@@ -10,20 +10,19 @@ environ
       SUBSET_1, RCOMP_1, TOPMETR, CONNSP_1, ARYTM_3, SQUARE_1, RELAT_1,
       ORDINAL2, LATTICES, SEQ_2, INTEGRA1, FUNCT_1, TREAL_1, ARYTM, LIMFUNC1,
       BORSUK_2, PCOMPS_1, GRAPH_1, INCPROJ, CARD_1, SETFAM_1, RAT_1, METRIC_1,
-      FINSET_1, ABSVALUE, IRRAT_1, POWER, INT_1, BORSUK_5, XREAL_0, BORSUK_6,
-      SUPINF_1, SEQ_4;
+      ABSVALUE, IRRAT_1, POWER, INT_1, BORSUK_5, XREAL_0, BORSUK_6, SUPINF_1,
+      SEQ_4;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, CARD_1, NUMBERS,
       XCMPLX_0, XREAL_0, REAL_1, ENUMSET1, FUNCT_1, FUNCT_2, XXREAL_2,
-      SETFAM_1, STRUCT_0, INT_1, COMPLEX1, PRE_TOPC, TOPS_2, COMPTS_1, RCOMP_1,
-      SEQ_4, TREAL_1, CONNSP_1, BORSUK_2, TOPMETR, PSCOMP_1, INTEGRA1,
-      LIMFUNC1, IRRAT_1, FINSET_1, RAT_1, METRIC_1, PCOMPS_1, XXREAL_0;
- constructors NAT_1, COMPLEX1, PROB_1, LIMFUNC1, POWER, CONNSP_1,
-      TOPS_2, COMPTS_1, URYSOHN1, TREAL_1, PSCOMP_1, BORSUK_2, INTEGRA1,
-      XXREAL_0, XXREAL_2, SEQ_4;
+      STRUCT_0, INT_1, COMPLEX1, PRE_TOPC, TOPS_2, COMPTS_1, RCOMP_1, SEQ_4,
+      TREAL_1, CONNSP_1, BORSUK_2, TOPMETR, PSCOMP_1, INTEGRA1, LIMFUNC1,
+      IRRAT_1, RAT_1, METRIC_1, PCOMPS_1, XXREAL_0;
+ constructors NAT_1, COMPLEX1, PROB_1, LIMFUNC1, POWER, CONNSP_1, TOPS_2,
+      COMPTS_1, URYSOHN1, TREAL_1, PSCOMP_1, BORSUK_2, INTEGRA1, XXREAL_0,
+      XXREAL_2, SEQ_4;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, FINSET_1, XXREAL_0, XREAL_0,
-      INT_1, RAT_1, MEMBERED, STRUCT_0, PRE_TOPC, TOPS_1, METRIC_1, BORSUK_1,
-      TOPMETR, BORSUK_2, JORDAN6, YELLOW13, TOPREAL6, INTEGRA1, FCONT_3,
-      XXREAL_1, RCOMP_1;
+      INT_1, RAT_1, MEMBERED, STRUCT_0, PRE_TOPC, TOPS_1, METRIC_1, TOPMETR,
+      BORSUK_2, JORDAN6, TOPREAL6, INTEGRA1, FCONT_3, RCOMP_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  definitions XBOOLE_0, TARSKI, BORSUK_2, TOPS_2, SUBSET_1, STRUCT_0, LIMFUNC1,
       PROB_1;
@@ -38,42 +37,50 @@ begin :: Preliminaries
 canceled;
 
 theorem Th2:
-  for A, B, a being set st A c= B & B c= A \/ {a} holds A \/ {a} = B or A = B
+  for A, B, a being set st A c= B & B c= A \/ {a} holds A \/ {a} =
+  B or A = B
 proof
   let A, B, a be set;
-  assume
-A1: A c= B & B c= A \/ {a};
-  assume A \/ {a} <> B & A <> B;
-  then
-A2: not A \/ {a} c= B & not B c= A by A1,XBOOLE_0:def 10;
-  not a in B
+  assume that
+A1: A c= B and
+A2: B c= A \/ {a};
+  assume that
+A3: A \/ {a} <> B and
+A4: A <> B;
+A5: not A \/ {a} c= B by A2,A3,XBOOLE_0:def 10;
+A6: not a in B
   proof
-    assume a in B;
+    assume
+    a in B;
     then {a} c= B by ZFMISC_1:37;
-    hence thesis by A1,A2,XBOOLE_1:8;
+    hence thesis by A1,A5,XBOOLE_1:8;
   end;
-  hence thesis by A1,A2,SETWISEO:5;
+  not B c= A by A1,A4,XBOOLE_0:def 10;
+  hence thesis by A2,A6,SETWISEO:5;
 end;
 
 theorem
-  for x1, x2, x3, x4, x5, x6 being set holds
-  { x1, x2, x3, x4, x5, x6 } = { x1, x3, x6 } \/ { x2, x4, x5 }
+  for x1, x2, x3, x4, x5, x6 being set holds { x1, x2, x3, x4, x5, x6 }
+  = { x1, x3, x6 } \/ { x2, x4, x5 }
 proof
   let x1, x2, x3, x4, x5, x6 be set;
   thus { x1, x2, x3, x4, x5, x6 } c= { x1, x3, x6 } \/ { x2, x4, x5 }
   proof
     let x be set;
-    assume x in { x1, x2, x3, x4, x5, x6 };
-    then x = x1 or x = x2 or x = x3 or x = x4 or x = x5 or x = x6
-    by ENUMSET1:def 4;
+    assume
+    x in { x1, x2, x3, x4, x5, x6 };
+    then x = x1 or x = x2 or x = x3 or x = x4 or x = x5 or x = x6 by
+    ENUMSET1:def 4;
     then x in { x1, x3, x6 } or x in { x2, x4, x5 } by ENUMSET1:def 1;
     hence thesis by XBOOLE_0:def 3;
   end;
   let x be set;
-  assume x in { x1, x3, x6 } \/ { x2, x4, x5 };
+  assume
+  x in { x1, x3, x6 } \/ { x2, x4, x5 };
   then x in { x1, x3, x6 } or x in { x2, x4, x5 } by XBOOLE_0:def 3;
-  then x = x1 or x = x3 or x = x6 or x = x2 or x = x4 or x = x5
-  by ENUMSET1:def 1;
+  then x = x1 or x = x3 or x = x6 or x = x2 or x = x4 or x = x5 by
+  ENUMSET1:
+  def 1;
   hence thesis by ENUMSET1:def 4;
 end;
 
@@ -84,119 +91,224 @@ definition
 end;
 
 theorem Th4:
-  for x1, x2, x3, x4, x5, x6 being set st
-  x1, x2, x3, x4, x5, x6 are_mutually_different holds
-  card {x1, x2, x3, x4, x5, x6} = 6
+  for x1, x2, x3, x4, x5, x6 being set st x1, x2, x3, x4, x5, x6
+  are_mutually_different holds card {x1, x2, x3, x4, x5, x6} = 6
 proof
   let x1, x2, x3, x4, x5, x6 be set;
-  assume x1, x2, x3, x4, x5, x6 are_mutually_different;
+A1: {x1,x2,x3,x4,x5,x6} = {x1,x2,x3,x4,x5} \/ {x6} by ENUMSET1:55;
+  assume
+A2: x1, x2, x3, x4, x5, x6 are_mutually_different;
   then
-A1: x1 <> x2 & x1 <> x3 & x1 <> x4 & x1 <> x5 & x1 <> x6 &
-  x2 <> x3 & x2 <> x4 & x2 <> x5 & x2 <> x6 & x3 <> x4 & x3 <> x5 & x3 <> x6 &
-  x4 <> x5 & x4 <> x6 & x5 <> x6 by ZFMISC_1:def 8;
-  then x1, x2, x3, x4, x5 are_mutually_different by ZFMISC_1:def 7;
+A3: x1 <> x3 by ZFMISC_1:def 8;
+A4: x4 <> x5 by A2,ZFMISC_1:def 8;
+A5: x3 <> x5 by A2,ZFMISC_1:def 8;
+A6: x3 <> x4 by A2,ZFMISC_1:def 8;
+A7: x2 <> x5 by A2,ZFMISC_1:def 8;
+A8: x2 <> x4 by A2,ZFMISC_1:def 8;
+A9: x2 <> x3 by A2,ZFMISC_1:def 8;
+A10: x1 <> x5 by A2,ZFMISC_1:def 8;
+A11: x1 <> x4 by A2,ZFMISC_1:def 8;
+  x1 <> x2 by A2,ZFMISC_1:def 8;
+  then x1, x2, x3, x4, x5 are_mutually_different by
+  A3,A11,A10,A9,A8,A7,A6,
+  A5,A4,ZFMISC_1:def 7;
   then
-A2: card {x1,x2,x3,x4,x5} = 5 by CARD_2:82;
-  not x6 in {x1,x2,x3,x4,x5} & {x1,x2,x3,x4,x5} is finite &
-  {x1,x2,x3,x4,x5,x6} = {x1,x2,x3,x4,x5} \/ {x6} by A1,ENUMSET1:55,def 3;
-  hence card {x1,x2,x3,x4,x5,x6} = 5+1 by A2,CARD_2:54
+A12: card {x1,x2,x3,x4,x5} = 5 by CARD_2:82;
+A13: x3 <> x6 by A2,ZFMISC_1:def 8;
+A14: x2 <> x6 by A2,ZFMISC_1:def 8;
+A15: x5 <> x6 by A2,ZFMISC_1:def 8;
+A16: x4 <> x6 by A2,ZFMISC_1:def 8;
+  x1 <> x6 by A2,ZFMISC_1:def 8;
+  then not x6 in {x1,x2,x3,x4,x5} by A14,A13,A16,A15,ENUMSET1:def 3;
+  hence card {x1,x2,x3,x4,x5,x6} = 5+1 by A12,A1,CARD_2:54
     .= 6;
 end;
 
 theorem
-  for x1, x2, x3, x4, x5, x6, x7 being set st
-  x1, x2, x3, x4, x5, x6, x7 are_mutually_different holds
-  card {x1, x2, x3, x4, x5, x6, x7} = 7
+  for x1, x2, x3, x4, x5, x6, x7 being set st x1, x2, x3, x4, x5, x6, x7
+  are_mutually_different holds card {x1, x2, x3, x4, x5, x6, x7} = 7
 proof
   let x1, x2, x3, x4, x5, x6, x7 be set;
-  assume x1, x2, x3, x4, x5, x6, x7 are_mutually_different;
+A1: {x1,x2,x3,x4,x5,x6,x7} = {x1,x2,x3,x4,x5,x6} \/ {x7} by ENUMSET1:61;
+  assume
+A2: x1, x2, x3, x4, x5, x6, x7 are_mutually_different;
   then
-A1: x1 <> x2 & x1 <> x3 & x1 <> x4 & x1 <> x5 & x1 <> x6 & x1 <> x7 &
-  x2 <> x3 & x2 <> x4 & x2 <> x5 & x2 <> x6 & x2 <> x7 &
-  x3 <> x4 & x3 <> x5 & x3 <> x6 & x3 <> x7 & x4 <> x5 & x4 <> x6 & x4 <> x7 &
-  x5 <> x6 & x5 <> x7 & x6 <> x7 by ZFMISC_1:def 9;
-  then x1, x2, x3, x4, x5, x6 are_mutually_different by ZFMISC_1:def 8;
+A3: x1 <> x3 by ZFMISC_1:def 9;
+A4: x5 <> x7 by A2,ZFMISC_1:def 9;
+A5: x4 <> x7 by A2,ZFMISC_1:def 9;
+A6: x3 <> x7 by A2,ZFMISC_1:def 9;
+A7: x2 <> x7 by A2,ZFMISC_1:def 9;
+A8: x4 <> x6 by A2,ZFMISC_1:def 9;
+A9: x4 <> x5 by A2,ZFMISC_1:def 9;
+A10: x5 <> x6 by A2,ZFMISC_1:def 9;
+A11: x1 <> x5 by A2,ZFMISC_1:def 9;
+A12: x1 <> x4 by A2,ZFMISC_1:def 9;
+A13: x3 <> x6 by A2,ZFMISC_1:def 9;
+A14: x3 <> x5 by A2,ZFMISC_1:def 9;
+A15: x3 <> x4 by A2,ZFMISC_1:def 9;
+A16: x2 <> x6 by A2,ZFMISC_1:def 9;
+A17: x2 <> x5 by A2,ZFMISC_1:def 9;
+A18: x2 <> x4 by A2,ZFMISC_1:def 9;
+A19: x2 <> x3 by A2,ZFMISC_1:def 9;
+A20: x1 <> x6 by A2,ZFMISC_1:def 9;
+  x1 <> x2 by A2,ZFMISC_1:def 9;
+  then x1, x2, x3, x4, x5, x6 are_mutually_different by
+  A3,A12,A11,A20,A19,A18,
+  A17,A16,A15,A14,A13,A9,A8,A10,ZFMISC_1:def 8;
   then
-A2: card {x1,x2,x3,x4,x5,x6} = 6 by Th4;
-  not x7 in {x1,x2,x3,x4,x5,x6} & {x1,x2,x3,x4,x5,x6} is finite &
-  {x1,x2,x3,x4,x5,x6,x7} = {x1,x2,x3,x4,x5,x6} \/ {x7}
-  by A1,ENUMSET1:61,def 4;
-  hence card {x1,x2,x3,x4,x5,x6,x7} = 6+1 by A2,CARD_2:54
+A21: card {x1,x2,x3,x4,x5,x6} = 6 by Th4;
+A22: x6 <> x7 by A2,ZFMISC_1:def 9;
+  x1 <> x7 by A2,ZFMISC_1:def 9;
+  then not x7 in {x1,x2,x3,x4,x5,x6} by
+  A7,A6,A5,A4,A22,ENUMSET1:def 4;
+  hence card {x1,x2,x3,x4,x5,x6,x7} = 6+1 by A21,A1,CARD_2:54
     .= 7;
 end;
 
 theorem Th6:
-  { x1, x2, x3 } misses { x4, x5, x6 } implies
-  x1 <> x4 & x1 <> x5 & x1 <> x6 & x2 <> x4 & x2 <> x5 & x2 <> x6 &
-  x3 <> x4 & x3 <> x5 & x3 <> x6
+  { x1, x2, x3 } misses { x4, x5, x6 } implies x1 <> x4 & x1 <> x5
+  & x1 <> x6 & x2 <> x4 & x2 <> x5 & x2 <> x6 & x3 <> x4 & x3 <> x5 & x3 <> x6
 proof
   assume
 A1: { x1, x2, x3 } misses { x4, x5, x6 };
-  assume x1 = x4 or x1 = x5 or x1 = x6 or x2 = x4 or x2 = x5 or x2 = x6 or
-  x3 = x4 or x3 = x5 or x3 = x6;
+A2: x5 in { x4, x5, x6 } by ENUMSET1:def 1;
+  assume
+  x1 = x4 or x1 = x5 or x1 = x6 or x2 = x4 or x2 = x5 or x2 = x6 or x3
+  = x4 or x3 = x5 or x3 = x6;
   then
-A2: x4 in { x1, x2, x3 } or x5 in { x1, x2, x3 } or x6 in { x1, x2, x3 }
-  by ENUMSET1:def 1;
-  x4 in { x4, x5, x6 } & x5 in { x4, x5, x6 } & x6 in { x4, x5, x6 }
-  by ENUMSET1:def 1;
-  hence thesis by A1,A2,XBOOLE_0:3;
+A3: x4 in { x1, x2, x3 } or x5 in { x1, x2, x3 } or x6 in { x1, x2, x3 } by
+  ENUMSET1:def 1;
+A4: x6 in { x4, x5, x6 } by ENUMSET1:def 1;
+  x4 in { x4, x5, x6 } by ENUMSET1:def 1;
+  hence thesis by A1,A3,A2,A4,XBOOLE_0:3;
 end;
 
 theorem
-  x1, x2, x3 are_mutually_different & x4, x5, x6 are_mutually_different &
-  { x1, x2, x3 } misses { x4, x5, x6 } implies
-  x1, x2, x3, x4, x5, x6 are_mutually_different
+  x1, x2, x3 are_mutually_different & x4, x5, x6 are_mutually_different
+  & { x1, x2, x3 } misses { x4, x5, x6 } implies x1, x2, x3, x4, x5, x6
+  are_mutually_different
 proof
   assume that
 A1: x1, x2, x3 are_mutually_different and
 A2: x4, x5, x6 are_mutually_different and
 A3: { x1, x2, x3 } misses { x4, x5, x6 };
-A4: x1 <> x2 & x2 <> x3 & x1 <> x3 by A1,ZFMISC_1:def 5;
-A5: x4 <> x5 & x5 <> x6 & x4 <> x6 by A2,ZFMISC_1:def 5;
-  x1 <> x4 & x1 <> x5 & x1 <> x6 & x2 <> x4 & x2 <> x5 & x2 <> x6 &
-  x3 <> x4 & x3 <> x5 & x3 <> x6 by A3,Th6;
-  hence thesis by A4,A5,ZFMISC_1:def 8;
+A4: x1 <> x2 by A1,ZFMISC_1:def 5;
+A5: x3 <> x5 by A3,Th6;
+A6: x3 <> x4 by A3,Th6;
+A7: x1 <> x6 by A3,Th6;
+A8: x1 <> x3 by A1,ZFMISC_1:def 5;
+A9: x2 <> x5 by A3,Th6;
+A10: x5 <> x6 by A2,ZFMISC_1:def 5;
+A11: x2 <> x4 by A3,Th6;
+A12: x4 <> x5 by A2,ZFMISC_1:def 5;
+A13: x2 <> x6 by A3,Th6;
+A14: x4 <> x6 by A2,ZFMISC_1:def 5;
+A15: x3 <> x6 by A3,Th6;
+A16: x1 <> x5 by A3,Th6;
+A17: x2 <> x3 by A1,ZFMISC_1:def 5;
+  x1 <> x4 by A3,Th6;
+  hence thesis by A4,A17,A8,A12,A10,A14,A16,A7,A11,A9,A13,A6,A5,A15,
+  ZFMISC_1:def 8;
 end;
 
 theorem
-  x1, x2, x3, x4, x5, x6 are_mutually_different &
-  { x1, x2, x3, x4, x5, x6 } misses { x7 } implies
-  x1, x2, x3, x4, x5, x6, x7 are_mutually_different
+  x1, x2, x3, x4, x5, x6 are_mutually_different & { x1, x2, x3, x4, x5,
+  x6 } misses { x7 } implies x1, x2, x3, x4, x5, x6, x7 are_mutually_different
 proof
   assume that
 A1: x1, x2, x3, x4, x5, x6 are_mutually_different and
 A2: { x1, x2, x3, x4, x5, x6 } misses { x7 };
-A3: x1 <> x2 & x1 <> x3 & x1 <> x4 & x1 <> x5 & x1 <> x6 &
-  x2 <> x3 & x2 <> x4 & x2 <> x5 & x2 <> x6 & x3 <> x4 & x3 <> x5 & x3 <> x6 &
-  x4 <> x5 & x4 <> x6 & x5 <> x6 by A1,ZFMISC_1:def 8;
-  not x7 in { x1, x2, x3, x4, x5, x6 } by A2,ZFMISC_1:54;
-  then x7 <> x1 & x7 <> x2 & x7 <> x3 & x7 <> x4 & x7 <> x5 & x7 <> x6
-  by ENUMSET1:def 4;
-  hence thesis by A3,ZFMISC_1:def 9;
+A3: x1 <> x3 by A1,ZFMISC_1:def 8;
+A4: x2 <> x3 by A1,ZFMISC_1:def 8;
+A5: x1 <> x6 by A1,ZFMISC_1:def 8;
+A6: x1 <> x5 by A1,ZFMISC_1:def 8;
+A7: x1 <> x4 by A1,ZFMISC_1:def 8;
+A8: not x7 in { x1, x2, x3, x4, x5, x6 } by A2,ZFMISC_1:54;
+  then
+A9: x7 <> x1 by ENUMSET1:def 4;
+A10: x4 <> x6 by A1,ZFMISC_1:def 8;
+A11: x4 <> x5 by A1,ZFMISC_1:def 8;
+A12: x3 <> x6 by A1,ZFMISC_1:def 8;
+A13: x3 <> x5 by A1,ZFMISC_1:def 8;
+A14: x3 <> x4 by A1,ZFMISC_1:def 8;
+A15: x2 <> x6 by A1,ZFMISC_1:def 8;
+A16: x2 <> x5 by A1,ZFMISC_1:def 8;
+A17: x2 <> x4 by A1,ZFMISC_1:def 8;
+A18: x7 <> x6 by A8,ENUMSET1:def 4;
+A19: x5 <> x6 by A1,ZFMISC_1:def 8;
+A20: x7 <> x5 by A8,ENUMSET1:def 4;
+A21: x7 <> x4 by A8,ENUMSET1:def 4;
+A22: x7 <> x3 by A8,ENUMSET1:def 4;
+A23: x7 <> x2 by A8,ENUMSET1:def 4;
+  x1 <> x2 by A1,ZFMISC_1:def 8;
+  hence thesis by A3,A7,A6,A5,A4,A17,A16,A15,A14,A13,A12,A11,A10,A19,A9,A23
+  ,A22,A21,A20,A18,ZFMISC_1:def 9;
 end;
 
 theorem
-  x1, x2, x3, x4, x5, x6, x7 are_mutually_different implies
-  x7, x1, x2, x3, x4, x5, x6 are_mutually_different
+  x1, x2, x3, x4, x5, x6, x7 are_mutually_different implies x7, x1, x2,
+  x3, x4, x5, x6 are_mutually_different
 proof
-  assume x1, x2, x3, x4, x5, x6, x7 are_mutually_different;
-  then x1 <> x2 & x1 <> x3 & x1 <> x4 & x1 <> x5 & x1 <> x6 & x1 <> x7 &
-  x2 <> x3 & x2 <> x4 & x2 <> x5 & x2 <> x6 & x2 <> x7 &
-  x3 <> x4 & x3 <> x5 & x3 <> x6 & x3 <> x7 & x4 <> x5 & x4 <> x6 & x4 <> x7 &
-  x5 <> x6 & x5 <> x7 & x6 <> x7 by ZFMISC_1:def 9;
-  hence thesis by ZFMISC_1:def 9;
+  assume
+A1: x1, x2, x3, x4, x5, x6, x7 are_mutually_different;
+  then
+A2: x1 <> x3 by ZFMISC_1:def 9;
+A3: x5 <> x7 by A1,ZFMISC_1:def 9;
+A4: x5 <> x6 by A1,ZFMISC_1:def 9;
+A5: x4 <> x7 by A1,ZFMISC_1:def 9;
+A6: x4 <> x6 by A1,ZFMISC_1:def 9;
+A7: x6 <> x7 by A1,ZFMISC_1:def 9;
+A8: x1 <> x5 by A1,ZFMISC_1:def 9;
+A9: x1 <> x4 by A1,ZFMISC_1:def 9;
+A10: x2 <> x4 by A1,ZFMISC_1:def 9;
+A11: x2 <> x3 by A1,ZFMISC_1:def 9;
+A12: x1 <> x7 by A1,ZFMISC_1:def 9;
+A13: x1 <> x6 by A1,ZFMISC_1:def 9;
+A14: x4 <> x5 by A1,ZFMISC_1:def 9;
+A15: x3 <> x7 by A1,ZFMISC_1:def 9;
+A16: x3 <> x6 by A1,ZFMISC_1:def 9;
+A17: x3 <> x5 by A1,ZFMISC_1:def 9;
+A18: x3 <> x4 by A1,ZFMISC_1:def 9;
+A19: x2 <> x7 by A1,ZFMISC_1:def 9;
+A20: x2 <> x6 by A1,ZFMISC_1:def 9;
+A21: x2 <> x5 by A1,ZFMISC_1:def 9;
+  x1 <> x2 by A1,ZFMISC_1:def 9;
+  hence thesis by A2,A9,A8,A13,A12,A11,A10,A21,A20,A19,A18,A17,A16,A15,A14,A6
+  ,
+  A5,A4,A3,A7,ZFMISC_1:def 9;
 end;
 
 theorem
-  x1, x2, x3, x4, x5, x6, x7 are_mutually_different implies
-  x1, x2, x5, x3, x6, x7, x4 are_mutually_different
+  x1, x2, x3, x4, x5, x6, x7 are_mutually_different implies x1, x2, x5,
+  x3, x6, x7, x4 are_mutually_different
 proof
-  assume x1, x2, x3, x4, x5, x6, x7 are_mutually_different;
-  then x1 <> x2 & x1 <> x3 & x1 <> x4 & x1 <> x5 & x1 <> x6 & x1 <> x7 &
-  x2 <> x3 & x2 <> x4 & x2 <> x5 & x2 <> x6 & x2 <> x7 &
-  x3 <> x4 & x3 <> x5 & x3 <> x6 & x3 <> x7 & x4 <> x5 & x4 <> x6 & x4 <> x7 &
-  x5 <> x6 & x5 <> x7 & x6 <> x7 by ZFMISC_1:def 9;
-  hence thesis by ZFMISC_1:def 9;
+  assume
+A1: x1, x2, x3, x4, x5, x6, x7 are_mutually_different;
+  then
+A2: x1 <> x3 by ZFMISC_1:def 9;
+A3: x5 <> x7 by A1,ZFMISC_1:def 9;
+A4: x5 <> x6 by A1,ZFMISC_1:def 9;
+A5: x4 <> x7 by A1,ZFMISC_1:def 9;
+A6: x4 <> x6 by A1,ZFMISC_1:def 9;
+A7: x6 <> x7 by A1,ZFMISC_1:def 9;
+A8: x1 <> x5 by A1,ZFMISC_1:def 9;
+A9: x1 <> x4 by A1,ZFMISC_1:def 9;
+A10: x2 <> x4 by A1,ZFMISC_1:def 9;
+A11: x2 <> x3 by A1,ZFMISC_1:def 9;
+A12: x1 <> x7 by A1,ZFMISC_1:def 9;
+A13: x1 <> x6 by A1,ZFMISC_1:def 9;
+A14: x4 <> x5 by A1,ZFMISC_1:def 9;
+A15: x3 <> x7 by A1,ZFMISC_1:def 9;
+A16: x3 <> x6 by A1,ZFMISC_1:def 9;
+A17: x3 <> x5 by A1,ZFMISC_1:def 9;
+A18: x3 <> x4 by A1,ZFMISC_1:def 9;
+A19: x2 <> x7 by A1,ZFMISC_1:def 9;
+A20: x2 <> x6 by A1,ZFMISC_1:def 9;
+A21: x2 <> x5 by A1,ZFMISC_1:def 9;
+  x1 <> x2 by A1,ZFMISC_1:def 9;
+  hence thesis by A2,A9,A8,A13,A12,A11,A10,A21,A20,A19,A18,A17,A16,A15,A14,A6
+  ,
+  A5,A4,A3,A7,ZFMISC_1:def 9;
 end;
 
 Lm1: R^1 is arcwise_connected
@@ -208,15 +320,18 @@ A1: a <= b;
     reconsider B = [. a, b .] as Subset of R^1 by TOPMETR:24;
     reconsider B as non empty Subset of R^1 by A1,XXREAL_1:1;
 A2: Closed-Interval-TSpace(a,b) = R^1|B by A1,TOPMETR:26;
-    then
-A3: L[01]((#)(a,b),(a,b)(#)) is continuous Function of
-    I[01], R^1|B by A1,TOPMETR:27,TREAL_1:11;
     the carrier of R^1|B c= the carrier of R^1 by BORSUK_1:35;
-    then reconsider g = L[01]((#)(a,b),(a,b)(#)) as Function of
-    the carrier of I[01], the carrier of R^1 by A2,FUNCT_2:9,TOPMETR:27;
+
+    then reconsider g = L[01]((#)(a,b),(a,b)(#)) as Function of the carrier of
+    I[01], the carrier of R^1 by A2,FUNCT_2:9,TOPMETR:27;
+
     reconsider g as Function of I[01], R^1;
     take g;
-    thus g is continuous by A3,PRE_TOPC:56;
+
+    L[01]((#)(a,b),(a,b)(#)) is continuous Function of I[01], R^1|B by A1,
+    A2,TOPMETR:27,TREAL_1:11;
+
+    hence g is continuous by PRE_TOPC:56;
     0 = (#)(0,1) by TREAL_1:def 1;
     hence g.0 = (#)(a,b) by A1,TREAL_1:12
       .= a by A1,TREAL_1:def 1;
@@ -225,32 +340,38 @@ A3: L[01]((#)(a,b),(a,b)(#)) is continuous Function of
       .= b by A1,TREAL_1:def 2;
   end;
   suppose
-A4: b <= a;
+A3: b <= a;
     reconsider B = [. b, a .] as Subset of R^1 by TOPMETR:24;
-    b in B by A4,XXREAL_1:1;
+    b in B by A3,XXREAL_1:1;
     then reconsider B = [. b, a .] as non empty Subset of R^1;
-A5: Closed-Interval-TSpace(b,a) = R^1|B by A4,TOPMETR:26;
-    then
-A6: L[01]((#)(b,a),(b,a)(#)) is continuous Function of
-    I[01], R^1|B by A4,TOPMETR:27,TREAL_1:11;
+A4: Closed-Interval-TSpace(b,a) = R^1|B by A3,TOPMETR:26;
     the carrier of R^1|B c= the carrier of R^1 by BORSUK_1:35;
-    then reconsider g = L[01]((#)(b,a),(b,a)(#)) as Function of
-    the carrier of I[01], the carrier of R^1 by A5,FUNCT_2:9,TOPMETR:27;
+
+    then reconsider g = L[01]((#)(b,a),(b,a)(#)) as Function of the carrier of
+    I[01], the carrier of R^1 by A4,FUNCT_2:9,TOPMETR:27;
+
     reconsider g as Function of I[01], R^1;
-A7: g is continuous by A6,PRE_TOPC:56;
     0 = (#)(0,1) by TREAL_1:def 1;
     then
-A8: g.0 = (#)(b,a) by A4,TREAL_1:12
-      .= b by A4,TREAL_1:def 1;
+A5: g.0 = (#)(b,a) by A3,TREAL_1:12
+      .= b by A3,TREAL_1:def 1;
     1 = (0,1)(#) by TREAL_1:def 2;
     then
-A9: g.1 = (b,a)(#) by A4,TREAL_1:12
-      .= a by A4,TREAL_1:def 2;
-    then b,a are_connected by A7,A8,BORSUK_2:def 1;
-    then reconsider P = g as Path of b, a by A7,A8,A9,BORSUK_2:def 2;
+A6: g.1 = (b,a)(#) by A3,TREAL_1:12
+      .= a by A3,TREAL_1:def 2;
+
+    L[01]((#)(b,a),(b,a)(#)) is continuous Function of I[01], R^1|B by A3
+    ,A4,TOPMETR:27,TREAL_1:11;
+
+    then
+A7: g is continuous by PRE_TOPC:56;
+    then b,a are_connected by A5,A6,BORSUK_2:def 1;
+    then reconsider P = g as Path of b, a by A7,A5,A6,BORSUK_2:def 2;
     take h = -P;
-    ex t being Function of I[01], R^1 st
-    t is continuous & t.0 = a & t.1 = b by A7,A8,A9,BORSUK_2:18;
+
+    ex t being Function of I[01], R^1 st t is continuous & t.0 = a & t.1
+    = b by A7,A5,A6,BORSUK_2:18;
+
     then a,b are_connected by BORSUK_2:def 1;
     hence thesis by BORSUK_2:def 2;
   end;
@@ -275,99 +396,104 @@ begin :: Intervals
 canceled 10;
 
 theorem
-  for A, B being Subset of R^1,
-  a, b, c, d being real number st a < b & b <= c & c < d &
-  A = [. a, b .[ & B = ]. c, d .] holds A, B are_separated
+  for A, B being Subset of R^1, a, b, c, d being real number st a < b &
+  b <= c & c < d & A = [. a, b .[ & B = ]. c, d .] holds A, B are_separated
 proof
   let A, B be Subset of R^1, a, b, c, d be real number;
   assume that
-A1: a < b & b <= c & c < d and
-A2: A = [. a, b .[ and
-A3: B = ]. c, d .];
-  Cl [. a, b .[ = [. a, b .] by A1,BORSUK_4:21;
-  then Cl A = [. a, b .] by A2,TOPREAL6:80;
+A1: a < b and
+A2: b <= c and
+A3: c < d and
+A4: A = [. a, b .[ and
+A5: B = ]. c, d .];
+  Cl ]. c, d .] = [. c, d .] by A3,BORSUK_4:20;
+  then Cl B = [. c, d .] by A5,TOPREAL6:80;
   then
-A4: Cl A misses B by A1,A3,XXREAL_1:90;
-  Cl ]. c, d .] = [. c, d .] by A1,BORSUK_4:20;
-  then Cl B = [. c, d .] by A3,TOPREAL6:80;
-  then Cl B misses A by A1,A2,XXREAL_1:95;
-  hence thesis by A4,CONNSP_1:def 1;
+A6: Cl B misses A by A2,A4,XXREAL_1:95;
+  Cl [. a, b .[ = [. a, b .] by A1,BORSUK_4:21;
+  then Cl A = [. a, b .] by A4,TOPREAL6:80;
+  then Cl A misses B by A2,A5,XXREAL_1:90;
+  hence thesis by A6,CONNSP_1:def 1;
 end;
 
 canceled 6;
 
 theorem Th28:
-  for a, b, c being real number st
-  a <= c & c <= b holds [.a,b.] \/ [.c,+infty .[ = [.a,+infty .[
+  for a, b, c being real number st a <= c & c <= b holds [.a,b.]
+  \/ [.c,+infty .[ = [.a,+infty .[
 proof
   let a, b, c be real number;
-  assume
-A1: a <= c & c <= b;
-A2: [.a,+infty .[ c= [.a,b.] \/ [.c,+infty .[
+  assume that
+A1: a <= c and
+A2: c <= b;
+A3: [.a,+infty .[ c= [.a,b.] \/ [.c,+infty .[
   proof
     let r be set;
     assume
-A3: r in [.a,+infty .[;
+A4: r in [.a,+infty .[;
     then reconsider s = r as Real;
-A4: a <= s by A3,XXREAL_1:236;
+A5: a <= s by A4,XXREAL_1:236;
     per cases;
-    suppose s <= b;
-      then s in [.a,b.] by A4,XXREAL_1:1;
+    suppose
+      s <= b;
+      then s in [.a,b.] by A5,XXREAL_1:1;
       hence thesis by XBOOLE_0:def 3;
     end;
-    suppose not s <= b;
-      then c <= s by A1,XXREAL_0:2;
+    suppose
+      not s <= b;
+      then c <= s by A2,XXREAL_0:2;
       then s in [.c,+infty .[ by XXREAL_1:236;
       hence thesis by XBOOLE_0:def 3;
     end;
   end;
-  [.a,b.] \/ [.c,+infty .[ c= [.a,+infty .[
-  proof
-A5: [.a,b.] c= right_closed_halfline a by XXREAL_1:251;
-    [.c,+infty .[ c= [.a,+infty .[ by A1,XXREAL_1:38;
-    hence thesis by A5,XBOOLE_1:8;
-  end;
-  hence thesis by A2,XBOOLE_0:def 10;
+A6: [.a,b.] c= right_closed_halfline a by XXREAL_1:251;
+  [.c,+infty .[ c= [.a,+infty .[ by A1,XXREAL_1:38;
+  then [.a,b.] \/ [.c,+infty .[ c= [.a,+infty .[ by A6,XBOOLE_1:8;
+  hence thesis by A3,XBOOLE_0:def 10;
 end;
 
 theorem Th29:
-  for a, b, c being real number st
-  a <= c & c <= b holds ]. -infty, c .] \/ [. a, b .] = ]. -infty, b .]
+  for a, b, c being real number st a <= c & c <= b holds ]. -infty
+  , c .] \/ [. a, b .] = ]. -infty, b .]
 proof
   let a, b, c be real number;
-  assume
-A1: a <= c & c <= b;
+  assume that
+A1: a <= c and
+A2: c <= b;
   thus ]. -infty, c .] \/ [. a, b .] c= ]. -infty, b .]
   proof
     let x be set;
     assume
-A2: x in ]. -infty, c .] \/ [. a, b .];
+A3: x in ]. -infty, c .] \/ [. a, b .];
     then reconsider x as real number;
-    per cases by A2,XBOOLE_0:def 3;
-    suppose x in ]. -infty, c .];
+    per cases by A3,XBOOLE_0:def 3;
+    suppose
+      x in ]. -infty, c .];
       then x <= c by XXREAL_1:234;
-      then x <= b by A1,XXREAL_0:2;
+      then x <= b by A2,XXREAL_0:2;
       hence thesis by XXREAL_1:234;
     end;
-    suppose x in [. a, b .];
+    suppose
+      x in [. a, b .];
       then x <= b by XXREAL_1:1;
       hence thesis by XXREAL_1:234;
     end;
   end;
   let x be set;
   assume
-A3: x in ]. -infty, b .];
+A4: x in ]. -infty, b .];
   then reconsider x as real number;
   per cases;
-  suppose x <= c;
+  suppose
+    x <= c;
     then x in ]. -infty, c .] by XXREAL_1:234;
     hence thesis by XBOOLE_0:def 3;
   end;
-  suppose x > c;
-    then
-A4: x > a by A1,XXREAL_0:2;
-    x <= b by A3,XXREAL_1:234;
-    then x in [. a, b .] by A4,XXREAL_1:1;
+  suppose
+A5: x > c;
+A6: x <= b by A4,XXREAL_1:234;
+    x > a by A1,A5,XXREAL_0:2;
+    then x in [. a, b .] by A6,XXREAL_1:1;
     hence thesis by XBOOLE_0:def 3;
   end;
 end;
@@ -385,15 +511,17 @@ end;
 canceled 3;
 
 theorem
-  for A being Subset of R^1, p being Point of RealSpace holds p in Cl A iff
-  for r being real number st r > 0 holds Ball (p, r) meets A
-  by GOBOARD6:95,TOPMETR:def 7;
+  for A being Subset of R^1, p being Point of RealSpace holds p in Cl A
+iff for r being real number st r > 0 holds Ball (p, r) meets A by GOBOARD6:95,
+  TOPMETR:def 7;
 
 theorem Th34:
-  for p, q being Element of RealSpace st q >= p holds dist (p, q) = q - p
+  for p, q being Element of RealSpace st q >= p holds dist (p, q)
+  = q - p
 proof
   let p, q be Element of RealSpace;
-  assume p <= q;
+  assume
+  p <= q;
   then
 A1: q - p >= 0 by XREAL_1:50;
   dist (p, q) = abs (q - p) by TOPMETR:15
@@ -402,51 +530,51 @@ A1: q - p >= 0 by XREAL_1:50;
 end;
 
 theorem Th35:
-  for A being Subset of R^1 st A = RAT holds Cl A = the carrier of R^1
+  for A being Subset of R^1 st A = RAT holds Cl A = the carrier of
+  R^1
 proof
   let A be Subset of R^1;
   assume
 A1: A = RAT;
-  Cl A = the carrier of R^1
+  the carrier of R^1 c= Cl A
   proof
-    thus Cl A c= the carrier of R^1;
-    thus the carrier of R^1 c= Cl A
-    proof
-      let x be set;
-      assume x in the carrier of R^1;
-      then reconsider p = x as Element of RealSpace
-      by METRIC_1:def 14,TOPMETR:24;
-      now
-        let r be real number;
-        assume
-A2:     r > 0;
-        reconsider pr = p + r as Element of RealSpace
-        by METRIC_1:def 14,XREAL_0:def 1;
-        p < pr by A2,XREAL_1:31;
-        then consider Q being rational number such that
-A3:     p < Q & Q < pr by RAT_1:22;
-A4:     Q in A by A1,RAT_1:def 2;
-        reconsider P = Q as Element of RealSpace by METRIC_1:def 14
-,XREAL_0:def 1;
-        P - p < pr - p by A3,XREAL_1:11;
-        then dist (p, P) < r by A3,Th34;
-        then P in Ball (p, r) by METRIC_1:12;
-        hence Ball (p, r) meets A by A4,XBOOLE_0:3;
-      end;
-      hence thesis by GOBOARD6:95,TOPMETR:def 7;
+    let x be set;
+    assume
+    x in the carrier of R^1;
+    then reconsider p = x as Element of RealSpace by
+    METRIC_1:def 14,TOPMETR:24;
+    now
+      let r be real number;
+      reconsider pr = p + r as Element of RealSpace by METRIC_1:def 14,XREAL_0
+      :def 1;
+      assume
+      r > 0;
+      then consider Q being rational number such that
+A2:   p < Q and
+A3:   Q < pr by RAT_1:22,XREAL_1:31;
+      reconsider P = Q as Element of RealSpace by METRIC_1:def 14 ,XREAL_0:def
+      1;
+      P - p < pr - p by A3,XREAL_1:11;
+      then dist (p, P) < r by A2,Th34;
+      then
+A4:   P in Ball (p, r) by METRIC_1:12;
+      Q in A by A1,RAT_1:def 2;
+      hence Ball (p, r) meets A by A4,XBOOLE_0:3;
     end;
+    hence thesis by GOBOARD6:95,TOPMETR:def 7;
   end;
-  hence thesis;
+  hence thesis by XBOOLE_0:def 10;
 end;
 
 theorem Th36:
-  for A being Subset of R^1, a, b being real number st
-  A = ]. a, b .[ & a <> b holds Cl A = [. a, b .]
+  for A being Subset of R^1, a, b being real number st A = ]. a, b
+  .[ & a <> b holds Cl A = [. a, b .]
 proof
   let A be Subset of R^1, a, b be real number;
-  assume
-A1: A = ]. a, b .[ & a <> b;
-  then Cl ]. a, b .[ = [. a, b .] by TOPREAL6:82;
+  assume that
+A1: A = ]. a, b .[ and
+A2: a <> b;
+  Cl ]. a, b .[ = [. a, b .] by A2,TOPREAL6:82;
   hence thesis by A1,TOPREAL6:80;
 end;
 
@@ -459,7 +587,6 @@ end;
 
 definition
   func IRRAT -> Subset of REAL equals
-
   REAL \ RAT;
   coherence;
 end;
@@ -467,11 +594,9 @@ end;
 definition
   let a, b be real number;
   func RAT (a, b) -> Subset of REAL equals
-
   RAT /\ ]. a, b .[;
   coherence;
   func IRRAT (a, b) -> Subset of REAL equals
-
   IRRAT /\ ]. a, b .[;
   coherence;
 end;
@@ -482,11 +607,13 @@ proof
   let x be real number;
 A1: x in REAL by XREAL_0:def 1;
   hereby
-    assume x is irrational;
+    assume
+    x is irrational;
     then not x in RAT;
     hence x in IRRAT by A1,XBOOLE_0:def 5;
   end;
-  assume x in IRRAT;
+  assume
+  x in IRRAT;
   then not x in RAT by XBOOLE_0:def 5;
   hence thesis by RAT_1:def 2;
 end;
@@ -502,14 +629,16 @@ registration
 end;
 
 theorem Th38:
-  for a being rational number, b being irrational (real number) holds
-  a + b is irrational
+  for a being rational number, b being irrational (real number)
+  holds a + b is irrational
 proof
-  let a be rational number, b be irrational (real number);
-  assume a + b is rational;
-  then consider m, n being Integer such that
-A1: n <> 0 & a + b = m / n by RAT_1:3;
   consider m1, n1 being Integer;
+  let a be rational number, b be irrational (real number);
+  assume
+  a + b is rational;
+  then consider m, n being Integer such that
+  n <> 0 and
+A1: a + b = m / n by RAT_1:3;
   a + b - a = (m*n1 - m1*n) / (n1*n) by A1;
   hence thesis;
 end;
@@ -518,15 +647,16 @@ theorem Th39:
   for a being irrational (real number) holds -a is irrational
 proof
   let a be irrational (real number);
-  assume -a is rational;
+  assume
+  -a is rational;
   then reconsider b = -a as rational number;
   -b is rational;
   hence thesis;
 end;
 
 theorem Th40:
-  for a being rational number, b being irrational (real number) holds
-  a - b is irrational
+  for a being rational number, b being irrational (real number)
+  holds a - b is irrational
 proof
   let a be rational number, b be irrational (real number);
   -b is irrational by Th39;
@@ -535,8 +665,8 @@ proof
 end;
 
 theorem Th41:
-  for a being rational number, b being irrational (real number) holds
-  b - a is irrational
+  for a being rational number, b being irrational (real number)
+  holds b - a is irrational
 proof
   let a be rational number, b be irrational (real number);
   b + -a is irrational by Th38;
@@ -550,23 +680,27 @@ proof
   let a be rational number, b be irrational (real number);
   assume
 A1: a <> 0;
-  assume a * b is rational;
+  assume
+  a * b is rational;
   then consider m, n being Integer such that
-A2: n <> 0 & a * b = m / n by RAT_1:3;
+  n <> 0 and
+A2: a * b = m / n by RAT_1:3;
   consider m1, n1 being Integer such that
-A3: n1 <> 0 & a = m1 / n1 by RAT_1:3;
+  n1 <> 0 and
+A3: a = m1 / n1 by RAT_1:3;
   a * b / a = (m * n1) / (n * m1) by A2,A3,XCMPLX_1:85;
   hence thesis by A1,XCMPLX_1:90;
 end;
 
 theorem Th43:
-  for a being rational number, b being irrational (real number)
-  st a <> 0 holds b / a is irrational
+  for a being rational number, b being irrational (real number) st
+  a <> 0 holds b / a is irrational
 proof
   let a be rational number, b be irrational (real number);
   assume
 A1: a <> 0;
-  assume b / a is rational;
+  assume
+  b / a is rational;
   then reconsider c = b / a as rational number;
   c * a is rational;
   hence thesis by A1,XCMPLX_1:88;
@@ -579,7 +713,8 @@ registration
     let a be real number;
     assume
 A1: a is irrational;
-    assume a is zero;
+    assume
+    a is zero;
     then a = 0 / 1;
     hence thesis by A1;
   end;
@@ -592,7 +727,8 @@ proof
   let a be rational number, b be irrational (real number);
   assume
 A1: a <> 0;
-  assume a / b is rational;
+  assume
+  a / b is rational;
   then reconsider c = a / b as rational number;
   c * b is irrational by A1,Th42,XCMPLX_1:50;
   hence thesis by XCMPLX_1:88;
@@ -655,84 +791,87 @@ end;
 canceled;
 
 theorem Th47:
-  for a, b being real number st a < b ex p1, p2 being rational number st
-  a < p1 & p1 < p2 & p2 < b
+  for a, b being real number st a < b ex p1, p2 being rational
+  number st a < p1 & p1 < p2 & p2 < b
 proof
   let a, b be real number;
-  assume a < b;
+  assume
+  a < b;
   then consider p1 being rational number such that
-A1: a < p1 & p1 < b by RAT_1:22;
-  consider p2 being rational number such that
-A2: p1 < p2 & p2 < b by A1,RAT_1:22;
-  thus thesis by A1,A2;
+A1: a < p1 and
+A2: p1 < b by RAT_1:22;
+  ex p2 being rational number st p1 < p2 & p2 < b by A2,RAT_1:22;
+  hence thesis by A1;
 end;
 
 canceled 2;
 
 theorem Th50:
-  for a, b being real number st a < b
-  ex p being irrational (real number) st a < p & p < b
+  for a, b being real number st a < b ex p being irrational (real
+  number) st a < p & p < b
 proof
-  let a, b be real number;
-  assume a < b;
-  then consider p1, p2 being rational number such that
-A1: a < p1 & p1 < p2 & p2 < b by Th47;
-A2: p2 - p1 <> 0 by A1;
   set x = frac number_e;
+  let a, b be real number;
+A1: x < 1 by INT_1:69;
+  assume
+  a < b;
+  then consider p1, p2 being rational number such that
+A2: a < p1 and
+A3: p1 < p2 and
+A4: p2 < b by Th47;
   set y = (1 - x) * p1 + x * p2;
-A3: y = p1 + x * (p2 - p1);
-  x * (p2 - p1) is irrational by A2;
+A5: 0 < x by INT_1:69;
+  then y < p2 by A3,A1,XREAL_1:180;
   then
-A4: y is irrational by A3;
-A5: 0 < x & x < 1 by INT_1:69;
-  then y < p2 by A1,XREAL_1:180;
+A6: y < b by A4,XXREAL_0:2;
+  y > p1 by A3,A5,A1,XREAL_1:179;
   then
-A6: y < b by A1,XXREAL_0:2;
-  y > p1 by A1,A5,XREAL_1:179;
-  then y > a by A1,XXREAL_0:2;
-  hence thesis by A4,A6;
+A7: y > a by A2,XXREAL_0:2;
+A8: y = p1 + x * (p2 - p1);
+  p2 - p1 <> 0 by A3;
+  hence thesis by A8,A6,A7;
 end;
 
 theorem Th51:
-  for A being Subset of R^1 st A = IRRAT holds Cl A = the carrier of R^1
+  for A being Subset of R^1 st A = IRRAT holds Cl A = the carrier
+  of R^1
 proof
   let A be Subset of R^1;
   assume
 A1: A = IRRAT;
-  Cl A = the carrier of R^1
+  the carrier of R^1 c= Cl A
   proof
-    thus Cl A c= the carrier of R^1;
-    thus the carrier of R^1 c= Cl A
-    proof
-      let x be set;
-      assume x in the carrier of R^1;
-      then reconsider p = x as Element of RealSpace
-      by METRIC_1:def 14,TOPMETR:24;
-      now
-        let r be real number;
-        assume
-A2:     r > 0;
-        reconsider pr = p + r as Element of RealSpace by METRIC_1:def 14
-,XREAL_0:def 1;
-        p < pr by A2,XREAL_1:31;
-        then consider Q being irrational (real number) such that
-A3:     p < Q & Q < pr by Th50;
-A4:     Q in A by A1,Th37;
-        reconsider P = Q as Element of RealSpace by METRIC_1:def 14
-,XREAL_0:def 1;
-        P - p < pr - p by A3,XREAL_1:11;
-        then dist (p, P) < r by A3,Th34;
-        then P in Ball (p, r) by METRIC_1:12;
-        hence Ball (p, r) meets A by A4,XBOOLE_0:3;
-      end;
-      hence thesis by GOBOARD6:95,TOPMETR:def 7;
+    let x be set;
+    assume
+    x in the carrier of R^1;
+    then reconsider p = x as Element of RealSpace by
+    METRIC_1:def 14,TOPMETR:24;
+    now
+      let r be real number;
+      reconsider pr = p + r as Element of RealSpace by METRIC_1:def 14 ,
+      XREAL_0:def 1;
+      assume
+      r > 0;
+      then consider Q being irrational (real number) such that
+A2:   p < Q and
+A3:   Q < pr by Th50,XREAL_1:31;
+      reconsider P = Q as Element of RealSpace by METRIC_1:def 14 ,XREAL_0:def
+      1;
+      P - p < pr - p by A3,XREAL_1:11;
+      then dist (p, P) < r by A2,Th34;
+      then
+A4:   P in Ball (p, r) by METRIC_1:12;
+      Q in A by A1,Th37;
+      hence Ball (p, r) meets A by A4,XBOOLE_0:3;
     end;
+    hence thesis by GOBOARD6:95,TOPMETR:def 7;
   end;
-  hence thesis;
+  hence thesis by XBOOLE_0:def 10;
 end;
 
-Lm4: for A being Subset of R^1,
-a, b being real number st a < b & A = RAT (a, b) holds a in Cl A & b in Cl A
+Lm2: for A being Subset of R^1, a, b being real number st a < b & A = RAT (a,
+b) holds a in Cl A & b in Cl A
+
 proof
   let A be Subset of R^1, a, b be real number;
   assume that
@@ -740,97 +879,112 @@ A1: a < b and
 A2: A = RAT (a, b);
   thus a in Cl A
   proof
+
     reconsider a' = a as Element of RealSpace by METRIC_1:def 14,XREAL_0:def 1;
+
     for r being real number st r > 0 holds Ball (a', r) meets A
     proof
-      let r be real number;
-      assume
-A3:   r > 0;
       set p = a;
-      reconsider pp = a + r as Element of RealSpace by METRIC_1:def 14
-,XREAL_0:def 1;
+      let r be real number;
+
+      reconsider pp = a + r as Element of RealSpace by METRIC_1:def 14 ,
+      XREAL_0:def 1;
+
       set pr = min (pp, (p + b)/2);
-A4:   pr <= (p + b)/2 by XXREAL_0:17;
-A5:   (p + b)/2 < b by A1,XREAL_1:228;
+A3:   pr <= (p + b)/2 by XXREAL_0:17;
+      assume
+A4:   r > 0;
       p < pr
       proof
         per cases by XXREAL_0:15;
-        suppose pr = pp;
-          hence thesis by A3,XREAL_1:31;
+        suppose
+          pr = pp;
+          hence thesis by A4,XREAL_1:31;
         end;
-        suppose pr = (p + b)/2;
+        suppose
+          pr = (p + b)/2;
           hence thesis by A1,XREAL_1:228;
         end;
       end;
       then consider Q being rational number such that
-A6:   p < Q & Q < pr by RAT_1:22;
-A7:   Q in RAT by RAT_1:def 2;
-      pr < b by A4,A5,XXREAL_0:2;
-      then a < Q & Q < b by A6,XXREAL_0:2;
-      then Q in ]. a, b .[ by XXREAL_1:4;
+A5:   p < Q and
+A6:   Q < pr by RAT_1:22;
+      (p + b)/2 < b by A1,XREAL_1:228;
+      then pr < b by A3,XXREAL_0:2;
+      then Q < b by A6,XXREAL_0:2;
       then
-A8:   Q in A by A2,A7,XBOOLE_0:def 4;
+A7:   Q in ]. a, b .[ by A5,XXREAL_1:4;
+      pr <= pp by XXREAL_0:17;
+      then
+A8:   pr - p <= pp - p by XREAL_1:11;
 
-reconsider P = Q as Element of RealSpace by METRIC_1:def 14,XREAL_0:def 1;
-A9:   P - p < pr - p by A6,XREAL_1:11;
-      pr - p <= r
-      proof
-        pr <= pp by XXREAL_0:17;
-        then pr - p <= pp - p by XREAL_1:11;
-        hence thesis;
-      end;
-      then P - p < r by A9,XXREAL_0:2;
-      then dist (a', P) < r by A6,Th34;
-      then P in Ball (a', r) by METRIC_1:12;
-      hence thesis by A8,XBOOLE_0:3;
+      reconsider P = Q as Element of RealSpace by METRIC_1:def 14,XREAL_0:def
+      1;
+
+      P - p < pr - p by A6,XREAL_1:11;
+      then P - p < r by A8,XXREAL_0:2;
+      then dist (a', P) < r by A5,Th34;
+      then
+A9:   P in Ball (a', r) by METRIC_1:12;
+      Q in RAT by RAT_1:def 2;
+      then Q in A by A2,A7,XBOOLE_0:def 4;
+      hence thesis by A9,XBOOLE_0:3;
     end;
     hence thesis by GOBOARD6:95,TOPMETR:def 7;
   end;
   b in Cl A
   proof
+
     reconsider a' = b as Element of RealSpace by METRIC_1:def 14,XREAL_0:def 1;
+
     for r being real number st r > 0 holds Ball (a', r) meets A
     proof
-      let r be real number;
-      assume
-A10:  r > 0;
       set p = b;
-      reconsider pp = b - r as Element of RealSpace by METRIC_1:def 14
-,XREAL_0:def 1;
+      let r be real number;
+
+      reconsider pp = b - r as Element of RealSpace by METRIC_1:def 14 ,
+      XREAL_0:def 1;
+
       set pr = max (pp, (p + a)/2);
-A11:  b < b + r by A10,XREAL_1:31;
-A12:  pr >= (p + a)/2 by XXREAL_0:25;
-A13:  (p + a)/2 > a by A1,XREAL_1:228;
+A10:  pr >= (p + a)/2 by XXREAL_0:25;
+      assume
+      r > 0;
+      then
+A11:  b < b + r by XREAL_1:31;
       p > pr
       proof
         per cases by XXREAL_0:16;
-        suppose pr = pp;
+        suppose
+          pr = pp;
           hence thesis by A11,XREAL_1:21;
         end;
-        suppose pr = (p + a)/2;
+        suppose
+          pr = (p + a)/2;
           hence thesis by A1,XREAL_1:228;
         end;
       end;
       then consider Q being rational number such that
-A14:  pr < Q & Q < p by RAT_1:22;
-A15:  Q in RAT by RAT_1:def 2;
-      a < pr by A12,A13,XXREAL_0:2;
-      then a < Q & Q < b by A14,XXREAL_0:2;
-      then Q in ]. a, b .[ by XXREAL_1:4;
+A12:  pr < Q and
+A13:  Q < p by RAT_1:22;
+      (p + a)/2 > a by A1,XREAL_1:228;
+      then a < pr by A10,XXREAL_0:2;
+      then a < Q by A12,XXREAL_0:2;
       then
-A16:  Q in A by A2,A15,XBOOLE_0:def 4;
+A14:  Q in ]. a, b .[ by A13,XXREAL_1:4;
+      pr >= pp by XXREAL_0:25;
+      then
+A15:  p - pr <= p - pp by XREAL_1:15;
 
-reconsider P = Q as Element of RealSpace by METRIC_1:def 14,XREAL_0:def 1;
-A17:  p - P < p - pr by A14,XREAL_1:12;
-      p - pr <= r
-      proof
-        pr >= pp by XXREAL_0:25;
-        then p - pr <= p - pp by XREAL_1:15;
-        hence thesis;
-      end;
-      then p - P < r by A17,XXREAL_0:2;
-      then dist (a', P) < r by A14,Th34;
-      then P in Ball (a', r) by METRIC_1:12;
+      reconsider P = Q as Element of RealSpace by METRIC_1:def 14,XREAL_0:def
+      1;
+
+      p - P < p - pr by A12,XREAL_1:12;
+      then p - P < r by A15,XXREAL_0:2;
+      then dist (a', P) < r by A13,Th34;
+      then
+A16:  P in Ball (a', r) by METRIC_1:12;
+      Q in RAT by RAT_1:def 2;
+      then Q in A by A2,A14,XBOOLE_0:def 4;
       hence thesis by A16,XBOOLE_0:3;
     end;
     hence thesis by GOBOARD6:95,TOPMETR:def 7;
@@ -838,8 +992,9 @@ A17:  p - P < p - pr by A14,XREAL_1:12;
   hence thesis;
 end;
 
-Lm5: for A being Subset of R^1,
-a, b being real number st a < b & A = IRRAT (a, b) holds a in Cl A & b in Cl A
+Lm3: for A being Subset of R^1, a, b being real number st a < b & A = IRRAT (a
+, b) holds a in Cl A & b in Cl A
+
 proof
   let A be Subset of R^1, a, b be real number;
   assume that
@@ -847,97 +1002,112 @@ A1: a < b and
 A2: A = IRRAT (a, b);
   thus a in Cl A
   proof
+
     reconsider a' = a as Element of RealSpace by METRIC_1:def 14,XREAL_0:def 1;
+
     for r being real number st r > 0 holds Ball (a', r) meets A
     proof
-      let r be real number;
-      assume
-A3:   r > 0;
       set p = a;
-      reconsider pp = a + r as Element of RealSpace by METRIC_1:def 14
-,XREAL_0:def 1;
+      let r be real number;
+
+      reconsider pp = a + r as Element of RealSpace by METRIC_1:def 14 ,
+      XREAL_0:def 1;
+
       set pr = min (pp, (p + b)/2);
-A4:   pr <= (p + b)/2 by XXREAL_0:17;
-A5:   (p + b)/2 < b by A1,XREAL_1:228;
+A3:   pr <= (p + b)/2 by XXREAL_0:17;
+      assume
+A4:   r > 0;
       p < pr
       proof
         per cases by XXREAL_0:15;
-        suppose pr = pp;
-          hence thesis by A3,XREAL_1:31;
+        suppose
+          pr = pp;
+          hence thesis by A4,XREAL_1:31;
         end;
-        suppose pr = (p + b)/2;
+        suppose
+          pr = (p + b)/2;
           hence thesis by A1,XREAL_1:228;
         end;
       end;
       then consider Q being irrational (real number) such that
-A6:   p < Q & Q < pr by Th50;
-A7:   Q in IRRAT by Th37;
-      pr < b by A4,A5,XXREAL_0:2;
-      then a < Q & Q < b by A6,XXREAL_0:2;
-      then Q in ]. a, b .[ by XXREAL_1:4;
+A5:   p < Q and
+A6:   Q < pr by Th50;
+      (p + b)/2 < b by A1,XREAL_1:228;
+      then pr < b by A3,XXREAL_0:2;
+      then Q < b by A6,XXREAL_0:2;
       then
-A8:   Q in A by A2,A7,XBOOLE_0:def 4;
+A7:   Q in ]. a, b .[ by A5,XXREAL_1:4;
+      pr <= pp by XXREAL_0:17;
+      then
+A8:   pr - p <= pp - p by XREAL_1:11;
 
-reconsider P = Q as Element of RealSpace by METRIC_1:def 14,XREAL_0:def 1;
-A9:   P - p < pr - p by A6,XREAL_1:11;
-      pr - p <= r
-      proof
-        pr <= pp by XXREAL_0:17;
-        then pr - p <= pp - p by XREAL_1:11;
-        hence thesis;
-      end;
-      then P - p < r by A9,XXREAL_0:2;
-      then dist (a', P) < r by A6,Th34;
-      then P in Ball (a', r) by METRIC_1:12;
-      hence thesis by A8,XBOOLE_0:3;
+      reconsider P = Q as Element of RealSpace by METRIC_1:def 14,XREAL_0:def
+      1;
+
+      P - p < pr - p by A6,XREAL_1:11;
+      then P - p < r by A8,XXREAL_0:2;
+      then dist (a', P) < r by A5,Th34;
+      then
+A9:   P in Ball (a', r) by METRIC_1:12;
+      Q in IRRAT by Th37;
+      then Q in A by A2,A7,XBOOLE_0:def 4;
+      hence thesis by A9,XBOOLE_0:3;
     end;
     hence thesis by GOBOARD6:95,TOPMETR:def 7;
   end;
   b in Cl A
   proof
+
     reconsider a' = b as Element of RealSpace by METRIC_1:def 14,XREAL_0:def 1;
+
     for r being real number st r > 0 holds Ball (a', r) meets A
     proof
-      let r be real number;
-      assume
-A10:  r > 0;
       set p = b;
-      reconsider pp = b - r as Element of RealSpace by METRIC_1:def 14
-,XREAL_0:def 1;
+      let r be real number;
+
+      reconsider pp = b - r as Element of RealSpace by METRIC_1:def 14 ,
+      XREAL_0:def 1;
+
       set pr = max (pp, (p + a)/2);
-A11:  b < b + r by A10,XREAL_1:31;
-A12:  pr >= (p + a)/2 by XXREAL_0:25;
-A13:  (p + a)/2 > a by A1,XREAL_1:228;
+A10:  pr >= (p + a)/2 by XXREAL_0:25;
+      assume
+      r > 0;
+      then
+A11:  b < b + r by XREAL_1:31;
       p > pr
       proof
         per cases by XXREAL_0:16;
-        suppose pr = pp;
+        suppose
+          pr = pp;
           hence thesis by A11,XREAL_1:21;
         end;
-        suppose pr = (p + a)/2;
+        suppose
+          pr = (p + a)/2;
           hence thesis by A1,XREAL_1:228;
         end;
       end;
       then consider Q being irrational (real number) such that
-A14:  pr < Q & Q < p by Th50;
-A15:  Q in IRRAT by Th37;
-      a < pr by A12,A13,XXREAL_0:2;
-      then a < Q & Q < b by A14,XXREAL_0:2;
-      then Q in ]. a, b .[ by XXREAL_1:4;
+A12:  pr < Q and
+A13:  Q < p by Th50;
+      (p + a)/2 > a by A1,XREAL_1:228;
+      then a < pr by A10,XXREAL_0:2;
+      then a < Q by A12,XXREAL_0:2;
       then
-A16:  Q in A by A2,A15,XBOOLE_0:def 4;
+A14:  Q in ]. a, b .[ by A13,XXREAL_1:4;
+      pr >= pp by XXREAL_0:25;
+      then
+A15:  p - pr <= p - pp by XREAL_1:15;
 
-reconsider P = Q as Element of RealSpace by METRIC_1:def 14,XREAL_0:def 1;
-A17:  p - P < p - pr by A14,XREAL_1:12;
-      p - pr <= r
-      proof
-        pr >= pp by XXREAL_0:25;
-        then p - pr <= p - pp by XREAL_1:15;
-        hence thesis;
-      end;
-      then p - P < r by A17,XXREAL_0:2;
-      then dist (a', P) < r by A14,Th34;
-      then P in Ball (a', r) by METRIC_1:12;
+      reconsider P = Q as Element of RealSpace by METRIC_1:def 14,XREAL_0:def
+      1;
+
+      p - P < p - pr by A12,XREAL_1:12;
+      then p - P < r by A15,XXREAL_0:2;
+      then dist (a', P) < r by A13,Th34;
+      then
+A16:  P in Ball (a', r) by METRIC_1:12;
+      Q in IRRAT by Th37;
+      then Q in A by A2,A14,XBOOLE_0:def 4;
       hence thesis by A16,XBOOLE_0:3;
     end;
     hence thesis by GOBOARD6:95,TOPMETR:def 7;
@@ -946,57 +1116,68 @@ A17:  p - P < p - pr by A14,XREAL_1:12;
 end;
 
 theorem Th52:
-  for a, b, c being real number st a < b holds
-  c in RAT (a,b) iff c is rational & a < c & c < b
+  for a, b, c being real number holds c in RAT (a,b) iff c is
+  rational & a < c & c < b
 proof
   let a, b, c be real number;
-  assume a < b;
   hereby
-    assume c in RAT (a,b);
-    then c in RAT & c in ]. a, b .[ by XBOOLE_0:def 4;
-    hence c is rational & a < c & c < b by XXREAL_1:4;
+    assume
+A1: c in RAT (a,b);
+    then c in ]. a, b .[ by XBOOLE_0:def 4;
+    hence c is rational & a < c & c < b by A1,XXREAL_1:4;
   end;
-  assume c is rational & a < c & c < b;
-  then c in RAT & c in ]. a, b .[ by RAT_1:def 2,XXREAL_1:4;
-  hence thesis by XBOOLE_0:def 4;
+  assume that
+A2: c is rational and
+A3: a < c and
+A4: c < b;
+A5: c in RAT by A2,RAT_1:def 2;
+  c in ]. a, b .[ by A3,A4,XXREAL_1:4;
+  hence thesis by A5,XBOOLE_0:def 4;
 end;
 
 theorem Th53:
-  for a, b, c being real number st a < b holds
-  c in IRRAT (a,b) iff c is irrational & a < c & c < b
+  for a, b, c being real number holds c in IRRAT (a,b) iff c is
+  irrational & a < c & c < b
 proof
   let a, b, c be real number;
-  assume a < b;
   hereby
-    assume c in IRRAT (a,b);
-    then c in IRRAT & c in ]. a, b .[ by XBOOLE_0:def 4;
-    hence c is irrational & a < c & c < b by Th37,XXREAL_1:4;
+    assume
+A1: c in IRRAT (a,b);
+    then
+A2: c in ]. a, b .[ by XBOOLE_0:def 4;
+    c in IRRAT by A1,XBOOLE_0:def 4;
+    hence c is irrational & a < c & c < b by A2,Th37,XXREAL_1:4;
   end;
-  assume c is irrational & a < c & c < b;
-  then c in IRRAT & c in ]. a, b .[ by Th37,XXREAL_1:4;
-  hence thesis by XBOOLE_0:def 4;
+  assume that
+A3: c is irrational and
+A4: a < c and
+A5: c < b;
+A6: c in ]. a, b .[ by A4,A5,XXREAL_1:4;
+  c in IRRAT by A3,Th37;
+  hence thesis by A6,XBOOLE_0:def 4;
 end;
 
 theorem Th54:
-  for A being Subset of R^1,
-  a, b being real number st a < b & A = RAT (a, b) holds Cl A = [. a, b .]
+  for A being Subset of R^1, a, b being real number st a < b & A =
+  RAT (a, b) holds Cl A = [. a, b .]
 proof
   let A be Subset of R^1, a, b be real number;
   assume that
 A1: a < b and
 A2: A = RAT (a, b);
+  reconsider ab = ]. a, b .[, RT = RAT as Subset of R^1 by NUMBERS:12,TOPMETR:
+  24;
   reconsider RR = RAT /\ ]. a, b .[ as Subset of R^1 by TOPMETR:24;
-  reconsider ab = ]. a, b .[, RT = RAT as Subset of R^1
-  by NUMBERS:12,TOPMETR:24;
-A3: Cl RR c= (Cl RT) /\ Cl ab by PRE_TOPC:51;
-A4: (the carrier of R^1) /\ Cl ab = Cl ab by XBOOLE_1:28;
+A3: (the carrier of R^1) /\ Cl ab = Cl ab by XBOOLE_1:28;
+A4: Cl RR c= (Cl RT) /\ Cl ab by PRE_TOPC:51;
   thus Cl A c= [. a, b .]
   proof
     let x be set;
-    assume x in Cl A;
-    then x in (Cl RT) /\ Cl ab by A2,A3;
+    assume
+    x in Cl A;
+    then x in (Cl RT) /\ Cl ab by A2,A4;
     then x in (the carrier of R^1) /\ Cl ab by Th35;
-    hence thesis by A1,A4,Th36;
+    hence thesis by A1,A3,Th36;
   end;
   thus [. a, b .] c= Cl A
   proof
@@ -1011,72 +1192,77 @@ A7: p <= b by A5,XXREAL_1:1;
 A8:   p < b;
       now
         let r be real number;
-        assume
-A9:     r > 0;
-        reconsider pp = p + r as Element of RealSpace by METRIC_1:def 14
-,XREAL_0:def 1;
+        reconsider pp = p + r as Element of RealSpace by METRIC_1:def 14 ,
+        XREAL_0:def 1;
         set pr = min (pp, (p + b)/2);
-A10:    pr <= (p + b)/2 by XXREAL_0:17;
-A11:    (p + b)/2 < b by A8,XREAL_1:228;
+A9:     pr <= (p + b)/2 by XXREAL_0:17;
+        assume
+A10:    r > 0;
         p < pr
         proof
           per cases by XXREAL_0:15;
-          suppose pr = pp;
-            hence thesis by A9,XREAL_1:31;
+          suppose
+            pr = pp;
+            hence thesis by A10,XREAL_1:31;
           end;
-          suppose pr = (p + b)/2;
+          suppose
+            pr = (p + b)/2;
             hence thesis by A8,XREAL_1:228;
           end;
         end;
         then consider Q being rational number such that
-A12:    p < Q & Q < pr by RAT_1:22;
-A13:    Q in RAT by RAT_1:def 2;
-        pr < b by A10,A11,XXREAL_0:2;
-        then a < Q & Q < b by A6,A12,XXREAL_0:2;
-        then Q in ]. a, b .[ by XXREAL_1:4;
+A11:    p < Q and
+A12:    Q < pr by RAT_1:22;
+        (p + b)/2 < b by A8,XREAL_1:228;
+        then pr < b by A9,XXREAL_0:2;
         then
-A14:    Q in A by A2,A13,XBOOLE_0:def 4;
-        reconsider P = Q as Element of RealSpace by METRIC_1:def 14
-,XREAL_0:def 1;
-A15:    P - p < pr - p by A12,XREAL_1:11;
-        pr - p <= r
-        proof
-          pr <= pp by XXREAL_0:17;
-          then pr - p <= pp - p by XREAL_1:11;
-          hence thesis;
-        end;
-        then P - p < r by A15,XXREAL_0:2;
-        then dist (p, P) < r by A12,Th34;
-        then P in Ball (p, r) by METRIC_1:12;
-        hence Ball (p, r) meets A by A14,XBOOLE_0:3;
+A13:    Q < b by A12,XXREAL_0:2;
+        pr <= pp by XXREAL_0:17;
+        then
+A14:    pr - p <= pp - p by XREAL_1:11;
+        reconsider P = Q as Element of RealSpace by METRIC_1:def 14 ,XREAL_0:
+        def 1;
+        P - p < pr - p by A12,XREAL_1:11;
+        then P - p < r by A14,XXREAL_0:2;
+        then dist (p, P) < r by A11,Th34;
+        then
+A15:    P in Ball (p, r) by METRIC_1:12;
+        a < Q by A6,A11,XXREAL_0:2;
+        then
+A16:    Q in ]. a, b .[ by A13,XXREAL_1:4;
+        Q in RAT by RAT_1:def 2;
+        then Q in A by A2,A16,XBOOLE_0:def 4;
+        hence Ball (p, r) meets A by A15,XBOOLE_0:3;
       end;
       hence thesis by GOBOARD6:95,TOPMETR:def 7;
     end;
-    suppose p = b;
-      hence thesis by A1,A2,Lm4;
+    suppose
+      p = b;
+      hence thesis by A1,A2,Lm2;
     end;
   end;
 end;
 
 theorem Th55:
-  for A being Subset of R^1,
-  a, b being real number st a < b & A = IRRAT (a, b) holds Cl A = [. a, b .]
+  for A being Subset of R^1, a, b being real number st a < b & A =
+  IRRAT (a, b) holds Cl A = [. a, b .]
 proof
   let A be Subset of R^1, a, b be real number;
   assume that
 A1: a < b and
 A2: A = IRRAT (a, b);
-  reconsider RR = IRRAT /\ ]. a, b .[ as Subset of R^1 by TOPMETR:24;
   reconsider ab = ]. a, b .[, RT = IRRAT as Subset of R^1 by TOPMETR:24;
-A3: Cl RR c= (Cl RT) /\ Cl ab by PRE_TOPC:51;
-A4: (the carrier of R^1) /\ Cl ab = Cl ab by XBOOLE_1:28;
+  reconsider RR = IRRAT /\ ]. a, b .[ as Subset of R^1 by TOPMETR:24;
+A3: (the carrier of R^1) /\ Cl ab = Cl ab by XBOOLE_1:28;
+A4: Cl RR c= (Cl RT) /\ Cl ab by PRE_TOPC:51;
   thus Cl A c= [. a, b .]
   proof
     let x be set;
-    assume x in Cl A;
-    then x in (Cl RT) /\ Cl ab by A2,A3;
+    assume
+    x in Cl A;
+    then x in (Cl RT) /\ Cl ab by A2,A4;
     then x in (the carrier of R^1) /\ Cl ab by Th51;
-    hence thesis by A1,A4,Th36;
+    hence thesis by A1,A3,Th36;
   end;
   thus [. a, b .] c= Cl A
   proof
@@ -1091,76 +1277,82 @@ A7: p <= b by A5,XXREAL_1:1;
 A8:   p < b;
       now
         let r be real number;
-        assume
-A9:     r > 0;
-        reconsider pp = p + r as Element of RealSpace by METRIC_1:def 14
-,XREAL_0:def 1;
+        reconsider pp = p + r as Element of RealSpace by METRIC_1:def 14 ,
+        XREAL_0:def 1;
         set pr = min (pp, (p + b)/2);
-A10:    pr <= (p + b)/2 by XXREAL_0:17;
-A11:    (p + b)/2 < b by A8,XREAL_1:228;
+A9:     pr <= (p + b)/2 by XXREAL_0:17;
+        assume
+A10:    r > 0;
         p < pr
         proof
           per cases by XXREAL_0:15;
-          suppose pr = pp;
-            hence thesis by A9,XREAL_1:31;
+          suppose
+            pr = pp;
+            hence thesis by A10,XREAL_1:31;
           end;
-          suppose pr = (p + b)/2;
+          suppose
+            pr = (p + b)/2;
             hence thesis by A8,XREAL_1:228;
           end;
         end;
         then consider Q being irrational (real number) such that
-A12:    p < Q & Q < pr by Th50;
-A13:    Q in IRRAT by Th37;
-        pr < b by A10,A11,XXREAL_0:2;
-        then a < Q & Q < b by A6,A12,XXREAL_0:2;
-        then Q in ]. a, b .[ by XXREAL_1:4;
+A11:    p < Q and
+A12:    Q < pr by Th50;
+        (p + b)/2 < b by A8,XREAL_1:228;
+        then pr < b by A9,XXREAL_0:2;
         then
-A14:    Q in A by A2,A13,XBOOLE_0:def 4;
-        reconsider P = Q as Element of RealSpace by METRIC_1:def 14
-,XREAL_0:def 1;
-A15:    P - p < pr - p by A12,XREAL_1:11;
-        pr - p <= r
-        proof
-          pr <= pp by XXREAL_0:17;
-          then pr - p <= pp - p by XREAL_1:11;
-          hence thesis;
-        end;
-        then P - p < r by A15,XXREAL_0:2;
-        then dist (p, P) < r by A12,Th34;
-        then P in Ball (p, r) by METRIC_1:12;
-        hence Ball (p, r) meets A by A14,XBOOLE_0:3;
+A13:    Q < b by A12,XXREAL_0:2;
+        pr <= pp by XXREAL_0:17;
+        then
+A14:    pr - p <= pp - p by XREAL_1:11;
+        reconsider P = Q as Element of RealSpace by METRIC_1:def 14 ,XREAL_0:
+        def 1;
+        P - p < pr - p by A12,XREAL_1:11;
+        then P - p < r by A14,XXREAL_0:2;
+        then dist (p, P) < r by A11,Th34;
+        then
+A15:    P in Ball (p, r) by METRIC_1:12;
+        a < Q by A6,A11,XXREAL_0:2;
+        then
+A16:    Q in ]. a, b .[ by A13,XXREAL_1:4;
+        Q in IRRAT by Th37;
+        then Q in A by A2,A16,XBOOLE_0:def 4;
+        hence Ball (p, r) meets A by A15,XBOOLE_0:3;
       end;
       hence thesis by GOBOARD6:95,TOPMETR:def 7;
     end;
-    suppose p = b;
-      hence thesis by A1,A2,Lm5;
+    suppose
+      p = b;
+      hence thesis by A1,A2,Lm3;
     end;
   end;
 end;
 
 theorem Th56:
-  for T being connected TopSpace, A being closed open Subset of T holds
-  A = {} or A = [#]T
+  for T being connected TopSpace, A being closed open Subset of T
+  holds A = {} or A = [#]T
 proof
   let T be connected TopSpace, A be closed open Subset of T;
   assume that
 A1: A <> {} and
 A2: A <> [#]T;
-A3: A <> {}T by A1;
-A4: [#]T = A \/ A` by PRE_TOPC:18;
+A3: A` <> {} by A2,PRE_TOPC:23;
   A misses A` by SUBSET_1:44;
   then
-A5: A, A` are_separated by A4,CONNSP_1:3;
-  A` <> {} by A2,PRE_TOPC:23;
-  then not [#]T is connected by A3,A4,A5,CONNSP_1:16;
+A4: A, A` are_separated by CONNSP_1:3;
+A5: [#]T = A \/ A` by PRE_TOPC:18;
+  A <> {}T by A1;
+  then not [#]T is connected by A5,A4,A3,CONNSP_1:16;
   hence thesis by CONNSP_1:28;
 end;
 
 theorem Th57:
-  for A being Subset of R^1 st A is closed open holds A = {} or A = REAL
+  for A being Subset of R^1 st A is closed open holds A = {} or A
+  = REAL
 proof
   let A be Subset of R^1;
-  assume A is closed open;
+  assume
+  A is closed open;
   then reconsider A as closed open Subset of R^1;
   A = {} or A = [#]R^1 by Th56;
   hence thesis by TOPMETR:24;
@@ -1169,50 +1361,54 @@ end;
 begin :: Topological Properties of Intervals
 
 theorem Th58:
-  for A being Subset of R^1, a, b being real number st
-  A = [. a, b .[ & a <> b holds Cl A = [. a, b .]
+  for A being Subset of R^1, a, b being real number st A = [. a, b
+  .[ & a <> b holds Cl A = [. a, b .]
 proof
   let A be Subset of R^1, a, b be real number;
-  assume
-A1: A = [. a, b .[ & a <> b;
-  then Cl [. a, b .[ = [. a, b .] by BORSUK_4:21;
+  assume that
+A1: A = [. a, b .[ and
+A2: a <> b;
+  Cl [. a, b .[ = [. a, b .] by A2,BORSUK_4:21;
   hence thesis by A1,TOPREAL6:80;
 end;
 
 theorem Th59:
-  for A being Subset of R^1, a, b being real number st
-  A = ]. a, b .] & a <> b holds Cl A = [. a, b .]
+  for A being Subset of R^1, a, b being real number st A = ]. a, b
+  .] & a <> b holds Cl A = [. a, b .]
 proof
   let A be Subset of R^1, a, b be real number;
-  assume
-A1: A = ]. a, b .] & a <> b;
-  then Cl ]. a, b .] = [. a, b .] by BORSUK_4:20;
+  assume that
+A1: A = ]. a, b .] and
+A2: a <> b;
+  Cl ]. a, b .] = [. a, b .] by A2,BORSUK_4:20;
   hence thesis by A1,TOPREAL6:80;
 end;
 
 theorem
-  for A being Subset of R^1, a, b, c being real number st
-  A = [. a, b .[ \/ ]. b, c .] & a < b & b < c holds Cl A = [. a, c .]
+  for A being Subset of R^1, a, b, c being real number st A = [. a, b .[
+  \/ ]. b, c .] & a < b & b < c holds Cl A = [. a, c .]
 proof
   let A be Subset of R^1, a, b, c be real number;
   assume that
 A1: A = [. a, b .[ \/ ]. b, c .] and
-A2: a < b & b < c;
+A2: a < b and
+A3: b < c;
   reconsider B = [. a, b .[, C = ]. b, c .] as Subset of R^1 by TOPMETR:24;
   Cl A = Cl B \/ Cl C by A1,PRE_TOPC:50
     .= [. a, b .] \/ Cl C by A2,Th58
-    .= [. a, b .] \/ [. b, c .] by A2,Th59
-    .= [. a, c .] by A2,XXREAL_1:174;
+    .= [. a, b .] \/ [. b, c .] by A3,Th59
+    .= [. a, c .] by A2,A3,XXREAL_1:174;
   hence thesis;
 end;
 
 theorem Th61:
-  for A being Subset of R^1, a being real number st A = {a} holds Cl A = {a}
+  for A being Subset of R^1, a being real number st A = {a} holds
+  Cl A = {a}
 proof
   let A be Subset of R^1, a be real number;
+A1: a is Point of R^1 by TOPMETR:24,XREAL_0:def 1;
   assume
-A1: A = {a};
-  a is Point of R^1 by TOPMETR:24,XREAL_0:def 1;
+  A = {a};
   hence thesis by A1,YELLOW_8:35;
 end;
 
@@ -1224,25 +1420,27 @@ proof
   assume
 A1: A = B;
   hereby
-    assume A is open;
+    assume
+    A is open;
     then A in Family_open_set RealSpace by JORDAN5A:6;
     then A in the topology of TopSpaceMetr RealSpace by TOPMETR:16;
     hence B is open by A1,PRE_TOPC:def 5,TOPMETR:def 7;
   end;
-  assume B is open;
+  assume
+  B is open;
   then B in the topology of R^1 by PRE_TOPC:def 5;
   then A in Family_open_set RealSpace by A1,TOPMETR:16,def 7;
   hence thesis by JORDAN5A:6;
 end;
 
-Lm7: for a being real number holds ]. -infty,a.] is closed
+Lm4: for a being real number holds ]. -infty,a.] is closed
 proof
   let a be real number;
   ]. -infty,a.] = left_closed_halfline a;
   hence thesis;
 end;
 
-Lm9: for a being real number holds [.a,+infty .[ is closed
+Lm5: for a being real number holds [.a,+infty .[ is closed
 proof
   let a be real number;
   [. a,+infty .[ = right_closed_halfline a;
@@ -1255,16 +1453,17 @@ registration
   cluster A /\ B -> open Subset of REAL;
   coherence
   proof
-    A1 is open & B1 is open by Th62;
-    then A1 /\ B1 is open by TOPS_1:38;
+A1: B1 is open by Th62;
+    A1 is open by Th62;
+    then A1 /\ B1 is open by A1;
     hence thesis by Th62;
   end;
   cluster A \/ B -> open Subset of REAL;
   coherence
   proof
-    A1 is open & B1 is open by Th62;
-    then 
-    A1 \/ B1 is open by TOPS_1:37;
+A2: B1 is open by Th62;
+    A1 is open by Th62;
+    then A1 \/ B1 is open by A2;
     hence thesis by Th62;
   end;
 end;
@@ -1274,42 +1473,46 @@ proof
   let a,b be ext-real number;
   set A = ]. a,b .[;
   per cases by XXREAL_0:14;
-  suppose a in REAL & b in REAL;
+  suppose
+    a in REAL & b in REAL;
     then reconsider a, b as real number;
     A = ].-infty,b.[ /\ ].a,+infty.[ by XXREAL_1:269;
     hence thesis;
   end;
-  suppose a = +infty;
+  suppose
+    a = +infty;
     then A = {} by XXREAL_1:214;
     hence thesis;
   end;
   suppose that
-a2: a = -infty and
-a3: b in REAL;
-    reconsider b as real number by a3;
-    A = left_open_halfline b by a2;
+A1: a = -infty and
+A2: b in REAL;
+    reconsider b as real number by A2;
+    A = left_open_halfline b by A1;
     hence thesis;
   end;
   suppose that
-a4: a in REAL and
-a5: b = +infty;
-    reconsider a as real number by a4;
-    A = right_open_halfline a by a5;
+A3: a in REAL and
+A4: b = +infty;
+    reconsider a as real number by A3;
+    A = right_open_halfline a by A4;
     hence thesis;
   end;
-  suppose b = -infty;
+  suppose
+    b = -infty;
     then A = {} by XXREAL_1:210;
     hence thesis;
   end;
-  suppose a = -infty & b = +infty;
+  suppose
+    a = -infty & b = +infty;
     then A = [#]REAL by XXREAL_1:224;
     hence thesis;
   end;
 end;
 
 theorem Th63:
-  for A being Subset of R^1, a,b being ext-real number st
-  A = ]. a,b .[ holds A is open
+  for A being Subset of R^1, a,b being ext-real number st A = ]. a
+  ,b .[ holds A is open
 proof
   let A be Subset of R^1, a,b be ext-real number;
   ]. a,b .[ is open by Lm6;
@@ -1319,29 +1522,30 @@ end;
 canceled;
 
 theorem Th65:
-  for A being Subset of R^1, a being real number st
-  A = ]. -infty,a.] holds A is closed
+  for A being Subset of R^1, a being real number st A = ]. -infty,
+  a.] holds A is closed
 proof
   let A be Subset of R^1, a be real number;
   assume
 A1: A = ]. -infty,a.];
-  ]. -infty,a.] is closed by Lm7;
+  ]. -infty,a.] is closed by Lm4;
   hence thesis by A1,TOPREAL6:79;
 end;
 
 theorem Th66:
-  for A being Subset of R^1, a being real number st
-  A = [. a,+infty .[ holds A is closed
+  for A being Subset of R^1, a being real number st A = [. a,
+  +infty .[ holds A is closed
 proof
   let A be Subset of R^1, a be real number;
   assume
 A1: A = [. a,+infty .[;
-  [. a,+infty .[ is closed by Lm9;
+  [. a,+infty .[ is closed by Lm5;
   hence thesis by A1,TOPREAL6:79;
 end;
 
 theorem Th67:
-  for a being real number holds [. a,+infty .[ = {a} \/ ]. a,+infty .[
+  for a being real number holds [. a,+infty .[ = {a} \/ ]. a,
+  +infty .[
 proof
   let a be real number;
   thus [. a,+infty .[ c= {a} \/ ]. a,+infty .[
@@ -1352,11 +1556,13 @@ A1: x in [. a,+infty .[;
     then reconsider x as real number;
 A2: x >= a by A1,XXREAL_1:236;
     per cases by A2,XXREAL_0:1;
-    suppose x = a;
+    suppose
+      x = a;
       then x in {a} by TARSKI:def 1;
       hence thesis by XBOOLE_0:def 3;
     end;
-    suppose x > a;
+    suppose
+      x > a;
       then x in ]. a,+infty .[ by XXREAL_1:235;
       hence thesis by XBOOLE_0:def 3;
     end;
@@ -1371,7 +1577,8 @@ A3: x in {a} \/ ]. a,+infty .[;
 end;
 
 theorem Th68:
-  for a being real number holds ]. -infty,a.] = {a} \/ ]. -infty,a.[
+  for a being real number holds ]. -infty,a.] = {a} \/ ]. -infty,a
+  .[
 proof
   let a be real number;
   thus ]. -infty,a.] c= {a} \/ ]. -infty,a.[
@@ -1382,11 +1589,13 @@ A1: x in ]. -infty,a.];
     then reconsider x as real number;
 A2: x <= a by A1,XXREAL_1:234;
     per cases by A2,XXREAL_0:1;
-    suppose x = a;
+    suppose
+      x = a;
       then x in {a} by TARSKI:def 1;
       hence thesis by XBOOLE_0:def 3;
     end;
-    suppose x < a;
+    suppose
+      x < a;
       then x in ]. -infty,a.[ by XXREAL_1:233;
       hence thesis by XBOOLE_0:def 3;
     end;
@@ -1434,8 +1643,8 @@ theorem
   for a being real number holds [. a,+infty .[ <> REAL
 proof
   let a be real number;
-A1: a - 1 in REAL by XREAL_0:def 1;
-  a - 1 < a by XREAL_1:148;
+A1: a - 1 < a by XREAL_1:148;
+  a - 1 in REAL by XREAL_0:def 1;
   hence thesis by A1,XXREAL_1:236;
 end;
 
@@ -1443,8 +1652,8 @@ theorem
   for a being real number holds ]. -infty, a .] <> REAL
 proof
   let a be real number;
-A1: a + 1 in REAL by XREAL_0:def 1;
-  a + 1 > a by XREAL_1:31;
+A1: a + 1 > a by XREAL_1:31;
+  a + 1 in REAL by XREAL_0:def 1;
   hence thesis by A1,XXREAL_1:234;
 end;
 
@@ -1452,30 +1661,33 @@ theorem Th74:
   for a being real number holds ]. -infty, a .[ <> REAL
 proof
   let a be real number;
-A1: a + 1 in REAL by XREAL_0:def 1;
-  a + 1 > a by XREAL_1:31;
+A1: a + 1 > a by XREAL_1:31;
+  a + 1 in REAL by XREAL_0:def 1;
   hence thesis by A1,XXREAL_1:233;
 end;
 
 theorem Th75:
-  for A being Subset of R^1, a being real number st
-  A = ]. a,+infty .[ holds Cl A = [. a,+infty .[
+  for A being Subset of R^1, a being real number st A = ]. a,
+  +infty .[ holds Cl A = [. a,+infty .[
 proof
   let A be Subset of R^1, a be real number;
   reconsider A' = A as Subset of R^1;
+  reconsider C = [. a,+infty .[ as Subset of R^1 by TOPMETR:24;
   assume
 A1: A = ]. a,+infty .[;
   then
 A2: A' is open by Th63;
-  reconsider C = [. a,+infty .[ as Subset of R^1 by TOPMETR:24;
-A3: C is closed by Th66;
+  C is closed by Th66;
+  then
+A3: Cl A' c= C by A1,TOPS_1:31,XXREAL_1:45;
 A4: C = A' \/ {a} by A1,Th67;
-A5: Cl A' c= C by A1,A3,TOPS_1:31,XXREAL_1:45;
-  per cases by A4,A5,Th2,PRE_TOPC:48;
-  suppose Cl A' = C;
+  per cases by A4,A3,Th2,PRE_TOPC:48;
+  suppose
+    Cl A' = C;
     hence thesis;
   end;
-  suppose Cl A' = A';
+  suppose
+    Cl A' = A';
     hence thesis by A1,A2,Th57,Th71;
   end;
 end;
@@ -1490,24 +1702,27 @@ proof
 end;
 
 theorem Th77:
-  for A being Subset of R^1, a being real number st
-  A = ]. -infty, a .[ holds Cl A = ]. -infty, a .]
+  for A being Subset of R^1, a being real number st A = ]. -infty,
+  a .[ holds Cl A = ]. -infty, a .]
 proof
   let A be Subset of R^1, a be real number;
   reconsider A' = A as Subset of R^1;
+  reconsider C = ]. -infty, a .] as Subset of R^1 by TOPMETR:24;
   assume
 A1: A = ]. -infty, a .[;
   then
 A2: A' is open by Th63;
-  reconsider C = ]. -infty, a .] as Subset of R^1 by TOPMETR:24;
-A3: C is closed by Th65;
+  C is closed by Th65;
+  then
+A3: Cl A' c= C by A1,TOPS_1:31,XXREAL_1:41;
 A4: C = A' \/ {a} by A1,Th68;
-A5: Cl A' c= C by A1,A3,TOPS_1:31,XXREAL_1:41;
-  per cases by A4,A5,Th2,PRE_TOPC:48;
-  suppose Cl A' = C;
+  per cases by A4,A3,Th2,PRE_TOPC:48;
+  suppose
+    Cl A' = C;
     hence thesis;
   end;
-  suppose Cl A' = A';
+  suppose
+    Cl A' = A';
     hence thesis by A1,A2,Th57,Th74;
   end;
 end;
@@ -1522,65 +1737,67 @@ proof
 end;
 
 theorem Th79:
-  for A, B being Subset of R^1, b being real number st
-  A = ]. -infty, b .[ & B = ]. b,+infty .[ holds A, B are_separated
+  for A, B being Subset of R^1, b being real number st A = ].
+  -infty, b .[ & B = ]. b,+infty .[ holds A, B are_separated
 proof
   let A, B be Subset of R^1, b be real number;
   assume that
 A1: A = ]. -infty, b .[ and
 A2: B = ]. b,+infty .[;
-  Cl A = ]. -infty, b .] by A1,Th77;
-  then
-A3: Cl A misses B by A2,XXREAL_1:91;
   Cl B = [. b,+infty .[ by A2,Th75;
-  then Cl B misses A by A1,XXREAL_1:94;
+  then
+A3: Cl B misses A by A1,XXREAL_1:94;
+  Cl A = ]. -infty, b .] by A1,Th77;
+  then Cl A misses B by A2,XXREAL_1:91;
   hence thesis by A3,CONNSP_1:def 1;
 end;
 
 theorem
-  for A being Subset of R^1, a, b being real number st a < b &
-  A = [. a, b .[ \/ ]. b,+infty .[ holds Cl A = [. a,+infty .[
+  for A being Subset of R^1, a, b being real number st a < b & A = [. a,
+  b .[ \/ ]. b,+infty .[ holds Cl A = [. a,+infty .[
 proof
   let A be Subset of R^1, a, b be real number;
-  assume
-A1: a < b & A = [. a, b .[ \/ ]. b,+infty .[;
-  reconsider B = [. a, b .[, C = ]. b,+infty .[ as Subset of R^1
-  by TOPMETR:24;
-A2: Cl B = [. a, b .] by A1,Th58;
-A3: Cl C = [. b,+infty .[ by Th75;
-  Cl A = Cl B \/ Cl C by A1,PRE_TOPC:50;
-  hence thesis by A1,A2,A3,Th28;
+  assume that
+A1: a < b and
+A2: A = [. a, b .[ \/ ]. b,+infty .[;
+  reconsider B = [. a, b .[, C = ]. b,+infty .[ as Subset of R^1 by TOPMETR:24;
+A3: Cl A = Cl B \/ Cl C by A2,PRE_TOPC:50;
+A4: Cl C = [. b,+infty .[ by Th75;
+  Cl B = [. a, b .] by A1,Th58;
+  hence thesis by A1,A4,A3,Th28;
 end;
 
 theorem Th81:
-  for A being Subset of R^1, a, b being real number st a < b &
-  A = ]. a, b .[ \/ ]. b,+infty .[ holds Cl A = [. a,+infty .[
+  for A being Subset of R^1, a, b being real number st a < b & A =
+  ]. a, b .[ \/ ]. b,+infty .[ holds Cl A = [. a,+infty .[
 proof
   let A be Subset of R^1, a, b be real number;
-  assume
-A1: a < b & A = ]. a, b .[ \/ ]. b,+infty .[;
-  reconsider B = ]. a, b .[, C = ]. b,+infty .[ as Subset of R^1
-  by TOPMETR:24;
-A2: Cl A = Cl B \/ Cl C by A1,PRE_TOPC:50;
-A3: Cl B = [. a, b .] by A1,Th36;
-  Cl C = [. b,+infty .[ by Th75;
-  hence thesis by A1,A2,A3,Th28;
+  assume that
+A1: a < b and
+A2: A = ]. a, b .[ \/ ]. b,+infty .[;
+  reconsider B = ]. a, b .[, C = ]. b,+infty .[ as Subset of R^1 by TOPMETR:24;
+A3: Cl A = Cl B \/ Cl C by A2,PRE_TOPC:50;
+A4: Cl C = [. b,+infty .[ by Th75;
+  Cl B = [. a, b .] by A1,Th36;
+  hence thesis by A1,A3,A4,Th28;
 end;
 
 theorem
-  for A being Subset of R^1, a, b, c being real number st a < b & b < c &
-  A = RAT (a,b) \/ ]. b, c .[ \/ ]. c,+infty .[ holds Cl A = [. a,+infty .[
+  for A being Subset of R^1, a, b, c being real number st a < b & b < c
+  & A = RAT (a,b) \/ ]. b, c .[ \/ ]. c,+infty .[ holds Cl A = [. a,+infty .[
 proof
   let A be Subset of R^1;
   let a, b, c be real number;
-  assume
-A1: a < b & b < c;
-  reconsider C = ]. b, c .[ \/ ]. c,+infty .[ as Subset of R^1 by TOPMETR:24;
+  assume that
+A1: a < b and
+A2: b < c;
   reconsider B = RAT (a,b) as Subset of R^1 by TOPMETR:24;
-  assume A = RAT (a,b) \/ ]. b, c .[ \/ ]. c,+infty .[;
+  reconsider C = ]. b, c .[ \/ ]. c,+infty .[ as Subset of R^1 by TOPMETR:24;
+  assume
+  A = RAT (a,b) \/ ]. b, c .[ \/ ]. c,+infty .[;
   then A = RAT (a,b) \/ C by XBOOLE_1:4;
   then Cl A = Cl B \/ Cl C by PRE_TOPC:50;
-  then Cl A = Cl B \/ [. b,+infty .[ by A1,Th81;
+  then Cl A = Cl B \/ [. b,+infty .[ by A2,Th81;
   then Cl A = [. a, b .] \/ [. b,+infty .[ by A1,Th54;
   hence thesis by A1,Th28;
 end;
@@ -1588,29 +1805,30 @@ end;
 canceled;
 
 theorem Th84:
-  for a, b being real number st a < b holds IRRAT (a, b) misses RAT (a, b)
+  for a, b being real number holds IRRAT (a, b) misses RAT (a, b)
 proof
   let a, b be real number;
   assume
-A1: a < b;
-  assume IRRAT (a, b) meets RAT (a, b);
+  IRRAT (a, b) meets RAT (a, b);
   then consider x being set such that
-A2: x in IRRAT (a, b) & x in RAT (a, b) by XBOOLE_0:3;
-  reconsider x as real number by A2;
-  x is rational & x is irrational by A1,A2,Th53;
-  hence thesis;
+A1: x in IRRAT (a, b) and
+A2: x in RAT (a, b) by XBOOLE_0:3;
+  thus thesis by A1,A2,Th53;
+  reconsider x as real number by A1;
 end;
 
-Lm10: for a, b being real number st b <= a holds RAT (a,b) = {}
+Lm7: for a, b being real number st b <= a holds RAT (a,b) = {}
 proof
   let a, b be real number;
-  assume b <= a;
+  assume
+  b <= a;
   then ]. a, b .[ = {} by XXREAL_1:28;
   hence thesis;
 end;
 
-Lm11: for a, b being real number st b <= a holds
-REAL = ]. -infty,a.] \/ [.b,+infty .[
+Lm8: for a, b being real number st b <= a holds REAL = ]. -infty,a.] \/ [.b,
++infty .[
+
 proof
   let a, b be real number;
   assume
@@ -1618,15 +1836,18 @@ A1: b <= a;
   thus REAL c= ]. -infty,a.] \/ [.b,+infty .[
   proof
     let x be set;
-    assume x in REAL;
+    assume
+    x in REAL;
     then reconsider y = x as Real;
     per cases;
-    suppose y <= b;
+    suppose
+      y <= b;
       then y <= a by A1,XXREAL_0:2;
       then y in ]. -infty,a.] by XXREAL_1:234;
       hence thesis by XBOOLE_0:def 3;
     end;
-    suppose y > b;
+    suppose
+      y > b;
       then y in [.b,+infty .[ by XXREAL_1:236;
       hence thesis by XBOOLE_0:def 3;
     end;
@@ -1635,83 +1856,95 @@ A1: b <= a;
 end;
 
 theorem Th85:
-  for a, b being real number holds
-  REAL \ RAT (a, b) = ]. -infty,a.] \/ IRRAT (a, b) \/ [.b,+infty .[
+  for a, b being real number holds REAL \ RAT (a, b) = ]. -infty,a
+  .] \/ IRRAT (a, b) \/ [.b,+infty .[
 proof
   let a, b be real number;
   per cases;
   suppose
-A1: a < b;
+    a < b;
     thus REAL \ RAT (a, b) c= ]. -infty,a.] \/ IRRAT (a, b) \/ [.b,+infty .[
     proof
       let x be set;
       assume
-A2:   x in REAL \ RAT (a, b);
+A1:   x in REAL \ RAT (a, b);
       then
-A3:   x in REAL & not x in RAT (a, b) by XBOOLE_0:def 5;
-      reconsider x as real number by A2;
+A2:   not x in RAT (a, b) by XBOOLE_0:def 5;
+      reconsider x as real number by A1;
       per cases;
-      suppose x <= a & x < b;
-        then x in ]. -infty,a.] by XXREAL_1:234;
-        then x in ]. -infty,a.] \/ IRRAT (a, b) by XBOOLE_0:def 3;
-        hence thesis by XBOOLE_0:def 3;
-      end;
-      suppose x <= a & x >= b;
+      suppose
+        x <= a & x < b;
         then x in ]. -infty,a.] by XXREAL_1:234;
         then x in ]. -infty,a.] \/ IRRAT (a, b) by XBOOLE_0:def 3;
         hence thesis by XBOOLE_0:def 3;
       end;
       suppose
-A4:     x > a & x < b;
+        x <= a & x >= b;
+        then x in ]. -infty,a.] by XXREAL_1:234;
+        then x in ]. -infty,a.] \/ IRRAT (a, b) by XBOOLE_0:def 3;
+        hence thesis by XBOOLE_0:def 3;
+      end;
+      suppose
+A3:     x > a & x < b;
         x in IRRAT (a, b)
         proof
           per cases;
-          suppose x is rational;
-            hence thesis by A1,A3,A4,Th52;
+          suppose
+            x is rational;
+            hence thesis by A2,A3,Th52;
           end;
-          suppose x is irrational;
-            hence thesis by A1,A4,Th53;
+          suppose
+            x is irrational;
+            hence thesis by A3,Th53;
           end;
         end;
         then x in ]. -infty,a.] \/ IRRAT (a, b) by XBOOLE_0:def 3;
         hence thesis by XBOOLE_0:def 3;
       end;
-      suppose x > a & x >= b;
+      suppose
+        x > a & x >= b;
         then x in [.b,+infty .[ by XXREAL_1:236;
         hence thesis by XBOOLE_0:def 3;
       end;
     end;
     let x be set;
     assume
-A5: x in ]. -infty,a.] \/ IRRAT (a, b) \/ [.b,+infty .[;
+A4: x in ]. -infty,a.] \/ IRRAT (a, b) \/ [.b,+infty .[;
     then reconsider x as real number;
-A6: x in ]. -infty,a.] \/ IRRAT (a, b) or x in [.b,+infty .[
-    by A5,XBOOLE_0:def 3;
-    per cases by A6,XBOOLE_0:def 3;
-    suppose x in ]. -infty,a.];
+A5: x in ]. -infty,a.] \/ IRRAT (a, b) or x in [.b,+infty .[ by A4,
+    XBOOLE_0:def 3;
+    per cases by A5,XBOOLE_0:def 3;
+    suppose
+      x in ]. -infty,a.];
       then x <= a by XXREAL_1:234;
-      then x in REAL & not x in RAT (a, b) by A1,Th52,XREAL_0:def 1;
-      hence thesis by XBOOLE_0:def 5;
+      then
+A6:   not x in RAT (a, b) by Th52;
+      x in REAL by XREAL_0:def 1;
+      hence thesis by A6,XBOOLE_0:def 5;
     end;
     suppose
 A7:   x in IRRAT (a, b);
-A8:   x in REAL by XREAL_0:def 1;
-      IRRAT (a, b) misses RAT (a, b) by A1,Th84;
-      then not x in RAT (a,b) by A7,XBOOLE_0:3;
+      IRRAT (a, b) misses RAT (a, b) by Th84;
+      then
+A8:   not x in RAT (a,b) by A7,XBOOLE_0:3;
+      x in REAL by XREAL_0:def 1;
       hence thesis by A8,XBOOLE_0:def 5;
     end;
-    suppose x in [.b,+infty .[;
+    suppose
+      x in [.b,+infty .[;
       then x >= b by XXREAL_1:236;
-      then x in REAL & not x in RAT (a, b) by A1,Th52,XREAL_0:def 1;
-      hence thesis by XBOOLE_0:def 5;
+      then
+A9:   not x in RAT (a, b) by Th52;
+      x in REAL by XREAL_0:def 1;
+      hence thesis by A9,XBOOLE_0:def 5;
     end;
   end;
   suppose
-A9: b <= a;
+A10: b <= a;
     then
-A10: ]. -infty,a.] \/ [.b,+infty .[ = REAL by Lm11;
-    REAL \ RAT (a, b) = REAL \ {} by A9,Lm10
-      .= ]. -infty,a.] \/ [.b,+infty .[ \/ IRRAT (a, b) by A10,XBOOLE_1:12
+A11: ]. -infty,a.] \/ [.b,+infty .[ = REAL by Lm8;
+    REAL \ RAT (a, b) = REAL \ {} by A10,Lm7
+      .= ]. -infty,a.] \/ [.b,+infty .[ \/ IRRAT (a, b) by A11,XBOOLE_1:12
       .= ]. -infty,a.] \/ IRRAT (a, b) \/ [.b,+infty .[ by XBOOLE_1:4;
     hence thesis;
   end;
@@ -1720,88 +1953,93 @@ end;
 canceled 2;
 
 theorem Th88:
-  for a, b being real number st a < b holds
-  [.a,+infty .[ \ (]. a, b .[ \/ ]. b,+infty .[) = {a} \/ {b}
+  for a, b being real number st a < b holds [.a,+infty .[ \ (]. a,
+  b .[ \/ ]. b,+infty .[) = {a} \/ {b}
 proof
   let a, b be real number;
+A1: not b in ]. a,b .[ \/ ]. b,+infty .[ by XXREAL_1:205;
   assume
-A1: a < b;
+A2: a < b;
   then
-A2: not a in ]. a,b .[ \/ ]. b,+infty .[ by XXREAL_1:223;
-A3: not b in ]. a,b .[ \/ ]. b,+infty .[ by XXREAL_1:205;
-  [. a,+infty .[ = [. a,b .] \/ [. b,+infty .[ by A1,Th28
-    .= {a, b} \/ ]. a,b .[ \/ [. b,+infty .[ by A1,XXREAL_1:128
+A3: not a in ]. a,b .[ \/ ]. b,+infty .[ by XXREAL_1:223;
+  [. a,+infty .[ = [. a,b .] \/ [. b,+infty .[ by A2,Th28
+    .= {a, b} \/ ]. a,b .[ \/ [. b,+infty .[ by A2,XXREAL_1:128
     .= {a, b} \/ ]. a,b .[ \/ ({b} \/ ]. b,+infty .[) by Th67
     .= {a, b} \/ ]. a,b .[ \/ {b} \/ ]. b,+infty .[ by XBOOLE_1:4
     .= {a, b} \/ {b} \/ ]. a,b .[ \/ ]. b,+infty .[ by XBOOLE_1:4
     .= {a, b} \/ ]. a,b .[ \/ ]. b,+infty .[ by ZFMISC_1:14
     .= {a, b} \/ (]. a,b .[ \/ ]. b,+infty .[) by XBOOLE_1:4;
-  then [.a,+infty .[ \ (]. a, b .[ \/ ]. b,+infty .[) = {a, b}
-  by A2,A3,XBOOLE_1:88,ZFMISC_1:57;
+  then [.a,+infty .[ \ (]. a, b .[ \/ ]. b,+infty .[) = {a, b} by A3,A1,
+  XBOOLE_1:88,ZFMISC_1:57;
   hence thesis by ENUMSET1:41;
 end;
 
 theorem
-  for A being Subset of R^1 st
-  A = RAT (2,4) \/ ]. 4, 5 .[ \/ ]. 5,+infty .[ holds
-  A` = ]. -infty,2 .] \/ IRRAT(2,4) \/ {4} \/ {5}
+  for A being Subset of R^1 st A = RAT (2,4) \/ ]. 4, 5 .[ \/ ]. 5,
+  +infty .[ holds A` = ]. -infty,2 .] \/ IRRAT(2,4) \/ {4} \/ {5}
 proof
-  let A be Subset of R^1;
-  assume A = RAT (2,4) \/ ]. 4, 5 .[ \/ ]. 5,+infty .[;
-  then
-A1: A` = REAL \ (RAT (2,4) \/ (]. 4, 5 .[ \/ ]. 5,+infty .[))
-  by TOPMETR:24,XBOOLE_1:4
-    .= REAL \ RAT (2,4) \ (]. 4, 5 .[ \/ ]. 5,+infty .[) by XBOOLE_1:41
-    .= (]. -infty,2.] \/ IRRAT (2, 4) \/ [.4,+infty .[) \
-  (]. 4, 5 .[ \/ ]. 5,+infty .[) by Th85;
-A2: ]. -infty,4.] misses ]. 4,+infty .[ by XXREAL_1:91;
-A3: ]. -infty,2.] \/ IRRAT (2, 4) c= ]. -infty,4.]
+A1: ]. -infty,2.] \/ IRRAT (2, 4) c= ]. -infty,4.]
   proof
     let x be set;
     assume
-A4: x in ]. -infty,2.] \/ IRRAT (2, 4);
+A2: x in ]. -infty,2.] \/ IRRAT (2, 4);
     then reconsider x as real number;
-    per cases by A4,XBOOLE_0:def 3;
-    suppose x in ]. -infty,2.];
+    per cases by A2,XBOOLE_0:def 3;
+    suppose
+      x in ]. -infty,2.];
       then x <= 2 by XXREAL_1:234;
       then x <= 4 by XXREAL_0:2;
       hence thesis by XXREAL_1:234;
     end;
-    suppose x in IRRAT (2, 4);
+    suppose
+      x in IRRAT (2, 4);
       then x < 4 by Th53;
       hence thesis by XXREAL_1:234;
     end;
   end;
-  ]. 4, 5 .[ \/ ]. 5,+infty .[ c= ]. 4,+infty .[
+  let A be Subset of R^1;
+A3: ]. 4, 5 .[ \/ ]. 5,+infty .[ c= ]. 4,+infty .[
   proof
     let x be set;
     assume
-A5: x in ]. 4, 5 .[ \/ ]. 5,+infty .[;
+A4: x in ]. 4, 5 .[ \/ ]. 5,+infty .[;
     then reconsider x as real number;
-    per cases by A5,XBOOLE_0:def 3;
-    suppose x in ]. 4, 5 .[;
+    per cases by A4,XBOOLE_0:def 3;
+    suppose
+      x in ]. 4, 5 .[;
       then x > 4 by XXREAL_1:4;
       hence thesis by XXREAL_1:235;
     end;
-    suppose x in ]. 5,+infty .[;
+    suppose
+      x in ]. 5,+infty .[;
       then x > 5 by XXREAL_1:235;
       then x > 4 by XXREAL_0:2;
       hence thesis by XXREAL_1:235;
     end;
   end;
-  then A` = ([.4,+infty .[ \
-  (]. 4, 5 .[ \/ ]. 5,+infty .[)) \/ (]. -infty,2.] \/ IRRAT (2, 4))
-  by A1,A2,A3,XBOOLE_1:64,87
+  assume
+  A = RAT (2,4) \/ ]. 4, 5 .[ \/ ]. 5,+infty .[;
+  then
+A5: A` = REAL \ (RAT (2,4) \/ (]. 4, 5 .[ \/ ]. 5,+infty .[)) by
+  TOPMETR:
+  24,XBOOLE_1:4
+    .= REAL \ RAT (2,4) \ (]. 4, 5 .[ \/ ]. 5,+infty .[) by XBOOLE_1:41
+    .= (]. -infty,2.] \/ IRRAT (2, 4) \/ [.4,+infty .[) \ (]. 4, 5 .[ \/ ].
+  5,+infty .[) by Th85;
+  ]. -infty,4.] misses ]. 4,+infty .[ by XXREAL_1:91;
+  then
+  A` = ([.4,+infty .[ \ (]. 4, 5 .[ \/ ]. 5,+infty .[)) \/ (]. -infty,2.]
+  \/ IRRAT (2, 4)) by A5,A1,A3,XBOOLE_1:64,87
     .= (]. -infty,2.] \/ IRRAT (2, 4)) \/ ({4} \/ {5}) by Th88
     .= ]. -infty,2 .] \/ IRRAT(2,4) \/ {4} \/ {5} by XBOOLE_1:4;
   hence thesis;
 end;
 
 theorem
-  for A being Subset of R^1, a being real number st A = {a} holds
-  A` = ]. -infty, a .[ \/ ]. a,+infty .[ by TOPMETR:24,XXREAL_1:389;
+  for A being Subset of R^1, a being real number st A = {a} holds A` =
+  ]. -infty, a .[ \/ ]. a,+infty .[ by TOPMETR:24,XXREAL_1:389;
 
-Lm12: IRRAT(2,4) \/ {4} \/ {5} c= ]. 1,+infty .[
+Lm9: IRRAT(2,4) \/ {4} \/ {5} c= ]. 1,+infty .[
 proof
   let x be set;
   assume
@@ -1809,57 +2047,70 @@ A1: x in IRRAT(2,4) \/ {4} \/ {5};
   then reconsider x as real number;
 A2: x in IRRAT(2,4) \/ {4} or x in {5} by A1,XBOOLE_0:def 3;
   per cases by A2,XBOOLE_0:def 3;
-  suppose x in IRRAT(2,4);
+  suppose
+    x in IRRAT(2,4);
     then x > 2 by Th53;
     then x > 1 by XXREAL_0:2;
     hence thesis by XXREAL_1:235;
   end;
-  suppose x in {4};
+  suppose
+    x in {4};
     then x = 4 by TARSKI:def 1;
     hence thesis by XXREAL_1:235;
   end;
-  suppose x in {5};
+  suppose
+    x in {5};
     then x = 5 by TARSKI:def 1;
     hence thesis by XXREAL_1:235;
   end;
 end;
 
-Lm13: ]. 1,+infty .[ c= [. 1,+infty .[ by XXREAL_1:45;
+Lm10: ]. 1,+infty .[ c= [. 1,+infty .[ by XXREAL_1:45;
 
-Lm14: ]. -infty, 1 .[ /\ (]. -infty, 2 .] \/ IRRAT(2,4) \/ {4} \/ {5}) =
-]. -infty, 1 .[
+Lm11: ]. -infty, 1 .[ /\ (]. -infty, 2 .] \/ IRRAT(2,4) \/ {4} \/ {5}) = ].
+-infty, 1 .[
+
 proof
-  [. 1,+infty .[ misses ]. -infty, 1 .[ by XXREAL_1:94;
-  then
-A1: IRRAT(2,4) \/ {4} \/ {5} misses ]. -infty, 1 .[ by Lm12,Lm13,XBOOLE_1:1,63;
-A2: ]. -infty, 1 .[ c= ]. -infty, 2 .]
+A1: ]. -infty, 1 .[ c= ]. -infty, 2 .]
   proof
     let x be set;
     assume
-A3: x in ]. -infty, 1 .[;
+A2: x in ]. -infty, 1 .[;
     then reconsider x as real number;
-    x < 1 by A3,XXREAL_1:233;
+    x < 1 by A2,XXREAL_1:233;
     then x < 2 by XXREAL_0:2;
     hence thesis by XXREAL_1:234;
   end;
-  ]. -infty, 1 .[ /\ (]. -infty, 2 .] \/ IRRAT(2,4) \/ {4} \/ {5}) =
-  ]. -infty, 1 .[ /\ (]. -infty, 2 .] \/ (IRRAT(2,4) \/ {4} \/ {5}))
-  by XBOOLE_1:113
-    .= ]. -infty, 1 .[ /\ ]. -infty, 2 .] by A1,XBOOLE_1:78
-    .= ]. -infty, 1 .[ by A2,XBOOLE_1:28;
+  [. 1,+infty .[ misses ]. -infty, 1 .[ by XXREAL_1:94;
+
+  then
+A3: IRRAT(2,4) \/ {4} \/ {5} misses ]. -infty, 1 .[ by
+  Lm9,Lm10,XBOOLE_1:
+  1 ,63;
+
+  ]. -infty, 1 .[ /\ (]. -infty, 2 .] \/ IRRAT(2,4) \/ {4} \/ {5}) = ].
+
+-infty, 1 .[ /\ (]. -infty, 2 .] \/ (IRRAT(2,4) \/ {4} \/ {5})) by XBOOLE_1:113
+
+    .= ]. -infty, 1 .[ /\ ]. -infty, 2 .] by A3,XBOOLE_1:78
+    .= ]. -infty, 1 .[ by A1,XBOOLE_1:28;
   hence thesis;
 end;
 
-Lm15: ]. 1,+infty .[ /\ (]. -infty, 2 .] \/ IRRAT(2,4) \/ {4} \/ {5}) =
-]. 1, 2 .] \/ IRRAT(2,4) \/ {4} \/ {5}
+Lm12: ]. 1,+infty .[ /\ (]. -infty, 2 .] \/ IRRAT(2,4) \/ {4} \/ {5}) = ]. 1,
+2 .] \/ IRRAT(2,4) \/ {4} \/ {5}
+
 proof
-  ]. 1,+infty .[ /\ (]. -infty, 2 .] \/ IRRAT(2,4) \/ {4} \/ {5}) =
-  ]. 1,+infty .[ /\ (]. -infty, 2 .] \/ (IRRAT(2,4) \/ {4} \/ {5}))
-  by XBOOLE_1:113
-    .= (]. 1,+infty .[ /\ ]. -infty, 2 .]) \/
-  (]. 1,+infty .[ /\ (IRRAT(2,4) \/ {4} \/ {5})) by XBOOLE_1:23
-    .= (]. 1,+infty .[ /\ ]. -infty, 2 .]) \/
-  (IRRAT(2,4) \/ {4} \/ {5}) by Lm12,XBOOLE_1:28
+
+  ]. 1,+infty .[ /\ (]. -infty, 2 .] \/ IRRAT(2,4) \/ {4} \/ {5}) = ]. 1,
+  +infty .[ /\ (]. -infty, 2 .] \/ (IRRAT(2,4) \/ {4} \/ {5})) by XBOOLE_1:113
+
+    .= (]. 1,+infty .[ /\ ]. -infty, 2 .]) \/ (]. 1,+infty .[ /\ (IRRAT(2,4)
+  \/ {4} \/ {5})) by XBOOLE_1:23
+
+    .= (]. 1,+infty .[ /\ ]. -infty, 2 .]) \/ (IRRAT(2,4) \/ {4} \/ {5}) by
+  Lm9,XBOOLE_1:28
+
     .= ]. 1,2 .] \/ (IRRAT(2,4) \/ {4} \/ {5}) by XXREAL_1:270
     .= ]. 1,2 .] \/ IRRAT(2,4) \/ {4} \/ {5} by XBOOLE_1:113;
   hence thesis;
@@ -1868,63 +2119,64 @@ end;
 canceled;
 
 theorem
-  (]. -infty, 1 .[ \/ ]. 1,+infty .[) /\
-  (]. -infty, 2 .] \/ IRRAT(2,4) \/ {4} \/ {5}) =
-  ]. -infty, 1 .[ \/ ]. 1, 2 .] \/ IRRAT(2,4) \/ {4} \/ {5}
+  (]. -infty, 1 .[ \/ ]. 1,+infty .[) /\ (]. -infty, 2 .] \/ IRRAT(2,4)
+  \/ {4} \/ {5}) = ]. -infty, 1 .[ \/ ]. 1, 2 .] \/ IRRAT(2,4) \/ {4} \/ {5}
 proof
-  (]. -infty, 1 .[ \/ ]. 1,+infty .[) /\
-  (]. -infty, 2 .] \/ IRRAT(2,4) \/ {4} \/ {5}) = ]. -infty, 1 .[ \/
-  (]. 1,+infty .[ /\ (]. -infty, 2 .] \/ IRRAT(2,4) \/ {4} \/ {5}))
-  by Lm14,XBOOLE_1:23
-    .= ]. -infty, 1 .[ \/ (]. 1, 2 .] \/ IRRAT(2,4) \/ ({4} \/ {5}))
-  by Lm15,XBOOLE_1:4
-    .= ]. -infty, 1 .[ \/ ]. 1, 2 .] \/ IRRAT(2,4) \/ ({4} \/ {5})
-  by XBOOLE_1:113;
+  (]. -infty, 1 .[ \/ ]. 1,+infty .[) /\ (]. -infty, 2 .] \/ IRRAT(2,4) \/
+{4} \/ {5}) = ]. -infty, 1 .[ \/ (]. 1,+infty .[ /\ (]. -infty, 2 .] \/ IRRAT(2
+  ,4) \/ {4} \/ {5})) by Lm11,XBOOLE_1:23
+    .= ]. -infty, 1 .[ \/ (]. 1, 2 .] \/ IRRAT(2,4) \/ ({4} \/ {5})) by Lm12
+  ,XBOOLE_1:4
+    .= ]. -infty, 1 .[ \/ ]. 1, 2 .] \/ IRRAT(2,4) \/ ({4} \/ {5}) by
+  XBOOLE_1:113;
   hence thesis by XBOOLE_1:4;
 end;
 
 canceled 2;
 
 theorem
-  for A being Subset of R^1, a, b being real number st a <= b &
-  A = {a} \/ [. b,+infty .[ holds A` = ]. -infty, a .[ \/ ]. a, b .[
+  for A being Subset of R^1, a, b being real number st a <= b & A = {a}
+  \/ [. b,+infty .[ holds A` = ]. -infty, a .[ \/ ]. a, b .[
 proof
   let A be Subset of R^1, a, b be real number;
-  assume
-A1: a <= b & A = {a} \/ [. b,+infty .[;
-  then A` = (REAL \ [. b,+infty .[) \ {a} by TOPMETR:24,XBOOLE_1:41
+  assume that
+A1: a <= b and
+A2: A = {a} \/ [. b,+infty .[;
+  A` = (REAL \ [. b,+infty .[) \ {a} by A2,TOPMETR:24,XBOOLE_1:41
     .= ]. -infty,b.[ \ {a} by XXREAL_1:224,294;
   hence thesis by A1,XXREAL_1:349;
 end;
 
 theorem
-  for A being Subset of R^1, a, b being real number st a < b &
-  A = ]. -infty, a .[ \/ ]. a, b .[ holds Cl A = ]. -infty, b .]
+  for A being Subset of R^1, a, b being real number st a < b & A = ].
+  -infty, a .[ \/ ]. a, b .[ holds Cl A = ]. -infty, b .]
 proof
   let A be Subset of R^1, a, b be real number;
-  assume
-A1: a < b & A = ]. -infty, a .[ \/ ]. a, b .[;
-  reconsider B = ]. -infty, a .[, C = ]. a, b .[ as Subset of R^1
-  by TOPMETR:24;
-A2: Cl C = [. a, b .] by A1,Th36;
-  Cl A = Cl B \/ Cl C by A1,PRE_TOPC:50
-    .= ]. -infty, a .] \/ [. a, b .] by A2,Th77
+  assume that
+A1: a < b and
+A2: A = ]. -infty, a .[ \/ ]. a, b .[;
+  reconsider B = ]. -infty, a .[, C = ]. a, b .[ as Subset of R^1 by TOPMETR:
+  24;
+A3: Cl C = [. a, b .] by A1,Th36;
+  Cl A = Cl B \/ Cl C by A2,PRE_TOPC:50
+    .= ]. -infty, a .] \/ [. a, b .] by A3,Th77
     .= ]. -infty, b .] by A1,Th29;
   hence thesis;
 end;
 
 theorem Th97:
-  for A being Subset of R^1, a, b being real number st a < b &
-  A = ]. -infty, a .[ \/ ]. a, b .] holds Cl A = ]. -infty, b .]
+  for A being Subset of R^1, a, b being real number st a < b & A =
+  ]. -infty, a .[ \/ ]. a, b .] holds Cl A = ]. -infty, b .]
 proof
   let A be Subset of R^1, a, b be real number;
-  assume
-A1: a < b & A = ]. -infty, a .[ \/ ]. a, b .];
-  reconsider B = ]. -infty, a .[, C = ]. a, b .] as Subset of R^1
-  by TOPMETR:24;
-A2: Cl C = [. a, b .] by A1,Th59;
-  Cl A = Cl B \/ Cl C by A1,PRE_TOPC:50
-    .= ]. -infty, a .] \/ [. a, b .] by A2,Th77
+  assume that
+A1: a < b and
+A2: A = ]. -infty, a .[ \/ ]. a, b .];
+  reconsider B = ]. -infty, a .[, C = ]. a, b .] as Subset of R^1 by TOPMETR:
+  24;
+A3: Cl C = [. a, b .] by A1,Th59;
+  Cl A = Cl B \/ Cl C by A2,PRE_TOPC:50
+    .= ]. -infty, a .] \/ [. a, b .] by A3,Th77
     .= ]. -infty, b .] by A1,Th29;
   hence thesis;
 end;
@@ -1932,50 +2184,54 @@ end;
 canceled 2;
 
 theorem Th100:
-  for A being Subset of R^1, a, b, c being real number st a < b & b < c &
-  A = ]. -infty, a .[ \/ ]. a, b .] \/ IRRAT(b,c) \/ {c} holds
-  Cl A = ]. -infty, c .]
+  for A being Subset of R^1, a, b, c being real number st a < b &
+b < c & A = ]. -infty, a .[ \/ ]. a, b .] \/ IRRAT(b,c) \/ {c} holds Cl A = ].
+  -infty, c .]
 proof
   let A be Subset of R^1, a, b, c be real number;
-  assume
-A1: a < b & b < c & A = ]. -infty, a .[ \/ ]. a, b .] \/ IRRAT(b,c) \/ {c};
-  reconsider B = ]. -infty, a .[, C = ]. a, b .], D = IRRAT(b,c), E = {c}
-  as Subset of R^1 by TOPMETR:24;
-A2: c in E & c in ]. -infty, c .] by TARSKI:def 1,XXREAL_1:234;
-  Cl A = Cl (B \/ C \/ D) \/ Cl E by A1,PRE_TOPC:50
+  assume that
+A1: a < b and
+A2: b < c and
+A3: A = ]. -infty, a .[ \/ ]. a, b .] \/ IRRAT(b,c) \/ {c};
+  reconsider B = ]. -infty, a .[, C = ]. a, b .], D = IRRAT(b,c), E = {c} as
+  Subset of R^1 by TOPMETR:24;
+A4: c in ]. -infty, c .] by XXREAL_1:234;
+  Cl A = Cl (B \/ C \/ D) \/ Cl E by A3,PRE_TOPC:50
     .= Cl (B \/ C \/ D) \/ E by Th61
     .= Cl (B \/ C) \/ Cl D \/ E by PRE_TOPC:50
     .= ]. -infty, b .] \/ Cl D \/ E by A1,Th97
-    .= ]. -infty, b .] \/ [. b,c .] \/ E by A1,Th55
-    .= ]. -infty, c .] \/ E by A1,Th29
-    .= ]. -infty, c .] by A2,ZFMISC_1:46;
+    .= ]. -infty, b .] \/ [. b,c .] \/ E by A2,Th55
+    .= ]. -infty, c .] \/ E by A2,Th29
+    .= ]. -infty, c .] by A4,ZFMISC_1:46;
   hence thesis;
 end;
 
 theorem
-  for A being Subset of R^1, a, b, c, d being real number st a < b & b < c &
-  A = ]. -infty, a .[ \/ ]. a, b .] \/ IRRAT(b,c) \/ {c} \/ {d} holds
-  Cl A = ]. -infty, c .] \/ {d}
+  for A being Subset of R^1, a, b, c, d being real number st a < b & b <
+c & A = ]. -infty, a .[ \/ ]. a, b .] \/ IRRAT(b,c) \/ {c} \/ {d} holds Cl A =
+  ]. -infty, c .] \/ {d}
 proof
   let A be Subset of R^1, a, b, c, d be real number;
-  assume
-A1: a < b & b < c &
-  A = ]. -infty, a .[ \/ ]. a, b .] \/ IRRAT(b,c) \/ {c} \/ {d};
-  reconsider B = ]. -infty, a .[, C = ]. a, b .], D = IRRAT(b,c),
-  E = {c}, F = {d} as Subset of R^1 by TOPMETR:24;
-  Cl A = Cl (B \/ C \/ D \/ E) \/ Cl F by A1,PRE_TOPC:50
+  assume that
+A1: a < b and
+A2: b < c and
+A3: A = ]. -infty, a .[ \/ ]. a, b .] \/ IRRAT(b,c) \/ {c} \/ {d};
+  reconsider B = ]. -infty, a .[, C = ]. a, b .], D = IRRAT(b,c), E = {c}, F =
+  {d} as Subset of R^1 by TOPMETR:24;
+  Cl A = Cl (B \/ C \/ D \/ E) \/ Cl F by A3,PRE_TOPC:50
     .= Cl (B \/ C \/ D \/ E) \/ {d} by Th61;
-  hence thesis by A1,Th100;
+  hence thesis by A1,A2,Th100;
 end;
 
 theorem
-  for A being Subset of R^1, a, b being real number st a <= b &
-  A = ]. -infty, a .] \/ {b} holds A` = ]. a, b .[ \/ ]. b,+infty .[
+  for A being Subset of R^1, a, b being real number st a <= b & A = ].
+  -infty, a .] \/ {b} holds A` = ]. a, b .[ \/ ]. b,+infty .[
 proof
   let A be Subset of R^1, a, b be real number;
-  assume
-A1: a <= b & A = ]. -infty, a .] \/ {b};
-  then A` = (REAL \ ]. -infty, a .]) \ {b} by TOPMETR:24,XBOOLE_1:41
+  assume that
+A1: a <= b and
+A2: A = ]. -infty, a .] \/ {b};
+  A` = (REAL \ ]. -infty, a .]) \ {b} by A2,TOPMETR:24,XBOOLE_1:41
     .= ]. a,+infty .[ \ {b} by XXREAL_1:224,288
     .= ]. a, b .[ \/ ]. b,+infty .[ by A1,XXREAL_1:365;
   hence thesis;
@@ -1986,14 +2242,16 @@ theorem
 proof
   let a, b be real number;
   set ab = min (a,b) - 1;
-A1: ab in REAL by XREAL_0:def 1;
-A2: min (a,b) <= a & min (a,b) <= b by XXREAL_0:17;
-A3: ab < min (a,b) by XREAL_1:148;
-  ab < a & ab < b by A2,XREAL_1:148,XXREAL_0:2;
+A1: ab < min (a,b) by XREAL_1:148;
+  min (a,b) <= b by XXREAL_0:17;
   then
-A4: not ab in [. a,+infty .[ by XXREAL_1:236;
-  not ab in {b} by A2,A3,TARSKI:def 1;
-  hence thesis by A1,A4,XBOOLE_0:def 3;
+A2: not ab in {b} by A1,TARSKI:def 1;
+  min (a,b) <= a by XXREAL_0:17;
+  then ab < a by XREAL_1:148,XXREAL_0:2;
+  then
+A3: not ab in [. a,+infty .[ by XXREAL_1:236;
+  ab in REAL by XREAL_0:def 1;
+  hence thesis by A3,A2,XBOOLE_0:def 3;
 end;
 
 theorem
@@ -2001,23 +2259,27 @@ theorem
 proof
   let a, b be real number;
   set ab = max (a,b) + 1;
-A1: ab in REAL by XREAL_0:def 1;
-A2: max (a,b) >= a & max (a,b) >= b by XXREAL_0:25;
-A3: ab > max (a,b) by XREAL_1:31;
-  then ab > a & ab > b by A2,XXREAL_0:2;
+A1: ab > max (a,b) by XREAL_1:31;
+  max (a,b) >= a by XXREAL_0:25;
+  then ab > a by A1,XXREAL_0:2;
   then
-A4: not ab in ]. -infty, a.] by XXREAL_1:234;
-  not ab in {b} by A2,A3,TARSKI:def 1;
-  hence thesis by A1,A4,XBOOLE_0:def 3;
+A2: not ab in ]. -infty, a.] by XXREAL_1:234;
+  max (a,b) >= b by XXREAL_0:25;
+  then
+A3: not ab in {b} by A1,TARSKI:def 1;
+  ab in REAL by XREAL_0:def 1;
+  hence thesis by A2,A3,XBOOLE_0:def 3;
 end;
 
 theorem
-  for TS being TopStruct, A, B being Subset of TS st A <> B holds A` <> B`
+  for TS being TopStruct, A, B being Subset of TS st A <> B holds A` <>
+  B`
 proof
   let TS be TopStruct, A, B be Subset of TS;
   assume
 A1: A <> B;
-  assume A` = B`;
+  assume
+  A` = B`;
   then A = B``;
   hence thesis by A1;
 end;
@@ -2025,9 +2287,10 @@ end;
 theorem
   for A being Subset of R^1 st REAL = A` holds A = {}
 proof
-  let A be Subset of R^1;
   reconsider AB = {}R^1 as Subset of R^1;
-  assume REAL = A`;
+  let A be Subset of R^1;
+  assume
+  REAL = A`;
   then AB` = A` by TOPMETR:24;
   then AB = A``;
   hence thesis;
@@ -2036,69 +2299,83 @@ end;
 begin :: Subcontinua of a real line
 
 theorem Th107:
-  for X being compact Subset of R^1, X' being Subset of REAL st X' = X holds
-  X' is bounded_above bounded_below
+  for X being compact Subset of R^1, X' being Subset of REAL st
+  X' = X holds X' is bounded_above bounded_below
 proof
   let X be compact Subset of R^1, X' be Subset of REAL;
-  assume X' = X;
+  assume
+  X' = X;
   then X' is compact by TOPREAL6:81;
   then X' is bounded by RCOMP_1:28;
   hence thesis by XXREAL_2:def 11;
 end;
 
 theorem Th108:
-  for X being compact Subset of R^1, X' being Subset of REAL,
-  x being real number st x in X' & X' = X holds inf X' <= x & x <= sup X'
+  for X being compact Subset of R^1, X' being Subset of REAL, x
+  being real number st x in X' & X' = X holds inf X' <= x & x <= sup X'
 proof
   let X be compact Subset of R^1, X' be Subset of REAL, x be real number;
-  assume
-A1: x in X' & X' = X;
-  then X' is bounded_above bounded_below by Th107;
+  assume that
+A1: x in X' and
+A2: X' = X;
+  X' is bounded_above bounded_below by A2,Th107;
   hence thesis by A1,SEQ_4:def 4,def 5;
 end;
 
 theorem Th109:
-  for C being non empty compact connected Subset of R^1,
-  C' being Subset of REAL st C = C' & [. inf C', sup C' .] c= C' holds
-  [. inf C', sup C' .] = C'
+  for C being non empty compact connected Subset of R^1, C' being
+  Subset of REAL st C = C' & [. inf C', sup C' .] c= C' holds [. inf C', sup C'
+  .] = C'
 proof
   let C be non empty compact connected Subset of R^1, C' be Subset of REAL;
+  assume that
+A1: C = C' and
+A2: [. inf C', sup C' .] c= C';
   assume
-A1: C = C' & [. inf C', sup C' .] c= C';
-  assume [. inf C', sup C' .] <> C';
-  then not C' c= [. inf C', sup C' .] by A1,XBOOLE_0:def 10;
+  [. inf C', sup C' .] <> C';
+  then not C' c= [. inf C', sup C' .] by A2,XBOOLE_0:def 10;
   then consider c being set such that
-A2: c in C' & not c in [. inf C', sup C' .] by TARSKI:def 3;
-  reconsider c as real number by A2;
-  inf C' <= c & c <= sup C' by A1,A2,Th108;
-  hence thesis by A2,XXREAL_1:1;
+A3: c in C' and
+A4: not c in [. inf C', sup C' .] by TARSKI:def 3;
+  reconsider c as real number by A3;
+A5: c <= sup C' by A1,A3,Th108;
+  inf C' <= c by A1,A3,Th108;
+  hence thesis by A4,A5,XXREAL_1:1;
 end;
 
-theorem Th110: :: TOPREAL5:9
-  for A being connected Subset of R^1, a, b, c being real number st
-  a <= b & b <= c & a in A & c in A holds b in A
+theorem Th110:
+  for A being connected Subset of R^1, a, b, c being real number
+  st a <= b & b <= c & a in A & c in A holds b in A
 proof
   let A be connected Subset of R^1, a, b, c be real number;
-  assume
-A1: a <= b & b <= c & a in A & c in A;
-  per cases by A1,XXREAL_0:1;
-  suppose a = b or b = c;
-    hence thesis by A1;
+  assume that
+A1: a <= b and
+A2: b <= c and
+A3: a in A and
+A4: c in A;
+  per cases by A1,A2,A3,A4,XXREAL_0:1;
+  suppose
+    a = b or b = c;
+    hence thesis by A3,A4;
   end;
   suppose
-A2: a < b & b < c & a in A & c in A;
-    assume not b in A;
+A5: a < b & b < c & a in A & c in A;
+    reconsider B = ]. -infty,b .[, C = ]. b,+infty .[ as Subset of R^1 by
+    TOPMETR:24;
+    assume
+    not b in A;
     then A c= REAL \ {b} by TOPMETR:24,ZFMISC_1:40;
     then
-A3: A c= ]. -infty,b .[ \/ ]. b,+infty .[ by XXREAL_1:389;
-    reconsider B = ]. -infty,b .[, C = ]. b,+infty .[ as Subset of R^1
-    by TOPMETR:24;
-    now per cases by A3,Th79,CONNSP_1:17;
-      suppose A c= B;
-        hence contradiction by A2,XXREAL_1:233;
+A6: A c= ]. -infty,b .[ \/ ]. b,+infty .[ by XXREAL_1:389;
+    now
+      per cases by A6,Th79,CONNSP_1:17;
+      suppose
+        A c= B;
+        hence contradiction by A5,XXREAL_1:233;
       end;
-      suppose A c= C;
-        hence contradiction by A2,XXREAL_1:235;
+      suppose
+        A c= C;
+        hence contradiction by A5,XXREAL_1:235;
       end;
     end;
     hence thesis;
@@ -2106,50 +2383,53 @@ A3: A c= ]. -infty,b .[ \/ ]. b,+infty .[ by XXREAL_1:389;
 end;
 
 theorem Th111:
-  for A being connected Subset of R^1,
-  a, b being real number st a in A & b in A holds [.a,b.] c= A
+  for A being connected Subset of R^1, a, b being real number st
+  a in A & b in A holds [.a,b.] c= A
 proof
   let A be connected Subset of R^1, a, b be real number;
-  assume
-A1: a in A & b in A;
+  assume that
+A1: a in A and
+A2: b in A;
   let x be set;
-  assume x in [.a,b.];
+  assume
+  x in [.a,b.];
   then x in { y where y is Real : a <= y & y <= b } by RCOMP_1:def 1;
-  then consider z being Real such that
-A2: z = x & a <= z & z <= b;
-  thus thesis by A1,A2,Th110;
+  then ex z being Real st z = x & a <= z & z <= b;
+  hence thesis by A1,A2,Th110;
 end;
 
 theorem Th112:
-  for X being non empty compact connected Subset of R^1 holds
-  X is non empty closed-interval Subset of REAL
+  for X being non empty compact connected Subset of R^1 holds X
+  is non empty closed-interval Subset of REAL
 proof
   let C be non empty compact connected Subset of R^1;
   reconsider C' = C as non empty Subset of REAL by TOPMETR:24;
   C is closed by COMPTS_1:16;
   then
 A1: C' is closed by TOPREAL6:79;
-A2: C' is bounded_below bounded_above by Th107;
   then
-A3: inf C' in C' by A1,RCOMP_1:31;
-  sup C' in C' by A1,A2,RCOMP_1:30;
+A2: sup C' in C' by Th107,RCOMP_1:30;
+  C' is bounded_below bounded_above by Th107;
+  then C' is bounded by XXREAL_2:def 11;
   then
-A4: [. inf C', sup C' .] = C' by A3,Th109,Th111;
-  C' is bounded by A2,XXREAL_2:def 11;
-  then lower_bound C' <= upper_bound C' by SEQ_4:24;
-  hence thesis by A4,INTEGRA1:def 1;
+A3: lower_bound C' <= upper_bound C' by SEQ_4:24;
+  inf C' in C' by A1,Th107,RCOMP_1:31;
+  then [. inf C', sup C' .] = C' by A2,Th109,Th111;
+  hence thesis by A3,INTEGRA1:def 1;
 end;
 
 theorem
-  for A being non empty compact connected Subset of R^1 holds
-  ex a, b being real number st a <= b & A = [. a, b .]
+  for A being non empty compact connected Subset of R^1 holds ex a, b
+  being real number st a <= b & A = [. a, b .]
 proof
   let C be non empty compact connected Subset of R^1;
   reconsider C' = C as closed-interval Subset of REAL by Th112;
-A1: C' = [. inf C', sup C' .] by INTEGRA1:5;
-  inf C' <= sup C' by BORSUK_4:53;
-  then inf C' in C & sup C' in C by A1,XXREAL_1:1;
-  then reconsider p1 = inf C', p2 = sup C' as Point of R^1;
+A1: inf C' <= sup C' by BORSUK_4:53;
+A2: C' = [. inf C', sup C' .] by INTEGRA1:5;
+  then
+A3: sup C' in C by A1,XXREAL_1:1;
+  inf C' in C by A2,A1,XXREAL_1:1;
+  then reconsider p1 = inf C', p2 = sup C' as Point of R^1 by A3;
   take p1, p2;
   thus p1 <= p2 by BORSUK_4:53;
   thus thesis by INTEGRA1:5;
@@ -2161,16 +2441,18 @@ registration
   existence
   proof
     reconsider F = {{}T} as Subset-Family of T by ZFMISC_1:37;
-A1: F is open
+A1: F is closed
     proof
       let P be Subset of T;
-      assume P in F;
+      assume
+      P in F;
       hence thesis by TARSKI:def 1;
     end;
-    F is closed
+    F is open
     proof
       let P be Subset of T;
-      assume P in F;
+      assume
+      P in F;
       hence thesis by TARSKI:def 1;
     end;
     hence thesis by A1;

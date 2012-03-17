@@ -11,12 +11,11 @@ environ
       BHSP_3, METRIC_6, ARYTM, FRECHET2;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XREAL_0,
       COMPLEX1, RELAT_1, FUNCT_1, FUNCT_2, DOMAIN_1, REAL_1, NAT_1, STRUCT_0,
-      METRIC_1, SEQ_1, SEQ_2, VALUED_0, SEQM_3, PCOMPS_1, TBSP_1, BHSP_3,
-      XXREAL_0, RECDEF_1;
+      METRIC_1, SEQ_1, SEQ_2, VALUED_0, PCOMPS_1, TBSP_1, XXREAL_0, RECDEF_1;
  constructors DOMAIN_1, XXREAL_0, REAL_1, NAT_1, COMPLEX1, SEQ_2, PCOMPS_1,
       BHSP_3, TBSP_1, SEQ_1, VALUED_1, PARTFUN1, RECDEF_1, SETFAM_1, RELSET_1;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0,
-      MEMBERED, SEQM_3, STRUCT_0, METRIC_1, VALUED_0;
+      MEMBERED, STRUCT_0, METRIC_1, VALUED_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TBSP_1, TARSKI;
  theorems ABSVALUE, TARSKI, BINOP_1, METRIC_1, FUNCT_1, FUNCT_2, SEQ_2, NAT_1,
@@ -29,34 +28,36 @@ begin :: Preliminaries
 reserve X for MetrSpace,
   x,y,z for Element of X,
   A for non empty set,
-  G for Function of [:A,A:],REAL,
+  G for
+  Function of [:A,A:],REAL,
   f for Function,
   k,n,m,m1,m2 for Element of NAT,
-  q,r for Real;
+  q,r
+  for Real;
 
 theorem Th1:
   abs(dist(x,z) - dist(y,z)) <= dist(x,y)
 proof
-A1: dist(x,z) <= dist(x,y) + dist(y,z) by METRIC_1:4;
   dist(y,z) <= dist(y,x) + dist(x,z) by METRIC_1:4;
   then dist(y,z) - dist(x,z) <= dist(x,y) by XREAL_1:22;
-  then - dist(x,y) <= - (dist(y,z) - dist(x,z)) by XREAL_1:26;
-  then - dist(x,y) <= dist(x,z) - dist(y,z) &
-  dist(x,z) - dist(y,z) <= dist(x,y) by A1,XREAL_1:22;
-  hence thesis by ABSVALUE:12;
+  then
+A1: - dist(x,y) <= - (dist(y,z) - dist(x,z)) by XREAL_1:26;
+  dist(x,z) <= dist(x,y) + dist(y,z) by METRIC_1:4;
+  then dist(x,z) - dist(y,z) <= dist(x,y) by XREAL_1:22;
+  hence thesis by A1,ABSVALUE:12;
 end;
 
 theorem Th2:
-  G is_metric_of A implies (for a,b being Element of A holds 0 <= G.(a,b))
+  G is_metric_of A implies for a,b being Element of A holds 0 <= G.
+  (a,b)
 proof
   assume
 A1: G is_metric_of A;
   let a,b be Element of A;
-A2: G.(a,a) <= G.(a,b) + G.(b,a) by A1,PCOMPS_1:def 7;
-A3: G.(a,b) = (1/2)*(1*G.(a,b) + G.(a,b))
+A2: (1/2)*G.(a,a) = (1/2)*0 by A1,PCOMPS_1:def 7;
+  G.(a,b) = (1/2)*(1*G.(a,b) + G.(a,b))
     .= (1/2)*(G.(a,b) + G.(b,a)) by A1,PCOMPS_1:def 7;
-  (1/2)*G.(a,a) = (1/2)*0 by A1,PCOMPS_1:def 7;
-  hence thesis by A2,A3;
+  hence thesis by A1,A2,PCOMPS_1:def 7;
 end;
 
 theorem Th3:
@@ -66,34 +67,33 @@ A1: G is_metric_of A implies G is Reflexive discerning symmetric triangle
   proof
     assume
 A2: G is_metric_of A;
-    then
-A3: for a,b being Element of A holds G.(a,b) = 0 iff a = b by PCOMPS_1:def 7;
-    for a being Element of A holds G.(a,a) = 0 by A2,PCOMPS_1:def 7;
+    then for a being Element of A holds G.(a,a) = 0 by PCOMPS_1:def 7;
     hence G is Reflexive by METRIC_1:def 3;
-    thus G is discerning by A3,METRIC_1:def 4;
-    for a,b being Element of A holds G.(a,b) = G.(b,a) by A2,PCOMPS_1:def 7;
+    for a,b being Element of A holds G.(a,b) = 0 iff a = b by A2, PCOMPS_1
+    :def 7;
+    hence G is discerning by METRIC_1:def 4;
+    for a,b being Element of A holds G.(a,b) = G.(b,a) by A2,PCOMPS_1:def
+    7;
     hence G is symmetric by METRIC_1:def 5;
-    for a,b,c being Element of A holds
-    G.(a,c) <= G.(a,b) + G.(b,c) by A2,PCOMPS_1:def 7;
+    for a,b,c being Element of A holds G.(a,c) <= G.(a,b) + G.(b,c) by A2,
+    PCOMPS_1:def 7;
     hence thesis by METRIC_1:def 6;
   end;
   G is Reflexive discerning symmetric triangle implies G is_metric_of A
   proof
-    assume that
-A4: G is Reflexive discerning and
-A5: G is symmetric and
-A6: G is triangle;
-    for a,b,c being Element of A holds (G.(a,b) = 0 iff a = b) &
-    G.(a,b) = G.(b,a) & G.(a,c) <= G.(a,b) + G.(b,c)
-    by A4,A5,A6,METRIC_1:def 3,def 4,def 5,def 6;
+    assume
+    G is Reflexive discerning & G is symmetric & G is triangle;
+    then
+    for a,b,c being Element of A holds (G.(a,b) = 0 iff a = b) & G.(a,b) =
+    G.(b,a) & G.(a,c) <= G.(a,b) + G.(b,c) by METRIC_1:def 3,def 4,def 5,def 6;
     hence thesis by PCOMPS_1:def 7;
   end;
   hence thesis by A1;
 end;
 
 theorem
-  for X being strict non empty MetrSpace holds
-  the distance of X is Reflexive discerning symmetric triangle
+  for X being strict non empty MetrSpace holds the distance of X is
+  Reflexive discerning symmetric triangle
 proof
   let X be strict non empty MetrSpace;
 A1: the distance of X is_metric_of the carrier of X by PCOMPS_1:39;
@@ -104,48 +104,48 @@ A1: the distance of X is_metric_of the carrier of X by PCOMPS_1:39;
 end;
 
 theorem
-  G is_metric_of A iff (G is Reflexive discerning &
-  for a,b,c being Element of A holds G.(b,c) <= G.(a,b) + G.(a,c))
+  G is_metric_of A iff (G is Reflexive discerning & for a,b,c being
+  Element of A holds G.(b,c) <= G.(a,b) + G.(a,c))
 proof
-A1: G is_metric_of A implies (G is Reflexive discerning &
-  for a,b,c being Element of A holds G.(b,c) <= G.(a,b) + G.(a,c))
-  proof
-    assume
-A2: G is_metric_of A;
-    then
-A3: G is Reflexive discerning symmetric triangle by Th3;
-    now
-      let a,b,c be Element of A;
-      G.(b,c) <= G.(b,a) + G.(a,c) by A3,METRIC_1:def 6;
-      hence G.(b,c) <= G.(a,b) + G.(a,c) by A3,METRIC_1:def 5;
-    end;
-    hence thesis by A2,Th3;
-  end;
-  (G is Reflexive discerning & for a,b,c being Element of A holds
-  G.(b,c) <= G.(a,b) + G.(a,c)) implies G is_metric_of A
+A1: (G is Reflexive discerning & for a,b,c being Element of A holds G.(b,c)
+  <= G.(a,b) + G.(a,c)) implies G is_metric_of A
   proof
     assume that
-A4: G is Reflexive discerning and
-A5: for a,b,c being Element of A holds G.(b,c) <= G.(a,b) + G.(a,c);
-A6: for b,c being Element of A holds G.(b,c) = G.(c,b)
+A2: G is Reflexive discerning and
+A3: for a,b,c being Element of A holds G.(b,c) <= G.(a,b) + G.(a,c);
+A4: for b,c being Element of A holds G.(b,c) = G.(c,b)
     proof
       let b,c be Element of A;
-      G.(b,c) <= G.(c,b) + G.(c,c) by A5;
+      G.(c,b) <= G.(b,c) + G.(b,b) by A3;
       then
-A7:   G.(b,c) <= G.(c,b) + 0 by A4,METRIC_1:def 3;
-      G.(c,b) <= G.(b,c) + G.(b,b) by A5;
-      then G.(c,b) <= G.(b,c) + 0 by A4,METRIC_1:def 3;
-      hence thesis by A7,XXREAL_0:1;
+A5:   G.(c,b) <= G.(b,c) + 0 by A2,METRIC_1:def 3;
+      G.(b,c) <= G.(c,b) + G.(c,c) by A3;
+      then G.(b,c) <= G.(c,b) + 0 by A2,METRIC_1:def 3;
+      hence thesis by A5,XXREAL_0:1;
     end;
     for a,b,c being Element of A holds G.(a,c) <= G.(a,b) + G.(b,c)
     proof
       let a,b,c be Element of A;
-      G.(a,c) <= G.(b,a) + G.(b,c) by A5;
-      hence thesis by A6;
+      G.(a,c) <= G.(b,a) + G.(b,c) by A3;
+      hence thesis by A4;
     end;
-    then G is Reflexive discerning symmetric triangle
-    by A4,A6,METRIC_1:def 5,def 6;
+    then G is Reflexive discerning symmetric triangle by A2,A4,METRIC_1:
+    def 5,def 6;
     hence thesis by Th3;
+  end;
+  G is_metric_of A implies (G is Reflexive discerning & for a,b,c being
+  Element of A holds G.(b,c) <= G.(a,b) + G.(a,c))
+  proof
+    assume
+A6: G is_metric_of A;
+    then
+A7: G is Reflexive discerning symmetric triangle by Th3;
+    now
+      let a,b,c be Element of A;
+      G.(b,c) <= G.(b,a) + G.(a,c) by A7,METRIC_1:def 6;
+      hence G.(b,c) <= G.(a,b) + G.(a,c) by A7,METRIC_1:def 5;
+    end;
+    hence thesis by A6,Th3;
   end;
   hence thesis by A1;
 end;
@@ -156,12 +156,14 @@ definition
   canceled 3;
   func bounded_metric(A,G) -> Function of [:A,A:],REAL means
   :Def4:
-  for a,b being Element of A holds it.(a,b) = G.(a,b)/(1 + G.(a,b));
+  for a,b
+  being Element of A holds it.(a,b) = G.(a,b)/(1 + G.(a,b));
   existence
   proof
     deffunc H(Element of A,Element of A) = G.($1,$2)/(1 + G.($1,$2));
     consider F being Function of [:A,A:],REAL such that
-A1: for a,b being Element of A holds F.(a,b) = H(a,b) from BINOP_1:sch 4;
+A1: for a,b being Element of A holds F.(a,b) = H(a,b) from BINOP_1:sch
+    4;
     take F;
     let a,b be Element of A;
     thus thesis by A1;
@@ -187,31 +189,61 @@ theorem
 proof
   assume
 A1: G is_metric_of A;
-A2: for a,b being Element of A holds
-  ((bounded_metric(A,G)).(a,b) = 0 iff a = b)
+A2: for a,b,c being Element of A holds (bounded_metric(A,G)).(a,c) <= (
+  bounded_metric(A,G)).(a,b) + (bounded_metric(A,G)).(b,c)
+  proof
+    let a,b,c be Element of A;
+    set a1 = G.(a,b);
+    set a3 = G.(a,c);
+    set a5 = G.(b,c);
+A3: (bounded_metric(A,G)).(a,b) = G.(a,b)/(1 + G.(a,b)) & (bounded_metric
+    (A,G)). (a,c) = G.(a,c)/(1 + G.(a,c)) by Def4;
+A4: (bounded_metric(A,G)).(b,c) = G.(b,c)/(1 + G.(b,c)) by Def4;
+A5: a3 >= 0 by A1,Th2;
+A6: 0 <= G.(a,b) & 0 <= G.(b,c) by A1,Th2;
+    then
+A7: 0 <> (1 + a1)*(1 + a5) by XCMPLX_1:6;
+A8: (a1/(1 + a1)) + (a5/(1 + a5)) = (a1*(1 + a5) + a5*(1 + a1))/((1 + a1)
+    *(1 + a5)) by A6,XCMPLX_1:117
+      .= ((a1*1 + a1*a5) + (a5*1 + a5*a1))/((1 + a1)*(1 + a5));
+    0 <= G.(a,c) by A1,Th2;
+    then
+A9: (a1/(1 + a1)) + (a5/(1 + a5)) - (a3/(1 + a3)) = (((a1 + a1*a5) + (a5
++ a5*a1))*(1 + a3) - a3*((1 + a1)*(1 + a5)))/ (((1 + a1)*(1 + a5))*(1 + a3)) by
+    A7,A8,XCMPLX_1:131;
+A10: a1 >= 0 & a5 >= 0 by A1,Th2;
+    a3 <= a1 + a5 by A1,PCOMPS_1:def 7;
+    then (a1 + a5) - a3 >= 0 by XREAL_1:50;
+    then ((a5 + a1) - a3) + (a1*a5 + (a5*a1 + (a5*a1)*a3)) >= 0 by
+    A10,A5;
+    hence thesis by A3,A4,A9,A10,A5,XREAL_1:51;
+  end;
+A11: for a,b being Element of A holds ((bounded_metric(A,G)).(a,b) = 0 iff a
+  = b)
   proof
     let a,b be Element of A;
-A3: (bounded_metric(A,G)).(a,b) = 0 implies a = b
+A12: (bounded_metric(A,G)).(a,b) = 0 implies a = b
     proof
-      assume (bounded_metric(A,G)).(a,b) = 0;
+      assume
+      (bounded_metric(A,G)).(a,b) = 0;
       then
-A4:   G.(a,b)/(1 + G.(a,b)) = 0 by Def4;
+A13:  G.(a,b)/(1 + G.(a,b)) = 0 by Def4;
       0 <= G.(a,b) by A1,Th2;
-      then 0 + 1 <= G.(a,b) + 1 by XREAL_1:8;
-      then G.(a,b) = 0 by A4,XCMPLX_1:50;
+      then G.(a,b) = 0 by A13,XCMPLX_1:50;
       hence thesis by A1,PCOMPS_1:def 7;
     end;
     a = b implies (bounded_metric(A,G)).(a,b) = 0
     proof
-      assume a = b;
+      assume
+      a = b;
       then G.(a,b) = 0 by A1,PCOMPS_1:def 7;
       then G.(a,b)/(1 + G.(a,b)) = 0;
       hence thesis by Def4;
     end;
-    hence thesis by A3;
+    hence thesis by A12;
   end;
-A5: for a,b being Element of A holds
-  (bounded_metric(A,G)).(a,b) = (bounded_metric(A,G)).(b,a)
+  for a,b being Element of A holds (bounded_metric(A,G)).(a,b) = (
+  bounded_metric(A,G)).(b,a)
   proof
     let a,b be Element of A;
     G.(a,b)/(1 + G.(a,b)) = G.(b,a)/(1 + G.(a,b)) by A1,PCOMPS_1:def 7
@@ -219,57 +251,7 @@ A5: for a,b being Element of A holds
       .= (bounded_metric(A,G)).(b,a) by Def4;
     hence thesis by Def4;
   end;
-  for a,b,c being Element of A holds
-  (bounded_metric(A,G)).(a,c) <= (bounded_metric(A,G)).(a,b) +
-  (bounded_metric(A,G)).(b,c)
-  proof
-    let a,b,c be Element of A;
-A6: (bounded_metric(A,G)).(a,b) = G.(a,b)/(1 + G.(a,b)) by Def4;
-A7: (bounded_metric(A,G)).(a,c) = G.(a,c)/(1 + G.(a,c)) by Def4;
-A8: (bounded_metric(A,G)).(b,c) = G.(b,c)/(1 + G.(b,c)) by Def4;
-    0 <= G.(a,b) by A1,Th2;
-    then
-A9: 0 + 1 <= G.(a,b) + 1 by XREAL_1:8;
-    0 <= G.(b,c) by A1,Th2;
-    then
-A10: 0 + 1 <= G.(b,c) + 1 by XREAL_1:8;
-    0 <= G.(a,c) by A1,Th2;
-    then
-A11: 0 + 1 <= G.(a,c) + 1 by XREAL_1:8;
-    set a1 = G.(a,b);
-    set a3 = G.(a,c);
-    set a5 = G.(b,c);
-A12: 0 <> (1 + a1)*(1 + a5) by A9,A10,XCMPLX_1:6;
-    (a1/(1 + a1)) + (a5/(1 + a5)) =
-    (a1*(1 + a5) + a5*(1 + a1))/((1 + a1)*(1 + a5)) by A9,A10,XCMPLX_1:117
-      .= ((a1*1 + a1*a5) + (a5*1 + a5*a1))/((1 + a1)*(1 + a5));
-    then
-A13: (a1/(1 + a1)) + (a5/(1 + a5)) - (a3/(1 + a3)) =
-    (((a1 + a1*a5) + (a5 + a5*a1))*(1 + a3) - a3*((1 + a1)*(1 + a5)))/
-    (((1 + a1)*(1 + a5))*(1 + a3)) by A11,A12,XCMPLX_1:131;
-    a3 <= a1 + a5 by A1,PCOMPS_1:def 7;
-    then
-A14: (a1 + a5) - a3 >= 0 by XREAL_1:50;
-A15: a1 >= 0 by A1,Th2;
-A16: a5 >= 0 by A1,Th2;
-A17: a3 >= 0 by A1,Th2;
-A18: a1*a5 >= 0 by A15,A16;
-A19: a5*a1 >= 0 by A15,A16;
-    then (a5*a1)*a3 >= 0 by A17;
-    then a5*a1 + (a5*a1)*a3 >= 0 + 0 by A19;
-    then a1*a5 + (a5*a1 + (a5*a1)*a3) >= 0 + 0 by A18;
-    then
-A20: ((a5 + a1) - a3) + (a1*a5 + (a5*a1 + (a5*a1)*a3)) >= 0 by A14;
-A21: 0 + 1 <= a1 + 1 by A15,XREAL_1:8;
-A22: 0 + 1 <= a3 + 1 by A17,XREAL_1:8;
-    0 + 1 <= a5 + 1 by A16,XREAL_1:8;
-    then (1 + a1)*(1 + a5) > 0 by A21,XREAL_1:131;
-    then ((1 + a1)*(1 + a5))*(1 + a3) > 0 by A22,XREAL_1:131;
-    then (a1/(1 + a1)) + (a5/(1 + a5)) - (a3/(1 + a3)) >= 0
-    by A13,A20;
-    hence thesis by A6,A7,A8,XREAL_1:51;
-  end;
-  hence thesis by A2,A5,PCOMPS_1:def 7;
+  hence thesis by A11,A2,PCOMPS_1:def 7;
 end;
 
 :: Sequences
@@ -277,7 +259,8 @@ end;
 reserve X for non empty MetrSpace,
   x,y for Element of X,
   V for Subset of X,
-  S,S1,T for sequence of X,
+  S,
+  S1,T for sequence of X,
   Nseq for increasing sequence of NAT;
 
 canceled 3;
@@ -287,10 +270,11 @@ theorem Th10:
 proof
   let x;
   consider f such that
-A1: dom f = NAT & rng f = {x} by FUNCT_1:15;
-  reconsider f as sequence of X by A1,FUNCT_2:4;
+A1: dom f = NAT and
+A2: rng f = {x} by FUNCT_1:15;
+  reconsider f as sequence of X by A1,A2,FUNCT_2:4;
   take f;
-  thus thesis by A1;
+  thus thesis by A2;
 end;
 
 definition
@@ -300,7 +284,8 @@ definition
   canceled 3;
   pred S is_convergent_in_metrspace_to x means
   :Def8:
-  for r st 0 < r ex m st for n st m <= n holds dist(S.n,x) < r;
+  for r st 0 < r ex m st
+  for n st m <= n holds dist(S.n,x) < r;
 end;
 
 definition
@@ -309,7 +294,8 @@ definition
   redefine
   canceled;
   attr V is bounded means
-  ex r being Real, x being Element of X st 0 < r & V c= Ball(x,r);
+  ex r being Real, x being Element of X st 0 < r & V
+  c= Ball(x,r);
   compatibility
   proof
     hereby
@@ -317,45 +303,47 @@ definition
 A1:   V is bounded;
       per cases;
       suppose
-A2:     V <> {};
+        V <> {};
+        then consider x being Element of X such that
+A2:     x in V by SUBSET_1:10;
         consider r such that
 A3:     0<r and
-A4:     for x,y being Element of X st x in V & y in V
-        holds dist(x,y)<=r by A1,TBSP_1:def 9;
-        consider x being Element of X such that
-A5:     x in V by A2,SUBSET_1:10;
+A4:     for x,y being Element of X st x in V & y in V holds dist(x,y)
+        <=r by A1,TBSP_1:def 9;
         take s=2*r,x;
         thus 0 < s by A3,XREAL_1:131;
         thus V c= Ball(x,s)
         proof
           let u be set;
           assume
-A6:       u in V;
+A5:       u in V;
           then reconsider v = u as Element of X;
-A7:       dist(x,v) <= r by A4,A5,A6;
-          1*r < s by A3,XREAL_1:70;
-          then dist(x,v) < s by A7,XXREAL_0:2;
+A6:       1*r < s by A3,XREAL_1:70;
+          dist(x,v) <= r by A4,A2,A5;
+          then dist(x,v) < s by A6,XXREAL_0:2;
           hence thesis by METRIC_1:12;
         end;
       end;
       suppose
-A8:     V = {};
+A7:     V = {};
         consider x be Element of X;
         take r=1/2,x;
-        thus 0 < r & V c= Ball(x,r) by A8,XBOOLE_1:2;
+        thus 0 < r & V c= Ball(x,r) by A7,XBOOLE_1:2;
       end;
     end;
     given r be Real,x be Element of X such that
-A9: 0 < r and
-A10: V c= Ball(x,r);
+A8: 0 < r and
+A9: V c= Ball(x,r);
     take 2*r;
-    thus 2*r > 0 by A9,XREAL_1:131;
+    thus 2*r > 0 by A8,XREAL_1:131;
     let z, y be Element of X;
-    assume z in V;
+    assume
+A10: z in V;
+    assume
+    y in V;
     then
-A11: dist(x,z) < r by A10,METRIC_1:12;
-    assume y in V;
-    then dist(x,y) < r by A10,METRIC_1:12;
+A11: dist(x,y) < r by A9,METRIC_1:12;
+    dist(x,z) < r by A9,A10,METRIC_1:12;
     then
 A12: dist(z,x)+dist(x,y) <= r+r by A11,XREAL_1:9;
     dist(z,y)<= dist(z,x)+dist(x,y) by METRIC_1:4;
@@ -368,7 +356,8 @@ definition
   let S be sequence of X;
   attr S is bounded means
   :Def11:
-  ex r being Real, x being Element of X st 0 < r & rng S c= Ball(x,r);
+  ex r being Real, x being Element of X st 0 <
+  r & rng S c= Ball(x,r);
 end;
 
 definition
@@ -377,17 +366,20 @@ definition
   let S;
   pred V contains_almost_all_sequence S means
   :Def12:
-  ex m st for n st m <= n holds S.n in V;
+  ex m st for n st m <= n
+  holds S.n in V;
 end;
 
 canceled 9;
 
 theorem Th20:
-  S is bounded iff (ex r,x st (0 < r & for n holds S.n in Ball(x,r)))
+  S is bounded iff ex r,x st (0 < r & for n holds S.n in Ball(x,r)
+  )
 proof
-  thus S is bounded implies (ex r,x st (0 < r & for n holds S.n in Ball(x,r)))
+  thus S is bounded implies ex r,x st (0 < r & for n holds S.n in Ball(x,r))
   proof
-    assume S is bounded;
+    assume
+    S is bounded;
     then consider r,x such that
 A1: 0 < r and
 A2: rng S c= Ball(x,r) by Def11;
@@ -408,7 +400,8 @@ A4: for n holds S.n in Ball(x,r);
     for x1 being set holds x1 in rng S implies x1 in Ball(x,r)
     proof
       let x1 be set;
-      assume x1 in rng S;
+      assume
+      x1 in rng S;
       then consider x2 being set such that
 A5:   x2 in dom S and
 A6:   x1 = S.x2 by FUNCT_1:def 5;
@@ -430,12 +423,14 @@ A1: S is_convergent_in_metrspace_to x;
 end;
 
 theorem Th22:
-  S is convergent implies ex x st S is_convergent_in_metrspace_to x
+  S is convergent implies ex x st S is_convergent_in_metrspace_to
+  x
 proof
-  assume S is convergent;
+  assume
+  S is convergent;
   then consider x such that
-A1: for r st 0 < r ex m st for n st m <= n holds dist(S.n,x) < r
-  by TBSP_1:def 3;
+A1: for r st 0 < r ex m st for n st m <= n holds dist(S.n,x) < r by
+  TBSP_1:def 3;
   S is_convergent_in_metrspace_to x by A1,Def8;
   hence thesis;
 end;
@@ -447,7 +442,8 @@ definition
   canceled;
   func dist_to_point(S,x) -> Real_Sequence means
   :Def14:
-  for n holds it.n = dist(S.n,x);
+  for n holds it.n =
+  dist(S.n,x);
   existence
   proof
     deffunc F(Element of NAT) = dist(S.$1,x);
@@ -459,12 +455,13 @@ A1: for n holds seq.n =F(n) from SEQ_1:sch 1;
   uniqueness
   proof
     let seq1,seq2 be Real_Sequence;
-    assume
-A2: (for n holds seq1.n = dist(S.n,x)) & (for n holds seq2.n = dist(S.n,x));
+    assume that
+A2: for n holds seq1.n = dist(S.n,x) and
+A3: for n holds seq2.n = dist(S.n,x);
     now
       let n;
       seq1.n = dist(S.n,x) by A2;
-      hence seq1.n = seq2.n by A2;
+      hence seq1.n = seq2.n by A3;
     end;
     hence thesis by FUNCT_2:113;
   end;
@@ -476,7 +473,8 @@ definition
   let T;
   func sequence_of_dist(S,T) -> Real_Sequence means
   :Def15:
-  for n holds it.n = dist(S.n,T.n);
+  for n holds it.n =
+  dist(S.n,T.n);
   existence
   proof
     deffunc F(Element of NAT) = dist(S.$1,T.$1);
@@ -488,13 +486,13 @@ A1: for n holds seq.n = F(n) from SEQ_1:sch 1;
   uniqueness
   proof
     let seq1,seq2 be Real_Sequence;
-    assume
-A2: (for n holds seq1.n = dist(S.n,T.n)) &
-    (for n holds seq2.n = dist(S.n,T.n));
+    assume that
+A2: for n holds seq1.n = dist(S.n,T.n) and
+A3: for n holds seq2.n = dist(S.n,T.n);
     now
       let n;
       seq1.n = dist(S.n,T.n) by A2;
-      hence seq1.n = seq2.n by A2;
+      hence seq1.n = seq2.n by A3;
     end;
     hence thesis by FUNCT_2:113;
   end;
@@ -506,47 +504,49 @@ theorem Th26:
   S is_convergent_in_metrspace_to x implies lim S = x
 proof
   assume
-A1: S is_convergent_in_metrspace_to x;
+  S is_convergent_in_metrspace_to x;
   then
-A2: S is convergent by Th21;
-  for r st 0 < r ex m st for n st m <= n holds dist(S.n,x) < r by A1,Def8;
-  hence thesis by A2,TBSP_1:def 4;
+  S is convergent & for r st 0 < r ex m st for n st m <= n holds dist(S.n,
+  x) < r by Def8,Th21;
+  hence thesis by TBSP_1:def 4;
 end;
 
 theorem Th27:
-  S is_convergent_in_metrspace_to x iff (S is convergent & lim S = x)
+  S is_convergent_in_metrspace_to x iff S is convergent & lim S =
+  x
 proof
-  (S is convergent & lim S = x) implies S is_convergent_in_metrspace_to x
+  S is convergent & lim S = x implies S is_convergent_in_metrspace_to x
   proof
-    assume S is convergent & lim S = x;
-    then for r st 0 < r ex m st for n st m <= n holds
-    dist(S.n,x) < r by TBSP_1:def 4;
+    assume
+    S is convergent & lim S = x;
+    then for r st 0 < r ex m st for n st m <= n holds dist(S.n,x) < r by
+    TBSP_1:def 4;
     hence thesis by Def8;
   end;
   hence thesis by Th21,Th26;
 end;
 
 theorem Th28:
-  S is convergent implies
-  (ex x st S is_convergent_in_metrspace_to x & lim S = x)
+  S is convergent implies ex x st S is_convergent_in_metrspace_to
+  x & lim S = x
 proof
-  assume S is convergent;
-  then consider x such that
-A1: S is_convergent_in_metrspace_to x by Th22;
-  thus thesis by A1,Th26;
+  assume
+  S is convergent;
+  then ex x st S is_convergent_in_metrspace_to x by Th22;
+  hence thesis by Th26;
 end;
 
 theorem Th29:
-  S is_convergent_in_metrspace_to x iff
-  (dist_to_point(S,x) is convergent & lim dist_to_point(S,x) = 0)
+  S is_convergent_in_metrspace_to x iff dist_to_point(S,x) is
+  convergent & lim dist_to_point(S,x) = 0
 proof
-A1: S is_convergent_in_metrspace_to x implies
-  (dist_to_point(S,x) is convergent & lim dist_to_point(S,x) = 0)
+A1: S is_convergent_in_metrspace_to x implies dist_to_point(S,x) is
+  convergent & lim dist_to_point(S,x) = 0
   proof
     assume
 A2: S is_convergent_in_metrspace_to x;
-A3: for r be real number st 0 < r ex m st for n st m <= n holds
-    abs(dist_to_point(S,x).n - 0) < r
+A3: for r be real number st 0 < r ex m st for n st m <= n holds abs(
+    dist_to_point(S,x).n - 0) < r
     proof
       let r be real number;
       assume
@@ -556,37 +556,40 @@ A4:   0 < r;
 A5:   for n st m1 <= n holds dist(S.n,x) < r by A2,A4,Def8;
       take k = m1;
       let n;
-      assume k <= n;
+      assume
+      k <= n;
+      then dist(S.n,x) < r by A5;
       then
-A6:   dist(S.n,x) < r by A5;
-A7:   dist(S.n,x) = dist_to_point(S,x).n by Def14;
-A8:   dist_to_point(S,x).n < r by A6,Def14;
-      0 <= dist_to_point(S,x).n by A7,METRIC_1:5;
-      hence thesis by A8,ABSVALUE:def 1;
+A6:   dist_to_point(S,x).n < r by Def14;
+      dist(S.n,x) = dist_to_point(S,x).n by Def14;
+      then 0 <= dist_to_point(S,x).n by METRIC_1:5;
+      hence thesis by A6,ABSVALUE:def 1;
     end;
     then dist_to_point(S,x) is convergent by SEQ_2:def 6;
     hence thesis by A3,SEQ_2:def 7;
   end;
-  (dist_to_point(S,x) is convergent & lim dist_to_point(S,x) = 0) implies
-  S is_convergent_in_metrspace_to x
+  dist_to_point(S,x) is convergent & lim dist_to_point(S,x) = 0 implies S
+  is_convergent_in_metrspace_to x
   proof
     assume
-A9: dist_to_point(S,x) is convergent & lim dist_to_point(S,x) = 0;
+A7: dist_to_point(S,x) is convergent & lim dist_to_point(S,x) = 0;
     for r st 0 < r ex m st for n st m <= n holds dist(S.n,x) < r
     proof
       let r;
-      assume 0 < r;
+      assume
+      0 < r;
       then consider m1 such that
-A10:  for n st m1 <= n holds abs(dist_to_point(S,x).n - 0) < r
-      by A9,SEQ_2:def 7;
+A8:   for n st m1 <= n holds abs(dist_to_point(S,x).n - 0) < r by A7
+      ,SEQ_2:def 7;
       take k = m1;
       let n;
-      assume k <= n;
-      then abs(dist_to_point(S,x).n - 0) < r by A10;
+      assume
+      k <= n;
+      then abs(dist_to_point(S,x).n - 0) < r by A8;
       then
-A11:  abs(dist(S.n,x)) < r by Def14;
+A9:   abs(dist(S.n,x)) < r by Def14;
       0 <= dist(S.n,x) by METRIC_1:5;
-      hence thesis by A11,ABSVALUE:def 1;
+      hence thesis by A9,ABSVALUE:def 1;
     end;
     hence thesis by Def8;
   end;
@@ -594,8 +597,8 @@ A11:  abs(dist(S.n,x)) < r by Def14;
 end;
 
 theorem Th30:
-  S is_convergent_in_metrspace_to x implies
-  (for r st 0 < r holds Ball(x,r) contains_almost_all_sequence S)
+  S is_convergent_in_metrspace_to x implies for r st 0 < r holds
+  Ball(x,r) contains_almost_all_sequence S
 proof
   assume
 A1: S is_convergent_in_metrspace_to x;
@@ -610,7 +613,8 @@ A3:   for n st m1 <= n holds dist(S.n,x) < r by A1,A2,Def8;
       take k = m1;
       now
         let n;
-        assume k <= n;
+        assume
+        k <= n;
         then dist(x,S.n) < r by A3;
         hence S.n in Ball(x,r) by METRIC_1:12;
       end;
@@ -621,65 +625,70 @@ A3:   for n st m1 <= n holds dist(S.n,x) < r by A1,A2,Def8;
 end;
 
 theorem Th31:
-  (for r st 0 < r holds Ball(x,r) contains_almost_all_sequence S) implies
-  (for V st x in V & V in Family_open_set X holds
-  V contains_almost_all_sequence S)
+  (for r st 0 < r holds Ball(x,r) contains_almost_all_sequence S)
+  implies for V st x in V & V in Family_open_set X holds V
+  contains_almost_all_sequence S
 proof
   assume
 A1: for r st 0 < r holds Ball(x,r) contains_almost_all_sequence S;
 A2: for r st 0 < r ex m st for n st m <= n holds S.n in Ball(x,r)
   proof
     let r;
-    assume 0 < r;
+    assume
+    0 < r;
     then Ball(x,r) contains_almost_all_sequence S by A1;
     hence thesis by Def12;
   end;
-  thus for V st x in V & V in Family_open_set X holds
-  V contains_almost_all_sequence S
+  thus for V st x in V & V in Family_open_set X holds V
+  contains_almost_all_sequence S
   proof
     let V;
-    assume that
-A3: x in V and
-A4: V in Family_open_set X;
-    consider q such that
-A5: 0 < q & Ball(x,q) c= V by A3,A4,PCOMPS_1:def 5;
+    assume
+    x in V & V in Family_open_set X;
+    then consider q such that
+A3: 0 < q and
+A4: Ball(x,q) c= V by PCOMPS_1:def 5;
     consider m1 such that
-A6: for n st m1 <= n holds S.n in Ball(x,q) by A2,A5;
+A5: for n st m1 <= n holds S.n in Ball(x,q) by A2,A3;
     now
       let n;
-      assume m1 <= n;
-      then S.n in Ball(x,q) by A6;
-      hence S.n in V by A5;
+      assume
+      m1 <= n;
+      then S.n in Ball(x,q) by A5;
+      hence S.n in V by A4;
     end;
     hence thesis by Def12;
   end;
 end;
 
 theorem Th32:
-  (for V st x in V & V in Family_open_set X holds
-  V contains_almost_all_sequence S) implies S is_convergent_in_metrspace_to x
+  (for V st x in V & V in Family_open_set X holds V
+  contains_almost_all_sequence S) implies S is_convergent_in_metrspace_to x
 proof
-  assume
-A1: for V st (x in V & V in Family_open_set X) holds
-  V contains_almost_all_sequence S;
-A2: for r st 0 < r holds x in Ball(x,r)
+A1: for r st 0 < r holds x in Ball(x,r)
   proof
     let r;
-    assume 0 < r;
+    assume
+    0 < r;
     then dist(x,x) < r by METRIC_1:1;
     hence thesis by METRIC_1:12;
   end;
+  assume
+A2: for V st x in V & V in Family_open_set X holds V
+  contains_almost_all_sequence S;
   for r st 0 < r ex m st for n st m <= n holds dist(S.n,x) < r
   proof
     let r;
-    assume 0 < r;
-    then x in Ball(x,r) by A2;
-    then Ball(x,r) contains_almost_all_sequence S by A1,PCOMPS_1:33;
+    assume
+    0 < r;
+    then x in Ball(x,r) by A1;
+    then Ball(x,r) contains_almost_all_sequence S by A2,PCOMPS_1:33;
     then consider m1 such that
 A3: for n st m1 <= n holds S.n in Ball(x,r) by Def12;
     take k = m1;
     let n;
-    assume k <= n;
+    assume
+    k <= n;
     then S.n in Ball(x,r) by A3;
     hence thesis by METRIC_1:12;
   end;
@@ -687,32 +696,33 @@ A3: for n st m1 <= n holds S.n in Ball(x,r) by Def12;
 end;
 
 theorem
-  S is_convergent_in_metrspace_to x iff
-  (for r st 0 < r holds Ball(x,r) contains_almost_all_sequence S)
+  S is_convergent_in_metrspace_to x iff for r st 0 < r holds Ball(x,r)
+  contains_almost_all_sequence S
 proof
-  thus S is_convergent_in_metrspace_to x implies
-  (for r st 0 < r holds Ball(x,r) contains_almost_all_sequence S) by Th30;
+  thus S is_convergent_in_metrspace_to x implies for r st 0 < r holds Ball(x,r
+  ) contains_almost_all_sequence S by Th30;
   thus (for r st 0 < r holds Ball(x,r) contains_almost_all_sequence S) implies
   S is_convergent_in_metrspace_to x
   proof
-    assume for r st 0 < r holds Ball(x,r) contains_almost_all_sequence S;
-    then (for V st (x in V & V in Family_open_set X) holds
-    V contains_almost_all_sequence S) by Th31;
+    assume
+    for r st 0 < r holds Ball(x,r) contains_almost_all_sequence S;
+    then for V st x in V & V in Family_open_set X holds V
+    contains_almost_all_sequence S by Th31;
     hence thesis by Th32;
   end;
 end;
 
 theorem
-  S is_convergent_in_metrspace_to x iff
-  (for V st (x in V & V in Family_open_set X) holds
-  V contains_almost_all_sequence S)
+  S is_convergent_in_metrspace_to x iff for V st x in V & V in
+  Family_open_set X holds V contains_almost_all_sequence S
 proof
-  thus S is_convergent_in_metrspace_to x implies
-  (for V st (x in V & V in Family_open_set X) holds
-  V contains_almost_all_sequence S)
+  thus S is_convergent_in_metrspace_to x implies for V st x in V & V in
+  Family_open_set X holds V contains_almost_all_sequence S
   proof
-    assume S is_convergent_in_metrspace_to x;
-    then for r st 0 < r holds Ball(x,r) contains_almost_all_sequence S by Th30;
+    assume
+    S is_convergent_in_metrspace_to x;
+    then for r st 0 < r holds Ball(x,r) contains_almost_all_sequence S by
+    Th30;
     hence thesis by Th31;
   end;
   thus thesis by Th32;
@@ -720,77 +730,74 @@ end;
 
 theorem
   (for r st 0 < r holds Ball(x,r) contains_almost_all_sequence S) iff
-  (for V st (x in V & V in Family_open_set X) holds
-  V contains_almost_all_sequence S) by Th31,Th30,Th32;
+for V st x in V & V in Family_open_set X holds V contains_almost_all_sequence S
+  by Th30,Th31,Th32;
 
 theorem Th36:
-  (S is convergent & T is convergent) implies
-  dist(lim S,lim T) = lim sequence_of_dist(S,T)
+  S is convergent & T is convergent implies dist(lim S,lim T) =
+  lim sequence_of_dist(S,T)
 proof
-  assume
-A1: S is convergent & T is convergent;
-  then consider x such that
-A2: S is_convergent_in_metrspace_to x & lim S = x by Th28;
+  assume that
+A1: S is convergent and
+A2: T is convergent;
+  consider x such that
+A3: S is_convergent_in_metrspace_to x and
+A4: lim S = x by A1,Th28;
   consider y such that
-A3: T is_convergent_in_metrspace_to y & lim T = y by A1,Th28;
-A4: for r be real number st 0 < r ex m st for n st m <= n holds
-  abs(sequence_of_dist(S,T).n - dist(x,y)) < r
+A5: T is_convergent_in_metrspace_to y and
+A6: lim T = y by A2,Th28;
+A7: for r be real number st 0 < r ex m st for n st m <= n holds abs(
+  sequence_of_dist(S,T).n - dist(x,y)) < r
   proof
     let r be real number;
     assume
-A5: 0 < r;
+A8: 0 < r;
     reconsider r as Real by XREAL_0:def 1;
-A6: 0 < r/2 by A5,XREAL_1:217;
+A9: 0 < r/2 by A8,XREAL_1:217;
     then consider m1 such that
-A7: for n st m1 <= n holds dist(S.n,x) < r/2 by A2,Def8;
+A10: for n st m1 <= n holds dist(S.n,x) < r/2 by A3,Def8;
     consider m2 such that
-A8: for n st m2 <= n holds dist(T.n,y) < r/2 by A3,A6,Def8;
+A11: for n st m2 <= n holds dist(T.n,y) < r/2 by A5,A9,Def8;
     take k = m1 + m2;
-      let n such that
-A9:   k <= n;
-      m1 <= k by NAT_1:11;
-      then m1 <= n by A9,XXREAL_0:2;
-      then
-A10:  dist(S.n,x) < r/2 by A7;
-      m2 <= k by NAT_1:12;
-      then m2 <= n by A9,XXREAL_0:2;
-      then
-A11:  dist(T.n,y) < r/2 by A8;
-      abs(sequence_of_dist(S,T).n - dist(lim S,lim T)) =
-      abs(dist(S.n,T.n) - dist(x,y)) by A2,A3,Def15
-        .= abs((dist(S.n,T.n) - dist(T.n,x)) + (dist(T.n,x) - dist(x,y)));
-      then
-A12:  abs(sequence_of_dist(S,T).n - dist(lim S,lim T)) <=
-      abs(dist(S.n,T.n) - dist(T.n,x)) + abs(dist(T.n,x) - dist(x,y))
-      by COMPLEX1:142;
-A13:  abs(dist(S.n,T.n) - dist(x,T.n)) <= dist(S.n,x) by Th1;
-      abs(dist(T.n,x) - dist(y,x)) <= dist(T.n,y) by Th1;
-      then
-A14:  abs(dist(S.n,T.n) - dist(T.n,x)) + abs(dist(T.n,x) - dist(x,y) ) <=
-      dist(S.n,x) + dist(T.n,y) by A13,XREAL_1:9;
-A15:  dist(S.n,x) + dist(T.n,y) < r/2 + r/2 by A10,A11,XREAL_1:10;
-      abs(sequence_of_dist(S,T).n - dist(lim S,lim T)) <=
-      dist(S.n,x) + dist(T.n,y) by A12,A14,XXREAL_0:2;
-      then abs(sequence_of_dist(S,T).n - dist(lim S,lim T)) < r
-      by A15,XXREAL_0:2;
-    hence thesis by A2,A3;
+    let n such that
+A12: k <= n;
+    abs(dist(S.n,T.n) - dist(x,T.n)) <= dist(S.n,x) & abs(dist(T.n,x) -
+    dist(y,x )) <= dist(T.n,y) by Th1;
+    then
+A13: abs(dist(S.n,T.n) - dist(T.n,x)) + abs(dist(T.n,x) - dist(x,y) ) <=
+    dist(S.n,x) + dist(T.n,y) by XREAL_1:9;
+    abs(sequence_of_dist(S,T).n - dist(lim S,lim T)) = abs(dist(S.n,T.n)
+    - dist(x,y)) by A4,A6,Def15
+      .= abs((dist(S.n,T.n) - dist(T.n,x)) + (dist(T.n,x) - dist(x,y)));
+    then
+    abs(sequence_of_dist(S,T).n - dist(lim S,lim T)) <= abs(dist(S.n,T.n)
+    - dist(T.n,x)) + abs(dist(T.n,x) - dist(x,y)) by COMPLEX1:142;
+    then
+A14: abs(sequence_of_dist(S,T).n - dist(lim S,lim T)) <= dist(S.n,x) +
+    dist(T.n,y) by A13,XXREAL_0:2;
+    m2 <= k by NAT_1:12;
+    then m2 <= n by A12,XXREAL_0:2;
+    then
+A15: dist(T.n,y) < r/2 by A11;
+    m1 <= k by NAT_1:11;
+    then m1 <= n by A12,XXREAL_0:2;
+    then dist(S.n,x) < r/2 by A10;
+    then dist(S.n,x) + dist(T.n,y) < r/2 + r/2 by A15,XREAL_1:10;
+    hence thesis by A4,A6,A14,XXREAL_0:2;
   end;
   then sequence_of_dist(S,T) is convergent by SEQ_2:def 6;
-  hence thesis by A2,A3,A4,SEQ_2:def 7;
+  hence thesis by A4,A6,A7,SEQ_2:def 7;
 end;
 
 theorem
-  (S is_convergent_in_metrspace_to x & S is_convergent_in_metrspace_to y)
+  S is_convergent_in_metrspace_to x & S is_convergent_in_metrspace_to y
   implies x = y
 proof
   assume that
 A1: S is_convergent_in_metrspace_to x and
 A2: S is_convergent_in_metrspace_to y;
-A3: (S is convergent & lim S = x) by A1,Th27;
-  (S is convergent & lim S = y) by A2,Th27;
-  then
-A4: dist(x,y) = lim sequence_of_dist(S,S) by A3,Th36;
-A5: for n being Nat holds sequence_of_dist(S,S).n = 0
+A3: lim S = y by A2,Th27;
+A4: for n being Nat holds sequence_of_dist(S,S).n = 0
   proof
     let n be Nat;
     n in NAT by ORDINAL1:def 13;
@@ -798,21 +805,24 @@ A5: for n being Nat holds sequence_of_dist(S,S).n = 0
       .= 0 by METRIC_1:1;
     hence thesis;
   end;
-  then
-A6: sequence_of_dist(S,S) is constant by VALUED_0:def 18;
-  ex n st sequence_of_dist(S,S).n = 0
+A5: ex n st sequence_of_dist(S,S).n = 0
   proof
     take 0;
-    thus thesis by A5;
+    thus thesis by A4;
   end;
-  then dist(x,y) = 0 by A4,A6,SEQ_4:40;
+  lim S = x & S is convergent by A1,A2,Th27;
+  then
+A6: dist(x,y) = lim sequence_of_dist(S,S) by A3,Th36;
+  sequence_of_dist(S,S) is constant by A4,VALUED_0:def 18;
+  then dist(x,y) = 0 by A6,A5,SEQ_4:40;
   hence thesis by METRIC_1:2;
 end;
 
 theorem Th38:
   S is constant implies S is convergent
 proof
-  assume S is constant;
+  assume
+  S is constant;
   then consider x such that
 A1: for n being Nat holds S.n =x by VALUED_0:def 18;
   take x;
@@ -820,7 +830,8 @@ A1: for n being Nat holds S.n =x by VALUED_0:def 18;
 A2: 0 < r;
   take k = 0;
   now
-    let n such that k <= n;
+    let n such that
+    k <= n;
     dist(S.n,x) = dist(x,x) by A1
       .= 0 by METRIC_1:1;
     hence dist(S.n,x) < r by A2;
@@ -829,8 +840,8 @@ A2: 0 < r;
 end;
 
 theorem
-  S is_convergent_in_metrspace_to x & S1 is subsequence of S implies
-  S1 is_convergent_in_metrspace_to x
+  S is_convergent_in_metrspace_to x & S1 is subsequence of S implies S1
+  is_convergent_in_metrspace_to x
 proof
   assume that
 A1: S is_convergent_in_metrspace_to x and
@@ -840,7 +851,8 @@ A3: S1 = S*Nseq by A2,VALUED_0:def 17;
   for r st 0 < r ex m st for n st m <= n holds dist(S1.n,x) < r
   proof
     let r;
-    assume 0 < r;
+    assume
+    0 < r;
     then consider m1 such that
 A4: for n st m1 <= n holds dist(S.n,x) < r by A1,Def8;
     take m = m1;
@@ -848,14 +860,13 @@ A4: for n st m1 <= n holds dist(S.n,x) < r by A1,Def8;
     proof
       let n such that
 A5:   m <= n;
-      n <= Nseq.n by SEQM_3:33;
-      then
-A6:   m1 <= Nseq.n by A5,XXREAL_0:2;
-A7:   dom Nseq = NAT by FUNCT_2:def 1;
       dom S = NAT by FUNCT_2:def 1;
-      then Nseq.n in dom S;
-      then n in dom(S*Nseq) by A7,FUNCT_1:21;
-      then S1.n = S.(Nseq.n) by A3,FUNCT_1:22;
+      then dom Nseq = NAT & Nseq.n in dom S by FUNCT_2:def 1;
+      then n in dom(S*Nseq) by FUNCT_1:21;
+      then
+A6:   S1.n = S.(Nseq.n) by A3,FUNCT_1:22;
+      n <= Nseq.n by SEQM_3:33;
+      then m1 <= Nseq.n by A5,XXREAL_0:2;
       hence thesis by A4,A6;
     end;
     hence thesis;
@@ -871,36 +882,37 @@ A1: S is Cauchy and
 A2: S1 is subsequence of S;
   consider Nseq such that
 A3: S1 = S*Nseq by A2,VALUED_0:def 17;
-  for r st 0 < r ex m st for n,k st m <= n & m <= k holds dist(S1.n,S1.k) < r
+  for r st 0 < r ex m st for n,k st m <= n & m <= k holds dist(S1.n,S1.k)
+  < r
   proof
     let r;
-    assume 0 < r;
+    assume
+    0 < r;
     then consider m1 such that
-A4: for n,k st m1 <= n & m1 <= k holds dist(S.n,S.k) < r by A1,TBSP_1:def 5;
+A4: for n,k st m1 <= n & m1 <= k holds dist(S.n,S.k) < r by A1,
+    TBSP_1:def 5;
     take m = m1;
     for n,k st m <= n & m <= k holds dist(S1.n,S1.k) < r
     proof
       let n,k such that
 A5:   m <= n and
 A6:   m <= k;
-      n <= Nseq.n by SEQM_3:33;
-      then
-A7:   m1 <= Nseq.n by A5,XXREAL_0:2;
-A8:   dom Nseq = NAT by FUNCT_2:def 1;
-      dom S = NAT by FUNCT_2:def 1;
-      then Nseq.n in dom S;
-      then n in dom(S*Nseq) by A8,FUNCT_1:21;
-      then
-A9:   S1.n = S.(Nseq.n) by A3,FUNCT_1:22;
       k <= Nseq.k by SEQM_3:33;
       then
-A10:  m1 <= Nseq.k by A6,XXREAL_0:2;
-A11:  dom Nseq = NAT by FUNCT_2:def 1;
+A7:   m1 <= Nseq.k by A6,XXREAL_0:2;
       dom S = NAT by FUNCT_2:def 1;
-      then Nseq.k in dom S;
-      then k in dom(S*Nseq) by A11,FUNCT_1:21;
-      then S1.k = S.(Nseq.k) by A3,FUNCT_1:22;
-      hence thesis by A4,A7,A9,A10;
+      then dom Nseq = NAT & Nseq.k in dom S by FUNCT_2:def 1;
+      then k in dom(S*Nseq) by FUNCT_1:21;
+      then
+A8:   S1.k = S.(Nseq.k) by A3,FUNCT_1:22;
+      dom S = NAT by FUNCT_2:def 1;
+      then dom Nseq = NAT & Nseq.n in dom S by FUNCT_2:def 1;
+      then n in dom(S*Nseq) by FUNCT_1:21;
+      then
+A9:   S1.n = S.(Nseq.n) by A3,FUNCT_1:22;
+      n <= Nseq.n by SEQM_3:33;
+      then m1 <= Nseq.n by A5,XXREAL_0:2;
+      hence thesis by A4,A9,A7,A8;
     end;
     hence thesis;
   end;
@@ -915,10 +927,12 @@ theorem
 theorem
   S is convergent implies S is bounded
 proof
-  assume S is convergent;
+  assume
+  S is convergent;
   then consider x such that
-A1: S is_convergent_in_metrspace_to x and lim S = x by Th28;
-  dist_to_point(S,x) is convergent & lim dist_to_point(S,x) = 0 by A1,Th29;
+A1: S is_convergent_in_metrspace_to x and
+  lim S = x by Th28;
+  dist_to_point(S,x) is convergent by A1,Th29;
   then dist_to_point(S,x) is bounded by SEQ_2:27;
   then consider r be real number such that
 A2: 0 < r and
@@ -929,7 +943,8 @@ A3: for n holds abs(dist_to_point(S,x).n) < r by SEQ_2:15;
     let n;
 A4: dist_to_point(S,x).n = dist(S.n,x) by Def14;
     then 0 <= dist_to_point(S,x).n by METRIC_1:5;
-    then abs(dist_to_point(S,x).n) = dist_to_point(S,x).n by ABSVALUE:def 1;
+    then abs(dist_to_point(S,x).n) = dist_to_point(S,x).n by
+    ABSVALUE:def 1;
     then dist(S.n,x) < r by A3,A4;
     hence thesis by METRIC_1:12;
   end;
@@ -945,7 +960,8 @@ A1: S is Cauchy;
     take r = 1;
     thus 0 < r;
     consider m1 such that
-A2: for n,k st m1 <= n & m1 <= k holds dist(S.n,S.k) < r by A1,TBSP_1:def 5;
+A2: for n,k st m1 <= n & m1 <= k holds dist(S.n,S.k) < r by A1,TBSP_1:
+    def 5;
     take m = m1;
     thus for n,k st m <= n & m <= k holds dist(S.n,S.k) < r by A2;
   end;
@@ -954,14 +970,16 @@ A3: 0 < r2 and
 A4: for n,k st m1 <= n & m1 <= k holds dist(S.n,S.k) < r2;
   consider r1 being real number such that
 A5: 0 < r1 and
-A6: for m2 st m2 <= m1 holds abs(dist_to_point(S,S.m1).m2) < r1 by SEQ_2:16;
+A6: for m2 st m2 <= m1 holds abs(dist_to_point(S,S.m1).m2) < r1 by SEQ_2
+  :16;
 A7: for m st m <= m1 holds dist(S.m,S.m1) < r1
   proof
     let m such that
 A8: m <= m1;
 A9: dist_to_point(S,S.m1).m = dist(S.m,S.m1) by Def14;
     then 0 <= dist_to_point(S,S.m1).m by METRIC_1:5;
-    then abs(dist_to_point(S,S.m1).m) = dist(S.m,S.m1) by A9,ABSVALUE:def 1;
+    then abs(dist_to_point(S,S.m1).m) = dist(S.m,S.m1) by A9, ABSVALUE:
+    def 1;
     hence thesis by A6,A8;
   end;
   ex r,x st 0 < r & for n holds S.n in Ball(x,r)
@@ -969,29 +987,29 @@ A9: dist_to_point(S,S.m1).m = dist(S.m,S.m1) by Def14;
     reconsider r = r1 + r2 as Real;
     take r;
     take x = S.m1;
-A10: 0 + 0 < r1 + r2 by A3,A5;
     for n holds S.n in Ball(x,r)
     proof
       let n;
-      now per cases;
-        suppose n <= m1;
-          then
-A11:      dist(S.n,S.m1) < r1 by A7;
-          r1 < r by A3,XREAL_1:31;
+      now
+        per cases;
+        suppose
+A10:      n <= m1;
+A11:      r1 < r by A3,XREAL_1:31;
+          dist(S.n,S.m1) < r1 by A7,A10;
           then dist(S.n,x) < r by A11,XXREAL_0:2;
           hence thesis by METRIC_1:12;
         end;
-        suppose m1 <= n;
-          then
-A12:      dist(S.n,S.m1) < r2 by A4;
-          r2 < r by A5,XREAL_1:31;
-          then dist(S.n,x) < r by A12,XXREAL_0:2;
+        suppose
+A12:      m1 <= n;
+A13:      r2 < r by A5,XREAL_1:31;
+          dist(S.n,S.m1) < r2 by A4,A12;
+          then dist(S.n,x) < r by A13,XXREAL_0:2;
           hence thesis by METRIC_1:12;
         end;
       end;
       hence thesis;
     end;
-    hence thesis by A10;
+    hence thesis by A3,A5;
   end;
   hence thesis by Th20;
 end;
@@ -1012,12 +1030,12 @@ registration
     consider x being Element of M;
     consider S being sequence of M such that
 A1: rng S = {x} by Th10;
-    take S; thus
+    take S;
+    thus
 A2: S is constant by A1,FUNCT_2:188;
-    hence
-A3: S is convergent;
+    hence S is convergent;
     thus S is Cauchy by A2,TBSP_1:7;
-    thus thesis by A3,Th44,TBSP_1:7;
+    thus thesis by A2,Th44,TBSP_1:7;
   end;
 end;
 

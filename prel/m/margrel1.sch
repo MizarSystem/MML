@@ -7,6 +7,7 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="TARSKI"/>
@@ -17,6 +18,7 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="XBOOLEAN"/>
+<ArticleID name="CARD_3"/>
 <ArticleID name="MARGREL1"/>
 </Signature>
 <Scheme>
@@ -30,6 +32,7 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="34"/>
+<Adjective nr="37"/>
 </Cluster>
 </Typ>
 <Not>
@@ -38,7 +41,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="6"/>
-<Adjective nr="30"/>
+<Adjective nr="31"/>
 </Cluster>
 </Typ>
 <And>
@@ -88,7 +91,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="6"/>
-<Adjective nr="30"/>
+<Adjective nr="31"/>
 </Cluster>
 </Typ>
 <For>
@@ -96,7 +99,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="6"/>
-<Adjective nr="30"/>
+<Adjective nr="31"/>
 </Cluster>
 </Typ>
 <Not>
@@ -109,10 +112,10 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="107">
+<Func kind="K" nr="115">
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="107">
+<Func kind="K" nr="115">
 <Var nr="2"/>
 </Func>
 </Pred>
@@ -134,7 +137,7 @@
 <For>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="136">
+<Func kind="K" nr="155">
 <Func kind="F" nr="1"/>
 </Func>
 </Typ>
@@ -196,10 +199,10 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="107">
+<Func kind="K" nr="115">
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="107">
+<Func kind="K" nr="115">
 <Var nr="2"/>
 </Func>
 </Pred>
@@ -218,14 +221,14 @@
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="95"/>
+<Func kind="K" nr="103"/>
 </Typ>
 </ArgTypes>
 <Not>
 <For>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="136">
+<Func kind="K" nr="155">
 <Func kind="F" nr="1"/>
 </Func>
 </Typ>
@@ -238,7 +241,7 @@
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="107">
+<Func kind="K" nr="115">
 <Var nr="2"/>
 </Func>
 <Func kind="F" nr="2"/>

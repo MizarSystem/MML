@@ -9,13 +9,13 @@ environ
  vocabularies FUNCT_1, BOOLE, ORDINAL1, FINSEQ_1, FINSET_1, RELAT_1, ORDINAL2,
       ALGSEQ_1, ARYTM_1, FINSEQ_7, AFINSQ_1, ARYTM, INT_1, FINSEQ_4, RVSUM_1,
       EUCLID_2, FUNCOP_1, RLVECT_1, FINSEQ_2, CQC_LANG, PRGCOR_2;
- notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, RELAT_1, FUNCT_1,
-      ORDINAL1, REAL_1, NAT_1, FINSET_1, PARTFUN1, FINSEQ_1, FUNCOP_1, SEQ_1,
-      AFINSQ_1, INT_1, RVSUM_1, NAT_D, EUCLID_2, FINSEQ_2, XXREAL_0;
- constructors XXREAL_0, REAL_1, NAT_1, PARTFUN1, NAT_D, AFINSQ_1, EUCLID_2,
-      SEQ_1, BINOP_2, INT_1, VALUED_1, RVSUM_1, RELSET_1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, RELAT_1, FUNCT_1, ORDINAL1,
+      REAL_1, NAT_1, FINSET_1, PARTFUN1, FINSEQ_1, FUNCOP_1, SEQ_1, AFINSQ_1,
+      INT_1, RVSUM_1, NAT_D, FINSEQ_2, XXREAL_0;
+ constructors XXREAL_0, REAL_1, NAT_1, PARTFUN1, NAT_D, AFINSQ_1, SEQ_1,
+      BINOP_2, INT_1, VALUED_1, RVSUM_1, RELSET_1;
  registrations ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1,
-      MEMBERED, FINSEQ_1, AFINSQ_1, XBOOLE_0, VALUED_0, FINSEQ_2;
+      MEMBERED, FINSEQ_1, AFINSQ_1, XBOOLE_0, VALUED_0, FINSEQ_2, CARD_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -32,82 +32,89 @@ canceled;
 
 reserve D for non empty set;
 
-theorem :: PRGCOR_2:2     :: uogolnic !!! usunac?
-  for f being non empty XFinSequence of D
-  holds len f >0;
+theorem :: PRGCOR_2:2
+  for f being non empty XFinSequence of D holds len f >0;
 
 definition
   let D be set,q be FinSequence of D;
   func FS2XFS q -> XFinSequence of D means
 :: PRGCOR_2:def 1
 
-  len it=len q & for i st i<len q holds q.(i+1)=it.i;
+  len it=len q & for i st i<
+  len q holds q.(i+1)=it.i;
 end;
 
 definition
   let D be set,q be XFinSequence of D;
   func XFS2FS q -> FinSequence of D means
 :: PRGCOR_2:def 2
-  len it=len q & for i st 1<=i & i<=len q holds q.(i-'1)=it.i;
+  len it=len q & for i st 1<=i & i<=
+  len q holds q.(i-'1)=it.i;
 end;
 
 theorem :: PRGCOR_2:3
   for k being Nat,a being set holds k --> a is XFinSequence;
 
 theorem :: PRGCOR_2:4
-  for D being set, n being Nat, r being set st r in D
-  holds (n-->r) is XFinSequence of D;
+  for D being set, n being Nat, r being set st r in D holds (n-->r)
+  is XFinSequence of D;
 
 definition
-  let D; let q be FinSequence of D, n be Nat;
-  assume
- n>len q & NAT c= D;
+  let D;
+  let q be FinSequence of D, n be Nat;
+  assume that
+ n>len q and
+ NAT c= D;
   func FS2XFS*(q,n) -> non empty XFinSequence of D means
 :: PRGCOR_2:def 3
 
-  len q = it.0 & len it=n & (for i st 1<=i & i<= len q holds it.i=q.i)&
-  (for j being Nat st len q<j & j<n holds it.j=0);
+  len q = it.0 &
+len it=n & (for i st 1<=i & i<= len q holds it.i=q.i)& for j being Nat st len q
+  <j & j<n holds it.j=0;
 end;
 
 definition
-  let D; let p be non empty XFinSequence of D;
-  assume
- NAT c= D & p.0 is Nat & p.0 in len p;
+  let D;
+  let p be non empty XFinSequence of D;
+  assume that
+ p.0 is Nat and
+ p.0 in len p;
   func XFS2FS*(p) -> FinSequence of D means
 :: PRGCOR_2:def 4
 
-  for m st m = p.0 holds len it =m & for i st 1<=i & i<= m holds it.i=p.i;
+  for m st m = p.0 holds len
+  it =m & for i st 1<=i & i<= m holds it.i=p.i;
 end;
 
 theorem :: PRGCOR_2:5
-  for p being non empty XFinSequence of D
-  st NAT c= D & p.0=0 & 0<len p holds XFS2FS*(p)={};
+  for p being non empty XFinSequence of D st p.0=0 & 0<len p holds
+  XFS2FS*(p)={};
 
 definition
-  let D; let p be XFinSequence of D, q be FinSequence of D;
+  let D;
+  let p be XFinSequence of D, q be FinSequence of D;
   pred p is_an_xrep_of q means
 :: PRGCOR_2:def 5
 
-  NAT c= D & (p.0)=len q & len q < len p
-  & for i st 1<=i & i<=len q holds p.i=q.i;
+  NAT c= D & (p.0)=len q & len q < len p &
+  for i st 1<=i & i<=len q holds p.i=q.i;
 end;
 
 theorem :: PRGCOR_2:6
-  for p being non empty XFinSequence of D st
-  NAT c= D & (p.0) is Nat & (p.0) in len p holds p is_an_xrep_of (XFS2FS*(p));
+  for p being non empty XFinSequence of D st NAT c= D & (p.0) is Nat & (
+  p.0) in len p holds p is_an_xrep_of (XFS2FS*(p));
 
 definition
   let x,y,a,b,c be set;
   func IFLGT(x,y,a,b,c) -> set equals
 :: PRGCOR_2:def 6
 
-  a if x in y,
-  b if x = y otherwise c;
+  a if x in y, b if x = y otherwise
+  c;
 end;
 
 theorem :: PRGCOR_2:7
-  for q being FinSequence of D,
-  n being Nat st NAT c= D & n>len q
+  for q being FinSequence of D, n being Nat st NAT c= D & n>len q
   holds ex p being XFinSequence of D st len p=n & p is_an_xrep_of q;
 
 :: Non-overwriting program calculating inner product of vectors
@@ -124,29 +131,29 @@ theorem :: PRGCOR_2:7
 
 definition
   let a,b be XFinSequence of REAL;
-  assume
- b.0 is Nat & 0<= b.0 & b.0 < len a;
+  assume that
+ b.0 is Nat and
+ b.0 < len a;
   func inner_prd_prg(a,b) -> Real means
 :: PRGCOR_2:def 7
 
-  ex s being XFinSequence of REAL, n being Integer st
-  len s=len a & s.0=0 & n= b.0 & (n<>0 implies for i being Nat st i<n
-  holds s.(i+1)=s.i + (a.(i+1))*(b.(i+1)) ) & it=s.n;
+  ex s being XFinSequence of REAL
+  , n being Integer st len s=len a & s.0=0 & n= b.0 & (n<>0 implies for i being
+  Nat st i<n holds s.(i+1)=s.i + (a.(i+1))*(b.(i+1)) ) & it=s.n;
 end;
 
 theorem :: PRGCOR_2:8
   for a being FinSequence of REAL, s being XFinSequence of REAL st
-  len s> len a & s.0=0 & (for i st i<len a holds s.(i+1)=s.i+a.(i+1))
-  holds Sum a =s.(len a);
+  s.0=0 & (for i st i<len a holds s.(i+1)=s.i+a.(i+1)) holds Sum a =s.(len a);
 
 theorem :: PRGCOR_2:9
   for a being FinSequence of REAL holds ex s being XFinSequence of REAL
-  st len s=len a +1 & s.0=0 & (for i st i<len a holds s.(i+1)=s.i+a.(i+1))
-  & Sum a =s.(len a);
+st len s=len a +1 & s.0=0 & (for i st i<len a holds s.(i+1)=s.i+a.(i+1)) & Sum
+  a =s.(len a);
 
 theorem :: PRGCOR_2:10
-  for a,b being FinSequence of REAL, n being Nat st len a=len b & n>len a
-  holds |(a,b)| = inner_prd_prg(FS2XFS*(a,n),FS2XFS*(b,n));
+  for a,b being FinSequence of REAL, n being Nat st len a=len b & n>len
+  a holds |(a,b)| = inner_prd_prg(FS2XFS*(a,n),FS2XFS*(b,n));
 
 :: Vector Calculation Program: Scalar Product of Vector
 ::
@@ -180,17 +187,16 @@ definition
   pred m scalar_prd_prg c,a,b means
 :: PRGCOR_2:def 8
 
-  len c =m & len b =m &
-  ex n being Integer st c.0=b.0 & n=b.0 & (n<>0 implies
-  for i being Nat st 1<=i & i<=n holds c.i=a*(b.i));
+  len c =m & len b =m & ex n being
+Integer st c.0=b.0 & n=b.0 & (n<>0 implies for i being Nat st 1<=i & i<=n holds
+  c.i=a*(b.i));
 end;
 
 theorem :: PRGCOR_2:11
   for b being non empty XFinSequence of REAL, a being Real,m being Nat
-  st b.0 is Nat & len b=m & 0<=b.0 & b.0 < m holds
-  (ex c being XFinSequence of REAL st m scalar_prd_prg c,a,b)&
-  for c being non empty XFinSequence of REAL st m scalar_prd_prg c,a,b
-  holds (XFS2FS*(c))=a*(XFS2FS*(b));
+  st b.0 is Nat & len b=m & b.0 < m holds (ex c being XFinSequence of REAL st m
+  scalar_prd_prg c,a,b)& for c being non empty XFinSequence of REAL st m
+  scalar_prd_prg c,a,b holds (XFS2FS*(c))=a*(XFS2FS*(b));
 
 :: Vector Calculation Program: Minus Vector
 ::#define V_SIZE 1024
@@ -210,16 +216,15 @@ definition
   pred m vector_minus_prg c,b means
 :: PRGCOR_2:def 9
 
-  len c =m & len b =m &
-  ex n being Integer st c.0=b.0 & n= b.0 & (n<>0 implies
-  for i being Nat st 1<=i & i<=n holds c.i= -(b.i));
+  len c =m & len b =m & ex n being
+  Integer st c.0=b.0 & n= b.0 & (n<>0 implies for i being Nat st 1<=i & i<=n
+  holds c.i= -(b.i));
 end;
 
 theorem :: PRGCOR_2:12
-  for b being non empty XFinSequence of REAL,m being Nat
-  st b.0 is Nat & len b=m & 0<=b.0 & b.0 < m holds
-  (ex c being XFinSequence of REAL st m vector_minus_prg c,b)&
-  for c being non empty XFinSequence of REAL st m vector_minus_prg c,b
+  for b being non empty XFinSequence of REAL,m being Nat st b.0 is Nat &
+len b=m & b.0 < m holds (ex c being XFinSequence of REAL st m vector_minus_prg
+  c,b)& for c being non empty XFinSequence of REAL st m vector_minus_prg c,b
   holds (XFS2FS*(c))= -(XFS2FS*(b));
 
 :: Vector Calculation Program: Sum of Vectors
@@ -243,17 +248,16 @@ definition
   pred m vector_add_prg c,a,b means
 :: PRGCOR_2:def 10
 
-  len c =m & len a=m & len b =m &
-  ex n being Integer st c.0=b.0 & n=b.0 & (n<>0 implies
-  for i being Nat st 1<=i & i<=n holds c.i=(a.i)+(b.i) );
+  len c =m & len a=m & len b =m & ex
+n being Integer st c.0=b.0 & n=b.0 & (n<>0 implies for i being Nat st 1<=i & i
+  <=n holds c.i=(a.i)+(b.i) );
 end;
 
 theorem :: PRGCOR_2:13
-  for a,b being non empty XFinSequence of REAL, m being Nat
-  st b.0 is Nat & len a=m & len b=m & a.0=b.0 & 0<=b.0 & b.0 < m holds
-  (ex c being XFinSequence of REAL st m vector_add_prg c,a,b)&
-  for c being non empty XFinSequence of REAL st m vector_add_prg c,a,b
-  holds (XFS2FS*(c))=(XFS2FS*(a))+(XFS2FS*(b));
+  for a,b being non empty XFinSequence of REAL, m being Nat st b.0 is
+  Nat & len a=m & len b=m & a.0=b.0 & b.0 < m holds (ex c being XFinSequence of
+REAL st m vector_add_prg c,a,b)& for c being non empty XFinSequence of REAL st
+  m vector_add_prg c,a,b holds (XFS2FS*(c))=(XFS2FS*(a))+(XFS2FS*(b));
 
 :: Vector Calculation Program: Subtraction of Vectors
 ::
@@ -276,15 +280,13 @@ definition
   pred m vector_sub_prg c,a,b means
 :: PRGCOR_2:def 11
 
-  len c =m & len a=m & len b =m &
-  ex n being Integer st c.0=b.0 & n=b.0 & (n<>0 implies
-  for i being Nat st 1<=i & i<=n holds c.i=(a.i)-(b.i) );
+  len c =m & len a=m & len b =m & ex
+n being Integer st c.0=b.0 & n=b.0 & (n<>0 implies for i being Nat st 1<=i & i
+  <=n holds c.i=(a.i)-(b.i) );
 end;
 
 theorem :: PRGCOR_2:14
-  for a,b being non empty XFinSequence of REAL, m being Nat
-  st b.0 is Nat & len a=m & len b=m & a.0=b.0 & 0<=b.0 & b.0 < m holds
-  (ex c being XFinSequence of REAL st m vector_sub_prg c,a,b) &
-  for c being non empty XFinSequence of REAL st m vector_sub_prg c,a,b
-  holds XFS2FS*(c)=XFS2FS*(a)-XFS2FS*(b);
-
+  for a,b being non empty XFinSequence of REAL, m being Nat st b.0 is
+  Nat & len a=m & len b=m & a.0=b.0 & b.0 < m holds (ex c being XFinSequence of
+REAL st m vector_sub_prg c,a,b) & for c being non empty XFinSequence of REAL st
+  m vector_sub_prg c,a,b holds XFS2FS*(c)=XFS2FS*(a)-XFS2FS*(b);

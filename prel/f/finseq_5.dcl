@@ -28,6 +28,7 @@
 <Adjective nr="10" value="false"/>
 <Adjective nr="20"/>
 <Adjective nr="26"/>
+<Adjective nr="27"/>
 </Cluster>
 </RCluster>
 <RCluster aid="FINSEQ_5" nr="2">
@@ -52,6 +53,7 @@
 <Adjective nr="10" value="false"/>
 <Adjective nr="20"/>
 <Adjective nr="26"/>
+<Adjective nr="27"/>
 </Cluster>
 </RCluster>
 <RCluster aid="FINSEQ_5" nr="3">
@@ -65,6 +67,7 @@
 <Adjective nr="11" value="false"/>
 <Adjective nr="20"/>
 <Adjective nr="26"/>
+<Adjective nr="27"/>
 </Cluster>
 </RCluster>
 <FCluster aid="FINSEQ_5" nr="1">

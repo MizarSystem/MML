@@ -9,16 +9,17 @@ environ
  vocabularies PRE_TOPC, EUCLID, ARYTM, RCOMP_1, BOOLE, CONNSP_1, SUBSET_1,
       RELAT_2, RELAT_1, FUNCT_1, ORDINAL2, TOPMETR, ARYTM_1, BORSUK_1, ARYTM_3,
       FUNCT_5, FINSEQ_1, MCART_1, TOPREAL2, TOPREAL1, TOPS_2, COMPTS_1,
-      PSCOMP_1, SPPOL_1, RLVECT_1;
+      PSCOMP_1, SPPOL_1, RLVECT_1, FINSEQ_4;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
       REAL_1, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, STRUCT_0, PRE_TOPC, TOPS_2,
       COMPTS_1, RCOMP_1, FINSEQ_1, RLVECT_1, EUCLID, TOPMETR, TOPREAL1,
-      TOPREAL2, TMAP_1,
-      CONNSP_1, SPPOL_1, PSCOMP_1, JORDAN2B, XXREAL_0;
+      TOPREAL2, TMAP_1, CONNSP_1, SPPOL_1, PSCOMP_1, JORDAN2B, XXREAL_0;
  constructors REAL_1, RCOMP_1, CONNSP_1, TOPS_2, COMPTS_1, TMAP_1, TOPMETR,
-      TOPREAL1, TOPREAL2, SPPOL_1, PSCOMP_1, JORDAN2B, SEQ_1;
+      TOPREAL1, TOPREAL2, SPPOL_1, PSCOMP_1, JORDAN2B, SEQ_1, BINOP_2,
+      MONOID_0;
  registrations XBOOLE_0, RELSET_1, FUNCT_2, NUMBERS, XREAL_0, MEMBERED,
-      STRUCT_0, PRE_TOPC, BORSUK_1, EUCLID, TOPMETR, TOPREAL2;
+      STRUCT_0, PRE_TOPC, BORSUK_1, EUCLID, TOPMETR, TOPREAL2, JORDAN2B,
+      MONOID_0;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, STRUCT_0;
  theorems BORSUK_1, EUCLID, FUNCT_1, FUNCT_2, PRE_TOPC, RCOMP_1, TARSKI,
@@ -35,38 +36,41 @@ reserve r,s,r1,r2,r3,rc for Element of REAL;
 reserve p,q,q1,q2 for Point of TOP-REAL 2;
 reserve X,Y,Z for non empty TopSpace;
 
-Lm1: for f being continuous Function of X,Y, g being continuous Function of Y,Z
-holds g*f is continuous Function of X,Z;
+Lm1: for f being continuous Function of X,Y, g being continuous Function of Y,
+Z holds g*f is continuous Function of X,Z;
 
 canceled 3;
 
 theorem Th4:
-  for A,B1,B2 being Subset of X st
-  B1 is open & B2 is open & B1 meets A & B2 meets A & A c= B1 \/ B2
-  & B1 misses B2 holds A is not connected
+  for A,B1,B2 being Subset of X st B1 is open & B2 is open & B1
+  meets A & B2 meets A & A c= B1 \/ B2 & B1 misses B2 holds A is not connected
 proof
   let A,B1,B2 be Subset of X;
-  assume
-A1: B1 is open & B2 is open & B1 meets A & B2 meets A &
-  A c= B1 \/ B2 & B1 misses B2;
-A2: (A is connected iff for P,Q being Subset of X st A = P \/ Q &
-  P,Q are_separated holds P = {}X or Q = {}X) by CONNSP_1:16;
+  assume that
+A1: B1 is open & B2 is open & B1 meets A and
+A2: B2 meets A and
+A3: A c= B1 \/ B2 and
+A4: B1 misses B2;
   reconsider C1=B1 /\ A, C2=B2 /\ A as Subset of X;
-A3: B1,B2 are_separated by A1,TSEP_1:41;
-A4: A=(B1 \/ B2)/\A by A1,XBOOLE_1:28
+A5: A=(B1 \/ B2)/\A by A3,XBOOLE_1:28
     .=C1 \/ C2 by XBOOLE_1:23;
-A5: C1 c= B1 & C2 c= B2 by XBOOLE_1:17;
-  C1 <> {} & C2 <> {} by A1,XBOOLE_0:def 7;
-  hence thesis by A2,A3,A4,A5,CONNSP_1:8;
+A6: C2 <> {} by A2,XBOOLE_0:def 7;
+A7: A is connected iff for P,Q being Subset of X st A = P \/ Q & P,Q
+  are_separated holds P = {}X or Q = {}X by CONNSP_1:16;
+A8: C1 c= B1 & C2 c= B2 by XBOOLE_1:17;
+  B1,B2 are_separated & C1 <> {} by A1,A4,TSEP_1:41,XBOOLE_0:def 7;
+  hence thesis by A7,A5,A8,A6,CONNSP_1:8;
 end;
 
 canceled;
 
 theorem Th6:
-  for ra,rb st ra<=rb holds [#](Closed-Interval-TSpace(ra,rb)) is connected
+  for ra,rb st ra<=rb holds [#](Closed-Interval-TSpace(ra,rb)) is
+  connected
 proof
   let ra,rb;
-  assume ra<=rb;
+  assume
+  ra<=rb;
   then Closed-Interval-TSpace(ra,rb) is connected by TREAL_1:23;
   hence thesis by CONNSP_1:28;
 end;
@@ -74,257 +78,288 @@ end;
 canceled 2;
 
 theorem Th9:
-  for A being Subset of R^1,a st not a in A & ex b,d st b in A & d in A
-  & b<a & a<d holds not A is connected
+  for A being Subset of R^1,a st not a in A & ex b,d st b in A & d
+  in A & b<a & a<d holds not A is connected
 proof
   let A be Subset of R^1,a;
-  assume
-A1: not a in A & ex b,d st b in A & d in A & b<a & a<d;
-  then consider b,d such that
-A2: b in A & d in A & b<a & a<d;
-  set B1={r:r<a};
+  assume that
+A1: not a in A and
+A2: ex b,d st b in A & d in A & b<a & a<d;
+  consider b,d such that
+A3: b in A and
+A4: d in A and
+A5: b<a and
+A6: a<d by A2;
   set B2={s:s>a};
-A3: now
-    assume B1 meets B2;
-    then consider x being set such that
-A4: x in B1 /\ B2 by XBOOLE_0:4;
-    x in B1 by A4,XBOOLE_0:def 4;
-    then consider r1 such that
-A5: r1=x & r1<a;
-    x in B2 by A4,XBOOLE_0:def 4;
-    then consider r2 such that
-A6: r2=x & r2>a;
-    thus contradiction by A5,A6;
-  end;
-  reconsider r = b as Element of REAL by XREAL_0:def 1;
-  r in B1 by A2;
-  then b in B1 /\ A by A2,XBOOLE_0:def 4;
-  then
-A7: B1 meets A by XBOOLE_0:4;
-  reconsider r1 = d as Element of REAL by XREAL_0:def 1;
-  r1 in B2 by A2;
-  then d in B2 /\ A by A2,XBOOLE_0:def 4;
-  then
-A8: B2 meets A by XBOOLE_0:4;
-A9: A c= B1 \/ B2
+  set B1={r:r<a};
+A7: A c= B1 \/ B2
   proof
     let x;
     assume
-A10: x in A;
+A8: x in A;
     then reconsider r=x as Real by METRIC_1:def 14,TOPMETR:16,def 7;
-    r<a or a<r by A1,A10,XXREAL_0:1;
+    r<a or a<r by A1,A8,XXREAL_0:1;
     then r in B1 or r in B2;
     hence thesis by XBOOLE_0:def 3;
   end;
-  B1 c= REAL
-  proof
-    let x;
-    assume x in B1;
-    then ex r st r=x & r<a;
-    hence thesis;
-  end;
-  then reconsider C1=B1 as Subset of R^1 by METRIC_1:def 14,TOPMETR:16,def 7;
-A11: C1 is open by JORDAN2B:30;
   B2 c= REAL
   proof
     let x;
-    assume x in B2;
+    assume
+    x in B2;
     then ex r st r=x & r>a;
     hence thesis;
   end;
   then reconsider C2=B2 as Subset of R^1 by METRIC_1:def 14,TOPMETR:16,def 7;
-  C2 is open by JORDAN2B:31;
-  hence thesis by A3,A7,A8,A9,A11,Th4;
+  B1 c= REAL
+  proof
+    let x;
+    assume
+    x in B1;
+    then ex r st r=x & r<a;
+    hence thesis;
+  end;
+  then reconsider C1=B1 as Subset of R^1 by METRIC_1:def 14,TOPMETR:16,def 7;
+A9: now
+    assume
+    B1 meets B2;
+    then consider x being set such that
+A10: x in B1 /\ B2 by XBOOLE_0:4;
+    x in B2 by A10,XBOOLE_0:def 4;
+    then
+A11: ex r2 st r2=x & r2>a;
+    x in B1 by A10,XBOOLE_0:def 4;
+    then ex r1 st r1=x & r1<a;
+    hence contradiction by A11;
+  end;
+  reconsider r1 = d as Element of REAL by XREAL_0:def 1;
+  r1 in B2 by A6;
+  then d in B2 /\ A by A4,XBOOLE_0:def 4;
+  then
+A12: B2 meets A by XBOOLE_0:4;
+  reconsider r = b as Element of REAL by XREAL_0:def 1;
+  r in B1 by A5;
+  then b in B1 /\ A by A3,XBOOLE_0:def 4;
+  then
+A13: B1 meets A by XBOOLE_0:4;
+  C1 is open & C2 is open by JORDAN2B:30,31;
+  hence thesis by A9,A13,A12,A7,Th4;
 end;
 
-theorem ::General Intermediate Value Point Theorem
-  for X being non empty TopSpace,xa,xb being Point of X,
-  a,b,d being Real,f being continuous Function of X,R^1 st
-  X is connected & f.xa=a & f.xb=b & a<=d & d<=b
-  ex xc being Point of X st f.xc =d
+theorem
+ ::General Intermediate Value Point Theorem
+  for X being non empty TopSpace,xa,xb being Point of X, a,b,d being
+Real,f being continuous Function of X,R^1 st X is connected & f.xa=a & f.xb=b &
+  a<=d & d<=b ex xc being Point of X st f.xc =d
 proof
-  let X be non empty TopSpace,xa,xb be Point of X,
-  a,b,d be Real,f be continuous Function of X,R^1;
-  assume
-A1: X is connected & f.xa=a & f.xb=b & a<=d & d<=b;
+  let X be non empty TopSpace,xa,xb be Point of X, a,b,d be Real,f be
+  continuous Function of X,R^1;
+  assume that
+A1: X is connected and
+A2: f.xa=a & f.xb=b and
+A3: a<=d & d<=b;
   now
     assume
-A2: not(a=d or d=b);
+    ( not a=d)& not d=b;
     then
-A3: a<d by A1,XXREAL_0:1;
-A4: d<b by A1,A2,XXREAL_0:1;
+A4: a<d & d<b by A3,XXREAL_0:1;
     now
       assume
 A5:   not ex rc being Point of X st f.rc=d;
-A7:   now
-        assume d in f.:([#](X));
-        then consider x such that
-A8:     x in the carrier of X & x in [#](X) & d = f.x by FUNCT_2:115;
-        thus contradiction by A5,A8;
+A6:   now
+        assume
+        d in f.:([#](X));
+        then ex x st x in the carrier of X & x in [#](X) & d = f.x by
+        FUNCT_2:115;
+        hence contradiction by A5;
       end;
-A10:  dom f=the carrier of X by FUNCT_2:def 1;
+      dom f=the carrier of X by FUNCT_2:def 1;
       then
-A11:  a in f.:([#](X)) by A1,FUNCT_1:def 12;
-A12:  b in f.:([#](X)) by A1,A10,FUNCT_1:def 12;
+A7:   a in f.:([#](X)) & b in f.:([#](X)) by A2,FUNCT_1:def 12;
       [#](X) is connected by A1,CONNSP_1:28;
-      hence contradiction by A3,A4,A7,A11,A12,Th9,TOPS_2:75;
+      hence contradiction by A4,A6,A7,Th9,TOPS_2:75;
     end;
     hence thesis;
   end;
-  hence thesis by A1;
+  hence thesis by A2;
 end;
 
 theorem ::General Intermediate Value Theorem II
-  for X being non empty TopSpace,xa,xb being Point of X, B being Subset of X,
-  a,b,d being Real,f being continuous Function of X,R^1 st
-  B is connected & f.xa=a & f.xb=b & a<=d & d<=b & xa in B & xb in B
-  ex xc being Point of X st xc in B & f.xc =d
+  for X being non empty TopSpace,xa,xb being Point of X, B being Subset
+of X, a,b,d being Real,f being continuous Function of X,R^1 st B is connected &
+f.xa=a & f.xb=b & a<=d & d<=b & xa in B & xb in B ex xc being Point of X st xc
+  in B & f.xc =d
 proof
-  let X be non empty TopSpace, xa,xb be Point of X, B be Subset of X,
-  a,b,d be Real,f be continuous Function of X,R^1;
-  assume
-A1: B is connected & f.xa=a & f.xb=b & a<=d & d<=b & xa in B & xb in B;
+  let X be non empty TopSpace, xa,xb be Point of X, B be Subset of X, a,b,d be
+  Real,f be continuous Function of X,R^1;
+  assume that
+A1: B is connected and
+A2: f.xa=a & f.xb=b and
+A3: a<=d & d<=b and
+A4: xa in B & xb in B;
   now
     assume
-A2: not(a=d or d=b);
+    ( not a=d)& not d=b;
     then
-A3: a<d by A1,XXREAL_0:1;
-A4: d<b by A1,A2,XXREAL_0:1;
+A5: a<d & d<b by A3,XXREAL_0:1;
     now
       assume
-A5:   not ex rc being Point of X st rc in B & f.rc=d;
-A6:   now
-        assume d in f.:B;
-        then consider x such that
-A7:     x in the carrier of X & x in B & d = f.x by FUNCT_2:115;
-        thus contradiction by A5,A7;
+A6:   not ex rc being Point of X st rc in B & f.rc=d;
+A7:   now
+        assume
+        d in f.:B;
+        then ex x st x in the carrier of X & x in B & d = f.x by FUNCT_2:
+        115;
+        hence contradiction by A6;
       end;
-A8:   dom f=the carrier of X by FUNCT_2:def 1;
-      then
-A9:   a in f.:B by A1,FUNCT_1:def 12;
-      b in f.:B by A1,A8,FUNCT_1:def 12;
-      hence contradiction by A1,A3,A4,A6,A9,Th9,TOPS_2:75;
+      dom f=the carrier of X by FUNCT_2:def 1;
+      then a in f.:B & b in f.:B by A2,A4,FUNCT_1:def 12;
+      hence contradiction by A1,A5,A7,Th9,TOPS_2:75;
     end;
     hence thesis;
   end;
-  hence thesis by A1;
+  hence thesis by A2,A4;
 end;
 
 ::Intermediate Value Theorem <
 
 theorem Th12:
-  for ra,rb,a,b st ra<rb
-  for f being continuous Function of Closed-Interval-TSpace(ra,rb),R^1,d
-  st f.ra=a & f.rb=b & a<d & d<b ex rc st f.rc =d & ra<rc & rc <rb
+  for ra,rb,a,b st ra<rb for f being continuous Function of
+Closed-Interval-TSpace(ra,rb),R^1,d st f.ra=a & f.rb=b & a<d & d<b ex rc st f.
+  rc =d & ra<rc & rc <rb
 proof
   let ra,rb,a,b;
   assume
 A1: ra<rb;
   let f be continuous Function of Closed-Interval-TSpace(ra,rb),R^1,d;
-  assume
-A2: f.ra=a & f.rb=b & a<d & d<b;
+  assume that
+A2: f.ra=a and
+A3: f.rb=b and
+A4: a<d and
+A5: d<b;
   now
-    assume
-A3: not ex rc st (f.rc) =d & ra<rc & rc <rb;
-A5: the carrier of Closed-Interval-TSpace(ra,rb)=[.ra,rb.] by A1,TOPMETR:25;
     reconsider C=f.:([#](Closed-Interval-TSpace(ra,rb))) as Subset of R^1;
-A6: now
-      assume d in f.:([#](Closed-Interval-TSpace(ra,rb)));
+A6: dom f=the carrier of Closed-Interval-TSpace(ra,rb) by FUNCT_2:def 1;
+A7: the carrier of Closed-Interval-TSpace(ra,rb)=[.ra,rb.] by A1,TOPMETR:
+    25;
+    then rb in [#](Closed-Interval-TSpace(ra,rb)) by A1,XXREAL_1:1;
+    then
+A8: b in f.:([#](Closed-Interval-TSpace(ra,rb))) by A3,A6,FUNCT_1:
+    def 12;
+    assume
+A9: not ex rc st (f.rc) =d & ra<rc & rc <rb;
+A10: now
+      assume
+      d in f.:([#](Closed-Interval-TSpace(ra,rb)));
       then consider x such that
-A7:   x in the carrier of Closed-Interval-TSpace(ra,rb)
-      & x in [#](Closed-Interval-TSpace(ra,rb)) & d = f.x by FUNCT_2:115;
-      reconsider r=x as Real by A5,A7;
-A8:   ra<=r & r<=rb by A5,A7,XXREAL_1:1;
+A11:  x in the carrier of Closed-Interval-TSpace(ra,rb) and
+      x in [#](Closed-Interval-TSpace(ra,rb)) and
+A12:  d = f.x by FUNCT_2:115;
+      reconsider r=x as Real by A7,A11;
+      r<=rb by A7,A11,XXREAL_1:1;
       then
-A9:   ra<r by A2,A7,XXREAL_0:1;
-      r<rb by A2,A7,A8,XXREAL_0:1;
-      hence contradiction by A3,A7,A9;
+A13:  r<rb by A3,A5,A12,XXREAL_0:1;
+      ra<=r by A7,A11,XXREAL_1:1;
+      then ra<r by A2,A4,A12,XXREAL_0:1;
+      hence contradiction by A9,A12,A13;
     end;
-    ra in [.ra,rb.] by A1,XXREAL_1:1;
-    then
-A10: ra in [#](Closed-Interval-TSpace(ra,rb)) by A5;
-A11: dom f=the carrier of Closed-Interval-TSpace(ra,rb) by FUNCT_2:def 1;
-    then
-A12: a in f.:([#](Closed-Interval-TSpace(ra,rb))) by A2,A10,FUNCT_1:def 12;
-    rb in [#](Closed-Interval-TSpace(ra,rb)) by A1,A5,XXREAL_1:1;
-    then b in f.:([#](Closed-Interval-TSpace(ra,rb)))
-    by A2,A11,FUNCT_1:def 12;
-    then not C is connected by A2,A6,A12,Th9;
+    ra in [#](Closed-Interval-TSpace(ra,rb)) by A1,A7,XXREAL_1:1;
+    then a in f.:([#](Closed-Interval-TSpace(ra,rb))) by A2,A6, FUNCT_1:
+    def 12;
+    then not C is connected by A4,A5,A10,A8,Th9;
     hence contradiction by A1,Th6,TOPS_2:75;
   end;
   hence thesis;
 end;
 
 theorem Th13:
-  for ra,rb,a,b st ra<rb holds
-  for f being continuous Function of Closed-Interval-TSpace(ra,rb),R^1,d st
-  f.ra=a & f.rb=b & a>d & d>b holds ex rc st f.rc =d & ra<rc & rc <rb
+  for ra,rb,a,b st ra<rb holds for f being continuous Function of
+Closed-Interval-TSpace(ra,rb),R^1,d st f.ra=a & f.rb=b & a>d & d>b holds ex rc
+  st f.rc =d & ra<rc & rc <rb
 proof
   let ra,rb,a,b;
   assume
 A1: ra<rb;
+  then
+A2: the carrier of Closed-Interval-TSpace(ra,rb)=[.ra,rb.] by
+  TOPMETR:25;
   let f be continuous Function of Closed-Interval-TSpace(ra,rb),R^1,d;
-  assume
-A2: f.ra=a & f.rb=b & a>d & d>b;
-A3: [#](Closed-Interval-TSpace(ra,rb)) is connected by A1,Th6;
-A5: the carrier of Closed-Interval-TSpace(ra,rb)=[.ra,rb.] by A1,TOPMETR:25;
-A6: dom f=the carrier of Closed-Interval-TSpace(ra,rb) by FUNCT_2:def 1;
+  assume that
+A3: f.ra=a and
+A4: f.rb=b and
+A5: a>d and
+A6: d>b;
+A7: dom f=the carrier of Closed-Interval-TSpace(ra,rb) by FUNCT_2:def 1;
+A8: [#](Closed-Interval-TSpace(ra,rb)) is connected by A1,Th6;
   now
     assume
-A7: for rc st ra<rc & rc <rb holds (f.rc)<>d;
-A8: now
-      assume d in f.:([#](Closed-Interval-TSpace(ra,rb)));
+A9: for rc st ra<rc & rc <rb holds (f.rc)<>d;
+A10: now
+      assume
+      d in f.:([#](Closed-Interval-TSpace(ra,rb)));
       then consider x such that
-A9:   x in dom f & x in [#](Closed-Interval-TSpace(ra,rb)) & d=f.x
-      by FUNCT_1:def 12;
-      x in [.ra,rb.] by A5,A9;
+A11:  x in dom f and
+      x in [#](Closed-Interval-TSpace(ra,rb)) and
+A12:  d=f.x by FUNCT_1:def 12;
+      x in [.ra,rb.] by A2,A11;
       then reconsider r=x as Real;
-A10:  ra<=r & r<=rb by A5,A9,XXREAL_1:1;
+      r<=rb by A2,A11,XXREAL_1:1;
       then
-A11:  ra<r by A2,A9,XXREAL_0:1;
-      rb>r by A2,A9,A10,XXREAL_0:1;
-      hence contradiction by A7,A9,A11;
+A13:  rb>r by A4,A6,A12,XXREAL_0:1;
+      ra<=r by A2,A11,XXREAL_1:1;
+      then ra<r by A3,A5,A12,XXREAL_0:1;
+      hence contradiction by A9,A12,A13;
     end;
-    ra in [.ra,rb.] by A1,XXREAL_1:1;
-    then
-A12: a in f.:([#](Closed-Interval-TSpace(ra,rb)))
-    by A2,A5,A6,FUNCT_1:def 12;
     rb in [.ra,rb.] by A1,XXREAL_1:1;
-    then b in f.:([#](Closed-Interval-TSpace(ra,rb)))
-    by A2,A5,A6,FUNCT_1:def 12;
-    hence contradiction by A2,A3,A8,A12,Th9,TOPS_2:75;
+    then
+A14: b in f.:([#](Closed-Interval-TSpace(ra,rb))) by A4,A2,A7,
+    FUNCT_1:
+    def 12;
+    ra in [.ra,rb.] by A1,XXREAL_1:1;
+    then a in f.:([#](Closed-Interval-TSpace(ra,rb))) by A3,A2,A7,
+    FUNCT_1:
+    def 12;
+    hence contradiction by A5,A6,A8,A10,A14,Th9,TOPS_2:75;
   end;
   hence thesis;
 end;
 
-theorem  ::The Bolzano Theorem
-  for ra,rb
-  for g being continuous Function of Closed-Interval-TSpace(ra,rb),R^1,s1,s2
-  st ra<rb & s1*s2<0 & s1=g.ra & s2=g.rb ex r1 st g.r1=0 & ra<r1 & r1<rb
+theorem ::The Bolzano Theorem
+  for ra,rb for g being continuous Function of Closed-Interval-TSpace(ra
+,rb),R^1,s1,s2 st ra<rb & s1*s2<0 & s1=g.ra & s2=g.rb ex r1 st g.r1=0 & ra<r1 &
+  r1<rb
 proof
   let ra,rb;
   let g be continuous Function of Closed-Interval-TSpace(ra,rb),R^1,s1,s2;
-  assume
-A1: ra<rb & s1*s2<0;
-  then s1>0 & s2<0 or s1<0 & s2>0 by XREAL_1:135;
+  assume that
+A1: ra<rb and
+A2: s1*s2<0;
+  s1>0 & s2<0 or s1<0 & s2>0 by A2,XREAL_1:135;
   hence thesis by A1,Th12,Th13;
 end;
 
 theorem Th15:
-  for g being Function of I[01],R^1,s1,s2 st g is continuous &
-  g.0<>g.1 & s1=g.0 & s2=g.1 holds ex r1 st 0<r1 & r1<1 & g.r1=(s1+s2)/2
+  for g being Function of I[01],R^1,s1,s2 st g is continuous & g.0
+  <>g.1 & s1=g.0 & s2=g.1 holds ex r1 st 0<r1 & r1<1 & g.r1=(s1+s2)/2
 proof
   let g be Function of I[01],R^1,s1,s2;
-  assume
-A1: g is continuous & g.0<>g.1 & s1=g.0 & s2=g.1;
-  now per cases by A1,XXREAL_0:1;
-    case s1<s2;
+  assume that
+A1: g is continuous and
+A2: g.0<>g.1 and
+A3: s1=g.0 & s2=g.1;
+  now
+    per cases by A2,A3,XXREAL_0:1;
+    case
+      s1<s2;
       then s1<(s1+s2)/2 & (s1+s2)/2<s2 by XREAL_1:228;
-      hence ex rc st (g.rc) =(s1+s2)/2 & 0<rc & rc <1 by A1,Th12,TOPMETR:27;
+      hence ex rc st (g.rc) =(s1+s2)/2 & 0<rc & rc <1 by A1,A3,Th12, TOPMETR
+      :27;
     end;
-    case s2<s1;
+    case
+      s2<s1;
       then s2<(s1+s2)/2 & (s1+s2)/2<s1 by XREAL_1:228;
-      hence ex rc st (g.rc) =(s1+s2)/2 & 0<rc & rc <1 by A1,Th13,TOPMETR:27;
+      hence ex rc st (g.rc) =(s1+s2)/2 & 0<rc & rc <1 by A1,A3,Th13, TOPMETR
+      :27;
     end;
   end;
   hence thesis;
@@ -333,224 +368,234 @@ end;
 begin ::2.  SIMPLE CLOSED CURVES ARE NOT FLAT
 
 theorem Th16:
-  for f being Function of TOP-REAL 2,R^1 st f=proj1 holds f is continuous
+  for f being Function of TOP-REAL 2,R^1 st f=proj1 holds f is
+  continuous
 proof
   let f be Function of TOP-REAL 2,R^1;
   assume
-A1: f=proj1;
-A2: 1 in Seg 2 by FINSEQ_1:3;
-  for p being Element of TOP-REAL 2 holds f.p=Proj(p,1) by A1,JORDAN2B:36;
-  hence thesis by A2,JORDAN2B:22;
+  f=proj1;
+  then 1 in Seg 2 & for p being Element of TOP-REAL 2 holds f.p=p/.1 by
+  FINSEQ_1:3,JORDAN2B:36;
+  hence thesis by JORDAN2B:22;
 end;
 
 theorem Th17:
-  for f being Function of TOP-REAL 2,R^1 st f=proj2 holds f is continuous
+  for f being Function of TOP-REAL 2,R^1 st f=proj2 holds f is
+  continuous
 proof
   let f be Function of TOP-REAL 2,R^1;
   assume
-A1: f=proj2;
-A2: 2 in Seg 2 by FINSEQ_1:3;
-  for p being Element of TOP-REAL 2 holds f.p=Proj(p,2) by A1,JORDAN2B:36;
-  hence thesis by A2,JORDAN2B:22;
+  f=proj2;
+  then 2 in Seg 2 & for p being Element of TOP-REAL 2 holds f.p=p/.2 by
+  FINSEQ_1:3,JORDAN2B:36;
+  hence thesis by JORDAN2B:22;
 end;
 
 theorem Th18:
-  for P being non empty Subset of TOP-REAL 2,
-  f being Function of I[01], (TOP-REAL 2)|P st f is continuous
-  ex g being Function of I[01],R^1 st g is continuous &
-  for r,q st r in the carrier of I[01] & q= f.r holds q`1=g.r
+  for P being non empty Subset of TOP-REAL 2, f being Function of
+I[01], (TOP-REAL 2)|P st f is continuous ex g being Function of I[01],R^1 st g
+  is continuous & for r,q st r in the carrier of I[01] & q= f.r holds q`1=g.r
 proof
-  let P be non empty Subset of TOP-REAL 2,
-  f be Function of I[01], (TOP-REAL 2)|P;
+  reconsider rj=proj1 as Function of (TOP-REAL 2),R^1 by TOPMETR:24;
+  let P be non empty Subset of TOP-REAL 2, f be Function of I[01], (TOP-REAL 2
+  )|P;
   assume
 A1: f is continuous;
-  [#]((TOP-REAL 2)|P)=P by PRE_TOPC:def 10;
-  then
-A2: the carrier of ((TOP-REAL 2)|P)=P;
+  reconsider f1=f as Function;
   set h=(proj1|P)*f;
-  reconsider rj=proj1 as Function of (TOP-REAL 2),R^1 by TOPMETR:24;
+A2: [#]((TOP-REAL 2)|P)=P by PRE_TOPC:def 10;
+  then
+A3: rng f1 c= P by RELAT_1:def 19;
   rj is continuous Function of TOP-REAL 2,R^1 by Th16;
-  then rj|((TOP-REAL 2)|P) is
-  continuous Function of ((TOP-REAL 2)|P),R^1 by TMAP_1:68;
-  then rj|P is continuous Function of ((TOP-REAL 2)|P),R^1 by A2,TMAP_1:def 3;
+  then rj|((TOP-REAL 2)|P) is continuous Function of ((TOP-REAL 2)|P),R^1 by
+  TMAP_1:68;
+  then rj|P is continuous Function of ((TOP-REAL 2)|P),R^1 by A2,
+  TMAP_1:def
+  3;
   then reconsider h2=h as continuous Function of I[01],R^1 by A1,Lm1;
   take h2;
   thus h2 is continuous;
   let r be Real,q be Point of TOP-REAL 2;
-  assume
-A3: r in the carrier of I[01] & q= f.r;
-  reconsider f1=f as Function;
-A4: r in dom f1 by A3,FUNCT_2:def 1;
+  assume that
+A4: r in the carrier of I[01] and
+A5: q= f.r;
+A6: dom proj1=the carrier of TOP-REAL 2 by FUNCT_2:def 1;
+A7: r in dom f1 by A4,FUNCT_2:def 1;
+  then f1.r in rng f1 by FUNCT_1:def 5;
   then
-A5: f1.r in rng f1 by FUNCT_1:def 5;
-A6: rng f1 c= P by A2,RELAT_1:def 19;
-  dom proj1=the carrier of TOP-REAL 2 by FUNCT_2:def 1;
-  then
-A7: q in dom proj1 /\ P by A3,A5,A6,XBOOLE_0:def 4;
-  thus h2.r = (proj1|P).q by A3,A4,FUNCT_1:23
-    .= proj1.q by A7,FUNCT_1:71
+A8: q in dom proj1 /\ P by A5,A3,A6,XBOOLE_0:def 4;
+  thus h2.r = (proj1|P).q by A5,A7,FUNCT_1:23
+    .= proj1.q by A8,FUNCT_1:71
     .= q`1 by PSCOMP_1:def 28;
 end;
 
 theorem Th19:
-  for P being non empty Subset of TOP-REAL 2,
-  f being Function of I[01], (TOP-REAL 2)|P st f is continuous
-  ex g being Function of I[01],R^1 st g is continuous &
-  for r,q st r in the carrier of I[01] & q= f.r holds q`2=g.r
+  for P being non empty Subset of TOP-REAL 2, f being Function of
+I[01], (TOP-REAL 2)|P st f is continuous ex g being Function of I[01],R^1 st g
+  is continuous & for r,q st r in the carrier of I[01] & q= f.r holds q`2=g.r
 proof
-  let P be non empty Subset of TOP-REAL 2,
-  f be Function of I[01], (TOP-REAL 2)|P;
+  reconsider rj=proj2 as Function of (TOP-REAL 2),R^1 by TOPMETR:24;
+  let P be non empty Subset of TOP-REAL 2, f be Function of I[01], (TOP-REAL 2
+  )|P;
   assume
 A1: f is continuous;
-  [#]((TOP-REAL 2)|P)=P by PRE_TOPC:def 10;
-  then
-A2: the carrier of ((TOP-REAL 2)|P)=P;
+  reconsider f1=f as Function;
   set h=(proj2|P)*f;
-  reconsider rj=proj2 as Function of (TOP-REAL 2),R^1 by TOPMETR:24;
+A2: [#]((TOP-REAL 2)|P)=P by PRE_TOPC:def 10;
+  then
+A3: rng f1 c= P by RELAT_1:def 19;
   rj is continuous by Th17;
-  then rj|((TOP-REAL 2)|P) is
-  continuous Function of ((TOP-REAL 2)|P),R^1 by TMAP_1:68;
-  then rj|P is continuous Function of ((TOP-REAL 2)|P),R^1 by A2,TMAP_1:def 3;
+  then rj|((TOP-REAL 2)|P) is continuous Function of ((TOP-REAL 2)|P),R^1 by
+  TMAP_1:68;
+  then rj|P is continuous Function of ((TOP-REAL 2)|P),R^1 by A2,
+  TMAP_1:def
+  3;
   then reconsider h2=h as continuous Function of I[01],R^1 by A1,Lm1;
   take h2;
   thus h2 is continuous;
   let r be Real,q be Point of TOP-REAL 2;
-  assume
-A3: r in the carrier of I[01] & q= f.r;
-  reconsider f1=f as Function;
-A4: r in dom f1 by A3,FUNCT_2:def 1;
+  assume that
+A4: r in the carrier of I[01] and
+A5: q= f.r;
+A6: dom proj2=the carrier of TOP-REAL 2 by FUNCT_2:def 1;
+A7: r in dom f1 by A4,FUNCT_2:def 1;
+  then f1.r in rng f1 by FUNCT_1:def 5;
   then
-A5: f1.r in rng f1 by FUNCT_1:def 5;
-A6: rng f1 c= P by A2,RELAT_1:def 19;
-  dom proj2=the carrier of TOP-REAL 2 by FUNCT_2:def 1;
-  then
-A7: q in dom proj2 /\ P by A3,A5,A6,XBOOLE_0:def 4;
-  thus h2.r = (proj2|P).q by A3,A4,FUNCT_1:23
-    .= proj2.q by A7,FUNCT_1:71
+A8: q in dom proj2 /\ P by A5,A3,A6,XBOOLE_0:def 4;
+  thus h2.r = (proj2|P).q by A5,A7,FUNCT_1:23
+    .= proj2.q by A8,FUNCT_1:71
     .= q`2 by PSCOMP_1:def 29;
 end;
 
 theorem Th20:
-  for P being non empty Subset of TOP-REAL 2
-  st P is being_simple_closed_curve holds
-  not (ex r st for p st p in P holds p`2=r)
+  for P being non empty Subset of TOP-REAL 2 st P is
+  being_simple_closed_curve holds not (ex r st for p st p in P holds p`2=r)
 proof
   let P be non empty Subset of TOP-REAL 2;
   assume
 A1: P is being_simple_closed_curve;
   now
+A2: [.0,1.] = ].0,1.[ \/ {0,1} by XXREAL_1:128;
     given r0 such that
-A2: for p st p in P holds p`2=r0;
-    consider p1,p2 being Point of TOP-REAL 2,
-    P1,P2 being non empty Subset of TOP-REAL 2 such that
-A3: p1 <> p2 & p1 in P & p2 in P &
-    P1 is_an_arc_of p1,p2 & P2 is_an_arc_of p1,p2 &
-    P = P1 \/ P2 & P1 /\ P2 = {p1,p2} by A1,TOPREAL2:6;
-A4: p1`2=r0 by A2,A3;
-A5: p2`2=r0 by A2,A3;
+A3: for p st p in P holds p`2=r0;
+    consider p1,p2 being Point of TOP-REAL 2, P1,P2 being non empty Subset of
+    TOP-REAL 2 such that
+A4: p1 <> p2 and
+A5: p1 in P and
+A6: p2 in P and
+A7: P1 is_an_arc_of p1,p2 and
+A8: P2 is_an_arc_of p1,p2 and
+A9: P = P1 \/ P2 and
+A10: P1 /\ P2 = {p1,p2} by A1,TOPREAL2:6;
+A11: p1`2=r0 by A3,A5;
+A12: p2`2=r0 by A3,A6;
     then
-A6: p1`2=p2`2 by A2,A3;
-    consider f1 being Function of I[01], (TOP-REAL 2)|P1 such that
-A7: f1 is being_homeomorphism & f1.0 = p1 & f1.1 = p2 by A3,TOPREAL1:def 2;
+A13: p1`2=p2`2 by A3,A5;
+A14: now
+      assume
+      p1`1=p2`1;
+      then p1=|[p2`1,p2`2]| by A13,EUCLID:57;
+      hence contradiction by A4,EUCLID:57;
+    end;
     consider f2 being Function of I[01], (TOP-REAL 2)|P2 such that
-A8: f2 is being_homeomorphism & f2.0 = p1 & f2.1 = p2 by A3,TOPREAL1:def 2;
-    f1 is continuous by A7,TOPS_2:def 5;
-    then consider g1 being Function of I[01],R^1 such that
-A9: g1 is continuous &
-    for r,q1 st r in the carrier of I[01] & q1= f1.r holds q1`1=g1.r by Th18;
-    f2 is continuous by A8,TOPS_2:def 5;
+A15: f2 is being_homeomorphism and
+A16: f2.0 = p1 and
+A17: f2.1 = p2 by A8,TOPREAL1:def 2;
+    f2 is continuous by A15,TOPS_2:def 5;
     then consider g2 being Function of I[01],R^1 such that
-A10: g2 is continuous &
-    for r,q2 st r in the carrier of I[01] & q2= f2.r holds q2`1=g2.r by Th18;
-A11: [.0,1.] = ].0,1.[ \/ {0,1} by XXREAL_1:128;
-    0 in {0,1} by TARSKI:def 2;
-    then
-A12: 0 in the carrier of I[01] by A11,BORSUK_1:83,XBOOLE_0:def 3;
-    then
-A13: p1`1=g1.0 by A7,A9;
-A14: p1`1=g2.0 by A8,A10,A12;
+A18: g2 is continuous and
+A19: for r,q2 st r in the carrier of I[01] & q2= f2.r holds q2`1=g2.r
+    by Th18;
+A20: [#]((TOP-REAL 2)|P2) = P2 by PRE_TOPC:def 10;
     1 in {0,1} by TARSKI:def 2;
     then
-A15: 1 in the carrier of I[01] by A11,BORSUK_1:83,XBOOLE_0:def 3;
+A21: 1 in the carrier of I[01] by A2,BORSUK_1:83,XBOOLE_0:def 3;
     then
-A16: p2`1=g1.1 by A7,A9;
-A17: p2`1=g2.1 by A8,A10,A15;
-A18: now
-      assume p1`1=p2`1;
-      then p1=|[p2`1,p2`2]| by A6,EUCLID:57;
-      hence contradiction by A3,EUCLID:57;
-    end;
-    then consider r1 such that
-A19: 0<r1 & r1<1 & g1.r1=(p1`1+p2`1)/2 by A9,A13,A16,Th15;
-A20: [.0,1.] = {r3 : 0<=r3 & r3<=1 } by RCOMP_1:def 1;
+A22: p2`1=g2.1 by A17,A19;
+    0 in {0,1} by TARSKI:def 2;
     then
-A21: r1 in the carrier of I[01] by A19,BORSUK_1:83;
-    then r1 in dom f1 by FUNCT_2:def 1;
-    then f1.r1 in rng f1 by FUNCT_1:def 5;
+A23: 0 in the carrier of I[01] by A2,BORSUK_1:83,XBOOLE_0:def 3;
+    then p1`1=g2.0 by A16,A19;
+    then consider r2 such that
+A24: 0<r2 & r2<1 and
+A25: g2.r2=(p1`1+p2`1)/2 by A18,A22,A14,Th15;
+A26: [.0,1.] = {r3 : 0<=r3 & r3<=1 } by RCOMP_1:def 1;
     then
-A22: f1.r1 in the carrier of ((TOP-REAL 2)|P1);
-    [#]((TOP-REAL 2)|P1) = P1 by PRE_TOPC:def 10;
-    then
-A23: f1.r1 in P1 by A22;
-    then
-A24: f1.r1 in P by A3,XBOOLE_0:def 3;
-    reconsider p3=f1.r1 as Point of (TOP-REAL 2) by A23;
-    consider r2 such that
-A25: 0<r2 & r2<1 & g2.r2=(p1`1+p2`1)/2 by A10,A14,A17,A18,Th15;
-A26: r2 in the carrier of I[01] by A20,A25,BORSUK_1:83;
+A27: r2 in the carrier of I[01] by A24,BORSUK_1:83;
     dom f2=the carrier of I[01] by FUNCT_2:def 1;
-    then f2.r2 in rng f2 by A26,FUNCT_1:def 5;
     then
-A27: f2.r2 in the carrier of ((TOP-REAL 2)|P2);
-    [#]((TOP-REAL 2)|P2) = P2 by PRE_TOPC:def 10;
+A28: f2.r2 in rng f2 by A27,FUNCT_1:def 5;
     then
-A28: f2.r2 in P2 by A27;
+A29: f2.r2 in P by A9,A20,XBOOLE_0:def 3;
+    f2.r2 in P2 by A28,A20;
+    then reconsider p4=f2.r2 as Point of (TOP-REAL 2);
+A30: [#]((TOP-REAL 2)|P1) = P1 by PRE_TOPC:def 10;
+    consider f1 being Function of I[01], (TOP-REAL 2)|P1 such that
+A31: f1 is being_homeomorphism and
+A32: f1.0 = p1 and
+A33: f1.1 = p2 by A7,TOPREAL1:def 2;
+    f1 is continuous by A31,TOPS_2:def 5;
+    then consider g1 being Function of I[01],R^1 such that
+A34: g1 is continuous and
+A35: for r,q1 st r in the carrier of I[01] & q1= f1.r holds q1`1=g1.r
+    by Th18;
+A36: p2`1=g1.1 by A33,A35,A21;
+    p1`1=g1.0 by A32,A35,A23;
+    then consider r1 such that
+A37: 0<r1 & r1<1 and
+A38: g1.r1=(p1`1+p2`1)/2 by A34,A36,A14,Th15;
+A39: r1 in the carrier of I[01] by A37,A26,BORSUK_1:83;
+    then r1 in dom f1 by FUNCT_2:def 1;
     then
-A29: f2.r2 in P by A3,XBOOLE_0:def 3;
-    reconsider p4=f2.r2 as Point of (TOP-REAL 2) by A28;
-A30: p3`1= (p1`1+p2`1)/2 by A9,A19,A21
-      .=p4`1 by A10,A25,A26;
-    p3`2=r0 by A2,A24
-      .=p4`2 by A2,A29;
-    then f1.r1=f2.r2 by A30,TOPREAL3:11;
+A40: f1.r1 in rng f1 by FUNCT_1:def 5;
+    then f1.r1 in P1 by A30;
+    then reconsider p3=f1.r1 as Point of (TOP-REAL 2);
+    f1.r1 in P by A9,A40,A30,XBOOLE_0:def 3;
     then
-A31: f1.r1 in P1/\P2 by A23,A28,XBOOLE_0:def 4;
-    now per cases by A3,A31,TARSKI:def 2;
-      case f1.r1=p1;
-        then
-A32:    p1`1=2"*(p1`1)+ (p2`1)/2 by A9,A19,A21
+A41: p3`2=r0 by A3
+      .=p4`2 by A3,A29;
+    p3`1= (p1`1+p2`1)/2 by A35,A38,A39
+      .=p4`1 by A19,A25,A27;
+    then f1.r1=f2.r2 by A41,TOPREAL3:11;
+    then
+A42: f1.r1 in P1/\P2 by A40,A30,A28,A20,XBOOLE_0:def 4;
+    now
+      per cases by A10,A42,TARSKI:def 2;
+      case
+A43:    f1.r1=p1;
+A44:    ((1/2)*p1+(1/2)*p2)`2= ((1/2)*p1)`2+((1/2)*p2)`2 by TOPREAL3:7
+          .=(1/2)*(p1`2)+((1/2)*p2)`2 by TOPREAL3:9
+          .=(1/2)*r0+(1/2)*r0 by A11,A12,TOPREAL3:9
+          .=r0;
+        p1`1=2"*(p1`1)+ (p2`1)/2 by A35,A38,A39,A43
           .=(2"*p1)`1+ 2"*(p2`1) by TOPREAL3:9
           .=(2"*p1)`1+ (2"*p2)`1 by TOPREAL3:9
           .=((1/2)*p1+(1/2)*p2)`1 by TOPREAL3:7;
-        ((1/2)*p1+(1/2)*p2)`2= ((1/2)*p1)`2+((1/2)*p2)`2 by TOPREAL3:7
-          .=(1/2)*(p1`2)+((1/2)*p2)`2 by TOPREAL3:9
-          .=(1/2)*r0+(1/2)*r0 by A4,A5,TOPREAL3:9
-          .=r0;
-        then p1=(1/2)*p1+(1/2)*p2 by A4,A32,TOPREAL3:11;
+        then p1=(1/2)*p1+(1/2)*p2 by A11,A44,TOPREAL3:11;
         then 1*p1-(1/2)*p1=(1/2)*p1+(1/2)*p2-(1/2)*p1 by EUCLID:33;
         then 1*p1-(1/2)*p1=(1/2)*p2+((1/2)*p1-(1/2)*p1) by EUCLID:49;
         then 1*p1-(1/2)*p1=(1/2)*p2+(0.TOP-REAL 2) by EUCLID:46;
         then 1*p1-(1/2)*p1=(1/2)*p2 by EUCLID:31;
         then (1-(1/2))*p1=(1/2)*p2 by EUCLID:54;
-        hence contradiction by A3,EUCLID:38;
+        hence contradiction by A4,EUCLID:38;
       end;
-      case f1.r1=p2;
-        then
-A33:    p2`1=2"*(p1`1)+ (p2`1)/2 by A9,A19,A21
+      case
+A45:    f1.r1=p2;
+A46:    ((1/2)*p1+(1/2)*p2)`2= ((1/2)*p1)`2+((1/2)*p2)`2 by TOPREAL3:7
+          .=(1/2)*(p1`2)+((1/2)*p2)`2 by TOPREAL3:9
+          .=(1/2)*r0+(1/2)*r0 by A11,A12,TOPREAL3:9
+          .=r0;
+        p2`1=2"*(p1`1)+ (p2`1)/2 by A35,A38,A39,A45
           .=(2"*p1)`1+ 2"*(p2`1) by TOPREAL3:9
           .=(2"*p1)`1+ (2"*p2)`1 by TOPREAL3:9
           .=((1/2)*p1+(1/2)*p2)`1 by TOPREAL3:7;
-        ((1/2)*p1+(1/2)*p2)`2= ((1/2)*p1)`2+((1/2)*p2)`2 by TOPREAL3:7
-          .=(1/2)*(p1`2)+((1/2)*p2)`2 by TOPREAL3:9
-          .=(1/2)*r0+(1/2)*r0 by A4,A5,TOPREAL3:9
-          .=r0;
-        then p2=(1/2)*p1+(1/2)*p2 by A5,A33,TOPREAL3:11;
+        then p2=(1/2)*p1+(1/2)*p2 by A12,A46,TOPREAL3:11;
         then 1*p2-(1/2)*p2=(1/2)*p1+(1/2)*p2-(1/2)*p2 by EUCLID:33;
         then 1*p2-(1/2)*p2=(1/2)*p1+((1/2)*p2-(1/2)*p2) by EUCLID:49;
         then 1*p2-(1/2)*p2=(1/2)*p1+(0.TOP-REAL 2) by EUCLID:46;
         then 1*p2-(1/2)*p2=(1/2)*p1 by EUCLID:31;
         then (1-(1/2))*p2=(1/2)*p1 by EUCLID:54;
-        hence contradiction by A3,EUCLID:38;
+        hence contradiction by A4,EUCLID:38;
       end;
     end;
     hence contradiction;
@@ -559,126 +604,134 @@ A33:    p2`1=2"*(p1`1)+ (p2`1)/2 by A9,A19,A21
 end;
 
 theorem Th21:
-  for P being non empty Subset of TOP-REAL 2
-  st P is being_simple_closed_curve holds
-  not (ex r st for p st p in P holds p`1=r)
+  for P being non empty Subset of TOP-REAL 2 st P is
+  being_simple_closed_curve holds not (ex r st for p st p in P holds p`1=r)
 proof
   let P be non empty Subset of TOP-REAL 2;
   assume
 A1: P is being_simple_closed_curve;
   now
+A2: [.0,1.] = ].0,1.[ \/ {0,1} by XXREAL_1:128;
     given r0 such that
-A2: for p st p in P holds p`1=r0;
-    consider p1,p2 being Point of TOP-REAL 2,
-    P1,P2 being non empty Subset of TOP-REAL 2 such that
-A3: p1 <> p2 & p1 in P & p2 in P &
-    P1 is_an_arc_of p1,p2 & P2 is_an_arc_of p1,p2 &
-    P = P1 \/ P2 & P1 /\ P2 = {p1,p2} by A1,TOPREAL2:6;
-A4: p1`1=r0 by A2,A3;
-A5: p2`1=r0 by A2,A3;
+A3: for p st p in P holds p`1=r0;
+    consider p1,p2 being Point of TOP-REAL 2, P1,P2 being non empty Subset of
+    TOP-REAL 2 such that
+A4: p1 <> p2 and
+A5: p1 in P and
+A6: p2 in P and
+A7: P1 is_an_arc_of p1,p2 and
+A8: P2 is_an_arc_of p1,p2 and
+A9: P = P1 \/ P2 and
+A10: P1 /\ P2 = {p1,p2} by A1,TOPREAL2:6;
+A11: p1`1=r0 by A3,A5;
+A12: p2`1=r0 by A3,A6;
     then
-A6: p1`1=p2`1 by A2,A3;
-    consider f1 being Function of I[01], (TOP-REAL 2)|P1 such that
-A7: f1 is being_homeomorphism & f1.0 = p1 & f1.1 = p2 by A3,TOPREAL1:def 2;
+A13: p1`1=p2`1 by A3,A5;
+A14: now
+      assume
+      p1`2=p2`2;
+      then p1=|[p2`1,p2`2]| by A13,EUCLID:57;
+      hence contradiction by A4,EUCLID:57;
+    end;
     consider f2 being Function of I[01], (TOP-REAL 2)|P2 such that
-A8: f2 is being_homeomorphism & f2.0 = p1 & f2.1 = p2 by A3,TOPREAL1:def 2;
-    f1 is continuous by A7,TOPS_2:def 5;
-    then consider g1 being Function of I[01],R^1 such that
-A9: g1 is continuous &
-    for r,q1 st r in the carrier of I[01] & q1= f1.r holds q1`2=g1.r by Th19;
-    f2 is continuous by A8,TOPS_2:def 5;
+A15: f2 is being_homeomorphism and
+A16: f2.0 = p1 and
+A17: f2.1 = p2 by A8,TOPREAL1:def 2;
+    f2 is continuous by A15,TOPS_2:def 5;
     then consider g2 being Function of I[01],R^1 such that
-A10: g2 is continuous &
-    for r,q2 st r in the carrier of I[01] & q2= f2.r holds q2`2=g2.r by Th19;
-A11: [.0,1.] = ].0,1.[ \/ {0,1} by XXREAL_1:128;
-    0 in {0,1} by TARSKI:def 2;
-    then
-A12: 0 in the carrier of I[01] by A11,BORSUK_1:83,XBOOLE_0:def 3;
-    then
-A13: p1`2=g1.0 by A7,A9;
-A14: p1`2=g2.0 by A8,A10,A12;
+A18: g2 is continuous and
+A19: for r,q2 st r in the carrier of I[01] & q2= f2.r holds q2`2=g2.r
+    by Th19;
+A20: [#]((TOP-REAL 2)|P2) = P2 by PRE_TOPC:def 10;
     1 in {0,1} by TARSKI:def 2;
     then
-A15: 1 in the carrier of I[01] by A11,BORSUK_1:83,XBOOLE_0:def 3;
+A21: 1 in the carrier of I[01] by A2,BORSUK_1:83,XBOOLE_0:def 3;
     then
-A16: p2`2=g1.1 by A7,A9;
-A17: p2`2=g2.1 by A8,A10,A15;
-A18: now
-      assume p1`2=p2`2;
-      then p1=|[p2`1,p2`2]| by A6,EUCLID:57;
-      hence contradiction by A3,EUCLID:57;
-    end;
-    then consider r1 such that
-A19: 0<r1 & r1<1 & g1.r1=(p1`2+p2`2)/2 by A9,A13,A16,Th15;
-A20: [.0,1.] = {r3 : 0<=r3 & r3<=1 } by RCOMP_1:def 1;
+A22: p2`2=g2.1 by A17,A19;
+    0 in {0,1} by TARSKI:def 2;
     then
-A21: r1 in the carrier of I[01] by A19,BORSUK_1:83;
-    then r1 in dom f1 by FUNCT_2:def 1;
-    then f1.r1 in rng f1 by FUNCT_1:def 5;
+A23: 0 in the carrier of I[01] by A2,BORSUK_1:83,XBOOLE_0:def 3;
+    then p1`2=g2.0 by A16,A19;
+    then consider r2 such that
+A24: 0<r2 & r2<1 and
+A25: g2.r2=(p1`2+p2`2)/2 by A18,A22,A14,Th15;
+A26: [.0,1.] = {r3 : 0<=r3 & r3<=1 } by RCOMP_1:def 1;
     then
-A22: f1.r1 in the carrier of ((TOP-REAL 2)|P1);
-    [#]((TOP-REAL 2)|P1) = P1 by PRE_TOPC:def 10;
-    then
-A23: f1.r1 in P1 by A22;
-    then
-A24: f1.r1 in P by A3,XBOOLE_0:def 3;
-    reconsider p3=f1.r1 as Point of (TOP-REAL 2) by A23;
-    consider r2 such that
-A25: 0<r2 & r2<1 & g2.r2=(p1`2+p2`2)/2 by A10,A14,A17,A18,Th15;
-A26: r2 in the carrier of I[01] by A20,A25,BORSUK_1:83;
+A27: r2 in the carrier of I[01] by A24,BORSUK_1:83;
     dom f2=the carrier of I[01] by FUNCT_2:def 1;
-    then f2.r2 in rng f2 by A26,FUNCT_1:def 5;
     then
-A27: f2.r2 in the carrier of ((TOP-REAL 2)|P2);
-    [#]((TOP-REAL 2)|P2) = P2 by PRE_TOPC:def 10;
+A28: f2.r2 in rng f2 by A27,FUNCT_1:def 5;
     then
-A28: f2.r2 in P2 by A27;
+A29: f2.r2 in P by A9,A20,XBOOLE_0:def 3;
+    f2.r2 in P2 by A28,A20;
+    then reconsider p4=f2.r2 as Point of (TOP-REAL 2);
+A30: [#]((TOP-REAL 2)|P1) = P1 by PRE_TOPC:def 10;
+    consider f1 being Function of I[01], (TOP-REAL 2)|P1 such that
+A31: f1 is being_homeomorphism and
+A32: f1.0 = p1 and
+A33: f1.1 = p2 by A7,TOPREAL1:def 2;
+    f1 is continuous by A31,TOPS_2:def 5;
+    then consider g1 being Function of I[01],R^1 such that
+A34: g1 is continuous and
+A35: for r,q1 st r in the carrier of I[01] & q1= f1.r holds q1`2=g1.r
+    by Th19;
+A36: p2`2=g1.1 by A33,A35,A21;
+    p1`2=g1.0 by A32,A35,A23;
+    then consider r1 such that
+A37: 0<r1 & r1<1 and
+A38: g1.r1=(p1`2+p2`2)/2 by A34,A36,A14,Th15;
+A39: r1 in the carrier of I[01] by A37,A26,BORSUK_1:83;
+    then r1 in dom f1 by FUNCT_2:def 1;
     then
-A29: f2.r2 in P by A3,XBOOLE_0:def 3;
-    reconsider p4=f2.r2 as Point of (TOP-REAL 2) by A28;
-A30: p3`2= (p1`2+p2`2)/2 by A9,A19,A21
-      .=p4`2 by A10,A25,A26;
-    p3`1=r0 by A2,A24
-      .=p4`1 by A2,A29;
-    then f1.r1=f2.r2 by A30,TOPREAL3:11;
+A40: f1.r1 in rng f1 by FUNCT_1:def 5;
+    then f1.r1 in P1 by A30;
+    then reconsider p3=f1.r1 as Point of (TOP-REAL 2);
+    f1.r1 in P by A9,A40,A30,XBOOLE_0:def 3;
     then
-A31: f1.r1 in P1/\P2 by A23,A28,XBOOLE_0:def 4;
-    now per cases by A3,A31,TARSKI:def 2;
-      case f1.r1=p1;
-        then
-A32:    p1`2=2"*(p1`2)+ (p2`2)/2 by A9,A19,A21
+A41: p3`1=r0 by A3
+      .=p4`1 by A3,A29;
+    p3`2= (p1`2+p2`2)/2 by A35,A38,A39
+      .=p4`2 by A19,A25,A27;
+    then f1.r1=f2.r2 by A41,TOPREAL3:11;
+    then
+A42: f1.r1 in P1/\P2 by A40,A30,A28,A20,XBOOLE_0:def 4;
+    now
+      per cases by A10,A42,TARSKI:def 2;
+      case
+A43:    f1.r1=p1;
+A44:    ((1/2)*p1+(1/2)*p2)`1= ((1/2)*p1)`1+((1/2)*p2)`1 by TOPREAL3:7
+          .=(1/2)*(p1`1)+((1/2)*p2)`1 by TOPREAL3:9
+          .=(1/2)*r0+(1/2)*r0 by A11,A12,TOPREAL3:9
+          .=r0;
+        p1`2=2"*(p1`2)+ (p2`2)/2 by A35,A38,A39,A43
           .=(2"*p1)`2+ 2"*(p2`2) by TOPREAL3:9
           .=(2"*p1)`2+ (2"*p2)`2 by TOPREAL3:9
           .=((1/2)*p1+(1/2)*p2)`2 by TOPREAL3:7;
-        ((1/2)*p1+(1/2)*p2)`1= ((1/2)*p1)`1+((1/2)*p2)`1 by TOPREAL3:7
-          .=(1/2)*(p1`1)+((1/2)*p2)`1 by TOPREAL3:9
-          .=(1/2)*r0+(1/2)*r0 by A4,A5,TOPREAL3:9
-          .=r0;
-        then p1=(1/2)*p1+(1/2)*p2 by A4,A32,TOPREAL3:11;
+        then p1=(1/2)*p1+(1/2)*p2 by A11,A44,TOPREAL3:11;
         then 1*p1-(1/2)*p1=(1/2)*p1+(1/2)*p2-(1/2)*p1 by EUCLID:33;
         then 1*p1-(1/2)*p1=(1/2)*p2+((1/2)*p1-(1/2)*p1) by EUCLID:49;
         then 1*p1-(1/2)*p1=(1/2)*p2+(0.TOP-REAL 2) by EUCLID:46;
         then 1*p1-(1/2)*p1=(1/2)*p2 by EUCLID:31;
         then (1-(1/2))*p1=(1/2)*p2 by EUCLID:54;
-        hence contradiction by A3,EUCLID:38;
+        hence contradiction by A4,EUCLID:38;
       end;
-      case f1.r1=p2;
-        then
-A33:    p2`2=2"*(p1`2)+ (p2`2)/2 by A9,A19,A21
+      case
+A45:    f1.r1=p2;
+A46:    ((1/2)*p1+(1/2)*p2)`1= ((1/2)*p1)`1+((1/2)*p2)`1 by TOPREAL3:7
+          .=(1/2)*(p1`1)+((1/2)*p2)`1 by TOPREAL3:9
+          .=(1/2)*r0+(1/2)*r0 by A11,A12,TOPREAL3:9
+          .=r0;
+        p2`2=2"*(p1`2)+ (p2`2)/2 by A35,A38,A39,A45
           .=(2"*p1)`2+ 2"*(p2`2) by TOPREAL3:9
           .=(2"*p1)`2+ (2"*p2)`2 by TOPREAL3:9
           .=((1/2)*p1+(1/2)*p2)`2 by TOPREAL3:7;
-        ((1/2)*p1+(1/2)*p2)`1= ((1/2)*p1)`1+((1/2)*p2)`1 by TOPREAL3:7
-          .=(1/2)*(p1`1)+((1/2)*p2)`1 by TOPREAL3:9
-          .=(1/2)*r0+(1/2)*r0 by A4,A5,TOPREAL3:9
-          .=r0;
-        then p2=(1/2)*p1+(1/2)*p2 by A5,A33,TOPREAL3:11;
+        then p2=(1/2)*p1+(1/2)*p2 by A12,A46,TOPREAL3:11;
         then 1*p2-(1/2)*p2=(1/2)*p1+(1/2)*p2-(1/2)*p2 by EUCLID:33;
         then 1*p2-(1/2)*p2=(1/2)*p1+((1/2)*p2-(1/2)*p2) by EUCLID:49;
         then 1*p2-(1/2)*p2=(1/2)*p1+(0.TOP-REAL 2) by EUCLID:46;
         then 1*p2-(1/2)*p2=(1/2)*p1 by EUCLID:31;
         then (1-(1/2))*p2=(1/2)*p1 by EUCLID:54;
-        hence contradiction by A3,EUCLID:38;
+        hence contradiction by A4,EUCLID:38;
       end;
     end;
     hence contradiction;
@@ -687,8 +740,8 @@ A33:    p2`2=2"*(p1`2)+ (p2`2)/2 by A9,A19,A21
 end;
 
 theorem Th22:
-  for C being compact non empty Subset of TOP-REAL 2
-  st C is being_simple_closed_curve holds N-bound(C) > S-bound(C)
+  for C being compact non empty Subset of TOP-REAL 2 st C is
+  being_simple_closed_curve holds N-bound(C) > S-bound(C)
 proof
   let C be compact non empty Subset of TOP-REAL 2;
   assume
@@ -699,7 +752,8 @@ A2: N-bound C <= S-bound C;
     for p st p in C holds p`2=S-bound C
     proof
       let p;
-      assume p in C;
+      assume
+      p in C;
       then
 A3:   S-bound C <= p`2 & p`2 <= N-bound C by PSCOMP_1:71;
       then S-bound C <= N-bound C by XXREAL_0:2;
@@ -712,8 +766,8 @@ A3:   S-bound C <= p`2 & p`2 <= N-bound C by PSCOMP_1:71;
 end;
 
 theorem Th23:
-  for C being compact non empty Subset of TOP-REAL 2
-  st C is being_simple_closed_curve holds E-bound(C) > W-bound(C)
+  for C being compact non empty Subset of TOP-REAL 2 st C is
+  being_simple_closed_curve holds E-bound(C) > W-bound(C)
 proof
   let C be compact non empty Subset of TOP-REAL 2;
   assume
@@ -724,7 +778,8 @@ A2: E-bound C <= W-bound C;
     for p st p in C holds p`1=W-bound C
     proof
       let p;
-      assume p in C;
+      assume
+      p in C;
       then
 A3:   W-bound C <= p`1 & p`1 <= E-bound C by PSCOMP_1:71;
       then W-bound C <= E-bound C by XXREAL_0:2;
@@ -737,36 +792,36 @@ A3:   W-bound C <= p`1 & p`1 <= E-bound C by PSCOMP_1:71;
 end;
 
 theorem
-  for P being compact non empty Subset of TOP-REAL 2
-  st P is being_simple_closed_curve holds S-min(P)<>N-max(P)
+  for P being compact non empty Subset of TOP-REAL 2 st P is
+  being_simple_closed_curve holds S-min(P)<>N-max(P)
 proof
   let P be compact non empty Subset of TOP-REAL 2;
   assume
 A1: P is being_simple_closed_curve;
   now
+A2: |[inf (proj1|S-most P), S-bound P]|=S-min(P) & |[sup (proj1|N-most P),
+    N-bound P]|=N-max(P) by PSCOMP_1:def 45,def 49;
     assume
-A2: S-min(P)=N-max(P);
-A3: |[inf (proj1|S-most P), S-bound P]|=S-min(P) by PSCOMP_1:def 49;
-    |[sup (proj1|N-most P), N-bound P]|=N-max(P) by PSCOMP_1:def 45;
-    then S-bound P= N-bound P by A2,A3,SPPOL_2:1;
+    S-min(P)=N-max(P);
+    then S-bound P= N-bound P by A2,SPPOL_2:1;
     hence contradiction by A1,Th22;
   end;
   hence thesis;
 end;
 
 theorem
-  for P being compact non empty Subset of TOP-REAL 2
-  st P is being_simple_closed_curve holds W-min(P)<>E-max(P)
+  for P being compact non empty Subset of TOP-REAL 2 st P is
+  being_simple_closed_curve holds W-min(P)<>E-max(P)
 proof
   let P be compact non empty Subset of TOP-REAL 2;
   assume
 A1: P is being_simple_closed_curve;
   now
+A2: |[W-bound P, inf (proj2|W-most P)]|=W-min(P) & |[E-bound P, sup (proj2
+    | E-most P)]|=E-max(P) by PSCOMP_1:def 42,def 46;
     assume
-A2: W-min(P)=E-max(P);
-A3: |[W-bound P, inf (proj2|W-most P)]|=W-min(P) by PSCOMP_1:def 42;
-    |[E-bound P, sup (proj2|E-most P)]|=E-max(P) by PSCOMP_1:def 46;
-    then W-bound P= E-bound P by A2,A3,SPPOL_2:1;
+    W-min(P)=E-max(P);
+    then W-bound P= E-bound P by A2,SPPOL_2:1;
     hence contradiction by A1,Th23;
   end;
   hence thesis;

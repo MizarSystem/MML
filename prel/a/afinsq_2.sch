@@ -9,6 +9,7 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="NUMBERS"/>
@@ -50,13 +51,13 @@
 </Adjective>
 <Adjective nr="6"/>
 <Adjective nr="14"/>
-<Adjective nr="31"/>
+<Adjective nr="32"/>
 </Cluster>
 </Typ>
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="182">
+<Func kind="K" nr="190">
 <Var nr="1"/>
 </Func>
 <Func kind="F" nr="1"/>

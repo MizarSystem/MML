@@ -34,7 +34,8 @@ theorem Th1:
   (ex m st n=2*m) implies (-a) |^ n = a |^ n
 proof
   given m such that
-A1: n=2*m; thus
+A1: n=2*m;
+  thus
   (-a) |^ n = ((-a) |^ (1+1)) |^ m by A1,NEWTON:14
     .= ((-a) |^ (0+1) * (-a) |^ (0+1)) |^ m by NEWTON:13
     .= ((-a) |^ 0 * (-a) * (-a) |^ (0+1)) |^ m by NEWTON:11
@@ -58,7 +59,8 @@ theorem Th2:
   (ex m st n=2*m+1) implies (-a) |^ n = - a |^ n
 proof
   given m such that
-A1: n=2*m+1; thus
+A1: n=2*m+1;
+  thus
   (-a) |^ n = (-a) |^ (2*m) * (-a) by A1,NEWTON:11
     .= a |^ (2*m) * (-a) by Th1
     .= -a |^ (2*m) * a
@@ -69,52 +71,55 @@ theorem Th3:
   a>=0 or (ex m st n=2*m) implies a |^ n >= 0
 proof
   assume
-A1: a>=0 or (ex m st n=2*m);
+A1: a>=0 or ex m st n=2*m;
 A2: now
     let a,n such that
 A3: a>=0;
-    now per cases by A3;
-      suppose a>0;
-        hence a |^ n >= 0 by PREPOWER:13;
+A4: now per cases by A3;
+      suppose
+A5:     a>0;
+        thus a |^ n >= 0 by A5,PREPOWER:13;
       end;
       suppose
-A4:     a=0;
-        now per cases by NAT_1:6;
+A6:     a=0;
+A7:     now per cases by NAT_1:6;
           suppose
-A5:         n=0;
-            a |^ n = a GeoSeq.n by PREPOWER:def 1
-              .= 1 by A5,PREPOWER:4;
-            hence a |^ n >= 0;
+A8:         n=0;
+A9:         a |^ n = a GeoSeq.n by PREPOWER:def 1
+              .= 1 by A8,PREPOWER:4;
+            thus a |^ n >= 0 by A9;
           end;
-          suppose ex m being Nat st n = m+1;
-            then consider m being Nat such that
-A6:         n = m + 1;
-            a |^ n = a |^ m * a by A6,NEWTON:11
-              .= 0 by A4;
-            hence a |^ n >= 0;
+          suppose
+A10:        ex m being Nat st n = m+1;
+            consider m being Nat such that
+A11:        n = m + 1 by A10;
+A12:        a |^ n = a |^ m * a by A11,NEWTON:11
+              .= 0 by A6;
+            thus a |^ n >= 0 by A12;
           end;
         end;
-        hence a |^ n >= 0;
+        thus a |^ n >= 0 by A7;
       end;
     end;
-    hence a |^ n >= 0;
+    thus a |^ n >= 0 by A4;
   end;
-  now
+A13: now
     assume
-A7: ex m st n=2*m;
-    now per cases;
-      suppose a>=0;
-        hence thesis by A2;
+A14: ex m st n=2*m;
+A15: now per cases;
+      suppose
+A16:    a>=0;
+        thus thesis by A2,A16;
       end;
-      suppose a<0;
-        then -a>=0;
-        then (-a) |^ n >= 0 by A2;
-        hence thesis by A7,Th1;
+      suppose
+A17:    a<0;
+A18:    (-a) |^ n >= 0 by A2,A17;
+        thus thesis by A14,A18,Th1;
       end;
     end;
-    hence thesis;
+    thus thesis by A15;
   end;
-  hence thesis by A1,A2;
+  thus thesis by A1,A2,A13;
 end;
 
 definition
@@ -145,51 +150,52 @@ proof
   assume
 A1: n>=1 & a>=0 or ex m st n=2*m+1;
 A2: now
-    assume
-A3: n>=1 & a>=0;
-    then
-A4: n-root a = n -Root a by Def1;
-    now per cases by A3;
-      suppose a>0;
-        hence a |^ n >= 0 by PREPOWER:13;
-      end;
-      suppose a=0;
-        hence a |^ n >= 0;
-      end;
-    end;
-    then n-root (a |^ n) = n -Root (a |^ n) by A3,Def1;
-    hence thesis by A3,A4,PREPOWER:28;
-  end;
-  now
-    assume
-A5: ex m st n=2*m+1;
-    then consider m such that
-A6: n = 2*m + 1;
-A7: n>=0+1 by A6,XREAL_1:8;
-    now per cases;
-      suppose a>=0;
-        hence thesis by A2,A7;
+    assume that
+A3: n>=1 and
+A4: a>=0;
+A5: n-root a = n -Root a by A3,A4,Def1;
+A6: now per cases by A4;
+      suppose
+A7:     a>0;
+        thus a |^ n >= 0 by A7,PREPOWER:13;
       end;
       suppose
-A8:     a<0;
-        then
-A9:     -a>0 by XREAL_1:60; thus
-        (n-root a) |^ n = (- n -Root (-a)) |^ n by A5,A8,Def1
-          .= -(n -Root (-a)) |^ n by A5,Th2
-          .= -(-a) by A7,A9,PREPOWER:28
+A8:     a=0;
+        thus a |^ n >= 0 by A8;
+      end;
+    end;
+A9: n-root (a |^ n) = n -Root (a |^ n) by A3,A6,Def1;
+    thus thesis by A3,A4,A5,A9,PREPOWER:28;
+  end;
+A10: now
+    assume
+A11: ex m st n=2*m+1;
+A12: n>=0+1 by A11,XREAL_1:8;
+A13: now per cases;
+      suppose
+A14:    a>=0;
+        thus thesis by A2,A12,A14;
+      end;
+      suppose
+A15:    a<0;
+A16:    -a>0 by A15,XREAL_1:60;
+        thus
+        (n-root a) |^ n = (- n -Root (-a)) |^ n by A11,A15,Def1
+          .= -(n -Root (-a)) |^ n by A11,Th2
+          .= -(-a) by A12,A15,PREPOWER:28
           .= a;
-        (-a) |^ n > 0 by A9,PREPOWER:13;
-        then -a |^ n > 0 by A5,Th2;
-        then a |^ n < 0;
-        hence n-root (a |^ n) = - n -Root (-a |^ n) by A5,Def1
-          .= - n -Root ((-a) |^ n) by A5,Th2
-          .= -(-a) by A7,A9,PREPOWER:28
+A17:    (-a) |^ n > 0 by A16,PREPOWER:13;
+A18:    -a |^ n > 0 by A11,A17,Th2;
+A19:    a |^ n < 0 by A18;
+        thus n-root (a |^ n) = - n -Root (-a |^ n) by A11,A19,Def1
+          .= - n -Root ((-a) |^ n) by A11,Th2
+          .= -(-a) by A12,A15,PREPOWER:28
           .= a;
       end;
     end;
-    hence thesis;
+    thus thesis by A13;
   end;
-  hence thesis by A1,A2;
+  thus thesis by A1,A2,A10;
 end;
 
 theorem Th6:
@@ -198,7 +204,7 @@ proof
   let n be Nat;
   assume
 A1: n>=1;
-  hence n-root 0 = n -Root 0 by Def1
+  thus n-root 0 = n -Root 0 by A1,Def1
     .= 0 by A1,PREPOWER:def 3;
 end;
 
@@ -207,29 +213,30 @@ theorem
 proof
   assume
 A1: n>=1;
-  hence n-root 1 = n -Root 1 by Def1
+  thus n-root 1 = n -Root 1 by A1,Def1
     .= 1 by A1,PREPOWER:29;
 end;
 
 theorem Th8:
   a>=0 & n>=1 implies n-root a >= 0
 proof
-  assume
-A1: a>=0 & n>=1;
-  now per cases by A1;
+  assume that
+A1: a>=0 and
+A2: n>=1;
+A3: now per cases by A1;
     suppose
-A2:   a>0;
-      n-root a = n -Root a by A1,Def1;
-      hence thesis by A1,A2,PREPOWER:def 3;
+A4:   a>0;
+A5:   n-root a = n -Root a by A1,A2,Def1;
+      thus thesis by A2,A4,A5,PREPOWER:def 3;
     end;
     suppose
-A3:   a=0;
-      n-root a = n -Root a by A1,Def1
-        .= 0 by A1,A3,PREPOWER:def 3;
-      hence thesis;
+A6:   a=0;
+A7:   n-root a = n -Root a by A1,A2,Def1
+        .= 0 by A2,A6,PREPOWER:def 3;
+      thus thesis by A7;
     end;
   end;
-  hence thesis;
+  thus thesis by A3;
 end;
 
 theorem
@@ -237,64 +244,58 @@ theorem
 proof
   assume
 A1: ex m st n=2*m+1;
-  then consider m such that
-A2: n = 2*m + 1;
-A3: n>=0+1 by A2,XREAL_1:8; thus
+A2: n>=0+1 by A1,XREAL_1:8;
+  thus
   n-root (-1) = - n -Root (-(-1)) by A1,Def1
-    .= - 1 by A3,PREPOWER:29;
+    .= - 1 by A2,PREPOWER:29;
 end;
 
 theorem
   1-root a = a
 proof
-  now per cases;
+A1: now per cases;
     suppose
-A1:   a>=0;
-      hence 1-root a = 1 -Root a by Def1
-        .= a by A1,PREPOWER:30;
+A2:   a>=0;
+      thus 1-root a = 1 -Root a by A2,Def1
+        .= a by A2,PREPOWER:30;
     end;
     suppose
-A2:   a<0;
-      then
-A3:   -a>=0;
-      1 = 2*0 + 1;
-      hence 1-root a = - 1 -Root (-a) by A2,Def1
+A3:   a<0;
+A4:   1 = 2*0 + 1;
+      thus 1-root a = - 1 -Root (-a) by A3,A4,Def1
         .= -(-a) by A3,PREPOWER:30
         .= a;
     end;
   end;
-  hence thesis;
+  thus thesis by A1;
 end;
 
 theorem Th11:
   (ex m st n = 2*m + 1) implies n-root a = - n-root (-a)
 proof
   assume
-A1: (ex m st n = 2*m + 1);
-  then consider m such that
-A2: n = 2*m + 1;
-A3: n>=0+1 by A2,XREAL_1:8;
-  now per cases;
+A1: ex m st n = 2*m + 1;
+A2: n>=0+1 by A1,XREAL_1:8;
+A3: now per cases;
     suppose
 A4:   a<0;
-      then
-A5:   -a>=0; thus
+      thus
       n-root a = - n -Root (-a) by A1,A4,Def1
-        .= - n-root (-a) by A3,A5,Def1;
+        .= - n-root (-a) by A2,A4,Def1;
     end;
     suppose
-A6:   a=0;
-      hence n-root a = 0 by A3,Th6
-        .= - n-root (-a) by A3,A6,Th6;
+A5:   a=0;
+      thus n-root a = 0 by A2,A5,Th6
+        .= - n-root (-a) by A2,A5,Th6;
     end;
     suppose
-A7:   a>0;
-      then -a<-0 by XREAL_1:26;
-      hence - n-root (-a) = -(- n -Root (-(-a))) by A1,Def1
-        .= n-root a by A3,A7,Def1;
+A6:   a>0;
+A7:   -a<-0 by A6,XREAL_1:26;
+      thus - n-root (-a) = -(- n -Root (-(-a))) by A1,A7,Def1
+        .= n-root a by A2,A6,Def1;
     end;
   end;
-  hence thesis;
+  thus thesis by A3;
 end;
 
 theorem Th12:
@@ -305,55 +306,55 @@ proof
 A1: n>=1 & a>=0 & b>=0 or ex m st n=2*m+1;
 A2: now
     let a,b,n;
-    assume
-A3: n>=1 & a>=0 & b>=0;
-    thus n-root (a*b) = n -Root (a*b) by A3,Def1
-      .= n -Root a * n -Root b by A3,PREPOWER:31
-      .= n-root a * n -Root b by A3,Def1
-      .= n-root a * n-root b by A3,Def1;
+    assume that
+A3: n>=1 and
+A4: a>=0 and
+A5: b>=0;
+    thus n-root (a*b) = n -Root (a*b) by A3,A4,A5,Def1
+      .= n -Root a * n -Root b by A3,A4,A5,PREPOWER:31
+      .= n-root a * n -Root b by A3,A4,Def1
+      .= n-root a * n-root b by A3,A5,Def1;
   end;
-  now
+A6: now
     assume
-A4: ex m st n=2*m+1;
-    then consider m such that
-A5: n = 2*m + 1;
-A6: n>=0+1 by A5,XREAL_1:8;
-    now per cases;
-      suppose a>=0 & b>=0;
-        hence thesis by A2,A6;
+A7: ex m st n=2*m+1;
+A8: n>=0+1 by A7,XREAL_1:8;
+A9: now per cases;
+      suppose
+A10:    a>=0 & b>=0;
+        thus thesis by A2,A8,A10;
       end;
       suppose
-A7:     a<0 & b<0;
-        then
-A8:     a*b>=0;
-A9:     -a>=0 by A7;
-A10:    -b>=0 by A7; thus
-        n-root (a*b) = n -Root ((-a)*(-b)) by A6,A8,Def1
-          .= (-(-n -Root (-a))) * n -Root (-b) by A6,A9,A10,PREPOWER:31
-          .= (-(n-root a)) * (-(-n -Root (-b))) by A4,A7,Def1
-          .= (-(n-root a)) * (-(n-root b)) by A4,A7,Def1
+A11:    a<0 & b<0;
+        thus
+        n-root (a*b) = n -Root ((-a)*(-b)) by A8,A11,Def1
+          .= (-(-n -Root (-a))) * n -Root (-b) by A8,A11,PREPOWER:31
+          .= (-(n-root a)) * (-(-n -Root (-b))) by A7,A11,Def1
+          .= (-(n-root a)) * (-(n-root b)) by A7,A11,Def1
           .= n-root a * n-root b;
       end;
       suppose
-A11:    a>=0 & b<0; thus
-        n-root (a*b) = -n-root (-a*b) by A4,Th11
+A12:    a>=0 & b<0;
+        thus
+        n-root (a*b) = -n-root (-a*b) by A7,Th11
           .= -n-root (a*(-b))
-          .= -(n-root a * n-root (-b)) by A2,A6,A11
+          .= -(n-root a * n-root (-b)) by A2,A8,A12
           .= n-root a * (-n-root (-b))
-          .= n-root a * n-root b by A4,Th11;
+          .= n-root a * n-root b by A7,Th11;
       end;
       suppose
-A13:    a<0 & b>=0; thus
-        n-root (a*b) = -n-root (-a*b) by A4,Th11
+A13:    a<0 & b>=0;
+        thus
+        n-root (a*b) = -n-root (-a*b) by A7,Th11
           .= -n-root ((-a)*b)
-          .= -(n-root (-a) * n-root b) by A2,A6,A13
+          .= -(n-root (-a) * n-root b) by A2,A8,A13
           .= (-n-root (-a)) * n-root b
-          .= n-root a * n-root b by A4,Th11;
+          .= n-root a * n-root b by A7,Th11;
       end;
     end;
-    hence thesis;
+    thus thesis by A9;
   end;
-  hence thesis by A1,A2;
+  thus thesis by A1,A2,A6;
 end;
 
 theorem Th13:
@@ -369,154 +370,155 @@ A3: a>0 & n>=1;
       .= 1/(n -Root a) by A3,PREPOWER:32
       .= 1/(n-root a) by A3,Def1;
   end;
-  now
-    assume
-A4: a<>0 & ex m st n = 2*m+1;
-    then consider m such that
-A5: n = 2*m + 1;
-A6: n>=0+1 by A5,XREAL_1:8;
-    now per cases by A4;
-      suppose a>0;
-        hence thesis by A2,A6;
+A4: now
+    assume that
+A5: a<>0 and
+A6: ex m st n = 2*m+1;
+A7: n>=0+1 by A6,XREAL_1:8;
+A8: now per cases by A5;
+      suppose
+A9:     a>0;
+        thus thesis by A2,A7,A9;
       end;
-      suppose a<0;
-        then
-A7:     -a>0 by XREAL_1:60; thus
-        1/(n-root a) = 1/(-(n-root (-a))) by A4,Th11
+      suppose
+A10:    a<0;
+A11:    -a>0 by A10,XREAL_1:60;
+        thus
+        1/(n-root a) = 1/(-(n-root (-a))) by A6,Th11
           .= - 1/(n-root (-a)) by XCMPLX_1:189
-          .= - n-root (1/(-a)) by A2,A6,A7
+          .= - n-root (1/(-a)) by A2,A7,A11
           .= - n-root (-1/a) by XCMPLX_1:189
-          .= n-root (1/a) by A4,Th11;
+          .= n-root (1/a) by A6,Th11;
       end;
     end;
-    hence thesis;
+    thus thesis by A8;
   end;
-  hence thesis by A1,A2;
+  thus thesis by A1,A2,A4;
 end;
 
 theorem
-  (a>=0 & b>0 & n>=1) or (b<>0 & ex m st n=2*m+1) implies
+  a>=0 & b>0 & n>=1 or (b<>0 & ex m st n=2*m+1) implies
   n-root (a/b) = n-root a / n-root b
 proof
   assume
-A1: (a>=0 & b>0 & n>=1) or (b<>0 & ex m st n=2*m+1);
-  now per cases by A1;
+A1: a>=0 & b>0 & n>=1 or (b<>0 & ex m st n=2*m+1);
+A2: now per cases by A1;
     suppose
-A2:   a>=0 & b>0 & n>=1;
-      thus n-root (a/b) = n -Root (a/b) by A2,Def1
-        .= n -Root a / n -Root b by A2,PREPOWER:33
-        .= n-root a / n -Root b by A2,Def1
-        .= n-root a / n-root b by A2,Def1;
+A3:   a>=0 & b>0 & n>=1;
+      thus n-root (a/b) = n -Root (a/b) by A3,Def1
+        .= n -Root a / n -Root b by A3,PREPOWER:33
+        .= n-root a / n -Root b by A3,Def1
+        .= n-root a / n-root b by A3,Def1;
     end;
     suppose
-A3:   b<>0 & ex m st n=2*m+1;
+A4:   b<>0 & ex m st n=2*m+1;
       thus n-root (a/b) = n-root (a*(1/b))
-        .= n-root a * n-root (1/b) by A3,Th12
-        .= n-root a * (1 / n-root b) by A3,Th13
+        .= n-root a * n-root (1/b) by A4,Th12
+        .= n-root a * (1 / n-root b) by A4,Th13
         .= n-root a / n-root b;
     end;
   end;
-  hence thesis;
+  thus thesis by A2;
 end;
 
 theorem
-  (a>=0 & n>=1 & m>=1) or (ex m1,m2 st n=2*m1+1 & m=2*m2+1) implies
+  a>=0 & n>=1 & m>=1 or (ex m1,m2 st n=2*m1+1 & m=2*m2+1) implies
   n-root (m-root a) = (n*m)-root a
 proof
   assume
-A1: (a>=0 & n>=1 & m>=1) or (ex m1,m2 st n=2*m1+1 & m=2*m2+1);
+A1: a>=0 & n>=1 & m>=1 or ex m1,m2 st n=2*m1+1 & m=2*m2+1;
 A2: now
     let a,n,m;
-    assume
-A3: a>=0 & n>=1 & m>=1;
-    then
-A4: n*m>= 1 by XREAL_1:161;
-    m-root a >= 0 by A3,Th8;
-    then
-A5: m -Root a >= 0 by A3,Def1; thus
-    n-root (m-root a) = n-root (m -Root a) by A3,Def1
-      .= n -Root (m -Root a) by A3,A5,Def1
-      .= (n*m) -Root a by A3,PREPOWER:34
-      .= (n*m)-root a by A3,A4,Def1;
+    assume that
+A3: a>=0 and
+A4: n>=1 and
+A5: m>=1;
+A6: n*m>= 1 by A4,A5,XREAL_1:161;
+A7: m-root a >= 0 by A3,A5,Th8;
+A8: m -Root a >= 0 by A3,A5,A7,Def1;
+    thus
+    n-root (m-root a) = n-root (m -Root a) by A3,A5,Def1
+      .= n -Root (m -Root a) by A4,A8,Def1
+      .= (n*m) -Root a by A3,A4,A5,PREPOWER:34
+      .= (n*m)-root a by A3,A6,Def1;
   end;
-  now
+A9: now
     given m1,m2 such that
-A6: n=2*m1+1 & m=2*m2+1;
-A7: n>=0+1 by A6,XREAL_1:8;
-A8: m>=0+1 by A6,XREAL_1:8;
-    then
-A9: n*m >= 1 by A7,XREAL_1:161;
-A10: n*m = 2*(m1*(2*m2)+m1+m2) + 1 by A6;
-    now per cases;
-      suppose a>=0;
-        hence thesis by A2,A7,A8;
+A10: n=2*m1+1 and
+A11: m=2*m2+1;
+A12: n>=0+1 by A10,XREAL_1:8;
+A13: m>=0+1 by A11,XREAL_1:8;
+A14: n*m >= 1 by A12,A13,XREAL_1:161;
+A15: n*m = 2*(m1*(2*m2)+m1+m2) + 1 by A10,A11;
+A16: now per cases;
+      suppose
+A17:    a>=0;
+        thus thesis by A2,A12,A13,A17;
       end;
       suppose
-A11:    a<0;
-        then
-A12:    -a>=0;
-        then m-root (-a) >= 0 by A8,Th8;
-        then
-A13:    m -Root (-a) >= 0 by A8,A12,Def1; thus
-        n-root (m-root a) = n-root (-m -Root (-a)) by A6,A11,Def1
-          .= -n-root (-(-m -Root (-a))) by A6,Th11
-          .= -n -Root (m -Root (-a)) by A7,A13,Def1
-          .= -(n*m) -Root (-a) by A7,A8,A12,PREPOWER:34
-          .= -(n*m)-root (-a) by A9,A12,Def1
-          .= (n*m)-root a by A10,Th11;
+A18:    a<0;
+A19:    m-root (-a) >= 0 by A13,A18,Th8;
+A20:    m -Root (-a) >= 0 by A13,A18,A19,Def1;
+        thus
+        n-root (m-root a) = n-root (-m -Root (-a)) by A11,A18,Def1
+          .= -n-root (-(-m -Root (-a))) by A10,Th11
+          .= -n -Root (m -Root (-a)) by A12,A20,Def1
+          .= -(n*m) -Root (-a) by A12,A13,A18,PREPOWER:34
+          .= -(n*m)-root (-a) by A14,A18,Def1
+          .= (n*m)-root a by A15,Th11;
       end;
     end;
-    hence thesis;
+    thus thesis by A16;
   end;
-  hence thesis by A1,A2;
+  thus thesis by A1,A2,A9;
 end;
 
 theorem
-  (a>=0 & n>=1 & m>=1) or (ex m1,m2 st n=2*m1+1 & m=2*m2+1) implies
+  a>=0 & n>=1 & m>=1 or (ex m1,m2 st n=2*m1+1 & m=2*m2+1) implies
   n-root a * m-root a = (n*m)-root (a |^ (n+m))
 proof
   assume
-A1: (a>=0 & n>=1 & m>=1) or (ex m1,m2 st n=2*m1+1 & m=2*m2+1);
+A1: a>=0 & n>=1 & m>=1 or ex m1,m2 st n=2*m1+1 & m=2*m2+1;
 A2: now
     let a,n,m;
-    assume
-A3: a>=0 & n>=1 & m>=1;
-    then
-A4: n*m>= 1 by XREAL_1:161;
-A5: a |^ (n+m) >=0 by A3,Th3; thus
-    n-root a * m-root a = n-root a* m -Root a by A3,Def1
-      .= n -Root a * m -Root a by A3,Def1
-      .= (n*m) -Root (a |^ (n+m)) by A3,PREPOWER:35
-      .= (n*m)-root (a |^ (n+m)) by A4,A5,Def1;
+    assume that
+A3: a>=0 and
+A4: n>=1 and
+A5: m>=1;
+A6: n*m>= 1 & a |^ (n+m) >=0 by A3,A4,A5,Th3,XREAL_1:161;
+    thus
+    n-root a * m-root a = n-root a* m -Root a by A3,A5,Def1
+      .= n -Root a * m -Root a by A3,A4,Def1
+      .= (n*m) -Root (a |^ (n+m)) by A3,A4,A5,PREPOWER:35
+      .= (n*m)-root (a |^ (n+m)) by A6,Def1;
   end;
-  now
+A7: now
     given m1,m2 such that
-A6: n=2*m1+1 & m=2*m2+1;
-A7: n>=0+1 by A6,XREAL_1:8;
-A8: m>=0+1 by A6,XREAL_1:8;
-    then
-A9: n*m >= 1 by A7,XREAL_1:161;
-A10: n+m = 2*(m1+(1+m2)) by A6;
-    now per cases;
-      suppose a>=0;
-        hence thesis by A2,A7,A8;
+A8: n=2*m1+1 and
+A9: m=2*m2+1;
+A10: n>=0+1 & m>=0+1 by A8,A9,XREAL_1:8;
+A11: n*m >= 1 by A10,XREAL_1:161;
+A12: n+m = 2*(m1+(1+m2)) by A8,A9;
+A13: now per cases;
+      suppose
+A14:    a>=0;
+        thus thesis by A2,A10,A14;
       end;
       suppose
-A11:    a<0;
-        then
-A12:    -a>=0;
-A13:    a |^ (n+m) >= 0 by A10,Th3; thus
-        n-root a * m-root a = n-root a * (-m -Root (-a)) by A6,A11,Def1
-          .= (-n -Root (-a)) * (-m -Root (-a)) by A6,A11,Def1
+A15:    a<0;
+A16:    a |^ (n+m) >= 0 by A12,Th3;
+        thus
+        n-root a * m-root a = n-root a * (-m -Root (-a)) by A9,A15,Def1
+          .= (-n -Root (-a)) * (-m -Root (-a)) by A8,A15,Def1
           .= n -Root (-a) * m -Root (-a)
-          .= (n*m) -Root ((-a) |^ (n+m))by A7,A8,A12,PREPOWER:35
-          .= (n*m) -Root (a |^ (n+m)) by A10,Th1
-          .= (n*m)-root (a |^ (n+m)) by A9,A13,Def1;
+          .= (n*m) -Root ((-a) |^ (n+m))by A10,A15,PREPOWER:35
+          .= (n*m) -Root (a |^ (n+m)) by A12,Th1
+          .= (n*m)-root (a |^ (n+m)) by A11,A16,Def1;
       end;
     end;
-    hence thesis;
+    thus thesis by A13;
   end;
-  hence thesis by A1,A2;
+  thus thesis by A1,A2,A7;
 end;
 
 theorem
@@ -527,49 +529,47 @@ A1: a<=b and
 A2: 0<=a & n>=1 or ex m st n=2*m+1;
 A3: now
     let a,b,n;
-    assume
-A4: 0<=a & n>=1 & a<=b;
-    then n -Root a <= n -Root b by PREPOWER:36;
-    then n -Root a <= n-root b by A4,Def1;
-    hence n-root a <= n-root b by A4,Def1;
+    assume that
+A4: 0<=a & n>=1 and
+A5: a<=b;
+A6: n -Root a <= n -Root b by A4,A5,PREPOWER:36;
+A7: n -Root a <= n-root b by A4,A5,A6,Def1;
+    thus n-root a <= n-root b by A4,A7,Def1;
   end;
-  now
+A8: now
     assume
-A5: ex m st n=2*m+1;
-    then consider m such that
-A6: n = 2*m + 1;
-A7: n>=0+1 by A6,XREAL_1:8;
-    now per cases;
-      suppose a>=0;
-        hence thesis by A1,A3,A7;
+A9: ex m st n=2*m+1;
+A10: n>=0+1 by A9,XREAL_1:8;
+A11: now per cases;
+      suppose
+A12:    a>=0;
+        thus thesis by A1,A3,A10,A12;
       end;
-      suppose a<0;
-        then
-A8:     -a>=0;
-        now per cases;
-          suppose b>=0;
-            then
-A9:         n-root b >= 0 by A7,Th8;
-            n-root (-a) >= 0 by A7,A8,Th8;
-            then - n-root (-a) <= -0;
-            hence thesis by A5,A9,Th11;
+      suppose
+A13:    a<0;
+A14:    now per cases;
+          suppose
+A15:        b>=0;
+A16:        n-root b >= 0 by A10,A15,Th8;
+A17:        n-root (-a) >= 0 by A10,A13,Th8;
+A18:        - n-root (-a) <= -0 by A17;
+            thus thesis by A9,A16,A18,Th11;
           end;
-          suppose b<0;
-            then
-A10:        -b>=0;
-            -a>=-b by A1,XREAL_1:26;
-            then n-root (-a) >= n-root (-b) by A3,A7,A10;
-            then - n-root (-a) <= - n-root (-b) by XREAL_1:26;
-            then n-root a <= - n-root (-b) by A5,Th11;
-            hence thesis by A5,Th11;
+          suppose
+A19:        b<0;
+A20:        -a>=-b by A1,XREAL_1:26;
+A21:        n-root (-a) >= n-root (-b) by A3,A10,A19,A20;
+A22:        - n-root (-a) <= - n-root (-b) by A21,XREAL_1:26;
+A23:        n-root a <= - n-root (-b) by A9,A22,Th11;
+            thus thesis by A9,A23,Th11;
           end;
         end;
-        hence thesis;
+        thus thesis by A14;
       end;
     end;
-    hence thesis;
+    thus thesis by A11;
   end;
-  hence thesis by A1,A2,A3;
+  thus thesis by A1,A2,A3,A8;
 end;
 
 theorem
@@ -580,97 +580,98 @@ A1: a<b and
 A2: 0<=a & n>=1 or ex m st n=2*m+1;
 A3: now
     let a,b,n;
-    assume
-A4: 0<=a & n>=1 & a<b;
-    then n -Root a < n -Root b by PREPOWER:37;
-    then n -Root a < n-root b by A4,Def1;
-    hence n-root a < n-root b by A4,Def1;
+    assume that
+A4: 0<=a & n>=1 and
+A5: a<b;
+A6: n -Root a < n -Root b by A4,A5,PREPOWER:37;
+A7: n -Root a < n-root b by A4,A5,A6,Def1;
+    thus n-root a < n-root b by A4,A7,Def1;
   end;
-  now
+A8: now
     assume
-A5: ex m st n=2*m+1;
-    then consider m such that
-A6: n = 2*m + 1;
-A7: n>=0+1 by A6,XREAL_1:8;
-    now per cases;
-      suppose a>=0;
-        hence thesis by A1,A3,A7;
+A9: ex m st n=2*m+1;
+A10: n>=0+1 by A9,XREAL_1:8;
+A11: now per cases;
+      suppose
+A12:    a>=0;
+        thus thesis by A1,A3,A10,A12;
       end;
       suppose
-A8:     a<0;
-        then
-A9:     -a>0 by XREAL_1:60;
-        now per cases;
-          suppose b>=0;
-            then
-A10:        n-root b >= 0 by A7,Th8;
-            n -Root (-a) > 0 by A7,A9,PREPOWER:def 3;
-            then - n -Root (-a) < -0 by XREAL_1:26;
-            hence thesis by A5,A8,A10,Def1;
+A13:    a<0;
+A14:    -a>0 by A13,XREAL_1:60;
+A15:    now per cases;
+          suppose
+A16:        b>=0;
+A17:        n-root b >= 0 by A10,A16,Th8;
+A18:        n -Root (-a) > 0 by A10,A14,PREPOWER:def 3;
+A19:        - n -Root (-a) < -0 by A18,XREAL_1:26;
+            thus thesis by A9,A13,A17,A19,Def1;
           end;
-          suppose b<0;
-            then
-A11:        -b>=0;
-            -a>-b by A1,XREAL_1:26;
-            then n-root (-a) > n-root (-b) by A3,A7,A11;
-            then - n-root (-a) < - n-root (-b) by XREAL_1:26;
-            then n-root a < - n-root (-b) by A5,Th11;
-            hence thesis by A5,Th11;
+          suppose
+A20:        b<0;
+A21:        -a>-b by A1,XREAL_1:26;
+A22:        n-root (-a) > n-root (-b) by A3,A10,A20,A21;
+A23:        - n-root (-a) < - n-root (-b) by A22,XREAL_1:26;
+A24:        n-root a < - n-root (-b) by A9,A23,Th11;
+            thus thesis by A9,A24,Th11;
           end;
         end;
-        hence thesis;
+        thus thesis by A15;
       end;
     end;
-    hence thesis;
+    thus thesis by A11;
   end;
-  hence thesis by A1,A2,A3;
+  thus thesis by A1,A2,A3,A8;
 end;
 
 theorem Th19:
   a>=1 & n>=1 implies n-root a >= 1 & a >= n-root a
 proof
-  assume
-A1: a>=1 & n>=1;
-  then n -Root a >= 1 & a >= n -Root a by PREPOWER:38;
-  hence thesis by A1,Def1;
+  assume that
+A1: a>=1 and
+A2: n>=1;
+  A3: n -Root a >= 1 & a >= n -Root a by A1,A2,PREPOWER:38;
+  thus thesis by A2,A3,Def1;
 end;
 
 theorem
   a<=-1 & (ex m st n=2*m+1) implies n-root a <= -1 & a <= n-root a
 proof
-  assume
-A1: a<=-1 & (ex m st n=2*m+1);
-  then consider m such that
-A2: n = 2*m + 1;
-A3: n>=0+1 by A2,XREAL_1:8;
-  -a>=1 by A1,XREAL_1:27;
-  then n-root (-a) >= 1 & -a >= n-root (-a) by A3,Th19;
-  then - n-root (-a) <= -1 & a <= - n-root (-a) by XREAL_1:26,27;
-  hence thesis by A1,Th11;
+  assume that
+A1: a<=-1 and
+A2: ex m st n=2*m+1;
+A3: n>=0+1 & -a>=1 by A1,A2,XREAL_1:8,27;
+A4: n-root (-a) >= 1 by A3,Th19;
+A5: -a >= n-root (-a) by A3,Th19;
+A6: - n-root (-a) <= -1 by A4,XREAL_1:26;
+A7: a <= - n-root (-a) by A5,XREAL_1:27;
+  thus thesis by A2,A6,A7,Th11;
 end;
 
 theorem Th21:
   a>=0 & a<1 & n>=1 implies a <= n-root a & n-root a < 1
 proof
-  assume
-A1: a>=0 & a<1 & n>=1;
-  then a <= n -Root a & n -Root a < 1 by PREPOWER:39;
-  hence thesis by A1,Def1;
+  assume that
+A1: a>=0 and
+A2: a<1 and
+A3: n>=1;
+  A4: a <= n -Root a & n -Root a < 1 by A1,A2,A3,PREPOWER:39;
+  thus thesis by A1,A3,A4,Def1;
 end;
 
 theorem
   a>-1 & a<=0 & (ex m st n=2*m+1) implies a >= n-root a & n-root a > -1
 proof
-  assume
-A1: a>-1 & a<=0 & (ex m st n=2*m+1);
-  then consider m such that
-A2: n = 2*m + 1;
-A3: n>=0+1 by A2,XREAL_1:8;
-A4: -a<1 by A1,XREAL_1:27;
-  -a>=-0 by A1;
-  then n-root (-a) < 1 & -a <= n-root (-a) by A3,A4,Th21;
-  then - n-root (-a) > -1 & a >= - n-root (-a) by XREAL_1:26,28;
-  hence thesis by A1,Th11;
+  assume that
+A1: a>-1 and
+A2: a<=0 and
+A3: ex m st n=2*m+1;
+A4: n>=0+1 & -a<1 by A1,A3,XREAL_1:8,27;
+A5: n-root (-a) < 1 by A2,A4,Th21;
+A6: -a <= n-root (-a) by A2,A4,Th21;
+A7: - n-root (-a) > -1 by A5,XREAL_1:26;
+A8: a >= - n-root (-a) by A6,XREAL_1:28;
+  thus thesis by A3,A7,A8,Th11;
 end;
 
 theorem Th23:
@@ -678,8 +679,8 @@ theorem Th23:
 proof
   assume
 A1: a>0 & n>=1;
-  then n -Root a - 1 <= (a-1)/n by PREPOWER:40;
-  hence thesis by A1,Def1;
+A2: n -Root a - 1 <= (a-1)/n by A1,PREPOWER:40;
+  thus thesis by A1,A2,Def1;
 end;
 
 theorem Th24:
@@ -690,14 +691,14 @@ proof
   assume that
 A1: a > 0 and
 A2: for n st n>=1 holds s.n = n-root a;
-  now
+A3: now
     let n;
     assume
-A3: n>=1;
-    hence s.n = n-root a by A2
-      .= n -Root a by A1,A3,Def1;
+A4: n>=1;
+    thus s.n = n-root a by A2,A4
+      .= n -Root a by A1,A4,Def1;
   end;
-  hence thesis by A1,PREPOWER:42;
+  thus thesis by A1,A3,PREPOWER:42;
 end;
 
 definition
@@ -708,41 +709,48 @@ definition
   it = 0 if a = 0 & b > 0,
   ex k st k = b & it = a #Z k if b is Integer;
   consistency
-   proof  let IT be real number;
+  proof
+    let IT be real number;
     thus a > 0 & a = 0 & b > 0 implies
-     (IT = a #R b iff IT = 0);
+    (IT = a #R b iff IT = 0);
     thus a > 0 & b is Integer implies
-     (IT = a #R b iff ex k st k = b & IT = a #Z k)
-     proof
+    (IT = a #R b iff ex k st k = b & IT = a #Z k)
+    proof
       assume
-Z1:    a > 0;
-      assume b is Integer;
-       then reconsider b as Integer;
-       a #R b = a #Q b by Z1,PREPOWER:88
-          .= a #Z b by Z1,PREPOWER:113;
-      hence thesis;
-     end;
-     a = 0 & b > 0 & b is Integer implies
-      (IT = 0 iff ex k st k = b & IT = a #Z k)
-     proof assume
-Z1:    a = 0;
+A1:   a > 0;
       assume
-Z2:    b > 0 & b is Integer;
-       then b in NAT by INT_1:16;
-       then reconsider b as Nat;
-        a #Z b = a |^ b by PREPOWER:46
-              .= 0 by Z1,Z2,NAT_1:14,NEWTON:16;
-      hence thesis;
-     end;
-    hence thesis;
-   end;
+A2:   b is Integer;
+      reconsider b as Integer by A2;
+A3:   a #R b = a #Q b by A1,PREPOWER:88
+        .= a #Z b by A1,PREPOWER:113;
+      thus thesis by A3;
+    end;
+A4: a = 0 & b > 0 & b is Integer implies
+    (IT = 0 iff ex k st k = b & IT = a #Z k)
+    proof
+      assume
+A5:   a = 0;
+      assume that
+A6:   b > 0 and
+A7:   b is Integer;
+A8:   b in NAT by A6,A7,INT_1:16;
+      reconsider b as Nat by A8;
+A9:   a #Z b = a |^ b by PREPOWER:46
+        .= 0 by A5,A6,NAT_1:14,NEWTON:16;
+      thus thesis by A9;
+    end;
+    thus thesis by A4;
+  end;
   existence
-  proof now assume b is Integer;
-      then reconsider k = b as Integer;
+  proof
+A10: now
+      assume
+A11:  b is Integer;
+      reconsider k = b as Integer by A11;
       take c = a #Z k;
       thus ex k st k = b & c = a #Z k;
     end;
-    hence thesis;
+    thus thesis by A10;
   end;
   uniqueness;
 end;
@@ -758,21 +766,22 @@ canceled 4;
 theorem Th29:
   a to_power 0 = 1
 proof
- thus a to_power 0 = a #Z 0 by Def2
-     .= 1 by PREPOWER:44;
+  thus a to_power 0 = a #Z 0 by Def2
+    .= 1 by PREPOWER:44;
 end;
 
 theorem Th30:
   a to_power 1 = a
 proof
- thus a to_power 1 = a #Z 1 by Def2
-     .= a by PREPOWER:45;
+  thus a to_power 1 = a #Z 1 by Def2
+    .= a by PREPOWER:45;
 end;
 
 theorem Th31:
   1 to_power a = 1
 proof
-A1: 1 #R a <> 0 by PREPOWER:95; thus
+A1: 1 #R a <> 0 by PREPOWER:95;
+  thus
   1 to_power a = (1/1) #R a by Def2
     .= (1 #R a) / (1 #R a) by PREPOWER:94
     .= 1 by A1,XCMPLX_1:60;
@@ -783,10 +792,10 @@ theorem Th32:
 proof
   assume
 A1: a > 0;
-  then a #R (b+c) = a #R b * a #R c by PREPOWER:89;
-  then a #R (b+c) = a #R b * a to_power c by A1,Def2;
-  then a #R (b+c) = a to_power b * a to_power c by A1,Def2;
-  hence thesis by A1,Def2;
+A2: a #R (b+c) = a #R b * a #R c by A1,PREPOWER:89;
+A3: a #R (b+c) = a #R b * a to_power c by A1,A2,Def2;
+A4: a #R (b+c) = a to_power b * a to_power c by A1,A3,Def2;
+  thus thesis by A1,A4,Def2;
 end;
 
 theorem Th33:
@@ -794,9 +803,9 @@ theorem Th33:
 proof
   assume
 A1: a > 0;
-  then a #R (-c) = 1 / a #R c by PREPOWER:90;
-  then a #R (-c) = 1 / a to_power c by A1,Def2;
-  hence thesis by A1,Def2;
+A2: a #R (-c) = 1 / a #R c by A1,PREPOWER:90;
+A3: a #R (-c) = 1 / a to_power c by A1,A2,Def2;
+  thus thesis by A1,A3,Def2;
 end;
 
 theorem Th34:
@@ -804,36 +813,36 @@ theorem Th34:
 proof
   assume
 A1: a > 0;
-  then a #R (b-c) = a #R b / a #R c by PREPOWER:91;
-  then a #R (b-c) = a #R b / a to_power c by A1,Def2;
-  then a #R (b-c) = a to_power b / a to_power c by A1,Def2;
-  hence thesis by A1,Def2;
+A2: a #R (b-c) = a #R b / a #R c by A1,PREPOWER:91;
+A3: a #R (b-c) = a #R b / a to_power c by A1,A2,Def2;
+A4: a #R (b-c) = a to_power b / a to_power c by A1,A3,Def2;
+  thus thesis by A1,A4,Def2;
 end;
 
 theorem
   a>0 & b>0 implies (a*b) to_power c = a to_power c*b to_power c
 proof
-  assume
-A1: a > 0 & b > 0;
-  then
-A2: a * b > 0 by XREAL_1:131;
-  (a * b) #R c = a #R c * b #R c by A1,PREPOWER:92;
-  then (a * b) #R c = a #R c * b to_power c by A1,Def2;
-  then (a * b) #R c = a to_power c * b to_power c by A1,Def2;
-  hence thesis by A2,Def2;
+  assume that
+A1: a > 0 and
+A2: b > 0;
+A3: a * b > 0 by A1,A2,XREAL_1:131;
+A4: (a * b) #R c = a #R c * b #R c by A1,A2,PREPOWER:92;
+A5: (a * b) #R c = a #R c * b to_power c by A2,A4,Def2;
+A6: (a * b) #R c = a to_power c * b to_power c by A1,A5,Def2;
+  thus thesis by A3,A6,Def2;
 end;
 
 theorem Th36:
   a>0 & b>0 implies (a/b) to_power c = a to_power c/b to_power c
 proof
-  assume
-A1: a > 0 & b > 0;
-  then
-A2: a / b > 0 by XREAL_1:141;
-  (a / b) #R c = a #R c / b #R c by A1,PREPOWER:94;
-  then (a / b) #R c = a #R c / b to_power c by A1,Def2;
-  then (a / b) #R c = a to_power c / b to_power c by A1,Def2;
-  hence thesis by A2,Def2;
+  assume that
+A1: a > 0 and
+A2: b > 0;
+A3: a / b > 0 by A1,A2,XREAL_1:141;
+A4: (a / b) #R c = a #R c / b #R c by A1,A2,PREPOWER:94;
+A5: (a / b) #R c = a #R c / b to_power c by A2,A4,Def2;
+A6: (a / b) #R c = a to_power c / b to_power c by A1,A5,Def2;
+  thus thesis by A3,A6,Def2;
 end;
 
 theorem Th37:
@@ -841,8 +850,7 @@ theorem Th37:
 proof
   assume
 A1: a>0;
-  then 1/a>0;
-  hence (1/a) to_power b = (1/a) #R b by Def2
+  thus (1/a) to_power b = (1/a) #R b by A1,Def2
     .= 1/a #R b by A1,PREPOWER:93
     .= 1/a to_power b by A1,Def2
     .= a to_power (-b) by A1,Th33;
@@ -853,12 +861,11 @@ theorem Th38:
 proof
   assume
 A1: a > 0;
-  then
-A2: a #R b > 0 by PREPOWER:95;
-  a #R b #R c = a #R (b * c) by A1,PREPOWER:105;
-  then a #R b #R c = a to_power (b * c) by A1,Def2;
-  then a #R b to_power c = a to_power (b * c) by A2,Def2;
-  hence thesis by A1,Def2;
+A2: a #R b > 0 by A1,PREPOWER:95;
+A3: a #R b #R c = a #R (b * c) by A1,PREPOWER:105;
+A4: a #R b #R c = a to_power (b * c) by A1,A3,Def2;
+A5: a #R b to_power c = a to_power (b * c) by A2,A4,Def2;
+  thus thesis by A1,A5,Def2;
 end;
 
 theorem Th39:
@@ -866,111 +873,114 @@ theorem Th39:
 proof
   assume
 A1: a > 0;
-  then a #R b > 0 by PREPOWER:95;
-  hence thesis by A1,Def2;
+A2: a #R b > 0 by A1,PREPOWER:95;
+  thus thesis by A1,A2,Def2;
 end;
 
 theorem Th40:
   a > 1 & b > 0 implies a to_power b > 1
 proof
-  assume
-A1: a > 1 & b > 0;
-  then a #R b > 1 by PREPOWER:100;
-  hence thesis by A1,Def2;
+  assume that
+A1: a > 1 and
+A2: b > 0;
+A3: a #R b > 1 by A1,A2,PREPOWER:100;
+  thus thesis by A1,A3,Def2;
 end;
 
 theorem Th41:
   a > 1 & b < 0 implies a to_power b < 1
 proof
-  assume
-A1: a > 1 & b < 0;
-  then a #R b < 1 by PREPOWER:102;
-  hence thesis by A1,Def2;
+  assume that
+A1: a > 1 and
+A2: b < 0;
+A3: a #R b < 1 by A1,A2,PREPOWER:102;
+  thus thesis by A1,A3,Def2;
 end;
 
 theorem
   a > 0 & a < b & c > 0 implies a to_power c < b to_power c
 proof
-  assume
-A1: a > 0 & a < b & c > 0;
-  then
-A2: a to_power c > 0 by Th39;
-A3: a to_power c <> 0 by A1,Th39;
-  a/a<b/a by A1,XREAL_1:76;
-  then 1<b/a by A1,XCMPLX_1:60;
-  then (b/a) to_power c > 1 by A1,Th40;
-  then b to_power c / a to_power c > 1 by A1,Th36;
-  then b to_power c/a to_power c*a to_power c>1*a to_power c by A2,XREAL_1:70;
-  hence thesis by A3,XCMPLX_1:88;
+  assume that
+A1: a > 0 and
+A2: a < b and
+A3: c > 0;
+A4: a to_power c > 0 by A1,Th39;
+A5: a to_power c <> 0 by A1,Th39;
+A6: a/a<b/a by A1,A2,XREAL_1:76;
+A7: 1<b/a by A1,A6,XCMPLX_1:60;
+A8: (b/a) to_power c > 1 by A3,A7,Th40;
+A9: b to_power c / a to_power c > 1 by A1,A2,A8,Th36;
+A10: b to_power c/a to_power c*a to_power c>1*a to_power c by A4,A9,
+  XREAL_1:70;
+  thus thesis by A5,A10,XCMPLX_1:88;
 end;
 
 theorem
   a > 0 & a < b & c < 0 implies a to_power c > b to_power c
 proof
-  assume
-A1: a > 0 & a < b & c < 0;
-  then
-A2: a to_power c > 0 by Th39;
-A3: a to_power c <> 0 by A1,Th39;
-  a/a<b/a by A1,XREAL_1:76;
-  then 1<b/a by A1,XCMPLX_1:60;
-  then (b/a) to_power c < 1 by A1,Th41;
-  then b to_power c / a to_power c < 1 by A1,Th36;
-  then b to_power c/a to_power c*a to_power c <1*a to_power c by A2,XREAL_1:70;
-  hence thesis by A3,XCMPLX_1:88;
+  assume that
+A1: a > 0 and
+A2: a < b and
+A3: c < 0;
+A4: a to_power c > 0 by A1,Th39;
+A5: a to_power c <> 0 by A1,Th39;
+A6: a/a<b/a by A1,A2,XREAL_1:76;
+A7: 1<b/a by A1,A6,XCMPLX_1:60;
+A8: (b/a) to_power c < 1 by A3,A7,Th41;
+A9: b to_power c / a to_power c < 1 by A1,A2,A8,Th36;
+A10: b to_power c/a to_power c*a to_power c <1*a to_power c by A4,A9,
+  XREAL_1:70;
+  thus thesis by A5,A10,XCMPLX_1:88;
 end;
 
 theorem Th44:
   a < b & c > 1 implies c to_power a < c to_power b
 proof
-  assume
-A1: a < b & c > 1;
-  then
-A2: c to_power a > 0 by Th39;
-A3: c to_power a <> 0 by A1,Th39;
-  b-a>0 by A1,XREAL_1:52;
-  then c to_power (b-a) > 1 by A1,Th40;
-  then c to_power b / c to_power a > 1 by A1,Th34;
-
-then c to_power b/c to_power a*c to_power a > 1*c to_power a by A2,XREAL_1:70;
-  hence thesis by A3,XCMPLX_1:88;
+  assume that
+A1: a < b and
+A2: c > 1;
+A3: c to_power a > 0 by A2,Th39;
+A4: c to_power a <> 0 by A2,Th39;
+A5: b-a>0 by A1,XREAL_1:52;
+A6: c to_power (b-a) > 1 by A2,A5,Th40;
+A7: c to_power b / c to_power a > 1 by A2,A6,Th34;
+A8: c to_power b/c to_power a*c to_power a > 1*c to_power a by A3,A7,XREAL_1:70
+  ;
+  thus thesis by A4,A8,XCMPLX_1:88;
 end;
 
 theorem Th45:
   a < b & c > 0 & c < 1 implies c to_power a > c to_power b
 proof
-  assume
-A1: a < b & c > 0 & c < 1;
-  then
-A2: (1/c)>0;
-  then
-A3: (1/c) to_power a > 0 by Th39;
-A4: (1/c) to_power a <> 0 by A2,Th39;
-  c to_power a > 0 by A1,Th39;
-  then
-A5: 1/c to_power a > 0;
-  c/c <1/c by A1,XREAL_1:76;
-  then
-A6: 1<1/c by A1,XCMPLX_1:60;
-  b-a>0 by A1,XREAL_1:52;
-  then (1/c) to_power (b-a) > 1 by A6,Th40;
-  then (1/c) to_power b / (1/c) to_power a > 1 by A1,Th34;
-  then (1/c) to_power b/(1/c) to_power a*(1/c) to_power a >
-  1*(1/c) to_power a by A3,XREAL_1:70;
-  then (1/c) to_power b > (1/c) to_power a by A4,XCMPLX_1:88;
-  then 1 to_power b/c to_power b > (1/c) to_power a by A1,Th36;
-  then 1 / c to_power b > (1/c) to_power a by Th31;
-  then 1 / c to_power b > 1 to_power a/c to_power a by A1,Th36;
-  then 1 / c to_power b > 1 / c to_power a by Th31;
-  hence thesis by A5,XREAL_1:93;
+  assume that
+A1: a < b and
+A2: c > 0 and
+A3: c < 1;
+A4: (1/c) to_power a > 0 by A2,Th39;
+A5: (1/c) to_power a <> 0 by A2,Th39;
+A6: c to_power a > 0 by A2,Th39;
+A7: c/c <1/c by A2,A3,XREAL_1:76;
+A8: 1<1/c by A2,A7,XCMPLX_1:60;
+A9: b-a>0 by A1,XREAL_1:52;
+A10: (1/c) to_power (b-a) > 1 by A8,A9,Th40;
+A11: (1/c) to_power b / (1/c) to_power a > 1 by A2,A10,Th34;
+A12: (1/c) to_power b/(1/c) to_power a*(1/c) to_power a >
+  1*(1/c) to_power a by A4,A11,XREAL_1:70;
+A13: (1/c) to_power b > (1/c) to_power a by A5,A12,XCMPLX_1:88;
+A14: 1 to_power b/c to_power b > (1/c) to_power a by A2,A13,Th36;
+A15: 1 / c to_power b > (1/c) to_power a by A14,Th31;
+A16: 1 / c to_power b > 1 to_power a/c to_power a by A2,A15,Th36;
+A17: 1 / c to_power b > 1 / c to_power a by A16,Th31;
+  thus thesis by A6,A17,XREAL_1:93;
 end;
 
-registration let a be real number, n be Nat;
- identify a to_power n with a |^ n;
- compatibility
+registration
+  let a be real number, n be Nat;
+  identify a to_power n with a |^ n;
+  compatibility
   proof
-   thus a to_power n = a #Z n by Def2
-        .= a |^ n by PREPOWER:46;
+    thus a to_power n = a #Z n by Def2
+      .= a |^ n by PREPOWER:46;
   end;
 end;
 
@@ -987,57 +997,60 @@ theorem Th51:
 proof
   assume
 A1: a>0;
-  hence a to_power p = a #R p by Def2
+  thus a to_power p = a #R p by A1,Def2
     .= a #Q p by A1,PREPOWER:88;
 end;
 
 theorem Th52:
   a>=0 & n>=1 implies a to_power (1/n) = n-root a
 proof
-  assume
-A1: a>=0 & n>=1;
+  assume that
+A1: a>=0 and
+A2: n>=1;
   reconsider p=n" as Rational;
-A3: 1/n>0 by A1;
-  now per cases by A1;
+A3: now per cases by A1;
     suppose
 A4:   a>0;
-      hence a to_power (1/n) = a #Q p by Th51
-        .= n -Root a by A1,A4,PREPOWER:61;
+      thus a to_power (1/n) = a #Q p by A4,Th51
+        .= n -Root a by A2,PREPOWER:61;
     end;
     suppose
 A5:   a=0;
-      hence a to_power (1/n) = 0 by A3,Def2
+      thus a to_power (1/n) = 0 by A2,A5,Def2
         .= n -Root a
-      by A1,A5,PREPOWER:def 3;
+      by A2,A5,PREPOWER:def 3;
     end;
   end;
-  hence thesis by A1,Def1;
+  thus thesis by A1,A2,A3,Def1;
 end;
 
 theorem Th53:
   a to_power 2 = a^2
 proof
-  now per cases;
+A1: now per cases;
     suppose
-A1:   a>0; thus
+A2:   a>0;
+      thus
       a to_power 2 = a to_power (1+1)
-        .= a to_power 1 * a to_power 1 by A1,Th32
+        .= a to_power 1 * a to_power 1 by A2,Th32
         .= a to_power 1 * a by Th30
         .= a^2 by Th30;
     end;
-    suppose a=0;
-      hence thesis by Def2;
+    suppose
+A3:   a=0;
+      thus thesis by A3,Def2;
     end;
     suppose
-A2:   a<0;
-      reconsider l=1 as Integer; thus
+A4:   a<0;
+      reconsider l=1 as Integer;
+      thus
       a to_power 2 = a #Z (l+l) by Def2
-        .= a #Z l * a #Z l by A2,PREPOWER:54
+        .= a #Z l * a #Z l by A4,PREPOWER:54
         .= a * a #Z l by PREPOWER:45
         .= a^2 by PREPOWER:45;
     end;
   end;
-  hence thesis;
+  thus thesis by A1;
 end;
 
 theorem Th54:
@@ -1048,11 +1061,11 @@ A1: a<>0;
   given l such that
 A2: k=2*l;
   reconsider l1=2 as Integer;
-  now per cases by A1;
+A3: now per cases by A1;
     suppose
-A3:   a>0;
-     thus
-      a to_power k = (a to_power 2) to_power l by A2,A3,Th38
+A4:   a>0;
+      thus
+      a to_power k = (a to_power 2) to_power l by A2,A4,Th38
         .= (a^2) to_power l by Th53
         .= ((-a)^2) to_power l
         .= ((-a) to_power 2) to_power l by Th53
@@ -1061,9 +1074,10 @@ A3:   a>0;
         .= (-a) #Z (l1*l) by PREPOWER:55
         .= (-a) to_power k by A2,Def2;
     end;
-    suppose a<0;
-      then -a>0 by XREAL_1:60;
-      hence (-a) to_power k = ((-a) to_power 2) to_power l by A2,Th38
+    suppose
+A5:   a<0;
+A6:   -a>0 by A5,XREAL_1:60;
+      thus (-a) to_power k = ((-a) to_power 2) to_power l by A2,A6,Th38
         .= ((-a)^2) to_power l by Th53
         .= (a^2) to_power l
         .= (a to_power 2) to_power l by Th53
@@ -1073,7 +1087,7 @@ A3:   a>0;
         .= a to_power k by A2,Def2;
     end;
   end;
-  hence thesis;
+  thus thesis by A3;
 end;
 
 theorem
@@ -1084,11 +1098,11 @@ A1: a<>0;
   given l such that
 A2: k=2*l + 1;
   reconsider l1=1 as Integer;
-  now per cases by A1;
+A3: now per cases by A1;
     suppose
-A3:   a>0;
-A5:   -a<>-0 by A3;
-      a to_power k = a to_power (2*l) * a to_power 1 by A2,A3,Th32
+A4:   a>0;
+A5:   -a<>-0 by A4;
+A6:   a to_power k = a to_power (2*l) * a to_power 1 by A2,A4,Th32
         .= a to_power (2*l) * a by Th30
         .= (-a) to_power (2*l) * a by A1,Th54
         .= - (-a) to_power (2*l) * (-a)
@@ -1096,22 +1110,23 @@ A5:   -a<>-0 by A3;
         .= - (-a) #Z (2*l) * (-a) #Z l1 by PREPOWER:45
         .= - (-a) #Z k by A2,A5,PREPOWER:54
         .= - (-a) to_power k by Def2;
-      hence thesis;
+      thus thesis by A6;
     end;
     suppose
-A6:   a<0;
-      then -a>0 by XREAL_1:60;
-      hence (-a) to_power k = (-a) to_power (2*l) * (-a) to_power 1 by A2,Th32
+A7:   a<0;
+A8:   -a>0 by A7,XREAL_1:60;
+      thus (-a) to_power k = (-a) to_power (2*l) * (-a) to_power 1 by A2,A8,
+      Th32
         .= (-a) to_power (2*l) * (-a) by Th30
         .= a to_power (2*l) * (-a) by A1,Th54
         .= - a to_power (2*l) * a
         .= - a #Z (2*l) * a by Def2
         .= - a #Z (2*l) * a #Z l1 by PREPOWER:45
-        .= - a #Z k by A2,A6,PREPOWER:54
+        .= - a #Z k by A2,A7,PREPOWER:54
         .= - a to_power k by Def2;
     end;
   end;
-  hence thesis;
+  thus thesis by A3;
 end;
 
 theorem
@@ -1120,42 +1135,49 @@ theorem
 theorem Th57:
   a>0 & a<>1 & c <>d implies a to_power c <> a to_power d
 proof
-  assume
-A1: a>0 & a<>1 & c <>d;
-  now per cases by A1,XXREAL_0:1;
+  assume that
+A1: a>0 and
+A2: a<>1 and
+A3: c <>d;
+A4: now per cases by A3,XXREAL_0:1;
     suppose
-A2:   c <d;
-      now per cases by A1,XXREAL_0:1;
-        suppose a<1;
-          hence thesis by A1,A2,Th45;
+A5:   c <d;
+A6:   now per cases by A2,XXREAL_0:1;
+        suppose
+A7:       a<1;
+          thus thesis by A1,A5,A7,Th45;
         end;
-        suppose a>1;
-          hence thesis by A2,Th44;
+        suppose
+A8:       a>1;
+          thus thesis by A5,A8,Th44;
         end;
       end;
-      hence thesis;
+      thus thesis by A6;
     end;
     suppose
-A3:   c>d;
-      now per cases by A1,XXREAL_0:1;
-        suppose a<1;
-          hence thesis by A1,A3,Th45;
+A9:   c>d;
+A10:  now per cases by A2,XXREAL_0:1;
+        suppose
+A11:      a<1;
+          thus thesis by A1,A9,A11,Th45;
         end;
-        suppose a>1;
-          hence thesis by A3,Th44;
+        suppose
+A12:      a>1;
+          thus thesis by A9,A12,Th44;
         end;
       end;
-      hence thesis;
+      thus thesis by A10;
     end;
   end;
-  hence thesis;
+  thus thesis by A4;
 end;
 
 definition
   let a,b be real number;
   assume that
-A1: a>0 & a<>1 and
-A2: b>0;
+A1: a>0 and
+A2: a<>1 and
+A3: b>0;
   func log(a,b) -> real number means
   :Def3:
   a to_power it = b;
@@ -1163,286 +1185,261 @@ A2: b>0;
   proof
     reconsider a1=a, b1=b as Real by XREAL_0:def 1;
     set X = {c where c is Real: a to_power c <= b};
-    X is Subset of REAL
+A4: for x holds x in X implies x in REAL
     proof
-      for x holds x in X implies x in REAL
-      proof
-        let x;
-        assume x in X;
-        then ex c be Real st x = c & a to_power c <= b;
-        hence thesis;
-      end;
-      hence thesis by TARSKI:def 3;
+      let x;
+      assume
+A5:   x in X;
+A6:   ex c be Real st x = c & a to_power c <= b by A5;
+      thus thesis by A6;
     end;
-    then reconsider X as Subset of REAL;
-A3: ex d st d in X
+    reconsider X as Subset of REAL by A4,TARSKI:def 3;
+A7: ex d st d in X
     proof
-A4:   now
+A8:   now
         let a,b be real number such that
-A5:     a>1 & b>0;
+A9:     a>1 and
+A10:    b>0;
         reconsider a1=a, b1=b as Real by XREAL_0:def 1;
         set e = a1-1;
         consider n such that
-A6:     n>1/(b*e) by SEQ_4:10;
-        e>0-1 by A5,XREAL_1:11;
-        then
-A7:     (1 + e) to_power n >= 1 + n * e by PREPOWER:24;
-        1 + n * e >= 0 + n * e by XREAL_1:8;
-        then
-A8:     (1 + e) to_power n >= n * e by A7,XXREAL_0:2;
-A9:     e>1-1 by A5,XREAL_1:11;
-        then n*e>1/(b*e)*e by A6,XREAL_1:70;
-        then n*e>=1/b by A9,XCMPLX_1:93;
-        then
-A10:    a to_power n >= 1/b by A8,XXREAL_0:2;
-        1/b > 0 by A5;
-        then 1/a to_power n <= 1/(1/b) by A10,XREAL_1:87;
-        then 1/a to_power n <= b;
-        then a1 to_power (-n) <= b1 by A5,Th33;
-        hence ex d st a to_power d <= b;
+A11:    n>1/(b*e) by SEQ_4:10;
+A12:    e>0-1 by A9,XREAL_1:11;
+A13:    (1 + e) to_power n >= 1 + n * e by A12,PREPOWER:24;
+A14:    1 + n * e >= 0 + n * e by XREAL_1:8;
+A15:    (1 + e) to_power n >= n * e by A13,A14,XXREAL_0:2;
+A16:    e>1-1 by A9,XREAL_1:11;
+A17:    n*e>1/(b*e)*e by A11,A16,XREAL_1:70;
+A18:    n*e>=1/b by A16,A17,XCMPLX_1:93;
+A19:    a to_power n >= 1/b by A15,A18,XXREAL_0:2;
+A20:    1/a to_power n <= 1/(1/b) by A10,A19,XREAL_1:87;
+A21:    a1 to_power (-n) <= b1 by A9,A20,Th33;
+        thus ex d st a to_power d <= b by A21;
       end;
-      now per cases by A1,XXREAL_0:1;
-        suppose a>1;
-          hence ex d st a to_power d <= b by A2,A4;
+A22:  now per cases by A2,XXREAL_0:1;
+        suppose
+A23:      a>1;
+          thus ex d st a to_power d <= b by A3,A8,A23;
         end;
-        suppose a<1;
-          then 1/a >1/1 by A1,XREAL_1:90;
-          then consider d such that
-A11:      (1/a) to_power d <= b by A2,A4;
-          a1 to_power (-d) <= b1 by A1,A11,Th37;
-          hence ex e st a to_power e <= b;
+        suppose
+A24:      a<1;
+A25:      1/a >1/1 by A1,A24,XREAL_1:90;
+          consider d such that
+A26:      (1/a) to_power d <= b by A3,A8,A25;
+A27:      a1 to_power (-d) <= b1 by A1,A26,Th37;
+          thus ex e st a to_power e <= b by A27;
         end;
       end;
-      then consider d such that
-A12:  a to_power d <= b;
+      consider d such that
+A28:  a to_power d <= b by A22;
       take d;
-      d is Real by XREAL_0:def 1;
-      hence thesis by A12;
+A29:  d is Real by XREAL_0:def 1;
+      thus thesis by A28,A29;
     end;
-    now per cases by A1,XXREAL_0:1;
+A30: now per cases by A2,XXREAL_0:1;
       suppose
-A13:    a>1;
-A14:    X is bounded_above
+A31:    a>1;
+A32:    X is bounded_above
         proof consider n such that
-A15:      n > (b1-1)/(a1-1) by SEQ_4:10;
-          a-1>1-1 by A13,XREAL_1:11;
-          then n*(a-1) > b-1 by A15,XREAL_1:79;
-          then
-A16:      1 + n*(a-1) > 1+(b-1) by XREAL_1:8;
-          a-1>0-1 by A1,XREAL_1:11;
-          then (1+(a1-1)) to_power n >= 1 + n*(a1-1) by PREPOWER:24;
-          then
-A17:      a to_power n > b by A16,XXREAL_0:2;
-          now
+A33:      n > (b1-1)/(a1-1) by SEQ_4:10;
+A34:      a-1>1-1 by A31,XREAL_1:11;
+A35:      n*(a-1) > b-1 by A33,A34,XREAL_1:79;
+A36:      1 + n*(a-1) > 1+(b-1) by A35,XREAL_1:8;
+A37:      a-1>0-1 by A1,XREAL_1:11;
+A38:      (1+(a1-1)) to_power n >= 1 + n*(a1-1) by A37,PREPOWER:24;
+A39:      a to_power n > b by A36,A38,XXREAL_0:2;
+A40:      now
             let c be real number;
-            assume c in X;
-            then ex d be Real st d=c & a to_power d <= b;
-            then a1 to_power c <= a1 to_power n by A17,XXREAL_0:2;
-            hence c <=n by A13,Th44;
+            assume
+A41:        c in X;
+A42:        ex d be Real st d=c & a to_power d <= b by A41;
+A43:        a1 to_power c <= a1 to_power n by A39,A42,XXREAL_0:2;
+            thus c <=n by A31,A43,Th44;
           end;
-          hence thesis by SEQ_4:def 1;
+          thus thesis by A40,SEQ_4:def 1;
         end;
         take d = upper_bound X;
-A18:    not b < a to_power d
+A44:    not b < a to_power d
         proof
-          assume a to_power d > b;
-          then consider e be real number such that
-A19:      b<e & e<a to_power d by XREAL_1:7;
+          assume
+A45:      a to_power d > b;
+          consider e be real number such that
+A46:      b<e and
+A47:      e<a to_power d by A45,XREAL_1:7;
           reconsider e as Real by XREAL_0:def 1;
           consider n such that
-A20:      n > (a1-1)/(e/b1-1) by SEQ_4:10;
+A48:      n > (a1-1)/(e/b1-1) by SEQ_4:10;
           reconsider m = max(1,n) as Element of NAT by XXREAL_0:16;
-          n<=m by XXREAL_0:25;
-          then
-A21:      (a-1)/(e/b-1) < m by A20,XXREAL_0:2;
-          e/b>1 by A2,A19,XREAL_1:189;
-          then e/b-1>1-1 by XREAL_1:11;
-          then
-A22:      (a-1)<m*(e/b-1) by A21,XREAL_1:79;
-A23:      1<=m by XXREAL_0:25;
-          then (a-1)/m<e/b-1 by A22,XREAL_1:85;
-          then
-A24:      (a-1)/m+1<e/b-1+1 by XREAL_1:8;
-          m-root a1 - 1 <= (a1-1)/m by A1,Th23,XXREAL_0:25;
-          then m-root a - 1 + 1 <= (a-1)/m + 1 by XREAL_1:8;
-          then m-root a <= e/b by A24,XXREAL_0:2;
-          then a1 to_power (1/m) <= e/b1 by A1,Th52,XXREAL_0:25;
-          then
-A25:      a to_power (1/m) * b <= e by A2,XREAL_1:85;
-          1/m>0 by A23;
-          then consider c be real number such that
-A26:      c in X & d-1/m < c by A3,A14,SEQ_4:def 4;
+A49:      n<=m by XXREAL_0:25;
+A50:      (a-1)/(e/b-1) < m by A48,A49,XXREAL_0:2;
+A51:      e/b>1 by A3,A46,XREAL_1:189;
+A52:      e/b-1>1-1 by A51,XREAL_1:11;
+A53:      (a-1)<m*(e/b-1) by A50,A52,XREAL_1:79;
+A54:      1<=m by XXREAL_0:25;
+A55:      (a-1)/m<e/b-1 by A53,A54,XREAL_1:85;
+A56:      (a-1)/m+1<e/b-1+1 by A55,XREAL_1:8;
+A57:      m-root a1 - 1 <= (a1-1)/m by A1,Th23,XXREAL_0:25;
+A58:      m-root a - 1 + 1 <= (a-1)/m + 1 by A57,XREAL_1:8;
+A59:      m-root a <= e/b by A56,A58,XXREAL_0:2;
+A60:      a1 to_power (1/m) <= e/b1 by A1,A59,Th52,XXREAL_0:25;
+A61:      a to_power (1/m) * b <= e by A3,A60,XREAL_1:85;
+          consider c be real number such that
+A62:      c in X and
+A63:      d-1/m < c by A7,A32,A54,SEQ_4:def 4;
           reconsider c as Real by XREAL_0:def 1;
-A27:      ex g being Real st g=c & a to_power g <= b by A26;
-          a1 to_power (1/m) >= 0 by A1,Th39;
-
-then a to_power c * a to_power (1/m) <= a to_power (1/m)*b by A27,XREAL_1:66;
-          then a to_power c * a to_power (1/m) <= e by A25,XXREAL_0:2;
-          then
-A28:      a1 to_power (c + 1/m) <= e by A1,Th32;
-          d<c + 1/m by A26,XREAL_1:21;
-          then a1 to_power d <= a1 to_power (c + 1/m) by A13,Th44;
-          hence contradiction by A19,A28,XXREAL_0:2;
+A64:      ex g being Real st g=c & a to_power g <= b by A62;
+A65:      a1 to_power (1/m) >= 0 by A1,Th39;
+A66:      a to_power c * a to_power (1/m) <= a to_power (1/m)*b by A64,A65,
+          XREAL_1:66;
+A67:      a to_power c * a to_power (1/m) <= e by A61,A66,XXREAL_0:2;
+A68:      a1 to_power (c + 1/m) <= e by A1,A67,Th32;
+A69:      d<c + 1/m by A63,XREAL_1:21;
+A70:      a1 to_power d <= a1 to_power (c + 1/m) by A31,A69,Th44;
+          thus contradiction by A47,A68,A70,XXREAL_0:2;
         end;
-        not a to_power d < b
+A71:    not a to_power d < b
         proof
-          assume a to_power d < b;
-          then consider e being real number such that
-A29:      a to_power d<e & e<b by XREAL_1:7;
+          assume
+A72:      a to_power d < b;
+          consider e being real number such that
+A73:      a to_power d<e and
+A74:      e<b by A72,XREAL_1:7;
           reconsider e as Real by XREAL_0:def 1;
-A30:      a1 to_power d > 0 by A1,Th39;
-          then b/e>1 by A29,XREAL_1:189;
-          then
-A31:      b/e-1>1-1 by XREAL_1:11;
+A75:      a1 to_power d > 0 by A1,Th39;
+A76:      b/e>1 by A73,A74,A75,XREAL_1:189;
+A77:      b/e-1>1-1 by A76,XREAL_1:11;
           deffunc F(Element of NAT) = $1-root a;
           consider s being Real_Sequence such that
-A32:      for n holds s.n = F(n) from SEQ_1:sch 1;
-          for n st n>=1 holds s.n = n-root a1 by A32;
-          then s is convergent & lim s = 1 by A1,Th24;
-          then consider n such that
-A33:      for m st m>=n holds abs(s.m - 1)<b/e-1 by A31,SEQ_2:def 7;
+A78:      for n holds s.n = F(n) from SEQ_1:sch 1;
+A79:      for n st n>=1 holds s.n = n-root a1 by A78;
+A80:      s is convergent & lim s = 1 by A1,A79,Th24;
+          consider n such that
+A81:      for m st m>=n holds abs(s.m - 1)<b/e-1 by A77,A80,SEQ_2:def 7;
           reconsider m = max(1,n) as Element of NAT by XXREAL_0:16;
-A34:      m>=n & m>=1 by XXREAL_0:25;
-          abs(s.m - 1)<b/e-1 by A33,XXREAL_0:25;
-          then
-A35:      abs(m-root a - 1)<b/e-1 by A32;
-          m-root a - 1<=abs(m-root a - 1) by ABSVALUE:11;
-          then m-root a - 1<b/e-1 by A35,XXREAL_0:2;
-          then m-root a < b/e by XREAL_1:11;
-          then a1 to_power (1/m) < b1/e by A1,Th52,XXREAL_0:25;
-
-then a to_power d * a to_power (1/m) < b/e * a to_power d by A30,XREAL_1:70;
-          then a1 to_power (d + 1/m) < b1/e * a1 to_power d by A1,Th32;
-          then a to_power (d + 1/m) < b * a to_power d / e;
-          then
-A36:      a to_power (d + 1/m) < a to_power d / e * b;
-          a to_power d / e < 1 by A29,A30,XREAL_1:191;
-          then a to_power d / e * b < 1*b by A2,XREAL_1:70;
-          then a to_power (d + 1/m) <= b by A36,XXREAL_0:2;
-          then d + 1/m in X;
-          then d + 1/m <= d by A14,SEQ_4:def 4;
-          then 1/m <= 0 by XREAL_1:31;
-          hence contradiction by A34;
+A82:      abs(s.m - 1)<b/e-1 by A81,XXREAL_0:25;
+A83:      abs(m-root a - 1)<b/e-1 by A78,A82;
+A84:      m-root a - 1<=abs(m-root a - 1) by ABSVALUE:11;
+A85:      m-root a - 1<b/e-1 by A83,A84,XXREAL_0:2;
+A86:      m-root a < b/e by A85,XREAL_1:11;
+A87:      a1 to_power (1/m) < b1/e by A1,A86,Th52,XXREAL_0:25;
+A88:      a
+ to_power d * a to_power (1/m) < b/e * a to_power d by A75,A87,XREAL_1:70;
+A89:      a to_power (d + 1/m) < b * a to_power d / e by A1,A88,Th32;
+A90:      a to_power d / e < 1 by A73,A75,XREAL_1:191;
+A91:      a to_power d / e * b < 1*b by A3,A90,XREAL_1:70;
+A92:      a to_power (d + 1/m) <= b by A89,A91,XXREAL_0:2;
+A93:      d + 1/m in X by A92;
+A94:      m>=1 & d + 1/m <= d by A32,A93,SEQ_4:def 4,XXREAL_0:25;
+          thus contradiction by A94,XREAL_1:31;
         end;
-        hence b = a to_power d by A18,XXREAL_0:1;
+        thus b = a to_power d by A44,A71,XXREAL_0:1;
       end;
       suppose
-A37:    a<1;
-A38:    X is bounded_below
+A95:    a<1;
+A96:    X is bounded_below
         proof consider n such that
-A39:      n > (b1-1)/(1/a1-1) by SEQ_4:10;
-          1/a >1/1 by A1,A37,XREAL_1:90;
-          then 1/a-1>1-1 by XREAL_1:11;
-          then n*(1/a-1) > b-1 by A39,XREAL_1:79;
-          then
-A40:      1 + n*(1/a-1) > 1+(b-1) by XREAL_1:8;
-          1/a>0 by A1;
-          then 1/a-1>0-1 by XREAL_1:11;
-          then (1+(1/a1-1)) to_power n >= 1 + n*(1/a1-1) by PREPOWER:24;
-          then (1/a) to_power n > b by A40,XXREAL_0:2;
-          then
-A41:      a1 to_power (-n) > b1 by A1,Th37;
-          now
+A97:      n > (b1-1)/(1/a1-1) by SEQ_4:10;
+A98:      1/a >1/1 by A1,A95,XREAL_1:90;
+A99:      1/a-1>1-1 by A98,XREAL_1:11;
+A100:     n*(1/a-1) > b-1 by A97,A99,XREAL_1:79;
+A101:     1 + n*(1/a-1) > 1+(b-1) by A100,XREAL_1:8;
+A102:     1/a-1>0-1 by A1,XREAL_1:11;
+A103:     (1+(1/a1-1)) to_power n >= 1 + n*(1/a1-1) by A102,PREPOWER:24;
+A104:     (1/a) to_power n > b by A101,A103,XXREAL_0:2;
+A105:     a1 to_power (-n) > b1 by A1,A104,Th37;
+A106:     now
             let c be real number;
-            assume c in X;
-            then ex d be Real st d=c & a to_power d <= b;
-            then a1 to_power c <= a1 to_power (-n) by A41,XXREAL_0:2;
-            hence c>=-n by A1,A37,Th45;
+            assume
+A107:       c in X;
+A108:       ex d be Real st d=c & a to_power d <= b by A107;
+A109:       a1 to_power c <= a1 to_power (-n) by A105,A108,XXREAL_0:2;
+            thus c>=-n by A1,A95,A109,Th45;
           end;
-          hence thesis by SEQ_4:def 2;
+          thus thesis by A106,SEQ_4:def 2;
         end;
         take d = lower_bound X;
-A42:    not b < a to_power d
+A110:   not b < a to_power d
         proof
-          assume a to_power d > b;
-          then consider e being real number such that
-A43:      b<e & e<a to_power d by XREAL_1:7;
+          assume
+A111:     a to_power d > b;
+          consider e being real number such that
+A112:     b<e and
+A113:     e<a to_power d by A111,XREAL_1:7;
           reconsider e as Real by XREAL_0:def 1;
           consider n such that
-A44:      n > (1/a1-1)/(e/b1-1) by SEQ_4:10;
+A114:     n > (1/a1-1)/(e/b1-1) by SEQ_4:10;
           reconsider m = max(1,n) as Element of NAT by XXREAL_0:16;
-          n<=m by XXREAL_0:25;
-          then
-A45:      (1/a-1)/(e/b-1) < m by A44,XXREAL_0:2;
-          e/b>1 by A2,A43,XREAL_1:189;
-          then e/b-1>1-1 by XREAL_1:11;
-          then
-A46:      (1/a-1)<m*(e/b-1) by A45,XREAL_1:79;
-A47:      1<=m by XXREAL_0:25;
-          then (1/a-1)/m<e/b-1 by A46,XREAL_1:85;
-          then
-A48:      (1/a-1)/m+1<e/b-1+1 by XREAL_1:8;
-A49:      1/a>0 by A1;
-          then m-root (1/a1) - 1 <= (1/a1-1)/m by Th23,XXREAL_0:25;
-          then m-root (1/a) - 1 + 1 <= (1/a-1)/m + 1 by XREAL_1:8;
-          then m-root (1/a) <= e/b by A48,XXREAL_0:2;
-          then (1/a1) to_power (1/m) <= e/b1 by A49,Th52,XXREAL_0:25;
-          then (1/a) to_power (1/m) * b <= e by A2,XREAL_1:85;
-          then
-A50:      a1 to_power (-1/m) * b1 <= e by A1,Th37;
-          1/m>0 by A47;
-          then consider c be real number such that
-A51:      c in X & c <d+1/m by A3,A38,SEQ_4:def 5;
+A115:     n<=m by XXREAL_0:25;
+A116:     (1/a-1)/(e/b-1) < m by A114,A115,XXREAL_0:2;
+A117:     e/b>1 by A3,A112,XREAL_1:189;
+A118:     e/b-1>1-1 by A117,XREAL_1:11;
+A119:     (1/a-1)<m*(e/b-1) by A116,A118,XREAL_1:79;
+A120:     1<=m by XXREAL_0:25;
+A121:     (1/a-1)/m<e/b-1 by A119,A120,XREAL_1:85;
+A122:     (1/a-1)/m+1<e/b-1+1 by A121,XREAL_1:8;
+A123:     m-root (1/a1) - 1 <= (1/a1-1)/m by A1,Th23,XXREAL_0:25;
+A124:     m-root (1/a) - 1 + 1 <= (1/a-1)/m + 1 by A123,XREAL_1:8;
+A125:     m-root (1/a) <= e/b by A122,A124,XXREAL_0:2;
+A126:     (1/a1) to_power (1/m) <= e/b1 by A1,A125,Th52,XXREAL_0:25;
+A127:     (1/a) to_power (1/m) * b <= e by A3,A126,XREAL_1:85;
+A128:     a1 to_power (-1/m) * b1 <= e by A1,A127,Th37;
+          consider c be real number such that
+A129:     c in X and
+A130:     c <d+1/m by A7,A96,A120,SEQ_4:def 5;
           reconsider c as Real by XREAL_0:def 1;
-A52:      ex g being Real st g=c & a to_power g <= b by A51;
-          a1 to_power (-1/m) >= 0 by A1,Th39;
-
-then a to_power c*a to_power (-1/m) <= a to_power (-1/m)*b by A52,XREAL_1:66;
-          then a to_power c * a to_power (-1/m) <= e by A50,XXREAL_0:2;
-          then
-A53:      a1 to_power (c + -1/m) <= e by A1,Th32;
-          d>c - 1/m by A51,XREAL_1:21;
-          then a1 to_power d <= a1 to_power (c - 1/m) by A1,A37,Th45;
-          hence contradiction by A43,A53,XXREAL_0:2;
+A131:     ex g being Real st g=c & a to_power g <= b by A129;
+A132:     a1 to_power (-1/m) >= 0 by A1,Th39;
+A133:     a to_power c*a to_power (-1/m) <= a to_power (-1/m)*b by A131,A132,
+          XREAL_1:66;
+A134:     a to_power c * a to_power (-1/m) <= e by A128,A133,XXREAL_0:2;
+A135:     a1 to_power (c + -1/m) <= e by A1,A134,Th32;
+A136:     d>c - 1/m by A130,XREAL_1:21;
+A137:     a1 to_power d <= a1 to_power (c - 1/m) by A1,A95,A136,Th45;
+          thus contradiction by A113,A135,A137,XXREAL_0:2;
         end;
-        not a to_power d < b
+A138:   not a to_power d < b
         proof
-          assume a to_power d < b;
-          then consider e being real number such that
-A54:      a to_power d<e & e<b by XREAL_1:7;
+          assume
+A139:     a to_power d < b;
+          consider e being real number such that
+A140:     a to_power d<e and
+A141:     e<b by A139,XREAL_1:7;
           reconsider e as Real by XREAL_0:def 1;
-A55:      a1 to_power d > 0 by A1,Th39;
-          then b/e>1 by A54,XREAL_1:189;
-          then
-A56:      b/e-1>1-1 by XREAL_1:11;
+A142:     a1 to_power d > 0 by A1,Th39;
+A143:     b/e>1 by A140,A141,A142,XREAL_1:189;
+A144:     b/e-1>1-1 by A143,XREAL_1:11;
           deffunc F(Element of NAT) = $1-root (1/a);
           consider s being Real_Sequence such that
-A57:      for n holds s.n = F(n) from SEQ_1:sch 1;
-A58:      1/a>0 by A1;
-          for n st n>=1 holds s.n = n-root (1/a1) by A57;
-          then s is convergent & lim s = 1 by A58,Th24;
-          then consider n such that
-A59:      for m st m>=n holds abs(s.m - 1)<b/e-1 by A56,SEQ_2:def 7;
+A145:     for n holds s.n = F(n) from SEQ_1:sch 1;
+A146:     for n st n>=1 holds s.n = n-root (1/a1) by A145;
+A147:     s is convergent & lim s = 1 by A1,A146,Th24;
+          consider n such that
+A148:     for m st m>=n holds abs(s.m - 1)<b/e-1 by A144,A147,SEQ_2:def 7;
           reconsider m = max(1,n) as Element of NAT by XXREAL_0:16;
-A60:      m>=n & m>=1 by XXREAL_0:25;
-          abs(s.m - 1)<b/e-1 by A59,XXREAL_0:25;
-          then
-A61:      abs(m-root (1/a) - 1)<b/e-1 by A57;
-          m-root (1/a) - 1<=abs(m-root (1/a) - 1) by ABSVALUE:11;
-          then m-root (1/a) - 1<b/e-1 by A61,XXREAL_0:2;
-          then m-root (1/a) < b/e by XREAL_1:11;
-          then (1/a1) to_power (1/m) < b1/e by A58,Th52,XXREAL_0:25;
-
-then a to_power d*(1/a) to_power (1/m)<b/e*a to_power d by A55,XREAL_1:70;
-          then a1 to_power d*a1 to_power (-1/m)<b1/e*a1 to_power d by A1,Th37;
-          then a1 to_power (d +- 1/m) < b1/e * a1 to_power d by A1,Th32;
-          then a to_power (d - 1/m) < b * a to_power d / e;
-          then
-A62:      a to_power (d - 1/m) < a to_power d / e * b;
-          a to_power d / e < 1 by A54,A55,XREAL_1:191;
-          then a to_power d / e * b < 1*b by A2,XREAL_1:70;
-          then a to_power (d - 1/m) < b by A62,XXREAL_0:2;
-          then d - 1/m in X;
-          then d - 1/m >= d by A38,SEQ_4:def 5;
-          then 1/m <= 0 by XREAL_1:46;
-          hence contradiction by A60;
+A149:     abs(s.m - 1)<b/e-1 by A148,XXREAL_0:25;
+A150:     abs(m-root (1/a) - 1)<b/e-1 by A145,A149;
+A151:     m-root (1/a) - 1<=abs(m-root (1/a) - 1) by ABSVALUE:11;
+A152:     m-root (1/a) - 1<b/e-1 by A150,A151,XXREAL_0:2;
+A153:     m-root (1/a) < b/e by A152,XREAL_1:11;
+A154:     (1/a1) to_power (1/m) < b1/e by A1,A153,Th52,XXREAL_0:25;
+A155:     a to_power d*(1/a) to_power (1/m)<b/e*a to_power d by A142,A154,
+          XREAL_1:70;
+A156:     a1 to_power d*a1 to_power (-1/m)<b1/e*a1 to_power d by A1,A155,
+          Th37;
+A157:     a to_power (d - 1/m) < b * a to_power d / e by A1,A156,Th32;
+A158:     a to_power d / e < 1 by A140,A142,XREAL_1:191;
+A159:     a to_power d / e * b < 1*b by A3,A158,XREAL_1:70;
+A160:     a to_power (d - 1/m) < b by A157,A159,XXREAL_0:2;
+A161:     d - 1/m in X by A160;
+A162:     m>=1 & d - 1/m >= d by A96,A161,SEQ_4:def 5,XXREAL_0:25;
+          thus contradiction by A162,XREAL_1:46;
         end;
-        hence b = a to_power d by A42,XXREAL_0:1;
+        thus b = a to_power d by A110,A138,XXREAL_0:1;
       end;
     end;
-    hence thesis;
+    thus thesis by A30;
   end;
-  uniqueness by A1,Th57;
+  uniqueness by A1,A2,Th57;
 end;
 
 definition
@@ -1458,8 +1455,8 @@ theorem
 proof
   assume
 A1: a>0 & a<>1;
-  a to_power 0 = 1 by Th29;
-  hence thesis by A1,Def3;
+A2: a to_power 0 = 1 by Th29;
+  thus thesis by A1,A2,Def3;
 end;
 
 theorem
@@ -1467,98 +1464,115 @@ theorem
 proof
   assume
 A1: a>0 & a<>1;
-  a to_power 1 = a by Th30;
-  hence thesis by A1,Def3;
+A2: a to_power 1 = a by Th30;
+  thus thesis by A1,A2,Def3;
 end;
 
 theorem
   a>0 & a<>1 & b>0 & c>0 implies log(a,b) + log(a,c) = log(a,b*c)
 proof
-  assume
-A1: a>0 & a<>1 & b>0 & c>0;
-  then
-A2: a to_power (log(a,b) + log(a,c))
-  = a to_power log(a,b) * a to_power log(a,c) by Th32
-    .= b * a to_power log(a,c) by A1,Def3
-    .= b * c by A1,Def3;
-  b*c>0 by A1,XREAL_1:131;
-  hence thesis by A1,A2,Def3;
+  assume that
+A1: a>0 and
+A2: a<>1 and
+A3: b>0 and
+A4: c>0;
+A5: a to_power (log(a,b) + log(a,c))
+  = a to_power log(a,b) * a to_power log(a,c) by A1,Th32
+    .= b * a to_power log(a,c) by A1,A2,A3,Def3
+    .= b * c by A1,A2,A4,Def3;
+A6: b*c>0 by A3,A4,XREAL_1:131;
+  thus thesis by A1,A2,A5,A6,Def3;
 end;
 
 theorem
   a>0 & a<>1 & b>0 & c>0 implies log(a,b) - log(a,c) = log(a,b/c)
 proof
-  assume
-A1: a>0 & a<>1 & b>0 & c>0;
-  then
-A2: a to_power (log(a,b) - log(a,c))
-  = a to_power log(a,b) / a to_power log(a,c) by Th34
-    .= b / a to_power log(a,c) by A1,Def3
-    .= b / c by A1,Def3;
-  b/c>0 by A1,XREAL_1:141;
-  hence thesis by A1,A2,Def3;
+  assume that
+A1: a>0 and
+A2: a<>1 and
+A3: b>0 and
+A4: c>0;
+A5: a to_power (log(a,b) - log(a,c))
+  = a to_power log(a,b) / a to_power log(a,c) by A1,Th34
+    .= b / a to_power log(a,c) by A1,A2,A3,Def3
+    .= b / c by A1,A2,A4,Def3;
+A6: b/c>0 by A3,A4,XREAL_1:141;
+  thus thesis by A1,A2,A5,A6,Def3;
 end;
 
 theorem
   a>0 & a<>1 & b>0 implies log(a,b to_power c) = c * log(a,b)
 proof
-  assume
-A1: a>0 & a<>1 & b>0;
-  then
-A2: b to_power c > 0 by Th39;
-  a to_power (c*log(a,b)) = (a to_power log(a,b)) to_power c by A1,Th38
-    .= b to_power c by A1,Def3;
-  hence thesis by A1,A2,Def3;
+  assume that
+A1: a>0 and
+A2: a<>1 and
+A3: b>0;
+A4: b to_power c > 0 by A3,Th39;
+A5: a to_power (c*log(a,b)) = (a to_power log(a,b)) to_power c by A1,Th38
+    .= b to_power c by A1,A2,A3,Def3;
+  thus thesis by A1,A2,A4,A5,Def3;
 end;
 
 theorem
   a>0 & a<>1 & b>0 & b<>1 & c>0 implies log(a,c) = log(a,b)*log(b,c)
 proof
-  assume
-A1: a>0 & a<>1 & b>0 & b<>1 & c>0;
-  then a to_power (log(a,b)*log(b,c))
-  = a to_power log(a,b) to_power log(b,c) by Th38
-    .= b to_power log(b,c) by A1,Def3
-    .= c by A1,Def3;
-  hence thesis by A1,Def3;
+  assume that
+A1: a>0 and
+A2: a<>1 and
+A3: b>0 and
+A4: b<>1 and
+A5: c>0;
+A6: a to_power (log(a,b)*log(b,c))
+  = a to_power log(a,b) to_power log(b,c) by A1,Th38
+    .= b to_power log(b,c) by A1,A2,A3,Def3
+    .= c by A3,A4,A5,Def3;
+  thus thesis by A1,A2,A5,A6,Def3;
 end;
 
 theorem
   a>1 & b>0 & c>b implies log(a,c) > log(a,b)
 proof
   assume that
-A1: a>1 & b>0 & c>b and
-A2: log(a,c) <= log(a,b);
-A3: a to_power log(a,b) = b by A1,Def3;
-A4: a to_power log(a,c) = c by A1,Def3;
-  now per cases by A2,XXREAL_0:1;
-    suppose log(a,c)<log(a,b);
-      hence contradiction by A1,A3,A4,Th44;
+A1: a>1 and
+A2: b>0 and
+A3: c>b and
+A4: log(a,c) <= log(a,b);
+A5: a to_power log(a,b) = b by A1,A2,Def3;
+A6: a to_power log(a,c) = c by A1,A2,A3,Def3;
+A7: now per cases by A4,XXREAL_0:1;
+    suppose
+A8:   log(a,c)<log(a,b);
+      thus contradiction by A1,A3,A5,A6,A8,Th44;
     end;
-    suppose log(a,c) = log(a,b);
-      hence contradiction by A1,A4,Def3;
+    suppose
+A9:   log(a,c) = log(a,b);
+      thus contradiction by A1,A2,A3,A6,A9,Def3;
     end;
   end;
-  hence contradiction;
+  thus contradiction by A7;
 end;
 
 theorem
   a>0 & a<1 & b>0 & c>b implies log(a,c) < log(a,b)
 proof
   assume that
-A1: a>0 & a<1 & b>0 & c>b and
-A2: log(a,c) >= log(a,b);
-A3: a to_power log(a,b) = b by A1,Def3;
-A4: a to_power log(a,c) = c by A1,Def3;
-  now per cases by A2,XXREAL_0:1;
-    suppose log(a,c)>log(a,b);
-      hence contradiction by A1,A3,A4,Th45;
+A1: a>0 & a<1 and
+A2: b>0 and
+A3: c>b and
+A4: log(a,c) >= log(a,b);
+A5: a to_power log(a,b) = b by A1,A2,Def3;
+A6: a to_power log(a,c) = c by A1,A2,A3,Def3;
+A7: now per cases by A4,XXREAL_0:1;
+    suppose
+A8:   log(a,c)>log(a,b);
+      thus contradiction by A1,A3,A5,A6,A8,Th45;
     end;
-    suppose log(a,c) = log(a,b);
-      hence contradiction by A1,A4,Def3;
+    suppose
+A9:   log(a,c) = log(a,b);
+      thus contradiction by A1,A2,A3,A6,A9,Def3;
     end;
   end;
-  hence contradiction;
+  thus contradiction by A7;
 end;
 
 theorem
@@ -1567,10 +1581,10 @@ theorem
 proof
   let s be Real_Sequence such that
 A1: for n holds s.n = (1 + 1/(n+1)) to_power (n+1);
-  now
+A2: now
     let n;
-A2: (1+1/(n+1)) to_power (n+1) > 0 by Th39;
-A3: s.(n+1)/s.n =(1 + 1/(n+1+1)) to_power (n+1+1) / s.n by A1
+A3: (1+1/(n+1)) to_power (n+1) > 0 by Th39;
+A4: s.(n+1)/s.n =(1 + 1/(n+1+1)) to_power (n+1+1) / s.n by A1
       .=(1 + 1/(n+1+1)) to_power (n+1+1)/(1+1/(n+1)) to_power (n+1)*1 by A1
       .=(1 + 1/(n+1+1)) to_power (n+1+1)/(1 + 1/(n+1)) to_power (n+1) *
     ((1+1/(n+1))/(1+1/(n+1))) by XCMPLX_1:60
@@ -1584,83 +1598,80 @@ A3: s.(n+1)/s.n =(1 + 1/(n+1+1)) to_power (n+1+1) / s.n by A1
     (1 + 1/(n+1)) to_power (n+1+1))
       .=(1+1/(n+1)) * ((1 + 1/(n+1+1))/(1 + 1/(n+1))) to_power (n+1+1)
     by Th36;
-A4: (1 + 1/(n+1+1))/(1 + 1/(n+1))
+A5: (1 + 1/(n+1+1))/(1 + 1/(n+1))
     = ((1*(n+1+1) + 1)/(n+1+1))/(1 + 1/(n+1)) by XCMPLX_1:114
       .= ((n+1+1+1)/(n+1+1))/((1*(n+1) + 1)/(n+1)) by XCMPLX_1:114
       .= ((n+(1+1)+1)*(n+1))/((n+2)*(n+2)) by XCMPLX_1:85
       .= (n*n+n*2+2*n+3+1-1)/((n+2)*(n+2))
       .= ((n+2)*(n+2))/((n+2)*(n+2)) - 1/((n+2)*(n+2))
       .= 1 - 1/((n+2)*(n+2)) by XCMPLX_1:6,60;
-    n+1+1>0+1 by XREAL_1:8;
-    then (n+2)*(n+2)>1 by XREAL_1:163;
-    then 1/((n+2)*(n+2))<1 by XREAL_1:214;
-    then - 1/((n+2)*(n+2)) > -1 by XREAL_1:26;
-
-then (1 + -1/((n+2)*(n+2))) to_power (n+1+1) >= 1 + (n+1+1)*(-1/((n+2)*(n+2)
-    )) by PREPOWER:24;
-    then (1 - 1/((n+2)*(n+2))) to_power (n+1+1) >= 1 - (n+2)*(1/((n+2)*(n+2)));
-    then (1 - 1/((n+2)*(n+2))) to_power (n+1+1) >= 1 - (n+2)*1/((n+2)*(n+2));
-    then (1 - 1/((n+2)*(n+2))) to_power (n+1+1) >= 1 - ((n+2)/(n+2)*1)/(n+2)
-    by XCMPLX_1:84;
-    then (1 - 1/((n+2)*(n+2))) to_power (n+1+1) >= 1 - (1*1)/(n+2)
-    by XCMPLX_1:60;
-    then s.(n+1)/s.n >= (1 + 1/(n+1)) * (1 - 1/(n+2)) by A3,A4,XREAL_1:66;
-    then s.(n+1)/s.n >= ((1*(n+1) + 1)/(n+1)) * (1 - 1/(n+2)) by XCMPLX_1:114;
-    then s.(n+1)/s.n >= ((n+2)/(n+1)) * ((1*(n+2) - 1)/(n+2)) by XCMPLX_1:128;
-    then s.(n+1)/s.n >= ((n+1)*(n+2))/((n+1)*(n+2)) by XCMPLX_1:77;
-    then
-A5: s.(n+1)/s.n >= 1 by XCMPLX_1:6,60;
-    s.n>0 by A1,A2;
-    hence s.(n+1)>=s.n by A5,XREAL_1:193;
+A6: n+1+1>0+1 by XREAL_1:8;
+A7: (n+2)*(n+2)>1 by A6,XREAL_1:163;
+A8: 1/((n+2)*(n+2))<1 by A7,XREAL_1:214;
+A9: - 1/((n+2)*(n+2)) > -1 by A8,XREAL_1:26;
+A10: (1 + -1/((n+2)*(n+2))) to_power (n+1+1) >= 1 + (n+1+1)*(-1/((n+2)*(n+2)
+    )) by A9,PREPOWER:24;
+A11: (1 - 1/((n+2)*(n+2))) to_power (n+1+1) >= 1 - (n+2)*1/((n+2)*(n+2))
+    by A10;
+A12: (1 - 1/((n+2)*(n+2))) to_power (n+1+1) >= 1 - ((n+2)/(n+2)*1)/(n+2)
+    by A11,XCMPLX_1:84;
+A13: (1 - 1/((n+2)*(n+2))) to_power (n+1+1) >= 1 - (1*1)/(n+2)
+    by A12,XCMPLX_1:60;
+A14: s.(n+1)/s.n >= (1 + 1/(n+1)) * (1 - 1/(n+2)) by A4,A5,A13,XREAL_1:66;
+A15: s.(n+1)/s.n >= ((1*(n+1) + 1)/(n+1)) * (1 - 1/(n+2)) by A14,
+    XCMPLX_1:114;
+A16: s.(n+1)/s.n >= ((n+2)/(n+1)) * ((1*(n+2) - 1)/(n+2)) by A15,
+    XCMPLX_1:128;
+A17: s.(n+1)/s.n >= ((n+1)*(n+2))/((n+1)*(n+2)) by A16,XCMPLX_1:77;
+A18: s.(n+1)/s.n >= 1 by A17,XCMPLX_1:6,60;
+A19: s.n>0 by A1,A3;
+    thus s.(n+1)>=s.n by A18,A19,XREAL_1:193;
   end;
-  then
-A6: s is non-decreasing by SEQM_3:def 13;
-  now
+A20: s is non-decreasing by A2,SEQM_3:def 13;
+A21: now
     let n;
-A7: 2*(n+1)>0 by XREAL_1:131;
-A9: 2*(n+1)<>0;
-A10: s.(n+(n+1)) = (1 + 1/(2*n+(1+1))) to_power (2*n+1+1) by A1
+A22: 2*(n+1)>0 by XREAL_1:131;
+A23: 2*(n+1)<>0;
+A24: s.(n+(n+1)) = (1 + 1/(2*n+(1+1))) to_power (2*n+1+1) by A1
       .= ((1 + 1/(2*(n+1))) to_power (n+1)) to_power 2 by Th38;
-    2*(n+1)+1>0+1 by A7,XREAL_1:8;
-    then 1/(2*(n+1)+1)<1 by XREAL_1:214;
-    then
-A11: - 1/(2*(n+1)+1)> -1 by XREAL_1:26;
-    then
-A12: - 1/(2*(n+1)+1) + 1 > -1 + 1 by XREAL_1:8;
-A13: (1 + 1/(2*(n+1))) to_power (n+1)
+A25: 2*(n+1)+1>0+1 by A22,XREAL_1:8;
+A26: 1/(2*(n+1)+1)<1 by A25,XREAL_1:214;
+A27: - 1/(2*(n+1)+1)> -1 by A26,XREAL_1:26;
+A28: - 1/(2*(n+1)+1) + 1 > -1 + 1 by A27,XREAL_1:8;
+A29: (1 + 1/(2*(n+1))) to_power (n+1)
     = (1/(1/(1 + 1/(2*(n+1))))) to_power (n+1)
       .= (1/(1 + 1/(2*(n+1)))) to_power (-(n+1)) by Th37
-      .= (1/((1*(2*(n+1)) + 1)/(2*(n+1)))) to_power (-(n+1)) by A9,XCMPLX_1:114
+      .= (1/((1*(2*(n+1)) + 1)/(2*(n+1)))) to_power (-(n+1)) by A23,
+    XCMPLX_1:114
       .= ((2*(n+1)+1-1)/(2*(n+1)+1)) to_power (-(n+1)) by XCMPLX_1:78
       .= ((2*(n+1)+1)/(2*(n+1)+1) - 1/(2*(n+1)+1)) to_power (-(n+1))
       .= (1 - 1/(2*(n+1)+1)) to_power (-(n+1)) by XCMPLX_1:60
-      .= 1 / (1 - 1/(2*(n+1)+1)) to_power (n+1) by A12,Th33;
-    (1 + - 1/(2*(n+1)+1)) to_power (n+1) >= 1 + (n+1)*(- 1/(2*(n+1)+1)) by A11,
-PREPOWER:24;
-    then (1 - 1/(2*(n+1)+1)) to_power (n+1) >= 1-(n+1)*(1/(2*(n+1)+1));
-    then (1 - 1/(2*(n+1)+1)) to_power (n+1) >= 1-(n+1)/(2*(n+1)+1);
-    then
-A14: (1 - 1/(2*(n+1)+1)) to_power (n+1) >= (1*(2*(n+1)+1)-(n+1))/(2*(n +1 )+1)
-    by XCMPLX_1:128;
-    now
-      assume (2*(n+1)-n)/(2*(n+1)+1) < 1/2;
-      then (2*(n+1)-n)*2 < (2*(n+1)+1)*1 by XREAL_1:104;
-      then 2*(n+1)+(-n + (2*(n+1)-n)) < 2*(n+1)+1;
-      hence contradiction by XREAL_1:8;
+      .= 1 / (1 - 1/(2*(n+1)+1)) to_power (n+1) by A28,Th33;
+    A30: (
+1 + - 1/(2*(n+1)+1)) to_power (n+1) >= 1 + (n+1)*(- 1/(2*(n+1)+1)) by A27,
+    PREPOWER:24;
+A31: (1 - 1/(2*(n+1)+1)) to_power (n+1) >= 1-(n+1)/(2*(n+1)+1) by A30;
+    A32: (
+1 - 1/(2*(n+1)+1)) to_power (n+1) >= (1*(2*(n+1)+1)-(n+1))/(2*(n +1 )+1)
+    by A31,XCMPLX_1:128;
+A33: now
+      assume
+A34:  (2*(n+1)-n)/(2*(n+1)+1) < 1/2;
+A35:  (2*(n+1)-n)*2 < (2*(n+1)+1)*1 by A34,XREAL_1:104;
+A36:  2*(n+1)+(-n + (2*(n+1)-n)) < 2*(n+1)+1 by A35;
+      thus contradiction by A36,XREAL_1:8;
     end;
-    then (1 - 1/(2*(n+1)+1)) to_power (n+1) >= 1/2 by A14,XXREAL_0:2;
-    then
-A15: (1 + 1/(2*(n+1))) to_power (n+1) <= 1/(1/2) by A13,XREAL_1:87;
-    (1 + 1/(2*(n+1))) to_power (n+1) > 0 by Th39;
-    then ((1 + 1/(2*(n+1))) to_power (n+1))^2 <= 2*2 by A15,XREAL_1:68;
-    then
-A16: s.(n+(n+1)) <= 2*2 by A10,Th53;
-    s.n<=s.(n+(n+1)) by A6,SEQM_3:11;
-    then s.n <= 2*2 & 2*2 + 0 < 2*2 + 1 by A16,XXREAL_0:2;
-    hence s.n < 2*2 + 1 by XXREAL_0:2;
+A37: (1 - 1/(2*(n+1)+1)) to_power (n+1) >= 1/2 by A32,A33,XXREAL_0:2;
+A38: (1 + 1/(2*(n+1))) to_power (n+1) <= 1/(1/2) by A29,A37,XREAL_1:87;
+A39: (1 + 1/(2*(n+1))) to_power (n+1) > 0 by Th39;
+A40: ((1 + 1/(2*(n+1))) to_power (n+1))^2 <= 2*2 by A38,A39,XREAL_1:68;
+A41: s.(n+(n+1)) <= 2*2 by A24,A40,Th53;
+A42: s.n<=s.(n+(n+1)) by A20,SEQM_3:11;
+A43: s.n <= 2*2 by A41,A42,XXREAL_0:2;
+    thus s.n < 2*2 + 1 by A43,XXREAL_0:2;
   end;
-  then s is bounded_above by SEQ_2:def 3;
-  hence thesis by A6;
+A44: s is bounded_above by A21,SEQ_2:def 3;
+  thus thesis by A20,A44;
 end;
 
 definition
@@ -1675,25 +1686,26 @@ A1: for n holds s1.n = F(n) from SEQ_1:sch 1;
     take lim s1;
     let s be Real_Sequence such that
 A2: for n holds s.n = (1 + 1/(n+1)) to_power (n+1);
-    now
-      let n; thus s1.n = (1 + 1/(n+1)) to_power (n+1) by A1
+A3: now
+      let n;
+      thus s1.n = (1 + 1/(n+1)) to_power (n+1) by A1
         .= s.n by A2;
     end;
-    hence thesis by FUNCT_2:113;
+    thus thesis by A3,FUNCT_2:113;
   end;
   uniqueness
   proof
     let a,b;
     assume that
-A3: for s being Real_Sequence st
-    for n holds s.n = (1 + 1/(n+1)) to_power (n+1) holds a = lim s and
 A4: for s being Real_Sequence st
+    for n holds s.n = (1 + 1/(n+1)) to_power (n+1) holds a = lim s and
+A5: for s being Real_Sequence st
     for n holds s.n = (1 + 1/(n+1)) to_power (n+1) holds b = lim s;
     deffunc F(Element of NAT) = (1 + 1/($1+1)) to_power ($1+1);
     consider s1 being Real_Sequence such that
-A5: for n holds s1.n = F(n) from SEQ_1:sch 1;
-    lim s1 = a by A3,A5;
-    hence thesis by A4,A5;
+A6: for n holds s1.n = F(n) from SEQ_1:sch 1;
+A7: lim s1 = a by A4,A6;
+    thus thesis by A5,A6,A7;
   end;
 end;
 
@@ -1702,18 +1714,19 @@ definition
   coherence by XREAL_0:def 1;
 end;
 
-theorem Lm7:
+theorem Th68:
   2 to_power 2 = 4
-proof thus 2 to_power 2 = 2^2 by Th53
+proof
+  thus 2 to_power 2 = 2^2 by Th53
     .= 4;
 end;
 
-theorem Lm8:
+theorem Th69:
   2 to_power 3 = 8
 proof
   thus 2 to_power 3 = 2 to_power (2+1)
     .= (2 to_power 2)*(2 to_power 1) by Th32
-    .= 4*2 by Lm7,Th30
+    .= 4*2 by Th30,Th68
     .= 8;
 end;
 
@@ -1722,7 +1735,7 @@ theorem
 proof
   thus 2 to_power 4 = 2 to_power (2+2)
     .= (2 to_power 2)*(2 to_power 2) by Th32
-    .= 16 by Lm7;
+    .= 16 by Th68;
 end;
 
 theorem
@@ -1730,7 +1743,7 @@ theorem
 proof
   thus 2 to_power 5 = 2 to_power (3+2)
     .= (2 to_power 3)*(2 to_power 2) by Th32
-    .= 32 by Lm7,Lm8;
+    .= 32 by Th68,Th69;
 end;
 
 theorem
@@ -1738,7 +1751,7 @@ theorem
 proof
   thus 2 to_power 6 = 2 to_power (3+3)
     .= 2 to_power 3 * 2 to_power 3 by Th32
-    .= 64 by Lm8;
+    .= 64 by Th69;
 end;
-    
+
 

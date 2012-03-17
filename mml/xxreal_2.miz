@@ -7,1415 +7,1572 @@
 environ
 
  vocabularies SUPINF_1, ARYTM, MEMBERED, ORDINAL2, SQUARE_1, FINSET_1,
-  XXREAL_2, SEQ_2, INT_1, RAT_1, RCOMP_1, BOOLE, FINSUB_1, SETWISEO,
-  ARYTM_1, LATTICES, FUNCT_1, RELAT_1, RELAT_2;
- notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1,
-  ORDINAL1, FINSET_1, FINSUB_1, SETWISEO, NUMBERS, MEMBERED, XXREAL_0,
-  XCMPLX_0, XREAL_0, INT_1, NAT_1, RAT_1, XXREAL_1;
+      XXREAL_2, SEQ_2, INT_1, RAT_1, RCOMP_1, BOOLE, FINSUB_1, SETWISEO,
+      ARYTM_1, LATTICES, FUNCT_1, RELAT_1, RELAT_2;
+ notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FINSET_1,
+      FINSUB_1, SETWISEO, NUMBERS, MEMBERED, XXREAL_0, XCMPLX_0, XREAL_0,
+      INT_1, NAT_1, RAT_1, XXREAL_1;
  constructors XXREAL_0, MEMBERED, XREAL_0, INT_1, FINSET_1, RAT_1, XXREAL_1,
-  SETWISEO, XCMPLX_0, REAL_1, NAT_1;
+      SETWISEO, XCMPLX_0, REAL_1, NAT_1;
  registrations XXREAL_0, MEMBERED, XXREAL_1, XBOOLE_0, FINSET_1, NUMBERS,
-  SETWISEO, FINSUB_1, XREAL_0, INT_1, NAT_1, CARD_1;
- theorems XXREAL_0, MEMBERED, TARSKI, XBOOLE_0, XXREAL_1, XBOOLE_1, FINSUB_1,
-  XREAL_0, XREAL_1, INT_1, NAT_1, FINSET_1, ZFMISC_1, FUNCT_1;
+      SETWISEO, FINSUB_1, XREAL_0, INT_1, NAT_1, CARD_1;
+ requirements BOOLE, SUBSET, NUMERALS, ARITHM, REAL;
  definitions TARSKI, SETWISEO, XXREAL_0, MEMBERED;
+ theorems XXREAL_0, MEMBERED, TARSKI, XBOOLE_0, XXREAL_1, XBOOLE_1, FINSUB_1,
+      XREAL_0, XREAL_1, INT_1, NAT_1, FINSET_1, ZFMISC_1, FUNCT_1;
  schemes XXREAL_1, NAT_1, SETWISEO, CLASSES1;
- requirements BOOLE, SUBSET, NUMERALS, ARITHM,REAL;
 
 begin
 
-scheme FinInter{m, n() -> Integer, F(set)->set, P[set]}:
-  {F(i) where i is Element of INT: m()<=i & i<=n() & P[i]} is finite
-proof
+scheme
+  FinInter{m, n() -> Integer, F(set)->set, P[set]}: {F(i) where i is Element
+  of INT: m()<=i & i<=n() & P[i]} is finite proof
   set F = {F(i) where i is Element of INT: m()<=i & i<=n() & P[i]};
- per cases;
- suppose
-S:  n() < m();
-   now assume F <> {};
-     then consider x being set such that
-W:    x in F by XBOOLE_0:def 1;
-     ex i being Element of INT st x = F(i) & m()<=i & i<=n() & P[i] by W;
-    hence contradiction by S,XXREAL_0:2;
-   end;
-   then reconsider F as empty set;
-   F is finite;
-  hence thesis;
- end;
- suppose
-S: m() <= n();
-  set F = {F(i) where i is Element of INT: m()<=i & i<=n() & P[i]};
-  reconsider k = n()-m() as Element of NAT by S,INT_1:18;
-  defpred Q[set,set] means ex i being Integer st $1 = i & $2 = F(i+m());
-X: for e being set st e in k+1 ex u being set st Q[e,u]
-    proof let e be set;
-     assume e in k+1;
-      then reconsider i = e as Nat;
-     take F(i+m()),i;
-     thus thesis;
+  per cases;
+  suppose
+A1: n() < m();
+    now
+      assume
+      F <> {};
+      then consider x being set such that
+A2:   x in F by XBOOLE_0:def 1;
+      ex i being Element of INT st x = F(i) & m()<=i & i<=n() & P[i] by A2;
+      hence contradiction by A1,XXREAL_0:2;
     end;
-  consider f being Function such that
-A1: dom f = k+1 and
-A2: for i being set st i in k+1 holds Q[i,f.i] from CLASSES1:sch 1(X);
-X:  rng f is finite by A1,FINSET_1:26;
-  F c= rng f
-    proof let x be set;
-     assume x in F; then
-     consider j being Element of INT such that
-W1:   x=F(j) and
-W2:   m()<=j & j<=n() and P[j];
-     reconsider l = j-m() as Element of NAT by W2,INT_1:18;
-     l <= k by W2,XREAL_1:11;
-     then l < k+1 by NAT_1:13;
-     then
-B:   l in k+1 by NAT_1:45;
-   Q[j-m(),f.(j-m())] by B,A2;
-   then f.(j-m()) = F(j+m()-m())
-       .= F(j);
-  hence thesis by W1,A1,B,FUNCT_1:def 5;
+    then reconsider F as empty set;
+    F is finite;
+    hence thesis;
   end;
-  hence thesis by X;
+  suppose
+    m() <= n();
+    then reconsider k = n()-m() as Element of NAT by INT_1:18;
+    set F = {F(i) where i is Element of INT: m()<=i & i<=n() & P[i]};
+    defpred Q[set,set] means ex i being Integer st $1 = i & $2 = F(i+m());
+A3: for e being set st e in k+1 ex u being set st Q[e,u]
+    proof
+      let e be set;
+      assume
+      e in k+1;
+      then reconsider i = e as Nat;
+      take F(i+m()),i;
+      thus thesis;
+    end;
+    consider f being Function such that
+A4: dom f = k+1 and
+A5: for i being set st i in k+1 holds Q[i,f.i] from CLASSES1:sch 1(A3
+    );
+A6: F c= rng f
+    proof
+      let x be set;
+      assume
+      x in F;
+      then consider j being Element of INT such that
+A7:   x=F(j) and
+A8:   m()<=j and
+A9:   j<=n() and
+      P[j];
+      reconsider l = j-m() as Element of NAT by A8,INT_1:18;
+      l <= k by A9,XREAL_1:11;
+      then l < k+1 by NAT_1:13;
+      then
+A10:  l in k+1 by NAT_1:45;
+      then Q[j-m(),f.(j-m())] by A5;
+      then f.(j-m()) = F(j+m()-m())
+        .= F(j);
+      hence thesis by A4,A7,A10,FUNCT_1:def 5;
+    end;
+    rng f is finite by A4,FINSET_1:26;
+    hence thesis by A6;
   end;
 end;
 
 reserve x,y,z,r,s for ext-real number;
 
-definition let X be ext-real-membered set;
- mode UpperBound of X -> ext-real number means
-:Def1: x in X implies x <= it;
- existence
+definition
+  let X be ext-real-membered set;
+  mode UpperBound of X -> ext-real number means
+    :Def1:
+    x in X implies x <= it;
+  existence
   proof
     take +infty;
     thus thesis by XXREAL_0:4;
   end;
- mode LowerBound of X -> ext-real number means
-:Def2: x in X implies it <= x;
- existence
+  mode LowerBound of X -> ext-real number means
+    :Def2:
+    x in X implies it <= x;
+  existence
   proof
     take -infty;
     thus thesis by XXREAL_0:5;
   end;
 end;
 
-definition let X be ext-real-membered set;
- func sup X -> ext-real number means
-:Def3: it is UpperBound of X &
-   for x being UpperBound of X holds it <= x;
- existence
+definition
+  let X be ext-real-membered set;
+  func sup X -> ext-real number means
+  :Def3:
+  it is UpperBound of X & for x
+  being UpperBound of X holds it <= x;
+  existence
   proof
-    defpred P[ext-real number] means $1 in X;
     defpred Q[ext-real number] means $1 is UpperBound of X;
-A:  for r,s st P[r] & Q[s] holds r <= s by Def1;
+    defpred P[ext-real number] means $1 in X;
+A1: for r,s st P[r] & Q[s] holds r <= s by Def1;
     consider s such that
-W1: for r st P[r] holds r <= s and
-W2: for r st Q[r] holds s <= r from XXREAL_1:sch 1(A);
-   take s;
-   thus s is UpperBound of X by W1,Def1;
-   thus thesis by W2;
+A2: for r st P[r] holds r <= s and
+A3: for r st Q[r] holds s <= r from XXREAL_1:sch 1(A1);
+    take s;
+    thus s is UpperBound of X by A2,Def1;
+    thus thesis by A3;
   end;
- uniqueness
-  proof let y,z such that
-Z1: y is UpperBound of X and
-Z2: for x being UpperBound of X holds y <= x and
-Z3: z is UpperBound of X and
-Z4: for x being UpperBound of X holds z <= x;
-A:  z <= y by Z1,Z4;
-    y <= z by Z2,Z3;
-   hence thesis by A,XXREAL_0:1;
-  end;
- func inf X -> ext-real number means
-:Def4: it is LowerBound of X &
-   for x being LowerBound of X holds x <= it;
- existence
+  uniqueness
   proof
-    defpred P[ext-real number] means $1 is LowerBound of X;
-    defpred Q[ext-real number] means $1 in X;
-A:  for r,s st P[r] & Q[s] holds r <= s by Def2;
-    consider s such that
-W1: for r st P[r] holds r <= s and
-W2: for r st Q[r] holds s <= r from XXREAL_1:sch 1(A);
-   take s;
-   thus s is LowerBound of X by W2,Def2;
-   thus thesis by W1;
+    let y,z such that
+A4: y is UpperBound of X and
+A5: for x being UpperBound of X holds y <= x and
+A6: z is UpperBound of X and
+A7: for x being UpperBound of X holds z <= x;
+A8: y <= z by A5,A6;
+    z <= y by A4,A7;
+    hence thesis by A8,XXREAL_0:1;
   end;
- uniqueness
-  proof let y,z such that
-Z1: y is LowerBound of X and
-Z2: for x being LowerBound of X holds x <= y and
-Z3: z is LowerBound of X and
-Z4: for x being LowerBound of X holds x <= z;
-A:  y <= z by Z1,Z4;
-    z <= y by Z2,Z3;
-   hence thesis by A,XXREAL_0:1;
+  func inf X -> ext-real number means
+  :Def4:
+  it is LowerBound of X & for x
+  being LowerBound of X holds x <= it;
+  existence
+  proof
+    defpred Q[ext-real number] means $1 in X;
+    defpred P[ext-real number] means $1 is LowerBound of X;
+A9: for r,s st P[r] & Q[s] holds r <= s by Def2;
+    consider s such that
+A10: for r st P[r] holds r <= s and
+A11: for r st Q[r] holds s <= r from XXREAL_1:sch 1(A9);
+    take s;
+    thus s is LowerBound of X by A11,Def2;
+    thus thesis by A10;
+  end;
+  uniqueness
+  proof
+    let y,z such that
+A12: y is LowerBound of X and
+A13: for x being LowerBound of X holds x <= y and
+A14: z is LowerBound of X and
+A15: for x being LowerBound of X holds x <= z;
+A16: z <= y by A13,A14;
+    y <= z by A12,A15;
+    hence thesis by A16,XXREAL_0:1;
   end;
 end;
 
-definition let X be ext-real-membered set;
- attr X is left_end means
-:Def5:  inf X in X;
- attr X is right_end means
-:Def6:  sup X in X;
+definition
+  let X be ext-real-membered set;
+  attr X is left_end means
+  :Def5:
+  inf X in X;
+  attr X is right_end means
+  :Def6:
+  sup X in X;
 end;
 
 theorem Th1:
- y is UpperBound of {x} iff x <= y
- proof
-F: x in {x} by TARSKI:def 1;
-  thus y is UpperBound of {x} implies x <= y by F,Def1;
+  y is UpperBound of {x} iff x <= y
+proof
+  x in {x} by TARSKI:def 1;
+  hence y is UpperBound of {x} implies x <= y by Def1;
   assume
-Z:  x <= y;
+A1: x <= y;
   let z;
-  assume z in {x};
-  hence thesis by Z,TARSKI:def 1;
- end;
+  assume
+  z in {x};
+  hence thesis by A1,TARSKI:def 1;
+end;
 
 theorem Th2:
- y is LowerBound of {x} iff y <= x
- proof
-F: x in {x} by TARSKI:def 1;
-  thus y is LowerBound of {x} implies y <= x by F,Def2;
+  y is LowerBound of {x} iff y <= x
+proof
+  x in {x} by TARSKI:def 1;
+  hence y is LowerBound of {x} implies y <= x by Def2;
   assume
-Z:  y <= x;
+A1: y <= x;
   let z;
-  assume z in {x};
-  hence thesis by Z,TARSKI:def 1;
- end;
+  assume
+  z in {x};
+  hence thesis by A1,TARSKI:def 1;
+end;
 
-Lm1:
- sup {x} = x
- proof
-A: x is UpperBound of {x} by Th1;
-  for z being UpperBound of {x} holds x <= z
-   proof let z be UpperBound of {x};
-     x in {x} by TARSKI:def 1;
+Lm1: sup {x} = x
+proof
+A1: for z being UpperBound of {x} holds x <= z
+  proof
+    let z be UpperBound of {x};
+    x in {x} by TARSKI:def 1;
     hence thesis by Def1;
-   end;
-  hence thesis by A,Def3;
- end;
+  end;
+  x is UpperBound of {x} by Th1;
+  hence thesis by A1,Def3;
+end;
 
-Lm2:
- inf {x} = x
- proof
-A: x is LowerBound of {x} by Th2;
-  for z being LowerBound of {x} holds z <= x
-   proof let z be LowerBound of {x};
-     x in {x} by TARSKI:def 1;
+Lm2: inf {x} = x
+proof
+A1: for z being LowerBound of {x} holds z <= x
+  proof
+    let z be LowerBound of {x};
+    x in {x} by TARSKI:def 1;
     hence thesis by Def2;
-   end;
-  hence thesis by A,Def4;
- end;
+  end;
+  x is LowerBound of {x} by Th2;
+  hence thesis by A1,Def4;
+end;
 
 registration
- cluster -> ext-real-membered Element of Fin ExtREAL;
- coherence
-  proof let X be Element of Fin ExtREAL;
+  cluster -> ext-real-membered Element of Fin ExtREAL;
+  coherence
+  proof
+    let X be Element of Fin ExtREAL;
     X c= ExtREAL by FINSUB_1:def 5;
-   hence thesis;
+    hence thesis;
   end;
 end;
 
 reserve A,B for ext-real-membered set;
 
 theorem Th3:
- x in A implies inf A <= x
- proof
-   inf A is LowerBound of A by Def4;
+  x in A implies inf A <= x
+proof
+  inf A is LowerBound of A by Def4;
   hence thesis by Def2;
- end;
-
-theorem Th3B:
- x in A implies x <= sup A
- proof
-   sup A is UpperBound of A by Def3;
-  hence thesis by Def1;
- end;
-
-theorem Th4:
- B c= A implies for x being LowerBound of A
-  holds x is LowerBound of B
-proof assume
-Z: B c= A;
- let x be LowerBound of A;
- let y;
- assume y in B;
- hence thesis by Def2,Z;
 end;
 
-theorem Th4B:
- B c= A implies for x being UpperBound of A
-  holds x is UpperBound of B
-proof assume
-Z: B c= A;
- let x be UpperBound of A;
- let y;
- assume y in B;
- hence thesis by Def1,Z;
+theorem Th4:
+  x in A implies x <= sup A
+proof
+  sup A is UpperBound of A by Def3;
+  hence thesis by Def1;
 end;
 
 theorem Th5:
- for x being LowerBound of A, y being LowerBound of B
-  holds min(x,y) is LowerBound of A\/ B
- proof let x be LowerBound of A, y be LowerBound of B;
-  set m = min(x,y);
-  let z;
-    assume
-Z:   z in A \/ B;
-    per cases by Z,XBOOLE_0:def 3;
-    suppose z in A;
-      then
-A1:   x <= z by Def2;
-      m <= x by XXREAL_0:17;
-     hence thesis by A1,XXREAL_0:2;
-    end;
-    suppose z in B;
-      then
-A1:   y <= z by Def2;
-      m <= y by XXREAL_0:17;
-     hence thesis by A1,XXREAL_0:2;
-    end;
-   end;
-
-theorem Th5B:
- for x being UpperBound of A, y being UpperBound of B
-  holds max(x,y) is UpperBound of A\/ B
- proof let x be UpperBound of A, y be UpperBound of B;
-  set m = max(x,y);
-  let z;
-    assume
-Z:   z in A \/ B;
-    per cases by Z,XBOOLE_0:def 3;
-    suppose z in A;
-      then
-A1:   z <= x by Def1;
-      x <= m by XXREAL_0:25;
-     hence thesis by A1,XXREAL_0:2;
-    end;
-    suppose z in B;
-      then
-A1:   z <= y by Def1;
-      y <= m by XXREAL_0:25;
-     hence thesis by A1,XXREAL_0:2;
-    end;
-   end;
+  B c= A implies for x being LowerBound of A holds x is LowerBound
+  of B
+proof
+  assume
+A1: B c= A;
+  let x be LowerBound of A;
+  let y;
+  assume
+  y in B;
+  hence thesis by A1,Def2;
+end;
 
 theorem Th6:
- inf(A \/ B) = min(inf A,inf B)
- proof
+  B c= A implies for x being UpperBound of A holds x is UpperBound
+  of B
+proof
+  assume
+A1: B c= A;
+  let x be UpperBound of A;
+  let y;
+  assume
+  y in B;
+  hence thesis by A1,Def1;
+end;
+
+theorem Th7:
+  for x being LowerBound of A, y being LowerBound of B holds min(x,
+  y) is LowerBound of A\/ B
+proof
+  let x be LowerBound of A, y be LowerBound of B;
+  set m = min(x,y);
+  let z;
+  assume
+A1: z in A \/ B;
+  per cases by A1,XBOOLE_0:def 3;
+  suppose
+A2: z in A;
+A3: m <= x by XXREAL_0:17;
+    x <= z by A2,Def2;
+    hence thesis by A3,XXREAL_0:2;
+  end;
+  suppose
+A4: z in B;
+A5: m <= y by XXREAL_0:17;
+    y <= z by A4,Def2;
+    hence thesis by A5,XXREAL_0:2;
+  end;
+end;
+
+theorem Th8:
+  for x being UpperBound of A, y being UpperBound of B holds max(x,
+  y) is UpperBound of A\/ B
+proof
+  let x be UpperBound of A, y be UpperBound of B;
+  set m = max(x,y);
+  let z;
+  assume
+A1: z in A \/ B;
+  per cases by A1,XBOOLE_0:def 3;
+  suppose
+A2: z in A;
+A3: x <= m by XXREAL_0:25;
+    z <= x by A2,Def1;
+    hence thesis by A3,XXREAL_0:2;
+  end;
+  suppose
+A4: z in B;
+A5: y <= m by XXREAL_0:25;
+    z <= y by A4,Def1;
+    hence thesis by A5,XXREAL_0:2;
+  end;
+end;
+
+theorem Th9:
+  inf(A \/ B) = min(inf A,inf B)
+proof
   set m = min(inf A,inf B);
-B: inf A is LowerBound of A by Def4;
-   inf B is LowerBound of B by Def4;
-   then
-A: m is LowerBound of A \/ B by B,Th5;
-  for x being LowerBound of A \/ B holds x <= m
-   proof let x be LowerBound of A \/ B;
-     x is LowerBound of A by Th4,XBOOLE_1:7;
-     then
-C:   x <= inf A by Def4;
-     x is LowerBound of B by Th4,XBOOLE_1:7;
-     then x <= inf B by Def4;
-    hence thesis by C,XXREAL_0:20;
-   end;
-  hence thesis by A,Def4;
- end;
-
-theorem Th6B:
- sup(A \/ B) = max(sup A,sup B)
- proof
-  set m = max(sup A,sup B);
-B: sup A is UpperBound of A by Def3;
-   sup B is UpperBound of B by Def3;
-   then
-A: m is UpperBound of A \/ B by B,Th5B;
-  for x being UpperBound of A \/ B holds m <= x
-   proof let x be UpperBound of A \/ B;
-     x is UpperBound of A by Th4B,XBOOLE_1:7;
-     then
-C:   sup A <= x by Def3;
-     x is UpperBound of B by Th4B,XBOOLE_1:7;
-     then sup B <= x by Def3;
-    hence thesis by C,XXREAL_0:28;
-   end;
-  hence thesis by A,Def3;
- end;
-
-registration
- cluster finite -> left_end right_end (non empty ext-real-membered set);
- coherence
+A1: inf B is LowerBound of B by Def4;
+A2: for x being LowerBound of A \/ B holds x <= m
   proof
-   defpred P[non empty ext-real-membered set] means $1 is left_end right_end;
-A: for x being Element of ExtREAL holds P[{.x.}]
-    proof let x being Element of ExtREAL;
-      inf {x} = x & sup {x} = x by Lm1,Lm2;
-      then inf {x} in {x} & sup {x} in {x} by TARSKI:def 1;
-     hence thesis by Def5,Def6;
-    end;
-B: for B1,B2 being non empty Element of Fin ExtREAL
-      holds P[B1] & P[B2] implies P[B1 \/ B2]
-   proof let B1,B2 be non empty Element of Fin ExtREAL;
-    assume P[B1];
-     then
-K:    inf B1 in B1 & sup B1 in B1 by Def5,Def6;
-    assume P[B2];
+    let x be LowerBound of A \/ B;
+    x is LowerBound of B by Th5,XBOOLE_1:7;
     then
-L:    inf B2 in B2 & sup B2 in B2 by Def5,Def6;
-     inf(B1 \/ B2) = min(inf B1,inf B2) by Th6;
-     then inf(B1 \/ B2) = inf B1 or inf(B1 \/ B2) = inf B2 by XXREAL_0:15;
-    hence inf(B1 \/ B2) in B1 \/ B2 by K,L,XBOOLE_0:def 3;
-     sup(B1 \/ B2) = max(sup B1,sup B2) by Th6B;
-     then sup(B1 \/ B2) = sup B1 or sup(B1 \/ B2) = sup B2 by XXREAL_0:16;
-    hence sup(B1 \/ B2) in B1 \/ B2 by K,L,XBOOLE_0:def 3;
-   end;
-C: for B being non empty Element of Fin ExtREAL holds P[B]
-   from SETWISEO:sch 3(A,B);
-   let X be non empty ext-real-membered set;
-F:  X c= ExtREAL by MEMBERED:2;
-   assume X is finite;
-    then X is non empty Element of Fin ExtREAL by F,FINSUB_1:def 5;
-   hence thesis by C;
+A3: x <= inf B by Def4;
+    x is LowerBound of A by Th5,XBOOLE_1:7;
+    then x <= inf A by Def4;
+    hence thesis by A3,XXREAL_0:20;
   end;
+  inf A is LowerBound of A by Def4;
+  then m is LowerBound of A \/ B by A1,Th7;
+  hence thesis by A2,Def4;
 end;
 
-registration
- cluster -> left_end (non empty natural-membered set);
- coherence
-  proof let X be non empty natural-membered set;
-   defpred P[Nat] means $1 in X;
-A: ex k being Nat st P[k] by MEMBERED:12;
-   consider k being Nat such that
-W1: P[k] and
-W2: for n being Nat st P[n] holds k <= n from NAT_1:sch 5(A);
-A: k is LowerBound of X
-    proof let y;
-     assume
-Z:    y in X;
-     thus thesis by Z,W2;
-    end;
-   for x being LowerBound of X holds x <= k by W1,Def2;
-   hence inf X in X by W1,A,Def4;
-  end;
-end;
-
-registration
- cluster right_end (non empty natural-membered set);
- existence
+theorem Th10:
+  sup(A \/ B) = max(sup A,sup B)
+proof
+  set m = max(sup A,sup B);
+A1: sup B is UpperBound of B by Def3;
+A2: for x being UpperBound of A \/ B holds m <= x
   proof
-   take {0};
-   thus thesis;
+    let x be UpperBound of A \/ B;
+    x is UpperBound of B by Th6,XBOOLE_1:7;
+    then
+A3: sup B <= x by Def3;
+    x is UpperBound of A by Th6,XBOOLE_1:7;
+    then sup A <= x by Def3;
+    hence thesis by A3,XXREAL_0:28;
+  end;
+  sup A is UpperBound of A by Def3;
+  then m is UpperBound of A \/ B by A1,Th8;
+  hence thesis by A2,Def3;
+end;
+
+registration
+  cluster finite -> left_end right_end (non empty ext-real-membered set);
+  coherence
+  proof
+    let X be non empty ext-real-membered set;
+    defpred P[non empty ext-real-membered set] means $1 is left_end right_end;
+    assume
+A1: X is finite;
+    X c= ExtREAL by MEMBERED:2;
+    then
+A2: X is non empty Element of Fin ExtREAL by A1,FINSUB_1:def 5;
+A3: for B1,B2 being non empty Element of Fin ExtREAL holds P[B1] & P[B2]
+    implies P[B1 \/ B2]
+    proof
+      let B1,B2 be non empty Element of Fin ExtREAL;
+      assume
+A4:   P[B1];
+      inf(B1 \/ B2) = min(inf B1,inf B2) by Th9;
+      then
+A5:   inf(B1 \/ B2) = inf B1 or inf(B1 \/ B2) = inf B2 by
+      XXREAL_0:15;
+      assume
+A6:   P[B2];
+      then
+A7:   inf B2 in B2 by Def5;
+      inf B1 in B1 by A4,Def5;
+      hence inf(B1 \/ B2) in B1 \/ B2 by A7,A5,XBOOLE_0:def 3;
+      sup(B1 \/ B2) = max(sup B1,sup B2) by Th10;
+      then
+A8:   sup(B1 \/ B2) = sup B1 or sup(B1 \/ B2) = sup B2 by
+      XXREAL_0:16;
+A9:   sup B2 in B2 by A6,Def6;
+      sup B1 in B1 by A4,Def6;
+      hence sup(B1 \/ B2) in B1 \/ B2 by A9,A8,XBOOLE_0:def 3;
+    end;
+A10: for x being Element of ExtREAL holds P[{.x.}]
+    proof
+      let x being Element of ExtREAL;
+      sup {x} = x by Lm1;
+      then
+A11:  sup {x} in {x} by TARSKI:def 1;
+      inf {x} = x by Lm2;
+      then inf {x} in {x} by TARSKI:def 1;
+      hence thesis by A11,Def5,Def6;
+    end;
+    for B being non empty Element of Fin ExtREAL holds P[B] from SETWISEO
+    :sch 3(A10,A3);
+    hence thesis by A2;
   end;
 end;
 
-notation let X be left_end (ext-real-membered set);
- synonym min X for inf X;
-end;
-
-notation let X be right_end (ext-real-membered set);
- synonym max X for sup X;
-end;
-
-definition let X be left_end (non empty ext-real-membered set);
- redefine func min X means
-:Def7:  it in X & for x st x in X holds it <= x;
- compatibility
-  proof let y;
-   thus y = min X implies y in X & for x st x in X holds y <= x by Def5,Th3;
-   assume that
-Z1: y in X and
-Z2: for x st x in X holds y <= x;
-A:  y is LowerBound of X by Z2,Def2;
-   for x being LowerBound of X holds x <= y by Z1,Def2;
-   hence thesis by A,Def4;
+registration
+  cluster -> left_end (non empty natural-membered set);
+  coherence
+  proof
+    let X be non empty natural-membered set;
+    defpred P[Nat] means $1 in X;
+A1: ex k being Nat st P[k] by MEMBERED:12;
+    consider k being Nat such that
+A2: P[k] and
+A3: for n being Nat st P[n] holds k <= n from NAT_1:sch 5(A1);
+A4: k is LowerBound of X
+    proof
+      let y;
+      assume
+      y in X;
+      hence thesis by A3;
+    end;
+    for x being LowerBound of X holds x <= k by A2,Def2;
+    hence inf X in X by A2,A4,Def4;
   end;
 end;
 
-definition let X be right_end (non empty ext-real-membered set);
- redefine func max X means
-:Def7B:  it in X & for x st x in X holds x <= it;
- compatibility
-  proof let y;
-   thus y = max X implies y in X & for x st x in X holds x <= y by Def6,Th3B;
-   assume that
-Z1: y in X and
-Z2: for x st x in X holds x <= y;
-A:  y is UpperBound of X by Z2,Def1;
-   for x being UpperBound of X holds y <= x by Z1,Def1;
-   hence thesis by A,Def3;
+registration
+  cluster right_end (non empty natural-membered set);
+  existence
+  proof
+    take {0};
+    thus thesis;
+  end;
+end;
+
+notation
+  let X be left_end (ext-real-membered set);
+  synonym min X for inf X;
+end;
+
+notation
+  let X be right_end (ext-real-membered set);
+  synonym max X for sup X;
+end;
+
+definition
+  let X be left_end (non empty ext-real-membered set);
+  redefine func min X means
+  :Def7:
+  it in X & for x st x in X holds it <= x;
+  compatibility
+  proof
+    let y;
+    thus y = min X implies y in X & for x st x in X holds y <= x by Def5,Th3;
+    assume that
+A1: y in X and
+A2: for x st x in X holds y <= x;
+A3: for x being LowerBound of X holds x <= y by A1,Def2;
+    y is LowerBound of X by A2,Def2;
+    hence thesis by A3,Def4;
+  end;
+end;
+
+definition
+  let X be right_end (non empty ext-real-membered set);
+  redefine func max X means
+  :Def8:
+  it in X & for x st x in X holds x <= it;
+  compatibility
+  proof
+    let y;
+    thus y = max X implies y in X & for x st x in X holds x <= y by Def6,Th4;
+    assume that
+A1: y in X and
+A2: for x st x in X holds x <= y;
+A3: for x being UpperBound of X holds y <= x by A1,Def1;
+    y is UpperBound of X by A2,Def1;
+    hence thesis by A3,Def3;
   end;
 end;
 
 theorem
- max{x} = x by Lm1;
+  max{x} = x by Lm1;
 
-Lm3:
- x <= y implies y is UpperBound of {x,y}
- proof assume
-Z:  x <= y;
+Lm3: x <= y implies y is UpperBound of {x,y}
+proof
+  assume
+A1: x <= y;
   let z;
-  assume z in {x,y};
-  hence thesis by Z,TARSKI:def 2;
- end;
+  assume
+  z in {x,y};
+  hence thesis by A1,TARSKI:def 2;
+end;
 
 Lm4: for z being UpperBound of {x,y} holds y <= z
- proof
+proof
   let z be UpperBound of {x,y};
-   y in {x,y} by TARSKI:def 2;
+  y in {x,y} by TARSKI:def 2;
   hence thesis by Def1;
- end;
+end;
 
 theorem
- max(x,y) = max{x,y}
-  proof
-   now per cases;
-   case x <= y;
-    then
-A:   y is UpperBound of {x,y} by Lm3;
-     for z being UpperBound of {x,y} holds y <= z by Lm4;
-    hence max{x,y} = y by A,Def3;
-   end;
-   case y < x;
-    then
-A:   x is UpperBound of {x,y} by Lm3;
-     for z being UpperBound of {x,y} holds x <= z by Lm4;
-    hence max{x,y} = x by A,Def3;
-   end;
-   end;
-   hence thesis by XXREAL_0:def 10;
+  max(x,y) = max{x,y}
+proof
+  now
+    per cases;
+    case
+A1:   x <= y;
+A2:   for z being UpperBound of {x,y} holds y <= z by Lm4;
+      y is UpperBound of {x,y} by A1,Lm3;
+      hence max{x,y} = y by A2,Def3;
+    end;
+    case
+A3:   y < x;
+A4:   for z being UpperBound of {x,y} holds x <= z by Lm4;
+      x is UpperBound of {x,y} by A3,Lm3;
+      hence max{x,y} = x by A4,Def3;
+    end;
   end;
+  hence thesis by XXREAL_0:def 10;
+end;
 
 theorem
- min{x} = x by Lm2;
+  min{x} = x by Lm2;
 
-Lm3:
- y <= x implies y is LowerBound of {x,y}
- proof assume
-Z:  y <= x;
+Lm5: y <= x implies y is LowerBound of {x,y}
+proof
+  assume
+A1: y <= x;
   let z;
-  assume z in {x,y};
-  hence thesis by Z,TARSKI:def 2;
- end;
+  assume
+  z in {x,y};
+  hence thesis by A1,TARSKI:def 2;
+end;
 
-Lm4: for z being LowerBound of {x,y} holds z <= y
- proof
+Lm6: for z being LowerBound of {x,y} holds z <= y
+proof
   let z be LowerBound of {x,y};
-   y in {x,y} by TARSKI:def 2;
+  y in {x,y} by TARSKI:def 2;
   hence thesis by Def2;
- end;
+end;
 
 theorem
- min{x,y} = min(x,y)
-  proof
-   now per cases;
-   case y <= x;
-    then
-A:   y is LowerBound of {x,y} by Lm3;
-     for z being LowerBound of {x,y} holds z <= y by Lm4;
-    hence min{x,y} = y by A,Def4;
-   end;
-   case x < y;
-    then
-A:   x is LowerBound of {x,y} by Lm3;
-     for z being LowerBound of {x,y} holds z <= x by Lm4;
-    hence min{x,y} = x by A,Def4;
-   end;
-   end;
-   hence thesis by XXREAL_0:def 9;
+  min{x,y} = min(x,y)
+proof
+  now
+    per cases;
+    case
+A1:   y <= x;
+A2:   for z being LowerBound of {x,y} holds z <= y by Lm6;
+      y is LowerBound of {x,y} by A1,Lm5;
+      hence min{x,y} = y by A2,Def4;
+    end;
+    case
+A3:   x < y;
+A4:   for z being LowerBound of {x,y} holds z <= x by Lm6;
+      x is LowerBound of {x,y} by A3,Lm5;
+      hence min{x,y} = x by A4,Def4;
+    end;
   end;
+  hence thesis by XXREAL_0:def 9;
+end;
 
-definition let X be ext-real-membered set;
- attr X is bounded_below means
-:Def9: ex r being real number st r is LowerBound of X;
- attr X is bounded_above means
-:Def10: ex r being real number st r is UpperBound of X;
+definition
+  let X be ext-real-membered set;
+  attr X is bounded_below means
+  :Def9:
+  ex r being real number st r is
+  LowerBound of X;
+  attr X is bounded_above means
+  :Def10:
+  ex r being real number st r is
+  UpperBound of X;
 end;
 
 registration
- cluster non empty finite natural-membered set;
- existence
+  cluster non empty finite natural-membered set;
+  existence
   proof
-   take {0};
-   thus thesis;
+    take {0};
+    thus thesis;
   end;
 end;
 
 definition
   let X be ext-real-membered set;
   attr X is bounded means
-:Def11: X is bounded_below bounded_above;
+  :Def11:
+  X is bounded_below bounded_above;
 end;
 
 registration
- cluster bounded -> bounded_above bounded_below (ext-real-membered set);
- coherence by Def11;
- cluster bounded_above bounded_below -> bounded (ext-real-membered set);
- coherence by Def11;
+  cluster bounded -> bounded_above bounded_below (ext-real-membered set);
+  coherence by Def11;
+  cluster bounded_above bounded_below -> bounded (ext-real-membered set);
+  coherence by Def11;
 end;
 
 registration
- cluster finite -> bounded (real-membered set);
- coherence
-  proof let X be real-membered set;
-   assume
-Z:   X is finite;
-   per cases;
-   suppose
-Z:   X is empty;
-    thus X is bounded_below
-     proof take 0;
+  cluster finite -> bounded (real-membered set);
+  coherence
+  proof
+    let X be real-membered set;
+    assume
+A1: X is finite;
+    per cases;
+    suppose
+A2:   X is empty;
+      thus X is bounded_below
+      proof
+        take 0;
+        let x;
+        thus thesis by A2;
+      end;
+      take 0;
       let x;
-      thus thesis by Z;
-     end;
-    take 0;
-    let x;
-    thus thesis by Z;
-   end;
-   suppose X is non empty;
-    then reconsider Y=X as non empty finite real-membered set by Z;
-    inf Y in X by Def5;
-    then reconsider m = inf X as real number;
-    thus X is bounded_below
-     proof take m;
+      thus thesis by A2;
+    end;
+    suppose
+      X is non empty;
+      then reconsider Y=X as non empty finite real-membered set by A1;
+      inf Y in X by Def5;
+      then reconsider m = inf X as real number;
+      thus X is bounded_below
+      proof
+        take m;
+        let x;
+        assume
+        x in X;
+        hence thesis by Th3;
+      end;
+      sup Y in X by Def6;
+      then reconsider m = sup X as real number;
+      take m;
       let x;
-      assume x in X;
-      hence thesis by Th3;
-     end;
-    sup Y in X by Def6;
-    then reconsider m = sup X as real number;
-    take m;
-    let x;
-    assume x in X;
-    hence thesis by Th3B;
-   end;
+      assume
+      x in X;
+      hence thesis by Th4;
+    end;
   end;
 end;
 
 registration
- cluster bounded (non empty natural-membered set);
- existence
+  cluster bounded (non empty natural-membered set);
+  existence
   proof
-   take {0};
-   thus thesis;
+    take {0};
+    thus thesis;
   end;
 end;
 
 theorem Th15:
- for X being non empty real-membered set st X is bounded_below
-    holds inf X in REAL
- proof let X be non empty real-membered set;
+  for X being non empty real-membered set st X is bounded_below
+  holds inf X in REAL
+proof
+  let X be non empty real-membered set;
   given r being real number such that
-G:   r is LowerBound of X;
-A: r <= inf X by Def4,G;
-   consider s being real number such that
-W:  s in X by MEMBERED:9;
-F: r in REAL & s in REAL by XREAL_0:def 1;
-   inf X <= s by W,Th3;
-  hence thesis by A,F,XXREAL_0:45;
- end;
+A1: r is LowerBound of X;
+  consider s being real number such that
+A2: s in X by MEMBERED:9;
+A3: inf X <= s by A2,Th3;
+A4: r in REAL by XREAL_0:def 1;
+A5: s in REAL by XREAL_0:def 1;
+  r <= inf X by A1,Def4;
+  hence thesis by A4,A5,A3,XXREAL_0:45;
+end;
 
 theorem Th16:
- for X being non empty real-membered set st X is bounded_above
-   holds sup X in REAL
- proof let X be non empty real-membered set;
+  for X being non empty real-membered set st X is bounded_above
+  holds sup X in REAL
+proof
+  let X be non empty real-membered set;
   given r being real number such that
-G:   r is UpperBound of X;
-A: sup X <= r by Def3,G;
-   consider s being real number such that
-W:  s in X by MEMBERED:9;
-F: r in REAL & s in REAL by XREAL_0:def 1;
-   s <= sup X by W,Th3B;
-  hence thesis by A,F,XXREAL_0:45;
- end;
-
-registration let X be bounded_above (non empty real-membered set);
- cluster sup X -> real;
- coherence
-  proof
-   sup X in REAL by Th16;
-   hence thesis;
-  end;
+A1: r is UpperBound of X;
+  consider s being real number such that
+A2: s in X by MEMBERED:9;
+A3: s <= sup X by A2,Th4;
+A4: r in REAL by XREAL_0:def 1;
+A5: s in REAL by XREAL_0:def 1;
+  sup X <= r by A1,Def3;
+  hence thesis by A4,A5,A3,XXREAL_0:45;
 end;
 
-registration let X be bounded_below (non empty real-membered set);
- cluster inf X -> real;
- coherence
+registration
+  let X be bounded_above (non empty real-membered set);
+  cluster sup X -> real;
+  coherence
   proof
-   inf X in REAL by Th15;
-   hence thesis;
+    sup X in REAL by Th16;
+    hence thesis;
   end;
 end;
 
 registration
- cluster bounded_above -> right_end (non empty integer-membered set);
- coherence
-  proof let X be non empty integer-membered set;
-   assume X is bounded_above;
+  let X be bounded_below (non empty real-membered set);
+  cluster inf X -> real;
+  coherence
+  proof
+    inf X in REAL by Th15;
+    hence thesis;
+  end;
+end;
+
+registration
+  cluster bounded_above -> right_end (non empty integer-membered set);
+  coherence
+  proof
+    let X be non empty integer-membered set;
+    assume
+    X is bounded_above;
     then reconsider Y=X as bounded_above non empty (integer-membered set);
     set s = sup Y;
+A1: [\ s /] <= s by INT_1:def 4;
     [\ s /] is UpperBound of X
-     proof let x;
+    proof
+      let x;
       assume
-Z:      x in X;
-      thus thesis by Z,Th3B,INT_1:81;
-     end;
-    then
-A:  s <= [\ s /] by Def3;
-    [\ s /] <= s by INT_1:def 4;
-    then reconsider s as Integer by A,XXREAL_0:1;
-   assume
-Z:  not sup X in X;
+      x in X;
+      hence thesis by Th4,INT_1:81;
+    end;
+    then s <= [\ s /] by Def3;
+    then reconsider s as Integer by A1,XXREAL_0:1;
+    assume
+A2: not sup X in X;
     s - 1 is UpperBound of X
-     proof let x;
+    proof
+      let x;
       assume
-ZZ:    x in X;
-       then reconsider i=x as Integer;
-       i <= s by ZZ,Th3B;
-       then i < s by Z,ZZ,XXREAL_0:1;
+A3:   x in X;
+      then reconsider i=x as Integer;
+      i <= s by A3,Th4;
+      then i < s by A2,A3,XXREAL_0:1;
       hence thesis by INT_1:79;
-     end;
+    end;
     then s - 1 >= s by Def3;
-   hence contradiction by XREAL_1:148;
+    hence contradiction by XREAL_1:148;
   end;
 end;
 
 registration
- cluster bounded_below -> left_end (non empty integer-membered set);
- coherence
-  proof let X be non empty integer-membered set;
-   assume X is bounded_below;
+  cluster bounded_below -> left_end (non empty integer-membered set);
+  coherence
+  proof
+    let X be non empty integer-membered set;
+    assume
+    X is bounded_below;
     then reconsider Y=X as bounded_below non empty (integer-membered set);
     set s = inf Y;
+A1: [/ s \] >= s by INT_1:def 5;
     [/ s \] is LowerBound of X
-     proof let x;
+    proof
+      let x;
       assume
-Z:      x in X;
-      thus thesis by Z,Th3,INT_1:92;
-     end;
-    then
-A:  [/ s \] <= s by Def4;
-    [/ s \] >= s by INT_1:def 5;
-    then reconsider s as Integer by A,XXREAL_0:1;
-   assume
-Z:  not inf X in X;
+      x in X;
+      hence thesis by Th3,INT_1:92;
+    end;
+    then [/ s \] <= s by Def4;
+    then reconsider s as Integer by A1,XXREAL_0:1;
+    assume
+A2: not inf X in X;
     s + 1 is LowerBound of X
-     proof let x;
+    proof
+      let x;
       assume
-ZZ:    x in X;
-       then reconsider i=x as Integer;
-       i >= s by ZZ,Th3;
-       then s < i by Z,ZZ,XXREAL_0:1;
+A3:   x in X;
+      then reconsider i=x as Integer;
+      i >= s by A3,Th3;
+      then s < i by A2,A3,XXREAL_0:1;
       hence thesis by INT_1:20;
-     end;
+    end;
     then s + 1 <= s by Def4;
-   hence contradiction by XREAL_1:147;
+    hence contradiction by XREAL_1:147;
   end;
 end;
 
 registration
- cluster -> bounded_below (natural-membered set);
- coherence
-  proof let X be natural-membered set;
-   take 0;
-   let x;
-   assume x in X;
-   hence thesis;
-  end;
-end;
-
-registration let X be left_end (non empty real-membered set);
- cluster min X -> real;
- coherence
+  cluster -> bounded_below (natural-membered set);
+  coherence
   proof
-    min X in X by Def7;
-   hence thesis;
-  end;
-end;
-
-registration let X be left_end (non empty rational-membered set);
- cluster min X -> rational;
- coherence
-  proof
-    min X in X by Def7;
-   hence thesis;
-  end;
-end;
-
-registration let X be left_end (non empty integer-membered set);
- cluster min X -> integer;
- coherence
-  proof
-    min X in X by Def7;
-   hence thesis;
-  end;
-end;
-
-registration let X be left_end (non empty natural-membered set);
- cluster min X -> natural;
- coherence
-  proof
-    min X in X by Def7;
-   hence thesis;
-  end;
-end;
-
-registration let X be right_end (non empty real-membered set);
- cluster max X -> real;
- coherence
-  proof
-    max X in X by Def7B;
-   hence thesis;
-  end;
-end;
-
-registration let X be right_end (non empty rational-membered set);
- cluster max X -> rational;
- coherence
-  proof
-    max X in X by Def7B;
-   hence thesis;
-  end;
-end;
-
-registration let X be right_end (non empty integer-membered set);
- cluster max X -> integer;
- coherence
-  proof
-    max X in X by Def7B;
-   hence thesis;
-  end;
-end;
-
-registration let X be right_end (non empty natural-membered set);
- cluster max X -> natural;
- coherence
-  proof
-    max X in X by Def7B;
-   hence thesis;
+    let X be natural-membered set;
+    take 0;
+    let x;
+    assume
+    x in X;
+    hence thesis;
   end;
 end;
 
 registration
- cluster left_end -> bounded_below (real-membered set);
- coherence
-  proof let X be real-membered set;
-   assume inf X in X;
+  let X be left_end (non empty real-membered set);
+  cluster min X -> real;
+  coherence
+  proof
+    min X in X by Def7;
+    hence thesis;
+  end;
+end;
+
+registration
+  let X be left_end (non empty rational-membered set);
+  cluster min X -> rational;
+  coherence
+  proof
+    min X in X by Def7;
+    hence thesis;
+  end;
+end;
+
+registration
+  let X be left_end (non empty integer-membered set);
+  cluster min X -> integer;
+  coherence
+  proof
+    min X in X by Def7;
+    hence thesis;
+  end;
+end;
+
+registration
+  let X be left_end (non empty natural-membered set);
+  cluster min X -> natural;
+  coherence
+  proof
+    min X in X by Def7;
+    hence thesis;
+  end;
+end;
+
+registration
+  let X be right_end (non empty real-membered set);
+  cluster max X -> real;
+  coherence
+  proof
+    max X in X by Def8;
+    hence thesis;
+  end;
+end;
+
+registration
+  let X be right_end (non empty rational-membered set);
+  cluster max X -> rational;
+  coherence
+  proof
+    max X in X by Def8;
+    hence thesis;
+  end;
+end;
+
+registration
+  let X be right_end (non empty integer-membered set);
+  cluster max X -> integer;
+  coherence
+  proof
+    max X in X by Def8;
+    hence thesis;
+  end;
+end;
+
+registration
+  let X be right_end (non empty natural-membered set);
+  cluster max X -> natural;
+  coherence
+  proof
+    max X in X by Def8;
+    hence thesis;
+  end;
+end;
+
+registration
+  cluster left_end -> bounded_below (real-membered set);
+  coherence
+  proof
+    let X be real-membered set;
+    assume
+    inf X in X;
     then reconsider r = inf X as real number;
-   take r; let x;
-   thus thesis by Th3;
+    take r;
+    let x;
+    thus thesis by Th3;
   end;
- cluster right_end -> bounded_above (real-membered set);
- coherence
-  proof let X be real-membered set;
-   assume sup X in X;
+  cluster right_end -> bounded_above (real-membered set);
+  coherence
+  proof
+    let X be real-membered set;
+    assume
+    sup X in X;
     then reconsider r = sup X as real number;
-   take r; let x;
-   thus thesis by Th3B;
+    take r;
+    let x;
+    thus thesis by Th4;
   end;
 end;
 
 theorem Th17:
- x is LowerBound of [.x,y.]
- proof
-  let z;
-  assume z in [.x,y.];
-  hence thesis by XXREAL_1:1;
- end;
-
-theorem Th18:
- x is LowerBound of ].x,y.]
- proof
-  let z;
-  assume z in ].x,y.];
-  hence thesis by XXREAL_1:2;
- end;
-
-theorem Th19:
- x is LowerBound of [.x,y.[
- proof
-  let z;
-  assume z in [.x,y.[;
-  hence thesis by XXREAL_1:3;
- end;
-
-theorem Th20:
- x is LowerBound of ].x,y.[
- proof
-  let z;
-  assume z in ].x,y.[;
-  hence thesis by XXREAL_1:4;
- end;
-
-theorem Th21:
- y is UpperBound of [.x,y.]
- proof
-  let z;
-  assume z in [.x,y.];
-  hence thesis by XXREAL_1:1;
- end;
-
-theorem Th22:
- y is UpperBound of ].x,y.]
- proof
-  let z;
-  assume z in ].x,y.];
-  hence thesis by XXREAL_1:2;
- end;
-
-theorem Th23:
- y is UpperBound of [.x,y.[
- proof
-  let z;
-  assume z in [.x,y.[;
-  hence thesis by XXREAL_1:3;
- end;
-
-theorem Th24:
- y is UpperBound of ].x,y.[
- proof
-  let z;
-  assume z in ].x,y.[;
-  hence thesis by XXREAL_1:4;
- end;
-
-theorem Th25:
- x <= y implies inf [.x,y.] = x
- proof
-A: x is LowerBound of [.x,y.] by Th17;
-  assume
-Z:  x <= y;
-  for z being LowerBound of [.x,y.] holds z <= x
-   proof let z be LowerBound of [.x,y.];
-     x in [.x,y.] by Z,XXREAL_1:1;
-    hence thesis by Def2;
-   end;
-  hence thesis by A,Def4;
- end;
-
-theorem Th26:
- x < y implies inf [.x,y.[ = x
- proof
-A: x is LowerBound of [.x,y.[ by Th19;
-  assume
-Z:  x < y;
-  for z being LowerBound of [.x,y.[ holds z <= x
-   proof let z be LowerBound of [.x,y.[;
-     x in [.x,y.[ by Z,XXREAL_1:3;
-    hence thesis by Def2;
-   end;
-  hence thesis by A,Def4;
- end;
-
-theorem Th27:
- x < y implies inf ].x,y.] = x
- proof
-A: x is LowerBound of ].x,y.] by Th18;
-  assume
-Z:  x < y;
-  for z being LowerBound of ].x,y.] holds z <= x
-   proof let z be LowerBound of ].x,y.];
-     for r st x < r & r < y holds z <= r
-      proof let r;
-       assume x < r & r < y;
-        then r in ].x,y.] by XXREAL_1:2;
-       hence thesis by Def2;
-      end;
-    hence thesis by Z,XREAL_1:230;
-   end;
-  hence thesis by A,Def4;
- end;
-
-theorem Th28:
- x < y implies inf ].x,y.[ = x
- proof
-A: x is LowerBound of ].x,y.[ by Th20;
-  assume
-Z:  x < y;
-  for z being LowerBound of ].x,y.[ holds z <= x
-   proof let z be LowerBound of ].x,y.[;
-     for r st x < r & r < y holds z <= r
-      proof let r;
-       assume x < r & r < y;
-        then r in ].x,y.[ by XXREAL_1:4;
-       hence thesis by Def2;
-      end;
-    hence thesis by Z,XREAL_1:230;
-   end;
-  hence thesis by A,Def4;
- end;
-
-theorem Th29:
- x <= y implies sup [.x,y.] = y
- proof
-A: y is UpperBound of [.x,y.] by Th21;
-  assume
-Z:  x <= y;
-  for z being UpperBound of [.x,y.] holds y <= z
-   proof let z be UpperBound of [.x,y.];
-     y in [.x,y.] by Z,XXREAL_1:1;
-    hence thesis by Def1;
-   end;
-  hence thesis by A,Def3;
- end;
-
-theorem Th30:
- x < y implies sup ].x,y.] = y
- proof
-A: y is UpperBound of ].x,y.] by Th22;
-  assume
-Z:  x < y;
-  for z being UpperBound of ].x,y.] holds y <= z
-   proof let z be UpperBound of ].x,y.];
-     y in ].x,y.] by Z,XXREAL_1:2;
-    hence thesis by Def1;
-   end;
-  hence thesis by A,Def3;
- end;
-
-theorem Th31:
- x < y implies sup [.x,y.[ = y
- proof
-A: y is UpperBound of [.x,y.[ by Th23;
-  assume
-Z:  x < y;
-  for z being UpperBound of [.x,y.[ holds y <= z
-   proof let z be UpperBound of [.x,y.[;
-     for r st x < r & r < y holds r <= z
-      proof let r;
-       assume x < r & r < y;
-        then r in [.x,y.[ by XXREAL_1:3;
-       hence thesis by Def1;
-      end;
-    hence thesis by Z,XREAL_1:231;
-   end;
-  hence thesis by A,Def3;
- end;
-
-theorem Th32:
- x < y implies sup ].x,y.[ = y
- proof
-A: y is UpperBound of ].x,y.[ by Th24;
-  assume
-Z:  x < y;
-  for z being UpperBound of ].x,y.[ holds y <= z
-   proof let z be UpperBound of ].x,y.[;
-     for r st x < r & r < y holds r <= z
-      proof let r;
-       assume x < r & r < y;
-        then r in ].x,y.[ by XXREAL_1:4;
-       hence thesis by Def1;
-      end;
-    hence thesis by Z,XREAL_1:231;
-   end;
-  hence thesis by A,Def3;
- end;
-
-theorem Th33:
- x <= y implies  [.x,y.] is left_end right_end
-  proof
-   assume
-Z: x <= y;
-   thus [.x,y.] is left_end
-    proof
-      x in [.x,y.] by Z,XXREAL_1:1;
-     hence inf [.x,y.] in [.x,y.] by Z,Th25;
-    end;
-    y in [.x,y.] by Z,XXREAL_1:1;
-   hence sup [.x,y.] in [.x,y.] by Z,Th29;
-  end;
-
-theorem Th34:
- x < y implies [.x,y.[ is left_end
-  proof
-   assume
-Z: x < y;
-    x in [.x,y.[ by Z,XXREAL_1:3;
-   hence inf [.x,y.[ in [.x,y.[ by Z,Th26;
-  end;
-
-theorem Th35:
- x < y implies ].x,y.] is right_end
-  proof
-   assume
-Z: x < y;
-    y in ].x,y.] by Z,XXREAL_1:2;
-   hence sup ].x,y.] in ].x,y.] by Z,Th30;
-  end;
-
-theorem TW1:
- x is LowerBound of {}
- proof let y;
-  thus thesis;
- end;
-
-theorem TW2:
- x is UpperBound of {}
- proof let y;
-  thus thesis;
- end;
-
-theorem TW3:
- inf {} = +infty
+  x is LowerBound of [.x,y.]
 proof
-A: +infty is LowerBound of {} by TW1;
-  for x being LowerBound of {} holds x <= +infty by XXREAL_0:3;
- hence thesis by A,Def4;
+  let z;
+  assume
+  z in [.x,y.];
+  hence thesis by XXREAL_1:1;
 end;
 
-theorem TW4:
- sup {} = -infty
+theorem Th18:
+  x is LowerBound of ].x,y.]
 proof
-A: -infty is UpperBound of {} by TW2;
-  for x being UpperBound of {} holds -infty <= x by XXREAL_0:5;
- hence thesis by A,Def3;
+  let z;
+  assume
+  z in ].x,y.];
+  hence thesis by XXREAL_1:2;
+end;
+
+theorem Th19:
+  x is LowerBound of [.x,y.[
+proof
+  let z;
+  assume
+  z in [.x,y.[;
+  hence thesis by XXREAL_1:3;
+end;
+
+theorem Th20:
+  x is LowerBound of ].x,y.[
+proof
+  let z;
+  assume
+  z in ].x,y.[;
+  hence thesis by XXREAL_1:4;
+end;
+
+theorem Th21:
+  y is UpperBound of [.x,y.]
+proof
+  let z;
+  assume
+  z in [.x,y.];
+  hence thesis by XXREAL_1:1;
+end;
+
+theorem Th22:
+  y is UpperBound of ].x,y.]
+proof
+  let z;
+  assume
+  z in ].x,y.];
+  hence thesis by XXREAL_1:2;
+end;
+
+theorem Th23:
+  y is UpperBound of [.x,y.[
+proof
+  let z;
+  assume
+  z in [.x,y.[;
+  hence thesis by XXREAL_1:3;
+end;
+
+theorem Th24:
+  y is UpperBound of ].x,y.[
+proof
+  let z;
+  assume
+  z in ].x,y.[;
+  hence thesis by XXREAL_1:4;
+end;
+
+theorem Th25:
+  x <= y implies inf [.x,y.] = x
+proof
+  assume
+A1: x <= y;
+A2: for z being LowerBound of [.x,y.] holds z <= x
+  proof
+    let z be LowerBound of [.x,y.];
+    x in [.x,y.] by A1,XXREAL_1:1;
+    hence thesis by Def2;
+  end;
+  x is LowerBound of [.x,y.] by Th17;
+  hence thesis by A2,Def4;
+end;
+
+theorem Th26:
+  x < y implies inf [.x,y.[ = x
+proof
+  assume
+A1: x < y;
+A2: for z being LowerBound of [.x,y.[ holds z <= x
+  proof
+    let z be LowerBound of [.x,y.[;
+    x in [.x,y.[ by A1,XXREAL_1:3;
+    hence thesis by Def2;
+  end;
+  x is LowerBound of [.x,y.[ by Th19;
+  hence thesis by A2,Def4;
+end;
+
+theorem Th27:
+  x < y implies inf ].x,y.] = x
+proof
+  assume
+A1: x < y;
+A2: for z being LowerBound of ].x,y.] holds z <= x
+  proof
+    let z be LowerBound of ].x,y.];
+    for r st x < r & r < y holds z <= r
+    proof
+      let r;
+      assume that
+A3:   x < r and
+A4:   r < y;
+      r in ].x,y.] by A3,A4,XXREAL_1:2;
+      hence thesis by Def2;
+    end;
+    hence thesis by A1,XREAL_1:230;
+  end;
+  x is LowerBound of ].x,y.] by Th18;
+  hence thesis by A2,Def4;
+end;
+
+theorem Th28:
+  x < y implies inf ].x,y.[ = x
+proof
+  assume
+A1: x < y;
+A2: for z being LowerBound of ].x,y.[ holds z <= x
+  proof
+    let z be LowerBound of ].x,y.[;
+    for r st x < r & r < y holds z <= r
+    proof
+      let r;
+      assume that
+A3:   x < r and
+A4:   r < y;
+      r in ].x,y.[ by A3,A4,XXREAL_1:4;
+      hence thesis by Def2;
+    end;
+    hence thesis by A1,XREAL_1:230;
+  end;
+  x is LowerBound of ].x,y.[ by Th20;
+  hence thesis by A2,Def4;
+end;
+
+theorem Th29:
+  x <= y implies sup [.x,y.] = y
+proof
+  assume
+A1: x <= y;
+A2: for z being UpperBound of [.x,y.] holds y <= z
+  proof
+    let z be UpperBound of [.x,y.];
+    y in [.x,y.] by A1,XXREAL_1:1;
+    hence thesis by Def1;
+  end;
+  y is UpperBound of [.x,y.] by Th21;
+  hence thesis by A2,Def3;
+end;
+
+theorem Th30:
+  x < y implies sup ].x,y.] = y
+proof
+  assume
+A1: x < y;
+A2: for z being UpperBound of ].x,y.] holds y <= z
+  proof
+    let z be UpperBound of ].x,y.];
+    y in ].x,y.] by A1,XXREAL_1:2;
+    hence thesis by Def1;
+  end;
+  y is UpperBound of ].x,y.] by Th22;
+  hence thesis by A2,Def3;
+end;
+
+theorem Th31:
+  x < y implies sup [.x,y.[ = y
+proof
+  assume
+A1: x < y;
+A2: for z being UpperBound of [.x,y.[ holds y <= z
+  proof
+    let z be UpperBound of [.x,y.[;
+    for r st x < r & r < y holds r <= z
+    proof
+      let r;
+      assume that
+A3:   x < r and
+A4:   r < y;
+      r in [.x,y.[ by A3,A4,XXREAL_1:3;
+      hence thesis by Def1;
+    end;
+    hence thesis by A1,XREAL_1:231;
+  end;
+  y is UpperBound of [.x,y.[ by Th23;
+  hence thesis by A2,Def3;
+end;
+
+theorem Th32:
+  x < y implies sup ].x,y.[ = y
+proof
+  assume
+A1: x < y;
+A2: for z being UpperBound of ].x,y.[ holds y <= z
+  proof
+    let z be UpperBound of ].x,y.[;
+    for r st x < r & r < y holds r <= z
+    proof
+      let r;
+      assume that
+A3:   x < r and
+A4:   r < y;
+      r in ].x,y.[ by A3,A4,XXREAL_1:4;
+      hence thesis by Def1;
+    end;
+    hence thesis by A1,XREAL_1:231;
+  end;
+  y is UpperBound of ].x,y.[ by Th24;
+  hence thesis by A2,Def3;
+end;
+
+theorem Th33:
+  x <= y implies [.x,y.] is left_end right_end
+proof
+  assume
+A1: x <= y;
+  then x in [.x,y.] by XXREAL_1:1;
+  then inf [.x,y.] in [.x,y.] by A1,Th25;
+  hence [.x,y.] is left_end by Def5;
+  y in [.x,y.] by A1,XXREAL_1:1;
+  hence sup [.x,y.] in [.x,y.] by A1,Th29;
+end;
+
+theorem Th34:
+  x < y implies [.x,y.[ is left_end
+proof
+  assume
+A1: x < y;
+  then x in [.x,y.[ by XXREAL_1:3;
+  hence inf [.x,y.[ in [.x,y.[ by A1,Th26;
+end;
+
+theorem Th35:
+  x < y implies ].x,y.] is right_end
+proof
+  assume
+A1: x < y;
+  then y in ].x,y.] by XXREAL_1:2;
+  hence sup ].x,y.] in ].x,y.] by A1,Th30;
+end;
+
+theorem Th36:
+  x is LowerBound of {}
+proof
+  let y;
+  thus thesis;
+end;
+
+theorem Th37:
+  x is UpperBound of {}
+proof
+  let y;
+  thus thesis;
+end;
+
+theorem Th38:
+  inf {} = +infty
+proof
+A1: for x being LowerBound of {} holds x <= +infty by XXREAL_0:3;
+  +infty is LowerBound of {} by Th36;
+  hence thesis by A1,Def4;
+end;
+
+theorem Th39:
+  sup {} = -infty
+proof
+A1: for x being UpperBound of {} holds -infty <= x by XXREAL_0:5;
+  -infty is UpperBound of {} by Th37;
+  hence thesis by A1,Def3;
 end;
 
 theorem Th40:
- for X being ext-real-membered set holds
-  X is non empty iff inf X <= sup X
- proof let X be ext-real-membered set;
+  for X being ext-real-membered set holds X is non empty iff inf X
+  <= sup X
+proof
+  let X be ext-real-membered set;
   thus X is non empty implies inf X <= sup X
-   proof assume X is non empty;
+  proof
+    assume
+    X is non empty;
     then consider x such that
-W:   x in X by MEMBERED:8;
-    inf X <= x & x <= sup X by W,Th3,Th3B;
-    hence thesis by XXREAL_0:2;
-   end;
-  assume inf X <= sup X;
-  hence thesis by TW3,TW4;
- end;
+A1: x in X by MEMBERED:8;
+A2: x <= sup X by A1,Th4;
+    inf X <= x by A1,Th3;
+    hence thesis by A2,XXREAL_0:2;
+  end;
+  assume
+  inf X <= sup X;
+  hence thesis by Th38,Th39;
+end;
 
 registration
- cluster bounded -> finite (integer-membered set);
- coherence
-  proof let X be integer-membered set;
-   per cases;
-   suppose X is empty;
-    hence thesis;
-   end;
-   suppose
-S:  X is non empty;
-   assume X is bounded_below bounded_above;
-    then reconsider Z = X as
-     bounded_below bounded_above non empty (integer-membered set) by S;
-    deffunc F(set) = $1;
-    defpred P[set] means $1 in X;
-    set m = inf Z, n = sup Z;
-    set Y = {F(i) where i is Element of INT: m<=i & i<=n & P[i]};
-A:  Y is finite from FinInter;
-    X c= Y
-     proof let i be Integer;
-F:    i in INT by INT_1:def 2;
+  cluster bounded -> finite (integer-membered set);
+  coherence
+  proof
+    let X be integer-membered set;
+    per cases;
+    suppose
+      X is empty;
+      hence thesis;
+    end;
+    suppose
+A1:   X is non empty;
       assume
-Z:      P[i];
-       then m<=i & i<=n by Th3,Th3B;
-      hence thesis by Z,F;
-     end;
-   hence thesis by A;
-   end;
+      X is bounded_below bounded_above;
+      then reconsider Z = X as bounded_below bounded_above non empty (
+      integer-membered set) by A1;
+      set m = inf Z, n = sup Z;
+      defpred P[set] means $1 in X;
+      deffunc F(set) = $1;
+      set Y = {F(i) where i is Element of INT: m<=i & i<=n & P[i]};
+A2:   X c= Y
+      proof
+        let i be Integer;
+A3:     i in INT by INT_1:def 2;
+        assume
+A4:     P[i];
+        then
+A5:     i<=n by Th4;
+        m<=i by A4,Th3;
+        hence thesis by A3,A4,A5;
+      end;
+      Y is finite from FinInter;
+      hence thesis by A2;
+    end;
   end;
 end;
 
 registration
- cluster -> finite (bounded_above (natural-membered set));
- coherence;
+  cluster -> finite (bounded_above (natural-membered set));
+  coherence;
 end;
 
 theorem
- for X being ext-real-membered set holds
-   +infty is UpperBound of X
-proof let X be ext-real-membered set;
- let x such that x in X;
- thus thesis by XXREAL_0:3;
+  for X being ext-real-membered set holds +infty is UpperBound of X
+proof
+  let X be ext-real-membered set;
+  let x such that
+  x in X;
+  thus thesis by XXREAL_0:3;
 end;
 
 theorem
- for X being ext-real-membered set holds
-   -infty is LowerBound of X
-proof let X be ext-real-membered set;
- let x such that x in X;
- thus thesis by XXREAL_0:5;
+  for X being ext-real-membered set holds -infty is LowerBound of X
+proof
+  let X be ext-real-membered set;
+  let x such that
+  x in X;
+  thus thesis by XXREAL_0:5;
 end;
 
 theorem Th43:
-  for X,Y being ext-real-membered set st X c= Y & Y is bounded_above holds
-  X is bounded_above
+  for X,Y being ext-real-membered set st X c= Y & Y is
+  bounded_above holds X is bounded_above
 proof
   let X,Y be ext-real-membered set;
   assume
 A1: X c= Y;
   given r being real number such that
-G: r is UpperBound of Y;
+A2: r is UpperBound of Y;
   take r;
-  thus thesis by A1,G,Th4B;
+  thus thesis by A1,A2,Th6;
 end;
 
 theorem Th44:
-  for X,Y being ext-real-membered set st X c= Y & Y is bounded_below holds
-  X is bounded_below
+  for X,Y being ext-real-membered set st X c= Y & Y is
+  bounded_below holds X is bounded_below
 proof
   let X,Y be ext-real-membered set;
   assume
 A1: X c= Y;
   given r being real number such that
-G: r is LowerBound of Y;
+A2: r is LowerBound of Y;
   take r;
-  thus thesis by A1,G,Th4;
+  thus thesis by A1,A2,Th5;
 end;
 
 theorem
-  for X,Y being ext-real-membered set st X c= Y & Y is bounded holds
-  X is bounded
-  proof
+  for X,Y being ext-real-membered set st X c= Y & Y is bounded holds X
+  is bounded
+proof
   let X,Y be ext-real-membered set;
   assume
 A1: X c= Y;
-   assume Y is bounded_below bounded_above;
-   hence X is bounded_below bounded_above by A1,Th43,Th44;
-  end;
+  assume
+  Y is bounded_below bounded_above;
+  hence X is bounded_below bounded_above by A1,Th43,Th44;
+end;
 
 theorem Th46:
- REAL is non bounded_below non bounded_above
- proof
+  REAL is non bounded_below non bounded_above
+proof
   thus REAL is non bounded_below
-   proof
+  proof
     given r being real number such that
-G:     r is LowerBound of REAL;
+A1: r is LowerBound of REAL;
     consider s being real number such that
-W:   s < r by XREAL_1:4;
-     s in REAL by XREAL_0:def 1;
-    hence contradiction by W,G,Def2;
-   end;
-    given r being real number such that
-G:     r is UpperBound of REAL;
-    consider s being real number such that
-W:   r < s by XREAL_1:3;
-     s in REAL by XREAL_0:def 1;
-    hence contradiction by W,G,Def1;
- end;
+A2: s < r by XREAL_1:4;
+    s in REAL by XREAL_0:def 1;
+    hence contradiction by A1,A2,Def2;
+  end;
+  given r being real number such that
+A3: r is UpperBound of REAL;
+  consider s being real number such that
+A4: r < s by XREAL_1:3;
+  s in REAL by XREAL_0:def 1;
+  hence contradiction by A3,A4,Def1;
+end;
 
 registration
- cluster REAL -> non bounded_below non bounded_above;
- coherence by Th46;
+  cluster REAL -> non bounded_below non bounded_above;
+  coherence by Th46;
 end;
 
 theorem
- {+infty} is bounded_below
-  proof
-   take 0;
-   let x;
-   assume x in {+infty};
-   hence thesis by TARSKI:def 1;
-  end;
+  {+infty} is bounded_below
+proof
+  take 0;
+  let x;
+  assume
+  x in {+infty};
+  hence thesis by TARSKI:def 1;
+end;
 
 theorem
- {-infty} is bounded_above
-  proof
-   take 0;
-   let x;
-   assume x in {-infty};
-   hence thesis by TARSKI:def 1;
-  end;
+  {-infty} is bounded_above
+proof
+  take 0;
+  let x;
+  assume
+  x in {-infty};
+  hence thesis by TARSKI:def 1;
+end;
 
 theorem Th49:
-  for X being bounded_above non empty (ext-real-membered set)
-   st X <> {-infty} holds
-  ex x being Element of REAL st x in X
- proof let X be bounded_above non empty (ext-real-membered set) such that
-Z: X <> {-infty};
-   consider r being real number such that
-W:  r is UpperBound of X by Def10;
-X: r in REAL by XREAL_0:def 1;
-   consider x being set such that
-W1: x in X and
-W2: x <> -infty by Z,ZFMISC_1:41;
-   reconsider x as ext-real number by W1;
-   x <= r by W1,W,Def1;
-   then x in REAL by W2,X,XXREAL_0:13;
-  hence thesis by W1;
- end;
+  for X being bounded_above non empty (ext-real-membered set) st X
+  <> {-infty} holds ex x being Element of REAL st x in X
+proof
+  let X be bounded_above non empty (ext-real-membered set);
+  assume
+  X <> {-infty};
+  then consider x being set such that
+A1: x in X and
+A2: x <> -infty by ZFMISC_1:41;
+  reconsider x as ext-real number by A1;
+  consider r being real number such that
+A3: r is UpperBound of X by Def10;
+A4: r in REAL by XREAL_0:def 1;
+  x <= r by A3,A1,Def1;
+  then x in REAL by A4,A2,XXREAL_0:13;
+  hence thesis by A1;
+end;
 
 theorem Th50:
-  for X being bounded_below non empty (ext-real-membered set)
-   st X <> {+infty} holds
-  ex x being Element of REAL st x in X
- proof let X be bounded_below non empty (ext-real-membered set) such that
-Z: X <> {+infty};
-   consider r being real number such that
-W:  r is LowerBound of X by Def9;
-X: r in REAL by XREAL_0:def 1;
-   consider x being set such that
-W1: x in X and
-W2: x <> +infty by Z,ZFMISC_1:41;
-   reconsider x as ext-real number by W1;
-   r <= x by W1,W,Def2;
-   then x in REAL by W2,X,XXREAL_0:10;
-  hence thesis by W1;
- end;
+  for X being bounded_below non empty (ext-real-membered set) st X
+  <> {+infty} holds ex x being Element of REAL st x in X
+proof
+  let X be bounded_below non empty (ext-real-membered set);
+  assume
+  X <> {+infty};
+  then consider x being set such that
+A1: x in X and
+A2: x <> +infty by ZFMISC_1:41;
+  reconsider x as ext-real number by A1;
+  consider r being real number such that
+A3: r is LowerBound of X by Def9;
+A4: r in REAL by XREAL_0:def 1;
+  r <= x by A3,A1,Def2;
+  then x in REAL by A4,A2,XXREAL_0:10;
+  hence thesis by A1;
+end;
+
+theorem Th51:
+  for X being ext-real-membered set st -infty is UpperBound of X
+  holds X c= {-infty}
+proof
+  let X be ext-real-membered set such that
+A1: -infty is UpperBound of X;
+  let x;
+  assume
+  x in X;
+  then x = -infty by A1,Def1,XXREAL_0:6;
+  hence thesis by TARSKI:def 1;
+end;
 
 theorem Th52:
-  for X being ext-real-membered set
-   st -infty is UpperBound of X
-  holds X c= {-infty}
-proof let X be ext-real-membered set such that
-Z: -infty is UpperBound of X;
- let x;
- assume x in X;
-  then x = -infty by Z,Def1,XXREAL_0:6;
- hence thesis by TARSKI:def 1;
-end;
-
-theorem Th53:
-  for X being ext-real-membered set
-   st +infty is LowerBound of X
+  for X being ext-real-membered set st +infty is LowerBound of X
   holds X c= {+infty}
-proof let X be ext-real-membered set such that
-Z: +infty is LowerBound of X;
- let x;
- assume x in X;
-  then x = +infty by Z,Def2,XXREAL_0:4;
- hence thesis by TARSKI:def 1;
-end;
-
-theorem
-  for X being non empty ext-real-membered set
-  st ex y being UpperBound of X st y <> +infty
-  holds X is bounded_above
-proof let X be non empty ext-real-membered set;
- given y being UpperBound of X such that
-G:  y <> +infty;
- per cases;
- suppose y = -infty;
-   then
-X:  X c= {-infty} by Th52;
-  take 0;
+proof
+  let X be ext-real-membered set such that
+A1: +infty is LowerBound of X;
   let x;
-  assume x in X;
-  hence thesis by X,TARSKI:def 1;
- end;
- suppose y <> -infty;
-  then y in REAL by G,XXREAL_0:14;
-  then reconsider y as real number;
- take y;
- thus thesis;
- end;
+  assume
+  x in X;
+  then x = +infty by A1,Def2,XXREAL_0:4;
+  hence thesis by TARSKI:def 1;
 end;
 
 theorem
-  for X being non empty ext-real-membered set
-  st ex y being LowerBound of X st y <> -infty
-  holds X is bounded_below
-proof let X be non empty ext-real-membered set;
- given y being LowerBound of X such that
-G:  y <> -infty;
- per cases;
- suppose y = +infty;
-   then
-X:  X c= {+infty} by Th53;
-  take 0;
-  let x;
-  assume x in X;
-  hence thesis by X,TARSKI:def 1;
- end;
- suppose y <> +infty;
-  then y in REAL by G,XXREAL_0:14;
-  then reconsider y as real number;
- take y;
- thus thesis;
- end;
+  for X being non empty ext-real-membered set st ex y being UpperBound
+  of X st y <> +infty holds X is bounded_above
+proof
+  let X be non empty ext-real-membered set;
+  given y being UpperBound of X such that
+A1: y <> +infty;
+  per cases;
+  suppose
+A2: y = -infty;
+    take 0;
+    let x;
+    assume
+A3: x in X;
+    X c= {-infty} by A2,Th51;
+    hence thesis by A3,TARSKI:def 1;
+  end;
+  suppose
+    y <> -infty;
+    then y in REAL by A1,XXREAL_0:14;
+    then reconsider y as real number;
+    take y;
+    thus thesis;
+  end;
 end;
 
 theorem
-  for X being non empty ext-real-membered set, x being UpperBound of X st
-  x in X holds x = sup X
+  for X being non empty ext-real-membered set st ex y being LowerBound
+  of X st y <> -infty holds X is bounded_below
+proof
+  let X be non empty ext-real-membered set;
+  given y being LowerBound of X such that
+A1: y <> -infty;
+  per cases;
+  suppose
+A2: y = +infty;
+    take 0;
+    let x;
+    assume
+A3: x in X;
+    X c= {+infty} by A2,Th52;
+    hence thesis by A3,TARSKI:def 1;
+  end;
+  suppose
+    y <> +infty;
+    then y in REAL by A1,XXREAL_0:14;
+    then reconsider y as real number;
+    take y;
+    thus thesis;
+  end;
+end;
+
+theorem
+  for X being non empty ext-real-membered set, x being UpperBound of X
+  st x in X holds x = sup X
 proof
   let X be non empty ext-real-membered set, x be UpperBound of X;
-  assume x in X;
+  assume
+  x in X;
   then for y being UpperBound of X holds x <= y by Def1;
   hence thesis by Def3;
 end;
 
 theorem
-  for X being non empty ext-real-membered set, x being LowerBound of X st
-  x in X holds x = inf X
+  for X being non empty ext-real-membered set, x being LowerBound of X
+  st x in X holds x = inf X
 proof
   let X be non empty ext-real-membered set, x be LowerBound of X;
-  assume x in X;
+  assume
+  x in X;
   then for y being LowerBound of X holds y <= x by Def2;
   hence thesis by Def4;
 end;
 
 theorem Th57:
-  for X being non empty ext-real-membered set st
-  X is bounded_above & X <> {-infty} holds sup X in REAL
+  for X being non empty ext-real-membered set st X is
+  bounded_above & X <> {-infty} holds sup X in REAL
 proof
   let X be non empty ext-real-membered set;
   assume
 A1: X is bounded_above;
   then consider r being real number such that
-A2:  r is UpperBound of X by Def10;
-A3: sup X <= r by A2,Def3;
-X: r in REAL by XREAL_0:def 1;
-  assume X <> {-infty};
-  then consider x being Element of REAL such that
-A4: x in X by A1,Th49;
+A2: r is UpperBound of X by Def10;
+  assume
+  X <> {-infty};
+  then
+A3: ex x being Element of REAL st x in X by A1,Th49;
   sup X is UpperBound of X by Def3;
-  then not sup X = -infty by A4,Def1,XXREAL_0:12;
-  hence thesis by A3,X,XXREAL_0:13;
+  then
+A4: not sup X = -infty by A3,Def1,XXREAL_0:12;
+A5: r in REAL by XREAL_0:def 1;
+  sup X <= r by A2,Def3;
+  hence thesis by A5,A4,XXREAL_0:13;
 end;
 
 theorem Th58:
-  for X being non empty ext-real-membered set st
-  X is bounded_below & X <> {+infty} holds inf X in REAL
+  for X being non empty ext-real-membered set st X is
+  bounded_below & X <> {+infty} holds inf X in REAL
 proof
   let X be non empty ext-real-membered set;
   assume
 A1: X is bounded_below;
   then consider r being real number such that
 A2: r is LowerBound of X by Def9;
-X: r in REAL by XREAL_0:def 1;
-A3: r <= inf X by A2,Def4;
-  assume X <> {+infty};
-  then consider x being Element of REAL such that
-A4: x in X by A1,Th50;
+  assume
+  X <> {+infty};
+  then
+A3: ex x being Element of REAL st x in X by A1,Th50;
   inf X is LowerBound of X by Def4;
-  then inf X <> +infty by A4,Def2,XXREAL_0:9;
-  hence thesis by A3,X,XXREAL_0:10;
+  then
+A4: inf X <> +infty by A3,Def2,XXREAL_0:9;
+A5: r in REAL by XREAL_0:def 1;
+  r <= inf X by A2,Def4;
+  hence thesis by A5,A4,XXREAL_0:10;
 end;
 
 theorem Th59:
-  for X,Y being ext-real-membered set st X c= Y holds sup X <= sup Y
+  for X,Y being ext-real-membered set st X c= Y holds sup X <= sup
+  Y
 proof
   let X,Y be ext-real-membered set;
   assume
 A1: X c= Y;
   sup Y is UpperBound of Y by Def3;
-  then sup Y is UpperBound of X by A1,Th4B;
+  then sup Y is UpperBound of X by A1,Th6;
   hence thesis by Def3;
 end;
 
 theorem Th60:
-  for X,Y being ext-real-membered set st X c= Y holds inf Y <= inf X
+  for X,Y being ext-real-membered set st X c= Y holds inf Y <= inf
+  X
 proof
   let X,Y be ext-real-membered set;
   assume
 A1: X c= Y;
   inf Y is LowerBound of Y by Def4;
-  then inf Y is LowerBound of X by A1,Th4;
+  then inf Y is LowerBound of X by A1,Th5;
   hence thesis by Def4;
 end;
 
 theorem
-  for X being ext-real-membered set, x being ext-real number st
-  (ex y being ext-real number st y in X & x <= y) holds x <= sup X
+  for X being ext-real-membered set, x being ext-real number st (ex y
+  being ext-real number st y in X & x <= y) holds x <= sup X
 proof
   let X be ext-real-membered set;
   let x be ext-real number;
   given y being ext-real number such that
 A1: y in X and
 A2: x <= y;
-   y <= sup X by A1,Th3B;
+  y <= sup X by A1,Th4;
   hence thesis by A2,XXREAL_0:2;
 end;
 
 theorem
-  for X being ext-real-membered set, x being ext-real number st
-  (ex y being ext-real number st y in X & y <= x) holds inf X <= x
+  for X being ext-real-membered set, x being ext-real number st (ex y
+  being ext-real number st y in X & y <= x) holds inf X <= x
 proof
   let X be ext-real-membered set;
   let x be ext-real number;
@@ -1427,1013 +1584,1163 @@ A2: y <= x;
 end;
 
 theorem
-  for X,Y being ext-real-membered set st
-  for x being ext-real number st x in X
-   ex y being ext-real number st y in Y & x <= y
-   holds sup X <= sup Y
+  for X,Y being ext-real-membered set st for x being ext-real number st
+  x in X ex y being ext-real number st y in Y & x <= y holds sup X <= sup Y
 proof
   let X,Y be ext-real-membered set;
   assume
-A1: for x being ext-real number st x in X
-  ex y being ext-real number st y in Y & x <= y;
+A1: for x being ext-real number st x in X ex y being ext-real number st
+  y in Y & x <= y;
   sup Y is UpperBound of X
   proof
     let x be ext-real number;
-    assume x in X;
+    assume
+    x in X;
     then consider y being ext-real number such that
-A2: y in Y & x <= y by A1;
-    y <= sup Y by A2,Th3B;
-    hence thesis by A2,XXREAL_0:2;
+A2: y in Y and
+A3: x <= y by A1;
+    y <= sup Y by A2,Th4;
+    hence thesis by A3,XXREAL_0:2;
   end;
   hence thesis by Def3;
 end;
 
 theorem
-  for X,Y being ext-real-membered set st
-  for y being ext-real number st y in Y
-   ex x being ext-real number st x in X & x <= y
-   holds inf X <= inf Y
+  for X,Y being ext-real-membered set st for y being ext-real number st
+  y in Y ex x being ext-real number st x in X & x <= y holds inf X <= inf Y
 proof
   let X,Y be ext-real-membered set;
   assume
-A1: for y being ext-real number st y in Y
-  ex x being ext-real number st x in X & x <= y;
- inf X is LowerBound of Y
+A1: for y being ext-real number st y in Y ex x being ext-real number st
+  x in X & x <= y;
+  inf X is LowerBound of Y
   proof
     let y be ext-real number;
-    assume y in Y;
+    assume
+    y in Y;
     then consider x being ext-real number such that
-A2: x in X & x <= y by A1;
+A2: x in X and
+A3: x <= y by A1;
     inf X <= x by A2,Th3;
-    hence thesis by A2,XXREAL_0:2;
+    hence thesis by A3,XXREAL_0:2;
   end;
   hence thesis by Def4;
 end;
 
-theorem Th69:
-  for X,Y being ext-real-membered set, x being UpperBound of X,
-  y being UpperBound of Y holds max(x,y) is UpperBound of X \/ Y
+theorem Th65:
+  for X,Y being ext-real-membered set, x being UpperBound of X, y
+  being UpperBound of Y holds max(x,y) is UpperBound of X \/ Y
 proof
-  let X,Y be ext-real-membered set, x be UpperBound of X,
-  y be UpperBound of Y;
+  let X,Y be ext-real-membered set, x be UpperBound of X, y be UpperBound of Y;
   let a be ext-real number;
-    assume
+  assume
 A1: a in X \/ Y;
   per cases by A1,XBOOLE_0:def 3;
-  suppose a in X;
-      then
-A3:   a <= x by Def1;
-       x <= max(x,y) by XXREAL_0:25;
-      hence thesis by A3,XXREAL_0:2;
-    end;
-   suppose a in Y;
-      then
-A5:   a <= y by Def1;
-       y <= max(x,y) by XXREAL_0:25;
-      hence thesis by A5,XXREAL_0:2;
-    end;
+  suppose
+A2: a in X;
+A3: x <= max(x,y) by XXREAL_0:25;
+    a <= x by A2,Def1;
+    hence thesis by A3,XXREAL_0:2;
+  end;
+  suppose
+A4: a in Y;
+A5: y <= max(x,y) by XXREAL_0:25;
+    a <= y by A4,Def1;
+    hence thesis by A5,XXREAL_0:2;
+  end;
 end;
 
-theorem Th70:
-  for X,Y being ext-real-membered set, x being LowerBound of X,
-  y being LowerBound of Y holds min(x,y) is LowerBound of X \/ Y
+theorem Th66:
+  for X,Y being ext-real-membered set, x being LowerBound of X, y
+  being LowerBound of Y holds min(x,y) is LowerBound of X \/ Y
 proof
-  let X,Y be ext-real-membered set, x be LowerBound of X,
-  y be LowerBound of Y;
-    let a be ext-real number;
-    assume
+  let X,Y be ext-real-membered set, x be LowerBound of X, y be LowerBound of Y;
+  let a be ext-real number;
+  assume
 A1: a in X \/ Y;
-   per cases by A1,XBOOLE_0:def 3;
-   suppose a in X;
-      then
-A3:   x <= a by Def2;
-      min(x,y) <= x by XXREAL_0:17;
-      hence thesis by A3,XXREAL_0:2;
-    end;
-   suppose a in Y;
-      then
-A5:   y <= a by Def2;
-       min(x,y) <= y by XXREAL_0:17;
-      hence thesis by A5,XXREAL_0:2;
-    end;
+  per cases by A1,XBOOLE_0:def 3;
+  suppose
+A2: a in X;
+A3: min(x,y) <= x by XXREAL_0:17;
+    x <= a by A2,Def2;
+    hence thesis by A3,XXREAL_0:2;
+  end;
+  suppose
+A4: a in Y;
+A5: min(x,y) <= y by XXREAL_0:17;
+    y <= a by A4,Def2;
+    hence thesis by A5,XXREAL_0:2;
+  end;
 end;
 
 theorem
-  for X,Y being ext-real-membered set holds
-  sup(X \/ Y) = max(sup X,sup Y)
+  for X,Y being ext-real-membered set holds sup(X \/ Y) = max(sup X,sup
+  Y)
 proof
   let X,Y be ext-real-membered set;
   set a = sup(X \/ Y);
-A1: sup X is UpperBound of X by Def3;
-  sup Y is UpperBound of Y by Def3;
-  then max(sup X,sup Y) is UpperBound of X \/ Y by A1,Th69;
+A1: sup Y is UpperBound of Y by Def3;
+  sup X is UpperBound of X by Def3;
+  then max(sup X,sup Y) is UpperBound of X \/ Y by A1,Th65;
   then
 A2: a <= max(sup X,sup Y) by Def3;
-A3: sup X <= a by Th59,XBOOLE_1:7;
-  sup Y <= a by Th59,XBOOLE_1:7;
+A3: sup Y <= a by Th59,XBOOLE_1:7;
+  sup X <= a by Th59,XBOOLE_1:7;
   then max(sup X,sup Y) <= a by A3,XXREAL_0:28;
   hence thesis by A2,XXREAL_0:1;
 end;
 
 theorem
-  for X,Y being ext-real-membered set holds
-  inf(X \/ Y) = min(inf X,inf Y)
+  for X,Y being ext-real-membered set holds inf(X \/ Y) = min(inf X,inf
+  Y)
 proof
   let X,Y be ext-real-membered set;
   set a = inf(X \/ Y);
-A1: inf X is LowerBound of X by Def4;
-  inf Y is LowerBound of Y by Def4;
-  then min(inf X,inf Y) is LowerBound of X \/ Y by A1,Th70;
+A1: inf Y is LowerBound of Y by Def4;
+  inf X is LowerBound of X by Def4;
+  then min(inf X,inf Y) is LowerBound of X \/ Y by A1,Th66;
   then
 A2: min(inf X,inf Y) <= a by Def4;
-A3: a <= inf X by Th60,XBOOLE_1:7;
-  a <= inf Y by Th60,XBOOLE_1:7;
+A3: a <= inf Y by Th60,XBOOLE_1:7;
+  a <= inf X by Th60,XBOOLE_1:7;
   then a <= min(inf X,inf Y) by A3,XXREAL_0:20;
   hence thesis by A2,XXREAL_0:1;
 end;
 
 theorem Th69:
-  for X,Y being ext-real-membered set, x being UpperBound of X,
-  y being UpperBound of Y holds min(x,y) is UpperBound of X /\ Y
+  for X,Y being ext-real-membered set, x being UpperBound of X, y
+  being UpperBound of Y holds min(x,y) is UpperBound of X /\ Y
 proof
-  let X,Y be ext-real-membered set, x be UpperBound of X,
-  y be UpperBound of Y;
-    let a be ext-real number;
-    assume a in X /\ Y;
-    then a in X & a in Y by XBOOLE_0:def 4;
-    then a <= x & a <= y by Def1;
-    hence thesis by XXREAL_0:20;
+  let X,Y be ext-real-membered set, x be UpperBound of X, y be UpperBound of Y;
+  let a be ext-real number;
+  assume
+A1: a in X /\ Y;
+  then a in Y by XBOOLE_0:def 4;
+  then
+A2: a <= y by Def1;
+  a in X by A1,XBOOLE_0:def 4;
+  then a <= x by Def1;
+  hence thesis by A2,XXREAL_0:20;
 end;
 
 theorem Th70:
-  for X,Y being ext-real-membered set, x being LowerBound of X,
-  y being LowerBound of Y holds max(x,y) is LowerBound of X /\ Y
+  for X,Y being ext-real-membered set, x being LowerBound of X, y
+  being LowerBound of Y holds max(x,y) is LowerBound of X /\ Y
 proof
-  let X,Y be ext-real-membered set, x be LowerBound of X,
-  y be LowerBound of Y;
-    let a be ext-real number;
-    assume a in X /\ Y;
-    then a in X & a in Y by XBOOLE_0:def 4;
-    then x <= a & y <= a by Def2;
-    hence thesis by XXREAL_0:28;
+  let X,Y be ext-real-membered set, x be LowerBound of X, y be LowerBound of Y;
+  let a be ext-real number;
+  assume
+A1: a in X /\ Y;
+  then a in Y by XBOOLE_0:def 4;
+  then
+A2: y <= a by Def2;
+  a in X by A1,XBOOLE_0:def 4;
+  then x <= a by Def2;
+  hence thesis by A2,XXREAL_0:28;
 end;
 
 theorem
-  for X,Y being ext-real-membered set
-    holds sup(X /\ Y) <= min(sup X,sup Y)
+  for X,Y being ext-real-membered set holds sup(X /\ Y) <= min(sup X,sup
+  Y)
 proof
   let X,Y be ext-real-membered set;
-A2: sup X is UpperBound of X by Def3;
-    sup Y is UpperBound of Y by Def3;
-    then min(sup X,sup Y) is UpperBound of X /\ Y by A2,Th69;
-    hence thesis by Def3;
+A1: sup Y is UpperBound of Y by Def3;
+  sup X is UpperBound of X by Def3;
+  then min(sup X,sup Y) is UpperBound of X /\ Y by A1,Th69;
+  hence thesis by Def3;
 end;
 
 theorem
-  for X,Y being ext-real-membered set
-   holds max(inf X,inf Y) <= inf(X /\ Y)
+  for X,Y being ext-real-membered set holds max(inf X,inf Y) <= inf(X /\
+  Y)
 proof
   let X,Y be ext-real-membered set;
-A2: inf X is LowerBound of X by Def4;
-    inf Y is LowerBound of Y by Def4;
-    then max(inf X,inf Y) is LowerBound of X /\ Y by A2,Th70;
-    hence thesis by Def4;
+A1: inf Y is LowerBound of Y by Def4;
+  inf X is LowerBound of X by Def4;
+  then max(inf X,inf Y) is LowerBound of X /\ Y by A1,Th70;
+  hence thesis by Def4;
 end;
 
 registration
- cluster bounded -> real-membered (ext-real-membered set);
- coherence
-  proof let X be ext-real-membered set such that
-Z0: X is bounded;
-   let x be set;
-   assume
-Z:  x in X;
-    then reconsider x as ext-real number;
-    reconsider X as non empty ext-real-membered set by Z;
-    consider r being real number such that
-W1:  r is LowerBound of X by Def9,Z0;
+  cluster bounded -> real-membered (ext-real-membered set);
+  coherence
+  proof
+    let X be ext-real-membered set such that
+A1: X is bounded;
+    let x be set;
+    assume
+A2: x in X;
+    then reconsider X as non empty ext-real-membered set;
     consider s being real number such that
-W2:  s is UpperBound of X by Def10,Z0;
-A:  r <= x & x <= s by Z,W1,W2,Def1,Def2;
-    r in REAL & s in REAL by XREAL_0:def 1;
-    then x in REAL by A,XXREAL_0:45;
-   hence thesis;
+A3: s is UpperBound of X by A1,Def10;
+    reconsider x as ext-real number by A2;
+A4: s in REAL by XREAL_0:def 1;
+A5: x <= s by A2,A3,Def1;
+    consider r being real number such that
+A6: r is LowerBound of X by A1,Def9;
+A7: r in REAL by XREAL_0:def 1;
+    r <= x by A2,A6,Def2;
+    then x in REAL by A5,A7,A4,XXREAL_0:45;
+    hence thesis;
   end;
 end;
 
 theorem Th73:
- A c= [.inf A, sup A.]
- proof let x be ext-real number;
-  assume x in A;
-   then inf A <= x & x <= sup A by Th3,Th3B;
-  hence thesis by XXREAL_1:1;
- end;
+  A c= [.inf A, sup A.]
+proof
+  let x be ext-real number;
+  assume
+A1: x in A;
+  then
+A2: x <= sup A by Th4;
+  inf A <= x by A1,Th3;
+  hence thesis by A2,XXREAL_1:1;
+end;
 
 theorem
- sup A = inf A implies A = {inf A}
+  sup A = inf A implies A = {inf A}
 proof
- assume
-Z:  sup A = inf A;
+  assume
+A1: sup A = inf A;
   then A c= [.inf A,inf A.] by Th73;
   then
-A:  A c= {inf A} by XXREAL_1:17;
-  A <> {} by Z,TW3,TW4;
-  hence thesis by A,ZFMISC_1:39;
+A2: A c= {inf A} by XXREAL_1:17;
+  A <> {} by A1,Th38,Th39;
+  hence thesis by A2,ZFMISC_1:39;
 end;
 
 theorem Th75:
- x <= y & x is UpperBound of A implies y is UpperBound of A
-  proof assume that
-Z1: x <= y and
-Z2: x is UpperBound of A;
-   let z;
-   assume z in A;
-    then z <= x by Z2,Def1;
-   hence thesis by Z1,XXREAL_0:2;
-  end;
+  x <= y & x is UpperBound of A implies y is UpperBound of A
+proof
+  assume that
+A1: x <= y and
+A2: x is UpperBound of A;
+  let z;
+  assume
+  z in A;
+  then z <= x by A2,Def1;
+  hence thesis by A1,XXREAL_0:2;
+end;
 
 theorem Th76:
- y <= x & x is LowerBound of A implies y is LowerBound of A
-  proof assume that
-Z1: y <= x and
-Z2: x is LowerBound of A;
-   let z;
-   assume z in A;
-    then x <= z by Z2,Def2;
-   hence thesis by Z1,XXREAL_0:2;
-  end;
+  y <= x & x is LowerBound of A implies y is LowerBound of A
+proof
+  assume that
+A1: y <= x and
+A2: x is LowerBound of A;
+  let z;
+  assume
+  z in A;
+  then x <= z by A2,Def2;
+  hence thesis by A1,XXREAL_0:2;
+end;
 
 theorem
- A is bounded_above iff sup A <> +infty
- proof
-  hereby assume
-Z:  A is bounded_above;
-   per cases by Z,Th57;
-   suppose A = {};
-   hence sup A <> +infty by TW4;
-  end;
-   suppose A = {-infty};
-   hence sup A <> +infty by Lm1;
-   end;
-   suppose sup A in REAL;
-    hence sup A <> +infty;
-   end;
+  A is bounded_above iff sup A <> +infty
+proof
+  hereby
+    assume
+A1: A is bounded_above;
+    per cases by A1,Th57;
+    suppose
+      A = {};
+      hence sup A <> +infty by Th39;
+    end;
+    suppose
+      A = {-infty};
+      hence sup A <> +infty by Lm1;
+    end;
+    suppose
+      sup A in REAL;
+      hence sup A <> +infty;
+    end;
   end;
   assume
-Z:  sup A <> +infty;
-  per cases by Z,XXREAL_0:14;
+A2: sup A <> +infty;
+  per cases by A2,XXREAL_0:14;
   suppose
-S:  sup A = -infty;
-   take 0;
-A:  -infty is UpperBound of A by S,Def3;
-   thus thesis by A,Th75;
+A3: sup A = -infty;
+    take 0;
+    -infty is UpperBound of A by A3,Def3;
+    hence thesis by Th75;
   end;
-  suppose sup A in REAL;
-   then reconsider r = sup A as real number;
-   take r;
-   thus thesis by Def3;
+  suppose
+    sup A in REAL;
+    then reconsider r = sup A as real number;
+    take r;
+    thus thesis by Def3;
   end;
- end;
+end;
 
 theorem
- A is bounded_below iff inf A <> -infty
- proof
-  hereby assume
-Z:  A is bounded_below;
-   per cases by Z,Th58;
-   suppose A = {};
-   hence inf A <> -infty by TW3;
-  end;
-   suppose A = {+infty};
-   hence inf A <> -infty by Lm2;
-   end;
-   suppose inf A in REAL;
-    hence inf A <> -infty;
-   end;
+  A is bounded_below iff inf A <> -infty
+proof
+  hereby
+    assume
+A1: A is bounded_below;
+    per cases by A1,Th58;
+    suppose
+      A = {};
+      hence inf A <> -infty by Th38;
+    end;
+    suppose
+      A = {+infty};
+      hence inf A <> -infty by Lm2;
+    end;
+    suppose
+      inf A in REAL;
+      hence inf A <> -infty;
+    end;
   end;
   assume
-Z:  inf A <> -infty;
-  per cases by Z,XXREAL_0:14;
+A2: inf A <> -infty;
+  per cases by A2,XXREAL_0:14;
   suppose
-S:  inf A = +infty;
-   take 0;
-A:  +infty is LowerBound of A by S,Def4;
-   thus thesis by A,Th76;
+A3: inf A = +infty;
+    take 0;
+    +infty is LowerBound of A by A3,Def4;
+    hence thesis by Th76;
   end;
-  suppose inf A in REAL;
-   then reconsider r = inf A as real number;
-   take r;
-   thus thesis by Def4;
+  suppose
+    inf A in REAL;
+    then reconsider r = inf A as real number;
+    take r;
+    thus thesis by Def4;
   end;
- end;
+end;
 
 begin :: Connectedness
 
 definition
   let A be ext-real-membered set;
   attr A is connected means
-:Def12: for r,s being ext-real number st r in A & s in A holds [.r,s.] c= A;
+  :Def12:
+  for r,s being ext-real number st r in A &
+  s in A holds [.r,s.] c= A;
 end;
 
 registration
- cluster ExtREAL -> connected;
- coherence
-  proof let r,s;
-   thus thesis by MEMBERED:2;
-  end;
- cluster empty -> connected (ext-real-membered set);
- coherence
-  proof let A be ext-real-membered set;
-   assume
-Z:  A is empty;
-   let r,s;
-   thus thesis by Z;
-  end;
- let r,s;
- cluster [.r,s.] -> connected;
- coherence
-  proof let x,y;
-   assume x in [.r,s.];
-   then
-A1: r <= x by XXREAL_1:1;
-   assume y in [.r,s.];
-   then
-A2: y <= s by XXREAL_1:1;
-   let z;
-   assume z in [.x,y.];
-    then x <= z & z <= y by XXREAL_1:1;
-    then r <= z & z <= s by A1,A2,XXREAL_0:2;
-   hence thesis by XXREAL_1:1;
-  end;
- cluster ].r,s.] -> connected;
- coherence
-  proof let x,y;
-   assume x in ].r,s.];
-   then
-A1: r < x by XXREAL_1:2;
-   assume y in ].r,s.];
-   then
-A2: y <= s by XXREAL_1:2;
-   let z;
-   assume z in [.x,y.];
-    then x <= z & z <= y by XXREAL_1:1;
-    then r < z & z <= s by A1,A2,XXREAL_0:2;
-   hence thesis by XXREAL_1:2;
-  end;
- cluster [.r,s.[ -> connected;
- coherence
-  proof let x,y;
-   assume x in [.r,s.[;
-   then
-A1: r <= x by XXREAL_1:3;
-   assume y in [.r,s.[;
-   then
-A2: y < s by XXREAL_1:3;
-   let z;
-   assume z in [.x,y.];
-    then x <= z & z <= y by XXREAL_1:1;
-    then r <= z & z < s by A1,A2,XXREAL_0:2;
-   hence thesis by XXREAL_1:3;
-  end;
- cluster ].r,s.[ -> connected;
- coherence
-  proof let x,y;
-   assume x in ].r,s.[;
-   then
-A1: r < x by XXREAL_1:4;
-   assume y in ].r,s.[;
-   then
-A2: y < s by XXREAL_1:4;
-   let z;
-   assume z in [.x,y.];
-    then x <= z & z <= y by XXREAL_1:1;
-    then r < z & z < s by A1,A2,XXREAL_0:2;
-   hence thesis by XXREAL_1:4;
-  end;
-end;
-
-registration
- cluster REAL -> connected;
- coherence by XXREAL_1:224;
-end;
-
-registration
- cluster connected (non empty ext-real-membered set);
- existence
+  cluster ExtREAL -> connected;
+  coherence
   proof
-   take REAL;
-   thus thesis;
+    let r,s;
+    thus thesis by MEMBERED:2;
+  end;
+  cluster empty -> connected (ext-real-membered set);
+  coherence
+  proof
+    let A be ext-real-membered set;
+    assume
+A1: A is empty;
+    let r,s;
+    thus thesis by A1;
+  end;
+  let r,s;
+  cluster [.r,s.] -> connected;
+  coherence
+  proof
+    let x,y;
+    assume
+    x in [.r,s.];
+    then
+A2: r <= x by XXREAL_1:1;
+    assume
+    y in [.r,s.];
+    then
+A3: y <= s by XXREAL_1:1;
+    let z;
+    assume
+A4: z in [.x,y.];
+    then x <= z by XXREAL_1:1;
+    then
+A5: r <= z by A2,XXREAL_0:2;
+    z <= y by A4,XXREAL_1:1;
+    then z <= s by A3,XXREAL_0:2;
+    hence thesis by A5,XXREAL_1:1;
+  end;
+  cluster ].r,s.] -> connected;
+  coherence
+  proof
+    let x,y;
+    assume
+    x in ].r,s.];
+    then
+A6: r < x by XXREAL_1:2;
+    assume
+    y in ].r,s.];
+    then
+A7: y <= s by XXREAL_1:2;
+    let z;
+    assume
+A8: z in [.x,y.];
+    then x <= z by XXREAL_1:1;
+    then
+A9: r < z by A6,XXREAL_0:2;
+    z <= y by A8,XXREAL_1:1;
+    then z <= s by A7,XXREAL_0:2;
+    hence thesis by A9,XXREAL_1:2;
+  end;
+  cluster [.r,s.[ -> connected;
+  coherence
+  proof
+    let x,y;
+    assume
+    x in [.r,s.[;
+    then
+A10: r <= x by XXREAL_1:3;
+    assume
+    y in [.r,s.[;
+    then
+A11: y < s by XXREAL_1:3;
+    let z;
+    assume
+A12: z in [.x,y.];
+    then x <= z by XXREAL_1:1;
+    then
+A13: r <= z by A10,XXREAL_0:2;
+    z <= y by A12,XXREAL_1:1;
+    then z < s by A11,XXREAL_0:2;
+    hence thesis by A13,XXREAL_1:3;
+  end;
+  cluster ].r,s.[ -> connected;
+  coherence
+  proof
+    let x,y;
+    assume
+    x in ].r,s.[;
+    then
+A14: r < x by XXREAL_1:4;
+    assume
+    y in ].r,s.[;
+    then
+A15: y < s by XXREAL_1:4;
+    let z;
+    assume
+A16: z in [.x,y.];
+    then x <= z by XXREAL_1:1;
+    then
+A17: r < z by A14,XXREAL_0:2;
+    z <= y by A16,XXREAL_1:1;
+    then z < s by A15,XXREAL_0:2;
+    hence thesis by A17,XXREAL_1:4;
   end;
 end;
 
 registration
- let A,B be connected (ext-real-membered set);
- cluster A /\ B -> connected;
- coherence
-  proof let r,s be ext-real number;
-   assume r in A /\ B & s in A /\ B;
-    then r in A & r in B & s in A & s in B by XBOOLE_0:def 4;
-    then [.r,s.] c= A & [.r,s.] c= B by Def12;
-   hence thesis by XBOOLE_1:19;
+  cluster REAL -> connected;
+  coherence by XXREAL_1:224;
+end;
+
+registration
+  cluster connected (non empty ext-real-membered set);
+  existence
+  proof
+    take REAL;
+    thus thesis;
+  end;
+end;
+
+registration
+  let A,B be connected (ext-real-membered set);
+  cluster A /\ B -> connected;
+  coherence
+  proof
+    let r,s be ext-real number;
+    assume that
+A1: r in A /\ B and
+A2: s in A /\ B;
+A3: s in B by A2,XBOOLE_0:def 4;
+    r in B by A1,XBOOLE_0:def 4;
+    then
+A4: [.r,s.] c= B by A3,Def12;
+A5: s in A by A2,XBOOLE_0:def 4;
+    r in A by A1,XBOOLE_0:def 4;
+    then [.r,s.] c= A by A5,Def12;
+    hence thesis by A4,XBOOLE_1:19;
   end;
 end;
 
 reserve A,B for ext-real-membered set;
 
-registration let r,s;
- cluster ].r,s.] -> non left_end;
- coherence
+registration
+  let r,s;
+  cluster ].r,s.] -> non left_end;
+  coherence
   proof
-   assume ].r,s.] is left_end;
+    assume
+    ].r,s.] is left_end;
     then
-A:   inf ].r,s.] in ].r,s.] by Def5;
-    then r < inf ].r,s.] & inf ].r,s.] <= s by XXREAL_1:2;
-    then r < s by XXREAL_0:2;
+A1: inf ].r,s.] in ].r,s.] by Def5;
+    then
+A2: inf ].r,s.] <= s by XXREAL_1:2;
+    r < inf ].r,s.] by A1,XXREAL_1:2;
+    then r < s by A2,XXREAL_0:2;
     then r = inf ].r,s.] by Th27;
-   hence contradiction by A,XXREAL_1:2;
+    hence contradiction by A1,XXREAL_1:2;
   end;
- cluster [.r,s.[ -> non right_end;
- coherence
+  cluster [.r,s.[ -> non right_end;
+  coherence
   proof
-   assume [.r,s.[ is right_end;
+    assume
+    [.r,s.[ is right_end;
     then
-A:   sup [.r,s.[ in [.r,s.[ by Def6;
-    then r <= sup [.r,s.[ & sup [.r,s.[ < s by XXREAL_1:3;
-    then r < s by XXREAL_0:2;
+A3: sup [.r,s.[ in [.r,s.[ by Def6;
+    then
+A4: sup [.r,s.[ < s by XXREAL_1:3;
+    r <= sup [.r,s.[ by A3,XXREAL_1:3;
+    then r < s by A4,XXREAL_0:2;
     then s = sup [.r,s.[ by Th31;
-   hence contradiction by A,XXREAL_1:3;
+    hence contradiction by A3,XXREAL_1:3;
   end;
- cluster ].r,s.[ -> non left_end non right_end;
- coherence
+  cluster ].r,s.[ -> non left_end non right_end;
+  coherence
   proof
-   thus ].r,s.[ is non left_end
-  proof
-   assume ].r,s.[ is left_end;
+    thus ].r,s.[ is non left_end
+    proof
+      assume
+      ].r,s.[ is left_end;
+      then
+A5:   inf ].r,s.[ in ].r,s.[ by Def5;
+      then
+A6:   inf ].r,s.[ < s by XXREAL_1:4;
+      r < inf ].r,s.[ by A5,XXREAL_1:4;
+      then r < s by A6,XXREAL_0:2;
+      then r = inf ].r,s.[ by Th28;
+      hence contradiction by A5,XXREAL_1:4;
+    end;
+    assume
+    ].r,s.[ is right_end;
     then
-A:   inf ].r,s.[ in ].r,s.[ by Def5;
-    then r < inf ].r,s.[ & inf ].r,s.[ < s by XXREAL_1:4;
-    then r < s by XXREAL_0:2;
-    then r = inf ].r,s.[ by Th28;
-   hence contradiction by A,XXREAL_1:4;
-  end;
-   assume ].r,s.[ is right_end;
+A7: sup ].r,s.[ in ].r,s.[ by Def6;
     then
-A:   sup ].r,s.[ in ].r,s.[ by Def6;
-    then r < sup ].r,s.[ & sup ].r,s.[ < s by XXREAL_1:4;
-    then r < s by XXREAL_0:2;
+A8: sup ].r,s.[ < s by XXREAL_1:4;
+    r < sup ].r,s.[ by A7,XXREAL_1:4;
+    then r < s by A8,XXREAL_0:2;
     then s = sup ].r,s.[ by Th32;
-   hence contradiction by A,XXREAL_1:4;
+    hence contradiction by A7,XXREAL_1:4;
   end;
 end;
 
 registration
- cluster left_end right_end connected (ext-real-membered set);
- existence
+  cluster left_end right_end connected (ext-real-membered set);
+  existence
   proof
-   take [.0,1.];
-   thus thesis by Th33;
+    take [.0,1.];
+    thus thesis by Th33;
   end;
- cluster non left_end right_end connected (ext-real-membered set);
- existence
+  cluster non left_end right_end connected (ext-real-membered set);
+  existence
   proof
-   take ].0,1.];
-   thus thesis by Th35;
+    take ].0,1.];
+    thus thesis by Th35;
   end;
- cluster left_end non right_end connected (ext-real-membered set);
- existence
+  cluster left_end non right_end connected (ext-real-membered set);
+  existence
   proof
-   take [.0,1.[;
-   thus thesis by Th34;
+    take [.0,1.[;
+    thus thesis by Th34;
   end;
- cluster non left_end non right_end connected non empty
-              (ext-real-membered set);
- existence
+  cluster non left_end non right_end connected non empty (ext-real-membered
+    set);
+  existence
   proof
-   take ].0,2.[;
+    take ].0,2.[;
     1 in ].0,2.[ by XXREAL_1:4;
-   hence thesis;
+    hence thesis;
   end;
 end;
 
 theorem
- for A being left_end right_end connected (ext-real-membered set)
-  holds A = [.min A, max A.]
- proof
+  for A being left_end right_end connected (ext-real-membered set) holds
+  A = [.min A, max A.]
+proof
   let A be left_end right_end connected (ext-real-membered set);
   let x;
+A1: max A in A by Def6;
   thus x in A implies x in [.min A, max A.]
-   proof assume x in A;
-     then min A <= x & x <= max A by Th3,Th3B;
-    hence thesis by XXREAL_1:1;
-   end;
-   min A in A & max A in A by Def5,Def6;
-   then [.min A, max A.] c= A by Def12;
+  proof
+    assume
+A2: x in A;
+    then
+A3: x <= max A by Th4;
+    min A <= x by A2,Th3;
+    hence thesis by A3,XXREAL_1:1;
+  end;
+  min A in A by Def5;
+  then [.min A, max A.] c= A by A1,Def12;
   hence thesis;
- end;
+end;
 
 theorem
- for A being non left_end right_end connected (ext-real-membered set)
+  for A being non left_end right_end connected (ext-real-membered set)
   holds A = ].inf A, max A.]
- proof
+proof
   let A be non left_end right_end connected (ext-real-membered set);
   let x;
+  defpred P[ext-real number] means $1 in A & $1 < x;
   thus x in A implies x in ].inf A, max A.]
-   proof assume
-Z:    x in A;
-     then
-A:    inf A <= x & x <= max A by Th3,Th3B;
-     not inf A in A by Def5;
-     then inf A < x by A,Z,XXREAL_0:1;
-    hence thesis by A,XXREAL_1:2;
-   end;
+  proof
+A1: not inf A in A by Def5;
+    assume
+A2: x in A;
+    then
+A3: x <= max A by Th4;
+    inf A <= x by A2,Th3;
+    then inf A < x by A2,A1,XXREAL_0:1;
+    hence thesis by A3,XXREAL_1:2;
+  end;
   assume
-Z:   x in ].inf A, max A.];
-   defpred P[ext-real number] means
-      $1 in A & $1 < x;
+A4: x in ].inf A, max A.];
   per cases;
-  suppose not ex r st P[r];
-   then x is LowerBound of A by Def2;
-   then x <= inf A by Def4;
-  hence thesis by Z,XXREAL_1:2;
+  suppose
+    not ex r st P[r];
+    then x is LowerBound of A by Def2;
+    then x <= inf A by Def4;
+    hence thesis by A4,XXREAL_1:2;
   end;
-  suppose ex r st P[r];
-   then consider r such that
-W3:  r in A and
-W4:  r < x;
-B: max A in A by Def6;
-   x <= max A by Z,XXREAL_1:2;
-   then
-A: x in [.r,max A.] by W4,XXREAL_1:1;
-   [.r,max A.] c= A by W3,B,Def12;
-  hence thesis by A;
+  suppose
+    ex r st P[r];
+    then consider r such that
+A5: r in A and
+A6: r < x;
+    x <= max A by A4,XXREAL_1:2;
+    then
+A7: x in [.r,max A.] by A6,XXREAL_1:1;
+    max A in A by Def6;
+    then [.r,max A.] c= A by A5,Def12;
+    hence thesis by A7;
   end;
- end;
+end;
 
 theorem
- for A being left_end non right_end connected (ext-real-membered set)
+  for A being left_end non right_end connected (ext-real-membered set)
   holds A = [.min A, sup A.[
- proof
+proof
   let A be left_end non right_end connected (ext-real-membered set);
   let x;
+  defpred P[ext-real number] means $1 in A & $1 > x;
   thus x in A implies x in [.min A, sup A.[
-   proof assume
-Z:    x in A;
-     then
-A:    min A <= x & x <= sup A by Th3,Th3B;
-     not sup A in A by Def6;
-     then x < sup A by A,Z,XXREAL_0:1;
-    hence thesis by A,XXREAL_1:3;
-   end;
+  proof
+A1: not sup A in A by Def6;
+    assume
+A2: x in A;
+    then
+A3: min A <= x by Th3;
+    x <= sup A by A2,Th4;
+    then x < sup A by A2,A1,XXREAL_0:1;
+    hence thesis by A3,XXREAL_1:3;
+  end;
   assume
-Z:   x in [.min A, sup A.[;
-   defpred P[ext-real number] means
-      $1 in A & $1 > x;
+A4: x in [.min A, sup A.[;
   per cases;
-  suppose not ex r st P[r];
-   then x is UpperBound of A by Def1;
-   then sup A <= x by Def3;
-  hence thesis by Z,XXREAL_1:3;
+  suppose
+    not ex r st P[r];
+    then x is UpperBound of A by Def1;
+    then sup A <= x by Def3;
+    hence thesis by A4,XXREAL_1:3;
   end;
-  suppose ex r st P[r];
-   then consider r such that
-W3:  r in A and
-W4:  r > x;
-B: min A in A by Def5;
-   inf A <= x by Z,XXREAL_1:3;
-   then
-A: x in [.inf A,r.] by W4,XXREAL_1:1;
-   [.inf A,r.] c= A by W3,B,Def12;
-  hence thesis by A;
+  suppose
+    ex r st P[r];
+    then consider r such that
+A5: r in A and
+A6: r > x;
+    inf A <= x by A4,XXREAL_1:3;
+    then
+A7: x in [.inf A,r.] by A6,XXREAL_1:1;
+    min A in A by Def5;
+    then [.inf A,r.] c= A by A5,Def12;
+    hence thesis by A7;
   end;
- end;
+end;
 
 theorem Th82:
- for A being non left_end non right_end non empty connected
-        (ext-real-membered set)
-  holds A =].inf A,sup A.[
+  for A being non left_end non right_end non empty connected (
+  ext-real-membered set) holds A =].inf A,sup A.[
 proof
- let A be non left_end non right_end non empty connected
-        (ext-real-membered set);
- let x;
- thus x in A implies x in ].inf A,sup A.[
-  proof assume
-Z: x in A;
-   then
-A:  inf A <= x by Th3;
-    x <> inf A by Z,Def5;
+  let A be non left_end non right_end non empty connected (ext-real-membered
+  set);
+  let x;
+  defpred P[ext-real number] means $1 in A & $1 < x;
+  defpred Q[ext-real number] means $1 in A & $1 > x;
+  thus x in A implies x in ].inf A,sup A.[
+  proof
+    assume
+A1: x in A;
     then
-C:   inf A < x by A,XXREAL_0:1;
-B:  x <= sup A by Z,Th3B;
-    x <> sup A by Z,Def6;
-    then x < sup A by B,XXREAL_0:1;
-   hence thesis by C,XXREAL_1:4;
+A2: x <> sup A by Def6;
+    x <= sup A by A1,Th4;
+    then
+A3: x < sup A by A2,XXREAL_0:1;
+A4: x <> inf A by A1,Def5;
+    inf A <= x by A1,Th3;
+    then inf A < x by A4,XXREAL_0:1;
+    hence thesis by A3,XXREAL_1:4;
   end;
- assume
-Z:  x in ].inf A,sup A.[;
-   defpred P[ext-real number] means $1 in A & $1 < x;
-   defpred Q[ext-real number] means $1 in A & $1 > x;
- per cases;
- suppose not ex r st P[r];
-   then x is LowerBound of A by Def2;
-   then x <= inf A by Def4;
-  hence thesis by Z,XXREAL_1:4;
- end;
- suppose not ex r st Q[r];
-   then x is UpperBound of A by Def1;
-   then sup A <= x by Def3;
-  hence thesis by Z,XXREAL_1:4;
- end;
- suppose that
-S1: ex r st P[r] and
-S2: ex r st Q[r];
-  consider r such that
-W3:  r in A and
-W4:  r < x by S1;
-  consider s such that
-W5:  s in A and
-W6:  s > x by S2;
-A: x in [.r,s.] by W4,W6,XXREAL_1:1;
-   [.r,s.] c= A by W3,W5,Def12;
- hence thesis by A;
- end;
- end;
+  assume
+A5: x in ].inf A,sup A.[;
+  per cases;
+  suppose
+    not ex r st P[r];
+    then x is LowerBound of A by Def2;
+    then x <= inf A by Def4;
+    hence thesis by A5,XXREAL_1:4;
+  end;
+  suppose
+    not ex r st Q[r];
+    then x is UpperBound of A by Def1;
+    then sup A <= x by Def3;
+    hence thesis by A5,XXREAL_1:4;
+  end;
+  suppose that
+A6: ex r st P[r] and
+A7: ex r st Q[r];
+    consider r such that
+A8: r in A and
+A9: r < x by A6;
+    consider s such that
+A10: s in A and
+A11: s > x by A7;
+A12: x in [.r,s.] by A9,A11,XXREAL_1:1;
+    [.r,s.] c= A by A8,A10,Def12;
+    hence thesis by A12;
+  end;
+end;
 
 theorem
- for A being non left_end non right_end connected (ext-real-membered set)
-  ex r,s st r <= s & A =].r,s.[
-proof let A be non left_end non right_end connected (ext-real-membered set);
- per cases;
- suppose
-S:  A is empty;
-  take -infty,-infty;
- thus thesis by S;
- end;
- suppose
-S: A is not empty;
-  take inf A, sup A;
- thus inf A <= sup A by S,Th40;
- thus thesis by S,Th82;
- end;
+  for A being non left_end non right_end connected (ext-real-membered
+  set) ex r,s st r <= s & A =].r,s.[
+proof
+  let A be non left_end non right_end connected (ext-real-membered set);
+  per cases;
+  suppose
+A1: A is empty;
+    take -infty,-infty;
+    thus thesis by A1;
+  end;
+  suppose
+A2: A is not empty;
+    take inf A, sup A;
+    thus inf A <= sup A by A2,Th40;
+    thus thesis by A2,Th82;
+  end;
 end;
 
 theorem Th84:
- A is connected implies
-  for x,y,r st x in A & y in A & x <= r & r <= y holds r in A
- proof assume
-Z: A is connected;
+  A is connected implies for x,y,r st x in A & y in A & x <= r & r
+  <= y holds r in A
+proof
+  assume
+A1: A is connected;
   let x,y,r such that
-Z1: x in A and
-Z2: y in A and
-Z3: x <= r and
-Z4: r <= y;
-A: [.x,y.] c= A by Z,Z1,Z2,Def12;
-   r in [.x,y.] by Z3,Z4,XXREAL_1:1;
-  hence thesis by A;
- end;
+A2: x in A and
+A3: y in A and
+A4: x <= r and
+A5: r <= y;
+A6: r in [.x,y.] by A4,A5,XXREAL_1:1;
+  [.x,y.] c= A by A1,A2,A3,Def12;
+  hence thesis by A6;
+end;
 
 theorem Th85:
- A is connected implies
-  for x,r st x in A & x <= r & r < sup A holds r in A
- proof assume
-Z: A is connected;
+  A is connected implies for x,r st x in A & x <= r & r < sup A
+  holds r in A
+proof
+  assume
+A1: A is connected;
   let x,r such that
-Z1: x in A and
-Z3: x <= r and
-Z4: r < sup A;
+A2: x in A and
+A3: x <= r and
+A4: r < sup A;
   per cases;
-  suppose ex y st y in A & r < y;
-  hence thesis by Z,Z1,Z3,Th84;
+  suppose
+    ex y st y in A & r < y;
+    hence thesis by A1,A2,A3,Th84;
   end;
-  suppose not ex y st y in A & r < y;
-   then r is UpperBound of A by Def1;
-   hence thesis by Z4,Def3;
+  suppose
+    not ex y st y in A & r < y;
+    then r is UpperBound of A by Def1;
+    hence thesis by A4,Def3;
   end;
- end;
+end;
 
 theorem Th86:
- A is connected implies
-  for x,r st x in A & inf A < r & r <= x holds r in A
- proof assume
-Z: A is connected;
+  A is connected implies for x,r st x in A & inf A < r & r <= x
+  holds r in A
+proof
+  assume
+A1: A is connected;
   let x,r such that
-Z1: x in A and
-Z4: inf A < r and
-Z3: r <= x;
+A2: x in A and
+A3: inf A < r and
+A4: r <= x;
   per cases;
-  suppose ex y st y in A & r > y;
-  hence thesis by Z,Z1,Z3,Th84;
+  suppose
+    ex y st y in A & r > y;
+    hence thesis by A1,A2,A4,Th84;
   end;
-  suppose not ex y st y in A & r > y;
-   then r is LowerBound of A by Def2;
-   hence thesis by Z4,Def4;
+  suppose
+    not ex y st y in A & r > y;
+    then r is LowerBound of A by Def2;
+    hence thesis by A3,Def4;
   end;
- end;
+end;
 
 theorem
- A is connected implies
-  for r st inf A < r & r < sup A holds r in A
- proof assume
-Z: A is connected;
+  A is connected implies for r st inf A < r & r < sup A holds r in A
+proof
+  assume
+A1: A is connected;
   let r such that
-Z4: inf A < r and
-Z3: r < sup A;
+A2: inf A < r and
+A3: r < sup A;
   per cases;
-  suppose ex y st y in A & r > y;
-  hence thesis by Z,Z3,Th85;
+  suppose
+    ex y st y in A & r > y;
+    hence thesis by A1,A3,Th85;
   end;
-  suppose not ex y st y in A & r > y;
-   then r is LowerBound of A by Def2;
-   hence thesis by Z4,Def4;
+  suppose
+    not ex y st y in A & r > y;
+    then r is LowerBound of A by Def2;
+    hence thesis by A2,Def4;
   end;
- end;
+end;
 
 theorem Th88:
- (for x,y,r st x in A & y in A & x < r & r < y holds r in A)
-   implies A is connected
- proof assume
-Z: for x,y,r st x in A & y in A & x < r & r < y holds r in A;
+  (for x,y,r st x in A & y in A & x < r & r < y holds r in A)
+  implies A is connected
+proof
+  assume
+A1: for x,y,r st x in A & y in A & x < r & r < y holds r in A;
   let x,y such that
-Z1: x in A & y in A;
+A2: x in A and
+A3: y in A;
   let r;
-  assume r in [.x,y.];
-   then r in ].x,y.[ \/ {x,y} by XXREAL_1:29,128;
-   then
-pc: r in ].x,y.[ or r in {x,y} by XBOOLE_0:def 3;
-  per cases by pc,TARSKI:def 2;
-  suppose r = x;
-  hence thesis by Z1;
-  end;
-  suppose r = y;
-  hence thesis by Z1;
-  end;
-  suppose r in ].x,y.[;
-   then x < r & r < y by XXREAL_1:4;
-  hence thesis by Z,Z1;
-  end;
- end;
-
-theorem
- (for x,r st x in A & x < r & r < sup A holds r in A)
-   implies A is connected
- proof assume
-Z: for x,r st x in A & x < r & r < sup A holds r in A;
-  let x,y such that
-Z1: x in A & y in A;
-  let r;
-  assume r in [.x,y.];
-   then r in ].x,y.[ \/ {x,y} by XXREAL_1:29,128;
-   then
-pc: r in ].x,y.[ or r in {x,y} by XBOOLE_0:def 3;
-  per cases by pc,TARSKI:def 2;
-  suppose r = x;
-  hence thesis by Z1;
-  end;
-  suppose r = y;
-  hence thesis by Z1;
+  assume
+  r in [.x,y.];
+  then r in ].x,y.[ \/ {x,y} by XXREAL_1:29,128;
+  then
+A4: r in ].x,y.[ or r in {x,y} by XBOOLE_0:def 3;
+  per cases by A4,TARSKI:def 2;
+  suppose
+    r = x;
+    hence thesis by A2;
   end;
   suppose
-S:  r in ].x,y.[;
-   then
-A:  x < r by XXREAL_1:4;
-B:  r < y by S,XXREAL_1:4;
-    y <= sup A by Z1,Th3B;
-    then r < sup A by B,XXREAL_0:2;
-  hence thesis by A,Z,Z1;
-  end;
- end;
-
-theorem
- (for y,r st y in A & inf A < r & r < y holds r in A)
-   implies A is connected
- proof assume
-Z: for y,r st y in A & inf A < r & r < y holds r in A;
-  let x,y such that
-Z1: x in A & y in A;
-  let r;
-  assume r in [.x,y.];
-   then r in ].x,y.[ \/ {x,y} by XXREAL_1:29,128;
-   then
-pc: r in ].x,y.[ or r in {x,y} by XBOOLE_0:def 3;
-  per cases by pc,TARSKI:def 2;
-  suppose r = x;
-  hence thesis by Z1;
-  end;
-  suppose r = y;
-  hence thesis by Z1;
+    r = y;
+    hence thesis by A3;
   end;
   suppose
-S:  r in ].x,y.[;
-   then
-A:  x < r by XXREAL_1:4;
-B:  r < y by S,XXREAL_1:4;
-    inf A <= x by Z1,Th3;
-    then inf A < r by A,XXREAL_0:2;
-  hence thesis by B,Z,Z1;
-  end;
- end;
-
-theorem
- (for r st inf A < r & r < sup A holds r in A)
-   implies A is connected
- proof assume
-Z: for r st inf A < r & r < sup A holds r in A;
-  let x,y such that
-Z1: x in A & y in A;
-  let r;
-  assume r in [.x,y.];
-   then r in ].x,y.[ \/ {x,y} by XXREAL_1:29,128;
-   then
-pc: r in ].x,y.[ or r in {x,y} by XBOOLE_0:def 3;
-  per cases by pc,TARSKI:def 2;
-  suppose r = x;
-  hence thesis by Z1;
-  end;
-  suppose r = y;
-  hence thesis by Z1;
-  end;
-  suppose
-S:  r in ].x,y.[;
-   then
-A:  x < r by XXREAL_1:4;
-B:  r < y by S,XXREAL_1:4;
-    inf A <= x by Z1,Th3;
+A5: r in ].x,y.[;
     then
-E:   inf A < r by A,XXREAL_0:2;
-    y <= sup A by Z1,Th3B;
-    then r < sup A by B,XXREAL_0:2;
-  hence thesis by Z,E;
+A6: r < y by XXREAL_1:4;
+    x < r by A5,XXREAL_1:4;
+    hence thesis by A1,A2,A3,A6;
   end;
- end;
+end;
 
-theorem Th89:
- (for x,y,r st x in A & y in A & x <= r & r <= y holds r in A)
-   implies A is connected
- proof assume for x,y,r st x in A & y in A & x <= r & r <= y holds r in A;
+theorem
+  (for x,r st x in A & x < r & r < sup A holds r in A) implies A is
+  connected
+proof
+  assume
+A1: for x,r st x in A & x < r & r < sup A holds r in A;
+  let x,y such that
+A2: x in A and
+A3: y in A;
+  let r;
+  assume
+  r in [.x,y.];
+  then r in ].x,y.[ \/ {x,y} by XXREAL_1:29,128;
+  then
+A4: r in ].x,y.[ or r in {x,y} by XBOOLE_0:def 3;
+  per cases by A4,TARSKI:def 2;
+  suppose
+    r = x;
+    hence thesis by A2;
+  end;
+  suppose
+    r = y;
+    hence thesis by A3;
+  end;
+  suppose
+A5: r in ].x,y.[;
+    then
+A6: r < y by XXREAL_1:4;
+    y <= sup A by A3,Th4;
+    then
+A7: r < sup A by A6,XXREAL_0:2;
+    x < r by A5,XXREAL_1:4;
+    hence thesis by A1,A2,A7;
+  end;
+end;
+
+theorem
+  (for y,r st y in A & inf A < r & r < y holds r in A) implies A is
+  connected
+proof
+  assume
+A1: for y,r st y in A & inf A < r & r < y holds r in A;
+  let x,y such that
+A2: x in A and
+A3: y in A;
+  let r;
+  assume
+  r in [.x,y.];
+  then r in ].x,y.[ \/ {x,y} by XXREAL_1:29,128;
+  then
+A4: r in ].x,y.[ or r in {x,y} by XBOOLE_0:def 3;
+  per cases by A4,TARSKI:def 2;
+  suppose
+    r = x;
+    hence thesis by A2;
+  end;
+  suppose
+    r = y;
+    hence thesis by A3;
+  end;
+  suppose
+A5: r in ].x,y.[;
+    then
+A6: x < r by XXREAL_1:4;
+    inf A <= x by A2,Th3;
+    then
+A7: inf A < r by A6,XXREAL_0:2;
+    r < y by A5,XXREAL_1:4;
+    hence thesis by A1,A3,A7;
+  end;
+end;
+
+theorem
+  (for r st inf A < r & r < sup A holds r in A) implies A is connected
+proof
+  assume
+A1: for r st inf A < r & r < sup A holds r in A;
+  let x,y such that
+A2: x in A and
+A3: y in A;
+  let r;
+  assume
+  r in [.x,y.];
+  then r in ].x,y.[ \/ {x,y} by XXREAL_1:29,128;
+  then
+A4: r in ].x,y.[ or r in {x,y} by XBOOLE_0:def 3;
+  per cases by A4,TARSKI:def 2;
+  suppose
+    r = x;
+    hence thesis by A2;
+  end;
+  suppose
+    r = y;
+    hence thesis by A3;
+  end;
+  suppose
+A5: r in ].x,y.[;
+    then
+A6: r < y by XXREAL_1:4;
+    y <= sup A by A3,Th4;
+    then
+A7: r < sup A by A6,XXREAL_0:2;
+A8: x < r by A5,XXREAL_1:4;
+    inf A <= x by A2,Th3;
+    then inf A < r by A8,XXREAL_0:2;
+    hence thesis by A1,A7;
+  end;
+end;
+
+theorem Th92:
+  (for x,y,r st x in A & y in A & x <= r & r <= y holds r in A)
+  implies A is connected
+proof
+  assume
+  for x,y,r st x in A & y in A & x <= r & r <= y holds r in A;
   then for x,y,r st x in A & y in A & x < r & r < y holds r in A;
   hence thesis by Th88;
- end;
+end;
 
 theorem
- A is connected & B is connected & A meets B implies
-      A \/ B is connected
- proof assume that
-Z1: A is connected and
-Z2: B is connected;
+  A is connected & B is connected & A meets B implies A \/ B is
+  connected
+proof
+  assume that
+A1: A is connected and
+A2: B is connected;
   given z such that
-G1: z in A and
-G2: z in B;
-   for x,y,r st x in A \/ B & y in A \/ B & x <= r & r <= y holds r in A \/ B
-    proof let x,y,r such that
-Z3:   x in A \/ B and
-Z4:   y in A \/ B and
-Z5:   x <= r and
-Z6:   r <= y;
-     per cases by Z3,Z4,XBOOLE_0:def 3;
-     suppose x in A & y in A;
-      then r in A by Z1,Z5,Z6,Th84;
-     hence thesis by XBOOLE_0:def 3;
-     end;
-     suppose that
-S1:   x in A and
-S2:   y in B;
-      per cases;
-       suppose r <= z;
-        then r in A by Z1,S1,G1,Z5,Th84;
-       hence thesis by XBOOLE_0:def 3;
-       end;
-       suppose z <= r;
-        then r in B by Z2,S2,G2,Z6,Th84;
-       hence thesis by XBOOLE_0:def 3;
-       end;
-     end;
-     suppose that
-S1:   x in B and
-S2:   y in A;
-      per cases;
-       suppose z <= r;
-        then r in A by Z1,S2,G1,Z6,Th84;
-       hence thesis by XBOOLE_0:def 3;
-       end;
-       suppose r <= z;
-        then r in B by Z2,S1,G2,Z5,Th84;
-       hence thesis by XBOOLE_0:def 3;
-       end;
-     end;
-     suppose x in B & y in B;
-      then r in B by Z2,Z5,Z6,Th84;
-     hence thesis by XBOOLE_0:def 3;
-     end;
+A3: z in A and
+A4: z in B;
+  for x,y,r st x in A \/ B & y in A \/ B & x <= r & r <= y holds r in A \/
+  B
+  proof
+    let x,y,r such that
+A5: x in A \/ B and
+A6: y in A \/ B and
+A7: x <= r and
+A8: r <= y;
+    per cases by A5,A6,XBOOLE_0:def 3;
+    suppose
+      x in A & y in A;
+      then r in A by A1,A7,A8,Th84;
+      hence thesis by XBOOLE_0:def 3;
     end;
-  hence thesis by Th89;
- end;
+    suppose that
+A9:   x in A and
+A10:  y in B;
+      per cases;
+      suppose
+        r <= z;
+        then r in A by A1,A3,A7,A9,Th84;
+        hence thesis by XBOOLE_0:def 3;
+      end;
+      suppose
+        z <= r;
+        then r in B by A2,A4,A8,A10,Th84;
+        hence thesis by XBOOLE_0:def 3;
+      end;
+    end;
+    suppose that
+A11:  x in B and
+A12:  y in A;
+      per cases;
+      suppose
+        z <= r;
+        then r in A by A1,A3,A8,A12,Th84;
+        hence thesis by XBOOLE_0:def 3;
+      end;
+      suppose
+        r <= z;
+        then r in B by A2,A4,A7,A11,Th84;
+        hence thesis by XBOOLE_0:def 3;
+      end;
+    end;
+    suppose
+      x in B & y in B;
+      then r in B by A2,A7,A8,Th84;
+      hence thesis by XBOOLE_0:def 3;
+    end;
+  end;
+  hence thesis by Th92;
+end;
 
 theorem
- A is connected & B is left_end connected & sup A = inf B implies
-   A \/ B is connected
- proof assume that
-Z1: A is connected and
-Z2: B is left_end connected and
-Z3: sup A = inf B;
-   set z = inf B;
-G2: z in B by Z2,Def5;
-   for x,y,r st x in A \/ B & y in A \/ B & x < r & r < y holds r in A \/ B
-    proof let x,y,r such that
-Z3':   x in A \/ B and
-Z4:   y in A \/ B and
-Z5:   x < r and
-Z6:   r < y;
-     per cases by Z3',Z4,XBOOLE_0:def 3;
-     suppose x in A & y in A;
-      then r in A by Z1,Z5,Z6,Th84;
-     hence thesis by XBOOLE_0:def 3;
-     end;
-     suppose that
-S1:   x in A and
-S2:   y in B;
-      per cases;
-       suppose r < z;
-        then r in A by Z1,S1,Z5,Th85,Z3;
-       hence thesis by XBOOLE_0:def 3;
-       end;
-       suppose z <= r;
-        then r in B by Z2,S2,G2,Z6,Th84;
-       hence thesis by XBOOLE_0:def 3;
-       end;
-     end;
-     suppose that
-S1:   x in B and
-S2:   y in A;
-      per cases;
-       suppose
-S:      z < r;
-        y <= z by S2,Z3,Th3B;
-       hence thesis by S,Z6,XXREAL_0:2;
-       end;
-       suppose r <= z;
-        then r in B by Z2,S1,G2,Z5,Th84;
-       hence thesis by XBOOLE_0:def 3;
-       end;
-     end;
-     suppose x in B & y in B;
-      then r in B by Z2,Z5,Z6,Th84;
-     hence thesis by XBOOLE_0:def 3;
-     end;
+  A is connected & B is left_end connected & sup A = inf B implies A \/
+  B is connected
+proof
+  assume that
+A1: A is connected and
+A2: B is left_end connected and
+A3: sup A = inf B;
+  set z = inf B;
+A4: z in B by A2,Def5;
+  for x,y,r st x in A \/ B & y in A \/ B & x < r & r < y holds r in A \/ B
+  proof
+    let x,y,r such that
+A5: x in A \/ B and
+A6: y in A \/ B and
+A7: x < r and
+A8: r < y;
+    per cases by A5,A6,XBOOLE_0:def 3;
+    suppose
+      x in A & y in A;
+      then r in A by A1,A7,A8,Th84;
+      hence thesis by XBOOLE_0:def 3;
     end;
+    suppose that
+A9:   x in A and
+A10:  y in B;
+      per cases;
+      suppose
+        r < z;
+        then r in A by A1,A3,A7,A9,Th85;
+        hence thesis by XBOOLE_0:def 3;
+      end;
+      suppose
+        z <= r;
+        then r in B by A2,A4,A8,A10,Th84;
+        hence thesis by XBOOLE_0:def 3;
+      end;
+    end;
+    suppose that
+A11:  x in B and
+A12:  y in A;
+      per cases;
+      suppose
+A13:    z < r;
+        y <= z by A3,A12,Th4;
+        hence thesis by A8,A13,XXREAL_0:2;
+      end;
+      suppose
+        r <= z;
+        then r in B by A2,A4,A7,A11,Th84;
+        hence thesis by XBOOLE_0:def 3;
+      end;
+    end;
+    suppose
+      x in B & y in B;
+      then r in B by A2,A7,A8,Th84;
+      hence thesis by XBOOLE_0:def 3;
+    end;
+  end;
   hence thesis by Th88;
- end;
+end;
 
 theorem
- A is right_end connected & B is connected & sup A = inf B implies
-   A \/ B is connected
- proof assume that
-Z1: A is right_end connected and
-Z2: B is connected and
-Z3: sup A = inf B;
-   set z = inf B;
-G1: z in A by Z1,Def6,Z3;
-   for x,y,r st x in A \/ B & y in A \/ B & x < r & r < y holds r in A \/ B
-    proof let x,y,r such that
-Z3:   x in A \/ B and
-Z4:   y in A \/ B and
-Z5:   x < r and
-Z6:   r < y;
-     per cases by Z3,Z4,XBOOLE_0:def 3;
-     suppose x in A & y in A;
-      then r in A by Z1,Z5,Z6,Th84;
-     hence thesis by XBOOLE_0:def 3;
-     end;
-     suppose that
-S1:   x in A and
-S2:   y in B;
-      per cases;
-       suppose r <= z;
-        then r in A by Z1,S1,G1,Z5,Th84;
-       hence thesis by XBOOLE_0:def 3;
-       end;
-       suppose z < r;
-        then r in B by Z2,S2,Z6,Th86;
-       hence thesis by XBOOLE_0:def 3;
-       end;
-     end;
-     suppose that
-S1:   x in B and
-S2:   y in A;
-      per cases;
-       suppose z <= r;
-        then r in A by Z1,S2,G1,Z6,Th84;
-       hence thesis by XBOOLE_0:def 3;
-       end;
-       suppose
-S:      r < z;
-        z <= x by S1,Th3;
-       hence thesis by S,Z5,XXREAL_0:2;
-       end;
-     end;
-     suppose x in B & y in B;
-      then r in B by Z2,Z5,Z6,Th84;
-     hence thesis by XBOOLE_0:def 3;
-     end;
+  A is right_end connected & B is connected & sup A = inf B implies A \/
+  B is connected
+proof
+  assume that
+A1: A is right_end connected and
+A2: B is connected and
+A3: sup A = inf B;
+  set z = inf B;
+A4: z in A by A1,A3,Def6;
+  for x,y,r st x in A \/ B & y in A \/ B & x < r & r < y holds r in A \/ B
+  proof
+    let x,y,r such that
+A5: x in A \/ B and
+A6: y in A \/ B and
+A7: x < r and
+A8: r < y;
+    per cases by A5,A6,XBOOLE_0:def 3;
+    suppose
+      x in A & y in A;
+      then r in A by A1,A7,A8,Th84;
+      hence thesis by XBOOLE_0:def 3;
     end;
+    suppose that
+A9:   x in A and
+A10:  y in B;
+      per cases;
+      suppose
+        r <= z;
+        then r in A by A1,A4,A7,A9,Th84;
+        hence thesis by XBOOLE_0:def 3;
+      end;
+      suppose
+        z < r;
+        then r in B by A2,A8,A10,Th86;
+        hence thesis by XBOOLE_0:def 3;
+      end;
+    end;
+    suppose that
+A11:  x in B and
+A12:  y in A;
+      per cases;
+      suppose
+        z <= r;
+        then r in A by A1,A4,A8,A12,Th84;
+        hence thesis by XBOOLE_0:def 3;
+      end;
+      suppose
+A13:    r < z;
+        z <= x by A11,Th3;
+        hence thesis by A7,A13,XXREAL_0:2;
+      end;
+    end;
+    suppose
+      x in B & y in B;
+      then r in B by A2,A7,A8,Th84;
+      hence thesis by XBOOLE_0:def 3;
+    end;
+  end;
   hence thesis by Th88;
- end;
+end;
 

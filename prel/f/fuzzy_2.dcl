@@ -12,6 +12,7 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="XXREAL_0"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="XXREAL_1"/>
@@ -27,13 +28,13 @@
 </ArgTypes>
 <Cluster>
 <Adjective nr="5">
-<Func kind="K" nr="90">
+<Func kind="K" nr="98">
 <Func kind="K" nr="49"/>
 <Num nr="1"/>
 </Func>
 </Adjective>
 <Adjective nr="6"/>
-<Adjective nr="24">
+<Adjective nr="25">
 <LocusVar nr="1"/>
 <Func kind="K" nr="44"/>
 </Adjective>
@@ -49,13 +50,13 @@
 </Typ>
 <Cluster>
 <Adjective nr="5">
-<Func kind="K" nr="90">
+<Func kind="K" nr="98">
 <Func kind="K" nr="49"/>
 <Num nr="1"/>
 </Func>
 </Adjective>
 <Adjective nr="6"/>
-<Adjective nr="24">
+<Adjective nr="25">
 <LocusVar nr="1"/>
 <Func kind="K" nr="44"/>
 </Adjective>

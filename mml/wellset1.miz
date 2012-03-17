@@ -20,7 +20,8 @@ environ
 begin
 
 reserve a,b,x,y,z,z1,z2,z3,y1,y3,y4,A,B,C,D,G,M,N,X,Y,Z,W0,W00 for set,
-  R,S,T,W,W1,W2 for Relation,
+  R,S,T,
+  W,W1,W2 for Relation,
   F,H,H1 for Function;
 
 theorem Th1:
@@ -34,73 +35,81 @@ canceled;
 
 theorem Th3:
   X <> {} & Y <> {} & W = [: X,Y :] implies field W = X \/ Y
-proof consider a being Element of X, b being Element of Y;
-  assume
-A1: X <> {} & Y <> {} & W = [: X,Y :];
-A2: x in field W implies x in X \/ Y
+proof
+  consider a being Element of X, b being Element of Y;
+  assume that
+A1: X <> {} and
+A2: Y <> {} and
+A3: W = [: X,Y :];
+A4: x in field W implies x in X \/ Y
   proof
-    assume x in field W;
+    assume
+    x in field W;
     then consider y such that
-A3: [x,y] in W or [y,x] in W by Th1;
-A4: [x,y] in W implies x in X \/ Y
+A5: [x,y] in W or [y,x] in W by Th1;
+A6: [y,x] in W implies x in X \/ Y
     proof
-      assume [x,y] in W;
-      then x in X by A1,ZFMISC_1:106;
+      assume
+      [y,x] in W;
+      then x in Y by A3,ZFMISC_1:106;
       hence thesis by XBOOLE_0:def 3;
     end;
-    [y,x] in W implies x in X \/ Y
+    [x,y] in W implies x in X \/ Y
     proof
-      assume [y,x] in W;
-      then x in Y by A1,ZFMISC_1:106;
+      assume
+      [x,y] in W;
+      then x in X by A3,ZFMISC_1:106;
       hence thesis by XBOOLE_0:def 3;
     end;
-    hence thesis by A3,A4;
+    hence thesis by A5,A6;
   end;
   x in X \/ Y implies x in field W
   proof
+A7: x in X implies x in field W
+    proof
+      assume
+      x in X;
+      then [x,b] in W by A2,A3,ZFMISC_1:106;
+      hence thesis by Th1;
+    end;
+A8: x in Y implies x in field W
+    proof
+      assume
+      x in Y;
+      then [a,x] in W by A1,A3,ZFMISC_1:106;
+      hence thesis by Th1;
+    end;
     assume
-A5: x in X \/ Y;
-A6: x in X implies x in field W
-    proof
-      assume x in X;
-      then [x,b] in W by A1,ZFMISC_1:106;
-      hence thesis by Th1;
-    end;
-    x in Y implies x in field W
-    proof
-      assume x in Y;
-      then [a,x] in W by A1,ZFMISC_1:106;
-      hence thesis by Th1;
-    end;
-    hence thesis by A5,A6,XBOOLE_0:def 3;
+    x in X \/ Y;
+    hence thesis by A7,A8,XBOOLE_0:def 3;
   end;
-  hence thesis by A2,TARSKI:2;
+  hence thesis by A4,TARSKI:2;
 end;
 
-scheme RSeparation { A()-> set, P[Relation] } :
-  ex B st for R being Relation holds R in B iff R in A() & P[R]
-proof
+scheme
+  RSeparation { A()-> set, P[Relation] } : ex B st for R being Relation holds
+  R in B iff R in A() & P[R] proof
   defpred p[set,set] means $1 = $2 & ex S st S = $2 & P[S];
 A1: for y,t,v being set st p[y,t] & p[y,v] holds t = v;
   consider B such that
-A2: for t being set holds t in B iff ex y being set st
-  y in A() & p[y,t] from TARSKI:sch 1(A1);
+A2: for t being set holds t in B iff ex y being set st y in A() & p[y,t]
+  from TARSKI:sch 1(A1);
   take B;
   let R;
-A3: R in B iff ex T st T in A() & (T = R & P[R])
+  R in B implies ex T st T in A() & T = R & P[R]
   proof
-    thus R in B implies ex T st T in A() & (T = R & P[R])
-    proof
-      assume R in B;
-      then consider y being set such that
-A4:   y in A() & (y = R & ex S st S = R & P[S]) by A2;
-      reconsider y as Relation by A4;
-      take y; thus thesis by A4;
-    end;
-    thus thesis by A2;
+    assume
+    R in B;
+    then consider y being set such that
+A3: y in A() and
+A4: y = R and
+A5: ex S st S = R & P[S] by A2;
+    reconsider y as Relation by A4;
+    take y;
+    thus thesis by A3,A4,A5;
   end;
   hence R in B implies R in A() & P[R];
-  thus thesis by A3;
+  thus thesis by A2;
 end;
 
 canceled 2;
@@ -114,14 +123,16 @@ proof
 A1: x in field W and
 A2: y in field W and
 A3: W is well-ordering;
-  W is reflexive & W is connected by A3,WELLORD1:def 4;
+  W is connected by A3,WELLORD1:def 4;
+  then W is_connected_in field W by RELAT_2:def 14;
   then
-A4: W is_reflexive_in field W & W is_connected_in field W
-  by RELAT_2:def 9,def 14;
+A4: x<>y implies [x,y] in W or [y,x] in W by A1,A2,RELAT_2:def 6;
+  W is reflexive by A3,WELLORD1:def 4;
   then
-A5: x<>y implies [x,y] in W or [y,x] in W by A1,A2,RELAT_2:def 6;
-  assume not x in W-Seg(y);
-  hence thesis by A1,A4,A5,RELAT_2:def 1,WELLORD1:def 1;
+A5: W is_reflexive_in field W by RELAT_2:def 9;
+  assume
+  not x in W-Seg(y);
+  hence thesis by A1,A5,A4,RELAT_2:def 1,WELLORD1:def 1;
 end;
 
 theorem Th7:
@@ -130,1083 +141,1077 @@ theorem Th7:
 proof
   let x,y,W;
   assume that
-A1: x in field W and
-A2: y in field W and
-A3: W is well-ordering;
-  W is antisymmetric by A3,WELLORD1:def 4;
+A1: x in field W & y in field W and
+A2: W is well-ordering;
+  W is antisymmetric by A2,WELLORD1:def 4;
   then
-A4: W is_antisymmetric_in field W by RELAT_2:def 12;
-  assume x in W-Seg(y);
+A3: W is_antisymmetric_in field W by RELAT_2:def 12;
+  assume
+  x in W-Seg(y);
   then
-A5: x<>y & [x,y] in W by WELLORD1:def 1;
-  assume [y,x] in W;
-  hence contradiction by A1,A2,A4,A5,RELAT_2:def 4;
+A4: x<>y & [x,y] in W by WELLORD1:def 1;
+  assume
+  [y,x] in W;
+  hence contradiction by A1,A3,A4,RELAT_2:def 4;
 end;
 
 theorem Th8:
-  for F,D st (for X st X in D holds not F.X in X & F.X in union D) ex R st
-  field R c= union D & R is well-ordering & not field R in D &
-  for y st y in field R holds R-Seg(y) in D & F.(R-Seg(y)) = y
+  for F,D st (for X st X in D holds not F.X in X & F.X in union D)
+ex R st field R c= union D & R is well-ordering & not field R in D & for y st y
+  in field R holds R-Seg(y) in D & F.(R-Seg(y)) = y
 proof
   let F,D;
   assume
 A1: for X st X in D holds not F.X in X & F.X in union D;
+  defpred P[Relation] means $1 is well-ordering & for y st y in field $1 holds
+  $1-Seg(y) in D & F.($1-Seg(y)) = y;
   set W0=bool [: union D, union D :];
-  defpred P[Relation] means $1 is well-ordering &
-  for y st y in field $1 holds $1-Seg(y) in D & F.($1-Seg(y)) = y;
   consider G such that
 A2: W in G iff W in W0 & P[W] from RSeparation;
-A3: for W1,W2 holds W1 in G & W2 in G implies
-  ((W1 c= W2 & for x st x in field W1 holds W1-Seg(x) = W2-Seg(x) ) or
-  (W2 c= W1 & for x st x in field W2 holds W2-Seg(x) = W1-Seg(x) ))
-  proof
-    let W1,W2;
-    assume
-A4: W1 in G & W2 in G;
-    defpred P[set] means $1 in field W2 &
-    W1 |_2 (W1-Seg($1)) = W2 |_2 (W2-Seg($1));
-    consider C such that
-A5: x in C iff x in field W1 & P[x] from XBOOLE_0:sch 1;
-A6: W1 is well-ordering & W2 is well-ordering by A2,A4;
-A7: x in C implies W1-Seg(x) = W2-Seg(x)
-    proof
-      assume
-A8:   x in C;
-      for y holds y in W1-Seg(x) iff y in W2-Seg(x)
-      proof
-        let y;
-A9:     field (W1 |_2(W1-Seg(x))) = W1-Seg(x) by A6,WELLORD1:40;
-        field (W2 |_2(W2-Seg(x))) = W2-Seg(x) by A6,WELLORD1:40;
-        hence thesis by A5,A8,A9;
-      end;
-      hence thesis by TARSKI:2;
-    end;
-A10: x in C implies W1-Seg(x) c= C
-    proof
-      assume
-A11:  x in C;
-      y in W1-Seg(x) implies y in C
-      proof
-        assume
-A12:    y in W1-Seg(x);
-        then
-A13:    [y,x] in W1 by WELLORD1:def 1;
-        then
-A14:    y in field W1 by RELAT_1:30;
-A15:    x in field W1 by A13,RELAT_1:30;
-        then
-A16:    W1-Seg(y) c= W1-Seg(x) by A6,A12,A14,WELLORD1:38;
-A17:    y in W2-Seg(x) by A7,A11,A12;
-        then
-A18:    [y,x] in W2 by WELLORD1:def 1;
-        then
-A19:    y in field W2 by RELAT_1:30;
-A20:    x in field W2 by A18,RELAT_1:30;
-        then
-A21:    W2-Seg(y) c= W2-Seg(x) by A6,A17,A19,WELLORD1:38;
-        W1 |_2 (W1-Seg(y)) = W2 |_2 (W2-Seg(y))
-        proof
-A22:      W1-Seg(y) = W2-Seg(y)
-          proof
-            W1-Seg(y)=(W1 |_2 (W1-Seg(x)))-Seg(y) by A6,A12,A15,WELLORD1:35
-              .=(W2 |_2 (W2-Seg(x)))-Seg(y) by A5,A11
-              .=W2-Seg(y) by A6,A17,A20,WELLORD1:35;
-            hence thesis;
-          end;
-          W1 |_2 (W1-Seg(y)) = (W1 |_2 (W1-Seg(x))) |_2 (W1-Seg(y))
-          by A16,WELLORD1:29
-            .= (W2 |_2 (W2-Seg(x))) |_2 (W2-Seg(y)) by A5,A11,A22
-            .= W2 |_2 (W2-Seg(y)) by A21,WELLORD1:29;
-          hence thesis;
-        end;
-        hence thesis by A5,A14,A19;
-      end;
-      hence thesis by TARSKI:def 3;
-    end;
-A23: y1 in field W1 & not y1 in C implies
-    ex y3 st y3 in field W1 & C=W1-Seg(y3) & not y3 in C
-    proof
-      assume
-A24:  y1 in field W1 & not y1 in C;
-      set Y = field W1 \ C;
-      Y <> {} by A24,XBOOLE_0:def 5;
-      then consider a such that
-A25:  a in Y and
-A26:  for b st b in Y holds [a,b] in W1 by A6,WELLORD1:10;
-      take y3=a;
-      C= W1-Seg(y3)
-      proof
-        x in C iff x in W1-Seg(y3)
-        proof
-          thus x in C implies x in W1-Seg(y3)
-          proof
-            assume that
-A27:        x in C and
-A28:        not x in W1-Seg(y3);
-            x in field W1 by A5,A27;
-            then
-A29:        [y3,x] in W1 by A6,A25,A28,Th6;
-A30:        W1-Seg(x) c= C by A10,A27;
-            y3 in C
-            proof
-              y3 <> x implies y3 in C
-              proof
-                assume y3 <> x;
-                then y3 in W1-Seg(x) by A29,WELLORD1:def 1;
-                hence thesis by A30;
-              end;
-              hence thesis by A27;
-            end;
-            hence contradiction by A25,XBOOLE_0:def 5;
-          end;
-          thus x in W1-Seg(y3) implies x in C
-          proof
-            assume that
-A31:        x in W1-Seg(y3) and
-A32:        not x in C;
-            [x,y3] in W1 by A31,WELLORD1:def 1;
-            then
-A33:        x in field W1 by RELAT_1:30;
-            then x in Y by A32,XBOOLE_0:def 5;
-            then [y3,x] in W1 by A26;
-            hence contradiction by A6,A25,A31,A33,Th7;
-          end;
-        end;
-        hence thesis by TARSKI:2;
-      end;
-      hence thesis by A25,XBOOLE_0:def 5;
-    end;
-A34: x in C implies W2-Seg(x) c= C
-    proof
-      assume
-A35:  x in C;
-      let y;
-      assume
-A36:  y in W2-Seg(x);
-      then
-A37:  [y,x] in W2 by WELLORD1:def 1;
-      then
-A38:  y in field W2 by RELAT_1:30;
-A39:  x in field W2 by A37,RELAT_1:30;
-      then
-A40:  W2-Seg(y) c= W2-Seg(x) by A6,A36,A38,WELLORD1:38;
-A41:  y in W1-Seg(x) by A7,A35,A36;
-      then
-A42:  [y,x] in W1 by WELLORD1:def 1;
-      then
-A43:  y in field W1 by RELAT_1:30;
-A44:  x in field W1 by A42,RELAT_1:30;
-      then
-A45:  W1-Seg(y) c= W1-Seg(x) by A6,A41,A43,WELLORD1:38;
-      W2 |_2 (W2-Seg(y)) = W1 |_2 (W1-Seg(y))
-      proof
-A46:    W2-Seg(y) = W1-Seg(y)
-        proof
-          W2-Seg(y)=(W2 |_2 (W2-Seg(x)))-Seg(y) by A6,A36,A39,WELLORD1:35
-            .=(W1 |_2 (W1-Seg(x)))-Seg(y) by A5,A35
-            .=W1-Seg(y) by A6,A41,A44,WELLORD1:35;
-          hence thesis;
-        end;
-        W2 |_2 (W2-Seg(y)) = (W2 |_2 (W2-Seg(x))) |_2 (W2-Seg(y))
-        by A40,WELLORD1:29
-          .= (W1 |_2 (W1-Seg(x))) |_2 (W1-Seg(y)) by A5,A35,A46
-          .= W1 |_2 (W1-Seg(y)) by A45,WELLORD1:29;
-        hence thesis;
-      end;
-      hence thesis by A5,A38,A43;
-    end;
-A47: y1 in field W2 & not y1 in C implies
-    ex y3 st y3 in field W2 & C=W2-Seg(y3) & not y3 in C
-    proof
-      assume
-A48:  y1 in field W2 & not y1 in C;
-      set Y = field W2 \ C;
-      Y <> {} by A48,XBOOLE_0:def 5;
-      then consider a such that
-A49:  a in Y and
-A50:  for b st b in Y holds [a,b] in W2 by A6,WELLORD1:10;
-      take y3=a;
-      C= W2-Seg(y3)
-      proof
-        x in C iff x in W2-Seg(y3)
-        proof
-          thus x in C implies x in W2-Seg(y3)
-          proof
-            assume that
-A51:        x in C and
-A52:        not x in W2-Seg(y3);
-            x in field W2 by A5,A51;
-            then
-A53:        [y3,x] in W2 by A6,A49,A52,Th6;
-A54:        W2-Seg(x) c= C by A34,A51;
-            y3 <> x implies y3 in C
-            proof
-              assume y3 <> x;
-              then y3 in W2-Seg(x) by A53,WELLORD1:def 1;
-              hence thesis by A54;
-            end;
-            hence contradiction by A49,A51,XBOOLE_0:def 5;
-          end;
-          thus x in W2-Seg(y3) implies x in C
-          proof
-            assume that
-A55:        x in W2-Seg(y3) and
-A56:        not x in C;
-            [x,y3] in W2 by A55,WELLORD1:def 1;
-            then
-A57:        x in field W2 by RELAT_1:30;
-            then x in Y by A56,XBOOLE_0:def 5;
-            then [y3,x] in W2 by A50;
-            hence contradiction by A6,A49,A55,A57,Th7;
-          end;
-        end;
-        hence thesis by TARSKI:2;
-      end;
-      hence thesis by A49,XBOOLE_0:def 5;
-    end;
-A58: C = field W1 or C = field W2
-    proof
-      assume not C = field W1;
-      then
-A59:  ex x st not (x in C implies x in field W1) or
-      not (x in field W1 implies x in C) by TARSKI:2;
-      assume not C = field W2;
-      then
-A60:  ex x st not (x in C implies x in field W2) or
-      not (x in field W2 implies x in C) by TARSKI:2;
-      consider y3 such that
-A61:  y3 in field W1 & C=W1-Seg(y3) & not y3 in C by A5,A23,A59;
-      consider y4 such that
-A62:  y4 in field W2 & C=W2-Seg(y4) & not y4 in C by A5,A47,A60;
-A63:  y3 = y4
-      proof
-        y3 = F.(W2-Seg(y4)) by A2,A4,A61,A62
-          .= y4 by A2,A4,A62;
-        hence thesis;
-      end;
-      W1 |_2 (W1-Seg(y3)) = W2 |_2 (W2-Seg(y3))
-      proof
-        z in W1 |_2 (W1-Seg(y3)) iff z in W2 |_2 (W2-Seg(y3))
-        proof
-          z in W1 & z in [: W1-Seg(y3),W1-Seg(y3) :] iff
-          z in W2 & z in [: W2-Seg(y3),W2-Seg(y3) :]
-          proof
-            thus z in W1 & z in [: W1-Seg(y3),W1-Seg(y3) :] implies
-            z in W2 & z in [: W2-Seg(y3),W2-Seg(y3) :]
-            proof
-              assume that
-A64:          z in W1 and
-A65:          z in [: W1-Seg(y3),W1-Seg(y3) :];
-              consider z1,z2 such that
-A66:          z1 in W1-Seg(y3) and
-A67:          z2 in W1-Seg(y3) and
-A68:          z=[z1,z2] by A65,ZFMISC_1:def 2;
-A69:          z1 in field W2 by A5,A61,A66;
-              z1 in W1-Seg(z2) or (z1=z2 & not z1 in W1-Seg(z2)) by A64,A68,
-WELLORD1:def 1;
-              then z1 in W2-Seg(z2) or (z1=z2 & not z1 in W2-Seg(z2))
-              by A7,A61,A67;
-              hence thesis by A6,A61,A62,A63,A65,A68,A69,Th6,WELLORD1:def 1;
-            end;
-            thus z in W2 & z in [: W2-Seg(y3),W2-Seg(y3) :] implies
-            z in W1 & z in [: W1-Seg(y3),W1-Seg(y3) :]
-            proof
-              assume that
-A70:          z in W2 and
-A71:          z in [: W2-Seg(y3),W2-Seg(y3) :];
-              consider z1,z2 such that
-A72:          z1 in W2-Seg(y3) and
-A73:          z2 in W2-Seg(y3) and
-A74:          z=[z1,z2] by A71,ZFMISC_1:def 2;
-A75:          z1 in field W1 by A5,A62,A63,A72;
-              z1 in W2-Seg(z2) or (z1=z2 & not z1 in W2-Seg(z2)) by A70,A74,
-WELLORD1:def 1;
-              then z1 in W1-Seg(z2) or (z1=z2 & not z1 in W1-Seg(z2))
-              by A7,A62,A63,A73;
-              hence thesis by A6,A61,A62,A63,A71,A74,A75,Th6,WELLORD1:def 1;
-            end;
-          end;
-          hence thesis by XBOOLE_0:def 4;
-        end;
-        hence thesis by TARSKI:2;
-      end;
-      hence contradiction by A5,A61,A62,A63;
-    end;
-A76: C = field W1 implies
-    (W1 c= W2 & for x st x in field W1 holds W1-Seg(x) = W2-Seg(x) )
-    proof
-      assume
-A77:  C = field W1;
-      [z1,z2] in W1 implies [z1,z2] in W2
-      proof
-        assume
-A78:    [z1,z2] in W1;
-        then
-A79:    z1 in C by A77,RELAT_1:30;
-A80:    z2 in C by A77,A78,RELAT_1:30;
-A81:    z1 in field W2 by A5,A79;
-        z1 in W1-Seg(z2) or (z1=z2 & not z1 in W1-Seg(z2)) by A78,
-WELLORD1:def 1;
-        then z1 in W2-Seg(z2) or (z1=z2 & not z1 in W2-Seg(z2)) by A7,A80;
-        hence thesis by A6,A81,Th6,WELLORD1:def 1;
-      end;
-      hence thesis by A7,A77,RELAT_1:def 3;
-    end;
-    C = field W2 implies
-    (W2 c= W1 & for x st x in field W2 holds W2-Seg(x) = W1-Seg(x) )
-    proof
-      assume
-A82:  C = field W2;
-      [z1,z2] in W2 implies [z1,z2] in W1
-      proof
-        assume
-A83:    [z1,z2] in W2;
-        then
-A84:    z1 in C by A82,RELAT_1:30;
-A85:    z2 in C by A82,A83,RELAT_1:30;
-A86:    z1 in field W1 by A5,A84;
-        z1 in W2-Seg(z2) or (z1=z2 & not z1 in W2-Seg(z2)) by A83,
-WELLORD1:def 1;
-        then z1 in W1-Seg(z2) or (z1=z2 & not z1 in W1-Seg(z2)) by A7,A85;
-        hence thesis by A6,A86,Th6,WELLORD1:def 1;
-      end;
-      hence thesis by A7,A82,RELAT_1:def 3;
-    end;
-    hence thesis by A58,A76;
-  end;
   defpred P[set,set] means ex W st [$1,$2] in W & W in G;
   consider S such that
-A87: [x,y] in S iff x in union D & y in union D & P[x,y] from RELAT_1:sch 1;
+A3: [x,y] in S iff x in union D & y in union D & P[x,y] from RELAT_1:
+  sch 1;
   take R = S;
-A88: x in field R implies x in union D & ex W st (x in field W & W in G)
+A4: x in field R implies x in union D & ex W st x in field W & W in G
   proof
-    assume x in field R;
+    assume
+    x in field R;
     then consider y such that
-A89: ([x,y] in R or [y,x] in R) by Th1;
-A90: (x in union D & y in union D & ex S st [x,y] in S & S in G) or
-    (y in union D & x in union D & ex S st [y,x] in S & S in G) by A87,A89;
-    thus x in union D by A87,A89;
-    consider S such that
-A91: ([x,y] in S or [y,x] in S ) and
-A92: S in G by A90;
+A5: [x,y] in R or [y,x] in R by Th1;
+    (x in union D & y in union D & ex S st [x,y] in S & S in G) or (y in
+    union D & x in union D & ex S st [y,x] in S & S in G) by A3,A5;
+    then consider S such that
+A6: ( [x,y] in S or [y,x] in S)& S in G;
+    thus x in union D by A3,A5;
     take S;
-    thus thesis by A91,A92,Th1;
+    thus thesis by A6,Th1;
   end;
   then x in field R implies x in union D;
   hence field R c= union D by TARSKI:def 3;
-A93: W in G implies field W c= field R
+A7: for W1,W2 holds W1 in G & W2 in G implies ((W1 c= W2 & for x st x in
+  field W1 holds W1-Seg(x) = W2-Seg(x) ) or (W2 c= W1 & for x st x in field W2
+  holds W2-Seg(x) = W1-Seg(x) ))
   proof
-    assume
-A94: W in G;
-    let x;
-    assume x in field W;
-    then consider y such that
-A95: [x,y] in W or [y,x] in W by Th1;
-A96: [x,y] in W implies [x,y] in R
+    let W1,W2;
+    assume that
+A8: W1 in G and
+A9: W2 in G;
+A10: W2 is well-ordering by A2,A9;
+    defpred P[set] means $1 in field W2 & W1 |_2 (W1-Seg($1)) = W2 |_2 (W2-Seg
+    ($1));
+    consider C such that
+A11: x in C iff x in field W1 & P[x] from XBOOLE_0:sch 1;
+A12: W1 is well-ordering by A2,A8;
+A13: x in C implies W1-Seg(x) = W2-Seg(x)
     proof
       assume
-A97:  [x,y] in W;
-      W in W0 by A2,A94;
-      then ex z1,z2 st z1 in union D & z2 in union D & [x,y]=[z1,z2]
-      by A97,ZFMISC_1:103;
-      hence thesis by A87,A94,A97;
+A14:  x in C;
+      for y holds y in W1-Seg(x) iff y in W2-Seg(x)
+      proof
+        let y;
+        field (W1 |_2(W1-Seg(x))) = W1-Seg(x) & field (W2 |_2(W2-Seg(x)))
+        = W2-Seg(x ) by A12,A10,WELLORD1:40;
+        hence thesis by A11,A14;
+      end;
+      hence thesis by TARSKI:2;
     end;
-    [y,x] in W implies [y,x] in R
+A15: x in C implies W1-Seg(x) c= C
     proof
       assume
-A98:  [y,x] in W;
-      W in W0 by A2,A94;
-      then ex z1,z2 st z1 in union D & z2 in union D & [y,x]=[z1,z2]
-      by A98,ZFMISC_1:103;
-      hence thesis by A87,A94,A98;
-    end;
-    hence thesis by A95,A96,Th1;
-  end;
-A99: R is well-ordering
-  proof
-A100: R is_reflexive_in field R
-    proof
-      x in field R implies [x,x] in R
+A16:  x in C;
+      y in W1-Seg(x) implies y in C
       proof
         assume
-A101:   x in field R;
+A17:    y in W1-Seg(x);
         then
-A102:   x in union D & ex W st (x in field W & W in G) by A88;
-        consider W such that
-A103:   x in field W & W in G by A88,A101;
-        W is well-ordering by A2,A103;
-        then W well_orders field W by WELLORD1:8;
-        then W is_reflexive_in field W by WELLORD1:def 5;
-        then [x,x] in W by A103,RELAT_2:def 1;
-        hence thesis by A87,A102,A103;
+A18:    y in W2-Seg(x) by A13,A16;
+        then
+A19:    [y,x] in W2 by WELLORD1:def 1;
+        then
+A20:    y in field W2 by RELAT_1:30;
+A21:    W1-Seg(y)=(W1 |_2 (W1-Seg(x)))-Seg(y) by A12,A17,WELLORD1:35
+          .=(W2 |_2 (W2-Seg(x)))-Seg(y) by A11,A16
+          .=W2-Seg(y) by A10,A18,WELLORD1:35;
+A22:    [y,x] in W1 by A17,WELLORD1:def 1;
+        then
+A23:    y in field W1 by RELAT_1:30;
+        x in field W2 by A19,RELAT_1:30;
+        then
+A24:    W2-Seg(y) c= W2-Seg(x) by A10,A18,A20,WELLORD1:38;
+        x in field W1 by A22,RELAT_1:30;
+        then W1-Seg(y) c= W1-Seg(x) by A12,A17,A23,WELLORD1:38;
+        then W1 |_2 (W1-Seg(y)) = (W1 |_2 (W1-Seg(x))) |_2 (W1-Seg(y)) by
+        WELLORD1:29
+          .= (W2 |_2 (W2-Seg(x))) |_2 (W2-Seg(y)) by A11,A16,A21
+          .= W2 |_2 (W2-Seg(y)) by A24,WELLORD1:29;
+        hence thesis by A11,A23,A20;
       end;
-      hence thesis by RELAT_2:def 1;
+      hence thesis by TARSKI:def 3;
     end;
-A104: R is_transitive_in field R
+A25: y1 in field W1 & not y1 in C implies ex y3 st y3 in field W1 & C=W1
+    -Seg(y3) & not y3 in C
     proof
-      x in field R & y in field R & z in field R & [x,y] in R & [y,z] in R
-      implies [x,z] in R
+      set Y = field W1 \ C;
+      assume
+      y1 in field W1 & not y1 in C;
+      then Y <> {} by XBOOLE_0:def 5;
+      then consider a such that
+A26:  a in Y and
+A27:  for b st b in Y holds [a,b] in W1 by A12,WELLORD1:10;
+      take y3=a;
+      x in C iff x in W1-Seg(y3)
       proof
-        assume that x in field R and y in field R and z in field R and
-A105:   [x,y] in R & [y,z] in R;
-A106:   x in union D & y in union D & ex W st [x,y] in W & W in G by A87,A105;
-        consider W1 such that
-A107:   [x,y] in W1 & W1 in G by A87,A105;
-A108:   y in union D & z in union D & ex W st [y,z] in W & W in G by A87,A105;
-        consider W2 such that
-A109:   [y,z] in W2 & W2 in G by A87,A105;
-        ex W st [x,y] in W & [y,z] in W & W in G
+        thus x in C implies x in W1-Seg(y3)
         proof
-          take W = W2;
-          y in field W1 & y in field W by A107,A109,RELAT_1:30;
+          assume that
+A28:      x in C and
+A29:      not x in W1-Seg(y3);
+          x in field W1 by A11,A28;
           then
-A110:     W1-Seg(y) = W-Seg(y) by A3,A107,A109;
-          not x in W1-Seg(y) implies [x,y] in W
+A30:      [y3,x] in W1 by A12,A26,A29,Th6;
+A31:      W1-Seg(x) c= C by A15,A28;
+          y3 <> x implies y3 in C
           proof
             assume
-A111:       not x in W1-Seg(y);
-A112:       x in field W1 & y in field W1 by A107,RELAT_1:30;
-A113:       W1 is well-ordering by A2,A107;
-            then
-A114:       [y,x] in W1 by A111,A112,Th6;
-            W1 well_orders field W1 by A113,WELLORD1:8;
-            then W1 is_antisymmetric_in field W1 by WELLORD1:def 5;
-            then
-A115:       x=y by A107,A112,A114,RELAT_2:def 4;
-A116:       y in field W by A109,RELAT_1:30;
-            W is well-ordering by A2,A109;
-            then W well_orders field W by WELLORD1:8;
-            then W is_reflexive_in field W by WELLORD1:def 5;
-            hence thesis by A115,A116,RELAT_2:def 1;
+            y3 <> x;
+            then y3 in W1-Seg(x) by A30,WELLORD1:def 1;
+            hence thesis by A31;
           end;
-          hence thesis by A109,A110,WELLORD1:def 1;
+          hence contradiction by A26,A28,XBOOLE_0:def 5;
         end;
-        then consider W such that
-A117:   [x,y] in W & [y,z] in W & W in G;
-        W is well-ordering by A2,A117;
-        then W well_orders field W by WELLORD1:8;
-        then
-A118:   W is_transitive_in field W by WELLORD1:def 5;
-        x in field W & y in field W & z in field W by A117,RELAT_1:30;
-        then [x,z] in W by A117,A118,RELAT_2:def 8;
-        hence thesis by A87,A106,A108,A117;
+        thus x in W1-Seg(y3) implies x in C
+        proof
+          assume that
+A32:      x in W1-Seg(y3) and
+A33:      not x in C;
+          [x,y3] in W1 by A32,WELLORD1:def 1;
+          then
+A34:      x in field W1 by RELAT_1:30;
+          then x in Y by A33,XBOOLE_0:def 5;
+          then [y3,x] in W1 by A27;
+          hence contradiction by A12,A26,A32,A34,Th7;
+        end;
       end;
-      hence thesis by RELAT_2:def 8;
+      hence thesis by A26,TARSKI:2,XBOOLE_0:def 5;
     end;
-A119: R is_antisymmetric_in field R
+A35: x in C implies W2-Seg(x) c= C
     proof
-      x in field R & y in field R & [x,y] in R & [y,x] in R implies x=y
-      proof
-        assume that x in field R and y in field R and
-A120:   [x,y] in R & [y,x] in R;
-        consider W1 such that
-A121:   [x,y] in W1 & W1 in G by A87,A120;
-        consider W2 such that
-A122:   [y,x] in W2 & W2 in G by A87,A120;
-A123:   W1 c= W2 implies x=y
-        proof
-          assume
-A124:     W1 c= W2;
-          then
-A125:     x in field W2 & y in field W2 by A121,RELAT_1:30;
-          W2 is well-ordering by A2,A122;
-          then W2 well_orders field W2 by WELLORD1:8;
-          then W2 is_antisymmetric_in field W2 by WELLORD1:def 5;
-          hence thesis by A121,A122,A124,A125,RELAT_2:def 4;
-        end;
-        W2 c= W1 implies x=y
-        proof
-          assume
-A126:     W2 c= W1;
-          then
-A127:     x in field W1 & y in field W1 by A122,RELAT_1:30;
-          W1 is well-ordering by A2,A121;
-          then W1 well_orders field W1 by WELLORD1:8;
-          then W1 is_antisymmetric_in field W1 by WELLORD1:def 5;
-          hence thesis by A121,A122,A126,A127,RELAT_2:def 4;
-        end;
-        hence thesis by A3,A121,A122,A123;
-      end;
-      hence thesis by RELAT_2:def 4;
-    end;
-A128: R is_connected_in field R
-    proof
-      x in field R & y in field R & x <>y implies [x,y] in R or [y,x] in R
-      proof
-        assume that
-A129:   x in field R and
-A130:   y in field R and
-A131:   x <>y;
-A132:   x in union D & ex W st (x in field W & W in G) by A88,A129;
-        consider W1 such that
-A133:   x in field W1 & W1 in G by A88,A129;
-A134:   y in union D & ex W st (y in field W & W in G) by A88,A130;
-        consider W2 such that
-A135:   y in field W2 & W2 in G by A88,A130;
-A136:   W1 c= W2 implies [x,y] in R or [y,x] in R
-        proof
-          assume W1 c= W2;
-          then
-A137:     field W1 c= field W2 by RELAT_1:31;
-          W2 is well-ordering by A2,A135;
-          then W2 well_orders field W2 by WELLORD1:8;
-          then W2 is_connected_in field W2 by WELLORD1:def 5;
-          then [x,y] in W2 or [y,x] in W2 by A131,A133,A135,A137,RELAT_2:def 6;
-          hence thesis by A87,A132,A134,A135;
-        end;
-        W2 c= W1 implies [x,y] in R or [y,x] in R
-        proof
-          assume W2 c= W1;
-          then
-A138:     field W2 c= field W1 by RELAT_1:31;
-          W1 is well-ordering by A2,A133;
-          then W1 well_orders field W1 by WELLORD1:8;
-          then W1 is_connected_in field W1 by WELLORD1:def 5;
-          then [x,y] in W1 or [y,x] in W1 by A131,A133,A135,A138,RELAT_2:def 6;
-          hence thesis by A87,A132,A133,A134;
-        end;
-        hence thesis by A3,A133,A135,A136;
-      end;
-      hence thesis by RELAT_2:def 6;
-    end;
-    R is_well_founded_in field R
-    proof
-      let Y;
-      assume that
-A139: Y c= field R and
-A140: Y <> {};
-      consider y being Element of Y;
-      y in field R by A139,A140,TARSKI:def 3;
-      then consider W such that
-A141: y in field W & W in G by A88;
-      W is well-ordering by A2,A141;
-      then W well_orders field W by WELLORD1:8;
+      assume
+A36:  x in C;
+      let y;
+      assume
+A37:  y in W2-Seg(x);
       then
-A142: W is_well_founded_in field W by WELLORD1:def 5;
-      set A = Y /\ field W;
-A143: A c= field W by XBOOLE_1:17;
-      A <> {} by A140,A141,XBOOLE_0:def 4;
-      then consider a such that
-A144: a in A and
-A145: W-Seg(a) misses A by A142,A143,WELLORD1:def 3;
-      ex b st b in Y & R-Seg(b) misses Y
-      proof
-        take b= a;
-        thus b in Y by A144,XBOOLE_0:def 4;
-        assume not thesis;
-        then consider x being set such that
-A146:   x in R-Seg(b) & x in Y by XBOOLE_0:3;
-A147:   [x,b] in R & x<>b by A146,WELLORD1:def 1;
-        then consider W1 such that
-A148:   [x,b] in W1 & W1 in G by A87;
-A149:   x in field W1 & b in field W1 by A148,RELAT_1:30;
-        x in W1-Seg(b) by A147,A148,WELLORD1:def 1;
-        then
-A150:   x in W-Seg(a) by A3,A141,A143,A144,A148,A149;
-        then [x,a] in W by WELLORD1:def 1;
-        then x in field W by RELAT_1:30;
-        then x in A by A146,XBOOLE_0:def 4;
-        hence contradiction by A145,A150,XBOOLE_0:3;
-      end;
-      hence thesis;
+A38:  y in W1-Seg(x) by A13,A36;
+      then
+A39:  [y,x] in W1 by WELLORD1:def 1;
+      then
+A40:  y in field W1 by RELAT_1:30;
+A41:  W2-Seg(y)=(W2 |_2 (W2-Seg(x)))-Seg(y) by A10,A37,WELLORD1:35
+        .=(W1 |_2 (W1-Seg(x)))-Seg(y) by A11,A36
+        .=W1-Seg(y) by A12,A38,WELLORD1:35;
+A42:  [y,x] in W2 by A37,WELLORD1:def 1;
+      then
+A43:  y in field W2 by RELAT_1:30;
+      x in field W1 by A39,RELAT_1:30;
+      then
+A44:  W1-Seg(y) c= W1-Seg(x) by A12,A38,A40,WELLORD1:38;
+      x in field W2 by A42,RELAT_1:30;
+      then W2-Seg(y) c= W2-Seg(x) by A10,A37,A43,WELLORD1:38;
+      then W2 |_2 (W2-Seg(y)) = (W2 |_2 (W2-Seg(x))) |_2 (W2-Seg(y)) by
+      WELLORD1:29
+        .= (W1 |_2 (W1-Seg(x))) |_2 (W1-Seg(y)) by A11,A36,A41
+        .= W1 |_2 (W1-Seg(y)) by A44,WELLORD1:29;
+      hence thesis by A11,A43,A40;
     end;
-    then R well_orders field R by A100,A104,A119,A128,WELLORD1:def 5;
-    hence thesis by WELLORD1:8;
+A45: y1 in field W2 & not y1 in C implies ex y3 st y3 in field W2 & C=W2
+    -Seg(y3) & not y3 in C
+    proof
+      set Y = field W2 \ C;
+      assume
+      y1 in field W2 & not y1 in C;
+      then Y <> {} by XBOOLE_0:def 5;
+      then consider a such that
+A46:  a in Y and
+A47:  for b st b in Y holds [a,b] in W2 by A10,WELLORD1:10;
+      take y3=a;
+      x in C iff x in W2-Seg(y3)
+      proof
+        thus x in C implies x in W2-Seg(y3)
+        proof
+          assume that
+A48:      x in C and
+A49:      not x in W2-Seg(y3);
+          x in field W2 by A11,A48;
+          then
+A50:      [y3,x] in W2 by A10,A46,A49,Th6;
+A51:      W2-Seg(x) c= C by A35,A48;
+          y3 <> x implies y3 in C
+          proof
+            assume
+            y3 <> x;
+            then y3 in W2-Seg(x) by A50,WELLORD1:def 1;
+            hence thesis by A51;
+          end;
+          hence contradiction by A46,A48,XBOOLE_0:def 5;
+        end;
+        thus x in W2-Seg(y3) implies x in C
+        proof
+          assume that
+A52:      x in W2-Seg(y3) and
+A53:      not x in C;
+          [x,y3] in W2 by A52,WELLORD1:def 1;
+          then
+A54:      x in field W2 by RELAT_1:30;
+          then x in Y by A53,XBOOLE_0:def 5;
+          then [y3,x] in W2 by A47;
+          hence contradiction by A10,A46,A52,A54,Th7;
+        end;
+      end;
+      hence thesis by A46,TARSKI:2,XBOOLE_0:def 5;
+    end;
+A55: C = field W1 or C = field W2
+    proof
+      assume
+      not C = field W1;
+      then ex x st not (x in C implies x in field W1) or not (x in field W1
+      implies x in C) by TARSKI:2;
+      then consider y3 such that
+A56:  y3 in field W1 and
+A57:  C=W1-Seg(y3) and
+A58:  not y3 in C by A11,A25;
+      assume
+      not C = field W2;
+      then ex x st not (x in C implies x in field W2) or not (x in field W2
+      implies x in C) by TARSKI:2;
+      then consider y4 such that
+A59:  y4 in field W2 and
+A60:  C=W2-Seg(y4) and
+      not y4 in C by A11,A45;
+A61:  y3 = F.(W2-Seg(y4)) by A2,A8,A56,A57,A60
+        .= y4 by A2,A9,A59;
+      z in W1 |_2 (W1-Seg(y3)) iff z in W2 |_2 (W2-Seg(y3))
+      proof
+A62:    z in W1 & z in [: W1-Seg(y3),W1-Seg(y3) :] implies z in W2 & z in
+        [: W2-Seg(y3),W2-Seg(y3) :]
+        proof
+          assume that
+A63:      z in W1 and
+A64:      z in [: W1-Seg(y3),W1-Seg(y3) :];
+          consider z1,z2 such that
+A65:      z1 in W1-Seg(y3) and
+A66:      z2 in W1-Seg(y3) and
+A67:      z=[z1,z2] by A64,ZFMISC_1:def 2;
+          z1 in W1-Seg(z2) or z1=z2 & not z1 in W1-Seg(z2) by A63,A67,
+          WELLORD1:def 1;
+          then
+A68:      z1 in W2-Seg(z2) or z1=z2 & not z1 in W2-Seg(z2) by A13,A57,
+          A66;
+          z1 in field W2 by A11,A57,A65;
+          hence thesis by A10,A57,A60,A61,A64,A67,A68,Th6, WELLORD1:def 1;
+        end;
+        z in W2 & z in [: W2-Seg(y3),W2-Seg(y3) :] implies z in W1 & z
+        in [: W1-Seg(y3),W1-Seg(y3) :]
+        proof
+          assume that
+A69:      z in W2 and
+A70:      z in [: W2-Seg(y3),W2-Seg(y3) :];
+          consider z1,z2 such that
+A71:      z1 in W2-Seg(y3) and
+A72:      z2 in W2-Seg(y3) and
+A73:      z=[z1,z2] by A70,ZFMISC_1:def 2;
+          z1 in W2-Seg(z2) or z1=z2 & not z1 in W2-Seg(z2) by A69,A73
+          ,WELLORD1:def 1;
+          then
+A74:      z1 in W1-Seg(z2) or z1=z2 & not z1 in W1-Seg(z2) by A13,A60,A61
+          ,A72;
+          z1 in field W1 by A11,A60,A61,A71;
+          hence thesis by A12,A57,A60,A61,A70,A73,A74,Th6, WELLORD1:def
+          1;
+        end;
+        hence thesis by A62,XBOOLE_0:def 4;
+      end;
+      then W1 |_2 (W1-Seg(y3)) = W2 |_2 (W2-Seg(y3)) by TARSKI:2;
+      hence contradiction by A11,A56,A58,A59,A61;
+    end;
+A75: C = field W2 implies (W2 c= W1 & for x st x in field W2 holds W2-Seg
+    (x) = W1-Seg(x) )
+    proof
+      assume
+A76:  C = field W2;
+      [z1,z2] in W2 implies [z1,z2] in W1
+      proof
+        assume
+A77:    [z1,z2] in W2;
+        then
+A78:    z1 in W2-Seg(z2) or z1=z2 & not z1 in W2-Seg(z2) by
+        WELLORD1:def 1;
+        z1 in C by A76,A77,RELAT_1:30;
+        then
+A79:    z1 in field W1 by A11;
+        z2 in C by A76,A77,RELAT_1:30;
+        then z1 in W1-Seg(z2) or z1=z2 & not z1 in W1-Seg(z2) by A13,
+        A78;
+        hence thesis by A12,A79,Th6,WELLORD1:def 1;
+      end;
+      hence thesis by A13,A76,RELAT_1:def 3;
+    end;
+    C = field W1 implies (W1 c= W2 & for x st x in field W1 holds W1-Seg
+    (x) = W2-Seg(x) )
+    proof
+      assume
+A80:  C = field W1;
+      [z1,z2] in W1 implies [z1,z2] in W2
+      proof
+        assume
+A81:    [z1,z2] in W1;
+        then
+A82:    z1 in W1-Seg(z2) or z1=z2 & not z1 in W1-Seg(z2) by
+        WELLORD1:def 1;
+        z1 in C by A80,A81,RELAT_1:30;
+        then
+A83:    z1 in field W2 by A11;
+        z2 in C by A80,A81,RELAT_1:30;
+        then z1 in W2-Seg(z2) or z1=z2 & not z1 in W2-Seg(z2) by A13,
+        A82;
+        hence thesis by A10,A83,Th6,WELLORD1:def 1;
+      end;
+      hence thesis by A13,A80,RELAT_1:def 3;
+    end;
+    hence thesis by A55,A75;
   end;
-A151: for y st y in field R holds R-Seg(y) in D & F.(R-Seg(y)) = y
+A84: x in field R & y in field R & [x,y] in R & [y,x] in R implies x=y
+  proof
+    assume that
+    x in field R and
+    y in field R and
+A85: [x,y] in R and
+A86: [y,x] in R;
+    consider W1 such that
+A87: [x,y] in W1 and
+A88: W1 in G by A3,A85;
+    consider W2 such that
+A89: [y,x] in W2 and
+A90: W2 in G by A3,A86;
+A91: W2 c= W1 implies x=y
+    proof
+      W1 is well-ordering by A2,A88;
+      then W1 well_orders field W1 by WELLORD1:8;
+      then
+A92:  W1 is_antisymmetric_in field W1 by WELLORD1:def 5;
+      assume
+A93:  W2 c= W1;
+      then x in field W1 & y in field W1 by A89,RELAT_1:30;
+      hence thesis by A87,A89,A93,A92,RELAT_2:def 4;
+    end;
+    W1 c= W2 implies x=y
+    proof
+      W2 is well-ordering by A2,A90;
+      then W2 well_orders field W2 by WELLORD1:8;
+      then
+A94:  W2 is_antisymmetric_in field W2 by WELLORD1:def 5;
+      assume
+A95:  W1 c= W2;
+      then x in field W2 & y in field W2 by A87,RELAT_1:30;
+      hence thesis by A87,A89,A95,A94,RELAT_2:def 4;
+    end;
+    hence thesis by A7,A88,A90,A91;
+  end;
+  then
+A96: R is_antisymmetric_in field R by RELAT_2:def 4;
+A97: W in G implies field W c= field R
+  proof
+    assume
+A98: W in G;
+    let x;
+    assume
+    x in field W;
+    then consider y such that
+A99: [x,y] in W or [y,x] in W by Th1;
+A100: [y,x] in W implies [y,x] in R
+    proof
+      assume
+A101: [y,x] in W;
+      W in W0 by A2,A98;
+      then ex z1,z2 st z1 in union D & z2 in union D & [y,x]=[z1,z2] by A101,
+      ZFMISC_1:103;
+      hence thesis by A3,A98,A101;
+    end;
+    [x,y] in W implies [x,y] in R
+    proof
+      assume
+A102: [x,y] in W;
+      W in W0 by A2,A98;
+      then ex z1,z2 st z1 in union D & z2 in union D & [x,y]=[z1,z2] by A102,
+      ZFMISC_1:103;
+      hence thesis by A3,A98,A102;
+    end;
+    hence thesis by A99,A100,Th1;
+  end;
+A103: for y st y in field R holds R-Seg(y) in D & F.(R-Seg(y)) = y
   proof
     let y;
     assume
-A152: y in field R;
+A104: y in field R;
     then consider W such that
-A153: y in field W & W in G by A88;
-A154: y in union D by A88,A152;
-A155: field W c= field R by A93,A153;
-    W-Seg(y) = R-Seg(y)
+A105: y in field W and
+A106: W in G by A4;
+A107: y in union D by A4,A104;
+A108: field W c= field R by A97,A106;
+A109: x in W-Seg(y) implies x in R-Seg(y)
     proof
-A156: x in W-Seg(y) implies x in R-Seg(y)
-      proof
-        assume x in W-Seg(y);
-        then
-A157:   [x,y] in W & not x =y by WELLORD1:def 1;
-        then x in field W by RELAT_1:30;
-        then x in union D by A88,A155;
-        then [x,y] in R by A87,A153,A154,A157;
-        hence thesis by A157,WELLORD1:def 1;
-      end;
-      x in R-Seg(y) implies x in W-Seg(y)
-      proof
-        assume x in R-Seg(y);
-        then
-A158:   [x,y] in R & not x =y by WELLORD1:def 1;
-        then consider W1 such that
-A159:   [x,y] in W1 & W1 in G by A87;
-A160:   x in W1-Seg(y) by A158,A159,WELLORD1:def 1;
-        y in field W1 by A159,RELAT_1:30;
-        hence thesis by A3,A153,A159,A160;
-      end;
-      hence thesis by A156,TARSKI:2;
+      assume
+A110: x in W-Seg(y);
+      then
+A111: [x,y] in W by WELLORD1:def 1;
+      then x in field W by RELAT_1:30;
+      then x in union D by A4,A108;
+      then
+A112: [x,y] in R by A3,A106,A107,A111;
+      not x =y by A110,WELLORD1:def 1;
+      hence thesis by A112,WELLORD1:def 1;
     end;
-    hence thesis by A2,A153;
+    x in R-Seg(y) implies x in W-Seg(y)
+    proof
+      assume
+A113: x in R-Seg(y);
+      then [x,y] in R by WELLORD1:def 1;
+      then consider W1 such that
+A114: [x,y] in W1 and
+A115: W1 in G by A3;
+A116: y in field W1 by A114,RELAT_1:30;
+      not x =y by A113,WELLORD1:def 1;
+      then x in W1-Seg(y) by A114,WELLORD1:def 1;
+      hence thesis by A7,A105,A106,A115,A116;
+    end;
+    then W-Seg(y) = R-Seg(y) by A109,TARSKI:2;
+    hence thesis by A2,A105,A106;
   end;
-  not field R in D
+A117: x in field R & y in field R & x <>y implies [x,y] in R or [y,x] in R
+  proof
+    assume that
+A118: x in field R and
+A119: y in field R and
+A120: x <>y;
+    consider W2 such that
+A121: y in field W2 and
+A122: W2 in G by A4,A119;
+    consider W1 such that
+A123: x in field W1 and
+A124: W1 in G by A4,A118;
+A125: x in union D & y in union D by A4,A118,A119;
+A126: W2 c= W1 implies [x,y] in R or [y,x] in R
+    proof
+      W1 is well-ordering by A2,A124;
+      then W1 well_orders field W1 by WELLORD1:8;
+      then
+A127: W1 is_connected_in field W1 by WELLORD1:def 5;
+      assume
+      W2 c= W1;
+      then field W2 c= field W1 by RELAT_1:31;
+      then [x,y] in W1 or [y,x] in W1 by A120,A123,A121,A127, RELAT_2:
+      def 6;
+      hence thesis by A3,A124,A125;
+    end;
+    W1 c= W2 implies [x,y] in R or [y,x] in R
+    proof
+      W2 is well-ordering by A2,A122;
+      then W2 well_orders field W2 by WELLORD1:8;
+      then
+A128: W2 is_connected_in field W2 by WELLORD1:def 5;
+      assume
+      W1 c= W2;
+      then field W1 c= field W2 by RELAT_1:31;
+      then [x,y] in W2 or [y,x] in W2 by A120,A123,A121,A128, RELAT_2:
+      def 6;
+      hence thesis by A3,A125,A122;
+    end;
+    hence thesis by A7,A124,A122,A126;
+  end;
+  then
+A129: R is_connected_in field R by RELAT_2:def 6;
+A130: R is_well_founded_in field R
+  proof
+    let Y;
+    assume that
+A131: Y c= field R and
+A132: Y <> {};
+    consider y being Element of Y;
+    y in field R by A131,A132,TARSKI:def 3;
+    then consider W such that
+A133: y in field W and
+A134: W in G by A4;
+    W is well-ordering by A2,A134;
+    then W well_orders field W by WELLORD1:8;
+    then
+A135: W is_well_founded_in field W by WELLORD1:def 5;
+    set A = Y /\ field W;
+A136: A c= field W by XBOOLE_1:17;
+    A <> {} by A132,A133,XBOOLE_0:def 4;
+    then consider a such that
+A137: a in A and
+A138: W-Seg(a) misses A by A135,A136,WELLORD1:def 3;
+    ex b st b in Y & R-Seg(b) misses Y
+    proof
+      take b= a;
+      thus b in Y by A137,XBOOLE_0:def 4;
+      assume
+      not thesis;
+      then consider x being set such that
+A139: x in R-Seg(b) and
+A140: x in Y by XBOOLE_0:3;
+      [x,b] in R by A139,WELLORD1:def 1;
+      then consider W1 such that
+A141: [x,b] in W1 and
+A142: W1 in G by A3;
+A143: b in field W1 by A141,RELAT_1:30;
+      x<>b by A139,WELLORD1:def 1;
+      then x in W1-Seg(b) by A141,WELLORD1:def 1;
+      then
+A144: x in W-Seg(a) by A7,A134,A136,A137,A142,A143;
+      then [x,a] in W by WELLORD1:def 1;
+      then x in field W by RELAT_1:30;
+      then x in A by A140,XBOOLE_0:def 4;
+      hence contradiction by A138,A144,XBOOLE_0:3;
+    end;
+    hence thesis;
+  end;
+A145: x in field R & y in field R & z in field R & [x,y] in R & [y,z] in R
+  implies [x,z] in R
+  proof
+    assume that
+    x in field R and
+    y in field R and
+    z in field R and
+A146: [x,y] in R and
+A147: [y,z] in R;
+A148: x in union D & z in union D by A3,A146,A147;
+    consider W1 such that
+A149: [x,y] in W1 and
+A150: W1 in G by A3,A146;
+    consider W2 such that
+A151: [y,z] in W2 and
+A152: W2 in G by A3,A147;
+    ex W st [x,y] in W & [y,z] in W & W in G
+    proof
+      take W = W2;
+A153: not x in W1-Seg(y) implies [x,y] in W
+      proof
+A154:   W1 is well-ordering by A2,A150;
+        then W1 well_orders field W1 by WELLORD1:8;
+        then
+A155:   W1 is_antisymmetric_in field W1 by WELLORD1:def 5;
+        W is well-ordering by A2,A152;
+        then W well_orders field W by WELLORD1:8;
+        then
+A156:   W is_reflexive_in field W by WELLORD1:def 5;
+A157:   x in field W1 & y in field W1 by A149,RELAT_1:30;
+        assume
+        not x in W1-Seg(y);
+        then [y,x] in W1 by A157,A154,Th6;
+        then
+A158:   x=y by A149,A157,A155,RELAT_2:def 4;
+        y in field W by A151,RELAT_1:30;
+        hence thesis by A158,A156,RELAT_2:def 1;
+      end;
+      y in field W1 & y in field W by A149,A151,RELAT_1:30;
+      then W1-Seg(y) = W-Seg(y) by A7,A150,A152;
+      hence thesis by A151,A152,A153,WELLORD1:def 1;
+    end;
+    then consider W such that
+A159: [x,y] in W and
+A160: [y,z] in W and
+A161: W in G;
+A162: z in field W by A160,RELAT_1:30;
+    W is well-ordering by A2,A161;
+    then W well_orders field W by WELLORD1:8;
+    then
+A163: W is_transitive_in field W by WELLORD1:def 5;
+    x in field W & y in field W by A159,RELAT_1:30;
+    then [x,z] in W by A159,A160,A163,A162,RELAT_2:def 8;
+    hence thesis by A3,A148,A161;
+  end;
+  then
+A164: R is_transitive_in field R by RELAT_2:def 8;
+A165: x in field R implies [x,x] in R
   proof
     assume
-A161: field R in D;
+A166: x in field R;
+    then consider W such that
+A167: x in field W and
+A168: W in G by A4;
+    W is well-ordering by A2,A168;
+    then W well_orders field W by WELLORD1:8;
+    then W is_reflexive_in field W by WELLORD1:def 5;
+    then
+A169: [x,x] in W by A167,RELAT_2:def 1;
+    x in union D by A4,A166;
+    hence thesis by A3,A168,A169;
+  end;
+A170: not field R in D
+  proof
     set a0=F.(field R);
-A162: not a0 in field R by A1,A161;
     reconsider W3 = [: field R,{ a0 } :] as Relation;
     reconsider W4 = { [a0,a0]} as Relation;
+    reconsider W1=R \/ [: field R,{ a0 }:] \/ {[ a0,a0 ]} as Relation;
+    {[ a0,a0 ]} c= W1 & [ a0,a0 ] in {[ a0,a0 ]} by TARSKI:def 1,
+    XBOOLE_1:7;
+    then
+A171: a0 in field W1 by RELAT_1:30;
     field W4 = {a0,a0} by RELAT_1:32;
     then
-A163: field W4 = {a0}\/{a0} by ENUMSET1:41;
-    reconsider W1=R \/ [: field R,{ a0 }:] \/ {[ a0,a0 ]} as Relation;
-A164: field W1 =field R \/ { a0 }
+A172: field W4 = {a0}\/{a0} by ENUMSET1:41;
+A173: field R = {} implies field W1 =field R \/ { a0 }
     proof
-A165: field R <> {} implies field W1 =field R \/ { a0 }
+      assume
+A174: field R = {};
+A175: field W3 = {}
       proof
-        assume field R <> {};
-        then
-A166:   field W3 = field R \/ { a0 } by Th3;
-        field W1 =field (R \/ W3) \/ field W4 by RELAT_1:33;
-        then field W1 =field R \/ (field R \/ { a0 }) \/
-        {a0} by A163,A166,RELAT_1:33;
-        then field W1 =(field R \/ field R) \/ { a0 } \/ {a0} by XBOOLE_1:4;
-        then field W1 =(field R \/ field R) \/ ({ a0 } \/ {a0}) by XBOOLE_1:4;
-        hence thesis;
-      end;
-      field R = {} implies field W1 =field R \/ { a0 }
-      proof
+        consider z3 being Element of field W3;
         assume
-A167:   field R = {};
-A168:   field W3 = {}
-        proof consider z3 being Element of field W3;
-          assume field W3 <> {};
-          then ex z2 st [z3,z2] in W3 or [z2,z3] in W3 by Th1;
-          hence contradiction by A167,ZFMISC_1:113;
-        end;
-        field W1 =field (R \/ W3) \/ field W4 by RELAT_1:33;
-        then field W1 =field R \/ {} \/ {a0} by A163,A168,RELAT_1:33;
-        hence thesis;
+        field W3 <> {};
+        then ex z2 st [z3,z2] in W3 or [z2,z3] in W3 by Th1;
+        hence contradiction by A174,ZFMISC_1:113;
       end;
-      hence thesis by A165;
+      field W1 =field (R \/ W3) \/ field W4 by RELAT_1:33;
+      then field W1 =field R \/ {} \/ {a0} by A172,A175,RELAT_1:33;
+      hence thesis;
     end;
-A169: x in field W1 implies x in field R or x = a0
+A176: field R <> {} implies field W1 =field R \/ { a0 }
     proof
-      assume x in field W1;
-      then x in field R or x in {a0} by A164,XBOOLE_0:def 3;
+      assume
+      field R <> {};
+      then
+A177: field W3 = field R \/ { a0 } by Th3;
+      field W1 =field (R \/ W3) \/ field W4 by RELAT_1:33;
+      then
+      field W1 =field R \/ (field R \/ { a0 }) \/ {a0} by A172,A177,RELAT_1:33;
+      then field W1 =(field R \/ field R) \/ { a0 } \/ {a0} by XBOOLE_1
+      :4;
+      then field W1 =(field R \/ field R) \/ ({ a0 } \/ {a0}) by
+      XBOOLE_1:4;
+      hence thesis;
+    end;
+A178: x in field W1 implies x in field R or x = a0
+    proof
+      assume
+      x in field W1;
+      then x in field R or x in {a0} by A176,A173,XBOOLE_0:def 3;
       hence thesis by TARSKI:def 1;
     end;
-A170: [x,y] in W1 iff [x,y] in R or [x,y] in W3 or [x,y] in W4
+A179: [x,y] in W1 iff [x,y] in R or [x,y] in W3 or [x,y] in W4
     proof
-      [x,y] in W1 iff ([x,y] in (R \/ W3) or [x,y] in W4) by XBOOLE_0:def 3;
+      [x,y] in W1 iff ([x,y] in (R \/ W3) or [x,y] in W4) by XBOOLE_0:
+      def 3;
       hence thesis by XBOOLE_0:def 3;
     end;
-A171: [x,y] in W1 & y in field R implies [x,y] in R & x in field R
+    x in field W1 & y in field W1 & x <>y implies [x,y] in W1 or [y,x]
+    in W1
     proof
-      assume
-A172: [x,y] in W1 & y in field R;
-      then
-A173: [x,y] in R or [x,y] in W3 or [x,y] in W4 by A170;
-A174: not [x,y] in W3 by A162,A172,ZFMISC_1:129;
-A175: not [x,y] in W4
+      assume that
+A180: x in field W1 and
+A181: y in field W1 and
+A182: x <>y;
+A183: not x in field R implies [x,y] in W1 or [y,x] in W1
       proof
-        assume [x,y] in W4;
-        then [x,y] = [a0,a0] by TARSKI:def 1;
-        hence contradiction by A162,A172,ZFMISC_1:33;
-      end;
-      hence [x,y] in R by A170,A172,A174;
-      thus thesis by A173,A175,RELAT_1:30,ZFMISC_1:129;
-    end;
-A176: y in field R implies W1-Seg(y) = R-Seg(y)
-    proof
-      assume
-A177: y in field R;
-A178: x in W1-Seg(y) implies x in R-Seg(y)
-      proof
-        assume x in W1-Seg(y);
+        assume
+        not x in field R;
         then
-A179:   [x,y] in W1 & x<>y by WELLORD1:def 1;
-        then [x,y] in R by A171,A177;
-        hence thesis by A179,WELLORD1:def 1;
+A184:   x = a0 by A178,A180;
+A185:   y in field R implies [x,y] in W1 or [y,x] in W1
+        proof
+          assume
+          y in field R;
+          then [y,x] in W3 by A184,ZFMISC_1:129;
+          hence thesis by A179;
+        end;
+        y = a0 implies [x,y] in W1 or [y,x] in W1
+        proof
+          assume
+          y = a0;
+          then [x,y] in W4 by A184,TARSKI:def 1;
+          hence thesis by A179;
+        end;
+        hence thesis by A178,A181,A185;
+      end;
+A186: not y in field R implies [x,y] in W1 or [y,x] in W1
+      proof
+        assume
+        not y in field R;
+        then
+A187:   y = a0 by A178,A181;
+A188:   x in field R implies [y,x] in W1 or [x,y] in W1
+        proof
+          assume
+          x in field R;
+          then [x,y] in W3 by A187,ZFMISC_1:129;
+          hence thesis by A179;
+        end;
+        x = a0 implies [y,x] in W1 or [x,y] in W1
+        proof
+          assume
+          x = a0;
+          then [y,x] in W4 by A187,TARSKI:def 1;
+          hence thesis by A179;
+        end;
+        hence thesis by A178,A180,A188;
+      end;
+      x in field R & y in field R implies [x,y] in W1 or [y,x] in W1
+      proof
+        assume
+        x in field R & y in field R;
+        then [x,y] in R or [y,x] in R by A117,A182;
+        hence thesis by A179;
+      end;
+      hence thesis by A183,A186;
+    end;
+    then
+A189: W1 is_connected_in field W1 by RELAT_2:def 6;
+    assume
+A190: field R in D;
+    for x,y holds [x,y] in W1 implies [x,y] in [: union D, union D :]
+    proof
+      let x,y;
+      assume
+A191: [x,y] in W1;
+      then y in field W1 by RELAT_1:30;
+      then y in field R or y=a0 by A178;
+      then
+A192: y in union D by A1,A4,A190;
+      x in field W1 by A191,RELAT_1:30;
+      then x in field R or x=a0 by A178;
+      then x in union D by A1,A4,A190;
+      hence thesis by A192,ZFMISC_1:def 2;
+    end;
+    then
+A193: W1 c= [: union D,union D :] by RELAT_1:def 3;
+A194: not a0 in field R by A1,A190;
+A195: [x,y] in W1 & y in field R implies [x,y] in R & x in field R
+    proof
+      assume that
+A196: [x,y] in W1 and
+A197: y in field R;
+A198: not [x,y] in W4
+      proof
+        assume
+        [x,y] in W4;
+        then [x,y] = [a0,a0] by TARSKI:def 1;
+        hence contradiction by A194,A197,ZFMISC_1:33;
+      end;
+      not [x,y] in W3 by A194,A197,ZFMISC_1:129;
+      hence [x,y] in R by A179,A196,A198;
+      [x,y] in R or [x,y] in W3 or [x,y] in W4 by A179,A196;
+      hence thesis by A198,RELAT_1:30,ZFMISC_1:129;
+    end;
+    x in field W1 & y in field W1 & [x,y] in W1 & [y,x] in W1 implies x=
+    y
+    proof
+      assume that
+A199: x in field W1 and
+A200: y in field W1 and
+A201: [x,y] in W1 and
+A202: [y,x] in W1;
+A203: x in field R implies x=y
+      proof
+        assume
+A204:   x in field R;
+        then
+A205:   [y,x] in R by A195,A202;
+A206:   y in field R by A195,A202,A204;
+        then [x,y] in R by A195,A201;
+        hence thesis by A84,A204,A205,A206;
+      end;
+A207: y in field R implies x=y
+      proof
+        assume
+A208:   y in field R;
+        then
+A209:   [x,y] in R by A195,A201;
+A210:   x in field R by A195,A201,A208;
+        then [y,x] in R by A195,A202;
+        hence thesis by A84,A208,A209,A210;
+      end;
+      y in field R or y =a0 by A178,A200;
+      hence thesis by A178,A199,A203,A207;
+    end;
+    then
+A211: W1 is_antisymmetric_in field W1 by RELAT_2:def 4;
+A212: y in field R implies W1-Seg(y) = R-Seg(y)
+    proof
+      assume
+A213: y in field R;
+A214: x in W1-Seg(y) implies x in R-Seg(y)
+      proof
+        assume
+A215:   x in W1-Seg(y);
+        then [x,y] in W1 by WELLORD1:def 1;
+        then
+A216:   [x,y] in R by A195,A213;
+        x<>y by A215,WELLORD1:def 1;
+        hence thesis by A216,WELLORD1:def 1;
       end;
       x in R-Seg(y) implies x in W1-Seg(y)
       proof
-        assume x in R-Seg(y);
+        assume
+A217:   x in R-Seg(y);
+        then [x,y] in R by WELLORD1:def 1;
         then
-A180:   [x,y] in R & x<>y by WELLORD1:def 1;
-        then [x,y] in W1 by A170;
-        hence thesis by A180,WELLORD1:def 1;
+A218:   [x,y] in W1 by A179;
+        x<>y by A217,WELLORD1:def 1;
+        hence thesis by A218,WELLORD1:def 1;
       end;
-      hence thesis by A178,TARSKI:2;
+      hence thesis by A214,TARSKI:2;
     end;
-A181: W1 in W0
+A219: W1 is_well_founded_in field W1
     proof
-      for x,y holds [x,y] in W1 implies [x,y] in [: union D, union D :]
-      proof
-        let x,y;
-        assume [x,y] in W1;
-        then x in field W1 & y in field W1 by RELAT_1:30;
-        then ( x in field R or x=a0) & (y in field R or y=a0) by A169;
-        then x in union D & y in union D by A1,A88,A161;
-        hence thesis by ZFMISC_1:def 2;
-      end;
-      then W1 c= [: union D,union D :] by RELAT_1:def 3;
-      hence thesis;
-    end;
-A182: W1 is well-ordering
-    proof
-A183: W1 is_reflexive_in field W1
-      proof
-        x in field W1 implies [x,x] in W1
-        proof
-          assume
-A184:     x in field W1;
-A185:     x in field R implies [x,x] in W1
-          proof
-            assume
-A186:       x in field R;
-            R well_orders field R by A99,WELLORD1:8;
-            then R is_reflexive_in field R by WELLORD1:def 5;
-            then [x,x] in R by A186,RELAT_2:def 1;
-            hence thesis by A170;
-          end;
-          x = a0 implies [x,x] in W1
-          proof
-            assume
-A187:       x=a0;
-            [a0,a0] in W4 by TARSKI:def 1;
-            hence thesis by A170,A187;
-          end;
-          hence thesis by A169,A184,A185;
-        end;
-        hence thesis by RELAT_2:def 1;
-      end;
-A188: W1 is_transitive_in field W1
-      proof
-        x in field W1 & y in field W1 & z in field W1 &
-        [x,y] in W1 & [y,z] in W1 implies [x,z] in W1
-        proof
-          assume that
-A189:     x in field W1 and
-A190:     y in field W1 and
-A191:     z in field W1 and
-A192:     [x,y] in W1 & [y,z] in W1;
-A193:     z in field R implies [x,z] in W1
-          proof
-            assume
-A194:       z in field R;
-            then
-A195:       [y,z] in R & y in field R by A171,A192;
-            then
-A196:       [x,y] in R & x in field R by A171,A192;
-            R well_orders field R by A99,WELLORD1:8;
-            then R is_transitive_in field R by WELLORD1:def 5;
-            then [x,z] in R by A194,A195,A196,RELAT_2:def 8;
-            hence thesis by A170;
-          end;
-          z = a0 implies [x,z] in W1
-          proof
-            assume
-A197:       z = a0;
-A198:       y in field R implies [x,z] in W1
-            proof
-              assume y in field R;
-              then [x,y] in R & x in field R by A171,A192;
-              then [x,z] in W3 by A197,ZFMISC_1:129;
-              hence thesis by A170;
-            end;
-            y = a0 implies [x,z] in W1
-            proof
-A199:         x in field R implies [x,z] in W1
-              proof
-                assume x in field R;
-                then [x,z] in W3 by A197,ZFMISC_1:129;
-                hence thesis by A170;
-              end;
-              x = a0 implies [x,z] in W1
-              proof
-                assume x = a0;
-                then [x,z] in W4 by A197,TARSKI:def 1;
-                hence thesis by A170;
-              end;
-              hence thesis by A169,A189,A199;
-            end;
-            hence thesis by A169,A190,A198;
-          end;
-          hence thesis by A169,A191,A193;
-        end;
-        hence thesis by RELAT_2:def 8;
-      end;
-A200: W1 is_antisymmetric_in field W1
-      proof
-        x in field W1 & y in field W1 & [x,y] in W1 & [y,x] in W1 implies x=y
-        proof
-          assume that
-A201:     x in field W1 and
-A202:     y in field W1 and
-A203:     [x,y] in W1 & [y,x] in W1;
-A204:     y in field R or y =a0 by A169,A202;
-A205:     x in field R implies x=y
-          proof
-            assume
-A206:       x in field R;
-            then
-A207:       [y,x] in R & y in field R by A171,A203;
-            then
-A208:       [x,y] in R by A171,A203;
-            R well_orders field R by A99,WELLORD1:8;
-            then R is_antisymmetric_in field R by WELLORD1:def 5;
-            hence thesis by A206,A207,A208,RELAT_2:def 4;
-          end;
-          y in field R implies x=y
-          proof
-            assume
-A209:       y in field R;
-            then
-A210:       [x,y] in R & x in field R by A171,A203;
-            then
-A211:       [y,x] in R by A171,A203;
-            R well_orders field R by A99,WELLORD1:8;
-            then R is_antisymmetric_in field R by WELLORD1:def 5;
-            hence thesis by A209,A210,A211,RELAT_2:def 4;
-          end;
-          hence thesis by A169,A201,A204,A205;
-        end;
-        hence thesis by RELAT_2:def 4;
-      end;
-A212: W1 is_connected_in field W1
-      proof
-        x in field W1 & y in field W1 & x <>y
-        implies [x,y] in W1 or [y,x] in W1
-        proof
-          assume that
-A213:     x in field W1 and
-A214:     y in field W1 and
-A215:     x <>y;
-A216:     x in field R & y in field R implies [x,y] in W1 or [y,x] in W1
-          proof
-            assume
-A217:       x in field R & y in field R;
-            R well_orders field R by A99,WELLORD1:8;
-            then R is_connected_in field R by WELLORD1:def 5;
-            then [x,y] in R or [y,x] in R by A215,A217,RELAT_2:def 6;
-            hence thesis by A170;
-          end;
-A218:     not x in field R implies [x,y] in W1 or [y,x] in W1
-          proof
-            assume not x in field R;
-            then
-A219:       x = a0 by A169,A213;
-A220:       y = a0 implies [x,y] in W1 or [y,x] in W1
-            proof
-              assume y = a0;
-              then [x,y] in W4 by A219,TARSKI:def 1;
-              hence thesis by A170;
-            end;
-            y in field R implies [x,y] in W1 or [y,x] in W1
-            proof
-              assume y in field R;
-              then [y,x] in W3 by A219,ZFMISC_1:129;
-              hence thesis by A170;
-            end;
-            hence thesis by A169,A214,A220;
-          end;
-          not y in field R implies [x,y] in W1 or [y,x] in W1
-          proof
-            assume not y in field R;
-            then
-A221:       y = a0 by A169,A214;
-A222:       x = a0 implies [y,x] in W1 or [x,y] in W1
-            proof
-              assume x = a0;
-              then [y,x] in W4 by A221,TARSKI:def 1;
-              hence thesis by A170;
-            end;
-            x in field R implies [y,x] in W1 or [x,y] in W1
-            proof
-              assume x in field R;
-              then [x,y] in W3 by A221,ZFMISC_1:129;
-              hence thesis by A170;
-            end;
-            hence thesis by A169,A213,A222;
-          end;
-          hence thesis by A216,A218;
-        end;
-        hence thesis by RELAT_2:def 6;
-      end;
-      W1 is_well_founded_in field W1
-      proof
-        let Y;
-        assume that
-A223:   Y c= field W1 and
-A224:   Y <> {};
-        R well_orders field R by A99,WELLORD1:8;
-        then
-A225:   R is_well_founded_in field R by WELLORD1:def 5;
-A226:   Y c= field R implies ex a st a in Y & W1-Seg(a) misses Y
-        proof
-          assume
-A227:     Y c= field R;
-          then consider b such that
-A228:     b in Y & R-Seg(b) misses Y by A224,A225,WELLORD1:def 3;
-          take b;
-          thus thesis by A176,A227,A228;
-        end;
-        not Y c=field R implies ex a st a in Y & W1-Seg(a) misses Y
-        proof
-          assume not Y c= field R;
-A229:     (field R) /\ Y = {} implies ex a st a in Y & W1-Seg(a) misses Y
-          proof
-            assume
-A230:       (field R) /\ Y = {};
-            consider y being Element of Y;
-A231:       not y in field R by A224,A230,XBOOLE_0:def 4;
-            y in field W1 by A223,A224,TARSKI:def 3;
-            then
-A232:       y = a0 by A169,A231;
-            W1-Seg(a0) c= field R
-            proof
-              let z be set;
-              assume z in W1-Seg(a0);
-              then
-A233:         [z,a0] in W1 & z <> a0 by WELLORD1:def 1;
-              then z in field W1 by RELAT_1:30;
-              hence thesis by A169,A233;
-            end;
-            then W1-Seg(y) /\ Y = {} by A230,A232,XBOOLE_1:3,26;
-            then W1-Seg(y) misses Y by XBOOLE_0:def 7;
-            hence thesis by A224;
-          end;
-          not (field R) /\ Y = {} implies ex a st a in Y & W1-Seg(a) misses Y
-          proof
-            assume
-A234:       not (field R) /\ Y = {};
-            set X = (field R) /\ Y;
-A235:       X c= field R by XBOOLE_1:17;
-            then consider y such that
-A236:       y in X & R-Seg(y) misses X by A225,A234,WELLORD1:def 3;
-A237:       y in Y by A236,XBOOLE_0:def 4;
-A238:       R-Seg(y) /\ X = {} by A236,XBOOLE_0:def 7;
-            R-Seg(y) /\ Y c= R-Seg(y) /\ X
-            proof
-              let x;
-              assume x in R-Seg(y) /\ Y;
-              then
-A239:         x in R-Seg(y) & x in Y by XBOOLE_0:def 4;
-              then [x,y] in R by WELLORD1:def 1;
-              then x in field R by RELAT_1:30;
-              then x in X by A239,XBOOLE_0:def 4;
-              hence thesis by A239,XBOOLE_0:def 4;
-            end;
-            then R-Seg(y) /\ Y = {} by A238;
-            then W1-Seg(y) /\ Y = {} by A176,A235,A236;
-            then W1-Seg(y) misses Y by XBOOLE_0:def 7;
-            hence thesis by A237;
-          end;
-          hence thesis by A229;
-        end;
-        hence thesis by A226;
-      end;
-      then W1 well_orders field W1 by A183,A188,A200,A212,WELLORD1:def 5;
-      hence thesis by WELLORD1:8;
-    end;
-    for y st y in field W1 holds W1-Seg(y) in D & F.(W1-Seg(y)) = y
-    proof
-      let y;
-      assume y in field W1;
-      then
-A240: y in field R or y=a0 by A169;
-A241: y in field R implies W1-Seg(y) = R-Seg(y)
+      let Y;
+      assume that
+A220: Y c= field W1 and
+A221: Y <> {};
+A222: not Y c=field R implies ex a st a in Y & W1-Seg(a) misses Y
       proof
         assume
-A242:   y in field R;
-A243:   x in W1-Seg(y) implies x in R-Seg(y)
+        not Y c= field R;
+A223:   not (field R) /\ Y = {} implies ex a st a in Y & W1-Seg(a)
+        misses Y
         proof
-          assume x in W1-Seg(y);
+          set X = (field R) /\ Y;
+A224:     X c= field R by XBOOLE_1:17;
+          assume
+          not (field R) /\ Y = {};
+          then consider y such that
+A225:     y in X and
+A226:     R-Seg(y) misses X by A130,A224,WELLORD1:def 3;
+A227:     R-Seg(y) /\ Y c= R-Seg(y) /\ X
+          proof
+            let x;
+            assume
+A228:       x in R-Seg(y) /\ Y;
+            then
+A229:       x in Y by XBOOLE_0:def 4;
+A230:       x in R-Seg(y) by A228,XBOOLE_0:def 4;
+            then [x,y] in R by WELLORD1:def 1;
+            then x in field R by RELAT_1:30;
+            then x in X by A229,XBOOLE_0:def 4;
+            hence thesis by A230,XBOOLE_0:def 4;
+          end;
+          R-Seg(y) /\ X = {} by A226,XBOOLE_0:def 7;
+          then W1-Seg(y) /\ Y = {} by A212,A224,A225,A227;
           then
-A244:     [x,y] in W1 & not x=y by WELLORD1:def 1;
+A231:     W1-Seg(y) misses Y by XBOOLE_0:def 7;
+          y in Y by A225,XBOOLE_0:def 4;
+          hence thesis by A231;
+        end;
+        (field R) /\ Y = {} implies ex a st a in Y & W1-Seg(a) misses Y
+        proof
+          consider y being Element of Y;
+A232:     W1-Seg(a0) c= field R
+          proof
+            let z be set;
+            assume
+A233:       z in W1-Seg(a0);
+            then [z,a0] in W1 by WELLORD1:def 1;
+            then
+A234:       z in field W1 by RELAT_1:30;
+            z <> a0 by A233,WELLORD1:def 1;
+            hence thesis by A178,A234;
+          end;
+A235:     y in field W1 by A220,A221,TARSKI:def 3;
+          assume
+A236:     (field R) /\ Y = {};
+          then not y in field R by A221,XBOOLE_0:def 4;
+          then y = a0 by A178,A235;
+          then W1-Seg(y) /\ Y = {} by A236,A232,XBOOLE_1:3,26;
+          then W1-Seg(y) misses Y by XBOOLE_0:def 7;
+          hence thesis by A221;
+        end;
+        hence thesis by A223;
+      end;
+      Y c= field R implies ex a st a in Y & W1-Seg(a) misses Y
+      proof
+        assume
+A237:   Y c= field R;
+        then consider b such that
+A238:   b in Y & R-Seg(b) misses Y by A130,A221,WELLORD1:def 3;
+        take b;
+        thus thesis by A212,A237,A238;
+      end;
+      hence thesis by A222;
+    end;
+A239: for y st y in field W1 holds W1-Seg(y) in D & F.(W1-Seg(y)) = y
+    proof
+      let y;
+A240: y in field R implies W1-Seg(y) = R-Seg(y)
+      proof
+        assume
+A241:   y in field R;
+A242:   x in W1-Seg(y) implies x in R-Seg(y)
+        proof
+A243:     [x,y] in W4 implies [x,y] = [a0,a0] by TARSKI:def 1;
+          assume
+A244:     x in W1-Seg(y);
+          then [x,y] in W1 by WELLORD1:def 1;
           then [x,y] in (R \/ W3) or [x,y] in W4 by XBOOLE_0:def 3;
           then
-A245:     [x,y] in R or [x,y] in W3 or [x,y] in W4 by XBOOLE_0:def 3;
-          [x,y] in W4 implies [x,y] = [a0,a0] by TARSKI:def 1;
-          hence thesis by A162,A242,A244,A245,WELLORD1:def 1,ZFMISC_1:33,129;
+A245:     [x,y] in R or [x,y] in W3 or [x,y] in W4 by XBOOLE_0:def
+          3;
+          not x=y by A244,WELLORD1:def 1;
+          hence thesis by A194,A241,A245,A243,WELLORD1:def 1,ZFMISC_1:33 ,
+          129;
         end;
         x in R-Seg(y) implies x in W1-Seg(y)
         proof
-          assume x in R-Seg(y);
-          then
-A246:     [x,y] in R & not x=y by WELLORD1:def 1;
+          assume
+A246:     x in R-Seg(y);
+          then [x,y] in R by WELLORD1:def 1;
           then [x,y] in R \/ W3 by XBOOLE_0:def 3;
-          then [x,y] in W1 by XBOOLE_0:def 3;
-          hence thesis by A246,WELLORD1:def 1;
+          then
+A247:     [x,y] in W1 by XBOOLE_0:def 3;
+          not x=y by A246,WELLORD1:def 1;
+          hence thesis by A247,WELLORD1:def 1;
         end;
-        hence thesis by A243,TARSKI:2;
+        hence thesis by A242,TARSKI:2;
       end;
-      W1-Seg(a0) in D & F.(W1-Seg(a0)) = a0
+A248: x in W1-Seg(a0) implies x in field R
       proof
-        W1-Seg(a0) = field R
-        proof
-A247:     x in W1-Seg(a0) implies x in field R
-          proof
-            assume x in W1-Seg(a0);
-            then
-A248:       [x,a0] in W1 & not x=a0 by WELLORD1:def 1;
-            then x in field W1 by RELAT_1:30;
-            hence thesis by A169,A248;
-          end;
-          x in field R implies x in W1-Seg(a0)
-          proof
-            assume
-A249:       x in field R;
-            then [x,a0] in W3 by ZFMISC_1:129;
-            then [x,a0] in R \/ W3 by XBOOLE_0:def 3;
-            then [x,a0] in W1 by XBOOLE_0:def 3;
-            hence thesis by A162,A249,WELLORD1:def 1;
-          end;
-          hence thesis by A247,TARSKI:2;
-        end;
-        hence thesis by A161;
+        assume
+A249:   x in W1-Seg(a0);
+        then [x,a0] in W1 by WELLORD1:def 1;
+        then
+A250:   x in field W1 by RELAT_1:30;
+        not x=a0 by A249,WELLORD1:def 1;
+        hence thesis by A178,A250;
       end;
-      hence thesis by A151,A240,A241;
+A251: x in field R implies x in W1-Seg(a0)
+      proof
+        assume
+A252:   x in field R;
+        then [x,a0] in W3 by ZFMISC_1:129;
+        then [x,a0] in R \/ W3 by XBOOLE_0:def 3;
+        then [x,a0] in W1 by XBOOLE_0:def 3;
+        hence thesis by A194,A252,WELLORD1:def 1;
+      end;
+      assume
+      y in field W1;
+      then y in field R or y=a0 by A178;
+      hence thesis by A103,A190,A240,A248,A251,TARSKI:2;
     end;
-    then W1 in G by A2,A181,A182;
+    x in field W1 & y in field W1 & z in field W1 & [x,y] in W1 & [y,z]
+    in W1 implies [x,z] in W1
+    proof
+      assume that
+A253: x in field W1 and
+      y in field W1 and
+A254: z in field W1 and
+A255: [x,y] in W1 and
+A256: [y,z] in W1;
+A257: z = a0 implies [x,z] in W1
+      proof
+        assume
+A258:   z = a0;
+A259:   x = a0 implies [x,z] in W1
+        proof
+          assume
+          x = a0;
+          then [x,z] in W4 by A258,TARSKI:def 1;
+          hence thesis by A179;
+        end;
+        x in field R implies [x,z] in W1
+        proof
+          assume
+          x in field R;
+          then [x,z] in W3 by A258,ZFMISC_1:129;
+          hence thesis by A179;
+        end;
+        hence thesis by A178,A253,A259;
+      end;
+      z in field R implies [x,z] in W1
+      proof
+        assume
+A260:   z in field R;
+        then
+A261:   [y,z] in R by A195,A256;
+A262:   y in field R by A195,A256,A260;
+        then [x,y] in R & x in field R by A195,A255;
+        then [x,z] in R by A145,A260,A261,A262;
+        hence thesis by A179;
+      end;
+      hence thesis by A178,A254,A257;
+    end;
     then
-A250: field W1 c= field R by A93;
-A251: {[ a0,a0 ]} c= W1 by XBOOLE_1:7;
-    [ a0,a0 ] in {[ a0,a0 ]} by TARSKI:def 1;
-    then a0 in field W1 by A251,RELAT_1:30;
-    hence contradiction by A1,A161,A250;
+A263: W1 is_transitive_in field W1 by RELAT_2:def 8;
+    x in field W1 implies [x,x] in W1
+    proof
+A264: x = a0 implies [x,x] in W1
+      proof
+A265:   [a0,a0] in W4 by TARSKI:def 1;
+        assume
+        x=a0;
+        hence thesis by A179,A265;
+      end;
+A266: x in field R implies [x,x] in W1
+      proof
+        assume
+        x in field R;
+        then [x,x] in R by A165;
+        hence thesis by A179;
+      end;
+      assume
+      x in field W1;
+      hence thesis by A178,A266,A264;
+    end;
+    then W1 is_reflexive_in field W1 by RELAT_2:def 1;
+    then W1 well_orders field W1 by A263,A211,A189,A219,WELLORD1:def 5;
+    then W1 is well-ordering by WELLORD1:8;
+    then W1 in G by A2,A193,A239;
+    then field W1 c= field R by A97;
+    hence contradiction by A1,A190,A171;
   end;
-  hence thesis by A99,A151;
+  R is_reflexive_in field R by A165,RELAT_2:def 1;
+  then R well_orders field R by A164,A96,A129,A130,WELLORD1:def 5;
+  hence thesis by A103,A170,WELLORD1:8;
 end;
 
-Lm1: X,M are_equipotent iff ex Z st
-(for x st x in X ex y st y in M & [x,y] in Z) &
-(for y st y in M ex x st x in X & [x,y] in Z) &
-for x,z1,y,z2 st [x,z1] in Z & [y,z2] in Z holds x = y iff z1 = z2
+Lm1: X,M are_equipotent iff ex Z st (for x st x in X ex y st y in M & [x,y] in
+Z) & (for y st y in M ex x st x in X & [x,y] in Z) & for x,z1,y,z2 st [x,z1] in
+Z & [y,z2] in Z holds x = y iff z1 = z2
+
 proof
-A1: X,M are_equipotent implies ex Z st
-  (for x st x in X ex y st y in M & [x,y] in Z) &
-  (for y st y in M ex x st x in X & [x,y] in Z) &
-  for x,z1,y,z2 st [x,z1] in Z & [y,z2] in Z holds x = y iff z1 = z2
+
+A1: ( ex Z st (for x st x in X ex y st y in M & [x,y] in Z) & (for y st y in
+  M ex x st x in X & [x,y] in Z) & for x,z1,y,z2 st [x,z1] in Z & [y,z2] in Z
+  holds x = y iff z1 = z2 ) implies X,M are_equipotent
+
   proof
-    assume ex Z st (for x st x in X ex y st y in M & [x,y] in Z) &
-    (for y st y in M ex x st x in X & [x,y] in Z) &
-    for x,z1,y,z2 st [x,z1] in Z & [y,z2] in Z holds x = y iff z1 = z2;
-    hence thesis;
+    assume
+
+    ex Z st (for x st x in X ex y st y in M & [x,y] in Z) & (for y st
+
+y in M ex x st x in X & [x,y] in Z) & for x,z1,y,z2 st [x,z1] in Z & [y,z2] in
+    Z holds x = y iff z1 = z2;
+
+    hence ex Z st (for x st x in X ex y st y in M & [x,y] in Z) & (for y st y
+
+in M ex x st x in X & [x,y] in Z) & for x,z1,y,z2 st [x,z1] in Z & [y,z2] in Z
+    holds x = y iff z1 = z2;
+
   end;
-  ( ex Z st (for x st x in X ex y st y in M & [x,y] in Z) &
-  (for y st y in M ex x st x in X & [x,y] in Z) &
-  for x,z1,y,z2 st [x,z1] in Z & [y,z2] in Z holds x = y iff z1 = z2 )
-  implies X,M are_equipotent
+
+  X,M are_equipotent implies ex Z st (for x st x in X ex y st y in M & [x,
+
+y] in Z) & (for y st y in M ex x st x in X & [x,y] in Z) & for x,z1,y,z2 st [x,
+  z1] in Z & [y,z2] in Z holds x = y iff z1 = z2
+
   proof
-    assume ex Z st (for x st x in X ex y st y in M & [x,y] in Z) &
-    (for y st y in M ex x st x in X & [x,y] in Z) &
-    for x,z1,y,z2 st [x,z1] in Z & [y,z2] in Z holds x = y iff z1 = z2;
-    hence ex Z st (for x st x in X ex y st y in M & [x,y] in Z) &
-    (for y st y in M ex x st x in X & [x,y] in Z) &
-    for x,z1,y,z2 st [x,z1] in Z & [y,z2] in Z holds x = y iff z1 = z2;
+    assume
+
+    ex Z st (for x st x in X ex y st y in M & [x,y] in Z) & (for y st
+
+y in M ex x st x in X & [x,y] in Z) & for x,z1,y,z2 st [x,z1] in Z & [y,z2] in
+    Z holds x = y iff z1 = z2;
+
+    hence thesis;
   end;
   hence thesis by A1;
 end;
@@ -1216,21 +1221,23 @@ theorem
 proof
   let N;
   consider M such that
-A1: N in M and
-A2: (for X,Y holds X in M & Y c= X implies Y in M) and
-A3: (for X holds X in M implies bool X in M) and
-A4: (for X holds X c= M implies X,M are_equipotent or X in M) by ZFMISC_1:136;
+A1: N in M & for X,Y holds X in M & Y c= X implies Y in M and
+A2: for X holds X in M implies bool X in M and
+A3: for X holds X c= M implies X,M are_equipotent or X in M by ZFMISC_1:
+  136;
   defpred P[set] means not $1,M are_equipotent;
   consider D such that
-A5: A in D iff A in bool M & P[A] from XBOOLE_0:sch 1;
-A6: union D c= M
+A4: A in D iff A in bool M & P[A] from XBOOLE_0:sch 1;
+A5: union D c= M
   proof
     let x;
-    assume x in union D;
+    assume
+    x in union D;
     then consider A such that
-A7: x in A & A in D by TARSKI:def 4;
-    A in bool M & not A,M are_equipotent by A5,A7;
-    hence thesis by A7;
+A6: x in A and
+A7: A in D by TARSKI:def 4;
+    A in bool M by A4,A7;
+    hence thesis by A6;
   end;
   set F = id D;
   for Z st Z in D holds not F.Z in Z & F.Z in union D
@@ -1242,43 +1249,43 @@ A8: Z in D;
     hence not F.Z in Z by A8,FUNCT_1:35;
     X in D implies X in union D
     proof
-      assume X in D;
+A9:   X in { X } by TARSKI:def 1;
+      assume
+      X in D;
       then
-A9:   X in bool M & not X,M are_equipotent by A5;
-      then
-A10:  X in M by A4;
-A11:  { X } c= M
+A10:  X in bool M & not X,M are_equipotent by A4;
+A11:  not { X },M are_equipotent
       proof
-        x in {X} implies x in M by A10,TARSKI:def 1;
-        hence thesis by TARSKI:def 3;
-      end;
-      not { X },M are_equipotent
-      proof
-        assume { X },M are_equipotent;
-        then consider Z such that
-        (for x st x in { X } ex y st y in M & [x,y] in Z) and
-A12:    (for y st y in M ex x st x in { X } & [x,y] in Z) and
-A13:    for x,z1,y,z2 st [x,z1] in Z & [y,z2] in Z holds x = y iff z1 = z2
-        by Lm1;
-A14:    bool X in M by A3,A4,A9;
-A15:    X <> bool X
+A12:    X <> bool X
         proof
-          assume X = bool X;
+          assume
+          X = bool X;
           then not X in bool X;
           hence contradiction by ZFMISC_1:def 1;
         end;
+        assume
+        { X },M are_equipotent;
+        then consider Z such that
+        for x st x in { X } ex y st y in M & [x,y] in Z and
+A13:    for y st y in M ex x st x in { X } & [x,y] in Z and
+A14:    for x,z1,y,z2 st [x,z1] in Z & [y,z2] in Z holds x = y iff z1
+        = z2 by Lm1;
+        bool X in M by A2,A3,A10;
+        then consider y such that
+A15:    y in {X} and
+A16:    [y,bool X] in Z by A13;
         consider x such that
-A16:    x in {X} & [x,X] in Z by A10,A12;
-        consider y such that
-A17:    y in {X} & [y,bool X] in Z by A12,A14;
-        x=X by A16,TARSKI:def 1;
-        then y=x by A17,TARSKI:def 1;
-        hence contradiction by A13,A15,A16,A17;
+A17:    x in {X} and
+A18:    [x,X] in Z by A3,A10,A13;
+        x=X by A17,TARSKI:def 1;
+        then y=x by A15,TARSKI:def 1;
+        hence contradiction by A14,A12,A18,A16;
       end;
-      then
-A18:  { X } in D by A5,A11;
-      X in { X } by TARSKI:def 1;
-      hence thesis by A18,TARSKI:def 4;
+      X in M by A3,A10;
+      then x in {X} implies x in M by TARSKI:def 1;
+      then { X } c= M by TARSKI:def 3;
+      then { X } in D by A4,A11;
+      hence thesis by A9,TARSKI:def 4;
     end;
     then Z in union D by A8;
     hence thesis by A8,FUNCT_1:35;
@@ -1288,291 +1295,303 @@ A19: field S c= union D and
 A20: S is well-ordering and
 A21: not field S in D and
   for y st y in field S holds S-Seg(y) in D & F.(S-Seg(y)) = y by Th8;
-  not field S c= M or field S,M are_equipotent by A5,A21;
+  not field S c= M or field S,M are_equipotent by A4,A21;
   then consider Z such that
-A22: (for x st x in field S ex y st y in M & [x,y] in Z) and
-A23: (for y st y in M ex x st x in field S & [x,y] in Z) and
+A22: for x st x in field S ex y st y in M & [x,y] in Z and
+A23: for y st y in M ex x st x in field S & [x,y] in Z and
 A24: for x,z1,y,z2 st [x,z1] in Z & [y,z2] in Z holds x = y iff z1 = z2
-  by A6,A19,Lm1,XBOOLE_1:1;
+  by A5,A19,Lm1,XBOOLE_1:1;
   defpred P[set,set] means [$2,$1] in Z;
-A25: for x,z1,z2 st x in M & P[x,z1] & P[x,z2] holds z1 = z2 by A24;
-A26: for x st x in M ex y st P[x,y]
+A25: for x st x in M ex y st P[x,y]
   proof
     let x;
-    assume x in M;
+    assume
+    x in M;
     then ex y st y in field S & [y,x] in Z by A23;
     hence thesis;
   end;
+A26: for x,z1,z2 st x in M & P[x,z1] & P[x,z2] holds z1 = z2 by A24;
   consider H such that
 A27: dom H = M and
-A28: for x st x in M holds P[x, H.x] from FUNCT_1:sch 2(A25,A26);
+A28: for x st x in M holds P[x, H.x] from FUNCT_1:sch 2(A26,A25);
+  defpred P[set,set] means $2={$1};
+  defpred P[set] means ex x,y st $1=[x,y] & [H.x,H.y] in S;
+  consider W0 such that
+A29: z in W0 iff z in [: M,M :] & P[z] from XBOOLE_0:sch 1;
+A30: x in field S implies x in rng H
+  proof
+    assume
+    x in field S;
+    then consider y such that
+A31: y in M and
+A32: [x,y] in Z by A22;
+    set z1= H.y;
+    z1 in rng H & [z1,y] in Z by A27,A28,A31,FUNCT_1:def 5;
+    hence thesis by A24,A32;
+  end;
   for z1,z2 st z1 in dom H & z2 in dom H & H.z1 = H.z2 holds z1 = z2
   proof
     let z1,z2;
-    assume
-A29: z1 in dom H & z2 in dom H & H.z1 = H.z2;
-    then [H.z1,z1] in Z & [H.z2,z2] in Z by A27,A28;
-    hence thesis by A24,A29;
+    assume that
+A33: z1 in dom H & z2 in dom H and
+A34: H.z1 = H.z2;
+    [H.z1,z1] in Z & [H.z2,z2] in Z by A27,A28,A33;
+    hence thesis by A24,A34;
   end;
   then
-A30: H is one-to-one by FUNCT_1:def 8;
-  defpred P[set] means ex x,y st $1=[x,y] & [H.x,H.y] in S;
-  consider W0 such that
-A31: z in W0 iff z in [: M,M :] & P[z] from XBOOLE_0:sch 1;
+A35: H is one-to-one by FUNCT_1:def 8;
   z in W0 implies ex x,y st z=[x,y]
   proof
-    assume z in W0;
-    then ex z1,z2 st z=[z1,z2] & [H.z1,H.z2] in S by A31;
+    assume
+    z in W0;
+    then ex z1,z2 st z=[z1,z2] & [H.z1,H.z2] in S by A29;
     hence thesis;
   end;
   then reconsider W0 as Relation by RELAT_1:def 1;
-A32: rng H = field S
+A36: z in field W0 implies z in M
   proof
-A33: x in rng H implies x in field S
-    proof
-      assume x in rng H;
-      then consider z1 such that
-A34:  z1 in dom H and
-A35:  x = H.z1 by FUNCT_1:def 5;
-A36:  ex z2 st z2 in field S & [z2,z1] in Z by A23,A27,A34;
-      [x,z1] in Z by A27,A28,A34,A35;
-      hence thesis by A24,A36;
-    end;
-    x in field S implies x in rng H
-    proof
-      assume x in field S;
-      then consider y such that
-A37:  y in M and
-A38:  [x,y] in Z by A22;
-      set z1= H.y;
-A39:  z1 in rng H by A27,A37,FUNCT_1:def 5;
-      [z1,y] in Z by A28,A37;
-      hence thesis by A24,A38,A39;
-    end;
-    hence thesis by A33,TARSKI:2;
-  end;
-A40: field W0 = M
-  proof
-A41: z in field W0 implies z in M
-    proof
-      assume z in field W0;
-      then consider z1 such that
-A42:  [z,z1] in W0 or [z1,z] in W0 by Th1;
-A43:  [z,z1] in W0 implies z in M
-      proof
-        assume [z,z1] in W0;
-        then [z,z1] in [: M,M :] by A31;
-        hence thesis by ZFMISC_1:106;
-      end;
-      [z1,z] in W0 implies z in M
-      proof
-        assume [z1,z] in W0;
-        then [z1,z] in [: M,M :] by A31;
-        hence thesis by ZFMISC_1:106;
-      end;
-      hence thesis by A42,A43;
-    end;
-    z in M implies z in field W0
+    assume
+    z in field W0;
+    then consider z1 such that
+A37: [z,z1] in W0 or [z1,z] in W0 by Th1;
+A38: [z1,z] in W0 implies z in M
     proof
       assume
-A44:  z in M;
-      ex z1 st [z,z1] in W0 or [z1,z] in W0
-      proof
-        H.z in field S by A27,A32,A44,FUNCT_1:def 5;
-        then consider z2 such that
-A45:    [H.z,z2] in S or [z2,H.z] in S by Th1;
-A46:    [z2,H.z] in S implies ex z1 st [z,z1] in W0 or [z1,z] in W0
-        proof
-          assume
-A47:      [z2,H.z] in S;
-          then z2 in rng H by A32,RELAT_1:30;
-          then consider z3 such that
-A48:      z3 in dom H and
-A49:      z2=H.z3 by FUNCT_1:def 5;
-A50:      [z3,z] in [: M,M :] by A27,A44,A48,ZFMISC_1:106;
-          take z3;
-          thus thesis by A31,A47,A49,A50;
-        end;
-        [H.z,z2] in S implies ex z1 st [z,z1] in W0 or [z1,z] in W0
-        proof
-          assume
-A51:      [H.z,z2] in S;
-          then z2 in rng H by A32,RELAT_1:30;
-          then consider z3 such that
-A52:      z3 in dom H and
-A53:      z2=H.z3 by FUNCT_1:def 5;
-A54:      [z,z3] in [: M,M :] by A27,A44,A52,ZFMISC_1:106;
-          take z3;
-          thus thesis by A31,A51,A53,A54;
-        end;
-        hence thesis by A45,A46;
-      end;
-      hence thesis by Th1;
+      [z1,z] in W0;
+      then [z1,z] in [: M,M :] by A29;
+      hence thesis by ZFMISC_1:106;
     end;
-    hence thesis by A41,TARSKI:2;
-  end;
-  for a,b holds [a,b] in W0 iff a in field W0 & b in field W0 & [H.a,H.b] in S
-  proof
-    let a,b;
-A55: [a,b] in W0 implies a in field W0 & b in field W0 & [H.a,H.b] in S
+    [z,z1] in W0 implies z in M
     proof
       assume
-A56:  [a,b] in W0;
-      then
-A57:  [a,b] in [: M,M :] & ex x,y st [a,b]=[x,y] & [H.x,H.y] in S by A31;
-      consider x,y such that
-A58:  [a,b] = [x,y] and
-A59:  [H.x,H.y] in S by A31,A56;
-      a=x & b=y by A58,ZFMISC_1:33;
-      hence thesis by A40,A57,A59,ZFMISC_1:106;
+      [z,z1] in W0;
+      then [z,z1] in [: M,M :] by A29;
+      hence thesis by ZFMISC_1:106;
     end;
-    a in field W0 & b in field W0 & [H.a,H.b] in S implies [a,b] in W0
-    proof
-      assume
-A60:  a in field W0 & b in field W0 & [H.a,H.b] in S;
-      then [a,b] in [: M,M :] by A40,ZFMISC_1:106;
-      hence thesis by A31,A60;
-    end;
-    hence thesis by A55;
+    hence thesis by A37,A38;
   end;
-  then H is_isomorphism_of W0,S by A27,A30,A32,A40,WELLORD1:def 7;
-  then
-A61: (H") is_isomorphism_of S, W0 by WELLORD1:49;
-  then
-A62: W0 is well-ordering by A20,WELLORD1:54;
-  defpred P[set,set] means $2={$1};
-A63: for x,z1,z2 st x in N & P[x,z1] & P[x,z2] holds z1 = z2;
-A64: for x st x in N ex y st P[x,y];
+A39: for x st x in N ex y st P[x,y];
+A40: for x,z1,z2 st x in N & P[x,z1] & P[x,z2] holds z1 = z2;
   consider H1 such that
-A65: dom H1 = N and
-A66: for x st x in N holds P[x, H1.x] from FUNCT_1:sch 2(A63,A64);
+A41: dom H1 = N and
+A42: for x st x in N holds P[x, H1.x] from FUNCT_1:sch 2(A40,A39);
   for z1,z2 st z1 in dom H1 & z2 in dom H1 & H1.z1 = H1.z2 holds z1 = z2
   proof
     let z1,z2;
-    assume
-A67: z1 in dom H1 & z2 in dom H1 & H1.z1 = H1.z2;
+    assume that
+A43: z1 in dom H1 and
+A44: z2 in dom H1 and
+A45: H1.z1 = H1.z2;
+    H1.z1={z1} by A41,A42,A43;
     then
-A68: H1.z1={z1} & H1.z2={z2} by A65,A66;
-    then z1 in H1.z2 by A67,TARSKI:def 1;
-    hence thesis by A68,TARSKI:def 1;
+A46: z1 in H1.z2 by A45,TARSKI:def 1;
+    H1.z2={z2} by A41,A42,A44;
+    hence thesis by A46,TARSKI:def 1;
   end;
   then
-A69: H1 is one-to-one by FUNCT_1:def 8;
-A70: rng H1 c= M
-  proof
-    let x;
-    assume x in rng H1;
-    then consider y such that
-A71: y in dom H1 and
-A72: x = H1.y by FUNCT_1:def 5;
-A73: x = { y } by A65,A66,A71,A72;
-    { y } c= N
-    proof
-      z1 in { y } implies z1 in N by A65,A71,TARSKI:def 1;
-      hence thesis by TARSKI:def 3;
-    end;
-    hence thesis by A1,A2,A73;
-  end;
+A47: H1 is one-to-one by FUNCT_1:def 8;
   set S1=W0 |_2 rng H1;
-A74: S1 is well-ordering by A62,WELLORD1:32;
-A75: field S1 = rng H1 by A20,A40,A61,A70,WELLORD1:39,54;
+  x in rng H implies x in field S
+  proof
+    assume
+    x in rng H;
+    then consider z1 such that
+A48: z1 in dom H & x = H.z1 by FUNCT_1:def 5;
+    ( ex z2 st z2 in field S & [z2,z1] in Z)& [x,z1] in Z by A23,A27,A28,
+    A48;
+    hence thesis by A24;
+  end;
+  then
+A49: rng H = field S by A30,TARSKI:2;
+  z in M implies z in field W0
+  proof
+    assume
+A50: z in M;
+    ex z1 st [z,z1] in W0 or [z1,z] in W0
+    proof
+      H.z in field S by A27,A49,A50,FUNCT_1:def 5;
+      then consider z2 such that
+A51:  [H.z,z2] in S or [z2,H.z] in S by Th1;
+A52:  [H.z,z2] in S implies ex z1 st [z,z1] in W0 or [z1,z] in W0
+      proof
+        assume
+A53:    [H.z,z2] in S;
+        then z2 in rng H by A49,RELAT_1:30;
+        then consider z3 such that
+A54:    z3 in dom H and
+A55:    z2=H.z3 by FUNCT_1:def 5;
+        take z3;
+        [z,z3] in [: M,M :] by A27,A50,A54,ZFMISC_1:106;
+        hence thesis by A29,A53,A55;
+      end;
+      [z2,H.z] in S implies ex z1 st [z,z1] in W0 or [z1,z] in W0
+      proof
+        assume
+A56:    [z2,H.z] in S;
+        then z2 in rng H by A49,RELAT_1:30;
+        then consider z3 such that
+A57:    z3 in dom H and
+A58:    z2=H.z3 by FUNCT_1:def 5;
+        take z3;
+        [z3,z] in [: M,M :] by A27,A50,A57,ZFMISC_1:106;
+        hence thesis by A29,A56,A58;
+      end;
+      hence thesis by A51,A52;
+    end;
+    hence thesis by Th1;
+  end;
+  then
+A59: field W0 = M by A36,TARSKI:2;
+  for a,b holds [a,b] in W0 iff a in field W0 & b in field W0 & [H.a,H.b
+  ] in S
+  proof
+    let a,b;
+A60: [a,b] in W0 implies a in field W0 & b in field W0 & [H.a,H.b] in S
+    proof
+      assume
+A61:  [a,b] in W0;
+      then
+A62:  [a,b] in [: M,M :] by A29;
+      consider x,y such that
+A63:  [a,b] = [x,y] and
+A64:  [H.x,H.y] in S by A29,A61;
+      a=x by A63,ZFMISC_1:33;
+      hence thesis by A59,A62,A63,A64,ZFMISC_1:33,106;
+    end;
+    a in field W0 & b in field W0 & [H.a,H.b] in S implies [a,b] in W0
+    proof
+      assume that
+A65:  a in field W0 & b in field W0 and
+A66:  [H.a,H.b] in S;
+      [a,b] in [: M,M :] by A59,A65,ZFMISC_1:106;
+      hence thesis by A29,A66;
+    end;
+    hence thesis by A60;
+  end;
+  then H is_isomorphism_of W0,S by A27,A35,A49,A59,WELLORD1:def 7;
+  then
+A67: (H") is_isomorphism_of S, W0 by WELLORD1:49;
+  then W0 is well-ordering by A20,WELLORD1:54;
+  then
+A68: S1 is well-ordering by WELLORD1:32;
   defpred P[set] means ex x,y st $1=[x,y] & [H1.x,H1.y] in S1;
   consider W00 such that
-A76: z in W00 iff z in [: N,N :] & P[z] from XBOOLE_0:sch 1;
+A69: z in W00 iff z in [: N,N :] & P[z] from XBOOLE_0:sch 1;
   z in W00 implies ex x,y st z=[x,y]
   proof
-    assume z in W00;
-    then ex z1,z2 st z=[z1,z2] & [H1.z1,H1.z2] in S1 by A76;
+    assume
+    z in W00;
+    then ex z1,z2 st z=[z1,z2] & [H1.z1,H1.z2] in S1 by A69;
     hence thesis;
   end;
   then reconsider W00 as Relation by RELAT_1:def 1;
-A77: field W00 = N
+A70: z in field W00 implies z in N
   proof
-A78: z in field W00 implies z in N
-    proof
-      assume z in field W00;
-      then consider z1 such that
-A79:  [z,z1] in W00 or [z1,z] in W00 by Th1;
-A80:  [z,z1] in W00 implies z in N
-      proof
-        assume [z,z1] in W00;
-        then [z,z1] in [: N,N :] by A76;
-        hence thesis by ZFMISC_1:106;
-      end;
-      [z1,z] in W00 implies z in N
-      proof
-        assume [z1,z] in W00;
-        then [z1,z] in [: N,N :] by A76;
-        hence thesis by ZFMISC_1:106;
-      end;
-      hence thesis by A79,A80;
-    end;
-    z in N implies z in field W00
+    assume
+    z in field W00;
+    then consider z1 such that
+A71: [z,z1] in W00 or [z1,z] in W00 by Th1;
+A72: [z1,z] in W00 implies z in N
     proof
       assume
-A81:  z in N;
-      ex z1 st [z,z1] in W00 or [z1,z] in W00
-      proof
-        H1.z in field S1 by A65,A75,A81,FUNCT_1:def 5;
-        then consider z2 such that
-A82:    [H1.z,z2] in S1 or [z2,H1.z] in S1 by Th1;
-A83:    [z2,H1.z] in S1 implies ex z1 st [z,z1] in W00 or [z1,z] in W00
-        proof
-          assume
-A84:      [z2,H1.z] in S1;
-          then z2 in rng H1 by A75,RELAT_1:30;
-          then consider z3 such that
-A85:      z3 in dom H1 and
-A86:      z2=H1.z3 by FUNCT_1:def 5;
-A87:      [z3,z] in [: N,N :] by A65,A81,A85,ZFMISC_1:106;
-          take z3;
-          thus thesis by A76,A84,A86,A87;
-        end;
-        [H1.z,z2] in S1 implies ex z1 st [z,z1] in W00 or [z1,z] in W00
-        proof
-          assume
-A88:      [H1.z,z2] in S1;
-          then z2 in rng H1 by A75,RELAT_1:30;
-          then consider z3 such that
-A89:      z3 in dom H1 and
-A90:      z2=H1.z3 by FUNCT_1:def 5;
-A91:      [z,z3] in [: N,N :] by A65,A81,A89,ZFMISC_1:106;
-          take z3;
-          thus thesis by A76,A88,A90,A91;
-        end;
-        hence thesis by A82,A83;
-      end;
-      hence thesis by Th1;
+      [z1,z] in W00;
+      then [z1,z] in [: N,N :] by A69;
+      hence thesis by ZFMISC_1:106;
     end;
-    hence thesis by A78,TARSKI:2;
+    [z,z1] in W00 implies z in N
+    proof
+      assume
+      [z,z1] in W00;
+      then [z,z1] in [: N,N :] by A69;
+      hence thesis by ZFMISC_1:106;
+    end;
+    hence thesis by A71,A72;
   end;
-  for a,b holds [a,b] in W00 iff a in field W00 & b in field W00 &
-  [H1.a,H1.b] in S1
+  rng H1 c= M
+  proof
+    let x;
+    assume
+    x in rng H1;
+    then consider y such that
+A73: y in dom H1 and
+A74: x = H1.y by FUNCT_1:def 5;
+    z1 in { y } implies z1 in N by A41,A73,TARSKI:def 1;
+    then
+A75: { y } c= N by TARSKI:def 3;
+    x = { y } by A41,A42,A73,A74;
+    hence thesis by A1,A75;
+  end;
+  then
+A76: field S1 = rng H1 by A20,A59,A67,WELLORD1:39,54;
+  z in N implies z in field W00
+  proof
+    assume
+A77: z in N;
+    ex z1 st [z,z1] in W00 or [z1,z] in W00
+    proof
+      H1.z in field S1 by A41,A76,A77,FUNCT_1:def 5;
+      then consider z2 such that
+A78:  [H1.z,z2] in S1 or [z2,H1.z] in S1 by Th1;
+A79:  [H1.z,z2] in S1 implies ex z1 st [z,z1] in W00 or [z1,z] in W00
+      proof
+        assume
+A80:    [H1.z,z2] in S1;
+        then z2 in rng H1 by A76,RELAT_1:30;
+        then consider z3 such that
+A81:    z3 in dom H1 and
+A82:    z2=H1.z3 by FUNCT_1:def 5;
+        take z3;
+        [z,z3] in [: N,N :] by A41,A77,A81,ZFMISC_1:106;
+        hence thesis by A69,A80,A82;
+      end;
+      [z2,H1.z] in S1 implies ex z1 st [z,z1] in W00 or [z1,z] in W00
+      proof
+        assume
+A83:    [z2,H1.z] in S1;
+        then z2 in rng H1 by A76,RELAT_1:30;
+        then consider z3 such that
+A84:    z3 in dom H1 and
+A85:    z2=H1.z3 by FUNCT_1:def 5;
+        take z3;
+        [z3,z] in [: N,N :] by A41,A77,A84,ZFMISC_1:106;
+        hence thesis by A69,A83,A85;
+      end;
+      hence thesis by A78,A79;
+    end;
+    hence thesis by Th1;
+  end;
+  then
+A86: field W00 = N by A70,TARSKI:2;
+  for a,b holds [a,b] in W00 iff a in field W00 & b in field W00 & [H1.a
+  ,H1.b] in S1
   proof
     let a,b;
-A92: [a,b] in W00 implies a in field W00 & b in field W00 & [H1.a,H1.b] in S1
+A87: [a,b] in W00 implies a in field W00 & b in field W00 & [H1.a,H1.b]
+    in S1
     proof
       assume
-A93:  [a,b] in W00;
+A88:  [a,b] in W00;
       then
-A94:  [a,b] in [: N,N :] & ex x,y st [a,b]=[x,y] & [H1.x,H1.y] in S1 by A76;
+A89:  [a,b] in [: N,N :] by A69;
       consider x,y such that
-A95:  [a,b] = [x,y] and
-A96:  [H1.x,H1.y] in S1 by A76,A93;
-      a=x & b=y by A95,ZFMISC_1:33;
-      hence thesis by A77,A94,A96,ZFMISC_1:106;
+A90:  [a,b] = [x,y] and
+A91:  [H1.x,H1.y] in S1 by A69,A88;
+      a=x by A90,ZFMISC_1:33;
+      hence thesis by A86,A89,A90,A91,ZFMISC_1:33,106;
     end;
-    a in field W00 & b in field W00 & [H1.a,H1.b] in S1 implies [a,b] in W00
+    a in field W00 & b in field W00 & [H1.a,H1.b] in S1 implies [a,b] in
+    W00
     proof
-      assume
-A97:  a in field W00 & b in field W00 & [H1.a,H1.b] in S1;
-      then [a,b] in [: N,N :] by A77,ZFMISC_1:106;
-      hence thesis by A76,A97;
+      assume that
+A92:  a in field W00 & b in field W00 and
+A93:  [H1.a,H1.b] in S1;
+      [a,b] in [: N,N :] by A86,A92,ZFMISC_1:106;
+      hence thesis by A69,A93;
     end;
-    hence thesis by A92;
+    hence thesis by A87;
   end;
-  then H1 is_isomorphism_of W00,S1 by A65,A69,A75,A77,WELLORD1:def 7;
+  then H1 is_isomorphism_of W00,S1 by A41,A47,A76,A86,WELLORD1:def 7;
   then (H1") is_isomorphism_of S1, W00 by WELLORD1:49;
-  hence thesis by A74,A77,WELLORD1:54;
+  hence thesis by A68,A86,WELLORD1:54;
 end;
 

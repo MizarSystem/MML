@@ -8,28 +8,27 @@ environ
 
  vocabularies AMI_3, ORDINAL2, ARYTM, AMI_1, RELAT_1, BOOLE, FUNCT_1, FUNCT_4,
       FINSET_1, TARSKI, CARD_1, ARYTM_1, FRAENKEL, SETFAM_1, CARD_3, PRALG_2,
-      FINSEQ_2, FINSEQ_1, CAT_1, FUNCOP_1, GOBOARD5, WAYBEL_0, AMISTD_1,
+      FINSEQ_1, CAT_1, FUNCOP_1, GOBOARD5, WAYBEL_0, AMISTD_1,
       MCART_1, AMI_5, UNIALG_1, REALSET1, CARD_5, FRECHET, PRE_TOPC, RELOC,
       FUNCT_7, ORDINAL1, SQUARE_1, SCMFSA6A, AMISTD_2, MEMBERED, SCMNORM;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, ZFMISC_1, MCART_1, SETFAM_1,
-      MEMBERED, FINSET_1, RELAT_1, FUNCT_1, RELSET_1, FUNCT_2,
-      REALSET1, FUNCT_4, CARD_1, NUMBERS, XCMPLX_0, XXREAL_0, NAT_1, CARD_3,
-      FINSEQ_1, FINSEQ_2, FUNCOP_1, NAT_D, FUNCT_7, XXREAL_2, STRUCT_0, AMI_1,
-      AMISTD_1;
- constructors WELLORD2, XXREAL_0, NAT_1, REALSET1, NAT_D, PRALG_2,
-      AMISTD_1, INT_1, MEMBERED, XXREAL_2, RELSET_1;
+      MEMBERED, FINSET_1, RELAT_1, FUNCT_1, RELSET_1, FUNCT_2, FUNCT_4, CARD_1,
+      NUMBERS, XCMPLX_0, XXREAL_0, NAT_1, CARD_3, FINSEQ_1, FINSEQ_2, FUNCOP_1,
+      NAT_D, FUNCT_7, XXREAL_2, STRUCT_0, AMI_1, AMISTD_1;
+ constructors WELLORD2, XXREAL_0, NAT_1, REALSET1, NAT_D, PRALG_2, AMISTD_1,
+      INT_1, MEMBERED, XXREAL_2, RELSET_1, PRE_POLY;
  registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, FUNCOP_1, FINSET_1,
-      FRAENKEL, XXREAL_0, XREAL_0, NAT_1, MEMBERED, FINSEQ_1, FINSEQ_2, CARD_3,
-      REALSET1, PRE_CIRC, FUNCT_7, STRUCT_0, AMI_1, AMISTD_1, CARD_1, FUNCT_4,
-      XXREAL_2, PARTFUN1, RELSET_1;
+      XXREAL_0, XREAL_0, NAT_1, MEMBERED, FINSEQ_1, FINSEQ_2, CARD_3, REALSET1,
+      FUNCT_7, STRUCT_0, AMI_1, AMISTD_1, CARD_1, FUNCT_4, XXREAL_2, RELSET_1,
+      FINSEQ_3;
  requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
- definitions TARSKI, RELAT_1, FUNCT_1, WELLORD2, FUNCT_7, AMI_1,
-      YELLOW_8, AMISTD_1, XBOOLE_0, FUNCOP_1, CARD_3;
+ definitions TARSKI, RELAT_1, FUNCT_1, WELLORD2, FUNCT_7, AMI_1, YELLOW_8,
+      AMISTD_1, XBOOLE_0, FUNCOP_1, CARD_3;
  theorems AMI_1, CARD_1, CARD_2, AMISTD_1, FUNCOP_1, FINSEQ_1, FINSEQ_2,
       FINSEQ_3, FUNCT_1, FUNCT_2, FUNCT_4, GRFUNC_1, INT_1, MCART_1, CATALG_1,
       NAT_1, PRE_CIRC, REALSET1, RELAT_1, SETFAM_1, TARSKI, YELLOW_8, ZFMISC_1,
       CARD_3, ORDINAL1, XBOOLE_0, XBOOLE_1, FINSET_1, XREAL_1, XXREAL_0,
-      DOMAIN_1, FUNCT_7, XXREAL_2, XREAL_0, NAT_D, RELSET_1;
+      DOMAIN_1, FUNCT_7, XXREAL_2, XREAL_0, NAT_D;
  schemes FUNCT_7, FINSEQ_1, CLASSES1;
 
 begin
@@ -39,103 +38,9 @@ reserve k, m for natural number,
   N for with_non-empty_elements set,
   IL for non empty set;
 
-registration
-  let D be set;
-  cluster -> functional FinSequenceSet of D;
-  coherence;
-end;
-
-registration
-  let i be Element of NAT, D be set;
-  cluster i-tuples_on D -> with_common_domain;
-  coherence
-  proof
-    set S = i-tuples_on D;
-    let f, g be Function such that
-A1: f in S & g in S;
-    S = { s where s is Element of D*: len s = i } by FINSEQ_2:def 4;
-    then (ex s being Element of D* st f = s & len s = i) &
-    (ex s being Element of D* st g = s & len s = i) by A1;
-    hence thesis by FINSEQ_3:31;
-  end;
-end;
-
-registration
-  let i be Element of NAT, D be set;
-  cluster i-tuples_on D -> product-like;
-  coherence
-  proof
-    set S = i-tuples_on D;
-    per cases;
-    suppose D = {} & i = 0;
-      then S = { <*>D } by FINSEQ_2:112
-        .= {{}};
-      hence thesis by CARD_3:19;
-    end;
-    suppose D = {} & i <> 0;
-      then
-A1:   S = {} by CATALG_1:7;
-      take f = 0 .--> {};
-      rng f = {{}} by FUNCOP_1:14;
-      then {} in rng f by TARSKI:def 1;
-      hence thesis by A1,CARD_3:37;
-    end;
-    suppose D <> {};
-      then reconsider D as non empty set;
-      set S = i-tuples_on D;
-      take product" S;
-      S = product product" S
-      proof
-        thus S c= product product" S by CARD_3:94;
-        let x be set;
-        assume x in product product" S;
-        then consider g being Function such that
-A2:     x = g and
-A3:     dom g = dom product" S and
-A4:     for z being set st z in dom product" S holds g.z in (product" S).z
-        by CARD_3:def 5;
-A5:     S = { s where s is Element of D*: len s = i } by FINSEQ_2:def 4;
-        consider s being Element of S;
-        s in S;
-        then consider t being Element of D* such that
-A6:     s = t and
-A7:     len t = i by A5;
-A8:     dom g = DOM S by A3,CARD_3:92
-          .= dom s by CARD_3:def 12;
-        dom s = Seg len t by A6,FINSEQ_1:def 3;
-        then
-A9:     g is FinSequence by A8,FINSEQ_1:def 2;
-        rng g c= D
-        proof
-          let y be set;
-          assume y in rng g;
-          then consider a being set such that
-A10:      a in dom g and
-A11:      g.a = y by FUNCT_1:def 5;
-          g.a in (product" S).a by A3,A4,A10;
-          then g.a in pi(S,a) by A3,A10,CARD_3:def 13;
-          then consider f being Function such that
-A12:      f in S and
-A13:      g.a = f.a by CARD_3:def 6;
-          consider w being Element of D* such that
-A14:      f = w and len w = i by A5,A12;
-          dom g = dom w by A8,A12,A14,CARD_3:def 10;
-          then w.a in rng w by A10,FUNCT_1:def 5;
-          hence thesis by A11,A13,A14;
-        end;
-        then reconsider g as FinSequence of D by A9,FINSEQ_1:def 4;
-A16:    g in D* by FINSEQ_1:def 11;
-        len g = i by A6,A7,A8,FINSEQ_3:31;
-        hence thesis by A2,A5,A16;
-      end;
-      hence thesis;
-    end;
-  end;
-end;
-
 Lm1: -1 < k
 proof
-  -1 < 0 & 0 <= k;
+  -1 < 0;
   hence thesis;
 end;
 
@@ -147,7 +52,7 @@ proof
 A1: 1 <= a and
 A2: 2 <= b and
 A3: a - 1 <= k and
-A4: (a > k or k > a + b - 3) and
+A4: a > k or k > a + b - 3 and
 A5: k <> a + b - 2 and
 A6: k <= a + b - 2;
 A7: a - 1 is Element of NAT by A1,INT_1:18;
@@ -176,7 +81,7 @@ theorem
   for IL,N being set, S being AMI-Struct over IL,N,
   F being FinPartState of S holds F \ X is FinPartState of S by CARD_3:80;
 
-theorem Th12:
+theorem
   for S being IC-Ins-separated definite
   (non empty stored-program AMI-Struct over IL,N),
   F being IL-defined FinPartState of S
@@ -194,13 +99,10 @@ proof
   end;
   suppose G is non empty;
     then reconsider G as non empty FinPartState of S;
-    G is IL-defined
-    proof
-A1:   dom G c= dom F by GRFUNC_1:8;
-      dom F c= IL by RELAT_1:def 18;
-      hence dom G c= IL by A1,XBOOLE_1:1;
-    end;
-    hence thesis;
+A1: dom G c= dom F by GRFUNC_1:8;
+    dom F c= IL by RELAT_1:def 18;
+    then dom G c= IL by A1,XBOOLE_1:1;
+    hence thesis by RELAT_1:def 18;
   end;
 end;
 
@@ -214,9 +116,9 @@ definition
   redefine func (i1,i2) --> (I1,I2) -> FinPartState of S;
   coherence
   proof
-    ObjectKind i1 = the Instructions of S &
+A1: ObjectKind i1 = the Instructions of S by AMI_1:def 14;
     ObjectKind i2 = the Instructions of S by AMI_1:def 14;
-    hence thesis by AMI_1:58;
+    hence thesis by A1,AMI_1:58;
   end;
 end;
 
@@ -293,7 +195,6 @@ definition
   let S be AMI-Struct over IL,N;
   let I be Element of the Instructions of S;
   func AddressPart I equals
-
   I`2;
   coherence;
 end;
@@ -302,29 +203,15 @@ definition
   let IL,N be set;
   let S be standard-ins AMI-Struct over IL,N;
   let I be Element of the Instructions of S;
-  redefine func AddressPart I -> FinSequence of (union N) \/ the carrier of S;
+  redefine func AddressPart I -> FinSequence;
   coherence
   proof
-A1: the Instructions of S c= [: NAT, ((union N) \/ the carrier of S)* :]
-    by AMI_1:def 32;
+   consider X being non empty set such that
+A1:  the Instructions of S c= [: NAT,X*:] by AMI_1:def 32;
     I in the Instructions of S;
-    then AddressPart I in ((union N) \/ the carrier of S)* by A1,MCART_1:10;
+    then AddressPart I in X* by A1,MCART_1:10;
     hence thesis by FINSEQ_1:def 11;
   end;
-end;
-
-theorem Th16:
-  for N being set, S being standard-ins AMI-Struct over IL,N,
-  I, J being Element of the Instructions of S holds
-  InsCode I = InsCode J & AddressPart I = AddressPart J implies I = J
-proof
-  let N be set, S be standard-ins AMI-Struct over IL,N,
-  I, J be Element of the Instructions of S;
-A1: the Instructions of S c= [: NAT, ((union N) \/ the carrier of S)* :]
-  by AMI_1:def 32;
-A2: I in the Instructions of S;
-  J in the Instructions of S;
-  hence thesis by A1,A2,DOMAIN_1:12;
 end;
 
 definition
@@ -335,6 +222,8 @@ definition
   for I, J being Instruction of S st InsCode I = InsCode J holds
   dom AddressPart I = dom AddressPart J;
 end;
+
+canceled;
 
 theorem Th17:
   for I being Instruction of STC N holds AddressPart I = 0
@@ -432,12 +321,16 @@ A1: for f being Instruction-Location of S holds NIC(I,f)={NextLoc f};
   not contradiction };
   assume not thesis;
   then consider x being set such that
-A3: x in meet X by XBOOLE_0:def 1;
-  NIC(I,p) = {NextLoc p} & NIC(I,q) = {NextLoc q} by A1;
-  then {NextLoc p} in X & {NextLoc q} in X;
-  then x in {NextLoc p} & x in {NextLoc q} by A3,SETFAM_1:def 1;
-  then x = NextLoc p & x = NextLoc q by TARSKI:def 1;
-  hence contradiction by AMISTD_1:36;
+A2: x in meet X by XBOOLE_0:def 1;
+A3: NIC(I,p) = {NextLoc p} by A1;
+A4: NIC(I,q) = {NextLoc q} by A1;
+A5: {NextLoc p} in X by A3;
+A6: {NextLoc q} in X by A4;
+A7: x in {NextLoc p} by A2,A5,SETFAM_1:def 1;
+A8: x in {NextLoc q} by A2,A6,SETFAM_1:def 1;
+A9: x = NextLoc p by A7,TARSKI:def 1;
+  x = NextLoc q by A8,TARSKI:def 1;
+  hence contradiction by A9,AMISTD_1:36;
 end;
 
 registration
@@ -480,10 +373,10 @@ A2: InsCode I = InsCode J;
     AddressParts InsCode I is product-like by A1;
     then consider f being Function such that
 A3: AddressParts InsCode I = product f by CARD_3:def 14;
-A4: AddressPart I in AddressParts InsCode I &
-    AddressPart J in AddressParts InsCode I by A2;
-    hence dom AddressPart I = dom f by A3,CARD_3:18
-      .= dom AddressPart J by A3,A4,CARD_3:18;
+A4: AddressPart I in AddressParts InsCode I;
+A5: AddressPart J in AddressParts InsCode I by A2;
+    thus dom AddressPart I = dom f by A3,A4,CARD_3:18
+      .= dom AddressPart J by A3,A5,CARD_3:18;
   end;
 end;
 
@@ -646,10 +539,12 @@ registration
   coherence
   proof
     let f, g be Function;
-    assume f in AddressParts T & g in AddressParts T;
-    then (ex I being Instruction of S st f = AddressPart I & InsCode I = T) &
-    ex J being Instruction of S st g = AddressPart J & InsCode J = T;
-    hence thesis by Def4;
+    assume that
+A1: f in AddressParts T and
+A2: g in AddressParts T;
+A3: ex I being Instruction of S st f = AddressPart I & InsCode I = T by A1;
+    ex J being Instruction of S st g = AddressPart J & InsCode J = T by A2;
+    hence thesis by A3,Def4;
   end;
 end;
 
@@ -910,9 +805,10 @@ proof
 A1: I is sequential;
   assume not thesis;
   then consider k being set such that
-A2: k in dom AddressPart I & (product" AddressParts InsCode I).k = NAT
+A2: k in dom AddressPart I and
+A3: (product" AddressParts InsCode I).k = NAT
   by Def12;
-  (AddressPart I).k in JUMP I by A2,Def7;
+  (AddressPart I).k in JUMP I by A2,A3,Def7;
   hence thesis by A1,AMISTD_1:43;
 end;
 
@@ -929,7 +825,6 @@ definition
   (IC-Ins-separated definite
   (non empty stored-program AMI-Struct over NAT,N));
   func Stop S -> FinPartState of S equals
-
   il.(S,0) .--> halt S;
   coherence;
 end;
@@ -1071,7 +966,9 @@ definition
   (AddressPart it).n = (AddressPart I).n);
   existence
   proof
-    set D = (union N) \/ the carrier of S;
+    consider D0 being non empty set such that
+W:   the Instructions of S c= [:NAT,D0*:] by AMI_1:def 32;
+    set D = D0 \/ NAT;
     defpred P[set,set] means ((product" AddressParts InsCode I).$1 = NAT
     implies ex il being Instruction-Location of S st
     il = (AddressPart I).$1 & $2 = il.(S,k + locnum il)) &
@@ -1084,20 +981,30 @@ A1: for m being Nat st m in Seg len AddressPart I
       assume m in Seg len AddressPart I;
       then
 A2:   m in dom AddressPart I by FINSEQ_1:def 3;
+      D0 c= D by XBOOLE_1:7;
+      then D0* c= D* by FINSEQ_1:83;
       then
-A3:   (AddressPart I).m in rng AddressPart I by FUNCT_1:def 5;
+C:    [:NAT,D0*:] c= [:NAT,D*:] by ZFMISC_1:118;
+      I in the Instructions of S;
+      then I in [:NAT,D0*:] by W;
+      then
+B1:   I in [:NAT,D*:] by C;
       per cases;
       suppose
 A4:     (product" AddressParts InsCode I).m = NAT;
         then reconsider il = (AddressPart I).m as Instruction-Location of S
         by A2,Th20;
-        reconsider x = il.(S,k + locnum il) as Element of D by XBOOLE_0:def 3;
+        il.(S,k + locnum il) in NAT by AMI_1:def 4;
+        then reconsider x = il.(S,k + locnum il) as Element of D
+                by XBOOLE_0:def 3;
         take x;
         thus thesis by A4;
       end;
       suppose
 A5:     (product" AddressParts InsCode I).m <> NAT;
-         reconsider x = (AddressPart I).m as Element of D by A3;
+        AddressPart I in D* by B1,MCART_1:10;
+        then (AddressPart I).m in D by A2,FINSEQ_1:105;
+        then reconsider x = (AddressPart I).m as Element of D;
         take x;
         thus thesis by A5;
       end;
@@ -1171,20 +1078,20 @@ A23: Seg len AddressPart a = dom AddressPart a by FINSEQ_1:def 3;
     (AddressPart a).n = (AddressPart b).n
     proof
       let n be Nat;
-      assume n in Seg len AddressPart a;
-      then ((product" AddressParts InsCode I).n = NAT implies
-      ex f being Instruction-Location of S st
-      f = (AddressPart I).n & (AddressPart a).n = il.(S,k + locnum f)) &
-      ((product" AddressParts InsCode I).n <> NAT implies
-      (AddressPart a).n = (AddressPart I).n) &
-      ((product" AddressParts InsCode I).n = NAT implies
-      ex f being Instruction-Location of S st
-      f = (AddressPart I).n & (AddressPart b).n = il.(S,k + locnum f)) &
-      ((product" AddressParts InsCode I).n <> NAT implies
-      (AddressPart b).n = (AddressPart I).n) by A18,A19,A22,A23;
-      hence thesis;
+      assume
+A24:  n in Seg len AddressPart a;
+      then
+A25:  (product" AddressParts InsCode I).n = NAT implies ex f being
+Instruction-Location of S st f = (AddressPart I).n & (AddressPart a).n = il.(S,
+      k + locnum f) by A18,A19,A23;
+A26:  (product" AddressParts InsCode I).n <> NAT implies (AddressPart a).n =
+      (AddressPart I).n by A18,A19,A23,A24;
+      (product" AddressParts InsCode I).n = NAT implies ex f being
+Instruction-Location of S st f = (AddressPart I).n & (AddressPart b).n = il.(S,
+      k + locnum f) by A18,A22,A23,A24;
+      hence thesis by A18,A22,A23,A24,A25,A26;
     end;
-    hence thesis by A17,A20,Th16,A18,A21,A23,FINSEQ_1:17;
+    hence thesis by A17,A18,A20,A21,A23,MCART_1:95,FINSEQ_1:17;
   end;
 end;
 
@@ -1214,7 +1121,7 @@ A3: k in dom AddressPart I;
       hence thesis by A3,Def14;
     end;
   end;
-  hence thesis by A1,Th16,A2,FINSEQ_1:17;
+  hence thesis by A1,A2,MCART_1:95,FINSEQ_1:17;
 end;
 
 theorem Th29:
@@ -1239,7 +1146,7 @@ A4: x in dom AddressPart I;
     (product" AddressParts InsCode I).x <> NAT;
     hence thesis by A1,A4,Def14;
   end;
-  hence thesis by A2,Th16,A3,FUNCT_1:9;
+  hence thesis by A2,A3,MCART_1:95,FUNCT_1:9;
 end;
 
 theorem
@@ -1370,7 +1277,7 @@ A11:  (product" AddressParts InsCode J).x <> NAT by A1,Th33;
         .= (AddressPart J).x by A1,A3,A4,A11,Def14;
     end;
   end;
-  hence thesis by A2,Th16,A3,FUNCT_1:9;
+  hence thesis by A2,A3,MCART_1:95,FUNCT_1:9;
 end;
 
 theorem Th35:
@@ -1410,38 +1317,40 @@ A2: dom AddressPart IncAddr(I,k+m) = dom AddressPart I by Def14
   for n being set st n in dom AddressPart IncAddr(IncAddr(I,k),m) holds
   (AddressPart IncAddr(IncAddr(I,k),m)).n = (AddressPart IncAddr(I,k+m)).n
   proof
-    let n be set such that
-A3: n in dom AddressPart IncAddr(IncAddr(I,k),m);
-A4: n in dom AddressPart IncAddr(I,k) by A3,Def14;
+    let n be set;
+    assume
+    n in dom AddressPart IncAddr(IncAddr(I,k),m);
     then
-A5: n in dom AddressPart I by Def14;
+A3: n in dom AddressPart IncAddr(I,k) by Def14;
+    then
+A4: n in dom AddressPart I by Def14;
     per cases;
     suppose
-A6:   (product" AddressParts InsCode I).n = NAT;
+A5:   (product" AddressParts InsCode I).n = NAT;
       then consider f being Instruction-Location of S such that
-A7:   f = (AddressPart I).n and
-A8:   (AddressPart IncAddr(I,k)).n = il.(S,k + locnum f) by A5,Def14;
-      (product" AddressParts InsCode IncAddr(I,k)).n = NAT by A6,Th31;
+A6:   f = (AddressPart I).n and
+A7:   (AddressPart IncAddr(I,k)).n = il.(S,k + locnum f) by A4,Def14;
+      (product" AddressParts InsCode IncAddr(I,k)).n = NAT by A5,Th31;
       then consider g being Instruction-Location of S such that
-A9:   g = (AddressPart IncAddr(I,k)).n and
-A10:  (AddressPart IncAddr(IncAddr(I,k),m)).n = il.(S,m + locnum g)
-      by A4,Def14;
-      consider h being Instruction-Location of S such that
-A11:  h = (AddressPart I).n and
-A12:  (AddressPart IncAddr(I,k+m)).n = il.(S,k + m + locnum h) by A5,A6,Def14;
-      locnum g = k + locnum f by A8,A9,AMISTD_1:def 13;
-      hence thesis by A7,A10,A11,A12;
+A8:   g = (AddressPart IncAddr(I,k)).n and
+A9:   (AddressPart IncAddr(IncAddr(I,k),m)).n = il.(S,m + locnum g)
+      by A3,Def14;
+A10:  ex h being Instruction-Location of S st ( h = (AddressPart
+I).n)&( (AddressPart IncAddr(I,k+m)).n = il.(S,k + m + locnum h)) by A4,A5,
+      Def14;
+      locnum g = k + locnum f by A7,A8,AMISTD_1:def 13;
+      hence thesis by A6,A9,A10;
     end;
     suppose
-A13:  (product" AddressParts InsCode I).n <> NAT;
+A11:  (product" AddressParts InsCode I).n <> NAT;
       then (product" AddressParts InsCode IncAddr(I,k)).n <> NAT by Def14;
       hence (AddressPart IncAddr(IncAddr(I,k),m)).n
-      = (AddressPart IncAddr(I,k)).n by A4,Def14
-        .= (AddressPart I).n by A5,A13,Def14
-        .= (AddressPart IncAddr(I,k+m)).n by A5,A13,Def14;
+      = (AddressPart IncAddr(I,k)).n by A3,Def14
+        .= (AddressPart I).n by A4,A11,Def14
+        .= (AddressPart IncAddr(I,k+m)).n by A4,A11,Def14;
     end;
   end;
-  hence thesis by A1,Th16,A2,FUNCT_1:9;
+  hence thesis by A1,A2,MCART_1:95,FUNCT_1:9;
 end;
 
 definition
@@ -1657,7 +1566,8 @@ A1: for e being set st e in A ex u being set st P[e,u]
       let e be set;
       assume e in A;
       then consider m being Element of NAT such that
-A2:   e = il.(S,m+k) & il.(S,m) in dom p;
+A2:   e = il.(S,m+k)
+      and il.(S,m) in dom p;
       take p.il.(S,m);
       thus thesis by A2;
     end;
@@ -1703,7 +1613,8 @@ A17: for m1, m2 being Element of NAT st G(m1) = G(m2)
     A is finite from FUNCT_7:sch 2(A16,A17);
     then reconsider f as FinPartState of S by A3,FINSET_1:29;
     take f;
-    thus dom f = { il.(S,m+k) where m is Element of NAT: il.(S,m) in dom p }
+    thus
+    dom f = { il.(S,m+k) where m is Element of NAT: il.(S,m) in dom p }
     by A3;
     let m be Element of NAT;
     assume il.(S,m) in dom p;
@@ -1728,7 +1639,8 @@ A23: for m being Element of NAT st il.(S,m) in dom p
     holds IT1.x = IT2.x
     proof
       let x be set;
-      assume x in { il.(S,m+k) where m is Element of NAT: il.(S,m) in dom p };
+      assume
+      x in { il.(S,m+k) where m is Element of NAT: il.(S,m) in dom p };
       then consider m being Element of NAT such that
 A24:  x = il.(S,m+k) and
 A25:  il.(S,m) in dom p;
@@ -1771,7 +1683,8 @@ A1: dom Shift(F,k) =
     dom f is non empty;
     then consider a being set such that
 A2: a in dom Shift(F,k) by XBOOLE_0:def 1;
-    ex m being Element of NAT st a = il.(S,m+k) & il.(S,m) in dom F by A1,A2;
+    ex m being Element of NAT st a = il.(S,m+k) & il.(S,m) in dom F by A1
+    ,A2;
     hence thesis;
   end;
 end;
@@ -1822,7 +1735,8 @@ A4:   l = il.(S,k) by AMISTD_1:26;
       { il.(S,m+0) where m is Element of NAT: il.(S,m) in dom F } by A3;
     end;
     let a be set;
-    assume a in { il.(S,m+0) where m is Element of NAT: il.(S,m) in dom F };
+    assume
+    a in { il.(S,m+0) where m is Element of NAT: il.(S,m) in dom F };
     then ex m being Element of NAT st a = il.(S,m+0) & il.(S,m) in dom F;
     hence thesis;
   end;
@@ -1844,10 +1758,9 @@ A1: k > 0 and
 A2: il.(S,0) in dom Shift(F,k);
   dom Shift(F,k) = { il.(S,m+k) where m is Element of NAT: il.(S,m) in dom F }
   by Def16;
-  then consider m being Element of NAT such that
-A3: il.(S,0) = il.(S,m+k) and il.(S,m) in dom F by A2;
-  m+k=0 by A3,AMISTD_1:25;
-  hence contradiction by A1;
+  then ex m being Element of NAT st ( il.(S,0) = il.(S,m+k))&( il.
+  (S,m) in dom F) by A2;
+  hence contradiction by A1,AMISTD_1:25;
 end;
 
 theorem
@@ -1877,7 +1790,8 @@ A5:   il.(S,l) in dom F by A3;
       {il.(S,q+(m+k)) where q is Element of NAT: il.(S,q) in dom F} by A5;
     end;
     let x be set;
-    assume x in {il.(S,q+(m+k)) where q is Element of NAT: il.(S,q) in dom F};
+    assume
+    x in {il.(S,q+(m+k)) where q is Element of NAT: il.(S,q) in dom F};
     then consider q being Element of NAT such that
 A6: x = il.(S,q+(m+k)) and
 A7: il.(S,q) in dom F;
@@ -1887,14 +1801,16 @@ A8: x = il.(S,q+m+k) by A6;
   end;
   then
 A9: dom Shift(Shift(F,m),k)
-  = {il.(S,l+(m+k)) where l is Element of NAT: il.(S,l) in dom F} by A1,Def16;
+  = {il.(S,l+(m+k)) where l is Element of NAT: il.(S,l) in dom F} by A1,
+  Def16;
   now
     let l be Element of NAT;
     assume
 A10: il.(S,l) in dom F;
     then
 A11: il.(S,l+m) in dom Shift(F,m) by A1;
-    thus Shift(Shift(F,m),k).il.(S,l+(m+k)) = Shift(Shift(F,m),k).il.(S,l+m+k)
+    thus
+    Shift(Shift(F,m),k).il.(S,l+(m+k)) = Shift(Shift(F,m),k).il.(S,l+m+k)
       .= Shift(F,m).il.(S,l+m) by A11,Def16
       .= F.il.(S,l) by A10,Def16;
   end;
@@ -1949,22 +1865,24 @@ A12: dom Shift(F,k) =
 A13: x in dom f and
 A14: f.x = y by FUNCT_1:def 5;
     consider il being Instruction-Location of S such that
-A15: x = il & f.x = il.(S,k+locnum il) by A3,A4,A13;
+A15: x = il and
+A16: f.x = il.(S,k+locnum il) by A3,A4,A13;
     consider a being natural number such that
-A16: il = il.(S,a) by AMISTD_1:26;
+A17: il = il.(S,a) by AMISTD_1:26;
     reconsider a as Element of NAT by ORDINAL1:def 13;
-    a = locnum il by A16,AMISTD_1:def 13;
-    hence y in dom Shift(F,k) by A3,A12,A13,A14,A15,A16;
+    a = locnum il by A17,AMISTD_1:def 13;
+    hence y in dom Shift(F,k) by A3,A12,A13,A14,A15,A16,A17;
   end;
   let y be set;
   assume y in dom Shift(F,k);
   then consider m being Element of NAT such that
-A17: y = il.(S,m+k) and
-A18: il.(S,m) in dom F by A12;
+A18: y = il.(S,m+k) and
+A19: il.(S,m) in dom F by A12;
   consider il being Instruction-Location of S such that
-A19: il.(S,m) = il & f.il.(S,m) = il.(S,k+locnum il) by A4,A18;
-  m = locnum il by A19,AMISTD_1:def 13;
-  hence thesis by A3,A17,A18,A19,FUNCT_1:def 5;
+A20: il.(S,m) = il and
+A21: f.il.(S,m) = il.(S,k+locnum il) by A4,A19;
+  m = locnum il by A20,AMISTD_1:def 13;
+  hence thesis by A3,A18,A19,A21,FUNCT_1:def 5;
 end;
 
 definition
@@ -2083,8 +2001,8 @@ proof
 A1: for s being State of S holds Exec(I,s) = s;
   let s1, s2 be State of S such that
 A2: s1, s2 equal_outside IL;
-  Exec(I,s1) = s1 & Exec(I,s2) = s2 by A1;
-  hence thesis by A2;
+  Exec(I,s1) = s1 by A1;
+  hence thesis by A1,A2;
 end;
 
 registration
@@ -2126,67 +2044,66 @@ A4:     InsCode IncAddr(I,k) = 1 by Def14;
       suppose InsCode I = 0;
         then
 A5:     I is halting by AMISTD_1:20;
-        then
-A6:     IncAddr(I,k) is halting;
-        thus IC Exec(I,s1) + k = IC s1 + k by A5,AMI_1:def 8
-          .= IC Exec(IncAddr(I,k), s2) by A2,A6,AMI_1:def 8;
+        hence IC Exec(I,s1) + k = IC s1 + k by AMI_1:def 8
+          .= IC Exec(IncAddr(I,k), s2) by A2,A5,AMI_1:def 8;
       end;
     end;
     let I be Instruction of STC N;
     per cases by AMISTD_1:22;
     suppose
-A7:   InsCode I = 1;
+A6:   InsCode I = 1;
       the Instructions of STC N = {[0,0],[1,0]} by AMISTD_1:def 11;
       then
-A8:   I = [0,0] or I = [1,0] by TARSKI:def 2;
+A7:   I = [0,0] or I = [1,0] by TARSKI:def 2;
       let s1, s2 be State of STC N such that
-A9:   s1, s2 equal_outside NAT;
+A8:   s1, s2 equal_outside NAT;
       consider f being Function of product the Object-Kind of STC N,
       product the Object-Kind of STC N such that
-A10:  for s being Element of product the Object-Kind of STC N
+A9:   for s being Element of product the Object-Kind of STC N
       holds f.s = s+*(NAT .-->succ(s.NAT)) and
-A11:  the Execution of STC N
+A10:  the Execution of STC N
       = ([1,0] .--> f) +* ([0,0] .--> id product the Object-Kind of STC N)
       by AMISTD_1:def 11;
       [0,0] <> [1,0] by ZFMISC_1:33;
-      then not I in {[0,0]} by A7,A8,MCART_1:7,TARSKI:def 1;
+      then not I in {[0,0]} by A6,A7,MCART_1:7,TARSKI:def 1;
       then not I in dom ([0,0] .--> id product the Object-Kind of STC N)
       by FUNCOP_1:19;
       then
-A12:  (the Execution of STC N).I = ([1,0] .--> f).I by A11,FUNCT_4:12;
-A13:  I in {[1,0]} by A7,A8,MCART_1:7,TARSKI:def 1;
+A11:  (the Execution of STC N).I = ([1,0] .--> f).I by A10,
+      FUNCT_4:12;
+A12:  I in {[1,0]} by A6,A7,MCART_1:7,TARSKI:def 1;
       then
-A14:  Exec(I,s1) = f.s1 by A12,FUNCOP_1:13
-        .= s1+*(NAT .-->succ(s1.NAT)) by A10;
-A15:  Exec(I,s2) = f.s2 by A12,A13,FUNCOP_1:13
-        .= s2+*(NAT .-->succ(s2.NAT)) by A10;
+A13:  Exec(I,s1) = f.s1 by A11,FUNCOP_1:13
+        .= s1+*(NAT .-->succ(s1.NAT)) by A9;
+A14:  Exec(I,s2) = f.s2 by A11,A12,FUNCOP_1:13
+        .= s2+*(NAT .-->succ(s2.NAT)) by A9;
       dom Exec(I,s1) = dom the Object-Kind of STC N by CARD_3:18;
       then
-A16:  dom Exec(I,s1) = dom Exec(I,s2) by CARD_3:18;
+A15:  dom Exec(I,s1) = dom Exec(I,s2) by CARD_3:18;
       for x being set st x in dom Exec(I,s1) \ NAT
       holds Exec(I,s1).x = Exec(I,s2).x
       proof
         let x be set;
         assume
-A17:    x in dom Exec(I,s1) \ NAT;
+A16:    x in dom Exec(I,s1) \ NAT;
         then
-A18:    not x in NAT by XBOOLE_0:def 5;
-A19:    s1.NAT = IC s1 by AMISTD_1:def 11
-          .= IC s2 by A9,AMI_1:121
+A17:    not x in NAT by XBOOLE_0:def 5;
+A18:    s1.NAT = IC s1 by AMISTD_1:def 11
+          .= IC s2 by A8,AMI_1:121
           .= s2.NAT by AMISTD_1:def 11;
-        x in dom Exec(I,s1) by A17;
+        x in dom Exec(I,s1) by A16;
         then x in the carrier of STC N by AMI_1:79;
         then x in NAT \/ {NAT} by AMISTD_1:def 11;
         then
-A20:    x in {NAT} by A18,XBOOLE_0:def 3;
+A19:    x in {NAT} by A17,XBOOLE_0:def 3;
         then
-A21:    x in dom (NAT .-->succ(s2.NAT)) by FUNCOP_1:19;
-        x in dom (NAT .-->succ(s1.NAT)) by A20,FUNCOP_1:19;
-        hence Exec(I,s1).x = (NAT .-->succ(s1.NAT)).x by A14,FUNCT_4:14
-          .= Exec(I,s2).x by A15,A19,A21,FUNCT_4:14;
+A20:    x in dom (NAT .-->succ(s2.NAT)) by FUNCOP_1:19;
+        x in dom (NAT .-->succ(s1.NAT)) by A19,FUNCOP_1:19;
+        hence Exec(I,s1).x = (NAT .-->succ(s1.NAT)).x by A13,FUNCT_4:14
+          .= Exec(I,s2).x by A14,A18,A20,FUNCT_4:14;
       end;
       hence Exec(I,s1)|(dom Exec(I,s1) \ NAT) =
-      Exec(I,s2)|(dom Exec(I,s2) \ NAT) by A16,FUNCT_1:165;
+      Exec(I,s2)|(dom Exec(I,s2) \ NAT) by A15,FUNCT_1:165;
     end;
     suppose InsCode I = 0;
       hence thesis by Th46,AMISTD_1:20;
@@ -2290,7 +2207,7 @@ A3: dom R = {LastLoc F} by FUNCOP_1:19;
     assume x in dom CutLastLoc F;
     then consider y being set such that
 A4: [x,y] in F \ R by A2,RELAT_1:def 4;
-A5: [x,y] in F & not [x,y] in R by A4,XBOOLE_0:def 5;
+A5: not [x,y] in R by A4,XBOOLE_0:def 5;
 A6: x in dom F by A4,RELAT_1:def 4;
     per cases by A5,TARSKI:def 1;
     suppose x <> LastLoc F;
@@ -2353,7 +2270,7 @@ registration
   (non empty stored-program AMI-Struct over NAT,N));
   let F be non empty NAT-defined FinPartState of S;
   cluster CutLastLoc F -> NAT-defined;
-  coherence by Th12;
+  coherence;
 end;
 
 registration
@@ -2380,7 +2297,8 @@ A1:     l in dom G;
         let m be Instruction-Location of S such that
 A2:     m <= l;
         consider M being finite non empty natural-membered set such that
-A3:     M = { locnum w where w is Instruction-Location of S : w in dom F } and
+        A3:     M
+ = { locnum w where w is Instruction-Location of S : w in dom F } and
 A4:     LastLoc F = il.(S, max M) by AMISTD_1:def 21;
         reconsider R = {[LastLoc F, F.LastLoc F]} as Relation;
         R = LastLoc F .--> (F.LastLoc F) by FUNCT_4:87;
@@ -2599,7 +2517,6 @@ A10:      f in dom F by AMISTD_1:def 13;
 A11:      locnum f = k + l1 by NAT_1:10;
           reconsider l1 as Element of NAT by ORDINAL1:def 13;
 A12:      dom Shift(IncAddr(G,k),k) =
-
 { il.(S,w+k) where w is Element of NAT: il.(S,w) in dom IncAddr(G,k) }
           by Def16;
 A13:      f = il.(S,l1+k) by A11,AMISTD_1:def 13;
@@ -2644,9 +2561,9 @@ A5: x = LastLoc F by TARSKI:def 1;
 A6: locnum f = locnum il.(S,card F -' 1) by A5,AMISTD_1:55
       .= card F -' 1 by AMISTD_1:def 13
       .= card F - 1 + 0 by PRE_CIRC:25;
-A7: card P = card F + card G - 1 by Th52
+    card P = card F + card G - 1 by Th52
       .= card F - 1 + card G;
-    locnum f < card P by A6,A7,XREAL_1:8;
+    then locnum f < card P by A6,XREAL_1:8;
     then il.(S,locnum f) in dom P by AMISTD_1:50;
     hence thesis by AMISTD_1:def 13;
   end;
@@ -2723,7 +2640,8 @@ A18:  m = card P -' 1 by AMISTD_1:25
     end;
     then not x in {LastLoc P} by TARSKI:def 1;
     then not x in dom ( LastLoc P .--> P.LastLoc P ) by FUNCOP_1:19;
-    then x in dom P \ dom ( LastLoc P .--> P.LastLoc P ) by A17,XBOOLE_0:def 5;
+    then x in dom P \ dom ( LastLoc P .--> P.LastLoc P ) by A17,
+    XBOOLE_0:def 5;
     hence (CutLastLoc P).x = (CutLastLoc F +* Shift(IncAddr(G,k),k)).x
     by GRFUNC_1:93
       .= (CutLastLoc F).x by A14,FUNCT_4:12;
@@ -2747,7 +2665,8 @@ A2: il.(S,0) in dom IncAddr(G,k) by AMISTD_1:49;
   {il.(S,m+k) where m is Element of NAT: il.(S,m) in dom IncAddr(G,k)}
   by Def16;
   then LastLoc F in dom Shift(IncAddr(G,k),k) by A1,A2;
-  hence (F ';' G).LastLoc F = (Shift(IncAddr(G,k),k)).LastLoc F by FUNCT_4:14
+  hence (F ';' G).LastLoc F = (Shift(IncAddr(G,k),k)).LastLoc F by
+  FUNCT_4:14
     .= IncAddr(G,k).il.(S,0) by A1,A2,Def16;
 end;
 
@@ -2769,14 +2688,16 @@ proof
 A1: il.(S,locnum f) in dom CutLastLoc F by AMISTD_1:50;
 A2: f = il.(S,locnum f) by AMISTD_1:def 13;
 A3: dom CutLastLoc F c= dom F by GRFUNC_1:8;
-  CutLastLoc F c= CutLastLoc P & CutLastLoc P c= P by Th54;
+  CutLastLoc F c= CutLastLoc P by Th54;
   then CutLastLoc F c= P by XBOOLE_1:1;
   then
 A4: dom CutLastLoc F c= dom P by GRFUNC_1:8;
 A5: F.il.(S,locnum f) = pi(F,il.(S,locnum f)) by A1,A3,AMI_1:def 47;
   dom CutLastLoc F misses dom Shift(IncAddr(G,k),k) by Th50;
-  then dom CutLastLoc F /\ dom Shift(IncAddr(G,k),k) = {} by XBOOLE_0:def 7;
-  then not il.(S,locnum f) in dom Shift(IncAddr(G,k),k) by A1,XBOOLE_0:def 4;
+  then dom CutLastLoc F /\ dom Shift(IncAddr(G,k),k) = {} by
+  XBOOLE_0:def 7;
+  then not il.(S,locnum f) in dom Shift(IncAddr(G,k),k) by A1,
+  XBOOLE_0:def 4;
   then
 A6: P.il.(S,locnum f) = (CutLastLoc F).il.(S,locnum f) by FUNCT_4:12
     .= F.il.(S,locnum f) by A1,GRFUNC_1:8;
@@ -2807,16 +2728,16 @@ A4: il.(S, card G -' 1) in dom IncAddr(G,k) by Def15;
 A5: il.(S, k + (card G -' 1)) in dom Shift(IncAddr(G,k),k) by A1;
 A6: pi(G,il.(S,card G -' 1)) = G.il.(S,card G -' 1) by A3,AMI_1:def 47
       .= halt S by A2,AMISTD_1:def 22;
-A8: card G - 1 >= 0 by NAT_1:14,XREAL_1:50;
+A7: card G - 1 >= 0 by NAT_1:14,XREAL_1:50;
     then k + (card G - 1) >= k+0 by XREAL_1:8;
     then
-A9: k + card G -' 1 = k + card G - 1 by XREAL_0:def 2
+A8: k + card G -' 1 = k + card G - 1 by XREAL_0:def 2
       .= k + (card G - 1)
-      .= k + (card G -' 1) by A8,XREAL_0:def 2;
+      .= k + (card G -' 1) by A7,XREAL_0:def 2;
     thus P.(LastLoc P) = P.il.(S,card P -' 1) by AMISTD_1:55
       .= P.il.(S, card F + card G -' 1 -' 1) by Th52
       .= P.il.(S, k + card G -' 1) by NAT_1:14,NAT_D:38
-      .= Shift(IncAddr(G,k),k).il.(S, k + (card G -' 1)) by A5,A9,FUNCT_4:14
+      .= Shift(IncAddr(G,k),k).il.(S, k + (card G -' 1)) by A5,A8,FUNCT_4:14
       .= IncAddr(G,k).il.(S,card G -' 1) by A4,Def16
       .= IncAddr(pi(G,il.(S,card G -' 1)),k) by A3,Def15
       .= halt S by A6,Th29;
@@ -2837,42 +2758,42 @@ registration
 A1: dom P = dom CutLastLoc F \/ dom Shift(IncAddr(G,k),k) by FUNCT_4:def 1;
 A2: dom Shift(IncAddr(G,k),k) = { il.(S,m+k) where m is Element of NAT:
     il.(S,m) in dom IncAddr(G,k) } by Def16;
-A4: card G - 1 >= 0 by NAT_1:14,XREAL_1:50;
+A3: card G - 1 >= 0 by NAT_1:14,XREAL_1:50;
     then k + (card G - 1) >= k+0 by XREAL_1:8;
     then
-A5: k + card G -' 1 = k + card G - 1 by XREAL_0:def 2
+A4: k + card G -' 1 = k + card G - 1 by XREAL_0:def 2
       .= k + (card G - 1)
-      .= k + (card G -' 1) by A4,XREAL_0:def 2;
+      .= k + (card G -' 1) by A3,XREAL_0:def 2;
     let f be Instruction-Location of S such that
-A6: P.f = halt S and
-A7: f in dom P;
-    per cases by A1,A7,XBOOLE_0:def 3;
+A5: P.f = halt S and
+A6: f in dom P;
+    per cases by A1,A6,XBOOLE_0:def 3;
     suppose
-A8:   f in dom CutLastLoc F;
+A7:   f in dom CutLastLoc F;
       then
-A9:   (CutLastLoc F).f <> halt S by Th51;
+A8:   (CutLastLoc F).f <> halt S by Th51;
       dom CutLastLoc F misses dom Shift(IncAddr(G,k),k) by Th50;
       then CutLastLoc F c= P by FUNCT_4:33;
-      hence thesis by A6,A8,A9,GRFUNC_1:8;
+      hence thesis by A5,A7,A8,GRFUNC_1:8;
     end;
     suppose
-A10:  f in dom Shift(IncAddr(G,k),k);
+A9:   f in dom Shift(IncAddr(G,k),k);
       then consider m being Element of NAT such that
-A11:  f = il.(S,m+k) and
-A12:  il.(S,m) in dom IncAddr(G,k) by A2;
-A13:  il.(S,m) in dom G by A12,Def15;
+A10:  f = il.(S,m+k) and
+A11:  il.(S,m) in dom IncAddr(G,k) by A2;
+A12:  il.(S,m) in dom G by A11,Def15;
       then
-A14:  pi(G,il.(S,m)) = G.il.(S,m) by AMI_1:def 47;
-      IncAddr(pi(G,il.(S,m)),k) = IncAddr(G,k).il.(S,m) by A13,Def15
-        .= Shift(IncAddr(G,k),k).il.(S,m+k) by A12,Def16
-        .= halt S by A6,A10,A11,FUNCT_4:14;
-      then G.il.(S,m) = halt S by A14,Th35;
-      then il.(S,m) = LastLoc G by A13,AMISTD_1:def 23
+A13:  pi(G,il.(S,m)) = G.il.(S,m) by AMI_1:def 47;
+      IncAddr(pi(G,il.(S,m)),k) = IncAddr(G,k).il.(S,m) by A12,Def15
+        .= Shift(IncAddr(G,k),k).il.(S,m+k) by A11,Def16
+        .= halt S by A5,A9,A10,FUNCT_4:14;
+      then G.il.(S,m) = halt S by A13,Th35;
+      then il.(S,m) = LastLoc G by A12,AMISTD_1:def 23
         .= il.(S,card G -' 1) by AMISTD_1:55;
       then m = card G -' 1 by AMISTD_1:25;
-      then m+k = card F + card G -' 1 -' 1 by A5,NAT_1:14,NAT_D:38
+      then m+k = card F + card G -' 1 -' 1 by A4,NAT_1:14,NAT_D:38
         .= card P -' 1 by Th52;
-      hence thesis by A11,AMISTD_1:55;
+      hence thesis by A10,AMISTD_1:55;
     end;
   end;
 end;
@@ -2902,7 +2823,8 @@ A1: f in dom P;
 A2: dom P = dom CutLastLoc F \/ dom Shift(IncAddr(G,k),k) by FUNCT_4:def 1;
     dom CutLastLoc F misses dom Shift(IncAddr(G,k),k) by Th50;
     then
-A3: dom CutLastLoc F /\ dom Shift(IncAddr(G,k),k) = {} by XBOOLE_0:def 7;
+A3: dom CutLastLoc F /\ dom Shift(IncAddr(G,k),k) = {} by
+    XBOOLE_0:def 7;
 A4: dom CutLastLoc F c= dom F by GRFUNC_1:8;
 A5: dom Shift(IncAddr(G,k),k) =
     {il.(S,m+k) where m is Element of NAT: il.(S,m) in dom IncAddr(G,k)}
@@ -2954,76 +2876,79 @@ A23:  IC s1 = il.(S,m) by A20,A21,FUNCT_4:14;
       by A18,AMI_1:59;
       s1 +* w is State of S;
       then
-A25:  dom (s1 +* (IC S .--> (IC s1 + k))) = the carrier of S by AMI_1:79;
+A24:  dom (s1 +* (IC S .--> (IC s1 + k))) = the carrier of S by
+      AMI_1:79;
       for a being set st a in dom s2 holds
       s2.a = (s1 +* (IC S .--> (IC s1 + k))).a
       proof
         let a be set such that a in dom s2;
-A26:    dom (IC S .--> (IC s1 + k)) = {IC S} by FUNCOP_1:19;
+A25:    dom (IC S .--> (IC s1 + k)) = {IC S} by FUNCOP_1:19;
         per cases;
         suppose
-A27:      a = IC S;
-          hence s2.a = il.(S,locnum IC s1 + k) by A7,A14,A23,AMISTD_1:def 13
-            .= (IC S .--> (IC s1 + k)).a by A27,FUNCOP_1:87
-            .= (s1 +* (IC S .--> (IC s1 + k))).a by A21,A26,A27,FUNCT_4:14;
+A26:      a = IC S;
+          hence s2.a = il.(S,locnum IC s1 + k) by A7,A14,A23,
+          AMISTD_1:def 13
+            .= (IC S .--> (IC s1 + k)).a by A26,FUNCOP_1:87
+            .= (s1 +* (IC S .--> (IC s1 + k))).a by A21,A25,A26,FUNCT_4:14;
         end;
         suppose
-A28:      a <> IC S;
+A27:      a <> IC S;
           then
-A29:      not a in dom (IC S .--> (IC s1 + k)) by A26,TARSKI:def 1;
-          not a in dom (IC S .--> il.(S,m)) by A22,A28,TARSKI:def 1;
+A28:      not a in dom (IC S .--> (IC s1 + k)) by A25,
+          TARSKI:def 1;
+          not a in dom (IC S .--> il.(S,m)) by A22,A27,TARSKI:def 1;
           then s1.a = s2.a by FUNCT_4:12;
-          hence thesis by A29,FUNCT_4:12;
+          hence thesis by A28,FUNCT_4:12;
         end;
       end;
       then
-A30:  s2 = s1 +* (IC S .--> (IC s1 + k)) by A25,AMI_1:79,FUNCT_1:9;
+A29:  s2 = s1 +* (IC S .--> (IC s1 + k)) by A24,AMI_1:79,FUNCT_1:9;
       set s3 = s1 +* (il.(S,m) .--> pi(G,il.(S,m)));
-A31:  dom (il.(S,m) .--> pi(G,il.(S,m))) = {il.(S,m)} by FUNCOP_1:19;
+A30:  dom (il.(S,m) .--> pi(G,il.(S,m))) = {il.(S,m)} by FUNCOP_1:19;
       then
-A32:  il.(S,m) in dom (il.(S,m) .--> pi(G,il.(S,m))) by TARSKI:def 1;
+A31:  il.(S,m) in dom (il.(S,m) .--> pi(G,il.(S,m))) by
+      TARSKI:def 1;
       now
         assume IC S in dom (il.(S,m) .--> pi(G,il.(S,m)));
         then reconsider l=IC S as Instruction-Location of S
-        by A31,TARSKI:def 1;
+        by A30,TARSKI:def 1;
         l=IC S;
         hence contradiction by AMI_1:48;
       end;
       then
-A33:  IC s3 = s1.IC S by FUNCT_4:12
+A32:  IC s3 = s1.IC S by FUNCT_4:12
         .= il.(S,m) by A20,A21,A22,FUNCT_4:14;
-A34:  s3.il.(S,m) = (il.(S,m) .--> pi(G,il.(S,m))).il.(S,m) by A32,FUNCT_4:14
+A33:  s3.il.(S,m) = (il.(S,m) .--> pi(G,il.(S,m))).il.(S,m) by A31,FUNCT_4:14
         .= pi(G,il.(S,m)) by FUNCOP_1:87;
-      s1, s3 equal_outside NAT
+A34:  dom s1 = the carrier of S by AMI_1:79;
+A35:  dom s3 = the carrier of S by AMI_1:79;
+      for x being set st x in dom s1 \ NAT holds s1.x = s3.x
       proof
-A35:    dom s1 = the carrier of S & dom s3 = the carrier of S by AMI_1:79;
-        for x being set st x in dom s1 \ NAT holds s1.x = s3.x
-        proof
-          let x be set;
-A36:      dom (il.(S,m) .--> pi(G,il.(S,m))) c= NAT by RELAT_1:def 18;
-          assume x in dom s1 \ NAT;
-          then not x in dom (il.(S,m) .--> pi(G,il.(S,m)))
-          by A36,XBOOLE_0:def 5;
-          hence thesis by FUNCT_4:12;
-        end;
-        hence s1|(dom s1 \ NAT) = s3|(dom s3 \ NAT) by A35,FUNCT_1:165;
+        let x be set;
+A36:    dom (il.(S,m) .--> pi(G,il.(S,m))) c= NAT by RELAT_1:def 18;
+        assume x in dom s1 \ NAT;
+        then not x in dom (il.(S,m) .--> pi(G,il.(S,m)))
+        by A36,XBOOLE_0:def 5;
+        hence thesis by FUNCT_4:12;
       end;
+      then s1|(dom s1 \ NAT) = s3|(dom s3 \ NAT) by A34,A35,
+      FUNCT_1:165;
+      then s1, s3 equal_outside NAT by FUNCT_7:def 2;
       then
 A37:  Exec(pi(G,il.(S,m)),s1), Exec(pi(G,il.(S,m)),s3)
       equal_outside NAT by Def19;
       reconsider k,m as Element of NAT;
 A38:  x = IC Exec(IncAddr(pi(G,il.(S,m)),k),s2) by A6,A7,A8,A16,A19,Def15
-        .= IC Exec(pi(G,il.(S,m)), s1) + k by A30,Def17
+        .= IC Exec(pi(G,il.(S,m)), s1) + k by A29,Def17
         .= il.(S,locnum IC Exec(pi(G,il.(S,m)), s3) + k) by A37,AMI_1:121;
       IC Following s3 = il.(S,locnum IC Exec(pi(G,il.(S,m)), s3))
-      by A33,A34,AMISTD_1:def 13;
-
+      by A32,A33,AMISTD_1:def 13;
 then il.(S,locnum IC Exec(pi(G,il.(S,m)), s3)) in NIC(pi(G,il.(S,m)),il.(S
-      ,m)) by A33,A34;
+      ,m)) by A32,A33;
       then il.(S,locnum IC Exec(pi(G,il.(S,m)), s3)) in dom G by A17;
-      then
-A39:  il.(S,locnum IC Exec(pi(G,il.(S,m)), s3)) in dom IncAddr(G,k) by Def15;
-      x in dom Shift(IncAddr(G,k),k) by A5,A38,A39;
+      then il.(S,locnum IC Exec(pi(G,il.(S,m)), s3)) in dom IncAddr(G,k) by
+      Def15;
+      then x in dom Shift(IncAddr(G,k),k) by A5,A38;
       hence thesis by A2,XBOOLE_0:def 3;
     end;
   end;
@@ -3126,7 +3051,8 @@ A3: dom (F ';' Stop S) = dom F by A1,A2,FUNCT_4:def 1;
 A4: x in dom F;
     dom CutLastLoc F misses dom Shift(IncAddr(Stop S,k),k) by Th50;
     then
-A5: {} = dom CutLastLoc F /\ dom Shift(IncAddr(Stop S,k),k) by XBOOLE_0:def 7;
+A5: {} = dom CutLastLoc F /\ dom Shift(IncAddr(Stop S,k),k) by
+    XBOOLE_0:def 7;
     per cases by A2,A4,XBOOLE_0:def 3;
     suppose
 A6:   x in dom CutLastLoc F;
@@ -3221,7 +3147,8 @@ A14:  card (F ';' G) -' 1 = card (F ';' G) - 1 by PRE_CIRC:25
         .= card F + card G - 1 - 1 by Th52;
       then card (F ';' G) -' 1 = card F - 1 + (card G - 1);
       then
-A15:  card (F ';' G) -' 1 = (card G -' 1) + (card F - 1) by PRE_CIRC:25
+A15:  card (F ';' G) -' 1 = (card G -' 1) + (card F - 1) by
+      PRE_CIRC:25
         .= (card G -' 1) + (card F -' 1) by PRE_CIRC:25;
 A16:  dom Shift(IncAddr(G,card F -' 1),card F -' 1) =
       { il.(S,m+(card F -' 1)) where m is Element of NAT:
@@ -3240,364 +3167,375 @@ A20:    W <> Stop S;
       end;
       then 2 <= card F by A3;
       then
-A22:  1 <= card F by XXREAL_0:2;
-A23:  2 <= card G by A4,A19;
-      per cases by A22,A23,Lm2;
+A21:  1 <= card F by XXREAL_0:2;
+A22:  2 <= card G by A4,A19;
+      per cases by A21,A22,Lm2;
       suppose
-A24:    k < card F - 1;
-A25:    CutLastLoc F c= CutLastLoc (F ';' G) by Th54;
-A26:    now
-          assume x in dom Shift(IncAddr(G ';' H,card F -' 1),card F -' 1);
+A23:    k < card F - 1;
+A24:    CutLastLoc F c= CutLastLoc (F ';' G) by Th54;
+A25:    now
+          assume
+          x in dom Shift(IncAddr(G ';' H,card F -' 1),card F -' 1);
           then consider m being Element of NAT such that
-A27:      x = il.(S,m+(card F -' 1)) and
+A26:      x = il.(S,m+(card F -' 1)) and
           il.(S,m) in dom IncAddr(G ';' H,card F -' 1) by A11;
-          k = m + (card F -' 1) by A9,A27,AMISTD_1:25
+          k = m + (card F -' 1) by A9,A26,AMISTD_1:25
             .= m + (card F - 1) by PRE_CIRC:25;
-          then m + (card F - 1) < card F -' 1 by A24,PRE_CIRC:25;
+          then m + (card F - 1) < card F -' 1 by A23,PRE_CIRC:25;
           then m + (card F -' 1) < card F -' 1 by PRE_CIRC:25;
           hence contradiction by NAT_1:11;
         end;
-A28:    now
+A27:    now
           assume x in dom
           Shift(IncAddr(H,card (F ';' G) -' 1),card (F ';' G) -' 1);
           then consider m being Element of NAT such that
-A29:      x = il.(S,m+(card (F ';' G) -' 1)) and
+A28:      x = il.(S,m+(card (F ';' G) -' 1)) and
           il.(S,m) in dom IncAddr(H,card (F ';' G) -' 1) by A12;
-          k = m + (card G -' 1) + (card F -' 1) by A9,A15,A29,AMISTD_1:25;
+          k = m + (card G -' 1) + (card F -' 1) by A9,A15,A28,AMISTD_1:25;
           then m + (card G -' 1) + (card F -' 1) < card F -' 1
-          by A24,PRE_CIRC:25;
+          by A23,PRE_CIRC:25;
           hence contradiction by NAT_1:11;
         end;
-        k < card CutLastLoc F by A24,Th49;
+        k < card CutLastLoc F by A23,Th49;
         then
-A30:    x in dom CutLastLoc F by A9,AMISTD_1:50;
-        thus (F ';' G ';' H).x = (CutLastLoc (F ';' G)).x by A28,FUNCT_4:12
-          .= (CutLastLoc F).x by A25,A30,GRFUNC_1:8
-          .= (F ';' (G ';' H)).x by A26,FUNCT_4:12;
+A29:    x in dom CutLastLoc F by A9,AMISTD_1:50;
+        thus (F ';' G ';' H).x = (CutLastLoc (F ';' G)).x by A27,FUNCT_4:12
+          .= (CutLastLoc F).x by A24,A29,GRFUNC_1:8
+          .= (F ';' (G ';' H)).x by A25,FUNCT_4:12;
       end;
       suppose
-A31:    k = card F - 1;
-A32:    now
+A30:    k = card F - 1;
+A31:    now
           assume x in dom
           Shift(IncAddr(H,card (F ';' G) -' 1),card (F ';' G) -' 1);
           then consider m being Element of NAT such that
-A33:      x = il.(S,m+(card (F ';' G) -' 1)) and
+A32:      x = il.(S,m+(card (F ';' G) -' 1)) and
           il.(S,m) in dom IncAddr(H,card (F ';' G) -' 1) by A12;
-          k = m + (card G -' 1) + (card F -' 1) by A9,A15,A33,AMISTD_1:25;
+          k = m + (card G -' 1) + (card F -' 1) by A9,A15,A32,AMISTD_1:25;
           then m + (card G -' 1) + (card F -' 1) = card F -' 1
-          by A31,PRE_CIRC:25;
+          by A30,PRE_CIRC:25;
           then card G -' 1 = 0;
           then card G - 1 = 0 by PRE_CIRC:25;
           hence contradiction by A4,Th26;
         end;
-A34:    il.(S,0) in dom IncAddr(G ';' H,card F -' 1) by AMISTD_1:49;
-A35:    il.(S,0) in dom IncAddr(G,card F -' 1) by AMISTD_1:49;
-A36:    il.(S,0) in dom G by AMISTD_1:49;
-A37:    il.(S,0) in dom (G ';' H) by AMISTD_1:49;
-        k = 0 + (card F -' 1) by A31,PRE_CIRC:25;
+A33:    il.(S,0) in dom IncAddr(G ';' H,card F -' 1) by AMISTD_1:49;
+A34:    il.(S,0) in dom IncAddr(G,card F -' 1) by AMISTD_1:49;
+A35:    il.(S,0) in dom G by AMISTD_1:49;
+A36:    il.(S,0) in dom (G ';' H) by AMISTD_1:49;
+        k = 0 + (card F -' 1) by A30,PRE_CIRC:25;
         then
-A38:    x in dom Shift(IncAddr(G ';' H,card F -' 1),card F -' 1) by A9,A11,A34;
-A39:    k = card F -' 1 by A31,PRE_CIRC:25;
-A40:    x = il.(S,0+k) by A9;
+A37:    x in dom Shift(IncAddr(G ';' H,card F -' 1),card F -' 1) by A9
+        ,A11,A33;
+A38:    k = card F -' 1 by A30,PRE_CIRC:25;
+A39:    x = il.(S,0+k) by A9;
         il.(S,0) in dom IncAddr(G,card F -' 1) by AMISTD_1:49;
         then
-A41:    x in dom Shift(IncAddr(G,card F -' 1),card F -' 1) by A16,A39,A40;
-
+A40:    x in dom Shift(IncAddr(G,card F -' 1),card F -' 1) by A16,A38
+        ,A39;
 then x in dom CutLastLoc F \/ dom Shift(IncAddr(G,card F -' 1),card F -' 1)
         by XBOOLE_0:def 3;
         then
-A42:    x in dom (F ';' G) by FUNCT_4:def 1;
+A41:    x in dom (F ';' G) by FUNCT_4:def 1;
         now
-A43:      dom (LastLoc (F ';' G) .--> (F ';' G).LastLoc (F ';' G ))
+A42:      dom (LastLoc (F ';' G) .--> (F ';' G).LastLoc (F ';' G ))
           = {LastLoc (F ';' G)} by FUNCOP_1:19
             .= {il.(S,card (F ';' G) -' 1)} by AMISTD_1:55;
-
 assume x in dom (LastLoc (F ';' G) .--> (F ';' G).LastLoc (F ';' G ));
-          then x = il.(S,card (F ';' G) -' 1) by A43,TARSKI:def 1;
+          then x = il.(S,card (F ';' G) -' 1) by A42,TARSKI:def 1;
           then k = (card G -' 1) + (card F -' 1) by A9,A15,AMISTD_1:25;
-          then card G - 1 = 0 by A39,PRE_CIRC:25;
+          then card G - 1 = 0 by A38,PRE_CIRC:25;
           hence contradiction by A4,Th26;
         end;
         then
-A44:    x in dom (F ';' G) \
+A43:    x in dom (F ';' G) \
         dom (LastLoc (F ';' G) .--> (F ';' G).LastLoc (F ';' G ))
-        by A42,XBOOLE_0:def 5;
-          1 <= card G & 1 <> card G by A4,Th26,NAT_1:14;
-        then card G > 1 by XXREAL_0:1;
+        by A41,XBOOLE_0:def 5;
+        1 <= card G by NAT_1:14;
+        then card G > 1 by A4,Th26,XXREAL_0:1;
         then
-A45:    card G - 1 > 1 - 1 by XREAL_1:11;
+A44:    card G - 1 > 1 - 1 by XREAL_1:11;
         then card G -' 1 > 1 - 1 by PRE_CIRC:25;
         then
-A46:    not il.(S,0) in dom Shift(IncAddr(H,card G -' 1), card G -' 1) by Th41;
-        card CutLastLoc G <> {} by A45,Th49;
+        A45:    not
+ il.(S,0) in dom Shift(IncAddr(H,card G -' 1), card G -' 1) by Th41;
+        card CutLastLoc G <> {} by A44,Th49;
         then
-A47:    il.(S,0) in dom CutLastLoc G by AMISTD_1:49,CARD_1:47;
-A48:    pi(G,il.(S,0)) = G.il.(S,0) by A36,AMI_1:def 47
-          .= (CutLastLoc G).il.(S,0) by A47,GRFUNC_1:8
-          .= (G ';' H).il.(S,0) by A46,FUNCT_4:12
-          .= pi(G ';' H,il.(S,0)) by A37,AMI_1:def 47;
+A46:    il.(S,0) in dom CutLastLoc G by AMISTD_1:49,CARD_1:47;
+A47:    pi(G,il.(S,0)) = G.il.(S,0) by A35,AMI_1:def 47
+          .= (CutLastLoc G).il.(S,0) by A46,GRFUNC_1:8
+          .= (G ';' H).il.(S,0) by A45,FUNCT_4:12
+          .= pi(G ';' H,il.(S,0)) by A36,AMI_1:def 47;
         thus (F ';' G ';' H).x = ((F ';' G) \
-        ( LastLoc (F ';' G) .--> (F ';' G).LastLoc (F ';' G ))).x by A32,
-FUNCT_4:12
-
-.= (CutLastLoc F +* Shift(IncAddr(G,card F -' 1),card F -' 1)).x by A44,
-GRFUNC_1:93
-          .= Shift(IncAddr(G,card F -' 1),card F -' 1).x by A41,FUNCT_4:14
-          .= IncAddr(G,card F -' 1).il.(S,0) by A35,A39,A40,Def16
-          .= IncAddr(pi(G ';' H,il.(S,0)),card F -' 1) by A36,A48,Def15
-          .= IncAddr(G ';' H,card F -' 1).il.(S,0) by A37,Def15
+        ( LastLoc (F ';' G) .--> (F ';' G).LastLoc (F ';' G ))).x by A31,
+        FUNCT_4:12
+.= (CutLastLoc F +* Shift(IncAddr(G,card F -' 1),card F -' 1)).x by A43,
+        GRFUNC_1:93
+          .= Shift(IncAddr(G,card F -' 1),card F -' 1).x by A40,FUNCT_4:14
+          .= IncAddr(G,card F -' 1).il.(S,0) by A34,A38,A39,Def16
+          .= IncAddr(pi(G ';' H,il.(S,0)),card F -' 1) by A35,A47,Def15
+          .= IncAddr(G ';' H,card F -' 1).il.(S,0) by A36,Def15
           .= Shift(IncAddr(G ';' H,card F -' 1),card F -' 1).x
-        by A34,A39,A40,Def16
-          .= (F ';' (G ';' H)).x by A38,FUNCT_4:14;
+        by A33,A38,A39,Def16
+          .= (F ';' (G ';' H)).x by A37,FUNCT_4:14;
       end;
       suppose that
-A49:    card F <= k and
-A50:    k <= card F + card G - 3;
-A51:    now
+A48:    card F <= k and
+A49:    k <= card F + card G - 3;
+A50:    now
           assume
           x in dom Shift(IncAddr(H,card (F ';' G) -' 1),card (F ';' G) -' 1);
           then consider m being Element of NAT such that
-A52:      x = il.(S,m+(card (F ';' G) -' 1)) and
+A51:      x = il.(S,m+(card (F ';' G) -' 1)) and
           il.(S,m) in dom IncAddr(H,card (F ';' G) -' 1) by A12;
           m + ((card G -' 1) + (card F -' 1))
-          <= - 1 + ((card G -' 1) + (card F -' 1)) by A9,A15,A17,A18,A50,A52,
-AMISTD_1:25;
+          <= - 1 + ((card G -' 1) + (card F -' 1)) by A9,A15,A17,A18,A49,A51,
+          AMISTD_1:25;
           then m <= -1 by XREAL_1:8;
           hence contradiction by Lm1;
         end;
         card F -' 1 <= card F by NAT_D:35;
         then
-A53:    x = il.(S, k -' (card F -' 1) + (card F -' 1))
- by A9,A49,XREAL_1:237,XXREAL_0:2;
-A54:    card F - card F <= k - card F by A49,XREAL_1:11;
+A52:    x = il.(S, k -' (card F -' 1) + (card F -' 1))
+        by A9,A48,XREAL_1:237,XXREAL_0:2;
+A53:    card F - card F <= k - card F by A48,XREAL_1:11;
         card F - 1 < card F - 0 by XREAL_1:17;
-        then k - (card F - 1) >= 0 by A54,XREAL_1:17;
+        then k - (card F - 1) >= 0 by A53,XREAL_1:17;
         then
-A55:    k - (card F -' 1) >= 0 by PRE_CIRC:25;
-A56:    card F + card G - 3 < card F + card G - 3 + 1 by XREAL_1:31;
+A54:    k - (card F -' 1) >= 0 by PRE_CIRC:25;
+A55:    card F + card G - 3 < card F + card G - 3 + 1 by XREAL_1:31;
         then
-A57:    k < (card G - 1) + (card F - 1) by A50,XXREAL_0:2;
+A56:    k < (card G - 1) + (card F - 1) by A49,XXREAL_0:2;
         k - (card F - 1) + (card F - 1) < (card G - 1) + (card F - 1)
-        by A50,A56,XXREAL_0:2;
+        by A49,A55,XXREAL_0:2;
         then k - (card F - 1) < card G - 1 by XREAL_1:9;
         then k - (card F -' 1) < card G - 1 by PRE_CIRC:25;
-        then k -' (card F -' 1) < card G - 1 by A55,XREAL_0:def 2;
+        then k -' (card F -' 1) < card G - 1 by A54,XREAL_0:def 2;
         then k -' (card F -' 1) < card CutLastLoc G by Th49;
         then
-A58:    il.(S,k -' (card F -' 1)) in dom CutLastLoc G by AMISTD_1:50;
+A57:    il.(S,k -' (card F -' 1)) in dom CutLastLoc G by
+        AMISTD_1:50;
         then il.(S,k -' (card F -' 1)) in
         dom CutLastLoc G \/ dom Shift(IncAddr(H,card G -' 1),card G -' 1)
         by XBOOLE_0:def 3;
         then
-A59:    il.(S,k -' (card F -' 1)) in dom (G ';' H) by FUNCT_4:def 1;
+A58:    il.(S,k -' (card F -' 1)) in dom (G ';' H) by
+        FUNCT_4:def 1;
         then
-A60:    il.(S,k -' (card F -' 1)) in dom IncAddr(G ';' H,card F -' 1)
+A59:    il.(S,k -' (card F -' 1)) in dom IncAddr(G ';' H,card F -' 1)
         by Def15;
         then
-A61:    x in dom Shift(IncAddr(G ';' H,card F -' 1),card F -' 1) by A11,A53;
+A60:    x in dom Shift(IncAddr(G ';' H,card F -' 1),card F -' 1) by
+        A11,A52;
         card G + card F - 2 < card F + card G - 1 by XREAL_1:17;
-        then k < card F + card G - 1 by A57,XXREAL_0:2;
+        then k < card F + card G - 1 by A56,XXREAL_0:2;
         then k < card (F ';' G) by Th52;
         then
-A62:    x in dom (F ';' G) by A9,AMISTD_1:50;
+A61:    x in dom (F ';' G) by A9,AMISTD_1:50;
         now
-          assume x in dom (LastLoc (F ';' G) .--> (F ';' G).LastLoc (F ';' G));
+          assume
+          x in dom (LastLoc (F ';' G) .--> (F ';' G).LastLoc (F ';' G));
           then x in {LastLoc (F ';' G)} by FUNCOP_1:19;
           then x = LastLoc (F ';' G) by TARSKI:def 1
             .= il.(S,card (F ';' G) -' 1) by AMISTD_1:55;
           then k = card (F ';' G) -' 1 by A9,AMISTD_1:25
             .= (card G - 1) + (card F - 1) by A15,A18,PRE_CIRC:25;
-          hence contradiction by A50,A56;
+          hence contradiction by A49,A55;
         end;
         then
-A63:    x in dom (F ';' G) \
+A62:    x in dom (F ';' G) \
         dom (LastLoc (F ';' G) .--> (F ';' G).LastLoc (F ';' G))
-        by A62,XBOOLE_0:def 5;
-A64:    dom CutLastLoc G c= dom G by GRFUNC_1:8;
-        then il.(S,k -' (card F -' 1)) in dom G by A58;
+        by A61,XBOOLE_0:def 5;
+A63:    dom CutLastLoc G c= dom G by GRFUNC_1:8;
+        then il.(S,k -' (card F -' 1)) in dom G by A57;
         then
-A65:    il.(S,k -' (card F -' 1)) in dom IncAddr(G,card F -' 1) by Def15;
+A64:    il.(S,k -' (card F -' 1)) in dom IncAddr(G,card F -' 1) by
+        Def15;
         then
-A66:    x in dom Shift(IncAddr(G,card F -' 1),card F -' 1) by A16,A53;
-A67:    now
+A65:    x in dom Shift(IncAddr(G,card F -' 1),card F -' 1) by A16,A52;
+A66:    now
           assume il.(S,k -' (card F -' 1)) in
           dom Shift(IncAddr(H,card G -' 1),card G -' 1);
           then consider m being Element of NAT such that
-A68:      il.(S,k -' (card F -' 1)) = il.(S,m+(card G -' 1)) and
+A67:      il.(S,k -' (card F -' 1)) = il.(S,m+(card G -' 1)) and
           il.(S,m) in dom IncAddr(H,card G -' 1) by A13;
-          k -' (card F -' 1) = m + (card G -' 1) by A68,AMISTD_1:25;
+          k -' (card F -' 1) = m + (card G -' 1) by A67,AMISTD_1:25;
           then
-A69:      m = k -' (card F -' 1) - (card G -' 1)
-            .= k - (card F -' 1) - (card G -' 1) by A55,XREAL_0:def 2
+A68:      m = k -' (card F -' 1) - (card G -' 1)
+            .= k - (card F -' 1) - (card G -' 1) by A54,XREAL_0:def 2
             .= k - (card F - 1) - (card G -' 1) by PRE_CIRC:25
             .= k - (card F - 1) - (card G - 1) by PRE_CIRC:25
             .= k - (card F + card G - 2);
           k - (card F + card G - 2)
-          <= card F + card G - 3 - (card F + card G - 2) by A50,XREAL_1:11;
-          hence contradiction by A69,Lm1;
+          <= card F + card G - 3 - (card F + card G - 2) by A49,XREAL_1:11;
+          hence contradiction by A68,Lm1;
         end;
-A70:    pi(G ';' H,il.(S,k -' (card F -' 1)))
+A69:    pi(G ';' H,il.(S,k -' (card F -' 1)))
         = (CutLastLoc G +* Shift(IncAddr(H,card G -' 1),card G -' 1))
-        .il.(S,k -' (card F -' 1)) by A59,AMI_1:def 47
-          .= (CutLastLoc G).il.(S,k -' (card F -' 1)) by A67,FUNCT_4:12
-          .= G.il.(S,k -' (card F -' 1)) by A58,GRFUNC_1:8;
+        .il.(S,k -' (card F -' 1)) by A58,AMI_1:def 47
+          .= (CutLastLoc G).il.(S,k -' (card F -' 1)) by A66,FUNCT_4:12
+          .= G.il.(S,k -' (card F -' 1)) by A57,GRFUNC_1:8;
         thus (F ';' G ';' H).x
         = ((F ';' G) \ (LastLoc (F ';' G) .--> (F ';' G).LastLoc (F ';' G))).x
-        by A51,FUNCT_4:12
-
-.= (CutLastLoc F +* Shift(IncAddr(G,card F -' 1),card F -' 1)).x by A63,
-GRFUNC_1:93
-          .= Shift(IncAddr(G,card F -' 1),card F -' 1).x by A66,FUNCT_4:14
-          .= IncAddr(G,card F -' 1).il.(S,k -' (card F -' 1)) by A53,A65,Def16
+        by A50,FUNCT_4:12
+.= (CutLastLoc F +* Shift(IncAddr(G,card F -' 1),card F -' 1)).x by A62,
+        GRFUNC_1:93
+          .= Shift(IncAddr(G,card F -' 1),card F -' 1).x by A65,FUNCT_4:14
+          .= IncAddr(G,card F -' 1).il.(S,k -' (card F -' 1)) by A52,A64,Def16
           .= IncAddr(pi(G,il.(S,k -' (card F -' 1))),card F -' 1)
-        by A58,A64,Def15
+        by A57,A63,Def15
           .= IncAddr(pi(G ';' H,il.(S,k -' (card F -' 1))),card F -' 1)
-        by A58,A64,A70,AMI_1:def 47
+        by A57,A63,A69,AMI_1:def 47
           .= IncAddr(G ';' H,card F -' 1).il.(S,k -' (card F -' 1))
-        by A59,Def15
-          .= Shift(IncAddr(G ';' H,card F -' 1),card F -' 1).x by A53,A60,Def16
-          .= (F ';' (G ';' H)).x by A61,FUNCT_4:14;
+        by A58,Def15
+          .= Shift(IncAddr(G ';' H,card F -' 1),card F -' 1).x by A52,A59,
+        Def16
+          .= (F ';' (G ';' H)).x by A60,FUNCT_4:14;
       end;
       suppose
-A71:    k = card F + card G - 2;
+A70:    k = card F + card G - 2;
         then
-A72:    x = il.(S,k -' (card (F ';' G) -' 1) + (card (F ';' G) -' 1))
+A71:    x = il.(S,k -' (card (F ';' G) -' 1) + (card (F ';' G) -' 1))
         by A9,A14,XREAL_1:237;
-        k - (card (F ';' G) -' 1) = 0 by A14,A71;
+        k - (card (F ';' G) -' 1) = 0 by A14,A70;
         then
-A73:    k -' (card (F ';' G) -' 1) = 0 by XREAL_0:def 2;
+A72:    k -' (card (F ';' G) -' 1) = 0 by XREAL_0:def 2;
         then
-A74:    il.(S,k -' (card (F ';' G) -' 1)) in dom IncAddr(H,card (F ';' G)
+        A73:    il.
+(S,k -' (card (F ';' G) -' 1)) in dom IncAddr(H,card (F ';' G)
         -' 1) by AMISTD_1:49;
         then
-A75:    x in dom Shift(IncAddr(H,card (F ';' G) -' 1),card (F ';' G) -' 1)
-        by A12,A72;
-A76:    x = il.(S, (card G -' 1) + (card F -' 1)) by A9,A17,A18,A71;
+        A74:    x
+ in dom Shift(IncAddr(H,card (F ';' G) -' 1),card (F ';' G) -' 1)
+        by A12,A71;
+A75:    x = il.(S, (card G -' 1) + (card F -' 1)) by A9,A17,A18,A70;
         card G - 1 + 0 < card G - 1 + card H by XREAL_1:8;
         then card G -' 1 < card G + card H - 1 by PRE_CIRC:25;
         then card G -' 1 < card (G ';' H) by Th52;
         then
-A77:    il.(S,card G -' 1) in dom (G ';' H) by AMISTD_1:50;
+A76:    il.(S,card G -' 1) in dom (G ';' H) by AMISTD_1:50;
         then
-A78:    il.(S,card G -' 1) in dom IncAddr(G ';' H,card F -' 1) by Def15;
+A77:    il.(S,card G -' 1) in dom IncAddr(G ';' H,card F -' 1) by Def15;
         then
-A79:    x in dom Shift(IncAddr(G ';' H,card F -' 1),card F -' 1) by A11,A76;
-A80:    il.(S,0) in dom H by AMISTD_1:49;
-A81:    pi(G ';' H,il.(S,card G -' 1)) = (G ';' H).il.(S,card G -' 1)
-        by A77,AMI_1:def 47;
-A82:    il.(S,0) in dom IncAddr(H,card G -' 1) by AMISTD_1:49;
+A78:    x in dom Shift(IncAddr(G ';' H,card F -' 1),card F -' 1) by
+        A11,A75;
+A79:    il.(S,0) in dom H by AMISTD_1:49;
+A80:    pi(G ';' H,il.(S,card G -' 1)) = (G ';' H).il.(S,card G -' 1)
+        by A76,AMI_1:def 47;
+A81:    il.(S,0) in dom IncAddr(H,card G -' 1) by AMISTD_1:49;
         then
-A83:    pi(IncAddr(H,card G -' 1),il.(S,0))
+A82:    pi(IncAddr(H,card G -' 1),il.(S,0))
         = IncAddr(H,card G -' 1).il.(S,0) by AMI_1:def 47
-          .= IncAddr(pi(H,il.(S,0)),(card G -' 1)) by A80,Def15;
+          .= IncAddr(pi(H,il.(S,0)),(card G -' 1)) by A79,Def15;
         pi(G ';' H,il.(S,card G -' 1))
-        = (G ';' H).LastLoc G by A81,AMISTD_1:55
+        = (G ';' H).LastLoc G by A80,AMISTD_1:55
           .= IncAddr(H,card G -' 1).il.(S,0) by Th55
-          .= pi(IncAddr(H,card G -' 1),il.(S,0)) by A82,AMI_1:def 47;
+          .= pi(IncAddr(H,card G -' 1),il.(S,0)) by A81,AMI_1:def 47;
         then
-A84:    IncAddr(pi(G ';' H,il.(S,card G -' 1)),card F -' 1)
-        = IncAddr(pi(H,il.(S,0)),card (F ';' G) -' 1) by A15,A83,Th37;
+A83:    IncAddr(pi(G ';' H,il.(S,card G -' 1)),card F -' 1)
+        = IncAddr(pi(H,il.(S,0)),card (F ';' G) -' 1) by A15,A82,Th37;
         thus (F ';' G ';' H).x
         = Shift(IncAddr(H,card (F ';' G) -' 1),card (F ';' G) -' 1).x
-        by A75,FUNCT_4:14
+        by A74,FUNCT_4:14
           .= IncAddr(H,card (F ';' G) -' 1).il.(S,k -' (card (F ';' G) -' 1))
-        by A72,A74,Def16
-          .= IncAddr(pi(H,il.(S,0)),card (F ';' G) -' 1) by A73,A80,Def15
-          .= IncAddr(G ';' H,card F -' 1).il.(S,card G -' 1) by A77,A84,Def15
-          .= Shift(IncAddr(G ';' H,card F -' 1),card F -' 1).x by A76,A78,Def16
-          .= (F ';' (G ';' H)).x by A79,FUNCT_4:14;
+        by A71,A73,Def16
+          .= IncAddr(pi(H,il.(S,0)),card (F ';' G) -' 1) by A72,A79,Def15
+          .= IncAddr(G ';' H,card F -' 1).il.(S,card G -' 1) by A76,A83,Def15
+          .= Shift(IncAddr(G ';' H,card F -' 1),card F -' 1).x by A75,A77,
+        Def16
+          .= (F ';' (G ';' H)).x by A78,FUNCT_4:14;
       end;
       suppose
-A85:    card F + card G - 2 < k;
+A84:    card F + card G - 2 < k;
         then
-A86:    x = il.(S,k -' (card (F ';' G) -' 1) + (card (F ';' G) -' 1))
+A85:    x = il.(S,k -' (card (F ';' G) -' 1) + (card (F ';' G) -' 1))
         by A9,A14,XREAL_1:237;
         k + 0 < card F + card G - (1 + 1) + card H by A10;
         then k - (card F + card G - (1 + 1)) < card H - 0 by XREAL_1:23;
         then k -' (card (F ';' G) -' 1) < card H by A14,XREAL_0:def 2;
         then
-A88:    il.(S,k -' (card (F ';' G) -' 1)) in dom H by AMISTD_1:50;
+A86:    il.(S,k -' (card (F ';' G) -' 1)) in dom H by AMISTD_1:50;
         then
-A89:    il.(S,k -' (card (F ';' G) -' 1)) in dom IncAddr(H,card (F ';' G)
+        A87:    il.
+(S,k -' (card (F ';' G) -' 1)) in dom IncAddr(H,card (F ';' G)
         -' 1) by Def15;
         then
-A90:    x in dom Shift(IncAddr(H,card (F ';' G) -' 1),card (F ';' G) -' 1)
-        by A12,A86;
-A91:    card F -' 1 <= (card G -' 1) + (card F -' 1) by NAT_1:11;
+        A88:    x
+ in dom Shift(IncAddr(H,card (F ';' G) -' 1),card (F ';' G) -' 1)
+        by A12,A85;
+A89:    card F -' 1 <= (card G -' 1) + (card F -' 1) by NAT_1:11;
         then
-A92:    k >= card F -' 1 by A14,A15,A85,XXREAL_0:2;
-A93:    x = il.(S,k -' (card F -' 1) + (card F -' 1)) by A9,A14,A15,A85,A91,
-XREAL_1:237,XXREAL_0:2;
-A94:    k - (card F -' 1) >= 0 by A92,XREAL_1:50;
-A95:    k - (card F -' 1) < card F + card G + card H - 1 - 1 - (card F -' 1)
+A90:    k >= card F -' 1 by A14,A15,A84,XXREAL_0:2;
+A91:    x = il.(S,k -' (card F -' 1) + (card F -' 1)) by A9,A14,A15,A84,A89
+        ,XREAL_1:237,XXREAL_0:2;
+A92:    k - (card F -' 1) >= 0 by A90,XREAL_1:50;
+A93:    k - (card F -' 1) < card F + card G + card H - 1 - 1 - (card F -' 1)
         by A10,XREAL_1:11;
         then
-A96:    k -' (card F -' 1) < card F + card G + card H - card F - 1
-        by A17,A94,XREAL_0:def 2;
+A94:    k -' (card F -' 1) < card F + card G + card H - card F - 1
+        by A17,A92,XREAL_0:def 2;
         k -' (card F -' 1) < card F - card F + card G + card H - 1
-        by A17,A94,A95,XREAL_0:def 2;
+        by A17,A92,A93,XREAL_0:def 2;
         then k -' (card F -' 1) < card (G ';' H) by Th52;
         then
-A97:    il.(S,k -' (card F -' 1)) in dom (G ';' H) by AMISTD_1:50;
+A95:    il.(S,k -' (card F -' 1)) in dom (G ';' H) by AMISTD_1:50;
         then il.(S,k -' (card F -' 1)) in dom IncAddr(G ';' H,card F -' 1)
         by Def15;
         then
-A98:    x in dom Shift(IncAddr(G ';' H,card F -' 1),card F -' 1) by A11,A93;
-A99:    il.(S,k -' (card F -' 1)) in dom IncAddr(G ';' H,card F -' 1)
-        by A97,Def15;
-A100:   k - (card F -' 1) >= card (F ';' G) -' 1 - (card F -' 1)
-        by A14,A85,XREAL_1:11;
+A96:    x in dom Shift(IncAddr(G ';' H,card F -' 1),card F -' 1) by
+        A11,A91;
+A97:    il.(S,k -' (card F -' 1)) in dom IncAddr(G ';' H,card F -' 1)
+        by A95,Def15;
+A98:    k - (card F -' 1) >= card (F ';' G) -' 1 - (card F -' 1)
+        by A14,A84,XREAL_1:11;
         then
-A101:   k -' (card F -' 1) >= (card F -' 1) + (card G -' 1) - ( card F -' 1)
-        by A14,A15,A85,A91,XREAL_1:235,XXREAL_0:2;
-A102:   k -' (card F -' 1) >= card G -' 1 by A14,A15,A85,A91,A100,XREAL_1:235
-,XXREAL_0:2;
-A103:   il.(S,k -' (card F -' 1)) =
+        A99:    k
+ -' (card F -' 1) >= (card F -' 1) + (card G -' 1) - ( card F -' 1)
+        by A14,A15,A84,A89,XREAL_1:235,XXREAL_0:2;
+A100:   k -' (card F -' 1) >= card G -' 1 by A14,A15,A84,A89,A98,XREAL_1:235
+        ,XXREAL_0:2;
+A101:   il.(S,k -' (card F -' 1)) =
         il.(S, k -' (card F -' 1) -' (card G -' 1) + (card G -' 1))
-        by A101,XREAL_1:237;
+        by A99,XREAL_1:237;
         k -' (card F -' 1) - (card G -' 1) < card G + card H - 1 - (card G -
-        1) by A18,A96,XREAL_1:11;
+        1) by A18,A94,XREAL_1:11;
         then k -' (card F -' 1) -' (card G -' 1) <
-        card H + (card G - 1) - (card G - 1) by A102,XREAL_1:235;
-
+        card H + (card G - 1) - (card G - 1) by A100,XREAL_1:235;
 then il.(S,k -' (card F -' 1) -' (card G -' 1)) in dom H by AMISTD_1:50;
         then
-A104:   il.(S,k -' (card F -' 1) -' (card G -' 1)) in
+A102:   il.(S,k -' (card F -' 1) -' (card G -' 1)) in
         dom IncAddr(H,card G -' 1) by Def15;
         then
-A105:   il.(S,k -' (card F -' 1)) in
-        dom Shift(IncAddr(H,card G -' 1),card G -' 1) by A13,A103;
-A106:   k -' (card F -' 1) -' (card G -' 1)
-        = k -' (card F -' 1) - (card G -' 1) by A101,XREAL_1:235
-          .= k - (card F -' 1) - (card G -' 1) by A14,A15,A85,A91,XREAL_1:235
-,XXREAL_0:2
+A103:   il.(S,k -' (card F -' 1)) in
+        dom Shift(IncAddr(H,card G -' 1),card G -' 1) by A13,A101;
+A104:   k -' (card F -' 1) -' (card G -' 1)
+        = k -' (card F -' 1) - (card G -' 1) by A99,XREAL_1:235
+          .= k - (card F -' 1) - (card G -' 1) by A14,A15,A84,A89,XREAL_1:235
+        ,XXREAL_0:2
           .= k - ((card F -' 1) + (card G -' 1))
-          .= k -' (card (F ';' G) -' 1) by A14,A15,A85,XREAL_1:235;
-A107:   pi(G ';' H,il.(S,k -' (card F -' 1)))
+          .= k -' (card (F ';' G) -' 1) by A14,A15,A84,XREAL_1:235;
+A105:   pi(G ';' H,il.(S,k -' (card F -' 1)))
         = ((CutLastLoc G) +* Shift(IncAddr(H,card G -' 1),card G -' 1)).
-        il.(S,k -' (card F -' 1)) by A97,AMI_1:def 47
-
+        il.(S,k -' (card F -' 1)) by A95,AMI_1:def 47
 .= Shift(IncAddr(H,card G -' 1),card G -' 1).il.(S,k -' (card F -' 1))
-        by A105,FUNCT_4:14
-
-.= IncAddr(H,card G -' 1).il.(S,k -' (card (F ';' G) -' 1)) by A103,A104,A106
-,Def16
+        by A103,FUNCT_4:14
+.= IncAddr(H,card G -' 1).il.(S,k -' (card (F ';' G) -' 1)) by A101,A102,A104,
+        Def16
           .= IncAddr(pi(H,il.(S,k -' (card (F ';' G) -' 1))),card G -' 1)
-        by A88,Def15;
+        by A86,Def15;
         thus (F ';' G ';' H).x
         = Shift(IncAddr(H,card (F ';' G) -' 1),card (F ';' G) -' 1).x
-        by A90,FUNCT_4:14
+        by A88,FUNCT_4:14
           .= IncAddr(H,card (F ';' G) -' 1).il.(S,k -' (card (F ';' G) -' 1))
-        by A86,A89,Def16
-
+        by A85,A87,Def16
 .= IncAddr(pi(H,il.(S,k -' (card (F ';' G) -' 1))),card (F ';' G) -' 1)
-        by A88,Def15
+        by A86,Def15
           .= IncAddr(pi(G ';' H,il.(S,k -' (card F -' 1))),card F -' 1)
-        by A15,A107,Th37
+        by A15,A105,Th37
           .= IncAddr(G ';' H,card F -' 1).il.(S,k -' (card F -' 1))
-        by A97,Def15
-          .= Shift(IncAddr(G ';' H,card F -' 1),card F -' 1).x by A93,A99,Def16
-          .= (F ';' (G ';' H)).x by A98,FUNCT_4:14;
+        by A95,Def15
+          .= Shift(IncAddr(G ';' H,card F -' 1),card F -' 1).x by A91,A97,
+        Def16
+          .= (F ';' (G ';' H)).x by A96,FUNCT_4:14;
       end;
     end;
     hence thesis by A7,A8,FUNCT_1:9;
@@ -3672,15 +3610,16 @@ A3: il.(S,m) in dom f by A1;
     il in dom f } by A2,A3;
   end;
   let e be set;
-  assume e in { il+k where il is Instruction-Location of S: il in dom f };
+  assume
+  e in { il+k where il is Instruction-Location of S: il in dom f };
   then consider il being Instruction-Location of S such that
 A4: e = il+k and
 A5: il in dom f;
-  il = il.(S,locnum il) & il+k = il.(S,locnum il+k) by AMISTD_1:def 13;
+  il = il.(S,locnum il) by AMISTD_1:def 13;
   hence thesis by A1,A4,A5;
 end;
 
-Lm4: for
+Lm7: for
 a,b,c being set st a c= c & b c= c \ a holds c = a \/ (c \ (a\/b)) \/ b
 proof
   let a,b,c be set such that
@@ -3694,7 +3633,7 @@ A2: b c= c \ a;
     .= c by A1,XBOOLE_1:12;
 end;
 
-Lm5: for S being IC-Ins-separated definite realistic
+Lm8: for S being IC-Ins-separated definite realistic
 (non empty stored-program AMI-Struct over IL,N) holds
 IL c= (the carrier of S) \ {IC S}
 proof
@@ -3731,39 +3670,39 @@ A5: dom Exec(i,s+*p) = C by AMI_1:79;
   D = C \ I \ {IC S} by XBOOLE_1:41;
   then
 A6: D \/ {IC S} = (C \ I) \/ {IC S} by XBOOLE_1:39;
-X: {IC S} c= C by ZFMISC_1:37;
+A7: {IC S} c= C by ZFMISC_1:37;
   {IC S} c= C \ I
   proof
     let x be set;
     assume
-A7: x in {IC S};
+A8: x in {IC S};
     then
-A8: x = IC S by TARSKI:def 1;
+A9: x = IC S by TARSKI:def 1;
     now
       assume x in I;
       then reconsider l=x as Instruction-Location of S by AMI_1:def 4;
       l=x;
-      hence contradiction by A8,AMI_1:48;
+      hence contradiction by A9,AMI_1:48;
     end;
-    hence thesis by A7,X,XBOOLE_0:def 5;
+    hence thesis by A7,A8,XBOOLE_0:def 5;
   end;
   then
-A9: C \ I = D \/ {IC S} by A6,XBOOLE_1:12;
-  I c= C \ {IC S} by Lm5;
+A10: C \ I = D \/ {IC S} by A6,XBOOLE_1:12;
+  I c= C \ {IC S} by Lm8;
   then
-A10: C = {IC S} \/ D \/ I by Lm4,X;
+A11: C = {IC S} \/ D \/ I by A7,Lm7;
   D \/ {IC S} misses I
   proof
     assume not thesis;
     then consider o being set such that
-A11: o in D \/ {IC S} and
-A12: o in I by XBOOLE_0:3;
-    reconsider l = o as Instruction-Location of S by A12,AMI_1:def 4;
-A13: o in D or o in {IC S} by A11,XBOOLE_0:def 3;
-    per cases by A13,TARSKI:def 1;
+A12: o in D \/ {IC S} and
+A13: o in I by XBOOLE_0:3;
+    reconsider l = o as Instruction-Location of S by A13,AMI_1:def 4;
+A14: o in D or o in {IC S} by A12,XBOOLE_0:def 3;
+    per cases by A14,TARSKI:def 1;
     suppose o in D;
       then not o in {IC S} \/ I by XBOOLE_0:def 5;
-      hence contradiction by A12,XBOOLE_0:def 3;
+      hence contradiction by A13,XBOOLE_0:def 3;
     end;
     suppose o = IC S;
       then l = IC S;
@@ -3771,26 +3710,24 @@ A13: o in D or o in {IC S} by A11,XBOOLE_0:def 3;
     end;
   end;
   then
-A14: D \/ {IC S} misses dom p by A1,XBOOLE_1:63;
-  s, s+*p equal_outside I
-  proof
-    thus s|(dom s \ I) = (s+*p)|(dom(s+*p) \ I) by A2,A3,A9,A14,FUNCT_4:76;
-  end;
+A15: D \/ {IC S} misses dom p by A1,XBOOLE_1:63;
+  then s|(dom s \ I) = (s+*p)|(dom(s+*p) \ I) by A2,A3,A10,FUNCT_4:76;
+  then s, s+*p equal_outside I by FUNCT_7:def 2;
   then
-A15: Exec(i,s), Exec(i,s+*p) equal_outside I by Def19;
-A16: (Exec(i,s) +* p) | (D \/ {IC S})
-  = Exec(i,s) | (D \/ {IC S}) by A14,FUNCT_4:76
-    .= Exec(i,s +* p) | (D \/ {IC S}) by A4,A5,A9,A15,FUNCT_7:def 2;
-A17: Exec (i, s +* p)|I = (s +* p)|I by AMI_1:117
+A16: Exec(i,s), Exec(i,s+*p) equal_outside I by Def19;
+A17: (Exec(i,s) +* p) | (D \/ {IC S})
+  = Exec(i,s) | (D \/ {IC S}) by A15,FUNCT_4:76
+    .= Exec(i,s +* p) | (D \/ {IC S}) by A4,A5,A10,A16,FUNCT_7:def 2;
+A18: Exec (i, s +* p)|I = (s +* p)|I by AMI_1:117
     .= s|I +* p|I by FUNCT_4:75
     .= Exec (i,s)|I +* p|I by AMI_1:117
     .= (Exec (i, s) +* p)|I by FUNCT_4:75;
   thus Exec (i, s +* p)
-  = Exec (i, s +* p)| ({IC S} \/ D \/ I) by A5,A10,RELAT_1:98
+  = Exec (i, s +* p)| ({IC S} \/ D \/ I) by A5,A11,RELAT_1:98
     .= (Exec (i, s) +* p)| ({IC S} \/ D)
-  +* (Exec (i, s) +* p)|I by A16,A17,FUNCT_4:83
+  +* (Exec (i, s) +* p)|I by A17,A18,FUNCT_4:83
     .= (Exec (i,s) +* p)| ({IC S} \/ D \/ I) by FUNCT_4:83
-    .= (Exec (i,s) +* p)| dom(Exec (i, s) +* p) by A10,AMI_1:79
+    .= (Exec (i,s) +* p)| dom(Exec (i, s) +* p) by A11,AMI_1:79
     .= Exec (i,s) +* p by RELAT_1:98;
 end;
 
@@ -3809,7 +3746,7 @@ reserve S for regular standard (IC-Ins-separated definite
   g for FinPartState of S,
   il for Instruction-Location of S;
 
-Lm3: now
+Lm9: now
   let L,C,I be set;
   set B = C \ (L \/ I);
   thus I misses B
@@ -3830,35 +3767,32 @@ proof
   set B = (the carrier of S) \ ({IC S} \/ I);
   set X = (Start-At ((IC g)+k)) | B;
   consider x being Element of dom X;
-  now
+A1: now
     assume X <> {};
     then dom X <> {};
     then x in dom X;
     then
-A1: x in dom (Start-At ((IC g)+k)) /\ B by RELAT_1:90;
+A2: x in dom (Start-At ((IC g)+k)) /\ B by RELAT_1:90;
     then x in B by XBOOLE_0:def 4;
     then
-A2: not x in {IC S} \/ I by XBOOLE_0:def 5;
-    x in dom (Start-At ((IC g)+k)) by A1,XBOOLE_0:def 4;
+A3: not x in {IC S} \/ I by XBOOLE_0:def 5;
+    x in dom (Start-At ((IC g)+k)) by A2,XBOOLE_0:def 4;
     then x in {IC S} by FUNCOP_1:19;
-    hence contradiction by A2,XBOOLE_0:def 3;
+    hence contradiction by A3,XBOOLE_0:def 3;
   end;
-  then (Start-At ((IC g)+k)) | B is Relation of {},{} by RELSET_1:25;
-  then
-A3: (Start-At ((IC g)+k)) | B = {};
 A4: dom IncAddr(Shift(ProgramPart(g),k),k) c= NAT by RELAT_1:def 18;
 A5: dom DataPart g c= B by RELAT_1:87;
-A6: B misses I by Lm3;
+A6: B misses I by Lm9;
   thus DataPart(Relocated(g,k))
   =(Start-At ((IC g)+k)+* (IncAddr(Shift(ProgramPart(g),k),k)+*DataPart g))
   | B by FUNCT_4:15
     .= ((Start-At ((IC g)+k)) | B) +*
   (IncAddr(Shift(ProgramPart(g),k),k)+*DataPart g)| B by FUNCT_4:75
-    .= (IncAddr(Shift(ProgramPart(g),k),k)+*DataPart g) | B by A3,FUNCT_4:21
+    .= (IncAddr(Shift(ProgramPart(g),k),k)+*DataPart g) | B by A1,FUNCT_4:21
     .= DataPart g by A4,A5,A6,FUNCT_4:81;
 end;
 
-theorem Th48:
+theorem Th69:
   S is realistic implies
   ProgramPart(Relocated(g,k)) = IncAddr(Shift(ProgramPart(g),k),k)
 proof
@@ -3869,39 +3803,36 @@ A1: S is realistic;
   set X = (Start-At ((IC g)+k)) | I;
   set f = IncAddr(Shift(ProgramPart(g),k),k);
   consider x being Element of dom X;
-  now
+A2: now
     assume X <> {};
     then dom X <> {};
     then x in dom X;
     then
-A2: x in dom (Start-At ((IC g)+k)) /\ I by RELAT_1:90;
+A3: x in dom (Start-At ((IC g)+k)) /\ I by RELAT_1:90;
     then x in I by XBOOLE_0:def 4;
     then reconsider x as Instruction-Location of S by AMI_1:def 4;
-    x in dom (Start-At ((IC g)+k)) by A2,XBOOLE_0:def 4;
+    x in dom (Start-At ((IC g)+k)) by A3,XBOOLE_0:def 4;
     then x in {IC S} by FUNCOP_1:19;
     then x = IC S by TARSKI:def 1;
     hence contradiction by A1,AMI_1:48;
   end;
-  then X is Relation of {},{} by RELSET_1:25;
-  then
-A3: X = {};
 A4: dom f c= I by RELAT_1:def 18;
 A5: dom DataPart g c= B by RELAT_1:87;
-A6: I misses B by Lm3;
+A6: I misses B by Lm9;
   thus ProgramPart(Relocated(g,k))
   = (Start-At ((IC g)+k)+* (f+*DataPart g)) | I by FUNCT_4:15
     .= ((Start-At ((IC g)+k)) | I) +* ((f+*DataPart g)| I) by FUNCT_4:75
-    .= (f+*DataPart g) | I by A3,FUNCT_4:21
+    .= (f+*DataPart g) | I by A2,FUNCT_4:21
     .= f by A4,A5,A6,FUNCT_4:81;
 end;
 
-theorem Th49:
+theorem Th70:
   S is realistic implies dom ProgramPart(Relocated(g,k))
   = { il.(S,j+k) where j is Element of NAT : il.(S,j) in dom ProgramPart(g) }
 proof
   assume S is realistic;
   hence dom ProgramPart(Relocated(g,k))
-  = dom IncAddr(Shift(ProgramPart(g),k),k) by Th48
+  = dom IncAddr(Shift(ProgramPart(g),k),k) by Th69
     .= dom Shift(ProgramPart(g),k) by Def15
     .= { il.(S,j+k) where j is Element of NAT:
   il.(S,j) in dom ProgramPart(g) } by Def16;
@@ -3915,8 +3846,8 @@ A1: S is realistic;
   consider m being natural number such that
 A2: il = il.(S,m) by AMISTD_1:26;
 A3: il + k = il.(S,m+k) by A2,AMISTD_1:def 13;
-A4: dom ProgramPart(Relocated(g,k)) = { il.(S,j+k) where j is Element of NAT:
-  il.(S,j) in dom ProgramPart(g) } by A1,Th49;
+  A4: dom ProgramPart(Relocated(g,k)) = { il.(S,j+k) where j is Element of NAT:
+  il.(S,j) in dom ProgramPart(g) } by A1,Th70;
   ProgramPart(Relocated(g,k)) c= Relocated(g,k) by RELAT_1:88;
   then
 A5: dom ProgramPart(Relocated(g,k)) c= dom Relocated(g,k) by GRFUNC_1:8;
@@ -3939,7 +3870,7 @@ A9: dom ProgramPart g c= dom g by GRFUNC_1:8;
   hence thesis by A2,A8,A9;
 end;
 
-theorem Th51:
+theorem Th72:
   IC S in dom Relocated (g,k)
 proof
 A1: Relocated (g,k)
@@ -3950,26 +3881,28 @@ A1: Relocated (g,k)
   hence thesis by A1,FUNCT_4:13;
 end;
 
-theorem Th52:
+theorem Th73:
   S is realistic implies IC Relocated (g,k) = (IC g) + k
 proof
   assume
 A1: S is realistic;
 A2: Relocated (g,k) = Start-At ((IC g)+k)
   +* (IncAddr(Shift(ProgramPart(g),k),k)+*DataPart g) by FUNCT_4:15;
-  ProgramPart(Relocated(g,k)) = IncAddr(Shift(ProgramPart(g),k),k) by A1,Th48;
-  then not IC S in dom(IncAddr(Shift(ProgramPart(g),k),k)) &
-  not IC S in dom(DataPart g) by A1,AMI_1:100,101;
+  ProgramPart(Relocated(g,k)) = IncAddr(Shift(ProgramPart(g),k),k) by A1,
+  Th69;
   then
-A3: not IC S in dom(IncAddr(Shift(ProgramPart(g),k),k)+*DataPart g)
-  by FUNCT_4:13;
-  IC S in dom Relocated (g,k) by Th51;
+A3: not IC S in dom(IncAddr(Shift(ProgramPart(g),k),k)) by A1,AMI_1:101;
+  not IC S in dom(DataPart g) by AMI_1:100;
+  then
+A4: not IC S in dom(IncAddr(Shift(ProgramPart(g),k),k)+*DataPart g)
+  by A3,FUNCT_4:13;
+  IC S in dom Relocated (g,k) by Th72;
   hence IC Relocated (g,k) = Relocated (g,k).IC S by AMI_1:def 43
-    .= (Start-At ((IC g)+k)).IC S by A2,A3,FUNCT_4:12
+    .= (Start-At ((IC g)+k)).IC S by A2,A4,FUNCT_4:12
     .= (IC g) +k by FUNCOP_1:87;
 end;
 
-theorem Th53:
+theorem Th74:
   for p being NAT-defined FinPartState of S,
   l being Element of NAT st l in dom p holds
   IncAddr(p,k).l = IncAddr(pi(p,l),k)
@@ -3982,12 +3915,13 @@ A1: l in dom p;
   hence thesis by A1,Def15;
 end;
 
-registration let N be set, S be AMI-Struct over NAT,N;
- cluster -> natural Instruction-Location of S;
- coherence;
+registration
+  let N be set, S be AMI-Struct over NAT,N;
+  cluster -> natural Instruction-Location of S;
+  coherence;
 end;
 
-theorem Th54:
+theorem Th75:
   for p being NAT-defined FinPartState of S holds
   Shift(IncAddr(p,i),i) = IncAddr(Shift(p,i),i)
 proof
@@ -4010,56 +3944,58 @@ A3: x in dom f;
     x in { il.(S,m+i) where m is Element of NAT:
     il.(S,m) in dom IncAddr(p,i) } by A3,Def16;
     then consider m being Element of NAT such that
-A4: x = il.(S,m+i) & il.(S,m) in dom IncAddr(p,i);
-A5: x = il.(S,m) + i by A4,AMISTD_1:def 13;
-A6: il.(S,m) in dom p by A4,Def15;
+A4: x = il.(S,m+i) and
+A5: il.(S,m) in dom IncAddr(p,i);
+A6: x = il.(S,m) + i by A4,AMISTD_1:def 13;
+A7: il.(S,m) in dom p by A5,Def15;
     dom Shift(p,i) = { il.(S,mm+i) where mm is Element of NAT :
     il.(S,mm) in dom p} by Def16;
     then
-A7: x' in dom Shift(p,i) by A4,A6;
+A8: x' in dom Shift(p,i) by A4,A7;
     reconsider mm=il.(S,m) as Element of NAT by ORDINAL1:def 13;
-A8: pi(p,mm) = p.(il.(S,m)) by A6,AMI_1:def 47
-      .= Shift(p,i).(il.(S,m)+i) by A6,Th65
+A9: pi(p,mm) = p.(il.(S,m)) by A7,AMI_1:def 47
+      .= Shift(p,i).(il.(S,m)+i) by A7,Th65
       .= Shift(p,i).(il.(S,m+i)) by AMISTD_1:def 13
-      .= pi(Shift(p,i),xx) by A4,A7,AMI_1:def 47;
-    thus f.x = IncAddr(p,i).(il.(S,m)) by A4,A5,Th65
-      .= IncAddr(pi(Shift(p,i),xx),i) by A6,A8,Th53
-      .= g.x by A7,Th53;
+      .= pi(Shift(p,i),xx) by A4,A8,AMI_1:def 47;
+    thus f.x = IncAddr(p,i).(il.(S,m)) by A5,A6,Th65
+      .= IncAddr(pi(Shift(p,i),xx),i) by A7,A9,Th74
+      .= g.x by A8,Th74;
   end;
   hence thesis by A1,FUNCT_1:9;
 end;
 
 theorem
   S is realistic implies
-   for I being Instruction of S holds
+  for I being Instruction of S holds
   il in dom ProgramPart g & I = g.il implies
   IncAddr(I, k) = (Relocated (g, k)).(il + k)
 proof
   assume
 A1: S is realistic;
   let I be Instruction of S;
-  assume
-A2: il in dom ProgramPart g & I = g.il;
-A3: ProgramPart g c= g by RELAT_1:88;
+  assume that
+A2: il in dom ProgramPart g and
+A3: I = g.il;
+A4: ProgramPart g c= g by RELAT_1:88;
   consider i being natural number such that
-A4: il = il.(S,i) by AMISTD_1:26;
+A5: il = il.(S,i) by AMISTD_1:26;
   reconsider ii = il as Element of NAT by ORDINAL1:def 13;
   i is Element of NAT by ORDINAL1:def 13;
   then il.(S,i+k) in { il.(S,j+k) where j is Element of NAT:
-  il.(S,j) in dom ProgramPart(g) } by A2,A4;
-  then il.(S,i+k) in dom ProgramPart(Relocated(g,k)) by A1,Th49;
+  il.(S,j) in dom ProgramPart(g) } by A2,A5;
+  then il.(S,i+k) in dom ProgramPart(Relocated(g,k)) by A1,Th70;
   then
-A5: il + k in dom ProgramPart(Relocated(g,k)) by A4,AMISTD_1:def 13;
-A6: il in dom IncAddr(ProgramPart(g),k) by A2,Def15;
-A7: I = (ProgramPart g).il by A2,A3,GRFUNC_1:8;
+A6: il + k in dom ProgramPart(Relocated(g,k)) by A5,AMISTD_1:def 13;
+A7: il in dom IncAddr(ProgramPart(g),k) by A2,Def15;
+A8: I = (ProgramPart g).il by A2,A3,A4,GRFUNC_1:8;
   ProgramPart (Relocated(g, k)) c= (Relocated(g, k)) by RELAT_1:88;
   hence (Relocated(g, k)).(il+k)
-  = (ProgramPart(Relocated(g, k))).(il+k) by A5,GRFUNC_1:8
-    .= (IncAddr(Shift(ProgramPart(g),k),k)).(il+k) by A1,Th48
-    .= (Shift(IncAddr(ProgramPart(g),k),k)).(il+k) by Th54
-    .= (IncAddr(ProgramPart(g),k)).il by A6,Th65
-    .= IncAddr(pi(ProgramPart(g), ii),k) by A2,Th53
-    .= IncAddr(I,k) by A2,A7,AMI_1:def 47;
+  = (ProgramPart(Relocated(g, k))).(il+k) by A6,GRFUNC_1:8
+    .= (IncAddr(Shift(ProgramPart(g),k),k)).(il+k) by A1,Th69
+    .= (Shift(IncAddr(ProgramPart(g),k),k)).(il+k) by Th75
+    .= (IncAddr(ProgramPart(g),k)).il by A7,Th65
+    .= IncAddr(pi(ProgramPart(g), ii),k) by A2,Th74
+    .= IncAddr(I,k) by A2,A8,AMI_1:def 47;
 end;
 
 theorem
@@ -4069,14 +4005,14 @@ proof
 A1: S is realistic;
   let x be set;
 A2: Start-At (IC g + k) = {[IC S,IC g + k]} by FUNCT_4:87;
-A3: IC S in dom (Relocated(g,k)) by Th51;
-A4: IC Relocated(g,k) = IC g + k by A1,Th52;
+A3: IC S in dom (Relocated(g,k)) by Th72;
+A4: IC Relocated(g,k) = IC g + k by A1,Th73;
   IC Relocated(g,k) = Relocated(g,k).IC S by A3,AMI_1:def 43;
   then [IC S,IC g + k] in Relocated(g,k) by A3,A4,FUNCT_1:def 4;
   hence thesis by A2,TARSKI:def 1;
 end;
 
-Lm2: for a,b,c being set holds not c in a \ ({c} \/ b)
+Lm10: for a,b,c being set holds not c in a \ ({c} \/ b)
 proof
   let a,b,c be set;
   assume c in a \ ({c} \/ b);
@@ -4091,25 +4027,25 @@ theorem
 proof
   let q be data-only FinPartState of S;
   assume
-A2: IC S in dom g;
+A1: IC S in dom g;
   then
-A3: IC S in dom g \/ dom q by XBOOLE_0:def 3;
+A2: IC S in dom g \/ dom q by XBOOLE_0:def 3;
   set I = NAT;
   set B = Data-Locations S;
-A4: dom q c= B by AMI_1:139;
+A3: dom q c= B by AMI_1:139;
   then
-A5: not IC S in dom q by Lm2;
-  IC S in dom (g +* q) by A3,FUNCT_4:def 1;
+A4: not IC S in dom q by Lm10;
+  IC S in dom (g +* q) by A2,FUNCT_4:def 1;
   then
-A6: IC (g +* q) = (g +* q).IC S by AMI_1:def 43
-    .= g.IC S by A3,A5,FUNCT_4:def 1
-    .= IC g by A2,AMI_1:def 43;
-  I misses B by Lm3;
-  then dom q misses I by A4,XBOOLE_1:63;
+A5: IC (g +* q) = (g +* q).IC S by AMI_1:def 43
+    .= g.IC S by A2,A4,FUNCT_4:def 1
+    .= IC g by A1,AMI_1:def 43;
+  I misses B by Lm9;
+  then dom q misses I by A3,XBOOLE_1:63;
   then
-A7: ProgramPart (g +* q) = ProgramPart g by FUNCT_4:76;
-A8: DataPart (g +* q) = g | B +* q | B by FUNCT_4:75
-    .= DataPart g +* q by A4,RELAT_1:97;
-  thus thesis by A6,A7,A8,FUNCT_4:15;
+A6: ProgramPart (g +* q) = ProgramPart g by FUNCT_4:76;
+  DataPart (g +* q) = g | B +* q | B by FUNCT_4:75
+    .= DataPart g +* q by A3,RELAT_1:97;
+  hence thesis by A5,A6,FUNCT_4:15;
 end;
 

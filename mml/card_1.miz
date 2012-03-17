@@ -8,9 +8,8 @@ environ
 
  vocabularies ORDINAL1, RELAT_1, FUNCT_1, BOOLE, WELLORD1, TARSKI, WELLORD2,
       ORDINAL2, FINSET_1, CARD_1, FUNCOP_1, COMPLEX1, GR_CY_1, ARYTM, MCART_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, ENUMSET1,
-      MCART_1, FUNCT_1,
-      FUNCOP_1, WELLORD1, ORDINAL1, ORDINAL2, WELLORD2, FINSET_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, ENUMSET1, MCART_1,
+      FUNCT_1, FUNCOP_1, WELLORD1, ORDINAL1, ORDINAL2, WELLORD2, FINSET_1;
  constructors ENUMSET1, WELLORD1, WELLORD2, FUNCOP_1, ORDINAL2, FINSET_1;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, ORDINAL1, FUNCOP_1, FINSET_1;
  requirements NUMERALS, SUBSET, BOOLE;
@@ -24,7 +23,8 @@ begin
 
 reserve A,B,C for Ordinal,
   X,X1,Y,Y1,Z,a,b,b1,b2,x,y,z for set,
-  R for Relation,
+  R for Relation
+  ,
   f,g,h for Function,
   k,m,n for natural number;
 
@@ -36,7 +36,8 @@ definition
   let IT be set;
   attr IT is cardinal means
   :Def1:
-  ex B st IT = B & for A st A,B are_equipotent holds B c= A;
+  ex B st IT = B & for A st A,B
+  are_equipotent holds B c= A;
 end;
 
 registration
@@ -52,7 +53,8 @@ A2: P[B] & for C st P[C] holds B c= C from ORDINAL1:sch 1(A1);
     take IT,B;
     thus IT = B;
     let C;
-    assume C,B are_equipotent;
+    assume
+    C,B are_equipotent;
     hence thesis by A2,WELLORD2:22;
   end;
 end;
@@ -66,7 +68,8 @@ registration
   coherence
   proof
     let M be set;
-    assume M is cardinal;
+    assume
+    M is cardinal;
     then ex B st M = B & for A st A,B are_equipotent holds B c= A by Def1;
     hence thesis;
   end;
@@ -83,16 +86,14 @@ proof
   consider R such that
 A1: R well_orders X by WELLORD2:26;
   set Q = R|_2 X;
-A2: field Q = X & Q is well-ordering by A1,WELLORD2:25;
   take A = order_type_of Q;
-  Q,RelIncl A are_isomorphic by A2,WELLORD2:def 2;
+  Q is well-ordering by A1,WELLORD2:25;
+  then Q,RelIncl A are_isomorphic by WELLORD2:def 2;
   then consider f such that
-A3: f is_isomorphism_of Q,RelIncl A by WELLORD1:def 8;
-A4: dom f = field Q & rng f = field RelIncl A & f is one-to-one &
-  for a,b holds [a,b] in Q iff a in field Q & b in field Q & [f.a,f.b] in
-  RelIncl A by A3,WELLORD1:def 7;
+A2: f is_isomorphism_of Q,RelIncl A by WELLORD1:def 8;
   take f;
-  thus thesis by A1,A4,WELLORD2:25,def 1;
+  dom f = field Q & rng f = field RelIncl A by A2,WELLORD1:def 7;
+  hence thesis by A1,A2,WELLORD1:def 7,WELLORD2:25,def 1;
 end;
 
 canceled 3;
@@ -102,15 +103,15 @@ theorem Th8:
 proof
   thus M = N implies M,N are_equipotent;
   consider A such that
-A1: M = A & for C st C,A are_equipotent holds A c= C by Def1;
+A1: M = A and
+A2: for C st C,A are_equipotent holds A c= C by Def1;
   consider B such that
-A2: N = B & for C st C,B are_equipotent holds B c= C by Def1;
+A3: N = B and
+A4: for C st C,B are_equipotent holds B c= C by Def1;
   assume
-A3: M,N are_equipotent;
-  then
-A4: B c= A & N,M are_equipotent by A1,A2;
-  A c= B by A1,A2,A3;
-  hence thesis by A1,A2,A4,XBOOLE_0:def 10;
+  M,N are_equipotent;
+  then B c= A & A c= B by A1,A2,A3,A4;
+  hence thesis by A1,A3,XBOOLE_0:def 10;
 end;
 
 canceled 4;
@@ -139,9 +140,11 @@ A1: ex A st P[A] by Th4;
 A2: P[A] & for B st P[B] holds A c= B from ORDINAL1:sch 1(A1);
     A is cardinal
     proof
-      take A; thus A = A;
+      take A;
+      thus A = A;
       let B;
-      assume B,A are_equipotent;
+      assume
+      B,A are_equipotent;
       hence thesis by A2,WELLORD2:22;
     end;
     then reconsider M = A as Cardinal;
@@ -150,40 +153,47 @@ A2: P[A] & for B st P[B] holds A c= B from ORDINAL1:sch 1(A1);
   end;
   uniqueness
   proof
-    let M,N such that
-A3: X,M are_equipotent and
-A4: X,N are_equipotent;
-    M,N are_equipotent by A3,A4,WELLORD2:22;
+    let M,N;
+    assume
+    X,M are_equipotent & X,N are_equipotent;
+    then M,N are_equipotent by WELLORD2:22;
     hence thesis by Th8;
   end;
   projectivity;
 end;
 
 registration
- cluster empty -> cardinal set;
- coherence
-  proof let S be set;
-   assume
-Z:  S is empty;
-   take {};
-   thus S = {} by Z;
-    let A such that A,{} are_equipotent;
+  cluster empty -> cardinal set;
+  coherence
+  proof
+    let S be set;
+    assume
+A1: S is empty;
+    take {};
+    thus S = {} by A1;
+    let A such that
+    A,{} are_equipotent;
     thus thesis;
   end;
 end;
 
-registration let X be empty set;
- cluster card X -> empty;
- coherence by Def5;
+registration
+  let X be empty set;
+  cluster card X -> empty;
+  coherence by Def5;
 end;
 
-registration let X be non empty set;
- cluster card X -> non empty;
- coherence
-  proof assume card X is empty;
+registration
+  let X be non empty set;
+  cluster card X -> non empty;
+  coherence
+  proof
+    assume
+    card X is empty;
     then X,{} are_equipotent by Def5;
-    then ex f st f is one-to-one & dom f = X & rng f = {} by WELLORD2:def 4;
-   hence contradiction by RELAT_1:65;
+    then ex f st f is one-to-one & dom f = X & rng f = {} by
+    WELLORD2:def 4;
+    hence contradiction by RELAT_1:65;
   end;
 end;
 
@@ -192,21 +202,26 @@ canceled 6;
 theorem Th21:
   X,Y are_equipotent iff card X = card Y
 proof
-A1: X,card X are_equipotent & Y,card Y are_equipotent by Def5;
+A1: Y,card Y are_equipotent by Def5;
+A2: X,card X are_equipotent by Def5;
   thus X,Y are_equipotent implies card X = card Y
   proof
-    assume X,Y are_equipotent;
-    then card X,Y are_equipotent by A1,WELLORD2:22;
+    assume
+    X,Y are_equipotent;
+    then card X,Y are_equipotent by A2,WELLORD2:22;
     hence thesis by Def5;
   end;
-  assume card X = card Y;
-  hence thesis by A1,WELLORD2:22;
+  assume
+  card X = card Y;
+  hence thesis by A2,A1,WELLORD2:22;
 end;
 
 theorem Th22:
-  R is well-ordering implies field R,order_type_of R are_equipotent
+  R is well-ordering implies field R,order_type_of R
+  are_equipotent
 proof
-  assume R is well-ordering;
+  assume
+  R is well-ordering;
   then R,RelIncl order_type_of R are_isomorphic by WELLORD2:def 2;
   then consider f such that
 A1: f is_isomorphism_of R,RelIncl order_type_of R by WELLORD1:def 8;
@@ -220,76 +235,87 @@ theorem Th23:
 proof
   defpred P[Ordinal] means $1 c= M & X,$1 are_equipotent;
   reconsider m = M as Ordinal;
-  assume X c= M;
-  then order_type_of RelIncl X c= m & RelIncl X is well-ordering &
-  field RelIncl X = X by WELLORD2:9,17,def 1;
+  assume
+  X c= M;
   then
-A1: ex A st P[A] by Th22;
+A1: order_type_of RelIncl X c= m & RelIncl X is well-ordering by
+  WELLORD2
+  :9 ,17;
+  field RelIncl X = X by WELLORD2:def 1;
+  then
+A2: ex A st P[A] by A1,Th22;
   consider A such that
-A2: P[A] & for B st P[B] holds A c= B from ORDINAL1:sch 1(A1);
+A3: P[A] & for B st P[B] holds A c= B from ORDINAL1:sch 1(A2);
   A is cardinal
   proof
-    take A; thus A = A;
+    take A;
+    thus A = A;
     let B;
     assume
-A3: B,A are_equipotent;
+A4: B,A are_equipotent;
     assume
-A4: not A c= B;
-    then m c= B by A2,A3,WELLORD2:22;
-    hence contradiction by A2,A4,XBOOLE_1:1;
+A5: not A c= B;
+    then m c= B by A3,A4,WELLORD2:22;
+    hence contradiction by A3,A5,XBOOLE_1:1;
   end;
   then reconsider A as Cardinal;
-  card X = A by A2,Def5;
-  hence thesis by A2;
+  card X = A by A3,Def5;
+  hence thesis by A3;
 end;
 
 theorem Th24:
   card A c= A
 proof
-A1: ex B st card A = B & for C st C,B are_equipotent holds B c= C by Def1;
-  A,card A are_equipotent by Def5;
-  hence thesis by A1;
+  ( ex B st card A = B & for C st C,B are_equipotent holds B c= C)& A,card
+  A are_equipotent by Def1,Def5;
+  hence thesis;
 end;
 
 theorem
   X in M implies card X in M by Th24,ORDINAL1:22;
 
 theorem Th26:
-  card X c= card Y iff ex f st f is one-to-one & dom f = X & rng f c= Y
+  card X c= card Y iff ex f st f is one-to-one & dom f = X & rng f
+  c= Y
 proof
-  thus card X c= card Y implies
-  ex f st f is one-to-one & dom f = X & rng f c= Y
+  thus card X c= card Y implies ex f st f is one-to-one & dom f = X & rng f c=
+  Y
   proof
-    assume
-A1: card X c= card Y;
-A2: X,card X are_equipotent & Y,card Y are_equipotent by Def5;
+    X,card X are_equipotent by Def5;
     then consider f such that
-A3: f is one-to-one & dom f = X & rng f = card X by WELLORD2:def 4;
-    consider g such that
-A4: g is one-to-one & dom g = Y & rng g = card Y by A2,WELLORD2:def 4;
+A1: f is one-to-one and
+A2: dom f = X & rng f = card X by WELLORD2:def 4;
+    assume
+A3: card X c= card Y;
+    Y,card Y are_equipotent by Def5;
+    then consider g such that
+A4: g is one-to-one and
+A5: dom g = Y & rng g = card Y by WELLORD2:def 4;
     take h = g"*f;
-    thus h is one-to-one by A3,A4;
+    thus h is one-to-one by A1,A4;
     rng g = dom(g") & dom g = rng(g") by A4,FUNCT_1:55;
-    hence thesis by A1,A3,A4,RELAT_1:45,46;
+    hence thesis by A3,A2,A5,RELAT_1:45,46;
   end;
   given f such that
-A5: f is one-to-one & dom f = X & rng f c= Y;
+A6: f is one-to-one and
+A7: dom f = X & rng f c= Y;
   Y,card Y are_equipotent by Def5;
   then consider g such that
-A6: g is one-to-one & dom g = Y & rng g = card Y by WELLORD2:def 4;
-A7: X,rng(g*f) are_equipotent
+A8: g is one-to-one and
+A9: dom g = Y and
+A10: rng g = card Y by WELLORD2:def 4;
+A11: X,rng(g*f) are_equipotent
   proof
     take g*f;
-    thus g*f is one-to-one by A5,A6;
-    thus dom(g*f) = X by A5,A6,RELAT_1:46;
+    thus g*f is one-to-one by A6,A8;
+    thus dom(g*f) = X by A7,A9,RELAT_1:46;
     thus thesis;
   end;
-A8: card rng(g*f) c= card Y by A6,Th23,RELAT_1:45;
-  X,card X are_equipotent & rng(g*f),card rng(g*f) are_equipotent by Def5;
-  then card X,X are_equipotent &
-  X,card rng(g*f) are_equipotent by A7,WELLORD2:22;
-  then card X,card rng(g*f) are_equipotent by WELLORD2:22;
-  hence thesis by A8,Th8;
+  rng(g*f),card rng(g*f) are_equipotent by Def5;
+  then
+A12: X,card rng(g*f) are_equipotent by A11,WELLORD2:22;
+  card rng(g*f) c= card Y by A10,Th23,RELAT_1:45;
+  hence thesis by A12,Def5;
 end;
 
 theorem Th27:
@@ -310,79 +336,100 @@ theorem
 proof
   thus card X c= card Y implies ex f st dom f = Y & X c= rng f
   proof
-    assume card X c= card Y;
+    assume
+    card X c= card Y;
     then consider f such that
-A1: f is one-to-one & dom f = X & rng f c= Y by Th26;
-    defpred
-    P[set,set] means $1 in rng f & $2 = f".$1 or not $1 in rng f & $2 = 0;
-A2: for x st x in Y ex y st P[x,y]
+A1: f is one-to-one and
+A2: dom f = X and
+A3: rng f c= Y by Th26;
+    defpred P[set,set] means $1 in rng f & $2 = f".$1 or not $1 in rng f & $2
+    = 0;
+A4: for x st x in Y ex y st P[x,y]
     proof
-      let x such that x in Y;
+      let x such that
+      x in Y;
       not x in rng f implies thesis;
       hence thesis;
     end;
-A3: for x,y,z st x in Y & P[x,y] & P[x,z] holds y = z;
+A5: for x,y,z st x in Y & P[x,y] & P[x,z] holds y = z;
     consider g such that
-A4: dom g = Y & for y st y in Y holds P[y,g.y] from FUNCT_1:sch 2(A3,A2);
-    take g; thus dom g = Y by A4;
+A6: dom g = Y & for y st y in Y holds P[y,g.y] from FUNCT_1:sch 2(A5,
+    A4);
+    take g;
+    thus dom g = Y by A6;
     let x;
-    assume x in X;
+    assume
+A7: x in X;
     then
-A5: f".(f.x) = x & f.x in rng f by A1,FUNCT_1:56,def 5;
-    then x = g.(f.x) by A1,A4;
-    hence thesis by A1,A4,A5,FUNCT_1:def 5;
+A8: f.x in rng f by A2,FUNCT_1:def 5;
+    f".(f.x) = x by A1,A2,A7,FUNCT_1:56;
+    then x = g.(f.x) by A3,A6,A8;
+    hence thesis by A3,A6,A8,FUNCT_1:def 5;
   end;
   given f such that
-A6: dom f = Y & X c= rng f;
+A9: dom f = Y and
+A10: X c= rng f;
   deffunc f(set) = f"{$1};
   consider g such that
-A7: dom g = X & for x st x in X holds g.x = f(x) from FUNCT_1:sch 3;
+A11: dom g = X & for x st x in X holds g.x = f(x) from FUNCT_1:sch 3;
   X <> {} implies thesis
   proof
-    assume X <> {};
-    then reconsider M = rng g as non empty set by A7,RELAT_1:65;
+    assume
+    X <> {};
+    then reconsider M = rng g as non empty set by A11,RELAT_1:65;
     for Z st Z in M holds Z <> {}
     proof
       let Z;
-      assume Z in M;
+      assume
+      Z in M;
       then consider x such that
-A8:   x in dom g & Z = g.x by FUNCT_1:def 5;
-A9:   Z = f"{x} & x in rng f by A6,A7,A8;
-      consider y such that
-A10:  y in dom f & x = f.y by A6,A7,A8,FUNCT_1:def 5;
-      x in {x} by TARSKI:def 1;
-      hence thesis by A9,A10,FUNCT_1:def 13;
+A12:  x in dom g & Z = g.x by FUNCT_1:def 5;
+A13:  x in {x} by TARSKI:def 1;
+      Z = f"{x} & ex y st y in dom f & x = f.y by A10,A11,A12,FUNCT_1:def
+      5;
+      hence thesis by A13,FUNCT_1:def 13;
     end;
     then consider F being Function such that
-A11: dom F = M & for Z st Z in M holds F.Z in Z by WELLORD2:28;
-A12: dom(F*g) = X by A7,A11,RELAT_1:46;
-A13: F*g is one-to-one
+A14: dom F = M and
+A15: for Z st Z in M holds F.Z in Z by WELLORD2:28;
+A16: dom(F*g) = X by A11,A14,RELAT_1:46;
+A17: F*g is one-to-one
     proof
       let x,y;
-      assume
-A14:  x in dom(F*g) & y in dom(F*g) & (F*g).x = (F*g).y;
+      assume that
+A18:  x in dom(F*g) and
+A19:  y in dom(F*g) and
+A20:  (F*g).x = (F*g).y;
+A21:  g.y = f"{y} by A11,A16,A19;
+      then f"{y} in M by A11,A16,A19,FUNCT_1:def 5;
+      then F.(f"{y}) in f"{y} by A15;
       then
-A15:  g.x = f"{x} & g.y = f"{y} & (F*g).x = F.(g.x) & (F*g).y = F. ( g.y)
-      by A7,A12,FUNCT_1:23;
-      then F.(f"{x}) = F.(f"{y}) & f"{x} in M & f"{y} in M
-      by A7,A12,A14,FUNCT_1:def 5;
-      then F.(f"{x}) in f"{x} & F.(f"{y}) in f"{y} by A11;
-      then f.(F.(f"{x})) in {x} & f.(F.(f"{y})) in {y} by FUNCT_1:def 13;
-      then f.(F.(f"{x})) = x & f.(F.(f"{y})) = y by TARSKI:def 1;
-      hence thesis by A14,A15;
+A22:  f.(F.(f"{y})) in {y} by FUNCT_1:def 13;
+A23:  g.x = f"{x} by A11,A16,A18;
+      then f"{x} in M by A11,A16,A18,FUNCT_1:def 5;
+      then F.(f"{x}) in f"{x} by A15;
+      then f.(F.(f"{x})) in {x} by FUNCT_1:def 13;
+      then
+A24:  f.(F.(f"{x})) = x by TARSKI:def 1;
+      (F*g).x = F.(g.x) & (F*g).y = F. ( g.y) by A11,A16,A18,A19,FUNCT_1:
+      23;
+      hence thesis by A20,A23,A21,A22,A24,TARSKI:def 1;
     end;
     rng(F*g) c= Y
     proof
       let x;
-      assume x in rng(F*g);
+      assume
+      x in rng(F*g);
       then consider y such that
-A16:  y in dom(F*g) & x = (F*g).y by FUNCT_1:def 5;
-A17:  g.y = f"{y} & x = F.(g.y) by A7,A12,A16,FUNCT_1:23;
-      then f"{y} in M by A7,A12,A16,FUNCT_1:def 5;
-      then x in f"{y} by A11,A17;
-      hence thesis by A6,FUNCT_1:def 13;
+A25:  y in dom(F*g) and
+A26:  x = (F*g).y by FUNCT_1:def 5;
+A27:  x = F.(g.y) by A11,A16,A25,A26,FUNCT_1:23;
+A28:  g.y = f"{y} by A11,A16,A25;
+      then f"{y} in M by A11,A16,A25,FUNCT_1:def 5;
+      then x in f"{y} by A15,A28,A27;
+      hence thesis by A9,FUNCT_1:def 13;
     end;
-    hence thesis by A12,A13,Th26;
+    hence thesis by A16,A17,Th26;
   end;
   hence thesis;
 end;
@@ -391,19 +438,22 @@ theorem Th29:
   not X,bool X are_equipotent
 proof
   given f such that
-A1: f is one-to-one & dom f = X & rng f = bool X;
+  f is one-to-one and
+A1: dom f = X & rng f = bool X;
   defpred P[set] means for Y st Y = f.$1 holds not $1 in Y;
   consider Z such that
 A2: a in Z iff a in X & P[a] from XBOOLE_0:sch 1;
   Z c= X
   proof
-    let a; thus thesis by A2;
+    let a;
+    thus thesis by A2;
   end;
   then consider a such that
-A3: a in X & Z = f.a by A1,FUNCT_1:def 5;
-  not a in Z by A2,A3;
+A3: a in X and
+A4: Z = f.a by A1,FUNCT_1:def 5;
+  not a in Z by A2,A4;
   then ex Y st Y = f.a & a in Y by A2,A3;
-  hence contradiction by A2,A3;
+  hence contradiction by A2,A4;
 end;
 
 theorem Th30:
@@ -412,33 +462,37 @@ proof
   deffunc f(set) = {$1};
   consider f such that
 A1: dom f = X & for x st x in X holds f.x = f(x) from FUNCT_1:sch 3;
-A2: f is one-to-one
-  proof
-    let x,y;
-    assume
-A3: x in dom f & y in dom f & f.x = f.y;
-    then f.x = { x } & f.y = { y } by A1;
-    hence thesis by A3,ZFMISC_1:6;
-  end;
-  rng f c= bool X
+A2: rng f c= bool X
   proof
     let x;
-    assume x in rng f;
+    assume
+    x in rng f;
     then consider y such that
-A4: y in dom f & x = f.y by FUNCT_1:def 5;
-A5: f.y = { y } by A1,A4;
-    { y } c= X
+A3: y in dom f and
+A4: x = f.y by FUNCT_1:def 5;
+A5: { y } c= X
     proof
       let z;
-      assume z in { y };
-      hence thesis by A1,A4,TARSKI:def 1;
+      assume
+      z in { y };
+      hence thesis by A1,A3,TARSKI:def 1;
     end;
+    f.y = { y } by A1,A3;
     hence thesis by A4,A5;
   end;
-  then
-A6: card X c= card bool X by A1,A2,Th26;
   not X,bool X are_equipotent by Th29;
-  then card X <> card bool X by Th21;
+  then
+A6: card X <> card bool X by Th21;
+  f is one-to-one
+  proof
+    let x,y;
+    assume that
+A7: x in dom f & y in dom f and
+A8: f.x = f.y;
+    f.x = { x } & f.y = { y } by A1,A7;
+    hence thesis by A8,ZFMISC_1:6;
+  end;
+  then card X c= card bool X by A1,A2,Th26;
   then card X c< card bool X by A6,XBOOLE_0:def 8;
   hence thesis by ORDINAL1:21;
 end;
@@ -447,29 +501,34 @@ definition
   let X;
   func nextcard X -> Cardinal means
   :Def6:
-  card X in it & for M st card X in M holds it c= M;
+  card X in it & for M st card X in M
+  holds it c= M;
   existence
   proof
     defpred P[Ordinal] means ex M st $1 = M & card X in M;
-    card X in card bool X & card bool X = card bool X by Th30;
+    card X in card bool X by Th30;
     then
 A1: ex A st P[A];
     consider A such that
 A2: P[A] and
 A3: for B st P[B] holds A c= B from ORDINAL1:sch 1(A1);
     consider M such that
-A4: A = M & card X in M by A2;
-    take M; thus card X in M by A4;
+A4: A = M and
+A5: card X in M by A2;
+    take M;
+    thus card X in M by A5;
     let N;
-    assume card X in N;
+    assume
+    card X in N;
     hence thesis by A3,A4;
   end;
   uniqueness
   proof
-    let M1,M2 be Cardinal such that
-A5: card X in M1 & for M st card X in M holds M1 c= M and
-A6: card X in M2 & for M st card X in M holds M2 c= M;
-    M1 c= M2 & M2 c= M1 by A5,A6;
+    let M1,M2 be Cardinal;
+    assume
+    card X in M1 & ( for M st card X in M holds M1 c= M)& card X in M2
+    & for M st card X in M holds M2 c= M;
+    then M1 c= M2 & M2 c= M1;
     hence thesis by XBOOLE_0:def 10;
   end;
 end;
@@ -478,14 +537,15 @@ canceled;
 
 theorem Th32:
   M in nextcard M
-proof card M in nextcard M & M = card M by Def5,Def6;
-  hence thesis;
+proof
+  card M in nextcard M by Def6;
+  hence thesis by Def5;
 end;
 
 theorem
   card {} in nextcard X
 proof
-   card {} c= card X & card X in nextcard X by Def6;
+  card {} c= card X & card X in nextcard X by Def6;
   hence thesis by ORDINAL1:22;
 end;
 
@@ -494,14 +554,16 @@ theorem Th34:
 proof
   assume
 A1: card X = card Y;
-  card X in nextcard X & for N st card X in N holds nextcard X c= N by Def6;
+  card X in nextcard X & for N st card X in N holds nextcard X c= N by
+  Def6;
   hence thesis by A1,Def6;
 end;
 
 theorem Th35:
   X,Y are_equipotent implies nextcard X = nextcard Y
 proof
-  assume X,Y are_equipotent;
+  assume
+  X,Y are_equipotent;
   then card X = card Y by Th21;
   hence thesis by Th34;
 end;
@@ -509,12 +571,15 @@ end;
 theorem
   A in nextcard A
 proof
-  assume not A in nextcard A;
-  then nextcard A c= A & A,card A are_equipotent by Def5,ORDINAL1:26;
-  then card nextcard A c= card A & card nextcard A = nextcard A &
-  nextcard card A = nextcard A & card A in nextcard card A
-  by Def5,Th27,Th32,Th35;
-  hence contradiction by ORDINAL1:7;
+  assume
+  not A in nextcard A;
+  then
+A1: card nextcard A c= card A by Th27,ORDINAL1:26;
+  A,card A are_equipotent by Def5;
+  then
+A2: nextcard card A = nextcard A by Th35;
+  card nextcard A = nextcard A by Def5;
+  hence contradiction by A1,A2,Th32,ORDINAL1:7;
 end;
 
 reserve S for T-Sequence;
@@ -530,45 +595,43 @@ definition
   let A;
   func alef A -> set means
   :Def8:
-  ex S st it = last S & dom S = succ A & S.{} = card omega &
-  (for B st succ B in succ A holds S.succ B = nextcard union { S.B }) &
-  for B st B in succ A & B <> {} & B is limit_ordinal
-  holds S.B = card sup(S|B);
+  ex S st it = last S & dom S = succ A & S.{}
+= card omega & (for B st succ B in succ A holds S.succ B = nextcard union { S.B
+}) & for B st B in succ A & B <> {} & B is limit_ordinal holds S.B = card sup(S
+  |B);
   correctness
   proof
-    deffunc C(Ordinal,set) = nextcard union {$2};
-    deffunc D(Ordinal,T-Sequence) = card sup $2;
     set B = card omega;
-    thus (ex x,S st x = last S & dom S = succ A & S.{} = B &
-    (for C st succ C in succ A holds S.succ C = C(C,S.C)) &
-    for C st C in succ A & C <> {} & C is limit_ordinal
-    holds S.C = D(C,S|C) ) & for x1,x2 being set st
-    (ex S st x1 = last S & dom S = succ A & S.{} = B &
-    (for C st succ C in succ A holds S.succ C = C(C,S.C)) &
-    for C st C in succ A & C <> {} & C is limit_ordinal
-    holds S.C = D(C,S|C) ) &
-    (ex S st x2 = last S & dom S = succ A & S.{} = B &
-    (for C st succ C in succ A holds S.succ C = C(C,S.C)) &
-    for C st C in succ A & C <> {} & C is limit_ordinal holds S.C = D(C,S|C) )
-    holds x1 = x2 from ORDINAL2:sch 7;
+    deffunc D(Ordinal,T-Sequence) = card sup $2;
+    deffunc C(Ordinal,set) = nextcard union {$2};
+    thus (ex x,S st x = last S & dom S = succ A & S.{} = B & (for C st succ C
+in succ A holds S.succ C = C(C,S.C)) & for C st C in succ A & C <> {} & C is
+    limit_ordinal holds S.C = D(C,S|C) ) & for x1,x2 being set st (ex S st x1 =
+last S & dom S = succ A & S.{} = B & (for C st succ C in succ A holds S.succ C
+= C(C,S.C)) & for C st C in succ A & C <> {} & C is limit_ordinal holds S.C = D
+(C,S|C) ) & (ex S st x2 = last S & dom S = succ A & S.{} = B & (for C st succ C
+in succ A holds S.succ C = C(C,S.C)) & for C st C in succ A & C <> {} & C is
+    limit_ordinal holds S.C = D(C,S|C) ) holds x1 = x2 from ORDINAL2:sch 7;
   end;
 end;
 
 Lm1: now
-  deffunc F(Ordinal) = alef $1;
-  deffunc C(Ordinal,set) = nextcard union { $2 };
   deffunc D(Ordinal,T-Sequence) = card sup $2;
-A1: for A,x holds x = F(A) iff
-  ex S st x = last S & dom S = succ A & S.{} = card omega &
-  (for C st succ C in succ A holds S.succ C = C(C,S.C)) &
-  for C st C in succ A & C <> {} & C is limit_ordinal
-  holds S.C = D(C,S|C) by Def8;
+  deffunc C(Ordinal,set) = nextcard union { $2 };
+  deffunc F(Ordinal) = alef $1;
+
+A1: for A,x holds x = F(A) iff ex S st x = last S & dom S = succ A & S.{} =
+
+card omega & (for C st succ C in succ A holds S.succ C = C(C,S.C)) & for C st C
+  in succ A & C <> {} & C is limit_ordinal holds S.C = D(C,S|C) by Def8;
+
   F({}) = card omega from ORDINAL2:sch 8(A1);
   hence alef 0 = card omega;
   thus for A holds F(succ A) = C(A,F(A)) from ORDINAL2:sch 9(A1);
-  thus A <> {} & A is limit_ordinal implies
-  for S st dom S = A & for B st B in A holds S.B = alef B holds
-  alef A = card sup S
+
+  thus A <> {} & A is limit_ordinal implies for S st dom S = A & for B st B in
+  A holds S.B = alef B holds alef A = card sup S
+
   proof
     assume
 A2: A <> {} & A is limit_ordinal;
@@ -586,20 +649,20 @@ registration
   coherence
   proof
 A1: now
-      given B such that
-A2:   A = succ B;
-      alef A = nextcard union {alef B} by A2,Lm1;
-      hence thesis;
+      consider S such that
+A2:   dom S = A & for B st B in A holds S.B = f(B) from ORDINAL2:sch 2;
+      assume that
+A3:   A <> {} and
+A4:   for B holds A <> succ B;
+      A is limit_ordinal by A4,ORDINAL1:42;
+      then alef A = card sup S by A3,A2,Lm1;
+      hence alef A is Cardinal;
     end;
     now
-      assume
-A3:   A <> {} & for B holds A <> succ B;
-      then
-A4:   A is limit_ordinal by ORDINAL1:42;
-      consider S such that
-A5:   dom S = A & for B st B in A holds S.B = f(B) from ORDINAL2:sch 2;
-      alef A = card sup S by A3,A4,A5,Lm1;
-      hence alef A is Cardinal;
+      given B such that
+A5:   A = succ B;
+      alef A = nextcard union {alef B} by A5,Lm1;
+      hence thesis;
     end;
     hence thesis by A1,Lm1;
   end;
@@ -615,62 +678,68 @@ proof
 end;
 
 theorem
-  A <> {} & A is limit_ordinal implies
-  for S st dom S = A & for B st B in A holds S.B = alef B holds
-  alef A = card sup S by Lm1;
+  A <> {} & A is limit_ordinal implies for S st dom S = A & for B st B
+  in A holds S.B = alef B holds alef A = card sup S by Lm1;
 
 theorem Th41:
   A in B iff alef A in alef B
 proof
   defpred P[Ordinal] means for A st A in $1 holds alef A in alef $1;
-A1: P[{}];
-A2: for B st P[B] holds P[succ B]
+A1: for B st P[B] holds P[succ B]
   proof
     let B such that
-A3: P[B];
+A2: P[B];
     let A;
-    assume
-A4: A in succ B;
-A5: alef succ B = nextcard alef B by Th39;
-A6: A c< B iff A c= B & A <> B by XBOOLE_0:def 8;
-    now
-      assume A in B;
-      then alef A in alef B & alef B in nextcard alef B by A3,Th32;
-      hence thesis by A5,ORDINAL1:19;
+A3: alef succ B = nextcard alef B by Th39;
+A4: now
+      assume
+      A in B;
+      then
+A5:   alef A in alef B by A2;
+      alef B in nextcard alef B by Th32;
+      hence thesis by A3,A5,ORDINAL1:19;
     end;
-    hence thesis by A4,A5,A6,Th32,ORDINAL1:21,34;
+A6: A c< B iff A c= B & A <> B by XBOOLE_0:def 8;
+    assume
+    A in succ B;
+    hence thesis by A3,A6,A4,Th32,ORDINAL1:21,34;
   end;
-A7: for B st B <> {} & B is limit_ordinal &
-  for C st C in B holds P[C] holds P[B]
+A7: for B st B <> {} & B is limit_ordinal & for C st C in B holds P[C]
+  holds P[B]
   proof
     let B such that
-A8: B <> {} & B is limit_ordinal and
+A8: B <> {} and
+A9: B is limit_ordinal and
     for C st C in B for A st A in C holds alef A in alef C;
-    consider S such that
-A9: dom S = B and
-A10: for C st C in B holds S.C = f(C) from ORDINAL2:sch 2;
-A11: alef B = card sup S by A8,A9,A10,Lm1;
     let A;
-    assume A in B;
-    then succ A in B by A8,ORDINAL1:41;
-    then S.succ A in rng S & S.succ A = alef succ A &
-    alef succ A = alef succ A by A9,A10,FUNCT_1:def 5;
-    then alef succ A in sup rng S & sup rng S = sup S by ORDINAL2:27,35;
-    then alef succ A c= sup S & card alef succ A = alef succ A
-    by Def5,ORDINAL1:def 2;
+    consider S such that
+A10: dom S = B & for C st C in B holds S.C = f(C) from ORDINAL2:sch 2;
+    assume
+    A in B;
+    then succ A in B by A9,ORDINAL1:41;
+    then S.succ A in rng S & S.succ A = alef succ A by A10,
+    FUNCT_1:def 5;
     then
-A12: alef succ A c= alef B by A11,Th27;
-    alef succ A = nextcard alef A & alef A in nextcard alef A by Th32,Th39;
-    hence thesis by A12;
+A11: alef succ A in sup rng S by ORDINAL2:27;
+    sup rng S = sup S by ORDINAL2:35;
+    then
+A12: alef succ A c= sup S by A11,ORDINAL1:def 2;
+A13: card alef succ A = alef succ A by Def5;
+A14: alef succ A = nextcard alef A & alef A in nextcard alef A by Th32,
+    Th39;
+    alef B = card sup S by A8,A9,A10,Lm1;
+    then alef succ A c= alef B by A12,A13,Th27;
+    hence thesis by A14;
   end;
-A13: for B holds P[B] from ORDINAL2:sch 1(A1,A2,A7);
+A15: P[{}];
+A16: for B holds P[B] from ORDINAL2:sch 1(A15,A1,A7);
   hence A in B implies alef A in alef B;
   assume
-A14: alef A in alef B;
+A17: alef A in alef B;
   then
-A15: not B in A by A13;
-  alef A <> alef B by A14;
-  hence thesis by A15,ORDINAL1:24;
+A18: alef A <> alef B;
+  not B in A by A16,A17;
+  hence thesis by A18,ORDINAL1:24;
 end;
 
 theorem Th42:
@@ -679,13 +748,15 @@ proof
   assume
 A1: alef A = alef B;
 A2: now
-    assume A in B;
-    then alef A in alef B by Th41;
+    assume
+    B in A;
+    then alef B in alef A by Th41;
     hence contradiction by A1;
   end;
   now
-    assume B in A;
-    then alef B in alef A by Th41;
+    assume
+    A in B;
+    then alef A in alef B by Th41;
     hence contradiction by A1;
   end;
   hence thesis by A2,ORDINAL1:24;
@@ -694,31 +765,35 @@ end;
 theorem
   A c= B iff alef A c= alef B
 proof
-  (A c< B iff A <> B & A c= B) &
-  (alef A c< alef B iff alef A <> alef B & alef A c= alef B)
-  by XBOOLE_0:def 8;
-  then (A in B iff alef A in alef B) & (alef A = alef B implies A = B) &
-  (alef A c= alef B iff alef A = alef B or alef A in alef B) &
-  (A c= B iff A = B or A in B) by Th41,Th42,ORDINAL1:21,def 2;
-  hence thesis;
+A1: A c< B iff A <> B & A c= B by XBOOLE_0:def 8;
+A2: alef A c< alef B iff alef A <> alef B & alef A c= alef B by XBOOLE_0:def
+  8;
+  A in B iff alef A in alef B by Th41;
+  hence thesis by A1,A2,Th42,ORDINAL1:21,def 2;
 end;
 
 theorem
-  X c= Y & Y c= Z & X,Z are_equipotent implies
-  X,Y are_equipotent & Y,Z are_equipotent
+  X c= Y & Y c= Z & X,Z are_equipotent implies X,Y are_equipotent & Y,Z
+  are_equipotent
 proof
-  assume X c= Y & Y c= Z & X,Z are_equipotent;
-  then card X c= card Y & card Y c= card Z & card X = card Z by Th21,Th27;
-  then card X = card Y & card Y = card Z by XBOOLE_0:def 10;
-  hence thesis by Th21;
+  assume that
+A1: X c= Y & Y c= Z and
+A2: X,Z are_equipotent;
+A3: card X = card Z by A2,Th21;
+  card X c= card Y & card Y c= card Z by A1,Th27;
+  then card X = card Y by A3,XBOOLE_0:def 10;
+  hence thesis by A3,Th21;
 end;
 
 theorem
   bool Y c= X implies card Y in card X & not Y,X are_equipotent
 proof
-  assume bool Y c= X;
-  then card Y in card bool Y & card bool Y c= card X by Th27,Th30;
-  hence card Y in card X;
+  assume
+  bool Y c= X;
+  then
+A1: card bool Y c= card X by Th27;
+  card Y in card bool Y by Th30;
+  hence card Y in card X by A1;
   then card Y <> card X;
   hence thesis by Th21;
 end;
@@ -726,9 +801,10 @@ end;
 theorem Th46:
   X,{} are_equipotent implies X = {}
 proof
-    given f such that
-A1: f is one-to-one & dom f = X & rng f = {};
-    thus thesis by A1,RELAT_1:65;
+  given f such that
+  f is one-to-one and
+A1: dom f = X & rng f = {};
+  thus thesis by A1,RELAT_1:65;
 end;
 
 theorem
@@ -739,39 +815,46 @@ theorem Th48:
 proof
   thus X,{x} are_equipotent implies ex x st X = { x }
   proof
-    assume X,{x} are_equipotent;
+    assume
+    X,{x} are_equipotent;
     then consider f such that
-A1: f is one-to-one & dom f = { x } & rng f = X by WELLORD2:def 4;
+    f is one-to-one and
+A1: dom f = { x } and
+A2: rng f = X by WELLORD2:def 4;
     rng f = { f.x } by A1,FUNCT_1:14;
-    hence thesis by A1;
+    hence thesis by A2;
   end;
   given y such that
-A2: X = { y };
+A3: X = { y };
   take f = X --> x;
-A3: dom f = X & for y st y in X holds f.y = x by FUNCOP_1:13,19;
+A4: dom f = X by FUNCOP_1:19;
   thus f is one-to-one
   proof
     let a,b;
-    assume a in dom f & b in dom f & f.a = f.b;
-    then a = y & b = y by A2,A3,TARSKI:def 1;
-    hence thesis;
+    assume that
+A5: a in dom f and
+A6: b in dom f and
+    f.a = f.b;
+    a = y by A3,A4,A5,TARSKI:def 1;
+    hence thesis by A3,A4,A6,TARSKI:def 1;
   end;
   thus dom f = X by FUNCOP_1:19;
   thus rng f c= { x } by FUNCOP_1:19;
   let a;
-  assume a in { x };
+  assume
+  a in { x };
   then
-A4: a = x & y in { y } by TARSKI:def 1;
-  then f.y = x by A2,FUNCOP_1:13;
-  hence thesis by A2,A3,A4,FUNCT_1:def 5;
+A7: a = x by TARSKI:def 1;
+A8: y in { y } by TARSKI:def 1;
+  then f.y = x by A3,FUNCOP_1:13;
+  hence thesis by A3,A4,A7,A8,FUNCT_1:def 5;
 end;
 
 theorem
   card X = card { x } iff ex x st X = { x }
 proof
-  (card X = card { x } iff X,{x} are_equipotent) &
-  (X,{x} are_equipotent iff ex x st X = { x }) by Th21,Th48;
-  hence thesis;
+  card X = card { x } iff X,{x} are_equipotent by Th21;
+  hence thesis by Th48;
 end;
 
 theorem
@@ -780,9 +863,11 @@ proof
 A1: 1 = succ 0;
   1 is cardinal
   proof
-    take IT = 1; thus 1 = IT;
+    take IT = 1;
+    thus 1 = IT;
     let A;
-    assume A,IT are_equipotent;
+    assume
+    A,IT are_equipotent;
     then ex y st A = { y } by A1,Th48;
     hence thesis by A1,ZFMISC_1:39;
   end;
@@ -794,198 +879,228 @@ end;
 canceled 7;
 
 theorem Th58:
-  X misses X1 & Y misses Y1 & X,Y are_equipotent &
-  X1,Y1 are_equipotent implies X \/ X1,Y \/ Y1 are_equipotent
+  X misses X1 & Y misses Y1 & X,Y are_equipotent & X1,Y1
+  are_equipotent implies X \/ X1,Y \/ Y1 are_equipotent
 proof
-  assume
-A1: X /\ X1 = {} & Y /\ Y1 = {};
+  assume that
+A1: X /\ X1 = {} and
+A2: Y /\ Y1 = {};
   given f such that
-A2: f is one-to-one & dom f = X & rng f = Y;
+A3: f is one-to-one and
+A4: dom f = X and
+A5: rng f = Y;
   given g such that
-A3: g is one-to-one & dom g = X1 & rng g = Y1;
+A6: g is one-to-one and
+A7: dom g = X1 and
+A8: rng g = Y1;
   defpred P[set,set] means $1 in X & $2 = f.$1 or $1 in X1 & $2 = g.$1;
-A4: for x st x in X \/ X1 ex y st P[x,y]
+A9: for x st x in X \/ X1 ex y st P[x,y]
   proof
     let x;
-    assume x in X \/ X1;
+    assume
+    x in X \/ X1;
     then x in X or x in X1 by XBOOLE_0:def 3;
     hence thesis;
   end;
-A5: for x,y,z st x in X \/ X1 & P[x,y] & P[x,z] holds y = z by A1,
-XBOOLE_0:def 4;
+A10: for x,y,z st x in X \/ X1 & P[x,y] & P[x,z] holds y = z by A1, XBOOLE_0
+  :def 4;
   consider h such that
-A6: dom h = X \/ X1 and
-A7: for x st x in X \/ X1 holds P[x,h.x] from FUNCT_1:sch 2(A5,A4);
+A11: dom h = X \/ X1 and
+A12: for x st x in X \/ X1 holds P[x,h.x] from FUNCT_1:sch 2(A10,A9);
   take h;
   thus h is one-to-one
   proof
     let x,y;
-    assume
-A8: x in dom h & y in dom h & h.x = h.y;
-    then
-A9: (x in X & h.x = f.x or x in X1 & h.x = g.x) &
-    (y in X & h.y = f.y or y in X1 & h.y = g.y) by A6,A7;
-A10: now
-      assume x in X & y in X1;
-      then not x in X1 & not y in X & f.x in Y & g.y in Y1
-      by A1,A2,A3,FUNCT_1:def 5,XBOOLE_0:def 4;
-      hence contradiction by A1,A8,A9,XBOOLE_0:def 4;
+    assume that
+A13: x in dom h and
+A14: y in dom h and
+A15: h.x = h.y;
+A16: y in X & h.y = f.y or y in X1 & h.y = g.y by A11,A12,A14;
+A17: x in X & h.x = f.x or x in X1 & h.x = g.x by A11,A12,A13;
+A18: now
+      assume
+A19:  y in X & x in X1;
+      then f.y in Y & g.x in Y1 by A4,A5,A7,A8,FUNCT_1:def 5;
+      hence contradiction by A1,A2,A15,A17,A16,A19,XBOOLE_0:def 4;
     end;
     now
-      assume y in X & x in X1;
-      then not y in X1 & not x in X & f.y in Y & g.x in Y1
-      by A1,A2,A3,FUNCT_1:def 5,XBOOLE_0:def 4;
-      hence contradiction by A1,A8,A9,XBOOLE_0:def 4;
+      assume
+A20:  x in X & y in X1;
+      then f.x in Y & g.y in Y1 by A4,A5,A7,A8,FUNCT_1:def 5;
+      hence contradiction by A1,A2,A15,A17,A16,A20,XBOOLE_0:def 4;
     end;
-    hence thesis by A2,A3,A8,A9,A10,FUNCT_1:def 8;
+    hence thesis by A3,A4,A6,A7,A15,A17,A16,A18,FUNCT_1:def 8;
   end;
-  thus dom h = X \/ X1 by A6;
+  thus dom h = X \/ X1 by A11;
   thus rng h c= Y \/ Y1
   proof
     let x;
-    assume x in rng h;
+    assume
+    x in rng h;
     then consider y such that
-A11: y in dom h & x = h.y by FUNCT_1:def 5;
-A12: y in X & x = f.y or y in X1 & x = g.y by A6,A7,A11;
-A13: now
-      assume y in X;
-      then x in Y by A1,A2,A12,FUNCT_1:def 5,XBOOLE_0:def 4;
+A21: y in dom h and
+A22: x = h.y by FUNCT_1:def 5;
+A23: y in X & x = f.y or y in X1 & x = g.y by A11,A12,A21,A22;
+A24: now
+      assume
+      y in X1;
+      then x in Y1 by A1,A7,A8,A23,FUNCT_1:def 5,XBOOLE_0:def 4;
       hence thesis by XBOOLE_0:def 3;
     end;
     now
-      assume y in X1;
-      then x in Y1 by A1,A3,A12,FUNCT_1:def 5,XBOOLE_0:def 4;
+      assume
+      y in X;
+      then x in Y by A1,A4,A5,A23,FUNCT_1:def 5,XBOOLE_0:def 4;
       hence thesis by XBOOLE_0:def 3;
     end;
-    hence thesis by A6,A11,A13,XBOOLE_0:def 3;
+    hence thesis by A11,A21,A24,XBOOLE_0:def 3;
   end;
   let x such that
-A14: x in Y \/ Y1;
-A15: now
-    assume x in Y;
+A25: x in Y \/ Y1;
+A26: now
+    assume
+    x in Y1;
     then consider y such that
-A16: y in dom f & x = f.y by A2,FUNCT_1:def 5;
-A17: y in X \/ X1 by A2,A16,XBOOLE_0:def 3;
-    then P[y,h.y] by A7;
-    hence thesis by A1,A2,A6,A16,A17,FUNCT_1:def 5,XBOOLE_0:def 4;
+A27: y in dom g and
+A28: x = g.y by A8,FUNCT_1:def 5;
+A29: y in X \/ X1 by A7,A27,XBOOLE_0:def 3;
+    then P[y,h.y] by A12;
+    hence thesis by A1,A7,A11,A27,A28,A29,FUNCT_1:def 5,XBOOLE_0:def 4;
   end;
   now
-    assume x in Y1;
+    assume
+    x in Y;
     then consider y such that
-A18: y in dom g & x = g.y by A3,FUNCT_1:def 5;
-A19: y in X \/ X1 by A3,A18,XBOOLE_0:def 3;
-    then P[y,h.y] by A7;
-    hence thesis by A1,A3,A6,A18,A19,FUNCT_1:def 5,XBOOLE_0:def 4;
+A30: y in dom f and
+A31: x = f.y by A5,FUNCT_1:def 5;
+A32: y in X \/ X1 by A4,A30,XBOOLE_0:def 3;
+    then P[y,h.y] by A12;
+    hence thesis by A1,A4,A11,A30,A31,A32,FUNCT_1:def 5,XBOOLE_0:def 4;
   end;
-  hence thesis by A14,A15,XBOOLE_0:def 3;
+  hence thesis by A25,A26,XBOOLE_0:def 3;
 end;
 
 theorem Th59:
   x in X & y in X implies X \ { x },X \ { y } are_equipotent
 proof
-  assume
-A1: x in X & y in X;
+  assume that
+A1: x in X and
+A2: y in X;
   defpred P[set,set] means $1 = y & $2 = x or $1 <> y & $1 = $2;
-A2: for a st a in X \ { x } ex b st P[a,b]
+A3: for a st a in X \ { x } ex b st P[a,b]
   proof
-    let a such that a in X \ { x };
+    let a such that
+    a in X \ { x };
     a = y implies thesis;
     hence thesis;
   end;
-A3: for a,b1,b2 st a in X \ { x } & P[a,b1] & P[a,b2] holds b1 = b2;
+A4: for a,b1,b2 st a in X \ { x } & P[a,b1] & P[a,b2] holds b1 = b2;
   consider f such that
-A4: dom f = X \ { x } & for a st a in X \ { x } holds P[a,f.a] from
-  FUNCT_1:sch 2(A3, A2);
+A5: dom f = X \ { x } & for a st a in X \ { x } holds P[a,f.a] from
+  FUNCT_1:sch 2(A4, A3);
   take f;
   thus f is one-to-one
   proof
     let b1,b2;
-    assume
-A5: b1 in dom f & b2 in dom f & f.b1 = f.b2 & b1 <> b2;
-    then P[b1,f.b1] & P[b2,f.b2] & not b1 in { x } & not b2 in { x }
-    by A4,XBOOLE_0:def 5;
-    hence thesis by A5,TARSKI:def 1;
+    assume that
+A6: b1 in dom f & b2 in dom f and
+A7: f.b1 = f.b2 & b1 <> b2;
+A8: ( not b1 in { x })& not b2 in { x } by A5,A6,XBOOLE_0:def 5;
+    ( P[b1,f.b1])& P[b2,f.b2] by A5,A6;
+    hence thesis by A7,A8,TARSKI:def 1;
   end;
-  thus dom f = X \ { x } by A4;
+  thus dom f = X \ { x } by A5;
   thus rng f c= X \ { y }
   proof
     let z;
-    assume z in rng f;
+    assume
+    z in rng f;
     then consider a such that
-A6: a in dom f & z = f.a by FUNCT_1:def 5;
-A7: now
-      assume a = y;
-      then not y in { x } & z = x by A4,A6,XBOOLE_0:def 5;
-      then y <> z & z in X by A1,TARSKI:def 1;
-      then not z in { y } & z in X by TARSKI:def 1;
-      hence thesis by XBOOLE_0:def 5;
+A9: a in dom f and
+A10: z = f.a by FUNCT_1:def 5;
+A11: now
+      assume
+A12:  a = y;
+      then ( not y in { x })& z = x by A5,A9,A10,XBOOLE_0:def 5;
+      then y <> z by TARSKI:def 1;
+      then
+A13:  not z in { y } by TARSKI:def 1;
+      z in X by A1,A5,A9,A10,A12;
+      hence thesis by A13,XBOOLE_0:def 5;
     end;
     now
-      assume a <> y;
-      then not a in { y } & a = z & a in X by A4,A6,TARSKI:def 1;
-      hence thesis by XBOOLE_0:def 5;
+      assume
+      a <> y;
+      then ( not a in { y })& a = z by A5,A9,A10,TARSKI:def 1;
+      hence thesis by A5,A9,XBOOLE_0:def 5;
     end;
-    hence thesis by A7;
+    hence thesis by A11;
   end;
   let z;
   assume
-A8: z in X \ { y };
-  then z in X & not z in { y } by XBOOLE_0:def 5;
+A14: z in X \ { y };
+  then not z in { y } by XBOOLE_0:def 5;
   then
-A9: z <> y by TARSKI:def 1;
-A10: now
+A15: z <> y by TARSKI:def 1;
+A16: now
     assume
-A11: z = x;
-    then not y in { x } by A9,TARSKI:def 1;
-    then
-A12: y in dom f by A1,A4,XBOOLE_0:def 5;
-    then z = f.y by A4,A11;
-    hence thesis by A12,FUNCT_1:def 5;
-  end;
-  now
-    assume z <> x;
+    z <> x;
     then not z in { x } by TARSKI:def 1;
     then
-A13: z in X \ { x } by A8,XBOOLE_0:def 5;
-    then z = f.z by A4,A9;
-    hence thesis by A4,A13,FUNCT_1:def 5;
+A17: z in X \ { x } by A14,XBOOLE_0:def 5;
+    then z = f.z by A5,A15;
+    hence thesis by A5,A17,FUNCT_1:def 5;
   end;
-  hence thesis by A10;
+  now
+    assume
+A18: z = x;
+    then not y in { x } by A15,TARSKI:def 1;
+    then
+A19: y in dom f by A2,A5,XBOOLE_0:def 5;
+    then z = f.y by A5,A18;
+    hence thesis by A19,FUNCT_1:def 5;
+  end;
+  hence thesis by A16;
 end;
 
 theorem Th60:
   X c= dom f & f is one-to-one implies X,f.:X are_equipotent
 proof
-  assume
-A1: X c= dom f & f is one-to-one;
+  assume that
+A1: X c= dom f and
+A2: f is one-to-one;
   take g = f|X;
-  thus g is one-to-one by A1,FUNCT_1:84;
+  thus g is one-to-one by A2,FUNCT_1:84;
   thus dom g = X by A1,RELAT_1:91;
   thus thesis by RELAT_1:148;
 end;
 
 theorem Th61:
-  X,Y are_equipotent & x in X & y in Y implies
-  X \ { x },Y \ { y } are_equipotent
+  X,Y are_equipotent & x in X & y in Y implies X \ { x },Y \ { y }
+  are_equipotent
 proof
   given f such that
-A1: f is one-to-one & dom f = X & rng f = Y;
-  assume
-A2: x in X & y in Y;
-A3: X \ { x },f.:(X \ { x }) are_equipotent by A1,Th60;
-A4: f.:(X \ { x }) = f.:X \ Im(f,x) by A1,FUNCT_1:123
-    .= Y \ Im(f,x) by A1,RELAT_1:146
-    .= Y \ { f.x } by A1,A2,FUNCT_1:117;
-  f.x in Y by A1,A2,FUNCT_1:def 5;
-  then Y \ { f.x },Y \ { y } are_equipotent by A2,Th59;
-  hence thesis by A3,A4,WELLORD2:22;
+A1: f is one-to-one and
+A2: dom f = X and
+A3: rng f = Y;
+A4: X \ { x },f.:(X \ { x }) are_equipotent by A1,A2,Th60;
+  assume that
+A5: x in X and
+A6: y in Y;
+  f.x in Y by A2,A3,A5,FUNCT_1:def 5;
+  then
+A7: Y \ { f.x },Y \ { y } are_equipotent by A6,Th59;
+  f.:(X \ { x }) = f.:X \ Im(f,x) by A1,FUNCT_1:123
+    .= Y \ Im(f,x) by A2,A3,RELAT_1:146
+    .= Y \ { f.x } by A2,A5,FUNCT_1:117;
+  hence thesis by A4,A7,WELLORD2:22;
 end;
 
 theorem Th62:
   succ X, succ Y are_equipotent implies X, Y are_equipotent
 proof
-A1: X = succ X \ {X} & Y = succ Y \ {Y} by ORDINAL1:52;
-  X in succ X & Y in succ Y by ORDINAL1:10;
+A1: X in succ X & Y in succ Y by ORDINAL1:10;
+  X = succ X \ {X} & Y = succ Y \ {Y} by ORDINAL1:52;
   hence thesis by A1,Th61;
 end;
 
@@ -993,35 +1108,36 @@ theorem Th63:
   n = {} or ex m st n = succ m
 proof
   defpred P[natural number] means $1 = {} or ex m st $1 = succ m;
-A1: P[{}];
-A2: for a being natural number st P[a] holds P[succ a];
-  thus P[n] from ORDINAL2:sch 17(A1,A2);
+A1: for a being natural number st P[a] holds P[succ a];
+A2: P[{}];
+  thus P[n] from ORDINAL2:sch 17(A2,A1);
 end;
 
 canceled;
 
-Th64:
-  n,m are_equipotent implies n = m
+Lm2: n,m are_equipotent implies n = m
 proof
   defpred P[natural number] means for n st n,$1 are_equipotent holds n = $1;
-A1: P[{}] by Th46;
-A2: for a being natural number st P[a] holds P[succ a]
+A1: for a being natural number st P[a] holds P[succ a]
   proof
     let a be natural number such that
-A3: P[a];
+A2: P[a];
     let n;
     assume
-A4: n,succ a are_equipotent;
+A3: n,succ a are_equipotent;
     per cases;
-    suppose n = {};
-      hence thesis by A4,Th46;
+    suppose
+      n = {};
+      hence thesis by A3,Th46;
     end;
-    suppose n <> {};
+    suppose
+      n <> {};
       then ex m st n = succ m by Th63;
-      hence thesis by A3,A4,Th62;
+      hence thesis by A2,A3,Th62;
     end;
   end;
-  P[m] from ORDINAL2:sch 17(A1,A2);
+A4: P[{}] by Th46;
+  P[m] from ORDINAL2:sch 17(A4,A1);
   hence thesis;
 end;
 
@@ -1033,12 +1149,13 @@ A1: x in omega and
 A2: for B st x = B ex C st C,B are_equipotent & not B c= C;
   reconsider A = x as Ordinal by A1;
   consider B such that
-A3: B,A are_equipotent & not A c= B by A2;
-  B in A by A3,ORDINAL1:26;
+A3: B,A are_equipotent and
+A4: not A c= B by A2;
+  B in A by A4,ORDINAL1:26;
   then B in omega by A1,ORDINAL1:19;
   then reconsider n = A, m = B as natural number by A1;
   n,m are_equipotent by A3;
-  hence contradiction by A3,Th64;
+  hence contradiction by A4,Lm2;
 end;
 
 registration
@@ -1046,7 +1163,8 @@ registration
   correctness
   proof
     let n be number;
-    assume n is natural;
+    assume
+    n is natural;
     then n in omega by ORDINAL1:def 13;
     hence thesis by Th65;
   end;
@@ -1057,19 +1175,24 @@ canceled 2;
 theorem Th68:
   X,Y are_equipotent & X is finite implies Y is finite
 proof
-  assume X,Y are_equipotent;
+  assume
+  X,Y are_equipotent;
   then consider f such that
-A1: f is one-to-one & dom f = X & rng f = Y by WELLORD2:def 4;
+  f is one-to-one and
+A1: dom f = X and
+A2: rng f = Y by WELLORD2:def 4;
   given p being Function such that
-A2: rng p = X and
-A3: dom p in omega;
-  take f*p; thus rng(f*p) = Y by A1,A2,RELAT_1:47;
-  thus thesis by A1,A2,A3,RELAT_1:46;
+A3: rng p = X and
+A4: dom p in omega;
+  take f*p;
+  thus rng(f*p) = Y by A1,A2,A3,RELAT_1:47;
+  thus thesis by A1,A3,A4,RELAT_1:46;
 end;
 
 theorem Th69:
   n is finite & card n is finite
-proof reconsider n as Element of omega by ORDINAL1:def 13;
+proof
+  reconsider n as Element of omega by ORDINAL1:def 13;
   rng id n = n & dom id n = n by RELAT_1:71;
   then n is finite by FINSET_1:def 1;
   hence thesis by Def5;
@@ -1083,85 +1206,94 @@ proof
   assume
 A1: card n = card m;
   reconsider n,m as Element of omega by ORDINAL1:def 13;
-  card n = n & card m = m by Def5;
-  hence thesis by A1;
+  card n = n by Def5;
+  hence thesis by A1,Def5;
 end;
 
 theorem
   card n c= card m iff n c= m
 proof
-  card n = n & card m = m by Def5;
-  hence thesis;
+  card n = n by Def5;
+  hence thesis by Def5;
 end;
 
 theorem Th73:
   card n in card m iff n in m
 proof
-  card n = n & card m = m by Def5;
-  hence thesis;
+  card n = n by Def5;
+  hence thesis by Def5;
 end;
 
 theorem Th74:
   X is finite implies ex n st X,n are_equipotent
 proof
   defpred P[set] means ex n st $1,n are_equipotent;
-  assume
-A1: X is finite;
-A2: P[{}];
-A3: for Z,Y st Z in X & Y c= X & P[Y] holds P[Y \/ {Z}]
+A1: P[{}];
+A2: for Z,Y st Z in X & Y c= X & P[Y] holds P[Y \/ {Z}]
   proof
-    let Z,Y such that Z in X & Y c= X;
+    let Z,Y such that
+    Z in X and
+    Y c= X;
     given n such that
-A4: Y,n are_equipotent;
-A5: Z in Y implies thesis
-    proof
-      assume Z in Y;
-      then
-A6:   { Z } c= Y by ZFMISC_1:37;
-      take n; thus thesis by A4,A6,XBOOLE_1:12;
-    end;
-    not Z in Y implies thesis
+A3: Y,n are_equipotent;
+A4: not Z in Y implies thesis
     proof
       assume
-A7:   not Z in Y;
-      take m = succ n;
-A8:   { Z },{ n } are_equipotent by Th48;
-A9:   now
-        assume n meets { n };
-        then consider x being set such that
-A10:    x in n & x in { n } by XBOOLE_0:3;
-        x = n by A10,TARSKI:def 1;
-        hence contradiction by A10;
-      end;
-      now consider x being Element of Y /\ { Z };
-        assume Y /\ { Z } <> {};
+A5:   not Z in Y;
+      now
+        consider x being Element of Y /\ { Z };
+        assume
+        Y /\ { Z } <> {};
         then x in Y & x in { Z } by XBOOLE_0:def 4;
-        hence contradiction by A7,TARSKI:def 1;
+        hence contradiction by A5,TARSKI:def 1;
       end;
-      then Y misses { Z } by XBOOLE_0:def 7;
-      hence thesis by A4,A8,A9,Th58;
+      then
+A6:   Y misses { Z } by XBOOLE_0:def 7;
+A7:   now
+        assume
+        n meets { n };
+        then consider x being set such that
+A8:     x in n and
+A9:     x in { n } by XBOOLE_0:3;
+        x = n by A9,TARSKI:def 1;
+        hence contradiction by A8;
+      end;
+      take m = succ n;
+      { Z },{ n } are_equipotent by Th48;
+      hence thesis by A3,A7,A6,Th58;
     end;
-    hence thesis by A5;
+    Z in Y implies thesis
+    proof
+      assume
+A10:  Z in Y;
+      take n;
+      { Z } c= Y by A10,ZFMISC_1:37;
+      hence thesis by A3,XBOOLE_1:12;
+    end;
+    hence thesis by A4;
   end;
-  thus P[X] from FINSET_1:sch 2(A1,A2,A3);
+  assume
+A11: X is finite;
+  thus P[X] from FINSET_1:sch 2(A11,A1,A2);
 end;
 
 canceled;
 
 theorem Th76:
   nextcard card n = card succ n
-proof reconsider sn = succ n as natural number;
-  n in succ n by ORDINAL1:10;
-  then
-A1: card n in card sn by Th73;
-  for M st card card n in M holds card succ n c= M
+proof
+  reconsider sn = succ n as natural number;
+A1: for M st card card n in M holds card succ n c= M
   proof
-    let M such that
-A2: card card n in M;
-    card n = n by Def5;
-    then succ n c= M & card succ n = succ n by A2,Def5,ORDINAL1:33;
-    hence thesis;
+A2: card n = n by Def5;
+    let M;
+    assume
+    card card n in M;
+    then succ n c= M by A2,ORDINAL1:33;
+    hence thesis by Def5;
   end;
+  n in succ n by ORDINAL1:10;
+  then card n in card sn by Th73;
   hence thesis by A1,Def6;
 end;
 
@@ -1173,10 +1305,10 @@ end;
 
 definition
   let X be finite set;
-  redefine
-  func card X -> Element of omega;
+  redefine func card X -> Element of omega;
   coherence
-  proof consider n such that
+  proof
+    consider n such that
 A1: X,n are_equipotent by Th74;
     reconsider n as Element of omega by ORDINAL1:def 13;
     X,n are_equipotent by A1;
@@ -1189,23 +1321,26 @@ canceled 5;
 theorem
   X is finite implies nextcard X is finite
 proof
-  assume X is finite;
+  assume
+  X is finite;
   then reconsider X as finite set;
-  card X = card card X & X,card X are_equipotent by Def5;
-  then card(succ card X) = nextcard card X & nextcard card X = nextcard X
-  by Th35,Th76;
-  hence thesis by Th69;
+  card X = card card X;
+  then
+A1: card(succ card X) = nextcard card X by Th76;
+  X,card X are_equipotent by Def5;
+  then nextcard card X = nextcard X by Th35;
+  hence thesis by A1,Th69;
 end;
 
-scheme CardinalInd { Sigma[set] }: for M holds Sigma[M]
+scheme
+  CardinalInd { Sigma[set] }: for M holds Sigma[M]
 provided
-A1: Sigma[{}]
-and
-A2: for M st Sigma[M] holds Sigma[nextcard M]
-and
-A3: for M st M <> {} & M is limit_cardinal & for N st N in M holds Sigma[N]
-holds Sigma[M]
+A1: Sigma[{}] and
+A2: for M st Sigma[M] holds Sigma[nextcard M] and
+A3: for M st M <> {} & M is limit_cardinal & for N st N in M holds Sigma
+[N] holds Sigma[M]
 proof
+  let M;
   defpred P[Ordinal] means $1 is Cardinal implies Sigma[$1];
 A4: for A st for B st B in A holds P[B] holds P[A]
   proof
@@ -1214,10 +1349,11 @@ A5: for B st B in A holds P[B] and
 A6: A is Cardinal;
     reconsider M = A as Cardinal by A6;
 A7: now
-      assume not M is limit_cardinal;
+      assume
+      not M is limit_cardinal;
       then consider N such that
 A8:   M = nextcard N by Def7;
-      N in M & N = N by A8,Th32;
+      N in M by A8,Th32;
       hence Sigma[M] by A2,A5,A8;
     end;
     now
@@ -1228,28 +1364,29 @@ A9:   M <> {} & M is limit_cardinal;
     end;
     hence thesis by A1,A7;
   end;
-A10: for A holds P[A] from ORDINAL1:sch 2(A4);
-  let M;
-  thus thesis by A10;
+  for A holds P[A] from ORDINAL1:sch 2(A4);
+  hence thesis;
 end;
 
-scheme CardinalCompInd { Sigma[set] }: for M holds Sigma[M]
+scheme
+  CardinalCompInd { Sigma[set] }: for M holds Sigma[M]
 provided
 A1: for M st for N st N in M holds Sigma[N] holds Sigma[M]
 proof
+  let M;
   defpred P[Ordinal] means $1 is Cardinal implies Sigma[$1];
 A2: for A st for B st B in A holds P[B] holds P[A]
   proof
     let A such that
 A3: for B st B in A holds B is Cardinal implies Sigma[B];
-    assume A is Cardinal;
+    assume
+    A is Cardinal;
     then reconsider M = A as Cardinal;
     for N st N in M holds Sigma[N] by A3;
     hence thesis by A1;
   end;
-A4: for A holds P[A] from ORDINAL1:sch 2(A2);
-  let M;
-  thus thesis by A4;
+  for A holds P[A] from ORDINAL1:sch 2(A2);
+  hence thesis;
 end;
 
 theorem Th83:
@@ -1265,35 +1402,35 @@ A1: x in omega;
     consider n being Element of omega such that
 A2: A = n by A1;
     succ n c= omega by ORDINAL1:33;
-    then card succ n c= card omega & n in succ n &
-    card succ n = succ n by Def5,Th27,ORDINAL1:10;
-    hence thesis by A2,Lm1;
+    then
+A3: card succ n c= card omega by Th27;
+    n in succ n & card succ n = succ n by Def5,ORDINAL1:10;
+    hence thesis by A2,A3,Lm1;
   end;
 end;
 
 registration
- cluster omega -> cardinal number;
- coherence by Th83;
+  cluster omega -> cardinal number;
+  coherence by Th83;
 end;
 
 theorem
   card omega = omega by Lm1,Th83;
 
 registration
- cluster omega -> limit_cardinal;
- coherence
- proof
-  given N such that
+  cluster omega -> limit_cardinal;
+  coherence
+  proof
+    given N such that
 A1: omega = nextcard N;
-  N in omega by A1,Th32;
-  then
-A2: succ N in omega & N is natural by ORDINAL1:def 13;
-  reconsider n=N as Element of omega by A1,Th32;
-A3: nextcard card n = card succ n by Th76;
-A4: card n = n by Def5;
-  card succ n = succ n by Def5;
-  hence contradiction by A1,A2,A3,A4;
- end;
+    N in omega by A1,Th32;
+    then
+A2: succ N in omega by ORDINAL1:def 13;
+    reconsider n=N as Element of omega by A1,Th32;
+A3: card succ n = succ n by Def5;
+    nextcard card n = card succ n & card n = n by Def5,Th76;
+    hence contradiction by A1,A2,A3;
+  end;
 end;
 
 registration
@@ -1304,7 +1441,8 @@ end;
 registration
   cluster finite Cardinal;
   existence
-  proof consider n being Element of omega;
+  proof
+    consider n being Element of omega;
     take n;
     thus thesis;
   end;
@@ -1316,7 +1454,7 @@ theorem
   for M being finite Cardinal ex n st M = card n
 proof
   let M be finite Cardinal;
-  card M = M & card M = card card M by Def5;
+  card M = M by Def5;
   hence thesis;
 end;
 
@@ -1326,70 +1464,69 @@ registration
   coherence;
 end;
 
-Th102:
-  A,n are_equipotent implies A = n
+Lm3: A,n are_equipotent implies A = n
 proof
   defpred P[natural number] means for A st A,$1 are_equipotent holds A = $1;
-A1: P[{}] by Th46;
-A2: for n st P[n] holds P[succ n]
+A1: for n st P[n] holds P[succ n]
   proof
     let n such that
-A3: P[n];
+A2: P[n];
     let A;
+A3: n in (succ n) & (succ n) \ { n} = n by ORDINAL1:10,52;
     assume
 A4: A,succ n are_equipotent;
     then A <> {} by Th46;
     then
 A5: {} in A by ORDINAL3:10;
     now
-      assume A is limit_ordinal;
+      assume
+      A is limit_ordinal;
       then
 A6:   omega c= A by A5,ORDINAL1:def 12;
-      card omega c= card A & card A = card (succ n) &
-      card (succ n) in card omega by A4,A6,Lm1,Th21,Th27,Th83;
-      hence contradiction by ORDINAL1:7;
+      card A = card (succ n) by A4,Th21;
+      hence contradiction by A6,Lm1,Th27,Th83,ORDINAL1:7;
     end;
     then consider B such that
 A7: A = succ B by ORDINAL1:42;
-    B in A & n in (succ n) by A7,ORDINAL1:10;
-    then A \ {B},(succ n) \ { n} are_equipotent & A\{B} = B &
-    (succ n) \ { n} = n by A4,A7,Th61,ORDINAL1:52;
-    hence thesis by A3,A7;
+    B in A & A\{B} = B by A7,ORDINAL1:10,52;
+    hence thesis by A2,A4,A7,A3,Th61;
   end;
-  P[n] from ORDINAL2:sch 17(A1,A2);
+A8: P[{}] by Th46;
+  P[n] from ORDINAL2:sch 17(A8,A1);
   hence thesis;
 end;
 
-Th103:
-  A is finite iff A in omega
+Lm4: A is finite iff A in omega
 proof
   thus A is finite implies A in omega
   proof
-    assume A is finite;
+    assume
+    A is finite;
     then consider n such that
 A1: A,n are_equipotent by Th74;
-    A = n by A1,Th102;
+    A = n by A1,Lm3;
     hence thesis by ORDINAL1:def 13;
   end;
-  assume A in omega;
+  assume
+  A in omega;
   hence thesis;
 end;
 
 registration
- cluster omega -> infinite;
- coherence
+  cluster omega -> infinite;
+  coherence
   proof
     not omega in omega;
-   hence thesis by Th103;
+    hence thesis by Lm4;
   end;
 end;
 
 registration
- cluster infinite set;
- existence
+  cluster infinite set;
+  existence
   proof
-   take omega;
-   thus thesis;
+    take omega;
+    thus thesis;
   end;
 end;
 
@@ -1397,9 +1534,10 @@ registration
   let X be infinite set;
   cluster card X -> infinite;
   coherence
-proof X,card X are_equipotent by Def5;
-  hence thesis by Th68;
-end;
+  proof
+    X,card X are_equipotent by Def5;
+    hence thesis by Th68;
+  end;
 end;
 
 begin :: The meaning of numerals, 2006.08.25
@@ -1477,13 +1615,14 @@ end;
 :: Moved from FRECHET2 by AK on 27.12.2006
 
 theorem
-  for f being Function st dom f is infinite & f is one-to-one holds
-  rng f is infinite
+  for f being Function st dom f is infinite & f is one-to-one holds rng
+  f is infinite
 proof
   let f be Function;
-  assume
-A1: dom f is infinite & f is one-to-one;
-  then dom f,rng f are_equipotent by WELLORD2:def 4;
+  assume that
+A1: dom f is infinite and
+A2: f is one-to-one;
+  dom f,rng f are_equipotent by A2,WELLORD2:def 4;
   hence thesis by A1,Th68;
 end;
 
@@ -1495,7 +1634,6 @@ definition
   canceled 3;
   let n;
   func Segm n -> set equals
-
   n;
   coherence;
 end;
@@ -1517,141 +1655,153 @@ canceled 4;
 :: from CARD_4, 2007.08.16, A.T.
 
 theorem
-  A,n are_equipotent implies A = n by Th102;
+  A,n are_equipotent implies A = n by Lm3;
 
 theorem
-  A is finite iff A in omega by Th103;
+  A is finite iff A in omega by Lm4;
 
 registration
   cluster natural -> finite set;
   coherence
   proof
     let a be set;
-    assume a in omega;
+    assume
+    a in omega;
     hence thesis;
   end;
 end;
 
 :: from CARD_4, CARD_5 etc. 2008.02.21, A.T.
 
-registration let A be infinite set;
- cluster bool A -> infinite;
- coherence
-proof
-    assume
-A28: bool A is finite;
+registration
+  let A be infinite set;
+  cluster bool A -> infinite;
+  coherence
+  proof
     defpred P[set] means ex y st $1={y};
     consider X being set such that
-A29: for x holds x in X iff x in bool A & P[x] from XBOOLE_0:sch 1;
+A1: for x holds x in X iff x in bool A & P[x] from XBOOLE_0:sch 1;
     for x holds x in union X iff x in A
     proof
       let x;
       thus x in union X implies x in A
       proof
-        assume x in union X;
+        assume
+        x in union X;
         then consider B being set such that
-A30:    x in B and
-A31:    B in X by TARSKI:def 4;
-        B in bool A by A29,A31;
-        hence thesis by A30;
+A2:     x in B and
+A3:     B in X by TARSKI:def 4;
+        B in bool A by A1,A3;
+        hence thesis by A2;
       end;
-      assume x in A;
+      assume
+      x in A;
       then {x} c= A by ZFMISC_1:37;
       then
-A32:  {x} in X by A29;
+A4:   {x} in X by A1;
       x in {x} by TARSKI:def 1;
-      hence thesis by A32,TARSKI:def 4;
+      hence thesis by A4,TARSKI:def 4;
     end;
     then
-A33: union X = A by TARSKI:2;
-A34: for B being set st B in X holds B is finite
+A5: union X = A by TARSKI:2;
+A6: for B being set st B in X holds B is finite
     proof
       let B be set;
-      assume B in X;
-      then ex y st B = {y} by A29;
+      assume
+      B in X;
+      then ex y st B = {y} by A1;
       hence thesis;
     end;
-    X c= bool A
+A7: X c= bool A
     proof
       let x;
-      assume x in X;
-      hence thesis by A29;
-    end;
-    then X is finite by A28;
-    hence thesis by A33,A34,FINSET_1:25;
-end;
- let B be non empty set;
- cluster [:A,B:] ->infinite;
- coherence
-proof
-  assume that
-A2: [:A,B:] is finite;
-  deffunc F(set) = $1`1;
-  consider f such that
-A3: dom f = [:A,B:] and
-A4: for x st x in [:A,B:] holds f.x = F(x) from FUNCT_1:sch 3;
-  x in rng f iff x in A
-  proof
-    thus x in rng f implies x in A
-    proof
-      assume x in rng f;
-      then consider y such that
-A5:   y in dom f and
-A6:   f.y = x by FUNCT_1:def 5;
-      x = y`1 by A3,A4,A5,A6;
-      hence thesis by A3,A5,MCART_1:10;
+      assume
+      x in X;
+      hence thesis by A1;
     end;
     assume
-A7: x in A;
-    consider y being Element of B;
-A8: [x,y] in dom f by A3,A7,ZFMISC_1:106;
-    then f.([x,y]) = [x,y]`1 by A3,A4
-      .= x by MCART_1:7;
-    hence thesis by A8,FUNCT_1:def 5;
+    bool A is finite;
+    hence thesis by A5,A6,A7,FINSET_1:25;
   end;
-  then rng f = A by TARSKI:2;
-  then f.:[:A,B:] = A by A3,RELAT_1:146;
-  hence contradiction by A2;
-end;
- cluster [:B,A:] ->infinite;
- coherence
-proof
-  assume that
-A2: [:B,A:] is finite;
-  deffunc F(set) = $1`2;
-  consider f such that
-A3: dom f = [:B,A:] and
-A4: for x st x in [:B,A:] holds f.x = F(x) from FUNCT_1:sch 3;
-  y in rng f iff y in A
+  let B be non empty set;
+  cluster [:A,B:] ->infinite;
+  coherence
   proof
-    thus y in rng f implies y in A
+    deffunc F(set) = $1`1;
+    consider f such that
+A8: dom f = [:A,B:] and
+A9: for x st x in [:A,B:] holds f.x = F(x) from FUNCT_1:sch 3;
+    x in rng f iff x in A
     proof
-      assume y in rng f;
-      then consider x such that
-A5:   x in dom f and
-A6:   f.x = y by FUNCT_1:def 5;
-      y = x`2 by A3,A4,A5,A6;
-      hence thesis by A3,A5,MCART_1:10;
+      thus x in rng f implies x in A
+      proof
+        assume
+        x in rng f;
+        then consider y such that
+A10:    y in dom f and
+A11:    f.y = x by FUNCT_1:def 5;
+        x = y`1 by A8,A9,A10,A11;
+        hence thesis by A8,A10,MCART_1:10;
+      end;
+      consider y being Element of B;
+      assume
+      x in A;
+      then
+A12:  [x,y] in dom f by A8,ZFMISC_1:106;
+      then f.([x,y]) = [x,y]`1 by A8,A9
+        .= x by MCART_1:7;
+      hence thesis by A12,FUNCT_1:def 5;
     end;
+    then rng f = A by TARSKI:2;
+    then
+A13: f.:[:A,B:] = A by A8,RELAT_1:146;
     assume
-A7: y in A;
-    consider x being Element of B;
-A8: [x,y] in dom f by A3,A7,ZFMISC_1:106;
-    [x,y]`2 = y by MCART_1:7;
-    then f.([x,y]) = y by A3,A4,A8;
-    hence thesis by A8,FUNCT_1:def 5;
+    [:A,B:] is finite;
+    hence contradiction by A13;
   end;
-  then rng f = A by TARSKI:2;
-  then f.:[:B,A:] = A by A3,RELAT_1:146;
-  hence contradiction by A2;
-end;
+  cluster [:B,A:] ->infinite;
+  coherence
+  proof
+    deffunc F(set) = $1`2;
+    consider f such that
+A14: dom f = [:B,A:] and
+A15: for x st x in [:B,A:] holds f.x = F(x) from FUNCT_1:sch 3;
+    y in rng f iff y in A
+    proof
+      thus y in rng f implies y in A
+      proof
+        assume
+        y in rng f;
+        then consider x such that
+A16:    x in dom f and
+A17:    f.x = y by FUNCT_1:def 5;
+        y = x`2 by A14,A15,A16,A17;
+        hence thesis by A14,A16,MCART_1:10;
+      end;
+      consider x being Element of B;
+      assume
+      y in A;
+      then
+A18:  [x,y] in dom f by A14,ZFMISC_1:106;
+      [x,y]`2 = y by MCART_1:7;
+      then f.([x,y]) = y by A14,A15,A18;
+      hence thesis by A18,FUNCT_1:def 5;
+    end;
+    then rng f = A by TARSKI:2;
+    then
+A19: f.:[:B,A:] = A by A14,RELAT_1:146;
+    assume
+    [:B,A:] is finite;
+    hence contradiction by A19;
+  end;
 end;
 
 registration
   let X be infinite set;
   cluster infinite Subset of X;
   existence
-  proof X c= X;
+  proof
+    X c= X;
     hence thesis;
   end;
 end;
@@ -1663,8 +1813,9 @@ registration
   coherence
   proof
     let n be number;
-    assume n is finite ordinal;
-    then n in omega by Th103;
+    assume
+    n is finite ordinal;
+    then n in omega by Lm4;
     hence thesis;
   end;
 end;
@@ -1683,30 +1834,36 @@ A2: for x st x in dom f holds g.x = F(x) from FUNCT_1:sch 3;
     thus g is one-to-one
     proof
       let x,y;
+      assume that
+A3:   x in dom g and
+A4:   y in dom g;
       assume
-A3:   x in dom g & y in dom g;
-      assume g.x = g.y;
+      g.x = g.y;
       then [x,f.x] = g.y by A1,A2,A3
-        .= [y,f.y] by A1,A2,A3;
+        .= [y,f.y] by A1,A2,A4;
       hence thesis by ZFMISC_1:33;
     end;
     thus dom g = dom f by A1;
     thus rng g c= f
     proof
       let i be set;
-      assume i in rng g;
+      assume
+      i in rng g;
       then consider x such that
-A4:   x in dom g and
-A5:   g.x = i by FUNCT_1:def 5;
-      g.x = [x,f.x] by A1,A2,A4;
-      hence thesis by A1,A4,A5,FUNCT_1:8;
+A5:   x in dom g and
+A6:   g.x = i by FUNCT_1:def 5;
+      g.x = [x,f.x] by A1,A2,A5;
+      hence thesis by A1,A5,A6,FUNCT_1:8;
     end;
     let x,y;
-    assume [x,y] in f;
+    assume
+A7: [x,y] in f;
     then
-A6: x in dom f & y = f.x by FUNCT_1:8;
-    then g.x = [x,y] by A2;
-    hence thesis by A1,A6,FUNCT_1:def 5;
+A8: x in dom f by FUNCT_1:8;
+    y = f.x by A7,FUNCT_1:8;
+    then g.x = [x,y] by A2,A8;
+    hence thesis by A1,A8,FUNCT_1:def 5;
   end;
   hence thesis by Th21;
 end;
+

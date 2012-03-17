@@ -8,6 +8,7 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="ORDINAL1"/>
@@ -15,7 +16,6 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
-<ArticleID name="PARTFUN1"/>
 <ArticleID name="ORDERS_1"/>
 <ArticleID name="ORDERS_2"/>
 <ArticleID name="FUNCT_4"/>
@@ -24,7 +24,6 @@
 <ArticleID name="WAYBEL_0"/>
 <ArticleID name="LATTICES"/>
 <ArticleID name="EQREL_1"/>
-<ArticleID name="FILTER_0"/>
 <ArticleID name="FILTER_1"/>
 <ArticleID name="LATTICE3"/>
 <ArticleID name="YELLOW_3"/>
@@ -38,9 +37,9 @@
 <Typ kind="G" nr="12">
 <Cluster>
 <Adjective nr="43"/>
+<Adjective nr="59"/>
 <Adjective nr="60"/>
 <Adjective nr="61"/>
-<Adjective nr="62"/>
 <Adjective nr="126"/>
 <Adjective nr="127"/>
 <Adjective nr="147"/>

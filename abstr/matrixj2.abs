@@ -27,28 +27,26 @@ environ
       POLYNOM1, MONOID_0, POLYNOM4, POLYNOM5, MATRIXJ1, MATRLIN2, VECTSP11,
       SEQ_1, BINOP_2, REAL_1, NAT_D, BINARITH, RELSET_1, FUNCT_7;
  registrations XBOOLE_0, FINSET_1, STRUCT_0, VECTSP_1, FUNCT_2, ORDINAL1,
-      XXREAL_0, NAT_1, FINSEQ_1, RELAT_1, CARD_1, FINSEQ_2, SEQM_3, XREAL_0,
-      VECTSP_9, VECTSP_7, VALUED_0, MATRIXJ1, VECTSP11, POLYNOM5, FUNCOP_1,
-      RELSET_1;
+      XXREAL_0, NAT_1, FINSEQ_1, RELAT_1, CARD_1, FINSEQ_2, XREAL_0, VECTSP_9,
+      VALUED_0, MATRIXJ1, VECTSP11, POLYNOM5, FUNCOP_1, RELSET_1;
  requirements ARITHM, NUMERALS, REAL, BOOLE, SUBSET;
 
 
 begin :: Jordan blocks
 
- reserve i,j,m,n,k for Nat,
-         x,y for set,
-         K for Field,
-         a,L for Element of K;
+reserve i,j,m,n,k for Nat,
+  x,y for set,
+  K for Field,
+  a,L for Element of K;
 
 definition
   let K,L,n;
   func Jordan_block(L,n) -> Matrix of K means
 :: MATRIXJ2:def 1
-    len it = n & width it = n &
-    for i,j st [i,j] in Indices it holds
-     (    i = j     implies it*(i,j) = L ) &
-     (   i+1 = j    implies it*(i,j) = 1_K ) &
-     (i<>j & i+1<>j implies it*(i,j) = 0.K );
+
+  len it = n & width it = n
+& for i,j st [i,j] in Indices it holds ( i = j implies it*(i,j) = L ) & ( i+1 =
+  j implies it*(i,j) = 1_K ) & (i<>j & i+1<>j implies it*(i,j) = 0.K );
 end;
 
 definition
@@ -66,30 +64,26 @@ theorem :: MATRIXJ2:3
   Jordan_block(L,n) is invertible iff n = 0 or L <> 0.K;
 
 theorem :: MATRIXJ2:4
-  i in Seg n & i<>n implies
-    Line(Jordan_block(L,n),i) = L*Line(1.(K,n),i)+Line(1.(K,n),i+1);
+  i in Seg n & i<>n implies Line(Jordan_block(L,n),i) = L*Line(1.(K
+  ,n),i)+Line(1.(K,n),i+1);
 
 theorem :: MATRIXJ2:5
   Line(Jordan_block(L,n),n) = L*Line(1.(K,n),n);
 
 theorem :: MATRIXJ2:6
   for F be Element of n-tuples_on the carrier of K st i in Seg n
-    holds
-  ( i <> n implies Line(Jordan_block(L,n),i) "*" F = L * (F/.i)+ F/.(i+1))&
-  ( i = n  implies Line(Jordan_block(L,n),i) "*" F = L * (F/.i));
+holds ( i <> n implies Line(Jordan_block(L,n),i) "*" F = L * (F/.i)+ F/.(i+1))&
+  ( i = n implies Line(Jordan_block(L,n),i) "*" F = L * (F/.i));
 
 theorem :: MATRIXJ2:7
   for F be Element of n-tuples_on the carrier of K st i in Seg n
-    holds
-  ( i = 1  implies Col(Jordan_block(L,n),i) "*" F = L * (F/.i) ) &
-  ( i <> 1 implies Col(Jordan_block(L,n),i) "*" F = L * (F/.i)+F/.(i-1) );
+holds ( i = 1 implies Col(Jordan_block(L,n),i) "*" F = L * (F/.i) ) & ( i <> 1
+  implies Col(Jordan_block(L,n),i) "*" F = L * (F/.i)+F/.(i-1) );
 
 theorem :: MATRIXJ2:8
-  L <> 0.K implies
-    ex M be Matrix of n,K st Jordan_block(L,n)~ = M &
-      for i,j st [i,j] in Indices M holds
-        (i > j  implies M*(i,j) = 0.K) &
-        (i <= j implies M*(i,j) = - power(K).(-L",j-'i+1));
+  L <> 0.K implies ex M be Matrix of n,K st Jordan_block(L,n)~ = M & for
+i,j st [i,j] in Indices M holds (i > j implies M*(i,j) = 0.K) & (i <= j implies
+  M*(i,j) = - power(K).(-L",j-'i+1));
 
 theorem :: MATRIXJ2:9
   Jordan_block(L,n) + a*1.(K,n)=Jordan_block(L+a,n);
@@ -101,7 +95,9 @@ definition
   let G be FinSequence of (the carrier of K)**;
   attr G is Jordan-block-yielding means
 :: MATRIXJ2:def 2
-    for i st i in dom G ex L,n st G.i = Jordan_block(L,n);
+
+  for i st i in dom G ex L,n st G
+  .i = Jordan_block(L,n);
 end;
 
 registration
@@ -111,14 +107,14 @@ end;
 
 registration
   let K;
-  cluster Jordan-block-yielding -> Square-Matrix-yielding
-                                   FinSequence of (the carrier of K)**;
+  cluster Jordan-block-yielding -> Square-Matrix-yielding FinSequence of (the
+    carrier of K)**;
 end;
 
 definition
   let K;
-  mode FinSequence_of_Jordan_block of K is
-     Jordan-block-yielding FinSequence of (the carrier of K)**;
+  mode FinSequence_of_Jordan_block of K is Jordan-block-yielding FinSequence
+    of (the carrier of K)**;
 end;
 
 definition
@@ -126,7 +122,8 @@ definition
   mode FinSequence_of_Jordan_block of L,K -> FinSequence_of_Jordan_block of K
     means
 :: MATRIXJ2:def 3
-  for i st i in dom it ex n st it.i = Jordan_block(L,n);
+
+    for i st i in dom it ex n st it.i = Jordan_block(L,n);
 end;
 
 theorem :: MATRIXJ2:10
@@ -145,11 +142,9 @@ registration
   cluster non-empty FinSequence_of_Jordan_block of K;
 end;
 
-
 theorem :: MATRIXJ2:12
-   for J be FinSequence_of_Jordan_block of L,K holds
-      J (+) mlt(len J|->a,1.(K,Len J)) is
-      FinSequence_of_Jordan_block of (L+a),K;
+  for J be FinSequence_of_Jordan_block of L,K holds J (+) mlt(len
+  J|->a,1.(K,Len J)) is FinSequence_of_Jordan_block of (L+a),K;
 
 definition
   let K;
@@ -187,14 +182,14 @@ definition
   let f be Function of V,V;
   attr f is nilpotent means
 :: MATRIXJ2:def 4
-    ex n st for v be Vector of V holds (f|^n).v=0.V;
+
+  ex n st for v be Vector of V holds (f|^n).v
+  =0.V;
 end;
 
 theorem :: MATRIXJ2:13
-  for K be doubleLoopStr
-    for V be non empty VectSpStr over K
-       for f be Function of V,V holds
-          f is nilpotent iff ex n st f|^n = ZeroMap(V,V);
+  for K be doubleLoopStr for V be non empty VectSpStr over K for f
+  be Function of V,V holds f is nilpotent iff ex n st f|^n = ZeroMap(V,V);
 
 registration
   let K be doubleLoopStr;
@@ -209,8 +204,8 @@ registration
 end;
 
 theorem :: MATRIXJ2:14
-  for V be VectSp of K,f be linear-transformation of V,V holds
-    f|ker (f|^n) is nilpotent linear-transformation of ker (f|^n),ker (f|^n);
+  for V be VectSp of K,f be linear-transformation of V,V holds f|
+  ker (f|^n) is nilpotent linear-transformation of ker (f|^n),ker (f|^n);
 
 definition
   let K be doubleLoopStr;
@@ -218,8 +213,9 @@ definition
   let f be nilpotent Function of V,V;
   func degree_of_nilpotent f -> Nat means
 :: MATRIXJ2:def 5
-    f|^it = ZeroMap(V,V) &
-    for k st f|^k = ZeroMap(V,V) holds it <= k;
+
+  f|^it = ZeroMap(V,V) & for k
+  st f|^k = ZeroMap(V,V) holds it <= k;
 end;
 
 notation
@@ -230,153 +226,118 @@ notation
 end;
 
 theorem :: MATRIXJ2:15
-  for K be doubleLoopStr
-    for V be non empty VectSpStr over K
-      for f be nilpotent Function of V,V holds
-        deg f = 0 iff [#]V = {0.V};
+  for K be doubleLoopStr for V be non empty VectSpStr over K for f
+  be nilpotent Function of V,V holds deg f = 0 iff [#]V = {0.V};
 
 theorem :: MATRIXJ2:16
-  for K be doubleLoopStr
-    for V be non empty VectSpStr over K
-      for f be nilpotent Function of V,V
-        ex v be Vector of V st
-          for i st i < deg f holds (f|^i).v <> 0.V;
+  for K be doubleLoopStr for V be non empty VectSpStr over K for f
+be nilpotent Function of V,V ex v be Vector of V st for i st i < deg f holds (f
+  |^i).v <> 0.V;
 
 theorem :: MATRIXJ2:17
-  for K be Field, V be VectSp of K, W be Subspace of V
-    for f be nilpotent Function of V,V st f|W is Function of W,W
-      holds
-    f|W is nilpotent Function of W,W;
+  for K be Field, V be VectSp of K, W be Subspace of V for f be
+  nilpotent Function of V,V st f|W is Function of W,W holds f|W is nilpotent
+  Function of W,W;
 
 theorem :: MATRIXJ2:18
-  for K be Field, V be VectSp of K, W be Subspace of V
-    for f be nilpotent linear-transformation of V,V,
-       fI be nilpotent Function of im (f|^n),im (f|^n) st
-           fI = f|im (f|^n) & n <= deg f
-      holds deg fI + n = deg f;
+  for K be Field, V be VectSp of K, W be Subspace of V for f be
+nilpotent linear-transformation of V,V, fI be nilpotent Function of im (f|^n),
+  im (f|^n) st fI = f|im (f|^n) & n <= deg f holds deg fI + n = deg f;
 
 reserve V1,V2 for finite-dimensional VectSp of K,
-        W1,W2 for Subspace of V1,
-        U1,U2 for Subspace of V2,
-        b1 for OrdBasis of V1,
-        B1 for FinSequence of V1,
-        b2 for OrdBasis of V2,
-        B2 for FinSequence of V2,
-        bw1 for OrdBasis of W1,
-        bw2 for OrdBasis of W2,
-        Bu1 for FinSequence of U1,
-        Bu2 for FinSequence of U2;
+  W1,W2 for Subspace of V1,
+  U1
+  ,U2 for Subspace of V2,
+  b1 for OrdBasis of V1,
+  B1 for FinSequence of V1,
+  b2 for
+  OrdBasis of V2,
+  B2 for FinSequence of V2,
+  bw1 for OrdBasis of W1,
+  bw2 for
+  OrdBasis of W2,
+  Bu1 for FinSequence of U1,
+  Bu2 for FinSequence of U2;
 
 theorem :: MATRIXJ2:19
-  for M be Matrix of len b1,len B2,K,
-      M1 be Matrix of len bw1,len Bu1,K,
-      M2 be Matrix of len bw2,len Bu2,K st
-          b1 = bw1 ^ bw2 & B2 = Bu1 ^ Bu2 &
-          M = block_diagonal(<*M1,M2*>,0.K) &
-          width M1 = len Bu1 & width M2 = len Bu2
-    holds
-      (i in dom bw1 implies
-           Mx2Tran(M,b1,B2).(b1/.i)           = Mx2Tran(M1,bw1,Bu1).(bw1/.i))&
-      (i in dom bw2 implies
-           Mx2Tran(M,b1,B2).(b1/.(i+len bw1)) = Mx2Tran(M2,bw2,Bu2).(bw2/.i));
+  for M be Matrix of len b1,len B2,K, M1 be Matrix of len bw1,len
+Bu1,K, M2 be Matrix of len bw2,len Bu2,K st b1 = bw1 ^ bw2 & B2 = Bu1 ^ Bu2 & M
+= block_diagonal(<*M1,M2*>,0.K) & width M1 = len Bu1 & width M2 = len Bu2 holds
+(i in dom bw1 implies Mx2Tran(M,b1,B2).(b1/.i) = Mx2Tran(M1,bw1,Bu1).(bw1/.i))&
+(i in dom bw2 implies Mx2Tran(M,b1,B2).(b1/.(i+len bw1)) = Mx2Tran(M2,bw2,Bu2).
+  (bw2/.i));
 
 theorem :: MATRIXJ2:20
-  for M be Matrix of len b1,len B2,K,
-      F be FinSequence_of_Matrix of K st M = block_diagonal(F,0.K)
-   for i,m st i in dom b1 & m = min(Len F,i) holds
-      Mx2Tran(M,b1,B2).(b1/.i) =
-         Sum lmlt(Line(F.m,i-'Sum (Len F|(m-'1))),
-                 (B2|Sum(Width F|m))/^Sum (Width F|(m-'1))) &
-      len ((B2|Sum(Width F|m))/^Sum (Width F|(m-'1))) = width (F.m);
+  for M be Matrix of len b1,len B2,K, F be FinSequence_of_Matrix
+  of K st M = block_diagonal(F,0.K) for i,m st i in dom b1 & m = min(Len F,i)
+holds Mx2Tran(M,b1,B2).(b1/.i) = Sum lmlt(Line(F.m,i-'Sum (Len F|(m-'1))), (B2|
+Sum(Width F|m))/^Sum (Width F|(m-'1))) & len ((B2|Sum(Width F|m))/^Sum (Width F
+  |(m-'1))) = width (F.m);
 
 theorem :: MATRIXJ2:21
-  len B1 in dom B1 implies
-    Sum lmlt (Line(Jordan_block(L,len B1),len B1),B1)= L*(B1/.(len B1));
+  len B1 in dom B1 implies Sum lmlt (Line(Jordan_block(L,len B1),
+  len B1),B1)= L*(B1/.(len B1));
 
 theorem :: MATRIXJ2:22
-  i in dom B1 & i <> len B1 implies
-    Sum lmlt (Line(Jordan_block(L,len B1),i),B1)= L*(B1/.i)+B1/.(i+1);
+  i in dom B1 & i <> len B1 implies Sum lmlt (Line(Jordan_block(L,
+  len B1),i),B1)= L*(B1/.i)+B1/.(i+1);
 
 theorem :: MATRIXJ2:23
-  for M be Matrix of len b1,len B2,K st M = Jordan_block(L,n)
-    for i st i in dom b1 holds
-      (i =  len b1 implies Mx2Tran(M,b1,B2).(b1/.i) = L*(B2/.i)) &
-      (i <> len b1 implies Mx2Tran(M,b1,B2).(b1/.i) = L*(B2/.i)+ B2/.(i+1));
+  for M be Matrix of len b1,len B2,K st M = Jordan_block(L,n) for
+i st i in dom b1 holds (i = len b1 implies Mx2Tran(M,b1,B2).(b1/.i) = L*(B2/.i)
+  ) & (i <> len b1 implies Mx2Tran(M,b1,B2).(b1/.i) = L*(B2/.i)+ B2/.(i+1));
 
 theorem :: MATRIXJ2:24
-  for J be FinSequence_of_Jordan_block of L,K
-    for M be Matrix of len b1,len B2,K st M = block_diagonal(J,0.K)
-      for i,m st i in dom b1 & m = min(Len J,i) holds
-        (i = Sum (Len J|m) implies
-             Mx2Tran(M,b1,B2).(b1/.i) = L*(B2/.i)) &
-        (i <> Sum (Len J|m) implies
-             Mx2Tran(M,b1,B2).(b1/.i) = L*(B2/.i)+ B2/.(i+1));
+  for J be FinSequence_of_Jordan_block of L,K for M be Matrix of
+len b1,len B2,K st M = block_diagonal(J,0.K) for i,m st i in dom b1 & m = min(
+Len J,i) holds (i = Sum (Len J|m) implies Mx2Tran(M,b1,B2).(b1/.i) = L*(B2/.i))
+& (i <> Sum (Len J|m) implies Mx2Tran(M,b1,B2).(b1/.i) = L*(B2/.i)+ B2/.(i+1));
 
 theorem :: MATRIXJ2:25
-  for J be FinSequence_of_Jordan_block of 0.K,K
-    for M be Matrix of len b1,len b1,K st M = block_diagonal(J,0.K)
-       for m st for i st i in dom J holds len (J.i) <= m
-    holds
-      Mx2Tran(M,b1,b1) |^ m = ZeroMap(V1,V1);
+  for J be FinSequence_of_Jordan_block of 0.K,K for M be Matrix of
+len b1,len b1,K st M = block_diagonal(J,0.K) for m st for i st i in dom J holds
+  len (J.i) <= m holds Mx2Tran(M,b1,b1) |^ m = ZeroMap(V1,V1);
 
 theorem :: MATRIXJ2:26
-  for J be FinSequence_of_Jordan_block of L,K
-    for M be Matrix of len b1,len b1,K st M = block_diagonal(J,0.K)
-      holds
-    Mx2Tran(M,b1,b1) is nilpotent iff len b1 = 0 or L = 0.K;
+  for J be FinSequence_of_Jordan_block of L,K for M be Matrix of len b1,
+  len b1,K st M = block_diagonal(J,0.K) holds Mx2Tran(M,b1,b1) is nilpotent iff
+  len b1 = 0 or L = 0.K;
 
 theorem :: MATRIXJ2:27
-  for J be FinSequence_of_Jordan_block of 0.K,K
-    for M be Matrix of len b1,len b1,K st
-          M = block_diagonal(J,0.K) & len b1 > 0
-      for F be nilpotent Function of V1,V1 st F = Mx2Tran(M,b1,b1)
-    holds
-      (ex i st i in dom J & len (J.i) = deg F) &
-      for i st i in dom J holds len (J.i) <= deg F;
+  for J be FinSequence_of_Jordan_block of 0.K,K for M be Matrix of len
+  b1,len b1,K st M = block_diagonal(J,0.K) & len b1 > 0 for F be nilpotent
+Function of V1,V1 st F = Mx2Tran(M,b1,b1) holds (ex i st i in dom J & len (J.i)
+  = deg F) & for i st i in dom J holds len (J.i) <= deg F;
 
 theorem :: MATRIXJ2:28
-  for V1,V2,b1,b2,L st len b1 = len b2
-    for F be linear-transformation of V1,V2 st
-      for i st i in dom b1 holds
-          F.(b1/.i) = L * (b2/.i) or
-          (i+1 in dom b1 & F.(b1/.i) = L * (b2/.i) +b2/.(i+1))
-      ex J be non-empty FinSequence_of_Jordan_block of L,K st
-          AutMt(F,b1,b2) = block_diagonal(J,0.K);
+  for V1,V2,b1,b2,L st len b1 = len b2 for F be
+linear-transformation of V1,V2 st for i st i in dom b1 holds F.(b1/.i) = L * (
+b2/.i) or i+1 in dom b1 & F.(b1/.i) = L * (b2/.i) +b2/.(i+1) ex J be non-empty
+  FinSequence_of_Jordan_block of L,K st AutMt(F,b1,b2) = block_diagonal(J,0.K);
 
 theorem :: MATRIXJ2:29
-  for V1 be finite-dimensional VectSp of K
-    for F be nilpotent linear-transformation of V1,V1
-      ex J be non-empty FinSequence_of_Jordan_block of 0.K,K,
-         b1 be OrdBasis of V1 st
-         AutMt(F,b1,b1) = block_diagonal(J,0.K);
+  for V1 be finite-dimensional VectSp of K for F be nilpotent
+linear-transformation of V1,V1 ex J be non-empty FinSequence_of_Jordan_block of
+  0.K,K, b1 be OrdBasis of V1 st AutMt(F,b1,b1) = block_diagonal(J,0.K);
 
 theorem :: MATRIXJ2:30
-  for V be VectSp of K
-    for F be linear-transformation of V,V,
-         V1 be finite-dimensional Subspace of V,
-         F1 be linear-transformation of V1,V1
-      st V1 = ker ((F+(-L)*id V)|^n) & F|V1=F1
-     ex J be non-empty FinSequence_of_Jordan_block of L,K,
-        b1 be OrdBasis of V1 st
-         AutMt(F1,b1,b1) = block_diagonal(J,0.K);
+  for V be VectSp of K for F be linear-transformation of V,V, V1
+be finite-dimensional Subspace of V, F1 be linear-transformation of V1,V1 st V1
+  = ker ((F+(-L)*id V)|^n) & F|V1=F1 ex J be non-empty
+  FinSequence_of_Jordan_block of L,K, b1 be OrdBasis of V1 st AutMt(F1,b1,b1) =
+  block_diagonal(J,0.K);
 
 begin :: The Main Theorem
 
 theorem :: MATRIXJ2:31
-  for K be algebraic-closed Field
-    for V be non trivial finite-dimensional VectSp of K,
-        F be linear-transformation of V,V
-      ex J be non-empty (FinSequence_of_Jordan_block of K),
-         b1 be OrdBasis of V st
-         AutMt(F,b1,b1) = block_diagonal(J,0.K) &
-         for L be Scalar of K holds
-           L is eigenvalue of F iff
-             ex i st i in dom J & J.i = Jordan_block(L,len (J.i));
+  for K be algebraic-closed Field for V be non trivial
+  finite-dimensional VectSp of K, F be linear-transformation of V,V ex J be
+non-empty (FinSequence_of_Jordan_block of K), b1 be OrdBasis of V st AutMt(F,b1
+,b1) = block_diagonal(J,0.K) & for L be Scalar of K holds L is eigenvalue of F
+  iff ex i st i in dom J & J.i = Jordan_block(L,len (J.i));
 
 theorem :: MATRIXJ2:32
-  for K be algebraic-closed Field,
-      M be Matrix of n,K
-    ex J be non-empty (FinSequence_of_Jordan_block of K),
-       P be Matrix of n,K st
-     Sum Len J = n & P is invertible &
-     M = P * block_diagonal(J,0.K) * (P~);
+  for K be algebraic-closed Field, M be Matrix of n,K ex J be non-empty
+(FinSequence_of_Jordan_block of K), P be Matrix of n,K st Sum Len J = n & P is
+  invertible & M = P * block_diagonal(J,0.K) * (P~);
+

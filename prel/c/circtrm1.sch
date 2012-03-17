@@ -10,6 +10,7 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
@@ -17,7 +18,6 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="FUNCOP_1"/>
-<ArticleID name="PARTFUN1"/>
 <ArticleID name="PBOOLE"/>
 </Signature>
 <Scheme>
@@ -35,7 +35,7 @@
 <Func kind="F" nr="1"/>
 </Adjective>
 <Adjective nr="6"/>
-<Adjective nr="33">
+<Adjective nr="20">
 <Func kind="F" nr="1"/>
 </Adjective>
 </Cluster>
@@ -48,7 +48,7 @@
 <Func kind="F" nr="1"/>
 </Adjective>
 <Adjective nr="6"/>
-<Adjective nr="33">
+<Adjective nr="20">
 <Func kind="F" nr="1"/>
 </Adjective>
 </Cluster>

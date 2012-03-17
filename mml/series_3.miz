@@ -12,7 +12,7 @@ environ
       NEWTON, REAL_1, NAT_1, PREPOWER, COMPLEX1, VALUED_1, SEQ_1, POWER,
       SERIES_1, FUNCT_2;
  constructors REAL_1, SQUARE_1, NAT_1, SEQ_1, NEWTON, PREPOWER, SERIES_1,
-      VALUED_1, PARTFUN1, RELSET_1;
+      VALUED_1, PARTFUN1, RELSET_1, BINOP_2;
  registrations NUMBERS, XCMPLX_0, XXREAL_0, XREAL_0, SQUARE_1, NAT_1, MEMBERED,
       COMPLEX1, NEWTON, VALUED_1, FUNCT_2, VALUED_0, RELSET_1, XBOOLE_0;
  requirements REAL, SUBSET, BOOLE, NUMERALS, ARITHM;
@@ -26,11 +26,12 @@ begin
 
 reserve a,b,c for positive (real number),
   m,x,y,z for real number,
-  n for Element of NAT,
+  n for
+  Element of NAT,
   s,s1,s2,s3,s4,s5 for Real_Sequence;
 
 registration
-  let x; :: move to another article
+  let x;
   cluster abs x -> non negative;
   coherence by COMPLEX1:132;
 end;
@@ -69,7 +70,7 @@ proof
   hence thesis by POWER:2;
 end;
 
-Lm6: (x+y)|^3=x|^3+3*x^2*y+3*x*y^2+y|^3 :: revise POLYEQ_1:14
+Lm6: (x+y)|^3=x|^3+3*x^2*y+3*x*y^2+y|^3
 proof
   (x+y)|^3=x|^3+(3*y*x^2+3*y^2*x)+y|^3 by POLYEQ_1:14
     .=x|^3+3*x^2*y+3*x*y^2+y|^3;
@@ -87,9 +88,9 @@ end;
 
 Lm8: x^2<=y*z implies abs(x) <= sqrt(y*z)
 proof
+A1: x^2>=0 by XREAL_1:65;
   assume
-A1: x^2<=y*z;
-  x^2>=0 by XREAL_1:65;
+  x^2<=y*z;
   then
 A2: sqrt(x^2)<=sqrt(y*z) by A1,SQUARE_1:94;
   per cases;
@@ -108,14 +109,14 @@ end;
 theorem
   y>x & x>=0 & m>=0 implies x/y <= (x+m)/(y+m)
 proof
-  assume
-A1: y>x & x>=0 & m>=0;
-  then y-x>0 by XREAL_1:52;
-  then
-A2: m*(y-x)>=0 by A1;
-  y*(y+m) > 0 by A1;
-  then (y*(x+m)-x*(m+y))/(y*(y+m))>=0 by A2;
-  then (x+m)/(y+m)-x/y>=0 by A1,XCMPLX_1:131;
+  assume that
+A1: y>x and
+A2: x>=0 and
+A3: m>=0;
+  y-x>0 by A1,XREAL_1:52;
+  then m*(y-x)>=0 by A3;
+  then (y*(x+m)-x*(m+y))/(y*(y+m))>=0 by A1,A2,A3;
+  then (x+m)/(y+m)-x/y>=0 by A1,A2,A3,XCMPLX_1:131;
   then (x+m)/(y+m)-x/y+x/y>=0+x/y by XREAL_1:8;
   hence thesis;
 end;
@@ -200,11 +201,12 @@ end;
 theorem Th10:
   x^2+y^2+z^2>=x*y+y*z+x*z
 proof
-A1: x^2+y^2>=2*x*y by Th6;
-A2: y^2+z^2>=2*y*z by Th6;
-A3: z^2+x^2>=2*z*x by Th6;
-  x^2+y^2+(y^2+z^2)>=2*x*y+2*y*z by A1,A2,XREAL_1:9;
-  then (x^2+y^2+(y^2+z^2))+(z^2+x^2)>=(2*x*y+2*y*z)+(2*z*x) by A3,XREAL_1:9;
+  x^2+y^2>=2*x*y & y^2+z^2>=2*y*z by Th6;
+  then
+A1: x^2+y^2+(y^2+z^2)>=2*x*y+2*y*z by XREAL_1:9;
+  z^2+x^2>=2*z*x by Th6;
+  then (x^2+y^2+(y^2+z^2))+(z^2+x^2)>=(2*x*y+2*y*z)+(2*z*x) by
+  A1,XREAL_1:9;
   then 2*(x^2+y^2+z^2)/2>=2*(x*y+y*z+z*x)/2 by XREAL_1:74;
   hence thesis;
 end;
@@ -213,46 +215,46 @@ theorem
   (x+y+z)^2>=3*(x*y+y*z+x*z)
 proof
   x^2+y^2+z^2>=x*y+y*z+x*z by Th10;
-  then x^2+y^2+z^2+(2*x*y+2*y*z+2*z*x)>=x*y+y*z+x*z+(2*x*y+2*y*z+2*z*x)
-  by XREAL_1:8;
+  then x^2+y^2+z^2+(2*x*y+2*y*z+2*z*x)>=x*y+y*z+x*z+(2*x*y+2*y*z+2*z*x) by
+  XREAL_1:8;
   hence thesis;
 end;
 
 theorem Th12:
   a|^3+b|^3+c|^3>=3*a*b*c
 proof
-A1: (a+b)|^3-(3*a^2*b+3*a*b^2)=a|^3+3*a^2*b+3*a*b^2+b|^3-(3*a^2*b+3*a*b^2)
+A1: (a+c)|^3-(3*a^2*c+3*a*c^2)=a|^3+3*a^2*c+3*a*c^2+c|^3-(3*a^2*c+3*a*c^2)
   by Lm6;
-A2: (b+c)|^3-(3*b^2*c+3*b*c^2)=b|^3+3*b^2*c+3*b*c^2+c|^3-(3*b^2*c+3*b*c^2)
-  by Lm6;
-A3: (a+c)|^3-(3*a^2*c+3*a*c^2)=a|^3+3*a^2*c+3*a*c^2+c|^3-(3*a^2*c+3*a*c^2)
-  by Lm6;
-  (a+b)^2*(a+b)>=4*a*b*(a+b) by Th9,XREAL_1:66;
-  then (a+b)|^2*(a+b)>=4*a*b*(a+b) by Lm1;
+  a*(b^2+c^2)>=a*(2*b*c) & b*(a^2+c^2)>=b*(2*a*c) by Th6,XREAL_1:66;
   then
-A4: (a+b)|^(2+1)>=4*a*b*(a+b) by NEWTON:11;
-  (b+c)^2*(b+c)>=4*b*c*(b+c) by Th9,XREAL_1:66;
-  then (b+c)|^2*(b+c)>=4*b*c*(b+c) by Lm1;
-  then (b+c)|^(2+1)>=4*b*c*(b+c) by NEWTON:11;
-  then
-A5: (a+b)|^3+(b+c)|^3>=(4*a^2*b+4*a*b^2)+(4*b^2*c+4*b*c^2) by A4,XREAL_1:9;
+A2: b*(a^2+c^2)+a*(b^2+c^2)>=2*a*b*c+2*a*b*c by XREAL_1:9;
   (a+c)^2*(a+c)>=4*a*c*(a+c) by Th9,XREAL_1:66;
   then (a+c)|^2*(a+c)>=4*a*c*(a+c) by Lm1;
-  then (a+c)|^(2+1)>=4*a*c*(a+c) by NEWTON:11;
-  then ((a+b)|^3+(b+c)|^3)+(a+c)|^3>=(4*a^2*b+4*a*b^2+4*b^2*c+4*b*c^2)
-  +(4*a^2*c+4*a*c^2) by A5,XREAL_1:9;
   then
-A6: (((a+b)|^3)+((b+c)|^3)+((a+c)|^3))+(-3*a^2*b-3*a*b^2-(3*b^2*c)-(3*b* c^2 )
-  -(3*a^2*c)-(3*a*c^2))>=((4*a^2*b)+4*a*b^2+4*b^2*c+4*b*c^2+4*a^2*c+4*a*c^2)
+A3: (a+c)|^(2+1)>=4*a*c*(a+c) by NEWTON:11;
+  (b+c)^2*(b+c)>=4*b*c*(b+c) by Th9,XREAL_1:66;
+  then (b+c)|^2*(b+c)>=4*b*c*(b+c) by Lm1;
+  then
+A4: (b+c)|^(2+1)>=4*b*c*(b+c) by NEWTON:11;
+  (a+b)^2*(a+b)>=4*a*b*(a+b) by Th9,XREAL_1:66;
+  then (a+b)|^2*(a+b)>=4*a*b*(a+b) by Lm1;
+  then (a+b)|^(2+1)>=4*a*b*(a+b) by NEWTON:11;
+  then (a+b)|^3+(b+c)|^3>=(4*a^2*b+4*a*b^2)+(4*b^2*c+4*b*c^2) by A4,
+  XREAL_1:9;
+  then
+  ((a+b)|^3+(b+c)|^3)+(a+c)|^3>=(4*a^2*b+4*a*b^2+4*b^2*c+4*b*c^2) +(4*a^2
+  *c+4*a*c^2) by A3,XREAL_1:9;
+  then
+A5: (((a+b)|^3)+((b+c)|^3)+((a+c)|^3))+(-3*a^2*b-3*a*b^2-(3*b^2*c)-(3*b* c
+^2 ) -(3*a^2*c)-(3*a*c^2))>=((4*a^2*b)+4*a*b^2+4*b^2*c+4*b*c^2+4*a^2*c+4*a*c^2)
   +(-3*a^2*b-3*a*b^2-(3*b^2*c)-(3*b*c^2)-(3*a^2*c)-(3*a*c^2)) by XREAL_1:8;
-A7: a*(b^2+c^2)>=a*(2*b*c) by Th6,XREAL_1:66;
-  b*(a^2+c^2)>=b*(2*a*c) by Th6,XREAL_1:66;
-  then
-A8: b*(a^2+c^2)+a*(b^2+c^2)>=2*a*b*c+2*a*b*c by A7,XREAL_1:9;
   c*(a^2+b^2)>=2*a*b*c by Th6,XREAL_1:66;
-  then (b*(a^2+c^2)+a*(b^2+c^2))+(c*(a^2+b^2))>=4*a*b*c+2*a*b*c
-  by A8,XREAL_1:9;
-  then 2*(a|^3+b|^3+(c|^3))>=6*a*b*c by A1,A2,A3,A6,XXREAL_0:2;
+  then
+A6: (b*(a^2+c^2)+a*(b^2+c^2))+(c*(a^2+b^2))>=4*a*b*c+2*a*b*c by A2,
+  XREAL_1:9;
+  (a+b)|^3-(3*a^2*b+3*a*b^2)=a|^3+3*a^2*b+3*a*b^2+b|^3-(3*a^2*b+3*a*b^2) &
+(b+ c)|^3-(3*b^2*c+3*b*c^2)=b|^3+3*b^2*c+3*b*c^2+c|^3-(3*b^2*c+3*b*c^2) by Lm6;
+  then 2*(a|^3+b|^3+(c|^3))>=6*a*b*c by A1,A5,A6,XXREAL_0:2;
   then (2*(a|^3+b|^3+(c|^3)))/2>=(6*a*b*c)/2 by XREAL_1:74;
   hence thesis;
 end;
@@ -267,49 +269,53 @@ end;
 theorem
   (a/b)|^3+(b/c)|^3+(c/a)|^3>=b/a+c/b+a/c
 proof
-  (b/a)=(b/a)*1
-    .=(b/a)*(c/c) by XCMPLX_1:60
-    .=(b/c)*(c/a)*1;
-  then
-A1: (b/a)<=((b/c)|^3+(c/a)|^3+1|^3)/3 by Th13;
-  (c/b)=(c/b)*1
-    .=(c/b)*(a/a) by XCMPLX_1:60
-    .=(a/b)*(c/a)*1;
-  then (c/b)<=((a/b)|^3+(c/a)|^3+1|^3)/3 by Th13;
-  then
-A2: (b/a)+(c/b)<=(((b/c)|^3)/3+((c/a)|^3)/3+1/3)+(((a/b)|^3)/3+
-  ((c/a)|^3)/3+1/3) by A1,Lm2,XREAL_1:9;
-  (a/c)=(a/c)*1
-    .=(a/c)*(b/b) by XCMPLX_1:60
-    .=(a/b)*(b/c)*1;
-  then
-A3: (a/c)<=((a/b)|^3+(b/c)|^3+1|^3)/3 by Th13;
-A4: 1=(a/a)*1*1 by XCMPLX_1:60
+A1: 1=(a/a)*1*1 by XCMPLX_1:60
     .=(a/a)*(b/b)*1 by XCMPLX_1:60
     .=(a/a)*(b/b)*(c/c) by XCMPLX_1:60
     .=(a/b)*(b/a)*(c/c)
     .=(a/b)*((b/a)*(c/c))
     .=(a/b)*((b/c)*(c/a))
     .=(a/b)*(b/c)*(c/a);
-A5: (a/b)*(b/c)*(c/a)<=((a/b)|^3+(b/c)|^3+(c/a)|^3)/3 by Th13;
-  (b/a)+(c/b)+(a/c)<=(b/c)|^3/3+(a/b)|^3/3+2*(c/a)|^3/3+2/3+
-  (((a/b)|^3)/3+((b/c)|^3)/3+1/3) by A2,A3,Lm2,XREAL_1:9;
-  then (b/a)+(c/b)+(a/c)+1<=2*(b/c)|^3/3+2*(a/b)|^3/3+2*(c/a)|^3/3+1+
-  (((a/b)|^3)/3+((b/c)|^3)/3+((c/a)|^3)/3) by A4,A5,XREAL_1:9;
-  then (b/a)+(c/b)+(a/c)+1-1<=(b/c)|^3+(a/b)|^3+(c/a)|^3+1-1 by XREAL_1:11;
+  (c/b)=(c/b)*1
+    .=(c/b)*(a/a) by XCMPLX_1:60
+    .=(a/b)*(c/a)*1;
+  then
+A2: (c/b)<=((a/b)|^3+(c/a)|^3+1|^3)/3 by Th13;
+  (a/c)=(a/c)*1
+    .=(a/c)*(b/b) by XCMPLX_1:60
+    .=(a/b)*(b/c)*1;
+  then
+A3: (a/c)<=((a/b)|^3+(b/c)|^3+1|^3)/3 by Th13;
+  (b/a)=(b/a)*1
+    .=(b/a)*(c/c) by XCMPLX_1:60
+    .=(b/c)*(c/a)*1;
+  then (b/a)<=((b/c)|^3+(c/a)|^3+1|^3)/3 by Th13;
+  then
+  (b/a)+(c/b)<=(((b/c)|^3)/3+((c/a)|^3)/3+1/3)+(((a/b)|^3)/3+ ((c/a)|^3)/3
+  +1/3) by A2,Lm2,XREAL_1:9;
+  then
+A4: (b/a)+(c/b)+(a/c)<=(b/c)|^3/3+(a/b)|^3/3+2*(c/a)|^3/3+2/3+ (((a/b)|^3)/
+  3+((b/c)|^3)/3+1/3) by A3,Lm2,XREAL_1:9;
+  (a/b)*(b/c)*(c/a)<=((a/b)|^3+(b/c)|^3+(c/a)|^3)/3 by Th13;
+  then (b/a)+(c/b)+(a/c)+1<=2*(b/c)|^3/3+2*(a/b)|^3/3+2*(c/a)|^3/3+1+ (((a/b)
+  |^3)/3+((b/c)|^3)/3+((c/a)|^3)/3) by A1,A4,XREAL_1:9;
+  then (b/a)+(c/b)+(a/c)+1-1<=(b/c)|^3+(a/b)|^3+(c/a)|^3+1-1 by
+  XREAL_1:11;
   hence thesis;
 end;
 
 theorem Th15:
   (a+b+c)>=3*(3-root(a*b*c))
 proof
-  (3 -Root(a))>0 & (3 -Root(b))>0 & (3 -Root(c))>0 by PREPOWER:def 3;
-  then (3 -Root(a))|^3+(3 -Root(b))|^3+(3 -Root(c))|^3>=3*(3 -Root(a))
-  *(3 -Root(b))*(3 -Root(c)) by Th12;
-  then a+(3 -Root(b))|^3+(3 -Root(c))|^3>=3*(3 -Root(a))
-  *(3 -Root(b))*(3 -Root(c)) by PREPOWER:28;
+A1: (3 -Root(c))>0 by PREPOWER:def 3;
+  (3 -Root(a))>0 & (3 -Root(b))>0 by PREPOWER:def 3;
+  then (3 -Root(a))|^3+(3 -Root(b))|^3+(3 -Root(c))|^3>=3*(3 -Root(a)) *(3
+  -Root(b))*(3 -Root(c)) by A1,Th12;
+  then
+  a+(3 -Root(b))|^3+(3 -Root(c))|^3>=3*(3 -Root(a)) *(3 -Root(b))*(3 -Root
+  (c)) by PREPOWER:28;
   then a+b+(3 -Root(c))|^3>=3*(3 -Root(a))*(3 -Root(b))*(3 -Root(c)) by
-PREPOWER:28;
+  PREPOWER:28;
   then a+b+c>=3*((3 -Root(a))*(3 -Root(b)))*(3 -Root(c)) by PREPOWER:28;
   then a+b+c>=3*(3 -Root(a*b))*(3 -Root(c)) by PREPOWER:31;
   then a+b+c>=3*((3 -Root(a*b))*(3 -Root(c)));
@@ -327,27 +333,32 @@ end;
 theorem
   x+y+z=1 implies x*y+y*z+x*z<=1/3
 proof
-  assume x+y+z =1;
+  x^2+y^2>=2*x*y & x^2+z^2>=2*x*z by Th6;
   then
-A1: 1^2=(x+y)^2+2*(x+y)*z+z^2 by SQUARE_1:63
-    .=x^2+y^2+z^2+2*(x*z+y*z+x*y);
-A2: x^2+y^2>=2*x*y & y^2+z^2>=2*y*z & x^2+z^2>=2*x*z by Th6;
-  then (x^2+y^2)+(x^2+z^2)>=2*x*y+2*x*z by XREAL_1:9;
-  then (x^2+y^2+x^2+z^2)+(y^2+z^2)>=2*x*y+2*x*z+2*y*z by A2,XREAL_1:9;
+A1: (x^2+y^2)+(x^2+z^2)>=2*x*y+2*x*z by XREAL_1:9;
+  y^2+z^2>=2*y*z by Th6;
+  then (x^2+y^2+x^2+z^2)+(y^2+z^2)>=2*x*y+2*x*z+2*y*z by A1,XREAL_1:9;
   then 2*(x^2+y^2+z^2)/2>=2*(x*y+x*z+y*z)/2 by XREAL_1:74;
-  then x^2+y^2+z^2+2*(x*z+y*z+x*y)>=x*y+x*z+y*z+2*(x*z+y*z+x*y)by XREAL_1:9;
-  then 1/3>=3*(x*z+y*z+x*y)/3 by A1,XREAL_1:74;
+  then
+A2: x^2+y^2+z^2+2*(x*z+y*z+x*y)>=x*y+x*z+y*z+2*(x*z+y*z+x*y)by
+  XREAL_1:9;
+  assume
+  x+y+z =1;
+  then 1^2=(x+y)^2+2*(x+y)*z+z^2 by SQUARE_1:63
+    .=x^2+y^2+z^2+2*(x*z+y*z+x*y);
+  then 1/3>=3*(x*z+y*z+x*y)/3 by A2,XREAL_1:74;
   hence thesis;
 end;
 
 theorem Th18:
   x+y=1 implies x*y<=1/4
 proof
-  assume x+y=1;
-  then
-A1: 1^2=x^2+2*x*y+y^2 by SQUARE_1:63;
   (x-y)^2 >= 0 by XREAL_1:65;
-  then x^2-2*x*y+y^2-(x^2+2*x*y+y^2)>=0-(x^2+2*x*y+y^2)by XREAL_1:11;
+  then
+A1: x^2-2*x*y+y^2-(x^2+2*x*y+y^2)>=0-(x^2+2*x*y+y^2)by XREAL_1:11;
+  assume
+  x+y=1;
+  then 1^2=x^2+2*x*y+y^2 by SQUARE_1:63;
   then -4*x*y>=-1 by A1;
   then 4*(x*y)<=1 by XREAL_1:26;
   then 4*(x*y)/4<=1/4 by XREAL_1:74;
@@ -357,11 +368,12 @@ end;
 theorem
   x+y=1 implies x^2+y^2>=1/2
 proof
-  assume x+y=1;
-  then
-A1: 1^2=x^2+2*x*y+y^2 by SQUARE_1:63;
   (x-y)^2 >= 0 by XREAL_1:65;
-  then x^2-2*x*y+y^2+(x^2+2*x*y+y^2) >= 0+(x^2+2*x*y+y^2)by XREAL_1:9;
+  then
+A1: x^2-2*x*y+y^2+(x^2+2*x*y+y^2) >= 0+(x^2+2*x*y+y^2)by XREAL_1:9;
+  assume
+  x+y=1;
+  then 1^2=x^2+2*x*y+y^2 by SQUARE_1:63;
   then 2*(x^2+y^2)/2 >= 1/2 by A1,XREAL_1:74;
   hence thesis;
 end;
@@ -371,20 +383,19 @@ theorem
 proof
   assume
 A1: a+b=1;
+  then 1/(a*b) >= 1/(1/4) by Th18,XREAL_1:87;
+  then (1/(a*b))*(-2) <= 4*(-2) by XREAL_1:67;
+  then -(1/(a*b))*2 <= -8;
+  then (1/(a*b))*2 >= 8 by XREAL_1:26;
   then
-A2: a*b <=1/4 by Th18;
-A3: (1+1/a)*(1+1/b)=1*1+1*(1/b)+(1/a)*(1/b)+(1/a)*1
+A2: 1+2*(1/(a*b)) >= 1+8 by XREAL_1:9;
+  (1+1/a)*(1+1/b)=1*1+1*(1/b)+(1/a)*(1/b)+(1/a)*1
     .=1+1/b+1/(a*b)+1/a by XCMPLX_1:103
     .=1+(1/b+1/a) +1/(a*b)
     .=1+(1*a+b*1)/(a*b)+1/(a*b) by XCMPLX_1:117
     .=1+1/(a*b)+1/(a*b) by A1
     .=1+2*(1/(a*b));
-  1/(a*b) >= 1/(1/4) by A2,XREAL_1:87;
-  then (1/(a*b))*(-2) <= 4*(-2) by XREAL_1:67;
-  then -(1/(a*b))*2 <= -8;
-  then (1/(a*b))*2 >= 8 by XREAL_1:26;
-  then 1+2*(1/(a*b)) >= 1+8 by XREAL_1:9;
-  hence thesis by A3;
+  hence thesis by A2;
 end;
 
 theorem
@@ -392,26 +403,25 @@ theorem
 proof
   assume
 A1: x+y=1;
-  x|^3 + y|^3=(x+y)*(x^2-x*y+y^2) by Lm7;
+  then (x*y)*(-3)>=(1/4)*(-3) by Th18,XREAL_1:67;
   then
-A2: x|^3 + y|^3 = x^2+2*x*y+y^2-3*x*y by A1
+A2: 1+(x*y)*(-3)>=(1/4)*(-3)+1 by XREAL_1:9;
+  x|^3 + y|^3=(x+y)*(x^2-x*y+y^2) by Lm7;
+  then x|^3 + y|^3 = x^2+2*x*y+y^2-3*x*y by A1
     .=1^2-3*(x*y) by A1,SQUARE_1:63;
-  (x*y)*(-3)>=(1/4)*(-3) by A1,Th18,XREAL_1:67;
-  then 1+(x*y)*(-3)>=(1/4)*(-3)+1 by XREAL_1:9;
   hence thesis by A2;
 end;
 
 theorem
   a+b=1 implies a|^3+b|^3<1
 proof
-A1: a|^3 + b|^3=(a+b)*(a^2-a*b+b^2) by Lm7;
   assume
-A2: a+b=1;
-  then
-A3: a|^3 + b|^3 = a^2+2*a*b+b^2-3*a*b by A1
-    .=1^2-3*(a*b) by A2,SQUARE_1:63;
-  1+(a*b)*(-3)<0+1 by XREAL_1:10;
-  hence thesis by A3;
+A1: a+b=1;
+A2: 1+(a*b)*(-3)<0+1 by XREAL_1:10;
+  a|^3 + b|^3=(a+b)*(a^2-a*b+b^2) by Lm7;
+  then a|^3 + b|^3 = a^2+2*a*b+b^2-3*a*b by A1
+    .=1^2-3*(a*b) by A1,SQUARE_1:63;
+  hence thesis by A2;
 end;
 
 theorem
@@ -419,25 +429,26 @@ theorem
 proof
   assume
 A1: a+b=1;
-  a^2+b^2=(a^2+2*a*b+b^2)-2*a*b;
   then
-A2: a^2+b^2=1^2-2*a*b by A1,SQUARE_1:63;
-A3: (a+(1/a))*(b+1/b)=((1+a^2)/a)*(b+1/b) by XCMPLX_1:114
-    .=((1+a^2)/a)*((1+b^2)/b) by XCMPLX_1:114
-    .=((1+a^2)*(1+b^2))/(a*b) by XCMPLX_1:77
-    .=((1+(1^2-2*(a*b)+a^2*b^2)))/(a*b) by A2
-    .=((1+((1-(a*b))^2)))/(a*b);
-  ((1-(a*b))^2)>=0 by XREAL_1:65;
-  then
-A4: 1+((1-(a*b))^2)>=1+0 by XREAL_1:8;
-A5: a*b<=(1/2)^2 by A1,Th4;
-  then
-A6: ((1+((1-(a*b))^2)))/(a*b)>=((1+((1-(a*b))^2)))/(1/4) by A4,XREAL_1:120;
-  1-(a*b)>=1-(1/4) by A5,XREAL_1:12;
+A2: a*b<=(1/2)^2 by Th4;
+  then 1-(a*b)>=1-(1/4) by XREAL_1:12;
   then (1-(a*b))^2>=(3/4)^2 by SQUARE_1:77;
   then 1+(1-(a*b))^2>=1+(9/16) by XREAL_1:8;
-  then 4*((1+((1-(a*b))^2)))>=4*(25/16) by XREAL_1:66;
-  hence thesis by A3,A6,XXREAL_0:2;
+  then
+A3: 4*((1+((1-(a*b))^2)))>=4*(25/16) by XREAL_1:66;
+  ((1-(a*b))^2)>=0 by XREAL_1:65;
+  then
+A4: (1+((1-(a*b))^2)) /(a*b)>=((1+((1-(a*b))^2)))/(1/4) by
+  A2,XREAL_1:120;
+  a^2+b^2=(a^2+2*a*b+b^2)-2*a*b;
+  then
+A5: a^2+b^2=1^2-2*a*b by A1,SQUARE_1:63;
+  (a+(1/a))*(b+1/b)=((1+a^2)/a)*(b+1/b) by XCMPLX_1:114
+    .=((1+a^2)/a)*((1+b^2)/b) by XCMPLX_1:114
+    .=((1+a^2)*(1+b^2))/(a*b) by XCMPLX_1:77
+    .=((1+(1^2-2*(a*b)+a^2*b^2)))/(a*b) by A5
+    .=((1+((1-(a*b))^2)))/(a*b);
+  hence thesis by A4,A3,XXREAL_0:2;
 end;
 
 theorem
@@ -453,10 +464,8 @@ A2: x>=0;
   end;
   suppose
 A3: x<0;
-    then
-A4: -x>=0;
-    -x<=a by A1,A3,ABSVALUE:def 1;
-    then (-x)^2<=a^2 by A4,SQUARE_1:77;
+    then -x<=a by A1,ABSVALUE:def 1;
+    then (-x)^2<=a^2 by A3,SQUARE_1:77;
     hence thesis;
   end;
 end;
@@ -467,11 +476,13 @@ proof
   assume
 A1: abs(x)>=a;
   per cases;
-  suppose x>=0;
+  suppose
+    x>=0;
     then x>=a by A1,ABSVALUE:def 1;
     hence thesis by SQUARE_1:77;
   end;
-  suppose x<0;
+  suppose
+    x<0;
     then -x>=a by A1,ABSVALUE:def 1;
     then (-x)^2>=a^2 by SQUARE_1:77;
     hence thesis;
@@ -481,9 +492,9 @@ end;
 theorem
   abs(abs(x)-abs(y))<=abs(x)+abs(y)
 proof
-A1: abs(abs(x)-abs(y))<=abs(x-y) by COMPLEX1:150;
-  abs(x-y)<=abs(x)+abs(y) by COMPLEX1:143;
-  hence thesis by A1,XXREAL_0:2;
+  abs(abs(x)-abs(y))<=abs(x-y) & abs(x-y)<=abs(x)+abs(y) by COMPLEX1:143,
+  150;
+  hence thesis by XXREAL_0:2;
 end;
 
 theorem
@@ -491,39 +502,48 @@ theorem
 proof
   assume
 A1: a*b*c =1;
-  (1/b+1/c)/2>=sqrt((1/b)*(1/c)) by Th2;
-  then (1/b+1/c)/2>=sqrt(1/(b*c)) by XCMPLX_1:103;
-  then
-A2: (1/b+1/c)/2>=sqrt((1*a)/((b*c)*a)) by XCMPLX_1:92;
-  (1/c+1/a)/2>=sqrt((1/c)*(1/a)) by Th2;
-  then (1/c+1/a)/2>=sqrt(1/(c*a)) by XCMPLX_1:103;
-  then (1/c+1/a)/2>=sqrt((1*b)/((c*a)*b)) by XCMPLX_1:92;
-  then
-A3: (1/b+1/c)/2+(1/c+1/a)/2>=sqrt(a)+sqrt(b) by A1,A2,XREAL_1:9;
   (1/a+1/b)/2>=sqrt((1/a)*(1/b)) by Th2;
   then (1/a+1/b)/2>=sqrt(1/(a*b)) by XCMPLX_1:103;
-  then (1/a+1/b)/2>=sqrt((1*c)/((a*b)*c)) by XCMPLX_1:92;
-  then (1/b+1/c)/2+(1/c+1/a)/2+(1/a+1/b)/2>=sqrt(a)+sqrt(b)+sqrt(c)
-  by A1,A3,XREAL_1:9;
+  then
+A2: (1/a+1/b)/2>=sqrt((1*c)/((a*b)*c)) by XCMPLX_1:92;
+  (1/c+1/a)/2>=sqrt((1/c)*(1/a)) by Th2;
+  then (1/c+1/a)/2>=sqrt(1/(c*a)) by XCMPLX_1:103;
+  then
+A3: (1/c+1/a)/2>=sqrt((1*b)/((c*a)*b)) by XCMPLX_1:92;
+  (1/b+1/c)/2>=sqrt((1/b)*(1/c)) by Th2;
+  then (1/b+1/c)/2>=sqrt(1/(b*c)) by XCMPLX_1:103;
+  then (1/b+1/c)/2>=sqrt((1*a)/((b*c)*a)) by XCMPLX_1:92;
+  then (1/b+1/c)/2+(1/c+1/a)/2>=sqrt(a)+sqrt(b) by A1,A3,XREAL_1:9;
+  then (1/b+1/c)/2+(1/c+1/a)/2+(1/a+1/b)/2>=sqrt(a)+sqrt(b)+sqrt(c) by A1,
+  A2,XREAL_1:9;
   hence thesis;
 end;
 
 theorem
-  x>0 & y>0 & z<0 & x+y+z=0 implies (x|^2+y|^2+z|^2)|^3>=6*(x|^3+y|^3+z|^3)^2
+  x>0 & y>0 & z<0 & x+y+z=0 implies (x|^2+y|^2+z|^2)|^3>=6*(x|^3+y|^3+z
+  |^3)^2
 proof
-  assume
-A1: x>0 & y>0 & z<0 & x+y+z=0;
+  assume that
+A1: x>0 & y>0 and
+A2: z<0 and
+A3: x+y+z=0;
+  3 -Root(((x^2*y^2*z^2))/4)>0 by A1,A2,PREPOWER:def 3;
   then
-A2: z=-(x+y);
+A4: 3-root(((x^2*y^2*z^2))/4)>0 by A1,A2,POWER:def 1;
+  x*(x+y)/2+y*(x+y)/2+x*y>=3*(3-root((x*(x+y)/2)*(y*(x+y)/2)*(x*y))) by
+  A1,Th15;
+  then x*(x+y)/2+y*(x+y)/2+x*y>=3*(3-root(((x^2*y^2*((x+y)*(x+y))))/4));
   then
-A3: z|^3 = -((x+y)|^3) by Lm5
-    .=-(x|^3+3*x^2*y+3*x*y^2+y|^3) by Lm6;
-A5: x*((x+y)/2)>0*x by A1;
-A6: y*((x+y)/2)>0*y by A1;
-A7: x*y>0 by A1;
-  (x*(x+y)/2)+(y*(x+y)/2)>0 by A5,A6;
+A5: x*(x+y)/2+y*(x+y)/2+x*y>=3*(3-root(((x^2*y^2*(-z)^2))/4)) by A3;
+  (3*(3-root(((x^2*y^2*z^2))/4)))|^3 =3|^3*(3-root(((x^2*y^2*z^2))/4))|^3
+  by NEWTON:12
+    .=27*(3 -Root(((x^2*y^2*z^2))/4))|^3 by A1,A2,Lm4,POWER:def 1
+    .=27*(((x^2*y^2*z^2))/4) by A1,A2,PREPOWER:28;
+  then (x*(x+y)/2+y*(x+y)/2+x*y)|^3>=27*(((x^2*y^2*z^2))/4) by A5,A4,
+  PREPOWER:17;
   then
-A8: (x*(x+y)/2)+(y*(x+y)/2)+x*y>0 by A7;
+A6: 8*(x*(x+y)/2+y*(x+y)/2+x*y)|^3>=8*(27*(((x^2*y^2*z^2))/4)) by
+  XREAL_1:66;
   (x^2+y^2)/2>=x*y by Th7;
   then (x|^2+y^2)/2>=x*y by Lm1;
   then (x|^2+y|^2)/2>=x*y by Lm1;
@@ -531,41 +551,27 @@ A8: (x*(x+y)/2)+(y*(x+y)/2)+x*y>0 by A7;
   by XREAL_1:8;
   then (x|^2+x*y)/2+(x*y+y|^2)/2+(x|^2+y|^2)/2>=(x^2+x*y)/2+(x*y+y|^2)/2+x*y
   by Lm1;
-  then (x|^2+x*y)/2+(x*y+y|^2)/2+(x|^2+y|^2)/2>=(x*x+x*y)/2+(x*y+y^2)/2+x*y by
-Lm1;
-  then ((x|^2+x*y)/2+(x*y+y|^2)/2+(x|^2+y|^2)/2)|^3>=(x*(x+y)/2+y*(x+y)/2+x*y)
-  |^3 by A8,PREPOWER:17;
   then
-A9: 8*((x|^2+x*y)/2+(x*y+y|^2)/2+(x|^2+y|^2)/2)|^3>=8*(x*(x+y)/2
-  +y*(x+y)/2+x*y)|^3 by XREAL_1:66;
-  x*(x+y)/2+y*(x+y)/2+x*y>=3*(3-root((x*(x+y)/2)*(y*(x+y)/2)*(x*y)))
-  by A5,A6,A7,Th15;
-  then x*(x+y)/2+y*(x+y)/2+x*y>=3*(3-root(((x^2*y^2*((x+y)*(x+y))))/4));
+  (x|^2+x*y)/2+(x*y+y|^2)/2+(x|^2+y|^2)/2>=(x*x+x*y)/2+(x*y+y^2)/2+x*y by
+  Lm1;
   then
-A10: x*(x+y)/2+y*(x+y)/2+x*y>=3*(3-root(((x^2*y^2*(-z)^2))/4)) by A1;
-A11: x^2>0 & y^2>0 & z^2>0 by A1;
-  x^2*y^2*z^2>0 by A11;
+  ((x|^2+x*y)/2+(x*y+y|^2)/2+(x|^2+y|^2)/2)|^3>=(x*(x+y)/2+y*(x+y)/2+x*y)
+  |^3 by A1,PREPOWER:17;
   then
-A12: (x^2*y^2*z^2)/4>0;
-A13: (3*(3-root(((x^2*y^2*z^2))/4)))|^3
-  =3|^3*(3-root(((x^2*y^2*z^2))/4))|^3 by NEWTON:12
-    .=27*(3 -Root(((x^2*y^2*z^2))/4))|^3 by A12,Lm4,POWER:def 1
-    .=27*(((x^2*y^2*z^2))/4) by A12,PREPOWER:28;
-  3 -Root(((x^2*y^2*z^2))/4)>0 by A12,PREPOWER:def 3;
-  then 3-root(((x^2*y^2*z^2))/4)>0 by A12,POWER:def 1;
-  then 3*(3-root(((x^2*y^2*z^2))/4))>0;
-  then (x*(x+y)/2+y*(x+y)/2+x*y)|^3>=27*(((x^2*y^2*z^2))/4)
-  by A10,A13,PREPOWER:17;
-  then 8*(x*(x+y)/2+y*(x+y)/2+x*y)|^3>=8*(27*(((x^2*y^2*z^2))/4))
-  by XREAL_1:66;
-  then 8*(x|^2+x*y+y|^2)|^3>=54*(x^2*y^2*z^2) by A9,XXREAL_0:2;
+  8*((x|^2+x*y)/2+(x*y+y|^2)/2+(x|^2+y|^2)/2)|^3>=8*(x*(x+y)/2 +y*(x+y)/2
+  +x*y)|^3 by XREAL_1:66;
+  then 8*(x|^2+x*y+y|^2)|^3>=54*(x^2*y^2*z^2) by A6,XXREAL_0:2;
   then (2*(x|^2+x*y+y|^2))|^3>=54*(x^2*y^2*z^2) by Lm3,NEWTON:12;
   then ((x|^2+2*x*y+y|^2)+x|^2+y|^2)|^3>=54*(x^2*y^2*z^2);
   then ((x^2+2*x*y+y|^2)+x|^2+y|^2)|^3>=54*(x^2*y^2*z^2) by Lm1;
   then ((x^2+2*x*y+y|^2)+x^2+y|^2)|^3>=54*(x^2*y^2*z^2) by Lm1;
   then ((x^2+2*x*y+y^2)+x^2+y|^2)|^3>=54*(x^2*y^2*z^2) by Lm1;
-  then ((x^2+2*x*y+y^2)+x^2+y^2)|^3>=54*(x^2*y^2*z^2) by Lm1;
-  then (z|^2+x^2+y^2)|^3>=6*(x|^3+y|^3+z|^3)^2 by A2,A3,Lm1;
+  then
+A7: ((x^2+2*x*y+y^2)+x^2+y^2)|^3>=54*(x^2*y^2*z^2) by Lm1;
+A8: z=-(x+y) by A3;
+  then z|^3 = -((x+y)|^3) by Lm5
+    .=-(x|^3+3*x^2*y+3*x*y^2+y|^3) by Lm6;
+  then (z|^2+x^2+y^2)|^3>=6*(x|^3+y|^3+z|^3)^2 by A8,A7,Lm1;
   then (z|^2+x|^2+y^2)|^3>=6*(x|^3+y|^3+z|^3)^2 by Lm1;
   then (z|^2+x|^2+y|^2)|^3>=6*(x|^3+y|^3+z|^3)^2 by Lm1;
   hence thesis;
@@ -574,157 +580,169 @@ end;
 theorem
   a>=1 implies (a to_power b)+(a to_power c)>=2*(a to_power sqrt(b*c))
 proof
-  assume
-A1: a>=1;
-A2: (b+c)/2>=(2*sqrt(b*c))/2 by SIN_COS2:1,XREAL_1:74;
-  set o=a to_power b;
+A1: (b+c)/2>=(2*sqrt(b*c))/2 by SIN_COS2:1,XREAL_1:74;
   set p=a to_power c;
-A3: (a to_power (b+c))>0 by POWER:39;
+  set o=a to_power b;
   o>0 & p>0 by POWER:39;
-  then (a to_power b)+(a to_power c)>=2*sqrt((a to_power b)*(a to_power c))
-  by SIN_COS2:1;
-  then (a to_power b)+(a to_power c)>=2*(sqrt(a to_power (b+c))) by POWER:32;
-  then (a to_power b)+(a to_power c)>=2*((a to_power (b+c)) to_power (1/2))
-  by A3,ASYMPT_1:89;
   then
-A4: (a to_power b)+(a to_power c)>=2*((a to_power ((1/2)*(b+c)))) by POWER:38;
-  a #R ((b+c)/2) >= a #R (sqrt(b*c)) by A1,A2,PREPOWER:96;
+  (a to_power b)+(a to_power c)>=2*sqrt((a to_power b)*(a to_power c)) by
+  SIN_COS2:1;
+  then
+  (a to_power (b+c))>0 & (a to_power b)+(a to_power c)>=2*(sqrt(a to_power
+  (b+ c))) by POWER:32,39;
+  then
+  (a to_power b)+(a to_power c)>=2*((a to_power (b+c)) to_power (1/2)) by
+  ASYMPT_1:89;
+  then
+A2: (a to_power b)+(a to_power c)>=2*((a to_power ((1/2)*(b+c)))) by
+  POWER:38;
+  assume
+  a>=1;
+  then a #R ((b+c)/2) >= a #R (sqrt(b*c)) by A1,PREPOWER:96;
   then a to_power ((b+c)/2) >= a #R (sqrt(b*c)) by POWER:def 2;
   then a to_power ((b+c)/2) >= a to_power (sqrt(b*c)) by POWER:def 2;
-  then 2*(a to_power ((b+c)/2)) >= 2*(a to_power (sqrt(b*c))) by XREAL_1:66;
-  hence thesis by A4,XXREAL_0:2;
+  then 2*(a to_power ((b+c)/2)) >= 2*(a to_power (sqrt(b*c))) by XREAL_1:
+  66;
+  hence thesis by A2,XXREAL_0:2;
 end;
 
 theorem
-  a>=b & b>=c implies
-  (a to_power a)*(b to_power b)*(c to_power c)>=(a*b*c) to_power ((a+b+c)/3)
+  a>=b & b>=c implies (a to_power a)*(b to_power b)*(c to_power c)>=(a*b
+  *c) to_power ((a+b+c)/3)
 proof
-  assume
-A1: a>=b & b>=c;
+  assume that
+A1: a>=b and
+A2: b>=c;
+A3: ((b/c) to_power ((b-c)/3)) =((b/c) #R ((b-c)/3)) by POWER:def 2;
+  b/c>=1 & b-c>=c-c by A2,XREAL_1:11,183;
   then
-A2: a>=c by XXREAL_0:2;
+A4: ((b/c) to_power ((b-c)/3))>=1 by A3,PREPOWER:99;
+A5: ( (a/b) to_power ((a-b)/3))=((a/b) #R ((a-b)/3)) by POWER:def 2;
+  a/b>=1 & a-b>=b-b by A1,XREAL_1:11,183;
+  then ((a/b) to_power ((a-b)/3))>=1 by A5,PREPOWER:99;
   then
-A3: a/b>=1 & b/c>=1 & a/c>=1 by A1,XREAL_1:183;
-  set u=a to_power ((a-b)/3);
-  set v=b to_power ((a-b)/3);
-  set w=b to_power ((b-c)/3);
-  set h=c to_power ((b-c)/3);
-  set i=a to_power ((a-c)/3);
-  set j=c to_power ((a-c)/3);
-  set o=a to_power a;
-  set p=a to_power ((a+b+c)/3);
-  set q=c to_power c;
-  set r=c to_power ((a+b+c)/3);
-  set s=b to_power b;
-  set t=b to_power ((a+b+c)/3);
-A4: a-b>=b-b & b-c>=c-c & a-c>=c-c by A1,A2,XREAL_1:11;
-A5: (
-  (a/b) to_power ((a-b)/3))=((a/b) #R ((a-b)/3)) & ((b/c) to_power ((b-c)/3))
-  =((b/c) #R ((b-c)/3)) & ((a/c) to_power ((a-c)/3))=((a/c) #R ((a-c)/3))
-  by POWER:def 2;
-A6: ((a to_power ((a-b)/3))/(b to_power ((a-b)/3)))*((b to_power ((b-c)/3))/
-  (c to_power ((b-c)/3)))*((a to_power ((a-c)/3))/(c to_power ((a-c)/3)))
-  =(u*w)/(v*h)*(i/j) by XCMPLX_1:77
-    .=(u*w*i)/(v*h*j) by XCMPLX_1:77
-    .=((a to_power ((a-b)/3))*(a to_power ((a-c)/3))*(b to_power ((b-c)/3)))/
-  ((b to_power ((a-b)/3))*(c to_power ((a-c)/3))*(c to_power ((b-c)/3)))
-    .=((a to_power (((a-b)/3)+((a-c)/3)))*(b to_power ((b-c)/3)))/
-  ((b to_power ((a-b)/3))*(c to_power ((a-c)/3))*(c to_power ((b-c)/3)))
-  by POWER:32
-    .=((a to_power ((2*a-b-c)/3))*(b to_power ((b-c)/3)))/
-  ((b to_power ((a-b)/3))*((c to_power ((a-c)/3))*(c to_power ((b-c)/3))))
-    .=((a to_power ((2*a-b-c)/3))*(b to_power ((b-c)/3)))/
-  ((b to_power ((a-b)/3))*((c to_power (((a-c)/3)+((b-c)/3))))) by POWER:32
-    .=((a to_power ((2*a-b-c)/3))/(c to_power ((a+b-2*c)/3)))*
-  ((b to_power ((b-c)/3))/(b to_power ((a-b)/3))) by XCMPLX_1:77
-    .=((a to_power ((2*a-b-c)/3))/(c to_power ((a+b-2*c)/3)))*
-  (b to_power ((b-c)/3-(a-b)/3)) by POWER:34
-    .=(1/(c to_power ((a+b-2*c)/3)))*
-  (b to_power ((2*b-a-c)/3))*(a to_power ((2*a-b-c)/3))
-    .=(c to_power (-((a+b-2*c)/3)))*
-  (b to_power ((2*b-a-c)/3))*(a to_power ((2*a-b-c)/3)) by POWER:33
-    .=(a to_power ((3*a)/3-(a+b+c)/3))*(c to_power ((3*c)/3-(a+b+c)/3))*
-  (b to_power ((3*b)/3-(a+b+c)/3))
-    .=((a to_power ((3*a)/3))/(a to_power ((a+b+c)/3)))
-  *(c to_power ((3*c)/3-(a+b+c)/3))*
-  (b to_power ((3*b)/3-(a+b+c)/3)) by POWER:34
-    .=((a to_power ((3*a)/3))/(a to_power ((a+b+c)/3)))
-  *((c to_power ((3*c)/3))/(c to_power ((a+b+c)/3)))*
-  (b to_power ((3*b)/3-(a+b+c)/3)) by POWER:34
-    .=((a to_power a)/(a to_power ((a+b+c)/3)))*
-  ((c to_power c)/(c to_power ((a+b+c)/3)))*
-  ((b to_power b)/(b to_power ((a+b+c)/3))) by POWER:34
-    .=(o*q)/(p*r)*(s/t) by XCMPLX_1:77
-    .=((a to_power a)*(c to_power c)*(b to_power b))/((a to_power ((a+b+c)/3))
-  *(c to_power ((a+b+c)/3))*(b to_power ((a+b+c)/3))) by XCMPLX_1:77;
-A7: ((a/b) to_power ((a-b)/3))>=1 & ((b/c) to_power ((b-c)/3))>=1 &
-  ((a/c) to_power ((a-c)/3))>=1 by A3,A4,A5,PREPOWER:99;
-  then ((a/b) to_power ((a-b)/3))*((b/c) to_power ((b-c)/3))>=1*1
-  by XREAL_1:68;
-  then ((a/b) to_power ((a-b)/3))*((b/c) to_power ((b-c)/3))*
-  ((a/c) to_power ((a-c)/3))>=1 by A7,XREAL_1:68;
+A6: ((a/b) to_power ((a-b)/3))*((b/c) to_power ((b-c)/3))>=1*1 by A4,
+  XREAL_1:68;
+  a>=c by A1,A2,XXREAL_0:2;
+  then
+A7: a/c>=1 & a-c>=c-c by XREAL_1:11,183;
+  ((a/c) to_power ((a-c)/3))=((a/c) #R ((a-c)/3)) by POWER:def 2;
+  then ((a/c) to_power ((a-c)/3))>=1 by A7,PREPOWER:99;
+  then ((a/b) to_power ((a-b)/3))*((b/c) to_power ((b-c)/3))* ((a/c) to_power
+  ((a-c)/3))>=1 by A6,XREAL_1:68;
   then ((a to_power ((a-b)/3))/(b to_power ((a-b)/3)))*((b/c) to_power ((b-c)
   /3))* ((a/c) to_power ((a-c)/3))>=1 by POWER:36;
-  then ((a to_power ((a-b)/3))/(b to_power ((a-b)/3)))*((b to_power ((b-c)/3)
-  )/ (c to_power ((b-c)/3)))*((a/c) to_power ((a-c)/3))>=1 by POWER:36;
   then
-A8: (o*q*s)/(p*r*t)>=1 by A6,POWER:36;
-A9: p>0 & r>0 & t>0 by POWER:39;
-A10: p*r*t>0 by A9;
-  then (o*q*s)/(p*r*t)*(p*r*t)>=1*(p*r*t) by A8,XREAL_1:66;
+A8: ((a to_power ((a-b)/3))/(b to_power ((a-b)/3)))*((b to_power ((b-c)/3)
+  )/ (c to_power ((b-c)/3)))*((a/c) to_power ((a-c)/3))>=1 by POWER:36;
+  set t=b to_power ((a+b+c)/3);
+  set s=b to_power b;
+  set r=c to_power ((a+b+c)/3);
+  set q=c to_power c;
+  set p=a to_power ((a+b+c)/3);
+  set o=a to_power a;
+  set j=c to_power ((a-c)/3);
+  set i=a to_power ((a-c)/3);
+  set h=c to_power ((b-c)/3);
+  set w=b to_power ((b-c)/3);
+  set v=b to_power ((a-b)/3);
+  set u=a to_power ((a-b)/3);
+A9: p>0 & r>0 by POWER:39;
+A10: t>0 by POWER:39;
+  ((a to_power ((a-b)/3))/(b to_power ((a-b)/3)))*((b to_power ((b-c)/3))
+/ (c to_power ((b-c)/3)))*((a to_power ((a-c)/3))/(c to_power ((a-c)/3))) =(u*w
+  )/(v*h)*(i/j) by XCMPLX_1:77
+    .=(u*w*i)/(v*h*j) by XCMPLX_1:77
+    .=((a to_power ((a-b)/3))*(a to_power ((a-c)/3))*(b to_power ((b-c)/3)))
+  / ((b to_power ((a-b)/3))*(c to_power ((a-c)/3))*(c to_power ((b-c)/3)))
+    .=((a to_power (((a-b)/3)+((a-c)/3)))*(b to_power ((b-c)/3)))/ ((b
+to_power ((a-b)/3))*(c to_power ((a-c)/3))*(c to_power ((b-c)/3))) by POWER:32
+    .=((a to_power ((2*a-b-c)/3))*(b to_power ((b-c)/3)))/ ((b to_power ((a-
+  b)/3))*((c to_power ((a-c)/3))*(c to_power ((b-c)/3))))
+    .=((a to_power ((2*a-b-c)/3))*(b to_power ((b-c)/3)))/ ((b to_power ((a-
+  b)/3))*((c to_power (((a-c)/3)+((b-c)/3))))) by POWER:32
+    .=((a to_power ((2*a-b-c)/3))/(c to_power ((a+b-2*c)/3)))* ((b to_power
+  ((b-c)/3))/(b to_power ((a-b)/3))) by XCMPLX_1:77
+    .=((a to_power ((2*a-b-c)/3))/(c to_power ((a+b-2*c)/3)))* (b to_power (
+  (b-c)/3-(a-b)/3)) by POWER:34
+    .=(1/(c to_power ((a+b-2*c)/3)))* (b to_power ((2*b-a-c)/3))*(a to_power
+  ((2*a-b-c)/3))
+    .=(c to_power (-((a+b-2*c)/3)))* (b to_power ((2*b-a-c)/3))*(a to_power
+  ((2*a-b-c)/3)) by POWER:33
+    .=(a to_power ((3*a)/3-(a+b+c)/3))*(c to_power ((3*c)/3-(a+b+c)/3))* (b
+  to_power ((3*b)/3-(a+b+c)/3))
+    .=((a to_power ((3*a)/3))/(a to_power ((a+b+c)/3))) *(c to_power ((3*c)/
+  3-(a+b+c)/3))* (b to_power ((3*b)/3-(a+b+c)/3)) by POWER:34
+    .=((a to_power ((3*a)/3))/(a to_power ((a+b+c)/3))) *((c to_power ((3*c)
+  /3))/(c to_power ((a+b+c)/3)))* (b to_power ((3*b)/3-(a+b+c)/3)) by POWER:34
+    .=((a to_power a)/(a to_power ((a+b+c)/3)))* ((c to_power c)/(c to_power
+  ((a+b+c)/3)))* ((b to_power b)/(b to_power ((a+b+c)/3))) by POWER:34
+    .=(o*q)/(p*r)*(s/t) by XCMPLX_1:77
+    .=((a to_power a)*(c to_power c)*(b to_power b))/((a to_power ((a+b+c)/3
+  )) *(c to_power ((a+b+c)/3))*(b to_power ((a+b+c)/3))) by XCMPLX_1:77;
+  then (o*q*s)/(p*r*t)>=1 by A8,POWER:36;
+  then (o*q*s)/(p*r*t)*(p*r*t)>=1*(p*r*t) by A9,A10,XREAL_1:66;
   then ((a to_power a)*(c to_power c)*(b to_power b))>=((a to_power ((a+b+c)/
-  3)) *(c to_power ((a+b+c)/3))*(b to_power ((a+b+c)/3))) by A10,XCMPLX_1:88;
-  then (a to_power a)*(c to_power c)*(b to_power b)>=
-  ((a*c) to_power ((a+b+c)/3))*(b to_power ((a+b+c)/3)) by POWER:35;
-  then (a to_power a)*((b to_power b)*(c to_power c))>=(a*c*b)
-  to_power ((a+b+c)/3) by POWER:35;
+  3)) *(c to_power ((a+b+c)/3))*(b to_power ((a+b+c)/3))) by A9,A10,
+  XCMPLX_1:88;
+  then
+  (a to_power a)*(c to_power c)*(b to_power b)>= ((a*c) to_power ((a+b+c)
+  /3))*(b to_power ((a+b+c)/3)) by POWER:35;
+  then
+  (a to_power a)*((b to_power b)*(c to_power c))>=(a*c*b) to_power ((a+b+
+  c)/3) by POWER:35;
   hence thesis;
 end;
 
 theorem Th31:
-  for a,b being non negative (real number) holds
-  (a+b)|^(n+2)>=a|^(n+2)+(n+2)*(a|^(n+1))*b
+  for a,b being non negative (real number) holds (a+b)|^(n+2)>=a|^
+  (n+2)+(n+2)*(a|^(n+1))*b
 proof
   let a,b be non negative (real number);
-  defpred X[Element of NAT] means
-  (a+b)|^($1+2)>=a|^($1+2)+($1+2)*(a|^($1+1))*b;
-A1: (a+b)|^(0+2) = (a+b)^2 by Lm1
-    .=a^2+2*a*b+b^2;
-  a|^(0+2)+(0+2)*a|^(0+1)*b = a^2+2*a|^1*b by Lm1
-    .=a^2+2*a*b by NEWTON:10;
-  then
-A2: X[0] by A1,XREAL_1:33;
-A3: for n st X[n] holds X[n+1]
+  defpred X[Element of NAT] means (a+b)|^($1+2)>=a|^($1+2)+($1+2)*(a|^($1+1))*
+  b;
+A1: for n st X[n] holds X[n+1]
   proof
     let n;
-    assume (a+b)|^(n+2)>=a|^(n+2)+(n+2)*(a|^(n+1))*b;
-    then (a+b)|^(n+2)*(a+b)>=(a|^(n+2)+(n+2)*(a|^(n+1))*b)*(a+b)
-    by XREAL_1:66;
-    then (a+b)|^(n+2+1)>=(a|^(n+2)+(n+2)*(a|^(n+1))*b)*(a+b) by NEWTON:11;
-    then (a+b)|^(n+3)>=a|^(n+2)*a+b*a|^(n+2)+(n+2)*(a+b)*(a|^(n+1))*b;
-    then (a+b)|^(n+3)>=a|^(n+2+1)+b*a|^(n+2)+(n+2)*(a+b)*(a|^(n+1))*b
-    by NEWTON:11;
-    then (a+b)|^(n+3)>=a|^(n+3)+a|^(n+2)*b+(n+2)*(a*(a|^(n+1)))*b+
-    (n+2)*(a|^(n+1))*(b*b);
-    then
-A4: (a+b)|^(n+3)>=a|^(n+3)+a|^(n+2)*b+(n+2)*((a|^(n+1+1)))*b+
-    (n+2)*(a|^(n+1))*(b*b) by NEWTON:11;
     a|^(n+1)>=0
     proof
       per cases;
-      suppose a=0;
+      suppose
+        a=0;
         hence thesis;
       end;
-      suppose a>0;
+      suppose
+        a>0;
         hence thesis by PREPOWER:13;
       end;
     end;
-    then (n+2)*(a|^(n+1))>=0;
-    then a|^(n+3)+(n+3)*(a|^(n+2))*b<=(n+2)*(a|^(n+1))*(b^2)+
-    (a|^(n+3)+(n+3)*(a|^(n+2))*b) by XREAL_1:33;
-    hence thesis by A4,XXREAL_0:2;
+    then
+A2: a|^(n+3)+(n+3)*(a|^(n+2))*b<=(n+2)*(a|^(n+1))*(b^2)+ (a|^(n+3)+(n+3)*
+    (a|^(n+2))*b) by XREAL_1:33;
+    assume
+    (a+b)|^(n+2)>=a|^(n+2)+(n+2)*(a|^(n+1))*b;
+    then (a+b)|^(n+2)*(a+b)>=(a|^(n+2)+(n+2)*(a|^(n+1))*b)*(a+b) by
+    XREAL_1:
+    66;
+    then (a+b)|^(n+2+1)>=(a|^(n+2)+(n+2)*(a|^(n+1))*b)*(a+b) by NEWTON:11;
+    then (a+b)|^(n+3)>=a|^(n+2)*a+b*a|^(n+2)+(n+2)*(a+b)*(a|^(n+1))*b;
+    then (a+b)|^(n+3)>=a|^(n+2+1)+b*a|^(n+2)+(n+2)*(a+b)*(a|^(n+1))*b by
+    NEWTON:11;
+    then
+    (a+b)|^(n+3)>=a|^(n+3)+a|^(n+2)*b+(n+2)*(a*(a|^(n+1)))*b+ (n+2)*(a|^(
+    n+1))*(b*b);
+    then
+    (a+b)|^(n+3)>=a|^(n+3)+a|^(n+2)*b+(n+2)*((a|^(n+1+1)))*b+ (n+2)*(a|^(
+    n+1))*(b*b) by NEWTON:11;
+    hence thesis by A2,XXREAL_0:2;
   end;
-  for n holds X[n] from NAT_1:sch 1(A2,A3);
+A3: a|^(0+2)+(0+2)*a|^(0+1)*b = a^2+2*a|^1*b by Lm1
+    .=a^2+2*a*b by NEWTON:10;
+  (a+b)|^(0+2) = (a+b)^2 by Lm1
+    .=a^2+2*a*b+b^2;
+  then
+A4: X[0] by A3,XREAL_1:33;
+  for n holds X[n] from NAT_1:sch 1(A4,A1);
   hence thesis;
 end;
 
@@ -732,23 +750,53 @@ theorem
   (a|^n+b|^n)/2 >= ((a+b)/2)|^n
 proof
   defpred X[Element of NAT] means (a|^$1+b|^$1)/2 >= ((a+b)/2)|^$1;
-  (a|^0+b|^0)/2 = (1+b|^0)/2 by NEWTON:9
-    .= (1+1)/2 by NEWTON:9
-    .= ((a+b)/2)|^0 by NEWTON:9;
-  then
-A1: X[0];
-A2: for n st X[n] holds X[n+1]
+A1: for n st X[n] holds X[n+1]
   proof
     let n;
-    assume X[n];
+    assume
+    X[n];
     then
-A3: ((a|^n+b|^n)/2)*(a+b)>= (((a+b)/2)|^n)*(a+b) by XREAL_1:66;
+A2: ((a|^n+b|^n)/2)*(a+b)>= (((a+b)/2)|^n)*(a+b) by XREAL_1:66;
     per cases;
     suppose
-A4:   a-b>=0;
+A3:   a-b>=0;
       then a-b+b>=0+b by XREAL_1:8;
       then a|^n >= b|^n by PREPOWER:17;
       then a|^n-b|^n>=0 by XREAL_1:50;
+      then (a-b)*(a|^n-b|^n)>=0 by A3;
+      then a|^n*a-a|^n*b-(b|^n*a-b|^n*b)>=0;
+      then a|^(n+1)-a|^n*b-(b|^n*a-b|^n*b)>=0 by NEWTON:11;
+      then a|^(n+1)-a|^n*b-b|^n*a+b|^n*b>=0;
+      then a|^(n+1)-a|^n*b-b|^n*a+b|^(n+1)>=0 by NEWTON:11;
+      then a|^(n+1)-a|^n*b-b|^n*a+b|^(n+1)+(a|^n*b+b|^n*a)>=0+(a|^n*b+b|^n*a)
+      by XREAL_1:8;
+      then
+      a|^(n+1)+b|^(n+1)+(a|^(n+1)+b|^(n+1))>=a|^n*b+b|^n*a+(a|^(n+1)+b|^(
+      n+ 1)) by XREAL_1:8;
+      then 2*a|^(n+1)+2*b|^(n+1)>=a|^(n+1)+a|^n*b+b|^n*a+b|^(n+1);
+      then 2*a|^(n+1)+2*b|^(n+1)>=a|^n*a+a|^n*b+b|^n*a+b|^(n+1) by
+      NEWTON
+      :11;
+      then 2*a|^(n+1)+2*b|^(n+1)>=a|^n*a+a|^n*b+b|^n*a+b|^n*b by
+      NEWTON:11;
+      then (2*(a|^(n+1)+b|^(n+1)))/2>=((a|^n+b|^n)*(a+b))/2 by
+      XREAL_1:74;
+      then (a|^(n+1)+b|^(n+1))>=(((a+b)/2)|^n)*(a+b) by A2,XXREAL_0:2;
+      then (a|^(n+1)+b|^(n+1))>=((a+b)|^n/2|^n)*(a+b) by PREPOWER:15;
+      then (a|^(n+1)+b|^(n+1))>=((a+b)|^n*(a+b))/2|^n;
+      then (a|^(n+1)+b|^(n+1))>=((a+b)|^(n+1))/2|^n by NEWTON:11;
+      then (a|^(n+1)+b|^(n+1)) /2>=(((a+b)|^(n+1))/2|^n)/2 by XREAL_1:74;
+      then (a|^(n+1)+b|^(n+1)) /2>=((a+b)|^(n+1))/(2|^n*2) by
+      XCMPLX_1:79;
+      then (a|^(n+1)+b|^(n+1)) /2>=((a+b)|^(n+1))/(2|^(n+1)) by
+      NEWTON:11;
+      hence thesis by PREPOWER:15;
+    end;
+    suppose
+A4:   a-b<0;
+      then a-b+b<0+b by XREAL_1:8;
+      then a|^n <= b|^n by PREPOWER:17;
+      then a|^n-b|^n<=0 by XREAL_1:49;
       then (a-b)*(a|^n-b|^n)>=0 by A4;
       then a|^n*a-a|^n*b-(b|^n*a-b|^n*b)>=0;
       then a|^(n+1)-a|^n*b-(b|^n*a-b|^n*b)>=0 by NEWTON:11;
@@ -756,282 +804,264 @@ A4:   a-b>=0;
       then a|^(n+1)-a|^n*b-b|^n*a+b|^(n+1)>=0 by NEWTON:11;
       then a|^(n+1)-a|^n*b-b|^n*a+b|^(n+1)+(a|^n*b+b|^n*a)>=0+(a|^n*b+b|^n*a)
       by XREAL_1:8;
-
-then a|^(n+1)+b|^(n+1)+(a|^(n+1)+b|^(n+1))>=a|^n*b+b|^n*a+(a|^(n+1)+b|^(n+ 1))
-      by XREAL_1:8;
+      then
+      a|^(n+1)+b|^(n+1)+(a|^(n+1)+b|^(n+1))>=a|^n*b+b|^n*a+(a|^(n+1)+b|^(
+      n+ 1)) by XREAL_1:8;
       then 2*a|^(n+1)+2*b|^(n+1)>=a|^(n+1)+a|^n*b+b|^n*a+b|^(n+1);
-      then 2*a|^(n+1)+2*b|^(n+1)>=a|^n*a+a|^n*b+b|^n*a+b|^(n+1) by NEWTON:11;
-      then 2*a|^(n+1)+2*b|^(n+1)>=a|^n*a+a|^n*b+b|^n*a+b|^n*b by NEWTON:11;
-      then (2*(a|^(n+1)+b|^(n+1)))/2>=((a|^n+b|^n)*(a+b))/2 by XREAL_1:74;
-      then (a|^(n+1)+b|^(n+1))>=(((a+b)/2)|^n)*(a+b) by A3,XXREAL_0:2;
+      then 2*a|^(n+1)+2*b|^(n+1)>=a|^n*a+a|^n*b+b|^n*a+b|^(n+1) by
+      NEWTON
+      :11;
+      then 2*a|^(n+1)+2*b|^(n+1)>=a|^n*a+a|^n*b+b|^n*a+b|^n*b by
+      NEWTON:11;
+      then (2*(a|^(n+1)+b|^(n+1)))/2>=((a|^n+b|^n)*(a+b))/2 by
+      XREAL_1:74;
+      then (a|^(n+1)+b|^(n+1))>=(((a+b)/2)|^n)*(a+b) by A2,XXREAL_0:2;
       then (a|^(n+1)+b|^(n+1))>=((a+b)|^n/2|^n)*(a+b) by PREPOWER:15;
       then (a|^(n+1)+b|^(n+1))>=((a+b)|^n*(a+b))/2|^n;
       then (a|^(n+1)+b|^(n+1))>=((a+b)|^(n+1))/2|^n by NEWTON:11;
-      then ((a|^(n+1)+b|^(n+1)))/2>=(((a+b)|^(n+1))/2|^n)/2 by XREAL_1:74;
-      then ((a|^(n+1)+b|^(n+1)))/2>=((a+b)|^(n+1))/(2|^n*2) by XCMPLX_1:79;
-      then ((a|^(n+1)+b|^(n+1)))/2>=((a+b)|^(n+1))/(2|^(n+1)) by NEWTON:11;
-      hence thesis by PREPOWER:15;
-    end;
-    suppose
-A5:   a-b<0;
-      then a-b+b<0+b by XREAL_1:8;
-      then a|^n <= b|^n by PREPOWER:17;
-      then a|^n-b|^n<=0 by XREAL_1:49;
-      then (a-b)*(a|^n-b|^n)>=0 by A5;
-      then a|^n*a-a|^n*b-(b|^n*a-b|^n*b)>=0;
-      then a|^(n+1)-a|^n*b-(b|^n*a-b|^n*b)>=0 by NEWTON:11;
-      then a|^(n+1)-a|^n*b-b|^n*a+b|^n*b>=0;
-      then a|^(n+1)-a|^n*b-b|^n*a+b|^(n+1)>=0 by NEWTON:11;
-      then a|^(n+1)-a|^n*b-b|^n*a+b|^(n+1)+(a|^n*b+b|^n*a)>=0+(a|^n*b+b|^n*a)
-      by XREAL_1:8;
-
-then a|^(n+1)+b|^(n+1)+(a|^(n+1)+b|^(n+1))>=a|^n*b+b|^n*a+(a|^(n+1)+b|^(n+ 1))
-      by XREAL_1:8;
-      then 2*a|^(n+1)+2*b|^(n+1)>=a|^(n+1)+a|^n*b+b|^n*a+b|^(n+1);
-      then 2*a|^(n+1)+2*b|^(n+1)>=a|^n*a+a|^n*b+b|^n*a+b|^(n+1) by NEWTON:11;
-      then 2*a|^(n+1)+2*b|^(n+1)>=a|^n*a+a|^n*b+b|^n*a+b|^n*b by NEWTON:11;
-      then (2*(a|^(n+1)+b|^(n+1)))/2>=((a|^n+b|^n)*(a+b))/2 by XREAL_1:74;
-      then (a|^(n+1)+b|^(n+1))>=(((a+b)/2)|^n)*(a+b) by A3,XXREAL_0:2;
-      then (a|^(n+1)+b|^(n+1))>=((a+b)|^n/2|^n)*(a+b) by PREPOWER:15;
-      then (a|^(n+1)+b|^(n+1))>=((a+b)|^n*(a+b))/2|^n;
-      then (a|^(n+1)+b|^(n+1))>=((a+b)|^(n+1))/2|^n by NEWTON:11;
-      then ((a|^(n+1)+b|^(n+1)))/2>=(((a+b)|^(n+1))/2|^n)/2 by XREAL_1:74;
-      then ((a|^(n+1)+b|^(n+1)))/2>=((a+b)|^(n+1))/(2|^n*2) by XCMPLX_1:79;
-      then ((a|^(n+1)+b|^(n+1)))/2>=((a+b)|^(n+1))/(2|^(n+1)) by NEWTON:11;
+      then (a|^(n+1)+b|^(n+1)) /2>=(((a+b)|^(n+1))/2|^n)/2 by XREAL_1:74;
+      then (a|^(n+1)+b|^(n+1)) /2>=((a+b)|^(n+1))/(2|^n*2) by
+      XCMPLX_1:79;
+      then (a|^(n+1)+b|^(n+1)) /2>=((a+b)|^(n+1))/(2|^(n+1)) by
+      NEWTON:11;
       hence thesis by PREPOWER:15;
     end;
   end;
-  for n holds X[n] from NAT_1:sch 1(A1,A2);
+  (a|^0+b|^0)/2 = (1+b|^0)/2 by NEWTON:9
+    .= (1+1)/2 by NEWTON:9
+    .= ((a+b)/2)|^0 by NEWTON:9;
+  then
+A5: X[0];
+  for n holds X[n] from NAT_1:sch 1(A5,A1);
   hence thesis;
 end;
 
 theorem Th33:
   (for n holds s.n>0) implies for n holds (Partial_Sums s).n>0
 proof
+  defpred X[Element of NAT] means (Partial_Sums s).$1>0;
   assume
 A1: for n holds s.n>0;
-  defpred X[Element of NAT] means (Partial_Sums s).$1>0;
-  (Partial_Sums s).0=s.0 by SERIES_1:def 1;
-  then
-A2: X[0] by A1;
-A3: for n st X[n] holds X[n+1]
+A2: for n st X[n] holds X[n+1]
   proof
     let n;
+A3: (Partial_Sums s).(n+1)=(Partial_Sums s).n+s.(n+1) by SERIES_1:def 1;
     assume
-A4: (Partial_Sums s).n>0;
-    (Partial_Sums s).(n+1)=(Partial_Sums s).n+s.(n+1) by SERIES_1:def 1;
-    hence thesis by A1,A4,XREAL_1:36;
+    (Partial_Sums s).n>0;
+    hence thesis by A1,A3,XREAL_1:36;
   end;
-  for n holds X[n] from NAT_1:sch 1(A2,A3);
+  (Partial_Sums s).0=s.0 by SERIES_1:def 1;
+  then
+A4: X[0] by A1;
+  for n holds X[n] from NAT_1:sch 1(A4,A2);
   hence thesis;
 end;
 
 theorem Th34:
   (for n holds s.n>=0) implies for n holds (Partial_Sums s).n>=0
 proof
+  defpred X[Element of NAT] means (Partial_Sums(s)).$1>=0;
   assume
 A1: for n holds s.n>=0;
-  defpred X[Element of NAT] means (Partial_Sums(s)).$1>=0;
-  (Partial_Sums(s)).0=s.0 by SERIES_1:def 1;
-  then
-A2: X[0] by A1;
-A3: for n st X[n] holds X[n+1]
+A2: for n st X[n] holds X[n+1]
   proof
     let n;
     assume
-A4: (Partial_Sums(s)).n>=0;
-A5: (Partial_Sums(s)).(n+1)=(Partial_Sums(s)).n+s.(n+1) by SERIES_1:def 1;
-    s.(n+1)>=0 by A1;
-    hence thesis by A4,A5;
+A3: (Partial_Sums(s)).n>=0;
+    (Partial_Sums(s)).(n+1)=(Partial_Sums(s)).n+s.(n+1) & s.(n+1)>=0 by A1
+    , SERIES_1:def 1;
+    hence thesis by A3;
   end;
-  for n holds X[n] from NAT_1:sch 1(A2,A3);
+  (Partial_Sums(s)).0=s.0 by SERIES_1:def 1;
+  then
+A4: X[0] by A1;
+  for n holds X[n] from NAT_1:sch 1(A4,A2);
   hence thesis;
 end;
 
 theorem Th35:
   (for n holds s.n<0) implies (Partial_Sums s).n<0
 proof
+  defpred X[Element of NAT] means (Partial_Sums(s)).$1<0;
   assume
 A1: for n holds s.n<0;
-  defpred X[Element of NAT] means (Partial_Sums(s)).$1<0;
-  (Partial_Sums(s)).0=s.0 by SERIES_1:def 1;
-  then
-A2: X[0] by A1;
-A3: for n st X[n] holds X[n+1]
+A2: for n st X[n] holds X[n+1]
   proof
     let n;
-    assume (Partial_Sums(s)).n<0;
-    then
-A4: 0*(-1)<(-1)*((Partial_Sums(s)).n);
-A5: (Partial_Sums(s)).(n+1)=(Partial_Sums(s)).n+s.(n+1) by SERIES_1:def 1;
-    s.(n+1)<0 by A1;
-    then 0*(-1)<(s.(n+1))*(-1);
-    then -(Partial_Sums(s)).n+(-s.(n+1))>0 by A4;
-    then -((Partial_Sums(s)).n+s.(n+1))>0;
-    hence thesis by A5;
+    assume
+A3: (Partial_Sums(s)).n<0;
+    (Partial_Sums(s)).(n+1)=(Partial_Sums(s)).n+s.(n+1) & s.(n+1)<0 by A1,
+    SERIES_1:def 1;
+    hence thesis by A3;
   end;
-  for n holds X[n] from NAT_1:sch 1(A2,A3);
+  (Partial_Sums(s)).0=s.0 by SERIES_1:def 1;
+  then
+A4: X[0] by A1;
+  for n holds X[n] from NAT_1:sch 1(A4,A2);
   hence thesis;
 end;
 
 theorem Th36:
   s=s1(#)s1 implies for n holds (Partial_Sums s).n>=0
 proof
+  defpred X[Element of NAT] means (Partial_Sums s).$1>=0;
   assume
 A1: s=s1(#)s1;
-  defpred X[Element of NAT] means (Partial_Sums s).$1>=0;
-  (Partial_Sums s).0=s.0 by SERIES_1:def 1
-    .=(s1.0)^2 by A1,SEQ_1:12;
-  then
-A2: X[0] by XREAL_1:65;
-A3: for n st X[n] holds X[n+1]
+A2: for n st X[n] holds X[n+1]
   proof
     let n;
     assume
-A4: (Partial_Sums(s)).n>=0;
-A5: (Partial_Sums s).(n+1)=(Partial_Sums(s)).n+s.(n+1) by SERIES_1:def 1
+A3: (Partial_Sums(s)).n>=0;
+A4: (s1.(n+1))^2>=0 by XREAL_1:65;
+    (Partial_Sums s).(n+1)=(Partial_Sums(s)).n+s.(n+1) by SERIES_1:def 1
       .=(Partial_Sums s).n+(s1.(n+1))^2 by A1,SEQ_1:12;
-    (s1.(n+1))^2>=0 by XREAL_1:65;
-    hence thesis by A4,A5;
+    hence thesis by A3,A4;
   end;
-  for n holds X[n] from NAT_1:sch 1(A2,A3);
+  (Partial_Sums s).0=s.0 by SERIES_1:def 1
+    .=(s1.0)^2 by A1,SEQ_1:12;
+  then
+A5: X[0] by XREAL_1:65;
+  for n holds X[n] from NAT_1:sch 1(A5,A2);
   hence thesis;
 end;
 
 theorem
-  (for n holds s.n>0 & s.n>s.(n-1)) implies (n+1)*s.(n+1) > (Partial_Sums s).n
+  (for n holds s.n>0 & s.n>s.(n-1)) implies (n+1)*s.(n+1) > (
+  Partial_Sums s).n
 proof
+  defpred X[Element of NAT] means ($1+1)*s.($1+1)>(Partial_Sums s).$1;
   assume
 A1: for n holds s.n>0 & s.n>s.(n-1);
-  defpred X[Element of NAT] means ($1+1)*s.($1+1)>(Partial_Sums s).$1;
-  s.1>s.(1-1) by A1;
-  then
-A2: X[0] by SERIES_1:def 1;
-A3: for n st X[n] holds X[n+1]
+A2: for n st X[n] holds X[n+1]
   proof
     let n;
     assume
-A4: (n+1)*s.(n+1)>(Partial_Sums s).n;
-    s.(n+2)>s.((n+2)-1) by A1;
+    (n+1)*s.(n+1)>(Partial_Sums s).n;
     then
-A5: (n+2)*s.(n+2)>(n+2)*s.(n+1) by XREAL_1:70;
-    (Partial_Sums(s)).n+s.(n+1)<(n+1)*s.(n+1)+s.(n+1) by A4,XREAL_1:8;
-    then (Partial_Sums s).n+s.(n+1)<(n+2)*s.(n+2) by A5,XXREAL_0:2;
+A3: (Partial_Sums(s)).n+s.(n+1)<(n+1)*s.(n+1)+s.(n+1) by XREAL_1:8;
+    s.(n+2)>s.((n+2)-1) by A1;
+    then (n+2)*s.(n+2)>(n+2)*s.(n+1) by XREAL_1:70;
+    then (Partial_Sums s).n+s.(n+1)<(n+2)*s.(n+2) by A3,XXREAL_0:2;
     hence thesis by SERIES_1:def 1;
   end;
-  for n holds X[n] from NAT_1:sch 1(A2,A3);
+  s.1>s.(1-1) by A1;
+  then
+A4: X[0] by SERIES_1:def 1;
+  for n holds X[n] from NAT_1:sch 1(A4,A2);
   hence thesis;
 end;
 
 theorem Th38:
-  (for n holds s.n>0 & s.n>=s.(n-1)) implies
-  (n+1)*s.(n+1) >= (Partial_Sums s).n
+  (for n holds s.n>0 & s.n>=s.(n-1)) implies (n+1)*s.(n+1) >= (
+  Partial_Sums s).n
 proof
+  defpred X[Element of NAT] means ($1+1)*s.($1+1)>=(Partial_Sums s).$1;
   assume
 A1: for n holds s.n>0 & s.n>=s.(n-1);
-  defpred X[Element of NAT] means ($1+1)*s.($1+1)>=(Partial_Sums s).$1;
+A2: for n st X[n] holds X[n+1]
+  proof
+    let n;
+    assume
+    (n+1)*s.(n+1)>=(Partial_Sums s).n;
+    then
+A3: (Partial_Sums(s)).n+s.(n+1)<=(n+1)*s.(n+1)+s.(n+1) by XREAL_1:8;
+    s.(n+2)>=s.((n+2)-1) by A1;
+    then (n+2)*s.(n+2)>=(n+2)*s.(n+1) by XREAL_1:66;
+    then (Partial_Sums s).n+s.(n+1)<=(n+2)*s.(n+2) by A3,XXREAL_0:2;
+    hence thesis by SERIES_1:def 1;
+  end;
   s.1>=s.(1-1) by A1;
   then
-A2: X[0] by SERIES_1:def 1;
+A4: X[0] by SERIES_1:def 1;
+  for n holds X[n] from NAT_1:sch 1(A4,A2);
+  hence thesis;
+end;
+
+theorem
+  (s=s1(#)s2 & for n holds s1.n>=0 & s2.n>=0) implies for n holds (
+  Partial_Sums s).n<= (Partial_Sums(s1).n)*(Partial_Sums(s2).n)
+proof
+  assume that
+A1: s=s1(#)s2 and
+A2: for n holds s1.n>=0 & s2.n>=0;
+  defpred X[Element of NAT] means (Partial_Sums(s)).$1<= (Partial_Sums(s1).$1)
+  *(Partial_Sums(s2).$1);
 A3: for n st X[n] holds X[n+1]
   proof
     let n;
+    set j=(Partial_Sums(s)).n;
+    set u=Partial_Sums(s1).n;
+    set v=Partial_Sums(s2).n;
+    set w=s1.(n+1);
+    set h=s2.(n+1);
+A4: (Partial_Sums(s1).(n+1))*(Partial_Sums(s2).(n+1)) =(Partial_Sums(s1).n
+    +s1.(n+1))*(Partial_Sums(s2).(n+1)) by SERIES_1:def 1
+      .=(u+w)*(v+h) by SERIES_1:def 1
+      .=u*v+u*h+w*v+w*h;
     assume
-A4: (n+1)*s.(n+1)>=(Partial_Sums s).n;
-    s.(n+2)>=s.((n+2)-1) by A1;
+    (Partial_Sums(s)).n<= (Partial_Sums(s1).n)*(Partial_Sums(s2).n);
     then
-A5: (n+2)*s.(n+2)>=(n+2)*s.(n+1) by XREAL_1:66;
-    (Partial_Sums(s)).n+s.(n+1)<=(n+1)*s.(n+1)+s.(n+1) by A4,XREAL_1:8;
-    then (Partial_Sums s).n+s.(n+1)<=(n+2)*s.(n+2) by A5,XXREAL_0:2;
-    hence thesis by SERIES_1:def 1;
+A5: j+w*h<=u*v+w*h by XREAL_1:8;
+A6: w>=0 & h>=0 by A2;
+    u>=0 & v>=0 by A2,Th34;
+    then
+A7: (u*v+w*h)<=(u*v+w*h)+(u*h+w*v) by A6,XREAL_1:33;
+    (Partial_Sums(s)).(n+1) =(Partial_Sums(s)).n+s.(n+1) by SERIES_1:def 1
+      .=(Partial_Sums(s)).n+s1.(n+1)*s2.(n+1) by A1,SEQ_1:12;
+    hence thesis by A4,A5,A7,XXREAL_0:2;
   end;
-  for n holds X[n] from NAT_1:sch 1(A2,A3);
+A8: (Partial_Sums(s1).0)*(Partial_Sums(s2).0) =s1.0*(Partial_Sums(s2).0) by
+  SERIES_1:def 1
+    .=s1.0*s2.0 by SERIES_1:def 1;
+  (Partial_Sums(s)).0 = s.0 by SERIES_1:def 1
+    .=s1.0*s2.0 by A1,SEQ_1:12;
+  then
+A9: X[0] by A8;
+  for n holds X[n] from NAT_1:sch 1(A9,A3);
   hence thesis;
 end;
 
 theorem
-  (s=s1(#)s2 & for n holds s1.n>=0 & s2.n>=0) implies
-  for n holds (Partial_Sums s).n<= (Partial_Sums(s1).n)*(Partial_Sums(s2).n)
+  (s=s1(#)s2 & for n holds s1.n<0 & s2.n<0) implies (Partial_Sums s).n<=
+  (Partial_Sums(s1).n)*(Partial_Sums(s2).n)
 proof
-  assume
-A1: s=s1(#)s2 & for n holds s1.n>=0 & s2.n>=0;
-  defpred X[Element of NAT] means (Partial_Sums(s)).$1<=
-  (Partial_Sums(s1).$1)*(Partial_Sums(s2).$1);
-A2: (Partial_Sums(s)).0 = s.0 by SERIES_1:def 1
-    .=s1.0*s2.0 by A1,SEQ_1:12;
-  (Partial_Sums(s1).0)*(Partial_Sums(s2).0)
-  =s1.0*(Partial_Sums(s2).0) by SERIES_1:def 1
-    .=s1.0*s2.0 by SERIES_1:def 1;
-  then
-A3: X[0] by A2;
-A4: for n st X[n] holds X[n+1]
+  assume that
+A1: s=s1(#)s2 and
+A2: for n holds s1.n<0 & s2.n<0;
+  defpred X[Element of NAT] means (Partial_Sums s).$1<= (Partial_Sums(s1).$1)*
+  (Partial_Sums(s2).$1);
+A3: for n st X[n] holds X[n+1]
   proof
     let n;
-    assume
-A5: (Partial_Sums(s)).n<= (Partial_Sums(s1).n)*(Partial_Sums(s2).n);
-A6: (Partial_Sums(s)).(n+1) =(Partial_Sums(s)).n+s.(n+1) by SERIES_1:def 1
-      .=(Partial_Sums(s)).n+s1.(n+1)*s2.(n+1) by A1,SEQ_1:12;
     set j=(Partial_Sums(s)).n;
     set u=Partial_Sums(s1).n;
     set v=Partial_Sums(s2).n;
     set w=s1.(n+1);
     set h=s2.(n+1);
-A7: (Partial_Sums(s1).(n+1))*(Partial_Sums(s2).(n+1))
-    =(Partial_Sums(s1).n+s1.(n+1))*(Partial_Sums(s2).(n+1)) by SERIES_1:def 1
+A4: (Partial_Sums(s1).(n+1))*(Partial_Sums(s2).(n+1)) =(Partial_Sums(s1).n
+    +s1.(n+1))*(Partial_Sums(s2).(n+1)) by SERIES_1:def 1
       .=(u+w)*(v+h) by SERIES_1:def 1
       .=u*v+u*h+w*v+w*h;
-A8: j+w*h<=u*v+w*h by A5,XREAL_1:8;
-A9: u>=0 & v>=0 by A1,Th34;
-    w>=0 & h>=0 by A1;
-    then u*h>=0 & w*v>=0 by A9;
-    then u*h+w*v>=0;
-    then (u*v+w*h)<=(u*v+w*h)+(u*h+w*v) by XREAL_1:33;
-    hence thesis by A6,A7,A8,XXREAL_0:2;
-  end;
-  for n holds X[n] from NAT_1:sch 1(A3,A4);
-  hence thesis;
-end;
-
-theorem
-  (s=s1(#)s2 & for n holds s1.n<0 & s2.n<0)
-  implies (Partial_Sums s).n<=(Partial_Sums(s1).n)*(Partial_Sums(s2).n)
-proof
-  assume
-A1: s=s1(#)s2 & for n holds s1.n<0 & s2.n<0;
-  defpred X[Element of NAT] means (Partial_Sums s).$1<=
-  (Partial_Sums(s1).$1)*(Partial_Sums(s2).$1);
-A2: (Partial_Sums s).0 = s.0 by SERIES_1:def 1
-    .=s1.0*s2.0 by A1,SEQ_1:12;
-  (Partial_Sums(s1).0)*(Partial_Sums(s2).0)
-  =s1.0*(Partial_Sums(s2).0) by SERIES_1:def 1
-    .=s1.0*s2.0 by SERIES_1:def 1;
-  then
-A3: X[0] by A2;
-A4: for n st X[n] holds X[n+1]
-  proof
-    let n;
     assume
-A5: (Partial_Sums(s)).n<= (Partial_Sums(s1).n)*(Partial_Sums(s2).n);
-A6: (Partial_Sums(s)).(n+1) =(Partial_Sums(s)).n+s.(n+1) by SERIES_1:def 1
+    (Partial_Sums(s)).n<= (Partial_Sums(s1).n)*(Partial_Sums(s2).n);
+    then
+A5: j+w*h<=u*v+w*h by XREAL_1:8;
+A6: w<0 & h<0 by A2;
+    u<0 & v<0 by A2,Th35;
+    then
+A7: (u*v+w*h)<=(u*v+w*h)+(u*h+w*v) by A6,XREAL_1:33;
+    (Partial_Sums(s)).(n+1) =(Partial_Sums(s)).n+s.(n+1) by SERIES_1:def 1
       .=(Partial_Sums(s)).n+s1.(n+1)*s2.(n+1) by A1,SEQ_1:12;
-    set j=(Partial_Sums(s)).n;
-    set u=Partial_Sums(s1).n;
-    set v=Partial_Sums(s2).n;
-    set w=s1.(n+1);
-    set h=s2.(n+1);
-A7: (Partial_Sums(s1).(n+1))*(Partial_Sums(s2).(n+1))
-    =(Partial_Sums(s1).n+s1.(n+1))*(Partial_Sums(s2).(n+1)) by SERIES_1:def 1
-      .=(u+w)*(v+h) by SERIES_1:def 1
-      .=u*v+u*h+w*v+w*h;
-A8: j+w*h<=u*v+w*h by A5,XREAL_1:8;
-A9: u<0 & v<0 by A1,Th35;
-    w<0 & h<0 by A1;
-    then u*h>0 & w*v>0 by A9;
-    then u*h+w*v>=0;
-    then (u*v+w*h)<=(u*v+w*h)+(u*h+w*v) by XREAL_1:33;
-    hence thesis by A6,A7,A8,XXREAL_0:2;
+    hence thesis by A4,A5,A7,XXREAL_0:2;
   end;
-  for n holds X[n] from NAT_1:sch 1(A3,A4);
+A8: (Partial_Sums(s1).0)*(Partial_Sums(s2).0) =s1.0*(Partial_Sums(s2).0) by
+  SERIES_1:def 1
+    .=s1.0*s2.0 by SERIES_1:def 1;
+  (Partial_Sums s).0 = s.0 by SERIES_1:def 1
+    .=s1.0*s2.0 by A1,SEQ_1:12;
+  then
+A9: X[0] by A8;
+  for n holds X[n] from NAT_1:sch 1(A9,A3);
   hence thesis;
 end;
 
@@ -1039,31 +1069,32 @@ theorem Th41:
   for n holds abs((Partial_Sums s).n)<=(Partial_Sums (abs s)).n
 proof
   set s1=abs s;
-  defpred X[Element of NAT] means
-  abs((Partial_Sums s).$1)<=(Partial_Sums s1).$1;
+  defpred X[Element of NAT] means abs((Partial_Sums s).$1)<=(Partial_Sums s1).
+  $1;
   let n;
-  s1.0=abs(s.0) by SEQ_1:16;
-  then (Partial_Sums s1).0=abs(s.0) by SERIES_1:def 1;
-  then
-A1: X[0] by SERIES_1:def 1;
-A2: for n st X[n] holds X[n+1]
+A1: for n st X[n] holds X[n+1]
   proof
     let n;
     assume
-A3: abs((Partial_Sums(s)).n)<=(Partial_Sums(s1)).n;
-A4: abs((Partial_Sums(s)).(n+1))=abs((Partial_Sums(s)).n + s.(n+1))
-    by SERIES_1:def 1;
-A5: abs((Partial_Sums(s)).n + s.(n+1))<=abs((Partial_Sums(s)).n) + abs(s.(n+1))
-    by COMPLEX1:142;
-    (Partial_Sums(s1)).(n+1)=(Partial_Sums(s1)).n + s1.(n+1)
-    by SERIES_1:def 1;
+    abs((Partial_Sums(s)).n)<=(Partial_Sums(s1)).n;
     then
-A6: (Partial_Sums(s1)).(n+1)=(Partial_Sums(s1)).n + abs(s.(n+1)) by SEQ_1:16;
-    abs((Partial_Sums(s)).n)+abs(s.(n+1))<=(Partial_Sums(s1)).n + abs(s.(n+1))
-    by A3,XREAL_1:8;
-    hence thesis by A4,A5,A6,XXREAL_0:2;
+A2: abs((Partial_Sums(s)).n)+abs(s.(n+1))<=(Partial_Sums(s1)).n + abs(s.(
+    n+1)) by XREAL_1:8;
+    (Partial_Sums(s1)).(n+1)=(Partial_Sums(s1)).n + s1.(n+1) by SERIES_1:
+    def 1;
+    then
+A3: (Partial_Sums(s1)).(n+1)=(Partial_Sums(s1)).n + abs(s.(n+1)) by
+    SEQ_1:16;
+    abs((Partial_Sums(s)).(n+1))=abs((Partial_Sums(s)).n + s.(n+1)) & abs(
+    ( Partial_Sums(s)).n + s.(n+1))<=abs((Partial_Sums(s)).n) + abs(s.(n+1)) by
+    COMPLEX1:142,SERIES_1:def 1;
+    hence thesis by A3,A2,XXREAL_0:2;
   end;
-  for n holds X[n] from NAT_1:sch 1(A1,A2);
+  s1.0=abs(s.0) by SEQ_1:16;
+  then (Partial_Sums s1).0=abs(s.0) by SERIES_1:def 1;
+  then
+A4: X[0] by SERIES_1:def 1;
+  for n holds X[n] from NAT_1:sch 1(A4,A1);
   hence thesis;
 end;
 
@@ -1071,22 +1102,23 @@ theorem
   (Partial_Sums s).n<=(Partial_Sums abs s).n
 proof
   set s1=abs s;
-A1: (Partial_Sums s).n<=abs((Partial_Sums s).n) by ABSVALUE:11;
-  abs((Partial_Sums s).n)<=(Partial_Sums s1).n by Th41;
-  hence thesis by A1,XXREAL_0:2;
+  (Partial_Sums s).n<=abs((Partial_Sums s).n) & abs((Partial_Sums s).n)<=(
+  Partial_Sums s1).n by Th41,ABSVALUE:11;
+  hence thesis by XXREAL_0:2;
 end;
 
 definition
   let s;
   func Partial_Product(s) -> Real_Sequence means
   :Def1:
-  it.0=s.0 & for n holds it.(n+1) = it.n * s.(n+1);
+  it.0=s.0 & for n holds
+  it.(n+1) = it.n * s.(n+1);
   existence
   proof
     deffunc U(Nat,Real) = $2 * s.($1+1);
     consider f being Function of NAT,REAL such that
-A1: f.0 = s.0 & for n being Nat holds f.(n+1) = U(n,f.n)
-    from NAT_1:sch 12;
+A1: f.0 = s.0 & for n being Nat holds f.(n+1) = U(n,f.n) from NAT_1:
+    sch 12;
     reconsider f as Real_Sequence;
     take f;
     thus thesis by A1;
@@ -1095,18 +1127,21 @@ A1: f.0 = s.0 & for n being Nat holds f.(n+1) = U(n,f.n)
   proof
     let s1,s2;
     assume that
-A2: s1.0=s.0 & for n holds s1.(n+1)=s1.n * s.(n+1) and
-A3: s2.0=s.0 & for n holds s2.(n+1)=s2.n * s.(n+1);
+A2: s1.0=s.0 and
+A3: for n holds s1.(n+1)=s1.n * s.(n+1) and
+A4: s2.0=s.0 and
+A5: for n holds s2.(n+1)=s2.n * s.(n+1);
     defpred X[Element of NAT] means s1.$1=s2.$1;
-A4: X[0] by A2,A3;
-A5: for n st X[n] holds X[n+1]
+A6: for n st X[n] holds X[n+1]
     proof
       let n;
-      assume s1.n =s2.n;
-      hence s1.(n+1)=s2.n * s.(n+1) by A2
-        .=s2.(n+1) by A3;
+      assume
+      s1.n =s2.n;
+      hence s1.(n+1)=s2.n * s.(n+1) by A3
+        .=s2.(n+1) by A5;
     end;
-    for n holds X[n] from NAT_1:sch 1(A4,A5);
+A7: X[0] by A2,A4;
+    for n holds X[n] from NAT_1:sch 1(A7,A6);
     hence s1=s2 by FUNCT_2:113;
   end;
 end;
@@ -1114,406 +1149,428 @@ end;
 theorem Th43:
   (for n holds s.n>0) implies (Partial_Product s).n>0
 proof
+  defpred X[Element of NAT] means (Partial_Product s).$1>0;
   assume
 A1: for n holds s.n>0;
-  defpred X[Element of NAT] means (Partial_Product s).$1>0;
-  s.0>0 by A1;
-  then
-A2: X[0] by Def1;
-A3: for n st X[n] holds X[n+1]
+A2: for n st X[n] holds X[n+1]
   proof
     let n;
     assume
-A4: (Partial_Product s).n>0;
-A5: (Partial_Product s).(n+1) = (Partial_Product s).n*s.(n+1) by Def1;
-    s.(n+1)>0 by A1;
-    hence thesis by A4,A5;
+A3: (Partial_Product s).n>0;
+    (Partial_Product s).(n+1) = (Partial_Product s).n*s.(n+1) & s.(n+1)>0
+    by A1,Def1;
+    hence thesis by A3;
   end;
-  for n holds X[n] from NAT_1:sch 1(A2,A3);
+  s.0>0 by A1;
+  then
+A4: X[0] by Def1;
+  for n holds X[n] from NAT_1:sch 1(A4,A2);
   hence thesis;
 end;
 
 theorem Th44:
   (for n holds s.n>=0) implies (Partial_Product s).n>=0
 proof
+  defpred X[Element of NAT] means (Partial_Product s).$1>=0;
   assume
 A1: for n holds s.n>=0;
-  defpred X[Element of NAT] means (Partial_Product s).$1>=0;
-  s.0>=0 by A1;
-  then
-A2: X[0] by Def1;
-A3: for n st X[n] holds X[n+1]
+A2: for n st X[n] holds X[n+1]
   proof
     let n;
     assume
-A4: (Partial_Product s).n>=0;
-A5: (Partial_Product s).(n+1) = (Partial_Product s).n*s.(n+1) by Def1;
-    s.(n+1)>=0 by A1;
-    hence thesis by A4,A5;
+A3: (Partial_Product s).n>=0;
+    (Partial_Product s).(n+1) = (Partial_Product s).n*s.(n+1) & s.(n+1)>=0
+    by A1,Def1;
+    hence thesis by A3;
   end;
-  for n holds X[n] from NAT_1:sch 1(A2,A3);
+  s.0>=0 by A1;
+  then
+A4: X[0] by Def1;
+  for n holds X[n] from NAT_1:sch 1(A4,A2);
   hence thesis;
 end;
 
 theorem
-  (for n holds s.n>0 & s.n<1) implies
-  for n holds (Partial_Product s).n>0 & (Partial_Product s).n<1
+  (for n holds s.n>0 & s.n<1) implies for n holds (Partial_Product s).n>
+  0 & (Partial_Product s).n<1
 proof
+  defpred X[Element of NAT] means (Partial_Product s).$1>0 & (Partial_Product
+  s).$1<1;
   assume
 A1: for n holds s.n>0 & s.n<1;
-  defpred X[Element of NAT] means
-  (Partial_Product s).$1>0 & (Partial_Product s).$1<1;
-  (Partial_Product s).0=s.0 by Def1;
-  then
-A2: X[0] by A1;
-A3: for n st X[n] holds X[n+1]
+A2: for n st X[n] holds X[n+1]
   proof
     let n;
     assume
-A4: (Partial_Product s).n>0 & (Partial_Product s).n<1;
-A5: (Partial_Product s).(n+1)=((Partial_Product s).n)*(s.(n+1)) by Def1;
-    s.(n+1)>0 & s.(n+1)<1 by A1;
-    hence thesis by A4,A5,XREAL_1:164;
+A3: (Partial_Product s).n>0 & (Partial_Product s).n<1;
+    (Partial_Product s).(n+1)=((Partial_Product s).n)*(s.(n+1)) & s.(n+1)>
+    0 by A1,Def1;
+    hence thesis by A1,A3,XREAL_1:164;
   end;
-  for n holds X[n] from NAT_1:sch 1(A2,A3);
+  (Partial_Product s).0=s.0 by Def1;
+  then
+A4: X[0] by A1;
+  for n holds X[n] from NAT_1:sch 1(A4,A2);
   hence thesis;
 end;
 
 theorem
   (for n holds s.n>=1) implies for n holds (Partial_Product s).n>=1
 proof
+  defpred X[Element of NAT] means (Partial_Product s).$1>=1;
   assume
 A1: for n holds s.n>=1;
-  defpred X[Element of NAT] means (Partial_Product s).$1>=1;
-  (Partial_Product s).0=s.0 by Def1;
-  then
-A2: X[0] by A1;
-A3: for n st X[n] holds X[n+1]
+A2: for n st X[n] holds X[n+1]
   proof
     let n;
+A3: (Partial_Product s).(n+1)=((Partial_Product s).n)*(s.(n+1)) by Def1;
     assume
 A4: (Partial_Product s).n>=1;
-A5: (Partial_Product s).(n+1)=((Partial_Product s).n)*(s.(n+1)) by Def1;
-    ((Partial_Product s).n)<=((Partial_Product s).n)*(s.(n+1))
-    by A1,A4,XREAL_1:153;
-    hence thesis by A4,A5,XXREAL_0:2;
+    then ((Partial_Product s).n)<=((Partial_Product s).n)*(s.(n+1)) by A1,
+    XREAL_1:153;
+    hence thesis by A4,A3,XXREAL_0:2;
   end;
-  for n holds X[n] from NAT_1:sch 1(A2,A3);
+  (Partial_Product s).0=s.0 by Def1;
+  then
+A5: X[0] by A1;
+  for n holds X[n] from NAT_1:sch 1(A5,A2);
   hence thesis;
 end;
 
 theorem
-  (for n holds s1.n>=0 & s2.n>=0) implies
-  (for n holds (Partial_Product s1).n+(Partial_Product s2).n<=
-  (Partial_Product(s1+s2)).n)
+  (for n holds s1.n>=0 & s2.n>=0) implies for n holds (Partial_Product
+  s1).n+(Partial_Product s2).n<= (Partial_Product(s1+s2)).n
 proof
-  assume
-A1: for n holds s1.n>=0 & s2.n>=0;
   set s=s1+s2;
-  defpred X[Element of NAT] means (Partial_Product s1).$1+
-  (Partial_Product s2).$1<=(Partial_Product s).$1;
-A2: (Partial_Product s1).0+(Partial_Product s2).0
-  =s1.0+(Partial_Product s2).0 by Def1
-    .=s1.0+s2.0 by Def1;
-  (Partial_Product s).0 = s.0 by Def1
+  defpred X[Element of NAT] means (Partial_Product s1).$1+ (Partial_Product s2
+  ).$1<=(Partial_Product s).$1;
+A1: (Partial_Product s).0 = s.0 by Def1
     .=s1.0+s2.0 by SEQ_1:11;
-  then
-A3: X[0] by A2;
-A4: for n st X[n] holds X[n+1]
+  assume
+A2: for n holds s1.n>=0 & s2.n>=0;
+A3: for n st X[n] holds X[n+1]
   proof
     let n;
-    assume
-A5: (Partial_Product s1).n+(Partial_Product s2).n<= (Partial_Product s).n;
     set u=(Partial_Product s1).n;
     set v=(Partial_Product s2).n;
     set w=(Partial_Product s).n;
     set h=s1.(n+1);
     set j=s2.(n+1);
-A6: u>=0 & v>=0 by A1,Th44;
-A7: h>=0 & j>=0 by A1;
+A4: h>=0 & j>=0 by A2;
+    u>=0 & v>=0 by A2,Th44;
     then
-A8: h+j>=0;
-A9: u*j>=0 & v*h>=0 by A6,A7;
-A10: (u+v)*(h+j)<=w*(h+j) by A5,A8,XREAL_1:66;
-A11: (Partial_Product s1).(n+1)+(Partial_Product s2).(n+1)
-    =(Partial_Product s1).n*s1.(n+1)+(Partial_Product s2).(n+1) by Def1
-      .=u*h+v*j by Def1;
-A12: (Partial_Product s).(n+1) =(Partial_Product s).n*s.(n+1) by Def1
+A5: u*h+v*j<=(u*h+v*j)+(u*j+v*h) by A4,XREAL_1:33;
+A6: (Partial_Product s).(n+1) =(Partial_Product s).n*s.(n+1) by Def1
       .=w*(h+j) by SEQ_1:11;
-    u*h+v*j<=(u*h+v*j)+(u*j+v*h) by A9,XREAL_1:33;
-    hence thesis by A10,A11,A12,XXREAL_0:2;
+    assume
+    (Partial_Product s1).n+(Partial_Product s2).n<= (Partial_Product s
+    ).n;
+    then
+A7: (u+v)*(h+j)<=w*(h+j) by A4,XREAL_1:66;
+    (Partial_Product s1).(n+1)+(Partial_Product s2).(n+1) =(
+    Partial_Product s1).n*s1.(n+1)+(Partial_Product s2).(n+1) by Def1
+      .=u*h+v*j by Def1;
+    hence thesis by A7,A6,A5,XXREAL_0:2;
   end;
-  for n holds X[n] from NAT_1:sch 1(A3,A4);
+  (Partial_Product s1).0+(Partial_Product s2).0 =s1.0+(Partial_Product s2)
+  .0 by Def1
+    .=s1.0+s2.0 by Def1;
+  then
+A8: X[0] by A1;
+  for n holds X[n] from NAT_1:sch 1(A8,A3);
   hence thesis;
 end;
 
 theorem
-  (for n holds s.n=(2*n+1)/(2*n+2)) implies
-  (Partial_Product s).n<=1/sqrt(3*n+4)
+  (for n holds s.n=(2*n+1)/(2*n+2)) implies (Partial_Product s).n<=1/
+  sqrt(3*n+4)
 proof
+  defpred X[Element of NAT] means (Partial_Product s).$1<=1/sqrt(3*$1+4);
   assume
 A1: for n holds s.n=(2*n+1)/(2*n+2);
-  defpred X[Element of NAT] means (Partial_Product s).$1<=1/sqrt(3*$1+4);
+A2: for n st X[n] holds X[n+1]
+  proof
+    let n;
+    assume
+    (Partial_Product s).n<=1/sqrt(3*n+4);
+    then
+    (Partial_Product s).n*((2*n+3)/(2*n+4))<=1/sqrt(3*n+4)*((2*n+3)/(2*n+
+    4 )) by XREAL_1:66;
+    then
+A3: (Partial_Product s).n*((2*n+3)/(2*n+4))<=(1*(2*n+3))/(sqrt(3*n+4)* (2*
+    n+ 4)) by XCMPLX_1:77;
+    111*n<=112*n by XREAL_1:66;
+    then 111*n+63<=112*n+64 by XREAL_1:9;
+    then (12*n|^3+64*n^2)+(111*n+63)<=(12*n|^3+64*n^2)+(112*n+64) by
+    XREAL_1:8;
+    then
+    12*n|^(2+1)+36*(n*n)+27*n+28*n^2+84*n+63<=12*n|^(2+1)+48*n^2+48*n+16*
+    n ^2 +64*n+64;
+    then
+    12*((n|^2)*(n|^1))+36*(n*n)+27*n+28*n^2+84*n+63<=12*n|^(2+1)+48*(n*n)
+    + 48*n+16*n^2+64*n+64 by NEWTON:13;
+    then
+    4*(n|^2)*3*(n|^1)+36*n*n+27*n+28*n^2+84*n+63<=12*n|^(2+1)+48*n*n+ 48*
+    n+16*n^2+64*n+64;
+    then
+    4*(n|^2)*3*n+36*n*n+27*n+28*n^2+84*n+63<=12*n|^(2+1)+48*n*n+ 48*n+16*
+    n^2+64*n+64 by NEWTON:10;
+    then
+    4*(n^2)*3*n+36*n*n+27*n+28*n^2+84*n+63<=12*n|^(2+1)+48*n*n+ 48*n+16*n
+    ^2+64*n+64 by Lm1;
+    then 4*(n^2)*3*n+36*n*n+27*n+28*n^2+84*n+63<=12*(n|^2*n|^1)+48*n*n+ 48*n+
+    16*n^2+64*n+64 by NEWTON:13;
+    then
+    4*(n^2)*3*n+36*n*n+27*n+28*n^2+84*n+63<=12*(n^2*n|^1)+48*n*n+ 48*n+16
+    *n^2+64*n+64 by Lm1;
+    then 4*(n^2)*3*n+36*n*n+27*n+28*n^2+84*n+63<=12*(n^2*n)+48*n*n+ 48*n+16*n
+    ^2+64*n+64 by NEWTON:10;
+    then sqrt(((2*n+3)^2)*((3*n)+7))<=sqrt(((2*n)+4)^2 *((3*n)+4)) by
+    SQUARE_1:94;
+    then sqrt((2*n+3)^2)*sqrt((3*n)+7)<=sqrt(((2*n)+4)^2 *((3*n)+4)) by
+    SQUARE_1:97;
+    then sqrt((2*n+3)^2)*sqrt((3*n)+7)<=sqrt((2*n+4)^2)*sqrt((3*n+4)) by
+    SQUARE_1:97;
+    then (2*n+3)*sqrt((3*n)+7)<=sqrt((2*n+4)^2)*sqrt((3*n+4)) by
+    SQUARE_1
+    :89;
+    then
+A4: (2*n+3)*sqrt((3*n)+7)<=((2*n+4)*sqrt((3*n+4)))*1 by SQUARE_1:89;
+    sqrt(3*n+4)>0 & sqrt(3*n+7)>0 by SQUARE_1:93;
+    then 1*(2*n+3)/((2*n+4)*sqrt((3*n+4)))<=1/sqrt((3*n)+7) by
+    A4,XREAL_1:
+    104;
+    then
+    (Partial_Product s).n*((2*(n+1)+1)/(2*(n+1)+2))<=1/sqrt(3*(n+1)+4) by
+    A3,XXREAL_0:2;
+    then (Partial_Product s).n*s.(n+1)<=1/sqrt(3*(n+1)+4) by A1;
+    hence thesis by Def1;
+  end;
   (Partial_Product s).0 =s.0 by Def1
     .=(2*0+1)/(2*0+2) by A1
     .=1/sqrt(3*0+4) by SQUARE_1:85;
   then
-A2: X[0];
-A3: for n st X[n] holds X[n+1]
-  proof
-    let n;
-    assume (Partial_Product s).n<=1/sqrt(3*n+4);
-    then (Partial_Product s).n*((2*n+3)/(2*n+4))<=1/sqrt(3*n+4)*((2*n+3)/(2*n+
-    4 )) by XREAL_1:66;
-    then
-A4: (Partial_Product s).n*((2*n+3)/(2*n+4))<=(1*(2*n+3))/(sqrt(3*n+4)* (2*n+
-    4)) by XCMPLX_1:77;
-A5: sqrt(3*n+4)>0 & sqrt(3*n+7)>0 by SQUARE_1:93;
-    111*n<=112*n by XREAL_1:66;
-    then 111*n+63<=112*n+64 by XREAL_1:9;
-    then (12*n|^3+64*n^2)+(111*n+63)<=(12*n|^3+64*n^2)+(112*n+64) by XREAL_1:8;
-    then 12*n|^(2+1)+36*(n*n)+27*n+28*n^2+84*n+63<=12*n|^(2+1)+48*n^2+48*n+16*
-    n ^2 +64*n+64;
-    then 12*((n|^2)*(n|^1))+36*(n*n)+27*n+28*n^2+84*n+63<=12*n|^(2+1)+48*(n*n)
-    + 48*n+16*n^2+64*n+64 by NEWTON:13;
-    then 4*(n|^2)*3*(n|^1)+36*n*n+27*n+28*n^2+84*n+63<=12*n|^(2+1)+48*n*n+
-    48*n+16*n^2+64*n+64;
-    then 4*(n|^2)*3*n+36*n*n+27*n+28*n^2+84*n+63<=12*n|^(2+1)+48*n*n+
-    48*n+16*n^2+64*n+64 by NEWTON:10;
-    then 4*(n^2)*3*n+36*n*n+27*n+28*n^2+84*n+63<=12*n|^(2+1)+48*n*n+
-    48*n+16*n^2+64*n+64 by Lm1;
-    then 4*(n^2)*3*n+36*n*n+27*n+28*n^2+84*n+63<=12*(n|^2*n|^1)+48*n*n+
-    48*n+16*n^2+64*n+64 by NEWTON:13;
-    then 4*(n^2)*3*n+36*n*n+27*n+28*n^2+84*n+63<=12*(n^2*n|^1)+48*n*n+
-    48*n+16*n^2+64*n+64 by Lm1;
-    then 4*(n^2)*3*n+36*n*n+27*n+28*n^2+84*n+63<=12*(n^2*n)+48*n*n+
-    48*n+16*n^2+64*n+64 by NEWTON:10;
-    then ((4*(n*n))+(12*n)+9)*((3*n)+7)<=((4*n^2)+ (16*n)+16)*((3*n)+4);
-    then sqrt(((2*n+3)^2)*((3*n)+7))<=sqrt(((2*n)+4)^2
-    *((3*n)+4)) by SQUARE_1:94;
-    then sqrt((2*n+3)^2)*sqrt((3*n)+7)<=sqrt(((2*n)+4)^2
-    *((3*n)+4)) by SQUARE_1:97;
-    then sqrt((2*n+3)^2)*sqrt((3*n)+7)<=sqrt((2*n+4)^2)*sqrt((3*n+4))
-    by SQUARE_1:97;
-    then (2*n+3)*sqrt((3*n)+7)<=sqrt((2*n+4)^2)*sqrt((3*n+4)) by SQUARE_1:89;
-    then (2*n+3)*sqrt((3*n)+7)<=((2*n+4)*sqrt((3*n+4)))*1 by SQUARE_1:89;
-    then 1*(2*n+3)/((2*n+4)*sqrt((3*n+4)))<=1/sqrt((3*n)+7)
-    by A5,XREAL_1:104;
-    then (Partial_Product s).n*((2*(n+1)+1)/(2*(n+1)+2))<=1/sqrt(3*(n+1)+4)
-    by A4,XXREAL_0:2;
-    then (Partial_Product s).n*s.(n+1)<=1/sqrt(3*(n+1)+4) by A1;
-    hence thesis by Def1;
-  end;
-  for n holds X[n] from NAT_1:sch 1(A2,A3);
+A5: X[0];
+  for n holds X[n] from NAT_1:sch 1(A5,A2);
   hence thesis;
 end;
 
-Lm9: (for n holds s.n>-1 & s.n<0) implies
-for n holds (Partial_Sums(s).n)*s.(n+1)>=0
+Lm9: (for n holds s.n>-1 & s.n<0) implies for n holds (Partial_Sums(s).n)*s.(n
++1)>=0
+
 proof
-  assume
-A1: for n holds s.n>-1 & s.n<0;
-  let n;
   defpred X[Element of NAT] means (Partial_Sums(s).$1)*(s.($1+1))>=0;
-A2: (Partial_Sums(s).0)*(s.1) = (s.0)*(s.1) by SERIES_1:def 1;
-  s.0<0 & s.1<0 by A1;
-  then
-A3: X[0] by A2;
-A4: for n st X[n] holds X[n+1]
+A1: (Partial_Sums(s).0)*(s.1) = (s.0)*(s.1) by SERIES_1:def 1;
+  assume
+A2: for n holds s.n>-1 & s.n<0;
+A3: for n st X[n] holds X[n+1]
   proof
     let n;
     assume
-A5: (Partial_Sums(s).n)*(s.(n+1))>=0;
-A6: s.(n+1)<0 by A1;
-    then 1/(s.(n+1))<0/(s.(n+1));
-    then (Partial_Sums(s).n)*(s.(n+1))*(1/(s.(n+1)))<=0*(1/(s.(n+1)))
-    by A5;
-    then (Partial_Sums(s).n)*((s.(n+1))*(1/(s.(n+1))))<=0;
+A4: (Partial_Sums(s).n)*(s.(n+1))>=0;
+    s.(n+1)<0 by A2;
     then
-A7: (Partial_Sums(s).n)*1<=0 by A6;
-A8: (Partial_Sums(s).(n+1))*(s.(n+2))
-    =(Partial_Sums(s).n + s.(n+1))*(s.(n+2)) by SERIES_1:def 1
+A5: (Partial_Sums(s).n)*1<=0 by A4;
+
+A6: (Partial_Sums(s).(n+1))*(s.(n+2)) =(Partial_Sums(s).n + s.(n+1))*(s.(
+    n+2)) by SERIES_1:def 1
+
       .=(Partial_Sums(s).n)*(s.(n+2))+(s.(n+1))*(s.(n+2));
-A9: s.(n+2)<=0 & s.(n+1)<=0 by A1;
-    then
-A10: (Partial_Sums(s).n)*(s.(n+2))>=0 by A7;
-    (s.(n+1))*(s.(n+2))>=0 by A9;
-    then (Partial_Sums(s).n)*(s.(n+2))+((s.(n+1))*(s.(n+2)))>=0+0
-    by A10;
-    hence thesis by A8;
+    s.(n+2)<=0 & s.(n+1)<=0 by A2;
+    hence thesis by A5,A6;
   end;
-  for n holds X[n] from NAT_1:sch 1(A3,A4);
+  let n;
+  s.0<0 & s.1<0 by A2;
+  then
+A7: X[0] by A1;
+  for n holds X[n] from NAT_1:sch 1(A7,A3);
   hence thesis;
 end;
 
 theorem :: Bernoulli Inequality(1)
-  (for n holds s1.n=1+s.n & s.n>-1 & s.n<0)
-  implies for n holds 1+Partial_Sums(s).n<=(Partial_Product s1).n
+  (for n holds s1.n=1+s.n & s.n>-1 & s.n<0) implies for n holds 1+
+  Partial_Sums(s).n<=(Partial_Product s1).n
 proof
+  defpred X[Element of NAT] means 1+Partial_Sums(s).$1<=(Partial_Product s1).
+  $1;
   assume
 A1: for n holds s1.n=1+s.n & s.n>-1 & s.n<0;
-  let n;
-  defpred X[Element of NAT] means
-  1+Partial_Sums(s).$1<=(Partial_Product s1).$1;
-A2: Partial_Sums(s).0=s.0 by SERIES_1:def 1;
-  (Partial_Product s1).0=s1.0 by Def1;
-  then
-A3: X[0] by A1,A2;
-A4: for n st X[n] holds X[n+1]
+A2: for n st X[n] holds X[n+1]
   proof
     let n;
-    assume
-A5: 1+Partial_Sums(s).n<=(Partial_Product s1).n;
+A3: ((Partial_Product(s1)).n)*(1+s.(n+1))=((Partial_Product s1).n)*s1.(n+
+    1) by A1;
     s.(n+1)>-1 by A1;
-    then s.(n+1)+1>-1+1 by XREAL_1:10;
     then
-A6: (1+Partial_Sums(s).n)*(1+s.(n+1))<=((Partial_Product s1).n)*(1+s.( n+1))
-    by A5,XREAL_1:66;
-    ((Partial_Product(s1)).n)*(1+s.(n+1))=((Partial_Product s1).n)*s1.(n+1)
-    by A1;
+A4: s.(n+1)+1>-1+1 by XREAL_1:10;
+    assume
+    1+Partial_Sums(s).n<=(Partial_Product s1).n;
     then
-A7: (1+Partial_Sums(s).n)*(1+s.(n+1))<=(Partial_Product s1).(n+1) by A6,Def1;
+    (1+Partial_Sums(s).n)*(1+s.(n+1))<=((Partial_Product s1).n)*(1+s.( n+1
+    )) by A4,XREAL_1:66;
+    then
+A5: (1+Partial_Sums(s).n)*(1+s.(n+1))<=(Partial_Product s1).(n+1) by
+    A3,Def1;
     (Partial_Sums(s).n)*(s.(n+1))>=0 by A1,Lm9;
     then
-A8: (Partial_Sums(s).n)*(s.(n+1))+(1+s.(n+1)+Partial_Sums(s).n)>=
-    0+(1+s.(n+1)+Partial_Sums(s).n) by XREAL_1:8;
-    1+Partial_Sums(s).(n+1)=1+(Partial_Sums(s).n+s.(n+1)) by SERIES_1:def 1;
-    hence thesis by A7,A8,XXREAL_0:2;
+A6: (Partial_Sums(s).n)*(s.(n+1))+(1+s.(n+1)+Partial_Sums(s).n)>= 0+(1+s.
+    (n+1)+Partial_Sums(s).n) by XREAL_1:8;
+    1+Partial_Sums(s).(n+1)=1+(Partial_Sums(s).n+s.(n+1)) by SERIES_1:def
+    1;
+    hence thesis by A5,A6,XXREAL_0:2;
   end;
-  for n holds X[n] from NAT_1:sch 1(A3,A4);
+  let n;
+  Partial_Sums(s).0=s.0 & (Partial_Product s1).0=s1.0 by Def1,SERIES_1:def
+  1;
+  then
+A7: X[0] by A1;
+  for n holds X[n] from NAT_1:sch 1(A7,A2);
   hence thesis;
 end;
 
-Lm10: (for n holds s.n>=0) implies for n holds (Partial_Sums(s).n)*(s.(n+1))>=0
+Lm10: (for n holds s.n>=0) implies for n holds (Partial_Sums(s).n)*(s.(n+1))>=
+0
+
 proof
   assume
 A1: for n holds s.n>=0;
   let n;
-A2: Partial_Sums(s).n>=0 by A1,Th34;
-  s.(n+1)>=0 by A1;
-  hence thesis by A2;
+  Partial_Sums(s).n>=0 & s.(n+1)>=0 by A1,Th34;
+  hence thesis;
 end;
 
 theorem :: Bernoulli Inequality(2)
-  (for n holds s1.n=1+s.n & s.n>=0)
-  implies for n holds 1+Partial_Sums(s).n<=(Partial_Product s1).n
+  (for n holds s1.n=1+s.n & s.n>=0) implies for n holds 1+Partial_Sums(s
+  ).n<=(Partial_Product s1).n
 proof
+  defpred X[Element of NAT] means 1+Partial_Sums(s).$1<=(Partial_Product s1).
+  $1;
   assume
 A1: for n holds s1.n=1+s.n & s.n>=0;
-  defpred X[Element of NAT] means
-  1+Partial_Sums(s).$1<=(Partial_Product s1).$1;
-A2: Partial_Sums(s).0=s.0 by SERIES_1:def 1;
-  (Partial_Product s1).0=s1.0 by Def1;
-  then
-A3: X[0] by A1,A2;
-A4: for n st X[n] holds X[n+1]
+A2: for n st X[n] holds X[n+1]
   proof
     let n;
-    assume
-A5: 1+Partial_Sums(s).n<=(Partial_Product(s1)).n;
+A3: ((Partial_Product s1).n)*(1+s.(n+1))=((Partial_Product s1).n)*s1.(n+1
+    ) by A1;
     s.(n+1)>-1 by A1;
-    then s.(n+1)+1>-1+1 by XREAL_1:10;
     then
-A6: (1+Partial_Sums(s).n)*(1+s.(n+1))<=((Partial_Product s1).n)*(1+s.( n+1))
-    by A5,XREAL_1:66;
-    ((Partial_Product s1).n)*(1+s.(n+1))=((Partial_Product s1).n)*s1.(n+1)
-    by A1;
+A4: s.(n+1)+1>-1+1 by XREAL_1:10;
+    assume
+    1+Partial_Sums(s).n<=(Partial_Product(s1)).n;
     then
-A7: (1+Partial_Sums(s).n)*(1+s.(n+1))<=(Partial_Product s1).(n+1) by A6,Def1;
+    (1+Partial_Sums(s).n)*(1+s.(n+1))<=((Partial_Product s1).n)*(1+s.( n+1
+    )) by A4,XREAL_1:66;
+    then
+A5: (1+Partial_Sums(s).n)*(1+s.(n+1))<=(Partial_Product s1).(n+1) by
+    A3,Def1;
     (Partial_Sums(s).n)*(s.(n+1))>=0 by A1,Lm10;
     then
-A8: (Partial_Sums(s).n)*(s.(n+1))+(1+s.(n+1)+Partial_Sums(s).n)>=
-    0+(1+s.(n+1)+Partial_Sums(s).n) by XREAL_1:8;
-    1+Partial_Sums(s).(n+1)=1+(Partial_Sums(s).n+s.(n+1)) by SERIES_1:def 1;
-    hence thesis by A7,A8,XXREAL_0:2;
+A6: (Partial_Sums(s).n)*(s.(n+1))+(1+s.(n+1)+Partial_Sums(s).n)>= 0+(1+s.
+    (n+1)+Partial_Sums(s).n) by XREAL_1:8;
+    1+Partial_Sums(s).(n+1)=1+(Partial_Sums(s).n+s.(n+1)) by SERIES_1:def
+    1;
+    hence thesis by A5,A6,XXREAL_0:2;
   end;
-  for n holds X[n] from NAT_1:sch 1(A3,A4);
+  Partial_Sums(s).0=s.0 & (Partial_Product s1).0=s1.0 by Def1,SERIES_1:def
+  1;
+  then
+A7: X[0] by A1;
+  for n holds X[n] from NAT_1:sch 1(A7,A2);
   hence thesis;
 end;
 
 theorem :: Cauchy Inequality
-  s3=s1(#)s2 & s4=s1(#)s1 & s5=s2(#)s2 implies for n holds
-  ((Partial_Sums s3).n)^2<=(Partial_Sums s4).n*(Partial_Sums s5).n
+  s3=s1(#)s2 & s4=s1(#)s1 & s5=s2(#)s2 implies for n holds ((
+  Partial_Sums s3).n)^2<=(Partial_Sums s4).n*(Partial_Sums s5).n
 proof
-  assume
-A1: s3=s1(#)s2 & s4=s1(#)s1 & s5=s2(#)s2;
-  defpred X[Element of NAT] means
-  ((Partial_Sums s3).$1)^2<=(Partial_Sums s4).$1* (Partial_Sums s5).$1;
+  assume that
+A1: s3=s1(#)s2 and
+A2: s4=s1(#)s1 and
+A3: s5=s2(#)s2;
   let n;
-A2: (Partial_Sums s3).0 =s3.0 by SERIES_1:def 1
+A4: (Partial_Sums s3).0 =s3.0 by SERIES_1:def 1
     .=s1.0 * s2.0 by A1,SEQ_1:12;
-  (Partial_Sums s4).0*(Partial_Sums(s5)).0
-  =(s4.0)*(Partial_Sums(s5)).0 by SERIES_1:def 1
-    .=(s4.0)*(s5.0) by SERIES_1:def 1
-    .=(s1.0)*(s1.0)*(s5.0) by A1,SEQ_1:12
-    .=(s1.0)^2*(s2.0)^2 by A1,SEQ_1:12;
-  then
-A3: X[0] by A2;
-A4: for n st X[n] holds X[n+1]
+  defpred X[Element of NAT] means ((Partial_Sums s3).$1)^2<=(Partial_Sums s4).
+  $1* (Partial_Sums s5).$1;
+A5: for n st X[n] holds X[n+1]
   proof
     let n;
-    assume
-A5: ((Partial_Sums s3).n)^2<=(Partial_Sums s4).n*(Partial_Sums s5).n;
     set u=(Partial_Sums s3).n;
     set v=(Partial_Sums s4).n;
     set w=(Partial_Sums s5).n;
     set h=s1.(n+1);
     set j=s2.(n+1);
-    ((Partial_Sums(s3)).(n+1))=u+s3.(n+1) by SERIES_1:def 1;
+    assume
+A6: ((Partial_Sums s3).n)^2<=(Partial_Sums s4).n*(Partial_Sums s5).n;
+    then abs(u)<=sqrt(v*w) by Lm8;
     then
-A6: ((Partial_Sums(s3)).(n+1))=u+h*s2.(n+1) by A1,SEQ_1:12;
-    (Partial_Sums(s4)).(n+1)*(Partial_Sums(s5)).(n+1)=
-    ((Partial_Sums(s4)).n+s4.(n+1))*(Partial_Sums(s5)).(n+1)
-    by SERIES_1:def 1;
+A7: (2*(abs(j)*abs(h)))*sqrt(v*w)>=(2*(abs(j)*abs h))*abs(u) by
+    XREAL_1:66;
+A8: w>=0 by A3,Th36;
     then
-A7: (Partial_Sums(s4)).(n+1)*(Partial_Sums(s5)).(n+1)=
-    (v+s4.(n+1))*(w+s5.(n+1)) by SERIES_1:def 1
-      .=(v+h*h)*(w+s5.(n+1)) by A1,SEQ_1:12
-      .=(v+h*h)*(w+s2.(n+1)*s2.(n+1)) by A1,SEQ_1:12
-      .=v*w+v*j^2+w*h^2+h^2*j^2;
-A8: v>=0 & w>=0 by A1,Th36;
-    then
-A9: v=(sqrt(v))^2 & w=(sqrt w)^2 by SQUARE_1:def 4;
-    ((Partial_Sums(s3)).(n+1))^2 =u^2+2*u*(h*j)+(h*j)^2 by A6;
-    then
-A10: (Partial_Sums s4).(n+1)*(Partial_Sums(s5)).(n+1)-
-    ((Partial_Sums s3).(n+1))^2
-    =v*w-u^2+v*j^2+w*h^2+h^2*j^2-2*u*(h*j)-(h*j)^2 by A7
-      .=v*w-u^2+v*j^2+w*h^2-2*u*h*j;
-A11: sqrt v>=0 & sqrt w>=0 by A8,SQUARE_1:def 4;
-    ((sqrt v)*j)^2+((sqrt w)*h)^2>=2*abs((sqrt v)*j)*abs((sqrt w)*h) by Th8;
+A9: w=(sqrt w)^2 by SQUARE_1:def 4;
+    ((sqrt v)*j)^2+((sqrt w)*h)^2>=2*abs((sqrt v)*j)*abs((sqrt w)*h) by
+    Th8;
     then ((sqrt v)*j)^2+((sqrt w)*h)^2>=2*(abs(sqrt v)*abs j)*abs((sqrt w)*h)
     by COMPLEX1:151;
-    then ((sqrt v)*j)^2+((sqrt w)*h)^2>=2*(abs(sqrt v)*abs j)
-    *(abs((sqrt w))*abs h) by COMPLEX1:151;
-    then ((sqrt v)*j)^2+((sqrt w)*h)^2>=2*(sqrt v*abs j)*(abs((sqrt w))*abs h)
-    by A11,ABSVALUE:def 1;
-    then ((sqrt v)*j)^2+((sqrt w)*h)^2>=2*(sqrt v*abs j)*((sqrt w)*abs h)
-    by A11,ABSVALUE:def 1;
-    then ((sqrt v)*j)^2+((sqrt(w))*h)^2>=2*(sqrt v*(sqrt(w)))*abs(j)*abs h;
     then
-A12: v*j^2+w*h^2>=2*(sqrt(v*w))*abs(j)*abs h by A8,A9,SQUARE_1:97;
-    abs(u)<=sqrt(v*w) by A5,Lm8;
-    then (2*(abs(j)*abs(h)))*sqrt(v*w)>=(2*(abs(j)*abs h))*abs(u)
-    by XREAL_1:66;
-    then v*j^2+w*h^2>=2*(abs(u)*abs(j))*abs(h) by A12,XXREAL_0:2;
+A10: ((sqrt v)*j)^2+((sqrt w)*h)^2>=2*(abs(sqrt v)*abs j) *(abs((sqrt w))*
+    abs h) by COMPLEX1:151;
+A11: v>=0 by A2,Th36;
+    then sqrt v>=0 by SQUARE_1:def 4;
+    then
+A12: ((sqrt v)*j)^2+((sqrt w)*h)^2>=2*(sqrt v*abs j)*(abs((sqrt w))*abs h)
+    by A10,ABSVALUE:def 1;
+    sqrt w>=0 by A8,SQUARE_1:def 4;
+    then ((sqrt v)*j)^2+((sqrt w)*h)^2>=2*(sqrt v*abs j)*((sqrt w)*abs h) by
+    A12,ABSVALUE:def 1;
+    then
+A13: ((sqrt v)*j)^2+((sqrt(w))*h)^2>=2*(sqrt v*(sqrt(w)))*abs(j)*abs h;
+    v=(sqrt(v))^2 by A11,SQUARE_1:def 4;
+    then v*j^2+w*h^2>=2*(sqrt(v*w))*abs(j)*abs h by A11,A8,A9,A13,
+    SQUARE_1:97;
+    then v*j^2+w*h^2>=2*(abs(u)*abs(j))*abs(h) by A7,XXREAL_0:2;
     then v*j^2+w*h^2>=2*(abs(u*j))*abs(h) by COMPLEX1:151;
     then v*j^2+w*h^2>=2*((abs(u*j))*abs(h));
     then
-A13: v*j^2+w*h^2>=2*abs(u*j*h) by COMPLEX1:151;
-    abs(u*j*h)>=(u*j*h) by ABSVALUE:11;
-    then 2*abs(u*j*h)>=2*(u*j*h) by XREAL_1:66;
-    then v*j^2+w*h^2>=2*u*j*h by A13,XXREAL_0:2;
+A14: v*j^2+w*h^2>=2*abs(u*j*h) by COMPLEX1:151;
+    2*abs(u*j*h)>=2*(u*j*h) by ABSVALUE:11,XREAL_1:66;
+    then v*j^2+w*h^2>=2*u*j*h by A14,XXREAL_0:2;
     then
-A14: v*j^2+w*h^2-2*u*j*h>=0 by XREAL_1:50;
-    v*w-u^2>=0 by A5,XREAL_1:50;
-    then v*w-u^2+(v*j^2+w*h^2-2*u*j*h)>=0 by A14;
-    then (Partial_Sums s4).(n+1)*(Partial_Sums s5).(n+1)-
-    ((Partial_Sums s3).(n+1))^2+((Partial_Sums s3).(n+1))^2>=
-    0+((Partial_Sums s3).(n+1))^2 by A10,XREAL_1:8;
+A15: v*j^2+w*h^2-2*u*j*h>=0 by XREAL_1:50;
+    v*w-u^2>=0 by A6,XREAL_1:50;
+    then
+A16: v*w-u^2+(v*j^2+w*h^2-2*u*j*h)>=0 by A15;
+    ((Partial_Sums(s3)).(n+1))=u+s3.(n+1) by SERIES_1:def 1;
+    then ((Partial_Sums(s3)).(n+1))=u+h*s2.(n+1) by A1,SEQ_1:12;
+    then
+A17: ((Partial_Sums(s3)).(n+1))^2 =u^2+2*u*(h*j)+(h*j)^2;
+    (Partial_Sums(s4)).(n+1)*(Partial_Sums(s5)).(n+1)= ((Partial_Sums(s4)
+    ).n+s4.(n+1))*(Partial_Sums(s5)).(n+1) by SERIES_1:def 1;
+    then
+    (Partial_Sums(s4)).(n+1)*(Partial_Sums(s5)).(n+1)= (v+s4.(n+1))*(w+s5
+    .(n+1)) by SERIES_1:def 1
+      .=(v+h*h)*(w+s5.(n+1)) by A2,SEQ_1:12
+      .=(v+h*h)*(w+s2.(n+1)*s2.(n+1)) by A3,SEQ_1:12
+      .=v*w+v*j^2+w*h^2+h^2*j^2;
+    then
+    (Partial_Sums s4).(n+1)*(Partial_Sums(s5)).(n+1)- ((Partial_Sums s3).
+    (n+1))^2 =v*w-u^2+v*j^2+w*h^2+h^2*j^2-2*u*(h*j)-(h*j)^2 by A17
+      .=v*w-u^2+v*j^2+w*h^2-2*u*h*j;
+    then
+    (Partial_Sums s4).(n+1)*(Partial_Sums s5).(n+1)- ((Partial_Sums s3).(
+    n+1))^2+((Partial_Sums s3).(n+1))^2>= 0+((Partial_Sums s3).(n+1))^2 by A16,
+    XREAL_1:8;
     hence thesis;
   end;
-  for n holds X[n] from NAT_1:sch 1(A3,A4);
+  (Partial_Sums s4).0*(Partial_Sums(s5)).0 =(s4.0)*(Partial_Sums(s5)).0 by
+  SERIES_1:def 1
+    .=(s4.0)*(s5.0) by SERIES_1:def 1
+    .=(s1.0)*(s1.0)*(s5.0) by A2,SEQ_1:12
+    .=(s1.0)^2*(s2.0)^2 by A3,SEQ_1:12;
+  then
+A18: X[0] by A4;
+  for n holds X[n] from NAT_1:sch 1(A18,A5);
   hence thesis;
 end;
 
@@ -1530,161 +1587,195 @@ A1: for n holds s.n=(s1.n+s2.n)^2;
 end;
 
 theorem :: Minkowski Inequality
-  (s4=s1(#)s1 & s5=s2(#)s2 & for n holds s1.n>=0 & s2.n>=0 &
-  s3.n=(s1.n+s2.n)^2) implies for n holds sqrt((Partial_Sums s3).n) <=
-  sqrt((Partial_Sums s4).n) + sqrt((Partial_Sums s5).n)
+  (s4=s1(#)s1 & s5=s2(#)s2 & for n holds s1.n>=0 & s2.n>=0 & s3.n=(s1.n+
+s2.n)^2) implies for n holds sqrt((Partial_Sums s3).n) <= sqrt((Partial_Sums s4
+  ).n) + sqrt((Partial_Sums s5).n)
 proof
-  assume
-A1: s4=s1(#)s1 & s5=s2(#)s2 & for n holds s1.n>=0 & s2.n>=0 &
-  s3.n=(s1.n+s2.n)^2;
-  defpred X[Element of NAT] means
-  sqrt((Partial_Sums(s3)).$1)<=sqrt((Partial_Sums(s4))
-  .$1)+sqrt((Partial_Sums(s5)).$1);
-A2: s1.0>=0 & s2.0>=0 by A1;
-  sqrt((Partial_Sums(s4)).0)+sqrt((Partial_Sums(s5)).0)
-  =sqrt(s4.0)+sqrt((Partial_Sums(s5)).0) by SERIES_1:def 1
-    .=sqrt(s4.0)+sqrt(s5.0) by SERIES_1:def 1
-    .=sqrt(s1.0*s1.0)+sqrt(s5.0) by A1,SEQ_1:12
-    .=sqrt((s1.0)^2)+sqrt(s2.0*s2.0) by A1,SEQ_1:12
-    .=s1.0+sqrt((s2.0)^2) by A2,SQUARE_1:89
-    .=s1.0+s2.0 by A2,SQUARE_1:89
-    .=sqrt((s1.0+s2.0)^2) by A2,SQUARE_1:89
-    .=sqrt(s3.0) by A1
-    .=sqrt((Partial_Sums s3).0) by SERIES_1:def 1;
-  then
-A3: X[0];
-A4: for n st X[n] holds X[n+1]
+  assume that
+A1: s4=s1(#)s1 and
+A2: s5=s2(#)s2 and
+A3: for n holds s1.n>=0 & s2.n>=0 & s3.n=(s1.n+s2.n)^2;
+A4: s1.0>=0 by A3;
+  defpred X[Element of NAT] means sqrt((Partial_Sums(s3)).$1)<=sqrt((
+  Partial_Sums(s4)) .$1)+sqrt((Partial_Sums(s5)).$1);
+A5: for n st X[n] holds X[n+1]
   proof
     let n;
     assume
-A5: sqrt((Partial_Sums s3).n)<=sqrt((Partial_Sums s4).n)+
-    sqrt((Partial_Sums s5).n);
-    set u=(Partial_Sums s3).n;
-    set v=(Partial_Sums s4).n;
-    set w=(Partial_Sums s5).n;
-    set h=s1.(n+1);
+A6: sqrt((Partial_Sums s3).n)<=sqrt((Partial_Sums s4).n)+ sqrt((
+    Partial_Sums s5).n);
     set j=s2.(n+1);
-A6: u>=0 by A1,Lm11;
+    set h=s1.(n+1);
+    set w=(Partial_Sums s5).n;
+    set v=(Partial_Sums s4).n;
+    set u=(Partial_Sums s3).n;
+A7: w>=0 by A2,Th36;
+A8: j^2>=0 by XREAL_1:65;
     then
-A7: sqrt(u)>=0 by SQUARE_1:def 4;
-A8: v>=0 by A1,Th36;
-A9: w>=0 by A1,Th36;
-    (sqrt u)^2<=(sqrt(v)+sqrt(w))^2 by A5,A7,SQUARE_1:77;
-    then u<=(sqrt(v))^2+2*sqrt(v)*sqrt(w)+(sqrt(w))^2 by A6,SQUARE_1:def 4;
-    then u<=v+2*sqrt(v)*sqrt(w)+(sqrt(w))^2 by A8,SQUARE_1:def 4;
+A9: sqrt(w+j^2)>=0 by A7,SQUARE_1:def 4;
+A10: v>=0 by A1,Th36;
     then
-A10: u<=v+2*sqrt(v)*sqrt(w)+w by A9,SQUARE_1:def 4;
-A11: sqrt((Partial_Sums s3).(n+1))
-    =sqrt((Partial_Sums s3).n+s3.(n+1)) by SERIES_1:def 1
-      .=sqrt(u+(h+j)^2) by A1;
-A12: sqrt((Partial_Sums s4).(n+1))+sqrt((Partial_Sums(s5)).(n+1))
-    =sqrt((Partial_Sums s4).n+s4.(n+1))+sqrt((Partial_Sums(s5)).(n+1))
-    by SERIES_1:def 1
-      .=sqrt(v+s4.(n+1))+sqrt(w+s5.(n+1)) by SERIES_1:def 1
-      .=sqrt(v+s1.(n+1)*s1.(n+1))+sqrt(w+s5.(n+1)) by A1,SEQ_1:12
-      .=sqrt(v+h^2)+sqrt(w+j^2) by A1,SEQ_1:12;
-A13: h>=0 & j>=0 by A1;
-A14: h^2>=0 & j^2>=0 by XREAL_1:65;
+A11: sqrt(v*w)>=0 by A7,SQUARE_1:def 4;
+A12: u>=0 by A3,Lm11;
+    then sqrt(u)>=0 by SQUARE_1:def 4;
+    then (sqrt u)^2<=(sqrt(v)+sqrt(w))^2 by A6,SQUARE_1:77;
+    then u<=(sqrt(v))^2+2*sqrt(v)*sqrt(w)+(sqrt(w))^2 by A12,SQUARE_1:def
+    4;
+    then u<=v+2*sqrt(v)*sqrt(w)+(sqrt(w))^2 by A10,SQUARE_1:def 4;
+    then u<=v+2*sqrt(v)*sqrt(w)+w by A7,SQUARE_1:def 4;
+    then u+2*h*j<=v+w+2*(sqrt(v)*sqrt(w))+2*h*j by XREAL_1:8;
     then
-A15: h^2*j^2>=0;
-A16: w*v>=0 by A8,A9;
-A17: ((sqrt(v*w))+h*j)^2>=0 by XREAL_1:65;
-A18: sqrt(v*w)>=0 by A16,SQUARE_1:def 4;
-A19: h*j>=0 by A13;
-A20: v+h^2>=0 by A8,A14;
-A21: w+j^2>=0 by A9,A14;
-    (h+j)^2>=0 by XREAL_1:65;
+A13: u+2*h*j<=v+w+2*sqrt(v*w)+2*h*j by A10,A7,SQUARE_1:97;
+A14: h>=0 by A3;
+A15: j>=0 by A3;
+A16: h^2>=0 by XREAL_1:65;
     then
-A22: u+(h+j)^2>=0 by A6;
-A23: sqrt(v+h^2)>=0 & sqrt(w+j^2)>=0 by A20,A21,SQUARE_1:def 4;
-    h^2*w>=0 & j^2*v>=0 by A8,A9,A14;
-    then h^2*w+j^2*v>=2*sqrt((h^2*w)*(j^2*v)) by SIN_COS2:1;
+A17: sqrt(v+h^2)>=0 by A10,SQUARE_1:def 4;
+    h^2*w+j^2*v>=2*sqrt((h^2*w)*(j^2*v)) by A10,A7,A16,A8,SIN_COS2:1;
     then h^2*w+j^2*v>=2*sqrt((h^2*j^2)*(w*v));
-    then h^2*w+j^2*v>=2*(sqrt(h^2*j^2)*sqrt(w*v)) by A15,A16,SQUARE_1:97;
+    then h^2*w+j^2*v>=2*(sqrt(h^2*j^2)*sqrt(w*v)) by A10,A7,A16,A8,
+    SQUARE_1:97;
     then h^2*w+j^2*v>=2*sqrt(h^2*j^2)*sqrt(w*v);
-    then h^2*w+j^2*v>=2*(sqrt(h^2)*sqrt(j^2))*sqrt(w*v) by A14,SQUARE_1:97;
+    then h^2*w+j^2*v>=2*(sqrt(h^2)*sqrt(j^2))*sqrt(w*v) by A16,A8,
+    SQUARE_1:97;
     then h^2*w+j^2*v>=2*sqrt(h^2)*sqrt(j^2)*sqrt(w*v);
-    then h^2*w+j^2*v>=2*h*sqrt(j^2)*sqrt(w*v) by A13,SQUARE_1:89;
-    then h^2*w+j^2*v>=2*h*j*sqrt(w*v) by A13,SQUARE_1:89;
-    then (h^2*w+j^2*v)+(v*w+h^2*j^2)>=2*h*j*sqrt(w*v)+(v*w+h^2*j^2)
-    by XREAL_1:8;
+    then h^2*w+j^2*v>=2*h*sqrt(j^2)*sqrt(w*v) by A14,SQUARE_1:89;
+    then h^2*w+j^2*v>=2*h*j*sqrt(w*v) by A15,SQUARE_1:89;
+    then (h^2*w+j^2*v)+(v*w+h^2*j^2)>=2*h*j*sqrt(w*v)+(v*w+h^2*j^2) by
+    XREAL_1:8;
     then v*w+j^2*v+h^2*w+h^2*j^2>=v*w+2*(sqrt(w*v))*(h*j)+h^2*j^2;
-    then (v+h^2)*(w+j^2)>=(sqrt(v*w))^2+2*(sqrt(w*v))*(h*j)+(h*j)^2 by A16,
-SQUARE_1:def 4;
-    then sqrt(((sqrt(v*w))+h*j)^2)<=sqrt((v+h^2)*(w+j^2)) by A17,SQUARE_1:94;
-    then (sqrt(v*w))+h*j<=sqrt((v+h^2)*(w+j^2)) by A18,A19,SQUARE_1:89
-    ;
+    then
+    ((sqrt(v*w))+h*j)^2>=0 & (v+h^2)*(w+j^2)>=(sqrt(v*w))^2+2*(sqrt(w*v))
+    *(h*j)+ (h*j)^2 by A10,A7,SQUARE_1:def 4,XREAL_1:65;
+    then sqrt(((sqrt(v*w))+h*j)^2)<=sqrt((v+h^2)*(w+j^2)) by SQUARE_1:94;
+    then (sqrt(v*w))+h*j<=sqrt((v+h^2)*(w+j^2)) by A14,A15,A11,
+    SQUARE_1:89;
     then 2*((sqrt(v*w))+h*j)<=2*(sqrt((v+h^2)*(w+j^2))) by XREAL_1:66;
     then
-A24: (v+w)+(2*(sqrt(v*w))+2*h*j)<=(v+w)+(2*(sqrt((v+h^2)*(w+j^2))))
-    by XREAL_1:8;
-    u+2*h*j<=v+w+2*(sqrt(v)*sqrt(w))+2*h*j by A10,XREAL_1:8;
-    then u+2*h*j<=v+w+2*sqrt(v*w)+2*h*j by A8,A9,SQUARE_1:97;
-    then u+2*h*j<=v+w+2*(sqrt((v+h^2)*(w+j^2))) by A24,XXREAL_0:2;
-    then (u+2*h*j)+(h^2+j^2)<=(v+w+2*(sqrt((v+h^2)*(w+j^2))))+(h^2+j^2)
-    by XREAL_1:8;
+(v+w)+(2*(sqrt(v*w))+2*h*j)<=(v+w)+(2*(sqrt((v+h^2)*(w+j^2)))) by XREAL_1:8;
+    then u+2*h*j<=v+w+2*(sqrt((v+h^2)*(w+j^2))) by A13,XXREAL_0:2;
+    then
+(u+2*h*j)+(h^2+j^2)<=(v+w+2*(sqrt((v+h^2)*(w+j^2))))+(h^2+j^2) by XREAL_1:8;
     then u+(h^2+2*h*j+j^2)<=(v+h^2)+2*sqrt((v+h^2)*(w+j^2))+(w+j^2);
-    then u+(h+j)^2<=(sqrt(v+h^2))^2+2*sqrt((v+h^2)*(w+j^2))+(w+j^2)
-    by A20,SQUARE_1:def 4;
-    then u+(h+j)^2<=(sqrt(v+h^2))^2+2*sqrt((v+h^2)*(w+j^2))+(sqrt(w+j^2))^2
-    by A21,SQUARE_1:def 4;
-    then u+(h+j)^2<=(sqrt(v+h^2))^2+2*(sqrt(v+h^2)*sqrt(w+j^2))+(sqrt(w+j^2))
-    ^2 by A20,A21,SQUARE_1:97;
-    then sqrt(u+(h+j)^2)<=sqrt((sqrt(v+h^2)+sqrt(w+j^2))^2)
-    by A22,SQUARE_1:94;
-    hence thesis by A11,A12,A23,SQUARE_1:89;
+    then
+    u+(h+j)^2<=(sqrt(v+h^2))^2+2*sqrt((v+h^2)*(w+j^2))+(w+j^2) by A10,A16
+    ,SQUARE_1:def 4;
+    then
+    u+(h+j)^2<=(sqrt(v+h^2))^2+2*sqrt((v+h^2)*(w+j^2))+(sqrt(w+j^2))^2 by
+    A7,A8,SQUARE_1:def 4;
+    then
+    (h+j)^2>=0 & u+(h+j)^2<=(sqrt(v+h^2))^2+2*(sqrt(v+h^2)*sqrt(w+j^2))+(
+    sqrt(w+ j^2)) ^2 by A10,A7,A16,A8,SQUARE_1:97,XREAL_1:65;
+    then
+A18: sqrt(u+(h+j)^2)<=sqrt((sqrt(v+h^2)+sqrt(w+j^2))^2) by A12,
+    SQUARE_1:94;
+A19: sqrt((Partial_Sums s3).(n+1)) =sqrt((Partial_Sums s3).n+s3.(n+1)) by
+    SERIES_1:def 1
+      .=sqrt(u+(h+j)^2) by A3;
+    sqrt((Partial_Sums s4).(n+1))+sqrt((Partial_Sums(s5)).(n+1)) =sqrt((
+Partial_Sums s4).n+s4.(n+1))+sqrt((Partial_Sums(s5)).(n+1)) by SERIES_1:def 1
+      .=sqrt(v+s4.(n+1))+sqrt(w+s5.(n+1)) by SERIES_1:def 1
+      .=sqrt(v+s1.(n+1)*s1.(n+1))+sqrt(w+s5.(n+1)) by A1,SEQ_1:12
+      .=sqrt(v+h^2)+sqrt(w+j^2) by A2,SEQ_1:12;
+    hence thesis by A19,A17,A9,A18,SQUARE_1:89;
   end;
-  for n holds X[n] from NAT_1:sch 1(A3,A4);
+A20: s2.0>=0 by A3;
+  sqrt((Partial_Sums(s4)).0)+sqrt((Partial_Sums(s5)).0) =sqrt(s4.0)+sqrt((
+  Partial_Sums(s5)).0) by SERIES_1:def 1
+    .=sqrt(s4.0)+sqrt(s5.0) by SERIES_1:def 1
+    .=sqrt(s1.0*s1.0)+sqrt(s5.0) by A1,SEQ_1:12
+    .=sqrt((s1.0)^2)+sqrt(s2.0*s2.0) by A2,SEQ_1:12
+    .=s1.0+sqrt((s2.0)^2) by A4,SQUARE_1:89
+    .=s1.0+s2.0 by A20,SQUARE_1:89
+    .=sqrt((s1.0+s2.0)^2) by A4,A20,SQUARE_1:89
+    .=sqrt(s3.0) by A3
+    .=sqrt((Partial_Sums s3).0) by SERIES_1:def 1;
+  then
+A21: X[0];
+  for n holds X[n] from NAT_1:sch 1(A21,A5);
   hence thesis;
 end;
 
 Lm12: (for n holds s.n>0) implies (n+1)-root((Partial_Product s).n)>0
 proof
-  assume for n holds s.n>0;
+  assume
+  for n holds s.n>0;
   then
 A1: (Partial_Product s).n>0 by Th43;
 A2: n+1>=0+1 by XREAL_1:8;
-  then (n+1)-root((Partial_Product s).n)
-  =(n+1) -Root((Partial_Product s).n) by A1,POWER:def 1;
+
+  then
+  (n+1)-root((Partial_Product s).n) =(n+1) -Root((Partial_Product s).n) by
+  A1,POWER:def 1;
+
   hence thesis by A1,A2,PREPOWER:def 3;
 end;
 
-Lm13: (for n holds s.n>0 & s.n>=s.(n-1)) implies
-(s.(n+1)-(((Partial_Sums s).n)/(n+1)))/(n+2)>=0
+Lm13: (for n holds s.n>0 & s.n>=s.(n-1)) implies (s.(n+1)-(((Partial_Sums s).n
+)/(n+1)))/(n+2)>=0
+
 proof
-  assume for n holds s.n>0 & s.n>=s.(n-1);
-  then (n+1)*s.(n+1)>=(Partial_Sums s).n by Th38;
-  then ((n+1)*s.(n+1))/(n+1)>=((Partial_Sums s).n)/(n+1) by XREAL_1:74;
+  assume
+  for n holds s.n>0 & s.n>=s.(n-1);
+  then ((n+1)*s.(n+1))/(n+1)>=((Partial_Sums s).n)/(n+1) by
+  Th38,XREAL_1:74;
   then s.(n+1)>=((Partial_Sums s).n)/(n+1) by XCMPLX_1:90;
   then s.(n+1)-(((Partial_Sums s).n)/(n+1))>=0 by XREAL_1:50;
   hence thesis;
 end;
 
 theorem
-  (for n holds s.n>0 & s.n>=s.(n-1)) implies
-  (Partial_Sums s).n>=(n+1)*((n+1)-root((Partial_Product s).n))
+  (for n holds s.n>0 & s.n>=s.(n-1)) implies (Partial_Sums s).n>=(n+1)*(
+  (n+1)-root((Partial_Product s).n))
 proof
+  defpred X[Element of NAT] means (Partial_Sums s).$1>= ($1+1)*(($1+1)-root((
+  Partial_Product s).$1));
+A1: (Partial_Sums s).0=s.0 by SERIES_1:def 1;
   assume
-A1: for n holds s.n>0 & s.n>=s.(n-1);
-  defpred X[Element of NAT] means (Partial_Sums s).$1>=
-  ($1+1)*(($1+1)-root((Partial_Product s).$1));
-A2: (Partial_Sums s).0=s.0 by SERIES_1:def 1;
-  (0+1)*((0+1)-root((Partial_Product s).0)) =((0+1)-root(s.0)) by Def1
-    .=(Partial_Sums s).0 by A2,POWER:10;
-  then
-A3: X[0];
-A4: for n st X[n] holds X[n+1]
+A2: for n holds s.n>0 & s.n>=s.(n-1);
+A3: for n st X[n] holds X[n+1]
   proof
     let n;
-    assume
-A5: (Partial_Sums s).n>=(n+1)*((n+1)-root((Partial_Product s).n));
-A6: ((Partial_Sums s).(n+1))/(n+2)
-    =(1*(Partial_Sums s).n+s.(n+1))/(n+2) by SERIES_1:def 1
-      .=((n+1)/(n+1)*(Partial_Sums s).n+s.(n+1))/(n+2) by XCMPLX_1:60
-      .=((((n+2)-1)*(Partial_Sums s).n)/(n+1)+s.(n+1))/(n+2);
     set u=(Partial_Sums s).n;
     set v=s.(n+1);
-A7: ((Partial_Sums s).(n+1))/(n+2) =(((n+2)*u-u)/(n+1)+v)/(n+2) by A6
+    set w=((u/(n+1))+(v-(u/(n+1)))/(n+2))|^(n+2);
+    set h=((n+1)-root((Partial_Product s).n));
+    set j=u/(n+1);
+A4: v>0 by A2;
+A5: n+1>=0+1 by XREAL_1:8;
+    then (n+1)+1>=1+1 by XREAL_1:8;
+    then
+A6: n+2>=1 by XXREAL_0:2;
+    assume
+    (Partial_Sums s).n>=(n+1)*((n+1)-root((Partial_Product s).n));
+    then u/(n+1)>=((n+1)* ((n+1)-root((Partial_Product s).n)))/(n+1) by
+    XREAL_1:74;
+    then ((n+1)-root((Partial_Product s).n))<=u/(n+1) by XCMPLX_1:90;
+    then
+A7: h|^(n+1)<=j|^(n+1) by A2,Lm12,PREPOWER:17;
+A8: (Partial_Product(s)).n>0 by A2,Th43;
+    then h=((n+1) -Root((Partial_Product s).n)) by A5,POWER:def 1;
+    then (Partial_Product s).n<=j|^(n+1) by A7,A8,A5,PREPOWER:28;
+    then ((Partial_Product s).n)*v<=(j|^(n+1))*v by A4,XREAL_1:66;
+    then
+A9: ((Partial_Product s).(n+1))<=(j|^(n+1))*v by Def1;
+A10: (Partial_Product s).(n+1)>=0 by A2,Th43;
+    u>0 & (v-(u/(n+1)))/(n+2)>=0 by A2,Lm13,Th33;
+    then
+    w>=(u/(n+1))|^((n+1)+1)+(n+2)*((u/(n+1))|^(n+1))* ((v-(u/(n+1)))/(n+2
+    )) by Th31;
+    then
+    w>=(u/(n+1))|^((n+1))*(u/(n+1))+((u/(n+1))|^(n+1))* ((v-(u/(n+1)))/(n
+    +2)*(n+2)) by NEWTON:11;
+    then
+A11: w>=(u/(n+1))|^((n+1))*(u/(n+1))+((u/(n+1))|^(n+1))* (v-(u/(n+1))) by
+    XCMPLX_1:88;
+A12: (Partial_Sums s).(n+1)>0 by A2,Th33;
+    ((Partial_Sums s).(n+1))/(n+2) =(1*(Partial_Sums s).n+s.(n+1))/(n+2)
+    by SERIES_1:def 1
+      .=((n+1)/(n+1)*(Partial_Sums s).n+s.(n+1))/(n+2) by XCMPLX_1:60
+      .=((((n+2)-1)*(Partial_Sums s).n)/(n+1)+s.(n+1))/(n+2);
+    then ((Partial_Sums s).(n+1))/(n+2) =(((n+2)*u-u)/(n+1)+v)/(n+2)
       .=((((n+2)*u)/(n+1)-u/(n+1))+v)/(n+2)
       .=(((n+2)*u)/(n+1)-u/(n+1))/(n+2)+v/(n+2)
       .=((n+2)*u)/(n+1)/(n+2)-(u/(n+1))/(n+2)+v/(n+2)
@@ -1692,56 +1783,25 @@ A7: ((Partial_Sums s).(n+1))/(n+2) =(((n+2)*u-u)/(n+1)+v)/(n+2) by A6
       .=u/(n+1)-(u/(n+1))/(n+2)+v/(n+2) by XCMPLX_1:92
       .=u/(n+1)+(v/(n+2)-(u/(n+1))/(n+2))
       .=u/(n+1)+(v-(u/(n+1)))/(n+2);
-    u>0 by A1,Th33;
+    then (((Partial_Sums s).(n+1))/(n+2))|^(n+2)>= (Partial_Product s).(n+1)
+    by A11,A9,XXREAL_0:2;
+    then (n+2) -Root((((Partial_Sums s).(n+1))/(n+2))|^(n+2))>= (n+2) -Root((
+    Partial_Product s).(n+1)) by A6,A10,PREPOWER:36;
     then
-A8: u/(n+1)>0;
-A9: (v-(u/(n+1)))/(n+2)>=0 by A1,Lm13;
-    set w=((u/(n+1))+(v-(u/(n+1)))/(n+2))|^(n+2);
-    w>=(u/(n+1))|^((n+1)+1)+(n+2)*((u/(n+1))|^(n+1))*
-    ((v-(u/(n+1)))/(n+2)) by A8,A9,Th31;
-    then w>=(u/(n+1))|^((n+1))*(u/(n+1))+((u/(n+1))|^(n+1))*
-    ((v-(u/(n+1)))/(n+2)*(n+2)) by NEWTON:11;
+    (((Partial_Sums s).(n+1))/(n+2))>= (n+2) -Root((Partial_Product s).(n
+    +1)) by A6,A12,PREPOWER:28;
     then
-A10: w>=(u/(n+1))|^((n+1))*(u/(n+1))+((u/(n+1))|^(n+1))*
-    (v-(u/(n+1))) by XCMPLX_1:88;
-    u/(n+1)>=((n+1)*
-    ((n+1)-root((Partial_Product s).n)))/(n+1) by A5,XREAL_1:74;
-    then
-A11: ((n+1)-root((Partial_Product s).n))<=u/(n+1) by XCMPLX_1:90;
-    set h=((n+1)-root((Partial_Product s).n));
-    set j=u/(n+1);
-    h>0 by A1,Lm12;
-    then
-A12: h|^(n+1)<=j|^(n+1) by A11,PREPOWER:17;
-A13: (Partial_Product(s)).n>0 by A1,Th43;
-A14: n+1>=0+1 by XREAL_1:8;
-    then h=((n+1) -Root((Partial_Product s).n)) by A13,POWER:def 1;
-    then
-A15: (Partial_Product s).n<=j|^(n+1) by A12,A13,A14,PREPOWER:28;
-    v>0 by A1;
-    then ((Partial_Product s).n)*v<=(j|^(n+1))*v by A15,XREAL_1:66;
-    then ((Partial_Product s).(n+1))<=(j|^(n+1))*v by Def1;
-    then
-A16: (((Partial_Sums s).(n+1))/(n+2))|^(n+2)>=
-    (Partial_Product s).(n+1) by A7,A10,XXREAL_0:2;
-    (n+1)+1>=1+1 by A14,XREAL_1:8;
-    then
-A17: n+2>=1 by XXREAL_0:2;
-A18: (Partial_Product s).(n+1)>=0 by A1,Th43;
-    (Partial_Sums s).(n+1)>0 by A1,Th33;
-    then
-A19: ((Partial_Sums s).(n+1))/(n+2)>0;
-    (n+2) -Root((((Partial_Sums s).(n+1))/(n+2))|^(n+2))>=
-    (n+2) -Root((Partial_Product s).(n+1)) by A16,A17,A18,PREPOWER:36;
-    then (((Partial_Sums s).(n+1))/(n+2))>=
-    (n+2) -Root((Partial_Product s).(n+1)) by A17,A19,PREPOWER:28;
-    then (((Partial_Sums s).(n+1))/(n+2))>=
-    (n+2)-root((Partial_Product s).(n+1)) by A17,A18,POWER:def 1;
-    then ((Partial_Sums s).(n+1))/(n+2)*(n+2)>=
-    (n+2)*((n+2)-root((Partial_Product s).(n+1))) by XREAL_1:66;
+    (((Partial_Sums s).(n+1))/(n+2))>= (n+2)-root((Partial_Product s).(n+
+    1)) by A6,A10,POWER:def 1;
+    then ((Partial_Sums s).(n+1))/(n+2)*(n+2)>= (n+2)*((n+2)-root((
+    Partial_Product s).(n+1))) by XREAL_1:66;
     hence thesis by XCMPLX_1:88;
   end;
-  for n holds X[n] from NAT_1:sch 1(A3,A4);
+  (0+1)*((0+1)-root((Partial_Product s).0)) =((0+1)-root(s.0)) by Def1
+    .=(Partial_Sums s).0 by A1,POWER:10;
+  then
+A13: X[0];
+  for n holds X[n] from NAT_1:sch 1(A13,A3);
   hence thesis;
 end;
 

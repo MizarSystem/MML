@@ -8,6 +8,7 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="ORDINAL1"/>
@@ -18,8 +19,9 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="CARD_5"/>
-<ArticleID name="PARTFUN1"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="INT_1"/>
+<ArticleID name="RAT_1"/>
 <ArticleID name="XXREAL_0"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="FUNCOP_1"/>
@@ -27,8 +29,6 @@
 <ArticleID name="FUNCT_3"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="RFUNCT_1"/>
-<ArticleID name="INT_1"/>
-<ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_1"/>
 <ArticleID name="RFUNCT_3"/>
 <ArticleID name="ORDERS_1"/>
@@ -46,12 +46,12 @@
 <Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="2" value="false"/>
-<Adjective nr="16"/>
 <Adjective nr="17"/>
 <Adjective nr="18"/>
-<Adjective nr="24" value="false"/>
-<Adjective nr="28"/>
-<Adjective nr="35"/>
+<Adjective nr="19"/>
+<Adjective nr="25" value="false"/>
+<Adjective nr="29"/>
+<Adjective nr="36"/>
 </Cluster>
 </RCluster>
 <RCluster aid="WELLFND1" nr="2">
@@ -60,7 +60,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="73" value="false"/>
+<Adjective nr="74" value="false"/>
 <Adjective nr="124"/>
 </Cluster>
 </RCluster>
@@ -90,12 +90,12 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="95">
+<Func kind="K" nr="103">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="28"/>
+<Adjective nr="29"/>
 </Cluster>
 </FCluster>
 <FCluster aid="WELLFND1" nr="2">
@@ -104,7 +104,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="310">
+<Func kind="K" nr="311">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

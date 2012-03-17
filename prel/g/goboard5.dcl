@@ -7,6 +7,7 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="TARSKI"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
@@ -26,10 +27,10 @@
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="MATRIX_1"/>
 <ArticleID name="PRE_TOPC"/>
+<ArticleID name="RAT_1"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
-<ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_1"/>
@@ -43,7 +44,7 @@
 <Typ kind="M" nr="6">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="282">
+<Func kind="K" nr="291">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -51,11 +52,11 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4">
-<Func kind="K" nr="48"/>
+<Func kind="K" nr="55"/>
 </Adjective>
 <Adjective nr="5">
 <Func kind="U" nr="1">
-<Func kind="K" nr="282">
+<Func kind="K" nr="291">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -63,19 +64,20 @@
 <Adjective nr="6"/>
 <Adjective nr="8" value="false"/>
 <Adjective nr="10" value="false"/>
-<Adjective nr="24"/>
-<Adjective nr="30"/>
-<Adjective nr="35">
+<Adjective nr="25"/>
+<Adjective nr="31"/>
+<Adjective nr="32"/>
+<Adjective nr="37">
 <Func kind="U" nr="1">
-<Func kind="K" nr="282">
+<Func kind="K" nr="291">
 <Num nr="2"/>
 </Func>
 </Func>
 </Adjective>
-<Adjective nr="149"/>
 <Adjective nr="150"/>
-<Adjective nr="154"/>
+<Adjective nr="151"/>
 <Adjective nr="155"/>
+<Adjective nr="156"/>
 </Cluster>
 </RCluster>
 </Registrations>

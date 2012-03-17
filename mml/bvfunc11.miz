@@ -12,8 +12,7 @@ environ
       FUNCT_1, FUNCT_2, EQREL_1, FUNCOP_1, PARTIT1, BVFUNC_1, BVFUNC_2,
       FUNCT_4;
  constructors SETFAM_1, FUNCT_4, XCMPLX_0, BVFUNC_1, BVFUNC_2, RELSET_1;
- registrations XBOOLE_0, FUNCOP_1, FUNCT_4, EQREL_1, MARGREL1, FUNCT_1,
-      FUNCT_2;
+ registrations XBOOLE_0, FUNCOP_1, FUNCT_4, EQREL_1, MARGREL1;
  requirements SUBSET, BOOLE, ARITHM;
  definitions TARSKI, BVFUNC_1, XBOOLE_0, XBOOLEAN, FUNCOP_1;
  theorems TARSKI, FUNCT_1, SETFAM_1, EQREL_1, ZFMISC_1, PARTIT1, BVFUNC_1,
@@ -24,222 +23,260 @@ begin :: Chap. 1  Preliminaries
 
 reserve Y for non empty set,
   a, b for Element of Funcs(Y,BOOLEAN),
-  G for Subset of PARTITIONS(Y),
+  G for
+  Subset of PARTITIONS(Y),
   A, B for a_partition of Y;
 
 theorem Th1:
-  for z being Element of Y, PA,PB being a_partition of Y
-  st PA '<' PB holds EqClass(z,PA) c= EqClass(z,PB)
+  for z being Element of Y, PA,PB being a_partition of Y st PA '<'
+  PB holds EqClass(z,PA) c= EqClass(z,PB)
 proof
   let z be Element of Y;
   let PA,PB be a_partition of Y;
   assume
-A1: PA '<' PB;
-A2: z in EqClass(z,PA) & EqClass(z,PA) in PA by EQREL_1:def 8;
-  ex b being set st b in PB & EqClass(z,PA) c= b by A1,SETFAM_1:def 2;
-  hence thesis by A2,EQREL_1:def 8;
+  PA '<' PB;
+  then
+A1: ex b being set st b in PB & EqClass(z,PA) c= b by SETFAM_1:def 2;
+  z in EqClass(z,PA) by EQREL_1:def 8;
+  hence thesis by A1,EQREL_1:def 8;
 end;
 
 theorem
-  for z being Element of Y, PA,PB being a_partition of Y
-  holds EqClass(z,PA) c= EqClass(z,PA '\/' PB) by Th1,PARTIT1:19;
+  for z being Element of Y, PA,PB being a_partition of Y holds EqClass(z
+  ,PA) c= EqClass(z,PA '\/' PB) by Th1,PARTIT1:19;
 
 theorem
-  for z being Element of Y, PA,PB being a_partition of Y
-  holds EqClass(z,PA '/\' PB) c= EqClass(z,PA) by Th1,PARTIT1:17;
+  for z being Element of Y, PA,PB being a_partition of Y holds EqClass(z
+  ,PA '/\' PB) c= EqClass(z,PA) by Th1,PARTIT1:17;
 
 theorem
-  for z being Element of Y, PA being a_partition of Y holds
-  EqClass(z,PA) c= EqClass(z,%O(Y)) & EqClass(z,%I(Y)) c= EqClass(z,PA)
-              by Th1,PARTIT1:36;
+  for z being Element of Y, PA being a_partition of Y holds EqClass(z,PA
+  ) c= EqClass(z,%O(Y)) & EqClass(z,%I(Y)) c= EqClass(z,PA) by Th1,PARTIT1:36;
 
 theorem
-  for G being Subset of PARTITIONS(Y), A,B being a_partition of Y
-  st G is independent & G={A,B} & A<>B holds
-  for a,b being set st a in A & b in B holds a meets b
+  for G being Subset of PARTITIONS(Y), A,B being a_partition of Y st G
+  is independent & G={A,B} & A<>B holds for a,b being set st a in A & b in B
+  holds a meets b
 proof
   let G be Subset of PARTITIONS(Y);
   let A,B be a_partition of Y;
   assume that
 A1: G is independent and
-A2: G={A,B} & A<>B;
+A2: G={A,B} and
+A3: A<>B;
   let a,b be set;
-  assume
-A3: a in A & b in B;
+  assume that
+A4: a in A and
+A5: b in B;
   set h2 = (A,B) --> (a,b);
+A6: for d being set st d in G holds h2.d in d
+  proof
+    let d be set;
+    assume
+    d in G;
+    then d = A or d = B by A2,TARSKI:def 2;
+    hence thesis by A3,A4,A5,FUNCT_4:66;
+  end;
   {a,b} c= bool Y
   proof
     let x be set;
-    assume x in {a,b};
+    assume
+    x in {a,b};
     then x = a or x = b by TARSKI:def 2;
-    hence thesis by A3;
+    hence thesis by A4,A5;
   end;
   then reconsider SS = {a,b} as Subset-Family of Y;
-A4: dom h2 = {A,B} & rng h2 = SS by A2,FUNCT_4:65,67;
-  for d being set st d in G holds h2.d in d
-  proof
-    let d be set;
-    assume d in G;
-    then d = A or d = B by A2,TARSKI:def 2;
-    hence thesis by A2,A3,FUNCT_4:66;
-  end;
-  then Intersect SS <> {} by A1,A2,A4,BVFUNC_2:def 5;
-  hence a /\ b <> {} by A3,MSSUBFAM:10;
+A7: dom h2 = {A,B} by FUNCT_4:65;
+  rng h2 = SS by A3,FUNCT_4:67;
+  then Intersect SS <> {} by A1,A2,A7,A6,BVFUNC_2:def 5;
+  hence a /\ b <> {} by A4,A5,MSSUBFAM:10;
 end;
 
 theorem
-  for G being Subset of PARTITIONS(Y), A,B being a_partition of Y
-  st G is independent & G={A,B} & A <> B holds '/\' G = A '/\' B
+  for G being Subset of PARTITIONS(Y), A,B being a_partition of Y st G
+  is independent & G={A,B} & A <> B holds '/\' G = A '/\' B
 proof
   let G be Subset of PARTITIONS(Y);
   let A,B be a_partition of Y;
   assume that
 A1: G is independent and
-A2: G={A,B} & A <> B;
-A3: A '/\' B c= '/\' G
+A2: G={A,B} and
+A3: A <> B;
+A4: '/\' G c= A '/\' B
   proof
     let x be set;
-    assume x in A '/\' B;
-    then x in INTERSECTION(A,B) \ {{}} by PARTIT1:def 4;
-    then consider X,Z being set such that
-A4: X in A & Z in B & x = X /\ Z by SETFAM_1:def 5;
-    set h = (A,B) --> (X,Z);
-    {X,Z} c= bool Y
-    proof
-      let m be set;
-      assume m in {X,Z};
-      then m = X or m = Z by TARSKI:def 2;
-      hence thesis by A4;
-    end;
-    then reconsider SS = {X,Z} as Subset-Family of Y;
-A5: dom h = {A,B} & rng h = SS by A2,FUNCT_4:65,67;
-A6: for d being set st d in G holds h.d in d
-    proof
-      let d be set;
-      assume d in G;
-      then d = A or d = B by A2,TARSKI:def 2;
-      hence thesis by A2,A4,FUNCT_4:66;
-    end;
-    then
-A7: Intersect SS <> {} by A1,A2,A5,BVFUNC_2:def 5;
-    X /\ Z = Intersect SS by A4,MSSUBFAM:10;
-    hence thesis by A2,A4,A5,A6,A7,BVFUNC_2:def 1;
-  end;
-  '/\' G c= A '/\' B
-  proof
-    let x be set;
-    assume x in '/\' G;
+    assume
+    x in '/\' G;
     then consider h being Function, F being Subset-Family of Y such that
-A8: dom h=G & rng h = F & (for d being set st d in G holds h.d in d) &
-    x=Intersect F & x<>{} by BVFUNC_2:def 1;
-A9: A in G & B in G by A2,TARSKI:def 2;
+A5: dom h=G and
+A6: rng h = F and
+A7: for d being set st d in G holds h.d in d and
+A8: x=Intersect F and
+A9: x<>{} by BVFUNC_2:def 1;
+A10: not x in {{}} by A9,TARSKI:def 1;
+A11: A in G by A2,TARSKI:def 2;
     then
-A10: h.A in A & h.B in B by A8;
-A11: h.A in rng h & h.B in rng h by A8,A9,FUNCT_1:def 5;
+A12: h.A in rng h by A5,FUNCT_1:def 5;
     then
-A12: Intersect F = meet (rng h) by A8,SETFAM_1:def 10;
-A13: not (x in {{}}) by A8,TARSKI:def 1;
+A13: Intersect F = meet (rng h) by A6,SETFAM_1:def 10;
 A14: h.A /\ h.B c= x
     proof
-      let m be set;
-      assume m in h.A /\ h.B;
-      then
-A15:  m in h.A & m in h.B by XBOOLE_0:def 4;
-      rng h = {h.A,h.B}
+A15:  rng h = {h.A,h.B}
       proof
         thus rng h c= {h.A,h.B}
         proof
           let m be set;
-          assume m in rng h;
+          assume
+          m in rng h;
           then consider w being set such that
-A16:      w in dom h & m = h.w by FUNCT_1:def 5;
-          w = A or w = B by A2,A8,A16,TARSKI:def 2;
-          hence thesis by A16,TARSKI:def 2;
+A16:      w in dom h and
+A17:      m = h.w by FUNCT_1:def 5;
+          w = A or w = B by A2,A5,A16,TARSKI:def 2;
+          hence thesis by A17,TARSKI:def 2;
         end;
         let m be set;
-        assume m in {h.A,h.B};
+        assume
+        m in {h.A,h.B};
         then
-A17:    m = h.A or m = h.B by TARSKI:def 2;
-        A in dom h & B in dom h by A2,A8,TARSKI:def 2;
-        hence thesis by A17,FUNCT_1:def 5;
+A18:    m = h.A or m = h.B by TARSKI:def 2;
+A19:    B in dom h by A2,A5,TARSKI:def 2;
+        A in dom h by A2,A5,TARSKI:def 2;
+        hence thesis by A18,A19,FUNCT_1:def 5;
       end;
-      then for y being set holds y in rng h implies m in y by A15,TARSKI:def 2;
-      hence thesis by A8,A11,A12,SETFAM_1:def 1;
+      let m be set;
+      assume
+A20:  m in h.A /\ h.B;
+      then
+A21:  m in h.B by XBOOLE_0:def 4;
+      m in h.A by A20,XBOOLE_0:def 4;
+      then for y being set holds y in rng h implies m in y by A21,A15,
+      TARSKI:def 2;
+      hence thesis by A8,A12,A13,SETFAM_1:def 1;
     end;
+A22: B in G by A2,TARSKI:def 2;
+    then
+A23: h.B in B by A7;
+A24: h.B in rng h by A5,A22,FUNCT_1:def 5;
     x c= h.A /\ h.B
     proof
       let m be set;
-      assume m in x;
-      then m in h.A & m in h.B by A8,A11,A12,SETFAM_1:def 1;
-      hence thesis by XBOOLE_0:def 4;
+      assume
+A25:  m in x;
+      then
+A26:  m in h.B by A8,A24,A13,SETFAM_1:def 1;
+      m in h.A by A8,A12,A13,A25,SETFAM_1:def 1;
+      hence thesis by A26,XBOOLE_0:def 4;
     end;
-    then h.A /\ h.B = x by A14,XBOOLE_0:def 10;
-    then x in INTERSECTION(A,B) by A10,SETFAM_1:def 5;
-    then x in INTERSECTION(A,B) \ {{}} by A13,XBOOLE_0:def 5;
+    then
+A27: h.A /\ h.B = x by A14,XBOOLE_0:def 10;
+    h.A in A by A7,A11;
+    then x in INTERSECTION(A,B) by A23,A27,SETFAM_1:def 5;
+    then x in INTERSECTION(A,B) \ {{}} by A10,XBOOLE_0:def 5;
     hence thesis by PARTIT1:def 4;
   end;
-  hence thesis by A3,XBOOLE_0:def 10;
-end;
-
-theorem
-  for G being Subset of PARTITIONS(Y), A,B being a_partition of Y
-  st G={A,B} & A<>B holds CompF(A,G) = B
-proof
-  let G be Subset of PARTITIONS(Y);
-  let A,B be a_partition of Y;
-  assume
-A1: G={A,B} & A<>B;
-  then
-A2: G \ {A}={A} \/ {B} \ {A} by ENUMSET1:41
-    .= ({A} \ {A}) \/ ({B} \ {A}) by XBOOLE_1:42
-    .= ({A} \ {A}) \/ {B} by A1,ZFMISC_1:20;
-  A in {A} by TARSKI:def 1;
-  then {A} \ {A}={} by ZFMISC_1:68;
-  then
-A3: CompF(A,G)='/\' {B} by A2,BVFUNC_2:def 7;
-A4: '/\' {B} c= B
-  proof
-    let x be set;
-    assume x in '/\' {B};
-    then consider h being Function, F being Subset-Family of Y such that
-A5: dom h={B} & rng h = F & (for d being set st d in {B} holds h.d in d) &
-    x=Intersect F & x<>{} by BVFUNC_2:def 1;
-    rng h = {h.B} by A5,FUNCT_1:14;
-    then
-A6: x=meet ({h.B}) by A5,SETFAM_1:def 10;
-    B in {B} by TARSKI:def 1;
-    then h.B in B by A5;
-    hence thesis by A6,SETFAM_1:11;
-  end;
-  B c= '/\' {B}
+  A '/\' B c= '/\' G
   proof
     let x be set;
     assume
-A7: x in B;
-    set h0 = B .--> x;
-A8: dom h0 = {B} & rng h0 = {x} by FUNCOP_1:14,19;
-A9: for d being set st d in {B} holds h0.d in d
+    x in A '/\' B;
+    then x in INTERSECTION(A,B) \ {{}} by PARTIT1:def 4;
+    then consider X,Z being set such that
+A28: X in A and
+A29: Z in B and
+A30: x = X /\ Z by SETFAM_1:def 5;
+    {X,Z} c= bool Y
+    proof
+      let m be set;
+      assume
+      m in {X,Z};
+      then m = X or m = Z by TARSKI:def 2;
+      hence thesis by A28,A29;
+    end;
+    then reconsider SS = {X,Z} as Subset-Family of Y;
+A31: X /\ Z = Intersect SS by A28,A29,MSSUBFAM:10;
+    set h = (A,B) --> (X,Z);
+A32: for d being set st d in G holds h.d in d
     proof
       let d be set;
-      assume d in {B};
-      then d=B by TARSKI:def 1;
-      hence thesis by A7,FUNCOP_1:87;
+      assume
+      d in G;
+      then d = A or d = B by A2,TARSKI:def 2;
+      hence thesis by A3,A28,A29,FUNCT_4:66;
     end;
+A33: dom h = {A,B} by FUNCT_4:65;
+A34: rng h = SS by A3,FUNCT_4:67;
+    then Intersect SS <> {} by A1,A2,A33,A32,BVFUNC_2:def 5;
+    hence thesis by A2,A30,A33,A34,A32,A31,BVFUNC_2:def 1;
+  end;
+  hence thesis by A4,XBOOLE_0:def 10;
+end;
+
+theorem
+  for G being Subset of PARTITIONS(Y), A,B being a_partition of Y st G={
+  A,B} & A<>B holds CompF(A,G) = B
+proof
+  let G be Subset of PARTITIONS(Y);
+  let A,B be a_partition of Y;
+  assume that
+A1: G={A,B} and
+A2: A<>B;
+A3: '/\' {B} c= B
+  proof
+    let x be set;
+    assume
+    x in '/\' {B};
+    then consider h being Function, F being Subset-Family of Y such that
+A4: dom h={B} and
+A5: rng h = F and
+A6: for d being set st d in {B} holds h.d in d and
+A7: x=Intersect F and
+    x<>{} by BVFUNC_2:def 1;
+    rng h = {h.B} by A4,FUNCT_1:14;
+    then
+A8: x=meet ({h.B}) by A5,A7,SETFAM_1:def 10;
+    B in {B} by TARSKI:def 1;
+    then h.B in B by A6;
+    hence thesis by A8,SETFAM_1:11;
+  end;
+A9: B c= '/\' {B}
+  proof
+    let x be set;
+    set h0 = B .--> x;
+A10: dom h0 = {B} by FUNCOP_1:19;
+    assume
+A11: x in B;
+A12: for d being set st d in {B} holds h0.d in d
+    proof
+      let d be set;
+      assume
+      d in {B};
+      then d=B by TARSKI:def 1;
+      hence thesis by A11,FUNCOP_1:87;
+    end;
+A13: rng h0 = {x} by FUNCOP_1:14;
     rng h0 c= bool Y
     proof
       let m be set;
-      assume m in rng h0;
-      then m=x by A8,TARSKI:def 1;
-      hence thesis by A7;
+      assume
+      m in rng h0;
+      then m=x by A13,TARSKI:def 1;
+      hence thesis by A11;
     end;
     then reconsider F0 = rng h0 as Subset-Family of Y;
-    meet F0 = Intersect F0 by A8,SETFAM_1:def 10;
+    meet F0 = Intersect F0 by A13,SETFAM_1:def 10;
     then
-A10: x=Intersect F0 by A8,SETFAM_1:11;
-    x<>{} by A7,EQREL_1:def 6;
-    hence thesis by A8,A9,A10,BVFUNC_2:def 1;
+A14: x=Intersect F0 by A13,SETFAM_1:11;
+    x<>{} by A11,EQREL_1:def 6;
+    hence thesis by A10,A12,A14,BVFUNC_2:def 1;
   end;
-  hence thesis by A3,A4,XBOOLE_0:def 10;
+  A in {A} by TARSKI:def 1;
+  then
+A15: {A} \ {A}={} by ZFMISC_1:68;
+  G \ {A}={A} \/ {B} \ {A} by A1,ENUMSET1:41
+    .= ({A} \ {A}) \/ ({B} \ {A}) by XBOOLE_1:42
+    .= ({A} \ {A}) \/ {B} by A2,ZFMISC_1:20;
+  then CompF(A,G)='/\' {B} by A15,BVFUNC_2:def 7;
+  hence thesis by A3,A9,XBOOLE_0:def 10;
 end;
 
 begin
@@ -247,7 +284,8 @@ begin
 theorem Th8:
   a '<' b implies All(a,A,G) '<' Ex(b,A,G)
 proof
-  assume a '<' b;
+  assume
+  a '<' b;
   then
 A1: All(a,A,G) '<' All(b,A,G) by PARTIT_2:13;
   All(b,A,G) '<' Ex(b,A,G) by BVFUNC_4:18;
@@ -259,7 +297,8 @@ canceled 2;
 theorem
   G is independent implies All(All(a,A,G),B,G) '<' Ex(All(a,B,G),A,G)
 proof
-  assume G is independent;
+  assume
+  G is independent;
   then All(All(a,A,G),B,G) = All(All(a,B,G),A,G) by PARTIT_2:17;
   hence thesis by Th8;
 end;
@@ -275,7 +314,8 @@ end;
 theorem
   G is independent implies All(All(a,A,G),B,G) '<' All(Ex(a,B,G),A,G)
 proof
-  assume G is independent;
+  assume
+  G is independent;
   then
 A1: All(All(a,A,G),B,G) = All(All(a,B,G),A,G) by PARTIT_2:17;
   All(a,B,G) '<' Ex(a,B,G) by Th8;
@@ -289,25 +329,27 @@ A1: Ex(a,B,G) = B_SUP(a,CompF(B,G)) by BVFUNC_2:def 10;
   let z be Element of Y;
   assume
 A2: (All(Ex(a,A,G),B,G)).z=TRUE;
-A3: z in EqClass(z,CompF(B,G)) &
-  EqClass(z,CompF(B,G)) in CompF(B,G) by EQREL_1:def 8;
-A4: now
-    assume not (for x being Element of Y st x in EqClass(z,CompF(B,G)) holds
+A3: now
+    assume
+    not (for x being Element of Y st x in EqClass(z,CompF(B,G)) holds
     (Ex(a,A,G)).x=TRUE);
     then (B_INF(Ex(a,A,G),CompF(B,G))).z = FALSE by BVFUNC_1:def 19;
     hence contradiction by A2,BVFUNC_2:def 9;
   end;
+A4: z in EqClass(z,CompF(B,G)) by EQREL_1:def 8;
   now
-    assume not (ex x being Element of Y st
-    x in EqClass(z,CompF(A,G)) & (a).x=TRUE);
+    assume
+    not (ex x being Element of Y st x in EqClass(z,CompF(A,G)) & (a).
+    x=TRUE);
     then (B_SUP(a,CompF(A,G))).z = FALSE by BVFUNC_1:def 20;
     then (Ex(a,A,G)).z=FALSE by BVFUNC_2:def 10;
-    hence contradiction by A3,A4;
+    hence contradiction by A4,A3;
   end;
   then consider x1 being Element of Y such that
-A5: x1 in EqClass(z,CompF(A,G)) & (a).x1=TRUE;
+A5: x1 in EqClass(z,CompF(A,G)) and
+A6: (a).x1=TRUE;
   x1 in EqClass(x1,CompF(B,G)) by EQREL_1:def 8;
-  then (Ex(a,B,G)).x1=TRUE by A1,A5,BVFUNC_1:def 20;
+  then (Ex(a,B,G)).x1=TRUE by A1,A6,BVFUNC_1:def 20;
   then (B_SUP(Ex(a,B,G),CompF(A,G))).z = TRUE by A5,BVFUNC_1:def 20;
   hence thesis by BVFUNC_2:def 10;
 end;
@@ -316,49 +358,54 @@ theorem
   'not' Ex(All(a,A,G),B,G) '<' Ex(Ex('not' a,B,G),A,G)
 proof
 A1: All(a,A,G) = B_INF(a,CompF(A,G)) by BVFUNC_2:def 9;
-A2: Ex('not' a,B,G) = B_SUP('not' a,CompF(B,G)) by BVFUNC_2:def 10;
-A3: Ex(All(a,A,G),B,G) = B_SUP(All(a,A,G),CompF(B,G)) by BVFUNC_2:def 10;
   let z be Element of Y;
-  assume ('not' Ex(All(a,A,G),B,G)).z=TRUE;
+A2: z in EqClass(z,CompF(B,G)) by EQREL_1:def 8;
+  assume
+  ('not' Ex(All(a,A,G),B,G)).z=TRUE;
   then
-A4: 'not' (Ex(All(a,A,G),B,G)).z=TRUE by MARGREL1:def 20;
-  z in EqClass(z,CompF(B,G)) &
-  EqClass(z,CompF(B,G)) in CompF(B,G) by EQREL_1:def 8;
-  then (All(a,A,G)).z<>TRUE by A3,A4,BVFUNC_1:def 20;
+A3: 'not' (Ex(All(a,A,G),B,G)).z=TRUE by MARGREL1:def 20;
+  Ex(All(a,A,G),B,G) = B_SUP(All(a,A,G),CompF(B,G)) by BVFUNC_2:def 10;
+  then (All(a,A,G)).z<>TRUE by A3,A2,BVFUNC_1:def 20;
   then consider x1 being Element of Y such that
-A5: x1 in EqClass(z,CompF(A,G)) & (a).x1<>TRUE by A1,BVFUNC_1:def 19;
-A6: x1 in EqClass(x1,CompF(B,G)) & EqClass(x1,CompF(B,G)) in CompF(B,G)
-  by EQREL_1:def 8;
+A4: x1 in EqClass(z,CompF(A,G)) and
+A5: (a).x1<>TRUE by A1,BVFUNC_1:def 19;
   (a).x1=FALSE by A5,XBOOLEAN:def 3;
-  then ('not' a).x1='not' FALSE by MARGREL1:def 20;
-  then (Ex('not' a,B,G)).x1=TRUE by A2,A6,BVFUNC_1:def 20;
-  then (B_SUP(Ex('not' a,B,G),CompF(A,G))).z = TRUE by A5,BVFUNC_1:def 20;
+  then
+A6: ('not' a).x1='not' FALSE by MARGREL1:def 20;
+A7: Ex('not' a,B,G) = B_SUP('not' a,CompF(B,G)) by BVFUNC_2:def 10;
+  x1 in EqClass(x1,CompF(B,G)) by EQREL_1:def 8;
+  then (Ex('not' a,B,G)).x1=TRUE by A7,A6,BVFUNC_1:def 20;
+  then (B_SUP(Ex('not' a,B,G),CompF(A,G))).z = TRUE by A4,
+  BVFUNC_1:def 20;
   hence thesis by BVFUNC_2:def 10;
 end;
 
 theorem Th16:
-  G is independent implies
-  Ex('not' All(a,A,G),B,G) '<' Ex(Ex('not' a,B,G),A,G)
+  G is independent implies Ex('not' All(a,A,G),B,G) '<' Ex(Ex(
+  'not' a,B,G),A,G)
 proof
-  assume G is independent;
+  assume
+  G is independent;
   then Ex(Ex('not' a,B,G),A,G) = Ex(Ex('not' a,A,G),B,G) by PARTIT_2:18;
   hence thesis by BVFUNC_2:20;
 end;
 
 theorem Th17:
-  G is independent implies
-  'not' All(All(a,A,G),B,G) = Ex('not' All(a,B,G),A,G)
+  G is independent implies 'not' All(All(a,A,G),B,G) = Ex('not'
+  All(a,B,G),A,G)
 proof
-  assume G is independent;
+  assume
+  G is independent;
   then All(All(a,A,G),B,G) = All(All(a,B,G),A,G) by PARTIT_2:17;
   hence thesis by BVFUNC_2:20;
 end;
 
 theorem
-  G is independent implies
-  All('not' All(a,A,G),B,G) '<' Ex(Ex('not' a,B,G),A,G)
+  G is independent implies All('not' All(a,A,G),B,G) '<' Ex(Ex('not' a,B
+  ,G),A,G)
 proof
-  assume G is independent;
+  assume
+  G is independent;
   then
 A1: Ex(Ex('not' a,B,G),A,G) = Ex(Ex('not' a,A,G),B,G) by PARTIT_2:18;
   'not' All(a,A,G) = Ex('not' a,A,G) by BVFUNC_2:20;
@@ -366,17 +413,18 @@ A1: Ex(Ex('not' a,B,G),A,G) = Ex(Ex('not' a,A,G),B,G) by PARTIT_2:18;
 end;
 
 theorem
-  G is independent implies 'not' All(All(a,A,G),B,G) = Ex(Ex('not' a,B,G),A,G)
+  G is independent implies 'not' All(All(a,A,G),B,G) = Ex(Ex('not' a,B,G
+  ),A,G)
 proof
+A1: Ex('not' a,B,G) = 'not' All(a,B,G) by BVFUNC_2:20;
   assume
-A1: G is independent;
-  Ex('not' a,B,G) = 'not' All(a,B,G) by BVFUNC_2:20;
+  G is independent;
   hence thesis by A1,Th17;
 end;
 
 theorem
-  G is independent implies
-  'not' All(All(a,A,G),B,G) '<' Ex(Ex('not' a,A,G),B,G)
+  G is independent implies 'not' All(All(a,A,G),B,G) '<' Ex(Ex('not' a,A
+  ,G),B,G)
 proof
   assume
 A1: G is independent;
@@ -410,7 +458,8 @@ end;
 theorem
   G is independent implies Ex(All(a,A,G),B,G) '<' Ex(Ex(a,B,G),A,G)
 proof
-  assume G is independent;
+  assume
+  G is independent;
   then
 A1: Ex(Ex(a,B,G),A,G) = Ex(Ex(a,A,G),B,G) by PARTIT_2:18;
   All(a,A,G) '<' Ex(a,A,G) by Th8;

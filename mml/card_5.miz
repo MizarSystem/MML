@@ -11,12 +11,11 @@ environ
       ORDINAL3, FUNCT_2, CARD_3, FUNCOP_1, RLVECT_1, MCART_1, CARD_5, ARYTM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS, NAT_1,
       RELAT_1, FUNCT_1, FINSET_1, ORDINAL1, FUNCT_2, WELLORD1, WELLORD2,
-      MCART_1, FUNCOP_1, ORDINAL2, ORDINAL3, CARD_2, CARD_3, ORDINAL4,
-      XXREAL_0;
+      MCART_1, FUNCOP_1, ORDINAL2, ORDINAL3, CARD_2, CARD_3, ORDINAL4;
  constructors WELLORD1, WELLORD2, FUNCOP_1, ORDINAL3, XXREAL_0, NAT_1,
       FINSEQ_1, CARD_2, CARD_3, ORDINAL4, RELSET_1;
  registrations XBOOLE_0, FUNCT_1, ORDINAL1, FUNCOP_1, ORDINAL2, ORDINAL3,
-      XXREAL_0, NAT_1, CARD_1, CARD_3, ORDINAL4;
+      NAT_1, CARD_1, CARD_3, ORDINAL4;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, FUNCT_1, ORDINAL2, CARD_1, CARD_3, XBOOLE_0;
  theorems TARSKI, FUNCT_1, FUNCT_2, FUNCOP_1, NAT_1, FINSET_1, MCART_1,
@@ -32,8 +31,8 @@ reserve k,n,m for Element of NAT,
   A,B,C for Ordinal,
   X for set,
   x,y,z for set;
-
-Lm1: 0 = card 0 & 1 = card 1 & 2 = card 2 by CARD_1:def 5;
+Lm1: 1 = card 1 by CARD_1:def 5;
+Lm2: 2 = card 2 by CARD_1:def 5;
 
 canceled 8;
 
@@ -41,13 +40,14 @@ begin :: Infinity, alephs and cofinality
 
 reserve f,g,h,fx for Function,
   K,M,N for Cardinal,
-  phi,psi for Ordinal-Sequence;
+  phi,psi for
+  Ordinal-Sequence;
 
 theorem Th9:
   nextcard card X = nextcard X
 proof
-  card card X in nextcard X & for M st card card X in M holds nextcard
-  X c= M by CARD_1:def 6;
+  card card X in nextcard X & for M st card card X in M holds nextcard X
+  c= M by CARD_1:def 6;
   hence thesis by CARD_1:def 6;
 end;
 
@@ -56,17 +56,21 @@ theorem Th10:
 proof
   thus y in Union f implies ex x st x in dom f & y in f.x
   proof
-    assume y in Union f;
+    assume
+    y in Union f;
     then consider X such that
-A1: y in X & X in rng f by TARSKI:def 4;
+A1: y in X and
+A2: X in rng f by TARSKI:def 4;
     consider x such that
-A2: x in dom f & X = f.x by A1,FUNCT_1:def 5;
-    take x; thus thesis by A1,A2;
+A3: x in dom f & X = f.x by A2,FUNCT_1:def 5;
+    take x;
+    thus thesis by A1,A3;
   end;
   given x such that
-A3: x in dom f & y in f.x;
-  f.x in rng f by A3,FUNCT_1:def 5;
-  hence thesis by A3,TARSKI:def 4;
+A4: x in dom f and
+A5: y in f.x;
+  f.x in rng f by A4,FUNCT_1:def 5;
+  hence thesis by A5,TARSKI:def 4;
 end;
 
 theorem Th11:
@@ -81,139 +85,170 @@ theorem Th12:
   M is infinite implies ex A st M = alef A
 proof
   defpred P[set] means $1 is infinite implies ex A st $1 = alef A;
-A1: P[{}];
-A2: P[K] implies P[nextcard K]
+A1: P[K] implies P[nextcard K]
   proof
     assume that
-A3: P[K] and
-A4: not nextcard K is finite;
+A2: P[K] and
+A3: not nextcard K is finite;
     now
-      assume K is finite;
+      assume
+      K is finite;
       then reconsider K' = K as finite set;
-      card K = card card K' & card K = K by CARD_1:def 5;
+      card K = K by CARD_1:def 5;
       then nextcard K = card (card K' + 1) by NAT_1:43;
-      hence contradiction by A4;
+      hence contradiction by A3;
     end;
     then consider A such that
-A5: K = alef A by A3;
-    take succ A; thus thesis by A5,CARD_1:39;
+A4: K = alef A by A2;
+    take succ A;
+    thus thesis by A4,CARD_1:39;
   end;
-A6: K <> {} & K is limit_cardinal & (for N st N in K holds P[N]) implies P[K]
+A5: K <> {} & K is limit_cardinal & (for N st N in K holds P[N]) implies P[
+  K]
   proof
+    deffunc a(Ordinal) = alef $1;
+    defpred R[set,set] means ex A st $1 = alef A & $2 = A;
     assume that
-A7: K <> {} & K is limit_cardinal and
-A8: for N st N in K holds P[N] and
-A9: not K is finite;
+    K <> {} and
+A6: K is limit_cardinal and
+A7: for N st N in K holds P[N] and
+A8: not K is finite;
     defpred P[set] means ex N st N = $1 & not N is finite;
     consider X such that
-A10: x in X iff x in K & P[x] from XBOOLE_0:sch 1;
-    defpred R[set,set] means ex A st $1 = alef A & $2 = A;
-A12: for x st x in X ex y st R[x,y]
+A9: x in X iff x in K & P[x] from XBOOLE_0:sch 1;
+A10: for x st x in X ex y st R[x,y]
     proof
       let x;
       assume
-A13:  x in X;
+A11:  x in X;
       then consider N such that
-A14:  N = x & not N is finite by A10;
-      N in K by A10,A13,A14;
-      then ex A st x = alef A by A8,A14;
+A12:  N = x and
+A13:  not N is finite by A9;
+      N in K by A9,A11,A12;
+      then ex A st x = alef A by A7,A12,A13;
       hence thesis;
     end;
     consider f such that
-A15: dom f = X & for x st x in X holds R[x,f.x] from CLASSES1:sch 1(A12);
+A14: dom f = X & for x st x in X holds R[x,f.x] from CLASSES1:sch 1(
+    A10);
     now
       let x;
-      assume x in rng f;
+      assume
+      x in rng f;
       then consider y such that
-A16:  y in X & x = f.y by A15,FUNCT_1:def 5;
+A15:  y in X and
+A16:  x = f.y by A14,FUNCT_1:def 5;
       consider A such that
-A17:  y = alef A & x = A by A15,A16;
-      thus x is Ordinal by A17;
+A17:  y = alef A and
+A18:  x = A by A14,A15,A16;
+      thus x is Ordinal by A18;
       thus x c= rng f
       proof
         let z;
         assume
-A18:    z in x;
-        then reconsider z' = z as Ordinal by A17;
-        alef z' in alef A & alef A in K by A10,A16,A17,A18,CARD_1:41;
-        then alef z' in K & not alef z' is finite by Th11,ORDINAL1:19;
+A19:    z in x;
+        then reconsider z' = z as Ordinal by A18;
+A20:    alef z' in alef A by A18,A19,CARD_1:41;
+        alef A in K by A9,A15,A17;
         then
-A19:    alef z' in X by A10;
-        then ex A st alef z' = alef A & f.(alef z') = A by A15;
+A21:    alef z' in K by A20,ORDINAL1:19;
+        not alef z' is finite by Th11;
+        then
+A22:    alef z' in X by A9,A21;
+        then ex A st alef z' = alef A & f.(alef z') = A by A14;
         then z' = f.(alef z') by CARD_1:42;
-        hence thesis by A15,A19,FUNCT_1:def 5;
+        hence thesis by A14,A22,FUNCT_1:def 5;
       end;
     end;
     then reconsider A = rng f as Ordinal by ORDINAL1:31;
-    take A;
-    deffunc a(Ordinal) = alef $1;
     consider L being T-Sequence such that
-A20: dom L = A & for B st B in A holds L.B = a(B) from ORDINAL2:sch 2;
+A23: dom L = A & for B st B in A holds L.B = a(B) from ORDINAL2:sch 2;
     now
       let B;
-      assume B in A;
+      assume
+      B in A;
       then consider x such that
-A21:  x in X & B = f.x by A15,FUNCT_1:def 5;
+A24:  x in X and
+A25:  B = f.x by A14,FUNCT_1:def 5;
       consider C such that
-A22:  x = alef C & B = C by A15,A21;
-      alef succ C = nextcard alef C & alef C in K by A10,A21,A22,CARD_1:39;
-      then alef succ C <> K & alef succ C c= K by A7,CARD_1:def 7,CARD_3:107;
-      then alef succ C in K & not alef succ C is finite by Th11,CARD_1:13;
+A26:  x = alef C and
+A27:  B = C by A14,A24,A25;
+A28:  alef succ C = nextcard alef C by CARD_1:39;
+      alef C in K by A9,A24,A26;
       then
-A23:  alef succ C in X by A10;
+A29:  alef succ C c= K by A28,CARD_3:107;
+      alef succ C <> K by A6,A28,CARD_1:def 7;
+      then
+A30:  alef succ C in K by A29,CARD_1:13;
+      not alef succ C is finite by Th11;
+      then
+A31:  alef succ C in X by A9,A30;
       then consider D being Ordinal such that
-A24:  alef succ C = alef D & f.(alef succ C) = D by A15;
-      succ C = D by A24,CARD_1:42;
-      hence succ B in A by A15,A22,A23,A24,FUNCT_1:def 5;
+A32:  alef succ C = alef D and
+A33:  f.(alef succ C) = D by A14;
+      succ C = D by A32,CARD_1:42;
+      hence succ B in A by A14,A27,A31,A33,FUNCT_1:def 5;
     end;
     then A is limit_ordinal by ORDINAL1:41;
     then
-A25: A = {} or alef A = card sup L by A20,CARD_1:40;
+A34: A = {} or alef A = card sup L by A23,CARD_1:40;
+    take A;
     sup L c= K
     proof
       let x;
       assume
-A26:  x in sup L;
+A35:  x in sup L;
       then reconsider x' = x as Ordinal;
       consider C such that
-A27:  C in rng L & x' c= C by A26,ORDINAL2:29;
+A36:  C in rng L and
+A37:  x' c= C by A35,ORDINAL2:29;
       consider y such that
-A28:  y in dom L & C = L.y by A27,FUNCT_1:def 5;
-      reconsider y as Ordinal by A28;
-A29:  C = alef y & not alef y is finite by A20,A28,Th11;
+A38:  y in dom L and
+A39:  C = L.y by A36,FUNCT_1:def 5;
+      reconsider y as Ordinal by A38;
+A40:  C = alef y by A23,A38,A39;
       consider z such that
-A30:  z in dom f & y = f.z by A20,A28,FUNCT_1:def 5;
-      ex D being Ordinal st z = alef D & y = D by A15,A30;
-      then C in K & K = K by A10,A15,A29,A30;
-      hence thesis by A27,ORDINAL1:22;
+A41:  z in dom f and
+A42:  y = f.z by A23,A38,FUNCT_1:def 5;
+      ex D being Ordinal st z = alef D & y = D by A14,A41,A42;
+      then C in K by A9,A14,A40,A41;
+      hence thesis by A37,ORDINAL1:22;
     end;
     then card sup L c= card K by CARD_1:27;
     then
-A31: card sup L c= K by CARD_1:def 5;
-    now per cases;
-      case A = {};
-        then not omega in X & not omega is finite by A15,RELAT_1:65;
-        then not omega in K by A10;
-        then K c= omega & omega c= K by A9,CARD_1:14,CARD_3:102;
-        hence K = omega by XBOOLE_0:def 10;
+A43: card sup L c= K by CARD_1:def 5;
+    now
+      per cases;
+      case
+        A = {};
+        then not omega in X by A14,RELAT_1:65;
+        then not omega in K by A9;
+        then
+A44:    K c= omega by CARD_1:14;
+        omega c= K by A8,CARD_3:102;
+        hence K = omega by A44,XBOOLE_0:def 10;
       end;
       case
-A32:    A <> {};
-        assume K <> alef A;
-        then card sup L in K & not alef A is finite by A25,A31,A32,Th11,
-CARD_1:13;
+A45:    A <> {};
+        assume
+        K <> alef A;
         then
-A33:    card sup L in X by A10,A25,A32;
+A46:    card sup L in K by A34,A43,A45,CARD_1:13;
+        not alef A is finite by Th11;
+        then
+A47:    card sup L in X by A9,A34,A45,A46;
         then consider B such that
-A34:    card sup L = alef B & f.(card sup L) = B by A15;
-        A = B by A25,A32,A34,CARD_1:42;
-        then A in A by A15,A33,A34,FUNCT_1:def 5;
+A48:    card sup L = alef B and
+A49:    f.(card sup L) = B by A14;
+        A = B by A34,A45,A48,CARD_1:42;
+        then A in A by A14,A47,A49,FUNCT_1:def 5;
         hence contradiction;
       end;
     end;
     hence thesis by CARD_1:83;
   end;
-  for M holds P[M] from CARD_1:sch 1(A1,A2,A6);
+A50: P[{}];
+  for M holds P[M] from CARD_1:sch 1(A50,A1,A5);
   hence thesis;
 end;
 
@@ -221,8 +256,9 @@ registration
   let phi;
   cluster Union phi -> ordinal;
   coherence
-  proof ex A st rng phi c= A by ORDINAL2:def 8;
-    then On rng phi = rng phi & union rng phi = Union phi by ORDINAL3:8;
+  proof
+    ex A st rng phi c= A by ORDINAL2:def 8;
+    then On rng phi = rng phi by ORDINAL3:8;
     hence thesis by ORDINAL3:7;
   end;
 end;
@@ -230,46 +266,57 @@ end;
 canceled;
 
 theorem Th14:
-  X c= A implies ex phi st
-  phi = canonical_isomorphism_of(RelIncl order_type_of RelIncl X, RelIncl X) &
-  phi is increasing & dom phi = order_type_of RelIncl X & rng phi = X
+  X c= A implies ex phi st phi = canonical_isomorphism_of(RelIncl
+  order_type_of RelIncl X, RelIncl X) & phi is increasing & dom phi =
+  order_type_of RelIncl X & rng phi = X
 proof
   set R = RelIncl X;
   set B = order_type_of R;
   set phi = canonical_isomorphism_of (RelIncl B,R);
   assume
 A1: X c= A;
-  then
-A2: R is well-ordering & RelIncl B is well-ordering & B c= A by WELLORD2:9,17;
+  then R is well-ordering by WELLORD2:9;
   then R, RelIncl B are_isomorphic by WELLORD2:def 2;
-  then RelIncl B, R are_isomorphic by WELLORD1:50;
+  then RelIncl B is well-ordering & RelIncl B, R are_isomorphic by
+  WELLORD1:
+  50 ,WELLORD2:9;
   then
-A3: phi is_isomorphism_of RelIncl B,R & field RelIncl B = B & field R = X
-  by A2,WELLORD1:def 9,WELLORD2:def 1;
+A2: phi is_isomorphism_of RelIncl B,R by WELLORD1:def 9;
   then
-A4: dom phi = B & rng phi = X & phi is one-to-one &
-  for x,y holds [x,y] in RelIncl B iff x in B & y in B & [phi.x,phi.y] in R
-  by WELLORD1:def 7;
-  then reconsider phi as T-Sequence by ORDINAL1:def 7;
-  reconsider phi as Ordinal-Sequence by A1,A4,ORDINAL2:def 8;
+A3: phi is one-to-one by WELLORD1:def 7;
+A4: field RelIncl B = B by WELLORD2:def 1;
+  then
+A5: dom phi = B by A2,WELLORD1:def 7;
+A6: field R = X by WELLORD2:def 1;
+  then
+A7: rng phi = X by A2,WELLORD1:def 7;
+  reconsider phi as T-Sequence by A5,ORDINAL1:def 7;
+  reconsider phi as Ordinal-Sequence by A1,A7,ORDINAL2:def 8;
   take phi;
   thus phi = canonical_isomorphism_of (RelIncl order_type_of RelIncl X,
   RelIncl X);
   thus phi is increasing
   proof
     let a,b be Ordinal;
-    assume
-A5: a in b & b in dom phi;
-    then
-A6: a in dom phi & a c= b & a <> b by ORDINAL1:19,def 2;
+    assume that
+A8: a in b and
+A9: b in dom phi;
+A10: a in dom phi by A8,A9,ORDINAL1:19;
     reconsider a' = phi.a, b' = phi.b as Ordinal;
-    [a,b] in RelIncl B by A4,A5,A6,WELLORD2:def 1;
-    then [a',b'] in R & a' in X & b' in X by A4,A5,A6,FUNCT_1:def 5;
-    then a' c= b' & a' <> b' by A4,A5,A6,FUNCT_1:def 8,WELLORD2:def 1;
-    then a' c< b' & a' <> b' by XBOOLE_0:def 8;
+A11: b' in X by A7,A9,FUNCT_1:def 5;
+    a c= b by A8,ORDINAL1:def 2;
+    then [a,b] in RelIncl B by A5,A9,A10,WELLORD2:def 1;
+    then
+A12: [a',b'] in R by A2,WELLORD1:def 7;
+    a' in X by A7,A10,FUNCT_1:def 5;
+    then
+A13: a' c= b' by A12,A11,WELLORD2:def 1;
+    a <> b by A8;
+    then a' <> b' by A3,A9,A10,FUNCT_1:def 8;
+    then a' c< b' by A13,XBOOLE_0:def 8;
     hence thesis by ORDINAL1:21;
   end;
-  thus thesis by A3,WELLORD1:def 7;
+  thus thesis by A2,A4,A6,WELLORD1:def 7;
 end;
 
 theorem Th15:
@@ -278,9 +325,10 @@ proof
   assume
 A1: X c= A;
   then consider phi such that
-A2: phi = canonical_isomorphism_of (RelIncl order_type_of RelIncl X,
-  RelIncl X) & phi is increasing &
-  dom phi = order_type_of RelIncl X & rng phi = X by Th14;
+  phi = canonical_isomorphism_of (RelIncl order_type_of RelIncl X, RelIncl
+  X) and
+A2: phi is increasing & dom phi = order_type_of RelIncl X & rng phi = X
+  by Th14;
   take phi;
   On X = X by A1,ORDINAL3:8;
   hence thesis by A2,ORDINAL2:def 7;
@@ -292,17 +340,23 @@ proof
   set R = RelIncl X;
   set B = order_type_of R;
   set phi = canonical_isomorphism_of (RelIncl B,R);
-  assume X c= A;
-  then
-A1: R is well-ordering & RelIncl B is well-ordering & B c= A by WELLORD2:9,17;
+  assume
+  X c= A;
+  then R is well-ordering by WELLORD2:9;
   then R, RelIncl B are_isomorphic by WELLORD2:def 2;
-  then RelIncl B, R are_isomorphic by WELLORD1:50;
-  then phi is_isomorphism_of RelIncl B,R & field RelIncl B = B & field R = X
-  by A1,WELLORD1:def 9,WELLORD2:def 1;
-  then dom phi = B & rng phi = X & phi is one-to-one &
-  for x,y holds [x,y] in RelIncl B iff x in B & y in B & [phi.x,phi.y] in R
-  by WELLORD1:def 7;
-  then B,X are_equipotent by WELLORD2:def 4;
+  then RelIncl B is well-ordering & RelIncl B, R are_isomorphic by
+  WELLORD1:
+  50 ,WELLORD2:9;
+  then
+A1: phi is_isomorphism_of RelIncl B,R by WELLORD1:def 9;
+  field R = X by WELLORD2:def 1;
+  then
+A2: rng phi = X by A1,WELLORD1:def 7;
+  field RelIncl B = B by WELLORD2:def 1;
+  then
+A3: dom phi = B by A1,WELLORD1:def 7;
+  phi is one-to-one by A1,WELLORD1:def 7;
+  then B,X are_equipotent by A3,A2,WELLORD2:def 4;
   hence thesis by CARD_1:21;
 end;
 
@@ -312,125 +366,152 @@ proof
   set M = card A;
   M,A are_equipotent by CARD_1:def 5;
   then consider f such that
-A1: f is one-to-one & dom f = M & rng f = A by WELLORD2:def 4;
+A1: f is one-to-one and
+A2: dom f = M and
+A3: rng f = A by WELLORD2:def 4;
   defpred P[set] means not f.$1 in Union (f|$1);
+  reconsider f as T-Sequence by A2,ORDINAL1:def 7;
+  reconsider f as Ordinal-Sequence by A3,ORDINAL2:def 8;
   consider X such that
-A2: x in X iff x in M & P[x] from XBOOLE_0:sch 1;
-  reconsider f as T-Sequence by A1,ORDINAL1:def 7;
-  reconsider f as Ordinal-Sequence by A1,ORDINAL2:def 8;
+A4: x in X iff x in M & P[x] from XBOOLE_0:sch 1;
   set R = RelIncl X;
   set B = order_type_of R;
-  set phi = canonical_isomorphism_of (RelIncl B,R);
   take B;
-A3: X c= M
+A5: X c= M
   proof
-    let x; thus thesis by A2;
+    let x;
+    thus thesis by A4;
   end;
-  then
-A4: R is well-ordering & RelIncl B is well-ordering by WELLORD2:9;
+  hence B c= card A by WELLORD2:17;
+  set phi = canonical_isomorphism_of (RelIncl B,R);
+  R is well-ordering by A5,WELLORD2:9;
   then R, RelIncl B are_isomorphic by WELLORD2:def 2;
-  then RelIncl B, R are_isomorphic by WELLORD1:50;
+  then RelIncl B is well-ordering & RelIncl B, R are_isomorphic by
+  WELLORD1:50 ,WELLORD2:9;
   then
-A5: phi is_isomorphism_of RelIncl B,R & field RelIncl B = B & field R = X
-  by A4,WELLORD1:def 9,WELLORD2:def 1;
+A6: phi is_isomorphism_of RelIncl B,R by WELLORD1:def 9;
   then
-A6: dom phi = B & rng phi = X & phi is one-to-one &
-  for x,y holds [x,y] in RelIncl B iff x in B & y in B & [phi.x,phi.y] in R
-  by WELLORD1:def 7;
-  then reconsider phi as T-Sequence by ORDINAL1:def 7;
-  reconsider phi as Ordinal-Sequence by A3,A6,ORDINAL2:def 8;
-  thus B c= card A by A3,WELLORD2:17;
-A7: dom (f*phi) = B & rng (f*phi) c= A by A1,A3,A6,RELAT_1:45,46;
+A7: phi is one-to-one by WELLORD1:def 7;
+  field RelIncl B = B by WELLORD2:def 1;
+  then
+A8: dom phi = B by A6,WELLORD1:def 7;
+  field R = X by WELLORD2:def 1;
+  then
+A9: rng phi = X by A6,WELLORD1:def 7;
+  reconsider phi as T-Sequence by A8,ORDINAL1:def 7;
+  reconsider phi as Ordinal-Sequence by A5,A9,ORDINAL2:def 8;
+A10: dom (f*phi) = B by A2,A5,A8,A9,RELAT_1:46;
   then reconsider xi = f*phi as T-Sequence by ORDINAL1:def 7;
-  reconsider xi as Ordinal-Sequence by A7,ORDINAL2:def 8;
+  rng (f*phi) c= A by A3,RELAT_1:45;
+  then reconsider xi as Ordinal-Sequence by ORDINAL2:def 8;
   take xi;
-  thus dom xi = B & rng xi c= A by A1,A3,A6,RELAT_1:45,46;
+  thus dom xi = B & rng xi c= A by A2,A3,A5,A8,A9,RELAT_1:45,46;
   thus xi is increasing
   proof
     let a,b be Ordinal;
-    assume
-A8: a in b & b in dom xi;
+    assume that
+A11: a in b and
+A12: b in dom xi;
+A13: a in dom xi by A11,A12,ORDINAL1:19;
     then
-A9: a in dom xi & a c= b & a <> b & xi is one-to-one
-    by A1,A6,ORDINAL1:19,def 2;
+A14: phi.a in X by A8,A9,A10,FUNCT_1:def 5;
+    a <> b by A11;
     then
-A10: phi.a <> phi.b & [a,b] in RelIncl B & phi.a in X & phi.b in X
-    by A6,A7,A8,FUNCT_1:def 5,def 8,WELLORD2:def 1;
+A15: phi.a <> phi.b by A8,A7,A10,A12,A13,FUNCT_1:def 8;
     reconsider a' = phi.a, b' = phi.b as Ordinal;
     reconsider a'' = f.a', b'' = f.b' as Ordinal;
-    [phi.a,phi.b] in R by A5,A10,WELLORD1:def 7;
-    then a' c= b' by A10,WELLORD2:def 1;
-    then a' c< b' by A10,XBOOLE_0:def 8;
+A16: phi.b in X by A8,A9,A10,A12,FUNCT_1:def 5;
+    then not b'' in Union (f|b') by A4;
     then
-A11: a' in b' & not b'' in Union (f|b') & a'' <> b''
-    by A1,A2,A3,A10,FUNCT_1:def 8,ORDINAL1:21;
-    then a'' in rng (f|b') & Union (f|b') = union rng (f|b')
-    by A1,A3,A10,FUNCT_1:73;
-    then a'' c= Union (f|b') & Union (f|b') c= b''
-    by A11,ORDINAL1:26,ZFMISC_1:92;
+A17: Union (f|b') c= b'' by ORDINAL1:26;
+    a c= b by A11,ORDINAL1:def 2;
+    then [a,b] in RelIncl B by A10,A12,A13,WELLORD2:def 1;
+    then [phi.a,phi.b] in R by A6,WELLORD1:def 7;
+    then a' c= b' by A14,A16,WELLORD2:def 1;
+    then a' c< b' by A15,XBOOLE_0:def 8;
+    then a' in b' by ORDINAL1:21;
+    then a'' c= Union (f|b') by A2,A5,A14,FUNCT_1:73,ZFMISC_1:92;
     then
-A12: a'' c= b'' & a'' = xi.a & b'' = xi.b by A8,A9,FUNCT_1:22,XBOOLE_1:1;
-    then a'' c< b'' by A11,XBOOLE_0:def 8;
-    hence thesis by A12,ORDINAL1:21;
+A18: a'' c= b'' by A17,XBOOLE_1:1;
+    a'' <> b'' by A1,A2,A5,A15,A14,A16,FUNCT_1:def 8;
+    then
+A19: a'' c< b'' by A18,XBOOLE_0:def 8;
+    a'' = xi.a & b'' = xi.b by A11,A12,FUNCT_1:22,ORDINAL1:19;
+    hence thesis by A19,ORDINAL1:21;
   end;
   thus A c= sup xi
   proof
     let x;
-    assume x in A;
+    assume
+    x in A;
     then consider y such that
-A14: y in dom f & x = f.y by A1,FUNCT_1:def 5;
-    reconsider x' = x, y as Ordinal by A14;
-    now per cases;
-      suppose not f.y in Union (f|y);
-        then y in X by A1,A2,A14;
+A20: y in dom f and
+A21: x = f.y by A3,FUNCT_1:def 5;
+    reconsider x' = x, y as Ordinal by A20,A21;
+    now
+      per cases;
+      suppose
+        not f.y in Union (f|y);
+        then y in X by A2,A4,A20;
         then consider z such that
-A15:    z in B & y = phi.z by A6,FUNCT_1:def 5;
-        x' = xi.z & xi.z in rng xi by A7,A14,A15,FUNCT_1:22,def 5;
+A22:    z in B & y = phi.z by A8,A9,FUNCT_1:def 5;
+        x' = xi.z & xi.z in rng xi by A10,A21,A22,FUNCT_1:22,def 5;
         hence thesis by ORDINAL2:27;
       end;
-      suppose f.y in Union (f|y);
-        then consider z such that
-A16:    z in dom (f|y) & f.y in (f|y).z by Th10;
-        reconsider z as Ordinal by A16;
+      suppose
+A23:    f.y in Union (f|y);
         defpred P[Ordinal] means $1 in y & f.y in f.$1;
+        consider z such that
+A24:    z in dom (f|y) and
+A25:    f.y in (f|y).z by A23,Th10;
+        reconsider z as Ordinal by A24;
+A26:    (f|y).z = f.z by A24,FUNCT_1:70;
         dom (f|y) = dom f /\ y by RELAT_1:90;
-        then (f|y).z = f.z & z in y by A16,FUNCT_1:70,XBOOLE_0:def 4;
+        then z in y by A24,XBOOLE_0:def 4;
         then
-A17:    ex C st P[C] by A16;
+A27:    ex C st P[C] by A25,A26;
         consider C such that
-A18:    P[C] & for B st P[B] holds C c= B from ORDINAL1:sch 1(A17);
-        now thus C in M by A1,A14,A18,ORDINAL1:19;
-          assume f.C in Union (f|C);
+A28:    P[C] & for B st P[B] holds C c= B from ORDINAL1:sch 1(A27);
+        now
+          thus C in M by A2,A20,A28,ORDINAL1:19;
+          assume
+          f.C in Union (f|C);
           then consider a be set such that
-A19:      a in dom (f|C) & f.C in (f|C).a by Th10;
-          reconsider a as Ordinal by A19;
+A29:      a in dom (f|C) and
+A30:      f.C in (f|C).a by Th10;
+          reconsider a as Ordinal by A29;
           reconsider fa = (f|C).a, fc = f.C, fy = f.y as Ordinal;
-          dom (f|C) = dom f /\ C & f.a = fa & fc in fa
-          by A19,FUNCT_1:70,RELAT_1:90;
+          f.a = fa by A29,FUNCT_1:70;
           then
-A20:      a in C & fy in f.a by A18,A19,ORDINAL1:19,XBOOLE_0:def 4;
-          then a in y & not C c= a by A18,ORDINAL1:7,19;
-          hence contradiction by A18,A20;
+A31:      fy in f.a by A28,A30,ORDINAL1:19;
+          dom (f|C) = dom f /\ C by RELAT_1:90;
+          then
+A32:      a in C by A29,XBOOLE_0:def 4;
+          then a in y by A28,ORDINAL1:19;
+          hence contradiction by A28,A32,A31,ORDINAL1:7;
         end;
-        then C in X by A2;
+        then C in X by A4;
         then consider z such that
-A21:    z in B & C = phi.z by A6,FUNCT_1:def 5;
-        reconsider z as Ordinal by A21;
+A33:    z in B and
+A34:    C = phi.z by A8,A9,FUNCT_1:def 5;
+        reconsider z as Ordinal by A33;
         reconsider xz = xi.z as Ordinal;
-        xz = f.C & xz in rng xi by A7,A21,FUNCT_1:22,def 5;
-        then xz in sup xi & x' in xz by A14,A18,ORDINAL2:27;
-        hence thesis by ORDINAL1:19;
+        xz in rng xi by A10,A33,FUNCT_1:def 5;
+        then
+A35:    xz in sup xi by ORDINAL2:27;
+        x' in xz by A10,A21,A28,A33,A34,FUNCT_1:22;
+        hence thesis by A35,ORDINAL1:19;
       end;
     end;
     hence thesis;
   end;
   sup A = A by ORDINAL2:26;
-  hence thesis by A7,ORDINAL2:30;
+  hence thesis by A3,ORDINAL2:30,RELAT_1:45;
 end;
 
 theorem Th18:
-  ex M st M c= card A & A is_cofinal_with M &
-  for B st A is_cofinal_with B holds M c= B
+  ex M st M c= card A & A is_cofinal_with M & for B st A
+  is_cofinal_with B holds M c= B
 proof
   defpred P[Ordinal] means $1 c= card A & A is_cofinal_with $1;
 A1: ex B st P[B] by Th17;
@@ -439,69 +520,87 @@ A2: P[C] and
 A3: for B st P[B] holds C c= B from ORDINAL1:sch 1(A1);
   take M = card C;
   consider B such that
-A4: B c= M & C is_cofinal_with B by Th17;
-A5: M c= C by CARD_1:24;
+A4: B c= M and
+A5: C is_cofinal_with B by Th17;
+A6: M c= C by CARD_1:24;
   then
-A6: B c= C by A4,XBOOLE_1:1;
-  then B c= card A & A is_cofinal_with B by A2,A4,ORDINAL4:39,XBOOLE_1:1;
-  then C c= B by A3;
+A7: B c= C by A4,XBOOLE_1:1;
+  then B c= card A by A2,XBOOLE_1:1;
+  then C c= B by A2,A3,A5,ORDINAL4:39;
   then
-A7: C = B by A6,XBOOLE_0:def 10;
-  then
-A8: C = M by A4,A5,XBOOLE_0:def 10;
-  thus M c= card A & A is_cofinal_with M by A2,A4,A5,A7,XBOOLE_0:def 10;
+A8: C = B by A7,XBOOLE_0:def 10;
+  hence M c= card A & A is_cofinal_with M by A2,A4,A6,XBOOLE_0:def 10;
   let B;
-  assume A is_cofinal_with B & not M c= B;
-  then not B c= card A & B c= M by A3,A8;
-  hence contradiction by A2,A8,XBOOLE_1:1;
+  assume that
+A9: A is_cofinal_with B and
+A10: not M c= B;
+A11: C = M by A4,A6,A8,XBOOLE_0:def 10;
+  then not B c= card A by A3,A9,A10;
+  hence contradiction by A2,A11,A10,XBOOLE_1:1;
 end;
 
-Lm2: rng phi = rng psi & phi is increasing & psi is increasing implies
-for A st A in dom phi holds A in dom psi & phi.A = psi.A
+Lm3: rng phi = rng psi & phi is increasing & psi is increasing implies for A
+st A in dom phi holds A in dom psi & phi.A = psi.A
+
 proof
+  assume that
+A1: rng phi = rng psi and
+A2: phi is increasing;
+
+  defpred P[Ordinal] means $1 in dom phi implies $1 in dom psi & phi.$1 = psi.
+  $1;
+
   assume
-A1: rng phi = rng psi & phi is increasing;
-  assume
-A2: for A,B st A in B & B in dom psi holds psi.A in psi.B;
-  defpred P[Ordinal] means
-  $1 in dom phi implies $1 in dom psi & phi.$1 = psi.$1;
-A3: for A st for B st B in A holds P[B] holds P[A]
+A3: for A,B st A in B & B in dom psi holds psi.A in psi.B;
+A4: for A st for B st B in A holds P[B] holds P[A]
   proof
     let A;
     assume that
-A4: for B st B in A & B in dom phi holds B in dom psi & phi.B = psi.B and
-A5: A in dom phi;
-    phi.A in rng phi by A5,FUNCT_1:def 5;
+A5: for B st B in A & B in dom phi holds B in dom psi & phi.B = psi.B and
+A6: A in dom phi;
+    phi.A in rng phi by A6,FUNCT_1:def 5;
     then consider x such that
-A6: x in dom psi & phi.A = psi.x by A1,FUNCT_1:def 5;
-    reconsider x as Ordinal by A6;
-A7: now
+A7: x in dom psi and
+A8: phi.A = psi.x by A1,FUNCT_1:def 5;
+    reconsider x as Ordinal by A7;
+A9: now
       assume
-A8:   x in A;
-      then phi.x in phi.A & x in dom phi by A1,A5,ORDINAL1:19,ORDINAL2:def 16;
-      then phi.A in phi.A by A4,A6,A8;
-      hence contradiction;
-    end;
-    now
-      assume A in x;
+A10:  A in x;
       then
-A9:   psi.A in psi.x & A in dom psi by A2,A6,ORDINAL1:19;
+A11:  A in dom psi by A7,ORDINAL1:19;
       then psi.A in rng psi by FUNCT_1:def 5;
       then consider y such that
-A10:  y in dom phi & psi.A = phi.y by A1,FUNCT_1:def 5;
-      reconsider y as Ordinal by A10;
-      not A c= y by A1,A6,A9,A10,ORDINAL1:7,ORDINAL4:9;
-      then y in A by ORDINAL1:26;
-      then psi.y in psi.A & psi.y = phi.y by A2,A4,A9,A10;
-      hence contradiction by A10;
+A12:  y in dom phi and
+A13:  psi.A = phi.y by A1,FUNCT_1:def 5;
+      reconsider y as Ordinal by A12;
+      psi.A in psi.x by A3,A7,A10;
+      then not A c= y by A2,A8,A12,A13,ORDINAL1:7,ORDINAL4:9;
+      then
+A14:  y in A by ORDINAL1:26;
+      then
+A15:  psi.y = phi.y by A5,A12;
+      psi.y in psi.A by A3,A11,A14;
+      hence contradiction by A13,A15;
     end;
-    hence thesis by A6,A7,ORDINAL1:24;
+    now
+      assume
+A16:  x in A;
+
+      then phi.x in phi.A & x in dom phi by A2,A6,
+      ORDINAL1:19,ORDINAL2:def
+      16;
+
+      then phi.A in phi.A by A5,A8,A16;
+      hence contradiction;
+    end;
+    hence thesis by A7,A8,A9,ORDINAL1:24;
   end;
-  thus P[A] from ORDINAL1:sch 2(A3);
+  thus P[A] from ORDINAL1:sch 2(A4);
 end;
 
 theorem
-  rng phi = rng psi & phi is increasing & psi is increasing implies phi = psi
+  rng phi = rng psi & phi is increasing & psi is increasing implies phi
+  = psi
 proof
   assume
 A1: rng phi = rng psi & phi is increasing & psi is increasing;
@@ -510,14 +609,16 @@ A2: dom phi = dom psi
     thus dom phi c= dom psi
     proof
       let x;
-      assume x in dom phi;
-      hence thesis by A1,Lm2;
+      assume
+      x in dom phi;
+      hence thesis by A1,Lm3;
     end;
     let x;
-    assume x in dom psi;
-    hence thesis by A1,Lm2;
+    assume
+    x in dom psi;
+    hence thesis by A1,Lm3;
   end;
-  for x st x in dom phi holds phi.x = psi.x by A1,Lm2;
+  for x st x in dom phi holds phi.x = psi.x by A1,Lm3;
   hence thesis by A2,FUNCT_1:9;
 end;
 
@@ -527,18 +628,19 @@ proof
   assume
 A1: for A,B st A in B & B in dom phi holds phi.A in phi.B;
   let x,y;
-  assume
-A2: x in dom phi & y in dom phi & phi.x = phi.y;
-  then reconsider A = x, B = y as Ordinal;
-  not phi.A in phi.B & (A in B or A = B or B in A) by A2,ORDINAL1:24;
-  hence thesis by A1,A2;
+  assume that
+A2: x in dom phi & y in dom phi and
+A3: phi.x = phi.y;
+  reconsider A = x, B = y as Ordinal by A2;
+A4: A in B or A = B or B in A by ORDINAL1:24;
+  not phi.A in phi.B by A3;
+  hence thesis by A1,A2,A3,A4;
 end;
 
 theorem Th21:
   (phi^psi)|(dom phi) = phi
 proof
-  dom (phi^psi) = (dom phi)+^(dom psi) &
-  for A st A in dom phi holds (phi^psi).A = phi.A by ORDINAL4:def 1;
+  dom (phi^psi) = (dom phi)+^(dom psi) by ORDINAL4:def 1;
   then dom phi c= dom (phi^psi) by ORDINAL3:27;
   then
 A1: dom phi = (dom (phi^psi))/\(dom phi) by XBOOLE_1:28;
@@ -547,144 +649,164 @@ A1: dom phi = (dom (phi^psi))/\(dom phi) by XBOOLE_1:28;
 end;
 
 theorem
-  X <> {} implies
-  card { Y where Y is Subset of X: card Y in M } c= M*`exp(card X,M)
+  X <> {} implies card { Y where Y is Subset of X: card Y in M } c= M*`
+  exp(card X,M)
 proof
-  assume
-Z:  X <> {};
+  set Z = { Y where Y is Subset of X: card Y in M };
   X,card X are_equipotent by CARD_1:def 5;
   then consider f such that
-A2: f is one-to-one & dom f = X & rng f = card X by WELLORD2:def 4;
-  set Z = { Y where Y is Subset of X: card Y in M };
-  defpred P[set,set] means ex A be Ordinal, phi be Ordinal-Sequence st
-  $2 = [A,phi] & dom phi = M & phi|A is increasing &
-  rng (phi|A) = f.:$1 & for B st A c= B & B in M holds phi.B = {};
-A10: for x st x in Z ex y st P[x,y]
+A1: f is one-to-one and
+A2: dom f = X and
+A3: rng f = card X by WELLORD2:def 4;
+  defpred P[set,set] means ex A be Ordinal, phi be Ordinal-Sequence st $2 = [A
+,phi] & dom phi = M & phi|A is increasing & rng (phi|A) = f.:$1 & for B st A c=
+  B & B in M holds phi.B = {};
+A4: for x st x in Z ex y st P[x,y]
   proof
-    let x;
-    assume x in Z;
-    then
-A11: ex Y being Subset of X st x = Y & card Y in M;
-    set A = order_type_of RelIncl (f.:x);
-    card (f.:x) = card A & card (f.:x) c= card x
-     by Th16,A2,CARD_2:3,RELAT_1:144;
-    then
-A13: card A in M by A11,ORDINAL1:22;
-    consider xi1 being Ordinal-Sequence such that
-A14: xi1 = canonical_isomorphism_of (RelIncl A, RelIncl (f.:x)) &
-    xi1 is increasing & dom xi1 = A & rng xi1 = f.:x by A2,Th14,RELAT_1:144;
     deffunc f(set) = {};
+    let x;
+    set A = order_type_of RelIncl (f.:x);
     consider xi2 being Ordinal-Sequence such that
-A15: dom xi2 = M -^ A & for B st B in M -^ A holds xi2.B = f(B)
-    from ORDINAL2:sch 3;
+A5: dom xi2 = M -^ A & for B st B in M -^ A holds xi2.B = f(B) from
+    ORDINAL2:sch 3;
+    assume
+    x in Z;
+    then
+A6: ex Y being Subset of X st x = Y & card Y in M;
+    consider xi1 being Ordinal-Sequence such that
+    xi1 = canonical_isomorphism_of (RelIncl A, RelIncl (f.:x)) and
+A7: xi1 is increasing and
+A8: dom xi1 = A and
+A9: rng xi1 = f.:x by A3,Th14,RELAT_1:144;
     set phi = xi1^xi2;
     take y = [A,phi], A, phi;
-    A in M by A13,CARD_3:60;
+    card (f.:x) = card A by A3,Th16,RELAT_1:144;
+    then card A in M by A6,CARD_2:3,ORDINAL1:22;
+    then A in M by CARD_3:60;
     then A c= M by ORDINAL1:def 2;
-    then A+^( M -^ A) = M & phi|A = xi1 by A14,Th21,ORDINAL3:def 6;
+    then A+^( M -^ A) = M by ORDINAL3:def 6;
     hence y = [A,phi] & dom phi = M & phi|A is increasing & rng (phi|A) = f.:x
-    by A14,A15,ORDINAL4:def 1;
+    by A7,A8,A9,A5,Th21,ORDINAL4:def 1;
     let B;
-    assume A c= B & B in M;
-    then B = A+^(B-^A) & B-^A in M-^A by ORDINAL3:66,def 6;
-    then phi.B = xi2.(B-^A) & xi2.(B-^A) = {} by A14,A15,ORDINAL4:def 1;
-    hence thesis;
+    assume that
+A10: A c= B and
+A11: B in M;
+A12: B-^A in M-^A by A10,A11,ORDINAL3:66;
+    B = A+^(B-^A) by A10,ORDINAL3:def 6;
+    then phi.B = xi2.(B-^A) by A8,A5,A12,ORDINAL4:def 1;
+    hence thesis by A5,A12;
   end;
   consider g such that
-A16: dom g = Z & for x st x in Z holds P[x,g.x] from CLASSES1:sch 1(A10);
+A13: dom g = Z & for x st x in Z holds P[x,g.x] from CLASSES1:sch 1(A4);
+  assume
+A14: X <> {};
+  rng g c= [:M,Funcs(M,card X):]
+  proof
+    let x;
+    assume
+    x in rng g;
+    then consider y such that
+A15: y in dom g and
+A16: x = g.y by FUNCT_1:def 5;
+    consider A,phi such that
+A17: x = [A,phi] and
+A18: dom phi = M and
+A19: phi|A is increasing and
+A20: rng (phi|A) = f.:y and
+A21: for B st A c= B & B in M holds phi.B = {} by A13,A15,A16;
+A22: ex Y being Subset of X st y = Y & card Y in M by A13,A15;
+    rng phi c= card X
+    proof
+      let x;
+      assume
+      x in rng phi;
+      then consider z such that
+A23:  z in dom phi and
+A24:  x = phi.z by FUNCT_1:def 5;
+      reconsider z as Ordinal by A23;
+      z in A or A c= z by ORDINAL1:26;
+      then x in f.:y & f.:y c= card X or x = {} by A3,A18,A20,A21,A23,A24,
+      FUNCT_1:73,RELAT_1:144;
+      hence thesis by A14,ORDINAL3:10;
+    end;
+    then
+A25: phi in Funcs(M,card X) by A18,FUNCT_2:def 2;
+A26: A c= M or M c= A;
+    phi|A is one-to-one by A19,Th20;
+    then dom (phi|A),f.:y are_equipotent by A20,WELLORD2:def 4;
+    then card dom (phi|A) = card (f.:y) by CARD_1:21;
+    then card dom (phi|A) in M by A22,CARD_2:3,ORDINAL1:22;
+    then
+A27: dom (phi|A) in M by CARD_3:60;
+    then dom (phi|A) <> M;
+    then A in M by A18,A27,A26,RELAT_1:91,97;
+    hence thesis by A17,A25,ZFMISC_1:106;
+  end;
+  then
+A28: card rng g c= card [:M,Funcs(M,card X):] by CARD_1:27;
   g is one-to-one
   proof
     let x,y;
-    assume
-A17: x in dom g & y in dom g & g.x = g.y;
-    then
-A18: (ex Y being Subset of X st x = Y & card Y in M) &
-    (ex Y being Subset of X st y = Y & card Y in M) by A16;
-    consider A1 be Ordinal, phi1 be Ordinal-Sequence such that
-A19: g.x = [A1,phi1] & dom phi1 = M & phi1|A1 is increasing &
-    rng (phi1|A1) = f.:x & for B st A1 c= B & B in M holds phi1.B = {}
-    by A16,A17;
+    assume that
+A29: x in dom g and
+A30: y in dom g and
+A31: g.x = g.y;
     consider A2 be Ordinal, phi2 be Ordinal-Sequence such that
-A20: g.y = [A2,phi2] & dom phi2 = M & phi2|A2 is increasing &
-    rng (phi2|A2) = f.:y & for B st A2 c= B & B in M holds phi2.B = {}
-    by A16,A17;
-A21: A1 = A2 & phi1 = phi2 by A17,A19,A20,ZFMISC_1:33;
+A32: g.y = [A2,phi2] and
+    dom phi2 = M and
+    phi2|A2 is increasing and
+A33: rng (phi2|A2) = f.:y and
+    for B st A2 c= B & B in M holds phi2.B = {} by A13,A30;
+    consider A1 be Ordinal, phi1 be Ordinal-Sequence such that
+A34: g.x = [A1,phi1] and
+    dom phi1 = M and
+    phi1|A1 is increasing and
+A35: rng (phi1|A1) = f.:x and
+    for B st A1 c= B & B in M holds phi1.B = {} by A13,A29;
+A36: A1 = A2 & phi1 = phi2 by A31,A34,A32,ZFMISC_1:33;
+A37: ex Y being Subset of X st x = Y & card Y in M by A13,A29;
     thus x c= y
     proof
       let z;
       assume
-A22:  z in x;
-      then f.z in f.:x by A2,A18,FUNCT_1:def 12;
-      then ex x1 being set st
-      x1 in dom f & x1 in y & f.z = f.x1 by A19,A20,A21,FUNCT_1:def 12;
-      hence thesis by A2,A18,A22,FUNCT_1:def 8;
+A38:  z in x;
+      then f.z in f.:x by A2,A37,FUNCT_1:def 12;
+      then ex x1 being set st x1 in dom f & x1 in y & f.z = f.x1 by A35,A33,
+      A36,FUNCT_1:def 12;
+      hence thesis by A1,A2,A37,A38,FUNCT_1:def 8;
     end;
     let z;
+A39: ex Y being Subset of X st y = Y & card Y in M by A13,A30;
     assume
-A23: z in y;
-    then f.z in f.:y by A2,A18,FUNCT_1:def 12;
-    then ex x1 being set st
-    x1 in dom f & x1 in x & f.z = f.x1 by A19,A20,A21,FUNCT_1:def 12;
-    hence thesis by A2,A18,A23,FUNCT_1:def 8;
+A40: z in y;
+    then f.z in f.:y by A2,A39,FUNCT_1:def 12;
+    then
+    ex x1 being set st x1 in dom f & x1 in x & f.z = f.x1 by A35,A33,A36,
+    FUNCT_1:def 12;
+    hence thesis by A1,A2,A39,A40,FUNCT_1:def 8;
   end;
   then
-A24: Z,rng g are_equipotent by A16,WELLORD2:def 4;
-  rng g c= [:M,Funcs(M,card X):]
-  proof
-    let x;
-    assume x in rng g;
-    then consider y such that
-A25: y in dom g & x = g.y by FUNCT_1:def 5;
-    consider A,phi such that
-A26: x = [A,phi] & dom phi = M & phi|A is increasing &
-    rng (phi|A) = f.:y & for B st A c= B & B in M holds phi.B = {} by A16,A25;
-A27: ex Y being Subset of X st y = Y & card Y in M by A16,A25;
-    phi|A is one-to-one by A26,Th20;
-    then dom (phi|A),f.:y are_equipotent by A26,WELLORD2:def 4;
-    then card dom (phi|A) = card (f.:y) & card (f.:y) c= card y
-    by CARD_1:21,CARD_2:3;
-    then card dom (phi|A) in M by A27,ORDINAL1:22;
-    then
-A28: dom (phi|A) in M by CARD_3:60;
-    then dom (phi|A) <> M & (A c= M or M c= A);
-    then
-A29: A in M by A26,A28,RELAT_1:91,97;
-    rng phi c= card X
-    proof
-      let x;
-      assume x in rng phi;
-      then consider z such that
-A30:  z in dom phi & x = phi.z by FUNCT_1:def 5;
-      reconsider z as Ordinal by A30;
-      z in A or A c= z by ORDINAL1:26;
-      then x in f.:y & f.:y c= card X or x = {}
-      by A2,A26,A30,FUNCT_1:73,RELAT_1:144;
-      hence thesis by Z,ORDINAL3:10;
-    end;
-    then phi in Funcs(M,card X) by A26,FUNCT_2:def 2;
-    hence thesis by A26,A29,ZFMISC_1:106;
-  end;
-  then
-A31: card rng g c= card [:M,Funcs(M,card X):] by CARD_1:27;
-  card [:M,Funcs(M,card X):] = card [:M,card Funcs(M,card X):] by CARD_2:14
+A41: Z,rng g are_equipotent by A13,WELLORD2:def 4;
+  card [:M,Funcs(M,card X):] = card [:M,card Funcs(M,card X):] by CARD_2:
+  14
     .= M*`card Funcs(M,card X) by CARD_2:def 2
     .= M*`exp(card X,M) by CARD_2:def 3;
-  hence thesis by A24,A31,CARD_1:21;
+  hence thesis by A41,A28,CARD_1:21;
 end;
 
 theorem Th23:
   M in exp(2,M)
 proof
-  card bool M = exp(2,card M) & card M in card bool M & card M = M
-  by CARD_1:30,def 5,CARD_2:44;
-  hence thesis;
+  card bool M = exp(2,card M) & card M = M by CARD_1:def 5,CARD_2:44;
+  hence thesis by CARD_1:30;
 end;
 
 registration
   cluster infinite Cardinal;
   existence
   proof
-    take omega; thus thesis;
+    take omega;
+    thus thesis;
   end;
 end;
 
@@ -699,8 +821,8 @@ definition
   canceled;
   func cf M -> Cardinal means
   :Def2:
-  M is_cofinal_with it &
-  for N st M is_cofinal_with N holds it c= N;
+  M is_cofinal_with it & for N st M
+  is_cofinal_with N holds it c= N;
   existence
   proof
     defpred P[Ordinal] means M is_cofinal_with $1 & $1 is Cardinal;
@@ -708,50 +830,53 @@ A1: ex A st P[A];
     consider A such that
 A2: P[A] & for B st P[B] holds A c= B from ORDINAL1:sch 1(A1);
     reconsider K = A as Cardinal by A2;
-    take K; thus M is_cofinal_with K by A2;
+    take K;
+    thus M is_cofinal_with K by A2;
     let N;
-    assume M is_cofinal_with N;
+    assume
+    M is_cofinal_with N;
     hence thesis by A2;
   end;
   uniqueness
   proof
     let K1,K2 be Cardinal;
-    assume M is_cofinal_with K1 &
-    (for N st M is_cofinal_with N holds K1 c= N) & M is_cofinal_with K2 &
-    for N st M is_cofinal_with N holds K2 c= N;
+    assume
+    M is_cofinal_with K1 & ( for N st M is_cofinal_with N holds K1 c=
+    N)& M is_cofinal_with K2 & for N st M is_cofinal_with N holds K2 c= N;
     then K1 c= K2 & K2 c= K1;
     hence thesis by XBOOLE_0:def 10;
   end;
   let N;
   func N-powerfunc_of M -> Cardinal-Function means
-  :
-  Def3: (for x holds x in dom it iff x in M & x is Cardinal) &
-  for K st K in M holds it.K = exp(K,N);
+  : Def3:
+  (for x holds x in
+  dom it iff x in M & x is Cardinal) & for K st K in M holds it.K = exp(K,N);
   existence
   proof
+    deffunc f(set) = exp(card $1,N);
     defpred P[set] means $1 is Cardinal;
     consider X such that
 A3: x in X iff x in M & P[x] from XBOOLE_0:sch 1;
-    deffunc f(set) = exp(card $1,N);
     consider f being Cardinal-Function such that
 A4: dom f = X & for x st x in X holds f.x = f(x) from CARD_3:sch 1;
-    take f; thus x in dom f iff x in M & x is Cardinal by A3,A4;
+    take f;
+    thus x in dom f iff x in M & x is Cardinal by A3,A4;
     let K;
-    assume K in M;
+    assume
+    K in M;
     then K = card K & K in X by A3,CARD_1:def 5;
     hence thesis by A4;
   end;
   uniqueness
   proof
-    let f1,f2 be Cardinal-Function;
     defpred P[set] means $1 in M & $1 is Cardinal;
+    let f1,f2 be Cardinal-Function;
     assume that
 A5: for x holds x in dom f1 iff P[x] and
 A6: for K st K in M holds f1.K = exp(K,N) and
 A7: for x holds x in dom f2 iff P[x] and
 A8: for K st K in M holds f2.K = exp(K,N);
-A9: dom f1 = dom f2 from XBOOLE_0:sch 2(A5,A7);
-    now
+A9: now
       let x;
       assume
 A10:  x in dom f1;
@@ -760,6 +885,7 @@ A11:  K in M by A5,A10;
       hence f1.x = exp(K,N) by A6
         .= f2.x by A8,A11;
     end;
+    dom f1 = dom f2 from XBOOLE_0:sch 2(A5,A7);
     hence thesis by A9,FUNCT_1:9;
   end;
 end;
@@ -778,29 +904,32 @@ theorem
   ex A st a = alef A by Th12;
 
 theorem Th25:
-  a <> 0 & a <> 1 & a <> 2 & a <> card n & card n in a & omega c= a
+  a <> 0 & a <> 1 & a <> 2 & a <> card n & card n in a & omega c=
+  a
 proof
-  omega c= a & card 0 in omega & card 1 in omega &
-  card 2 in omega & card n in omega by CARD_3:102;
+  omega c= a & card n in omega by CARD_3:102;
   hence thesis;
 end;
 
 theorem Th26:
   a c= M or a in M implies M is Aleph
 proof
-  assume a c= M or a in M;
-  then omega c= a & a c= M by Th25,CARD_1:13;
-  then omega c= M by XBOOLE_1:1;
+  assume
+A1: a c= M or a in M;
+  omega c= a by Th25;
+  then omega c= M by A1,XBOOLE_1:1;
   hence thesis by CARD_3:102;
 end;
 
 theorem Th27:
-  a c= M or a in M implies a +` M = M & M +` a = M & a *` M = M & M *` a = M
+  a c= M or a in M implies a +` M = M & M +` a = M & a *` M = M &
+  M *` a = M
 proof
+A1: card 0 in a by Th25;
   assume
-A1: a c= M or a in M;
-  then M is infinite & card 0 in a & card 0 = 0 by Th25,Th26;
-  hence thesis by A1,CARD_3:118,CARD_4:78;
+A2: a c= M or a in M;
+  then M is infinite by Th26;
+  hence thesis by A2,A1,CARD_3:118,CARD_4:78;
 end;
 
 theorem
@@ -810,9 +939,10 @@ canceled 2;
 
 theorem Th31:
   M c= exp(M,a)
-proof 1 in a by Lm1,Th25;
-  then M = 0 & {} c= exp(M,a) or exp(M,1) c= exp(M,a) & exp(M,1) = M
-  by CARD_2:40,CARD_3:139,XBOOLE_1:2;
+proof
+  1 in a by Lm1,Th25;
+  then M = 0 & {} c= exp(M,a) or exp(M,1) c= exp(M,a) & exp(M,1) = M by
+  CARD_2:40,CARD_3:139,XBOOLE_1:2;
   hence thesis;
 end;
 
@@ -841,15 +971,17 @@ registration
   cluster a *` b -> infinite;
   coherence
   proof
-     a c= b or b c= a;
+    a c= b or b c= a;
     hence thesis by Th27;
   end;
   cluster exp(a,b) -> infinite;
   coherence
-  proof 0 <> a & a c= a & 1 in b by Lm1,Th25;
-    then exp(a,1) = a & exp(a,1) c= exp(a,b) & omega c= a
-    by Th25,CARD_2:40,CARD_3:138;
-    then omega c= exp(a,b) by XBOOLE_1:1;
+  proof
+    1 in b by Lm1,Th25;
+    then
+A1: exp(a,1) c= exp(a,b) by CARD_3:138;
+    exp(a,1) = a & omega c= a by Th25,CARD_2:40;
+    then omega c= exp(a,b) by A1,XBOOLE_1:1;
     hence thesis by CARD_3:102;
   end;
 end;
@@ -859,7 +991,6 @@ begin :: Regular alephs
 definition
   let IT be Aleph;
   attr IT is regular means
-
   cf IT = IT;
 end;
 
@@ -872,7 +1003,8 @@ registration
   let a;
   cluster nextcard a -> infinite;
   coherence
-  proof not a is finite & a in nextcard a by CARD_1:32;
+  proof
+    a in nextcard a by CARD_1:32;
     then omega c= nextcard a;
     hence thesis by CARD_3:102;
   end;
@@ -883,35 +1015,39 @@ canceled;
 theorem Th34:
   cf omega = omega
 proof
+  defpred P[set,set] means $2 c= $1;
   assume
 A1: cf omega <> omega;
   cf omega c= omega by Def2;
   then cf omega in omega by A1,CARD_1:13;
   then reconsider B = cf omega as finite set;
   set n = card B;
-  card cf omega = cf omega & n = card n &
-  card cf omega = card n by CARD_1:def 5;
+A2: for x,y st P[x,y] & P[y,x] holds x = y by XBOOLE_0:def 10;
+A3: for x,y,z st P[x,y] & P[y,z] holds P[x,z] by XBOOLE_1:1;
+  card cf omega = cf omega by CARD_1:def 5;
   then omega is_cofinal_with n by Def2;
   then consider xi being Ordinal-Sequence such that
-A2: dom xi = n & rng xi c= omega & xi is increasing &
-  omega = sup xi by ORDINAL2:def 21;
-  reconsider rxi = rng xi as finite set by A2,FINSET_1:26;
-  defpred P[set,set] means $2 c= $1;
-A3: rxi <> {} by A2,ORDINAL2:26;
-A4: for x,y st P[x,y] & P[y,x] holds x = y by XBOOLE_0:def 10;
-A5: for x,y,z st P[x,y] & P[y,z] holds P[x,z] by XBOOLE_1:1;
+A4: dom xi = n and
+A5: rng xi c= omega and
+  xi is increasing and
+A6: omega = sup xi by ORDINAL2:def 21;
+  reconsider rxi = rng xi as finite set by A4,FINSET_1:26;
+A7: rxi <> {} by A6,ORDINAL2:26;
   consider x such that
-A6: x in rxi & for y st y in rxi & y <> x holds not P[y,x]
-  from CARD_3:sch 2(A3,A4,A5);
-  reconsider x as Ordinal by A2,A6;
+A8: x in rxi & for y st y in rxi & y <> x holds not P[y,x] from CARD_3:
+  sch 2(A7,A2,A3);
+  reconsider x as Ordinal by A5,A8;
   now
     let A;
-    assume A in rng xi;
-    then A c= x or not x c= A by A6;
+    assume
+    A in rng xi;
+    then A c= x or not x c= A by A8;
     hence A in succ x by ORDINAL1:34;
   end;
-  then omega c= succ x & succ x in omega by A2,A6,ORDINAL1:41,ORDINAL2:28;
-  hence contradiction by ORDINAL1:7;
+  then
+A9: omega c= succ x by A6,ORDINAL2:28;
+  succ x in omega by A5,A8,ORDINAL1:41;
+  hence contradiction by A9,ORDINAL1:7;
 end;
 
 Lm4: 1 = card 1 by CARD_1:def 5;
@@ -921,57 +1057,64 @@ theorem Th35:
 proof
   nextcard a is_cofinal_with cf nextcard a by Def2;
   then consider xi being Ordinal-Sequence such that
-A1: dom xi = cf nextcard a & rng xi c= nextcard a &
-  xi is increasing & nextcard a = sup xi by ORDINAL2:def 21;
-A2: dom Card xi = dom xi & dom (cf nextcard a --> a) = cf nextcard a
-  by CARD_3:def 2,FUNCOP_1:19;
-  now
+A1: dom xi = cf nextcard a and
+A2: rng xi c= nextcard a and
+  xi is increasing and
+A3: nextcard a = sup xi by ORDINAL2:def 21;
+A4: card Union xi c= Sum Card xi & Sum (cf nextcard a --> a) = (cf nextcard
+  a)*` a by CARD_3:52,54;
+A5: card nextcard a = nextcard a & succ Union xi = (Union xi) +^ 1 by
+  CARD_1:def 5,ORDINAL2:48;
+A6: now
     let x;
     assume
-Z:     x in cf nextcard a;
+A7: x in cf nextcard a;
+    then reconsider A = xi.x as Ordinal;
+    xi.x in rng xi by A1,A7,FUNCT_1:def 5;
     then
-A3: (Card xi).x = card (xi.x) & (cf nextcard a --> a).x = a &
-    xi.x in rng xi by A1,CARD_3:def 2,FUNCOP_1:13,FUNCT_1:def 5;
-    reconsider A = xi.x as Ordinal by Z;
-    card (xi.x) in nextcard a by A1,A3,CARD_1:24,ORDINAL1:22;
-    hence (Card xi).x c= (cf nextcard a --> a).x by A3,CARD_3:108;
+A8: card (xi.x) in nextcard a by A2,CARD_1:24,ORDINAL1:22;
+    (Card xi).x = card (xi.x) & (cf nextcard a --> a).x = a by A1,A7,
+    CARD_3:def 2,FUNCOP_1:13;
+    hence (Card xi).x c= (cf nextcard a --> a).x by A8,CARD_3:108;
   end;
+  dom Card xi = dom xi & dom (cf nextcard a --> a) = cf nextcard a by
+  CARD_3:def 2,FUNCOP_1:19;
+  then Sum Card xi c= Sum (cf nextcard a --> a) by A1,A6,CARD_3:43;
+  then card Union xi c= (cf nextcard a)*`a by A4,XBOOLE_1:1;
   then
-A4: card Union xi c= Sum Card xi & Sum Card xi c= Sum
-  (cf nextcard a --> a) & Sum (cf nextcard a --> a) = (cf nextcard a)*`a
-  by A1,A2,CARD_3:43,52,54;
+A9: (card Union xi) +` 1 c= (cf nextcard a)*`a +` 1 by CARD_3:126;
+A10: card ((Union xi) +^ 1) = (card Union xi) +` card 1 by CARD_2:24;
   ex A st rng xi c= A by ORDINAL2:def 8;
-  then On rng xi = rng xi & sup rng xi c= succ union On rng xi &
-  union rng xi = Union xi & card Union xi c= (cf nextcard a)*`a &
-  sup rng xi = sup xi by A4,ORDINAL3:8,85,XBOOLE_1:1;
+  then On rng xi = rng xi by ORDINAL3:8;
   then
-A5: card nextcard a c= card succ Union xi &
-  card nextcard a = nextcard a & succ Union xi = (Union xi) +^ 1 &
-  (card Union xi) +` 1 c= (cf nextcard a)*`a +` 1 &
-  card ((Union xi) +^ 1) = (card Union xi) +` card 1
-  by A1,CARD_1:27,def 5,CARD_2:24,CARD_3:126,ORDINAL2:48;
-  then
-A6: nextcard a c= (cf nextcard a)*`a +` 1 &
-  cf nextcard a c= nextcard a by Def2,Lm4,XBOOLE_1:1;
-  now per cases;
-    suppose cf nextcard a = 0;
-      then (cf nextcard a)*`a = 0 & 0+`1 = 1 & 1 in nextcard a
-      by Lm1,Th25,CARD_2:29,32;
-      hence thesis by A5,Lm4,CARD_1:14;
+A11: card nextcard a c= card succ Union xi by A3,CARD_1:27,ORDINAL3:85;
+A12: cf nextcard a c= nextcard a by Def2;
+  now
+    per cases;
+    suppose
+      cf nextcard a = 0;
+      then
+A13:  (cf nextcard a)*`a = 0 by CARD_2:32;
+      0+`1 = 1 & 1 in nextcard a by Lm1,Th25,CARD_2:29;
+      hence thesis by A11,A5,A9,A10,A13,Lm4,CARD_1:14;
     end;
     suppose
-A8:   cf nextcard a <> 0;
+A14:  cf nextcard a <> 0;
       0 c= cf nextcard a by XBOOLE_1:2;
-      then 0 in cf nextcard a & 1 in a &
-      (cf nextcard a c= a or a c= cf nextcard a)
-      by A8,Lm1,Th25,CARD_1:13;
-      then (cf nextcard a)*`a = a & a+`1 = a & a in nextcard a or
-      (cf nextcard a)*`a = cf nextcard a & cf nextcard a is Aleph
-      by Th26,Th27,CARD_1:32,CARD_3:118,CARD_4:78;
-      then nextcard a c= (cf nextcard a) +` 1 & cf nextcard a is Aleph &
-      1 in cf nextcard a by A5,Lm1,Th25,CARD_1:14,XBOOLE_1:1;
-      then nextcard a c= cf nextcard a by CARD_3:118;
-      hence thesis by A6,XBOOLE_0:def 10;
+      then
+A15:  0 in cf nextcard a by A14,CARD_1:13;
+A16:  cf nextcard a c= a or a c= cf nextcard a;
+      1 in a by Lm1,Th25;
+      then
+A17:  (cf nextcard a)*`a = a & a+`1 = a & a in nextcard a or (cf nextcard
+a)*`a = cf nextcard a & cf nextcard a is Aleph by A15,A16,Th26,Th27,CARD_1:
+      32,CARD_3:118,CARD_4:78;
+      then
+      nextcard a c= (cf nextcard a) +` 1 & 1 in cf nextcard a by A11,A5,
+      A9,A10,Lm1,Th25,CARD_1:14,XBOOLE_1:1;
+      then nextcard a c= cf nextcard a by A11,A5,A9,A10,A17,Lm1,CARD_1:
+      14 ,CARD_3:118;
+      hence thesis by A12,XBOOLE_0:def 10;
     end;
   end;
   hence thesis;
@@ -980,73 +1123,85 @@ end;
 theorem Th36:
   omega c= cf a
 proof
-A1: a is_cofinal_with cf a & a is limit_ordinal by Def2;
+A1: a is_cofinal_with cf a by Def2;
+  then cf a <> {} by ORDINAL2:68;
   then
-A2: cf a is limit_ordinal by ORDINAL4:40;
-  cf a <> {} by A1,ORDINAL2:68;
-  then {} in cf a by ORDINAL3:10;
+A2: {} in cf a by ORDINAL3:10;
+  cf a is limit_ordinal by A1,ORDINAL4:40;
   hence thesis by A2,ORDINAL1:def 12;
 end;
 
 theorem
   cf 0 = 0 & cf card (n+1) = 1
-proof cf 0 c= 0 & 0 c= cf 0 by Def2,XBOOLE_1:2;
+proof
+A1: succ n is_cofinal_with 1 by ORDINAL3:86;
+  card (n+1) = n+1 & n+1 = succ n by CARD_1:def 5,NAT_1:39;
+  then cf card (n+1) c= 1 by A1,Def2;
+  then
+A2: cf card (n+1) = 1 or cf card (n+1) = 0 & {} c= n & n in succ n by
+  ORDINAL1:10,ORDINAL3:19,XBOOLE_1:2;
+  cf 0 c= 0 & 0 c= cf 0 by Def2,XBOOLE_1:2;
   hence cf 0 = 0 by XBOOLE_0:def 10;
-A1: card (n+1) = n+1 & n+1 = succ n &
-  card (n+1) is_cofinal_with cf card (n+1) &
-  succ n is_cofinal_with 1 by Def2,CARD_1:def 5,NAT_1:39,ORDINAL3:86;
-  then cf card (n+1) c= 1 by Def2;
-  then cf card (n+1) = 1 or cf card (n+1) = 0 & {} c= n &
-  n in succ n by ORDINAL1:10,ORDINAL3:19,XBOOLE_1:2;
-  hence thesis by A1,ORDINAL2:68;
+  card (n+1) is_cofinal_with cf card (n+1) by Def2;
+  hence thesis by A2,ORDINAL2:68;
 end;
 
 theorem Th38:
   X c= M & card X in cf M implies sup X in M & union X in M
 proof
-  assume
-A1: X c= M & card X in cf M;
+  assume that
+A1: X c= M and
+A2: card X in cf M;
   set A = order_type_of (RelIncl X);
-A2: sup X is_cofinal_with A & A c= M & card A = card X
-  by A1,Th15,Th16,WELLORD2:17;
+A3: card A = card X by A1,Th16;
   consider N such that
-A3: N c= card A & A is_cofinal_with N &
+A4: N c= card A and
+A5: A is_cofinal_with N and
   for C st A is_cofinal_with C holds N c= C by Th18;
-A4: N in cf M & sup X is_cofinal_with N & sup X c= sup M &
-  sup M = M by A1,A2,A3,ORDINAL1:22,ORDINAL2:26,30,ORDINAL4:39;
-  now
-    assume sup X = M;
-    then cf M c= N by A4,Def2;
-    hence contradiction by A1,A2,A3,CARD_1:14;
-  end;
+  sup X is_cofinal_with A by A1,Th15;
   then
-A5: sup X c< M by A4,XBOOLE_0:def 8;
-  hence sup X in M by ORDINAL1:21;
+A6: sup X is_cofinal_with N by A5,ORDINAL4:39;
+A7: now
+    assume
+    sup X = M;
+    then cf M c= N by A6,Def2;
+    hence contradiction by A2,A3,A4,CARD_1:14;
+  end;
   for x st x in X holds x is Ordinal by A1;
   then reconsider A = union X as Ordinal by ORDINAL1:35;
+A8: sup M = M by ORDINAL2:26;
+  sup X c= sup M by A1,ORDINAL2:30;
+  then
+A9: sup X c< M by A8,A7,XBOOLE_0:def 8;
+  hence sup X in M by ORDINAL1:21;
   A c= sup X
   proof
     let x;
-    assume x in A;
+    assume
+    x in A;
     then consider Y being set such that
-A6: x in Y & Y in X by TARSKI:def 4;
-    reconsider Y as Ordinal by A1,A6;
-    Y in sup X by A6,ORDINAL2:27;
+A10: x in Y and
+A11: Y in X by TARSKI:def 4;
+    reconsider Y as Ordinal by A1,A11;
+    Y in sup X by A11,ORDINAL2:27;
     then Y c= sup X by ORDINAL1:def 2;
-    hence thesis by A6;
+    hence thesis by A10;
   end;
-  hence thesis by A5,ORDINAL1:21,22;
+  hence thesis by A9,ORDINAL1:21,22;
 end;
 
 theorem Th39:
-  dom phi = M & rng phi c= N & M in cf N implies sup phi in N & Union phi in N
+  dom phi = M & rng phi c= N & M in cf N implies sup phi in N &
+  Union phi in N
 proof
-  assume
-A1: dom phi = M & rng phi c= N & M in cf N;
-  then card rng phi c= card M & card M = M by CARD_1:28,def 5;
-  then card rng phi in cf N & Union phi = union rng phi & sup phi = sup rng
-  phi by A1,ORDINAL1:22;
-  hence thesis by A1,Th38;
+  assume that
+A1: dom phi = M and
+A2: rng phi c= N and
+A3: M in cf N;
+A4: card M = M by CARD_1:def 5;
+  card rng phi c= card M by A1,CARD_1:28;
+  then card rng phi in cf N by A3,A4,ORDINAL1:22;
+  hence thesis by A2,Th38;
 end;
 
 registration
@@ -1069,23 +1224,20 @@ A2: a = nextcard M;
 end;
 
 theorem Th41:
-  cf a in a implies ex xi being Ordinal-Sequence st
-  dom xi = cf a & rng xi c= a & xi is increasing & a = sup xi &
-  xi is Cardinal-Function & not 0 in rng xi
+  cf a in a implies ex xi being Ordinal-Sequence st dom xi = cf a
+& rng xi c= a & xi is increasing & a = sup xi & xi is Cardinal-Function & not 0
+  in rng xi
 proof
-  assume cf a in a;
-  then
-A1: a is limit_cardinal by Th40;
   a is_cofinal_with cf a by Def2;
   then consider xi being Ordinal-Sequence such that
-A2: dom xi = cf a & rng xi c= a &
-  xi is increasing & a = sup xi by ORDINAL2:def 21;
+A1: dom xi = cf a and
+A2: rng xi c= a and
+  xi is increasing and
+A3: a = sup xi by ORDINAL2:def 21;
   deffunc f(T-Sequence) = (nextcard (xi.dom $1)) \/ nextcard sup $1;
   consider phi being T-Sequence such that
-A3: dom phi = cf a &
-  for A for psi being T-Sequence st A in cf a & psi = phi|A holds
-  phi.A = f(psi) from ORDINAL1:sch 4;
-A4: cf a = cf a & a = a & sup a = a by ORDINAL2:26;
+A4: dom phi = cf a & for A for psi being T-Sequence st A in cf a & psi =
+  phi|A holds phi.A = f(psi) from ORDINAL1:sch 4;
   phi is Ordinal-yielding
   proof
     take sup rng phi;
@@ -1093,138 +1245,150 @@ A4: cf a = cf a & a = a & sup a = a by ORDINAL2:26;
     assume
 A5: x in rng phi;
     then consider y such that
-A6: y in dom phi & x = phi.y by FUNCT_1:def 5;
+A6: y in dom phi and
+A7: x = phi.y by FUNCT_1:def 5;
     reconsider y as Ordinal by A6;
     y c= dom phi by A6,ORDINAL1:def 2;
     then dom (phi|y) = y by RELAT_1:91;
-    then x = ( nextcard (xi.y)) \/ nextcard sup (phi|y) by A3,A6;
+    then x = ( nextcard (xi.y)) \/ nextcard sup (phi|y) by A4,A6,A7;
     hence thesis by A5,ORDINAL2:27;
   end;
   then reconsider phi as Ordinal-Sequence;
-  take phi; thus dom phi = cf a by A3;
   defpred P[Ordinal] means $1 in cf a implies phi.$1 in a;
-A7: now
+  assume
+  cf a in a;
+  then
+A8: a is limit_cardinal by Th40;
+A9: now
     let A such that
-A8: for B st B in A holds P[B];
+A10: for B st B in A holds P[B];
     thus P[A]
     proof
       assume
-A9:   A in cf a;
-      then A c= dom phi by A3,ORDINAL1:def 2;
+A11:  A in cf a;
       then
-A10:  dom (phi|A) = A by RELAT_1:91;
+A12:  card A in cf a by CARD_1:25;
+      A c= dom phi by A4,A11,ORDINAL1:def 2;
       then
-A11:  phi.A = (nextcard (xi.A)) \/ nextcard sup (phi|A) by A3,A9;
-      xi.A in rng xi & sup xi = sup rng xi by A2,A9,FUNCT_1:def 5;
-      then card (xi.A) in a by A2,CARD_1:25;
+A13:  dom (phi|A) = A by RELAT_1:91;
+      then phi.A = (nextcard (xi.A)) \/ nextcard sup (phi|A) by A4,A11;
       then
-A12:  nextcard card (xi.A) c= a & a <> nextcard card (xi.A) &
-      nextcard card (xi.A) = nextcard (xi.A) by A1,Th9,CARD_1:def 7,CARD_3:107;
-      (phi|A).:A = rng (phi|A) by A10,RELAT_1:146;
-      then card rng (phi|A) c= card A & card A in cf a
-      by A9,CARD_1:25,CARD_2:3;
-      then
-A13:  card rng (phi|A) in cf a by ORDINAL1:22;
-      rng (phi|A) c= a
+A14:  phi.A = nextcard (xi.A) or phi.A = nextcard sup (phi|A) by
+      ORDINAL3:15;
+A15:  rng (phi|A) c= a
       proof
         let x;
-        assume x in rng (phi|A);
+        assume
+        x in rng (phi|A);
         then consider y such that
-A14:    y in dom (phi|A) & x = (phi|A).y by FUNCT_1:def 5;
-        reconsider y as Ordinal by A14;
-        x = phi.y & y in cf a by A9,A10,A14,FUNCT_1:70,ORDINAL1:19;
-        hence thesis by A8,A10,A14;
+A16:    y in dom (phi|A) and
+A17:    x = (phi|A).y by FUNCT_1:def 5;
+        reconsider y as Ordinal by A16;
+        x = phi.y & y in cf a by A11,A13,A16,A17,FUNCT_1:70,ORDINAL1:19;
+        hence thesis by A10,A13,A16;
       end;
-      then sup rng (phi|A) in a & sup rng (phi|A) = sup (phi|A) by A13,Th38;
+      (phi|A).:A = rng (phi|A) by A13,RELAT_1:146;
+      then card rng (phi|A) in cf a by A12,CARD_2:3,ORDINAL1:22;
+      then sup rng (phi|A) in a by A15,Th38;
       then card sup (phi|A) in a by CARD_1:25;
-      then nextcard card sup (phi|A) c= a & nextcard card sup (phi|A) <> a &
-      nextcard card sup (phi|A) = nextcard sup (phi|A)
-      by A1,Th9,CARD_1:def 7,CARD_3:107;
-      then (phi.A = nextcard (xi.A) or phi.A = nextcard sup (phi|A)) &
-      nextcard (xi.A) = nextcard (xi.A) &
-      nextcard sup (phi|A) = nextcard sup (phi|A) &
-      nextcard (xi.A) in a & nextcard sup (phi|A) in a
-      by A11,A12,CARD_1:13,ORDINAL3:15;
-      hence thesis;
+      then
+A18:  nextcard card sup (phi|A) c= a by CARD_3:107;
+      xi.A in rng xi by A1,A11,FUNCT_1:def 5;
+      then card (xi.A) in a by A2,CARD_1:25;
+      then
+A19:  nextcard card (xi.A) c= a by CARD_3:107;
+A20:  nextcard card sup (phi|A) <> a & nextcard card sup (phi|A) =
+      nextcard sup ( phi|A) by A8,Th9,CARD_1:def 7;
+      a <> nextcard card (xi.A) & nextcard card (xi.A) = nextcard (xi.A)
+      by A8, Th9,CARD_1:def 7;
+      hence thesis by A19,A18,A20,A14,CARD_1:13;
     end;
   end;
-A15: for A holds P[A] from ORDINAL1:sch 2(A7);
+A21: for A holds P[A] from ORDINAL1:sch 2(A9);
+A22: rng phi c= a
+  proof
+    let x;
+    assume
+    x in rng phi;
+    then ex y st y in dom phi & x = phi.y by FUNCT_1:def 5;
+    hence thesis by A4,A21;
+  end;
+  take phi;
+  thus dom phi = cf a by A4;
   thus rng phi c= a
   proof
     let x;
-    assume x in rng phi;
+    assume
+    x in rng phi;
     then ex y st y in dom phi & x = phi.y by FUNCT_1:def 5;
-    hence thesis by A3,A15;
+    hence thesis by A4,A21;
   end;
   thus phi is increasing
   proof
     let A,B;
-    assume
-A17: A in B & B in dom phi;
-    then
-A18: phi.B = ( nextcard (xi.dom (phi|B))) \/ nextcard sup (phi|B) by A3;
-A19: A in dom phi by A17,ORDINAL1:19;
+    assume that
+A23: A in B and
+A24: B in dom phi;
     reconsider C = phi.A as Ordinal;
-    C in rng (phi|B) & sup (phi|B) = sup rng (phi|B) by A17,A19,FUNCT_1:73;
-    then C in sup (phi|B) & sup (phi|B) in nextcard sup (phi|B) &
-    nextcard sup (phi|B) = nextcard sup (phi|B) by CARD_1:36,ORDINAL2:27;
-    then C in nextcard sup (phi|B) by ORDINAL1:19;
-    hence thesis by A18,XBOOLE_0:def 3;
+    A in dom phi by A23,A24,ORDINAL1:19;
+    then C in rng (phi|B) by A23,FUNCT_1:73;
+    then
+A25: C in sup (phi|B) by ORDINAL2:27;
+    sup (phi|B) in nextcard sup (phi|B) by CARD_1:36;
+    then
+A26: C in nextcard sup (phi|B) by A25,ORDINAL1:19;
+    phi.B = ( nextcard (xi.dom (phi|B))) \/ nextcard sup (phi|B) by A4,
+    A24;
+    hence thesis by A26,XBOOLE_0:def 3;
   end;
   thus a c= sup phi
   proof
     let x;
-    assume x in a;
+    assume
+    x in a;
     then reconsider x as Element of a;
     consider A such that
-A20: A in rng xi & x c= A by A2,ORDINAL2:29;
+A27: A in rng xi and
+A28: x c= A by A3,ORDINAL2:29;
     consider y such that
-A21: y in dom xi & A = xi.y by A20,FUNCT_1:def 5;
-    reconsider y as Ordinal by A21;
-    y c= cf a by A2,A21,ORDINAL1:def 2;
-    then dom (phi|y) = y by A3,RELAT_1:91;
-    then A in nextcard A & nextcard A = nextcard A &
-    phi.y = ( nextcard A) \/ nextcard sup (phi|y) by A2,A3,A21,CARD_1:36;
-    then A in phi.y by XBOOLE_0:def 3;
-    then A c= phi.y by ORDINAL1:def 2;
+A29: y in dom xi and
+A30: A = xi.y by A27,FUNCT_1:def 5;
+    reconsider y as Ordinal by A29;
+    y c= cf a by A1,A29,ORDINAL1:def 2;
+    then dom (phi|y) = y by A4,RELAT_1:91;
     then
-A22: x c= phi.y & phi.y in rng phi by A2,A3,A20,A21,FUNCT_1:def 5,XBOOLE_1:1;
+    A in nextcard A & phi.y = ( nextcard A) \/ nextcard sup (phi|y) by A1
+    ,A4,A29,A30,CARD_1:36;
+    then A in phi.y by XBOOLE_0:def 3;
+    then
+A31: A c= phi.y by ORDINAL1:def 2;
+    phi.y in rng phi by A1,A4,A29,FUNCT_1:def 5;
     then phi.y in sup phi by ORDINAL2:27;
-    hence thesis by A22,ORDINAL1:22;
+    hence thesis by A28,A31,ORDINAL1:22,XBOOLE_1:1;
   end;
-  rng phi c= a
-  proof
-    let x;
-    assume x in rng phi;
-    then ex y st y in dom phi & x = phi.y by FUNCT_1:def 5;
-    hence thesis by A3,A15;
-  end;
-  hence sup phi c= a by A4,ORDINAL2:30;
+  sup a = a by ORDINAL2:26;
+  hence sup phi c= a by A22,ORDINAL2:30;
   phi is Cardinal-yielding
   proof
     let y;
     assume
-A24: y in dom phi;
+A32: y in dom phi;
     then reconsider y as Ordinal;
-    y c= dom phi by A24,ORDINAL1:def 2;
+    y c= dom phi by A32,ORDINAL1:def 2;
     then dom (phi|y) = y by RELAT_1:91;
-    then phi.y = ( nextcard (xi.y)) \/ nextcard sup (phi|y) &
-    (( nextcard (xi.y)) \/ nextcard sup (phi|y) = nextcard (xi.y) or
-    ( nextcard (xi.y)) \/ nextcard sup (phi|y) = nextcard sup (phi|y)) &
-    nextcard (xi.y) = nextcard (xi.y) &
-    nextcard sup (phi|y) = nextcard sup (phi|y) by A3,A24,ORDINAL3:15;
-    hence thesis;
+    then phi.y = ( nextcard (xi.y)) \/ nextcard sup (phi|y) by A4,A32;
+    hence thesis by ORDINAL3:15;
   end;
   hence phi is Cardinal-Function;
-  assume 0 in rng phi;
+  assume
+  0 in rng phi;
   then consider x such that
-A25: x in dom phi & 0 = phi.x by FUNCT_1:def 5;
-  reconsider x as Ordinal by A25;
-  x c= dom phi by A25,ORDINAL1:def 2;
+A33: x in dom phi and
+A34: 0 = phi.x by FUNCT_1:def 5;
+  reconsider x as Ordinal by A33;
+  x c= dom phi by A33,ORDINAL1:def 2;
   then dom (phi|x) = x by RELAT_1:91;
-  then 0 = ( nextcard (xi.x)) \/ nextcard sup (phi|x) &
-  nextcard (xi.x) = nextcard (xi.x) &
-  nextcard sup (phi|x) = nextcard sup (phi|x) by A3,A25;
+  then 0 = ( nextcard (xi.x)) \/ nextcard sup (phi|x) by A4,A33,A34;
   then 0 = nextcard (xi.x) or 0 = nextcard sup (phi|x);
   hence contradiction by CARD_1:33;
 end;
@@ -1243,85 +1407,105 @@ reserve a,b for Aleph;
 theorem Th43:
   a c= b implies exp(a,b) = exp(2,b)
 proof
-  assume
-A1: a c= b;
-  b c= b & 2 in a & card 2 <> card 0 & a <> 0 & card 0 = 0 & card 2 = 2
-  by Lm1,Th25;
+A1: card bool a = exp(2,card a) by CARD_2:44;
+  card a = a & card a in card bool a by CARD_1:30,def 5;
   then
-A2: exp(2,b) c= exp(a,b) by CARD_3:138;
-  card a = a & card a in card bool a & card bool a = exp(2,card a)
-  by CARD_1:30,def 5,CARD_2:44;
-  then exp(a,b) c= exp(exp(2,a),b) & exp(exp(2,a),b) = exp(2,a*`b) & a*`b = b
-  by A1,Th27,CARD_2:43,CARD_3:138;
-  hence thesis by A2,XBOOLE_0:def 10;
+A2: exp(a,b) c= exp(exp(2,a),b) by A1,CARD_3:138;
+  assume
+  a c= b;
+  then
+A3: exp(exp(2,a),b) = exp(2,a*`b) & a*`b = b by Th27,CARD_2:43;
+  2 in a by Lm2,Th25;
+  then exp(2,b) c= exp(a,b) by CARD_3:138;
+  hence thesis by A2,A3,XBOOLE_0:def 10;
 end;
 
 theorem
   exp(nextcard a,b) = exp(a,b) *` nextcard a
 proof
-  now per cases by CARD_1:14;
-    suppose a in b;
-      then nextcard a c= b & b in exp(2,b) & a c= b
-      by Th23,CARD_1:13,CARD_3:107;
-      then exp(nextcard a,b) = exp(2,b) & nextcard a in exp(2,b) &
-      exp(a,b) = exp(2,b) by Th43,ORDINAL1:22;
-      hence thesis by Th27;
-    end;
-    suppose b c= a;
+  now
+    per cases by CARD_1:14;
+    suppose
+A1:   a in b;
+      then a c= b by CARD_1:13;
       then
-A1:   b in nextcard a & cf nextcard a = nextcard a by Th35,CARD_3:108;
+A2:   exp(a,b) = exp(2,b) by Th43;
+      nextcard a c= b by A1,CARD_3:107;
+      then exp(nextcard a,b) = exp(2,b) & nextcard a in exp(2,b) by Th23,
+      Th43, ORDINAL1:22;
+      hence thesis by A2,Th27;
+    end;
+    suppose
+A3:   b c= a;
       deffunc f(Ordinal) = Funcs(b,$1);
       consider phi being T-Sequence such that
-A2:   dom phi = nextcard a &
-      for A st A in nextcard a holds phi.A = f(A) from ORDINAL2:sch 2;
+A4:   dom phi = nextcard a & for A st A in nextcard a holds phi.A = f
+      (A) from ORDINAL2:sch 2;
+A5:   cf nextcard a = nextcard a by Th35;
+A6:   b in nextcard a by A3,CARD_3:108;
       Funcs(b,nextcard a) c= Union phi
       proof
         let x;
-        assume x in Funcs(b,nextcard a);
-        then consider f be Function such that
-A3:     x = f & dom f = b & rng f c= nextcard a by FUNCT_2:def 2;
-        reconsider f as T-Sequence by A3,ORDINAL1:def 7;
-        reconsider f as Ordinal-Sequence by A3,ORDINAL2:def 8;
-        sup f in nextcard a & rng f c= sup f by A1,A3,Th39,ORDINAL2:67;
-        then f in Funcs(b,sup f) & phi.sup f = Funcs(b,sup f) &
-        Union phi = union rng phi & phi.sup f in rng phi
-        by A2,A3,FUNCT_1:def 5,FUNCT_2:def 2;
-        hence thesis by A3,TARSKI:def 4;
-      end;
-      then card Funcs(b,nextcard a) c= card Union phi &
-      card Funcs(b,nextcard a) = exp(nextcard a,b) & card Union phi c= Sum
-      Card phi by CARD_1:27,CARD_2:def 3,CARD_3:54;
-      then
-A4:   exp(nextcard a,b) c= Sum Card phi & dom Card phi = dom phi &
-      dom (nextcard a --> exp(a,b)) = nextcard a
-      by CARD_3:def 2,FUNCOP_1:19,XBOOLE_1:1;
-      now
-        let x;
         assume
-A5:     x in nextcard a;
+        x in Funcs(b,nextcard a);
+        then consider f be Function such that
+A7:     x = f and
+A8:     dom f = b and
+A9:     rng f c= nextcard a by FUNCT_2:def 2;
+        reconsider f as T-Sequence by A8,ORDINAL1:def 7;
+        reconsider f as Ordinal-Sequence by A9,ORDINAL2:def 8;
+        sup f in nextcard a by A6,A5,A8,A9,Th39;
+        then
+A10:    phi.sup f in rng phi by A4,FUNCT_1:def 5;
+        rng f c= sup f by ORDINAL2:67;
+        then
+A11:    f in Funcs(b,sup f) by A8,FUNCT_2:def 2;
+        phi.sup f = Funcs(b,sup f) by A6,A5,A4,A8,A9,Th39;
+        hence thesis by A7,A11,A10,TARSKI:def 4;
+      end;
+      then
+A12:  card Funcs(b,nextcard a) c= card Union phi by CARD_1:27;
+      card Funcs(b,nextcard a) = exp(nextcard a,b) & card Union phi c=
+      Sum Card phi by CARD_2:def 3,CARD_3:54;
+      then
+A13:  exp(nextcard a,b) c= Sum Card phi by A12,XBOOLE_1:1;
+      a in nextcard a by CARD_1:32;
+      then
+A14:  exp(nextcard a,b) *` exp(nextcard a,b) = exp(nextcard a,b) & exp(a,
+      b) c= exp (nextcard a,b) by CARD_3:138,CARD_4:77;
+      exp(nextcard a,1) = nextcard a & 1 in b by Lm1,Th25,CARD_2:40;
+      then nextcard a c= exp(nextcard a,b) by CARD_3:138;
+      then
+A15:  exp(a,b)*`nextcard a c= exp(nextcard a,b) by A14,CARD_3:136;
+A16:  now
+        let x;
+A17:    card card x = card x & card b = card b;
+        assume
+A18:    x in nextcard a;
         then reconsider x' = x as Ordinal;
-A6:     (nextcard a --> exp(a,b)).x = exp(a,b) & Card phi.x = card (phi.x) &
-        phi.x' = Funcs(b,x') by A2,A5,CARD_3:def 2,FUNCOP_1:13;
-A7:     card card x = card x & card x' c= x' & card b = card b by CARD_1:24;
-        card x in nextcard a by A5,CARD_1:24,ORDINAL1:22;
+A19:    phi.x' = Funcs(b,x') by A4,A18;
+        card x in nextcard a by A18,CARD_1:24,ORDINAL1:22;
         then card x c= a by CARD_3:108;
         then Funcs(b,card x) c= Funcs(b,a) by FUNCT_5:63;
-        then card Funcs(b,card x) c= card Funcs(b,a) &
-        card Funcs(b,a) = exp(a,b) by CARD_1:27,CARD_2:def 3;
-        hence Card phi.x c= (nextcard a --> exp(a,b)).x by A6,A7,FUNCT_5:68;
+        then
+A20:    card Funcs(b,card x) c= card Funcs(b,a) by CARD_1:27;
+A21:    card Funcs(b,a) = exp(a,b) by CARD_2:def 3;
+        (nextcard a --> exp(a,b)).x = exp(a,b) & Card phi.x = card (phi.x
+        ) by A4,A18,CARD_3:def 2,FUNCOP_1:13;
+        hence Card phi.x c= (nextcard a --> exp(a,b)).x by A19,A17,A20,A21,
+        FUNCT_5:68;
       end;
-      then Sum Card phi c= Sum (nextcard a --> exp(a,b)) &
-      Sum (nextcard a --> exp(a,b)) = (nextcard a)*`exp(a,b) &
-      (nextcard a)*`exp(a,b) = exp(a,b)*`(nextcard a) by A2,A4,CARD_3:43,52;
+      dom Card phi = dom phi & dom (nextcard a --> exp(a,b)) = nextcard a
+      by CARD_3:def 2,FUNCOP_1:19;
       then
-A8:   exp(nextcard a,b) c= exp(a,b)*`nextcard a by A4,XBOOLE_1:1;
-      a in nextcard a & b c= b & a <> 0 & exp(nextcard a,1) = nextcard a &
-      nextcard a <> 0 & 1 in b by Lm1,Th25,CARD_1:32,CARD_2:40;
-      then exp(nextcard a,b) *` exp(nextcard a,b) = exp(nextcard a,b) &
-      exp(a,b) c= exp(nextcard a,b) & nextcard a c= exp(nextcard a,b)
-      by CARD_3:138,CARD_4:77;
-      then exp(a,b)*`nextcard a c= exp(nextcard a,b) by CARD_3:136;
-      hence thesis by A8,XBOOLE_0:def 10;
+A22:  Sum Card phi c= Sum (nextcard a --> exp(a,b)) by A4,
+      A16,CARD_3
+      :43;
+      Sum (nextcard a --> exp(a,b)) = (nextcard a)*`exp(a,b) by CARD_3:52;
+      then exp(nextcard a,b) c= exp(a,b)*`nextcard a by A13,A22,
+      XBOOLE_1:
+      1;
+      hence thesis by A15,XBOOLE_0:def 10;
     end;
   end;
   hence thesis;
@@ -1332,319 +1516,386 @@ theorem Th45:
 proof
   set X = { c where c is Element of a: c is Cardinal};
   set f = X --> exp(a,b);
-A1: X c= a
+  X c= a
   proof
     let x;
-    assume x in X;
+    assume
+    x in X;
     then ex c being Element of a st x = c & c is Cardinal;
     hence thesis;
   end;
-A2: now
-    let x;
-    assume
-A3: x in X;
-    then consider c being Element of a such that
-A4: x = c & c is Cardinal;
-    reconsider c as Cardinal by A4;
-    f.x = exp(a,b) & (b-powerfunc_of a).x = exp(c,b) & exp(c,b) c= exp( a, b
-    ) by A3,A4,Def3,CARD_3:139,FUNCOP_1:13;
-    hence (b-powerfunc_of a).x c= f.x;
-  end;
-A5: dom f = X & dom (b-powerfunc_of a) = X
-  proof thus dom f = X by FUNCOP_1:19;
+  then
+A1: f c= a --> exp(a,b) by FUNCT_4:5;
+  Sum (a --> exp(a,b)) = a*`exp( a,b) by CARD_3:52;
+  then
+A2: Sum f c= a*`exp(a,b) by A1,CARD_3:46;
+A3: dom f = X & dom (b-powerfunc_of a) = X
+  proof
+    thus dom f = X by FUNCOP_1:19;
     thus dom (b-powerfunc_of a) c= X
     proof
       let x;
-      assume x in dom (b-powerfunc_of a);
+      assume
+      x in dom (b-powerfunc_of a);
       then x in a & x is Cardinal by Def3;
       hence thesis;
     end;
     let x;
-    assume x in X;
+    assume
+    x in X;
     then ex c being Element of a st x = c & c is Cardinal;
     hence thesis by Def3;
   end;
-  1 in b & a <> 0 & exp(a,1) = a by Lm1,Th25,CARD_2:40;
-  then f c= a --> exp(a,b) & a c= exp(a,b) & Sum (a --> exp(a,b)) = a*`exp(
-  a,b) by A1,CARD_3:52,139,FUNCT_4:5;
-  then Sum (b-powerfunc_of a) c= Sum f & Sum
-  f c= a*`exp(a,b) & a*`exp(a,b) = exp(a,b) by A2,A5,Th27,CARD_3:43,46;
-  hence thesis by XBOOLE_1:1;
-end;
-
-theorem
-  a is limit_cardinal & b in cf a implies exp(a,b) = Sum (b-powerfunc_of a)
-proof
-  assume
-A1: a is limit_cardinal & b in cf a;
-  deffunc f(Ordinal) = Funcs(b,$1);
-  consider L being T-Sequence such that
-A2: dom L = a & for A st A in a holds L.A = f(A) from ORDINAL2:sch 2;
-  Funcs(b,a) c= Union L
-  proof
-    let x;
-    assume x in Funcs(b,a);
-    then consider f such that
-A3: x = f & dom f = b & rng f c= a by FUNCT_2:def 2;
-    reconsider f as T-Sequence by A3,ORDINAL1:def 7;
-    reconsider f as Ordinal-Sequence by A3,ORDINAL2:def 8;
-    sup f in a & rng f c= sup f by A1,A3,Th39,ORDINAL2:67;
-    then x in Funcs(b,sup f) & L.sup f = Funcs(b,sup f) & L.sup f in rng L
-    by A2,A3,FUNCT_1:def 5,FUNCT_2:def 2;
-    hence thesis by TARSKI:def 4;
-  end;
-  then card Funcs(b,a) c= card Union L & card Union L c= Sum Card L
-  by CARD_1:27,CARD_3:54;
-  then card Funcs(b,a) c= Sum Card L by XBOOLE_1:1;
+  1 in b & exp(a,1) = a by Lm1,Th25,CARD_2:40;
+  then a c= exp(a,b) by CARD_3:139;
   then
-A4: exp(a,b) c= Sum Card L by CARD_2:def 3;
-A5: Sum (b-powerfunc_of a) c= exp(a,b) by Th45;
-A6: dom (a --> Sum (b-powerfunc_of a)) = a & dom Card L = dom L
-  by CARD_3:def 2,FUNCOP_1:19;
+A4: a*`exp(a,b) = exp(a,b) by Th27;
   now
     let x;
     assume
-A7: x in a;
+A5: x in X;
+    then consider c being Element of a such that
+A6: x = c and
+A7: c is Cardinal;
+    reconsider c as Cardinal by A7;
+A8: f.x = exp(a,b) by A5,FUNCOP_1:13;
+    (b-powerfunc_of a).x = exp(c,b) by A6,Def3;
+    hence (b-powerfunc_of a).x c= f.x by A8,CARD_3:139;
+  end;
+  then Sum (b-powerfunc_of a) c= Sum f by A3,CARD_3:43;
+  hence thesis by A2,A4,XBOOLE_1:1;
+end;
+
+theorem
+  a is limit_cardinal & b in cf a implies exp(a,b) = Sum (b-powerfunc_of
+  a)
+proof
+  assume that
+A1: a is limit_cardinal and
+A2: b in cf a;
+  deffunc f(Ordinal) = Funcs(b,$1);
+  consider L being T-Sequence such that
+A3: dom L = a & for A st A in a holds L.A = f(A) from ORDINAL2:sch 2;
+A4: now
+    let x;
+A5: card Union (b-powerfunc_of a) c= Sum (b-powerfunc_of a) by CARD_3:55;
+    assume
+A6: x in a;
     then reconsider x' = x as Ordinal;
     set m = card x';
-    b,b are_equipotent & x',m are_equipotent by CARD_1:def 5;
-    then L.x = Funcs(b,x') & (Card L).x = card (L.x) &
-    card Funcs(b,x') = card Funcs(b,card x') & card x' c= x'
-    by A2,A7,CARD_1:24,CARD_3:def 2,FUNCT_5:67;
-    then
-A8: (Card L).x = exp(m,b) & m in a by A7,CARD_2:def 3,ORDINAL1:22;
+A7: m in a by A6,CARD_1:24,ORDINAL1:22;
     then m in dom (b-powerfunc_of a) by Def3;
-    then (b-powerfunc_of a).(card x) = exp(card x,b) &
-    (b-powerfunc_of a).(card x) in rng (b-powerfunc_of a)
-    by A8,Def3,FUNCT_1:def 5;
-    then card exp(card x,b) c= card Union (b-powerfunc_of a) &
-    card Union (b-powerfunc_of a) c= Sum (b-powerfunc_of a)
-    by CARD_1:27,CARD_3:55,ZFMISC_1:92;
-    then card exp(card x,b) c= Sum (b-powerfunc_of a) &
-    card exp(card x,b) = exp(card x,b) by CARD_1:def 5,XBOOLE_1:1;
-    hence (Card L).x c= (a --> Sum (b-powerfunc_of a)).x by A7,A8,FUNCOP_1:13;
+    then
+A8: (b-powerfunc_of a).(card x) in rng (b-powerfunc_of a) by
+    FUNCT_1
+    :def 5;
+    x',m are_equipotent by CARD_1:def 5;
+    then
+A9: card Funcs(b,x') = card Funcs(b,card x') by FUNCT_5:67;
+    L.x = Funcs(b,x') & (Card L).x = card (L.x) by A3,A6,CARD_3:def 2;
+    then
+A10: (Card L).x = exp(m,b) by A9,CARD_2:def 3;
+    (b-powerfunc_of a).(card x) = exp(card x,b) by A7,Def3;
+    then card exp(card x,b) c= card Union (b-powerfunc_of a) by
+    A8,CARD_1
+    :27 ,ZFMISC_1:92;
+    then
+A11: card exp(card x,b) c= Sum (b-powerfunc_of a) by A5,XBOOLE_1:1;
+    card exp(card x,b) = exp(card x,b) by CARD_1:def 5;
+    hence (Card L).x c= (a --> Sum (b-powerfunc_of a)).x by A6,A10,A11,
+    FUNCOP_1:13;
   end;
-  then Sum Card L c= Sum (a --> Sum (b-powerfunc_of a)) &
-  Sum (a --> Sum (b-powerfunc_of a)) = a*`Sum (b-powerfunc_of a)
-  by A2,A6,CARD_3:43,52;
+  dom (a --> Sum (b-powerfunc_of a)) = a & dom Card L = dom L by CARD_3:
+  def 2 ,FUNCOP_1:19;
   then
-A9: exp(a,b) c= a*`Sum (b-powerfunc_of a) by A4,XBOOLE_1:1;
+A12: Sum Card L c= Sum (a --> Sum (b-powerfunc_of a)) by A3,A4,CARD_3:
+  43;
   a c= Sum (b-powerfunc_of a)
   proof
     let x;
     assume
-A10: x in a;
+A13: x in a;
     then reconsider x' = x as Ordinal;
     set m = card x';
-    m in a by A10,CARD_1:24,ORDINAL1:22;
-    then nextcard m c= a & nextcard m <> a by A1,CARD_1:def 7,CARD_3:107;
+    m in a by A13,CARD_1:24,ORDINAL1:22;
     then
-A11: nextcard m in a by CARD_1:13;
+A14: nextcard m c= a by CARD_3:107;
+    nextcard m <> a by A1,CARD_1:def 7;
+    then
+A15: nextcard m in a by A14,CARD_1:13;
     then nextcard m in dom (b-powerfunc_of a) by Def3;
-    then (b-powerfunc_of a).(nextcard m) in rng (b-powerfunc_of a) &
-    (b-powerfunc_of a).(nextcard m) = exp(nextcard m,b)
-    by A11,Def3,FUNCT_1:def 5;
-    then exp(nextcard m,b) c= Union (b-powerfunc_of a) by ZFMISC_1:92;
-    then card exp(nextcard m,b) = exp(nextcard m,b) &
-    card exp(nextcard m,b) c= card Union (b-powerfunc_of a) &
-    card Union (b-powerfunc_of a) c= Sum (b-powerfunc_of a)
-    by CARD_1:27,def 5,CARD_3:55;
-    then exp(nextcard m,b) c= Sum (b-powerfunc_of a) &
-    nextcard m c= exp(nextcard m,b) by Th31,XBOOLE_1:1;
     then
-A12: nextcard card x c= Sum (b-powerfunc_of a) by XBOOLE_1:1;
+A16: (b-powerfunc_of a).(nextcard m) in rng (b-powerfunc_of a) by
+    FUNCT_1:def 5;
+    (b-powerfunc_of a).(nextcard m) = exp(nextcard m,b) by A15,Def3;
+    then
+A17: card exp(nextcard m,b) c= card Union (b-powerfunc_of a) by A16,
+    CARD_1:27,ZFMISC_1:92;
+A18: nextcard m c= exp(nextcard m,b) by Th31;
     card x = card card x;
-    then x' in nextcard x' & nextcard card x = nextcard x by CARD_1:36
-,CARD_3:105;
-    hence thesis by A12;
+    then
+A19: x' in nextcard x' & nextcard card x = nextcard x by CARD_1:36 ,
+    CARD_3:105;
+    card exp(nextcard m,b) = exp(nextcard m,b) & card Union (b
+    -powerfunc_of a) c= Sum (b-powerfunc_of a) by CARD_1:def 5,CARD_3:55;
+    then exp(nextcard m,b) c= Sum (b-powerfunc_of a) by A17,XBOOLE_1:1;
+    then nextcard card x c= Sum (b-powerfunc_of a) by A18,XBOOLE_1:1;
+    hence thesis by A19;
   end;
-  then a*`Sum (b-powerfunc_of a) = Sum (b-powerfunc_of a) by Th27;
-  hence thesis by A5,A9,XBOOLE_0:def 10;
+  then
+A20: a*`Sum (b-powerfunc_of a) = Sum (b-powerfunc_of a) by Th27;
+  Funcs(b,a) c= Union L
+  proof
+    let x;
+    assume
+    x in Funcs(b,a);
+    then consider f such that
+A21: x = f and
+A22: dom f = b and
+A23: rng f c= a by FUNCT_2:def 2;
+    reconsider f as T-Sequence by A22,ORDINAL1:def 7;
+    reconsider f as Ordinal-Sequence by A23,ORDINAL2:def 8;
+    rng f c= sup f by ORDINAL2:67;
+    then
+A24: x in Funcs(b,sup f) by A21,A22,FUNCT_2:def 2;
+    sup f in a by A2,A22,A23,Th39;
+    then
+A25: L.sup f in rng L by A3,FUNCT_1:def 5;
+    L.sup f = Funcs(b,sup f) by A2,A3,A22,A23,Th39;
+    hence thesis by A24,A25,TARSKI:def 4;
+  end;
+  then
+A26: card Funcs(b,a) c= card Union L by CARD_1:27;
+  card Union L c= Sum Card L by CARD_3:54;
+  then card Funcs(b,a) c= Sum Card L by A26,XBOOLE_1:1;
+  then
+A27: exp(a,b) c= Sum Card L by CARD_2:def 3;
+A28: Sum (b-powerfunc_of a) c= exp(a,b) by Th45;
+  Sum (a --> Sum (b-powerfunc_of a)) = a*`Sum (b-powerfunc_of a) by
+  CARD_3:52;
+  then exp(a,b) c= a*`Sum (b-powerfunc_of a) by A27,A12,XBOOLE_1:1;
+  hence thesis by A28,A20,XBOOLE_0:def 10;
 end;
 
 theorem
-  cf a c= b & b in a implies exp(a,b) = exp(Sum (b-powerfunc_of a), cf a)
+  cf a c= b & b in a implies exp(a,b) = exp(Sum (b-powerfunc_of a), cf a
+  )
 proof
-  assume
-A1: cf a c= b & b in a;
-  cf a <> 0 & Sum (b-powerfunc_of a) c= exp(a,b) by Th45;
-  then
-A2: exp(Sum (b-powerfunc_of a), cf a) c= exp(exp(a,b), cf a) &
-  b*`cf a = b & exp(exp(a,b), cf a) = exp(a,b*`cf a)
-  by A1,Th27,CARD_2:43,CARD_3:139;
+  assume that
+A1: cf a c= b and
+A2: b in a;
   consider phi such that
-A3: dom phi = cf a & rng phi c= a & phi is increasing & a = sup phi &
-  phi is Cardinal-Function & not 0 in rng phi by Th41,A1,ORDINAL1:22;
-A4: exp(a,b) = card Funcs(b,a) & a = a & 0 = 0 &
-  exp(Sum (b-powerfunc_of a), cf a) = card Funcs(cf a, Sum
-  (b-powerfunc_of a)) &
-  Sum (b-powerfunc_of a) = card Union disjoin (b-powerfunc_of a) &
-  Sum (b-powerfunc_of a) = card Sum (b-powerfunc_of a) & card cf a = cf a
-  by CARD_1:def 5,CARD_2:def 3;
-  defpred R[set,set] means
-  ex g,h st g = $1 & h = $2 & dom g = b & rng g c= a &
-  dom h = cf a & for y st y in cf a ex fx st h.y = [fx,phi.y] & dom fx = b &
-  for z st z in b holds (g.z in phi.y implies fx.z = g.z) &
-  (not g.z in phi.y implies fx.z = 0);
-A5: for x st x in Funcs(b,a) ex x1 being set st R[x,x1]
+A3: dom phi = cf a and
+A4: rng phi c= a and
+  phi is increasing and
+A5: a = sup phi and
+A6: phi is Cardinal-Function and
+A7: not 0 in rng phi by A1,A2,Th41,ORDINAL1:22;
+  defpred R[set,set] means ex g,h st g = $1 & h = $2 & dom g = b & rng g c= a
+  & dom h = cf a & for y st y in cf a ex fx st h.y = [fx,phi.y] & dom fx = b &
+  for z st z in b holds (g.z in phi.y implies fx.z = g.z) & (not g.z in phi.y
+  implies fx.z = 0);
+A8: for x st x in Funcs(b,a) ex x1 being set st R[x,x1]
   proof
     let x;
-    assume x in Funcs(b,a);
+    assume
+    x in Funcs(b,a);
     then consider g such that
-A6: x = g & dom g = b & rng g c= a by FUNCT_2:def 2;
-    defpred P[set,set] means ex fx st $2 = [fx,phi.$1] & dom fx = b &
-    for z st z in b holds (g.z in phi.$1 implies fx.z = g.z) &
-    (not g.z in phi.$1 implies fx.z = 0);
-A7: for y st y in cf a ex x2 being set st P[y,x2]
+A9: x = g & dom g = b & rng g c= a by FUNCT_2:def 2;
+    defpred P[set,set] means ex fx st $2 = [fx,phi.$1] & dom fx = b & for z st
+z in b holds (g.z in phi.$1 implies fx.z = g.z) & (not g.z in phi.$1 implies fx
+    .z = 0);
+A10: for y st y in cf a ex x2 being set st P[y,x2]
     proof
-      let y such that y in cf a;
-      deffunc f(set) = g.$1;
       deffunc g(set) = 0;
+      deffunc f(set) = g.$1;
+      let y such that
+      y in cf a;
       defpred C[set] means g.$1 in phi.y;
       consider fx such that
-A8:   dom fx = b & for z st z in b holds (C[z] implies fx.z = f(z)) &
+A11:  dom fx = b & for z st z in b holds (C[z] implies fx.z = f(z)) &
       (not C[z] implies fx.z = g(z)) from PARTFUN1:sch 1;
-      take [fx,phi.y], fx; thus thesis by A8;
+      take [fx,phi.y], fx;
+      thus thesis by A11;
     end;
     consider h such that
-A9: dom h = cf a & for y st y in cf a holds P[y,h.y] from CLASSES1:sch 1 (A7);
-    take h, g, h; thus thesis by A6,A9;
+A12: dom h = cf a & for y st y in cf a holds P[y,h.y] from CLASSES1:
+    sch 1 ( A10);
+    take h, g, h;
+    thus thesis by A9,A12;
   end;
   consider f such that
-A10: dom f = Funcs(b,a) & for x st x in Funcs(b,a) holds R[x,f.x]
-  from CLASSES1:sch 1(A5);
-A11: f is one-to-one
-  proof
-    let x,y;
-    assume
-A12: x in dom f & y in dom f & f.x = f.y;
-    then consider g1, h1 being Function such that
-A13: g1 = x & h1 = f.x & dom g1 = b & rng g1 c= a & dom h1 = cf a &
-    for x1 being set st x1 in cf a ex fx st h1.x1 = [fx,phi.x1] & dom fx = b &
-    for z st z in b holds (g1.z in phi.x1 implies fx.z = g1.z) &
-    (not g1.z in phi.x1 implies fx.z = 0) by A10;
-    consider g2, h2 being Function such that
-A14: g2 = y & h2 = f.y & dom g2 = b & rng g2 c= a & dom h2 = cf a &
-    for x2 being set st x2 in cf a ex fx st h2.x2 = [fx,phi.x2] & dom fx = b &
-    for z st z in b holds (g2.z in phi.x2 implies fx.z = g2.z) &
-    (not g2.z in phi.x2 implies fx.z = 0) by A10,A12;
-    now
-      let x1 be set;
-      assume x1 in b;
-      then reconsider X = x1 as Element of b;
-      g1.X in rng g1 & g2.X in rng g2 by A13,A14,FUNCT_1:def 5;
-      then reconsider A1 = g1.x1, A2 = g2.x1 as Element of a by A13,A14;
-      set A = A1 \/ A2;
-      (A = A1 or A = A2) & a is limit_ordinal
-      by ORDINAL3:15;
-      then succ A in a & sup phi = sup rng phi by ORDINAL1:41;
-      then consider B such that
-A15:  B in rng phi & succ A c= B by A3,ORDINAL2:29;
-      consider x2 being set such that
-A16:  x2 in dom phi & B = phi.x2 by A15,FUNCT_1:def 5;
-      consider f1 being Function such that
-A17:  h1.x2 = [f1,phi.x2] & dom f1 = b &
-      for z st z in b holds (g1.z in phi.x2 implies f1.z = g1.z) &
-      (not g1.z in phi.x2 implies f1.z = 0) by A3,A13,A16;
-      consider f2 being Function such that
-A18:  h2.x2 = [f2,phi.x2] & dom f2 = b &
-      for z st z in b holds (g2.z in phi.x2 implies f2.z = g2.z) &
-      (not g2.z in phi.x2 implies f2.z = 0) by A3,A14,A16;
-      A1 c= A & A2 c= A & A in succ A by ORDINAL1:10,XBOOLE_1:7;
-      then A1 in B & A2 in B & f1 = f2
-      by A12,A13,A14,A15,A17,A18,ORDINAL1:22,ZFMISC_1:33;
-      then f1.X = g1.x1 & f1.X = g2.x1 by A16,A17,A18;
-      hence g1.x1 = g2.x1;
-    end;
-    hence thesis by A13,A14,FUNCT_1:9;
-  end;
+A13: dom f = Funcs(b,a) & for x st x in Funcs(b,a) holds R[x,f.x] from
+  CLASSES1:sch 1(A8);
   deffunc f(set) = Funcs(b,$1);
   consider F being Function such that
-A19: dom F = dom (b-powerfunc_of a) &
-  for x st x in dom (b-powerfunc_of a) holds F.x = f(x) from FUNCT_1:sch 3;
-  rng f c= Funcs(cf a, Union disjoin F)
+A14: dom F = dom (b-powerfunc_of a) & for x st x in dom (b-powerfunc_of
+  a) holds F.x = f(x) from FUNCT_1:sch 3;
+A15: rng f c= Funcs(cf a, Union disjoin F)
   proof
     let y;
-    assume y in rng f;
+    assume
+    y in rng f;
     then consider x such that
-A20: x in dom f & y = f.x by FUNCT_1:def 5;
+A16: x in dom f and
+A17: y = f.x by FUNCT_1:def 5;
     consider g,h such that
-A21: g = x & h = f.x & dom g = b & rng g c= a &
-    dom h = cf a & for y st y in cf a ex fx st h.y = [fx,phi.y] & dom fx = b &
-    for z st z in b holds (g.z in phi.y implies fx.z = g.z) &
-    (not g.z in phi.y implies fx.z = 0) by A10,A20;
+    g = x and
+A18: h = f.x and
+    dom g = b and
+    rng g c= a and
+A19: dom h = cf a and
+A20: for y st y in cf a ex fx st h.y = [fx,phi.y] & dom fx = b & for z
+st z in b holds (g.z in phi.y implies fx.z = g.z) & (not g.z in phi.y implies
+    fx.z = 0) by A13,A16;
     rng h c= Union disjoin F
     proof
       let x1 be set;
-      assume x1 in rng h;
+      assume
+      x1 in rng h;
       then consider x2 being set such that
-A22:  x2 in dom h & x1 = h.x2 by FUNCT_1:def 5;
+A21:  x2 in dom h and
+A22:  x1 = h.x2 by FUNCT_1:def 5;
       consider fx such that
-A23:  x1 = [fx,phi.x2] & dom fx = b &
-      for z st z in b holds (g.z in phi.x2 implies fx.z = g.z) &
-      (not g.z in phi.x2 implies fx.z = 0) by A21,A22;
+A23:  x1 = [fx,phi.x2] and
+A24:  dom fx = b and
+A25:  for z st z in b holds (g.z in phi.x2 implies fx.z = g.z) & (not
+      g.z in phi.x2 implies fx.z = 0) by A19,A20,A21,A22;
       rng fx c= phi.x2
       proof
+        reconsider x2 as Ordinal by A19,A21;
         let z;
-        assume z in rng fx;
-        then consider z' being set such that
-A24:    z' in dom fx & z = fx.z' by FUNCT_1:def 5;
-        reconsider x2 as Ordinal by A21,A22;
         reconsider A = phi.x2 as Ordinal;
-        (g.z' in phi.x2 or not g.z' in phi.x2) & A <> 0 by A3,A21,A22,
-FUNCT_1:def 5;
-        then (z = g.z' & g.z' in phi.x2 or z = 0) & 0 in A
-        by A23,A24,ORDINAL3:10;
-        hence thesis;
+        assume
+        z in rng fx;
+        then consider z' being set such that
+A26:    z' in dom fx & z = fx.z' by FUNCT_1:def 5;
+A27:    z = g.z' & g.z' in phi.x2 or z = 0 by A24,A25,A26;
+        A <> 0 by A3,A7,A19,A21,FUNCT_1:def 5;
+        hence thesis by A27,ORDINAL3:10;
       end;
       then
-A25:  fx in Funcs(b,phi.x2) by A23,FUNCT_2:def 2;
-      phi.x2 in rng phi by A3,A21,A22,FUNCT_1:def 5;
-      then phi.x2 is Cardinal & phi.x2 in a by A3,A21,A22,CARD_3:def 1;
+A28:  fx in Funcs(b,phi.x2) by A24,FUNCT_2:def 2;
+A29:  [fx,phi.x2]`1 = fx & [fx,phi.x2]`2 = phi.x2 by MCART_1:7;
+      phi.x2 in rng phi & phi.x2 is Cardinal by A3,A6,A19,A21,CARD_3:
+      def 1 ,FUNCT_1:def 5;
       then
-A26:  phi.x2 in dom (b-powerfunc_of a) by Def3;
-      then F.(phi.x2) = Funcs(b,phi.x2) & [fx,phi.x2]`1 = fx &
-      [fx,phi.x2]`2 = phi.x2 by A19,MCART_1:7;
-      hence thesis by A19,A23,A25,A26,CARD_3:33;
+A30:  phi.x2 in dom (b-powerfunc_of a) by A4,Def3;
+      then F.(phi.x2) = Funcs(b,phi.x2) by A14;
+      hence thesis by A14,A23,A28,A30,A29,CARD_3:33;
     end;
-    hence thesis by A20,A21,FUNCT_2:def 2;
+    hence thesis by A17,A18,A19,FUNCT_2:def 2;
   end;
+  card card Union disjoin F = card Union disjoin F & card cf a = cf a by
+  CARD_1:def 5;
   then
-A27: exp(a,b) c= card Funcs(cf a, Union disjoin F) by A4,A10,A11,CARD_1:26;
-  card card Union disjoin F = card Union disjoin F & card cf a = cf a
-  by CARD_1:def 5;
-  then
-A28: card Funcs(cf a, Union disjoin F)
-  = card Funcs(cf a, card Union disjoin F) by FUNCT_5:68
+A31: card Funcs(cf a, Union disjoin F) = card Funcs(cf a, card Union
+  disjoin F) by FUNCT_5:68
     .= exp(card Union disjoin F, cf a) by CARD_2:def 3;
-A29: dom Card disjoin F = dom disjoin F & dom disjoin F = dom F &
-  dom Card F = dom F by CARD_3:def 2,def 3;
-  now
-    let x;
-    assume x in dom F;
-    then (Card F).x = card (F.x) & (Card disjoin F).x = card ((disjoin F).x)
-    & (disjoin F).x = [:F.x,{x}:] by A29,CARD_3:def 2,def 3;
-    hence (Card disjoin F).x = (Card F).x by CARD_2:13;
+A32: dom Card F = dom F by CARD_3:def 2;
+A33: f is one-to-one
+  proof
+    let x,y;
+    assume that
+A34: x in dom f and
+A35: y in dom f and
+A36: f.x = f.y;
+    consider g1, h1 being Function such that
+A37: g1 = x and
+A38: h1 = f.x and
+A39: dom g1 = b and
+A40: rng g1 c= a and
+    dom h1 = cf a and
+A41: for x1 being set st x1 in cf a ex fx st h1.x1 = [fx,phi.x1] & dom
+fx = b & for z st z in b holds (g1.z in phi.x1 implies fx.z = g1.z) & (not g1.z
+    in phi.x1 implies fx.z = 0) by A13,A34;
+    consider g2, h2 being Function such that
+A42: g2 = y and
+A43: h2 = f.y and
+A44: dom g2 = b and
+A45: rng g2 c= a and
+    dom h2 = cf a and
+A46: for x2 being set st x2 in cf a ex fx st h2.x2 = [fx,phi.x2] & dom
+fx = b & for z st z in b holds (g2.z in phi.x2 implies fx.z = g2.z) & (not g2.z
+    in phi.x2 implies fx.z = 0) by A13,A35;
+    now
+      let x1 be set;
+      assume
+      x1 in b;
+      then reconsider X = x1 as Element of b;
+      g1.X in rng g1 & g2.X in rng g2 by A39,A44,FUNCT_1:def 5;
+      then reconsider A1 = g1.x1, A2 = g2.x1 as Element of a by A40,A45;
+      set A = A1 \/ A2;
+      A = A1 or A = A2 by ORDINAL3:15;
+      then succ A in a by ORDINAL1:41;
+      then consider B such that
+A47:  B in rng phi and
+A48:  succ A c= B by A5,ORDINAL2:29;
+      consider x2 being set such that
+A49:  x2 in dom phi and
+A50:  B = phi.x2 by A47,FUNCT_1:def 5;
+A51:  A in succ A by ORDINAL1:10;
+      then
+A52:  A2 in B by A48,ORDINAL1:22,XBOOLE_1:7;
+      consider f1 being Function such that
+A53:  h1.x2 = [f1,phi.x2] and
+      dom f1 = b and
+A54:  for z st z in b holds (g1.z in phi.x2 implies f1.z = g1.z) & (
+      not g1.z in phi.x2 implies f1.z = 0) by A3,A41,A49;
+      A1 in B by A48,A51,ORDINAL1:22,XBOOLE_1:7;
+      then
+A55:  f1.X = g1.x1 by A50,A54;
+      consider f2 being Function such that
+A56:  h2.x2 = [f2,phi.x2] and
+      dom f2 = b and
+A57:  for z st z in b holds (g2.z in phi.x2 implies f2.z = g2.z) & (
+      not g2.z in phi.x2 implies f2.z = 0) by A3,A46,A49;
+      f1 = f2 by A36,A38,A43,A53,A56,ZFMISC_1:33;
+      hence g1.x1 = g2.x1 by A50,A57,A52,A55;
+    end;
+    hence thesis by A37,A39,A42,A44,FUNCT_1:9;
   end;
-  then
-A30: Card F = Card disjoin F by A29,FUNCT_1:9;
+A58: dom disjoin F = dom F by CARD_3:def 3;
+A59: now
+    let x;
+    assume
+A60: x in dom F;
+    then
+A61: (disjoin F).x = [:F.x,{x}:] by CARD_3:def 3;
+    (Card F).x = card (F.x) & (Card disjoin F).x = card ((disjoin F).x)
+    by A58,A60,CARD_3:def 2;
+    hence (Card disjoin F).x = (Card F).x by A61,CARD_2:13;
+  end;
   now
     let x;
     assume
-A31: x in dom F;
+A62: x in dom F;
+    then reconsider M = x as Cardinal by A14,Def3;
+    M in a by A14,A62,Def3;
     then
-A32: (Card F).x = card (F.x) & F.x = Funcs(b,x) by A19,CARD_3:def 2;
-    reconsider M = x as Cardinal by A19,A31,Def3;
-    M in a by A19,A31,Def3;
-    then (b-powerfunc_of a).M = exp(M,b) by Def3;
-    hence (Card F).x = (b-powerfunc_of a).x by A32,CARD_2:def 3;
+A63: (b-powerfunc_of a).M = exp(M,b) by Def3;
+    (Card F).x = card (F.x) & F.x = Funcs(b,x) by A14,A62,CARD_3:def 2;
+    hence (Card F).x = (b-powerfunc_of a).x by A63,CARD_2:def 3;
   end;
-  then Card F = b-powerfunc_of a by A19,A29,FUNCT_1:9;
-  then cf a <> 0 & card Union disjoin F c= Sum (b-powerfunc_of a)
-  by A30,CARD_3:54;
-  then exp(card Union disjoin F, cf a) c= exp(Sum (b-powerfunc_of a), cf a)
+  then
+A64: Card F = b-powerfunc_of a by A14,A32,FUNCT_1:9;
+  dom Card disjoin F = dom disjoin F by CARD_3:def 2;
+  then Card F = Card disjoin F by A58,A32,A59,FUNCT_1:9;
+  then card Union disjoin F c= Sum (b-powerfunc_of a) by A64,CARD_3:54;
+  then
+A65: exp(card Union disjoin F, cf a) c= exp(Sum (b-powerfunc_of a), cf a)
   by CARD_3:139;
-  then exp(a,b) c= exp(Sum (b-powerfunc_of a), cf a) by A27,A28,XBOOLE_1:1;
-  hence thesis by A2,XBOOLE_0:def 10;
+  exp(a,b) = card Funcs(b,a) by CARD_2:def 3;
+  then exp(a,b) c= card Funcs(cf a, Union disjoin F) by A13,A33,A15,
+  CARD_1:26;
+  then
+A66: exp(exp(a,b), cf a) = exp(a,b*`cf a) & exp(a,b) c= exp(Sum (b
+  -powerfunc_of a ), cf a) by A31,A65,CARD_2:43,XBOOLE_1:1;
+  Sum (b-powerfunc_of a) c= exp(a,b) by Th45;
+  then
+A67: exp(Sum (b-powerfunc_of a), cf a) c= exp(exp(a,b), cf a) by CARD_3:
+  139;
+  b*`cf a = b by A1,Th27;
+  hence thesis by A67,A66,XBOOLE_0:def 10;
 end;
 

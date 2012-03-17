@@ -11,6 +11,7 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -26,7 +27,7 @@
 <Func kind="K" nr="68"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="115">
+<Func kind="K" nr="123">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -35,14 +36,14 @@
 </FCluster>
 <FCluster aid="URYSOHN1" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="116"/>
+<Func kind="K" nr="124"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster aid="URYSOHN1" nr="3">
 <ArgTypes/>
-<Func kind="K" nr="117"/>
+<Func kind="K" nr="125"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>

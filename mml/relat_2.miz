@@ -28,22 +28,28 @@ definition
   x in X implies not [x,x] in R;
   pred R is_symmetric_in X means
   :Def3:
-  x in X & y in X & [x,y] in R implies [y,x] in R;
+  x in X & y in X & [x,y] in R implies [
+  y,x] in R;
   pred R is_antisymmetric_in X means
   :Def4:
-  x in X & y in X & [x,y] in R & [y,x] in R implies x = y;
+  x in X & y in X & [x,y] in R & [y,
+  x] in R implies x = y;
   pred R is_asymmetric_in X means
   :Def5:
-  x in X & y in X & [x,y] in R implies not [y,x] in R;
+  x in X & y in X & [x,y] in R implies
+  not [y,x] in R;
   pred R is_connected_in X means
   :Def6:
-  x in X & y in X & x <>y implies [x,y] in R or [y,x] in R;
+  x in X & y in X & x <>y implies [x,y]
+  in R or [y,x] in R;
   pred R is_strongly_connected_in X means
   :Def7:
-  x in X & y in X implies [x,y] in R or [y,x] in R;
+  x in X & y in X implies [x,y]
+  in R or [y,x] in R;
   pred R is_transitive_in X means
   :Def8:
-  x in X & y in X & z in X & [x,y] in R & [y,z] in R implies [x,z] in R;
+  x in X & y in X & z in X & [x,y] in R
+  & [y,z] in R implies [x,z] in R;
 end;
 
 definition
@@ -68,7 +74,8 @@ definition
   R is_connected_in field R;
   attr R is strongly_connected means
   :Def15:
-  R is_strongly_connected_in field R;
+  R is_strongly_connected_in field
+  R;
   attr R is transitive means
   :Def16:
   R is_transitive_in field R;
@@ -80,28 +87,31 @@ theorem
   R is reflexive iff id field R c= R
 proof
 A1: now
-    assume R is reflexive;
-    then
-A2: R is_reflexive_in field R by Def9;
-    now
-      let a,b;
-      assume [a,b] in id field R;
-      then a in field R & a = b by RELAT_1:def 10;
-      hence [a,b] in R by A2,Def1;
-    end;
-    hence id field R c= R by RELAT_1:def 3;
-  end;
-  now
     assume
-A3: id field R c= R;
+A2: id field R c= R;
     now
       let a;
-      assume a in field R;
+      assume
+      a in field R;
       then [a,a] in id field R by RELAT_1:def 10;
-      hence [a,a] in R by A3;
+      hence [a,a] in R by A2;
     end;
     then R is_reflexive_in field R by Def1;
     hence R is reflexive by Def9;
+  end;
+  now
+    assume
+    R is reflexive;
+    then
+A3: R is_reflexive_in field R by Def9;
+    now
+      let a,b;
+      assume
+      [a,b] in id field R;
+      then a in field R & a = b by RELAT_1:def 10;
+      hence [a,b] in R by A3,Def1;
+    end;
+    hence id field R c= R by RELAT_1:def 3;
   end;
   hence thesis by A1;
 end;
@@ -110,27 +120,32 @@ theorem
   R is irreflexive iff id field R misses R
 proof
 A1: now
-    assume R is irreflexive;
+    assume
+    R is irreflexive;
     then
 A2: R is_irreflexive_in field R by Def10;
     now
       let a,b;
-      assume [a,b] in id (field R) /\ R;
-      then [a,b] in id (field R) & [a,b] in R by XBOOLE_0:def 4;
-      then a in field R & a = b & [a,b] in R by RELAT_1:def 10;
-      hence contradiction by A2,Def2;
+      assume
+A3:   [a,b] in id (field R) /\ R;
+      then [a,b] in id (field R) by XBOOLE_0:def 4;
+      then
+A4:   a in field R & a = b by RELAT_1:def 10;
+      [a,b] in R by A3,XBOOLE_0:def 4;
+      hence contradiction by A2,A4,Def2;
     end;
     then id (field R) /\ R = {} by RELAT_1:56;
     hence id (field R) misses R by XBOOLE_0:def 7;
   end;
   now
     assume
-A3: id (field R) misses R;
+A5: id (field R) misses R;
     now
       let a;
-      assume a in field R;
+      assume
+      a in field R;
       then [a,a] in id field R by RELAT_1:def 10;
-      hence not [a,a] in R by A3,XBOOLE_0:3;
+      hence not [a,a] in R by A5,XBOOLE_0:3;
     end;
     then R is_irreflexive_in field R by Def2;
     hence R is irreflexive by Def10;
@@ -147,12 +162,15 @@ proof
 A1: R is_antisymmetric_in X;
     now
       let x,y;
-      assume
-A2:   x in X & y in X & [x,y] in R \ id X;
+      assume that
+A2:   x in X and
+A3:   y in X and
+A4:   [x,y] in R \ id X;
+      not [x,y] in id X by A4,XBOOLE_0:def 5;
       then
-A3:   [x,y] in R & not [x,y] in id X by XBOOLE_0:def 5;
-      then x <> y by A2,RELAT_1:def 10;
-      then not [y,x] in R by A1,A2,A3,Def4;
+A5:   x <> y by A2,RELAT_1:def 10;
+      [x,y] in R by A4,XBOOLE_0:def 5;
+      then not [y,x] in R by A1,A2,A3,A5,Def4;
       hence not [y,x] in R \ id X by XBOOLE_0:def 5;
     end;
     hence thesis by Def5;
@@ -160,16 +178,22 @@ A3:   [x,y] in R & not [x,y] in id X by XBOOLE_0:def 5;
   thus R \ id X is_asymmetric_in X implies R is_antisymmetric_in X
   proof
     assume
-A4: R \ id X is_asymmetric_in X;
+A6: R \ id X is_asymmetric_in X;
     now
       let x,y;
-      assume
-A5:   x in X & y in X & [x,y] in R & [y,x] in R;
+      assume that
+A7:   x in X & y in X and
+A8:   [x,y] in R and
+A9:   [y,x] in R;
       now
-        assume x <> y;
-        then not [x,y] in id X & not [y,x] in id X by RELAT_1:def 10;
-        then [x,y] in R \ id X & [y,x] in R \ id X by A5,XBOOLE_0:def 5;
-        hence contradiction by A4,A5,Def5;
+        assume
+A10:    x <> y;
+        then not [y,x] in id X by RELAT_1:def 10;
+        then
+A11:    [y,x] in R \ id X by A9,XBOOLE_0:def 5;
+        not [x,y] in id X by A10,RELAT_1:def 10;
+        then [x,y] in R \ id X by A8,XBOOLE_0:def 5;
+        hence contradiction by A6,A7,A11,Def5;
       end;
       hence x = y;
     end;
@@ -184,13 +208,19 @@ proof
 A1: R is_asymmetric_in X;
   now
     let x,y;
-    assume
-A2: x in X & y in X & [x,y] in R \/ id X & [y,x] in R \/ id X;
+    assume that
+A2: x in X & y in X and
+A3: [x,y] in R \/ id X and
+A4: [y,x] in R \/ id X;
     now
-      assume x <> y;
-      then not [x,y] in id X & not [y,x] in id X by RELAT_1:def 10;
-      then [x,y] in R & [y,x] in R by A2,XBOOLE_0:def 3;
-      hence contradiction by A1,A2,Def5;
+      assume
+A5:   x <> y;
+      then not [y,x] in id X by RELAT_1:def 10;
+      then
+A6:   [y,x] in R by A4,XBOOLE_0:def 3;
+      not [x,y] in id X by A5,RELAT_1:def 10;
+      then [x,y] in R by A3,XBOOLE_0:def 3;
+      hence contradiction by A1,A2,A6,Def5;
     end;
     hence x = y;
   end;
@@ -205,30 +235,32 @@ proof
   assume that
 A1: R is symmetric and
 A2: R is transitive;
-A3: R is_symmetric_in field R by A1,Def11;
-A4: R is_transitive_in field R by A2,Def16;
+A3: R is_transitive_in field R by A2,Def16;
+A4: R is_symmetric_in field R by A1,Def11;
   now
     let a;
-    assume a in field R;
-    then
-A5: a in dom R \/ rng R by RELAT_1:def 6;
-A6: now
-      assume a in dom R;
+A5: now
+      assume
+      a in dom R;
       then consider b such that
-A7:   [a,b] in R by RELAT_1:def 4;
-A8:   a in field R & b in field R by A7,RELAT_1:30;
-      then [b,a] in R by A3,A7,Def3;
-      hence [a,a] in R by A4,A7,A8,Def8;
+A6:   [a,b] in R by RELAT_1:def 4;
+A7:   a in field R & b in field R by A6,RELAT_1:30;
+      then [b,a] in R by A4,A6,Def3;
+      hence [a,a] in R by A3,A6,A7,Def8;
     end;
-    now
-      assume a in rng R;
+A8: now
+      assume
+      a in rng R;
       then consider b such that
 A9:   [b,a] in R by RELAT_1:def 5;
 A10:  a in field R & b in field R by A9,RELAT_1:30;
-      then [a,b] in R by A3,A9,Def3;
-      hence [a,a] in R by A4,A9,A10,Def8;
+      then [a,b] in R by A4,A9,Def3;
+      hence [a,a] in R by A3,A9,A10,Def8;
     end;
-    hence [a,a] in R by A5,A6,XBOOLE_0:def 3;
+    assume
+    a in field R;
+    then a in dom R \/ rng R by RELAT_1:def 6;
+    hence [a,a] in R by A5,A8,XBOOLE_0:def 3;
   end;
   then R is_reflexive_in field R by Def1;
   hence thesis by Def9;
@@ -240,17 +272,22 @@ proof
   thus id X is symmetric
   proof
     let a,b;
-    assume
-A1: a in field(id X) & b in field(id X) & [a,b] in id X;
-    then a = b by RELAT_1:def 10;
+    assume that
+    a in field(id X) and
+    b in field(id X) and
+A1: [a,b] in id X;
+    a = b by A1,RELAT_1:def 10;
     hence thesis by A1;
   end;
   thus id X is transitive
   proof
     let a,b,c;
-    assume a in field id X & b in field id X & c in field id X &
-    [a,b] in id X & [b,c] in id X;
-    hence thesis by RELAT_1:def 10;
+    assume that
+    a in field id X and
+    b in field id X and
+    c in field id X and
+A2: [a,b] in id X & [b,c] in id X;
+    thus thesis by A2,RELAT_1:def 10;
   end;
 end;
 
@@ -260,15 +297,15 @@ proof
   thus id X is antisymmetric
   proof
     let a,b;
-    assume a in field(id X) & b in field(id X) &
-    [a,b] in id X & [b,a] in id X;
-    hence thesis by RELAT_1:def 10;
+    assume that
+    a in field(id X) and
+    b in field(id X) and
+A1: [a,b] in id X and
+    [b,a] in id X;
+    thus thesis by A1,RELAT_1:def 10;
   end;
-  thus id X is reflexive
-  proof
-    id X is symmetric & id X is transitive by Th23;
-    hence thesis by Th22;
-  end;
+  id X is symmetric & id X is transitive by Th23;
+  hence id X is reflexive by Th22;
 end;
 
 theorem
@@ -277,14 +314,15 @@ proof
   assume that
 A1: R is irreflexive and
 A2: R is transitive;
-A3: R is_irreflexive_in field R by A1,Def10;
-A4: R is_transitive_in field R by A2,Def16;
+A3: R is_transitive_in field R by A2,Def16;
+A4: R is_irreflexive_in field R by A1,Def10;
   now
     let a,b;
-    assume
-A5: a in field R & b in field R;
-    then not [a,a] in R by A3,Def2;
-    hence [a,b] in R implies not [b,a] in R by A4,A5,Def8;
+    assume that
+A5: a in field R and
+A6: b in field R;
+    not [a,a] in R by A4,A5,Def2;
+    hence [a,b] in R implies not [b,a] in R by A3,A5,A6,Def8;
   end;
   then R is_asymmetric_in field R by Def5;
   hence thesis by Def13;
@@ -293,14 +331,15 @@ end;
 theorem
   R is asymmetric implies R is irreflexive antisymmetric
 proof
-  assume R is asymmetric;
+  assume
+  R is asymmetric;
   then
 A1: R is_asymmetric_in field R by Def13;
   then for x holds x in field R implies not [x,x] in R by Def5;
   then R is_irreflexive_in field R by Def2;
   hence R is irreflexive by Def10;
-  for x,y holds x in field R & y in field R & [x,y] in R &
-  [y,x] in R implies x = y by A1,Def5;
+  for x,y holds x in field R & y in field R & [x,y] in R & [y,x] in R
+  implies x = y by A1,Def5;
   then R is_antisymmetric_in field R by Def4;
   hence thesis by Def12;
 end;
@@ -308,12 +347,14 @@ end;
 theorem Th27:
   R is reflexive implies R~ is reflexive
 proof
-  assume R is reflexive;
+  assume
+  R is reflexive;
   then
 A1: R is_reflexive_in field R by Def9;
   now
     let x;
-    assume x in field(R~);
+    assume
+    x in field(R~);
     then x in field R by RELAT_1:38;
     then [x,x] in R by A1,Def1;
     hence [x,x] in R~ by RELAT_1:def 7;
@@ -325,12 +366,14 @@ end;
 theorem
   R is irreflexive implies R~ is irreflexive
 proof
-  assume R is irreflexive;
+  assume
+  R is irreflexive;
   then
 A1: R is_irreflexive_in field R by Def10;
   now
     let x;
-    assume x in field(R~);
+    assume
+    x in field(R~);
     then x in field R by RELAT_1:38;
     then not [x,x] in R by A1,Def2;
     hence not [x,x] in R~ by RELAT_1:def 7;
@@ -352,20 +395,22 @@ A3: R~ is_reflexive_in field(R~) by Def9;
   now
     let x;
 A4: now
-      assume x in dom R;
-      then x in dom R \/ rng R by XBOOLE_0:def 3;
-      then x in field R by RELAT_1:def 6;
-      then [x,x] in R by A2,Def1;
-      then [x,x] in R~ by RELAT_1:def 7;
-      hence x in dom(R~) by RELAT_1:def 4;
-    end;
-    now
-      assume x in dom(R~);
+      assume
+      x in dom(R~);
       then x in dom(R~) \/ rng(R~) by XBOOLE_0:def 3;
       then x in field(R~) by RELAT_1:def 6;
       then [x,x] in R~ by A3,Def1;
       then [x,x] in R by RELAT_1:def 7;
       hence x in dom R by RELAT_1:def 4;
+    end;
+    now
+      assume
+      x in dom R;
+      then x in dom R \/ rng R by XBOOLE_0:def 3;
+      then x in field R by RELAT_1:def 6;
+      then [x,x] in R by A2,Def1;
+      then [x,x] in R~ by RELAT_1:def 7;
+      hence x in dom(R~) by RELAT_1:def 4;
     end;
     hence x in dom R iff x in dom(R~) by A4;
   end;
@@ -373,20 +418,22 @@ A4: now
   now
     let x;
 A5: now
-      assume x in rng R;
-      then x in dom R \/ rng R by XBOOLE_0:def 3;
-      then x in field R by RELAT_1:def 6;
-      then [x,x] in R by A2,Def1;
-      then [x,x] in R~ by RELAT_1:def 7;
-      hence x in rng(R~) by RELAT_1:def 5;
-    end;
-    now
-      assume x in rng(R~);
+      assume
+      x in rng(R~);
       then x in dom(R~) \/ rng(R~) by XBOOLE_0:def 3;
       then x in field(R~) by RELAT_1:def 6;
       then [x,x] in R~ by A3,Def1;
       then [x,x] in R by RELAT_1:def 7;
       hence x in rng R by RELAT_1:def 5;
+    end;
+    now
+      assume
+      x in rng R;
+      then x in dom R \/ rng R by XBOOLE_0:def 3;
+      then x in field R by RELAT_1:def 6;
+      then [x,x] in R by A2,Def1;
+      then [x,x] in R~ by RELAT_1:def 7;
+      hence x in rng(R~) by RELAT_1:def 5;
     end;
     hence x in rng R iff x in rng(R~) by A5;
   end;
@@ -397,33 +444,36 @@ theorem Th30:
   R is symmetric iff R = R~
 proof
 A1: now
-    assume R is symmetric;
+    assume
+    R is symmetric;
     then
 A2: R is_symmetric_in field R by Def11;
     now
       let a,b;
 A3:   now
         assume
-A4:     [a,b] in R;
+        [a,b] in R~;
+        then
+A4:     [b,a] in R by RELAT_1:def 7;
         then a in field R & b in field R by RELAT_1:30;
-        then [b,a] in R by A2,A4,Def3;
-        hence [a,b] in R~ by RELAT_1:def 7;
+        hence [a,b] in R by A2,A4,Def3;
       end;
       now
-        assume [a,b] in R~;
-        then
-A5:     [b,a] in R by RELAT_1:def 7;
+        assume
+A5:     [a,b] in R;
         then a in field R & b in field R by RELAT_1:30;
-        hence [a,b] in R by A2,A5,Def3;
+        then [b,a] in R by A2,A5,Def3;
+        hence [a,b] in R~ by RELAT_1:def 7;
       end;
       hence [a,b] in R iff [a,b] in R~ by A3;
     end;
     hence R = R~ by RELAT_1:def 2;
   end;
   now
-    assume R = R~;
-    then for a,b holds a in field R & b in field R & [a,b] in R implies
-    [b,a] in R by RELAT_1:def 7;
+    assume
+    R = R~;
+    then for a,b holds a in field R & b in field R & [a,b] in R implies [b,a]
+    in R by RELAT_1:def 7;
     then R is_symmetric_in field R by Def3;
     hence R is symmetric by Def11;
   end;
@@ -431,48 +481,54 @@ A5:     [b,a] in R by RELAT_1:def 7;
 end;
 
 theorem
-  P is reflexive & R is reflexive implies P \/ R is reflexive &
-  P /\ R is reflexive
+  P is reflexive & R is reflexive implies P \/ R is reflexive & P /\ R
+  is reflexive
 proof
   assume that
 A1: P is reflexive and
 A2: R is reflexive;
-A3: P is_reflexive_in field P by A1,Def9;
-A4: R is_reflexive_in field R by A2,Def9;
+A3: R is_reflexive_in field R by A2,Def9;
+A4: P is_reflexive_in field P by A1,Def9;
   now
     let a;
-    assume a in field(P \/ R);
-    then
-A5: a in field P \/ field R by RELAT_1:33;
+A5: now
+      assume
+      a in field P;
+      then [a,a] in P by A4,Def1;
+      hence [a,a] in P \/ R by XBOOLE_0:def 3;
+    end;
 A6: now
-      assume a in field P;
-      then [a,a] in P by A3,Def1;
+      assume
+      a in field R;
+      then [a,a] in R by A3,Def1;
       hence [a,a] in P \/ R by XBOOLE_0:def 3;
     end;
-    now
-      assume a in field R;
-      then [a,a] in R by A4,Def1;
-      hence [a,a] in P \/ R by XBOOLE_0:def 3;
-    end;
+    assume
+    a in field(P \/ R);
+    then a in field P \/ field R by RELAT_1:33;
     hence [a,a] in P \/ R by A5,A6,XBOOLE_0:def 3;
   end;
   then P \/ R is_reflexive_in field(P \/ R) by Def1;
   hence P \/ R is reflexive by Def9;
   now
     let a;
-A7: field(P /\ R) c= field P /\ field R by RELAT_1:34;
-    assume a in field(P /\ R);
-    then a in field P & a in field R by A7,XBOOLE_0:def 4;
-    then [a,a] in P & [a,a] in R by A3,A4,Def1;
-    hence [a,a] in P /\ R by XBOOLE_0:def 4;
+    assume
+A7: a in field(P /\ R);
+A8: field(P /\ R) c= field P /\ field R by RELAT_1:34;
+    then a in field R by A7,XBOOLE_0:def 4;
+    then
+A9: [a,a] in R by A3,Def1;
+    a in field P by A8,A7,XBOOLE_0:def 4;
+    then [a,a] in P by A4,Def1;
+    hence [a,a] in P /\ R by A9,XBOOLE_0:def 4;
   end;
   then P /\ R is_reflexive_in field(P /\ R) by Def1;
   hence thesis by Def9;
 end;
 
 theorem
-  P is irreflexive & R is irreflexive implies P \/ R is irreflexive &
-  P /\ R is irreflexive
+  P is irreflexive & R is irreflexive implies P \/ R is irreflexive & P
+  /\ R is irreflexive
 proof
   assume that
 A1: P is irreflexive and
@@ -481,35 +537,38 @@ A3: P is_irreflexive_in field P by A1,Def10;
 A4: R is_irreflexive_in field R by A2,Def10;
   now
     let a;
-    assume a in field(P \/ R);
-    then
-A5: a in field P \/ field R by RELAT_1:33;
-A6: now
-      assume a in field P;
+A5: now
+      assume
+      a in field P;
       then
-A7:   not [a,a] in P by A3,Def2;
-A8:   a in field R implies not [a,a] in R by A4,Def2;
-      not a in field R implies not [a,a] in R by RELAT_1:30;
-      hence not [a,a] in P \/ R by A7,A8,XBOOLE_0:def 3;
+A6:   not [a,a] in P by A3,Def2;
+A7:   not a in field R implies not [a,a] in R by RELAT_1:30;
+      a in field R implies not [a,a] in R by A4,Def2;
+      hence not [a,a] in P \/ R by A6,A7,XBOOLE_0:def 3;
     end;
-    now
-      assume a in field R;
+A8: now
+      assume
+      a in field R;
       then
 A9:   not [a,a] in R by A4,Def2;
-A10:  a in field P implies not [a,a] in P by A3,Def2;
-      not a in field P implies not [a,a] in P by RELAT_1:30;
+A10:  not a in field P implies not [a,a] in P by RELAT_1:30;
+      a in field P implies not [a,a] in P by A3,Def2;
       hence not [a,a] in P \/ R by A9,A10,XBOOLE_0:def 3;
     end;
-    hence not [a,a] in P \/ R by A5,A6,XBOOLE_0:def 3;
+    assume
+    a in field(P \/ R);
+    then a in field P \/ field R by RELAT_1:33;
+    hence not [a,a] in P \/ R by A5,A8,XBOOLE_0:def 3;
   end;
   then P \/ R is_irreflexive_in field(P \/ R) by Def2;
   hence P \/ R is irreflexive by Def10;
   now
     let a;
-A11: field(P /\ R) c= (field P) /\ (field R) by RELAT_1:34;
-    assume a in field(P /\ R);
-    then a in field P & a in field R by A11,XBOOLE_0:def 4;
-    then not [a,a] in P & not [a,a] in R by A3,A4,Def2;
+    assume
+A11: a in field(P /\ R);
+    field(P /\ R) c= (field P) /\ (field R) by RELAT_1:34;
+    then a in field P by A11,XBOOLE_0:def 4;
+    then not [a,a] in P by A3,Def2;
     hence not [a,a] in P /\ R by XBOOLE_0:def 4;
   end;
   then P /\ R is_irreflexive_in field(P /\ R) by Def2;
@@ -519,31 +578,34 @@ end;
 theorem
   P is irreflexive implies P \ R is irreflexive
 proof
-  assume P is irreflexive;
+  assume
+  P is irreflexive;
   then
 A1: P is_irreflexive_in field P by Def10;
   now
     let a;
-    assume a in field(P \ R);
-    then
-A2: a in dom(P \ R) \/ rng(P \ R) by RELAT_1:def 6;
-A3: now
-      assume a in dom(P \ R);
+A2: now
+      assume
+      a in dom(P \ R);
       then consider b such that
-A4:   [a,b] in P \ R by RELAT_1:def 4;
-      [a,b] in P & not [a,b] in R by A4,XBOOLE_0:def 5;
+A3:   [a,b] in P \ R by RELAT_1:def 4;
+      [a,b] in P by A3,XBOOLE_0:def 5;
       then a in field P by RELAT_1:30;
       hence not [a,a] in P by A1,Def2;
     end;
-    now
-      assume a in rng(P \ R);
+A4: now
+      assume
+      a in rng(P \ R);
       then consider b such that
 A5:   [b,a] in P \ R by RELAT_1:def 5;
-      [b,a] in P & not [b,a] in R by A5,XBOOLE_0:def 5;
+      [b,a] in P by A5,XBOOLE_0:def 5;
       then a in field P by RELAT_1:30;
       hence not [a,a] in P by A1,Def2;
     end;
-    hence not [a,a] in P \ R by A2,A3,XBOOLE_0:def 3,def 5;
+    assume
+    a in field(P \ R);
+    then a in dom(P \ R) \/ rng(P \ R) by RELAT_1:def 6;
+    hence not [a,a] in P \ R by A2,A4,XBOOLE_0:def 3,def 5;
   end;
   then P \ R is_irreflexive_in field(P \ R) by Def2;
   hence thesis by Def10;
@@ -553,30 +615,32 @@ theorem
   R is symmetric implies R~ is symmetric by Th30;
 
 theorem
-  P is symmetric & R is symmetric implies P \/ R is symmetric &
-  P /\ R is symmetric & P \ R is symmetric
+  P is symmetric & R is symmetric implies P \/ R is symmetric & P /\ R
+  is symmetric & P \ R is symmetric
 proof
   assume that
 A1: P is symmetric and
 A2: R is symmetric;
-A3: P is_symmetric_in field P by A1,Def11;
-A4: R is_symmetric_in field R by A2,Def11;
+A3: R is_symmetric_in field R by A2,Def11;
+A4: P is_symmetric_in field P by A1,Def11;
   now
     let a,b;
-    assume that a in field(P \/ R) & b in field(P \/ R) and
+    assume that
+    a in field(P \/ R) and
+    b in field(P \/ R) and
 A5: [a,b] in P \/ R;
 A6: now
       assume
-A7:   [a,b] in P;
-      then a in field P & b in field P by RELAT_1:30;
-      then [b,a] in P by A3,A7,Def3;
+A7:   [a,b] in R;
+      then a in field R & b in field R by RELAT_1:30;
+      then [b,a] in R by A3,A7,Def3;
       hence [b,a] in P \/ R by XBOOLE_0:def 3;
     end;
     now
       assume
-A8:   [a,b] in R;
-      then a in field R & b in field R by RELAT_1:30;
-      then [b,a] in R by A4,A8,Def3;
+A8:   [a,b] in P;
+      then a in field P & b in field P by RELAT_1:30;
+      then [b,a] in P by A4,A8,Def3;
       hence [b,a] in P \/ R by XBOOLE_0:def 3;
     end;
     hence [b,a] in P \/ R by A5,A6,XBOOLE_0:def 3;
@@ -585,32 +649,38 @@ A8:   [a,b] in R;
   hence P \/ R is symmetric by Def11;
   now
     let a,b;
-A9: field(P /\ R) c= field P /\ field R by RELAT_1:34;
-    assume
-A10: a in field(P /\ R) & b in field(P /\ R) & [a,b] in P /\ R;
+    assume that
+A9: a in field(P /\ R) & b in field(P /\ R) and
+A10: [a,b] in P /\ R;
+A11: [a,b] in R by A10,XBOOLE_0:def 4;
+A12: field(P /\ R) c= field P /\ field R by RELAT_1:34;
+    then a in field R & b in field R by A9,XBOOLE_0:def 4;
     then
-A11: a in field P & a in field R by A9,XBOOLE_0:def 4;
-A12: b in field P & b in field R by A9,A10,XBOOLE_0:def 4;
-A13: [a,b] in P & [a,b] in R by A10,XBOOLE_0:def 4;
-    then
-A14: [b,a] in P by A3,A11,A12,Def3;
-    [b,a] in R by A4,A11,A12,A13,Def3;
-    hence [b,a] in P /\ R by A14,XBOOLE_0:def 4;
+A13: [b,a] in R by A3,A11,Def3;
+A14: [a,b] in P by A10,XBOOLE_0:def 4;
+    a in field P & b in field P by A12,A9,XBOOLE_0:def 4;
+    then [b,a] in P by A4,A14,Def3;
+    hence [b,a] in P /\ R by A13,XBOOLE_0:def 4;
   end;
   then P /\ R is_symmetric_in field(P /\ R) by Def3;
   hence P /\ R is symmetric by Def11;
   now
     let a,b;
-    assume that a in field(P \ R) & b in field(P \ R) and
+    assume that
+    a in field(P \ R) and
+    b in field(P \ R) and
 A15: [a,b] in P \ R;
-A16: [a,b] in P & not [a,b] in R by A15,XBOOLE_0:def 5;
+    not [a,b] in R by A15,XBOOLE_0:def 5;
+    then
+A16: not b in field R or not a in field R or not [b,a] in R by A3,
+    Def3;
+A17: [a,b] in P by A15,XBOOLE_0:def 5;
     then a in field P & b in field P by RELAT_1:30;
     then
-A17: [b,a] in P by A3,A16,Def3;
-A18: not b in field R or not a in field R or not [b,a] in R by A4,A16,Def3;
-    ( not b in field R or not a in field R ) implies not [b,a] in R
-    by RELAT_1:30;
-    hence [b,a] in P \ R by A17,A18,XBOOLE_0:def 5;
+A18: [b,a] in P by A4,A17,Def3;
+    ( not b in field R or not a in field R ) implies not [b,a] in R by
+    RELAT_1:30;
+    hence [b,a] in P \ R by A18,A16,XBOOLE_0:def 5;
   end;
   then P \ R is_symmetric_in field(P \ R) by Def3;
   hence thesis by Def11;
@@ -619,14 +689,18 @@ end;
 theorem
   R is asymmetric implies R~ is asymmetric
 proof
-  assume R is asymmetric;
+  assume
+  R is asymmetric;
   then
 A1: R is_asymmetric_in field R by Def13;
   now
     let x,y;
-    assume x in field(R~) & y in field(R~) & [x,y] in R~;
-    then x in field R & y in field R & [y,x] in R by RELAT_1:38,def 7;
-    then not [x,y] in R by A1,Def5;
+    assume that
+A2: x in field(R~) & y in field(R~) and
+A3: [x,y] in R~;
+A4: [y,x] in R by A3,RELAT_1:def 7;
+    x in field R & y in field R by A2,RELAT_1:38;
+    then not [x,y] in R by A1,A4,Def5;
     hence not [y,x] in R~ by RELAT_1:def 7;
   end;
   then R~ is_asymmetric_in field(R~) by Def5;
@@ -634,21 +708,21 @@ A1: R is_asymmetric_in field R by Def13;
 end;
 
 theorem
-  P is asymmetric & R is asymmetric implies P /\ R is asymmetric
+  R is asymmetric implies P /\ R is asymmetric
 proof
-  assume that P is asymmetric and
-A1: R is asymmetric;
-A2: R is_asymmetric_in field R by A1,Def13;
-A3: field(P /\ R) c= (field P) /\ (field R) by RELAT_1:34;
+  assume
+  R is asymmetric;
+  then
+A1: R is_asymmetric_in field R by Def13;
+A2: field(P /\ R) c= (field P) /\ (field R) by RELAT_1:34;
   now
     let a,b;
-    assume
-A4: a in field(P /\ R) & b in field(P /\ R) & [a,b] in P /\ R;
-    then
-A5: a in field P & a in field R by A3,XBOOLE_0:def 4;
-A6: b in field P & b in field R by A3,A4,XBOOLE_0:def 4;
-    [a,b] in P & [a,b] in R by A4,XBOOLE_0:def 4;
-    then not [b,a] in R by A2,A5,A6,Def5;
+    assume that
+A3: a in field(P /\ R) & b in field(P /\ R) and
+A4: [a,b] in P /\ R;
+A5: [a,b] in R by A4,XBOOLE_0:def 4;
+    a in field R & b in field R by A2,A3,XBOOLE_0:def 4;
+    then not [b,a] in R by A1,A5,Def5;
     hence not [b,a] in P /\ R by XBOOLE_0:def 4;
   end;
   then P /\ R is_asymmetric_in field(P /\ R) by Def5;
@@ -658,14 +732,17 @@ end;
 theorem
   P is asymmetric implies P \ R is asymmetric
 proof
-  assume P is asymmetric;
+  assume
+  P is asymmetric;
   then
 A1: P is_asymmetric_in field P by Def13;
   now
     let a,b;
-    assume that a in field(P \ R) & b in field(P \ R) and
+    assume that
+    a in field(P \ R) and
+    b in field(P \ R) and
 A2: [a,b] in P \ R;
-A3: [a,b] in P & not [a,b] in R by A2,XBOOLE_0:def 5;
+A3: [a,b] in P by A2,XBOOLE_0:def 5;
     then a in field P & b in field P by RELAT_1:30;
     then not [b,a] in P by A1,A3,Def5;
     hence not [b,a] in P \ R by XBOOLE_0:def 5;
@@ -678,21 +755,23 @@ theorem
   R is antisymmetric iff R /\ (R~) c= id (dom R)
 proof
 A1: now
-    assume R is antisymmetric;
+    assume
+    R is antisymmetric;
     then
 A2: R is_antisymmetric_in field R by Def12;
     now
       let a,b;
-      assume [a,b] in R /\ (R~);
+      assume
+A3:   [a,b] in R /\ (R~);
+      then [a,b] in R~ by XBOOLE_0:def 4;
       then
-A3:   [a,b] in R & [a,b] in R~ by XBOOLE_0:def 4;
+A4:   [b,a] in R by RELAT_1:def 7;
       then
-A4:   a in field R & b in field R by RELAT_1:30;
-A5:   [b,a] in R by A3,RELAT_1:def 7;
-      then
-A6:   a = b by A2,A3,A4,Def4;
-      b in dom R by A5,RELAT_1:def 4;
-      hence [a,b] in id (dom R) by A6,RELAT_1:def 10;
+A5:   b in dom R by RELAT_1:def 4;
+A6:   [a,b] in R by A3,XBOOLE_0:def 4;
+      then a in field R & b in field R by RELAT_1:30;
+      then a = b by A2,A6,A4,Def4;
+      hence [a,b] in id (dom R) by A5,RELAT_1:def 10;
     end;
     hence R /\ (R~) c= id (dom R) by RELAT_1:def 3;
   end;
@@ -701,9 +780,12 @@ A6:   a = b by A2,A3,A4,Def4;
 A7: R /\ (R~) c= id (dom R);
     now
       let a,b;
-      assume
-A8:   a in field R & b in field R & [a,b] in R & [b,a] in R;
-      then [a,b] in R~ by RELAT_1:def 7;
+      assume that
+      a in field R and
+      b in field R and
+A8:   [a,b] in R and
+A9:   [b,a] in R;
+      [a,b] in R~ by A9,RELAT_1:def 7;
       then [a,b] in R /\ (R~) by A8,XBOOLE_0:def 4;
       hence a = b by A7,RELAT_1:def 10;
     end;
@@ -716,44 +798,56 @@ end;
 theorem
   R is antisymmetric implies R~ is antisymmetric
 proof
-  assume R is antisymmetric;
+  assume
+  R is antisymmetric;
   then
 A1: R is_antisymmetric_in field R by Def12;
   now
     let x,y;
-    assume x in field(R~) & y in field(R~) & [x,y] in R~ & [y,x] in R~;
-    then x in field R & y in field R & [y,x] in R & [x,y] in R
-    by RELAT_1:38,def 7;
-    hence x = y by A1,Def4;
+    assume that
+A2: x in field(R~) & y in field(R~) and
+A3: [x,y] in R~ & [y,x] in R~;
+A4: [y,x] in R & [x,y] in R by A3,RELAT_1:def 7;
+    x in field R & y in field R by A2,RELAT_1:38;
+    hence x = y by A1,A4,Def4;
   end;
   then R~ is_antisymmetric_in field(R~) by Def4;
   hence thesis by Def12;
 end;
 
 theorem
-  P is antisymmetric implies P /\ R is antisymmetric & P \ R is antisymmetric
+  P is antisymmetric implies P /\ R is antisymmetric & P \ R is
+  antisymmetric
 proof
-  assume P is antisymmetric;
+  assume
+  P is antisymmetric;
   then
 A1: P is_antisymmetric_in field P by Def12;
   now
     let a,b;
-    assume that a in field(P /\ R) & b in field(P /\ R) and
-A2: [a,b] in (P /\ R) & [b,a] in (P /\ R);
-A3: [a,b] in P & [b,a] in P by A2,XBOOLE_0:def 4;
+    assume that
+    a in field(P /\ R) and
+    b in field(P /\ R) and
+A2: [a,b] in (P /\ R) and
+A3: [b,a] in (P /\ R);
+A4: [b,a] in P by A3,XBOOLE_0:def 4;
+A5: [a,b] in P by A2,XBOOLE_0:def 4;
     then a in field P & b in field P by RELAT_1:30;
-    hence a = b by A1,A3,Def4;
+    hence a = b by A1,A5,A4,Def4;
   end;
   then P /\ R is_antisymmetric_in field(P /\ R) by Def4;
   hence P /\ R is antisymmetric by Def12;
   now
     let a,b;
-    assume that a in field(P \ R) & b in field(P \ R) and
-A4: [a,b] in P \ R & [b,a] in P \ R;
-A5: [a,b] in P & not [a,b] in R &
-    [b,a] in P & not [b,a] in R by A4,XBOOLE_0:def 5;
+    assume that
+    a in field(P \ R) and
+    b in field(P \ R) and
+A6: [a,b] in P \ R and
+A7: [b,a] in P \ R;
+A8: [b,a] in P by A7,XBOOLE_0:def 5;
+A9: [a,b] in P by A6,XBOOLE_0:def 5;
     then a in field P & b in field P by RELAT_1:30;
-    hence a = b by A1,A5,Def4;
+    hence a = b by A1,A9,A8,Def4;
   end;
   then P \ R is_antisymmetric_in field(P \ R) by Def4;
   hence thesis by Def12;
@@ -762,16 +856,21 @@ end;
 theorem
   R is transitive implies R~ is transitive
 proof
-  assume R is transitive;
+  assume
+  R is transitive;
   then
 A1: R is_transitive_in field R by Def16;
   now
     let x,y,z;
-    assume x in field(R~) & y in field(R~) & z in field(R~) &
-    [x,y] in R~ & [y,z] in R~;
-    then x in field R & y in field R & z in field R & [z,y] in R & [y,x] in R
-    by RELAT_1:38,def 7;
-    then [z,x] in R by A1,Def8;
+    assume that
+A2: x in field(R~) & y in field(R~) and
+A3: z in field(R~) and
+A4: [x,y] in R~ and
+A5: [y,z] in R~;
+A6: x in field R & y in field R by A2,RELAT_1:38;
+A7: [y,x] in R by A4,RELAT_1:def 7;
+    z in field R & [z,y] in R by A3,A5,RELAT_1:38,def 7;
+    then [z,x] in R by A1,A6,A7,Def8;
     hence [x,z] in R~ by RELAT_1:def 7;
   end;
   then R~ is_transitive_in field(R~) by Def8;
@@ -784,18 +883,30 @@ proof
   assume that
 A1: P is transitive and
 A2: R is transitive;
-A3: P is_transitive_in field P by A1,Def16;
-A4: R is_transitive_in field R by A2,Def16;
+A3: R is_transitive_in field R by A2,Def16;
+A4: P is_transitive_in field P by A1,Def16;
   now
     let a,b,c;
     assume that
-    a in field(P /\ R) & b in field(P /\ R) & c in field(P /\ R) and
-A5: [a,b] in P /\ R & [b,c] in P /\ R;
-A6: [a,b] in P & [a,b] in R & [b,c] in P & [b,c] in R by A5,XBOOLE_0:def 4;
-    then a in field P & b in field P & c in field P &
-    a in field R & b in field R & c in field R by RELAT_1:30;
-    then [a,c] in P & [a,c] in R by A3,A4,A6,Def8;
-    hence [a,c] in P /\ R by XBOOLE_0:def 4;
+    a in field(P /\ R) and
+    b in field(P /\ R) and
+    c in field(P /\ R) and
+A5: [a,b] in P /\ R and
+A6: [b,c] in P /\ R;
+A7: [b,c] in R by A6,XBOOLE_0:def 4;
+    then
+A8: c in field R by RELAT_1:30;
+A9: [a,b] in R by A5,XBOOLE_0:def 4;
+    then a in field R & b in field R by RELAT_1:30;
+    then
+A10: [a,c] in R by A3,A9,A7,A8,Def8;
+A11: [b,c] in P by A6,XBOOLE_0:def 4;
+    then
+A12: c in field P by RELAT_1:30;
+A13: [a,b] in P by A5,XBOOLE_0:def 4;
+    then a in field P & b in field P by RELAT_1:30;
+    then [a,c] in P by A4,A13,A11,A12,Def8;
+    hence [a,c] in P /\ R by A10,XBOOLE_0:def 4;
   end;
   then P /\ R is_transitive_in field (P /\ R) by Def8;
   hence thesis by Def16;
@@ -805,28 +916,35 @@ theorem
   R is transitive iff R*R c= R
 proof
 A1: now
-    assume R is transitive;
+    assume
+    R is transitive;
     then
 A2: R is_transitive_in field R by Def16;
     now
       let a,b;
-      assume [a,b] in R*R;
+      assume
+      [a,b] in R*R;
       then consider c such that
-A3:   [a,c] in R & [c,b] in R by RELAT_1:def 8;
-      a in field R & b in field R & c in field R by A3,RELAT_1:30;
-      hence [a,b] in R by A2,A3,Def8;
+A3:   [a,c] in R and
+A4:   [c,b] in R by RELAT_1:def 8;
+A5:   c in field R by A3,RELAT_1:30;
+      a in field R & b in field R by A3,A4,RELAT_1:30;
+      hence [a,b] in R by A2,A3,A4,A5,Def8;
     end;
     hence R*R c= R by RELAT_1:def 3;
   end;
   now
     assume
-A4: R*R c= R;
+A6: R*R c= R;
     now
       let a,b,c;
-      assume a in field R & b in field R & c in field R &
-      [a,b] in R & [b,c] in R;
-      then [a,c] in R*R by RELAT_1:def 8;
-      hence [a,c] in R by A4;
+      assume that
+      a in field R and
+      b in field R and
+      c in field R and
+A7:   [a,b] in R & [b,c] in R;
+      [a,c] in R*R by A7,RELAT_1:def 8;
+      hence [a,c] in R by A6;
     end;
     then R is_transitive_in field R by Def8;
     hence R is transitive by Def16;
@@ -838,21 +956,25 @@ theorem
   R is connected iff [:field R,field R:] \ id (field R) c= R \/ R~
 proof
 A1: now
-    assume R is connected;
+    assume
+    R is connected;
     then
 A2: R is_connected_in field R by Def14;
     now
       let x;
       now
-        assume x in [:field R, field R:] \ id (field R);
-        then
-A3:     x in [:field R, field R:] & not x in id (field R) by XBOOLE_0:def 5;
+        assume
+A3:     x in [:field R, field R:] \ id (field R);
+        then x in [:field R, field R:] by XBOOLE_0:def 5;
         then consider y,z such that
-A4:     y in field R & z in field R & x = [y,z] by ZFMISC_1:def 2;
-        y <> z by A3,A4,RELAT_1:def 10;
-        then [y,z] in R or [z,y] in R by A2,A4,Def6;
+A4:     y in field R and
+A5:     z in field R and
+A6:     x = [y,z] by ZFMISC_1:def 2;
+        not x in id (field R) by A3,XBOOLE_0:def 5;
+        then y <> z by A4,A6,RELAT_1:def 10;
+        then [y,z] in R or [z,y] in R by A2,A4,A5,Def6;
         then [y,z] in R or [y,z] in R~ by RELAT_1:def 7;
-        hence x in R \/ R~ by A4,XBOOLE_0:def 3;
+        hence x in R \/ R~ by A6,XBOOLE_0:def 3;
       end;
       hence x in [:field R, field R:] \ id (field R) implies x in R \/ R~;
     end;
@@ -860,18 +982,20 @@ A4:     y in field R & z in field R & x = [y,z] by ZFMISC_1:def 2;
   end;
   now
     assume
-A5: [:field R, field R:] \ id (field R) c= R \/ R~;
+A7: [:field R, field R:] \ id (field R) c= R \/ R~;
     now
       let a,b;
+      [a,b] in [:field R, field R:] \ id (field R) implies [a,b] in R \/
+      R~ by A7;
+      then
+      [a,b] in [:field R, field R:] & not [a,b] in id (field R) implies [
+      a,b] in R \/ R~ by XBOOLE_0:def 5;
+      then
+A8:   a in field R & b in field R & a <> b implies [a,b] in R or [a,b] in
+      R~ by RELAT_1:def 10,XBOOLE_0:def 3 ,ZFMISC_1:106;
       assume
-A6:   a in field R & b in field R & a <> b;
-      [a,b] in [:field R, field R:] \ id (field R) implies
-      [a,b] in R \/ R~ by A5;
-      then [a,b] in [:field R, field R:] & not [a,b] in id (field R)
-      implies [a,b] in R \/ R~ by XBOOLE_0:def 5;
-      then a in field R & b in field R & a <> b implies
-      [a,b] in R or [a,b] in R~ by RELAT_1:def 10,XBOOLE_0:def 3,ZFMISC_1:106;
-      hence [a,b] in R or [b,a] in R by A6,RELAT_1:def 7;
+      a in field R & b in field R & a <> b;
+      hence [a,b] in R or [b,a] in R by A8,RELAT_1:def 7;
     end;
     then R is_connected_in field R by Def6;
     hence R is connected by Def14;
@@ -882,20 +1006,20 @@ end;
 theorem
   R is strongly_connected implies R is connected reflexive
 proof
-  assume R is strongly_connected;
+  assume
+  R is strongly_connected;
   then
 A1: R is_strongly_connected_in field R by Def15;
-  thus R is connected
-  proof
-    for x,y holds x in field R & y in field R & x <> y implies (
-    [x,y] in R or [y,x] in R) by A1,Def7;
-    then R is_connected_in field R by Def6;
-    hence thesis by Def14;
-  end;
+  then
+  for x,y holds x in field R & y in field R & x <> y implies ( [x,y] in R
+  or [y,x] in R) by Def7;
+  then R is_connected_in field R by Def6;
+  hence R is connected by Def14;
   thus R is reflexive
   proof
     let x;
-    assume x in field R;
+    assume
+    x in field R;
     hence thesis by A1,Def7;
   end;
 end;
@@ -904,28 +1028,31 @@ theorem
   R is strongly_connected iff [:field R, field R:] = R \/ R~
 proof
 A1: now
-    assume R is strongly_connected;
+    assume
+    R is strongly_connected;
     then
 A2: R is_strongly_connected_in field R by Def15;
     now
       let x;
 A3:   now
-        assume x in [:field R, field R:];
+        assume
+A4:     x in R \/ R~;
         then consider y,z such that
-A4:     y in field R & z in field R & x = [y,z] by ZFMISC_1:def 2;
-        [y,z] in R or [z,y] in R by A2,A4,Def7;
-        then [y,z] in R or [y,z] in R~ by RELAT_1:def 7;
-        hence x in R \/ R~ by A4,XBOOLE_0:def 3;
+A5:     x = [y,z] by RELAT_1:def 1;
+        [y,z] in R or [y,z] in R~ by A4,A5,XBOOLE_0:def 3;
+        then [y,z] in R or [z,y] in R by RELAT_1:def 7;
+        then y in field R & z in field R by RELAT_1:30;
+        hence x in [:field R, field R:] by A5,ZFMISC_1:106;
       end;
       now
         assume
-A5:     x in R \/ R~;
+        x in [:field R, field R:];
         then consider y,z such that
-A6:     x = [y,z] by RELAT_1:def 1;
-        [y,z] in R or [y,z] in R~ by A5,A6,XBOOLE_0:def 3;
-        then [y,z] in R or [z,y] in R by RELAT_1:def 7;
-        then y in field R & z in field R by RELAT_1:30;
-        hence x in [:field R, field R:] by A6,ZFMISC_1:106;
+A6:     y in field R & z in field R and
+A7:     x = [y,z] by ZFMISC_1:def 2;
+        [y,z] in R or [z,y] in R by A2,A6,Def7;
+        then [y,z] in R or [y,z] in R~ by RELAT_1:def 7;
+        hence x in R \/ R~ by A7,XBOOLE_0:def 3;
       end;
       hence x in [:field R, field R:] iff x in R \/ R~ by A3;
     end;
@@ -933,14 +1060,15 @@ A6:     x = [y,z] by RELAT_1:def 1;
   end;
   now
     assume
-A7: [:field R, field R:] = R \/ R~;
+A8: [:field R, field R:] = R \/ R~;
     now
       let a,b;
-      a in field R & b in field R implies [a,b] in R \/ R~ by A7,ZFMISC_1:106;
-      then a in field R & b in field R implies
-      [a,b] in R or [a,b] in R~ by XBOOLE_0:def 3;
-      hence a in field R & b in field R implies
-      [a,b] in R or [b,a] in R by RELAT_1:def 7;
+      a in field R & b in field R implies [a,b] in R \/ R~ by A8,
+      ZFMISC_1:106;
+      then a in field R & b in field R implies [a,b] in R or [a,b] in R~ by
+      XBOOLE_0:def 3;
+      hence a in field R & b in field R implies [a,b] in R or [b,a] in R by
+      RELAT_1:def 7;
     end;
     then R is_strongly_connected_in field R by Def7;
     hence R is strongly_connected by Def15;
@@ -949,21 +1077,26 @@ A7: [:field R, field R:] = R \/ R~;
 end;
 
 theorem
-  R is transitive iff for x,y,z st [x,y] in R & [y,z] in R holds [x,z] in R
+  R is transitive iff for x,y,z st [x,y] in R & [y,z] in R holds [x,z]
+  in R
 proof
   hereby
-    assume R is transitive;
+    assume
+    R is transitive;
     then
 A1: R is_transitive_in field R by Def16;
     let x,y,z;
-    assume
-A2: [x,y] in R & [y,z] in R;
-    then x in field R & y in field R & z in field R by RELAT_1:30;
-    hence [x,z] in R by A1,A2,Def8;
+    assume that
+A2: [x,y] in R and
+A3: [y,z] in R;
+A4: z in field R by A3,RELAT_1:30;
+    x in field R & y in field R by A2,RELAT_1:30;
+    hence [x,z] in R by A1,A2,A3,A4,Def8;
   end;
-  assume for x,y,z st [x,y] in R & [y,z] in R holds [x,z] in R;
-  then x in field R & y in field R & z in field R &
-  [x,y] in R & [y,z] in R implies [x,z] in R;
+  assume
+  for x,y,z st [x,y] in R & [y,z] in R holds [x,z] in R;
+  then x in field R & y in field R & z in field R & [x,y] in R & [y,z] in R
+  implies [x,z] in R;
   then R is_transitive_in field R by Def8;
   hence thesis by Def16;
 end;

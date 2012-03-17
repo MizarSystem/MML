@@ -30,14 +30,14 @@ end;
 canceled;
 
 theorem Th2:
-  X = {} or ex a be set st {a} = X or ex a,b be set st a<>b & a in X & b in X
+  X = {} or ex a be set st {a} = X or ex a,b be set st a<>b & a in
+  X & b in X
 proof
   now
-    assume that
-A1: X <> {} and
-A2: not ex a,b be set st a<>b & a in X & b in X;
     consider p be Element of X;
-    for z be set holds z in X iff z = p by A1,A2;
+    assume
+    X <> {} & not ex a,b be set st a<>b & a in X & b in X;
+    then for z be set holds z in X iff z = p;
     then X={p} by TARSKI:def 1;
     hence ex a be set st {a} = X;
   end;
@@ -49,8 +49,8 @@ end;
 ::                      *********************
 
 definition
-  struct(1-sorted) CollStr (# carrier -> set,
-    Collinearity -> Relation3 of the carrier #);
+  struct(1-sorted) CollStr (# carrier -> set, Collinearity -> Relation3 of the
+    carrier #);
 end;
 
 registration
@@ -81,7 +81,8 @@ Lm2: {[1,1,1]} c= [:{1},{1},{1}:]
 proof
   now
     let x be set;
-    assume x in {[1,1,1]};
+    assume
+    x in {[1,1,1]};
     then x = [1,1,1] by TARSKI:def 1;
     hence x in [:{1},{1},{1}:] by Lm1,MCART_1:73;
   end;
@@ -92,36 +93,41 @@ reconsider RR = {[1,1,1]} as Relation3 of Z by Def1,Lm2;
 reconsider CLS = CollStr (# Z, RR #) as non empty CollStr;
 
 Lm3: now
-A1: for z1,z2,z3 being Point of CLS holds
-  [z1,z2,z3] in the Collinearity of CLS
+  let a,b,c,p,q,r be Point of CLS;
+
+A1: for z1,z2,z3 being Point of CLS holds [z1,z2,z3] in the Collinearity of
+  CLS
+
   proof
     let z1,z2,z3 be Point of CLS;
-    z1 = 1 & z2 = 1 & z3 = 1 by TARSKI:def 1;
-    hence thesis by TARSKI:def 1;
+A2: z3 = 1 by TARSKI:def 1;
+    z1 = 1 & z2 = 1 by TARSKI:def 1;
+    hence thesis by A2,TARSKI:def 1;
   end;
-  let a,b,c,p,q,r be Point of CLS;
-  thus (a=b or a=c or b=c implies [a,b,c] in the Collinearity of CLS) by A1;
-  thus (a<>b & [a,b,p] in the Collinearity of CLS &
-  [a,b,q] in the Collinearity of CLS & [a,b,r] in the Collinearity of CLS
-  implies [p,q,r] in the Collinearity of CLS) by A1;
+  hence a=b or a=c or b=c implies [a,b,c] in the Collinearity of CLS;
+
+  thus a<>b & [a,b,p] in the Collinearity of CLS & [a,b,q] in the Collinearity
+
+of CLS & [a,b,r] in the Collinearity of CLS implies [p,q,r] in the Collinearity
+  of CLS by A1;
+
 end;
 
 definition
   let IT be non empty CollStr;
   attr IT is reflexive means
   :Def3:
-  for a,b,c being Point of IT
-  st a=b or a=c or b=c holds [a,b,c] in the Collinearity of IT;
+  for a,b,c being Point of IT st a=b or a=c
+  or b=c holds [a,b,c] in the Collinearity of IT;
 end;
 
 definition
   let IT be non empty CollStr;
   attr IT is transitive means
   :Def4:
-  for a,b,p,q,r being Point of IT
-  st a<>b & [a,b,p] in the Collinearity of IT &
-  [a,b,q] in the Collinearity of IT & [a,b,r] in the Collinearity of IT
-  holds [p,q,r] in the Collinearity of IT;
+  for a,b,p,q,r being Point of IT st a<>b &
+[a,b,p] in the Collinearity of IT & [a,b,q] in the Collinearity of IT & [a,b,r]
+  in the Collinearity of IT holds [p,q,r] in the Collinearity of IT;
 end;
 
 registration
@@ -145,47 +151,47 @@ canceled 4;
 theorem Th7:
   (a=b or a=c or b=c) implies a,b,c is_collinear
 proof
-  assume a=b or a=c or b=c;
+  assume
+  a=b or a=c or b=c;
   then [a,b,c] in the Collinearity of CLSP by Def3;
   hence thesis by Def2;
 end;
 
 theorem Th8:
-  a<>b & a,b,p is_collinear & a,b,q is_collinear & a,b,r is_collinear
-  implies p,q,r is_collinear
+  a<>b & a,b,p is_collinear & a,b,q is_collinear & a,b,r
+  is_collinear implies p,q,r is_collinear
 proof
-  assume a<>b & a,b,p is_collinear & a,b,q is_collinear & a,b,r is_collinear;
-  then a<>b & [a,b,p] in the Collinearity of CLSP &
-  [a,b,q] in the Collinearity of CLSP &
-  [a,b,r] in the Collinearity of CLSP by Def2;
-  then [p,q,r] in the Collinearity of CLSP by Def4;
+  assume that
+A1: a<>b and
+A2: a,b,p is_collinear & a,b,q is_collinear and
+A3: a,b,r is_collinear;
+A4: [a,b,r] in the Collinearity of CLSP by A3,Def2;
+  [a,b,p] in the Collinearity of CLSP & [a,b,q] in the Collinearity of
+  CLSP by A2,Def2;
+  then [p,q,r] in the Collinearity of CLSP by A1,A4,Def4;
   hence thesis by Def2;
 end;
 
 theorem Th9:
-  a,b,c is_collinear implies b,a,c is_collinear & a,c,b is_collinear
+  a,b,c is_collinear implies b,a,c is_collinear & a,c,b
+  is_collinear
 proof
   assume
 A1: a,b,c is_collinear;
-  thus b,a,c is_collinear
-  proof
-    a=b or a<>b & a,b,b is_collinear & a,b,a is_collinear & a,b,c is_collinear
-    by A1,Th7;
-    hence thesis by Th7,Th8;
-  end;
-  thus a,c,b is_collinear
-  proof
-    a=b or a<>b & a,b,a is_collinear & a,b,c is_collinear & a,b,b is_collinear
-    by A1,Th7;
-    hence thesis by Th7,Th8;
-  end;
+  then a=b or a<>b & a,b,b is_collinear & a,b,a is_collinear & a,b,c
+  is_collinear by Th7;
+  hence b,a,c is_collinear by Th7,Th8;
+  a=b or a<>b & a,b,a is_collinear & a,b,c is_collinear & a,b,b
+  is_collinear by A1,Th7;
+  hence a,c,b is_collinear by Th7,Th8;
 end;
 
 theorem
   a,b,a is_collinear by Th7;
 
 theorem Th11:
-  a<>b & a,b,c is_collinear & a,b,d is_collinear implies a,c,d is_collinear
+  a<>b & a,b,c is_collinear & a,b,d is_collinear implies a,c,d
+  is_collinear
 proof
   assume
 A1: a<>b & a,b,c is_collinear & a,b,d is_collinear;
@@ -199,25 +205,29 @@ theorem
 theorem Th13:
   a,b,c is_collinear implies b,c,a is_collinear
 proof
-  assume a,b,c is_collinear;
+  assume
+  a,b,c is_collinear;
   then b,a,c is_collinear by Th9;
   hence thesis by Th9;
 end;
 
 theorem Th14:
-  p<>q & a,b,p is_collinear & a,b,q is_collinear & p,q,r is_collinear
-  implies a,b,r is_collinear
+  p<>q & a,b,p is_collinear & a,b,q is_collinear & p,q,r
+  is_collinear implies a,b,r is_collinear
 proof
-  assume
-A1: p<>q & a,b,p is_collinear & a,b,q is_collinear & p,q,r is_collinear;
+  assume that
+A1: p<>q and
+A2: a,b,p is_collinear & a,b,q is_collinear and
+A3: p,q,r is_collinear;
   now
     assume
-A2: a<>b;
+A4: a<>b;
+    then a,p,q is_collinear by A2,Th11;
     then
-A3: a,p,q is_collinear by A1,Th11;
+A5: p,q,a is_collinear by Th13;
     a,b,b is_collinear by Th7;
-    then p,q,a is_collinear & p,q,b is_collinear by A1,A2,A3,Th8,Th13;
-    hence thesis by A1,Th8;
+    then p,q,b is_collinear by A2,A4,Th8;
+    hence thesis by A1,A3,A5,Th8;
   end;
   hence thesis by Th7;
 end;
@@ -229,7 +239,6 @@ end;
 definition
   let CLSP,a,b;
   func Line(a,b) -> set equals
-
   {p: a,b,p is_collinear};
   correctness;
 end;
@@ -239,16 +248,10 @@ canceled;
 theorem Th16:
   a in Line(a,b) & b in Line(a,b)
 proof
-  thus a in Line(a,b)
-  proof
-    a,b,a is_collinear by Th7;
-    hence thesis;
-  end;
-  thus b in Line(a,b)
-  proof
-    a,b,b is_collinear by Th7;
-    hence thesis;
-  end;
+  a,b,a is_collinear by Th7;
+  hence a in Line(a,b);
+  a,b,b is_collinear by Th7;
+  hence b in Line(a,b);
 end;
 
 theorem Th17:
@@ -257,7 +260,8 @@ proof
   thus a,b,r is_collinear implies r in Line(a,b);
   thus r in Line(a,b) implies a,b,r is_collinear
   proof
-    assume r in Line(a,b);
+    assume
+    r in Line(a,b);
     then ex p st r=p & a,b,p is_collinear;
     hence thesis;
   end;
@@ -275,9 +279,13 @@ Lm4: RR c= [:Z,Z,Z:]
 proof
   now
     let x be set;
-    assume x in RR;
-    then ex i,j,k st
-    x = [i,j,k] & (i=j or j=k or k=i) & i in Z & j in Z & k in Z;
+    assume
+    x in RR;
+
+    then
+    ex i,j,k st x = [i,j,k] & (i=j or j=k or k=i) & i in Z & j in Z & k in
+    Z;
+
     hence x in [:Z,Z,Z:] by MCART_1:73;
   end;
   hence thesis by TARSKI:def 3;
@@ -286,54 +294,64 @@ reconsider Z as non empty set by ENUMSET1:def 1;
 reconsider RR as Relation3 of Z by Def1,Lm4;
 reconsider CLS = CollStr (# Z, RR #) as non empty CollStr;
 
-Lm5: for a,b,c be Point of CLS holds
-[a,b,c] in RR iff (a=b or b=c or c =a) & a in Z & b in Z & c in Z
+Lm5: for a,b,c be Point of CLS holds [a,b,c] in RR iff (a=b or b=c or c =a) &
+a in Z & b in Z & c in Z
+
 proof
   let a,b,c be Point of CLS;
   thus [a,b,c] in RR implies (a=b or b=c or c =a) & a in Z & b in Z & c in Z
   proof
-    assume [a,b,c] in RR;
+    assume
+    [a,b,c] in RR;
     then consider i,j,k such that
 A1: [a,b,c] = [i,j,k] and
-A2: (i=j or j=k or k=i) & i in Z & j in Z & k in Z;
-    a=i & b=j & c =k by A1,MCART_1:28;
-    hence thesis by A2;
+A2: i=j or j=k or k=i and
+    i in Z and
+    j in Z and
+    k in Z;
+    a=i & b=j by A1,MCART_1:28;
+    hence thesis by A1,A2,MCART_1:28;
   end;
   thus thesis;
 end;
 
-Lm6: for a,b,c,p,q,r be Point of CLS holds
-(a<>b & [a,b,p] in the Collinearity of CLS &
-[a,b,q] in the Collinearity of CLS & [a,b,r] in the Collinearity of CLS
-implies [p,q,r] in the Collinearity of CLS)
+Lm6: for a,b,c,p,q,r be Point of CLS holds (a<>b & [a,b,p] in the Collinearity
+of CLS & [a,b,q] in the Collinearity of CLS & [a,b,r] in the Collinearity of
+CLS implies [p,q,r] in the Collinearity of CLS)
+
 proof
   let a,b,c,p,q,r be Point of CLS;
-  assume
-A1: a<>b & [a,b,p] in the Collinearity of CLS &
-  [a,b,q] in the Collinearity of CLS & [a,b,r] in the Collinearity of CLS;
-  thus [p,q,r] in the Collinearity of CLS
-  proof
-    (a=p or b=p) & (a=q or b=q) & (a=r or b=r)
-    & p in Z & q in Z & r in Z by A1,Lm5;
-    hence thesis;
-  end;
+  assume that
+A1: a<>b and
+A2: [a,b,p] in the Collinearity of CLS and
+A3: [a,b,q] in the Collinearity of CLS and
+A4: [a,b,r] in the Collinearity of CLS;
+A5: a=q or b=q by A1,A3,Lm5;
+A6: a=r or b=r by A1,A4,Lm5;
+A7: p in Z & q in Z;
+A8: r in Z;
+  a=p or b=p by A1,A2,Lm5;
+  hence [p,q,r] in the Collinearity of CLS by A5,A6,A7,A8;
 end;
 
 Lm7: ex a,b,c be Point of CLS st not a,b,c is_collinear
 proof
   reconsider a=1,b=2,c =3 as Point of CLS by ENUMSET1:def 1;
-A1: not [a,b,c] in the Collinearity of CLS by Lm5;
   take a,b,c;
-  thus thesis by A1,Def2;
+  not [a,b,c] in the Collinearity of CLS by Lm5;
+  hence thesis by Def2;
 end;
 
 Lm8: CLS is CollSp
 proof
-  for a,b,c,p,q,r being Point of CLS holds
-  (a=b or a=c or b=c implies [a,b,c] in the Collinearity of CLS) &
-  (a<>b & [a,b,p] in the Collinearity of CLS &
-  [a,b,q] in the Collinearity of CLS & [a,b,r] in the Collinearity of CLS
-  implies [p,q,r] in the Collinearity of CLS) by Lm5,Lm6;
+
+  for a,b,c,p,q,r being Point of CLS holds (a=b or a=c or b=c implies [a,b
+
+,c] in the Collinearity of CLS) & (a<>b & [a,b,p] in the Collinearity of CLS &
+
+[a,b,q] in the Collinearity of CLS & [a,b,r] in the Collinearity of CLS implies
+  [p,q,r] in the Collinearity of CLS) by Lm5,Lm6;
+
   hence thesis by Def3,Def4;
 end;
 
@@ -341,13 +359,15 @@ definition
   let IT be non empty CollStr;
   attr IT is proper means
   :Def6:
-  ex a,b,c being Point of IT st not a,b,c is_collinear;
+  ex a,b,c being Point of IT st not a,b,c
+  is_collinear;
 end;
 
 registration
   cluster strict proper CollSp;
   existence
-  proof reconsider CLS as CollSp by Lm8;
+  proof
+    reconsider CLS as CollSp by Lm8;
     CLS is proper by Def6,Lm7;
     hence thesis;
   end;
@@ -362,12 +382,12 @@ theorem Th19:
   for p,q holds p<>q implies ex r st not p,q,r is_collinear
 proof
   let p,q;
-  assume
-A1: p<>q;
   consider a,b,c such that
-A2: not a,b,c is_collinear by Def6;
-  not p,q,a is_collinear or not p,q,b is_collinear
-  or not p,q,c is_collinear by A1,A2,Th8;
+A1: not a,b,c is_collinear by Def6;
+  assume
+  p<>q;
+  then not p,q,a is_collinear or not p,q,b is_collinear or not p,q,c
+  is_collinear by A1,Th8;
   hence thesis;
 end;
 
@@ -380,9 +400,9 @@ definition
   proof
     consider a,b,c such that
 A1: not a,b,c is_collinear by Def6;
-A2: a<>b by A1,Th7;
     take Line(a,b);
-    thus thesis by A2;
+    a<>b by A1,Th7;
+    hence thesis;
   end;
 end;
 
@@ -400,7 +420,8 @@ A1: a=b;
     let x be set;
     thus x in Line(a,b) implies x in the carrier of CLSP
     proof
-      assume x in Line(a,b);
+      assume
+      x in Line(a,b);
       then ex p st x=p & a,b,p is_collinear;
       then reconsider x as Point of CLSP;
       x is Element of CLSP;
@@ -408,7 +429,8 @@ A1: a=b;
     end;
     thus x in the carrier of CLSP implies x in Line(a,b)
     proof
-      assume x in the carrier of CLSP;
+      assume
+      x in the carrier of CLSP;
       then reconsider x as Point of CLSP;
       a,b,x is_collinear by A1,Th7;
       hence thesis;
@@ -422,16 +444,16 @@ theorem
 proof
   let P;
   consider a,b such that
-A1: a<>b and
-A2: P = Line(a,b) by Def7;
+A1: a<>b & P = Line(a,b) by Def7;
   take a,b;
-  thus thesis by A1,A2,Th16;
+  thus thesis by A1,Th16;
 end;
 
 theorem
   a <> b implies ex P st a in P & b in P
 proof
-  assume a<>b;
+  assume
+  a<>b;
   then reconsider P = Line(a,b) as LINE of CLSP by Def7;
   take P;
   thus thesis by Th16;
@@ -440,25 +462,27 @@ end;
 theorem Th25:
   p in P & q in P & r in P implies p,q,r is_collinear
 proof
-  assume
-A1: p in P & q in P & r in P;
+  assume that
+A1: p in P & q in P and
+A2: r in P;
   consider a,b such that
-A2: a<>b and
-A3: P = Line(a,b) by Def7;
-A4: ex x be Point of CLSP st x=p & a,b,x is_collinear by A1,A3;
-A5: ex y be Point of CLSP st y=q & a,b,y is_collinear by A1,A3;
-  ex z be Point of CLSP st z=r & a,b,z is_collinear by A1,A3;
-  hence thesis by A2,A4,A5,Th8;
+A3: a<>b and
+A4: P = Line(a,b) by Def7;
+A5: ex z be Point of CLSP st z=r & a,b,z is_collinear by A2,A4;
+  ( ex x be Point of CLSP st x=p & a,b,x is_collinear)& ex y be Point of
+  CLSP st y=q & a,b,y is_collinear by A1,A4;
+  hence thesis by A3,A5,Th8;
 end;
 
 Lm9: for x be set holds x in P implies x is Point of CLSP
 proof
   let x be set;
-  assume
-A1: x in P;
   consider a,b such that
-A2: a<>b & P = Line(a,b) by Def7;
-  ex r be Point of CLSP st r=x & a,b,r is_collinear by A1,A2;
+  a<>b and
+A1: P = Line(a,b) by Def7;
+  assume
+  x in P;
+  then ex r be Point of CLSP st r=x & a,b,r is_collinear by A1;
   hence thesis;
 end;
 
@@ -470,14 +494,15 @@ A1: P c= Q;
   Q c= P
   proof
     let r be set;
+    consider p,q such that
+    p<>q and
+A2: P = Line(p,q) by Def7;
     assume
-A2: r in Q;
+A3: r in Q;
     then reconsider r as Point of CLSP by Lm9;
-    consider p,q such that p<>q and
-A3: P = Line(p,q) by Def7;
-    p in P & q in P by A3,Th16;
-    then p,q,r is_collinear by A1,A2,Th25;
-    hence thesis by A3;
+    p in P & q in P by A2,Th16;
+    then p,q,r is_collinear by A1,A3,Th25;
+    hence thesis by A2;
   end;
   hence thesis by A1,XBOOLE_0:def 10;
 end;
@@ -487,69 +512,77 @@ theorem Th27:
 proof
   assume that
 A1: p<>q and
-A2: p in P and
-A3: q in P;
-  consider a,b such that a<>b and
-A4: P = Line(a,b) by Def7;
-A5: a,b,p is_collinear & a,b,q is_collinear by A2,A3,A4,Th17;
+A2: p in P & q in P;
   let x be set;
-  assume x in Line(p,q);
+  consider a,b such that
+  a<>b and
+A3: P = Line(a,b) by Def7;
+  assume
+  x in Line(p,q);
   then consider r be Point of CLSP such that
-A6: r=x and
-A7: p,q,r is_collinear;
-  a,b,r is_collinear by A1,A5,A7,Th14;
-  hence thesis by A4,A6;
+A4: r=x and
+A5: p,q,r is_collinear;
+  a,b,p is_collinear & a,b,q is_collinear by A2,A3,Th17;
+  then a,b,r is_collinear by A1,A5,Th14;
+  hence thesis by A3,A4;
 end;
 
 theorem Th28:
   p<>q & p in P & q in P implies Line(p,q) = P
 proof
-  assume
-A1: p<>q & p in P & q in P;
-  then reconsider Q = Line(p,q) as LINE of CLSP by Def7;
-  Q c= P by A1,Th27;
+  assume that
+A1: p<>q and
+A2: p in P & q in P;
+  reconsider Q = Line(p,q) as LINE of CLSP by A1,Def7;
+  Q c= P by A1,A2,Th27;
   hence thesis by Th26;
 end;
 
 theorem Th29:
   p<>q & p in P & q in P & p in Q & q in Q implies P = Q
 proof
-  assume p<>q & p in P & q in P & p in Q & q in Q;
-  then Line(p,q) = P & Line(p,q) = Q by Th28;
-  hence thesis;
+  assume that
+A1: p<>q and
+A2: p in P & q in P and
+A3: p in Q & q in Q;
+  Line(p,q) = P by A1,A2,Th28;
+  hence thesis by A1,A3,Th28;
 end;
 
 theorem
   P = Q or P misses Q or ex p st P /\ Q = {p}
 proof
-A1: P /\ Q = {} or ex a be set st {a} = P /\ Q
-  or ex a,b be set st a<>b & a in P /\ Q & b in P /\ Q by Th2;
-A2: (ex a be set st {a} = P /\ Q) implies ex p st P /\ Q = {p}
+A1: (ex a be set st {a} = P /\ Q) implies ex p st P /\ Q = {p}
   proof
     given a be set such that
-A3: {a} = P /\ Q;
-    a in P /\ Q by A3,TARSKI:def 1;
+A2: {a} = P /\ Q;
+    a in P /\ Q by A2,TARSKI:def 1;
     then a in P by XBOOLE_0:def 4;
     then reconsider p=a as Point of CLSP by Lm9;
-    P /\ Q = {p} by A3;
+    P /\ Q = {p} by A2;
     hence thesis;
   end;
-  (ex a,b be set st a<>b & a in P /\ Q & b in P /\ Q) implies P = Q
+A3: (ex a,b be set st a<>b & a in P /\ Q & b in P /\ Q) implies P = Q
   proof
     given a,b be set such that
-A4: a<>b & a in P /\ Q & b in P /\ Q;
-    a in P & a in Q & b in P & b in Q by A4,XBOOLE_0:def 4;
+A4: a<>b and
+A5: a in P /\ Q & b in P /\ Q;
+    a in P & b in P by A5,XBOOLE_0:def 4;
     then reconsider p=a, q=b as Point of CLSP by Lm9;
-    p<>q & p in P & q in P & p in Q & q in Q by A4,XBOOLE_0:def 4;
-    hence thesis by Th29;
+A6: p in Q & q in Q by A5,XBOOLE_0:def 4;
+    p in P & q in P by A5,XBOOLE_0:def 4;
+    hence thesis by A4,A6,Th29;
   end;
-  hence thesis by A1,A2,XBOOLE_0:def 7;
+  P /\ Q = {} or ex a be set st {a} = P /\ Q or ex a,b be set st a<>b & a
+  in P /\ Q & b in P /\ Q by Th2;
+  hence thesis by A1,A3,XBOOLE_0:def 7;
 end;
 
 theorem
   a<>b implies Line(a,b) <> the carrier of CLSP
 proof
-  assume a<>b;
+  assume
+  a<>b;
   then ex r st not a,b,r is_collinear by Th19;
   hence thesis by Th17;
 end;

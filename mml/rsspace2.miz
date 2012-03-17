@@ -11,17 +11,16 @@ environ
       SERIES_1, PROB_2, BHSP_1, BHSP_3, SUPINF_2, RSSPACE, FUNCOP_1, REALSET1,
       ALGSTR_0;
  notations TARSKI, SUBSET_1, ZFMISC_1, ORDINAL1, BINOP_1, REALSET1, NUMBERS,
-      XCMPLX_0, XXREAL_0, COMPLEX1, REAL_1, NAT_1,
-      STRUCT_0, ALGSTR_0, XREAL_0, RELAT_1,
-      PARTFUN1, FUNCT_1, FUNCT_2, FUNCOP_1, PRE_TOPC, RLVECT_1,
-      BHSP_1, BHSP_2, BHSP_3, SQUARE_1, VALUED_1, SEQ_1, SEQ_2, SEQM_3,
-      SERIES_1, RSSPACE;
+      XCMPLX_0, XXREAL_0, COMPLEX1, REAL_1, NAT_1, STRUCT_0, ALGSTR_0, XREAL_0,
+      RELAT_1, PARTFUN1, FUNCT_1, FUNCT_2, FUNCOP_1, PRE_TOPC, RLVECT_1,
+      BHSP_1, BHSP_2, BHSP_3, SQUARE_1, VALUED_1, SEQ_1, SEQ_2, SERIES_1,
+      RSSPACE;
  constructors PARTFUN1, BINOP_1, FUNCOP_1, REAL_1, SQUARE_1, NAT_1, NAT_D,
       SEQ_2, SERIES_1, REALSET1, RLSUB_1, BHSP_2, BHSP_3, RSSPACE, SEQ_1,
       VALUED_1, RELSET_1;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0,
-      MEMBERED, SEQM_3, REALSET1, STRUCT_0, RSSPACE, VALUED_1, FUNCT_2,
-      VALUED_0, FUNCOP_1, NAT_1, SEQ_4;
+      MEMBERED, REALSET1, STRUCT_0, RSSPACE, VALUED_1, FUNCT_2, VALUED_0,
+      FUNCOP_1, NAT_1, SEQ_4;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
  definitions SQUARE_1, BINOP_1, REALSET1, RLVECT_1, STRUCT_0, ALGSTR_0;
  theorems RELAT_1, SQUARE_1, ZFMISC_1, SEQ_1, SEQ_2, SEQM_3, SERIES_1, INT_1,
@@ -32,217 +31,214 @@ environ
 begin :: Hilbert Space of Real Sequences
 
 theorem Th1:
-  ( the carrier of l2_Space = the_set_of_l2RealSequences) &
-  (for x be set holds x is VECTOR of l2_Space
-  iff x is Real_Sequence & seq_id(x)(#)seq_id(x) is summable) &
-  0.l2_Space = Zeroseq & (for u be VECTOR of l2_Space holds u =seq_id(u)) &
-  (for u,v be VECTOR of l2_Space holds u+v =seq_id(u)+seq_id(v)) &
-  (for r be Real for u be VECTOR of l2_Space holds r*u =r(#)seq_id(u)) &
-  (for u be VECTOR of l2_Space holds -u =-seq_id(u) & seq_id(-u)=-seq_id(u)) &
-  (for u,v be VECTOR of l2_Space holds u-v =seq_id(u)-seq_id(v)) &
-  for v,w be VECTOR of l2_Space holds seq_id(v)(#)seq_id(w) is summable &
-  for v,w be VECTOR of l2_Space holds v.|.w = Sum(seq_id(v)(#)seq_id(w))
+  the carrier of l2_Space = the_set_of_l2RealSequences & (for x be
+set holds x is VECTOR of l2_Space iff x is Real_Sequence & seq_id(x)(#)seq_id(x
+) is summable) & 0.l2_Space = Zeroseq & (for u be VECTOR of l2_Space holds u =
+seq_id(u)) & (for u,v be VECTOR of l2_Space holds u+v =seq_id(u)+seq_id(v)) & (
+for r be Real for u be VECTOR of l2_Space holds r*u =r(#)seq_id(u)) & (for u be
+VECTOR of l2_Space holds -u =-seq_id(u) & seq_id(-u)=-seq_id(u)) & (for u,v be
+  VECTOR of l2_Space holds u-v =seq_id(u)-seq_id(v)) & for v,w be VECTOR of
+  l2_Space holds seq_id(v)(#)seq_id(w) is summable & for v,w be VECTOR of
+  l2_Space holds v.|.w = Sum(seq_id(v)(#)seq_id(w))
 proof
-A1: for x be set holds x is Element of l2_Space
-  iff x is Real_Sequence & seq_id(x)(#)seq_id(x) is summable
+A1: for u,v be VECTOR of l2_Space holds seq_id(u)(#)seq_id(v) is summable
+  proof
+    set q0 = 1/2;
+    let u,v be VECTOR of l2_Space;
+    set p = (seq_id(v))(#)(seq_id(v));
+    set q = (seq_id(u))(#)(seq_id(u));
+    set r = abs( (seq_id(u))(#)(seq_id(v)));
+A2: for n be Element of NAT holds 0<=(2(#)r).n
+    proof
+      set rr=(seq_id u)(#)(seq_id v);
+      let n be Element of NAT;
+      reconsider tt=abs(rr.n) as Real;
+A3:   0 <= tt by COMPLEX1:132;
+      (2(#)r).n = 2*r.n by SEQ_1:13
+        .= 2*abs(rr.n) by SEQ_1:16;
+      hence thesis by A3;
+    end;
+A4: for n be Element of NAT holds (2(#)r).n <=(p+q).n
+    proof
+      set s = seq_id v, t = seq_id u;
+      let n be Element of NAT;
+      reconsider sn=s.n,tn=t.n as Real;
+      reconsider ss=abs sn,tt=abs tn as Real;
+A5:   (p+q).n = p.n +q.n by SEQ_1:11
+        .= (s.n*s.n) + q.n by SEQ_1:12
+        .= sn^2 + (t.n*t.n) by SEQ_1:12
+        .=(abs(sn))^2 + tn^2 by COMPLEX1:161
+        .=(abs(sn))^2 + (abs(tn))^2 by COMPLEX1:161;
+A6:   0 <= (abs(sn)-abs(tn))^2 by XREAL_1:65;
+      (2(#)r).n =2*r.n by SEQ_1:13
+        .=2*abs(((seq_id u)(#)(seq_id v)).n ) by SEQ_1:16
+        .=2*(abs((seq_id u).n * (seq_id v).n)) by SEQ_1:12
+        .= 2*(ss*tt) by COMPLEX1:151
+        .= 2*abs(sn)*abs(tn);
+      then 0 + (2(#)r).n <= (p+q).n - (2(#)r).n + (2(#)r).n by A5,A6,
+      XREAL_1:9;
+      hence thesis;
+    end;
+A7: q0(#)(2(#)r)=(q0*2)(#)r by SEQ_1:31
+      .=r by SEQ_1:35;
+    (seq_id(v))(#)(seq_id(v)) is summable & (seq_id(u))(#)(seq_id(u)) is
+    summable by RSSPACE:def 11,def 13;
+    then p+q is summable by SERIES_1:10;
+    then 2(#)r is summable by A2,A4,SERIES_1:24;
+    then r is summable by A7,SERIES_1:13;
+    then (seq_id(u))(#)(seq_id(v)) is absolutely_summable by SERIES_1:def
+    5;
+    hence thesis by SERIES_1:40;
+  end;
+A8: for x be set holds x is Element of l2_Space iff x is Real_Sequence &
+  seq_id(x)(#)seq_id(x) is summable
   proof
     let x be set;
     x in the_set_of_RealSequences iff x is Real_Sequence by RSSPACE:def 1;
     hence thesis by RSSPACE:def 11,def 13;
   end;
-A2: for u be VECTOR of l2_Space holds u =seq_id u
-  proof
-    let u be VECTOR of l2_Space;
-    u is VECTOR of Linear_Space_of_RealSequences
-    by RLSUB_1:18,RSSPACE:15,def 13;
-    hence thesis by RSSPACE:17;
-  end;
-A3: for u,v be VECTOR of l2_Space holds u+v =seq_id(u)+seq_id(v)
-  proof
-    let u,v be VECTOR of l2_Space;
-    reconsider u1=u,v1=v as VECTOR of Linear_Space_of_RealSequences
-    by RLSUB_1:18,RSSPACE:15,def 13;
-    set L1 = Linear_Space_of_RealSequences;
-    set W = the_set_of_l2RealSequences;
-    dom (the addF of L1)
-    = [:the carrier of L1,the carrier of L1:] by FUNCT_2:def 1;
-    then dom ((the addF of Linear_Space_of_RealSequences)||W)
-    =[:W,W:] by RELAT_1:91,ZFMISC_1:119;
-    then
-A4: [u,v] in dom ((the addF of Linear_Space_of_RealSequences)||W)
-    by RSSPACE:def 13,ZFMISC_1:106;
-    u+v =((the addF of Linear_Space_of_RealSequences)||W).[u,v]
-    by RSSPACE:def 8,def 13
-      .=u1+v1 by A4,FUNCT_1:70;
-    hence thesis by RSSPACE:17;
-  end;
-A5: for r be Real for u be VECTOR of l2_Space holds r*u =r(#)seq_id(u)
-  proof
-    let r be Real;
-    let u be VECTOR of l2_Space;
-    reconsider u1=u as VECTOR of Linear_Space_of_RealSequences
-    by RLSUB_1:18,RSSPACE:15,def 13;
-    set L1=Linear_Space_of_RealSequences;
-    set W = the_set_of_l2RealSequences;
-    dom (the Mult of L1) = [:REAL,the carrier of L1:] by FUNCT_2:def 1;
-    then dom ((the Mult of Linear_Space_of_RealSequences) | [:REAL,W:])
-    =[:REAL,W:] by RELAT_1:91,ZFMISC_1:119;
-    then
-A6: [r,u] in dom ((the Mult of Linear_Space_of_RealSequences)|[:REAL,W :])
-    by RSSPACE:def 13,ZFMISC_1:106;
-    r*u =((the Mult of Linear_Space_of_RealSequences)|[:REAL,W:]).[r,u]
-    by RSSPACE:def 9,def 13
-      .=r*u1 by A6,FUNCT_1:70;
-    hence thesis by RSSPACE:17;
-  end;
-A7: for u be VECTOR of l2_Space holds (-u =-seq_id(u) & seq_id(-u)=-seq_id(u))
-  proof
-    let u be VECTOR of l2_Space;
-    -u = (-1)*u by RLVECT_1:29
-      .= (-1)(#)seq_id(u) by A5
-      .= -seq_id(u) by SEQ_1:25;
-    hence thesis by A2;
-  end;
-A8: for u,v be VECTOR of l2_Space holds u-v =seq_id(u)-seq_id(v)
-  proof
-    let u,v be VECTOR of l2_Space;
-    thus u-v = seq_id(u)+seq_id(-v) by A3
-      .= seq_id(u)+(-seq_id(v)) by A7
-      .= seq_id(u)-seq_id(v) by SEQ_1:15;
-  end;
-A9: 0.l2_Space = Zeroseq
-  proof
-    thus 0.l2_Space = 0.Linear_Space_of_RealSequences by RSSPACE:def 10,def 13
-      .= Zeroseq by RSSPACE:def 7;
-  end;
-A10: for u,v be VECTOR of l2_Space holds seq_id(u)(#)seq_id(v) is summable
-  proof
-    let u,v be VECTOR of l2_Space;
-A11: (seq_id(v))(#)(seq_id(v)) is summable by RSSPACE:def 11,def 13;
-A12: (seq_id(u))(#)(seq_id(u)) is summable by RSSPACE:def 11,def 13;
-    set p = (seq_id(v))(#)(seq_id(v));
-    set q = (seq_id(u))(#)(seq_id(u));
-    set r = abs( (seq_id(u))(#)(seq_id(v)));
-A13: p+q is summable by A11,A12,SERIES_1:10;
-A14: for n be Element of NAT holds 0<=(2(#)r).n
-    proof
-      let n be Element of NAT;
-      set rr=(seq_id u)(#)(seq_id v);
-A15:  (2(#)r).n = 2*r.n by SEQ_1:13
-        .= 2*abs(rr.n) by SEQ_1:16;
-      reconsider tt=abs(rr.n) as Real;
-      0 <= 2 & 0 <= tt by COMPLEX1:132;
-      hence thesis by A15;
-    end;
-    for n be Element of NAT holds (2(#)r).n <=(p+q).n
-    proof
-      let n be Element of NAT;
-      set s = seq_id v, t = seq_id u;
-      reconsider sn=s.n,tn=t.n as Real;
-      reconsider ss=abs sn,tt=abs tn as Real;
-A16:  (2(#)r).n =2*r.n by SEQ_1:13
-        .=2*abs(((seq_id u)(#)(seq_id v)).n ) by SEQ_1:16
-        .=2*(abs((seq_id u).n * (seq_id v).n)) by SEQ_1:12
-        .= 2*(ss*tt) by COMPLEX1:151
-        .= 2*abs(sn)*abs(tn);
-A17:  (p+q).n = p.n +q.n by SEQ_1:11
-        .= (s.n*s.n) + q.n by SEQ_1:12
-        .= sn^2 + (t.n*t.n) by SEQ_1:12
-        .=(abs(sn))^2 + tn^2 by COMPLEX1:161
-        .=(abs(sn))^2 + (abs(tn))^2 by COMPLEX1:161;
-      0 <= (abs(sn)-abs(tn))^2 by XREAL_1:65;
-      then 0 + (2(#)r).n <= (p+q).n - (2(#)r).n + (2(#)r).n by A16,A17,
-XREAL_1:9;
-      hence thesis;
-    end;
-    then
-A18: 2(#)r is summable by A13,A14,SERIES_1:24;
-    set q0 = 1/2;
-    q0(#)(2(#)r)=(q0*2)(#)r by SEQ_1:31
-      .=r by SEQ_1:35;
-    then r is summable by A18,SERIES_1:13;
-    then (seq_id(u))(#)(seq_id(v)) is absolutely_summable by SERIES_1:def 5;
-    hence thesis by SERIES_1:40;
-  end;
-  for v,w be VECTOR of l2_Space holds v.|.w = Sum(seq_id(v)(#)seq_id(w))
+A9: for v,w be VECTOR of l2_Space holds v.|.w = Sum(seq_id(v)(#)seq_id(w))
   proof
     let v,w be VECTOR of l2_Space;
     thus v.|.w = (the scalar of l2_Space).(v,w) by BHSP_1:def 1
       .= Sum(seq_id(v)(#)seq_id(w)) by RSSPACE:def 12,def 13;
   end;
-  hence thesis by A1,A2,A3,A5,A7,A8,A9,A10,RSSPACE:def 13;
+A10: for u,v be VECTOR of l2_Space holds u+v =seq_id(u)+seq_id(v)
+  proof
+    set W = the_set_of_l2RealSequences;
+    set L1 = Linear_Space_of_RealSequences;
+    let u,v be VECTOR of l2_Space;
+    reconsider u1=u,v1=v as VECTOR of Linear_Space_of_RealSequences by RLSUB_1
+    :18,RSSPACE:15,def 13;
+    dom (the addF of L1) = [:the carrier of L1,the carrier of L1:] by
+    FUNCT_2:def 1;
+    then dom ((the addF of Linear_Space_of_RealSequences)||W) =[:W,W:] by
+    RELAT_1:91,ZFMISC_1:119;
+    then
+A11: [u,v] in dom ((the addF of Linear_Space_of_RealSequences)||W) by
+    RSSPACE:def 13,ZFMISC_1:106;
+    u+v =((the addF of Linear_Space_of_RealSequences)||W).[u,v] by RSSPACE
+    :def 8,def 13
+      .=u1+v1 by A11,FUNCT_1:70;
+    hence thesis by RSSPACE:17;
+  end;
+A12: for r be Real for u be VECTOR of l2_Space holds r*u =r(#)seq_id(u)
+  proof
+    set W = the_set_of_l2RealSequences;
+    set L1=Linear_Space_of_RealSequences;
+    let r be Real;
+    let u be VECTOR of l2_Space;
+    reconsider u1=u as VECTOR of Linear_Space_of_RealSequences by RLSUB_1:18,
+    RSSPACE:15,def 13;
+    dom (the Mult of L1) = [:REAL,the carrier of L1:] by FUNCT_2:def 1;
+    then dom ((the Mult of Linear_Space_of_RealSequences) | [:REAL,W:]) =[:
+    REAL,W:] by RELAT_1:91,ZFMISC_1:119;
+    then
+A13: [r,u] in dom ((the Mult of Linear_Space_of_RealSequences)|[:REAL,W :]
+    ) by RSSPACE:def 13,ZFMISC_1:106;
+    r*u =((the Mult of Linear_Space_of_RealSequences)|[:REAL,W:]).[r,u]
+    by RSSPACE:def 9,def 13
+      .=r*u1 by A13,FUNCT_1:70;
+    hence thesis by RSSPACE:17;
+  end;
+A14: for u be VECTOR of l2_Space holds u =seq_id u
+  proof
+    let u be VECTOR of l2_Space;
+    u is VECTOR of Linear_Space_of_RealSequences by RLSUB_1:18,RSSPACE:15,
+    def 13;
+    hence thesis by RSSPACE:17;
+  end;
+A15: for u be VECTOR of l2_Space holds -u =-seq_id(u) & seq_id(-u)=-seq_id(u
+  )
+  proof
+    let u be VECTOR of l2_Space;
+    -u = (-1)*u by RLVECT_1:29
+      .= (-1)(#)seq_id(u) by A12
+      .= -seq_id(u) by SEQ_1:25;
+    hence thesis by A14;
+  end;
+A16: for u,v be VECTOR of l2_Space holds u-v =seq_id(u)-seq_id(v)
+  proof
+    let u,v be VECTOR of l2_Space;
+    thus u-v = seq_id(u)+seq_id(-v) by A10
+      .= seq_id(u)+(-seq_id(v)) by A15
+      .= seq_id(u)-seq_id(v) by SEQ_1:15;
+  end;
+  0.l2_Space = 0.Linear_Space_of_RealSequences by RSSPACE:def 10,def 13
+    .= Zeroseq by RSSPACE:def 7;
+  hence thesis by A8,A14,A10,A12,A15,A16,A1,A9,RSSPACE:def 13;
 end;
 
 theorem Th2:
-  for x, y, z being Point of l2_Space for a be Real holds
-  ( x .|. x = 0 iff x = 0.l2_Space ) & 0 <= x .|. x & x .|. y = y .|. x &
-  (x+y) .|. z = x .|. z + y .|. z & (a*x) .|. y = a * ( x .|. y )
+  for x, y, z being Point of l2_Space for a be Real holds ( x .|. x
+  = 0 iff x = 0.l2_Space ) & 0 <= x .|. x & x .|. y = y .|. x & (x+y) .|. z = x
+  .|. z + y .|. z & (a*x) .|. y = a * ( x .|. y )
 proof
   let x, y, z be Point of l2_Space;
   let a be Real;
-A1: now
-    assume
-A2: x .|. x = 0;
-A3: x .|. x = Sum(seq_id(x)(#)seq_id(x)) by Th1;
+A1: for n be Element of NAT holds 0 <= (seq_id(x)(#)seq_id(x)).n
+  proof
+    let n be Element of NAT;
+    (seq_id(x)(#)seq_id(x)).n =(seq_id x).n * (seq_id x).n by SEQ_1:12;
+    hence thesis by XREAL_1:65;
+  end;
+A2: seq_id(x)(#)seq_id(x) is summable & x .|. x = Sum(seq_id(x)(#)seq_id(x)
+  ) by Th1;
+A3: now
 A4: for n be Element of NAT holds 0 <= (seq_id(x)(#)seq_id(x)).n
     proof
       let n be Element of NAT;
       (seq_id(x)(#)seq_id(x)).n =(seq_id(x)).n * (seq_id(x)).n by SEQ_1:12;
       hence thesis by XREAL_1:65;
     end;
-A5: seq_id(x)(#)seq_id(x) is summable by Th1;
-A6: for n be Element of NAT holds 0 = (seq_id x).n
+    assume
+A5: x .|. x = 0;
+A6: x .|. x = Sum(seq_id(x)(#)seq_id(x)) & seq_id(x)(#)seq_id(x) is
+    summable by Th1;
+A7: for n be Element of NAT holds 0 = (seq_id x).n
     proof
       let n be Element of NAT;
-      0 = (seq_id(x)(#)seq_id(x)).n by A2,A3,A4,A5,RSSPACE:21
+      0 = (seq_id(x)(#)seq_id(x)).n by A5,A4,A6,RSSPACE:21
         .= ((seq_id(x)).n)*((seq_id(x)).n) by SEQ_1:12;
       hence thesis by XCMPLX_1:6;
     end;
     x is Element of the_set_of_RealSequences by RSSPACE:def 11,def 13;
-    hence x=0.l2_Space by A6,Th1,RSSPACE:def 6;
+    hence x=0.l2_Space by A7,Th1,RSSPACE:def 6;
   end;
-A7: now
+A8: x .|. y = Sum(seq_id(x)(#)seq_id(y)) by Th1
+    .=y .|. x by Th1;
+A9: now
     assume
-A8: x=0.l2_Space;
-A9: for n be Element of NAT holds (seq_id(x)(#)seq_id(x)).n=0
+A10: x=0.l2_Space;
+A11: for n be Element of NAT holds (seq_id(x)(#)seq_id(x)).n=0
     proof
       let n be Element of NAT;
-      thus (seq_id(x)(#)seq_id(x)).n
-      = (seq_id(x)).n * (seq_id(x)).n by SEQ_1:12
-        .=(seq_id(x)).n * 0 by A8,Th1,RSSPACE:def 6
+      thus (seq_id(x)(#)seq_id(x)).n = (seq_id(x)).n * (seq_id(x)).n by SEQ_1:
+      12
+        .=(seq_id(x)).n * 0 by A10,Th1,RSSPACE:def 6
         .= 0;
     end;
     thus x .|. x = Sum(seq_id(x)(#)seq_id(x)) by Th1
-      .=0 by A9,RSSPACE:20;
+      .=0 by A11,RSSPACE:20;
   end;
-A10: for n be Element of NAT holds 0 <= (seq_id(x)(#)seq_id(x)).n
-  proof
-    let n be Element of NAT;
-    (seq_id(x)(#)seq_id(x)).n =(seq_id x).n * (seq_id x).n by SEQ_1:12;
-    hence thesis by XREAL_1:65;
-  end;
-A11: seq_id(x)(#)seq_id(x) is summable by Th1;
-A12: x .|. x = Sum(seq_id(x)(#)seq_id(x)) by Th1;
-A13: x .|. y = Sum(seq_id(x)(#)seq_id(y)) by Th1
-    .=y .|. x by Th1;
-A14: seq_id(x)(#)seq_id(z) is summable by Th1;
-A15: seq_id(y)(#)seq_id(z) is summable by Th1;
-A16: (x+y) .|. z = Sum(seq_id(x+y)(#)seq_id(z)) by Th1
-    .= Sum(seq_id(seq_id(x)+seq_id(y))(#)seq_id(z)) by Th1
-    .= Sum((seq_id(x)+seq_id(y))(#)seq_id(z)) by RSSPACE:3
-    .= Sum(seq_id(x)(#)seq_id(z)+seq_id(y)(#)seq_id(z)) by SEQ_1:24
-    .= Sum(seq_id(x)(#)seq_id(z))+Sum(seq_id(y)(#)seq_id(z))
-  by A14,A15,SERIES_1:10
-    .= x .|. z + Sum(seq_id(y)(#)seq_id(z)) by Th1
-    .= x .|. z + y .|. z by Th1;
-A17: seq_id(x)(#)seq_id(y) is summable by Th1;
-  (a*x) .|. y =Sum(seq_id(a*x)(#)seq_id(y)) by Th1
+A12: seq_id(x)(#)seq_id(y) is summable by Th1;
+A13: (a*x) .|. y =Sum(seq_id(a*x)(#)seq_id(y)) by Th1
     .=Sum(seq_id(a(#)seq_id(x))(#)seq_id(y)) by Th1
     .=Sum(a(#)seq_id(x)(#)seq_id(y)) by RSSPACE:3
     .=Sum(a(#)(seq_id(x)(#)seq_id(y))) by SEQ_1:26
-    .=a*Sum(seq_id(x)(#)seq_id(y)) by A17,SERIES_1:13
+    .=a*Sum(seq_id(x)(#)seq_id(y)) by A12,SERIES_1:13
     .=a * ( x .|. y ) by Th1;
-  hence thesis by A1,A7,A10,A11,A12,A13,A16,SERIES_1:21;
+A14: seq_id(x)(#)seq_id(z) is summable & seq_id(y)(#)seq_id(z) is summable
+  by Th1;
+  (x+y) .|. z = Sum(seq_id(x+y)(#)seq_id(z)) by Th1
+    .= Sum(seq_id(seq_id(x)+seq_id(y))(#)seq_id(z)) by Th1
+    .= Sum((seq_id(x)+seq_id(y))(#)seq_id(z)) by RSSPACE:3
+    .= Sum(seq_id(x)(#)seq_id(z)+seq_id(y)(#)seq_id(z)) by SEQ_1:24
+    .= Sum(seq_id(x)(#)seq_id(z))+Sum(seq_id(y)(#)seq_id(z)) by A14,SERIES_1
+  :10
+    .= x .|. z + Sum(seq_id(y)(#)seq_id(z)) by Th1
+    .= x .|. z + y .|. z by Th1;
+  hence thesis by A3,A9,A1,A2,A8,A13,SERIES_1:21;
 end;
 
 registration
@@ -250,68 +246,82 @@ registration
   coherence by Th2,BHSP_1:def 2;
 end;
 
-Lm1: for rseq be Real_Sequence st
-(for n be Element of NAT holds 0 <= rseq.n) holds
-( for n be Element of NAT holds 0 <= (Partial_Sums rseq).n ) &
-( for n be Element of NAT holds rseq.n <= (Partial_Sums rseq).n ) &
-(rseq is summable implies
-(( for n be Element of NAT holds (Partial_Sums rseq).n <= Sum rseq) &
-( for n be Element of NAT holds rseq.n <= Sum rseq )))
+Lm1: for rseq be Real_Sequence st (for n be Element of NAT holds 0 <= rseq.n)
+holds ( for n be Element of NAT holds 0 <= (Partial_Sums rseq).n ) & ( for n be
+Element of NAT holds rseq.n <= (Partial_Sums rseq).n ) & (rseq is summable
+implies ( for n be Element of NAT holds (Partial_Sums rseq).n <= Sum rseq) &
+for n be Element of NAT holds rseq.n <= Sum rseq )
+
 proof
   let rseq be Real_Sequence such that
 A1: for n be Element of NAT holds 0 <= rseq.n;
-A2: Partial_Sums rseq is non-decreasing by A1,SERIES_1:19; thus
+A2: Partial_Sums rseq is non-decreasing by A1,SERIES_1:19;
+  thus
 A3: for n be Element of NAT holds 0 <= Partial_Sums(rseq).n
   proof
     let n be Element of NAT;
-A4: n=n+0;
-A5: Partial_Sums(rseq).0 = rseq.0 by SERIES_1:def 1;
+A4: n=n+0 & Partial_Sums(rseq).0 = rseq.0 by SERIES_1:def 1;
     0 <= rseq.0 by A1;
-    hence thesis by A2,A4,A5,SEQM_3:11;
-  end; thus
-A6: for n be Element of NAT holds rseq.n <= Partial_Sums(rseq).n
+    hence thesis by A2,A4,SEQM_3:11;
+  end;
+  thus
+A5: for n be Element of NAT holds rseq.n <= Partial_Sums(rseq).n
   proof
     let n be Element of NAT;
-    now per cases;
-      case n=0;
+    now
+      per cases;
+      case
+        n=0;
         hence thesis by SERIES_1:def 1;
       end;
       case
-A7:     n<>0;
-A8:     0 + 1 <= n by A7,INT_1:20;
+A6:     n<>0;
         set nn=n-1;
-A9:     nn in NAT by A8,INT_1:18;
-A10:    nn+1 =n;
-        0 <= Partial_Sums(rseq).nn by A3,A9;
-        then rseq.n+0 <= rseq.n+Partial_Sums(rseq).nn by XREAL_1:9;
-        hence thesis by A9,A10,SERIES_1:def 1;
+        0 + 1 <= n by A6,INT_1:20;
+        then
+A7:     nn in NAT by INT_1:18;
+        then 0 <= Partial_Sums(rseq).nn by A3;
+
+        then nn+1 =n & rseq.n+0 <= rseq.n+Partial_Sums(rseq).nn by
+        XREAL_1
+        :9;
+
+        hence thesis by A7,SERIES_1:def 1;
       end;
     end;
     hence thesis;
   end;
-  assume rseq is summable;
+  assume
+  rseq is summable;
   then
-A11: Partial_Sums rseq is bounded_above by A1,SERIES_1:20; thus
-A12: for n be Element of NAT holds (Partial_Sums rseq).n <= Sum rseq
+A8: Partial_Sums rseq is bounded_above by A1,SERIES_1:20;
+  thus
+A9: for n be Element of NAT holds (Partial_Sums rseq).n <= Sum rseq
   proof
     let n be Element of NAT;
-    (Partial_Sums(rseq)).n <= lim Partial_Sums(rseq) by A2,A11,SEQ_4:54;
+
+    (Partial_Sums(rseq)).n <= lim Partial_Sums(rseq) by A1,A8,SEQ_4:54 ,
+    SERIES_1:19;
+
     hence thesis by SERIES_1:def 3;
   end;
   let n be Element of NAT;
-A13: (Partial_Sums(rseq)).n <= Sum rseq by A12;
-  rseq.n <= Partial_Sums(rseq).n by A6;
-  hence thesis by A13,XXREAL_0:2;
+A10: rseq.n <= Partial_Sums(rseq).n by A5;
+  (Partial_Sums(rseq)).n <= Sum rseq by A9;
+  hence thesis by A10,XXREAL_0:2;
 end;
 
-Lm2: (for x,y be Real holds (x+y)*(x+y) <= 2*x*x + 2*y*y) &
-(for x,y be Real holds x*x <= 2*(x-y)*(x-y) + 2*y*y)
+Lm2: (for x,y be Real holds (x+y)*(x+y) <= 2*x*x + 2*y*y) & for x,y be Real
+holds x*x <= 2*(x-y)*(x-y) + 2*y*y
+
 proof
 A1: now
     let x,y be Real;
     0 <= (x-y)^2 by XREAL_1:65;
-    then 0 + (x+y)*(x+y) <= 2*x*x+2*y*y - (x+y)*(x+y)
-    + (x+y)*(x+y) by XREAL_1:9;
+
+    then 0 + (x+y)*(x+y) <= 2*x*x+2*y*y - (x+y)*(x+y) + (x+y)*(x+y) by
+    XREAL_1:9;
+
     hence (x+y)*(x+y) <=2*x*x+2*y*y;
   end;
   now
@@ -322,45 +332,49 @@ A1: now
   hence thesis by A1;
 end;
 
-Lm3: for e be Real for seq be Real_Sequence st (seq is convergent &
-ex k be Element of NAT st (for i be Element of NAT st
-k <= i holds seq.i <=e )) holds lim seq <=e
+Lm3: for e be Real for seq be Real_Sequence st (seq is convergent & ex k be
+Element of NAT st for i be Element of NAT st k <= i holds seq.i <=e ) holds lim
+seq <=e
+
 proof
   let e be Real;
   let seq be Real_Sequence such that
 A1: seq is convergent and
-A2: ex k be Element of NAT st
-  (for i be Element of NAT st k <= i holds seq.i <=e );
-  reconsider cseq = NAT --> e as Real_Sequence;
+
+A2: ex k be Element of NAT st for i be Element of NAT st k <= i holds
+  seq.i <=e;
+
   consider k be Element of NAT such that
-A4: for i be Element of NAT st k <= i holds seq.i <=e by A2;
-A5: (seq ^\k) is convergent by A1;
-A6: lim (seq ^\k)=lim seq by A1,SEQ_4:33;
-A7: now
-    let i be Element of NAT;
-A8: (seq ^\k).i = seq.(k+i) by NAT_1:def 3;
-    seq.(k+i) <=e by A4,NAT_1:11;
-    hence (seq ^\k) .i <= cseq.i by A8,FUNCOP_1:13;
-  end;
-  lim cseq = cseq.0 by SEQ_4:41
+A3: for i be Element of NAT st k <= i holds seq.i <=e by A2;
+  reconsider cseq = NAT --> e as Real_Sequence;
+A4: lim cseq = cseq.0 by SEQ_4:41
     .= e by FUNCOP_1:13;
-  hence thesis by A5,A6,A7,SEQ_2:32;
+A5: now
+    let i be Element of NAT;
+    (seq ^\k).i = seq.(k+i) & seq.(k+i) <=e by A3,NAT_1:11,def 3;
+    hence (seq ^\k) .i <= cseq.i by FUNCOP_1:13;
+  end;
+  lim (seq ^\k)=lim seq by A1,SEQ_4:33;
+  hence thesis by A1,A5,A4,SEQ_2:32;
 end;
 
-Lm4: for c be Real, seq be Real_Sequence st seq is convergent
-for rseq be Real_Sequence st
-(for i be Element of NAT holds rseq .i = (seq.i-c)*(seq.i-c))
-holds (rseq is convergent & lim rseq = (lim seq-c)*(lim seq-c) )
+Lm4: for c be Real, seq be Real_Sequence st seq is convergent for rseq be
+Real_Sequence st (for i be Element of NAT holds rseq .i = (seq.i-c)*(seq.i-c))
+holds rseq is convergent & lim rseq = (lim seq-c)*(lim seq-c)
+
 proof
   let c be Real;
+  reconsider cseq = NAT --> c as Real_Sequence;
   let seq be Real_Sequence such that
 A1: seq is convergent;
+A2: seq -cseq is convergent by A1,SEQ_2:25;
+  then
+A3: (seq -cseq)(#)(seq -cseq) is convergent by SEQ_2:28;
   let rseq be Real_Sequence such that
-A2: for i be Element of NAT holds rseq .i = (seq.i-c)*(seq.i-c);
-  reconsider cseq = NAT --> c as Real_Sequence;
+A4: for i be Element of NAT holds rseq .i = (seq.i-c)*(seq.i-c);
   now
     let i be Element of NAT;
-    thus rseq.i=(seq.i-c)*(seq.i-c) by A2
+    thus rseq.i=(seq.i-c)*(seq.i-c) by A4
       .=(seq.i-(cseq.i))*(seq.i-c) by FUNCOP_1:13
       .=(seq.i-(cseq.i))*(seq.i+-(cseq.i)) by FUNCOP_1:13
       .=(seq.i+(-cseq).i)*(seq.i+-(cseq.i)) by SEQ_1:14
@@ -371,37 +385,41 @@ A2: for i be Element of NAT holds rseq .i = (seq.i-c)*(seq.i-c);
       .=(( seq -cseq ).i)*((seq -cseq).i) by SEQ_1:15
       .=((seq -cseq) (#) (seq -cseq)).i by SEQ_1:12;
   end;
+
   then
-A3: for x be set st x in NAT holds rseq.x =((seq -cseq) (#) (seq -cseq)) .x;
-A5: seq -cseq is convergent by A1,SEQ_2:25;
-  then
-A6: (seq -cseq)(#)(seq -cseq) is convergent by SEQ_2:28;
-  lim ((seq -cseq)(#)(seq -cseq))
-  = (lim ((seq -cseq)))*(lim ((seq -cseq))) by A5,SEQ_2:29
+A5: for x be set st x in NAT holds rseq.x =((seq -cseq) (#) (seq -cseq)) .x;
+
+  lim ((seq -cseq)(#)(seq -cseq)) = (lim ((seq -cseq)))*(lim ((seq -cseq))
+  ) by A2,SEQ_2:29
+
     .= ((lim seq) - (lim cseq))*(lim ((seq -cseq))) by A1,SEQ_2:26
     .= ((lim seq) - (lim cseq))*((lim seq) - (lim cseq)) by A1,SEQ_2:26
     .= ((lim seq) - (cseq.0))*((lim seq) - (lim cseq)) by SEQ_4:41
     .= ((lim seq) - (cseq.0))*((lim seq) - (cseq.0)) by SEQ_4:41
     .= ((lim seq) - c)*((lim seq) - (cseq.0)) by FUNCOP_1:13
     .= ((lim seq) - c)*((lim seq) - c) by FUNCOP_1:13;
-  hence thesis by A3,A6,FUNCT_2:18;
+  hence thesis by A5,A3,FUNCT_2:18;
 end;
 
-Lm5: for c be Real, seq,seq1 be Real_Sequence st
-seq is convergent & seq1 is convergent for rseq be Real_Sequence st
-(for i be Element of NAT holds rseq.i = (seq.i-c)*(seq.i-c)+seq1.i) holds
-(rseq is convergent & lim rseq = (lim seq-c)*(lim seq-c)+lim seq1 )
+Lm5: for c be Real, seq,seq1 be Real_Sequence st seq is convergent & seq1 is
+convergent for rseq be Real_Sequence st (for i be Element of NAT holds rseq.i =
+(seq.i-c)*(seq.i-c)+seq1.i) holds rseq is convergent & lim rseq = (lim seq-c)*(
+lim seq-c)+lim seq1
+
 proof
   let c be Real;
   let seq,seq1 be Real_Sequence such that
 A1: seq is convergent and
 A2: seq1 is convergent;
-  let rseq be Real_Sequence such that
-A3: for i be Element of NAT holds rseq .i = (seq.i-c)*(seq.i-c)+seq1.i;
   reconsider cseq = NAT --> c as Real_Sequence;
+A3: seq -cseq is convergent by A1,SEQ_2:25;
+  then
+A4: (seq -cseq)(#)(seq -cseq) is convergent by SEQ_2:28;
+  let rseq be Real_Sequence such that
+A5: for i be Element of NAT holds rseq .i = (seq.i-c)*(seq.i-c)+seq1.i;
   now
     let i be Element of NAT;
-    thus rseq.i=(seq.i-c)*(seq.i-c) +seq1.i by A3
+    thus rseq.i=(seq.i-c)*(seq.i-c) +seq1.i by A5
       .=(seq.i-(cseq.i))*(seq.i-c) +seq1.i by FUNCOP_1:13
       .=(seq.i-(cseq.i))*(seq.i+-(cseq.i)) +seq1.i by FUNCOP_1:13
       .=(seq.i+(-cseq).i)*(seq.i+-(cseq.i)) +seq1.i by SEQ_1:14
@@ -414,550 +432,515 @@ A3: for i be Element of NAT holds rseq .i = (seq.i-c)*(seq.i-c)+seq1.i;
       .=((seq -cseq) (#) (seq -cseq) +seq1).i by SEQ_1:11;
   end;
   then
-A4: rseq = ((seq -cseq) (#) (seq -cseq)+seq1) by FUNCT_2:113;
-A6: seq -cseq is convergent by A1,SEQ_2:25;
-  then
-A7: (seq -cseq)(#)(seq -cseq) is convergent by SEQ_2:28;
-  lim ((seq -cseq)(#)(seq -cseq))
-  = (lim ((seq -cseq)))*(lim ((seq -cseq))) by A6,SEQ_2:29
+A6: rseq = ((seq -cseq) (#) (seq -cseq)+seq1) by FUNCT_2:113;
+
+  lim ((seq -cseq)(#)(seq -cseq)) = (lim ((seq -cseq)))*(lim ((seq -cseq))
+  ) by A3,SEQ_2:29
+
     .= ((lim seq) - (lim cseq))*(lim ((seq -cseq))) by A1,SEQ_2:26
     .= ((lim seq) - (lim cseq))*((lim seq) - (lim cseq)) by A1,SEQ_2:26
     .= ((lim seq) - (cseq.0))*((lim seq) - (lim cseq)) by SEQ_4:41
     .= ((lim seq) - (cseq.0))*((lim seq) - (cseq.0)) by SEQ_4:41
     .= ((lim seq) - c)*((lim seq) - (cseq.0)) by FUNCOP_1:13
     .= ((lim seq) - c)*((lim seq) - c) by FUNCOP_1:13;
-  hence thesis by A2,A4,A7,SEQ_2:19,20;
+  hence thesis by A2,A6,A4,SEQ_2:19,20;
 end;
 
 theorem
-  for vseq be sequence of l2_Space st vseq is Cauchy holds
-  vseq is convergent
+  for vseq be sequence of l2_Space st vseq is Cauchy holds vseq is
+  convergent
 proof
   let vseq be sequence of l2_Space such that
 A1: vseq is Cauchy;
-  defpred P[set,set] means ex i be Element of NAT st $1=i
-  & ex rseqi be Real_Sequence
-  st ( for n be Element of NAT holds rseqi.n=(seq_id(vseq.n)).i )
-  & rseqi is convergent & $2=lim rseqi;
+  defpred P[set,set] means ex i be Element of NAT st $1=i & ex rseqi be
+Real_Sequence st ( for n be Element of NAT holds rseqi.n=(seq_id(vseq.n)).i ) &
+  rseqi is convergent & $2=lim rseqi;
 A2: for x be set st x in NAT ex y be set st y in REAL & P[x,y]
   proof
-    let x be set such that
-A3: x in NAT;
-    reconsider i=x as Element of NAT by A3;
+    let x be set;
+    assume
+    x in NAT;
+    then reconsider i=x as Element of NAT;
     deffunc F(set)=(seq_id(vseq.$1)).i;
     consider rseqi be Real_Sequence such that
-A4: for n be Element of NAT holds rseqi.n=F(n) from SEQ_1:sch 1;
-A5: rseqi is convergent
-    proof
-      now
-        let e be real number such that
-A6:     e > 0;
-        thus ex k be Element of NAT st for m be Element of NAT st
-        k<=m holds abs(rseqi.m -rseqi.k) < e
-        proof
-          e is Real by XREAL_0:def 1;
-          then consider k be Element of NAT such that
-A7:       for n, m be Element of NAT st n >= k & m >= k holds
-          ||.(vseq.n) - (vseq.m).|| < e by A1,A6,BHSP_3:2;
-          now
-            let m be Element of NAT such that
-A8:         k<=m;
-            ||.(vseq.m) - (vseq.k).|| < e by A7,A8;
-            then
-A9:         sqrt (((vseq.m) - (vseq.k)) .|.((vseq.m) - (vseq.k ))) < e
-            by BHSP_1:def 4;
-            reconsider e1=e as Real by XREAL_0:def 1;
-A10:        seq_id(((vseq.m) - (vseq.k)))(#)seq_id(((vseq.m) - (vseq.k)))
-            is summable by RSSPACE:def 11,def 13;
-A11:        for i be Element of NAT holds 0 <= (seq_id(((vseq.m) - (vseq.k)))
-            (#)seq_id(((vseq.m) - (vseq.k)))).i
-            proof
-              let i be Element of NAT;
-              (seq_id(((vseq.m) - (vseq.k)))
-              (#)seq_id(((vseq.m) - (vseq.k)))).i
-              =(seq_id(((vseq.m) - (vseq.k)))).i
-              *(seq_id(((vseq.m) - (vseq.k)))).i by SEQ_1:12;
-              hence thesis by XREAL_1:65;
-            end;
-            then
-A12:        0<= Sum(seq_id(((vseq.m) - (vseq.k)))
-            (#)seq_id(((vseq.m) - (vseq.k)))) by A10,SERIES_1:21;
-            then
-A13:        0 <= sqrt ( Sum(seq_id(((vseq.m) - (vseq.k)))
-            (#)seq_id(((vseq.m) - (vseq.k)))) ) by SQUARE_1:def 4;
-            sqrt ( Sum(seq_id(((vseq.m) - (vseq.k)))
-            (#)seq_id(((vseq.m) - (vseq.k)))) ) < e by A9,Th1;
-            then (sqrt ( Sum(seq_id(((vseq.m) - (vseq.k)))
-            (#)seq_id(((vseq.m) - (vseq.k)))) ) )^2 < e1^2 by A13,SQUARE_1:78;
-            then
-A14:        Sum(seq_id(((vseq.m) - (vseq.k)))
-            (#)seq_id(((vseq.m) - (vseq.k)))) < e*e by A12,SQUARE_1:def 4;
-A15:        abs(rseqi.m-rseqi.k)*abs(rseqi.m-rseqi.k)
-            = (seq_id(((vseq.m) - (vseq.k)))
-            (#)seq_id(((vseq.m) - (vseq.k)))).i
-            proof
-              seq_id((vseq.m) - (vseq.k))
-              =seq_id(seq_id(vseq.m)-seq_id(vseq.k)) by Th1
-                .= seq_id(vseq.m)-seq_id(vseq.k) by RSSPACE:3
-                .= seq_id(vseq.m)+-seq_id(vseq.k) by SEQ_1:15;
-              then (seq_id((vseq.m) - (vseq.k))).i
-              =(seq_id(vseq.m)).i+(-seq_id(vseq.k)).i by SEQ_1:11
-                .=(seq_id(vseq.m)).i+(-(seq_id(vseq.k)).i) by SEQ_1:14
-                .=(seq_id(vseq.m)).i-(seq_id(vseq.k)).i
-                .=rseqi.m -(seq_id(vseq.k)).i by A4
-                .=rseqi.m - rseqi.k by A4;
-              then ((seq_id((vseq.m) - (vseq.k))).i)
-              *((seq_id((vseq.m) - (vseq.k))).i) =((rseqi.m - rseqi.k))^2
-                .= (abs((rseqi.m - rseqi.k)))^2 by COMPLEX1:161
-                .=abs((rseqi.m - rseqi.k))*abs((rseqi.m - rseqi.k));
-              hence thesis by SEQ_1:12;
-            end;
-A16:        (seq_id(((vseq.m) - (vseq.k))) (#)seq_id(((vseq.m) - (vseq.k)))).i
-            <= Sum(seq_id(((vseq.m) - (vseq.k)))
-            (#)seq_id(((vseq.m) - (vseq.k)))) by A10,A11,Lm1;
-            0 <= abs(rseqi.m-rseqi.k) by COMPLEX1:132;
-            then
-A17:        0 <= abs(rseqi.m-rseqi.k)*abs(rseqi.m-rseqi.k);
-A18:        abs(rseqi.m-rseqi.k)*abs(rseqi.m-rseqi.k)
-            < e*e by A14,A15,A16,XXREAL_0:2;
-A19:        sqrt (abs(rseqi.m-rseqi.k)*abs(rseqi.m-rseqi.k))
-            =sqrt ((abs(rseqi.m-rseqi.k))^2)
-              .=abs(rseqi.m-rseqi.k) by COMPLEX1:132,SQUARE_1:89;
-            sqrt (e*e)=sqrt (e1^2)
-              .=e by A6,SQUARE_1:89;
-            hence abs(rseqi.m-rseqi.k) < e by A17,A18,A19,SQUARE_1:95;
-          end;
-          hence thesis;
-        end;
-      end;
-      hence thesis by SEQ_4:58;
-    end;
+A3: for n be Element of NAT holds rseqi.n=F(n) from SEQ_1:sch 1;
     take lim rseqi;
-    thus thesis by A4,A5;
+    now
+      let e be real number such that
+A4:   e > 0;
+      thus ex k be Element of NAT st for m be Element of NAT st k<=m holds abs
+      (rseqi.m -rseqi.k) < e
+      proof
+        e is Real by XREAL_0:def 1;
+        then consider k be Element of NAT such that
+A5:     for n, m be Element of NAT st n >= k & m >= k holds ||.(vseq.n
+        ) - (vseq.m).|| < e by A1,A4,BHSP_3:2;
+        now
+          let m be Element of NAT;
+          assume
+          k<=m;
+          then ||.(vseq.m) - (vseq.k).|| < e by A5;
+          then sqrt (((vseq.m) - (vseq.k)) .|.((vseq.m) - (vseq.k ))) < e by
+          BHSP_1:def 4;
+          then
+A6:       sqrt ( Sum(seq_id(((vseq.m) - (vseq.k))) (#)seq_id(((vseq.m) -
+          (vseq.k)))) ) < e by Th1;
+          reconsider e1=e as Real by XREAL_0:def 1;
+A7:       sqrt (abs(rseqi.m-rseqi.k)*abs(rseqi.m-rseqi.k)) =sqrt ((abs(
+          rseqi.m-rseqi.k))^2)
+            .=abs(rseqi.m-rseqi.k) by COMPLEX1:132,SQUARE_1:89;
+          seq_id((vseq.m) - (vseq.k)) =seq_id(seq_id(vseq.m)-seq_id(vseq.
+          k)) by Th1
+            .= seq_id(vseq.m)-seq_id(vseq.k) by RSSPACE:3
+            .= seq_id(vseq.m)+-seq_id(vseq.k) by SEQ_1:15;
+          then (seq_id((vseq.m) - (vseq.k))).i =(seq_id(vseq.m)).i+(-seq_id(
+          vseq.k)).i by SEQ_1:11
+            .=(seq_id(vseq.m)).i+(-(seq_id(vseq.k)).i) by SEQ_1:14
+            .=(seq_id(vseq.m)).i-(seq_id(vseq.k)).i
+            .=rseqi.m -(seq_id(vseq.k)).i by A3
+            .=rseqi.m - rseqi.k by A3;
+          then
+          ((seq_id((vseq.m) - (vseq.k))).i) *((seq_id((vseq.m) - (vseq.k)
+          )).i) =((rseqi.m - rseqi.k))^2
+            .= (abs((rseqi.m - rseqi.k)))^2 by COMPLEX1:161
+            .=abs((rseqi.m - rseqi.k))*abs((rseqi.m - rseqi.k));
+          then
+A8:       abs(rseqi.m-rseqi.k)*abs(rseqi.m-rseqi.k) = (seq_id(((vseq.m) -
+          (vseq.k))) (#)seq_id(((vseq.m) - (vseq.k)))).i by SEQ_1:12;
+A9:       for i be Element of NAT holds 0 <= (seq_id(((vseq.m) - (vseq.k)
+          )) (#)seq_id(((vseq.m) - (vseq.k)))).i
+          proof
+            let i be Element of NAT;
+            (seq_id(((vseq.m) - (vseq.k))) (#)seq_id(((vseq.m) - (vseq.k)
+))).i =(seq_id(((vseq.m) - (vseq.k)))).i *(seq_id(((vseq.m) - (vseq.k)))).i by
+            SEQ_1:12;
+            hence thesis by XREAL_1:65;
+          end;
+A10:      seq_id(((vseq.m) - (vseq.k)))(#)seq_id(((vseq.m) - (vseq.k)))
+          is summable by RSSPACE:def 11,def 13;
+          then
+A11:      0<= Sum(seq_id(((vseq.m) - (vseq.k))) (#)seq_id(((vseq.m) - (
+          vseq.k)))) by A9,SERIES_1:21;
+          then
+          0 <= sqrt ( Sum(seq_id(((vseq.m) - (vseq.k))) (#)seq_id(((vseq.
+          m) - (vseq.k)))) ) by SQUARE_1:def 4;
+          then
+          (sqrt ( Sum(seq_id(((vseq.m) - (vseq.k))) (#)seq_id(((vseq.m) -
+          (vseq.k)))) ) )^2 < e1^2 by A6, SQUARE_1:78;
+          then
+A12:      Sum(seq_id(((vseq.m) - (vseq.k))) (#)seq_id(((vseq.m) - (vseq.k
+          )))) < e*e by A11,SQUARE_1:def 4;
+          (seq_id(((vseq.m) - (vseq.k))) (#)seq_id(((vseq.m) - (vseq.k)))
+).i <= Sum(seq_id(((vseq.m) - (vseq.k))) (#)seq_id(((vseq.m) - (vseq.k)))) by
+          A10,A9,Lm1;
+          then
+A13:      0 <= abs(rseqi.m-rseqi.k) & abs(rseqi.m-rseqi.k)*abs(rseqi.m-
+          rseqi.k) < e*e by A12,A8,COMPLEX1:132,XXREAL_0:2;
+          sqrt (e*e)=sqrt (e1^2)
+            .=e by A4,SQUARE_1:89;
+          hence abs(rseqi.m-rseqi.k) < e by A13,A7,SQUARE_1:95;
+        end;
+        hence thesis;
+      end;
+    end;
+    then rseqi is convergent by SEQ_4:58;
+    hence thesis by A3;
   end;
   consider f be Function of NAT,REAL such that
-A20: for x be set st x in NAT holds P[x,f.x] from FUNCT_2:sch 1(A2);
+A14: for x be set st x in NAT holds P[x,f.x] from FUNCT_2:sch 1(A2);
   reconsider tseq=f as Real_Sequence;
-A21: now
+A15: now
     let i be Element of NAT;
     reconsider x=i as set;
-    ex i0 be Element of NAT st x=i0 & ex rseqi be Real_Sequence
-    st ( for n be Element of NAT holds rseqi.n=(seq_id(vseq.n)).i0 )
-    & rseqi is convergent & f.x=lim rseqi by A20;
-    hence ex rseqi be Real_Sequence
-    st ( for n be Element of NAT holds rseqi.n=(seq_id(vseq.n)).i )
-    & rseqi is convergent & tseq.i=lim rseqi;
+    ex i0 be Element of NAT st x=i0 & ex rseqi be Real_Sequence st ( for
+n be Element of NAT holds rseqi.n=(seq_id(vseq.n)).i0 ) & rseqi is convergent &
+    f.x=lim rseqi by A14;
+    hence
+    ex rseqi be Real_Sequence st ( for n be Element of NAT holds rseqi.n=
+    (seq_id(vseq.n)).i ) & rseqi is convergent & tseq.i=lim rseqi;
   end;
-A22: for e be Real st e >0
-  ex k be Element of NAT st for n be Element of NAT st n >= k holds
-  ( (seq_id tseq-seq_id(vseq.n))(#)(seq_id tseq-seq_id(vseq.n)) is summable &
-  Sum((seq_id tseq-seq_id(vseq.n)) (#)( seq_id tseq-seq_id(vseq.n))) < e *e )
+A16: for e be Real st e >0 ex k be Element of NAT st for n be Element of NAT
+st n >= k holds (seq_id tseq-seq_id(vseq.n))(#)(seq_id tseq-seq_id(vseq.n)) is
+summable & Sum((seq_id tseq-seq_id(vseq.n)) (#)( seq_id tseq-seq_id(vseq.n))) <
+  e *e
   proof
     let e1 be Real such that
-A23: e1 >0;
+A17: e1 >0;
     set e=e1/2;
-A24: e > 0 by A23,XREAL_1:217;
-    e < e1 by A23,XREAL_1:218;
+A18: e > 0 by A17,XREAL_1:217;
+    then consider k be Element of NAT such that
+A19: for n, m be Element of NAT st n >= k & m >= k holds ||.(vseq.n) -
+    (vseq.m).|| < e by A1,BHSP_3:2;
+    e < e1 by A17,XREAL_1:218;
     then
-A25: e*e < e1*e1 by A24,XREAL_1:99;
-    consider k be Element of NAT such that
-A26: for n, m be Element of NAT st n >= k & m >= k
-    holds ||.(vseq.n) - (vseq.m).|| < e by A1,A24,BHSP_3:2;
-A27: for m,n be Element of NAT st n >= k & m >= k holds
-    (seq_id(((vseq.n) - (vseq.m)))(#)seq_id(((vseq.n) - (vseq.m)))
-    is summable & Sum(seq_id(((vseq.n) - (vseq.m)))
-    (#)seq_id(((vseq.n) - (vseq.m)))) < e*e & for i be Element of NAT holds
-    0 <= (seq_id(((vseq.n) - (vseq.m))) (#)seq_id(((vseq.n) - (vseq.m)))).i)
+A20: e*e < e1*e1 by A18,XREAL_1:99;
+A21: for m,n be Element of NAT st n >= k & m >= k holds (seq_id(((vseq.n)
+- (vseq.m)))(#)seq_id(((vseq.n) - (vseq.m))) is summable & Sum(seq_id(((vseq.n)
+- (vseq.m))) (#)seq_id(((vseq.n) - (vseq.m)))) < e*e & for i be Element of NAT
+holds 0 <= (seq_id(((vseq.n) - (vseq.m))) (#)seq_id(((vseq.n) - (vseq.m)))).i)
     proof
-      let m,n be Element of NAT such that
-A28:  n >= k & m >= k;
-      ||.(vseq.n) - (vseq.m).|| < e by A26,A28;
+      let m,n be Element of NAT;
+      assume
+      n >= k & m >= k;
+      then ||.(vseq.n) - (vseq.m).|| < e by A19;
+      then sqrt (((vseq.n) - (vseq.m)) .|.((vseq.n) - (vseq.m))) < e by
+      BHSP_1:def 4;
       then
-A29:  sqrt (((vseq.n) - (vseq.m)) .|.((vseq.n) - (vseq.m)))
-      < e by BHSP_1:def 4;
-A30:  seq_id(((vseq.n) - (vseq.m)))(#)seq_id(((vseq.n) - (vseq.m)))
-      is summable by RSSPACE:def 11,def 13;
-A31:  for i be Element of NAT holds 0 <= (seq_id(((vseq.n) - (vseq.m)))
+A22:  sqrt ( Sum(seq_id(((vseq.n) - (vseq.m))) (#)seq_id(((vseq.n) - (
+      vseq.m)))) ) < e by Th1;
+A23:  for i be Element of NAT holds 0 <= (seq_id(((vseq.n) - (vseq.m)))
       (#)seq_id(((vseq.n) - (vseq.m)))).i
       proof
         let i be Element of NAT;
         (seq_id(((vseq.n) - (vseq.m)))(#)seq_id(((vseq.n) - (vseq.m)))).i
-        =(seq_id(((vseq.n) - (vseq.m)))).i
-        *(seq_id(((vseq.n) - (vseq.m)))).i by SEQ_1:12;
+=(seq_id(((vseq.n) - (vseq.m)))).i *(seq_id(((vseq.n) - (vseq.m)))).i by SEQ_1:
+        12;
         hence thesis by XREAL_1:65;
       end;
+      seq_id(((vseq.n) - (vseq.m)))(#)seq_id(((vseq.n) - (vseq.m))) is
+      summable by RSSPACE:def 11,def 13;
       then
-A32:  0<= Sum(seq_id(((vseq.n) - (vseq.m)))
-      (#)seq_id(((vseq.n) - (vseq.m)))) by A30,SERIES_1:21;
+A24:  0<= Sum(seq_id(((vseq.n) - (vseq.m))) (#)seq_id(((vseq.n) - (vseq.m
+      )))) by A23,SERIES_1:21;
       then
-A33:  0 <= sqrt ( Sum(seq_id(((vseq.n) - (vseq.m)))
-      (#)seq_id(((vseq.n) - (vseq.m)))) ) by SQUARE_1:def 4;
-      sqrt ( Sum(seq_id(((vseq.n) - (vseq.m)))
-      (#)seq_id(((vseq.n) - (vseq.m)))) ) < e by A29,Th1;
-      then (sqrt ( Sum(seq_id(((vseq.n) - (vseq.m)))
-      (#)seq_id(((vseq.n) - (vseq.m)))) ) )^2 < e^2 by A33,SQUARE_1:78;
-      hence thesis by A31,A32,RSSPACE:def 11,def 13,SQUARE_1:def 4;
+      0 <= sqrt ( Sum(seq_id(((vseq.n) - (vseq.m))) (#)seq_id(((vseq.n) -
+      (vseq.m)))) ) by SQUARE_1:def 4;
+      then (sqrt ( Sum(seq_id(((vseq.n) - (vseq.m))) (#)seq_id(((vseq.n) - (
+      vseq.m)))) ) )^2 < e^2 by A22,SQUARE_1:78;
+      hence thesis by A23,A24,RSSPACE:def 11,def 13,SQUARE_1:def 4;
     end;
-A34: for n,i be Element of NAT holds for rseq be Real_Sequence st
-    ( for m be Element of NAT holds
-    rseq.m=Partial_Sums(seq_id(((vseq.m) - (vseq.n)))
-    (#)seq_id(((vseq.m) - (vseq.n)))).i ) holds (rseq is convergent
-    & lim rseq =Partial_Sums((seq_id tseq-seq_id(vseq.n))
-    (#)(seq_id tseq-seq_id(vseq.n)) ).i )
+A25: for n,i be Element of NAT holds for rseq be Real_Sequence st ( for m
+be Element of NAT holds rseq.m=Partial_Sums(seq_id(((vseq.m) - (vseq.n))) (#)
+    seq_id(((vseq.m) - (vseq.n)))).i ) holds rseq is convergent & lim rseq =
+Partial_Sums((seq_id tseq-seq_id(vseq.n)) (#)(seq_id tseq-seq_id(vseq.n)) ).i
     proof
       let n be Element of NAT;
-A35:  for m,k be Element of NAT holds
-      seq_id((vseq.m) - (vseq.k))=seq_id((vseq.m))-seq_id((vseq.k))
+      defpred P[Nat] means for rseq be Real_Sequence st (for m be Element of
+NAT holds rseq.m=Partial_Sums(seq_id(((vseq.m) - (vseq.n))) (#)seq_id(((vseq.m)
+- (vseq.n)))).$1 ) holds (rseq is convergent & lim rseq =Partial_Sums((seq_id
+      tseq-seq_id(vseq.n)) (#)(seq_id tseq-seq_id(vseq.n)) ).$1);
+A26:  for m,k be Element of NAT holds seq_id((vseq.m) - (vseq.k))=seq_id(
+      (vseq.m))-seq_id((vseq.k))
       proof
         let m,k be Element of NAT;
-        thus seq_id((vseq.m) - (vseq.k))
-        =seq_id(seq_id(vseq.m)-seq_id(vseq.k)) by Th1
+        thus seq_id((vseq.m) - (vseq.k)) =seq_id(seq_id(vseq.m)-seq_id(vseq.k)
+        ) by Th1
           .= seq_id(vseq.m)-seq_id(vseq.k) by RSSPACE:3;
       end;
-      defpred P[Nat] means for rseq be Real_Sequence st
-      (for m be Element of NAT holds
-      rseq.m=Partial_Sums(seq_id(((vseq.m) - (vseq.n)))
-      (#)seq_id(((vseq.m) - (vseq.n)))).$1 ) holds (rseq is convergent
-      & lim rseq =Partial_Sums((seq_id tseq-seq_id(vseq.n))
-      (#)(seq_id tseq-seq_id(vseq.n)) ).$1);
-A36:  P[0]
-      proof
-        now
+      now
+        let i be Element of NAT such that
+A27:    for rseq be Real_Sequence st ( for m be Element of NAT holds
+rseq.m=Partial_Sums(seq_id(((vseq.m) - (vseq.n))) (#)seq_id(((vseq.m) - (vseq.n
+)))).i ) holds rseq is convergent & lim rseq =Partial_Sums((seq_id tseq-seq_id(
+        vseq.n)) (#)(seq_id tseq-seq_id(vseq.n)) ).i;
+        thus for rseq be Real_Sequence st ( for m be Element of NAT holds rseq
+.m=Partial_Sums(seq_id(((vseq.m) - (vseq.n))) (#)seq_id(((vseq.m) - (vseq.n))))
+.(i+1) ) holds rseq is convergent & lim rseq =Partial_Sums((seq_id tseq -seq_id
+        (vseq.n)) (#)(seq_id tseq-seq_id(vseq.n)) ).(i+1)
+        proof
+          deffunc F(Element of NAT)= Partial_Sums(seq_id(((vseq.$1) - (vseq.n)
+          )) (#)seq_id(((vseq.$1) - (vseq.n)))).i;
+          consider rseqb be Real_Sequence such that
+A28:      for m be Element of NAT holds rseqb.m = F(m) from SEQ_1:sch
+          1;
+          consider rseq0 be Real_Sequence such that
+A29:      for m be Element of NAT holds rseq0.m=(seq_id(vseq.m)).(i+1
+          ) and
+A30:      rseq0 is convergent and
+A31:      tseq.(i+1)=lim rseq0 by A15;
           let rseq be Real_Sequence such that
-A37:      ( for m be Element of NAT holds
-          rseq.m=Partial_Sums(seq_id(((vseq.m) - (vseq.n)))
-          (#)seq_id(((vseq.m) - (vseq.n)))).0 );
-          thus rseq is convergent
-          & lim rseq =Partial_Sums((seq_id tseq-seq_id(vseq.n))
-          (#)(seq_id tseq-seq_id(vseq.n)) ).0
-          proof
-            consider rseq0 be Real_Sequence such that
-A38:        ( for m be Element of NAT holds rseq0.m=(seq_id(vseq.m)).0 )
-            & rseq0 is convergent & tseq.0=lim rseq0 by A21;
-A39:        now
-              let m be Element of NAT;
-              thus rseq.m=Partial_Sums(seq_id(((vseq.m) - (vseq.n)))
-              (#)seq_id(((vseq.m) - (vseq.n)))).0 by A37
-                .=(seq_id(((vseq.m) - (vseq.n)))
-              (#)seq_id(((vseq.m) - (vseq.n)))).0 by SERIES_1:def 1
-                .=( (seq_id(vseq.m)-seq_id(vseq.n) )
-              (#)(seq_id(((vseq.m) - (vseq.n))))).0 by A35
-                .=( (seq_id(vseq.m)-seq_id(vseq.n) )
-              (#)(seq_id(vseq.m)-seq_id(vseq.n) ) ).0 by A35
-                .= (seq_id(vseq.m)-seq_id(vseq.n) ).0 *
-              (seq_id(vseq.m)-seq_id(vseq.n) ).0 by SEQ_1:12
-                .= (seq_id(vseq.m)+-seq_id(vseq.n) ).0 *
-              (seq_id(vseq.m)-seq_id(vseq.n) ).0 by SEQ_1:15
-                .= (seq_id(vseq.m)+-seq_id(vseq.n) ).0 *
-              (seq_id(vseq.m)+-seq_id(vseq.n) ).0 by SEQ_1:15
-                .= ((seq_id(vseq.m)).0+(-seq_id(vseq.n)).0 ) *
-              (seq_id(vseq.m)+-seq_id(vseq.n) ).0 by SEQ_1:11
-                .= ((seq_id(vseq.m)).0+(-seq_id(vseq.n)).0 ) *
-              ((seq_id(vseq.m)).0+(-seq_id(vseq.n)).0 ) by SEQ_1:11
-                .= ((seq_id(vseq.m)).0+-(seq_id(vseq.n)).0 ) *
-              ((seq_id(vseq.m)).0+(-seq_id(vseq.n)).0 ) by SEQ_1:14
-                .= ((seq_id(vseq.m)).0-(seq_id(vseq.n)).0 ) *
-              ((seq_id(vseq.m)).0+-(seq_id(vseq.n)).0 ) by SEQ_1:14
-                .= (rseq0.m-(seq_id(vseq.n)).0 ) *
-              ((seq_id(vseq.m)).0-(seq_id(vseq.n)).0 ) by A38
-                .= (rseq0.m-(seq_id(vseq.n)).0 ) *
-              (rseq0.m-(seq_id(vseq.n)).0 ) by A38;
-            end;
-            then lim rseq = ( tseq.0+-(seq_id(vseq.n)).0 ) *
-            ( tseq.0-(seq_id(vseq.n)).0 ) by A38,Lm4
-              .= ( tseq.0+(-seq_id(vseq.n)).0 ) *
-            ( tseq.0+-(seq_id(vseq.n)).0 ) by SEQ_1:14
-              .= ( tseq.0+(-seq_id(vseq.n)).0 ) *
-            ( tseq.0+(-seq_id(vseq.n)).0 ) by SEQ_1:14
-              .= ( tseq+(-seq_id(vseq.n))).0 *
-            ( tseq.0+(-seq_id(vseq.n)).0 ) by SEQ_1:11
-              .= ( tseq+(-seq_id(vseq.n))).0 *
-            ( tseq+(-seq_id(vseq.n))).0 by SEQ_1:11
-              .= ( tseq-seq_id(vseq.n) ).0 *
-            ( tseq+(-seq_id(vseq.n))).0 by SEQ_1:15
-              .= ( tseq-seq_id(vseq.n)).0 *
-            ( tseq-seq_id(vseq.n)).0 by SEQ_1:15
-              .= ((tseq-seq_id(vseq.n))
-            (#)(tseq-seq_id(vseq.n))).0 by SEQ_1:12
-              .=Partial_Sums( (tseq-seq_id(vseq.n))
-            (#)(tseq-seq_id(vseq.n)) ).0 by SERIES_1:def 1
-              .=Partial_Sums(( seq_id tseq-seq_id(vseq.n) )
-            (#)(tseq-seq_id(vseq.n) ) ).0 by RSSPACE:3
-              .=Partial_Sums(( seq_id tseq-seq_id(vseq.n) )
-            (#)(seq_id tseq-seq_id(vseq.n) ) ).0 by RSSPACE:3;
-            hence thesis by A38,A39,Lm4;
+A32:      for m be Element of NAT holds rseq.m=Partial_Sums(seq_id(((
+          vseq.m) - (vseq.n))) (#)seq_id(((vseq.m) - (vseq.n)))).(i+1);
+A33:      now
+            let m be Element of NAT;
+            thus rseq.m=Partial_Sums(seq_id(((vseq.m) - (vseq.n))) (#)seq_id((
+            (vseq.m) - (vseq.n)))).(i+1) by A32
+              .=(seq_id(((vseq.m) - (vseq.n))) (#)seq_id(((vseq.m) - (vseq.n
+)))).(i+1) +Partial_Sums(seq_id(((vseq.m) - (vseq.n))) (#)seq_id(((vseq.m) - (
+            vseq.n)))).(i) by SERIES_1:def 1
+              .=( (seq_id(vseq.m)-seq_id(vseq.n) ) (#)(seq_id(((vseq.m) - (
+vseq.n))))).(i+1) +Partial_Sums(seq_id(((vseq.m) - (vseq.n))) (#)seq_id(((vseq.
+            m) - (vseq.n)))).i by A26
+              .=( (seq_id(vseq.m)-seq_id(vseq.n) ) (#)(seq_id(((vseq.m) - (
+            vseq.n))))).(i+1) +rseqb.m by A28
+              .=( (seq_id(vseq.m)-seq_id(vseq.n) ) (#)(seq_id(vseq.m)-seq_id
+            (vseq.n) ) ).(i+1) +rseqb.m by A26
+              .= (seq_id(vseq.m)-seq_id(vseq.n) ).(i+1) * (seq_id(vseq.m)-
+            seq_id(vseq.n) ).(i+1) +rseqb.m by SEQ_1:12
+              .= (seq_id(vseq.m)+-seq_id(vseq.n) ).(i+1) * (seq_id(vseq.m)-
+            seq_id(vseq.n) ).(i+1) +rseqb.m by SEQ_1:15
+              .= (seq_id(vseq.m)+-seq_id(vseq.n) ).(i+1) * (seq_id(vseq.m)+-
+            seq_id(vseq.n) ).(i+1) +rseqb.m by SEQ_1:15
+              .= ((seq_id(vseq.m)).(i+1)+(-seq_id(vseq.n)).(i+1) ) * (seq_id
+            (vseq.m)+-seq_id(vseq.n) ).(i+1) +rseqb.m by SEQ_1:11
+              .= ((seq_id(vseq.m)).(i+1)+(-seq_id(vseq.n)).(i+1) ) * ((
+seq_id(vseq.m)).(i+1)+(-seq_id(vseq.n)).(i+1) ) +rseqb.m by SEQ_1:11
+              .= ((seq_id(vseq.m)).(i+1)+-(seq_id(vseq.n)).(i+1) ) * ((
+seq_id(vseq.m)).(i+1)+(-seq_id(vseq.n)).(i+1) ) +rseqb.m by SEQ_1:14
+              .= ((seq_id(vseq.m)).(i+1)-(seq_id(vseq.n)).(i+1) ) * ((seq_id
+            (vseq.m)).(i+1)+-(seq_id(vseq.n)).(i+1) ) +rseqb.m by SEQ_1:14
+              .= (rseq0.m-(seq_id(vseq.n)).(i+1) ) * ((seq_id(vseq.m)).(i+1)
+            -(seq_id(vseq.n)).(i+1) ) +rseqb.m by A29
+              .= (rseq0.m-(seq_id(vseq.n)).(i+1) ) * (rseq0.m-(seq_id(vseq.n
+            )).(i+1) ) +rseqb.m by A29;
           end;
+A34:      rseqb is convergent by A27,A28;
+          then
+          lim rseq = ( tseq.(i+1)+-(seq_id(vseq.n)).(i+1) ) * ( tseq.(i+1
+          )-(seq_id(vseq.n)).(i+1) ) +lim rseqb by A30,A31,A33,Lm5
+            .= ( tseq.(i+1)+(-seq_id(vseq.n)).(i+1) ) * ( tseq.(i+1)+-(
+          seq_id(vseq.n)).(i+1) ) + lim rseqb by SEQ_1:14
+            .= ( tseq.(i+1)+(-seq_id(vseq.n)).(i+1) ) * ( tseq.(i+1)+(-
+          seq_id(vseq.n)).(i+1) ) + lim rseqb by SEQ_1:14
+            .= ( tseq+(-seq_id(vseq.n))).(i+1) * ( tseq.(i+1)+(-seq_id(vseq.
+          n)).(i+1) ) + lim rseqb by SEQ_1:11
+            .= ( tseq+(-seq_id(vseq.n))).(i+1) * ( tseq+(-seq_id(vseq.n))).(
+          i+1) + lim rseqb by SEQ_1:11
+            .= ( tseq-seq_id(vseq.n)).(i+1) * ( tseq+(-seq_id(vseq.n))).(i+1
+          ) + lim rseqb by SEQ_1:15
+            .= ( tseq-seq_id(vseq.n)).(i+1) * ( tseq-seq_id(vseq.n)).(i+1) +
+          lim rseqb by SEQ_1:15
+            .= ( (tseq-seq_id(vseq.n)) (#)(tseq-seq_id(vseq.n))).(i+1) + lim
+          rseqb by SEQ_1:12
+            .= ( (tseq-seq_id(vseq.n)) (#)(tseq-seq_id(vseq.n))).(i+1) +
+Partial_Sums((seq_id tseq-seq_id(vseq.n)) (#)(seq_id tseq-seq_id(vseq.n)) ).i
+          by A27,A28
+            .= ( (tseq-seq_id(vseq.n)) (#)(seq_id tseq-seq_id(vseq.n)) ).(i+
+1) + Partial_Sums((seq_id tseq-seq_id(vseq.n)) (#)(seq_id tseq-seq_id(vseq.n))
+          ).i by RSSPACE:3
+            .= ( (seq_id tseq-seq_id(vseq.n)) (#)(seq_id tseq-seq_id(vseq.n)
+) ).(i+1) + Partial_Sums((seq_id tseq-seq_id(vseq.n)) (#)(seq_id tseq-seq_id(
+          vseq.n)) ).i by RSSPACE:3
+            .=Partial_Sums((seq_id tseq-seq_id(vseq.n)) (#)(seq_id tseq-
+          seq_id(vseq.n)) ).(i+1) by SERIES_1:def 1;
+          hence thesis by A34,A30,A33,Lm5;
         end;
-        hence thesis;
       end;
-A40:  for i be Element of NAT st P[i] holds P[i+1]
-      proof
-        now
-          let i be Element of NAT such that
-A41:      for rseq be Real_Sequence st ( for m be Element of NAT holds
-          rseq.m=Partial_Sums(seq_id(((vseq.m) - (vseq.n)))
-          (#)seq_id(((vseq.m) - (vseq.n)))).i ) holds (rseq is convergent
-          & lim rseq =Partial_Sums((seq_id tseq-seq_id(vseq.n))
-          (#)(seq_id tseq-seq_id(vseq.n)) ).i );
-          thus for rseq be Real_Sequence st ( for m be Element of NAT holds
-          rseq.m=Partial_Sums(seq_id(((vseq.m) - (vseq.n)))
-          (#)seq_id(((vseq.m) - (vseq.n)))).(i+1) ) holds (rseq is convergent
-          & lim rseq =Partial_Sums((seq_id tseq -seq_id(vseq.n))
-          (#)(seq_id tseq-seq_id(vseq.n)) ).(i+1) )
-          proof
-            let rseq be Real_Sequence such that
-A42:        for m be Element of NAT holds
-            rseq.m=Partial_Sums(seq_id(((vseq.m) - (vseq.n)))
-            (#)seq_id(((vseq.m) - (vseq.n)))).(i+1);
-            deffunc F(Element of NAT)=
-            Partial_Sums(seq_id(((vseq.$1) - (vseq.n)))
-            (#)seq_id(((vseq.$1) - (vseq.n)))).i;
-            consider rseqb be Real_Sequence such that
-A43:        for m be Element of NAT holds rseqb.m = F(m) from SEQ_1:sch 1;
-A44:        rseqb is convergent
-            & lim rseqb = Partial_Sums((seq_id(tseq)-seq_id(vseq.n))
-            (#)(seq_id(tseq)-seq_id(vseq.n)) ).i by A41,A43;
-            consider rseq0 be Real_Sequence such that
-A45:        ( for m be Element of NAT holds rseq0.m=(seq_id(vseq.m)).(i+1) )
-            & rseq0 is convergent & tseq.(i+1)=lim rseq0 by A21;
-A46:        now
-              let m be Element of NAT;
-              thus rseq.m=Partial_Sums(seq_id(((vseq.m) - (vseq.n)))
-              (#)seq_id(((vseq.m) - (vseq.n)))).(i+1) by A42
-                .=(seq_id(((vseq.m) - (vseq.n)))
-              (#)seq_id(((vseq.m) - (vseq.n)))).(i+1)
-              +Partial_Sums(seq_id(((vseq.m) - (vseq.n)))
-              (#)seq_id(((vseq.m) - (vseq.n)))).(i) by SERIES_1:def 1
-                .=( (seq_id(vseq.m)-seq_id(vseq.n) )
-              (#)(seq_id(((vseq.m) - (vseq.n))))).(i+1)
-              +Partial_Sums(seq_id(((vseq.m) - (vseq.n)))
-              (#)seq_id(((vseq.m) - (vseq.n)))).i by A35
-                .=( (seq_id(vseq.m)-seq_id(vseq.n) )
-              (#)(seq_id(((vseq.m) - (vseq.n))))).(i+1) +rseqb.m by A43
-                .=( (seq_id(vseq.m)-seq_id(vseq.n) )
-              (#)(seq_id(vseq.m)-seq_id(vseq.n) ) ).(i+1) +rseqb.m by A35
-                .= (seq_id(vseq.m)-seq_id(vseq.n) ).(i+1) *
-              (seq_id(vseq.m)-seq_id(vseq.n) ).(i+1) +rseqb.m by SEQ_1:12
-                .= (seq_id(vseq.m)+-seq_id(vseq.n) ).(i+1) *
-              (seq_id(vseq.m)-seq_id(vseq.n) ).(i+1) +rseqb.m by SEQ_1:15
-                .= (seq_id(vseq.m)+-seq_id(vseq.n) ).(i+1) *
-              (seq_id(vseq.m)+-seq_id(vseq.n) ).(i+1) +rseqb.m by SEQ_1:15
-                .= ((seq_id(vseq.m)).(i+1)+(-seq_id(vseq.n)).(i+1) ) *
-              (seq_id(vseq.m)+-seq_id(vseq.n) ).(i+1) +rseqb.m by SEQ_1:11
-                .= ((seq_id(vseq.m)).(i+1)+(-seq_id(vseq.n)).(i+1) ) *
-              ((seq_id(vseq.m)).(i+1)+(-seq_id(vseq.n)).(i+1) )
-              +rseqb.m by SEQ_1:11
-                .= ((seq_id(vseq.m)).(i+1)+-(seq_id(vseq.n)).(i+1) ) *
-              ((seq_id(vseq.m)).(i+1)+(-seq_id(vseq.n)).(i+1) )
-              +rseqb.m by SEQ_1:14
-                .= ((seq_id(vseq.m)).(i+1)-(seq_id(vseq.n)).(i+1) ) *
-              ((seq_id(vseq.m)).(i+1)+-(seq_id(vseq.n)).(i+1) )
-              +rseqb.m by SEQ_1:14
-                .= (rseq0.m-(seq_id(vseq.n)).(i+1) ) *
-              ((seq_id(vseq.m)).(i+1)-(seq_id(vseq.n)).(i+1) ) +rseqb.m by A45
-                .= (rseq0.m-(seq_id(vseq.n)).(i+1) ) *
-              (rseq0.m-(seq_id(vseq.n)).(i+1) ) +rseqb.m by A45;
-            end;
-            then lim rseq = ( tseq.(i+1)+-(seq_id(vseq.n)).(i+1) ) *
-            ( tseq.(i+1)-(seq_id(vseq.n)).(i+1) ) +lim rseqb by A44,A45,Lm5
-              .= ( tseq.(i+1)+(-seq_id(vseq.n)).(i+1) ) *
-            ( tseq.(i+1)+-(seq_id(vseq.n)).(i+1) ) + lim rseqb by SEQ_1:14
-              .= ( tseq.(i+1)+(-seq_id(vseq.n)).(i+1) ) *
-            ( tseq.(i+1)+(-seq_id(vseq.n)).(i+1) ) + lim rseqb by SEQ_1:14
-              .= ( tseq+(-seq_id(vseq.n))).(i+1) *
-            ( tseq.(i+1)+(-seq_id(vseq.n)).(i+1) ) + lim rseqb by SEQ_1:11
-              .= ( tseq+(-seq_id(vseq.n))).(i+1) *
-            ( tseq+(-seq_id(vseq.n))).(i+1) + lim rseqb by SEQ_1:11
-              .= ( tseq-seq_id(vseq.n)).(i+1) *
-            ( tseq+(-seq_id(vseq.n))).(i+1) + lim rseqb by SEQ_1:15
-              .= ( tseq-seq_id(vseq.n)).(i+1) * ( tseq-seq_id(vseq.n)).(i+1)
-            + lim rseqb by SEQ_1:15
-              .= ( (tseq-seq_id(vseq.n))
-            (#)(tseq-seq_id(vseq.n))).(i+1) + lim rseqb by SEQ_1:12
-              .= ( (tseq-seq_id(vseq.n)) (#)(tseq-seq_id(vseq.n))).(i+1)
-            + Partial_Sums((seq_id tseq-seq_id(vseq.n))
-            (#)(seq_id tseq-seq_id(vseq.n)) ).i by A41,A43
-              .= ( (tseq-seq_id(vseq.n))
-            (#)(seq_id tseq-seq_id(vseq.n)) ).(i+1)
-            + Partial_Sums((seq_id tseq-seq_id(vseq.n))
-            (#)(seq_id tseq-seq_id(vseq.n)) ).i by RSSPACE:3
-              .= ( (seq_id tseq-seq_id(vseq.n))
-            (#)(seq_id tseq-seq_id(vseq.n)) ).(i+1)
-            + Partial_Sums((seq_id tseq-seq_id(vseq.n))
-            (#)(seq_id tseq-seq_id(vseq.n)) ).i by RSSPACE:3
-              .=Partial_Sums((seq_id tseq-seq_id(vseq.n))
-            (#)(seq_id tseq-seq_id(vseq.n)) ).(i+1) by SERIES_1:def 1;
-            hence thesis by A44,A45,A46,Lm5;
+      then
+A35:  for i be Element of NAT st P[i] holds P[i+1];
+      now
+        let rseq be Real_Sequence such that
+A36:    for m be Element of NAT holds rseq.m=Partial_Sums(seq_id(((
+        vseq.m) - (vseq.n))) (#)seq_id(((vseq.m) - (vseq.n)))).0;
+        thus rseq is convergent & lim rseq =Partial_Sums((seq_id tseq-seq_id(
+        vseq.n)) (#)(seq_id tseq-seq_id(vseq.n)) ).0
+        proof
+          consider rseq0 be Real_Sequence such that
+A37:      for m be Element of NAT holds rseq0.m=(seq_id(vseq.m)).0 and
+A38:      rseq0 is convergent and
+A39:      tseq.0=lim rseq0 by A15;
+A40:      now
+            let m be Element of NAT;
+            thus rseq.m=Partial_Sums(seq_id(((vseq.m) - (vseq.n))) (#)seq_id((
+            (vseq.m) - (vseq.n)))).0 by A36
+              .=(seq_id(((vseq.m) - (vseq.n))) (#)seq_id(((vseq.m) - (vseq.n
+            )))).0 by SERIES_1:def 1
+              .=( (seq_id(vseq.m)-seq_id(vseq.n) ) (#)(seq_id(((vseq.m) - (
+            vseq.n))))).0 by A26
+              .=( (seq_id(vseq.m)-seq_id(vseq.n) ) (#)(seq_id(vseq.m)-seq_id
+            (vseq.n) ) ).0 by A26
+              .= (seq_id(vseq.m)-seq_id(vseq.n) ).0 * (seq_id(vseq.m)-seq_id
+            (vseq.n) ).0 by SEQ_1:12
+              .= (seq_id(vseq.m)+-seq_id(vseq.n) ).0 * (seq_id(vseq.m)-
+            seq_id(vseq.n) ).0 by SEQ_1:15
+              .= (seq_id(vseq.m)+-seq_id(vseq.n) ).0 * (seq_id(vseq.m)+-
+            seq_id(vseq.n) ).0 by SEQ_1:15
+              .= ((seq_id(vseq.m)).0+(-seq_id(vseq.n)).0 ) * (seq_id(vseq.m)
+            +-seq_id(vseq.n) ).0 by SEQ_1:11
+              .= ((seq_id(vseq.m)).0+(-seq_id(vseq.n)).0 ) * ((seq_id(vseq.m
+            )).0+(-seq_id(vseq.n)).0 ) by SEQ_1:11
+              .= ((seq_id(vseq.m)).0+-(seq_id(vseq.n)).0 ) * ((seq_id(vseq.m
+            )).0+(-seq_id(vseq.n)).0 ) by SEQ_1:14
+              .= ((seq_id(vseq.m)).0-(seq_id(vseq.n)).0 ) * ((seq_id(vseq.m)
+            ).0+-(seq_id(vseq.n)).0 ) by SEQ_1:14
+              .= (rseq0.m-(seq_id(vseq.n)).0 ) * ((seq_id(vseq.m)).0-(seq_id
+            (vseq.n)).0 ) by A37
+              .= (rseq0.m-(seq_id(vseq.n)).0 ) * (rseq0.m-(seq_id(vseq.n)).0
+            ) by A37;
           end;
+          then lim rseq = ( tseq.0+-(seq_id(vseq.n)).0 ) * ( tseq.0-(seq_id(
+          vseq.n)).0 ) by A38,A39,Lm4
+            .= ( tseq.0+(-seq_id(vseq.n)).0 ) * ( tseq.0+-(seq_id(vseq.n)).0
+          ) by SEQ_1:14
+            .= ( tseq.0+(-seq_id(vseq.n)).0 ) * ( tseq.0+(-seq_id(vseq.n)).0
+          ) by SEQ_1:14
+            .= ( tseq+(-seq_id(vseq.n))).0 * ( tseq.0+(-seq_id(vseq.n)).0 )
+          by SEQ_1:11
+            .= ( tseq+(-seq_id(vseq.n))).0 * ( tseq+(-seq_id(vseq.n))).0 by
+          SEQ_1:11
+            .= ( tseq-seq_id(vseq.n) ).0 * ( tseq+(-seq_id(vseq.n))).0 by
+          SEQ_1:15
+            .= ( tseq-seq_id(vseq.n)).0 * ( tseq-seq_id(vseq.n)).0 by SEQ_1:
+          15
+            .= ((tseq-seq_id(vseq.n)) (#)(tseq-seq_id(vseq.n))).0 by SEQ_1:
+          12
+            .=Partial_Sums( (tseq-seq_id(vseq.n)) (#)(tseq-seq_id(vseq.n)) )
+          .0 by SERIES_1:def 1
+            .=Partial_Sums(( seq_id tseq-seq_id(vseq.n) ) (#)(tseq-seq_id(
+          vseq.n) ) ).0 by RSSPACE:3
+            .=Partial_Sums(( seq_id tseq-seq_id(vseq.n) ) (#)(seq_id tseq-
+          seq_id(vseq.n) ) ).0 by RSSPACE:3;
+          hence thesis by A38,A40,Lm4;
         end;
-        hence thesis;
       end;
-      for i be Element of NAT holds P[i] from NAT_1:sch 1(A36,A40);
+      then
+A41:  P[0];
+      for i be Element of NAT holds P[i] from NAT_1:sch 1(A41,A35);
       hence thesis;
     end;
-    for n be Element of NAT st n >= k holds
-    ( (seq_id tseq-seq_id(vseq.n))(#)(seq_id tseq-seq_id(vseq.n))
-    is summable &
-    Sum((seq_id tseq -seq_id(vseq.n)) (#)(seq_id tseq-seq_id(vseq.n)))
-    < e1*e1 )
+    for n be Element of NAT st n >= k holds (seq_id tseq-seq_id(vseq.n))
+(#)(seq_id tseq-seq_id(vseq.n)) is summable & Sum((seq_id tseq -seq_id(vseq.n))
+    (#)(seq_id tseq-seq_id(vseq.n))) < e1*e1
     proof
       let n be Element of NAT such that
-A47:  n >= k;
-A48:  for i be Element of NAT st 0 <= i holds
-      Partial_Sums((seq_id tseq-seq_id(vseq.n))
-      (#)(seq_id tseq -seq_id(vseq.n)) ).i <=e*e
+A42:  n >= k;
+A43:  for i be Element of NAT st 0 <= i holds Partial_Sums((seq_id tseq-
+      seq_id(vseq.n)) (#)(seq_id tseq -seq_id(vseq.n)) ).i <=e*e
       proof
-        let i be Element of NAT such that 0 <=i;
-        deffunc F(Element of NAT) =
-        Partial_Sums(seq_id(((vseq.$1) - (vseq.n)))
-        (#)seq_id(((vseq.$1) - (vseq.n)))).i;
+        let i be Element of NAT such that
+        0 <=i;
+        deffunc F(Element of NAT) = Partial_Sums(seq_id(((vseq.$1) - (vseq.n))
+        ) (#)seq_id(((vseq.$1) - (vseq.n)))).i;
         consider rseq be Real_Sequence such that
-A49:    for m be Element of NAT holds rseq.m=F(m) from SEQ_1:sch 1;
-A50:    rseq is convergent by A34,A49;
-A51:    lim rseq =Partial_Sums((seq_id tseq-seq_id(vseq.n))
-        (#)(seq_id tseq-seq_id(vseq.n)) ).i by A34,A49;
-        for m be Element of NAT st m >= k holds rseq.m <= e*e
+A44:    for m be Element of NAT holds rseq.m=F(m) from SEQ_1:sch 1;
+A45:    for m be Element of NAT st m >= k holds rseq.m <= e*e
         proof
           let m be Element of NAT such that
-A52:      m >= k;
-A53:      rseq.m=Partial_Sums(seq_id(((vseq.m) - (vseq.n)))
-          (#)seq_id(((vseq.m) - (vseq.n)))).i by A49;
-A54:      seq_id((vseq.m) - (vseq.n))(#)
-          seq_id((vseq.m) -(vseq.n)) is summable &
-          Sum(seq_id(((vseq.m) - (vseq.n)))
-          (#)seq_id(((vseq.m) - (vseq.n)))) < e*e
-          &for i be Element of NAT holds 0 <= ( seq_id((vseq.m) - (vseq.n))
-          (#)seq_id((vseq.m) - (vseq.n)) ).i by A27,A47,A52;
-          then Partial_Sums(seq_id(((vseq.m) - (vseq.n)))
-          (#)seq_id(((vseq.m) - (vseq.n)))).i
-          <=Sum(seq_id(((vseq.m) - (vseq.n)))
-          (#)seq_id(((vseq.m) - (vseq.n)))) by Lm1;
-          hence thesis by A53,A54,XXREAL_0:2;
+A46:      m >= k;
+          seq_id((vseq.m) - (vseq.n))(#) seq_id((vseq.m) -(vseq.n)) is
+summable & for i be Element of NAT holds 0 <= ( seq_id((vseq.m) - (vseq.n)) (#)
+          seq_id((vseq.m ) - (vseq.n)) ).i by A21,A42,A46;
+          then
+A47:      Partial_Sums(seq_id(((vseq.m) - (vseq.n))) (#)seq_id(((vseq.m)
+- (vseq.n)))).i <=Sum(seq_id(((vseq.m) - (vseq.n))) (#)seq_id(((vseq.m) - (vseq
+          .n)))) by Lm1;
+A48:      rseq.m=Partial_Sums(seq_id(((vseq.m) - (vseq.n))) (#)seq_id(((
+          vseq.m) - (vseq.n)))).i by A44;
+          Sum(seq_id(((vseq.m) - (vseq.n))) (#)seq_id(((vseq.m) - (vseq.n
+          )))) < e*e by A21,A42,A46;
+          hence thesis by A48,A47,XXREAL_0:2;
         end;
-        hence thesis by A50,A51,Lm3;
+        rseq is convergent & lim rseq =Partial_Sums((seq_id tseq-seq_id(
+        vseq.n)) (#) (seq_id tseq-seq_id(vseq.n)) ).i by A25,A44;
+        hence thesis by A45,Lm3;
       end;
-A55:  for i be Element of NAT holds 0 <= ( (seq_id tseq-seq_id(vseq.n))
+      now
+        let i be Element of NAT;
+        Partial_Sums((seq_id tseq-seq_id(vseq.n)) (#)(seq_id tseq-seq_id(
+        vseq.n)) ).i <=e*e by A43;
+        hence
+        Partial_Sums((seq_id tseq -seq_id(vseq.n)) (#)(seq_id tseq-seq_id
+        (vseq.n)) ).i < e1*e1 by A20,XXREAL_0:2;
+      end;
+      then
+A49:  Partial_Sums((seq_id tseq-seq_id(vseq.n)) (#)(seq_id tseq-seq_id(
+      vseq.n)) ) is bounded_above by SEQ_2:def 3;
+A50:  for i be Element of NAT holds 0 <= ( (seq_id tseq-seq_id(vseq.n))
       (#)(seq_id tseq-seq_id(vseq.n))) .i
       proof
         let i be Element of NAT;
         ((seq_id tseq-seq_id(vseq.n)) (#)(seq_id tseq -seq_id(vseq.n))).i
-        =(seq_id tseq-seq_id(vseq.n)).i
-        *(seq_id tseq-seq_id(vseq.n)).i by SEQ_1:12;
+=(seq_id tseq-seq_id(vseq.n)).i *(seq_id tseq-seq_id(vseq.n)).i by SEQ_1:12;
         hence thesis by XREAL_1:65;
       end;
-A56:  Partial_Sums((seq_id tseq-seq_id(vseq.n))
-      (#)(seq_id tseq-seq_id(vseq.n)) ) is bounded_above
-      proof
-        now
-          let i be Element of NAT;
-          Partial_Sums((seq_id tseq-seq_id(vseq.n))
-          (#)(seq_id tseq-seq_id(vseq.n)) ).i <=e*e by A48;
-          hence Partial_Sums((seq_id tseq -seq_id(vseq.n))
-          (#)(seq_id tseq-seq_id(vseq.n)) ).i < e1*e1 by A25,XXREAL_0:2;
-        end;
-        hence thesis by SEQ_2:def 3;
-      end;
-      then (seq_id tseq-seq_id(vseq.n))
-      (#)(seq_id tseq-seq_id(vseq.n)) is summable by A55,SERIES_1:20;
+      then (seq_id tseq-seq_id(vseq.n)) (#)(seq_id tseq-seq_id(vseq.n)) is
+      summable by A49,SERIES_1:20;
+      then Partial_Sums( (seq_id tseq-seq_id(vseq.n)) (#)(seq_id tseq-seq_id(
+      vseq.n)) ) is convergent by SERIES_1:def 2;
       then
-A57:  Partial_Sums( (seq_id tseq-seq_id(vseq.n))
-      (#)(seq_id tseq-seq_id(vseq.n)) ) is convergent by SERIES_1:def 2;
-A58:  Sum((seq_id tseq-seq_id(vseq.n)) (#)(seq_id tseq-seq_id(vseq.n)))
-      = lim Partial_Sums( (seq_id(tseq)-seq_id(vseq.n))
-      (#)(seq_id(tseq)-seq_id(vseq.n)) ) by SERIES_1:def 3;
-      lim Partial_Sums((seq_id tseq-seq_id(vseq.n))
-      (#)(seq_id tseq -seq_id(vseq.n))) <=e*e by A48,A57,Lm3;
-      hence thesis by A25,A55,A56,A58,SERIES_1:20,XXREAL_0:2;
+      Sum((seq_id tseq-seq_id(vseq.n)) (#)(seq_id tseq-seq_id(vseq.n))) =
+lim Partial_Sums( (seq_id(tseq)-seq_id(vseq.n)) (#)(seq_id(tseq)-seq_id(vseq.n)
+) ) & lim Partial_Sums((seq_id tseq-seq_id(vseq.n)) (#)(seq_id tseq -seq_id(
+      vseq.n ))) <=e*e by A43,Lm3,SERIES_1:def 3;
+      hence thesis by A20,A50,A49,SERIES_1:20,XXREAL_0:2;
     end;
     hence thesis;
   end;
-A59: seq_id tseq(#)seq_id tseq is summable
+A51: seq_id tseq(#)seq_id tseq is summable
   proof
-A60: for i be Element of NAT holds 0 <= (seq_id tseq(#)seq_id tseq).i
+    set d=seq_id tseq(#)seq_id tseq;
+A52: for i be Element of NAT holds 0 <= (seq_id tseq(#)seq_id tseq).i
     proof
       let i be Element of NAT;
-      (seq_id tseq(#)seq_id tseq).i
-      =(seq_id tseq).i * (seq_id tseq).i by SEQ_1:12;
+      (seq_id tseq(#)seq_id tseq).i =(seq_id tseq).i * (seq_id tseq).i by
+      SEQ_1:12;
       hence thesis by XREAL_1:65;
     end;
     consider m be Element of NAT such that
-A61: for n be Element of NAT st n >= m holds
-    ( (seq_id tseq-seq_id(vseq.n))(#)( seq_id(tseq)-seq_id(vseq.n))
-    is summable & Sum((seq_id tseq-seq_id(vseq.n))
-    (#)(seq_id tseq -seq_id(vseq.n))) < 1*1 ) by A22;
-A62: (seq_id tseq-seq_id(vseq.m))
-    (#)( seq_id tseq-seq_id(vseq.m)) is summable by A61;
-A63: seq_id(vseq.m)(#)seq_id(vseq.m) is summable by RSSPACE:def 11,def 13;
-    set a =(seq_id tseq-seq_id(vseq.m))(#)(seq_id tseq-seq_id(vseq.m));
+A53: for n be Element of NAT st n >= m holds (seq_id tseq-seq_id(vseq.
+n))(#)( seq_id(tseq)-seq_id(vseq.n)) is summable & Sum((seq_id tseq-seq_id(vseq
+    .n)) (#)(seq_id tseq -seq_id(vseq.n))) < 1*1 by A16;
     set b=seq_id(vseq.m)(#)seq_id(vseq.m);
-    set d=seq_id tseq(#)seq_id tseq;
-A64: 2(#)a is summable by A62,SERIES_1:13;
-    2(#)b is summable by A63,SERIES_1:13;
+    set a =(seq_id tseq-seq_id(vseq.m))(#)(seq_id tseq-seq_id(vseq.m));
+    seq_id(vseq.m)(#)seq_id(vseq.m) is summable by RSSPACE:def 11,def 13;
     then
-A65: 2(#)a + 2(#)b is summable by A64,SERIES_1:10;
-    for i be Element of NAT holds d.i <= (2(#)a + 2(#)b).i
+A54: 2(#)b is summable by SERIES_1:13;
+A55: for i be Element of NAT holds d.i <= (2(#)a + 2(#)b).i
     proof
       let i be Element of NAT;
-A66:  d.i=((seq_id tseq).i) * ((seq_id tseq).i) by SEQ_1:12;
-A67:  (2(#)a + 2(#)b).i = (2(#)a).i + (2(#)b).i by SEQ_1:11
-        .=2*(a.i)+ (2(#)b).i by SEQ_1:13
-        .=2*(a.i)+ 2*(b.i) by SEQ_1:13;
-      (seq_id tseq-seq_id(vseq.m)).i
-      = (seq_id tseq+-seq_id(vseq.m)).i by SEQ_1:15
+      set x=(seq_id tseq).i;
+      set y=(seq_id(vseq.m)).i;
+A56:  2*(b.i)=2*(y*y) by SEQ_1:12
+        .=2*y*y;
+      (seq_id tseq-seq_id(vseq.m)).i = (seq_id tseq+-seq_id(vseq.m)).i
+      by SEQ_1:15
         .= (seq_id tseq).i+(-seq_id(vseq.m)).i by SEQ_1:11
         .= (seq_id tseq).i+(-(seq_id(vseq.m)).i) by SEQ_1:14
         .= (seq_id tseq).i-(seq_id(vseq.m)).i;
+      then a.i = ((seq_id tseq).i-(seq_id(vseq.m)).i) *((seq_id tseq).i-(
+      seq_id(vseq.m)).i) by SEQ_1:12;
       then
-A68:  a.i = ((seq_id tseq).i-(seq_id(vseq.m)).i)
-      *((seq_id tseq).i-(seq_id(vseq.m)).i) by SEQ_1:12;
-      set x=(seq_id tseq).i;
-      set y=(seq_id(vseq.m)).i;
-A69:  2*(a.i)=2*(x-y)*(x-y) by A68;
-      2*(b.i)=2*(y*y) by SEQ_1:12
-        .=2*y*y;
-      hence thesis by A66,A67,A69,Lm2;
+A57:  d.i=((seq_id tseq).i) * ((seq_id tseq).i) & 2*(a.i)=2*(x-y)*(x-y)
+      by SEQ_1:12;
+      (2(#)a + 2(#)b).i = (2(#)a).i + (2(#)b).i by SEQ_1:11
+        .=2*(a.i)+ (2(#)b).i by SEQ_1:13
+        .=2*(a.i)+ 2*(b.i) by SEQ_1:13;
+      hence thesis by A57,A56,Lm2;
     end;
-    hence thesis by A60,A65,SERIES_1:24;
+    (seq_id tseq-seq_id(vseq.m)) (#)( seq_id tseq-seq_id(vseq.m)) is
+    summable by A53;
+    then 2(#)a is summable by SERIES_1:13;
+    then 2(#)a + 2(#)b is summable by A54,SERIES_1:10;
+    hence thesis by A52,A55,SERIES_1:24;
   end;
   tseq in the_set_of_RealSequences by RSSPACE:def 1;
-  then reconsider tv=tseq as Point of l2_Space by A59,RSSPACE:def 11,def 13;
-  for e be Real st e > 0 ex m be Element of NAT st for n be Element of NAT
-  st n >= m holds ||.(vseq.n) - tv.|| < e
+  then reconsider tv=tseq as Point of l2_Space by A51,RSSPACE:def 11,def 13;
+  for e be Real st e > 0 ex m be Element of NAT st for n be Element of
+  NAT st n >= m holds ||.(vseq.n) - tv.|| < e
   proof
     let e be Real such that
-A70: e > 0;
+A58: e > 0;
     consider m be Element of NAT such that
-A71: for n be Element of NAT st n >= m holds ( (seq_id tseq-seq_id(vseq.n))
-    (#)(seq_id tseq-seq_id(vseq.n)) is summable &
-    Sum((seq_id tseq-seq_id(vseq.n))
-    (#)( seq_id tseq-seq_id(vseq.n))) < e *e ) by A22,A70;
+A59: for n be Element of NAT st n >= m holds (seq_id tseq-seq_id(vseq
+.n)) (#)(seq_id tseq-seq_id(vseq.n)) is summable & Sum((seq_id tseq-seq_id(vseq
+    .n)) (#)( seq_id tseq-seq_id(vseq.n))) < e *e by A16,A58;
     now
-      let n be Element of NAT such that
-A72:  n >= m;
-A73:  Sum((seq_id tseq-seq_id(vseq.n))
-      (#)( seq_id tseq-seq_id(vseq.n))) < e*e by A71,A72;
       tseq in the_set_of_RealSequences by RSSPACE:def 1;
-
-then reconsider u=tseq as VECTOR of l2_Space by A59,RSSPACE:def 11,def 13;
+      then reconsider u=tseq as VECTOR of l2_Space by A51,RSSPACE:def 11,def
+      13;
+      let n be Element of NAT;
+      assume
+      n >= m;
+      then
+A60:  Sum((seq_id tseq-seq_id(vseq.n)) (#)( seq_id tseq-seq_id(vseq.n)))
+      < e*e by A59;
       reconsider v=vseq.n as VECTOR of l2_Space;
       seq_id(u-v) = u-v by Th1;
       then seq_id(u-v)=seq_id tseq-seq_id(vseq.n) by Th1;
       then
-A74:  (u-v).|.(u-v) < e*e by A73,Th1;
-      0 <= (u-v).|.(u-v) by BHSP_1:def 2;
-      then
-A75:  sqrt ((u-v).|.(u-v)) < sqrt (e^2) by A74,SQUARE_1:95;
-      ||.(vseq.n) - tv.|| =||.-(tv-(vseq.n)).|| by RLVECT_1:47
+A61:  (u-v).|.(u-v) < e*e by A60,Th1;
+A62:  ||.(vseq.n) - tv.|| =||.-(tv-(vseq.n)).|| by RLVECT_1:47
         .=||.tv-(vseq.n).|| by BHSP_1:37
         .=sqrt ((u-v).|.(u-v)) by BHSP_1:def 4;
-      hence ||.(vseq.n) - tv.|| < e by A70,A75,SQUARE_1:89;
+      0 <= (u-v).|.(u-v) by BHSP_1:def 2;
+      then sqrt ((u-v).|.(u-v)) < sqrt (e^2) by A61,SQUARE_1:95;
+      hence ||.(vseq.n) - tv.|| < e by A58,A62,SQUARE_1:89;
     end;
     hence thesis;
   end;
   hence thesis by BHSP_2:9;
 end;
 then
-
 Lm6: l2_Space is complete by BHSP_3:def 6;
 
 registration
@@ -968,31 +951,29 @@ end;
 begin  :: Miscellaneous
 
 theorem
-  for r be Real_Sequence st (for n be Element of NAT holds 0 <= r.n) holds
-  ( for n be Element of NAT holds 0 <= (Partial_Sums r).n ) &
-  ( for n be Element of NAT holds r.n <= (Partial_Sums r).n ) &
-  ( r is summable implies
-  (( for n be Element of NAT holds (Partial_Sums r).n <= Sum r) &
-  ( for n be Element of NAT holds r.n <= Sum r ))) by Lm1;
+  for r be Real_Sequence st (for n be Element of NAT holds 0 <= r.n)
+  holds ( for n be Element of NAT holds 0 <= (Partial_Sums r).n ) & ( for n be
+  Element of NAT holds r.n <= (Partial_Sums r).n ) & ( r is summable implies (
+  for n be Element of NAT holds (Partial_Sums r).n <= Sum r) & for n be Element
+  of NAT holds r.n <= Sum r ) by Lm1;
 
 theorem
-  (for x,y be Real holds (x+y)*(x+y) <= 2*x*x + 2*y*y) &
-  (for x,y be Real holds x*x <= 2*(x-y)*(x-y) + 2*y*y) by Lm2;
+  (for x,y be Real holds (x+y)*(x+y) <= 2*x*x + 2*y*y) & for x,y be Real
+  holds x*x <= 2*(x-y)*(x-y) + 2*y*y by Lm2;
 
 theorem
-  for e being Real, s being Real_Sequence st (s is convergent &
-  ex k being Element of NAT st (for i being Element of NAT st
-  k <= i holds s.i <= e)) holds lim s <=e by Lm3;
+  for e being Real, s being Real_Sequence st (s is convergent & ex k
+  being Element of NAT st for i being Element of NAT st k <= i holds s.i <= e )
+  holds lim s <=e by Lm3;
 
 theorem
-  for c being Real, s being Real_Sequence st s is convergent
-  for r be Real_Sequence st
-  (for i be Element of NAT holds r.i = (s.i-c)*(s.i-c)) holds
-  r is convergent & lim r = (lim s-c)*(lim s-c) by Lm4;
+  for c being Real, s being Real_Sequence st s is convergent for r be
+Real_Sequence st (for i be Element of NAT holds r.i = (s.i-c)*(s.i-c)) holds r
+  is convergent & lim r = (lim s-c)*(lim s-c) by Lm4;
 
 theorem
-  for c being Real, s,s1 being Real_Sequence st
-  s is convergent & s1 is convergent for r be Real_Sequence st
-  (for i be Element of NAT holds r.i = (s.i-c)*(s.i-c)+s1.i) holds
-  r is convergent & lim r = (lim s-c)*(lim s-c)+lim s1 by Lm5;
+  for c being Real, s,s1 being Real_Sequence st s is convergent & s1 is
+convergent for r be Real_Sequence st (for i be Element of NAT holds r.i = (s.i-
+c)*(s.i-c)+s1.i) holds r is convergent & lim r = (lim s-c)*(lim s-c)+lim s1 by
+  Lm5;
 

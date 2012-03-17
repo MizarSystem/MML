@@ -13,22 +13,22 @@
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="FCONT_1"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
-<ArticleID name="PARTFUN1"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
 <ArticleID name="NAT_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
-<ArticleID name="ALGSTR_0"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="RAT_1"/>
+<ArticleID name="ALGSTR_0"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_1"/>
@@ -48,7 +48,7 @@
 <Cluster/>
 <Func kind="K" nr="21">
 <Func kind="U" nr="1">
-<Func kind="K" nr="273">
+<Func kind="K" nr="275">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -82,9 +82,9 @@
 <Adjective nr="22"/>
 <Adjective nr="24">
 <Func kind="K" nr="44"/>
-<Func kind="K" nr="44"/>
 </Adjective>
-<Adjective nr="58">
+<Adjective nr="25">
+<Func kind="K" nr="44"/>
 <Func kind="K" nr="44"/>
 </Adjective>
 <Adjective nr="112"/>
@@ -105,14 +105,14 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="278">
+<Func kind="K" nr="280">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="6"/>
 <Adjective nr="22"/>
-<Adjective nr="24">
+<Adjective nr="25">
 <Func kind="K" nr="44"/>
 <Func kind="K" nr="44"/>
 </Adjective>

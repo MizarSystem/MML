@@ -7,6 +7,7 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="TARSKI"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
@@ -26,12 +27,12 @@
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
-<Adjective nr="34" value="false"/>
-<Adjective nr="58"/>
-<Adjective nr="83"/>
+<Adjective nr="36" value="false"/>
+<Adjective nr="59"/>
 <Adjective nr="84"/>
 <Adjective nr="85"/>
 <Adjective nr="86"/>
+<Adjective nr="87"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -44,7 +45,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="89">
+<Adjective nr="90">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

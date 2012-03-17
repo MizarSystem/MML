@@ -13,10 +13,10 @@ environ
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XCMPLX_0, FINSOP_1, NUMBERS,
       INT_1, SETWISEO, SETFAM_1, FUNCT_1, PARTFUN1, FUNCT_2, FINSEQ_1,
       FINSEQ_3, FINSEQ_4, BINOP_1, STRUCT_0, ALGSTR_0, GROUP_2, GROUP_3,
-      LATTICES, GROUP_1, DOMAIN_1, XXREAL_0, NAT_1, NAT_D, INT_2;
+      LATTICES, GROUP_1, DOMAIN_1, XXREAL_0, NAT_1, INT_2;
  constructors PARTFUN1, SETFAM_1, BINOP_1, SETWISEO, XXREAL_0, NAT_1, NAT_D,
       FINSEQ_3, FINSEQ_4, FINSOP_1, REALSET1, REAL_1, LATTICES, GROUP_3,
-      RELSET_1;
+      RELSET_1, FINSEQ_2, BINOP_2;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, NUMBERS, XREAL_0, INT_1,
       FINSEQ_1, STRUCT_0, LATTICES, GROUP_1, GROUP_2, GROUP_3, ORDINAL1,
       CARD_1, FINSEQ_2;
@@ -38,89 +38,101 @@ definition
   coherence by FINSEQ_3:93;
 end;
 
-scheme MeetSbgEx{G() -> Group, P[set]}: ex H being strict Subgroup of G() st
-  the carrier of H = meet{A where A is Subset of G() :
-  ex K being strict Subgroup of G() st A = the carrier of K & P[K]}
+scheme
+  MeetSbgEx{G() -> Group, P[set]}: ex H being strict Subgroup of G() st the
+carrier of H = meet{A where A is Subset of G() : ex K being strict Subgroup of
+  G() st A = the carrier of K & P[K]}
 provided
 A1: ex H being strict Subgroup of G() st P[H]
 proof
-  set X = {A where A is Subset of G(): ex K being strict Subgroup of G()
-  st A = the carrier of K & P[K]};
+  set X = {A where A is Subset of G(): ex K being strict Subgroup of G() st A
+  = the carrier of K & P[K]};
   consider T being strict Subgroup of G() such that
 A2: P[T] by A1;
 A3: carr T in X by A2;
   then reconsider Y = meet X as Subset of G() by SETFAM_1:8;
-  now
-    let Z be set;
-    assume Z in X;
-    then consider A being Subset of G() such that
-A4: Z = A and
-A5: ex K being strict Subgroup of G() st A = the carrier of K & P[K];
-    consider H being Subgroup of G() such that
-A6: A = the carrier of H & P[H] by A5;
-    1_G() in H by GROUP_2:55;
-    hence 1_G() in Z by A4,A6,STRUCT_0:def 5;
-  end;
-  then
-A7: Y <> {} by A3,SETFAM_1:def 1;
-A8: now
-    let a,b be Element of G();
+A4: now
+    let a be Element of G();
     assume
-A9: a in Y & b in Y;
+A5: a in Y;
     now
       let Z be set;
       assume
-A10:  Z in X;
+A6:   Z in X;
       then consider A being Subset of G() such that
-A11:  A = Z and
-A12:  ex H being strict Subgroup of G() st A = the carrier of H & P[H];
+A7:   A = Z and
+A8:   ex H being strict Subgroup of G() st A = the carrier of H & P[H
+      ];
       consider H being Subgroup of G() such that
-A13:  A = the carrier of H & P[H] by A12;
-      a in the carrier of H & b in the carrier of H
-      by A9,A10,A11,A13,SETFAM_1:def 1;
-      then a in H & b in H by STRUCT_0:def 5;
-      then a * b in H by GROUP_2:59;
-      hence a * b in Z by A11,A13,STRUCT_0:def 5;
+A9:   A = the carrier of H and
+      P[H] by A8;
+      a in the carrier of H by A5,A6,A7,A9,SETFAM_1:def 1;
+      then a in H by STRUCT_0:def 5;
+      then a" in H by GROUP_2:60;
+      hence a" in Z by A7,A9,STRUCT_0:def 5;
+    end;
+    hence a" in Y by A3,SETFAM_1:def 1;
+  end;
+A10: now
+    let a,b be Element of G();
+    assume that
+A11: a in Y and
+A12: b in Y;
+    now
+      let Z be set;
+      assume
+A13:  Z in X;
+      then consider A being Subset of G() such that
+A14:  A = Z and
+A15:  ex H being strict Subgroup of G() st A = the carrier of H & P[H
+      ];
+      consider H being Subgroup of G() such that
+A16:  A = the carrier of H and
+      P[H] by A15;
+      b in the carrier of H by A12,A13,A14,A16,SETFAM_1:def 1;
+      then
+A17:  b in H by STRUCT_0:def 5;
+      a in the carrier of H by A11,A13,A14,A16,SETFAM_1:def 1;
+      then a in H by STRUCT_0:def 5;
+      then a * b in H by A17,GROUP_2:59;
+      hence a * b in Z by A14,A16,STRUCT_0:def 5;
     end;
     hence a * b in Y by A3,SETFAM_1:def 1;
   end;
   now
-    let a be Element of G();
+    let Z be set;
     assume
-A14: a in Y;
-    now
-      let Z be set;
-      assume
-A15:  Z in X;
-      then consider A being Subset of G() such that
-A16:  A = Z and
-A17:  ex H being strict Subgroup of G() st A = the carrier of H & P[H];
-      consider H being Subgroup of G() such that
-A18:  A = the carrier of H & P[H] by A17;
-      a in the carrier of H by A14,A15,A16,A18,SETFAM_1:def 1;
-      then a in H by STRUCT_0:def 5;
-      then a" in H by GROUP_2:60;
-      hence a" in Z by A16,A18,STRUCT_0:def 5;
-    end;
-    hence a" in Y by A3,SETFAM_1:def 1;
+    Z in X;
+    then consider A being Subset of G() such that
+A18: Z = A and
+A19: ex K being strict Subgroup of G() st A = the carrier of K & P[K];
+    consider H being Subgroup of G() such that
+A20: A = the carrier of H and
+    P[H] by A19;
+    1_G() in H by GROUP_2:55;
+    hence 1_G() in Z by A18,A20,STRUCT_0:def 5;
   end;
-  hence thesis by A7,A8,GROUP_2:61;
+  then Y <> {} by A3,SETFAM_1:def 1;
+  hence thesis by A10,A4,GROUP_2:61;
 end;
 
 reserve x,y,y1,y2,X,Y for set,
   k,l,n for Element of NAT,
-  i,i1,i2,i3,j for Integer,
+  i,i1,i2,i3,j for
+  Integer,
   G for Group,
   a,b,c,d for Element of G,
   A,B,C for Subset of G,
-  H,H1,H2,H3 for Subgroup of G,
+  H,H1,H2,
+  H3 for Subgroup of G,
   h for Element of H,
-  F,F1,F2 for FinSequence of the carrier of G,
+  F,F1,F2 for FinSequence of the
+  carrier of G,
   I,I1,I2 for FinSequence of INT;
 
-scheme SubgrSep{G() -> Group,P[set]}: ex X st X c= Subgroups G() &
-  for H being strict Subgroup of G() holds H in X iff P[H]
-proof
+scheme
+  SubgrSep{G() -> Group,P[set]}: ex X st X c= Subgroups G() & for H being
+  strict Subgroup of G() holds H in X iff P[H] proof
   defpred R[set] means ex H being Subgroup of G() st $1 = H & P[H];
   consider X such that
 A1: x in X iff x in Subgroups G() & R[x] from XBOOLE_0:sch 1;
@@ -128,19 +140,21 @@ A1: x in X iff x in Subgroups G() & R[x] from XBOOLE_0:sch 1;
   thus X c= Subgroups G()
   proof
     let x;
-    assume x in X;
+    assume
+    x in X;
     hence thesis by A1;
   end;
   let H be strict Subgroup of G();
   thus H in X implies P[H]
   proof
-    assume H in X;
+    assume
+    H in X;
     then ex H1 being Subgroup of G() st H = H1 & P[H1] by A1;
     hence thesis;
   end;
+A2: H in Subgroups G() by GROUP_3:def 1;
   assume
-A2: P[H];
-  H in Subgroups G() by GROUP_3:def 1;
+  P[H];
   hence thesis by A1,A2;
 end;
 
@@ -148,7 +162,6 @@ definition
   let i;
   canceled;
   func @i -> Element of INT equals
-
   i;
   coherence by INT_1:def 2;
 end;
@@ -158,24 +171,24 @@ canceled 2;
 theorem Th3:
   a = h implies a |^ n = h |^ n
 proof
+  defpred P[Element of NAT] means a |^ $1 = h |^ $1;
   assume
 A1: a = h;
-  defpred P[Element of NAT] means a |^ $1 = h |^ $1;
+A2: now
+    let n;
+    assume
+A3: P[n];
+    a |^ (n + 1) = a |^ n * a by GROUP_1:66
+      .= h |^ n * h by A1,A3,GROUP_2:52
+      .= h |^ (n + 1) by GROUP_1:66;
+    hence P[n+1];
+  end;
   a |^ 0 = 1_G by GROUP_1:43
     .= 1_H by GROUP_2:53
     .= h |^ 0 by GROUP_1:43;
   then
-A2: P[0];
-A3: now
-    let n;
-    assume
-A4: P[n];
-    a |^ (n + 1) = a |^ n * a by GROUP_1:66
-      .= h |^ n * h by A1,A4,GROUP_2:52
-      .= h |^ (n + 1) by GROUP_1:66;
-    hence P[n+1];
-  end;
-  for n holds P[n] from NAT_1:sch 1(A2,A3);
+A4: P[0];
+  for n holds P[n] from NAT_1:sch 1(A4,A2);
   hence thesis;
 end;
 
@@ -184,7 +197,8 @@ theorem
 proof
   assume
 A1: a = h;
-  now per cases;
+  now
+    per cases;
     suppose
 A2:   i >= 0;
       hence a |^ i = a |^ abs(i) by ABSVALUE:def 1
@@ -205,20 +219,20 @@ end;
 theorem Th5:
   a in H implies a |^ n in H
 proof
+  defpred P[Element of NAT] means a |^ $1 in H;
   assume
 A1: a in H;
-  defpred P[Element of NAT] means a |^ $1 in H;
+A2: now
+    let n;
+A3: a |^ (n + 1) = a |^ n * a by GROUP_1:66;
+    assume
+    P[n];
+    hence P[n+1] by A1,A3,GROUP_2:59;
+  end;
   a |^ 0 = 1_G by GROUP_1:43;
   then
-A2: P[0] by GROUP_2:55;
-A3: now
-    let n;
-    assume
-A4: P[n];
-    a |^ (n + 1) = a |^ n * a by GROUP_1:66;
-    hence P[n+1] by A1,A4,GROUP_2:59;
-  end;
-  for n holds P[n] from NAT_1:sch 1(A2,A3);
+A4: P[0] by GROUP_2:55;
+  for n holds P[n] from NAT_1:sch 1(A4,A2);
   hence thesis;
 end;
 
@@ -227,14 +241,19 @@ theorem Th6:
 proof
   assume
 A1: a in H;
-  now per cases;
-    suppose i >= 0;
+  now
+    per cases;
+    suppose
+      i >= 0;
       then a |^ i = a |^ abs(i) by ABSVALUE:def 1;
       hence thesis by A1,Th5;
     end;
-    suppose i < 0;
-      then a |^ i = (a |^ abs(i))" & a |^ abs(i) in H by A1,Th5,GROUP_1:60;
-      hence thesis by GROUP_2:60;
+    suppose
+      i < 0;
+      then
+A2:   a |^ i = (a |^ abs(i))" by GROUP_1:60;
+      a |^ abs(i) in H by A1,Th5;
+      hence thesis by A2,GROUP_2:60;
     end;
   end;
   hence thesis;
@@ -244,7 +263,6 @@ definition
   let G be non empty multMagma;
   let F be FinSequence of the carrier of G;
   func Product F -> Element of G equals
-
   (the multF of G) "**" F;
   correctness;
 end;
@@ -252,37 +270,37 @@ end;
 canceled;
 
 theorem Th8:
-  for G being associative unital (non empty multMagma),
-  F1,F2 being FinSequence of the carrier of G
-  holds Product(F1 ^ F2) = Product(F1) * Product(F2)
+  for G being associative unital (non empty multMagma), F1,F2 being
+FinSequence of the carrier of G holds Product(F1 ^ F2) = Product(F1) * Product(
+  F2)
 proof
-  let G be associative unital (non empty multMagma),
-  F1,F2 be FinSequence of the carrier of G;
+  let G be associative unital (non empty multMagma), F1,F2 be FinSequence of
+  the carrier of G;
   set g = the multF of G;
-  g is associative & g is having_a_unity by GROUP_1:31,34;
-  hence thesis by FINSOP_1:6;
+  g is associative by GROUP_1:31;
+  hence thesis by FINSOP_1:6,GROUP_1:34;
 end;
 
-theorem Th9:
-  for G being unital (non empty multMagma),
-  F being FinSequence of the carrier of G, a being Element of G
-  holds Product(F ^ <* a *>) = Product(F) * a by FINSOP_1:5,GROUP_1:34;
+theorem
+  for G being unital (non empty multMagma), F being FinSequence of the
+carrier of G, a being Element of G holds Product(F ^ <* a *>) = Product(F) * a
+  by FINSOP_1:5,GROUP_1:34;
 
 theorem Th10:
-  for G being associative unital (non empty multMagma),
-  F being FinSequence of the carrier of G, a being Element of G
-  holds Product(<* a *> ^ F) = a * Product(F)
+  for G being associative unital (non empty multMagma), F being
+FinSequence of the carrier of G, a being Element of G holds Product(<* a *> ^ F
+  ) = a * Product(F)
 proof
-  let G be associative unital (non empty multMagma),
-  F be FinSequence of the carrier of G, a be Element of G;
+  let G be associative unital (non empty multMagma), F be FinSequence of the
+  carrier of G, a be Element of G;
   set g = the multF of G;
-  g is associative & g is having_a_unity by GROUP_1:31,34;
-  hence thesis by FINSOP_1:7;
+  g is associative by GROUP_1:31;
+  hence thesis by FINSOP_1:7,GROUP_1:34;
 end;
 
 theorem Th11:
-  for G being unital (non empty multMagma)
-  holds Product <*> the carrier of G = 1_G
+  for G being unital (non empty multMagma) holds Product <*> the
+  carrier of G = 1_G
 proof
   let G be unital (non empty multMagma);
   set g = the multF of G;
@@ -292,24 +310,26 @@ proof
 end;
 
 theorem
-  for G being non empty multMagma, a being Element of G holds
-  Product<* a *> = a by FINSOP_1:12;
+  for G being non empty multMagma, a being Element of G holds Product<*
+  a *> = a by FINSOP_1:12;
 
 theorem
-  for G being non empty multMagma, a,b being Element of G holds
-  Product<* a,b *> = a * b by FINSOP_1:13;
+  for G being non empty multMagma, a,b being Element of G holds Product
+  <* a,b *> = a * b by FINSOP_1:13;
 
 theorem
   Product<* a,b,c *> = a * b * c & Product<* a,b,c *> = a * (b * c)
-proof <* a,b,c *> = <* a *> ^ <* b,c *> & <* a,b,c *> = <* a,b *> ^ <* c *> &
-  Product<* a *> = a & Product<* c *> = c & Product<* a,b *> = a * b &
-  Product<* b,c *> = b * c by FINSEQ_1:60,FINSOP_1:12,13;
-  hence thesis by Th8;
+proof
+A1: Product<* a *> = a & Product<* c *> = c by FINSOP_1:12;
+A2: Product<* a,b *> = a * b & Product<* b,c *> = b * c by FINSOP_1:13;
+  <* a,b,c *> = <* a *> ^ <* b,c *> & <* a,b,c *> = <* a,b *> ^ <* c *> by
+  FINSEQ_1:60;
+  hence thesis by A1,A2,Th8;
 end;
 
 Lm1: now
   let G,a;
-  thus Product(0 |-> a) = Product <*> the carrier of G by FINSEQ_2:72
+  thus Product(0 |-> a) = Product <*> the carrier of G
     .= 1_G by Th11
     .= a |^ 0 by GROUP_1:43;
 end;
@@ -329,266 +349,288 @@ theorem
   Product(n |-> a) = a |^ n
 proof
   defpred P[Element of NAT] means Product($1 |-> a) = a |^ $1;
-A1: P[0] by Lm1;
-A2: for n being Element of NAT st P[n] holds P[n+1] by Lm2;
-  for n being Element of NAT holds P[n] from NAT_1:sch 1(A1,A2);
+A1: for n being Element of NAT st P[n] holds P[n+1] by Lm2;
+A2: P[0] by Lm1;
+  for n being Element of NAT holds P[n] from NAT_1:sch 1(A2,A1);
   hence thesis;
 end;
 
 theorem
   Product(F - {1_G}) = Product(F)
 proof
-  defpred P[FinSequence of the carrier of G] means
-  Product($1 - {1_G}) = Product$1;
-A1: P[<*> the carrier of G] by FINSEQ_3:81;
-A2: for F,a st P[F] holds P[F ^ <* a *>]
+  defpred P[FinSequence of the carrier of G] means Product($1 - {1_G}) =
+  Product$1;
+A1: for F,a st P[F] holds P[F ^ <* a *>]
   proof
     let F,a;
     assume
-A3: P[F];
-A4: Product((F ^ <* a *>) - {1_G}) =
-    Product(((F - {1_G}) ^ (<* a *> - {1_G}))) by FINSEQ_3:80
-      .= Product F * Product(<* a *> - {1_G}) by A3,Th8;
-    now per cases;
+A2: P[F];
+A3: Product((F ^ <* a *>) - {1_G}) = Product(((F - {1_G}) ^ (<* a *> - {
+    1_G}))) by FINSEQ_3:80
+      .= Product F * Product(<* a *> - {1_G}) by A2,Th8;
+    now
+      per cases;
       suppose
-A5:     a = 1_G;
+A4:     a = 1_G;
         then a in {1_G} by TARSKI:def 1;
         then <* a *> - {1_G} = <*> the carrier of G by FINSEQ_3:83;
         then Product(<* a *> - {1_G}) = 1_G by Th11;
-        hence thesis
-        by A4,A5,Th9;
+        hence thesis by A3,A4,FINSOP_1:5,GROUP_1:34;
       end;
-      suppose a <> 1_G;
+      suppose
+        a <> 1_G;
         then not a in {1_G} by TARSKI:def 1;
         then <* a *> - {1_G} = <* a *> by FINSEQ_3:82;
-        hence thesis by A4,Th8;
+        hence thesis by A3,Th8;
       end;
     end;
     hence thesis;
   end;
-  for F holds P[F] from FINSEQ_2:sch 2(A1,A2);
+A5: P[<*> the carrier of G] by FINSEQ_3:81;
+  for F holds P[F] from FINSEQ_2:sch 2(A5,A1);
   hence thesis;
 end;
 
-Lm3: for F1 being FinSequence, y being Element of NAT st y in dom F1 holds
-len F1 - y + 1 is Element of NAT & len F1 - y + 1 >= 1 &
-len F1 - y + 1 <= len F1
+Lm3: for F1 being FinSequence, y being Element of NAT st y in dom F1 holds len
+F1 - y + 1 is Element of NAT & len F1 - y + 1 >= 1 & len F1 - y + 1 <= len F1
+
 proof
   let F1 be FinSequence, y be Element of NAT;
   assume
 A1: y in dom F1;
   now
-    assume len F1 - y + 1 < 0;
+    assume
+    len F1 - y + 1 < 0;
     then 1 < 0 qua Nat - (len F1 - y) by XREAL_1:22;
     then 1 < y - len F1;
-    then len F1 + 1 < y & y <= len F1 by A1,FINSEQ_3:27,XREAL_1:22;
-    hence contradiction by NAT_1:12;
+    then
+A2: len F1 + 1 < y by XREAL_1:22;
+    y <= len F1 by A1,FINSEQ_3:27;
+    hence contradiction by A2,NAT_1:12;
   end;
   then reconsider n = len F1 - y + 1 as Element of NAT by INT_1:16;
-  y + 0 <= len F1 by A1,FINSEQ_3:27;
-  then
-A2: 0 + 1 = 1 & 0 <= len F1 - y by XREAL_1:21;
-  n - 1 <= len F1 - y & y >= 1 by A1,FINSEQ_3:27;
+  y >= 1 by A1,FINSEQ_3:27;
   then n - 1 - y <= len F1 - y - 1 by XREAL_1:15;
-  then n - (y + 1) <= len F1 - (y + 1);
-  hence thesis by A2,XREAL_1:8,11;
+  then
+A3: n - (y + 1) <= len F1 - (y + 1);
+  y + 0 <= len F1 by A1,FINSEQ_3:27;
+  then 0 + 1 = 1 & 0 <= len F1 - y by XREAL_1:21;
+  hence thesis by A3,XREAL_1:8,11;
 end;
 
 theorem Th17:
-  len F1 = len F2 &
-  (for k st k in dom F1 holds F2.(len F1 - k + 1) = (F1/.k)") implies
-  Product(F1) = Product(F2)"
+  len F1 = len F2 & (for k st k in dom F1 holds F2.(len F1 - k + 1
+  ) = (F1/.k)") implies Product(F1) = Product(F2)"
 proof
   defpred P[Element of NAT] means for F1,F2 st len F1 = $1 & len F1 = len F2 &
-  (for k st k in dom F1 holds F2.(len F1 - k + 1) = (F1/.k)") holds
-  Product(F1) = Product(F2)";
-A1: P[0]
-  proof
-    let F1,F2;
-    assume len F1 = 0 & len F1 = len F2;
-    then F1 = <*> the carrier of G & F2 = <*> the carrier of G;
-    then Product F1 = 1_G & Product F2 = 1_G & 1_G = (1_G)"
-    by Th11,GROUP_1:16;
-    hence thesis;
-  end;
-A2: for n st P[n] holds P[n + 1]
+(for k st k in dom F1 holds F2.(len F1 - k + 1) = (F1/.k)") holds Product(F1) =
+  Product(F2)";
+A1: for n st P[n] holds P[n + 1]
   proof
     let n;
     assume
-A3: P[n];
+A2: P[n];
     let F1,F2;
     assume that
-A4: len F1 = n + 1 & len F1 = len F2 and
+A3: len F1 = n + 1 and
+A4: len F1 = len F2 and
 A5: for k st k in dom F1 holds F2.(len F1 - k + 1) = (F1/.k)";
-    reconsider p = F1 | Seg n
-    as FinSequence of the carrier of G by FINSEQ_1:23;
-    1 <= n + 1 by NAT_1:12;
-    then n + 1 in dom F1 by A4,FINSEQ_3:27;
-    then F1.(n + 1) in rng F1 & rng F1 c= the carrier of G
-    by FINSEQ_1:def 4,FUNCT_1:def 5;
-    then reconsider a = F1.(n + 1) as Element of G;
-A6: len p = n by A4,FINSEQ_3:59;
+    reconsider p = F1 | Seg n as FinSequence of the carrier of G by FINSEQ_1:
+    23;
     deffunc F(Nat) = F2.($1 + 1);
     consider q being FinSequence such that
-A7: len q = len p and
-A8: for k be Nat st k in dom q holds q.k = F(k) from FINSEQ_1:sch 2;
-A9: dom q = dom p by A7,FINSEQ_3:31;
-    rng q c= the carrier of G
+A6: len q = len p and
+A7: for k be Nat st k in dom q holds q.k = F(k) from FINSEQ_1:sch 2;
+A8: dom q = dom p by A6,FINSEQ_3:31;
+A9: len p = n by A3,FINSEQ_3:59;
+A10: rng q c= the carrier of G
     proof
       let x;
-      assume x in rng q;
+      assume
+      x in rng q;
       then consider y such that
-A10:  y in dom q & x = q.y by FUNCT_1:def 5;
-      reconsider y as Element of NAT by A10;
-A11:  x = F2.(y + 1) by A8,A10;
-A12:  1 <= y + 1 by NAT_1:12;
-      y <= len p by A7,A10,FINSEQ_3:27;
-      then y + 1 <= len F2 by A4,A6,XREAL_1:9;
-      then y + 1 in dom F2 by A12,FINSEQ_3:27;
-      then x in rng F2 & rng F2 c= the carrier of G
-      by A11,FINSEQ_1:def 4,FUNCT_1:def 5;
-      hence thesis;
+A11:  y in dom q and
+A12:  x = q.y by FUNCT_1:def 5;
+      reconsider y as Element of NAT by A11;
+      y <= len p by A6,A11,FINSEQ_3:27;
+      then 1 <= y + 1 & y + 1 <= len F2 by A3,A4,A9,
+      NAT_1:12,XREAL_1:9;
+      then
+A13:  y + 1 in dom F2 by FINSEQ_3:27;
+      x = F2.(y + 1) by A7,A11,A12;
+      then
+A14:  x in rng F2 by A13,FUNCT_1:def 5;
+      rng F2 c= the carrier of G by FINSEQ_1:def 4;
+      hence thesis by A14;
     end;
-    then reconsider q as FinSequence of the carrier of G by FINSEQ_1:def 4;
-A13: len F2 = len<* a" *> + len q by A4,A6,A7,FINSEQ_1:56;
-A14: now
+A15: rng F1 c= the carrier of G by FINSEQ_1:def 4;
+    1 <= n + 1 by NAT_1:12;
+    then n + 1 in dom F1 by A3,FINSEQ_3:27;
+    then F1.(n + 1) in rng F1 by FUNCT_1:def 5;
+    then reconsider a = F1.(n + 1) as Element of G by A15;
+A16: F1 = p ^ <* a *> by A3,FINSEQ_3:61;
+A17: now
       let k;
-      assume k in dom<* a" *>;
+      assume
+      k in dom<* a" *>;
       then
-A15:  k in {1} by FINSEQ_1:4,def 8;
-      len F2 >= 1 by A4,NAT_1:12;
+A18:  k in {1} by FINSEQ_1:4,def 8;
+      len F2 >= 1 by A3,A4,NAT_1:12;
       then
-A16:  len F2 in dom F1 by A4,FINSEQ_3:27;
+A19:  len F2 in dom F1 by A4,FINSEQ_3:27;
       then F2.(len F1 - len F1 + 1) = (F1/.len F1)" by A4,A5;
-      then (F1/.len F1)" = F2.k by A15,TARSKI:def 1;
-      then F2.k = a" & k = 1 by A4,A15,A16,PARTFUN1:def 8,TARSKI:def 1;
-      hence <* a" *>.k = F2.k by FINSEQ_1:def 8;
+      then (F1/.len F1)" = F2.k by A18,TARSKI:def 1;
+      then
+A20:  F2.k = a" by A3,A4,A19,PARTFUN1:def 8;
+      k = 1 by A18,TARSKI:def 1;
+      hence <* a" *>.k = F2.k by A20,FINSEQ_1:def 8;
     end;
-    now
-      let k;
-      assume k in dom q;
-      then k in dom q & len<* a" *> = 1 & k + 1 = 1 + k by FINSEQ_1:56;
-      hence F2.(len<* a" *> + k) = q.k by A8;
-    end;
-    then
-A17: F2 = <* a" *> ^ q by A13,A14,FINSEQ_3:43;
+    reconsider q as FinSequence of the carrier of G by A10,FINSEQ_1:def 4;
     now
       let k;
       assume
-A18:  k in dom p;
+A21:  k in dom p;
       then reconsider i = len p - k + 1 as Element of NAT by Lm3;
-      1 <= i & i <= len p by A18,Lm3;
+A22:  i + 1 = len F1 - k + 1 by A3,A9;
+      1 <= i & i <= len p by A21,Lm3;
       then i in dom p by FINSEQ_3:27;
       then
-A19:  q.i = F2.(i + 1) by A8,A9;
-      len p <= len F1 & k <= len p by A4,A6,A18,FINSEQ_3:27,NAT_1:12;
-      then 1 <= k & k <= len F1 by A18,FINSEQ_3:27,XXREAL_0:2;
+A23:  q.i = F2.(i + 1) by A7,A8;
+      k <= len p by A21,FINSEQ_3:27;
       then
-A20:  k in dom F1 by FINSEQ_3:27;
-A21:  i + 1 = len F1 - k + 1 by A4,A6;
-      F1/.k = F1.k by A20,PARTFUN1:def 8
-        .= p.k by A18,FUNCT_1:70
-        .= p/.k by A18,PARTFUN1:def 8;
-      hence q.(len p - k + 1) = (p/.k)" by A5,A19,A20,A21;
+A24:  k <= len F1 by A3,A9,NAT_1:12;
+      1 <= k by A21,FINSEQ_3:27;
+      then
+A25:  k in dom F1 by A24,FINSEQ_3:27;
+      then F1/.k = F1.k by PARTFUN1:def 8
+        .= p.k by A21,FUNCT_1:70
+        .= p/.k by A21,PARTFUN1:def 8;
+      hence q.(len p - k + 1) = (p/.k)" by A5,A23,A25,A22;
     end;
     then
-A22: Product p = Product q" by A3,A6,A7;
-    F1 = p ^ <* a *> by A4,FINSEQ_3:61;
-    then
-A23: Product F1 = Product p * a by Th9;
-    Product F2 = a" * Product q by A17,Th10
-      .= a" * Product p" by A22
+A26: Product p = Product q" by A2,A9,A6;
+A27: now
+      let k;
+A28:  len<* a" *> = 1 by FINSEQ_1:56;
+      assume
+      k in dom q;
+      hence F2.(len<* a" *> + k) = q.k by A7,A28;
+    end;
+    len F2 = len<* a" *> + len q by A3,A4,A9,A6,FINSEQ_1:56;
+    then F2 = <* a" *> ^ q by A17,A27,FINSEQ_3:43;
+    then Product F2 = a" * Product q by Th10
+      .= a" * Product p" by A26
       .= (Product p * a)" by GROUP_1:25;
-    hence thesis by A23;
+    hence thesis by A16,FINSOP_1:5,GROUP_1:34;
   end;
-  for k holds P[k] from NAT_1:sch 1(A1,A2);
+A29: P[0]
+  proof
+    let F1,F2;
+    assume that
+A30: len F1 = 0 and
+A31: len F1 = len F2;
+    F1 = <*> the carrier of G by A30;
+    then
+A32: Product F1 = 1_G by Th11;
+    F2 = <*> the carrier of G by A30,A31;
+    then Product F2 = 1_G by Th11;
+    hence thesis by A32,GROUP_1:16;
+  end;
+  for k holds P[k] from NAT_1:sch 1(A29,A1);
   hence thesis;
 end;
 
 theorem
-  G is commutative Group implies
-  for P being Permutation of dom F1 st F2 = F1 * P holds
-  Product(F1) = Product(F2)
+  G is commutative Group implies for P being Permutation of dom F1 st F2
+  = F1 * P holds Product(F1) = Product(F2)
 proof
   set g = the multF of G;
-  assume G is commutative Group;
+A1: g is associative by GROUP_1:31;
+  assume
+  G is commutative Group;
   then
-A1: g is commutative & g is having_a_unity & g is associative
-  by GROUP_1:31,34,GROUP_3:2;
+A2: g is commutative by GROUP_3:2;
   let P be Permutation of dom F1;
-  assume F2 = F1 * P;
-  hence thesis by A1,FINSOP_1:8;
+  assume
+  F2 = F1 * P;
+  hence thesis by A2,A1,FINSOP_1:8,GROUP_1:34;
 end;
 
 theorem
-  G is commutative Group & F1 is one-to-one & F2 is one-to-one & rng F1 = rng
-  F2 implies Product(F1) = Product(F2)
+  G is commutative Group & F1 is one-to-one & F2 is one-to-one & rng F1
+  = rng F2 implies Product(F1) = Product(F2)
 proof
   set g = the multF of G;
-  assume G is commutative Group;
+A1: g is associative by GROUP_1:31;
+  assume
+  G is commutative Group;
   then
-A1: g is commutative & g is having_a_unity & g is associative
-  by GROUP_1:31,34,GROUP_3:2;
-  assume F1 is one-to-one & F2 is one-to-one & rng F1 = rng F2;
-  hence thesis by A1,FINSOP_1:9;
+A2: g is commutative by GROUP_3:2;
+  assume
+  F1 is one-to-one & F2 is one-to-one & rng F1 = rng F2;
+  hence thesis by A2,A1,FINSOP_1:9,GROUP_1:34;
 end;
 
 theorem
-  G is commutative Group & len F = len F1 & len F = len F2 &
-  (for k st k in dom F holds F.k = (F1/.k) * (F2/.k)) implies
-  Product(F) = Product(F1) * Product(F2)
+  G is commutative Group & len F = len F1 & len F = len F2 & (for k st k
+  in dom F holds F.k = (F1/.k) * (F2/.k)) implies Product(F) = Product(F1) *
+  Product(F2)
 proof
   set g = the multF of G;
-  assume G is commutative Group;
+  assume
+  G is commutative Group;
   then
-A1: g is commutative & g is having_a_unity & g is associative
-  by GROUP_1:31,34,GROUP_3:2;
+A1: g is commutative by GROUP_3:2;
+  assume that
+A2: len F = len F1 and
+A3: len F = len F2;
   assume
-A2: len F = len F1 & len F = len F2;
-  assume
-A3: for k st k in dom F holds F.k = (F1/.k) * (F2/.k);
-  now
+A4: for k st k in dom F holds F.k = (F1/.k) * (F2/.k);
+A5: now
+A6: dom F2 = Seg len F2 by FINSEQ_1:def 3;
+A7: dom F1 = Seg len F1 by FINSEQ_1:def 3;
     let k;
+A8: dom F = Seg len F by FINSEQ_1:def 3;
     assume
-A4: k in dom F;
-A5: dom F = Seg len F & dom F1 = Seg len F1 & dom F2 = Seg len F2
-    by FINSEQ_1:def 3;
-    thus F.k = (F1/.k) * (F2/.k) by A3,A4
-      .= g.(F1.k,F2/.k) by A2,A4,A5,PARTFUN1:def 8
-      .= g.(F1.k,F2.k) by A2,A4,A5,PARTFUN1:def 8;
+A9: k in dom F;
+    hence F.k = (F1/.k) * (F2/.k) by A4
+      .= g.(F1.k,F2/.k) by A2,A9,A8,A7,PARTFUN1:def 8
+      .= g.(F1.k,F2.k) by A3,A9,A8,A6,PARTFUN1:def 8;
   end;
-  hence thesis by A1,A2,FINSOP_1:10;
+  g is associative by GROUP_1:31;
+  hence thesis by A1,A2,A3,A5,FINSOP_1:10,GROUP_1:34;
 end;
 
 theorem Th21:
   rng F c= carr H implies Product(F) in H
 proof
-  defpred P[FinSequence of the carrier of G] means
-  rng $1 c= carr H implies Product $1 in H;
-A1: P[<*> the carrier of G]
+  defpred P[FinSequence of the carrier of G] means rng $1 c= carr H implies
+  Product $1 in H;
+A1: now
+    let F,d;
+    assume
+A2: P[F];
+    thus P[F^<*d*>]
+    proof
+A3:   rng F c= rng(F ^ <* d *>) & Product(F ^ <* d *>) = Product(F) * d
+      by FINSEQ_1:42,FINSOP_1:5,GROUP_1:34;
+A4:   rng<* d *> = {d} & d in {d} by FINSEQ_1:56,TARSKI:def 1;
+      assume
+A5:   rng(F ^ <* d *>) c= carr H;
+      rng<* d *> c= rng(F ^ <* d *>) by FINSEQ_1:43;
+      then rng<* d *> c= carr H by A5,XBOOLE_1:1;
+      then d in H by A4,STRUCT_0:def 5;
+      hence thesis by A2,A5,A3,GROUP_2:59,XBOOLE_1:1;
+    end;
+  end;
+A6: P[<*> the carrier of G]
   proof
-    assume rng <*> the carrier of G c= carr H;
+    assume
+    rng <*> the carrier of G c= carr H;
     1_G in H by GROUP_2:55;
     hence thesis by Th11;
   end;
-A2: now
-    let F,d;
-    assume
-A3: P[F];
-    thus P[F^<*d*>]
-    proof
-      assume
-A4:   rng(F ^ <* d *>) c= carr H;
-      rng F c= rng(F ^ <* d *>) & rng<* d *> c= rng(F ^ <* d *>)
-      by FINSEQ_1:42,43;
-      then rng F c= carr H & rng<* d *> c= carr H & rng<* d *> = {d} &
-      d in {d} by A4,FINSEQ_1:56,TARSKI:def 1,XBOOLE_1:1;
-      then d in H & Product(F) in
-      H & Product(F ^ <* d *>) = Product(F) * d by A3,Th9,STRUCT_0:def 5;
-      hence thesis by GROUP_2:59;
-    end;
-  end;
-  for F holds P[F] from FINSEQ_2:sch 2(A1,A2);
+  for F holds P[F] from FINSEQ_2:sch 2(A6,A1);
   hence thesis;
 end;
 
@@ -608,12 +650,13 @@ A3: dom p = dom F by A1,FINSEQ_3:31;
     rng p c= the carrier of G
     proof
       let x;
-      assume x in rng p;
+      assume
+      x in rng p;
       then consider y such that
-A4:   y in dom p & p.y = x by FUNCT_1:def 5;
+A4:   y in dom p and
+A5:   p.y = x by FUNCT_1:def 5;
       reconsider y as Element of NAT by A4;
-      x = (F/.y) |^ @(I/.y) & (F/.y) |^ @(I/.y) in the carrier of G
-      by A2,A4;
+      x = (F/.y) |^ @(I/.y) by A2,A4,A5;
       hence thesis;
     end;
     then reconsider p as FinSequence of the carrier of G by FINSEQ_1:def 4;
@@ -624,106 +667,115 @@ A4:   y in dom p & p.y = x by FUNCT_1:def 5;
   proof
     let F1,F2;
     assume that
-A5: len F1 = len F and
-A6: for k st k in dom F holds F1.k = (F/.k) |^ @(I/.k);
+A6: len F1 = len F and
+A7: for k st k in dom F holds F1.k = (F/.k) |^ @(I/.k);
     assume that
-A7: len F2 = len F and
-A8: for k st k in dom F holds F2.k = (F/.k) |^ @(I/.k);
-A9: dom F1 = Seg len F by A5,FINSEQ_1:def 3;
+A8: len F2 = len F and
+A9: for k st k in dom F holds F2.k = (F/.k) |^ @(I/.k);
+A10: dom F1 = Seg len F by A6,FINSEQ_1:def 3;
     now
       let k be Nat;
-      assume k in dom F1;
+      assume
+      k in dom F1;
       then
-A10:  k in dom F by A9,FINSEQ_1:def 3;
-      hence F1.k = (F/.k) |^ @(I/.k) by A6
-        .= F2.k by A8,A10;
+A11:  k in dom F by A10,FINSEQ_1:def 3;
+      hence F1.k = (F/.k) |^ @(I/.k) by A7
+        .= F2.k by A9,A11;
     end;
-    hence thesis by A5,A7,FINSEQ_2:10;
+    hence thesis by A6,A8,FINSEQ_2:10;
   end;
 end;
 
 canceled 3;
 
 theorem Th25:
-  len F1 = len I1 & len F2 = len I2 implies
-  (F1 ^ F2) |^ (I1 ^ I2) = (F1 |^ I1) ^ (F2 |^ I2)
+  len F1 = len I1 & len F2 = len I2 implies (F1 ^ F2) |^ (I1 ^ I2)
+  = (F1 |^ I1) ^ (F2 |^ I2)
 proof
-  assume
-A1: len F1 = len I1 & len F2 = len I2;
-  set q = F1 |^ I1;
+  assume that
+A1: len F1 = len I1 and
+A2: len F2 = len I2;
   set r = F2 |^ I2;
-A2: len(q ^ r) = len q + len r by FINSEQ_1:35
-    .= len F1 + len r by Def4
-    .= len F1 + len F2 by Def4
-    .= len(F1 ^ F2) by FINSEQ_1:35;
+  set q = F1 |^ I1;
   len(F1 ^ F2) = len F1 + len F2 by FINSEQ_1:35
-    .= len(I1 ^ I2) by A1,FINSEQ_1:35;
+    .= len(I1 ^ I2) by A1,A2,FINSEQ_1:35;
   then
 A3: dom (F1 ^ F2) = dom (I1 ^ I2) by FINSEQ_3:31;
-  now
+A4: now
     let k;
     assume
-A4: k in dom(F1 ^ F2);
-    now per cases by A4,FINSEQ_1:38;
+A5: k in dom(F1 ^ F2);
+    now
+      per cases by A5,FINSEQ_1:38;
       suppose
-A5:     k in dom F1;
-        then
-A6:     k in dom I1 by A1,FINSEQ_3:31;
-        then
-A7:     I1/.k = I1.k by PARTFUN1:def 8;
-A8:     (I1 ^ I2).k = (I1 ^ I2)/.k by A3,A4,PARTFUN1:def 8;
+A6:     k in dom F1;
         len q = len F1 by Def4;
-        then k in dom q by A5,FINSEQ_3:31;
+        then k in dom q by A6,FINSEQ_3:31;
         then
-A9:     (q ^ r).k = q.k by FINSEQ_1:def 7
-          .= (F1/.k) |^ @(I1/.k) by A5,Def4;
-        F1/.k = F1.k by A5,PARTFUN1:def 8
-          .= (F1 ^ F2).k by A5,FINSEQ_1:def 7
-          .= (F1 ^ F2)/.k by A4,PARTFUN1:def 8;
-        hence (q ^ r).k = ((F1 ^ F2)/.k) |^ @((I1 ^ I2)/.k)
-        by A6,A7,A8,A9,FINSEQ_1:def 7;
+A7:     (q ^ r).k = q.k by FINSEQ_1:def 7
+          .= (F1/.k) |^ @(I1/.k) by A6,Def4;
+A8:     (I1 ^ I2).k = (I1 ^ I2)/.k by A3,A5,PARTFUN1:def 8;
+A9:     F1/.k = F1.k by A6,PARTFUN1:def 8
+          .= (F1 ^ F2).k by A6,FINSEQ_1:def 7
+          .= (F1 ^ F2)/.k by A5,PARTFUN1:def 8;
+A10:    k in dom I1 by A1,A6,FINSEQ_3:31;
+        then I1/.k = I1.k by PARTFUN1:def 8;
+        hence (q ^ r).k = ((F1 ^ F2)/.k) |^ @((I1 ^ I2)/.k) by A10,A8,A7,
+        A9,FINSEQ_1:def 7;
       end;
-      suppose ex n be Nat st n in dom F2 & k = len F1 + n;
+      suppose
+        ex n be Nat st n in dom F2 & k = len F1 + n;
         then consider n such that
-A10:    n in dom F2 and
-A11:    k = len F1 + n;
-A12:    len r = len F2 & len q = len F1 by Def4;
+A11:    n in dom F2 and
+A12:    k = len F1 + n;
+A13:    (F1 ^ F2).k = F2.n & F2.n = F2/.n by A11,A12,FINSEQ_1:def 7,
+        PARTFUN1:def 8;
+A14:    len q = len F1 by Def4;
+        len r = len F2 by Def4;
+        then n in dom r by A11,FINSEQ_3:31;
         then
-A13:    n in dom r & n in dom I2 by A1,A10,FINSEQ_3:31;
+A15:    (q ^ r).k = r.n by A12,A14,FINSEQ_1:def 7;
+A16:    (F1 ^ F2).k = (F1 ^ F2)/.k & (I1 ^ I2)/.k = (I1 ^ I2).k by A3,A5,
+        PARTFUN1:def 8;
+A17:    n in dom I2 by A2,A11,FINSEQ_3:31;
         then
-A14:    (q ^ r).k = r.n & (I1 ^ I2).k = I2.n & (F1 ^ F2).k = F2.n &
-        n in dom F2 & (F1 ^ F2).k = (F1 ^ F2)/.k & F2.n = F2/.n
-        by A1,A4,A10,A11,A12,FINSEQ_1:def 7,PARTFUN1:def 8;
-A15:    (I1 ^ I2)/.k = (I1 ^ I2).k by A3,A4,PARTFUN1:def 8;
-        I2/.n = I2.n by A13,PARTFUN1:def 8;
-        hence (q ^ r).k = ((F1 ^ F2)/.k) |^ @((I1 ^ I2)/.k) by A14,A15,Def4;
+A18:    I2/.n = I2.n by PARTFUN1:def 8;
+        (I1 ^ I2).k = I2.n by A1,A12,A17,FINSEQ_1:def 7;
+        hence (q ^ r).k = ((F1 ^ F2)/.k) |^ @((I1 ^ I2)/.k) by A11,A15,A13
+        ,A16,A18,Def4;
       end;
     end;
     hence (q ^ r).k = ((F1 ^ F2)/.k) |^ @((I1 ^ I2)/.k);
   end;
-  hence thesis by A2,Def4;
+  len(q ^ r) = len q + len r by FINSEQ_1:35
+    .= len F1 + len r by Def4
+    .= len F1 + len F2 by Def4
+    .= len(F1 ^ F2) by FINSEQ_1:35;
+  hence thesis by A4,Def4;
 end;
 
 theorem Th26:
   rng F c= carr H implies Product(F |^ I) in H
 proof
-  assume that
+  assume
 A1: rng F c= carr H;
   rng(F |^ I) c= carr H
   proof
     let x;
-    assume x in rng(F |^ I);
+    assume
+    x in rng(F |^ I);
     then consider y such that
-A2: y in dom(F |^ I) & x = (F |^ I).y by FUNCT_1:def 5;
+A2: y in dom(F |^ I) and
+A3: x = (F |^ I).y by FUNCT_1:def 5;
     reconsider y as Element of NAT by A2;
     len(F |^ I) = len F by Def4;
     then
-A3: y in dom F by A2,FINSEQ_3:31;
+A4: y in dom F by A2,FINSEQ_3:31;
+    then F.y in rng F & F.y = F/.y by FUNCT_1:def 5,PARTFUN1:def 8;
     then
-A4: x = (F/.y) |^ @(I/.y) by A2,Def4;
-    F.y in rng F & F.y = F/.y by A3,FUNCT_1:def 5,PARTFUN1:def 8;
-    then F/.y in H by A1,STRUCT_0:def 5;
-    then x in H by A4,Th6;
+A5: F/.y in H by A1,STRUCT_0:def 5;
+    x = (F/.y) |^ @(I/.y) by A3,A4,Def4;
+    then x in H by A5,Th6;
     hence thesis by STRUCT_0:def 5;
   end;
   hence thesis by Th21;
@@ -731,7 +783,8 @@ end;
 
 theorem Th27:
   (<*> the carrier of G) |^ (<*> INT) = {}
-proof len <*> the carrier of G = 0 & len <*> INT = 0;
+proof
+  len <*> the carrier of G = 0;
   then len((<*> the carrier of G) |^ (<*> INT)) = 0 by Def4;
   hence thesis;
 end;
@@ -739,28 +792,32 @@ end;
 theorem Th28:
   <* a *> |^ <* @i *> = <* a |^ i *>
 proof
-A1: len<* a *> = 1 & len<* @i *> = 1 & len<* a |^ i*> = 1 by FINSEQ_1:56;
-  now
+A1: len<* a *> = 1 by FINSEQ_1:56;
+A2: now
     let k;
+A3: @i = <* @i *>/.1 by FINSEQ_4:25;
+A4: dom <* a *> = Seg len <* a *> by FINSEQ_1:def 3;
     assume
-A2: k in dom <* a *>;
-A3: i = @i & @i = <* @i *>/.1 by FINSEQ_4:25;
-    dom <* a *> = Seg len <* a *> by FINSEQ_1:def 3;
+    k in dom <* a *>;
     then
-A4: k = 1 by A1,A2,FINSEQ_1:4,TARSKI:def 1;
+A5: k = 1 by A1,A4,FINSEQ_1:4,TARSKI:def 1;
     hence <* a |^ i *>.k = a |^ i by FINSEQ_1:57
-      .= (<* a *>/.k) |^ @(<* @i *>/.k) by A3,A4,FINSEQ_4:25;
+      .= (<* a *>/.k) |^ @(<* @i *>/.k) by A3,A5,FINSEQ_4:25;
   end;
-  hence thesis by A1,Def4;
+  len<* a |^ i*> = 1 by FINSEQ_1:56;
+  hence thesis by A1,A2,Def4;
 end;
 
 theorem Th29:
   <* a,b *> |^ <* @i,@j *> = <* a |^ i,b |^ j *>
-proof len<* a *> = 1 & len<* b *> = 1 & len <* @i *> = 1 & len<* @j *> = 1 &
-  <* a,b *> = <* a *> ^ <* b *> & <* @i,@j *> = <* @i *> ^ <* @j *>
-  by FINSEQ_1:56,def 9;
-  hence <* a,b *> |^ <* @i,@j *> =
-  (<* a *> |^ <* @i *>) ^ (<* b *> |^ <* @j *>) by Th25
+proof
+A1: len <* @i *> = 1 & len<* @j *> = 1 by FINSEQ_1:56;
+A2: <* a,b *> = <* a *> ^ <* b *> & <* @i,@j *> = <* @i *> ^ <* @j *> by
+  FINSEQ_1:def 9;
+  len<* a *> = 1 & len<* b *> = 1 by FINSEQ_1:56;
+  hence
+  <* a,b *> |^ <* @i,@j *> = (<* a *> |^ <* @i *>) ^ (<* b *> |^ <* @j *>
+  ) by A1,A2,Th25
     .= <* a |^ i *> ^ (<* b *> |^ <* @j *>) by Th28
     .= <* a |^ i *> ^ <* b |^ j *> by Th28
     .= <* a |^ i,b |^ j *> by FINSEQ_1:def 9;
@@ -768,12 +825,13 @@ end;
 
 theorem
   <* a,b,c *> |^ <* @i1,@i2,@i3 *> = <* a |^ i1,b |^ i2,c |^ i3 *>
-proof len<* a *> = 1 & len<* b,c *> = 2 &
-  len <* @i1 *> = 1 & len<* @i2,@i3 *> = 2 &
-  <* a,b,c *> = <* a *> ^ <* b,c *> &
-  <* @i1,@i2,@i3 *> = <* @i1 *> ^ <* @i2,@i3 *> by FINSEQ_1:56,60,61;
-  hence <* a,b,c *> |^ <* @i1,@i2,@i3 *> =
-  (<* a *> |^ <* @i1 *>) ^ (<* b,c *> |^ <* @i2,@i3 *>) by Th25
+proof
+A1: len <* @i1 *> = 1 & len<* @i2,@i3 *> = 2 by FINSEQ_1:56,61;
+A2: <* a,b,c *> = <* a *> ^ <* b,c *> & <* @i1,@i2,@i3 *> = <* @i1 *> ^ <* @
+  i2,@ i3 *> by FINSEQ_1:60;
+  len<* a *> = 1 & len<* b,c *> = 2 by FINSEQ_1:56,61;
+  hence <* a,b,c *> |^ <* @i1,@i2,@i3 *> = (<* a *> |^ <* @i1 *>) ^ (<* b,c *>
+  |^ <* @i2,@i3 *>) by A1,A2,Th25
     .= <* a |^ i1 *> ^ (<* b,c *> |^ <* @i2,@i3 *>) by Th28
     .= <* a |^ i1 *> ^ <* b |^ i2,c |^ i3 *> by Th29
     .= <* a |^ i1,b |^ i2,c |^ i3 *> by FINSEQ_1:60;
@@ -782,111 +840,112 @@ end;
 theorem
   F |^ (len F |-> @(1)) = F
 proof
-  defpred P[FinSequence of the carrier of G] means
-  $1 |^ (len $1 |-> @(1)) = $1;
-A1: P[<*> the carrier of G]
-  proof
-    set A = <*> the carrier of G;
-    thus A |^ (len A |-> @(1)) = A |^ (0 |-> @(1))
-      .= A |^ (<*> INT) by FINSEQ_2:72
-      .= A by Th27;
-  end;
-A2: for F,a st P[F] holds P[F ^ <* a *>]
+  defpred P[FinSequence of the carrier of G] means $1 |^ (len $1 |-> @(1)) =
+  $1;
+A1: for F,a st P[F] holds P[F ^ <* a *>]
   proof
     let F,a;
     set A = F ^ <* a *>;
     assume
-A3: P[F];
-A4: len A = len F + len<* a *> by FINSEQ_1:35;
-A5: len<* a *> = 1 by FINSEQ_1:57;
-A6: len<* @(1) *> = 1 by FINSEQ_1:57;
-A7: len(len F |-> @(1)) = len F by FINSEQ_1:def 18;
-    thus A |^ (len A |-> @(1)) = A |^ ((len F |-> @(1)) ^ <* @(1) *>)
-    by A4,A5,FINSEQ_2:74
-      .= (F |^ (len F |-> @(1))) ^ (<* a *> |^ <* @(1) *>)
-    by A5,A6,A7,Th25
-      .= F ^ <* a |^ 1 *> by A3,Th28
+A2: P[F];
+A3: len<* a *> = 1 by FINSEQ_1:57;
+A4: len<* @(1) *> = 1 & len(len F |-> @(1)) = len F by FINSEQ_1:57,def 18;
+    len A = len F + len<* a *> by FINSEQ_1:35;
+    hence A |^ (len A |-> @(1)) = A |^ ((len F |-> @(1)) ^ <* @(1) *>) by A3
+    ,FINSEQ_2:74
+      .= (F |^ (len F |-> @(1))) ^ (<* a *> |^ <* @(1) *>) by A3,A4,Th25
+      .= F ^ <* a |^ 1 *> by A2,Th28
       .= F ^ <* a *> by GROUP_1:44;
   end;
-  for F holds P[F] from FINSEQ_2:sch 2(A1,A2);
+A5: P[<*> the carrier of G]
+  proof
+    set A = <*> the carrier of G;
+    thus A |^ (len A |-> @(1)) = A |^ (0 |-> @(1))
+      .= A |^ (<*> INT)
+      .= A by Th27;
+  end;
+  for F holds P[F] from FINSEQ_2:sch 2(A5,A1);
   hence thesis;
 end;
 
 theorem
   F |^ (len F |-> @(0)) = len F |-> 1_G
 proof
-  defpred P[FinSequence of the carrier of G] means
-  $1 |^ (len $1 |-> @(0)) = len $1 |-> 1_G;
-A1: P[<*> the carrier of G]
-  proof
-    set A = <*> the carrier of G;
-    thus A |^ (len A |-> @(0)) = A |^ (0 |-> @(0))
-      .= A |^ (<*> INT) by FINSEQ_2:72
-      .= {} by Th27
-      .= len A |-> 1_G by FINSEQ_2:72;
-  end;
-A2: for F,a st P[F] holds P[F ^ <* a *>]
+  defpred P[FinSequence of the carrier of G] means $1 |^ (len $1 |-> @(0)) =
+  len $1 |-> 1_G;
+A1: for F,a st P[F] holds P[F ^ <* a *>]
   proof
     let F,a;
     set A = F ^ <* a *>;
     assume
-A3: P[F];
-A4: len A = len F + len<* a *> by FINSEQ_1:35;
-A5: len<* a *> = 1 by FINSEQ_1:57;
-A6: len<* @(0) *> = 1 by FINSEQ_1:57;
-A7: len(len F |-> @(0)) = len F by FINSEQ_1:def 18;
-    thus A |^ (len A |-> @(0)) = A |^ ((len F |-> @(0)) ^ <* @(0) *>)
-    by A4,A5,FINSEQ_2:74
-      .= (F |^ (len F |-> @(0))) ^ (<* a *> |^ <* @(0) *>)
-    by A5,A6,A7,Th25
-      .= (len F |-> 1_G) ^ <* a |^ 0 *> by A3,Th28
+A2: P[F];
+A3: len<* a *> = 1 by FINSEQ_1:57;
+A4: len<* @(0) *> = 1 & len(len F |-> @(0)) = len F by FINSEQ_1:57,def 18;
+A5: len A = len F + len<* a *> by FINSEQ_1:35;
+    hence A |^ (len A |-> @(0)) = A |^ ((len F |-> @(0)) ^ <* @(0) *>) by A3
+    ,FINSEQ_2:74
+      .= (F |^ (len F |-> @(0))) ^ (<* a *> |^ <* @(0) *>) by A3,A4,Th25
+      .= (len F |-> 1_G) ^ <* a |^ 0 *> by A2,Th28
       .= (len F |-> 1_G) ^ <* 1_G *> by GROUP_1:43
-      .= (len A |-> 1_G) by A4,A5,FINSEQ_2:74;
+      .= (len A |-> 1_G) by A5,A3,FINSEQ_2:74;
   end;
-  for F holds P[F] from FINSEQ_2:sch 2(A1,A2);
+A6: P[<*> the carrier of G]
+  proof
+    set A = <*> the carrier of G;
+    thus A |^ (len A |-> @(0)) = A |^ (0 |-> @(0))
+      .= A |^ (<*> INT)
+      .= {} by Th27
+      .= len A |-> 1_G;
+  end;
+  for F holds P[F] from FINSEQ_2:sch 2(A6,A1);
   hence thesis;
 end;
 
 theorem
   len I = n implies (n |-> 1_G) |^ I = n |-> 1_G
 proof
-  defpred P[Element of NAT] means
-  for I st len I = $1 holds ($1 |-> 1_G) |^ I = $1 |-> 1_G;
-A1: P[0]
-  proof
-    let I;
-    assume len I = 0;
-    then I = <*> INT & (0 |-> 1_G) = {} & {} = <*> the carrier of G
-    by FINSEQ_2:72;
-    hence thesis by Th27;
-  end;
-A2: for k st P[k] holds P[k + 1]
+  defpred P[Element of NAT] means for I st len I = $1 holds ($1 |-> 1_G) |^ I
+  = $1 |-> 1_G;
+A1: for k st P[k] holds P[k + 1]
   proof
     let k;
     assume
-A3: P[k];
+A2: P[k];
     let I;
-    assume
-A4: len I = k + 1;
     reconsider J = I | Seg k as FinSequence of INT by FINSEQ_1:23;
-A5: len J = k by A4,FINSEQ_3:59;
+    assume
+A3: len I = k + 1;
     then
-A6: (k |-> 1_G) |^ J = k |-> 1_G by A3;
+A4: len J = k by FINSEQ_3:59;
+    then
+A5: (k |-> 1_G) |^ J = k |-> 1_G by A2;
+A6: rng I c= INT by FINSEQ_1:def 4;
     1 <= k + 1 by NAT_1:12;
-    then k + 1 in dom I by A4,FINSEQ_3:27;
-    then I.(k + 1) in rng I & rng I c= INT by FINSEQ_1:def 4,FUNCT_1:def 5;
-    then reconsider i = I.(k + 1) as Integer;
-A7: I = J ^ <* @i *> by A4,FINSEQ_3:61;
-A8: (k + 1) |-> 1_G = (k |-> 1_G) ^ <* 1_G *> by FINSEQ_2:74;
-    len(k |-> 1_G) = k & len<* 1_G *> = 1 & len<* @i *> = 1
-    by FINSEQ_1:57,FINSEQ_1:def 18;
-    then ((k + 1) |-> 1_G) |^ I = ((k |-> 1_G) |^ J) ^ (<* 1_G *> |^ <* @i *>)
-    by A5,A7,A8,Th25
-      .= (k |-> 1_G) ^ <* (1_G) |^ i *> by A6,Th28
+    then k + 1 in dom I by A3,FINSEQ_3:27;
+    then I.(k + 1) in rng I by FUNCT_1:def 5;
+    then reconsider i = I.(k + 1) as Integer by A6;
+A7: len<* 1_G *> = 1 & len<* @i *> = 1 by FINSEQ_1:57;
+A8: (k + 1) |-> 1_G = (k |-> 1_G) ^ <* 1_G *> & len(k |-> 1_G) = k by
+    FINSEQ_1:def 18,FINSEQ_2:74;
+    I = J ^ <* @i *> by A3,FINSEQ_3:61;
+    then
+    ((k + 1) |-> 1_G) |^ I = ((k |-> 1_G) |^ J) ^ (<* 1_G *> |^ <* @i *>)
+    by A4,A8,A7,Th25
+      .= (k |-> 1_G) ^ <* (1_G) |^ i *> by A5,Th28
       .= (k |-> 1_G) ^ <* 1_G *> by GROUP_1:61;
     hence thesis by FINSEQ_2:74;
   end;
-  for k holds P[k] from NAT_1:sch 1(A1,A2);
+A9: P[0]
+  proof
+    let I;
+    assume
+    len I = 0;
+    then
+A10: I = <*> INT;
+    {} = <*> the carrier of G;
+    hence thesis by A10,Th27;
+  end;
+  for k holds P[k] from NAT_1:sch 1(A9,A1);
   hence thesis;
 end;
 
@@ -894,97 +953,102 @@ definition
   let G,A;
   func gr A -> strict Subgroup of G means
   :Def5:
-  A c= the carrier of it &
-  (for H being strict Subgroup of G
-  st A c= the carrier of H holds it is Subgroup of H);
+  A c= the carrier of it & for
+H being strict Subgroup of G st A c= the carrier of H holds it is Subgroup of H
+  ;
   existence
   proof
     defpred P[set] means ex H st $1 = carr H & A c= $1;
     consider X such that
 A1: Y in X iff Y in bool the carrier of G & P[Y] from XBOOLE_0:sch 1;
     set M = meet X;
-A2: the carrier of G in bool the carrier of G &
-    the carrier of the multMagma of G = the carrier of (Omega).G &
-    A c= the carrier of G & carr (Omega).G = the carrier of (Omega).
-    G by ZFMISC_1:def 1;
+A2: carr (Omega).G = the carrier of (Omega). G;
     then
-A3: the carrier of G in X by A1;
-A4: X <> {} by A1,A2;
-    now
-      let Y;
-      assume Y in X;
-      then consider H such that
-A5:   Y = carr H and A c= Y by A1;
-      1_G in H by GROUP_2:55;
-      hence 1_G in Y by A5,STRUCT_0:def 5;
-    end;
-    then
-A6: M <> {} by A4,SETFAM_1:def 1;
-    M c= the carrier of G
-    proof consider x such that
-A7:   x in X by A3;
-      consider H such that
-A8:   x = carr H and A c= x by A1,A7;
+A3: X <> {} by A1;
+A4: the carrier of G in X by A1,A2;
+A5: M c= the carrier of G
+    proof
       let y;
-      assume y in M;
-      then y in carr H & carr H c= the carrier of G by A7,A8,SETFAM_1:def 1;
+      consider x such that
+A6:   x in X by A4;
+      consider H such that
+A7:   x = carr H and
+      A c= x by A1,A6;
+      assume
+      y in M;
+      then y in carr H by A6,A7,SETFAM_1:def 1;
       hence thesis;
     end;
-    then reconsider M as Subset of G;
-A9: now
+    now
+      let Y;
+      assume
+      Y in X;
+      then consider H such that
+A8:   Y = carr H and
+      A c= Y by A1;
+      1_G in H by GROUP_2:55;
+      hence 1_G in Y by A8,STRUCT_0:def 5;
+    end;
+    then
+A9: M <> {} by A3,SETFAM_1:def 1;
+    reconsider M as Subset of G by A5;
+A10: now
       let a,b;
       assume
-A10:  a in M & b in M;
+A11:  a in M & b in M;
       now
         let Y;
         assume
-A11:    Y in X;
+A12:    Y in X;
         then consider H such that
-A12:    Y = carr H and A c= Y by A1;
-        a in carr H & b in carr H by A10,A11,A12,SETFAM_1:def 1;
-        hence a * b in Y by A12,GROUP_2:89;
+A13:    Y = carr H and
+        A c= Y by A1;
+        a in carr H & b in carr H by A11,A12,A13,SETFAM_1:def 1;
+        hence a * b in Y by A13,GROUP_2:89;
       end;
-      hence a * b in M by A4,SETFAM_1:def 1;
+      hence a * b in M by A3,SETFAM_1:def 1;
     end;
     now
       let a;
       assume
-A13:  a in M;
+A14:  a in M;
       now
         let Y;
         assume
-A14:    Y in X;
+A15:    Y in X;
         then consider H such that
-A15:    Y = carr H and A c= Y by A1;
-        a in carr H by A13,A14,A15,SETFAM_1:def 1;
-        hence a" in Y by A15,GROUP_2:90;
+A16:    Y = carr H and
+        A c= Y by A1;
+        a in carr H by A14,A15,A16,SETFAM_1:def 1;
+        hence a" in Y by A16,GROUP_2:90;
       end;
-      hence a" in M by A4,SETFAM_1:def 1;
+      hence a" in M by A3,SETFAM_1:def 1;
     end;
     then consider H being strict Subgroup of G such that
-A16: the carrier of H = M by A6,A9,GROUP_2:61;
+A17: the carrier of H = M by A9,A10,GROUP_2:61;
     take H;
     now
       let Y;
-      assume Y in X;
+      assume
+      Y in X;
       then ex H st Y = carr H & A c= Y by A1;
       hence A c= Y;
     end;
-    hence A c= the carrier of H by A4,A16,SETFAM_1:6;
+    hence A c= the carrier of H by A3,A17,SETFAM_1:6;
     let H1 be strict Subgroup of G;
+A18: the carrier of H1 = carr H1;
     assume
-A17: A c= the carrier of H1;
-    the carrier of H1 = carr H1;
-    then the carrier of H1 in X by A1,A17;
-    hence thesis by A16,GROUP_2:66,SETFAM_1:4;
+    A c= the carrier of H1;
+    then the carrier of H1 in X by A1,A18;
+    hence thesis by A17,GROUP_2:66,SETFAM_1:4;
   end;
   uniqueness
   proof
     let H1,H2 be strict Subgroup of G;
-    assume A c= the carrier of H1 & (for H being strict Subgroup of G
-    st A c= the carrier of H holds H1 is Subgroup of H) &
-    A c= the carrier of H2 & (for H being strict Subgroup of G
-    st A c= the carrier of H holds H2 is Subgroup of H);
+    assume
+    A c= the carrier of H1 & ( for H being strict Subgroup of G st A
+c= the carrier of H holds H1 is Subgroup of H)& A c= the carrier of H2 & for H
+being strict Subgroup of G st A c= the carrier of H holds H2 is Subgroup of H;
     then H1 is Subgroup of H2 & H2 is Subgroup of H1;
     hence thesis by GROUP_2:64;
   end;
@@ -993,179 +1057,194 @@ end;
 canceled 3;
 
 theorem Th37:
-  a in gr A iff ex F,I st len F = len I & rng F c= A & Product(F |^ I) = a
+  a in gr A iff ex F,I st len F = len I & rng F c= A & Product(F
+  |^ I) = a
 proof
-  thus a in gr A implies ex F,I st len F = len I & rng F c= A &
-  Product(F |^ I) = a
+  thus a in gr A implies ex F,I st len F = len I & rng F c= A & Product(F |^ I
+  ) = a
   proof
+    defpred P[set] means ex F,I st $1 = Product (F |^ I) & len F = len I & rng
+    F c= A;
     assume
 A1: a in gr A;
-    defpred P[set] means
-    ex F,I st $1 = Product (F |^ I) & len F = len I & rng F c= A;
     reconsider B = {b : P[b]} as Subset of G from DOMAIN_1:sch 7;
-    1_G = Product <*> the carrier of G & <*> the carrier of G = {} &
-    (<*> the carrier of G) |^ (<*> INT) = {} &
-    rng <*> the carrier of G = {} & {} c= A & len {} = 0 & len<*>INT = 0
-    by Th11,Th27,XBOOLE_1:2;
-    then
-A2: 1_G in B;
-A3: now
+A2: now
       let c,d;
       assume that
-A4:   c in B and
-A5:   d in B;
-A6:   ex d1 being Element of G st c = d1 &
-      ex F,I st d1 = Product(F |^ I) & len F = len I & rng F c= A by A4;
-A7:   ex d2 being Element of G st d = d2 &
-      ex F,I st d2 = Product(F |^ I) & len F = len I & rng F c= A by A5;
-      consider F1,I1 such that
-A8:   c = Product(F1 |^ I1) and
-A9:   len F1 = len I1 and
-A10:  rng F1 c= A by A6;
-      consider F2,I2 such that
-A11:  d = Product(F2 |^ I2) and
-A12:  len F2 = len I2 and
-A13:  rng F2 c= A by A7;
-A14:  c * d = Product((F1 |^ I1) ^ (F2 |^ I2)) by A8,A11,Th8
-        .= Product((F1 ^ F2) |^ (I1 ^ I2)) by A9,A12,Th25;
+A3:   c in B and
+A4:   d in B;
+      ex d1 being Element of G st c = d1 & ex F,I st d1 = Product(F |^ I)
+      & len F = len I & rng F c= A by A3;
+      then consider F1,I1 such that
+A5:   c = Product(F1 |^ I1) and
+A6:   len F1 = len I1 and
+A7:   rng F1 c= A;
+      ex d2 being Element of G st d = d2 & ex F,I st d2 = Product(F |^ I)
+      & len F = len I & rng F c= A by A4;
+      then consider F2,I2 such that
+A8:   d = Product(F2 |^ I2) and
+A9:   len F2 = len I2 and
+A10:  rng F2 c= A;
+A11:  len(F1 ^ F2) = len I1 + len I2 by A6,A9,FINSEQ_1:35
+        .= len(I1 ^ I2) by FINSEQ_1:35;
       rng(F1 ^ F2) = rng F1 \/ rng F2 by FINSEQ_1:44;
       then
-A15:  rng(F1 ^ F2) c= A by A10,A13,XBOOLE_1:8;
-      len(F1 ^ F2) = len I1 + len I2 by A9,A12,FINSEQ_1:35
-        .= len(I1 ^ I2) by FINSEQ_1:35;
-      hence c * d in B by A14,A15;
+A12:  rng(F1 ^ F2) c= A by A7,A10,XBOOLE_1:8;
+      c * d = Product((F1 |^ I1) ^ (F2 |^ I2)) by A5,A8,Th8
+        .= Product((F1 ^ F2) |^ (I1 ^ I2)) by A6,A9,Th25;
+      hence c * d in B by A12,A11;
     end;
-    now
+A13: now
       let c;
-      assume c in B;
-      then ex d1 being Element of G st c = d1 &
-      ex F,I st d1 = Product(F |^ I) & len F = len I & rng F c= A;
+      assume
+      c in B;
+      then
+      ex d1 being Element of G st c = d1 & ex F,I st d1 = Product(F |^ I)
+      & len F = len I & rng F c= A;
       then consider F1,I1 such that
-A16:  c = Product(F1 |^ I1) and
-A17:  len F1 = len I1 and
-A18:  rng F1 c= A;
-A19:  dom F1 = dom I1 by A17,FINSEQ_3:31;
+A14:  c = Product(F1 |^ I1) and
+A15:  len F1 = len I1 and
+A16:  rng F1 c= A;
       deffunc F(Nat) = F1.(len F1 - $1 + 1);
       consider F2 being FinSequence such that
-A20:  len F2 = len F1 and
-A21:  for k be Nat st k in dom F2 holds F2.k = F(k) from FINSEQ_1:sch 2;
-A22:  Seg len F1 = dom F1 by FINSEQ_1:def 3;
+A17:  len F2 = len F1 and
+A18:  for k be Nat st k in dom F2 holds F2.k = F(k) from FINSEQ_1:sch
+      2;
+A19:  Seg len I1 = dom I1 by FINSEQ_1:def 3;
+A20:  rng F2 c= rng F1
+      proof
+        let x;
+        assume
+        x in rng F2;
+        then consider y such that
+A21:    y in dom F2 and
+A22:    F2.y = x by FUNCT_1:def 5;
+        reconsider y as Element of NAT by A21;
+        reconsider n = len F1 - y + 1 as Element of NAT by A17,A21,Lm3;
+        1 <= n & n <= len F1 by A17,A21,Lm3;
+        then
+A23:    n in dom F1 by FINSEQ_3:27;
+        x = F1.(len F1 - y + 1) by A18,A21,A22;
+        hence thesis by A23,FUNCT_1:def 5;
+      end;
+      then
+A24:  rng F2 c= A by A16,XBOOLE_1:1;
       defpred P[Nat,set] means ex i st i = I1.(len I1 - $1 + 1) & $2 = - i;
-A23:  for k be Nat st k in Seg len I1 ex x st P[k,x]
+A25:  for k be Nat st k in Seg len I1 ex x st P[k,x]
       proof
         let k be Nat;
-        assume k in Seg len I1;
+        assume
+        k in Seg len I1;
         then
-A24:    k in dom I1 by FINSEQ_1:def 3;
+A26:    k in dom I1 by FINSEQ_1:def 3;
         then reconsider n = len I1 - k + 1 as Element of NAT by Lm3;
-        1 <= n & n <= len I1 by A24,Lm3;
+        1 <= n & n <= len I1 by A26,Lm3;
         then n in dom I1 by FINSEQ_3:27;
-        then I1.n in rng I1 & rng I1 c= INT by FINSEQ_1:def 4,FUNCT_1:def 5;
-        then reconsider i = I1.n as Element of INT qua non empty set;
+        then
+A27:    I1.n in rng I1 by FUNCT_1:def 5;
+        rng I1 c= INT by FINSEQ_1:def 4;
+        then reconsider i = I1.n as Element of INT qua non empty set by A27;
         reconsider i as Integer;
         reconsider x = - i as set;
         take x,i;
         thus thesis;
       end;
       consider I2 being FinSequence such that
-A25:  dom I2 = Seg len I1 and
-A26:  for k be Nat st k in Seg len I1 holds P[k,I2.k]
-      from FINSEQ_1:sch 1(A23);
-A27:  Seg len I1 = dom I1 by FINSEQ_1:def 3;
-A28:  len F2 = len I2 by A17,A20,A25,FINSEQ_1:def 3;
-A29:  dom F2 = dom I2 by A17,A20,A25,FINSEQ_1:def 3;
-A30:  rng F2 c= rng F1
+A28:  dom I2 = Seg len I1 and
+A29:  for k be Nat st k in Seg len I1 holds P[k,I2.k] from FINSEQ_1:
+      sch 1(A25);
+A30:  len F2 = len I2 by A15,A17,A28,FINSEQ_1:def 3;
+A31:  rng I2 c= INT
       proof
         let x;
-        assume x in rng F2;
+        assume
+        x in rng I2;
         then consider y such that
-A31:    y in dom F2 & F2.y = x by FUNCT_1:def 5;
-        reconsider y as Element of NAT by A31;
-A32:    x = F1.(len F1 - y + 1) by A21,A31;
-        reconsider n = len F1 - y + 1 as Element of NAT by A20,A31,Lm3;
-A33:    1 <= n by A20,A31,Lm3;
-        n <= len F1 by A20,A31,Lm3;
-        then n in dom F1 by A33,FINSEQ_3:27;
-        hence thesis by A32,FUNCT_1:def 5;
-      end;
-      then
-A34:  rng F2 c= A by A18,XBOOLE_1:1;
-      rng F1 c= the carrier of G by FINSEQ_1:def 4;
-      then rng F2 c= the carrier of G by A30,XBOOLE_1:1;
-      then reconsider F2 as FinSequence of the carrier of G by FINSEQ_1:def 4;
-      rng I2 c= INT
-      proof
-        let x;
-        assume x in rng I2;
-        then consider y such that
-A35:    y in dom I2 and
-A36:    x = I2.y by FUNCT_1:def 5;
-        reconsider y as Element of NAT by A35;
-        ex i st i = I1.(len I1 - y + 1) & x = - i by A25,A26,A35,A36;
+A32:    y in dom I2 and
+A33:    x = I2.y by FUNCT_1:def 5;
+        reconsider y as Element of NAT by A32;
+        ex i st i = I1.(len I1 - y + 1) & x = - i by A28,A29,A32,A33;
         hence thesis by INT_1:def 2;
       end;
-      then reconsider I2 as FinSequence of INT by FINSEQ_1:def 4;
-      set p = F1 |^ I1;
-      set q = F2 |^ I2;
-A37:  len p = len F1 & len q = len F2 by Def4;
+      rng F1 c= the carrier of G by FINSEQ_1:def 4;
       then
-A38:  dom p = dom F1 & dom q = dom F2 by FINSEQ_3:31;
+A34:  rng F2 c= the carrier of G by A20,XBOOLE_1:1;
+      set p = F1 |^ I1;
+A35:  Seg len F1 = dom F1 by FINSEQ_1:def 3;
+A36:  len p = len F1 by Def4;
+A37:  dom F2 = dom I2 by A15,A17,A28,FINSEQ_1:def 3;
+      reconsider I2 as FinSequence of INT by A31,FINSEQ_1:def 4;
+      reconsider F2 as FinSequence of the carrier of G by A34,FINSEQ_1:def 4;
+      set q = F2 |^ I2;
+A38:  len q = len F2 by Def4;
+      then
+A39:  dom q = dom F2 by FINSEQ_3:31;
+A40:  dom F1 = dom I1 by A15,FINSEQ_3:31;
       now
         let k;
+A41:    I2/.k = @(I2/.k);
         assume
-A39:    k in dom q;
-        then reconsider n = len p - k + 1 as Element of NAT by A20,A37,Lm3;
-        1 <= n & len p >= n by A20,A37,A39,Lm3;
-        then
-A40:    n in dom I2 & n in Seg len I2 by A20,A28,A37,FINSEQ_1:3,FINSEQ_3:27;
-        dom q = dom I1 by A17,A20,A37,FINSEQ_3:31;
+A42:    k in dom q;
+        then reconsider n = len p - k + 1 as Element of NAT by A17,A36,A38,
+        Lm3;
+A43:    I1/.n = @(I1/.n) & q/.k = q.k by A42,PARTFUN1:def 8;
+        dom q = dom I1 by A15,A17,A38,FINSEQ_3:31;
         then consider i such that
-A41:    i = I1.n & I2.k = - i by A17,A26,A27,A37,A39;
-        I2.k = I2/.k & I2/.k = @(I2/.k) by A29,A38,A39,PARTFUN1:def 8;
-        then q.k = (F2/.k) |^ (- i) & F2/.k = F2.k & F2.k = F1.n &
-        F1/.n= F1.n by A17,A21,A22,A25,A37,A38,A39,A40,A41,Def4,PARTFUN1:def 8;
+A44:    i = I1.n and
+A45:    I2.k = - i by A15,A29,A19,A36,A42;
+        I2.k = I2/.k by A37,A39,A42,PARTFUN1:def 8;
         then
-A42:    q.k = ((F1/.n) |^ i)" by GROUP_1:70;
-        I1.n = I1/.n & I1/.n = @(I1/.n) by A25,A27,A40,PARTFUN1:def 8;
-        then p.n = (F1/.n) |^ i by A19,A25,A27,A40,A41,Def4;
-        then (p/.n)" = ((F1/.n) |^ i)" & q/.k = q.k
-        by A19,A25,A27,A38,A39,A40,PARTFUN1:def 8;
-        then p/.n = (q/.k)" by A42;
-        hence (q/.k)" = p.(len p - k + 1)
-        by A19,A25,A27,A38,A40,PARTFUN1:def 8;
+A46:    q.k = (F2/.k) |^ (- i) by A39,A42,A45,A41,Def4;
+A47:    F2/.k = F2.k & F2.k = F1.n by A18,A36,A39,A42,PARTFUN1:def 8;
+        1 <= n & len p >= n by A17,A36,A38,A42,Lm3;
+        then
+A48:    n in dom I2 by A17,A30,A36,FINSEQ_3:27;
+        then
+A49:    I1.n = I1/.n by A28,A19,PARTFUN1:def 8;
+        F1/.n= F1.n by A15,A35,A28,A48,PARTFUN1:def 8;
+        then q.k = ((F1/.n) |^ i)" by A46,A47,GROUP_1:70;
+        hence (q/.k)" = p.(len p - k + 1) by A40,A28,A19,A48,A44,A49,A43,
+        Def4;
       end;
-      then Product p" = Product q by A20,A37,Th17;
-      hence c" in B by A16,A28,A34;
+      then Product p" = Product q by A17,A36,A38,Th17;
+      hence c" in B by A14,A30,A24;
     end;
+A50: len {} = 0;
+A51: rng <*> the carrier of G = {} & {} c= A by XBOOLE_1:2;
+    1_G = Product <*> the carrier of G & (<*> the carrier of G) |^ (<*>
+    INT) = {} by Th11,Th27;
+    then 1_G in B by A51,A50;
     then consider H being strict Subgroup of G such that
-A43: the carrier of H = B by A2,A3,GROUP_2:61;
+A52: the carrier of H = B by A2,A13,GROUP_2:61;
     A c= B
     proof
+      reconsider p = 1 as Integer;
       let x;
       assume
-A44:  x in A;
+A53:  x in A;
       then reconsider a = x as Element of G;
-      reconsider p = 1 as Integer;
-A45:  len<* a *> = 1 & len<* @p *> = 1 by FINSEQ_1:56;
-A46:  Product(<* a *> |^ <* @p *>) = Product<* a |^ 1 *> by Th28
+A54:  rng<* a *> = {a} & {a} c= A by A53,FINSEQ_1:56,ZFMISC_1:37;
+A55:  len<* a *> = 1 & len<* @p *> = 1 by FINSEQ_1:56;
+      Product(<* a *> |^ <* @p *>) = Product<* a |^ 1 *> by Th28
         .= a |^ 1 by FINSOP_1:12
         .= a by GROUP_1:44;
-      rng<* a *> = {a} & {a} c= A by A44,FINSEQ_1:56,ZFMISC_1:37;
-      hence thesis by A45,A46;
+      hence thesis by A55,A54;
     end;
-    then gr A is Subgroup of H by A43,Def5;
+    then gr A is Subgroup of H by A52,Def5;
     then a in H by A1,GROUP_2:49;
-    then a in B by A43,STRUCT_0:def 5;
-    then ex b st
-    b = a & ex F,I st b = Product(F |^ I) & len F = len I & rng F c= A;
+    then a in B by A52,STRUCT_0:def 5;
+    then
+    ex b st b = a & ex F,I st b = Product(F |^ I) & len F = len I & rng F
+    c= A;
     hence thesis;
   end;
-  given F,I such that len F = len I and
-A47: rng F c= A and
-A48: Product(F |^ I) = a;
+  given F,I such that
+  len F = len I and
+A56: rng F c= A and
+A57: Product(F |^ I) = a;
   A c= the carrier of gr A by Def5;
-  then rng F c= carr gr A by A47,XBOOLE_1:1;
-  hence thesis by A48,Th26;
+  then rng F c= carr gr A by A56,XBOOLE_1:1;
+  hence thesis by A57,Th26;
 end;
 
 theorem Th38:
@@ -1180,19 +1259,18 @@ end;
 theorem
   gr {} the carrier of G = (1).G
 proof
-A1: {} the carrier of G c= the carrier of (1).G by XBOOLE_1:2;
-  for H being strict Subgroup of G
-  st {} the carrier of G c= the carrier of H holds
-  (1).G is Subgroup of H by GROUP_2:77;
-  hence thesis by A1,Def5;
+  {} the carrier of G c= the carrier of (1).G & for H being strict
+  Subgroup of G st {} the carrier of G c= the carrier of H holds (1).G is
+  Subgroup of H by GROUP_2:77,XBOOLE_1:2;
+  hence thesis by Def5;
 end;
 
 theorem Th40:
   for H being strict Subgroup of G holds gr carr H = H
 proof
   let H be strict Subgroup of G;
-  for H1 be strict Subgroup of G st carr H c= the carrier of H1 holds
-  H is Subgroup of H1 by GROUP_2:66;
+  for H1 be strict Subgroup of G st carr H c= the carrier of H1 holds H is
+  Subgroup of H1 by GROUP_2:66;
   hence thesis by Def5;
 end;
 
@@ -1203,11 +1281,14 @@ proof
 A1: A c= B;
   now
     let a;
-    assume a in gr A;
+    assume
+    a in gr A;
     then consider F,I such that
-A2: len F = len I & rng F c= A & Product(F |^ I) = a by Th37;
-    rng F c= B by A1,A2,XBOOLE_1:1;
-    hence a in gr B by A2,Th37;
+A2: len F = len I and
+A3: rng F c= A and
+A4: Product(F |^ I) = a by Th37;
+    rng F c= B by A1,A3,XBOOLE_1:1;
+    hence a in gr B by A2,A4,Th37;
   end;
   hence thesis by GROUP_2:67;
 end;
@@ -1217,13 +1298,20 @@ theorem
 proof
   now
     let a;
-    assume a in gr(A /\ B);
+    assume
+    a in gr(A /\ B);
     then consider F,I such that
-A1: len F = len I & rng F c= A /\ B & Product(F |^ I) = a by Th37;
-    A /\ B c= A & A /\ B c= B by XBOOLE_1:17;
-    then rng F c= A & rng F c= B by A1,XBOOLE_1:1;
-    then a in gr A & a in gr B by A1,Th37;
-    hence a in gr A /\ gr B by GROUP_2:99;
+A1: len F = len I and
+A2: rng F c= A /\ B and
+A3: Product(F |^ I) = a by Th37;
+    A /\ B c= B by XBOOLE_1:17;
+    then rng F c= B by A2,XBOOLE_1:1;
+    then
+A4: a in gr B by A1,A3,Th37;
+    A /\ B c= A by XBOOLE_1:17;
+    then rng F c= A by A2,XBOOLE_1:1;
+    then a in gr A by A1,A3,Th37;
+    hence a in gr A /\ gr B by A4,GROUP_2:99;
   end;
   hence thesis by GROUP_2:67;
 end;
@@ -1233,52 +1321,54 @@ theorem Th43:
   st B = the carrier of H & A c= carr H}
 proof
   defpred P[Subgroup of G] means A c= carr $1;
-  A c= the carrier of G & the carrier of (Omega).G = carr (Omega).G &
-  (Omega).G = the multMagma of G;
-  then
-A1: ex H being strict Subgroup of G st P[H];
-  consider H being strict Subgroup of G such that
-A2: the carrier of H = meet{B : ex H being strict Subgroup of G
-  st B = the carrier of H & P[H]} from MeetSbgEx(A1);
-  set X = {B :ex H being strict Subgroup of G
-  st B = the carrier of H & A c= carr H};
-A3: carr (Omega).G in X;
-  now
+  set X = {B :ex H being strict Subgroup of G st B = the carrier of H & A c=
+  carr H};
+A1: now
     let Y;
-    assume Y in X;
-    then ex B st Y = B & ex H being strict Subgroup of G
-    st B = the carrier of H & A c= carr H;
+    assume
+    Y in X;
+    then
+    ex B st Y = B & ex H being strict Subgroup of G st B = the carrier of
+    H & A c= carr H;
     hence A c= Y;
   end;
+  the carrier of (Omega).G = carr (Omega).G;
   then
-A4: A c= the carrier of H by A2,A3,SETFAM_1:6;
-  now
+A2: ex H being strict Subgroup of G st P[H];
+  consider H being strict Subgroup of G such that
+A3: the carrier of H = meet{B : ex H being strict Subgroup of G st B =
+  the carrier of H & P[H]} from MeetSbgEx(A2);
+A4: now
     let H1 be strict Subgroup of G;
+A5: the carrier of H1 = carr H1;
     assume
-A5: A c= the carrier of H1;
-    the carrier of H1 = carr H1;
+    A c= the carrier of H1;
     then the carrier of H1 in X by A5;
-    hence H is Subgroup of H1 by A2,GROUP_2:66,SETFAM_1:4;
+    hence H is Subgroup of H1 by A3,GROUP_2:66,SETFAM_1:4;
   end;
-  hence thesis by A2,A4,Def5;
+  carr (Omega).G in X;
+  then A c= the carrier of H by A3,A1,SETFAM_1:6;
+  hence thesis by A3,A4,Def5;
 end;
 
 theorem Th44:
   gr A = gr(A \ {1_G})
 proof
-  set X = {B : ex H being strict Subgroup of G
-  st B = the carrier of H & A c= carr H};
-  set Y = {C : ex H being strict Subgroup of G
-  st C = the carrier of H & A \ {1_G} c= carr H};
+  set X = {B : ex H being strict Subgroup of G st B = the carrier of H & A c=
+  carr H};
+  set Y = {C : ex H being strict Subgroup of G st C = the carrier of H & A \ {
+  1_G} c= carr H};
 A1: X = Y
   proof
     thus X c= Y
     proof
       let x;
-      assume x in X;
+      assume
+      x in X;
       then consider B such that
 A2:   x = B and
-A3:   ex H being strict Subgroup of G st B = the carrier of H & A c= carr H;
+A3:   ex H being strict Subgroup of G st B = the carrier of H & A c=
+      carr H;
       consider H being strict Subgroup of G such that
 A4:   B = the carrier of H and
 A5:   A c= carr H by A3;
@@ -1287,11 +1377,12 @@ A5:   A c= carr H by A3;
       hence thesis by A2,A4;
     end;
     let x;
-    assume x in Y;
+    assume
+    x in Y;
     then consider B such that
 A6: x = B and
-A7: ex H being strict Subgroup of G
-    st B = the carrier of H & A \ {1_G} c= carr H;
+A7: ex H being strict Subgroup of G st B = the carrier of H & A \ {
+    1_G} c= carr H;
     consider H being strict Subgroup of G such that
 A8: B = the carrier of H and
 A9: A \ {1_G} c= carr H by A7;
@@ -1300,12 +1391,15 @@ A9: A \ {1_G} c= carr H by A7;
     then {1_G} c= carr H by ZFMISC_1:37;
     then
 A10: (A \ {1_G}) \/ {1_G} c= carr H by A9,XBOOLE_1:8;
-    now per cases;
-      suppose 1_G in A;
+    now
+      per cases;
+      suppose
+        1_G in A;
         then {1_G} c= A by ZFMISC_1:37;
         hence A c= carr H by A10,XBOOLE_1:45;
       end;
-      suppose not 1_G in A;
+      suppose
+        not 1_G in A;
         hence A c= carr H by A9,ZFMISC_1:65;
       end;
     end;
@@ -1330,7 +1424,8 @@ theorem
   1_G is non generating
 proof
   let A;
-  assume gr A = the multMagma of G;
+  assume
+  gr A = the multMagma of G;
   hence thesis by Th44;
 end;
 
@@ -1339,28 +1434,27 @@ definition
   attr H is maximal means
   :Def7:
   the multMagma of H <> the multMagma of G &
-  for K being strict Subgroup of G st
-  the multMagma of H <> K & H is Subgroup of K holds K = the multMagma of G;
+for K being strict Subgroup of G st the multMagma of H <> K & H is Subgroup of
+  K holds K = the multMagma of G;
 end;
 
 canceled;
 
 theorem Th48:
-  for G being strict Group, H being strict Subgroup of G,
-  a being Element of G holds
-  H is maximal & not a in H implies gr(carr H \/ {a}) = G
+  for G being strict Group, H being strict Subgroup of G, a being
+  Element of G holds H is maximal & not a in H implies gr(carr H \/ {a}) = G
 proof
   let G be strict Group, H be strict Subgroup of G, a be Element of G;
   assume that
 A1: H is maximal and
 A2: not a in H;
+  gr carr H is Subgroup of gr(carr H \/ {a}) by Th41,XBOOLE_1:7;
+  then
+A3: H is Subgroup of gr(carr H \/ {a}) by Th40;
   a in {a} by TARSKI:def 1;
-  then carr H c= carr H \/ {a} & a in carr H \/ {a}
-  by XBOOLE_0:def 3,XBOOLE_1:7;
-  then gr carr H is Subgroup of gr(carr H \/ {a}) &
-  a in gr(carr H \/ {a}) by Th38,Th41;
-  then H is Subgroup of gr(carr H \/ {a}) & H <> gr(carr H \/ {a}) by A2,Th40;
-  hence thesis by A1,Def7;
+  then a in carr H \/ {a} by XBOOLE_0:def 3;
+  then H <> gr(carr H \/ {a}) by A2,Th38;
+  hence thesis by A1,A3,Def7;
 end;
 
 ::
@@ -1371,25 +1465,25 @@ definition
   let G be Group;
   func Phi(G) -> strict Subgroup of G means
   :Def8:
-  the carrier of it =
-  meet{A where A is Subset of G : ex H being strict Subgroup of G
-  st A = the carrier of H & H is maximal} if
-  ex H being strict Subgroup of G st H is maximal otherwise
+  the carrier of it = meet{A
+where A is Subset of G : ex H being strict Subgroup of G st A = the carrier of
+H & H is maximal} if ex H being strict Subgroup of G st H is maximal otherwise
   it = the multMagma of G;
   existence
   proof
     defpred P[Subgroup of G] means $1 is maximal;
-    now per cases;
+    now
+      per cases;
       suppose
 A1:     ex H being strict Subgroup of G st P[H];
-        ex H being strict Subgroup of G st the carrier of H =
-        meet{A where A is Subset of G:      ex K being strict Subgroup of G
-        st A = the carrier of K & P[K]} from MeetSbgEx(A1);
+        ex H being strict Subgroup of G st the carrier of H = meet{A where
+A is Subset of G: ex K being strict Subgroup of G st A = the carrier of K & P[K
+        ]} from MeetSbgEx(A1);
         hence thesis by A1;
       end;
       suppose
 A2:     for H being strict Subgroup of G holds H is not maximal;
-        (Omega).G = the multMagma of G & (Omega).G is Subgroup of G;
+        (Omega).G = the multMagma of G;
         hence thesis by A2;
       end;
     end;
@@ -1402,400 +1496,449 @@ end;
 canceled 3;
 
 theorem Th52:
-  for G being Group holds
-  (ex H being strict Subgroup of G st H is maximal) implies (a in Phi(G) iff
-  for H being strict Subgroup of G st H is maximal holds a in H)
+  for G being Group holds (ex H being strict Subgroup of G st H is
+  maximal) implies (a in Phi(G) iff for H being strict Subgroup of G st H is
+  maximal holds a in H)
 proof
   let G be Group;
+  set X = {A where A is Subset of G: ex K being strict Subgroup of G st A =
+  the carrier of K & K is maximal};
   assume
 A1: ex H being strict Subgroup of G st H is maximal;
-  set X = {A where A is Subset of G: ex K being strict Subgroup of G
-  st A = the carrier of K & K is maximal};
-  thus a in Phi(G) implies
-  for H being strict Subgroup of G st H is maximal holds a in H
+  then consider H being strict Subgroup of G such that
+A2: H is maximal;
+  thus a in Phi(G) implies for H being strict Subgroup of G st H is maximal
+  holds a in H
   proof
-    assume a in Phi(G);
+    assume
+    a in Phi(G);
     then a in the carrier of Phi(G) by STRUCT_0:def 5;
     then
-A2: a in meet X by A1,Def8;
+A3: a in meet X by A1,Def8;
     let H be strict Subgroup of G;
-    assume H is maximal;
+    assume
+    H is maximal;
     then carr H in X;
-    then a in carr H by A2,SETFAM_1:def 1;
+    then a in carr H by A3,SETFAM_1:def 1;
     hence thesis by STRUCT_0:def 5;
   end;
-  consider H being strict Subgroup of G such that
-A3: H is maximal by A1;
-A4: carr H in X by A3;
   assume
-A5: for H being strict Subgroup of G st H is maximal holds a in H;
-  now
+A4: for H being strict Subgroup of G st H is maximal holds a in H;
+A5: now
     let Y;
-    assume Y in X;
+    assume
+    Y in X;
     then consider A being Subset of G such that
 A6: Y = A and
-A7: ex H being strict Subgroup of G st A = the carrier of H & H is maximal;
+A7: ex H being strict Subgroup of G st A = the carrier of H & H is
+    maximal;
     consider H being strict Subgroup of G such that
-A8: A = the carrier of H & H is maximal by A7;
-    A = carr H & a in H by A5,A8;
-    hence a in Y by A6,STRUCT_0:def 5;
+A8: A = the carrier of H and
+A9: H is maximal by A7;
+    a in H by A4,A9;
+    hence a in Y by A6,A8,STRUCT_0:def 5;
   end;
-  then a in meet X by A4,SETFAM_1:def 1;
+  carr H in X by A2;
+  then a in meet X by A5,SETFAM_1:def 1;
   then a in the carrier of Phi(G) by A1,Def8;
   hence thesis by STRUCT_0:def 5;
 end;
 
 theorem
-  for G being Group, a being Element of G holds
-  (for H being strict Subgroup of G holds H is not maximal) implies a in Phi(G)
+  for G being Group, a being Element of G holds (for H being strict
+  Subgroup of G holds H is not maximal) implies a in Phi(G)
 proof
   let G be Group, a be Element of G;
-  assume for H being strict Subgroup of G holds H is not maximal;
+  assume
+  for H being strict Subgroup of G holds H is not maximal;
   then Phi(G) = the multMagma of G by Def8;
   hence thesis by STRUCT_0:def 5;
 end;
 
 theorem Th54:
-  for G being Group, H being strict Subgroup of G holds
-  H is maximal implies Phi(G) is Subgroup of H
+  for G being Group, H being strict Subgroup of G holds H is
+  maximal implies Phi(G) is Subgroup of H
 proof
   let G be Group, H be strict Subgroup of G;
-  assume H is maximal;
+  assume
+  H is maximal;
   then for a be Element of G holds a in Phi(G) implies a in H by Th52;
   hence thesis by GROUP_2:67;
 end;
 
 theorem Th55:
-  for G being strict Group holds
-  the carrier of Phi(G) = {a where a is Element of G: a is non generating}
+  for G being strict Group holds the carrier of Phi(G) = {a where
+  a is Element of G: a is non generating}
 proof
   let G be strict Group;
   set A = {a where a is Element of G: a is non generating};
   thus the carrier of Phi(G) c= A
   proof
+    defpred P[set,set] means ex H1,H2 being strict Subgroup of G st $1 = H1 &
+    $2 = H2 & H1 is Subgroup of H2;
     let x;
     assume
 A1: x in the carrier of Phi(G);
-    assume
-A2: not x in A;
-    x in Phi(G) by A1,STRUCT_0:def 5;
+    then x in Phi(G) by STRUCT_0:def 5;
     then x in G by GROUP_2:49;
     then reconsider a = x as Element of G by STRUCT_0:def 5;
-    a is generating by A2;
+    assume
+    not x in A;
+    then a is generating;
     then consider B being Subset of G such that
-A3: gr B = G and
-A4: gr(B \ {a}) <> G by Def6;
+A2: gr B = G and
+A3: gr(B \ {a}) <> G by Def6;
     set M = B \ {a};
-    defpred P[Subgroup of G] means M c= carr $1 & not a in $1;
-    consider X such that
-A5: X c= Subgroups G and
-A6: for H being strict Subgroup of G holds H in X iff P[H] from SubgrSep;
-A7: M c= carr gr M by Def5;
-    now
+A4: now
       assume
-A8:   a in gr M;
+A5:   a in gr M;
       now
         let b be Element of G;
-        b in gr B by A3,STRUCT_0:def 5;
-        then consider F being FinSequence of the carrier of G,
-        I such that len I = len F and
-A9:     rng F c= B and
-A10:    b = Product(F |^ I) by Th37;
+        b in gr B by A2,STRUCT_0:def 5;
+        then consider F being FinSequence of the carrier of G, I such that
+        len I = len F and
+A6:     rng F c= B and
+A7:     b = Product(F |^ I) by Th37;
         rng(F |^ I) c= carr gr M
         proof
           let x;
-          assume x in rng(F |^ I);
+          assume
+          x in rng(F |^ I);
           then consider y such that
-A11:      y in dom(F |^ I) and
-A12:      (F |^ I).y = x by FUNCT_1:def 5;
-          reconsider y as Element of NAT by A11;
+A8:       y in dom(F |^ I) and
+A9:       (F |^ I).y = x by FUNCT_1:def 5;
+          reconsider y as Element of NAT by A8;
           len(F |^ I) = len F by Def4;
           then
-A13:      y in dom F by A11,FINSEQ_3:31;
+A10:      y in dom F by A8,FINSEQ_3:31;
           then
-A14:      x = (F/.y) |^ @(I/.y) by A12,Def4;
-          now per cases;
-            suppose F/.y = a;
-              then x in gr M by A8,A14,Th6;
+A11:      x = (F/.y) |^ @(I/.y) by A9,Def4;
+          now
+            per cases;
+            suppose
+              F/.y = a;
+              then x in gr M by A5,A11,Th6;
               hence thesis by STRUCT_0:def 5;
             end;
             suppose
-A15:          F/.y <> a;
-              F/.y = F.y & F.y in rng F by A13,FUNCT_1:def 5,PARTFUN1:def 8;
-              then F/.y in B & not F/.y in {a} by A9,A15,TARSKI:def 1;
-              then F/.y in M by XBOOLE_0:def 5;
-              then x in gr M by A14,Th6,Th38;
+              F/.y <> a;
+              then
+A12:          not F/.y in {a} by TARSKI:def 1;
+              F/.y = F.y & F.y in rng F by A10,FUNCT_1:def 5,PARTFUN1:def
+              8;
+              then F/.y in M by A6,A12,XBOOLE_0:def 5;
+              then x in gr M by A11,Th6,Th38;
               hence thesis by STRUCT_0:def 5;
             end;
           end;
           hence thesis;
         end;
-        hence b in gr M by A10,Th21;
+        hence b in gr M by A7,Th21;
       end;
-      hence contradiction by A4,GROUP_2:71;
+      hence contradiction by A3,GROUP_2:71;
     end;
-    then reconsider X as non empty set by A6,A7;
-    defpred P[set,set] means ex H1,H2 being strict Subgroup of G st
-    $1 = H1 & $2 = H2 & H1 is Subgroup of H2;
-A16: now
-      let x be Element of X;
-      x in Subgroups G by A5,TARSKI:def 3;
-      hence x is strict Subgroup of G by GROUP_3:def 1;
-    end;
-A17: for x being Element of X holds P[x,x]
-    proof
-      let x be Element of X;
-      reconsider H = x as strict Subgroup of G by A16;
-      H is Subgroup of H by GROUP_2:63;
-      hence thesis;
-    end;
-A18: for x,y being Element of X st P[x,y] & P[y,x] holds x = y by GROUP_2:64;
-A19: for x,y,z being Element of X st P[x,y] & P[y,z] holds P[x,z]
+    defpred P[Subgroup of G] means M c= carr $1 & not a in $1;
+    consider X such that
+A13: X c= Subgroups G and
+A14: for H being strict Subgroup of G holds H in X iff P[H] from
+    SubgrSep;
+    M c= carr gr M by Def5;
+    then reconsider X as non empty set by A14,A4;
+A15: for x,y,z being Element of X st P[x,y] & P[y,z] holds P[x,z]
     proof
       let x,y,z be Element of X;
       given H1,H2 being strict Subgroup of G such that
-A20:  x = H1 & y = H2 & H1 is Subgroup of H2;
+A16:  x = H1 and
+A17:  y = H2 & H1 is Subgroup of H2;
       given H3,H4 being strict Subgroup of G such that
-A21:  y = H3 & z = H4 & H3 is Subgroup of H4;
-      H1 is Subgroup of H4 by A20,A21,GROUP_2:65;
-      hence thesis by A20,A21;
+A18:  y = H3 and
+A19:  z = H4 and
+A20:  H3 is Subgroup of H4;
+      H1 is Subgroup of H4 by A17,A18,A20,GROUP_2:65;
+      hence thesis by A16,A19;
     end;
-A22: for Y st Y c= X & (for x,y being Element of X st x in Y & y in Y holds
-    P[x,y] or P[y,x]) ex y being Element of X st
-    for x being Element of X st x in Y holds P[x,y]
+A21: for Y st Y c= X & (for x,y being Element of X st x in Y & y in Y
+holds P[x,y] or P[y,x]) ex y being Element of X st for x being Element of X st
+    x in Y holds P[x,y]
     proof
       let Y;
       assume
-A23:  Y c= X;
-      assume
-A24:  for x,y being Element of X st x in Y & y in Y holds P[x,y] or P[y,x];
-      set C = {D where D is Subset of G :
-      ex H being strict Subgroup of G st H in Y & D = carr H};
+A22:  Y c= X;
+      set C = {D where D is Subset of G : ex H being strict Subgroup of G st H
+      in Y & D = carr H};
       now
         let Z be set;
-        assume Z in C;
-        then ex D being Subset of G st Z = D &
-        ex H being strict Subgroup of G st H in Y & D = carr H;
+        assume
+        Z in C;
+        then
+        ex D being Subset of G st Z = D & ex H being strict Subgroup of G
+        st H in Y & D = carr H;
         hence Z c= the carrier of G;
       end;
       then reconsider E = union C as Subset of G by ZFMISC_1:94;
-      now per cases;
+      assume
+A23:  for x,y being Element of X st x in Y & y in Y holds P[x,y] or P
+      [y,x];
+      now
+        per cases;
         suppose
-A25:      Y = {};
+A24:      Y = {};
           consider y being Element of X;
           take y;
           let x be Element of X;
-          assume x in Y;
-          hence P[x,y] by A25;
+          assume
+          x in Y;
+          hence P[x,y] by A24;
         end;
         suppose
-A26:      Y <> {};
-          consider s being Element of Y;
-A27:      s in X by A23,A26,TARSKI:def 3;
-          then reconsider s as strict Subgroup of G by A5,GROUP_3:def 1;
-A28:      carr s in C by A26;
-          then carr s c= E & M c= carr s by A6,A27,ZFMISC_1:92;
-          then
-A29:      M c= E by XBOOLE_1:1;
-A30:      E <> {} by A28,ORDERS_1:91;
-A31:      now
+A25:      Y <> {};
+A26:      now
             let a,b be Element of G;
             assume that
-A32:        a in E and
-A33:        b in E;
+A27:        a in E and
+A28:        b in E;
             consider Z being set such that
-A34:        a in Z and
-A35:        Z in C by A32,TARSKI:def 4;
-            consider D being Subset of G such that
-A36:        Z = D and
-A37:        ex H being strict Subgroup of G st H in Y & D = carr H by A35;
-            consider H1 being Subgroup of G such that
-A38:        H1 in Y & D = carr H1 by A37;
+A29:        a in Z and
+A30:        Z in C by A27,TARSKI:def 4;
             consider Z1 being set such that
-A39:        b in Z1 and
-A40:        Z1 in C by A33,TARSKI:def 4;
+A31:        b in Z1 and
+A32:        Z1 in C by A28,TARSKI:def 4;
+            consider D being Subset of G such that
+A33:        Z = D and
+A34:        ex H being strict Subgroup of G st H in Y & D = carr H by
+            A30;
             consider B being Subset of G such that
-A41:        Z1 = B and
-A42:        ex H being strict Subgroup of G st H in Y & B = carr H by A40;
+A35:        Z1 = B and
+A36:        ex H being strict Subgroup of G st H in Y & B = carr H by
+            A32;
+            consider H1 being Subgroup of G such that
+A37:        H1 in Y and
+A38:        D = carr H1 by A34;
             consider H2 being Subgroup of G such that
-A43:        H2 in Y & B = carr H2 by A42;
-            now per cases by A23,A24,A38,A43;
-              suppose P[H1,H2];
+A39:        H2 in Y and
+A40:        B = carr H2 by A36;
+            now
+              per cases by A22,A23,A37,A39;
+              suppose
+                P[H1,H2];
                 then carr H1 c= the carrier of H2 by GROUP_2:def 5;
-                then a * b in carr H2 by A34,A36,A38,A39,A41,A43,GROUP_2:89;
-                hence a * b in E by A40,A41,A43,TARSKI:def 4;
+                then a * b in carr H2 by A29,A33,A38,A31,A35,A40,GROUP_2:
+                89;
+                hence a * b in E by A32,A35,A40,TARSKI:def 4;
               end;
-              suppose P[H2,H1];
+              suppose
+                P[H2,H1];
                 then carr H2 c= the carrier of H1 by GROUP_2:def 5;
-                then a * b in carr H1 by A34,A36,A38,A39,A41,A43,GROUP_2:89;
-                hence a * b in E by A35,A36,A38,TARSKI:def 4;
+                then a * b in carr H1 by A29,A33,A38,A31,A35,A40,GROUP_2:
+                89;
+                hence a * b in E by A30,A33,A38,TARSKI:def 4;
               end;
             end;
             hence a * b in E;
           end;
-          now
+A41:      now
             let a be Element of G;
-            assume a in E;
+            assume
+            a in E;
             then consider Z being set such that
-A44:        a in Z and
-A45:        Z in C by TARSKI:def 4;
+A42:        a in Z and
+A43:        Z in C by TARSKI:def 4;
             consider D being Subset of G such that
-A46:        Z = D and
-A47:        ex H being strict Subgroup of G st H in Y & D = carr H by A45;
+A44:        Z = D and
+A45:        ex H being strict Subgroup of G st H in Y & D = carr H by
+            A43;
             consider H1 being Subgroup of G such that
-A48:        H1 in Y & D = carr H1 by A47;
-            a" in carr H1 by A44,A46,A48,GROUP_2:90;
-            hence a" in E by A45,A46,A48,TARSKI:def 4;
+            H1 in Y and
+A46:        D = carr H1 by A45;
+            a" in carr H1 by A42,A44,A46,GROUP_2:90;
+            hence a" in E by A43,A44,A46,TARSKI:def 4;
           end;
+          consider s being Element of Y;
+A47:      s in X by A22,A25,TARSKI:def 3;
+          then reconsider s as strict Subgroup of G by A13,GROUP_3:def 1;
+A48:      carr s in C by A25;
+          then
+A49:      carr s c= E by ZFMISC_1:92;
+          E <> {} by A48,ORDERS_1:91;
           then consider H being strict Subgroup of G such that
-A49:      the carrier of H = E by A30,A31,GROUP_2:61;
-A50:      now
-            assume a in H;
-            then a in E by A49,STRUCT_0:def 5;
+A50:      the carrier of H = E by A26,A41,GROUP_2:61;
+A51:      now
+            assume
+            a in H;
+            then a in E by A50,STRUCT_0:def 5;
             then consider Z being set such that
-A51:        a in Z and
-A52:        Z in C by TARSKI:def 4;
+A52:        a in Z and
+A53:        Z in C by TARSKI:def 4;
             consider D being Subset of G such that
-A53:        Z = D and
-A54:        ex H being strict Subgroup of G st H in Y & D = carr H by A52;
+A54:        Z = D and
+A55:        ex H being strict Subgroup of G st H in Y & D = carr H by
+            A53;
             consider H1 being strict Subgroup of G such that
-A55:        H1 in Y & D = carr H1 by A54;
-            not a in H1 by A6,A23,A55;
-            hence contradiction by A51,A53,A55,STRUCT_0:def 5;
+A56:        H1 in Y and
+A57:        D = carr H1 by A55;
+            not a in H1 by A14,A22,A56;
+            hence contradiction by A52,A54,A57,STRUCT_0:def 5;
           end;
+          M c= carr s by A14,A47;
+          then
+A58:      M c= E by A49,XBOOLE_1:1;
           the carrier of H = carr H;
-          then reconsider y = H as Element of X by A6,A29,A49,A50;
+          then reconsider y = H as Element of X by A14,A58,A50,A51;
           take y;
           let x be Element of X;
           assume
-A56:      x in Y;
-          x in Subgroups G by A5,TARSKI:def 3;
+A59:      x in Y;
+          x in Subgroups G by A13,TARSKI:def 3;
           then reconsider K = x as strict Subgroup of G by GROUP_3:def 1;
           take K,H;
           thus x = K & y = H;
           carr K = the carrier of K;
-          then the carrier of K in C by A56;
-          hence K is Subgroup of H by A49,GROUP_2:66,ZFMISC_1:92;
+          then the carrier of K in C by A59;
+          hence K is Subgroup of H by A50,GROUP_2:66,ZFMISC_1:92;
         end;
       end;
       hence thesis;
     end;
+A60: now
+      let x be Element of X;
+      x in Subgroups G by A13,TARSKI:def 3;
+      hence x is strict Subgroup of G by GROUP_3:def 1;
+    end;
+A61: for x being Element of X holds P[x,x]
+    proof
+      let x be Element of X;
+      reconsider H = x as strict Subgroup of G by A60;
+      H is Subgroup of H by GROUP_2:63;
+      hence thesis;
+    end;
+A62: for x,y being Element of X st P[x,y] & P[y,x] holds x = y by GROUP_2:
+    64;
     consider s being Element of X such that
-A57: for y being Element of X st s <> y holds not P[s,y] from ORDERS_1:sch 1
-    (A17,A18,A19,A22);
-    reconsider H = s as strict Subgroup of G by A16;
+A63: for y being Element of X st s <> y holds not P[s,y] from
+    ORDERS_1:sch 1 (A61,A62,A15,A21);
+    reconsider H = s as strict Subgroup of G by A60;
     H is maximal
     proof
-      not a in H by A6;
+      not a in H by A14;
       hence the multMagma of H <> the multMagma of G by STRUCT_0:def 5;
       let K be strict Subgroup of G;
       assume that
-A58:  K <> the multMagma of H and
-A59:  H is Subgroup of K and
-A60:  K <> the multMagma of G;
-      the carrier of H = carr H & the carrier of K = carr K &
-      the carrier of H c= the carrier of K & M c= carr H
-      by A6,A59,GROUP_2:def 5;
+A64:  K <> the multMagma of H and
+A65:  H is Subgroup of K and
+A66:  K <> the multMagma of G;
+A67:  M c= carr H by A14;
+      the carrier of H c= the carrier of K by A65,GROUP_2:def 5;
       then
-A61:  M c= carr K by XBOOLE_1:1;
+A68:  M c= carr K by A67,XBOOLE_1:1;
       now
-        assume a in K;
-        then a in carr K by STRUCT_0:def 5;
-        then {a} c= carr K by ZFMISC_1:37;
-        then
-A62:    M \/ {a} c= carr K by A61,XBOOLE_1:8;
-        B c= M \/ {a}
+A69:    B c= M \/ {a}
         proof
           let x;
           assume
-A63:      x in B;
-          now per cases;
-            suppose x = a;
+A70:      x in B;
+          now
+            per cases;
+            suppose
+              x = a;
               then x in {a} by TARSKI:def 1;
               hence thesis by XBOOLE_0:def 3;
             end;
-            suppose x <> a;
+            suppose
+              x <> a;
               then not x in {a} by TARSKI:def 1;
-              then x in M by A63,XBOOLE_0:def 5;
+              then x in M by A70,XBOOLE_0:def 5;
               hence thesis by XBOOLE_0:def 3;
             end;
           end;
           hence thesis;
         end;
-        then gr B is Subgroup of gr carr K by A62,Th41,XBOOLE_1:1;
-        then G is Subgroup of K by A3,Th40;
-        hence contradiction by A60,GROUP_2:64;
+        assume
+        a in K;
+        then a in carr K by STRUCT_0:def 5;
+        then {a} c= carr K by ZFMISC_1:37;
+        then M \/ {a} c= carr K by A68,XBOOLE_1:8;
+        then gr B is Subgroup of gr carr K by A69,Th41,XBOOLE_1:1;
+        then G is Subgroup of K by A2,Th40;
+        hence contradiction by A66,GROUP_2:64;
       end;
-      then reconsider v = K as Element of X by A6,A61;
-      not P[s,v] by A57,A58;
-      hence thesis by A59;
+      then reconsider v = K as Element of X by A14,A68;
+      not P[s,v] by A63,A64;
+      hence thesis by A65;
     end;
     then Phi(G) is Subgroup of H by Th54;
     then the carrier of Phi(G) c= the carrier of H by GROUP_2:def 5;
-    then x in H & not a in H by A1,A6,STRUCT_0:def 5;
-    hence thesis;
+    then x in H by A1,STRUCT_0:def 5;
+    hence thesis by A14;
   end;
   let x;
-  assume x in A;
+  assume
+  x in A;
   then consider a being Element of G such that
-A64: x = a and
-A65: a is non generating;
-  now per cases;
-    suppose for H being strict Subgroup of G holds H is not maximal;
+A71: x = a and
+A72: a is non generating;
+  now
+    per cases;
+    suppose
+      for H being strict Subgroup of G holds H is not maximal;
       then Phi(G) = G by Def8;
-      hence thesis by A64;
+      hence thesis by A71;
     end;
     suppose
-A66:  ex H being strict Subgroup of G st H is maximal;
+A73:  ex H being strict Subgroup of G st H is maximal;
       now
         let H be strict Subgroup of G;
         assume
-A67:    H is maximal;
+A74:    H is maximal;
         now
           assume
-A68:      not a in H;
-          then
-A69:      gr(carr H \/ {a}) = G by A67,Th48;
-A70:      carr H misses {a}
+A75:      not a in H;
+          carr H /\ {a} c= {}
           proof
-            thus carr H /\ {a} c= {}
-            proof
-              let x;
-              assume x in carr H /\ {a};
-              then x in carr H & x in {a} by XBOOLE_0:def 4;
-              then x in carr H & x = a by TARSKI:def 1;
-              hence thesis by A68,STRUCT_0:def 5;
-            end;
-            thus {} c= carr H /\ {a} by XBOOLE_1:2;
+            let x;
+            assume
+A76:        x in carr H /\ {a};
+            then x in {a} by XBOOLE_0:def 4;
+            then
+A77:        x = a by TARSKI:def 1;
+            x in carr H by A76,XBOOLE_0:def 4;
+            hence thesis by A75,A77,STRUCT_0:def 5;
           end;
+          then carr H /\ {a} = {};
+          then
+A78:      carr H misses {a} by XBOOLE_0:def 7;
           (carr H \/ {a}) \ {a} = carr H \ {a} by XBOOLE_1:40
-            .= carr H by A70,XBOOLE_1:83;
-          then gr((carr H \/ {a}) \ {a}) = H & H <> G by A67,Def7,Th40;
-          hence contradiction by A65,A69,Def6;
+            .= carr H by A78,XBOOLE_1:83;
+          then
+A79:      gr((carr H \/ {a}) \ {a}) = H by Th40;
+A80:      H <> G by A74,Def7;
+          gr(carr H \/ {a}) = G by A74,A75,Th48;
+          hence contradiction by A72,A79,A80,Def6;
         end;
         hence a in H;
       end;
-      then a in Phi(G) by A66,Th52;
-      hence thesis by A64,STRUCT_0:def 5;
+      then a in Phi(G) by A73,Th52;
+      hence thesis by A71,STRUCT_0:def 5;
     end;
   end;
   hence thesis;
 end;
 
 theorem
-  for G being strict Group, a being Element of G holds
-  a in Phi(G) iff a is non generating
+  for G being strict Group, a being Element of G holds a in Phi(G) iff a
+  is non generating
 proof
   let G be strict Group, a be Element of G;
   thus a in Phi(G) implies a is non generating
   proof
-    assume a in Phi(G);
+    assume
+    a in Phi(G);
     then a in the carrier of Phi(G) by STRUCT_0:def 5;
-    then a in {b where b is Element of G:  b is non generating} by Th55;
+    then a in {b where b is Element of G: b is non generating} by Th55;
     then ex b being Element of G st a = b & b is non generating;
     hence thesis;
   end;
-  assume a is non generating;
+  assume
+  a is non generating;
   then a in {b where b is Element of G : b is non generating};
   then a in the carrier of Phi(G) by Th55;
   hence thesis by STRUCT_0:def 5;
@@ -1804,14 +1947,13 @@ end;
 definition
   let G,H1,H2;
   func H1 * H2 -> Subset of G equals
-
   carr H1 * carr H2;
   correctness;
 end;
 
 theorem
-  H1 * H2 = carr H1 * carr H2 & H1 * H2 = H1 * carr H2 &
-  H1 * H2 = carr H1 * H2;
+  H1 * H2 = carr H1 * carr H2 & H1 * H2 = H1 * carr H2 & H1 * H2 = carr
+  H1 * H2;
 
 canceled;
 
@@ -1853,7 +1995,6 @@ end;
 definition
   let G,H1,H2;
   func H1 "\/" H2 -> strict Subgroup of G equals
-
   gr(carr H1 \/ carr H2);
   correctness;
 end;
@@ -1861,294 +2002,294 @@ end;
 canceled 3;
 
 theorem
-  a in H1 "\/" H2 iff
-  ex F,I st len F = len I & rng F c= carr H1 \/ carr H2 & a = Product(F |^ I)
-  by Th37;
+  a in H1 "\/" H2 iff ex F,I st len F = len I & rng F c= carr H1 \/ carr
+  H2 & a = Product(F |^ I) by Th37;
 
 theorem
   H1 "\/" H2 = gr(H1 * H2)
 proof
   set H = gr(carr H1 * carr H2);
-  carr H1 \/ carr H2 c= carr H1 * carr H2
-  proof
-    let x;
-    assume
-A1: x in carr H1 \/ carr H2;
-    then reconsider a = x as Element of G;
-    now per cases by A1,XBOOLE_0:def 3;
-      suppose
-A2:     x in carr H1;
-        1_G in H2 by GROUP_2:55;
-        then 1_G in carr H2 & a * 1_G = a by GROUP_1:def 5,STRUCT_0:def 5;
-        hence thesis by A2;
-      end;
-      suppose
-A3:     x in carr H2;
-        1_G in H1 by GROUP_2:55;
-        then 1_G in carr H1 & 1_G * a = a by GROUP_1:def 5,STRUCT_0:def 5;
-        hence thesis by A3;
-      end;
-    end;
-    hence thesis;
-  end;
-  then
-A4: H1 "\/" H2 is Subgroup of H by Th41;
   now
     let a;
-    assume a in H;
+    assume
+    a in H;
     then consider F,I such that
-A5: len F = len I and
-A6: rng F c= carr H1 * carr H2 and
-A7: a = Product(F |^ I) by Th37;
+A1: len F = len I and
+A2: rng F c= carr H1 * carr H2 and
+A3: a = Product(F |^ I) by Th37;
     rng(F |^ I) c= carr(H1 "\/" H2)
     proof
-      let x;
       set f = F |^ I;
-      assume x in rng f;
+      let x;
+A4:   rng I c= INT by FINSEQ_1:def 4;
+      assume
+      x in rng f;
       then consider y such that
-A8:   y in dom f and
-A9:   f.y = x by FUNCT_1:def 5;
-      reconsider y as Element of NAT by A8;
-A10:  len f = len F by Def4;
+A5:   y in dom f and
+A6:   f.y = x by FUNCT_1:def 5;
+      reconsider y as Element of NAT by A5;
+A7:   len f = len F by Def4;
       then
-A11:  y in dom I by A5,A8,FINSEQ_3:31;
-      then I.y in rng I & rng I c= INT by FINSEQ_1:def 4,FUNCT_1:def 5;
-      then reconsider i = I.y as Integer;
-A12:  y in dom F by A8,A10,FINSEQ_3:31;
-      I/.y = I.y & @(I/.y) = I/.y by A11,PARTFUN1:def 8;
+A8:   y in dom I by A1,A5,FINSEQ_3:31;
       then
-A13:  x = (F/.y) |^ i by A9,A12,Def4;
-      y in dom F by A8,A10,FINSEQ_3:31;
+A9:   I/.y = I.y by PARTFUN1:def 8;
+      I.y in rng I by A8,FUNCT_1:def 5;
+      then reconsider i = I.y as Integer by A4;
+A10:  @(I/.y) = I/.y;
+      y in dom F by A5,A7,FINSEQ_3:31;
       then F/.y = F.y & F.y in rng F by FUNCT_1:def 5,PARTFUN1:def 8;
       then consider b,c such that
-A14:  F/.y = b * c and
-A15:  b in carr H1 and
-A16:  c in carr H2 by A6,GROUP_2:12;
-      now per cases;
-        suppose i >= 0;
+A11:  F/.y = b * c and
+A12:  b in carr H1 and
+A13:  c in carr H2 by A2,GROUP_2:12;
+      y in dom F by A5,A7,FINSEQ_3:31;
+      then
+A14:  x = (F/.y) |^ i by A6,A9,A10,Def4;
+      now
+        per cases;
+        suppose
+          i >= 0;
           then reconsider n = i as Element of NAT by INT_1:16;
-          defpred P[Nat,set] means ($1 mod 2 = 1 implies $2 = b) &
-          ($1 mod 2 = 0 implies $2 = c);
-A17:      for k be Nat st k in Seg(2 * n) ex x st P[k,x]
+          defpred P[Nat,set] means ($1 mod 2 = 1 implies $2 = b) & ($1 mod 2 =
+          0 implies $2 = c);
+A15:      for k be Nat st k in Seg(2 * n) ex x st P[k,x]
           proof
             let k be Nat;
-            assume k in Seg(2 * n);
-            now per cases by NAT_D:12;
+            assume
+            k in Seg(2 * n);
+            now
+              per cases by NAT_D:12;
               suppose
-A18:            k mod 2 = 1;
+A16:            k mod 2 = 1;
                 reconsider x = b as set;
                 take x;
-                thus (k mod 2 = 1 implies x = b) &
-                (k mod 2 = 0 implies x = c) by A18;
+                thus (k mod 2 = 1 implies x = b) & (k mod 2 = 0 implies x = c)
+                by A16;
               end;
               suppose
-A19:            k mod 2 = 0;
+A17:            k mod 2 = 0;
                 reconsider x = c as set;
                 take x;
-                thus (k mod 2 = 1 implies x = b) &
-                (k mod 2 = 0 implies x = c) by A19;
+                thus (k mod 2 = 1 implies x = b) & (k mod 2 = 0 implies x = c)
+                by A17;
               end;
             end;
             hence thesis;
           end;
           consider p being FinSequence such that
-A20:      dom p = Seg(2 * n) and
-A21:      for k be Nat st k in Seg(2 * n) holds P[k,p.k]
-          from FINSEQ_1:sch 1(A17);
-A22:      len p = 2 * n by A20,FINSEQ_1:def 3;
-A23:      rng p c= {b,c}
+A18:      dom p = Seg(2 * n) and
+A19:      for k be Nat st k in Seg(2 * n) holds P[k,p.k] from
+          FINSEQ_1:sch 1(A15);
+A20:      len p = 2 * n by A18,FINSEQ_1:def 3;
+A21:      rng p c= {b,c}
           proof
             let x;
-            assume x in rng p;
+            assume
+            x in rng p;
             then consider y such that
-A24:        y in dom p and
-A25:        p.y = x by FUNCT_1:def 5;
-            reconsider y as Element of NAT by A24;
-            now per cases by NAT_D:12;
-              suppose y mod 2 = 0;
-                then x = c by A20,A21,A24,A25;
+A22:        y in dom p and
+A23:        p.y = x by FUNCT_1:def 5;
+            reconsider y as Element of NAT by A22;
+            now
+              per cases by NAT_D:12;
+              suppose
+                y mod 2 = 0;
+                then x = c by A18,A19,A22,A23;
                 hence thesis by TARSKI:def 2;
               end;
-              suppose y mod 2 = 1;
-                then x = b by A20,A21,A24,A25;
+              suppose
+                y mod 2 = 1;
+                then x = b by A18,A19,A22,A23;
                 hence thesis by TARSKI:def 2;
               end;
             end;
             hence thesis;
           end;
           then rng p c= the carrier of G by XBOOLE_1:1;
-          then reconsider p as FinSequence of the carrier of G
-          by FINSEQ_1:def 4;
-          defpred Q[Nat] means $1 <= 2 * n & $1 mod 2 = 0 implies
-          for F1 st F1 = p | Seg $1 holds Product(F1) = (F/.y) |^ ($1 div 2);
-A26:      for k being Nat st for l being Nat st l < k holds Q[l] holds Q[k]
+          then reconsider p as FinSequence of the carrier of G by FINSEQ_1:def
+          4;
+A24:      carr H1 \/ carr H2 c= the carrier of gr(carr H1 \/ carr H2) &
+carr gr(carr H1 \/ carr H2) = the carrier of gr(carr H1 \/ carr H2) by Def5;
+          defpred Q[Nat] means $1 <= 2 * n & $1 mod 2 = 0 implies for F1 st F1
+          = p | Seg $1 holds Product(F1) = (F/.y) |^ ($1 div 2);
+A25:      for k being Nat st for l being Nat st l < k holds Q[l] holds Q[
+          k]
           proof
             let k be Nat;
             assume
-A27:        for l being Nat st l < k holds Q[l];
+A26:        for l being Nat st l < k holds Q[l];
             assume that
-A28:        k <= 2 * n and
-A29:        k mod 2 = 0;
+A27:        k <= 2 * n and
+A28:        k mod 2 = 0;
             let F1;
             assume
-A30:        F1 = p | Seg k;
-            now per cases;
+A29:        F1 = p | Seg k;
+            now
+              per cases;
               suppose
-A31:            k = 0;
-                then F1 = <*> the carrier of G by A30;
-                then
-A32:            Product F1 = 1_G by Th11;
+A30:            k = 0;
                 2 * 0 = 0;
-                then 0 div 2 = 0 by NAT_D:18;
-                hence thesis by A31,A32,GROUP_1:43;
-              end;
-              suppose k <> 0;
                 then
-A33:            k >= 1 by NAT_1:14;
-                k <> 1 by A29,NAT_D:14;
+A31:            0 div 2 = 0 by NAT_D:18;
+                F1 = <*> the carrier of G by A29,A30;
+                then Product F1 = 1_G by Th11;
+                hence thesis by A30,A31,GROUP_1:43;
+              end;
+              suppose
+A32:            k <> 0;
+A33:            k <> 1 by A28,NAT_D:14;
+                k >= 1 by A32,NAT_1:14;
                 then k > 1 by A33,XXREAL_0:1;
                 then k >= 1 + 1 by NAT_1:13;
                 then k - 2 >= 2 - 2 by XREAL_1:11;
                 then reconsider m = k - 2 as Element of NAT by INT_1:16;
-A34:            m + 2 = k;
-                then
-A35:            m < k by NAT_1:16;
-A36:            m <= 2 * n by A28,A34,NAT_1:16,XXREAL_0:2;
+                reconsider q = p | Seg m as FinSequence of the carrier of G by
+                FINSEQ_1:23;
                 1 * 2 = 2;
                 then
-A37:            m mod 2 = 0 by A29,NAT_D:15;
-                reconsider q = p | Seg m
-                as FinSequence of the carrier of G by FINSEQ_1:23;
-A38:            Product q = (F/.y) |^ (m div 2) by A27,A35,A36,A37;
-A39:            ex j being Nat st 2 * n = k + j by A28,NAT_1:10;
-                ex o being Nat st 2 * n = m + o by A36,NAT_1:10;
+A34:            m mod 2 = 0 by A28,NAT_D:15;
+A35:            m + 2 = k;
                 then
-A40:            len F1 = k & len q = m by A22,A30,A39,FINSEQ_3:59;
-A41:            len F1 = m + 2 by A22,A30,A39,FINSEQ_3:59
-                  .= len q + len<* b,c *> by A40,FINSEQ_1:61;
-A42:            now
+A36:            m <= 2 * n by A27,NAT_1:16,XXREAL_0:2;
+                then ex o being Nat st 2 * n = m + o by NAT_1:10;
+                then
+A37:            len q = m by A20,FINSEQ_3:59;
+A38:            ex j being Nat st 2 * n = k + j by A27,NAT_1:10;
+                then
+A39:            len F1 = k by A20,A29,FINSEQ_3:59;
+A40:            now
                   let l;
                   assume
-A43:              l in dom q;
-                  then 1 <= l & l <= len q & len q <= len F1
-                  by A34,A40,FINSEQ_3:27,NAT_1:16;
-                  then 1 <= l & l <= len F1 by XXREAL_0:2;
-                  then l in dom F1 by FINSEQ_3:27;
-                  then F1.l = p.l & q.l = p.l by A30,A43,FUNCT_1:70;
-                  hence F1.l = q.l;
-                end;
-                now
-                  let l;
-                  assume l in dom<* b,c *>;
+A41:              l in dom q;
+                  then l <= len q by FINSEQ_3:27;
                   then
-A44:              l in {1,2} by FINSEQ_1:4,FINSEQ_3:29;
-                  now per cases by A44,TARSKI:def 2;
+A42:              l <= len F1 by A35,A39,A37,NAT_1:16,XXREAL_0:2;
+                  1 <= l by A41,FINSEQ_3:27;
+                  then l in dom F1 by A42,FINSEQ_3:27;
+                  then F1.l = p.l by A29,FUNCT_1:70;
+                  hence F1.l = q.l by A41,FUNCT_1:70;
+                end;
+A43:            m < k by A35,NAT_1:16;
+                then
+A44:            Product q = (F/.y) |^ (m div 2) by A26,A36,A34;
+A45:            now
+                  let l;
+                  assume
+                  l in dom<* b,c *>;
+                  then
+A46:              l in {1,2} by FINSEQ_1:4,FINSEQ_3:29;
+                  now
+                    per cases by A46,TARSKI:def 2;
                     suppose
-A45:                  l = 1;
+A47:                  l = 1;
                       then
-A46:                  <* b,c *>.l = b by FINSEQ_1:61;
-                      m + 1 <= k & 1 <= m + 1 by A35,NAT_1:12,13;
+A48:                  <* b,c *>.l = b by FINSEQ_1:61;
+A49:                  m + 1 mod 2 = 1 & dom F1 c= dom p by A29,A34,NAT_D
+                      :16,RELAT_1:89;
+                      m + 1 <= k & 1 <= m + 1 by A43,NAT_1:12,13;
                       then
-A47:                  m + 1 in dom F1 by A40,FINSEQ_3:27;
-                      then
-A48:                  F1.(len q + l) = p.(m + 1) by A30,A40,A45,FUNCT_1:70;
-A49:                  m + 1 mod 2 = 1 by A37,NAT_D:16;
-                      dom F1 c= dom p by A30,RELAT_1:89;
-                      hence F1.(len q + l) = <* b,c *>.l by A20,A21,A46,A47,A48
-,A49;
+A50:                  m + 1 in dom F1 by A39, FINSEQ_3:27;
+                      then F1.(len q + l) = p.(m + 1) by A29,A37,A47,
+                      FUNCT_1:70;
+                      hence F1.(len q + l) = <* b,c *>.l by A18,A19,A48,A50,
+                      A49;
                     end;
                     suppose
-A50:                  l = 2;
+A51:                  l = 2;
                       then
-A51:                  <* b,c *>.l = c by FINSEQ_1:61;
+A52:                  <* b,c *>.l = c by FINSEQ_1:61;
+A53:                  dom F1 c= dom p by A29,RELAT_1:89;
                       1 <= m + (1 + 1) by NAT_1:12;
                       then
-A52:                  m + 2 in dom F1 by A40,FINSEQ_3:27;
-                      then
-A53:                  F1.(len q + l) = p.(m + 2) by A30,A40,A50,FUNCT_1:70;
-                      dom F1 c= dom p by A30,RELAT_1:89;
-                      hence F1.(len q + l) = <* b,c *>.l by A20,A21,A29,A51,A52
-,A53;
+A54:                  m + 2 in dom F1 by A39, FINSEQ_3:27;
+                      then F1.(len q + l) = p.(m + 2) by A29,A37,A51,
+                      FUNCT_1:70;
+                      hence F1.(len q + l) = <* b,c *>.l by A18,A19,A28,A52,
+                      A54,A53;
                     end;
                   end;
                   hence F1.(len q + l) = <* b,c *>.l;
                 end;
-                then F1 = q ^ <* b,c *> by A41,A42,FINSEQ_3:43;
-                then
-A54:            Product F1 = Product q * Product<* b,c *> by Th8
-                  .= Product q * (F/.y) by A14,FINSOP_1:13
-                  .= (F/.y) |^ ((m div 2) + 1) by A38,GROUP_1:66;
-                m div 2*1 + 1 = (m div 2) + (2 div 2) by NAT_D:18
-                  .= k div 2 by A34,A37,NAT_D:19;
-                hence thesis by A54;
+A55:            m div 2*1 + 1 = (m div 2) + (2 div 2) by NAT_D:18
+                  .= k div 2 by A35,A34,NAT_D:19;
+                len F1 = m + 2 by A20,A29,A38,FINSEQ_3:59
+                  .= len q + len<* b,c *> by A37,FINSEQ_1:61;
+                then F1 = q ^ <* b,c *> by A40,A45,FINSEQ_3:43;
+                then Product F1 = Product q * Product<* b,c *> by Th8
+                  .= Product q * (F/.y) by A11,FINSOP_1:13
+                  .= (F/.y) |^ ((m div 2) + 1) by A44,GROUP_1:66;
+                hence thesis by A55;
               end;
             end;
             hence thesis;
           end;
-A55:      for k being Nat holds Q[k] from NAT_1:sch 4(A26);
-A56:      2 * n mod 2 = 0 by NAT_D:13;
-A57:      2 * n div 2 = n by NAT_D:18;
-          len p = 2 * n by A20,FINSEQ_1:def 3;
-          then p = p | Seg(2 * n) by FINSEQ_3:55;
-          then
-A58:      x = Product(p) by A13,A55,A56,A57;
-          b in carr H1 \/ carr H2 & c in carr H1 \/ carr H2 by A15,A16,
-XBOOLE_0:def 3;
+A56:      for k being Nat holds Q[k] from NAT_1:sch 4(A25);
+          b in carr H1 \/ carr H2 & c in carr H1 \/ carr H2 by A12,A13,
+          XBOOLE_0:def 3;
           then {b,c} c= carr H1 \/ carr H2 by ZFMISC_1:38;
           then
-A59:      rng p c= carr H1 \/ carr H2 by A23,XBOOLE_1:1;
-          carr H1 \/ carr H2 c= the carrier of gr(carr H1 \/ carr H2) &
-          carr gr(carr H1 \/ carr H2) =
-          the carrier of gr(carr H1 \/ carr H2) by Def5;
-          then x in gr(carr H1 \/ carr H2) by A58,A59,Th21,XBOOLE_1:1;
+A57:      rng p c= carr H1 \/ carr H2 by A21,XBOOLE_1:1;
+          len p = 2 * n by A18,FINSEQ_1:def 3;
+          then
+A58:      p = p | Seg(2 * n) by FINSEQ_3:55;
+          2 * n mod 2 = 0 & 2 * n div 2 = n by NAT_D:13,18;
+          then x = Product(p) by A14,A56,A58;
+          then x in gr(carr H1 \/ carr H2) by A57,A24,Th21,XBOOLE_1:1;
           hence thesis by STRUCT_0:def 5;
         end;
         suppose
-A60:      i < 0;
+A59:      i < 0;
+          defpred P[Nat,set] means ($1 mod 2 = 1 implies $2 = c") & ($1 mod 2
+          = 0 implies $2 = b");
           set n = abs(i);
-          defpred P[Nat,set] means ($1 mod 2 = 1 implies $2 = c") &
-          ($1 mod 2 = 0 implies $2 = b");
+A60:      2 * n mod 2 = 0 & 2 * n div 2 = n by NAT_D:13,18;
 A61:      for k be Nat st k in Seg(2 * n) ex x st P[k,x]
           proof
             let k be Nat;
-            assume k in Seg(2 * n);
-            now per cases by NAT_D:12;
+            assume
+            k in Seg(2 * n);
+            now
+              per cases by NAT_D:12;
               suppose
 A62:            k mod 2 = 1;
                 reconsider x = c" as set;
                 take x;
-                thus (k mod 2 = 1 implies x = c") &
-                (k mod 2 = 0 implies x = b") by A62;
+                thus (k mod 2 = 1 implies x = c") & (k mod 2 = 0 implies x = b
+                ") by A62;
               end;
               suppose
 A63:            k mod 2 = 0;
                 reconsider x = b" as set;
                 take x;
-                thus (k mod 2 = 1 implies x = c") &
-                (k mod 2 = 0 implies x = b") by A63;
+                thus (k mod 2 = 1 implies x = c") & (k mod 2 = 0 implies x = b
+                ") by A63;
               end;
             end;
             hence thesis;
           end;
           consider p being FinSequence such that
 A64:      dom p = Seg(2 * n) and
-A65:      for k be Nat st k in Seg(2 * n) holds P[k,p.k]
-          from FINSEQ_1:sch 1(A61);
+A65:      for k be Nat st k in Seg(2 * n) holds P[k,p.k] from
+          FINSEQ_1:sch 1(A61);
 A66:      len p = 2 * n by A64,FINSEQ_1:def 3;
 A67:      rng p c= {b",c"}
           proof
             let x;
-            assume x in rng p;
+            assume
+            x in rng p;
             then consider y such that
 A68:        y in dom p and
 A69:        p.y = x by FUNCT_1:def 5;
             reconsider y as Element of NAT by A68;
-            now per cases by NAT_D:12;
-              suppose y mod 2 = 0;
+            now
+              per cases by NAT_D:12;
+              suppose
+                y mod 2 = 0;
                 then x = b" by A64,A65,A68,A69;
                 hence thesis by TARSKI:def 2;
               end;
-              suppose y mod 2 = 1;
+              suppose
+                y mod 2 = 1;
                 then x = c" by A64,A65,A68,A69;
                 hence thesis by TARSKI:def 2;
               end;
@@ -2156,215 +2297,258 @@ A69:        p.y = x by FUNCT_1:def 5;
             hence thesis;
           end;
           then rng p c= the carrier of G by XBOOLE_1:1;
-          then reconsider p as FinSequence of the carrier of G
-          by FINSEQ_1:def 4;
-          defpred Q[Nat] means $1 <= 2 * n & $1 mod 2 = 0 implies
-          for F1 st F1 = p | Seg $1 holds
-          Product(F1) = ((F/.y) |^ ($1 div 2))";
-A70:      for k being Nat st for l being Nat st l < k holds Q[l] holds Q[k]
+          then reconsider p as FinSequence of the carrier of G by FINSEQ_1:def
+          4;
+A70:      carr H1 \/ carr H2 c= the carrier of gr(carr H1 \/ carr H2) &
+carr gr(carr H1 \/ carr H2) = the carrier of gr(carr H1 \/ carr H2) by Def5;
+          defpred Q[Nat] means $1 <= 2 * n & $1 mod 2 = 0 implies for F1 st F1
+          = p | Seg $1 holds Product(F1) = ((F/.y) |^ ($1 div 2))";
+A71:      for k being Nat st for l being Nat st l < k holds Q[l] holds Q
+          [k]
           proof
             let k be Nat;
             assume
-A71:        for l being Nat st l < k holds Q[l];
+A72:        for l being Nat st l < k holds Q[l];
             assume that
-A72:        k <= 2 * n and
-A73:        k mod 2 = 0;
+A73:        k <= 2 * n and
+A74:        k mod 2 = 0;
             let F1;
             assume
-A74:        F1 = p | Seg k;
-            now per cases;
+A75:        F1 = p | Seg k;
+            now
+              per cases;
               suppose
-A75:            k = 0;
-                then F1 = <*> the carrier of G by A74;
-                then
-A76:            Product F1 = 1_G by Th11;
+A76:            k = 0;
                 2 * 0 = 0;
                 then 0 div 2 = 0 by NAT_D:18;
-                then (F/.y) |^ (k div 2) = 1_G by A75,GROUP_1:43;
-                hence thesis by A76,GROUP_1:16;
-              end;
-              suppose k <> 0;
                 then
-A77:            k >= 1 by NAT_1:14;
-                k <> 1 by A73,NAT_D:14;
-                then k > 1 by A77,XXREAL_0:1;
+A77:            (F/.y) |^ (k div 2) = 1_G by A76,GROUP_1:43;
+                F1 = <*> the carrier of G by A75,A76;
+                then Product F1 = 1_G by Th11;
+                hence thesis by A77,GROUP_1:16;
+              end;
+              suppose
+A78:            k <> 0;
+A79:            k <> 1 by A74,NAT_D:14;
+                k >= 1 by A78,NAT_1:14;
+                then k > 1 by A79,XXREAL_0:1;
                 then k >= 1 + 1 by NAT_1:13;
                 then k - 2 >= 2 - 2 by XREAL_1:11;
                 then reconsider m = k - 2 as Element of NAT by INT_1:16;
-A78:            m + 2 = k;
-                then
-A79:            m < k by NAT_1:16;
-A80:            m <= 2 * n by A72,A78,NAT_1:16,XXREAL_0:2;
+                reconsider q = p | Seg m as FinSequence of the carrier of G by
+                FINSEQ_1:23;
                 1 * 2 = 2;
                 then
-A81:            m mod 2 = 0 by A73,NAT_D:15;
-                reconsider q = p | Seg m
-                as FinSequence of the carrier of G by FINSEQ_1:23;
-A82:            Product q = ((F/.y) |^ (m div 2))" by A71,A79,A80,A81;
-A83:            ex j being Nat st 2 * n = k + j by A72,NAT_1:10;
-                ex o being Nat st 2 * n = m + o by A80,NAT_1:10;
+A80:            m mod 2 = 0 by A74,NAT_D:15;
+A81:            m + 2 = k;
                 then
-A84:            len F1 = k & len q = m by A66,A74,A83,FINSEQ_3:59;
-A85:            len F1 = m + 2 by A66,A74,A83,FINSEQ_3:59
-                  .= len q + len<* c",b" *> by A84,FINSEQ_1:61;
+A82:            m <= 2 * n by A73,NAT_1:16,XXREAL_0:2;
+                then ex o being Nat st 2 * n = m + o by NAT_1:10;
+                then
+A83:            len q = m by A66,FINSEQ_3:59;
+A84:            ex j being Nat st 2 * n = k + j by A73,NAT_1:10;
+                then
+A85:            len F1 = k by A66,A75,FINSEQ_3:59;
 A86:            now
                   let l;
                   assume
 A87:              l in dom q;
-                  then 1 <= l & l <= len q & len q <= len F1
-                  by A78,A84,FINSEQ_3:27,NAT_1:16;
-                  then 1 <= l & l <= len F1 by XXREAL_0:2;
-                  then l in dom F1 by FINSEQ_3:27;
-                  then F1.l = p.l & q.l = p.l by A74,A87,FUNCT_1:70;
-                  hence F1.l = q.l;
-                end;
-                now
-                  let l;
-                  assume l in dom<* c",b" *>;
+                  then l <= len q by FINSEQ_3:27;
                   then
-A88:              l in {1,2} by FINSEQ_1:4,FINSEQ_3:29;
-                  now per cases by A88,TARSKI:def 2;
+A88:              l <= len F1 by A81,A85,A83,NAT_1:16,XXREAL_0:2;
+                  1 <= l by A87,FINSEQ_3:27;
+                  then l in dom F1 by A88,FINSEQ_3:27;
+                  then F1.l = p.l by A75,FUNCT_1:70;
+                  hence F1.l = q.l by A87,FUNCT_1:70;
+                end;
+A89:            m < k by A81,NAT_1:16;
+                then
+A90:            Product q = ((F/.y) |^ (m div 2))" by A72,A82,
+                A80;
+A91:            now
+                  let l;
+                  assume
+                  l in dom<* c",b" *>;
+                  then
+A92:              l in {1,2} by FINSEQ_1:4,FINSEQ_3:29;
+                  now
+                    per cases by A92,TARSKI:def 2;
                     suppose
-A89:                  l = 1;
+A93:                  l = 1;
                       then
-A90:                  <* c",b" *>.l = c" by FINSEQ_1:61;
-                      m + 1 <= k & 1 <= m + 1 by A79,NAT_1:12,13;
+A94:                  <* c",b" *>.l = c" by FINSEQ_1:61;
+A95:                  m + 1 mod 2 = 1 & dom F1 c= dom p by A75,A80,
+                      NAT_D:16,RELAT_1:89;
+                      m + 1 <= k & 1 <= m + 1 by A89,NAT_1:12,13;
                       then
-A91:                  m + 1 in dom F1 by A84,FINSEQ_3:27;
+A96:                  m + 1 in dom F1 by A85, FINSEQ_3:27;
                       then
-A92:                  F1.(len q + l) = p.(m + 1) by A74,A84,A89,FUNCT_1:70;
-A93:                  m + 1 mod 2 = 1 by A81,NAT_D:16;
-                      dom F1 c= dom p by A74,RELAT_1:89;
-
-hence F1.(len q + l) = <* c",b" *>.l by A64,A65,A90,A91,A92,A93;
+                      F1.(len q + l) = p.(m + 1) by A75,A83,A93,FUNCT_1:70;
+                      hence F1.(len q + l) = <* c",b" *>.l by A64,A65,A94,
+                      A96,A95;
                     end;
                     suppose
-A94:                  l = 2;
+A97:                  l = 2;
                       then
-A95:                  <* c",b" *>.l = b" by FINSEQ_1:61;
+A98:                  <* c",b" *>.l = b" by FINSEQ_1:61;
+A99:                  dom F1 c= dom p by A75,RELAT_1:89;
                       1 <= m + (1 + 1) by NAT_1:12;
                       then
-A96:                  m + 2 in dom F1 by A84,FINSEQ_3:27;
+A100:                 m + 2 in dom F1 by A85, FINSEQ_3:27;
                       then
-A97:                  F1.(len q + l) = p.(m + 2) by A74,A84,A94,FUNCT_1:70;
-                      dom F1 c= dom p by A74,RELAT_1:89;
-
-hence F1.(len q + l) = <* c",b" *>.l by A64,A65,A73,A95,A96,A97;
+                      F1.(len q + l) = p.(m + 2) by A75,A83,A97,FUNCT_1:70;
+                      hence F1.(len q + l) = <* c",b" *>.l by A64,A65,A74,
+                      A98,A100,A99;
                     end;
                   end;
                   hence F1.(len q + l) = <* c",b" *>.l;
                 end;
-                then F1 = q ^ <* c",b" *> by A85,A86,FINSEQ_3:43;
-                then
-A98:           Product F1 = Product q * Product<* c",b" *> by Th8
+A101:           m div 2*1 + 1 = (m div 2) + (2 div 2) by NAT_D:18
+                  .= k div 2 by A81,A80,NAT_D:19;
+                len F1 = m + 2 by A66,A75,A84,FINSEQ_3:59
+                  .= len q + len<* c",b" *> by A83,FINSEQ_1:61;
+                then F1 = q ^ <* c",b" *> by A86,A91,FINSEQ_3:43;
+                then Product F1 = Product q * Product<* c",b" *> by Th8
                   .= Product q * (c" * b") by FINSOP_1:13
-                  .= Product q * (F/.y)" by A14,GROUP_1:25
-                  .= ((F/.y) * ((F/.y) |^ (m div 2)))" by A82,GROUP_1:25
+                  .= Product q * (F/.y)" by A11,GROUP_1:25
+                  .= ((F/.y) * ((F/.y) |^ (m div 2)))" by A90,GROUP_1:25
                   .= ((F/.y) |^ ((m div 2) + 1))" by GROUP_1:66;
-                m div 2*1 + 1 = (m div 2) + (2 div 2) by NAT_D:18
-                  .= k div 2 by A78,A81,NAT_D:19;
-                hence thesis by A98;
+                hence thesis by A101;
               end;
             end;
             hence thesis;
           end;
-A99:     for k being Nat holds Q[k] from NAT_1:sch 4(A70);
-A100:     2 * n mod 2 = 0 by NAT_D:13;
-A101:     2 * n div 2 = n by NAT_D:18;
+A102:     for k being Nat holds Q[k] from NAT_1:sch 4(A71);
+          c" in carr H2 by A13,GROUP_2:90;
+          then
+A103:     c" in carr H1 \/ carr H2 by XBOOLE_0:def 3;
           len p = 2 * n by A64,FINSEQ_1:def 3;
           then
-A102:     p = p | Seg(2 * n) by FINSEQ_3:55;
-          x = ((F/.y) |^ n)" by A13,A60,GROUP_1:60;
+A104:     p = p | Seg(2 * n) by FINSEQ_3:55;
+          b" in carr H1 by A12,GROUP_2:90;
+          then b" in carr H1 \/ carr H2 by XBOOLE_0:def 3;
+          then {b",c"} c= carr H1 \/ carr H2 by A103,ZFMISC_1:38;
           then
-A103:     x = Product(p) by A99,A100,A101,A102;
-          b" in carr H1 & c" in carr H2 by A15,A16,GROUP_2:90;
-          then b" in carr H1 \/ carr H2 &
-          c" in carr H1 \/ carr H2 by XBOOLE_0:def 3;
-          then {b",c"} c= carr H1 \/ carr H2 by ZFMISC_1:38;
-          then
-A104:     rng p c= carr H1 \/ carr H2 by A67,XBOOLE_1:1;
-          carr H1 \/ carr H2 c= the carrier of gr(carr H1 \/ carr H2) &
-          carr gr(carr H1 \/ carr H2) =
-          the carrier of gr(carr H1 \/ carr H2) by Def5;
-          then x in gr(carr H1 \/ carr H2) by A103,A104,Th21,XBOOLE_1:1;
+A105:     rng p c= carr H1 \/ carr H2 by A67,XBOOLE_1:1;
+          x = ((F/.y) |^ n)" by A14,A59,GROUP_1:60;
+          then x = Product(p) by A102,A60,A104;
+          then x in gr(carr H1 \/ carr H2) by A105,A70,Th21,XBOOLE_1:1;
           hence thesis by STRUCT_0:def 5;
         end;
       end;
       hence thesis;
     end;
-    hence a in H1 "\/" H2 by A7,Th21;
+    hence a in H1 "\/" H2 by A3,Th21;
   end;
-  then H is Subgroup of H1 "\/" H2 by GROUP_2:67;
-  hence gr(H1 * H2) = H1 "\/" H2 by A4,GROUP_2:64;
+  then
+A106: H is Subgroup of H1 "\/" H2 by GROUP_2:67;
+  carr H1 \/ carr H2 c= carr H1 * carr H2
+  proof
+    let x;
+    assume
+A107: x in carr H1 \/ carr H2;
+    then reconsider a = x as Element of G;
+    now
+      per cases by A107,XBOOLE_0:def 3;
+      suppose
+A108:   x in carr H1;
+        1_G in H2 by GROUP_2:55;
+        then
+A109:   1_G in carr H2 by STRUCT_0:def 5;
+        a * 1_G = a by GROUP_1:def 5;
+        hence thesis by A108,A109;
+      end;
+      suppose
+A110:   x in carr H2;
+        1_G in H1 by GROUP_2:55;
+        then
+A111:   1_G in carr H1 by STRUCT_0:def 5;
+        1_G * a = a by GROUP_1:def 5;
+        hence thesis by A110,A111;
+      end;
+    end;
+    hence thesis;
+  end;
+  then H1 "\/" H2 is Subgroup of H by Th41;
+  hence gr(H1 * H2) = H1 "\/" H2 by A106,GROUP_2:64;
 end;
 
 theorem Th69:
   H1 * H2 = H2 * H1 implies the carrier of H1 "\/" H2 = H1 * H2
 proof
-  assume H1 * H2 = H2 * H1;
+  assume
+  H1 * H2 = H2 * H1;
   then consider H being strict Subgroup of G such that
 A1: the carrier of H = carr H1 * carr H2 by GROUP_2:93;
-  carr H1 \/ carr H2 c= carr H1 * carr H2
-  proof
-    let x;
-    assume
-A2: x in carr H1 \/ carr H2;
-    then reconsider a = x as Element of G;
-    now per cases by A2,XBOOLE_0:def 3;
-      suppose
-A3:     x in carr H1;
-        1_G in H2 by GROUP_2:55;
-        then 1_G in carr H2 & a * 1_G = a by GROUP_1:def 5,STRUCT_0:def 5;
-        hence thesis by A3;
-      end;
-      suppose
-A4:     x in carr H2;
-        1_G in H1 by GROUP_2:55;
-        then 1_G in carr H1 & 1_G * a = a by GROUP_1:def 5,STRUCT_0:def 5;
-        hence thesis by A4;
-      end;
-    end;
-    hence thesis;
-  end;
-  then
-A5: H1 "\/" H2 is Subgroup of H by A1,Def5;
   now
+    reconsider p = 1 as Integer;
     let a;
-    assume a in H;
+    assume
+    a in H;
     then a in carr H1 * carr H2 by A1,STRUCT_0:def 5;
     then consider b,c such that
-A6: a = b * c and
-A7: b in carr H1 & c in carr H2;
-    reconsider p = 1 as Integer;
-A8: len<* b,c *> = 2 & len<* @p,@p *> = 2 by FINSEQ_1:61;
-A9: rng<* b,c *> = {b,c} by FINSEQ_2:147;
-    b in carr H1 \/ carr H2 & c in carr H1 \/ carr H2 by A7,XBOOLE_0:def 3;
+A2: a = b * c and
+A3: b in carr H1 & c in carr H2;
+    b in carr H1 \/ carr H2 & c in carr H1 \/ carr H2 by A3,XBOOLE_0:def
+    3;
     then
-A10: {b,c} c= carr H1 \/ carr H2 by ZFMISC_1:38;
-    a = Product<* b *> * c by A6,FINSOP_1:12
+A4: rng<* b,c *> = {b,c} & {b,c} c= carr H1 \/ carr H2 by FINSEQ_2:
+    147 ,ZFMISC_1:38;
+A5: len<* b,c *> = 2 & len<* @p,@p *> = 2 by FINSEQ_1:61;
+    a = Product<* b *> * c by A2,FINSOP_1:12
       .= Product<* b *> * Product<* c *> by FINSOP_1:12
       .= Product(<* b *> ^ <* c *>) by Th8
       .= Product<* b,c *> by FINSEQ_1:def 9
       .= Product<* b |^ p, c *> by GROUP_1:44
       .= Product<* b |^ p, c |^ p *> by GROUP_1:44
       .= Product(<* b,c *> |^ <* @p,@p *>) by Th29;
-    hence a in H1 "\/" H2 by A8,A9,A10,Th37;
+    hence a in H1 "\/" H2 by A5,A4,Th37;
   end;
-  then H is Subgroup of H1 "\/" H2 by GROUP_2:67;
-  hence thesis by A1,A5,GROUP_2:64;
+  then
+A6: H is Subgroup of H1 "\/" H2 by GROUP_2:67;
+  carr H1 \/ carr H2 c= carr H1 * carr H2
+  proof
+    let x;
+    assume
+A7: x in carr H1 \/ carr H2;
+    then reconsider a = x as Element of G;
+    now
+      per cases by A7,XBOOLE_0:def 3;
+      suppose
+A8:     x in carr H1;
+        1_G in H2 by GROUP_2:55;
+        then
+A9:     1_G in carr H2 by STRUCT_0:def 5;
+        a * 1_G = a by GROUP_1:def 5;
+        hence thesis by A8,A9;
+      end;
+      suppose
+A10:    x in carr H2;
+        1_G in H1 by GROUP_2:55;
+        then
+A11:    1_G in carr H1 by STRUCT_0:def 5;
+        1_G * a = a by GROUP_1:def 5;
+        hence thesis by A10,A11;
+      end;
+    end;
+    hence thesis;
+  end;
+  then H1 "\/" H2 is Subgroup of H by A1,Def5;
+  hence thesis by A1,A6,GROUP_2:64;
 end;
 
 theorem
   G is commutative Group implies the carrier of H1 "\/" H2 = H1 * H2
 proof
-  assume G is commutative Group;
+  assume
+  G is commutative Group;
   then H1 * H2 = H2 * H1 by GROUP_2:29;
   hence thesis by Th69;
 end;
 
 theorem Th71:
-  for N1,N2 being strict normal Subgroup of G
-  holds the carrier of N1 "\/" N2 = N1 * N2
+  for N1,N2 being strict normal Subgroup of G holds the carrier of
+  N1 "\/" N2 = N1 * N2
 proof
   let N1,N2 be strict normal Subgroup of G;
   N1 * N2 = N2 * N1 by GROUP_3:148;
@@ -2372,14 +2556,13 @@ proof
 end;
 
 theorem
-  for N1,N2 being strict normal Subgroup of G
-  holds N1 "\/" N2 is normal Subgroup of G
+  for N1,N2 being strict normal Subgroup of G holds N1 "\/" N2 is normal
+  Subgroup of G
 proof
   let N1,N2 be strict normal Subgroup of G;
-  consider N being strict normal Subgroup of G such that
-A1: the carrier of N = carr N1 * carr N2 by GROUP_3:149;
-  the carrier of N1 "\/" N2 = N1 * N2 & N1 * N2 = carr N1 * carr N2 by Th71;
-  hence thesis by A1,GROUP_2:68;
+  (ex N being strict normal Subgroup of G st the carrier of N = carr N1 *
+  carr N2 )& the carrier of N1 "\/" N2 = N1 * N2 by Th71,GROUP_3:149;
+  hence thesis by GROUP_2:68;
 end;
 
 theorem
@@ -2389,10 +2572,11 @@ theorem
   H1 "\/" H2 = H2 "\/" H1;
 
 Lm4: H1 is Subgroup of H1 "\/" H2
-proof carr H1 c= carr H1 \/ carr H2 &
-  carr H1 \/ carr H2 c= the carrier of gr(carr H1 \/ carr H2) &
-  H1 "\/" H2 = gr(carr H1 \/ carr H2) &
-  the carrier of H1 = carr H1 by Def5,XBOOLE_1:7;
+proof
+
+  carr H1 c= carr H1 \/ carr H2 & carr H1 \/ carr H2 c= the carrier of gr(
+  carr H1 \/ carr H2) by Def5,XBOOLE_1:7;
+
   hence thesis by GROUP_2:66,XBOOLE_1:1;
 end;
 
@@ -2400,7 +2584,8 @@ Lm5: H1 "\/" H2 "\/" H3 is Subgroup of H1 "\/" (H2 "\/" H3)
 proof
   now
     let a;
-    assume a in H1 "\/" H2 "\/" H3;
+    assume
+    a in H1 "\/" H2 "\/" H3;
     then consider F,I such that
 A1: len F = len I and
 A2: rng F c= carr(H1 "\/" H2) \/ carr H3 and
@@ -2410,34 +2595,41 @@ A3: a = Product(F |^ I) by Th37;
       let x;
       assume
 A4:   x in rng F;
-      now per cases by A2,A4,XBOOLE_0:def 3;
+      now
+        per cases by A2,A4,XBOOLE_0:def 3;
         suppose
 A5:       x in carr(H1 "\/" H2);
-          then
-A6:       x in H1 "\/" H2 by STRUCT_0:def 5;
-          reconsider b = x as Element of G by A5;
-          consider F1,I1 such that
-A7:       len F1 = len I1 and
-A8:       rng F1 c= carr H1 \/ carr H2 and
-A9:       b = Product(F1 |^ I1) by A6,Th37;
+          then reconsider b = x as Element of G;
+          x in H1 "\/" H2 by A5,STRUCT_0:def 5;
+          then consider F1,I1 such that
+A6:       len F1 = len I1 and
+A7:       rng F1 c= carr H1 \/ carr H2 and
+A8:       b = Product(F1 |^ I1) by Th37;
           H2 is Subgroup of H2 "\/" H3 by Lm4;
-          then the carrier of H2 c= the carrier of H2 "\/" H3 &
-          the carrier of H2 = carr H2 & the carrier of H3 = carr H3 &
-          H2 "\/" H3 = gr(carr H2 \/ carr H3) by GROUP_2:def 5;
-          then carr H1 \/ carr H2 c= carr H1 \/ carr(H2 "\/" H3)
-          by XBOOLE_1:9;
-          then rng F1 c= carr H1 \/ carr(H2 "\/" H3) by A8,XBOOLE_1:1;
-          then b in H1 "\/" (H2 "\/" H3) by A7,A9,Th37;
+
+          then the carrier of H2 c= the carrier of H2 "\/" H3 by GROUP_2:
+          def 5;
+
+          then carr H1 \/ carr H2 c= carr H1 \/ carr(H2 "\/" H3) by
+          XBOOLE_1:9;
+
+          then rng F1 c= carr H1 \/ carr(H2 "\/" H3) by A7,XBOOLE_1:1;
+          then b in H1 "\/" (H2 "\/" H3) by A6,A8,Th37;
           hence thesis by STRUCT_0:def 5;
         end;
-        suppose x in carr H3;
-          then x in H3 & H3 is Subgroup of H3 "\/" H2 by Lm4,STRUCT_0:def 5;
-          then x in H3 "\/" H2 by GROUP_2:49;
+        suppose
+A9:       x in carr H3;
+A10:      H3 is Subgroup of H3 "\/" H2 by Lm4;
+          x in H3 by A9,STRUCT_0:def 5;
+          then x in H3 "\/" H2 by A10,GROUP_2:49;
           then x in carr(H2 "\/" H3) by STRUCT_0:def 5;
-          then x in carr H1 \/ carr(H2 "\/" H3) & carr H1 \/ carr(H2 "\/" H3)
-          c= the carrier of gr(carr H1 \/ carr(H2 "\/" H3))
-          by Def5,XBOOLE_0:def 3;
-          hence thesis;
+          then
+A11:      x in carr H1 \/ carr(H2 "\/" H3) by XBOOLE_0:def 3;
+
+          carr H1 \/ carr(H2 "\/" H3) c= the carrier of gr(carr H1 \/
+          carr(H2 "\/" H3)) by Def5;
+
+          hence thesis by A11;
         end;
       end;
       hence thesis;
@@ -2451,54 +2643,57 @@ end;
 theorem Th75:
   H1 "\/" H2 "\/" H3 = H1 "\/" (H2 "\/" H3)
 proof
-A1: H1 "\/" H2 "\/" H3 is Subgroup of H1 "\/" (H2 "\/" H3) by Lm5;
-  H2 "\/" H3 "\/" H1 is Subgroup of H2 "\/" (H3 "\/" H1) by Lm5;
-  then H2 "\/" H3 "\/" H1 is Subgroup of H3 "\/" H1 "\/" H2 &
-  H3 "\/" H1 "\/" H2 is Subgroup of H3 "\/" (H1 "\/" H2) by Lm5;
-  then H1 "\/" (H2 "\/" H3) is Subgroup of H3 "\/" (H1 "\/" H2) by GROUP_2:65;
+  H2 "\/" H3 "\/" H1 is Subgroup of H2 "\/" (H3 "\/" H1) & H3 "\/" H1 "\/"
+  H2 is Subgroup of H3 "\/" (H1 "\/" H2) by Lm5;
+  then
+A1: H1 "\/" (H2 "\/" H3) is Subgroup of H3 "\/" (H1 "\/" H2) by
+  GROUP_2:
+  65;
+  H1 "\/" H2 "\/" H3 is Subgroup of H1 "\/" (H2 "\/" H3) by Lm5;
   hence thesis by A1,GROUP_2:64;
 end;
 
 theorem
-  for H being strict Subgroup of G holds (1).G "\/" H = H & H "\/" (1).G = H
+  for H being strict Subgroup of G holds (1).G "\/" H = H & H "\/" (1).G
+  = H
 proof
   let H be strict Subgroup of G;
-A1: carr(1).G = {1_G} by GROUP_2:def 7;
   1_G in H by GROUP_2:55;
   then 1_G in carr H by STRUCT_0:def 5;
   then {1_G} c= carr H by ZFMISC_1:37;
   then
-A2: {1_G} \/ carr H = carr H by XBOOLE_1:12;
-  hence (1).G "\/" H = H by A1,Th40;
-  thus thesis by A1,A2,Th40;
+A1: carr(1).G = {1_G} & {1_G} \/ carr H = carr H by GROUP_2:def 7 ,
+  XBOOLE_1:12;
+  hence (1).G "\/" H = H by Th40;
+  thus thesis by A1,Th40;
 end;
 
 theorem Th77:
   (Omega).G "\/" H = (Omega).G & H "\/" (Omega).G = (Omega).G
 proof
-A1: (the carrier of (Omega).
-  G) \/ carr H = [#] the carrier of G by SUBSET_1:28;
+A1: (the carrier of (Omega). G) \/ carr H = [#] the carrier of G by SUBSET_1
+  :28;
   hence (Omega).G "\/" H = (Omega).G by Th40;
   thus thesis by A1,Th40;
 end;
 
 theorem Th78:
   H1 is Subgroup of H1 "\/" H2 & H2 is Subgroup of H1 "\/" H2
-proof H1 "\/" H2 = H2 "\/" H1;
+proof
+  H1 "\/" H2 = H2 "\/" H1;
   hence thesis by Lm4;
 end;
 
 theorem Th79:
-  for H2 being strict Subgroup of G holds
-  H1 is Subgroup of H2 iff H1 "\/" H2 = H2
+  for H2 being strict Subgroup of G holds H1 is Subgroup of H2 iff
+  H1 "\/" H2 = H2
 proof
   let H2 be strict Subgroup of G;
   thus H1 is Subgroup of H2 implies H1 "\/" H2 = H2
   proof
-    assume H1 is Subgroup of H2;
-    then the carrier of H1 c= the carrier of H2 &
-    the carrier of H1 = carr H1 & carr H2 = the carrier of H2
-    by GROUP_2:def 5;
+    assume
+    H1 is Subgroup of H2;
+    then the carrier of H1 c= the carrier of H2 by GROUP_2:def 5;
     hence H1 "\/" H2 = gr carr H2 by XBOOLE_1:12
       .= H2 by Th40;
   end;
@@ -2507,39 +2702,39 @@ end;
 
 theorem
   H1 is Subgroup of H2 implies H1 is Subgroup of H2 "\/" H3
-proof H2 is Subgroup of H2 "\/" H3 by Th78;
+proof
+  H2 is Subgroup of H2 "\/" H3 by Th78;
   hence thesis by GROUP_2:65;
 end;
 
 theorem
-  for H3 being strict Subgroup of G holds
-  H1 is Subgroup of H3 & H2 is Subgroup of H3 implies H1 "\/"
-  H2 is Subgroup of H3
+  for H3 being strict Subgroup of G holds H1 is Subgroup of H3 & H2 is
+  Subgroup of H3 implies H1 "\/" H2 is Subgroup of H3
 proof
   let H3 be strict Subgroup of G;
-  assume that
-A1: H1 is Subgroup of H3 and
-A2: H2 is Subgroup of H3;
+  assume
+A1: H1 is Subgroup of H3 & H2 is Subgroup of H3;
   now
     let a;
-    assume a in H1 "\/" H2;
+    assume
+    a in H1 "\/" H2;
     then consider F,I such that
-A3: len F = len I & rng F c= carr H1 \/ carr H2 & a = Product(F |^ I) by Th37;
-    the carrier of H1 c= the carrier of H3 &
-    the carrier of H2 c= the carrier of H3 &
-    the carrier of H1 = carr H1 & the carrier of H2 = carr H2 &
-    the carrier of H3 = carr H3 by A1,A2,GROUP_2:def 5;
+A2: len F = len I and
+A3: rng F c= carr H1 \/ carr H2 and
+A4: a = Product(F |^ I) by Th37;
+    the carrier of H1 c= the carrier of H3 & the carrier of H2 c= the
+    carrier of H3 by A1,GROUP_2:def 5;
     then carr H1 \/ carr H2 c= carr H3 by XBOOLE_1:8;
     then rng F c= carr H3 by A3,XBOOLE_1:1;
-    then a in gr carr H3 by A3,Th37;
+    then a in gr carr H3 by A2,A4,Th37;
     hence a in H3 by Th40;
   end;
   hence thesis by GROUP_2:67;
 end;
 
 theorem
-  for H3,H2 being strict Subgroup of G holds
-  H1 is Subgroup of H2 implies H1 "\/" H3 is Subgroup of H2 "\/" H3
+  for H3,H2 being strict Subgroup of G holds H1 is Subgroup of H2
+  implies H1 "\/" H3 is Subgroup of H2 "\/" H3
 proof
   let H3,H2 be strict Subgroup of G;
   assume
@@ -2556,8 +2751,9 @@ end;
 
 theorem
   H1 /\ H2 is Subgroup of H1 "\/" H2
-proof H1 /\ H2 is Subgroup of H1 & H1 is Subgroup of H1 "\/" H2
-  by Th78,GROUP_2:106;
+proof
+  H1 /\ H2 is Subgroup of H1 & H1 is Subgroup of H1 "\/" H2 by Th78,
+  GROUP_2:106;
   hence thesis by GROUP_2:65;
 end;
 
@@ -2578,12 +2774,12 @@ proof
 end;
 
 theorem
-  for H1,H2 being strict Subgroup of G holds H1 "\/" H2 = H2 iff H1 /\ H2 = H1
+  for H1,H2 being strict Subgroup of G holds H1 "\/" H2 = H2 iff H1 /\
+  H2 = H1
 proof
   let H1,H2 be strict Subgroup of G;
-  (H1 "\/" H2 = H2 iff H1 is Subgroup of H2) &
-  (H1 /\ H2 = H1 iff H1 is Subgroup of H2) by Th79,GROUP_2:107;
-  hence thesis;
+  H1 "\/" H2 = H2 iff H1 is Subgroup of H2 by Th79;
+  hence thesis by GROUP_2:107;
 end;
 
 reserve S1,S2 for Element of Subgroups G;
@@ -2592,11 +2788,12 @@ definition
   let G;
   func SubJoin G -> BinOp of Subgroups G means
   :Def11:
-  for H1,H2 being strict Subgroup of G holds it.(H1,H2) = H1 "\/" H2;
+  for H1,H2 being strict
+  Subgroup of G holds it.(H1,H2) = H1 "\/" H2;
   existence
   proof
-    defpred P[set,set,set] means
-    for H1,H2 st $1 = H1 & $2 = H2 holds $3 = H1 "\/" H2;
+    defpred P[set,set,set] means for H1,H2 st $1 = H1 & $2 = H2 holds $3 = H1
+    "\/" H2;
 A1: for S1,S2 ex B being Element of Subgroups G st P[S1,S2,B]
     proof
       let S1,S2;
@@ -2606,27 +2803,27 @@ A1: for S1,S2 ex B being Element of Subgroups G st P[S1,S2,B]
       thus thesis;
     end;
     consider o being BinOp of Subgroups G such that
-a1: for a,b being Element of Subgroups G holds P[a,b,o.(a,b)]
-    from BINOP_1:sch 3(A1);
+A2: for a,b being Element of Subgroups G holds P[a,b,o.(a,b)] from
+    BINOP_1:sch 3(A1);
     take o;
     let H1,H2 be strict Subgroup of G;
     H1 in Subgroups G & H2 in Subgroups G by GROUP_3:def 1;
-    hence thesis by a1;
+    hence thesis by A2;
   end;
   uniqueness
   proof
     let o1,o2 be BinOp of Subgroups(G);
     assume that
-A2: for H1,H2 be strict Subgroup of G holds o1.(H1,H2) = H1 "\/" H2 and
-A3: for H1,H2 be strict Subgroup of G holds o2.(H1,H2) = H1 "\/" H2;
+A3: for H1,H2 be strict Subgroup of G holds o1.(H1,H2) = H1 "\/" H2 and
+A4: for H1,H2 be strict Subgroup of G holds o2.(H1,H2) = H1 "\/" H2;
     now
       let x,y be set;
       assume
-A4:   x in Subgroups(G) & y in Subgroups(G);
+A5:   x in Subgroups(G) & y in Subgroups(G);
       then reconsider A = x, B = y as Element of Subgroups(G);
-      reconsider H1 = x, H2 = y as strict Subgroup of G by A4,GROUP_3:def 1;
-      o1.(A,B) = H1 "\/" H2 & o2.(A,B) = H1 "\/" H2 by A2,A3;
-      hence o1.(x,y) = o2.(x,y);
+      reconsider H1 = x, H2 = y as strict Subgroup of G by A5,GROUP_3:def 1;
+      o1.(A,B) = H1 "\/" H2 by A3;
+      hence o1.(x,y) = o2.(x,y) by A4;
     end;
     hence thesis by BINOP_1:1;
   end;
@@ -2636,11 +2833,12 @@ definition
   let G;
   func SubMeet G -> BinOp of Subgroups G means
   :Def12:
-  for H1,H2 being strict Subgroup of G holds it.(H1,H2) = H1 /\ H2;
+  for H1,H2 being strict
+  Subgroup of G holds it.(H1,H2) = H1 /\ H2;
   existence
   proof
-    defpred P[set,set,set] means
-    for H1,H2 st $1 = H1 & $2 = H2 holds $3 = H1 /\ H2;
+    defpred P[set,set,set] means for H1,H2 st $1 = H1 & $2 = H2 holds $3 = H1
+    /\ H2;
 A1: for S1,S2 ex B being Element of Subgroups G st P[S1,S2,B]
     proof
       let S1,S2;
@@ -2650,36 +2848,36 @@ A1: for S1,S2 ex B being Element of Subgroups G st P[S1,S2,B]
       thus thesis;
     end;
     consider o being BinOp of Subgroups G such that
-a1: for a,b being Element of Subgroups G holds P[a,b,o.(a,b)]
-    from BINOP_1:sch 3(A1);
+A2: for a,b being Element of Subgroups G holds P[a,b,o.(a,b)] from
+    BINOP_1:sch 3(A1);
     take o;
     let H1,H2 be strict Subgroup of G;
     H1 in Subgroups G & H2 in Subgroups G by GROUP_3:def 1;
-    hence thesis by a1;
+    hence thesis by A2;
   end;
   uniqueness
   proof
     let o1,o2 be BinOp of Subgroups(G);
     assume that
-A2: for H1,H2 be strict Subgroup of G holds o1.(H1,H2) = H1 /\ H2 and
-A3: for H1,H2 be strict Subgroup of G holds o2.(H1,H2) = H1 /\ H2;
+A3: for H1,H2 be strict Subgroup of G holds o1.(H1,H2) = H1 /\ H2 and
+A4: for H1,H2 be strict Subgroup of G holds o2.(H1,H2) = H1 /\ H2;
     now
       let x,y be set;
       assume
-A4:   x in Subgroups(G) & y in Subgroups(G);
+A5:   x in Subgroups(G) & y in Subgroups(G);
       then reconsider A = x, B = y as Element of Subgroups(G);
-      reconsider H1 = x, H2 = y as strict Subgroup of G by A4,GROUP_3:def 1;
-      o1.(A,B) = H1 /\ H2 & o2.(A,B) = H1 /\ H2 by A2,A3;
-      hence o1.(x,y) = o2.(x,y);
+      reconsider H1 = x, H2 = y as strict Subgroup of G by A5,GROUP_3:def 1;
+      o1.(A,B) = H1 /\ H2 by A3;
+      hence o1.(x,y) = o2.(x,y) by A4;
     end;
     hence thesis by BINOP_1:1;
   end;
 end;
 
-Lm6: 
-LattStr (# Subgroups G, SubJoin G, SubMeet G #) is Lattice &
-LattStr (# Subgroups G, SubJoin G, SubMeet G #) is 0_Lattice &
-LattStr (# Subgroups G, SubJoin G, SubMeet G #) is 1_Lattice
+Lm6: LattStr (# Subgroups G, SubJoin G, SubMeet G #) is Lattice & LattStr (#
+  Subgroups G, SubJoin G, SubMeet G #) is 0_Lattice & LattStr (# Subgroups G,
+  SubJoin G, SubMeet G #) is 1_Lattice
+
 proof
   set L = LattStr (# Subgroups G, SubJoin G, SubMeet G #);
 A1: now
@@ -2687,61 +2885,67 @@ A1: now
     let H1,H2 be strict Subgroup of G;
     assume
 A2: A = H1 & B = H2;
-    thus A "/\" B = SubMeet(G).(A,B) by LATTICES:def 2
-      .= H1 /\ H2 by A2,Def12;
+    thus A "\/" B = SubJoin(G).(A,B) by LATTICES:def 1
+      .= H1 "\/" H2 by A2,Def11;
   end;
 A3: now
     let A,B be Element of L;
     let H1,H2 be strict Subgroup of G;
     assume
 A4: A = H1 & B = H2;
-    thus A "\/" B = SubJoin(G).(A,B) by LATTICES:def 1
-      .= H1 "\/" H2 by A4,Def11;
+    thus A "/\" B = SubMeet(G).(A,B) by LATTICES:def 2
+      .= H1 /\ H2 by A4,Def12;
   end;
   now
     let A,B,C be Element of L;
-    reconsider H1 = A, H2 = B, H3 = C as strict Subgroup of G
-    by GROUP_3:def 1;
-    thus A "\/" B = H1 "\/" H2 by A3
+
+    reconsider H1 = A, H2 = B, H3 = C as strict Subgroup of G by GROUP_3:def 1;
+
+A5: H2 "\/" H3 = B "\/" C by A1;
+    thus A "\/" B = H1 "\/" H2 by A1
       .= H2 "\/" H1
-      .= B "\/" A by A3;
-A5: H1 "\/" H2 = A "\/" B & H2 "\/" H3 = B "\/" C by A3;
-    hence A "\/" B "\/" C = H1 "\/" H2 "\/" H3 by A3
+      .= B "\/" A by A1;
+A6: H1 "\/" H2 = A "\/" B by A1;
+    hence A "\/" B "\/" C = H1 "\/" H2 "\/" H3 by A1
       .= H1 "\/" (H2 "\/" H3) by Th75
-      .= A "\/" (B "\/" C) by A3,A5;
-A6: H1 /\ H2 = A "/\" B by A1;
-    hence (A "/\" B) "\/" B = (H1 /\ H2) "\/" H2 by A3
+      .= A "\/" (B "\/" C) by A1,A5;
+A7: H1 /\ H2 = A "/\" B by A3;
+    hence (A "/\" B) "\/" B = (H1 /\ H2) "\/" H2 by A1
       .= B by Th84;
-    thus A "/\" B = H2 /\ H1 by A1
-      .= B "/\" A by A1;
-A7: H2 /\ H3 = B "/\" C by A1;
-    thus A "/\" B "/\" C = H1 /\ H2 /\ H3 by A1,A6
+A8: H2 /\ H3 = B "/\" C by A3;
+    thus A "/\" B = H2 /\ H1 by A3
+      .= B "/\" A by A3;
+    thus A "/\" B "/\" C = H1 /\ H2 /\ H3 by A3,A7
       .= H1 /\ (H2 /\ H3) by GROUP_2:102
-      .= A "/\" (B "/\" C) by A1,A7;
-    thus A "/\" (A "\/" B) = H1 /\ (H1 "\/" H2) by A1,A5
+      .= A "/\" (B "/\" C) by A3,A8;
+    thus A "/\" (A "\/" B) = H1 /\ (H1 "\/" H2) by A3,A6
       .= A by Th85;
   end;
+
   then
-A8: L is join-commutative join-associative meet-absorbing
-  meet-commutative meet-associative join-absorbing
-  by LATTICES:def 4,def 5,def 6,def 7,def 8,def 9;
+A9: L is join-commutative join-associative meet-absorbing meet-commutative
+  meet-associative join-absorbing by LATTICES:def 4,def 5,def 6,def 7,def 8,
+  def 9;
+
   hence L is Lattice;
-  reconsider L as Lattice by A8;
+  reconsider L as Lattice by A9;
   reconsider E = (1).G as Element of L by GROUP_3:def 1;
   now
     let A be Element of L;
     reconsider H = A as strict Subgroup of G by GROUP_3:def 1;
-    thus E "/\" A = (1).G /\ H by A1
+    thus E "/\" A = (1).G /\ H by A3
       .= E by GROUP_2:103;
     hence A "/\" E = E;
   end;
-  hence LattStr (# Subgroups G, SubJoin G, SubMeet G #) is 0_Lattice
-  by LATTICES:def 13;
+
+  hence LattStr (# Subgroups G, SubJoin G, SubMeet G #) is 0_Lattice by
+  LATTICES:def 13;
+
   reconsider F = (Omega).G as Element of L by GROUP_3:def 1;
   now
     let A be Element of L;
     reconsider H = A as strict Subgroup of G by GROUP_3:def 1;
-    thus F "\/" A = (Omega).G "\/" H by A3
+    thus F "\/" A = (Omega).G "\/" H by A1
       .= F by Th77;
     hence A "\/" F = F;
   end;
@@ -2751,7 +2955,8 @@ end;
 definition
   let G be Group;
   func lattice G -> strict Lattice equals
-  LattStr (# Subgroups G, SubJoin G, SubMeet G #);
+  LattStr (# Subgroups G, SubJoin G,
+    SubMeet G #);
   coherence by Lm6;
 end;
 

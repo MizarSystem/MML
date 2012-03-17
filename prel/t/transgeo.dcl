@@ -7,6 +7,7 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="TARSKI"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="ORDINAL1"/>
@@ -29,9 +30,9 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="34" value="false"/>
-<Adjective nr="88"/>
-<Adjective nr="93"/>
+<Adjective nr="36" value="false"/>
+<Adjective nr="89"/>
+<Adjective nr="94"/>
 </Cluster>
 </RCluster>
 </Registrations>

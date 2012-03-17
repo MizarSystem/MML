@@ -12,12 +12,12 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="NAT_1"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="VALUED_0"/>
-<ArticleID name="PARTFUN1"/>
 </Signature>
 <RCluster aid="REAL_3" nr="1">
 <ArgTypes/>
@@ -42,15 +42,15 @@
 <Adjective nr="10" value="false"/>
 <Adjective nr="22">
 <Func kind="K" nr="48"/>
+</Adjective>
+<Adjective nr="23">
+<Func kind="K" nr="48"/>
 <Func kind="K" nr="44"/>
 </Adjective>
-<Adjective nr="26"/>
 <Adjective nr="27"/>
 <Adjective nr="28"/>
-<Adjective nr="30"/>
-<Adjective nr="38">
-<Func kind="K" nr="48"/>
-</Adjective>
+<Adjective nr="29"/>
+<Adjective nr="31"/>
 </Cluster>
 </RCluster>
 <FCluster aid="REAL_3" nr="1">
@@ -61,13 +61,13 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="99">
+<Func kind="K" nr="107">
 <LocusVar nr="1"/>
 <Func kind="K" nr="49"/>
 </Func>
 <Cluster>
 <Adjective nr="10"/>
-<Adjective nr="25"/>
+<Adjective nr="26"/>
 </Cluster>
 </FCluster>
 <FCluster aid="REAL_3" nr="2">
@@ -78,13 +78,13 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="100">
+<Func kind="K" nr="108">
 <LocusVar nr="1"/>
 <Func kind="K" nr="49"/>
 </Func>
 <Cluster>
 <Adjective nr="10"/>
-<Adjective nr="25"/>
+<Adjective nr="26"/>
 </Cluster>
 </FCluster>
 <FCluster aid="REAL_3" nr="3">
@@ -95,13 +95,13 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="99">
+<Func kind="K" nr="107">
 <Func kind="K" nr="49"/>
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="10"/>
-<Adjective nr="25"/>
+<Adjective nr="26"/>
 </Cluster>
 </FCluster>
 <FCluster aid="REAL_3" nr="4">
@@ -112,13 +112,13 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="100">
+<Func kind="K" nr="108">
 <Func kind="K" nr="49"/>
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="10"/>
-<Adjective nr="25"/>
+<Adjective nr="26"/>
 </Cluster>
 </FCluster>
 <FCluster aid="REAL_3" nr="5">
@@ -155,12 +155,12 @@
 </FCluster>
 <FCluster aid="REAL_3" nr="7">
 <ArgTypes/>
-<Func kind="K" nr="95">
+<Func kind="K" nr="103">
 <Func kind="K" nr="49"/>
 </Func>
 <Cluster>
 <Adjective nr="10"/>
-<Adjective nr="25"/>
+<Adjective nr="26"/>
 </Cluster>
 </FCluster>
 </Registrations>

@@ -10,19 +10,20 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
+<ArticleID name="XREAL_0"/>
+<ArticleID name="INT_1"/>
+<ArticleID name="RAT_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="FINSEQ_2"/>
-<ArticleID name="XREAL_0"/>
+<ArticleID name="CARD_3"/>
 <ArticleID name="NAT_1"/>
-<ArticleID name="INT_1"/>
-<ArticleID name="FINSEQ_3"/>
-<ArticleID name="RAT_1"/>
+<ArticleID name="FINSEQ_2"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_1"/>
@@ -31,13 +32,11 @@
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="GROUP_1"/>
 <ArticleID name="FINSUB_1"/>
-<ArticleID name="RELAT_2"/>
-<ArticleID name="PARTFUN1"/>
 <ArticleID name="VECTSP_1"/>
-<ArticleID name="CARD_3"/>
 <ArticleID name="FVSUM_1"/>
-<ArticleID name="MATRIX_1"/>
-<ArticleID name="MATRLIN"/>
+<ArticleID name="WELLORD1"/>
+<ArticleID name="RELAT_2"/>
+<ArticleID name="PRE_POLY"/>
 <ArticleID name="POLYNOM1"/>
 </Signature>
 <FCluster aid="POLYNOM6" nr="1">
@@ -95,27 +94,27 @@
 </Typ>
 <Typ kind="G" nr="11">
 <Cluster>
-<Adjective nr="62" value="false"/>
-<Adjective nr="67" value="false"/>
-<Adjective nr="86"/>
-<Adjective nr="111"/>
-<Adjective nr="112"/>
-<Adjective nr="113"/>
+<Adjective nr="69" value="false"/>
+<Adjective nr="74" value="false"/>
+<Adjective nr="92"/>
+<Adjective nr="117"/>
 <Adjective nr="118"/>
-<Adjective nr="138"/>
-<Adjective nr="139"/>
+<Adjective nr="119"/>
+<Adjective nr="124"/>
+<Adjective nr="135"/>
+<Adjective nr="136"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="338">
+<Func kind="K" nr="322">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="62" value="false"/>
-<Adjective nr="67" value="false"/>
-<Adjective nr="109"/>
-<Adjective nr="139"/>
+<Adjective nr="69" value="false"/>
+<Adjective nr="74" value="false"/>
+<Adjective nr="115"/>
+<Adjective nr="136"/>
 </Cluster>
 </FCluster>
 </Registrations>

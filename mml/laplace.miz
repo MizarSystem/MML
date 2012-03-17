@@ -16,14 +16,14 @@ environ
       FINSET_1, RELAT_1, RELSET_1, FUNCT_1, PARTFUN1, FUNCT_2, FINSEQ_1,
       BINOP_1, STRUCT_0, ALGSTR_0, GROUP_1, VECTSP_1, SETWISEO, SETWOP_2,
       FINSEQ_2, MATRIX_1, FINSUB_1, MATRIX_2, NAT_1, FVSUM_1, FINSOP_1,
-      BINARITH, MATRIX_3, CARD_1, FINSEQ_7, NEWTON, MATRIX_7, FINSEQ_3,
-      MATRIX11, MATRIX_6, NAT_D;
+      MATRIX_3, CARD_1, FINSEQ_7, NEWTON, MATRIX_7, FINSEQ_3, MATRIX11,
+      MATRIX_6, NAT_D;
  constructors RELAT_2, PARTFUN1, SETWISEO, FINSOP_1, SETWOP_2, ALGSTR_1,
       FVSUM_1, BINOP_1, XXREAL_0, FINSEQ_4, BINARITH, FINSEQ_7, WELLORD2,
       NEWTON, MATRIX_6, MATRIX_7, MATRIX11, NAT_D, BINOP_2, RELSET_1;
  registrations FUNCT_1, FINSUB_1, FINSET_1, STRUCT_0, FVSUM_1, MATRIX_2,
       VECTSP_1, FUNCT_2, PARTFUN1, XBOOLE_0, ORDINAL1, XXREAL_0, NAT_1, INT_1,
-      RELAT_1, CARD_1, MATRIX_9, MATRIX11, XCMPLX_0, RELSET_1, FINSEQ_2;
+      RELAT_1, CARD_1, MATRIX11, XCMPLX_0, RELSET_1, FINSEQ_2, FINSEQ_1;
  requirements ARITHM, NUMERALS, REAL, BOOLE, SUBSET;
  definitions FINSEQ_2, FINSEQ_1, TARSKI, MATRIX_1, MATRIX_3, FVSUM_1, MATRIX_2,
       MATRIX_7, MATRIX11, RELAT_1, ALGSTR_0;
@@ -40,24 +40,30 @@ begin :: Preliminaries
 reserve x,y for set,
   N for Element of NAT,
   c,i,j,k,l,m,n for Nat,
-  D for non empty set,
+  D for non
+  empty set,
   s for Element of 2Set Seg (n+2),
-  p, q for Element of Permutations(n),
+  p, q for Element of Permutations(n)
+  ,
   p1, q1 for Element of Permutations(n+1),
-  p2, q2 for Element of Permutations(n+2),
+  p2, q2 for Element of Permutations(n
+  +2),
   K for Field,
   a, b for Element of K,
   f for FinSequence of K,
-  A for (Matrix of K),
+  A for (Matrix
+  of K),
   AD for Matrix of n,m,D,
   pD for FinSequence of D,
   M for Matrix of n,K;
 
 theorem Th1:
-  for f be FinSequence, i be Nat st i in dom f holds len Del(f,i) = len f -' 1
+  for f be FinSequence, i be Nat st i in dom f holds len Del(f,i) =
+  len f -' 1
 proof
   let f be FinSequence, i be Nat;
-  assume i in dom f;
+  assume
+  i in dom f;
   then ex m be Nat st len f = m + 1 & len Del(f,i) = m by FINSEQ_3:113;
   hence thesis by NAT_D:34;
 end;
@@ -78,23 +84,30 @@ theorem Th3:
   j in Seg width A implies width DelCol(A,j) = width A-'1
 proof
   set DC=DelCol(A,j);
+A1: len DC = len A by MATRIX_2:def 6;
   assume
-A1: j in Seg width A;
+A2: j in Seg width A;
   then
-A2: len A > 0 by FINSEQ_1:4,MATRIX_1:def 4;
-A3: len DC = len A by MATRIX_2:def 6;
+X:  Seg width A <> {} by FINSEQ_1:4,MATRIX_1:def 4;
+  then width A <>0;
+  then len A > 0 by FINSEQ_1:4,MATRIX_1:def 4;
   then consider t being FinSequence such that
-A4: t in rng DC & len t = width DC by A2,MATRIX_1:def 4;
+A3: t in rng DC and
+A4: len t = width DC by A1,MATRIX_1:def 4;
   consider k' be set such that
-A5: k' in dom DelCol(A,j) & DC.k' = t by A4,FUNCT_1:def 5;
+A5: k' in dom DelCol(A,j) and
+A6: DC.k' = t by A3,FUNCT_1:def 5;
   k' in Seg len DC by A5,FINSEQ_1:def 3;
   then consider k being Element of NAT such that
-A6: k'=k & 1<=k & k<=len DC;
-A7: k in dom A by A3,A5,A6,FINSEQ_3:31;
-A8: len Line(A,k)=width A by MATRIX_1:def 8;
-  then t=Del(Line(A,k),j) & dom Line(A,k)=Seg (width A)
-  by A5,A6,A7,FINSEQ_1:def 3,MATRIX_2:def 6;
-  hence thesis by A1,A4,A8,Th1;
+A7: k'=k and
+  1<=k and
+  k<=len DC;
+  k in dom A by A1,A5,A7,FINSEQ_3:31;
+  then
+A8: t=Del(Line(A,k),j) by A6,A7,MATRIX_2:def 6;
+A9: len Line(A,k)=width A by MATRIX_1:def 8;
+  then dom Line(A,k)=Seg (width A) by FINSEQ_1:def 3;
+  hence thesis by A2,A4,A9,A8,Th1;
 end;
 
 theorem Th4:
@@ -104,27 +117,31 @@ proof
   assume
 A1: len A>1;
   per cases;
-  suppose i in dom A;
+  suppose
+    i in dom A;
     then consider m be Nat such that
-A2: len A = m + 1 & len Del(A,i) = m by FINSEQ_3:113;
-A3: m>=1 by A1,A2,NAT_1:13;
-    then m in dom Del(A,i) by A2,FINSEQ_3:27;
+A2: len A = m + 1 and
+A3: len Del(A,i) = m by FINSEQ_3:113;
+A4: m>=1 by A1,A2,NAT_1:13;
     then
-A4: DelLine(A,i).m in rng Del(A,i)&
-    DelLine(A,i).m=Line(DelLine(A,i),m) & rng Del(A,i) c= rng A
-    by FINSEQ_3:115,FUNCT_1:def 5,MATRIX_2:18;
-    then Line(DelLine(A,i),m) in rng A & A is Matrix of len A,width A,K
-    by A1,MATRIX_1:20;
-    then len Line(DelLine(A,i),m)=width A by MATRIX_1:def 3;
-    hence thesis by A2,A3,A4,MATRIX_1:def 4;
+A5: m in dom Del(A,i) by A3,FINSEQ_3:27;
+    then
+A6: DelLine(A,i).m in rng Del(A,i) by FUNCT_1:def 5;
+A7: rng Del(A,i) c= rng A by FINSEQ_3:115;
+A8: DelLine(A,i).m=Line(DelLine(A,i),m) by A5,MATRIX_2:18;
+    A is Matrix of len A,width A,K by A1,MATRIX_1:20;
+    then len Line(DelLine(A,i),m)=width A by A6,A8,A7,MATRIX_1:def 3;
+    hence thesis by A3,A4,A6,A8,MATRIX_1:def 4;
   end;
-  suppose not i in dom A;
+  suppose
+    not i in dom A;
     hence thesis by FINSEQ_3:113;
   end;
 end;
 
 theorem Th5:
-  for i being Nat st j in Seg width M holds width Deleting(M,i,j) = n-' 1
+  for i being Nat st j in Seg width M holds width Deleting(M,i,j) =
+  n-' 1
 proof
   let i be Nat;
   assume
@@ -132,20 +149,27 @@ A1: j in Seg width M;
   per cases;
   suppose
 A2: len M<=1 & i in dom M;
-    len M > 0 by A1,FINSEQ_1:4,MATRIX_1:def 4;
+X:  Seg width M <> {} by A1;
+    then width M <> {} by A1,FINSEQ_1:4,MATRIX_1:def 4,X;
+    then len M > 0 by A1,FINSEQ_1:4,MATRIX_1:def 4,X;
     then
-A3: len M=1 & len M=n & len Deleting(M,i,j)=n-'1
-    by A2,Th2,MATRIX_1:25,NAT_1:26;
-    then len Deleting(M,i,j)=0 by XREAL_1:234;
-    hence thesis by A3,MATRIX_1:def 4;
+A3: len M=1 by A2,NAT_1:26;
+A4: len Deleting(M,i,j)=n-'1 by A2,Th2;
+    len M=n by MATRIX_1:25;
+    then len Deleting(M,i,j)=0 by A3,A4,XREAL_1:234;
+    hence thesis by A4,MATRIX_1:def 4;
   end;
-  suppose len M>1;
-    then width M=width DelLine(M,i) & width M=n by Th4,MATRIX_1:25;
-    hence thesis by A1,Th3;
+  suppose
+A5: len M>1;
+A6: width M=n by MATRIX_1:25;
+    width M=width DelLine(M,i) by A5,Th4;
+    hence thesis by A1,A6,Th3;
   end;
-  suppose not i in dom M;
-    then DelLine(M,i)=M & width M=n by FINSEQ_3:113,MATRIX_1:25;
-    hence thesis by A1,Th3;
+  suppose
+A7: not i in dom M;
+A8: width M=n by MATRIX_1:25;
+    DelLine(M,i)=M by A7,FINSEQ_3:113;
+    hence thesis by A1,A8,Th3;
   end;
 end;
 
@@ -155,7 +179,8 @@ definition
   let g be Element of G, i be Nat;
   redefine func B.(g,i) -> Element of G;
   coherence
-  proof reconsider i as Element of NAT by ORDINAL1:def 13;
+  proof
+    reconsider i as Element of NAT by ORDINAL1:def 13;
     B.(g,i) is Element of G;
     hence thesis;
   end;
@@ -168,19 +193,21 @@ proof
   reconsider N=n as Element of NAT by ORDINAL1:def 13;
   set X=finSeg N;
   set PER={F where F is Function of X,X:F is Permutation of X};
-A1: PER c= P
+A1: P c= PER
   proof
     let x;
-    assume x in PER;
-    then ex F be Function of X,X st x=F & F is Permutation of X;
-    hence thesis by MATRIX_2:def 11;
-  end;
-  P c= PER
-  proof
-    let x;
-    assume x in P;
+    assume
+    x in P;
     then x is Permutation of X by MATRIX_2:def 11;
     hence thesis;
+  end;
+  PER c= P
+  proof
+    let x;
+    assume
+    x in PER;
+    then ex F be Function of X,X st x=F & F is Permutation of X;
+    hence thesis by MATRIX_2:def 11;
   end;
   then P=PER by A1,XBOOLE_0:def 10;
   hence card P = card X! by CARD_FIN:8
@@ -188,57 +215,69 @@ A1: PER c= P
 end;
 
 theorem Th7:
-  for i,j st i in Seg (n+1) & j in Seg (n+1) holds card {p1: p1.i = j} = n!
+  for i,j st i in Seg (n+1) & j in Seg (n+1) holds card {p1: p1.i =
+  j} = n!
 proof
   let i,j such that
-A1: i in Seg (n+1) & j in Seg (n+1);
+A1: i in Seg (n+1) and
+A2: j in Seg (n+1);
   reconsider N = n as Element of NAT by ORDINAL1:def 13;
   set n1=N+1;
   set X=finSeg n1;
+  set Y=X\{j};
+A3: Y\/{j}=X by A2,ZFMISC_1:140;
+  set X'=X\{i};
   set P1=Permutations n1;
   set F={p where p is Element of P1:p.i=j};
-  set X'=X\{i};
-  set Y=X\{j};
   set F'={f where f is Function of X'\/{i},Y\/{j}:f is one-to-one & f.i=j};
-A2: X'\/{i}=X & Y\/{j}=X & not i in X' & not j in Y by A1,ZFMISC_1:64,140;
-  then
-A3: card X=card X'+1 & card X=card Y+1 & card X=n1 by CARD_2:54,FINSEQ_1:78;
-A4: F' c= F
+A4: X'\/{i}=X by A1,ZFMISC_1:140;
+A5: F' c= F
   proof
     let x;
-    assume x in F';
+    assume
+    x in F';
     then consider f be Function of X,X such that
-A5: f=x & f is one-to-one & f.i=j by A2;
+A6: f=x and
+A7: f is one-to-one and
+A8: f.i=j by A4,A3;
     card X=card X;
-    then f is onto by A5,STIRL2_1:70;
-    then f is Permutation of X by A5;
-    then f in P1 by MATRIX_2:def 11;
-    hence thesis by A5;
+    then f is onto by A7,STIRL2_1:70;
+    then f in P1 by A7,MATRIX_2:def 11;
+    hence thesis by A6,A8;
   end;
   F c= F'
   proof
     let x;
-    assume x in F;
+    assume
+    x in F;
     then consider p be Element of P1 such that
-A6: x=p & p.i=j;
+A9: x=p and
+A10: p.i=j;
     reconsider p as Permutation of X by MATRIX_2:def 11;
-    p is one-to-one & p.i=j by A6;
-    hence thesis by A2,A6;
+    p.i=j by A10;
+    hence thesis by A4,A3,A9;
   end;
   then
-A7: F=F' by A4,XBOOLE_0:def 10;
-  Y is empty implies X' is empty by A3;
-  hence card {p1: p1.i = j}
-  = card {f where f is Function of X',Y:f is one-to-one} by A2,A7,CARD_FIN:5
-    .= card Y!/((card Y-'card X')!) by A3,CARD_FIN:7
-    .= card Y!/1 by A3,NEWTON:18,XREAL_1:234
-    .= n! by A3;
+A11: F=F' by A5,XBOOLE_0:def 10;
+A12: card X=n1 by FINSEQ_1:78;
+A13: not j in Y by ZFMISC_1:64;
+  then
+A14: card X=card Y+1 by A3,CARD_2:54;
+A15: not i in X' by ZFMISC_1:64;
+  then
+A16: card X=card X'+1 by A4,CARD_2:54;
+  then Y is empty implies X' is empty by A14;
+  hence card {p1: p1.i = j} = card {f where f is Function of X',Y:f is
+  one-to-one} by A15,A13,A11, CARD_FIN:5
+    .= card Y!/((card Y-'card X')!) by A16,A14,CARD_FIN:7
+    .= card Y!/1 by A16,A14,NEWTON:18,XREAL_1:234
+    .= n! by A14,A12;
 end;
 
 theorem Th8:
-  for K be Fanoian Field for p2 for X,Y be Element of Fin 2Set Seg (n+2)
-  st Y={s:s in X & Part_sgn(p2,K).s = -1_K} holds
-  (the multF of K) $$ (X,Part_sgn(p2,K)) = power(K).(-1_K,card Y)
+  for K be Fanoian Field for p2 for X,Y be Element of Fin 2Set Seg
+  (n+2) st Y={s:s in X & Part_sgn(p2,K).s = -1_K} holds (the multF of K) $$ (X,
+  Part_sgn(p2,K)) = power(K).(-1_K,card Y)
 proof
   let K be Fanoian Field;
   let p2;
@@ -246,341 +285,443 @@ proof
   let X,Y be Element of Fin 2Set Seg n2 such that
 A1: Y={s:s in X & Part_sgn(p2,K).s = -1_K};
   reconsider ID = id Seg n2 as Element of Permutations(n2) by MATRIX_2:def 11;
+  set Y'= {s:s in X & Part_sgn(p2,K).s <> Part_sgn(ID,K).s};
 A2: for x st x in X holds Part_sgn(ID,K).x = 1_K
   proof
-    let x such that
-A3: x in X;
-    X c= 2Set Seg n2 by FINSUB_1:def 5;
+A3: X c= 2Set Seg n2 by FINSUB_1:def 5;
+    let x;
+    assume
+    x in X;
     then consider i,j be Nat such that
-A4: i in Seg n2 & j in Seg n2 & i < j & x = {i,j} by A3,MATRIX11:1;
-    ID.i=i & ID.j=j by A4,FUNCT_1:34;
-    hence thesis by A4,MATRIX11:def 1;
+A4: i in Seg n2 and
+A5: j in Seg n2 and
+A6: i < j and
+A7: x = {i,j} by A3,MATRIX11:1;
+A8: ID.j=j by A5,FUNCT_1:34;
+    ID.i=i by A4,FUNCT_1:34;
+    hence thesis by A4,A5,A6,A7,A8,MATRIX11:def 1;
   end;
-  set Y'= {s:s in X & Part_sgn(p2,K).s <> Part_sgn(ID,K).s};
-A5: Y c= Y'
+A9: Y' c= Y
   proof
     let y;
-    assume y in Y;
+    assume
+    y in Y';
     then consider s such that
-A6: s=y & s in X & Part_sgn(p2,K).s = -1_K by A1;
-    Part_sgn(ID,K).s=1_K & 1_K<>-1_K by A2,A6,MATRIX11:22;
-    hence thesis by A6;
+A10: y=s and
+A11: s in X and
+A12: Part_sgn(p2,K).s <> Part_sgn(ID,K).s;
+    Part_sgn(ID,K).s=1_K by A2,A11;
+    then Part_sgn(p2,K).s =-1_K by A12,MATRIX11:5;
+    hence thesis by A1,A10,A11;
   end;
-  Y' c= Y
+  Y c= Y'
   proof
     let y;
-    assume y in Y';
+A13: 1_K<>-1_K by MATRIX11:22;
+    assume
+    y in Y;
     then consider s such that
-A7: y=s & s in X & Part_sgn(p2,K).s <> Part_sgn(ID,K).s;
-    Part_sgn(ID,K).s=1_K by A2,A7;
-    then Part_sgn(p2,K).s =-1_K by A7,MATRIX11:5;
-    hence thesis by A1,A7;
+A14: s=y and
+A15: s in X and
+A16: Part_sgn(p2,K).s = -1_K by A1;
+    Part_sgn(ID,K).s=1_K by A2,A15;
+    hence thesis by A14,A15,A16,A13;
   end;
   then
-A8: Y=Y' by A5,XBOOLE_0:def 10;
+A17: Y=Y' by A9,XBOOLE_0:def 10;
   per cases by NAT_D:12;
   suppose
-A9: card Y mod 2 = 0;
+A18: card Y mod 2 = 0;
     then consider t be Nat such that
-A10: card Y = 2 * t + 0 & 0 < 2 by NAT_D:def 2;
+A19: card Y = 2 * t + 0 and
+    0 < 2 by NAT_D:def 2;
     t is Element of NAT by ORDINAL1:def 13;
-    hence power(K).(-1_K,card Y)=1_K by A10,HURWITZ:4
+    hence power(K).(-1_K,card Y)=1_K by A19,HURWITZ:4
       .= (the multF of K) $$ (X,Part_sgn(ID,K)) by A2,MATRIX11:4
-      .= (the multF of K) $$ (X,Part_sgn(p2,K)) by A8,A9,MATRIX11:7;
+      .= (the multF of K) $$ (X,Part_sgn(p2,K)) by A17,A18,MATRIX11:7;
   end;
   suppose
-A11: card Y mod 2 = 1;
+A20: card Y mod 2 = 1;
     then consider t be Nat such that
-A12: card Y = 2 * t + 1 & 1 < 2 by NAT_D:def 2;
+A21: card Y = 2 * t + 1 and
+    1 < 2 by NAT_D:def 2;
     t is Element of NAT by ORDINAL1:def 13;
-    hence power(K).(-1_K,card Y)=-1_K by A12,HURWITZ:4
+    hence power(K).(-1_K,card Y)=-1_K by A21,HURWITZ:4
       .= -(the multF of K) $$ (X,Part_sgn(ID,K)) by A2,MATRIX11:4
-      .= (the multF of K) $$ (X,Part_sgn(p2,K)) by A8,A11,MATRIX11:7;
+      .= (the multF of K) $$ (X,Part_sgn(p2,K)) by A17,A20,MATRIX11:7;
   end;
 end;
 
 theorem Th9:
-  for K be Fanoian Field for p2,i,j st i in Seg (n+2) & p2.i=j
-  ex X be Element of Fin 2Set Seg (n+2) st
-  X = {{N,i} : {N,i} in 2Set Seg (n+2)} &
-  (the multF of K) $$ (X,Part_sgn(p2,K)) = power(K).(-1_K,i+j)
+  for K be Fanoian Field for p2,i,j st i in Seg (n+2) & p2.i=j ex X
+  be Element of Fin 2Set Seg (n+2) st X = {{N,i} : {N,i} in 2Set Seg (n+2)} & (
+  the multF of K) $$ (X,Part_sgn(p2,K)) = power(K).(-1_K,i+j)
 proof
   let K be Fanoian Field;
   let p2,i,j such that
-A1: i in Seg (n+2) & p2.i=j;
+A1: i in Seg (n+2) and
+A2: p2.i=j;
   reconsider N=n as Element of NAT by ORDINAL1:def 13;
   set n2=N+2;
-  set X={{k,i} where k is Element of NAT :{k,i} in 2Set Seg(n+2)};
-  set SS=2Set Seg(n+2);
-  set P=power(K);
-  reconsider I=i, J=j as Element of NAT by ORDINAL1:def 13;
   reconsider p2'=p2 as Permutation of finSeg n2 by MATRIX_2:def 11;
-A2: X c= SS
+A3: rng p2'=Seg n2 by FUNCT_2:def 3;
+  1<=i by A1,FINSEQ_1:3;
+  then reconsider i1=i-1 as Element of NAT by NAT_1:21;
+  deffunc F(set)={$1,i};
+  set Ui=(finSeg n2)\(Seg i);
+  set Li=finSeg i1;
+  set SS=2Set Seg(n+2);
+  set X={{k,i} where k is Element of NAT :{k,i} in 2Set Seg(n+2)};
+A4: X c= SS
   proof
     let x;
-    assume x in X;
+    assume
+    x in X;
     then ex k being Element of NAT st x={k,i} & {k,i} in 2Set Seg n2;
     hence thesis;
   end;
-  reconsider X as Element of Fin SS by A2,FINSUB_1:def 5;
-  take X;
-  thus X = {{e,i} where e is Element of NAT :{e,i} in 2Set Seg (n+2)};
+  then reconsider X as Element of Fin SS by FINSUB_1:def 5;
   set Y={s:s in X & Part_sgn(p2,K).s=-1_K};
-A3: Y c= X
+A5: Y c= X
   proof
     let x;
-    assume x in Y;
+    assume
+    x in Y;
     then ex s st s=x & s in X & Part_sgn(p2,K).s=-1_K;
     hence thesis;
   end;
-  then Y c= SS & Y is finite by A2,XBOOLE_1:1;
-  then reconsider Y as Element of Fin SS by FINSUB_1:def 5;
-  1<=i by A1,FINSEQ_1:3;
-  then reconsider i1=i-1 as Element of NAT by NAT_1:21;
-  set Li=finSeg i1;
-  set Ui=(finSeg n2)\(Seg i);
-  i1<i1+1 by NAT_1:13;
-  then Li c= Seg i & Seg i misses Ui by FINSEQ_1:7,XBOOLE_1:79;
   then
-A4: Li misses Ui by XBOOLE_1:64;
-A5: Li\/Ui c= Seg n2\{i}
+A6: Y c= SS by A4,XBOOLE_1:1;
+  dom p2'=Seg n2 by FUNCT_2:67;
+  then
+A7: p2.i in rng p2 by A1,FUNCT_1:def 5;
+  then 1<= j by A2,A3,FINSEQ_1:3;
+  then reconsider j1=j-1 as Element of NAT by NAT_1:21;
+  reconsider Y as Element of Fin SS by A6,FINSUB_1:def 5;
+  consider f be Function such that
+A8: dom f = Li\/Ui & for x st x in Li\/Ui holds f.x = F(x) from FUNCT_1
+  :sch 3;
+A9: f"Y c= dom f by RELAT_1:167;
+  then reconsider fY=f"Y as finite set by A8;
+A10: Li\/Ui c= Seg n2\{i}
   proof
     let x such that
-A6: x in Li\/Ui;
-    per cases by A6,XBOOLE_0:def 3;
-    suppose x in Li;
-      then consider k being Element of NAT such that
-A7:   x=k & 1<=k & k<=i1;
-      k<=i1 & i1<i1+1 by A7,NAT_1:13;
-      then k<i & i<=n2 by A1,FINSEQ_1:3,XXREAL_0:2;
-      then not k in {i} & k<=n2 by TARSKI:def 1,XXREAL_0:2;
-      then not k in {i} & k in Seg n2 by A7;
-      hence thesis by A7,XBOOLE_0:def 5;
+A11: x in Li\/Ui;
+    per cases by A11,XBOOLE_0:def 3;
+    suppose
+A12:  x in Li;
+A13:  i<=n2 by A1,FINSEQ_1:3;
+      consider k being Element of NAT such that
+A14:  x=k and
+A15:  1<=k and
+A16:  k<=i1 by A12;
+A17:  i1<i1+1 by NAT_1:13;
+      then k<i by A16,XXREAL_0:2;
+      then k<=n2 by A13,XXREAL_0:2;
+      then
+A18:  k in Seg n2 by A15;
+      not k in {i} by A16,A17,TARSKI:def 1;
+      hence thesis by A14,A18,XBOOLE_0:def 5;
     end;
-    suppose x in Ui;
-      then x in Seg n2 & not x in Seg i & (i1+1) in Seg i
-      by FINSEQ_1:6,XBOOLE_0:def 5;
-      then x in Seg n2 & not x in {i} by TARSKI:def 1;
-      hence thesis by XBOOLE_0:def 5;
+    suppose
+A19:  x in Ui;
+A20:  (i1+1) in Seg i by FINSEQ_1:6;
+      not x in Seg i by A19,XBOOLE_0:def 5;
+      then not x in {i} by A20,TARSKI:def 1;
+      hence thesis by A19,XBOOLE_0:def 5;
     end;
   end;
+  for x1,x2 be set st x1 in dom f & x2 in dom f & f.x1 = f.x2 holds x1 =
+  x2
+  proof
+    let x1,x2 be set such that
+A21: x1 in dom f and
+A22: x2 in dom f and
+A23: f.x1 = f.x2;
+A24: f.x2=F(x2) by A8,A22;
+    not x1 in {i} by A10,A8,A21,XBOOLE_0:def 5;
+    then
+A25: x1<>i by TARSKI:def 1;
+    f.x1=F(x1) by A8,A21;
+    then x1 in {i,x2} by A23,A24,TARSKI:def 2;
+    hence thesis by A25,TARSKI:def 2;
+  end;
+  then f is one-to-one by FUNCT_1:def 8;
+  then (f.:fY),(fY) are_equipotent by A9,CARD_1:60;
+  then
+A26: card (f.:fY) = card fY by CARD_1:21;
   finSeg n2\{i} c= Li\/Ui
   proof
     let x such that
-A8: x in finSeg n2\{i};
-    x in finSeg n2 by A8;
+A27: x in finSeg n2\{i};
+    x in finSeg n2 by A27;
     then consider k being Element of NAT such that
-A9: x=k & 1<=k & k<=n2;
-    not k in {i} by A8,A9,XBOOLE_0:def 5;
+A28: x=k and
+A29: 1<=k and
+A30: k<=n2;
+    not k in {i} by A27,A28,XBOOLE_0:def 5;
     then
-A10: k<>i by TARSKI:def 1;
-    per cases by A10,XXREAL_0:1;
-    suppose k<i1+1;
+A31: k<>i by TARSKI:def 1;
+    per cases by A31,XXREAL_0:1;
+    suppose
+      k<i1+1;
       then k<=i1 by NAT_1:13;
-      then x in Li by A9;
+      then x in Li by A28,A29;
       hence thesis by XBOOLE_0:def 3;
     end;
-    suppose k>i1+1;
-      then not x in Seg i & x in Seg n2 by A9,FINSEQ_1:3;
-      then x in Ui by XBOOLE_0:def 5;
+    suppose
+      k>i1+1;
+      then
+A32:  not x in Seg i by A28,FINSEQ_1:3;
+      x in Seg n2 by A28,A29,A30;
+      then x in Ui by A32,XBOOLE_0:def 5;
       hence thesis by XBOOLE_0:def 3;
     end;
   end;
   then
-A11: finSeg n2\{i}=Li\/Ui by A5,XBOOLE_0:def 10;
-  deffunc F(set)={$1,i};
-  consider f be Function such that
-A12: dom f = Li\/Ui & for x st x in Li\/Ui holds f.x = F(x)
-  from FUNCT_1:sch 3;
-A13: rng f c= X
+A33: finSeg n2\{i}=Li\/Ui by A10,XBOOLE_0:def 10;
+A34: rng f c= X
   proof
     let x;
-    assume x in rng f;
+    assume
+    x in rng f;
     then consider y such that
-A14: y in dom f & f.y=x by FUNCT_1:def 5;
-    y in finSeg n2 by A11,A12,A14;
+A35: y in dom f and
+A36: f.y=x by FUNCT_1:def 5;
+    y in finSeg n2 by A33,A8,A35;
     then consider k being Element of NAT such that
-A15: k=y & 1<= k & k<=n2;
-    not y in {i} by A5,A12,A14,XBOOLE_0:def 5;
-    then i<>k by A15,TARSKI:def 1;
-    then k in Seg n2 & (k<i or i<k) by A15,XXREAL_0:1;
-    then {i,k} in SS & f.k={i,k} by A1,A12,A14,A15,MATRIX11:1;
-    hence thesis by A14,A15;
+A37: k=y and
+A38: 1<= k and
+A39: k<=n2;
+A40: f.k={i,k} by A8,A35,A37;
+    not y in {i} by A10,A8,A35,XBOOLE_0:def 5;
+    then i<>k by A37,TARSKI:def 1;
+    then
+A41: k<i or i<k by XXREAL_0:1;
+    k in Seg n2 by A38,A39;
+    then {i,k} in SS by A1,A41,MATRIX11:1;
+    hence thesis by A36,A37,A40;
   end;
-A16: X c= rng f
-  proof
-    let x;
-    assume x in X;
-    then consider k being Element of NAT such that
-A17: x={k,i} & {k,i} in SS;
-    k<>i by A17,SGRAPH1:12;
-    then k in Seg n2 & not k in {i} by A17,SGRAPH1:12,TARSKI:def 1;
-    then k in Li\/Ui by A11,XBOOLE_0:def 5;
-    then k in dom f & f.k=F(k) by A12;
-    hence thesis by A17,FUNCT_1:def 5;
-  end;
-  for x1,x2 be set st x1 in dom f & x2 in dom f & f.x1 = f.x2 holds x1 = x2
-  proof
-    let x1,x2 be set such that
-A18: x1 in dom f & x2 in dom f & f.x1 = f.x2;
-    not x1 in {i} & f.x1=F(x1) & f.x2=F(x2) by A5,A12,A18,XBOOLE_0:def 5;
-    then x1<>i & x1 in {i,x2} by A18,TARSKI:def 1,def 2;
-    hence thesis by TARSKI:def 2;
-  end;
-  then
-A19: f is one-to-one by FUNCT_1:def 8;
-  dom p2'=Seg n2 by FUNCT_2:67;
-  then
-A20: p2.i in rng p2 & rng p2'=Seg n2 by A1,FUNCT_1:def 5,FUNCT_2:def 3;
-  then 1<= j by A1,FINSEQ_1:3;
-  then reconsider j1=j-1 as Element of NAT by NAT_1:21;
-A21: p2'.:((Li\f"Y)\/(Ui/\f"Y)) c= Seg j1
+A42: p2'.:((Li\f"Y)\/(Ui/\f"Y)) c= Seg j1
   proof
     let y;
-    assume y in p2'.:((Li\f"Y)\/(Ui/\f"Y));
+    assume
+    y in p2'.:((Li\f"Y)\/(Ui/\f"Y));
     then consider x such that
-A22: x in dom p2' & x in (Li\f"Y)\/(Ui/\f"Y) & p2'.x=y by FUNCT_1:def 12;
+A43: x in dom p2' and
+A44: x in (Li\f"Y)\/(Ui/\f"Y) and
+A45: p2'.x=y by FUNCT_1:def 12;
     dom p2'=Seg n2 by FUNCT_2:67;
     then consider k being Element of NAT such that
-A23: x=k & 1<=k & k<=n2 by A22;
-    per cases by A22,A23,XBOOLE_0:def 3;
+A46: x=k and
+A47: 1<=k and
+A48: k<=n2 by A43;
+    per cases by A44,A46,XBOOLE_0:def 3;
     suppose
-A24:  k in (Li\f"Y);
-      then k in Li & Li c= dom f by A12,XBOOLE_1:7;
-      then k in dom f&not k in f"Y&k<=i1 by A24,FINSEQ_1:3,XBOOLE_0:def 5;
+A49:  k in (Li\f"Y);
+      then k<=i1 by FINSEQ_1:3;
       then
-A25:  not f.k in Y & f.k in rng f & f.k=F(k) & k<i1+1
-      by A12,FUNCT_1:def 5,def 13,NAT_1:13;
-      then F(k) in X by A13;
-      then consider m being Element of NAT such that
-A26:  F(k)={m,i} & {m,i} in SS;
-      Part_sgn(p2,K).{k,i}<>-1_K & k in Seg n2 & dom p2'=Seg n2
-      by A13,A23,A25,A26,FUNCT_2:67;
-      then p2.k <= p2.i & p2.i<>p2.k by A1,A25,FUNCT_1:def 8,MATRIX11:def 1;
-      then p2.k < j1+1 & p2.k in rng p2' & rng p2'=Seg n2
-      by A1,A22,A23,FUNCT_1:def 5,FUNCT_2:def 3,XXREAL_0:1;
-      then p2.k <= j1 & 1<=p2.k by FINSEQ_1:3,NAT_1:13;
-      hence thesis by A22,A23,FINSEQ_1:3;
+A50:  k<i1+1 by NAT_1:13;
+A51:  Li c= dom f by A8,XBOOLE_1:7;
+A52:  k in Li by A49;
+      then
+A53:  f.k in rng f by A51,FUNCT_1:def 5;
+      not k in f"Y by A49,XBOOLE_0:def 5;
+      then
+A54:  not f.k in Y by A52,A51,FUNCT_1:def 13;
+A55:  k in Seg n2 by A47,A48;
+      dom p2'=Seg n2 by FUNCT_2:67;
+      then
+A56:  p2.i<>p2.k by A1,A50,A55,FUNCT_1:def 8;
+A57:  f.k=F(k) by A8,A52,A51;
+      then F(k) in X by A34,A53;
+      then ex m being Element of NAT st F(k)={m,i} & {m,i} in SS;
+      then Part_sgn(p2,K).{k,i}<>-1_K by A34,A54,A53,A57;
+      then p2.k <= p2.i by A1,A50,A55,MATRIX11:def 1;
+      then p2.k < j1+1 by A2,A56,XXREAL_0:1;
+      then
+A58:  p2.k <= j1 by NAT_1:13;
+A59:  rng p2'=Seg n2 by FUNCT_2:def 3;
+      p2.k in rng p2' by A43,A46,FUNCT_1:def 5;
+      then 1<=p2.k by A59,FINSEQ_1:3;
+      hence thesis by A45,A46,A58,FINSEQ_1:3;
     end;
     suppose
-A27:  k in (Ui/\f"Y);
-      then k in f"Y by XBOOLE_0:def 4;
+A60:  k in (Ui/\f"Y);
+      then k in Ui by XBOOLE_0:def 4;
       then
-A28:  k in dom f & f.k in Y by FUNCT_1:def 13;
+A61:  not k in Seg i by XBOOLE_0:def 5;
+      1<= k by A60,FINSEQ_1:3;
+      then
+A62:  i<k by A61;
+A63:  k in f"Y by A60,XBOOLE_0:def 4;
+      then f.k in Y by FUNCT_1:def 13;
       then consider s such that
-A29:  s=f.k & s in X & Part_sgn(p2,K).s=-1_K;
-      k in Ui by A27,XBOOLE_0:def 4;
-      then k in Seg n2 & not k in Seg i by XBOOLE_0:def 5;
-      then 1<= k & (1>k or k>i) by FINSEQ_1:3;
-      then s = {i,k} & i<k & 1_K<>-1_K & dom p2'=finSeg n2
-      by A12,A28,A29,FUNCT_2:67,MATRIX11:22;
-      then p2.i>=p2.k & p2'.i<>p2.k
-      by A1,A27,A29,FUNCT_1:def 8,MATRIX11:def 1;
-      then p2.k <j1+1 & p2.k in rng p2' & rng p2'=Seg n2
-      by A1,A22,A23,FUNCT_1:def 5,FUNCT_2:def 3,XXREAL_0:1;
-      then p2.k<=j1 & 1<=p2.k by FINSEQ_1:3,NAT_1:13;
-      hence thesis by A22,A23,FINSEQ_1:3;
+A64:  s=f.k and
+      s in X and
+A65:  Part_sgn(p2,K).s=-1_K;
+      k in dom f by A63,FUNCT_1:def 13;
+      then
+A66:  s = {i,k} by A8,A64;
+      dom p2'=finSeg n2 by FUNCT_2:67;
+      then
+A67:  p2'.i<>p2.k by A1,A60,A62,FUNCT_1:def 8;
+      1_K<>-1_K by MATRIX11:22;
+      then p2.i>=p2.k by A1,A60,A65,A66,A62,MATRIX11:def 1;
+      then p2.k <j1+1 by A2,A67,XXREAL_0:1;
+      then
+A68:  p2.k<=j1 by NAT_1:13;
+A69:  rng p2'=Seg n2 by FUNCT_2:def 3;
+      p2.k in rng p2' by A43,A46,FUNCT_1:def 5;
+      then 1<=p2.k by A69,FINSEQ_1:3;
+      hence thesis by A45,A46,A68,FINSEQ_1:3;
     end;
   end;
-A30: Seg j1 c= p2'.:((Li\f"Y)\/(Ui/\f"Y))
+  take X;
+  reconsider I=i, J=j as Element of NAT by ORDINAL1:def 13;
+  set P=power(K);
+  thus X = {{e,i} where e is Element of NAT :{e,i} in 2Set Seg (n+2)};
+A70: Li/\f"Y c= Li by XBOOLE_1:17;
+  Seg j1 c= p2'.:((Li\f"Y)\/(Ui/\f"Y))
   proof
     let y such that
-A31: y in Seg j1;
+A71: y in Seg j1;
     consider k being Element of NAT such that
-A32: y=k & 1<=k & k<=j1 by A31;
-A33: j <=n2 & j1<j1+1 by A1,A20,FINSEQ_1:3,NAT_1:13;
+A72: y=k and
+    1<=k and
+A73: k<=j1 by A71;
+A74: j1<j1+1 by NAT_1:13;
     then
-A34: j1<=n2 & k < j by A32,XXREAL_0:2;
+A75: k < j by A73,XXREAL_0:2;
+    j <=n2 by A2,A7,A3,FINSEQ_1:3;
+    then j1<=n2 by A74,XXREAL_0:2;
     then Seg j1 c= Seg n2 by FINSEQ_1:7;
     then consider x such that
-A35: x in dom p2' & y=p2'.x by A20,A31,FUNCT_1:def 5;
-A36: not x in {i} by A1,A32,A33,A35,TARSKI:def 1;
-    then x in dom f by A11,A12,A35,XBOOLE_0:def 5;
+A76: x in dom p2' and
+A77: y=p2'.x by A3,A71,FUNCT_1:def 5;
+A78: not x in {i} by A2,A72,A73,A74,A77,TARSKI:def 1;
     then
-A37: f.x=F(x) & f.x in rng f by A12,FUNCT_1:def 5;
-    then F(x) in X by A13;
+A79: x in dom f by A33,A8,A76,XBOOLE_0:def 5;
+    then
+A80: f.x=F(x) by A8;
+A81: f.x in rng f by A79,FUNCT_1:def 5;
+    then F(x) in X by A34,A80;
     then consider m being Element of NAT such that
-A38: F(x)={m,i} & {m,i} in 2Set Seg n2;
-A39: m in {x,i} & m<>i by A38,SGRAPH1:12,TARSKI:def 2;
+A82: F(x)={m,i} and
+A83: {m,i} in 2Set Seg n2;
+A84: m<>i by A83,SGRAPH1:12;
+A85: m in Seg n2 by A83,SGRAPH1:12;
+    m in {x,i} by A82,TARSKI:def 2;
     then
-A40: m=x & m<>i & m in Seg n2 by A38,SGRAPH1:12,TARSKI:def 2;
-    per cases by A39,XXREAL_0:1;
+A86: m=x by A84,TARSKI:def 2;
+    per cases by A83,SGRAPH1:12,XXREAL_0:1;
     suppose
-A41:  m<i;
-A42:  not m in f"Y
+A87:  m<i;
+A88:  not m in f"Y
       proof
-        assume m in f"Y;
-        then {m,i} in Y by A37,A40,FUNCT_1:def 13;
-        then (ex s st s={m,i} & s in X & Part_sgn(p2,K).s=-1_K) &
-        Part_sgn(p2,K).{m,i}=1_K by A1,A32,A34,A35,A40,A41,MATRIX11:def 1;
-        hence thesis by MATRIX11:22;
+        assume
+        m in f"Y;
+        then {m,i} in Y by A80,A86,FUNCT_1:def 13;
+        then
+A89:    ex s st s={m,i} & s in X & Part_sgn(p2,K).s=-1_K;
+        Part_sgn(p2,K).{m,i}=1_K by A1,A2,A72,A75,A76,A77,A86,A87,
+        MATRIX11:def 1;
+        hence thesis by A89,MATRIX11:22;
       end;
-      m<i1+1 by A41;
-      then m<=i1 & 1<=m by A40,FINSEQ_1:3,NAT_1:13;
-      then m in Li;
-      then x in Li\f"Y by A40,A42,XBOOLE_0:def 5;
+      m<i1+1 by A87;
+      then
+A90:  m<=i1 by NAT_1:13;
+      1<=m by A85,FINSEQ_1:3;
+      then m in Li by A90;
+      then x in Li\f"Y by A86,A88,XBOOLE_0:def 5;
       then x in (Li\f"Y)\/(Ui/\f"Y) by XBOOLE_0:def 3;
-      hence thesis by A35,FUNCT_1:def 12;
+      hence thesis by A76,A77,FUNCT_1:def 12;
     end;
     suppose
-A43:  m>i;
-      then Part_sgn(p2,K).{m,i}=-1_K by A1,A32,A34,A35,A40,MATRIX11:def 1;
-      then f.x in Y & x in dom f & not m in Seg i
-      by A11,A12,A13,A35,A36,A37,A38,A43,FINSEQ_1:3,XBOOLE_0:def 5;
-      then x in f"Y & x in Ui by A40,FUNCT_1:def 13,XBOOLE_0:def 5;
-      then x in Ui/\f"Y by XBOOLE_0:def 4;
+A91:  m>i;
+      then not m in Seg i by FINSEQ_1:3;
+      then
+A92:  x in Ui by A86,A85,XBOOLE_0:def 5;
+      Part_sgn(p2,K).{m,i}=-1_K by A1,A2,A72,A75,A76,A77,A86,A91,
+      MATRIX11:def 1;
+      then
+A93:  f.x in Y by A34,A80,A81,A82,A83;
+      x in dom f by A33,A8,A76,A78,XBOOLE_0:def 5;
+      then x in f"Y by A93,FUNCT_1:def 13;
+      then x in Ui/\f"Y by A92,XBOOLE_0:def 4;
       then x in (Li\f"Y)\/(Ui/\f"Y) by XBOOLE_0:def 3;
-      hence thesis by A35,FUNCT_1:def 12;
+      hence thesis by A76,A77,FUNCT_1:def 12;
     end;
   end;
-  Li\f"Y c= Li & Li/\f"Y c= Li & Ui/\f"Y c= Ui by XBOOLE_1:17;
   then
-A44: (Li\f"Y) misses (Ui/\f"Y) & (Li/\f"Y) misses (Ui/\f"Y) &
-  (Li/\f"Y)\/(Ui/\f"Y)=(dom f)/\f"Y & f"Y c= dom f & (f"Y/\Li) c= Li &
-  (Li\f"Y)\/(Ui/\f"Y) c= finSeg n2\{i} & Li\f"Y=Li\(f"Y/\Li)
-  by A4,A11,A12,RELAT_1:167,XBOOLE_1:13,23,47,64;
+A94: Seg j1 = p2'.:((Li\f"Y)\/(Ui/\f"Y)) by A42,XBOOLE_0:def 10;
+A95: Seg n2 = dom p2' by FUNCT_2:67;
+A96: Li\f"Y=Li\(f"Y/\Li) by XBOOLE_1:47;
+  i1<i1+1 by NAT_1:13;
+  then Li c= Seg i by FINSEQ_1:7;
   then
-A45: (Li\f"Y )\/(Ui/\f"Y) c= Seg n2 & Seg n2 = dom p2' &
-  (Li/\f"Y)\/(Ui/\f"Y) = f"Y by FUNCT_2:67,XBOOLE_1:1,28;
-  reconsider fY=f"Y as finite set by A44,XBOOLE_1:28;
-  (f.:fY),(fY) are_equipotent & X = rng f
-  by A13,A16,A19,A44,CARD_1:60,XBOOLE_0:def 10;
+A97: Li misses Ui by XBOOLE_1:64,79;
+  X c= rng f
+  proof
+    let x;
+    assume
+    x in X;
+    then consider k being Element of NAT such that
+A98: x={k,i} and
+A99: {k,i} in SS;
+    k<>i by A99,SGRAPH1:12;
+    then
+A100: not k in {i} by TARSKI:def 1;
+    k in Seg n2 by A99,SGRAPH1:12;
+    then
+A101: k in Li\/Ui by A33,A100,XBOOLE_0:def 5;
+    then f.k=F(k) by A8;
+    hence thesis by A8,A98,A101,FUNCT_1:def 5;
+  end;
+  then X = rng f by A34,XBOOLE_0:def 10;
   then
-A46: card (f.:fY) = card fY & f.:fY = Y by A3,CARD_1:21,FUNCT_1:147;
- Seg j1 = p2'.:((Li\f"Y)\/(Ui/\f"Y)) by A21,A30,XBOOLE_0:def 10;
+A102: f.:fY = Y by A5,FUNCT_1:147;
+  (Li/\f"Y)\/(Ui/\f"Y)=(dom f)/\f"Y by A8,XBOOLE_1:23;
   then
-  finSeg j1,(Li\f"Y)\/(Ui/\f"Y) are_equipotent by A45,CARD_1:60;
+A103: (Li/\f"Y)\/(Ui/\f"Y) = f"Y by RELAT_1:167,XBOOLE_1:28;
+A104: Ui/\f"Y c= Ui by XBOOLE_1:17;
+  then (Li\f"Y)\/(Ui/\f"Y) c= finSeg n2\{i} by A33,XBOOLE_1:13;
+  then finSeg j1,(Li\f"Y)\/(Ui/\f"Y) are_equipotent by A95,A94, CARD_1
+  :60,XBOOLE_1:1;
   then
-A47: card (finSeg j1) = card ((Li\f"Y)\/(Ui/\f"Y)) by CARD_1:21
-    .= card (Li\(f"Y/\Li)) +card (Ui/\f"Y) by A44,CARD_2:53
+A105: card (finSeg j1) = card ((Li\f"Y)\/(Ui/\f"Y)) by CARD_1:21
+    .= card (Li\(f"Y/\Li)) +card (Ui/\f"Y) by A97,A104,A96,CARD_2:53 ,
+  XBOOLE_1:64
     .= (card Li -card (f"Y/\Li))+card (Ui/\f"Y) by CARD_2:63,XBOOLE_1:17;
   per cases;
-  suppose j>i;
+  suppose
+    j>i;
     then reconsider ji=j-i as Element of NAT by NAT_1:21;
-    card Y = card (Li/\fY)+card (finSeg j1)-card Li+card (fY/\Li)
-    by A44,A45,A46,A47,CARD_2:53
+    card Y = card (Li/\fY)+card (finSeg j1)-card Li+card (fY/\Li) by A97
+    ,A70,A104,A103,A26,A102,A105,CARD_2:53,XBOOLE_1:64
       .= 2*card (Li/\fY) +card (finSeg j1)-card Li
       .= 2*card (Li/\fY)+j1-card Li by FINSEQ_1:78
       .= 2*card (Li/\fY)+j1-i1 by FINSEQ_1:78
       .= 2*card (Li/\fY)+ji;
-    hence (the multF of K) $$ (X,Part_sgn(p2,K))
-    = P.(-1_K,2*card (Li/\fY)+ji) by Th8
+    hence (the multF of K) $$ (X,Part_sgn(p2,K)) = P.(-1_K,2*card (Li/\fY)+ji)
+    by Th8
       .= P.(-1_K,2*card (Li/\fY)) * P.(-1_K,ji) by HURWITZ:3
       .= 1_K * P.(-1_K,ji) by HURWITZ:4
       .= P.(-1_K,2*I)*P.(-1_K,ji) by HURWITZ:4
       .= P.(-1_K,2*i+ji) by HURWITZ:3
       .= P.(-1_K,i+j);
   end;
-  suppose j<=i;
+  suppose
+    j<=i;
     then reconsider ij=i-j as Element of NAT by NAT_1:21;
-    card Y = (card Li+card (Ui/\fY)-card (finSeg j1))+ card(Ui/\fY)
-    by A44,A45,A46,A47,CARD_2:53
+    card Y = (card Li+card (Ui/\fY)-card (finSeg j1))+ card(Ui/\fY) by
+    A97,A70,A104,A103,A26,A102,A105,CARD_2:53,XBOOLE_1:64
       .= 2*card (Ui/\fY)-card (finSeg j1)+card Li
       .= 2*card (Ui/\fY)-j1+card Li by FINSEQ_1:78
       .= 2*card (Ui/\fY)-j1+i1 by FINSEQ_1:78
       .= 2*card (Ui/\fY)+ij;
-    hence (the multF of K) $$ (X,Part_sgn(p2,K))
-    = P.(-1_K,2*card (Ui/\fY)+ij) by Th8
+    hence (the multF of K) $$ (X,Part_sgn(p2,K)) = P.(-1_K,2*card (Ui/\fY)+ij)
+    by Th8
       .= P.(-1_K,2*card (Ui/\fY)) * P.(-1_K,ij) by HURWITZ:3
       .= 1_K * P.(-1_K,ij) by HURWITZ:4
       .= P.(-1_K,2*J)*P.(-1_K,ij) by HURWITZ:4
@@ -590,328 +731,437 @@ A47: card (finSeg j1) = card ((Li\f"Y)\/(Ui/\f"Y)) by CARD_1:21
 end;
 
 theorem Th10:
-  for i,j st i in Seg (n+1) & j in Seg (n+1) & n >= 2
-  ex Proj be Function of 2Set Seg n, 2Set Seg(n+1) st
-  rng Proj = 2Set Seg(n+1)\{{N,i}:{N,i} in 2Set Seg(n+1)} &
-  Proj is one-to-one & for k,m st k<m & {k,m} in 2Set Seg n holds
-  (m < i & k < i implies Proj.{k,m} = {k,m} ) &
-  (m >= i & k < i implies Proj.{k,m} = {k,m+1} ) &
-  (m >= i & k >= i implies Proj.{k,m} = {k+1,m+1})
+  for i,j st i in Seg (n+1) & n >= 2 ex Proj be Function of 2Set
+Seg n, 2Set Seg(n+1) st rng Proj = 2Set Seg(n+1)\{{N,i}:{N,i} in 2Set Seg(n+1)}
+& Proj is one-to-one & for k,m st k<m & {k,m} in 2Set Seg n holds (m < i & k <
+i implies Proj.{k,m} = {k,m} ) & (m >= i & k < i implies Proj.{k,m} = {k,m+1} )
+  & (m >= i & k >= i implies Proj.{k,m} = {k+1,m+1})
 proof
   let i,j be Nat such that
-A1: i in Seg (n+1) & j in Seg (n+1)& n>=2;
-  set n1=n+1;
-  set SS=2Set Seg(n);
-  set SS1=2Set Seg n1;
+A1: i in Seg (n+1) and
+A2: n>=2;
+  defpred P[set,set] means for k,m being Nat st {k,m}=$1 & k<m holds (m < i &
+  k < i implies $2={k,m}) & (m >= i & k<i implies $2={k,m+1})&(m >= i & k >= i
+  implies $2={k+1,m+1});
   set X={{N,i}:{N,i} in 2Set Seg(n+1)};
-  defpred P[set,set] means for k,m being Nat st {k,m}=$1 & k<m holds
-  (m < i & k < i implies $2={k,m}) &
-  (m >= i & k<i implies $2={k,m+1})&(m >= i & k >= i implies $2={k+1,m+1});
-A2: for k,m be Nat st {k,m} in X holds k=i or m=i
+  set SS=2Set Seg(n);
+  set n1=n+1;
+  set SS1=2Set Seg n1;
+A3: for k,m be Nat st {k,m} in X holds k=i or m=i
   proof
-    let k,m be Nat such that
-A3: {k,m} in X;
-    consider m1 be Element of NAT such that
-A4: {k,m}={m1,i} & {m1,i} in SS1 by A3;
+    let k,m be Nat;
+    assume
+    {k,m} in X;
+    then consider m1 be Element of NAT such that
+A4: {k,m}={m1,i} and
+    {m1,i} in SS1;
     i in {i,m1} by TARSKI:def 2;
     hence thesis by A4,TARSKI:def 2;
   end;
 A5: for x st x in SS ex y st y in SS1\X & P[x,y]
   proof
-    let x;
-    assume x in SS;
-    then consider k,m be Nat such that
-A6: k in Seg n & m in Seg n & k < m & x={k,m} by MATRIX11:1;
-    reconsider e = k as Element of NAT by ORDINAL1:def 13;
-    reconsider N=n as Element of NAT by ORDINAL1:def 13;
     n<=n+1 by NAT_1:11;
     then
-A7: Seg n c= Seg n1 by FINSEQ_1:7;
-    then
-A8: e in Seg(N+1) & m in Seg(N+1) & m+1 in Seg (N+1) & e+1 in Seg(N+1)
-    by A6,FINSEQ_1:81;
+A6: Seg n c= Seg n1 by FINSEQ_1:7;
+    reconsider N=n as Element of NAT by ORDINAL1:def 13;
+    let x;
+    assume
+    x in SS;
+    then consider k,m be Nat such that
+A7: k in Seg n and
+A8: m in Seg n and
+A9: k < m and
+A10: x={k,m} by MATRIX11:1;
+A11: m+1 in Seg (N+1) by A8,FINSEQ_1:81;
+    reconsider e = k as Element of NAT by ORDINAL1:def 13;
+A12: e+1 in Seg(N+1) by A7,FINSEQ_1:81;
     per cases;
     suppose
-A9:   m<i & k<i;
-      then {k,m} in SS1 & not {k,m} in X by A2,A6,A7,MATRIX11:1;
-      then {k,m} in SS1\X & P[{k,m},{k,m}] by A9,XBOOLE_0:def 5,ZFMISC_1:10;
-      hence thesis by A6;
+A13:  m<i & k<i;
+      then
+A14:  not {k,m} in X by A3;
+      {k,m} in SS1 by A7,A8,A9,A6,MATRIX11:1;
+      then
+A15:  {k,m} in SS1\X by A14,XBOOLE_0:def 5;
+      P[{k,m},{k,m}] by A13,ZFMISC_1:10;
+      hence thesis by A10,A15;
     end;
     suppose
-A10:  m>=i & k<i;
-      then m+1>i & m+1>k by A6,NAT_1:13;
-      then {k,m+1} in SS1 & not {k,m+1} in X by A2,A8,A10,MATRIX11:1;
-      then
-A11:  {k,m+1} in SS1\X by XBOOLE_0:def 5;
-      P[{k,m},{k,m+1}]
+A16:  m>=i & k<i;
+A17:  P[{k,m},{k,m+1}]
       proof
         let k',m' be Nat such that
-A12:    {k',m'}={k,m} & k'<m';
-        (k'=k or k'=m) & (m'=k or m'=m) by A12,ZFMISC_1:10;
-        hence thesis by A10,A12;
+A18:    {k',m'}={k,m} and
+        k'<m';
+        k'=k or k'=m by A18,ZFMISC_1:10;
+        hence thesis by A16,A18,ZFMISC_1:10;
       end;
-      hence thesis by A6,A11;
-    end;
-    suppose m<i & k>=i;
-      hence thesis by A6,XXREAL_0:2;
+      m+1>i by A16,NAT_1:13;
+      then
+A19:  not {k,m+1} in X by A3,A16;
+      m+1>k by A9,NAT_1:13;
+      then {k,m+1} in SS1 by A7,A6,A11,MATRIX11:1;
+      then {k,m+1} in SS1\X by A19,XBOOLE_0:def 5;
+      hence thesis by A10,A17;
     end;
     suppose
-A13:  m>=i & k>=i;
-      then m+1>i & k+1>i & m+1>k+1 by A6,NAT_1:13,XREAL_1:10;
-      then {k+1,m+1} in SS1 & not {k+1,m+1} in X by A2,A8,MATRIX11:1;
-      then
-A14:  {k+1,m+1} in SS1\X by XBOOLE_0:def 5;
-      P[{k,m},{k+1,m+1}]
+      m<i & k>=i;
+      hence thesis by A9,XXREAL_0:2;
+    end;
+    suppose
+A20:  m>=i & k>=i;
+A21:  P[{k,m},{k+1,m+1}]
       proof
         let k',m' be Nat such that
-A15:    {k',m'}={k,m} & k'<m';
-        (k'=k or k'=m) & (m'=k or m'=m) by A15,ZFMISC_1:10;
-        hence thesis by A13,A15;
+A22:    {k',m'}={k,m} and
+A23:    k'<m';
+        k'=k or k'=m by A22,ZFMISC_1:10;
+        hence thesis by A20,A22,A23,ZFMISC_1:10;
       end;
-      hence thesis by A6,A14;
+A24:  k+1>i by A20,NAT_1:13;
+      m+1>k+1 by A9,XREAL_1:10;
+      then
+A25:  {k+1,m+1} in SS1 by A11,A12,MATRIX11:1;
+      m+1>i by A20,NAT_1:13;
+      then not {k+1,m+1} in X by A3,A24;
+      then {k+1,m+1} in SS1\X by A25,XBOOLE_0:def 5;
+      hence thesis by A10,A21;
     end;
   end;
   consider f be Function of SS,SS1\X such that
-A16: for x st x in SS holds P[x,f.x] from FUNCT_2:sch 1(A5);
-  {1,2} in SS by A1,MATRIX11:3;
-  then ex y st y in SS1\X & P[{1,2},y] by A5;
+A26: for x st x in SS holds P[x,f.x] from FUNCT_2:sch 1(A5);
+  ex y st y in SS1\X & P[{1,2},y] by A2,A5,MATRIX11:3;
   then reconsider SSX=SS1\X as non empty set;
   reconsider f as Function of SS,SSX;
-A17: SSX c= rng f
+A27: SSX c= rng f
   proof
     let x such that
-A18: x in SSX;
+A28: x in SSX;
     consider k,m be Nat such that
-A19: k in Seg n1 & m in Seg n1 & k < m & x={k,m} by A18,MATRIX11:1;
-    1<=k & 1<=m by A19,FINSEQ_1:3;
-    then reconsider k1=k-1,m1=m-1 as Element of NAT by NAT_1:21;
-    reconsider m'=m,k'=k as Element of NAT by ORDINAL1:def 13;
-A20: k<>i & m<>i
+A29: k in Seg n1 and
+A30: m in Seg n1 and
+A31: k < m and
+A32: x={k,m} by A28,MATRIX11:1;
+A33: k<>i & m<>i
     proof
-      assume k=i or m=i;
-      then x in X by A18,A19;
-      hence thesis by A18,XBOOLE_0:def 5;
+      assume
+      k=i or m=i;
+      then x in X by A28,A29,A30,A32;
+      hence thesis by A28,XBOOLE_0:def 5;
     end;
-    per cases by A20,XXREAL_0:1;
+A34: 1<=m by A30,FINSEQ_1:3;
+    1<=k by A29,FINSEQ_1:3;
+    then reconsider k1=k-1,m1=m-1 as Element of NAT by A34,NAT_1:21;
+    reconsider m'=m,k'=k as Element of NAT by ORDINAL1:def 13;
+    per cases by A33,XXREAL_0:1;
     suppose
-A21:  k<i & m<i;
+A35:  k<i & m<i;
+A36:  i<=n+1 by A1,FINSEQ_1:3;
+      then k<n+1 by A35,XXREAL_0:2;
+      then
+A37:  k<=n by NAT_1:13;
+      m <n+1 by A35,A36,XXREAL_0:2;
+      then
+A38:  m<=n by NAT_1:13;
+      1<=m by A30,FINSEQ_1:3;
+      then
+A39:  m in Seg n by A38,FINSEQ_1:3;
+A40:  dom f=SS by FUNCT_2:def 1;
+      1<=k by A29,FINSEQ_1:3;
+      then k in Seg n by A37,FINSEQ_1:3;
+      then
+A41:  {k',m'} in SS by A31,A39,MATRIX11:1;
+      then x=f.x by A26,A31,A32,A35;
+      hence thesis by A32,A41,A40,FUNCT_1:def 5;
+    end;
+    suppose
+      k>i & m<i;
+      hence thesis by A31,XXREAL_0:2;
+    end;
+    suppose
+A42:  k<i & m>i;
+      1<=i by A1,FINSEQ_1:3;
+      then
+A43:  1< m1+1 by A42,XXREAL_0:2;
+      then
+A44:  i<=m1 by A42,NAT_1:13;
+      then
+A45:  k<m1 by A42,XXREAL_0:2;
       i<=n+1 by A1,FINSEQ_1:3;
-      then k<n+1 & m <n+1 by A21,XXREAL_0:2;
-      then 1<=k & 1<=m & k<=n & m<=n by A19,FINSEQ_1:3,NAT_1:13;
-      then k in Seg n & m in Seg n by FINSEQ_1:3;
-      then {k',m'} in SS & dom f=SS by A19,FUNCT_2:def 1,MATRIX11:1;
-      then x=f.x & f.x in rng f by A16,A19,A21,FUNCT_1:def 5;
-      hence thesis;
-    end;
-    suppose k>i & m<i;
-      hence thesis by A19,XXREAL_0:2;
+      then k<n+1 by A42,XXREAL_0:2;
+      then
+A46:  k<=n by NAT_1:13;
+A47:  dom f=SS by FUNCT_2:def 1;
+      (m1+1) <= n+1 by A30,FINSEQ_1:3;
+      then m1 < n+1 by NAT_1:13;
+      then
+A48:  m1<=n by NAT_1:13;
+      1<=m1 by A43,NAT_1:13;
+      then
+A49:  m1 in Seg n by A48;
+      1<=k by A29,FINSEQ_1:3;
+      then k in Seg n by A46,FINSEQ_1:3;
+      then
+A50:  {k',m1} in SS by A49,A45,MATRIX11:1;
+      then f.{k',m1}={k',m1+1} by A26,A42,A44,A45;
+      hence thesis by A32,A50,A47,FUNCT_1:def 5;
     end;
     suppose
-A22:  k<i & m>i;
-      i<=n+1 & (m1+1) <= n+1 & 1<=i by A1,A19,FINSEQ_1:3;
-      then k<n+1 & m1 < n+1 & 1< m1+1 by A22,NAT_1:13,XXREAL_0:2;
+A51:  k>i & m>i;
+      (k1+1) <= n+1 by A29,FINSEQ_1:3;
+      then k1<n+1 by NAT_1:13;
       then
-A23:  1<=k&k<=n&m1<=n&1<=m1&i<=m1 by A19,A22,FINSEQ_1:3,NAT_1:13;
-      then k in Seg n & m1 in Seg n & k<m1 by A22,FINSEQ_1:3,XXREAL_0:2;
-      then {k',m1} in SS & dom f=SS & k<m1 by FUNCT_2:def 1,MATRIX11:1;
-      then f.{k',m1}={k',m1+1} & f.{k',m1} in rng f
-      by A16,A22,A23,FUNCT_1:def 5;
-      hence thesis by A19;
-    end;
-    suppose
-A24:  k>i & m>i;
-      (k1+1) <= n+1 & (m1+1) <= n+1 & 1<=i by A1,A19,FINSEQ_1:3;
-      then k1<n+1 & m1<n+1 & 1<m1+1 & 1<k1+1 by A24,NAT_1:13,XXREAL_0:2;
+A52:  k1<=n by NAT_1:13;
+A53:  dom f=SS by FUNCT_2:def 1;
+      (m1+1) <= n+1 by A30,FINSEQ_1:3;
+      then m1<n+1 by NAT_1:13;
       then
-A25:  1<=k1 & k1<=n & m1<=n&1<=m1&i<=m1&i<=k1 by A24,NAT_1:13;
-      then k1 in Seg n & m1 in Seg n & k1<m1 by A19,XREAL_1:11;
-      then {k1,m1} in SS & dom f=SS & k1<m1 by FUNCT_2:def 1,MATRIX11:1;
-      then f.{k1,m1}={k1+1,m1+1}&f.{k1,m1} in rng f by A16,A25,FUNCT_1:def 5;
-      hence thesis by A19;
+A54:  m1<=n by NAT_1:13;
+A55:  k1<m1 by A31,XREAL_1:11;
+A56:  1<=i by A1,FINSEQ_1:3;
+      then
+A57:  1<m1+1 by A51,XXREAL_0:2;
+A58:  1<k1+1 by A51,A56,XXREAL_0:2;
+      then
+A59:  i<=k1 by A51,NAT_1:13;
+      1<=k1 by A58,NAT_1:13;
+      then
+A60:  k1 in Seg n by A52;
+      1<=m1 by A57,NAT_1:13;
+      then m1 in Seg n by A54;
+      then
+A61:  {k1,m1} in SS by A60,A55,MATRIX11:1;
+      i<=m1 by A51,A57,NAT_1:13;
+      then f.{k1,m1}={k1+1,m1+1} by A26,A59,A55,A61;
+      hence thesis by A32,A61,A53,FUNCT_1:def 5;
     end;
   end;
-A26: rng f c= SSX by RELAT_1:def 19;
+A62: rng f c= SSX by RELAT_1:def 19;
   then
-A27: SSX = rng f by A17,XBOOLE_0:def 10;
-  SSX c= SS1 & dom f=SS by FUNCT_2:def 1;
-  then reconsider f as Function of SS,SS1 by A27,FUNCT_2:4;
+A63: SSX = rng f by A27,XBOOLE_0:def 10;
+  dom f=SS by FUNCT_2:def 1;
+  then reconsider f as Function of SS,SS1 by A63,FUNCT_2:4;
   take f;
   for x1,x2 be set st x1 in SS & x2 in SS & f.x1 = f.x2 holds x1 = x2
   proof
     let x1,x2 be set such that
-A28: x1 in SS & x2 in SS & f.x1 = f.x2;
-    consider k1,m1 be Nat such that
-A29: k1 in Seg n & m1 in Seg n & k1 < m1 & x1={k1,m1} by A28,MATRIX11:1;
+A64: x1 in SS and
+A65: x2 in SS and
+A66: f.x1 = f.x2;
     consider k2,m2 be Nat such that
-A30: k2 in Seg n & m2 in Seg n & k2 < m2 & x2={k2,m2} by A28,MATRIX11:1;
+    k2 in Seg n and
+    m2 in Seg n and
+A67: k2 < m2 and
+A68: x2={k2,m2} by A65,MATRIX11:1;
+    consider k1,m1 be Nat such that
+    k1 in Seg n and
+    m1 in Seg n and
+A69: k1 < m1 and
+A70: x1={k1,m1} by A64,MATRIX11:1;
     reconsider m1,m2,k1,k2 as Element of NAT by ORDINAL1:def 13;
     per cases;
-    suppose k1<i & m1<i & k2<i & m2<i;
-      then f.x1=x1 & f.x2=x2 by A16,A28,A29,A30;
-      hence thesis by A28;
+    suppose
+A71:  k1<i & m1<i & k2<i & m2<i;
+      then f.x1=x1 by A26,A64,A69,A70;
+      hence thesis by A26,A65,A66,A67,A68,A71;
     end;
     suppose
-A31:  k1<i & m1<i & (k2<i or k2>=i) & m2>=i;
-      then f.x1={k1,m1} & (f.x2={k2,m2+1} or f.x2={k2+1,m2+1})
-      by A16,A28,A29,A30;
-      then ((k1=k2 or k1=m2+1) & (m1=k2 or m1=m2+1)) or
-      ((k1=k2+1 or k1=m2+1)&(m1=k2+1 or m1=m2+1)) by A28,ZFMISC_1:10;
-      hence thesis by A29,A31,NAT_1:13;
+A72:  k1<i & m1<i & (k2<i or k2>=i) & m2>=i;
+      then
+A73:  f.x2={k2,m2+1} or f.x2={k2+1,m2+1} by A26,A65,A67,A68;
+      f.x1={k1,m1} by A26,A64,A69,A70,A72;
+      then (k1=k2 or k1=m2+1) & (m1=k2 or m1=m2+1) or (k1=k2+1 or k1=m2+1)&(
+      m1=k2+1 or m1=m2+1) by A66,A73,ZFMISC_1:10;
+      hence thesis by A69,A72,NAT_1:13;
     end;
     suppose
-A32:  k1<i & m1>=i & k2<i & m2>=i;
-      then f.x1={k1,m1+1} & f.x2={k2,m2+1} by A16,A28,A29,A30;
-      then (k1=k2 or k1=m2+1)&(m1+1=k2 or m1+1=m2+1) by A28,ZFMISC_1:10;
-      hence thesis by A29,A30,A32,NAT_1:13;
+A74:  k1<i & m1>=i & k2<i & m2>=i;
+      then
+A75:  f.x2={k2,m2+1} by A26,A65,A67,A68;
+A76:  f.x1={k1,m1+1} by A26,A64,A69,A70,A74;
+      then
+A77:  m1+1=k2 or m1+1=m2+1 by A66,A75,ZFMISC_1:10;
+      k1=k2 or k1=m2+1 by A66,A76,A75,ZFMISC_1:10;
+      hence thesis by A70,A68,A74,A77,NAT_1:13;
     end;
     suppose
-A33:  k1<i & m1>=i & ((k2>=i & m2>=i) or (k2<i & m2<i));
-      then f.x1={k1,m1+1} & (f.x2 = {k2+1,m2+1} or f.x2 = {k2,m2})
-      by A16,A28,A29,A30;
-      then ((k1=k2+1 or k1=m2+1)&(m1+1=k2+1 or m1+1=m2+1)) or
-      ((k1=k2 or k1=m2) & (m1+1=k2 or m1+1=m2)) by A28,ZFMISC_1:10;
-      hence thesis by A33,NAT_1:13;
-    end;
-    suppose (k1>=i & m1<i) or (k2>=i & m2<i);
-      hence thesis by A29,A30,XXREAL_0:2;
-    end;
-    suppose k1>=i & m1>=i & k2>=i & m2>=i;
-      then f.x1={k1+1,m1+1} & f.x2={k2+1,m2+1} by A16,A28,A29,A30;
-      then (k1+1=k2+1 or k1+1=m2+1) & (m1+1=k2+1 or m1+1=m2+1)
-      by A28,ZFMISC_1:10;
-      hence thesis by A29,A30;
+A78:  k1<i & m1>=i & ( k2>=i & m2>=i or k2<i & m2<i );
+      then
+A79:  f.x2 = {k2+1,m2+1} or f.x2 = {k2,m2} by A26,A65,A67,A68;
+      f.x1={k1,m1+1} by A26,A64,A69,A70,A78;
+      then (k1=k2+1 or k1=m2+1)&(m1+1=k2+1 or m1+1=m2+1) or (k1=k2 or k1=m2)
+      & (m1+1=k2 or m1+1=m2) by A66,A79,ZFMISC_1:10;
+      hence thesis by A78,NAT_1:13;
     end;
     suppose
-A34:  k1>=i & m1>=i & ((k2<i & m2<i) or (k2<i & m2>=i));
-      then f.x1={k1+1,m1+1} & (f.x2={k2,m2} or f.x2={k2,m2+1})
-      by A16,A28,A29,A30;
-      then ((k1+1=k2 or k1+1=m2) & (m1+1=k2 or m1+1=m2)) or
-      ((k1+1=k2 or k1+1=m2+1)&(m1+1=k2 or m1+1=m2+1)) by A28,ZFMISC_1:10;
-      hence thesis by A29,A34,NAT_1:13;
+      k1>=i & m1<i or k2>=i & m2<i;
+      hence thesis by A69,A67,XXREAL_0:2;
+    end;
+    suppose
+A80:  k1>=i & m1>=i & k2>=i & m2>=i;
+      then
+A81:  f.x2={k2+1,m2+1} by A26,A65,A67,A68;
+A82:  f.x1={k1+1,m1+1} by A26,A64,A69,A70,A80;
+      then
+A83:  m1+1=k2+1 or m1+1=m2+1 by A66,A81,ZFMISC_1:10;
+      k1+1=k2+1 or k1+1=m2+1 by A66,A82,A81,ZFMISC_1:10;
+      hence thesis by A69,A70,A68,A83;
+    end;
+    suppose
+A84:  k1>=i & m1>=i & ( k2<i & m2<i or k2<i & m2>=i );
+      then
+A85:  f.x2={k2,m2} or f.x2={k2,m2+1} by A26,A65,A67,A68;
+      f.x1={k1+1,m1+1} by A26,A64,A69,A70,A84;
+      then (k1+1=k2 or k1+1=m2) & (m1+1=k2 or m1+1=m2) or (k1+1=k2 or k1+1=m2
+      +1)&(m1+1=k2 or m1+1=m2+1) by A66,A85, ZFMISC_1:10;
+      hence thesis by A69,A84,NAT_1:13;
     end;
   end;
-  hence thesis by A16,A17,A26,FUNCT_2:25,XBOOLE_0:def 10;
+  hence thesis by A26,A27,A62,FUNCT_2:25,XBOOLE_0:def 10;
 end;
 
 theorem Th11:
-  n < 2 implies for p be Element of Permutations n holds p is even & p=idseq n
+  n < 2 implies for p be Element of Permutations n holds p is even
+  & p=idseq n
 proof
   assume
 A1: n<2;
   let p be Element of Permutations n;
   reconsider P=p as Permutation of Seg n by MATRIX_2:def 11;
-  now per cases by A1,NAT_1:23;
+  now
+    per cases by A1,NAT_1:23;
     suppose
 A2:   n=0;
-      then dom P={} by FINSEQ_1:4;
-      then P={} & len Permutations(n)=n by MATRIX_2:20;
-      hence thesis by A2,FINSEQ_1:4,MATRIX_2:29,RELAT_1:81;
+    then
+B2:   Seg n={};
+A3:   len Permutations(n)=n by MATRIX_2:20;
+      P={} by A2,FINSEQ_1:4;
+      hence thesis by A2,A3,FINSEQ_1:4,MATRIX_2:29,RELAT_1:81,B2;
     end;
-    suppose n=1;
-      then P=id Seg n & len Permutations(n)=n by MATRIX_2:20,21,TARSKI:def 1;
-      hence thesis by MATRIX_2:29;
+    suppose
+A4:   n=1;
+A5:   len Permutations(n)=n by MATRIX_2:20;
+      P=id Seg n by A4,MATRIX_2:21,TARSKI:def 1;
+      hence thesis by A5,MATRIX_2:29;
     end;
   end;
   hence thesis;
 end;
 
 theorem Th12:
-  for X,Y,D be non empty set
-  for f be Function of X,Fin Y, g be Function of Fin Y,D, F be BinOp of D st
-  (for A,B be Element of Fin Y st A misses B holds F.(g.A,g.B) = g.(A \/ B)) &
-  F is commutative associative & F is having_a_unity & g.{} = the_unity_wrt F
-  for I be Element of Fin X st
-  for x,y st x in I & y in I & f.x meets f.y holds x = y holds
-  F $$ (I,g*f) = F $$ (f.:I,g) & F $$ (f.:I,g) = g.union (f.:I) &
-  union (f.:I) is Element of Fin Y
+  for X,Y,D be non empty set for f be Function of X,Fin Y, g be
+  Function of Fin Y,D, F be BinOp of D st (for A,B be Element of Fin Y st A
+misses B holds F.(g.A,g.B) = g.(A \/ B)) & F is commutative associative & F is
+having_a_unity & g.{} = the_unity_wrt F for I be Element of Fin X st for x,y st
+x in I & y in I & f.x meets f.y holds x = y holds F $$ (I,g*f) = F $$ (f.:I,g)
+  & F $$ (f.:I,g) = g.union (f.:I) & union (f.:I) is Element of Fin Y
 proof
   let X,Y,D be non empty set;
-  let f be Function of X,Fin Y, g be Function of Fin Y,D, F be BinOp of D
-  such that
-A1: for A,B be Element of Fin Y st A misses B holds F.(g.A,g.B)=g.(A \/ B) and
-A2: F is commutative associative & F is having_a_unity & g.{}=the_unity_wrt F;
-  defpred P[set] means for I be Element of Fin X st I=$1 &
-  for x,y st x in I & y in I & f.x meets f.y holds x=y holds
-  F $$ (I,g*f)=F $$ (f.:I,g) & F $$ (f.:I,g)= g.union (f.:I) &
-  union (f.:I) is Element of Fin Y;
-A3: P[{}.X]
-  proof
-    let I be Element of Fin X such that
-A4: {}.X=I and for x,y st x in I & y in I & f.x meets f.y holds x=y;
-    f.:I={}.(Fin Y) by A4,RELAT_1:149;
-    then F $$ (I,g*f)=g.{} & union(f.:I)={} & F $$ (f.:I,g)=g.{}&{}c= Y
-    by A2,A4,SETWISEO:40,XBOOLE_1:2,ZFMISC_1:2;
-    hence thesis by FINSUB_1:def 5;
-  end;
-A5: for I be (Element of Fin X), i be Element of X
-  holds P[I] & not i in I implies P[I \/ {i}]
+  let f be Function of X,Fin Y, g be Function of Fin Y,D, F be BinOp of D such
+  that
+A1: for A,B be Element of Fin Y st A misses B holds F.(g.A,g.B)=g.(A \/
+  B) and
+A2: F is commutative associative and
+A3: F is having_a_unity and
+A4: g.{}=the_unity_wrt F;
+  defpred P[set] means for I be Element of Fin X st I=$1 & for x,y st x in I &
+y in I & f.x meets f.y holds x=y holds F $$ (I,g*f)=F $$ (f.:I,g) & F $$ (f.:I,
+  g)= g.union (f.:I) & union (f.:I) is Element of Fin Y;
+A5: for I be (Element of Fin X), i be Element of X holds P[I] & not i in I
+  implies P[I \/ {i}]
   proof
     let A be (Element of Fin X), a be Element of X such that
-A6: P[A] & not a in A;
+A6: P[A] and
+A7: not a in A;
     let I be Element of Fin X such that
-A7: A\/{a}=I and
-A8: for x,y st x in I & y in I & f.x meets f.y holds x=y;
-A9: for x,y st x in A & y in A & f.x meets f.y holds x=y
+A8: A\/{a}=I and
+A9: for x,y st x in I & y in I & f.x meets f.y holds x=y;
+A10: for x,y st x in A & y in A & f.x meets f.y holds x=y
     proof
       let x,y such that
-A10:  x in A & y in A & f.x meets f.y;
-      A c= I by A7,XBOOLE_1:7;
-      hence thesis by A8,A10;
+A11:  x in A and
+A12:  y in A and
+A13:  f.x meets f.y;
+      A c= I by A8,XBOOLE_1:7;
+      hence thesis by A9,A11,A12,A13;
     end;
     then
-A11: F $$ (A,g*f)=F $$ (f.:A,g) & F $$ (f.:A,g)=g.union(f.:A) &
-    union (f.:A) is Element of Fin Y by A6;
+A14: F $$ (A,g*f)=F $$ (f.:A,g) by A6;
+A15: union (f.:A) is Element of Fin Y by A6,A10;
     dom f=X by FUNCT_2:def 1;
-    then Im(f,a)={f.a} & dom (g*f)=X by FUNCT_1:117,FUNCT_2:def 1;
+    then Im(f,a)={f.a} by FUNCT_1:117;
     then
-A12: f.:I=f.:A\/{f.a} & g.(f.a)=(g*f).a by A7,FUNCT_1:22,RELAT_1:153;
+A16: f.:I=f.:A\/{f.a} by A8,RELAT_1:153;
+A17: F $$ (f.:A,g)=g.union(f.:A) by A6,A10;
+    dom (g*f)=X by FUNCT_2:def 1;
+    then
+A18: g.(f.a)=(g*f).a by FUNCT_1:22;
     per cases;
     suppose
-A13:  f.a is non empty or not f.a in f.:A;
+A19:  f.a is non empty or not f.a in f.:A;
       not f.a in f.:A
       proof
+A20:    A c= I by A8,XBOOLE_1:7;
+A21:    {a} c= I by A8,XBOOLE_1:7;
+A22:    a in {a} by TARSKI:def 1;
         assume
-A14:    f.a in f.:A;
+A23:    f.a in f.:A;
         then consider x such that
-A15:    x in dom f & x in A & f.x=f.a by FUNCT_1:def 12;
-        a in {a} & {a} c= I & A c= I by A7,TARSKI:def 1,XBOOLE_1:7;
-        then f.x meets f.a&a in I&x in I by A13,A14,A15,XBOOLE_1:66;
-        hence thesis by A6,A8,A15;
+        x in dom f and
+A24:    x in A and
+A25:    f.x=f.a by FUNCT_1:def 12;
+        f.x meets f.a by A19,A23,A25,XBOOLE_1:66;
+        hence thesis by A7,A9,A24,A22,A21,A20;
       end;
       then
-A16:  F $$ (f.:I,g)=F.(F$$(f.:A,g),(g*f).a)&
-      F $$ (I,g*f)=F.(F$$(A,g*f),(g*f).a) by A2,A6,A7,A12,SETWOP_2:4;
-      f.a c= Y & f.a is finite & union (f.:A) c= Y&union (f.:A) is finite
-      by A11,FINSUB_1:def 5;
+A26:  F $$ (f.:I,g)=F.(F$$(f.:A,g),(g*f).a) by A2,A3,A16,A18,
+      SETWOP_2
+      :4;
+A27:  f.a c= Y by FINSUB_1:def 5;
+      union (f.:A) c= Y by A15,FINSUB_1:def 5;
       then
-A17:  (union (f.:A))\/f.a c= Y & (union (f.:A))\/f.a is finite
-      by XBOOLE_1:8;
-A18:  union (f.:I) = union (f.:A)\/union {f.a} by A12,ZFMISC_1:96
-        .= union (f.:A)\/f.a by ZFMISC_1:31;
+A28:  (union (f.:A))\/f.a c= Y by A27,XBOOLE_1:8;
       now
-        let x such that
-A19:    x in f.:A;
-        consider y such that
-A20:    y in dom f & y in A & f.y=x by A19,FUNCT_1:def 12;
+        let x;
         assume
-A21:    x meets f.a;
-        a in {a} & {a} c= I & A c= I by A7,TARSKI:def 1,XBOOLE_1:7;
-        hence contradiction by A6,A8,A20,A21;
+        x in f.:A;
+        then
+A29:    ex y st y in dom f & y in A & f.y=x by FUNCT_1:def 12;
+A30:    a in {a} by TARSKI:def 1;
+A31:    A c= I by A8,XBOOLE_1:7;
+A32:    {a} c= I by A8,XBOOLE_1:7;
+        assume
+        x meets f.a;
+        hence contradiction by A7,A9,A29,A30,A32,A31;
       end;
-      then union(f.:A) misses f.a by ZFMISC_1:98;
-      hence thesis by A1,A11,A12,A16,A17,A18,FINSUB_1:def 5;
+      then
+A33:  union(f.:A) misses f.a by ZFMISC_1:98;
+      union (f.:I) = union (f.:A)\/union {f.a} by A16,ZFMISC_1:96
+        .= union (f.:A)\/f.a by ZFMISC_1:31;
+      hence thesis by A1,A2,A3,A7,A8,A14,A17,A15,A18,A26,A28,A33,
+      FINSUB_1:def 5,SETWOP_2:4;
     end;
     suppose
-A22:  f.a is empty & f.a in f.:A;
+A34:  f.a is empty & f.a in f.:A;
       then
-A23:  F is having_a_unity & f.:A\/{f.a}=f.:A by A2,ZFMISC_1:46;
-      F $$ (I,g*f) = F.(F $$ (f.:A,g),the_unity_wrt F)
-      by A2,A6,A7,A11,A12,A22,SETWOP_2:4
-        .= F $$ (f.:I,g) by A12,A23,SETWISEO:23;
-      hence thesis by A6,A9,A12,A23;
+A35:  f.:A\/{f.a}=f.:A by ZFMISC_1:46;
+      F $$ (I,g*f) = F.(F $$ (f.:A,g),the_unity_wrt F) by A2,A3,A4,A7,
+      A8,A14,A18,A34,SETWOP_2:4
+        .= F $$ (f.:I,g) by A3,A16,A35,SETWISEO:23;
+      hence thesis by A6,A10,A16,A35;
     end;
   end;
-  for I be Element of Fin X holds P[I] from SETWISEO:sch 2(A3,A5);
+A36: P[{}.X]
+  proof
+A37: {}c= Y by XBOOLE_1:2;
+    let I be Element of Fin X such that
+A38: {}.X=I and
+    for x,y st x in I & y in I & f.x meets f.y holds x=y;
+A39: f.:I={}.(Fin Y) by A38,RELAT_1:149;
+    F $$ (I,g*f)=g.{} by A2,A3,A4,A38,SETWISEO:40;
+    hence thesis by A2,A3,A4,A39,A37,FINSUB_1:def 5,SETWISEO:40,ZFMISC_1:2;
+  end;
+  for I be Element of Fin X holds P[I] from SETWISEO:sch 2(A36,A5);
   hence thesis;
 end;
 
@@ -930,14 +1180,17 @@ A2: j in Seg n;
   coherence
   proof
     set D=Deleting(M,i,j);
-A3: len M=n & width M=n by MATRIX_1:25;
+A3: width M=n by MATRIX_1:25;
+    len M=n by MATRIX_1:25;
     then dom M=Seg n by FINSEQ_1:def 3;
     then
 A4: len D=n-'1 by A1,Th2;
     per cases;
-    suppose n-'1=0;
-      then dom D = Seg 0 & Seg 0={} by A4,FINSEQ_1:4,def 3;
-      then for f st f in rng D holds len f = n-'1 by RELAT_1:65;
+    suppose
+      n-'1=0;
+      then dom D = Seg 0 by A4,FINSEQ_1:def 3;
+      then for f st f in rng D holds len f = n-'1 by
+      FINSEQ_1:4,RELAT_1:65;
       hence thesis by A4,MATRIX_1:def 3;
     end;
     suppose
@@ -949,139 +1202,177 @@ A5:   n-'1>0;
 end;
 
 theorem Th13:
-  for i,j st i in Seg n & j in Seg n
-  for k,m st k in Seg (n-'1) & m in Seg (n-'1) holds
-  (k < i & m < j implies Delete(M,i,j)*(k,m) = M*(k,m) )&
-  (k < i & m >= j implies Delete(M,i,j)*(k,m) = M*(k,m+1) )&
-  (k >= i & m < j implies Delete(M,i,j)*(k,m) = M*(k+1,m) )&
-  (k >= i & m >= j implies Delete(M,i,j)*(k,m) = M*(k+1,m+1))
+  for i,j st i in Seg n & j in Seg n for k,m st k in Seg (n-'1) &
+m in Seg (n-'1) holds (k < i & m < j implies Delete(M,i,j)*(k,m) = M*(k,m) )& (
+  k < i & m >= j implies Delete(M,i,j)*(k,m) = M*(k,m+1) )& (k >= i & m < j
+implies Delete(M,i,j)*(k,m) = M*(k+1,m) )& (k >= i & m >= j implies Delete(M,i,
+  j)*(k,m) = M*(k+1,m+1))
 proof
   let i,j such that
-A1: i in Seg n & j in Seg n;
-  let k,m such that
-A2: k in Seg (n-'1) & m in Seg (n-'1);
-  reconsider I=i, J=j, K=k, U = m as Element of NAT by ORDINAL1:def 13;
-  n<>0 by A1,FINSEQ_1:4;
-  then n>0;
-  then reconsider n'=n-1 as Element of NAT by NAT_1:20;
-A3: n-'1=n' by XREAL_0:def 2;
-  set DL=DelLine(M,i);
+A1: i in Seg n and
+A2: j in Seg n;
   set DM=Delete(M,i,j);
-A4: len M=n by MATRIX_1:25;
+A3: Deleting(M,i,j)=DM by A1,A2,Def1;
+  n>0 by A1,FINSEQ_1:4;
+  then reconsider n'=n-1 as Element of NAT by NAT_1:20;
+  set DL=DelLine(M,i);
+  let k,m such that
+A4: k in Seg (n-'1) and
+A5: m in Seg (n-'1);
+A6: n-'1=n' by XREAL_0:def 2;
   then
-A5: dom M=Seg n & len DM=n' by A3,FINSEQ_1:def 3,MATRIX_1:25;
-  then len DL=n' by A1,A3,A4,Th1;
-  then dom DM=Seg n' & dom DL=Seg n' & width DM=n'
-  by A3,A5,FINSEQ_1:def 3,MATRIX_1:25;
-  then
-A6: Deleting(M,i,j).k=Del(Line(DL,k),j) & Deleting(M,i,j)=DM &
-  DM.k=Line(DM,k) & Line(DM,k).m=DM*(k,m) & Line(DL,k)=DL.k
-  by A1,A2,A3,Def1,MATRIX_1:def 8,MATRIX_2:18,def 6;
+A7: k+1 in Seg (n'+1) by A4,FINSEQ_1:81;
+  reconsider I=i, J=j, K=k, U = m as Element of NAT by ORDINAL1:def 13;
   n'<=n'+1 by NAT_1:11;
   then
-A7: Seg n' c= Seg n & k+1 in Seg (n'+1) & m+1 in Seg (n'+1)
-  by A2,A3,FINSEQ_1:7,81;
-A8: K<I implies
-  ((U<J implies DM*(K,U)=M*(K,U))&(U>=J implies DM*(K,U)=M*(K,U+1)))
+A8: Seg n' c= Seg n by FINSEQ_1:7;
+A9: len M=n by MATRIX_1:25;
+  then
+A10: dom M=Seg n by FINSEQ_1:def 3;
+  then len DL=n' by A1,A6,A9,Th1;
+  then
+A11: dom DL=Seg n' by FINSEQ_1:def 3;
+  then
+A12: Deleting(M,i,j).k=Del(Line(DL,k),j) by A4,A6,MATRIX_2:def 6;
+  len DM=n' by A6,MATRIX_1:25;
+  then dom DM=Seg n' by FINSEQ_1:def 3;
+  then
+A13: DM.k=Line(DM,k) by A4,A6,MATRIX_2:18;
+  width DM=n' by A6,MATRIX_1:25;
+  then
+A14: Line(DM,k).m=DM*(k,m) by A5,A6,MATRIX_1:def 8;
+A15: Line(DL,k)=DL.k by A4,A6,A11,MATRIX_2:18;
+A16: m+1 in Seg (n'+1) by A5,A6,FINSEQ_1:81;
+A17: K>=I implies (U<J implies DM*(K,U)=M*(K+1,U))&(U>=J implies DM*(K,U)=M*
+  (K+1,U+1))
   proof
-    assume K < I;
+    assume
+A18: K >=I;
+    K<=n' by A4,A6,FINSEQ_1:3;
     then
-A9: DL.K=M.K & M.K=Line(M,K) by A2,A3,A4,A5,A7,FINSEQ_3:119,MATRIX_2:18;
+A19: DL.K=M.(K+1) by A1,A9,A10,A7,A18,FINSEQ_3:120;
+A20: M.(K+1)=Line(M,K+1) by A10,A7,MATRIX_2:18;
+    thus U<J implies DM*(K,U)=M*(K+1,U)
+    proof
+A21:  width M=n by MATRIX_1:25;
+      assume
+A22:  U<J;
+      len Line(DL,K)=width M by A15,A19,A20,MATRIX_1:def 8;
+      then DM*(K,U)=Line(M,K+1).U by A12,A3,A13,A14,A15,A7,A19,A20,A22,
+      FINSEQ_3:119,MATRIX_1:25;
+      hence thesis by A5,A6,A8,A21,MATRIX_1:def 8;
+    end;
+    assume
+A23: U>=J;
+A24: U<=n' by A5,A6,FINSEQ_1:3;
+A25: width M=n by MATRIX_1:25;
+A26: len Line(DL,K)=width M by A15,A19,A20,MATRIX_1:def 8;
+    then J in dom Line(DL,K) by A2,A25,FINSEQ_1:def 3;
+    then
+    DM*(K,U)=Line(M,K+1).(U+1) by A12,A3,A13,A14,A15,A7,A19,A20,A23,A26
+    ,A24,FINSEQ_3:120,MATRIX_1:25;
+    hence thesis by A16,A25,MATRIX_1:def 8;
+  end;
+  K<I implies (U<J implies DM*(K,U)=M*(K,U))&(U>=J implies DM*(K,U)=M*(K,
+  U+1))
+  proof
+    assume
+    K < I;
+    then
+A27: DL.K=M.K by A9,A7,FINSEQ_3:119;
+A28: M.K=Line(M,K) by A4,A6,A10,A8,MATRIX_2:18;
     thus U<J implies DM*(K,U) = M*(K,U)
     proof
       assume
-A10:  U<J;
-      len Line(DL,K)=width M & width M=n'+1 by A6,A9,MATRIX_1:25,def 8;
-      then DM*(K,U)=Line(M,K).U & Line(M,K).U= M*(K,U)
-      by A2,A3,A6,A7,A9,A10,FINSEQ_3:119,MATRIX_1:def 8;
-      hence thesis;
+A29:  U<J;
+A30:  width M=n'+1 by MATRIX_1:25;
+      len Line(DL,K)=width M by A15,A27,A28,MATRIX_1:def 8;
+      then DM*(K,U)=Line(M,K).U by A12,A3,A13,A14,A15,A27,A28,A29,A30,
+      FINSEQ_3:119;
+      hence thesis by A5,A6,A8,A30,MATRIX_1:def 8;
     end;
     assume
-A11: U>=J;
-A12: len Line(DL,K)=width M & width M=n by A6,A9,MATRIX_1:25,def 8;
-    then J in dom Line(DL,K) & U<=n' by A1,A2,A3,FINSEQ_1:3,def 3;
-    then DM*(K,U)=Line(M,K).(U+1) & Line(M,K).(U+1)= M*(K,U+1)
-    by A6,A7,A9,A11,A12,FINSEQ_3:120,MATRIX_1:def 8;
-    hence thesis;
+A31: U>=J;
+A32: U<=n' by A5,A6,FINSEQ_1:3;
+A33: width M=n by MATRIX_1:25;
+A34: len Line(DL,K)=width M by A15,A27,A28,MATRIX_1:def 8;
+    then J in dom Line(DL,K) by A2,A33,FINSEQ_1:def 3;
+    then DM*(K,U)=Line(M,K).(U+1) by A12,A3,A13,A14,A15,A7,A27,A28,A31,A34,
+    A32,FINSEQ_3:120,MATRIX_1:25;
+    hence thesis by A16,A33,MATRIX_1:def 8;
   end;
-  K>=I implies
-  ((U<J implies DM*(K,U)=M*(K+1,U))&(U>=J implies DM*(K,U)=M*(K+1,U+1)))
-  proof
-    assume
-A13: K >=I;
-    K<=n' by A2,A3,FINSEQ_1:3;
-    then
-A14: DL.K=M.(K+1) & M.(K+1)=Line(M,K+1)
-    by A1,A4,A5,A7,A13,FINSEQ_3:120,MATRIX_2:18;
-    thus U<J implies DM*(K,U)=M*(K+1,U)
-    proof
-      assume
-A15:  U<J;
-      len Line(DL,K)=width M & width M=n by A6,A14,MATRIX_1:25,def 8;
-      then DM*(K,U)=Line(M,K+1).U & Line(M,K+1).U= M*(K+1,U)
-      by A2,A3,A6,A7,A14,A15,FINSEQ_3:119,MATRIX_1:def 8;
-      hence thesis;
-    end;
-    assume
-A16: U>=J;
-A17: len Line(DL,K)=width M & width M=n by A6,A14,MATRIX_1:25,def 8;
-    then J in dom Line(DL,K) & U<=n' by A1,A2,A3,FINSEQ_1:3,def 3;
-    then DM*(K,U)=Line(M,K+1).(U+1) & Line(M,K+1).(U+1)= M*(K+1,U+1)
-    by A6,A7,A14,A16,A17,FINSEQ_3:120,MATRIX_1:def 8;
-    hence thesis;
-  end;
-  hence thesis by A8;
+  hence thesis by A17;
 end;
 
 theorem Th14:
-  for i,j st i in Seg n & j in Seg n holds Delete(M,i,j)@ = Delete(M@,j,i)
+  for i,j st i in Seg n & j in Seg n holds Delete(M,i,j)@ = Delete
+  (M@,j,i)
 proof
   let i,j such that
-A1: i in Seg n & j in Seg n;
-  reconsider I=i as Element of NAT by ORDINAL1:def 13;
-  n<>0 by A1,FINSEQ_1:4;
-  then n>0;
+A1: i in Seg n and
+A2: j in Seg n;
+  n>0 by A1,FINSEQ_1:4;
   then reconsider n1=n-1 as Element of NAT by NAT_1:20;
-A2: n1+1-'1=n1 by NAT_D:34;
-  set n'=n-'1;
-  set D=Delete(M,i,j);
-  reconsider DT=D@ as Matrix of n',K;
+  set X1=Seg n;
   reconsider MT=M@ as Matrix of n,K;
+  set D=Delete(M,i,j);
+  set n'=n-'1;
+  reconsider I=i as Element of NAT by ORDINAL1:def 13;
+  reconsider DT=D@ as Matrix of n',K;
   set D'=Delete(MT,j,i);
   set X=Seg n';
-  set X1=Seg n;
+A3: n1+1-'1=n1 by NAT_D:34;
   now
+    n'<=n by NAT_D:35;
+    then
+A4: X c= X1 by FINSEQ_1:7;
     let k,m be Nat such that
-A3: [k,m] in Indices DT;
+A5: [k,m] in Indices DT;
+    [m,k] in Indices D by A5,MATRIX_1:def 7;
+    then
+A6: DT*(k,m)=D*(m,k) by MATRIX_1:def 7;
     reconsider k'=k,m'=m as Element of NAT by ORDINAL1:def 13;
-    Indices DT=[:X,X:] & n'<=n by MATRIX_1:25,NAT_D:35;
+A7: Indices DT=[:X,X:] by MATRIX_1:25;
     then
-A4: k in X & m in X & X c= X1 & n'+1=n by A2,A3,FINSEQ_1:7,ZFMISC_1:106;
+A8: k in X by A5,ZFMISC_1:106;
     then
-A5: k+1 in X1 & m+1 in X1 by FINSEQ_1:81;
-    [m,k] in Indices D by A3,MATRIX_1:def 7;
+A9: k+1 in X1 by A3,FINSEQ_1:81;
+A10: Indices M=[:X1,X1:] by MATRIX_1:25;
+A11: m in X by A5,A7,ZFMISC_1:106;
     then
-A6: DT*(k,m)=D*(m,k) & Indices M=[:X1,X1:] by MATRIX_1:25,def 7;
+A12: m+1 in X1 by A3,FINSEQ_1:81;
     per cases;
-    suppose m'<I & k'<j;
-      then D*(m,k)=M*(m,k) & [m,k] in Indices M & D'*(k,m)=MT*(k,m)
-      by A1,A4,A6,Th13,ZFMISC_1:106;
-      hence DT*(k,m)=D'*(k,m) by A6,MATRIX_1:def 7;
+    suppose
+A13:  m'<I & k'<j;
+      then
+A14:  D'*(k,m)=MT*(k,m) by A1,A2,A8,A11,Th13;
+A15:  [m,k] in Indices M by A8,A11,A4,A10,ZFMISC_1:106;
+      D*(m,k)=M*(m,k) by A1,A2,A8,A11,A13,Th13;
+      hence DT*(k,m)=D'*(k,m) by A6,A15,A14,MATRIX_1:def 7;
     end;
-    suppose m'<I & k'>=j;
-      then D*(m,k)=M*(m,k+1) & [m,k+1] in Indices M & D'*(k,m)=MT*(k+1,m)
-      by A1,A4,A5,A6,Th13,ZFMISC_1:106;
-      hence DT*(k,m)=D'*(k,m) by A6,MATRIX_1:def 7;
+    suppose
+A16:  m'<I & k'>=j;
+      then
+A17:  D'*(k,m)=MT*(k+1,m) by A1,A2,A8,A11,Th13;
+A18:  [m,k+1] in Indices M by A11,A4,A9,A10,ZFMISC_1:106;
+      D*(m,k)=M*(m,k+1) by A1,A2,A8,A11,A16,Th13;
+      hence DT*(k,m)=D'*(k,m) by A6,A18,A17,MATRIX_1:def 7;
     end;
-    suppose m'>=I & k'<j;
-      then D*(m,k)=M*(m+1,k) & [m+1,k] in Indices M & D'*(k,m)=MT*(k,m+1)
-      by A1,A4,A5,A6,Th13,ZFMISC_1:106;
-      hence DT*(k,m)=D'*(k,m) by A6,MATRIX_1:def 7;
+    suppose
+A19:  m'>=I & k'<j;
+      then
+A20:  D'*(k,m)=MT*(k,m+1) by A1,A2,A8,A11,Th13;
+A21:  [m+1,k] in Indices M by A8,A4,A12,A10,ZFMISC_1:106;
+      D*(m,k)=M*(m+1,k) by A1,A2,A8,A11,A19,Th13;
+      hence DT*(k,m)=D'*(k,m) by A6,A21,A20,MATRIX_1:def 7;
     end;
-    suppose m'>=I & k'>=j;
-      then D*(m,k)=M*(m+1,k+1)&[m+1,k+1] in Indices M&D'*(k,m)=MT*(k+1,m+1)
-      by A1,A4,A5,A6,Th13,ZFMISC_1:106;
-      hence DT*(k,m)=D'*(k,m) by A6,MATRIX_1:def 7;
+    suppose
+A22:  m'>=I & k'>=j;
+      then
+A23:  D'*(k,m)=MT*(k+1,m+1) by A1,A2,A8,A11,Th13;
+A24:  [m+1,k+1] in Indices M by A9,A12,A10,ZFMISC_1:106;
+      D*(m,k)=M*(m+1,k+1) by A1,A2,A8,A11,A22,Th13;
+      hence DT*(k,m)=D'*(k,m) by A6,A24,A23,MATRIX_1:def 7;
     end;
   end;
   hence thesis by MATRIX_1:28;
@@ -1092,19 +1383,20 @@ theorem Th15:
   Delete(M,i,j) = Delete(RLine(M,i,f),i,j)
 proof
   let f be FinSequence of K, i,j such that
-A1: i in Seg n & j in Seg n;
-  reconsider I=i as Element of NAT by ORDINAL1:def 13;
-A2: Delete(M,i,j) = Deleting(M,i,j) &
-  Deleting(M,i,j) = DelCol(DelLine(M,i),j) &
-  Delete(RLine(M,i,f),i,j) = Deleting(RLine(M,i,f),i,j) &
-  Deleting(RLine(M,i,f),i,j) = DelCol(DelLine(RLine(M,i,f),i),j) by A1,Def1;
+A1: i in Seg n and
+A2: j in Seg n;
+A3: Delete(M,i,j) = Deleting(M,i,j) by A1,A2,Def1;
+A4: Delete(RLine(M,i,f),i,j) = Deleting(RLine(M,i,f),i,j) by A1,A2,Def1;
   reconsider f'=f as Element of (the carrier of K)* by FINSEQ_1:def 11;
+  reconsider I=i as Element of NAT by ORDINAL1:def 13;
   per cases;
-  suppose len f=width M;
+  suppose
+    len f=width M;
     then RLine(M,I,f)=Replace(M,i,f') by MATRIX11:29;
-    hence thesis by A2,COMPUT_1:6;
+    hence thesis by A3,A4,COMPUT_1:6;
   end;
-  suppose len f<>width M;
+  suppose
+    len f<>width M;
     hence thesis by MATRIX11:def 3;
   end;
 end;
@@ -1115,104 +1407,124 @@ definition
   let pD be FinSequence of D;
   func ReplaceCol(M,c,pD) -> Matrix of n,m,D means
   :Def2:
-  len it = len M & width it = width M & for i,j st [i,j] in Indices M holds
-  (j <> c implies it*(i,j) = M*(i,j)) & (j = c implies it*(i,c) = pD.i)
-  if len pD = len M otherwise it = M;
+  len it = len M &
+width it = width M & for i,j st [i,j] in Indices M holds (j <> c implies it*(i,
+j) = M*(i,j)) & (j = c implies it*(i,c) = pD.i) if len pD = len M otherwise it
+  = M;
   consistency;
   existence
   proof
-    thus len pD=len M implies ex M1 be Matrix of n,m,D st
-    len M1 = len M & width M1 = width M & for i,j st [i,j] in Indices M holds
-    (j <> c implies M1*(i,j) = M*(i,j)) & (j = c implies M1*(i,c) = pD.i)
+    thus len pD=len M implies ex M1 be Matrix of n,m,D st len M1 = len M &
+width M1 = width M & for i,j st [i,j] in Indices M holds (j <> c implies M1*(i,
+    j) = M*(i,j)) & (j = c implies M1*(i,c) = pD.i)
     proof
+      reconsider M'=M as Matrix of len M,width M,D by MATRIX_2:7;
+      reconsider V = n, U = m as Element of NAT by ORDINAL1:def 13;
+      defpred P[set,set,set] means for i,j st i=$1 & j=$2 holds (j <>c implies
+      $3 = M*(i,j)) & (j = c implies $3 = pD.i);
       assume
 A1:   len pD=len M;
-      defpred P[set,set,set] means for i,j st i=$1 & j=$2 holds
-      (j <>c implies $3 = M*(i,j)) & (j = c implies $3 = pD.i);
-      reconsider V = n, U = m as Element of NAT by ORDINAL1:def 13;
-A2:   for i,j be Nat st [i,j] in [:Seg V, Seg U:]
-      for x1,x2 being Element of D st P[i,j,x1] & P[i,j,x2] holds x1 = x2
-      proof
-        let i,j be Nat such that [i,j] in [:Seg V, Seg U:];
-        let x1,x2 being Element of D such that
-A3:     P[i,j,x1] & P[i,j,x2];
-        reconsider i,j as Element of NAT by ORDINAL1:def 13;
-        (j <>c implies x1 = M*(i,j)) & (j = c implies x1 = pD.i) &
-        (j <>c implies x2 = M*(i,j)) & (j = c implies x2 = pD.i) by A3;
-        hence thesis;
-      end;
-A4:   for i,j be Nat st [i,j] in [:Seg V, Seg U:]
-      ex x being Element of D st P[i,j,x]
+A2:   for i,j be Nat st [i,j] in [:Seg V, Seg U:] ex x being Element of D
+      st P[i,j,x]
       proof
         let i,j be Nat such that
-A5:     [i,j] in [:Seg V, Seg U:];
-        now per cases;
+A3:     [i,j] in [:Seg V, Seg U:];
+        now
+          per cases;
           case
-A6:         j=c;
+A4:         j=c;
+A5:         rng pD c= D by FINSEQ_1:def 4;
             len M=n by MATRIX_1:def 3;
-            then i in Seg len pD by A1,A5,ZFMISC_1:106;
+            then i in Seg len pD by A1,A3,ZFMISC_1:106;
             then i in dom pD by FINSEQ_1:def 3;
-            then pD.i in rng pD & rng pD c= D by FINSEQ_1:def 4,FUNCT_1:def 5;
-            then pD.i in D & P[i,j,pD.i] by A6;
-            hence thesis;
+            then
+A6:         pD.i in rng pD by FUNCT_1:def 5;
+            P[i,j,pD.i] by A4;
+            hence thesis by A6,A5;
           end;
-          case j<>c;
+          case
+            j<>c;
             then P[i,j,M*(i,j)];
             hence thesis;
           end;
         end;
         hence thesis;
       end;
+A7:   for i,j be Nat st [i,j] in [:Seg V, Seg U:] for x1,x2 being Element
+      of D st P[i,j,x1] & P[i,j,x2] holds x1 = x2
+      proof
+        let i,j be Nat such that
+        [i,j] in [:Seg V, Seg U:];
+        let x1,x2 being Element of D such that
+A8:     P[i,j,x1] and
+A9:     P[i,j,x2];
+        reconsider i,j as Element of NAT by ORDINAL1:def 13;
+A10:    j = c implies x1 = pD.i by A8;
+        j <>c implies x1 = M*(i,j) by A8;
+        hence thesis by A9,A10;
+      end;
       consider M1 be Matrix of V,U,D such that
-A7:   for i,j be Nat st [i,j] in Indices M1 holds P[i,j,M1*(i,j)]
-      from MATRIX_1:sch 2(A2,A4);
+A11:  for i,j be Nat st [i,j] in Indices M1 holds P[i,j,M1*(i,j)]
+      from MATRIX_1:sch 2(A7,A2);
       reconsider M1 as Matrix of n,m,D;
       take M1;
-A8:   now per cases;
-        suppose n=0;
+A12:  now
+        per cases;
+        suppose
+A13:      n=0;
+          then len M1=0 by MATRIX_1:def 3;
           then
-A9:       len M=0 & len M1=0 by MATRIX_1:def 3;
-          then width M1=0 & 0=width M by MATRIX_1:def 4;
-          hence len M = len M1 & width M1=width M by A9;
+A14:      width M1=0 by MATRIX_1:def 4;
+          len M=0 by A13,MATRIX_1:def 3;
+          hence len M = len M1 & width M1=width M by A13,A14,MATRIX_1:def 3
+          ,def 4;
         end;
-        suppose n > 0;
-          then len M=n & len M1=n & width M=m & width M1=m by MATRIX_1:24;
-          hence len M = len M1 & width M = width M1;
+        suppose
+A15:      n > 0;
+          then
+A16:      width M=m by MATRIX_1:24;
+          len M=n by A15,MATRIX_1:24;
+          hence len M = len M1 & width M = width M1 by A15,A16,MATRIX_1:24;
         end;
       end;
-      reconsider M'=M as Matrix of len M,width M,D by MATRIX_2:7;
-      Indices M'=Indices M & Indices M'=Indices M1 by MATRIX_1:27;
-      hence thesis by A7,A8;
+      Indices M'=Indices M1 by MATRIX_1:27;
+      hence thesis by A11,A12;
     end;
     thus thesis;
   end;
   uniqueness
   proof
     let M1,M2 be Matrix of n,m,D;
-    thus len pD=len M &
-    (len M1 = len M & width M1 = width M & for i,j st [i,j] in Indices M holds
-    (j <> c implies M1*(i,j) = M*(i,j)) & (j = c implies M1*(i,c) = pD.i))&
-    (len M2 = len M & width M2 = width M & for i,j st [i,j] in Indices M holds
-    (j <> c implies M2*(i,j) = M*(i,j)) & (j = c implies M2*(i,c) = pD.i))
-    implies M1=M2
+    thus len pD=len M & (len M1 = len M & width M1 = width M & for i,j st [i,j
+] in Indices M holds (j <> c implies M1*(i,j) = M*(i,j)) & (j = c implies M1*(i
+    ,c) = pD.i))& (len M2 = len M & width M2 = width M & for i,j st [i,j] in
+Indices M holds (j <> c implies M2*(i,j) = M*(i,j)) & (j = c implies M2*(i,c) =
+    pD.i)) implies M1=M2
     proof
-      assume len pD=len M;
       assume
-A10:  len M1=len M&width M1=width M&for i,j st [i,j] in Indices M holds
-      (j <> c implies M1*(i,j) = M*(i,j))&(j = c implies M1*(i,c) = pD.i);
-      assume
-A11:  len M2=len M&width M2=width M&for i,j st [i,j] in Indices M holds
-      (j <> c implies M2*(i,j) = M*(i,j))&(j = c implies M2*(i,c) = pD.i);
+      len pD=len M;
+      assume that
+A17:  len M1=len M and
+A18:  width M1=width M and
+A19:  for i,j st [i,j] in Indices M holds (j <> c implies M1*(i,j) =
+      M*(i, j))&(j = c implies M1*(i,c) = pD.i);
+      assume that
+      len M2=len M and
+      width M2=width M and
+A20:  for i,j st [i,j] in Indices M holds (j <> c implies M2*(i,j) =
+      M*(i, j))&(j = c implies M2*(i,c) = pD.i);
       for i,j be Nat st [i,j] in Indices M1 holds M1*(i,j)=M2*(i,j)
       proof
-        let i,j be Nat such that
-A12:    [i,j] in Indices M1;
+        let i,j be Nat;
+        assume
+        [i,j] in Indices M1;
+        then
+A21:    [i,j] in Indices M by A17,A18,MATRIX_4:55;
         reconsider I=i,J=j as Element of NAT by ORDINAL1:def 13;
-        [i,j] in Indices M by A10,A12,MATRIX_4:55;
-        then (J<>c implies M1*(I,J)=M*(I,J)) & (J=c implies M1*(I,c)=pD.I)&
-        (J<>c implies M2*(I,J)=M*(I,J)) & (J=c implies M2*(I,c)=pD.I) by A10
-,A11;
-        hence thesis;
+A22:    J=c implies M1*(I,c)=pD.I by A19,A21;
+A23:    J<>c implies M2*(I,J)=M*(I,J) by A20,A21;
+        J<>c implies M1*(I,J)=M*(I,J) by A19,A21;
+        hence thesis by A20,A21,A22,A23;
       end;
       hence thesis by MATRIX_1:28;
     end;
@@ -1228,56 +1540,70 @@ notation
 end;
 
 theorem
-  for i st i in Seg width AD holds
-  (i = c & len pD = len AD implies Col(RCol(AD,c,pD),i) = pD) &
-  (i <> c implies Col(RCol(AD,c,pD),i) = Col(AD,i))
+  for i st i in Seg width AD holds (i = c & len pD = len AD implies Col(
+  RCol(AD,c,pD),i) = pD) & (i <> c implies Col(RCol(AD,c,pD),i) = Col(AD,i))
 proof
   let i such that
 A1: i in Seg width AD;
   set R=RCol(AD,c,pD);
   set CR=Col(R,i);
-  set CA=Col(AD,i);
   thus i = c & len pD = len AD implies CR = pD
   proof
-    assume
-A2: i = c & len pD = len AD;
-    then
-A3: len R = len pD & width R=width AD by Def2;
-    then
-A4: len CR=len pD by MATRIX_1:def 9;
-    now
+    assume that
+A2: i = c and
+A3: len pD = len AD;
+A4: len R = len pD by A3,Def2;
+A5: now
       let J be Nat such that
-A5:   1<=J & J<=len pD;
+A6:   1<=J and
+A7:   J<=len pD;
       J in NAT by ORDINAL1:def 13;
-      then J in Seg len pD by A5;
-      then J in dom R & i in Seg width R by A1,A3,FINSEQ_1:def 3;
-      then CR.J=R*(J,c) & [J,c] in Indices R & Indices R=Indices AD
-      by A2,MATRIX_1:27,def 9,ZFMISC_1:106;
-      hence CR.J=pD.J by A2,Def2;
+      then J in Seg len pD by A6,A7;
+      then
+A8:   J in dom R by A4,FINSEQ_1:def 3;
+      i in Seg width R by A1,A3,Def2;
+      then
+A9:   [J,c] in Indices R by A2,A8,ZFMISC_1:106;
+A10:  Indices R=Indices AD by MATRIX_1:27;
+      CR.J=R*(J,c) by A2,A8,MATRIX_1:def 9;
+      hence CR.J=pD.J by A3,A9,A10,Def2;
     end;
-    hence thesis by A4,FINSEQ_1:18;
+    len CR=len pD by A4,MATRIX_1:def 9;
+    hence thesis by A5,FINSEQ_1:18;
   end;
+  set CA=Col(AD,i);
+A11: len AD=n by MATRIX_1:def 3;
+A12: len R=n by MATRIX_1:def 3;
+A13: len AD=len CA by MATRIX_1:def 9;
   assume
-A6: i <> c;
-A7: len CR=len R & len AD=n & len R=n & len AD=len CA by MATRIX_1:def 3,def 9;
-  now
+A14: i <> c;
+A15: now
     let j be Nat such that
-A8: 1 <=j & j <= len CA;
+A16: 1 <=j and
+A17: j <= len CA;
     j in NAT by ORDINAL1:def 13;
-    then j in Seg len AD by A7,A8;
-    then j in dom AD & j in dom R by A7,FINSEQ_1:def 3;
     then
-A9: CA.j=AD*(j,i) & CR.j=R*(j,i) & [j,i] in Indices AD
-    by A1,MATRIX_1:def 9,ZFMISC_1:106;
+A18: j in Seg len AD by A13,A16,A17;
+    then
+A19: j in dom AD by FINSEQ_1:def 3;
+    then
+A20: CA.j=AD*(j,i) by MATRIX_1:def 9;
+    j in dom R by A11,A12,A18,FINSEQ_1:def 3;
+    then
+A21: CR.j=R*(j,i) by MATRIX_1:def 9;
+A22: [j,i] in Indices AD by A1,A19,ZFMISC_1:106;
     per cases;
-    suppose len pD=len AD;
-      hence CA.j=CR.j by A6,A9,Def2;
+    suppose
+      len pD=len AD;
+      hence CA.j=CR.j by A14,A20,A21,A22,Def2;
     end;
-    suppose len pD<>len AD;
+    suppose
+      len pD<>len AD;
       hence CA.j=CR.j by Def2;
     end;
   end;
-  hence thesis by A7,FINSEQ_1:18;
+  len CR=len R by MATRIX_1:def 9;
+  hence thesis by A11,A12,A13,A15,FINSEQ_1:18;
 end;
 
 theorem
@@ -1297,7 +1623,8 @@ A3:   [i,j] in Indices AD;
     end;
     hence thesis by MATRIX_1:28;
   end;
-  suppose len pD<>len AD;
+  suppose
+    len pD<>len AD;
     hence thesis by Def2;
   end;
 end;
@@ -1308,18 +1635,21 @@ proof
   set C=Col(AD,c);
   set R=RCol(AD,c,C);
   now
+    reconsider c as Element of NAT by ORDINAL1:def 13;
     let i,j be Nat such that
 A1: [i,j] in Indices AD;
+A2: len C=len AD by MATRIX_1:def 9;
     reconsider I=i,J=j as Element of NAT by ORDINAL1:def 13;
-A2: i in dom AD & len C=len AD by A1,MATRIX_1:def 9,ZFMISC_1:106;
-    reconsider c as Element of NAT by ORDINAL1:def 13;
-    now per cases;
+A3: i in dom AD by A1,ZFMISC_1:106;
+    now
+      per cases;
       suppose
-A3:     c = j;
+A4:     c = j;
         hence R*(i,j) = C.I by A1,A2,Def2
-          .= AD*(i,j) by A2,A3,MATRIX_1:def 9;
+          .= AD*(i,j) by A3,A4,MATRIX_1:def 9;
       end;
-      suppose c <> J;
+      suppose
+        c <> J;
         hence R*(i,j)=AD*(i,j) by A1,A2,Def2;
       end;
     end;
@@ -1329,16 +1659,16 @@ A3:     c = j;
 end;
 
 theorem Th19:
-  for A be Matrix of n,m,D, A' be Matrix of m,n,D
-  st A' = A@ & (m=0 implies n=0) holds
-  ReplaceCol(A,c,pD) = ReplaceLine(A',c,pD)@
+  for A be Matrix of n,m,D, A' be Matrix of m,n,D st A' = A@ & (m=
+  0 implies n=0) holds ReplaceCol(A,c,pD) = ReplaceLine(A',c,pD)@
 proof
   let A be Matrix of n,m,D,A' be Matrix of m,n,D such that
 A1: A'=A@ and
 A2: m=0 implies n=0;
-  set RL=ReplaceLine(A',c,pD);
   set RC=ReplaceCol(A,c,pD);
-  now per cases;
+  set RL=ReplaceLine(A',c,pD);
+  now
+    per cases;
     suppose
 A3:   n=0;
       then 0=len A by MATRIX_1:def 3;
@@ -1347,49 +1677,56 @@ A3:   n=0;
       then m=0 by MATRIX_1:def 3;
       then len RL=0 by MATRIX_1:def 3;
       then width RL=0 by MATRIX_1:def 4;
-      then len (RL@)=0 & len RC=0 by A3,MATRIX_1:def 3,def 7;
-      then RL@={} & RC={};
-      hence thesis;
+      then len (RL@)=0 by MATRIX_1:def 7;
+      then
+A4:   RL@={};
+      len RC=0 by A3,MATRIX_1:def 3;
+      hence thesis by A4;
     end;
     suppose
-A4:   len pD <> len A & n>0;
+A5:   len pD <> len A & n>0;
       then
-A5:   len A=n & width A=m & m>0 by A2,MATRIX_1:24;
+A6:   width A=m by MATRIX_1:24;
       then
-A6:   width A'=len A by A1,MATRIX_2:12;
-      thus RC = A by A4,Def2
-        .= (A@)@ by A4,A5,MATRIX_2:15
-        .= RL@ by A1,A4,A6,MATRIX11:def 3;
+A7:   width A'=len A by A1,A2,A5,MATRIX_2:12;
+A8:   len A=n by A5,MATRIX_1:24;
+      thus RC = A by A5,Def2
+        .= (A@)@ by A2,A5,A8,A6,MATRIX_2:15
+        .= RL@ by A1,A5,A7,MATRIX11:def 3;
     end;
     suppose
-A7:   len pD = len A & n>0;
+A9:   len pD = len A & n>0;
       then
-A8:   len A=n & m>0 by A2,MATRIX_1:24;
+A10:  width RL=n by A2,MATRIX_1:24;
       then
-A9:   width A'=n & len RL=m & width RL=n by MATRIX_1:24;
-      then len (RL@)=n & width (RL@)=m by A7,MATRIX_2:12;
-      then reconsider RL'=RL@ as Matrix of n,m,D by MATRIX_2:7;
+A11:  len (RL@)=n by A9,MATRIX_2:12;
+      len RL=m by A2,A9,MATRIX_1:24;
+      then width (RL@)=m by A9,A10,MATRIX_2:12;
+      then reconsider RL'=RL@ as Matrix of n,m,D by A11,MATRIX_2:7;
+A12:  len A=n by A9,MATRIX_1:24;
+A13:  width A'=n by A2,A9,MATRIX_1:24;
       now
+A14:    Indices RC=Indices A by MATRIX_1:27;
+A15:    Indices RL=Indices A' by MATRIX_1:27;
         let i,j be Nat such that
-A10:    [i,j] in Indices RC;
+A16:    [i,j] in Indices RC;
         reconsider I=i,J=j as Element of NAT by ORDINAL1:def 13;
         Indices RC=Indices RL' by MATRIX_1:27;
         then
-A11:    [j,i] in Indices RL by A10,MATRIX_1:def 7;
-A12:    Indices RC=Indices A & Indices RL=Indices A' by MATRIX_1:27;
+A17:    [j,i] in Indices RL by A16,MATRIX_1:def 7;
         per cases;
         suppose
-A13:      J=c;
-          hence RC*(i,j) = pD.I by A7,A10,A12,Def2
-            .= RL*(J,I) by A7,A8,A9,A11,A12,A13,MATRIX11:def 3
-            .= RL'*(i,j) by A11,MATRIX_1:def 7;
+A18:      J=c;
+          hence RC*(i,j) = pD.I by A9,A16,A14,Def2
+            .= RL*(J,I) by A9,A12,A13,A17,A15,A18,MATRIX11:def 3
+            .= RL'*(i,j) by A17,MATRIX_1:def 7;
         end;
         suppose
-A14:      J<>c;
-          hence RC*(i,j) = A*(I,J) by A7,A10,A12,Def2
-            .= A'*(j,i) by A1,A10,A12,MATRIX_1:def 7
-            .= RL*(J,I) by A7,A8,A9,A11,A12,A14,MATRIX11:def 3
-            .= RL'*(i,j) by A11,MATRIX_1:def 7;
+A19:      J<>c;
+          hence RC*(i,j) = A*(I,J) by A9,A16,A14,Def2
+            .= A'*(j,i) by A1,A16,A14,MATRIX_1:def 7
+            .= RL*(J,I) by A9,A12,A13,A17,A15,A19,MATRIX11:def 3
+            .= RL'*(i,j) by A17,MATRIX_1:def 7;
         end;
       end;
       hence thesis by MATRIX_1:28;
@@ -1407,627 +1744,793 @@ definition
 A1: i in Seg (n+1);
   func Rem(perm,i) -> Element of Permutations n means
   :Def3:
-  for k st k in Seg n holds (k<i implies
-  (perm.k < perm.i implies it.k = perm.k )&
-  (perm.k >= perm.i implies it.k = perm.k-1) )& (k>=i implies
-  (perm.(k+1) < perm.i implies it.k = perm.(k+1) )&
-  (perm.(k+1) >= perm.i implies it.k = perm.(k+1)-1));
+  for k st k in Seg
+n holds (k<i implies (perm.k < perm.i implies it.k = perm.k )& (perm.k >= perm.
+i implies it.k = perm.k-1) )& (k>=i implies (perm.(k+1) < perm.i implies it.k =
+  perm.(k+1) )& (perm.(k+1) >= perm.i implies it.k = perm.(k+1)-1));
   existence
   proof
-    reconsider N=n as Element of NAT by ORDINAL1:def 13;
-    set n1 = n+1;
-    set p=perm;
-    set P = Permutations n;
     set j=perm.i;
+    set P = Permutations n;
+    set p=perm;
+    set n1 = n+1;
+    reconsider N=n as Element of NAT by ORDINAL1:def 13;
     reconsider p'=p as Permutation of Seg n1 by MATRIX_2:def 11;
-A2: dom p'=Seg n1 & rng p'=Seg n1 by FUNCT_2:67,def 3;
+A2: dom p'=Seg n1 by FUNCT_2:67;
+    defpred Q[set,set] means for k st k in Seg n & $1=k holds (k<i implies (p.
+    k<j implies $2=p.k)&(p.k>=j implies $2=p.k-1))& (k>=i implies (p.(k+1)<j
+    implies $2=p.(k+1))&(p.(k+1)>=j implies $2=p.(k+1)-1));
+A3: rng p'=Seg n1 by FUNCT_2:def 3;
     then
-A3: j in Seg n1 by A1,FUNCT_1:def 5;
-    defpred Q[set,set] means for k st k in Seg n & $1=k holds
-    (k<i implies (p.k<j implies $2=p.k)&(p.k>=j implies $2=p.k-1))&
-    (k>=i implies
-    (p.(k+1)<j implies $2=p.(k+1))&(p.(k+1)>=j implies $2=p.(k+1)-1));
-A4: for k' be set st k' in Seg n ex y st y in Seg n & Q[k',y]
+A4: j in Seg n1 by A1,A2,FUNCT_1:def 5;
+A5: for k' be set st k' in Seg n ex y st y in Seg n & Q[k',y]
     proof
-      let k' be set such that
-A5:   k' in Seg n;
-      consider k being Element of NAT such that
-A6:   k'=k & 1<=k & k <= n by A5;
-A7:   k<n1 by A6,NAT_1:13;
-      then k+1<=n1 & 1+0<=k+1 by NAT_1:13;
+      let k' be set;
+      assume
+      k' in Seg n;
+      then consider k being Element of NAT such that
+A6:   k'=k and
+A7:   1<=k and
+A8:   k <= n;
+A9:   k<n1 by A8,NAT_1:13;
       then
-A8:   k in Seg n1 & (k+1) in Seg n1 by A6,A7;
+A10:  k in Seg n1 by A7;
       then
-A9:   p.k in Seg n1 & p.(k+1) in Seg n1 by A2,FUNCT_1:def 5;
+A11:  p.k in Seg n1 by A2,A3,FUNCT_1:def 5;
       set k1=k+1;
+A12:  1+0<=k+1 by NAT_1:13;
+      k+1<=n1 by A9,NAT_1:13;
+      then
+A13:  (k+1) in Seg n1 by A12;
+      then
+A14:  p.(k+1) in Seg n1 by A2,A3,FUNCT_1:def 5;
       per cases;
       suppose
-A10:    k < i & p.k<j;
-        j<=n1 by A3,FINSEQ_1:3;
-        then p.k < n1 by A10,XXREAL_0:2;
-        then 1<=p.k & p.k <=n by A9,FINSEQ_1:3,NAT_1:13;
-        then p.k in Seg n & Q[k',p.k] by A6,A10,FINSEQ_1:3;
-        hence thesis;
+A15:    k < i & p.k<j;
+        j<=n1 by A4,FINSEQ_1:3;
+        then p.k < n1 by A15,XXREAL_0:2;
+        then
+A16:    p.k <=n by NAT_1:13;
+A17:    Q[k',p.k] by A6,A15;
+        1<=p.k by A11,FINSEQ_1:3;
+        then p.k in Seg n by A16,FINSEQ_1:3;
+        hence thesis by A17;
       end;
       suppose
-A11:    k<i & p.k>=j;
-        then p'.k<>p'.i by A1,A8,FUNCT_2:25;
+A18:    k<i & p.k>=j;
+        then p'.k<>p'.i by A1,A10,FUNCT_2:25;
         then
-A12:    p.k > j & j>=1 by A3,A11,FINSEQ_1:3,XXREAL_0:1;
+A19:    p.k > j by A18,XXREAL_0:1;
         then reconsider pk1=p.k-1 as Element of NAT by NAT_1:20;
-        pk1<pk1+1 & p.k <= n1 by A9,FINSEQ_1:3,NAT_1:13;
-        then pk1+1 > 1 & pk1 <n1 by A12,XXREAL_0:2;
-        then pk1 >= 1 & pk1 <= n by NAT_1:13;
-        then pk1 in Seg n & Q[k',pk1] by A6,A11;
-        hence thesis;
-      end;
-      suppose
-A13:    k>=i & p.k1<j;
-        j<=n1 by A3,FINSEQ_1:3;
-        then p.k1 < n1 by A13,XXREAL_0:2;
-        then 1<=p.k1 & p.k1 <=n by A9,FINSEQ_1:3,NAT_1:13;
-        then p.k1 in Seg n & Q[k',p.k1] by A6,A13,FINSEQ_1:3;
-        hence thesis;
-      end;
-      suppose
-A14:    k>=i & p.k1>=j;
-        then i<k1 by NAT_1:13;
-        then p'.k1<>p'.i by A1,A8,FUNCT_2:25;
+A20:    Q[k',pk1] by A6,A18;
+A21:    pk1<pk1+1 by NAT_1:13;
+        p.k <= n1 by A11,FINSEQ_1:3;
+        then pk1 <n1 by A21,XXREAL_0:2;
         then
-A15:    p.k1 > j & j>=1 by A3,A14,FINSEQ_1:3,XXREAL_0:1;
+A22:    pk1 <= n by NAT_1:13;
+        j>=1 by A4,FINSEQ_1:3;
+        then pk1+1 > 1 by A19,XXREAL_0:2;
+        then pk1 >= 1 by NAT_1:13;
+        then pk1 in Seg n by A22;
+        hence thesis by A20;
+      end;
+      suppose
+A23:    k>=i & p.k1<j;
+        j<=n1 by A4,FINSEQ_1:3;
+        then p.k1 < n1 by A23,XXREAL_0:2;
+        then
+A24:    p.k1 <=n by NAT_1:13;
+A25:    Q[k',p.k1] by A6,A23;
+        1<=p.k1 by A14,FINSEQ_1:3;
+        then p.k1 in Seg n by A24,FINSEQ_1:3;
+        hence thesis by A25;
+      end;
+      suppose
+A26:    k>=i & p.k1>=j;
+        then i<k1 by NAT_1:13;
+        then p'.k1<>p'.i by A1,A13,FUNCT_2:25;
+        then
+A27:    p.k1 > j by A26,XXREAL_0:1;
         then reconsider pk1=p.k1-1 as Element of NAT by NAT_1:20;
-        pk1<pk1+1 & p.k1 <= n1 by A9,FINSEQ_1:3,NAT_1:13;
-        then pk1+1 > 1 & pk1 <n1 by A15,XXREAL_0:2;
-        then pk1 >= 1 & pk1 <= n by NAT_1:13;
-        then pk1 in Seg n & Q[k',pk1] by A6,A14;
-        hence thesis;
+A28:    Q[k',pk1] by A6,A26;
+A29:    pk1<pk1+1 by NAT_1:13;
+        p.k1 <= n1 by A14,FINSEQ_1:3;
+        then pk1 <n1 by A29,XXREAL_0:2;
+        then
+A30:    pk1 <= n by NAT_1:13;
+        j>=1 by A4,FINSEQ_1:3;
+        then pk1+1 > 1 by A27,XXREAL_0:2;
+        then pk1 >= 1 by NAT_1:13;
+        then pk1 in Seg n by A30;
+        hence thesis by A28;
       end;
     end;
     consider q be Function of Seg n,Seg n such that
-A16: for x st x in Seg n holds Q[x,q.x] from FUNCT_2:sch 1(A4);
-    for x1,x2 be set st x1 in dom q & x2 in dom q & q.x1 = q.x2 holds x1 = x2
+A31: for x st x in Seg n holds Q[x,q.x] from FUNCT_2:sch 1(A5);
+    for x1,x2 be set st x1 in dom q & x2 in dom q & q.x1 = q.x2 holds x1
+    = x2
     proof
       let x1,x2 be set such that
-A17:  x1 in dom q & x2 in dom q & q.x1 = q.x2;
-A18:  dom q=Seg n by FUNCT_2:67;
+A32:  x1 in dom q and
+A33:  x2 in dom q and
+A34:  q.x1 = q.x2;
+A35:  dom q=Seg n by FUNCT_2:67;
       then consider k1 be Element of NAT such that
-A19:  x1=k1 & 1<=k1 & k1 <=n by A17;
-      consider k2 be Element of NAT such that
-A20:  x2=k2 & 1<=k2 & k2 <=n by A17,A18;
-A21:  k1 < n+1 & k2 < n+1 by A19,A20,NAT_1:13;
-      then k1+1<=n+1 & k2+1<=n+1 & 0+1<=k1+1 & 0+1<=k2+1 by NAT_1:13;
+A36:  x1=k1 and
+A37:  1<=k1 and
+A38:  k1 <=n by A32;
+A39:  0+1<=k1+1 by NAT_1:13;
+A40:  k1 < n+1 by A38,NAT_1:13;
       then
-A22:  k1 in Seg n1 & k2 in Seg n1 & k1+1 in Seg n1 & k2+1 in Seg n1
-      by A19,A20,A21;
+A41:  k1 in Seg n1 by A37;
+      k1+1<=n+1 by A40,NAT_1:13;
+      then
+A42:  k1+1 in Seg n1 by A39;
+      consider k2 be Element of NAT such that
+A43:  x2=k2 and
+A44:  1<=k2 and
+A45:  k2 <=n by A33,A35;
+A46:  k2 < n+1 by A45,NAT_1:13;
+      then
+A47:  k2 in Seg n1 by A44;
+A48:  0+1<=k2+1 by NAT_1:13;
+      k2+1<=n+1 by A46,NAT_1:13;
+      then
+A49:  k2+1 in Seg n1 by A48;
       per cases;
       suppose
-A23:    k1<i & p.k1<j;
+A50:    k1<i & p.k1<j;
         then
-A24:    q.k1=p'.k1 by A16,A17,A19;
+A51:    q.k1=p'.k1 by A31,A32,A36;
         per cases;
-        suppose k2<i & p.k2<j;
-          then p'.k2=p'.k1 by A16,A17,A19,A20,A24;
-          hence thesis by A2,A19,A20,A22,FUNCT_1:def 8;
+        suppose
+          k2<i & p.k2<j;
+          then p'.k2=p'.k1 by A31,A33,A34,A36,A43,A51;
+          hence thesis by A2,A36,A43,A41,A47,FUNCT_1:def 8;
         end;
         suppose
-A25:      k2<i & p.k2>=j;
-          then q.k2=p.k2-1 by A16,A17,A20;
-          then p.k1+1=p.k2 by A17,A19,A20,A24;
-          then p.k2 <= j by A23,NAT_1:13;
-          then p'.k2=p'.i by A25,XXREAL_0:1;
-          hence thesis by A1,A2,A22,A25,FUNCT_1:def 8;
+A52:      k2<i & p.k2>=j;
+          then q.k2=p.k2-1 by A31,A33,A43;
+          then p.k1+1=p.k2 by A34,A36,A43,A51;
+          then p.k2 <= j by A50,NAT_1:13;
+          then p'.k2=p'.i by A52,XXREAL_0:1;
+          hence thesis by A1,A2,A47,A52,FUNCT_1:def 8;
         end;
         suppose
-A26:      k2>=i & p.(k2+1)<j;
-          then p'.k1=p'.(k2+1) by A16,A17,A19,A20,A24;
-          then k1=k2+1 by A2,A22,FUNCT_1:def 8;
-          hence thesis by A23,A26,NAT_1:13;
+A53:      k2>=i & p.(k2+1)<j;
+          then p'.k1=p'.(k2+1) by A31,A33,A34,A36,A43,A51;
+          then k1=k2+1 by A2,A41,A49,FUNCT_1:def 8;
+          hence thesis by A50,A53,NAT_1:13;
         end;
         suppose
-A27:      k2>=i & p.(k2+1)>=j;
-          then p.k1=p.(k2+1)-1 by A16,A17,A19,A20,A24;
+A54:      k2>=i & p.(k2+1)>=j;
+          then p.k1=p.(k2+1)-1 by A31,A33,A34,A36,A43,A51;
           then p.k1+1=p.(k2+1);
-          then p.(k2+1)<=j by A23,NAT_1:13;
-          then p'.(k2+1) = p.i by A27,XXREAL_0:1;
-          then k2+1 = i by A1,A2,A22,FUNCT_1:def 8;
-          hence thesis by A27,NAT_1:13;
+          then p.(k2+1)<=j by A50,NAT_1:13;
+          then p'.(k2+1) = p.i by A54,XXREAL_0:1;
+          then k2+1 = i by A1,A2,A49,FUNCT_1:def 8;
+          hence thesis by A54,NAT_1:13;
         end;
       end;
       suppose
-A28:    k1<i & p.k1 >= j;
+A55:    k1<i & p.k1 >= j;
         then
-A29:    q.k1=p.k1-1 by A16,A17,A19;
+A56:    q.k1=p.k1-1 by A31,A32,A36;
         per cases;
         suppose
-A30:      k2<i & p.k2<j;
-          then q.k2=p'.k2 by A16,A17,A20;
-          then p.k1 =p.k2+1 by A17,A19,A20,A29;
-          then p.k1 <= j by A30,NAT_1:13;
-          then p.k1=p.i by A28,XXREAL_0:1;
-          hence thesis by A1,A2,A22,A28,FUNCT_1:def 8;
-        end;
-        suppose k2<i & p.k2>=j;
-          then p.k1-1=p.k2-1 by A16,A17,A19,A20,A29;
-          hence thesis by A2,A19,A20,A22,FUNCT_1:def 8;
+A57:      k2<i & p.k2<j;
+          then q.k2=p'.k2 by A31,A33,A43;
+          then p.k1 =p.k2+1 by A34,A36,A43,A56;
+          then p.k1 <= j by A57,NAT_1:13;
+          then p.k1=p.i by A55,XXREAL_0:1;
+          hence thesis by A1,A2,A41,A55,FUNCT_1:def 8;
         end;
         suppose
-A31:      k2>=i & p.(k2+1)<j;
-          then p.k1-1=p.(k2+1) by A16,A17,A19,A20,A29;
+          k2<i & p.k2>=j;
+          then p.k1-1=p.k2-1 by A31,A33,A34,A36,A43,A56;
+          hence thesis by A2,A36,A43,A41,A47,FUNCT_1:def 8;
+        end;
+        suppose
+A58:      k2>=i & p.(k2+1)<j;
+          then p.k1-1=p.(k2+1) by A31,A33,A34,A36,A43,A56;
           then p.(k2+1)+1=p.k1;
-          then p.k1 <=j by A31,NAT_1:13;
-          then p'.k1=p'.i by A28,XXREAL_0:1;
-          hence thesis by A1,A2,A22,A28,FUNCT_1:def 8;
+          then p.k1 <=j by A58,NAT_1:13;
+          then p'.k1=p'.i by A55,XXREAL_0:1;
+          hence thesis by A1,A2,A41,A55,FUNCT_1:def 8;
         end;
         suppose
-A32:      k2>=i & p.(k2+1)>=j;
-          then p.k1-1=p.(k2+1)-1 by A16,A17,A19,A20,A29;
-          then k1=k2+1 by A2,A22,FUNCT_1:def 8;
-          hence thesis by A28,A32,NAT_1:13;
+A59:      k2>=i & p.(k2+1)>=j;
+          then p.k1-1=p.(k2+1)-1 by A31,A33,A34,A36,A43,A56;
+          then k1=k2+1 by A2,A41,A49,FUNCT_1:def 8;
+          hence thesis by A55,A59,NAT_1:13;
         end;
       end;
       suppose
-A33:    k1>=i & p.(k1+1)<j;
+A60:    k1>=i & p.(k1+1)<j;
         then
-A34:    q.k1=p.(k1+1) by A16,A17,A19;
+A61:    q.k1=p.(k1+1) by A31,A32,A36;
         per cases;
         suppose
-A35:      k2<i & p.k2<j;
-          then p'.(k1+1)=p'.k2 by A16,A17,A19,A20,A34;
-          then k1+1=k2 by A2,A22,FUNCT_1:def 8;
-          hence thesis by A33,A35,NAT_1:13;
+A62:      k2<i & p.k2<j;
+          then p'.(k1+1)=p'.k2 by A31,A33,A34,A36,A43,A61;
+          then k1+1=k2 by A2,A47,A42,FUNCT_1:def 8;
+          hence thesis by A60,A62,NAT_1:13;
         end;
         suppose
-A36:      k2<i & p.k2>=j;
-          then p.(k1+1)=p.k2-1 by A16,A17,A19,A20,A34;
+A63:      k2<i & p.k2>=j;
+          then p.(k1+1)=p.k2-1 by A31,A33,A34,A36,A43,A61;
           then p.k2=p.(k1+1)+1;
-          then p.k2<=j by A33,NAT_1:13;
-          then p'.k2=p'.i by A36,XXREAL_0:1;
-          hence thesis by A1,A2,A22,A36,FUNCT_1:def 8;
-        end;
-        suppose k2>=i & p.(k2+1)<j;
-          then q.k2=p.(k2+1) by A16,A17,A20;
-          then k1+1=k2+1 by A2,A17,A19,A20,A22,A34,FUNCT_1:def 8;
-          hence thesis by A19,A20;
+          then p.k2<=j by A60,NAT_1:13;
+          then p'.k2=p'.i by A63,XXREAL_0:1;
+          hence thesis by A1,A2,A47,A63,FUNCT_1:def 8;
         end;
         suppose
-A37:      k2>=i & p.(k2+1)>=j;
-          then p.(k1+1)=p.(k2+1)-1 by A16,A17,A19,A20,A34;
+          k2>=i & p.(k2+1)<j;
+          then q.k2=p.(k2+1) by A31,A33,A43;
+          then k1+1=k2+1 by A2,A34,A36,A43,A42,A49,A61,FUNCT_1:def 8;
+          hence thesis by A36,A43;
+        end;
+        suppose
+A64:      k2>=i & p.(k2+1)>=j;
+          then p.(k1+1)=p.(k2+1)-1 by A31,A33,A34,A36,A43,A61;
           then p.(k2+1)=p.(k1+1)+1;
-          then p.(k2+1)<=j by A33,NAT_1:13;
-          then p'.(k2+1)=p'.i by A37,XXREAL_0:1;
-          then k2+1=i by A1,A2,A22,FUNCT_1:def 8;
-          hence thesis by A37,NAT_1:13;
+          then p.(k2+1)<=j by A60,NAT_1:13;
+          then p'.(k2+1)=p'.i by A64,XXREAL_0:1;
+          then k2+1=i by A1,A2,A49,FUNCT_1:def 8;
+          hence thesis by A64,NAT_1:13;
         end;
       end;
       suppose
-A38:    k1>=i & p.(k1+1)>=j;
+A65:    k1>=i & p.(k1+1)>=j;
         then
-A39:    q.k1=p.(k1+1)-1 by A16,A17,A19;
+A66:    q.k1=p.(k1+1)-1 by A31,A32,A36;
         per cases;
         suppose
-A40:      k2<i & p.k2<j;
-          then p.(k1+1)-1=p.k2 by A16,A17,A19,A20,A39;
+A67:      k2<i & p.k2<j;
+          then p.(k1+1)-1=p.k2 by A31,A33,A34,A36,A43,A66;
           then p.(k1+1)=p.k2+1;
-          then p.(k1+1)<=j by A40,NAT_1:13;
-          then p'.(k1+1)=p'.i by A38,XXREAL_0:1;
-          then k1+1=i by A1,A2,A22,FUNCT_1:def 8;
-          hence thesis by A38,NAT_1:13;
+          then p.(k1+1)<=j by A67,NAT_1:13;
+          then p'.(k1+1)=p'.i by A65,XXREAL_0:1;
+          then k1+1=i by A1,A2,A42,FUNCT_1:def 8;
+          hence thesis by A65,NAT_1:13;
         end;
         suppose
-A41:      k2<i & p.k2>=j;
-          then p.(k1+1)-1=p.k2-1 by A16,A17,A19,A20,A39;
-          then k1+1=k2 by A2,A22,FUNCT_1:def 8;
-          hence thesis by A38,A41,NAT_1:13;
+A68:      k2<i & p.k2>=j;
+          then p.(k1+1)-1=p.k2-1 by A31,A33,A34,A36,A43,A66;
+          then k1+1=k2 by A2,A47,A42,FUNCT_1:def 8;
+          hence thesis by A65,A68,NAT_1:13;
         end;
         suppose
-A42:      k2>=i & p.(k2+1)<j;
-          then p.(k1+1)-1=p.(k2+1) by A16,A17,A19,A20,A39;
+A69:      k2>=i & p.(k2+1)<j;
+          then p.(k1+1)-1=p.(k2+1) by A31,A33,A34,A36,A43,A66;
           then p.(k1+1)=p.(k2+1)+1;
-          then p.(k1+1) <= j by A42,NAT_1:13;
-          then p'.(k1+1)=p'.i by A38,XXREAL_0:1;
-          then k1+1=i by A1,A2,A22,FUNCT_1:def 8;
-          hence thesis by A38,NAT_1:13;
+          then p.(k1+1) <= j by A69,NAT_1:13;
+          then p'.(k1+1)=p'.i by A65,XXREAL_0:1;
+          then k1+1=i by A1,A2,A42,FUNCT_1:def 8;
+          hence thesis by A65,NAT_1:13;
         end;
-        suppose k2>=i & p.(k2+1)>=j;
-          then p.(k1+1)-1=p.(k2+1)-1 by A16,A17,A19,A20,A39;
-          then k1+1=k2+1 by A2,A22,FUNCT_1:def 8;
-          hence thesis by A19,A20;
+        suppose
+          k2>=i & p.(k2+1)>=j;
+          then p.(k1+1)-1=p.(k2+1)-1 by A31,A33,A34,A36,A43,A66;
+          then k1+1=k2+1 by A2,A42,A49,FUNCT_1:def 8;
+          hence thesis by A36,A43;
         end;
       end;
     end;
-    then q is one-to-one & card finSeg N=card finSeg N by FUNCT_1:def 8;
-    then q is one-to-one onto by STIRL2_1:70;
-    then q is Permutation of Seg n;
+    then
+A70: q is one-to-one by FUNCT_1:def 8;
+    card finSeg N=card finSeg N;
+    then q is one-to-one onto by A70,STIRL2_1:70;
     then reconsider q as Element of P by MATRIX_2:def 11;
     take q;
-    thus thesis by A16;
+    thus thesis by A31;
   end;
   uniqueness
   proof
     set p=perm;
     let q1,q2 be Element of Permutations n such that
-A43: for k st k in Seg n holds (k<i implies
-    (p.k<p.i implies q1.k=p.k)&(p.k>=p.i implies q1.k=p.k-1))& (k>=i implies
-
-(p.(k+1)<p.i implies q1.k=p.(k+1))&(p.(k+1)>=p.i implies q1.k=p.(k+1)-1))and
-A44: for k st k in Seg n holds (k<i implies
-    (p.k<p.i implies q2.k=p.k)&(p.k>=p.i implies q2.k=p.k-1))& (k>=i implies
-    (p.(k+1)<p.i implies q2.k=p.(k+1))&(p.(k+1)>=p.i implies q2.k=p.(k+1)-1));
-    q1 is Permutation of Seg n & q2 is Permutation of Seg n by MATRIX_2:def 11;
+A71: for k st k in Seg n holds (k<i implies (p.k<p.i implies q1.k=p.k
+)&(p.k>=p.i implies q1.k=p.k-1))& (k>=i implies (p.(k+1)<p.i implies q1.k=p.(k+
+    1))&(p.(k+1)>=p.i implies q1.k=p.(k+1)-1)) and
+A72: for k st k in Seg n holds (k<i implies (p.k<p.i implies q2.k=p.k
+)&(p.k>=p.i implies q2.k=p.k-1))& (k>=i implies (p.(k+1)<p.i implies q2.k=p.(k+
+    1))&(p.(k+1)>=p.i implies q2.k=p.(k+1)-1));
+A73: q1 is Permutation of Seg n by MATRIX_2:def 11;
     then
-A45: dom q1=Seg n & dom q2=Seg n by FUNCT_2:67;
-    now
+A74: dom q1=Seg n by FUNCT_2:67;
+A75: now
       let x such that
-A46:  x in dom q1;
+A76:  x in dom q1;
       consider k being Element of NAT such that
-A47:  x=k & 1<=k & k<=n by A45,A46;
+A77:  x=k and
+      1<=k and
+      k<=n by A74,A76;
       set k1=k+1;
-      (k<i or k>=i) & (p.k<p.i or p.k>=p.i) & (p.k1<p.i or p.k1>=p.i);
-      then p.k < p.i & q1.k = p.k & q2.k=p.k
-      or p.k >= p.i & q1.k = p.k-1 & q2.k=p.k-1
-      or p.k1 < p.i & q1.k = p.k1 & q2.k=p.k1
-      or p.k1 >= p.i & q1.k = p.k1-1 & q2.k=p.k1-1 by A43,A44,A45,A46,A47;
-      hence q1.x=q2.x by A47;
+A78:  p.k<p.i or p.k>=p.i;
+A79:  p.k1<p.i or p.k1>=p.i;
+      k<i or k>=i;
+      then p.k < p.i & q1.k = p.k & q2.k=p.k or p.k >= p.i & q1.k = p.k-1 &
+q2.k=p.k-1 or p.k1 < p.i & q1.k = p.k1 & q2.k=p.k1 or p.k1 >= p.i & q1.k = p.k1
+      -1 & q2.k=p.k1-1 by A71,A72,A74,A76,A77,A78,A79;
+      hence q1.x=q2.x by A77;
     end;
-    hence thesis by A45,FUNCT_1:9;
+    q2 is Permutation of Seg n by MATRIX_2:def 11;
+    then dom q2=Seg n by FUNCT_2:67;
+    hence thesis by A73,A75,FUNCT_1:9,FUNCT_2:67;
   end;
 end;
 
 theorem Th20:
-  for i,j st i in Seg (n+1) & j in Seg(n+1) for P be set st P = {p1:p1.i = j}
-  ex Proj be Function of P,Permutations n st Proj is bijective &
-  for q1 st q1.i = j holds Proj.q1 = Rem(q1,i)
+  for i,j st i in Seg (n+1) & j in Seg(n+1) for P be set st P = {
+p1: p1
+.i = j} ex Proj be Function of P,Permutations n st Proj is bijective & for
+  q1 st q1.i = j holds Proj.q1 = Rem(q1,i)
 proof
   let i,j such that
-A1: i in Seg (n+1) & j in Seg(n+1);
-  let X be set such that
-A2: X={p1:p1.i=j};
+A1: i in Seg (n+1) and
+A2: j in Seg(n+1);
+  set n1 = n+1;
   reconsider N=n as Element of NAT by ORDINAL1:def 13;
   set P1 = Permutations(N+1);
-  set P = Permutations(N);
-  set n1 = n+1;
-  defpred F[set,set] means
-  for p be Element of P1 st $1=p & p.i=j holds $2=Rem(p,i);
-A3: for x st x in X ex y st y in Permutations n & F[x,y]
+  defpred F[set,set] means for p be Element of P1 st $1=p & p.i=j holds $2=Rem
+  (p,i);
+  let X be set such that
+A3: X={p1:p1.i=j};
+A4: for x st x in X ex y st y in Permutations n & F[x,y]
   proof
     let x;
-    assume x in X;
+    assume
+    x in X;
     then consider p be Element of P1 such that
-A4: p=x & p.i=j by A2;
+A5: p=x and
+    p.i=j by A3;
     take R=Rem(p,i);
-    thus thesis by A4;
+    thus thesis by A5;
   end;
   consider f be Function of X,Permutations n such that
-A5: for x st x in X holds F[x,f.x] from FUNCT_2:sch 1(A3);
-  take f;
-A6: for x1,x2 be set st x1 in X & x2 in X & f.x1 = f.x2 holds x1 = x2
+A6: for x st x in X holds F[x,f.x] from FUNCT_2:sch 1(A4);
+  for x1,x2 be set st x1 in X & x2 in X & f.x1 = f.x2 holds x1 = x2
   proof
     let x1,x2 be set such that
-A7: x1 in X & x2 in X & f.x1 = f.x2;
+A7: x1 in X and
+A8: x2 in X and
+A9: f.x1 = f.x2;
     consider p1 be Element of P1 such that
-A8: p1=x1 & p1.i=j by A2,A7;
-    consider p2 be Element of P1 such that
-A9: p2=x2 & p2.i=j by A2,A7;
+A10: p1=x1 and
+A11: p1.i=j by A3,A7;
     set R1=Rem(p1,i);
+A12: f.x1 =R1 by A6,A7,A10,A11;
+    consider p2 be Element of P1 such that
+A13: p2=x2 and
+A14: p2.i=j by A3,A8;
     set R2=Rem(p2,i);
-A10: f.x1 =R1 & f.x2 =R2 by A5,A7,A8,A9;
+A15: f.x2 =R2 by A6,A8,A13,A14;
     reconsider p1'=p1,p2'=p2 as Permutation of Seg n1 by MATRIX_2:def 11;
-A11: dom p1'=Seg n1 & dom p2'=Seg n1 by FUNCT_2:67;
+A16: dom p2'=Seg n1 by FUNCT_2:67;
+A17: dom p1'=Seg n1 by FUNCT_2:67;
     now
       let x such that
-A12:  x in Seg n1;
+A18:  x in Seg n1;
       consider k being Element of NAT such that
-A13:  x=k & 1<=k & k<=n1 by A12;
+A19:  x=k and
+A20:  1<=k and
+A21:  k<=n1 by A18;
       per cases by XXREAL_0:1;
       suppose
-A14:    k<i;
+A22:    k<i;
         i<=n1 by A1,FINSEQ_1:3;
-        then k<n1 by A14,XXREAL_0:2;
+        then k<n1 by A22,XXREAL_0:2;
         then k<=n by NAT_1:13;
         then
-A15:    k in Seg n by A13;
+A23:    k in Seg n by A20;
         per cases;
-        suppose (p1.k<j & p2.k<j) or (p1.k>=j & p2.k>=j);
-          then (R1.k=p1.k & R2.k=p2.k) or (R1.k=p1.k-1 & R2.k=p2.k-1)
-          by A1,A8,A9,A14,A15,Def3;
-          hence p1.x=p2.x by A7,A10,A13;
+        suppose
+          p1.k<j & p2.k<j or p1.k>=j & p2.k>=j;
+          then R1.k=p1.k & R2.k=p2.k or R1.k=p1.k-1 & R2.k=p2.k-1 by A1,A11,
+          A14,A22,A23,Def3;
+          hence p1.x=p2.x by A9,A12,A15,A19;
         end;
-        suppose (p1.k<j & p2.k>=j) or (p1.k>=j & p2.k<j);
-          then (R1.k=p1.k & R2.k=p2.k-1 & p1.k<j & p2.k>=j) or
-          (R1.k=p1.k-1 & R2.k=p2.k & p1.k>=j & p2.k<j)
-          by A1,A8,A9,A14,A15,Def3;
-          then (p1.k+1=p2.k & p1.k<j & p2.k>=j) or
-          (p1.k=p2.k+1 & p1.k>=j & p2.k<j) by A7,A10;
-          then (p2.k<=j & p2.k>=j) or (p1.k>=j & p1.k<=j) by NAT_1:13;
-          then p2'.k=p2'.i or p1'.k=p1'.i by A8,A9,XXREAL_0:1;
-          hence p1.x=p2.x by A1,A11,A12,A13,A14,FUNCT_1:def 8;
+        suppose
+          p1.k<j & p2.k>=j or p1.k>=j & p2.k<j;
+          then
+          R1.k=p1.k & R2.k=p2.k-1 & p1.k<j & p2.k>=j or R1.k=p1.k-1 & R2.
+          k=p2.k & p1.k>=j & p2.k<j by A1,A11,A14,A22,A23,Def3;
+          then
+          p1.k+1=p2.k & p1.k<j & p2.k>=j or p1.k=p2.k+1 & p1.k>=j & p2.k<
+          j by A9,A12,A15;
+          then p2.k<=j & p2.k>=j or p1.k>=j & p1.k<=j by NAT_1:13;
+          then p2'.k=p2'.i or p1'.k=p1'.i by A11,A14,XXREAL_0:1;
+          hence p1.x=p2.x by A1,A17,A16,A18,A19,A22,FUNCT_1:def 8;
         end;
-      end;
-      suppose k=i;
-        hence p1.x=p2.x by A8,A9,A13;
       end;
       suppose
-A16:    k>i;
+        k=i;
+        hence p1.x=p2.x by A11,A14,A19;
+      end;
+      suppose
+A24:    k>i;
         then reconsider k1=k-1 as Element of NAT by NAT_1:20;
-        1<=i & k1+1 <= n1 by A1,A13,FINSEQ_1:3;
-        then 1<k1+1 & k1 < n1 by A16,NAT_1:13,XXREAL_0:2;
-        then 1<=k1 & k1<=n & k1+1>i by A16,NAT_1:13;
+        k1+1>i by A24;
         then
-A17:    k1 in Seg n & k1>=i by NAT_1:13;
+A25:    k1>=i by NAT_1:13;
+        k1+1 <= n1 by A21;
+        then k1 < n1 by NAT_1:13;
+        then
+A26:    k1<=n by NAT_1:13;
+        1<=i by A1,FINSEQ_1:3;
+        then 1<k1+1 by A24,XXREAL_0:2;
+        then 1<=k1 by NAT_1:13;
+        then
+A27:    k1 in Seg n by A26;
         per cases;
-        suppose (p1.(k1+1)<j&p2.(k1+1)<j)or(p1.(k1+1)>=j&p2.(k1+1)>=j);
-          then (R1.k1=p1.k & R2.k1=p2.k) or (R1.k1=p1.k-1 & R2.k1=p2.k-1 )
-          by A1,A8,A9,A17,Def3;
-          hence p1.x=p2.x by A7,A10,A13;
+        suppose
+          p1.(k1+1)<j&p2.(k1+1)<j or p1.(k1+1)>=j&p2.(k1+1)>=j;
+          then R1.k1=p1.k & R2.k1=p2.k or R1.k1=p1.k-1 & R2.k1=p2.k-1 by A1,
+          A11,A14,A27,A25,Def3;
+          hence p1.x=p2.x by A9,A12,A15,A19;
         end;
-        suppose (p1.(k1+1)<j&p2.(k1+1)>=j)or(p1.(k1+1)>=j&p2.(k1+1)<j);
-          then (R1.k1=p1.k & R2.k1=p2.k-1 & p1.k<j & p2.k>=j) or
-          (R1.k1=p1.k-1 & R2.k1=p2.k & p1.k>=j & p2.k<j) by A1,A8,A9,A17,Def3;
-          then (p1.k+1=p2.k & p1.k<j & p2.k>=j) or
-          (p1.k=p2.k+1 & p1.k>=j & p2.k<j) by A7,A10;
-          then (p2.k<=j & p2.k>=j) or (p1.k>=j & p1.k<=j) by NAT_1:13;
-          then p2'.k=p2'.i or p1'.k=p1'.i by A8,A9,XXREAL_0:1;
-          hence p1.x=p2.x by A1,A11,A12,A13,A16,FUNCT_1:def 8;
+        suppose
+          p1.(k1+1)<j&p2.(k1+1)>=j or p1.(k1+1)>=j&p2.(k1+1)<j;
+          then R1.k1=p1.k & R2.k1=p2.k-1 & p1.k<j & p2.k>=j or R1.k1=p1.k-1 &
+          R2.k1=p2.k & p1.k>=j & p2.k<j by A1,A11,A14,A27,A25,Def3;
+          then
+          p1.k+1=p2.k & p1.k<j & p2.k>=j or p1.k=p2.k+1 & p1.k>=j & p2.k<
+          j by A9,A12,A15;
+          then p2.k<=j & p2.k>=j or p1.k>=j & p1.k<=j by NAT_1:13;
+          then p2'.k=p2'.i or p1'.k=p1'.i by A11,A14,XXREAL_0:1;
+          hence p1.x=p2.x by A1,A17,A16,A18,A19,A24,FUNCT_1:def 8;
         end;
       end;
     end;
-    hence thesis by A8,A9,A11,FUNCT_1:9;
+    hence thesis by A10,A13,A17,A16,FUNCT_1:9;
   end;
-  card P=N! & card X= N! by A1,A2,Th6,Th7;
-  then reconsider P'=P,X'=X as finite set;
-  f is one-to-one & card P'=n! & card X'=n! by A1,A2,A6,Th6,Th7,FUNCT_2:25;
-  then f is onto one-to-one by STIRL2_1:70;
+  then
+A28: f is one-to-one by FUNCT_2:25;
+  set P = Permutations(N);
+A29: card P=N! by Th6;
+  card X= N! by A1,A2,A3,Th7;
+  then reconsider P'=P,X'=X as finite set by A29;
+  take f;
+A30: card P'=n! by Th6;
+  card X'=n! by A1,A2,A3,Th7;
+  then f is onto one-to-one by A28,A30,STIRL2_1:70;
   hence f is bijective;
   let p be Element of Permutations(n+1) such that
-A18: p.i=j;
-  p in X by A2,A18;
-  hence thesis by A5,A18;
+A31: p.i=j;
+  p in X by A3,A31;
+  hence thesis by A6,A31;
 end;
 
 theorem Th21:
-  for i,j st i in Seg (n+1) & p1.i = j holds
-  -(a,p1) = power(K).(-1_K,i+j) * -(a,Rem(p1,i))
+  for i,j st i in Seg (n+1) & p1.i = j holds -(a,p1) = power(K).(-
+  1_K,i+j) * -(a,Rem(p1,i))
 proof
   set n1=n+1;
   let i,j such that
-A1: i in Seg n1 & p1.i=j;
-  p1 is Permutation of Seg n1 by MATRIX_2:def 11;
-  then dom p1=Seg n1 & rng p1=Seg n1 by FUNCT_2:67,def 3;
+A1: i in Seg n1 and
+A2: p1.i=j;
+A3: p1 is Permutation of Seg n1 by MATRIX_2:def 11;
   then
-A2: j in Seg n1 by A1,FUNCT_1:def 5;
+A4: rng p1=Seg n1 by FUNCT_2:def 3;
+  dom p1=Seg n1 by A3,FUNCT_2:67;
+  then
+A5: j in Seg n1 by A1,A2,A4,FUNCT_1:def 5;
   set R=Rem(p1,i);
   per cases by NAT_1:23;
-  suppose n=0;
-    then i=1 & j=1 & R is even & p1 is even & 1+1=2*1
-    by A1,A2,Th11,FINSEQ_1:4,TARSKI:def 1;
-    then power(K).(-1_K,i+j)=1_K & -(a,p1)=a & -(a,R)=a
-    by HURWITZ:4,MATRIX_2:def 16;
-    hence thesis by VECTSP_1:def 13;
-  end;
   suppose
-A3: n=1;
+A6: n=0;
+    then R is even by Th11;
     then
-A4: p1 is Permutation of Seg 2 by MATRIX_2:def 11;
-    per cases by A4,MATRIX_7:1;
+A7: -(a,R)=a by MATRIX_2:def 16;
+A8: 1+1=2*1;
+    p1 is even by A6,Th11;
+    then
+A9: -(a,p1)=a by MATRIX_2:def 16;
+A10: j=1 by A5,A6,FINSEQ_1:4,TARSKI:def 1;
+    i=1 by A1,A6,FINSEQ_1:4,TARSKI:def 1;
+    then power(K).(-1_K,i+j)=1_K by A10,A8,HURWITZ:4;
+    hence thesis by A9,A7,VECTSP_1:def 13;
+  end;
+  suppose
+A11: n=1;
+    then
+A12: p1 is Permutation of Seg 2 by MATRIX_2:def 11;
+    per cases by A12,MATRIX_7:1;
     suppose
-A5:   p1=<*1,2*>;
-      i=1 or i=2 by A1,A3,FINSEQ_1:4,TARSKI:def 2;
-      then (i=1 & p1.i=1) or (i=2 & p1.i=2) by A5,FINSEQ_1:61;
-      then (i+j=2*1 or i+j=2*2) & R is even & id Seg 2 is even &
-      p1=id Seg 2 & len Permutations(2)=2
-      by A1,A3,A5,Th11,FINSEQ_2:61,MATRIX_2:20,29;
-      then power(K).(-1_K,i+j)=1_K & -(a,R)=a & -(a,p1)=a
-      by A3,HURWITZ:4,MATRIX_2:def 16;
-      hence thesis by VECTSP_1:def 13;
+A13:  p1=<*1,2*>;
+      i=1 or i=2 by A1,A11,FINSEQ_1:4,TARSKI:def 2;
+      then i=1 & p1.i=1 or i=2 & p1.i=2 by A13,FINSEQ_1:61;
+      then i+j=2*1 or i+j=2*2 by A2;
+      then
+A14:  power(K).(-1_K,i+j)=1_K by HURWITZ:4;
+A15:  len Permutations(2)=2 by MATRIX_2:20;
+      R is even by A11,Th11;
+      then
+A16:  -(a,R)=a by MATRIX_2:def 16;
+      id Seg 2 is even by MATRIX_2:29;
+      then -(a,p1)=a by A11,A13,A15,FINSEQ_2:61,MATRIX_2:def 16;
+      hence thesis by A14,A16,VECTSP_1:def 13;
     end;
     suppose
-A6:   p1=<*2,1*>;
-      i=1 or i=2 by A1,A3,FINSEQ_1:4,TARSKI:def 2;
-      then i+j=2*1+1 & R is even & <*2,1*> is odd Permutation of Seg 2&
-      len Permutations(2)=2
-      by A1,A3,A6,Th11,FINSEQ_1:61,MATRIX_2:20,MATRIX_9:12;
-      then power(K).(-1_K,i+j)=-1_K & -(a,R)=a & -(a,p1)=-a
-      by A3,A6,HURWITZ:4,MATRIX_2:def 16;
-      then -(a,p1)=-1_K*a & -1_K*a =power(K).(-1_K,i+j)*-(a,R)
-      by VECTSP_1:40,def 13;
-      hence thesis;
+A17:  p1=<*2,1*>;
+      len Permutations(2)=2 by MATRIX_2:20;
+      then -(a,p1)=-a by A11,A17,MATRIX_2:def 16,MATRIX_9:12;
+      then
+A18:  -(a,p1)=-1_K*a by VECTSP_1:def 13;
+      i=1 or i=2 by A1,A11,FINSEQ_1:4,TARSKI:def 2;
+      then i+j=2*1+1 by A2,A17,FINSEQ_1:61;
+      then
+A19:  power(K).(-1_K,i+j)=-1_K by HURWITZ:4;
+      R is even by A11,Th11;
+      then -(a,R)=a by MATRIX_2:def 16;
+      hence thesis by A19,A18,VECTSP_1:40;
     end;
   end;
   suppose
-A7: n >= 2;
+A20: n >= 2;
     then reconsider n2=n-2 as Element of NAT by NAT_1:21;
     per cases;
     suppose
-A8:   not K is Fanoian;
-A9:   now per cases by NAT_D:12;
-        suppose i+j mod 2=0;
+A21:  not K is Fanoian;
+A22:  now
+        per cases by NAT_D:12;
+        suppose
+          i+j mod 2=0;
           then consider t be Nat such that
-A10:      i+j = 2 * t + 0 & 0 < 2 by NAT_D:def 2;
+A23:      i+j = 2 * t + 0 and
+          0 < 2 by NAT_D:def 2;
           t is Element of NAT by ORDINAL1:def 13;
-          hence power(K).(-1_K,i+j)=1_K by A10,HURWITZ:4;
+          hence power(K).(-1_K,i+j)=1_K by A23,HURWITZ:4;
         end;
-        suppose i+j mod 2=1;
+        suppose
+          i+j mod 2=1;
           then consider t be Nat such that
-A11:      i+j = 2 * t + 1 & 1 < 2 by NAT_D:def 2;
-          t is Element of NAT & 1_K=-1_K by A8,MATRIX11:22,ORDINAL1:def 13;
-          hence power(K).(-1_K,i+j)=1_K by A11,HURWITZ:4;
+A24:      i+j = 2 * t + 1 and
+          1 < 2 by NAT_D:def 2;
+A25:      1_K=-1_K by A21,MATRIX11:22;
+          t is Element of NAT by ORDINAL1:def 13;
+          hence power(K).(-1_K,i+j)=1_K by A24,A25,HURWITZ:4;
         end;
       end;
-      (R is even or R is odd) & (p1 is even or p1 is odd)& -1_K=1_K
-      by A8,MATRIX11:22;
-      then (-(a,R)=a or -(a,R)=-a)&(-(a,p1)=a or -(a,p1)=-a)& -a=-a*1_K &
-      -a*1_K=a*(1_K) by MATRIX_2:def 16,VECTSP_1:41,def 13;
-      then -(a,R)=a & -(a,p1)=a by VECTSP_1:def 13;
-      hence thesis by A9,VECTSP_1:def 13;
+A26:  -(a,p1)=a or -(a,p1)=-a by MATRIX_2:def 16;
+      -1_K=1_K by A21,MATRIX11:22;
+      then
+A27:  -a*1_K=a*(1_K) by VECTSP_1:41;
+A28:  -a=-a*1_K by VECTSP_1:def 13;
+      -(a,R)=a or -(a,R)=-a by MATRIX_2:def 16;
+      then -(a,R)=a by A28,A27,VECTSP_1:def 13;
+      hence thesis by A22,A26,A27,VECTSP_1:def 13;
     end;
     suppose
-A12:  K is Fanoian;
-      reconsider n1=n2+1 as Element of NAT;
-      set P2=Permutations(n2+2);
-      set P1=Permutations(n1+2);
-      reconsider Q=R as Element of P2;
-      reconsider Q1=p1 as Element of P1;
-      reconsider Q'=Q as Permutation of Seg (n2+2) by MATRIX_2:def 11;
-      reconsider Q1'=Q1 as Permutation of Seg (n1+2) by MATRIX_2:def 11;
-      set SS1=2Set Seg (n1+2);
-      set SS2=2Set Seg (n2+2);
+A29:  K is Fanoian;
       set mm=the multF of K;
+      reconsider n1=n2+1 as Element of NAT;
+      set P1=Permutations(n1+2);
+      reconsider Q1=p1 as Element of P1;
+      set SS1=2Set Seg (n1+2);
       consider X be Element of Fin SS1 such that
-A13:  X = {{N,i}:{N,i} in SS1} and
-A14:  mm $$ (X,Part_sgn(Q1,K)) = power(K).(-1_K,i+j) by A1,A12,Th9;
-      consider f be Function of SS2,SS1 such that
-A15:  rng f=SS1\X & f is one-to-one and
-A16:  for k,m st k<m & {k,m} in SS2 holds
-      (m < i & k < i implies f.{k,m}={k,m}) &
-      (m >= i & k < i implies f.{k,m}={k,m+1}) &
-      (m >= i & k >= i implies f.{k,m}={k+1,m+1}) by A1,A7,A13,Th10;
-A17:  dom f=SS2 by FUNCT_2:def 1;
-      reconsider domf=dom f as Element of Fin SS2 by FINSUB_1:def 5;
-      reconsider SSX=SS1\X as Element of Fin SS1 by FINSUB_1:def 5;
-      set PQ=Part_sgn(Q,K);
+A30:  X = {{N,i}:{N,i} in SS1} and
+A31:  mm $$ (X,Part_sgn(Q1,K)) = power(K).(-1_K,i+j) by A1,A2,A29,Th9;
       set PQ1=Part_sgn(Q1,K);
+      set SS2=2Set Seg (n2+2);
+      reconsider Q1'=Q1 as Permutation of Seg (n1+2) by MATRIX_2:def 11;
+      set P2=Permutations(n2+2);
+      reconsider Q=R as Element of P2;
+      reconsider Q'=Q as Permutation of Seg (n2+2) by MATRIX_2:def 11;
+      set PQ=Part_sgn(Q,K);
+A32:  FinOmega(SS1)=SS1 by MATRIX_2:def 17;
+      reconsider SSX=SS1\X as Element of Fin SS1 by FINSUB_1:def 5;
+A33:  X\/SSX=SS1\/X by XBOOLE_1:39;
+      X c= SS1 by FINSUB_1:def 5;
+      then
+A34:  X\/SSX=SS1 by A33,XBOOLE_1:12;
+      consider f be Function of SS2,SS1 such that
+A35:  rng f=SS1\X and
+A36:  f is one-to-one and
+A37:  for k,m st k<m & {k,m} in SS2 holds (m < i & k < i implies f.{k
+      ,m}={k,m}) & (m >= i & k < i implies f.{k,m}={k,m+1}) & (m >= i & k >= i
+      implies f.{k,m}={k+1,m+1}) by A1,A20,A30,Th10;
       set Pf=PQ1*f;
-A18:  dom Pf=SS2 & dom PQ=SS2 & dom Q1'=Seg (n1+2) by FUNCT_2:67,def 1;
-      now
-        let x such that
-A19:    x in SS2;
-        consider k,m be Nat such that
-A20:    k in Seg (n2+2) & m in Seg (n2+2) & k < m & x={k,m} by A19,MATRIX11:1;
-        reconsider k,m as Element of NAT by ORDINAL1:def 13;
-        set m1=m+1;
-        set k1=k+1;
+A38:  dom Pf=SS2 by FUNCT_2:def 1;
+A39:  dom Q1'=Seg (n1+2) by FUNCT_2:67;
+A40:  now
         n<=n+1 by NAT_1:11;
         then
-A21:    Seg (n2+2) c= Seg (n1+2) & (n2+2)+1=n1+2 by FINSEQ_1:7;
-        then
-A22:    k in Seg (n1+2) & m in Seg (n1+2)&
-        k1 in Seg (n1+2) & m1 in Seg (n1+2) by A20,FINSEQ_1:81;
+A41:    Seg (n2+2) c= Seg (n1+2) by FINSEQ_1:7;
+        let x such that
+A42:    x in SS2;
+        consider k,m be Nat such that
+A43:    k in Seg (n2+2) and
+A44:    m in Seg (n2+2) and
+A45:    k < m and
+A46:    x={k,m} by A42,MATRIX11:1;
+        reconsider k,m as Element of NAT by ORDINAL1:def 13;
         dom Q'=Seg (n2+2) by FUNCT_2:67;
-        then Q'.k<>Q.m by A20,FUNCT_1:def 8;
+        then Q'.k<>Q.m by A43,A44,A45,FUNCT_1:def 8;
         then
-A23:    Q.k>Q.m or Q.k<Q.m by XXREAL_0:1;
+A47:    Q.k>Q.m or Q.k<Q.m by XXREAL_0:1;
+        set m1=m+1;
+        set k1=k+1;
+A48:    (n2+2)+1=n1+2;
+        then
+A49:    k1 in Seg (n1+2) by A43,FINSEQ_1:81;
+A50:    m1 in Seg (n1+2) by A44,A48,FINSEQ_1:81;
         per cases;
         suppose
-A24:      k<i & m<i;
-          then
-A25:      f.x=x & Pf.x=PQ1.(f.x) by A16,A18,A19,A20,FUNCT_1:22;
+A51:      k<i & m<i;
+A52:      Pf.x=PQ1.(f.x) by A38,A42,FUNCT_1:22;
+A53:      f.x=x by A37,A42,A45,A46,A51;
           per cases;
-          suppose (Q1.k<j & Q1.m<j) or (Q1.k>=j & Q1.m>=j);
-            then (Q.k=Q1.k&Q.m=Q1.m)or(Q.k=Q1.k-1&Q.m=Q1.m-1)
-            by A1,A20,A24,Def3;
-            then (Q.k<Q.m & Q1.k<Q1.m) or (Q.k>Q.m & Q1.k>Q1.m)
-            by A23,XREAL_1:11;
-            then (PQ1.x=1_K & PQ.x=1_K) or (PQ1.x=-1_K & PQ.x=-1_K)
-            by A20,A21,MATRIX11:def 1;
-            hence Pf.x=PQ.x by A25;
+          suppose
+            Q1.k<j & Q1.m<j or Q1.k>=j & Q1.m>=j;
+            then Q.k=Q1.k&Q.m=Q1.m or Q.k=Q1.k-1&Q.m=Q1.m-1 by A1,A2,A43,A44,
+            A51,Def3;
+            then Q.k<Q.m & Q1.k<Q1.m or Q.k>Q.m & Q1.k>Q1.m by A47,
+            XREAL_1
+            :11;
+            then
+            PQ1.x=1_K & PQ.x=1_K or PQ1.x=-1_K & PQ.x=-1_K by A43,A44,A45
+            ,A46,A41,MATRIX11:def 1;
+            hence Pf.x=PQ.x by A38,A42,A53,FUNCT_1:22;
           end;
           suppose
-A26:        Q1.k<j & Q1.m>=j;
-            then Q.m=Q1.m-1 & Q1'.m<>j
-            by A1,A18,A20,A21,A24,Def3,FUNCT_1:def 8;
-            then Q1.m=Q.m+1 & Q1.m>j by A26,XXREAL_0:1;
-            then Q.m>=j & Q1.k=Q.k by A1,A20,A24,A26,Def3,NAT_1:13;
-            then Q.k<Q.m & Q1.k<Q1.m by A26,XXREAL_0:2;
-            then PQ1.x=1_K & PQ.x=1_K by A20,A21,MATRIX11:def 1;
-            hence Pf.x=PQ.x by A25;
+A54:        Q1.k<j & Q1.m>=j;
+            then Q.m=Q1.m-1 by A1,A2,A44,A51,Def3;
+            then
+A55:        Q1.m=Q.m+1;
+            Q1'.m<>j by A1,A2,A39,A44,A41,A51,FUNCT_1:def 8;
+            then Q1.m>j by A54,XXREAL_0:1;
+            then
+A56:        Q.m>=j by A55,NAT_1:13;
+            Q1.k<Q1.m by A54,XXREAL_0:2;
+            then
+A57:        PQ1.x=1_K by A43,A44,A45,A46,A41,MATRIX11:def 1;
+            Q1.k=Q.k by A1,A2,A43,A51,A54,Def3;
+            then Q.k<Q.m by A54,A56,XXREAL_0:2;
+            hence Pf.x=PQ.x by A43,A44,A45,A46,A53,A52,A57,MATRIX11:def 1;
           end;
           suppose
-A27:        Q1.k>=j & Q1.m<j;
-            then Q.k=Q1.k-1 & Q1'.k<>j
-            by A1,A18,A20,A21,A24,Def3,FUNCT_1:def 8;
-            then Q1.k=Q.k+1 & Q1.k>j by A27,XXREAL_0:1;
-            then Q.k>=j & Q1.m=Q.m by A1,A20,A24,A27,Def3,NAT_1:13;
-            then Q.k>Q.m & Q1.k>Q1.m by A27,XXREAL_0:2;
-            then PQ1.x=-1_K & PQ.x=-1_K by A20,A21,MATRIX11:def 1;
-            hence Pf.x=PQ.x by A25;
-          end;
-        end;
-        suppose k>=i & m<i;
-          hence Pf.x=PQ.x by A20,XXREAL_0:2;
-        end;
-        suppose
-A28:      k<i & m>=i;
-          then
-A29:      f.{k,m}={k,m1} & Pf.x=PQ1.(f.{k,m}) by A16,A18,A19,A20,FUNCT_1:22;
-          per cases;
-          suppose (Q1.k<j & Q1.m1<j) or (Q1.k>=j & Q1.m1>=j);
-            then (Q.k=Q1.k & Q.m=Q1.m1) or (Q.k=Q1.k-1 & Q.m=Q1.m1-1)
-            by A1,A20,A28,Def3;
-            then ((Q.k<Q.m & Q1.k<Q1.m1) or (Q.k>Q.m & Q1.k>Q1.m1)) & k < m1
-            by A20,A23,NAT_1:13,XREAL_1:11;
-            then (PQ1.{k,m1}=1_K & PQ.x=1_K)or(PQ1.{k,m1}=-1_K & PQ.x=-1_K)
-            by A20,A22,MATRIX11:def 1;
-            hence Pf.x=PQ.x by A29;
-          end;
-          suppose
-A30:        Q1.k<j & Q1.m1>=j;
-            m1>i by A28,NAT_1:13;
-            then Q.m=Q1.m1-1 & Q1'.m1<>j
-            by A1,A18,A20,A22,A28,A30,Def3,FUNCT_1:def 8;
-            then Q1.m1=Q.m+1 & Q1.m1>j by A30,XXREAL_0:1;
-            then Q.m>=j & Q1.k=Q.k by A1,A20,A28,A30,Def3,NAT_1:13;
-            then Q.k<Q.m & Q1.k<Q1.m1 & k<m1 by A20,A30,NAT_1:13,XXREAL_0:2;
-            then PQ1.{k,m1}=1_K & PQ.x=1_K by A20,A22,MATRIX11:def 1;
-            hence Pf.x=PQ.x by A29;
-          end;
-          suppose
-A31:        Q1.k>=j & Q1.m1<j;
-            then Q.k=Q1.k-1 & Q1'.k<>j
-            by A1,A18,A20,A21,A28,Def3,FUNCT_1:def 8;
-            then Q1.k=Q.k+1 & Q1.k>j by A31,XXREAL_0:1;
-            then Q.k>=j & Q1.m1=Q.m by A1,A20,A28,A31,Def3,NAT_1:13;
-            then Q.m<Q.k & Q1.k>Q1.m1 & k<m1 by A20,A31,NAT_1:13,XXREAL_0:2;
-            then PQ1.{k,m1}=-1_K & PQ.x=-1_K by A20,A22,MATRIX11:def 1;
-            hence Pf.x=PQ.x by A29;
+A58:        Q1.k>=j & Q1.m<j;
+            then Q.k=Q1.k-1 by A1,A2,A43,A51,Def3;
+            then
+A59:        Q1.k=Q.k+1;
+            Q1'.k<>j by A1,A2,A39,A43,A41,A51,FUNCT_1:def 8;
+            then Q1.k>j by A58,XXREAL_0:1;
+            then
+A60:        Q.k>=j by A59,NAT_1:13;
+            Q1.k>Q1.m by A58,XXREAL_0:2;
+            then
+A61:        PQ1.x=-1_K by A43,A44,A45,A46,A41,MATRIX11:def 1;
+            Q1.m=Q.m by A1,A2,A44,A51,A58,Def3;
+            then Q.k>Q.m by A58,A60,XXREAL_0:2;
+            hence Pf.x=PQ.x by A43,A44,A45,A46,A53,A52,A61,MATRIX11:def 1;
           end;
         end;
         suppose
-A32:      k>=i & m>=i;
-          then
-A33:      f.{k,m}={k+1,m+1} & Pf.x=PQ1.(f.{k,m}) & k1<m1
-          by A16,A18,A19,A20,FUNCT_1:22,XREAL_1:8;
+          k>=i & m<i;
+          hence Pf.x=PQ.x by A45,XXREAL_0:2;
+        end;
+        suppose
+A62:      k<i & m>=i;
+A63:      Pf.x=PQ1.(f.{k,m}) by A38,A42,A46,FUNCT_1:22;
+A64:      f.{k,m}={k,m1} by A37,A42,A45,A46,A62;
           per cases;
-          suppose (Q1.k1<j & Q1.m1<j) or (Q1.k1>=j & Q1.m1>=j);
-            then (Q.k=Q1.k1&Q.m=Q1.m1)or(Q.k=Q1.k1-1&Q.m=Q1.m1-1)
-            by A1,A20,A32,Def3;
-            then (Q.k<Q.m & Q1.k1<Q1.m1) or (Q.k>Q.m & Q1.k1>Q1.m1)
-            by A23,XREAL_1:11;
-            then (PQ1.{k1,m1}=1_K & PQ.x=1_K)or(PQ1.{m1,k1}=-1_K&PQ.x=-1_K)
-            by A20,A22,A33,MATRIX11:def 1;
-            hence Pf.x=PQ.x by A33;
+          suppose
+            Q1.k<j & Q1.m1<j or Q1.k>=j & Q1.m1>=j;
+            then Q.k=Q1.k & Q.m=Q1.m1 or Q.k=Q1.k-1 & Q.m=Q1.m1-1 by A1,A2,
+            A43,A44,A62,Def3;
+            then
+A65:        Q.k<Q.m & Q1.k<Q1.m1 or Q.k>Q.m & Q1.k>Q1.m1 by A47,
+            XREAL_1:11;
+            k < m1 by A45,NAT_1:13;
+            then PQ1.{k,m1}=1_K & PQ.x=1_K or PQ1.{k,m1}=-1_K & PQ.x=-1_K by
+            A43,A44,A45,A46,A41,A50,A65,MATRIX11:def 1;
+            hence Pf.x=PQ.x by A38,A42,A46,A64,FUNCT_1:22;
           end;
           suppose
-A34:        Q1.k1<j & Q1.m1>=j;
-            m1>i by A32,NAT_1:13;
-            then Q.m=Q1.m1-1 & Q1'.m1<>j
-            by A1,A18,A20,A22,A32,A34,Def3,FUNCT_1:def 8;
-            then Q1.m1=Q.m+1 & Q1.m1>j by A34,XXREAL_0:1;
-            then Q.m>=j & Q1.k1=Q.k by A1,A20,A32,A34,Def3,NAT_1:13;
-            then Q.k<Q.m & Q1.k1<Q1.m1 by A34,XXREAL_0:2;
-            then PQ1.{k1,m1}=1_K & PQ.x=1_K by A20,A22,A33,MATRIX11:def 1;
-            hence Pf.x=PQ.x by A33;
+A66:        Q1.k<j & Q1.m1>=j;
+            m1>i by A62,NAT_1:13;
+            then Q1'.m1<>j by A1,A2,A39,A50,FUNCT_1:def 8;
+            then
+A67:        Q1.m1>j by A66,XXREAL_0:1;
+            Q.m=Q1.m1-1 by A1,A2,A44,A62,A66,Def3;
+            then Q1.m1=Q.m+1;
+            then
+A68:        Q.m>=j by A67,NAT_1:13;
+            Q1.k=Q.k by A1,A2,A43,A62,A66,Def3;
+            then
+A69:        Q.k<Q.m by A66,A68,XXREAL_0:2;
+A70:        k<m1 by A45,NAT_1:13;
+            Q1.k<Q1.m1 by A66,XXREAL_0:2;
+            then PQ1.{k,m1}=1_K by A43,A41,A50,A70,MATRIX11:def 1;
+            hence Pf.x=PQ.x by A43,A44,A45,A46,A64,A63,A69, MATRIX11:
+            def 1;
           end;
           suppose
-A35:        Q1.k1>=j & Q1.m1<j;
-            k1>i by A32,NAT_1:13;
-            then Q.k=Q1.k1-1 & Q1'.k1<>j
-            by A1,A18,A20,A22,A32,A35,Def3,FUNCT_1:def 8;
-            then Q1.k1=Q.k+1 & Q1.k1>j by A35,XXREAL_0:1;
-            then Q.k>=j & Q1.m1=Q.m by A1,A20,A32,A35,Def3,NAT_1:13;
-            then Q.k>Q.m & Q1.k1>Q1.m1 by A35,XXREAL_0:2;
-            then PQ1.{k1,m1}=-1_K & PQ.x=-1_K by A20,A22,A33,MATRIX11:def 1;
-            hence Pf.x=PQ.x by A33;
+A71:        Q1.k>=j & Q1.m1<j;
+            then Q.k=Q1.k-1 by A1,A2,A43,A62,Def3;
+            then
+A72:        Q1.k=Q.k+1;
+            Q1'.k<>j by A1,A2,A39,A43,A41,A62,FUNCT_1:def 8;
+            then Q1.k>j by A71,XXREAL_0:1;
+            then
+A73:        Q.k>=j by A72,NAT_1:13;
+            Q1.m1=Q.m by A1,A2,A44,A62,A71,Def3;
+            then
+A74:        Q.m<Q.k by A71,A73,XXREAL_0:2;
+A75:        k<m1 by A45,NAT_1:13;
+            Q1.k>Q1.m1 by A71,XXREAL_0:2;
+            then PQ1.{k,m1}=-1_K by A43,A41,A50,A75,MATRIX11:def 1;
+            hence Pf.x=PQ.x by A43,A44,A45,A46,A64,A63,A74, MATRIX11:
+            def 1;
+          end;
+        end;
+        suppose
+A76:      k>=i & m>=i;
+A77:      Pf.x=PQ1.(f.{k,m}) by A38,A42,A46,FUNCT_1:22;
+A78:      k1<m1 by A45,XREAL_1:8;
+A79:      f.{k,m}={k+1,m+1} by A37,A42,A45,A46,A76;
+          per cases;
+          suppose
+            Q1.k1<j & Q1.m1<j or Q1.k1>=j & Q1.m1>=j;
+            then Q.k=Q1.k1&Q.m=Q1.m1 or Q.k=Q1.k1-1&Q.m=Q1.m1-1 by A1,A2,A43,
+            A44,A76,Def3;
+            then Q.k<Q.m & Q1.k1<Q1.m1 or Q.k>Q.m & Q1.k1>Q1.m1 by A47,
+            XREAL_1:11;
+            then PQ1.{k1,m1}=1_K & PQ.x=1_K or PQ1.{m1,k1}=-1_K&PQ.x=-1_K by
+            A43,A44,A45,A46,A49,A50,A78,MATRIX11:def 1;
+            hence Pf.x=PQ.x by A38,A42,A46,A79,FUNCT_1:22;
+          end;
+          suppose
+A80:        Q1.k1<j & Q1.m1>=j;
+            m1>i by A76,NAT_1:13;
+            then Q1'.m1<>j by A1,A2,A39,A50,FUNCT_1:def 8;
+            then
+A81:        Q1.m1>j by A80,XXREAL_0:1;
+            Q.m=Q1.m1-1 by A1,A2,A44,A76,A80,Def3;
+            then Q1.m1=Q.m+1;
+            then
+A82:        Q.m>=j by A81,NAT_1:13;
+            Q1.k1<Q1.m1 by A80,XXREAL_0:2;
+            then
+A83:        PQ1.{k1,m1}=1_K by A49,A50,A78,MATRIX11:def 1;
+            Q1.k1=Q.k by A1,A2,A43,A76,A80,Def3;
+            then Q.k<Q.m by A80,A82,XXREAL_0:2;
+            hence Pf.x=PQ.x by A43,A44,A45,A46,A79,A77,A83, MATRIX11:
+            def 1;
+          end;
+          suppose
+A84:        Q1.k1>=j & Q1.m1<j;
+            k1>i by A76,NAT_1:13;
+            then Q1'.k1<>j by A1,A2,A39,A49,FUNCT_1:def 8;
+            then
+A85:        Q1.k1>j by A84,XXREAL_0:1;
+            Q.k=Q1.k1-1 by A1,A2,A43,A76,A84,Def3;
+            then Q1.k1=Q.k+1;
+            then
+A86:        Q.k>=j by A85,NAT_1:13;
+            Q1.k1>Q1.m1 by A84,XXREAL_0:2;
+            then
+A87:        PQ1.{k1,m1}=-1_K by A49,A50,A78,MATRIX11:def 1;
+            Q1.m1=Q.m by A1,A2,A44,A76,A84,Def3;
+            then Q.k>Q.m by A84,A86,XXREAL_0:2;
+            hence Pf.x=PQ.x by A43,A44,A45,A46,A79,A77,A87, MATRIX11:
+            def 1;
           end;
         end;
       end;
-      then PQ=Pf & domf=FinOmega(SS2) & f.:domf=rng f
-      by A17,A18,FUNCT_1:9,MATRIX_2:def 17,RELAT_1:146;
+      reconsider domf=dom f as Element of Fin SS2 by FINSUB_1:def 5;
+A88:  f.:domf=rng f by RELAT_1:146;
+      dom f=SS2 by FUNCT_2:def 1;
       then
-A36:  mm $$ (SSX,PQ1) = sgn(Q,K) by A15,SETWOP_2:8;
-      X c= SS1 & X\/SSX=SS1\/X by FINSUB_1:def 5,XBOOLE_1:39;
-      then X\/SSX=SS1 & X misses SSX & FinOmega(SS1)=SS1
-      by MATRIX_2:def 17,XBOOLE_1:12,79;
-      then sgn(Q1,K)=power(K).(-1_K,i+j)*sgn(Q,K) by A14,A36,SETWOP_2:6;
+A89:  domf=FinOmega(SS2) by MATRIX_2:def 17;
+      dom PQ=SS2 by FUNCT_2:def 1;
+      then PQ=Pf by A38,A40,FUNCT_1:9;
+      then
+A90:  mm $$ (SSX,PQ1) = sgn(Q,K) by A35,A36,A89,A88,SETWOP_2:8;
+      X misses SSX by XBOOLE_1:79;
+      then sgn(Q1,K)=power(K).(-1_K,i+j)*sgn(Q,K) by A31,A90,A34,A32,
+      SETWOP_2:6;
       hence -(a,p1) = power(K).(-1_K,i+j)*sgn(Q,K)*a by MATRIX11:26
         .= power(K).(-1_K,i+j)*(sgn(Q,K)*a) by GROUP_1:def 4
         .= power(K).(-1_K,i+j)*-(a,R) by MATRIX11:26;
@@ -2037,214 +2540,262 @@ end;
 
 theorem Th22:
   for i,j st i in Seg (n+1) & p1.i = j for M be Matrix of n+1,K
-  for DM be Matrix of n,K st DM = Delete(M,i,j) holds (Path_product M).p1 =
-  power(K).(-1_K,i+j)*(M*(i,j))*(Path_product(DM)).Rem(p1,i)
+for DM be Matrix of n,K st DM = Delete(M,i,j) holds (Path_product M).p1 = power
+  (K).(-1_K,i+j)*(M*(i,j))*(Path_product(DM)).Rem(p1,i)
 proof
   reconsider N=n as Element of NAT by ORDINAL1:def 13;
   set n1 = N+1;
   let i,j be Nat such that
-A1: i in Seg(n+1) & p1.i=j;
-  let M be (Matrix of n+1,K),DM be (Matrix of n,K) such that
-A2: DM=Delete(M,i,j);
-  set R=Rem(p1,i);
+A1: i in Seg(n+1) and
+A2: p1.i=j;
   set mm=the multF of K;
-  set Pp1=Path_matrix(p1,M);
+  set R=Rem(p1,i);
+  let M be (Matrix of n+1,K),DM be (Matrix of n,K) such that
+A3: DM=Delete(M,i,j);
   set PR=Path_matrix(R,DM);
+  set Pp1=Path_matrix(p1,M);
   len Pp1=n1 by MATRIX_3:def 7;
   then dom Pp1=Seg n1 by FINSEQ_1:def 3;
   then
-A3: Pp1.i=M*(i,j) by A1,MATRIX_3:def 7;
-A4: now per cases;
-    suppose N=0;
-      then len Pp1=1 & Pp1.1=M*(i,j) & len PR=0
-      by A1,A3,FINSEQ_1:4,MATRIX_3:def 7,TARSKI:def 1;
-      then Pp1=<*M*(i,j)*> & PR=<*>(the carrier of K)
-       by FINSEQ_1:57;
-      then mm $$ Pp1=M*(i,j) & mm $$ PR = the_unity_wrt mm &
-      the_unity_wrt mm=1_K by FINSOP_1:11,12,FVSUM_1:7;
-      hence mm $$ Pp1=(M*(i,j))*(mm $$ PR) by VECTSP_1:def 13;
+A4: Pp1.i=M*(i,j) by A1,A2,MATRIX_3:def 7;
+A5: now
+    per cases;
+    suppose
+A6:   N=0;
+      then
+A7:   len Pp1=1 by MATRIX_3:def 7;
+      Pp1.1=M*(i,j) by A1,A4,A6,FINSEQ_1:4,TARSKI:def 1;
+      then Pp1=<*M*(i,j)*> by A7,FINSEQ_1:57;
+      then
+A8:   mm $$ Pp1=M*(i,j) by FINSOP_1:12;
+      len PR=0 by A6,MATRIX_3:def 7;
+      then PR=<*>(the carrier of K);
+      then
+A9:   mm $$ PR = the_unity_wrt mm by FINSOP_1:11;
+      the_unity_wrt mm=1_K by FVSUM_1:7;
+      hence mm $$ Pp1=(M*(i,j))*(mm $$ PR) by A8,A9,VECTSP_1:def 13;
     end;
     suppose
-A5:   N>0;
-      n1 >= 1 & len Pp1=n1 by MATRIX_3:def 7,NAT_1:11;
-      then consider F be Function of NAT,the carrier of K such that
-A6:   F.1 = Pp1.1 and
-A7:   for k being Element of NAT st 0<>k & k<n1
-      holds F.(k+1) = mm.(F.k,Pp1.(k+1)) and
-A8:   mm $$ Pp1=F.n1 by FINSOP_1:def 1;
-      n>=1 & len PR=n by A5,MATRIX_3:def 7,NAT_1:14;
+A10:  N>0;
+      len PR=n by MATRIX_3:def 7;
       then consider f be Function of NAT,the carrier of K such that
-A9:   f.1 = PR.1 and
-A10:  for k being Element of NAT st 0<>k & k<n
-      holds f.(k+1) = mm.(f.k,PR.(k+1)) and
-A11:  mm $$ PR=f.n by FINSOP_1:def 1;
-A12:  for k st k in Seg n holds
-      ((k<i implies PR.k=Pp1.k) & (k>=i implies PR.k=Pp1.(k+1)))
+A11:  f.1 = PR.1 and
+A12:  for k being Element of NAT st 0<>k & k<n holds f.(k+1) = mm.(f.
+      k,PR.(k+1)) and
+A13:  mm $$ PR=f.n by A10,FINSOP_1:def 1;
+      len Pp1=n1 by MATRIX_3:def 7;
+      then consider F be Function of NAT,the carrier of K such that
+A14:  F.1 = Pp1.1 and
+A15:  for k being Element of NAT st 0<>k & k<n1 holds F.(k+1) = mm.(F
+      .k,Pp1.(k+1)) and
+A16:  mm $$ Pp1=F.n1 by FINSOP_1:def 1;
+      defpred P[Nat] means 1<=$1 & $1<i implies f.$1=F.$1;
+A17:  for k st k in Seg n holds (k<i implies PR.k=Pp1.k) & (k>=i implies
+      PR.k=Pp1.(k+1))
       proof
-        let k such that
-A13:    k in Seg n;
-        reconsider R'=R as Permutation of Seg n by MATRIX_2:def 11;
+        len Pp1=n1 by MATRIX_3:def 7;
+        then
+A18:    dom Pp1=Seg n1 by FINSEQ_1:def 3;
+        len PR=n by MATRIX_3:def 7;
+        then
+A19:    dom PR=Seg n by FINSEQ_1:def 3;
         reconsider p1'=p1 as Permutation of Seg n1 by MATRIX_2:def 11;
-        dom R'=Seg n & rng R'=Seg n & dom p1'=Seg n1 & rng p1'=Seg n1
-        by FUNCT_2:67,def 3;
-        then
-A14:    R.k in Seg n & j in Seg n1 by A1,A13,FUNCT_1:def 5;
-        then consider Rk be Element of NAT such that
-A15:    Rk=R.k&1<=Rk&Rk<=n;
+        reconsider R'=R as Permutation of Seg n by MATRIX_2:def 11;
+        let k such that
+A20:    k in Seg n;
         reconsider k1=k+1 as Element of NAT;
-        n<=n1 & 1<=n1 by NAT_1:11;
+A21:    k1 in Seg n1 by A20,FINSEQ_1:81;
+A22:    rng p1'=Seg n1 by FUNCT_2:def 3;
+        dom p1'=Seg n1 by FUNCT_2:67;
         then
-A16:    Seg n c= Seg n1 & len PR=n & len Pp1=n1 & n1-'1=n1-1
-        by FINSEQ_1:7,MATRIX_3:def 7,XREAL_0:def 2;
+A23:    j in Seg n1 by A1,A2,A22,FUNCT_1:def 5;
+A24:    rng R'=Seg n by FUNCT_2:def 3;
+        dom R'=Seg n by FUNCT_2:67;
         then
-A17:    k in Seg n1 & k1 in Seg n1 & dom PR=Seg n & dom Pp1=Seg n1
-        by A13,FINSEQ_1:81,def 3;
+A25:    R.k in Seg n by A20,A24,FUNCT_1:def 5;
+        then consider Rk be Element of NAT such that
+A26:    Rk=R.k and
+        1<=Rk and
+        Rk<=n;
+A27:    n1-'1=n1-1 by XREAL_0:def 2;
+        n<=n1 by NAT_1:11;
+        then
+A28:    Seg n c= Seg n1 by FINSEQ_1:7;
         thus k<i implies PR.k=Pp1.k
         proof
           assume
-A18:      k<i;
+A29:      k<i;
           dom p1'=Seg n1 by FUNCT_2:67;
-          then p1'.k<>p1'.i by A1,A13,A16,A18,FUNCT_1:def 8;
-          then p1.k<j or p1.k>j by A1,XXREAL_0:1;
-          then Rk=p1.k & p1.k<j or p1.k>j&Rk=p1.k-1 by A1,A13,A15,A18,Def3;
+          then p1'.k<>p1'.i by A1,A20,A28,A29,FUNCT_1:def 8;
+          then p1.k<j or p1.k>j by A2,XXREAL_0:1;
+          then Rk=p1.k & p1.k<j or p1.k>j&Rk=p1.k-1 by A1,A2,A20,A26,A29,
+          Def3;
           then Rk=p1.k & p1.k<j or p1.k>j & p1.k=Rk+1;
-          then Rk=p1.k & p1.k<j or p1.k>j & Rk>=j & p1.k=Rk+1 by NAT_1:13;
-          then DM*(k,Rk)=M*(k,Rk) & PR.k=DM*(k,Rk) & Pp1.k=M*(k,Rk)
-          or PR.k=DM*(k,Rk) & DM*(k,Rk)=M*(k,Rk+1) & Pp1.k=M*(k,Rk+1)
-          by A1,A2,A13,A14,A15,A16,A17,A18,Th13,MATRIX_3:def 7;
+          then Rk=p1.k & p1.k<j or p1.k>j & Rk>=j & p1.k=Rk+1 by
+          NAT_1:13;
+          then
+          DM*(k,Rk)=M*(k,Rk) & PR.k=DM*(k,Rk) & Pp1.k=M*(k,Rk) or PR.k=DM
+*(k,Rk) & DM*(k,Rk)=M*(k,Rk+1) & Pp1.k=M*(k,Rk+1) by A1,A3,A20,A25,A23,A26,A28,
+          A27,A19,A18,A29,Th13,MATRIX_3:def 7;
           hence thesis;
         end;
+A30:    dom p1'=Seg n1 by FUNCT_2:67;
         assume
-A19:    k>=i;
-        then k1 >i & dom p1'=Seg n1 by FUNCT_2:67,NAT_1:13;
-        then p1'.k1<>p1'.i by A1,A17,FUNCT_1:def 8;
-        then p1.k1<j or p1.k1>j by A1,XXREAL_0:1;
-        then Rk=p1.k1 & p1.k1<j or p1.k1>j&Rk=p1.k1-1 by A1,A13,A15,A19,Def3;
+A31:    k>=i;
+        then k1 >i by NAT_1:13;
+        then p1'.k1<>p1'.i by A1,A21,A30,FUNCT_1:def 8;
+        then p1.k1<j or p1.k1>j by A2,XXREAL_0:1;
+        then
+        Rk=p1.k1 & p1.k1<j or p1.k1>j&Rk=p1.k1-1 by A1,A2,A20,A26,A31, Def3;
         then Rk=p1.k1 & p1.k1<j or p1.k1>j & p1.k1=Rk+1;
-        then Rk=p1.k1 & p1.k1<j or p1.k1>j & Rk>=j & p1.k1=Rk+1 by NAT_1:13;
-        then DM*(k,Rk)=M*(k+1,Rk) & PR.k=DM*(k,Rk) & Pp1.k1=M*(k+1,Rk)
-        or PR.k=DM*(k,Rk) & DM*(k,Rk)=M*(k+1,Rk+1) & Pp1.k1=M*(k1,Rk+1)
-        by A1,A2,A13,A14,A15,A16,A17,A19,Th13,MATRIX_3:def 7;
+        then Rk=p1.k1 & p1.k1<j or p1.k1>j & Rk>=j & p1.k1=Rk+1 by NAT_1:
+        13;
+        then
+        DM*(k,Rk)=M*(k+1,Rk) & PR.k=DM*(k,Rk) & Pp1.k1=M*(k+1,Rk) or PR.k
+=DM*(k,Rk) & DM*(k,Rk)=M*(k+1,Rk+1) & Pp1.k1=M*(k1,Rk+1) by A1,A3,A20,A25,A23,
+        A26,A27,A21,A19,A18,A31,Th13,MATRIX_3:def 7;
         hence thesis;
       end;
-      defpred P[Nat] means 1<=$1 & $1<i implies f.$1=F.$1;
-A20:  P[0];
-A21:  for k st P[k] holds P[k+1]
+A32:  for k st P[k] holds P[k+1]
       proof
         let k such that
-A22:    P[k];
-        assume
-A23:    1<=k+1 & k+1<i;
+A33:    P[k];
         reconsider e=k as Element of NAT by ORDINAL1:def 13;
+        assume that
+A34:    1<=k+1 and
+A35:    k+1<i;
         set k1 = e+1;
         i<=n1 by A1,FINSEQ_1:3;
-        then k1<n1 by A23,XXREAL_0:2;
+        then k1<n1 by A35,XXREAL_0:2;
         then k1<=n by NAT_1:13;
         then
-A24:    k1 in Seg N by A23;
+A36:    k1 in Seg N by A34;
         per cases by NAT_1:14;
-        suppose k=0;
-          hence thesis by A6,A9,A12,A23,A24;
+        suppose
+          k=0;
+          hence thesis by A14,A11,A17,A35,A36;
         end;
         suppose
-A25:      k>=1;
+A37:      k>=1;
           i<=n1 by A1,FINSEQ_1:3;
-          then k1<n1 by A23,XXREAL_0:2;
           then
-A26:      k<i & k<n & k<n1 & k1<=n by A23,NAT_1:13,XREAL_1:8;
+A38:      k1<n1 by A35,XXREAL_0:2;
+          then k<n1 by NAT_1:13;
           then
-A27:      f.k1=mm.(f.k,PR.k1) by A10,A25;
-A28:      F.k1=mm.(F.k,Pp1.k1) by A7,A25,A26;
-          k1 in Seg N by A23,A26;
-          hence thesis by A12,A22,A23,A25,A27,A28,NAT_1:13;
+A39:      F.k1=mm.(F.k,Pp1.k1) by A15,A37;
+          k1<=n by A38,NAT_1:13;
+          then
+A40:      k1 in Seg N by A34;
+          k<n by A38,XREAL_1:8;
+          then f.k1=mm.(f.k,PR.k1) by A12,A37;
+          hence thesis by A17,A33,A35,A37,A39,A40,NAT_1:13;
         end;
       end;
-A29:  for k holds P[k] from NAT_1:sch 2(A20,A21);
-      defpred Q[Nat] means i<=$1 & $1<=n1 implies
-      ($1=1 implies F.($1)=M*(i,j)) &
-      ($1>1 implies for a st a=f.($1-1) holds F.$1=M*(i,j)*a);
-A30:  Q[0];
-A31:  for k st Q[k] holds Q[k+1]
+      defpred Q[Nat] means i<=$1 & $1<=n1 implies ($1=1 implies F.($1)=M*(i,j)
+      ) & ($1>1 implies for a st a=f.($1-1) holds F.$1=M*(i,j)*a);
+A41:  P[0];
+A42:  for k holds P[k] from NAT_1:sch 2(A41,A32);
+A43:  for k st Q[k] holds Q[k+1]
       proof
         let k such that
-A32:    Q[k];
+A44:    Q[k];
         set k1=k+1;
-        assume
-A33:    i<=k1 & k1<=n1;
+        assume that
+A45:    i<=k1 and
+A46:    k1<=n1;
         per cases;
         suppose
-A34:      k=0;
-          then i<=1 & 1<=i by A1,A33,FINSEQ_1:3;
-          hence thesis by A3,A6,A34,XXREAL_0:1;
+A47:      k=0;
+          1<=i by A1,FINSEQ_1:3;
+          hence thesis by A4,A14,A45,A47,XXREAL_0:1;
         end;
         suppose
-A35:      k>0;
+A48:      k>0;
           hence k1=1 implies F.k1=M*(i,j);
-          assume k1>1;
+          assume
+          k1>1;
           let a such that
-A36:      a=f.(k1-1);
-A37:      k>=1 by A35,NAT_1:14;
-          k<=n & len PR=n by A33,MATRIX_3:def 7,XREAL_1:8;
+A49:      a=f.(k1-1);
+A50:      k<=n by A46,XREAL_1:8;
+          k>=1 by A48,NAT_1:14;
           then
-A38:      k<n1 & k in Seg n & dom PR=Seg n by A37,FINSEQ_1:3,def 3,NAT_1:13;
+A51:      k in Seg n by A50,FINSEQ_1:3;
+          len PR=n by MATRIX_3:def 7;
           then
-A39:      F.k1=mm.(F.k,Pp1.k1) & PR.k=DM*(k,R.k) by A7,A35,MATRIX_3:def 7;
-          per cases by A33,XXREAL_0:1;
+A52:      dom PR=Seg n by FINSEQ_1:def 3;
+          then
+A53:      PR.k=DM*(k,R.k) by A51,MATRIX_3:def 7;
+          k<n1 by A46,NAT_1:13;
+          then
+A54:      F.k1=mm.(F.k,Pp1.k1) by A15,A48,A51;
+          per cases by A45,XXREAL_0:1;
           suppose
-A40:        k1=i;
-            then 1<=k & k<i by A35,NAT_1:13,14;
-            then F.k1=a*(M*(i,j)) by A3,A29,A36,A39,A40;
+A55:        k1=i;
+            then k<i by NAT_1:13;
+            then F.k1=a*(M*(i,j)) by A4,A42,A48,A49,A54,A55,NAT_1:14;
             hence thesis;
           end;
-          suppose k1>i;
+          suppose
+A56:        k1>i;
+A57:        k<n1 by A46,NAT_1:13;
+A58:        k>=i by A56,NAT_1:13;
+            i>=1 by A1,FINSEQ_1:3;
             then
-A41:        k>=i & k<n1 & i>=1 by A1,A33,FINSEQ_1:3,NAT_1:13;
-            then
-A42:        k>=1 by XXREAL_0:2;
-            per cases by A42,XXREAL_0:1;
-            suppose k=1;
-              hence thesis by A9,A12,A32,A36,A38,A39,A41;
+A59:        k>=1 by A58,XXREAL_0:2;
+            per cases by A59,XXREAL_0:1;
+            suppose
+              k=1;
+              hence thesis by A11,A17,A44,A46,A49,A51,A54,A58,NAT_1:13;
             end;
             suppose
-A43:          k>1;
-              reconsider k'=k-1 as Element of NAT by A35,NAT_1:20;
+A60:          k>1;
+              reconsider k'=k-1 as Element of NAT by A48,NAT_1:20;
               reconsider fk'=f.k' as Element of K;
-              k'+1>0+1 & k'+1<=n by A41,A43,NAT_1:13;
-              then 0<k' & k'<n by NAT_1:13;
+              k'+1<=n by A57,NAT_1:13;
               then
-A44:          F.k=M*(i,j)*fk' & a=mm.(fk',PR.(k'+1))
-              & PR.k=Pp1.k1 by A10,A12,A32,A36,A38,A41,A43;
-              hence F.k1 = (M*(i,j)*fk')*(DM*(k,R.k)) by A39
+A61:          k'<n by NAT_1:13;
+              k'+1>0+1 by A60;
+              then
+A62:          a=mm.(fk',PR.(k'+1)) by A12,A49,A61;
+              F.k=M*(i,j)*fk' by A44,A46,A56,A60,NAT_1:13;
+              hence F.k1 = (M*(i,j)*fk')*(DM*(k,R.k)) by A17,A51,A54,A53,A58
                 .= M*(i,j)*(fk'*(DM*(k,R.k)))by GROUP_1:def 4
-                .= M*(i,j)*a by A38,A44,MATRIX_3:def 7;
+                .= M*(i,j)*a by A51,A52,A62,MATRIX_3:def 7;
             end;
           end;
         end;
       end;
-A45:  for k holds Q[k] from NAT_1:sch 2(A30,A31);
-      n1>0+1 & i<=n1 & n1-1=n by A1,A5,FINSEQ_1:3,XREAL_1:8;
-      hence mm $$ Pp1=M*(i,j)*mm $$ PR by A8,A11,A45;
+A63:  Q[0];
+A64:  for k holds Q[k] from NAT_1:sch 2(A63,A43);
+A65:  i<=n1 by A1,FINSEQ_1:3;
+A66:  n1-1=n;
+      n1>0+1 by A10,XREAL_1:8;
+      hence mm $$ Pp1=M*(i,j)*mm $$ PR by A16,A13,A64,A65,A66;
     end;
   end;
   per cases;
   suppose
-A46: R is even;
+A67: R is even;
     thus (Path_product(M)).p1 = -(mm $$ Pp1,p1) by MATRIX_3:def 8
-      .= power(K).(-1_K,i+j)*-(mm $$ Pp1,R) by A1,Th21
-      .= power(K).(-1_K,i+j)*(M*(i,j)*mm $$ PR) by A4,A46,MATRIX_2:def 16
+      .= power(K).(-1_K,i+j)*-(mm $$ Pp1,R) by A1,A2,Th21
+      .= power(K).(-1_K,i+j)*(M*(i,j)*mm $$ PR) by A5,A67,MATRIX_2:def 16
       .= power(K).(-1_K,i+j) * (M*(i,j))*mm $$ PR by GROUP_1:def 4
-      .= power(K).(-1_K,i+j) * (M*(i,j))* -(mm $$ PR,R) by A46,MATRIX_2:def 16
-      .= power(K).(-1_K,i+j)*(M*(i,j))*(Path_product(DM)).R by MATRIX_3:def 8;
+      .= power(K).(-1_K,i+j) * (M*(i,j))* -(mm $$ PR,R) by A67,MATRIX_2:def
+    16
+      .= power(K).(-1_K,i+j)*(M*(i,j))*(Path_product(DM)).R by MATRIX_3:def
+    8;
   end;
   suppose
-A47: R is odd;
+A68: R is odd;
     thus (Path_product(M)).p1=-(mm $$ Pp1,p1) by MATRIX_3:def 8
-      .= power(K).(-1_K,i+j)*-(mm $$ Pp1,R) by A1,Th21
-      .= power(K).(-1_K,i+j)*(-(M*(i,j)*mm $$ PR)) by A4,A47,MATRIX_2:def 16
+      .= power(K).(-1_K,i+j)*-(mm $$ Pp1,R) by A1,A2,Th21
+      .= power(K).(-1_K,i+j)*(-(M*(i,j)*mm $$ PR)) by A5,A68,MATRIX_2:def
+    16
       .= power(K).(-1_K,i+j)*((M*(i,j)*(-(mm $$ PR)))) by VECTSP_1:40
       .= power(K).(-1_K,i+j)*(M*(i,j))*(-(mm $$ PR)) by GROUP_1:def 4
-      .= power(K).(-1_K,i+j)*(M*(i,j))*-(mm $$ PR,R) by A47,MATRIX_2:def 16
-      .= power(K).(-1_K,i+j)*(M*(i,j))*(Path_product(DM)).R by MATRIX_3:def 8;
+      .= power(K).(-1_K,i+j)*(M*(i,j))*-(mm $$ PR,R) by A68,MATRIX_2:def 16
+      .= power(K).(-1_K,i+j)*(M*(i,j))*(Path_product(DM)).R by MATRIX_3:def
+    8;
   end;
 end;
 
@@ -2255,7 +2806,6 @@ definition
   let K;
   let M be Matrix of n,K;
   func Minor(M,i,j) -> Element of K equals
-
   Det Delete(M,i,j);
   coherence;
 end;
@@ -2270,110 +2820,126 @@ definition
 end;
 
 theorem Th23:
-  for i,j st i in Seg n & j in Seg n
-  for P be Element of Fin Permutations n st P = {p:p.i = j}
-  for M be Matrix of n,K holds
-  (the addF of K) $$ (P,Path_product(M)) = M*(i,j)*Cofactor(M,i,j)
+  for i,j st i in Seg n & j in Seg n for P be Element of Fin
+Permutations n st P = {p:p.i = j} for M be Matrix of n,K holds (the addF of K)
+  $$ (P,Path_product(M)) = M*(i,j)*Cofactor(M,i,j)
 proof
   let i,j be Nat such that
-A1: i in Seg n & j in Seg n;
-  set P1=Permutations n;
-  let PP be Element of Fin P1 such that
-A2: PP={p:p.i=j};
-  let M be Matrix of n,K;
-  n<>0 by A1,FINSEQ_1:4;
-  then n>0;
+A1: i in Seg n and
+A2: j in Seg n;
+  n>0 by A1,FINSEQ_1:4;
   then reconsider n'=n-1 as Element of NAT by NAT_1:20;
-  set n'1=n'+1;
   set P=Permutations (n-'1);
+  set n'1=n'+1;
+  set P1=Permutations n;
 A3: n'1-'1=n'+1-1 by XREAL_0:def 2;
-  then consider Proj be Function of PP,P such that
-A4: Proj is bijective and
-A5: for q be Element of Permutations n'1 st q.i=j
-  holds Proj.q = Rem(q,i) by A1,A2,Th20;
+  set aa=the addF of K;
+A4: FinOmega(P)=P by MATRIX_2:30,def 17;
+  let PP be Element of Fin P1 such that
+A5: PP={p:p.i=j};
+  consider Proj be Function of PP,P such that
+A6: Proj is bijective and
+A7: for q be Element of Permutations n'1 st q.i=j holds Proj.q = Rem(q,i
+  ) by A1,A2,A5,A3,Th20;
+  let M be Matrix of n,K;
   set DM=Delete(M,i,j);
   set PathM=Path_product(M);
   set PathDM=Path_product(DM);
-  set aa=the addF of K;
   set pm=power(K).(-1_K,i+j)*(M*(i,j));
-  P is finite by MATRIX_2:30;
-  then
-A6: aa is having_a_unity & FinOmega(P)=P by FVSUM_1:10,MATRIX_2:def 17;
   defpred P[set] means for D be Element of Fin P1,ProjD be Element of Fin P st
-  D=$1 & ProjD=Proj.:D & D c= PP
-  holds aa $$ (D,PathM) = pm * aa $$ (ProjD,PathDM);
-A7: P[{}.P1]
-  proof
-    let B be Element of Fin P1,ProjB be Element of Fin P such that
-A8: B = {}.P1 & ProjB = Proj.:B & B c= PP;
-    ProjB={}.P by A8,RELAT_1:149;
-    then aa $$ (ProjB,PathDM)=the_unity_wrt aa & the_unity_wrt aa=0.K &
-    aa $$ (B,PathM)=the_unity_wrt aa by A6,A8,FVSUM_1:9,SETWISEO:40;
-    hence thesis by VECTSP_1:36;
-  end;
-A9: for B' be (Element of Fin P1), b be Element of P1
-  holds P[B'] & not b in B' implies P[B' \/ {b}]
+D=$1 & ProjD=Proj.:D & D c= PP holds aa $$ (D,PathM) = pm * aa $$ (ProjD,PathDM
+  );
+A8: for B' be (Element of Fin P1), b be Element of P1 holds P[B'] & not b
+  in B' implies P[B' \/ {b}]
   proof
     let B' be (Element of Fin P1), b be Element of P1 such that
-A10: P[B'] & not b in B';
-    let D be Element of Fin P1,ProjD be Element of Fin P such that
-A11: D=B'\/{b} & ProjD=Proj.:D & D c= PP;
-    b in {b} & {b}c=D & B' c= D by A11,TARSKI:def 1,XBOOLE_1:7;
-    then
-A12: b in PP & B' c= PP & dom Proj = PP & Proj is onto
-    by A4,A11,FUNCT_2:def 1,TARSKI:def 3,XBOOLE_1:1;
-    then
-A13: Im(Proj,b)={Proj.b} & Proj.b in rng Proj & rng Proj=P
-    by FUNCT_1:117,def 5,FUNCT_2:def 3;
-    consider Q1 be Element of P1 such that
-A14: Q1=b & Q1.i=j by A2,A12;
-    reconsider Q1'=Q1 as Element of Permutations (n'+1);
-    reconsider Q=Proj.b as Element of P by A13;
-    Proj.:B' c= P & P is finite by A13,RELAT_1:144;
+A9: P[B'] and
+A10: not b in B';
+A11: b in {b} by TARSKI:def 1;
+A12: rng Proj=P by A6,FUNCT_2:def 3;
+    then Proj.:B' c= P by RELAT_1:144;
     then reconsider ProjB'=Proj.:B' as Element of Fin P by FINSUB_1:def 5;
-A15: B' c= D by A11,XBOOLE_1:7;
-A16: not Q in ProjB'
-    proof
-      assume Q in ProjB';
-      then consider x such that
-A17:  x in dom Proj & x in B' & Proj.x=Q by FUNCT_1:def 12;
-      Proj is one-to-one by A4;
-      hence thesis by A10,A12,A17,FUNCT_1:def 8;
-    end;
-A18: Rem(Q1',i)=Q by A5,A14;
+    let D be Element of Fin P1,ProjD be Element of Fin P such that
+A13: D=B'\/{b} and
+A14: ProjD=Proj.:D and
+A15: D c= PP;
+A16: B' c= D by A13,XBOOLE_1:7;
+    B' c= D by A13,XBOOLE_1:7;
     then
-A19: PathM.Q1=pm*PathDM.Q by A1,A3,A14,Th22;
+A17: B' c= PP by A15,XBOOLE_1:1;
+    {b}c=D by A13,XBOOLE_1:7;
+    then
+A18: b in PP by A15,A11,TARSKI:def 3;
+    then consider Q1 be Element of P1 such that
+A19: Q1=b and
+A20: Q1.i=j by A5;
+A21: dom Proj = PP by FUNCT_2:def 1;
+    then
+A22: Im(Proj,b)={Proj.b} by A18,FUNCT_1:117;
+    reconsider Q=Proj.b as Element of P by A18,A21,A12,FUNCT_1:def 5;
+A23: Proj.b in rng Proj by A18,A21,FUNCT_1:def 5;
+    reconsider Q1'=Q1 as Element of Permutations (n'+1);
+A24: Rem(Q1',i)=Q by A7,A19,A20;
+    then
+A25: PathM.Q1=pm*PathDM.Q by A1,A3,A20,Th22;
+A26: not Q in ProjB'
+    proof
+      assume
+      Q in ProjB';
+      then ex x st x in dom Proj & x in B' & Proj.x=Q by FUNCT_1:def
+      12;
+      hence thesis by A6,A10,A18,A21,FUNCT_1:def 8;
+    end;
     per cases;
-    suppose B'={};
-      then aa $$ (ProjD,PathDM)=PathDM.(Proj.b) &
-      aa $$ (D,PathM)=PathM.b by A11,A13,SETWISEO:26;
-      hence thesis by A1,A3,A14,A18,Th22;
+    suppose
+A27:  B'={};
+      then
+A28:  aa $$ (D,PathM)=PathM.b by A13,SETWISEO:26;
+      aa $$ (ProjD,PathDM)=PathDM.(Proj.b) by A13,A14,A22,A23,A12,A27,
+      SETWISEO:26;
+      hence thesis by A1,A3,A19,A20,A24,A28,Th22;
     end;
     suppose
-A20:  B'<>{};
-      then ProjD=ProjB'\/{Q} & ProjB'<>{} by A11,A12,A13,RELAT_1:153;
-      hence pm *aa $$ (ProjD,PathDM)
-      = pm*(aa $$(ProjB',PathDM)+PathDM.Q) by A16,SETWOP_2:4
+A29:  B'<>{};
+      ProjD=ProjB'\/{Q} by A13,A14,A22,RELAT_1:153;
+      hence pm *aa $$ (ProjD,PathDM) = pm*(aa $$(ProjB',PathDM)+PathDM.Q) by
+      A18,A17,A21,A26,A29, SETWOP_2:4
         .= (pm * aa $$ (ProjB',PathDM))+(pm * PathDM.Q) by VECTSP_1:def 11
-        .= aa.(aa $$ (B',PathM),PathM.b) by A10,A11,A14,A15,A19,XBOOLE_1:1
-        .= aa $$ (D,PathM) by A10,A11,A20,SETWOP_2:4;
+        .= aa.(aa $$ (B',PathM),PathM.b) by A9,A15,A19,A16,A25,XBOOLE_1:1
+        .= aa $$ (D,PathM) by A10,A13,A29,SETWOP_2:4;
     end;
   end;
-A21: for B being Element of Fin P1 holds P[B] from SETWISEO:sch 2(A7,A9);
-  Proj is onto by A4;
-  then dom Proj=PP & rng Proj=P by FUNCT_2:def 1,def 3;
-  then P[PP] & Proj.:PP=FinOmega(P) by A6,A21,RELAT_1:146;
+A30: P[{}.P1]
+  proof
+    let B be Element of Fin P1,ProjB be Element of Fin P such that
+A31: B = {}.P1 and
+A32: ProjB = Proj.:B and
+    B c= PP;
+    ProjB={}.P by A31,A32,RELAT_1:149;
+    then
+A33: aa $$ (ProjB,PathDM)=the_unity_wrt aa by FVSUM_1:10,SETWISEO:40;
+A34: the_unity_wrt aa=0.K by FVSUM_1:9;
+    aa $$ (B,PathM)=the_unity_wrt aa by A31,FVSUM_1:10,SETWISEO:40;
+    hence thesis by A33,A34,VECTSP_1:36;
+  end;
+A35: for B being Element of Fin P1 holds P[B] from SETWISEO:sch 2(A30,A8 );
+A36: dom Proj=PP by FUNCT_2:def 1;
+  rng Proj=P by A6,FUNCT_2:def 3;
+  then Proj.:PP=FinOmega(P) by A4,A36,RELAT_1:146;
   hence aa $$ (PP,PathM) = M*(i,j) * power(K).(-1_K,i+j)* Det (Delete(M,i,j))
+  by A35
     .= M*(i,j) * Cofactor(M,i,j) by GROUP_1:def 4;
 end;
 
 theorem Th24:
-  for i,j st i in Seg n & j in Seg n holds Minor(M,i,j) = Minor(M@,j,i)
+  for i,j st i in Seg n & j in Seg n holds Minor(M,i,j) = Minor(M@
+  ,j,i)
 proof
   let i,j such that
-A1: i in Seg n & j in Seg n;
+A1: i in Seg n and
+A2: j in Seg n;
   thus Minor(M,i,j) = Det Delete(M,i,j)@ by MATRIXR2:43
-    .= Minor(M@,j,i) by A1,Th14;
+    .= Minor(M@,j,i) by A1,A2,Th14;
 end;
 
 definition
@@ -2381,30 +2947,30 @@ definition
   let M be Matrix of n,K;
   func Matrix_of_Cofactor(M) -> Matrix of n,K means
   :Def6:
-  for i,j being Nat st [i,j] in Indices it holds it*(i,j) = Cofactor(M,i,j);
+  for i,j being Nat
+  st [i,j] in Indices it holds it*(i,j) = Cofactor(M,i,j);
   existence
   proof
-    deffunc C(Nat,Nat)=Cofactor(M,$1,$2);
     reconsider N=n as Element of NAT by ORDINAL1:def 13;
-    consider M being Matrix of N,N,K such that
-A1: for i,j being Nat st [i,j] in Indices M holds M*(i,j) = C(i,j)
-    from MATRIX_1:sch 1;
-    thus thesis by A1;
+    deffunc C(Nat,Nat)=Cofactor(M,$1,$2);
+    ex M being Matrix of N,N,K st for i,j being Nat st [i,j] in Indices M
+    holds M*(i,j) = C(i,j) from MATRIX_1:sch 1;
+    hence thesis;
   end;
   uniqueness
   proof
     let C1,C2 be Matrix of n,K such that
-A2: for i,j being Nat st [i,j] in Indices C1
-    holds C1*(i,j) = Cofactor(M,i,j) and
-A3: for i,j being Nat st [i,j] in Indices C2 holds C2*(i,j) = Cofactor(M,i,j);
+A1: for i,j being Nat st [i,j] in Indices C1 holds C1*(i,j) = Cofactor
+    (M,i,j) and
+A2: for i,j being Nat st [i,j] in Indices C2 holds C2*(i,j) = Cofactor
+    (M,i,j);
     now
+A3:   Indices C1=Indices C2 by MATRIX_1:27;
       let i,j be Nat such that
 A4:   [i,j] in Indices C1;
       reconsider i'=i,j'=j as Element of NAT by ORDINAL1:def 13;
-      Indices C1=Indices C2 by MATRIX_1:27;
-      then C1*(i,j) = Cofactor(M,i',j') & C2*(i,j) = Cofactor(M,i',j')
-      by A2,A3,A4;
-      hence C1*(i,j)=C2*(i,j);
+      C1*(i,j) = Cofactor(M,i',j') by A1,A4;
+      hence C1*(i,j)=C2*(i,j) by A2,A4,A3;
     end;
     hence thesis by MATRIX_1:28;
   end;
@@ -2417,26 +2983,31 @@ definition
   let M be Matrix of n,K;
   func LaplaceExpL(M,i) -> FinSequence of K means
   :Def7:
-  len it = n & for j st j in dom it holds it.j = M*(i,j)*Cofactor(M,i,j);
+  len it = n & for j st
+  j in dom it holds it.j = M*(i,j)*Cofactor(M,i,j);
   existence
   proof
-    deffunc L(Nat)=M*(i,$1)*Cofactor(M,i,$1);
     reconsider N=n as Element of NAT by ORDINAL1:def 13;
+    deffunc L(Nat)=M*(i,$1)*Cofactor(M,i,$1);
     consider LL be FinSequence such that
-A1: len LL = N & for k being Nat st k in dom LL holds LL.k=L(k)
-    from FINSEQ_1:sch 2;
+A1: len LL = N & for k being Nat st k in dom LL holds LL.k=L(k) from
+    FINSEQ_1:sch 2;
     rng LL c= the carrier of K
     proof
       let x;
-      assume x in rng LL;
+      assume
+      x in rng LL;
       then consider y such that
-A2:   y in dom LL & LL.y=x by FUNCT_1:def 5;
-   dom LL=Seg n by A1,FINSEQ_1:def 3;
+A2:   y in dom LL and
+A3:   LL.y=x by FUNCT_1:def 5;
+      dom LL=Seg n by A1,FINSEQ_1:def 3;
       then consider k being Element of NAT such that
-A4:   k=y & 1<=k& k<=n by A2;
-      L(k) is Element of the carrier of K;
-      then LL.k is Element of the carrier of K by A1,A2,A4;
-      hence thesis by A2,A4;
+A4:   k=y and
+      1<=k and
+      k<=n by A2;
+      L(k) is Element of K;
+      then LL.k is Element of K by A1,A2,A4;
+      hence thesis by A3,A4;
     end;
     then reconsider LL as FinSequence of K by FINSEQ_1:def 4;
     take LL;
@@ -2446,16 +3017,19 @@ A4:   k=y & 1<=k& k<=n by A2;
   uniqueness
   proof
     let L1,L2 be FinSequence of K such that
-A5: len L1=n & for j st j in dom L1 holds L1.j=M*(i,j)*Cofactor(M,i,j) and
-A6: len L2=n & for j st j in dom L2 holds L2.j = M*(i,j)*Cofactor(M,i,j);
-A7: dom L1=Seg n & dom L2=Seg n by A5,A6,FINSEQ_1:def 3;
+A5: len L1=n and
+A6: for j st j in dom L1 holds L1.j=M*(i,j)*Cofactor(M,i,j) and
+A7: len L2=n and
+A8: for j st j in dom L2 holds L2.j = M*(i,j)*Cofactor(M,i,j);
+A9: dom L2=Seg n by A7,FINSEQ_1:def 3;
+A10: dom L1=Seg n by A5,FINSEQ_1:def 3;
     now
       let k be Nat such that
-A8:   k in dom L1;
-      L1.k=M*(i,k)*Cofactor(M,i,k)&L2.k=M*(i,k)*Cofactor(M,i,k) by A5,A6,A7,A8;
-      hence L1.k=L2.k;
+A11:  k in dom L1;
+      L1.k=M*(i,k)*Cofactor(M,i,k) by A6,A11;
+      hence L1.k=L2.k by A8,A10,A9,A11;
     end;
-    hence thesis by A7,FINSEQ_1:17;
+    hence thesis by A10,A9,FINSEQ_1:17;
   end;
 end;
 
@@ -2465,161 +3039,200 @@ definition
   let M be Matrix of n,K;
   func LaplaceExpC(M,j) -> FinSequence of K means
   :Def8:
-  len it = n & for i st i in dom it holds it.i = M*(i,j)*Cofactor(M,i,j);
+  len it = n & for i st
+  i in dom it holds it.i = M*(i,j)*Cofactor(M,i,j);
   existence
   proof
-    deffunc L(Nat)=M*($1,j)*Cofactor(M,$1,j);
     reconsider N=n as Element of NAT by ORDINAL1:def 13;
+    deffunc L(Nat)=M*($1,j)*Cofactor(M,$1,j);
     consider LL be FinSequence such that
-A1: len LL = N & for k being Nat st k in dom LL holds LL.k=L(k)
-    from FINSEQ_1:sch 2;
+A1: len LL = N & for k being Nat st k in dom LL holds LL.k=L(k) from
+    FINSEQ_1:sch 2;
     rng LL c= the carrier of K
     proof
       let x;
-      assume x in rng LL;
+      assume
+      x in rng LL;
       then consider y such that
-A2:   y in dom LL & LL.y=x by FUNCT_1:def 5;
-   dom LL=Seg n by A1,FINSEQ_1:def 3;
+A2:   y in dom LL and
+A3:   LL.y=x by FUNCT_1:def 5;
+      dom LL=Seg n by A1,FINSEQ_1:def 3;
       then consider k being Element of NAT such that
-A4:   k=y & 1<=k& k<=n by A2;
-      L(k) is Element of the carrier of K;
-      then LL.k is Element of the carrier of K by A1,A2,A4;
-      hence thesis by A2,A4;
+A4:   k=y and
+      1<=k and
+      k<=n by A2;
+      L(k) is Element of K;
+      then LL.k is Element of K by A1,A2,A4;
+      hence thesis by A3,A4;
     end;
     then reconsider LL as FinSequence of K by FINSEQ_1:def 4;
     take LL;
     thus len LL = n by A1;
-    let i such that
-A5: i in dom LL;
-    thus thesis by A1,A5;
+    let i;
+    assume
+    i in dom LL;
+    hence thesis by A1;
   end;
   uniqueness
   proof
     let L1,L2 be FinSequence of K such that
-A6: len L1=n&for i st i in dom L1 holds L1.i=M*(i,j)*Cofactor(M,i,j) and
-A7: len L2=n&for i st i in dom L2 holds L2.i = M*(i,j)*Cofactor(M,i,j);
-A8: dom L1=Seg n & dom L2=Seg n by A6,A7,FINSEQ_1:def 3;
+A5: len L1=n and
+A6: for i st i in dom L1 holds L1.i=M*(i,j)*Cofactor(M,i,j) and
+A7: len L2=n and
+A8: for i st i in dom L2 holds L2.i = M*(i,j)*Cofactor(M,i,j);
+A9: dom L2=Seg n by A7,FINSEQ_1:def 3;
+A10: dom L1=Seg n by A5,FINSEQ_1:def 3;
     now
       let k be Nat such that
-A9:   k in dom L1;
-      L1.k=M*(k,j)*Cofactor(M,k,j)&L2.k=M*(k,j)*Cofactor(M,k,j)by A6,A7,A8,A9;
-      hence L1.k=L2.k;
+A11:  k in dom L1;
+      L1.k=M*(k,j)*Cofactor(M,k,j) by A6,A11;
+      hence L1.k=L2.k by A8,A10,A9,A11;
     end;
-    hence thesis by A8,FINSEQ_1:17;
+    hence thesis by A10,A9,FINSEQ_1:17;
   end;
 end;
 
 theorem Th25:
-  for i be Nat, M be Matrix of n,K st i in Seg n
-  holds Det M = Sum LaplaceExpL(M,i)
+  for i be Nat, M be Matrix of n,K st i in Seg n holds Det M = Sum
+  LaplaceExpL(M,i)
 proof
-  let i be Nat, M be Matrix of n,K such that
-A1: i in Seg n;
   reconsider N=n as Element of NAT by ORDINAL1:def 13;
-  reconsider X=finSeg N as non empty set by A1;
   set P=Permutations n;
-  set Path=Path_product(M);
   set KK=the carrier of K;
   set aa=the addF of K;
+A1: aa is having_a_unity by FVSUM_1:10;
+  let i be Nat, M be Matrix of n,K such that
+A2: i in Seg n;
+  reconsider X=finSeg N as non empty set by A2;
+  set Path=Path_product(M);
   deffunc G(Element of Fin P)=aa $$ ($1,Path);
   consider g be Function of Fin P,KK such that
-A2: for x being Element of Fin P holds g.x = G(x) from FUNCT_2:sch 4;
+A3: for x being Element of Fin P holds g.x = G(x) from FUNCT_2:sch 4;
+A4: for A,B be Element of Fin P st A misses B holds aa.(g.A,g.B)=g.(A \/ B)
+  proof
+    let A,B be Element of Fin P such that
+A5: A misses B;
+A6: g.(A)=G(A) by A3;
+A7: g.B=G(B) by A3;
+    g.(A \/ B)=G(A\/B) by A3;
+    hence thesis by A5,A6,A7,FVSUM_1:10,SETWOP_2:6;
+  end;
   deffunc F(set) = {p:p.i=$1};
   consider f be Function such that
-A3: dom f = X & for x st x in X holds f.x = F(x) from FUNCT_1:sch 3;
+A8: dom f = X & for x st x in X holds f.x = F(x) from FUNCT_1:sch 3;
   rng f c= Fin P
   proof
     let x;
-    assume x in rng f;
+    assume
+    x in rng f;
     then consider y such that
-A4: y in dom f & f.y=x by FUNCT_1:def 5;
-X:  P is finite by MATRIX_2:30;
- F(y) c= P
+A9: y in dom f and
+A10: f.y=x by FUNCT_1:def 5;
+A11: F(y) c= P
     proof
       let z be set;
-      assume z in F(y);
+      assume
+      z in F(y);
       then ex p st p=z& p.i=y;
       hence thesis;
     end;
-    then F(y) in Fin P by X,FINSUB_1:def 5;
-    hence thesis by A3,A4;
+    P is finite by MATRIX_2:30;
+    then F(y) in Fin P by A11,FINSUB_1:def 5;
+    hence thesis by A8,A9,A10;
   end;
-  then reconsider f as Function of X,Fin P by A3,FUNCT_2:4;
+  then reconsider f as Function of X,Fin P by A8,FUNCT_2:4;
+A12: g.FinOmega(P)=Det M by A3;
   set gf=g*f;
-  reconsider X'=X as Element of Fin X by FINSUB_1:def 5;
-A6: now
-    let x,y such that
-A7: x in X' & y in X' & f.x meets f.y;
-    consider z be set such that
-A8: z in f.x & z in f.y by A7,XBOOLE_0:3;
-    f.x=F(x) & f.y=F(y) by A3,A7;
-    then (ex p st p=z& p.i=x) & (ex p st p=z& p.i=y) by A8;
-    hence x=y;
-  end;
-A9: for A,B be Element of Fin P st A misses B holds aa.(g.A,g.B)=g.(A \/ B)
-  proof
-    let A,B be Element of Fin P such that
-A10: A misses B;
-    g.(A \/ B)=G(A\/B) & g.(A)=G(A) & g.B=G(B) & aa is having_a_unity
-    by A2,FVSUM_1:10;
-    hence thesis by A10,SETWOP_2:6;
-  end;
-A11: union (f.:X) c= P
-  proof
-    let x;
-    assume x in union (f.:X);
-    then consider y such that
-A12: x in y & y in f.:X by TARSKI:def 4;
-    consider z be set such that
-A13: z in dom f & z in X & f.z=y by A12,FUNCT_1:def 12;
-    y=F(z) by A3,A13;
-    then ex p st x=p & p.i=z by A12;
-    hence thesis;
-  end;
-  P c= union (f.:X)
+A13: dom gf=X by FUNCT_2:def 1;
+  then
+A14: gf*(id X)=gf by RELAT_1:78;
+A15: P c= union (f.:X)
   proof
     let x;
     assume
-A14: x in P;
+A16: x in P;
     then reconsider p=x as Permutation of X by MATRIX_2:def 11;
-    dom p=X & rng p=X by FUNCT_2:67,def 3;
-    then p.i in X by A1,FUNCT_1:def 5;
-    then x in F(p.i) & f.(p.i)=F(p.i) & f.(p.i) in f.:X
-    by A3,A14,FUNCT_1:def 12;
-    hence thesis by TARSKI:def 4;
+A17: x in F(p.i) by A16;
+A18: rng p=X by FUNCT_2:def 3;
+    dom p=X by FUNCT_2:67;
+    then
+A19: p.i in X by A2,A18,FUNCT_1:def 5;
+    then
+A20: f.(p.i) in f.:X by A8,FUNCT_1:def 12;
+    f.(p.i)=F(p.i) by A8,A19;
+    hence thesis by A17,A20,TARSKI:def 4;
   end;
-  then
-A15: P=union (f.:X) by A11,XBOOLE_0:def 10;
   set L=LaplaceExpL(M,i);
-  set Laa=[#](L,the_unity_wrt aa);
   len L=n by Def7;
   then
-A16: dom L=Seg n & dom gf=X by FINSEQ_1:def 3,FUNCT_2:def 1;
+A21: dom L=Seg n by FINSEQ_1:def 3;
   then
-A17: dom id X=dom L & rng id X=X' & Laa|(dom L)=L & gf*(id X)=gf
-  by RELAT_1:71,78,SETWOP_2:23;
+A22: dom id X=dom L by RELAT_1:71;
+  reconsider X'=X as Element of Fin X by FINSUB_1:def 5;
+A23: FinOmega(P)=P by MATRIX_2:30,def 17;
+  g.{}.Fin P=aa $$ ({}.P,Path) by A3;
+  then
+A24: g.{}=the_unity_wrt aa by FVSUM_1:10,SETWISEO:40;
+A25: now
+    let x,y such that
+A26: x in X' and
+A27: y in X' and
+A28: f.x meets f.y;
+    consider z be set such that
+A29: z in f.x and
+A30: z in f.y by A28,XBOOLE_0:3;
+    f.y=F(y) by A8,A27;
+    then
+A31: ex p st p=z& p.i=y by A30;
+    f.x=F(x) by A8,A26;
+    then ex p st p=z& p.i=x by A29;
+    hence x=y by A31;
+  end;
   now
+A32: rng f c= Fin P by RELAT_1:def 19;
     let x such that
-A18: x in dom gf;
+A33: x in dom gf;
     consider k being Element of NAT such that
-A19: k=x & 1<=k & k<=n by A16,A18;
-    f.k in rng f & rng f c= Fin P by A3,A18,A19,FUNCT_1:def 5,RELAT_1:def 19;
-    then reconsider Fk=F(k) as Element of Fin P by A3,A18,A19;
-    gf.k=g.(f.k) & f.k=Fk by A3,A18,A19,FUNCT_1:23;
-    then gf.k=G(Fk) & G(Fk)=M*(i,k)*Cofactor(M,i,k) by A1,A2,A18,A19,Th23;
-    hence L.x=gf.x by A16,A18,A19,Def7;
+A34: k=x and
+    1<=k and
+    k<=n by A13,A33;
+    f.k in rng f by A8,A33,A34,FUNCT_1:def 5;
+    then reconsider Fk=F(k) as Element of Fin P by A8,A33,A34,A32;
+A35: f.k=Fk by A8,A33,A34;
+    gf.k=g.(f.k) by A8,A33,A34,FUNCT_1:23;
+    then
+A36: gf.k=G(Fk) by A3,A35;
+    G(Fk)=M*(i,k)*Cofactor(M,i,k) by A2,A33,A34,Th23;
+    hence L.x=gf.x by A21,A33,A34,A36,Def7;
   end;
   then
-A20: L=gf by A16,FUNCT_1:9;
-A21: aa is having_a_unity & g.{}.Fin P=aa $$ ({}.P,Path) & P is finite
-  by A2,FVSUM_1:10,MATRIX_2:30;
-  then g.{}=the_unity_wrt aa & aa is having_a_unity & FinOmega(P)=P
-  by MATRIX_2:def 17,SETWISEO:40;
-  then aa $$ (X',g*f)=aa $$ (f.:X',g) & FinOmega(X)=X &
-  aa $$ (f.:X',g)= g.FinOmega(P) & g.FinOmega(P)=Det M
-  by A2,A6,A9,A15,Th12,MATRIX_2:def 17;
-  hence Det M = aa $$(findom L,Laa) by A17,A20,SETWOP_2:7
-    .= Sum L by A21,SETWOP_2:def 2;
+A37: L=gf by A21,A13,FUNCT_1:9;
+  set Laa=[#](L,the_unity_wrt aa);
+A38: rng id X=X' by RELAT_1:71;
+A39: Laa|(dom L)=L by SETWOP_2:23;
+  union (f.:X) c= P
+  proof
+    let x;
+    assume
+    x in union (f.:X);
+    then consider y such that
+A40: x in y and
+A41: y in f.:X by TARSKI:def 4;
+    consider z be set such that
+A42: z in dom f and
+    z in X and
+A43: f.z=y by A41,FUNCT_1:def 12;
+    y=F(z) by A8,A42,A43;
+    then ex p st x=p & p.i=z by A40;
+    hence thesis;
+  end;
+  then P=union (f.:X) by A15,XBOOLE_0:def 10;
+  then
+A44: aa $$ (f.:X',g)= g.FinOmega(P) by A25,A4,A1,A24,A23,Th12;
+  aa $$ (X',g*f)=aa $$ (f.:X',g) by A25,A4,A1,A24,Th12;
+  hence Det M = aa $$(findom L,Laa) by A22,A38,A39,A14,A37,A44,A12,
+  SETWOP_2:7
+    .= Sum L by FVSUM_1:10,SETWOP_2:def 2;
 end;
 
 theorem Th26:
@@ -2627,28 +3240,36 @@ theorem Th26:
 proof
   let i such that
 A1: i in Seg n;
-  reconsider I=i as Element of NAT by ORDINAL1:def 13;
-  set LC=LaplaceExpC(M,i);
   set LL=LaplaceExpL(M@,i);
-A2: len LC=n & len LL=n by Def7,Def8;
+  set LC=LaplaceExpC(M,i);
+  reconsider I=i as Element of NAT by ORDINAL1:def 13;
+A2: len LL=n by Def7;
+A3: len LC=n by Def8;
   now
     let k be Nat such that
-A3: 1 <=k & k <= n;
+A4: 1 <=k and
+A5: k <= n;
     k in NAT by ORDINAL1:def 13;
-    then k in Seg n & Indices M=[:Seg n,Seg n:] by A3,MATRIX_1:25;
-    then k in Seg n & dom LC=Seg n & dom LL=Seg n & [k,i] in Indices M
-    by A1,A2,FINSEQ_1:def 3,ZFMISC_1:106;
-    then LC.k=M*(k,I)*Cofactor(M,k,I) & LL.k=M@*(I,k)*Cofactor(M@,I,k) &
-    Cofactor(M,k,I)=Cofactor(M@,I,k) & M*(k,I)=M@*(I,k)
-    by A1,Def7,Def8,Th24,MATRIX_1:def 7;
-    hence LC.k=LL.k;
+    then
+A6: k in Seg n by A4,A5;
+    dom LC=Seg n by A3,FINSEQ_1:def 3;
+    then
+A7: LC.k=M*(k,I)*Cofactor(M,k,I) by A6,Def8;
+    Indices M=[:Seg n,Seg n:] by MATRIX_1:25;
+    then
+A8: [k,i] in Indices M by A1,A6,ZFMISC_1:106;
+    dom LL=Seg n by A2,FINSEQ_1:def 3;
+    then
+A9: LL.k=M@*(I,k)*Cofactor(M@,I,k) by A6,Def7;
+    Cofactor(M,k,I)=Cofactor(M@,I,k) by A1,A6,Th24;
+    hence LC.k=LL.k by A8,A7,A9,MATRIX_1:def 7;
   end;
-  hence thesis by A2,FINSEQ_1:18;
+  hence thesis by A3,A2,FINSEQ_1:18;
 end;
 
 theorem
-  for j be Nat, M be Matrix of n,K st j in Seg n
-  holds Det M = Sum LaplaceExpC(M,j)
+  for j be Nat, M be Matrix of n,K st j in Seg n holds Det M = Sum
+  LaplaceExpC(M,j)
 proof
   let j be Nat, M be Matrix of n,K such that
 A1: j in Seg n;
@@ -2658,59 +3279,72 @@ A1: j in Seg n;
 end;
 
 theorem Th28:
-  for p,i st len f=n & i in Seg n holds
-  mlt(Line(Matrix_of_Cofactor M,i),f) = LaplaceExpL(RLine(M,i,f),i)
+  for p,i st len f=n & i in Seg n holds mlt(Line(
+  Matrix_of_Cofactor M,i),f) = LaplaceExpL(RLine(M,i,f),i)
 proof
   let p,i such that
-A1: len f=n & i in Seg n;
-  set C=Matrix_of_Cofactor M;
+A1: len f=n and
+A2: i in Seg n;
+  reconsider N=n as Element of NAT by ORDINAL1:def 13;
   set KK=the carrier of K;
+  set C=Matrix_of_Cofactor M;
+  reconsider Tp=f,TL=Line(C,i) as Element of N-tuples_on KK by A1,FINSEQ_2:110
+  ,MATRIX_1:25;
   set R=RLine(M,i,f);
   set LL=LaplaceExpL(R,i);
-  reconsider N=n as Element of NAT by ORDINAL1:def 13;
-  reconsider Tp=f,TL=Line(C,i) as Element of N-tuples_on KK
-  by A1,FINSEQ_2:110,MATRIX_1:25;
   set MLT=mlt(TL,Tp);
-A2: len MLT=n & len LL=n by Def7,FINSEQ_1:def 18;
-  now
+A3: len LL=n by Def7;
+A4: now
+A5: dom LL=Seg n by A3,FINSEQ_1:def 3;
+A6: n=width M by MATRIX_1:25;
     let j be Nat such that
-A3: 1<=j & j<=n;
+A7: 1<=j and
+A8: j<=n;
     j in NAT by ORDINAL1:def 13;
     then
-A4: j in Seg n & n=width C & n=width M & Indices C=[:Seg n,Seg n:] &
-    Indices M=[:Seg n,Seg n:] by A3,MATRIX_1:25;
-    then [i,j] in Indices C & [i,j] in Indices M & Delete(M,i,j)=Delete(R,i,j)
-    & Line(C,i).j=C*(i,j) by A1,Th15,MATRIX_1:def 8,ZFMISC_1:106;
-    then Line(C,i).j=Cofactor(M,i,j) & Cofactor(M,i,j)=Cofactor(R,i,j)
-    & R*(i,j)=f.j & dom LL=Seg n
-    by A1,A2,A4,Def6,FINSEQ_1:def 3,MATRIX11:def 3;
-    then MLT.j=Cofactor(M,i,j)*(R*(i,j)) & LL.j=R*(i,j)*Cofactor(M,i,j)
-    by A4,Def7,FVSUM_1:74;
-    hence MLT.j=LL.j;
+A9: j in Seg n by A7,A8;
+    n=width C by MATRIX_1:25;
+    then
+A10: Line(C,i).j=C*(i,j) by A9,MATRIX_1:def 8;
+    Indices M=[:Seg n,Seg n:] by MATRIX_1:25;
+    then [i,j] in Indices M by A2,A9,ZFMISC_1:106;
+    then
+A11: R*(i,j)=f.j by A1,A6,MATRIX11:def 3;
+    Indices C=[:Seg n,Seg n:] by MATRIX_1:25;
+    then [i,j] in Indices C by A2,A9,ZFMISC_1:106;
+    then Line(C,i).j=Cofactor(M,i,j) by A10,Def6;
+    then
+A12: MLT.j=Cofactor(M,i,j)*(R*(i,j)) by A9,A11,FVSUM_1:74;
+    Cofactor(M,i,j)=Cofactor(R,i,j) by A2,A9,Th15;
+    hence MLT.j=LL.j by A9,A5,A12,Def7;
   end;
-  hence thesis by A2,FINSEQ_1:18;
+  len MLT=n by FINSEQ_1:def 18;
+  hence thesis by A3,A4,FINSEQ_1:18;
 end;
 
 theorem Th29:
-  i in Seg n implies
-  Line(M,j) "*" Col((Matrix_of_Cofactor M)@,i) = Det RLine(M,i,Line(M,j))
+  i in Seg n implies Line(M,j) "*" Col((Matrix_of_Cofactor M)@,i)
+  = Det RLine(M,i,Line(M,j))
 proof
   assume
 A1: i in Seg n;
   set C=Matrix_of_Cofactor M;
   len C=n by MATRIX_1:25;
-  then dom C=Seg n & width M=n & len (C@)=n by FINSEQ_1:def 3,MATRIX_1:25;
+  then dom C=Seg n by FINSEQ_1:def 3;
   then
-A2: Line(C,i)=Col(C@,i) & len Line(M,j)=n & len Col(C@,i)=n
-  by A1,MATRIX_1:def 8,def 9,MATRIX_2:16;
-  thus Det RLine(M,i,Line(M,j)) = Sum LaplaceExpL(RLine(M,i,Line(M,j)),i)
-  by A1,Th25
-    .= Sum mlt(Col(C@,i),Line(M,j)) by A1,A2,Th28
+A2: Line(C,i)=Col(C@,i) by A1,MATRIX_2:16;
+  width M=n by MATRIX_1:25;
+  then
+A3: len Line(M,j)=n by MATRIX_1:def 8;
+  thus Det RLine(M,i,Line(M,j)) = Sum LaplaceExpL(RLine(M,i,Line(M,j)),i) by
+  A1,Th25
+    .= Sum mlt(Col(C@,i),Line(M,j)) by A1,A2,A3,Th28
     .= Line(M,j) "*" Col(C@,i) by FVSUM_1:78;
 end;
 
 theorem Th30:
-  Det M <> 0.K implies M * ((Det M)" * (Matrix_of_Cofactor M)@) = 1.(K,n)
+  Det M <> 0.K implies M * ((Det M)" * (Matrix_of_Cofactor M)@) =
+  1.(K,n)
 proof
   set D=Det M;
   set D'=D";
@@ -2721,94 +3355,124 @@ proof
   assume
 A1: D<>0.K;
   now
-    let i,j be Nat such that
-A2: [i,j] in Indices MC;
-    reconsider i'=i,j'=j as Element of NAT by ORDINAL1:def 13;
-    Indices MC=[:Seg n,Seg n:] by MATRIX_1:25;
-    then
-A3: i in Seg n & j in Seg n & width M=n & len DC=n & width (C@)=n
-    & len (C@)=n by A2,MATRIX_1:25,ZFMISC_1:106;
+A2: Indices MC=Indices ID by MATRIX_1:27;
     reconsider N=n as Element of NAT by ORDINAL1:def 13;
-    reconsider COL=Col(C@,j),L=Line(M,i) as
-    Element of N-tuples_on the carrier of K by MATRIX_1:25;
-    1<=j & j<=width (C@) by A3,FINSEQ_1:3;
-    then Col(DC,j)=D'*COL by MATRIXR1:19;
+    let i,j be Nat such that
+A3: [i,j] in Indices MC;
+    reconsider COL=Col(C@,j),L=Line(M,i) as Element of N-tuples_on the carrier
+    of K by MATRIX_1:25;
+    reconsider i'=i,j'=j as Element of NAT by ORDINAL1:def 13;
+A4: len DC=n by MATRIX_1:25;
+A5: Indices MC=[:Seg n,Seg n:] by MATRIX_1:25;
+    then
+A6: i in Seg n by A3,ZFMISC_1:106;
+A7: j in Seg n by A3,A5,ZFMISC_1:106;
+    then
+A8: 1<=j by FINSEQ_1:3;
+    width (C@)=n by MATRIX_1:25;
+    then j<=width (C@) by A7,FINSEQ_1:3;
+    then Col(DC,j)=D'*COL by A8,MATRIXR1:19;
     then mlt(Line(M,i),Col(DC,j)) = D'* mlt(L,COL) by FVSUM_1:83;
     then
-A4: Line(M,i) "*" Col(DC,j) = D'*(Line(M,i)"*"Col(C@,j)) by FVSUM_1:92
-      .= D'* Det RLine(M,j',Line(M,i'))by A3,Th29;
+A9: Line(M,i) "*" Col(DC,j) = D'*(Line(M,i)"*"Col(C@,j)) by FVSUM_1:
+    92
+      .= D'* Det RLine(M,j',Line(M,i'))by A7,Th29;
+A10: width M=n by MATRIX_1:25;
     then
-A5: MC*(i,j)=D'* Det RLine(M,j,Line(M,i)) by A2,A3,MATRIX_3:def 4;
-A6: Indices MC=Indices ID by MATRIX_1:27;
+A11: MC*(i,j)=D'* Det RLine(M,j,Line(M,i)) by A3,
+    A4,A9,MATRIX_3:def 4;
     per cases;
-    suppose i=j;
-      then RLine(M,j,Line(M,i))=M & ID*(i,j) = 1_K & D*D'=1_K
-      by A1,A2,A6,MATRIX11:30,MATRIX_1:def 12,VECTSP_1:def 22;
-      hence ID*(i,j) = MC*(i,j) by A2,A3,A4,MATRIX_3:def 4;
+    suppose
+A12:  i=j;
+      then
+A13:  RLine(M,j,Line(M,i))=M by MATRIX11:30;
+A14:  D*D'=1_K by A1,VECTSP_1:def 22;
+      ID*(i,j) = 1_K by A3,A2,A12,MATRIX_1:def 12;
+      hence ID*(i,j) = MC*(i,j) by A3,A10,A4,A9,A13,A14,MATRIX_3:def 4;
     end;
-    suppose i<>j;
-      then Det RLine(M,j',Line(M,i'))=0.K & ID*(i,j) = 0.K
-      by A2,A3,A6,MATRIX11:51,MATRIX_1:def 12;
-      hence ID*(i,j) = MC*(i,j) by A5,VECTSP_1:36;
+    suppose
+A15:  i<>j;
+      then
+A16:  ID*(i,j) = 0.K by A3,A2,MATRIX_1:def 12;
+      Det RLine(M,j',Line(M,i'))=0.K by A6,A7,A15,MATRIX11:51;
+      hence ID*(i,j) = MC*(i,j) by A11,A16,VECTSP_1:36;
     end;
   end;
   hence thesis by MATRIX_1:28;
 end;
 
 theorem Th31:
-  for f,i st len f=n & i in Seg n holds
-  mlt(Col(Matrix_of_Cofactor M,i),f) = LaplaceExpL(RLine(M@,i,f),i)
+  for f,i st len f=n & i in Seg n holds mlt(Col(Matrix_of_Cofactor
+  M,i),f) = LaplaceExpL(RLine(M@,i,f),i)
 proof
   let f,i such that
-A1: len f=n & i in Seg n;
-  set C=Matrix_of_Cofactor M;
+A1: len f=n and
+A2: i in Seg n;
+  reconsider N=n as Element of NAT by ORDINAL1:def 13;
   set KK=the carrier of K;
+  set C=Matrix_of_Cofactor M;
+  reconsider Tp=f,TC=Col(C,i) as Element of N-tuples_on KK by A1,FINSEQ_2:110,
+  MATRIX_1:25;
   set R=RLine(M@,i,f);
   set LL=LaplaceExpL(R,i);
-  reconsider N=n as Element of NAT by ORDINAL1:def 13;
-  reconsider Tp=f,TC=Col(C,i) as Element of N-tuples_on KK
-  by A1,FINSEQ_2:110,MATRIX_1:25;
   set MCT=mlt(TC,Tp);
-A2: len MCT=n & len LL=n by Def7,FINSEQ_1:def 18;
-  now
+A3: len LL=n by Def7;
+A4: now
+A5: Indices M@=[:Seg n,Seg n:] by MATRIX_1:25;
+A6: dom LL=Seg n by A3,FINSEQ_1:def 3;
+A7: width (M@)=n by MATRIX_1:25;
     let j be Nat such that
-A3: 1<=j & j<=n;
+A8: 1<=j and
+A9: j<=n;
     j in NAT by ORDINAL1:def 13;
     then
-A4: j in Seg n & n=len C & width (M@)=n & Indices C=[:Seg n,Seg n:] &
-    Indices M=[:Seg n,Seg n:]&Indices M@=[:Seg n,Seg n:] by A3,MATRIX_1:25;
-    then Delete(M@,i,j)=Delete(M,j,i)@ & [j,i] in Indices C&[i,j] in Indices M
-    & dom C=Seg n by A1,Th14,FINSEQ_1:def 3,ZFMISC_1:106;
-    then Col(C,i).j=C*(j,i) & C*(j,i)=Cofactor(M,j,i) & R*(i,j)=f.j &
-    Cofactor(R,i,j)=Cofactor(M@,i,j) & Cofactor(M@,i,j)=Cofactor(M,j,i)
-    & dom LL=Seg n by A1,A2,A4,Def6,Th15,FINSEQ_1:def 3,MATRIX11:def 3
-,MATRIXR2:43,MATRIX_1:def 9;
-    then MCT.j=Cofactor(M,j,i)*(R*(i,j)) & LL.j=R*(i,j)*Cofactor(M,j,i)
-    by A4,Def7,FVSUM_1:74;
-    hence MCT.j=LL.j;
+A10: j in Seg n by A8,A9;
+    then Delete(M@,i,j)=Delete(M,j,i)@ by A2,Th14;
+    then
+A11: Cofactor(M@,i,j)=Cofactor(M,j,i) by MATRIXR2:43;
+    Indices C=[:Seg n,Seg n:] by MATRIX_1:25;
+    then [j,i] in Indices C by A2,A10,ZFMISC_1:106;
+    then
+A12: C*(j,i)=Cofactor(M,j,i) by Def6;
+    n=len C by MATRIX_1:25;
+    then dom C=Seg n by FINSEQ_1:def 3;
+    then
+A13: Col(C,i).j=C*(j,i) by A10,MATRIX_1:def 9;
+A14: Indices M=[:Seg n,Seg n:] by MATRIX_1:25;
+    then [i,j] in Indices M by A2,A10,ZFMISC_1:106;
+    then R*(i,j)=f.j by A1,A7,A14,A5,MATRIX11:def 3;
+    then
+A15: MCT.j=Cofactor(M,j,i)*(R*(i,j)) by A10,A13,A12,FVSUM_1:74;
+    Cofactor(R,i,j)=Cofactor(M@,i,j) by A2,A10,Th15;
+    hence MCT.j=LL.j by A10,A11,A6,A15,Def7;
   end;
-  hence thesis by A2,FINSEQ_1:18;
+  len MCT=n by FINSEQ_1:def 18;
+  hence thesis by A3,A4,FINSEQ_1:18;
 end;
 
 theorem Th32:
-  i in Seg n & j in Seg n implies
-  Line((Matrix_of_Cofactor M)@,i) "*" Col(M,j) = Det RLine(M@,i,Line(M@,j))
+  i in Seg n & j in Seg n implies Line((Matrix_of_Cofactor M)@,i)
+  "*" Col(M,j) = Det RLine(M@,i,Line(M@,j))
 proof
-  assume
-A1: i in Seg n & j in Seg n;
-  set L=Line(M@,j);
+  assume that
+A1: i in Seg n and
+A2: j in Seg n;
   set C=Matrix_of_Cofactor M;
+  set L=Line(M@,j);
+A3: width C = n by MATRIX_1:25;
   width (M@)=n by MATRIX_1:25;
   then
-A2: len L=n & width C = n & width M=n by MATRIX_1:25,def 8;
+A4: len L=n by MATRIX_1:def 8;
+A5: width M=n by MATRIX_1:25;
   thus Det RLine(M@,i,L) = Sum LaplaceExpL(RLine(M@,i,L),i) by A1,Th25
-    .= Sum mlt(Col(C,i),L) by A1,A2,Th31
-    .= Line(C@,i) "*" L by A1,A2,MATRIX_2:17
-    .= Line(C@,i) "*" Col(M,j) by A1,A2,MATRIX_2:17;
+    .= Sum mlt(Col(C,i),L) by A1,A4,Th31
+    .= Line(C@,i) "*" L by A1,A3,MATRIX_2:17
+    .= Line(C@,i) "*" Col(M,j) by A2,A5,MATRIX_2:17;
 end;
 
 theorem Th33:
-  Det M <> 0.K implies ((Det M)" * (Matrix_of_Cofactor M)@) * M = 1.(K,n)
+  Det M <> 0.K implies ((Det M)" * (Matrix_of_Cofactor M)@) * M =
+  1.(K,n)
 proof
   set D=Det M;
   set D'=D";
@@ -2819,35 +3483,48 @@ proof
   assume
 A1: D<>0.K;
   now
-    let i,j be Nat such that
-A2: [i,j] in Indices CM;
-    reconsider i'=i,j'=j as Element of NAT by ORDINAL1:def 13;
-    Indices CM=[:Seg n,Seg n:] by MATRIX_1:25;
-    then
-A3: i in Seg n & j in Seg n & width DC=n & len M=n & len (C@)=n
-    by A2,MATRIX_1:25,ZFMISC_1:106;
+A2: Indices CM=Indices ID by MATRIX_1:27;
     reconsider N=n as Element of NAT by ORDINAL1:def 13;
-    reconsider COL=Col(M,j),L=Line(C@,i) as
-    Element of N-tuples_on the carrier of K by MATRIX_1:25;
-    1<=i & i<=len (C@) by A3,FINSEQ_1:3;
-    then Line(DC,i)=D'*L by MATRIXR1:20;
+    let i,j be Nat such that
+A3: [i,j] in Indices CM;
+    reconsider COL=Col(M,j),L=Line(C@,i) as Element of N-tuples_on the carrier
+    of K by MATRIX_1:25;
+    reconsider i'=i,j'=j as Element of NAT by ORDINAL1:def 13;
+A4: len M=n by MATRIX_1:25;
+A5: Indices CM=[:Seg n,Seg n:] by MATRIX_1:25;
+    then
+A6: i in Seg n by A3,ZFMISC_1:106;
+    then
+A7: 1<=i by FINSEQ_1:3;
+A8: j in Seg n by A3,A5,ZFMISC_1:106;
+    len (C@)=n by MATRIX_1:25;
+    then i<=len (C@) by A6,FINSEQ_1:3;
+    then Line(DC,i)=D'*L by A7,MATRIXR1:20;
     then mlt(Line(DC,i),Col(M,j)) = D'* mlt(L,COL) by FVSUM_1:83;
     then
-A4: Line(DC,i)"*"Col(M,j) = D'*(Line(C@,i)"*"Col(M,j)) by FVSUM_1:92
-      .= D'*Det RLine(M@,i',Line(M@,j'))by A3,Th32;
+A9: Line(DC,i)"*"Col(M,j) = D'*(Line(C@,i)"*"Col(M,j)) by FVSUM_1:92
+      .= D'*Det RLine(M@,i',Line(M@,j'))by A6,A8,Th32;
+A10: width DC=n by MATRIX_1:25;
     then
-A5: CM*(i,j)=D'* Det RLine(M@,i,Line(M@,j)) by A2,A3,MATRIX_3:def 4;
-A6: Indices CM=Indices ID by MATRIX_1:27;
+A11: CM*(i,j)=D'* Det RLine(M@,i,Line(M@,j)) by A3,
+    A4,A9,MATRIX_3:def
+    4;
     per cases;
-    suppose i=j;
-      then RLine(M@,i,Line(M@,j))=M@ & ID*(i,j) = 1_K & D'*D=1_K & D=Det M@
-      by A1,A2,A6,MATRIX11:30,MATRIXR2:43,MATRIX_1:def 12,VECTSP_1:def 22;
-      hence ID*(i,j) = CM*(i,j) by A2,A3,A4,MATRIX_3:def 4;
+    suppose
+A12:  i=j;
+      then
+A13:  RLine(M@,i,Line(M@,j))=M@ by MATRIX11:30;
+A14:  D=Det M@ by MATRIXR2:43;
+A15:  D'*D=1_K by A1,VECTSP_1:def 22;
+      ID*(i,j) = 1_K by A3,A2,A12,MATRIX_1:def 12;
+      hence ID*(i,j) = CM*(i,j) by A3,A10,A4,A9,A13,A15,A14,MATRIX_3:def 4;
     end;
-    suppose i<>j;
-      then Det RLine(M@,i',Line(M@,j'))=0.K & ID*(i,j) = 0.K
-      by A2,A3,A6,MATRIX11:51,MATRIX_1:def 12;
-      hence ID*(i,j) = CM*(i,j) by A5,VECTSP_1:36;
+    suppose
+A16:  i<>j;
+      then
+A17:  ID*(i,j) = 0.K by A3,A2,MATRIX_1:def 12;
+      Det RLine(M@,i',Line(M@,j'))=0.K by A6,A8,A16,MATRIX11:51;
+      hence ID*(i,j) = CM*(i,j) by A11,A17,VECTSP_1:36;
     end;
   end;
   hence thesis by MATRIX_1:28;
@@ -2858,26 +3535,32 @@ theorem Th34:
 proof
   thus M is invertible implies Det M <> 0.K
   proof
-    assume M is invertible;
+    reconsider N=n as Element of NAT by ORDINAL1:def 13;
+    assume
+    M is invertible;
     then consider M1 be Matrix of n,K such that
 A1: M is_reverse_of M1 by MATRIX_6:def 3;
-    reconsider N=n as Element of NAT by ORDINAL1:def 13;
     per cases by NAT_1:14;
-    suppose N=0;
+    suppose
+      N=0;
       then Det M=1_K by MATRIXR2:41;
       hence thesis;
     end;
     suppose
 A2:   N>=1;
-      then Det (1.(K,n))=1_K & M*M1=(1.(K,n)) by A1,MATRIX_6:def 2,MATRIX_7:16;
-      then Det M*Det M1=1_K & 1_K<>0.K by A2,MATRIX11:62;
+A3:   M*M1=(1.(K,n)) by A1,MATRIX_6:def 2;
+      Det (1.(K,n))=1_K by A2,MATRIX_7:16;
+      then Det M*Det M1=1_K by A2,A3,MATRIX11:62;
       hence thesis by VECTSP_1:44;
     end;
   end;
   set C=(Det M)" * (Matrix_of_Cofactor M)@;
-  assume Det M <> 0.K;
-  then C*M=1.(K,n) & M*C=1.(K,n) by Th30,Th33;
-  then M is_reverse_of C by MATRIX_6:def 2;
+  assume
+A4: Det M <> 0.K;
+  then
+A5: M*C=1.(K,n) by Th30;
+  C*M=1.(K,n) by A4,Th33;
+  then M is_reverse_of C by A5,MATRIX_6:def 2;
   hence thesis by MATRIX_6:def 3;
 end;
 
@@ -2887,111 +3570,133 @@ proof
   set C=(Det M)" * (Matrix_of_Cofactor M)@;
   assume
 A1: Det M <> 0.K;
-  then C*M=1.(K,n) & M*C=1.(K,n) by Th30,Th33;
-  then M is invertible & M is_reverse_of C by A1,Th34,MATRIX_6:def 2;
-  hence thesis by MATRIX_6:def 4;
+  then
+A2: M*C=1.(K,n) by Th30;
+  C*M=1.(K,n) by A1,Th33;
+  then
+A3: M is_reverse_of C by A2,MATRIX_6:def 2;
+  M is invertible by A1,Th34;
+  hence thesis by A3,MATRIX_6:def 4;
 end;
 
 theorem
-  for M be Matrix of n,K st M is invertible
-  for i,j st [i,j] in Indices (M~) holds
-  M~*(i,j) = (Det M)" * power(K).(-1_K,i+j) * Minor(M,j,i)
+  for M be Matrix of n,K st M is invertible for i,j st [i,j] in Indices
+  (M~) holds M~*(i,j) = (Det M)" * power(K).(-1_K,i+j) * Minor(M,j,i)
 proof
-  let M be Matrix of n,K such that
-A1: M is invertible;
-  let i,j such that
-A2: [i,j] in Indices (M~);
-  set COF=Matrix_of_Cofactor M;
-  set D=Det M;
-A3: [i,j] in Indices (COF@) by A2,MATRIX_1:27;
+  let M be Matrix of n,K;
+  assume
+  M is invertible;
   then
-A4: [j,i] in Indices COF by MATRIX_1:def 7;
-  Det M<>0.K by A1,Th34;
-  hence M~*(i,j)=(D" * COF@)*(i,j) by Th35
-    .=D"*((COF@)*(i,j)) by A3,MATRIX_3:def 5
-    .=D"*(COF*(j,i)) by A4,MATRIX_1:def 7
-    .=D"*Cofactor(M,j,i) by A4,Def6
+A1: Det M<>0.K by Th34;
+  set D=Det M;
+  set COF=Matrix_of_Cofactor M;
+  let i,j;
+  assume
+  [i,j] in Indices (M~);
+  then
+A2: [i,j] in Indices (COF@) by MATRIX_1:27;
+  then
+A3: [j,i] in Indices COF by MATRIX_1:def 7;
+  thus M~*(i,j)=(D" * COF@)*(i,j) by A1,Th35
+    .=D"*((COF@)*(i,j)) by A2,MATRIX_3:def 5
+    .=D"*(COF*(j,i)) by A3,MATRIX_1:def 7
+    .=D"*Cofactor(M,j,i) by A3,Def6
     .=D"*power(K).(-1_K,i+j) * Minor(M,j,i) by GROUP_1:def 4;
 end;
 
 theorem Th37:
-  for A be Matrix of n,K st Det A <> 0.K
-  for x,b be Matrix of K st len x = n & A * x = b holds x = A~ * b &
-  for i,j st [i,j] in Indices x holds
-  x*(i,j) = (Det A)" * Det ReplaceCol(A,i,Col(b,j))
+  for A be Matrix of n,K st Det A <> 0.K for x,b be Matrix of K st
+len x = n & A * x = b holds x = A~ * b & for i,j st [i,j] in Indices x holds x*
+  (i,j) = (Det A)" * Det ReplaceCol(A,i,Col(b,j))
 proof
   let A be Matrix of n,K such that
 A1: Det A <> 0.K;
-  let x,b be Matrix of K such that
-A2: len x = n & A * x = b;
-  set D=Det A;
-  set MC=Matrix_of_Cofactor A;
-A3: len MC=n & width MC=n & len (MC@)=n & width (MC@)=n &
-  len (A~)=n & width (A~)=n & len A=n & width A=n by MATRIX_1:25;
   A is invertible by A1,Th34;
   then A~ is_reverse_of A by MATRIX_6:def 4;
-  then x = 1.(K,n) * x & A~*A=1.(K,n) by A2,MATRIXR2:68,MATRIX_6:def 2;
+  then
+A2: A~*A=1.(K,n) by MATRIX_6:def 2;
+  set MC=Matrix_of_Cofactor A;
+  set D=Det A;
+A3: width MC=n by MATRIX_1:25;
+A4: len (MC@)=n by MATRIX_1:25;
+A5: width (MC@)=n by MATRIX_1:25;
+A6: width (A~)=n by MATRIX_1:25;
+A7: width A=n by MATRIX_1:25;
+  let x,b be Matrix of K such that
+A8: len x = n and
+A9: A * x = b;
+A10: len A=n by MATRIX_1:25;
+  then
+A11: len b=n by A8,A9,A7,MATRIX_3:def 4;
+  x = 1.(K,n) * x by A8,MATRIXR2:68;
   hence
-A4: x=A~ * b by A2,A3,MATRIX_3:35;
+A12: x=A~ * b by A8,A9,A6,A10,A7,A2,MATRIX_3:35;
   let i,j such that
-A5: [i,j] in Indices x;
-  Indices x=[:Seg n,Seg width x:] by A2,FINSEQ_1:def 3;
+A13: [i,j] in Indices x;
+A14: len Col(b,j)=n by A11,MATRIX_1:def 9;
+  Indices x=[:Seg n,Seg width x:] by A8,FINSEQ_1:def 3;
   then
-A6: i in Seg n by A5,ZFMISC_1:106;
+A15: i in Seg n by A13,ZFMISC_1:106;
   then
-A7: 1<=i & i<= n by FINSEQ_1:3;
-A8: len b=n by A2,A3,MATRIX_3:def 4;
-  then
-A9: len Col(b,j)=n by MATRIX_1:def 9;
-  thus x*(i,j) = Line(A~,i)"*"Col(b,j) by A3,A4,A5,A8,MATRIX_3:def 4
+A16: 1<=i by FINSEQ_1:3;
+A17: i<= n by A15,FINSEQ_1:3;
+  thus x*(i,j) = Line(A~,i)"*"Col(b,j) by A6,A12,A13,A11,MATRIX_3:def 4
     .= Line(D" * MC@,i)"*"Col(b,j) by A1,Th35
-    .= (D"*Line(MC@,i))"*"Col(b,j) by A3,A7,MATRIXR1:20
-    .= Sum(D"*mlt(Line(MC@,i),Col(b,j))) by A3,A8,FVSUM_1:82
+    .= (D"*Line(MC@,i))"*"Col(b,j) by A4,A16,A17,MATRIXR1:20
+    .= Sum(D"*mlt(Line(MC@,i),Col(b,j))) by A5,A11,FVSUM_1:82
     .= D"*(Line(MC@,i)"*"Col(b,j)) by FVSUM_1:92
-    .= D"*(Col(MC,i)"*"Col(b,j)) by A3,A6,MATRIX_2:17
-    .= D"*Sum(LaplaceExpL(RLine(A@,i,Col(b,j)),i)) by A6,A9,Th31
-    .= D"*Det RLine(A@,i,Col(b,j)) by A6,Th25
+    .= D"*(Col(MC,i)"*"Col(b,j)) by A3,A15,MATRIX_2:17
+    .= D"*Sum(LaplaceExpL(RLine(A@,i,Col(b,j)),i)) by A15,A14,Th31
+    .= D"*Det RLine(A@,i,Col(b,j)) by A15,Th25
     .= D"*Det (RLine(A@,i,Col(b,j))@) by MATRIXR2:43
     .= D"*Det RCol(A,i,Col(b,j)) by Th19;
 end;
 
 theorem Th38:
-  for A be Matrix of n,K st Det A <> 0.K
-  for x,b be Matrix of K st width x = n & x * A = b holds x = b * A~ &
-  for i,j st [i,j] in Indices x holds
+  for A be Matrix of n,K st Det A <> 0.K for x,b be Matrix of K st
+width x = n & x * A = b holds x = b * A~ & for i,j st [i,j] in Indices x holds
   x*(i,j) = (Det A)" * Det ReplaceLine(A,j,Line(b,i))
 proof
   let A be Matrix of n,K such that
 A1: Det A <> 0.K;
-  let x,b be Matrix of K such that
-A2: width x = n & x * A = b;
-  set D=Det A;
-  set MC=Matrix_of_Cofactor A;
-A3: len MC=n & width MC=n & len (MC@)=n & width (MC@)=n &
-  len (A~)=n & width (A~)=n & len A=n & width A=n by MATRIX_1:25;
   A is invertible by A1,Th34;
   then A~ is_reverse_of A by MATRIX_6:def 4;
-  then x = x* 1.(K,n) & A*A~=1.(K,n) by A2,MATRIXR2:67,MATRIX_6:def 2;
+  then
+A2: A*A~=1.(K,n) by MATRIX_6:def 2;
+A3: width A=n by MATRIX_1:25;
+  let x,b be Matrix of K such that
+A4: width x = n and
+A5: x * A = b;
+A6: len A=n by MATRIX_1:25;
+  then
+A7: width b=n by A4,A5,A3,MATRIX_3:def 4;
+  set MC=Matrix_of_Cofactor A;
+  set D=Det A;
+A8: len (MC@)=n by MATRIX_1:25;
+A9: width (MC@)=n by MATRIX_1:25;
+  len MC=n by MATRIX_1:25;
+  then
+A10: Seg n=dom MC by FINSEQ_1:def 3;
+A11: len (A~)=n by MATRIX_1:25;
+  x = x* 1.(K,n) by A4,MATRIXR2:67;
   hence
-A4: x= b * A~ by A2,A3,MATRIX_3:35;
+A12: x= b * A~ by A4,A5,A11,A6,A3,A2,MATRIX_3:35;
   let i,j such that
-A5: [i,j] in Indices x;
-A6: Indices x=[:Seg len x,Seg n:] & j in Seg n & Seg n=dom MC
-  by A2,A3,A5,FINSEQ_1:def 3,ZFMISC_1:106;
+A13: [i,j] in Indices x;
+A14: j in Seg n by A4,A13,ZFMISC_1:106;
   then
-A7: 1<=j & j<= n by FINSEQ_1:3;
-A8: width b=n by A2,A3,MATRIX_3:def 4;
-  then
-A9: len Line(b,i)=n by MATRIX_1:def 8;
-  thus x*(i,j) = Line(b,i)"*"Col(A~,j) by A3,A4,A5,A8,MATRIX_3:def 4
+A15: 1<=j by FINSEQ_1:3;
+A16: len Line(b,i)=n by A7,MATRIX_1:def 8;
+A17: j<= n by A14,FINSEQ_1:3;
+  thus x*(i,j) = Line(b,i)"*"Col(A~,j) by A11,A12,A13,A7,MATRIX_3:def 4
     .= Line(b,i)"*"Col(D" * MC@,j) by A1,Th35
-    .= Line(b,i)"*"(D"*Col(MC@,j)) by A3,A7,MATRIXR1:19
+    .= Line(b,i)"*"(D"*Col(MC@,j)) by A9,A15,A17,MATRIXR1:19
     .= (D"*Col(MC@,j))"*"Line(b,i) by FVSUM_1:115
-    .= Sum(D"*mlt(Col(MC@,j),Line(b,i))) by A3,A8,FVSUM_1:83
+    .= Sum(D"*mlt(Col(MC@,j),Line(b,i))) by A8,A7,FVSUM_1:83
     .= D"*(Col(MC@,j)"*"Line(b,i)) by FVSUM_1:92
-    .= D"*(Line(MC,j)"*"Line(b,i)) by A6,MATRIX_2:16
-    .= D"*Sum(LaplaceExpL(RLine(A,j,Line(b,i)),j)) by A6,A9,Th28
-    .= D"*Det RLine(A,j,Line(b,i)) by A6,Th25;
+    .= D"*(Line(MC,j)"*"Line(b,i)) by A14,A10,MATRIX_2:16
+    .= D"*Sum(LaplaceExpL(RLine(A,j,Line(b,i)),j)) by A14,A16,Th28
+    .= D"*Det RLine(A,j,Line(b,i)) by A14,Th25;
 end;
 
 begin :: Product by a vector
@@ -3008,76 +3713,82 @@ definition
   let M be Matrix of K;
   let f be FinSequence of K;
   func M * f -> Matrix of K equals
-
   M * (<*f*>@);
   coherence;
   func f * M -> Matrix of K equals
-
   <*f*> * M;
   coherence;
 end;
 
 theorem
-  for A be Matrix of n,K st Det A <> 0.K
-  for x,b be FinSequence of K st len x = n & A * x = <*b*>@ holds
-  <*x*>@ = A~ * b & for i st i in Seg n holds
-  x.i = (Det A)" * Det ReplaceCol(A,i,b)
+  for A be Matrix of n,K st Det A <> 0.K for x,b be FinSequence of K st
+len x = n & A * x = <*b*>@ holds <*x*>@ = A~ * b & for i st i in Seg n holds x.
+  i = (Det A)" * Det ReplaceCol(A,i,b)
 proof
   let A be Matrix of n,K such that
 A1: Det A <> 0.K;
   let x,b be FinSequence of K such that
-A2: len x = n & A * x = <*b*>@;
+A2: len x = n and
+A3: A * x = <*b*>@;
   set X=<*x*>;
-  set B=<*b*>;
   len X=1 by MATRIX_1:def 3;
   then
-A3: len x=width X by MATRIX_1:20;
+A4: len x=width X by MATRIX_1:20;
   then
-A4: len (X@)=len x by MATRIX_1:def 7;
-  hence X@ = A~ * b by A1,A2,Th37;
+A5: len (X@)=len x by MATRIX_1:def 7;
+  hence X@ = A~ * b by A1,A2,A3,Th37;
+  set B=<*b*>;
+A6: 1 in Seg 1;
+  then
+A7: Line(X,1)=X.1 by MATRIX_2:10;
+  len B=1 by MATRIX_1:def 3;
+  then
+A8: 1 in dom B by A6,FINSEQ_1:def 3;
+A9: Line(B,1)=B.1 by A6,MATRIX_2:10;
   let i such that
-A5: i in Seg n;
-  n<>0 by A5,FINSEQ_1:4;
-  then n>0;
-  then width (X@) = len X by A2,A3,MATRIX_2:12
+A10: i in Seg n;
+  n>0 by A10,FINSEQ_1:4;
+  then width (X@) = len X by A2,A4,MATRIX_2:12
     .= 1 by MATRIX_1:def 3;
-  then Indices (X@)=[:Seg n,Seg 1:] & 1 in Seg 1 & len B=1
-  by A2,A4,FINSEQ_1:def 3,MATRIX_1:def 3;
+  then Indices (X@)=[:Seg n,Seg 1:] by A2,A5,FINSEQ_1:def 3;
   then
-A6: [i,1] in Indices (X@) & Line(X,1)=X.1 & Line(B,1)=B.1 & 1 in dom B
-  by A5,FINSEQ_1:def 3,MATRIX_2:10,ZFMISC_1:106;
+A11: [i,1] in Indices (X@) by A10,A6,ZFMISC_1:106;
   then [1,i] in Indices X by MATRIX_1:def 7;
   then (X@)*(i,1) = X*(1,i) by MATRIX_1:def 7
-    .= Line(X,1).i by A2,A3,A5,MATRIX_1:def 8
-    .= x.i by A6,FINSEQ_1:57;
-  hence x.i = (Det A)" * Det ReplaceCol(A,i,Col(B@,1)) by A1,A2,A4,A6,Th37
-    .= (Det A)" * Det ReplaceCol(A,i,Line(B,1)) by A6,MATRIX_2:16
-    .= (Det A)" * Det ReplaceCol(A,i,b) by A6,FINSEQ_1:57;
+    .= Line(X,1).i by A2,A4,A10,MATRIX_1:def 8
+    .= x.i by A7,FINSEQ_1:57;
+  hence x.i = (Det A)" * Det ReplaceCol(A,i,Col(B@,1)) by A1,A2,A3,A5,A11,
+  Th37
+    .= (Det A)" * Det ReplaceCol(A,i,Line(B,1)) by A8,MATRIX_2:16
+    .= (Det A)" * Det ReplaceCol(A,i,b) by A9,FINSEQ_1:57;
 end;
 
 theorem
-  for A be Matrix of n,K st Det A <> 0.K
-  for x,b be FinSequence of K st len x = n & x * A = <*b*> holds
-  <*x*> = b * A~ & for i st i in Seg n holds
-  x.i = (Det A)" * Det ReplaceLine(A,i,b)
+  for A be Matrix of n,K st Det A <> 0.K for x,b be FinSequence of K st
+len x = n & x * A = <*b*> holds <*x*> = b * A~ & for i st i in Seg n holds x.i
+  = (Det A)" * Det ReplaceLine(A,i,b)
 proof
   let A be Matrix of n,K such that
 A1: Det A <> 0.K;
   let x,b be FinSequence of K such that
-A2: len x = n & x * A = <*b*>;
+A2: len x = n and
+A3: x * A = <*b*>;
   set X=<*x*>;
+A4: width X=len x by MATRIX_1:24;
+  hence X = b * A~ by A1,A2,A3,Th38;
+A5: [:Seg 1,Seg n:]= Indices X by A2,MATRIX_1:24;
   set B=<*b*>;
-A3: width X=len x by MATRIX_1:24;
-  hence X = b * A~ by A1,A2,Th38;
-  let i such that
-A4: i in Seg n;
-  1 in Seg 1;
+A6: 1 in Seg 1;
   then
-A5: [1,i] in [:Seg 1,Seg n:] & [:Seg 1,Seg n:]= Indices X & Line(X,1)=X. 1
-  & Line(B,1)=B.1 by A2,A4,MATRIX_1:24,MATRIX_2:10,ZFMISC_1:106;
-  X*(1,i) = Line(X,1).i by A2,A3,A4,MATRIX_1:def 8
-    .= x.i by A5,FINSEQ_1:57;
-  hence x.i = (Det A)" * Det ReplaceLine(A,i,Line(B,1)) by A1,A2,A3,A5,Th38
-    .= (Det A)" * Det ReplaceLine(A,i,b) by A5,FINSEQ_1:57;
+A7: Line(X,1)=X. 1 by MATRIX_2:10;
+  let i such that
+A8: i in Seg n;
+A9: [1,i] in [:Seg 1,Seg n:] by A8,A6,ZFMISC_1:106;
+A10: Line(B,1)=B.1 by A6,MATRIX_2:10;
+  X*(1,i) = Line(X,1).i by A2,A4,A8,MATRIX_1:def 8
+    .= x.i by A7,FINSEQ_1:57;
+  hence x.i = (Det A)" * Det ReplaceLine(A,i,Line(B,1)) by A1,A2,A3,A4,A9,A5,
+  Th38
+    .= (Det A)" * Det ReplaceLine(A,i,b) by A10,FINSEQ_1:57;
 end;
 

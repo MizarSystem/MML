@@ -7,6 +7,7 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="TARSKI"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="ORDINAL1"/>
@@ -37,36 +38,36 @@
 <ArgTypes/>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="183">
+<Func kind="K" nr="192">
 <Func kind="U" nr="9">
-<Func kind="K" nr="276"/>
-<Func kind="K" nr="36">
-<Func kind="K" nr="67"/>
-<Func kind="K" nr="270">
-<Func kind="K" nr="67"/>
+<Func kind="K" nr="286"/>
+<Func kind="K" nr="43">
+<Func kind="K" nr="74"/>
+<Func kind="K" nr="279">
+<Func kind="K" nr="74"/>
 </Func>
 </Func>
-<Func kind="K" nr="292"/>
+<Func kind="K" nr="302"/>
 </Func>
 </Func>
 </Typ>
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4" value="false">
-<Func kind="K" nr="255"/>
+<Func kind="K" nr="264"/>
 </Adjective>
 <Adjective nr="6"/>
-<Adjective nr="25"/>
-<Adjective nr="64"/>
-<Adjective nr="83">
-<Func kind="K" nr="276"/>
-<Func kind="K" nr="36">
-<Func kind="K" nr="67"/>
-<Func kind="K" nr="270">
-<Func kind="K" nr="67"/>
+<Adjective nr="26"/>
+<Adjective nr="65"/>
+<Adjective nr="84">
+<Func kind="K" nr="286"/>
+<Func kind="K" nr="43">
+<Func kind="K" nr="74"/>
+<Func kind="K" nr="279">
+<Func kind="K" nr="74"/>
 </Func>
 </Func>
-<Func kind="K" nr="292"/>
+<Func kind="K" nr="302"/>
 </Adjective>
 </Cluster>
 </RCluster>

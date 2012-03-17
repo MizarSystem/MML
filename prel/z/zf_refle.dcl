@@ -9,6 +9,7 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
@@ -24,7 +25,7 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="17" value="false"/>
-<Adjective nr="40"/>
+<Adjective nr="41"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -41,7 +42,7 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="17" value="false"/>
-<Adjective nr="40"/>
+<Adjective nr="41"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -56,7 +57,7 @@
 </Adjective>
 <Adjective nr="6"/>
 <Adjective nr="14"/>
-<Adjective nr="41">
+<Adjective nr="42">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

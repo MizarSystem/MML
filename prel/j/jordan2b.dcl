@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<Definientia>
+<Registrations>
 <Signature>
 <ArticleID name="HIDDEN"/>
 <ArticleID name="RELAT_1"/>
@@ -12,6 +12,7 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
@@ -21,73 +22,40 @@
 <ArticleID name="INT_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
-<ArticleID name="PARTFUN1"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
 <ArticleID name="NAT_1"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="MEMBERED"/>
-<ArticleID name="ALGSTR_0"/>
 <ArticleID name="RAT_1"/>
+<ArticleID name="ALGSTR_0"/>
 <ArticleID name="VALUED_1"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="RLTOPSP1"/>
 <ArticleID name="EUCLID"/>
-<ArticleID name="JORDAN2B"/>
 </Signature>
-<Definiens constrkind="K" constrnr="278" aid="JORDAN2B" defnr="1">
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="K" nr="48"/>
+<CCluster aid="JORDAN2B" nr="1">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="19"/>
+</Cluster>
 </Typ>
-<Typ kind="M" nr="2">
+</ArgTypes>
 <Cluster/>
-<Func kind="K" nr="48"/>
-</Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="273">
+<Func kind="K" nr="275">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 </Typ>
-<Typ kind="M" nr="2">
-<Cluster/>
+<Cluster>
+<Adjective nr="5">
 <Func kind="K" nr="44"/>
-</Typ>
-<Essentials>
-<Int x="1"/>
-<Int x="2"/>
-<Int x="3"/>
-<Int x="4"/>
-</Essentials>
-<DefMeaning kind="m">
-<For>
-<Typ kind="M" nr="7">
-<Cluster/>
-<Func kind="K" nr="44"/>
-</Typ>
-<Not>
-<And>
-<Pred kind="R" nr="1">
-<Var nr="1"/>
-<LocusVar nr="3"/>
-</Pred>
-<Not>
-<Pred kind="R" nr="1">
-<LocusVar nr="4"/>
-<Func kind="K" nr="139">
-<Func kind="K" nr="44"/>
-<Var nr="1"/>
-<LocusVar nr="2"/>
-</Func>
-</Pred>
-</Not>
-</And>
-</Not>
-</For>
-</DefMeaning>
-</Definiens>
-</Definientia>
+</Adjective>
+</Cluster>
+</CCluster>
+</Registrations>

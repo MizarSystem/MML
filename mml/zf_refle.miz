@@ -10,14 +10,13 @@ environ
       BOOLE, ZFMODEL1, RELAT_1, CARD_1, ORDINAL4, PROB_1, CLASSES1, QC_LANG1,
       FUNCT_2, ARYTM_3, ZF_REFLE, ARYTM;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, CARD_1, NUMBERS, NAT_1,
-      RELAT_1, FUNCT_1, RELSET_1, FUNCT_2, ZF_MODEL, ZFMODEL1,
-      ORDINAL1, ORDINAL2, CARD_3, CLASSES1, CLASSES2, ZF_LANG, ORDINAL4,
-      ZF_LANG1, XXREAL_0;
+      RELAT_1, FUNCT_1, RELSET_1, FUNCT_2, ZF_MODEL, ZFMODEL1, ORDINAL1,
+      ORDINAL2, CARD_3, CLASSES1, CLASSES2, ZF_LANG, ORDINAL4, ZF_LANG1,
+      XXREAL_0;
  constructors ENUMSET1, WELLORD2, XXREAL_0, XREAL_0, NAT_1, CLASSES1, CARD_3,
       ORDINAL4, ZF_MODEL, ZFMODEL1, ZF_LANG1, RELSET_1;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, ORDINAL1, RELSET_1, ORDINAL2,
-      XREAL_0, CARD_1, CLASSES2, ZF_LANG, ZF_LANG1, CLASSES1, ORDINAL4,
-      FUNCT_2;
+      XREAL_0, CARD_1, CLASSES2, ZF_LANG, ZF_LANG1, CLASSES1, ORDINAL4;
  requirements NUMERALS, BOOLE, SUBSET;
  definitions TARSKI, FUNCT_1, ZF_LANG, ZF_MODEL, WELLORD2, ORDINAL2, RELAT_1,
       XBOOLE_0, ORDINAL1;
@@ -33,7 +32,8 @@ reserve W for Universe,
   H for ZF-formula,
   x,y,z,X,Y for set,
   k for Variable,
-  f for Function of VAR,W,
+  f
+  for Function of VAR,W,
   u,v for Element of W;
 
 canceled;
@@ -41,21 +41,22 @@ canceled;
 theorem Th2:
   W |= the_axiom_of_pairs
 proof
-  W is epsilon-transitive & for u,v holds {u,v} in W;
+  for u,v holds {u,v} in W;
   hence thesis by ZFMODEL1:2;
 end;
 
 theorem Th3:
   W |= the_axiom_of_unions
 proof
-  W is epsilon-transitive & for u holds union u in W;
+  for u holds union u in W;
   hence thesis by ZFMODEL1:4;
 end;
 
 theorem Th4:
   omega in W implies W |= the_axiom_of_infinity
 proof
-  assume omega in W;
+  assume
+  omega in W;
   then reconsider u = omega as Element of W;
   now
     take u;
@@ -66,12 +67,12 @@ A1: v in u;
     then reconsider A = v as Ordinal;
 A2: omega is limit_ordinal by ORDINAL1:def 12;
     then succ A in omega by A1,ORDINAL1:41;
-    then succ A c= u & u in W by ORDINAL1:def 2;
+    then succ A c= u by ORDINAL1:def 2;
     then reconsider w = succ A as Element of W by CLASSES1:def 1;
     take w;
     A in succ A by ORDINAL1:10;
-    then v c= w & v <> w & w in u by A1,A2,ORDINAL1:41,def 2;
-    hence v c< w & w in u by XBOOLE_0:def 8;
+    then v c= w & v <> w by ORDINAL1:def 2;
+    hence v c< w & w in u by A1,A2,ORDINAL1:41,XBOOLE_0:def 8;
   end;
   hence thesis by ZFMODEL1:6;
 end;
@@ -81,26 +82,25 @@ theorem Th5:
 proof
   now
     let u;
-    bool u in W & W /\ bool u c= bool u by XBOOLE_1:17;
+    W /\ bool u c= bool u by XBOOLE_1:17;
     hence W /\ bool u in W by CLASSES1:def 1;
   end;
   hence thesis by ZFMODEL1:8;
 end;
 
 theorem Th6:
-  for H st { x.0,x.1,x.2 } misses Free H holds
-  W |= the_axiom_of_substitution_for H
+  for H st { x.0,x.1,x.2 } misses Free H holds W |=
+  the_axiom_of_substitution_for H
 proof
-  for H,f st { x.0,x.1,x.2 } misses Free H &
-  W,f |= All(x.3,Ex(x.0,All(x.4,H <=> x.4 '=' x.0)))
-  for u holds def_func'(H,f).:u in W
+  for H,f st { x.0,x.1,x.2 } misses Free H & W,f |= All(x.3,Ex(x.0,All(x.4
+  ,H <=> x.4 '=' x.0))) for u holds def_func'(H,f).:u in W
   proof
-    let H,f such that { x.0,x.1,x.2 } misses Free H &
+    let H,f such that
+    { x.0,x.1,x.2 } misses Free H and
     W,f |= All(x.3,Ex(x.0,All(x.4,H <=> x.4 '=' x.0)));
     let u;
-    card u in card W & def_func'(H,f).:u c= W &
-    card (def_func'(H,f).:u) c= card u by CARD_2:3,CLASSES2:1;
-    then card (def_func'(H,f).:u) in card W by ORDINAL1:22;
+    card u in card W by CLASSES2:1;
+    then card (def_func'(H,f).:u) in card W by CARD_2:3,ORDINAL1:22;
     hence thesis by CLASSES1:2;
   end;
   hence thesis by ZFMODEL1:19;
@@ -109,11 +109,12 @@ end;
 theorem
   omega in W implies W is being_a_model_of_ZF
 proof
-  assume omega in W;
-  hence W is epsilon-transitive & W |= the_axiom_of_pairs &
-  W |= the_axiom_of_unions & W |= the_axiom_of_infinity &
-  W |= the_axiom_of_power_sets & for H st { x.0,x.1,x.2 } misses Free H holds
-  W |= the_axiom_of_substitution_for H by Th2,Th3,Th4,Th5,Th6;
+  assume
+  omega in W;
+  hence W is epsilon-transitive & W |= the_axiom_of_pairs & W |=
+the_axiom_of_unions & W |= the_axiom_of_infinity & W |= the_axiom_of_power_sets
+  & for H st { x.0,x.1,x.2 } misses Free H holds W |=
+  the_axiom_of_substitution_for H by Th2,Th3,Th4,Th5,Th6;
 end;
 
 reserve F for Function,
@@ -123,10 +124,10 @@ reserve F for Function,
   phi for Ordinal-Sequence of W,
   H for ZF-formula;
 
-scheme ALFA'Universe { W()->Universe, D() -> non empty set, P[set,set] }:
-  ex F st dom F = D() &
-  for d being Element of D() ex a being Ordinal of W() st a = F.d & P[d,a] &
-  for b being Ordinal of W() st P[d,b] holds a c= b
+scheme
+  ALFA'Universe { W()->Universe, D() -> non empty set, P[set,set] }: ex F st
+dom F = D() & for d being Element of D() ex a being Ordinal of W() st a = F.d &
+  P[d,a] & for b being Ordinal of W() st P[d,b] holds a c= b
 provided
 A1: for d being Element of D() ex a being Ordinal of W() st P[d,a]
 proof
@@ -136,162 +137,168 @@ A2: for d being Element of D() ex A st P[d,A]
     consider a being Ordinal of W() such that
 A3: P[d,a] by A1;
     reconsider a as Ordinal;
-    take a; thus thesis by A3;
+    take a;
+    thus thesis by A3;
   end;
   consider F such that
 A4: dom F = D() and
-A5: for d being Element of D() ex A st A = F.d & P[d,A] &
-  for B st P[d,B] holds A c= B from ORDINAL1:sch 6(A2);
-  take F; thus dom F = D() by A4;
+A5: for d being Element of D() ex A st A = F.d & P[d,A] & for B st P[d,B
+  ] holds A c= B from ORDINAL1:sch 6(A2);
+  take F;
+  thus dom F = D() by A4;
   let d be Element of D();
   consider A such that
-A6: A = F.d & P[d,A] & for B st P[d,B] holds A c= B by A5;
+A6: A = F.d & P[d,A] and
+A7: for B st P[d,B] holds A c= B by A5;
   consider a being Ordinal of W() such that
-A7: P[d,a] by A1;
-  A c= a & a in W() by A6,A7;
-  then A in W() by CLASSES1:def 1;
-  then reconsider a = A as Ordinal of W();
-  take a; thus thesis by A6;
+A8: P[d,a] by A1;
+  A c= a by A7,A8;
+  then reconsider a = A as Ordinal of W() by CLASSES1:def 1;
+  take a;
+  thus thesis by A6,A7;
 end;
 
-theorem Th8:
+theorem
   x is Ordinal of W iff x in On W by ORDINAL1:def 10;
 
 reserve psi for Ordinal-Sequence;
 
-scheme OrdSeqOfUnivEx { W()->Universe, P[set,set] }:
-  ex phi being Ordinal-Sequence of W() st
-  for a being Ordinal of W() holds P[a,phi.a]
+scheme
+  OrdSeqOfUnivEx { W()->Universe, P[set,set] }: ex phi being Ordinal-Sequence
+  of W() st for a being Ordinal of W() holds P[a,phi.a]
 provided
- for a,b1,b2 being Ordinal of W() st P[a,b1] & P[a,b2] holds b1 = b2
-and
-A2: for a being Ordinal of W() ex b being Ordinal of W() st P[a,b]
+for a,b1,b2 being Ordinal of W() st P[a,b1] & P[a,b2] holds b1 = b2 and
+A1: for a being Ordinal of W() ex b being Ordinal of W() st P[a,b]
 proof
   defpred Q[set,set] means P[$1,$2] & $2 is Ordinal of W();
-A5: for x st x in On W() ex y st Q[x,y]
+A2: for x st x in On W() ex y st Q[x,y]
   proof
     let x;
-    assume x in On W();
-    then reconsider a = x as Ordinal of W() by Th8;
+    assume
+    x in On W();
+    then reconsider a = x as Ordinal of W() by ORDINAL1:def 10;
     consider b being Ordinal of W() such that
-A6: P[a,b] by A2;
+A3: P[a,b] by A1;
     reconsider y = b as set;
-    take y; thus thesis by A6;
+    take y;
+    thus thesis by A3;
   end;
   consider f being Function such that
-A7: dom f = On W() &
-  for x st x in On W() holds Q[x,f.x] from CLASSES1:sch 1(A5);
-  reconsider phi = f as T-Sequence by A7,ORDINAL1:def 7;
-A8: rng phi c= On W()
+A4: dom f = On W() & for x st x in On W() holds Q[x,f.x] from CLASSES1:
+  sch 1(A2);
+  reconsider phi = f as T-Sequence by A4,ORDINAL1:def 7;
+A5: rng phi c= On W()
   proof
     let x;
-    assume x in rng phi;
+    assume
+    x in rng phi;
     then ex y st y in dom phi & x = phi.y by FUNCT_1:def 5;
-    then reconsider x as Ordinal of W() by A7;
+    then reconsider x as Ordinal of W() by A4;
     x in W();
     hence thesis by ORDINAL1:def 10;
   end;
   then reconsider phi as Ordinal-Sequence by ORDINAL2:def 8;
-  reconsider phi as Ordinal-Sequence of W() by A7,A8,RELSET_1:11,FUNCT_2:def 1;
+  reconsider phi as Ordinal-Sequence of W() by A4,A5,FUNCT_2:def 1,RELSET_1:11;
   take phi;
   let a be Ordinal of W();
   a in On W() by ORDINAL1:def 10;
-  hence thesis by A7;
+  hence thesis by A4;
 end;
 
-scheme UOSExist { W()->Universe, a()->Ordinal of W(),
-  C(Ordinal,Ordinal)->Ordinal of W(),
-  D(Ordinal,T-Sequence)->Ordinal of W() } :
-  ex phi being Ordinal-Sequence of W() st phi.0-element_of W() = a() &
-  (for a being Ordinal of W() holds phi.(succ a) = C(a,phi.a)) &
-  (for a being Ordinal of W() st a <> 0-element_of W() & a is limit_ordinal
-  holds phi.a = D(a,phi|a))
-proof
+scheme
+  UOSExist { W()->Universe, a()->Ordinal of W(), C(Ordinal,Ordinal)->Ordinal
+of W(), D(Ordinal,T-Sequence)->Ordinal of W() } : ex phi being Ordinal-Sequence
+of W() st phi.0-element_of W() = a() & (for a being Ordinal of W() holds phi.(
+succ a) = C(a,phi.a)) & for a being Ordinal of W() st a <> 0-element_of W() & a
+  is limit_ordinal holds phi.a = D(a,phi|a) proof
   consider phi being Ordinal-Sequence such that
 A1: dom phi = On W() and
 A2: {} in On W() implies phi.{} = a() and
 A3: for A st succ A in On W() holds phi.(succ A) = C(A,phi.A) and
-A4: for A st A in On W() & A <> {} & A is limit_ordinal
-  holds phi.A = D(A,phi|A) from ORDINAL2:sch 11;
+A4: for A st A in On W() & A <> {} & A is limit_ordinal holds phi.A = D(
+  A,phi|A) from ORDINAL2:sch 11;
   rng phi c= On W()
   proof
     let x;
-    assume x in rng phi;
+    assume
+    x in rng phi;
     then consider y such that
-A5: y in dom phi & x = phi.y by FUNCT_1:def 5;
-    reconsider y as Ordinal of W() by A1,A5,Th8;
-A6: now
-      given A such that
-A7:   y = succ A;
-      reconsider B = phi.A as Ordinal;
-      x = C(A,B) by A1,A3,A5,A7;
-      hence thesis by Th8;
-    end;
-    now
-      assume not ex A st y = succ A;
+A5: y in dom phi and
+A6: x = phi.y by FUNCT_1:def 5;
+    reconsider y as Ordinal of W() by A1,A5,ORDINAL1:def 10;
+A7: now
+      assume
+      not ex A st y = succ A;
       then
 A8:   y is limit_ordinal by ORDINAL1:42;
-      assume y <> {};
-      then x = D(y,phi|y) by A1,A4,A5,A8;
-      hence thesis by Th8;
+      assume
+      y <> {};
+      then x = D(y,phi|y) by A1,A4,A5,A6,A8;
+      hence thesis by ORDINAL1:def 10;
     end;
-    hence thesis by A2,A5,A6,Th8;
+    now
+      given A such that
+A9:   y = succ A;
+      reconsider B = phi.A as Ordinal;
+      x = C(A,B) by A1,A3,A5,A6,A9;
+      hence thesis by ORDINAL1:def 10;
+    end;
+    hence thesis by A2,A6,A7,ORDINAL1:def 10;
   end;
-  then reconsider phi as Ordinal-Sequence of W()
-   by A1,RELSET_1:11,FUNCT_2:def 1;
+  then reconsider phi as Ordinal-Sequence of W() by A1,
+  FUNCT_2:def 1,RELSET_1:11;
   take phi;
   0-element_of W() in dom phi by ORDINAL4:36;
   hence phi.0-element_of W() = a() by A1,A2,ORDINAL4:35;
-  thus for a being Ordinal of W() holds phi.(succ a) = C(a,phi.a)
-  by A1,A3,ORDINAL4:36;
+  thus for a being Ordinal of W() holds phi.(succ a) = C(a,phi.a) by A1,A3,
+  ORDINAL4:36;
   let a be Ordinal of W();
   a in dom phi & {} = 0-element_of W() by ORDINAL4:35,36;
   hence thesis by A4;
 end;
 
-scheme UniverseInd { W()->Universe, P[Ordinal] }:
-  for a being Ordinal of W() holds P[a]
+scheme
+  UniverseInd { W()->Universe, P[Ordinal] }: for a being Ordinal of W() holds
+  P[a]
 provided
-A1: P[0-element_of W()]
-and
-A2: for a being Ordinal of W() st P[a] holds P[succ a]
-and
-A3: for a being Ordinal of W() st a <> 0-element_of W() & a is limit_ordinal &
-for b being Ordinal of W() st b in a holds P[b] holds P[a]
+A1: P[0-element_of W()] and
+A2: for a being Ordinal of W() st P[a] holds P[succ a] and
+A3: for a being Ordinal of W() st a <> 0-element_of W() & a is
+limit_ordinal & for b being Ordinal of W() st b in a holds P[b] holds P[a]
 proof
   defpred Q[Ordinal] means $1 is Ordinal of W() implies P[$1];
-A4: Q[{}] by A1,ORDINAL4:35;
-A5: for A st Q[A] holds Q[succ A]
-  proof
-    let A such that
-A6: A is Ordinal of W() implies P[A] and
-A7: succ A is Ordinal of W();
-    A in succ A & succ A in On W() by A7,Th8,ORDINAL1:10;
-    then A in On W() by ORDINAL1:19;
-    then reconsider a = A as Ordinal of W() by Th8;
-    P[succ a] by A2,A6;
-    hence thesis;
-  end;
-A8: for A st A <> {} & A is limit_ordinal & for B st B in A holds Q[B]
+A4: for A st A <> {} & A is limit_ordinal & for B st B in A holds Q[B]
   holds Q[A]
   proof
     let A such that
-A9: A <> {} & A is limit_ordinal and
-A10: for B st B in A holds B is Ordinal of W() implies P[B];
-    assume A is Ordinal of W();
+A5: A <> {} & A is limit_ordinal and
+A6: for B st B in A holds B is Ordinal of W() implies P[B];
+    assume
+    A is Ordinal of W();
     then reconsider a = A as Ordinal of W();
     {} = 0-element_of W() & for b be Ordinal of W() st b in a holds P[b ]
-    by A10,ORDINAL4:35;
-    hence thesis by A3,A9;
+    by A6,ORDINAL4:35;
+    hence thesis by A3,A5;
   end;
-  Q[A] from ORDINAL2:sch 1(A4,A5,A8);
+A7: for A st Q[A] holds Q[succ A]
+  proof
+    let A such that
+A8: A is Ordinal of W() implies P[A] and
+A9: succ A is Ordinal of W();
+    A in succ A & succ A in On W() by A9,ORDINAL1:10,def 10;
+    then A in On W() by ORDINAL1:19;
+    then reconsider a = A as Ordinal of W() by ORDINAL1:def 10;
+    P[succ a] by A2,A8;
+    hence thesis;
+  end;
+A10: Q[{}] by A1,ORDINAL4:35;
+  Q[A] from ORDINAL2:sch 1(A10,A7,A4);
   hence thesis;
 end;
 
 definition
   let f be Function, W be Universe, a be Ordinal of W;
   func union(f,a) -> set equals
-
   Union (W|(f|Rank a));
   correctness;
 end;
@@ -305,19 +312,24 @@ proof
 A1: dom(L|Rank A) = dom L /\ Rank A by RELAT_1:90;
   now
     let X;
-    assume X in dom(L|Rank A);
+    assume
+A2: X in dom(L|Rank A);
     then
-A2: X in dom L & X in Rank A by A1,XBOOLE_0:def 4;
+A3: X in dom L by A1,XBOOLE_0:def 4;
     hence X is Ordinal;
-    X c= dom L & X c= Rank A by A2,ORDINAL1:def 2;
-    hence X c= dom(L|Rank A) by A1,XBOOLE_1:19;
+    X in Rank A by A1,A2,XBOOLE_0:def 4;
+    then
+A4: X c= Rank A by ORDINAL1:def 2;
+    X c= dom L by A3,ORDINAL1:def 2;
+    hence X c= dom(L|Rank A) by A1,A4,XBOOLE_1:19;
   end;
   then dom(L|Rank A) is Ordinal by ORDINAL1:31;
   hence thesis by ORDINAL1:46;
 end;
 
 theorem Th11:
-  for L being Ordinal-Sequence,A holds L|Rank A is Ordinal-Sequence
+  for L being Ordinal-Sequence,A holds L|Rank A is
+  Ordinal-Sequence
 proof
   let L be Ordinal-Sequence, A;
   reconsider K = L|Rank A as T-Sequence by Th10;
@@ -330,26 +342,29 @@ end;
 
 theorem
   Union psi is Ordinal
-proof consider A such that
-A1: rng psi c= A by ORDINAL2:def 8;
-A2: Union psi = union rng psi by CARD_3:def 4;
-  for x st x in rng psi holds x is Ordinal by A1;
-  hence thesis by A2,ORDINAL1:35;
+proof
+  ex A st rng psi c= A by ORDINAL2:def 8;
+  then
+  Union psi = union rng psi & for x st x in rng psi holds x is Ordinal by
+  CARD_3:def 4;
+  hence thesis by ORDINAL1:35;
 end;
 
 theorem Th13:
   Union (X|psi) is Ordinal
-proof consider A such that
+proof
+  consider A such that
 A1: rng psi c= A by ORDINAL2:def 8;
-A2: Union (X|psi) = union rng (X|psi) & rng (X|psi) c= rng psi
-  by CARD_3:def 4,RELAT_1:118;
-  now
+A2: rng (X|psi) c= rng psi by RELAT_1:118;
+A3: now
     let x;
-    assume x in rng (X|psi);
+    assume
+    x in rng (X|psi);
     then x in A by A1,A2,TARSKI:def 3;
     hence x is Ordinal;
   end;
-  hence thesis by A2,ORDINAL1:35;
+  Union (X|psi) = union rng (X|psi) by CARD_3:def 4;
+  hence thesis by A3,ORDINAL1:35;
 end;
 
 theorem Th14:
@@ -360,10 +375,9 @@ proof
     let x;
     assume
 A1: x in On Rank A;
-    then
-A2: x is Ordinal & x in Rank A by ORDINAL1:def 10;
-    reconsider B = x as Ordinal by A1,ORDINAL1:def 10;
-    the_rank_of B in A by A2,CLASSES1:74;
+    then reconsider B = x as Ordinal by ORDINAL1:def 10;
+    x in Rank A by A1,ORDINAL1:def 10;
+    then the_rank_of B in A by CLASSES1:74;
     hence thesis by CLASSES1:81;
   end;
   On A c= On Rank A by CLASSES1:44,ORDINAL2:11;
@@ -373,13 +387,14 @@ end;
 theorem Th15:
   psi|Rank A = psi|A
 proof
-  A c= Rank A by CLASSES1:44;
+  dom (psi|Rank A) c= dom psi by RELAT_1:89;
   then
-A1: (psi|Rank A)|A = psi|A & dom (psi|Rank A) c= Rank A &
-  dom (psi|Rank A) c= dom psi by FUNCT_1:82,RELAT_1:87,89;
-  then On dom (psi|Rank A) c= On Rank A & On dom (psi|Rank A) = dom (psi|
-  Rank A) by ORDINAL2:11,ORDINAL3:8;
-  then dom (psi|Rank A) c= A by Th14;
+  On dom (psi|Rank A) c= On Rank A & On dom (psi|Rank A) = dom (psi| Rank
+  A) by ORDINAL2:11,ORDINAL3:8,RELAT_1:87;
+  then
+A1: dom (psi|Rank A) c= A by Th14;
+  A c= Rank A by CLASSES1:44;
+  then (psi|Rank A)|A = psi|A by FUNCT_1:82;
   hence thesis by A1,RELAT_1:97;
 end;
 
@@ -390,17 +405,20 @@ definition
   proof
     reconsider K = phi|Rank a as Ordinal-Sequence by Th11;
     reconsider A = Union (W|K) as Ordinal by Th13;
-A1: a in On W & W is Tarski & rng (W|K) c= W & dom (W|K) c= dom K
-    by Th8,FUNCT_1:89,RELAT_1:116;
+    a in On W by ORDINAL1:def 10;
     then dom K c= Rank a & Rank a in W by CLASSES2:26,RELAT_1:87;
-    then dom K in W by CLASSES1:def 1;
-    then dom (W|K) in W by A1,CLASSES1:def 1;
-    then card dom (W|K) in card W & card ((W|K).:dom(W|K)) c= card dom(W|K) &
-    (W|K).:dom(W|K) = rng(W|K) by CARD_2:3,CLASSES2:1,RELAT_1:146;
-    then card rng (W|K) in card W by ORDINAL1:22;
-    then rng (W|K) in W & union rng (W|K) = Union (W|K)
-    by A1,CARD_3:def 4,CLASSES1:2;
-    then A in W & A = union (phi,a) by CLASSES2:65;
+    then dom (W|K) c= dom K & dom K in W by CLASSES1:def 1,FUNCT_1:89;
+    then dom (W|K) in W by CLASSES1:def 1;
+    then
+A1: card dom (W|K) in card W by CLASSES2:1;
+    (W|K).:dom(W|K) = rng(W|K) by RELAT_1:146;
+    then rng (W|K) c= W & card rng (W|K) in card W by A1,
+    CARD_2:3,ORDINAL1:
+    22 ,RELAT_1:116;
+    then
+A2: rng (W|K) in W by CLASSES1:2;
+    union rng (W|K) = Union (W|K) by CARD_3:def 4;
+    then A in W by A2,CLASSES2:65;
     hence thesis;
   end;
 end;
@@ -408,18 +426,15 @@ end;
 canceled;
 
 theorem Th17:
-  for phi being Ordinal-Sequence of W holds
-  union(phi,a) = Union (phi|a) & union(phi|a,a) = Union (phi|a)
+  for phi being Ordinal-Sequence of W holds union(phi,a) = Union (
+  phi|a) & union(phi|a,a) = Union (phi|a)
 proof
   let phi be Ordinal-Sequence of W;
-  rng phi c= On W & On W c= W by ORDINAL2:9;
-  then rng (phi|Rank a) c= rng phi & rng (phi|a) c= rng phi &
-  rng phi c= W by RELAT_1:99,XBOOLE_1:1;
-  then rng (phi|Rank a) c= W & rng (phi|a) c= W & a c= Rank a
-  by CLASSES1:44,XBOOLE_1:1;
-  then (phi|a)|Rank a = phi|a & W|(phi|Rank a) = phi|Rank a &
-  phi|a = W|(phi|a) by FUNCT_1:82,RELAT_1:125;
-  hence thesis by Th15;
+  On W c= W by ORDINAL2:9;
+  then rng (phi|a) c= rng phi & rng phi c= W by RELAT_1:99,XBOOLE_1:1;
+  then a c= Rank a & phi|a = W|(phi|a) by
+  CLASSES1:44,RELAT_1:125,XBOOLE_1:1;
+  hence thesis by Th15,FUNCT_1:82;
 end;
 
 definition
@@ -436,7 +451,8 @@ registration
   let W;
   cluster non empty Element of W;
   existence
-  proof consider u;
+  proof
+    consider u;
     {u} is non empty Element of W;
     hence thesis;
   end;
@@ -460,31 +476,36 @@ registration
   let W;
   cluster DOMAIN-yielding non-empty T-Sequence of W;
   existence
-  proof consider D being non empty Element of W;
+  proof
+    consider D being non empty Element of W;
     deffunc F(set) = D;
     consider L being T-Sequence such that
-A1: dom L = On W &
-    for A for L1 being T-Sequence st A in On W & L1 = L|A holds L.A = F(L1)
-    from ORDINAL1:sch 4;
+A1: dom L = On W & for A for L1 being T-Sequence st A in On W & L1 = L
+    |A holds L.A = F(L1) from ORDINAL1:sch 4;
     rng L c= W
     proof
       let x;
-      assume x in rng L;
+      assume
+      x in rng L;
       then consider y such that
-A2:   y in dom L & x = L.y by FUNCT_1:def 5;
+A2:   y in dom L and
+A3:   x = L.y by FUNCT_1:def 5;
       reconsider y as Ordinal by A2;
       L|y = L|y;
-      then x = D by A1,A2;
+      then x = D by A1,A2,A3;
       hence thesis;
     end;
     then reconsider L as T-Sequence of W by RELAT_1:def 19;
-    take L; thus dom L = On W by A1;
-    assume {} in rng L;
+    take L;
+    thus dom L = On W by A1;
+    assume
+    {} in rng L;
     then consider x such that
-A3: x in dom L & {} = L.x by FUNCT_1:def 5;
-    reconsider x as Ordinal by A3;
+A4: x in dom L and
+A5: {} = L.x by FUNCT_1:def 5;
+    reconsider x as Ordinal by A4;
     L|x = L|x;
-    hence contradiction by A1,A3;
+    hence contradiction by A1,A4,A5;
   end;
 end;
 
@@ -498,23 +519,26 @@ definition
   let L be DOMAIN-Sequence of W;
   redefine func Union L -> Subclass of W;
   coherence
-  proof rng L c= W & Union L = union rng L by CARD_3:def 4,RELAT_1:def 19;
-    then
-A1: Union L c= union W by ZFMISC_1:95;
+  proof
     consider a;
     a in On W by ORDINAL1:def 10;
     then a in dom L by Def5;
-    then L.a in rng L & L.a = L.a by FUNCT_1:def 5;
+    then L.a in rng L by FUNCT_1:def 5;
     then L.a c= union rng L & L.a <> {} by RELAT_1:def 9,ZFMISC_1:92;
-    then union rng L <> {} & union rng L = Union L by CARD_3:def 4;
-    then reconsider S = Union L as non empty set;
+    then union rng L <> {};
+    then reconsider S = Union L as non empty set by CARD_3:def 4;
+    rng L c= W & Union L = union rng L by CARD_3:def 4,RELAT_1:def 19;
+    then
+A1: Union L c= union W by ZFMISC_1:95;
     S c= W
     proof
       let x;
-      assume x in S;
+      assume
+      x in S;
       then consider X such that
-A2:   x in X & X in W by A1,TARSKI:def 4;
-      X c= W by A2,ORDINAL1:def 2;
+A2:   x in X and
+A3:   X in W by A1,TARSKI:def 4;
+      X c= W by A3,ORDINAL1:def 2;
       hence thesis by A2;
     end;
     hence thesis;
@@ -525,14 +549,17 @@ A2:   x in X & X in W by A1,TARSKI:def 4;
   proof
     a in On W by ORDINAL1:def 10;
     then a in dom L by Def5;
-    then L.a in rng L & rng L c= W by FUNCT_1:def 5,RELAT_1:def 19;
-    hence thesis by RELAT_1:def 9;
+    then
+A4: L.a in rng L by FUNCT_1:def 5;
+    rng L c= W by RELAT_1:def 19;
+    hence thesis by A4,RELAT_1:def 9;
   end;
 end;
 
 reserve L for DOMAIN-Sequence of W,
   n for Element of NAT,
-  f for Function of VAR,L.a;
+  f for Function of
+  VAR,L.a;
 
 canceled 5;
 
@@ -545,9 +572,12 @@ end;
 
 theorem Th24:
   L.a c= Union L
-proof a in dom L by Th23;
-  then L.a in rng L & union rng L = Union L by CARD_3:def 4,FUNCT_1:def 5;
-  hence thesis by ZFMISC_1:92;
+proof
+  a in dom L by Th23;
+  then
+A1: L.a in rng L by FUNCT_1:def 5;
+  union rng L = Union L by CARD_3:def 4;
+  hence thesis by A1,ZFMISC_1:92;
 end;
 
 theorem Th25:
@@ -555,44 +585,51 @@ theorem Th25:
 proof
   deffunc F(Nat,set) = 5+($1+1);
   consider f being Function of NAT,NAT such that
-A1: f.0 = 5+0 & for n being Nat holds f.(n+1) = F(n,f.n) from NAT_1:sch 12;
-A2: dom f = NAT by FUNCT_2:def 1;
-A3: now
+A1: f.0 = 5+0 & for n being Nat holds f.(n+1) = F(n,f.n) from NAT_1:sch
+  12;
+A2: now
     let n;
     (ex j be Nat st n = j+1) implies f.n = 5+n by A1;
     then n = 0 or f.n = 5+n by NAT_1:6;
     hence f.n = 5+n by A1;
   end;
+A3: dom f = NAT by FUNCT_2:def 1;
   thus NAT,VAR are_equipotent
-  proof reconsider g = f as Function;
+  proof
+    reconsider g = f as Function;
     take g;
     thus g is one-to-one
     proof
       let x,y;
-      assume x in dom g & y in dom g;
+      assume
+      x in dom g & y in dom g;
       then reconsider n1 = x, n2 = y as Element of NAT by FUNCT_2:def 1;
-      f.n1 = 5+n1 & f.n2 = 5+n2 by A3;
+      f.n1 = 5+n1 & f.n2 = 5+n2 by A2;
       hence thesis by XCMPLX_1:2;
     end;
     thus dom g = NAT by FUNCT_2:def 1;
     thus rng g c= VAR
     proof
       let x;
-      assume x in rng g;
+      assume
+      x in rng g;
       then consider y such that
-A5:   y in dom f & x = f.y by FUNCT_1:def 5;
-      reconsider y as Element of NAT by A5;
-      x = 5+y & 5+y >= 5 by A3,A5,NAT_1:11;
-      hence thesis;
+A4:   y in dom f and
+A5:   x = f.y by FUNCT_1:def 5;
+      reconsider y as Element of NAT by A4;
+A6:   5+y >= 5 by NAT_1:11;
+      x = 5+y by A2,A5;
+      hence thesis by A6;
     end;
     let x;
-    assume x in VAR;
+    assume
+    x in VAR;
     then ex n st x = n & 5 <= n;
     then consider n be Nat such that
-A6: x = 5+n by NAT_1:10;
-    n in NAT by ORDINAL1:def 13;
-    then f.n = x & n in NAT by A3,A6;
-    hence thesis by A2,FUNCT_1:def 5;
+A7: x = 5+n by NAT_1:10;
+A8: n in NAT by ORDINAL1:def 13;
+    then f.n = x by A2,A7;
+    hence thesis by A3,A8,FUNCT_1:def 5;
   end;
 end;
 
@@ -604,710 +641,782 @@ theorem
 theorem Th28:
   X in W implies sup X in W
 proof
-  assume
-A1: X in W;
   reconsider a = union On X as Ordinal by ORDINAL3:7;
-  On X c= X by ORDINAL2:9;
+A1: On X c= X by ORDINAL2:9;
+  assume
+  X in W;
   then On X in W by A1,CLASSES1:def 1;
-  then a in W by CLASSES2:65;
-  then reconsider a as Ordinal of W;
-  sup X c= succ a & succ a in W by ORDINAL3:85;
+  then reconsider a as Ordinal of W by CLASSES2:65;
+  sup X c= succ a by ORDINAL3:85;
   hence thesis by CLASSES1:def 1;
 end;
 
 reserve x1 for Variable;
 
 theorem
-  omega in W & (for a,b st a in b holds L.a c= L.b) &
-  (for a st a <> {} & a is limit_ordinal holds L.a = Union (L|a)) implies
-  for H ex phi st phi is increasing & phi is continuous &
-  for a st phi.a = a & {} <> a
-  for f holds Union L,(Union L)!f |= H iff L.a,f |= H
+  omega in W & (for a,b st a in b holds L.a c= L.b) & (for a st a <> {}
+  & a is limit_ordinal holds L.a = Union (L|a)) implies for H ex phi st phi is
+increasing & phi is continuous & for a st phi.a = a & {} <> a for f holds Union
+  L,(Union L)!f |= H iff L.a,f |= H
 proof
-  assume
-A1: omega in W & (for a,b st a in b holds L.a c= L.b) &
-  for a st a <> {} & a is limit_ordinal holds L.a = Union (L|a);
+  assume that
+A1: omega in W and
+A2: for a,b st a in b holds L.a c= L.b and
+A3: for a st a <> {} & a is limit_ordinal holds L.a = Union (L|a);
   set M = Union L;
-A2: dom L = On W by Def5;
-A3: union rng L = M by CARD_3:def 4;
-  defpred RT[ZF-formula] means
-  ex phi st phi is increasing & phi is continuous &
-  for a st phi.a = a & {} <> a for f holds M,M!f |= $1 iff L.a,f |= $1;
-A4: for H st H is atomic holds RT[H]
+A4: union rng L = M by CARD_3:def 4;
+  defpred RT[ZF-formula] means ex phi st phi is increasing & phi is continuous
+  & for a st phi.a = a & {} <> a for f holds M,M!f |= $1 iff L.a,f |= $1;
+A5: dom L = On W by Def5;
+A6: for H st H is universal & RT[the_scope_of H] holds RT[H]
   proof
-    let H such that
-A5: H is being_equality or H is being_membership;
-A6: dom id On W = On W & rng id On W = On W by RELAT_1:71;
-    then reconsider phi = id On W as T-Sequence by ORDINAL1:def 7;
-    reconsider phi as Ordinal-Sequence by A6,ORDINAL2:def 8;
-    reconsider phi as Ordinal-Sequence of W by A6,RELSET_1:11,FUNCT_2:def 1;
-    take phi; thus
-A7: phi is increasing
-    proof
-      let A,B;
-      assume
-A8:   A in B & B in dom phi;
-      then phi.A = A & phi.B = B by FUNCT_1:35,ORDINAL1:19;
-      hence thesis by A8;
-    end;
-    thus phi is continuous
-    proof
-      let A,B;
-      assume
-A9:   A in dom phi & A <> {} & A is limit_ordinal & B = phi.A;
-      then
-A10:  phi.A = A & A c= dom phi by FUNCT_1:35,ORDINAL1:def 2;
-      phi|A = phi*(id A) by RELAT_1:94
-        .= id((dom phi) /\ A) by A6,FUNCT_1:43
-        .= id A by A10,XBOOLE_1:28;
-      then rng(phi|A) = A by RELAT_1:71;
-      then
-A11:  sup(phi|A) = B by A9,A10,ORDINAL2:26;
-      dom (phi|A) = A & phi|A is increasing by A7,A10,ORDINAL4:15,RELAT_1:91;
-      hence thesis by A9,A11,ORDINAL4:8;
-    end;
-    let a such that phi.a = a & {} <> a;
-    let f;
-    thus M,M!f |= H implies L.a,f |= H
-    proof
-      assume
-A12:  M,M!f |= H;
-A13:  M!f = f by Th24,ZF_LANG1:def 2;
-A14:  now
-        assume H is being_equality;
-        then
-A15:    H = (Var1 H) '=' (Var2 H) by ZF_LANG:53;
-        then (M!f).Var1 H = (M!f).Var2 H by A12,ZF_MODEL:12;
-        hence thesis by A13,A15,ZF_MODEL:12;
-      end;
-      now
-        assume H is being_membership;
-        then
-A16:    H = (Var1 H) 'in' (Var2 H) by ZF_LANG:54;
-        then (M!f).Var1 H in (M!f).Var2 H by A12,ZF_MODEL:13;
-        hence thesis by A13,A16,ZF_MODEL:13;
-      end;
-      hence thesis by A5,A14;
-    end;
-    assume
-A17: L.a,f |= H;
-A18: M!f = f by Th24,ZF_LANG1:def 2;
-A19: now
-      assume H is being_equality;
-      then
-A20:  H = (Var1 H) '=' (Var2 H) by ZF_LANG:53;
-      then f.Var1 H = f.Var2 H by A17,ZF_MODEL:12;
-      hence thesis by A18,A20,ZF_MODEL:12;
-    end;
-    now
-      assume H is being_membership;
-      then
-A21:  H = (Var1 H) 'in' (Var2 H) by ZF_LANG:54;
-      then f.Var1 H in f.Var2 H by A17,ZF_MODEL:13;
-      hence thesis by A18,A21,ZF_MODEL:13;
-    end;
-    hence thesis by A5,A19;
-  end;
-A22: for H st H is negative & RT[the_argument_of H] holds RT[H]
-  proof
+    deffunc D(Ordinal of W, Ordinal-Sequence) = union($2,$1);
     let H;
-    assume H is negative;
-    then
-A23: H = 'not' the_argument_of H by ZF_LANG:def 30;
-    given phi such that
-A24: phi is increasing & phi is continuous and
-A25: for a st phi.a = a & {} <> a
-    for f holds M,M!f |= the_argument_of H iff L.a,f |= the_argument_of H;
-    take phi;
-    thus phi is increasing & phi is continuous by A24;
-    let a such that
-A26: phi.a = a & {} <> a;
-A27: L.a c= M by Th24;
-    let f;
-    thus M,M!f |= H implies L.a,f |= H
-    proof
-      assume M,M!f |= H;
-      then not M,M!f |= the_argument_of H & f = M!f
-      by A23,A27,ZF_LANG1:def 2,ZF_MODEL:14;
-      then not L.a,f |= the_argument_of H by A25,A26;
-      hence thesis by A23,ZF_MODEL:14;
-    end;
-    assume L.a,f |= H;
-    then not L.a,f |= the_argument_of H by A23,ZF_MODEL:14;
-    then not M,M!f |= the_argument_of H by A25,A26;
-    hence thesis by A23,ZF_MODEL:14;
-  end;
-A28: for H st H is conjunctive &
-  RT[the_left_argument_of H] & RT[the_right_argument_of H] holds RT[H]
-  proof
-    let H;
-    assume H is conjunctive;
-    then
-A29: H = (the_left_argument_of H) '&' (the_right_argument_of H) by ZF_LANG:58;
-    given fi1 being Ordinal-Sequence of W such that
-A30: fi1 is increasing & fi1 is continuous and
-A31: for a st fi1.a = a & {} <> a for f holds
-    M,M!f |= the_left_argument_of H iff L.a,f |= the_left_argument_of H;
-    given fi2 being Ordinal-Sequence of W such that
-A32: fi2 is increasing & fi2 is continuous and
-A33: for a st fi2.a = a & {} <> a for f holds
-    M,M!f |= the_right_argument_of H iff L.a,f |= the_right_argument_of H;
-    take phi = fi2*fi1;
-    ex fi st fi = fi2*fi1 & fi is increasing by A30,A32,ORDINAL4:13;
-    hence phi is increasing & phi is continuous by A30,A32,ORDINAL4:17;
-    let a such that
-A34: phi.a = a & {} <> a;
-A35: a in dom fi1 & a in dom fi2 & a in dom phi by ORDINAL4:36;
-    then
-A36: a c= fi1.a & a c= fi2.a by A30,A32,ORDINAL4:10;
-A37: now
-      assume fi1.a <> a;
-      then a c< fi1.a by A36,XBOOLE_0:def 8;
-      then
-A38:  a in fi1.a by ORDINAL1:21;
-      fi1.a in dom fi2 by ORDINAL4:36;
-      then
-A39:  fi2.a in fi2.(fi1.a) by A32,A38,ORDINAL2:def 16;
-      phi.a = fi2.(fi1.a) by A35,FUNCT_1:22;
-      hence contradiction by A32,A34,A35,A39,ORDINAL1:7,ORDINAL4:10;
-    end;
-    then
-A40: fi2.a = a by A34,A35,FUNCT_1:22;
-A41: L.a c= M by Th24;
-    let f;
-    thus M,M!f |= H implies L.a,f |= H
-    proof
-      assume M,M!f |= H;
-      then M,M!f |= the_left_argument_of H & M,M!f |=
-      the_right_argument_of H & f = M!f by A29,A41,ZF_LANG1:def 2,ZF_MODEL:15;
-      then L.a,f |= the_left_argument_of H & L.a,f |= the_right_argument_of H
-      by A31,A33,A34,A37,A40;
-      hence thesis by A29,ZF_MODEL:15;
-    end;
-    assume L.a,f |= H;
-    then L.a,f |= the_left_argument_of H & L.a,f |= the_right_argument_of H
-    by A29,ZF_MODEL:15;
-    then M,M!f |= the_left_argument_of H & M,M!f |= the_right_argument_of H
-    by A31,A33,A34,A37,A40;
-    hence thesis by A29,ZF_MODEL:15;
-  end;
-A42: for H st H is universal & RT[the_scope_of H] holds RT[H]
-  proof
-    let H;
-    assume H is universal;
-    then
-A43: H = All(bound_in H,the_scope_of H) by ZF_LANG:62;
-    given phi such that
-A44: phi is increasing & phi is continuous and
-A45: for a st phi.a = a & {} <> a for f holds
-    M,M!f |= the_scope_of H iff L.a,f |= the_scope_of H;
     set x0 = bound_in H;
     set H' = the_scope_of H;
-A46: now
-      assume
-A47:  not x0 in Free H';
-      thus thesis
-      proof
-        take phi;
-        thus phi is increasing & phi is continuous by A44;
-        let a such that
-A48:    phi.a = a & {} <> a;
-        let f;
-        thus M,M!f |= H implies L.a,f |= H
-        proof
-          assume
-A49:      M,M!f |= H;
-          for k st (M!f).k <> (M!f).k holds x0 = k;
-          then M,M!f |= H' by A43,A49,ZF_MODEL:16;
-          then L.a,f |= H' by A45,A48;
-          hence thesis by A43,A47,ZFMODEL1:10;
-        end;
-        assume
-A50:    L.a,f |= H;
-        for k st f.k <> f.k holds x0 = k;
-        then L.a,f |= H' by A43,A50,ZF_MODEL:16;
-        then M,M!f |= H' by A45,A48;
-        hence thesis by A43,A47,ZFMODEL1:10;
-      end;
-    end;
-    defpred P[set,set] means ex f being Function of VAR,M st $1 = f &
-    ((ex m being Element of M st m in L.$2 & M,f/(x0,m) |= 'not' H') or
-    $2 = 0-element_of W & not ex m being Element of M st
-    M,f/(x0,m) |= 'not' H');
-A51: for h being Element of Funcs(VAR,M) qua non empty set ex a st P[h,a]
+    defpred P[set,set] means ex f being Function of VAR,M st $1 = f & ((ex m
+being Element of M st m in L.$2 & M,f/(x0,m) |= 'not' H') or $2 = 0-element_of
+    W & not ex m being Element of M st M,f/(x0,m) |= 'not' H');
+    assume
+    H is universal;
+    then
+A7: H = All(bound_in H,the_scope_of H) by ZF_LANG:62;
+A8: for h being Element of Funcs(VAR,M) qua non empty set ex a st P[h,a]
     proof
       let h be Element of Funcs(VAR,M) qua non empty set;
       reconsider f = h as Element of Funcs(VAR,M);
-      reconsider f as Function of VAR,M by FUNCT_2:121;
-      now per cases;
-        suppose for m being Element of M holds not M,f/(x0,m) |= 'not' H';
+      reconsider f as Function of VAR,M;
+      now
+        per cases;
+        suppose
+          for m being Element of M holds not M,f/(x0,m) |= 'not' H';
           hence thesis;
         end;
         suppose
-A52:      not for m being Element of M holds not M,f/(x0,m) |= 'not' H';
+A9:       not for m being Element of M holds not M,f/(x0,m) |= 'not'
+          H';
           thus thesis
-          proof consider m being Element of M such that
-A53:        M,f/(x0,m) |= 'not' H' by A52;
+          proof
+            consider m being Element of M such that
+A10:        M,f/(x0,m) |= 'not' H' by A9;
             consider X be set such that
-A54:        m in X & X in rng L by A3,TARSKI:def 4;
+A11:        m in X and
+A12:        X in rng L by A4,TARSKI:def 4;
             consider x such that
-A55:        x in dom L & X = L.x by A54,FUNCT_1:def 5;
-            reconsider x as Ordinal by A55;
-            x in W by A2,A55,ORDINAL1:def 10;
-            then reconsider b = x as Ordinal of W;
-            take b, f; thus thesis by A53,A54,A55;
+A13:        x in dom L and
+A14:        X = L.x by A12,FUNCT_1:def 5;
+            reconsider x as Ordinal by A13;
+            reconsider b = x as Ordinal of W by A5,A13,ORDINAL1:def 10;
+            take b, f;
+            thus thesis by A10,A11,A14;
           end;
         end;
       end;
       hence thesis;
     end;
     consider rho being Function such that
-A56: dom rho = Funcs(VAR,M) qua non empty set and
-A57: for h being Element of Funcs(VAR,M) qua non empty set
-    ex a st a = rho.h & P[h,a] &
-    for b st P[h,b] holds a c= b from ALFA'Universe(A51);
-    defpred SI[Ordinal of W,Ordinal of W] means
-    $2 = sup (rho.:Funcs(VAR,L.$1));
-A58: for a,b1,b2 st SI[a, b1] & SI[a, b2] holds b1 = b2;
-A59: for a ex b st SI[a, b]
+A15: dom rho = Funcs(VAR,M) qua non empty set and
+A16: for h being Element of Funcs(VAR,M) qua non empty set ex a st a
+    = rho.h & P[h,a] & for b st P[h,b] holds a c= b from ALFA'Universe(A8);
+    defpred SI[Ordinal of W,Ordinal of W] means $2 = sup (rho.:Funcs(VAR,L.$1)
+    );
+A17: for a ex b st SI[a, b]
     proof
       let a;
       set X = rho.:Funcs(VAR,L.a);
-A60:  X c= W
+A18:  X c= W
       proof
         let x;
-        assume x in X;
+        assume
+        x in X;
         then consider h being set such that
-A61:    h in dom rho & h in Funcs(VAR,L.a) & x = rho.h by FUNCT_1:def 12;
+        h in dom rho and
+A19:    h in Funcs(VAR,L.a) and
+A20:    x = rho.h by FUNCT_1:def 12;
         Funcs(VAR,L.a) c= Funcs(VAR,M) by Th24,FUNCT_5:63;
-        then reconsider h as Element of Funcs(VAR,M) qua non empty set by A61;
-        ex a st a = rho.h &
-        (ex f being Function of VAR,M st h = f & ((ex m being Element of
-        M st m in L.a & M,f/(x0,m) |= 'not'
-        H') or a = 0-element_of W & not ex m being
-        Element of M st M,f/(x0,m) |= 'not' H')) & for b st ex f being
-        Function of VAR,M st h = f & ((ex m being Element of M st m in L.b
-        & M,f/(x0,m) |= 'not'
-        H') or b = 0-element_of W & not ex m being Element of M
-        st M,f/(x0,m) |= 'not' H') holds a c= b by A57;
-        hence thesis by A61;
+        then reconsider h as Element of Funcs(VAR,M) qua non empty set by A19;
+        ex a st a = rho.h & (ex f being Function of VAR,M st h = f & ((
+        ex m being Element of M st m in L.a & M,f/(x0,m) |= 'not' H') or a =
+0-element_of W & not ex m being Element of M st M,f/(x0,m) |= 'not' H')) & for
+b st ex f being Function of VAR,M st h = f & ((ex m being Element of M st m in
+L.b & M,f/(x0,m) |= 'not' H') or b = 0-element_of W & not ex m being Element of
+        M st M,f/(x0,m) |= 'not' H') holds a c= b by A16;
+        hence thesis by A20;
       end;
-      L.a in W & card VAR = card omega & card(L.a) = card(L.a)
-      by Th25,CARD_1:21;
-      then card Funcs(VAR,L.a) = card Funcs(omega,L.a) & Funcs(omega,L.a) in W
-      by A1,CLASSES2:67,FUNCT_5:68;
-      then card X c= card Funcs(omega,L.a) & card Funcs(omega,L.a) in card W
-      by CARD_2:3,CLASSES2:1;
-      then card X in card W & W is Tarski by ORDINAL1:22;
-      then X in W by A60,CLASSES1:2;
-      then sup X in W by Th28;
-      then reconsider b = sup X as Ordinal of W;
-      take b; thus thesis;
+      Funcs(omega,L.a) in W by A1,CLASSES2:67;
+      then
+A21:  card Funcs(omega,L.a) in card W by CLASSES2:1;
+      card VAR = card omega & card(L.a) = card(L.a) by Th25,CARD_1:21;
+      then card Funcs(VAR,L.a) = card Funcs(omega,L.a) by FUNCT_5:68;
+      then card X in card W by A21,CARD_2:3,ORDINAL1:22;
+      then X in W by A18,CLASSES1:2;
+      then reconsider b = sup X as Ordinal of W by Th28;
+      take b;
+      thus thesis;
     end;
+A22: for a,b1,b2 st SI[a, b1] & SI[a, b2] holds b1 = b2;
     consider si being Ordinal-Sequence of W such that
-A62: for a holds SI[a, si.a] from OrdSeqOfUnivEx(A58,A59);
+A23: for a holds SI[a, si.a] from OrdSeqOfUnivEx(A22,A17);
     deffunc C(Ordinal of W, Ordinal of W) = succ((si.succ $1) \/ $2);
-    deffunc D(Ordinal of W, Ordinal-Sequence) = union($2,$1);
     consider ksi being Ordinal-Sequence of W such that
-A63: ksi.0-element_of W = si.0-element_of W and
-A64: for a holds ksi.(succ a) = C(a,ksi.a) and
-A65: for a st a <> 0-element_of W & a is limit_ordinal
-    holds ksi.a = D(a,ksi|a) from UOSExist;
-A67: 0-element_of W = {} by ORDINAL4:35;
-A68: ksi is increasing
+A24: ksi.0-element_of W = si.0-element_of W and
+A25: for a holds ksi.(succ a) = C(a,ksi.a) and
+A26: for a st a <> 0-element_of W & a is limit_ordinal holds ksi.a =
+    D(a,ksi|a) from UOSExist;
+    defpred P[Ordinal] means si.$1 c= ksi.$1;
+    given phi such that
+A27: phi is increasing and
+A28: phi is continuous and
+A29: for a st phi.a = a & {} <> a for f holds M,M!f |= the_scope_of H
+    iff L.a,f |= the_scope_of H;
+A30: ksi is increasing
     proof
       let A,B;
-      assume
-A69:  A in B & B in dom ksi;
-      then A in dom ksi by ORDINAL1:19;
-      then reconsider a = A, b = B as Ordinal of W by A69,Th8;
+      assume that
+A31:  A in B and
+A32:  B in dom ksi;
+      A in dom ksi by A31,A32,ORDINAL1:19;
+      then reconsider a = A, b = B as Ordinal of W by A32,ORDINAL1:def 10;
       defpred Theta[Ordinal of W] means a in $1 implies ksi.a in ksi.$1;
-A70:  Theta[0-element_of W] by ORDINAL4:35;
-A71:  Theta[c] implies Theta[succ c]
+A33:  Theta[c] implies Theta[succ c]
       proof
         assume that
-A72:    a in c implies ksi.a in ksi.c and
-A73:    a in succ c;
-A74:    a c= c & ksi.succ c = succ((si.succ c) \/ ksi.c) &
-        (si.succ c) \/ ksi.c in succ((si.succ c) \/ ksi.c) &
-        ksi.c c= (si.succ c) \/ ksi.c by A64,A73,ORDINAL1:34,XBOOLE_1:7;
-        ksi.a in ksi.c or ksi.a = ksi.c
+A34:    a in c implies ksi.a in ksi.c and
+A35:    a in succ c;
+A36:    a c= c by A35,ORDINAL1:34;
+A37:    ksi.a in ksi.c or ksi.a = ksi.c
         proof
           per cases;
-          suppose a <> c;
-            then a c< c by A74,XBOOLE_0:def 8;
-            hence thesis by A72,ORDINAL1:21;
+          suppose
+            a <> c;
+            then a c< c by A36,XBOOLE_0:def 8;
+            hence thesis by A34,ORDINAL1:21;
           end;
-          suppose a = c;
+          suppose
+            a = c;
             hence thesis;
           end;
         end;
-        hence thesis by A74,ORDINAL1:19,22;
+A38:    ksi.c c= (si.succ c) \/ ksi.c by XBOOLE_1:7;
+        ksi.succ c = succ((si.succ c) \/ ksi.c) & (si.succ c) \/ ksi.c
+        in succ((si. succ c) \/ ksi.c) by A25,ORDINAL1:34;
+        hence thesis by A38,A37,ORDINAL1:19,22;
       end;
-A75:  for b st b <> 0-element_of W & b is limit_ordinal &
-      for c st c in b holds Theta[c] holds Theta[b]
+A39:  for b st b <> 0-element_of W & b is limit_ordinal & for c st c in
+      b holds Theta[c] holds Theta[b]
       proof
+        ksi.succ a = succ((si.succ a) \/ ksi.a) by A25;
+        then (si.succ a) \/ ksi.a in ksi.succ a by ORDINAL1:10;
+        then
+A40:    ksi.a in ksi.succ a by ORDINAL1:22,XBOOLE_1:7;
         let b such that
-A76:    b <> 0-element_of W & b is limit_ordinal and
+A41:    b <> 0-element_of W and
+A42:    b is limit_ordinal and
         for c st c in b holds Theta[c] and
-A77:    a in b;
-A78:    ksi.b = union(ksi|b,b) by A65,A76
+A43:    a in b;
+        succ a in dom ksi & succ a in b by A42,A43,ORDINAL1:41,
+        ORDINAL4:36;
+        then
+A44:    ksi.succ a in rng(ksi|b) by FUNCT_1:73;
+        ksi.b = union(ksi|b,b) by A26,A41,A42
           .= Union (ksi|b) by Th17
           .= union rng (ksi|b) by CARD_3:def 4;
-        succ a in dom ksi & succ a in b by A76,A77,ORDINAL1:41,ORDINAL4:36;
-        then
-A79:    ksi.succ a in rng(ksi|b) by FUNCT_1:73;
-        ksi.succ a = succ((si.succ a) \/ ksi.a) by A64;
-        then (si.succ a) \/ ksi.a in ksi.succ a &
-        ksi.a c= (si.succ a) \/ ksi.a by ORDINAL1:10,XBOOLE_1:7;
-        then ksi.a in ksi.succ a by ORDINAL1:22;
-        hence thesis by A78,A79,TARSKI:def 4;
+        hence thesis by A44,A40,TARSKI:def 4;
       end;
-      Theta[c] from UniverseInd(A70,A71,A75);
-      then ksi.a in ksi.b by A69;
+A45:  Theta[0-element_of W] by ORDINAL4:35;
+      Theta[c] from UniverseInd(A45,A33,A39);
+      then ksi.a in ksi.b by A31;
       hence thesis;
     end;
-    defpred P[Ordinal] means si.$1 c= ksi.$1;
-A80: P[0-element_of W] by A63;
-A81: P[a] implies P[succ a]
+A46: 0-element_of W = {} by ORDINAL4:35;
+A47: ksi is continuous
     proof
-      assume si.a c= ksi.a;
-      ksi.succ a = succ((si.succ a) \/ (ksi.a)) &
-      (si.succ a) \/ (ksi.a) in succ((si.succ a) \/ (ksi.a)) &
-      si.succ a c= (si.succ a) \/ (ksi.a) by A64,ORDINAL1:10,XBOOLE_1:7;
-      then si.succ a in ksi.succ a by ORDINAL1:22;
-      hence si.succ a c= ksi.succ a by ORDINAL1:def 2;
-    end;
-A82: a <> 0-element_of W & a is limit_ordinal implies si.a c= sup (si|a)
-    proof
-      assume
-A83:  a <> 0-element_of W & a is limit_ordinal;
-      let A such that
-A84:  A in si.a;
-      si.a = sup (rho.:Funcs(VAR,L.a)) by A62;
-      then consider B such that
-A85:  B in rho.:Funcs(VAR,L.a) & A c= B by A84,ORDINAL2:29;
-      consider x such that
-A86:  x in dom rho & x in Funcs(VAR,L.a) & B = rho.x by A85,FUNCT_1:def 12;
-      reconsider h = x as Element of Funcs(VAR,M) qua non empty set
-      by A56,A86;
-      consider a1 being Ordinal of W such that
-A87:  a1 = rho.h & (ex f being Function of VAR,M st h = f &
-      ((ex m being Element of M st m in L.a1 & M,f/(x0,m) |= 'not' H') or
-      a1 = 0-element_of W & not ex m being Element of M st
-      M,f/(x0,m) |= 'not' H'))& for b st
-      ex f being Function of VAR,M st h = f &
-      ((ex m being Element of M st m in L.b & M,f/(x0,m) |= 'not' H') or
-      b = 0-element_of W & not ex m being Element of M st
-      M,f/(x0,m) |= 'not' H') holds a1 c= b by A57;
-      consider f being Function of VAR,M such that
-A88:  h = f &
-      ((ex m being Element of M st m in L.a1 & M,f/(x0,m) |= 'not' H') or
-      a1 = 0-element_of W & not ex m being Element of M st
-      M,f/(x0,m) |= 'not' H') by A87;
-      defpred P[set,set] means for a st f.$1 in L.a holds f.$2 in L.a;
-A89:  now
-        assume Free 'not' H' <> {};
+      let A,B;
+      assume that
+A48:  A in dom ksi and
+A49:  A <> {} and
+A50:  A is limit_ordinal and
+A51:  B = ksi.A;
+      A c= dom ksi by A48,ORDINAL1:def 2;
+      then
+A52:  dom (ksi|A) = A by RELAT_1:91;
+      reconsider a = A as Ordinal of W by A48,ORDINAL1:def 10;
+A53:  B = union(ksi|a,a) by A26,A46,A49,A50,A51
+        .= Union (ksi|a) by Th17
+        .= union rng (ksi|a) by CARD_3:def 4;
+A54:  B c= sup (ksi|A)
+      proof
+        let C;
+        assume
+        C in B;
+        then consider X such that
+A55:    C in X and
+A56:    X in rng (ksi|A) by A53,TARSKI:def 4;
+        ex A1 being Ordinal st rng (ksi|A) c= A1 by ORDINAL2:def 8;
+        then reconsider X as Ordinal by A56;
+        X in sup (ksi|A) by A56,ORDINAL2:27;
+        hence thesis by A55,ORDINAL1:19;
+      end;
+A57:  ksi|A is increasing by A30,ORDINAL4:15;
+A58:  sup (ksi|A) c= B
+      proof
+        let C;
+        assume
+        C in sup (ksi|A);
+        then consider D being Ordinal such that
+A59:    D in rng (ksi|A) and
+A60:    C c= D by ORDINAL2:29;
+        consider x such that
+A61:    x in dom (ksi|A) and
+A62:    D = (ksi|A).x by A59,FUNCT_1:def 5;
+        reconsider x as Ordinal by A61;
+A63:    succ x in A by A50,A52,A61,ORDINAL1:41;
         then
-A90:    Free 'not' H' <> {};
-A91:    for x,y holds P[x,y] or P[y,x]
+A64:    (ksi|A).succ x in rng (ksi|A) by A52,FUNCT_1:def 5;
+        x in succ x by ORDINAL1:10;
+        then D in (ksi|A).succ x by A52,A57,A62,A63,ORDINAL2:def 16;
+        then D in B by A53,A64,TARSKI:def 4;
+        hence thesis by A60,ORDINAL1:22;
+      end;
+      sup (ksi|A) is_limes_of ksi|A by A49,A50,A52,A57,ORDINAL4:8;
+      hence thesis by A54,A58,XBOOLE_0:def 10;
+    end;
+A65: a <> 0-element_of W & a is limit_ordinal implies si.a c= sup (si|a)
+    proof
+      defpred C[set] means $1 in Free 'not' H';
+      assume that
+A66:  a <> 0-element_of W and
+A67:  a is limit_ordinal;
+A68:  si.a = sup (rho.:Funcs(VAR,L.a)) by A23;
+      let A;
+      assume
+      A in si.a;
+      then consider B such that
+A69:  B in rho.:Funcs(VAR,L.a) and
+A70:  A c= B by A68,ORDINAL2:29;
+      consider x such that
+A71:  x in dom rho and
+A72:  x in Funcs(VAR,L.a) and
+A73:  B = rho.x by A69,FUNCT_1:def 12;
+      reconsider h = x as Element of Funcs(VAR,M) qua non empty set by A15,
+      A71;
+      consider a1 being Ordinal of W such that
+A74:  a1 = rho.h and
+A75:  ex f being Function of VAR,M st h = f & ((ex m being Element
+of M st m in L.a1 & M,f/(x0,m) |= 'not' H') or a1 = 0-element_of W & not ex m
+      being Element of M st M,f/(x0,m) |= 'not' H') and
+A76:  for b st ex f being Function of VAR,M st h = f & ((ex m being
+Element of M st m in L.b & M,f/(x0,m) |= 'not' H') or b = 0-element_of W & not
+      ex m being Element of M st M,f/(x0,m) |= 'not' H') holds a1 c= b by A16;
+      consider f being Function of VAR,M such that
+A77:  h = f and
+A78:  (ex m being Element of M st m in L.a1 & M,f/(x0,m) |= 'not' H'
+) or a1 = 0-element_of W & not ex m being Element of M st M,f/(x0,m) |= 'not'
+      H' by A75;
+      defpred P[set,set] means for a st f.$1 in L.a holds f.$2 in L.a;
+A79:  now
+A80:    for x,y holds P[x,y] or P[y,x]
         proof
           let x,y;
           given a such that
-A92:      f.x in L.a & not f.y in L.a;
+A81:      f.x in L.a & not f.y in L.a;
           let b such that
-A93:      f.y in L.b;
+A82:      f.y in L.b;
           a in b or a = b or b in a by ORDINAL1:24;
-          then L.a c= L.b or L.b c= L.a by A1;
-          hence thesis by A92,A93;
+          then L.a c= L.b or L.b c= L.a by A2;
+          hence thesis by A81,A82;
         end;
-A94:    for x,y,z st P[x,y] & P[y,z] holds P[x,z];
-        consider z such that
-A95:    z in Free 'not' H' & for y st y in Free 'not' H' holds P[z,y]
-        from CARD_3:sch 3(A90,A91,A94);
-        reconsider z as Variable by A95;
-A96:    ex s being Function st f = s & dom s = VAR & rng s c= L.a
-        by A86,A88,FUNCT_2:def 2;
-        then f.z in rng f by FUNCT_1:def 5;
-        then f.z in L.a & L.a = Union (L|a) & Union (L|a) = union rng (L|a )
-        by A1,A67,A83,A96,CARD_3:def 4;
-        then consider X such that
-A97:    f.z in X & X in rng (L|a) by TARSKI:def 4;
-        consider x such that
-A98:    x in dom (L|a) & X = (L|a).x by A97,FUNCT_1:def 5;
-A99:    dom (L|a) c= a & (L|a).x = L.x by A98,FUNCT_1:70,RELAT_1:87;
+        assume
+        Free 'not' H' <> {};
         then
-A100:   x in a & a in On W by A98,Th8;
-        reconsider x as Ordinal by A98;
-        x in On W by A100,ORDINAL1:19;
-        then reconsider x as Ordinal of W by Th8;
-        take x; thus x in a by A98,A99;
+A83:    Free 'not' H' <> {};
+A84:    L.a = Union (L|a) & Union (L|a) = union rng (L|a ) by A3,A46,
+        A66,A67, CARD_3:def 4;
+A85:    for x,y,z st P[x,y] & P[y,z] holds P[x,z];
+        consider z such that
+A86:    z in Free 'not' H' & for y st y in Free 'not' H' holds P[z,y
+        ] from CARD_3:sch 3(A83,A80,A85);
+        reconsider z as Variable by A86;
+A87:    dom (L|a) c= a by RELAT_1:87;
+A88:    ex s being Function st f = s & dom s = VAR & rng s c= L.a by
+        A72,A77,FUNCT_2:def 2;
+        then f.z in rng f by FUNCT_1:def 5;
+        then consider X such that
+A89:    f.z in X and
+A90:    X in rng (L|a) by A88,A84,TARSKI:def 4;
+        consider x such that
+A91:    x in dom (L|a) and
+A92:    X = (L|a).x by A90,FUNCT_1:def 5;
+A93:    (L|a).x = L.x by A91,FUNCT_1:70;
+        reconsider x as Ordinal by A91;
+        a in On W by ORDINAL1:def 10;
+        then x in On W by A91,A87,ORDINAL1:19;
+        then reconsider x as Ordinal of W by ORDINAL1:def 10;
+        take x;
+        thus x in a by A91,A87;
         let y be Variable;
-        assume y in Free 'not' H';
-        hence f.y in L.x by A95,A97,A98,A99;
+        assume
+        y in Free 'not' H';
+        hence f.y in L.x by A86,A89,A92,A93;
       end;
       now
         assume
-A101:   Free 'not' H' = {};
-        take b = 0-element_of W; thus b in a by A67,A83,ORDINAL3:10;
-        thus for x1 st x1 in Free 'not' H' holds f.x1 in L.b by A101;
+A94:    Free 'not' H' = {};
+        take b = 0-element_of W;
+        thus b in a by A46,A66,ORDINAL3:10;
+        thus for x1 st x1 in Free 'not' H' holds f.x1 in L.b by A94;
       end;
       then consider c such that
-A102: c in a & for x1 st x1 in Free 'not' H' holds f.x1 in L.c by A89;
-      consider e being Element of L.c;
-      defpred C[set] means $1 in Free 'not' H';
+A95:  c in a and
+A96:  for x1 st x1 in Free 'not' H' holds f.x1 in L.c by A79;
+A97:  si.c = sup (rho.:Funcs(VAR,L.c)) by A23;
+      c in dom si & dom (si|a) = dom si /\ a by ORDINAL4:36,RELAT_1:90;
+      then
+A98:  c in dom (si|a) by A95,XBOOLE_0:def 4;
+      si.c = (si|a).c by A95,FUNCT_1:72;
+      then si.c in rng (si|a) by A98,FUNCT_1:def 5;
+      then
+A99:  si.c in sup (si|a) by ORDINAL2:27;
       deffunc F(set) = f.$1;
+      consider e being Element of L.c;
       deffunc G(set) = e;
       consider v being Function such that
-A103: dom v = VAR & for x st x in VAR holds (C[x] implies v.x = F(x)) &
-      (not C[x] implies v.x = G(x)) from PARTFUN1:sch 1;
-A104: rng v c= L.c
+A100: dom v = VAR & for x st x in VAR holds (C[x] implies v.x = F(x)
+      ) & (not C[x] implies v.x = G(x)) from PARTFUN1:sch 1;
+A101: rng v c= L.c
       proof
         let x;
-        assume x in rng v;
+        assume
+        x in rng v;
         then consider y such that
-A105:   y in dom v & x = v.y by FUNCT_1:def 5;
-        reconsider y as Variable by A103,A105;
+A102:   y in dom v and
+A103:   x = v.y by FUNCT_1:def 5;
+        reconsider y as Variable by A100,A102;
         y in Free 'not' H' or not y in Free 'not' H';
-        then x = f.y & f.y in L.c or x = e by A102,A103,A105;
+        then x = f.y & f.y in L.c or x = e by A96,A100,A103;
         hence thesis;
       end;
-      then reconsider v as Function of VAR,L.c by A103,FUNCT_2:def 1
-,RELSET_1:11;
-A106: L.c c= M by Th24;
-      then
-A107: v in Funcs(VAR,L.c) & v = M!v & Funcs(VAR,L.c) c= Funcs(VAR,M)
-      by A103,A104,FUNCT_2:def 2,FUNCT_5:63,ZF_LANG1:def 2;
-      then reconsider v' = v as Element of Funcs(VAR,M) qua non empty set;
+      then reconsider v as Function of VAR,L.c by A100,FUNCT_2:def 1 ,RELSET_1
+      :11;
+A104: v in Funcs(VAR,L.c) by A100,A101,FUNCT_2:def 2;
+      Funcs(VAR,L.c) c= Funcs(VAR,M) by Th24,FUNCT_5:63;
+      then reconsider
+      v' = v as Element of Funcs(VAR,M) qua non empty set by A104;
       consider a2 being Ordinal of W such that
-A108: a2 = rho.v' & (ex f being Function of VAR,M st v' = f &
-      ((ex m being Element of M st m in L.a2 & M,f/(x0,m) |= 'not' H') or
-      a2 = 0-element_of W & not ex m being Element of M st
-      M,f/(x0,m) |= 'not' H'))& for b st
-      ex f being Function of VAR,M st v' = f &
-      ((ex m being Element of M st m in L.b & M,f/(x0,m) |= 'not' H') or
-      b = 0-element_of W & not ex m being Element of M st
-      M,f/(x0,m) |= 'not' H') holds a2 c= b by A57;
+A105: a2 = rho.v' and
+A106: ex f being Function of VAR,M st v' = f & ((ex m being Element
+of M st m in L.a2 & M,f/(x0,m) |= 'not' H') or a2 = 0-element_of W & not ex m
+      being Element of M st M,f/(x0,m) |= 'not' H') and
+A107: for b st ex f being Function of VAR,M st v' = f & ((ex m being
+Element of M st m in L.b & M,f/(x0,m) |= 'not' H') or b = 0-element_of W & not
+      ex m being Element of M st M,f/(x0,m) |= 'not' H') holds a2 c= b by A16;
       consider f' being Function of VAR,M such that
-A109: v' = f' &
-      ((ex m being Element of M st m in L.a2 & M,f'/(x0,m) |= 'not' H') or
-      a2 = 0-element_of W & not ex m being Element of M st
-      M,f'/(x0,m) |= 'not' H') by A108;
-A110: now
-        assume
-A111:   not ex m being Element of M st M,f/(x0,m) |= 'not' H';
-        now
-          let m be Element of M;
-A112:     not M,f/(x0,m) |= 'not' H' by A111;
-          now
-            let x1;
-            assume x1 in Free 'not' H';
-            then f.x1 = (M!v).x1 & f/(x0,m).x0 = m & (M!v)/(x0,m).x0 = m &
-            (x1 <> x0 implies f/(x0,m).x1 = f.x1 & (M!v)/(x0,m).x1 = (M!v).x1)
-            by A103,A107,FUNCT_7:34,130;
-            hence f/(x0,m).x1 = (M!v)/(x0,m).x1;
-          end;
-          hence not M,(M!v)/(x0,m) |= 'not' H' by A112,ZF_LANG1:84;
+A108: v' = f' and
+A109: (ex m being Element of M st m in L.a2 & M,f'/(x0,m) |= 'not'
+H') or a2 = 0-element_of W & not ex m being Element of M st M,f'/(x0,m) |=
+      'not' H' by A106;
+A110: v = M!v by Th24,ZF_LANG1:def 2;
+A111: now
+        given m being Element of M such that
+A112:   m in L.a1 and
+A113:   M,f/(x0,m) |= 'not' H';
+A114:   now
+          let x1;
+A115:     f/(x0,m).x0 = m by FUNCT_7:130;
+A116:     x1 <> x0 implies f/(x0,m).x1 = f.x1 & (M!v)/(x0,m).x1 = (M!v).
+          x1 by FUNCT_7:34;
+          assume
+          x1 in Free 'not' H';
+          hence f/(x0,m).x1 = (M!v)/(x0,m).x1 by A100,A110,A115,A116,
+          FUNCT_7:130;
         end;
-        hence a1 = a2 by A88,A107,A109,A111;
+        then M,(M!v)/(x0,m) |= 'not' H' by A113,ZF_LANG1:84;
+        then consider m' being Element of M such that
+A117:   m' in L.a2 & M,f'/(x0,m') |= 'not' H' by A110,A108,A109;
+        now
+          let x1;
+A118:     f/(x0,m').x0 = m' by FUNCT_7:130;
+A119:     x1 <> x0 implies f/(x0,m').x1 = f.x1 & (M!v)/(x0,m').x1 = (M!v
+          ).x1 by FUNCT_7:34;
+          assume
+          x1 in Free 'not' H';
+          hence f/(x0,m').x1 = f'/(x0,m').x1 by A100,A110,A108,A118,A119,
+          FUNCT_7:130;
+        end;
+        then
+A120:   a1 c= a2 by A76,A77,A117,ZF_LANG1:84;
+        a2 c= a1 by A110,A107,A112,A113,A114,ZF_LANG1:84;
+        hence a1 = a2 by A120,XBOOLE_0:def 10;
       end;
       now
-        given m being Element of M such that
-A113:   m in L.a1 & M,f/(x0,m) |= 'not' H';
+        assume
+A121:   not ex m being Element of M st M,f/(x0,m) |= 'not' H';
         now
-          let x1;
-          assume x1 in Free 'not' H';
-          then f.x1 = (M!v).x1 & f/(x0,m).x0 = m & (M!v)/(x0,m).x0 = m &
-          (x1 <> x0 implies f/(x0,m).x1 = f.x1 & (M!v)/(x0,m).x1 = (M!v).x1)
-          by A103,A107,FUNCT_7:34,130;
-          hence f/(x0,m).x1 = (M!v)/(x0,m).x1;
+          let m be Element of M;
+          now
+            let x1;
+A122:       f/(x0,m).x0 = m by FUNCT_7:130;
+A123:       x1 <> x0 implies f/(x0,m).x1 = f.x1 & (M!v)/(x0,m).x1 = (M!v
+            ).x1 by FUNCT_7:34;
+            assume
+            x1 in Free 'not' H';
+            hence f/(x0,m).x1 = (M!v)/(x0,m).x1 by A100,A110,A122,A123,
+            FUNCT_7:130;
+          end;
+          hence not M,(M!v)/(x0,m) |= 'not' H' by A121,ZF_LANG1:84;
         end;
-        then
-A114:   M,(M!v)/(x0,m) |= 'not' H' by A113,ZF_LANG1:84;
-        then consider m' being Element of M such that
-A115:   m' in L.a2 & M,f'/(x0,m') |= 'not' H' by A107,A109;
-        now
-          let x1;
-          assume x1 in Free 'not' H';
-          then f.x1 = (M!v).x1 & f/(x0,m').x0 = m' & (M!v)/(x0,m').x0 = m' &
-          (x1 <> x0 implies f/(x0,m').x1 = f.x1 & (M!v)/(x0,m').x1 = (M!v).x1)
-          by A103,A107,FUNCT_7:34,130;
-          hence f/(x0,m').x1 = f'/(x0,m').x1 by A106,A109,ZF_LANG1:def 2;
-        end;
-        then M,f/(x0,m') |= 'not' H' by A115,ZF_LANG1:84;
-        then a1 c= a2 & a2 c= a1 by A87,A88,A107,A108,A113,A114,A115;
-        hence a1 = a2 by XBOOLE_0:def 10;
+        hence a1 = a2 by A78,A110,A108,A109,A121;
       end;
-      then B in rho.:Funcs(VAR,L.c) & si.c = sup (rho.:Funcs(VAR,L.c)) &
-      c in dom si & dom (si|a) = dom si /\ a
-      by A56,A62,A86,A87,A88,A107,A108,A110,FUNCT_1:def 12,ORDINAL4:36
-,RELAT_1:90;
-      then
-A116: B in si.c & si.c = (si|a).c & c in dom (si|a)
-      by A102,FUNCT_1:72,ORDINAL2:27,XBOOLE_0:def 4;
-      then si.c in rng (si|a) & sup (si|a) = sup rng (si|a) by FUNCT_1:def 5;
-      then si.c in sup (si|a) by ORDINAL2:27;
-      then B in sup (si|a) by A116,ORDINAL1:19;
-      hence thesis by A85,ORDINAL1:22;
+      then B in rho.:Funcs(VAR,L.c) by A15,A73,A74,A75,A77,A104,A105,
+      A111,FUNCT_1:def 12;
+      then B in si.c by A97,ORDINAL2:27;
+      then B in sup (si|a) by A99,ORDINAL1:19;
+      hence thesis by A70,ORDINAL1:22;
     end;
-A117: a <> 0-element_of W & a is limit_ordinal &
-    (for b st b in a holds P[b]) implies P[a]
+A124: a <> 0-element_of W & a is limit_ordinal & (for b st b in a holds P[
+    b]) implies P[a]
     proof
       assume that
-A118: a <> 0-element_of W & a is limit_ordinal and
-A119: for b st b in a holds si.b c= ksi.b;
+A125: a <> 0-element_of W & a is limit_ordinal and
+A126: for b st b in a holds si.b c= ksi.b;
       thus si.a c= ksi.a
       proof
-        let A such that
-A120:   A in si.a;
-        si.a c= sup (si|a) by A82,A118;
+A127:   si.a c= sup (si|a) by A65,A125;
+        let A;
+        assume
+        A in si.a;
         then consider B such that
-A121:   B in rng (si|a) & A c= B by A120,ORDINAL2:29;
+A128:   B in rng (si|a) and
+A129:   A c= B by A127,ORDINAL2:29;
         consider x such that
-A122:   x in dom (si|a) & B = (si|a).x by A121,FUNCT_1:def 5;
-        reconsider x as Ordinal by A122;
-A123:   dom (si|a) c= a by RELAT_1:87;
-        then
-A124:   x in a & a in On W by A122,Th8;
-        then x in On W by ORDINAL1:19;
-        then reconsider x as Ordinal of W by Th8;
-        si.x = B & si.x c= ksi.x & dom ksi = On W
-        by A119,A122,A123,FUNCT_1:70,FUNCT_2:def 1;
-        then A c= ksi.x & ksi.x in ksi.a
-        by A68,A121,A124,ORDINAL2:def 16,XBOOLE_1:1;
-        hence thesis by ORDINAL1:22;
+A130:   x in dom (si|a) and
+A131:   B = (si|a).x by A128,FUNCT_1:def 5;
+A132:   dom (si|a) c= a by RELAT_1:87;
+        reconsider x as Ordinal by A130;
+A133:   a in On W by ORDINAL1:def 10;
+        then x in On W by A130,A132,ORDINAL1:19;
+        then reconsider x as Ordinal of W by ORDINAL1:def 10;
+A134:   si.x = B by A130,A131,FUNCT_1:70;
+A135:   si.x c= ksi.x by A126,A130,A132;
+        dom ksi = On W by FUNCT_2:def 1;
+        then ksi.x in ksi.a by A30,A130,A132,A133,ORDINAL2:def 16;
+        hence thesis by A129,A134,A135,ORDINAL1:22,XBOOLE_1:1;
       end;
     end;
-A125: P[a] from UniverseInd(A80,A81,A117);
-A126: ksi is continuous
+A136: P[a] implies P[succ a]
     proof
-      let A,B;
       assume
-A127: A in dom ksi & A <> {} & A is limit_ordinal & B = ksi.A;
-      then reconsider a = A as Ordinal of W by Th8;
-      A c= dom ksi by A127,ORDINAL1:def 2;
-      then
-A128: dom (ksi|A) = A & ksi|A is increasing by A68,ORDINAL4:15,RELAT_1:91;
-      then
-A129: sup (ksi|A) is_limes_of ksi|A & sup (ksi|A) = sup rng (ksi|A)
-      by A127,ORDINAL4:8;
-A130: B = union(ksi|a,a) by A65,A67,A127
-        .= Union (ksi|a) by Th17
-        .= union rng (ksi|a) by CARD_3:def 4;
-A131: B c= sup (ksi|A)
-      proof
-        let C;
-        assume C in B;
-        then consider X such that
-A132:   C in X & X in rng (ksi|A) by A130,TARSKI:def 4;
-        consider A1 being Ordinal such that
-A133:   rng (ksi|A) c= A1 by ORDINAL2:def 8;
-        reconsider X as Ordinal by A132,A133;
-        X in sup (ksi|A) by A132,ORDINAL2:27;
-        hence thesis by A132,ORDINAL1:19;
-      end;
-      sup (ksi|A) c= B
-      proof
-        let C;
-        assume C in sup (ksi|A);
-        then consider D being Ordinal such that
-A134:   D in rng (ksi|A) & C c= D by ORDINAL2:29;
-        consider x such that
-A135:   x in dom (ksi|A) & D = (ksi|A).x by A134,FUNCT_1:def 5;
-        reconsider x as Ordinal by A135;
-        x in succ x & succ x in A by A127,A128,A135,ORDINAL1:10,41;
-        then D in (ksi|A).succ x & (ksi|A).succ x in rng (ksi|A)
-        by A128,A135,FUNCT_1:def 5,ORDINAL2:def 16;
-        then D in B by A130,TARSKI:def 4;
-        hence thesis by A134,ORDINAL1:22;
-      end;
-      hence thesis by A129,A131,XBOOLE_0:def 10;
+      si.a c= ksi.a;
+      ksi.succ a = succ((si.succ a) \/ (ksi.a)) & (si.succ a) \/ (ksi.a)
+      in succ(( si.succ a) \/ (ksi.a)) by A25,ORDINAL1:10;
+      then si.succ a in ksi.succ a by ORDINAL1:22,XBOOLE_1:7;
+      hence si.succ a c= ksi.succ a by ORDINAL1:def 2;
     end;
-    now
-      assume x0 in Free H';
+A137: P[0-element_of W] by A24;
+A138: P[a] from UniverseInd(A137,A136,A124);
+A139: now
+      assume
+      x0 in Free H';
       thus thesis
       proof
         take gamma = phi*ksi;
-        ex f being Ordinal-Sequence st f = phi*ksi & f is increasing
-        by A44,A68,ORDINAL4:13;
-        hence gamma is increasing & gamma is continuous
-        by A44,A68,A126,ORDINAL4:17;
+        ex f being Ordinal-Sequence st f = phi*ksi & f is increasing by
+        A27,A30,ORDINAL4:13;
+        hence gamma is increasing & gamma is continuous by A28,A30,A47,
+        ORDINAL4:17;
         let a such that
-A136:   gamma.a = a & {} <> a;
-        a in dom gamma & ksi.a in dom phi & a in dom ksi by ORDINAL4:36;
-        then ksi.a c= phi.(ksi.a) & a c= ksi.a & phi.(ksi.a) = gamma.a
-        by A44,A68,FUNCT_1:22,ORDINAL4:10;
-        then
-A137:   ksi.a = a & phi.a = a by A136,XBOOLE_0:def 10;
+A140:   gamma.a = a and
+A141:   {} <> a;
         let f;
+        a in dom gamma by ORDINAL4:36;
+        then
+A142:   phi.(ksi.a) = gamma.a by FUNCT_1:22;
+        a in dom ksi by ORDINAL4:36;
+        then
+A143:   a c= ksi.a by A30,ORDINAL4:10;
+        ksi.a in dom phi by ORDINAL4:36;
+        then
+A144:   ksi.a c= phi.(ksi.a) by A27,ORDINAL4:10;
+        then
+A145:   ksi.a = a by A140,A143,A142,XBOOLE_0:def 10;
+A146:   phi.a = a by A140,A144,A143,A142,XBOOLE_0:def 10;
         thus M,M!f |= H implies L.a,f |= H
         proof
           assume
-A138:     M,M!f |= H;
+A147:     M,M!f |= H;
           now
             let g be Function of VAR,L.a such that
-A139:       for k st g.k <> f.k holds x0 = k;
+A148:       for k st g.k <> f.k holds x0 = k;
             now
               let k;
               M!f = f & M!g = g by Th24,ZF_LANG1:def 2;
-              hence (M!g).k <> (M!f).k implies x0 = k by A139;
+              hence (M!g).k <> (M!f).k implies x0 = k by A148;
             end;
-            then M,(M!g) |= H' by A43,A138,ZF_MODEL:16;
-            hence L.a,g |= H' by A45,A136,A137;
+            then M,(M!g) |= H' by A7,A147,ZF_MODEL:16;
+            hence L.a,g |= H' by A29,A141,A146;
           end;
-          hence thesis by A43,ZF_MODEL:16;
+          hence thesis by A7,ZF_MODEL:16;
         end;
         assume that
-A140:   L.a,f |= H and
-A141:   not M,M!f |= H;
+A149:   L.a,f |= H and
+A150:   not M,M!f |= H;
         consider m being Element of M such that
-A142:   not M,(M!f)/(x0,m) |= H' by A43,A141,ZF_LANG1:80;
-A143:   M,(M!f)/(x0,m) |= 'not' H' by A142,ZF_MODEL:14;
-A144:   M!f in Funcs(VAR,M) & f in Funcs(VAR,L.a) by FUNCT_2:11;
+A151:   not M,(M!f)/(x0,m) |= H' by A7,A150,ZF_LANG1:80;
+A152:   si.a c= ksi.a by A138;
+A153:   si.a = sup (rho.:Funcs(VAR,L.a)) by A23;
         reconsider h = M!f as Element of Funcs(VAR,M) qua non empty set by
-FUNCT_2:11;
+        FUNCT_2:11;
         consider a1 being Ordinal of W such that
-A145:   a1 = rho.h & (ex f being Function of VAR,M st h = f &
-        ((ex m being Element of M st m in L.a1 & M,f/(x0,m) |= 'not' H') or
-        a1 = 0-element_of W & not ex m being Element of M st
-        M,f/(x0,m) |= 'not' H'))& for b st
-        ex f being Function of VAR,M st h = f &
-        ((ex m being Element of M st m in L.b & M,f/(x0,m) |= 'not' H') or
-        b = 0-element_of W & not ex m being Element of M st
-        M,f/(x0,m) |= 'not' H') holds a1 c= b by A57;
-        consider m being Element of M such that
-A146:   m in L.a1 & M,(M!f)/(x0,m) |= 'not' H' by A143,A145;
-A147:   M!f = f by Th24,ZF_LANG1:def 2;
-        then a1 in rho.:Funcs(VAR,L.a) & si.a = sup (rho.:Funcs(VAR,L.a))
-        by A56,A62,A144,A145,FUNCT_1:def 12;
-        then a1 in si.a & si.a c= ksi.a by A125,ORDINAL2:27;
-        then L.a1 c= L.a by A1,A137;
-        then reconsider m' = m as Element of L.a by A146;
+A154:   a1 = rho.h and
+A155:   ex f being Function of VAR,M st h = f & ((ex m being Element
+of M st m in L.a1 & M,f/(x0,m) |= 'not' H') or a1 = 0-element_of W & not ex m
+        being Element of M st M,f/(x0,m) |= 'not' H') and
+        for b st ex f being Function of VAR,M st h = f & ((ex m being
+Element of M st m in L.b & M,f/(x0,m) |= 'not' H') or b = 0-element_of W & not
+ex m being Element of M st M,f/(x0,m) |= 'not' H') holds a1 c= b by A16;
+A156:   M!f = f by Th24,ZF_LANG1:def 2;
+        M,(M!f)/(x0,m) |= 'not' H' by A151,ZF_MODEL:14;
+        then consider m being Element of M such that
+A157:   m in L.a1 and
+A158:   M,(M!f)/(x0,m) |= 'not' H' by A155;
+        f in Funcs(VAR,L.a) by FUNCT_2:11;
+        then a1 in rho.:Funcs(VAR,L.a) by A15,A154,A156,FUNCT_1:def 12;
+        then a1 in si.a by A153,ORDINAL2:27;
+        then L.a1 c= L.a by A2,A145,A152;
+        then reconsider m' = m as Element of L.a by A157;
+        (M!f)/(x0,m) = M!(f/(x0,m')) by A156,Th24,ZF_LANG1:def 2;
+        then not M,M!(f/(x0,m')) |= H' by A158,ZF_MODEL:14;
+        then not L.a,f/(x0,m') |= H' by A29,A141,A146;
+        hence contradiction by A7,A149,ZF_LANG1:80;
         dom ((M!f)/(x0,m)) = VAR & rng ((M!f)/(x0,m)) c= L.a
-        proof thus
-          dom ((M!f)/(x0,m)) = VAR by FUNCT_2:def 1;
+        proof
+          thus dom ((M!f)/(x0,m)) = VAR by FUNCT_2:def 1;
           let x;
-          assume x in rng ((M!f)/(x0,m));
+          assume
+          x in rng ((M!f)/(x0,m));
           then consider y such that
-A148:     y in dom ((M!f)/(x0,m)) & x = ((M!f)/(x0,m)).y by FUNCT_1:def 5;
-          reconsider y as Variable by A148;
+A159:     y in dom ((M!f)/(x0,m)) and
+A160:     x = ((M!f)/(x0,m)).y by FUNCT_1:def 5;
+          reconsider y as Variable by A159;
           y = x0 or y <> x0;
-          then x = m' or x = f.y by A147,A148,FUNCT_7:34,130;
+          then x = m' or x = f.y by A156,A160,FUNCT_7:34,130;
           hence thesis;
         end;
-        then reconsider g = (M!f)/(x0,m) as Function of VAR,L.a by
-FUNCT_2:def 1,RELSET_1:11;
-        g.x0 = m' & for y be Variable holds g.y <> f.y implies x0 = y
-        by A147,FUNCT_7:34,130;
-        then (M!f)/(x0,m) = f/(x0,m') by FUNCT_7:131;
-        then (M!f)/(x0,m) = M!(f/(x0,m')) by Th24,ZF_LANG1:def 2;
-        then not M,M!(f/(x0,m')) |= H' by A146,ZF_MODEL:14;
-        then not L.a,f/(x0,m') |= H' by A45,A136,A137;
-        hence contradiction by A43,A140,ZF_LANG1:80;
+        then reconsider g = (M!f)/(x0,m) as Function of VAR,L.a by FUNCT_2:
+        def 1,RELSET_1:11;
       end;
     end;
-    hence thesis by A46;
+    now
+      assume
+A161: not x0 in Free H';
+      thus thesis
+      proof
+        take phi;
+        thus phi is increasing & phi is continuous by A27,A28;
+        let a such that
+A162:   phi.a = a & {} <> a;
+        let f;
+        thus M,M!f |= H implies L.a,f |= H
+        proof
+A163:     for k st (M!f).k <> (M!f).k holds x0 = k;
+          assume
+          M,M!f |= H;
+          then M,M!f |= H' by A7,A163,ZF_MODEL:16;
+          then L.a,f |= H' by A29,A162;
+          hence thesis by A7,A161,ZFMODEL1:10;
+        end;
+A164:   for k st f.k <> f.k holds x0 = k;
+        assume
+        L.a,f |= H;
+        then L.a,f |= H' by A7,A164,ZF_MODEL:16;
+        then M,M!f |= H' by A29,A162;
+        hence thesis by A7,A161,ZFMODEL1:10;
+      end;
+    end;
+    hence thesis by A139;
   end;
-  thus RT[H] from ZF_LANG:sch 1(A4,A22,A28,A42);
+A165: for H st H is conjunctive & RT[the_left_argument_of H] & RT[
+  the_right_argument_of H] holds RT[H]
+  proof
+    let H;
+    assume
+    H is conjunctive;
+    then
+A166: H = (the_left_argument_of H) '&' (the_right_argument_of H) by
+    ZF_LANG:58;
+    given fi1 being Ordinal-Sequence of W such that
+A167: fi1 is increasing and
+A168: fi1 is continuous and
+A169: for a st fi1.a = a & {} <> a for f holds M,M!f |=
+    the_left_argument_of H iff L.a,f |= the_left_argument_of H;
+    given fi2 being Ordinal-Sequence of W such that
+A170: fi2 is increasing and
+A171: fi2 is continuous and
+A172: for a st fi2.a = a & {} <> a for f holds M,M!f |=
+    the_right_argument_of H iff L.a,f |= the_right_argument_of H;
+    take phi = fi2*fi1;
+    ex fi st fi = fi2*fi1 & fi is increasing by A167,A170,ORDINAL4:13;
+    hence phi is increasing & phi is continuous by A167,A168,A171,ORDINAL4:17;
+    let a such that
+A173: phi.a = a and
+A174: {} <> a;
+    a in dom fi1 by ORDINAL4:36;
+    then
+A175: a c= fi1.a by A167,ORDINAL4:10;
+    let f;
+A176: a in dom phi by ORDINAL4:36;
+A177: a in dom fi2 by ORDINAL4:36;
+A178: now
+      assume
+      fi1.a <> a;
+      then a c< fi1.a by A175,XBOOLE_0:def 8;
+      then
+A179: a in fi1.a by ORDINAL1:21;
+A180: phi.a = fi2.(fi1.a) by A176,FUNCT_1:22;
+      fi1.a in dom fi2 by ORDINAL4:36;
+      then fi2.a in fi2.(fi1.a) by A170,A179,ORDINAL2:def 16;
+      hence contradiction by A170,A173,A177,A180,ORDINAL1:7,ORDINAL4:10;
+    end;
+    then
+A181: fi2.a = a by A173,A176,FUNCT_1:22;
+    thus M,M!f |= H implies L.a,f |= H
+    proof
+      assume
+A182: M,M!f |= H;
+      then M,M!f |= the_right_argument_of H by A166,ZF_MODEL:15;
+      then
+A183: L.a,f |= the_right_argument_of H by A172,A174,A181;
+      M,M!f |= the_left_argument_of H by A166,A182,ZF_MODEL:15;
+      then L.a,f |= the_left_argument_of H by A169,A174,A178;
+      hence thesis by A166,A183,ZF_MODEL:15;
+    end;
+    assume
+A184: L.a,f |= H;
+    then L.a,f |= the_right_argument_of H by A166,ZF_MODEL:15;
+    then
+A185: M,M!f |= the_right_argument_of H by A172,A174,A181;
+    L.a,f |= the_left_argument_of H by A166,A184,ZF_MODEL:15;
+    then M,M!f |= the_left_argument_of H by A169,A174,A178;
+    hence thesis by A166,A185,ZF_MODEL:15;
+  end;
+A186: for H st H is atomic holds RT[H]
+  proof
+A187: dom id On W = On W by RELAT_1:71;
+    then reconsider phi = id On W as T-Sequence by ORDINAL1:def 7;
+A188: rng id On W = On W by RELAT_1:71;
+    then reconsider phi as Ordinal-Sequence by ORDINAL2:def 8;
+    reconsider phi as Ordinal-Sequence of W by A187,A188
+    ,FUNCT_2:def 1,RELSET_1:11;
+    let H such that
+A189: H is being_equality or H is being_membership;
+    take phi;
+    thus
+A190: phi is increasing
+    proof
+      let A,B;
+      assume
+A191: A in B & B in dom phi;
+      then phi.A = A by FUNCT_1:35,ORDINAL1:19;
+      hence thesis by A191,FUNCT_1:35;
+    end;
+    thus phi is continuous
+    proof
+      let A,B;
+      assume that
+A192: A in dom phi and
+A193: A <> {} & A is limit_ordinal and
+A194: B = phi.A;
+A195: A c= dom phi by A192,ORDINAL1:def 2;
+      phi|A = phi*(id A) by RELAT_1:94
+        .= id((dom phi) /\ A) by A187,FUNCT_1:43
+        .= id A by A195,XBOOLE_1:28;
+      then
+A196: rng(phi|A) = A by RELAT_1:71;
+      phi.A = A by A192,FUNCT_1:35;
+      then
+A197: sup(phi|A) = B by A194,A196,ORDINAL2:26;
+A198: phi|A is increasing by A190,ORDINAL4:15;
+      dom (phi|A) = A by A195,RELAT_1:91;
+      hence thesis by A193,A197,A198,ORDINAL4:8;
+    end;
+    let a such that
+    phi.a = a and
+    {} <> a;
+    let f;
+    thus M,M!f |= H implies L.a,f |= H
+    proof
+      assume
+A199: M,M!f |= H;
+A200: M!f = f by Th24,ZF_LANG1:def 2;
+A201: now
+        assume
+        H is being_membership;
+        then
+A202:   H = (Var1 H) 'in' (Var2 H) by ZF_LANG:54;
+        then (M!f).Var1 H in (M!f).Var2 H by A199,ZF_MODEL:13;
+        hence thesis by A200,A202,ZF_MODEL:13;
+      end;
+      now
+        assume
+        H is being_equality;
+        then
+A203:   H = (Var1 H) '=' (Var2 H) by ZF_LANG:53;
+        then (M!f).Var1 H = (M!f).Var2 H by A199,ZF_MODEL:12;
+        hence thesis by A200,A203,ZF_MODEL:12;
+      end;
+      hence thesis by A189,A201;
+    end;
+    assume
+A204: L.a,f |= H;
+A205: M!f = f by Th24,ZF_LANG1:def 2;
+A206: now
+      assume
+      H is being_membership;
+      then
+A207: H = (Var1 H) 'in' (Var2 H) by ZF_LANG:54;
+      then f.Var1 H in f.Var2 H by A204,ZF_MODEL:13;
+      hence thesis by A205,A207,ZF_MODEL:13;
+    end;
+    now
+      assume
+      H is being_equality;
+      then
+A208: H = (Var1 H) '=' (Var2 H) by ZF_LANG:53;
+      then f.Var1 H = f.Var2 H by A204,ZF_MODEL:12;
+      hence thesis by A205,A208,ZF_MODEL:12;
+    end;
+    hence thesis by A189,A206;
+  end;
+A209: for H st H is negative & RT[the_argument_of H] holds RT[H]
+  proof
+    let H;
+    assume
+    H is negative;
+    then
+A210: H = 'not' the_argument_of H by ZF_LANG:def 30;
+    given phi such that
+A211: phi is increasing & phi is continuous and
+A212: for a st phi.a = a & {} <> a for f holds M,M!f |= the_argument_of
+    H iff L.a,f |= the_argument_of H;
+    take phi;
+    thus phi is increasing & phi is continuous by A211;
+    let a such that
+A213: phi.a = a & {} <> a;
+    let f;
+    thus M,M!f |= H implies L.a,f |= H
+    proof
+      assume
+      M,M!f |= H;
+      then not M,M!f |= the_argument_of H by A210,ZF_MODEL:14;
+      then not L.a,f |= the_argument_of H by A212,A213;
+      hence thesis by A210,ZF_MODEL:14;
+    end;
+    assume
+    L.a,f |= H;
+    then not L.a,f |= the_argument_of H by A210,ZF_MODEL:14;
+    then not M,M!f |= the_argument_of H by A212,A213;
+    hence thesis by A210,ZF_MODEL:14;
+  end;
+  thus RT[H] from ZF_LANG:sch 1(A186,A209,A165,A6);
 end;
 

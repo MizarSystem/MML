@@ -8,9 +8,9 @@ environ
 
  vocabularies ARYTM, FINSEQ_2, FINSEQ_1, FUNCT_1, ABSVALUE, ARYTM_1, RVSUM_1,
       COMPLEX1, SQUARE_1, RLVECT_1, RELAT_1, PCOMPS_1, METRIC_1, PRE_TOPC,
-      FUNCT_2, ARYTM_3, MCART_1, EUCLID, BOOLE, MONOID_0, ZF_LANG, SEQ_1,
-      XREAL_0, SUBSET_1, VALUED_0, RLTOPSP1, FUNCSDOM, SETFAM_1, STRUCT_0,
-      ALGSTR_0, VECTSP_1, FUNCOP_1;
+      FUNCT_2, MCART_1, EUCLID, BOOLE, MONOID_0, ZF_LANG, SEQ_1, XREAL_0,
+      SUBSET_1, VALUED_0, RLTOPSP1, FUNCSDOM, SETFAM_1, STRUCT_0, ALGSTR_0,
+      VECTSP_1, FUNCOP_1, MIDSP_3;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
       SETFAM_1, XREAL_0, COMPLEX1, NAT_1, RELAT_1, FUNCT_1, VALUED_0, STRUCT_0,
       METRIC_1, FUNCT_2, BINOP_1, BINOP_2, FUNCOP_1, REAL_1, VALUED_1, SEQ_1,
@@ -20,7 +20,7 @@ environ
       MONOID_0, SEQ_1, TOPMETR, RLTOPSP1, FUNCSDOM;
  registrations XBOOLE_0, FUNCT_1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0,
       BINOP_2, MEMBERED, FINSEQ_2, RVSUM_1, METRIC_1, PCOMPS_1, MONOID_0,
-      VALUED_0, VALUED_1, STRUCT_0, TOPMETR, RLTOPSP1, FUNCOP_1;
+      VALUED_0, VALUED_1, STRUCT_0, TOPMETR, RLTOPSP1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
 
 
@@ -33,12 +33,12 @@ definition
   let n be Nat;
   func REAL n -> FinSequence-DOMAIN of REAL equals
 :: EUCLID:def 1
-
   n-tuples_on REAL;
 end;
 
-registration let n;
- cluster -> n-long Element of REAL n;
+registration
+  let n;
+  cluster -> n-long Element of REAL n;
 end;
 
 definition
@@ -52,7 +52,6 @@ definition
   let x be real-valued FinSequence;
   redefine func abs x -> FinSequence of REAL equals
 :: EUCLID:def 3
-
   absreal*x;
 end;
 
@@ -60,7 +59,6 @@ definition
   let n;
   func 0*n -> real-valued FinSequence equals
 :: EUCLID:def 4
-
   n |-> (0 qua Real);
 end;
 
@@ -104,7 +102,6 @@ definition
   let f;
   func |. f .| -> Real equals
 :: EUCLID:def 5
-
   sqrt Sum sqr f;
 end;
 
@@ -184,11 +181,12 @@ definition
   func Pitag_dist n -> Function of [:REAL n,REAL n:],REAL means
 :: EUCLID:def 6
 
-  for x,y being Element of REAL n holds it.(x,y) = |.x-y.|;
+  for x,y
+  being Element of REAL n holds it.(x,y) = |.x-y.|;
 end;
 
 theorem :: EUCLID:23
-  sqr(x-y) = sqr(y-x);
+  for x, y being real-valued FinSequence holds sqr(x-y) = sqr(y-x);
 
 theorem :: EUCLID:24
   for n being Nat holds Pitag_dist n is_metric_of REAL n;
@@ -197,7 +195,6 @@ definition
   let n be Nat;
   func Euclid n -> strict MetrSpace equals
 :: EUCLID:def 7
-
   MetrStruct(#REAL n,Pitag_dist n#);
 end;
 
@@ -210,8 +207,9 @@ definition
   let n be Nat;
   func TOP-REAL n -> strict RLTopStruct means
 :: EUCLID:def 8
- the TopStruct of it = TopSpaceMetr Euclid n &
-  the RLSStruct of it = RealVectSpace Seg n;
+
+  the TopStruct of it =
+  TopSpaceMetr Euclid n & the RLSStruct of it = RealVectSpace Seg n;
 end;
 
 registration
@@ -221,8 +219,7 @@ end;
 
 registration
   let n be Nat;
-  cluster TOP-REAL n -> TopSpace-like
-   Abelian add-associative right_zeroed
+  cluster TOP-REAL n -> TopSpace-like Abelian add-associative right_zeroed
     right_complementable RealLinearSpace-like;
 end;
 
@@ -243,40 +240,48 @@ registration
   cluster TOP-REAL n -> constituted-FinSeqs;
 end;
 
-registration let n;
- cluster -> FinSequence-like Point of TOP-REAL n;
+registration
+  let n;
+  cluster -> FinSequence-like Point of TOP-REAL n;
 end;
 
-registration let n;
+registration
+  let n;
   cluster -> real-valued Point of TOP-REAL n;
 end;
 
-registration let r,s be real number;
- let n; let p be Element of TOP-REAL n;
- let f be real-valued FinSequence;
- identify r*p with s*f when r=s, p=f;
+registration
+  let r,s be real number;
+  let n;
+  let p be Element of TOP-REAL n;
+  let f be real-valued FinSequence;
+  identify r*p with s*f when r=s, p=f;
 end;
 
 registration
- let n; let p,q be Element of TOP-REAL n;
- let f,g be real-valued FinSequence;
- identify p+q with f+g when p=f, q=g;
+  let n;
+  let p,q be Element of TOP-REAL n;
+  let f,g be real-valued FinSequence;
+  identify p+q with f+g when p=f, q=g;
 end;
 
 registration
- let n; let p be Element of TOP-REAL n;
- let f be real-valued FinSequence;
- identify -p with -f when p=f;
+  let n;
+  let p be Element of TOP-REAL n;
+  let f be real-valued FinSequence;
+  identify -p with -f when p=f;
 end;
 
 registration
- let n; let p,q be Element of TOP-REAL n;
- let f,g be real-valued FinSequence;
- identify p-q with f-g when p=f, q=g;
+  let n;
+  let p,q be Element of TOP-REAL n;
+  let f,g be real-valued FinSequence;
+  identify p-q with f-g when p=f, q=g;
 end;
 
-registration let n;
- cluster -> n-long Point of TOP-REAL n;
+registration
+  let n;
+  cluster -> n-long Point of TOP-REAL n;
 end;
 
 notation
@@ -375,15 +380,13 @@ theorem :: EUCLID:55
   ex x,y being Real st p=<*x,y*>;
 
 definition
- canceled 5;
+  canceled 5;
   let p;
   func p`1 -> Real equals
 :: EUCLID:def 14
-
   p.1;
   func p`2 -> Real equals
 :: EUCLID:def 15
-
   p.2;
 end;
 
@@ -431,41 +434,36 @@ theorem :: EUCLID:66
   |[x1, y1]| - |[x2, y2]| = |[ x1 - x2, y1 - y2]|;
 
 theorem :: EUCLID:67
-  for P being Subset of TOP-REAL n, Q being non empty Subset of Euclid n holds
-  P = Q implies (TOP-REAL n)|P = TopSpaceMetr((Euclid n)|Q);
+  for P being Subset of TOP-REAL n, Q being non empty Subset of Euclid n
+  holds P = Q implies (TOP-REAL n)|P = TopSpaceMetr((Euclid n)|Q);
 
 :: to enable the 03.2009. revision A.T.
 
 theorem :: EUCLID:68
- for p1,p2 being Point of TOP-REAL n
- for r1,r2 being real-valued Function st p1 = r1 & p2 =r2
-  holds p1+p2 = r1+r2;
+  for p1,p2 being Point of TOP-REAL n for r1,r2 being real-valued
+  Function st p1 = r1 & p2 =r2 holds p1+p2 = r1+r2;
 
 theorem :: EUCLID:69
- for p being Point of TOP-REAL n
- for r being real-valued Function st p = r
-  holds x*p = x(#)r;
+  for p being Point of TOP-REAL n for r being real-valued Function st
+  p = r holds x*p = x(#)r;
 
 theorem :: EUCLID:70
- 0.REAL n = 0.TOP-REAL n;
+  0.REAL n = 0.TOP-REAL n;
 
 theorem :: EUCLID:71
   the carrier of Euclid n = the carrier of TOP-REAL n;
 
 theorem :: EUCLID:72
- for p1 being Point of TOP-REAL n
- for r1 being real-valued Function st p1 = r1
-  holds -p1 = -r1;
+  for p1 being Point of TOP-REAL n for r1 being real-valued Function st
+  p1 = r1 holds -p1 = -r1;
 
 theorem :: EUCLID:73
- for p1,p2 being Point of TOP-REAL n
- for r1,r2 being real-valued Function st p1 = r1 & p2 =r2
-  holds p1-p2 = r1-r2;
+  for p1,p2 being Point of TOP-REAL n for r1,r2 being real-valued
+  Function st p1 = r1 & p2 =r2 holds p1-p2 = r1-r2;
 
 theorem :: EUCLID:74
   0.TOP-REAL n = 0*n;
 
-reserve p for Point of TOP-REAL n;
-
 theorem :: EUCLID:75
- |.-p.| = |.p.|;
+  for p being Point of TOP-REAL n holds |.-p.| = |.p.|;
+

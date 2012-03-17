@@ -57,8 +57,8 @@ definition
   canceled;
   mode Element of X means
     :Def2:
-    it in X if X is non empty
-    otherwise it is empty;
+    it in X if X is non empty otherwise it is
+    empty;
   existence by XBOOLE_0:def 1;
   consistency;
 end;
@@ -84,11 +84,11 @@ registration
   cluster [: X1,X2 :] -> non empty;
   coherence
   proof
-    consider x1 being set such that
-A1: x1 in X1 by XBOOLE_0:def 1;
     consider x2 being set such that
-A2: x2 in X2 by XBOOLE_0:def 1;
-    [x1,x2] in [:X1,X2:] by A1,A2,ZFMISC_1:def 2;
+A1: x2 in X2 by XBOOLE_0:def 1;
+    consider x1 being set such that
+A2: x1 in X1 by XBOOLE_0:def 1;
+    [x1,x2] in [:X1,X2:] by A2,A1,ZFMISC_1:def 2;
     hence thesis;
   end;
 end;
@@ -98,11 +98,11 @@ registration
   cluster [: X1,X2,X3 :] -> non empty;
   coherence
   proof
-    consider x12 being set such that
-A1: x12 in [:X1,X2:] by XBOOLE_0:def 1;
     consider x3 being set such that
-A2: x3 in X3 by XBOOLE_0:def 1;
-    [x12,x3] in [:[:X1,X2:],X3:] by A1,A2,ZFMISC_1:def 2;
+A1: x3 in X3 by XBOOLE_0:def 1;
+    consider x12 being set such that
+A2: x12 in [:X1,X2:] by XBOOLE_0:def 1;
+    [x12,x3] in [:[:X1,X2:],X3:] by A2,A1,ZFMISC_1:def 2;
     hence thesis by ZFMISC_1:def 3;
   end;
 end;
@@ -112,11 +112,11 @@ registration
   cluster [: X1,X2,X3,X4 :] -> non empty;
   coherence
   proof
-    consider x123 being set such that
-A1: x123 in [:X1,X2,X3:] by XBOOLE_0:def 1;
     consider x4 being set such that
-A2: x4 in X4 by XBOOLE_0:def 1;
-    [x123,x4] in [:[:X1,X2,X3:],X4:] by A1,A2,ZFMISC_1:def 2;
+A1: x4 in X4 by XBOOLE_0:def 1;
+    consider x123 being set such that
+A2: x123 in [:X1,X2,X3:] by XBOOLE_0:def 1;
+    [x123,x4] in [:[:X1,X2,X3:],X4:] by A2,A1,ZFMISC_1:def 2;
     hence thesis by ZFMISC_1:def 4;
   end;
 end;
@@ -127,9 +127,10 @@ definition
   coherence
   proof
     let x be Element of X;
-A1: x in X by Def2;
     X in bool D by Def2;
-    then X c= D by ZFMISC_1:def 1;
+    then
+A1: X c= D by ZFMISC_1:def 1;
+    x in X by Def2;
     then x in D by A1,TARSKI:def 3;
     hence thesis by Def2;
   end;
@@ -159,7 +160,6 @@ end;
 definition
   let E;
   func {}E -> Subset of E equals
-
   {};
   coherence
   proof
@@ -169,7 +169,6 @@ definition
   end;
   correctness;
   func [#] E -> Subset of E equals
-
   E;
   coherence
   proof
@@ -199,7 +198,8 @@ reserve A,B,C for Subset of E;
 canceled 2;
 
 theorem Th7:
-  (for x being Element of E holds x in A implies x in B) implies A c= B
+  (for x being Element of E holds x in A implies x in B) implies A
+  c= B
 proof
   assume
 A1: for x being Element of E holds x in A implies x in B;
@@ -214,7 +214,8 @@ end;
 theorem Th8:
   (for x being Element of E holds x in A iff x in B) implies A = B
 proof
-  assume for x being Element of E holds x in A iff x in B;
+  assume
+  for x being Element of E holds x in A iff x in B;
   hence A c= B & B c= A by Th7;
 end;
 
@@ -223,7 +224,8 @@ canceled;
 theorem
   A <> {} implies ex x being Element of E st x in A
 proof
-  assume A <> {};
+  assume
+  A <> {};
   then consider x being set such that
 A1: x in A by XBOOLE_0:def 1;
   x in E by A1,Lm1;
@@ -234,7 +236,6 @@ end;
 definition
   let E,A;
   func A` -> Subset of E equals
-
   E \ A;
   coherence
   proof
@@ -258,20 +259,26 @@ A1: S = E \ T;
   redefine func A \/ B -> Subset of E;
   coherence
   proof
-    A in bool E & B in bool E by Def2;
-    then A c= E & B c= E by ZFMISC_1:def 1;
-    then A \/ B c= E by XBOOLE_1:8;
+    B in bool E by Def2;
+    then
+A2: B c= E by ZFMISC_1:def 1;
+    A in bool E by Def2;
+    then A c= E by ZFMISC_1:def 1;
+    then A \/ B c= E by A2,XBOOLE_1:8;
     then A \/ B in bool E by ZFMISC_1:def 1;
     hence thesis by Def2;
   end;
   redefine func A \+\ B -> Subset of E;
   coherence
   proof
-A2: A in bool E & B in bool E by Def2;
-A3: A \ B c= A & B \ A c= B by XBOOLE_1:36;
-    A c= E & B c= E by A2,ZFMISC_1:def 1;
-    then A \ B c= E & B \ A c= E by A3,XBOOLE_1:1;
-    then (A \ B) \/ (B \ A) c= E by XBOOLE_1:8;
+    B in bool E by Def2;
+    then B \ A c= B & B c= E by XBOOLE_1:36,ZFMISC_1:def 1;
+    then
+A3: B \ A c= E by XBOOLE_1:1;
+    A in bool E by Def2;
+    then A \ B c= A & A c= E by XBOOLE_1:36,ZFMISC_1:def 1;
+    then A \ B c= E by XBOOLE_1:1;
+    then (A \ B) \/ (B \ A) c= E by A3,XBOOLE_1:8;
     then A \+\ B in bool E by ZFMISC_1:def 1;
     hence thesis by Def2;
   end;
@@ -293,10 +300,9 @@ definition
   redefine func A \ X -> Subset of E;
   coherence
   proof
-A1: A in bool E by Def2;
-A2: A \ X c= A by XBOOLE_1:36;
-    A c= E by A1,ZFMISC_1:def 1;
-    then A \ X c= E by A2,XBOOLE_1:1;
+    A in bool E by Def2;
+    then A \ X c= A & A c= E by XBOOLE_1:36,ZFMISC_1:def 1;
+    then A \ X c= E by XBOOLE_1:1;
     then A \ X in bool E by ZFMISC_1:def 1;
     hence A \ X is Subset of E by Def2;
   end;
@@ -307,10 +313,9 @@ definition
   redefine func A /\ X -> Subset of E;
   coherence
   proof
-A1: A in bool E by Def2;
-A2: A /\ X c= A by XBOOLE_1:17;
-    A c= E by A1,ZFMISC_1:def 1;
-    then A /\ X c= E by A2,XBOOLE_1:1;
+    A in bool E by Def2;
+    then A /\ X c= A & A c= E by XBOOLE_1:17,ZFMISC_1:def 1;
+    then A /\ X c= E by XBOOLE_1:1;
     then A /\ X in bool E by ZFMISC_1:def 1;
     hence thesis by Def2;
   end;
@@ -329,21 +334,23 @@ end;
 canceled 4;
 
 theorem
-  (for x being Element of E holds x in A iff x in B or x in C)
-  implies A = B \/ C
+  (for x being Element of E holds x in A iff x in B or x in C) implies A
+  = B \/ C
 proof
   assume
 A1: for x being Element of E holds x in A iff x in B or x in C;
   now
     let x be Element of E;
-    assume x in A;
+    assume
+    x in A;
     then x in B or x in C by A1;
     hence x in B \/ C by XBOOLE_0:def 3;
   end;
   hence A c= B \/ C by Th7;
   now
     let x be Element of E;
-    assume x in B \/ C;
+    assume
+    x in B \/ C;
     then x in B or x in C by XBOOLE_0:def 3;
     hence x in A by A1;
   end;
@@ -351,21 +358,23 @@ A1: for x being Element of E holds x in A iff x in B or x in C;
 end;
 
 theorem
-  (for x being Element of E holds x in A iff x in B & x in C)
-  implies A = B /\ C
+  (for x being Element of E holds x in A iff x in B & x in C) implies A
+  = B /\ C
 proof
   assume
 A1: for x being Element of E holds x in A iff x in B & x in C;
   now
     let x be Element of E;
-    assume x in A;
+    assume
+    x in A;
     then x in B & x in C by A1;
     hence x in B /\ C by XBOOLE_0:def 4;
   end;
   hence A c= B /\ C by Th7;
   now
     let x be Element of E;
-    assume x in B /\ C;
+    assume
+    x in B /\ C;
     then x in B & x in C by XBOOLE_0:def 4;
     hence x in A by A1;
   end;
@@ -380,14 +389,16 @@ proof
 A1: for x being Element of E holds x in A iff x in B & not x in C;
   now
     let x be Element of E;
-    assume x in A;
+    assume
+    x in A;
     then x in B & not x in C by A1;
     hence x in B \ C by XBOOLE_0:def 5;
   end;
   hence A c= B \ C by Th7;
   now
     let x be Element of E;
-    assume x in B \ C;
+    assume
+    x in B \ C;
     then x in B & not x in C by XBOOLE_0:def 5;
     hence x in A by A1;
   end;
@@ -402,7 +413,8 @@ proof
 A1: for x being Element of E holds x in A iff not(x in B iff x in C);
   now
     let x be Element of E;
-    assume x in A;
+    assume
+    x in A;
     then x in B & not x in C or x in C & not x in B by A1;
     then x in B \ C or x in C \ B by XBOOLE_0:def 5;
     hence x in B \+\ C by XBOOLE_0:def 3;
@@ -410,7 +422,8 @@ A1: for x being Element of E holds x in A iff not(x in B iff x in C);
   hence A c= B \+\ C by Th7;
   now
     let x be Element of E;
-    assume x in B \+\ C;
+    assume
+    x in B \+\ C;
     then x in B \ C or x in C \ B by XBOOLE_0:def 3;
     then x in B & not x in C or x in C & not x in B by XBOOLE_0:def 5;
     hence x in A by A1;
@@ -449,10 +462,10 @@ theorem Th31:
   A c= B iff B` c= A`
 proof
   thus A c= B implies B` c= A` by XBOOLE_1:34;
-A1: E \ A` = A``
-    .= A;
-  E \ B` = B``
+A1: E \ B` = B``
     .= B;
+  E \ A` = A``
+    .= A;
   hence thesis by A1,XBOOLE_1:34;
 end;
 
@@ -469,9 +482,9 @@ end;
 theorem
   (A \ B)` = A` \/ B
 proof
-  A in bool E & B in bool E by Def2;
+  B in bool E by Def2;
   then
-A1: A c= E & B c= E by ZFMISC_1:def 1;
+A1: B c= E by ZFMISC_1:def 1;
   thus (A \ B)` = (E \ A) \/ E /\ B by XBOOLE_1:52
     .= A` \/ B by A1,XBOOLE_1:28;
 end;
@@ -490,7 +503,8 @@ end;
 theorem
   A c= B` implies B c= A`
 proof
-  assume A c= B`;
+  assume
+  A c= B`;
   then B``c= A` by Th31;
   hence thesis;
 end;
@@ -498,7 +512,8 @@ end;
 theorem
   A` c= B implies B` c= A
 proof
-  assume A` c= B;
+  assume
+  A` c= B;
   then B` c= A`` by Th31;
   hence thesis;
 end;
@@ -518,11 +533,13 @@ theorem
 proof
   thus A` c= A implies A = [#]E
   proof
-    assume A` c= A;
+    assume
+    A` c= A;
     hence A = A \/ A` by XBOOLE_1:12
       .= [#]E by Th25;
   end;
-  assume A = [#]E;
+  assume
+  A = [#]E;
   then A` = {} by XBOOLE_1:37;
   hence thesis by XBOOLE_1:2;
 end;
@@ -555,17 +572,19 @@ A1: A misses B;
     assume
 A2: x in A;
     then
-A3: x in E by Lm1;
-    not x in B by A1,A2,XBOOLE_0:3;
+A3: not x in B by A1,XBOOLE_0:3;
+    x in E by A2,Lm1;
     hence thesis by A3,XBOOLE_0:def 5;
   end;
   assume
 A4: A c= B`;
-  assume A meets B;
+  assume
+  A meets B;
   then consider x such that
-A5: x in A & x in B by XBOOLE_0:3;
+A5: x in A and
+A6: x in B by XBOOLE_0:3;
   x in E \ B by A4,A5,TARSKI:def 3;
-  hence thesis by A5,XBOOLE_0:def 5;
+  hence thesis by A6,XBOOLE_0:def 5;
 end;
 
 theorem
@@ -580,33 +599,34 @@ canceled;
 theorem
   A misses B & A` misses B` implies A = B`
 proof
-A1: A in bool E by Def2;
   assume that
-A2: A misses B and
-A3: A` misses B`;
+A1: A misses B and
+A2: A` misses B`;
+A3: A in bool E by Def2;
   thus A c= B`
   proof
     let x;
     assume
 A4: x in A;
-    A c= E by A1,ZFMISC_1:def 1;
     then
-A5: x in E by A4,TARSKI:def 3;
-    not x in B by A2,A4,XBOOLE_0:3;
+A5: not x in B by A1,XBOOLE_0:3;
+    A c= E by A3,ZFMISC_1:def 1;
+    then x in E by A4,TARSKI:def 3;
     hence thesis by A5,XBOOLE_0:def 5;
   end;
   let x;
-  assume x in B`;
-  then
-A6: x in E & not x in B by XBOOLE_0:def 5;
-  x in A` implies not x in B` by A3,XBOOLE_0:3;
-  hence thesis by A6,XBOOLE_0:def 5;
+A6: x in A` implies not x in B` by A2,XBOOLE_0:3;
+  assume
+A7: x in B`;
+  then x in E by XBOOLE_0:def 5;
+  hence thesis by A7,A6,XBOOLE_0:def 5;
 end;
 
 theorem
   A c= B & C misses B implies A c= C`
 proof
-  assume A c= B & C misses B;
+  assume
+  A c= B & C misses B;
   then A misses C by XBOOLE_1:63;
   hence thesis by Th43;
 end;
@@ -621,7 +641,8 @@ proof
   assume
 A1: for a being Element of A holds a in B;
   let a be set;
-  assume a in A;
+  assume
+  a in A;
   then a is Element of A by Def2;
   hence thesis by A1;
 end;
@@ -634,7 +655,8 @@ A1: for x being Element of E holds x in A;
   thus E c= A
   proof
     let a be set;
-    assume a in E;
+    assume
+    a in E;
     then a is Element of E by Def2;
     hence thesis by A1;
   end;
@@ -643,7 +665,8 @@ A1: for x being Element of E holds x in A;
 end;
 
 theorem
-  E <> {} implies for B for x being Element of E st not x in B holds x in B`
+  E <> {} implies for B for x being Element of E st not x in B holds x
+  in B`
 proof
   assume
 A1: E <> {};
@@ -656,7 +679,8 @@ A2: not x in B;
 end;
 
 theorem Th51:
-  for A,B st for x being Element of E holds x in A iff not x in B holds A = B`
+  for A,B st for x being Element of E holds x in A iff not x in B
+  holds A = B`
 proof
   let A,B be Subset of E;
   assume
@@ -670,14 +694,16 @@ A2: x in A;
     then A c= E by ZFMISC_1:def 1;
     then x in E by A2,TARSKI:def 3;
     then x is Element of E by Def2;
-    then x in E & not x in B by A1,A2,Lm1;
-    hence thesis by XBOOLE_0:def 5;
+    then
+A3: not x in B by A1,A2;
+    x in E by A2,Lm1;
+    hence thesis by A3,XBOOLE_0:def 5;
   end;
   let x be set;
-A3: B` in bool E by Def2;
   assume
 A4: x in B`;
-  B` c= E by A3,ZFMISC_1:def 1;
+  B` in bool E by Def2;
+  then B` c= E by ZFMISC_1:def 1;
   then x in E by A4,TARSKI:def 3;
   then reconsider x as Element of E by Def2;
   not x in B by A4,XBOOLE_0:def 5;
@@ -685,20 +711,23 @@ A4: x in B`;
 end;
 
 theorem
-  for A,B st for x being Element of E holds not x in A iff x in B holds A = B`
+  for A,B st for x being Element of E holds not x in A iff x in B holds
+  A = B`
 proof
   let A,B;
-  assume for x being Element of E holds not x in A iff x in B;
+  assume
+  for x being Element of E holds not x in A iff x in B;
   then for x being Element of E holds x in A iff not x in B;
   hence thesis by Th51;
 end;
 
 theorem
-  for A,B st for x being Element of E holds not(x in A iff x in B)
-  holds A = B`
+  for A,B st for x being Element of E holds not(x in A iff x in B) holds
+  A = B`
 proof
   let A,B;
-  assume for x being Element of E holds not(x in A iff x in B);
+  assume
+  for x being Element of E holds not(x in A iff x in B);
   then for x being Element of E holds x in A iff not x in B;
   hence thesis by Th51;
 end;
@@ -710,13 +739,15 @@ canceled;
 theorem
   X <> {} implies {x1} is Subset of X
 proof
-  assume X <> {};
+  assume
+  X <> {};
   then
 A1: x1 in X by Def2;
   {x1} c= X
   proof
     let x;
-    assume x in {x1};
+    assume
+    x in {x1};
     hence thesis by A1,TARSKI:def 1;
   end;
   then {x1} in bool X by ZFMISC_1:def 1;
@@ -726,13 +757,15 @@ end;
 theorem
   X <> {} implies {x1,x2} is Subset of X
 proof
-  assume X <> {};
+  assume
+  X <> {};
   then
 A1: x1 in X & x2 in X by Def2;
   {x1,x2} c= X
   proof
     let x;
-    assume x in {x1,x2};
+    assume
+    x in {x1,x2};
     hence thesis by A1,TARSKI:def 2;
   end;
   then {x1,x2} in bool X by ZFMISC_1:def 1;
@@ -742,14 +775,17 @@ end;
 theorem
   X <> {} implies {x1,x2,x3} is Subset of X
 proof
-  assume X <> {};
+  assume
+A1: X <> {};
   then
-A1: x1 in X & x2 in X & x3 in X by Def2;
+A2: x3 in X by Def2;
+A3: x1 in X & x2 in X by A1,Def2;
   {x1,x2,x3} c= X
   proof
     let x;
-    assume x in {x1,x2,x3};
-    hence thesis by A1,ENUMSET1:def 1;
+    assume
+    x in {x1,x2,x3};
+    hence thesis by A3,A2,ENUMSET1:def 1;
   end;
   then {x1,x2,x3} in bool X by ZFMISC_1:def 1;
   hence thesis by Def2;
@@ -758,14 +794,17 @@ end;
 theorem
   X <> {} implies {x1,x2,x3,x4} is Subset of X
 proof
-  assume X <> {};
+  assume
+A1: X <> {};
   then
-A1: x1 in X & x2 in X & x3 in X & x4 in X by Def2;
+A2: x3 in X & x4 in X by Def2;
+A3: x1 in X & x2 in X by A1,Def2;
   {x1,x2,x3,x4} c= X
   proof
     let x;
-    assume x in {x1,x2,x3,x4};
-    hence thesis by A1,ENUMSET1:def 2;
+    assume
+    x in {x1,x2,x3,x4};
+    hence thesis by A3,A2,ENUMSET1:def 2;
   end;
   then {x1,x2,x3,x4} in bool X by ZFMISC_1:def 1;
   hence thesis by Def2;
@@ -779,10 +818,10 @@ A1: X <> {};
   {x1,x2,x3,x4,x5} c= X
   proof
     let x;
-    assume
-A2: x in {x1,x2,x3,x4,x5};
-    x in { x1,x2,x3,x4,x5 } implies x=x1 or x=x2 or x=x3 or x=x4 or x=x5
+A2: x in { x1,x2,x3,x4,x5 } implies x=x1 or x=x2 or x=x3 or x=x4 or x=x5
     by ENUMSET1:def 3;
+    assume
+    x in {x1,x2,x3,x4,x5};
     hence thesis by A1,A2,Def2;
   end;
   then {x1,x2,x3,x4,x5} in bool X by ZFMISC_1:def 1;
@@ -797,10 +836,10 @@ A1: X <> {};
   {x1,x2,x3,x4,x5,x6} c= X
   proof
     let x;
+A2: x in { x1,x2,x3,x4,x5,x6} implies x=x1 or x=x2 or x=x3 or x=x4 or x=x5
+    or x=x6 by ENUMSET1:def 4;
     assume
-A2: x in {x1,x2,x3,x4,x5,x6};
-    x in { x1,x2,x3,x4,x5,x6} implies
-    x=x1 or x=x2 or x=x3 or x=x4 or x=x5 or x=x6 by ENUMSET1:def 4;
+    x in {x1,x2,x3,x4,x5,x6};
     hence thesis by A1,A2,Def2;
   end;
   then {x1,x2,x3,x4,x5,x6} in bool X by ZFMISC_1:def 1;
@@ -815,10 +854,10 @@ A1: X <> {};
   {x1,x2,x3,x4,x5,x6,x7} c= X
   proof
     let x;
+A2: x in { x1,x2,x3,x4,x5,x6,x7} implies x=x1 or x=x2 or x=x3 or x=x4 or x
+    =x5 or x=x6 or x=x7 by ENUMSET1:def 5;
     assume
-A2: x in {x1,x2,x3,x4,x5,x6,x7};
-    x in { x1,x2,x3,x4,x5,x6,x7} implies
-    x=x1 or x=x2 or x=x3 or x=x4 or x=x5 or x=x6 or x=x7 by ENUMSET1:def 5;
+    x in {x1,x2,x3,x4,x5,x6,x7};
     hence thesis by A1,A2,Def2;
   end;
   then {x1,x2,x3,x4,x5,x6,x7} in bool X by ZFMISC_1:def 1;
@@ -833,11 +872,10 @@ A1: X <> {};
   {x1,x2,x3,x4,x5,x6,x7,x8} c= X
   proof
     let x;
+A2: x in { x1,x2,x3,x4,x5,x6,x7,x8} implies x=x1 or x=x2 or x=x3 or x=x4
+    or x=x5 or x=x6 or x=x7 or x=x8 by ENUMSET1:def 6;
     assume
-A2: x in {x1,x2,x3,x4,x5,x6,x7,x8};
-    x in { x1,x2,x3,x4,x5,x6,x7,x8} implies
-    x=x1 or x=x2 or x=x3 or x=x4 or x=x5 or x=x6 or x=x7 or x=x8
-    by ENUMSET1:def 6;
+    x in {x1,x2,x3,x4,x5,x6,x7,x8};
     hence thesis by A1,A2,Def2;
   end;
   then {x1,x2,x3,x4,x5,x6,x7,x8} in bool X by ZFMISC_1:def 1;
@@ -847,15 +885,16 @@ end;
 theorem
   x in X implies {x} is Subset of X
 proof
-  assume x in X;
+  assume
+  x in X;
   then {x} c= X by ZFMISC_1:37;
   then {x} in bool X by ZFMISC_1:def 1;
   hence thesis by Def2;
 end;
 
-scheme SubsetEx { A()-> set, P[set] } :
-  ex X being Subset of A() st for x holds x in X iff x in A() & P[x]
-proof
+scheme
+  SubsetEx { A()-> set, P[set] } : ex X being Subset of A() st for x holds x
+  in X iff x in A() & P[x] proof
   consider X being set such that
 A1: for x holds x in X iff x in A() & P[x] from XBOOLE_0:sch 1;
   X c= A()
@@ -869,9 +908,9 @@ A1: for x holds x in X iff x in A() & P[x] from XBOOLE_0:sch 1;
   thus thesis by A1;
 end;
 
-scheme SubsetEq {X() -> set, X1,X2()-> Subset of X(), P[set]}:
- X1() = X2()
- provided
+scheme
+  SubsetEq {X() -> set, X1,X2()-> Subset of X(), P[set]}: X1() = X2()
+provided
 A1: for y being Element of X() holds y in X1() iff P[y] and
 A2: for y being Element of X() holds y in X2() iff P[y]
 proof
@@ -879,11 +918,13 @@ proof
   proof
     let x be Element of X();
     hereby
-      assume x in X1();
+      assume
+      x in X1();
       then P[x] by A1;
       hence x in X2() by A2;
     end;
-    assume x in X2();
+    assume
+    x in X2();
     then P[x] by A2;
     hence thesis by A1;
   end;
@@ -914,7 +955,7 @@ end;
 definition
   let S be set;
   func choose S -> Element of S equals
-   the Element of S;
+  the Element of S;
   correctness;
 end;
 
@@ -924,7 +965,8 @@ reserve Y for set;
 
 Lm2: (for x st x in X holds x in Y) implies X is Subset of Y
 proof
-  assume for x st x in X holds x in Y;
+  assume
+  for x st x in X holds x in Y;
   then X c= Y by TARSKI:def 3;
   then X in bool Y by ZFMISC_1:def 1;
   hence thesis by Def2;
@@ -932,16 +974,17 @@ end;
 
 Lm3: x in A implies x is Element of E
 proof
-  assume x in A;
+  assume
+  x in A;
   then x in E by Lm1;
   hence thesis by Def2;
 end;
 
 :: from SETWISEO, 2005.6.11 , A.T.
 
-scheme SubsetEx { A() -> non empty set, P[set] } : ex B being Subset of A() st
-  for x being Element of A() holds x in B iff P[x]
-proof
+scheme
+  SubsetEx { A() -> non empty set, P[set] } : ex B being Subset of A() st for
+  x being Element of A() holds x in B iff P[x] proof
   consider B being set such that
 A1: for x being set holds x in B iff x in A() & P[x] from XBOOLE_0:sch 1;
   for x being set holds x in B implies x in A() by A1;
@@ -954,10 +997,10 @@ end;
 
 :: from GROUP_2, 2005.6.14 , A.T.
 
-scheme SubComp{A() -> set, F1,F2() -> Subset of A(), P[set]}: F1() = F2()
+scheme
+  SubComp{A() -> set, F1,F2() -> Subset of A(), P[set]}: F1() = F2()
 provided
-A1: for X being Element of A() holds X in F1() iff P[X]
-and
+A1: for X being Element of A() holds X in F1() iff P[X] and
 A2: for X being Element of A() holds X in F2() iff P[X]
 proof
   thus F1() c= F2()
@@ -982,7 +1025,8 @@ end;
 theorem
   A` = B` implies A = B
 proof
-  assume A` = B`;
+  assume
+  A` = B`;
   hence A = B``
     .= B;
 end;
@@ -993,11 +1037,12 @@ registration
   let X be empty set;
   cluster -> empty Subset of X;
   coherence
-   proof let Y be Subset of X;
-     Y in bool X by Def2;
-     then Y c= X by ZFMISC_1:def 1;
+  proof
+    let Y be Subset of X;
+    Y in bool X by Def2;
+    then Y c= X by ZFMISC_1:def 1;
     hence thesis by XBOOLE_1:3;
-   end;
+  end;
 end;
 
 :: from TEX_2, 2006.06.18, A.T. (simplified)
@@ -1006,16 +1051,16 @@ definition
   let E be set;
   let A be Subset of E;
   attr A is proper means
- A <> E;
+  A <> E;
 end;
 
 registration
   let E be set;
   cluster [#]E -> non proper;
   coherence
-   proof
+  proof
     thus [#]E = E;
-   end;
+  end;
 end;
 
 registration
@@ -1032,10 +1077,12 @@ registration
   let E be non empty set;
   cluster non proper -> non empty Subset of E;
   coherence
-   proof let A be Subset of E;
-    assume A = E;
+  proof
+    let A be Subset of E;
+    assume
+    A = E;
     hence thesis;
-   end;
+  end;
   cluster empty -> proper Subset of E;
   coherence;
 end;
@@ -1050,11 +1097,13 @@ registration
   end;
 end;
 
-registration let E be empty set;
- cluster -> non proper Subset of E;
- coherence
-  proof let A be Subset of E;
-   thus A = E;
+registration
+  let E be empty set;
+  cluster -> non proper Subset of E;
+  coherence
+  proof
+    let A be Subset of E;
+    thus A = E;
   end;
 end;
 

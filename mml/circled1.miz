@@ -15,8 +15,8 @@ environ
       RVSUM_1, RLTOPSP1, RUSUB_5;
  constructors PARTFUN1, SETFAM_1, DOMAIN_1, XXREAL_0, REAL_1, BINOP_2,
       COMPLEX1, FINSOP_1, RVSUM_1, RUSUB_5, CONVEX1, RLTOPSP1, RELSET_1;
- registrations XBOOLE_0, SUBSET_1, RELSET_1, FINSET_1, NUMBERS, XXREAL_0,
-      XREAL_0, MEMBERED, STRUCT_0, RLVECT_1, RLTOPSP1, VALUED_0;
+ registrations XBOOLE_0, SUBSET_1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0,
+      MEMBERED, STRUCT_0, RLVECT_1, RLTOPSP1, VALUED_0, FINSEQ_1, CARD_1;
  requirements BOOLE, REAL, NUMERALS, SUBSET, ARITHM;
  definitions TARSKI, XBOOLE_0, RLTOPSP1, RVSUM_1;
  theorems TARSKI, XBOOLE_0, XBOOLE_1, ZFMISC_1, SUBSET_1, SETFAM_1, XCMPLX_0,
@@ -27,11 +27,14 @@ environ
 
 begin :: Circled Sets
 
-Lm1: for V being non empty RLSStruct, M,N being Subset of V,
-x,y being VECTOR of V st x in M & y in N holds x-y in M - N
+Lm1: for V being non empty RLSStruct, M,N being Subset of V, x,y being VECTOR
+of V st x in M & y in N holds x-y in M - N
+
 proof
   let V be non empty RLSStruct, M,N be Subset of V, x,y be VECTOR of V;
+
   M-N = {u - v where u,v is VECTOR of V: u in M & v in N} by RUSUB_5:def 2;
+
   hence thesis;
 end;
 
@@ -40,23 +43,25 @@ theorem Th1:
   A-B is circled
 proof
   let V be RealLinearSpace,A,B be circled Subset of V;
-  let r be Real such that
-A1: abs r <= 1;
-A2: r*(A-B) = {r * v where v is VECTOR of V: v in A - B} by CONVEX1:def 1;
-A3: A-B = {u - v where u,v is VECTOR of V: u in A & v in B} by RUSUB_5:def 2;
+A1: A-B = {u - v where u,v is VECTOR of V: u in A & v in B} by RUSUB_5:def 2;
+  let r be Real;
+  assume
+  abs r <= 1;
+  then
+A2: r*A c= A & r*B c= B by RLTOPSP1:def 6;
   let x be set;
-  assume x in r*(A-B);
+  assume
+A3: x in r*(A-B);
+  r*(A-B) = {r * v where v is VECTOR of V: v in A - B} by CONVEX1:def 1;
   then consider x' being VECTOR of V such that
 A4: x = r*x' and
-A5: x' in A-B by A2;
+A5: x' in A-B by A3;
   consider u,v being VECTOR of V such that
 A6: x' = u-v and
-A7: u in A and
-A8: v in B by A3,A5;
-A9: r*A c= A & r*B c= B by A1,RLTOPSP1:def 6;
-A10: r*u in r*A & r*v in r*B by A7,A8,RLTOPSP1:1;
+A7: u in A & v in B by A1,A5;
+A8: r*u in r*A & r*v in r*B by A7,RLTOPSP1:1;
   x = r*u-r*v by A4,A6,RLVECT_1:48;
-  hence thesis by A9,A10,Lm1;
+  hence thesis by A2,A8,Lm1;
 end;
 
 registration
@@ -69,72 +74,76 @@ definition
   let V be non empty RLSStruct, M be Subset of V;
   redefine attr M is circled means
   :Def1:
-  for u being VECTOR of V, r being Real st abs(r) <= 1 & u in M holds
-  r*u in M;
+  for u being VECTOR of V, r being
+  Real st abs(r) <= 1 & u in M holds r*u in M;
   compatibility
   proof
-    thus M is circled implies for u being VECTOR of V,
-    r being Real st abs(r) <= 1 & u in M holds r*u in M
+    thus M is circled implies for u being VECTOR of V, r being Real st abs(r)
+    <= 1 & u in M holds r*u in M
     proof
       assume
 A1:   M is circled;
       let u be VECTOR of V, r be Real;
       assume
-A2:   abs r <= 1;
-      assume u in M;
+      abs r <= 1;
       then
-A3:   r*u in r * M by RLTOPSP1:1;
-      r * M c= M by A1,A2,RLTOPSP1:def 6;
-      hence thesis by A3;
+A2:   r * M c= M by A1,RLTOPSP1:def 6;
+      assume
+      u in M;
+      then r*u in r * M by RLTOPSP1:1;
+      hence thesis by A2;
     end;
     assume
-A4: for u being VECTOR of V,
-    r being Real st abs(r) <= 1 & u in M holds r*u in M;
+A3: for u being VECTOR of V, r being Real st abs(r) <= 1 & u in M
+    holds r*u in M;
     let r be Real;
     assume
-A5: abs r <= 1;
+A4: abs r <= 1;
     for x being Element of V st x in r * M holds x in M
     proof
       let x be Element of V;
-      assume x in r * M;
+      assume
+      x in r * M;
       then consider u be Element of V such that
-A6:   x = u & u in r*M;
+A5:   x = u and
+A6:   u in r*M;
       u in {r * w where w is Element of V : w in M} by A6,CONVEX1:def 1;
-      then consider w1 be Element of V such that
-A7:   u = r * w1 & w1 in M;
-      thus thesis by A4,A5,A6,A7;
+      then ex w1 be Element of V st u = r * w1 & w1 in M;
+      hence thesis by A3,A4,A5;
     end;
     hence thesis by SUBSET_1:7;
   end;
 end;
 
 theorem Th2:
-  for V be RealLinearSpace, M being Subset of V, r being Real st
-  M is circled holds r * M is circled
+  for V be RealLinearSpace, M being Subset of V, r being Real st M
+  is circled holds r * M is circled
 proof
   let V be RealLinearSpace, M be Subset of V, r be Real;
   assume
 A1: M is circled;
-  for u being VECTOR of V, p being Real st
-  abs p <= 1 & u in r * M holds p*u in r*M
+  for u being VECTOR of V, p being Real st abs p <= 1 & u in r * M holds p
+  *u in r*M
   proof
     let u be VECTOR of V, p be Real;
-    assume
-A2: abs p <= 1 & u in r * M;
-    then u in {r * w where w is Element of V: w in M} by CONVEX1:def 1;
+    assume that
+A2: abs p <= 1 and
+A3: u in r * M;
+    u in {r * w where w is Element of V: w in M} by A3,CONVEX1:def 1;
     then consider u' be Element of V such that
-A3: u = r * u' & u' in M;
-A4: p*u = r*p*u' by A3,RLVECT_1:def 9
+A4: u = r * u' and
+A5: u' in M;
+A6: p*u = r*p*u' by A4,RLVECT_1:def 9
       .= r*(p*u') by RLVECT_1:def 9;
-    p*u' in M by A1,A2,A3,Def1;
-    hence thesis by A4,RLTOPSP1:1;
+    p*u' in M by A1,A2,A5,Def1;
+    hence thesis by A6,RLTOPSP1:1;
   end;
   hence thesis by Def1;
 end;
 
 theorem Th3:
-  for V be RealLinearSpace, M1,M2 being Subset of V, r1,r2 being Real st
-  M1 is circled & M2 is circled holds r1*M1 + r2*M2 is circled
+  for V be RealLinearSpace, M1,M2 being Subset of V, r1,r2 being
+  Real st M1 is circled & M2 is circled holds r1*M1 + r2*M2 is circled
 proof
   let V be RealLinearSpace, M1,M2 be Subset of V, r1,r2 be Real;
   assume that
@@ -144,43 +153,48 @@ A2: M2 is circled;
   assume that
 A3: abs p <= 1 and
 A4: u in r1*M1 + r2*M2;
-  u in {x+y where x,y is VECTOR of V : x in r1*M1 & y in r2*M2}
-  by A4,RUSUB_4:def 10;
+  u in {x+y where x,y is VECTOR of V : x in r1*M1 & y in r2*M2} by A4,
+  RUSUB_4:def 10;
   then consider u1,u2 be VECTOR of V such that
-A5: u = u1 + u2 & u1 in r1*M1 & u2 in r2*M2;
-  u1 in {r1*x where x is VECTOR of V : x in M1} by A5,CONVEX1:def 1;
+A5: u = u1 + u2 and
+A6: u1 in r1*M1 and
+A7: u2 in r2*M2;
+  u1 in {r1*x where x is VECTOR of V : x in M1} by A6,CONVEX1:def 1;
   then consider x1 be VECTOR of V such that
-A6: u1 = r1*x1 & x1 in M1;
-  u2 in {r2*x where x is VECTOR of V : x in M2} by A5,CONVEX1:def 1;
-  then consider x2 be VECTOR of V such that
-A7: u2 = r2*x2 & x2 in M2;
-A8: p*x1 in M1 & p*x2 in M2 by A1,A2,A3,A6,A7,Def1;
-  p*u1 = r1*p*x1 by A6,RLVECT_1:def 9
+A8: u1 = r1*x1 and
+A9: x1 in M1;
+A10: p*u1 = r1*p*x1 by A8,RLVECT_1:def 9
     .= r1*(p*x1) by RLVECT_1:def 9;
-  then
-A9: p*u1 in r1*M1 by A8,RLTOPSP1:1;
-  p*u2 = r2*p*x2 by A7,RLVECT_1:def 9
+  u2 in {r2*x where x is VECTOR of V : x in M2} by A7,CONVEX1:def 1;
+  then consider x2 be VECTOR of V such that
+A11: u2 = r2*x2 and
+A12: x2 in M2;
+A13: p*u2 = r2*p*x2 by A11,RLVECT_1:def 9
     .= r2*(p*x2) by RLVECT_1:def 9;
+  p*x2 in M2 by A2,A3,A12,Def1;
   then
-A10: p*u2 in r2*M2 by A8,RLTOPSP1:1;
+A14: p*u2 in r2*M2 by A13,RLTOPSP1:1;
+  p*x1 in M1 by A1,A3,A9,Def1;
+  then
+A15: p*u1 in r1*M1 by A10,RLTOPSP1:1;
   p*(u1+u2) = p*u1 + p*u2 by RLVECT_1:def 9;
-  then p*(u1+u2) in {x+y where x,y is VECTOR of V:
-  x in r1*M1 & y in r2*M2} by A9,A10;
+  then
+  p*(u1+u2) in {x+y where x,y is VECTOR of V: x in r1*M1 & y in r2*M2} by
+  A15,A14;
   hence thesis by A5,RUSUB_4:def 10;
 end;
 
 theorem
-  for V be RealLinearSpace, M1,M2,M3 being Subset of V, r1,r2,r3 being Real st
-  M1 is circled & M2 is circled & M3 is circled holds
-  r1*M1 + r2*M2 + r3*M3 is circled
+  for V be RealLinearSpace, M1,M2,M3 being Subset of V, r1,r2,r3 being
+Real st M1 is circled & M2 is circled & M3 is circled holds r1*M1 + r2*M2 + r3*
+  M3 is circled
 proof
   let V be RealLinearSpace, M1,M2,M3 be Subset of V, r1,r2,r3 be Real;
   assume that
-A1: M1 is circled and
-A2: M2 is circled and
-A3: M3 is circled;
-  r1*M1 + r2*M2 is circled by A1,A2,Th3;
-  then 1*(r1*M1 + r2*M2) + r3*M3 is circled by A3,Th3;
+A1: M1 is circled & M2 is circled and
+A2: M3 is circled;
+  r1*M1 + r2*M2 is circled by A1,Th3;
+  then 1*(r1*M1 + r2*M2) + r3*M3 is circled by A2,Th3;
   hence thesis by CONVEX1:32;
 end;
 
@@ -188,7 +202,8 @@ theorem
   for V being RealLinearSpace holds Up((0).V) is circled
 proof
   let V be RealLinearSpace, u be VECTOR of V, r be Real;
-  assume that abs(r) <= 1 and
+  assume that
+  abs(r) <= 1 and
 A1: u in Up((0).V);
   u in the carrier of (0).V by A1,RUSUB_4:def 6;
   then u in {0.V} by RLSUB_1:def 3;
@@ -209,27 +224,32 @@ proof
 end;
 
 theorem
-  for V being RealLinearSpace, M,N being circled Subset of V holds
-  M /\ N is circled
+  for V being RealLinearSpace, M,N being circled Subset of V holds M /\
+  N is circled
 proof
-  let V be RealLinearSpace, M,N be circled Subset of V,
-  x be VECTOR of V, r be Real;
-  assume
-A1: abs r <= 1 & x in M /\ N;
-  then x in M & x in N by XBOOLE_0:def 4;
-  then r * x in M & r * x in N by A1,Def1;
-  hence thesis by XBOOLE_0:def 4;
+  let V be RealLinearSpace, M,N be circled Subset of V, x be VECTOR of V, r be
+  Real;
+  assume that
+A1: abs r <= 1 and
+A2: x in M /\ N;
+  x in N by A2,XBOOLE_0:def 4;
+  then
+A3: r * x in N by A1,Def1;
+  x in M by A2,XBOOLE_0:def 4;
+  then r * x in M by A1,Def1;
+  hence thesis by A3,XBOOLE_0:def 4;
 end;
 
 theorem
-  for V being RealLinearSpace, M,N being circled Subset of V holds
-  M \/ N is circled
+  for V being RealLinearSpace, M,N being circled Subset of V holds M \/
+  N is circled
 proof
-  let V be RealLinearSpace, M,N be circled Subset of V,
-  x be VECTOR of V, r be Real;
-  assume
-A1: abs r <= 1 & x in M \/ N;
-  then x in M or x in N by XBOOLE_0:def 3;
+  let V be RealLinearSpace, M,N be circled Subset of V, x be VECTOR of V, r be
+  Real;
+  assume that
+A1: abs r <= 1 and
+A2: x in M \/ N;
+  x in M or x in N by A2,XBOOLE_0:def 3;
   then r * x in M or r * x in N by A1,Def1;
   hence thesis by XBOOLE_0:def 3;
 end;
@@ -240,12 +260,13 @@ definition
   let V be non empty RLSStruct, M be Subset of V;
   func Circled-Family M -> Subset-Family of V means
   :Def2:
-  for N being Subset of V holds N in it iff N is circled & M c= N;
+  for N being Subset
+  of V holds N in it iff N is circled & M c= N;
   existence
   proof
     defpred P[Subset of V] means $1 is circled & M c= $1;
-    thus ex F be Subset-Family of V st
-    for N being Subset of V holds N in F iff P[N] from SUBSET_1:sch 3;
+    thus ex F be Subset-Family of V st for N being Subset of V holds N in F
+    iff P[N] from SUBSET_1:sch 3;
   end;
   uniqueness
   proof
@@ -257,11 +278,13 @@ A2: for N being Subset of V holds N in SG iff N is circled & M c= N;
     proof
       let Y be Subset of V;
       hereby
-        assume Y in SF;
+        assume
+        Y in SF;
         then Y is circled & M c= Y by A1;
         hence Y in SG by A2;
       end;
-      assume Y in SG;
+      assume
+      Y in SG;
       then Y is circled & M c= Y by A2;
       hence thesis by A1;
     end;
@@ -272,12 +295,11 @@ end;
 definition
   let V be RealLinearSpace, M be Subset of V;
   func Cir M -> circled Subset of V equals
-
   meet Circled-Family M;
   coherence
   proof
-    for N being Subset of V st N in Circled-Family M holds
-    N is circled by Def2;
+    for N being Subset of V st N in Circled-Family M holds N is circled by
+    Def2;
     then Circled-Family M is circled-membered by RLTOPSP1:def 7;
     hence thesis by RLTOPSP1:31;
   end;
@@ -288,23 +310,24 @@ registration
   cluster Circled-Family M -> non empty;
   coherence
   proof
-A1: Up((Omega).V) is circled by Th6;
-    M c= Up((Omega).V)
+A1: M c= Up((Omega).V)
     proof
       let u be set;
-      assume u in M;
+      assume
+      u in M;
       then reconsider u as Element of V;
       u in the carrier of the RLSStruct of V;
       then u in the carrier of (Omega).V by RLSUB_1:def 4;
       hence thesis by RUSUB_4:def 6;
     end;
+    Up((Omega).V) is circled by Th6;
     hence thesis by A1,Def2;
   end;
 end;
 
 theorem Th9:
-  for V being RealLinearSpace, M1,M2 being Subset of V st M1 c= M2 holds
-  Circled-Family M2 c= Circled-Family M1
+  for V being RealLinearSpace, M1,M2 being Subset of V st M1 c= M2
+  holds Circled-Family M2 c= Circled-Family M1
 proof
   let V be RealLinearSpace, M1,M2 be Subset of V such that
 A1: M1 c= M2;
@@ -323,18 +346,21 @@ theorem
   for V being RealLinearSpace, M1,M2 being Subset of V st M1 c= M2 holds
   Cir M1 c= Cir M2
 proof
-  let V be RealLinearSpace, M1,M2 be Subset of V such that
-A1: M1 c= M2;
+  let V be RealLinearSpace, M1,M2 be Subset of V;
+  assume
+  M1 c= M2;
+  then Circled-Family M2 c= Circled-Family M1 by Th9;
+  then
+A1: meet Circled-Family M1 c= meet Circled-Family M2 by SETFAM_1:7;
   let x be set;
   assume
-A2: x in Cir M1;
-  Circled-Family M2 c= Circled-Family M1 by A1,Th9;
-  then meet Circled-Family M1 c= meet Circled-Family M2 by SETFAM_1:7;
-  hence thesis by A2;
+  x in Cir M1;
+  hence thesis by A1;
 end;
 
 theorem Th11:
-  for V being RealLinearSpace, M being Subset of V holds M c= Cir(M)
+  for V being RealLinearSpace, M being Subset of V holds M c= Cir(
+  M)
 proof
   let V be RealLinearSpace, M be Subset of V, u be set;
   assume
@@ -345,24 +371,26 @@ A1: u in M;
     assume
 A2: Y in Circled-Family M;
     then reconsider Y as Subset of V;
-    Y is circled& M c= Y by A2,Def2;
+    M c= Y by A2,Def2;
     hence thesis by A1;
   end;
   hence thesis by SETFAM_1:def 1;
 end;
 
 theorem Th12:
-  for V being RealLinearSpace, M being Subset of V,
-  N being circled Subset of V st M c= N holds Cir M c= N
+  for V being RealLinearSpace, M being Subset of V, N being
+  circled Subset of V st M c= N holds Cir M c= N
 proof
   let V be RealLinearSpace, M be Subset of V, N be circled Subset of V;
-  assume M c= N;
+  assume
+  M c= N;
   then N in Circled-Family M by Def2;
   hence thesis by SETFAM_1:4;
 end;
 
 theorem
-  for V being RealLinearSpace, M being circled Subset of V holds Cir M = M
+  for V being RealLinearSpace, M being circled Subset of V holds Cir M =
+  M
 proof
   let V be RealLinearSpace, M be circled Subset of V;
   thus Cir M c= M by Th12;
@@ -378,8 +406,8 @@ proof
 end;
 
 theorem
-  for V being RealLinearSpace, M being Subset of V, r being Real
-  holds r*Cir M = Cir(r*M)
+  for V being RealLinearSpace, M being Subset of V, r being Real holds r
+  *Cir M = Cir(r*M)
 proof
   let V be RealLinearSpace, M be Subset of V, r be Real;
   thus r*Cir M c= Cir(r*M)
@@ -389,25 +417,27 @@ proof
     suppose
 A1:   r = 0;
       per cases;
-      suppose M = {};
+      suppose
+        M = {};
         then M = {}V;
         then Cir M = {} by Th14;
         hence thesis by CONVEX1:33;
       end;
       suppose
 A2:     M <> {};
-        then Cir M <> {} by Th11,XBOOLE_1:3;
+        then r * M = {0.V} by A1,CONVEX1:34;
         then
-A3:     r*Cir M = {0.V} by A1,CONVEX1:34;
-        r * M = {0.V} by A1,A2,CONVEX1:34;
-        then {0.V} c= Cir(r*M) by Th11;
+A3:     {0.V} c= Cir(r*M) by Th11;
+        Cir M <> {} by A2,Th11,XBOOLE_1:3;
+        then r*Cir M = {0.V} by A1,CONVEX1:34;
         hence thesis by A3;
       end;
     end;
     suppose
 A4:   r <> 0;
 A5:   r*Cir M = {r*v where v is Point of V: v in Cir M} by CONVEX1:def 1;
-      assume x in r*Cir M;
+      assume
+      x in r*Cir M;
       then consider v being Point of V such that
 A6:   x = r*v and
 A7:   v in Cir M by A5;
@@ -415,33 +445,32 @@ A7:   v in Cir M by A5;
       proof
         let W be set;
         assume
-A9:     W in Circled-Family (r*M);
+A8:     W in Circled-Family (r*M);
         then reconsider W as Subset of V;
-A10:    W is circled by A9,Def2;
-        r * M c= W by A9,Def2;
+        r * M c= W by A8,Def2;
         then r"*(r*M) c= r"*W by CONVEX1:39;
         then (r"*r)*M c= r"*W by CONVEX1:37;
         then 1*M c= r"*W by A4,XCMPLX_0:def 7;
         then
-A11:    M c= r"*W by CONVEX1:32;
-A12:    r"*W = {r"*w where w is Point of V: w in W} by CONVEX1:def 1;
-        r"*W is circled by A10,Th2;
-        then r"*W in Circled-Family M by A11,Def2;
-        then v in r"*W by A7,SETFAM_1:def 1;
+A9:     M c= r"*W by CONVEX1:32;
+        W is circled by A8,Def2;
+        then r"*W is circled by Th2;
+        then r"*W in Circled-Family M by A9,Def2;
+        then r"*W = {r"*w where w is Point of V: w in W} & v in r"*W by A7,
+        CONVEX1:def 1,SETFAM_1:def 1;
         then consider w being Point of V such that
-A13:    v = r"*w and
-A14:    w in W by A12;
-        r*v = (r*r")*w by A13,RLVECT_1:def 9
+A10:    v = r"*w and
+A11:    w in W;
+        r*v = (r*r")*w by A10,RLVECT_1:def 9
           .= 1*w by A4,XCMPLX_0:def 7
           .= w by RLVECT_1:def 9;
-        hence thesis by A14;
+        hence thesis by A11;
       end;
       hence thesis by A6,SETFAM_1:def 1;
     end;
   end;
-A15: r * M c= r*Cir M by Th11,CONVEX1:39;
-  r*Cir M is circled by Th2;
-  hence thesis by A15,Th12;
+  r * M c= r*Cir M & r*Cir M is circled by Th2,Th11,CONVEX1:39;
+  hence thesis by Th12;
 end;
 
 begin :: Basic properties of Combination
@@ -451,9 +480,9 @@ definition
   attr L is circled means
   :Def4:
   ex F being FinSequence of the carrier of V st
-  F is one-to-one & rng F = Carrier L &
-  (ex f being FinSequence of REAL st len f = len F & Sum(f) = 1 &
-  (for n being Nat st n in dom f holds f.n = L.(F.n) & f.n >= 0));
+F is one-to-one & rng F = Carrier L & ex f being FinSequence of REAL st len f =
+len F & Sum(f) = 1 & for n being Nat st n in dom f holds f.n = L.(F.n) & f.n >=
+  0;
 end;
 
 theorem Th16:
@@ -465,57 +494,62 @@ proof
 A1: L is circled and
 A2: Carrier L = {};
   consider F being FinSequence of the carrier of V such that
-A3: (F is one-to-one & rng F = Carrier L &
-  (ex f being FinSequence of REAL st len f = len F & Sum(f) = 1 &
-  (for n being Nat st n in dom f holds f.n = L.(F.n) & f.n >= 0))) by A1,Def4;
-  consider f be FinSequence of REAL such that
-A4: len f = len F & Sum(f) = 1 &
-  (for n being Nat st n in dom f holds f.n = L.(F.n) & f.n >= 0) by A3;
+A3: F is one-to-one & rng F = Carrier L and
+A4: ex f being FinSequence of REAL st len f = len F & Sum(f) = 1 & for n
+  being Nat st n in dom f holds f.n = L.(F.n) & f.n >= 0 by A1,Def4;
+  consider f being FinSequence of REAL such that
+W:  len f = len F & Sum(f) = 1 & for n
+  being Nat st n in dom f holds f.n = L.(F.n) & f.n >= 0 by A4;
   len F = 0 by A2,A3,CARD_1:47,FINSEQ_4:77;
-  hence contradiction by A4,FINSEQ_1:32,RVSUM_1:102;
+  then f = <*>the carrier of V by W;
+  hence contradiction by A4,RVSUM_1:102,W;
 end;
 
 theorem Th17:
-  for V being RealLinearSpace, L being Linear_Combination of V,
-  v being VECTOR of V st L is circled & L.v <= 0 holds not v in Carrier(L)
+  for V being RealLinearSpace, L being Linear_Combination of V, v
+  being VECTOR of V st L is circled & L.v <= 0 holds not v in Carrier(L)
 proof
   let V be RealLinearSpace, L be Linear_Combination of V, v be VECTOR of V;
   assume that
 A1: L is circled and
 A2: L.v <= 0;
   per cases by A2;
-  suppose L.v = 0;
+  suppose
+    L.v = 0;
     hence thesis by RLVECT_2:28;
   end;
   suppose
 A3: L.v < 0;
     now
-      assume
-A4:   v in Carrier(L);
       consider F being FinSequence of the carrier of V such that
       F is one-to-one and
-A5:   rng F = Carrier L and
-A6:   ex f being FinSequence of REAL st len f = len F & Sum(f) = 1 &
+A4:   rng F = Carrier L and
+A5:   ex f being FinSequence of REAL st len f = len F & Sum(f) = 1 &
       for n being Nat st n in dom f holds f.n = L.(F.n) & f.n >= 0 by A1,Def4;
+      assume
+      v in Carrier(L);
+      then consider n be set such that
+A6:   n in dom F and
+A7:   F.n = v by A4,FUNCT_1:def 5;
+      reconsider n as Element of NAT by A6;
       consider f being FinSequence of REAL such that
-A7:   len f = len F and Sum f = 1 and
-A8:   for n being Nat st n in dom f holds f.n = L.(F.n) & f.n >= 0 by A6;
-      consider n be set such that
-A9:   n in dom F & F.n = v by A4,A5,FUNCT_1:def 5;
-      reconsider n as Element of NAT by A9;
-      n in Seg len F by A9,FINSEQ_1:def 3;
+A8:   len f = len F and
+      Sum f = 1 and
+A9:   for n being Nat st n in dom f holds f.n = L.(F.n) & f.n >= 0 by
+      A5;
+      n in Seg len F by A6,FINSEQ_1:def 3;
       then
-A10:  n in dom f by A7,FINSEQ_1:def 3;
-      then L.v = f.n by A8,A9;
-      hence contradiction by A3,A8,A10;
+A10:  n in dom f by A8,FINSEQ_1:def 3;
+      then L.v = f.n by A9,A7;
+      hence contradiction by A3,A9,A10;
     end;
     hence thesis;
   end;
 end;
 
 theorem
-  for V being RealLinearSpace, L being Linear_Combination of V st
-  L is circled holds L <> ZeroLC(V)
+  for V being RealLinearSpace, L being Linear_Combination of V st L is
+  circled holds L <> ZeroLC(V)
 proof
   let V be RealLinearSpace, L be Linear_Combination of V;
   assume that
@@ -526,46 +560,46 @@ A2: L = ZeroLC(V);
 end;
 
 theorem Th19:
-  for V being RealLinearSpace holds
-  ex L be Linear_Combination of V st L is circled
+  for V being RealLinearSpace holds ex L be Linear_Combination of
+  V st L is circled
 proof
   let V be RealLinearSpace;
   consider u being Element of V;
   consider L being Linear_Combination of {u} such that
 A1: L.u = 1 from RLVECT_4:sch 2;
-A2: L is circled
+  take L;
+  L is circled
   proof
-A3: Carrier L c= {u} by RLVECT_2:def 8;
-    u in {w where w is Element of V : L.w <> 0} by A1;
-    then u in Carrier L by RLVECT_2:def 6;
-    then {u} c= Carrier L by ZFMISC_1:37;
-    then
-A4: Carrier L = {u} by A3,XBOOLE_0:def 10;
-A5: ex f being FinSequence of REAL st len f = len <*u*> & Sum(f) = 1 &
-    for n being Nat st n in dom f holds f.n = L.(<*u*>.n) & f.n >= 0
+    take <*u*>;
+A2: ex f being FinSequence of REAL st len f = len <*u*> & Sum(f) = 1 & for
+    n being Nat st n in dom f holds f.n = L.(<*u*>.n) & f.n >= 0
     proof
       reconsider f = <*1*> as FinSequence of REAL;
-A6:   len <*1*> = 1 by FINSEQ_1:56
-        .= len <*u*> by FINSEQ_1:56;
-A7:   for n being Nat st n in dom f holds f.n = L.(<*u*>.n) & f.n >= 0
+      take f;
+A3:   for n being Nat st n in dom f holds f.n = L.(<*u*>.n) & f.n >= 0
       proof
         let n be Nat;
-        assume n in dom f;
+        assume
+        n in dom f;
         then n in {1} by FINSEQ_1:4,55;
         then
-A8:     n = 1 by TARSKI:def 1;
+A4:     n = 1 by TARSKI:def 1;
         then f.n = L.u by A1,FINSEQ_1:57
-          .= L.(<*u*>.n) by A8,FINSEQ_1:57;
-        hence thesis by A8,FINSEQ_1:57;
+          .= L.(<*u*>.n) by A4,FINSEQ_1:57;
+        hence thesis by A4,FINSEQ_1:57;
       end;
-      take f;
-      thus thesis by A6,A7,FINSOP_1:12;
+      len <*1*> = 1 by FINSEQ_1:56
+        .= len <*u*> by FINSEQ_1:56;
+      hence thesis by A3,FINSOP_1:12;
     end;
-    take <*u*>;
-    thus thesis by A4,A5,FINSEQ_1:55,FINSEQ_3:102;
+    u in {w where w is Element of V : L.w <> 0} by A1;
+    then u in Carrier L by RLVECT_2:def 6;
+    then Carrier L c= {u} & {u} c= Carrier L by
+    RLVECT_2:def 8,ZFMISC_1:37;
+    then Carrier L = {u} by XBOOLE_0:def 10;
+    hence thesis by A2,FINSEQ_1:55,FINSEQ_3:102;
   end;
-  take L;
-  thus thesis by A2;
+  hence thesis;
 end;
 
 registration
@@ -591,38 +625,38 @@ A1: u in M by XBOOLE_0:def 1;
 A2: L.u = 1 from RLVECT_4:sch 2;
   {u} c= M by A1,ZFMISC_1:37;
   then reconsider L as Linear_Combination of M by RLVECT_2:33;
-A3: L is circled
+  take L;
+  L is circled
   proof
-A4: Carrier L c= {u} by RLVECT_2:def 8;
-    u in {w where w is Element of V : L.w <> 0} by A2;
-    then u in Carrier L by RLVECT_2:def 6;
-    then {u} c= Carrier L by ZFMISC_1:37;
-    then
-A5: Carrier L = {u} by A4,XBOOLE_0:def 10;
-A6: ex f being FinSequence of REAL st len f = len <*u*> & Sum(f) = 1 &
-    for n being Nat st n in dom f holds f.n = L.(<*u*>.n) & f.n >= 0
+    take <*u*>;
+A3: ex f being FinSequence of REAL st len f = len <*u*> & Sum(f) = 1 & for
+    n being Nat st n in dom f holds f.n = L.(<*u*>.n) & f.n >= 0
     proof
       reconsider f = <*1*> as FinSequence of REAL;
-A7:   len <*1*> = 1 by FINSEQ_1:56
-        .= len <*u*> by FINSEQ_1:56;
-A8:   for n being Nat st n in dom f holds f.n = L.(<*u*>.n) & f.n >= 0
+      take f;
+A4:   for n being Nat st n in dom f holds f.n = L.(<*u*>.n) & f.n >= 0
       proof
         let n be Nat;
-        assume n in dom f;
+        assume
+        n in dom f;
         then n in {1} by FINSEQ_1:4,55;
         then
-A9:     n = 1 by TARSKI:def 1;
+A5:     n = 1 by TARSKI:def 1;
         then f.n = 1 by FINSEQ_1:57;
-        hence thesis by A2,A9,FINSEQ_1:57;
+        hence thesis by A2,A5,FINSEQ_1:57;
       end;
-      take f;
-      thus thesis by A7,A8,FINSOP_1:12;
+      len <*1*> = 1 by FINSEQ_1:56
+        .= len <*u*> by FINSEQ_1:56;
+      hence thesis by A4,FINSOP_1:12;
     end;
-    take <*u*>;
-    thus thesis by A5,A6,FINSEQ_1:55,FINSEQ_3:102;
+    u in {w where w is Element of V : L.w <> 0} by A2;
+    then u in Carrier L by RLVECT_2:def 6;
+    then Carrier L c= {u} & {u} c= Carrier L by
+    RLVECT_2:def 8,ZFMISC_1:37;
+    then Carrier L = {u} by XBOOLE_0:def 10;
+    hence thesis by A3,FINSEQ_1:55,FINSEQ_3:102;
   end;
-  take L;
-  thus thesis by A3;
+  hence thesis;
 end;
 
 registration
@@ -640,24 +674,24 @@ definition
   let V be RealLinearSpace;
   defpred P[set] means $1 is circled_Combination of V;
   func circledComb V means
-
-  for L being set holds
-  L in it iff L is circled_Combination of V;
+  for L being set holds L in it iff L is
+  circled_Combination of V;
   existence
   proof
     consider A being set such that
-A1: for x being set holds
-    x in A iff x in Funcs(the carrier of V, REAL) & P[x] from XBOOLE_0:sch 1;
+A1: for x being set holds x in A iff x in Funcs(the carrier of V, REAL
+    ) & P[x] from XBOOLE_0:sch 1;
     take A;
     let L be set;
     thus L in A implies L is circled_Combination of V by A1;
-    assume L is circled_Combination of V;
+    assume
+    L is circled_Combination of V;
     hence thesis by A1;
   end;
   uniqueness
   proof
-    thus for X1,X2 being set st (for x being set holds x in X1 iff P[x]) &
-    (for x being set holds x in X2 iff P[x]) holds X1 = X2 from XBOOLE_0:sch 3;
+    thus for X1,X2 being set st (for x being set holds x in X1 iff P[x]) & (
+    for x being set holds x in X2 iff P[x]) holds X1 = X2 from XBOOLE_0:sch 3;
   end;
 end;
 
@@ -665,291 +699,304 @@ definition
   let V be RealLinearSpace, M be non empty Subset of V;
   defpred P[set] means $1 is circled_Combination of M;
   func circledComb M means
-
-  for L being set holds
-  L in it iff L is circled_Combination of M;
+  for L being set holds L in it iff L is
+  circled_Combination of M;
   existence
   proof
     consider A being set such that
-A1: for x being set holds
-    x in A iff x in Funcs(the carrier of V, REAL) & P[x] from XBOOLE_0:sch 1;
+A1: for x being set holds x in A iff x in Funcs(the carrier of V, REAL
+    ) & P[x] from XBOOLE_0:sch 1;
     take A;
     let L be set;
     thus L in A implies L is circled_Combination of M by A1;
-    assume L is circled_Combination of M;
+    assume
+    L is circled_Combination of M;
     hence thesis by A1;
   end;
   uniqueness
   proof
-    thus for X1,X2 being set st (for x being set holds x in X1 iff P[x]) &
-    (for x being set holds x in X2 iff P[x]) holds X1 = X2 from XBOOLE_0:sch 3;
+    thus for X1,X2 being set st (for x being set holds x in X1 iff P[x]) & (
+    for x being set holds x in X2 iff P[x]) holds X1 = X2 from XBOOLE_0:sch 3;
   end;
 end;
 
 theorem
-  for V being RealLinearSpace, v being VECTOR of V holds
-  ex L being circled_Combination of V st Sum L = v &
-  (for A being non empty Subset of V st v in A holds
-  L is circled_Combination of A)
+  for V being RealLinearSpace, v being VECTOR of V holds ex L being
+circled_Combination of V st Sum L = v & for A being non empty Subset of V st v
+  in A holds L is circled_Combination of A
 proof
   let V be RealLinearSpace, v be VECTOR of V;
   consider L being Linear_Combination of {v} such that
 A1: L.v = 1 from RLVECT_4:sch 2;
-A2: Carrier L c= {v} by RLVECT_2:def 8;
-  v in Carrier L by A1,RLVECT_2:28;
-  then {v} c= Carrier L by ZFMISC_1:37;
-  then
-A3: {v} = Carrier L by A2,XBOOLE_0:def 10;
   consider F being FinSequence of the carrier of V such that
-A4: F is one-to-one & rng F = Carrier(L) & Sum(L) = Sum(L (#) F)
-  by RLVECT_2:def 10;
+A2: F is one-to-one & rng F = Carrier(L) and
+  Sum(L) = Sum(L (#) F) by RLVECT_2:def 10;
+  v in Carrier L by A1,RLVECT_2:28;
+  then Carrier L c= {v} & {v} c= Carrier L by RLVECT_2:def 8,ZFMISC_1:37;
+  then
+A3: {v} = Carrier L by XBOOLE_0:def 10;
+  then F = <*v*> by A2,FINSEQ_3:106;
+  then
+A4: F.1 = v by FINSEQ_1:def 8;
   deffunc F(set) = L.(F.$1);
   consider f being FinSequence such that
-A5: len f = len F & for n being Nat st n in dom f holds f.n = F(n)
-  from FINSEQ_1:sch 2;
-A6: len F = 1 by A3,A4,FINSEQ_3:105;
+A5: len f = len F & for n being Nat st n in dom f holds f.n = F(n) from
+  FINSEQ_1:sch 2;
+A6: len F = 1 by A3,A2,FINSEQ_3:105;
   then 1 in dom f by A5,FINSEQ_3:27;
   then
 A7: f.1 = L.(F.1) by A5;
-  F = <*v*> by A3,A4,FINSEQ_3:106;
-  then
-A8: F.1 = v by FINSEQ_1:def 8;
-  then f = <*1*> by A1,A5,A6,A7,FINSEQ_1:57;
+  then f = <*1*> by A1,A5,A6,A4,FINSEQ_1:57;
   then reconsider f as FinSequence of REAL;
-  f = <*1*> by A1,A5,A6,A7,A8,FINSEQ_1:57;
-  then
-A9: Sum(f) = 1 by FINSOP_1:12;
-  for n being Nat st n in dom f holds f.n = L.(F.n) & f.n >= 0
+A8: for n being Nat st n in dom f holds f.n = L.(F.n) & f.n >= 0
   proof
     let n be Nat;
     assume
-A10:   n in dom f;
+A9: n in dom f;
     then n in Seg len f by FINSEQ_1:def 3;
-    hence thesis by A1,A5,A6,A7,A8,A10,FINSEQ_1:4,TARSKI:def 1;
+    hence thesis by A1,A5,A6,A7,A4,A9,FINSEQ_1:4,TARSKI:def 1;
   end;
-  then reconsider L as circled_Combination of V by A4,A5,A9,Def4;
-A11: for A being non empty Subset of V st v in A holds
-  L is circled_Combination of A
+  f = <*1*> by A1,A5,A6,A7,A4,FINSEQ_1:57;
+  then Sum(f) = 1 by FINSOP_1:12;
+  then reconsider L as circled_Combination of V by A2,A5,A8,Def4;
+A10: for A being non empty Subset of V st v in A holds L is
+  circled_Combination of A
   proof
     let A be non empty Subset of V;
-    assume v in A;
+    assume
+    v in A;
     then {v} c= A by ZFMISC_1:37;
     hence thesis by A3,RLVECT_2:def 8;
   end;
   take L;
   Sum(L) = 1 * v by A1,A3,RLVECT_2:53;
-  hence thesis by A11,RLVECT_1:def 9;
+  hence thesis by A10,RLVECT_1:def 9;
 end;
 
 theorem
   for V being RealLinearSpace, v1,v2 being VECTOR of V st v1 <> v2 holds
-  ex L being circled_Combination of V st
-  for A being non empty Subset of V st {v1,v2} c= A holds
-  L is circled_Combination of A
+ex L being circled_Combination of V st for A being non empty Subset of V st {v1
+  ,v2} c= A holds L is circled_Combination of A
 proof
   let V be RealLinearSpace, v1,v2 be VECTOR of V;
   assume
 A1: v1 <> v2;
   consider L being Linear_Combination of {v1,v2} such that
 A2: L.v1 = 1/2 & L.v2 = 1/2 from RLVECT_4:sch 3(A1);
-A3: Carrier(L) c= {v1,v2} by RLVECT_2:def 8;
-  v1 in Carrier(L) & v2 in Carrier(L) by A2,RLVECT_2:28;
-  then {v1,v2} c= Carrier(L) by ZFMISC_1:38;
-  then
-A4: {v1,v2} = Carrier(L) by A3,XBOOLE_0:def 10;
   consider F being FinSequence of the carrier of V such that
-A5: F is one-to-one & rng F = Carrier(L) & Sum(L) = Sum(L (#) F)
-  by RLVECT_2:def 10;
+A3: F is one-to-one & rng F = Carrier(L) and
+  Sum(L) = Sum(L (#) F) by RLVECT_2:def 10;
   deffunc F(set) = L.(F.$1);
   consider f being FinSequence such that
-A6: len f = len F & for n being Nat st n in dom f holds f.n = F(n)
-  from FINSEQ_1:sch 2;
-A7: len F = 2 by A1,A4,A5,FINSEQ_3:107;
-  then 1 in dom f & 2 in dom f by A6,FINSEQ_3:27;
+A4: len f = len F & for n being Nat st n in dom f holds f.n = F(n) from
+  FINSEQ_1:sch 2;
+  v1 in Carrier(L) & v2 in Carrier(L) by A2,RLVECT_2:28;
+  then Carrier(L) c= {v1,v2} & {v1,v2} c= Carrier(L) by RLVECT_2:def 8 ,
+  ZFMISC_1:38;
   then
-A8: f.1 = L.(F.1) & f.2 = L.(F.2) by A6;
-  now per cases by A1,A4,A5,FINSEQ_3:108;
-    suppose F = <*v1,v2*>;
+A5: {v1,v2} = Carrier(L) by XBOOLE_0:def 10;
+  then
+A6: len F = 2 by A1,A3,FINSEQ_3:107;
+  then 2 in dom f by A4,FINSEQ_3:27;
+  then
+A7: f.2 = L.(F.2) by A4;
+  1 in dom f by A4,A6,FINSEQ_3:27;
+  then
+A8: f.1 = L.(F.1) by A4;
+  now
+    per cases by A1,A5,A3,FINSEQ_3:108;
+    suppose
+      F = <*v1,v2*>;
       then
 A9:   F.1 = v1 & F.2 = v2 by FINSEQ_1:61;
-      rng f c= REAL
-      proof
-        f = <*1/2,1/2*> by A2,A6,A7,A8,A9,FINSEQ_1:61;
-        then f = <*1/2*>^<*1/2*> by FINSEQ_1:def 9;
-        then rng f = rng <*1/2*> \/ rng <*1/2*> by FINSEQ_1:44
-          .= {1/2} by FINSEQ_1:55;
-        hence thesis;
-      end;
+      then f = <*1/2,1/2*> by A2,A4,A6,A8,A7,FINSEQ_1:61;
+      then f = <*1/2*>^<*1/2*> by FINSEQ_1:def 9;
+      then rng f = rng <*1/2*> \/ rng <*1/2*> by FINSEQ_1:44
+        .= {1/2} by FINSEQ_1:55;
       then reconsider f as FinSequence of REAL by FINSEQ_1:def 4;
-      f = <*1/2,1/2*> by A2,A6,A7,A8,A9,FINSEQ_1:61;
-      then
-A10:  Sum(f) = 1/2 + 1/2 by RVSUM_1:107
-        .= 1;
-      for n being Nat st n in dom f holds f.n = L.(F.n) & f.n >= 0
+A10:  for n being Nat st n in dom f holds f.n = L.(F.n) & f.n >= 0
       proof
         let n be Nat;
         assume
-A11:         n in dom f;
+A11:    n in dom f;
         then n in Seg len f by FINSEQ_1:def 3;
-        hence thesis by A2,A6,A7,A8,A9,A11,FINSEQ_1:4,TARSKI:def 2;
+        hence thesis by A2,A4,A6,A8,A7,A9,A11,FINSEQ_1:4,TARSKI:def 2;
       end;
-      then reconsider L as circled_Combination of V by A5,A6,A10,Def4;
-A12:  for A being non empty Subset of V st {v1,v2} c= A holds
-      L is circled_Combination of A by A4,RLVECT_2:def 8;
+      f = <*1/2,1/2*> by A2,A4,A6,A8,A7,A9,FINSEQ_1:61;
+      then Sum(f) = 1/2 + 1/2 by RVSUM_1:107
+        .= 1;
+      then reconsider L as circled_Combination of V by A3,A4,A10,Def4;
       take L;
-      thus thesis by A12;
+      for A being non empty Subset of V st {v1,v2} c= A holds L is
+      circled_Combination of A by A5,RLVECT_2:def 8;
+      hence thesis;
     end;
-    suppose F = <*v2,v1*>;
+    suppose
+      F = <*v2,v1*>;
       then
-A13:  F.1 = v2 & F.2 = v1 by FINSEQ_1:61;
-      rng f c= REAL
-      proof
-        f = <*1/2,1/2*> by A2,A6,A7,A8,A13,FINSEQ_1:61;
-        then f = <*1/2*>^<*1/2*> by FINSEQ_1:def 9;
-        then rng f = rng <*1/2*> \/ rng <*1/2*> by FINSEQ_1:44
-          .= {1/2} by FINSEQ_1:55;
-        hence thesis;
-      end;
+A12:  F.1 = v2 & F.2 = v1 by FINSEQ_1:61;
+      then f = <*1/2,1/2*> by A2,A4,A6,A8,A7,FINSEQ_1:61;
+      then f = <*1/2*>^<*1/2*> by FINSEQ_1:def 9;
+      then rng f = rng <*1/2*> \/ rng <*1/2*> by FINSEQ_1:44
+        .= {1/2} by FINSEQ_1:55;
       then reconsider f as FinSequence of REAL by FINSEQ_1:def 4;
-      f = <*1/2,1/2*> by A2,A6,A7,A8,A13,FINSEQ_1:61;
-      then
-A14:  Sum(f) = 1/2 + 1/2 by RVSUM_1:107
-        .= 1;
-      for n being Nat st n in dom f holds f.n = L.(F.n) & f.n >= 0
+A13:  for n being Nat st n in dom f holds f.n = L.(F.n) & f.n >= 0
       proof
         let n be Nat;
         assume
-A15:         n in dom f;
+A14:    n in dom f;
         then n in Seg len f by FINSEQ_1:def 3;
-        hence thesis by A2,A6,A7,A8,A13,A15,FINSEQ_1:4,TARSKI:def 2;
+        hence thesis by A2,A4,A6,A8,A7,A12,A14,FINSEQ_1:4,TARSKI:def 2;
       end;
-      then reconsider L as circled_Combination of V by A5,A6,A14,Def4;
-A16:  for A being non empty Subset of V st {v1,v2} c= A holds
-      L is circled_Combination of A by A4,RLVECT_2:def 8;
+      f = <*1/2,1/2*> by A2,A4,A6,A8,A7,A12,FINSEQ_1:61;
+      then Sum(f) = 1/2 + 1/2 by RVSUM_1:107
+        .= 1;
+      then reconsider L as circled_Combination of V by A3,A4,A13,Def4;
       take L;
-      thus thesis by A16;
+      for A being non empty Subset of V st {v1,v2} c= A holds L is
+      circled_Combination of A by A5,RLVECT_2:def 8;
+      hence thesis;
     end;
   end;
   hence thesis;
 end;
 
 theorem
-  for V being RealLinearSpace, L1, L2 being circled_Combination of V,
-  a,b being Real st a * b > 0 holds
-  Carrier(a*L1 + b*L2) = Carrier(a * L1) \/ Carrier(b * L2)
+  for V being RealLinearSpace, L1, L2 being circled_Combination of V, a,
+  b being Real st a * b > 0 holds Carrier(a*L1 + b*L2) = Carrier(a * L1) \/
+  Carrier(b * L2)
 proof
   let V be RealLinearSpace, L1, L2 be circled_Combination of V, a,b be Real;
-  assume a * b > 0;
+  assume
+  a * b > 0;
   then
 A1: not (a>=0 & b<=0 or a<=0 & b>=0);
   then
-A2: Carrier L1 = Carrier(a * L1) &
-  Carrier L2 = Carrier(b * L2) by RLVECT_2:65;
-  for x being set st x in Carrier(a * L1) \/ Carrier(b * L2) holds
-  x in Carrier(a*L1 + b*L2)
+A2: Carrier L2 = Carrier(b * L2) by RLVECT_2:65;
+A3: Carrier L1 = Carrier(a * L1) by A1,RLVECT_2:65;
+  for x being set st x in Carrier(a * L1) \/ Carrier(b * L2) holds x in
+  Carrier(a*L1 + b*L2)
   proof
     let x be set;
     assume
-A3: x in Carrier(a * L1) \/ Carrier(b * L2);
-    per cases by A3,XBOOLE_0:def 3;
+A4: x in Carrier(a * L1) \/ Carrier(b * L2);
+    per cases by A4,XBOOLE_0:def 3;
     suppose
-A4:   x in Carrier(a * L1);
-      then x in {v where v is Element of V : (a * L1).v <> 0}
-      by RLVECT_2:def 6;
+A5:   x in Carrier(a * L1);
+      then x in {v where v is Element of V : (a * L1).v <> 0} by RLVECT_2:
+      def 6;
       then consider v being Element of V such that
-A5:   v = x & (a * L1).v <> 0;
-A6:   L1.v > 0 by A2,A4,A5,Th17;
+A6:   v = x and
+A7:   (a * L1).v <> 0;
+A8:   L1.v > 0 by A3,A5,A6,Th17;
       v in Carrier(a*L1 + b*L2)
       proof
         per cases;
         suppose
-A7:       v in Carrier L2;
+A9:       v in Carrier L2;
           then
-A8:       L2.v > 0 by Th17;
+A10:      L2.v > 0 by Th17;
           per cases by A1;
-          suppose a > 0 & b > 0;
-            then a*L1.v > 0 & b*L2.v > 0 by A6,A8,XREAL_1:131;
+          suppose
+A11:        a > 0 & b > 0;
+            then b*L2.v > 0 by A10,XREAL_1:131;
+            then (b*L2).v > 0 by RLVECT_2:def 13;
             then
-A9:         (a*L1).v > 0 & (b*L2).v > 0 by RLVECT_2:def 13;
-            then (a*L1).v + (b*L2).v > (a*L1).v by XREAL_1:31;
-            then (a*L1 + b*L2).v > 0 by A9,RLVECT_2:def 12;
+A12:        (a*L1).v + (b*L2).v > (a*L1).v by XREAL_1:31;
+            a*L1.v > 0 by A8,A11,XREAL_1:131;
+            then (a*L1).v > 0 by RLVECT_2:def 13;
+            then (a*L1 + b*L2).v > 0 by A12,RLVECT_2:def 12;
             hence thesis by RLVECT_2:28;
           end;
-          suppose a < 0 & b < 0;
-            then a*L1.v < 0 & b*L2.v < 0 by A2,A4,A5,A7,Th17,XREAL_1:134;
+          suppose
+A13:        a < 0 & b < 0;
+            then a*L1.v < 0 by A3,A5,A6,Th17,XREAL_1:134;
+            then (a*L1).v < 0 by RLVECT_2:def 13;
             then
-A10:        (a*L1).v < 0 & (b*L2).v < 0 by RLVECT_2:def 13;
-            then (a*L1).v + (b*L2).v < (b*L2).v by XREAL_1:32;
-            then (a*L1 + b*L2).v < 0 by A10,RLVECT_2:def 12;
+A14:        (a*L1).v + (b*L2).v < (b*L2).v by XREAL_1:32;
+            b*L2.v < 0 by A9,A13,Th17,XREAL_1:134;
+            then (b*L2).v < 0 by RLVECT_2:def 13;
+            then (a*L1 + b*L2).v < 0 by A14,RLVECT_2:def 12;
             hence thesis by RLVECT_2:28;
           end;
         end;
-        suppose not v in Carrier(L2);
+        suppose
+          not v in Carrier(L2);
           then L2.v = 0 by RLVECT_2:28;
           then b*L2.v = 0;
           then (b*L2).v = 0 by RLVECT_2:def 13;
           then (a*L1).v + (b*L2).v = (a*L1).v;
-          then (a*L1 + b*L2).v <> 0 by A5,RLVECT_2:def 12;
+          then (a*L1 + b*L2).v <> 0 by A7,RLVECT_2:def 12;
           hence thesis by RLVECT_2:28;
         end;
       end;
-      hence thesis by A5;
+      hence thesis by A6;
     end;
     suppose
-A11:  x in Carrier(b * L2);
-      then x in {v where v is Element of V : (b * L2).v <> 0}
-      by RLVECT_2:def 6;
+A15:  x in Carrier(b * L2);
+      then x in {v where v is Element of V : (b * L2).v <> 0} by
+      RLVECT_2:
+      def 6;
       then consider v being Element of V such that
-A12:  v = x & (b * L2).v <> 0;
-A13:  L2.v > 0 by A2,A11,A12,Th17;
+A16:  v = x and
+A17:  (b * L2).v <> 0;
+A18:  L2.v > 0 by A2,A15,A16,Th17;
       v in Carrier(a*L1 + b*L2)
       proof
         per cases;
         suppose
-A14:      v in Carrier(L1);
+A19:      v in Carrier(L1);
           then
-A15:      L1.v > 0 by Th17;
+A20:      L1.v > 0 by Th17;
           per cases by A1;
-          suppose a > 0 & b > 0;
-            then a*L1.v > 0 & b*L2.v > 0 by A13,A15,XREAL_1:131;
+          suppose
+A21:        a > 0 & b > 0;
+            then b*L2.v > 0 by A18,XREAL_1:131;
+            then (b*L2).v > 0 by RLVECT_2:def 13;
             then
-A16:        (a*L1).v > 0 & (b*L2).v > 0 by RLVECT_2:def 13;
-            then (a*L1).v + (b*L2).v > (a*L1).v by XREAL_1:31;
-            then (a*L1 + b*L2).v > 0 by A16,RLVECT_2:def 12;
+A22:        (a*L1).v + (b*L2).v > (a*L1).v by XREAL_1:31;
+            a*L1.v > 0 by A20,A21,XREAL_1:131;
+            then (a*L1).v > 0 by RLVECT_2:def 13;
+            then (a*L1 + b*L2).v > 0 by A22,RLVECT_2:def 12;
             hence thesis by RLVECT_2:28;
           end;
-          suppose a < 0 & b < 0;
-            then a*L1.v < 0 & b*L2.v < 0 by A2,A11,A12,A14,Th17,XREAL_1:134;
+          suppose
+A23:        a < 0 & b < 0;
+            then a*L1.v < 0 by A19,Th17,XREAL_1:134;
+            then (a*L1).v < 0 by RLVECT_2:def 13;
             then
-A17:        (a*L1).v < 0 & (b*L2).v < 0 by RLVECT_2:def 13;
-            then (a*L1).v + (b*L2).v < (b*L2).v by XREAL_1:32;
-            then (a*L1 + b*L2).v < 0 by A17,RLVECT_2:def 12;
+A24:        (a*L1).v + (b*L2).v < (b*L2).v by XREAL_1:32;
+            b*L2.v < 0 by A2,A15,A16,A23,Th17,XREAL_1:134;
+            then (b*L2).v < 0 by RLVECT_2:def 13;
+            then (a*L1 + b*L2).v < 0 by A24,RLVECT_2:def 12;
             hence thesis by RLVECT_2:28;
           end;
         end;
-        suppose not v in Carrier(L1);
+        suppose
+          not v in Carrier(L1);
           then L1.v = 0 by RLVECT_2:28;
           then a*L1.v = 0;
           then (a*L1).v = 0 by RLVECT_2:def 13;
           then (a*L1).v + (b*L2).v = (b*L2).v;
-          then (a*L1 + b*L2).v <> 0 by A12,RLVECT_2:def 12;
+          then (a*L1 + b*L2).v <> 0 by A17,RLVECT_2:def 12;
           hence thesis by RLVECT_2:28;
         end;
       end;
-      hence thesis by A12;
+      hence thesis by A16;
     end;
   end;
   then
-A18: Carrier(a * L1) \/ Carrier(b * L2) c= Carrier(a*L1 + b*L2)
-  by TARSKI:def 3;
+A25: Carrier(a * L1) \/ Carrier(b * L2) c= Carrier(a*L1 + b*L2) by
+  TARSKI
+  :def 3;
   Carrier(a*L1 + b*L2) c= Carrier(a*L1) \/ Carrier(b*L2) by RLVECT_2:58;
-  hence thesis by A18,XBOOLE_0:def 10;
+  hence thesis by A25,XBOOLE_0:def 10;
 end;
 
 theorem Th24:
-  for V being RealLinearSpace, v being VECTOR of V,
-  L being Linear_Combination of V st L is circled & Carrier(L) = {v} holds
-  L.v = 1 & Sum(L) = L.v * v
+  for V being RealLinearSpace, v being VECTOR of V, L being
+Linear_Combination of V st L is circled & Carrier(L) = {v} holds L.v = 1 & Sum(
+  L) = L.v * v
 proof
   let V be RealLinearSpace, v be VECTOR of V, L be Linear_Combination of V;
   assume that
@@ -957,119 +1004,129 @@ A1: L is circled and
 A2: Carrier(L) = {v};
   reconsider L as Linear_Combination of {v} by A2,RLVECT_2:def 8;
   consider F being FinSequence of the carrier of V such that
-A3: (F is one-to-one & rng F = Carrier L &
-  (ex f being FinSequence of REAL st len f = len F & Sum(f) = 1 &
-  (for n being Nat st n in dom f holds f.n = L.(F.n) & f.n >= 0))) by A1,Def4;
+A3: F is one-to-one & rng F = Carrier L and
+A4: ex f being FinSequence of REAL st len f = len F & Sum(f) = 1 & for n
+  being Nat st n in dom f holds f.n = L.(F.n) & f.n >= 0 by A1,Def4;
+A5: F = <*v*> by A2,A3,FINSEQ_3:106;
   consider f be FinSequence of REAL such that
-A4: len f = len F & Sum(f) = 1 &
-  (for n being Nat st n in dom f holds f.n = L.(F.n) & f.n >= 0) by A3;
+A6: len f = len F and
+A7: Sum(f) = 1 and
+A8: for n being Nat st n in dom f holds f.n = L.(F.n) & f.n >= 0 by A4;
+  reconsider r = f/.1 as Element of REAL;
   card Carrier(L) = 1 by A2,CARD_1:50;
   then len F = 1 by A3,FINSEQ_4:77;
   then
-A5: dom f = Seg 1 by A4,FINSEQ_1:def 3;
+A9: dom f = Seg 1 by A6,FINSEQ_1:def 3;
   then
-A6: 1 in dom f by FINSEQ_1:4,TARSKI:def 1;
+A10: 1 in dom f by FINSEQ_1:4,TARSKI:def 1;
   then
-A7: f.1 = L.(F.1) by A4;
-A8: f.1 = f/.1 by A6,PARTFUN1:def 8;
-  reconsider r = f/.1 as Element of REAL;
-  f = <* r *> by A5,A8,FINSEQ_1:def 8;
+A11: f.1 = f/.1 by PARTFUN1:def 8;
+  then f = <* r *> by A9,FINSEQ_1:def 8;
   then
-A9: Sum f = r by FINSOP_1:12;
-  F = <*v*> by A2,A3,FINSEQ_3:106;
-  hence thesis by A4,A7,A8,A9,FINSEQ_1:def 8,RLVECT_2:50;
+A12: Sum f = r by FINSOP_1:12;
+  f.1 = L.(F.1) by A8,A10;
+  hence thesis by A7,A11,A12,A5,FINSEQ_1:def 8,RLVECT_2:50;
 end;
 
 theorem Th25:
-  for V being RealLinearSpace, v1,v2 being VECTOR of V,
-  L being Linear_Combination of V st
-  L is circled & Carrier(L) = {v1,v2} & v1 <> v2 holds
+  for V being RealLinearSpace, v1,v2 being VECTOR of V, L being
+Linear_Combination of V st L is circled & Carrier(L) = {v1,v2} & v1 <> v2 holds
   L.v1 + L.v2 = 1 & L.v1 >= 0 & L.v2 >= 0 & Sum(L) = L.v1 * v1 + L.v2 * v2
 proof
-  let V be RealLinearSpace, v1,v2 be VECTOR of V,
-  L be Linear_Combination of V;
+  let V be RealLinearSpace, v1,v2 be VECTOR of V, L be Linear_Combination of V;
   assume that
 A1: L is circled and
 A2: Carrier(L) = {v1,v2} and
 A3: v1 <> v2;
   reconsider L as Linear_Combination of {v1,v2} by A2,RLVECT_2:def 8;
   consider F being FinSequence of the carrier of V such that
-A4: (F is one-to-one & rng F = Carrier L &
-  (ex f being FinSequence of REAL st len f = len F & Sum(f) = 1 &
-  (for n being Nat st n in dom f holds f.n = L.(F.n) & f.n >= 0))) by A1,Def4;
+A4: F is one-to-one & rng F = Carrier L and
+A5: ex f being FinSequence of REAL st len f = len F & Sum(f) = 1 & for n
+  being Nat st n in dom f holds f.n = L.(F.n) & f.n >= 0 by A1,Def4;
   consider f be FinSequence of REAL such that
-A5: len f = len F & Sum(f) = 1 &
-  (for n being Nat st n in dom f holds f.n = L.(F.n) & f.n >= 0) by A4;
+A6: len f = len F and
+A7: Sum(f) = 1 and
+A8: for n being Nat st n in dom f holds f.n = L.(F.n) & f.n >= 0 by A5;
   len F = card {v1,v2} by A2,A4,FINSEQ_4:77;
   then
-A6: len f = 2 by A3,A5,CARD_2:76;
-  then dom f = {1,2} by FINSEQ_1:4,def 3;
+A9: len f = 2 by A3,A6,CARD_2:76;
   then
-A7: 1 in dom f & 2 in dom f by TARSKI:def 2;
+A10: dom f = {1,2} by FINSEQ_1:4,def 3;
   then
-A8: f.1 = L.(F.1) & f.1 >= 0 by A5;
-  then f/.1 = L.(F.1) & L.(F.1) >= 0 by A7,PARTFUN1:def 8;
+A11: 1 in dom f by TARSKI:def 2;
+  then
+A12: f.1 = L.(F.1) by A8;
+  then f/.1 = L.(F.1) by A11,PARTFUN1:def 8;
   then reconsider r1 = L.(F.1) as Element of REAL;
-A9: f.2 = L.(F.2) & f.2 >= 0 by A5,A7;
-  then f/.2 = L.(F.2) & L.(F.2) >= 0 by A7,PARTFUN1:def 8;
+A13: 2 in dom f by A10,TARSKI:def 2;
+  then
+A14: f.2 = L.(F.2) by A8;
+  then f/.2 = L.(F.2) by A13,PARTFUN1:def 8;
   then reconsider r2 = L.(F.2) as Element of REAL;
-A10: f = <*r1,r2*> by A6,A8,A9,FINSEQ_1:61;
-  now per cases by A2,A3,A4,FINSEQ_3:108;
-    suppose F = <*v1,v2*>;
+A15: f = <*r1,r2*> by A9,A12,A14,FINSEQ_1:61;
+  now
+    per cases by A2,A3,A4,FINSEQ_3:108;
+    suppose
+      F = <*v1,v2*>;
       then F.1 = v1 & F.2 = v2 by FINSEQ_1:61;
-
-hence L.v1 + L.v2 = 1 & L.v1 >= 0 & L.v2 >= 0 by A5,A8,A9,A10,RVSUM_1:107;
+      hence L.v1 + L.v2 = 1 & L.v1 >= 0 & L.v2 >= 0 by A7,A8,A11,A13,A12,A14,
+      A15, RVSUM_1:107;
     end;
-    suppose F = <*v2,v1*>;
+    suppose
+      F = <*v2,v1*>;
       then F.1 = v2 & F.2 = v1 by FINSEQ_1:61;
-
-hence L.v1 + L.v2 = 1 & L.v1 >= 0 & L.v2 >= 0 by A5,A8,A9,A10,RVSUM_1:107;
+      hence L.v1 + L.v2 = 1 & L.v1 >= 0 & L.v2 >= 0 by A7,A8,A11,A13,A12,A14,
+      A15, RVSUM_1:107;
     end;
   end;
   hence thesis by A3,RLVECT_2:51;
 end;
 
 theorem
-  for V being RealLinearSpace, v being VECTOR of V,
-  L being Linear_Combination of {v} st L is circled holds
-  L.v = 1 & Sum(L) = L.v * v
+  for V being RealLinearSpace, v being VECTOR of V, L being
+  Linear_Combination of {v} st L is circled holds L.v = 1 & Sum(L) = L.v * v
 proof
   let V be RealLinearSpace, v be VECTOR of V, L be Linear_Combination of {v};
-  assume
-A1: L is circled;
   Carrier L c= {v} by RLVECT_2:def 8;
-  then Carrier L = {} or Carrier(L) = {v} by ZFMISC_1:39;
+  then
+A1: Carrier L = {} or Carrier(L) = {v} by ZFMISC_1:39;
+  assume
+  L is circled;
   hence thesis by A1,Th16,Th24;
 end;
 
 theorem
-  for V being RealLinearSpace, v1,v2 being VECTOR of V,
-  L being Linear_Combination of {v1,v2} st v1 <> v2 & L is circled holds
-  L.v1 + L.v2 = 1 & L.v1 >= 0 & L.v2 >= 0 & Sum(L) = L.v1 * v1 + L.v2 * v2
+  for V being RealLinearSpace, v1,v2 being VECTOR of V, L being
+Linear_Combination of {v1,v2} st v1 <> v2 & L is circled holds L.v1 + L.v2 = 1
+  & L.v1 >= 0 & L.v2 >= 0 & Sum(L) = L.v1 * v1 + L.v2 * v2
 proof
-  let V be RealLinearSpace, v1,v2 be VECTOR of V,
-  L be Linear_Combination of {v1,v2};
+  let V be RealLinearSpace, v1,v2 be VECTOR of V, L be Linear_Combination of {
+  v1,v2};
   assume that
 A1: v1 <> v2 and
 A2: L is circled;
-A3: Carrier L c= {v1,v2} by RLVECT_2:def 8;
-A4: Carrier L <> {} by A2,Th16;
-  now per cases by A3,A4,ZFMISC_1:42;
+A3: Carrier L c= {v1,v2} & Carrier L <> {} by A2,Th16,RLVECT_2:def 8;
+  now
+    per cases by A3,ZFMISC_1:42;
     suppose
-A5:   Carrier L = {v1};
+A4:   Carrier L = {v1};
       then not v2 in Carrier(L) by A1,TARSKI:def 1;
-      then not v2 in {v where v is Element of V : L.v <> 0} by RLVECT_2:def 6;
+      then not v2 in {v where v is Element of V : L.v <> 0} by
+      RLVECT_2:def
+      6;
       then L.v2 = 0;
+      hence L.v1 + L.v2 = 1 & L.v1 >= 0 & L.v2 >= 0 by A2,A4,Th24;
+    end;
+    suppose
+A5:   Carrier L = {v2};
+      then not v1 in Carrier(L) by A1,TARSKI:def 1;
+      then not v1 in {v where v is Element of V : L.v <> 0} by RLVECT_2:
+      def 6;
+      then L.v1 = 0;
       hence L.v1 + L.v2 = 1 & L.v1 >= 0 & L.v2 >= 0 by A2,A5,Th24;
     end;
     suppose
-A6:   Carrier L = {v2};
-      then not v1 in Carrier(L) by A1,TARSKI:def 1;
-      then not v1 in {v where v is Element of V : L.v <> 0} by RLVECT_2:def 6;
-      then L.v1 = 0;
-      hence L.v1 + L.v2 = 1 & L.v1 >= 0 & L.v2 >= 0 by A2,A6,Th24;
-    end;
-    suppose Carrier(L) = {v1,v2};
+      Carrier(L) = {v1,v2};
       hence L.v1 + L.v2 = 1 & L.v1 >= 0 & L.v2 >= 0 by A1,A2,Th25;
     end;
   end;

@@ -21,10 +21,9 @@ environ
  constructors DOMAIN_1, CLASSES1, CLASSES2, TOPS_1, CONNSP_2, TDLAT_3,
       T_0TOPSP, CANTOR_1, PRALG_1, PRALG_2, ORDERS_3, WAYBEL_1, YELLOW_4,
       WAYBEL_3, WAYBEL_5, WAYBEL_6, WAYBEL_9, YELLOW_8, RELSET_1;
- registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2, FUNCOP_1,
-      FINSET_1, FRAENKEL, CARD_3, CLASSES2, PBOOLE, STRUCT_0, ORDERS_2,
-      LATTICE3, YELLOW_0, TDLAT_3, WAYBEL_0, YELLOW_1, WAYBEL_3, YELLOW_6,
-      WAYBEL_5, WAYBEL_9, RELSET_1;
+ registrations XBOOLE_0, SUBSET_1, FUNCT_1, FUNCT_2, FUNCOP_1, FINSET_1,
+      CARD_3, CLASSES2, PBOOLE, STRUCT_0, LATTICE3, YELLOW_0, TDLAT_3,
+      WAYBEL_0, YELLOW_1, WAYBEL_3, YELLOW_6, WAYBEL_5, WAYBEL_9, RELSET_1;
  requirements SUBSET, BOOLE;
  definitions STRUCT_0, XBOOLE_0, TARSKI, SUBSET_1, PRE_TOPC, WAYBEL_0,
       LATTICE3, YELLOW_0, RELAT_1, YELLOW_6, YELLOW_4, WAYBEL_1, WAYBEL_3,
@@ -44,9 +43,11 @@ st p = p' & q = q' & the RelStr of R = the RelStr of S
 holds p <= q implies p' <= q'
 proof
   let R,S be RelStr, p,q be Element of R, p',q' be Element of S such that
-A1: p = p' & q = q' & the RelStr of R = the RelStr of S;
+A1: p = p' and
+A2: q = q' and
+A3: the RelStr of R = the RelStr of S;
   assume p <= q;
-  then [p',q'] in the InternalRel of S by A1,ORDERS_2:def 9;
+  then [p',q'] in the InternalRel of S by A1,A2,A3,ORDERS_2:def 9;
   hence thesis by ORDERS_2:def 9;
 end;
 
@@ -64,16 +65,18 @@ proof
     consider i being Element of I();
     assume e in A;
     then consider u being Element of D() such that
-A2: e = F(u) & P[u];
+A2: e = F(u) and
+A3: P[u];
     e = F(i,u) by A1,A2;
-    hence thesis by A2;
+    hence thesis by A3;
   end;
   let e be set;
   assume e in B;
   then consider i being Element of I(), u being Element of D() such that
-A3: e = F(i,u) & P[u];
-  e = F(u) by A1,A3;
-  hence thesis by A3;
+A4: e = F(i,u) and
+A5: P[u];
+  e = F(u) by A1,A4;
+  hence thesis by A5;
 end;
 
 theorem Th1:
@@ -122,16 +125,17 @@ proof
   let x,y be Element of T such that
 A1: x in A /\ B and
 A2: y in A /\ B;
-  x in B & y in B by A1,A2,XBOOLE_0:def 4;
+A3: x in B by A1,XBOOLE_0:def 4;
+  y in B by A2,XBOOLE_0:def 4;
   then consider z being Element of T such that
-A3: z in B and
-A4: x <= z and
-A5: y <= z by WAYBEL_0:def 1;
+A4: z in B and
+A5: x <= z and
+A6: y <= z by A3,WAYBEL_0:def 1;
   take z;
   x in A by A1,XBOOLE_0:def 4;
-  then z in A by A4,WAYBEL_0:def 20;
-  hence z in A /\ B by A3,XBOOLE_0:def 4;
-  thus thesis by A4,A5;
+  then z in A by A5,WAYBEL_0:def 20;
+  hence z in A /\ B by A4,XBOOLE_0:def 4;
+  thus thesis by A5,A6;
 end;
 
 registration
@@ -163,8 +167,9 @@ A3: for b being Element of T st D is_<=_than
     let c be Element of T such that
 A4: D is_<=_than c and
 A5: for b being Element of T st D is_<=_than b holds b >= c;
-    x >= c & c >= x by A1,A2,A4,A5,LATTICE3:def 9;
-    hence thesis by ORDERS_2:25;
+A6: x >= c by A2,A5;
+    c >= x by A1,A4,LATTICE3:def 9;
+    hence thesis by A6,ORDERS_2:25;
   end;
   then ex_sup_of D,T by A2,A3,YELLOW_0:def 7;
   hence thesis by A1,A2,A3,YELLOW_0:def 9;
@@ -224,9 +229,8 @@ registration
   coherence
   proof
     let S be Subset of R;
-    consider x being Element of R such that
-A1: the carrier of R = {x} by TEX_1:def 1;
-    S = {}R or S = [#]R by A1,ZFMISC_1:39;
+    ex x being Element of R st ( the carrier of R = {x}) by TEX_1:def 1;
+    then S = {}R or S = [#]R by ZFMISC_1:39;
     hence thesis;
   end;
 end;
@@ -291,7 +295,8 @@ registration
     ex y being Element of T st y in D &
     for x being Element of T st x in D & x >= y holds x in {}T;
     hence {}T is property(S) by Def3;
-    thus for D being non empty directed Subset of T st D c= {}T holds sup D in
+    thus
+    for D being non empty directed Subset of T st D c= {}T holds sup D in
     {} T;
   end;
 end;
@@ -301,7 +306,8 @@ registration
   cluster property(S) directly_closed Subset of T;
   existence
   proof
-    take {}T; thus thesis;
+    take {}T;
+    thus thesis;
   end;
 end;
 
@@ -385,9 +391,8 @@ registration
       thus thesis;
     end;
     let D be non empty directed Subset of T such that sup D in [#]T;
-    consider p being Element of T such that
-A1: p in D by SUBSET_1:10;
-    thus D meets [#]T by A1,XBOOLE_0:3;
+    ex p being Element of T st ( p in D) by SUBSET_1:10;
+    hence D meets [#]T by XBOOLE_0:3;
   end;
 end;
 
@@ -506,9 +511,10 @@ proof
   now
     let x,y be Point of T;
     reconsider x' = x, y' = y as Element of T;
-A1: Cl {x'} = downarrow x' & Cl {y'} = downarrow y' by Th9;
+A1: Cl {x'} = downarrow x' by Th9;
+A2: Cl {y'} = downarrow y' by Th9;
     assume x <> y;
-    hence Cl {x} <> Cl {y} by A1,WAYBEL_0:19;
+    hence Cl {x} <> Cl {y} by A1,A2,WAYBEL_0:19;
   end;
   hence thesis by TSP_1:def 5;
 end;
@@ -632,7 +638,6 @@ end;
 
 registration
   let T be complete TopLattice;
-
 :: p. 100, Remark 1.4 (vi)
   cluster lower -> property(S) Subset of T;
   coherence
@@ -661,7 +666,8 @@ proof
 A1: y in D by SUBSET_1:10;
   take y;
   thus y in D by A1;
-  let x be Element of T such that x in D & x >= y;
+  let x be Element of T such that x in D
+  and x >= y;
   thus thesis;
 end;
 
@@ -695,8 +701,10 @@ A8:   for x being Element of T st x in D & x >=
       take y;
       thus y in D by A7;
       let u be Element of T;
-      assume u in D & u >= y;
-      then u in X by A8;
+      assume that
+A9:   u in D and
+A10:  u >= y;
+      u in X by A8,A9,A10;
       hence thesis by A4,A5,TARSKI:def 4;
     end;
     hence union a in the topology of T by A1;
@@ -704,43 +712,43 @@ A8:   for x being Element of T st x in D & x >=
   let a,b be Subset of T;
   assume a in the topology of T;
   then consider A being Subset of T such that
-A9: a = A and
-A10: A is property(S) by A1;
+A11: a = A and
+A12: A is property(S) by A1;
   assume b in the topology of T;
   then consider B being Subset of T such that
-A11: b = B and
-A12: B is property(S) by A1;
+A13: b = B and
+A14: B is property(S) by A1;
   A /\ B is property(S)
   proof
     let D be non empty directed Subset of T;
     assume
-A13: sup D in A /\ B;
+A15: sup D in A /\ B;
     then sup D in A by XBOOLE_0:def 4;
     then consider x being Element of T such that
-A14: x in D and
-A15: for z being Element of T st z in D & z >= x holds z in A by A10,Def3;
-    sup D in B by A13,XBOOLE_0:def 4;
+A16: x in D and
+A17: for z being Element of T st z in D & z >= x holds z in A by A12,Def3;
+    sup D in B by A15,XBOOLE_0:def 4;
     then consider y being Element of T such that
-A16: y in D and
-A17: for z being Element of T st z in D & z >= y holds z in B by A12,Def3;
+A18: y in D and
+A19: for z being Element of T st z in D & z >= y holds z in B by A14,Def3;
     consider z being Element of T such that
-A18: z in D and
-A19: x <= z and
-A20: y <= z by A14,A16,WAYBEL_0:def 1;
+A20: z in D and
+A21: x <= z and
+A22: y <= z by A16,A18,WAYBEL_0:def 1;
     take z;
-    thus z in D by A18;
+    thus z in D by A20;
     let u be Element of T such that
-A21: u in D;
+A23: u in D;
     assume
-A22: u >= z;
-    then u >= x by A19,YELLOW_0:def 2;
+A24: u >= z;
+    then u >= x by A21,YELLOW_0:def 2;
     then
-A23: u in A by A15,A21;
-    u >= y by A20,A22,YELLOW_0:def 2;
-    then u in B by A17,A21;
-    hence thesis by A23,XBOOLE_0:def 4;
+A25: u in A by A17,A23;
+    u >= y by A22,A24,YELLOW_0:def 2;
+    then u in B by A19,A23;
+    hence thesis by A25,XBOOLE_0:def 4;
   end;
-  hence thesis by A1,A9,A11;
+  hence thesis by A1,A11,A13;
 end;
 
 begin :: Scott Convergence
@@ -806,7 +814,7 @@ A7:   [x,y] in it1;
 A8:   x in NetUniv R by A5,ZFMISC_1:106;
       then consider N being strict net of R such that
 A9:   N = x and the carrier of N in the_universe_of the carrier of R by
-YELLOW_6:def 14;
+      YELLOW_6:def 14;
       reconsider p = y as Element of R by A5,A7,ZFMISC_1:106;
       p is_S-limit_of N by A3,A7,A8,A9;
       hence [x,y] in it2 by A4,A8,A9;
@@ -817,7 +825,7 @@ A10: [x,y] in it2;
 A11: x in NetUniv R by A6,ZFMISC_1:106;
     then consider N being strict net of R such that
 A12: N = x and the carrier of N in the_universe_of the carrier of R by
-YELLOW_6:def 14;
+    YELLOW_6:def 14;
     reconsider p = y as Element of R by A6,A10,ZFMISC_1:106;
     p is_S-limit_of N by A4,A10,A11,A12;
     hence thesis by A3,A11,A12;
@@ -848,13 +856,14 @@ A4: x = "/\"({N.i where i is Element of N: i >= j1},R);
     set Y = {N.i where i is Element of N: i >= j1};
     reconsider j1 as Element of N;
     consider j2 being Element of N such that
-A5: j2 >= j0 & j2 >= j1 by YELLOW_6:def 5;
-    N.j2 in Y by A5;
+A5: j2 >= j0 and
+A6: j2 >= j1 by YELLOW_6:def 5;
+    N.j2 in Y by A6;
     then
-A6: x <= N.j2 by A4,YELLOW_2:24;
+A7: x <= N.j2 by A4,YELLOW_2:24;
     N.j2 in downarrow q by A3,A5;
     then N.j2 <= q' by WAYBEL_0:17;
-    hence x <= q' by A6,YELLOW_0:def 2;
+    hence x <= q' by A7,YELLOW_0:def 2;
   end;
   then lim_inf N <= q' by YELLOW_0:32;
   hence thesis by A1,YELLOW_0:def 2;
@@ -1004,9 +1013,8 @@ A3: e = (the mapping of N).u by FUNCT_1:def 5;
   end;
   let e be set;
   assume e in X;
-  then consider i being Element of N such that
-A4: e = N.i;
-  thus thesis by A1,A4,FUNCT_1:def 5;
+  then ex i being Element of N st ( e = N.i);
+  hence thesis by A1,FUNCT_1:def 5;
 end;
 
 theorem Th20:
@@ -1020,18 +1028,22 @@ A1: rng f is directed;
   set N = Net-Str(S,f);
   let x,y be Element of N;
   f = the mapping of N by Def10;
-  then rng f = { N.i where i is Element of N: not contradiction} by Th19;
-  then N.x in rng f & N.y in rng f;
+  then
+A2: rng f = { N.i where i is Element of N: not contradiction} by Th19;
+  then
+A3: N.x in rng f;
+  N.y in rng f by A2;
   then consider p being Element of R such that
-A2: p in rng f and
-A3: N.x <= p & N.y <= p by A1,WAYBEL_0:def 1;
+A4: p in rng f and
+A5: N.x <= p and
+A6: N.y <= p by A1,A3,WAYBEL_0:def 1;
   consider z being set such that
-A4: z in dom f and
-A5: p = f.z by A2,FUNCT_1:def 5;
-  reconsider z as Element of N by A4,Def10;
+A7: z in dom f and
+A8: p = f.z by A4,FUNCT_1:def 5;
+  reconsider z as Element of N by A7,Def10;
   take z;
-  p = N.z by A5,Def10;
-  hence thesis by A3,Def10;
+  p = N.z by A8,Def10;
+  hence thesis by A5,A6,Def10;
 end;
 
 registration
@@ -1061,9 +1073,12 @@ registration
   proof
     set N = Net-Str(S,f);
     let x,y,z be Element of N;
-    assume x <= y & y <= z;
-    then N.x <= N.y & N.y <= N.z by Def10;
-    then N.x <= N.z by YELLOW_0:def 2;
+    assume that
+A1: x <= y and
+A2: y <= z;
+A3: N.x <= N.y by A1,Def10;
+    N.y <= N.z by A2,Def10;
+    then N.x <= N.z by A3,YELLOW_0:def 2;
     hence thesis by Def10;
   end;
 end;
@@ -1231,9 +1246,10 @@ definition
   proof
     e in {e} by TARSKI:def 1;
     then reconsider r = {[e,e]} as Relation of {e} by RELSET_1:8;
-    dom id{e} = {e} & rng id{e} = {e} by RELAT_1:71;
+A1: dom id{e} = {e} by RELAT_1:71;
+    rng id{e} = {e} by RELAT_1:71;
     then reconsider f = id{e} as Function of {e}, the carrier of S
-    by RELSET_1:11;
+    by A1,RELSET_1:11;
     take NetStr(#{e},r,f#);
     thus thesis;
   end;
@@ -1256,7 +1272,7 @@ theorem Th25:
   x being Element of Net-Str e holds x = e
 proof
   let S be non empty 1-sorted, e be Element of S, x be Element of Net-Str e;
-  x in the carrier of Net-Str e & the carrier of Net-Str e = {e} by Def11;
+  the carrier of Net-Str e = {e} by Def11;
   hence thesis by TARSKI:def 1;
 end;
 
@@ -1266,7 +1282,7 @@ theorem Th26:
 proof
   let S be non empty 1-sorted, e be Element of S, x be Element of Net-Str e;
   set N = Net-Str e;
-A1: x in the carrier of Net-Str e & the carrier of Net-Str e = {e} by Def11;
+A1: the carrier of Net-Str e = {e} by Def11;
   then
 A2: x = e by TARSKI:def 1;
   thus N.x = (id{e}).x by Def11
@@ -1292,20 +1308,24 @@ A1: [e,e] in the InternalRel of N by TARSKI:def 1;
     end;
     thus N is transitive
     proof
-      let x,y,z be Element of N such that x <= y & y <= z;
-      x = e & z = e by Th25;
-      hence thesis by A1,ORDERS_2:def 9;
+      let x,y,z be Element of N such that x <= y
+      and y <= z;
+A2:   x = e by Th25;
+      z = e by Th25;
+      hence thesis by A1,A2,ORDERS_2:def 9;
     end;
     thus N is directed
     proof
       let x,y be Element of N;
       take e;
-      x = e & y = e by Th25;
-      hence thesis by A1,ORDERS_2:def 9;
+A3:   x = e by Th25;
+      y = e by Th25;
+      hence thesis by A1,A3,ORDERS_2:def 9;
     end;
-    let x,y be Element of N such that x <= y & y <= x;
-    x = e & y = e by Th25;
-    hence thesis;
+    let x,y be Element of N such that x <= y
+    and y <= x;
+    x = e by Th25;
+    hence thesis by Th25;
   end;
 end;
 
@@ -1375,12 +1395,12 @@ theorem Th29:
 proof
   let S be non empty reflexive RelStr, e be Element of S;
   set N = Net-Str e, UN = the_universe_of the carrier of S;
-A1: the carrier of N = {e} & e in the carrier of S by Def11;
+A1: the carrier of N = {e} by Def11;
   reconsider UN as universal set;
   the_transitive-closure_of the carrier of S in UN by CLASSES1:5;
   then the carrier of S in UN by CLASSES1:6,59;
   then the carrier of N in the_universe_of the carrier of S by A1,
-CLASSES1:def 1;
+  CLASSES1:def 1;
   hence thesis by YELLOW_6:def 14;
 end;
 
@@ -1452,17 +1472,18 @@ A1: the topology of T = { V where V is Subset of L:
   let S be Subset of L;
   hereby
     assume S in the topology of T;
-    then consider V being Subset of L such that
-A2: S = V and
-A3: for p being Element of L st p in V
-    for N being net of L st [N,p] in SC holds N is_eventually_in V by A1;
+    then
+A2: ex V being Subset of L st ( S = V)&( for p being Element of
+    L st p in V for N being net of L st [N,p] in SC holds N is_eventually_in V)
+    by A1;
     thus S is inaccessible
     proof
       let D be non empty directed Subset of L such that
-A4:   sup D in S;
-A5:   dom id D = D & rng id D = D by RELAT_1:71;
+A3:   sup D in S;
+A4:   dom id D = D by RELAT_1:71;
+A5:   rng id D = D by RELAT_1:71;
       then reconsider f = id D as Function of D, the carrier of L
-      by RELSET_1:11;
+      by A4,RELSET_1:11;
       reconsider N = Net-Str(D,f) as strict monotone reflexive net of L
       by A5,Th20;
 A6:   N in NetUniv L by Th21;
@@ -1473,9 +1494,10 @@ A6:   N in NetUniv L by Th21;
         .= sup D by RELAT_1:71;
       then sup D is_S-limit_of N by Def7;
       then [N,sup D] in SC by A6,Def8;
-      then N is_eventually_in S by A2,A3,A4;
+      then N is_eventually_in S by A2,A3;
       then consider i0 being Element of N such that
-A7:   for j being Element of N st i0 <= j holds N.j in S by WAYBEL_0:def 11;
+A7:   for j being Element of N st i0 <= j holds N.j in S by
+      WAYBEL_0:def 11;
       consider j0 being Element of N such that
 A8:   j0 >= i0 and j0 >= i0 by YELLOW_6:def 5;
 A9:   N.j0 in S by A7,A8;
@@ -1493,7 +1515,7 @@ A13:  Net-Str y in NetUniv L by Th29;
       y = lim_inf Net-Str y by Th28;
       then x is_S-limit_of Net-Str y by A12,Def7;
       then [Net-Str y,x] in SC by A13,Def8;
-      then Net-Str y is_eventually_in S by A2,A3,A11;
+      then Net-Str y is_eventually_in S by A2,A11;
       hence thesis by Th27;
     end;
   end;
@@ -1591,17 +1613,18 @@ A1: the topology of T = { V where V is Subset of T:
   hereby
     assume S is open;
     then S in the topology of T by PRE_TOPC:def 5;
-    then consider V being Subset of T such that
-A2: S = V and
-A3: for p being Element of T st p in V
-    for N being net of T st [N,p] in SC holds N is_eventually_in V by A1;
+    then
+A2: ex V being Subset of T st ( S = V)&( for p being Element of
+    T st p in V for N being net of T st [N,p] in SC holds N is_eventually_in V)
+    by A1;
     thus S is inaccessible
     proof
       let D be non empty directed Subset of T such that
-A4:   sup D in S;
-A5:   dom id D = D & rng id D = D by RELAT_1:71;
+A3:   sup D in S;
+A4:   dom id D = D by RELAT_1:71;
+A5:   rng id D = D by RELAT_1:71;
       then reconsider f = id D as Function of D, the carrier of T
-      by RELSET_1:11;
+      by A4,RELSET_1:11;
       reconsider N = Net-Str(D,f) as strict monotone reflexive net of T
       by A5,Th20;
 A6:   N in NetUniv T by Th21;
@@ -1612,9 +1635,10 @@ A6:   N in NetUniv T by Th21;
         .= sup D by RELAT_1:71;
       then sup D is_S-limit_of N by Def7;
       then [N,sup D] in SC by A6,Def8;
-      then N is_eventually_in S by A2,A3,A4;
+      then N is_eventually_in S by A2,A3;
       then consider i0 being Element of N such that
-A7:   for j being Element of N st i0 <= j holds N.j in S by WAYBEL_0:def 11;
+A7:   for j being Element of N st i0 <= j holds N.j in S by
+      WAYBEL_0:def 11;
       consider j0 being Element of N such that
 A8:   j0 >= i0 and j0 >= i0 by YELLOW_6:def 5;
 A9:   N.j0 in S by A7,A8;
@@ -1632,7 +1656,7 @@ A13:  Net-Str y in NetUniv T by Th29;
       y = lim_inf Net-Str y by Th28;
       then x is_S-limit_of Net-Str y by A12,Def7;
       then [Net-Str y,x] in SC by A13,Def8;
-      then Net-Str y is_eventually_in S by A2,A3,A11;
+      then Net-Str y is_eventually_in S by A2,A11;
       hence thesis by Th27;
     end;
   end;
@@ -1691,13 +1715,13 @@ theorem Th34:
 proof
   let T be complete TopLattice;
   assume the TopStruct of T = ConvergenceSpace Scott-Convergence T;
-  hence for S being Subset of T holds S is open iff S is inaccessible upper
+  hence
+  for S being Subset of T holds S is open iff S is inaccessible upper
   by Th33;
 end;
 
 registration
   let R be complete LATTICE;
-
 :: 1.6. Proposition (i)
   cluster Scott-Convergence R -> (CONSTANTS);
   coherence
@@ -1715,7 +1739,6 @@ end;
 
 registration
   let R be complete LATTICE;
-
 :: 1.6. Proposition (i)
   cluster Scott-Convergence R -> (SUBNETS);
   coherence
@@ -1796,7 +1819,8 @@ A1: M = N"X;
   then j in (the mapping of N)"X by A1,YELLOW_6:def 13;
   then
 A2: (the mapping of N).j in X by FUNCT_1:def 13;
-  the mapping of M = (the mapping of N)|the carrier of M by A1,YELLOW_6:def 8;
+  the mapping of M = (the mapping of N)|the carrier of M by A1,
+  YELLOW_6:def 8;
   hence thesis by A2,FUNCT_1:72;
 end;
 
@@ -1870,36 +1894,37 @@ A2: now
     hereby
       assume x in NetUniv S1;
       then consider N being strict net of S1 such that
-A3:   N = x & the carrier of N in the_universe_of the carrier of S1
+A3:   N = x and
+A4:   the carrier of N in the_universe_of the carrier of S1
       by YELLOW_6:def 14;
       reconsider N as strict net of S2 by A1;
       thus P[x]
       proof
-        take N; thus thesis by A1,A3;
+        take N;
+        thus thesis by A1,A3,A4;
       end;
     end;
     assume P[x];
     then consider N being strict net of S2 such that
-A4: N = x & the carrier of N in the_universe_of the carrier of S2;
+A5: N = x and
+A6: the carrier of N in the_universe_of the carrier of S2;
     reconsider N as strict net of S1 by A1;
     now
       take N;
       thus N = x & the carrier of N in the_universe_of the carrier of S1
-      by A1,A4;
+      by A1,A5,A6;
     end;
     hence x in NetUniv S1 by YELLOW_6:def 14;
   end;
-A5: for x being set holds x in NetUniv S2 iff P[x] by YELLOW_6:def 14;
-  thus NetUniv S1 = NetUniv S2 from XBOOLE_0:sch 2(A2,A5);
+A7: for x being set holds x in NetUniv S2 iff P[x] by YELLOW_6:def 14;
+  thus NetUniv S1 = NetUniv S2 from XBOOLE_0:sch 2(A2,A7);
 end;
 
 Lm6: for T1,T2 being non empty 1-sorted, X be set
-st the carrier of T1 = the carrier of T2
 for N1 being net of T1, N2 being net of T2 st N1 = N2 & N1 is_eventually_in X
 holds N2 is_eventually_in X
 proof
-  let T1,T2 be non empty 1-sorted, X be set such that
-  the carrier of T1 = the carrier of T2;
+  let T1,T2 be non empty 1-sorted, X be set;
   let N1 be net of T1, N2 be net of T2 such that
 A1: N1 = N2;
   assume N1 is_eventually_in X;
@@ -1946,7 +1971,8 @@ A7: p2 in G by TOPS_1:54;
     proof
       N1 is_eventually_in W by A4,YELLOW_6:def 18;
       then consider i being Element of N1 such that
-A8:   for j being Element of N1 st i <= j holds N1.j in W by WAYBEL_0:def 11;
+A8:   for j being Element of N1 st i <= j holds N1.j in W by
+      WAYBEL_0:def 11;
       reconsider ii = i as Element of N2 by A2;
       take ii;
       let jj be Element of N2;
@@ -1982,22 +2008,24 @@ A6: N1 in NetUniv T1;
 A7: p1 in Lim N1 by A4,A5,YELLOW_6:def 22;
     reconsider N2 = N1 as net of T2 by A1;
     reconsider p2 =p1 as Point of T2 by A1;
-    N2 in NetUniv T2 & p2 in Lim N2 by A1,A6,A7,Lm5,Lm7;
-    hence [u1,u2] in Convergence T2 by A5,YELLOW_6:def 22;
+A8: N2 in NetUniv T2 by A1,A6,Lm5;
+    p2 in Lim N2 by A1,A7,Lm7;
+    hence [u1,u2] in Convergence T2 by A5,A8,YELLOW_6:def 22;
   end;
   assume
-A8: [u1,u2] in Convergence T2;
+A9: [u1,u2] in Convergence T2;
   then consider N1 being Element of NetUniv T2, p1 being Point of T2 such that
-A9: [u1,u2] = [N1,p1] by A3,DOMAIN_1:9;
-A10: N1 in NetUniv T2;
+A10: [u1,u2] = [N1,p1] by A3,DOMAIN_1:9;
+A11: N1 in NetUniv T2;
   ex N being strict net of T2 st N = N1 &
   the carrier of N in the_universe_of the carrier of T2 by YELLOW_6:def 14;
   then reconsider N1 as net of T2;
-A11: p1 in Lim N1 by A8,A9,YELLOW_6:def 22;
+A12: p1 in Lim N1 by A9,A10,YELLOW_6:def 22;
   reconsider N2 = N1 as net of T1 by A1;
   reconsider p2 =p1 as Point of T1 by A1;
-  N2 in NetUniv T1 & p2 in Lim N2 by A1,A10,A11,Lm5,Lm7;
-  hence thesis by A9,YELLOW_6:def 22;
+A13: N2 in NetUniv T1 by A1,A11,Lm5;
+  p2 in Lim N2 by A1,A12,Lm7;
+  hence thesis by A10,A13,YELLOW_6:def 22;
 end;
 
 Lm9: for R1,R2 being non empty RelStr
@@ -2011,62 +2039,76 @@ A3: R2 is with_infima
     let x,y be Element of R2;
     reconsider x' = x, y' = y as Element of R1 by A1;
     consider z' being Element of R1 such that
-A4: z' <= x' & z' <= y' and
-A5: for w' being Element of R1 st w' <= x' & w' <= y' holds w' <= z'
+A4: z' <= x' and
+A5: z' <= y' and
+A6: for w' being Element of R1 st w' <= x' & w' <= y' holds w' <= z'
     by A2,LATTICE3:def 11;
     reconsider z = z' as Element of R2 by A1;
     take z;
-    thus z <= x & z <= y by A1,A4,Lm1;
+    thus z <= x & z <= y by A1,A4,A5,Lm1;
     let w be Element of R2;
     reconsider w' = w as Element of R1 by A1;
-    assume w <= x & w <= y;
-    then w' <= x' & w' <= y' by A1,Lm1;
-    then w' <= z' by A5;
+    assume that
+A7: w <= x and
+A8: w <= y;
+A9: w' <= x' by A1,A7,Lm1;
+    w' <= y' by A1,A8,Lm1;
+    then w' <= z' by A6,A9;
     hence thesis by A1,Lm1;
   end;
-A6: R2 is with_suprema
+A10: R2 is with_suprema
   proof
     let x,y be Element of R2;
     reconsider x' = x, y' = y as Element of R1 by A1;
     consider z' being Element of R1 such that
-A7: z' >= x' & z' >= y' and
-A8: for w' being Element of R1 st w' >= x' & w' >= y' holds w' >= z'
+A11: z' >= x' and
+A12: z' >= y' and
+A13: for w' being Element of R1 st w' >= x' & w' >= y' holds w' >= z'
     by A2,LATTICE3:def 10;
     reconsider z = z' as Element of R2 by A1;
     take z;
-    thus z >= x & z >= y by A1,A7,Lm1;
+    thus z >= x & z >= y by A1,A11,A12,Lm1;
     let w be Element of R2;
     reconsider w' = w as Element of R1 by A1;
-    assume w >= x & w >= y;
-    then w' >= x' & w' >= y' by A1,Lm1;
-    then w' >= z' by A8;
+    assume that
+A14: w >= x and
+A15: w >= y;
+A16: w' >= x' by A1,A14,Lm1;
+    w' >= y' by A1,A15,Lm1;
+    then w' >= z' by A13,A16;
     hence thesis by A1,Lm1;
   end;
-A9: R2 is reflexive
+A17: R2 is reflexive
   proof
     let x be Element of R2;
     reconsider x' = x as Element of R1 by A1;
     x' <= x' by A2,YELLOW_0:def 1;
     hence thesis by A1,Lm1;
   end;
-A10: R2 is transitive
+A18: R2 is transitive
   proof
     let x,y,z be Element of R2;
     reconsider x' = x, y' = y, z' = z as Element of R1 by A1;
-    assume x <= y & y <= z;
-    then x' <= y' & y' <= z' by A1,Lm1;
-    then x' <= z' by A2,YELLOW_0:def 2;
+    assume that
+A19: x <= y and
+A20: y <= z;
+A21: x' <= y' by A1,A19,Lm1;
+    y' <= z' by A1,A20,Lm1;
+    then x' <= z' by A2,A21,YELLOW_0:def 2;
     hence thesis by A1,Lm1;
   end;
   R2 is antisymmetric
   proof
     let x,y be Element of R2;
     reconsider x' = x, y' = y as Element of R1 by A1;
-    assume x <= y & y <= x;
-    then x' <= y' & y' <= x' by A1,Lm1;
-    hence thesis by A2,YELLOW_0:def 3;
+    assume that
+A22: x <= y and
+A23: y <= x;
+A24: x' <= y' by A1,A22,Lm1;
+    y' <= x' by A1,A23,Lm1;
+    hence thesis by A2,A24,YELLOW_0:def 3;
   end;
-  hence thesis by A3,A6,A9,A10;
+  hence thesis by A3,A10,A17,A18;
 end;
 
 Lm10: for R1,R2 being LATTICE, X being set
@@ -2162,15 +2204,17 @@ A1: the RelStr of R1 = the RelStr of R2;
 A2: D = D' and
 A3: D is directed;
   let x2,y2 be Element of R2 such that
-A4: x2 in D' & y2 in D';
+A4: x2 in D' and
+A5: y2 in D';
   reconsider x1 = x2, y1 = y2 as Element of R1 by A1;
   consider z1 being Element of R1 such that
-A5: z1 in D and
-A6: x1 <= z1 & y1 <= z1 by A2,A3,A4,WAYBEL_0:def 1;
+A6: z1 in D and
+A7: x1 <= z1 and
+A8: y1 <= z1 by A2,A3,A4,A5,WAYBEL_0:def 1;
   reconsider z2 = z1 as Element of R2 by A1;
   take z2;
-  thus z2 in D' by A2,A5;
-  thus x2 <= z2 & y2 <= z2 by A1,A6,Lm1;
+  thus z2 in D' by A2,A6;
+  thus x2 <= z2 & y2 <= z2 by A1,A7,A8,Lm1;
 end;
 
 Lm15: for R1,R2 being complete LATTICE st the RelStr of R1 = the RelStr of R2
@@ -2182,19 +2226,21 @@ A1: the RelStr of R1 = the RelStr of R2;
   let p,q be Element of R1 such that
 A2: p << q;
   let p',q' be Element of R2 such that
-A3: p = p' & q = q';
+A3: p = p' and
+A4: q = q';
   let D' be non empty directed Subset of R2 such that
-A4: q' <= sup D';
+A5: q' <= sup D';
   reconsider D = D' as non empty Subset of R1 by A1;
   reconsider D as non empty directed Subset of R1 by A1,Lm14;
   sup D = sup D' by A1,Lm12;
-  then q <= sup D by A1,A3,A4,Lm1;
+  then q <= sup D by A1,A4,A5,Lm1;
   then consider d be Element of R1 such that
-A5: d in D & p <= d by A2,WAYBEL_3:def 1;
+A6: d in D and
+A7: p <= d by A2,WAYBEL_3:def 1;
   reconsider d' = d as Element of R2 by A1;
   take d';
-  thus d' in D' by A5;
-  thus thesis by A1,A3,A5,Lm1;
+  thus d' in D' by A6;
+  thus thesis by A1,A3,A7,Lm1;
 end;
 
 Lm16: for R1,R2 being complete LATTICE st the RelStr of R1 = the RelStr of R2
@@ -2281,14 +2327,12 @@ A12:  j2 <= i2;
 end;
 
 Lm17: for R1,R2 being non empty reflexive RelStr, X being non empty set
-st the RelStr of R1 = the RelStr of R2
 for N1 being net of R1, N2 being net of R2 st N1 = N2
 for J1 being net_set of the carrier of N1,R1,
 J2 being net_set of the carrier of N2,R2 st J1 = J2
 holds Iterated J1 = Iterated J2
 proof
-  let R1,R2 be non empty reflexive RelStr, X be non empty set such that
-  the RelStr of R1 = the RelStr of R2;
+  let R1,R2 be non empty reflexive RelStr, X be non empty set;
   let N1 be net of R1, N2 be net of R2 such that
 A1: N1 = N2;
   let J1 be net_set of the carrier of N1,R1,
@@ -2351,6 +2395,7 @@ proof
 A1: the RelStr of R1 = the RelStr of R2;
 A2: Scott-Convergence R1 c= [:NetUniv R1,the carrier of R1:]
   by YELLOW_6:def 21;
+
   for e being set st e in Scott-Convergence R1 holds e in Scott-Convergence R2
   proof
     let e be set;
@@ -2360,10 +2405,10 @@ A3: e in Scott-Convergence R1;
     p1 being Element of R1 such that
 A4: e = [N1,p1] by A2,DOMAIN_1:9;
 A5: N1 in NetUniv R1;
-    consider N being strict net of R1 such that
-A6: N1 = N and the carrier of N in the_universe_of the carrier of R1
-    by YELLOW_6:def 14;
-    reconsider N2 = N1 as strict net of R2 by A1,A6,Lm4;
+
+A6: ex N being strict net of R1 st ( N1 = N)&( the carrier of N
+    in the_universe_of the carrier of R1) by YELLOW_6:def 14;
+    then reconsider N2 = N1 as strict net of R2 by A1,Lm4;
     reconsider N1 as strict net of R1 by A6;
     reconsider p2 = p1 as Element of R2 by A1;
 A7: N2 in NetUniv R2 by A1,A5,Lm5;
@@ -2428,7 +2473,7 @@ A6:     p2 in V2;
         reconsider N1 = N2 as net of R1 by A1;
         assume [N2,p2] in Scott-Convergence R2;
         then [N1,p1] in Scott-Convergence R1 by A1,Lm20;
-        hence thesis by A1,A5,A6,Lm6;
+        hence thesis by A5,A6,Lm6;
       end;
       hence thesis by A3,A4;
     end;
@@ -2451,7 +2496,7 @@ A9:   p2 in V2;
       reconsider N1 = N2 as net of R2 by A1;
       assume [N2,p2] in Scott-Convergence R1;
       then [N1,p1] in Scott-Convergence R2 by A1,Lm20;
-      hence thesis by A1,A8,A9,Lm6;
+      hence thesis by A8,A9,Lm6;
     end;
     hence thesis by A2,A7;
   end;
@@ -2485,9 +2530,9 @@ holds R2 is continuous
 proof
   let R1,R2 be complete LATTICE such that
 A1: the RelStr of R1 = the RelStr of R2;
-  assume R1 is continuous;
-  then
-A2: R1 is satisfying_axiom_of_approximation; thus
+  assume
+A2: R1 is continuous;
+  thus
 A3: for x being Element of R2 holds waybelow x is non empty directed;
   thus R2 is up-complete;
 A4: for x being Element of R1 holds waybelow x is non empty directed;
@@ -2511,7 +2556,6 @@ end;
 
 registration
   let R be continuous complete LATTICE;
-
 :: 1.6. Proposition (ii)
   cluster Scott-Convergence R -> topological;
   coherence
@@ -2587,7 +2631,8 @@ A16:  u <= d by A5,WAYBEL_3:def 1;
 A17:  d = "/\"({Z.k where k is Element of Z: k >= j},R) by A15;
       reconsider j' = j as Element of Z;
       consider i being Element of Z such that
-A18:  i >= j' & i >= j' by YELLOW_6:def 5;
+A18:  i >= j'
+      and i >= j' by YELLOW_6:def 5;
       consider f being Function of Z, Y such that
 A19:  the mapping of Z = (the mapping of Y)*f and
       for m being Element of Y ex n being Element of Z st
@@ -2634,7 +2679,6 @@ A28:    the carrier of R = the carrier of ConvergenceSpace C
         reconsider T as continuous complete TopLattice by A27,Lm23;
         the topology of T = sigma T by A27,Lm21;
         then reconsider T as continuous complete Scott TopLattice by Th37;
-
 :: we now move all to T setting
         reconsider XX = X as net of T;
         reconsider JJ = J as net_set of the carrier of XX,T by A27,Lm18;
@@ -2682,11 +2726,12 @@ A1: N in NetUniv T;
 A2: Convergence ConvergenceSpace Scott-Convergence T
   = Scott-Convergence T by YELLOW_6:53;
   consider M being strict net of T such that
-A3: M = N and the carrier of M in the_universe_of the carrier of T by A1,
-YELLOW_6:def 14;
+A3: M = N and
+  the carrier of M in the_universe_of the carrier of T by A1,YELLOW_6:def 14;
   the TopStruct of T = ConvergenceSpace Scott-Convergence T by Th32;
   then
-A4: Convergence T = Convergence ConvergenceSpace Scott-Convergence T by Lm8;
+A4: Convergence T = Convergence ConvergenceSpace Scott-Convergence T by
+  Lm8;
   thus x is_S-limit_of N implies x in Lim N
   proof
     assume x is_S-limit_of N;
@@ -2715,7 +2760,7 @@ A4: for j being Element of I holds rng(F.j) is directed;
     set x = Inf Sups F;
 A5: x >= Sup Infs Frege F by WAYBEL_5:16;
     [:I,I:] c= [:I,I:];
-    then reconsider r = [:I,I:] as Relation of I ;
+    then reconsider r = [:I,I:] as Relation of I;
     dom F = I by PARTFUN1:def 4;
     then reconsider f = Sups F as Function of I, the carrier of L;
     set X = NetStr(#I,r,f#);
@@ -2727,7 +2772,8 @@ A6: for i,j being Element of X holds i <= j
     end;
 A7: X is transitive
     proof
-      let x,y,z be Element of X such that x <= y & y <= z;
+      let x,y,z be Element of X such that x <= y
+      and y <= z;
       thus thesis by A6;
     end;
     X is directed
@@ -2773,7 +2819,8 @@ A14: for i being Element of X holds J.i in NetUniv L
 A15:  J.i = Net-Str(K.i',F.i') by A8;
       then reconsider Ji = J.i as strict net of L;
       K.i' in the_universe_of the carrier of L by A3;
-      then the carrier of Ji in the_universe_of the carrier of L by A15,Def10;
+      then the carrier of Ji in the_universe_of the carrier of L by A15,
+      Def10;
       hence thesis by YELLOW_6:def 14;
     end;
 A16: for i being Element of X holds [J.i,X.i] in C
@@ -2829,47 +2876,47 @@ A23:      y =G.(i,g) and i >= j;
           reconsider x = i as set;
           take x;
           reconsider i' = i as Element of I;
-          i in I;
+A24:      i in I;
           then
-A24:      i' in dom F by PARTFUN1:def 4;
-          hence x in dom((Frege F).g) by A12,WAYBEL_5:8;
-          thus ((Frege F).g).x = F.i'.(g.i) by A12,A24,WAYBEL_5:9
+A25:      i' in dom F by PARTFUN1:def 4;
+          thus x in dom((Frege F).g) by A24,PARTFUN1:def 4;
+          thus ((Frege F).g).x = F.i'.(g.i) by A12,A25,WAYBEL_5:9
             .= (the mapping of Net-Str(K.i',F.i')).(g.i) by Def10
             .= (the mapping of J.i).(g.i) by A8
             .= y by A22,A23,YELLOW_6:def 16;
         end;
         given x being set such that
-A25:    x in dom((Frege F).g) and
-A26:    y = ((Frege F).g).x;
-A27:    x in dom F by A12,A25,WAYBEL_5:8;
-        reconsider i' = x as Element of I by A25;
+A26:    x in dom((Frege F).g) and
+A27:    y = ((Frege F).g).x;
+A28:    x in dom F by A12,A26,WAYBEL_5:8;
+        reconsider i' = x as Element of I by A26;
         reconsider i = i' as Element of X;
-A28:    i >= j by A6;
-        y = (F.x).(g.x) by A12,A26,A27,WAYBEL_5:9
+A29:    i >= j by A6;
+        y = (F.x).(g.x) by A12,A27,A28,WAYBEL_5:9
           .= (the mapping of Net-Str(K.i',F.i')).(g.i) by Def10
           .= (the mapping of J.i).(g.i) by A8
           .= G.(i,g) by A22,YELLOW_6:def 16;
-        hence thesis by A28;
+        hence thesis by A29;
       end;
       hence thesis by FUNCT_1:def 5;
     end;
-A29: D = D'
+A30: D = D'
     proof
-A30:  the carrier of Iterated J = [:the carrier of X, product Carrier J:]
+A31:  the carrier of Iterated J = [:the carrier of X, product Carrier J:]
       by YELLOW_6:35;
-A31:  for p being Element of Iterated J, i being Element of X,
+A32:  for p being Element of Iterated J, i being Element of X,
       g being Element of product doms F st p = [i,g]
       holds "/\"(I(p),L) = "/\"(I(i,g),L)
       proof
         let p be Element of Iterated J, i be Element of X,
         g be Element of product doms F such that
-A32:    p = [i,g];
-A33:    the RelStr of Iterated J= the RelStr of [:X, product J:]
+A33:    p = [i,g];
+A34:    the RelStr of Iterated J= the RelStr of [:X, product J:]
         by YELLOW_6:def 16;
         reconsider g' = g as Element of product J by A11,YELLOW_1:def 4;
         g' in the carrier of product J;
         then
-A34:    g' in product Carrier J by YELLOW_1:def 4;
+A35:    g' in product Carrier J by YELLOW_1:def 4;
         reconsider i' = i as Element of X;
         for i be set st i in the carrier of X
         ex R being RelStr, xi,yi being Element of R
@@ -2879,33 +2926,33 @@ A34:    g' in product Carrier J by YELLOW_1:def 4;
           assume i in the carrier of X;
           then reconsider ii = i as Element of X;
           reconsider i' = ii as Element of I;
-A35:      J.i = Net-Str(K.i',F.i') by A8;
+A36:      J.i = Net-Str(K.i',F.i') by A8;
           set R = Net-Str(K.i',F.i');
-          g'.ii in the carrier of R by A35;
+          g'.ii in the carrier of R by A36;
           then reconsider x = g'.i as Element of R;
           take R,x,x;
           x <= x;
           hence thesis by A8;
         end;
         then
-A36:    g' <= g' by A34,YELLOW_1:def 4;
+A37:    g' <= g' by A35,YELLOW_1:def 4;
         I(i,g) c= I(p)
         proof
           let u be set;
           assume u in I(i,g);
           then consider j being Element of X such that
-A37:      u = (the mapping of Iterated J).(j,g) and
-A38:      j >= i;
+A38:      u = (the mapping of Iterated J).(j,g) and
+A39:      j >= i;
           reconsider j' = j as Element of X;
           reconsider q = [j,g] as Element of Iterated J by A11,YELLOW_6:35;
-          [j',g'] >= [i',g'] by A36,A38,YELLOW_3:11;
+          [j',g'] >= [i',g'] by A37,A39,YELLOW_3:11;
           then
-A39:      q >= p by A32,A33,Lm1;
-          u = (Iterated J).q by A37;
-          hence thesis by A39;
+A40:      q >= p by A33,A34,Lm1;
+          u = (Iterated J).q by A38;
+          hence thesis by A40;
         end;
         then
-A40:    "/\"(I(p),L) <= "/\"(I(i,g),L) by WAYBEL_7:3;
+A41:    "/\"(I(p),L) <= "/\"(I(i,g),L) by WAYBEL_7:3;
         defpred P[Element of X] means $1 >= i;
         deffunc F(Element of X) = G.($1,g);
         {F(k) where k is Element of X: P[k]}
@@ -2921,57 +2968,57 @@ A40:    "/\"(I(p),L) <= "/\"(I(i,g),L) by WAYBEL_7:3;
           let b be Element of L;
           assume b in B;
           then consider q being Element of Iterated J such that
-A41:      b = (Iterated J).q and
-A42:      p <= q;
+A42:      b = (Iterated J).q and
+A43:      p <= q;
           consider k being Element of X,
           f being Element of product Carrier J such that
-A43:      q = [k,f] by A30,DOMAIN_1:9;
+A44:      q = [k,f] by A31,DOMAIN_1:9;
           reconsider k' = k as Element of X;
           set a = (the mapping of Iterated J).(k,g);
           a = G.(k,g);
           then reconsider a as Element of L;
           take a;
           reconsider f' = f as Element of product J by YELLOW_1:def 4;
-A44:      [k',f'] >= [i',g'] by A32,A33,A42,A43,Lm1;
+A45:      [k',f'] >= [i',g'] by A33,A34,A43,A44,Lm1;
           then i <= k by YELLOW_3:11;
           hence a in A;
           reconsider k' = k as Element of I;
           set N = Net-Str(K.k',F.k');
-A45:      J.k = N by A8;
+A46:      J.k = N by A8;
           reconsider g'k =g'.k, f'k = f'.k as Element of N by A8;
-A46:      b = N.(f'k) by A41,A43,A45,YELLOW_6:36;
+A47:      b = N.(f'k) by A42,A44,A46,YELLOW_6:36;
           reconsider kg = [k,g] as Element of Iterated J by A11,YELLOW_6:35;
-A47:      a = (Iterated J).kg
-            .= N.(g'k) by A45,YELLOW_6:36;
-          g' <= f' by A44,YELLOW_3:11;
+A48:      a = (Iterated J).kg
+            .= N.(g'k) by A46,YELLOW_6:36;
+          g' <= f' by A45,YELLOW_3:11;
           then g'.k <= f'.k by WAYBEL_3:28;
-          hence a <= b by A45,A46,A47,Def10;
+          hence a <= b by A46,A47,A48,Def10;
         end;
         then "/\"(I(i,g),L) <= "/\"(I(p),L) by Th1;
-        hence thesis by A40,YELLOW_0:def 3;
+        hence thesis by A41,YELLOW_0:def 3;
       end;
       thus D c= D'
       proof
         let e be set;
         assume e in D;
         then consider p being Element of Iterated J such that
-A48:    e = "/\"(I(p),L);
+A49:    e = "/\"(I(p),L);
         consider j being Element of X,
         g being Element of product doms F such that
-A49:    p = [j,g] by A11,A30,DOMAIN_1:9;
-        e = "/\"(I(j,g),L) by A31,A48,A49;
+A50:    p = [j,g] by A11,A31,DOMAIN_1:9;
+        e = "/\"(I(j,g),L) by A32,A49,A50;
         hence thesis;
       end;
       let e be set;
       assume e in D';
       then consider i being Element of X,
       g being Element of product doms F such that
-A50:  e = "/\"(I(i,g),L);
+A51:  e = "/\"(I(i,g),L);
       reconsider j = [i,g] as Element of Iterated J by A11,YELLOW_6:35;
-      e = "/\"(I(j),L) by A31,A50;
+      e = "/\"(I(j),L) by A32,A51;
       hence thesis;
     end;
-A51: E' = D' from Irrel(A21); :: UWAGA!!! wrazliwy na strony rownosci
+A52: E' = D' from Irrel(A21); :: UWAGA!!! wrazliwy na strony rownosci
     for y being set holds y in E' iff
     ex x being set st x in dom(Infs Frege F) & y = (Infs Frege F).x
     proof
@@ -2981,31 +3028,31 @@ A51: E' = D' from Irrel(A21); :: UWAGA!!! wrazliwy na strony rownosci
       proof
         assume y in E';
         then consider g being Element of product doms F such that
-A52:    y = "/\"(rng((Frege F).g),L);
-        take g; thus
-A53:    g in dom(Infs Frege F) by A13;
-        thus y = //\((Frege F).g, L) by A52,YELLOW_2:def 6
-          .= (Infs Frege F).g by A53,WAYBEL_5:def 2;
+A53:    y = "/\"(rng((Frege F).g),L);
+        take g;
+        thus
+A54:    g in dom(Infs Frege F) by A13;
+        thus y = //\((Frege F).g, L) by A53,YELLOW_2:def 6
+          .= (Infs Frege F).g by A54,WAYBEL_5:def 2;
       end;
       given x being set such that
-A54:  x in dom(Infs Frege F) and
-A55:  y = (Infs Frege F).x;
-      reconsider x as Element of product doms F by A54,PARTFUN1:def 4
-;
-      y = //\((Frege F).x, L) by A54,A55,WAYBEL_5:def 2
+A55:  x in dom(Infs Frege F) and
+A56:  y = (Infs Frege F).x;
+      reconsider x as Element of product doms F by A55,PARTFUN1:def 4;
+      y = //\((Frege F).x, L) by A55,A56,WAYBEL_5:def 2
         .= "/\"(rng((Frege F).x),L) by YELLOW_2:def 6;
       hence thesis;
     end;
     then rng Infs Frege F = E' by FUNCT_1:def 5;
     then
-A56: Sup Infs Frege F = lim_inf Iterated J by A29,A51,YELLOW_2:def 5;
+A57: Sup Infs Frege F = lim_inf Iterated J by A30,A52,YELLOW_2:def 5;
     reconsider x' = x as Element of L;
     set X1 = {x where j' is Element of X: not contradiction},
     X2 = {"/\"({X.i where i is Element of X:i >= j},L)
     where j is Element of X: not contradiction};
-A57: X2 = X1
+A58: X2 = X1
     proof
-A58:  for j being Element of X holds
+A59:  for j being Element of X holds
       x = "/\"({X.i where i is Element of X:i >= j},L)
       proof
         let j be Element of X;
@@ -3017,20 +3064,20 @@ A58:  for j being Element of X holds
           hereby
             assume e in X3;
             then consider i being Element of X such that
-A59:        e = X.i and i >= j;
+A60:        e = X.i and i >= j;
             reconsider u = i as set;
             take u;
             u in I;
             hence u in dom Sups F by FUNCT_2:def 1;
-            thus e = (Sups F).u by A59;
+            thus e = (Sups F).u by A60;
           end;
           given u being set such that
-A60:      u in dom Sups F and
-A61:      e = (Sups F).u;
-          reconsider i = u as Element of X by A60,FUNCT_2:def 1;
-A62:      i >= j by A6;
-          e = X.i by A61;
-          hence thesis by A62;
+A61:      u in dom Sups F and
+A62:      e = (Sups F).u;
+          reconsider i = u as Element of X by A61,FUNCT_2:def 1;
+A63:      i >= j by A6;
+          e = X.i by A62;
+          hence thesis by A63;
         end;
         then rng Sups F = X3 by FUNCT_1:def 5;
         hence thesis by YELLOW_2:def 6;
@@ -3039,16 +3086,16 @@ A62:      i >= j by A6;
       proof
         let u be set;
         assume u in X2;
-        then consider j being Element of X such that
-A63:    u = "/\"({X.i where i is Element of X:i >= j},L);
-        u = x by A58,A63;
+        then ex j being Element of X st ( u = "/\"({X.i where i is
+        Element of X:i >= j},L));
+        then u = x by A59;
         hence thesis;
       end;
       let u be set;
       consider j being Element of X;
       assume u in X1;
       then ex j being Element of X st u = x;
-      then u = "/\"({X.i where i is Element of X:i >= j},L) by A58;
+      then u = "/\"({X.i where i is Element of X:i >= j},L) by A59;
       hence thesis;
     end;
     now
@@ -3057,14 +3104,14 @@ A63:    u = "/\"({X.i where i is Element of X:i >= j},L);
       then u in X1 iff u = x;
       hence u in X1 iff u in {x} by TARSKI:def 1;
     end;
-    then "\/"(X2,L) = sup {x'} by A57,TARSKI:2
+    then "\/"(X2,L) = sup {x'} by A58,TARSKI:2
       .= x by YELLOW_0:39;
     then x <= lim_inf X;
     then x is_S-limit_of X by Def7;
     then [X,x] in C by A19,Def8;
     then [Iterated J,x] in C by A1,A16,YELLOW_6:def 26;
     then x is_S-limit_of Iterated J by A20,Def8;
-    then x <= Sup Infs Frege F by A56,Def7;
+    then x <= Sup Infs Frege F by A57,Def7;
     hence x = Sup Infs Frege F by A5,ORDERS_2:25;
   end;
   hence thesis by WAYBEL_5:18;
@@ -3079,8 +3126,8 @@ proof
     assume T is continuous;
     then reconsider L = T as continuous complete Scott TopLattice;
     the TopStruct of T = ConvergenceSpace Scott-Convergence T by Th32;
-
-hence Convergence T = Convergence ConvergenceSpace Scott-Convergence L by Lm8
+    hence
+    Convergence T = Convergence ConvergenceSpace Scott-Convergence L by Lm8
       .= Scott-Convergence T by YELLOW_6:53;
   end;
   thus thesis by Th39;
@@ -3254,10 +3301,9 @@ proof
 A1: y in Int uparrow p;
     then reconsider q = y as Element of T;
     reconsider S = Int uparrow p as Subset of T;
-    S is open by TOPS_1:51;
-    then consider u being Element of T such that
+    consider u being Element of T such that
 A2: u << q and
-A3: u in S by A1,Th43;
+A3: u in S by A1,Th43,TOPS_1:51;
     S c= uparrow p by TOPS_1:44;
     then p <= u by A3,WAYBEL_0:18;
     then p << q by A2,WAYBEL_3:2;

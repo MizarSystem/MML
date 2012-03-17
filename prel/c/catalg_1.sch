@@ -10,6 +10,7 @@
 <ArticleID name="TARSKI"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
@@ -17,7 +18,6 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_4"/>
 <ArticleID name="FUNCOP_1"/>
-<ArticleID name="PARTFUN1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="STRUCT_0"/>
@@ -65,12 +65,12 @@
 <Typ kind="G" nr="11">
 <Cluster>
 <Adjective nr="78">
-<Func kind="K" nr="348">
+<Func kind="K" nr="345">
 <Func kind="F" nr="1"/>
 </Func>
 </Adjective>
 </Cluster>
-<Func kind="K" nr="348">
+<Func kind="K" nr="345">
 <Func kind="F" nr="1"/>
 </Func>
 </Typ>
@@ -89,12 +89,12 @@
 <Pred kind="R" nr="1">
 <Func kind="K" nr="13">
 <Func kind="U" nr="12">
-<Func kind="K" nr="348">
+<Func kind="K" nr="345">
 <Func kind="F" nr="1"/>
 </Func>
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="354">
+<Func kind="K" nr="351">
 <Func kind="F" nr="1"/>
 <Var nr="2"/>
 <Var nr="3"/>
@@ -114,11 +114,11 @@
 </Typ>
 <Pred kind="R" nr="1">
 <Func kind="K" nr="13">
-<Func kind="K" nr="192">
-<Func kind="K" nr="348">
+<Func kind="K" nr="194">
+<Func kind="K" nr="345">
 <Func kind="F" nr="1"/>
 </Func>
-<Func kind="K" nr="353">
+<Func kind="K" nr="350">
 <Func kind="F" nr="1"/>
 <Var nr="2"/>
 </Func>
@@ -175,11 +175,11 @@
 <Not>
 <Pred kind="R" nr="1">
 <Func kind="K" nr="13">
-<Func kind="K" nr="192">
-<Func kind="K" nr="348">
+<Func kind="K" nr="194">
+<Func kind="K" nr="345">
 <Func kind="F" nr="1"/>
 </Func>
-<Func kind="K" nr="355">
+<Func kind="K" nr="352">
 <Func kind="F" nr="1"/>
 <Var nr="2"/>
 <Var nr="3"/>
@@ -187,7 +187,7 @@
 </Func>
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="106">
+<Func kind="K" nr="114">
 <Func kind="F" nr="2"/>
 <Var nr="6"/>
 <Var nr="5"/>

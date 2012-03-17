@@ -12,7 +12,7 @@ environ
       RAT_1, INT_1, ORDINAL1, MEMBERED, BINOP_2, XXREAL_3, XXREAL_0;
  constructors XCMPLX_0, RAT_1, MEMBERED, ENUMSET1, BINOP_2, XXREAL_3;
  registrations XREAL_0, INT_1, RAT_1, ORDINAL1, MEMBERED, XCMPLX_0, NAT_1,
-      XXREAL_3, XBOOLE_0, XXREAL_0;
+      XXREAL_3, XBOOLE_0;
  requirements BOOLE, SUBSET, NUMERALS, ARITHM, REAL;
  definitions TARSKI, XBOOLE_0, XCMPLX_0, MEMBERED, XXREAL_3;
  theorems XCMPLX_0, TARSKI, XBOOLE_0, ENUMSET1, XCMPLX_1, XXREAL_0, XXREAL_3,
@@ -29,9 +29,9 @@ reserve f, g, h, i, j for ext-real number;
 reserve r for real number;
 reserve e for set;
 
-definition let w;
- redefine
-  func -w -> Element of ExtREAL;
+definition
+  let w;
+  redefine func -w -> Element of ExtREAL;
   coherence by XXREAL_0:def 1;
   func w" -> Element of ExtREAL;
   coherence by XXREAL_0:def 1;
@@ -69,7 +69,8 @@ definition
     {-w: w in F} is ext-real-membered
     proof
       let e;
-      assume e in {-w: w in F};
+      assume
+      e in {-w: w in F};
       then ex w st e = -w & w in F;
       hence thesis;
     end;
@@ -83,49 +84,51 @@ A1: A = {-w: w in B};
     thus B c= {-w: w in A}
     proof
       let z be ext-real number;
+A2:   z in ExtREAL by XXREAL_0:def 1;
+A3:   -z in ExtREAL & z = - -z by XXREAL_0:def 1;
       assume
-A2:   z in B;
-A3:   z in ExtREAL by XXREAL_0:def 1;
-A4:   -z in ExtREAL by XXREAL_0:def 1;
-A5:   z = - -z;
-      -z in A by A1,A2,A3;
-      hence thesis by A5,A4;
+      z in B;
+      then -z in A by A1,A2;
+      hence thesis by A3;
     end;
     let e;
-    assume e in {-w: w in A};
+    assume
+    e in {-w: w in A};
     then consider w1 such that
-A6: -w1 = e and
-A7: w1 in A;
-    ex w st -w = w1 & w in B by A1,A7;
-    hence thesis by A6;
+A4: -w1 = e and
+A5: w1 in A;
+    ex w st -w = w1 & w in B by A1,A5;
+    hence thesis by A4;
   end;
 end;
 
-theorem Th7:
+theorem Th1:
   f in F iff -f in --F
-  proof
-    f in ExtREAL by XXREAL_0:def 1;
-    hence f in F implies -f in --F;
-    assume -f in --F;
-    then
+proof
+  f in ExtREAL by XXREAL_0:def 1;
+  hence f in F implies -f in --F;
+  assume
+  -f in --F;
+  then
 A1: ex w st -w = -f & w in F;
-    - -f = f;
-    hence thesis by A1;
-  end;
+  - -f = f;
+  hence thesis by A1;
+end;
 
-theorem Th8:
+theorem Th2:
   -f in F iff f in --F
-  proof
-    - -f = f;
-    hence thesis by Th7;
-  end;
+proof
+  - -f = f;
+  hence thesis by Th1;
+end;
 
 registration
   let F be empty set;
   cluster --F -> empty;
   coherence
   proof
-    assume --F is non empty;
+    assume
+    --F is non empty;
     then the Element of --F in --F;
     then ex w st the Element of --F = -w & w in F;
     hence thesis;
@@ -137,128 +140,148 @@ registration
   cluster --F -> non empty;
   coherence
   proof
-    -the Element of F in --F by Th7;
+    -the Element of F in --F by Th1;
     hence thesis;
   end;
 end;
 
-Lm2:
-  F c= G implies --F c= --G
-  proof
-    assume
+Lm1: F c= G implies --F c= --G
+proof
+  assume
 A1: F c= G;
-    let j;
-    assume j in --F;
-    then -j in F by Th8;
-    hence thesis by A1,Th8;
-  end;
+  let j;
+  assume
+  j in --F;
+  then -j in F by Th2;
+  hence thesis by A1,Th2;
+end;
 
-theorem Th9:
+theorem Th3:
   F c= G iff --F c= --G
-  proof
-    ----F = F & ----G = G;
-    hence thesis by Lm2;
-  end;
+proof
+  ----F = F & ----G = G;
+  hence thesis by Lm1;
+end;
 
 theorem
   --F = --G implies F = G
-  proof
-    assume --F = --G;
-    then F c= G & G c= F by Th9;
-    hence thesis by XBOOLE_0:def 10;
-  end;
+proof
+  assume
+  --F = --G;
+  then F c= G & G c= F by Th3;
+  hence thesis by XBOOLE_0:def 10;
+end;
 
-theorem Th11:
+theorem Th5:
   -- (F \/ G) = (--F) \/ (--G)
-  proof
-    let i;
-    hereby
-      assume i in --(F\/G);
-      then -i in F \/ G by Th8;
-      then -i in F or -i in G by XBOOLE_0:def 3;
-      then i in --F or i in --G by Th8;
-      hence i in --F \/ --G by XBOOLE_0:def 3;
-    end;
-    assume i in --F \/ --G;
-    then i in --F or i in --G by XBOOLE_0:def 3;
-    then -i in F or -i in G by Th8;
-    then -i in F \/ G by XBOOLE_0:def 3;
-    hence thesis by Th8;
+proof
+  let i;
+  hereby
+    assume
+    i in --(F\/G);
+    then -i in F \/ G by Th2;
+    then -i in F or -i in G by XBOOLE_0:def 3;
+    then i in --F or i in --G by Th2;
+    hence i in --F \/ --G by XBOOLE_0:def 3;
   end;
+  assume
+  i in --F \/ --G;
+  then i in --F or i in --G by XBOOLE_0:def 3;
+  then -i in F or -i in G by Th2;
+  then -i in F \/ G by XBOOLE_0:def 3;
+  hence thesis by Th2;
+end;
 
-theorem Th12:
+theorem Th6:
   -- (F /\ G) = (--F) /\ (--G)
-  proof
-    let i;
-    hereby
-      assume i in --(F/\G);
-      then -i in F /\ G by Th8;
-      then -i in F & -i in G by XBOOLE_0:def 4;
-      then i in --F & i in --G by Th8;
-      hence i in (--F) /\ --G by XBOOLE_0:def 4;
-    end;
-    assume i in (--F) /\ --G;
-    then i in --F & i in --G by XBOOLE_0:def 4;
-    then -i in F & -i in G by Th8;
-    then -i in F /\ G by XBOOLE_0:def 4;
-    hence thesis by Th8;
-  end;
-
-theorem Th13:
-  -- (F \ G) = (--F) \ (--G)
-  proof
-    let i;
-    hereby
-      assume i in --(F\G);
-      then -i in F \ G by Th8;
-      then -i in F & not -i in G by XBOOLE_0:def 5;
-      then i in --F & not i in --G by Th8;
-      hence i in (--F) \ --G by XBOOLE_0:def 5;
-    end;
-    assume i in (--F) \ --G;
-    then i in --F & not i in --G by XBOOLE_0:def 5;
-    then -i in F & not -i in G by Th8;
-    then -i in F \ G by XBOOLE_0:def 5;
-    hence thesis by Th8;
-  end;
-
-theorem Th14:
-  -- (F \+\ G) = (--F) \+\ (--G)
-  proof
-    thus -- (F \+\ G) = --(F\G) \/ --(G\F) by Th11
-    .= --F \ --G \/ --(G\F) by Th13
-    .= (--F) \+\ --G by Th13;
-  end;
-
-theorem Th15:
-  --{f} = {-f}
-  proof
-    let i;
-    hereby
-      assume i in --{f};
-      then consider w such that
-A1:   i = -w and
-A2:   w in {f};
-      w = f by A2,TARSKI:def 1;
-      hence i in {-f} by A1,TARSKI:def 1;
-    end;
-    assume i in {-f};
+proof
+  let i;
+  hereby
+    assume
+    i in --(F/\G);
     then
-A3: i = -f by TARSKI:def 1;
-A4: f in ExtREAL by XXREAL_0:def 1;
-    f in {f} by TARSKI:def 1;
-    hence thesis by A3,A4;
+A1: -i in F /\ G by Th2;
+    then -i in G by XBOOLE_0:def 4;
+    then
+A2: i in --G by Th2;
+    -i in F by A1,XBOOLE_0:def 4;
+    then i in --F by Th2;
+    hence i in (--F) /\ --G by A2,XBOOLE_0:def 4;
   end;
+  assume
+A3: i in (--F) /\ --G;
+  then i in --G by XBOOLE_0:def 4;
+  then
+A4: -i in G by Th2;
+  i in --F by A3,XBOOLE_0:def 4;
+  then -i in F by Th2;
+  then -i in F /\ G by A4,XBOOLE_0:def 4;
+  hence thesis by Th2;
+end;
 
-theorem Th16:
-  --{f,g} = {-f,-g}
-  proof
-    thus --{f,g} = --({f}\/{g}) by ENUMSET1:41
-    .= --{f} \/ --{g} by Th11
-    .= {-f} \/ --{g} by Th15
-    .= {-f} \/ {-g} by Th15
-    .= {-f,-g} by ENUMSET1:41;
+theorem Th7:
+  -- (F \ G) = (--F) \ (--G)
+proof
+  let i;
+  hereby
+    assume
+    i in --(F\G);
+    then
+A1: -i in F \ G by Th2;
+    then not -i in G by XBOOLE_0:def 5;
+    then
+A2: not i in --G by Th2;
+    i in --F by A1,Th2;
+    hence i in (--F) \ --G by A2,XBOOLE_0:def 5;
   end;
+  assume
+A3: i in (--F) \ --G;
+  then not i in --G by XBOOLE_0:def 5;
+  then
+A4: not -i in G by Th2;
+  -i in F by A3,Th2;
+  then -i in F \ G by A4,XBOOLE_0:def 5;
+  hence thesis by Th2;
+end;
+
+theorem Th8:
+  -- (F \+\ G) = (--F) \+\ (--G)
+proof
+  thus -- (F \+\ G) = --(F\G) \/ --(G\F) by Th5
+    .= --F \ --G \/ --(G\F) by Th7
+    .= (--F) \+\ --G by Th7;
+end;
+
+theorem Th9:
+  --{f} = {-f}
+proof
+  let i;
+  hereby
+    assume
+    i in --{f};
+    then consider w such that
+A1: i = -w and
+A2: w in {f};
+    w = f by A2,TARSKI:def 1;
+    hence i in {-f} by A1,TARSKI:def 1;
+  end;
+  assume
+  i in {-f};
+  then
+A3: i = -f by TARSKI:def 1;
+  f in ExtREAL & f in {f} by TARSKI:def 1,XXREAL_0:def 1;
+  hence thesis by A3;
+end;
+
+theorem Th10:
+  --{f,g} = {-f,-g}
+proof
+  thus --{f,g} = --({f}\/{g}) by ENUMSET1:41
+    .= --{f} \/ --{g} by Th5
+    .= {-f} \/ --{g} by Th9
+    .= {-f} \/ {-g} by Th9
+    .= {-f,-g} by ENUMSET1:41;
+end;
 
 definition
   let A be complex-membered set;
@@ -269,7 +292,8 @@ definition
     {-c: c in A} is complex-membered
     proof
       let e;
-      assume e in {-c: c in A};
+      assume
+      e in {-c: c in A};
       then ex c st e = -c & c in A;
       hence thesis;
     end;
@@ -283,47 +307,49 @@ A1: A = {-c: c in B};
     thus B c= {-c: c in A}
     proof
       let z;
+A2:   z in COMPLEX by XCMPLX_0:def 2;
+A3:   -z in COMPLEX & z = - -z by XCMPLX_0:def 2;
       assume
-A2:   z in B;
-A3:   z in COMPLEX by XCMPLX_0:def 2;
-A4:   -z in COMPLEX by XCMPLX_0:def 2;
-A5:   z = - -z;
-      -z in A by A1,A2,A3;
-      hence thesis by A5,A4;
+      z in B;
+      then -z in A by A1,A2;
+      hence thesis by A3;
     end;
     let e;
-    assume e in {-c: c in A};
+    assume
+    e in {-c: c in A};
     then consider r0 being Element of COMPLEX such that
-A6: -r0 = e and
-A7: r0 in A;
-    ex c st -c = r0 & c in B by A1,A7;
-    hence thesis by A6;
+A4: -r0 = e and
+A5: r0 in A;
+    ex c st -c = r0 & c in B by A1,A5;
+    hence thesis by A4;
   end;
 end;
 
-theorem Th17:
+theorem Th11:
   a in A iff -a in --A
-  proof
-    a in COMPLEX by XCMPLX_0:def 2;
-    hence a in A implies -a in --A;
-    assume -a in --A;
-    then ex c st -c = -a & c in A;
-    hence thesis;
-  end;
+proof
+  a in COMPLEX by XCMPLX_0:def 2;
+  hence a in A implies -a in --A;
+  assume
+  -a in --A;
+  then ex c st -c = -a & c in A;
+  hence thesis;
+end;
 
-theorem Th18:
+theorem Th12:
   -a in A iff a in --A
-  proof
-    - -a = a;
-    hence thesis by Th17;
-  end;
+proof
+  - -a = a;
+  hence thesis by Th11;
+end;
 
 registration
   let A be empty set;
   cluster --A -> empty;
   coherence
   proof
-    assume --A is non empty;
+    assume
+    --A is non empty;
     then the Element of --A in --A;
     then ex c st the Element of --A = -c & c in A;
     hence thesis;
@@ -335,7 +361,7 @@ registration
   cluster --A -> non empty;
   coherence
   proof
-    -the Element of A in --A by Th17;
+    -the Element of A in --A by Th11;
     hence thesis;
   end;
 end;
@@ -346,7 +372,8 @@ registration
   coherence
   proof
     let e;
-    assume e in --A;
+    assume
+    e in --A;
     then ex c st e = -c & c in A;
     hence thesis;
   end;
@@ -358,7 +385,8 @@ registration
   coherence
   proof
     let e;
-    assume e in --A;
+    assume
+    e in --A;
     then ex c st e = -c & c in A;
     hence thesis;
   end;
@@ -370,7 +398,8 @@ registration
   coherence
   proof
     let e;
-    assume e in --A;
+    assume
+    e in --A;
     then ex c st e = -c & c in A;
     hence thesis;
   end;
@@ -388,10 +417,11 @@ A1: A = F;
       assume
 A2:   a in --A;
       then reconsider b = a as real number;
-      -b in A by A2,Th18;
-      hence a in --F by A1,Th8;
+      -b in A by A2,Th12;
+      hence a in --F by A1,Th2;
     end;
-    assume a in --F;
+    assume
+    a in --F;
     then consider w such that
 A3: a = -w and
 A4: w in F;
@@ -403,123 +433,143 @@ A4: w in F;
   end;
 end;
 
-Lm3:
-  A c= B implies --A c= --B
-  proof
-    assume
+Lm2: A c= B implies --A c= --B
+proof
+  assume
 A1: A c= B;
-    let a;
-    assume a in --A;
-    then -a in A by Th18;
-    hence thesis by A1,Th18;
-  end;
+  let a;
+  assume
+  a in --A;
+  then -a in A by Th12;
+  hence thesis by A1,Th12;
+end;
 
-theorem Th19:
+theorem Th13:
   A c= B iff --A c= --B
-  proof
-    ----A = A & ----B = B;
-    hence thesis by Lm3;
-  end;
+proof
+  ----A = A & ----B = B;
+  hence thesis by Lm2;
+end;
 
 theorem
   --A = --B implies A = B
-  proof
-    assume --A = --B;
-    then A c= B & B c= A by Th19;
-    hence thesis by XBOOLE_0:def 10;
-  end;
+proof
+  assume
+  --A = --B;
+  then A c= B & B c= A by Th13;
+  hence thesis by XBOOLE_0:def 10;
+end;
 
-theorem Th21:
+theorem Th15:
   -- (A \/ B) = (--A) \/ (--B)
-  proof
-    let z;
-    hereby
-      assume z in --(A\/B);
-      then -z in A \/ B by Th18;
-      then -z in A or -z in B by XBOOLE_0:def 3;
-      then z in --A or z in --B by Th18;
-      hence z in --A \/ --B by XBOOLE_0:def 3;
-    end;
-    assume z in --A \/ --B;
-    then z in --A or z in --B by XBOOLE_0:def 3;
-    then -z in A or -z in B by Th18;
-    then -z in A \/ B by XBOOLE_0:def 3;
-    hence thesis by Th18;
+proof
+  let z;
+  hereby
+    assume
+    z in --(A\/B);
+    then -z in A \/ B by Th12;
+    then -z in A or -z in B by XBOOLE_0:def 3;
+    then z in --A or z in --B by Th12;
+    hence z in --A \/ --B by XBOOLE_0:def 3;
   end;
+  assume
+  z in --A \/ --B;
+  then z in --A or z in --B by XBOOLE_0:def 3;
+  then -z in A or -z in B by Th12;
+  then -z in A \/ B by XBOOLE_0:def 3;
+  hence thesis by Th12;
+end;
 
-theorem Th22:
+theorem Th16:
   -- (A /\ B) = (--A) /\ (--B)
-  proof
-    let z;
-    hereby
-      assume z in --(A/\B);
-      then -z in A /\ B by Th18;
-      then -z in A & -z in B by XBOOLE_0:def 4;
-      then z in --A & z in --B by Th18;
-      hence z in (--A) /\ --B by XBOOLE_0:def 4;
-    end;
-    assume z in (--A) /\ --B;
-    then z in --A & z in --B by XBOOLE_0:def 4;
-    then -z in A & -z in B by Th18;
-    then -z in A /\ B by XBOOLE_0:def 4;
-    hence thesis by Th18;
-  end;
-
-theorem Th23:
-  -- (A \ B) = (--A) \ (--B)
-  proof
-    let z;
-    hereby
-      assume z in --(A\B);
-      then -z in A \ B by Th18;
-      then -z in A & not -z in B by XBOOLE_0:def 5;
-      then z in --A & not z in --B by Th18;
-      hence z in (--A) \ --B by XBOOLE_0:def 5;
-    end;
-    assume z in (--A) \ --B;
-    then z in --A & not z in --B by XBOOLE_0:def 5;
-    then -z in A & not -z in B by Th18;
-    then -z in A \ B by XBOOLE_0:def 5;
-    hence thesis by Th18;
-  end;
-
-theorem Th24:
-  -- (A \+\ B) = (--A) \+\ (--B)
-  proof
-    thus -- (A \+\ B) = --(A\B) \/ --(B\A) by Th21
-    .= --A \ --B \/ --(B\A) by Th23
-    .= (--A) \+\ --B by Th23;
-  end;
-
-theorem Th25:
-  --{a} = {-a}
-  proof
-    let z;
-    hereby
-      assume z in --{a};
-      then consider c such that
-A1:   z = -c and
-A2:   c in {a};
-      c = a by A2,TARSKI:def 1;
-      hence z in {-a} by A1,TARSKI:def 1;
-    end;
-    assume z in {-a};
+proof
+  let z;
+  hereby
+    assume
+    z in --(A/\B);
     then
-A3: z = -a by TARSKI:def 1;
-A4: a in COMPLEX by XCMPLX_0:def 2;
-    a in {a} by TARSKI:def 1;
-    hence thesis by A3,A4;
+A1: -z in A /\ B by Th12;
+    then -z in B by XBOOLE_0:def 4;
+    then
+A2: z in --B by Th12;
+    -z in A by A1,XBOOLE_0:def 4;
+    then z in --A by Th12;
+    hence z in (--A) /\ --B by A2,XBOOLE_0:def 4;
   end;
+  assume
+A3: z in (--A) /\ --B;
+  then z in --B by XBOOLE_0:def 4;
+  then
+A4: -z in B by Th12;
+  z in --A by A3,XBOOLE_0:def 4;
+  then -z in A by Th12;
+  then -z in A /\ B by A4,XBOOLE_0:def 4;
+  hence thesis by Th12;
+end;
 
-theorem Th26:
-  --{a,b} = {-a,-b}
-  proof
-    thus --{a,b} = --({a}\/{b}) by ENUMSET1:41
-    .= --{a} \/ --{b} by Th21
-    .= {-a} \/ --{b} by Th25
-    .= {-a} \/ {-b} by Th25
-    .= {-a,-b} by ENUMSET1:41;
+theorem Th17:
+  -- (A \ B) = (--A) \ (--B)
+proof
+  let z;
+  hereby
+    assume
+    z in --(A\B);
+    then
+A1: -z in A \ B by Th12;
+    then not -z in B by XBOOLE_0:def 5;
+    then
+A2: not z in --B by Th12;
+    z in --A by A1,Th12;
+    hence z in (--A) \ --B by A2,XBOOLE_0:def 5;
   end;
+  assume
+A3: z in (--A) \ --B;
+  then not z in --B by XBOOLE_0:def 5;
+  then
+A4: not -z in B by Th12;
+  -z in A by A3,Th12;
+  then -z in A \ B by A4,XBOOLE_0:def 5;
+  hence thesis by Th12;
+end;
+
+theorem Th18:
+  -- (A \+\ B) = (--A) \+\ (--B)
+proof
+  thus -- (A \+\ B) = --(A\B) \/ --(B\A) by Th15
+    .= --A \ --B \/ --(B\A) by Th17
+    .= (--A) \+\ --B by Th17;
+end;
+
+theorem Th19:
+  --{a} = {-a}
+proof
+  let z;
+  hereby
+    assume
+    z in --{a};
+    then consider c such that
+A1: z = -c and
+A2: c in {a};
+    c = a by A2,TARSKI:def 1;
+    hence z in {-a} by A1,TARSKI:def 1;
+  end;
+  assume
+  z in {-a};
+  then
+A3: z = -a by TARSKI:def 1;
+  a in COMPLEX & a in {a} by TARSKI:def 1,XCMPLX_0:def 2;
+  hence thesis by A3;
+end;
+
+theorem Th20:
+  --{a,b} = {-a,-b}
+proof
+  thus --{a,b} = --({a}\/{b}) by ENUMSET1:41
+    .= --{a} \/ --{b} by Th15
+    .= {-a} \/ --{b} by Th19
+    .= {-a} \/ {-b} by Th19
+    .= {-a,-b} by ENUMSET1:41;
+end;
 
 definition
   let F be ext-real-membered set;
@@ -530,7 +580,8 @@ definition
     {w": w in F} is ext-real-membered
     proof
       let e;
-      assume e in {w": w in F};
+      assume
+      e in {w": w in F};
       then ex w st e = w" & w in F;
       hence thesis;
     end;
@@ -538,19 +589,20 @@ definition
   end;
 end;
 
-theorem Th27:
+theorem Th21:
   f in F implies f" in F""
-  proof
-    f in ExtREAL by XXREAL_0:def 1;
-    hence thesis;
-  end;
+proof
+  f in ExtREAL by XXREAL_0:def 1;
+  hence thesis;
+end;
 
 registration
   let F be empty set;
   cluster F"" -> empty;
   coherence
   proof
-    assume F"" is non empty;
+    assume
+    F"" is non empty;
     then the Element of F"" in F"";
     then ex w st the Element of F"" = w" & w in F;
     hence thesis;
@@ -562,120 +614,129 @@ registration
   cluster F"" -> non empty;
   coherence
   proof
-    (the Element of F)" in F"" by Th27;
+    (the Element of F)" in F"" by Th21;
     hence thesis;
   end;
 end;
 
 theorem
   F c= G implies F"" c= G""
-  proof
-    assume
+proof
+  assume
 A1: F c= G;
-    let i;
-    assume i in F"";
-    then ex w st i = w" & w in F;
-    hence thesis by A1;
-  end;
+  let i;
+  assume
+  i in F"";
+  then ex w st i = w" & w in F;
+  hence thesis by A1;
+end;
 
-theorem Th29:
+theorem Th23:
   (F \/ G)"" = (F"") \/ (G"")
-  proof
-    let i;
-    hereby
-      assume i in (F\/G)"";
-      then consider w such that
-A1:   i = w" and
-A2:   w in F \/ G;
-      w in F or w in G by A2,XBOOLE_0:def 3;
-      then w" in F"" or w" in G"";
-      hence i in F"" \/ G"" by A1,XBOOLE_0:def 3;
-    end;
+proof
+  let i;
+  hereby
     assume
-A3: i in F"" \/ G"";
-    per cases by A3,XBOOLE_0:def 3;
-    suppose i in F"";
-      then consider w such that
-A4:   i = w" and
-A5:   w in F;
-      w in F\/G by A5,XBOOLE_0:def 3;
-      hence thesis by A4;
-    end;
-    suppose i in G"";
-      then consider w such that
-A6:   i = w" and
-A7:   w in G;
-      w in F\/G by A7,XBOOLE_0:def 3;
-      hence thesis by A6;
-    end;
-  end;
-
-theorem Th30:
-  (F /\ G)"" c= (F"") /\ (G"")
-  proof
-    let i;
-    assume i in (F/\G)"";
+    i in (F\/G)"";
     then consider w such that
 A1: i = w" and
-A2: w in F /\ G;
-    w in F & w in G by A2,XBOOLE_0:def 4;
-    then w" in F"" & w" in G"";
-    hence thesis by A1,XBOOLE_0:def 4;
+A2: w in F \/ G;
+    w in F or w in G by A2,XBOOLE_0:def 3;
+    then w" in F"" or w" in G"";
+    hence i in F"" \/ G"" by A1,XBOOLE_0:def 3;
   end;
+  assume
+A3: i in F"" \/ G"";
+  per cases by A3,XBOOLE_0:def 3;
+  suppose
+    i in F"";
+    then consider w such that
+A4: i = w" and
+A5: w in F;
+    w in F\/G by A5,XBOOLE_0:def 3;
+    hence thesis by A4;
+  end;
+  suppose
+    i in G"";
+    then consider w such that
+A6: i = w" and
+A7: w in G;
+    w in F\/G by A7,XBOOLE_0:def 3;
+    hence thesis by A6;
+  end;
+end;
+
+theorem Th24:
+  (F /\ G)"" c= (F"") /\ (G"")
+proof
+  let i;
+  assume
+  i in (F/\G)"";
+  then consider w such that
+A1: i = w" and
+A2: w in F /\ G;
+  w in G by A2,XBOOLE_0:def 4;
+  then
+A3: w" in G"";
+  w in F by A2,XBOOLE_0:def 4;
+  then w" in F"";
+  hence thesis by A1,A3,XBOOLE_0:def 4;
+end;
 
 theorem
   --(F"") = (--F)""
-  proof
-    let i;
-    hereby
-      assume i in --F"";
-      then -i in F"" by Th8;
-      then consider w such that
-A1:   -i = w" and
-A2:   w in F;
-A3:   (-w)" = -w" by XXREAL_3:111;
-      -w in --F by A2;
-      hence i in (--F)"" by A1,A3;
-    end;
-    assume i in (--F)"";
+proof
+  let i;
+  hereby
+    assume
+    i in --F"";
+    then -i in F"" by Th2;
     then consider w such that
-A4: i = w" and
-A5: w in --F;
-A6: (-w)" = -w" by XXREAL_3:111;
-    -w in F by A5,Th8;
-    then -i in F"" by A4,A6;
-    hence thesis by Th8;
+A1: -i = w" and
+A2: w in F;
+    (-w)" = -w" & -w in --F by A2,XXREAL_3:111;
+    hence i in (--F)"" by A1;
   end;
+  assume
+  i in (--F)"";
+  then consider w such that
+A3: i = w" and
+A4: w in --F;
+  (-w)" = -w" & -w in F by A4,Th2,XXREAL_3:111;
+  then -i in F"" by A3;
+  hence thesis by Th2;
+end;
 
-theorem Th32:
+theorem Th26:
   {f}"" = {f"}
-  proof
-    let i;
-    hereby
-      assume i in {f}"";
-      then consider w such that
-A1:   i = w" and
-A2:   w in {f};
-      w = f by A2,TARSKI:def 1;
-      hence i in {f"} by A1,TARSKI:def 1;
-    end;
-    assume i in {f"};
-    then
+proof
+  let i;
+  hereby
+    assume
+    i in {f}"";
+    then consider w such that
+A1: i = w" and
+A2: w in {f};
+    w = f by A2,TARSKI:def 1;
+    hence i in {f"} by A1,TARSKI:def 1;
+  end;
+  assume
+  i in {f"};
+  then
 A3: i = f" by TARSKI:def 1;
-A4: f in ExtREAL by XXREAL_0:def 1;
-    f in {f} by TARSKI:def 1;
-    hence thesis by A3,A4;
-  end;
+  f in ExtREAL & f in {f} by TARSKI:def 1,XXREAL_0:def 1;
+  hence thesis by A3;
+end;
 
-theorem Th33:
+theorem Th27:
   {f,g}"" = {f",g"}
-  proof
-    thus {f,g}"" = ({f}\/{g})"" by ENUMSET1:41
-    .= ({f}"") \/ ({g}"") by Th29
-    .= {f"} \/ ({g}"") by Th32
-    .= ({f"}) \/ {g"} by Th32
+proof
+  thus {f,g}"" = ({f}\/{g})"" by ENUMSET1:41
+    .= ({f}"") \/ ({g}"") by Th23
+    .= {f"} \/ ({g}"") by Th26
+    .= ({f"}) \/ {g"} by Th26
     .= {f",g"} by ENUMSET1:41;
-  end;
+end;
 
 definition
   let A be complex-membered set;
@@ -686,7 +747,8 @@ definition
     {c": c in A} is complex-membered
     proof
       let e;
-      assume e in {c": c in A};
+      assume
+      e in {c": c in A};
       then ex c st e = c" & c in A;
       hence thesis;
     end;
@@ -700,47 +762,49 @@ A1: A = {c": c in B};
     thus B c= {c": c in A}
     proof
       let z;
+A2:   z in COMPLEX by XCMPLX_0:def 2;
+A3:   z" in COMPLEX & z = z" " by XCMPLX_0:def 2;
       assume
-A2:   z in B;
-A3:   z in COMPLEX by XCMPLX_0:def 2;
-A4:   z" in COMPLEX by XCMPLX_0:def 2;
-A5:   z = z" ";
-      z" in A by A1,A2,A3;
-      hence thesis by A5,A4;
+      z in B;
+      then z" in A by A1,A2;
+      hence thesis by A3;
     end;
     let e;
-    assume e in {c": c in A};
+    assume
+    e in {c": c in A};
     then consider r0 being Element of COMPLEX such that
-A6: r0" = e and
-A7: r0 in A;
-    ex c st c" = r0 & c in B by A1,A7;
-    hence thesis by A6;
+A4: r0" = e and
+A5: r0 in A;
+    ex c st c" = r0 & c in B by A1,A5;
+    hence thesis by A4;
   end;
 end;
 
-theorem Th34:
+theorem Th28:
   a in A iff a" in A""
-  proof
-    a in COMPLEX by XCMPLX_0:def 2;
-    hence a in A implies a" in A"";
-    assume a" in A"";
-    then ex c st c" = a" & c in A;
-    hence thesis by XCMPLX_1:202;
+proof
+  a in COMPLEX by XCMPLX_0:def 2;
+  hence a in A implies a" in A"";
+  assume
+  a" in A"";
+  then ex c st c" = a" & c in A;
+  hence thesis by XCMPLX_1:202;
 end;
 
-theorem Th35:
+theorem Th29:
   a" in A iff a in A""
-  proof
-    a" " = a;
-    hence thesis by Th34;
-  end;
+proof
+  a" " = a;
+  hence thesis by Th28;
+end;
 
 registration
   let A be empty set;
   cluster A"" -> empty;
   coherence
   proof
-    assume A"" is non empty;
+    assume
+    A"" is non empty;
     then the Element of A"" in A"";
     then ex c st the Element of A"" = c" & c in A;
     hence thesis;
@@ -752,7 +816,7 @@ registration
   cluster A"" -> non empty;
   coherence
   proof
-    (the Element of A)" in A"" by Th34;
+    (the Element of A)" in A"" by Th28;
     hence thesis;
   end;
 end;
@@ -763,7 +827,8 @@ registration
   coherence
   proof
     let e;
-    assume e in A"";
+    assume
+    e in A"";
     then ex c st e = c" & c in A;
     hence thesis;
   end;
@@ -775,7 +840,8 @@ registration
   coherence
   proof
     let e;
-    assume e in A"";
+    assume
+    e in A"";
     then ex c st e = c" & c in A;
     hence thesis;
   end;
@@ -790,15 +856,17 @@ registration
 A1: A = F;
     let a be ext-real number;
     hereby
-      assume a in A"";
+      assume
+      a in A"";
       then consider c such that
 A2:   a = c" and
 A3:   c in A;
       reconsider w = c as Element of ExtREAL by A3,XXREAL_0:def 1;
       ex m being complex number st w = m & w" = m" by A3,XXREAL_3:def 6;
-      hence a in F"" by A2,A1,A3;
+      hence a in F"" by A1,A2,A3;
     end;
-    assume a in F"";
+    assume
+    a in F"";
     then consider w such that
 A4: a = w" and
 A5: w in F;
@@ -808,152 +876,176 @@ A5: w in F;
   end;
 end;
 
-Lm4:
-  A c= B implies A"" c= B""
-  proof
-    assume
+Lm3: A c= B implies A"" c= B""
+proof
+  assume
 A1: A c= B;
-    let a;
-    assume a in A"";
-    then a" in A by Th35;
-    hence thesis by A1,Th35;
-  end;
+  let a;
+  assume
+  a in A"";
+  then a" in A by Th29;
+  hence thesis by A1,Th29;
+end;
 
-theorem Th36:
+theorem Th30:
   A c= B iff A"" c= B""
-  proof
-    A"""" = A & B"""" = B;
-    hence thesis by Lm4;
-  end;
+proof
+  A"""" = A & B"""" = B;
+  hence thesis by Lm3;
+end;
 
 theorem
   A"" = B"" implies A = B
-  proof
-    assume A"" = B"";
-    then A c= B & B c= A by Th36;
-    hence thesis by XBOOLE_0:def 10;
+proof
+  assume
+  A"" = B"";
+  then A c= B & B c= A by Th30;
+  hence thesis by XBOOLE_0:def 10;
+end;
+
+theorem Th32:
+  (A \/ B)"" = (A"") \/ (B"")
+proof
+  let a;
+  hereby
+    assume
+    a in (A\/B)"";
+    then a" in A\/B by Th29;
+    then a" in A or a" in B by XBOOLE_0:def 3;
+    then a in A"" or a in B"" by Th29;
+    hence a in A"" \/ B"" by XBOOLE_0:def 3;
   end;
+  assume
+  a in A"" \/ B"";
+  then a in A"" or a in B"" by XBOOLE_0:def 3;
+  then a" in A or a" in B by Th29;
+  then a" in A\/B by XBOOLE_0:def 3;
+  hence thesis by Th29;
+end;
+
+theorem Th33:
+  (A /\ B)"" = (A"") /\ (B"")
+proof
+  let a;
+  hereby
+    assume
+    a in (A/\B)"";
+    then
+A1: a" in A/\B by Th29;
+    then a" in B by XBOOLE_0:def 4;
+    then
+A2: a in B"" by Th29;
+    a" in A by A1,XBOOLE_0:def 4;
+    then a in A"" by Th29;
+    hence a in (A"") /\ (B"") by A2,XBOOLE_0:def 4;
+  end;
+  assume
+A3: a in (A"") /\ (B"");
+  then a in B"" by XBOOLE_0:def 4;
+  then
+A4: a" in B by Th29;
+  a in A"" by A3,XBOOLE_0:def 4;
+  then a" in A by Th29;
+  then a" in A/\B by A4,XBOOLE_0:def 4;
+  hence thesis by Th29;
+end;
+
+theorem Th34:
+  (A \ B)"" = (A"") \ (B"")
+proof
+  let a;
+  hereby
+    assume
+    a in (A\B)"";
+    then
+A1: a" in A\B by Th29;
+    then not a" in B by XBOOLE_0:def 5;
+    then
+A2: not a in B"" by Th29;
+    a in A"" by A1,Th29;
+    hence a in (A"") \ (B"") by A2,XBOOLE_0:def 5;
+  end;
+  assume
+A3: a in (A"") \ (B"");
+  then not a in B"" by XBOOLE_0:def 5;
+  then
+A4: not a" in B by Th29;
+  a" in A by A3,Th29;
+  then a" in A\B by A4,XBOOLE_0:def 5;
+  hence thesis by Th29;
+end;
+
+theorem Th35:
+  (A \+\ B)"" = (A"") \+\ (B"")
+proof
+  thus (A \+\ B)"" = ((A\B)"") \/ ((B\A)"") by Th32
+    .= ((A"")\(B"")) \/ ((B\A)"") by Th34
+    .= (A"") \+\ (B"") by Th34;
+end;
+
+theorem Th36:
+  --(A"") = (--A)""
+proof
+  let a;
+A1: (-a)" = -a" by XCMPLX_1:224;
+  hereby
+    assume
+    a in --A"";
+    then -a in A"" by Th12;
+    then (-a)" in A by Th29;
+    then a" in --A by A1,Th12;
+    hence a in (--A)"" by Th29;
+  end;
+  assume
+  a in (--A)"";
+  then a" in --A by Th29;
+  then -a" in A by Th12;
+  then -a in A"" by A1,Th29;
+  hence thesis by Th12;
+end;
+
+theorem Th37:
+  {a}"" = {a"}
+proof
+  let z;
+  hereby
+    assume
+    z in {a}"";
+    then consider c such that
+A1: z = c" and
+A2: c in {a};
+    c = a by A2,TARSKI:def 1;
+    hence z in {a"} by A1,TARSKI:def 1;
+  end;
+  assume
+  z in {a"};
+  then
+A3: z = a" by TARSKI:def 1;
+  a in COMPLEX & a in {a} by TARSKI:def 1,XCMPLX_0:def 2;
+  hence thesis by A3;
+end;
 
 theorem Th38:
-  (A \/ B)"" = (A"") \/ (B"")
-  proof
-    let a;
-    hereby
-      assume a in (A\/B)"";
-      then a" in A\/B by Th35;
-      then a" in A or a" in B by XBOOLE_0:def 3;
-      then a in A"" or a in B"" by Th35;
-      hence a in A"" \/ B"" by XBOOLE_0:def 3;
-    end;
-    assume a in A"" \/ B"";
-    then a in A"" or a in B"" by XBOOLE_0:def 3;
-    then a" in A or a" in B by Th35;
-    then a" in A\/B by XBOOLE_0:def 3;
-    hence thesis by Th35;
-  end;
-
-theorem Th39:
-  (A /\ B)"" = (A"") /\ (B"")
-  proof
-    let a;
-    hereby
-      assume a in (A/\B)"";
-      then a" in A/\B by Th35;
-      then a" in A & a" in B by XBOOLE_0:def 4;
-      then a in A"" & a in B"" by Th35;
-      hence a in (A"") /\ (B"") by XBOOLE_0:def 4;
-    end;
-    assume a in (A"") /\ (B"");
-    then a in A"" & a in B"" by XBOOLE_0:def 4;
-    then a" in A & a" in B by Th35;
-    then a" in A/\B by XBOOLE_0:def 4;
-    hence thesis by Th35;
-  end;
-
-theorem Th40:
-  (A \ B)"" = (A"") \ (B"")
-  proof
-    let a;
-    hereby
-      assume a in (A\B)"";
-      then a" in A\B by Th35;
-      then a" in A & not a" in B by XBOOLE_0:def 5;
-      then a in A"" & not a in B"" by Th35;
-      hence a in (A"") \ (B"") by XBOOLE_0:def 5;
-    end;
-    assume a in (A"") \ (B"");
-    then a in A"" & not a in B"" by XBOOLE_0:def 5;
-    then a" in A & not a" in B by Th35;
-    then a" in A\B by XBOOLE_0:def 5;
-    hence thesis by Th35;
-  end;
-
-theorem Th41:
-  (A \+\ B)"" = (A"") \+\ (B"")
-  proof
-    thus (A \+\ B)"" = ((A\B)"") \/ ((B\A)"") by Th38
-    .= ((A"")\(B"")) \/ ((B\A)"") by Th40
-    .= (A"") \+\ (B"") by Th40;
-  end;
-
-theorem Th42:
-  --(A"") = (--A)""
-  proof
-    let a;
-A1: (-a)" = -a" by XCMPLX_1:224;
-    hereby
-      assume a in --A"";
-      then -a in A"" by Th18;
-      then (-a)" in A by Th35;
-      then a" in --A by A1,Th18;
-      hence a in (--A)"" by Th35;
-    end;
-    assume a in (--A)"";
-    then a" in --A by Th35;
-    then -a" in A by Th18;
-    then -a in A"" by A1,Th35;
-    hence thesis by Th18;
-  end;
-
-theorem Th43:
-  {a}"" = {a"}
-  proof
-    let z;
-    hereby
-      assume z in {a}"";
-      then consider c such that
-A1:   z = c" and
-A2:   c in {a};
-      c = a by A2,TARSKI:def 1;
-      hence z in {a"} by A1,TARSKI:def 1;
-    end;
-    assume z in {a"};
-    then
-A3: z = a" by TARSKI:def 1;
-A4: a in COMPLEX by XCMPLX_0:def 2;
-    a in {a} by TARSKI:def 1;
-    hence thesis by A3,A4;
-  end;
-
-theorem Th44:
   {a,b}"" = {a",b"}
-  proof
-    let z;
-    hereby
-      assume z in {a,b}"";
-      then consider c such that
-A1:   z = c" and
-A2:   c in {a,b};
-      c = a or c = b by A2,TARSKI:def 2;
-      hence z in {a",b"} by A1,TARSKI:def 2;
-    end;
-    assume z in {a",b"};
-    then
-A3: z = a" or z = b" by TARSKI:def 2;
-A4: a in COMPLEX & b in COMPLEX by XCMPLX_0:def 2;
-    a in {a,b} & b in {a,b} by TARSKI:def 2;
-    hence thesis by A3,A4;
+proof
+  let z;
+  hereby
+    assume
+    z in {a,b}"";
+    then consider c such that
+A1: z = c" and
+A2: c in {a,b};
+    c = a or c = b by A2,TARSKI:def 2;
+    hence z in {a",b"} by A1,TARSKI:def 2;
   end;
+A3: a in {a,b} & b in {a,b} by TARSKI:def 2;
+  assume
+  z in {a",b"};
+  then
+A4: z = a" or z = b" by TARSKI:def 2;
+  a in COMPLEX & b in COMPLEX by XCMPLX_0:def 2;
+  hence thesis by A4,A3;
+end;
 
 definition
   let F, G be ext-real-membered set;
@@ -969,23 +1061,25 @@ A1: X = {w1+w2: w1 in F & w2 in G};
     thus X c= {w1+w2: w1 in G & w2 in F}
     proof
       let e;
-      assume e in X;
+      assume
+      e in X;
       then ex w1,w2 st e = w1+w2 & w1 in F & w2 in G by A1;
       hence thesis;
     end;
     let e;
-    assume e in {w1+w2: w1 in G & w2 in F};
+    assume
+    e in {w1+w2: w1 in G & w2 in F};
     then ex w1,w2 st e = w1+w2 & w1 in G & w2 in F;
     hence thesis by A1;
   end;
 end;
 
-theorem Th45:
+theorem Th39:
   f in F & g in G implies f+g in F++G
-  proof
-    f in ExtREAL & g in ExtREAL by XXREAL_0:def 1;
-    hence thesis;
-  end;
+proof
+  f in ExtREAL & g in ExtREAL by XXREAL_0:def 1;
+  hence thesis;
+end;
 
 registration
   let F be empty set;
@@ -993,7 +1087,8 @@ registration
   cluster F++G -> empty;
   coherence
   proof
-    assume F++G is non empty;
+    assume
+    F++G is non empty;
     then the Element of (F++G) in F++G;
     then ex w1,w2 st the Element of (F++G) = w1+w2 & w1 in F & w2 in G;
     hence thesis;
@@ -1007,7 +1102,7 @@ registration
   cluster F++G -> non empty;
   coherence
   proof
-    (the Element of F)+the Element of G in F++G by Th45;
+    (the Element of F)+the Element of G in F++G by Th39;
     hence thesis;
   end;
 end;
@@ -1018,7 +1113,8 @@ registration
   coherence
   proof
     let e;
-    assume e in F++G;
+    assume
+    e in F++G;
     then ex w1,w2 st e = w1+w2 & w1 in F & w2 in G;
     hence thesis;
   end;
@@ -1026,104 +1122,111 @@ end;
 
 theorem
   F c= G & H c= I implies F++H c= G++I
-  proof
-    assume
+proof
+  assume
 A1: F c= G & H c= I;
-    let i;
-    assume i in F++H;
-    then ex w,w1 st i = w+w1 & w in F & w1 in H;
-    hence thesis by A1;
-  end;
+  let i;
+  assume
+  i in F++H;
+  then ex w,w1 st i = w+w1 & w in F & w1 in H;
+  hence thesis by A1;
+end;
 
-theorem Th47:
+theorem Th41:
   F ++ (G \/ H) = (F++G) \/ (F++H)
-  proof
-    let j;
-    hereby
-      assume j in F++(G\/H);
-      then consider w,w1 such that
-A1:   j = w+w1 and
-A2:   w in F and
-A3:   w1 in G\/H;
-      w1 in G or w1 in H by A3,XBOOLE_0:def 3;
-      then w+w1 in F++G or w+w1 in F++H by A2;
-      hence j in (F++G)\/(F++H) by A1,XBOOLE_0:def 3;
-    end;
+proof
+  let j;
+  hereby
     assume
-A4: j in (F++G)\/(F++H);
-    per cases by A4,XBOOLE_0:def 3;
-    suppose j in F++G;
-      then consider w,w1 such that
-A5:   j = w+w1 and
-A6:   w in F and
-A7:   w1 in G;
-      w1 in G\/H by A7,XBOOLE_0:def 3;
-      hence thesis by A5,A6;
-    end;
-    suppose j in F++H;
-      then consider w,w1 such that
-A8:   j = w+w1 and
-A9:   w in F and
-A10:   w1 in H;
-      w1 in G\/H by A10,XBOOLE_0:def 3;
-      hence thesis by A8,A9;
-    end;
-  end;
-
-theorem Th48:
-  F ++ (G /\ H) c= (F++G) /\ (F++H)
-  proof
-    let j;
-    assume j in F++(G/\H);
+    j in F++(G\/H);
     then consider w,w1 such that
 A1: j = w+w1 and
 A2: w in F and
+A3: w1 in G\/H;
+    w1 in G or w1 in H by A3,XBOOLE_0:def 3;
+    then w+w1 in F++G or w+w1 in F++H by A2;
+    hence j in (F++G)\/(F++H) by A1,XBOOLE_0:def 3;
+  end;
+  assume
+A4: j in (F++G)\/(F++H);
+  per cases by A4,XBOOLE_0:def 3;
+  suppose
+    j in F++G;
+    then consider w,w1 such that
+A5: j = w+w1 & w in F and
+A6: w1 in G;
+    w1 in G\/H by A6,XBOOLE_0:def 3;
+    hence thesis by A5;
+  end;
+  suppose
+    j in F++H;
+    then consider w,w1 such that
+A7: j = w+w1 & w in F and
+A8: w1 in H;
+    w1 in G\/H by A8,XBOOLE_0:def 3;
+    hence thesis by A7;
+  end;
+end;
+
+theorem Th42:
+  F ++ (G /\ H) c= (F++G) /\ (F++H)
+proof
+  let j;
+  assume
+  j in F++(G/\H);
+  then consider w,w1 such that
+A1: j = w+w1 and
+A2: w in F and
 A3: w1 in G/\H;
-    w1 in G & w1 in H by A3,XBOOLE_0:def 4;
-    then w+w1 in F++G & w+w1 in F++H by A2;
-    hence thesis by A1,XBOOLE_0:def 4;
-  end;
+  w1 in H by A3,XBOOLE_0:def 4;
+  then
+A4: w+w1 in F++H by A2;
+  w1 in G by A3,XBOOLE_0:def 4;
+  then w+w1 in F++G by A2;
+  hence thesis by A1,A4,XBOOLE_0:def 4;
+end;
 
-theorem Th49:
+theorem Th43:
   {f}++{g} = {f+g}
-  proof
-    let j;
-    hereby
-      assume j in {f}++{g};
-      then consider w1,w2 such that
-A1:   j = w1+w2 and
-A2:   w1 in {f} and
-A3:   w2 in {g};
-      w1 = f & w2 = g by A2,A3,TARSKI:def 1;
-      hence j in {f+g} by A1,TARSKI:def 1;
-    end;
-    assume j in {f+g};
-    then
+proof
+  let j;
+  hereby
+    assume
+    j in {f}++{g};
+    then consider w1,w2 such that
+A1: j = w1+w2 and
+A2: w1 in {f} & w2 in {g};
+    w1 = f & w2 = g by A2,TARSKI:def 1;
+    hence j in {f+g} by A1,TARSKI:def 1;
+  end;
+A3: f in {f} & g in {g} by TARSKI:def 1;
+  assume
+  j in {f+g};
+  then
 A4: j = f+g by TARSKI:def 1;
-A5: f in ExtREAL & g in ExtREAL by XXREAL_0:def 1;
-    f in {f} & g in {g} by TARSKI:def 1;
-    hence thesis by A4,A5;
-  end;
+  f in ExtREAL & g in ExtREAL by XXREAL_0:def 1;
+  hence thesis by A4,A3;
+end;
 
-theorem Th50:
+theorem Th44:
   {f}++{g,h} = {f+g,f+h}
-  proof
-    thus {f}++{g,h} = {f}++({g}\/{h}) by ENUMSET1:41
-    .= ({f}++{g}) \/ ({f}++{h}) by Th47
-    .= {f+g} \/ ({f}++{h}) by Th49
-    .= {f+g} \/ {f+h} by Th49
+proof
+  thus {f}++{g,h} = {f}++({g}\/{h}) by ENUMSET1:41
+    .= ({f}++{g}) \/ ({f}++{h}) by Th41
+    .= {f+g} \/ ({f}++{h}) by Th43
+    .= {f+g} \/ {f+h} by Th43
     .= {f+g,f+h} by ENUMSET1:41;
-  end;
+end;
 
-theorem Th51:
+theorem Th45:
   {f,g}++{h,i} = {f+h,f+i,g+h,g+i}
-  proof
-    thus {f,g}++{h,i} = ({f}\/{g})++{h,i} by ENUMSET1:41
-    .= ({f}++{h,i}) \/ ({g}++{h,i}) by Th47
-    .= {f+h,f+i} \/ ({g}++{h,i}) by Th50
-    .= {f+h,f+i} \/ {g+h,g+i} by Th50
+proof
+  thus {f,g}++{h,i} = ({f}\/{g})++{h,i} by ENUMSET1:41
+    .= ({f}++{h,i}) \/ ({g}++{h,i}) by Th41
+    .= {f+h,f+i} \/ ({g}++{h,i}) by Th44
+    .= {f+h,f+i} \/ {g+h,g+i} by Th44
     .= {f+h,f+i,g+h,g+i} by ENUMSET1:45;
-  end;
+end;
 
 definition
   let A, B be complex-membered set;
@@ -1139,23 +1242,25 @@ A1: X = {c1+c2: c1 in A & c2 in B};
     thus X c= {c1+c2: c1 in B & c2 in A}
     proof
       let e;
-      assume e in X;
+      assume
+      e in X;
       then ex c1,c2 st e = c1+c2 & c1 in A & c2 in B by A1;
       hence thesis;
     end;
     let e;
-    assume e in {c1+c2: c1 in B & c2 in A};
+    assume
+    e in {c1+c2: c1 in B & c2 in A};
     then ex c1,c2 st e = c1+c2 & c1 in B & c2 in A;
     hence thesis by A1;
   end;
 end;
 
-theorem Th52:
+theorem Th46:
   a in A & b in B implies a+b in A++B
-  proof
-    a in COMPLEX & b in COMPLEX by XCMPLX_0:def 2;
-    hence thesis;
-  end;
+proof
+  a in COMPLEX & b in COMPLEX by XCMPLX_0:def 2;
+  hence thesis;
+end;
 
 registration
   let A be empty set;
@@ -1163,7 +1268,8 @@ registration
   cluster A++B -> empty;
   coherence
   proof
-    assume A++B is non empty;
+    assume
+    A++B is non empty;
     then the Element of (A++B) in A++B;
     then ex c1,c2 st the Element of (A++B) = c1+c2 & c1 in A & c2 in B;
     hence thesis;
@@ -1177,7 +1283,7 @@ registration
   cluster A++B -> non empty;
   coherence
   proof
-    (the Element of A)+the Element of B in A++B by Th52;
+    (the Element of A)+the Element of B in A++B by Th46;
     hence thesis;
   end;
 end;
@@ -1188,7 +1294,8 @@ registration
   coherence
   proof
     let e;
-    assume e in A++B;
+    assume
+    e in A++B;
     then ex c1,c2 st e = c1+c2 & c1 in A & c2 in B;
     hence thesis;
   end;
@@ -1200,7 +1307,8 @@ registration
   coherence
   proof
     let e;
-    assume e in A++B;
+    assume
+    e in A++B;
     then ex c1,c2 st e = c1+c2 & c1 in A & c2 in B;
     hence thesis;
   end;
@@ -1212,7 +1320,8 @@ registration
   coherence
   proof
     let e;
-    assume e in A++B;
+    assume
+    e in A++B;
     then ex c1,c2 st e = c1+c2 & c1 in A & c2 in B;
     hence thesis;
   end;
@@ -1224,7 +1333,8 @@ registration
   coherence
   proof
     let e;
-    assume e in A++B;
+    assume
+    e in A++B;
     then ex c1,c2 st e = c1+c2 & c1 in A & c2 in B;
     hence thesis;
   end;
@@ -1236,7 +1346,8 @@ registration
   coherence
   proof
     let e;
-    assume e in A++B;
+    assume
+    e in A++B;
     then ex c1,c2 st e = c1+c2 & c1 in A & c2 in B;
     hence thesis;
   end;
@@ -1251,159 +1362,163 @@ registration
 A1: A = F & B = G;
     let a be ext-real number;
     hereby
-      assume a in A++B;
+      assume
+      a in A++B;
       then consider c,c1 such that
 A2:   a = c+c1 and
-A3:   c in A and
-A4:   c1 in B;
-      reconsider d1 = c, d2 = c1 as Element of ExtREAL by A3,A4,XXREAL_0:def 1;
-      a = d1+d2 by A2,A3,A4,XXREAL_3:def 2;
-      hence a in F++G by A1,A3,A4;
+A3:   c in A & c1 in B;
+      reconsider d1 = c, d2 = c1 as Element of ExtREAL by A3,XXREAL_0:def 1;
+      a = d1+d2 by A2,A3,XXREAL_3:def 2;
+      hence a in F++G by A1,A3;
     end;
-    assume a in F++G;
+    assume
+    a in F++G;
     then consider w,w1 such that
-A5: a = w+w1 and
-A6: w in F and
-A7: w1 in G;
-    reconsider d1 = w, d2 = w1 as Element of COMPLEX
-    by A1,A6,A7,XCMPLX_0:def 2;
-    a = d1+d2 by A1,A7,A5,A6,XXREAL_3:def 2;
-    hence thesis by A1,A6,A7;
+A4: a = w+w1 and
+A5: w in F & w1 in G;
+    reconsider d1 = w, d2 = w1 as Element of COMPLEX by A1,A5,XCMPLX_0:def 2;
+    a = d1+d2 by A1,A4,A5,XXREAL_3:def 2;
+    hence thesis by A1,A5;
   end;
 end;
 
-theorem Th53:
+theorem Th47:
   A c= B & C c= D implies A++C c= B++D
-  proof
-    assume
+proof
+  assume
 A1: A c= B & C c= D;
-    let a;
-    assume a in A++C;
-    then ex c,c1 st a = c+c1 & c in A & c1 in C;
-    hence thesis by A1;
-  end;
+  let a;
+  assume
+  a in A++C;
+  then ex c,c1 st a = c+c1 & c in A & c1 in C;
+  hence thesis by A1;
+end;
 
-theorem Th54:
+theorem Th48:
   A ++ (B \/ C) = (A++B) \/ (A++C)
-  proof
-    let a;
-    hereby
-      assume a in A++(B\/C);
-      then consider c,c1 such that
-A1:   a = c+c1 and
-A2:   c in A and
-A3:   c1 in B\/C;
-      c1 in B or c1 in C by A3,XBOOLE_0:def 3;
-      then c+c1 in A++B or c+c1 in A++C by A2;
-      hence a in (A++B)\/(A++C) by A1,XBOOLE_0:def 3;
-    end;
+proof
+  let a;
+  hereby
     assume
-A4: a in (A++B)\/(A++C);
-    per cases by A4,XBOOLE_0:def 3;
-    suppose a in A++B;
-      then consider c,c1 such that
-A5:   a = c+c1 and
-A6:   c in A and
-A7:   c1 in B;
-      c1 in B\/C by A7,XBOOLE_0:def 3;
-      hence thesis by A5,A6;
-    end;
-    suppose a in A++C;
-      then consider c,c1 such that
-A8:   a = c+c1 and
-A9:   c in A and
-A10:   c1 in C;
-      c1 in B\/C by A10,XBOOLE_0:def 3;
-      hence thesis by A8,A9;
-    end;
-  end;
-
-theorem Th55:
-  A ++ (B /\ C) c= (A++B) /\ (A++C)
-  proof
-    let a;
-    assume a in A++(B/\C);
+    a in A++(B\/C);
     then consider c,c1 such that
 A1: a = c+c1 and
 A2: c in A and
-A3: c1 in B/\C;
-    c1 in B & c1 in C by A3,XBOOLE_0:def 4;
-    then c+c1 in A++B & c+c1 in A++C by A2;
-    hence thesis by A1,XBOOLE_0:def 4;
+A3: c1 in B\/C;
+    c1 in B or c1 in C by A3,XBOOLE_0:def 3;
+    then c+c1 in A++B or c+c1 in A++C by A2;
+    hence a in (A++B)\/(A++C) by A1,XBOOLE_0:def 3;
   end;
-
-theorem Th56:
-  (A++B)++C = A++(B++C)
-  proof
-    let a;
-    hereby
-      assume a in A++B++C;
-      then consider c,c1 such that
-A1:   a = c+c1 and
-A2:   c in A++B and
-A3:   c1 in C;
-      consider c2,c3 being Element of COMPLEX such that
-A4:   c = c2+c3 and
-A5:   c2 in A and
-A6:   c3 in B by A2;
-A7:   a = c2+(c3+c1) by A1,A4;
-      c3+c1 in B++C by A6,A3;
-      hence a in A++(B++C) by A5,A7;
-    end;
-    assume a in A++(B++C);
+  assume
+A4: a in (A++B)\/(A++C);
+  per cases by A4,XBOOLE_0:def 3;
+  suppose
+    a in A++B;
     then consider c,c1 such that
-A8: a = c+c1 and
-A9: c in A and
-A10: c1 in B++C;
+A5: a = c+c1 & c in A and
+A6: c1 in B;
+    c1 in B\/C by A6,XBOOLE_0:def 3;
+    hence thesis by A5;
+  end;
+  suppose
+    a in A++C;
+    then consider c,c1 such that
+A7: a = c+c1 & c in A and
+A8: c1 in C;
+    c1 in B\/C by A8,XBOOLE_0:def 3;
+    hence thesis by A7;
+  end;
+end;
+
+theorem Th49:
+  A ++ (B /\ C) c= (A++B) /\ (A++C)
+proof
+  let a;
+  assume
+  a in A++(B/\C);
+  then consider c,c1 such that
+A1: a = c+c1 and
+A2: c in A and
+A3: c1 in B/\C;
+  c1 in C by A3,XBOOLE_0:def 4;
+  then
+A4: c+c1 in A++C by A2;
+  c1 in B by A3,XBOOLE_0:def 4;
+  then c+c1 in A++B by A2;
+  hence thesis by A1,A4,XBOOLE_0:def 4;
+end;
+
+theorem Th50:
+  (A++B)++C = A++(B++C)
+proof
+  let a;
+  hereby
+    assume
+    a in A++B++C;
+    then consider c,c1 such that
+A1: a = c+c1 and
+A2: c in A++B and
+A3: c1 in C;
     consider c2,c3 being Element of COMPLEX such that
-A11: c1 = c2+c3 and
-A12: c2 in B and
-A13: c3 in C by A10;
-A14: a = c+c2+c3 by A8,A11;
-    c+c2 in A++B by A9,A12;
-    hence thesis by A13,A14;
+A4: c = c2+c3 and
+A5: c2 in A and
+A6: c3 in B by A2;
+    a = c2+(c3+c1) & c3+c1 in B++C by A1,A3,A4,A6;
+    hence a in A++(B++C) by A5;
   end;
+  assume
+  a in A++(B++C);
+  then consider c,c1 such that
+A7: a = c+c1 & c in A and
+A8: c1 in B++C;
+  consider c2,c3 being Element of COMPLEX such that
+A9: c1 = c2+c3 & c2 in B and
+A10: c3 in C by A8;
+  a = c+c2+c3 & c+c2 in A++B by A7,A9;
+  hence thesis by A10;
+end;
 
-theorem Th57:
+theorem Th51:
   {a}++{b} = {a+b}
-  proof
-    let z;
-    hereby
-      assume z in {a}++{b};
-      then consider c1,c2 such that
-A1:   z = c1+c2 and
-A2:   c1 in {a} and
-A3:   c2 in {b};
-      c1 = a & c2 = b by A2,A3,TARSKI:def 1;
-      hence z in {a+b} by A1,TARSKI:def 1;
-    end;
-    assume z in {a+b};
-    then
+proof
+  let z;
+  hereby
+    assume
+    z in {a}++{b};
+    then consider c1,c2 such that
+A1: z = c1+c2 and
+A2: c1 in {a} & c2 in {b};
+    c1 = a & c2 = b by A2,TARSKI:def 1;
+    hence z in {a+b} by A1,TARSKI:def 1;
+  end;
+A3: a in {a} & b in {b} by TARSKI:def 1;
+  assume
+  z in {a+b};
+  then
 A4: z = a+b by TARSKI:def 1;
-A5: a in COMPLEX & b in COMPLEX by XCMPLX_0:def 2;
-    a in {a} & b in {b} by TARSKI:def 1;
-    hence thesis by A4,A5;
-  end;
+  a in COMPLEX & b in COMPLEX by XCMPLX_0:def 2;
+  hence thesis by A4,A3;
+end;
 
-theorem Th58:
+theorem Th52:
   {a}++{s,t} = {a+s,a+t}
-  proof
-    thus {a}++{s,t} = {a}++({s}\/{t}) by ENUMSET1:41
-    .= ({a}++{s}) \/ ({a}++{t}) by Th54
-    .= {a+s} \/ ({a}++{t}) by Th57
-    .= {a+s} \/ {a+t} by Th57
+proof
+  thus {a}++{s,t} = {a}++({s}\/{t}) by ENUMSET1:41
+    .= ({a}++{s}) \/ ({a}++{t}) by Th48
+    .= {a+s} \/ ({a}++{t}) by Th51
+    .= {a+s} \/ {a+t} by Th51
     .= {a+s,a+t} by ENUMSET1:41;
-  end;
+end;
 
-theorem Th59:
+theorem Th53:
   {a,b}++{s,t} = {a+s,a+t,b+s,b+t}
-  proof
-    thus {a,b}++{s,t} = ({a}\/{b})++{s,t} by ENUMSET1:41
-    .= ({a}++{s,t}) \/ ({b}++{s,t}) by Th54
-    .= {a+s,a+t} \/ ({b}++{s,t}) by Th58
-    .= {a+s,a+t} \/ {b+s,b+t} by Th58
+proof
+  thus {a,b}++{s,t} = ({a}\/{b})++{s,t} by ENUMSET1:41
+    .= ({a}++{s,t}) \/ ({b}++{s,t}) by Th48
+    .= {a+s,a+t} \/ ({b}++{s,t}) by Th52
+    .= {a+s,a+t} \/ {b+s,b+t} by Th52
     .= {a+s,a+t,b+s,b+t} by ENUMSET1:45;
-  end;
+end;
 
 definition
   let F, G be ext-real-membered set;
@@ -1412,38 +1527,38 @@ definition
   coherence;
 end;
 
-theorem Th60:
+theorem Th54:
   F--G = {w1-w2: w1 in F & w2 in G}
+proof
+  thus F--G c= {w1-w2: w1 in F & w2 in G}
   proof
-    thus F--G c= {w1-w2: w1 in F & w2 in G}
-    proof
-      let e;
-      assume e in F--G;
-      then consider w1,w2 such that
-A1:   e = w1+w2 and
-A2:   w1 in F and
-A3:   w2 in --G;
-A4:   e = w1- -w2 by A1;
-      -w2 in G by A3,Th8;
-      hence thesis by A4,A2;
-    end;
     let e;
-    assume e in {w1-w2: w1 in F & w2 in G};
+    assume
+    e in F--G;
     then consider w1,w2 such that
-A5: e = w1-w2 and
-A6: w1 in F and
-A7: w2 in G;
-    -w2 in --G by A7;
-    hence thesis by A5,A6;
+A1: e = w1+w2 and
+A2: w1 in F and
+A3: w2 in --G;
+    e = w1- -w2 & -w2 in G by A1,A3,Th2;
+    hence thesis by A2;
   end;
+  let e;
+  assume
+  e in {w1-w2: w1 in F & w2 in G};
+  then consider w1,w2 such that
+A4: e = w1-w2 & w1 in F and
+A5: w2 in G;
+  -w2 in --G by A5;
+  hence thesis by A4;
+end;
 
-theorem Th61:
+theorem Th55:
   f in F & g in G implies f-g in F--G
-  proof
+proof
 A1: f in ExtREAL & g in ExtREAL by XXREAL_0:def 1;
-    F--G = {w1-w2: w1 in F & w2 in G} by Th60;
-    hence thesis by A1;
-  end;
+  F--G = {w1-w2: w1 in F & w2 in G} by Th54;
+  hence thesis by A1;
+end;
 
 registration
   let F be empty set;
@@ -1468,36 +1583,37 @@ end;
 
 theorem
   F c= G & H c= I implies F--H c= G--I
-  proof
-A1: F--H = {w1-w2: w1 in F & w2 in H} by Th60;
-    assume
-A2: F c= G & H c= I;
-    let i;
-    assume i in F--H;
-    then ex w,w1 st i = w-w1 & w in F & w1 in H by A1;
-    hence thesis by A2,Th61;
-  end;
+proof
+  assume
+A1: F c= G & H c= I;
+  let i;
+A2: F--H = {w1-w2: w1 in F & w2 in H} by Th54;
+  assume
+  i in F--H;
+  then ex w,w1 st i = w-w1 & w in F & w1 in H by A2;
+  hence thesis by A1,Th55;
+end;
 
 theorem
   F -- (G \/ H) = (F--G) \/ (F--H)
-  proof
-    thus F -- (G \/ H) = F++(--G\/--H) by Th11
-    .= (F--G) \/ (F--H) by Th47;
+proof
+  thus F -- (G \/ H) = F++(--G\/--H) by Th5
+    .= (F--G) \/ (F--H) by Th41;
 end;
 
 theorem
   F -- (G /\ H) c= (F--G) /\ (F--H)
-  proof
-    F -- (G /\ H) = F++((--G)/\--H) by Th12;
-    hence thesis by Th48;
-  end;
+proof
+  F -- (G /\ H) = F++((--G)/\--H) by Th6;
+  hence thesis by Th42;
+end;
 
-Lm5:
---(F++G) = (--F) ++ --G
+Lm4: --(F++G) = (--F) ++ --G
 proof
   let j;
   hereby
-    assume j in --(F++G);
+    assume
+    j in --(F++G);
     then consider w such that
 A1: j = -w and
 A2: w in F++G;
@@ -1508,53 +1624,53 @@ A5: -(w1+w2) = -w1-w2 by XXREAL_3:9;
     -w1 in --F & -w2 in --G by A4;
     hence j in (--F) ++ --G by A1,A3,A5;
   end;
-  assume j in (--F) ++ --G;
+  assume
+  j in (--F) ++ --G;
   then consider w1,w2 such that
 A6: j = w1+w2 and
 A7: w1 in --F & w2 in --G;
-A8: -(w1+w2) = -w1-w2 by XXREAL_3:9;
-  -w1 in F & -w2 in G by A7,Th8;
-  then -w1+-w2 in F++G;
-  hence thesis by A6,A8,Th8;
+  -w1 in F & -w2 in G by A7,Th2;
+  then -(w1+w2) = -w1-w2 & -w1+-w2 in F++G by XXREAL_3:9;
+  hence thesis by A6,Th2;
 end;
 
 theorem
-  --(F++G) = (--F) -- G by Lm5;
+  --(F++G) = (--F) -- G by Lm4;
 
-theorem Th66:
+theorem Th60:
   --(F--G) = (--F) ++ G
-  proof
-    thus --(F--G) = (--F)----G by Lm5
+proof
+  thus --(F--G) = (--F)----G by Lm4
     .= (--F) ++ G;
-  end;
+end;
 
 theorem
   {f}--{g} = {f-g}
-  proof
-    thus {f}--{g} = {f}++{-g} by Th15
-    .= {f-g} by Th49;
-  end;
+proof
+  thus {f}--{g} = {f}++{-g} by Th9
+    .= {f-g} by Th43;
+end;
 
 theorem
   {f}--{h,i} = {f-h,f-i}
-  proof
-    thus {f}--{h,i} = {f}++{-h,-i} by Th16
-    .= {f-h,f-i} by Th50;
-  end;
+proof
+  thus {f}--{h,i} = {f}++{-h,-i} by Th10
+    .= {f-h,f-i} by Th44;
+end;
 
 theorem
   {f,g}--{h} = {f-h,g-h}
-  proof
-    thus {f,g}--{h} = {f,g}++{-h} by Th15
-    .= {f-h,g-h} by Th50;
-  end;
+proof
+  thus {f,g}--{h} = {f,g}++{-h} by Th9
+    .= {f-h,g-h} by Th44;
+end;
 
 theorem
   {f,g}--{h,i} = {f-h,f-i,g-h,g-i}
-  proof
-    thus {f,g}--{h,i} = {f,g}++{-h,-i} by Th16
-    .= {f-h,f-i,g-h,g-i} by Th51;
-  end;
+proof
+  thus {f,g}--{h,i} = {f,g}++{-h,-i} by Th10
+    .= {f-h,f-i,g-h,g-i} by Th45;
+end;
 
 definition
   let A, B be complex-membered set;
@@ -1563,38 +1679,38 @@ definition
   coherence;
 end;
 
-theorem Th71:
+theorem Th65:
   A--B = {c1-c2: c1 in A & c2 in B}
+proof
+  thus A--B c= {c1-c2: c1 in A & c2 in B}
   proof
-    thus A--B c= {c1-c2: c1 in A & c2 in B}
-    proof
-      let e;
-      assume e in A--B;
-      then consider c1,c2 such that
-A1:   e = c1+c2 and
-A2:   c1 in A and
-A3:   c2 in --B;
-A4:   e = c1- -c2 by A1;
-      -c2 in B by A3,Th18;
-      hence thesis by A4,A2;
-    end;
     let e;
-    assume e in {c1-c2: c1 in A & c2 in B};
+    assume
+    e in A--B;
     then consider c1,c2 such that
-A5: e = c1-c2 and
-A6: c1 in A and
-A7: c2 in B;
-    -c2 in --B by A7;
-    hence thesis by A5,A6;
+A1: e = c1+c2 and
+A2: c1 in A and
+A3: c2 in --B;
+    e = c1- -c2 & -c2 in B by A1,A3,Th12;
+    hence thesis by A2;
   end;
+  let e;
+  assume
+  e in {c1-c2: c1 in A & c2 in B};
+  then consider c1,c2 such that
+A4: e = c1-c2 & c1 in A and
+A5: c2 in B;
+  -c2 in --B by A5;
+  hence thesis by A4;
+end;
 
-theorem Th72:
+theorem Th66:
   a in A & b in B implies a-b in A--B
-  proof
+proof
 A1: a in COMPLEX & b in COMPLEX by XCMPLX_0:def 2;
-    A--B = {c1-c2: c1 in A & c2 in B} by Th71;
-    hence thesis by A1;
-  end;
+  A--B = {c1-c2: c1 in A & c2 in B} by Th65;
+  hence thesis by A1;
+end;
 
 registration
   let A be empty set;
@@ -1641,112 +1757,114 @@ registration
   compatibility;
 end;
 
-theorem Th73:
+theorem Th67:
   A c= B & C c= D implies A--C c= B--D
-  proof
-    assume
+proof
+  assume
 A1: A c= B & C c= D;
-A2: A--C = {c1-c2: c1 in A & c2 in C} by Th71;
-    let z;
-    assume z in A--C;
-    then ex c,c1 st z = c-c1 & c in A & c1 in C by A2;
-    hence thesis by A1,Th72;
-  end;
+  let z;
+A2: A--C = {c1-c2: c1 in A & c2 in C} by Th65;
+  assume
+  z in A--C;
+  then ex c,c1 st z = c-c1 & c in A & c1 in C by A2;
+  hence thesis by A1,Th66;
+end;
 
-Lm6:
---(A++B) = (--A) ++ --B
+Lm5: --(A++B) = (--A) ++ --B
 proof
   let a;
   hereby
-    assume a in --(A++B);
+    assume
+    a in --(A++B);
     then consider c such that
 A1: a = -c and
 A2: c in A++B;
     consider c1,c2 such that
 A3: c = c1+c2 and
 A4: c1 in A & c2 in B by A2;
-A5: a = -c1+-c2 by A1,A3;
-    -c1 in --A & -c2 in --B by A4;
+A5: -c1 in --A & -c2 in --B by A4;
+    a = -c1+-c2 by A1,A3;
     hence a in (--A) ++ --B by A5;
   end;
-  assume a in (--A) ++ --B;
+  assume
+  a in (--A) ++ --B;
   then consider c1,c2 such that
 A6: a = c1+c2 and
 A7: c1 in --A & c2 in --B;
-  -c1 in A & -c2 in B by A7,Th18;
+  -c1 in A & -c2 in B by A7,Th12;
   then -c1+-c2 in A++B;
   then -a in A++B by A6;
-  hence thesis by Th18;
+  hence thesis by Th12;
 end;
 
 theorem
   A -- (B \/ C) = (A--B) \/ (A--C)
-  proof
-    thus A -- (B \/ C) = A++(--B\/--C) by Th21
-    .= (A--B) \/ (A--C) by Th54;
+proof
+  thus A -- (B \/ C) = A++(--B\/--C) by Th15
+    .= (A--B) \/ (A--C) by Th48;
 end;
 
 theorem
   A -- (B /\ C) c= (A--B) /\ (A--C)
-  proof
-    A -- (B /\ C) = A++((--B)/\--C) by Th22;
-    hence thesis by Th55;
-  end;
+proof
+  A -- (B /\ C) = A++((--B)/\--C) by Th16;
+  hence thesis by Th49;
+end;
 
 theorem
-  --(A++B) = (--A) -- B by Lm6;
+  --(A++B) = (--A) -- B by Lm5;
 
-theorem Th77:
+theorem Th71:
   --(A--B) = (--A) ++ B
-  proof
-    thus --(A--B) = (--A)----B by Lm6
+proof
+  thus --(A--B) = (--A)----B by Lm5
     .= (--A) ++ B;
-  end;
+end;
 
 theorem
-  A++(B--C) = A++B--C by Th56;
+  A++(B--C) = A++B--C by Th50;
 
 theorem
   A--(B++C) = A--B--C
-  proof
-    thus A--(B++C) = A++(--B--C) by Lm6
-    .= A--B--C by Th56;
-  end;
+proof
+  thus A--(B++C) = A++(--B--C) by Lm5
+    .= A--B--C by Th50;
+end;
 
 theorem
   A--(B--C) = A--B++C
-  proof
-    thus A--(B--C) = A++((--B)++C) by Th77
-    .= A--B++C by Th56;
-  end;
+proof
+  thus A--(B--C) = A++((--B)++C) by Th71
+    .= A--B++C by Th50;
+end;
 
-theorem Th81:
+theorem Th75:
   {a}--{b} = {a-b}
-  proof
-    thus {a}--{b} = {a}++{-b} by Th25
-    .= {a-b} by Th57;
-  end;
+proof
+  thus {a}--{b} = {a}++{-b} by Th19
+    .= {a-b} by Th51;
+end;
 
 theorem
   {a}--{s,t} = {a-s,a-t}
-  proof
-    thus {a}--{s,t} = {a}++{-s,-t} by Th26
-    .= {a-s,a-t} by Th58;
-  end;
+proof
+  thus {a}--{s,t} = {a}++{-s,-t} by Th20
+    .= {a-s,a-t} by Th52;
+end;
 
 theorem
   {a,b}--{s} = {a-s,b-s}
-  proof
-    thus {a,b}--{s} = {a,b}++{-s} by Th25
-    .= {a-s,b-s} by Th58;
-  end;
+proof
+  thus {a,b}--{s} = {a,b}++{-s} by Th19
+    .= {a-s,b-s} by Th52;
+end;
 
 theorem
   {a,b}--{s,t} = {a-s,a-t,b-s,b-t}
-  proof
-    thus {a,b}--{s,t} = {a,b}++{-s,-t} by Th26
-    .= {a-s,a-t,b-s,b-t} by Th59;
-  end;
+proof
+  thus {a,b}--{s,t} = {a,b}++{-s,-t} by Th20
+    .= {a-s,a-t,b-s,b-t} by Th53;
+end;
 
 definition
   let F, G be ext-real-membered set;
@@ -1762,12 +1880,14 @@ A1: X = {w1*w2: w1 in F & w2 in G};
     thus X c= {w1*w2: w1 in G & w2 in F}
     proof
       let e;
-      assume e in X;
+      assume
+      e in X;
       then ex w1,w2 st e = w1*w2 & w1 in F & w2 in G by A1;
       hence thesis;
     end;
     let e;
-    assume e in {w1*w2: w1 in G & w2 in F};
+    assume
+    e in {w1*w2: w1 in G & w2 in F};
     then ex w1,w2 st e = w1*w2 & w1 in G & w2 in F;
     hence thesis by A1;
   end;
@@ -1779,7 +1899,8 @@ registration
   cluster F**G -> empty;
   coherence
   proof
-    assume F**G is non empty;
+    assume
+    F**G is non empty;
     then the Element of (F**G) in F**G;
     then ex w1,w2 st the Element of (F**G) = w1*w2 & w1 in F & w2 in G;
     hence thesis;
@@ -1794,222 +1915,229 @@ registration
   coherence
   proof
     let e;
-    assume e in F**G;
+    assume
+    e in F**G;
     then ex w1,w2 st e = w1*w2 & w1 in F & w2 in G;
     hence thesis;
   end;
 end;
 
-theorem Th85:
+theorem Th79:
   f in F & g in G implies f*g in F**G
-  proof
-    f in ExtREAL & g in ExtREAL by XXREAL_0:def 1;
-    hence thesis;
-  end;
+proof
+  f in ExtREAL & g in ExtREAL by XXREAL_0:def 1;
+  hence thesis;
+end;
 
 registration
   let F, G be ext-real-membered non empty set;
   cluster F**G -> non empty;
   coherence
   proof
-    (the Element of F)*the Element of G in F**G by Th85;
+    (the Element of F)*the Element of G in F**G by Th79;
     hence thesis;
   end;
 end;
 
-theorem Th86:
+theorem Th80:
   (F**G)**H = F**(G**H)
-  proof
-    let i;
-    hereby
-      assume i in F**G**H;
-      then consider w,w1 such that
-A1:   i = w*w1 and
-A2:   w in F**G and
-A3:   w1 in H;
-      consider w2,w3 being Element of ExtREAL such that
-A4:   w = w2*w3 and
-A5:   w2 in F and
-A6:   w3 in G by A2;
-A7:   i = w2*(w3*w1) by A1,A4,XXREAL_3:77;
-      w3*w1 in G**H by A6,A3;
-      hence i in F**(G**H) by A5,A7;
-    end;
-    assume i in F**(G**H);
+proof
+  let i;
+  hereby
+    assume
+    i in F**G**H;
     then consider w,w1 such that
-A8: i = w*w1 and
-A9: w in F and
-A10: w1 in G**H;
+A1: i = w*w1 and
+A2: w in F**G and
+A3: w1 in H;
     consider w2,w3 being Element of ExtREAL such that
-A11: w1 = w2*w3 and
-A12: w2 in G and
-A13: w3 in H by A10;
-A14: i = w*w2*w3 by A8,A11,XXREAL_3:77;
-    w*w2 in F**G by A9,A12;
-    hence thesis by A13,A14;
+A4: w = w2*w3 and
+A5: w2 in F and
+A6: w3 in G by A2;
+    i = w2*(w3*w1) & w3*w1 in G**H by A1,A3,A4,A6,XXREAL_3:77;
+    hence i in F**(G**H) by A5;
   end;
+  assume
+  i in F**(G**H);
+  then consider w,w1 such that
+A7: i = w*w1 & w in F and
+A8: w1 in G**H;
+  consider w2,w3 being Element of ExtREAL such that
+A9: w1 = w2*w3 & w2 in G and
+A10: w3 in H by A8;
+  i = w*w2*w3 & w*w2 in F**G by A7,A9,XXREAL_3:77;
+  hence thesis by A10;
+end;
 
-theorem Th87:
+theorem Th81:
   F c= G & H c= I implies F**H c= G**I
-  proof
-    assume
+proof
+  assume
 A1: F c= G & H c= I;
-    let i;
-    assume i in F**H;
-    then ex w,w1 st i = w*w1 & w in F & w1 in H;
-    hence thesis by A1;
-  end;
+  let i;
+  assume
+  i in F**H;
+  then ex w,w1 st i = w*w1 & w in F & w1 in H;
+  hence thesis by A1;
+end;
 
-theorem Th88:
+theorem Th82:
   F ** (G \/ H) = (F**G) \/ (F**H)
-  proof
-    let j;
-    hereby
-      assume j in F**(G\/H);
-      then consider w,w1 such that
-A1:   j = w*w1 and
-A2:   w in F and
-A3:   w1 in G\/H;
-      w1 in G or w1 in H by A3,XBOOLE_0:def 3;
-      then w*w1 in F**G or w*w1 in F**H by A2;
-      hence j in (F**G)\/(F**H) by A1,XBOOLE_0:def 3;
-    end;
+proof
+  let j;
+  hereby
     assume
-A4: j in (F**G)\/(F**H);
-    per cases by A4,XBOOLE_0:def 3;
-    suppose j in F**G;
-      then consider w,w1 such that
-A5:   j = w*w1 and
-A6:   w in F and
-A7:   w1 in G;
-      w1 in G\/H by A7,XBOOLE_0:def 3;
-      hence thesis by A5,A6;
-    end;
-    suppose j in F**H;
-      then consider w,w1 such that
-A8:   j = w*w1 and
-A9:   w in F and
-A10:   w1 in H;
-      w1 in G\/H by A10,XBOOLE_0:def 3;
-      hence thesis by A8,A9;
-    end;
-  end;
-
-theorem Th89:
-  F ** (G /\ H) c= (F**G) /\ (F**H)
-  proof
-    let j;
-    assume j in F**(G/\H);
+    j in F**(G\/H);
     then consider w,w1 such that
 A1: j = w*w1 and
 A2: w in F and
-A3: w1 in G/\H;
-    w1 in G & w1 in H by A3,XBOOLE_0:def 4;
-    then w*w1 in F**G & w*w1 in F**H by A2;
-    hence thesis by A1,XBOOLE_0:def 4;
+A3: w1 in G\/H;
+    w1 in G or w1 in H by A3,XBOOLE_0:def 3;
+    then w*w1 in F**G or w*w1 in F**H by A2;
+    hence j in (F**G)\/(F**H) by A1,XBOOLE_0:def 3;
   end;
+  assume
+A4: j in (F**G)\/(F**H);
+  per cases by A4,XBOOLE_0:def 3;
+  suppose
+    j in F**G;
+    then consider w,w1 such that
+A5: j = w*w1 & w in F and
+A6: w1 in G;
+    w1 in G\/H by A6,XBOOLE_0:def 3;
+    hence thesis by A5;
+  end;
+  suppose
+    j in F**H;
+    then consider w,w1 such that
+A7: j = w*w1 & w in F and
+A8: w1 in H;
+    w1 in G\/H by A8,XBOOLE_0:def 3;
+    hence thesis by A7;
+  end;
+end;
+
+theorem Th83:
+  F ** (G /\ H) c= (F**G) /\ (F**H)
+proof
+  let j;
+  assume
+  j in F**(G/\H);
+  then consider w,w1 such that
+A1: j = w*w1 and
+A2: w in F and
+A3: w1 in G/\H;
+  w1 in H by A3,XBOOLE_0:def 4;
+  then
+A4: w*w1 in F**H by A2;
+  w1 in G by A3,XBOOLE_0:def 4;
+  then w*w1 in F**G by A2;
+  hence thesis by A1,A4,XBOOLE_0:def 4;
+end;
 
 theorem
   F**--G = --(F**G)
-  proof
-    let i;
-    hereby
-      assume i in F**--G;
-      then consider w,w1 such that
-A1:   i = w*w1 and
-A2:   w in F and
-A3:   w1 in --G;
-      w*-w1 = -(w*w1) by XXREAL_3:103;
-      then
-A4:   i = -(w*-w1) by A1;
-      -w1 in G by A3,Th8;
-      then w*-w1 in F**G by A2;
-      hence i in --(F**G) by A4;
-    end;
-    assume i in --(F**G);
-    then -i in F**G by Th8;
+proof
+  let i;
+  hereby
+    assume
+    i in F**--G;
     then consider w,w1 such that
-A5: -i = w*w1 and
-A6: w in F and
-A7: w1 in G;
-A8: w*-w1 = -(w*w1) by XXREAL_3:103;
-    -w1 in --G by A7;
-    hence thesis by A5,A6,A8;
-  end;
-
-theorem Th91:
-  (F**G)"" = (F"") ** (G"")
-  proof
-    let i;
-    hereby
-      assume i in (F**G)"";
-      then consider w such that
-A1:   i = w" and
-A2:   w in F**G;
-      consider w1,w2 such that
-A3:   w = w1*w2 and
-A4:   w1 in F and
-A5:   w2 in G by A2;
-A6:   i = w1"*w2" by A1,A3,XXREAL_3:78;
-      w1" in F"" & w2" in G"" by A4,A5;
-      hence i in (F"")**(G"") by A6;
-    end;
-    assume i in (F"")**(G"");
-    then consider w,w1 such that
-A7: i = w*w1 and
-A8: w in F"" and
-A9: w1 in G"";
-    consider w2 such that
-A10: w = w2" and
-A11: w2 in F by A8;
-    consider w3 being Element of ExtREAL such that
-A12: w1 = w3" and
-A13: w3 in G by A9;
-A14: w2*w3 in F**G by A11,A13;
-    i = (w2*w3)" by A7,A10,A12,XXREAL_3:78;
-    hence thesis by A14;
-  end;
-
-theorem Th92:
-  {f}**{g} = {f*g}
-  proof
-    let i;
-    hereby
-      assume i in {f}**{g};
-      then consider w1,w2 such that
-A1:   i = w1*w2 and
-A2:   w1 in {f} and
-A3:   w2 in {g};
-      w1 = f & w2 = g by A2,A3,TARSKI:def 1;
-      hence i in {f*g} by A1,TARSKI:def 1;
-    end;
-    assume i in {f*g};
+A1: i = w*w1 and
+A2: w in F and
+A3: w1 in --G;
+    w*-w1 = -(w*w1) by XXREAL_3:103;
     then
+A4: i = -(w*-w1) by A1;
+    -w1 in G by A3,Th2;
+    then w*-w1 in F**G by A2;
+    hence i in --(F**G) by A4;
+  end;
+  assume
+  i in --(F**G);
+  then -i in F**G by Th2;
+  then consider w,w1 such that
+A5: -i = w*w1 & w in F and
+A6: w1 in G;
+  w*-w1 = -(w*w1) & -w1 in --G by A6,XXREAL_3:103;
+  hence thesis by A5;
+end;
+
+theorem Th85:
+  (F**G)"" = (F"") ** (G"")
+proof
+  let i;
+  hereby
+    assume
+    i in (F**G)"";
+    then consider w such that
+A1: i = w" and
+A2: w in F**G;
+    consider w1,w2 such that
+A3: w = w1*w2 and
+A4: w1 in F & w2 in G by A2;
+A5: w1" in F"" & w2" in G"" by A4;
+    i = w1"*w2" by A1,A3,XXREAL_3:78;
+    hence i in (F"")**(G"") by A5;
+  end;
+  assume
+  i in (F"")**(G"");
+  then consider w,w1 such that
+A6: i = w*w1 and
+A7: w in F"" and
+A8: w1 in G"";
+  consider w3 being Element of ExtREAL such that
+A9: w1 = w3" and
+A10: w3 in G by A8;
+  consider w2 such that
+A11: w = w2" and
+A12: w2 in F by A7;
+A13: w2*w3 in F**G by A12,A10;
+  i = (w2*w3)" by A6,A11,A9,XXREAL_3:78;
+  hence thesis by A13;
+end;
+
+theorem Th86:
+  {f}**{g} = {f*g}
+proof
+  let i;
+  hereby
+    assume
+    i in {f}**{g};
+    then consider w1,w2 such that
+A1: i = w1*w2 and
+A2: w1 in {f} & w2 in {g};
+    w1 = f & w2 = g by A2,TARSKI:def 1;
+    hence i in {f*g} by A1,TARSKI:def 1;
+  end;
+A3: f in {f} & g in {g} by TARSKI:def 1;
+  assume
+  i in {f*g};
+  then
 A4: i = f*g by TARSKI:def 1;
-A5: f in ExtREAL & g in ExtREAL by XXREAL_0:def 1;
-    f in {f} & g in {g} by TARSKI:def 1;
-    hence thesis by A4,A5;
-  end;
+  f in ExtREAL & g in ExtREAL by XXREAL_0:def 1;
+  hence thesis by A4,A3;
+end;
 
-theorem Th93:
+theorem Th87:
   {f}**{h,i} = {f*h,f*i}
-  proof
-    thus {f}**{h,i} = {f}**({h}\/{i}) by ENUMSET1:41
-    .= ({f}**{h}) \/ ({f}**{i}) by Th88
-    .= {f*h} \/ ({f}**{i}) by Th92
-    .= {f*h} \/ {f*i} by Th92
+proof
+  thus {f}**{h,i} = {f}**({h}\/{i}) by ENUMSET1:41
+    .= ({f}**{h}) \/ ({f}**{i}) by Th82
+    .= {f*h} \/ ({f}**{i}) by Th86
+    .= {f*h} \/ {f*i} by Th86
     .= {f*h,f*i} by ENUMSET1:41;
-  end;
+end;
 
-theorem Th94:
+theorem Th88:
   {f,g}**{h,i} = {f*h,f*i,g*h,g*i}
-  proof
-    thus {f,g}**{h,i} = ({f}\/{g})**{h,i} by ENUMSET1:41
-    .= ({f}**{h,i}) \/ ({g}**{h,i}) by Th88
-    .= {f*h,f*i} \/ ({g}**{h,i}) by Th93
-    .= {f*h,f*i} \/ {g*h,g*i} by Th93
+proof
+  thus {f,g}**{h,i} = ({f}\/{g})**{h,i} by ENUMSET1:41
+    .= ({f}**{h,i}) \/ ({g}**{h,i}) by Th82
+    .= {f*h,f*i} \/ ({g}**{h,i}) by Th87
+    .= {f*h,f*i} \/ {g*h,g*i} by Th87
     .= {f*h,f*i,g*h,g*i} by ENUMSET1:45;
-  end;
+end;
 
 definition
   let A, B be complex-membered set;
@@ -2025,23 +2153,25 @@ A1: X = {c1*c2: c1 in A & c2 in B};
     thus X c= {c1*c2: c1 in B & c2 in A}
     proof
       let e;
-      assume e in X;
+      assume
+      e in X;
       then ex c1,c2 st e = c1*c2 & c1 in A & c2 in B by A1;
       hence thesis;
     end;
     let e;
-    assume e in {c1*c2: c1 in B & c2 in A};
+    assume
+    e in {c1*c2: c1 in B & c2 in A};
     then ex c1,c2 st e = c1*c2 & c1 in B & c2 in A;
     hence thesis by A1;
   end;
 end;
 
-theorem Th95:
+theorem Th89:
   a in A & b in B implies a*b in A**B
-  proof
-    a in COMPLEX & b in COMPLEX by XCMPLX_0:def 2;
-    hence thesis;
-  end;
+proof
+  a in COMPLEX & b in COMPLEX by XCMPLX_0:def 2;
+  hence thesis;
+end;
 
 registration
   let A be empty set;
@@ -2049,7 +2179,8 @@ registration
   cluster A**B -> empty;
   coherence
   proof
-    assume A**B is non empty;
+    assume
+    A**B is non empty;
     then the Element of (A**B) in A**B;
     then ex c1,c2 st the Element of (A**B) = c1*c2 & c1 in A & c2 in B;
     hence thesis;
@@ -2063,7 +2194,7 @@ registration
   cluster A**B -> non empty;
   coherence
   proof
-    (the Element of A)*the Element of B in A**B by Th95;
+    (the Element of A)*the Element of B in A**B by Th89;
     hence thesis;
   end;
 end;
@@ -2074,7 +2205,8 @@ registration
   coherence
   proof
     let e;
-    assume e in A**B;
+    assume
+    e in A**B;
     then ex c1,c2 st e = c1*c2 & c1 in A & c2 in B;
     hence thesis;
   end;
@@ -2086,7 +2218,8 @@ registration
   coherence
   proof
     let e;
-    assume e in A**B;
+    assume
+    e in A**B;
     then ex c1,c2 st e = c1*c2 & c1 in A & c2 in B;
     hence thesis;
   end;
@@ -2098,7 +2231,8 @@ registration
   coherence
   proof
     let e;
-    assume e in A**B;
+    assume
+    e in A**B;
     then ex c1,c2 st e = c1*c2 & c1 in A & c2 in B;
     hence thesis;
   end;
@@ -2110,7 +2244,8 @@ registration
   coherence
   proof
     let e;
-    assume e in A**B;
+    assume
+    e in A**B;
     then ex c1,c2 st e = c1*c2 & c1 in A & c2 in B;
     hence thesis;
   end;
@@ -2122,7 +2257,8 @@ registration
   coherence
   proof
     let e;
-    assume e in A**B;
+    assume
+    e in A**B;
     then ex c1,c2 st e = c1*c2 & c1 in A & c2 in B;
     hence thesis;
   end;
@@ -2137,243 +2273,250 @@ registration
 A1: A = F & B = G;
     let a be ext-real number;
     hereby
-      assume a in A**B;
+      assume
+      a in A**B;
       then consider c,c1 such that
 A2:   a = c*c1 and
-A3:   c in A and
-A4:   c1 in B;
-      reconsider d1 = c, d2 = c1 as Element of ExtREAL by A3,A4,XXREAL_0:def 1;
-      a = d1*d2 by A2,A3,A4,XXREAL_3:def 5;
-      hence a in F**G by A1,A3,A4;
+A3:   c in A & c1 in B;
+      reconsider d1 = c, d2 = c1 as Element of ExtREAL by A3,XXREAL_0:def 1;
+      a = d1*d2 by A2,A3,XXREAL_3:def 5;
+      hence a in F**G by A1,A3;
     end;
-    assume a in F**G;
+    assume
+    a in F**G;
     then consider w,w1 such that
-A5: a = w*w1 and
-A6: w in F and
-A7: w1 in G;
-    reconsider d1 = w, d2 = w1 as Element of COMPLEX
-    by A1,A6,A7,XCMPLX_0:def 2;
-    a = d1*d2 by A1,A7,A5,A6,XXREAL_3:def 5;
-    hence thesis by A1,A6,A7;
+A4: a = w*w1 and
+A5: w in F & w1 in G;
+    reconsider d1 = w, d2 = w1 as Element of COMPLEX by A1,A5,XCMPLX_0:def 2;
+    a = d1*d2 by A1,A4,A5,XXREAL_3:def 5;
+    hence thesis by A1,A5;
   end;
 end;
 
-theorem Th96:
+theorem Th90:
   (A**B)**C = A**(B**C)
-  proof
-    let a;
-    hereby
-      assume a in A**B**C;
-      then consider c,c1 such that
-A1:   a = c*c1 and
-A2:   c in A**B and
-A3:   c1 in C;
-      consider c2,c3 being Element of COMPLEX such that
-A4:   c = c2*c3 and
-A5:   c2 in A and
-A6:   c3 in B by A2;
-A7:   a = c2*(c3*c1) by A1,A4;
-      c3*c1 in B**C by A6,A3;
-      hence a in A**(B**C) by A5,A7;
-    end;
-    assume a in A**(B**C);
+proof
+  let a;
+  hereby
+    assume
+    a in A**B**C;
     then consider c,c1 such that
-A8: a = c*c1 and
-A9: c in A and
-A10: c1 in B**C;
+A1: a = c*c1 and
+A2: c in A**B and
+A3: c1 in C;
     consider c2,c3 being Element of COMPLEX such that
-A11: c1 = c2*c3 and
-A12: c2 in B and
-A13: c3 in C by A10;
-A14: a = c*c2*c3 by A8,A11;
-    c*c2 in A**B by A9,A12;
-    hence thesis by A13,A14;
+A4: c = c2*c3 and
+A5: c2 in A and
+A6: c3 in B by A2;
+    a = c2*(c3*c1) & c3*c1 in B**C by A1,A3,A4,A6;
+    hence a in A**(B**C) by A5;
   end;
+  assume
+  a in A**(B**C);
+  then consider c,c1 such that
+A7: a = c*c1 & c in A and
+A8: c1 in B**C;
+  consider c2,c3 being Element of COMPLEX such that
+A9: c1 = c2*c3 & c2 in B and
+A10: c3 in C by A8;
+  a = c*c2*c3 & c*c2 in A**B by A7,A9;
+  hence thesis by A10;
+end;
 
 theorem
   A c= B & C c= D implies A**C c= B**D
-  proof
-    assume
+proof
+  assume
 A1: A c= B & C c= D;
-    let a;
-    assume a in A**C;
-    then ex c,c1 st a = c*c1 & c in A & c1 in C;
-    hence thesis by A1;
-  end;
+  let a;
+  assume
+  a in A**C;
+  then ex c,c1 st a = c*c1 & c in A & c1 in C;
+  hence thesis by A1;
+end;
 
-theorem Th98:
+theorem Th92:
   A ** (B \/ C) = (A**B) \/ (A**C)
-  proof
-    let a;
-    hereby
-      assume a in A**(B\/C);
-      then consider c,c1 such that
-A1:   a = c*c1 and
-A2:   c in A and
-A3:   c1 in B\/C;
-      c1 in B or c1 in C by A3,XBOOLE_0:def 3;
-      then c*c1 in A**B or c*c1 in A**C by A2;
-      hence a in (A**B)\/(A**C) by A1,XBOOLE_0:def 3;
-    end;
+proof
+  let a;
+  hereby
     assume
-A4: a in (A**B)\/(A**C);
-    per cases by A4,XBOOLE_0:def 3;
-    suppose a in A**B;
-      then consider c,c1 such that
-A5:   a = c*c1 and
-A6:   c in A and
-A7:   c1 in B;
-      c1 in B\/C by A7,XBOOLE_0:def 3;
-      hence thesis by A5,A6;
-    end;
-    suppose a in A**C;
-      then consider c,c1 such that
-A8:   a = c*c1 and
-A9:   c in A and
-A10:   c1 in C;
-      c1 in B\/C by A10,XBOOLE_0:def 3;
-      hence thesis by A8,A9;
-    end;
-  end;
-
-theorem Th99:
-  A ** (B /\ C) c= (A**B) /\ (A**C)
-  proof
-    let a;
-    assume a in A**(B/\C);
+    a in A**(B\/C);
     then consider c,c1 such that
+A1: a = c*c1 and
+A2: c in A and
+A3: c1 in B\/C;
+    c1 in B or c1 in C by A3,XBOOLE_0:def 3;
+    then c*c1 in A**B or c*c1 in A**C by A2;
+    hence a in (A**B)\/(A**C) by A1,XBOOLE_0:def 3;
+  end;
+  assume
+A4: a in (A**B)\/(A**C);
+  per cases by A4,XBOOLE_0:def 3;
+  suppose
+    a in A**B;
+    then consider c,c1 such that
+A5: a = c*c1 & c in A and
+A6: c1 in B;
+    c1 in B\/C by A6,XBOOLE_0:def 3;
+    hence thesis by A5;
+  end;
+  suppose
+    a in A**C;
+    then consider c,c1 such that
+A7: a = c*c1 & c in A and
+A8: c1 in C;
+    c1 in B\/C by A8,XBOOLE_0:def 3;
+    hence thesis by A7;
+  end;
+end;
+
+theorem Th93:
+  A ** (B /\ C) c= (A**B) /\ (A**C)
+proof
+  let a;
+  assume
+  a in A**(B/\C);
+  then consider c,c1 such that
 A1: a = c*c1 and
 A2: c in A and
 A3: c1 in B/\C;
-    c1 in B & c1 in C by A3,XBOOLE_0:def 4;
-    then c*c1 in A**B & c*c1 in A**C by A2;
-    hence thesis by A1,XBOOLE_0:def 4;
-  end;
+  c1 in C by A3,XBOOLE_0:def 4;
+  then
+A4: c*c1 in A**C by A2;
+  c1 in B by A3,XBOOLE_0:def 4;
+  then c*c1 in A**B by A2;
+  hence thesis by A1,A4,XBOOLE_0:def 4;
+end;
 
-theorem Th100:
+theorem Th94:
   A**--B = --(A**B)
-  proof
-    let a;
-    hereby
-      assume a in A**--B;
-      then consider c,c1 such that
-A1:   a = c*c1 and
-A2:   c in A and
-A3:   c1 in --B;
-A4:   a = -(c*-c1) by A1;
-      -c1 in B by A3,Th18;
-      then c*-c1 in A**B by A2;
-      hence a in --(A**B) by A4;
-    end;
-    assume a in --(A**B);
-    then -a in A**B by Th18;
-    then consider c,c1 such that
-A5: -a = c*c1 and
-A6: c in A and
-A7: c1 in B;
-A8: a = c*-c1 by A5;
-    -c1 in --B by A7;
-    hence thesis by A6,A8;
-  end;
-
-theorem Th101:
-  A**(B++C) c= A**B ++ A**C
-  proof
-    let a;
-    assume a in A**(B++C);
+proof
+  let a;
+  hereby
+    assume
+    a in A**--B;
     then consider c,c1 such that
 A1: a = c*c1 and
 A2: c in A and
-A3: c1 in B++C;
-    consider c2,c3 being Element of COMPLEX such that
-A4: c1 = c2+c3 and
-A5: c2 in B and
-A6: c3 in C by A3;
-A7: a = c*c2+c*c3 by A1,A4;
-    c*c2 in A**B & c*c3 in A**C by A2,A5,A6;
-    hence thesis by A7;
-  end;
-
-theorem Th102:
-  A**(B--C) c= A**B -- A**C
-  proof
-    A**(B++--C) c= A**B++A**--C by Th101;
-    hence thesis by Th100;
-  end;
-
-theorem Th103:
-  (A**B)"" = (A"") ** (B"")
-  proof
-    let a;
-    hereby
-      assume a in (A**B)"";
-      then consider c such that
-A1:   a = c" and
-A2:   c in A**B;
-      consider c1,c2 such that
-A3:   c = c1*c2 and
-A4:   c1 in A and
-A5:   c2 in B by A2;
-A6:   a = c1"*c2" by A1,A3,XCMPLX_1:205;
-      c1" in A"" & c2" in B"" by A4,A5;
-      hence a in (A"")**(B"") by A6;
-    end;
-    assume a in (A"")**(B"");
-    then consider c,c1 such that
-A7: a = c*c1 and
-A8: c in A"" and
-A9: c1 in B"";
-    consider c2 such that
-A10: c = c2" and
-A11: c2 in A by A8;
-    consider c3 being Element of COMPLEX such that
-A12: c1 = c3" and
-A13: c3 in B by A9;
-A14: c2*c3 in A**B by A11,A13;
-    a = (c2*c3)" by A7,A10,A12,XCMPLX_1:205;
-    hence thesis by A14;
-  end;
-
-theorem Th104:
-  {a}**{b} = {a*b}
-  proof
-    let z;
-    hereby
-      assume z in {a}**{b};
-      then consider c1,c2 such that
-A1:   z = c1*c2 and
-A2:   c1 in {a} and
-A3:   c2 in {b};
-      c1 = a & c2 = b by A2,A3,TARSKI:def 1;
-      hence z in {a*b} by A1,TARSKI:def 1;
-    end;
-    assume z in {a*b};
+A3: c1 in --B;
+    -c1 in B by A3,Th12;
     then
+A4: c*-c1 in A**B by A2;
+    a = -(c*-c1) by A1;
+    hence a in --(A**B) by A4;
+  end;
+  assume
+  a in --(A**B);
+  then -a in A**B by Th12;
+  then consider c,c1 such that
+A5: -a = c*c1 and
+A6: c in A and
+A7: c1 in B;
+  a = c*-c1 & -c1 in --B by A5,A7;
+  hence thesis by A6;
+end;
+
+theorem Th95:
+  A**(B++C) c= A**B ++ A**C
+proof
+  let a;
+  assume
+  a in A**(B++C);
+  then consider c,c1 such that
+A1: a = c*c1 and
+A2: c in A and
+A3: c1 in B++C;
+  consider c2,c3 being Element of COMPLEX such that
+A4: c1 = c2+c3 & c2 in B and
+A5: c3 in C by A3;
+A6: c*c3 in A**C by A2,A5;
+  a = c*c2+c*c3 & c*c2 in A**B by A1,A2,A4;
+  hence thesis by A6;
+end;
+
+theorem Th96:
+  A**(B--C) c= A**B -- A**C
+proof
+  A**(B++--C) c= A**B++A**--C by Th95;
+  hence thesis by Th94;
+end;
+
+theorem Th97:
+  (A**B)"" = (A"") ** (B"")
+proof
+  let a;
+  hereby
+    assume
+    a in (A**B)"";
+    then consider c such that
+A1: a = c" and
+A2: c in A**B;
+    consider c1,c2 such that
+A3: c = c1*c2 and
+A4: c1 in A & c2 in B by A2;
+A5: c1" in A"" & c2" in B"" by A4;
+    a = c1"*c2" by A1,A3,XCMPLX_1:205;
+    hence a in (A"")**(B"") by A5;
+  end;
+  assume
+  a in (A"")**(B"");
+  then consider c,c1 such that
+A6: a = c*c1 and
+A7: c in A"" and
+A8: c1 in B"";
+  consider c3 being Element of COMPLEX such that
+A9: c1 = c3" and
+A10: c3 in B by A8;
+  consider c2 such that
+A11: c = c2" and
+A12: c2 in A by A7;
+A13: c2*c3 in A**B by A12,A10;
+  a = (c2*c3)" by A6,A11,A9,XCMPLX_1:205;
+  hence thesis by A13;
+end;
+
+theorem Th98:
+  {a}**{b} = {a*b}
+proof
+  let z;
+  hereby
+    assume
+    z in {a}**{b};
+    then consider c1,c2 such that
+A1: z = c1*c2 and
+A2: c1 in {a} & c2 in {b};
+    c1 = a & c2 = b by A2,TARSKI:def 1;
+    hence z in {a*b} by A1,TARSKI:def 1;
+  end;
+A3: a in {a} & b in {b} by TARSKI:def 1;
+  assume
+  z in {a*b};
+  then
 A4: z = a*b by TARSKI:def 1;
-A5: a in COMPLEX & b in COMPLEX by XCMPLX_0:def 2;
-    a in {a} & b in {b} by TARSKI:def 1;
-    hence thesis by A4,A5;
-  end;
+  a in COMPLEX & b in COMPLEX by XCMPLX_0:def 2;
+  hence thesis by A4,A3;
+end;
 
-theorem Th105:
+theorem Th99:
   {a}**{s,t} = {a*s,a*t}
-  proof
-    thus {a}**{s,t} = {a}**({s}\/{t}) by ENUMSET1:41
-    .= ({a}**{s}) \/ ({a}**{t}) by Th98
-    .= {a*s} \/ ({a}**{t}) by Th104
-    .= {a*s} \/ {a*t} by Th104
+proof
+  thus {a}**{s,t} = {a}**({s}\/{t}) by ENUMSET1:41
+    .= ({a}**{s}) \/ ({a}**{t}) by Th92
+    .= {a*s} \/ ({a}**{t}) by Th98
+    .= {a*s} \/ {a*t} by Th98
     .= {a*s,a*t} by ENUMSET1:41;
-  end;
+end;
 
-theorem Th106:
+theorem Th100:
   {a,b}**{s,t} = {a*s,a*t,b*s,b*t}
-  proof
-    thus {a,b}**{s,t} = ({a}\/{b})**{s,t} by ENUMSET1:41
-    .= ({a}**{s,t}) \/ ({b}**{s,t}) by Th98
-    .= {a*s,a*t} \/ ({b}**{s,t}) by Th105
-    .= {a*s,a*t} \/ {b*s,b*t} by Th105
+proof
+  thus {a,b}**{s,t} = ({a}\/{b})**{s,t} by ENUMSET1:41
+    .= ({a}**{s,t}) \/ ({b}**{s,t}) by Th92
+    .= {a*s,a*t} \/ ({b}**{s,t}) by Th99
+    .= {a*s,a*t} \/ {b*s,b*t} by Th99
     .= {a*s,a*t,b*s,b*t} by ENUMSET1:45;
-  end;
+end;
 
 definition
   let F, G be ext-real-membered set;
@@ -2382,40 +2525,41 @@ definition
   coherence;
 end;
 
-theorem Th107:
+theorem Th101:
   F///G = {w1/w2: w1 in F & w2 in G}
+proof
+  thus F///G c= {w1/w2: w1 in F & w2 in G}
   proof
-    thus F///G c= {w1/w2: w1 in F & w2 in G}
-    proof
-      let e;
-      assume e in F///G;
-      then consider w1,w2 such that
-A1:   e = w1*w2 and
-A2:   w1 in F and
-A3:   w2 in G"";
-      consider w such that
-A4:   w2 = w" and
-A5:   w in G by A3;
-      e = w1/w by A1,A4;
-      hence thesis by A2,A5;
-    end;
     let e;
-    assume e in {w1/w2: w1 in F & w2 in G};
+    assume
+    e in F///G;
     then consider w1,w2 such that
-A6: e = w1/w2 and
-A7: w1 in F and
-A8: w2 in G;
-    w2" in G"" by A8;
-    hence thesis by A6,A7;
+A1: e = w1*w2 and
+A2: w1 in F and
+A3: w2 in G"";
+    consider w such that
+A4: w2 = w" and
+A5: w in G by A3;
+    e = w1/w by A1,A4;
+    hence thesis by A2,A5;
   end;
+  let e;
+  assume
+  e in {w1/w2: w1 in F & w2 in G};
+  then consider w1,w2 such that
+A6: e = w1/w2 & w1 in F and
+A7: w2 in G;
+  w2" in G"" by A7;
+  hence thesis by A6;
+end;
 
-theorem Th108:
+theorem Th102:
   f in F & g in G implies f/g in F///G
-  proof
-A1: F///G = {w1/w2: w1 in F & w2 in G} by Th107;
-    f in ExtREAL & g in ExtREAL by XXREAL_0:def 1;
-    hence thesis by A1;
-  end;
+proof
+A1: f in ExtREAL & g in ExtREAL by XXREAL_0:def 1;
+  F///G = {w1/w2: w1 in F & w2 in G} by Th101;
+  hence thesis by A1;
+end;
 
 registration
   let F be empty set;
@@ -2440,79 +2584,80 @@ end;
 
 theorem
   F c= G & H c= I implies F///H c= G///I
-  proof
-    assume
+proof
+  assume
 A1: F c= G & H c= I;
-A2: F///H = {w1/w2: w1 in F & w2 in H} by Th107;
-    let i;
-    assume i in F///H;
-    then ex w,w1 st i = w/w1 & w in F & w1 in H by A2;
-    hence thesis by A1,Th108;
-  end;
+  let i;
+A2: F///H = {w1/w2: w1 in F & w2 in H} by Th101;
+  assume
+  i in F///H;
+  then ex w,w1 st i = w/w1 & w in F & w1 in H by A2;
+  hence thesis by A1,Th102;
+end;
 
 theorem
-  (F \/ G) /// H = (F///H) \/ (G///H) by Th88;
+  (F \/ G) /// H = (F///H) \/ (G///H) by Th82;
 
 theorem
-  (F /\ G) /// H c= (F///H) /\ (G///H) by Th89;
+  (F /\ G) /// H c= (F///H) /\ (G///H) by Th83;
 
 theorem
   F /// (G \/ H) = (F///G) \/ (F///H)
-  proof
-    thus F /// (G \/ H) = F**((G"")\/(H"")) by Th29
-    .= (F///G) \/ (F///H) by Th88;
-  end;
+proof
+  thus F /// (G \/ H) = F**((G"")\/(H"")) by Th23
+    .= (F///G) \/ (F///H) by Th82;
+end;
 
 theorem
   F /// (G /\ H) c= (F///G) /\ (F///H)
-  proof
-    (G /\ H)"" c= (G"")/\(H"") by Th30;
-    then
-A1: F**((G /\ H)"") c= F**((G"")/\(H"")) by Th87;
-    F**((G"")/\(H"")) c= (F**(G""))/\(F**(H"")) by Th89;
-    hence thesis by A1,XBOOLE_1:1;
-  end;
+proof
+  (G /\ H)"" c= (G"")/\(H"") by Th24;
+  then
+A1: F**((G /\ H)"") c= F**((G"")/\(H"")) by Th81;
+  F**((G"")/\(H"")) c= (F**(G""))/\(F**(H"")) by Th83;
+  hence thesis by A1,XBOOLE_1:1;
+end;
 
 theorem
-  (F**G)///H = F**(G///H) by Th86;
+  (F**G)///H = F**(G///H) by Th80;
 
 theorem
-  (F///G)**H = (F**H)///G by Th86;
+  (F///G)**H = (F**H)///G by Th80;
 
 theorem
   (F///G)///H = F///(G**H)
-  proof
-    thus (F///G)///H = F**((G"")**(H"")) by Th86
-    .= F///(G**H) by Th91;
-  end;
+proof
+  thus (F///G)///H = F**((G"")**(H"")) by Th80
+    .= F///(G**H) by Th85;
+end;
 
 theorem
   {f}///{g} = {f/g}
-  proof
-    thus {f}///{g} = {f}**{g"} by Th32
-    .= {f/g} by Th92;
-  end;
+proof
+  thus {f}///{g} = {f}**{g"} by Th26
+    .= {f/g} by Th86;
+end;
 
 theorem
   {f}///{h,i} = {f/h,f/i}
-  proof
-    thus {f}///{h,i} = {f}**{h",i"} by Th33
-    .= {f/h,f/i} by Th93;
-  end;
+proof
+  thus {f}///{h,i} = {f}**{h",i"} by Th27
+    .= {f/h,f/i} by Th87;
+end;
 
 theorem
   {f,g}///{h} = {f/h,g/h}
-  proof
-    thus {f,g}///{h} = {f,g}**{h"} by Th32
-    .= {f/h,g/h} by Th93;
-  end;
+proof
+  thus {f,g}///{h} = {f,g}**{h"} by Th26
+    .= {f/h,g/h} by Th87;
+end;
 
 theorem
   {f,g}///{h,i} = {f/h,f/i,g/h,g/i}
-  proof
-    thus {f,g}///{h,i} = {f,g}**{h",i"} by Th33
-    .= {f/h,f/i,g/h,g/i} by Th94;
-  end;
+proof
+  thus {f,g}///{h,i} = {f,g}**{h",i"} by Th27
+    .= {f/h,f/i,g/h,g/i} by Th88;
+end;
 
 definition
   let A, B be complex-membered set;
@@ -2521,38 +2666,38 @@ definition
   coherence;
 end;
 
-theorem Th121:
+theorem Th115:
   A///B = {c1/c2: c1 in A & c2 in B}
+proof
+  thus A///B c= {c1/c2: c1 in A & c2 in B}
   proof
-    thus A///B c= {c1/c2: c1 in A & c2 in B}
-    proof
-      let e;
-      assume e in A///B;
-      then consider c1,c2 such that
-A1:   e = c1*c2 and
-A2:   c1 in A and
-A3:   c2 in B"";
-A4:   e = c1/(c2") by A1;
-      c2" in B by A3,Th35;
-      hence thesis by A4,A2;
-    end;
     let e;
-    assume e in {c1/c2: c1 in A & c2 in B};
+    assume
+    e in A///B;
     then consider c1,c2 such that
-A5: e = c1/c2 and
-A6: c1 in A and
-A7: c2 in B;
-    c2" in B"" by A7;
-    hence thesis by A5,A6;
+A1: e = c1*c2 and
+A2: c1 in A and
+A3: c2 in B"";
+    e = c1/(c2") & c2" in B by A1,A3,Th29;
+    hence thesis by A2;
   end;
+  let e;
+  assume
+  e in {c1/c2: c1 in A & c2 in B};
+  then consider c1,c2 such that
+A4: e = c1/c2 & c1 in A and
+A5: c2 in B;
+  c2" in B"" by A5;
+  hence thesis by A4;
+end;
 
-theorem Th122:
+theorem Th116:
   a in A & b in B implies a/b in A///B
-  proof
-A1: A///B = {c1/c2: c1 in A & c2 in B} by Th121;
-    a in COMPLEX & b in COMPLEX by XCMPLX_0:def 2;
-    hence thesis by A1;
-  end;
+proof
+A1: a in COMPLEX & b in COMPLEX by XCMPLX_0:def 2;
+  A///B = {c1/c2: c1 in A & c2 in B} by Th115;
+  hence thesis by A1;
+end;
 
 registration
   let A be empty set;
@@ -2595,97 +2740,98 @@ end;
 
 theorem
   A c= B & C c= D implies A///C c= B///D
-  proof
-    assume
+proof
+  assume
 A1: A c= B & C c= D;
-A2: A///C = {c1/c2: c1 in A & c2 in C} by Th121;
-    let z;
-    assume z in A///C;
-    then ex c,c1 st z = c/c1 & c in A & c1 in C by A2;
-    hence thesis by A1,Th122;
-  end;
+  let z;
+A2: A///C = {c1/c2: c1 in A & c2 in C} by Th115;
+  assume
+  z in A///C;
+  then ex c,c1 st z = c/c1 & c in A & c1 in C by A2;
+  hence thesis by A1,Th116;
+end;
 
 theorem
   A /// (B \/ C) = (A///B) \/ (A///C)
-  proof
-    thus A /// (B \/ C) = A**((B"")\/(C"")) by Th38
-    .= (A///B) \/ (A///C) by Th98;
-  end;
+proof
+  thus A /// (B \/ C) = A**((B"")\/(C"")) by Th32
+    .= (A///B) \/ (A///C) by Th92;
+end;
 
 theorem
   A /// (B /\ C) c= (A///B) /\ (A///C)
-  proof
-    A /// (B /\ C) = A**((B"")/\(C"")) by Th39;
-    hence thesis by Th99;
-  end;
+proof
+  A /// (B /\ C) = A**((B"")/\(C"")) by Th33;
+  hence thesis by Th93;
+end;
 
 theorem
   A///--B = --(A///B)
-  proof
-    thus A///--B = A**--(B"") by Th42
-    .= --(A///B) by Th100;
-  end;
+proof
+  thus A///--B = A**--(B"") by Th36
+    .= --(A///B) by Th94;
+end;
 
 theorem
-  (--A)///B = --(A///B) by Th100;
+  (--A)///B = --(A///B) by Th94;
 
 theorem
-  (A++B)///C c= A///C ++ B///C by Th101;
+  (A++B)///C c= A///C ++ B///C by Th95;
 
 theorem
   (A--B)///C c= A///C -- B///C
-  proof
-    (A++--B)///C c= A///C++(--B)///C by Th101;
-    hence thesis by Th100;
-  end;
+proof
+  (A++--B)///C c= A///C++(--B)///C by Th95;
+  hence thesis by Th94;
+end;
 
 theorem
-  (A**B)///C = A**(B///C) by Th96;
+  (A**B)///C = A**(B///C) by Th90;
 
 theorem
-  (A///B)**C = (A**C)///B by Th96;
+  (A///B)**C = (A**C)///B by Th90;
 
 theorem
   (A///B)///C = A///(B**C)
-  proof
-    thus (A///B)///C = A**((B"")**(C"")) by Th96
-    .= A///(B**C) by Th103;
-  end;
+proof
+  thus (A///B)///C = A**((B"")**(C"")) by Th90
+    .= A///(B**C) by Th97;
+end;
 
 theorem
   A///(B///C) = (A**C)///B
-  proof
-    thus A///(B///C) = A**((B"")**(C"""")) by Th103
-    .= (A**C)///B by Th96;
-  end;
+proof
+  thus A///(B///C) = A**((B"")**(C"""")) by Th97
+    .= (A**C)///B by Th90;
+end;
 
 theorem
   {a}///{b} = {a/b}
-  proof
-    thus {a}///{b} = {a}**{b"} by Th43
-    .= {a/b} by Th104;
-  end;
+proof
+  thus {a}///{b} = {a}**{b"} by Th37
+    .= {a/b} by Th98;
+end;
 
 theorem
   {a}///{s,t} = {a/s,a/t}
-  proof
-    thus {a}///{s,t} = {a}**{s",t"} by Th44
-    .= {a/s,a/t} by Th105;
-  end;
+proof
+  thus {a}///{s,t} = {a}**{s",t"} by Th38
+    .= {a/s,a/t} by Th99;
+end;
 
 theorem
   {a,b}///{s} = {a/s,b/s}
-  proof
-    thus {a,b}///{s} = {a,b}**{s"} by Th43
-    .= {a/s,b/s} by Th105;
-  end;
+proof
+  thus {a,b}///{s} = {a,b}**{s"} by Th37
+    .= {a/s,b/s} by Th99;
+end;
 
 theorem
   {a,b}///{s,t} = {a/s,a/t,b/s,b/t}
-  proof
-    thus {a,b}///{s,t} = {a,b}**{s",t"} by Th44
-    .= {a/s,a/t,b/s,b/t} by Th106;
-  end;
+proof
+  thus {a,b}///{s,t} = {a,b}**{s",t"} by Th38
+    .= {a/s,a/t,b/s,b/t} by Th100;
+end;
 
 definition
   let F be ext-real-membered set;
@@ -2695,39 +2841,41 @@ definition
   coherence;
 end;
 
-theorem Th138:
+theorem Th132:
   g in G implies f+g in f++G
-  proof
-    f in {f} by TARSKI:def 1;
-    hence thesis by Th45;
-  end;
+proof
+  f in {f} by TARSKI:def 1;
+  hence thesis by Th39;
+end;
 
-theorem Th139:
+theorem Th133:
   f++F = {f+w: w in F}
+proof
+  thus f++F c= {f+w: w in F}
   proof
-    thus f++F c= {f+w: w in F}
-    proof
-      let e;
-      assume e in f++F;
-      then consider w1,w2 such that
-A1:   e = w1+w2 and
-A2:   w1 in {f} and
-A3:   w2 in F;
-      w1 = f by A2,TARSKI:def 1;
-      hence thesis by A1,A3;
-    end;
     let e;
-    assume e in {f+w: w in F};
-    then ex w st e = f+w & w in F;
-    hence thesis by Th138;
+    assume
+    e in f++F;
+    then consider w1,w2 such that
+A1: e = w1+w2 and
+A2: w1 in {f} and
+A3: w2 in F;
+    w1 = f by A2,TARSKI:def 1;
+    hence thesis by A1,A3;
   end;
+  let e;
+  assume
+  e in {f+w: w in F};
+  then ex w st e = f+w & w in F;
+  hence thesis by Th132;
+end;
 
-theorem Th140:
+theorem Th134:
   e in f++F implies ex w st e = f+w & w in F
-  proof
-    f++F = {f+w: w in F} by Th139;
-    hence thesis;
-  end;
+proof
+  f++F = {f+w: w in F} by Th133;
+  hence thesis;
+end;
 
 registration
   let F be empty set;
@@ -2750,100 +2898,105 @@ registration
   coherence;
 end;
 
-theorem Th141:
+theorem Th135:
   r++F c= r++G implies F c= G
-  proof
-    assume
+proof
+  assume
 A1: r++F c= r++G;
-    let i;
-    assume i in F;
-    then r+i in r++F by Th138;
-    then ex w st r+i = r+w & w in G by A1,Th140;
-    hence thesis by XXREAL_3:11;
-  end;
+  let i;
+  assume
+  i in F;
+  then r+i in r++F by Th132;
+  then ex w st r+i = r+w & w in G by A1,Th134;
+  hence thesis by XXREAL_3:11;
+end;
 
 theorem
   r++F = r++G implies F = G
-  proof
-    assume r++F = r++G;
-    then F c= G & G c= F by Th141;
-    hence thesis by XBOOLE_0:def 10;
-  end;
+proof
+  assume
+  r++F = r++G;
+  then F c= G & G c= F by Th135;
+  hence thesis by XBOOLE_0:def 10;
+end;
 
-theorem Th143:
+theorem Th137:
   r ++ (F /\ G) = (r++F) /\ (r++G)
+proof
+A1: (r++F) /\ (r++G) c= r ++ (F /\ G)
   proof
-A1: r ++ (F /\ G) c= (r++F) /\ (r++G) by Th48;
-    (r++F) /\ (r++G) c= r ++ (F /\ G)
-    proof
-      let j;
-      assume
-A2:   j in (r++F) /\ (r++G);
-      then j in r++F by XBOOLE_0:def 4;
-      then consider w such that
-A3:   j = r+w and
-A4:   w in F by Th140;
-      j in r++G by A2,XBOOLE_0:def 4;
-      then consider w1 such that
-A5:   j = r+w1 and
-A6:   w1 in G by Th140;
-      w = w1 by A3,A5,XXREAL_3:11;
-      then w in F /\ G by A4,A6,XBOOLE_0:def 4;
-      hence thesis by A3,Th138;
-    end;
-    hence thesis by A1,XBOOLE_0:def 10;
+    let j;
+    assume
+A2: j in (r++F) /\ (r++G);
+    then j in r++F by XBOOLE_0:def 4;
+    then consider w such that
+A3: j = r+w and
+A4: w in F by Th134;
+    j in r++G by A2,XBOOLE_0:def 4;
+    then consider w1 such that
+A5: j = r+w1 and
+A6: w1 in G by Th134;
+    w = w1 by A3,A5,XXREAL_3:11;
+    then w in F /\ G by A4,A6,XBOOLE_0:def 4;
+    hence thesis by A3,Th132;
   end;
+  r ++ (F /\ G) c= (r++F) /\ (r++G) by Th42;
+  hence thesis by A1,XBOOLE_0:def 10;
+end;
 
-theorem Th144:
+theorem Th138:
   (f++F) \ (f++G) c= f ++ (F \ G)
+proof
+  let i;
+  assume
+A1: i in (f++F) \ (f++G);
+  then consider w such that
+A2: i = f+w and
+A3: w in F by Th134;
+  now
+    assume
+    not w in F\G;
+    then w in G by A3,XBOOLE_0:def 5;
+    then f+w in f++G by Th132;
+    hence contradiction by A1,A2,XBOOLE_0:def 5;
+  end;
+  hence thesis by A2,Th132;
+end;
+
+theorem Th139:
+  r ++ (F \ G) = (r++F) \ (r++G)
+proof
+A1: r ++ (F \ G) c= (r++F) \ (r++G)
   proof
     let i;
     assume
-A1: i in (f++F) \ (f++G);
+    i in r ++ (F \ G);
     then consider w such that
-A2: i = f+w and
-A3: w in F by Th140;
-    now
-      assume not w in F\G;
-      then w in G by A3,XBOOLE_0:def 5;
-      then f+w in f++G by Th138;
-      hence contradiction by A1,A2,XBOOLE_0:def 5;
+A2: i = r+w and
+A3: w in F\G by Th134;
+A4: now
+      assume
+      r+w in r++G;
+      then consider w1 such that
+A5:   r+w = r+w1 and
+A6:   w1 in G by Th134;
+      w = w1 by A5,XXREAL_3:11;
+      hence contradiction by A3,A6,XBOOLE_0:def 5;
     end;
-    hence thesis by A2,Th138;
+    r+w in r++F by A3,Th132;
+    hence thesis by A2,A4,XBOOLE_0:def 5;
   end;
+  (r++F) \ (r++G) c= r ++ (F \ G) by Th138;
+  hence thesis by A1,XBOOLE_0:def 10;
+end;
 
-theorem Th145:
-  r ++ (F \ G) = (r++F) \ (r++G)
-  proof
-A1: r ++ (F \ G) c= (r++F) \ (r++G)
-    proof
-      let i;
-      assume i in r ++ (F \ G);
-      then consider w such that
-A2:   i = r+w and
-A3:   w in F\G by Th140;
-A4:   r+w in r++F by A3,Th138;
-      now
-        assume r+w in r++G;
-        then consider w1 such that
-A5:     r+w = r+w1 and
-A6:     w1 in G by Th140;
-        w = w1 by A5,XXREAL_3:11;
-        hence contradiction by A3,A6,XBOOLE_0:def 5;
-      end;
-      hence thesis by A2,A4,XBOOLE_0:def 5;
-    end;
-    (r++F) \ (r++G) c= r ++ (F \ G) by Th144;
-    hence thesis by A1,XBOOLE_0:def 10;
-  end;
-
-theorem Th146:
+theorem Th140:
   r ++ (F \+\ G) = (r++F) \+\ (r++G)
-  proof
-    thus r ++ (F \+\ G) = (r++(F\G)) \/ (r++(G\F)) by Th47
-    .= ((r++F)\(r++G)) \/ (r++(G\F)) by Th145
-    .= (r++F) \+\ (r++G) by Th145;
-  end;
+proof
+  thus r ++ (F \+\ G) = (r++(F\G)) \/ (r++(G\F)) by Th41
+    .= ((r++F)\(r++G)) \/ (r++(G\F)) by Th139
+    .= (r++F) \+\ (r++G) by Th139;
+end;
 
 definition
   let A be complex-membered set;
@@ -2853,39 +3006,41 @@ definition
   coherence;
 end;
 
-theorem Th147:
+theorem Th141:
   b in A implies a+b in a++A
-  proof
-    a in {a} by TARSKI:def 1;
-    hence thesis by Th52;
-  end;
+proof
+  a in {a} by TARSKI:def 1;
+  hence thesis by Th46;
+end;
 
-theorem Th148:
+theorem Th142:
   a++A = {a+c: c in A}
+proof
+  thus a++A c= {a+c: c in A}
   proof
-    thus a++A c= {a+c: c in A}
-    proof
-      let e;
-      assume e in a++A;
-      then consider c1,c2 such that
-A1:   e = c1+c2 and
-A2:   c1 in {a} and
-A3:   c2 in A;
-      c1 = a by A2,TARSKI:def 1;
-      hence thesis by A1,A3;
-    end;
     let e;
-    assume e in {a+c: c in A};
-    then ex c st e = a+c & c in A;
-    hence thesis by Th147;
+    assume
+    e in a++A;
+    then consider c1,c2 such that
+A1: e = c1+c2 and
+A2: c1 in {a} and
+A3: c2 in A;
+    c1 = a by A2,TARSKI:def 1;
+    hence thesis by A1,A3;
   end;
+  let e;
+  assume
+  e in {a+c: c in A};
+  then ex c st e = a+c & c in A;
+  hence thesis by Th141;
+end;
 
-theorem Th149:
+theorem Th143:
   e in a++A implies ex c st e = a+c & c in A
-  proof
-    a++A = {a+c: c in A} by Th148;
-    hence thesis;
-  end;
+proof
+  a++A = {a+c: c in A} by Th142;
+  hence thesis;
+end;
 
 registration
   let A be empty set;
@@ -2943,116 +3098,122 @@ registration
   compatibility;
 end;
 
-theorem Th150:
+theorem Th144:
   A c= B iff a++A c= a++B
-  proof
-    thus A c= B implies a++A c= a++B by Th53;
-    assume
+proof
+  thus A c= B implies a++A c= a++B by Th47;
+  assume
 A1: a++A c= a++B;
-    let z;
-    assume z in A;
-    then a+z in a++A by Th147;
-    then ex c st a+z = a+c & c in B by A1,Th149;
-    hence thesis;
-  end;
+  let z;
+  assume
+  z in A;
+  then a+z in a++A by Th141;
+  then ex c st a+z = a+c & c in B by A1,Th143;
+  hence thesis;
+end;
 
 theorem
   a++A = a++B implies A = B
-  proof
-    assume a++A = a++B;
-    then A c= B & B c= A by Th150;
-    hence thesis by XBOOLE_0:def 10;
-  end;
+proof
+  assume
+  a++A = a++B;
+  then A c= B & B c= A by Th144;
+  hence thesis by XBOOLE_0:def 10;
+end;
 
 theorem
   0++A = A
-  proof
-    let a;
-    hereby
-      assume a in 0++A;
-      then consider c1,c2 such that
-A1:   a = c1+c2 and
-A2:   c1 in {0} and
-A3:   c2 in A;
-      c1 = 0 by A2,TARSKI:def 1;
-      hence a in A by A1,A3;
-    end;
+proof
+  let a;
+  hereby
     assume
-A4: a in A;
-    a in COMPLEX by XCMPLX_0:def 2;
-    then 0+a in {0+c: c in A} by A4;
-    hence thesis by Th148;
+    a in 0++A;
+    then consider c1,c2 such that
+A1: a = c1+c2 and
+A2: c1 in {0} and
+A3: c2 in A;
+    c1 = 0 by A2,TARSKI:def 1;
+    hence a in A by A1,A3;
   end;
+A4: a in COMPLEX by XCMPLX_0:def 2;
+  assume
+  a in A;
+  then 0+a in {0+c: c in A} by A4;
+  hence thesis by Th142;
+end;
 
 theorem
   (a+b)++A = a++(b++A)
-  proof
-    thus (a+b)++A = {a}++{b}++A by Th57
-    .= a++(b++A) by Th56;
-  end;
+proof
+  thus (a+b)++A = {a}++{b}++A by Th51
+    .= a++(b++A) by Th50;
+end;
 
 theorem
-  a++(A++B) = (a++A)++B by Th56;
+  a++(A++B) = (a++A)++B by Th50;
 
-theorem Th155:
+theorem Th149:
   a ++ (A /\ B) = (a++A) /\ (a++B)
-  proof
-A1: a ++ (A /\ B) c= (a++A) /\ (a++B) by Th55;
-    (a++A) /\ (a++B) c= a ++ (A /\ B)
-    proof
-      let z;
-      assume
-A2:   z in (a++A) /\ (a++B);
-      then z in a++A by XBOOLE_0:def 4;
-      then consider c such that
-A3:   z = a+c and
-A4:   c in A by Th149;
-      z in a++B by A2,XBOOLE_0:def 4;
-      then ex c1 st z = a+c1 & c1 in B by Th149;
-      then c in A/\B by A3,A4,XBOOLE_0:def 4;
-      hence thesis by A3,Th147;
-    end;
-    hence thesis by A1,XBOOLE_0:def 10;
-  end;
-
-theorem Th156:
-  a ++ (A \ B) = (a++A) \ (a++B)
+proof
+A1: (a++A) /\ (a++B) c= a ++ (A /\ B)
   proof
     let z;
-    hereby
-      assume z in a ++ (A \ B);
-      then consider c such that
-A1:   z = a+c and
-A2:   c in A\B by Th149;
-A3:   a+c in a++A by A2,Th147;
-      now
-        assume a+c in a++B;
-        then ex c1 st a+c = a+c1 & c1 in B by Th149;
-        hence contradiction by A2,XBOOLE_0:def 5;
-      end;
-      hence z in (a++A) \ (a++B) by A1,A3,XBOOLE_0:def 5;
-    end;
     assume
-A4: z in (a++A) \ (a++B);
+A2: z in (a++A) /\ (a++B);
+    then z in a++A by XBOOLE_0:def 4;
     then consider c such that
-A5: z = a+c and
-A6: c in A by Th149;
-    now
-      assume not c in A\B;
-      then c in B by A6,XBOOLE_0:def 5;
-      then a+c in a++B by Th147;
-      hence contradiction by A4,A5,XBOOLE_0:def 5;
-    end;
-    hence thesis by A5,Th147;
+A3: z = a+c and
+A4: c in A by Th143;
+    z in a++B by A2,XBOOLE_0:def 4;
+    then ex c1 st z = a+c1 & c1 in B by Th143;
+    then c in A/\B by A3,A4,XBOOLE_0:def 4;
+    hence thesis by A3,Th141;
   end;
+  a ++ (A /\ B) c= (a++A) /\ (a++B) by Th49;
+  hence thesis by A1,XBOOLE_0:def 10;
+end;
 
-theorem Th157:
-  a ++ (A \+\ B) = (a++A) \+\ (a++B)
-  proof
-    thus a ++ (A \+\ B) = (a++(A\B)) \/ (a++(B\A)) by Th54
-    .= ((a++A)\(a++B)) \/ (a++(B\A)) by Th156
-    .= (a++A) \+\ (a++B) by Th156;
+theorem Th150:
+  a ++ (A \ B) = (a++A) \ (a++B)
+proof
+  let z;
+  hereby
+    assume
+    z in a ++ (A \ B);
+    then consider c such that
+A1: z = a+c and
+A2: c in A\B by Th143;
+A3: now
+      assume
+      a+c in a++B;
+      then ex c1 st a+c = a+c1 & c1 in B by Th143;
+      hence contradiction by A2,XBOOLE_0:def 5;
+    end;
+    a+c in a++A by A2,Th141;
+    hence z in (a++A) \ (a++B) by A1,A3,XBOOLE_0:def 5;
   end;
+  assume
+A4: z in (a++A) \ (a++B);
+  then consider c such that
+A5: z = a+c and
+A6: c in A by Th143;
+  now
+    assume
+    not c in A\B;
+    then c in B by A6,XBOOLE_0:def 5;
+    then a+c in a++B by Th141;
+    hence contradiction by A4,A5,XBOOLE_0:def 5;
+  end;
+  hence thesis by A5,Th141;
+end;
+
+theorem Th151:
+  a ++ (A \+\ B) = (a++A) \+\ (a++B)
+proof
+  thus a ++ (A \+\ B) = (a++(A\B)) \/ (a++(B\A)) by Th48
+    .= ((a++A)\(a++B)) \/ (a++(B\A)) by Th150
+    .= (a++A) \+\ (a++B) by Th150;
+end;
 
 definition
   let F be ext-real-membered set;
@@ -3062,41 +3223,41 @@ definition
   coherence;
 end;
 
-theorem Th158:
+theorem Th152:
   g in G implies f-g in f--G
-  proof
-    f in {f} by TARSKI:def 1;
-    hence thesis by Th61;
-  end;
+proof
+  f in {f} by TARSKI:def 1;
+  hence thesis by Th55;
+end;
 
-theorem Th159:
+theorem Th153:
   f--F = {f-w: w in F}
+proof
+  thus f--F c= {f-w: w in F}
   proof
-    thus f--F c= {f-w: w in F}
-    proof
-      let e;
-      assume e in f--F;
-      then consider w1,w2 such that
-A1:   e = w1+w2 and
-A2:   w1 in {f} and
-A3:   w2 in --F;
-A4:   w1- -w2 = w1+w2;
-A5:   -w2 in F by A3,Th8;
-      w1 = f by A2,TARSKI:def 1;
-      hence thesis by A1,A4,A5;
-    end;
     let e;
-    assume e in {f-w: w in F};
-    then ex w st e = f-w & w in F;
-    hence thesis by Th158;
+    assume
+    e in f--F;
+    then consider w1,w2 such that
+A1: e = w1+w2 and
+A2: w1 in {f} & w2 in --F;
+A3: w1- -w2 = w1+w2;
+    -w2 in F & w1 = f by A2,Th2,TARSKI:def 1;
+    hence thesis by A1,A3;
   end;
+  let e;
+  assume
+  e in {f-w: w in F};
+  then ex w st e = f-w & w in F;
+  hence thesis by Th152;
+end;
 
-theorem Th160:
+theorem Th154:
   e in f--F implies ex w st e = f-w & w in F
-  proof
-    f--F = {f-w: w in F} by Th159;
-    hence thesis;
-  end;
+proof
+  f--F = {f-w: w in F} by Th153;
+  hence thesis;
+end;
 
 registration
   let F be empty set;
@@ -3119,49 +3280,51 @@ registration
   coherence;
 end;
 
-theorem Th161:
+theorem Th155:
   r--F c= r--G implies F c= G
-  proof
-    assume
+proof
+  assume
 A1: r--F c= r--G;
-    let i;
-    assume i in F;
-    then r-i in r--F by Th158;
-    then ex w st r-i = r-w & w in G by A1,Th160;
-    hence thesis by XXREAL_3:12;
-  end;
+  let i;
+  assume
+  i in F;
+  then r-i in r--F by Th152;
+  then ex w st r-i = r-w & w in G by A1,Th154;
+  hence thesis by XXREAL_3:12;
+end;
 
 theorem
   r--F = r--G implies F = G
-  proof
-    assume r--F = r--G;
-    then F c= G & G c= F by Th161;
-    hence thesis by XBOOLE_0:def 10;
-  end;
+proof
+  assume
+  r--F = r--G;
+  then F c= G & G c= F by Th155;
+  hence thesis by XBOOLE_0:def 10;
+end;
 
-theorem Th163:
+theorem Th157:
   r -- (F/\G) = (r--F) /\ (r--G)
-  proof
-    thus r -- (F/\G) = r ++ ((--F)/\(--G)) by Th12
-    .= (r++--F) /\ (r++--G) by Th143
+proof
+  thus r -- (F/\G) = r ++ ((--F)/\(--G)) by Th6
+    .= (r++--F) /\ (r++--G) by Th137
     .= (r--F) /\ (r--G);
-  end;
+end;
 
-theorem Th164:
+theorem Th158:
   r -- (F\G) = (r--F) \ (r--G)
-  proof
-    thus r -- (F\G) = r ++ ((--F)\(--G)) by Th13
-    .= (r++--F) \ (r++--G) by Th145
+proof
+  thus r -- (F\G) = r ++ ((--F)\(--G)) by Th7
+    .= (r++--F) \ (r++--G) by Th139
     .= (r--F) \ (r--G);
-  end;
+end;
 
-theorem Th165:
+theorem Th159:
   r -- (F\+\G) = (r--F) \+\ (r--G)
-  proof
-    thus r -- (F\+\G) = r ++ ((--F)\+\(--G)) by Th14
-    .= (r++--F) \+\ (r++--G) by Th146
+proof
+  thus r -- (F\+\G) = r ++ ((--F)\+\(--G)) by Th8
+    .= (r++--F) \+\ (r++--G) by Th140
     .= (r--F) \+\ (r--G);
-  end;
+end;
 
 definition
   let A be complex-membered set;
@@ -3171,40 +3334,42 @@ definition
   coherence;
 end;
 
-theorem Th166:
+theorem Th160:
   b in A implies a-b in a--A
-  proof
-    a in {a} by TARSKI:def 1;
-    hence thesis by Th72;
-  end;
+proof
+  a in {a} by TARSKI:def 1;
+  hence thesis by Th66;
+end;
 
-theorem Th167:
+theorem Th161:
   a--A = {a-c: c in A}
+proof
+A1: a--A = {c1-c2: c1 in {a} & c2 in A} by Th65;
+  thus a--A c= {a-c: c in A}
   proof
-A1: a--A = {c1-c2: c1 in {a} & c2 in A} by Th71;
-    thus a--A c= {a-c: c in A}
-    proof
-      let e;
-      assume e in a--A;
-      then consider c1,c2 such that
-A2:   e = c1-c2 and
-A3:   c1 in {a} and
-A4:   c2 in A by A1;
-      c1 = a by A3,TARSKI:def 1;
-      hence thesis by A2,A4;
-    end;
     let e;
-    assume e in {a-c: c in A};
-    then ex c st e = a-c & c in A;
-    hence thesis by Th166;
+    assume
+    e in a--A;
+    then consider c1,c2 such that
+A2: e = c1-c2 and
+A3: c1 in {a} and
+A4: c2 in A by A1;
+    c1 = a by A3,TARSKI:def 1;
+    hence thesis by A2,A4;
   end;
+  let e;
+  assume
+  e in {a-c: c in A};
+  then ex c st e = a-c & c in A;
+  hence thesis by Th160;
+end;
 
-theorem Th168:
+theorem Th162:
   e in a--A implies ex c st e = a-c & c in A
-  proof
-    a--A = {a-c: c in A} by Th167;
-    hence thesis;
-  end;
+proof
+  a--A = {a-c: c in A} by Th161;
+  hence thesis;
+end;
 
 registration
   let A be empty set;
@@ -3255,50 +3420,52 @@ registration
   compatibility;
 end;
 
-theorem Th169:
+theorem Th163:
   A c= B iff a--A c= a--B
-  proof
-    thus A c= B implies a--A c= a--B by Th73;
-    assume
+proof
+  thus A c= B implies a--A c= a--B by Th67;
+  assume
 A1: a--A c= a--B;
-    let z;
-    assume z in A;
-    then a-z in a--A by Th166;
-    then ex c st a-z = a-c & c in B by A1,Th168;
-    hence thesis;
-  end;
+  let z;
+  assume
+  z in A;
+  then a-z in a--A by Th160;
+  then ex c st a-z = a-c & c in B by A1,Th162;
+  hence thesis;
+end;
 
 theorem
   a--A = a--B implies A = B
-  proof
-    assume a--A = a--B;
-    then A c= B & B c= A by Th169;
-    hence thesis by XBOOLE_0:def 10;
-  end;
+proof
+  assume
+  a--A = a--B;
+  then A c= B & B c= A by Th163;
+  hence thesis by XBOOLE_0:def 10;
+end;
 
-theorem Th171:
+theorem Th165:
   a -- (A/\B) = (a--A) /\ (a--B)
-  proof
-    thus a -- (A/\B) = a ++ ((--A)/\(--B)) by Th22
-    .= (a++--A) /\ (a++--B) by Th155
+proof
+  thus a -- (A/\B) = a ++ ((--A)/\(--B)) by Th16
+    .= (a++--A) /\ (a++--B) by Th149
     .= (a--A) /\ (a--B);
-  end;
+end;
 
-theorem Th172:
+theorem Th166:
   a -- (A\B) = (a--A) \ (a--B)
-  proof
-    thus a -- (A\B) = a ++ ((--A)\(--B)) by Th23
-    .= (a++--A) \ (a++--B) by Th156
+proof
+  thus a -- (A\B) = a ++ ((--A)\(--B)) by Th17
+    .= (a++--A) \ (a++--B) by Th150
     .= (a--A) \ (a--B);
-  end;
+end;
 
-theorem Th173:
+theorem Th167:
   a -- (A\+\B) = (a--A) \+\ (a--B)
-  proof
-    thus a -- (A\+\B) = a ++ ((--A)\+\(--B)) by Th24
-    .= (a++--A) \+\ (a++--B) by Th157
+proof
+  thus a -- (A\+\B) = a ++ ((--A)\+\(--B)) by Th18
+    .= (a++--A) \+\ (a++--B) by Th151
     .= (a--A) \+\ (a--B);
-  end;
+end;
 
 definition
   let F be ext-real-membered set;
@@ -3308,41 +3475,41 @@ definition
   coherence;
 end;
 
-theorem Th174:
+theorem Th168:
   g in G implies g-f in G--f
-  proof
-    f in {f} by TARSKI:def 1;
-    hence thesis by Th61;
-  end;
+proof
+  f in {f} by TARSKI:def 1;
+  hence thesis by Th55;
+end;
 
-theorem Th175:
+theorem Th169:
   F--f = {w-f: w in F}
+proof
+  thus F--f c= {w-f: w in F}
   proof
-    thus F--f c= {w-f: w in F}
-    proof
-      let e;
-      assume e in F--f;
-      then consider w1,w2 such that
-A1:   e = w1+w2 and
-A2:   w1 in F and
-A3:   w2 in --{f};
-A4:   w1- -w2 = w1+w2;
-      -w2 in {f} by A3,Th8;
-      then -w2 = f by TARSKI:def 1;
-      hence thesis by A1,A2,A4;
-    end;
     let e;
-    assume e in {w-f: w in F};
-    then ex w st e = w-f & w in F;
-    hence thesis by Th174;
+    assume
+    e in F--f;
+    then consider w1,w2 such that
+A1: e = w1+w2 & w1 in F and
+A2: w2 in --{f};
+    -w2 in {f} by A2,Th2;
+    then w1- -w2 = w1+w2 & -w2 = f by TARSKI:def 1;
+    hence thesis by A1;
   end;
+  let e;
+  assume
+  e in {w-f: w in F};
+  then ex w st e = w-f & w in F;
+  hence thesis by Th168;
+end;
 
 theorem
   e in F--f implies ex w st e = w-f & w in F
-  proof
-    F--f = {w-f: w in F} by Th175;
-    hence thesis;
-  end;
+proof
+  F--f = {w-f: w in F} by Th169;
+  hence thesis;
+end;
 
 registration
   let F be empty set;
@@ -3366,40 +3533,40 @@ registration
 end;
 
 theorem
-  F -- f = -- (f -- F) by Th66;
+  F -- f = -- (f -- F) by Th60;
 
 theorem
-  f -- F = -- (F -- f) by Th66;
+  f -- F = -- (F -- f) by Th60;
 
 theorem
   (F/\G) -- r = (F--r) /\ (G--r)
-  proof
-    thus (F/\G) -- r = --(r--(F/\G)) by Th66
-    .= --((r--F) /\ (r--G)) by Th163
-    .= (--(r--F)) /\ (--(r--G)) by Th12
-    .= (--(r--F)) /\ (G--r) by Th66
-    .= (F--r) /\ (G--r) by Th66;
-  end;
+proof
+  thus (F/\G) -- r = --(r--(F/\G)) by Th60
+    .= --((r--F) /\ (r--G)) by Th157
+    .= (--(r--F)) /\ (--(r--G)) by Th6
+    .= (--(r--F)) /\ (G--r) by Th60
+    .= (F--r) /\ (G--r) by Th60;
+end;
 
 theorem
   (F\G) -- r = (F--r) \ (G--r)
-  proof
-    thus (F\G) -- r = --(r--(F\G)) by Th66
-    .= --((r--F) \ (r--G)) by Th164
-    .= (--(r--F)) \ (--(r--G)) by Th13
-    .= (--(r--F)) \ (G--r) by Th66
-    .= (F--r) \ (G--r) by Th66;
-  end;
+proof
+  thus (F\G) -- r = --(r--(F\G)) by Th60
+    .= --((r--F) \ (r--G)) by Th158
+    .= (--(r--F)) \ (--(r--G)) by Th7
+    .= (--(r--F)) \ (G--r) by Th60
+    .= (F--r) \ (G--r) by Th60;
+end;
 
 theorem
   (F\+\G) -- r = (F--r) \+\ (G--r)
-  proof
-    thus (F\+\G) -- r = --(r--(F\+\G)) by Th66
-    .= --((r--F) \+\ (r--G)) by Th165
-    .= (--(r--F)) \+\ (--(r--G)) by Th14
-    .= (--(r--F)) \+\ (G--r) by Th66
-    .= (F--r) \+\ (G--r) by Th66;
-  end;
+proof
+  thus (F\+\G) -- r = --(r--(F\+\G)) by Th60
+    .= --((r--F) \+\ (r--G)) by Th159
+    .= (--(r--F)) \+\ (--(r--G)) by Th8
+    .= (--(r--F)) \+\ (G--r) by Th60
+    .= (F--r) \+\ (G--r) by Th60;
+end;
 
 definition
   let A be complex-membered set;
@@ -3409,40 +3576,41 @@ definition
   coherence;
 end;
 
-theorem Th182:
+theorem Th176:
   b in A implies b-a in A--a
-  proof
-    a in {a} by TARSKI:def 1;
-    hence thesis by Th72;
-  end;
+proof
+  a in {a} by TARSKI:def 1;
+  hence thesis by Th66;
+end;
 
-theorem Th183:
+theorem Th177:
   A--a = {c-a: c in A}
+proof
+A1: A--a = {c1-c2: c1 in A & c2 in {a}} by Th65;
+  thus A--a c= {c-a: c in A}
   proof
-A1: A--a = {c1-c2: c1 in A & c2 in {a}} by Th71;
-    thus A--a c= {c-a: c in A}
-    proof
-      let e;
-      assume e in A--a;
-      then consider c1,c2 such that
-A2:   e = c1-c2 and
-A3:   c1 in A and
-A4:   c2 in {a} by A1;
-      c2 = a by A4,TARSKI:def 1;
-      hence thesis by A2,A3;
-    end;
     let e;
-    assume e in {c-a: c in A};
-    then ex c st e = c-a & c in A;
-    hence thesis by Th182;
+    assume
+    e in A--a;
+    then consider c1,c2 such that
+A2: e = c1-c2 & c1 in A and
+A3: c2 in {a} by A1;
+    c2 = a by A3,TARSKI:def 1;
+    hence thesis by A2;
   end;
+  let e;
+  assume
+  e in {c-a: c in A};
+  then ex c st e = c-a & c in A;
+  hence thesis by Th176;
+end;
 
-theorem Th184:
+theorem Th178:
   e in A--a implies ex c st e = c-a & c in A
-  proof
-    A--a = {c-a: c in A} by Th183;
-    hence thesis;
-  end;
+proof
+  A--a = {c-a: c in A} by Th177;
+  hence thesis;
+end;
 
 registration
   let A be empty set;
@@ -3493,62 +3661,64 @@ registration
   compatibility;
 end;
 
-theorem Th185:
+theorem Th179:
   A c= B iff A--a c= B--a
-  proof
-    thus A c= B implies A--a c= B--a by Th73;
-    assume
+proof
+  thus A c= B implies A--a c= B--a by Th67;
+  assume
 A1: A--a c= B--a;
-    let z;
-    assume z in A;
-    then z-a in A--a by Th182;
-    then ex c st z-a = c-a & c in B by A1,Th184;
-    hence thesis;
-  end;
+  let z;
+  assume
+  z in A;
+  then z-a in A--a by Th176;
+  then ex c st z-a = c-a & c in B by A1,Th178;
+  hence thesis;
+end;
 
 theorem
   A--a = B--a implies A = B
-  proof
-    assume A--a = B--a;
-    then A c= B & B c= A by Th185;
-    hence thesis by XBOOLE_0:def 10;
-  end;
+proof
+  assume
+  A--a = B--a;
+  then A c= B & B c= A by Th179;
+  hence thesis by XBOOLE_0:def 10;
+end;
 
 theorem
-  A -- a = -- (a -- A) by Th77;
+  A -- a = -- (a -- A) by Th71;
 
 theorem
-  a -- A = -- (A -- a) by Th77;
+  a -- A = -- (A -- a) by Th71;
 
 theorem
   (A/\B) -- a = (A--a) /\ (B--a)
-  proof
-    thus (A/\B) -- a = --(a--(A/\B)) by Th77
-    .= --((a--A) /\ (a--B)) by Th171
-    .= (--(a--A)) /\ (--(a--B)) by Th22
-    .= (--(a--A)) /\ (B--a) by Th77
-    .= (A--a) /\ (B--a) by Th77;
-  end;
+proof
+  thus (A/\B) -- a = --(a--(A/\B)) by Th71
+    .= --((a--A) /\ (a--B)) by Th165
+    .= (--(a--A)) /\ (--(a--B)) by Th16
+    .= (--(a--A)) /\ (B--a) by Th71
+    .= (A--a) /\ (B--a) by Th71;
+end;
 
 theorem
   (A\B) -- a = (A--a) \ (B--a)
-  proof
-    thus (A\B) -- a = --(a--(A\B)) by Th77
-    .= --((a--A) \ (a--B)) by Th172
-    .= (--(a--A)) \ (--(a--B)) by Th23
-    .= (--(a--A)) \ (B--a) by Th77
-    .= (A--a) \ (B--a) by Th77;
-  end;
+proof
+  thus (A\B) -- a = --(a--(A\B)) by Th71
+    .= --((a--A) \ (a--B)) by Th166
+    .= (--(a--A)) \ (--(a--B)) by Th17
+    .= (--(a--A)) \ (B--a) by Th71
+    .= (A--a) \ (B--a) by Th71;
+end;
 
 theorem
   (A\+\B) -- a = (A--a) \+\ (B--a)
-  proof
-    thus (A\+\B) -- a = --(a--(A\+\B)) by Th77
-    .= --((a--A) \+\ (a--B)) by Th173
-    .= (--(a--A)) \+\ (--(a--B)) by Th24
-    .= (--(a--A)) \+\ (B--a) by Th77
-    .= (A--a) \+\ (B--a) by Th77;
-  end;
+proof
+  thus (A\+\B) -- a = --(a--(A\+\B)) by Th71
+    .= --((a--A) \+\ (a--B)) by Th167
+    .= (--(a--A)) \+\ (--(a--B)) by Th18
+    .= (--(a--A)) \+\ (B--a) by Th71
+    .= (A--a) \+\ (B--a) by Th71;
+end;
 
 definition
   let F be ext-real-membered set;
@@ -3558,39 +3728,41 @@ definition
   coherence;
 end;
 
-theorem Th192:
+theorem Th186:
   g in G implies f*g in f**G
-  proof
-    f in {f} by TARSKI:def 1;
-    hence thesis by Th85;
-  end;
+proof
+  f in {f} by TARSKI:def 1;
+  hence thesis by Th79;
+end;
 
-theorem Th193:
+theorem Th187:
   f**F = {f*w: w in F}
+proof
+  thus f**F c= {f*w: w in F}
   proof
-    thus f**F c= {f*w: w in F}
-    proof
-      let e;
-      assume e in f**F;
-      then consider w1,w2 such that
-A1:   e = w1*w2 and
-A2:   w1 in {f} and
-A3:   w2 in F;
-      w1 = f by A2,TARSKI:def 1;
-      hence thesis by A1,A3;
-    end;
     let e;
-    assume e in {f*w: w in F};
-    then ex w st e = f*w & w in F;
-    hence thesis by Th192;
+    assume
+    e in f**F;
+    then consider w1,w2 such that
+A1: e = w1*w2 and
+A2: w1 in {f} and
+A3: w2 in F;
+    w1 = f by A2,TARSKI:def 1;
+    hence thesis by A1,A3;
   end;
+  let e;
+  assume
+  e in {f*w: w in F};
+  then ex w st e = f*w & w in F;
+  hence thesis by Th186;
+end;
 
-theorem Th194:
+theorem Th188:
   e in f**F implies ex w st e = f*w & w in F
-  proof
-    f**F = {f*w: w in F} by Th193;
-    hence thesis;
-  end;
+proof
+  f**F = {f*w: w in F} by Th187;
+  hence thesis;
+end;
 
 registration
   let F be empty set;
@@ -3615,84 +3787,87 @@ end;
 
 theorem
   r <> 0 implies r ** (F/\G) = (r**F) /\ (r**G)
-  proof
-    assume
+proof
+  assume
 A1: r <> 0;
-A2: r ** (F /\ G) c= (r**F) /\ (r**G) by Th89;
-    (r**F) /\ (r**G) c= r ** (F /\ G)
-    proof
-      let j;
-      assume
-A3:   j in (r**F) /\ (r**G);
-      then j in r**F by XBOOLE_0:def 4;
-      then consider w such that
-A4:   j = r*w and
-A5:   w in F by Th194;
-      j in r**G by A3,XBOOLE_0:def 4;
-      then consider w1 such that
-A6:   j = r*w1 and
-A7:   w1 in G by Th194;
-      w = w1 by A1,A4,A6,XXREAL_3:79;
-      then w in F /\ G by A5,A7,XBOOLE_0:def 4;
-      hence thesis by A4,Th192;
-    end;
-    hence thesis by A2,XBOOLE_0:def 10;
+A2: (r**F) /\ (r**G) c= r ** (F /\ G)
+  proof
+    let j;
+    assume
+A3: j in (r**F) /\ (r**G);
+    then j in r**F by XBOOLE_0:def 4;
+    then consider w such that
+A4: j = r*w and
+A5: w in F by Th188;
+    j in r**G by A3,XBOOLE_0:def 4;
+    then consider w1 such that
+A6: j = r*w1 and
+A7: w1 in G by Th188;
+    w = w1 by A1,A4,A6,XXREAL_3:79;
+    then w in F /\ G by A5,A7,XBOOLE_0:def 4;
+    hence thesis by A4,Th186;
   end;
+  r ** (F /\ G) c= (r**F) /\ (r**G) by Th83;
+  hence thesis by A2,XBOOLE_0:def 10;
+end;
 
-theorem Th196:
+theorem Th190:
   (f**F) \ (f**G) c= f ** (F \ G)
+proof
+  let i;
+  assume
+A1: i in (f**F) \ (f**G);
+  then consider w such that
+A2: i = f*w and
+A3: w in F by Th188;
+  now
+    assume
+    not w in F\G;
+    then w in G by A3,XBOOLE_0:def 5;
+    then f*w in f**G by Th186;
+    hence contradiction by A1,A2,XBOOLE_0:def 5;
+  end;
+  hence thesis by A2,Th186;
+end;
+
+theorem Th191:
+  r <> 0 implies r ** (F\G) = (r**F) \ (r**G)
+proof
+  assume
+A1: r <> 0;
+A2: r ** (F \ G) c= (r**F) \ (r**G)
   proof
     let i;
     assume
-A1: i in (f**F) \ (f**G);
+    i in r ** (F \ G);
     then consider w such that
-A2: i = f*w and
-A3: w in F by Th194;
-    now
-      assume not w in F\G;
-      then w in G by A3,XBOOLE_0:def 5;
-      then f*w in f**G by Th192;
-      hence contradiction by A1,A2,XBOOLE_0:def 5;
+A3: i = r*w and
+A4: w in F\G by Th188;
+A5: now
+      assume
+      r*w in r**G;
+      then consider w1 such that
+A6:   r*w = r*w1 and
+A7:   w1 in G by Th188;
+      w = w1 by A1,A6,XXREAL_3:79;
+      hence contradiction by A4,A7,XBOOLE_0:def 5;
     end;
-    hence thesis by A2,Th192;
+    r*w in r**F by A4,Th186;
+    hence thesis by A3,A5,XBOOLE_0:def 5;
   end;
-
-theorem Th197:
-  r <> 0 implies r ** (F\G) = (r**F) \ (r**G)
-  proof
-    assume
-A1: r <> 0;
-A2: r ** (F \ G) c= (r**F) \ (r**G)
-    proof
-      let i;
-      assume i in r ** (F \ G);
-      then consider w such that
-A3:   i = r*w and
-A4:   w in F\G by Th194;
-A5:   r*w in r**F by A4,Th192;
-      now
-        assume r*w in r**G;
-        then consider w1 such that
-A6:     r*w = r*w1 and
-A7:     w1 in G by Th194;
-        w = w1 by A1,A6,XXREAL_3:79;
-        hence contradiction by A4,A7,XBOOLE_0:def 5;
-      end;
-      hence thesis by A3,A5,XBOOLE_0:def 5;
-    end;
-    (r**F) \ (r**G) c= r ** (F \ G) by Th196;
-    hence thesis by A2,XBOOLE_0:def 10;
-  end;
+  (r**F) \ (r**G) c= r ** (F \ G) by Th190;
+  hence thesis by A2,XBOOLE_0:def 10;
+end;
 
 theorem
   r <> 0 implies r ** (F\+\G) = (r**F) \+\ (r**G)
-  proof
-    assume
+proof
+  assume
 A1: r <> 0;
-    thus r ** (F \+\ G) = (r**(F\G)) \/ (r**(G\F)) by Th88
-    .= ((r**F)\(r**G)) \/ (r**(G\F)) by A1,Th197
-    .= (r**F) \+\ (r**G) by A1,Th197;
-  end;
+  thus r ** (F \+\ G) = (r**(F\G)) \/ (r**(G\F)) by Th82
+    .= ((r**F)\(r**G)) \/ (r**(G\F)) by A1,Th191
+    .= (r**F) \+\ (r**G) by A1,Th191;
+end;
 
 definition
   let A be complex-membered set;
@@ -3702,39 +3877,41 @@ definition
   coherence;
 end;
 
-theorem Th199:
+theorem Th193:
   b in A implies a*b in a**A
-  proof
-    a in {a} by TARSKI:def 1;
-    hence thesis by Th95;
-  end;
+proof
+  a in {a} by TARSKI:def 1;
+  hence thesis by Th89;
+end;
 
-theorem Th200:
+theorem Th194:
   a**A = {a*c: c in A}
+proof
+  thus a**A c= {a*c: c in A}
   proof
-    thus a**A c= {a*c: c in A}
-    proof
-      let e;
-      assume e in a**A;
-      then consider c1,c2 such that
-A1:   e = c1*c2 and
-A2:   c1 in {a} and
-A3:   c2 in A;
-      c1 = a by A2,TARSKI:def 1;
-      hence thesis by A1,A3;
-    end;
     let e;
-    assume e in {a*c: c in A};
-    then ex c st e = a*c & c in A;
-    hence thesis by Th199;
+    assume
+    e in a**A;
+    then consider c1,c2 such that
+A1: e = c1*c2 and
+A2: c1 in {a} and
+A3: c2 in A;
+    c1 = a by A2,TARSKI:def 1;
+    hence thesis by A1,A3;
   end;
+  let e;
+  assume
+  e in {a*c: c in A};
+  then ex c st e = a*c & c in A;
+  hence thesis by Th193;
+end;
 
-theorem Th201:
+theorem Th195:
   e in a**A implies ex c st e = a*c & c in A
-  proof
-    a**A = {a*c: c in A} by Th200;
-    hence thesis;
-  end;
+proof
+  a**A = {a*c: c in A} by Th194;
+  hence thesis;
+end;
 
 registration
   let A be empty set;
@@ -3792,206 +3969,216 @@ registration
   compatibility;
 end;
 
-theorem Th202:
+theorem Th196:
   a <> 0 & a**A c= a**B implies A c= B
-  proof
-    assume that
+proof
+  assume that
 A1: a <> 0 and
 A2: a**A c= a**B;
-    let z;
-    assume z in A;
-    then a*z in a**A by Th199;
-    then ex c st a*z = a*c & c in B by A2,Th201;
-    hence thesis by A1,XCMPLX_1:5;
-  end;
+  let z;
+  assume
+  z in A;
+  then a*z in a**A by Th193;
+  then ex c st a*z = a*c & c in B by A2,Th195;
+  hence thesis by A1,XCMPLX_1:5;
+end;
 
 theorem
   a <> 0 & a**A = a**B implies A = B
-  proof
-    assume a <> 0 & a**A = a**B;
-    then A c= B & B c= A by Th202;
-    hence thesis by XBOOLE_0:def 10;
-  end;
+proof
+  assume
+  a <> 0 & a**A = a**B;
+  then A c= B & B c= A by Th196;
+  hence thesis by XBOOLE_0:def 10;
+end;
 
-theorem Th204:
+theorem Th198:
   a <> 0 implies a ** (A/\B) = (a**A) /\ (a**B)
-  proof
-    assume
+proof
+  assume
 A1: a <> 0;
-A2: a ** (A /\ B) c= (a**A) /\ (a**B) by Th99;
-    (a**A) /\ (a**B) c= a ** (A /\ B)
-    proof
-      let z;
-      assume
-A3:   z in (a**A) /\ (a**B);
-      then z in a**A by XBOOLE_0:def 4;
-      then consider c such that
-A4:   z = a*c and
-A5:   c in A by Th201;
-      z in a**B by A3,XBOOLE_0:def 4;
-      then consider c1 such that
-A6:   z = a*c1 and
-A7:   c1 in B by Th201;
-      c = c1 by A1,A4,A6,XCMPLX_1:5;
-      then c in A /\ B by A5,A7,XBOOLE_0:def 4;
-      hence thesis by A4,Th199;
-    end;
-    hence thesis by A2,XBOOLE_0:def 10;
-  end;
-
-theorem Th205:
-  a <> 0 implies a ** (A\B) = (a**A) \ (a**B)
+A2: (a**A) /\ (a**B) c= a ** (A /\ B)
   proof
-    assume
-A1: a <> 0;
     let z;
-    hereby
-      assume z in a ** (A \ B);
-      then consider c such that
-A2:   z = a*c and
-A3:   c in A\B by Th201;
-A4:   a*c in a**A by A3,Th199;
-      now
-        assume a*c in a**B;
-        then consider c1 such that
-A5:     a*c = a*c1 and
-A6:     c1 in B by Th201;
-        c = c1 by A1,A5,XCMPLX_1:5;
-        hence contradiction by A3,A6,XBOOLE_0:def 5;
-      end;
-      hence z in (a**A) \ (a**B) by A2,A4,XBOOLE_0:def 5;
-    end;
     assume
-A7: z in (a**A) \ (a**B);
+A3: z in (a**A) /\ (a**B);
+    then z in a**A by XBOOLE_0:def 4;
     then consider c such that
-A8: z = a*c and
-A9: c in A by Th201;
-    now
-      assume not c in A\B;
-      then c in B by A9,XBOOLE_0:def 5;
-      then a*c in a**B by Th199;
-      hence contradiction by A7,A8,XBOOLE_0:def 5;
-    end;
-    hence thesis by A8,Th199;
+A4: z = a*c and
+A5: c in A by Th195;
+    z in a**B by A3,XBOOLE_0:def 4;
+    then consider c1 such that
+A6: z = a*c1 and
+A7: c1 in B by Th195;
+    c = c1 by A1,A4,A6,XCMPLX_1:5;
+    then c in A /\ B by A5,A7,XBOOLE_0:def 4;
+    hence thesis by A4,Th193;
   end;
+  a ** (A /\ B) c= (a**A) /\ (a**B) by Th93;
+  hence thesis by A2,XBOOLE_0:def 10;
+end;
 
-theorem Th206:
-  a <> 0 implies a ** (A\+\B) = (a**A) \+\ (a**B)
-  proof
-    assume
+theorem Th199:
+  a <> 0 implies a ** (A\B) = (a**A) \ (a**B)
+proof
+  assume
 A1: a <> 0;
-    thus a ** (A \+\ B) = (a**(A\B)) \/ (a**(B\A)) by Th98
-    .= ((a**A)\(a**B)) \/ (a**(B\A)) by A1,Th205
-    .= (a**A) \+\ (a**B) by A1,Th205;
+  let z;
+  hereby
+    assume
+    z in a ** (A \ B);
+    then consider c such that
+A2: z = a*c and
+A3: c in A\B by Th195;
+A4: now
+      assume
+      a*c in a**B;
+      then consider c1 such that
+A5:   a*c = a*c1 and
+A6:   c1 in B by Th195;
+      c = c1 by A1,A5,XCMPLX_1:5;
+      hence contradiction by A3,A6,XBOOLE_0:def 5;
+    end;
+    a*c in a**A by A3,Th193;
+    hence z in (a**A) \ (a**B) by A2,A4,XBOOLE_0:def 5;
   end;
+  assume
+A7: z in (a**A) \ (a**B);
+  then consider c such that
+A8: z = a*c and
+A9: c in A by Th195;
+  now
+    assume
+    not c in A\B;
+    then c in B by A9,XBOOLE_0:def 5;
+    then a*c in a**B by Th193;
+    hence contradiction by A7,A8,XBOOLE_0:def 5;
+  end;
+  hence thesis by A8,Th193;
+end;
 
-theorem Th207:
+theorem Th200:
+  a <> 0 implies a ** (A\+\B) = (a**A) \+\ (a**B)
+proof
+  assume
+A1: a <> 0;
+  thus a ** (A \+\ B) = (a**(A\B)) \/ (a**(B\A)) by Th92
+    .= ((a**A)\(a**B)) \/ (a**(B\A)) by A1,Th199
+    .= (a**A) \+\ (a**B) by A1,Th199;
+end;
+
+theorem Th201:
   0**A c= {0}
-  proof
-    let a;
-    assume a in 0**A;
-    then consider c1,c2 such that
+proof
+  let a;
+  assume
+  a in 0**A;
+  then consider c1,c2 such that
 A1: a = c1*c2 and
-A2: c1 in {0} and c2 in A;
-    c1 = 0 by A2,TARSKI:def 1;
-    hence thesis by A1,TARSKI:def 1;
-  end;
+A2: c1 in {0} and
+  c2 in A;
+  c1 = 0 by A2,TARSKI:def 1;
+  hence thesis by A1,TARSKI:def 1;
+end;
 
 theorem
   A <> {} implies 0**A = {0}
-  proof
-    assume
+proof
+  assume
 A1: A <> {};
-A2: 0**A c= {0} by Th207;
-    {0} c= 0**A
-    proof
-      let a be natural number;
-      assume
-A3:   a in {0};
-      set x = the Element of A;
-A4:   0**A = {0*c: c in A} by Th200;
-      x in COMPLEX by XCMPLX_0:def 2;
-      then 0*x in {0*c: c in A} by A1;
-      hence thesis by A4,A3,TARSKI:def 1;
-    end;
-    hence thesis by A2,XBOOLE_0:def 10;
+A2: {0} c= 0**A
+  proof
+    set x = the Element of A;
+    let a be natural number;
+    assume
+A3: a in {0};
+    x in COMPLEX by XCMPLX_0:def 2;
+    then
+A4: 0*x in {0*c: c in A} by A1;
+    0**A = {0*c: c in A} by Th194;
+    hence thesis by A3,A4,TARSKI:def 1;
   end;
+  0**A c= {0} by Th201;
+  hence thesis by A2,XBOOLE_0:def 10;
+end;
 
 theorem
   1**A = A
-  proof
-    let a;
-    hereby
-      assume a in 1**A;
-      then consider c1,c2 such that
-A1:   a = c1*c2 and
-A2:   c1 in {1} and
-A3:   c2 in A;
-      c1 = 1 by A2,TARSKI:def 1;
-      hence a in A by A1,A3;
-    end;
+proof
+  let a;
+  hereby
     assume
-A4: a in A;
-    a in COMPLEX by XCMPLX_0:def 2;
-    then 1*a in {1*c: c in A} by A4;
-    hence thesis by Th200;
+    a in 1**A;
+    then consider c1,c2 such that
+A1: a = c1*c2 and
+A2: c1 in {1} and
+A3: c2 in A;
+    c1 = 1 by A2,TARSKI:def 1;
+    hence a in A by A1,A3;
   end;
+A4: a in COMPLEX by XCMPLX_0:def 2;
+  assume
+  a in A;
+  then 1*a in {1*c: c in A} by A4;
+  hence thesis by Th194;
+end;
 
 theorem
   (a*b)**A = a**(b**A)
-  proof
-    thus (a*b)**A = {a}**{b}**A by Th104
-    .= a**(b**A) by Th96;
-  end;
+proof
+  thus (a*b)**A = {a}**{b}**A by Th98
+    .= a**(b**A) by Th90;
+end;
 
 theorem
-  a**(A**B) = (a**A)**B by Th96;
+  a**(A**B) = (a**A)**B by Th90;
 
 theorem
   (a+b)**A c= a**A ++ b**A
-  proof
-    {a}++{b} = {a+b} by Th57;
-    hence thesis by Th101;
-  end;
+proof
+  {a}++{b} = {a+b} by Th51;
+  hence thesis by Th95;
+end;
 
 theorem
   (a-b)**A c= a**A -- b**A
-  proof
-    {a}--{b} = {a-b} by Th81;
-    hence thesis by Th102;
-  end;
+proof
+  {a}--{b} = {a-b} by Th75;
+  hence thesis by Th96;
+end;
 
-theorem Th214:
+theorem Th208:
   a**(B++C) = a**B++a**C
+proof
+A1: a**B++a**C c= a**(B++C)
   proof
-A1: a**(B++C) c= a**B++a**C by Th101;
-    a**B++a**C c= a**(B++C)
-    proof
-      let z;
-      assume z in a**B++a**C;
-      then consider c,c1 such that
-A2:   z = c+c1 and
-A3:   c in a**B and
-A4:   c1 in a**C;
-      consider c2 such that
-A5:   c = a*c2 and
-A6:   c2 in B by A3,Th201;
-      consider c3 being Element of COMPLEX such that
-A7:   c1 = a*c3 and
-A8:   c3 in C by A4,Th201;
-A9:   z = a*(c2+c3) by A2,A5,A7;
-      c2+c3 in B++C by A6,A8;
-      hence thesis by A9,Th199;
-    end;
-    hence thesis by A1,XBOOLE_0:def 10;
+    let z;
+    assume
+    z in a**B++a**C;
+    then consider c,c1 such that
+A2: z = c+c1 and
+A3: c in a**B and
+A4: c1 in a**C;
+    consider c3 being Element of COMPLEX such that
+A5: c1 = a*c3 and
+A6: c3 in C by A4,Th195;
+    consider c2 such that
+A7: c = a*c2 and
+A8: c2 in B by A3,Th195;
+A9: c2+c3 in B++C by A8,A6;
+    z = a*(c2+c3) by A2,A7,A5;
+    hence thesis by A9,Th193;
   end;
+  a**(B++C) c= a**B++a**C by Th95;
+  hence thesis by A1,XBOOLE_0:def 10;
+end;
 
 theorem
   a**(B--C) = a**B--a**C
-  proof
-    thus a**(B--C) = a**B++a**--C by Th214
-    .= a**B--a**C by Th100;
-  end;
+proof
+  thus a**(B--C) = a**B++a**--C by Th208
+    .= a**B--a**C by Th94;
+end;
 
 definition
   let F be ext-real-membered set;
@@ -4001,43 +4188,43 @@ definition
   coherence;
 end;
 
-theorem Th216:
+theorem Th210:
   g in G implies f/g in f///G
-  proof
-    f in {f} by TARSKI:def 1;
-    hence thesis by Th108;
-  end;
+proof
+  f in {f} by TARSKI:def 1;
+  hence thesis by Th102;
+end;
 
-theorem Th217:
+theorem Th211:
   f///F = {f/w: w in F}
+proof
+  thus f///F c= {f/w: w in F}
   proof
-    thus f///F c= {f/w: w in F}
-    proof
-      let e;
-      assume e in f///F;
-      then consider w1,w2 such that
-A1:   e = w1*w2 and
-A2:   w1 in {f} and
-A3:   w2 in F"";
-      consider w3 being Element of ExtREAL such that
-A4:   w2 = w3" and
-A5:   w3 in F by A3;
-A6:   w1*w3" = w1/w3;
-      w1 = f by A2,TARSKI:def 1;
-      hence thesis by A1,A4,A5,A6;
-    end;
     let e;
-    assume e in {f/w: w in F};
-    then ex w st e = f/w & w in F;
-    hence thesis by Th216;
+    assume
+    e in f///F;
+    then consider w1,w2 such that
+A1: e = w1*w2 and
+A2: w1 in {f} and
+A3: w2 in F"";
+    consider w3 being Element of ExtREAL such that
+A4: w2 = w3" & w3 in F by A3;
+    w1*w3" = w1/w3 & w1 = f by A2,TARSKI:def 1;
+    hence thesis by A1,A4;
   end;
+  let e;
+  assume
+  e in {f/w: w in F};
+  then ex w st e = f/w & w in F;
+  hence thesis by Th210;
+end;
 
 theorem
   e in f///F implies ex w st e = f/w & w in F
-  proof
-    f///F = {f/w: w in F} by Th217;
-    hence thesis;
-  end;
+proof
+  f///F = {f/w: w in F} by Th211;
+  hence thesis;
+end;
 
 registration
   let F be empty set;
@@ -4068,41 +4255,41 @@ definition
   coherence;
 end;
 
-theorem Th219:
+theorem Th213:
   b in A implies a/b in a///A
-  proof
-    a in {a} by TARSKI:def 1;
-    hence thesis by Th122;
-  end;
+proof
+  a in {a} by TARSKI:def 1;
+  hence thesis by Th116;
+end;
 
-theorem Th220:
+theorem Th214:
   a///A = {a/c: c in A}
+proof
+  thus a///A c= {a/c: c in A}
   proof
-    thus a///A c= {a/c: c in A}
-    proof
-      let e;
-      assume e in a///A;
-      then consider c1,c2 such that
-A1:   e = c1*c2 and
-A2:   c1 in {a} and
-A3:   c2 in A"";
-A4:   c2" in A by A3,Th35;
-A5:   c1*c2 = c1/(c2");
-      c1 = a by A2,TARSKI:def 1;
-      hence thesis by A1,A4,A5;
-    end;
     let e;
-    assume e in {a/c: c in A};
-    then ex c st e = a/c & c in A;
-    hence thesis by Th219;
+    assume
+    e in a///A;
+    then consider c1,c2 such that
+A1: e = c1*c2 and
+A2: c1 in {a} & c2 in A"";
+A3: c1*c2 = c1/(c2");
+    c2" in A & c1 = a by A2,Th29,TARSKI:def 1;
+    hence thesis by A1,A3;
   end;
+  let e;
+  assume
+  e in {a/c: c in A};
+  then ex c st e = a/c & c in A;
+  hence thesis by Th213;
+end;
 
-theorem Th221:
+theorem Th215:
   e in a///A implies ex c st e = a/c & c in A
-  proof
-    a///A = {a/c: c in A} by Th220;
-    hence thesis;
-  end;
+proof
+  a///A = {a/c: c in A} by Th214;
+  hence thesis;
+end;
 
 registration
   let A be empty set;
@@ -4146,73 +4333,75 @@ registration
   compatibility;
 end;
 
-theorem Th222:
+theorem Th216:
   a <> 0 & a///A c= a///B implies A c= B
-  proof
-    assume that
+proof
+  assume that
 A1: a <> 0 and
 A2: a///A c= a///B;
-    let z;
-    assume z in A;
-    then a/z in a///A by Th219;
-    then consider c such that
+  let z;
+  assume
+  z in A;
+  then a/z in a///A by Th213;
+  then consider c such that
 A3: a/z = a/c and
-A4: c in B by A2,Th221;
-    z" = c" by A1,A3,XCMPLX_1:5;
-    hence thesis by A4,XCMPLX_1:202;
-  end;
+A4: c in B by A2,Th215;
+  z" = c" by A1,A3,XCMPLX_1:5;
+  hence thesis by A4,XCMPLX_1:202;
+end;
 
 theorem
   a <> 0 & a///A = a///B implies A = B
-  proof
-    assume a <> 0 & a///A = a///B;
-    then A c= B & B c= A by Th222;
-    hence thesis by XBOOLE_0:def 10;
-  end;
+proof
+  assume
+  a <> 0 & a///A = a///B;
+  then A c= B & B c= A by Th216;
+  hence thesis by XBOOLE_0:def 10;
+end;
 
 theorem
   a <> 0 implies a /// (A/\B) = (a///A) /\ (a///B)
-  proof
-    assume
+proof
+  assume
 A1: a <> 0;
-    thus a /// (A/\B) = a ** ((A"")/\(B"")) by Th39
-    .= (a**(A"")) /\ (a**(B"")) by A1,Th204
+  thus a /// (A/\B) = a ** ((A"")/\(B"")) by Th33
+    .= (a**(A"")) /\ (a**(B"")) by A1,Th198
     .= (a///A) /\ (a///B);
-  end;
+end;
 
 theorem
   a <> 0 implies a /// (A\B) = (a///A) \ (a///B)
-  proof
-    assume
+proof
+  assume
 A1: a <> 0;
-    thus a /// (A\B) = a ** ((A"")\(B"")) by Th40
-    .= (a**(A"")) \ (a**(B"")) by A1,Th205
+  thus a /// (A\B) = a ** ((A"")\(B"")) by Th34
+    .= (a**(A"")) \ (a**(B"")) by A1,Th199
     .= (a///A) \ (a///B);
-  end;
+end;
 
 theorem
   a <> 0 implies a /// (A\+\B) = (a///A) \+\ (a///B)
-  proof
-    assume
+proof
+  assume
 A1: a <> 0;
-    thus a /// (A\+\B) = a ** ((A"")\+\(B"")) by Th41
-    .= (a**(A"")) \+\ (a**(B"")) by A1,Th206
+  thus a /// (A\+\B) = a ** ((A"")\+\(B"")) by Th35
+    .= (a**(A"")) \+\ (a**(B"")) by A1,Th200
     .= (a///A) \+\ (a///B);
-  end;
+end;
 
 theorem
   (a+b)///A c= a///A ++ b///A
-  proof
-    {a}++{b} = {a+b} by Th57;
-    hence thesis by Th101;
-  end;
+proof
+  {a}++{b} = {a+b} by Th51;
+  hence thesis by Th95;
+end;
 
 theorem
   (a-b)///A c= a///A -- b///A
-  proof
-    {a}--{b} = {a-b} by Th81;
-    hence thesis by Th102;
-  end;
+proof
+  {a}--{b} = {a-b} by Th75;
+  hence thesis by Th96;
+end;
 
 definition
   let F be ext-real-membered set;
@@ -4222,43 +4411,43 @@ definition
   coherence;
 end;
 
-theorem Th229:
+theorem Th223:
   g in G implies g/f in G///f
-  proof
-    f in {f} by TARSKI:def 1;
-    hence thesis by Th108;
-  end;
+proof
+  f in {f} by TARSKI:def 1;
+  hence thesis by Th102;
+end;
 
-theorem Th230:
+theorem Th224:
   F///f = {w/f: w in F}
+proof
+  thus F///f c= {w/f: w in F}
   proof
-    thus F///f c= {w/f: w in F}
-    proof
-      let e;
-      assume e in F///f;
-      then consider w1,w2 such that
-A1:   e = w1*w2 and
-A2:   w1 in F and
-A3:   w2 in {f}"";
-      consider w3 being Element of ExtREAL such that
-A4:   w2 = w3" and
-A5:   w3 in {f} by A3;
-A6:   w1*w3" = w1/w3;
-      w3 = f by A5,TARSKI:def 1;
-      hence thesis by A1,A2,A4,A6;
-    end;
     let e;
-    assume e in {w/f: w in F};
-    then ex w st e = w/f & w in F;
-    hence thesis by Th229;
+    assume
+    e in F///f;
+    then consider w1,w2 such that
+A1: e = w1*w2 & w1 in F and
+A2: w2 in {f}"";
+    consider w3 being Element of ExtREAL such that
+A3: w2 = w3" and
+A4: w3 in {f} by A2;
+    w1*w3" = w1/w3 & w3 = f by A4,TARSKI:def 1;
+    hence thesis by A1,A3;
   end;
+  let e;
+  assume
+  e in {w/f: w in F};
+  then ex w st e = w/f & w in F;
+  hence thesis by Th223;
+end;
 
 theorem
   e in F///f implies ex w st e = w/f & w in F
-  proof
-    F///f = {w/f: w in F} by Th230;
-    hence thesis;
-  end;
+proof
+  F///f = {w/f: w in F} by Th224;
+  hence thesis;
+end;
 
 registration
   let F be empty set;
@@ -4289,41 +4478,41 @@ definition
   coherence;
 end;
 
-theorem Th232:
+theorem Th226:
   b in A implies b/a in A///a
-  proof
-    a in {a} by TARSKI:def 1;
-    hence thesis by Th122;
-  end;
+proof
+  a in {a} by TARSKI:def 1;
+  hence thesis by Th116;
+end;
 
-theorem Th233:
+theorem Th227:
   A///a = {c/a: c in A}
+proof
+  thus A///a c= {c/a: c in A}
   proof
-    thus A///a c= {c/a: c in A}
-    proof
-      let e;
-      assume e in A///a;
-      then consider c1,c2 such that
-A1:   e = c1*c2 and
-A2:   c1 in A and
-A3:   c2 in {a}"";
-A4:   c1*c2 = c1/(c2");
-      {a}"" = {a"} by Th43;
-      then c2 = a" by A3,TARSKI:def 1;
-      hence thesis by A1,A2,A4;
-    end;
     let e;
-    assume e in {c/a: c in A};
-    then ex c st e = c/a & c in A;
-    hence thesis by Th232;
+    assume
+    e in A///a;
+    then consider c1,c2 such that
+A1: e = c1*c2 & c1 in A and
+A2: c2 in {a}"";
+    {a}"" = {a"} by Th37;
+    then c1*c2 = c1/(c2") & c2 = a" by A2,TARSKI:def 1;
+    hence thesis by A1;
   end;
+  let e;
+  assume
+  e in {c/a: c in A};
+  then ex c st e = c/a & c in A;
+  hence thesis by Th226;
+end;
 
-theorem Th234:
+theorem Th228:
   e in A///a implies ex c st e = c/a & c in A
-  proof
-    A///a = {c/a: c in A} by Th233;
-    hence thesis;
-  end;
+proof
+  A///a = {c/a: c in A} by Th227;
+  hence thesis;
+end;
 
 registration
   let A be empty set;
@@ -4367,72 +4556,75 @@ registration
   compatibility;
 end;
 
-theorem Th235:
+theorem Th229:
   a <> 0 & A///a c= B///a implies A c= B
-  proof
-    assume that
+proof
+  assume that
 A1: a <> 0 and
 A2: A///a c= B///a;
-    let z;
-    assume z in A;
-    then z/a in A///a by Th232;
-    then ex c st z/a = c/a & c in B by A2,Th234;
-    hence thesis by A1,XCMPLX_1:5;
-  end;
+  let z;
+  assume
+  z in A;
+  then z/a in A///a by Th226;
+  then ex c st z/a = c/a & c in B by A2,Th228;
+  hence thesis by A1,XCMPLX_1:5;
+end;
 
 theorem
   a <> 0 & A///a = B///a implies A = B
-  proof
-    assume a <> 0 & A///a = B///a;
-    then A c= B & B c= A by Th235;
-    hence thesis by XBOOLE_0:def 10;
-  end;
+proof
+  assume
+  a <> 0 & A///a = B///a;
+  then A c= B & B c= A by Th229;
+  hence thesis by XBOOLE_0:def 10;
+end;
 
 theorem
   a <> 0 implies (A/\B) /// a = (A///a) /\ (B///a)
-  proof
-    assume
+proof
+  assume
 A1: a <> 0;
-A2: {a}"" = {a"} by Th43;
-    thus (A/\B)///a = a"**(A/\B) by Th43
-    .= (a"**A)/\(a"**B) by A1,Th204
+A2: {a}"" = {a"} by Th37;
+  thus (A/\B)///a = a"**(A/\B) by Th37
+    .= (a"**A)/\(a"**B) by A1,Th198
     .= (A///a) /\ (B///a) by A2;
-  end;
+end;
 
 theorem
   a <> 0 implies (A\B) /// a = (A///a) \ (B///a)
-  proof
-    assume
+proof
+  assume
 A1: a <> 0;
-A2: {a}"" = {a"} by Th43;
-    thus (A\B)///a = a"**(A\B) by Th43
-    .= (a"**A)\(a"**B) by A1,Th205
+A2: {a}"" = {a"} by Th37;
+  thus (A\B)///a = a"**(A\B) by Th37
+    .= (a"**A)\(a"**B) by A1,Th199
     .= (A///a) \ (B///a) by A2;
-  end;
+end;
 
 theorem
   a <> 0 implies (A\+\B) /// a = (A///a) \+\ (B///a)
-  proof
-    assume
+proof
+  assume
 A1: a <> 0;
-A2: {a}"" = {a"} by Th43;
-    thus (A\+\B)///a = a"**(A\+\B) by Th43
-    .= (a"**A)\+\(a"**B) by A1,Th206
+A2: {a}"" = {a"} by Th37;
+  thus (A\+\B)///a = a"**(A\+\B) by Th37
+    .= (a"**A)\+\(a"**B) by A1,Th200
     .= (A///a) \+\ (B///a) by A2;
-  end;
+end;
 
-theorem Th240:
+theorem Th234:
   (A++B)///a = A///a ++ B///a
-  proof
-    thus (A++B)///a = a"**(A++B) by Th43
-    .= a"**A++a"**B by Th214
-    .= A///a++a"**B by Th43
-    .= A///a ++ B///a by Th43;
-  end;
+proof
+  thus (A++B)///a = a"**(A++B) by Th37
+    .= a"**A++a"**B by Th208
+    .= A///a++a"**B by Th37
+    .= A///a ++ B///a by Th37;
+end;
 
 theorem
   (A--B)///a = A///a -- B///a
-  proof
-    thus (A--B)///a = A///a ++ (--B)///a by Th240
-    .= A///a -- B///a by Th100;
-  end;
+proof
+  thus (A--B)///a = A///a ++ (--B)///a by Th234
+    .= A///a -- B///a by Th94;
+end;
+

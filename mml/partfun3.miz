@@ -17,8 +17,8 @@ environ
  constructors REAL_1, SQUARE_1, COMPLEX1, RCOMP_1, RFUNCT_1, PSCOMP_1,
       FUNCOP_1, TOPALG_2, SEQ_1;
  registrations XBOOLE_0, FUNCT_1, RELSET_1, FUNCOP_1, NUMBERS, XCMPLX_0,
-      XXREAL_0, XREAL_0, MEMBERED, STRUCT_0, PRE_TOPC, TOPS_1, BORSUK_1,
-      TOPMETR, PSCOMP_1, VALUED_0, VALUED_1, FUNCT_2;
+      XXREAL_0, XREAL_0, MEMBERED, STRUCT_0, PRE_TOPC, TOPMETR, PSCOMP_1,
+      VALUED_0, VALUED_1, FUNCT_2;
  requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
  definitions PSCOMP_1, RELAT_1, VALUED_1, VALUED_0, STRUCT_0;
  theorems JGRAPH_6, TARSKI, FUNCT_2, RELAT_1, FUNCT_1, ZFMISC_1, JGRAPH_2,
@@ -80,14 +80,15 @@ registration
   cluster f"{0} -> empty;
   coherence
   proof
-    assume not thesis;
+    assume
+    not thesis;
     then consider x being set such that
 A1: x in f"{0} by XBOOLE_0:def 1;
-    f.x in {0} by A1,FUNCT_1:def 13;
-    then
-A2: f.x = 0 by TARSKI:def 1;
     x in dom f by A1,FUNCT_1:def 13;
-    then f.x in rng f by FUNCT_1:def 5;
+    then
+A2: f.x in rng f by FUNCT_1:def 5;
+    f.x in {0} by A1,FUNCT_1:def 13;
+    then f.x = 0 by TARSKI:def 1;
     hence thesis by A2,RELAT_1:def 9;
   end;
 end;
@@ -96,16 +97,20 @@ definition
   let R be Relation;
   attr R is positive-yielding means
   :Def1:
-  for r being real number st r in rng R holds 0 < r;
+  for r being real number st r in rng
+  R holds 0 < r;
   attr R is negative-yielding means
   :Def2:
-  for r being real number st r in rng R holds 0 > r;
+  for r being real number st r in rng
+  R holds 0 > r;
   attr R is nonpositive-yielding means
   :Def3:
-  for r being real number st r in rng R holds 0 >= r;
+  for r being real number st r in
+  rng R holds 0 >= r;
   attr R is nonnegative-yielding means
   :Def4:
-  for r being real number st r in rng R holds 0 <= r;
+  for r being real number st r in
+  rng R holds 0 <= r;
 end;
 
 registration
@@ -115,8 +120,8 @@ registration
   proof
     let x be real number;
     assume
-A1: x in rng (X --> r);
-    thus thesis by A1,TARSKI:def 1;
+    x in rng (X --> r);
+    hence thesis by TARSKI:def 1;
   end;
 end;
 
@@ -127,8 +132,8 @@ registration
   proof
     let x be real number;
     assume
-A1: x in rng (X --> r);
-    thus thesis by A1,TARSKI:def 1;
+    x in rng (X --> r);
+    hence thesis by TARSKI:def 1;
   end;
 end;
 
@@ -139,8 +144,8 @@ registration
   proof
     let x be real number;
     assume
-A1: x in rng (X --> r);
-    thus thesis by A1,TARSKI:def 1;
+    x in rng (X --> r);
+    hence thesis by TARSKI:def 1;
   end;
 end;
 
@@ -151,8 +156,8 @@ registration
   proof
     let x be real number;
     assume
-A1: x in rng (X --> r);
-    thus thesis by A1,TARSKI:def 1;
+    x in rng (X --> r);
+    hence thesis by TARSKI:def 1;
   end;
 end;
 
@@ -177,7 +182,8 @@ A1: for r being real number st r in rng R holds 0 < r;
       let r be real number;
       thus thesis by A1;
     end;
-    assume not thesis;
+    assume
+    not thesis;
     then 0 in rng R by RELAT_1:def 9;
     hence thesis by A1;
   end;
@@ -191,7 +197,8 @@ A2: for r being real number st r in rng R holds 0 > r;
       let r be real number;
       thus thesis by A2;
     end;
-    assume not thesis;
+    assume
+    not thesis;
     then 0 in rng R by RELAT_1:def 9;
     hence thesis by A2;
   end;
@@ -232,12 +239,11 @@ proof
 end;
 
 theorem Th3:
-  for X being non empty set,
-  f being PartFunc of X,REAL, g being non-empty PartFunc of X,REAL holds
-  dom(f/g) = dom f /\ dom g
+  for X being non empty set, f being PartFunc of X,REAL, g being
+  non-empty PartFunc of X,REAL holds dom(f/g) = dom f /\ dom g
 proof
-  let X be non empty set, f be PartFunc of X,REAL,
-  g be non-empty PartFunc of X,REAL;
+  let X be non empty set, f be PartFunc of X,REAL, g be non-empty PartFunc of
+  X,REAL;
   thus dom (f/g) = dom f /\ (dom g \ g"{0}) by RFUNCT_1:def 4
     .= dom f /\ dom g;
 end;
@@ -248,16 +254,20 @@ registration
   cluster f+g -> nonpositive-yielding;
   coherence
   proof
-    set R = f+g;
     let r be real number;
-    assume r in rng R;
+    set R = f+g;
+    assume
+    r in rng R;
     then consider x being set such that
 A1: x in dom R and
 A2: R.x = r by FUNCT_1:def 5;
-    dom R = dom f /\ dom g by VALUED_1:def 1;
-    then x in dom f & x in dom g by A1,XBOOLE_0:def 4;
-    then f.x in rng f & g.x in rng g by FUNCT_1:def 5;
-    then reconsider a = f.x, b = g.x as non positive (real number) by Def3;
+A3: dom R = dom f /\ dom g by VALUED_1:def 1;
+    then x in dom g by A1,XBOOLE_0:def 4;
+    then
+A4: g.x in rng g by FUNCT_1:def 5;
+    x in dom f by A1,A3,XBOOLE_0:def 4;
+    then f.x in rng f by FUNCT_1:def 5;
+    then reconsider a = f.x, b = g.x as non positive (real number) by A4,Def3;
     a+b is non positive;
     hence thesis by A1,A2,VALUED_1:def 1;
   end;
@@ -269,16 +279,20 @@ registration
   cluster f+g -> nonnegative-yielding;
   coherence
   proof
-    set R = f+g;
     let r be real number;
-    assume r in rng R;
+    set R = f+g;
+    assume
+    r in rng R;
     then consider x being set such that
 A1: x in dom R and
 A2: R.x = r by FUNCT_1:def 5;
-    dom R = dom f /\ dom g by VALUED_1:def 1;
-    then x in dom f & x in dom g by A1,XBOOLE_0:def 4;
-    then f.x in rng f & g.x in rng g by FUNCT_1:def 5;
-    then reconsider a = f.x, b = g.x as non negative (real number) by Def4;
+A3: dom R = dom f /\ dom g by VALUED_1:def 1;
+    then x in dom g by A1,XBOOLE_0:def 4;
+    then
+A4: g.x in rng g by FUNCT_1:def 5;
+    x in dom f by A1,A3,XBOOLE_0:def 4;
+    then f.x in rng f by FUNCT_1:def 5;
+    then reconsider a = f.x, b = g.x as non negative (real number) by A4,Def4;
     a+b is non negative;
     hence thesis by A1,A2,VALUED_1:def 1;
   end;
@@ -291,18 +305,20 @@ registration
   cluster f+g -> positive-yielding;
   coherence
   proof
-    set R = f+g;
     let r be real number;
-    assume r in rng R;
+    set R = f+g;
+    assume
+    r in rng R;
     then consider x being set such that
 A1: x in dom R and
 A2: R.x = r by FUNCT_1:def 5;
-    dom R = dom f /\ dom g by VALUED_1:def 1;
-    then x in dom f & x in dom g by A1,XBOOLE_0:def 4;
-    then
-A3: f.x in rng f & g.x in rng g by FUNCT_1:def 5;
+A3: dom R = dom f /\ dom g by VALUED_1:def 1;
+    then x in dom f by A1,XBOOLE_0:def 4;
+    then f.x in rng f by FUNCT_1:def 5;
     then reconsider a = f.x as positive (real number) by Def1;
-    reconsider b = g.x as non negative (real number) by A3,Def4;
+    x in dom g by A1,A3,XBOOLE_0:def 4;
+    then g.x in rng g by FUNCT_1:def 5;
+    then reconsider b = g.x as non negative (real number) by Def4;
     a+b is positive;
     hence thesis by A1,A2,VALUED_1:def 1;
   end;
@@ -323,18 +339,20 @@ registration
   cluster f+g -> negative-yielding;
   coherence
   proof
-    set R = f+g;
     let r be real number;
-    assume r in rng R;
+    set R = f+g;
+    assume
+    r in rng R;
     then consider x being set such that
 A1: x in dom R and
 A2: R.x = r by FUNCT_1:def 5;
-    dom R = dom f /\ dom g by VALUED_1:def 1;
-    then x in dom f & x in dom g by A1,XBOOLE_0:def 4;
-    then
-A3: f.x in rng f & g.x in rng g by FUNCT_1:def 5;
+A3: dom R = dom f /\ dom g by VALUED_1:def 1;
+    then x in dom f by A1,XBOOLE_0:def 4;
+    then f.x in rng f by FUNCT_1:def 5;
     then reconsider a = f.x as non positive (real number) by Def3;
-    reconsider b = g.x as negative (real number) by A3,Def2;
+    x in dom g by A1,A3,XBOOLE_0:def 4;
+    then g.x in rng g by FUNCT_1:def 5;
+    then reconsider b = g.x as negative (real number) by Def2;
     a+b is negative;
     hence thesis by A1,A2,VALUED_1:def 1;
   end;
@@ -355,18 +373,20 @@ registration
   cluster f-g -> nonnegative-yielding;
   coherence
   proof
-    set R = f-g;
     let r be real number;
-    assume r in rng R;
+    set R = f-g;
+    assume
+    r in rng R;
     then consider x being set such that
 A1: x in dom R and
 A2: R.x = r by FUNCT_1:def 5;
-    dom R = dom f /\ dom g by VALUED_1:12;
-    then x in dom f & x in dom g by A1,XBOOLE_0:def 4;
-    then
-A3: f.x in rng f & g.x in rng g by FUNCT_1:def 5;
+A3: dom R = dom f /\ dom g by VALUED_1:12;
+    then x in dom f by A1,XBOOLE_0:def 4;
+    then f.x in rng f by FUNCT_1:def 5;
     then reconsider a = f.x as non negative (real number) by Def4;
-    reconsider b = g.x as non positive (real number) by A3,Def3;
+    x in dom g by A1,A3,XBOOLE_0:def 4;
+    then g.x in rng g by FUNCT_1:def 5;
+    then reconsider b = g.x as non positive (real number) by Def3;
     a-b is non negative;
     hence thesis by A1,A2,VALUED_1:13;
   end;
@@ -379,18 +399,20 @@ registration
   cluster f-g -> nonpositive-yielding;
   coherence
   proof
-    set R = f-g;
     let r be real number;
-    assume r in rng R;
+    set R = f-g;
+    assume
+    r in rng R;
     then consider x being set such that
 A1: x in dom R and
 A2: R.x = r by FUNCT_1:def 5;
-    dom R = dom f /\ dom g by VALUED_1:12;
-    then x in dom f & x in dom g by A1,XBOOLE_0:def 4;
-    then
-A3: f.x in rng f & g.x in rng g by FUNCT_1:def 5;
+A3: dom R = dom f /\ dom g by VALUED_1:12;
+    then x in dom f by A1,XBOOLE_0:def 4;
+    then f.x in rng f by FUNCT_1:def 5;
     then reconsider a = f.x as non positive (real number) by Def3;
-    reconsider b = g.x as non negative (real number) by A3,Def4;
+    x in dom g by A1,A3,XBOOLE_0:def 4;
+    then g.x in rng g by FUNCT_1:def 5;
+    then reconsider b = g.x as non negative (real number) by Def4;
     a-b is non positive;
     hence thesis by A1,A2,VALUED_1:13;
   end;
@@ -403,18 +425,20 @@ registration
   cluster f-g -> positive-yielding;
   coherence
   proof
-    set R = f-g;
     let r be real number;
-    assume r in rng R;
+    set R = f-g;
+    assume
+    r in rng R;
     then consider x being set such that
 A1: x in dom R and
 A2: R.x = r by FUNCT_1:def 5;
-    dom R = dom f /\ dom g by VALUED_1:12;
-    then x in dom f & x in dom g by A1,XBOOLE_0:def 4;
-    then
-A3: f.x in rng f & g.x in rng g by FUNCT_1:def 5;
+A3: dom R = dom f /\ dom g by VALUED_1:12;
+    then x in dom f by A1,XBOOLE_0:def 4;
+    then f.x in rng f by FUNCT_1:def 5;
     then reconsider a = f.x as positive (real number) by Def1;
-    reconsider b = g.x as non positive (real number) by A3,Def3;
+    x in dom g by A1,A3,XBOOLE_0:def 4;
+    then g.x in rng g by FUNCT_1:def 5;
+    then reconsider b = g.x as non positive (real number) by Def3;
     a-b is positive;
     hence thesis by A1,A2,VALUED_1:13;
   end;
@@ -427,18 +451,20 @@ registration
   cluster f-g -> negative-yielding;
   coherence
   proof
-    set R = f-g;
     let r be real number;
-    assume r in rng R;
+    set R = f-g;
+    assume
+    r in rng R;
     then consider x being set such that
 A1: x in dom R and
 A2: R.x = r by FUNCT_1:def 5;
-    dom R = dom f /\ dom g by VALUED_1:12;
-    then x in dom f & x in dom g by A1,XBOOLE_0:def 4;
-    then
-A3: f.x in rng f & g.x in rng g by FUNCT_1:def 5;
+A3: dom R = dom f /\ dom g by VALUED_1:12;
+    then x in dom f by A1,XBOOLE_0:def 4;
+    then f.x in rng f by FUNCT_1:def 5;
     then reconsider a = f.x as non positive (real number) by Def3;
-    reconsider b = g.x as positive (real number) by A3,Def1;
+    x in dom g by A1,A3,XBOOLE_0:def 4;
+    then g.x in rng g by FUNCT_1:def 5;
+    then reconsider b = g.x as positive (real number) by Def1;
     a-b is negative;
     hence thesis by A1,A2,VALUED_1:13;
   end;
@@ -451,18 +477,20 @@ registration
   cluster f-g -> negative-yielding;
   coherence
   proof
-    set R = f-g;
     let r be real number;
-    assume r in rng R;
+    set R = f-g;
+    assume
+    r in rng R;
     then consider x being set such that
 A1: x in dom R and
 A2: R.x = r by FUNCT_1:def 5;
-    dom R = dom f /\ dom g by VALUED_1:12;
-    then x in dom f & x in dom g by A1,XBOOLE_0:def 4;
-    then
-A3: f.x in rng f & g.x in rng g by FUNCT_1:def 5;
+A3: dom R = dom f /\ dom g by VALUED_1:12;
+    then x in dom f by A1,XBOOLE_0:def 4;
+    then f.x in rng f by FUNCT_1:def 5;
     then reconsider a = f.x as negative (real number) by Def2;
-    reconsider b = g.x as non negative (real number) by A3,Def4;
+    x in dom g by A1,A3,XBOOLE_0:def 4;
+    then g.x in rng g by FUNCT_1:def 5;
+    then reconsider b = g.x as non negative (real number) by Def4;
     a-b is negative;
     hence thesis by A1,A2,VALUED_1:13;
   end;
@@ -475,18 +503,20 @@ registration
   cluster f-g -> positive-yielding;
   coherence
   proof
-    set R = f-g;
     let r be real number;
-    assume r in rng R;
+    set R = f-g;
+    assume
+    r in rng R;
     then consider x being set such that
 A1: x in dom R and
 A2: R.x = r by FUNCT_1:def 5;
-    dom R = dom f /\ dom g by VALUED_1:12;
-    then x in dom f & x in dom g by A1,XBOOLE_0:def 4;
-    then
-A3: f.x in rng f & g.x in rng g by FUNCT_1:def 5;
+A3: dom R = dom f /\ dom g by VALUED_1:12;
+    then x in dom f by A1,XBOOLE_0:def 4;
+    then f.x in rng f by FUNCT_1:def 5;
     then reconsider a = f.x as non negative (real number) by Def4;
-    reconsider b = g.x as negative (real number) by A3,Def2;
+    x in dom g by A1,A3,XBOOLE_0:def 4;
+    then g.x in rng g by FUNCT_1:def 5;
+    then reconsider b = g.x as negative (real number) by Def2;
     a-b is positive;
     hence thesis by A1,A2,VALUED_1:13;
   end;
@@ -498,16 +528,20 @@ registration
   cluster f(#)g -> nonnegative-yielding;
   coherence
   proof
-    set R = f(#)g;
     let r be real number;
-    assume r in rng R;
+    set R = f(#)g;
+    assume
+    r in rng R;
     then consider x being set such that
 A1: x in dom R and
 A2: R.x = r by FUNCT_1:def 5;
-    dom R = dom f /\ dom g by VALUED_1:def 4;
-    then x in dom f & x in dom g by A1,XBOOLE_0:def 4;
-    then f.x in rng f & g.x in rng g by FUNCT_1:def 5;
-    then reconsider a = f.x, b = g.x as non positive (real number) by Def3;
+A3: dom R = dom f /\ dom g by VALUED_1:def 4;
+    then x in dom g by A1,XBOOLE_0:def 4;
+    then
+A4: g.x in rng g by FUNCT_1:def 5;
+    x in dom f by A1,A3,XBOOLE_0:def 4;
+    then f.x in rng f by FUNCT_1:def 5;
+    then reconsider a = f.x, b = g.x as non positive (real number) by A4,Def3;
     a*b is non negative;
     hence thesis by A2,VALUED_1:5;
   end;
@@ -519,16 +553,20 @@ registration
   cluster f(#)g -> nonnegative-yielding;
   coherence
   proof
-    set R = f(#)g;
     let r be real number;
-    assume r in rng R;
+    set R = f(#)g;
+    assume
+    r in rng R;
     then consider x being set such that
 A1: x in dom R and
 A2: R.x = r by FUNCT_1:def 5;
-    dom R = dom f /\ dom g by VALUED_1:def 4;
-    then x in dom f & x in dom g by A1,XBOOLE_0:def 4;
-    then f.x in rng f & g.x in rng g by FUNCT_1:def 5;
-    then reconsider a = f.x, b = g.x as non negative (real number) by Def4;
+A3: dom R = dom f /\ dom g by VALUED_1:def 4;
+    then x in dom g by A1,XBOOLE_0:def 4;
+    then
+A4: g.x in rng g by FUNCT_1:def 5;
+    x in dom f by A1,A3,XBOOLE_0:def 4;
+    then f.x in rng f by FUNCT_1:def 5;
+    then reconsider a = f.x, b = g.x as non negative (real number) by A4,Def4;
     a*b is non negative;
     hence thesis by A2,VALUED_1:5;
   end;
@@ -541,18 +579,20 @@ registration
   cluster f(#)g -> nonpositive-yielding;
   coherence
   proof
-    set R = f(#)g;
     let r be real number;
-    assume r in rng R;
+    set R = f(#)g;
+    assume
+    r in rng R;
     then consider x being set such that
 A1: x in dom R and
 A2: R.x = r by FUNCT_1:def 5;
-    dom R = dom f /\ dom g by VALUED_1:def 4;
-    then x in dom f & x in dom g by A1,XBOOLE_0:def 4;
-    then
-A3: f.x in rng f & g.x in rng g by FUNCT_1:def 5;
+A3: dom R = dom f /\ dom g by VALUED_1:def 4;
+    then x in dom f by A1,XBOOLE_0:def 4;
+    then f.x in rng f by FUNCT_1:def 5;
     then reconsider a = f.x as non positive (real number) by Def3;
-    reconsider b = g.x as non negative (real number) by A3,Def4;
+    x in dom g by A1,A3,XBOOLE_0:def 4;
+    then g.x in rng g by FUNCT_1:def 5;
+    then reconsider b = g.x as non negative (real number) by Def4;
     a*b is non positive;
     hence thesis by A2,VALUED_1:5;
   end;
@@ -573,18 +613,20 @@ registration
   cluster f(#)g -> negative-yielding;
   coherence
   proof
-    set R = f(#)g;
     let r be real number;
-    assume r in rng R;
+    set R = f(#)g;
+    assume
+    r in rng R;
     then consider x being set such that
 A1: x in dom R and
 A2: R.x = r by FUNCT_1:def 5;
-    dom R = dom f /\ dom g by VALUED_1:def 4;
-    then x in dom f & x in dom g by A1,XBOOLE_0:def 4;
-    then
-A3: f.x in rng f & g.x in rng g by FUNCT_1:def 5;
+A3: dom R = dom f /\ dom g by VALUED_1:def 4;
+    then x in dom f by A1,XBOOLE_0:def 4;
+    then f.x in rng f by FUNCT_1:def 5;
     then reconsider a = f.x as positive (real number) by Def1;
-    reconsider b = g.x as negative (real number) by A3,Def2;
+    x in dom g by A1,A3,XBOOLE_0:def 4;
+    then g.x in rng g by FUNCT_1:def 5;
+    then reconsider b = g.x as negative (real number) by Def2;
     a*b is negative;
     hence thesis by A2,VALUED_1:5;
   end;
@@ -604,16 +646,20 @@ registration
   cluster f(#)g -> positive-yielding;
   coherence
   proof
-    set R = f(#)g;
     let r be real number;
-    assume r in rng R;
+    set R = f(#)g;
+    assume
+    r in rng R;
     then consider x being set such that
 A1: x in dom R and
 A2: R.x = r by FUNCT_1:def 5;
-    dom R = dom f /\ dom g by VALUED_1:def 4;
-    then x in dom f & x in dom g by A1,XBOOLE_0:def 4;
-    then f.x in rng f & g.x in rng g by FUNCT_1:def 5;
-    then reconsider a = f.x, b = g.x as positive (real number) by Def1;
+A3: dom R = dom f /\ dom g by VALUED_1:def 4;
+    then x in dom g by A1,XBOOLE_0:def 4;
+    then
+A4: g.x in rng g by FUNCT_1:def 5;
+    x in dom f by A1,A3,XBOOLE_0:def 4;
+    then f.x in rng f by FUNCT_1:def 5;
+    then reconsider a = f.x, b = g.x as positive (real number) by A4,Def1;
     a*b is positive;
     hence thesis by A2,VALUED_1:5;
   end;
@@ -625,16 +671,20 @@ registration
   cluster f(#)g -> positive-yielding;
   coherence
   proof
-    set R = f(#)g;
     let r be real number;
-    assume r in rng R;
+    set R = f(#)g;
+    assume
+    r in rng R;
     then consider x being set such that
 A1: x in dom R and
 A2: R.x = r by FUNCT_1:def 5;
-    dom R = dom f /\ dom g by VALUED_1:def 4;
-    then x in dom f & x in dom g by A1,XBOOLE_0:def 4;
-    then f.x in rng f & g.x in rng g by FUNCT_1:def 5;
-    then reconsider a = f.x, b = g.x as negative (real number) by Def2;
+A3: dom R = dom f /\ dom g by VALUED_1:def 4;
+    then x in dom g by A1,XBOOLE_0:def 4;
+    then
+A4: g.x in rng g by FUNCT_1:def 5;
+    x in dom f by A1,A3,XBOOLE_0:def 4;
+    then f.x in rng f by FUNCT_1:def 5;
+    then reconsider a = f.x, b = g.x as negative (real number) by A4,Def2;
     a*b is positive;
     hence thesis by A2,VALUED_1:5;
   end;
@@ -647,16 +697,21 @@ registration
   coherence
   proof
     set R = f(#)g;
-    assume not thesis;
+    assume
+    not thesis;
     then 0 in rng R by RELAT_1:def 9;
     then consider x being set such that
 A1: x in dom R and
 A2: R.x = 0 by FUNCT_1:def 5;
-    dom R = dom f /\ dom g by VALUED_1:def 4;
-    then x in dom f & x in dom g by A1,XBOOLE_0:def 4;
-    then f.x in rng f & g.x in rng g by FUNCT_1:def 5;
-
-then reconsider a = f.x, b = g.x as non zero (real number) by RELAT_1:def 9;
+A3: dom R = dom f /\ dom g by VALUED_1:def 4;
+    then x in dom g by A1,XBOOLE_0:def 4;
+    then
+A4: g.x in rng g by FUNCT_1:def 5;
+    x in dom f by A1,A3,XBOOLE_0:def 4;
+    then f.x in rng f by FUNCT_1:def 5;
+    then reconsider a = f.x, b = g.x as non zero (real number) by
+    A4,RELAT_1:def
+    9;
     a*b is non zero;
     hence thesis by A2,VALUED_1:5;
   end;
@@ -668,11 +723,13 @@ registration
   cluster f(#)f -> nonnegative-yielding;
   coherence
   proof
-    set R = f(#)f;
     let r be real number;
-    assume r in rng R;
+    set R = f(#)f;
+    assume
+    r in rng R;
     then consider x being set such that
-A1: x in dom R & R.x = r by FUNCT_1:def 5;
+    x in dom R and
+A1: R.x = r by FUNCT_1:def 5;
     f.x * f.x is non negative;
     hence thesis by A1,VALUED_1:5;
   end;
@@ -685,9 +742,10 @@ registration
   cluster r(#)f -> nonnegative-yielding;
   coherence
   proof
-    set R = r(#)f;
     let z be real number;
-    assume z in rng R;
+    set R = r(#)f;
+    assume
+    z in rng R;
     then consider x being set such that
 A1: x in dom R and
 A2: R.x = z by FUNCT_1:def 5;
@@ -706,9 +764,10 @@ registration
   cluster r(#)f -> nonnegative-yielding;
   coherence
   proof
-    set R = r(#)f;
     let z be real number;
-    assume z in rng R;
+    set R = r(#)f;
+    assume
+    z in rng R;
     then consider x being set such that
 A1: x in dom R and
 A2: R.x = z by FUNCT_1:def 5;
@@ -727,9 +786,10 @@ registration
   cluster r(#)f -> nonpositive-yielding;
   coherence
   proof
-    set R = r(#)f;
     let z be real number;
-    assume z in rng R;
+    set R = r(#)f;
+    assume
+    z in rng R;
     then consider x being set such that
 A1: x in dom R and
 A2: R.x = z by FUNCT_1:def 5;
@@ -748,9 +808,10 @@ registration
   cluster r(#)f -> nonpositive-yielding;
   coherence
   proof
-    set R = r(#)f;
     let z be real number;
-    assume z in rng R;
+    set R = r(#)f;
+    assume
+    z in rng R;
     then consider x being set such that
 A1: x in dom R and
 A2: R.x = z by FUNCT_1:def 5;
@@ -769,9 +830,10 @@ registration
   cluster r(#)f -> negative-yielding;
   coherence
   proof
-    set R = r(#)f;
     let z be real number;
-    assume z in rng R;
+    set R = r(#)f;
+    assume
+    z in rng R;
     then consider x being set such that
 A1: x in dom R and
 A2: R.x = z by FUNCT_1:def 5;
@@ -790,9 +852,10 @@ registration
   cluster r(#)f -> negative-yielding;
   coherence
   proof
-    set R = r(#)f;
     let z be real number;
-    assume z in rng R;
+    set R = r(#)f;
+    assume
+    z in rng R;
     then consider x being set such that
 A1: x in dom R and
 A2: R.x = z by FUNCT_1:def 5;
@@ -811,9 +874,10 @@ registration
   cluster r(#)f -> positive-yielding;
   coherence
   proof
-    set R = r(#)f;
     let z be real number;
-    assume z in rng R;
+    set R = r(#)f;
+    assume
+    z in rng R;
     then consider x being set such that
 A1: x in dom R and
 A2: R.x = z by FUNCT_1:def 5;
@@ -832,9 +896,10 @@ registration
   cluster r(#)f -> positive-yielding;
   coherence
   proof
-    set R = r(#)f;
     let z be real number;
-    assume z in rng R;
+    set R = r(#)f;
+    assume
+    z in rng R;
     then consider x being set such that
 A1: x in dom R and
 A2: R.x = z by FUNCT_1:def 5;
@@ -854,7 +919,8 @@ registration
   coherence
   proof
     set R = r(#)f;
-    assume not thesis;
+    assume
+    not thesis;
     then 0 in rng R by RELAT_1:def 9;
     then consider x being set such that
 A1: x in dom R and
@@ -873,17 +939,21 @@ registration
   cluster f/g -> nonnegative-yielding;
   coherence
   proof
-    set R = f/g;
     let r be real number;
-    assume r in rng R;
+    set R = f/g;
+    assume
+    r in rng R;
     then consider x being set such that
 A1: x in dom R and
 A2: R.x = r by FUNCT_1:def 5;
-    dom R = dom f /\ (dom g \ g"{0}) by RFUNCT_1:def 4;
-    then x in dom f & x in dom g \ g"{0} by A1,XBOOLE_0:def 4;
-    then x in dom f & x in dom g by XBOOLE_0:def 5;
-    then f.x in rng f & g.x in rng g by FUNCT_1:def 5;
-    then reconsider a = f.x, b = g.x as non positive (real number) by Def3;
+A3: dom R = dom f /\ (dom g \ g"{0}) by RFUNCT_1:def 4;
+    then x in dom g \ g"{0} by A1,XBOOLE_0:def 4;
+    then x in dom g by XBOOLE_0:def 5;
+    then
+A4: g.x in rng g by FUNCT_1:def 5;
+    x in dom f by A1,A3,XBOOLE_0:def 4;
+    then f.x in rng f by FUNCT_1:def 5;
+    then reconsider a = f.x, b = g.x as non positive (real number) by A4,Def3;
     a*b" is non negative;
     hence thesis by A1,A2,RFUNCT_1:def 4;
   end;
@@ -895,17 +965,21 @@ registration
   cluster f/g -> nonnegative-yielding;
   coherence
   proof
-    set R = f/g;
     let r be real number;
-    assume r in rng R;
+    set R = f/g;
+    assume
+    r in rng R;
     then consider x being set such that
 A1: x in dom R and
 A2: R.x = r by FUNCT_1:def 5;
-    dom R = dom f /\ (dom g \ g"{0}) by RFUNCT_1:def 4;
-    then x in dom f & x in dom g \ g"{0} by A1,XBOOLE_0:def 4;
-    then x in dom f & x in dom g by XBOOLE_0:def 5;
-    then f.x in rng f & g.x in rng g by FUNCT_1:def 5;
-    then reconsider a = f.x, b = g.x as non negative (real number) by Def4;
+A3: dom R = dom f /\ (dom g \ g"{0}) by RFUNCT_1:def 4;
+    then x in dom g \ g"{0} by A1,XBOOLE_0:def 4;
+    then x in dom g by XBOOLE_0:def 5;
+    then
+A4: g.x in rng g by FUNCT_1:def 5;
+    x in dom f by A1,A3,XBOOLE_0:def 4;
+    then f.x in rng f by FUNCT_1:def 5;
+    then reconsider a = f.x, b = g.x as non negative (real number) by A4,Def4;
     a*b" is non negative;
     hence thesis by A1,A2,RFUNCT_1:def 4;
   end;
@@ -918,19 +992,21 @@ registration
   cluster f/g -> nonpositive-yielding;
   coherence
   proof
-    set R = f/g;
     let r be real number;
-    assume r in rng R;
+    set R = f/g;
+    assume
+    r in rng R;
     then consider x being set such that
 A1: x in dom R and
 A2: R.x = r by FUNCT_1:def 5;
-    dom R = dom f /\ (dom g \ g"{0}) by RFUNCT_1:def 4;
-    then x in dom f & x in dom g \ g"{0} by A1,XBOOLE_0:def 4;
-    then x in dom f & x in dom g by XBOOLE_0:def 5;
-    then
-A3: f.x in rng f & g.x in rng g by FUNCT_1:def 5;
+A3: dom R = dom f /\ (dom g \ g"{0}) by RFUNCT_1:def 4;
+    then x in dom f by A1,XBOOLE_0:def 4;
+    then f.x in rng f by FUNCT_1:def 5;
     then reconsider a = f.x as non positive (real number) by Def3;
-    reconsider b = g.x as non negative (real number) by A3,Def4;
+    x in dom g \ g"{0} by A1,A3,XBOOLE_0:def 4;
+    then x in dom g by XBOOLE_0:def 5;
+    then g.x in rng g by FUNCT_1:def 5;
+    then reconsider b = g.x as non negative (real number) by Def4;
     a*b" is non positive;
     hence thesis by A1,A2,RFUNCT_1:def 4;
   end;
@@ -943,19 +1019,21 @@ registration
   cluster f/g -> nonpositive-yielding;
   coherence
   proof
-    set R = f/g;
     let r be real number;
-    assume r in rng R;
+    set R = f/g;
+    assume
+    r in rng R;
     then consider x being set such that
 A1: x in dom R and
 A2: R.x = r by FUNCT_1:def 5;
-    dom R = dom f /\ (dom g \ g"{0}) by RFUNCT_1:def 4;
-    then x in dom f & x in dom g \ g"{0} by A1,XBOOLE_0:def 4;
-    then x in dom f & x in dom g by XBOOLE_0:def 5;
-    then
-A3: f.x in rng f & g.x in rng g by FUNCT_1:def 5;
+A3: dom R = dom f /\ (dom g \ g"{0}) by RFUNCT_1:def 4;
+    then x in dom f by A1,XBOOLE_0:def 4;
+    then f.x in rng f by FUNCT_1:def 5;
     then reconsider a = f.x as non negative (real number) by Def4;
-    reconsider b = g.x as non positive (real number) by A3,Def3;
+    x in dom g \ g"{0} by A1,A3,XBOOLE_0:def 4;
+    then x in dom g by XBOOLE_0:def 5;
+    then g.x in rng g by FUNCT_1:def 5;
+    then reconsider b = g.x as non positive (real number) by Def3;
     a*b" is non positive;
     hence thesis by A1,A2,RFUNCT_1:def 4;
   end;
@@ -968,18 +1046,20 @@ registration
   cluster f/g -> negative-yielding;
   coherence
   proof
-    set R = f/g;
     let r be real number;
-    assume r in rng R;
+    set R = f/g;
+    assume
+    r in rng R;
     then consider x being set such that
 A1: x in dom R and
 A2: R.x = r by FUNCT_1:def 5;
-    dom R = dom f /\ (dom g \ g"{0}) by RFUNCT_1:def 4;
-    then x in dom f & x in dom g \ g"{0} by A1,XBOOLE_0:def 4;
-    then
-A3: f.x in rng f & g.x in rng g by FUNCT_1:def 5;
+A3: dom R = dom f /\ (dom g \ g"{0}) by RFUNCT_1:def 4;
+    then x in dom f by A1,XBOOLE_0:def 4;
+    then f.x in rng f by FUNCT_1:def 5;
     then reconsider a = f.x as positive (real number) by Def1;
-    reconsider b = g.x as negative (real number) by A3,Def2;
+    x in dom g \ g"{0} by A1,A3,XBOOLE_0:def 4;
+    then g.x in rng g by FUNCT_1:def 5;
+    then reconsider b = g.x as negative (real number) by Def2;
     a*b" is negative;
     hence thesis by A1,A2,RFUNCT_1:def 4;
   end;
@@ -992,18 +1072,20 @@ registration
   cluster f/g -> negative-yielding;
   coherence
   proof
-    set R = f/g;
     let r be real number;
-    assume r in rng R;
+    set R = f/g;
+    assume
+    r in rng R;
     then consider x being set such that
 A1: x in dom R and
 A2: R.x = r by FUNCT_1:def 5;
-    dom R = dom f /\ (dom g \ g"{0}) by RFUNCT_1:def 4;
-    then x in dom f & x in dom g \ g"{0} by A1,XBOOLE_0:def 4;
-    then
-A3: f.x in rng f & g.x in rng g by FUNCT_1:def 5;
+A3: dom R = dom f /\ (dom g \ g"{0}) by RFUNCT_1:def 4;
+    then x in dom f by A1,XBOOLE_0:def 4;
+    then f.x in rng f by FUNCT_1:def 5;
     then reconsider a = f.x as negative (real number) by Def2;
-    reconsider b = g.x as positive (real number) by A3,Def1;
+    x in dom g \ g"{0} by A1,A3,XBOOLE_0:def 4;
+    then g.x in rng g by FUNCT_1:def 5;
+    then reconsider b = g.x as positive (real number) by Def1;
     a*b" is negative;
     hence thesis by A1,A2,RFUNCT_1:def 4;
   end;
@@ -1015,16 +1097,20 @@ registration
   cluster f/g -> positive-yielding;
   coherence
   proof
-    set R = f/g;
     let r be real number;
-    assume r in rng R;
+    set R = f/g;
+    assume
+    r in rng R;
     then consider x being set such that
 A1: x in dom R and
 A2: R.x = r by FUNCT_1:def 5;
-    dom R = dom f /\ (dom g \ g"{0}) by RFUNCT_1:def 4;
-    then x in dom f & x in dom g \ g"{0} by A1,XBOOLE_0:def 4;
-    then f.x in rng f & g.x in rng g by FUNCT_1:def 5;
-    then reconsider a = f.x, b = g.x as positive (real number) by Def1;
+A3: dom R = dom f /\ (dom g \ g"{0}) by RFUNCT_1:def 4;
+    then x in dom g \ g"{0} by A1,XBOOLE_0:def 4;
+    then
+A4: g.x in rng g by FUNCT_1:def 5;
+    x in dom f by A1,A3,XBOOLE_0:def 4;
+    then f.x in rng f by FUNCT_1:def 5;
+    then reconsider a = f.x, b = g.x as positive (real number) by A4,Def1;
     a*b" is positive;
     hence thesis by A1,A2,RFUNCT_1:def 4;
   end;
@@ -1036,16 +1122,20 @@ registration
   cluster f/g -> positive-yielding;
   coherence
   proof
-    set R = f/g;
     let r be real number;
-    assume r in rng R;
+    set R = f/g;
+    assume
+    r in rng R;
     then consider x being set such that
 A1: x in dom R and
 A2: R.x = r by FUNCT_1:def 5;
-    dom R = dom f /\ (dom g \ g"{0}) by RFUNCT_1:def 4;
-    then x in dom f & x in dom g \ g"{0} by A1,XBOOLE_0:def 4;
-    then f.x in rng f & g.x in rng g by FUNCT_1:def 5;
-    then reconsider a = f.x, b = g.x as negative (real number) by Def2;
+A3: dom R = dom f /\ (dom g \ g"{0}) by RFUNCT_1:def 4;
+    then x in dom g \ g"{0} by A1,XBOOLE_0:def 4;
+    then
+A4: g.x in rng g by FUNCT_1:def 5;
+    x in dom f by A1,A3,XBOOLE_0:def 4;
+    then f.x in rng f by FUNCT_1:def 5;
+    then reconsider a = f.x, b = g.x as negative (real number) by A4,Def2;
     a*b" is positive;
     hence thesis by A1,A2,RFUNCT_1:def 4;
   end;
@@ -1057,9 +1147,10 @@ registration
   cluster f/f -> nonnegative-yielding;
   coherence
   proof
-    set R = f/f;
     let r be real number;
-    assume r in rng R;
+    set R = f/f;
+    assume
+    r in rng R;
     then consider x being set such that
 A1: x in dom R & R.x = r by FUNCT_1:def 5;
     f.x * (f.x)" is non negative;
@@ -1074,16 +1165,21 @@ registration
   coherence
   proof
     set R = f/g;
-    assume not thesis;
+    assume
+    not thesis;
     then 0 in rng R by RELAT_1:def 9;
     then consider x being set such that
 A1: x in dom R and
 A2: R.x = 0 by FUNCT_1:def 5;
-    dom R = dom f /\ (dom g \ g"{0}) by RFUNCT_1:def 4;
-    then x in dom f & x in dom g \ g"{0} by A1,XBOOLE_0:def 4;
-    then f.x in rng f & g.x in rng g by FUNCT_1:def 5;
-
-then reconsider a = f.x, b = g.x as non zero (real number) by RELAT_1:def 9;
+A3: dom R = dom f /\ (dom g \ g"{0}) by RFUNCT_1:def 4;
+    then x in dom g \ g"{0} by A1,XBOOLE_0:def 4;
+    then
+A4: g.x in rng g by FUNCT_1:def 5;
+    x in dom f by A1,A3,XBOOLE_0:def 4;
+    then f.x in rng f by FUNCT_1:def 5;
+    then reconsider a = f.x, b = g.x as non zero (real number) by
+    A4,RELAT_1:def
+    9;
     a*b" is non zero;
     hence thesis by A1,A2,RFUNCT_1:def 4;
   end;
@@ -1095,9 +1191,10 @@ registration
   cluster Inv f -> nonpositive-yielding;
   coherence
   proof
-    set R = Inv f;
     let r be real number;
-    assume r in rng R;
+    set R = Inv f;
+    assume
+    r in rng R;
     then consider x being set such that
 A1: x in dom R and
 A2: R.x = r by FUNCT_1:def 5;
@@ -1116,9 +1213,10 @@ registration
   cluster Inv f -> nonnegative-yielding;
   coherence
   proof
-    set R = Inv f;
     let r be real number;
-    assume r in rng R;
+    set R = Inv f;
+    assume
+    r in rng R;
     then consider x being set such that
 A1: x in dom R and
 A2: R.x = r by FUNCT_1:def 5;
@@ -1137,9 +1235,10 @@ registration
   cluster Inv f -> positive-yielding;
   coherence
   proof
-    set R = Inv f;
     let r be real number;
-    assume r in rng R;
+    set R = Inv f;
+    assume
+    r in rng R;
     then consider x being set such that
 A1: x in dom R and
 A2: R.x = r by FUNCT_1:def 5;
@@ -1158,9 +1257,10 @@ registration
   cluster Inv f -> negative-yielding;
   coherence
   proof
-    set R = Inv f;
     let r be real number;
-    assume r in rng R;
+    set R = Inv f;
+    assume
+    r in rng R;
     then consider x being set such that
 A1: x in dom R and
 A2: R.x = r by FUNCT_1:def 5;
@@ -1180,15 +1280,15 @@ registration
   coherence
   proof
     set R = Inv f;
-    assume not thesis;
+    assume
+    not thesis;
     then 0 in rng R by RELAT_1:def 9;
     then consider x being set such that
 A1: x in dom R and
 A2: R.x = 0 by FUNCT_1:def 5;
     dom R = X by FUNCT_2:def 1
       .= dom f by FUNCT_2:def 1;
-    then f.x in rng f by A1,FUNCT_1:def 5;
-    then reconsider a = f.x as non zero (real number) by RELAT_1:def 9;
+    then reconsider a = f.x as non zero (real number) by A1;
     a" is non zero;
     hence thesis by A2,VALUED_1:10;
   end;
@@ -1235,10 +1335,12 @@ registration
   cluster abs f -> nonnegative-yielding;
   coherence
   proof
-    set R = abs f;
     let r be real number;
-    assume r in rng R;
-    then consider x being set such that x in dom R and
+    set R = abs f;
+    assume
+    r in rng R;
+    then consider x being set such that
+    x in dom R and
 A1: R.x = r by FUNCT_1:def 5;
     abs (f.x) is non negative by COMPLEX1:132;
     hence thesis by A1,VALUED_1:18;
@@ -1251,15 +1353,15 @@ registration
   cluster abs f -> positive-yielding;
   coherence
   proof
-    set R = abs f;
     let r be real number;
-    assume r in rng R;
+    set R = abs f;
+    assume
+    r in rng R;
     then consider x being set such that
 A1: x in dom R and
 A2: R.x = r by FUNCT_1:def 5;
     dom R = dom f by VALUED_1:def 11;
-    then f.x in rng f by A1,FUNCT_1:def 5;
-    then reconsider a = f.x as non zero (real number) by RELAT_1:def 9;
+    then reconsider a = f.x as non zero (real number) by A1;
     abs a is positive by COMPLEX1:133;
     hence thesis by A2,VALUED_1:18;
   end;
@@ -1271,9 +1373,10 @@ registration
   cluster f^ -> nonpositive-yielding;
   coherence
   proof
-    set R = f^;
     let r be real number;
-    assume r in rng R;
+    set R = f^;
+    assume
+    r in rng R;
     then consider x being set such that
 A1: x in dom R and
 A2: R.x = r by FUNCT_1:def 5;
@@ -1292,9 +1395,10 @@ registration
   cluster f^ -> nonnegative-yielding;
   coherence
   proof
-    set R = f^;
     let r be real number;
-    assume r in rng R;
+    set R = f^;
+    assume
+    r in rng R;
     then consider x being set such that
 A1: x in dom R and
 A2: R.x = r by FUNCT_1:def 5;
@@ -1313,9 +1417,10 @@ registration
   cluster f^ -> positive-yielding;
   coherence
   proof
-    set R = f^;
     let r be real number;
-    assume r in rng R;
+    set R = f^;
+    assume
+    r in rng R;
     then consider x being set such that
 A1: x in dom R and
 A2: R.x = r by FUNCT_1:def 5;
@@ -1333,9 +1438,10 @@ registration
   cluster f^ -> negative-yielding;
   coherence
   proof
-    set R = f^;
     let r be real number;
-    assume r in rng R;
+    set R = f^;
+    assume
+    r in rng R;
     then consider x being set such that
 A1: x in dom R and
 A2: R.x = r by FUNCT_1:def 5;
@@ -1354,14 +1460,14 @@ registration
   coherence
   proof
     set R = f^;
-    assume not thesis;
+    assume
+    not thesis;
     then 0 in rng R by RELAT_1:def 9;
     then consider x being set such that
 A1: x in dom R and
 A2: R.x = 0 by FUNCT_1:def 5;
     dom R = dom f by Th2;
-    then f.x in rng f by A1,FUNCT_1:def 5;
-    then reconsider a = f.x as non zero (real number) by RELAT_1:def 9;
+    then reconsider a = f.x as non zero (real number) by A1;
     a" is non zero;
     hence thesis by A1,A2,RFUNCT_1:def 8;
   end;
@@ -1371,13 +1477,13 @@ definition
   let f be real-valued Function;
   func sqrt f -> Function means
   :Def5:
-  dom it = dom f &
-  for x being set st x in dom it holds it.x = sqrt(f.x);
+  dom it = dom f & for x being set st x
+  in dom it holds it.x = sqrt(f.x);
   existence
   proof
     deffunc F(set) = sqrt (f.$1);
-    ex h being Function st dom h = dom f &
-    for x being set st x in dom f holds h.x = F(x) from FUNCT_1:sch 3;
+    ex h being Function st dom h = dom f & for x being set st x in dom f
+    holds h.x = F(x) from FUNCT_1:sch 3;
     hence thesis;
   end;
   uniqueness
@@ -1403,9 +1509,10 @@ registration
   cluster sqrt f -> real-valued;
   coherence
   proof
-    set F = sqrt f;
     let x be set;
-    assume x in dom F;
+    set F = sqrt f;
+    assume
+    x in dom F;
     then F.x = sqrt(f.x) by Def5;
     hence thesis;
   end;
@@ -1417,10 +1524,8 @@ definition
   coherence
   proof
     set F = sqrt f;
-A1: dom F = dom f by Def5;
-    rng F c= REAL by VALUED_0:def 3;
-    then F is PartFunc of dom F, REAL by RELSET_1:11;
-    hence thesis by A1,RELSET_1:13;
+    dom F = dom f & rng F c= REAL by Def5,VALUED_0:def 3;
+    hence thesis by RELSET_1:11;
   end;
 end;
 
@@ -1430,9 +1535,10 @@ registration
   cluster sqrt f -> nonnegative-yielding;
   coherence
   proof
-    set R = sqrt f;
     let r be real number;
-    assume r in rng R;
+    set R = sqrt f;
+    assume
+    r in rng R;
     then consider x being set such that
 A1: x in dom R and
 A2: R.x = r by FUNCT_1:def 5;
@@ -1450,9 +1556,10 @@ registration
   cluster sqrt f -> positive-yielding;
   coherence
   proof
-    set R = sqrt f;
     let r be real number;
-    assume r in rng R;
+    set R = sqrt f;
+    assume
+    r in rng R;
     then consider x being set such that
 A1: x in dom R and
 A2: R.x = r by FUNCT_1:def 5;
@@ -1487,8 +1594,8 @@ definition
 end;
 
 definition
-  let X be non empty set, f be Function of X, REAL,
-  g be non-empty Function of X, REAL;
+  let X be non empty set, f be Function of X, REAL, g be non-empty Function of
+  X, REAL;
   redefine func f/g -> Function of X,REAL;
   coherence
   proof
@@ -1501,7 +1608,8 @@ end;
 
 reserve T for non empty TopSpace,
   f, g for continuous RealMap of T,
-  r for real number;
+  r for real
+  number;
 
 definition
   let T, f, g;
@@ -1509,11 +1617,11 @@ definition
   redefine func f+g -> continuous RealMap of T;
   coherence
   proof
-    reconsider F = f, G = g as continuous Function
-    of T,R^1 by TOPMETR:24,TOPREAL6:83;
+    reconsider F = f, G = g as continuous Function of T,R^1 by TOPMETR:24,
+    TOPREAL6:83;
     consider H being Function of T,R^1 such that
-A1: for p being Point of T, r1,r2 being real number st
-    F.p = r1 & G.p = r2 holds H.p = r1+r2 and
+A1: for p being Point of T, r1,r2 being real number st F.p = r1 & G.p
+    = r2 holds H.p = r1+r2 and
 A2: H is continuous by JGRAPH_2:29;
     reconsider h = H as RealMap of T by TOPMETR:24;
 A3: dom h = c /\ c by FUNCT_2:def 1
@@ -1526,37 +1634,37 @@ A3: dom h = c /\ c by FUNCT_2:def 1
   redefine func f-g -> continuous RealMap of T;
   coherence
   proof
-    reconsider F = f, G = g as continuous Function
-    of T,R^1 by TOPMETR:24,TOPREAL6:83;
+    reconsider F = f, G = g as continuous Function of T,R^1 by TOPMETR:24,
+    TOPREAL6:83;
     consider H being Function of T,R^1 such that
-A4: for p being Point of T, r1,r2 being real number st
-    F.p = r1 & G.p = r2 holds H.p = r1-r2 and
+A4: for p being Point of T, r1,r2 being real number st F.p = r1 & G.p
+    = r2 holds H.p = r1-r2 and
 A5: H is continuous by JGRAPH_2:31;
     reconsider h = H as RealMap of T by TOPMETR:24;
 A6: dom h = c /\ c by FUNCT_2:def 1
       .= c /\ dom g by FUNCT_2:def 1
       .= dom f /\ dom g by FUNCT_2:def 1;
-A7: dom (f-g) = dom f /\ dom g by VALUED_1:12;
-    for c being set st c in dom h holds h.c = f.c - g.c by A4;
-    then h = f-g by A6,A7,VALUED_1:14;
+    dom (f-g) = dom f /\ dom g & for c being set st c in dom h holds h.c =
+    f.c - g.c by A4,VALUED_1:12;
+    then h = f-g by A6,VALUED_1:14;
     hence thesis by A5,TOPREAL6:83;
   end;
   redefine func f(#)g -> continuous RealMap of T;
   coherence
   proof
-    reconsider F = f, G = g as continuous Function
-    of T,R^1 by TOPMETR:24,TOPREAL6:83;
+    reconsider F = f, G = g as continuous Function of T,R^1 by TOPMETR:24,
+    TOPREAL6:83;
     consider H being Function of T,R^1 such that
-A8: for p being Point of T, r1,r2 being real number st
-    F.p = r1 & G.p = r2 holds H.p = r1*r2 and
-A9: H is continuous by JGRAPH_2:35;
+A7: for p being Point of T, r1,r2 being real number st F.p = r1 & G.p
+    = r2 holds H.p = r1*r2 and
+A8: H is continuous by JGRAPH_2:35;
     reconsider h = H as RealMap of T by TOPMETR:24;
-A10: dom h = c /\ c by FUNCT_2:def 1
+A9: dom h = c /\ c by FUNCT_2:def 1
       .= c /\ dom g by FUNCT_2:def 1
       .= dom f /\ dom g by FUNCT_2:def 1;
-    for c being set st c in dom h holds h.c = f.c * g.c by A8;
-    then h = f(#)g by A10,VALUED_1:def 4;
-    hence thesis by A9,TOPREAL6:83;
+    for c being set st c in dom h holds h.c = f.c * g.c by A7;
+    then h = f(#)g by A9,VALUED_1:def 4;
+    hence thesis by A8,TOPREAL6:83;
   end;
 end;
 
@@ -1565,11 +1673,11 @@ definition
   redefine func -f -> continuous RealMap of T;
   coherence
   proof
-    set c = the carrier of T;
     reconsider F = f as continuous Function of T,R^1 by TOPMETR:24,TOPREAL6:83;
+    set c = the carrier of T;
     consider H being Function of T,R^1 such that
-A1: for p being Point of T, r1 being real number st
-    F.p = r1 holds H.p = -r1 and
+A1: for p being Point of T, r1 being real number st F.p = r1 holds H.p
+    = -r1 and
 A2: H is continuous by JGRAPH_4:13;
     reconsider h = H as RealMap of T by TOPMETR:24;
 A3: dom h = c by FUNCT_2:def 1
@@ -1585,11 +1693,11 @@ definition
   redefine func abs f -> continuous RealMap of T;
   coherence
   proof
-    set c = the carrier of T;
     reconsider F = f as continuous Function of T,R^1 by TOPMETR:24,TOPREAL6:83;
+    set c = the carrier of T;
     consider H being Function of T,R^1 such that
-A1: for p being Point of T, r1 being real number st
-    F.p = r1 holds H.p = abs r1 and
+A1: for p being Point of T, r1 being real number st F.p = r1 holds H.p
+    = abs r1 and
 A2: H is continuous by JGRAPH_4:12;
     reconsider h = H as RealMap of T by TOPMETR:24;
 A3: dom h = c by FUNCT_2:def 1
@@ -1607,12 +1715,14 @@ Lm1: now
   set f = c --> a;
   thus f is continuous
   proof
-A1: dom f = c by FUNCT_2:def 1;
-A2: rng f = {a} by FUNCOP_1:14;
     let Y be Subset of REAL;
-    assume Y is closed;
+A1: dom f = c by FUNCT_2:def 1;
+    assume
+    Y is closed;
+A2: rng f = {a} by FUNCOP_1:14;
     per cases;
-    suppose a in Y;
+    suppose
+      a in Y;
       then
 A3:   rng f c= Y by A2,ZFMISC_1:37;
       f"Y = f"(rng f /\ Y) by RELAT_1:168
@@ -1621,7 +1731,8 @@ A3:   rng f c= Y by A2,ZFMISC_1:37;
         .= [#]T;
       hence thesis;
     end;
-    suppose not a in Y;
+    suppose
+      not a in Y;
       then
 A4:   rng f misses Y by A2,ZFMISC_1:56;
       f"Y = f"(rng f /\ Y) by RELAT_1:168
@@ -1656,8 +1767,8 @@ definition
   redefine func sqrt f -> continuous RealMap of T;
   coherence
   proof
-    set c = the carrier of T;
     reconsider F = f as continuous Function of T,R^1 by TOPMETR:24,TOPREAL6:83;
+    set c = the carrier of T;
     for q being Point of T ex r being real number st f.q = r & r >= 0
     proof
       let q be Point of T;
@@ -1668,8 +1779,8 @@ definition
       hence thesis by Def4;
     end;
     then consider H being Function of T,R^1 such that
-A1: for p being Point of T, r1 being real number st
-    F.p = r1 holds H.p = sqrt r1 and
+A1: for p being Point of T, r1 being real number st F.p = r1 holds H.p
+    = sqrt r1 and
 A2: H is continuous by JGRAPH_3:15;
     reconsider h = H as RealMap of T by TOPMETR:24;
 A3: dom h = c by FUNCT_2:def 1
@@ -1685,11 +1796,11 @@ definition
   redefine func r(#)f -> continuous RealMap of T;
   coherence
   proof
-    set c = the carrier of T;
     reconsider F = f as continuous Function of T,R^1 by TOPMETR:24,TOPREAL6:83;
+    set c = the carrier of T;
     consider H being Function of T,R^1 such that
-A1: for p being Point of T, r1 being real number st
-    F.p = r1 holds H.p = r*r1 and
+A1: for p being Point of T, r1 being real number st F.p = r1 holds H.p
+    = r*r1 and
 A2: H is continuous by JGRAPH_2:33;
     reconsider h = H as RealMap of T by TOPMETR:24;
 A3: dom h = c by FUNCT_2:def 1
@@ -1706,29 +1817,29 @@ definition
   redefine func f^ -> continuous RealMap of T;
   coherence
   proof
-    set c = the carrier of T;
     reconsider F = f as continuous Function of T,R^1 by TOPMETR:24,TOPREAL6:83;
+    set c = the carrier of T;
     for q being Point of T holds f.q <> 0
     proof
       let q be Point of T;
       dom f = c by FUNCT_2:def 1;
-      then f.q in rng f by FUNCT_1:def 5;
-      hence thesis by RELAT_1:def 9;
+      hence thesis;
     end;
     then consider H being Function of T,R^1 such that
-A1: for p being Point of T, r1 being real number st
-    F.p = r1 holds H.p = 1/r1 and
+A1: for p being Point of T, r1 being real number st F.p = r1 holds H.p
+    = 1/r1 and
 A2: H is continuous by JGRAPH_2:36;
     reconsider h = H as RealMap of T by TOPMETR:24;
-A3: dom h = c by FUNCT_2:def 1
-      .= dom f \ f"{0} by FUNCT_2:def 1;
-    now
+A3: now
       let a be set;
-      assume a in dom h;
+      assume
+      a in dom h;
       hence h.a = 1/f.a by A1
         .= 1 * (f.a)" by XCMPLX_0:def 9
         .= (f.a)";
     end;
+    dom h = c by FUNCT_2:def 1
+      .= dom f \ f"{0} by FUNCT_2:def 1;
     then h = f^ by A3,RFUNCT_1:def 8;
     hence thesis by A2,TOPREAL6:83;
   end;
@@ -1740,30 +1851,30 @@ definition
   redefine func f/g -> continuous RealMap of T;
   coherence
   proof
+    reconsider F = f, G = g as continuous Function of T,R^1 by TOPMETR:24,
+    TOPREAL6:83;
     set c = the carrier of T;
-    reconsider F = f, G = g as continuous Function
-    of T,R^1 by TOPMETR:24,TOPREAL6:83;
     for q being Point of T holds g.q <> 0
     proof
       let q be Point of T;
       dom g = c by FUNCT_2:def 1;
-      then g.q in rng g by FUNCT_1:def 5;
-      hence thesis by RELAT_1:def 9;
+      hence thesis;
     end;
     then consider H being Function of T,R^1 such that
-A1: for p being Point of T, r1,r2 being real number st
-    F.p = r1 & G.p = r2 holds H.p = r1/r2 and
+A1: for p being Point of T, r1,r2 being real number st F.p = r1 & G.p
+    = r2 holds H.p = r1/r2 and
 A2: H is continuous by JGRAPH_2:37;
     reconsider h = H as RealMap of T by TOPMETR:24;
-A3: dom h = c /\ c by FUNCT_2:def 1
-      .= c /\ dom g by FUNCT_2:def 1
-      .= dom f /\ (dom g \ g"{0}) by FUNCT_2:def 1;
-    now
+A3: now
       let c be set;
-      assume c in dom h;
+      assume
+      c in dom h;
       hence h.c = f.c / g.c by A1
         .= f.c * (g.c)" by XCMPLX_0:def 9;
     end;
+    dom h = c /\ c by FUNCT_2:def 1
+      .= c /\ dom g by FUNCT_2:def 1
+      .= dom f /\ (dom g \ g"{0}) by FUNCT_2:def 1;
     then h = f/g by A3,RFUNCT_1:def 4;
     hence thesis by A2,TOPREAL6:83;
   end;

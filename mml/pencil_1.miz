@@ -11,96 +11,104 @@ environ
       PRALG_1, PBOOLE, FUNCOP_1, WAYBEL_3, FUNCT_4, RLVECT_2, MSUALG_2,
       INTEGRA1, SUBSET_1, ARYTM_1, PENCIL_1, ARYTM;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, XCMPLX_0, SETFAM_1,
-      CARD_1, NUMBERS, NAT_1, FINSET_1, RELAT_1, REALSET1, DOMAIN_1, STRUCT_0,
-      FUNCT_1, PBOOLE, FUNCT_7,
-      WAYBEL_3, FINSEQ_1, CARD_3, PRE_TOPC, PZFMISC1,
-      FUNCOP_1, PRALG_1, POLYNOM1, XXREAL_0;
- constructors XXREAL_0, NAT_1, PZFMISC1, REALSET2, PRALG_1, WAYBEL_3,
-      POLYNOM1, PBOOLE, FUNCT_7, FUNCT_4;
+      CARD_1, NUMBERS, NAT_1, FINSET_1, RELAT_1, DOMAIN_1, STRUCT_0, FUNCT_1,
+      PBOOLE, FUNCT_7, WAYBEL_3, FINSEQ_1, CARD_3, PRE_TOPC, PZFMISC1,
+      FUNCOP_1, PRALG_1, XXREAL_0;
+ constructors XXREAL_0, NAT_1, PZFMISC1, REALSET2, PRALG_1, WAYBEL_3, POLYNOM1,
+      PBOOLE, FUNCT_7, FUNCT_4;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, FINSET_1, XREAL_0, CARD_3,
       REALSET1, PZFMISC1, STRUCT_0, YELLOW_6, ORDINAL1, CARD_1, ZFMISC_1,
-      POLYNOM1, PRE_CIRC;
+      PRE_CIRC, PRE_POLY;
  requirements REAL, BOOLE, SUBSET, NUMERALS, ARITHM;
  definitions TARSKI, WAYBEL_3, PBOOLE, XBOOLE_0, PRALG_1, STRUCT_0;
  theorems TARSKI, FUNCT_1, FUNCOP_1, PBOOLE, CARD_3, PRALG_1, STRUCT_0, CARD_1,
       YELLOW11, ENUMSET1, FINSEQ_1, CARD_2, TRIANG_1, ZFMISC_1, NAT_1, FUNCT_7,
       YELLOW_6, YELLOW_8, PZFMISC1, PUA2MSS1, FINSEQ_3, RELAT_1, XBOOLE_0,
-      XBOOLE_1, REALSET1, XREAL_1, XXREAL_0, ORDINAL1, PARTFUN1;
+      XBOOLE_1, REALSET1, XREAL_1, XXREAL_0, ORDINAL1, PARTFUN1, PRE_POLY;
  schemes FINSEQ_1, XBOOLE_0;
 
 begin
 
 theorem Th1:
-  for f,g being Function st product f = product g holds
-  f is non-empty implies g is non-empty
+  for f,g being Function st product f = product g holds f is
+  non-empty implies g is non-empty
 proof
   let f,g be Function;
   assume
 A1: product f = product g;
   now
-    assume
-A2: f is non-empty & not g is non-empty;
-    then consider n being set such that
-A3: n in dom g & g.n is empty by FUNCT_1:def 15;
-    {} in rng g by A3,FUNCT_1:def 5;
+    assume that
+A2: f is non-empty and
+A3: not g is non-empty;
+    ex n being set st n in dom g & g.n is empty by A3,FUNCT_1:def 15;
+    then {} in rng g by FUNCT_1:def 5;
     then product g = {} by CARD_3:37;
     then {} in rng f by A1,CARD_3:37;
-    then consider n being set such that
-A4: n in dom f & f.n = {} by FUNCT_1:def 5;
-    thus contradiction by A2,A4,FUNCT_1:def 15;
+    then ex n being set st n in dom f & f.n = {} by FUNCT_1:def 5;
+    hence contradiction by A2,FUNCT_1:def 15;
   end;
   hence thesis;
 end;
 
 theorem Th2:
-  for X being set holds 2 c= card X iff ex x,y being set st
-  x in X & y in X & x<>y
+  for X being set holds 2 c= card X iff ex x,y being set st x in X
+  & y in X & x<>y
 proof
   let X be set;
   thus 2 c= card X implies ex x,y being set st x in X & y in X & x<>y
   proof
-    assume 2 c= card X;
+    assume
+    2 c= card X;
     then card 2 c= card X by CARD_1:def 5;
     then consider f being Function such that
-A1: f is one-to-one & dom f = 2 & rng f c= X by CARD_1:26;
+A1: f is one-to-one and
+A2: dom f = 2 and
+A3: rng f c= X by CARD_1:26;
     take x=f.0;
     take y=f.1;
-A2: 0 in dom f & 1 in dom f by A1,CARD_1:88,TARSKI:def 2;
+A4: 0 in dom f by A2,CARD_1:88,TARSKI:def 2;
     then f.0 in rng f by FUNCT_1:def 5;
-    hence x in X by A1;
-    f.1 in rng f by A2,FUNCT_1:def 5;
-    hence y in X by A1;
-    thus thesis by A1,A2,FUNCT_1:def 8;
+    hence x in X by A3;
+A5: 1 in dom f by A2,CARD_1:88,TARSKI:def 2;
+    then f.1 in rng f by FUNCT_1:def 5;
+    hence y in X by A3;
+    thus thesis by A1,A4,A5,FUNCT_1:def 8;
   end;
   given x,y being set such that
-A3: x in X & y in X & x<>y;
+A6: x in X & y in X and
+A7: x<>y;
   {x,y} c= X
   proof
     let a be set;
-    assume a in {x,y};
-    hence thesis by A3,TARSKI:def 2;
+    assume
+    a in {x,y};
+    hence thesis by A6,TARSKI:def 2;
   end;
   then card {x,y} c= card X by CARD_1:27;
-  hence thesis by A3,CARD_2:76;
+  hence thesis by A7,CARD_2:76;
 end;
 
 theorem Th3:
-  for X being set st 2 c= card X
-  for x being set ex y being set st y in X & x<>y
+  for X being set st 2 c= card X for x being set ex y being set st
+  y in X & x<>y
 proof
   let X be set;
-  assume 2 c= card X;
+  assume
+  2 c= card X;
   then consider a,b being set such that
-A1: a in X & b in X & a <> b by Th2;
+A1: a in X and
+A2: b in X & a <> b by Th2;
   let x be set;
   per cases;
   suppose
-A2: x=a;
-    take b; thus thesis by A1,A2;
+A3: x=a;
+    take b;
+    thus thesis by A2,A3;
   end;
   suppose
-A3: x <> a;
-    take a; thus thesis by A1,A3;
+A4: x <> a;
+    take a;
+    thus thesis by A1,A4;
   end;
 end;
 
@@ -108,97 +116,117 @@ theorem Th4:
   for X being set holds 2 c= card X iff X is non trivial
 proof
   let X be set;
+  consider z being Element of X;
   thus 2 c= card X implies X is non trivial
   proof
-    assume 2 c= card X;
+    assume
+    2 c= card X;
     then consider x,y being set such that
-A1: x in X & y in X & x<>y by Th2;
+A1: x in X and
+A2: y in X and
+A3: x<>y by Th2;
     now
       given z being set such that
-A2:   X={z};
-      thus x = z by A1,A2,TARSKI:def 1
-        .= y by A1,A2,TARSKI:def 1;
+A4:   X={z};
+      thus x = z by A1,A4,TARSKI:def 1
+        .= y by A2,A4,TARSKI:def 1;
     end;
-    hence thesis by A1,REALSET1:def 4;
+    hence thesis by A1,A3,REALSET1:def 4;
   end;
   assume
-A3: X is non trivial;
-  then
-A4: X is non empty & for z being set holds X<>{z};
-  consider z being Element of X;
-  {z} c= X by A4,ZFMISC_1:37;
+A5: X is non trivial;
+  then {z} c= X by ZFMISC_1:37;
   then X c= {z} implies X={z} by XBOOLE_0:def 10;
   then consider w being set such that
-A5: w in X & not w in {z} by A3,TARSKI:def 3;
-  w in X & w <> z by A5,TARSKI:def 1;
-  hence thesis by Th2;
+A6: w in X and
+A7: not w in {z} by A5,TARSKI:def 3;
+  w <> z by A7,TARSKI:def 1;
+  hence thesis by A6,Th2;
 end;
 
 theorem Th5:
-  for X being set holds 3 c= card X iff ex x,y,z being set st
-  x in X & y in X & z in X & x<>y & x<>z & y<>z
+  for X being set holds 3 c= card X iff ex x,y,z being set st x in
+  X & y in X & z in X & x<>y & x<>z & y<>z
 proof
   let X be set;
-  thus 3 c= card X implies ex x,y,z being set st
-  x in X & y in X & z in X & x<>y & x<>z & y<>z
+  thus 3 c= card X implies ex x,y,z being set st x in X & y in X & z in X & x
+  <>y & x<>z & y<>z
   proof
-    assume 3 c= card X;
+    assume
+    3 c= card X;
     then card 3 c= card X by CARD_1:def 5;
     then consider f being Function such that
-A1: f is one-to-one & dom f = 3 & rng f c= X by CARD_1:26;
+A1: f is one-to-one and
+A2: dom f = 3 and
+A3: rng f c= X by CARD_1:26;
     take x=f.0;
     take y=f.1;
     take z=f.2;
-A2: 0 in dom f & 1 in dom f & 2 in dom f by A1,ENUMSET1:def 1,YELLOW11:1;
+A4: 0 in dom f by A2,ENUMSET1:def 1,YELLOW11:1;
     then f.0 in rng f by FUNCT_1:def 5;
-    hence x in X by A1;
-    f.1 in rng f by A2,FUNCT_1:def 5;
-    hence y in X by A1;
-    f.2 in rng f by A2,FUNCT_1:def 5;
-    hence z in X by A1;
-    thus x <> y by A1,A2,FUNCT_1:def 8;
-    thus x <> z by A1,A2,FUNCT_1:def 8;
-    thus thesis by A1,A2,FUNCT_1:def 8;
+    hence x in X by A3;
+A5: 1 in dom f by A2,ENUMSET1:def 1,YELLOW11:1;
+    then f.1 in rng f by FUNCT_1:def 5;
+    hence y in X by A3;
+A6: 2 in dom f by A2,ENUMSET1:def 1,YELLOW11:1;
+    then f.2 in rng f by FUNCT_1:def 5;
+    hence z in X by A3;
+    thus x <> y by A1,A4,A5,FUNCT_1:def 8;
+    thus x <> z by A1,A4,A6,FUNCT_1:def 8;
+    thus thesis by A1,A5,A6,FUNCT_1:def 8;
   end;
   given x,y,z being set such that
-A3: x in X & y in X & z in X & x<>y & x<>z & y<>z;
+A7: x in X & y in X & z in X and
+A8: x<>y & x<>z & y<>z;
   {x,y,z} c= X
   proof
     let a be set;
-    assume a in {x,y,z};
-    hence thesis by A3,ENUMSET1:def 1;
+    assume
+    a in {x,y,z};
+    hence thesis by A7,ENUMSET1:def 1;
   end;
   then card {x,y,z} c= card X by CARD_1:27;
-  hence thesis by A3,CARD_2:77;
+  hence thesis by A8,CARD_2:77;
 end;
 
 theorem Th6:
-  for X being set st 3 c= card X
-  for x,y being set ex z being set st z in X & x<>z & y<>z
+  for X being set st 3 c= card X for x,y being set ex z being set
+  st z in X & x<>z & y<>z
 proof
   let X be set;
-  assume 3 c= card X;
+  assume
+  3 c= card X;
   then consider a,b,c being set such that
-A1: a in X & b in X & c in X & a<>b & a<>c & b<>c by Th5;
+A1: a in X and
+A2: b in X and
+A3: c in X and
+A4: a<>b and
+A5: a<>c & b<>c by Th5;
   let x,y be set;
   per cases;
-  suppose x <> a & y <> a;
+  suppose
+    x <> a & y <> a;
     hence thesis by A1;
   end;
-  suppose x <> a & y = a & x = b;
-    hence thesis by A1;
+  suppose
+    x <> a & y = a & x = b;
+    hence thesis by A3,A5;
   end;
-  suppose x <> a & y = a & x <> b;
-    hence thesis by A1;
+  suppose
+    x <> a & y = a & x <> b;
+    hence thesis by A2,A4;
   end;
-  suppose x = a & y <> a & y=b;
-    hence thesis by A1;
+  suppose
+    x = a & y <> a & y=b;
+    hence thesis by A3,A5;
   end;
-  suppose x = a & y <> a & y<>b;
-    hence thesis by A1;
+  suppose
+    x = a & y <> a & y<>b;
+    hence thesis by A2,A4;
   end;
-  suppose x = a & y = a;
-    hence thesis by A1;
+  suppose
+    x = a & y = a;
+    hence thesis by A2,A4;
   end;
 end;
 
@@ -214,7 +242,8 @@ definition
   let x,y be Point of S;
   pred x,y are_collinear means
   :Def1:
-  x=y or ex l being Block of S st {x,y} c= l;
+  x=y or ex l being Block of S st {x,y} c=
+  l;
 end;
 
 definition
@@ -222,10 +251,12 @@ definition
   let T be Subset of S;
   attr T is closed_under_lines means
   :Def2:
-  for l being Block of S st 2 c= card (l /\ T) holds l c= T;
+  for l being Block of S st 2 c=
+  card (l /\ T) holds l c= T;
   attr T is strong means
   :Def3:
-  for x,y being Point of S st x in T & y in T holds x,y are_collinear;
+  for x,y being Point of S st x in T & y in T
+  holds x,y are_collinear;
 end;
 
 definition
@@ -238,72 +269,74 @@ definition
   the carrier of S is Block of S;
   attr S is with_non_trivial_blocks means
   :Def6:
-  for k being Block of S holds 2 c= card k;
+  for k being Block of S holds
+  2 c= card k;
   attr S is identifying_close_blocks means
   :Def7:
-  for k,l being Block of S st 2 c= card(k /\ l) holds k=l;
+  for k,l being Block of S st
+  2 c= card(k /\ l) holds k=l;
   attr S is truly-partial means
   :Def8:
-  ex x,y being Point of S st not x,y are_collinear;
+  ex x,y being Point of S st not x,y
+  are_collinear;
   attr S is without_isolated_points means
   :Def9:
-  for x being Point of S ex l being Block of S st x in l;
+  for x being Point of S ex l
+  being Block of S st x in l;
   attr S is connected means
-  for x,y being Point of S ex f being FinSequence of the carrier of S st
-  x=f.1 & y=f.(len f) & for i being Nat st 1 <= i & i < len f
+  for x,y being Point of S ex f being FinSequence of
+the carrier of S st x=f.1 & y=f.(len f) & for i being Nat st 1 <= i & i < len f
   for a,b being Point of S st a = f.i & b = f.(i+1) holds a,b are_collinear;
   attr S is strongly_connected means
   :Def11:
-  for x being Point of S
-  for X being Subset of S st X is closed_under_lines strong
-  ex f being FinSequence of bool the carrier of S st
-  X = f.1 & x in f.(len f) & (for W being Subset of S st W in rng f holds
-  W is closed_under_lines strong) &
-  for i being Nat st 1 <= i & i < len f holds 2 c= card((f.i) /\ (f.(i+1)));
+  for x being Point of S for X
+  being Subset of S st X is closed_under_lines strong ex f being FinSequence of
+bool the carrier of S st X = f.1 & x in f.(len f) & (for W being Subset of S st
+W in rng f holds W is closed_under_lines strong) & for i being Nat st 1 <= i &
+  i < len f holds 2 c= card((f.i) /\ (f.(i+1)));
 end;
 
 theorem Th7:
-  for X being non empty set st 3 c= card X
-  for S being TopStruct st the carrier of S = X &
-  the topology of S = {L where L is Subset of X : 2 = card L} holds
-  S is non empty non void
-  non degenerated non truly-partial with_non_trivial_blocks
-  identifying_close_blocks without_isolated_points
+  for X being non empty set st 3 c= card X for S being TopStruct st
+the carrier of S = X & the topology of S = {L where L is Subset of X : 2 = card
+  L} holds S is non empty non void non degenerated non truly-partial
+  with_non_trivial_blocks identifying_close_blocks without_isolated_points
 proof
   let X be non empty set;
   assume
 A1: 3 c= card X;
-B2: 2 c= 3 by NAT_1:40;
-  then
-A2: 2 c= card X by A1,XBOOLE_1:1;
-  let S be TopStruct;
-  assume that
-A3: the carrier of S = X and
-A4: the topology of S = {L where L is Subset of X : 2 = card L};
-  thus S is non empty by A3;
-  consider x,y being set such that
-A5: x in X & y in X & x <> y by A2,Th2;
+A2: 2 c= 3 by NAT_1:40;
+  then 2 c= card X by A1,XBOOLE_1:1;
+  then consider x,y being set such that
+A3: x in X & y in X and
+A4: x <> y by Th2;
   {x,y} c= X
   proof
     let a be set;
-    assume a in {x,y};
-    hence thesis by A5,TARSKI:def 2;
+    assume
+    a in {x,y};
+    hence thesis by A3,TARSKI:def 2;
   end;
   then reconsider l = {x,y} as Subset of X;
-  2 = card l by A5,CARD_2:76;
+  let S be TopStruct;
+  assume that
+A5: the carrier of S = X and
+A6: the topology of S = {L where L is Subset of X : 2 = card L};
+  thus S is non empty by A5;
+  2 = card l by A4,CARD_2:76;
   then
-A6: l in the topology of S by A4;
-  hence S is non void by Def4;
-  reconsider F={L where L is Subset of X : 2 = card L} as non empty set
-  by A4,A6;
+A7: l in the topology of S by A6;
+  then reconsider
+  F={L where L is Subset of X : 2 = card L} as non empty set by A6;
+  thus S is non void by A7,Def4;
   now
-    assume X in F;
-    then consider L being Subset of X such that
-A7: X=L & 2 = card L;
-    thus contradiction by A1,A7,NAT_1:40;
+    assume
+    X in F;
+    then ex L being Subset of X st X=L & 2 = card L;
+    hence contradiction by A1,NAT_1:40;
   end;
   then not X is Element of F;
-  hence S is non degenerated by A3,A4,Def5;
+  hence S is non degenerated by A5,A6,Def5;
   for x,y being Point of S holds x,y are_collinear
   proof
     let x,y be Point of S;
@@ -311,39 +344,43 @@ A7: X=L & 2 = card L;
     suppose
 A8:   x=y;
       consider z being set such that
-A9:   z in X & z <> x by B2,Th3,A1,XBOOLE_1:1;
-      reconsider z as Point of S by A3,A9;
-A10:  {x,y} c= {x,z}
+A9:   z in X and
+A10:  z <> x by A1,A2,Th3,XBOOLE_1:1;
+      reconsider z as Point of S by A5,A9;
+A11:  {x,y} c= {x,z}
       proof
         let a be set;
-        assume a in {x,y};
+        assume
+        a in {x,y};
         then a=x or a=y by TARSKI:def 2;
         hence thesis by A8,TARSKI:def 2;
       end;
       {x,z} c= X
       proof
         let a be set;
-        assume a in {x,z};
+        assume
+        a in {x,z};
         then a = x or a = z by TARSKI:def 2;
-        hence thesis by A3;
+        hence thesis by A5;
       end;
       then reconsider l = {x,z} as Subset of X;
-      card l = 2 by A9,CARD_2:76;
-      then l in the topology of S by A4;
-      hence thesis by A10,Def1;
+      card l = 2 by A10,CARD_2:76;
+      then l in the topology of S by A6;
+      hence thesis by A11,Def1;
     end;
-    suppose x<>y;
-      then
-A11:  card {x,y} = 2 by CARD_2:76;
+    suppose
+A12:  x<>y;
       {x,y} c= X
       proof
         let a be set;
-        assume a in {x,y};
+        assume
+        a in {x,y};
         then a=x or a=y by TARSKI:def 2;
-        hence thesis by A3;
+        hence thesis by A5;
       end;
       then reconsider l = {x,y} as Subset of X;
-      l in the topology of S by A4,A11;
+      card {x,y} = 2 by A12,CARD_2:76;
+      then l in the topology of S by A6;
       hence thesis by Def1;
     end;
   end;
@@ -351,250 +388,265 @@ A11:  card {x,y} = 2 by CARD_2:76;
   thus S is with_non_trivial_blocks
   proof
     let k be Block of S;
-    k in the topology of S by A6;
-    then consider m being Subset of X such that
-A12: m = k & card m = 2 by A4;
-    thus thesis by A12;
+    k in the topology of S by A7;
+    then ex m being Subset of X st m = k & card m = 2 by A6;
+    hence thesis;
   end;
   thus S is identifying_close_blocks
   proof
     let k,l be Block of S;
-    k in the topology of S by A6;
-    then consider m being Subset of X such that
-A13: m = k & card m = 2 by A4;
-    assume 2 c= card(k /\ l);
+    assume
+    2 c= card(k /\ l);
     then consider a,b being set such that
-A14: a in k /\ l & b in k /\ l & a <> b by Th2;
+A13: a in k /\ l & b in k /\ l and
+A14: a <> b by Th2;
 A15: {a,b} c= k /\ l
     proof
       let x be set;
-      assume x in {a,b};
-      hence thesis by A14,TARSKI:def 2;
+      assume
+      x in {a,b};
+      hence thesis by A13,TARSKI:def 2;
     end;
-A16: card {a,b} = 2 by A14,CARD_2:76;
-    card k = card 2 by A13;
-    then reconsider k1=k as finite set;
-    k /\ l c= k1 by XBOOLE_1:17;
+    l in the topology of S by A7;
     then
-A17: {a,b} = k1 by A13,A15,A16,TRIANG_1:3,XBOOLE_1:1;
-    l in the topology of S by A6;
-    then consider n being Subset of X such that
-A18: n = l & card n = 2 by A4;
-    card l = card 2 by A18;
+A16: ex n being Subset of X st n = l & card n = 2 by A6;
     then reconsider l1=l as finite set;
-    k /\ l c= l1 by XBOOLE_1:17;
-    hence thesis by A15,A16,A17,A18,TRIANG_1:3,XBOOLE_1:1;
+A17: k /\ l c= l1 by XBOOLE_1:17;
+    k in the topology of S by A7;
+    then
+A18: ex m being Subset of X st m = k & card m = 2 by A6;
+    then reconsider k1=k as finite set;
+A19: card {a,b} = 2 by A14,CARD_2:76;
+    k /\ l c= k1 by XBOOLE_1:17;
+    then {a,b} = k1 by A18,A15,A19,PRE_POLY:8,XBOOLE_1:1;
+    hence thesis by A15,A19,A16,A17,PRE_POLY:8,XBOOLE_1:1;
   end;
   thus S is without_isolated_points
   proof
     let x be Point of S;
     consider z being set such that
-A19: z in X & z <> x by B2,Th3,A1,XBOOLE_1:1;
-A20: card {x,z} = 2 by A19,CARD_2:76;
+A20: z in X and
+A21: z <> x by A1,A2,Th3,XBOOLE_1:1;
     {x,z} c= X
     proof
       let a be set;
-      assume a in {x,z};
+      assume
+      a in {x,z};
       then a=x or a=z by TARSKI:def 2;
-      hence thesis by A3,A19;
+      hence thesis by A5,A20;
     end;
     then reconsider l = {x,z} as Subset of X;
-    l in the topology of S by A4,A20;
+    card {x,z} = 2 by A21,CARD_2:76;
+    then l in the topology of S by A6;
     then reconsider l as Block of S;
     take l;
     thus thesis by TARSKI:def 2;
   end;
 end;
 
-Lm1: ex S being TopStruct st S is strict non empty non void
-non degenerated non truly-partial with_non_trivial_blocks
-identifying_close_blocks without_isolated_points
+Lm1: ex S being TopStruct st S is strict non empty non void non degenerated
+non truly-partial with_non_trivial_blocks identifying_close_blocks
+without_isolated_points
+
 proof
   {L where L is Subset of 3 : 2 = card L} c= bool 3
   proof
     let x be set;
-    assume x in {L where L is Subset of 3 : 2 = card L};
-    then consider L being Subset of 3 such that
-A1: x=L & 2 = card L;
-    thus thesis by A1;
+    assume
+    x in {L where L is Subset of 3 : 2 = card L};
+    then ex L being Subset of 3 st x=L & 2 = card L;
+    hence thesis;
   end;
-  then reconsider B = {L where L is Subset of 3 : 2 = card L}
-  as Subset-Family of 3;
+
+  then reconsider
+  B = {L where L is Subset of 3 : 2 = card L} as Subset-Family of 3;
+
   take TopStruct(# 3, B #);
   3 = card 3 by CARD_1:def 5;
   hence thesis by Th7;
 end;
 
 theorem Th8:
-  for X being non empty set st 3 c= card X
-  for K being Subset of X st card K = 2
-  for S being TopStruct st the carrier of S = X &
-  the topology of S = {L where L is Subset of X : 2 = card L} \ {K} holds
-  S is non empty non void
-
+  for X being non empty set st 3 c= card X for K being Subset of X
+st card K = 2 for S being TopStruct st the carrier of S = X & the topology of S
+  = {L where L is Subset of X : 2 = card L} \ {K} holds S is non empty non void
 non degenerated truly-partial with_non_trivial_blocks identifying_close_blocks
   without_isolated_points
 proof
   let X be non empty set;
   assume
 A1: 3 c= card X;
-B2: 2 c= 3 by NAT_1:40;
   let K be Subset of X;
   assume
-A3: card K = 2;
-  then card K = card 2;
+A2: card K = 2;
   then reconsider K'=K as finite Subset of X;
+  consider x,y being set such that
+A3: x <> y and
+A4: K' = {x,y} by A2,CARD_2:79;
   let S be TopStruct;
   assume that
-A4: the carrier of S = X and
-A5: the topology of S = {L where L is Subset of X : 2 = card L} \ {K};
-  consider x,y being set such that
-A6: x <> y & K' = {x,y} by A3,CARD_2:79;
-  reconsider x,y as Point of S by A4,A6,ZFMISC_1:38;
-  thus S is non empty by A4;
+A5: the carrier of S = X and
+A6: the topology of S = {L where L is Subset of X : 2 = card L} \ {K};
+  reconsider x,y as Point of S by A5,A4,ZFMISC_1:38;
   consider z being set such that
-A7: z in X & z <> x & z <> y by A1,Th6;
+A7: z in X and
+A8: z <> x and
+A9: z <> y by A1,Th6;
   {x,z} c= X
   proof
     let a be set;
-    assume a in {x,z};
+    assume
+    a in {x,z};
     then a=x or a=z by TARSKI:def 2;
-    hence thesis by A4,A7;
+    hence thesis by A5,A7;
   end;
   then reconsider l = {x,z} as Subset of X;
-A8: not z in K' & z in l by A6,A7,TARSKI:def 2;
-  card l = 2 by A7,CARD_2:76;
-  then l in {L where L is Subset of X : 2 = card L} & not l in
-  {K} by A8,TARSKI:def 1;
+  card l = 2 by A8,CARD_2:76;
   then
-A9: not {L where L is Subset of X : 2 = card L} c= {K};
+A10: z in l & l in {L where L is Subset of X : 2 = card L} by TARSKI:def 2;
+  thus S is non empty by A5;
+  not z in K' by A4,A8,A9,TARSKI:def 2;
   then
-A10: {L where L is Subset of X : 2 = card L} \ {K} is non empty by XBOOLE_1:37;
-  hence S is non void by A5,Def4;
+A11: not {L where L is Subset of X : 2 = card L} c= {K} by A10,TARSKI:def 1;
+  then
+A12: {L where L is Subset of X : 2 = card L} \ {K} is non empty by XBOOLE_1:37;
+  hence S is non void by A6,Def4;
   reconsider F={L where L is Subset of X : 2 = card L} \ {K} as non empty set
-  by A9,XBOOLE_1:37;
+  by A11,XBOOLE_1:37;
   now
-    assume X in F;
+    assume
+    X in F;
     then X in {L where L is Subset of X : 2 = card L};
-    then consider L being Subset of X such that
-A11: X=L & 2 = card L;
-    thus contradiction by A1,A11,NAT_1:40;
+    then ex L being Subset of X st X=L & 2 = card L;
+    hence contradiction by A1,NAT_1:40;
   end;
   then not X is Element of F;
-  hence S is non degenerated by A4,A5,Def5;
+  hence S is non degenerated by A5,A6,Def5;
   thus S is truly-partial
   proof
     take x,y;
     for l being Block of S holds not {x,y} c= l
     proof
       let l be Block of S;
-A12:  l in {L where L is Subset of X : 2 = card L} & not l in {K} by A5,A10,
-XBOOLE_0:def 5;
+      l in {L where L is Subset of X : 2 = card L} by A6,A12,XBOOLE_0:def 5;
       then consider L being Subset of X such that
-A13:  l = L & card L = 2;
-      card L = card 2 by A13;
-      then reconsider L'=L as finite Subset of X;
+A13:  l = L and
+A14:  card L = 2;
+      reconsider L'=L as finite Subset of X by A14;
       consider a,b being set such that
-A14:  a <> b & L' = {a,b} by A13,CARD_2:79;
+      a <> b and
+A15:  L' = {a,b} by A14,CARD_2:79;
+A16:  not l in {K} by A6,A12,XBOOLE_0:def 5;
       now
-        assume {x,y} c= l;
-        then x in L' & y in L' by A13,ZFMISC_1:38;
-        then (x = a or x = b) & (y = a or y = b) by A14,TARSKI:def 2;
-        hence contradiction by A6,A12,A13,A14,TARSKI:def 1;
+        assume
+A17:    {x,y} c= l;
+        then y in L' by A13,ZFMISC_1:38;
+        then
+A18:    y = a or y = b by A15,TARSKI:def 2;
+        x in L' by A13,A17,ZFMISC_1:38;
+        then x = a or x = b by A15,TARSKI:def 2;
+        hence contradiction by A3,A4,A16,A13,A15,A18,TARSKI:def 1;
       end;
       hence thesis;
     end;
-    hence thesis by A6,Def1;
+    hence thesis by A3,Def1;
   end;
   thus S is with_non_trivial_blocks
   proof
     let k be Block of S;
-    k in {L where L is Subset of X : 2 = card L} by A5,A10,XBOOLE_0:def 5;
-    then consider m being Subset of X such that
-A15: m = k & card m = 2;
-    thus thesis by A15;
+    k in {L where L is Subset of X : 2 = card L} by A6,A12,XBOOLE_0:def 5;
+    then ex m being Subset of X st m = k & card m = 2;
+    hence thesis;
   end;
   thus S is identifying_close_blocks
   proof
     let k,l be Block of S;
-    k in {L where L is Subset of X : 2 = card L} by A5,A10,XBOOLE_0:def 5;
-    then consider m being Subset of X such that
-A16: m = k & card m = 2;
-    assume 2 c= card(k /\ l);
+    assume
+    2 c= card(k /\ l);
     then consider a,b being set such that
-A17: a in k /\ l & b in k /\ l & a <> b by Th2;
-A18: {a,b} c= k /\ l
+A19: a in k /\ l & b in k /\ l and
+A20: a <> b by Th2;
+A21: {a,b} c= k /\ l
     proof
       let x be set;
-      assume x in {a,b};
-      hence thesis by A17,TARSKI:def 2;
+      assume
+      x in {a,b};
+      hence thesis by A19,TARSKI:def 2;
     end;
-A19: card {a,b} = 2 by A17,CARD_2:76;
-    card k = card 2 by A16;
-    then reconsider k1=k as finite set;
-    k /\ l c= k1 by XBOOLE_1:17;
+    l in {L where L is Subset of X : 2 = card L} by A6,A12,XBOOLE_0:def 5;
     then
-A20: {a,b} = k1 by A16,A18,A19,TRIANG_1:3,XBOOLE_1:1;
-    l in {L where L is Subset of X : 2 = card L} by A5,A10,XBOOLE_0:def 5;
-    then consider n being Subset of X such that
-A21: n = l & card n = 2;
-    card l = card 2 by A21;
+A22: ex n being Subset of X st n = l & card n = 2;
     then reconsider l1=l as finite set;
-    k /\ l c= l1 by XBOOLE_1:17;
-    hence thesis by A18,A19,A20,A21,TRIANG_1:3,XBOOLE_1:1;
+A23: k /\ l c= l1 by XBOOLE_1:17;
+    k in {L where L is Subset of X : 2 = card L} by A6,A12,XBOOLE_0:def 5;
+    then
+A24: ex m being Subset of X st m = k & card m = 2;
+    then reconsider k1=k as finite set;
+A25: card {a,b} = 2 by A20,CARD_2:76;
+    k /\ l c= k1 by XBOOLE_1:17;
+    then {a,b} = k1 by A24,A21,A25,PRE_POLY:8,XBOOLE_1:1;
+    hence thesis by A21,A25,A22,A23,PRE_POLY:8,XBOOLE_1:1;
   end;
+A26: 2 c= 3 by NAT_1:40;
   thus S is without_isolated_points
   proof
     let p be Point of S;
     per cases;
     suppose
-A22:  p <> x & p <> y;
+A27:  p <> x & p <> y;
       consider z being set such that
-A23:  z in X & z <> p by B2,Th3,A1,XBOOLE_1:1;
-A24:  card {p,z} = 2 by A23,CARD_2:76;
+A28:  z in X and
+A29:  z <> p by A1,A26,Th3,XBOOLE_1:1;
       {p,z} c= X
       proof
         let a be set;
-        assume a in {p,z};
+        assume
+        a in {p,z};
         then a=p or a=z by TARSKI:def 2;
-        hence thesis by A4,A23;
+        hence thesis by A5,A28;
       end;
       then reconsider el = {p,z} as Subset of X;
+      card {p,z} = 2 by A29,CARD_2:76;
+      then
+A30:  el in {L where L is Subset of X : 2 = card L};
       p in el by TARSKI:def 2;
-      then el <> K by A6,A22,TARSKI:def 2;
-      then el in {L where L is Subset of X : 2 = card L} & not el in {K}
-      by A24,TARSKI:def 1;
-      then reconsider el as Block of S by A5,XBOOLE_0:def 5;
+      then el <> K by A4,A27,TARSKI:def 2;
+      then not el in {K} by TARSKI:def 1;
+      then reconsider el as Block of S by A6,A30,XBOOLE_0:def 5;
       take el;
       thus thesis by TARSKI:def 2;
     end;
     suppose
-A25:  p=x or p=y;
+A31:  p=x or p=y;
       consider z being set such that
-A26:  z in X & z <> x & z <> y by A1,Th6;
-A27:  card {p,z} = 2 by A25,A26,CARD_2:76;
+A32:  z in X and
+A33:  z <> x & z <> y by A1,Th6;
       {p,z} c= X
       proof
         let a be set;
-        assume a in {p,z};
+        assume
+        a in {p,z};
         then a=p or a=z by TARSKI:def 2;
-        hence thesis by A4,A26;
+        hence thesis by A5,A32;
       end;
       then reconsider el = {p,z} as Subset of X;
+      card {p,z} = 2 by A31,A33,CARD_2:76;
+      then
+A34:  el in {L where L is Subset of X : 2 = card L};
       z in el by TARSKI:def 2;
-      then el <> K by A6,A26,TARSKI:def 2;
-      then el in {L where L is Subset of X : 2 = card L} & not el in {K}
-      by A27,TARSKI:def 1;
-      then reconsider el as Block of S by A5,XBOOLE_0:def 5;
+      then el <> K by A4,A33,TARSKI:def 2;
+      then not el in {K} by TARSKI:def 1;
+      then reconsider el as Block of S by A6,A34,XBOOLE_0:def 5;
       take el;
       thus thesis by TARSKI:def 2;
     end;
   end;
 end;
 
-Lm2: ex S being TopStruct st S is strict non empty non void
-non degenerated truly-partial with_non_trivial_blocks identifying_close_blocks
+Lm2: ex S being TopStruct st S is strict non empty non void non degenerated
+truly-partial with_non_trivial_blocks identifying_close_blocks
 without_isolated_points
+
 proof
   2 c= 3 & card 2 = 2 by CARD_1:def 5,NAT_1:40;
   then consider K being Subset of 3 such that
@@ -602,13 +654,16 @@ A1: card K = 2;
   {L where L is Subset of 3 : 2 = card L} c= bool 3
   proof
     let x be set;
-    assume x in {L where L is Subset of 3 : 2 = card L};
-    then consider L being Subset of 3 such that
-A2: x=L & 2 = card L;
-    thus thesis by A2;
+    assume
+    x in {L where L is Subset of 3 : 2 = card L};
+    then ex L being Subset of 3 st x=L & 2 = card L;
+    hence thesis;
   end;
-  then reconsider B = {L where L is Subset of 3 : 2 = card L}\{K}
-  as Subset-Family of 3 by XBOOLE_1:1;
+
+  then reconsider
+  B = {L where L is Subset of 3 : 2 = card L}\{K} as Subset-Family
+  of 3 by XBOOLE_1:1;
+
   take TopStruct(# 3, B #);
   3 c= card 3 by CARD_1:def 5;
   hence thesis by A1,Th8;
@@ -616,12 +671,12 @@ end;
 
 registration
   cluster strict non empty non void non degenerated non truly-partial
-    with_non_trivial_blocks identifying_close_blocks
-    without_isolated_points TopStruct;
+    with_non_trivial_blocks identifying_close_blocks without_isolated_points
+    TopStruct;
   existence by Lm1;
   cluster strict non empty non void non degenerated truly-partial
-    with_non_trivial_blocks identifying_close_blocks
-    without_isolated_points TopStruct;
+    with_non_trivial_blocks identifying_close_blocks without_isolated_points
+    TopStruct;
   existence by Lm2;
 end;
 
@@ -635,7 +690,6 @@ definition
   let S be without_isolated_points TopStruct;
   let x,y be Point of S;
   redefine pred x,y are_collinear means
-
   ex l being Block of S st {x,y} c= l;
   compatibility
   proof
@@ -651,7 +705,8 @@ A3:     x in l by Def9;
         take l;
         thus thesis by A2,A3,ZFMISC_1:38;
       end;
-      suppose x<>y;
+      suppose
+        x<>y;
         hence thesis by A1,Def1;
       end;
     end;
@@ -670,7 +725,8 @@ definition
   let F be Relation;
   attr F is TopStruct-yielding means
   :Def13:
-  for x being set st x in rng F holds x is TopStruct;
+  for x being set st x in rng F
+  holds x is TopStruct;
 end;
 
 registration
@@ -680,7 +736,8 @@ registration
     let F be Function such that
 A1: F is TopStruct-yielding;
     let x be set;
-    assume x in dom F;
+    assume
+    x in dom F;
     then F.x in rng F by FUNCT_1:def 5;
     hence thesis by A1,Def13;
   end;
@@ -690,11 +747,13 @@ registration
   let I be set;
   cluster TopStruct-yielding ManySortedSet of I;
   existence
-  proof consider R being TopStruct;
+  proof
+    consider R being TopStruct;
     take I --> R;
     let v be set;
-A1: rng(I-->R) c= {R} by FUNCOP_1:19;
-    assume v in rng(I-->R);
+    assume
+A1: v in rng(I-->R);
+    rng(I-->R) c= {R} by FUNCOP_1:19;
     hence thesis by A1,TARSKI:def 1;
   end;
 end;
@@ -713,20 +772,23 @@ definition
   let F be Relation;
   attr F is non-void-yielding means
   :Def14:
-  for S being TopStruct st S in rng F holds S is non void;
+  for S being TopStruct st S in rng
+  F holds S is non void;
 end;
 
 definition
   let F be TopStruct-yielding Function;
   redefine attr F is non-void-yielding means
-  for i being set st i in rng F holds i is non void TopStruct;
+  for i being set st i in rng F
+  holds i is non void TopStruct;
   compatibility
   proof
-    thus F is non-void-yielding implies for i be set
-    holds i in rng F implies i is non void TopStruct by Def13,Def14;
+    thus F is non-void-yielding implies for i be set holds i in rng F implies
+    i is non void TopStruct by Def13,Def14;
     assume
 A1: for i being set st i in rng F holds i is non void TopStruct;
-    let S be TopStruct; thus thesis by A1;
+    let S be TopStruct;
+    thus thesis by A1;
   end;
 end;
 
@@ -734,14 +796,16 @@ definition
   let F be Relation;
   attr F is trivial-yielding means
   :Def16:
-  for S being set st S in rng F holds S is trivial;
+  for S being set st S in rng F holds
+  S is trivial;
 end;
 
 definition
   let F be Relation;
   attr F is non-Trivial-yielding means
   :Def17:
-  for S being 1-sorted st S in rng F holds S is non trivial;
+  for S being 1-sorted st S in
+  rng F holds S is non trivial;
 end;
 
 registration
@@ -751,16 +815,17 @@ registration
     let F be Relation such that
 A1: F is non-Trivial-yielding;
     let i be 1-sorted;
-    assume i in rng F;
-    then i is non trivial 1-sorted by A1,Def17;
-    hence thesis;
+    assume
+    i in rng F;
+    hence thesis by A1,Def17;
   end;
 end;
 
 definition
   let F be 1-sorted-yielding Function;
   redefine attr F is non-Trivial-yielding means
-  for i being set st i in rng F holds i is non trivial 1-sorted;
+  for i being set st i in rng F
+  holds i is non trivial 1-sorted;
   compatibility
   proof
     hereby
@@ -774,7 +839,8 @@ A2:   i in rng F;
     end;
     assume
 A3: for i being set st i in rng F holds i is non trivial 1-sorted;
-    let S be 1-sorted; thus thesis by A3;
+    let S be 1-sorted;
+    thus thesis by A3;
   end;
 end;
 
@@ -784,7 +850,8 @@ definition
   let j be Element of I;
   redefine func A.j -> TopStruct;
   coherence
-  proof dom A = I by PARTFUN1:def 4;
+  proof
+    dom A = I by PARTFUN1:def 4;
     then A.j in rng A by FUNCT_1:def 5;
     hence thesis by Def13;
   end;
@@ -794,7 +861,8 @@ definition
   let F be Relation;
   attr F is PLS-yielding means
   :Def19:
-  for x being set st x in rng F holds x is PLS;
+  for x being set st x in rng F holds x
+  is PLS;
 end;
 
 registration
@@ -806,11 +874,13 @@ A1: f is PLS-yielding;
     thus f is non-Empty
     proof
       let S be 1-sorted;
-      assume S in rng f;
+      assume
+      S in rng f;
       hence thesis by A1,Def19;
     end;
     let x be set;
-    assume x in rng f;
+    assume
+    x in rng f;
     hence thesis by A1,Def19;
   end;
   cluster PLS-yielding -> non-void-yielding (TopStruct-yielding Function);
@@ -819,7 +889,8 @@ A1: f is PLS-yielding;
     let f be TopStruct-yielding Function such that
 A2: f is PLS-yielding;
     let x be set;
-    assume x in rng f;
+    assume
+    x in rng f;
     hence thesis by A2,Def19;
   end;
   cluster PLS-yielding -> non-Trivial-yielding (TopStruct-yielding Function);
@@ -828,16 +899,16 @@ A2: f is PLS-yielding;
     let f be TopStruct-yielding Function such that
 A3: f is PLS-yielding;
     let x be set;
-    assume x in rng f;
-    then reconsider S1=x as with_non_trivial_blocks non void non empty
-    TopStruct by A3,Def19;
+    assume
+    x in rng f;
+    then reconsider
+    S1=x as with_non_trivial_blocks non void non empty TopStruct by A3,Def19;
     consider s being set such that
 A4: s in the topology of S1 by XBOOLE_0:def 1;
     reconsider s as Block of S1 by A4;
     2 c= card s by Def6;
-    then consider s1,s2 being set such that
-A5: s1 in s & s2 in s & s1 <> s2 by Th2;
-    thus thesis by A4,A5,STRUCT_0:def 10;
+    then ex s1,s2 being set st s1 in s & s2 in s & s1 <> s2 by Th2;
+    hence thesis by A4,STRUCT_0:def 10;
   end;
 end;
 
@@ -845,11 +916,13 @@ registration
   let I be set;
   cluster PLS-yielding ManySortedSet of I;
   existence
-  proof consider R being PLS;
+  proof
+    consider R being PLS;
     take I --> R;
     let v be set;
-A1: rng(I-->R) c= {R} by FUNCOP_1:19;
-    assume v in rng(I-->R);
+    assume
+A1: v in rng(I-->R);
+    rng(I-->R) c= {R} by FUNCOP_1:19;
     hence thesis by A1,TARSKI:def 1;
   end;
 end;
@@ -860,7 +933,8 @@ definition
   let j be Element of I;
   redefine func A.j -> PLS;
   coherence
-  proof dom A = I by PARTFUN1:def 4;
+  proof
+    dom A = I by PARTFUN1:def 4;
     then A.j in rng A by FUNCT_1:def 5;
     hence thesis by Def19;
   end;
@@ -871,8 +945,8 @@ definition
   let A be ManySortedSet of I;
   attr A is Segre-like means
   :Def20:
-  ex i being Element of I st for j being Element of I st i<>j
-  holds A.j is non empty trivial;
+  ex i being Element of I st for j being
+  Element of I st i<>j holds A.j is non empty trivial;
 end;
 
 registration
@@ -882,7 +956,8 @@ registration
   coherence
   proof
     let a be set;
-    assume a in rng {A};
+    assume
+    a in rng {A};
     then consider i being set such that
 A1: i in dom {A} & a = {A}.i by FUNCT_1:def 5;
     dom {A} = I by PARTFUN1:def 4;
@@ -892,9 +967,8 @@ A1: i in dom {A} & a = {A}.i by FUNCT_1:def 5;
 end;
 
 theorem
-  for I being non empty set for A being ManySortedSet of I
-  for i being Element of I for S being non trivial set holds
-  A+*(i,S) is non trivial-yielding
+  for I being non empty set for A being ManySortedSet of I for i being
+Element of I for S being non trivial set holds A+*(i,S) is non trivial-yielding
 proof
   let I be non empty set;
   let A be ManySortedSet of I;
@@ -917,25 +991,28 @@ registration
   proof
     consider i being Element of I;
     take i;
-    let j be Element of I such that i<>j;
+    let j be Element of I such that
+    i<>j;
     {A}.j = {A.j} by PZFMISC1:def 1;
     hence thesis;
   end;
 end;
 
 theorem
-  for I being non empty set for A being ManySortedSet of I
-  for i,S be set holds {A}+*(i,S) is Segre-like
+  for I being non empty set for A being ManySortedSet of I for i,S be
+  set holds {A}+*(i,S) is Segre-like
 proof
   let I be non empty set;
   let A be ManySortedSet of I;
   let i,S be set;
   per cases;
-  suppose not i in I;
+  suppose
+    not i in I;
     then not i in dom {A} by PARTFUN1:def 4;
     hence thesis by FUNCT_7:def 3;
   end;
-  suppose i in I;
+  suppose
+    i in I;
     then reconsider i as Element of I;
     take i;
     let j be Element of I such that
@@ -946,9 +1023,9 @@ A1: i<>j;
 end;
 
 theorem Th11:
-  for I being non empty set
-  for A being non-Empty (1-sorted-yielding ManySortedSet of I)
-  for B being Element of Carrier A holds {B} is ManySortedSubset of Carrier A
+  for I being non empty set for A being non-Empty (
+1-sorted-yielding ManySortedSet of I) for B being Element of Carrier A holds {B
+  } is ManySortedSubset of Carrier A
 proof
   let I be non empty set;
   let A be non-Empty (1-sorted-yielding ManySortedSet of I);
@@ -961,9 +1038,8 @@ A1: i in I;
     then reconsider j=i as Element of I;
     j in dom A by A1,PARTFUN1:def 4;
     then A.j in rng A by FUNCT_1:def 5;
-    then A.j is non empty by YELLOW_6:def 4;
     then
-A2: the carrier of A.j is non empty;
+A2: A.j is non empty by YELLOW_6:def 4;
     B.j is Element of (Carrier A).j by PBOOLE:def 17;
     then B.j is Element of A.j by YELLOW_6:9;
     then {B.j} c= the carrier of A.j by A2,ZFMISC_1:37;
@@ -989,33 +1065,34 @@ end;
 registration
   let I be non empty set;
   let A be non-Trivial-yielding (1-sorted-yielding ManySortedSet of I);
-  cluster Segre-like non trivial-yielding non-empty
-    ManySortedSubset of Carrier A;
+  cluster Segre-like non trivial-yielding non-empty ManySortedSubset of
+    Carrier A;
   existence
   proof
-    consider i1 being Element of I;
     consider B being Element of Carrier A;
-    consider R being 1-sorted such that
-A1: R=A.i1 & the carrier of R = (Carrier A).i1 by PRALG_1:def 13;
-    reconsider b1=B.i1 as Element of A.i1 by A1,PBOOLE:def 17;
+    consider i1 being Element of I;
+A1: ex R being 1-sorted st R=A.i1 & the carrier of R = ( Carrier A).i1 by
+PRALG_1:def 13;
+    then reconsider b1=B.i1 as Element of A.i1 by PBOOLE:def 17;
+    reconsider B as ManySortedSet of I;
     dom A = I by PARTFUN1:def 4;
     then A.i1 in rng A by FUNCT_1:def 5;
     then A.i1 is non trivial by Def17;
     then reconsider Ai1=the carrier of A.i1 as non trivial set;
-    consider x1,x2 being Element of Ai1 such that
-A2: x1 <> x2 by YELLOW_8:def 1;
-    2 c= card the carrier of (A.i1) by A2,Th2;
+    ex x1,x2 being Element of Ai1 st x1 <> x2 by YELLOW_8:def 1;
+    then 2 c= card the carrier of (A.i1) by Th2;
     then consider b2 being set such that
-A3: b2 in the carrier of (A.i1) & b1 <> b2 by Th3;
-    reconsider b2 as Element of A.i1 by A3;
-    reconsider B as ManySortedSet of I;
+A2: b2 in the carrier of (A.i1) and
+A3: b1 <> b2 by Th3;
+    reconsider b2 as Element of A.i1 by A2;
     set B1=B+*(i1,b2);
 A4: for i being set st i in I holds B1.i is Element of (Carrier A).i
     proof
       let i be set such that
 A5:   i in I;
       per cases;
-      suppose i <> i1;
+      suppose
+        i <> i1;
         then B1.i = B.i by FUNCT_7:34;
         hence thesis by A5,PBOOLE:def 17;
       end;
@@ -1033,42 +1110,44 @@ A7:   i in I;
       then reconsider j=i as Element of I;
       j in dom A by A7,PARTFUN1:def 4;
       then A.j in rng A by FUNCT_1:def 5;
-      then A.j is non empty by YELLOW_6:def 4;
       then
-A8:   the carrier of A.j is non empty;
-      B.j is Element of (Carrier A).j &
-      B1.j is Element of (Carrier A).j by A4,PBOOLE:def 17;
-      then B.j is Element of A.j & B1.j is Element of A.j by YELLOW_6:9;
-      then {B.j,B1.j} c= the carrier of A.j by A8,ZFMISC_1:38;
+A8:   A.j is non empty by YELLOW_6:def 4;
+      B.j is Element of (Carrier A).j by PBOOLE:def 17;
+      then
+A9:   B.j is Element of A.j by YELLOW_6:9;
+      B1.j is Element of (Carrier A).j by A4;
+      then B1.j is Element of A.j by YELLOW_6:9;
+      then {B.j,B1.j} c= the carrier of A.j by A8,A9,ZFMISC_1:38;
       then {B,B1}.j c= the carrier of A.j by PZFMISC1:def 2;
       hence thesis by YELLOW_6:9;
     end;
-    then reconsider C = {B,B1} as
-    ManySortedSubset of Carrier A by PBOOLE:def 23;
+    then reconsider C = {B,B1} as ManySortedSubset of Carrier A by
+PBOOLE:def 23;
+    dom B = I by PARTFUN1:def 4;
+    then B1.i1 = b2 by FUNCT_7:33;
+    then
+A10: C.i1 = {b1,b2} by PZFMISC1:def 2;
+A11: now
+      assume
+      C.i1 is trivial;
+      then C.i1 is empty or ex x being set st C.i1 = {x} by REALSET1:def 4;
+      hence contradiction by A3,A10,ZFMISC_1:9;
+    end;
     take C;
     thus C is Segre-like
     proof
       take i1;
       let j be Element of I;
-      assume i1<>j;
+      assume
+      i1<>j;
       then B.j = B1.j by FUNCT_7:34;
       then C.j = {B.j,B.j} by PZFMISC1:def 2
         .= {B.j} by ENUMSET1:69;
       hence thesis;
     end;
     dom C = I by PARTFUN1:def 4;
-    then
-A9: C.i1 in rng C by FUNCT_1:def 5;
-    dom B = I by PARTFUN1:def 4;
-    then B1.i1 = b2 by FUNCT_7:33;
-    then
-A10: C.i1 = {b1,b2} by PZFMISC1:def 2;
-    now
-      assume C.i1 is trivial;
-      then C.i1 is empty or ex x being set st C.i1 = {x} by REALSET1:def 4;
-      hence contradiction by A3,A10,ZFMISC_1:9;
-    end;
-    hence C is non trivial-yielding by A9,Def16;
+    then C.i1 in rng C by FUNCT_1:def 5;
+    hence C is non trivial-yielding by A11,Def16;
     thus thesis;
   end;
 end;
@@ -1078,21 +1157,22 @@ registration
   cluster Segre-like non trivial-yielding ManySortedSet of I;
   existence
   proof
-    consider i being Element of I;
     consider B being ManySortedSet of I;
+    consider i being Element of I;
     take C={B}+*(i,{0,1});
     thus C is Segre-like
     proof
       take i;
       let j be Element of I;
+      assume
+      j<>i;
+      then
+A1:   C.j = {B}.j by FUNCT_7:34;
       j in I;
       then
-A1:   j in dom {B} by PARTFUN1:def 4;
-      assume j<>i;
-      then
-A2:   C.j = {B}.j by FUNCT_7:34;
+A2:   j in dom {B} by PARTFUN1:def 4;
       then C.j in rng {B} by A1,FUNCT_1:def 5;
-      hence thesis by A1,A2,Def16,FUNCT_1:def 15;
+      hence thesis by A2,A1,Def16,FUNCT_1:def 15;
     end;
     thus C is non trivial-yielding
     proof
@@ -1126,16 +1206,20 @@ A2:   B.i is trivial;
       for S being set st S in rng B holds S is trivial
       proof
         let S be set;
-        assume S in rng B;
+        assume
+        S in rng B;
         then consider j being set such that
-A3:     j in dom B & S = B.j by FUNCT_1:def 5;
+A3:     j in dom B and
+A4:     S = B.j by FUNCT_1:def 5;
         reconsider j as Element of I by A3,PARTFUN1:def 4;
         per cases;
-        suppose i=j;
-          hence thesis by A2,A3;
+        suppose
+          i=j;
+          hence thesis by A2,A4;
         end;
-        suppose i<>j;
-          hence thesis by A1,A3;
+        suppose
+          i<>j;
+          hence thesis by A1,A4;
         end;
       end;
       hence contradiction by Def16;
@@ -1145,32 +1229,35 @@ A3:     j in dom B & S = B.j by FUNCT_1:def 5;
   uniqueness
   proof
     let i1,i2 be Element of I;
-    assume
-A4: B.i1 is non trivial & B.i2 is non trivial;
+    assume that
+A5: B.i1 is non trivial and
+A6: B.i2 is non trivial;
     consider i being Element of I such that
-A5: for j being Element of I st i<>j holds B.j is non empty trivial by Def20;
-    thus i1=i by A4,A5
-      .= i2 by A4,A5;
+A7: for j being Element of I st i<>j holds B.j is non empty trivial
+    by Def20;
+    thus i1=i by A5,A7
+      .= i2 by A6,A7;
   end;
 end;
 
 theorem Th12:
-  for I being non empty set
-  for A being Segre-like non trivial-yielding ManySortedSet of I
-  for i being Element of I st i <> indx(A) holds A.i is non empty trivial
+  for I being non empty set for A being Segre-like non
+  trivial-yielding ManySortedSet of I for i being Element of I st i <> indx(A)
+  holds A.i is non empty trivial
 proof
   let I be non empty set;
   let A be Segre-like non trivial-yielding ManySortedSet of I;
   let i be Element of I;
-  assume
-A1: i <> indx(A);
   consider j being Element of I such that
-A2: for k being Element of I st k<>j holds A.k is non empty trivial by Def20;
-  now
-    assume indx(A) <> j;
-    then A.indx(A) is trivial by A2;
+A1: for k being Element of I st k<>j holds A.k is non empty trivial by Def20;
+A2: now
+    assume
+    indx(A) <> j;
+    then A.indx(A) is trivial by A1;
     hence contradiction by Def21;
   end;
+  assume
+  i <> indx(A);
   hence thesis by A1,A2;
 end;
 
@@ -1180,19 +1267,24 @@ registration
   coherence
   proof
     let f be ManySortedSet of I;
-    assume f is Segre-like non trivial-yielding;
+    assume
+    f is Segre-like non trivial-yielding;
     then reconsider g=f as Segre-like non trivial-yielding ManySortedSet of I;
     now
-      assume {} in rng g;
+      assume
+      {} in rng g;
       then consider i being set such that
-A1:   i in dom f & g.i = {} by FUNCT_1:def 5;
+A1:   i in dom f and
+A2:   g.i = {} by FUNCT_1:def 5;
       reconsider i as Element of I by A1,PARTFUN1:def 4;
       per cases;
-      suppose i=indx(g);
-        hence contradiction by A1,Def21;
+      suppose
+        i=indx(g);
+        hence contradiction by A2,Def21;
       end;
-      suppose i <> indx(g);
-        hence contradiction by A1,Th12;
+      suppose
+        i <> indx(g);
+        hence contradiction by A2,Th12;
       end;
     end;
     hence thesis by RELAT_1:def 9;
@@ -1200,82 +1292,94 @@ A1:   i in dom f & g.i = {} by FUNCT_1:def 5;
 end;
 
 theorem Th13:
-  for I being non empty set for A being ManySortedSet of I holds
-  2 c= card (product A) iff A is non-empty non trivial-yielding
+  for I being non empty set for A being ManySortedSet of I holds 2
+  c= card (product A) iff A is non-empty non trivial-yielding
 proof
   let I be non empty set;
   let A be ManySortedSet of I;
 A1: dom A = I by PARTFUN1:def 4;
   thus 2 c= card (product A) implies A is non-empty non trivial-yielding
   proof
-    assume 2 c= card product A;
+    assume
+    2 c= card product A;
     then consider a,b being set such that
-A2: a in product A & b in product A & a<>b by Th2;
+A2: a in product A and
+A3: b in product A and
+A4: a<>b by Th2;
     consider a1 being Function such that
-A3: a=a1 & dom a1 = dom A & for e being set st e in dom A holds a1.e in A.e
-    by A2,CARD_3:def 5;
-    consider b1 being Function such that
-A4: b=b1 & dom b1 = dom A & for e being set st e in dom A holds b1.e in A.e
-    by A2,CARD_3:def 5;
-    consider e being set such that
-A5: e in dom A & b1.e <> a1.e by A2,A3,A4,FUNCT_1:9;
+A5: a=a1 & dom a1 = dom A and
+A6: for e being set st e in dom A holds a1.e in A.e by A2,CARD_3:def 5;
     thus A is non-empty
     proof
       let i be set;
-      assume i in I;
-      hence thesis by A1,A3;
+      assume
+      i in I;
+      hence thesis by A1,A6;
     end;
+    consider b1 being Function such that
+A7: b=b1 & dom b1 = dom A and
+A8: for e being set st e in dom A holds b1.e in A.e by A3,CARD_3:def 5;
+    consider e being set such that
+A9: e in dom A and
+A10: b1.e <> a1.e by A4,A5,A7,FUNCT_1:9;
     thus A is non trivial-yielding
     proof
       take A.e;
-      thus A.e in rng A by A5,FUNCT_1:def 5;
-      a1.e in A.e & b1.e in A.e by A3,A4,A5;
-      then 2 c= card (A.e) by A5,Th2;
+      thus A.e in rng A by A9,FUNCT_1:def 5;
+      a1.e in A.e & b1.e in A.e by A6,A8,A9;
+      then 2 c= card (A.e) by A10,Th2;
       hence thesis by Th4;
     end;
   end;
   assume
-A6: A is non-empty non trivial-yielding;
+A11: A is non-empty non trivial-yielding;
+  then consider r being set such that
+A12: r in rng A and
+A13: r is non trivial by Def16;
   now
-    assume {} in rng A;
-    then consider o being set such that
-A7: o in dom A & A.o = {} by FUNCT_1:def 5;
-    thus contradiction by A1,A6,A7,PBOOLE:def 16;
+    assume
+    {} in rng A;
+    then ex o being set st o in dom A & A.o = {} by FUNCT_1:def 5;
+    hence contradiction by A1,A11,PBOOLE:def 16;
   end;
   then product A is non empty by CARD_3:37;
   then consider a1 being set such that
-A8: a1 in product A by XBOOLE_0:def 1;
-  consider a being Function such that
-A9: a=a1 & dom a = dom A & for o being set st o in dom A holds a.o in A.o
-  by A8,CARD_3:def 5;
-  reconsider a as ManySortedSet of I by A1,A9,PARTFUN1:def 4,RELAT_1:def 18;
-  consider r being set such that
-A10: r in rng A & r is non trivial by A6,Def16;
+A14: a1 in product A by XBOOLE_0:def 1;
   consider p being set such that
-A11: p in dom A & r = A.p by A10,FUNCT_1:def 5;
-  2 c= card r by A10,Th4;
+A15: p in dom A and
+A16: r = A.p by A12,FUNCT_1:def 5;
+  consider a being Function such that
+A17: a=a1 and
+A18: dom a = dom A and
+A19: for o being set st o in dom A holds a.o in A.o by A14,CARD_3:def 5;
+  reconsider a as ManySortedSet of I by A1,A18,PARTFUN1:def 4,RELAT_1:def 18;
+  2 c= card r by A13,Th4;
   then consider t being set such that
-A12: t in r & t <> a.p by Th3;
-  reconsider p as Element of I by A11,PARTFUN1:def 4;
+A20: t in r and
+A21: t <> a.p by Th3;
+  reconsider p as Element of I by A15,PARTFUN1:def 4;
   set b=a+*(p,t);
-A13: b.p = t by A9,A11,FUNCT_7:33;
-A14: dom b = I by PARTFUN1:def 4
-    .= dom A by PARTFUN1:def 4;
-  now
+A22: now
     let o be set;
     assume
-A15: o in dom A;
+A23: o in dom A;
     per cases;
-    suppose o<>p;
+    suppose
+      o<>p;
       then b.o = a.o by FUNCT_7:34;
-      hence b.o in A.o by A9,A15;
+      hence b.o in A.o by A19,A23;
     end;
-    suppose o=p;
-      hence b.o in A.o by A9,A11,A12,FUNCT_7:33;
+    suppose
+      o=p;
+      hence b.o in A.o by A18,A15,A16,A20,FUNCT_7:33;
     end;
   end;
-  then b in product A by A14,CARD_3:18;
-  hence thesis by A8,A9,A12,A13,Th2;
+  dom b = I by PARTFUN1:def 4
+    .= dom A by PARTFUN1:def 4;
+  then
+A24: b in product A by A22,CARD_3:18;
+  b.p = t by A18,A15,FUNCT_7:33;
+  hence thesis by A14,A17,A21,A24,Th2;
 end;
 
 registration
@@ -1286,23 +1390,18 @@ registration
   proof
     consider f being set such that
 A1: f in product B by XBOOLE_0:def 1;
-    consider g being Function such that
-A2: g=f & dom g = dom B & for x being set st x in dom B
-    holds g.x in B.x by A1,CARD_3:def 5;
+A2: ex g being Function st g=f & dom g = dom B & for x being set st x in
+    dom B holds g.x in B.x by A1,CARD_3:def 5;
     dom B = I by PARTFUN1:def 4;
-    then reconsider f as ManySortedSet of I
-     by A2,PARTFUN1:def 4,RELAT_1:def 18;
+    then reconsider f as ManySortedSet of I by A2,PARTFUN1:def 4,RELAT_1:def 18
+;
     B.indx(B) is non trivial by Def21;
     then 2 c= card (B.indx(B)) by Th4;
     then consider y being set such that
-A3: y in B.indx(B) & y <> f.indx(B) by Th3;
+A3: y in B.indx(B) and
+A4: y <> f.indx(B) by Th3;
     set l=f+*(indx(B),y);
-    dom f=I by PARTFUN1:def 4;
-    then
-A4: l.indx(B) = y by FUNCT_7:33;
-A5: dom l = I by PARTFUN1:def 4
-      .= dom B by PARTFUN1:def 4;
-    for x being set st x in dom B holds l.x in B.x
+A5: for x being set st x in dom B holds l.x in B.x
     proof
       let x be set;
       assume
@@ -1311,16 +1410,23 @@ A6:   x in dom B;
       then
 A7:   x in dom f by PARTFUN1:def 4;
       per cases;
-      suppose x=indx(B);
+      suppose
+        x=indx(B);
         hence thesis by A3,A7,FUNCT_7:33;
       end;
-      suppose x<>indx(B);
+      suppose
+        x<>indx(B);
         then l.x = f.x by FUNCT_7:34;
         hence thesis by A2,A6;
       end;
     end;
+    dom f=I by PARTFUN1:def 4;
+    then
+A8: l.indx(B) = y by FUNCT_7:33;
+    dom l = I by PARTFUN1:def 4
+      .= dom B by PARTFUN1:def 4;
     then l in product B by A5,CARD_3:def 5;
-    then 2 c= card product B by A1,A3,A4,Th2;
+    then 2 c= card product B by A1,A4,A8,Th2;
     hence thesis by Th4;
   end;
 end;
@@ -1332,21 +1438,21 @@ definition
   let A be non-Empty (TopStruct-yielding ManySortedSet of I);
   func Segre_Blocks(A) -> Subset-Family of product Carrier A means
   :Def22:
-  for x being set holds x in it iff
-  ex B being Segre-like ManySortedSubset of Carrier A st
-  x = product B & ex i being Element of I st B.i is Block of A.i;
+  for
+x being set holds x in it iff ex B being Segre-like ManySortedSubset of Carrier
+  A st x = product B & ex i being Element of I st B.i is Block of A.i;
   existence
   proof
-    defpred P[set] means
-    ex B being Segre-like ManySortedSubset of Carrier A st
-    $1 = product B & ex i being Element of I st B.i is Block of A.i;
+    defpred P[set] means ex B being Segre-like ManySortedSubset of Carrier A
+    st $1 = product B & ex i being Element of I st B.i is Block of A.i;
     consider S being set such that
-A1: for x being set holds x in S iff x in bool (product Carrier A) & P[x]
-    from XBOOLE_0:sch 1;
+A1: for x being set holds x in S iff x in bool (product Carrier A) & P
+    [x] from XBOOLE_0:sch 1;
     S c= bool (product Carrier A)
     proof
       let a be set;
-      assume a in S;
+      assume
+      a in S;
       hence thesis by A1;
     end;
     then reconsider S as Subset-Family of product Carrier A;
@@ -1355,48 +1461,52 @@ A1: for x being set holds x in S iff x in bool (product Carrier A) & P[x]
     thus x in S implies ex B being Segre-like ManySortedSubset of Carrier A st
     x = product B & ex i being Element of I st B.i is Block of A.i by A1;
     given B being Segre-like ManySortedSubset of Carrier A such that
-A2: x = product B & ex i being Element of I st B.i is Block of A.i;
+A2: x = product B and
+A3: ex i being Element of I st B.i is Block of A.i;
     x c= product Carrier A
     proof
       let a be set;
-      assume a in x;
+      assume
+      a in x;
       then consider g being Function such that
-A3:   g=a & dom g = dom B &
-      for y being set st y in dom B holds g.y in B.y by A2,CARD_3:def 5;
-A4:   dom g = I by A3,PARTFUN1:def 4
-        .= dom Carrier A by PARTFUN1:def 4;
-      for y being set st y in dom Carrier A holds g.y in (Carrier A).y
+A4:   g=a and
+A5:   dom g = dom B and
+A6:   for y being set st y in dom B holds g.y in B.y by A2,CARD_3:def 5;
+A7:   for y being set st y in dom Carrier A holds g.y in (Carrier A).y
       proof
         let y be set;
-        assume y in dom Carrier A;
+        assume
+        y in dom Carrier A;
         then
-A5:     y in I by PARTFUN1:def 4;
-        then y in dom g by A3,PARTFUN1:def 4;
+A8:     y in I by PARTFUN1:def 4;
+        then y in dom g by A5,PARTFUN1:def 4;
         then
-A6:     g.y in B.y by A3;
+A9:     g.y in B.y by A5,A6;
         B c= (Carrier A) by PBOOLE:def 23;
-        then B.y c= (Carrier A).y by A5,PBOOLE:def 5;
-        hence thesis by A6;
+        then B.y c= (Carrier A).y by A8,PBOOLE:def 5;
+        hence thesis by A9;
       end;
-      hence thesis by A3,A4,CARD_3:def 5;
+      dom g = I by A5,PARTFUN1:def 4
+        .= dom Carrier A by PARTFUN1:def 4;
+      hence thesis by A4,A7,CARD_3:def 5;
     end;
-    hence thesis by A1,A2;
+    hence thesis by A1,A2,A3;
   end;
   uniqueness
   proof
     let S1,S2 be Subset-Family of product Carrier A such that
-A7: for x being set holds x in S1 iff
-    ex B being Segre-like ManySortedSubset of Carrier A st
-    x = product B & ex i being Element of I st B.i is Block of A.i and
-A8: for x being set holds x in S2 iff
-    ex B being Segre-like ManySortedSubset of Carrier A st
-    x = product B & ex i being Element of I st B.i is Block of A.i;
+A10: for x being set holds x in S1 iff ex B being Segre-like
+ManySortedSubset of Carrier A st x = product B & ex i being Element of I st B.i
+    is Block of A.i and
+A11: for x being set holds x in S2 iff ex B being Segre-like
+ManySortedSubset of Carrier A st x = product B & ex i being Element of I st B.i
+    is Block of A.i;
     for x being set holds x in S1 iff x in S2
     proof
       let x be set;
       x in S1 iff ex B being Segre-like ManySortedSubset of Carrier A st
-      x = product B & ex i being Element of I st B.i is Block of A.i by A7;
-      hence thesis by A8;
+      x = product B & ex i being Element of I st B.i is Block of A.i by A10;
+      hence thesis by A11;
     end;
     hence thesis by TARSKI:2;
   end;
@@ -1406,76 +1516,79 @@ definition
   let I be non empty set;
   let A be non-Empty (TopStruct-yielding ManySortedSet of I);
   func Segre_Product A -> non empty TopStruct equals
-  TopStruct(#product Carrier A, Segre_Blocks A#);
+  TopStruct(#product
+    Carrier A, Segre_Blocks A#);
   correctness;
 end;
 
 theorem Th14:
-  for I being non empty set
-  for A be non-Empty (TopStruct-yielding ManySortedSet of I)
-  for x being Point of Segre_Product A holds x is ManySortedSet of I
+  for I being non empty set for A be non-Empty (TopStruct-yielding
+  ManySortedSet of I) for x being Point of Segre_Product A holds x is
+  ManySortedSet of I
 proof
   let I be non empty set;
   let A be non-Empty (TopStruct-yielding ManySortedSet of I);
   let x be Point of Segre_Product A;
   consider f being Function such that
-A1: x=f & dom f = dom Carrier A & for a being set st a in dom Carrier A holds
-  f.a in (Carrier A).a by CARD_3:def 5;
-  dom f = I by A1,PARTFUN1:def 4;
-  hence thesis by PARTFUN1:def 4,RELAT_1:def 18,A1;
+A1: x=f and
+A2: dom f = dom Carrier A and
+  for a being set st a in dom Carrier A holds f.a in (Carrier A).a by
+CARD_3:def 5;
+  dom f = I by A2,PARTFUN1:def 4;
+  hence thesis by A1,PARTFUN1:def 4,RELAT_1:def 18;
 end;
 
 theorem Th15:
-  for I being non empty set
-  for A being non-Empty (TopStruct-yielding ManySortedSet of I)
-  st ex i being Element of I st A.i is non void
-  holds Segre_Product A is non void
+  for I being non empty set for A being non-Empty (
+TopStruct-yielding ManySortedSet of I) st ex i being Element of I st A.i is non
+  void holds Segre_Product A is non void
 proof
   let I be non empty set;
   let A be non-Empty (TopStruct-yielding ManySortedSet of I);
   consider B being trivial-yielding non-empty ManySortedSubset of Carrier A;
   given i being Element of I such that
 A1: A.i is non void;
-A2: the topology of A.i is non empty by A1;
   consider l being Block of A.i;
-A3: for j being Element of I st i<>j holds B+*(i,l).j is non empty trivial
-  proof
-    let j be Element of I;
-    j in I;
-    then
-A4: j in dom B by PARTFUN1:def 4;
-    assume i<>j;
-    then
-A5: B+*(i,l).j = B.j by FUNCT_7:34;
-    then B+*(i,l).j in rng B by A4,FUNCT_1:def 5;
-    hence thesis by A4,A5,Def16,FUNCT_1:def 15;
-  end;
-  B+*(i,l) c= Carrier A
+A2: the topology of A.i is non empty by A1;
+A3: B+*(i,l) c= Carrier A
   proof
     let i1 be set;
     assume
-A6: i1 in I;
+A4: i1 in I;
     then
-A7: i1 in dom B by PARTFUN1:def 4;
+A5: i1 in dom B by PARTFUN1:def 4;
     per cases;
     suppose
-A8:   i = i1;
-      then B+*(i,l).i1 = l by A7,FUNCT_7:33;
+A6:   i = i1;
+      then B+*(i,l).i1 = l by A5,FUNCT_7:33;
       then
-A9:   B+*(i,l).i1 in the topology of (A.i) by A2;
-      consider R being 1-sorted such that
-A10:  R=A.i1 & the carrier of R = (Carrier A).i1 by A6,PRALG_1:def 13;
-      thus thesis by A8,A9,A10;
+A7:   B+*(i,l).i1 in the topology of (A.i) by A2;
+      ex R being 1-sorted st R=A.i1 & the carrier of R = ( Carrier A).i1
+      by A4,PRALG_1:def 13;
+      hence thesis by A6,A7;
     end;
-    suppose i1 <> i;
-      then
-A11:  B+*(i,l).i1 = B.i1 by FUNCT_7:34;
-      B c= Carrier A by PBOOLE:def 23;
-      hence thesis by A6,A11,PBOOLE:def 5;
+    suppose
+A8:   i1 <> i;
+A9:   B c= Carrier A by PBOOLE:def 23;
+      B+*(i,l).i1 = B.i1 by A8,FUNCT_7:34;
+      hence thesis by A4,A9,PBOOLE:def 5;
     end;
   end;
-  then reconsider C=B+*(i,l) as Segre-like ManySortedSubset of
-  Carrier A by A3,Def20,PBOOLE:def 23;
+  for j being Element of I st i<>j holds B+*(i,l).j is non empty trivial
+  proof
+    let j be Element of I;
+    assume
+    i<>j;
+    then
+A10: B+*(i,l).j = B.j by FUNCT_7:34;
+    j in I;
+    then
+A11: j in dom B by PARTFUN1:def 4;
+    then B+*(i,l).j in rng B by A10,FUNCT_1:def 5;
+    hence thesis by A11,A10,Def16,FUNCT_1:def 15;
+  end;
+  then reconsider C=B+*(i,l) as Segre-like ManySortedSubset of Carrier A by A3
+,Def20,PBOOLE:def 23;
   dom B = I by PARTFUN1:def 4;
   then C.i is Block of A.i by FUNCT_7:33;
   then product C in Segre_Blocks A by Def22;
@@ -1483,31 +1596,31 @@ A11:  B+*(i,l).i1 = B.i1 by FUNCT_7:34;
 end;
 
 theorem Th16:
-  for I being non empty set
-  for A being non-Empty (TopStruct-yielding ManySortedSet of I)
-  st for i being Element of I holds A.i is non degenerated &
-  ex i being Element of I st A.i is non void
-  holds Segre_Product A is non degenerated
+  for I being non empty set for A being non-Empty (
+TopStruct-yielding ManySortedSet of I) st for i being Element of I holds A.i is
+  non degenerated & ex i being Element of I st A.i is non void holds
+  Segre_Product A is non degenerated
 proof
   let I be non empty set;
   let A be non-Empty (TopStruct-yielding ManySortedSet of I);
   assume
-A1: for i being Element of I holds A.i is non degenerated &
-  ex i being Element of I st A.i is non void;
+A1: for i being Element of I holds A.i is non degenerated & ex i being
+  Element of I st A.i is non void;
   then Segre_Product A is non void by Th15;
   then reconsider SB=Segre_Blocks A as non empty set;
   now
-    assume product Carrier A in SB;
+    assume
+    product Carrier A in SB;
     then consider B being Segre-like ManySortedSubset of Carrier A such that
-A2: product Carrier A = product B &
-    ex i being Element of I st B.i is Block of A.i by Def22;
+A2: product Carrier A = product B and
+A3: ex i being Element of I st B.i is Block of A.i by Def22;
     consider i being Element of I such that
-A3: B.i is Block of A.i by A2;
-    consider R being 1-sorted such that
-A4: R=A.i & the carrier of R = (Carrier A).i by PRALG_1:def 13;
+A4: B.i is Block of A.i by A3;
     B is non-empty by A2,Th1;
-    then (Carrier A).i is Block of A.i by A2,A3,PUA2MSS1:2;
-    then A.i is degenerated by A4,Def5;
+    then
+    (ex R being 1-sorted st R=A.i & the carrier of R = ( Carrier A).i )& (
+    Carrier A).i is Block of A.i by A2,A4,PRALG_1:def 13,PUA2MSS1:2;
+    then A.i is degenerated by Def5;
     hence contradiction by A1;
   end;
   then not product Carrier A is Element of SB;
@@ -1515,34 +1628,33 @@ A4: R=A.i & the carrier of R = (Carrier A).i by PRALG_1:def 13;
 end;
 
 theorem Th17:
-  for I being non empty set
-  for A being non-Empty (TopStruct-yielding ManySortedSet of I)
-  st for i being Element of I holds A.i is with_non_trivial_blocks &
-  ex i being Element of I st A.i is non void
-  holds Segre_Product A is with_non_trivial_blocks
+  for I being non empty set for A being non-Empty (
+TopStruct-yielding ManySortedSet of I) st for i being Element of I holds A.i is
+  with_non_trivial_blocks & ex i being Element of I st A.i is non void holds
+  Segre_Product A is with_non_trivial_blocks
 proof
   let I be non empty set;
   let A be non-Empty (TopStruct-yielding ManySortedSet of I);
   assume
-A1: for i being Element of I holds A.i is with_non_trivial_blocks &
-  ex i being Element of I st A.i is non void;
+A1: for i being Element of I holds A.i is with_non_trivial_blocks & ex i
+  being Element of I st A.i is non void;
   for k being Block of Segre_Product A holds 2 c= card k
   proof
     let k be Block of Segre_Product A;
     Segre_Product A is non void by A1,Th15;
-    then Segre_Blocks A is non empty;
     then consider B being Segre-like ManySortedSubset of Carrier A such that
-A2: k = product B & ex i being Element of I st B.i is Block of A.i by Def22;
+A2: k = product B and
+A3: ex i being Element of I st B.i is Block of A.i by Def22;
     consider i being Element of I such that
-A3: B.i is Block of A.i by A2;
+A4: B.i is Block of A.i by A3;
     A.i is with_non_trivial_blocks by A1;
-    then 2 c= card (B.i) by A3,Def6;
+    then 2 c= card (B.i) by A4,Def6;
     then
-A4: B.i is non trivial by Th4;
+A5: B.i is non trivial by Th4;
     dom B = I by PARTFUN1:def 4;
     then B.i in rng B by FUNCT_1:def 5;
-    then reconsider BB=B as Segre-like non trivial-yielding ManySortedSet of I
-    by A4,Def16;
+    then reconsider
+    BB=B as Segre-like non trivial-yielding ManySortedSet of I by A5,Def16;
     product BB is non trivial;
     hence thesis by A2,Th4;
   end;
@@ -1550,162 +1662,163 @@ A4: B.i is non trivial by Th4;
 end;
 
 theorem Th18:
-  for I being non empty set
-  for A being non-Empty (TopStruct-yielding ManySortedSet of I)
-  st for i being Element of I holds A.i is
-  identifying_close_blocks with_non_trivial_blocks &
-  ex i being Element of I st A.i is non void
-  holds Segre_Product A is identifying_close_blocks
+  for I being non empty set for A being non-Empty (
+TopStruct-yielding ManySortedSet of I) st for i being Element of I holds A.i is
+identifying_close_blocks with_non_trivial_blocks & ex i being Element of I st A
+  .i is non void holds Segre_Product A is identifying_close_blocks
 proof
   let I be non empty set;
   let A be non-Empty (TopStruct-yielding ManySortedSet of I);
   assume
-A1: for i being Element of I holds A.i is
-  identifying_close_blocks with_non_trivial_blocks &
-  ex i being Element of I st A.i is non void;
+A1: for i being Element of I holds A.i is identifying_close_blocks
+  with_non_trivial_blocks & ex i being Element of I st A.i is non void;
   for k,l being Block of Segre_Product A st 2 c= card(k /\ l) holds k=l
   proof
     let k,l be Block of Segre_Product A;
+    assume
+    2 c= card(k /\ l);
+    then consider a,b being set such that
+A2: a in k /\ l and
+A3: b in k /\ l and
+A4: a <> b by Th2;
     Segre_Product A is non void by A1,Th15;
-    then Segre_Blocks A is non empty;
     then consider B being Segre-like ManySortedSubset of Carrier A such that
-A2: k = product B & ex i being Element of I st B.i is Block of A.i by Def22;
+A5: k = product B and
+A6: ex i being Element of I st B.i is Block of A.i by Def22;
+A7: b in product B by A5,A3,XBOOLE_0:def 4;
+    then reconsider b as Function by CARD_3:64;
+A8: dom b = dom B by A7,CARD_3:18
+      .= I by PARTFUN1:def 4;
+    then reconsider b as ManySortedSet of I by PARTFUN1:def 4,RELAT_1:def 18;
+A9: a in product B by A5,A2,XBOOLE_0:def 4;
     consider i being Element of I such that
-A3: B.i is Block of A.i by A2;
-A4: for j being Element of I st j<>i holds B.j is non empty trivial
+A10: B.i is Block of A.i by A6;
+A11: for j being Element of I st j<>i holds B.j is non empty trivial
     proof
       let j be Element of I;
       assume
-A5:   j<>i;
+A12:  j<>i;
       consider i1 being Element of I such that
-A6:   for j1 being Element of I st j1<>i1
-      holds B.j1 is non empty trivial by Def20;
+A13:  for j1 being Element of I st j1<>i1 holds B.j1 is non empty
+      trivial by Def20;
       A.i is with_non_trivial_blocks by A1;
-      then 2 c= card (B.i) by A3,Def6;
+      then 2 c= card (B.i) by A10,Def6;
       then B.i is non trivial by Th4;
-      then i1 = i by A6;
-      hence thesis by A5,A6;
+      then i1 = i by A13;
+      hence thesis by A12,A13;
     end;
     Segre_Product A is non void by A1,Th15;
-    then Segre_Blocks A is non empty;
     then consider C being Segre-like ManySortedSubset of Carrier A such that
-A7: l = product C & ex i being Element of I st C.i is Block of A.i by Def22;
+A14: l = product C and
+A15: ex i being Element of I st C.i is Block of A.i by Def22;
+A16: dom C = I by PARTFUN1:def 4;
     consider j being Element of I such that
-A8: C.j is Block of A.j by A7;
-A9: for i being Element of I st j<>i holds C.i is non empty trivial
+A17: C.j is Block of A.j by A15;
+    reconsider a as Function by A9,CARD_3:64;
+A18: dom a = dom B by A9,CARD_3:18
+      .= I by PARTFUN1:def 4;
+    then reconsider a as ManySortedSet of I by PARTFUN1:def 4,RELAT_1:def 18;
+    consider x being set such that
+A19: x in I and
+A20: a.x <> b.x by A4,A18,A8,FUNCT_1:9;
+    reconsider x as Element of I by A19;
+    dom B = I by PARTFUN1:def 4;
+    then
+A21: b.x in B.x by A7,CARD_3:18;
+    dom B = I by PARTFUN1:def 4;
+    then
+A22: a.x in B.x by A9,CARD_3:18;
+    then 2 c= card (B.x) by A20,A21,Th2;
+    then B.x is non trivial by Th4;
+    then
+A23: x=i by A11;
+    b in product C by A14,A3,XBOOLE_0:def 4;
+    then
+A24: b.x in C.x by A16,CARD_3:18;
+A25: a in product C by A14,A2,XBOOLE_0:def 4;
+A26: for i being Element of I st j<>i holds C.i is non empty trivial
     proof
       let i be Element of I;
       assume
-A10:  j<>i;
+A27:  j<>i;
       consider j1 being Element of I such that
-A11:  for i1 being Element of I st j1<>i1
-      holds C.i1 is non empty trivial by Def20;
+A28:  for i1 being Element of I st j1<>i1 holds C.i1 is non empty
+      trivial by Def20;
       A.j is with_non_trivial_blocks by A1;
-      then 2 c= card (C.j) by A8,Def6;
+      then 2 c= card (C.j) by A17,Def6;
       then C.j is non trivial by Th4;
-      then j1 = j by A11;
-      hence thesis by A10,A11;
+      then j1 = j by A28;
+      hence thesis by A27,A28;
     end;
-    assume 2 c= card(k /\ l);
-    then consider a,b being set such that
-A12: a in k /\ l & b in k /\ l & a <> b by Th2;
-A13: a in product B by A2,A12,XBOOLE_0:def 4;
-    then reconsider a as Function by CARD_3:64;
-A14: b in product B by A2,A12,XBOOLE_0:def 4;
-    then reconsider b as Function by CARD_3:64;
-A15: dom a = dom B by A13,CARD_3:18
-      .= I by PARTFUN1:def 4;
-    then reconsider a as ManySortedSet of I by PARTFUN1:def 4,RELAT_1:def 18;
-A16: dom b = dom B by A14,CARD_3:18
-      .= I by PARTFUN1:def 4;
-    then reconsider b as ManySortedSet of I by PARTFUN1:def 4,RELAT_1:def 18;
-    consider x being set such that
-A17: x in I & a.x <> b.x by A12,A15,A16,FUNCT_1:9;
-    reconsider x as Element of I by A17;
-    dom B = I by PARTFUN1:def 4;
-    then
-A18: a.x in B.x by A13,CARD_3:18;
-    dom B = I by PARTFUN1:def 4;
-    then
-A19: b.x in B.x by A14,CARD_3:18;
-    then 2 c= card (B.x) by A17,A18,Th2;
-    then B.x is non trivial by Th4;
-    then
-A20: x=i by A4;
-A21: a in product C by A7,A12,XBOOLE_0:def 4;
+A29: dom B = I by PARTFUN1:def 4
+      .= dom C by PARTFUN1:def 4;
     dom C = I by PARTFUN1:def 4;
     then
-A22: a.x in C.x by A21,CARD_3:18;
-A23: b in product C by A7,A12,XBOOLE_0:def 4;
-    dom C = I by PARTFUN1:def 4;
-    then
-A24: b.x in C.x by A23,CARD_3:18;
-    then 2 c= card (C.x) by A17,A22,Th2;
+A30: a.x in C.x by A25,CARD_3:18;
+    then 2 c= card (C.x) by A20,A24,Th2;
     then C.x is non trivial by Th4;
     then
-A25: x=j by A9;
-A26: dom B = I by PARTFUN1:def 4
-      .= dom C by PARTFUN1:def 4;
+A31: x=j by A26;
     for s being set st s in dom B holds B.s c= C.s
     proof
       let s be set;
       assume
-A27:  s in dom B;
+A32:  s in dom B;
       then reconsider t=s as Element of I by PARTFUN1:def 4;
       per cases;
       suppose
-A28:    t=x;
-        then reconsider Bt = B.t as Block of A.t by A3,A20;
-        reconsider Ct = C.t as Block of A.t by A8,A25,A28;
-A29:    a.t in (Bt /\ Ct) by A18,A22,A28,XBOOLE_0:def 4;
-        b.t in (Bt /\ Ct) by A19,A24,A28,XBOOLE_0:def 4;
+A33:    t=x;
+        then reconsider Ct = C.t as Block of A.t by A17,A31;
+        reconsider Bt = B.t as Block of A.t by A10,A23,A33;
+        a.t in (Bt /\ Ct) & b.t in (Bt /\ Ct) by A22,A21,A30,A24,A33,
+XBOOLE_0:def 4;
         then
-A30:    2 c= card (Bt /\ Ct) by A17,A28,A29,Th2;
+A34:    2 c= card (Bt /\ Ct) by A20,A33,Th2;
         A.t is identifying_close_blocks by A1;
-        hence thesis by A30,Def7;
+        hence thesis by A34,Def7;
       end;
-      suppose s<>x;
-        then B.t is non empty trivial by A4,A20;
+      suppose
+        s<>x;
+        then B.t is non empty trivial by A11,A23;
         then consider y being set such that
-A31:    B.t = {y} by REALSET1:def 4;
-        a.t in B.t by A13,A27,CARD_3:18;
-        then
-A32:    a.t = y by A31,TARSKI:def 1;
-        a.t in C.t by A21,A26,A27,CARD_3:18;
-        hence thesis by A31,A32,ZFMISC_1:37;
+A35:    B.t = {y} by REALSET1:def 4;
+A36:    a.t in C.t by A25,A29,A32,CARD_3:18;
+        a.t in B.t by A9,A32,CARD_3:18;
+        then a.t = y by A35,TARSKI:def 1;
+        hence thesis by A35,A36,ZFMISC_1:37;
       end;
     end;
-    hence k c= l by A2,A7,A26,CARD_3:38;
+    hence k c= l by A5,A14,A29,CARD_3:38;
     for s being set st s in dom C holds C.s c= B.s
     proof
       let s be set;
       assume
-A33:  s in dom C;
+A37:  s in dom C;
       then reconsider t=s as Element of I by PARTFUN1:def 4;
       per cases;
       suppose
-A34:    t=x;
-        then reconsider Bt = B.t as Block of A.t by A3,A20;
-        reconsider Ct = C.t as Block of A.t by A8,A25,A34;
-A35:    a.t in (Bt /\ Ct) by A18,A22,A34,XBOOLE_0:def 4;
-        b.t in (Bt /\ Ct) by A19,A24,A34,XBOOLE_0:def 4;
+A38:    t=x;
+        then reconsider Ct = C.t as Block of A.t by A17,A31;
+        reconsider Bt = B.t as Block of A.t by A10,A23,A38;
+        a.t in (Bt /\ Ct) & b.t in (Bt /\ Ct) by A22,A21,A30,A24,A38,
+XBOOLE_0:def 4;
         then
-A36:    2 c= card (Bt /\ Ct) by A17,A34,A35,Th2;
+A39:    2 c= card (Bt /\ Ct) by A20,A38,Th2;
         A.t is identifying_close_blocks by A1;
-        hence thesis by A36,Def7;
+        hence thesis by A39,Def7;
       end;
-      suppose s<>x;
-        then C.t is non empty trivial by A9,A25;
+      suppose
+        s<>x;
+        then C.t is non empty trivial by A26,A31;
         then consider y being set such that
-A37:    C.t = {y} by REALSET1:def 4;
-        a.t in C.t by A21,A33,CARD_3:18;
-        then
-A38:    a.t = y by A37,TARSKI:def 1;
-        a.t in B.t by A13,A26,A33,CARD_3:18;
-        hence thesis by A37,A38,ZFMISC_1:37;
+A40:    C.t = {y} by REALSET1:def 4;
+A41:    a.t in B.t by A9,A29,A37,CARD_3:18;
+        a.t in C.t by A25,A37,CARD_3:18;
+        then a.t = y by A40,TARSKI:def 1;
+        hence thesis by A40,A41,ZFMISC_1:37;
       end;
     end;
-    hence thesis by A2,A7,A26,CARD_3:38;
+    hence thesis by A5,A14,A29,CARD_3:38;
   end;
   hence thesis by Def7;
 end;
@@ -1717,17 +1830,17 @@ definition
   coherence
   proof
     consider i being Element of I;
-A1: A.i is non void;
-A2: for j being Element of I holds A.j is non degenerated;
-A3: for j being Element of I holds A.j is with_non_trivial_blocks;
-    for j being Element of I holds A.j is identifying_close_blocks;
-    hence thesis by A1,A2,A3,Th15,Th16,Th17,Th18;
+A1: ( for j being Element of I holds A.j is with_non_trivial_blocks)& for
+    j being Element of I holds A.j is identifying_close_blocks;
+    A.i is non void & for j being Element of I holds A.j is non
+    degenerated;
+    hence thesis by A1,Th15,Th16,Th17,Th18;
   end;
 end;
 
 theorem
-  for T being TopStruct for S being Subset of T holds
-  S is trivial implies S is strong closed_under_lines
+  for T being TopStruct for S being Subset of T holds S is trivial
+  implies S is strong closed_under_lines
 proof
   let T be TopStruct;
   let S be Subset of T;
@@ -1741,10 +1854,12 @@ A2: x in S & y in S;
     thus x,y are_collinear
     proof
       per cases;
-      suppose x=y;
+      suppose
+        x=y;
         hence thesis by Def1;
       end;
-      suppose x<>y;
+      suppose
+        x<>y;
         then 2 c= card S by A2,Th2;
         hence thesis by A1,Th4;
       end;
@@ -1753,17 +1868,17 @@ A2: x in S & y in S;
   thus S is closed_under_lines
   proof
     let l be Block of T;
+A3: card (l /\ S) c= card S by CARD_1:27,XBOOLE_1:17;
     assume
-A3: 2 c= card (l /\ S);
-    card (l /\ S) c= card S by CARD_1:27,XBOOLE_1:17;
+    2 c= card (l /\ S);
     then 2 c= card S by A3,XBOOLE_1:1;
     hence thesis by A1,Th4;
   end;
 end;
 
 theorem Th20:
-  for S being identifying_close_blocks TopStruct, l being Block of S
-  for L being Subset of S st L=l holds L is closed_under_lines
+  for S being identifying_close_blocks TopStruct, l being Block of
+  S for L being Subset of S st L=l holds L is closed_under_lines
 proof
   let S be identifying_close_blocks TopStruct;
   let l be Block of S;
@@ -1773,14 +1888,15 @@ A1: L=l;
   thus L is closed_under_lines
   proof
     let K be Block of S;
-    assume 2 c= card (K /\ L);
+    assume
+    2 c= card (K /\ L);
     hence thesis by A1,Def7;
   end;
 end;
 
 theorem Th21:
-  for S being TopStruct, l being Block of S
-  for L being Subset of S st L=l holds L is strong
+  for S being TopStruct, l being Block of S for L being Subset of
+  S st L=l holds L is strong
 proof
   let S be TopStruct;
   let l be Block of S;
@@ -1790,7 +1906,8 @@ A1: L=l;
   thus L is strong
   proof
     let x,y be Point of S;
-    assume x in L & y in L;
+    assume
+    x in L & y in L;
     then {x,y} c= l by A1,ZFMISC_1:38;
     hence thesis by Def1;
   end;
@@ -1803,95 +1920,101 @@ proof
   thus [#]S is closed_under_lines
   proof
     let K be Block of S;
-    assume 2 c= card (K /\ [#]S);
+    assume
+    2 c= card (K /\ [#]S);
     K in the topology of S;
-    then K c= the carrier of S;
     hence thesis;
   end;
 end;
 
 theorem Th23:
-  for I being non empty set
-  for A being Segre-like non trivial-yielding ManySortedSet of I
-  for x,y being ManySortedSet of I st x in product A & y in product A
-  for i being set st i <> indx(A) holds x.i = y.i
+  for I being non empty set for A being Segre-like non
+  trivial-yielding ManySortedSet of I for x,y being ManySortedSet of I st x in
+  product A & y in product A for i being set st i <> indx(A) holds x.i = y.i
 proof
   let I be non empty set;
   let A be Segre-like non trivial-yielding ManySortedSet of I;
   let x,y be ManySortedSet of I such that
-A1: x in product A & y in product A;
-A2: dom A = I by PARTFUN1:def 4;
+A1: x in product A and
+A2: y in product A;
   let i be set;
+A3: dom A = I by PARTFUN1:def 4;
   assume
-A3: i <> indx(A);
+A4: i <> indx(A);
   per cases;
-  suppose not i in I;
+  suppose
+A5: not i in I;
     then
-A4: not i in dom x & not i in dom y by PARTFUN1:def 4;
+A6: not i in dom y by PARTFUN1:def 4;
+    not i in dom x by A5,PARTFUN1:def 4;
     hence x.i = {} by FUNCT_1:def 4
-      .= y.i by A4,FUNCT_1:def 4;
+      .= y.i by A6,FUNCT_1:def 4;
   end;
-  suppose i in I;
+  suppose
+    i in I;
     then reconsider ii=i as Element of I;
     consider j being Element of I such that
-A5: for k being Element of I st k<>j holds A.k is non empty trivial by Def20;
+A7: for k being Element of I st k<>j holds A.k is non empty trivial by Def20;
     now
-      assume j <> indx(A);
-      then A.indx(A) is trivial by A5;
+      assume
+      j <> indx(A);
+      then A.indx(A) is trivial by A7;
       hence contradiction by Def21;
     end;
-    then A.ii is non empty trivial by A3,A5;
+    then A.ii is non empty trivial by A4,A7;
     then consider o being set such that
-A6: A.i = {o} by REALSET1:def 4;
-A7: x.ii in A.ii by A1,A2,CARD_3:18;
-    y.ii in A.ii by A1,A2,CARD_3:18;
-    hence y.i = o by A6,TARSKI:def 1
-      .= x.i by A6,A7,TARSKI:def 1;
+A8: A.i = {o} by REALSET1:def 4;
+A9: x.ii in A.ii by A1,A3,CARD_3:18;
+    y.ii in A.ii by A2,A3,CARD_3:18;
+    hence y.i = o by A8,TARSKI:def 1
+      .= x.i by A8,A9,TARSKI:def 1;
   end;
 end;
 
 theorem Th24:
-  for I being non empty set for A being PLS-yielding ManySortedSet of I
-  for x being set holds x is Block of Segre_Product A iff
-  ex L being Segre-like non trivial-yielding ManySortedSubset of Carrier A st
-  x = product L & L.indx(L) is Block of A.indx(L)
+  for I being non empty set for A being PLS-yielding ManySortedSet
+  of I for x being set holds x is Block of Segre_Product A iff ex L being
+Segre-like non trivial-yielding ManySortedSubset of Carrier A st x = product L
+  & L.indx(L) is Block of A.indx(L)
 proof
   let I be non empty set;
   let A be PLS-yielding ManySortedSet of I;
   let x be set;
-  thus x is Block of Segre_Product A implies
-  ex L being Segre-like non trivial-yielding ManySortedSubset of Carrier A st
-  x = product L & L.indx(L) is Block of A.indx(L)
+  thus x is Block of Segre_Product A implies ex L being Segre-like non
+trivial-yielding ManySortedSubset of Carrier A st x = product L & L.indx(L) is
+  Block of A.indx(L)
   proof
     assume
 A1: x is Block of Segre_Product A;
     then consider L being Segre-like ManySortedSubset of Carrier A such that
-A2: x = product L & ex i being Element of I st L.i is Block of A.i by Def22;
+A2: x = product L and
+A3: ex i being Element of I st L.i is Block of A.i by Def22;
     2 c= card (product L) by A1,A2,Def6;
-    then reconsider L as Segre-like non trivial-yielding
-    ManySortedSubset of Carrier A by Th13;
+    then reconsider L as Segre-like non trivial-yielding ManySortedSubset of
+    Carrier A by Th13;
     consider i being Element of I such that
-A3: L.i is Block of A.i by A2;
+A4: L.i is Block of A.i by A3;
     now
-      assume i <> indx(L);
+      assume
+      i <> indx(L);
       then
-A4:   L.i is non empty trivial by Th12;
-      2 c= card (L.i) by A3,Def6;
-      hence contradiction by A4,Th4;
+A5:   L.i is non empty trivial by Th12;
+      2 c= card (L.i) by A4,Def6;
+      hence contradiction by A5,Th4;
     end;
-    hence thesis by A2,A3;
+    hence thesis by A2,A4;
   end;
   given L being Segre-like non trivial-yielding ManySortedSubset of Carrier A
   such that
-A5: x = product L & L.indx(L) is Block of A.indx(L);
-  thus thesis by A5,Def22;
+A6: x = product L & L.indx(L) is Block of A.indx(L);
+  thus thesis by A6,Def22;
 end;
 
 theorem Th25:
-  for I being non empty set for A being PLS-yielding ManySortedSet of I
-  for P being ManySortedSet of I st P is Point of Segre_Product A
-  for i being Element of I for p being Point of A.i holds
-  P+*(i,p) is Point of Segre_Product A
+  for I being non empty set for A being PLS-yielding ManySortedSet
+  of I for P being ManySortedSet of I st P is Point of Segre_Product A for i
+  being Element of I for p being Point of A.i holds P+*(i,p) is Point of
+  Segre_Product A
 proof
   let I be non empty set;
   let A be PLS-yielding ManySortedSet of I;
@@ -1899,9 +2022,7 @@ proof
 A1: P is Point of Segre_Product A;
   let j be Element of I;
   let p be Point of A.j;
-A2: dom (P+*(j,p)) = I by PARTFUN1:def 4
-    .= dom Carrier A by PARTFUN1:def 4;
-  for i be set st i in dom Carrier A holds P+*(j,p).i in (Carrier A).i
+A2: for i be set st i in dom Carrier A holds P+*(j,p).i in (Carrier A).i
   proof
     let i be set;
     assume
@@ -1910,92 +2031,102 @@ A3: i in dom Carrier A;
     then
 A4: i in dom P by PARTFUN1:def 4;
     per cases;
-    suppose i <> j;
+    suppose
+      i <> j;
       then P+*(j,p).i = P.i by FUNCT_7:34;
       hence thesis by A1,A3,CARD_3:18;
     end;
     suppose
 A5:   i = j;
-      then
-A6:   P+*(j,p).i = p by A4,FUNCT_7:33;
-      p in the carrier of A.j;
+A6:   p in the carrier of A.j;
+      P+*(j,p).i = p by A4,A5,FUNCT_7:33;
       hence thesis by A5,A6,YELLOW_6:9;
     end;
   end;
+  dom (P+*(j,p)) = I by PARTFUN1:def 4
+    .= dom Carrier A by PARTFUN1:def 4;
   hence thesis by A2,CARD_3:18;
 end;
 
 theorem Th26:
-  for I being non empty set
-  for A,B being Segre-like non trivial-yielding ManySortedSet of I st
-  2 c= card ((product A) /\ (product B)) holds indx(A) = indx(B) &
-  for i being set st i <> indx(A) holds A.i = B.i
+  for I being non empty set for A,B being Segre-like non
+  trivial-yielding ManySortedSet of I st 2 c= card ((product A) /\ (product B))
+  holds indx(A) = indx(B) & for i being set st i <> indx(A) holds A.i = B.i
 proof
   let I be non empty set;
   let A,B be Segre-like non trivial-yielding ManySortedSet of I;
-  assume 2 c= card ((product A) /\ (product B));
+A1: dom B = I by PARTFUN1:def 4;
+  assume
+  2 c= card ((product A) /\ (product B));
   then consider a,b being set such that
-A1: a in (product A) /\ (product B) & b in (product A) /\ (product B)
-  & a<>b by Th2;
-  a in (product A) by A1,XBOOLE_0:def 4;
-  then consider a1 being Function such that
-A2: a1=a & dom a1=dom A & for o being set st o in dom A holds a1.o in A.o
-  by CARD_3:def 5;
-A3: a in (product B) by A1,XBOOLE_0:def 4;
-  b in (product A) by A1,XBOOLE_0:def 4;
+A2: a in (product A) /\ (product B) and
+A3: b in (product A) /\ (product B) and
+A4: a<>b by Th2;
+  b in (product A) by A3,XBOOLE_0:def 4;
   then consider b1 being Function such that
-A4: b1=b & dom b1=dom A & for o being set st o in dom A holds b1.o in A.o
-  by CARD_3:def 5;
-A5: b in (product B) by A1,XBOOLE_0:def 4;
+A5: b1=b and
+A6: dom b1=dom A and
+A7: for o being set st o in dom A holds b1.o in A.o by CARD_3:def 5;
+  a in (product A) by A2,XBOOLE_0:def 4;
+  then consider a1 being Function such that
+A8: a1=a and
+A9: dom a1=dom A and
+A10: for o being set st o in dom A holds a1.o in A.o by CARD_3:def 5;
   consider o being set such that
-A6: o in dom A & a1.o <> b1.o by A1,A2,A4,FUNCT_1:9;
-  reconsider o as Element of I by A6,PARTFUN1:def 4;
-  a1.o in A.o & b1.o in A.o by A2,A4,A6;
-  then 2 c= card (A.o) by A6,Th2;
+A11: o in dom A and
+A12: a1.o <> b1.o by A4,A8,A9,A5,A6,FUNCT_1:9;
+  reconsider o as Element of I by A11,PARTFUN1:def 4;
+  b in (product B) by A3,XBOOLE_0:def 4;
+  then
+A13: b1.o in B.o by A5,A1,CARD_3:18;
+A14: a in (product B) by A2,XBOOLE_0:def 4;
+  then a1.o in B.o by A8,A1,CARD_3:18;
+  then 2 c= card (B.o) by A12,A13,Th2;
+  then
+A15: B.o is non trivial by Th4;
+  then
+A16: o = indx(B) by Def21;
+A17: b1.o in A.o by A7,A11;
+  a1.o in A.o by A10,A11;
+  then 2 c= card (A.o) by A12,A17,Th2;
   then A.o is non trivial by Th4;
   then
-A7: o = indx(A) by Def21;
-  dom B = I by PARTFUN1:def 4;
-  then a1.o in B.o & b1.o in B.o by A2,A3,A4,A5,CARD_3:18;
-  then 2 c= card (B.o) by A6,Th2;
-  then
-A8: B.o is non trivial by Th4;
-  then
-A9: o = indx(B) by Def21;
-  thus indx(A) = indx(B) by A7,A8,Def21;
+A18: o = indx(A) by Def21;
+  hence indx(A) = indx(B) by A15,Def21;
   let i be set;
   assume
-A10: i <> indx(A);
+A19: i <> indx(A);
   per cases;
   suppose
-A11: i in I;
+A20: i in I;
+    then B.i is non empty trivial by A18,A16,A19,Th12;
     then
-A12: A.i is non empty trivial & B.i is non empty trivial by A7,A9,A10,Th12;
+A21: ex y being set st B.i = {y} by REALSET1:def 4;
+    A.i is non empty trivial by A19,A20,Th12;
     then consider x being set such that
-A13: A.i = {x} by REALSET1:def 4;
-    consider y being set such that
-A14: B.i = {y} by A12,REALSET1:def 4;
-    dom A = I by PARTFUN1:def 4;
-    then a1.i in A.i by A2,A11;
-    then
-A15: a1.i = x by A13,TARSKI:def 1;
+A22: A.i = {x} by REALSET1:def 4;
     dom B = I by PARTFUN1:def 4;
-    then a1.i in B.i by A2,A3,A11,CARD_3:18;
-    hence thesis by A13,A14,A15,TARSKI:def 1;
-  end;
-  suppose not i in I;
     then
-A16: not i in dom A & not i in dom B by PARTFUN1:def 4;
+A23: a1.i in B.i by A8,A14,A20,CARD_3:18;
+    dom A = I by PARTFUN1:def 4;
+    then a1.i in A.i by A10,A20;
+    then a1.i = x by A22,TARSKI:def 1;
+    hence thesis by A22,A21,A23,TARSKI:def 1;
+  end;
+  suppose
+A24: not i in I;
+    then
+A25: not i in dom B by PARTFUN1:def 4;
+    not i in dom A by A24,PARTFUN1:def 4;
     hence A.i = {} by FUNCT_1:def 4
-      .= B.i by A16,FUNCT_1:def 4;
+      .= B.i by A25,FUNCT_1:def 4;
   end;
 end;
 
 theorem Th27:
-  for I being non empty set
-  for A being Segre-like non trivial-yielding ManySortedSet of I
-  for N being non trivial set holds
-  A+*(indx(A),N) is Segre-like non trivial-yielding
+  for I being non empty set for A being Segre-like non
+trivial-yielding ManySortedSet of I for N being non trivial set holds A+*(indx(
+  A),N) is Segre-like non trivial-yielding
 proof
   let I be non empty set;
   let A be Segre-like non trivial-yielding ManySortedSet of I;
@@ -2021,8 +2152,8 @@ end;
 
 theorem
   for S being non empty non void identifying_close_blocks
-  without_isolated_points
-  TopStruct holds S is strongly_connected implies S is connected
+  without_isolated_points TopStruct holds S is strongly_connected implies S is
+  connected
 proof
   let S be non empty non void identifying_close_blocks without_isolated_points
   TopStruct;
@@ -2031,520 +2162,549 @@ A1: S is strongly_connected;
   thus S is connected
   proof
     let x,y be Point of S;
+A2: len <*x*> = 1 by FINSEQ_1:56;
+A3: len <*y*> = 1 by FINSEQ_1:56;
     consider K being Block of S such that
-A2: x in K by Def9;
+A4: x in K by Def9;
     K in the topology of S;
     then reconsider L=K as Subset of S;
     L is closed_under_lines strong by Th20,Th21;
     then consider f being FinSequence of bool the carrier of S such that
-A3: L = f.1 & y in f.(len f) and
-A4: for W being Subset of S st W in rng f holds
-    W is closed_under_lines strong and
-A5: for i being Nat st 1 <= i & i < len f holds
-    2 c= card((f.i) /\ (f.(i+1))) by A1,Def11;
-A6: rng f c= bool the carrier of S by FINSEQ_1:def 4;
-A7: 1 in dom f by A2,A3,FUNCT_1:def 4;
+A5: L = f.1 and
+A6: y in f.(len f) and
+A7: for W being Subset of S st W in rng f holds W is
+    closed_under_lines strong and
+A8: for i being Nat st 1 <= i & i < len f holds 2 c= card((f.i) /\ (f.
+    (i+1))) by A1,Def11;
+A9: len f in dom f by A6,FUNCT_1:def 4;
+A10: 1 in dom f by A4,A5,FUNCT_1:def 4;
     then reconsider n=(len f) - 1 as Nat by FINSEQ_3:28;
-    reconsider n as Element of NAT by ORDINAL1:def 13;
-A8: len f in dom f by A3,FUNCT_1:def 4;
     deffunc F(Nat) = (f.$1) /\ f.($1+1);
+    reconsider n as Element of NAT by ORDINAL1:def 13;
     consider h being FinSequence such that
-A9: len h = n & for k being Nat st k in dom h holds h.k=F(k)
-    from FINSEQ_1:sch 2;
-A10: dom h = Seg n by A9,FINSEQ_1:def 3;
-A11: (len h) + 1 = len f by A9;
+A11: len h = n & for k being Nat st k in dom h holds h.k=F(k) from
+    FINSEQ_1:sch 2;
+A12: dom h = Seg n by A11,FINSEQ_1:def 3;
+A13: (len h) + 1 = len f by A11;
     now
-      assume {} in rng h;
+      assume
+      {} in rng h;
       then consider i being set such that
-A12:  i in dom h & h.i = {} by FUNCT_1:def 5;
-      reconsider i as Element of NAT by A12;
-A13:  1 <= i & i <= len h by A12,FINSEQ_3:27;
-      then i in Seg n by A9,FINSEQ_1:3;
+A14:  i in dom h and
+A15:  h.i = {} by FUNCT_1:def 5;
+      reconsider i as Element of NAT by A14;
+A16:  i <= len h by A14,FINSEQ_3:27;
       then
-A14:  h.i=(f.i) /\ (f.(i+1)) by A9,A10;
-      1 <= i & i < len f by A11,A13,NAT_1:13;
-      then 2 c= card (h.i) by A5,A14;
-      hence contradiction by A12;
+A17:  i < len f by A13,NAT_1:13;
+A18:  1 <= i by A14,FINSEQ_3:27;
+      then i in Seg n by A11,A16,FINSEQ_1:3;
+      then h.i=(f.i) /\ (f.(i+1)) by A11,A12;
+      then 2 c= card (h.i) by A8,A18,A17;
+      hence contradiction by A15;
     end;
     then product h <> {} by CARD_3:37;
     then consider c being set such that
-A15: c in product h by XBOOLE_0:def 1;
-    consider ce being Function such that
-A16: ce = c & dom ce = dom h & for a being set st a in dom h holds ce.a in h.a
-    by A15,CARD_3:def 5;
-    reconsider c as Function by A16;
-A17: dom h = Seg n by A9,FINSEQ_1:def 3;
-    then reconsider c as FinSequence by A16,FINSEQ_1:def 2;
+A19: c in product h by XBOOLE_0:def 1;
+A20: ex ce being Function st ce = c & dom ce = dom h & for a being set st a
+    in dom h holds ce.a in h.a by A19,CARD_3:def 5;
+    then reconsider c as Function;
+A21: dom h = Seg n by A11,FINSEQ_1:def 3;
+    then reconsider c as FinSequence by A20,FINSEQ_1:def 2;
+A22: rng f c= bool the carrier of S by FINSEQ_1:def 4;
     rng (<*x*>^c^<*y*>) c= the carrier of S
     proof
       let r be set;
-      assume r in rng (<*x*>^c^<*y*>);
+      assume
+      r in rng (<*x*>^c^<*y*>);
       then r in rng (<*x*>^c) \/ rng <*y*> by FINSEQ_1:44;
       then r in rng (<*x*>^c) or r in rng <*y*> by XBOOLE_0:def 3;
       then
-A18:  r in (rng <*x*>) \/ (rng c) or r in rng <*y*> by FINSEQ_1:44;
-      per cases by A18,XBOOLE_0:def 3;
-      suppose r in rng <*x*>;
+A23:  r in (rng <*x*>) \/ (rng c) or r in rng <*y*> by FINSEQ_1:44;
+      per cases by A23,XBOOLE_0:def 3;
+      suppose
+        r in rng <*x*>;
         then r in {x} by FINSEQ_1:55;
         hence thesis;
       end;
-      suppose r in rng c;
+      suppose
+        r in rng c;
         then consider o being set such that
-A19:    o in dom c & r = c.o by FUNCT_1:def 5;
-        reconsider o as Element of NAT by A19;
-        h.o=(f.o) /\ f.(o+1) by A9,A16,A19;
-        then r in (f.o) /\ f.(o+1) by A16,A19;
+A24:    o in dom c and
+A25:    r = c.o by FUNCT_1:def 5;
+        reconsider o as Element of NAT by A24;
+        h.o=(f.o) /\ f.(o+1) by A11,A20,A24;
+        then r in (f.o) /\ f.(o+1) by A20,A24,A25;
         then
-A20:    r in f.o by XBOOLE_0:def 4;
-        len h <= len f by A11,NAT_1:11;
+A26:    r in f.o by XBOOLE_0:def 4;
+        len h <= len f by A13,NAT_1:11;
         then dom h c= dom f by FINSEQ_3:32;
-        then f.o in rng f by A16,A19,FUNCT_1:def 5;
-        hence thesis by A6,A20;
+        then f.o in rng f by A20,A24,FUNCT_1:def 5;
+        hence thesis by A22,A26;
       end;
-      suppose r in rng <*y*>;
+      suppose
+        r in rng <*y*>;
         then r in {y} by FINSEQ_1:55;
         hence thesis;
       end;
     end;
-    then reconsider g = <*x*>^c^<*y*> as
-    FinSequence of the carrier of S by FINSEQ_1:def 4;
+    then reconsider g = <*x*>^c^<*y*> as FinSequence of the carrier of S by
+FINSEQ_1:def 4;
+A27: len (<*x*>^c) = len <*x*> + len c by FINSEQ_1:35;
+    then
+A28: len (<*x*>^c) = len c + 1 by FINSEQ_1:56;
     take g;
-A21: g = <*x*>^(c^<*y*>) by FINSEQ_1:45;
+A29: g = <*x*>^(c^<*y*>) by FINSEQ_1:45;
     hence x=g.1 by FINSEQ_1:58;
     len g = len (<*x*>^c) + len <*y*> by FINSEQ_1:35;
     then
-A22: len (<*x*>^c) + 1 = len g by FINSEQ_1:56;
+A30: len (<*x*>^c) + 1 = len g by FINSEQ_1:56;
     hence
-A23: y=g.(len g) by FINSEQ_1:59;
-A24: len (<*x*>^c) = len <*x*> + len c by FINSEQ_1:35;
-    then
-A25: len (<*x*>^c) = len c + 1 by FINSEQ_1:56;
+A31: y=g.(len g) by FINSEQ_1:59;
     let i be Nat;
-    assume
-A26: 1 <= i & i < len g;
-    then
-A27: i <= len (<*x*>^c) by A22,NAT_1:13;
+    assume that
+A32: 1 <= i and
+A33: i < len g;
+A34: i <= len (<*x*>^c) by A30,A33,NAT_1:13;
     let a,b be Point of S;
-    assume
-A28: a = g.i & b = g.(i+1);
+    assume that
+A35: a = g.i and
+A36: b = g.(i+1);
     reconsider i as Element of NAT by ORDINAL1:def 13;
-A29: len <*x*> = 1 & len <*y*> = 1 by FINSEQ_1:56;
-    per cases by A25,A26,A27,NAT_1:8,XXREAL_0:1;
+    per cases by A28,A32,A34,NAT_1:8,XXREAL_0:1;
     suppose
-A30:  i = 1 & i <= len c;
+A37:  i = 1 & i <= len c;
+      len (c^<*y*>) = len c + 1 & len (<*x*>^(c^<*y*>)) = len <*x*> + len
+      (c^<*y*> ) by A3,FINSEQ_1:35;
       then
-A31:  1 in dom c by FINSEQ_3:27;
-A32:  len (c^<*y*>) = len c + 1 by A29,FINSEQ_1:35;
-A33:  b = (<*x*>^(c^<*y*>)).2 by A28,A30,FINSEQ_1:45;
-      len (<*x*>^(c^<*y*>)) = len <*x*> + len (c^<*y*>) by FINSEQ_1:35;
-      then len (<*x*>^(c^<*y*>)) = 1 + 1 + len c by A29,A32;
-      then b = (c^<*y*>).(2 - len <*x*>) by A29,A33,FINSEQ_1:37,NAT_1:11;
+A38:  len (<*x*>^(c^<*y*>)) = 1 + 1 + len c by A2;
+A39:  1 in dom c by A37,FINSEQ_3:27;
+      b = (<*x*>^(c^<*y*>)).2 by A36,A37,FINSEQ_1:45;
+      then b = (c^<*y*>).(2 - len <*x*>) by A2,A38,FINSEQ_1:37,NAT_1:11;
       then b = (c^<*y*>).(2-1) by FINSEQ_1:56;
       then
-A34:  b = c.1 by A31,FINSEQ_1:def 7;
-A35:  c.1 in h.1 by A16,A31;
-      h.1=(f.1) /\ f.(1+1) by A9,A16,A31;
+A40:  b = c.1 by A39,FINSEQ_1:def 7;
+      c.1 in h.1 & h.1=(f.1) /\ f.(1+1) by A11,A20,A39;
       then
-A36:  b in f.1 by A34,A35,XBOOLE_0:def 4;
-A37:  f.1 in rng f by A7,FUNCT_1:def 5;
-      then reconsider f1=f.1 as Subset of S by A6;
-A38:  f1 is closed_under_lines strong by A4,A37;
-      a = x by A21,A28,A30,FINSEQ_1:58;
-      hence thesis by A2,A3,A36,A38,Def3;
+A41:  b in f.1 by A40,XBOOLE_0:def 4;
+A42:  f.1 in rng f by A10,FUNCT_1:def 5;
+      then reconsider f1=f.1 as Subset of S by A22;
+A43:  f1 is closed_under_lines strong by A7,A42;
+      a = x by A29,A35,A37,FINSEQ_1:58;
+      hence thesis by A4,A5,A41,A43,Def3;
     end;
     suppose
-A39:  i = 1 & i = len c + 1;
-      then
-A40:  len h = 0 by A16,FINSEQ_3:31;
-A41:  f.1 in rng f by A7,FUNCT_1:def 5;
-      then reconsider f1=f.1 as Subset of S by A6;
-      f1 is closed_under_lines strong by A4,A41;
-      then
-A42:  x,y are_collinear by A2,A3,A9,A40,Def3;
+A44:  i = 1 & i = len c + 1;
+A45:  f.1 in rng f by A10,FUNCT_1:def 5;
+      then reconsider f1=f.1 as Subset of S by A22;
+A46:  f1 is closed_under_lines strong by A7,A45;
       len <*x*> = 1 by FINSEQ_1:56;
-      then len g = i+1 by A22,A39,FINSEQ_1:35;
-      hence thesis by A21,A23,A28,A39,A42,FINSEQ_1:58;
+      then
+A47:  len g = i+1 by A30,A44,FINSEQ_1:35;
+      len h = 0 by A20,A44,FINSEQ_3:31;
+      then x,y are_collinear by A4,A5,A6,A11,A46,Def3;
+      hence thesis by A29,A31,A35,A36,A44,A47,FINSEQ_1:58;
     end;
     suppose
-A43:  1 < i & i <= len c;
-A44:  len h <= len h + 1 by NAT_1:11;
-A45:  len c = len h by A16,FINSEQ_3:31;
-A46:  i <= len h by A16,A43,FINSEQ_3:31;
-      i <= len h + 1 by A43,A44,A45,XXREAL_0:2;
+A48:  1 < i & i <= len c;
+A49:  len h <= len h + 1 & len c = len h by A20,FINSEQ_3:31,NAT_1:11;
+      then i <= len h + 1 by A48,XXREAL_0:2;
       then
-A47:  i in dom f by A9,A43,FINSEQ_3:27;
+A50:  i in dom f by A11,A48,FINSEQ_3:27;
+      then reconsider j = i-1 as Nat by FINSEQ_3:28;
+      i <= len c + 1 by A48,A49,XXREAL_0:2;
+      then i in dom (<*x*>^c) by A28,A48,FINSEQ_3:27;
       then
-A48:  f.i in rng f by FUNCT_1:def 5;
-      then reconsider ff = f.i as Subset of S by A6;
-A49:  ff is closed_under_lines strong by A4,A48;
-      reconsider j = i-1 as Nat by A47,FINSEQ_3:28;
+A51:  a = (<*x*>^c).i by A35,FINSEQ_1:def 7;
+      i <= len(<*x*>^c) by A27,A2,A48,NAT_1:13;
+      then
+A52:  a = c.j by A2,A48,A51,FINSEQ_1:37;
       j + 1 = i;
       then
-A50:  1 <= j by A43,NAT_1:13;
-      j <= j + 1 by NAT_1:11;
-      then j <= n by A9,A46,XXREAL_0:2;
+A53:  1 <= j by A48,NAT_1:13;
+A54:  f.i in rng f by A50,FUNCT_1:def 5;
+      then reconsider ff = f.i as Subset of S by A22;
+A55:  j <= j + 1 by NAT_1:11;
+A56:  len <*x*> < i+1 & i+1 <= len c + 1 by A2,A48,NAT_1:13,XREAL_1:8;
+      then i+1 in dom (<*x*>^c) by A27,A2,FINSEQ_3:27;
+      then b = (<*x*>^c).(i+1) by A36,FINSEQ_1:def 7;
       then
-A51:  j in Seg n by A50,FINSEQ_1:3;
+A57:  b = c.(i + 1 - len <*x*>) by A28,A56,FINSEQ_1:37;
+      i <= len h by A20,A48,FINSEQ_3:31;
       then
-A52:  c.j in h.j by A16,A17;
-A53:  len <*x*> < i & i <= len(<*x*>^c) by A24,A29,A43,NAT_1:13;
-      i <= len c + 1 by A43,A44,A45,XXREAL_0:2;
-      then i in dom (<*x*>^c) by A25,A43,FINSEQ_3:27;
-      then a = (<*x*>^c).i by A28,FINSEQ_1:def 7;
-      then a = c.j by A29,A53,FINSEQ_1:37;
-      then a in (f.j) /\ f.(j+1) by A9,A51,A52,A10;
+A58:  i in Seg n by A11,A48,FINSEQ_1:3;
+      then c.i in h.i by A20,A21;
+      then b in (f.i) /\ f.(i+1) by A11,A12,A2,A58,A57;
       then
-A54:  a in ff by XBOOLE_0:def 4;
-      i <= len h by A16,A43,FINSEQ_3:31;
+A59:  b in ff by XBOOLE_0:def 4;
+      i <= len h by A20,A48,FINSEQ_3:31;
+      then j <= n by A11,A55,XXREAL_0:2;
       then
-A55:  i in Seg n by A9,A43,FINSEQ_1:3;
+A60:  j in Seg n by A53,FINSEQ_1:3;
+      then c.j in h.j by A20,A21;
+      then a in (f.j) /\ f.(j+1) by A11,A12,A60,A52;
       then
-A56:  c.i in h.i by A16,A17;
-A57:  len <*x*> < i+1 by A29,A43,NAT_1:13;
-A58:  i+1 <= len c + 1 by A43,XREAL_1:8;
-      then i+1 in dom (<*x*>^c) by A24,A29,A57,FINSEQ_3:27;
-      then b = (<*x*>^c).(i+1) by A28,FINSEQ_1:def 7;
-      then b = c.(i + 1 - len <*x*>) by A25,A57,A58,FINSEQ_1:37;
-      then b in (f.i) /\ f.(i+1) by A9,A29,A55,A56,A10;
-      then b in ff by XBOOLE_0:def 4;
-      hence thesis by A49,A54,Def3;
+A61:  a in ff by XBOOLE_0:def 4;
+      ff is closed_under_lines strong by A7,A54;
+      hence thesis by A61,A59,Def3;
     end;
     suppose
-A59:  1 < i & i = len c + 1;
-A60:  len (<*x*>^c) = 1 + len c by A29,FINSEQ_1:35;
+A62:  1 < i & i = len c + 1;
+      then 0 + 1 < len c + 1;
+      then ex k being Nat st len c = k + 1 by NAT_1:6;
+      then 1 <= len c by NAT_1:11;
       then
-A61:  b = y by A28,A59,FINSEQ_1:59;
-A62:  f.(len f) in rng f by A8,FUNCT_1:def 5;
-      then reconsider ff = f.(len f) as Subset of S by A6;
-A63:  ff is closed_under_lines strong by A4,A62;
-      i in dom (<*x*>^c) by A59,A60,FINSEQ_3:27;
-      then
-A64:  a = (<*x*>^c).i by A28,FINSEQ_1:def 7
-        .= c.(len c + 1 - 1) by A29,A59,A60,FINSEQ_1:37
+A63:  len c in dom h by A20,FINSEQ_3:27;
+A64:  len (<*x*>^c) = 1 + len c by A2,FINSEQ_1:35;
+      then i in dom (<*x*>^c) by A62,FINSEQ_3:27;
+      then a = (<*x*>^c).i by A35,FINSEQ_1:def 7
+        .= c.(len c + 1 - 1) by A2,A62,A64,FINSEQ_1:37
         .= c.(len c);
-      0 + 1 < len c + 1 by A59;
-      then consider k being Nat such that
-A65:  len c = k + 1 by NAT_1:6;
-      1 <= len c by A65,NAT_1:11;
+      then a in h.(len c) by A20,A63;
       then
-A66:  len c in dom h by A16,FINSEQ_3:27;
-      then a in h.(len c) by A16,A64;
+A65:  a in (f.(len c)) /\ (f.(len c + 1)) by A11,A63;
+A66:  f.(len f) in rng f by A9,FUNCT_1:def 5;
+      then reconsider ff = f.(len f) as Subset of S by A22;
+A67:  ff is closed_under_lines strong by A7,A66;
+      len c = len h by A20,FINSEQ_3:31;
       then
-A67:  a in (f.(len c)) /\ (f.(len c + 1)) by A9,A66;
-      len c = len h by A16,FINSEQ_3:31;
-      then a in ff by A9,A67,XBOOLE_0:def 4;
-      hence thesis by A3,A61,A63,Def3;
+A68:  a in ff by A11,A65,XBOOLE_0:def 4;
+      b = y by A36,A62,A64,FINSEQ_1:59;
+      hence thesis by A6,A67,A68,Def3;
     end;
   end;
 end;
 
 theorem
   for I being non empty set for A being PLS-yielding ManySortedSet of I
-  for S being Subset of Segre_Product A holds
-  S is non trivial strong closed_under_lines iff
-  ex B being Segre-like non trivial-yielding ManySortedSubset of Carrier A st
-  S = product B & for C being Subset of A.indx(B)
-  st C=B.indx(B) holds C is strong closed_under_lines
+  for S being Subset of Segre_Product A holds S is non trivial strong
+  closed_under_lines iff ex B being Segre-like non trivial-yielding
+ManySortedSubset of Carrier A st S = product B & for C being Subset of A.indx(B
+  ) st C=B.indx(B) holds C is strong closed_under_lines
 proof
   let I be non empty set;
   let A be PLS-yielding ManySortedSet of I;
   let S be Subset of Segre_Product A;
-A1: dom Carrier A = I by PARTFUN1:def 4; thus
-  S is non trivial strong closed_under_lines implies
-  ex B being Segre-like non trivial-yielding ManySortedSubset of Carrier A st
-  S = product B & for C being Subset of A.indx(B)
-  st C=B.indx(B) holds C is strong closed_under_lines
+  thus S is non trivial strong closed_under_lines implies ex B being
+Segre-like non trivial-yielding ManySortedSubset of Carrier A st S = product B
+  & for C being Subset of A.indx(B) st C=B.indx(B) holds C is strong
+  closed_under_lines
   proof
     assume
-A2: S is non trivial strong closed_under_lines;
+A1: S is non trivial strong closed_under_lines;
     then 2 c= card S by Th4;
     then consider a,b being set such that
-A3: a in S & b in S & a<>b by Th2;
-    reconsider a,b as Point of Segre_Product A by A3;
-    reconsider a1=a,b1=b as ManySortedSet of I by Th14;
-A4: dom a1 = I & dom b1 = I by PARTFUN1:def 4;
-    a,b are_collinear by A2,A3,Def3;
+A2: a in S and
+A3: b in S and
+A4: a<>b by Th2;
+    reconsider a,b as Point of Segre_Product A by A2,A3;
+    a,b are_collinear by A1,A2,A3,Def3;
     then consider C being Block of Segre_Product A such that
-A5: {a,b} c= C by A3,Def1;
+A5: {a,b} c= C by A4,Def1;
     consider CC being Segre-like ManySortedSubset of Carrier A such that
-A6: C = product CC & ex i being Element of I st CC.i is Block of A.i by Def22;
+A6: C = product CC and
+    ex i being Element of I st CC.i is Block of A.i by Def22;
     a in product CC & b in product CC by A5,A6,ZFMISC_1:38;
-    then 2 c= card (product CC) by A3,Th2;
-    then reconsider CC as Segre-like non trivial-yielding
-    ManySortedSubset of Carrier A by Th13;
-A7: a1.indx(CC) in pi(S,indx(CC)) & b1.indx(CC) in
-    pi(S,indx(CC)) by A3,CARD_3:def 6;
-A8: now
+    then 2 c= card (product CC) by A4,Th2;
+    then reconsider CC as Segre-like non trivial-yielding ManySortedSubset of
+    Carrier A by Th13;
+A7: dom CC = I by PARTFUN1:def 4;
+    reconsider a1=a,b1=b as ManySortedSet of I by Th14;
+A8: dom a1 = I by PARTFUN1:def 4;
+A9: dom b1 = I by PARTFUN1:def 4;
+A10: now
       assume
-A9:   a1.indx(CC) = b1.indx(CC);
+A11:  a1.indx(CC) = b1.indx(CC);
       for i being set st i in I holds a1.i = b1.i
       proof
         let i be set;
-        assume i in I;
+        assume
+        i in I;
         per cases;
-        suppose i = indx(CC);
-          hence thesis by A9;
+        suppose
+          i = indx(CC);
+          hence thesis by A11;
         end;
         suppose
-A10:      i <> indx(CC);
+A12:      i <> indx(CC);
           a1 in product CC & b1 in product CC by A5,A6,ZFMISC_1:38;
-          hence thesis by A10,Th23;
+          hence thesis by A12,Th23;
         end;
       end;
-      hence contradiction by A3,A4,FUNCT_1:9;
+      hence contradiction by A4,A8,A9,FUNCT_1:9;
     end;
-    then 2 c= card pi(S,indx(CC)) by A7,Th2;
+A13: for f being ManySortedSet of I st f in S for i being Element of I st
+    i <> indx(CC) holds f.i in CC.i
+    proof
+      let f be ManySortedSet of I;
+      assume
+A14:  f in S;
+      then reconsider f1=f as Point of Segre_Product A;
+      let i be Element of I;
+      assume
+A15:  i <> indx(CC);
+      now
+        b1 in product CC by A5,A6,ZFMISC_1:38;
+        then
+A16:    b1.i in CC.i by A7,CARD_3:18;
+        assume
+A17:    not f.i in CC.i;
+        f1,b are_collinear by A1,A3,A14,Def3;
+        then consider lb being Block of Segre_Product A such that
+A18:    {f1,b} c= lb by A17,A16,Def1;
+        consider Lb being Segre-like non trivial-yielding ManySortedSubset of
+        Carrier A such that
+A19:    lb = product Lb and
+        Lb.indx(Lb) is Block of A.indx(Lb) by Th24;
+A20:    b1 in product Lb by A18,A19,ZFMISC_1:38;
+A21:    f in product Lb by A18,A19,ZFMISC_1:38;
+        then indx(Lb) = i by A17,A16,A20,Th23;
+        then Lb.indx(CC) is non empty trivial by A15,Th12;
+        then consider cb being set such that
+A22:    Lb.indx(CC) = {cb} by REALSET1:def 4;
+A23:    dom Lb = I by PARTFUN1:def 4;
+        then b1.indx(CC) in {cb} by A20,A22,CARD_3:18;
+        then
+A24:    b1.indx(CC) = cb by TARSKI:def 1;
+        a1 in product CC by A5,A6,ZFMISC_1:38;
+        then
+A25:    a1.i in CC.i by A7,CARD_3:18;
+        f1,a are_collinear by A1,A2,A14,Def3;
+        then consider la being Block of Segre_Product A such that
+A26:    {f1,a} c= la by A17,A25,Def1;
+        consider La being Segre-like non trivial-yielding ManySortedSubset of
+        Carrier A such that
+A27:    la = product La and
+        La.indx(La) is Block of A.indx(La) by Th24;
+A28:    a1 in product La by A26,A27,ZFMISC_1:38;
+A29:    f in product La by A26,A27,ZFMISC_1:38;
+        then indx(La) = i by A17,A25,A28,Th23;
+        then La.indx(CC) is non empty trivial by A15,Th12;
+        then consider ca being set such that
+A30:    La.indx(CC) = {ca} by REALSET1:def 4;
+A31:    dom La = I by PARTFUN1:def 4;
+        then a1.indx(CC) in {ca} by A28,A30,CARD_3:18;
+        then
+A32:    ca <> cb by A10,A24,TARSKI:def 1;
+        f.indx(CC) in {ca} by A29,A30,A31,CARD_3:18;
+        then
+A33:    f.indx(CC) <> cb by A32,TARSKI:def 1;
+        f.indx(CC) in {cb} by A21,A22,A23,CARD_3:18;
+        hence contradiction by A33,TARSKI:def 1;
+      end;
+      hence thesis;
+    end;
+    a1.indx(CC) in pi(S,indx(CC)) & b1.indx(CC) in pi(S,indx(CC)) by A2,A3,
+CARD_3:def 6;
+    then 2 c= card pi(S,indx(CC)) by A10,Th2;
     then reconsider p=pi(S,indx(CC)) as non trivial set by Th4;
     CC+*(indx(CC),p) c= Carrier A
     proof
       let i be set;
       assume
-A11:  i in I;
+A34:  i in I;
       per cases;
-      suppose i <> indx(CC);
-        then
-A12:    CC+*(indx(CC),p).i = CC.i by FUNCT_7:34;
-        CC c= Carrier A by PBOOLE:def 23;
-        hence thesis by A11,A12,PBOOLE:def 5;
+      suppose
+A35:    i <> indx(CC);
+A36:    CC c= Carrier A by PBOOLE:def 23;
+        CC+*(indx(CC),p).i = CC.i by A35,FUNCT_7:34;
+        hence thesis by A34,A36,PBOOLE:def 5;
       end;
       suppose
-A13:    i=indx(CC);
-A14:    dom CC = I by PARTFUN1:def 4;
-        p c= (Carrier A).i
+A37:    i=indx(CC);
+A38:    p c= (Carrier A).i
         proof
           let y be set;
-          assume y in p;
-          then consider f being Function such that
-A15:      f in S & y = f.i by A13,CARD_3:def 6;
-          i in dom (Carrier A) by A11,PARTFUN1:def 4;
-          hence thesis by A15,CARD_3:18;
+          assume
+          y in p;
+          then
+A39:      ex f being Function st f in S & y = f.i by A37,CARD_3:def 6;
+          i in dom (Carrier A) by A34,PARTFUN1:def 4;
+          hence thesis by A39,CARD_3:18;
         end;
-        hence thesis by A13,A14,FUNCT_7:33;
+        dom CC = I by PARTFUN1:def 4;
+        hence thesis by A37,A38,FUNCT_7:33;
       end;
     end;
     then reconsider B=CC+*(indx(CC),p) as Segre-like non trivial-yielding
     ManySortedSubset of Carrier A by Th27,PBOOLE:def 23;
-A16: dom CC = I by PARTFUN1:def 4;
-    then
-A17: B.indx(CC) = p by FUNCT_7:33;
-A18: dom B = I by PARTFUN1:def 4;
     take B;
-A19: for f being ManySortedSet of I st f in S
-    for i being Element of I st i <> indx(CC) holds f.i in CC.i
-    proof
-      let f be ManySortedSet of I;
-      assume
-A20:  f in S;
-      then reconsider f1=f as Point of Segre_Product A;
-      let i be Element of I;
-      assume
-A21:  i <> indx(CC);
-      now
-        assume
-A22:    not f.i in CC.i;
-        a1 in product CC by A5,A6,ZFMISC_1:38;
-        then
-A23:    a1.i in CC.i by A16,CARD_3:18;
-        b1 in product CC by A5,A6,ZFMISC_1:38;
-        then
-A24:    b1.i in CC.i by A16,CARD_3:18;
-        f1,a are_collinear by A2,A3,A20,Def3;
-        then consider la being Block of Segre_Product A such that
-A25:    {f1,a} c= la by A22,A23,Def1;
-        consider La being Segre-like non trivial-yielding
-        ManySortedSubset of Carrier A such that
-A26:    la = product La & La.indx(La) is Block of A.indx(La) by Th24;
-A27:    f in product La & a1 in product La by A25,A26,ZFMISC_1:38;
-        then indx(La) = i by A22,A23,Th23;
-        then La.indx(CC) is non empty trivial by A21,Th12;
-        then consider ca being set such that
-A28:    La.indx(CC) = {ca} by REALSET1:def 4;
-        dom La = I by PARTFUN1:def 4;
-        then
-A29:    a1.indx(CC) in {ca} & f.indx(CC) in {ca} by A27,A28,CARD_3:18;
-        f1,b are_collinear by A2,A3,A20,Def3;
-        then consider lb being Block of Segre_Product A such that
-A30:    {f1,b} c= lb by A22,A24,Def1;
-        consider Lb being Segre-like non trivial-yielding
-        ManySortedSubset of Carrier A such that
-A31:    lb = product Lb & Lb.indx(Lb) is Block of A.indx(Lb) by Th24;
-A32:    f in product Lb & b1 in product Lb by A30,A31,ZFMISC_1:38;
-        then indx(Lb) = i by A22,A24,Th23;
-        then Lb.indx(CC) is non empty trivial by A21,Th12;
-        then consider cb being set such that
-A33:    Lb.indx(CC) = {cb} by REALSET1:def 4;
-        dom Lb = I by PARTFUN1:def 4;
-        then
-A34:    b1.indx(CC) in {cb} & f.indx(CC) in {cb} by A32,A33,CARD_3:18;
-        then b1.indx(CC) = cb by TARSKI:def 1;
-        then ca <> cb by A8,A29,TARSKI:def 1;
-        then f.indx(CC) <> cb by A29,TARSKI:def 1;
-        hence contradiction by A34,TARSKI:def 1;
-      end;
-      hence thesis;
-    end; thus
-A35: S = product B
+A40: dom B = I by PARTFUN1:def 4;
+A41: B.indx(CC) = p by A7,FUNCT_7:33;
+    thus
+A42: S = product B
     proof
       thus S c= product B
       proof
         let e be set;
         assume
-A36:    e in S;
+A43:    e in S;
         then reconsider f=e as ManySortedSet of I by Th14;
-A37:    dom f = I by PARTFUN1:def 4;
-        now
+A44:    now
           let i be set;
-          assume i in I;
+          assume
+          i in I;
           then reconsider j=i as Element of I;
           per cases;
-          suppose j = indx(CC);
-            hence f.i in B.i by A17,A36,CARD_3:def 6;
+          suppose
+            j = indx(CC);
+            hence f.i in B.i by A41,A43,CARD_3:def 6;
           end;
           suppose
-A38:        j <> indx(CC);
-            then f.j in CC.j by A19,A36;
-            hence f.i in B.i by A38,FUNCT_7:34;
+A45:        j <> indx(CC);
+            then f.j in CC.j by A13,A43;
+            hence f.i in B.i by A45,FUNCT_7:34;
           end;
         end;
-        hence thesis by A18,A37,CARD_3:18;
+        dom f = I by PARTFUN1:def 4;
+        hence thesis by A40,A44,CARD_3:18;
       end;
       let e be set;
-      assume e in product B;
+      assume
+      e in product B;
       then consider f being Function such that
-A39:  e = f & dom f = I & for i being set st i in I holds f.i in B.i
-      by A18,CARD_3:def 5;
-      f.indx(CC) in p by A17,A39;
+A46:  e = f & dom f = I and
+A47:  for i being set st i in I holds f.i in B.i by A40,CARD_3:def 5;
+      f.indx(CC) in p by A41,A47;
       then consider g being Function such that
-A40:  g in S & f.indx(CC) = g.indx(CC) by CARD_3:def 6;
-      reconsider g as ManySortedSet of I by A40,Th14;
-A41:  dom g = I by PARTFUN1:def 4;
-      now
+A48:  g in S and
+A49:  f.indx(CC) = g.indx(CC) by CARD_3:def 6;
+      reconsider g as ManySortedSet of I by A48,Th14;
+A50:  now
         let i be set;
-        assume i in I;
+        assume
+        i in I;
         then reconsider j=i as Element of I;
         per cases;
-        suppose i = indx(CC);
-          hence f.i = g.i by A40;
+        suppose
+          i = indx(CC);
+          hence f.i = g.i by A49;
         end;
         suppose
-A42:      i <> indx(CC);
+A51:      i <> indx(CC);
           then CC.j is non empty trivial by Th12;
           then consider c being set such that
-A43:      CC.i = {c} by REALSET1:def 4;
-A44:      g.j in CC.j by A19,A40,A42;
-          f.j in B.j by A39;
-          then f.j in {c} by A42,A43,FUNCT_7:34;
+A52:      CC.i = {c} by REALSET1:def 4;
+A53:      g.j in CC.j by A13,A48,A51;
+          f.j in B.j by A47;
+          then f.j in {c} by A51,A52,FUNCT_7:34;
           hence f.i = c by TARSKI:def 1
-            .= g.i by A43,A44,TARSKI:def 1;
+            .= g.i by A52,A53,TARSKI:def 1;
         end;
       end;
-      hence thesis by A39,A40,A41,FUNCT_1:9;
+      dom g = I by PARTFUN1:def 4;
+      hence thesis by A46,A48,A50,FUNCT_1:9;
     end;
     let SS be Subset of A.indx(B);
     assume
-A45: SS=B.indx(B);
+A54: SS=B.indx(B);
     thus SS is strong
     proof
       let q,r be Point of A.indx(B);
-      assume
-A46:  q in SS & r in SS;
+      assume that
+A55:  q in SS and
+A56:  r in SS;
       thus q,r are_collinear
       proof
         per cases;
-        suppose q=r;
+        suppose
+          q=r;
           hence thesis by Def1;
         end;
         suppose
-A47:      q <> r;
-          reconsider Q=a1+*(indx(B),q) as Point of Segre_Product A by Th25;
+A57:      q <> r;
           reconsider R=a1+*(indx(B),r) as Point of Segre_Product A by Th25;
+          reconsider Q=a1+*(indx(B),q) as Point of Segre_Product A by Th25;
           reconsider Q1=Q,R1=R as ManySortedSet of I;
-A48:      dom Q1 = I by PARTFUN1:def 4
-            .= dom B by PARTFUN1:def 4;
-          for i being set st i in dom B holds Q1.i in B.i
+A58:      now
+            dom a1 = I by PARTFUN1:def 4;
+            then
+A59:        Q1.indx(B) = q by FUNCT_7:33;
+A60:        dom a1 = I by PARTFUN1:def 4;
+            assume
+            Q = R;
+            hence contradiction by A57,A59,A60,FUNCT_7:33;
+          end;
+A61:      for i being set st i in dom B holds Q1.i in B.i
           proof
             let i be set;
             assume
-A49:        i in dom B;
+A62:        i in dom B;
             then i in I by PARTFUN1:def 4;
             then
-A50:        i in dom a1 by PARTFUN1:def 4;
+A63:        i in dom a1 by PARTFUN1:def 4;
             per cases;
-            suppose i <> indx(B);
+            suppose
+              i <> indx(B);
               then Q1.i = a1.i by FUNCT_7:34;
-              hence thesis by A3,A35,A49,CARD_3:18;
+              hence thesis by A2,A42,A62,CARD_3:18;
             end;
-            suppose i = indx(B);
-              hence thesis by A45,A46,A50,FUNCT_7:33;
+            suppose
+              i = indx(B);
+              hence thesis by A54,A55,A63,FUNCT_7:33;
             end;
           end;
-          then
-A51:      Q in product B by A48,CARD_3:18;
-A52:      dom R1 = I by PARTFUN1:def 4
-            .= dom B by PARTFUN1:def 4;
-          for i being set st i in dom B holds R1.i in B.i
+A64:      for i being set st i in dom B holds R1.i in B.i
           proof
             let i be set;
             assume
-A53:        i in dom B;
+A65:        i in dom B;
             then i in I by PARTFUN1:def 4;
             then
-A54:        i in dom a1 by PARTFUN1:def 4;
+A66:        i in dom a1 by PARTFUN1:def 4;
             per cases;
-            suppose i <> indx(B);
+            suppose
+              i <> indx(B);
               then R1.i = a1.i by FUNCT_7:34;
-              hence thesis by A3,A35,A53,CARD_3:18;
+              hence thesis by A2,A42,A65,CARD_3:18;
             end;
-            suppose i = indx(B);
-              hence thesis by A45,A46,A54,FUNCT_7:33;
+            suppose
+              i = indx(B);
+              hence thesis by A54,A56,A66,FUNCT_7:33;
             end;
           end;
-          then R in product B by A52,CARD_3:18;
+          dom R1 = I by PARTFUN1:def 4
+            .= dom B by PARTFUN1:def 4;
           then
-A55:      Q,R are_collinear by A2,A35,A51,Def3;
-          now
-            assume
-A56:        Q = R;
-            dom a1 = I by PARTFUN1:def 4;
-            then
-A57:        Q1.indx(B) = q by FUNCT_7:33;
-            dom a1 = I by PARTFUN1:def 4;
-            hence contradiction by A47,A56,A57,FUNCT_7:33;
-          end;
+A67:      R in product B by A64,CARD_3:18;
+          dom Q1 = I by PARTFUN1:def 4
+            .= dom B by PARTFUN1:def 4;
+          then Q in product B by A61,CARD_3:18;
+          then Q,R are_collinear by A1,A42,A67,Def3;
           then consider L being Block of Segre_Product A such that
-A58:      {Q,R} c= L by A55,Def1;
-          consider L1 being Segre-like non trivial-yielding
-          ManySortedSubset of Carrier A such that
-A59:      L = product L1 & L1.indx(L1) is Block of A.indx(L1) by Th24;
-A60:      Q1 in product L1 by A58,A59,ZFMISC_1:38;
-          dom L1 = I by PARTFUN1:def 4;
+A68:      {Q,R} c= L by A58,Def1;
+          dom a1 = I by PARTFUN1:def 4;
           then
-A61:      Q1.indx(B) in L1.indx(B) by A60,CARD_3:18;
-A62:      R1 in product L1 by A58,A59,ZFMISC_1:38;
-          dom L1 = I by PARTFUN1:def 4;
+A69:      R1.indx(B) = r by FUNCT_7:33;
+          consider L1 being Segre-like non trivial-yielding ManySortedSubset
+          of Carrier A such that
+A70:      L = product L1 and
+A71:      L1.indx(L1) is Block of A.indx(L1) by Th24;
+A72:      dom L1 = I by PARTFUN1:def 4;
+          Q1 in product L1 by A68,A70,ZFMISC_1:38;
           then
-A63:      R1.indx(B) in L1.indx(B) by A62,CARD_3:18;
+A73:      Q1.indx(B) in L1.indx(B) by A72,CARD_3:18;
+A74:      dom L1 = I by PARTFUN1:def 4;
+          R1 in product L1 by A68,A70,ZFMISC_1:38;
+          then
+A75:      R1.indx(B) in L1.indx(B) by A74,CARD_3:18;
           now
-            assume
-A64:        Q1.indx(B) = R1.indx(B);
             dom a1 = I by PARTFUN1:def 4;
             then
-A65:        Q1.indx(B) = q by FUNCT_7:33;
-            dom a1 = I by PARTFUN1:def 4;
-            hence contradiction by A47,A64,A65,FUNCT_7:33;
+A76:        Q1.indx(B) = q by FUNCT_7:33;
+A77:        dom a1 = I by PARTFUN1:def 4;
+            assume
+            Q1.indx(B) = R1.indx(B);
+            hence contradiction by A57,A76,A77,FUNCT_7:33;
           end;
-          then 2 c= card(L1.indx(B)) by A61,A63,Th2;
+          then 2 c= card(L1.indx(B)) by A73,A75,Th2;
           then
-A66:      L1.indx(B) is non trivial by Th4;
-          then
-A67:      indx(B) = indx(L1) by Def21;
-          reconsider LI=L1.indx(L1) as Block of A.indx(B) by A59,A66,Def21;
+A78:      L1.indx(B) is non trivial by Th4;
+          then reconsider LI=L1.indx(L1) as Block of A.indx(B) by A71,Def21;
           dom a1 = I by PARTFUN1:def 4;
           then
-A68:      Q1.indx(B) = q by FUNCT_7:33;
-          dom a1 = I by PARTFUN1:def 4;
-          then R1.indx(B) = r by FUNCT_7:33;
-          then {q,r} c= LI by A61,A63,A67,A68,ZFMISC_1:38;
+A79:      Q1.indx(B) = q by FUNCT_7:33;
+          indx(B) = indx(L1) by A78,Def21;
+          then {q,r} c= LI by A73,A75,A79,A69,ZFMISC_1:38;
           hence thesis by Def1;
         end;
       end;
@@ -2552,387 +2712,416 @@ A68:      Q1.indx(B) = q by FUNCT_7:33;
     thus SS is closed_under_lines
     proof
       let L be Block of A.indx(B);
-      L in the topology of A.indx(B);
-      then
-A69:  L c= the carrier of A.indx(B);
-      assume 2 c= card (L /\ SS);
-      then consider x,y being set such that
-A70:  x in L /\ SS & y in L /\ SS & x <> y by Th2;
+A80:  dom B = I by PARTFUN1:def 4;
       2 c= card L by Def6;
       then reconsider L1=L as non trivial set by Th4;
-      set x1=a1+*(indx(B),x);
-      set y1=a1+*(indx(B),y);
-A71:  x1.indx(B) = x & y1.indx(B) = y by A4,FUNCT_7:33;
+      L in the topology of A.indx(B);
+      then
+A81:  L c= the carrier of A.indx(B);
       B+*(indx(B),L1) c= Carrier A
       proof
         let o be set;
         assume
-A72:    o in I;
+A82:    o in I;
         thus B+*(indx(B),L1).o c= (Carrier A).o
         proof
           per cases;
-          suppose o <> indx(B);
-            then
-A73:        B+*(indx(B),L1).o = B.o by FUNCT_7:34;
-            B c= Carrier A by PBOOLE:def 23;
-            hence thesis by A72,A73,PBOOLE:def 5;
+          suppose
+A83:        o <> indx(B);
+A84:        B c= Carrier A by PBOOLE:def 23;
+            B+*(indx(B),L1).o = B.o by A83,FUNCT_7:34;
+            hence thesis by A82,A84,PBOOLE:def 5;
           end;
           suppose
-A74:        o = indx(B);
-            then B+*(indx(B),L1).o = L by A18,FUNCT_7:33;
-            hence thesis by A69,A74,YELLOW_6:9;
+A85:        o = indx(B);
+            then B+*(indx(B),L1).o = L by A40,FUNCT_7:33;
+            hence thesis by A81,A85,YELLOW_6:9;
           end;
         end;
       end;
       then reconsider L2 = B+*(indx(B),L1) as Segre-like non trivial-yielding
       ManySortedSubset of Carrier A by Th27,PBOOLE:def 23;
-A75:  dom L2 = I by PARTFUN1:def 4;
-A76:  L2.indx(B) = L1 by A18,FUNCT_7:33;
-      then
-A77:  indx(B) = indx(L2) by Def21;
-      dom B = I by PARTFUN1:def 4;
-      then L2.indx(L2) is Block of A.indx(L2) by A77,FUNCT_7:33;
+A86:  L2.indx(B) = L1 by A40,FUNCT_7:33;
+      then indx(B) = indx(L2) by Def21;
+      then L2.indx(L2) is Block of A.indx(L2) by A80,FUNCT_7:33;
       then reconsider L3=product L2 as Block of Segre_Product A by Th24;
-A78:  dom x1 = I by PARTFUN1:def 4;
+      assume
+      2 c= card (L /\ SS);
+      then consider x,y being set such that
+A87:  x in L /\ SS and
+A88:  y in L /\ SS and
+A89:  x <> y by Th2;
+      set y1=a1+*(indx(B),y);
+A90:  dom y1 = I by PARTFUN1:def 4;
       now
         let o be set;
         assume
-A79:    o in dom L2;
+A91:    o in I;
         per cases;
         suppose
-A80:      o <> indx(B);
-          then
-A81:      x1.o = a1.o by FUNCT_7:34;
-          a1.o in B.o by A3,A18,A35,A75,A79,CARD_3:18;
-          hence x1.o in L2.o by A80,A81,FUNCT_7:34;
-        end;
-        suppose
-A82:      o = indx(B);
-          then x1.o = x by A4,FUNCT_7:33;
-          hence x1.o in L2.o by A70,A76,A82,XBOOLE_0:def 4;
-        end;
-      end;
-      then
-A83:  x1 in L3 by A75,A78,CARD_3:18;
-      now
-        let o be set;
-        assume
-A84:    o in I;
-        per cases;
-        suppose o <> indx(B);
-          then x1.o = a1.o by FUNCT_7:34;
-          hence x1.o in B.o by A3,A18,A35,A84,CARD_3:18;
-        end;
-        suppose
-A85:      o = indx(B);
-          then x1.o = x by A4,FUNCT_7:33;
-          hence x1.o in B.o by A45,A70,A85,XBOOLE_0:def 4;
-        end;
-      end;
-      then x1 in S by A18,A35,A78,CARD_3:18;
-      then
-A86:  x1 in L3 /\ S by A83,XBOOLE_0:def 4;
-A87:  dom y1 = I by PARTFUN1:def 4;
-      now
-        let o be set;
-        assume
-A88:    o in dom L2;
-        per cases;
-        suppose
-A89:      o <> indx(B);
-          then
-A90:      y1.o = a1.o by FUNCT_7:34;
-          a1.o in B.o by A3,A18,A35,A75,A88,CARD_3:18;
-          hence y1.o in L2.o by A89,A90,FUNCT_7:34;
-        end;
-        suppose
-A91:      o = indx(B);
-          then y1.o = y by A4,FUNCT_7:33;
-          hence y1.o in L2.o by A70,A76,A91,XBOOLE_0:def 4;
-        end;
-      end;
-      then
-A92:  y1 in L3 by A75,A87,CARD_3:18;
-      now
-        let o be set;
-        assume
-A93:    o in I;
-        per cases;
-        suppose o <> indx(B);
+          o <> indx(B);
           then y1.o = a1.o by FUNCT_7:34;
-          hence y1.o in B.o by A3,A18,A35,A93,CARD_3:18;
+          hence y1.o in B.o by A2,A40,A42,A91,CARD_3:18;
         end;
         suppose
-A94:      o = indx(B);
-          then y1.o = y by A4,FUNCT_7:33;
-          hence y1.o in B.o by A45,A70,A94,XBOOLE_0:def 4;
+A92:      o = indx(B);
+          then y1.o = y by A8,FUNCT_7:33;
+          hence y1.o in B.o by A54,A88,A92,XBOOLE_0:def 4;
         end;
       end;
-      then y1 in S by A18,A35,A87,CARD_3:18;
-      then y1 in L3 /\ S by A92,XBOOLE_0:def 4;
-      then 2 c= card (L3 /\ S) by A70,A71,A86,Th2;
       then
-A95:  L3 c= S by A2,Def2;
+A93:  y1 in S by A40,A42,A90,CARD_3:18;
+A94:  dom L2 = I by PARTFUN1:def 4;
+      now
+        let o be set;
+        assume
+A95:    o in dom L2;
+        per cases;
+        suppose
+A96:      o <> indx(B);
+          then
+A97:      y1.o = a1.o by FUNCT_7:34;
+          a1.o in B.o by A2,A40,A42,A94,A95,CARD_3:18;
+          hence y1.o in L2.o by A96,A97,FUNCT_7:34;
+        end;
+        suppose
+A98:      o = indx(B);
+          then y1.o = y by A8,FUNCT_7:33;
+          hence y1.o in L2.o by A88,A86,A98,XBOOLE_0:def 4;
+        end;
+      end;
+      then y1 in L3 by A94,A90,CARD_3:18;
+      then
+A99:  y1 in L3 /\ S by A93,XBOOLE_0:def 4;
+      set x1=a1+*(indx(B),x);
+A100: dom x1 = I by PARTFUN1:def 4;
+      now
+        let o be set;
+        assume
+A101:   o in I;
+        per cases;
+        suppose
+          o <> indx(B);
+          then x1.o = a1.o by FUNCT_7:34;
+          hence x1.o in B.o by A2,A40,A42,A101,CARD_3:18;
+        end;
+        suppose
+A102:     o = indx(B);
+          then x1.o = x by A8,FUNCT_7:33;
+          hence x1.o in B.o by A54,A87,A102,XBOOLE_0:def 4;
+        end;
+      end;
+      then
+A103: x1 in S by A40,A42,A100,CARD_3:18;
+A104: x1.indx(B) = x & y1.indx(B) = y by A8,FUNCT_7:33;
+      now
+        let o be set;
+        assume
+A105:   o in dom L2;
+        per cases;
+        suppose
+A106:     o <> indx(B);
+          then
+A107:     x1.o = a1.o by FUNCT_7:34;
+          a1.o in B.o by A2,A40,A42,A94,A105,CARD_3:18;
+          hence x1.o in L2.o by A106,A107,FUNCT_7:34;
+        end;
+        suppose
+A108:     o = indx(B);
+          then x1.o = x by A8,FUNCT_7:33;
+          hence x1.o in L2.o by A87,A86,A108,XBOOLE_0:def 4;
+        end;
+      end;
+      then x1 in L3 by A94,A100,CARD_3:18;
+      then x1 in L3 /\ S by A103,XBOOLE_0:def 4;
+      then 2 c= card (L3 /\ S) by A89,A104,A99,Th2;
+      then
+A109: L3 c= S by A1,Def2;
       thus L c= SS
       proof
         let e be set;
-        assume
-A96:    e in L;
         consider f being set such that
-A97:    f in L3 by XBOOLE_0:def 1;
-        consider F being Function such that
-A98:    F=f & dom F = I & for o being set st o in I holds F.o in L2.o
-        by A75,A97,CARD_3:def 5;
-        reconsider f as ManySortedSet of I by A98,PARTFUN1:def 4,RELAT_1:def 18
-;
-A99:    dom (f+*(indx(B),e)) = dom L2 by A75,PARTFUN1:def 4;
-        now
+A110:   f in L3 by XBOOLE_0:def 1;
+A111:   ex F being Function st F=f & dom F = I & for o being set st o in
+        I holds F.o in L2.o by A94,A110,CARD_3:def 5;
+        then reconsider f as ManySortedSet of I by PARTFUN1:def 4
+,RELAT_1:def 18;
+        assume
+A112:   e in L;
+A113:   now
           let o be set;
           assume
-A100:     o in dom L2;
+A114:     o in dom L2;
           per cases;
-          suppose o <> indx(B);
+          suppose
+            o <> indx(B);
             then f+*(indx(B),e).o = f.o by FUNCT_7:34;
-            hence f+*(indx(B),e).o in L2.o by A75,A98,A100;
+            hence f+*(indx(B),e).o in L2.o by A94,A111,A114;
           end;
           suppose
-A101:       o = indx(B);
-            then f+*(indx(B),e).o = e by A98,FUNCT_7:33;
-            hence f+*(indx(B),e).o in L2.o by A18,A96,A101,FUNCT_7:33;
+A115:       o = indx(B);
+            then f+*(indx(B),e).o = e by A111,FUNCT_7:33;
+            hence f+*(indx(B),e).o in L2.o by A40,A112,A115,FUNCT_7:33;
           end;
         end;
-        then f+*(indx(B),e) in L3 by A99,CARD_3:18;
-        then f+*(indx(B),e).indx(B) in B.indx(B) by A18,A35,A95,CARD_3:18;
-        hence thesis by A45,A98,FUNCT_7:33;
+        dom (f+*(indx(B),e)) = dom L2 by A94,PARTFUN1:def 4;
+        then f+*(indx(B),e) in L3 by A113,CARD_3:18;
+        then f+*(indx(B),e).indx(B) in B.indx(B) by A40,A42,A109,CARD_3:18;
+        hence thesis by A54,A111,FUNCT_7:33;
       end;
     end;
   end;
-  given B being Segre-like non trivial-yielding
-  ManySortedSubset of Carrier A such that
-A102: S = product B & for C being Subset of A.indx(B)
-  st C=B.indx(B) holds C is strong closed_under_lines;
-  thus S is non trivial by A102;
-A103: dom B = I by PARTFUN1:def 4;
+  given B being Segre-like non trivial-yielding ManySortedSubset of Carrier A
+  such that
+A116: S = product B and
+A117: for C being Subset of A.indx(B) st C=B.indx(B) holds C is strong
+  closed_under_lines;
+  thus S is non trivial by A116;
+A118: dom B = I by PARTFUN1:def 4;
+A119: dom Carrier A = I by PARTFUN1:def 4;
   thus S is strong
   proof
     let x,y be Point of Segre_Product A;
-    assume
-A104: x in S & y in S;
+    assume that
+A120: x in S and
+A121: y in S;
     per cases;
-    suppose x=y;
+    suppose
+      x=y;
       hence thesis by Def1;
     end;
     suppose
-A105: x<>y;
-      consider x1 being Function such that
-A106: x1=x & dom x1=dom Carrier A & for a being set st a in dom Carrier A
-      holds x1.a in (Carrier A).a by CARD_3:def 5;
-X:    dom Carrier A = I by PARTFUN1:def 4;
-      then reconsider x1 as ManySortedSet of I
-       by A106,PARTFUN1:def 4,RELAT_1:def 18;
+A122: x<>y;
       consider y1 being Function such that
-A107: y1=y & dom y1=dom Carrier A & for a being set st a in dom Carrier A
-      holds y1.a in (Carrier A).a by CARD_3:def 5;
-      reconsider y1 as ManySortedSet of I
-       by X,A107,PARTFUN1:def 4,RELAT_1:def 18
-;
-A108: now
+A123: y1=y and
+A124: dom y1=dom Carrier A and
+A125: for a being set st a in dom Carrier A holds y1.a in (Carrier A
+      ).a by CARD_3:def 5;
+A126: dom Carrier A = I by PARTFUN1:def 4;
+      then reconsider y1 as ManySortedSet of I by A124,PARTFUN1:def 4
+,RELAT_1:def 18;
+      consider x1 being Function such that
+A127: x1=x and
+A128: dom x1=dom Carrier A and
+A129: for a being set st a in dom Carrier A holds x1.a in (Carrier A
+      ).a by CARD_3:def 5;
+      reconsider x1 as ManySortedSet of I by A128,A126,PARTFUN1:def 4
+,RELAT_1:def 18;
+A130: now
         assume
-A109:   x1.indx(B) = y1.indx(B);
+A131:   x1.indx(B) = y1.indx(B);
         now
           let i be set;
-          assume i in dom Carrier A;
+          assume
+          i in dom Carrier A;
           per cases;
-          suppose i<>indx(B);
-            hence x1.i = y1.i by A102,A104,A106,A107,Th23;
+          suppose
+            i<>indx(B);
+            hence x1.i = y1.i by A116,A120,A121,A127,A123,Th23;
           end;
-          suppose i=indx(B);
-            hence x1.i = y1.i by A109;
+          suppose
+            i=indx(B);
+            hence x1.i = y1.i by A131;
           end;
         end;
-        hence contradiction by A105,A106,A107,FUNCT_1:9;
+        hence contradiction by A122,A127,A128,A123,A124,FUNCT_1:9;
       end;
-      x1.indx(B) in (Carrier A).indx(B) by A1,A106;
-      then reconsider x1i = x1.indx(B) as Point of A.indx(B) by YELLOW_6:9;
-      y1.indx(B) in (Carrier A).indx(B) by A1,A107;
-      then reconsider y1i = y1.indx(B) as Point of A.indx(B) by YELLOW_6:9;
       B c= Carrier A by PBOOLE:def 23;
       then B.indx(B) c= (Carrier A).indx(B) by PBOOLE:def 5;
       then reconsider C = B.indx(B) as Subset of A.indx(B) by YELLOW_6:9;
-A110: x1i in C by A102,A103,A104,A106,CARD_3:18;
-A111: y1i in C by A102,A103,A104,A107,CARD_3:18;
-      C is strong by A102;
-      then x1i,y1i are_collinear by A110,A111,Def3;
+A132: C is strong by A117;
+      y1.indx(B) in (Carrier A).indx(B) by A119,A125;
+      then reconsider y1i = y1.indx(B) as Point of A.indx(B) by YELLOW_6:9;
+A133: y1i in C by A116,A118,A121,A123,CARD_3:18;
+      x1.indx(B) in (Carrier A).indx(B) by A119,A129;
+      then reconsider x1i = x1.indx(B) as Point of A.indx(B) by YELLOW_6:9;
+      x1i in C by A116,A118,A120,A127,CARD_3:18;
+      then x1i,y1i are_collinear by A133,A132,Def3;
       then consider l being Block of A.indx(B) such that
-A112: {x1i,y1i} c= l by A108,Def1;
-A113: dom {x1} = I by PARTFUN1:def 4;
-      for i being Element of I st i <> indx(B) holds
-      {x1}+*(indx(B),l).i is non empty trivial
+A134: {x1i,y1i} c= l by A130,Def1;
+A135: dom {x1} = I by PARTFUN1:def 4;
+A136: for a be set st a in dom ({x1}+*(indx(B),l)) holds y1.a in {x1}+*(
+      indx(B),l).a
       proof
-        let i be Element of I;
-        assume i <> indx(B);
-        then {x1}+*(indx(B),l).i = {x1}.i by FUNCT_7:34
-          .= {x1.i} by PZFMISC1:def 1;
-        hence thesis;
+        let a be set;
+        assume
+        a in dom ({x1}+*(indx(B),l));
+        then
+A137:   a in I by PARTFUN1:def 4;
+        per cases;
+        suppose
+A138:     a = indx(B);
+          then {x1}+*(indx(B),l).a = l by A135,FUNCT_7:33;
+          hence thesis by A134,A138,ZFMISC_1:38;
+        end;
+        suppose
+A139:     a <> indx(B);
+          x1.a in {x1.a} by TARSKI:def 1;
+          then x1.a in {x1}.a by A137,PZFMISC1:def 1;
+          then y1.a in {x1}.a by A116,A120,A121,A127,A123,A139,Th23;
+          hence thesis by A139,FUNCT_7:34;
+        end;
       end;
-      then
-A114: {x1}+*(indx(B),l) is Segre-like by Def20;
       {x1}+*(indx(B),l) c= Carrier A
       proof
         let i be set;
         assume
-A115:   i in I;
+A140:   i in I;
         then reconsider i1=i as Element of I;
         thus {x1}+*(indx(B),l).i c= (Carrier A).i
         proof
           per cases;
           suppose
-A116:       i=indx(B);
-            then {x1}+*(indx(B),l).i = l by A113,FUNCT_7:33;
+A141:       i=indx(B);
+            then {x1}+*(indx(B),l).i = l by A135,FUNCT_7:33;
             then {x1}+*(indx(B),l).i in the topology of A.indx(B);
             then {x1}+*(indx(B),l).i c= the carrier of (A.indx(B));
-            hence thesis by A116,YELLOW_6:9;
+            hence thesis by A141,YELLOW_6:9;
           end;
-          suppose i<>indx(B);
-            then
-A117:       {x1}+*(indx(B),l).i = {x1}.i by FUNCT_7:34
-              .= {x1.i} by A115,PZFMISC1:def 1;
-            x1.i in (Carrier A).i1 by A1,A106;
+          suppose
+A142:       i<>indx(B);
+            x1.i in (Carrier A).i1 by A119,A129;
             then x1.i in the carrier of A.i1 by YELLOW_6:9;
-            then {x1.i} c= the carrier of A.i1 by ZFMISC_1:37;
-            hence thesis by A117,YELLOW_6:9;
+            then
+A143:       {x1.i} c= the carrier of A.i1 by ZFMISC_1:37;
+            {x1}+*(indx(B),l).i = {x1}.i by A142,FUNCT_7:34
+              .= {x1.i} by A140,PZFMISC1:def 1;
+            hence thesis by A143,YELLOW_6:9;
           end;
         end;
       end;
       then
-A118: {x1}+*(indx(B),l) is ManySortedSubset of Carrier A by PBOOLE:def 23;
-      {x1}+*(indx(B),l).indx(B) is Block of A.indx(B) by A113,FUNCT_7:33;
-      then reconsider L = product({x1}+*(indx B,l)) as Block of Segre_Product A
-      by A114,A118,Def22;
-A119: dom x1 = I by PARTFUN1:def 4
-        .= dom ({x1}+*(indx(B),l)) by PARTFUN1:def 4;
-      for a be set st a in dom ({x1}+*(indx(B),l)) holds
-      x1.a in {x1}+*(indx(B),l).a
+A144: {x1}+*(indx(B),l) is ManySortedSubset of Carrier A by PBOOLE:def 23;
+      for i being Element of I st i <> indx(B) holds {x1}+*(indx(B),l).i
+      is non empty trivial
       proof
-        let a be set;
-        assume a in dom ({x1}+*(indx(B),l));
-        then
-A120:   a in I by PARTFUN1:def 4;
-        per cases;
-        suppose
-A121:     a = indx(B);
-          then {x1}+*(indx(B),l).a = l by A113,FUNCT_7:33;
-          hence thesis by A112,A121,ZFMISC_1:38;
-        end;
-        suppose
-A122:     a <> indx(B);
-          x1.a in {x1.a} by TARSKI:def 1;
-          then x1.a in {x1}.a by A120,PZFMISC1:def 1;
-          hence thesis by A122,FUNCT_7:34;
-        end;
+        let i be Element of I;
+        assume
+        i <> indx(B);
+        then {x1}+*(indx(B),l).i = {x1}.i by FUNCT_7:34
+          .= {x1.i} by PZFMISC1:def 1;
+        hence thesis;
       end;
       then
-A123: x1 in L by A119,CARD_3:18;
-A124: dom y1 = I by PARTFUN1:def 4
-        .= dom ({x1}+*(indx(B),l)) by PARTFUN1:def 4;
-      for a be set st a in dom ({x1}+*(indx(B),l)) holds
-      y1.a in {x1}+*(indx(B),l).a
+A145: {x1}+*(indx(B),l) is Segre-like by Def20;
+A146: for a be set st a in dom ({x1}+*(indx(B),l)) holds x1.a in {x1}+*(
+      indx(B),l).a
       proof
         let a be set;
-        assume a in dom ({x1}+*(indx(B),l));
+        assume
+        a in dom ({x1}+*(indx(B),l));
         then
-A125:   a in I by PARTFUN1:def 4;
+A147:   a in I by PARTFUN1:def 4;
         per cases;
         suppose
-A126:     a = indx(B);
-          then {x1}+*(indx(B),l).a = l by A113,FUNCT_7:33;
-          hence thesis by A112,A126,ZFMISC_1:38;
+A148:     a = indx(B);
+          then {x1}+*(indx(B),l).a = l by A135,FUNCT_7:33;
+          hence thesis by A134,A148,ZFMISC_1:38;
         end;
         suppose
-A127:     a <> indx(B);
+A149:     a <> indx(B);
           x1.a in {x1.a} by TARSKI:def 1;
-          then x1.a in {x1}.a by A125,PZFMISC1:def 1;
-          then y1.a in {x1}.a by A102,A104,A106,A107,A127,Th23;
-          hence thesis by A127,FUNCT_7:34;
+          then x1.a in {x1}.a by A147,PZFMISC1:def 1;
+          hence thesis by A149,FUNCT_7:34;
         end;
       end;
-      then y1 in L by A124,CARD_3:18;
-      then {x,y} c= L by A106,A107,A123,ZFMISC_1:38;
+      {x1}+*(indx(B),l).indx(B) is Block of A.indx(B) by A135,FUNCT_7:33;
+      then reconsider
+      L = product({x1}+*(indx B,l)) as Block of Segre_Product A by A145,A144
+,Def22;
+      dom y1 = I by PARTFUN1:def 4
+        .= dom ({x1}+*(indx(B),l)) by PARTFUN1:def 4;
+      then
+A150: y1 in L by A136,CARD_3:18;
+      dom x1 = I by PARTFUN1:def 4
+        .= dom ({x1}+*(indx(B),l)) by PARTFUN1:def 4;
+      then x1 in L by A146,CARD_3:18;
+      then {x,y} c= L by A127,A123,A150,ZFMISC_1:38;
       hence thesis by Def1;
     end;
   end;
   thus S is closed_under_lines
   proof
     let l be Block of Segre_Product A;
-    assume
-A128: 2 c= card (l /\ S);
-    then consider a,b being set such that
-A129: a in l /\ S & b in l /\ S & a<>b by Th2;
-    reconsider a1=a,b1=b as ManySortedSet of I by A129,Th14;
     consider L being Segre-like ManySortedSubset of Carrier A such that
-A130: l = product L & ex i being Element of I st L.i is Block of A.i by Def22;
+A151: l = product L and
+A152: ex i being Element of I st L.i is Block of A.i by Def22;
+    assume
+A153: 2 c= card (l /\ S);
+    then consider a,b being set such that
+A154: a in l /\ S and
+A155: b in l /\ S and
+A156: a<>b by Th2;
     card (l /\ S) c= card l by CARD_1:27,XBOOLE_1:17;
-    then 2 c= card l by A128,XBOOLE_1:1;
-    then reconsider L as Segre-like non trivial-yielding
-    ManySortedSubset of Carrier A by A130,Th13;
-A131: indx(B) = indx(L) &
-    for i being set st i <> indx(B) holds B.i = L.i by A102,A128,A130,Th26;
-A132: dom L = I by PARTFUN1:def 4
+    then 2 c= card l by A153,XBOOLE_1:1;
+    then reconsider L as Segre-like non trivial-yielding ManySortedSubset of
+    Carrier A by A151,Th13;
+    reconsider a1=a,b1=b as ManySortedSet of I by A154,A155,Th14;
+A157: dom L = I by PARTFUN1:def 4
       .= dom B by PARTFUN1:def 4;
+A158: indx(B) = indx(L) by A116,A153,A151,Th26;
     for a being set st a in dom L holds L.a c= B.a
     proof
       let a be set;
-      assume a in dom L;
+      assume
+      a in dom L;
       per cases;
-      suppose a <> indx(B);
-        hence thesis by A102,A128,A130,Th26;
+      suppose
+        a <> indx(B);
+        hence thesis by A116,A153,A151,Th26;
       end;
       suppose
-A133:   a = indx(B);
-        consider j being Element of I such that
-A134:   L.j is Block of A.j by A130;
-        2 c= card(L.j) by A134,Def6;
-        then L.j is non trivial by Th4;
-        then j = indx(L) by Def21;
-        then reconsider Li=L.indx(B) as Block of A.indx(B) by A131,A134;
+A159:   a = indx(B);
         B c= Carrier A by PBOOLE:def 23;
         then B.indx(B) c= (Carrier A).indx(B) by PBOOLE:def 5;
         then reconsider C = B.indx(B) as Subset of A.indx(B) by YELLOW_6:9;
-A135:   a1 in product B & b1 in product B by A102,A129,XBOOLE_0:def 4;
-A136:   now
+        consider j being Element of I such that
+A160:   L.j is Block of A.j by A152;
+        2 c= card(L.j) by A160,Def6;
+        then L.j is non trivial by Th4;
+        then j = indx(L) by Def21;
+        then reconsider Li=L.indx(B) as Block of A.indx(B) by A158,A160;
+A161:   C is closed_under_lines by A117;
+        a1 in product L by A154,A151,XBOOLE_0:def 4;
+        then
+A162:   a1.indx(B) in L.indx(B) by A118,A157,CARD_3:18;
+        b1 in product L by A155,A151,XBOOLE_0:def 4;
+        then
+A163:   b1.indx(B) in L.indx(B) by A118,A157,CARD_3:18;
+A164:   b1 in product B by A116,A155,XBOOLE_0:def 4;
+        then b1.indx(B) in B.indx(B) by A118,CARD_3:18;
+        then
+A165:   b1.indx(B) in Li /\ C by A163,XBOOLE_0:def 4;
+A166:   a1 in product B by A116,A154,XBOOLE_0:def 4;
+A167:   now
           assume
-A137:     a1.indx(B) = b1.indx(B);
-A138:     for o being set st o in dom a1 holds a1.o = b1.o
+A168:     a1.indx(B) = b1.indx(B);
+A169:     for o being set st o in dom a1 holds a1.o = b1.o
           proof
             let o be set;
-            assume o in dom a1;
+            assume
+            o in dom a1;
             per cases;
-            suppose o <> indx(B);
-              hence thesis by A135,Th23;
+            suppose
+              o <> indx(B);
+              hence thesis by A166,A164,Th23;
             end;
-            suppose o=indx(B);
-              hence thesis by A137;
+            suppose
+              o=indx(B);
+              hence thesis by A168;
             end;
           end;
           dom a1 = I by PARTFUN1:def 4
             .= dom b1 by PARTFUN1:def 4;
-          hence contradiction by A129,A138,FUNCT_1:9;
+          hence contradiction by A156,A169,FUNCT_1:9;
         end;
-        a1 in product L & b1 in product L by A129,A130,XBOOLE_0:def 4;
-        then
-A139:   a1.indx(B) in L.indx(B) & b1.indx(B) in L.indx(B)
-        by A103,A132,CARD_3:18;
-        a1.indx(B) in B.indx(B) & b1.indx(B) in
-        B.indx(B) by A103,A135,CARD_3:18;
-        then a1.indx(B) in Li /\ C & b1.indx(B) in Li /\
-        C by A139,XBOOLE_0:def 4;
-        then
-A140:   2 c= card(Li /\ C) by A136,Th2;
-        C is closed_under_lines by A102;
-        hence thesis by A133,A140,Def2;
+        a1.indx(B) in B.indx(B) by A118,A166,CARD_3:18;
+        then a1.indx(B) in Li /\ C by A162,XBOOLE_0:def 4;
+        then 2 c= card(Li /\ C) by A167,A165,Th2;
+        hence thesis by A159,A161,Def2;
       end;
     end;
-    hence thesis by A102,A130,A132,CARD_3:38;
+    hence thesis by A116,A151,A157,CARD_3:38;
   end;
 end;
 

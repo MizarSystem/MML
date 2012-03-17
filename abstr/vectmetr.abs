@@ -16,16 +16,15 @@ environ
       XCMPLX_0, XREAL_0, COMPLEX1, REAL_1, RELAT_2, XXREAL_0, INT_1, NAT_1,
       NAT_D, POWER, ABIAN, SERIES_1, RELAT_1, RELSET_1, MARGREL1, BINOP_1,
       DOMAIN_1, FUNCT_1, PARTFUN1, FUNCT_2, STRUCT_0, ALGSTR_0, PRE_TOPC,
-      FINSEQ_1, FINSEQ_2, FINSEQOP, BINARITH, TREES_1, TREES_2, TREES_4,
-      BINTREE1, BINTREE2, RVSUM_1, RLVECT_1, GROUP_1, GROUP_2, TOPS_2,
-      METRIC_1, EUCLID;
+      FINSEQ_1, FINSEQ_2, BINARITH, TREES_1, TREES_2, TREES_4, BINTREE1,
+      BINTREE2, RVSUM_1, RLVECT_1, GROUP_1, GROUP_2, TOPS_2, METRIC_1, EUCLID;
  constructors XXREAL_0, REAL_1, NAT_1, NAT_D, FINSEQOP, FINSEQ_4, FINSOP_1,
       SERIES_1, REALSET1, BINARITH, ABIAN, TOPS_2, GROUP_2, GRCAT_1, EUCLID,
       BINTREE2, BINOP_2, RVSUM_1, RELSET_1;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, RELSET_1, FUNCT_2, NUMBERS,
       XXREAL_0, NAT_1, FINSEQ_1, BINOP_2, MEMBERED, MARGREL1, FINSEQ_2,
       TREES_2, STRUCT_0, METRIC_1, GROUP_2, BINTREE1, BINTREE2, VALUED_0,
-      XREAL_0;
+      XREAL_0, RELAT_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
 
 
@@ -36,34 +35,30 @@ definition
   attr V is convex means
 :: VECTMETR:def 1
 
-  for x,y be Element of V
-  for r be Real st 0 <= r & r <= 1 ex z be Element of V st
-  dist(x,z) = r * dist(x,y) & dist(z,y) = (1 - r) * dist(x,y);
+  for x,y be Element of V for r be Real st 0 <=
+r & r <= 1 ex z be Element of V st dist(x,z) = r * dist(x,y) & dist(z,y) = (1 -
+  r) * dist(x,y);
 end;
 
 definition
   let V be non empty MetrStruct;
   attr V is internal means
 :: VECTMETR:def 2
-
-  for x,y be Element of V
-  for p,q be Real st p > 0 & q > 0 ex f be FinSequence of the carrier of V st
-  f/.1 = x & f/.len f = y & (for i be Element of NAT st 1 <= i & i <=
-  len f - 1 holds dist(f/.i,f/.(i+1)) < p) &
-  for F be FinSequence of REAL st len F = len f - 1 &
-  for i be Element of NAT st 1 <= i & i <= len F
-  holds F/.i = dist(f/.i,f/.(i+1)) holds abs(dist(x,y) - Sum F) < q;
+  for x,y be Element of V for p,q be Real st p > 0 &
+q > 0 ex f be FinSequence of the carrier of V st f/.1 = x & f/.len f = y & (for
+i be Element of NAT st 1 <= i & i <= len f - 1 holds dist(f/.i,f/.(i+1)) < p) &
+for F be FinSequence of REAL st len F = len f - 1 & for i be Element of NAT st
+1 <= i & i <= len F holds F/.i = dist(f/.i,f/.(i+1)) holds abs(dist(x,y) - Sum
+  F) < q;
 end;
 
 theorem :: VECTMETR:1
-  for V be non empty MetrSpace st V is convex for x,y be Element of V
-  for p be Real st p > 0 ex f be FinSequence of the carrier of V st
-  f/.1 = x & f/.len f = y &
-  (for i be Element of NAT st 1 <= i & i <= len f - 1
-  holds dist(f/.i,f/.(i+1)) < p) &
-  for F be FinSequence of REAL st len F = len f - 1 &
-  for i be Element of NAT st 1 <= i & i <= len F
-  holds F/.i = dist(f/.i,f/.(i+1)) holds dist(x,y) = Sum F;
+  for V be non empty MetrSpace st V is convex for x,y be Element of
+V for p be Real st p > 0 ex f be FinSequence of the carrier of V st f/.1 = x &
+f/.len f = y & (for i be Element of NAT st 1 <= i & i <= len f - 1 holds dist(f
+/.i,f/.(i+1)) < p) & for F be FinSequence of REAL st len F = len f - 1 & for i
+be Element of NAT st 1 <= i & i <= len F holds F/.i = dist(f/.i,f/.(i+1)) holds
+  dist(x,y) = Sum F;
 
 registration
   cluster convex -> internal (non empty MetrSpace);
@@ -74,8 +69,8 @@ registration
 end;
 
 definition
-  mode Geometry is Reflexive discerning symmetric triangle internal
-    (non empty MetrStruct);
+  mode Geometry is Reflexive discerning symmetric triangle internal (non empty
+    MetrStruct);
 end;
 
 begin  :: Isometric Functions
@@ -86,8 +81,8 @@ definition
   attr f is isometric means
 :: VECTMETR:def 3
 
-  rng f = the carrier of V &
-  for x,y be Element of V holds dist(x,y) = dist(f.x,f.y);
+  rng f = the carrier of V & for x,y be
+  Element of V holds dist(x,y) = dist(f.x,f.y);
 end;
 
 definition
@@ -95,8 +90,8 @@ definition
   func ISOM(V) -> set means
 :: VECTMETR:def 4
 
-  for x be set holds
-  x in it iff ex f be Function of V,V st f = x & f is isometric;
+  for x be set holds x in it iff ex f be
+  Function of V,V st f = x & f is isometric;
 end;
 
 definition
@@ -105,8 +100,8 @@ definition
 end;
 
 theorem :: VECTMETR:2
-  for V be discerning Reflexive (non empty MetrStruct)
-  for f be Function of V,V st f is isometric holds f is one-to-one;
+  for V be discerning Reflexive (non empty MetrStruct) for f be
+  Function of V,V st f is isometric holds f is one-to-one;
 
 registration
   let V be discerning Reflexive (non empty MetrStruct);
@@ -119,12 +114,12 @@ registration
 end;
 
 theorem :: VECTMETR:3
-  for V be discerning Reflexive (non empty MetrStruct)
-  for f be isometric Function of V,V holds f" is isometric;
+  for V be discerning Reflexive (non empty MetrStruct) for f be
+  isometric Function of V,V holds f" is isometric;
 
 theorem :: VECTMETR:4
-  for V be non empty MetrStruct for f,g be isometric Function of V,V holds
-  f*g is isometric;
+  for V be non empty MetrStruct for f,g be isometric Function of V,
+  V holds f*g is isometric;
 
 theorem :: VECTMETR:5
   for V be non empty MetrStruct holds id(V) is isometric;
@@ -137,10 +132,10 @@ end;
 begin  :: Real Linear-Metric Spaces
 
 definition
-  struct(RLSStruct,MetrStruct) RLSMetrStruct (# carrier -> set,
-    distance -> Function of [:the carrier,the carrier:],REAL,
-    ZeroF -> Element of the carrier, addF -> BinOp of the carrier,
-    Mult -> Function of [:REAL, the carrier:],the carrier #);
+  struct(RLSStruct,MetrStruct) RLSMetrStruct (# carrier -> set, distance ->
+Function of [:the carrier,the carrier:],REAL, ZeroF -> Element of the carrier,
+    addF -> BinOp of the carrier, Mult -> Function of [:REAL, the carrier:],the
+    carrier #);
 end;
 
 registration
@@ -161,8 +156,8 @@ definition
   attr V is homogeneous means
 :: VECTMETR:def 5
 
-  for r be Real
-  for v,w be Element of V holds dist(r*v,r*w) = abs(r) * dist(v,w);
+  for r be Real for v,w be Element of V
+  holds dist(r*v,r*w) = abs(r) * dist(v,w);
 end;
 
 definition
@@ -170,8 +165,8 @@ definition
   attr V is translatible means
 :: VECTMETR:def 6
 
-  for u,w,v be Element of V holds
-  dist(v,w) = dist(v+u,w+u);
+  for u,w,v be Element of V holds dist(v,w
+  ) = dist(v+u,w+u);
 end;
 
 definition
@@ -179,37 +174,34 @@ definition
   let v be Element of V;
   func Norm(v) -> Real equals
 :: VECTMETR:def 7
-
   dist(0.V,v);
 end;
 
 registration
-  cluster strict Abelian add-associative right_zeroed
-    right_complementable RealLinearSpace-like
-    Reflexive discerning symmetric triangle
-    homogeneous translatible (non empty RLSMetrStruct);
+  cluster strict Abelian add-associative right_zeroed right_complementable
+    RealLinearSpace-like Reflexive discerning symmetric triangle homogeneous
+    translatible (non empty RLSMetrStruct);
 end;
 
 definition
-  mode RealLinearMetrSpace is
-    Abelian add-associative right_zeroed right_complementable
-    RealLinearSpace-like Reflexive discerning symmetric triangle
-    homogeneous translatible (non empty RLSMetrStruct);
+  mode RealLinearMetrSpace is Abelian add-associative right_zeroed
+    right_complementable RealLinearSpace-like Reflexive discerning symmetric
+    triangle homogeneous translatible (non empty RLSMetrStruct);
 end;
 
 theorem :: VECTMETR:6
   for V be homogeneous Abelian add-associative right_zeroed
-  right_complementable RealLinearSpace-like (non empty RLSMetrStruct)
-  for r be Real for v be Element of V holds Norm (r * v) = abs(r) * Norm v;
+  right_complementable RealLinearSpace-like (non empty RLSMetrStruct) for r be
+  Real for v be Element of V holds Norm (r * v) = abs(r) * Norm v;
 
 theorem :: VECTMETR:7
   for V be translatible Abelian add-associative right_zeroed
-  right_complementable triangle (non empty RLSMetrStruct)
-  for v,w be Element of V holds Norm (v + w) <= Norm v + Norm w;
+right_complementable triangle (non empty RLSMetrStruct) for v,w be Element of V
+  holds Norm (v + w) <= Norm v + Norm w;
 
 theorem :: VECTMETR:8
-  for V be translatible add-associative right_zeroed right_complementable
-  (non empty RLSMetrStruct) for v,w be Element of V holds
+  for V be translatible add-associative right_zeroed
+  right_complementable (non empty RLSMetrStruct) for v,w be Element of V holds
   dist(v,w) = Norm (w - v);
 
 definition
@@ -217,16 +209,15 @@ definition
   func RLMSpace n -> strict RealLinearMetrSpace means
 :: VECTMETR:def 8
 
-  the carrier of it = REAL n & the distance of it = Pitag_dist n &
-  0.it = 0*n &
-  (for x,y be Element of REAL n holds (the addF of it).(x,y) = x + y) &
-  for x be Element of REAL n,r be Element of REAL holds
-  (the Mult of it).(r,x) = r * x;
+  the carrier of it
+= REAL n & the distance of it = Pitag_dist n & 0.it = 0*n & (for x,y be Element
+of REAL n holds (the addF of it).(x,y) = x + y) & for x be Element of REAL n,r
+  be Element of REAL holds (the Mult of it).(r,x) = r * x;
 end;
 
 theorem :: VECTMETR:9
-  for n be Element of NAT
-  for f be isometric Function of RLMSpace n,RLMSpace n holds rng f = REAL n;
+  for n be Element of NAT for f be isometric Function of RLMSpace n,
+  RLMSpace n holds rng f = REAL n;
 
 begin  :: Groups of Isometric Functions
 
@@ -235,9 +226,9 @@ definition
   func IsomGroup n -> strict multMagma means
 :: VECTMETR:def 9
 
-  the carrier of it = ISOM RLMSpace n &
-  (for f,g be Function st f in ISOM RLMSpace n &
-  g in ISOM RLMSpace n holds (the multF of it).(f,g) = f*g);
+  the carrier of it = ISOM
+RLMSpace n & for f,g be Function st f in ISOM RLMSpace n & g in ISOM RLMSpace n
+  holds (the multF of it).(f,g) = f*g;
 end;
 
 registration
@@ -254,8 +245,8 @@ theorem :: VECTMETR:10
   for n be Element of NAT holds 1_IsomGroup n = id (RLMSpace n);
 
 theorem :: VECTMETR:11
-  for n be Element of NAT for f be Element of IsomGroup n
-  for g be Function of RLMSpace n,RLMSpace n st f = g holds f" = g";
+  for n be Element of NAT for f be Element of IsomGroup n for g be
+  Function of RLMSpace n,RLMSpace n st f = g holds f" = g";
 
 definition
   let n be Element of NAT;
@@ -263,8 +254,9 @@ definition
   func SubIsomGroupRel G -> Relation of the carrier of RLMSpace n means
 :: VECTMETR:def 10
 
-  for A,B be Element of RLMSpace n holds
-  [A,B] in it iff ex f be Function st f in the carrier of G & f.A = B;
+
+  for A,B be Element of RLMSpace n holds [A,B] in it iff ex f be Function st f
+  in the carrier of G & f.A = B;
 end;
 
 registration

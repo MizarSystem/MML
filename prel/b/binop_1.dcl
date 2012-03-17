@@ -7,6 +7,7 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="BINOP_1"/>
@@ -15,7 +16,7 @@
 <ArgTypes/>
 <Cluster>
 <Adjective nr="6"/>
-<Adjective nr="13">
+<Adjective nr="14">
 <Func kind="K" nr="22">
 <Func kind="K" nr="16"/>
 <Func kind="K" nr="16"/>
@@ -38,17 +39,17 @@
 <Cluster>
 <Adjective nr="6"/>
 <Adjective nr="10"/>
-<Adjective nr="13">
+<Adjective nr="14">
 <Func kind="K" nr="22">
 <Func kind="K" nr="16"/>
 <Func kind="K" nr="16"/>
 </Func>
 <Func kind="K" nr="16"/>
 </Adjective>
-<Adjective nr="16">
+<Adjective nr="17">
 <Func kind="K" nr="16"/>
 </Adjective>
-<Adjective nr="17">
+<Adjective nr="18">
 <Func kind="K" nr="16"/>
 </Adjective>
 </Cluster>

@@ -1,0 +1,595 @@
+:: Dilworth's Decomposition Theorem for Posets
+::  by Piotr Rudnicki
+:: 
+:: Received September 17, 2009
+:: Copyright (c) 2009 Association of Mizar Users
+
+environ
+
+ vocabularies DILWORTH, ORDERS_1, FINSET_1, RELAT_2, EQREL_1, CARD_1, ARYTM,
+      BOOLE, ORDERS_2, YELLOW_0, ARYTM_1, TARSKI, SGRAPH1, FUNCT_1, LEXBFS,
+      RELAT_1, SETFAM_1, WAYBEL_0, WAYBEL_4, PUA2MSS1, JORDAN4, ASYMPT_0,
+      HAHNBAN, ZFMISC_1, FINSEQ_1, SQUARE_1, UPROOTS, RLVECT_1, FINSEQ_2,
+      VALUED_0, ORDINAL2, SEQM_3, SUPINF_1, GROUP_10, RAMSEY_1, COMBGRAS,
+      CIRCUIT2, SUBSET_1, REALSET1;
+ notations TARSKI, RELAT_1, RELAT_2, RELSET_1, FINSET_1, SETFAM_1, XBOOLE_0,
+      SUBSET_1, CARD_1, STRUCT_0, WAYBEL_0, WAYBEL_4, ORDERS_2, NAT_1, EQREL_1,
+      FUNCT_1, FUNCT_2, NUMBERS, GROUP_1, XREAL_0, XXREAL_0, YELLOW_0,
+      XCMPLX_0, ZFMISC_1, LEXBFS, ORDINAL1, FINSEQ_1, SQUARE_1, UPROOTS,
+      RVSUM_1, INT_5, FINSEQ_2, VALUED_0, GROUP_10, RAMSEY_1, DOMAIN_1;
+ constructors DOMAIN_1, SETFAM_1, ORDERS_3, LEXBFS, WAYBEL_4, SQUARE_1,
+      UPROOTS, WSIERP_1, PROB_3, INT_5, SEQ_1, RAMSEY_1, RELSET_1, BINOP_2;
+ registrations STRUCT_0, MEMBERED, XXREAL_0, RELSET_1, CARD_1, YELLOW_0,
+      XREAL_0, FINSET_1, XBOOLE_0, ORDERS_3, NAT_1, INT_1, YELLOW_2, EQREL_1,
+      FINSEQ_1, FUNCT_1, SUBSET_1, ORDINAL1, PEPIN, RVSUM_1, UPROOTS, FUNCT_2,
+      FINSEQ_2, NUMBERS, PNPROC_1, RELAT_1, VALUED_0, ZFMISC_1, ORDERS_2;
+ requirements ARITHM, SUBSET, BOOLE, NUMERALS, REAL;
+
+
+begin  :: Preliminaries
+       :: Facts that I could not find in MML.
+
+scheme :: DILWORTH:sch 1
+ FraenkelFinCard1 { A() -> finite non empty set, P[set],
+  Y() -> finite set, F(set) -> set }:
+  card Y() <= card A()
+provided
+ Y() = { F(w) where w is Element of A(): P[w] };
+
+theorem :: DILWORTH:1  :: set00:
+for X, Y, x being set st not x in X holds X \ (Y \/ {x}) = X \ Y;
+
+registration
+ cluster empty -> c=-linear set;
+end;
+
+registration let X be c=-linear set;
+ cluster -> c=-linear Subset of X;
+end;
+
+theorem :: DILWORTH:2  :: ssf0:
+for X, Y being set, F being Subset-Family of X, G being Subset-Family of Y
+ holds F \/ G is Subset-Family of X \/ Y;
+
+theorem :: DILWORTH:3  :: SPpart0:
+for X, Y being set, F being a_partition of X, G being a_partition of Y
+  st X misses Y holds F \/ G is a_partition of X \/ Y;
+
+theorem :: DILWORTH:4  :: SPpart:
+for X, Y being set, F being a_partition of Y
+ st Y c< X holds F \/ { X \ Y } is a_partition of X;
+
+theorem :: DILWORTH:5  :: Sinfset:
+for X being infinite set, n being Nat
+ ex Y being finite Subset of X st card Y > n;
+
+begin ::  Cliques and stable sets
+
+definition
+  let R be RelStr, S be Subset of R;
+  attr S is connected means
+:: DILWORTH:def 1
+  the InternalRel of R is_connected_in S;
+end;
+
+notation
+  let R be RelStr, S be Subset of R;
+  synonym S is clique for S is connected;
+end;
+
+registration
+  let R be RelStr;
+  cluster trivial -> clique Subset of R;
+end;
+
+registration
+  let R be RelStr;
+  cluster clique Subset of R;
+end;
+
+definition
+  let R be RelStr;
+  mode Clique of R is clique Subset of R;
+end;
+
+theorem :: DILWORTH:6  :: DClique:
+for R being RelStr, S being Subset of R holds
+S is Clique of R iff
+for a, b being Element of R st a in S & b in S & a <> b holds a <= b or b <= a;
+
+registration
+ let R be RelStr;
+ cluster finite Clique of R;
+end;
+
+registration
+  let R be reflexive RelStr;
+  cluster connected -> strongly_connected Subset of R;
+end;
+
+registration
+  let R be non empty RelStr;
+  cluster finite non empty Clique of R;
+end;
+
+theorem :: DILWORTH:7 :: Clique36a:
+for R being non empty RelStr, a1,a2 being Element of R
+ st a1 <> a2 & {a1,a2} is Clique of R holds a1 <= a2 or a2 <= a1;
+
+theorem :: DILWORTH:8  :: Clique36b:
+for R being non empty RelStr, a1,a2 being Element of R
+ st a1 <= a2 or a2 <= a1 holds {a1,a2} is Clique of R;
+
+theorem :: DILWORTH:9  :: Clique37:
+for R being RelStr, C being Clique of R, S being Subset of C
+  holds S is Clique of R;
+
+theorem :: DILWORTH:10 :: Clique1:
+for R being RelStr, C being finite Clique of R, n being Nat
+  st n <= card C ex B being finite Clique of R st card B = n;
+
+theorem :: DILWORTH:11  :: ExtClique
+for R being transitive RelStr, C being Clique of R, x, y being Element of R
+ st x is_maximal_in C & x <= y holds C \/ {y} is Clique of R;
+
+theorem :: DILWORTH:12  :: ExtCliquemin
+for R being transitive RelStr, C being Clique of R, x, y being Element of R
+ st x is_minimal_in C & y <= x holds C \/ {y} is Clique of R;
+
+definition
+  let R be RelStr, S be Subset of R;
+  attr S is stable means
+:: DILWORTH:def 2
+    for x, y being Element of R st x in S & y in S & x <> y
+     holds not x <= y & not y <= x;
+end;
+
+registration
+  let R be RelStr;
+  cluster trivial -> stable Subset of R;
+end;
+
+registration
+  let R be RelStr;
+  cluster stable Subset of R;
+end;
+
+definition
+  let R be RelStr;
+  mode StableSet of R is stable Subset of R;
+    :: other possible names: AntiChain of R, IndependentSet of R
+end;
+
+registration
+  let R be RelStr;
+  cluster finite StableSet of R;
+end;
+
+registration
+  let R be non empty RelStr;
+  cluster finite non empty StableSet of R;
+end;
+
+theorem :: DILWORTH:13 :: AChain36a:
+for R being non empty RelStr, a1, a2 being Element of R
+  st a1 <> a2 & {a1,a2} is StableSet of R holds not (a1 <= a2 or a2 <= a1);
+
+theorem :: DILWORTH:14  :: AChain36b:
+for R being non empty RelStr, a1, a2 being Element of R
+ st not (a1 <= a2 or a2 <= a1) holds {a1,a2} is StableSet of R;
+
+theorem :: DILWORTH:15  :: ACClique:
+for R being RelStr, C being Clique of R, A being StableSet of R, a, b being set
+ st a in A & b in A & a in C & b in C holds a = b;
+
+theorem :: DILWORTH:16  :: AChain0:
+for R being RelStr, A being StableSet of R, B being Subset of A
+ holds B is StableSet of R;
+
+theorem :: DILWORTH:17  :: AChain1:
+for R being RelStr, A being finite StableSet of R, n being Nat
+  st n <= card A ex B being finite StableSet of R st card B = n;
+
+begin :: Clique number and stability number
+
+definition
+  let R be RelStr;
+  attr R is with_finite_clique# means
+:: DILWORTH:def 3
+   ex C being finite Clique of R
+    st for D being finite Clique of R holds card D <= card C;
+end;
+
+registration
+  cluster finite -> with_finite_clique# RelStr;
+end;
+
+registration
+  let R be with_finite_clique# RelStr;
+  cluster -> finite Clique of R;
+end;
+
+definition
+  let R be with_finite_clique# RelStr;
+  func clique# R -> Nat  means
+:: DILWORTH:def 4
+   (ex C being finite Clique of R st card C = it)
+     & for T being finite Clique of R holds card T <= it;
+end;
+
+registration
+  let R be empty RelStr;
+  cluster clique# R -> empty;
+end;
+
+registration
+  let R be with_finite_clique# non empty RelStr;
+  cluster clique# R -> positive;
+end;
+
+theorem :: DILWORTH:18 :: Height3:
+for R being with_finite_clique# non empty RelStr
+ st [#]R is StableSet of R holds clique# R = 1;
+
+theorem :: DILWORTH:19  :: Height4:
+for R being with_finite_clique# RelStr st clique# R = 1
+  holds [#]R is StableSet of R;
+
+definition
+  let R be RelStr;
+  attr R is with_finite_stability# means
+:: DILWORTH:def 5
+   ex A being finite StableSet of R
+    st for B being finite StableSet of R holds card B <= card A;
+end;
+
+registration
+  cluster finite -> with_finite_stability# RelStr;
+end;
+
+registration
+  let R be with_finite_stability# RelStr;
+  cluster -> finite StableSet of R;
+end;
+
+definition
+  let R be with_finite_stability# RelStr;
+  func stability# R -> Nat means
+:: DILWORTH:def 6
+   (ex A being finite StableSet of R st card(A) = it)
+     & for T being finite StableSet of R holds card T <= it;
+end;
+
+registration
+  let R be empty RelStr;
+  cluster stability# R -> empty;
+end;
+
+registration
+  let R be with_finite_stability# non empty RelStr;
+  cluster stability# R -> positive;
+end;
+
+theorem :: DILWORTH:20  :: Width3:
+for R being with_finite_stability# non empty RelStr
+ st [#]R is Clique of R holds stability# R = 1;
+
+theorem :: DILWORTH:21  :: Width4:
+for R being with_finite_stability# RelStr st stability# R = 1
+ holds [#]R is Clique of R;
+
+registration
+
+ :: I have done it through Ramsey.  How else to prove it?
+ :: For posets one gets it directly from Dilworth.
+
+ :: Related: how big the gap between (clique# * stability#) and
+ ::          card of the carrier can be?
+
+  cluster with_finite_clique# with_finite_stability# -> finite RelStr;
+end;
+
+begin :: Lower and upper sets, minimal and maximal elements
+
+definition
+  let R be RelStr, X be Subset of R;
+  func Lower X -> Subset of R equals
+:: DILWORTH:def 7
+   X \/ downarrow X;
+  func Upper X -> Subset of R equals
+:: DILWORTH:def 8
+   X \/ uparrow X;
+end;
+
+theorem :: DILWORTH:22  :: ABAC0:
+for R being antisymmetric transitive RelStr, A being StableSet of R,
+    z being set
+ st z in Upper A & z in Lower A holds z in A;
+
+theorem :: DILWORTH:23  :: ABunion:
+for R being with_finite_stability# RelStr, A being StableSet of R
+ st card A = stability# R holds Upper A \/ Lower A = [#]R;
+
+theorem :: DILWORTH:24  :: Pminmin:
+for R being transitive RelStr, x being Element of R, S being Subset of R
+ st x is_minimal_in Lower S holds x is_minimal_in [#]R;
+
+theorem :: DILWORTH:25  :: Pmaxmax:
+for R being transitive RelStr, x being Element of R, S being Subset of R
+ st x is_maximal_in Upper S holds x is_maximal_in [#]R;
+
+definition
+  let R be RelStr;
+  func minimals R -> Subset of R means
+:: DILWORTH:def 9
+   for x being Element of R holds x in it iff x is_minimal_in [#]R
+     if R is non empty
+   otherwise it  = {};
+
+  func maximals R -> Subset of R means
+:: DILWORTH:def 10
+   for x being Element of R holds x in it iff x is_maximal_in [#]R
+     if R is non empty
+   otherwise it  = {};
+end;
+
+registration
+  let R be with_finite_clique# non empty antisymmetric transitive RelStr;
+  cluster maximals R -> non empty;
+  cluster minimals R -> non empty;
+end;
+
+registration let R be RelStr;
+ cluster minimals R -> stable;
+ cluster maximals R -> stable;
+end;
+
+theorem :: DILWORTH:26  :: PCAamin:
+for R being RelStr, A being StableSet of R
+ st not minimals R c= A holds not minimals R c= Upper A;
+
+theorem :: DILWORTH:27  :: PCAbmax:
+for R being RelStr, A being StableSet of R
+ st not maximals R c= A holds not maximals R c= Lower A;
+
+begin :: Substructures
+
+registration
+  let R be RelStr, X be finite Subset of R;
+  cluster subrelstr X -> finite;
+end;
+
+theorem :: DILWORTH:28  :: SPClique:
+for R being RelStr, S being Subset of R, C being Clique of subrelstr S
+ holds C is Clique of R;
+
+theorem :: DILWORTH:29  :: SPClique1:
+for R being RelStr, S being Subset of R, C being Clique of R
+ holds C /\ S is Clique of subrelstr S;
+
+theorem :: DILWORTH:30  :: SPAChain1:
+for R being RelStr, S being Subset of R, A being StableSet of subrelstr S
+ holds A is StableSet of R;
+
+theorem :: DILWORTH:31  :: SPAChain:
+for R being RelStr, S being Subset of R, A being StableSet of R
+ holds A /\ S is StableSet of subrelstr S;
+
+theorem :: DILWORTH:32  :: SPmax
+for R being RelStr, S being Subset of R, B being Subset of subrelstr S,
+    x being Element of subrelstr S, y being Element of R
+ st x = y & x is_maximal_in B holds y is_maximal_in B;
+
+theorem :: DILWORTH:33  :: SPmin
+for R being RelStr, S being Subset of R, B being Subset of subrelstr S,
+    x being Element of subrelstr S, y being Element of R
+ st x = y & x is_minimal_in B holds y is_minimal_in B;
+
+theorem :: DILWORTH:34  :: PbeSmax:
+for R being transitive RelStr, A being StableSet of R,
+    C being Clique of subrelstr Lower A, a, b being Element of R
+ st a in A & a in C & b in C holds a = b or b <= a;
+
+theorem :: DILWORTH:35  :: PabSmin:
+for R being transitive RelStr, A being StableSet of R,
+    C being Clique of subrelstr Upper A, a, b being Element of R
+ st a in A & a in C & b in C holds a = b or a <= b;
+
+registration
+  let R be with_finite_clique# RelStr, S be Subset of R;
+  cluster subrelstr S -> with_finite_clique#;
+end;
+
+registration
+  let R be with_finite_stability# RelStr, S be Subset of R;
+  cluster subrelstr S -> with_finite_stability#;
+end;
+
+theorem :: DILWORTH:36  :: Pmaxmin:
+for R being with_finite_clique# non empty antisymmetric transitive RelStr,
+    x being Element of R
+ holds ex y being Element of R st y is_minimal_in [#]R & (y = x or y < x);
+
+theorem :: DILWORTH:37 :: Pam:
+for R being with_finite_clique# antisymmetric transitive RelStr
+ holds Upper minimals R = [#]R;
+
+theorem :: DILWORTH:38  :: Pminmax
+for R being with_finite_clique# non empty antisymmetric transitive RelStr,
+    x being Element of R
+  ex y being Element of R st y is_maximal_in [#]R & (y = x or x < y);
+
+theorem :: DILWORTH:39 :: Pbm:
+for R being with_finite_clique# antisymmetric transitive RelStr
+ holds Lower maximals R = [#]R;
+
+theorem :: DILWORTH:40  :: PCAmin:
+for R being with_finite_clique# antisymmetric transitive RelStr,
+    A being StableSet of R
+ st minimals R c= A holds A = minimals R;
+
+theorem :: DILWORTH:41  :: PCAmax:
+for R being with_finite_clique# antisymmetric transitive RelStr,
+    A being StableSet of R
+ st maximals R c= A holds A = maximals R;
+
+theorem :: DILWORTH:42  :: Hsubp0:
+for R being with_finite_clique# RelStr, S being Subset of R
+ holds clique# subrelstr S <= clique# R;
+
+theorem :: DILWORTH:43 :: Hsubp1:
+for R being with_finite_clique# RelStr, C being Clique of R,
+    S being Subset of R st card C = clique# R & C c= S
+ holds clique# subrelstr S = clique# R;
+
+theorem :: DILWORTH:44  :: Wsubp0:
+for R being with_finite_stability# RelStr, S being Subset of R
+ holds stability# subrelstr S <= stability# R;
+
+theorem :: DILWORTH:45  :: Wsubp1:
+for R being with_finite_stability# RelStr, A being StableSet of R,
+    S being Subset of R st card A = stability# R & A c= S
+ holds stability# subrelstr S = stability# R;
+
+begin :: Partitions into cliques and stable sets
+
+definition
+  let R be RelStr, P be a_partition of the carrier of R;
+  attr P is Clique-wise means
+:: DILWORTH:def 11
+    for x being set st x in P holds x is Clique of R;
+end;
+
+registration let R be RelStr;
+ cluster Clique-wise a_partition of the carrier of R;
+end;
+
+definition
+  let R be RelStr;
+  mode Clique-partition of R is Clique-wise a_partition of the carrier of R;
+end;
+
+registration let R be empty RelStr;
+ cluster empty -> Clique-wise a_partition of the carrier of R;
+end;
+
+theorem :: DILWORTH:46  :: Chpw:
+for R being finite RelStr, C being Clique-partition of R
+ holds card C >= stability# R;
+
+theorem :: DILWORTH:47  :: ACpart1:
+for R being with_finite_stability# RelStr, A being StableSet of R,
+    C being Clique-partition of R st card C = card A
+  ex f being Function of A, C st f is bijective &
+   for x being set st x in A holds x in f.x;
+
+theorem :: DILWORTH:48   :: ACpart2:
+for R being finite RelStr, A being StableSet of R,
+    C being Clique-partition of R st card C = card A
+  for c being set st c in C ex a being Element of A st c /\ A = {a};
+
+theorem :: DILWORTH:49  :: Glueing lemma:
+for R being with_finite_stability# antisymmetric transitive non empty RelStr,
+    A being StableSet of R,
+    U being Clique-partition of subrelstr Upper A,
+    L being Clique-partition of subrelstr Lower A
+ st card A = stability# R & card U = stability# R & card L = stability# R
+  ex C being Clique-partition of R st card C = stability# R;
+
+definition
+  let R be RelStr, P be a_partition of the carrier of R;
+  attr P is StableSet-wise means
+:: DILWORTH:def 12
+
+    for x being set st x in P holds x is StableSet of R;
+end;
+
+registration
+  let R be RelStr;
+  cluster StableSet-wise a_partition of the carrier of R;
+end;
+
+definition
+  let R be RelStr;
+  mode Coloring of R is StableSet-wise a_partition of the carrier of R;
+end;
+
+registration let R be empty RelStr;
+ cluster -> StableSet-wise a_partition of the carrier of R;
+end;
+
+theorem :: DILWORTH:50 :: ColClique:
+for R being finite RelStr, C being Coloring of R holds card C >= clique# R;
+
+begin :: Dilworth's theorem and a dual
+
+    :: There seems to be little theory of antisymmetric transitive relations.
+    :: Posets are required to be reflexive and antisymmetric while
+    :: strict posets to be irreflexive and asymmetric (and both are
+    :: required to be transitive.) Since asymmetric implies antisymmetric,
+    :: it seems that the common ground would be antisymmetric and transitive
+    :: relations.
+
+theorem :: DILWORTH:51    ::  Dilworth: Finite case
+for R being finite antisymmetric transitive RelStr
+ ex C being Clique-partition of R st card(C) = stability# R;
+
+definition
+  let R be with_finite_stability# non empty RelStr, C be Subset of R;
+  attr C is strong-chain means
+:: DILWORTH:def 13
+  for S being finite non empty Subset of R
+   ex P being Clique-partition of subrelstr S
+    st card P <= stability# R &
+       ex c being set st c in P & S /\ C c= c &
+            for d being set st d in P & d <> c holds C /\ d = {};
+end;
+
+registration let R be with_finite_stability# non empty RelStr;
+ cluster strong-chain -> clique Subset of R;
+end;
+
+registration
+ let R be with_finite_stability# antisymmetric transitive non empty RelStr;
+ cluster trivial non empty -> strong-chain Subset of R;
+end;
+
+theorem :: DILWORTH:52  :: Maxsc:
+for R being with_finite_stability# non empty antisymmetric transitive RelStr
+ ex S being non empty Subset of R
+  st S is strong-chain &
+          not ex D being Subset of R st D is strong-chain & S c< D;
+
+theorem :: DILWORTH:53 :: Dilworth: General case
+for R being with_finite_stability# antisymmetric transitive RelStr
+ ex C being Clique-partition of R st card C = stability# R;
+
+theorem :: DILWORTH:54 :: A dual of Dilworth's theorem
+for R being with_finite_clique# antisymmetric transitive RelStr
+ ex A being Coloring of R st card A = clique# R;
+
+begin :: Erdos-Szekeres theorem
+
+theorem :: DILWORTH:55  :: CSR
+for R being finite antisymmetric transitive RelStr, r, s  being Nat
+ st card R = r*s+1
+  holds (ex C being Clique of R st card C >= r+1) or
+        (ex A being StableSet of R st card A >= s+1);
+
+:: In a sequence of n^2+1 (distinct) real numbers there is a monotone
+:: subsequence of length at least n+1.
+
+:: Let F be the sequence.  Define a RelStr with the carrier equal F (a set
+:: of ordered pairs) and the relation defined as: if a = [i,F.i] in F and
+:: b = [j,F.j] in F, for some i and j, then  a < b iff i < j & F.i < F.j.
+:: The relation is asymmetric and transitive.
+
+:: Considered defining FinSubsequence of f but have given up.
+:: There is not much gain from having FinSubsequence of f instead of
+:: FinSubsequence st g c= f
+
+theorem :: DILWORTH:56
+for f being real-valued FinSequence, n being Nat
+ st card f = n^2+1 & f is one-to-one
+  ex g being real-valued FinSubsequence
+   st g c= f & card g >= n+1 & (g is increasing or g is decreasing);

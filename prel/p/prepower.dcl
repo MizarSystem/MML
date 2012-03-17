@@ -7,6 +7,7 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="TARSKI"/>
@@ -18,7 +19,6 @@
 <ArticleID name="COMPLEX1"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="VALUED_0"/>
-<ArticleID name="PARTFUN1"/>
 <ArticleID name="RAT_1"/>
 <ArticleID name="PREPOWER"/>
 </Signature>
@@ -28,31 +28,31 @@
 <Cluster/>
 <Func kind="K" nr="21">
 <Func kind="K" nr="22">
-<Func kind="K" nr="77"/>
-<Func kind="K" nr="73"/>
+<Func kind="K" nr="85"/>
+<Func kind="K" nr="81"/>
 </Func>
 </Func>
 </Typ>
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4">
-<Func kind="K" nr="77"/>
+<Func kind="K" nr="85"/>
 </Adjective>
 <Adjective nr="5">
-<Func kind="K" nr="73"/>
+<Func kind="K" nr="81"/>
 </Adjective>
 <Adjective nr="6"/>
 <Adjective nr="10" value="false"/>
 <Adjective nr="13">
-<Func kind="K" nr="77"/>
-<Func kind="K" nr="73"/>
+<Func kind="K" nr="85"/>
 </Adjective>
-<Adjective nr="26"/>
+<Adjective nr="14">
+<Func kind="K" nr="85"/>
+<Func kind="K" nr="81"/>
+</Adjective>
 <Adjective nr="27"/>
 <Adjective nr="28"/>
-<Adjective nr="38">
-<Func kind="K" nr="77"/>
-</Adjective>
+<Adjective nr="29"/>
 <Adjective nr="40"/>
 </Cluster>
 </RCluster>
@@ -60,44 +60,44 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="25"/>
+<Adjective nr="26"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="110">
+<Func kind="K" nr="118">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="22"/>
 <Adjective nr="23"/>
+<Adjective nr="24"/>
 </Cluster>
 </FCluster>
 <FCluster aid="PREPOWER" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="24"/>
+<Adjective nr="25"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="25"/>
+<Adjective nr="26"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="133">
+<Func kind="K" nr="134">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="24"/>
+<Adjective nr="25"/>
 </Cluster>
 </FCluster>
 <FCluster aid="PREPOWER" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="24"/>
+<Adjective nr="25"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -106,12 +106,12 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="135">
+<Func kind="K" nr="136">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="24"/>
+<Adjective nr="25"/>
 </Cluster>
 </FCluster>
 </Registrations>

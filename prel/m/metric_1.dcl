@@ -7,6 +7,7 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="BINOP_1"/>
@@ -38,7 +39,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="35" value="false"/>
+<Adjective nr="36" value="false"/>
 <Adjective nr="59"/>
 </Cluster>
 </RCluster>
@@ -48,7 +49,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="35" value="false"/>
+<Adjective nr="36" value="false"/>
 <Adjective nr="59"/>
 <Adjective nr="64"/>
 <Adjective nr="65"/>
@@ -58,7 +59,7 @@
 </RCluster>
 <FCluster aid="METRIC_1" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="122"/>
+<Func kind="K" nr="130"/>
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="6"/>
@@ -87,13 +88,13 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="64">
+<Func kind="K" nr="72">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
-<Adjective nr="25"/>
+<Adjective nr="26"/>
 </Cluster>
 </FCluster>
 <FCluster aid="METRIC_1" nr="3">
@@ -104,11 +105,11 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="130">
+<Func kind="K" nr="138">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="35" value="false"/>
+<Adjective nr="36" value="false"/>
 <Adjective nr="59"/>
 </Cluster>
 </FCluster>
@@ -118,7 +119,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="130">
+<Func kind="K" nr="138">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -131,15 +132,15 @@
 </FCluster>
 <FCluster aid="METRIC_1" nr="5">
 <ArgTypes/>
-<Func kind="K" nr="132"/>
+<Func kind="K" nr="140"/>
 <Cluster>
-<Adjective nr="35" value="false"/>
+<Adjective nr="36" value="false"/>
 <Adjective nr="59"/>
 </Cluster>
 </FCluster>
 <FCluster aid="METRIC_1" nr="6">
 <ArgTypes/>
-<Func kind="K" nr="132"/>
+<Func kind="K" nr="140"/>
 <Cluster>
 <Adjective nr="59"/>
 <Adjective nr="64"/>

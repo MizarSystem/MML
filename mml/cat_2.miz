@@ -10,12 +10,12 @@ environ
       FUNCOP_1, FUNCT_3, TARSKI, PARTFUN1, FUNCT_4, MCART_1, CAT_2, REALSET1,
       GRAPH_1, AMI_1, STRUCT_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, DOMAIN_1, RELAT_1, FUNCT_1,
-      FUNCT_2, BINOP_1, PARTFUN1, FUNCT_3, FUNCT_4, FUNCT_5,
-      REALSET1, FUNCOP_1, STRUCT_0, GRAPH_1, CAT_1;
- constructors PARTFUN1, BINOP_1, FUNCT_3, FUNCT_4, FUNCT_5, REALSET1,
-      CAT_1, FUNCOP_1, RELSET_1;
- registrations XBOOLE_0, SUBSET_1, RELSET_1, REALSET1, CAT_1, FUNCT_4,
-      STRUCT_0;
+      FUNCT_2, BINOP_1, PARTFUN1, FUNCT_3, FUNCT_4, FUNCT_5, REALSET1,
+      FUNCOP_1, STRUCT_0, GRAPH_1, CAT_1;
+ constructors PARTFUN1, BINOP_1, FUNCT_3, FUNCT_4, FUNCT_5, REALSET1, CAT_1,
+      FUNCOP_1, RELSET_1;
+ registrations XBOOLE_0, SUBSET_1, RELSET_1, REALSET1, CAT_1, STRUCT_0,
+      RELAT_1;
  requirements SUBSET, BOOLE;
  definitions TARSKI, CAT_1, REALSET1, FUNCOP_1, BINOP_1, GRAPH_1;
  theorems TARSKI, ZFMISC_1, MCART_1, DOMAIN_1, FUNCT_1, FUNCT_2, FUNCT_3,
@@ -39,7 +39,8 @@ definition
   let d be Element of D;
   redefine func f.d -> Element of F;
   coherence
-  proof thus f.d is Element of F;
+  proof
+    thus f.d is Element of F;
   end;
 end;
 
@@ -49,22 +50,22 @@ theorem Th1:
   curry f is Function of C,Funcs(D,E)
 proof
 A1: dom f = [:C,D:] by FUNCT_2:def 1;
-  then
-A2: dom curry f = C by FUNCT_5:31;
-  rng curry f c= Funcs(D,E)
+A2: rng curry f c= Funcs(D,E)
   proof
-    let x be set such that
-A3: x in rng curry f;
-    rng curry f c= Funcs(D,rng f) by A1,FUNCT_5:42;
+A3: rng curry f c= Funcs(D,rng f) by A1,FUNCT_5:42;
+    let x be set;
+    assume
+    x in rng curry f;
     then consider g being Function such that
 A4: x = g and
 A5: dom g = D and
 A6: rng g c= rng f by A3,FUNCT_2:def 2;
     rng f c= E by RELAT_1:def 19;
     then rng g c= E by A6,XBOOLE_1:1;
-    then g is Function of D,E & E<>{} by A5,FUNCT_2:def 1,RELSET_1:11;
+    then g is Function of D,E by A5,FUNCT_2:def 1,RELSET_1:11;
     hence thesis by A4,FUNCT_2:11;
   end;
+  dom curry f = C by A1,FUNCT_5:31;
   hence thesis by A2,FUNCT_2:def 1,RELSET_1:11;
 end;
 
@@ -72,22 +73,22 @@ theorem Th2:
   curry' f is Function of D,Funcs(C,E)
 proof
 A1: dom f = [:C,D:] by FUNCT_2:def 1;
-  then
-A2: dom curry' f = D by FUNCT_5:31;
-  rng curry' f c= Funcs(C,E)
+A2: rng curry' f c= Funcs(C,E)
   proof
-    let x be set such that
-A3: x in rng curry' f;
-    rng curry' f c= Funcs(C,rng f) by A1,FUNCT_5:42;
+A3: rng curry' f c= Funcs(C,rng f) by A1,FUNCT_5:42;
+    let x be set;
+    assume
+    x in rng curry' f;
     then consider g being Function such that
 A4: x = g and
 A5: dom g = C and
 A6: rng g c= rng f by A3,FUNCT_2:def 2;
     rng f c= E by RELAT_1:def 19;
     then rng g c= E by A6,XBOOLE_1:1;
-    then g is Function of C,E & E<>{} by A5,FUNCT_2:def 1,RELSET_1:11;
+    then g is Function of C,E by A5,FUNCT_2:def 1,RELSET_1:11;
     hence thesis by A4,FUNCT_2:11;
   end;
+  dom curry' f = D by A1,FUNCT_5:31;
   hence thesis by A2,FUNCT_2:def 1,RELSET_1:11;
 end;
 
@@ -101,14 +102,16 @@ end;
 
 theorem Th3:
   f.(c,d) = ((curry f).c).d
-proof [c,d] in [:C,D:];
+proof
+  [c,d] in [:C,D:];
   then [c,d] in dom f by FUNCT_2:def 1;
   hence thesis by FUNCT_5:27;
 end;
 
 theorem Th4:
   f.(c,d) = ((curry' f).d).c
-proof [c,d] in [:C,D:];
+proof
+  [c,d] in [:C,D:];
   then [c,d] in dom f by FUNCT_2:def 1;
   hence thesis by FUNCT_5:29;
 end;
@@ -124,27 +127,30 @@ definition
   (the carrier' of B) --> (id c);
   coherence
   proof
-    reconsider T = (the carrier' of B) --> id c
-    as Function of the carrier' of B,the carrier' of C;
+    reconsider T = (the carrier' of B) --> id c as Function of the carrier' of
+    B,the carrier' of C;
     now
       thus for b being Object of B ex d being Object of C st T.(id b) = id d
       by FUNCOP_1:13;
-      thus for f being Morphism of B
-      holds T.(id dom f) = id dom (T.f) & T.(id cod f) = id cod (T.f)
+      thus for f being Morphism of B holds T.(id dom f) = id dom (T.f) & T.(id
+      cod f) = id cod (T.f)
       proof
         let f be Morphism of B;
-        T.(id dom f) = id c & T.(id cod f) = id c by FUNCOP_1:13;
-        then T.(id dom f) = id dom id c & T.(id cod f) = id cod id c &
-        f in the carrier' of B by CAT_1:44;
-        hence thesis by FUNCOP_1:13;
+        T.(id cod f) = id c by FUNCOP_1:13;
+        then
+A1:     T.(id cod f) = id cod id c by CAT_1:44;
+        T.(id dom f) = id c by FUNCOP_1:13;
+        then T.(id dom f) = id dom id c by CAT_1:44;
+        hence thesis by A1,FUNCOP_1:13;
       end;
-      let f,g be Morphism of B such that dom g = cod f;
-      Hom(c,c) <> {} & g*f in the carrier' of B &
-      g in the carrier' of B & f in the carrier' of B by CAT_1:56;
-      then T.(g*f) = id c & T.g = id c & T.f = id c &
-      (id c)*(id c) = (id c)*((id c) qua Morphism of C) by CAT_1:def 13
-,FUNCOP_1:13;
-      hence T.(g*f) = (T.g)*(T.f) by CAT_1:59;
+      let f,g be Morphism of B such that
+      dom g = cod f;
+      Hom(c,c) <> {} by CAT_1:56;
+      then
+A2:   T.f = id c & (id c)*(id c) = (id c)*((id c) qua Morphism of C) by
+      CAT_1:def 13,FUNCOP_1:13;
+      T.(g*f) = id c & T.g = id c by FUNCOP_1:13;
+      hence T.(g*f) = (T.g)*(T.f) by A2,CAT_1:59;
     end;
     hence thesis by CAT_1:96;
   end;
@@ -153,7 +159,8 @@ end;
 canceled 2;
 
 theorem
-  for c being Object of C, b being Object of B holds (Obj (B --> c)).b = c
+  for c being Object of C, b being Object of B holds (Obj (B --> c)).b =
+  c
 proof
   let c be Object of C, b be Object of B;
   (B --> c).(id b) = id c by FUNCOP_1:13;
@@ -164,14 +171,14 @@ definition
   let C,D;
   func Funct(C,D) -> set means
   :Def2:
-  for x being set holds x in it iff x is Functor of C,D;
+  for x being set holds x in it iff x is
+  Functor of C,D;
   existence
   proof
     defpred P[set] means $1 is Functor of C,D;
     consider F being set such that
-A1: for x being set holds x in F iff
-    x in Funcs(the carrier' of C,the carrier' of D) & P[x] from
-    XBOOLE_0:sch 1;
+A1: for x being set holds x in F iff x in Funcs(the carrier' of C,the
+    carrier' of D) & P[x] from XBOOLE_0:sch 1;
     take F;
     let x be set;
     thus x in F implies x is Functor of C,D by A1;
@@ -183,13 +190,12 @@ A2: x is Functor of C,D;
   uniqueness
   proof
     let F1,F2 be set such that
-A3: (for x being set holds x in F1 iff x is Functor of C,D) &
-    (for x being set holds x in F2 iff x is Functor of C,D);
+A3: for x being set holds x in F1 iff x is Functor of C,D and
+A4: for x being set holds x in F2 iff x is Functor of C,D;
     now
       let x be set;
-      (x in F1 iff x is Functor of C,D) & (x in F2 iff x is Functor of C,D)
-      by A3;
-      hence x in F1 iff x in F2;
+      x in F1 iff x is Functor of C,D by A3;
+      hence x in F1 iff x in F2 by A4;
     end;
     hence thesis by TARSKI:2;
   end;
@@ -210,10 +216,12 @@ definition
   let C,D;
   mode FUNCTOR-DOMAIN of C,D -> non empty set means
     :Def3:
-    for x being Element of it holds x is Functor of C,D;
+    for x being Element
+    of it holds x is Functor of C,D;
   existence
   proof
-    take Funct(C,D); thus thesis by Def2;
+    take Funct(C,D);
+    thus thesis by Def2;
   end;
 end;
 
@@ -230,7 +238,8 @@ definition
   let F be FUNCTOR-DOMAIN of C,D, T be Function of A,F, x be Element of A;
   redefine func T.x -> Element of F;
   coherence
-  proof thus T.x is Element of F;
+  proof
+    thus T.x is Element of F;
   end;
 end;
 
@@ -239,7 +248,8 @@ definition
   redefine func Funct(C,D) -> FUNCTOR-DOMAIN of C,D;
   coherence
   proof
-    let x be Element of Funct(C,D); thus thesis by Def2;
+    let x be Element of Funct(C,D);
+    thus thesis by Def2;
   end;
 end;
 
@@ -249,15 +259,14 @@ definition
   let C;
   mode Subcategory of C -> Category means
     :Def4:
-    the carrier of it c= the carrier of C &
-    (for a,b being Object of it, a',b' being Object of C
-    st a = a' & b = b' holds Hom(a,b) c= Hom(a',b')) &
-    the Comp of it c= the Comp of C &
-    (for a being Object of it, a' being Object of C st a = a'
-    holds id a = id a');
+    the carrier of it c= the
+carrier of C & (for a,b being Object of it, a',b' being Object of C st a = a' &
+b = b' holds Hom(a,b) c= Hom(a',b')) & the Comp of it c= the Comp of C & for a
+    being Object of it, a' being Object of C st a = a' holds id a = id a';
   existence
   proof
-    take C; thus thesis;
+    take C;
+    thus thesis;
   end;
 end;
 
@@ -265,40 +274,47 @@ registration
   let C;
   cluster strict Subcategory of C;
   existence
-  proof consider c being Object of C;
+  proof
+    consider c being Object of C;
     set E = 1Cat(c,id c);
     now
       thus the carrier of E c= the carrier of C
       proof
         let a be set;
-        assume a in the carrier of E;
+        assume
+        a in the carrier of E;
         then a = c by TARSKI:def 1;
         hence thesis;
       end;
-      thus for a,b being Object of E, a',b' being Object of C
-      st a = a' & b = b' holds Hom(a,b) c= Hom(a',b')
+      thus for a,b being Object of E, a',b' being Object of C st a = a' & b =
+      b' holds Hom(a,b) c= Hom(a',b')
       proof
-        let a,b be Object of E, a',b' be Object of C such that
-A1:     a = a' & b = b';
+        let a,b be Object of E, a',b' be Object of C;
+        assume
+        a = a' & b = b';
+        then
+A1:     a' = c & b' = c by TARSKI:def 1;
         let x be set;
-        assume x in Hom(a,b);
-        then x = id c & a' = c & b' = c by A1,TARSKI:def 1;
-        hence thesis by CAT_1:55;
+        assume
+        x in Hom(a,b);
+        then x = id c by TARSKI:def 1;
+        hence thesis by A1,CAT_1:55;
       end;
       thus the Comp of E c= the Comp of C
       proof
-A2:     dom id c = c & cod id c = c by CAT_1:44;
-        then
-A3:     [id c,id c] in dom the Comp of C by CAT_1:40;
         reconsider i = id c as Morphism of C;
-A4:     Hom(c,c) <> {} by CAT_1:56;
+A2:     Hom(c,c) <> {} by CAT_1:56;
+A3:     dom id c = c & cod id c = c by CAT_1:44;
+        then
+A4:     [id c,id c] in dom the Comp of C by CAT_1:40;
         the Comp of E = (id c,id c).-->((id c)*(id c)) by CAT_1:59
-          .= (id c,id c).-->((id c)*i) by A4,CAT_1:def 13
-          .= [id c,id c].-->(the Comp of C).(id c,id c) by A2,CAT_1:41;
-        hence thesis by A3,FUNCT_4:8;
+          .= (id c,id c).-->((id c)*i) by A2,CAT_1:def 13
+          .= [id c,id c].-->(the Comp of C).(id c,id c) by A3,CAT_1:41;
+        hence thesis by A4,FUNCT_4:8;
       end;
       let a be Object of E, a' be Object of C;
-      assume a = a';
+      assume
+      a = a';
       then a' = c by TARSKI:def 1;
       hence id a = id a' by TARSKI:def 1;
     end;
@@ -323,7 +339,8 @@ theorem Th13:
   the carrier' of E c= the carrier' of C
 proof
   let x be set;
-  assume x in the carrier' of E;
+  assume
+  x in the carrier' of E;
   then reconsider f = x as Morphism of E;
   set a = dom f, b = cod f;
   reconsider a' = a, b' = b as Object of C by Th12;
@@ -353,32 +370,36 @@ A1: f = f';
 end;
 
 theorem
-  for a,b being Object of E, a',b' being Object of C,f being Morphism of a, b
-  st a = a' & b = b' & Hom(a,b)<>{} holds f is Morphism of a',b'
+  for a,b being Object of E, a',b' being Object of C,f being Morphism of
+  a, b st a = a' & b = b' & Hom(a,b)<>{} holds f is Morphism of a',b'
 proof
   let a,b be Object of E, a',b' be Object of C, f be Morphism of a,b;
-  assume a = a' & b = b' & Hom(a,b)<>{};
+  assume
+  a = a' & b = b' & Hom(a,b)<>{};
   then f in Hom(a,b) & Hom(a,b) c= Hom(a',b') by Def4,CAT_1:def 7;
   hence thesis by CAT_1:21;
 end;
 
 theorem Th17:
-  for f,g being (Morphism of E), f',g' being Morphism of C
-  st f = f' & g = g' & dom g = cod f holds g*f = g'*f'
+  for f,g being (Morphism of E), f',g' being Morphism of C st f =
+  f' & g = g' & dom g = cod f holds g*f = g'*f'
 proof
   let f,g be (Morphism of E), f',g' be Morphism of C such that
 A1: f = f' & g = g' and
 A2: dom g = cod f;
   dom g = dom g' & cod f = cod f' by A1,Th15;
-  then g*f = (the Comp of E).(g,f) & [g,f] in dom(the Comp of E) &
-  g'*f' = (the Comp of C).(g',f') & the Comp of E c= the Comp of C
-  by A2,Def4,CAT_1:40,41;
-  hence thesis by A1,GRFUNC_1:8;
+  then
+A3: g'*f' = (the Comp of C).(g',f') by A2,CAT_1:41;
+A4: the Comp of E c= the Comp of C by Def4;
+  g*f = (the Comp of E).(g,f) & [g,f] in dom(the Comp of E) by A2,CAT_1:40
+  ,41;
+  hence thesis by A1,A3,A4,GRFUNC_1:8;
 end;
 
 theorem
   C is Subcategory of C
-proof thus the carrier of C c= the carrier of C;
+proof
+  thus the carrier of C c= the carrier of C;
   thus thesis;
 end;
 
@@ -386,9 +407,9 @@ theorem Th19:
   id E is Functor of E,C
 proof
   rng id E = the carrier' of E by RELAT_1:71;
-  then rng id E c= the carrier' of C & the carrier' of E <> {} by Th13;
-  then reconsider T = id E as Function of the carrier' of E,the carrier' of C
-  by FUNCT_2:8;
+  then rng id E c= the carrier' of C by Th13;
+  then reconsider
+  T = id E as Function of the carrier' of E,the carrier' of C by FUNCT_2:8;
   now
     thus for e being Object of E ex c being Object of C st T.(id e) = id c
     proof
@@ -398,25 +419,23 @@ proof
         .= id c by Def4;
       hence thesis;
     end;
-    thus for f being Morphism of E
-    holds T.(id dom f) = id dom (T.f) & T.(id cod f) = id cod (T.f)
+    thus for f being Morphism of E holds T.(id dom f) = id dom (T.f) & T.(id
+    cod f) = id cod (T.f)
     proof
       let f be Morphism of E;
-      now
-        thus T.(id dom f) = id dom f by FUNCT_1:35
-          .= id dom ((id E).f) by FUNCT_1:35;
-        thus T.(id cod f) = id cod f by FUNCT_1:35
-          .= id cod ((id E).f) by FUNCT_1:35;
-        thus dom (T.f) = dom((id E).f) & cod (T.f) = cod((id E).f) by Th15;
-      end;
-      hence thesis by Def4;
+A1:   T.(id dom f) = id dom f by FUNCT_1:35
+        .= id dom ((id E).f) by FUNCT_1:35;
+A2:   T.(id cod f) = id cod f by FUNCT_1:35
+        .= id cod ((id E).f) by FUNCT_1:35;
+      dom (T.f) = dom((id E).f) & cod (T.f) = cod((id E).f) by Th15;
+      hence thesis by A1,A2,Def4;
     end;
     let f,g be Morphism of E;
+A3: T.f = f & T.g = g by FUNCT_1:35;
     assume
-A1: dom g = cod f;
-    then T.f = f & T.g = g & T.(g*f) = ((id E).g)*((id E).f) by CAT_1:99
-,FUNCT_1:35;
-    hence T.(g*f) = (T.g)*(T.f) by A1,Th17;
+A4: dom g = cod f;
+    then T.(g*f) = ((id E).g)*((id E).f) by CAT_1:99;
+    hence T.(g*f) = (T.g)*(T.f) by A4,A3,Th17;
   end;
   hence thesis by CAT_1:96;
 end;
@@ -424,7 +443,6 @@ end;
 definition
   let C,E;
   func incl(E) -> Functor of E,C equals
-
   id E;
   coherence by Th19;
 end;
@@ -448,63 +466,65 @@ theorem
 theorem
   incl E is faithful
 proof
-  let a,b be Object of E such that Hom(a,b) <> {};
+  let a,b be Object of E such that
+  Hom(a,b) <> {};
   let f1,f2 be Morphism of a,b;
-  (incl E).f1 = f1 & (incl E).f2 = f2 by FUNCT_1:35;
-  hence thesis;
+  (incl E).f1 = f1 by FUNCT_1:35;
+  hence thesis by FUNCT_1:35;
 end;
 
 theorem Th25:
-  incl E is full iff for a,b being Object of E, a',b' being Object of C
-  st a = a' & b = b' holds Hom(a,b) = Hom(a',b')
+  incl E is full iff for a,b being Object of E, a',b' being Object
+  of C st a = a' & b = b' holds Hom(a,b) = Hom(a',b')
 proof
   set T = incl E;
-  thus T is full implies for a,b being Object of E, a',b' being Object of C
-  st a = a' & b = b' holds Hom(a,b) = Hom(a',b')
+  thus T is full implies for a,b being Object of E, a',b' being Object of C st
+  a = a' & b = b' holds Hom(a,b) = Hom(a',b')
   proof
     assume
-A1: for a,b being Object of E st Hom(T.a,T.b) <> {}
-    for g being Morphism of T.a,T.b holds
-    Hom(a,b) <> {} & ex f being Morphism of a,b st g = T.f;
+A1: for a,b being Object of E st Hom(T.a,T.b) <> {} for g being
+Morphism of T.a,T.b holds Hom(a,b) <> {} & ex f being Morphism of a,b st g = T.
+    f;
     let a,b be Object of E, a',b' be Object of C such that
 A2: a = a' & b = b';
     now
       let x be set;
       Hom(a,b) c= Hom(a',b') by A2,Def4;
       hence x in Hom(a,b) implies x in Hom(a',b');
-A3:   T.a = a' & T.b = b' by A2,Th22;
       assume
-A4:   x in Hom(a',b');
+A3:   x in Hom(a',b');
+A4:   T.a = a' & T.b = b' by A2,Th22;
       then reconsider g = x as Morphism of T.a,T.b by A3,CAT_1:def 7;
       consider f being Morphism of a,b such that
-A5:   g = T.f by A1,A3,A4;
-      g = f & Hom(a,b) <> {} by A1,A3,A4,A5,FUNCT_1:35;
-      hence x in Hom(a,b) by CAT_1:def 7;
+A5:   g = T.f by A1,A4,A3;
+A6:   g = f by A5,FUNCT_1:35;
+      Hom(a,b) <> {} by A1,A4,A3;
+      hence x in Hom(a,b) by A6,CAT_1:def 7;
     end;
     hence thesis by TARSKI:2;
   end;
   assume
-A6: for a,b being Object of E, a',b' being Object of C
-  st a = a' & b = b' holds Hom(a,b) = Hom(a',b');
+A7: for a,b being Object of E, a',b' being Object of C st a = a' & b =
+  b' holds Hom(a,b) = Hom(a',b');
   let a,b be Object of E such that
-A7: Hom(T.a,T.b) <> {};
+A8: Hom(T.a,T.b) <> {};
   let g be Morphism of T.a,T.b;
-A8: a = T.a & b = T.b by Th22;
-  then
-A9: Hom(a,b) = Hom(T.a,T.b) by A6;
-  thus Hom(a,b) <> {} by A6,A7,A8;
-  g in Hom(T.a,T.b) by A7,CAT_1:def 7;
+A9: g in Hom(T.a,T.b) by A8,CAT_1:def 7;
+A10: a = T.a & b = T.b by Th22;
+  hence Hom(a,b) <> {} by A7,A8;
+  Hom(a,b) = Hom(T.a,T.b) by A7,A10;
   then reconsider f = g as Morphism of a,b by A9,CAT_1:def 7;
-  take f; thus thesis by FUNCT_1:35;
+  take f;
+  thus thesis by FUNCT_1:35;
 end;
 
 definition
   let C be non void non empty CatStr, D;
   pred C is_full_subcategory_of D means
   :Def6:
-  C is Subcategory of D &
-  for a,b being Object of C, a',b' being Object of D
-  st a = a' & b = b' holds Hom(a,b) = Hom(a',b');
+  C is Subcategory of D & for a,b
+being Object of C, a',b' being Object of D st a = a' & b = b' holds Hom(a,b) =
+  Hom(a',b');
 end;
 
 canceled;
@@ -514,171 +534,175 @@ theorem
 proof
   thus E is_full_subcategory_of C implies incl(E) is full
   proof
-    assume E is_full_subcategory_of C;
-    then for a,b being Object of E, a',b' being Object of C
-    st a = a' & b = b' holds Hom(a,b) = Hom(a',b') by Def6;
+    assume
+    E is_full_subcategory_of C;
+    then
+    for a,b being Object of E, a',b' being Object of C st a = a' & b = b'
+    holds Hom(a,b) = Hom(a',b') by Def6;
     hence thesis by Th25;
   end;
-  assume incl(E) is full;
-  hence E is Subcategory of C &
-  for a,b being Object of E, a',b' being Object of C
-  st a = a' & b = b' holds Hom(a,b) = Hom(a',b') by Th25;
+  assume
+  incl(E) is full;
+  hence E is Subcategory of C & for a,b being Object of E, a',b' being Object
+  of C st a = a' & b = b' holds Hom(a,b) = Hom(a',b') by Th25;
 end;
 
 theorem Th28:
-  for O being non empty Subset of the carrier of C holds
-  union{Hom(a,b) where a is Object of C,b is Object of C: a in O & b in O}
-  is non empty Subset of the carrier' of C
+  for O being non empty Subset of the carrier of C holds union{Hom
+  (a,b) where a is Object of C,b is Object of C: a in O & b in O} is non empty
+  Subset of the carrier' of C
 proof
   let O be non empty Subset of the carrier of C;
   set H = {Hom(a,b) where a is Object of C, b is Object of C: a in O & b in O};
   set M = union H;
-  now
-    now consider a being Element of O;
-      reconsider a as Object of C;
-      id a in Hom(a,a) & Hom(a,a) in H by CAT_1:55;
-      then id a in M by TARSKI:def 4;
-      hence ex f being set st f in M;
-    end;
-    hence M is non empty set;
-    thus M c= the carrier' of C
-    proof
-      let x be set;
-      assume x in M;
-      then consider X being set such that
-A1:   x in X and
-A2:   X in H by TARSKI:def 4;
-      consider a,b being Object of C such that
-A3:   X = Hom(a,b) and a in O & b in O by A2;
-      thus thesis by A1,A3;
-    end;
+A1: M c= the carrier' of C
+  proof
+    let x be set;
+    assume
+    x in M;
+    then consider X being set such that
+A2: x in X and
+A3: X in H by TARSKI:def 4;
+    ex a,b being Object of C st X = Hom(a,b) & a in O & b in O by A3;
+    hence thesis by A2;
   end;
-  hence thesis;
+  now
+    consider a being Element of O;
+    reconsider a as Object of C;
+    id a in Hom(a,a) & Hom(a,a) in H by CAT_1:55;
+    then id a in M by TARSKI:def 4;
+    hence ex f being set st f in M;
+  end;
+  hence thesis by A1;
 end;
 
 theorem Th29:
-  for O being non empty Subset of the carrier of C, M being non empty set st
-  M = union{Hom(a,b) where a is Object of C,b is Object of C: a in O & b in O}
-  holds (the Source of C)|M is Function of M,O &
-  (the Target of C)|M is Function of M,O &
-  (the Comp of C)||M is PartFunc of [:M,M:],M &
-  (the Id of C)|O is Function of O,M
+  for O being non empty Subset of the carrier of C, M being non
+empty set st M = union{Hom(a,b) where a is Object of C,b is Object of C: a in O
+& b in O} holds (the Source of C)|M is Function of M,O & (the Target of C)|M is
+Function of M,O & (the Comp of C)||M is PartFunc of [:M,M:],M & (the Id of C)|O
+  is Function of O,M
 proof
   let O be non empty Subset of the carrier of C;
   set H = {Hom(a,b) where a is Object of C, b is Object of C: a in O & b in O};
+A1: dom the Source of C = the carrier' of C by FUNCT_2:def 1;
   let M be non empty set such that
-A1: M = union H;
-  set d = (the Source of C)|M, c = (the Target of C)|M,
-  p = (the Comp of C)||M, i = (the Id of C)|O;
-A2: now
+A2: M = union H;
+A3: now
     let f be Morphism of C;
-    assume f in M;
+    assume
+    f in M;
     then consider X being set such that
-A3: f in X and
-A4: X in H by A1,TARSKI:def 4;
-    ex a,b being Object of C st X = Hom(a,b) & a in O & b in O by A4;
-    hence dom f in O & cod f in O by A3,CAT_1:18;
+A4: f in X and
+A5: X in H by A2,TARSKI:def 4;
+    ex a,b being Object of C st X = Hom(a,b) & a in O & b in O by A5;
+    hence dom f in O & cod f in O by A4,CAT_1:18;
   end;
-A5: dom the Source of C = the carrier' of C &
-  dom the Target of C = the carrier' of C by FUNCT_2:def 1;
-A6: dom d = (dom the Source of C) /\ M & dom c = (dom the Target of C) /\ M
-  by RELAT_1:90;
-A7: M is non empty Subset of the carrier' of C by A1,Th28;
-  now
-    thus dom d = M & dom c = M by A5,A7,RELAT_1:91;
-    thus rng d c= O
-    proof
-      let y be set;
-      assume y in rng d;
-      then consider x being set such that
-A8:   x in dom d and
-A9:   y = d.x by FUNCT_1:def 5;
-      reconsider f = x as Morphism of C by A5,A6,A8,XBOOLE_0:def 4;
-      d.f = dom f & f in M by A6,A8,FUNCT_1:70,XBOOLE_0:def 4;
-      hence thesis by A2,A9;
-    end;
-    thus rng c c= O
-    proof
-      let y be set;
-      assume y in rng c;
-      then consider x being set such that
-A10:  x in dom c and
-A11:  y = c.x by FUNCT_1:def 5;
-      reconsider f = x as Morphism of C by A5,A6,A10,XBOOLE_0:def 4;
-      c.f = cod f & f in M by A6,A10,FUNCT_1:70,XBOOLE_0:def 4;
-      hence thesis by A2,A11;
-    end;
-  end;
-  hence d is Function of M,O & c is Function of M,O by FUNCT_2:def 1
-,RELSET_1:11;
-  thus p is PartFunc of [:M,M:],M
+  set d = (the Source of C)|M, c = (the Target of C)|M, p = (the Comp of C)||M
+  , i = (the Id of C)|O;
+A6: dom the Target of C = the carrier' of C by FUNCT_2:def 1;
+A7: dom d = (dom the Source of C) /\ M by RELAT_1:90;
+A8: rng d c= O
   proof
-A12: dom the Comp of C c= [:the carrier' of C,the carrier' of C:]
-    by RELAT_1:def 18;
-A13: dom p = (dom the Comp of C) /\ [:M,M:] by RELAT_1:90;
-    rng p c= M
-    proof
-      let y be set;
-      assume y in rng p;
-      then consider x being set such that
-A14:  x in dom p and
-A15:  y = p.x by FUNCT_1:def 5;
-A16:  x in dom the Comp of C by A13,A14,XBOOLE_0:def 4;
-      then consider g,f being Morphism of C such that
-A17:  x = [g,f] by A12,DOMAIN_1:9;
-      now
-        thus p.x = (the Comp of C).(g,f) by A14,A17,FUNCT_1:70
-          .= g*f by A16,A17,CAT_1:def 4;
-        now [g,f] in [:M,M:] by A13,A14,A17,XBOOLE_0:def 4;
-          then f in M & g in M by ZFMISC_1:106;
-          hence dom f in O & cod g in O by A2;
-          dom g = cod f by A16,A17,CAT_1:40;
-          hence dom(g*f) = dom f & cod(g*f) = cod g by CAT_1:42;
-        end;
-        hence Hom(dom(g*f),cod(g*f)) in H & g*f in Hom(dom(g*f),cod(g*f));
-      end;
-      hence thesis by A1,A15,TARSKI:def 4;
-    end;
-    hence thesis by A13,RELSET_1:11,XBOOLE_1:17;
+    let y be set;
+    assume
+    y in rng d;
+    then consider x being set such that
+A9: x in dom d and
+A10: y = d.x by FUNCT_1:def 5;
+    reconsider f = x as Morphism of C by A1,A7,A9,XBOOLE_0:def 4;
+    d.f = dom f & f in M by A7,A9,FUNCT_1:70,XBOOLE_0:def 4;
+    hence thesis by A3,A10;
   end;
-  now
-A18: dom the Id of C = the carrier of C by FUNCT_2:def 1;
-A19: dom i = (dom the Id of C) /\ O by RELAT_1:90;
-    thus dom i = O by A18,RELAT_1:91;
-    thus rng i c= M
-    proof
-      let y be set;
-      assume y in rng i;
-      then consider x being set such that
-A20:  x in dom i and
-A21:  y = i.x by FUNCT_1:def 5;
-      reconsider a = x as Object of C by A19,A20;
-      i.a = id a & a in O by A19,A20,FUNCT_1:70,XBOOLE_0:def 4;
-      then i.a in Hom(a,a) & Hom(a,a) in H by CAT_1:55;
-      hence thesis by A1,A21,TARSKI:def 4;
-    end;
+A11: M is non empty Subset of the carrier' of C by A2,Th28;
+  then
+A12: dom c = M by A6,RELAT_1:91;
+A13: dom c = (dom the Target of C) /\ M by RELAT_1:90;
+A14: rng c c= O
+  proof
+    let y be set;
+    assume
+    y in rng c;
+    then consider x being set such that
+A15: x in dom c and
+A16: y = c.x by FUNCT_1:def 5;
+    reconsider f = x as Morphism of C by A6,A13,A15,XBOOLE_0:def 4;
+    c.f = cod f & f in M by A13,A15,FUNCT_1:70,XBOOLE_0:def 4;
+    hence thesis by A3,A16;
   end;
-  hence thesis by FUNCT_2:def 1,RELSET_1:11;
+  dom d = M by A1,A11,RELAT_1:91;
+  hence d is Function of M,O & c is Function of M,O by A8,A14,A12, FUNCT_2
+  :def 1,RELSET_1:11;
+A17: dom p = (dom the Comp of C) /\ [:M,M:] by RELAT_1:90;
+A18: dom i = (dom the Id of C) /\ O by RELAT_1:90;
+A19: rng i c= M
+  proof
+    let y be set;
+    assume
+    y in rng i;
+    then consider x being set such that
+A20: x in dom i and
+A21: y = i.x by FUNCT_1:def 5;
+    reconsider a = x as Object of C by A18,A20;
+    i.a = id a by A20,FUNCT_1:70;
+    then
+A22: i.a in Hom(a,a) by CAT_1:55;
+    a in O by A18,A20,XBOOLE_0:def 4;
+    then Hom(a,a) in H;
+    hence thesis by A2,A21,A22,TARSKI:def 4;
+  end;
+A23: dom the Comp of C c= [:the carrier' of C,the carrier' of C:] by RELAT_1
+  :def 18;
+  rng p c= M
+  proof
+    let y be set;
+    assume
+    y in rng p;
+    then consider x being set such that
+A24: x in dom p and
+A25: y = p.x by FUNCT_1:def 5;
+A26: x in dom the Comp of C by A17,A24,XBOOLE_0:def 4;
+    then consider g,f being Morphism of C such that
+A27: x = [g,f] by A23,DOMAIN_1:9;
+A28: [g,f] in [:M,M:] by A17,A24,A27,XBOOLE_0:def 4;
+    then g in M by ZFMISC_1:106;
+    then
+A29: cod g in O by A3;
+    dom g = cod f by A26,A27,CAT_1:40;
+    then
+A30: dom(g*f) = dom f & cod(g*f) = cod g by CAT_1:42;
+    f in M by A28,ZFMISC_1:106;
+    then dom f in O by A3;
+    then
+A31: Hom(dom(g*f),cod(g*f)) in H by A29,A30;
+A32: g*f in Hom(dom(g*f),cod(g*f ));
+    p.x = (the Comp of C).(g,f) by A24,A27,FUNCT_1:70
+      .= g*f by A26,A27,CAT_1:def 4;
+    hence thesis by A2,A25,A31,A32,TARSKI:def 4;
+  end;
+  hence p is PartFunc of [:M,M:],M by A17,RELSET_1:11,XBOOLE_1:17;
+  dom the Id of C = the carrier of C by FUNCT_2:def 1;
+  then dom i = O by RELAT_1:91;
+  hence thesis by A19,FUNCT_2:def 1,RELSET_1:11;
 end;
 
 registration
-  let O, M be non empty set, d,c being Function of M,O,
-      p being PartFunc of [:M,M:],M, i being Function of O,M;
- cluster CatStr(#O,M,d,c,p,i#) -> non void non empty;
- coherence;
+  let O, M be non empty set, d,c being Function of M,O, p being PartFunc of [:
+  M,M:],M, i being Function of O,M;
+  cluster CatStr(#O,M,d,c,p,i#) -> non void non empty;
+  coherence;
 end;
 
 theorem
-  for O being non empty Subset of the carrier of C, M being non empty set,
-  d,c being Function of M,O, p being PartFunc of [:M,M:],M,
-  i being Function of O,M
-  st M = union{Hom(a,b) where a is Object of C,b is Object of C: a in O & b in
-  O} & d = (the Source of C)|M & c = (the Target of C)|M
-  & p = (the Comp of C)||M & i = (the Id of C)|O
-  holds CatStr(#O,M,d,c,p,i#) is_full_subcategory_of C
+  for O being non empty Subset of the carrier of C, M being non empty
+set, d,c being Function of M,O, p being PartFunc of [:M,M:],M, i being Function
+of O,M st M = union{Hom(a,b) where a is Object of C,b is Object of C: a in O &
+b in O} & d = (the Source of C)|M & c = (the Target of C)|M & p = (the Comp of
+C)||M & i = (the Id of C)|O holds CatStr(#O,M,d,c,p,i#) is_full_subcategory_of
+  C
 proof
-  let O be non empty Subset of the carrier of C, M be non empty set,
-  d,c be Function of M,O, p be PartFunc of [:M,M:],M, i be Function of O,M;
+  let O be non empty Subset of the carrier of C, M be non empty set, d,c be
+  Function of M,O, p be PartFunc of [:M,M:],M, i be Function of O,M;
   set H = {Hom(a,b) where a is Object of C, b is Object of C: a in O & b in O};
   assume that
 A1: M = union H and
@@ -699,70 +723,83 @@ A9: for f,g being Element of M holds [g,f] in dom(p) iff d.g=c.f
   proof
     let f,g be Element of M;
 A10: g is Morphism of C & f is Morphism of C by A6;
-A11: d.g = (the Source of C).g & c.f = (the Target of C).f by A2,A3,FUNCT_1:72;
+A11: d.g = (the Source of C).g & c.f = (the Target of C).f by A2,A3,
+    FUNCT_1:72;
     thus [g,f] in dom(p) implies d.g=c.f
     proof
-      assume [g,f] in dom(p);
+      assume
+      [g,f] in dom(p);
       then [g,f] in (dom the Comp of C) /\ [:M,M:] by A4,RELAT_1:90;
       then [g,f] in (dom the Comp of C) by XBOOLE_0:def 4;
       hence thesis by A10,A11,CAT_1:def 8;
     end;
-    assume d.g=c.f;
-    then [g,f] in dom the Comp of C & [g,f] in [:M,M:] by A10,A11,CAT_1:def 8;
+    assume
+    d.g=c.f;
+    then [g,f] in dom the Comp of C by A10,A11,CAT_1:def 8;
     then [g,f] in (dom the Comp of C) /\ [:M,M:] by XBOOLE_0:def 4;
     hence thesis by A4,RELAT_1:90;
   end;
-A12: for f,g being Element of M st d.g=c.f
-  holds p.[g,f] = (the Comp of C).[g,f]
+A12: for f,g being Element of M st d.g=c.f holds p.[g,f] = (the Comp of C).[
+  g,f]
   proof
     let f,g be Element of M;
-    assume d.g=c.f;
+    assume
+    d.g=c.f;
     then [g,f] in dom(p) by A9;
     hence thesis by A4,FUNCT_1:70;
   end;
 A13: for f,g being Element of M st d.g=c.f holds p.[g,f] is Element of M
   proof
     let f,g be Element of M;
+A14: f is Morphism of C & g is Morphism of C by A6;
     assume
-A14: d.g=c.f;
+A15: d.g=c.f;
     then [g,f] in dom p by A9;
     then p.[g,f] is Element of M by PARTFUN1:27;
     then reconsider h = p.[g,f] as Morphism of C by A6;
+A16: h = (the Comp of C).(g,f) by A12,A15;
     set a = dom h, b = cod h;
-    f is Morphism of C & g is Morphism of C & h = (the Comp of C).(g,f) &
-    d.f = (the Source of C).f & c.g = (the Target of C).g &
-    d.g = (the Source of C).g & c.f = (the Target of C).f by A2,A3,A6,A12,A14,
-FUNCT_1:72;
-    then (the Source of C).h = d.f & (the Target of C).h = c.g
-        by A14,CAT_1:def 8;
-    then h in Hom(a,b) & Hom(a,b) in H;
+A17: d.g = (the Source of C).g & c.f = (the Target of C).f by A2,A3,
+    FUNCT_1:72;
+    c.g = (the Target of C).g by A3,FUNCT_1:72;
+    then
+A18: (the Target of C).h = c.g by A15,A14,A16,A17,CAT_1:def 8;
+    d.f = (the Source of C).f by A2,FUNCT_1:72;
+    then (the Source of C).h = d.f by A15,A14,A16,A17,CAT_1:def 8;
+    then h in Hom(a,b) & Hom(a,b) in H by A18;
     hence thesis by A1,TARSKI:def 4;
   end;
-A15: for a,b being Object of B, a',b' being Object of C
-  st a = a' & b = b' holds Hom(a,b) = Hom(a',b')
+A19: for a,b being Object of B, a',b' being Object of C st a = a' & b = b'
+  holds Hom(a,b) = Hom(a',b')
   proof
     let a,b be Object of B, a',b' be Object of C such that
-A16: a = a' & b = b';
+A20: a = a' & b = b';
     now
       let x be set;
       thus x in Hom(a,b) implies x in Hom(a',b')
       proof
         assume
-A17:    x in Hom(a,b);
+A21:    x in Hom(a,b);
         then reconsider f = x as Morphism of B;
         reconsider f' = f as Morphism of C by A6;
-        dom f = dom f' & cod f = cod f' by A2,A3,FUNCT_1:72;
-        then a = dom f' & b = cod f' by A17,CAT_1:18;
-        hence thesis by A16;
+        cod f = cod f' by A3,FUNCT_1:72;
+        then
+A22:    b = cod f' by A21,CAT_1:18;
+        dom f = dom f' by A2,FUNCT_1:72;
+        then a = dom f' by A21,CAT_1:18;
+        hence thesis by A20,A22;
       end;
       assume
-A18:  x in Hom(a',b');
+A23:  x in Hom(a',b');
       then reconsider f' = x as Morphism of C;
-      Hom(a',b') in H by A16;
-      then reconsider f = f' as Morphism of B by A1,A18,TARSKI:def 4;
-      dom f = dom f' & cod f = cod f' by A2,A3,FUNCT_1:72;
-      then dom f = a' & cod f = b' by A18,CAT_1:18;
-      hence x in Hom(a,b) by A16;
+      Hom(a',b') in H by A20;
+      then reconsider f = f' as Morphism of B by A1,A23,TARSKI:def 4;
+      cod f = cod f' by A3,FUNCT_1:72;
+      then
+A24:  cod f = b' by A23,CAT_1:18;
+      dom f = dom f' by A2,FUNCT_1:72;
+      then dom f = a' by A23,CAT_1:18;
+      hence x in Hom(a,b) by A20,A24;
     end;
     hence thesis by TARSKI:2;
   end;
@@ -771,119 +808,121 @@ A18:  x in Hom(a',b');
     now
       thus for f,g being Element of M holds [g,f] in dom(p) iff d.g=c.f by A9;
       thus
-A19:  for f,g being Element of M
-      st d.g=c.f holds d.(p.(g,f)) = d.f & c.(p.(g,f)) = c.g
+A25:  for f,g being Element of M st d.g=c.f holds d.(p.(g,f)) = d.f
+      & c.(p.(g,f)) = c.g
       proof
         let f,g be Element of M;
+A26:    g is Morphism of C & f is Morphism of C by A6;
+A27:    d.g = (the Source of C).g & c.f = (the Target of C).f by A2,A3,
+        FUNCT_1:72;
         assume
-A20:    d.g=c.f;
-A21:    g is Morphism of C & f is Morphism of C by A6;
-A22:    p.[g,f] is Element of M by A13,A20;
-A23:    d.g = (the Source of C).g & c.f = (the Target of C).f
-            by A2,A3,FUNCT_1:72;
-        thus d.(p.(g,f)) = (the Source of C).(p.[g,f]) by A2,A22,FUNCT_1:72
-          .= (the Source of C).((the Comp of C).(g,f)) by A12,A20
-          .= (the Source of C).f by A20,A21,A23,CAT_1:def 8
+A28:    d.g=c.f;
+        then
+A29:    p.[g,f] is Element of M by A13;
+        hence d.(p.(g,f)) = (the Source of C).(p.[g,f]) by A2,FUNCT_1:72
+          .= (the Source of C).((the Comp of C).(g,f)) by A12,A28
+          .= (the Source of C).f by A28,A26,A27,CAT_1:def 8
           .= d.f by A2,FUNCT_1:72;
-        thus c.(p.(g,f)) = (the Target of C).(p.[g,f]) by A3,A22,FUNCT_1:72
-          .= (the Target of C).((the Comp of C).(g,f)) by A12,A20
-          .= (the Target of C).g by A20,A21,A23,CAT_1:def 8
+        thus c.(p.(g,f)) = (the Target of C).(p.[g,f]) by A3,A29,FUNCT_1:72
+          .= (the Target of C).((the Comp of C).(g,f)) by A12,A28
+          .= (the Target of C).g by A28,A26,A27,CAT_1:def 8
           .= c.g by A3,FUNCT_1:72;
       end;
-      thus for f,g,h being Element of M
-      st d.h = c.g & d.g = c.f holds p.(h,p.(g,f)) = p.(p.(h,g),f)
+      thus for f,g,h being Element of M st d.h = c.g & d.g = c.f holds p.(h,p.
+      (g,f)) = p.(p.(h,g),f)
       proof
         let f,g,h be Element of M;
-        assume
-A24:    d.h = c.g & d.g = c.f;
-        then
-A25:    c.(p.(g,f)) = c.g by A19;
-A26:    h is Morphism of C & g is Morphism of C & f is Morphism of C &
-        d.h = (the Source of C).h & c.g = (the Target of C).g &
-        d.g = (the Source of C).g & c.f = (the Target of C).f
-                    by A2,A3,A6,FUNCT_1:72;
-A27:    d.(p.(h,g)) = d.g & p.(h,g) is Element of M by A13,A19,A24;
-        p.[g,f] is Element of M by A13,A24;
-        hence p.(h,p.(g,f)) = (the Comp of C).[h,p.[g,f]] by A12,A24,A25
-          .= (the Comp of C).(h,(the Comp of C).(g,f)) by A12,A24
-          .= (the Comp of C).((the Comp of C).(h,g),f) by A24,A26,CAT_1:def 8
-          .= (the Comp of C).[p.[h,g],f] by A12,A24
-          .= p.(p.(h,g),f) by A12,A24,A27;
+        assume that
+A30:    d.h = c.g and
+A31:    d.g = c.f;
+A32:    d.(p.(h,g)) = d.g & p.(h,g) is Element of M by A13,A25,A30;
+A33:    c.g = (the Target of C).g & d.g = (the Source of C).g by A2,A3,
+        FUNCT_1:72;
+A34:    c.f = (the Target of C).f by A3,FUNCT_1:72;
+A35:    f is Morphism of C & d.h = (the Source of C).h by A2,A6,FUNCT_1:
+        72;
+A36:    h is Morphism of C & g is Morphism of C by A6;
+        c.(p.(g,f)) = c.g & p.[g,f] is Element of M by A13,A25,A31;
+        hence p.(h,p.(g,f)) = (the Comp of C).[h,p.[g,f]] by A12,A30
+          .= (the Comp of C).(h,(the Comp of C).(g,f)) by A12,A31
+          .= (the Comp of C).((the Comp of C).(h,g),f) by A30,A31,A36,A35,
+        A33,A34,CAT_1:def 8
+          .= (the Comp of C).[p.[h,g],f] by A12,A30
+          .= p.(p.(h,g),f) by A12,A31,A32;
       end;
       let b be Element of O;
-A28:  i.b = (the Id of C).b by A5,FUNCT_1:72;
-      d.(i.b) = (the Source of C).(i.b) & c.(i.b) = (the Target of C).(i.b)
-      by A2,A3,FUNCT_1:72;
+A37:  i.b = (the Id of C).b by A5,FUNCT_1:72;
+      d.(i.b) = (the Source of C).(i.b) & c.(i.b) = (the Target of C).(i.
+      b) by A2,A3,FUNCT_1:72;
       hence
-A29:  d.(i.b) = b & c.(i.b) = b by A28,CAT_1:def 8;
+A38:  d.(i.b) = b & c.(i.b) = b by A37,CAT_1:def 8;
       thus for f being Element of M st c.f=b holds p.(i.b,f) = f
       proof
         let f be Element of M such that
-A30:    c.f=b;
-A31:    f is Morphism of C & c.f = (the Target of C).f by A3,A6,FUNCT_1:72;
-        thus p.(i.b,f) = (the Comp of C).(i.b,f) by A12,A29,A30
-          .= f by A28,A30,A31,CAT_1:def 8;
+A39:    c.f=b;
+A40:    f is Morphism of C & c.f = (the Target of C).f by A3,A6,FUNCT_1:
+        72;
+        thus p.(i.b,f) = (the Comp of C).(i.b,f) by A12,A38,A39
+          .= f by A37,A39,A40,CAT_1:def 8;
       end;
       let g be Element of M;
+A41:  g is Morphism of C & d.g = (the Source of C).g by A2,A6,FUNCT_1:72;
       assume
-A32:  d.g=b;
-A33:  g is Morphism of C & d.g = (the Source of C).g by A2,A6,FUNCT_1:72;
-      thus p.(g,i.b) = (the Comp of C).(g,i.b) by A12,A29,A32
-        .= g by A28,A32,A33,CAT_1:def 8;
+A42:  d.g=b;
+      hence p.(g,i.b) = (the Comp of C).(g,i.b) by A12,A38
+        .= g by A37,A42,A41,CAT_1:def 8;
     end;
     then reconsider B as Category by CAT_1:def 8;
-    the carrier of B c= the carrier of C &
-    (for a,b being Object of B, a',b' being Object of C
-    st a = a' & b = b' holds Hom(a,b) c= Hom(a',b')) &
-    the Comp of B c= the Comp of C &
-    for a be Object of B, a' be Object of C st a = a'
-    holds id a = id a' by A4,A5,A15,FUNCT_1:72,RELAT_1:88;
-    hence thesis by Def4;
+A43: for a be Object of B, a' be Object of C st a = a' holds id a = id a'
+    by A5,FUNCT_1:72;
+    ( for a,b being Object of B, a',b' being Object of C st a = a' & b =
+    b' holds Hom(a,b) c= Hom(a',b'))& the Comp of B c= the Comp of C by A4,A19,
+    RELAT_1:88;
+    hence thesis by A43,Def4;
   end;
-  thus thesis by A15;
+  thus thesis by A19;
 end;
 
 theorem
-  for O being non empty Subset of the carrier of C, M being non empty set ,
-  d,c being Function of M,O, p being PartFunc of [:M,M:],M,
-  i being Function of O,M st CatStr(#O,M,d,c,p,i#) is_full_subcategory_of C
-  holds
-  M = union{Hom(a,b) where a is Object of C,b is Object of C: a in O & b in O}
-  & d = (the Source of C)|M & c = (the Target of C)|M
-  & p = (the Comp of C)||M & i = (the Id of C)|O
+  for O being non empty Subset of the carrier of C, M being non empty
+  set , d,c being Function of M,O, p being PartFunc of [:M,M:],M, i being
+  Function of O,M st CatStr(#O,M,d,c,p,i#) is_full_subcategory_of C holds M =
+union{Hom(a,b) where a is Object of C,b is Object of C: a in O & b in O} & d =
+(the Source of C)|M & c = (the Target of C)|M & p = (the Comp of C)||M & i = (
+  the Id of C)|O
 proof
-  let O be non empty Subset of the carrier of C, M be non empty set,
-  d,c be Function of M,O, p be PartFunc of [:M,M:],M, i be Function of O,M;
+  let O be non empty Subset of the carrier of C, M be non empty set, d,c be
+  Function of M,O, p be PartFunc of [:M,M:],M, i be Function of O,M;
   set H = {Hom(a,b) where a is Object of C, b is Object of C: a in O & b in O};
   set B = CatStr(#O,M,d,c,p,i#);
   assume that
 A1: B is Subcategory of C and
-A2: for a,b being Object of B, a',b' being Object of C
-  st a = a' & b = b' holds Hom(a,b) = Hom(a',b');
-A3: for f being Morphism of B holds
-  d.f = (the Source of C).f & c.f = (the Target of C).f
+A2: for a,b being Object of B, a',b' being Object of C st a = a' & b =
+  b' holds Hom(a,b) = Hom(a',b');
+A3: for f being Morphism of B holds d.f = (the Source of C).f & c.f = (the
+  Target of C).f
   proof
     let f be Morphism of B;
     reconsider f' = f as Morphism of C by A1,Th14;
-    dom f = dom f' & cod f = cod f' &
-    dom f = (the Source of B).f & dom f' = (the Source of C).f' &
-    cod f = (the Target of B).f & cod f' = (the Target of C).f' by A1,Th15;
+    dom f = dom f' & cod f = cod f' by A1,Th15;
     hence thesis;
   end;
   now
     let x be set;
     thus x in M implies x in union H
     proof
-      assume x in M;
+      assume
+      x in M;
       then reconsider f = x as Morphism of B;
       reconsider f' = f as Morphism of C by A1,Th14;
       set a' = dom f', b' = cod f';
-      (the Source of B).f = (the Source of C).f' &
-      (the Target of B).f = (the Target of C).f' by A3;
+      (the Source of B).f = (the Source of C).f' & (the Target of B).f = (
+      the Target of C).f' by A3;
       then f in Hom(a',b') & Hom(a',b') in H;
       hence thesis by TARSKI:def 4;
     end;
-    assume x in union H;
+    assume
+    x in union H;
     then consider X being set such that
 A4: x in X and
 A5: X in H by TARSKI:def 4;
@@ -896,36 +935,30 @@ A7: a' in O & b' in O by A5;
   end;
   hence
 A8: M = union H by TARSKI:2;
-  then reconsider d' = (the Source of C)|M, c' = (the Target of C)|M
-   as Function of M
-  ,O by Th29;
+  then reconsider
+  d' = (the Source of C)|M, c' = (the Target of C)|M as Function of
+  M,O by Th29;
+  set p' = (the Comp of C)||M;
   now
     let f be Element of M;
-    now thus d.f = (the Source of C).f by A3;
-      thus f in M;
-      f is Morphism of C by A1,Th14;
-      then f in the carrier' of C;
-      hence f in dom the Source of C by FUNCT_2:def 1;
-    end;
+    d.f = (the Source of C).f by A3;
     hence d.f = d'.f by FUNCT_1:72;
   end;
   hence d = (the Source of C)|M by FUNCT_2:113;
   now
     let f be Element of M;
-    now thus c.f = (the Target of C).f by A3;
-      thus f in M;
-      f is Morphism of C by A1,Th14;
-      then f in the carrier' of C;
-      hence f in dom the Target of C by FUNCT_2:def 1;
-    end;
+    c.f = (the Target of C).f by A3;
     hence c.f = c'.f by FUNCT_1:72;
   end;
   hence c = (the Target of C)|M by FUNCT_2:113;
-  set p' = (the Comp of C)||M;
   now
 A9: dom p c= [:M,M:] by RELAT_1:def 18;
 A10: dom p' = (dom the Comp of C) /\ [:M,M:] by RELAT_1:90;
-A11: dom p' c= dom p
+    the Comp of B c= the Comp of C by A1,Def4;
+    then dom p c= dom the Comp of C by GRFUNC_1:8;
+    then
+A11: dom p c= dom p' by A9,A10,XBOOLE_1:19;
+    dom p' c= dom p
     proof
       let x be set;
       assume
@@ -936,14 +969,11 @@ A13:  x = [g,f] by DOMAIN_1:9;
       reconsider f,g as Morphism of B;
       reconsider f' = f,g' = g as Morphism of C by A1,Th14;
       [g,f] in dom the Comp of C by A10,A12,A13,XBOOLE_0:def 4;
-      then cod f = cod f' & dom g = dom g' & dom g' = cod f'
-      by A1,Th15,CAT_1:40;
-      hence thesis by A1,A13,CAT_1:40;
+      then
+A14:  dom g' = cod f' by CAT_1:40;
+      cod f = cod f' & dom g = dom g' by A1,Th15;
+      hence thesis by A1,A13,A14,CAT_1:40;
     end;
-    the Comp of B c= the Comp of C by A1,Def4;
-    then dom p c= dom the Comp of C by GRFUNC_1:8;
-    then
-A14: dom p c= dom p' by A9,A10,XBOOLE_1:19;
     hence dom p = dom p' by A11,XBOOLE_0:def 10;
     let x be set;
     assume
@@ -951,24 +981,23 @@ A15: x in dom p;
     then consider g,f being Element of M such that
 A16: x = [g,f] by A9,DOMAIN_1:9;
     reconsider f,g as Morphism of B;
+A17: dom g = cod f by A1,A15,A16,CAT_1:40;
     reconsider f' = f,g' = g as Morphism of C by A1,Th14;
-A17: cod f = cod f' & dom g = dom g' & dom g = cod f
-    by A1,A15,A16,Th15,CAT_1:40;
+A18: cod f = cod f' & dom g = dom g' by A1,Th15;
     p.x = p.(g,f) by A16;
     hence p.x = g*f by A1,A17,CAT_1:41
       .= g'*f' by A1,A17,Th17
-      .= (the Comp of C).(g',f') by A17,CAT_1:41
-      .= p'.x by A14,A15,A16,FUNCT_1:70;
+      .= (the Comp of C).(g',f') by A18,A17,CAT_1:41
+      .= p'.x by A11,A15,A16,FUNCT_1:70;
   end;
   hence p = (the Comp of C)||M by FUNCT_1:9;
   reconsider i' = (the Id of C)|O as Function of O,M by A8,Th29;
   now
     let a be Element of O;
     now
-      reconsider a' = a as Object of C;
       reconsider b = a as Object of B;
-      id b = id a' & id b = (the Id of B).b & id a' = (the Id of C).a'
-      by A1,Def4;
+      reconsider a' = a as Object of C;
+      id b = id a' by A1,Def4;
       hence i.a = (the Id of C).a;
       thus a in O;
       a in the carrier of C;
@@ -987,7 +1016,8 @@ definition
   let f2 be Function of X2,Y2;
   redefine func [:f1,f2:] -> Function of [:X1,X2:],[:Y1,Y2:];
   coherence
-  proof [:f1,f2:] is Function of [:X1,X2:],[:Y1,Y2:];
+  proof
+    [:f1,f2:] is Function of [:X1,X2:],[:Y1,Y2:];
     hence thesis;
   end;
 end;
@@ -1003,39 +1033,37 @@ end;
 definition
   let C,D;
   func [:C,D:] -> Category equals
-  CatStr (# [:the carrier of C,the carrier of D:],
-    [:the carrier' of C,the carrier' of D:],
-     [:the Source of C,the Source of D:],
-    [:the Target of C,the Target of D:], |:the Comp of C, the Comp of D:|,
-    [:the Id of C,the Id of D:] #);
+  CatStr (# [:the carrier of C,the carrier of
+D:], [:the carrier' of C,the carrier' of D:], [:the Source of C,the Source of D
+:], [:the Target of C,the Target of D:], |:the Comp of C, the Comp of D:|, [:
+    the Id of C,the Id of D:] #);
   coherence
   proof
-    set O = [:the carrier of C,the carrier of D:],
-    M = [:the carrier' of C,the carrier' of D:],
-    d = [:the Source of C,the Source of D:],
-    c = [:the Target of C,the Target of D:],
-    p = |:the Comp of C, the Comp of D:|, i = [:the Id of C,the Id of D:];
-A1: for f,g being Element of M st d.g = c.f holds
-    [g`1,f`1] in dom(the Comp of C) & [g`2,f`2] in dom(the Comp of D)
+    set O = [:the carrier of C,the carrier of D:], M = [:the carrier' of C,the
+carrier' of D:], d = [:the Source of C,the Source of D:], c = [:the Target of C
+,the Target of D:], p = |:the Comp of C, the Comp of D:|, i = [:the Id of C,the
+    Id of D:];
+A1: for f,g being Element of M st d.g = c.f holds [g`1,f`1] in dom(the
+    Comp of C) & [g`2,f`2] in dom(the Comp of D)
     proof
       let f,g be Element of M;
-A2:   g = [g`1,g`2] & f = [f`1,f`2] by MCART_1:23;
-A3:   d.(g`1,g`2) = [(the Source of C).g`1,(the Source of D).g`2]
-      & c.(f`1,f`2) = [(the Target of C).f`1,(the Target of D).f`2]
-       by FUNCT_3:96;
-      assume d.g = c.f;
-      then (the Source of C).g`1 = (the Target of C).f`1 &
-      (the Source of D).g`2 = (the Target of D).f`2 by A2,A3,ZFMISC_1:33;
-      hence thesis
-      by CAT_1:def 8;
+A2:   d.(g`1,g`2) = [(the Source of C).g`1,(the Source of D).g`2] & c.(f`1
+      ,f`2) = [(the Target of C).f`1,(the Target of D).f`2] by FUNCT_3:96;
+      assume
+A3:   d.g = c.f;
+      g = [g`1,g`2] & f = [f`1,f`2] by MCART_1:23;
+      then
+      (the Source of C).g`1 = (the Target of C).f`1 & (the Source of D).g
+      `2 = (the Target of D).f`2 by A2,A3,ZFMISC_1:33;
+      hence thesis by CAT_1:def 8;
     end;
-A4: for f,g being Element of M st [g,f] in dom(p) holds
-    (the Source of C).g`1 = (the Target of C).f`1 &
-    (the Source of D).g`2 = (the Target of D).f`2
+A4: for f,g being Element of M st [g,f] in dom(p) holds (the Source of C).
+    g`1 = (the Target of C).f`1 & (the Source of D).g`2 = (the Target of D).f`2
     proof
       let f,g be Element of M;
-A5:   g = [g`1,g`2] & f = [f`1,f`2] by MCART_1:23;
-      assume [g,f] in dom(p);
+      assume
+A5:   [g,f] in dom(p);
+      g = [g`1,g`2] & f = [f`1,f`2] by MCART_1:23;
       then [g`1,f`1] in dom(the Comp of C) & [g`2,f`2] in dom(the Comp of D)
       by A5,FUNCT_4:57;
       hence thesis by CAT_1:def 8;
@@ -1046,152 +1074,179 @@ A6: for f,g being Element of M holds [g,f] in dom(p) iff d.g = c.f
 A7:   g = [g`1,g`2] & f = [f`1,f`2] by MCART_1:23;
       thus [g,f] in dom(p) implies d.g = c.f
       proof
-        assume [g,f] in dom(p);
-        then (the Source of C).g`1 = (the Target of C).f`1 &
-        (the Source of D).g`2 = (the Target of D).f`2 &
-        d.(g`1,g`2) = [(the Source of C).g`1,(the Source of D).g`2]
-        & c.(f`1,f`2) = [(the Target of C).f`1,(the Target of D).f`2]
-        by A4,FUNCT_3:96;
-        hence thesis by A7;
+A8:     d.(g`1,g`2) = [(the Source of C).g`1,(the Source of D).g`2] & c.(
+        f`1,f`2) = [(the Target of C).f`1,(the Target of D).f`2] by FUNCT_3:96;
+        assume
+A9:     [g,f] in dom(p);
+        then (the Source of C).g`1 = (the Target of C).f`1 by A4;
+        hence thesis by A4,A7,A9,A8;
       end;
-      assume d.g = c.f;
+      assume
+      d.g = c.f;
       then [g`1,f`1] in dom(the Comp of C) & [g`2,f`2] in dom(the Comp of D)
       by A1;
       hence thesis by A7,FUNCT_4:57;
     end;
-A8: for f,g being Element of M st d.g = c.f holds
-    p.(g,f) = [(the Comp of C).(g`1,f`1),(the Comp of D).(g`2,f`2)]
+A10: for f,g being Element of M st d.g = c.f holds p.(g,f) = [(the Comp of
+    C).(g`1,f`1),(the Comp of D).(g`2,f`2)]
     proof
       let f,g be Element of M;
-      assume d.g = c.f;
-      then [g,f] in dom(p) & g = [g`1,g`2] & f = [f`1,f`2] by A6,MCART_1:23;
-      hence thesis
-      by FUNCT_4:58;
-    end;
-A9: for f,g being Element of M
-    st d.g = c.f holds d.(p.(g,f)) = d.f & c.(p.(g,f)) = c.g
-    proof
-      let f,g be Element of M;
-A10:  g = [g`1,g`2] & f = [f`1,f`2] by MCART_1:23;
-A11:  d.(f`1,f`2) = [(the Source of C).f`1,(the Source of D).f`2]
-      & c.(g`1,g`2) = [(the Target of C).g`1,(the Target of D).g`2]
-       by FUNCT_3:96;
       assume
-A12:  d.g = c.f;
+      d.g = c.f;
       then
-A13:  [g,f] in dom(p) by A6;
-      [g`1,f`1] in dom(the Comp of C) & [g`2,f`2] in dom(the Comp of D)
-      by A1,A12;
-      then (the Source of C).g`1 = (the Target of C).f`1 &
-      (the Source of D).g`2 = (the Target of D).f`2 &
-      (the Comp of C).[g`1,f`1] in the carrier' of C &
-      (the Comp of D).[g`2,f`2] in the carrier' of D by A4,A13,PARTFUN1:27;
-      then
-A14:  (the Source of C).((the Comp of C).(g`1,f`1)) = (the Source of C).f `1 &
-      (the Source of D).((the Comp of D).(g`2,f`2)) = (the Source of D).f`2 &
-      (the Target of C).((the Comp of C).(g`1,f`1)) = (the Target of C).g`1 &
-      (the Target of D).((the Comp of D).(g`2,f`2)) = (the Target of D).g`2 &
-      (the Comp of C).(g`1,f`1) in dom(the Source of C) &
-      (the Comp of D).(g`2,f`2) in dom(the Source of D) &
-      (the Comp of C).(g`1,f`1) in dom(the Target of C) &
-      (the Comp of D).(g`2,f`2) in dom(the Target of D) &
-      p.(g,f) = [(the Comp of C).(g`1,f`1),(the Comp of D).(g`2,f`2)]
-      by A8,A12,CAT_1:def 8,FUNCT_2:def 1;
-      thus d.(p.(g,f)) =
-      d.((the Comp of C).(g`1,f`1),(the Comp of D).(g`2,f`2)) by A8,A12
-        .= d.f by A10,A11,A14,FUNCT_3:def 9;
-      thus c.(p.(g,f)) =
-      c.((the Comp of C).(g`1,f`1),(the Comp of D).(g`2,f`2)) by A8,A12
-        .= c.g by A10,A11,A14,FUNCT_3:def 9;
+A11:  [g,f] in dom(p) by A6;
+      g = [g`1,g`2] & f = [f`1,f`2] by MCART_1:23;
+      hence thesis by A11,FUNCT_4:58;
     end;
-A15: for f,g,h being Element of M
-    st d.h = c.g & d.g = c.f holds p.(h,p.(g,f)) = p.(p.(h,g),f)
-    proof
-      let f,g,h be Element of M;
-      assume
-A16:  d.h = c.g & d.g = c.f;
-      then
-A17:  [g`1,f`1] in dom(the Comp of C) & [g`2,f`2] in dom(the Comp of D) &
-      [h`1,g`1] in dom(the Comp of C) & [h`2,g`2] in dom(the Comp of D) by A1;
-      then (the Comp of C).[g`1,f`1] in the carrier' of C &
-      (the Comp of D).[g`2,f`2] in the carrier' of D &
-      (the Comp of C).[h`1,g`1] in the carrier' of C &
-      (the Comp of D).[h`2,g`2] in the carrier' of D by PARTFUN1:27;
-      then reconsider
-      pgf = [(the Comp of C).[g`1,f`1],(the Comp of D).[g`2,f`2]],
-      phg = [(the Comp of C).[h`1,g`1],(the Comp of D).[h`2,g`2]]
-      as Element of M by ZFMISC_1:106;
-A18:  pgf`1 = (the Comp of C).[g`1,f`1] & pgf`2 = (the Comp of D).[g`2,f`2] &
-      phg`1 = (the Comp of C).[h`1,g`1] & phg`2 = (the Comp of D).[h`2,g`2]
-      by MCART_1:7;
-      set pgf1 = pgf`1, phg1 = phg`1;
-      set pgf2 = pgf`2, phg2 = phg`2;
-A19:  (the Source of C).g`1 = (the Target of C).f`1 &
-      (the Source of D).g`2 = (the Target of D).f`2 &
-      (the Source of C).h`1 = (the Target of C).g`1 &
-      (the Source of D).h`2 = (the Target of D).g`2 by A17,CAT_1:def 8;
-A20:  p.(g,f) = [(the Comp of C).(g`1,f`1),(the Comp of D).(g`2,f`2)]
-      by A8,A16;
-A21:  p.(h,g) = [(the Comp of C).(h`1,g`1),(the Comp of D).(h`2,g`2)]
-      by A8,A16;
-      d.h = c.(p.(g,f)) & d.(p.(h,g)) = c.f by A9,A16;
-      then p.(h,p.(g,f)) = [(the Comp of C).(h`1,pgf1),
-      (the Comp of D).(h`2,pgf2)] &
-      p.(p.(h,g),f) = [(the Comp of C).(phg1,f`1),(the Comp of D).(phg2,f`2)] &
-      (the Comp of C).(h`1,pgf1) = (the Comp of C).(phg1,f`1) &
-      (the Comp of D).(h`2,pgf2) = (the Comp of D).(phg2,f`2)
-      by A8,A18,A19,A20,A21,CAT_1:def 8;
-      hence thesis;
-    end;
-    now
+A12: now
       let b be Element of O;
-A22:  b = [b`1,b`2] by MCART_1:23;
-A23:  (the Source of C).((the Id of C).b`1) = b`1 &
-      (the Source of D).((the Id of D).b`2) = b`2 &
-      (the Target of C).((the Id of C).b`1) = b`1 &
-      (the Target of D).((the Id of D).b`2) = b`2 &
-      i.(b`1,b`2) = [(the Id of C).b`1,(the Id of D).b`2]
-      by CAT_1:def 8,FUNCT_3:96;
+A13:  b = [b`1,b`2] by MCART_1:23;
+A14:  (the Source of C).((the Id of C).b`1) = b`1 & (the Source of D).((
+      the Id of D).b`2) = b`2 by CAT_1:def 8;
+A15:  i.(b`1,b`2) = [(the Id of C).b`1,(the Id of D).b`2] by FUNCT_3:96;
       hence
-A24:  d.(i.b) = d.((the Id of C).b`1,(the Id of D).b`2) by MCART_1:23
-        .= b by A22,A23,FUNCT_3:96; thus
-A25:  c.(i.b) = c.((the Id of C).b`1,(the Id of D).b`2) by A23,MCART_1:23
-        .= b by A22,A23,FUNCT_3:96;
-A26:  (i.(b`1,b`2))`1 = (the Id of C).b`1 & (i.(b`1,b`2))`2 = (the Id of D).b`2
-      by A23,MCART_1:7;
+A16:  d.(i.b) = d.((the Id of C).b`1,(the Id of D).b`2) by
+      MCART_1:23
+        .= b by A13,A14,FUNCT_3:96;
+A17:  (the Target of C).((the Id of C).b`1) = b`1 & (the Target of D).((
+      the Id of D).b`2) = b`2 by CAT_1:def 8;
+      thus
+A18:  c.(i.b) = c.((the Id of C).b`1,(the Id of D).b`2) by A15,
+      MCART_1:23
+        .= b by A13,A17,FUNCT_3:96;
+A19:  (i.(b`1,b`2))`1 = (the Id of C).b`1 & (i.(b`1,b`2))`2 = (the Id of
+      D).b`2 by A15,MCART_1:7;
       thus for f being Element of M st c.f = b holds p.(i.b,f) = f
       proof
         let f be Element of M;
-A27:    f = [f`1,f`2] by MCART_1:23;
         assume
-A28:    c.f = b;
-        c.(f`1,f`2) = [(the Target of C).f`1,(the Target of D).f`2]
-         by FUNCT_3:96;
-        then (the Target of C).f`1 = b`1 & (the Target of D).f`2 = b`2
-        by A22,A27,A28,ZFMISC_1:33;
-        then p.(i.(b`1,b`2),f) =
-        [(the Comp of C).((i.b)`1,f`1),(the Comp of D).((i.b)`2,f`2)] &
-        (the Comp of C).((the Id of C).b`1,f`1) = f`1 &
-        (the Comp of D).((the Id of D).b`2,f`2) = f`2
-        by A8,A22,A24,A28,CAT_1:def 8;
-        hence thesis by A22,A26,MCART_1:23;
+A20:    c.f = b;
+A21:    f = [f`1,f`2] & c.(f`1,f`2) = [(the Target of C).f`1,(the Target
+        of D).f`2] by FUNCT_3:96,MCART_1:23;
+        then (the Target of C).f`1 = b`1 by A13,A20,ZFMISC_1:33;
+        then
+A22:    (the Comp of C).((the Id of C).b`1,f`1) = f`1 by
+        CAT_1:def 8;
+        (the Target of D).f`2 = b`2 by A13,A20,A21,ZFMISC_1:33;
+        then
+A23:    (the Comp of D).((the Id of D).b`2,f`2) = f`2 by
+        CAT_1:def 8;
+        p.(i.(b`1,b`2),f) = [(the Comp of C).((i.b)`1,f`1),(the Comp of D
+        ).((i. b)`2,f`2)] by A10,A13,A16,A20;
+        hence thesis by A13,A19,A22,A23,MCART_1:23;
       end;
       let g be Element of M;
-A29:  g = [g`1,g`2] by MCART_1:23;
       assume
-A30:  d.g = b;
-      d.(g`1,g`2) = [(the Source of C).g`1,(the Source of D).g`2]
-       by FUNCT_3:96;
-      then (the Source of C).g`1 = b`1 & (the Source of D).g`2 = b`2
-      by A22,A29,A30,ZFMISC_1:33;
-      then p.(g,i.(b`1,b`2)) =
-      [(the Comp of C).(g`1,(i.b)`1),(the Comp of D).(g`2,(i.b)`2)] &
-      (the Comp of C).(g`1,(the Id of C).b`1) = g`1 &
-      (the Comp of D).(g`2,(the Id of D).b`2) = g`2
-      by A8,A22,A25,A30,CAT_1:def 8;
-      hence p.(g,i.b) = g by A22,A26,MCART_1:23;
+A24:  d.g = b;
+A25:  g = [g`1,g`2] & d.(g`1,g`2) = [(the Source of C).g`1,(the Source of
+      D).g`2] by FUNCT_3:96,MCART_1:23;
+      then (the Source of C).g`1 = b`1 by A13,A24,ZFMISC_1:33;
+      then
+A26:  (the Comp of C).(g`1,(the Id of C).b`1) = g`1 by CAT_1:def 8;
+      (the Source of D).g`2 = b`2 by A13,A24,A25,ZFMISC_1:33;
+      then
+A27:  (the Comp of D).(g`2,(the Id of D).b`2) = g`2 by CAT_1:def 8;
+      p.(g,i.(b`1,b`2)) = [(the Comp of C).(g`1,(i.b)`1),(the Comp of D).
+      (g`2 ,(i.b)`2)] by A10,A13,A18,A24;
+      hence p.(g,i.b) = g by A13,A19,A26,A27,MCART_1:23;
     end;
-    hence thesis by A6,A9,A15,CAT_1:def 8;
+A28: for f,g being Element of M st d.g = c.f holds d.(p.(g,f)) = d.f & c.(
+    p.(g,f)) = c.g
+    proof
+      let f,g be Element of M;
+A29:  f = [f`1,f`2] & d.(f`1,f`2) = [(the Source of C).f`1,(the Source of
+      D).f`2] by FUNCT_3:96,MCART_1:23;
+      assume
+A30:  d.g = c.f;
+      then
+A31:  (the Comp of C).[g`1,f`1] in the carrier' of C by A1,PARTFUN1:
+      27;
+      then
+A32:  (the Comp of C).(g`1,f`1) in dom(the Source of C) by FUNCT_2:
+      def 1;
+A33:  [g,f] in dom(p) by A6,A30;
+      then
+A34:  (the Source of C).g`1 = (the Target of C).f`1 by A4;
+      then
+A35:  (the Source of C).((the Comp of C).(g`1,f`1)) = (the Source of C).f
+      `1 by CAT_1:def 8;
+A36:  (the Comp of D).[g`2,f`2] in the carrier' of D by A1,A30,PARTFUN1:
+      27;
+      then
+A37:  (the Comp of D).(g`2,f`2) in dom(the Source of D) by FUNCT_2:
+      def 1;
+A38:  (the Source of D).g`2 = (the Target of D).f`2 by A4,A33;
+      then
+A39:  (the Source of D).((the Comp of D).(g`2,f`2)) = (the Source of D).f
+      `2 by CAT_1:def 8;
+      thus d.(p.(g,f)) = d.((the Comp of C).(g`1,f`1),(the Comp of D).(g`2,f`2
+      )) by A10,A30
+        .= d.f by A29,A35,A39,A32,A37,FUNCT_3:def 9;
+A40:  g = [g`1,g`2] & c.(g`1,g`2) = [(the Target of C).g`1,(the Target of
+      D).g`2] by FUNCT_3:96,MCART_1:23;
+A41:  (the Target of D).((the Comp of D).(g`2,f`2)) = (the Target of D).g
+      `2 by A38,CAT_1:def 8;
+A42:  (the Target of C).((the Comp of C).(g`1,f`1)) = (the Target of C).g
+      `1 by A34,CAT_1:def 8;
+A43:  (the Comp of D).(g`2,f`2) in dom(the Target of D) by A36,FUNCT_2:
+      def 1;
+A44:  (the Comp of C).(g`1,f`1) in dom(the Target of C) by A31,FUNCT_2:
+      def 1;
+      thus c.(p.(g,f)) = c.((the Comp of C).(g`1,f`1),(the Comp of D).(g`2,f`2
+      )) by A10,A30
+        .= c.g by A40,A42,A41,A44,A43,FUNCT_3:def 9;
+    end;
+    for f,g,h being Element of M st d.h = c.g & d.g = c.f holds p.(h,p.(g
+    ,f)) = p.(p.(h,g),f)
+    proof
+      let f,g,h be Element of M;
+      assume that
+A45:  d.h = c.g and
+A46:  d.g = c.f;
+A47:  (the Comp of C).[h`1,g`1] in the carrier' of C & (the Comp of D).[h
+      `2,g`2] in the carrier' of D by A1,A45,PARTFUN1:27;
+      (the Comp of C).[g`1,f`1] in the carrier' of C & (the Comp of D).[g
+      `2,f`2] in the carrier' of D by A1,A46,PARTFUN1:27;
+      then reconsider
+      pgf = [(the Comp of C).[g`1,f`1],(the Comp of D).[g`2,f`2]],
+phg = [(the Comp of C).[h`1,g`1],(the Comp of D).[h`2,g`2]] as Element of M by
+      A47,ZFMISC_1:106;
+      set pgf2 = pgf`2, phg2 = phg`2;
+      set pgf1 = pgf`1, phg1 = phg`1;
+A48:  pgf`2 = (the Comp of D).[g`2,f`2] & phg`2 = (the Comp of D).[h`2,g
+      `2] by MCART_1:7;
+A49:  p.(g,f) = [(the Comp of C).(g`1,f`1),(the Comp of D).(g`2,f`2)] by
+      A10,A46;
+      d.h = c.(p.(g,f)) by A28,A45,A46;
+      then
+A50:  p.(h,p.(g,f)) = [(the Comp of C).(h`1,pgf1), (the Comp of D).(h`2,
+      pgf2) ] by A10,A49;
+A51:  p.(h,g) = [(the Comp of C).(h`1,g`1),(the Comp of D).(h`2,g`2)] by
+      A10,A45;
+      [h`2,g`2] in dom(the Comp of D) by A1,A45;
+      then
+A52:  (the Source of D).h`2 = (the Target of D).g`2 by CAT_1:def 8;
+      [h`1,g`1] in dom(the Comp of C) by A1,A45;
+      then
+A53:  (the Source of C).h`1 = (the Target of C).g`1 by CAT_1:def 8;
+      [g`2,f`2] in dom(the Comp of D) by A1,A46;
+      then
+A54:  (the Source of D).g`2 = (the Target of D).f`2 by CAT_1:def 8;
+      [g`1,f`1] in dom(the Comp of C) by A1,A46;
+      then
+A55:  (the Source of C).g`1 = (the Target of C).f`1 by CAT_1:def 8;
+      d.(p.(h,g)) = c.f by A28,A45,A46;
+      then
+A56:  p.(p.(h,g),f) = [(the Comp of C).(phg1,f`1),(the Comp of D).(phg2,f
+      `2)] by A10,A51;
+      pgf`1 = (the Comp of C).[g`1,f`1] & phg`1 = (the Comp of C).[h`1,g
+      `1] by MCART_1:7;
+      then (the Comp of C).(h`1,pgf1) = (the Comp of C).(phg1,f`1) by
+      A55,
+      A53,A49,A51,CAT_1:def 8;
+      hence thesis by A48,A54,A52,A49,A51,A50,A56,CAT_1:def 8;
+    end;
+    hence thesis by A6,A28,A12,CAT_1:def 8;
   end;
 end;
 
@@ -1204,16 +1259,15 @@ end;
 canceled;
 
 theorem
-  the carrier of [:C,D:] = [:the carrier of C,the carrier of D:] &
-  the carrier' of [:C,D:] = [:the carrier' of C,the carrier' of D:] &
-  the Source of [:C,D:] = [:the Source of C,the Source of D:] &
-  the Target of [:C,D:] = [:the Target of C,the Target of D:] &
-  the Comp of [:C,D:] = |:the Comp of C, the Comp of D:| &
-  the Id of [:C,D:] = [:the Id of C,the Id of D:];
+  the carrier of [:C,D:] = [:the carrier of C,the carrier of D:] & the
+  carrier' of [:C,D:] = [:the carrier' of C,the carrier' of D:] & the Source of
+  [:C,D:] = [:the Source of C,the Source of D:] & the Target of [:C,D:] = [:the
+Target of C,the Target of D:] & the Comp of [:C,D:] = |:the Comp of C, the Comp
+  of D:| & the Id of [:C,D:] = [:the Id of C,the Id of D:];
 
 theorem Th34:
-  for c being Object of C, d being Object of D
-  holds [c,d] is Object of [:C,D:];
+  for c being Object of C, d being Object of D holds [c,d] is
+  Object of [:C,D:];
 
 definition
   let C,D;
@@ -1224,12 +1278,12 @@ definition
 end;
 
 theorem
-  for cd being Object of [:C,D:]
-  ex c being Object of C, d being Object of D st cd = [c,d] by DOMAIN_1:9;
+  for cd being Object of [:C,D:] ex c being Object of C, d being Object
+  of D st cd = [c,d] by DOMAIN_1:9;
 
 theorem Th36:
-  for f being Morphism of C for g being Morphism of D
-  holds [f,g] is Morphism of [:C,D:];
+  for f being Morphism of C for g being Morphism of D holds [f,g]
+  is Morphism of [:C,D:];
 
 definition
   let C,D;
@@ -1240,13 +1294,12 @@ definition
 end;
 
 theorem
-  for fg being Morphism of [:C,D:]
-  ex f being (Morphism of C), g being Morphism of D st fg = [f,g]
-  by DOMAIN_1:9;
+  for fg being Morphism of [:C,D:] ex f being (Morphism of C), g being
+  Morphism of D st fg = [f,g] by DOMAIN_1:9;
 
 theorem Th38:
-  for f being Morphism of C for g being Morphism of D
-  holds dom [f,g] = [dom f,dom g] & cod [f,g] = [cod f,cod g]
+  for f being Morphism of C for g being Morphism of D holds dom [f
+  ,g] = [dom f,dom g] & cod [f,g] = [cod f,cod g]
 proof
   let f be Morphism of C;
   let g be Morphism of D;
@@ -1257,26 +1310,28 @@ proof
 end;
 
 theorem Th39:
-  for f,f' being Morphism of C for g,g' being Morphism of D
-  st dom f' = cod f & dom g' = cod g holds [f',g']*[f,g] = [f'*f,g'*g]
+  for f,f' being Morphism of C for g,g' being Morphism of D st dom
+  f' = cod f & dom g' = cod g holds [f',g']*[f,g] = [f'*f,g'*g]
 proof
   let f,f' be Morphism of C;
   let g,g' be Morphism of D;
-  assume
-A1: dom f' = cod f & dom g' = cod g;
-  then
-A2: [f',f] in dom(the Comp of C) & [g',g] in dom(the Comp of D) by CAT_1:40;
+  assume that
+A1: dom f' = cod f and
+A2: dom g' = cod g;
+A3: [f',f] in dom(the Comp of C) & [g',g] in dom(the Comp of D) by A1,A2,
+  CAT_1:40;
   dom [f',g'] = [dom f',dom g'] & cod [f,g] = [cod f,cod g] by Th38;
-  hence [f',g']*[f,g] = |:the Comp of C, the Comp of D:|.([f',g'],[f,g])
-  by A1,CAT_1:41
-    .= [(the Comp of C).(f',f),(the Comp of D).(g',g)] by A2,FUNCT_4:def 3
+  hence
+  [f',g']*[f,g] = |:the Comp of C, the Comp of D:|.([f',g'],[f,g]) by A1,
+  A2,CAT_1:41
+    .= [(the Comp of C).(f',f),(the Comp of D).(g',g)] by A3,FUNCT_4:def 3
     .= [f'*f,(the Comp of D).(g',g)] by A1,CAT_1:41
-    .= [f'*f,g'*g] by A1,CAT_1:41;
+    .= [f'*f,g'*g] by A2,CAT_1:41;
 end;
 
 theorem Th40:
-  for f,f' being Morphism of C for g,g' being Morphism of D
-  st dom [f',g'] = cod [f,g] holds [f',g']*[f,g] = [f'*f,g'*g]
+  for f,f' being Morphism of C for g,g' being Morphism of D st dom
+  [f',g'] = cod [f,g] holds [f',g']*[f,g] = [f'*f,g'*g]
 proof
   let f,f' be Morphism of C;
   let g,g' be Morphism of D such that
@@ -1287,7 +1342,8 @@ A1: dom [f',g'] = cod [f,g];
 end;
 
 theorem Th41:
-  for c being Object of C, d being Object of D holds id [c,d] = [id c,id d]
+  for c being Object of C, d being Object of D holds id [c,d] = [
+  id c,id d]
 proof
   let c being Object of C;
   let d being Object of D;
@@ -1296,8 +1352,8 @@ proof
 end;
 
 theorem
-  for c,c' being Object of C, d,d' being Object of D
-  holds Hom([c,d],[c',d']) = [:Hom(c,c'),Hom(d,d'):]
+  for c,c' being Object of C, d,d' being Object of D holds Hom([c,d],[c'
+  ,d']) = [:Hom(c,c'),Hom(d,d'):]
 proof
   let c,c' be Object of C, d,d' be Object of D;
   now
@@ -1307,42 +1363,59 @@ proof
       assume
 A1:   x in Hom([c,d],[c',d']);
       then reconsider fg = x as Morphism of [c,d],[c',d'] by CAT_1:def 7;
-A2:   dom fg = [c,d] & cod fg = [c',d'] by A1,CAT_1:18;
+A2:   dom fg = [c,d] by A1,CAT_1:18;
+A3:   cod fg = [c',d'] by A1,CAT_1:18;
       consider x1,x2 being set such that
-A3:   x1 in the carrier' of C & x2 in the carrier' of D and
-A4:   fg = [x1,x2] by ZFMISC_1:def 2;
-      reconsider f = x1 as Morphism of C by A3;
-      reconsider g = x2 as Morphism of D by A3;
-      dom fg = [dom f,dom g] & cod fg = [cod f,cod g] by A4,Th38;
-      then dom f = c & cod f = c' & dom g = d & cod g = d' by A2,ZFMISC_1:33;
-      then f in Hom(c,c') & g in Hom(d,d');
-      hence thesis by A4,ZFMISC_1:106;
+A4:   x1 in the carrier' of C and
+A5:   x2 in the carrier' of D and
+A6:   fg = [x1,x2] by ZFMISC_1:def 2;
+      reconsider g = x2 as Morphism of D by A5;
+      reconsider f = x1 as Morphism of C by A4;
+A7:   cod fg = [cod f,cod g] by A6,Th38;
+      then
+A8:   cod f = c' by A3,ZFMISC_1:33;
+A9:   cod g = d' by A3,A7,ZFMISC_1:33;
+A10:  dom fg = [dom f,dom g] by A6,Th38;
+      then dom g = d by A2,ZFMISC_1:33;
+      then
+A11:  g in Hom(d,d') by A9;
+      dom f = c by A2,A10,ZFMISC_1:33;
+      then f in Hom(c,c') by A8;
+      hence thesis by A6,A11,ZFMISC_1:106;
     end;
-    assume x in [:Hom(c,c'),Hom(d,d'):];
+    assume
+    x in [:Hom(c,c'),Hom(d,d'):];
     then consider x1,x2 being set such that
-A5: x1 in Hom(c,c') & x2 in Hom(d,d') and
-A6: x = [x1,x2] by ZFMISC_1:def 2;
-    reconsider f = x1 as Morphism of c,c' by A5,CAT_1:def 7;
-    reconsider g = x2 as Morphism of d,d' by A5,CAT_1:def 7;
-    dom f = c & cod f = c' & dom g = d & cod g = d' by A5,CAT_1:18;
-    then dom [f,g] = [c,d] & cod [f,g] = [c',d'] by Th38;
-    hence x in Hom([c,d],[c',d']) by A6;
+A12: x1 in Hom(c,c') and
+A13: x2 in Hom(d,d') and
+A14: x = [x1,x2] by ZFMISC_1:def 2;
+    reconsider g = x2 as Morphism of d,d' by A13,CAT_1:def 7;
+    reconsider f = x1 as Morphism of c,c' by A12,CAT_1:def 7;
+    cod f = c' & cod g = d' by A12,A13,CAT_1:18;
+    then
+A15: cod [f,g] = [c',d'] by Th38;
+    dom f = c & dom g = d by A12,A13,CAT_1:18;
+    then dom [f,g] = [c,d] by Th38;
+    hence x in Hom([c,d],[c',d']) by A14,A15;
   end;
   hence thesis by TARSKI:2;
 end;
 
 theorem
-  for c,c' being Object of C, f being Morphism of c,c',
-  d,d' being Object of D, g being Morphism of d,d'
-  st Hom(c,c') <> {} & Hom(d,d') <> {}
+  for c,c' being Object of C, f being Morphism of c,c', d,d' being
+  Object of D, g being Morphism of d,d' st Hom(c,c') <> {} & Hom(d,d') <> {}
   holds [f,g] is Morphism of [c,d],[c',d']
 proof
-  let c,c' be Object of C, f be Morphism of c,c',
-  d,d' be Object of D, g be Morphism of d,d';
-  assume Hom(c,c') <> {} & Hom(d,d') <> {};
-  then dom f = c & cod f = c' & dom g = d & cod g = d' by CAT_1:23;
-  then dom [f,g] = [c,d] & cod [f,g] = [c',d'] by Th38;
-  hence thesis by CAT_1:22;
+  let c,c' be Object of C, f be Morphism of c,c', d,d' be Object of D, g be
+  Morphism of d,d';
+  assume
+A1: Hom(c,c') <> {} & Hom(d,d') <> {};
+  then cod f = c' & cod g = d' by CAT_1:23;
+  then
+A2: cod [f,g] = [c',d'] by Th38;
+  dom f = c & dom g = d by A1,CAT_1:23;
+  then dom [f,g] = [c,d] by Th38;
+  hence thesis by A2,CAT_1:22;
 end;
 
 :: Bifunctors
@@ -1352,23 +1425,23 @@ definition
   let S being Functor of [:C,C':],D;
   let m be Morphism of C;
   let m' be Morphism of C';
-  redefine
-  func S.(m,m') -> Morphism of D;
+  redefine func S.(m,m') -> Morphism of D;
   coherence
-  proof S.(m,m') = S.[m,m'];
+  proof
+    S.(m,m') = S.[m,m'];
     hence thesis;
   end;
 end;
 
 theorem Th44:
-  for S being Functor of [:C,C':],D, c being Object of C
-  holds (curry S).(id c) is Functor of C',D
+  for S being Functor of [:C,C':],D, c being Object of C holds (
+  curry S).(id c) is Functor of C',D
 proof
   let S be Functor of [:C,C':],D, c be Object of C;
-  reconsider S' = S as
-  Function of [:the carrier' of C,the carrier' of C':],the carrier' of D;
-  reconsider T = (curry S').(id c)
-  as Function of the carrier' of C',the carrier' of D;
+  reconsider S' = S as Function of [:the carrier' of C,the carrier' of C':],
+  the carrier' of D;
+  reconsider T = (curry S').(id c) as Function of the carrier' of C',the
+  carrier' of D;
   now
     thus for c' being Object of C' ex d being Object of D st T.(id c') = id d
     proof
@@ -1379,8 +1452,9 @@ A1:   S.(id [c,c']) = id d by CAT_1:97;
       thus T.(id c') = S.(id c,id c') by Th3
         .= id d by A1,Th41;
     end;
-    thus for f being Morphism of C'
-    holds T.(id dom f) = id dom (T.f) & T.(id cod f) = id cod (T.f)
+A2: dom id c = c & cod id c = c by CAT_1:44;
+    thus for f being Morphism of C' holds T.(id dom f) = id dom (T.f) & T.(id
+    cod f) = id cod (T.f)
     proof
       let f be Morphism of C';
       thus T.(id dom f) = S.(id c,id dom f) by Th3
@@ -1397,17 +1471,17 @@ A1:   S.(id [c,c']) = id d by CAT_1:97;
         .= id cod (T.f) by Th3;
     end;
     let f,g be Morphism of C' such that
-A2: dom g = cod f;
-A3: dom id c = c & cod id c = c by CAT_1:44;
-A4: dom [id c,g] = [dom id c,dom g] & cod [id c,f] = [cod id c, cod f]
-    by Th38;
+A3: dom g = cod f;
     Hom(c,c) <> {} by CAT_1:56;
     then
-A5: (id c)*(id c) = (id c)*((id c) qua Morphism of C) by CAT_1:def 13;
+A4: (id c)*(id c) = (id c)*((id c) qua Morphism of C) by
+    CAT_1:def 13;
+A5: dom [id c,g] = [dom id c,dom g] & cod [id c,f] = [cod id c, cod f] by
+    Th38;
     (id c)*(id c) = id c by CAT_1:59;
     hence T.(g*f) = S.((id c)*(id c),g*f) by Th3
-      .= S.([id c,g]*[id c,f]) by A2,A3,A5,Th39
-      .= (S.(id c,g))*(S.(id c,f)) by A2,A3,A4,CAT_1:99
+      .= S.([id c,g]*[id c,f]) by A3,A2,A4,Th39
+      .= (S.(id c,g))*(S.(id c,f)) by A3,A2,A5,CAT_1:99
       .= (T.g)*(S.(id c,f)) by Th3
       .= (T.g)*(T.f) by Th3;
   end;
@@ -1415,14 +1489,14 @@ A5: (id c)*(id c) = (id c)*((id c) qua Morphism of C) by CAT_1:def 13;
 end;
 
 theorem Th45:
-  for S being Functor of [:C,C':],D, c' being Object of C'
-  holds (curry' S).(id c') is Functor of C,D
+  for S being Functor of [:C,C':],D, c' being Object of C' holds (
+  curry' S).(id c') is Functor of C,D
 proof
   let S be Functor of [:C,C':],D, c' be Object of C';
-  reconsider S' = S as
-  Function of [:the carrier' of C,the carrier' of C':],the carrier' of D;
-  reconsider T = (curry' S').(id c')
-  as Function of the carrier' of C,the carrier' of D;
+  reconsider S' = S as Function of [:the carrier' of C,the carrier' of C':],
+  the carrier' of D;
+  reconsider T = (curry' S').(id c') as Function of the carrier' of C,the
+  carrier' of D;
   now
     thus for c being Object of C ex d being Object of D st T.(id c) = id d
     proof
@@ -1433,8 +1507,9 @@ A1:   S.(id [c,c']) = id d by CAT_1:97;
       thus T.(id c) = S.(id c,id c') by Th4
         .= id d by A1,Th41;
     end;
-    thus for f being Morphism of C
-    holds T.(id dom f) = id dom (T.f) & T.(id cod f) = id cod (T.f)
+A2: dom id c' = c' & cod id c' = c' by CAT_1:44;
+    thus for f being Morphism of C holds T.(id dom f) = id dom (T.f) & T.(id
+    cod f) = id cod (T.f)
     proof
       let f be Morphism of C;
       thus T.(id dom f) = S.(id dom f,id c') by Th4
@@ -1451,17 +1526,17 @@ A1:   S.(id [c,c']) = id d by CAT_1:97;
         .= id cod (T.f) by Th4;
     end;
     let f,g be Morphism of C such that
-A2: dom g = cod f;
-A3: dom id c' = c' & cod id c' = c' by CAT_1:44;
-A4: dom [g,id c'] = [dom g,dom id c'] & cod [f,id c'] = [cod f,cod id c']
-    by Th38;
+A3: dom g = cod f;
     Hom(c',c') <> {} by CAT_1:56;
     then
-A5: (id c')*(id c') = (id c')*((id c') qua Morphism of C') by CAT_1:def 13;
+A4: (id c')*(id c') = (id c')*((id c') qua Morphism of C') by CAT_1:
+    def 13;
+A5: dom [g,id c'] = [dom g,dom id c'] & cod [f,id c'] = [cod f,cod id c']
+    by Th38;
     (id c')*(id c') = id c' by CAT_1:59;
     hence T.(g*f) = S.(g*f,(id c')*(id c')) by Th4
-      .= S.([g,id c']*[f,id c']) by A2,A3,A5,Th39
-      .= (S.(g,id c'))*(S.(f,id c')) by A2,A3,A4,CAT_1:99
+      .= S.([g,id c']*[f,id c']) by A3,A2,A4,Th39
+      .= (S.(g,id c'))*(S.(f,id c')) by A3,A2,A5,CAT_1:99
       .= (T.g)*(S.(f,id c')) by Th4
       .= (T.g)*(T.f) by Th4;
   end;
@@ -1474,7 +1549,6 @@ definition
   let C,C',D;
   let S be Functor of [:C,C':],D, c be Object of C;
   func S?-c -> Functor of C',D equals
-
   (curry S).(id c);
   coherence by Th44;
 end;
@@ -1482,13 +1556,12 @@ end;
 canceled;
 
 theorem
-  for S being Functor of [:C,C':],D, c being Object of C,
-  f being Morphism of C' holds (S?-c).f = S.(id c,f) by Th3;
+  for S being Functor of [:C,C':],D, c being Object of C, f being
+  Morphism of C' holds (S?-c).f = S.(id c,f) by Th3;
 
 theorem
-  for S being Functor of [:C,C':],D,
-  c being Object of C, c' being Object of C'
-  holds (Obj S?-c).c' = (Obj S).(c,c')
+  for S being Functor of [:C,C':],D, c being Object of C, c' being
+  Object of C' holds (Obj S?-c).c' = (Obj S).(c,c')
 proof
   let S be Functor of [:C,C':],D, c be Object of C, c' be Object of C';
   (S?-c).(id c') = S.(id c,id c') by Th3
@@ -1501,7 +1574,6 @@ definition
   let C,C',D;
   let S be Functor of [:C,C':],D, c' be Object of C';
   func S-?c' -> Functor of C,D equals
-
   (curry' S).(id c');
   coherence by Th45;
 end;
@@ -1509,13 +1581,12 @@ end;
 canceled;
 
 theorem
-  for S being Functor of [:C,C':],D, c' being Object of C',
-  f being Morphism of C holds (S-?c').f = S.(f,id c') by Th4;
+  for S being Functor of [:C,C':],D, c' being Object of C', f being
+  Morphism of C holds (S-?c').f = S.(f,id c') by Th4;
 
 theorem
-  for S being Functor of [:C,C':],D,
-  c being Object of C, c' being Object of C'
-  holds (Obj S-?c').c = (Obj S).(c,c')
+  for S being Functor of [:C,C':],D, c being Object of C, c' being
+  Object of C' holds (Obj S-?c').c = (Obj S).(c,c')
 proof
   let S be Functor of [:C,C':],D, c be Object of C, c' be Object of C';
   (S-?c').(id c) = S.(id c,id c') by Th4
@@ -1525,32 +1596,29 @@ proof
 end;
 
 theorem
-  for L being Function of the carrier of C,Funct(B,D),
-  M being Function of the carrier of B,Funct(C,D)
-  st ( for c being Object of C,b being Object of B
-  holds (M.b).(id c) = (L.c).(id b) ) &
-  ( for f being Morphism of B for g being Morphism of C
-  holds ((M.(cod f)).g)*((L.(dom g)).f) = ((L.(cod g)).f)*((M.(dom f)).g) )
-  ex S being Functor of [:B,C:],D st
-  for f being Morphism of B for g being Morphism of C
-  holds S.(f,g) = ((L.(cod g)).f)*((M.(dom f)).g)
+  for L being Function of the carrier of C,Funct(B,D), M being Function
+of the carrier of B,Funct(C,D) st ( for c being Object of C,b being Object of B
+  holds (M.b).(id c) = (L.c).(id b) ) & ( for f being Morphism of B for g being
+Morphism of C holds ((M.(cod f)).g)*((L.(dom g)).f) = ((L.(cod g)).f)*((M.(dom
+  f)).g) ) ex S being Functor of [:B,C:],D st for f being Morphism of B for g
+  being Morphism of C holds S.(f,g) = ((L.(cod g)).f)*((M.(dom f)).g)
 proof
-  let L be Function of the carrier of C,Funct(B,D),
-  M be Function of the carrier of B,Funct(C,D) such that
-A1: for c being Object of C, b being Object of B
-  holds (M.b).(id c) = (L.c).(id b) and
-A2: for f being Morphism of B for g being Morphism of C
-  holds ((M.(cod f)).g)*((L.(dom g)).f) = ((L.(cod g)).f)*((M.(dom f)).g);
   deffunc Mor(Category) = the carrier' of $1;
-  deffunc F(Element of Mor(B), Element of Mor(C)) =
-  ((L.(cod $2)).$1)*((M.(dom $1)).$2);
+  let L be Function of the carrier of C,Funct(B,D), M be Function of the
+  carrier of B,Funct(C,D) such that
+A1: for c being Object of C, b being Object of B holds (M.b).(id c) = (L
+  .c).(id b) and
+A2: for f being Morphism of B for g being Morphism of C holds ((M.(cod f
+  )).g)*((L.(dom g)).f) = ((L.(cod g)).f)*((M.(dom f)).g);
+  deffunc F(Element of Mor(B), Element of Mor(C)) = ((L.(cod $2)).$1)*((M.(dom
+  $1)).$2);
   consider S being Function of [:Mor(B),Mor(C):],Mor(D) such that
-A3: for f being Morphism of B for g being Morphism of C
-  holds S.(f,g) = F(f,g) from BINOP_1:sch 4;
+A3: for f being Morphism of B for g being Morphism of C holds S.(f,g) =
+  F(f,g) from BINOP_1:sch 4;
   reconsider T = S as Function of Mor([:B,C:]),Mor(D);
   now
-    thus for bc being Object of [:B,C:]
-    ex d being Object of D st T.(id bc) = id d
+    thus for bc being Object of [:B,C:] ex d being Object of D st T.(id bc) =
+    id d
     proof
       let bc be Object of [:B,C:];
       consider b being Object of B, c being Object of C such that
@@ -1559,148 +1627,163 @@ A4:   bc = [b,c] by DOMAIN_1:9;
 A5:   (L.c).(id b) = id d by CAT_1:97;
       take d;
       Hom(d,d) <> {} by CAT_1:56;
-      then (id d)*(id d) = (id d)*((id d) qua Morphism of D) &
-      cod id c = c & dom id b = b & (L.c).(id b) = (M.b).(id c)
-      by A1,CAT_1:44,def 13;
-      then ((L.(cod id c)).(id b))*((M.(dom id b)).(id c)) = id d &
-      id bc = [id b,id c] by A4,A5,Th41,CAT_1:59;
+      then
+A6:   (id d)*(id d) = (id d)*((id d) qua Morphism of D) by
+      CAT_1:def 13;
+A7:   cod id c = c & dom id b = b by CAT_1:44;
+      (L.c).(id b) = (M.b).(id c) by A1;
+      then
+      ((L.(cod id c)).(id b))*((M.(dom id b)).(id c)) = id d by A5,A6,A7
+      , CAT_1:59;
       then T.(id b,id c) = id d by A3;
       hence thesis by A4,Th41;
     end;
-    thus for fg being Morphism of [:B,C:]
-    holds T.(id dom fg) = id dom (T.fg) & T.(id cod fg) = id cod (T.fg)
+    thus for fg being Morphism of [:B,C:] holds T.(id dom fg) = id dom (T.fg)
+    & T.(id cod fg) = id cod (T.fg)
     proof
       let fg be Morphism of [:B,C:];
       consider f being (Morphism of B), g being Morphism of C such that
-A6:   fg = [f,g] by DOMAIN_1:9;
+A8:   fg = [f,g] by DOMAIN_1:9;
       set b = dom f, c = dom g;
       set g' = id c, f'= id b;
-A7:   Hom(dom ((M.b).g),dom ((M.b).g)) <> {} by CAT_1:56;
+A9:   Hom(dom ((M.b).g),dom ((M.b).g)) <> {} by CAT_1:56;
       id dom ((L.(cod g)).f) = (L.(cod g)).(id dom f) by CAT_1:98
         .= (M.(dom f)).(id cod g) by A1
         .= id cod ((M.(dom f)).g) by CAT_1:98;
       then
-A8:   dom ((L.(cod g)).f) = cod ((M.(dom f)).g) by CAT_1:45;
-      thus T.(id (dom fg)) = S.(id [b,c]) by A6,Th38
+A10:  dom ((L.(cod g)).f) = cod ((M.(dom f)).g) by CAT_1:45;
+      thus T.(id (dom fg)) = S.(id [b,c]) by A8,Th38
         .= S.(id b,id c) by Th41
         .= ((L.(cod g')).f')*((M.(dom f')).g') by A3
         .= ((L.c).f')*((M.(dom f')).g') by CAT_1:44
         .= ((L.c).f')*((M.b).g') by CAT_1:44
         .= ((M.b).g')*((M.b).g') by A1
         .= (id dom ((M.b).g))*((M.b).g') by CAT_1:98
-        .= (id dom ((M.b).g))*((id dom((M.b).g)) qua Morphism of D) by CAT_1:98
-        .= (id dom ((M.b).g))*(id dom((M.b).g)) by A7,CAT_1:def 13
+        .= (id dom ((M.b).g))*((id dom((M.b).g)) qua Morphism of D) by CAT_1
+      :98
+        .= (id dom ((M.b).g))*(id dom((M.b).g)) by A9,CAT_1:def 13
         .= id dom ((M.(dom f)).g) by CAT_1:59
-        .= id dom (((L.(cod g)).f)*((M.(dom f)).g)) by A8,CAT_1:42
+        .= id dom (((L.(cod g)).f)*((M.(dom f)).g)) by A10,CAT_1:42
         .= id dom (S.(f,g)) by A3
-        .= id dom(T.fg) by A6;
+        .= id dom(T.fg) by A8;
       set b = cod f, c = cod g;
       set g' = id c, f'= id b;
-A9:   Hom(cod ((L.c).f),cod ((L.c).f)) <> {} by CAT_1:56;
-      thus T.(id (cod fg)) = S.(id [b,c]) by A6,Th38
+A11:  Hom(cod ((L.c).f),cod ((L.c).f)) <> {} by CAT_1:56;
+      thus T.(id (cod fg)) = S.(id [b,c]) by A8,Th38
         .= S.(id b,id c) by Th41
         .= ((L.(cod g')).f')*((M.(dom f')).g') by A3
         .= ((L.c).f')*((M.(dom f')).g') by CAT_1:44
         .= ((L.c).f')*((M.(cod f)).g') by CAT_1:44
         .= ((L.c).f')*((L.c).f') by A1
         .= (id cod (((L.c).f))*((L.c).f')) by CAT_1:98
-        .= (id cod ((L.c).f))*((id cod((L.c).f)) qua Morphism of D) by CAT_1:98
-        .= (id cod ((L.c).f))*(id cod ((L.c).f)) by A9,CAT_1:def 13
+        .= (id cod ((L.c).f))*((id cod((L.c).f)) qua Morphism of D) by CAT_1
+      :98
+        .= (id cod ((L.c).f))*(id cod ((L.c).f)) by A11,CAT_1:def 13
         .= id cod ((L.(cod g)).f) by CAT_1:59
-        .= id cod (((L.(cod g)).f)*((M.(dom f)).g)) by A8,CAT_1:42
+        .= id cod (((L.(cod g)).f)*((M.(dom f)).g)) by A10,CAT_1:42
         .= id cod (S.(f,g)) by A3
-        .= id cod (T.fg) by A6;
+        .= id cod (T.fg) by A8;
     end;
     let fg1,fg2 be Morphism of [:B,C:] such that
-A10: dom fg2 = cod fg1;
+A12: dom fg2 = cod fg1;
     consider f1 being (Morphism of B), g1 being Morphism of C such that
-A11: fg1 = [f1,g1] by DOMAIN_1:9;
+A13: fg1 = [f1,g1] by DOMAIN_1:9;
     consider f2 being (Morphism of B), g2 being Morphism of C such that
-A12: fg2 = [f2,g2] by DOMAIN_1:9;
-    [dom f2,dom g2] = dom fg2 & [cod f1,cod g1] = cod fg1 by A11,A12,Th38;
-    then
-A13: dom f2 = cod f1 & dom g2 = cod g1 by A10,ZFMISC_1:33;
-    set f = f2*f1, g = g2*g1;
+A14: fg2 = [f2,g2] by DOMAIN_1:9;
+A15: [cod f1,cod g1] = cod fg1 by A13,Th38;
     set L1 = L.(cod g1), L2 = L.(cod g2), M1 = M.(dom f1), M2 = M.(dom f2);
-A14: dom(L2.f2) = cod (L2.f1) & dom(M1.g2) = cod (M1.g1) by A13,CAT_1:99;
+A16: [dom f2,dom g2] = dom fg2 by A14,Th38;
     then
-A15: cod ((M1.g2)*(M1.g1)) = cod(M1.g2) by CAT_1:42;
-    id dom (L2.f1) = L2.(id dom f1) by CAT_1:98
-      .= M1.(id cod g2) by A1
-      .= id cod (M1.g2) by CAT_1:98;
+A17: dom f2 = cod f1 by A12,A15,ZFMISC_1:33;
     then
-A16: dom (L2.f1) = cod (M1.g2) by CAT_1:45;
+A18: dom(L2.f2) = cod (L2.f1) by CAT_1:99;
     id dom (L1.f1) = L1.(id dom f1) by CAT_1:98
       .= M1.(id cod g1) by A1
       .= id cod (M1.g1) by CAT_1:98;
     then
-A17: dom (L1.f1) = cod (M1.g1) by CAT_1:45;
+A19: dom (L1.f1) = cod (M1.g1) by CAT_1:45;
+    then
+A20: cod ((L1.f1)*(M1.g1)) = cod (L1.f1) by CAT_1:42;
+A21: dom g2 = cod g1 by A12,A16,A15,ZFMISC_1:33;
+    then
+A22: dom(M1.g2) = cod (M1.g1) by CAT_1:99;
+    then
+A23: cod ((M1.g2)*(M1.g1)) = cod(M1.g2) by CAT_1:42;
     id dom (M2.g2) = M2.(id dom g2) by CAT_1:98
-      .= L1.(id cod f1) by A1,A13
+      .= L1.(id cod f1) by A1,A17,A21
       .= id cod (L1.f1) by CAT_1:98;
     then
-A18: dom (M2.g2) = cod(L1.f1) by CAT_1:45;
+A24: dom (M2.g2) = cod(L1.f1) by CAT_1:45;
     id dom (L2.f2) = L2.(id dom f2) by CAT_1:98
       .= M2.(id cod g2) by A1
       .= id cod (M2.g2) by CAT_1:98;
     then
-A19: dom (L2.f2) = cod (M2.g2) by CAT_1:45;
-A20: cod ((L1.f1)*(M1.g1)) = cod (L1.f1) by A17,CAT_1:42;
-    thus T.(fg2*fg1) = S.(f,g) by A10,A11,A12,Th40
+A25: dom (L2.f2) = cod (M2.g2) by CAT_1:45;
+    set f = f2*f1, g = g2*g1;
+    id dom (L2.f1) = L2.(id dom f1) by CAT_1:98
+      .= M1.(id cod g2) by A1
+      .= id cod (M1.g2) by CAT_1:98;
+    then
+A26: dom (L2.f1) = cod (M1.g2) by CAT_1:45;
+    thus T.(fg2*fg1) = S.(f,g) by A12,A13,A14,Th40
       .= ((L.(cod g)).f)*((M.(dom f)).g) by A3
-      .= ((L.(cod g2)).f)*((M.(dom f)).g) by A13,CAT_1:42
-      .= ((L.(cod g2)).f)*((M.(dom f1)).g) by A13,CAT_1:42
-      .= ((L2.f2)*(L2.f1))*(M1.g) by A13,CAT_1:99
-      .= ((L2.f2)*(L2.f1))*((M1.g2)*(M1.g1)) by A13,CAT_1:99
-      .= (L2.f2)*((L2.f1)*((M1.g2)*(M1.g1))) by A14,A15,A16,CAT_1:43
-      .= (L2.f2)*(((L2.f1)*(M1.g2))*(M1.g1)) by A14,A16,CAT_1:43
-      .= (L2.f2)*(((M2.g2)*(L1.f1))*(M1.g1)) by A2,A13
-      .= (L2.f2)*((M2.g2)*((L1.f1)*(M1.g1))) by A17,A18,CAT_1:43
-      .= ((L2.f2)*(M2.g2))*((L1.f1)*(M1.g1)) by A18,A19,A20,CAT_1:43
+      .= ((L.(cod g2)).f)*((M.(dom f)).g) by A21,CAT_1:42
+      .= ((L.(cod g2)).f)*((M.(dom f1)).g) by A17,CAT_1:42
+      .= ((L2.f2)*(L2.f1))*(M1.g) by A17,CAT_1:99
+      .= ((L2.f2)*(L2.f1))*((M1.g2)*(M1.g1)) by A21,CAT_1:99
+      .= (L2.f2)*((L2.f1)*((M1.g2)*(M1.g1))) by A18,A23,A26,CAT_1:43
+      .= (L2.f2)*(((L2.f1)*(M1.g2))*(M1.g1)) by A22,A26,CAT_1:43
+      .= (L2.f2)*(((M2.g2)*(L1.f1))*(M1.g1)) by A2,A17,A21
+      .= (L2.f2)*((M2.g2)*((L1.f1)*(M1.g1))) by A19,A24,CAT_1:43
+      .= ((L2.f2)*(M2.g2))*((L1.f1)*(M1.g1)) by A24,A25,A20,CAT_1:43
       .= ((L2.f2)*(M2.g2))*(S.(f1,g1)) by A3
-      .= (S.(f2,g2))*(T.fg1) by A3,A11
-      .= (T.fg2)*(T.fg1) by A12;
+      .= (S.(f2,g2))*(T.fg1) by A3,A13
+      .= (T.fg2)*(T.fg1) by A14;
   end;
   then reconsider T as Functor of [:B,C:],D by CAT_1:96;
-  take T; thus thesis by A3;
+  take T;
+  thus thesis by A3;
 end;
 
 theorem
-  for L being Function of the carrier of C,Funct(B,D),
-  M being Function of the carrier of B,Funct(C,D)
-  st ex S being Functor of [:B,C:],D st
-  for c being Object of C,b being Object of B holds S-?c = L.c & S?-b = M.b
-  for f being Morphism of B for g being Morphism of C
-  holds ((M.(cod f)).g)*((L.(dom g)).f) = ((L.(cod g)).f)*((M.(dom f)).g)
+  for L being Function of the carrier of C,Funct(B,D), M being Function
+  of the carrier of B,Funct(C,D) st ex S being Functor of [:B,C:],D st for c
+being Object of C,b being Object of B holds S-?c = L.c & S?-b = M.b for f being
+Morphism of B for g being Morphism of C holds ((M.(cod f)).g)*((L.(dom g)).f) =
+  ((L.(cod g)).f)*((M.(dom f)).g)
 proof
-  let L be Function of the carrier of C,Funct(B,D),
-  M be Function of the carrier of B,Funct(C,D);
+  let L be Function of the carrier of C,Funct(B,D), M be Function of the
+  carrier of B,Funct(C,D);
   given S be Functor of [:B,C:],D such that
-A1: for c being Object of C, b being Object of B
-  holds S-?c = L.c & S?-b = M.b;
+A1: for c being Object of C, b being Object of B holds S-?c = L.c & S?-b
+  = M.b;
   let f be Morphism of B;
   let g be Morphism of C;
-  dom id cod f = cod f & cod id dom g = dom g by CAT_1:44;
+  dom id cod f = cod f by CAT_1:44;
   then
-A2: dom [id cod f,g] = [cod f,dom g] & cod [f,id dom g] = [cod f, dom g]
-  by Th38;
-  dom id cod g = cod g & cod id dom f = dom f by CAT_1:44;
+A2: dom [id cod f,g] = [cod f,dom g] by Th38;
+  cod id dom g = dom g by CAT_1:44;
   then
-A3: dom [f,id cod g] = [dom f,cod g] & cod [id dom f,g] = [dom f,cod g]
-  by Th38;
-  thus ((M.(cod f)).g)*((L.(dom g)).f)
-  = ((S?-(cod f)).g)*((L.(dom g)).f) by A1
+A3: cod [f,id dom g] = [cod f, dom g] by Th38;
+  cod id dom f = dom f by CAT_1:44;
+  then
+A4: cod [id dom f,g] = [dom f,cod g] by Th38;
+  dom id cod g = cod g by CAT_1:44;
+  then
+A5: dom [f,id cod g] = [dom f,cod g] by Th38;
+  thus ((M.(cod f)).g)*((L.(dom g)).f) = ((S?-(cod f)).g)*((L.(dom g)).f) by
+  A1
     .= ((S?-(cod f)).g)*((S-?(dom g)).f) by A1
     .= (S.(id cod f,g))*((S-?(dom g)).f) by Th3
     .= (S.(id cod f,g))*(S.(f,id dom g)) by Th4
-    .= S.([id cod f,g]*[f,id dom g]) by A2,CAT_1:99
-    .= S.[(id cod f)*f,g*(id dom g)] by A2,Th40
+    .= S.([id cod f,g]*[f,id dom g]) by A2,A3,CAT_1:99
+    .= S.[(id cod f)*f,g*(id dom g)] by A2,A3,Th40
     .= S.[f,g*(id dom g)] by CAT_1:46
     .= S.[f,g] by CAT_1:47
     .= S.[f*(id dom f),g] by CAT_1:47
     .= S.[f*(id dom f),(id cod g)*g ] by CAT_1:46
-    .= S.([f,id cod g]*[id dom f,g]) by A3,Th40
-    .= (S.(f,id cod g))*(S.[id dom f,g]) by A3,CAT_1:99
+    .= S.([f,id cod g]*[id dom f,g]) by A5,A4,Th40
+    .= (S.(f,id cod g))*(S.[id dom f,g]) by A5,A4,CAT_1:99
     .= ((S-?(cod g)).f)*(S.(id dom f,g)) by Th4
     .= ((S-?(cod g)).f)*((S?-(dom f)).g) by Th3
     .= ((L.(cod g)).f)*((S?-(dom f)).g) by A1
@@ -1710,48 +1793,51 @@ end;
 theorem Th54:
   pr1(the carrier' of C,the carrier' of D) is Functor of [:C,D:],C
 proof
-  reconsider T = pr1(the carrier' of C,the carrier' of D)
-  as Function of the carrier' of [:C,D:],the carrier' of C;
+  reconsider T = pr1(the carrier' of C,the carrier' of D) as Function of the
+  carrier' of [:C,D:],the carrier' of C;
   now
-    thus for cd being Object of [:C,D:]
-    ex c being Object of C st T.(id cd) = id c
+    thus for cd being Object of [:C,D:] ex c being Object of C st T.(id cd) =
+    id c
     proof
       let cd be Object of [:C,D:];
       consider c being Object of C,d being Object of D such that
 A1:   cd = [c,d] by DOMAIN_1:9;
-A2:   id cd = [id c,id d] by A1,Th41;
-      T.(id c,id d) = id c by FUNCT_3:def 5;
+A2:   T.(id c,id d) = id c by FUNCT_3:def 5;
+      id cd = [id c,id d] by A1,Th41;
       hence thesis by A2;
     end;
-    thus for fg being Morphism of [:C,D:]
-    holds T.(id dom fg) = id dom (T.fg) & T.(id cod fg) = id cod (T.fg)
+    thus for fg being Morphism of [:C,D:] holds T.(id dom fg) = id dom (T.fg)
+    & T.(id cod fg) = id cod (T.fg)
     proof
       let fg be Morphism of [:C,D:];
       consider f being (Morphism of C), g being Morphism of D such that
 A3:   fg = [f,g] by DOMAIN_1:9;
-A4:   dom [f,g] = [dom f,dom g] & cod [f,g] = [cod f,cod g] by Th38;
       T.(f,g) = T.fg by A3;
       then
-A5:   T.fg = f by FUNCT_3:def 5;
-      thus T.(id dom fg) = T.(id dom f,id dom g) by A3,A4,Th41
-        .= id dom(T.fg) by A5,FUNCT_3:def 5;
-      thus T.(id cod fg) = T.(id cod f,id cod g) by A3,A4,Th41
-        .= id cod(T.fg) by A5,FUNCT_3:def 5;
+A4:   T.fg = f by FUNCT_3:def 5;
+      dom [f,g] = [dom f,dom g] by Th38;
+      hence T.(id dom fg) = T.(id dom f,id dom g) by A3,Th41
+        .= id dom(T.fg) by A4,FUNCT_3:def 5;
+      cod [f,g] = [cod f,cod g] by Th38;
+      hence T.(id cod fg) = T.(id cod f,id cod g) by A3,Th41
+        .= id cod(T.fg) by A4,FUNCT_3:def 5;
     end;
     let fg,fg' be Morphism of [:C,D:] such that
-A6: dom fg' = cod fg;
+A5: dom fg' = cod fg;
     consider f being (Morphism of C), g being Morphism of D such that
-A7: fg = [f,g] by DOMAIN_1:9;
+A6: fg = [f,g] by DOMAIN_1:9;
+    T.(f,g) = T.fg by A6;
+    then
+A7: T.fg = f by FUNCT_3:def 5;
     consider f' being (Morphism of C), g' being Morphism of D such that
 A8: fg' = [f',g'] by DOMAIN_1:9;
+    T.(f',g') = T.fg' by A8;
+    then
+A9: T.fg' = f' by FUNCT_3:def 5;
     dom [f',g'] = [dom f',dom g'] & cod [f,g] = [cod f,cod g] by Th38;
-    then
-A9: dom f' = cod f & dom g' = cod g by A6,A7,A8,ZFMISC_1:33;
-    T.(f',g') = T.fg' & T.(f,g) = T.fg by A7,A8;
-    then
-A10: T.fg' = f' & T.fg = f by FUNCT_3:def 5;
-    thus T.(fg'*fg) = T.(f'*f,g'*g) by A7,A8,A9,Th39
-      .= (T.fg')*(T.fg) by A10,FUNCT_3:def 5;
+    then dom f' = cod f & dom g' = cod g by A5,A6,A8,ZFMISC_1:33;
+    hence T.(fg'*fg) = T.(f'*f,g'*g) by A6,A8,Th39
+      .= (T.fg')*(T.fg) by A9,A7,FUNCT_3:def 5;
   end;
   hence thesis by CAT_1:96;
 end;
@@ -1759,48 +1845,51 @@ end;
 theorem Th55:
   pr2(the carrier' of C,the carrier' of D) is Functor of [:C,D:],D
 proof
-  reconsider T = pr2(the carrier' of C,the carrier' of D)
-  as Function of the carrier' of [:C,D:],the carrier' of D;
+  reconsider T = pr2(the carrier' of C,the carrier' of D) as Function of the
+  carrier' of [:C,D:],the carrier' of D;
   now
-    thus for cd being Object of [:C,D:]
-    ex d being Object of D st T.(id cd) = id d
+    thus for cd being Object of [:C,D:] ex d being Object of D st T.(id cd) =
+    id d
     proof
       let cd be Object of [:C,D:];
       consider c being Object of C,d being Object of D such that
 A1:   cd = [c,d] by DOMAIN_1:9;
-A2:   id cd = [id c,id d] by A1,Th41;
-      T.(id c,id d) = id d by FUNCT_3:def 6;
+A2:   T.(id c,id d) = id d by FUNCT_3:def 6;
+      id cd = [id c,id d] by A1,Th41;
       hence thesis by A2;
     end;
-    thus for fg being Morphism of [:C,D:]
-    holds T.(id dom fg) = id dom (T.fg) & T.(id cod fg) = id cod (T.fg)
+    thus for fg being Morphism of [:C,D:] holds T.(id dom fg) = id dom (T.fg)
+    & T.(id cod fg) = id cod (T.fg)
     proof
       let fg be Morphism of [:C,D:];
       consider f being (Morphism of C), g being Morphism of D such that
 A3:   fg = [f,g] by DOMAIN_1:9;
-A4:   dom [f,g] = [dom f,dom g] & cod [f,g] = [cod f,cod g] by Th38;
       T.(f,g) = T.fg by A3;
       then
-A5:   T.fg = g by FUNCT_3:def 6;
-      thus T.(id dom fg) = T.(id dom f,id dom g) by A3,A4,Th41
-        .= id dom(T.fg) by A5,FUNCT_3:def 6;
-      thus T.(id cod fg) = T.(id cod f,id cod g) by A3,A4,Th41
-        .= id cod(T.fg) by A5,FUNCT_3:def 6;
+A4:   T.fg = g by FUNCT_3:def 6;
+      dom [f,g] = [dom f,dom g] by Th38;
+      hence T.(id dom fg) = T.(id dom f,id dom g) by A3,Th41
+        .= id dom(T.fg) by A4,FUNCT_3:def 6;
+      cod [f,g] = [cod f,cod g] by Th38;
+      hence T.(id cod fg) = T.(id cod f,id cod g) by A3,Th41
+        .= id cod(T.fg) by A4,FUNCT_3:def 6;
     end;
     let fg,fg' be Morphism of [:C,D:] such that
-A6: dom fg' = cod fg;
+A5: dom fg' = cod fg;
     consider f being (Morphism of C), g being Morphism of D such that
-A7: fg = [f,g] by DOMAIN_1:9;
+A6: fg = [f,g] by DOMAIN_1:9;
+    T.(f,g) = T.fg by A6;
+    then
+A7: T.fg = g by FUNCT_3:def 6;
     consider f' being (Morphism of C), g' being Morphism of D such that
 A8: fg' = [f',g'] by DOMAIN_1:9;
+    T.(f',g') = T.fg' by A8;
+    then
+A9: T.fg' = g' by FUNCT_3:def 6;
     dom [f',g'] = [dom f',dom g'] & cod [f,g] = [cod f,cod g] by Th38;
-    then
-A9: dom f' = cod f & dom g' = cod g by A6,A7,A8,ZFMISC_1:33;
-    T.(f',g') = T.fg' & T.(f,g) = T.fg by A7,A8;
-    then
-A10: T.fg' = g' & T.fg = g by FUNCT_3:def 6;
-    thus T.(fg'*fg) = T.(f'*f,g'*g) by A7,A8,A9,Th39
-      .= (T.fg')*(T.fg) by A10,FUNCT_3:def 6;
+    then dom f' = cod f & dom g' = cod g by A5,A6,A8,ZFMISC_1:33;
+    hence T.(fg'*fg) = T.(f'*f,g'*g) by A6,A8,Th39
+      .= (T.fg')*(T.fg) by A9,A7,FUNCT_3:def 6;
   end;
   hence thesis by CAT_1:96;
 end;
@@ -1808,45 +1897,49 @@ end;
 definition
   let C,D;
   func pr1(C,D) -> Functor of [:C,D:],C equals
-  pr1(the carrier' of C,the carrier' of D);
+  pr1(the carrier' of C,the
+  carrier' of D);
   coherence by Th54;
   func pr2(C,D) -> Functor of [:C,D:],D equals
-  pr2(the carrier' of C,the carrier' of D);
+  pr2(the carrier' of C,the
+  carrier' of D);
   coherence by Th55;
 end;
 
 canceled 3;
 
 theorem
-  for c being Object of C, d being Object of D holds (Obj pr1(C,D)).(c,d) = c
+  for c being Object of C, d being Object of D holds (Obj pr1(C,D)).(c,d
+  ) = c
 proof
   let c be Object of C, d be Object of D;
-A1: id [c,d] = [id c,id d] by Th41;
-  (pr1(C,D)).(id c,id d) = id c by FUNCT_3:def 5;
-  hence thesis by A1,CAT_1:103;
+  id [c,d] = [id c,id d] & (pr1(C,D)).(id c,id d) = id c by Th41, FUNCT_3:
+  def 5;
+  hence thesis by CAT_1:103;
 end;
 
 canceled;
 
 theorem
-  for c being Object of C, d being Object of D holds (Obj pr2(C,D)).(c,d) = d
+  for c being Object of C, d being Object of D holds (Obj pr2(C,D)).(c,d
+  ) = d
 proof
   let c be Object of C, d be Object of D;
-A1: id [c,d] = [id c,id d] by Th41;
-  (pr2(C,D)).(id c,id d) = id d by FUNCT_3:def 6;
-  hence thesis by A1,CAT_1:103;
+  id [c,d] = [id c,id d] & (pr2(C,D)).(id c,id d) = id d by Th41, FUNCT_3:
+  def 6;
+  hence thesis by CAT_1:103;
 end;
 
 theorem Th62:
-  for T being Functor of C,D, T' being Functor of C,D'
-  holds <:T,T':> is Functor of C,[:D,D':]
+  for T being Functor of C,D, T' being Functor of C,D' holds <:T,
+  T':> is Functor of C,[:D,D':]
 proof
   let T be Functor of C,D, T' be Functor of C,D';
-  reconsider S = <:T,T':>
-  as Function of the carrier' of C,the carrier' of [:D,D':];
+  reconsider S = <:T,T':> as Function of the carrier' of C,the carrier' of [:D
+  ,D':];
   now
-    thus for c being Object of C
-    ex dd' being Object of [:D,D':] st S.(id c) = id dd'
+    thus for c being Object of C ex dd' being Object of [:D,D':] st S.(id c) =
+    id dd'
     proof
       let c be Object of C;
       set d = (Obj T).c, d' = (Obj T').c;
@@ -1856,16 +1949,18 @@ proof
         .= [id d,id d'] by CAT_1:104
         .= id dd' by Th41;
     end;
-    thus for f being Morphism of C
-    holds S.(id dom f) = id dom (S.f) & S.(id cod f) = id cod (S.f)
+    thus for f being Morphism of C holds S.(id dom f) = id dom (S.f) & S.(id
+    cod f) = id cod (S.f)
     proof
       let f be Morphism of C;
-      T.(id dom f) = id(dom(T.f)) & T'.(id dom f) = id(dom(T'.f)) by CAT_1:98;
+      T.(id dom f) = id(dom(T.f)) & T'.(id dom f) = id(dom(T'.f)) by CAT_1
+      :98;
       hence S.(id dom f) = [id(dom(T.f)),id(dom(T'.f))] by FUNCT_3:79
         .= id [dom(T.f),dom(T'.f)] by Th41
         .= id dom[T.f,T'.f] by Th38
         .= id dom (S.f) by FUNCT_3:79;
-      T.(id cod f) = id(cod(T.f)) & T'.(id cod f) = id(cod(T'.f)) by CAT_1:98;
+      T.(id cod f) = id(cod(T.f)) & T'.(id cod f) = id(cod(T'.f)) by CAT_1
+      :98;
       hence S.(id cod f) = [id(cod(T.f)),id(cod(T'.f))] by FUNCT_3:79
         .= id [cod(T.f),cod(T'.f)] by Th41
         .= id cod [T.f,T'.f] by Th38
@@ -1893,35 +1988,31 @@ definition
 end;
 
 theorem
-  for T being Functor of C,D, T' being Functor of C,D', c being Object of C
-  holds (Obj <:T,T':>).c = [(Obj T).c,(Obj T').c]
+  for T being Functor of C,D, T' being Functor of C,D', c being Object
+  of C holds (Obj <:T,T':>).c = [(Obj T).c,(Obj T').c]
 proof
   let T be Functor of C,D, T' be Functor of C,D', c be Object of C;
-  T.(id c) = id((Obj T).c) & T'.(id c) = id((Obj T').c) &
-  <:T,T':>.(id c) = [T.(id c),T'.(id c)] &
-  [id((Obj T).c),id((Obj T').c)] = id [(Obj T).c,(Obj T').c]
-  by Th41,CAT_1:104,FUNCT_3:79;
-  hence thesis by CAT_1:103;
+A1: T.(id c) = id((Obj T).c) & T'.(id c) = id((Obj T').c) by CAT_1:104;
+  <:T,T':>.(id c) = [T.(id c),T'.(id c)] & [id((Obj T).c),id((Obj T').c)]
+  = id [(Obj T).c,(Obj T').c] by Th41,FUNCT_3:79;
+  hence thesis by A1,CAT_1:103;
 end;
 
 theorem Th64:
-  for T being Functor of C,D, T' being Functor of C',D'
-  holds [:T,T':] = <:T*pr1(C,C'),T'*pr2(C,C'):>
+  for T being Functor of C,D, T' being Functor of C',D' holds [:T,
+  T':] = <:T*pr1(C,C'),T'*pr2(C,C'):>
 proof
   let T be Functor of C,D, T' be Functor of C',D';
-  pr1(C,C') = pr1(the carrier' of C,the carrier' of C') &
-  pr2(C,C') = pr2(the carrier' of C,the carrier' of C') &
   dom T = the carrier' of C & dom T' = the carrier' of C' by FUNCT_2:def 1;
   hence thesis by FUNCT_3:87;
 end;
 
 theorem Th65:
-  for T being Functor of C,D, T' being Functor of C',D'
-  holds [:T,T':] is Functor of [:C,C':],[:D,D':]
+  for T being Functor of C,D, T' being Functor of C',D' holds [:T,
+  T':] is Functor of [:C,C':],[:D,D':]
 proof
   let T be Functor of C,D, T' be Functor of C',D';
-  T*pr1(C,C') is Functor of [:C,C':],D & T'*pr2(C,C') is Functor of [:C,C' :]
-  , D' & [:T,T':] = <:T*pr1(C,C'),T'*pr2(C,C'):> by Th64;
+  [:T,T':] = <:T*pr1(C,C'),T'*pr2(C,C'):> by Th64;
   hence thesis;
 end;
 
@@ -1933,16 +2024,16 @@ definition
 end;
 
 theorem
-  for T being Functor of C,D, T' being Functor of C',D',
-  c being Object of C, c' being Object of C'
-  holds (Obj [:T,T':]).(c,c') = [(Obj T).c,(Obj T').c']
+  for T being Functor of C,D, T' being Functor of C',D', c being Object
+of C, c' being Object of C' holds (Obj [:T,T':]).(c,c') = [(Obj T).c,(Obj T').
+  c']
 proof
   let T be Functor of C,D, T' be Functor of C',D';
   let c be Object of C, c' be Object of C';
-  T.(id c) = id((Obj T).c) & T'.(id c') = id((Obj T').c') &
-  [:T,T':].(id c,id c') = [T.(id c),T'.(id c')] & [id c,id c'] = id [c,c'] &
-  [id((Obj T).c),id((Obj T').c')] = id [(Obj T).c,(Obj T').c'] by Th41,
-CAT_1:104,FUNCT_3:96;
-  hence thesis by CAT_1:103;
+A1: T.(id c) = id((Obj T).c) & T'.(id c') = id((Obj T').c') by CAT_1:104;
+A2: [id((Obj T).c),id((Obj T').c')] = id [(Obj T).c,(Obj T').c'] by Th41;
+  [:T,T':].(id c,id c') = [T.(id c),T'.(id c')] & [id c,id c'] = id [c,c']
+  by Th41,FUNCT_3:96;
+  hence thesis by A1,A2,CAT_1:103;
 end;
 

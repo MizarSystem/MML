@@ -8,10 +8,11 @@ environ
 
  vocabularies ANALOAF, REALSET1, TDGROUP, DIRAF, BINOP_1, FUNCT_1, RLVECT_1,
       ARYTM_1, VECTSP_1, MCART_1, RELAT_1, AFVECT0, ALGSTR_0;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, STRUCT_0, ALGSTR_0, ANALOAF,
-      TDGROUP, FUNCT_1, FUNCT_2, MCART_1, BINOP_1, RELAT_1, VECTSP_1, RLVECT_1;
+ notations TARSKI, ZFMISC_1, SUBSET_1, STRUCT_0, ALGSTR_0, ANALOAF, TDGROUP,
+      FUNCT_1, FUNCT_2, MCART_1, BINOP_1, RELAT_1, VECTSP_1, RLVECT_1;
  constructors BINOP_1, DOMAIN_1, TDGROUP, RELSET_1;
- registrations XBOOLE_0, SUBSET_1, RELSET_1, STRUCT_0, VECTSP_1, TDGROUP;
+ registrations XBOOLE_0, SUBSET_1, RELSET_1, STRUCT_0, VECTSP_1, TDGROUP,
+      RELAT_1;
  requirements SUBSET, BOOLE;
  definitions STRUCT_0, RLVECT_1, BINOP_1, ALGSTR_0;
  theorems DOMAIN_1, TDGROUP, FUNCT_1, FUNCT_2, MCART_1, RELAT_1, TARSKI,
@@ -24,31 +25,30 @@ definition
   let IT be non empty AffinStruct;
   attr IT is WeakAffVect-like means
   :Def1:
-  (for a,b,c being Element of IT st a,b // c,c holds a=b) &
-  (for a,b,c,d,p,q being Element of IT st
-  a,b // p,q & c,d // p,q holds a,b // c,d) & (for a,b,c being Element of IT
-  ex d being Element of IT st a,b // c,d) &
-  (for a,b,c,a',b',c' being Element of IT st
-  a,b // a',b' & a,c // a',c' holds b,c // b',c') &
-  (for a,c being Element of IT ex b being Element of IT st a,b // b,c) &
-  (for a,b,c,d being Element of IT st a,b // c,d holds a,c // b,d);
+  (for a,b,c being Element of IT st a
+,b // c,c holds a=b) & (for a,b,c,d,p,q being Element of IT st a,b // p,q & c,d
+// p,q holds a,b // c,d) & (for a,b,c being Element of IT ex d being Element of
+IT st a,b // c,d) & (for a,b,c,a',b',c' being Element of IT st a,b // a',b' & a
+  ,c // a',c' holds b,c // b',c') & (for a,c being Element of IT ex b being
+  Element of IT st a,b // b,c) & for a,b,c,d being Element of IT st a,b // c,d
+  holds a,c // b,d;
 end;
 
 registration
   cluster strict non trivial WeakAffVect-like (non empty AffinStruct);
   existence
-  proof consider AFV being strict AffVect;
+  proof
+    consider AFV being strict AffVect;
     reconsider AS = AFV as non empty AffinStruct;
-    (for a,b,c being Element of AS st a,b // c,c holds a=b) &
-    (for a,b,c,d,p,q being Element of AS st
-    a,b // p,q & c,d // p,q holds a,b // c,d) & (for a,b,c being Element of AS
-    ex d being Element of AS st a,b // c,d) &
-    (for a,b,c,a',b',c' being Element of AS st
-    a,b // a',b' & a,c // a',c' holds b,c // b',c') &
-    (for a,c being Element of AS ex b being Element of AS st a,b // b,c) &
-    (for a,b,c,d being Element of AS st
-    a,b // c,d holds a,c // b,d) by TDGROUP:21;
-    then AS is WeakAffVect-like by Def1;
+A1: ( for a,b,c being Element of AS ex d being Element of AS st a,b // c,d
+)& for a,b,c,a',b',c' being Element of AS st a,b // a',b' & a,c // a',c' holds
+    b,c // b',c' by TDGROUP:21;
+A2: ( for a,c being Element of AS ex b being Element of AS st a,b // b,c)&
+for a,b,c,d being Element of AS st a,b // c,d holds a,c // b,d by TDGROUP:21;
+    ( for a,b,c being Element of AS st a,b // c,c holds a=b)& for a,b,c,d,
+p,q being Element of AS st a,b // p,q & c,d // p,q holds a, b // c,d by TDGROUP
+    :21;
+    then AS is WeakAffVect-like by A1,A2,Def1;
     hence thesis;
   end;
 end;
@@ -63,21 +63,16 @@ registration
   proof
     let AFV be non empty AffinStruct such that
 A1: AFV is AffVect-like;
-    AFV is WeakAffVect-like
-    proof
-      (for a,b,c being Element of AFV st a,b // c,c holds a=b) &
-      (for a,b,c,d,p,q being Element of AFV st
-      a,b // p,q & c,d // p,q holds a,b // c,d) &
-      (for a,b,c being Element of AFV
-      ex d being Element of AFV st a,b // c,d) &
-      (for a,b,c,a',b',c' being Element of AFV st
-      a,b // a',b' & a,c // a',c' holds b,c // b',c') &
-      (for a,c being Element of AFV ex b being Element of AFV st a,b // b,c) &
-      (for a,b,c,d being Element of AFV st
-      a,b // c,d holds a,c // b,d) by A1,TDGROUP:def 8;
-      hence thesis by Def1;
-    end;
-    hence thesis;
+A2: ( for a,b,c being Element of AFV ex d being Element of AFV st a,b // c
+    ,d)& for a,b,c,a',b',c' being Element of AFV st a,b // a',b' & a,c // a',c'
+    holds b,c // b',c' by A1,TDGROUP:def 8;
+A3: ( for a,c being Element of AFV ex b being Element of AFV st a,b // b,c
+    )& for a,b,c,d being Element of AFV st a,b // c,d holds a,c // b,d by A1,
+    TDGROUP:def 8;
+    ( for a,b,c being Element of AFV st a,b // c,c holds a=b)& for a,b,c,d
+,p,q being Element of AFV st a,b // p,q & c,d // p,q holds a,b // c,d by A1,
+    TDGROUP:def 8;
+    hence thesis by A2,A3,Def1;
   end;
 end;
 
@@ -92,7 +87,8 @@ canceled;
 
 theorem Th2:
   a,b // a,b
-proof ex d st a,b // b,d by Def1;
+proof
+  ex d st a,b // b,d by Def1;
   hence thesis by Def1;
 end;
 
@@ -111,7 +107,8 @@ end;
 theorem Th5:
   a,b // a,c implies b = c
 proof
-  assume a,b // a,c;
+  assume
+  a,b // a,c;
   then a,a // b,c by Def1;
   then b,c // a,a by Th4;
   hence thesis by Def1;
@@ -120,7 +117,8 @@ end;
 theorem Th6:
   a,b // c,d & a,b // c,d' implies d = d'
 proof
-  assume a,b // c,d & a,b // c,d';
+  assume
+  a,b // c,d & a,b // c,d';
   then c,d // a,b & c,d' // a,b by Th4;
   then c,d // c,d' by Def1;
   hence thesis by Th5;
@@ -148,66 +146,76 @@ end;
 theorem
   a,b // c,d & a,c // b',d implies b = b'
 proof
-  assume
-A1: a,b // c,d & a,c // b',d;
-  then a,c // b,d by Def1;
+  assume that
+A1: a,b // c,d and
+A2: a,c // b',d;
+  a,c // b,d by A1,Def1;
   then b,d // a,c by Th4;
   then
-A2: d,b // c,a by Th8;
-  b',d // a,c by A1,Th4;
+A3: d,b // c,a by Th8;
+  b',d // a,c by A2,Th4;
   then d,b' // c,a by Th8;
-  then d,b // d,b' by A2,Def1;
+  then d,b // d,b' by A3,Def1;
   hence thesis by Th5;
 end;
 
 theorem
   b,c // b',c' & a,d // b,c & a,d' // b',c' implies d = d'
 proof
-  assume
-A1: b,c // b',c' & a,d // b,c & a,d' // b',c';
-  then b',c' // b,c by Th4;
-  then a,d // b',c' by A1,Def1;
-  then a,d // a,d' by A1,Def1;
+  assume that
+A1: b,c // b',c' and
+A2: a,d // b,c and
+A3: a,d' // b',c';
+  b',c' // b,c by A1,Th4;
+  then a,d // b',c' by A2,Def1;
+  then a,d // a,d' by A3,Def1;
   hence thesis by Th5;
 end;
 
 theorem
   a,b // a',b' & c,d // b,a & c,d' // b',a' implies d = d'
 proof
-  assume
-A1: a,b // a',b' & c,d // b,a & c,d' // b',a';
-  then a',b' // a,b by Th4;
+  assume that
+A1: a,b // a',b' and
+A2: c,d // b,a and
+A3: c,d' // b',a';
+  a',b' // a,b by A1,Th4;
   then b',a' // b,a by Th8;
-  then c,d // b',a' by A1,Def1;
-  then c,d // c,d' by A1,Def1;
+  then c,d // b',a' by A2,Def1;
+  then c,d // c,d' by A3,Def1;
   hence thesis by Th5;
 end;
 
 theorem
-  a,b // a',b' & c,d // c',d' & b,f // c,d & b',f' // c',d'
-  implies a,f // a',f'
+  a,b // a',b' & c,d // c',d' & b,f // c,d & b',f' // c',d' implies a,f
+  // a',f'
 proof
-  assume
-A1: a,b // a',b' & c,d // c',d' & b,f // c,d & b',f' // c',d';
-  then b',f' // c,d by Def1;
+  assume that
+A1: a,b // a',b' and
+A2: c,d // c',d' and
+A3: b,f // c,d and
+A4: b',f' // c',d';
+  b',f' // c,d by A2,A4,Def1;
   then
-A2: b,f // b',f' by A1,Def1;
+A5: b,f // b',f' by A3,Def1;
   b,a // b',a' by A1,Th8;
-  hence thesis by A2,Def1;
+  hence thesis by A5,Def1;
 end;
 
 theorem Th13:
   a,b // a',b' & a,c // c',b' implies b,c // c',a'
 proof
-  assume
-A1: a,b // a',b' & a,c // c',b';
+  assume that
+A1: a,b // a',b' and
+A2: a,c // c',b';
   consider d such that
-A2: c',b' // a',d by Def1;
-A3: c',a' // b',d by A2,Def1;
-  a',d // c',b' by A2,Th4;
-  then a,c // a',d by A1,Def1;
-  then b,c // b',d by A1,Def1;
-  hence thesis by A3,Def1;
+A3: c',b' // a',d by Def1;
+  a',d // c',b' by A3,Th4;
+  then a,c // a',d by A2,Def1;
+  then
+A4: b,c // b',d by A1,Def1;
+  c',a' // b',d by A3,Def1;
+  hence thesis by A4,Def1;
 end;
 
 ::
@@ -227,32 +235,33 @@ end;
 canceled 2;
 
 theorem
-  ex a,b st (a<>b & not MDist a,b)
+  ex a,b st a<>b & not MDist a,b
 proof
   consider p,q such that
 A1: p <> q by STRUCT_0:def 10;
-  now consider r such that
+  now
+    consider r such that
 A2: p,r // r,q by Def1;
 A3: now
+A4:   now
+        assume
+        MDist p,r;
+        then
+A5:     p,r // r,p by Def2;
+        r,q // p,r by A2,Th4;
+        then q,r // r,p by Th8;
+        then p,r // q,r by A5,Def1;
+        hence thesis by A1,Th5,Th8;
+      end;
       assume
-A4:   p = r;
-      then r,q // p,p by A2,Th4;
-      hence thesis by A1,A4,Def1;
+      p <> r;
+      hence thesis by A4;
     end;
     now
       assume
-A5:   p <> r;
-      now
-        assume
-A6:     MDist p,r;
-        r,q // p,r by A2,Th4;
-        then
-A7:     q,r // r,p by Th8;
-        p,r // r,p by A6,Def2;
-        then p,r // q,r by A7,Def1;
-        hence thesis by A1,Th5,Th8;
-      end;
-      hence thesis by A5;
+A6:   p = r;
+      then r,q // p,p by A2,Th4;
+      hence thesis by A1,A6,Def1;
     end;
     hence thesis by A3;
   end;
@@ -264,16 +273,18 @@ canceled;
 theorem
   MDist a,b & MDist a,c implies b = c or MDist b,c
 proof
-  assume
-A1: MDist a,b & MDist a,c;
+  assume that
+A1: MDist a,b and
+A2: MDist a,c;
+A3: a,b // b,a by A1,Def2;
+A4: a,c // c,a by A2,Def2;
   consider d such that
-A2: c,a // b,d by Def1;
-A3: b,d // c,a by A2,Th4;
-A4: a,b // b,a & a,c // c,a by A1,Def2;
+A5: c,a // b,d by Def1;
+  b,d // c,a by A5,Th4;
+  then a,c // b,d by A4,Def1;
   then
-A5: a,c // b,d by A3,Def1;
-A6: c,b // a,d by A2,Def1;
-  b,c // a,d by A4,A5,Def1;
+A6: b,c // a,d by A3,Def1;
+  c,b // a,d by A5,Def1;
   then b,c // c,b by A6,Def1;
   hence thesis by Def2;
 end;
@@ -281,16 +292,16 @@ end;
 theorem
   MDist a,b & a,b // c,d implies MDist c,d
 proof
-  assume
-A1: MDist a,b & a,b // c,d;
-  then
-A2: a <> b & a,b // b,a by Def2;
-A3: c,d // a,b by A1,Th4;
+  assume that
+A1: MDist a,b and
+A2: a,b // c,d;
+A3: a,b // b,a by A1,Def2;
+A4: c,d // a,b by A2,Th4;
   then d,c // b,a by Th8;
-  then d,c // a,b by A2,Def1;
-  then c,d // d,c by A3,Def1;
+  then d,c // a,b by A3,Def1;
+  then c,d // d,c by A4,Def1;
   then c <> d implies thesis by Def2;
-  hence thesis by A1,Def1;
+  hence thesis by A1,A2,Def1;
 end;
 
 ::
@@ -310,7 +321,8 @@ canceled;
 theorem Th21:
   Mid a,b,c implies Mid c,b,a
 proof
-  assume Mid a,b,c;
+  assume
+  Mid a,b,c;
   then a,b // b,c by Def3;
   then b,a // c,b by Th8;
   then c,b // b,a by Th4;
@@ -321,14 +333,16 @@ theorem
   Mid a,b,b iff a = b
 proof
 A1: now
-    assume Mid a,b,b;
-    then a,b // b,b by Def3;
-    hence a = b by Def1;
-  end;
-  now
-    assume a = b;
+    assume
+    a = b;
     then a,b // b,b by Th7;
     hence Mid a,b,b by Def3;
+  end;
+  now
+    assume
+    Mid a,b,b;
+    then a,b // b,b by Def3;
+    hence a = b by Def1;
   end;
   hence thesis by A1;
 end;
@@ -337,26 +351,30 @@ theorem Th23:
   Mid a,b,a iff a = b or MDist a,b
 proof
 A1: now
-    assume Mid a,b,a;
-    then a,b // b,a by Def3;
-    hence (a = b or MDist a,b) by Def2;
-  end;
-A2: now
-    assume a = b;
+    assume
+    a = b;
     then a,b // b,a by Th7;
     hence Mid a,b,a by Def3;
   end;
-  now
-    assume MDist a,b;
+A2: now
+    assume
+    MDist a,b;
     then a,b // b,a by Def2;
     hence Mid a,b,a by Def3;
+  end;
+  now
+    assume
+    Mid a,b,a;
+    then a,b // b,a by Def3;
+    hence a = b or MDist a,b by Def2;
   end;
   hence thesis by A1,A2;
 end;
 
 theorem Th24:
   ex b st Mid a,b,c
-proof consider b such that
+proof
+  consider b such that
 A1: a,b // b,c by Def1;
   Mid a,b,c by A1,Def3;
   hence thesis;
@@ -365,24 +383,27 @@ end;
 theorem Th25:
   Mid a,b,c & Mid a,b',c implies b =b' or MDist b,b'
 proof
-  assume Mid a,b,c & Mid a,b',c;
-  then
-A1: a,b // b,c & a,b' // b',c by Def3;
+  assume that
+A1: Mid a,b,c and
+A2: Mid a,b',c;
+A3: a,b // b,c by A1,Def3;
   consider d such that
-A2: b',c // b,d by Def1;
-A3: b,d // b',c by A2,Th4;
-  then a,b' // b,d by A1,Def1;
+A4: b',c // b,d by Def1;
+A5: b,d // b',c by A4,Th4;
+  then b,b' // d,c by Def1;
   then
-A4: b,b' // c,d by A1,Def1;
-  b,b' // d,c by A3,Def1;
-  then b',b // c,d by Th8;
-  then b,b' // b',b by A4,Def1;
+A6: b',b // c,d by Th8;
+  a,b' // b',c by A2,Def3;
+  then a,b' // b,d by A5,Def1;
+  then b,b' // c,d by A3,Def1;
+  then b,b' // b',b by A6,Def1;
   hence thesis by Def2;
 end;
 
 theorem Th26:
   ex c st Mid a,b,c
-proof consider c such that
+proof
+  consider c such that
 A1: a,b // b,c by Def1;
   Mid a,b,c by A1,Def3;
   hence thesis;
@@ -391,68 +412,81 @@ end;
 theorem Th27:
   Mid a,b,c & Mid a,b,c' implies c = c'
 proof
-  assume Mid a,b,c & Mid a,b,c';
-  then a,b // b,c & a,b // b,c' by Def3;
-  then b,c // a,b & b,c' // a,b by Th4;
-  then b,c // b,c' by Def1;
+  assume that
+A1: Mid a,b,c and
+A2: Mid a,b,c';
+  a,b // b,c' by A2,Def3;
+  then
+A3: b,c' // a,b by Th4;
+  a,b // b,c by A1,Def3;
+  then b,c // a,b by Th4;
+  then b,c // b,c' by A3,Def1;
   hence thesis by Th5;
 end;
 
 theorem Th28:
   Mid a,b,c & MDist b,b' implies Mid a,b',c
 proof
-  assume Mid a,b,c & MDist b,b';
+  assume that
+A1: Mid a,b,c and
+A2: MDist b,b';
+A3: b,b' // b',b by A2,Def2;
+  a,b // b,c by A1,Def3;
   then
-A1: a,b // b,c & b,b' // b',b by Def2,Def3;
+A4: b,a // c,b by Th8;
   consider d such that
-A2: b',b // c,d by Def1;
-  c,d // b',b by A2,Th4;
+A5: b',b // c,d by Def1;
+  c,d // b',b by A5,Th4;
+  then b,b' // c,d by A3,Def1;
   then
-A3: b,b' // c,d by A1,Def1;
-  b,a // c,b by A1,Th8;
-  then
-A4: a,b' // b,d by A3,Def1;
-  b',c // b,d by A2,Def1;
-  then a,b' // b',c by A4,Def1;
+A6: a,b' // b,d by A4,Def1;
+  b',c // b,d by A5,Def1;
+  then a,b' // b',c by A6,Def1;
   hence thesis by Def3;
 end;
 
 theorem Th29:
   Mid a,b,c & Mid a,b',c' & MDist b,b' implies c = c'
 proof
-  assume
-A1: Mid a,b,c & Mid a,b',c' & MDist b,b';
-  then Mid a,b',c by Th28;
-  hence thesis by A1,Th27;
+  assume that
+A1: Mid a,b,c and
+A2: Mid a,b',c' and
+A3: MDist b,b';
+  Mid a,b',c by A1,A3,Th28;
+  hence thesis by A2,Th27;
 end;
 
 theorem Th30:
   Mid a,p,a' & Mid b,p,b' implies a,b // b',a'
 proof
-  assume
-A1: Mid a,p,a' & Mid b,p,b';
+  assume that
+A1: Mid a,p,a' and
+A2: Mid b,p,b';
   consider d such that
-A2: b',p // a',d by Def1;
-A3: a',d // b',p by A2,Th4;
-  b,p // p,b' by A1,Def3;
-  then p,b // b',p by Th8;
-  then
-A4: p,b // a',d by A3,Def1;
+A3: b',p // a',d by Def1;
   a,p // p,a' by A1,Def3;
-  then p,a // a',p by Th8;
   then
-A5: a,b // p,d by A4,Def1;
-  b',a' // p,d by A2,Def1;
-  hence thesis by A5,Def1;
+A4: p,a // a',p by Th8;
+  b,p // p,b' by A2,Def3;
+  then
+A5: p,b // b',p by Th8;
+  a',d // b',p by A3,Th4;
+  then p,b // a',d by A5,Def1;
+  then
+A6: a,b // p,d by A4,Def1;
+  b',a' // p,d by A3,Def1;
+  hence thesis by A6,Def1;
 end;
 
 theorem
   Mid a,p,a' & Mid b,q,b' & MDist p,q implies a,b // b',a'
 proof
-  assume
-A1: Mid a,p,a' & Mid b,q,b' & MDist p,q;
-  then Mid a,q,a' by Th28;
-  hence thesis by A1,Th30;
+  assume that
+A1: Mid a,p,a' and
+A2: Mid b,q,b' and
+A3: MDist p,q;
+  Mid a,q,a' by A1,A3,Th28;
+  hence thesis by A2,Th30;
 end;
 
 ::
@@ -474,14 +508,16 @@ theorem
   PSym(p,a) = b iff a,p // p,b
 proof
 A1: now
-    assume PSym(p,a) = b;
-    then Mid a,p,b by Def4;
-    hence a,p // p,b by Def3;
-  end;
-  now
-    assume a,p // p,b;
+    assume
+    a,p // p,b;
     then Mid a,p,b by Def3;
     hence PSym(p,a) = b by Def4;
+  end;
+  now
+    assume
+    PSym(p,a) = b;
+    then Mid a,p,b by Def4;
+    hence a,p // p,b by Def3;
   end;
   hence thesis by A1;
 end;
@@ -492,21 +528,24 @@ theorem Th35:
   PSym(p,a) = a iff a = p or MDist a,p
 proof
 A1: now
-    assume PSym(p,a) = a;
-    then Mid a,p,a by Def4;
-    hence a = p or MDist a,p by Th23;
-  end;
-  now
-    assume a = p or MDist a,p;
+    assume
+    a = p or MDist a,p;
     then Mid a,p,a by Th23;
     hence PSym(p,a) = a by Def4;
+  end;
+  now
+    assume
+    PSym(p,a) = a;
+    then Mid a,p,a by Def4;
+    hence a = p or MDist a,p by Th23;
   end;
   hence thesis by A1;
 end;
 
 theorem Th36:
   PSym(p,PSym(p,a)) = a
-proof Mid a,p,PSym(p,a) by Def4;
+proof
+  Mid a,p,PSym(p,a) by Def4;
   then Mid PSym(p,a),p,a by Th21;
   hence thesis by Def4;
 end;
@@ -516,19 +555,21 @@ theorem Th37:
 proof
   assume
 A1: PSym(p,a) = PSym(p,b);
-  PSym(p,PSym(p,a)) = a & PSym(p,PSym(p,b)) = b by Th36;
-  hence thesis by A1;
+  PSym(p,PSym(p,a)) = a by Th36;
+  hence thesis by A1,Th36;
 end;
 
 theorem
   ex a st PSym(p,a) = b
-proof PSym(p,PSym(p,b)) = b by Th36;
+proof
+  PSym(p,PSym(p,b)) = b by Th36;
   hence thesis;
 end;
 
 theorem Th39:
   a,b // PSym(p,b),PSym(p,a)
-proof Mid a,p,PSym(p,a) & Mid b,p,PSym(p,b) by Def4;
+proof
+  Mid a,p,PSym(p,a) & Mid b,p,PSym(p,b) by Def4;
   hence thesis by Th30;
 end;
 
@@ -537,22 +578,22 @@ theorem Th40:
 proof
 A1: now
     assume
-A2: a,b // c,d;
-    PSym(p,d),PSym(p,c) // c,d by Th4,Th39;
+A2: PSym(p,a),PSym(p,b) // PSym(p,c),PSym(p,d);
+    d,c // PSym(p,c),PSym(p,d) by Th39;
+    then d,c // PSym(p,a),PSym(p,b) by A2,Def1;
     then
-A3: PSym(p,d),PSym(p,c) // a,b by A2,Def1;
-    PSym(p,b),PSym(p,a) // a,b by Th4,Th39;
-    then PSym(p,b),PSym(p,a) // PSym(p,d),PSym(p,c) by A3,Def1;
-    hence PSym(p,a),PSym(p,b) // PSym(p,c),PSym(p,d) by Th8;
+A3: c,d // PSym(p,b),PSym(p,a) by Th8;
+    a,b // PSym(p,b),PSym(p,a) by Th39;
+    hence a,b // c,d by A3,Def1;
   end;
   now
+A4: PSym(p,b),PSym(p,a) // a,b by Th4,Th39;
     assume
-A4: PSym(p,a),PSym(p,b) // PSym(p,c),PSym(p,d);
-A5: a,b // PSym(p,b),PSym(p,a) & c,d // PSym(p,d),PSym(p,c) by Th39;
-    d,c // PSym(p,c),PSym(p,d) by Th39;
-    then d,c // PSym(p,a),PSym(p,b) by A4,Def1;
-    then c,d // PSym(p,b),PSym(p,a) by Th8;
-    hence a,b // c,d by A5,Def1;
+A5: a,b // c,d;
+    PSym(p,d),PSym(p,c) // c,d by Th4,Th39;
+    then PSym(p,d),PSym(p,c) // a,b by A5,Def1;
+    then PSym(p,b),PSym(p,a) // PSym(p,d),PSym(p,c) by A4,Def1;
+    hence PSym(p,a),PSym(p,b) // PSym(p,c),PSym(p,d) by Th8;
   end;
   hence thesis by A1;
 end;
@@ -561,18 +602,20 @@ theorem
   MDist a,b iff MDist PSym(p,a),PSym(p,b)
 proof
 A1: now
-    assume MDist a,b;
-    then a,b // b,a & a <> b by Def2;
-    then PSym(p,a),PSym(p,b) // PSym(p,b),PSym(p,a) &
-    PSym(p,a) <> PSym(p,b) by Th37,Th40;
-    hence MDist PSym(p,a),PSym(p,b) by Def2;
+    assume
+A2: MDist a,b;
+    then a,b // b,a by Def2;
+    then
+A3: PSym(p,a),PSym(p,b) // PSym(p,b),PSym(p,a) by Th40;
+    PSym(p,a) <> PSym(p,b) by A2,Th37;
+    hence MDist PSym(p,a),PSym(p,b) by A3,Def2;
   end;
   now
-    assume MDist PSym(p,a),PSym(p,b);
-    then PSym(p,a),PSym(p,b) // PSym(p,b),PSym(p,a) &
-    PSym(p,a) <> PSym(p,b) by Def2;
-    then a,b // b,a & a <> b by Th40;
-    hence MDist a,b by Def2;
+    assume
+A4: MDist PSym(p,a),PSym(p,b);
+    then PSym(p,a),PSym(p,b) // PSym(p,b),PSym(p,a) by Def2;
+    then a,b // b,a by Th40;
+    hence MDist a,b by A4,Def2;
   end;
   hence thesis by A1;
 end;
@@ -581,16 +624,18 @@ theorem Th42:
   Mid a,b,c iff Mid PSym(p,a),PSym(p,b),PSym(p,c)
 proof
 A1: now
-    assume Mid a,b,c;
-    then a,b // b,c by Def3;
-    then PSym(p,a),PSym(p,b) // PSym(p,b),PSym(p,c) by Th40;
-    hence Mid PSym(p,a),PSym(p,b),PSym(p,c) by Def3;
-  end;
-  now
-    assume Mid PSym(p,a),PSym(p,b),PSym(p,c);
+    assume
+    Mid PSym(p,a),PSym(p,b),PSym(p,c);
     then PSym(p,a),PSym(p,b) // PSym(p,b),PSym(p,c) by Def3;
     then a,b // b,c by Th40;
     hence Mid a,b,c by Def3;
+  end;
+  now
+    assume
+    Mid a,b,c;
+    then a,b // b,c by Def3;
+    then PSym(p,a),PSym(p,b) // PSym(p,b),PSym(p,c) by Th40;
+    hence Mid PSym(p,a),PSym(p,b),PSym(p,c) by Def3;
   end;
   hence thesis by A1;
 end;
@@ -600,33 +645,36 @@ theorem Th43:
 proof
 A1: now
     assume
-A2: PSym(p,a) = PSym(q,a);
+A2: MDist p,q;
     Mid a,p,PSym(p,a) & Mid a,q,PSym(q,a) by Def4;
-    hence p = q or MDist p,q by A2,Th25;
+    hence PSym(p,a) = PSym(q,a) by A2,Th29;
   end;
   now
     assume
-A3: MDist p,q;
+A3: PSym(p,a) = PSym(q,a);
     Mid a,p,PSym(p,a) & Mid a,q,PSym(q,a) by Def4;
-    hence PSym(p,a) = PSym(q,a) by A3,Th29;
+    hence p = q or MDist p,q by A3,Th25;
   end;
   hence thesis by A1;
 end;
 
 theorem Th44:
   PSym(q,PSym(p,PSym(q,a))) = PSym(PSym(q,p),a)
-proof Mid PSym(q,a),p,PSym(p,PSym(q,a)) by Def4;
+proof
+  Mid PSym(q,a),p,PSym(p,PSym(q,a)) by Def4;
   then Mid PSym(q,PSym(q,a)),PSym(q,p),PSym(q,PSym(p,PSym(q,a))) by Th42;
-  then PSym(q,PSym(p,PSym(q,a)))=PSym(PSym(q,p),PSym(q,PSym(q,a))) by Def4;
+  then PSym(q,PSym(p,PSym(q,a)))=PSym(PSym(q,p),PSym(q,PSym(q,a))) by
+  Def4;
   hence thesis by Th36;
 end;
 
 theorem
-  PSym(p,PSym(q,a)) = PSym(q,PSym(p,a)) iff p = q or MDist p,q or
-  MDist q,PSym(p,q)
+  PSym(p,PSym(q,a)) = PSym(q,PSym(p,a)) iff p = q or MDist p,q or MDist
+  q,PSym(p,q)
 proof
 A1: now
-    assume PSym(p,PSym(q,a))=PSym(q,PSym(p,a));
+    assume
+    PSym(p,PSym(q,a))=PSym(q,PSym(p,a));
     then PSym(p,PSym(q,PSym(p,a)))=PSym(q,a) by Th36;
     then PSym(PSym(p,q),a)=PSym(q,a) by Th44;
     then q=PSym(p,q) or MDist q,PSym(p,q) by Th43;
@@ -636,7 +684,8 @@ A2: Mid q,p,q or MDist q,PSym(p,q) by Def4;
     thus p = q or MDist p,q or MDist q,PSym(p,q) by A2,Th23;
   end;
   now
-    assume p = q or MDist p,q or MDist q,PSym(p,q);
+    assume
+    p = q or MDist p,q or MDist q,PSym(p,q);
     then Mid q,p,q or MDist q,PSym(p,q) by Th23;
     then PSym(PSym(p,q),a)=PSym(q,a) by Def4,Th43;
     then PSym(p,PSym(q,PSym(p,a)))=PSym(q,a) by Th44;
@@ -648,45 +697,48 @@ end;
 theorem Th46:
   PSym(p,PSym(q,PSym(r,a))) = PSym(r,PSym(q,PSym(p,a)))
 proof
-  PSym(q,PSym(r,p)),p // PSym(q,p),PSym(q,PSym(q,PSym(r,p))) by Th39;
+  p,a // PSym(r,a),PSym(r,p) & PSym(q,PSym(r,p)),PSym(q,PSym(r,a)) //
+  PSym(r,a ),PSym(r,p) by Th4,Th39;
   then
-A1: PSym(q,PSym(r,p)),p // PSym(q,p),PSym(r,p) by Th36;
+A1: p,a // PSym(q,PSym(r,p)),PSym(q,PSym(r,a)) by Def1;
+  p,a // PSym(p,a),PSym(p,p) & PSym(q,PSym(p,p)),PSym(q,PSym(p,a)) //
+  PSym(p,a ),PSym(p,p) by Th4,Th39;
+  then
+A2: p,a // PSym(q,PSym(p,p)),PSym(q,PSym(p,a)) by Def1;
   PSym(q,p),PSym(r,p) // PSym(r,PSym(r,p)),PSym(r,PSym(q,p)) by Th39;
   then PSym(q,p),PSym(r,p) // p,PSym(r,PSym(q,p)) by Th36;
-  then p,PSym(r,PSym(q,p)) // PSym(q,p),PSym(r,p) by Th4;
-  then PSym(q,PSym(r,p)),p // p,PSym(r,PSym(q,p)) by A1,Def1;
+  then
+A3: p,PSym(r,PSym(q,p)) // PSym(q,p),PSym(r,p) by Th4;
+  PSym(q,PSym(r,p)),p // PSym(q,p),PSym(q,PSym(q,PSym(r,p))) by Th39;
+  then PSym(q,PSym(r,p)),p // PSym(q,p),PSym(r,p) by Th36;
+  then PSym(q,PSym(r,p)),p // p,PSym(r,PSym(q,p)) by A3,Def1;
   then Mid PSym(q,PSym(r,p)),p,PSym(r,PSym(q,p)) by Def3;
   then PSym(p,PSym(q,PSym(r,p))) = PSym(r,PSym(q,p)) by Def4;
   then
-A2: PSym(p,PSym(q,PSym(r,p))) = PSym(r,PSym(q,PSym(p,p))) by Th35;
-A3: p,a // PSym(r,a),PSym(r,p) by Th39;
-  PSym(q,PSym(r,p)),PSym(q,PSym(r,a)) // PSym(r,a),PSym(r,p) by Th4,Th39;
+A4: PSym(p,PSym(q,PSym(r,p))) = PSym(r,PSym(q,PSym(p,p))) by Th35;
+  PSym(r,PSym(q,PSym(p,a))),PSym(r,PSym(q,PSym(p,p))) // PSym(q,PSym(p,p)
+  ),PSym(q,PSym(p,a)) by Th4,Th39;
   then
-A4: p,a // PSym(q,PSym(r,p)),PSym(q,PSym(r,a)) by A3,Def1;
-  PSym(p,PSym(q,PSym(r,a))),PSym(p,PSym(q,PSym(r,p))) //
-  PSym(q,PSym(r,p)),PSym(q,PSym(r,a)) by Th4,Th39;
-  then
-A5: PSym(p,PSym(q,PSym(r,a))),PSym(p,PSym(q,PSym(r,p))) // p,a by A4,Def1;
-A6: p,a // PSym(p,a),PSym(p,p) by Th39;
-  PSym(q,PSym(p,p)),PSym(q,PSym(p,a)) // PSym(p,a),PSym(p,p) by Th4,Th39;
-  then
-A7: p,a // PSym(q,PSym(p,p)),PSym(q,PSym(p,a)) by A6,Def1;
-  PSym(r,PSym(q,PSym(p,a))),PSym(r,PSym(q,PSym(p,p))) //
-  PSym(q,PSym(p,p)),PSym(q,PSym(p,a)) by Th4,Th39;
-  then PSym(r,PSym(q,PSym(p,a))),PSym(r,PSym(q,PSym(p,p))) // p,a by A7,Def1;
-  then PSym(p,PSym(q,PSym(r,a))),PSym(p,PSym(q,PSym(r,p))) //
-  PSym(r,PSym(q,PSym(p,a))),PSym(p,PSym(q,PSym(r,p))) by A2,A5,Def1;
+A5: PSym(r,PSym(q,PSym(p,a))),PSym(r,PSym(q,PSym(p,p))) // p,a by A2,
+  Def1;
+  PSym(p,PSym(q,PSym(r,a))),PSym(p,PSym(q,PSym(r,p))) // PSym(q,PSym(r,p)
+  ),PSym(q,PSym(r,a)) by Th4,Th39;
+  then PSym(p,PSym(q,PSym(r,a))),PSym(p,PSym(q,PSym(r,p))) // p,a by A1,
+  Def1;
+  then PSym(p,PSym(q,PSym(r,a))),PSym(p,PSym(q,PSym(r,p))) // PSym(r,PSym(q,
+  PSym(p,a))),PSym(p,PSym(q,PSym(r,p))) by A4,A5,Def1;
   hence thesis by Th5,Th8;
 end;
 
 theorem
   ex d st PSym(a,PSym(b,PSym(c,p))) = PSym(d,p)
-proof consider e such that
+proof
+  consider e such that
 A1: Mid a,e,c by Th24;
-A2: c = PSym(e,a) by A1,Def4;
   consider d such that
-A3: Mid b,e,d by Th26;
-  PSym(c,PSym(d,p)) = PSym(PSym(e,a),PSym(PSym(e,b),p)) by A2,A3,Def4
+A2: Mid b,e,d by Th26;
+  c = PSym(e,a) by A1,Def4;
+  then PSym(c,PSym(d,p)) = PSym(PSym(e,a),PSym(PSym(e,b),p)) by A2,Def4
     .= PSym(PSym(e,a),PSym(e,PSym(b,PSym(e,p)))) by Th44
     .= PSym(e,PSym(a,PSym(e,PSym(e,PSym(b,PSym(e,p)))))) by Th44
     .= PSym(e,PSym(a,PSym(b,PSym(e,p)))) by Th36
@@ -698,7 +750,8 @@ end;
 
 theorem
   ex c st PSym(a,PSym(c,p)) = PSym(c,PSym(b,p))
-proof consider c such that
+proof
+  consider c such that
 A1: Mid a,c,b by Th24;
   PSym(b,p) = PSym(PSym(c,a),p) by A1,Def4
     .= PSym(c,PSym(a,(PSym(c,p)))) by Th44;
@@ -728,14 +781,16 @@ end;
 Lm1: Pcom(o,a) = b iff a,o // o,b
 proof
 A1: now
-    assume Pcom(o,a) = b;
-    then Mid a,o,b by Def4;
-    hence a,o // o,b by Def3;
-  end;
-  now
-    assume a,o // o,b;
+    assume
+    a,o // o,b;
     then Mid a,o,b by Def3;
     hence Pcom(o,a) = b by Def4;
+  end;
+  now
+    assume
+    Pcom(o,a) = b;
+    then Mid a,o,b by Def4;
+    hence a,o // o,b by Def3;
   end;
   hence thesis by A1;
 end;
@@ -745,7 +800,8 @@ definition
   canceled;
   func Padd(o) -> BinOp of the carrier of AFV means
   :Def7:
-  for a,b holds it.(a,b) = Padd(o,a,b);
+  for a,b holds it.(a
+  ,b) = Padd(o,a,b);
   existence
   proof
     deffunc F(Element of AFV, Element of AFV) = Padd(o,$1,$2);
@@ -756,10 +812,10 @@ A1: for a,b holds O.(a,b) = F(a,b) from BINOP_1:sch 4;
   end;
   uniqueness
   proof
+    set X = the carrier of AFV;
     let o1,o2 be BinOp of the carrier of AFV such that
 A2: for a,b holds o1.(a,b) = Padd(o,a,b) and
 A3: for a,b holds o2.(a,b) = Padd(o,a,b);
-    set X = the carrier of AFV;
     for x being Element of [:X,X:] holds o1.x = o2.x
     proof
       let x be Element of [:X,X:];
@@ -779,7 +835,8 @@ definition
   let AFV,o;
   func Pcom(o) -> UnOp of the carrier of AFV means
   :Def8:
-  for a holds it.a = Pcom(o,a);
+  for a holds it.a =
+  Pcom(o,a);
   existence
   proof
     deffunc F(Element of AFV) = Pcom(o,$1);
@@ -790,10 +847,10 @@ A1: for a holds O.a = F(a) from FUNCT_2:sch 4;
   end;
   uniqueness
   proof
+    set X = the carrier of AFV;
     let o1,o2 be UnOp of the carrier of AFV such that
 A2: for a holds o1.a = Pcom(o,a) and
 A3: for a holds o2.a = Pcom(o,a);
-    set X = the carrier of AFV;
     for x being Element of X holds o1.x = o2.x
     proof
       let x be Element of X;
@@ -808,7 +865,8 @@ end;
 definition
   let AFV,o;
   func GroupVect(AFV,o) -> strict addLoopStr equals
-  addLoopStr(#the carrier of AFV,Padd(o),o#);
+  addLoopStr(#the carrier of
+    AFV,Padd(o),o#);
   correctness;
 end;
 
@@ -821,19 +879,20 @@ end;
 canceled 6;
 
 theorem
-  the carrier of GroupVect(AFV,o) = the carrier of AFV
-  & the addF of GroupVect(AFV,o) = Padd(o) & 0.GroupVect(AFV,o) = o;
+  the carrier of GroupVect(AFV,o) = the carrier of AFV & the addF of
+  GroupVect(AFV,o) = Padd(o) & 0.GroupVect(AFV,o) = o;
 
 reserve a,b,c for Element of GroupVect(AFV,o);
 
 canceled;
 
 theorem
-  for a,b being Element of GroupVect(AFV,o),
-  a',b' being Element of AFV st a=a' & b=b' holds a + b = (Padd(o)).(a',b');
+  for a,b being Element of GroupVect(AFV,o), a',b' being Element of AFV
+  st a=a' & b=b' holds a + b = (Padd(o)).(a',b');
 
 Lm2: a+b = b+a
-proof reconsider a'=a,b'=b as Element of AFV;
+proof
+  reconsider a'=a,b'=b as Element of AFV;
   reconsider c'=(a+b) as Element of AFV;
   c'= Padd(o,a',b') by Def7;
   then o,a' // b',c' by Def5;
@@ -844,39 +903,40 @@ proof reconsider a'=a,b'=b as Element of AFV;
 end;
 
 Lm3: (a+b)+c = a+(b+c)
-proof reconsider a'=a,b'=b,c'=c as Element of AFV;
+proof
+  reconsider a'=a,b'=b,c'=c as Element of AFV;
   set p= b+c,q=a+b;
   reconsider p'=p,q'=q as Element of AFV;
   reconsider x'=(a+p) ,y'=(q+c) as Element of AFV;
-  p'= Padd(o,b',c') by Def7;
+  consider x'' such that
+A1: x',p' // c',x'' by Def1;
+  x'= Padd(o,a',p') by Def7;
+  then o,a' // p',x' by Def5;
   then
-A1: o,b' // c',p' by Def5;
+A2: a',o // x',p' by Th8;
+  c',x'' // x',p' by A1,Th4;
+  then
+A3: a',o // c',x'' by A2,Def1;
   q'= Padd(o,a',b') by Def7;
   then o,a' // b',q' by Def5;
   then o,b' // a',q' by Def1;
   then
-A2: a',q' // o,b' by Th4;
-  c',p' // o,b' by A1,Th4;
+A4: a',q' // o,b' by Th4;
+  p'= Padd(o,b',c') by Def7;
+  then o,b' // c',p' by Def5;
+  then c',p' // o,b' by Th4;
+  then a',q' // c',p' by A4,Def1;
   then
-A3: a',q' // c',p' by A2,Def1;
-  consider x'' such that
-A4: x',p' // c',x'' by Def1;
-A5: c',x'' // x',p' by A4,Th4;
-  x'= Padd(o,a',p') by Def7;
-  then o,a' // p',x' by Def5;
-  then a',o // x',p' by Th8;
-  then a',o // c',x'' by A5,Def1;
-  then
-A6: q',o // p',x'' by A3,Def1;
-  x',c' // p',x'' by A4,Def1;
-  then q',o // x',c' by A6,Def1;
+A5: q',o // p',x'' by A3,Def1;
+  x',c' // p',x'' by A1,Def1;
+  then q',o // x',c' by A5,Def1;
   then o,q' // c',x' by Th8;
   then
-A7: c',x' // o,q' by Th4;
+A6: c',x' // o,q' by Th4;
   y'= Padd(o,q',c') by Def7;
   then o,q' // c',y' by Def5;
   then c',y' // o,q' by Th4;
-  then c',y' // c',x' by A7,Def1;
+  then c',y' // c',x' by A6,Def1;
   hence thesis by Th5;
 end;
 
@@ -918,19 +978,18 @@ registration
 end;
 
 theorem Th58:
-  for a being Element of GroupVect(AFV,o),
-  a' being Element of AFV st a=a' holds -a = (Pcom(o)).a'
+  for a being Element of GroupVect(AFV,o), a' being Element of AFV
+  st a=a' holds -a = (Pcom(o)).a'
 proof
   let a be Element of GroupVect(AFV,o), a' be Element of AFV;
   assume
 A1: a=a';
   reconsider aa = (Pcom(o)).a' as Element of GroupVect(AFV,o);
-A2: Pcom(o,o) = o by Th35;
-  o,a' // Pcom(o,a'),Pcom(o,o) by Th39;
+  Pcom(o,o) = o & o,a' // Pcom(o,a'),Pcom(o,o) by Th35,Th39;
   then
-A3: Padd(o,a',Pcom(o,a')) = o by A2,Def5;
+A2: Padd(o,a',Pcom(o,a')) = o by Def5;
   a + aa = (Padd(o)).(a,(Pcom(o,a'))) by Def8
-    .= 0.GroupVect(AFV,o) by A1,A3,Def7;
+    .= 0.GroupVect(AFV,o) by A1,A2,Def7;
   hence thesis by RLVECT_1:def 11;
 end;
 
@@ -958,7 +1017,8 @@ registration
   let AFV,o;
   cluster GroupVect(AFV,o) -> Two_Divisible;
   coherence
-  proof for a ex b st b + b = a by Th66;
+  proof
+    for a ex b st b + b = a by Th66;
     hence thesis by TDGROUP:def 1;
   end;
 end;
@@ -971,26 +1031,27 @@ reserve AFV for AffVect,
   o for Element of AFV;
 
 theorem Th67:
-  for a being Element of GroupVect(AFV,o)
-  st a + a = 0.(GroupVect(AFV,o)) holds a = 0.(GroupVect(AFV,o))
+  for a being Element of GroupVect(AFV,o) st a + a = 0.(GroupVect(
+  AFV,o)) holds a = 0.(GroupVect(AFV,o))
 proof
   let a be Element of GroupVect(AFV,o) such that
 A1: a + a = 0.(GroupVect(AFV,o));
   reconsider a''=a as Element of AFV;
-  set GV = GroupVect(AFV,o);
   o = Padd(o,a'',a'') by A1,Def7;
   then
 A2: o,a'' // a'',o by Def5;
   o,o // o,o by Th2;
   hence thesis by A2,TDGROUP:21;
+  set GV = GroupVect(AFV,o);
 end;
 
 registration
   let AFV,o;
   cluster GroupVect(AFV,o) -> Fanoian;
   coherence
-  proof for a being Element of GroupVect(AFV,o)
-    st a + a = 0.(GroupVect(AFV,o)) holds a = 0.(GroupVect(AFV,o)) by Th67;
+  proof
+    for a being Element of GroupVect(AFV,o) st a + a = 0.(GroupVect(AFV,o)
+    ) holds a = 0.(GroupVect(AFV,o)) by Th67;
     hence thesis by VECTSP_1:def 28;
   end;
 end;
@@ -1022,7 +1083,8 @@ registration
 end;
 
 theorem Th70:
-  for ADG being Proper_Uniquely_Two_Divisible_Group holds AV(ADG) is AffVect
+  for ADG being Proper_Uniquely_Two_Divisible_Group holds AV(ADG)
+  is AffVect
 proof
   let ADG be Proper_Uniquely_Two_Divisible_Group;
   ex a,b being Element of ADG st a<>b by STRUCT_0:def 10;
@@ -1036,80 +1098,92 @@ registration
 end;
 
 theorem Th71:
-  for AFV being strict AffVect holds (for o being Element of AFV holds
-  AFV = AV(GroupVect(AFV,o)))
+  for AFV being strict AffVect holds for o being Element of AFV
+  holds AFV = AV(GroupVect(AFV,o))
 proof
   let AFV be strict AffVect;
   let o be Element of AFV;
   set X = GroupVect(AFV,o);
-A1: the carrier of AV(X) = the carrier of AFV by TDGROUP:9;
-  CONGRD(X) = the CONGR of AFV
-  proof
-    now
-      let x,y be set;
-      set xy = [x,y];
-A2:   now
-        assume
-A3:     xy in CONGRD(X);
-        set V = the carrier of X;
-        set VV = [:V,V:];
-        xy`1 = x & xy`2 = y by MCART_1:7;
+  now
+    let x,y be set;
+    set xy = [x,y];
+A1: now
+      set V = the carrier of AFV;
+      assume
+A2:   xy in the CONGR of AFV;
+      set VV = [:V,V:];
+      xy`2 = y by MCART_1:7;
+      then
+A3:   y in VV by A2,MCART_1:10;
+      then
+A4:   y = [y`1,y`2] by MCART_1:23;
+      xy`1 = x by MCART_1:7;
+      then
+A5:   x in VV by A2,MCART_1:10;
+      then reconsider
+      x1 = x`1, x2 = x`2, y1 = y`1, y2 = y`2 as Element of AFV by
+      A3,MCART_1:10;
+      reconsider x1' = x1, x2' = x2, y1' = y1, y2' = y2 as Element of X;
+A6:   x = [x`1,x`2] by A5,MCART_1:23;
+      then
+A7:   x1,x2 // y1,y2 by A2,A4,ANALOAF:def 2;
+      x1' # y2' = x2' # y1'
+      proof
+        reconsider z1=x1'#y2',z2=x2'#y1' as Element of AFV;
+        z1 = Padd(o,x1,y2) by Def7;
+        then o,x1 // y2,z1 by Def5;
+        then x1,o // z1,y2 by Th8;
         then
-A4:     x in VV & y in VV by A3,MCART_1:10;
-        then
-A5:     x = [x`1,x`2] & y = [y`1,y`2] & x`1 in V & x`2 in V & y`1 in V & y`2
-        in V by MCART_1:10,23;
-        reconsider x1' = x`1, x2' = x`2, y1' = y`1, y2' = y`2 as
-        Element of X by A4,MCART_1:10;
-        reconsider x1 = x1', x2 = x2', y1 = y1', y2 = y2' as Element of AFV;
-        set z1' = x1' # y2', z2' = x2' # y1';
-A6:     z1'=z2' by A3,A5,TDGROUP:def 4;
-        reconsider z1=z1',z2=z2' as Element of AFV;
-        z1 = Padd(o,x1,y2) & z2 = Padd(o,x2,y1) by Def7;
-        then o,x1 // y2,z1 & o,x2 // y1,z1 by A6,Def5;
-        then x1,x2 // y1,y2 by Th13;
-        hence xy in the CONGR of AFV by A5,ANALOAF:def 2;
+A8:     o,x2 // y1,z1 by A7,Th13;
+        z2 = Padd(o,x2,y1) by Def7;
+        hence thesis by A8,Def5;
       end;
-      now
-        assume
-A7:     xy in the CONGR of AFV;
-        set V = the carrier of AFV;
-        set VV = [:V,V:];
-        xy`1 = x & xy`2 = y by MCART_1:7;
-        then
-A8:     x in VV & y in VV by A7,MCART_1:10;
-        then
-A9:     x = [x`1,x`2] & y = [y`1,y`2] & x`1 in V & x`2 in V & y`1
-        in V & y`2 in V by MCART_1:10,23;
-        reconsider x1 = x`1, x2 = x`2, y1 = y`1, y2 = y`2
-        as Element of AFV by A8,MCART_1:10;
-        reconsider x1' = x1, x2' = x2, y1' = y1, y2' = y2 as Element of X;
-A10:    x1,x2 // y1,y2 by A7,A9,ANALOAF:def 2;
-        x1' # y2' = x2' # y1'
-        proof
-          reconsider z1=x1'#y2',z2=x2'#y1' as Element of AFV;
-A11:      z1 = Padd(o,x1,y2) & z2 = Padd(o,x2,y1) by Def7;
-          then o,x1 // y2,z1 & o,x2 // y1,z2 by Def5;
-          then x1,o // z1,y2 & o,x2 // y1,z2 by Th8;
-          then o,x2 // y1,z1 by A10,Th13;
-          hence thesis by A11,Def5;
-        end;
-        hence [x,y] in CONGRD(X) by A9,TDGROUP:def 4;
-      end;
-      hence [x,y] in CONGRD(X) iff [x,y] in the CONGR of AFV by A2;
+      hence [x,y] in CONGRD(X) by A6,A4,TDGROUP:def 4;
     end;
-    hence thesis by RELAT_1:def 2;
+    now
+      set V = the carrier of X;
+      assume
+A9:   xy in CONGRD(X);
+      set VV = [:V,V:];
+      xy`2 = y by MCART_1:7;
+      then
+A10:  y in VV by A9,MCART_1:10;
+      then
+A11:  y = [y`1,y`2] by MCART_1:23;
+      xy`1 = x by MCART_1:7;
+      then
+A12:  x in VV by A9,MCART_1:10;
+      then reconsider
+      x1' = x`1, x2' = x`2, y1' = y`1, y2' = y`2 as Element of X by
+      A10,MCART_1:10;
+      set z1' = x1' # y2', z2' = x2' # y1';
+      reconsider x1 = x1', x2 = x2', y1 = y1', y2 = y2' as Element of AFV;
+      reconsider z1=z1',z2=z2' as Element of AFV;
+A13:  z2 = Padd(o,x2,y1) by Def7;
+      z1 = Padd(o,x1,y2) by Def7;
+      then
+A14:  o,x1 // y2,z1 by Def5;
+A15:  x = [x`1,x`2] by A12,MCART_1:23;
+      then z1'=z2' by A9,A11,TDGROUP:def 4;
+      then o,x2 // y1,z1 by A13,Def5;
+      then x1,x2 // y1,y2 by A14,Th13;
+      hence xy in the CONGR of AFV by A15,A11,ANALOAF:def 2;
+    end;
+    hence [x,y] in CONGRD(X) iff [x,y] in the CONGR of AFV by A1;
   end;
-  hence thesis by A1,TDGROUP:9;
+  then the carrier of AV(X) = the carrier of AFV & CONGRD(X) = the CONGR of
+  AFV by RELAT_1:def 2,TDGROUP:9;
+  hence thesis by TDGROUP:9;
 end;
 
 theorem
-  for AS being strict AffinStruct holds (AS is AffVect iff
-  (ex ADG being Proper_Uniquely_Two_Divisible_Group st AS = AV(ADG)))
+  for AS being strict AffinStruct holds (AS is AffVect iff ex ADG being
+  Proper_Uniquely_Two_Divisible_Group st AS = AV(ADG) )
 proof
   let AS be strict AffinStruct;
   now
-    assume AS is AffVect;
+    assume
+    AS is AffVect;
     then reconsider AS' = AS as AffVect;
     consider o being Element of AS';
     take ADG = GroupVect(AS',o);
@@ -1124,16 +1198,17 @@ definition
   let f be Function of the carrier of X,the carrier of Y;
   pred f is_Iso_of X,Y means
   :Def10:
-  f is one-to-one & rng(f) = the carrier of Y &
-  (for a,b being Element of X holds
-  (f.(a+b) = (f.a)+(f.b) & f.(0.X) = 0.Y & f.(-a) = -(f.a)));
+  f is one-to-one & rng(f) = the carrier of
+Y & for a,b being Element of X holds f.(a+b) = (f.a)+(f.b) & f.(0.X) = 0.Y & f.
+  (-a) = -(f.a);
 end;
 
 definition
   let X,Y be non empty addLoopStr;
   pred X,Y are_Iso means
   :Def11:
-  ex f being Function of the carrier of X,the carrier of Y st f is_Iso_of X,Y;
+  ex f being Function of the carrier of X,the
+  carrier of Y st f is_Iso_of X,Y;
 end;
 
 reserve ADG for Proper_Uniquely_Two_Divisible_Group;
@@ -1142,10 +1217,10 @@ reserve f for Function of the carrier of ADG,the carrier of ADG;
 canceled 2;
 
 theorem Th75:
-  for o' being Element of ADG, o being Element of AV(ADG) st
-  (for x being Element of ADG holds f.x = o'+x) & o=o'
-  holds (for a,b being Element of ADG holds (f.(a+b) =(Padd(o)).(f.a,f.b)
-  & f.(0.ADG) = 0.(GroupVect(AV(ADG),o)) & f.(-a) = (Pcom(o)).(f.a)))
+  for o' being Element of ADG, o being Element of AV(ADG) st (for
+x being Element of ADG holds f.x = o'+x) & o=o' holds for a,b being Element of
+ADG holds f.(a+b) =(Padd(o)).(f.a,f.b) & f.(0.ADG) = 0.(GroupVect(AV(ADG),o)) &
+  f.(-a) = (Pcom(o)).(f.a)
 proof
   let o' be Element of ADG, o be Element of AV(ADG);
   assume that
@@ -1171,11 +1246,9 @@ A5: o'+c' = a'+b' by TDGROUP:def 4;
       .= f.(a+b) by A1;
     hence thesis;
   end;
-  thus f.(0.ADG) = 0.(GroupVect(AV(ADG),o))
-  proof
-    thus f.(0.ADG) = o'+(0.ADG) by A1
-      .= 0.(GroupVect(AV(ADG),o)) by A2,RLVECT_1:10;
-  end;
+  f.(0.ADG) = o'+(0.ADG) by A1
+    .= 0.(GroupVect(AV(ADG),o)) by A2,RLVECT_1:10;
+  hence f.(0.ADG) = 0.(GroupVect(AV(ADG),o));
   thus f.(-a) = (Pcom(o)).(f.a)
   proof
 A6: ((Pcom(o)).(f.a)) = Pcom(o,a'') by Def8;
@@ -1191,15 +1264,14 @@ A7: o'+o' = (o'+a)+c' by A1
       .= (c'+a)+(-a) by A7,RLVECT_1:21
       .= c'+(a+(-a)) by RLVECT_1:def 6
       .= c'+(0.ADG) by RLVECT_1:16
-      .= c'
-    by RLVECT_1:10;
+      .= c' by RLVECT_1:10;
     hence thesis;
   end;
 end;
 
 theorem Th76:
-  for o' being Element of ADG st (for b being Element of ADG holds f.b = o'+b)
-  holds f is one-to-one
+  for o' being Element of ADG st (for b being Element of ADG holds
+  f.b = o'+b) holds f is one-to-one
 proof
   let o' be Element of ADG such that
 A1: for b being Element of ADG holds f.b = o'+b;
@@ -1216,36 +1288,39 @@ A3: f.x1 = f.x2;
 end;
 
 theorem Th77:
-  for o' being Element of ADG, o being Element of AV(ADG) st
-  (for b being Element of ADG holds f.b = o'+b)
-  holds rng(f) = the carrier of GroupVect(AV(ADG),o)
+  for o' being Element of ADG, o being Element of AV(ADG) st (for
+  b being Element of ADG holds f.b = o'+b) holds rng(f) = the carrier of
+  GroupVect(AV(ADG),o)
 proof
-  let o' be Element of ADG, o be Element of AV(ADG) such that
-A1: for b being Element of ADG holds f.b = o'+b;
   set X = the carrier of ADG;
-A2: X = dom(f) & rng(f) c= X by FUNCT_2:def 1,RELAT_1:def 19;
-A3: X = the carrier of GroupVect(AV(ADG),o) by TDGROUP:9;
+A1: X = dom(f) by FUNCT_2:def 1;
+  let o' be Element of ADG, o be Element of AV(ADG) such that
+A2: for b being Element of ADG holds f.b = o'+b;
   now
     let y be set;
-    assume y in X;
+    assume
+    y in X;
     then reconsider y'=y as Element of X;
     set x'=y'-o';
-    f.x' = o'+((-o')+y') by A1
+    f.x' = o'+((-o')+y') by A2
       .= (o'+(-o'))+y' by RLVECT_1:def 6
       .= y'+(0.ADG) by RLVECT_1:16
       .= y by RLVECT_1:10;
-    hence y in rng(f) by A2,FUNCT_1:def 5;
+    hence y in rng(f) by A1,FUNCT_1:def 5;
   end;
-  then X c= rng(f) by TARSKI:def 3;
-  hence thesis by A2,A3,XBOOLE_0:def 10;
+  then
+A3: X c= rng(f) by TARSKI:def 3;
+  rng(f) c= X & X = the carrier of GroupVect(AV(ADG),o) by RELAT_1:def 19
+  ,TDGROUP:9;
+  hence thesis by A3,XBOOLE_0:def 10;
 end;
 
 theorem
-  for ADG being Proper_Uniquely_Two_Divisible_Group, o' being Element of ADG,
-  o being Element of AV(ADG) st o=o' holds ADG,GroupVect(AV(ADG),o) are_Iso
+  for ADG being Proper_Uniquely_Two_Divisible_Group, o' being Element of
+ADG, o being Element of AV(ADG) st o=o' holds ADG,GroupVect(AV(ADG),o) are_Iso
 proof
-  let ADG be Proper_Uniquely_Two_Divisible_Group, o' be Element of ADG,
-  o be Element of AV(ADG) such that
+  let ADG be Proper_Uniquely_Two_Divisible_Group, o' be Element of ADG, o be
+  Element of AV(ADG) such that
 A1: o=o';
   set AS = AV(ADG);
   set X = the carrier of ADG,Y=the carrier of AS,Z=GroupVect(AS,o);
@@ -1253,19 +1328,18 @@ A1: o=o';
   deffunc F(Element of X) = o'+$1;
   consider g being UnOp of X such that
 A2: for a being Element of X holds g.a = F(a) from FUNCT_2:sch 4;
-  X = T & X = Y & Y = T by TDGROUP:9;
+  X = T by TDGROUP:9;
   then reconsider f = g as Function of X,T;
-A3: f is one-to-one by A2,Th76;
-A4: rng(f) = T by A2,Th77;
-  now
+A3: now
     let a,b be Element of ADG;
+    reconsider fa = f.a as Element of AV(ADG);
     thus f.(a+b) = (f.a)+(f.b) by A1,A2,Th75;
     thus f.(0.ADG) = 0.Z by A1,A2,Th75;
-    reconsider fa = f.a as Element of AV(ADG);
     thus f.(-a) = (Pcom(o)).fa by A1,A2,Th75
       .= -(f.a) by Th58;
   end;
-  then f is_Iso_of ADG,Z by A3,A4,Def10;
+  f is one-to-one & rng(f) = T by A2,Th76,Th77;
+  then f is_Iso_of ADG,Z by A3,Def10;
   hence thesis by Def11;
 end;
 

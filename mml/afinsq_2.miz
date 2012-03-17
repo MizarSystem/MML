@@ -10,18 +10,16 @@ environ
  vocabularies FUNCT_1, BOOLE, FINSEQ_1, FINSET_1, RELAT_1, CARD_1, TARSKI,
       ALGSEQ_1, ARYTM_1, AFINSQ_1, ARYTM, FINSEQ_5, RFINSEQ, SQUARE_1,
       ORDINAL2, AFINSQ_2, RLVECT_1, JORDAN3, MEMBERED, XREAL_0;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS, RELAT_1,
-      STRUCT_0, FUNCT_1, XCMPLX_0, REAL_1, NAT_1, PARTFUN1, FUNCT_2, FINSET_1,
-      ORDINAL1, ORDINAL4, FINSEQ_1, FUNCOP_1, FUNCT_4, XREAL_0, XXREAL_0,
-      NAT_D, AFINSQ_1, MATRIX_7, CARD_FIN, RECDEF_1, SEQ_1, MEMBERED, VALUED_1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, RELAT_1, FUNCT_1,
+      XCMPLX_0, REAL_1, NAT_1, FINSET_1, ORDINAL1, XXREAL_0, NAT_D, AFINSQ_1,
+      CARD_FIN, SEQ_1, MEMBERED, VALUED_1;
  constructors WELLORD2, FUNCT_4, XXREAL_0, XREAL_0, NAT_1, ORDINAL4, FUNCT_7,
       FUNCOP_1, RLVECT_1, ORDINAL3, VALUED_1, PARTFUN1, SEQ_1, AFINSQ_1, NAT_D,
       MATRIX_7, NUMBERS, XCMPLX_0, REAL_1, CARD_FIN, RECDEF_1, MEMBERED,
       VALUED_0;
- registrations XBOOLE_0, SUBSET_1, RELAT_1, STRUCT_0, FUNCT_1, ORDINAL1,
-      FUNCOP_1, XXREAL_0, XREAL_0, NAT_1, CARD_1, ORDINAL2, ORDINAL3, VALUED_0,
-      VALUED_1, FUNCT_2, AFINSQ_1, RELSET_1, NUMBERS, REAL_1, FINSET_1,
-      MEMBERED, PARTFUN1, PRE_CIRC;
+ registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, XXREAL_0,
+      XREAL_0, NAT_1, CARD_1, VALUED_0, VALUED_1, AFINSQ_1, NUMBERS, FINSET_1,
+      MEMBERED;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, XBOOLE_0, SUBSET_1, AFINSQ_1, FUNCT_1, XXREAL_0;
  theorems TARSKI, FUNCT_1, NAT_1, ZFMISC_1, RELAT_1, CARD_2, XBOOLE_0,
@@ -36,13 +34,15 @@ reserve k,n for Element of NAT,
   x,y,z,y1,y2,X,Y,D for set,
   f,g for Function;
 
-theorem AB470: for x being set, i being Nat st
- x in i holds x is Element of NAT
-proof let x be set, i be Nat;
- assume A1: x in i;
+theorem Th1:
+  for x being set, i being Nat st x in i holds x is Element of NAT
+proof
+  let x be set, i be Nat;
   reconsider i0=i as Element of NAT by ORDINAL1:def 13;
-  i0 c= NAT by MEMBERED:6;
- hence thesis by A1;
+A1: i0 c= NAT by MEMBERED:6;
+  assume
+  x in i;
+  hence thesis by A1;
 end;
 
 registration
@@ -50,416 +50,463 @@ registration
   coherence
   proof
     let n be Nat;
-    for x st x in n holds x is natural by AB470;
+    for x st x in n holds x is natural by Th1;
     hence thesis by MEMBERED:def 6;
   end;
 end;
 
 begin :: Additional Properties of Zero Based Finite Sequence
 
-theorem AE221f: for X0 being finite natural-membered set holds
- ex m being Nat st X0 c= m
-proof let X0 be finite natural-membered set;
-  A1: X0 c= NAT by MEMBERED:6;
+theorem Th2:
+  for X0 being finite natural-membered set holds ex m being Nat st
+  X0 c= m
+proof
+  let X0 be finite natural-membered set;
   consider p being Function such that
-  A2: rng p = X0 & dom p in NAT by FINSET_1:def 1;
+A1: rng p = X0 and
+A2: dom p in NAT by FINSET_1:def 1;
   reconsider np=dom p as Element of NAT by A2;
-  np=dom p;then
-  reconsider p as XFinSequence by AFINSQ_1:7;
-  reconsider p as XFinSequence of NAT by A1,A2,RELAT_1:def 19;
-  defpred P[Nat] means ex n being Nat st for i being Nat st i in $1 &
-   $1-'1 in dom p holds p.i in n;
-   for i being Nat st i in 0 & 0-'1 in dom p holds p.i in 0;then
-   A4: P[0];
-   A6: for k being Element of NAT st P[k] holds P[k+1]
-    proof let k be Element of NAT;assume P[k];then
-     consider n being Nat such that
-     B1: for i being Nat st i in k & k-'1 in dom p holds p.i in n;
-     per cases;
-     suppose  C0: k+1-1 <len p;
-      k-'1<=k by NAT_D:35;then
-      k-'1 < len p by C0,XXREAL_0:2;then
-      C2: k-'1 in dom p by NAT_1:45;
+  np=dom p;
+  then reconsider p as XFinSequence by AFINSQ_1:7;
+  X0 c= NAT by MEMBERED:6;
+  then reconsider p as XFinSequence of NAT by A1,RELAT_1:def 19;
+  defpred P[Nat] means ex n being Nat st for i being Nat st i in $1 & $1-'1 in
+  dom p holds p.i in n;
+A3: for k being Element of NAT st P[k] holds P[k+1]
+  proof
+    let k be Element of NAT;
+    assume
+    P[k];
+    then consider n being Nat such that
+A4: for i being Nat st i in k & k-'1 in dom p holds p.i in n;
+    per cases;
+    suppose
+A5:   k+1-1 <len p;
       set m=p.(k);
       set m2=max(n,m+1);
-      for i being Nat st i in (k+1) &
-        k+1-'1 in dom p holds p.i in m2
-      proof let i be Nat;assume
-        i in (k+1) & k+1-'1 in dom p;then
-        D2: i<k+1 by NAT_1:45;
+      k-'1<=k by NAT_D:35;
+      then k-'1 < len p by A5,XXREAL_0:2;
+      then
+A6:   k-'1 in dom p by NAT_1:45;
+      for i being Nat st i in (k+1) & k+1-'1 in dom p holds p.i in m2
+      proof
+        let i be Nat;
+        assume that
+A7:     i in (k+1) and
+        k+1-'1 in dom p;
+A8:     i<k+1 by A7,NAT_1:45;
         per cases;
-        suppose i<k;then
-          i in k by NAT_1:45;then
-          E2: p.i in n by B1,C2;
+        suppose
+A9:       i<k;
           set k0=p.i;
-          k0<n by E2,NAT_1:45;then
-          k0<m2 by XXREAL_0:30;
-         hence thesis by NAT_1:45;
+          i in k by A9,NAT_1:45;
+          then p.i in n by A4,A6;
+          then k0<n by NAT_1:45;
+          then k0<m2 by XXREAL_0:30;
+          hence thesis by NAT_1:45;
         end;
-        suppose E0: i>=k;
-          i<=k by D2,NAT_1:13;then
-          E2: p.i=m by E0,XXREAL_0:1;
-          m<m+1 by XREAL_1:31;then
-          m<m2 by XXREAL_0:30;
-         hence thesis by E2,NAT_1:45;
+        suppose
+A10:      i>=k;
+          m<m+1 by XREAL_1:31;
+          then
+A11:      m<m2 by XXREAL_0:30;
+          i<=k by A8,NAT_1:13;
+          then p.i=m by A10,XXREAL_0:1;
+          hence thesis by A11,NAT_1:45;
+        end;
       end;
-      end;
-     hence thesis;
-     end;
-     suppose E20: k+1-1>=len p;
-      E30: k+1-'1=k by NAT_D:34;
-      for i being Nat st i in (k+1) &
-        (k+1)-'1 in dom p holds p.i in 2 by E20,E30,NAT_1:45;
-    hence thesis;
-     end;
+      hence thesis;
     end;
-    for k being Element of NAT holds P[k] from NAT_1:sch 1(A4,A6);then
-   consider n being Nat such that
-   A5: for i being Nat st i in len p & len p -'1 in dom p holds
-        p.i in n;
-   rng p c= n
-   proof let y be set;assume y in rng p;then
-     consider x being set such that
-     B2: x in dom p & y=p.x by FUNCT_1:def 5;
-     reconsider nn=dom p as Nat;
-     reconsider nx=x as Nat by B2;
-     B6: len p -1<len p by XREAL_1:46;
-     (0 qua Element of NAT )+1 <= len p by B2,NAT_1:13;then
-     len p-'1=len p-1 by XREAL_1:235;then
-     nx in len p & len p -'1 in dom p by B2,B6,NAT_1:45;
-    hence thesis by B2,A5;
-   end;
- hence thesis by A2;
+    suppose
+A12:  k+1-1>=len p;
+      k+1-'1=k by NAT_D:34;
+      then
+      for i being Nat st i in (k+1) & (k+1)-'1 in dom p holds p.i in 2 by
+      A12,NAT_1:45;
+      hence thesis;
+    end;
+  end;
+  for i being Nat st i in 0 & 0-'1 in dom p holds p.i in 0;
+  then
+A13: P[0];
+  for k being Element of NAT holds P[k] from NAT_1:sch 1(A13,A3);
+  then consider n being Nat such that
+A14: for i being Nat st i in len p & len p -'1 in dom p holds p.i in n;
+  rng p c= n
+  proof
+    let y be set;
+    assume
+    y in rng p;
+    then consider x being set such that
+A15: x in dom p and
+A16: y=p.x by FUNCT_1:def 5;
+    reconsider nx=x as Nat by A15;
+    reconsider nn=dom p as Nat;
+A17: len p -1<len p by XREAL_1:46;
+    (0 qua Element of NAT )+1 <= len p by A15,NAT_1:13;
+    then len p-'1=len p-1 by XREAL_1:235;
+    then len p -'1 in dom p by A17,NAT_1:45;
+    hence thesis by A14,A15,A16;
+  end;
+  hence thesis by A1;
 end;
 
-theorem Th11:  :: from FINSEQ_2:11
-  for p being XFinSequence, b being set holds
-  b in rng p implies ex i being Element of NAT st i in dom p & p.i = b
-proof let p be XFinSequence, b be set;
-  assume b in rng p;
-  then ex a being set st
-  a in dom p & b = p.a by FUNCT_1:def 5;
+theorem Th3: :: from FINSEQ_2:11
+  for p being XFinSequence, b being set holds b in rng p implies ex
+  i being Element of NAT st i in dom p & p.i = b
+proof
+  let p be XFinSequence, b be set;
+  assume
+  b in rng p;
+  then ex a being set st a in dom p & b = p.a by FUNCT_1:def 5;
   hence thesis;
 end;
 
-theorem Th14: ::from FINSEQ_2:14
-  for D being set,p being XFinSequence holds
-  (for i being Nat st i in dom p holds p.i in D) implies
- p is XFinSequence of D
+theorem Th4: ::from FINSEQ_2:14
+  for D being set,p being XFinSequence holds (for i being Nat st i
+  in dom p holds p.i in D) implies p is XFinSequence of D
 proof
   let D be set,p be XFinSequence;
   assume
 A1: for i being Nat st i in dom p holds p.i in D;
   rng p c= D
   proof
-  let b be set;
-  assume b in rng p;then
-   consider i being Element of NAT such that
-   B1: i in dom p & p.i = b by Th11;
-   thus thesis by B1,A1;
+    let b be set;
+    assume
+    b in rng p;
+    then ex i being Element of NAT st i in dom p & p.i = b by Th3;
+    hence thesis by A1;
   end;
   hence thesis by RELAT_1:def 19;
 end;
 
-scheme XSeqLambdaD{i()->Nat,D()->non empty set,F(set)->Element of D()}:
-  ex z being XFinSequence of D() st len z = i() &
-  for j being Nat st j in i() holds z.j = F(j)
-proof
+scheme
+  XSeqLambdaD{i()->Nat,D()->non empty set,F(set)->Element of D()}: ex z being
+XFinSequence of D() st len z = i() & for j being Nat st j in i() holds z.j = F(
+  j) proof
   consider z being XFinSequence such that
 A1: len z = i() and
-A2: for i being Element of NAT st i in i() holds z.i = F(i)
-                      from AFINSQ_1:sch 2;
+A2: for i being Element of NAT st i in i() holds z.i = F(i) from
+  AFINSQ_1:sch 2;
   for j be Nat st j in i() holds z.j in D()
   proof
     let j be Nat;
-    assume B2: j in i();
     reconsider j0=j as Element of NAT by ORDINAL1:def 13;
-    z.j0 = F(j0) by A2,B2;
+    assume
+    j in i();
+    then z.j0 = F(j0) by A2;
     hence thesis;
   end;
-  then reconsider z as XFinSequence of D() by A1,Th14;
+  then reconsider z as XFinSequence of D() by A1,Th4;
   take z;
   thus len z = i() by A1;
   let j be Nat;
-  assume B3: j in i();
   reconsider j0=j as Element of NAT by ORDINAL1:def 13;
-  j0 in i() by B3;
+  assume
+  j in i();
+  then j0 in i();
   hence thesis by A2;
 end;
 
-theorem Th10:  ::from FINSEQ_2:10
-  for p,q being XFinSequence
-  holds len p = len q & (for j being Nat st j in dom p holds p.j = q.j)
- implies p = q
-proof let p,q be XFinSequence;
+theorem Th5: ::from FINSEQ_2:10
+  for p,q being XFinSequence holds len p = len q & (for j being Nat
+  st j in dom p holds p.j = q.j) implies p = q
+proof
+  let p,q be XFinSequence;
   assume that
 A1: len p = len q and
 A2: for j being Nat st j in dom p holds p.j = q.j;
-for k being Element of NAT st k<len p holds p.k=q.k
-proof let k be Element of NAT;
- assume  k<len p;then k in dom p by NAT_1:45;
- hence thesis by A2;
-end;
- hence thesis by A1,AFINSQ_1:11;
+  for k being Element of NAT st k<len p holds p.k=q.k
+  proof
+    let k be Element of NAT;
+    assume
+    k<len p;
+    then k in dom p by NAT_1:45;
+    hence thesis by A2;
+  end;
+  hence thesis by A1,AFINSQ_1:11;
 end;
 
-definition let f be XFinSequence of REAL, a be Element of REAL;
- redefine func f+a -> XFinSequence of REAL;
- coherence
+definition
+  let f be XFinSequence of REAL, a be Element of REAL;
+  redefine func f+a -> XFinSequence of REAL;
+  coherence
   proof
-   dom (f+a) = len f by VALUED_1:def 2;then
-  B5: f+a is XFinSequence by AFINSQ_1:7;
-  rng (f+a) c= REAL by VALUED_0:def 3;
-  hence thesis by B5,RELAT_1:def 19;
+A1: rng (f+a) c= REAL by VALUED_0:def 3;
+    dom (f+a) = len f by VALUED_1:def 2;
+    hence thesis by A1,AFINSQ_1:7,RELAT_1:def 19;
   end;
 end;
 
-theorem AC500: for f being XFinSequence of REAL, a being Element of REAL
-   holds len(f+a) = len f &
-   for i being Nat st i<len f holds (f+a).i=f.i+a
-proof let f be XFinSequence of REAL, a be Element of REAL;
- thus len(f+a) = len f by VALUED_1:def 2;
+theorem Th6:
+  for f being XFinSequence of REAL, a being Element of REAL holds
+  len(f+a) = len f & for i being Nat st i<len f holds (f+a).i=f.i+a
+proof
+  let f be XFinSequence of REAL, a be Element of REAL;
+  thus len(f+a) = len f by VALUED_1:def 2;
   let i be Nat;
-   assume i<len f;then
-   C1: i in len f by NAT_1:45;
-    dom (f+a) = dom f & for c being set st
-               c in dom (f+a) holds (f+a).c = a + f.c
-                            by VALUED_1:def 2;
-   hence thesis by C1;
+  assume
+  i<len f;
+  then
+A1: i in len f by NAT_1:45;
+  dom (f+a) = dom f by VALUED_1:def 2;
+  hence thesis by A1,VALUED_1:def 2;
 end;
 
-theorem AE359: for f1,f2 being XFinSequence,i being Nat st
-i <len f1 holds (f1^f2).i=f1.i
-proof let f1,f2 be XFinSequence,i be Nat;
- assume i <len f1;then
-  i in dom f1 by NAT_1:45;
- hence thesis by AFINSQ_1:def 4;
+theorem Th7:
+  for f1,f2 being XFinSequence,i being Nat st i <len f1 holds (f1^
+  f2).i=f1.i
+proof
+  let f1,f2 be XFinSequence,i be Nat;
+  assume
+  i <len f1;
+  then i in dom f1 by NAT_1:45;
+  hence thesis by AFINSQ_1:def 4;
 end;
 
-definition let f be XFinSequence;
- func Rev f -> XFinSequence means :Def3:
- len it = len f & for i being Element of NAT st i in dom it
-      holds it.i = f.(len f - (i + 1));
+definition
+  let f be XFinSequence;
+  func Rev f -> XFinSequence means
+  :Def1:
+  len it = len f & for i being Element
+  of NAT st i in dom it holds it.i = f.(len f - (i + 1));
   existence
   proof
     deffunc F(Element of NAT) = f.(len f - ($1 + 1));
-    ex p being XFinSequence st
-    len p = len f &
-    for k being Element of NAT st k in len f holds p.k = F(k)
-                                 from AFINSQ_1:sch 2;
-   hence thesis;
+    ex p being XFinSequence st len p = len f & for k being Element of NAT
+    st k in len f holds p.k = F(k) from AFINSQ_1:sch 2;
+    hence thesis;
   end;
   uniqueness
- proof let f1,f2 be XFinSequence such that
+  proof
+    let f1,f2 be XFinSequence such that
 A1: len f1 = len f and
-A2: for i being Element of NAT st
- i in dom f1 holds f1.i = f.(len f - (i + 1)) and
+A2: for i being Element of NAT st i in dom f1 holds f1.i = f.(len f -
+    (i + 1)) and
 A3: len f2 = len f and
-A4: for i being Element of NAT st i in dom f2 holds f2.i = f.(len f - (i + 1));
-       now let i be Element of NAT; assume i in dom f;
-    then f1.i = f.(len f - (i + 1)) & f2.i = f.(len f - (i + 1))
-     by A1,A2,A3,A4;
-    hence f1.i = f2.i;
-   end;
-  hence thesis by A1,A3,AFINSQ_1:10;
- end;
+A4: for i being Element of NAT st i in dom f2 holds f2.i = f.(len f -
+    (i + 1));
+    now
+      let i be Element of NAT;
+      assume
+A5:   i in dom f;
+      then f1.i = f.(len f - (i + 1)) by A1,A2;
+      hence f1.i = f2.i by A3,A4,A5;
+    end;
+    hence thesis by A1,A3,AFINSQ_1:10;
+  end;
 end;
 
-theorem Th60:  ::from FINSEQ_5:60
-  for f being XFinSequence holds dom f = dom Rev f & rng f = rng Rev f
- proof let f be XFinSequence;
+theorem Th8: ::from FINSEQ_5:60
+  for f being XFinSequence holds dom f = dom Rev f & rng f = rng
+  Rev f
+proof
+  let f be XFinSequence;
   thus
-A1:  dom f = len f
-            .= len (Rev f) by Def3
-            .= dom(Rev f);
-A2: len f = len(Rev f) by Def3;
-  hereby let x be set;
-   assume x in rng f;
-   then consider z being set such that
+A1: dom f = len f
+    .= len (Rev f) by Def1
+    .= dom(Rev f);
+A2: len f = len(Rev f) by Def1;
+  hereby
+    let x be set;
+    assume
+    x in rng f;
+    then consider z being set such that
 A3: z in dom f and
 A4: f.z = x by FUNCT_1:def 5;
     reconsider i=z as Element of NAT by A3;
-       i < len f by A3,NAT_1:45;then
-     i+1<=len f by NAT_1:13;then
-     len f -'(i+1)=len f -(i+1) by XREAL_1:235;
-   then reconsider j = len f - (i + 1) as Element of NAT;
-   len f -(i+1)<len f by XREAL_1:46;then
-A5:  j in len (Rev f) by A2,NAT_1:45;
-   then (Rev f).j = f.(len f - (j + 1)) by Def3;
-   hence x in rng(Rev f) by A4,A5,FUNCT_1:def 5;
+    i < len f by A3,NAT_1:45;
+    then i+1<=len f by NAT_1:13;
+    then len f -'(i+1)=len f -(i+1) by XREAL_1:235;
+    then reconsider j = len f - (i + 1) as Element of NAT;
+    len f -(i+1)<len f by XREAL_1:46;
+    then
+A5: j in len (Rev f) by A2,NAT_1:45;
+    then (Rev f).j = f.(len f - (j + 1)) by Def1;
+    hence x in rng(Rev f) by A4,A5,FUNCT_1:def 5;
   end;
   let x be set;
-  assume x in rng(Rev f);
-   then consider z being set such that
+  assume
+  x in rng(Rev f);
+  then consider z being set such that
 A6: z in dom(Rev f) and
 A7: (Rev f).z = x by FUNCT_1:def 5;
- reconsider i=z as Element of NAT by A6;
-A8: (Rev f).i = f.(len f - (i + 1)) by A6,Def3;
-     i < len f by A2,A6,NAT_1:45;then
-     i+1<=len f by NAT_1:13;then
-     len f -'(i+1)=len f -(i+1) by XREAL_1:235;
+  reconsider i=z as Element of NAT by A6;
+  i < len f by A2,A6,NAT_1:45;
+  then i+1<=len f by NAT_1:13;
+  then len f -'(i+1)=len f -(i+1) by XREAL_1:235;
   then reconsider j = len f - (i + 1) as Element of NAT;
-   len f -(i+1)<len f by XREAL_1:46;
-   then j in len (Rev f) by A2,NAT_1:45;
+  len f -(i+1)<len f by XREAL_1:46;
+  then
+A8: j in len (Rev f) by A2,NAT_1:45;
+  (Rev f).i = f.(len f - (i + 1)) by A6,Def1;
   hence thesis by A1,A7,A8,FUNCT_1:def 5;
- end;
+end;
 
-definition let D be set, f be XFinSequence of D;
-redefine func Rev f -> XFinSequence of D;
-coherence
-proof
-  rng f=rng (Rev f) by Th60;
-  then rng Rev f c=D by RELAT_1:def 19;
-  hence thesis by RELAT_1:def 19;
- end;
+definition
+  let D be set, f be XFinSequence of D;
+  redefine func Rev f -> XFinSequence of D;
+  coherence
+  proof
+    rng f=rng (Rev f) by Th8;
+    then rng Rev f c=D by RELAT_1:def 19;
+    hence thesis by RELAT_1:def 19;
+  end;
 end;
 
 theorem ::from FINSEQ_1:63
- for p being XFinSequence holds
-  p <> {} implies ex q being XFinSequence,x being set st p=q^<%x%>
-proof let p be XFinSequence;
-  assume p <> {};
+  for p being XFinSequence holds p <> {} implies ex q being XFinSequence
+  ,x being set st p=q^<%x%>
+proof
+  let p be XFinSequence;
+  assume
+  p <> {};
   then consider n be Nat such that
 A1: len p = n + 1 by NAT_1:6;
   reconsider n as Element of NAT by ORDINAL1:def 13;
+  n <len p by A1,XREAL_1:31;
+  then
+A2: n c= len p by NAT_1:40;
   set q=p|n;
+  dom q = len p /\ n by RELAT_1:90;
+  then
+A3: dom q = n by A2,XBOOLE_1:28;
+A4: for x being set st x in dom p holds p.x = (q^(<%p.(len p-1)%>)).x
+  proof
+    let x be set;
+    assume
+A5: x in dom p;
+    then reconsider k = x as Element of NAT;
+A6: now
+      assume
+A7:   k in n;
+      hence p.k=q.k by A3,FUNCT_1:70
+        .=(q^<%p.(len p-1)%>).k by A3,A7,AFINSQ_1:def 4;
+    end;
+A8: now
+A9:   0 in dom <%p.(len p-1)%> by NAT_1:45;
+      assume
+A10:  k in {n};
+      hence (q^<%p.(len p-1)%>).k = (q^<%p.(len p-1)%>).(len q +(0 qua Element
+      of NAT)) by A3,TARSKI:def 1
+        .=<%p.(len p-1)%>.(0 qua Element of NAT) by A9,AFINSQ_1:def 4
+        .=p.(n) by A1,AFINSQ_1:def 5
+        .=p.k by A10,TARSKI:def 1;
+    end;
+    k in n \/ {n} by A1,A5,AFINSQ_1:4;
+    hence thesis by A6,A8,XBOOLE_0:def 3;
+  end;
   take q;
   take p.(len p-1);
-A2: dom q = n
-  proof
-A3: dom q = len p /\ n by RELAT_1:90;
-    n <len p by A1,XREAL_1:31;
-    then n c= len p by NAT_1:40;
-    hence thesis by A3,XBOOLE_1:28;
-  end;
-  thus q^(<% p.((len p)-1) %>)=p
-  proof
-A4: dom(q^(<%p.((len p)-1)%>)) = len (q^(<%p.(len p-1)%>))
-      .= (len q + len <%p.(len p-1)%>) by AFINSQ_1:20
-      .= dom p by A1,A2,AFINSQ_1:38;
-    for x being set st x in dom p holds p.x = (q^(<%p.(len p-1)%>)).x
-    proof
-      let x be set;
-      assume
-A5:   x in dom p;
-      then reconsider k = x as Element of NAT;
-A6:   k in n \/ {n} by A1,A5,AFINSQ_1:4;
-A7:   now
-        assume
-A8:     k in n;
-        hence p.k=q.k by A2,FUNCT_1:70
-          .=(q^<%p.(len p-1)%>).k by A2,A8,AFINSQ_1:def 4;
-      end;
-      now
-        assume
-A9:     k in {n};
-A10:    0 in dom <%p.(len p-1)%> by NAT_1:45;
-        thus (q^<%p.(len p-1)%>).k =
-        (q^<%p.(len p-1)%>).(len q +(0 qua Element of NAT))
-                                  by A2,A9,TARSKI:def 1
-          .=<%p.(len p-1)%>.(0 qua Element of NAT) by A10,AFINSQ_1:def 4
-          .=p.(n) by A1,AFINSQ_1:def 5
-          .=p.k by A9,TARSKI:def 1;
-      end;
-      hence thesis by A6,A7,XBOOLE_0:def 3;
-    end;
-    hence thesis by A4,FUNCT_1:9;
-  end;
+  dom(q^(<%p.((len p)-1)%>)) = len (q^(<%p.(len p-1)%>))
+    .= (len q + len <%p.(len p-1)%>) by AFINSQ_1:20
+    .= dom p by A1,A3,AFINSQ_1:38;
+  hence q^(<% p.((len p)-1) %>)=p by A4,FUNCT_1:9;
 end;
 
-theorem Lm4:
-  for n be Nat
-  for f being XFinSequence st len f<=n holds (f|n) = f
+theorem Th10:
+  for n be Nat for f being XFinSequence st len f<=n holds (f|n) =
+  f
 proof
   let n be Nat;
   let f be XFinSequence;
-  assume len f<=n;then
-   (len f) /\ n=len f by NAT_1:47;
+  assume
+  len f<=n;
+  then (len f) /\ n=len f by NAT_1:47;
   hence thesis by RELAT_1:97,XBOOLE_1:18;
 end;
 
-theorem Th19:  ::from RFINSEQ:19
-  for f be XFinSequence, n,m be Nat holds
-  n <=len f & m in n implies (f|n).m = f.m & m in dom f
+theorem Th11: ::from RFINSEQ:19
+  for f be XFinSequence, n,m be Nat holds n <=len f & m in n
+  implies (f|n).m = f.m & m in dom f
 proof
   let f be XFinSequence, n,m be Nat;
-  assume
-A1: n <=len f & m in n;then
-A3: n c= dom f by NAT_1:40;
+  assume that
+A1: n <=len f and
+A2: m in n;
+A3: n c= dom f by A1,NAT_1:40;
   then n = dom f /\ n by XBOOLE_1:28
     .= dom(f|n) by RELAT_1:90;
-  hence thesis by A1,A3,FUNCT_1:70;
+  hence thesis by A2,A3,FUNCT_1:70;
 end;
 
-theorem TH80: for i being Element of NAT,q being XFinSequence st
-  i <= len q holds len(q|i) = i
-proof let i be Element of NAT,q be XFinSequence;
-  assume A0: i <= len q;
-   i c= (len q) by A0,NAT_1:40;
+theorem Th12:
+  for i being Element of NAT,q being XFinSequence st i <= len q
+  holds len(q|i) = i
+proof
+  let i be Element of NAT,q be XFinSequence;
+  assume
+  i <= len q;
+  then i c= (len q) by NAT_1:40;
   hence thesis by RELAT_1:91;
 end;
 
-theorem TH80f: for i being Element of NAT,q being XFinSequence
-  holds len(q|i) <= i
-proof let i be Element of NAT,q be XFinSequence;
+theorem Th13:
+  for i being Element of NAT,q being XFinSequence holds len(q|i)
+  <= i
+proof
+  let i be Element of NAT,q be XFinSequence;
   dom (q|i) c= i by RELAT_1:87;
- hence thesis by NAT_1:40;
+  hence thesis by NAT_1:40;
 end;
 
 theorem
-  for f be XFinSequence, n be Element of NAT st
-  len f = n+1 holds f = (f|n) ^ <% f.n %>
+  for f be XFinSequence, n be Element of NAT st len f = n+1 holds f = (f
+  |n) ^ <% f.n %>
 proof
   let f be XFinSequence, n be Element of NAT;
-  assume
-A1: len f = n+1;
   set fn = f|n;
   set x=f.n;
-A2b: n < len f by A1,NAT_1:13;
-A3: len fn = n by A1,TH80,NAT_1:11;
+  assume
+A1: len f = n+1;
   then
-A4: len (fn^<%x%>) = n + len <%x%> by AFINSQ_1:20
-    .= len f by A1,AFINSQ_1:38;
-  now
+A2: len fn = n by Th12,NAT_1:11;
+A3: n < len f by A1,NAT_1:13;
+A4: now
     let m be Nat;
-    assume m in len f;
+    assume
+    m in len f;
+    then m<len f by NAT_1:45;
     then
-    m<len f by NAT_1:45;then
-A11: m <= len fn by A1,A3,NAT_1:13;
-    now per cases;
-      case m = len fn;
-        hence f.m = (fn^<%x%>).m by A3,AFINSQ_1:40;
+A5: m <= len fn by A1,A2,NAT_1:13;
+    now
+      per cases;
+      case
+        m = len fn;
+        hence f.m = (fn^<%x%>).m by A2,AFINSQ_1:40;
       end;
-      case m <> len fn;
-        then m< len fn by A11,XXREAL_0:1;
+      case
+        m <> len fn;
+        then m< len fn by A5,XXREAL_0:1;
         then
-A7:     m in dom fn by NAT_1:45;
+A6:     m in dom fn by NAT_1:45;
         hence (fn^<%x%>).m = fn.m by AFINSQ_1:def 4
-          .= f.m by A2b,A3,A7,Th19;
+          .= f.m by A3,A2,A6,Th11;
       end;
     end;
     hence f.m = (fn^<%x%>).m;
   end;
-  hence thesis by A4,Th10;
+  len (fn^<%x%>) = n + len <%x%> by A2,AFINSQ_1:20
+    .= len f by A1,AFINSQ_1:38;
+  hence thesis by A4,Th5;
 end;
 
 definition
   let f be XFinSequence, n be Nat;
   func f /^ n -> XFinSequence means
   :Def2:
-  len it = len f -' n & for m be Nat st
-  m in dom it holds it.m = f.(m+n);
+  len it = len f -' n & for m be Nat
+  st m in dom it holds it.m = f.(m+n);
   existence
   proof
-    thus ex p1 be XFinSequence st
-    len p1 = len f -' n & for m be Nat st m in dom p1 holds p1.m = f.(m+n)
+    thus ex p1 be XFinSequence st len p1 = len f -' n & for m be Nat st m in
+    dom p1 holds p1.m = f.(m+n)
     proof
-      set k = len f -' n;
       deffunc F(Nat)=f.($1+n);
+      set k = len f -' n;
       consider p be XFinSequence such that
-A1:   len p = k &
-      for m2 be Element of NAT st m2 in k holds
-                           p.m2 = F(m2) from AFINSQ_1:sch 2;
+A1:   len p = k & for m2 be Element of NAT st m2 in k holds p.m2 = F(
+      m2) from AFINSQ_1:sch 2;
       take p;
       thus thesis by A1;
     end;
@@ -467,149 +514,188 @@ A1:   len p = k &
   uniqueness
   proof
     let p1,p2 be XFinSequence;
-    thus
-    (len p1 = len f -' n & for m be Nat st m in dom p1 holds p1.m = f.(m+n)) &
-    (len p2 = len f -' n & for m be Nat st m in dom p2 holds p2.m = f.(m+n))
+    thus (len p1 = len f -' n & for m be Nat st m in dom p1 holds p1.m = f.(m+
+n)) & (len p2 = len f -' n & for m be Nat st m in dom p2 holds p2.m = f.(m+n))
     implies p1 = p2
     proof
       assume that
-A2:   len p1 = len f -' n & for m be Nat st m in dom p1 holds
-      p1.m = f.(m+n) and
-A3:   len p2 = len f -' n & for m be Nat st m in dom p2 holds p2.m = f.(m+n);
+A2:   len p1 = len f -' n and
+A3:   for m be Nat st m in dom p1 holds p1.m = f.(m+n) and
+A4:   len p2 = len f -' n and
+A5:   for m be Nat st m in dom p2 holds p2.m = f.(m+n);
       now
         let m be Nat;
-        assume m in len p1;
-        then p1.m = f.(m+n) & p2.m = f.(m+n) by A2,A3;
-        hence p1.m = p2.m;
+        assume
+A6:     m in len p1;
+        then p1.m = f.(m+n) by A3;
+        hence p1.m = p2.m by A2,A4,A5,A6;
       end;
-      hence thesis by A2,A3,Th10;
+      hence thesis by A2,A4,Th5;
     end;
   end;
 end;
 
-theorem TH80e: for f being XFinSequence, n being Nat st
- n>=len f holds f/^n={}
-proof let f be XFinSequence, n be Nat;
- assume n>=len f;then len f-'n=0 by NAT_2:10;then
-   len (f/^n)=0 by Def2;
+theorem Th15:
+  for f being XFinSequence, n being Nat st n>=len f holds f/^n={}
+proof
+  let f be XFinSequence, n be Nat;
+  assume
+  n>=len f;
+  then len f-'n=0 by NAT_2:10;
+  then len (f/^n)=0 by Def2;
   hence thesis;
 end;
 
-theorem TH80b: for f being XFinSequence,n being Nat st
- n < len f holds len (f/^n) = len f -n
-proof let f be XFinSequence,n be Nat;
- assume n < len f;then len f-n>=0 by XREAL_1:50;then
-   len f-'n=len f-n by XREAL_0:def 2;
+theorem Th16:
+  for f being XFinSequence,n being Nat st n < len f holds len (f/^
+  n) = len f -n
+proof
+  let f be XFinSequence,n be Nat;
+  assume
+  n < len f;
+  then len f-n>=0 by XREAL_1:50;
+  then len f-'n=len f-n by XREAL_0:def 2;
   hence thesis by Def2;
 end;
 
-theorem Th19b:
-  for f being XFinSequence, n,m being Nat st
-  m+n<len f holds (f/^n).m = f.(m+n)
-proof let f be XFinSequence, n,m be Nat;
- assume A1: m+n<len f;then
-   B1: len (f/^n)=len f-n by TH80b,NAT_1:12;
-   m<len f-n by A1,XREAL_1:22;then
-   m in dom (f/^n) by B1,NAT_1:45;
+theorem Th17:
+  for f being XFinSequence, n,m being Nat st m+n<len f holds (f/^n
+  ).m = f.(m+n)
+proof
+  let f be XFinSequence, n,m be Nat;
+  assume
+A1: m+n<len f;
+  then
+A2: m<len f-n by XREAL_1:22;
+  len (f/^n)=len f-n by A1,Th16,NAT_1:12;
+  then m in dom (f/^n) by A2,NAT_1:45;
   hence thesis by Def2;
 end;
 
 registration
- let f be one-to-one XFinSequence, n being Nat;
- cluster f/^n -> one-to-one;
- coherence
+  let f be one-to-one XFinSequence, n being Nat;
+  cluster f/^n -> one-to-one;
+  coherence
+  proof
+    let x,y be set;
+    assume that
+A1: x in dom (f/^n) and
+A2: y in dom (f/^n) and
+A3: (f/^n).x=(f/^n).y;
+    reconsider nx=x,ny=y as Nat by A1,A2;
+A4: nx<len (f/^n) by A1,NAT_1:45;
+A5: len (f/^n)=len f-'n by Def2;
+A6: ny<len (f/^n) by A2,NAT_1:45;
+    per cases;
+    suppose
+      n<=len f;
+      then
+A7:   len f-'n=len f-n by XREAL_1:235;
+      then
+A8:   nx+n<len f by A4,A5,XREAL_1:22;
+      then
+A9:   nx+n in dom f by NAT_1:45;
+A10:  ny+n<len f by A6,A5,A7,XREAL_1:22;
+      then
+A11:  ny+n in dom f by NAT_1:45;
+A12:  (f/^n).ny=f.(ny+n) by A10,Th17;
+      (f/^n).nx=f.(nx+n) by A8,Th17;
+      then nx+n=ny+n by A3,A9,A12,A11,FUNCT_1:def 8;
+      hence thesis;
+    end;
+    suppose
+      n>len f;
+      then f/^n={} by Th15;
+      hence thesis by A1;
+    end;
+  end;
+end;
+
+theorem Th18:
+  for f being XFinSequence,n being Nat holds rng (f/^n) c= rng f
 proof
-   let x,y be set;
-   assume B1: x in dom (f/^n) & y in dom (f/^n) & (f/^n).x=(f/^n).y;
-    reconsider nx=x,ny=y as Nat by B1;
-    B3: nx<len (f/^n) & ny<len (f/^n) by B1,NAT_1:45;
-    B6: len (f/^n)=len f-'n by Def2;
+  let f be XFinSequence,n be Nat;
+  thus rng (f/^n) c= rng f
+  proof
+    let z be set;
+    assume
+    z in rng (f/^n);
+    then consider x being set such that
+A1: x in dom (f/^n) and
+A2: z=(f/^n).x by FUNCT_1:def 5;
+    reconsider nx=x as Element of NAT by A1;
+    nx<len (f/^n) by A1,NAT_1:45;
+    then
+A3: nx < len f -' n by Def2;
     per cases;
-    suppose n<=len f;then
-      C2: len f-'n=len f-n by XREAL_1:235;
-      nx+n<len f by C2,B3,B6,XREAL_1:22;then
-      C3: (f/^n).nx=f.(nx+n) & nx+n in dom f by Th19b,NAT_1:45;
-      ny+n<len f by C2,B3,B6,XREAL_1:22;then
-      (f/^n).ny=f.(ny+n) & ny+n in dom f by Th19b,NAT_1:45;then
-      nx+n=ny+n by C3,B1,FUNCT_1:def 8;
-     hence thesis;
+    suppose
+      n<len f;
+      then len f-'n=len f-n by XREAL_1:235;
+      then nx+n<len f by A3,XREAL_1:22;
+      then
+A4:   nx+n in dom f by NAT_1:45;
+      (f/^n).nx=f.(nx+n) by A1,Def2;
+      hence thesis by A2,A4,FUNCT_1:def 5;
     end;
-    suppose n>len f;then f/^n={} by TH80e;
-     hence thesis by B1;
-    end;
-end;
-end;
-
-theorem AG170: for f being XFinSequence,n being Nat holds
-  rng (f/^n) c= rng f
-proof let f be XFinSequence,n be Nat;
- thus rng (f/^n) c= rng f
-  proof let z be set;assume z in rng (f/^n);then
-    consider x being set such that
-    B1: x in dom (f/^n) & z=(f/^n).x by FUNCT_1:def 5;
-    reconsider nx=x as Element of NAT by B1;
-    nx<len (f/^n) by B1,NAT_1:45;then
-    B3: nx < len f -' n by Def2;
-    per cases;
-    suppose C0: n<len f;
-      C1: (f/^n).nx=f.(nx+n) by Def2,B1;
-      len f-'n=len f-n by C0,XREAL_1:235;then
-      nx+n<len f by B3,XREAL_1:22;then
-      nx+n in dom f by NAT_1:45;
-     hence thesis by C1,B1,FUNCT_1:def 5;
-    end;
-    suppose n>=len f;then
-      (f/^n)={} by TH80e;
-     hence thesis by B1;
+    suppose
+      n>=len f;
+      then (f/^n)={} by Th15;
+      hence thesis by A1;
     end;
   end;
 end;
 
-theorem Th31:  ::from FINSEQ_5:31
- for f being XFinSequence holds f/^0 = f
-proof let f be XFinSequence;
-per cases;
-suppose 0 <len f;then
-A2: len(f/^0) = len f - 0 by TH80b
-    .= len f;
-  now
-    let i be Element of NAT;
-    assume i < len(f/^0);
-    then i in dom(f/^0) by NAT_1:45;
-    hence (f/^0).i = f.(i+(0 qua Element of NAT)) by Def2
-      .= f.i;
+theorem Th19: ::from FINSEQ_5:31
+  for f being XFinSequence holds f/^0 = f
+proof
+  let f be XFinSequence;
+  per cases;
+  suppose
+A1: 0 <len f;
+A2: now
+      let i be Element of NAT;
+      assume
+      i < len(f/^0);
+      then i in dom(f/^0) by NAT_1:45;
+      hence (f/^0).i = f.(i+(0 qua Element of NAT)) by Def2
+        .= f.i;
+    end;
+    len(f/^0) = len f - 0 by A1,Th16
+      .= len f;
+    hence thesis by A2,AFINSQ_1:11;
   end;
-  hence thesis by A2,AFINSQ_1:11;
- end;
- suppose B0: 0>=len f;then
-  f/^0 ={} by TH80e;
-  hence thesis by B0;
- end;
+  suppose
+A3: 0>=len f;
+    then f/^0 ={} by Th15;
+    hence thesis by A3;
+  end;
 end;
 
-theorem Th39: ::from FINSEQ_5:39
- for i being Nat,f,g being XFinSequence holds
-  (f^g)/^(len f + i) = g/^i
-proof let
-i be Nat,f,g be XFinSequence;
+theorem Th20: ::from FINSEQ_5:39
+  for i being Nat,f,g being XFinSequence holds (f^g)/^(len f + i)
+  = g/^i
+proof
+  let i be Nat,f,g be XFinSequence;
 A1: len(f^g) = len f + len g by AFINSQ_1:20;
   per cases;
   suppose
 A2: i < len g;
-    then len f + i < len f + len g by XREAL_1:8;then
-    len f +i<len (f^g) by AFINSQ_1:20;then
-A3: len((f^g)/^(len f + i)) = len (f^g)-(len f +i) by TH80b
-                           .=len g + len f - (len f + i) by AFINSQ_1:20
+    then len f + i < len f + len g by XREAL_1:8;
+    then len f +i<len (f^g) by AFINSQ_1:20;
+    then
+A3: len((f^g)/^(len f + i)) = len (f^g)-(len f +i) by Th16
+      .=len g + len f - (len f + i) by AFINSQ_1:20
       .= len g - i
-      .= len(g/^i) by A2,TH80b;
+      .= len(g/^i) by A2,Th16;
     now
       let k be Element of NAT;
       assume
 A4:   k < len(g/^i);
       then
 A5:   k in dom(g/^i) by NAT_1:45;
-      k < len g -i by A2,A4,TH80b;then
-      i+k < len g by XREAL_1:22;then
+      k < len g -i by A2,A4,Th16;
+      then i+k < len g by XREAL_1:22;
+      then
 A6:   i+k in dom g by NAT_1:45;
       k in dom((f^g)/^(len f + i)) by A3,A4,NAT_1:45;
       hence ((f^g)/^(len f + i)).k = (f^g).(len f + i + k) by Def2
@@ -622,68 +708,69 @@ A6:   i+k in dom g by NAT_1:45;
   suppose
 A7: i >= len g;
     then len f + i >= len(f^g) by A1,XREAL_1:8;
-    hence (f^g)/^(len f+i) = {} by TH80e
-      .= g/^i by A7,TH80e;
+    hence (f^g)/^(len f+i) = {} by Th15
+      .= g/^i by A7,Th15;
   end;
 end;
 
-theorem Th40:   ::from FINSEQ_5:40
- for f,g being XFinSequence holds (f^g)/^(len f) = g
-proof let f,g be XFinSequence;
+theorem Th21: ::from FINSEQ_5:40
+  for f,g being XFinSequence holds (f^g)/^(len f) = g
+proof
+  let f,g be XFinSequence;
   thus (f^g)/^(len f) = (f^g)/^(len f + (0 qua Element of NAT))
-    .= g/^0 by Th39
-    .= g by Th31;
+    .= g/^0 by Th20
+    .= g by Th19;
 end;
 
-theorem   ::from RFINSEQ:21
-  for f be XFinSequence, n be Element of NAT
-  holds (f|n)^(f/^n) = f
+theorem ::from RFINSEQ:21
+  for f be XFinSequence, n be Element of NAT holds (f|n)^(f/^n) = f
 proof
   let f be XFinSequence,n be Element of NAT;
   set fn = f/^n;
-  now per cases;
+  now
+    per cases;
     case
 A1:   len f<=n;
       then
-A2:   f/^n = {} by TH80e;
-      f|n = f by A1,Lm4;
+A2:   f|n = f by Th10;
+      f/^n = {} by A1,Th15;
       hence thesis by A2,AFINSQ_1:32;
     end;
     case
 A3:   n<len f;
-      then
-A4:   len fn = len f - n & for m being Element of NAT st
-                       m in dom fn holds fn.m = f.(m+n)
-             by Def2,TH80b;
-     set g=f|n;
-A5:   len (g) = n by A3,TH80;
-      then
-A6:   len (g^(f/^n)) = n+(len f - n) by A4,AFINSQ_1:20
-        .= len f;
-      now
+      set g=f|n;
+A4:   len (g) = n by A3,Th12;
+A5:   len fn = len f - n by A3,Th16;
+A6:   now
         let m be Element of NAT;
-        assume A8: m < len f;
-        now per cases;
-          case m<n;
+        assume
+A7:     m < len f;
+        now
+          per cases;
+          case
+            m<n;
             then
-A9:         m in n by NAT_1:45;
-            thus ((f|n)^(f/^n)).m = (f|n).m by A5,A9,AFINSQ_1:def 4
-              .= f.m by A3,A9,Th19;
-           end;
+A8:         m in n by NAT_1:45;
+            hence ((f|n)^(f/^n)).m = (f|n).m by A4,AFINSQ_1:def 4
+              .= f.m by A3,A8,Th11;
+          end;
           case
             n<=m;
             then max(0,m-n) = m-n by FINSEQ_2:4;
             then reconsider k = m-n as Element of NAT by FINSEQ_2:5;
-A20:        k< len fn by A4,A8,XREAL_1:11;
-A12:        m=len (f|n)  +k by A5;
-A13:        k in dom fn by A20,NAT_1:45;
-           hence ((f|n) ^ (f/^n)).m = fn.k by A12,AFINSQ_1:def 4
-              .= f.(k+n) by A13,Def2
+            k< len fn by A5,A7,XREAL_1:11;
+            then
+A9:         k in dom fn by NAT_1:45;
+            m=len (f|n) +k by A4;
+            hence ((f|n) ^ (f/^n)).m = fn.k by A9,AFINSQ_1:def 4
+              .= f.(k+n) by A9,Def2
               .= f.m;
           end;
         end;
         hence ((f|n) ^ (f/^n)).m = f.m;
       end;
+      len (g^(f/^n)) = n+(len f - n) by A5,A4,AFINSQ_1:20
+        .= len f;
       hence thesis by A6,AFINSQ_1:11;
     end;
   end;
@@ -694,33 +781,37 @@ definition
   let D be set, f be XFinSequence of D, n be Nat;
   redefine func f /^ n -> XFinSequence of D;
   coherence
-  proof  A0: rng f c= D by RELAT_1:def 19;
-    set p = f /^ n;
+  proof
     deffunc F(Element of NAT)=f.($1+n);
+    set p = f /^ n;
+A1: rng f c= D by RELAT_1:def 19;
     per cases;
     suppose
-A1:   n<len f;
+A2:   n<len f;
       then reconsider k = len f - n as Nat by NAT_1:21;
-A2:   len p = k & for m being Element of NAT
-                       st m in dom p holds p.m = F(m) by A1,Def2,TH80b;
-A2b:  rng p c= rng f
+A3:   len p = k by A2,Th16;
+A4:   rng p c= rng f
       proof
         let x be set;
-        assume x in rng p;
+        assume
+        x in rng p;
         then consider m being Element of NAT such that
-A3:     m in dom p & p.m = x by Th11;
-A4:     p.m = f.(m+n) by A3,Def2;
-        m<len p & m<=m+n by A3,NAT_1:11,45;then
-        m+n<k+n by A2,XREAL_1:8;
-        then m+n in dom f by NAT_1:45;
-        hence thesis by A3,A4,FUNCT_1:def 5;
+A5:     m in dom p and
+A6:     p.m = x by Th3;
+        m<len p by A5,NAT_1:45;
+        then m+n<k+n by A3,XREAL_1:8;
+        then
+A7:     m+n in dom f by NAT_1:45;
+        p.m = f.(m+n) by A5,Def2;
+        hence thesis by A6,A7,FUNCT_1:def 5;
       end;
-      for f2 being XFinSequence st
-       rng f2 c= D holds f2 is XFinSequence of D by RELAT_1:def 19;
-     hence thesis by A2b,A0,XBOOLE_1:1;
+      for f2 being XFinSequence st rng f2 c= D holds f2 is XFinSequence
+      of D by RELAT_1:def 19;
+      hence thesis by A1,A4,XBOOLE_1:1;
     end;
-    suppose len f <= n;
-      then f /^ n = <%>D by TH80e;
+    suppose
+      len f <= n;
+      then f /^ n = <%>D by Th15;
       hence thesis;
     end;
   end;
@@ -729,139 +820,162 @@ end;
 definition
   let f be XFinSequence,k1,k2 be Nat;
   func mid(f,k1,k2) -> XFinSequence means
- :AB540b: for k11,k21 being Element of NAT st
-  k11=k1 & k21=k2 holds it=(f|k21)/^(k11-'1);
-existence
+  :Def3:
+  for k11,k21 being Element of
+  NAT st k11=k1 & k21=k2 holds it=(f|k21)/^(k11-'1);
+  existence
+  proof
+    reconsider k12=k1,k22=k2 as Element of NAT by ORDINAL1:def 13;
+    for k11,k21 being Element of NAT st k11=k1 & k21=k2 holds (f|k22)/^(
+    k12-'1)=(f|k21)/^(k11-'1);
+    hence thesis;
+  end;
+  uniqueness
+  proof
+    reconsider k12=k1,k22=k2 as Element of NAT by ORDINAL1:def 13;
+    let p,q being XFinSequence;
+    assume that
+A1: for k11,k21 being Element of NAT st k11=k1 & k21=k2 holds p=(f|k21
+    )/^( k11-'1) and
+A2: for k11,k21 being Element of NAT st k11=k1 & k21=k2 holds q=(f|k21
+    ) /^(k11-'1);
+    p=(f|k22)/^(k12-'1) by A1;
+    hence thesis by A2;
+  end;
+end;
+
+theorem Th23:
+  for f being XFinSequence,k1,k2 being Nat st k1>k2 holds mid(f,k1
+  ,k2) = {}
 proof
- reconsider k12=k1,k22=k2 as Element of NAT by ORDINAL1:def 13;
- for k11,k21 being Element of NAT st
-  k11=k1 & k21=k2 holds (f|k22)/^(k12-'1)=(f|k21)/^(k11-'1);
- hence thesis;
-end;
-uniqueness
-proof let p,q being XFinSequence;
- assume B1: (for k11,k21 being Element of NAT st
-  k11=k1 & k21=k2 holds p=(f|k21)/^(k11-'1))&
- (for k11,k21 being Element of NAT st
-   k11=k1 & k21=k2 holds q=(f|k21)/^(k11-'1));
-  reconsider k12=k1,k22=k2 as Element of NAT by ORDINAL1:def 13;
-  p=(f|k22)/^(k12-'1) by B1;
-  hence thesis by B1;
-end;
-end;
-
-theorem AB540f: for f being XFinSequence,k1,k2 being Nat st
-k1>k2 holds mid(f,k1,k2) = {}
-proof let f be XFinSequence,k1,k2 be Nat;
- assume A6: k1>k2;
+  let f be XFinSequence,k1,k2 be Nat;
   reconsider k11=k1,k21=k2 as Element of NAT by ORDINAL1:def 13;
-  A2: mid(f,k1,k2) = (f|k21)/^(k11-'1) by AB540b;
-  k1>= (0 qua Nat) +1 by A6,NAT_1:13;then
-  A17: k1-'1=k1-1 by XREAL_1:235;
-  k1>=k2+1 by A6,NAT_1:13;then
-  A18: k1-1>=k2+1-1 by XREAL_1:11;
-  len (f|k21)<=k21 by TH80f;
- hence thesis by A2,TH80e,A17,A18,XXREAL_0:2;
+A1: len (f|k21)<=k21 by Th13;
+  assume
+A2: k1>k2;
+  then k1>= (0 qua Nat) +1 by NAT_1:13;
+  then
+A3: k1-'1=k1-1 by XREAL_1:235;
+  k1>=k2+1 by A2,NAT_1:13;
+  then
+A4: k1-1>=k2+1-1 by XREAL_1:11;
+  mid(f,k1,k2) = (f|k21)/^(k11-'1) by Def3;
+  hence thesis by A3,A4,A1,Th15,XXREAL_0:2;
 end;
 
-theorem for f being XFinSequence,k1,k2 being Nat st 1<=k1 & k2<=len f
-holds
+theorem
+  for f being XFinSequence,k1,k2 being Nat st 1<=k1 & k2<=len f holds
   mid(f,k1,k2) = (f/^(k1-'1))|(k2+1-'k1)
-proof let f be XFinSequence,k1,k2 be Nat;
-  assume A5: 1<=k1 & k2<=len f;
+proof
+  let f be XFinSequence,k1,k2 be Nat;
+  assume that
+A1: 1<=k1 and
+A2: k2<=len f;
   reconsider k11=k1,k21=k2 as Element of NAT by ORDINAL1:def 13;
-  A2: mid(f,k1,k2) = (f|k21)/^(k11-'1) by AB540b;
-   B2: len (f|k21)=k21 by TH80,A5;
-    k1<k1+1 by NAT_1:13;then
-    k1-1<k1+1-1 by XREAL_1:11;then
-    B43: k1-'1<k1 by A5,XREAL_1:235;
+A3: len (f|k21)=k21 by A2,Th12;
+  k1<k1+1 by NAT_1:13;
+  then k1-1<k1+1-1 by XREAL_1:11;
+  then
+A4: k1-'1<k1 by A1,XREAL_1:235;
+A5: mid(f,k1,k2) = (f|k21)/^(k11-'1) by Def3;
   per cases;
-  suppose A6: k1<=k2;
-B9: k2<k2+1 by XREAL_1:31;
-    B7: k11-'1=k11-1 by A5,XREAL_1:235;
-     k1-'1<k2 by A6,B43,XXREAL_0:2;then
-    k1-'1<len f by A5,XXREAL_0:2;then
-    B20: len (f/^(k1-'1))=len f -(k1-'1) by TH80b;
-    B21: k2+1-'k1 =k2+1-k1 by B9,A6,XREAL_1:235,XXREAL_0:2
-    .=k2-(k1-1);then
-    B30: k2+1-'k1<= len (f/^(k1-'1)) by B20,A5,B7,XREAL_1:11;then
-    B5: len ((f/^(k1-'1))|(k2+1-'k1))=k2+1-'k1 by TH80;
-      k11-1<k11 by XREAL_1:46;then
-    k11-1<k21 by A6,XXREAL_0:2;then
-B3: len (mid(f,k1,k2))=k21-(k11-1) by TH80b,A2,B2,B7;then
-    len (mid(f,k1,k2))=k21+1-k11;then
-    B10: len (mid(f,k1,k2))= len ((f/^(k1-'1))|(k2+1-'k1))
-    by B5,B9,A6,XREAL_1:235,XXREAL_0:2;
-    for i being Element of NAT st i<len (mid(f,k1,k2)) holds
-      (mid(f,k1,k2)).i=((f/^(k1-'1))|(k2+1-'k1)).i
-     proof let i be Element of NAT;
-      assume  C2: i<len (mid(f,k1,k2));then
-       i+(k11-1)<k21 by B3,XREAL_1:22;then
-       C12: ((f|k21)/^(k11-'1)).i=(f|k21).(i+(k11-'1)) by B2,B7,Th19b;
-       i+(k11-'1) < k21 by C2,B3,B7,XREAL_1:22;then
-       C40: (i+(k11-'1)) in k21 by NAT_1:45;
-       i+(k1-'1)<k21-(k11-1)+(k1-'1) by C2,B3,XREAL_1:8;then
-       C10: i+(k1-'1)<len f by A5,B7,XXREAL_0:2;
-       C9: i in k2+1-'k1 by C2,B3,B21,NAT_1:45;
-       ((f/^(k1-'1))|(k2+1-'k1)).i=(f/^(k1-'1)).i by Th19,C9,B30
-                                 .=f.(i+(k1-'1)) by Th19b,C10;
-      hence thesis by C40,Th19,A5,A2,C12;
-     end;
-    hence thesis by B10,AFINSQ_1:11;
-   end;
-   suppose A6: k1>k2;then
-     D3: mid(f,k1,k2)={} by AB540f;
-     k2+1<=k1 by A6,NAT_1:13;then
-     k2+1-'k1=0 by NAT_2:10;
-    hence thesis by D3;
-   end;
+  suppose
+A6: k1<=k2;
+A7: k2<k2+1 by XREAL_1:31;
+    then
+A8: k2+1-'k1 =k2+1-k1 by A6,XREAL_1:235,XXREAL_0:2
+      .=k2-(k1-1);
+A9: k11-'1=k11-1 by A1,XREAL_1:235;
+    k11-1<k11 by XREAL_1:46;
+    then k11-1<k21 by A6,XXREAL_0:2;
+    then
+A10: len (mid(f,k1,k2))=k21-(k11-1) by A5,A3,A9,Th16;
+    then
+A11: len (mid(f,k1,k2))=k21+1-k11;
+    k1-'1<k2 by A4,A6,XXREAL_0:2;
+    then k1-'1<len f by A2,XXREAL_0:2;
+    then len (f/^(k1-'1))=len f -(k1-'1) by Th16;
+    then
+A12: k2+1-'k1<= len (f/^(k1-'1)) by A2,A9,A8,XREAL_1:11;
+A13: for i being Element of NAT st i<len (mid(f,k1,k2)) holds (mid(f,k1,k2
+    )).i=((f/^(k1-'1))|(k2+1-'k1)).i
+    proof
+      let i be Element of NAT;
+      assume
+A14:  i<len (mid(f,k1,k2));
+      then i+(k11-'1) < k21 by A9,A10,XREAL_1:22;
+      then
+A15:  (i+(k11-'1)) in k21 by NAT_1:45;
+      i+(k1-'1)<k21-(k11-1)+(k1-'1) by A10,A14,XREAL_1:8;
+      then
+A16:  i+(k1-'1)<len f by A2,A9,XXREAL_0:2;
+      i+(k11-1)<k21 by A10,A14,XREAL_1:22;
+      then
+A17:  ((f|k21)/^(k11-'1)).i=(f|k21).(i+(k11-'1)) by A3,A9,Th17;
+      i in k2+1-'k1 by A8,A10,A14,NAT_1:45;
+      then ((f/^(k1-'1))|(k2+1-'k1)).i=(f/^(k1-'1)).i by A12,Th11
+        .=f.(i+(k1-'1)) by A16,Th17;
+      hence thesis by A2,A5,A17,A15,Th11;
+    end;
+    len ((f/^(k1-'1))|(k2+1-'k1))=k2+1-'k1 by A12,Th12;
+    then len (mid(f,k1,k2))= len ((f/^(k1-'1))|(k2+1-'k1)) by A6,A7,A11,
+    XREAL_1:235,XXREAL_0:2;
+    hence thesis by A13,AFINSQ_1:11;
+  end;
+  suppose
+A18: k1>k2;
+    then k2+1<=k1 by NAT_1:13;
+    then
+A19: k2+1-'k1=0 by NAT_2:10;
+    mid(f,k1,k2)={} by A18,Th23;
+    hence thesis by A19;
+  end;
 end;
 
-theorem Th5:   ::from FINSEQ_8:5
+theorem Th25: ::from FINSEQ_8:5
   for f being XFinSequence,k2 being Nat holds mid(f,1,k2)=f|k2
 proof
   let f be XFinSequence,k2 be Nat;
   reconsider k21=k2 as Element of NAT by ORDINAL1:def 13;
-  A2: mid(f,1,k2) = (f|k21)/^(1-'1) by AB540b;
-  1-'1=0 by XREAL_1:234;
- hence thesis by A2,Th31;
+A1: 1-'1=0 by XREAL_1:234;
+  mid(f,1,k2) = (f|k21)/^(1-'1) by Def3;
+  hence thesis by A1,Th19;
 end;
 
-theorem  ::from FINSEQ_8:6
-  for f being XFinSequence of D,k2 being Nat st len f<=k2 holds
-  mid(f,1,k2)=f
+theorem ::from FINSEQ_8:6
+  for f being XFinSequence of D,k2 being Nat st len f<=k2 holds mid(f,1,
+  k2)=f
 proof
   let f be XFinSequence of D,k2 be Nat;
   assume
 A1: len f<=k2;
-  thus mid(f,1,k2)=f|k2 by Th5
-    .=f by A1,Lm4;
+  thus mid(f,1,k2)=f|k2 by Th25
+    .=f by A1,Th10;
 end;
 
-theorem    ::from FINSEQ_8:8
-  for f being XFinSequence,k2 being Element of NAT holds
-  mid(f,0,k2)=mid(f,1,k2)
+theorem ::from FINSEQ_8:8
+  for f being XFinSequence,k2 being Element of NAT holds mid(f,0,k2)=mid
+  (f,1,k2)
 proof
   let f be XFinSequence,k2 be Element of NAT;
   reconsider k21=k2 as Element of NAT;
-  A2: mid(f,1,k2) = (f|k21) by Th5;
-  A4: mid(f,0,k2) = (f|k21)/^(0-'1) by AB540b;
-  0-'1=0 by NAT_2:10;
- hence thesis by Th31,A4,A2;
+A1: 0-'1=0 by NAT_2:10;
+A2: mid(f,0,k2) = (f|k21)/^(0-'1) by Def3;
+  mid(f,1,k2) = (f|k21) by Th25;
+  hence thesis by A2,A1,Th19;
 end;
 
-theorem    ::from FINSEQ_8:9
-  for f,g being XFinSequence holds
-  mid(f^g,len f+1,len f+len g)=g
+theorem ::from FINSEQ_8:9
+  for f,g being XFinSequence holds mid(f^g,len f+1,len f+len g)=g
 proof
   let f,g be XFinSequence;
-  A2: mid(f^g,len f +1,len f+len g)
-           = ((f^g)|(len f+len g))/^((len f +1)-'1) by AB540b;
-  A3: (len f +1)-'1=len f by NAT_D:34;
-
-  len (f^g)=len f + len g by AFINSQ_1:20;then
-  (f^g)|(len f+len g)= f^g by Lm4;
-  hence thesis  by Th40,A2,A3;
+A1: (len f +1)-'1=len f by NAT_D:34;
+  len (f^g)=len f + len g by AFINSQ_1:20;
+  then
+A2: (f^g)|(len f+len g)= f^g by Th10;
+  mid(f^g,len f +1,len f+len g) = ((f^g)|(len f+len g))/^((len f +1)-'1)
+  by Def3;
+  hence thesis by A1,A2,Th21;
 end;
 
 definition
@@ -869,286 +983,338 @@ definition
   redefine func mid(f,k1,k2) -> XFinSequence of D;
   coherence
   proof
-  reconsider k11=k1,k21=k2 as Element of NAT by ORDINAL1:def 13;
-  mid(f,k1,k2) = (f|k21)/^(k11-'1) by AB540b;
-  hence thesis;
+    reconsider k11=k1,k21=k2 as Element of NAT by ORDINAL1:def 13;
+    mid(f,k1,k2) = (f|k21)/^(k11-'1) by Def3;
+    hence thesis;
   end;
 end;
 
-definition let f be XFinSequence of REAL;
-func Sum f -> Element of REAL means
-:AC300: ex g being XFinSequence of REAL st
- len f=len g & f.0=g.0 & (for i being Nat st i+1<len f holds
-  g.(i+1)=(g.i)+(f.(i+1))) & it=g.(len f-'1);
-existence
-proof
-  per cases;
-  suppose
-B1:len f > 0;
-   then
-  A3: (0 qua Element of NAT)+1<=len f by NAT_1:13;
-  defpred P[Nat] means ex g being XFinSequence of REAL st
-   len g=$1+1 & f.0=g.0 &
-   (len g<=len f implies (for i being Nat st i+1<$1+1 holds
-  g.(i+1)=(g.i)+(f.(i+1))));
-  A2: len (<% f.0 %>)=(0 qua Element of NAT)+1 by AFINSQ_1:38;
-  A34: f.0=(<% f.0 %>).0 by AFINSQ_1:38;
-  set d=f.0;
-  set g2=(<% d %>);
-  for i being Nat st i+1< (0 qua Element of NAT)+1 holds
-  g2.(i+1)=(g2.i)+(f.(i+1)) by XREAL_1:8;then
-  A31: P[0] by A2,A34;
-  A32: for k being Element of NAT st P[k] holds P[k + 1]
-  proof let k be Element of NAT;
-   assume P[k];then
-    consider g3 being XFinSequence of REAL such that
-   B2: len g3=k+1 & f.0=g3.0 &
-   (len g3<=len f implies (for i being Nat st i+1<k+1 holds
-     g3.(i+1)=(g3.i)+(f.(i+1))));
+definition
+  let f be XFinSequence of REAL;
+  func Sum f -> Element of REAL means
+  :Def4:
+  ex g being XFinSequence of REAL
+st len f=len g & f.0=g.0 & (for i being Nat st i+1<len f holds g.(i+1)=(g.i)+(f
+  .(i+1))) & it=g.(len f-'1);
+  existence
+  proof
     per cases;
-    suppose C1: len g3 < len f;
-      set O=g3.((len g3)-'1)+ f.(len g3);
-      set r=<% O %>;
-      set g4=g3^r;
-      C2: len g4=len g3 + len (<% O %>) by AFINSQ_1:20
-           .=len g3 +1 by AFINSQ_1:38;
-      C4: 0 in dom g3 by B2,NAT_1:45;
-      C5: g4.0=g3.0 by C4,AFINSQ_1:def 4;
-      for i being Nat st i+1<k+1+1 holds
-       g4.(i+1)=(g4.i)+(f.(i+1))
-      proof let i be Nat;
-       assume i+1<k+1+1;then
-        D2: i+1<=k+1 by NAT_1:13;
-        per cases by D2,XXREAL_0:1;
-        suppose E1: i+1<k+1;
-          i+1 in dom g3 by E1,B2,NAT_1:45;then
-          E3: g4.(i+1)=g3.(i+1) by AFINSQ_1:def 4;
-          i<=i+1 by NAT_1:11;then
-          i<len g3 by B2,E1,XXREAL_0:2;then
-          i in dom g3 by NAT_1:45;then
-          g4.i=g3.i by AFINSQ_1:def 4;
-         hence thesis by E3,B2,E1,C1;
-        end;
-        suppose E0: i+1=k+1;
-          i<i+1 by XREAL_1:31;then
-          i in dom g3 by E0,B2,NAT_1:45;then
-          E4: g4.i=g3.i by AFINSQ_1:def 4;
-          (len g3) -'1=i by E0,B2,NAT_D:34;
-         hence thesis by B2,E0,E4,AFINSQ_1:40;
-        end;
-      end;
-     hence thesis by C2,C5,B2;
-    end;
-    suppose C1: len g3 >= len f;
-       reconsider O=0 as Element of REAL;
-       set r=<% O %>;
-       set g4=g3^r;
-       C2: len g4=len g3 + len (<% 0 %>) by AFINSQ_1:20
-                .=len g3 +1 by AFINSQ_1:38;then
-       C3: len g4>len f by C1,NAT_1:13;
-       C4: 0 in dom g3 by B1,C1,NAT_1:45;
-       g4.0=g3.0 by C4,AFINSQ_1:def 4;
-      hence thesis by B2,C3,C2;
-     end;
-  end;
-  for k being Element of NAT holds P[k] from NAT_1:sch 1(A31,A32);then
-  consider g being XFinSequence of REAL such that
-  A33: len g=len f-'1+1 & f.0=g.0 &
-   (len g<=len f implies (for i being Nat st i+1<len f-'1+1 holds
-  g.(i+1)=(g.i)+(f.(i+1))));
-  A34: len f-'1+1=len f-1+1 by A3,XREAL_1:235 .=len f;
-  set b=g.(len f-'1);
-  len f=len g & f.0=g.0 &
- (for i being Nat st i+1<len f holds
-  g.(i+1)=(g.i)+(f.(i+1)))& b=g.(len f-'1) by A34,A33;
-  hence thesis;
- end;
- suppose
-A1: not len f>0;
-   take 0, g=<%>REAL;
-   len f = 0 by A1;
-   hence len f=len g & f.0=g.0 by AFINSQ_1:18;
-   thus for i be Nat st i+1<len f holds g.(i+1)=(g.i)+(f.(i+1)) by A1;
-   not 0 in dom g;
-   hence thesis by FUNCT_1:def 4;
- end;
-end;
-uniqueness
-proof let a,b be Element of REAL;
-  now assume C1: (ex g being XFinSequence of REAL st
-   len f=len g & f.0=g.0 &
-   (for i being Nat st i+1<len f holds
-    g.(i+1)=(g.i)+(f.(i+1)))& a=g.(len f-'1))&
-  (ex g being XFinSequence of REAL st
-   len f=len g & f.0=g.0 &
-   (for i being Nat st i+1<len f holds
-    g.(i+1)=(g.i)+(f.(i+1)))& b=g.(len f-'1));then
-  consider g1 being XFinSequence of REAL such that
-   C2: len f=len g1 & f.0=g1.0 &
-   (for i being Nat st i+1<len f holds
-    g1.(i+1)=(g1.i)+(f.(i+1)))& a=g1.(len f-'1);
-  consider g2 being XFinSequence of REAL such that
-   C3: len f=len g2 & f.0=g2.0 &
-   (for i being Nat st i+1<len f holds
-    g2.(i+1)=(g2.i)+(f.(i+1)))& b=g2.(len f-'1) by C1;
-  defpred P[Nat] means $1<len g1 implies g1.$1=g2.$1;
-  A31: P[0] by C2,C3;
-  A32: for k being Element of NAT st P[k] holds P[k + 1]
-  proof let k be Element of NAT;
-   assume B0: P[k];
-    per cases;
-    suppose D1: k+1< len g1;
-      D3n: k<k+1 by XREAL_1:31;
-      g1.(k+1)=g2.(k+1)
+    suppose
+A1:   len f > 0;
+      defpred P[Nat] means ex g being XFinSequence of REAL st len g=$1+1 & f.0
+=g.0 & (len g<=len f implies (for i being Nat st i+1<$1+1 holds g.(i+1)=(g.i)+(
+      f.(i+1))));
+A2:   for k being Element of NAT st P[k] holds P[k + 1]
       proof
-        g1.(k+1)=(g1.k)+(f.(k+1)) by C2,D1;
-       hence thesis by D3n,B0,D1,C2,C3,XXREAL_0:2;
+        let k be Element of NAT;
+        assume
+        P[k];
+        then consider g3 being XFinSequence of REAL such that
+A3:     len g3=k+1 and
+A4:     f.0=g3.0 and
+A5:     len g3<=len f implies for i being Nat st i+1<k+1 holds g3.(i+
+        1)=( g3.i)+(f.(i+1));
+        per cases;
+        suppose
+A6:       len g3 < len f;
+          set O=g3.((len g3)-'1)+ f.(len g3);
+          set r=<% O %>;
+          set g4=g3^r;
+A7:       for i being Nat st i+1<k+1+1 holds g4.(i+1)=(g4.i)+(f.(i+1))
+          proof
+            let i be Nat;
+            assume
+            i+1<k+1+1;
+            then
+A8:         i+1<=k+1 by NAT_1:13;
+            per cases by A8,XXREAL_0:1;
+            suppose
+A9:           i+1<k+1;
+              i<=i+1 by NAT_1:11;
+              then i<len g3 by A3,A9,XXREAL_0:2;
+              then i in dom g3 by NAT_1:45;
+              then
+A10:          g4.i=g3.i by AFINSQ_1:def 4;
+              i+1 in dom g3 by A3,A9,NAT_1:45;
+              then g4.(i+1)=g3.(i+1) by AFINSQ_1:def 4;
+              hence thesis by A5,A6,A9,A10;
+            end;
+            suppose
+A11:          i+1=k+1;
+              i<i+1 by XREAL_1:31;
+              then i in dom g3 by A3,A11,NAT_1:45;
+              then
+A12:          g4.i=g3.i by AFINSQ_1:def 4;
+              (len g3) -'1=i by A3,A11,NAT_D:34;
+              hence thesis by A3,A11,A12,AFINSQ_1:40;
+            end;
+          end;
+          0 in dom g3 by A3,NAT_1:45;
+          then
+A13:      g4.0=g3.0 by AFINSQ_1:def 4;
+          len g4=len g3 + len (<% O %>) by AFINSQ_1:20
+            .=len g3 +1 by AFINSQ_1:38;
+          hence thesis by A3,A4,A13,A7;
+        end;
+        suppose
+A14:      len g3 >= len f;
+          reconsider O=0 as Element of REAL;
+          set r=<% O %>;
+          set g4=g3^r;
+          0 in dom g3 by A1,A14,NAT_1:45;
+          then
+A15:      g4.0=g3.0 by AFINSQ_1:def 4;
+A16:      len g4=len g3 + len (<% 0 %>) by AFINSQ_1:20
+            .=len g3 +1 by AFINSQ_1:38;
+          then len g4>len f by A14,NAT_1:13;
+          hence thesis by A3,A4,A16,A15;
+        end;
       end;
-     hence thesis;
+      set d=f.0;
+A17:  f.0=(<% f.0 %>).0 by AFINSQ_1:38;
+      set g2=(<% d %>);
+A18:  for i being Nat st i+1< (0 qua Element of NAT)+1 holds g2.(i+1)=(g2.
+      i)+(f.(i+1)) by XREAL_1:8;
+      (0 qua Element of NAT)+1<=len f by A1,NAT_1:13;
+      then
+A19:  len f-'1+1=len f-1+1 by XREAL_1:235
+        .=len f;
+      len (<% f.0 %>)=(0 qua Element of NAT)+1 by AFINSQ_1:38;
+      then
+A20:  P[0] by A17,A18;
+      for k being Element of NAT holds P[k] from NAT_1:sch 1(A20,A2);
+      then consider g being XFinSequence of REAL such that
+A21:  len g=len f-'1+1 and
+A22:  f.0=g.0 and
+A23:  len g<=len f implies for i being Nat st i+1<len f-'1+1 holds g.
+      (i +1)=(g.i)+(f.(i+1));
+      set b=g.(len f-'1);
+      b=g.(len f-'1);
+      hence thesis by A21,A22,A23,A19;
     end;
-    suppose k+1>=len g1;
-     hence thesis;
+    suppose
+A24:  not len f>0;
+      take 0, g=<%>REAL;
+      len f = 0 by A24;
+      hence len f=len g & f.0=g.0 by AFINSQ_1:18;
+      thus for i be Nat st i+1<len f holds g.(i+1)=(g.i)+(f.(i+1)) by A24;
+      not 0 in dom g;
+      hence thesis by FUNCT_1:def 4;
     end;
   end;
-   for k being Element of NAT holds P[k] from NAT_1:sch 1(A31,A32);
-  hence a=b by C3,C2,AFINSQ_1:11;
+  uniqueness
+  proof
+    let a,b be Element of REAL;
+    now
+      assume that
+A25:  ex g being XFinSequence of REAL st len f=len g & f.0=g.0 & (for
+      i being Nat st i+1<len f holds g.(i+1)=(g.i)+(f.(i+1)))& a=g.(len f-'1)
+      and
+A26:  ex g being XFinSequence of REAL st len f=len g & f.0=g.0 & (for
+      i being Nat st i+1<len f holds g.(i+1)=(g.i)+(f.(i+1)))& b=g.(len f-'1);
+      consider g1 being XFinSequence of REAL such that
+A27:  len f=len g1 and
+A28:  f.0=g1.0 and
+A29:  for i being Nat st i+1<len f holds g1.(i+1)=(g1.i)+(f.(i+1)) and
+A30:  a=g1.(len f-'1) by A25;
+      consider g2 being XFinSequence of REAL such that
+A31:  len f=len g2 and
+A32:  f.0=g2.0 and
+A33:  for i being Nat st i+1<len f holds g2.(i+1)=(g2.i)+(f.(i+1)) and
+A34:  b=g2.(len f-'1) by A26;
+      defpred P[Nat] means $1<len g1 implies g1.$1=g2.$1;
+A35:  for k being Element of NAT st P[k] holds P[k + 1]
+      proof
+        let k be Element of NAT;
+        assume
+A36:    P[k];
+        per cases;
+        suppose
+A37:      k+1< len g1;
+A38:      k<k+1 by XREAL_1:31;
+          g1.(k+1)=(g1.k)+(f.(k+1)) by A27,A29,A37;
+          hence thesis by A27,A33,A36,A38,XXREAL_0:2;
+        end;
+        suppose
+          k+1>=len g1;
+          hence thesis;
+        end;
+      end;
+A39:  P[0] by A28,A32;
+      for k being Element of NAT holds P[k] from NAT_1:sch 1(A39,A35);
+      hence a=b by A27,A30,A31,A34,AFINSQ_1:11;
+    end;
+    hence thesis;
   end;
-  hence thesis;
-end;
 end;
 
 registration
- let f be empty XFinSequence of REAL;
- cluster Sum f -> zero;
- coherence
+  let f be empty XFinSequence of REAL;
+  cluster Sum f -> zero;
+  coherence
+  proof
+    ex g being XFinSequence of REAL st len f=len g & f.0=g.0 & (for i
+being Nat st i+1<len f holds g.(i+1)=(g.i)+(f.(i+1))) & Sum f=g.(len f-'1) by
+    Def4;
+    hence Sum f = 0 by FUNCT_1:def 4;
+  end;
+end;
+
+theorem
+  for f being empty XFinSequence of REAL holds Sum f=0;
+
+theorem ::from RLVECT_1:58
+  for h1,h2 being XFinSequence of REAL holds Sum (h1^h2)= Sum h1 + Sum
+  h2
 proof
- ex g being XFinSequence of REAL st
- len f=len g & f.0=g.0 &
- (for i being Nat st i+1<len f holds g.(i+1)=(g.i)+(f.(i+1))) &
- Sum f=g.(len f-'1) by AC300;
- hence Sum f = 0 by FUNCT_1:def 4;
-end;
-end;
-
-theorem for f being empty XFinSequence of REAL holds Sum f=0;
-
-theorem    ::from RLVECT_1:58
-  for h1,h2 being XFinSequence of REAL holds
-  Sum (h1^h2)= Sum h1 + Sum h2
-proof let h1,h2 be XFinSequence of REAL;
+  let h1,h2 be XFinSequence of REAL;
   per cases;
-  suppose A0: len (h1^h2)>0;
-   per cases;
-   suppose A71: len h1>0;
-   consider g1 being XFinSequence of REAL such that
-  A1: len (h1)=len g1 & (h1).0=g1.0 &
-   (for i being Nat st i+1<len (h1) holds
-   g1.(i+1)=(g1.i)+((h1).(i+1))) & Sum (h1)=g1.(len (h1)-'1) by AC300;
+  suppose
+A1: len (h1^h2)>0;
     per cases;
-    suppose A72: len h2>0;
-  consider g2 being XFinSequence of REAL such that
-  A2: len (h2)=len g2 & (h2).0=g2.0 &
-   (for i being Nat st i+1<len (h2) holds
-   g2.(i+1)=(g2.i)+((h2).(i+1))) & Sum (h2)=g2.(len (h2)-'1) by AC300;
-  set a=g1.(len g1 -'1 qua Nat);
-   set g2b = g2+a;
-    E4b: len g2b = len g2 &
-    for i being Nat st i<len g2 holds g2b.i = g2.i +a by AC500;
-   set g4=g1^g2b;
-   E10: len (h1^h2)=len g1+ len g2 by A1,A2,AFINSQ_1:20
-                  .=len g4 by E4b,AFINSQ_1:20;
-   E34: (h1^h2).0=h1.0 by AE359,A71.=g4.0 by AE359,A1,A71;
-   E93: len (h1^h2)=len g1 +len g2b by A1,E4b,A2,AFINSQ_1:20;
-   E94: len (h1^h2)=len h1+len h2 by AFINSQ_1:20
-                  .=len (g1^g2b) by A1,E4b,A2,AFINSQ_1:20;
-   E95: len g1<len (h1^h2) by E93,E4b,A2,A72,XREAL_1:31;
-   E35: for i being Nat st i+1<len (h1^h2) holds
-   g4.(i+1)=(g4.i)+((h1^h2).(i+1))
-   proof let i be Nat;
-    assume G1: i+1<len (h1^h2);
-      reconsider i0=i as Element of NAT by ORDINAL1:def 13;
+    suppose
+A2:   len h1>0;
+      consider g1 being XFinSequence of REAL such that
+A3:   len (h1)=len g1 and
+A4:   (h1).0=g1.0 and
+A5:   for i being Nat st i+1<len (h1) holds g1.(i+1)=(g1.i)+((h1).(i+1
+      )) and
+A6:   Sum (h1)=g1.(len (h1)-'1) by Def4;
+      per cases;
+      suppose
+A7:     len h2>0;
+        set a=g1.(len g1 -'1 qua Nat);
+        consider g2 being XFinSequence of REAL such that
+A8:     len (h2)=len g2 and
+A9:     (h2).0=g2.0 and
+A10:    for i being Nat st i+1<len (h2) holds g2.(i+1)=(g2.i)+((h2).(
+        i+1)) and
+A11:    Sum (h2)=g2.(len (h2)-'1) by Def4;
+        set g2b = g2+a;
+A12:    len g2b = len g2 by Th6;
+        then
+A13:    len g2b>=(0 qua Element of NAT)+1 by A7,A8,NAT_1:13;
+        then
+A14:    len g2b-'1=len g2b-1 by XREAL_1:235;
+        set g4=g1^g2b;
+A15:    len (h1^h2)=len h1+len h2 by AFINSQ_1:20
+          .=len (g1^g2b) by A3,A8,A12,AFINSQ_1:20;
+A16:    len (h1^h2)=len g1 +len g2b by A3,A8,A12,AFINSQ_1:20;
+        then
+A17:    len g1<len (h1^h2) by A7,A8,A12,XREAL_1:31;
+A18:    for i being Nat st i+1<len (h1^h2) holds g4.(i+1)=(g4.i)+((h1^h2)
+        .(i+1))
+        proof
+          let i be Nat;
+          assume
+A19:      i+1<len (h1^h2);
+          reconsider i0=i as Element of NAT by ORDINAL1:def 13;
           per cases;
-          suppose H0: i+1<len g1;then
-            G2: (g1^g2b).(i+1)=g1.(i+1) by AE359;
-             i<i+1 by XREAL_1:31;then
-             i<len g1 by H0,XXREAL_0:2;then
-            G4: (g1^g2b).i=g1.i by AE359;
-            (h1^h2).(i+1)=h1.(i+1) by AE359,A1,H0;
-           hence thesis by G2,G4,A1,H0;
+          suppose
+A20:        i+1<len g1;
+            i<i+1 by XREAL_1:31;
+            then i<len g1 by A20,XXREAL_0:2;
+            then
+A21:        (g1^g2b).i=g1.i by Th7;
+A22:        (g1^g2b).(i+1)=g1.(i+1) by A20,Th7;
+            (h1^h2).(i+1)=h1.(i+1) by A3,A20,Th7;
+            hence thesis by A3,A5,A20,A22,A21;
           end;
-         suppose H0: i+1>=len g1;
-           per cases by H0,XXREAL_0:1;
-           suppose J0: i+1>len g1;then
-            i>=len g1 by NAT_1:13;then
-            i-'len g1=i-len g1 by XREAL_1:235;then
-            reconsider i1=i-len g1 as Element of NAT;
-            i+1-len g1<len (h1^h2)-len g1 by G1,XREAL_1:11;then
-            G1en: i1+1<len g1+len g2b - len g1 by A1,E4b,A2,AFINSQ_1:20;
-             i1<i1+1 by XREAL_1:31;then
-            G3: i1<len g2b by G1en,XXREAL_0:2;
-            G5p: i1+1=i0+1-len h1 by A1;
-            len g1<=i0 & i0<len (g1^g2b) by J0,E94,G1,NAT_1:13;then
-            G4: (g1^g2b).i0=g2b.i1 by AFINSQ_1:22;
-            G5:  (h1^h2).(i0+1)=h2.(i1+1) by G5p,H0,G1,AFINSQ_1:22;
-            G51: g2b.(i1)=g2.(i1) +a by E4b,G3;
-            G52: g2b.(i1+1)=g2.(i1+1)+a by E4b,G1en;
-            g2.(i1+1)=(g2.(i1))+(h2.(i1+1)) by A2,E4b,G1en;
-            hence thesis
-                     by G5p,H0,E94,G1,G4,G5,G51,G52,AFINSQ_1:22;
-           end;
-           suppose H0: i+1=len g1;then
-             H8: i=len g1-'1 by NAT_D:34;
-            G2r: 0 in dom g2b by A72,A2,E4b,NAT_1:45;
-            G2: (g1^g2b).(i+1)=(g1^g2b).(len g1+(0 qua Element of NAT)) by H0
-                          .=g2b.(0 qua Element of NAT)
-                                 by G2r,AFINSQ_1:def 4;
-          (0 qua Element of NAT)+1<=len g1 by A71,A1,NAT_1:13;then
-          G34: len g1-'1=len g1-1 by XREAL_1:235;
-          len g1<len g1+1 by XREAL_1:31;then
-          len g1-1<len g1 by XREAL_1:21;then
-          len g1 -'1 in dom g1 by G34,NAT_1:45;then
-          G4: (g1^g2b).i=g1.(len g1 -'1) by H8,AFINSQ_1:def 4;
-          G65: len g1-len h1=0 by A1;
-          h2.(0)=(h1^h2).(i+1) by H0,G65,E95,AFINSQ_1:22;
-            hence thesis by G2,G4,AC500,A72,A2;
-           end;
-         end;
-   end;
-     len (h1^h2)>= (0 qua Element of NAT)+1 by A0,NAT_1:13;then
-     R50: len g1+len g2b>=1 by A1,A2,E4b,AFINSQ_1:20;
-     R4n: len g2b>=(0 qua Element of NAT)+1 by A2,E4b,A72,NAT_1:13;then
-     R4: len g2b-'1=len g2b-1 by XREAL_1:235;
-     R2: len g1 + len g2b -'1=len g1 + len g2b -1 by R50,XREAL_1:235
-                       .= len g1 +(len g2b-1)
-                       .= len g1 +(len g2b-'1) by R4n,XREAL_1:235;
-     R7n: len g2b-1<len g2b by XREAL_1:46;
-     R3: len g2b -'1 in dom g2b by R4,R7n,NAT_1:45;
-     R5: (g1^g2b).(len (h1^h2) -'1)=g2b.(len g2b-'1)
-                           by E93,R2,R3,AFINSQ_1:def 4;
-     g1.(len g1 -'1)+g2.(len h2 -'1) =g2b.(len h2 -'1) by E4b,A2,R4,XREAL_1:46;
-    hence thesis by AC300,E10,E34,E35,A1,A2,R5,E4b;
-   end;
-        suppose len h2<=0; then
-         A73: h2={};then
-         Sum h2=0;
-        hence thesis by A73,AFINSQ_1:32;
+          suppose
+A23:        i+1>=len g1;
+            per cases by A23,XXREAL_0:1;
+            suppose
+A24:          i+1>len g1;
+              then i>=len g1 by NAT_1:13;
+              then i-'len g1=i-len g1 by XREAL_1:235;
+              then reconsider i1=i-len g1 as Element of NAT;
+              i+1-len g1<len (h1^h2)-len g1 by A19,XREAL_1:11;
+              then
+A25:          i1+1<len g1+len g2b - len g1 by A3,A8,A12,AFINSQ_1:20;
+              then
+A26:          g2b.(i1+1)=g2.(i1+1)+a by A12,Th6;
+A27:          len g1<=i0 by A24,NAT_1:13;
+              i0<len (g1^g2b) by A15,A19,NAT_1:13;
+              then
+A28:          (g1^g2b).i0=g2b.i1 by A27,AFINSQ_1:22;
+              i1<i1+1 by XREAL_1:31;
+              then i1<len g2b by A25,XXREAL_0:2;
+              then
+A29:          g2b.(i1)=g2.(i1) +a by A12,Th6;
+A30:          g2.(i1+1)=(g2.(i1))+(h2.(i1+1)) by A8,A10,A12,A25;
+A31:          i1+1=i0+1-len h1 by A3;
+              then (h1^h2).(i0+1)=h2.(i1+1) by A19,A23,AFINSQ_1:22;
+              hence thesis by A15,A19,A23,A31,A28,A29,A26,A30,AFINSQ_1:22;
+            end;
+            suppose
+A32:          i+1=len g1;
+              len g1<len g1+1 by XREAL_1:31;
+              then
+A33:          len g1-1<len g1 by XREAL_1:21;
+A34:          i=len g1-'1 by A32,NAT_D:34;
+              (0 qua Element of NAT)+1<=len g1 by A2,A3,NAT_1:13;
+              then len g1-'1=len g1-1 by XREAL_1:235;
+              then len g1 -'1 in dom g1 by A33,NAT_1:45;
+              then
+A35:          (g1^g2b).i=g1.(len g1 -'1) by A34,AFINSQ_1:def 4;
+A36:          0 in dom g2b by A7,A8,A12,NAT_1:45;
+              len g1-len h1=0 by A3;
+              then
+A37:          h2.(0)=(h1^h2).(i+1) by A17,A32,AFINSQ_1:22;
+              (g1^g2b).(i+1)=(g1^g2b).(len g1+(0 qua Element of NAT)) by
+              A32
+                .=g2b.(0 qua Element of NAT) by A36,AFINSQ_1:def 4;
+              hence thesis by A7,A8,A9,A35,A37,Th6;
+            end;
+          end;
         end;
-   end;
-   suppose len h1<=0;then
-         A73: h1={};then
-         Sum h1=0;
-    hence thesis by A73,AFINSQ_1:32;
-   end;
- end;
- suppose A0: len (h1^h2)<=0;then
-         A80n: h1^h2={};
-         len h1<=len h1+len h2 by NAT_1:11;then
-         h1={} by A0,AFINSQ_1:20;then
-         A81: Sum (h1)=0;
-         len h2<=len h1+len h2 by NAT_1:11;then
-         len h2=0 by A0,AFINSQ_1:20;
-  hence thesis by A80n,A81,AFINSQ_1:18;
- end;
+A38:    len (h1^h2)=len g1+ len g2 by A3,A8,AFINSQ_1:20
+          .=len g4 by A12,AFINSQ_1:20;
+A39:    (h1^h2).0=h1.0 by A2,Th7
+          .=g4.0 by A2,A3,A4,Th7;
+        len (h1^h2)>= (0 qua Element of NAT)+1 by A1,NAT_1:13;
+        then len g1+len g2b>=1 by A3,A8,A12,AFINSQ_1:20;
+        then
+A40:    len g1 + len g2b -'1=len g1 + len g2b -1 by XREAL_1:235
+          .= len g1 +(len g2b-1)
+          .= len g1 +(len g2b-'1) by A13,XREAL_1:235;
+        len g2b-1<len g2b by XREAL_1:46;
+        then len g2b -'1 in dom g2b by A14,NAT_1:45;
+        then
+A41:    (g1^g2b).(len (h1^h2) -'1)=g2b.(len g2b-'1) by A16,A40,
+        AFINSQ_1:def 4;
+        g1.(len g1 -'1)+g2.(len h2 -'1) =g2b.(len h2 -'1) by A8,A12,A14,
+        Th6, XREAL_1:46;
+        hence thesis by A3,A6,A8,A11,A12,A38,A39,A18,A41,Def4;
+      end;
+      suppose
+        len h2<=0;
+        then
+A42:    h2={};
+        then Sum h2=0;
+        hence thesis by A42,AFINSQ_1:32;
+      end;
+    end;
+    suppose
+      len h1<=0;
+      then
+A43:  h1={};
+      then Sum h1=0;
+      hence thesis by A43,AFINSQ_1:32;
+    end;
+  end;
+  suppose
+A44: len (h1^h2)<=0;
+    len h1<=len h1+len h2 by NAT_1:11;
+    then h1={} by A44,AFINSQ_1:20;
+    then
+A45: Sum (h1)=0;
+    len h2<=len h1+len h2 by NAT_1:11;
+    then
+A46: len h2=0 by A44,AFINSQ_1:20;
+    h1^h2={} by A44;
+    hence thesis by A45,A46,AFINSQ_1:18;
+  end;
 end;
 
 begin :: Selected Subsequences
@@ -1156,157 +1322,177 @@ begin :: Selected Subsequences
 definition
   let X be finite natural-membered set;
   func Sgm0 X -> XFinSequence of NAT means
-:AC113:
-  rng it = X & for l,m,k1,k2 being Nat st ( l < m & m < len it &
-  k1=it.l & k2=it.m) holds k1 < k2;
-existence
+  :Def5:
+  rng it = X & for l,m,k1,k2
+  being Nat st l < m & m < len it & k1=it.l & k2=it.m holds k1 < k2;
+  existence
   proof
-    consider k being Nat such that
-    A6: X c= k by AE221f;
-    defpred P[Nat] means for X being set st
-     X c= $1 ex p being XFinSequence of NAT st
-    rng p = X & for l,m,k1,k2 being Nat st ( l < m & m < len p &
-    k1=p.l & k2=p.m) holds k1 < k2;
-A2: P[0]
-    proof
-      let X be set;
-      assume
-A3:   X c= 0;
-      take <%>(NAT);
-      thus rng <%>(NAT) = X by A3;
-      thus thesis;
-    end;
-A4: for k being Nat st P[k] holds P[k+1]
+    defpred P[Nat] means for X being set st X c= $1 ex p being XFinSequence of
+NAT st rng p = X & for l,m,k1,k2 being Nat st ( l < m & m < len p & k1=p.l & k2
+    =p.m) holds k1 < k2;
+A1: ex k being Nat st X c= k by Th2;
+A2: for k being Nat st P[k] holds P[k+1]
     proof
       let k be Nat such that
-A5:   for X being set st X c= k holds ex p being XFinSequence of NAT st
-      rng p = X & for l,m,k1,k2 be Nat st (l < m & m < len p &
-      k1=p.l & k2=p.m) holds k1 < k2;
+A3:   for X being set st X c= k holds ex p being XFinSequence of NAT
+st rng p = X & for l,m,k1,k2 be Nat st l < m & m < len p & k1=p.l & k2=p.m
+      holds k1 < k2;
       let X be set;
       assume
-A6:   X c= (k+1);
+A4:   X c= (k+1);
       now
-        assume not X c= k;
-        then consider x such that
-A7:     x in X & not x in k by TARSKI:def 3;
-        reconsider n=x as Element of NAT by AB470,A6,A7;
-        n<k+1 by A6,A7,NAT_1:45;then
-A19:    n<=k by NAT_1:13;
-        not n<k by A7,NAT_1:45;then
-A8:     n=k by A19,XXREAL_0:1;
         set Y=X\{k};
-A10:    Y c= k
+        assume
+        not X c= k;
+        then consider x such that
+A5:     x in X and
+A6:     not x in k by TARSKI:def 3;
+        reconsider n=x as Element of NAT by A4,A5,Th1;
+        n<k+1 by A4,A5,NAT_1:45;
+        then
+A7:     n<=k by NAT_1:13;
+        not n<k by A6,NAT_1:45;
+        then
+A8:     n=k by A7,XXREAL_0:1;
+A9:     Y c= k
         proof
           let x;
-          assume x in Y;
+          assume
+A10:      x in Y;
           then
-A12n:     x in X & not x in {k} by XBOOLE_0:def 5;
+A11:      x in X;
+          then reconsider m=x as Element of NAT by A4,Th1;
+          not x in {k} by A10,XBOOLE_0:def 5;
           then
-          reconsider m=x as Element of NAT by AB470,A6;
-          m<k+1 & m<>k by A12n,A6,NAT_1:45,TARSKI:def 1;then
-          m<=k & m<>k by NAT_1:13;
-          then m <k by XXREAL_0:1;
+A12:      m<>k by TARSKI:def 1;
+          m<k+1 by A4,A11,NAT_1:45;
+          then m<=k by NAT_1:13;
+          then m <k by A12,XXREAL_0:1;
           hence thesis by NAT_1:45;
         end;
         then consider p being XFinSequence of NAT such that
-A13:    rng p = Y & for l,m,k1,k2 be Nat st
-        ( l < m & m < len p & k1=p.l & k2=p.m) holds k1 < k2 by A5;
+A13:    rng p = Y and
+A14:    for l,m,k1,k2 be Nat st l < m & m < len p & k1=p.l & k2=p.m
+        holds k1 < k2 by A3;
         reconsider k as Element of NAT by ORDINAL1:def 13;
         consider q being XFinSequence of NAT such that
-A14:    q=p^<% k %>;
-A15:    {k} c= X by A7,A8,ZFMISC_1:37;
-A16:    rng q = rng p \/ rng <% k %> by A14,AFINSQ_1:29
-          .= Y \/ {k} by A13,AFINSQ_1:36
-          .= X \/ {k} by XBOOLE_1:39
-          .= X by A15,XBOOLE_1:12;
-        for l,m,k1,k2 be Nat st ( l < m & m < len q &
-        k1=q.l & k2=q.m) holds k1 < k2
+A15:    q=p^<% k %>;
+A16:    for l,m,k1,k2 be Nat st l < m & m < len q & k1=q.l & k2=q.m holds
+        k1 < k2
         proof
           let l,m,k1,k2 be Nat;
-          assume
-A17:      l < m & m < len q & k1=q.l & k2=q.m;then
-          m+1<=len q by NAT_1:13;then
-A38:      m<=len q -1 by XREAL_1:21;
-A38b:     m<=len q-'1 by A38,XREAL_0:def 2;
-A18:      l in dom p
-          proof
-            l < len (p^<% k %>) -1 by A38,A14,A17,XXREAL_0:2;
-            then l < len p + len <% k %> -1 by AFINSQ_1:20;
-            then l < len p + 1 -1 by AFINSQ_1:38;
-            hence thesis by NAT_1:45;
-          end;
-A20:      now
+          assume that
+A17:      l < m and
+A18:      m < len q and
+A19:      k1=q.l and
+A20:      k2=q.m;
+          m+1<=len q by A18,NAT_1:13;
+          then
+A21:      m<=len q -1 by XREAL_1:21;
+          then l < len (p^<% k %>) -1 by A15,A17,XXREAL_0:2;
+          then l < len p + len <% k %> -1 by AFINSQ_1:20;
+          then l < len p + 1 -1 by AFINSQ_1:38;
+          then
+A22:      l in dom p by NAT_1:45;
+A23:      m<=len q-'1 by A21,XREAL_0:def 2;
+A24:      now
+A25:        k1 = p.l by A15,A19,A22,AFINSQ_1:def 4;
             assume
-A21:        m=len q -'1;
-            k1 = p.l by A14,A17,A18,AFINSQ_1:def 4;
-            then
-A22n:       k1 in Y by A13,A18,FUNCT_1:def 5;
-            q.m = (p^<% k %>).((len p + len <% k %>)-'1)
-                                by A14,A21,AFINSQ_1:20
-              .= (p^<% k %>).((len p + 1)-'1) by AFINSQ_1:38
-              .=(p^<% k %>).(len p) by NAT_D:34
-              .= k by AFINSQ_1:40;
-            hence thesis by A17,A10,A22n,NAT_1:45;
-          end;
-          now
-            assume m <> len q -'1;
-            then m < len (p^<% k %>) -'1 by A38b,A14,XXREAL_0:1;
+            m <> len q -'1;
+            then m < len (p^<% k %>) -'1 by A15,A23,XXREAL_0:1;
             then m < len p + len <% k %> -'1 by AFINSQ_1:20;
             then m < len p + 1 -'1 by AFINSQ_1:38;
             then
-A23:        m < len p by NAT_D:34;
+A26:        m < len p by NAT_D:34;
             then m in dom p by NAT_1:45;
-            then
-A24:        k2 = p.m by A14,A17,AFINSQ_1:def 4;
-            k1 = p.l by A14,A17,A18,AFINSQ_1:def 4;
-            hence thesis by A13,A17,A23,A24;
+            then k2 = p.m by A15,A20,AFINSQ_1:def 4;
+            hence thesis by A14,A17,A26,A25;
           end;
-          hence thesis by A20;
+          now
+            assume
+            m=len q -'1;
+            then
+A27:        q.m = (p^<% k %>).((len p + len <% k %>)-'1) by A15,
+            AFINSQ_1:20
+              .= (p^<% k %>).((len p + 1)-'1) by AFINSQ_1:38
+              .=(p^<% k %>).(len p) by NAT_D:34
+              .= k by AFINSQ_1:40;
+            k1 = p.l by A15,A19,A22,AFINSQ_1:def 4;
+            then k1 in Y by A13,A22,FUNCT_1:def 5;
+            hence thesis by A9,A20,A27,NAT_1:45;
+          end;
+          hence thesis by A24;
         end;
+A28:    {k} c= X by A5,A8,ZFMISC_1:37;
+        rng q = rng p \/ rng <% k %> by A15,AFINSQ_1:29
+          .= Y \/ {k} by A13,AFINSQ_1:36
+          .= X \/ {k} by XBOOLE_1:39
+          .= X by A28,XBOOLE_1:12;
         hence thesis by A16;
       end;
-      hence thesis by A5;
+      hence thesis by A3;
     end;
-    for k2 being Nat holds P[k2] from NAT_1:sch 2(A2,A4);
-    hence thesis by A6;
+A29: P[0]
+    proof
+      let X be set;
+      assume
+A30:  X c= 0;
+      take <%>(NAT);
+      thus rng <%>(NAT) = X by A30;
+      thus thesis;
+    end;
+    for k2 being Nat holds P[k2] from NAT_1:sch 2(A29,A2);
+    hence thesis by A1;
   end;
-uniqueness
+  uniqueness
   proof
+    defpred S[XFinSequence] means for X st ex k being Nat st X c= k holds ($1
+is XFinSequence of NAT & rng $1 = X & for l,m,k1,k2 being Nat st ( l < m & m <
+len $1 & k1=$1.l & k2=$1.m) holds k1 < k2) implies for q being XFinSequence of
+NAT st rng q = X & for l,m,k1,k2 being Nat st ( l < m & m < len q & k1=q.l & k2
+    =q.m) holds k1 < k2 holds q=$1;
     let p,q be XFinSequence of NAT such that
-A25: rng p = X & for l,m,k1,k2 being Nat st ( l < m & m < len p &
-    k1=p.l & k2=p.m) holds k1 < k2 and
-A26: rng q = X & for l,m,k1,k2 being Nat st ( l < m & m < len q &
-    k1=q.l & k2=q.m) holds k1 < k2;
-   consider k being Nat such that
-    A6: X c= k by AE221f;
-    defpred S[XFinSequence] means for X st ex k being Nat st X c= k holds
-    ($1 is XFinSequence of NAT & rng $1 = X &
-    for l,m,k1,k2 being Nat st ( l < m & m < len $1 &
-    k1=$1.l & k2=$1.m) holds k1 < k2) implies
-    for q being XFinSequence of NAT st rng q = X &
-    for l,m,k1,k2 being Nat st ( l < m & m < len q &
-    k1=q.l & k2=q.m) holds k1 < k2 holds q=$1;
-A27: S[{}];
-A28: for p being XFinSequence,x be set st S[p] holds S[p^<% x %>]
+A31: rng p = X and
+A32: for l,m,k1,k2 being Nat st l < m & m < len p & k1=p.l & k2=p.m
+    holds k1 < k2 and
+A33: rng q = X and
+A34: for l,m,k1,k2 being Nat st l < m & m < len q & k1=q.l & k2=q.m
+    holds k1 < k2;
+A35: for p being XFinSequence,x be set st S[p] holds S[p^<% x %>]
     proof
       let p be XFinSequence,x be set;
       assume
-A29:  S[p];
+A36:  S[p];
       let X be set;
       given k being Nat such that
-A30:  X c= k;
-      assume
-A31:  (p^<% x %> is XFinSequence of NAT & rng (p^<% x %>) = X &
-      for l,m,k1,k2 being Nat st ( l < m & m < len(p^<%x%>) &
-      k1=(p^<% x %>).l & k2=(p^<% x %>).m) holds k1 < k2);
+A37:  X c= k;
+      assume that
+A38:  p^<% x %> is XFinSequence of NAT and
+A39:  rng (p^<% x %>) = X and
+A40:  for l,m,k1,k2 being Nat st l < m & m < len(p^<%x%>) & k1=(p^<%
+      x %>).l & k2=(p^<% x %>).m holds k1 < k2;
       let q be XFinSequence of NAT;
-      assume
-A32:  rng q = X & for l,m,k1,k2 being Nat st ( l < m & m < len q &
-      k1=q.l & k2=q.m) holds k1 < k2;
-A34:  ex m being Nat st m=x & for l being Nat st l in X & l <> x holds
-                             l < m
+      assume that
+A41:  rng q = X and
+A42:  for l,m,k1,k2 being Nat st l < m & m < len q & k1=q.l & k2=q.m
+      holds k1 < k2;
+      deffunc F(Nat) = q.$1;
+      len q <> 0
       proof
-        <%x%> is XFinSequence of NAT by A31,AFINSQ_1:34;
+        assume
+        len q = 0;
+        then p^<%x%> = {} by A39,A41,AFINSQ_1:18,RELAT_1:60;
+        then 0 = len (p^<%x%>)
+          .= len p + len <%x%> by AFINSQ_1:20
+          .= 1 + len p by AFINSQ_1:38;
+        hence contradiction;
+      end;
+      then consider n be Nat such that
+A43:  len q = n+1 by NAT_1:6;
+A44:  ex m being Nat st m=x & for l being Nat st l in X & l <> x holds l
+      < m
+      proof
+        <%x%> is XFinSequence of NAT by A38,AFINSQ_1:34;
         then rng <%x%> c= NAT by RELAT_1:def 19;
         then {x} c= NAT by AFINSQ_1:36;
         then reconsider m=x as Element of NAT by ZFMISC_1:37;
@@ -1314,1259 +1500,1487 @@ A34:  ex m being Nat st m=x & for l being Nat st l in X & l <> x holds
         thus m=x;
         thus for l being Nat st l in X & l <> x holds l < m
         proof
-          let l be Nat;
-          assume
-A35:      l in X & l <> x;
-          then consider y such that
-A36:      y in dom (p^<%x%>) & l=(p^<%x%>).y by A31,FUNCT_1:def 5;
-          reconsider k=y as Element of NAT by A36;
-          k < len (p^<%x%>) by A36,NAT_1:45;
-          then k < len p + len <%x%> by AFINSQ_1:20;
+          len <%x%>=1 by AFINSQ_1:38;
           then
-          k < len p + 1 by AFINSQ_1:38;then
-A38b:     k<=len p by NAT_1:13;
-          k <> len p by A35,A36,AFINSQ_1:40;
-          then
-          k< len p +1-1 by A38b,XXREAL_0:1;
-          then
-A91:      k < len p + len <%x%>-1 by AFINSQ_1:38;
-A92n:     len(p^<%x %>)<len(p^<%x %>) +1 by XREAL_1:31;
-A93:      len <%x%>=1 by AFINSQ_1:38;
-A39:      k < len(p^<%x%>)-1 & len(p^<%x%>)-1 < len(p^<%x %>)
-                                 by A91,A92n,AFINSQ_1:20,XREAL_1:21;
-A98b:     len(p^<%x %>) -'1=len(p^<%x %>)-1 by A39,XREAL_0:def 2;
-          m= (p^<%x%>).(len p + len <%x%> -1) by A93,AFINSQ_1:40
+A45:      m= (p^<%x%>).(len p + len <%x%> -1) by AFINSQ_1:40
             .= (p^<%x%>).(len(p^<%x%>) -1) by AFINSQ_1:20;
-          hence thesis by A31,A36,A39,A98b;
+          len(p^<%x %>)<len(p^<%x %>) +1 by XREAL_1:31;
+          then
+A46:      len(p^<%x%>)-1 < len(p^<%x %>) by XREAL_1:21;
+          let l be Nat;
+          assume that
+A47:      l in X and
+A48:      l <> x;
+          consider y such that
+A49:      y in dom (p^<%x%>) and
+A50:      l=(p^<%x%>).y by A39,A47,FUNCT_1:def 5;
+          reconsider k=y as Element of NAT by A49;
+          k < len (p^<%x%>) by A49,NAT_1:45;
+          then k < len p + len <%x%> by AFINSQ_1:20;
+          then k < len p + 1 by AFINSQ_1:38;
+          then
+A51:      k<=len p by NAT_1:13;
+          k <> len p by A48,A50,AFINSQ_1:40;
+          then k< len p +1-1 by A51,XXREAL_0:1;
+          then k < len p + len <%x%>-1 by AFINSQ_1:38;
+          then
+A52:      k < len(p^<%x%>)-1 by AFINSQ_1:20;
+          then len(p^<%x %>) -'1=len(p^<%x %>)-1 by XREAL_0:def 2;
+          hence thesis by A40,A50,A52,A46,A45;
         end;
       end;
       then reconsider m = x as Nat;
-      len q <> 0
+A53:  not x in rng p
       proof
-        assume len q = 0;
-        then p^<%x%> = {} by A31,A32,AFINSQ_1:18,RELAT_1:60;
-        then 0 = len (p^<%x%>)
-          .= len p + len <%x%> by AFINSQ_1:20
-          .= 1 + len p by AFINSQ_1:38;
-        hence contradiction;
+        len p + 1 = len p + len <%x%> by AFINSQ_1:38
+          .= len (p^<%x%>) by AFINSQ_1:20;
+        then
+A54:    len p < len (p^<%x%>) by XREAL_1:31;
+A55:    m = (p^<%x%>).(len p ) by AFINSQ_1:40;
+        assume
+        x in rng p;
+        then consider y such that
+A56:    y in dom p and
+A57:    x=p.y by FUNCT_1:def 5;
+        reconsider y as Element of NAT by A56;
+A58:    y < len p by A56,NAT_1:45;
+        m = (p^<%x%>).y by A56,A57,AFINSQ_1:def 4;
+        hence contradiction by A40,A58,A54,A55;
       end;
-      then consider n be Nat such that
-A40:  len q = n+1 by NAT_1:6;
-      deffunc F(Nat) = q.$1;
-      ex q' being XFinSequence st len q' = n &
-      for m being Element of NAT st m in n holds q'.m = F(m)
-                                   from AFINSQ_1:sch 2;
+A59:  for z holds z in rng p \/ {x} \ {x} iff z in rng p
+      proof
+        let z;
+        thus z in rng p \/ {x} \ {x} implies z in rng p
+        proof
+          assume
+A60:      z in rng p \/ {x} \ {x};
+          then not z in {x} by XBOOLE_0:def 5;
+          hence thesis by A60,XBOOLE_0:def 3;
+        end;
+        assume
+A61:    z in rng p;
+        then
+A62:    z in rng p \/ {x} by XBOOLE_0:def 3;
+        not z in {x} by A53,A61,TARSKI:def 1;
+        hence thesis by A62,XBOOLE_0:def 5;
+      end;
+      ex q' being XFinSequence st len q' = n & for m being Element of NAT
+      st m in n holds q'.m = F(m) from AFINSQ_1:sch 2;
       then consider q' being XFinSequence such that
-A41b:  len q' = n & for m being Element of NAT st m in n holds q'.m = q.m;
-A41n: for m being Nat st m in n holds q'.m = q.m
-      proof let m be Nat;
-       assume B1: m in n;
-        reconsider m2=m as Element of NAT by ORDINAL1:def 13;
-        q'.m2=q.m2 by A41b,B1;
-       hence thesis;
+A63:  len q' = n and
+A64:  for m being Element of NAT st m in n holds q'.m = q.m;
+      now
+        let x;
+        assume
+        x in rng q';
+        then consider y such that
+A65:    y in dom q' and
+A66:    x=q'.y by FUNCT_1:def 5;
+        reconsider y as Element of NAT by A65;
+        q.y in NAT by ORDINAL1:def 13;
+        hence x in NAT by A63,A64,A65,A66;
       end;
-      q' is XFinSequence of NAT
+      then rng q' c= NAT by TARSKI:def 3;
+      then reconsider f=q' as XFinSequence of NAT by RELAT_1:def 19;
+A67:  p is XFinSequence of NAT by A38,AFINSQ_1:34;
+A68:  for m being Element of NAT st m in dom <%x%> holds q.(len q' + m)
+      = <%x%>.m
       proof
-        now
-          let x;
-          assume x in rng q';
+        let m be Element of NAT;
+        assume
+        m in dom <%x%>;
+        then m in len <%x%>;
+        then
+A69:    m in 1 by AFINSQ_1:38;
+        (0 qua Element of NAT)+1=0 \/ {0} by AFINSQ_1:4;
+        then
+A70:    m=0 by A69,TARSKI:def 1;
+        q.(len q' + m) = x
+        proof
+          x in {x} by TARSKI:def 1;
+          then x in rng <%x%> by AFINSQ_1:36;
+          then x in rng p \/ rng <%x%> by XBOOLE_0:def 3;
+          then x in rng q by A39,A41,AFINSQ_1:29;
           then consider y such that
-A42:      y in dom q' & x=q'.y by FUNCT_1:def 5;
-          reconsider y as Element of NAT by A42;
-          q.y in NAT by ORDINAL1:def 13;
-          hence x in NAT by A41b,A42;
+A71:      y in dom q and
+A72:      x=q.y by FUNCT_1:def 5;
+          reconsider y as Element of NAT by A71;
+          y<len q by A71,NAT_1:45;
+          then y+1<=len q by NAT_1:13;
+          then
+A73:      y <= len q -1 by XREAL_1:21;
+          len q<len q+1 by XREAL_1:31;
+          then len q-1<len q by XREAL_1:21;
+          then len q -1 in dom q by A43,NAT_1:45;
+          then
+A74:      q.(len q -1) in X by A41,FUNCT_1:def 5;
+          len q<len q+1 by XREAL_1:31;
+          then
+A75:      y <len q -1 & len q -1 < len q or y=len q-1 by A73,
+          XREAL_1:21,XXREAL_0:1;
+          set k = q.(len q-1);
+          consider d being Nat such that
+A76:      d=x and
+A77:      for l being Nat st l in X & l<>x holds l<d by A44;
+          assume
+          q.(len q' + m) <> x;
+          then k < d by A43,A63,A70,A77,A74;
+          hence contradiction by A42,A43,A76,A72,A75;
         end;
-        then rng q' c= NAT by TARSKI:def 3;
-        hence thesis by RELAT_1:def 19;
+        hence thesis by A70,AFINSQ_1:38;
       end;
-      then reconsider f=q' as XFinSequence of NAT;
-A46:  q'^<%x%> = q
+A78:  dom q = (len q' + len <%x%>) by A43,A63,AFINSQ_1:38;
+      then
+A79:  q'^<%x%> = q by A63,A64,A68,AFINSQ_1:def 4;
+A80:  not x in rng f
       proof
-A47:    dom q = (len q' + len <%x%>) by A41b,A40,AFINSQ_1:38;
-        for m being Element of NAT st m in dom <%x%> holds
-               q.(len q' + m) = <%x%>.m
-        proof
-          let m be Element of NAT;
-          assume m in dom <%x%>;
-          then m in len <%x%>;then
-          D4: m in 1 by AFINSQ_1:38;
-          (0 qua Element of NAT)+1=0 \/ {0} by AFINSQ_1:4;then
-A50:      m=0 by D4,TARSKI:def 1;
-          q.(len q' + m) = x
-          proof
-            assume A51n: q.(len q' + m) <> x;
-            consider d being Nat such that
-A52:        d=x & for l being Nat st l in X & l<>x holds l<d by A34;
-            x in rng q
-            proof
-              x in {x} by TARSKI:def 1;
-              then x in rng <%x%> by AFINSQ_1:36;
-              then x in rng p \/ rng <%x%> by XBOOLE_0:def 3;
-              hence thesis by A31,A32,AFINSQ_1:29;
-            end;
-            then consider y such that
-A53:        y in dom q & x=q.y by FUNCT_1:def 5;
-            reconsider y as Element of NAT by A53;
-A76:        y<len q by A53,NAT_1:45;
-A77:        len q<len q+1 by XREAL_1:31;
-            y+1<=len q by A76,NAT_1:13;then
-            y <= len q -1 by XREAL_1:21;then
-A56:        y <len q -1 & len q -1 < len q or y=len q-1
-                                     by A77,XREAL_1:21,XXREAL_0:1;
-A57:        q.(len q -1) is Nat & q.(len q -1) in X
-            proof
-              len q<len q+1 by XREAL_1:31;then
-              len q-1<len q by XREAL_1:21;
-               then
-A59:          len q -1 in dom q by A40,NAT_1:45;
-              thus q.(len q-1) is Nat;
-              thus thesis by A32,A59,FUNCT_1:def 5;
-            end;
-            set k = q.(len q-1);
-            k < d by A50,A40,A41b,A51n,A52,A57;
-            hence contradiction by A32,A52,A53,A56,A40;
-          end;
-          hence thesis by A50,AFINSQ_1:38;
-        end;
-        hence thesis by A47,A41b,AFINSQ_1:def 4;
+        len f + 1 = len f + len <%x%> by AFINSQ_1:38
+          .= len (f^<%x%>) by AFINSQ_1:20;
+        then
+A81:    len f < len (f^<%x%>) by XREAL_1:31;
+A82:    m = q.(len f) by A79,AFINSQ_1:40;
+        assume
+        x in rng f;
+        then consider y such that
+A83:    y in dom f and
+A84:    x=f.y by FUNCT_1:def 5;
+        reconsider y as Element of NAT by A83;
+A85:    y < len f by A83,NAT_1:45;
+        m = q.y by A63,A64,A83,A84;
+        hence contradiction by A42,A79,A85,A81,A82;
       end;
-      q' = p
+A86:  for z holds z in rng f \/ {x} \ {x} iff z in rng f
       proof
-A60:    ex m being Nat st X\{x} c= m by A30,XBOOLE_1:1;
-A61:    (p is XFinSequence of NAT & rng p = X\{x} & for l,m,k1,k2 being Nat
-        st ( l < m & m < len p & k1=p.l & k2=p.m) holds k1 < k2)
+        let z;
+        thus z in rng f \/ {x} \ {x} implies z in rng f
         proof
-          thus p is XFinSequence of NAT by A31,AFINSQ_1:34;
-          thus rng p = X\{x}
-          proof
-A62:        not x in rng p
-            proof
-              assume x in rng p;
-              then consider y such that
-A63:          y in dom p & x=p.y by FUNCT_1:def 5;
-              reconsider y as Element of NAT by A63;
-A66:          y < len p & len p < len (p^<%x%>)
-              proof
-                thus y < len p by A63,NAT_1:45;
-                len p + 1 = len p + len <%x%> by AFINSQ_1:38
-                  .= len (p^<%x%>) by AFINSQ_1:20;
-                hence thesis by XREAL_1:31;
-              end;
-A67:          m = (p^<%x%>).y by A63,AFINSQ_1:def 4;
-              m = (p^<%x%>).(len p ) by AFINSQ_1:40;
-              hence contradiction by A31,A66,A67;
-            end;
-A68:        X = rng p \/ rng <%x%> by A31,AFINSQ_1:29
-              .= rng p \/ {x} by AFINSQ_1:36;
-            for z holds z in rng p \/ {x} \ {x} iff z in rng p
-            proof
-              let z;
-              thus z in rng p \/ {x} \ {x} implies z in rng p
-              proof
-                assume z in rng p \/ {x} \ {x};
-                then (z in rng p \/ {x}) & not z in {x} by XBOOLE_0:def 5;
-                hence thesis by XBOOLE_0:def 3;
-              end;
-              assume
-A69:          z in rng p;
-              then
-A70:          not z in {x} by A62,TARSKI:def 1;
-              z in rng p \/ {x} by A69,XBOOLE_0:def 3;
-              hence thesis by A70,XBOOLE_0:def 5;
-            end;
-            hence thesis by A68,TARSKI:2;
-          end; thus
-          for l,m,k1,k2 being Nat st l < m & m < len p &
-          k1=p.l & k2=p.m holds k1 < k2
-          proof
-            let l,m,k1,k2 be Nat;
-            assume
-A71:        l < m & m < len p & k1=p.l & k2=p.m;
-            then l < len p by XXREAL_0:2;
-            then l in dom p by NAT_1:45;
-            then
-A72:        k1 = (p^<%x%>).l by A71,AFINSQ_1:def 4;
-            m in dom p by A71,NAT_1:45;
-            then
-A73:        k2 = (p^<%x%>).m by A71,AFINSQ_1:def 4;
-            len p < len p + 1 by XREAL_1:31;
-            then m < len p + 1 by A71,XXREAL_0:2;
-            then m < len p + len <%x%> by AFINSQ_1:38;
-            then l < m & m < len (p^<%x%>) by A71,AFINSQ_1:20;
-            hence thesis by A31,A72,A73;
-          end;
+          assume
+A87:      z in rng f \/ {x} \ {x};
+          then not z in {x} by XBOOLE_0:def 5;
+          hence thesis by A87,XBOOLE_0:def 3;
         end;
-        rng f = X\{x} & for l,m,k1,k2 being Nat st
-        (l < m & m < len f & k1=f.l & k2=f.m) holds k1 < k2
-        proof
-          thus rng f = X\{x}
-          proof
-A74:        not x in rng f
-            proof
-              assume x in rng f;
-              then consider y such that
-A75:          y in dom f & x=f.y by FUNCT_1:def 5;
-              reconsider y as Element of NAT by A75;
-A78:          y < len f & len f < len (f^<%x%>)
-              proof
-                thus y < len f by A75,NAT_1:45;
-                len f + 1 = len f + len <%x%> by AFINSQ_1:38
-                  .= len (f^<%x%>) by AFINSQ_1:20;
-                hence thesis by XREAL_1:31;
-              end;
-A79:          m = q.y by A46,A75,AFINSQ_1:def 4;
-              m = q.(len f) by A46,AFINSQ_1:40;
-              hence contradiction by A32,A46,A78,A79;
-            end;
-A80:        X = rng f \/ rng <%x%> by A32,A46,AFINSQ_1:29
-              .= rng f \/ {x} by AFINSQ_1:36;
-            for z holds z in rng f \/ {x} \ {x} iff z in rng f
-            proof
-              let z;
-              thus z in rng f \/ {x} \ {x} implies z in rng f
-              proof
-                assume z in rng f \/ {x} \ {x};
-                then (z in rng f \/ {x}) & not z in {x} by XBOOLE_0:def 5;
-                hence thesis by XBOOLE_0:def 3;
-              end;
-              assume
-A81:          z in rng f;
-              then
-A82:          not z in {x} by A74,TARSKI:def 1;
-              z in rng f \/ {x} by A81,XBOOLE_0:def 3;
-              hence thesis by A82,XBOOLE_0:def 5;
-            end;
-            hence thesis by A80,TARSKI:2;
-          end;
-          thus for l,m,k1,k2 being Nat st ( l < m & m < len f &
-          k1=f.l & k2=f.m) holds k1 < k2
-          proof
-            let l,m,k1,k2 be Nat;
-            assume
-A83:        l < m & m < len f & k1=f.l & k2=f.m;
-            then
-A84:        l < m & m < len q by A40,A41b,NAT_1:13;
-            l in n & m in n
-            proof
-              l < n by A41b,A83,XXREAL_0:2;
-              hence l in n by NAT_1:45;
-              thus thesis by A41b,A83,NAT_1:45;
-            end;
-            then k1 = q.l & k2 = q.m by A41n,A83;
-            hence thesis by A32,A84;
-          end;
-        end;
-        hence thesis by A29,A60,A61;
+        assume
+A88:    z in rng f;
+        then
+A89:    z in rng f \/ {x} by XBOOLE_0:def 3;
+        not z in {x} by A80,A88,TARSKI:def 1;
+        hence thesis by A89,XBOOLE_0:def 5;
       end;
-      hence thesis by A46;
+      X = rng p \/ rng <%x%> by A39,AFINSQ_1:29
+        .= rng p \/ {x} by AFINSQ_1:36;
+      then
+A90:  rng p = X\{x} by A59,TARSKI:2;
+A91:  for l,m,k1,k2 being Nat st l < m & m < len p & k1=p.l & k2=p.m
+      holds k1 < k2
+      proof
+        let l,m,k1,k2 be Nat;
+        assume that
+A92:    l < m and
+A93:    m < len p and
+A94:    k1=p.l and
+A95:    k2=p.m;
+        l < len p by A92,A93,XXREAL_0:2;
+        then l in dom p by NAT_1:45;
+        then
+A96:    k1 = (p^<%x%>).l by A94,AFINSQ_1:def 4;
+        len p < len p + 1 by XREAL_1:31;
+        then m < len p + 1 by A93,XXREAL_0:2;
+        then m < len p + len <%x%> by AFINSQ_1:38;
+        then
+A97:    m < len (p^<%x%>) by AFINSQ_1:20;
+        m in dom p by A93,NAT_1:45;
+        then k2 = (p^<%x%>).m by A95,AFINSQ_1:def 4;
+        hence thesis by A40,A92,A96,A97;
+      end;
+A98:  for m being Nat st m in n holds q'.m = q.m
+      proof
+        let m be Nat;
+        reconsider m2=m as Element of NAT by ORDINAL1:def 13;
+        assume
+        m in n;
+        then q'.m2=q.m2 by A64;
+        hence thesis;
+      end;
+A99:  for l,m,k1,k2 being Nat st l < m & m < len f & k1=f.l & k2=f.m
+      holds k1 < k2
+      proof
+        let l,m,k1,k2 be Nat;
+        assume that
+A100:   l < m and
+A101:   m < len f and
+A102:   k1=f.l and
+A103:   k2=f.m;
+        m in n by A63,A101,NAT_1:45;
+        then
+A104:   k2 = q.m by A98,A103;
+        l < n by A63,A100,A101,XXREAL_0:2;
+        then l in n by NAT_1:45;
+        then
+A105:   k1 = q.l by A98,A102;
+        m < len q by A43,A63,A101,NAT_1:13;
+        hence thesis by A42,A100,A105,A104;
+      end;
+      X = rng f \/ rng <%x%> by A41,A79,AFINSQ_1:29
+        .= rng f \/ {x} by AFINSQ_1:36;
+      then
+A106: rng f = X\{x} by A86,TARSKI:2;
+      ex m being Nat st X\{x} c= m by A37,XBOOLE_1:1;
+      then q' = p by A36,A91,A67,A90,A99,A106;
+      hence thesis by A63,A64,A78,A68,AFINSQ_1:def 4;
     end;
-    for p being XFinSequence holds S[p] from AFINSQ_1:sch 3(A27,A28);
-    hence thesis by A6,A25,A26;
+A107: S[{}];
+A108: for p being XFinSequence holds S[p] from AFINSQ_1:sch 3(A107,A35);
+    ex k being Nat st X c= k by Th2;
+    hence thesis by A31,A32,A33,A34,A108;
   end;
 end;
 
 registration
- let A be finite natural-membered set;
- cluster Sgm0 A -> one-to-one;
- coherence
-proof
-  consider k being Nat such that
-  A1: A c= k by AE221f;
-  for x,y being set st x in dom(Sgm0 A) & y in dom(Sgm0 A) &
-  (Sgm0(A)).x = (Sgm0(A)).y & x<>y holds contradiction
- proof let x,y be set;
-  assume that
-A2: x in dom(Sgm0 A) & y in dom(Sgm0 A) and
-A3: (Sgm0(A)).x = (Sgm0(A)).y and
-A4: x <> y;
-  reconsider i = x, j = y as Element of NAT by A2;
-  reconsider k0=k as Element of NAT by ORDINAL1:def 13;
-  (Sgm0(A)).x in rng(Sgm0 A) & (Sgm0(A)).y in rng(Sgm0 A) & rng(Sgm0 A) = A
-  by A2,AC113,FUNCT_1:def 5;
-  then reconsider m = (Sgm0(A)).x, n = (Sgm0(A)).y as Element of NAT
-                              by A1,AB470;
-  per cases by A4,XXREAL_0:1;
-    suppose
-A6:   i < j;
-      j < len(Sgm0 A) by A2,NAT_1:45;
-     hence contradiction by A6,AC113,A3;
+  let A be finite natural-membered set;
+  cluster Sgm0 A -> one-to-one;
+  coherence
+  proof
+    consider k being Nat such that
+A1: A c= k by Th2;
+    for x,y being set st x in dom(Sgm0 A) & y in dom(Sgm0 A) & (Sgm0(A)).x
+    = (Sgm0(A)).y & x<>y holds contradiction
+    proof
+A2:   rng(Sgm0 A) = A by Def5;
+      reconsider k0=k as Element of NAT by ORDINAL1:def 13;
+      let x,y be set;
+      assume that
+A3:   x in dom(Sgm0 A) and
+A4:   y in dom(Sgm0 A) and
+A5:   (Sgm0(A)).x = (Sgm0(A)).y and
+A6:   x <> y;
+A7:   (Sgm0(A)).y in rng(Sgm0 A) by A4,FUNCT_1:def 5;
+      (Sgm0(A)).x in rng(Sgm0 A) by A3,FUNCT_1:def 5;
+      then reconsider
+      m = (Sgm0(A)).x, n = (Sgm0(A)).y as Element of NAT by A1,
+      A7,A2,Th1;
+      reconsider i = x, j = y as Element of NAT by A3,A4;
+      per cases by A6,XXREAL_0:1;
+      suppose
+A8:     i < j;
+        j < len(Sgm0 A) by A4,NAT_1:45;
+        hence contradiction by A5,A8,Def5;
+      end;
+      suppose
+A9:     j < i;
+        i < len(Sgm0 A) by A3,NAT_1:45;
+        hence contradiction by A5,A9,Def5;
+      end;
     end;
-    suppose
-A7:   j < i;
-      i < len(Sgm0 A) by A2,NAT_1:45;
-      hence contradiction by A7,AC113,A3;
-    end;
+    hence thesis by FUNCT_1:def 8;
   end;
-  hence thesis by FUNCT_1:def 8;
-end;
 end;
 
-theorem Th44: ::from FINSEQ_3:44
-  for A being finite natural-membered set holds len(Sgm0 A) = card A
+theorem Th31: ::from FINSEQ_3:44
+  for A being finite natural-membered set holds len(Sgm0 A) = card
+  A
 proof
   let A be finite natural-membered set;
-  dom(Sgm0 A) = (len(Sgm0 A)) & rng(Sgm0 A) = A & Sgm0 A is one-to-one
-  by AC113;
-  then (len(Sgm0 A)),A are_equipotent & (len(Sgm0 A)) is finite
-  by WELLORD2:def 4;
-  then card((len(Sgm0 A))) = len(Sgm0 A) & card A = card((len(Sgm0 A)))
-    by CARD_1:21;
+  rng(Sgm0 A) = A by Def5;
+  then (len(Sgm0 A)),A are_equipotent by WELLORD2:def 4;
+  then card A = card((len(Sgm0 A))) by CARD_1:21;
   hence thesis;
 end;
 
-theorem AE200: for X,Y being finite natural-membered set st
- X c= Y & X <> {} holds
-  (Sgm0 Y).0 <= (Sgm0 X).0
-proof let X,Y be finite natural-membered set;
- assume A1: X c= Y & X <> {};
-  A3: rng (Sgm0 X)=X by AC113;
-  A4: rng (Sgm0 Y)=Y by AC113;
-  reconsider X0=X,Y0=Y as finite set;
-  0 <> card X0 by A1;then
-  0 < len (Sgm0 X) by Th44;then
-  0 in dom (Sgm0 X) by NAT_1:45;then
-  (Sgm0 X).0 in X by A3,FUNCT_1:def 5;then
-  consider x being set such that
-  A20: x in dom (Sgm0 Y) & (Sgm0 Y).x=(Sgm0 X).0 by A1,A4,FUNCT_1:def 5;
-  reconsider nx=x as Nat by A20;
-  A21: nx <len (Sgm0 Y) by A20,NAT_1:45;
-  now per cases;
-  case 0<>nx;
-   hence thesis by A20,AC113,A21;
-  end;
-  case 0=nx;
-   hence thesis by A20;
-  end;
-  end;
- hence thesis;
-end;
-
-theorem AE205: for n being Nat holds (Sgm0 {n}).0=n
-proof let n be Nat;
-  A3: rng (Sgm0 {n})={n} by AC113;
-  A4: len (Sgm0 {n})=card {n} by Th44;
-  0 in dom (Sgm0 {n}) by A4,NAT_1:45;then
-  (Sgm0 {n}).0 in rng (Sgm0 {n}) by FUNCT_1:def 5;
- hence thesis by A3,TARSKI:def 1;
-end;
-
-definition let B1,B2 be set;
-  pred B1 <N< B2 means
-:AE100: for n,m being Nat st n in B1 & m in B2 holds n<m;
-end;
-
-definition let B1,B2 be set;
-  pred B1 <N= B2 means
-:AE102: for n,m being Nat st n in B1 & m in B2 holds n<=m;
-end;
-
-theorem AG110: for B1,B2 being set st B1 <N< B2 holds B1/\B2/\NAT={}
-proof let B1,B2 be set;
-  assume A1: B1 <N< B2;
-   now assume B1: B1/\ B2/\NAT <> {};
-     consider x being Element of B1/\B2/\NAT;
-     B2: x in B1/\B2 & x in NAT by B1,XBOOLE_0:def 4;
-     reconsider nx=x as Nat;
-     nx in B1 & nx in B2 by B2,XBOOLE_0:def 4;
-    hence contradiction by AE100,A1;
-   end;
-  hence thesis;
-end;
-
-theorem AE101: for B1,B2 being finite natural-membered set st
- B1 <N< B2 holds
-  B1 misses B2
-proof let B1,B2 be finite natural-membered set;
- assume A1: B1 <N< B2;
-  now assume B1 meets B2;then
-    B2: B1 /\ B2 <> {} by XBOOLE_0:def 7;
-    consider x being Element of B1 /\ B2;
-    x in B1 & x in B2 by B2,XBOOLE_0:def 4;
-    hence contradiction by A1,AE100;
-  end;
- hence thesis;
-end;
-
-theorem AE400: for A,B1,B2 being set st B1 <N< B2 holds A/\ B1 <N< A/\B2
-proof let A,B1,B2 be set;
-  assume A0: B1 <N< B2;
-  for n,m being Nat st n in A/\B1 & m in A/\B2 holds n<m
-  proof let n,m be Nat;
-   assume n in A/\B1 & m in A/\B2;then
-    n in B1 & m in B2 by XBOOLE_0:def 4;
-   hence thesis by A0,AE100;
-  end;
- hence thesis by AE100;
-end;
-
-theorem for X,Y being finite natural-membered set st
- Y <> {} & (ex x being set st x in X & {x} <N= Y) holds
-  (Sgm0 X).0 <= (Sgm0 Y).0
-proof let X,Y be finite natural-membered set;
- assume A1: Y <> {} &
- (ex x being set st x in X & {x} <N= Y);then
-  consider x being set such that
-  A2: x in X & {x} <N= Y;
-  reconsider x0=x as Element of NAT by A2,ORDINAL1:def 13;
-  {x0} c= X
-   proof let y be set;assume y in {x0};
-    hence thesis by A2,TARSKI:def 1;
-   end;then
-  A12: (Sgm0 X).0 <= (Sgm0 {x0}).0 by AE200;
-  A4: rng (Sgm0 Y)=Y by AC113;
-  reconsider X0=X,Y0=Y as finite set;
-  0 <> card Y by A1;then
-  0 < len (Sgm0 Y) by Th44;then
-  0 in dom (Sgm0 Y) by NAT_1:45;then
-  A10: (Sgm0 Y).0 in Y by A4,FUNCT_1:def 5;
-  set nx=x0;
-  nx in {x0} by TARSKI:def 1;then
-  A14: nx<=(Sgm0 Y).0 by A10,A2,AE102;
-  (Sgm0 {x0}).0=nx by AE205;
- hence thesis by A12,A14,XXREAL_0:2;
-end;
-
-theorem AE221e: for X0,Y0 being finite natural-membered set, i being Nat st
-  X0 <N< Y0 & i < (card X0) holds
-  rng((Sgm0 (X0\/Y0))|(card X0))=X0 &
- ((Sgm0 (X0\/Y0))|(card X0)).i = (Sgm0 (X0 \/ Y0)).i
-proof let X0,Y0 be finite natural-membered set,i be Nat;
-  assume A1: X0 <N< Y0 & i < card X0;
-  A20: X0 \/ Y0 <> {} by A1,CARD_1:47,XBOOLE_1:15;
-   set f0=(Sgm0 (X0\/Y0));
-   A30: rng f0=X0 \/Y0 by AC113;
-   set f=(Sgm0 (X0\/Y0))|(card X0);
-   set Z={ v where v is Element of X0 \/Y0: ex k2 being Nat st v=f.k2 &
-                       k2 in card X0};
-   A2: dom f=len f;
-   A33: len (Sgm0 (X0\/Y0))=card (X0\/Y0) by Th44;
-   A22n: X0 c= X0 \/ Y0 by XBOOLE_1:7;
-   A22: card X0 <= len (Sgm0 (X0\/Y0)) by A33,NAT_1:44,XBOOLE_1:7;
-   A4: len f=card X0 by TH80,A33,A22n,NAT_1:44;
-   A4d: len f0=card (X0 \/Y0) by Th44;
-   B4: rng f c= rng (Sgm0 (X0 \/ Y0)) by RELAT_1:99;
-   A3: rng f c= Z
-    proof let y being set; assume
-      B1: y in rng f;then
-      consider x being set such that
-      B2: x in dom f & y=f.x by FUNCT_1:def 5;
-      reconsider nx=x as Nat by B2;
-      B3: nx in card X0 by B2,TH80,A33,A22n,A2,NAT_1:44;
-      reconsider y0=y as Element of (X0 \/Y0) by B1,B4,AC113;
-      ex k2 being Nat st y0=f.k2 & k2 in card X0 by B3,B2;
-     hence thesis;
-    end;
-   A40n: Z c= rng f
-    proof let y being set;assume y in Z;then
-      consider v0 being Element of X0 \/Y0 such that
-      B2: y=v0 & ex k2 being Nat st v0=f.k2 & k2 in card X0;
-      thus thesis by B2,A4,FUNCT_1:def 5;
-    end;then
-   A40: rng f=Z by A3,XBOOLE_0:def 10;
-   A50n: now assume B1: not Z c= X0 & not X0 c= Z;then
-     consider v1 being set such that
-     B2: v1 in Z & not v1 in X0 by TARSKI:def 3;
-     consider v2 being set such that
-     B3: v2 in X0 & not v2 in Z by B1,TARSKI:def 3;
-     consider v10 being Element of X0 \/Y0 such that
-     B4: v1=v10 & ex k2 being Nat st v10=f.k2 & k2 in card X0 by B2;
-     B98: v10 in Y0 by A20,B2,B4,XBOOLE_0:def 3;
-     consider k20 being Nat such that
-     B4b: v10=f.k20 & k20 in card X0 by B4;
-     reconsider nv10 =v10 as Nat;
-     X0 c= X0\/Y0 by XBOOLE_1:7;then
-     consider x2 being set such that
-     B5: x2 in dom f0 & v2=f0.x2 by B3,A30,FUNCT_1:def 5;
-     reconsider x20=x2 as Nat by B5;
-     reconsider nv2 =v2 as Nat by B5;
-     B61n: now assume C0: x20 < card X0;
-      card X0 <= card (X0 \/Y0) by NAT_1:44,XBOOLE_1:7;then
-      C4: card X0 <= len f0 & x20 in card X0 by Th44,C0,NAT_1:45;then
-      f.x20=f0.x20 by Th19;
-    hence contradiction by B3,B5,C4,A22n;
-    end;
-    k20<len f by B4b,A4,NAT_1:45;then
-    B62: k20<x20 by B61n,A4,XXREAL_0:2;
-    B66: card X0 <= len f0 by A4d,NAT_1:44,XBOOLE_1:7;
-    B44: f.k20=f0.k20 by Th19,B66,B4b;
-    x20<len f0 by B5,NAT_1:45;then
-    nv10<nv2 by B4b,B5,AC113,B62,B44;
-    hence contradiction by B3,AE100,A1,B98;
-   end;
-   f is one-to-one by FUNCT_1:84;then
-   A51: dom f,(f.:(dom f)) are_equipotent by CARD_1:60;
-   f.:(dom f)=rng f by RELAT_1:146;then
-   card Z=card (len f) by A40,A51,CARD_1:21;then
-   A53: card Z= card X0 by TH80,A33,A22n,NAT_1:44;then
-   X0,Z are_equipotent by CARD_1:21;then
-   reconsider Z0=Z as finite set by CARD_1:68;
-   A77n: now per cases by A50n;
-   case Z0 c= X0;
-    hence Z0=X0 by A53,CARD_FIN:1;
-   end;
-   case X0 c=Z0;
-    hence Z0=X0 by A53,CARD_FIN:1;
-   end;
-   end;
-   card X0 <= len f0 & i in card X0 by A22,A1,NAT_1:45;
-  hence thesis by A3,A40n,A77n,Th19,XBOOLE_0:def 10;
-end;
-
-theorem for X,Y being finite natural-membered set,i being Nat st
- X <N< Y & i in card (X)
-holds (Sgm0 (X\/Y)).i in X
-proof let X,Y be finite natural-membered set,i be Nat;
-  assume A1: X <N< Y & i in card (X);
-  A20: X \/ Y <> {} by A1,CARD_1:47,XBOOLE_1:15;
-   set f0=(Sgm0 (X\/Y));
-   A30: rng f0=X \/Y by AC113;
-   set f=(Sgm0 (X\/Y))|(card X);
-   set Z={ v where v is Element of X \/Y: ex k2 being Nat st v=f.k2 &
-                       k2 in card X};
-   A33: len (Sgm0 (X\/Y))=card (X\/Y) by Th44;
-   A22: card X <= len (Sgm0 (X\/Y)) by A33,NAT_1:44,XBOOLE_1:7;then
-   A4: len f=card X by TH80;
-   B4: rng f c= rng (Sgm0 (X\/Y)) by RELAT_1:99;
-   A3: rng f c= Z
-    proof let y being set;assume
-      B1: y in rng f;then
-      consider x being set such that
-      B2: x in dom f & y=f.x by FUNCT_1:def 5;
-      reconsider nx=x as Nat by B2;
-      reconsider y0=y as Element of X\/Y by B1,B4,AC113;
-      ex k2 being Nat st y0=f.k2 & k2 in card X by A4,B2;
-     hence thesis;
-    end;
-   Z c= rng f
-    proof let y being set;assume y in Z;then
-      consider v0 being Element of X \/Y such that
-      B2: y=v0 & ex k2 being Nat st v0=f.k2 & k2 in card X;
-     thus thesis by B2,A4,FUNCT_1:def 5;
-    end;then
-   A40: rng f=Z by A3,XBOOLE_0:def 10;
-   A50n: now assume B1: not Z c= X & not X c= Z;then
-     consider v1 being set such that
-     B2: v1 in Z & not v1 in X by TARSKI:def 3;
-     consider v2 being set such that
-     B3: v2 in X & not v2 in Z by B1,TARSKI:def 3;
-     consider v10 being Element of X \/Y such that
-     B4: v1=v10 & ex k2 being Nat st v10=f.k2 & k2 in card X by B2;
-     B98: v10 in Y by A20,B2,B4,XBOOLE_0:def 3;
-     consider k20 being Nat such that
-     B4b: v10=f.k20 & k20 in card X by B4;
-     reconsider nv10 =v10 as Nat;
-     X c= X\/Y by XBOOLE_1:7;then
-     consider x2 being set such that
-     B5: x2 in dom f0 & v2=f0.x2 by B3,A30,FUNCT_1:def 5;
-     reconsider x20=x2 as Nat by B5;
-     reconsider nv2 =v2 as Nat by B5;
-    now assume C0: x20 < card X;
-      card X <= card (X \/Y) by NAT_1:44,XBOOLE_1:7;then
-      C4: card X <= len f0 & x20 in card X by C0,Th44,NAT_1:45;then
-      f.x20=f0.x20 by Th19;
-    hence contradiction by B3,B5,A40,C4,A4,FUNCT_1:def 5;
-    end;then
-    B61: len f <=x20 by TH80,A22;
-    k20<len f by B4b,A4,NAT_1:45;then
-    B62: k20<x20 by B61,XXREAL_0:2;
-    B44: f.k20=f0.k20 by Th19,A22,B4b;
-    x20<len f0 by B5,NAT_1:45;then
-    nv10<nv2 by B4b,B5,AC113,B62,B44;
-   hence contradiction by AE100,A1,B3,B98;
-   end;
-   f is one-to-one by FUNCT_1:84;then
-   A51: dom f,(f.:(dom f)) are_equipotent by CARD_1:60;
-   f.:(dom f)=rng f by RELAT_1:146;then
-ak: card Z=card (len f)by A40,A51,CARD_1:21;then
-   A53: card Z=card X by TH80,A22;then
-   X,Z are_equipotent by CARD_1:21;then
-   reconsider Z0=Z as finite set by CARD_1:68;
-   A77n: now per cases by A50n;
-   case Z0 c= X;
-    hence Z0=X by ak,TH80,A22,CARD_FIN:1;
-   end;
-   case X c=Z0;
-    hence Z0=X by A53,CARD_FIN:1;
-   end;
-   end;
-   f.i=f0.i by Th19,A22,A1;
- hence thesis by A77n,A40,A1,A4,FUNCT_1:def 5;
-end;
-
-theorem AE221: for X,Y being finite natural-membered set, i being Nat st
-  X <N< Y & i< len (Sgm0 X) holds
-  (Sgm0 X).i = (Sgm0 (X \/ Y)).i
-proof let X,Y be finite natural-membered set, i be Nat;
- assume A1: X <N< Y & i< len (Sgm0 X);
-  card X c= card (X \/ Y) by CARD_1:27,XBOOLE_1:7;then
-  A102: card X <= card (X \/ Y) by NAT_1:40;
-  A56: len (Sgm0 X)=card X by Th44;
-  reconsider h=(Sgm0 (X \/ Y))|(len (Sgm0 X)) as XFinSequence of NAT;
-  A230bn: len (Sgm0 (X \/ Y))=card (X \/Y) by Th44;then
-  A230b: len h=len (Sgm0 X) by TH80,A102,A56;
-  A230: len h=card X by TH80,A102,A56,A230bn;
-  card X <= len (Sgm0 (X \/ Y)) by A102,Th44;then
-  A101: len (Sgm0 X) <= len (Sgm0 (X \/ Y)) by Th44;
-  A100: for l,m,k1,k2 being Nat st (l < m & m < len h &
-  k1=h.l & k2=h.m) holds k1 < k2
-  proof let l,m,k1,k2 be Nat;
-   assume B1: l < m & m < len h &
-    k1=h.l & k2=h.m;
-    l < card X by B1,A230,XXREAL_0:2;then
-    B3: h.l= (Sgm0 (X \/ Y)).l by A1,AE221e,A56;
-    B4: h.m=(Sgm0 (X \/ Y)).m by A1,AE221e,B1,A56,A230b;
-    m<len  (Sgm0 (X \/ Y)) by B1,A230b,A101,XXREAL_0:2;
-   hence thesis by B3,B4,AC113,B1;
-  end;
-  A103: rng h=X by A1,AE221e,A56;
-  h.i=(Sgm0 (X \/ Y)).i by A1,AE221e,A56;
- hence thesis by AC113,A100,A103;
-end;
-
-theorem AE222e: for X0,Y0 being finite natural-membered set, i being Nat st
-  X0 <N< Y0 & i < (card Y0) holds
-  rng((Sgm0 (X0\/Y0))/^(card X0))=Y0 &
- ((Sgm0 (X0\/Y0))/^(card X0)).i = (Sgm0 (X0 \/ Y0)).(i+(card X0))
-proof let X0,Y0 be finite natural-membered set,i be Nat;
-  assume A1: X0 <N< Y0 & i < card Y0;
-  consider n being Nat such that
-  A1d: Y0 c= n by AE221f;
-A1e: n c= NAT by MEMBERED:6;
-  A20: X0 \/ Y0 <> {} by A1,CARD_1:47,XBOOLE_1:15;
-   set f0=(Sgm0 (X0\/Y0));
-   A30: rng f0=X0 \/Y0 by AC113;
-   set f=(Sgm0 (X0\/Y0))/^(card X0);
-   set Z={ v where v is Element of X0 \/Y0: ex k2 being Nat st
-       v=f.k2 & k2 in card Y0};
-   A33: len (Sgm0 (X0\/Y0))=card (X0\/Y0) by Th44;
-   A22: card X0 <= len (Sgm0 (X0\/Y0)) by A33,NAT_1:44,XBOOLE_1:7;
-   A74: len f=len f0 -' (card X0) by Def2
-            .=len f0 - (card X0) by A22,XREAL_1:235;
-   X0/\Y0=(X0/\(Y0/\NAT)) by A1e,A1d,XBOOLE_1:1,28
-        .= (X0/\Y0/\NAT) by XBOOLE_1:16
-        .={} by A1,AG110;then
-   A72: X0 misses Y0 by XBOOLE_0:def 7;
-   A73: (X0\/Y0)\X0=(X0\X0)\/(Y0\X0) by XBOOLE_1:42
-             .={} \/ (Y0\X0) by XBOOLE_1:37
-             .=Y0 by A72,XBOOLE_1:83;
-   A4: len f=card Y0 by A74,A33,A73,CARD_2:63,XBOOLE_1:7;
-   len f0=card (X0 \/Y0) by Th44;then
-   A4e: len f0=(card X0)+(card Y0) by A72,CARD_2:53;
-   B4: rng f c= rng (Sgm0 (X0\/Y0)) by AG170;
-   A3: rng f c= Z
-    proof let y being set;assume
-      B1: y in rng f;then
-      consider x being set such that
-      B2: x in dom f & y=f.x by FUNCT_1:def 5;
-      reconsider nx=x as Nat by B2;
-      reconsider y0=y as Element of X0\/Y0 by B1,B4,AC113;
-      ex k2 being Nat st y0=f.(k2) & k2 in card Y0 by B2,A4;
-     hence thesis;
-    end;
-   A40n: Z c= rng f
-    proof let y being set;assume y in Z;then
-      consider v0 being Element of X0 \/Y0 such that
-      B2: y=v0 & ex k2 being Nat st v0=f.k2 & k2 in card Y0;
-     thus thesis by B2,A4,FUNCT_1:def 5;
-    end;then
-   A40: rng f=Z by A3,XBOOLE_0:def 10;
-   A50n: now assume B1: not Z c= Y0 & not Y0 c= Z;then
-     consider v1 being set such that
-     B2: v1 in Z & not v1 in Y0 by TARSKI:def 3;
-     consider v2 being set such that
-     B3: v2 in Y0 & not v2 in Z by B1,TARSKI:def 3;
-     consider v10 being Element of X0 \/Y0 such that
-     B4: v1=v10 & ex k2 being Nat st v10=f.k2 & k2 in card Y0 by B2;
-     B98: v10 in X0 by A20,B2,B4,XBOOLE_0:def 3;
-     consider k20 being Nat such that
-     B4b: v10=f.k20 & k20 in card Y0 by B4;
-     reconsider nv10 =v10 as Nat;
-     Y0 c= X0\/Y0 by XBOOLE_1:7;then
-     consider x2 being set such that
-     B5: x2 in dom f0 & v2=f0.x2 by B3,A30,FUNCT_1:def 5;
-     reconsider x20=x2 as Nat by B5;
-     set nx20=x20 -' (card X0);
-     B57d: v2 in X0 \/Y0 by A30,B5,FUNCT_1:def 5;
-     reconsider ev2=v2 as Element of X0\/Y0 by A30,B5,FUNCT_1:def 5;
-     reconsider nv2 =v2 as Nat by B5;
-     B36n: now assume C0bn: x20 >= card X0;then
-      C0b: x20-'card X0=x20-card X0 by XREAL_1:235;
-      x20<card X0 +card Y0 by A4e,B5,NAT_1:45;then
-      x20-card X0 < card X0 +card Y0 -card X0 by XREAL_1:11;then
-      C8: nx20<card Y0 by C0bn,XREAL_1:235;then
-      C5e: nx20+(card X0)<len f0 by A4e,XREAL_1:8;
-      C5: f.nx20=f0.x20 by C0b,C5e,Th19b;
-      nx20 in card Y0 by C8,NAT_1:45;
-    hence contradiction by B3,C5,B5,B57d;
-    end;
-    card X0 <=(card X0)+k20 by NAT_1:12;then
-    B62: k20+card X0 >x20 by B36n,XXREAL_0:2;
-    k20<card Y0 by B4b,NAT_1:45;then
-    B53: k20+card X0<len f0 by A4e,XREAL_1:8;then
-    f.k20=f0.(k20+card X0) by Th19b;then
-    nv10>nv2 by B5,B53,AC113,B62,B4b;
-   hence contradiction by AE100,A1,B3,B98;
-   end;
-   A51: dom f,(f.:(dom f)) are_equipotent by CARD_1:60;
-   f.:(dom f)=rng f by RELAT_1:146;then
-   card Z=card (len f) by A40,A51,CARD_1:21;then
-   A53: card Z=card Y0 by A74,A33,A73,CARD_2:63,XBOOLE_1:7;then
-   Y0,Z are_equipotent by CARD_1:21;then
-   reconsider Z0=Z as finite set by CARD_1:68;
-   A77n: now per cases by A50n;
-   case Z0 c= Y0;
-    hence Z0=Y0 by A53,CARD_FIN:1;
-   end;
-   case Y0 c=Z0;
-    hence Z0=Y0 by A53,CARD_FIN:1;
-   end;
-   end;
-   i+card X0 < len f0 by A1,A4,A74,XREAL_1:22;
- hence thesis by A3,A40n,A77n,Th19b,XBOOLE_0:def 10;
-end;
-
-theorem AE222f: for X,Y being finite natural-membered set,i being Nat st
- X <N< Y & i< len (Sgm0 Y) holds
-  (Sgm0 Y).i = (Sgm0 (X \/ Y)).(i+len (Sgm0 X))
-proof let X,Y be finite natural-membered set,i be Nat;
- assume A1: X <N< Y & i< len (Sgm0 Y);
-  consider m being Nat such that
-  A1d: Y c= m by AE221f;
-ak:  m c= NAT by MEMBERED:6;
-  A56b: len (Sgm0 X)=card X by Th44;
-  A56: len (Sgm0 Y)=card Y by Th44;
-  X/\Y=(X/\(Y/\NAT)) by ak,A1d,XBOOLE_1:1,28
-       .= (X/\Y/\NAT) by XBOOLE_1:16
-       .={} by A1,AG110;then
-  X misses Y by XBOOLE_0:def 7;then
-  A92: card Y +card X=card (X\/Y) by CARD_2:53;
-  reconsider h=(Sgm0 (X \/ Y))/^(len (Sgm0 X)) as XFinSequence of NAT;
-  A56e: len (Sgm0 (X \/ Y))=card (X \/Y) by Th44;
-  len h=len ((Sgm0 (X \/ Y))) -' len (Sgm0 X) by Def2
-              .= card (X) + card Y -' card X by A56e,A92,Th44
-              .= card Y by NAT_D:34
-              .= len (Sgm0 Y) by Th44;then
-  A230: len h=card Y by Th44;
-  A100: for l,m,k1,k2 being Nat st (l < m & m < len h &
-  k1=h.l & k2=h.m) holds k1 < k2
-  proof let l,m,k1,k2 be Nat;
-   assume B1: l < m & m < len h &
-    k1=h.l & k2=h.m;
-    l < card Y by B1,A230,XXREAL_0:2;then
-    B3: h.l= (Sgm0 (X \/ Y)).(l+card X) by A1,AE222e,A56b;
-    B4: h.m=(Sgm0 (X \/ Y)).(m+card X) by A1,AE222e,B1,A56b,A230;
-    B9: m+card X <len  (Sgm0 (X \/ Y)) by A230,A56e,A92,B1,XREAL_1:8;
-    set l3=l+card X;
-    set m3=m+card X;
-    l3<m3 by B1,XREAL_1:8;
-   hence thesis by B3,B4,AC113,B1,B9;
-  end;
-  A103: rng h=Y by A1,AE222e,A56,A56b;
-  h.i=(Sgm0 (X \/ Y)).(i+card X) by A1,AE222e,A56,A56b;
- hence thesis by A56b,AC113,A100,A103;
-end;
-
-theorem AE222: for X,Y being finite natural-membered set st
- Y <> {} & X <N< Y holds
-  (Sgm0 Y).0 = (Sgm0 (X \/ Y)).(len (Sgm0 X))
-proof let X,Y be finite natural-membered set;
- assume A1: Y <> {} & X <N< Y;
-  A56v: card Y <> 0 by A1;
-  0<len (Sgm0 Y) by A56v,Th44;then
-  (Sgm0 Y).0 = (Sgm0 (X \/ Y)).((0 qua Element of NAT)+len (Sgm0 X))
-                                    by A1,AE222f;
- hence thesis;
-end;
-
-theorem Th46:  ::from FINSEQ_3:46
-  for l,m,n,k being Nat,X being finite natural-membered set st
-  k < l & m < len(Sgm0 X) &
-  (Sgm0(X)).m = k & (Sgm0(X)).n = l holds m < n
-proof let l,m,n,k be Nat,X being finite natural-membered set;
+theorem Th32:
+  for X,Y being finite natural-membered set st X c= Y & X <> {}
+  holds (Sgm0 Y).0 <= (Sgm0 X).0
+proof
+  let X,Y be finite natural-membered set;
   assume that
-A2: k < l and
-A4: m < len(Sgm0 X) and
-A5: (Sgm0(X)).m = k & (Sgm0(X)).n = l and
-A6: not m < n;
-  n < m by A2,A5,A6,XXREAL_0:1;
-  hence thesis by A2,A4,A5,AC113;
+A1: X c= Y and
+A2: X <> {};
+  reconsider X0=X,Y0=Y as finite set;
+  0 <> card X0 by A2;
+  then 0 < len (Sgm0 X) by Th31;
+  then
+A3: 0 in dom (Sgm0 X) by NAT_1:45;
+A4: rng (Sgm0 Y)=Y by Def5;
+  rng (Sgm0 X)=X by Def5;
+  then (Sgm0 X).0 in X by A3,FUNCT_1:def 5;
+  then consider x being set such that
+A5: x in dom (Sgm0 Y) and
+A6: (Sgm0 Y).x=(Sgm0 X).0 by A1,A4,FUNCT_1:def 5;
+  reconsider nx=x as Nat by A5;
+A7: nx <len (Sgm0 Y) by A5,NAT_1:45;
+  now
+    per cases;
+    case
+      0<>nx;
+      hence thesis by A6,A7,Def5;
+    end;
+    case
+      0=nx;
+      hence thesis by A6;
+    end;
+  end;
+  hence thesis;
 end;
 
-theorem AE220: for X,Y being finite natural-membered set st
- X <> {} & X <N< Y holds
-  (Sgm0 X).0 = (Sgm0 (X \/ Y)).0
-proof let X,Y be finite natural-membered set;
- assume A1: X <> {} & X <N< Y;
-  A56v: card X <> 0 by A1;
-  0<len (Sgm0 X) by A56v,Th44;
- hence thesis by AE221,A1;
+theorem Th33:
+  for n being Nat holds (Sgm0 {n}).0=n
+proof
+  let n be Nat;
+  len (Sgm0 {n})=card {n} by Th31;
+  then 0 in dom (Sgm0 {n}) by NAT_1:45;
+  then
+A1: (Sgm0 {n}).0 in rng (Sgm0 {n}) by FUNCT_1:def 5;
+  rng (Sgm0 {n})={n} by Def5;
+  hence thesis by A1,TARSKI:def 1;
 end;
 
-theorem       ::from FINSEQ_3
-  for X,Y being finite natural-membered set holds
-  (X <N< Y) iff Sgm0(X \/ Y) = Sgm0(X) ^ Sgm0(Y)
-proof let X,Y be finite natural-membered set;
+definition
+  let B1,B2 be set;
+  pred B1 <N< B2 means
+  :Def6:
+  for n,m being Nat st n in B1 & m in B2 holds n<m;
+end;
+
+definition
+  let B1,B2 be set;
+  pred B1 <N= B2 means
+  :Def7:
+  for n,m being Nat st n in B1 & m in B2 holds n<=
+  m;
+end;
+
+theorem Th34:
+  for B1,B2 being set st B1 <N< B2 holds B1/\B2/\NAT={}
+proof
+  let B1,B2 be set;
+  assume
+A1: B1 <N< B2;
+  now
+    consider x being Element of B1/\B2/\NAT;
+    reconsider nx=x as Nat;
+    assume
+    B1/\ B2/\NAT <> {};
+    then
+A2: x in B1/\B2 by XBOOLE_0:def 4;
+    then
+A3: nx in B2 by XBOOLE_0:def 4;
+    nx in B1 by A2,XBOOLE_0:def 4;
+    hence contradiction by A1,A3,Def6;
+  end;
+  hence thesis;
+end;
+
+theorem Th35:
+  for B1,B2 being finite natural-membered set st B1 <N< B2 holds
+  B1 misses B2
+proof
+  let B1,B2 be finite natural-membered set;
+  assume
+A1: B1 <N< B2;
+  now
+    consider x being Element of B1 /\ B2;
+    assume
+    B1 meets B2;
+    then
+A2: B1 /\ B2 <> {} by XBOOLE_0:def 7;
+    then
+A3: x in B2 by XBOOLE_0:def 4;
+    x in B1 by A2,XBOOLE_0:def 4;
+    hence contradiction by A1,A3,Def6;
+  end;
+  hence thesis;
+end;
+
+theorem Th36:
+  for A,B1,B2 being set st B1 <N< B2 holds A/\ B1 <N< A/\B2
+proof
+  let A,B1,B2 be set;
+  assume
+A1: B1 <N< B2;
+  for n,m being Nat st n in A/\B1 & m in A/\B2 holds n<m
+  proof
+    let n,m be Nat;
+    assume that
+A2: n in A/\B1 and
+A3: m in A/\B2;
+A4: m in B2 by A3,XBOOLE_0:def 4;
+    n in B1 by A2,XBOOLE_0:def 4;
+    hence thesis by A1,A4,Def6;
+  end;
+  hence thesis by Def6;
+end;
+
+theorem
+  for X,Y being finite natural-membered set st Y <> {} & (ex x being set
+  st x in X & {x} <N= Y) holds (Sgm0 X).0 <= (Sgm0 Y).0
+proof
+  let X,Y be finite natural-membered set;
+  assume that
+A1: Y <> {} and
+A2: ex x being set st x in X & {x} <N= Y;
+  consider x being set such that
+A3: x in X and
+A4: {x} <N= Y by A2;
+  0 <> card Y by A1;
+  then 0 < len (Sgm0 Y) by Th31;
+  then
+A5: 0 in dom (Sgm0 Y) by NAT_1:45;
+  rng (Sgm0 Y)=Y by Def5;
+  then
+A6: (Sgm0 Y).0 in Y by A5,FUNCT_1:def 5;
+  reconsider x0=x as Element of NAT by A3,ORDINAL1:def 13;
+  set nx=x0;
+  nx in {x0} by TARSKI:def 1;
+  then
+A7: nx<=(Sgm0 Y).0 by A4,A6,Def7;
+  {x0} c= X
+  proof
+    let y be set;
+    assume
+    y in {x0};
+    hence thesis by A3,TARSKI:def 1;
+  end;
+  then
+A8: (Sgm0 X).0 <= (Sgm0 {x0}).0 by Th32;
+  (Sgm0 {x0}).0=nx by Th33;
+  hence thesis by A8,A7,XXREAL_0:2;
+  reconsider X0=X,Y0=Y as finite set;
+end;
+
+theorem Th38:
+  for X0,Y0 being finite natural-membered set, i being Nat st X0
+<N< Y0 & i < (card X0) holds rng((Sgm0 (X0\/Y0))|(card X0))=X0 & ((Sgm0 (X0\/Y0
+  ))|(card X0)).i = (Sgm0 (X0 \/ Y0)).i
+proof
+  let X0,Y0 be finite natural-membered set,i be Nat;
+  assume that
+A1: X0 <N< Y0 and
+A2: i < card X0;
+A3: i in card X0 by A2,NAT_1:45;
+  set f=(Sgm0 (X0\/Y0))|(card X0);
+  set f0=(Sgm0 (X0\/Y0));
+  set Z={ v where v is Element of X0 \/Y0: ex k2 being Nat st v=f.k2 & k2 in
+  card X0};
+A4: X0 c= X0 \/ Y0 by XBOOLE_1:7;
+A5: len (Sgm0 (X0\/Y0))=card (X0\/Y0) by Th31;
+  then
+A6: len f=card X0 by A4,Th12,NAT_1:44;
+A7: Z c= rng f
+  proof
+    let y being set;
+    assume
+    y in Z;
+    then
+    ex v0 being Element of X0 \/Y0 st y=v0 & ex k2 being Nat st v0=f.k2
+    & k2 in card X0;
+    hence thesis by A6,FUNCT_1:def 5;
+  end;
+  then reconsider Z0=Z as finite set;
+A8: rng f c= rng (Sgm0 (X0 \/ Y0)) by RELAT_1:99;
+  f is one-to-one by FUNCT_1:84;
+  then
+A9: dom f,(f.:(dom f)) are_equipotent by CARD_1:60;
+A10: f.:(dom f)=rng f by RELAT_1:146;
+A11: len f0=card (X0 \/Y0) by Th31;
+A12: rng f0=X0 \/Y0 by Def5;
+A13: dom f=len f;
+A14: rng f c= Z
+  proof
+    let y being set;
+    assume
+A15: y in rng f;
+    then consider x being set such that
+A16: x in dom f and
+A17: y=f.x by FUNCT_1:def 5;
+    reconsider nx=x as Nat by A16;
+    reconsider y0=y as Element of (X0 \/Y0) by A8,A15,Def5;
+    nx in card X0 by A13,A5,A4,A16,Th12,NAT_1:44;
+    then ex k2 being Nat st y0=f.k2 & k2 in card X0 by A17;
+    hence thesis;
+  end;
+  then rng f=Z by A7,XBOOLE_0:def 10;
+  then card Z=card (len f) by A9,A10,CARD_1:21;
+  then
+A18: card Z= card X0 by A5,A4,Th12,NAT_1:44;
+A19: X0 \/ Y0 <> {} by A2,CARD_1:47,XBOOLE_1:15;
+A20: now
+    assume that
+A21: not Z c= X0 and
+A22: not X0 c= Z;
+    consider v1 being set such that
+A23: v1 in Z and
+A24: not v1 in X0 by A21,TARSKI:def 3;
+    consider v10 being Element of X0 \/Y0 such that
+A25: v1=v10 and
+A26: ex k2 being Nat st v10=f.k2 & k2 in card X0 by A23;
+A27: v10 in Y0 by A19,A24,A25,XBOOLE_0:def 3;
+    reconsider nv10 =v10 as Nat;
+    consider v2 being set such that
+A28: v2 in X0 and
+A29: not v2 in Z by A22,TARSKI:def 3;
+    X0 c= X0\/Y0 by XBOOLE_1:7;
+    then consider x2 being set such that
+A30: x2 in dom f0 and
+A31: v2=f0.x2 by A12,A28,FUNCT_1:def 5;
+    reconsider x20=x2 as Nat by A30;
+    reconsider nv2 =v2 as Nat by A31;
+A32: x20<len f0 by A30,NAT_1:45;
+A33: now
+      assume
+      x20 < card X0;
+      then
+A34:  x20 in card X0 by NAT_1:45;
+      card X0 <= card (X0 \/Y0) by NAT_1:44,XBOOLE_1:7;
+      then card X0 <= len f0 by Th31;
+      then f.x20=f0.x20 by A34,Th11;
+      hence contradiction by A4,A28,A29,A31,A34;
+    end;
+    consider k20 being Nat such that
+A35: v10=f.k20 and
+A36: k20 in card X0 by A26;
+    card X0 <= len f0 by A11,NAT_1:44,XBOOLE_1:7;
+    then
+A37: f.k20=f0.k20 by A36,Th11;
+    k20<len f by A6,A36,NAT_1:45;
+    then k20<x20 by A6,A33,XXREAL_0:2;
+    then nv10<nv2 by A35,A31,A37,A32,Def5;
+    hence contradiction by A1,A28,A27,Def6;
+  end;
+A38: now
+    per cases by A20;
+    case
+      Z0 c= X0;
+      hence Z0=X0 by A18,CARD_FIN:1;
+    end;
+    case
+      X0 c=Z0;
+      hence Z0=X0 by A18,CARD_FIN:1;
+    end;
+  end;
+  card X0 <= len f0 by A5,NAT_1:44,XBOOLE_1:7;
+  hence thesis by A14,A7,A38,A3,Th11,XBOOLE_0:def 10;
+end;
+
+theorem
+  for X,Y being finite natural-membered set,i being Nat st X <N< Y & i
+  in card (X) holds (Sgm0 (X\/Y)).i in X
+proof
+  let X,Y be finite natural-membered set,i be Nat;
+  assume that
+A1: X <N< Y and
+A2: i in card (X);
+  set f=(Sgm0 (X\/Y))|(card X);
+  set f0=(Sgm0 (X\/Y));
+  set Z={ v where v is Element of X \/Y: ex k2 being Nat st v=f.k2 & k2 in
+  card X};
+A3: rng f0=X \/Y by Def5;
+  len (Sgm0 (X\/Y))=card (X\/Y) by Th31;
+  then
+A4: card X <= len (Sgm0 (X\/Y)) by NAT_1:44,XBOOLE_1:7;
+  then
+A5: len f=card X by Th12;
+A6: Z c= rng f
+  proof
+    let y being set;
+    assume
+    y in Z;
+    then
+    ex v0 being Element of X \/Y st y=v0 & ex k2 being Nat st v0=f.k2 &
+    k2 in card X;
+    hence thesis by A5,FUNCT_1:def 5;
+  end;
+  then reconsider Z0=Z as finite set;
+A7: rng f c= rng (Sgm0 (X\/Y)) by RELAT_1:99;
+  rng f c= Z
+  proof
+    let y being set;
+    assume
+A8: y in rng f;
+    then consider x being set such that
+A9: x in dom f and
+A10: y=f.x by FUNCT_1:def 5;
+    reconsider y0=y as Element of X\/Y by A7,A8,Def5;
+    ex k2 being Nat st y0=f.k2 & k2 in card X by A5,A9,A10;
+    hence thesis;
+    reconsider nx=x as Nat by A9;
+  end;
+  then
+A11: rng f=Z by A6,XBOOLE_0:def 10;
+A12: X \/ Y <> {} by A2,CARD_1:47,XBOOLE_1:15;
+A13: now
+    assume that
+A14: not Z c= X and
+A15: not X c= Z;
+    consider v1 being set such that
+A16: v1 in Z and
+A17: not v1 in X by A14,TARSKI:def 3;
+    consider v10 being Element of X \/Y such that
+A18: v1=v10 and
+A19: ex k2 being Nat st v10=f.k2 & k2 in card X by A16;
+A20: v10 in Y by A12,A17,A18,XBOOLE_0:def 3;
+    reconsider nv10 =v10 as Nat;
+    consider v2 being set such that
+A21: v2 in X and
+A22: not v2 in Z by A15,TARSKI:def 3;
+    X c= X\/Y by XBOOLE_1:7;
+    then consider x2 being set such that
+A23: x2 in dom f0 and
+A24: v2=f0.x2 by A3,A21,FUNCT_1:def 5;
+    reconsider x20=x2 as Nat by A23;
+    now
+      assume
+      x20 < card X;
+      then
+A25:  x20 in card X by NAT_1:45;
+      card X <= card (X \/Y) by NAT_1:44,XBOOLE_1:7;
+      then card X <= len f0 by Th31;
+      then f.x20=f0.x20 by A25,Th11;
+      hence contradiction by A5,A11,A22,A24,A25,FUNCT_1:def 5;
+    end;
+    then
+A26: len f <=x20 by A4,Th12;
+    consider k20 being Nat such that
+A27: v10=f.k20 and
+A28: k20 in card X by A19;
+A29: f.k20=f0.k20 by A4,A28,Th11;
+    reconsider nv2 =v2 as Nat by A24;
+    k20<len f by A5,A28,NAT_1:45;
+    then
+A30: k20<x20 by A26,XXREAL_0:2;
+    x20<len f0 by A23,NAT_1:45;
+    then nv10<nv2 by A27,A24,A30,A29,Def5;
+    hence contradiction by A1,A21,A20,Def6;
+  end;
+  f is one-to-one by FUNCT_1:84;
+  then
+A31: dom f,(f.:(dom f)) are_equipotent by CARD_1:60;
+  f.:(dom f)=rng f by RELAT_1:146;
+  then
+A32: card Z=card (len f)by A11,A31,CARD_1:21;
+  then
+A33: card Z=card X by A4,Th12;
+A34: now
+    per cases by A13;
+    case
+      Z0 c= X;
+      hence Z0=X by A4,A32,Th12,CARD_FIN:1;
+    end;
+    case
+      X c=Z0;
+      hence Z0=X by A33,CARD_FIN:1;
+    end;
+  end;
+  f.i=f0.i by A2,A4,Th11;
+  hence thesis by A2,A5,A11,A34,FUNCT_1:def 5;
+end;
+
+theorem Th40:
+  for X,Y being finite natural-membered set, i being Nat st X <N<
+  Y & i< len (Sgm0 X) holds (Sgm0 X).i = (Sgm0 (X \/ Y)).i
+proof
+  let X,Y be finite natural-membered set, i be Nat;
+  assume that
+A1: X <N< Y and
+A2: i< len (Sgm0 X);
+  reconsider h=(Sgm0 (X \/ Y))|(len (Sgm0 X)) as XFinSequence of NAT;
+A3: len (Sgm0 X)=card X by Th31;
+  then
+A4: h.i=(Sgm0 (X \/ Y)).i by A1,A2,Th38;
+  card X c= card (X \/ Y) by CARD_1:27,XBOOLE_1:7;
+  then
+A5: card X <= card (X \/ Y) by NAT_1:40;
+  then card X <= len (Sgm0 (X \/ Y)) by Th31;
+  then
+A6: len (Sgm0 X) <= len (Sgm0 (X \/ Y)) by Th31;
+A7: len (Sgm0 (X \/ Y))=card (X \/Y) by Th31;
+  then
+A8: len h=len (Sgm0 X) by A5,A3,Th12;
+A9: len h=card X by A5,A3,A7,Th12;
+A10: for l,m,k1,k2 being Nat st l < m & m < len h & k1=h.l & k2=h.m holds k1
+  < k2
+  proof
+    let l,m,k1,k2 be Nat;
+    assume that
+A11: l < m and
+A12: m < len h and
+A13: k1=h.l and
+A14: k2=h.m;
+A15: m<len (Sgm0 (X \/ Y)) by A8,A6,A12,XXREAL_0:2;
+    l < card X by A9,A11,A12,XXREAL_0:2;
+    then
+A16: h.l= (Sgm0 (X \/ Y)).l by A1,A3,Th38;
+    h.m=(Sgm0 (X \/ Y)).m by A1,A3,A8,A12,Th38;
+    hence thesis by A11,A13,A14,A16,A15,Def5;
+  end;
+  rng h=X by A1,A2,A3,Th38;
+  hence thesis by A10,A4,Def5;
+end;
+
+theorem Th41:
+  for X0,Y0 being finite natural-membered set, i being Nat st X0
+<N< Y0 & i < (card Y0) holds rng((Sgm0 (X0\/Y0))/^(card X0))=Y0 & ((Sgm0 (X0\/
+  Y0))/^(card X0)).i = (Sgm0 (X0 \/ Y0)).(i+(card X0))
+proof
+  let X0,Y0 be finite natural-membered set,i be Nat;
+  assume that
+A1: X0 <N< Y0 and
+A2: i < card Y0;
+  consider n being Nat such that
+A3: Y0 c= n by Th2;
+  n c= NAT by MEMBERED:6;
+  then X0/\Y0=(X0/\(Y0/\NAT)) by A3,XBOOLE_1:1,28
+    .= (X0/\Y0/\NAT) by XBOOLE_1:16
+    .={} by A1,Th34;
+  then
+A4: X0 misses Y0 by XBOOLE_0:def 7;
+  set f=(Sgm0 (X0\/Y0))/^(card X0);
+  set f0=(Sgm0 (X0\/Y0));
+  set Z={ v where v is Element of X0 \/Y0: ex k2 being Nat st v=f.k2 & k2 in
+  card Y0};
+A5: dom f,(f.:(dom f)) are_equipotent by CARD_1:60;
+A6: rng f0=X0 \/Y0 by Def5;
+A7: len (Sgm0 (X0\/Y0))=card (X0\/Y0) by Th31;
+  then
+A8: card X0 <= len (Sgm0 (X0\/Y0)) by NAT_1:44,XBOOLE_1:7;
+A9: len f=len f0 -' (card X0) by Def2
+    .=len f0 - (card X0) by A8,XREAL_1:235;
+A10: (X0\/Y0)\X0=(X0\X0)\/(Y0\X0) by XBOOLE_1:42
+    .={} \/ (Y0\X0) by XBOOLE_1:37
+    .=Y0 by A4,XBOOLE_1:83;
+  then
+A11: len f=card Y0 by A7,A9,CARD_2:63,XBOOLE_1:7;
+A12: Z c= rng f
+  proof
+    let y being set;
+    assume
+    y in Z;
+    then
+    ex v0 being Element of X0 \/Y0 st y=v0 & ex k2 being Nat st v0=f.k2
+    & k2 in card Y0;
+    hence thesis by A11,FUNCT_1:def 5;
+  end;
+  then reconsider Z0=Z as finite set;
+A13: f.:(dom f)=rng f by RELAT_1:146;
+A14: rng f c= rng (Sgm0 (X0\/Y0)) by Th18;
+A15: rng f c= Z
+  proof
+    let y being set;
+    assume
+A16: y in rng f;
+    then consider x being set such that
+A17: x in dom f and
+A18: y=f.x by FUNCT_1:def 5;
+    reconsider y0=y as Element of X0\/Y0 by A14,A16,Def5;
+    ex k2 being Nat st y0=f.(k2) & k2 in card Y0 by A11,A17,A18;
+    hence thesis;
+    reconsider nx=x as Nat by A17;
+  end;
+  then rng f=Z by A12,XBOOLE_0:def 10;
+  then card Z=card (len f) by A5,A13,CARD_1:21;
+  then
+A19: card Z=card Y0 by A7,A9,A10,CARD_2:63,XBOOLE_1:7;
+  len f0=card (X0 \/Y0) by Th31;
+  then
+A20: len f0=(card X0)+(card Y0) by A4,CARD_2:53;
+A21: X0 \/ Y0 <> {} by A2,CARD_1:47,XBOOLE_1:15;
+A22: now
+    assume that
+A23: not Z c= Y0 and
+A24: not Y0 c= Z;
+    consider v2 being set such that
+A25: v2 in Y0 and
+A26: not v2 in Z by A24,TARSKI:def 3;
+    Y0 c= X0\/Y0 by XBOOLE_1:7;
+    then consider x2 being set such that
+A27: x2 in dom f0 and
+A28: v2=f0.x2 by A6,A25,FUNCT_1:def 5;
+    consider v1 being set such that
+A29: v1 in Z and
+A30: not v1 in Y0 by A23,TARSKI:def 3;
+    consider v10 being Element of X0 \/Y0 such that
+A31: v1=v10 and
+A32: ex k2 being Nat st v10=f.k2 & k2 in card Y0 by A29;
+A33: v10 in X0 by A21,A30,A31,XBOOLE_0:def 3;
+    reconsider ev2=v2 as Element of X0\/Y0 by A6,A27,A28,FUNCT_1:def 5;
+    reconsider nv10 =v10 as Nat;
+    reconsider nv2 =v2 as Nat by A28;
+    consider k20 being Nat such that
+A34: v10=f.k20 and
+A35: k20 in card Y0 by A32;
+    k20<card Y0 by A35,NAT_1:45;
+    then
+A36: k20+card X0<len f0 by A20,XREAL_1:8;
+    then
+A37: f.k20=f0.(k20+card X0) by Th17;
+    reconsider x20=x2 as Nat by A27;
+    set nx20=x20 -' (card X0);
+A38: v2 in X0 \/Y0 by A6,A27,A28,FUNCT_1:def 5;
+A39: now
+      assume
+A40:  x20 >= card X0;
+      then
+A41:  x20-'card X0=x20-card X0 by XREAL_1:235;
+      x20<card X0 +card Y0 by A20,A27,NAT_1:45;
+      then x20-card X0 < card X0 +card Y0 -card X0 by XREAL_1:11;
+      then
+A42:  nx20<card Y0 by A40,XREAL_1:235;
+      then
+A43:  nx20 in card Y0 by NAT_1:45;
+      nx20+(card X0)<len f0 by A20,A42,XREAL_1:8;
+      then f.nx20=f0.x20 by A41,Th17;
+      hence contradiction by A26,A28,A38,A43;
+    end;
+    card X0 <=(card X0)+k20 by NAT_1:12;
+    then k20+card X0 >x20 by A39,XXREAL_0:2;
+    then nv10>nv2 by A34,A28,A36,A37,Def5;
+    hence contradiction by A1,A25,A33,Def6;
+  end;
+A44: now
+    per cases by A22;
+    case
+      Z0 c= Y0;
+      hence Z0=Y0 by A19,CARD_FIN:1;
+    end;
+    case
+      Y0 c=Z0;
+      hence Z0=Y0 by A19,CARD_FIN:1;
+    end;
+  end;
+  i+card X0 < len f0 by A2,A9,A11,XREAL_1:22;
+  hence thesis by A15,A12,A44,Th17,XBOOLE_0:def 10;
+end;
+
+theorem Th42:
+  for X,Y being finite natural-membered set,i being Nat st X <N< Y
+  & i< len (Sgm0 Y) holds (Sgm0 Y).i = (Sgm0 (X \/ Y)).(i+len (Sgm0 X))
+proof
+  let X,Y be finite natural-membered set,i be Nat;
+  assume that
+A1: X <N< Y and
+A2: i< len (Sgm0 Y);
+  consider m being Nat such that
+A3: Y c= m by Th2;
+  reconsider h=(Sgm0 (X \/ Y))/^(len (Sgm0 X)) as XFinSequence of NAT;
+A4: len (Sgm0 X)=card X by Th31;
+A5: len (Sgm0 Y)=card Y by Th31;
+  then
+A6: h.i=(Sgm0 (X \/ Y)).(i+card X) by A1,A2,A4,Th41;
+A7: len (Sgm0 (X \/ Y))=card (X \/Y) by Th31;
+  m c= NAT by MEMBERED:6;
+  then X/\Y=(X/\(Y/\NAT)) by A3,XBOOLE_1:1,28
+    .= (X/\Y/\NAT) by XBOOLE_1:16
+    .={} by A1,Th34;
+  then X misses Y by XBOOLE_0:def 7;
+  then
+A8: card Y +card X=card (X\/Y) by CARD_2:53;
+  len h=len ((Sgm0 (X \/ Y))) -' len (Sgm0 X) by Def2
+    .= card (X) + card Y -' card X by A8,A7,Th31
+    .= card Y by NAT_D:34
+    .= len (Sgm0 Y) by Th31;
+  then
+A9: len h=card Y by Th31;
+A10: for l,m,k1,k2 being Nat st l < m & m < len h & k1=h.l & k2=h.m holds k1
+  < k2
+  proof
+    let l,m,k1,k2 be Nat;
+    assume that
+A11: l < m and
+A12: m < len h and
+A13: k1=h.l and
+A14: k2=h.m;
+A15: m+card X <len (Sgm0 (X \/ Y)) by A8,A7,A9,A12,XREAL_1:8;
+    set m3=m+card X;
+    set l3=l+card X;
+A16: l3<m3 by A11,XREAL_1:8;
+    l < card Y by A9,A11,A12,XXREAL_0:2;
+    then
+A17: h.l= (Sgm0 (X \/ Y)).(l+card X) by A1,A4,Th41;
+    h.m=(Sgm0 (X \/ Y)).(m+card X) by A1,A4,A9,A12,Th41;
+    hence thesis by A13,A14,A17,A15,A16,Def5;
+  end;
+  rng h=Y by A1,A2,A4,A5,Th41;
+  hence thesis by A4,A10,A6,Def5;
+end;
+
+theorem Th43:
+  for X,Y being finite natural-membered set st Y <> {} & X <N< Y
+  holds (Sgm0 Y).0 = (Sgm0 (X \/ Y)).(len (Sgm0 X))
+proof
+  let X,Y be finite natural-membered set;
+  assume that
+A1: Y <> {} and
+A2: X <N< Y;
+  card Y <> 0 by A1;
+  then 0<len (Sgm0 Y) by Th31;
+  then
+  (Sgm0 Y).0 = (Sgm0 (X \/ Y)).((0 qua Element of NAT)+len (Sgm0 X)) by A2
+  ,Th42;
+  hence thesis;
+end;
+
+theorem Th44: ::from FINSEQ_3:46
+  for l,m,n,k being Nat,X being finite natural-membered set st k <
+  l & m < len(Sgm0 X) & (Sgm0(X)).m = k & (Sgm0(X)).n = l holds m < n
+proof
+  let l,m,n,k be Nat,X being finite natural-membered set;
+  assume that
+A1: k < l and
+A2: m < len(Sgm0 X) and
+A3: (Sgm0(X)).m = k and
+A4: (Sgm0(X)).n = l and
+A5: not m < n;
+  n < m by A1,A3,A4,A5,XXREAL_0:1;
+  hence thesis by A1,A2,A3,A4,Def5;
+end;
+
+theorem Th45:
+  for X,Y being finite natural-membered set st X <> {} & X <N< Y
+  holds (Sgm0 X).0 = (Sgm0 (X \/ Y)).0
+proof
+  let X,Y be finite natural-membered set;
+  assume that
+A1: X <> {} and
+A2: X <N< Y;
+  card X <> 0 by A1;
+  then 0<len (Sgm0 X) by Th31;
+  hence thesis by A2,Th40;
+end;
+
+theorem ::from FINSEQ_3
+  for X,Y being finite natural-membered set holds X <N< Y iff Sgm0(X \/
+  Y) = Sgm0(X) ^ Sgm0(Y)
+proof
+  let X,Y be finite natural-membered set;
   set p = Sgm0 X;
   set q = Sgm0 Y;
   set r = Sgm0(X \/ Y);
-  thus X <N< Y
-  implies Sgm0(X \/ Y) = Sgm0(X) ^ Sgm0(Y)
+  thus X <N< Y implies Sgm0(X \/ Y) = Sgm0(X) ^ Sgm0(Y)
   proof
-    assume A40: X <N< Y;
+    defpred P[Element of NAT] means $1 in dom p implies r.$1 = p.$1;
+    reconsider X1 = X, Y1 = Y as finite set;
+    assume
+A1: X <N< Y;
     X /\ Y = {}
     proof
-      assume
-A6:   not thesis;
       consider x being Element of X /\ Y;
-      X = rng p & Y = rng q by AC113;
-      then X c= NAT & Y c= NAT & x in X by A6,RELAT_1:def 19,XBOOLE_0:def 4;
-      then reconsider m = x as Element of NAT;
-      m in X & m in Y by A6,XBOOLE_0:def 4;
-      hence thesis by AE100,A40;
+      X = rng p by Def5;
+      then
+A2:   X c= NAT by RELAT_1:def 19;
+      assume
+A3:   not thesis;
+      then x in X by XBOOLE_0:def 4;
+      then reconsider m = x as Element of NAT by A2;
+A4:   m in Y by A3,XBOOLE_0:def 4;
+      m in X by A3,XBOOLE_0:def 4;
+      hence thesis by A1,A4,Def6;
     end;
     then
-A7: X misses Y by XBOOLE_0:def 7;
-    reconsider X1 = X, Y1 = Y as finite set;
-A51:  0<len p implies X1<>{} by Th44,CARD_1:47;
-A8: len r = card(X1 \/ Y1) by Th44
-      .= card X1 + card Y1 by A7,CARD_2:53
-      .= len p + card Y1 by Th44
-      .= len p + len q by Th44;
-    defpred P[Element of NAT] means $1 in dom p implies r.$1 = p.$1;
-A9: P[0] by A40,A51,AE220;
-A10: now
+A5: X misses Y by XBOOLE_0:def 7;
+A6: len r = card(X1 \/ Y1) by Th31
+      .= card X1 + card Y1 by A5,CARD_2:53
+      .= len p + card Y1 by Th31
+      .= len p + len q by Th31;
+A7: now
       let k be Element of NAT;
       assume
-A11:  P[k];
+A8:   P[k];
       thus P[k+1]
       proof
+        reconsider m = r.(k + 1) as Element of NAT by ORDINAL1:def 13;
+        reconsider n = p.(k + 1) as Element of NAT by ORDINAL1:def 13;
         assume
-A12:    k + 1 in dom p;
+A9:     k + 1 in dom p;
+        then p.(k + 1) in rng p by FUNCT_1:def 5;
+        then
+A10:    n in X by Def5;
+        len p <= len r by A6,NAT_1:12;
+        then
+A11:    (len p) c= (len r) by NAT_1:40;
+        then r.(k + 1) in rng r by A9,FUNCT_1:def 5;
+        then
+A12:    m in X \/ Y by Def5;
         assume
 A13:    r.(k + 1) <> p.(k + 1);
-A14:    p.(k + 1) in rng p & rng p c= NAT by A12,FUNCT_1:def 5,RELAT_1:def 19;
-        reconsider n = p.(k + 1) as Element of NAT by ORDINAL1:def 13;
-        len p <= len r by A8,NAT_1:12;
-        then
-A15:    (len p) c= (len r) by NAT_1:40;
-        then
-A17:    r.(k + 1) in rng r & rng r c= NAT by A12,FUNCT_1:def 5,RELAT_1:def 19;
-        reconsider m = r.(k + 1) as Element of NAT by ORDINAL1:def 13;
-A18:    n in X & m in X \/ Y by A14,A17,AC113;
-        now per cases;
+        now
+          per cases;
           suppose
-A19:        k in dom p;
-            reconsider n1 = p.k as Element of NAT by ORDINAL1:def 13;
+A14:        k in dom p;
             reconsider m1 = r.k as Element of NAT by ORDINAL1:def 13;
-            now per cases by A13,XXREAL_0:1;
+            reconsider n1 = p.k as Element of NAT by ORDINAL1:def 13;
+            now
+              per cases by A13,XXREAL_0:1;
               suppose
-A20:            m < n;
-                then not m in Y by AE100,A40,A18;
-                then m in X by A18,XBOOLE_0:def 3;
-                then m in rng p by AC113;
+A15:            m < n;
+                then not m in Y by A1,A10,Def6;
+                then m in X by A12,XBOOLE_0:def 3;
+                then m in rng p by Def5;
                 then consider x such that
-A21:            x in dom p and
-A22:            p.x = m by FUNCT_1:def 5;
-                reconsider x as Element of NAT by A21;
-                k < k + 1 & k + 1 < len r
-                by A15,A12,NAT_1:45,XREAL_1:31;
+A16:            x in dom p and
+A17:            p.x = m by FUNCT_1:def 5;
+                reconsider x as Element of NAT by A16;
+                x < len p by A16,NAT_1:45;
                 then
-A23:            n1 < m by A11,A19,AC113;
-                k < len p by A19,NAT_1:45;
+A18:            x < k + 1 by A15,A17,Th44;
+A19:            k < k + 1 by XREAL_1:31;
+                k + 1 < len r by A9,A11,NAT_1:45;
                 then
-A24:            k < x by A22,A23,Th46;
-                x < len p by A21,NAT_1:45;
-                then x < k + 1 by A20,A22,Th46;
+A20:            n1 < m by A8,A14,A19,Def5;
+                k < len p by A14,NAT_1:45;
+                then k < x by A17,A20,Th44;
+                hence contradiction by A18,NAT_1:13;
+              end;
+              suppose
+A21:            n < m;
+                n in X \/ Y by A10,XBOOLE_0:def 3;
+                then n in rng r by Def5;
+                then consider x such that
+A22:            x in dom r and
+A23:            r.x = n by FUNCT_1:def 5;
+                reconsider x as Element of NAT by A22;
+                x < len r by A22,NAT_1:45;
+                then
+A24:            x < k + 1 by A21,A23,Th44;
+A25:            k < k + 1 by XREAL_1:31;
+                k + 1 < len p by A9,NAT_1:45;
+                then
+A26:            m1 < n by A8,A14,A25,Def5;
+                k < len r by A11,A14,NAT_1:45;
+                then k < x by A23,A26,Th44;
                 hence contradiction by A24,NAT_1:13;
               end;
-              suppose
-A25:            n < m;
-                n in X \/ Y by A18,XBOOLE_0:def 3;
-                then n in rng r by AC113;
-                then consider x such that
-A26:            x in dom r and
-A27:            r.x = n by FUNCT_1:def 5;
-                reconsider x as Element of NAT by A26;
-                 k < k + 1 & k + 1 < len p by A12,NAT_1:45,XREAL_1:31;
-                then
-A28:            m1 < n by A11,A19,AC113;
-                k < len r by A15,A19,NAT_1:45;
-                then
-A29:            k < x by A27,A28,Th46;
-                x < len r by A26,NAT_1:45;
-                then x < k + 1 by A25,A27,Th46;
-                hence contradiction by A29,NAT_1:13;
-              end;
             end;
             hence contradiction;
           end;
-          suppose not k in dom p;
-            then (len p <= k) & k < k + 1 by NAT_1:45,XREAL_1:31;
-            then
-            (len p < k + 1 & k + 1 < len p) by A12,NAT_1:45,XXREAL_0:2;
-           hence contradiction;
+          suppose
+A27:        not k in dom p;
+A28:        k < k + 1 by XREAL_1:31;
+            len p <= k by A27,NAT_1:45;
+            then len p < k + 1 by A28,XXREAL_0:2;
+            hence contradiction by A9,NAT_1:45;
           end;
         end;
         hence contradiction;
       end;
     end;
-A37: for k being Element of NAT holds P[k] from NAT_1:sch 1(A9,A10);
+    0<len p implies X1<>{} by Th31,CARD_1:47;
+    then
+A29: P[0] by A1,Th45;
+A30: for k being Element of NAT holds P[k] from NAT_1:sch 1(A29,A7);
     defpred P[Element of NAT] means $1 in dom q implies r.(len p + $1) = q.$1;
-   len q>0 implies Y <>{} by Th44,CARD_1:47;then
-A38: P[0] by A40,AE222;
-A39: now
+A31: now
       let k be Element of NAT;
       assume
-A40:  P[k];
+A32:  P[k];
       thus P[k+1]
       proof
-        assume
-A41:    k + 1 in dom q;
-        assume
-A42:    r.(len p + (k + 1)) <> q.(k + 1);
-        set a = len p + (k + 1);
-A43:    q.(k + 1) in rng q & rng q c= NAT by A41,FUNCT_1:def 5,RELAT_1:def 19;
         reconsider n = q.(k + 1) as Element of NAT by ORDINAL1:def 13;
-        k + 1 <len q by A41,NAT_1:45;
-        then
-A44:    a < len r by A8,XREAL_1:8;
-A46:    a in dom r by A44,NAT_1:45;
-        then
-A47:    r.a in rng r & rng r c= NAT by FUNCT_1:def 5,RELAT_1:def 19;
+        set a = len p + (k + 1);
         reconsider m = r.a as Element of NAT by ORDINAL1:def 13;
-A48:    n in Y & m in X \/ Y by A43,A47,AC113;
-A49:    now
-          assume m in X;
-          then m in rng p by AC113;
+        assume
+A33:    k + 1 in dom q;
+        then q.(k + 1) in rng q by FUNCT_1:def 5;
+        then
+A34:    n in Y by Def5;
+        k + 1 <len q by A33,NAT_1:45;
+        then
+A35:    a < len r by A6,XREAL_1:8;
+        then
+A36:    a in dom r by NAT_1:45;
+        then r.a in rng r by FUNCT_1:def 5;
+        then
+A37:    m in X \/ Y by Def5;
+A38:    now
+A39:      len p <= len r by A6,NAT_1:12;
+          assume
+          m in X;
+          then m in rng p by Def5;
           then consider x such that
-A50:      x in dom p and
-A51:      p.x = m by FUNCT_1:def 5;
-          reconsider x as Element of NAT by A50;
-A52:      r.x = r.a & r is one-to-one by A37,A50,A51;
-          x < len p & len p <= len r by A8,A50,NAT_1:12,45;
-          then x < len r by XXREAL_0:2;
-          then x in dom r by NAT_1:45;
-          then x = a by A46,A52,FUNCT_1:def 8;
-          then len p + (k + 1) <= len p + (0 qua Element of NAT)
-                                by A50,NAT_1:45;
+A40:      x in dom p and
+A41:      p.x = m by FUNCT_1:def 5;
+          reconsider x as Element of NAT by A40;
+          x < len p by A40,NAT_1:45;
+          then x < len r by A39,XXREAL_0:2;
+          then
+A42:      x in dom r by NAT_1:45;
+          r.x = r.a by A30,A40,A41;
+          then x = a by A36,A42,FUNCT_1:def 8;
+          then len p + (k + 1) <= len p + (0 qua Element of NAT) by A40,
+          NAT_1:45;
           hence contradiction by XREAL_1:31;
         end;
-        now per cases;
+        assume
+A43:    r.(len p + (k + 1)) <> q.(k + 1);
+        now
+          per cases;
           suppose
-A53:        k in dom q;
-            reconsider n1 = q.k as Element of NAT by ORDINAL1:def 13;
-A54:        k < len q & k <= len p + k by A53,NAT_1:12,45;
+A44:        k in dom q;
             reconsider m1 = r.(len p + k) as Element of NAT by ORDINAL1:def 13;
-            now per cases by A42,XXREAL_0:1;
+            reconsider n1 = q.k as Element of NAT by ORDINAL1:def 13;
+A45:        k < len q by A44,NAT_1:45;
+            now
+              per cases by A43,XXREAL_0:1;
               suppose
-A56:            m < n;
-                m in Y by A48,A49,XBOOLE_0:def 3;
-                then m in rng q by AC113;
+A46:            m < n;
+                m in Y by A37,A38,XBOOLE_0:def 3;
+                then m in rng q by Def5;
                 then consider x such that
-A57:            x in dom q and
-A58:            q.x = m by FUNCT_1:def 5;
-                reconsider x as Element of NAT by A57;
-                len p + k < len p + k + 1 by XREAL_1:31; then
-A59:            n1 < m by A40,A44,A53,AC113;
-                k < len q by A53,NAT_1:45; then
-A60:            k < x by A58,A59,Th46;
-                x < len q by A57,NAT_1:45;
-                then x < k + 1 by A56,A58,Th46;
-                hence contradiction by A60,NAT_1:13;
+A47:            x in dom q and
+A48:            q.x = m by FUNCT_1:def 5;
+                reconsider x as Element of NAT by A47;
+                x < len q by A47,NAT_1:45;
+                then
+A49:            x < k + 1 by A46,A48,Th44;
+                len p + k < len p + k + 1 by XREAL_1:31;
+                then
+A50:            n1 < m by A32,A35,A44,Def5;
+                k < len q by A44,NAT_1:45;
+                then k < x by A48,A50,Th44;
+                hence contradiction by A49,NAT_1:13;
               end;
               suppose
-A61:            n < m;
-                n in X \/ Y by A48,XBOOLE_0:def 3;
-                then n in rng r by AC113;
+A51:            n < m;
+                n in X \/ Y by A34,XBOOLE_0:def 3;
+                then n in rng r by Def5;
                 then consider x such that
-A62:            x in dom r and
-A63:            r.x = n by FUNCT_1:def 5;
-                reconsider x as Element of NAT by A62;
-                k < k + 1 & k + 1 < len q
-                by A41,NAT_1:45,XREAL_1:31;
+A52:            x in dom r and
+A53:            r.x = n by FUNCT_1:def 5;
+                reconsider x as Element of NAT by A52;
+                x < len r by A52,NAT_1:45;
                 then
-A64:            m1 < n by A40,A53,AC113;
-                len p + k < len r by A8,A54,XREAL_1:8;
+A54:            x < len p + k + 1 by A51,A53,Th44;
+A55:            k < k + 1 by XREAL_1:31;
+                k + 1 < len q by A33,NAT_1:45;
                 then
-A65:            len p + k < x by A63,A64,Th46;
-                x < len r by A62,NAT_1:45;
-                then x < len p + k + 1 by A61,A63,Th46;
-                hence contradiction by A65,NAT_1:13;
+A56:            m1 < n by A32,A44,A55,Def5;
+                len p + k < len r by A6,A45,XREAL_1:8;
+                then len p + k < x by A53,A56,Th44;
+                hence contradiction by A54,NAT_1:13;
               end;
             end;
             hence contradiction;
           end;
-          suppose not k in dom q;
-            then (len q <= k) & k < k + 1 by NAT_1:45,XREAL_1:31;
-            then
-            len q < k + 1 & k + 1 < len q by A41,NAT_1:45,XXREAL_0:2;
-           hence contradiction;
+          suppose
+A57:        not k in dom q;
+A58:        k < k + 1 by XREAL_1:31;
+            len q <= k by A57,NAT_1:45;
+            then len q < k + 1 by A58,XXREAL_0:2;
+            hence contradiction by A33,NAT_1:45;
           end;
         end;
         hence contradiction;
       end;
     end;
-    for k being Element of NAT holds P[k] from NAT_1:sch 1(A38,A39);
-    hence thesis by A8,A37,AFINSQ_1:def 4;
+    len q>0 implies Y <>{} by Th31,CARD_1:47;
+    then
+A59: P[0] by A1,Th43;
+    for k being Element of NAT holds P[k] from NAT_1:sch 1(A59,A31);
+    hence thesis by A6,A30,AFINSQ_1:def 4;
   end;
   assume
-A73: Sgm0(X \/ Y) = Sgm0(X) ^ Sgm0(Y);
+A60: Sgm0(X \/ Y) = Sgm0(X) ^ Sgm0(Y);
   let m,n be Nat;
   assume that
-A74: m in X and
-A75: n in Y;
-  m in rng(Sgm0 X) by A74,AC113;
-  then consider x such that
-A76: x in dom p and
-A77: p.x = m by FUNCT_1:def 5;
-  reconsider x as Element of NAT by A76;
-  n in rng q by A75,AC113;
+A61: m in X and
+A62: n in Y;
+  n in rng q by A62,Def5;
   then consider y such that
-A78: y in dom q and
-A79: q.y = n by FUNCT_1:def 5;
-  reconsider y as Element of NAT by A78;
-A80: m = r.x & n = r.(len p + y) by A73,A76,A77,A78,A79,AFINSQ_1:def 4;
-A81: x < len p by A76,NAT_1:45;
-  len p<=len p+y by NAT_1:12;
-  then
-A82: x < len p + y by A81,XXREAL_0:2;
-  y < len q by A78,NAT_1:45;
+A63: y in dom q and
+A64: q.y = n by FUNCT_1:def 5;
+  reconsider y as Element of NAT by A63;
+A65: n = r.(len p + y) by A60,A63,A64,AFINSQ_1:def 4;
+  y < len q by A63,NAT_1:45;
   then len p + y < len p + len q by XREAL_1:8;
-  then len p + y < len r by A73,AFINSQ_1:20;
-  hence thesis by A80,A82,AC113;
+  then
+A66: len p + y < len r by A60,AFINSQ_1:20;
+A67: len p<=len p+y by NAT_1:12;
+  m in rng(Sgm0 X) by A61,Def5;
+  then consider x such that
+A68: x in dom p and
+A69: p.x = m by FUNCT_1:def 5;
+  reconsider x as Element of NAT by A68;
+  x < len p by A68,NAT_1:45;
+  then
+A70: x < len p + y by A67,XXREAL_0:2;
+  m = r.x by A60,A68,A69,AFINSQ_1:def 4;
+  hence thesis by A65,A70,A66,Def5;
 end;
 
-definition let f be XFinSequence;let B be set;
-::Following is a subsequence selected from f by B.
-func SubXFinS (f,B) -> XFinSequence equals
-   f*Sgm0(B /\ len f);
-coherence
+definition
+  let f be XFinSequence;
+  let B be set;
+  ::Following is a subsequence selected from f by B.
+  func SubXFinS (f,B) -> XFinSequence equals
+  f*Sgm0(B /\ len f);
+  coherence
+  proof
+    B/\ len f c= dom f by XBOOLE_1:17;
+    then rng Sgm0(B/\ len f) c= dom f by Def5;
+    hence thesis by AFINSQ_1:13;
+  end;
+end;
+
+theorem Th47:
+  for f being XFinSequence for B being set holds len SubXFinS (f,B
+)=card (B/\ (len f)) & for i being Nat st i < len SubXFinS (f,B) holds SubXFinS
+  (f,B).i=f.((Sgm0 (B/\ (len f))).i)
 proof
+  let f being XFinSequence, B be set;
   B/\ len f c= dom f by XBOOLE_1:17;
-  then rng Sgm0(B/\ len f) c= dom f by AC113;
- hence thesis by AFINSQ_1:13;
-end;
-end;
-
-theorem AC200:
- for f being XFinSequence for B being set holds
- len SubXFinS (f,B)=card (B/\ (len f)) &
-  (for i being Nat st i < len SubXFinS (f,B) holds
-   SubXFinS (f,B).i=f.((Sgm0 (B/\ (len f))).i))
-proof let f being XFinSequence, B be set;
-  B/\ len f c= dom f by XBOOLE_1:17;
-  then rng Sgm0(B/\ len f) c= dom f by AC113;
+  then rng Sgm0(B/\ len f) c= dom f by Def5;
   then dom SubXFinS (f,B) = len Sgm0(B/\ len f) by RELAT_1:46
-    .= card(B/\ len f) by Th44;
- hence len SubXFinS (f,B)=card (B/\ len f);
- let i be Nat;
- assume i < len SubXFinS (f,B);
+    .= card(B/\ len f) by Th31;
+  hence len SubXFinS (f,B)=card (B/\ len f);
+  let i be Nat;
+  assume
+  i < len SubXFinS (f,B);
   then i in dom SubXFinS (f,B) by NAT_1:45;
- hence thesis by FUNCT_1:22;
+  hence thesis by FUNCT_1:22;
 end;
 
-definition let D be set;let f be XFinSequence of D, B be set;
- redefine func SubXFinS(f,B) -> XFinSequence of D;
-coherence;
+definition
+  let D be set;
+  let f be XFinSequence of D, B be set;
+  redefine func SubXFinS(f,B) -> XFinSequence of D;
+  coherence;
 end;
 
 registration
   let f be XFinSequence;
   cluster SubXFinS (f,{}) -> empty;
   coherence
+  proof
+    len (SubXFinS (f,{})) =card {} by Th47;
+    hence thesis;
+  end;
+end;
+
+registration
+  let B be set;
+  cluster SubXFinS ({},B) -> empty;
+  coherence;
+end;
+
+theorem
+  for B1,B2 being finite natural-membered set, f being XFinSequence of
+  REAL st B1 <N< B2 holds Sum (SubXFinS(f,B1\/B2))=Sum (SubXFinS(f,B1))+Sum (
+  SubXFinS(f,B2))
 proof
- len (SubXFinS (f,{})) =card {} by AC200;
- hence thesis;
-end;
-end;
-
-registration let B be set;
- cluster SubXFinS ({},B) -> empty;
- coherence;
-end;
-
-theorem for B1,B2 being finite natural-membered set,
- f being XFinSequence of REAL st
- B1 <N< B2 holds
- Sum (SubXFinS(f,B1\/B2))=Sum (SubXFinS(f,B1))+Sum (SubXFinS(f,B2))
-proof let B1,B2 be finite natural-membered set,
-  f be XFinSequence of REAL;
-  assume A1: B1 <N< B2;
-   set B10 = B1, B20 = B2;
-   set X0=B10/\(len f);
-   set Y0=B20/\(len f);
-   G55: X0\/Y0=(B10\/B20)/\ (len f) by XBOOLE_1:23;
+  let B1,B2 be finite natural-membered set, f be XFinSequence of REAL;
+  assume
+A1: B1 <N< B2;
+  set B10 = B1, B20 = B2;
+  set X0=B10/\(len f);
+  set Y0=B20/\(len f);
   X0/\Y0= X0/\Y0/\NAT by MEMBERED:6,XBOOLE_1:28
-       .={} by AE400,A1,AG110;then
-  X0 misses Y0 by XBOOLE_0:def 7;then
-  A92: card Y0 +card X0=card (X0\/Y0) by CARD_2:53;
- set f2=SubXFinS(f,B1\/B2);
- per cases;
- suppose C1: len f2>0;
-  set f3=SubXFinS(f,B1);
-  F3: len f3=card (B1/\(len f)) by AC200;
+    .={} by A1,Th34,Th36;
+  then X0 misses Y0 by XBOOLE_0:def 7;
+  then
+A2: card Y0 +card X0=card (X0\/Y0) by CARD_2:53;
+  set f2=SubXFinS(f,B1\/B2);
+A3: X0\/Y0=(B10\/B20)/\ (len f) by XBOOLE_1:23;
   per cases;
-  suppose D1: len f3>0;
-   set f4=SubXFinS(f,B2);
-   F4: len f4=card (B2/\(len f)) by AC200;
-   A1b: B1 /\ (len f)<>{} by D1,AC200,CARD_1:47;
-   per cases;
-   suppose E1: len f4>0;
-    consider g1 being XFinSequence of REAL such that
-    E2: len f3=len g1 & f3.0=g1.0 & (for i being Nat st i+1<len f3 holds
-     g1.(i+1)=(g1.i)+(f3.(i+1)))
-     & (Sum (SubXFinS(f,B1))=g1.(len f3-'1)) by AC300;
-   consider g2 being XFinSequence of REAL such that
-    E3: len f4=len g2 & f4.0=g2.0 & (for i being Nat st i+1<len f4 holds
-     g2.(i+1)=(g2.i)+(f4.(i+1)))
-     & (Sum (SubXFinS(f,B2))=g2.(len f4-'1)) by AC300;
-   set a=g1.(len g1 -'1 qua Nat);
-   set g3=g2+a;
-    E4: len g2=len g3 &
-     for i being Nat st i<len g2 holds g3.i=g2.i+a by AC500;
-   E7: B1/\ (len f) misses B2/\ (len f) by AE101,A1,XBOOLE_1:76;
-   set g4=g1^g3;
-   E8b: len g1+len g3
-          =card (card (B1/\ (len f)))+ len f4 by AC200,E2,E3,E4
-         .=card (B1/\ (len f))+ card (B2/\ (len f)) by AC200
-         .=card ((B1/\ (len f))\/ (B2/\ (len f))) by E7,CARD_2:53
-         .=card ((B1\/B2)/\ (len f)) by XBOOLE_1:23
-         .=len f2 by AC200;then
-   E8: len g4=len f2 by AFINSQ_1:20;
-   F4h: len f2=card ((B1\/B2)/\(len f)) by AC200;
-   E44: 0 in len g1 by E2,D1,NAT_1:45;
-   E77n: (Sgm0 (B1/\ (len f))).0=(Sgm0 ((B1/\ (len f)\/ B2/\ (len f)))).0
-                        by AE220,A1b,AE400,A1;
-   E9: g4.0= g1.0 by E44,AFINSQ_1:def 4
-          .=f.((Sgm0 (B1/\ (len f))).0) by AC200,D1,E2
-          .=f.((Sgm0 ((B1\/B2)/\ (len f))).0) by E77n,XBOOLE_1:23
-          .=f2.0 by AC200,C1;
-    E89: for i being Nat st i+1<len f2 holds
-     g4.(i+1)=(g4.i)+(f2.(i+1))
-     proof let i be Nat;
-      assume F1: i+1<len f2;
-        per cases;
-        suppose G1: i+1<len g1;then
-           (i+1) in dom g1 by NAT_1:45;then
-          G2: (g1^g3).(i+1)=g1.(i+1) by AFINSQ_1:def 4;
-           i<i+1 by XREAL_1:31;then
-          i<len g1 by G1,XXREAL_0:2;then
-           i in dom g1 by NAT_1:45;then
-          G4: (g1^g3).i=g1.i by AFINSQ_1:def 4;
-          i+1< len (Sgm0 X0) by Th44,G1,E2,F3;then
-          G20: (Sgm0 (B1/\ (len f))).(i+1)
-                  =(Sgm0 ((B1\/B2)/\ (len f))).(i+1) by AE221,G55,AE400,A1;
-          (SubXFinS(f,B1)).(i+1)= f.((Sgm0 (B1/\ (len f))).(i+1))
-                                      by AC200,E2,G1;then
-           f3.(i+1)=f2.(i+1) by G20,AC200,F1;
-          hence thesis by G2,G4,E2,G1;
+  suppose
+A4: len f2>0;
+    set f3=SubXFinS(f,B1);
+A5: len f3=card (B1/\(len f)) by Th47;
+    per cases;
+    suppose
+A6:   len f3>0;
+      then
+A7:   B1 /\ (len f)<>{} by Th47,CARD_1:47;
+      set f4=SubXFinS(f,B2);
+A8:   len f4=card (B2/\(len f)) by Th47;
+      per cases;
+      suppose
+A9:     len f4>0;
+A10:    B1/\ (len f) misses B2/\ (len f) by A1,Th35,XBOOLE_1:76;
+        consider g2 being XFinSequence of REAL such that
+A11:    len f4=len g2 and
+A12:    f4.0=g2.0 and
+A13:    for i being Nat st i+1<len f4 holds g2.(i+1)=(g2.i)+(f4.(i+1)
+        ) and
+A14:    Sum (SubXFinS(f,B2))=g2.(len f4-'1) by Def4;
+        consider g1 being XFinSequence of REAL such that
+A15:    len f3=len g1 and
+A16:    f3.0=g1.0 and
+A17:    for i being Nat st i+1<len f3 holds g1.(i+1)=(g1.i)+(f3.(i+1)
+        ) and
+A18:    Sum (SubXFinS(f,B1))=g1.(len f3-'1) by Def4;
+        set a=g1.(len g1 -'1 qua Nat);
+        set g3=g2+a;
+        set g4=g1^g3;
+A19:    len g2=len g3 by Th6;
+        then
+A20:    len g3>=(0 qua Element of NAT)+1 by A9,A11,NAT_1:13;
+        then
+A21:    len g3-'1=len g3-1 by XREAL_1:235;
+        then len g3-'1<len g3 by XREAL_1:46;
+        then
+A22:    len g3 -'1 in dom g3 by NAT_1:45;
+A23:    len g1+len g3 =card (card (B1/\ (len f)))+ len f4 by A15,A11,A19,
+        Th47
+          .=card (B1/\ (len f))+ card (B2/\ (len f)) by Th47
+          .=card ((B1/\ (len f))\/ (B2/\ (len f))) by A10,CARD_2:53
+          .=card ((B1\/B2)/\ (len f)) by XBOOLE_1:23
+          .=len f2 by Th47;
+        then len g1 + len g3>= (0 qua Element of NAT)+1 by A4,NAT_1:13;
+        then len g1 + len g3 -'1=len g1 + len g3 -1 by XREAL_1:235
+          .= len g1 +(len g3-1)
+          .= len g1 +(len g3-'1) by A20,XREAL_1:235;
+        then (g1^g3).(len f2 -'1)=g3.(len g3-'1) by A23,
+        A22,AFINSQ_1:def 4;
+        then
+A24:    g1.(len f3-'1)+g2.(len f4-'1)=(g1^g3).(len f2-'1) by A15,A11,A19,
+        A21,Th6,XREAL_1:46;
+A25:    len f2=card ((B1\/B2)/\(len f)) by Th47;
+A26:    for i being Nat st i+1<len f2 holds g4.(i+1)=(g4.i)+(f2.(i+1))
+        proof
+          let i be Nat;
+          assume
+A27:      i+1<len f2;
+          per cases;
+          suppose
+A28:        i+1<len g1;
+            then i+1< len (Sgm0 X0) by A5,A15,Th31;
+            then
+A29:        (Sgm0 (B1/\ (len f))).(i+1) =(Sgm0 ((B1\/B2)/\ (len f))).(i+1
+            ) by A1,A3,Th36,Th40;
+            (i+1) in dom g1 by A28,NAT_1:45;
+            then
+A30:        (g1^g3).(i+1)=g1.(i+1) by AFINSQ_1:def 4;
+            i<i+1 by XREAL_1:31;
+            then i<len g1 by A28,XXREAL_0:2;
+            then i in dom g1 by NAT_1:45;
+            then
+A31:        (g1^g3).i=g1.i by AFINSQ_1:def 4;
+            (SubXFinS(f,B1)).(i+1)= f.((Sgm0 (B1/\ (len f))).(i+1)) by
+            A15,A28,Th47;
+            then f3.(i+1)=f2.(i+1) by A27,A29,Th47;
+            hence thesis by A15,A17,A28,A30,A31;
+          end;
+          suppose
+A32:        i+1>= len g1;
+            set Y0=B20/\(len f);
+            set X0=B10/\(len f);
+            per cases by A32,XXREAL_0:1;
+            suppose
+              i+1>len g1;
+              then i>=len g1 by NAT_1:13;
+              then i-'len g1=i-len g1 by XREAL_1:235;
+              then reconsider i1=i-len g1 as Nat;
+A33:          len g1 +i1=i;
+A34:          i+1-len g1<len f2-len g1 by A27,XREAL_1:11;
+              then
+A35:          (SubXFinS(f,B2)).(i1+1)= f.((Sgm0 (B2/\ (len f))).(i1+1))
+              by A11,A19,A23,Th47;
+A36:          len (Sgm0 X0)=card X0 by Th31;
+A37:          i+1=i1+1+len f3 by A15
+                .=i1+1+card(X0) by Th47;
+A38:          X0\/Y0=(B10\/B20)/\ (len f) by XBOOLE_1:23;
+              i1+1< len (Sgm0 Y0) by A8,A11,A19,A23,A34,Th31;
+              then
+              (Sgm0 (B2/\ (len f))).(i1+1) =(Sgm0 ((B1\/B2)/\ (len f))).(
+              i+1) by A1,A37,A38,A36,Th36,Th42;
+              then
+A39:          f4.(i1+1)=f2.(i+1) by A27,A35,Th47;
+              i1<i1+1 by XREAL_1:31;
+              then
+A40:          i1<len g3 by A23,A34,XXREAL_0:2;
+              then
+A41:          g3.(i1)=g2.(i1) +a by A19,Th6;
+A42:          g3.(i1+1)=g2.(i1+1)+a by A19,A23,A34,Th6;
+              (i1+1) in dom g3 by A23,A34,NAT_1:45;
+              then
+A43:          (g1^g3).(len g1+(i1+1))=g3.(i1+1) by AFINSQ_1:def 4;
+              i1 in dom g3 by A40,NAT_1:45;
+              then
+A44:          (g1^g3).i=g3.i1 by A33,AFINSQ_1:def 4;
+              g2.(i1+1)=(g2.(i1))+(f4.(i1+1)) by A11,A13,A19,A23,A34;
+              hence thesis by A43,A44,A39,A41,A42;
+            end;
+            suppose
+A45:          i+1=len g1;
+              len g1<len g1+1 by XREAL_1:31;
+              then
+A46:          len g1-1<len g1 by XREAL_1:21;
+A47:          i=len g1-'1 by A45,NAT_D:34;
+              (0 qua Element of NAT)+1<=len g1 by A6,A15,NAT_1:13;
+              then len g1-'1=len g1-1 by XREAL_1:235;
+              then len g1 -'1 in dom g1 by A46,NAT_1:45;
+              then
+A48:          (g1^g3).i=g1.(len g1 -'1) by A47,AFINSQ_1:def 4;
+A49:          len (Sgm0 X0)=card X0 by Th31;
+              0< len (Sgm0 Y0) by A8,A9,Th31;
+              then
+A50:          (Sgm0 (Y0)).(0) =(Sgm0 (X0\/Y0)).((0 qua Element of NAT)+
+              len (Sgm0 X0)) by A1,Th36,Th42;
+A51:          X0\/Y0=(B10\/B20)/\ (len f) by XBOOLE_1:23;
+A52:          0 in dom g3 by A9,A11,A19,NAT_1:45;
+A53:          (g1^g3).(i+1)=(g1^g3).(len g1+(0 qua Element of NAT)) by
+              A45
+                .=g3.0 by A52,AFINSQ_1:def 4;
+A54:          card (Y0) >0 by A9,Th47;
+              (SubXFinS(f,B2)).0= f.((Sgm0 (B2/\ (len f))).0) by A9,Th47;
+              then f4.(0)=f2.(i+1) by A2,A5,A15,A25,A45,A51,A49,A50,A54,
+              Th47, XREAL_1:31;
+              hence thesis by A9,A11,A12,A53,A48,Th6;
+            end;
+          end;
         end;
-        suppose G1: i+1>= len g1;
-         set X0=B10/\(len f);
-         set Y0=B20/\(len f);
-         per cases by G1,XXREAL_0:1;
-         suppose i+1>len g1;then
-          i>=len g1 by NAT_1:13;then
-          i-'len g1=i-len g1 by XREAL_1:235;then
-          reconsider i1=i-len g1 as Nat;
-          G67: i+1=i1+1+len f3 by E2.=i1+1+card(X0) by AC200;
-          G3dn: i+1-len g1<len f2-len g1 by F1,XREAL_1:11;then
-          (i1+1) in dom g3 by E8b,NAT_1:45;then
-          G2n: (g1^g3).(len g1+(i1+1))=g3.(i1+1) by AFINSQ_1:def 4;
-          G3b: len g1 +i1=i;
-          i1<i1+1 by XREAL_1:31;then
-          G3: i1<len g3 by E8b,G3dn,XXREAL_0:2;then
-          i1 in dom g3 by NAT_1:45;then
-          G4: (g1^g3).i=g3.i1 by G3b,AFINSQ_1:def 4;
-          G55: X0\/Y0=(B10\/B20)/\ (len f) by XBOOLE_1:23;
-          G20f: len (Sgm0 X0)=card X0 by Th44;
-          i1+1< len (Sgm0 Y0) by Th44,E8b,G3dn,E3,E4,F4;then
-          G20: (Sgm0 (B2/\ (len f))).(i1+1)
-                  =(Sgm0 ((B1\/B2)/\ (len f))).(i+1)
-                             by G55,G67,G20f,AE222f,AE400,A1;
-          G21: (SubXFinS(f,B2)).(i1+1)= f.((Sgm0 (B2/\ (len f))).(i1+1))
-                                      by AC200,E3,E4,E8b,G3dn;
-          G5:  f4.(i1+1)=f2.(i+1) by G20,G21,AC200,F1;
-          G51: g3.(i1)=g2.(i1) +a by E4,G3;
-          G52: g3.(i1+1)=g2.(i1+1)+a by E4,E8b,G3dn;
-          g2.(i1+1)=(g2.(i1))+(f4.(i1+1)) by E3,E4,E8b,G3dn;
-          hence thesis by G2n,G4,G5,G51,G52;
-         end;
-         suppose H0: i+1=len g1;then
-          H8: i=len g1-'1 by NAT_D:34;
-          H12: len g1=card X0 by E2,AC200;
-          G55: X0\/Y0=(B10\/B20)/\ (len f) by XBOOLE_1:23;
-          G20f: len (Sgm0 X0)=card X0 by Th44;
-          0< len (Sgm0 Y0) by Th44,E1,F4;then
-          (Sgm0 (Y0)).(0)
-                  =(Sgm0 (X0\/Y0)).((0 qua Element of NAT)+len (Sgm0 X0))
-                              by AE222f,AE400,A1;then
-          G20: (Sgm0 (B2/\ (len f))).(0 qua Element of NAT)
-                  =(Sgm0 ((B1\/B2)/\ (len f))).(len g1)
-                             by G20f,H12,XBOOLE_1:23;
-          G2r: 0 in dom g3 by E1,E3,E4,NAT_1:45;
-          G2: (g1^g3).(i+1)=(g1^g3).(len g1+(0 qua Element of NAT)) by H0
-                          .=g3.0 by G2r,AFINSQ_1:def 4;
-          (0 qua Element of NAT)+1<=len g1 by D1,E2,NAT_1:13;then
-          G34: len g1-'1=len g1-1 by XREAL_1:235;
-          len g1<len g1+1 by XREAL_1:31;then
-          len g1-1<len g1 by XREAL_1:21;then
-          len g1 -'1 in dom g1 by G34,NAT_1:45;then
-          G4: (g1^g3).i=g1.(len g1 -'1) by H8,AFINSQ_1:def 4;
-          G21: (SubXFinS(f,B2)).0= f.((Sgm0 (B2/\ (len f))).0) by AC200,E1;
-          card (Y0) >0 by AC200,E1; then
-           f4.(0)=f2.(i+1) by H0,G21,G20,AC200,E2,F3,F4h,G55,A92,XREAL_1:31;
-           hence thesis by G2,G4,E3,AC500,E1;
-         end;
-        end;
-     end;
-     R4n: len g3>=(0 qua Element of NAT)+1 by E3,E4,E1,NAT_1:13;then
-     R4: len g3-'1=len g3-1 by XREAL_1:235;
-     len g1 + len g3>= (0 qua Element of NAT)+1 by E8b,C1,NAT_1:13;then
-     R2: len g1 + len g3 -'1=len g1 + len g3 -1 by XREAL_1:235
-                       .= len g1 +(len g3-1)
-                       .= len g1 +(len g3-'1) by R4n,XREAL_1:235;
-      len g3-'1<len g3 by R4,XREAL_1:46;then
-     R3: len g3 -'1 in dom g3 by NAT_1:45;
-     R5: (g1^g3).(len f2 -'1)=g3.(len g3-'1) by R2,R3,E8b,AFINSQ_1:def 4;
-     g1.(len f3-'1)+g2.(len f4-'1)=(g1^g3).(len f2-'1)
-                           by E2,R5,E3,E4,R4,XREAL_1:46;
-   hence thesis by AC300,E8,E9,E89,E2,E3;
-   end;
-   suppose D3:len f4<=0;then
-    f4 = {}; then
-    D2: Sum f4=0;
-    len (SubXFinS(f,B2))=card (B2 /\ (len f)) by AC200;then
-    D4: B2/\ (len f)= {} by D3;
-    (B1\/B2)/\(len f)= B1/\(len f) \/ B2/\(len f) by XBOOLE_1:23
-                    .= B1/\(len f) by D4;
-    hence thesis by D2;
-   end;
+A55:    (Sgm0 (B1/\ (len f))).0=(Sgm0 ((B1/\ (len f)\/ B2/\ (len f)))).0
+        by A1,A7,Th36,Th45;
+        0 in len g1 by A6,A15,NAT_1:45;
+        then
+A56:    g4.0= g1.0 by AFINSQ_1:def 4
+          .=f.((Sgm0 (B1/\ (len f))).0) by A6,A16,Th47
+          .=f.((Sgm0 ((B1\/B2)/\ (len f))).0) by A55,XBOOLE_1:23
+          .=f2.0 by A4,Th47;
+        len g4=len f2 by A23,AFINSQ_1:20;
+        hence thesis by A18,A14,A56,A26,A24,Def4;
+      end;
+      suppose
+A57:    len f4<=0;
+        then f4 = {};
+        then
+A58:    Sum f4=0;
+        len (SubXFinS(f,B2))=card (B2 /\ (len f)) by Th47;
+        then
+A59:    B2/\ (len f)= {} by A57;
+        (B1\/B2)/\(len f)= B1/\(len f) \/ B2/\(len f) by XBOOLE_1:23
+          .= B1/\(len f) by A59;
+        hence thesis by A58;
+      end;
+    end;
+    suppose
+A60:  len f3<=0;
+      then f3 = {};
+      then
+A61:  Sum f3=0;
+      len (SubXFinS(f,B1))=card (B1 /\ (len f)) by Th47;
+      then
+A62:  B1/\ (len f)= {} by A60;
+      (B1\/B2)/\(len f)= B1/\(len f) \/ B2/\(len f) by XBOOLE_1:23
+        .= B2/\(len f) by A62;
+      hence thesis by A61;
+    end;
   end;
-  suppose D3: len f3<=0;then
-    f3 = {}; then
-    D2: Sum f3=0;
-    len (SubXFinS(f,B1))=card (B1 /\ (len f)) by AC200;then
-    D4: B1/\ (len f)= {} by D3;
-    (B1\/B2)/\(len f)= B1/\(len f) \/ B2/\(len f) by XBOOLE_1:23
-                    .= B2/\(len f) by D4;
-    hence thesis by D2;
+  suppose
+A63: len f2<=0;
+    B1/\(len f) c= (B1\/B2) /\(len f) by XBOOLE_1:7,26;
+    then card (B1/\(len f)) c= card ((B1\/B2) /\(len f)) by CARD_1:27;
+    then card (B1/\(len f)) <= card ((B1\/B2) /\(len f)) by NAT_1:40;
+    then card (B1/\(len f)) <= 0 by A63,Th47;
+    then len SubXFinS(f,B1)=0 by Th47;
+    then SubXFinS(f,B1)=0;
+    then
+A64: Sum(SubXFinS(f,B1))=0;
+    B2/\(len f) c= (B1\/B2) /\(len f) by XBOOLE_1:7,26;
+    then card (B2/\(len f)) c= card ((B1\/B2) /\(len f)) by CARD_1:27;
+    then card (B2/\(len f)) <= card ((B1\/B2) /\(len f)) by NAT_1:40;
+    then card (B2/\(len f)) <= 0 by A63,Th47;
+    then
+A65: len (SubXFinS(f,B2))=0 by Th47;
+    f2= {} by A63;
+    hence thesis by A64,A65,AFINSQ_1:18;
   end;
- end;
- suppose C1: len f2<=0; then
-C2: f2= {};
-   B1/\(len f) c= (B1\/B2) /\(len f) by XBOOLE_1:7,26;then
-   card (B1/\(len f)) c= card ((B1\/B2) /\(len f)) by CARD_1:27;then
-   card (B1/\(len f)) <= card ((B1\/B2) /\(len f)) by NAT_1:40;then
-   C7: card (B1/\(len f)) <= 0 by C1,AC200;
-   len SubXFinS(f,B1)=0 by C7,AC200;then
-   SubXFinS(f,B1)=0;then
-   C8: Sum(SubXFinS(f,B1))=0;
-   B2/\(len f) c= (B1\/B2) /\(len f) by XBOOLE_1:7,26;then
-   card (B2/\(len f)) c= card ((B1\/B2) /\(len f)) by CARD_1:27;then
-   card (B2/\(len f)) <= card ((B1\/B2) /\(len f)) by NAT_1:40;then
-   card (B2/\(len f)) <= 0 by C1,AC200;then
-   len (SubXFinS(f,B2))=0 by AC200;
-  hence thesis by C2,C8,AFINSQ_1:18;
- end;
 end;
+

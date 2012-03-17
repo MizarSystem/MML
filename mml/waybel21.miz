@@ -24,8 +24,8 @@ environ
  requirements SUBSET, BOOLE;
  definitions TARSKI, LATTICE3, YELLOW_0, WAYBEL_0, WAYBEL_1, YELLOW_6,
       XBOOLE_0, WELLORD1, RELAT_1, STRUCT_0;
- theorems YELLOW_0, WAYBEL_0, WAYBEL_6, PRE_TOPC, FUNCOP_1, RELAT_1,
-      FUNCT_2, TOPS_1, TOPS_2, ZFMISC_1, CONNSP_2, WAYBEL_9, YELLOW_9, FUNCT_1,
+ theorems YELLOW_0, WAYBEL_0, WAYBEL_6, PRE_TOPC, FUNCOP_1, RELAT_1, FUNCT_2,
+      TOPS_1, TOPS_2, ZFMISC_1, CONNSP_2, WAYBEL_9, YELLOW_9, FUNCT_1,
       WAYBEL_1, YELLOW_6, WAYBEL19, SETWISEO, FUNCT_3, TARSKI, CANTOR_1,
       LATTICE3, WAYBEL11, WAYBEL17, ORDERS_2, YELLOW_2, WEIERSTR, COMPTS_1,
       WAYBEL10, YELLOW_7, YELLOW_4, WAYBEL20, RELSET_1, XBOOLE_0, XBOOLE_1;
@@ -46,21 +46,27 @@ A1: S is upper-bounded implies T is upper-bounded;
     let X be finite Subset of S such that
 A2: ex_inf_of X,S;
     per cases;
-    suppose X = {};
+    suppose
+A3:   X = {};
       then
-A3:   f.:X = {} & S is upper-bounded by A2,RELAT_1:149,WAYBEL20:5;
-      hence ex_inf_of f.:X,T by A1,YELLOW_0:43;
-      thus f.inf X = inf (f.:X) by A3,FUNCOP_1:13;
+A4:   f.:X = {} by RELAT_1:149;
+      hence ex_inf_of f.:X,T by A1,A2,A3,WAYBEL20:5,YELLOW_0:43;
+      thus f.inf X = inf (f.:X) by A4,FUNCOP_1:13;
     end;
     suppose X <> {};
       then reconsider A = X as non empty Subset of S;
       consider a being Element of A;
       reconsider a as Element of S;
-      dom f = the carrier of S & f.a = Top T by FUNCOP_1:13,19;
-      then Top T in f.:X by FUNCT_1:def 12;
-      then {Top T} c= f.:X & f.:X c= {Top T} by FUNCOP_1:96,ZFMISC_1:37;
-      then {Top T} = f.:X & f.inf X = Top T by FUNCOP_1:13,XBOOLE_0:def 10;
-      hence thesis by YELLOW_0:38,39;
+A5:   dom f = the carrier of S by FUNCOP_1:19;
+      f.a = Top T by FUNCOP_1:13;
+      then Top T in f.:X by A5,FUNCT_1:def 12;
+      then
+A6:   {Top T} c= f.:X by ZFMISC_1:37;
+      f.:X c= {Top T} by FUNCOP_1:96;
+      then
+A7:   {Top T} = f.:X by A6,XBOOLE_0:def 10;
+      f.inf X = Top T by FUNCOP_1:13;
+      hence thesis by A7,YELLOW_0:38,39;
     end;
   end;
 end;
@@ -87,7 +93,8 @@ registration
   coherence
   proof
     let f be SemilatticeHomomorphism of S,T;
-    let x,y be Element of S; thus thesis by Def1;
+    let x,y be Element of S;
+    thus thesis by Def1;
   end;
 end;
 
@@ -97,8 +104,9 @@ theorem
 proof
   let S, T be upper-bounded Semilattice;
   let f be SemilatticeHomomorphism of S,T;
-  f preserves_inf_of {}S & ex_inf_of {}S,S by Def1,YELLOW_0:43;
-  then f.inf {}S = inf (f.:{}S) by WAYBEL_0:def 30;
+A1: f preserves_inf_of {}S by Def1;
+  ex_inf_of {}S,S by YELLOW_0:43;
+  then f.inf {}S = inf (f.:{}S) by A1,WAYBEL_0:def 30;
   hence thesis by RELAT_1:149;
 end;
 
@@ -115,31 +123,35 @@ A2: X is finite;
 A3: P[{}];
 A4: now
     let y,x be set such that
-A5: y in X & x c= X & P[x];
+A5: y in X
+    and x c= X and
+A6: P[x];
     thus P[x \/ {y}]
     proof
       assume x \/ {y} <> {};
       reconsider y' = y as Element of S by A5;
       set fy = f.y';
-A6:   ex_inf_of {fy}, T & inf {fy} = fy &
-      ex_inf_of {y'}, S & inf {y'} = y by YELLOW_0:38,39;
-      hence ex_inf_of x \/ {y}, S by A5,YELLOW_2:4;
+A7:   ex_inf_of {fy}, T by YELLOW_0:38;
+A8:   inf {fy} = fy by YELLOW_0:39;
+A9:   ex_inf_of {y'}, S by YELLOW_0:38;
+A10:  inf {y'} = y by YELLOW_0:39;
+      thus ex_inf_of x \/ {y}, S by A6,A9,YELLOW_2:4;
       dom f = the carrier of S by FUNCT_2:def 1;
       then
-A7:   Im(f,y) = {fy} by FUNCT_1:117;
+A11:  Im(f,y) = {fy} by FUNCT_1:117;
       then
-A8:   f.:(x \/ {y}) = (f.:x) \/ {fy} by RELAT_1:153;
-      hence ex_inf_of f.:(x \/ {y}), T by A5,A6,A7,YELLOW_2:4;
+A12:  f.:(x \/ {y}) = (f.:x) \/ {fy} by RELAT_1:153;
+      hence ex_inf_of f.:(x \/ {y}), T by A6,A7,A11,YELLOW_2:4;
       per cases;
       suppose x = {};
-        hence thesis by A6,A7;
+        hence thesis by A8,A11,YELLOW_0:39;
       end;
       suppose
-A9:     x <> {};
+A13:    x <> {};
         hence "/\"(f.:(x \/ {y}), T)
-        = (f."/\"(x, S)) "/\" fy by A5,A6,A8,YELLOW_2:4
+        = (f."/\"(x, S)) "/\" fy by A6,A7,A8,A12,YELLOW_2:4
           .= f.("/\"(x, S)"/\" y') by A1,WAYBEL_6:1
-          .= f."/\"(x \/ {y}, S) by A5,A6,A9,YELLOW_2:4;
+          .= f."/\"(x \/ {y}, S) by A6,A9,A10,A13,YELLOW_2:4;
       end;
     end;
   end;
@@ -156,11 +168,11 @@ proof
 A1: f.Top S = Top T;
   thus S is upper-bounded implies T is upper-bounded;
   let X be finite Subset of S;
-  f.:{} = {} & Top S = "/\"({},S) by RELAT_1:149;
+A2: f.:{} = {} by RELAT_1:149;
   then
-A2: ex_inf_of f.:{}, T & "/\"(f.:{}, T) = f."/\" ({}, S) by A1,YELLOW_0:43;
+A3: ex_inf_of f.:{}, T by YELLOW_0:43;
   X = {} or f preserves_inf_of X by Th2;
-  hence thesis by A2,WAYBEL_0:def 30;
+  hence thesis by A1,A2,A3,WAYBEL_0:def 30;
 end;
 
 theorem Th4:
@@ -180,26 +192,28 @@ A4: for x being set holds x in Z iff x in the carrier of S & P[x]
   from XBOOLE_0:sch 1;
   consider a being Element of X;
   reconsider a' = a as Element of S;
-A5: ex_inf_of {a}, S & inf {a'} = a & {a} c= X by YELLOW_0:38,39;
+A5: ex_inf_of {a}, S by YELLOW_0:38;
+A6: inf {a'} = a by YELLOW_0:39;
   Z c= the carrier of S
   proof
-    let x be set; thus thesis by A4;
+    let x be set;
+    thus thesis by A4;
   end;
-  then reconsider Z as non empty Subset of S by A4,A5;
-A6: now
+  then reconsider Z as non empty Subset of S by A4,A5,A6;
+A7: now
     let Y be finite Subset of X;
     Y is Subset of S by XBOOLE_1:1;
     hence Y <> {} implies ex_inf_of Y, S by YELLOW_0:55;
   end;
-A7: now
+A8: now
     let Y be finite Subset of X;
     reconsider Y' = Y as Subset of S by XBOOLE_1:1;
     assume
-A8: Y <> {};
+A9: Y <> {};
     then ex_inf_of Y', S by YELLOW_0:55;
-    hence "/\"(Y,S) in Z by A4,A8;
+    hence "/\"(Y,S) in Z by A4,A9;
   end;
-  now
+A10: now
     let x be Element of S;
     assume x in Z;
     then ex Y being non empty finite Subset of X st ex_inf_of Y,S & x = "/\"
@@ -207,54 +221,62 @@ A8: Y <> {};
     hence ex Y being finite Subset of X st ex_inf_of Y,S & x = "/\"(Y,S);
   end;
   then
-A9: Z is filtered & ex_inf_of Z, S & inf Z = inf X & Z <> {}
-  by A3,A6,A7,WAYBEL_0:56,58,59;
-  then f preserves_inf_of Z by A2;
+A11: Z is filtered by A7,A8,WAYBEL_0:56;
+A12: ex_inf_of Z, S by A3,A7,A8,A10,WAYBEL_0:58;
+A13: f preserves_inf_of Z by A2,A11;
   then
-A10: ex_inf_of f.:Z,T & inf (f.:Z) = f.inf Z & inf Z = inf X
-  by A9,WAYBEL_0:def 30;
+A14: ex_inf_of f.:Z,T by A12,WAYBEL_0:def 30;
+A15: inf (f.:Z) = f.inf Z by A12,A13,WAYBEL_0:def 30;
+A16: inf Z = inf X by A3,A7,A8,A10,WAYBEL_0:59;
   X c= Z
   proof
     let x be set;
     assume
-A11: x in X;
+A17: x in X;
     then reconsider Y = {x} as finite Subset of X by ZFMISC_1:37;
-    reconsider x as Element of S by A11;
+    reconsider x as Element of S by A17;
     Y is Subset of S by XBOOLE_1:1;
-    then ex_inf_of Y, S & x = "/\"(Y,S) by YELLOW_0:39,55;
-    hence thesis by A4;
+    then
+A18: ex_inf_of Y, S by YELLOW_0:55;
+    x = "/\"(Y,S) by YELLOW_0:39;
+    hence thesis by A4,A18;
   end;
   then
-A12: f.:X c= f.:Z by RELAT_1:156;
-A13: f.:Z is_>=_than f.inf X by A10,YELLOW_0:31;
-A14: f.:X is_>=_than f.inf X
+A19: f.:X c= f.:Z by RELAT_1:156;
+A20: f.:Z is_>=_than f.inf X by A14,A15,A16,YELLOW_0:31;
+A21: f.:X is_>=_than f.inf X
   proof
     let x be Element of T;
     assume x in f.:X;
-    hence thesis by A12,A13,LATTICE3:def 8;
+    hence thesis by A19,A20,LATTICE3:def 8;
   end;
-A15: now
+A22: now
     let b be Element of T;
     assume
-A16: f.:X is_>=_than b;
+A23: f.:X is_>=_than b;
     f.:Z is_>=_than b
     proof
       let a be Element of T;
       assume a in f.:Z;
       then consider x being set such that
-A17:  x in dom f & x in Z & a = f.x by FUNCT_1:def 12;
+      x in dom f and
+A24:  x in Z and
+A25:  a = f.x by FUNCT_1:def 12;
       consider Y being non empty finite Subset of X such that
-A18:  ex_inf_of Y, S & x = "/\"(Y,S) by A4,A17;
+A26:  ex_inf_of Y, S and
+A27:  x = "/\"(Y,S) by A4,A24;
       reconsider Y as Subset of S by XBOOLE_1:1;
-      f.:Y c= f.:X & f preserves_inf_of Y by A1,Th2,RELAT_1:156;
-      then b is_<=_than f.:Y & a = "/\"(f.:Y,T) & ex_inf_of f.:Y, T
-      by A16,A17,A18,WAYBEL_0:def 30,YELLOW_0:9;
-      hence thesis by YELLOW_0:def 10;
+A28:  f.:Y c= f.:X by RELAT_1:156;
+A29:  f preserves_inf_of Y by A1,Th2;
+A30:  b is_<=_than f.:Y by A23,A28,YELLOW_0:9;
+A31:  a = "/\"(f.:Y,T) by A25,A26,A27,A29,WAYBEL_0:def 30;
+      ex_inf_of f.:Y, T by A26,A29,WAYBEL_0:def 30;
+      hence thesis by A30,A31,YELLOW_0:def 10;
     end;
-    hence f.inf X >= b by A10,YELLOW_0:31;
+    hence f.inf X >= b by A14,A15,A16,YELLOW_0:31;
   end;
-  hence ex_inf_of f.:X,T by A14,YELLOW_0:16;
-  hence inf (f.:X) = f.inf X by A14,A15,YELLOW_0:def 10;
+  hence ex_inf_of f.:X,T by A21,YELLOW_0:16;
+  hence inf (f.:X) = f.inf X by A21,A22,YELLOW_0:def 10;
 end;
 
 theorem Th5:
@@ -266,12 +288,16 @@ A1: f is infs-preserving;
   reconsider e = {} as Subset of S by XBOOLE_1:2;
   hereby
     assume S is upper-bounded;
-    then ex_inf_of e, S & f preserves_inf_of e
-    by A1,WAYBEL_0:def 32,YELLOW_0:43;
-    then ex_inf_of f.:e, T & f.:e = {} by RELAT_1:149,WAYBEL_0:def 30;
-    hence T is upper-bounded by WAYBEL20:5;
+    then
+A2: ex_inf_of e, S by YELLOW_0:43;
+    f preserves_inf_of e by A1,WAYBEL_0:def 32;
+    then
+A3: ex_inf_of f.:e, T by A2,WAYBEL_0:def 30;
+    f.:e = {} by RELAT_1:149;
+    hence T is upper-bounded by A3,WAYBEL20:5;
   end;
-  let X be finite Subset of S; thus thesis by A1,WAYBEL_0:def 32;
+  let X be finite Subset of S;
+  thus thesis by A1,WAYBEL_0:def 32;
 end;
 
 theorem Th6:
@@ -282,26 +308,26 @@ theorem Th6:
   (f1 is directed-sups-preserving implies f2 is directed-sups-preserving)
 proof
   let S1,T1,S2,T2 be non empty RelStr such that
-A1: the RelStr of S1 = the RelStr of S2 & the RelStr of T1 = the RelStr of T2;
+A1: the RelStr of S1 = the RelStr of S2 and
+A2: the RelStr of T1 = the RelStr of T2;
   let f1 be Function of S1,T1, f2 be Function of S2,T2 such that
-A2: f1 = f2;
+A3: f1 = f2;
   thus f1 is infs-preserving implies f2 is infs-preserving
   proof
     assume
-A3: for X being Subset of S1 holds f1 preserves_inf_of X;
+A4: for X being Subset of S1 holds f1 preserves_inf_of X;
     let X be Subset of S2;
     reconsider Y = X as Subset of S1 by A1;
-    f1 preserves_inf_of Y by A3;
-    hence thesis by A1,A2,WAYBEL_0:65;
+    thus thesis by A1,A2,A3,A4,WAYBEL_0:65;
   end;
   assume
-A4: for X being Subset of S1 st X is non empty directed
+A5: for X being Subset of S1 st X is non empty directed
   holds f1 preserves_sup_of X;
   let X be Subset of S2;
   reconsider Y = X as Subset of S1 by A1;
   assume X is non empty directed;
-  then f1 preserves_sup_of Y by A1,A4,WAYBEL_0:3;
-  hence thesis by A1,A2,WAYBEL_0:65;
+  then f1 preserves_sup_of Y by A1,A5,WAYBEL_0:3;
+  hence thesis by A1,A2,A3,WAYBEL_0:65;
 end;
 
 theorem
@@ -312,26 +338,26 @@ theorem
   (f1 is filtered-infs-preserving implies f2 is filtered-infs-preserving)
 proof
   let S1,T1,S2,T2 be non empty RelStr such that
-A1: the RelStr of S1 = the RelStr of S2 & the RelStr of T1 = the RelStr of T2;
+A1: the RelStr of S1 = the RelStr of S2 and
+A2: the RelStr of T1 = the RelStr of T2;
   let f1 be Function of S1,T1, f2 be Function of S2,T2 such that
-A2: f1 = f2;
+A3: f1 = f2;
   thus f1 is sups-preserving implies f2 is sups-preserving
   proof
     assume
-A3: for X being Subset of S1 holds f1 preserves_sup_of X;
+A4: for X being Subset of S1 holds f1 preserves_sup_of X;
     let X be Subset of S2;
     reconsider Y = X as Subset of S1 by A1;
-    f1 preserves_sup_of Y by A3;
-    hence thesis by A1,A2,WAYBEL_0:65;
+    thus thesis by A1,A2,A3,A4,WAYBEL_0:65;
   end;
   assume
-A4: for X being Subset of S1 st X is non empty filtered
+A5: for X being Subset of S1 st X is non empty filtered
   holds f1 preserves_inf_of X;
   let X be Subset of S2;
   reconsider Y = X as Subset of S1 by A1;
   assume X is non empty filtered;
-  then f1 preserves_inf_of Y by A1,A4,WAYBEL_0:4;
-  hence thesis by A1,A2,WAYBEL_0:65;
+  then f1 preserves_inf_of Y by A1,A5,WAYBEL_0:4;
+  hence thesis by A1,A2,A3,WAYBEL_0:65;
 end;
 
 theorem Th8:
@@ -346,11 +372,14 @@ proof
   assume ex_inf_of X, S;
   thus ex_inf_of f.:X, T by YELLOW_0:17;
   the carrier of S c= the carrier of T by YELLOW_0:def 13;
-  then f = id the carrier of S by YELLOW_9:def 1;
   then
-A1: f.:X = X & ex_inf_of X, T & f.inf X = inf X by FUNCT_1:35,162,YELLOW_0:17;
-  then "/\"(X,T) in the carrier of S by YELLOW_0:def 18;
-  hence thesis by A1,YELLOW_0:64;
+A1: f = id the carrier of S by YELLOW_9:def 1;
+  then
+A2: f.:X = X by FUNCT_1:162;
+A3: ex_inf_of X, T by YELLOW_0:17;
+A4: f.inf X = inf X by A1,FUNCT_1:35;
+  "/\"(X,T) in the carrier of S by A3,YELLOW_0:def 18;
+  hence thesis by A2,A3,A4,YELLOW_0:64;
 end;
 
 theorem
@@ -365,11 +394,14 @@ proof
   assume ex_sup_of X, S;
   thus ex_sup_of f.:X, T by YELLOW_0:17;
   the carrier of S c= the carrier of T by YELLOW_0:def 13;
-  then f = id the carrier of S by YELLOW_9:def 1;
   then
-A1: f.:X = X & ex_sup_of X, T & f.sup X = sup X by FUNCT_1:35,162,YELLOW_0:17;
-  then "\/"(X,T) in the carrier of S by YELLOW_0:def 19;
-  hence thesis by A1,YELLOW_0:65;
+A1: f = id the carrier of S by YELLOW_9:def 1;
+  then
+A2: f.:X = X by FUNCT_1:162;
+A3: ex_sup_of X, T by YELLOW_0:17;
+A4: f.sup X = sup X by A1,FUNCT_1:35;
+  "\/"(X,T) in the carrier of S by A3,YELLOW_0:def 19;
+  hence thesis by A2,A3,A4,YELLOW_0:65;
 end;
 
 theorem Th10:
@@ -381,15 +413,18 @@ proof
   let S be directed-sups-inheriting full non empty SubRelStr of T;
   set f = incl(S,T);
   let X be Subset of S;
-  assume
-A1: X is non empty directed & ex_sup_of X, S;
-  then reconsider X' = X as non empty directed Subset of T by YELLOW_2:7;
+  assume that
+A1: X is non empty directed
+  and ex_sup_of X, S;
+  reconsider X' = X as non empty directed Subset of T by A1,YELLOW_2:7;
   the carrier of S c= the carrier of T by YELLOW_0:def 13;
-  then f = id the carrier of S by YELLOW_9:def 1;
   then
-A2: f.:X = X' & f.sup X = sup X by FUNCT_1:35,162;
-  hence ex_sup_of f.:X, T by WAYBEL_0:75;
-  hence thesis by A1,A2,WAYBEL_0:7;
+A2: f = id the carrier of S by YELLOW_9:def 1;
+  then
+A3: f.:X = X' by FUNCT_1:162;
+A4: f.sup X = sup X by A2,FUNCT_1:35;
+  thus ex_sup_of f.:X, T by A3,WAYBEL_0:75;
+  hence thesis by A1,A3,A4,WAYBEL_0:7;
 end;
 
 theorem
@@ -401,14 +436,18 @@ proof
   let S be filtered-infs-inheriting full non empty SubRelStr of T;
   set f = incl(S,T);
   let X be Subset of S;
-  assume
-A1: X is non empty filtered & ex_inf_of X, S;
+  assume that
+A1: X is non empty filtered
+  and ex_inf_of X, S;
   thus ex_inf_of f.:X, T by YELLOW_0:17;
   the carrier of S c= the carrier of T by YELLOW_0:def 13;
-  then f = id the carrier of S by YELLOW_9:def 1;
-  then f.:X = X & ex_inf_of X, T & f.inf X = inf X
-  by FUNCT_1:35,162,YELLOW_0:17;
-  hence thesis by A1,WAYBEL_0:6;
+  then
+A2: f = id the carrier of S by YELLOW_9:def 1;
+  then
+A3: f.:X = X by FUNCT_1:162;
+A4: ex_inf_of X, T by YELLOW_0:17;
+  f.inf X = inf X by A2,FUNCT_1:35;
+  hence thesis by A1,A3,A4,WAYBEL_0:6;
 end;
 
 theorem Th12:
@@ -417,14 +456,14 @@ theorem Th12:
   holds R is SubRelStr of T2 & (S is full implies R is full SubRelStr of T2)
 proof
   let T,T2,R be RelStr, S be SubRelStr of T such that
-A1: the RelStr of T = the RelStr of T2 & the RelStr of S = the RelStr of R;
-  thus
-A2: R is SubRelStr of T2
-  proof thus the carrier of R c= the carrier of T2 &
-    the InternalRel of R c= the InternalRel of T2 by A1,YELLOW_0:def 13;
-  end;
-  assume the InternalRel of S = (the InternalRel of T)|_2 the carrier of S;
-  hence thesis by A1,A2,YELLOW_0:def 14;
+A1: the RelStr of T = the RelStr of T2 and
+A2: the RelStr of S = the RelStr of R;
+A3: the carrier of R c= the carrier of T2 by A1,A2,YELLOW_0:def 13;
+A4: the InternalRel of R c= the InternalRel of T2 by A1,A2,YELLOW_0:def 13;
+  hence R is SubRelStr of T2 by A3,YELLOW_0:def 13;
+  assume
+  the InternalRel of S = (the InternalRel of T)|_2 the carrier of S;
+  hence thesis by A1,A2,A3,A4,YELLOW_0:def 13,def 14;
 end;
 
 theorem Th13:
@@ -473,41 +512,47 @@ A2: X is finite;
 A3: P[{}];
 A4: now
       let y,x be set;
-      assume
-A5:   y in X & x c= X & P[x];
+      assume that
+A5:   y in X and
+A6:   x c= X and
+A7:   P[x];
       thus P[x \/ {y}]
       proof
         assume x \/ {y} <> {};
         reconsider y' = y as Element of S by A5;
         reconsider z = y' as Element of T by YELLOW_0:59;
-        x c= the carrier of S & the carrier of S c= the carrier of T
-        by A5,XBOOLE_1:1,YELLOW_0:def 13;
+A8:     x c= the carrier of S by A6,XBOOLE_1:1;
+        the carrier of S c= the carrier of T by YELLOW_0:def 13;
         then reconsider x' = x as finite Subset of T
-        by A5,XBOOLE_1:1;
-A6:     ex_inf_of {z}, T & inf {z} = y' by YELLOW_0:38,39;
+        by A6,A8,XBOOLE_1:1;
+A9:     ex_inf_of {z}, T by YELLOW_0:38;
+A10:    inf {z} = y' by YELLOW_0:39;
         now
           assume
-A7:       x' <> {};
+A11:      x' <> {};
           then ex_inf_of x', T by YELLOW_0:55;
           then
-A8:       inf x' in the carrier of S & inf (x' \/ {z}) = (inf x' )"/\"z &
-          ex_inf_of {inf x', z}, T by A5,A6,A7,YELLOW_0:21,YELLOW_2:4;
-          then inf {inf x', z} in the carrier of S by A1,YELLOW_0:def 16;
-          hence inf (x' \/ {z}) in the carrier of S by A8,YELLOW_0:40;
+A12:      inf (x' \/ {z}) = (inf x' )"/\"z by A9,A10,YELLOW_2:4;
+          ex_inf_of {inf x', z}, T by YELLOW_0:21;
+          then inf {inf x', z} in the carrier of S by A1,A7,A11,
+          YELLOW_0:def 16;
+          hence inf (x' \/ {z}) in the carrier of S by A12,YELLOW_0:40;
         end;
-        hence thesis by A6;
+        hence thesis by A10;
       end;
     end;
     P[X] from FINSET_1:sch 2(A2,A3,A4);
     hence "/\"(X, T) in the carrier of S;
   end;
   assume
-A9: for X being finite non empty Subset of S holds "/\"
+A13: for X being finite non empty Subset of S holds "/\"
   (X, T) in the carrier of S;
   let x,y be Element of T;
-  assume x in the carrier of S & y in the carrier of S;
-  then {x,y} c= the carrier of S by ZFMISC_1:38;
-  hence thesis by A9;
+  assume that
+A14: x in the carrier of S and
+A15: y in the carrier of S;
+  {x,y} c= the carrier of S by A14,A15,ZFMISC_1:38;
+  hence thesis by A13;
 end;
 
 theorem Th15:
@@ -527,41 +572,47 @@ A2: X is finite;
 A3: P[{}];
 A4: now
       let y,x be set;
-      assume
-A5:   y in X & x c= X & P[x];
-      then reconsider y' = y as Element of S;
+      assume that
+A5:   y in X and
+A6:   x c= X and
+A7:   P[x];
+      reconsider y' = y as Element of S by A5;
       reconsider z = y' as Element of T by YELLOW_0:59;
       thus P[x \/ {y}]
       proof
         assume x \/ {y} <> {};
-        x c= the carrier of S & the carrier of S c= the carrier of T
-        by A5,XBOOLE_1:1,YELLOW_0:def 13;
+A8:     x c= the carrier of S by A6,XBOOLE_1:1;
+        the carrier of S c= the carrier of T by YELLOW_0:def 13;
         then reconsider x' = x as finite Subset of T
-        by A5,XBOOLE_1:1;
-A6:     ex_sup_of {z}, T & sup {z} = y' by YELLOW_0:38,39;
+        by A6,A8,XBOOLE_1:1;
+A9:     ex_sup_of {z}, T by YELLOW_0:38;
+A10:    sup {z} = y' by YELLOW_0:39;
         now
           assume
-A7:       x' <> {};
+A11:      x' <> {};
           then ex_sup_of x', T by YELLOW_0:54;
           then
-A8:       sup x' in the carrier of S & sup (x' \/ {z}) = (sup x' ) "\/"z &
-          ex_sup_of {sup x', z}, T by A5,A6,A7,YELLOW_0:20,YELLOW_2:3;
-          then sup {sup x', z} in the carrier of S by A1,YELLOW_0:def 17;
-          hence sup (x' \/ {z}) in the carrier of S by A8,YELLOW_0:41;
+A12:      sup (x' \/ {z}) = (sup x' ) "\/"z by A9,A10,YELLOW_2:3;
+          ex_sup_of {sup x', z}, T by YELLOW_0:20;
+          then sup {sup x', z} in the carrier of S by A1,A7,A11,
+          YELLOW_0:def 17;
+          hence sup (x' \/ {z}) in the carrier of S by A12,YELLOW_0:41;
         end;
-        hence thesis by A6;
+        hence thesis by A10;
       end;
     end;
     P[X] from FINSET_1:sch 2(A2,A3,A4);
     hence "\/"(X, T) in the carrier of S;
   end;
   assume
-A9: for X being finite non empty Subset of S holds "\/"
+A13: for X being finite non empty Subset of S holds "\/"
   (X, T) in the carrier of S;
   let x,y be Element of T;
-  assume x in the carrier of S & y in the carrier of S;
-  then {x,y} c= the carrier of S by ZFMISC_1:38;
-  hence thesis by A9;
+  assume that
+A14: x in the carrier of S and
+A15: y in the carrier of S;
+  {x,y} c= the carrier of S by A14,A15,ZFMISC_1:38;
+  hence thesis by A13;
 end;
 
 theorem Th16:
@@ -572,36 +623,38 @@ theorem Th16:
 proof
   let T be upper-bounded Semilattice;
   let S be meet-inheriting full non empty SubRelStr of T such that
-A1: Top T in the carrier of S & S is filtered-infs-inheriting;
+A1: Top T in the carrier of S and
+A2: S is filtered-infs-inheriting;
   let A be Subset of S;
   the carrier of S c= the carrier of T by YELLOW_0:def 13;
   then reconsider C = A as Subset of T by XBOOLE_1:1;
   set F = fininfs C;
   assume
-A2: ex_inf_of A, T;
+A3: ex_inf_of A, T;
   then
-A3: inf F = inf C by WAYBEL_0:60;
+A4: inf F = inf C by WAYBEL_0:60;
   F c= the carrier of S
   proof
     let x be set;
     assume x in F;
     then consider Y being finite Subset of C such that
-A4: x = "/\"(Y, T) & ex_inf_of Y, T;
+A5: x = "/\"(Y, T)
+    and ex_inf_of Y, T;
     reconsider Y as finite Subset of T by XBOOLE_1:1;
     reconsider Z = Y as finite Subset of S by XBOOLE_1:1;
     assume
-A5: not x in the carrier of S;
-    then Z <> {} by A1,A4;
-    hence thesis by A4,A5,Th14;
+A6: not x in the carrier of S;
+    then Z <> {} by A1,A5;
+    hence thesis by A5,A6,Th14;
   end;
   then reconsider G = F as non empty Subset of S;
   reconsider G as filtered non empty Subset of S by WAYBEL10:24;
-A6: now
+A7: now
     let Y be finite Subset of C;
     Y c= the carrier of T by XBOOLE_1:1;
     hence Y <> {} implies ex_inf_of Y,T by YELLOW_0:55;
   end;
-A7: now
+A8: now
     let x be Element of T;
     assume x in F;
     then ex Y being finite Subset of C st x = "/\"(Y,T) & ex_inf_of Y,T;
@@ -614,8 +667,8 @@ A7: now
     then ex_inf_of Z, T by YELLOW_0:55;
     hence "/\"(Y,T) in F;
   end;
-  then ex_inf_of G, T by A2,A6,A7,WAYBEL_0:58;
-  hence thesis by A1,A3,WAYBEL_0:def 3;
+  then ex_inf_of G, T by A3,A7,A8,WAYBEL_0:58;
+  hence thesis by A2,A4,WAYBEL_0:def 3;
 end;
 
 theorem
@@ -626,36 +679,38 @@ theorem
 proof
   let T be lower-bounded sup-Semilattice;
   let S be join-inheriting full non empty SubRelStr of T such that
-A1: Bottom T in the carrier of S & S is directed-sups-inheriting;
+A1: Bottom T in the carrier of S and
+A2: S is directed-sups-inheriting;
   let A be Subset of S;
   the carrier of S c= the carrier of T by YELLOW_0:def 13;
   then reconsider C = A as Subset of T by XBOOLE_1:1;
   set F = finsups C;
   assume
-A2: ex_sup_of A, T;
+A3: ex_sup_of A, T;
   then
-A3: sup F = sup C by WAYBEL_0:55;
+A4: sup F = sup C by WAYBEL_0:55;
   F c= the carrier of S
   proof
     let x be set;
     assume x in F;
     then consider Y being finite Subset of C such that
-A4: x = "\/"(Y, T) & ex_sup_of Y, T;
+A5: x = "\/"(Y, T)
+    and ex_sup_of Y, T;
     reconsider Y as finite Subset of T by XBOOLE_1:1;
     reconsider Z = Y as finite Subset of S by XBOOLE_1:1;
     assume
-A5: not x in the carrier of S;
-    then Z <> {} by A1,A4;
-    hence thesis by A4,A5,Th15;
+A6: not x in the carrier of S;
+    then Z <> {} by A1,A5;
+    hence thesis by A5,A6,Th15;
   end;
   then reconsider G = F as non empty Subset of S;
   reconsider G as directed non empty Subset of S by WAYBEL10:24;
-A6: now
+A7: now
     let Y be finite Subset of C;
     Y c= the carrier of T by XBOOLE_1:1;
     hence Y <> {} implies ex_sup_of Y,T by YELLOW_0:54;
   end;
-A7: now
+A8: now
     let x be Element of T;
     assume x in F;
     then ex Y being finite Subset of C st x = "\/"(Y,T) & ex_sup_of Y,T;
@@ -668,8 +723,8 @@ A7: now
     then ex_sup_of Z, T by YELLOW_0:54;
     hence "\/"(Y,T) in F;
   end;
-  then ex_sup_of G, T by A2,A6,A7,WAYBEL_0:53;
-  hence thesis by A1,A3,WAYBEL_0:def 4;
+  then ex_sup_of G, T by A3,A7,A8,WAYBEL_0:53;
+  hence thesis by A2,A4,WAYBEL_0:def 4;
 end;
 
 theorem Th18:
@@ -731,8 +786,7 @@ A3: for X being Subset of S1 st ex_inf_of X,T1
   reconsider Y = X as Subset of S1 by A2;
   assume
 A4: ex_inf_of X,T2;
-  then ex_inf_of Y,T1 by A1,YELLOW_0:14;
-  then "/\"(Y,T1) in the carrier of S1 by A3;
+  then "/\"(Y,T1) in the carrier of S1 by A1,A3,YELLOW_0:14;
   hence thesis by A1,A2,A4,YELLOW_0:27;
 end;
 
@@ -757,8 +811,7 @@ A3: for X being Subset of S1 st ex_sup_of X,T1
   reconsider Y = X as Subset of S1 by A2;
   assume
 A4: ex_sup_of X,T2;
-  then ex_sup_of Y,T1 by A1,YELLOW_0:14;
-  then "\/"(Y,T1) in the carrier of S1 by A3;
+  then "\/"(Y,T1) in the carrier of S1 by A1,A3,YELLOW_0:14;
   hence thesis by A1,A2,A4,YELLOW_0:26;
 end;
 
@@ -788,8 +841,7 @@ A5: X <> {};
   reconsider Y = X as directed Subset of S1 by A3,WAYBEL_0:3;
   assume
 A6: ex_sup_of X,T2;
-  then ex_sup_of Y,T1 by A1,YELLOW_0:14;
-  then "\/"(Y,T1) in the carrier of S1 by A4,A5;
+  then "\/"(Y,T1) in the carrier of S1 by A1,A4,A5,YELLOW_0:14;
   hence thesis by A1,A2,A6,YELLOW_0:26;
 end;
 
@@ -819,8 +871,7 @@ A5: X <> {};
   reconsider Y = X as filtered Subset of S1 by A3,WAYBEL_0:4;
   assume
 A6: ex_inf_of X,T2;
-  then ex_inf_of Y,T1 by A1,YELLOW_0:14;
-  then "/\"(Y,T1) in the carrier of S1 by A4,A5;
+  then "/\"(Y,T1) in the carrier of S1 by A1,A4,A5,YELLOW_0:14;
   hence thesis by A1,A2,A6,YELLOW_0:27;
 end;
 
@@ -839,31 +890,36 @@ A2: f is continuous;
 A3: p in f.:Lim N;
   then reconsider p as Point of T;
   consider x being set such that
-A4: x in the carrier of S & x in Lim N & p = f.x by A3,FUNCT_2:115;
+A4: x in the carrier of S and
+A5: x in Lim N and
+A6: p = f.x by A3,FUNCT_2:115;
   reconsider x as Element of S by A4;
   now
     let V be a_neighborhood of p;
-    p in Int V & Int V is open by CONNSP_2:def 1,TOPS_1:51;
-    then x in f"Int V & f"Int V is open by A1,A2,A4,FUNCT_2:46,TOPS_2:55;
-    then f"Int V is a_neighborhood of x by CONNSP_2:5;
-    then N is_eventually_in f"Int V by A4,YELLOW_6:def 18;
+A7: p in Int V by CONNSP_2:def 1;
+A8: Int V is open by TOPS_1:51;
+A9: x in f"Int V by A6,A7,FUNCT_2:46;
+    f"Int V is open by A1,A2,A8,TOPS_2:55;
+    then f"Int V is a_neighborhood of x by A9,CONNSP_2:5;
+    then N is_eventually_in f"Int V by A5,YELLOW_6:def 18;
     then consider i being Element of N such that
-A5: for j being Element of N st j >= i holds N.j in
+A10: for j being Element of N st j >= i holds N.j in
     f"Int V by WAYBEL_0:def 11;
-A6: the mapping of f*N = f*the mapping of N &
-    the RelStr of f*N = the RelStr of N by WAYBEL_9:def 8;
+A11: the mapping of f*N = f*the mapping of N by WAYBEL_9:def 8;
+A12: the RelStr of f*N = the RelStr of N by WAYBEL_9:def 8;
     then reconsider i' = i as Element of f*N;
     thus f*N is_eventually_in V
     proof
       take i';
       let j' be Element of f*N;
-      reconsider j = j' as Element of N by A6;
-A7:   f.(N.j) = (f*N).j' by A6,FUNCT_2:21;
+      reconsider j = j' as Element of N by A12;
+A13:  f.(N.j) = (f*N).j' by A11,FUNCT_2:21;
       assume j' >= i';
-      then j >= i by A6,YELLOW_0:1;
-      then N.j in f"Int V by A5;
-      then f.(N.j) in Int V & Int V c= V by FUNCT_2:46,TOPS_1:44;
-      hence thesis by A7;
+      then N.j in f"Int V by A10,A12,YELLOW_0:1;
+      then
+A14:  f.(N.j) in Int V by FUNCT_2:46;
+      Int V c= V by TOPS_1:44;
+      hence thesis by A13,A14;
     end;
   end;
   hence thesis by YELLOW_6:def 18;
@@ -888,8 +944,9 @@ A1:   netmap(N,T) is antitone by WAYBEL_0:def 10;
     assume
 A2: for i,j being Element of N st i <= j holds N.i >= N.j;
     let i,j be Element of N;
-    N.i = netmap(N,T).i & N.j = netmap(N,T).j;
-    hence thesis by A2;
+A3: N.i = netmap(N,T).i;
+    N.j = netmap(N,T).j;
+    hence thesis by A2,A3;
   end;
 end;
 
@@ -904,25 +961,28 @@ A1: the carrier of N = {x} by YELLOW_9:7;
     thus N is transitive
     proof
       let i,j,k be Element of N;
-      i = x & k = x by A1,TARSKI:def 1;
-      hence thesis by YELLOW_0:def 1;
+      i = x by A1,TARSKI:def 1;
+      hence thesis by A1,TARSKI:def 1;
     end;
     thus N is directed
     proof
       let i,j be Element of N;
-      i = x & j = x by A1,TARSKI:def 1;
-      then i <= i & j <= i;
-      hence thesis;
+A2:   i = x by A1,TARSKI:def 1;
+A3:   i <= i;
+      j <= i by A1,A2,TARSKI:def 1;
+      hence thesis by A3;
     end;
     thus N is monotone
     proof
       let i,j be Element of N;
-      i = x & j = x by A1,TARSKI:def 1;
-      hence thesis by YELLOW_0:def 1;
+A4:   i = x by A1,TARSKI:def 1;
+      j = x by A1,TARSKI:def 1;
+      hence thesis by A4,YELLOW_0:def 1;
     end;
     let i,j be Element of N;
-    i = x & j = x by A1,TARSKI:def 1;
-    hence thesis by YELLOW_0:def 1;
+A5: i = x by A1,TARSKI:def 1;
+    j = x by A1,TARSKI:def 1;
+    hence thesis by A5,YELLOW_0:def 1;
   end;
 end;
 
@@ -931,7 +991,8 @@ registration
   cluster monotone antitone reflexive strict net of T;
   existence
   proof consider x being Element of T;
-    take {x} opp+id; thus thesis;
+    take {x} opp+id;
+    thus thesis;
   end;
 end;
 
@@ -946,8 +1007,8 @@ A1: F opp+id is full SubRelStr of T opp by YELLOW_9:7;
     then reconsider x = i, y = j as Element of T opp by YELLOW_0:59;
     assume i <= j;
     then x <= y by A1,YELLOW_0:60;
-    then ~x >= ~y & ~x = x by YELLOW_7:1;
-    then (F opp+id).i >= ~y & ~y = y by YELLOW_9:7;
+    then ~x >= ~y by YELLOW_7:1;
+    then (F opp+id).i >= ~y by YELLOW_9:7;
     hence thesis by YELLOW_9:7;
   end;
 end;
@@ -960,16 +1021,14 @@ registration
   coherence
   proof
     let i,j be Element of f*N;
-A1: the mapping of f*N = f*the mapping of N &
-    the RelStr of f*N = the RelStr of N by WAYBEL_9:def 8;
+A1: the mapping of f*N = f*the mapping of N by WAYBEL_9:def 8;
+A2: the RelStr of f*N = the RelStr of N by WAYBEL_9:def 8;
     then reconsider x = i, y = j as Element of N;
     assume i <= j;
-    then x <= y by A1,YELLOW_0:1;
+    then x <= y by A2,YELLOW_0:1;
     then N.x >= N.y by Def2;
-    then f.(N.x) >= f.(N.y) & N.x = (the mapping of N).x &
-    (f*N).i = (the mapping of f*N).i by WAYBEL_1:def 2;
-    then (f*N).i >= f.(N.y) & N.y = (the mapping of N).y &
-    (f*N).j = (the mapping of f*N).j by A1,FUNCT_2:21;
+    then f.(N.x) >= f.(N.y) by WAYBEL_1:def 2;
+    then (f*N).i >= f.(N.y) by A1,FUNCT_2:21;
     hence thesis by A1,FUNCT_2:21;
   end;
 end;
@@ -1026,13 +1085,16 @@ A2: x = "/\"({N.i where i is Element of N: i >= j1}, S);
     then consider j2 being Element of N such that
 A3: y = "/\"({N.i where i is Element of N: i >= j2}, S);
     reconsider j1,j2 as Element of N;
-    [#]N is directed & [#]N = the carrier of N by WAYBEL_0:def 6;
+    [#]N is directed by WAYBEL_0:def 6;
     then consider j being Element of N such that
-A4: j in [#]N & j >= j1 & j >= j2 by WAYBEL_0:def 1;
+    j in [#]N and
+A4: j >= j1 and
+A5: j >= j2 by WAYBEL_0:def 1;
     set z = "/\"({N.i where i is Element of N: i >= j}, S);
-    take z; thus z in X;
+    take z;
+    thus z in X;
     deffunc up(Element of N) = {N.i where i is Element of N: i >= $1};
-A5: for j being Element of N holds ex_inf_of up(j), S
+A6: for j being Element of N holds ex_inf_of up(j), S
     proof
       let j be Element of N;
       reconsider j' = j as Element of N;
@@ -1040,7 +1102,7 @@ A5: for j being Element of N holds ex_inf_of up(j), S
         take x = N.j;
         j' <= j';
         then
-A6:     x in up(j);
+A7:     x in up(j);
         thus x is_<=_than up(j)
         proof
           let y be Element of S;
@@ -1050,37 +1112,39 @@ A6:     x in up(j);
         end;
         let y be Element of S;
         assume y is_<=_than up(j);
-        hence y <= x by A6,LATTICE3:def 8;
+        hence y <= x by A7,LATTICE3:def 8;
       end;
       hence thesis by YELLOW_0:16;
     end;
     then
-A7: ex_inf_of up(j1), S;
-A8: ex_inf_of up(j2), S by A5;
-A9: ex_inf_of up(j), S by A5;
+A8: ex_inf_of up(j1), S;
+A9: ex_inf_of up(j2), S by A6;
+A10: ex_inf_of up(j), S by A6;
     set A = {N.i where i is Element of N:i >= j};
     A c= {N.k where k is Element of N:k >= j1}
     proof
       let a be set;
       assume a in A;
       then consider k being Element of N such that
-A10:  a = N.k & k >= j;
+A11:  a = N.k and
+A12:  k >= j;
       reconsider k as Element of N;
-      k >= j1 by A4,A10,ORDERS_2:26;
-      hence thesis by A10;
+      k >= j1 by A4,A12,ORDERS_2:26;
+      hence thesis by A11;
     end;
-    hence z >= x by A2,A7,A9,YELLOW_0:35;
+    hence z >= x by A2,A8,A10,YELLOW_0:35;
     A c= {N.k where k is Element of N:k >= j2}
     proof
       let a be set;
       assume a in A;
       then consider k being Element of N such that
-A11:  a = N.k & k >= j;
+A13:  a = N.k and
+A14:  k >= j;
       reconsider k as Element of N;
-      k >= j2 by A4,A11,ORDERS_2:26;
-      hence thesis by A11;
+      k >= j2 by A5,A14,ORDERS_2:26;
+      hence thesis by A13;
     end;
-    hence thesis by A3,A8,A9,YELLOW_0:35;
+    hence thesis by A3,A9,A10,YELLOW_0:35;
   end;
   hence thesis;
 end;
@@ -1122,7 +1186,8 @@ A3: X c= F
       let x be set;
       assume x in X;
       then consider i being Element of N such that
-A4:   x = N.i & i >= v;
+A4:   x = N.i
+      and i >= v;
       reconsider i as Element of N;
       x = i by A4,YELLOW_9:7;
       hence thesis by A2;
@@ -1130,33 +1195,40 @@ A4:   x = N.i & i >= v;
     vv <= vv;
     then N.v in X;
     then reconsider X as non empty Subset of R by A3,XBOOLE_1:1;
-A5: ex_inf_of F, R & ex_inf_of X, R by WAYBEL_0:76;
+A5: ex_inf_of F, R by WAYBEL_0:76;
+A6: ex_inf_of X, R by WAYBEL_0:76;
     then
-A6: inf X >= inf F by A3,YELLOW_0:35;
+A7: inf X >= inf F by A3,A5,YELLOW_0:35;
     F is_>=_than inf X
     proof
       let a be Element of R;
       assume a in F;
       then consider b being Element of R such that
-A7:   b in F & a >= b & j >= b by A2,WAYBEL_0:def 2;
-      reconsider k = b as Element of N by A7,YELLOW_9:7;
-      N is full SubRelStr of R opp & j~ = v & b~ = k & j~ <= b~
-      by A7,LATTICE3:9,YELLOW_9:7;
-      then N.k = b & k >= vv by YELLOW_0:61,YELLOW_9:7;
-      then b in X;
-      then {b} c= X & ex_inf_of {b}, R & inf {b} = b
-      by YELLOW_0:38,39,ZFMISC_1:37;
-      then b >= inf X by A5,YELLOW_0:35;
-      hence thesis by A7,YELLOW_0:def 2;
+A8:   b in F and
+A9:   a >= b and
+A10:  j >= b by A2,WAYBEL_0:def 2;
+      reconsider k = b as Element of N by A8,YELLOW_9:7;
+A11:  N is full SubRelStr of R opp by YELLOW_9:7;
+A12:  j~ <= b~ by A10,LATTICE3:9;
+A13:  N.k = b by YELLOW_9:7;
+      k >= vv by A11,A12,YELLOW_0:61;
+      then b in X by A13;
+      then
+A14:  {b} c= X by ZFMISC_1:37;
+A15:  ex_inf_of {b}, R by YELLOW_0:38;
+      inf {b} = b by YELLOW_0:39;
+      then b >= inf X by A6,A14,A15,YELLOW_0:35;
+      hence thesis by A9,YELLOW_0:def 2;
     end;
     then inf F >= "/\"(X, R) by A5,YELLOW_0:31;
-    hence thesis by A6,ORDERS_2:25;
+    hence thesis by A7,ORDERS_2:25;
   end;
-A8: {F(j) where j is Element of N: P[j]}
+A16: {F(j) where j is Element of N: P[j]}
   = {G(k) where k is Element of N: P[k]} from FRAENKEL:sch 6(A1);
-A9: ex j being Element of N st P[j];
-  {inf F where j is Element of N: P[j]} = {inf F} from LATTICE3:sch 1(A9);
-  hence lim_inf N = "\/"({inf F}, R) by A8,WAYBEL11:def 6
+A17: ex j being Element of N st P[j];
+  {inf F where j is Element of N: P[j]} = {inf F} from LATTICE3:sch 1(
+  A17);
+  hence lim_inf N = "\/"({inf F}, R) by A16,WAYBEL11:def 6
     .= inf F by YELLOW_0:39;
 end;
 
@@ -1172,67 +1244,78 @@ proof
   set M = X opp+id, N = f*M;
   deffunc up(Element of N) = {N.i where i is Element of N: i >= $1};
   deffunc infy(Element of N) = "/\"(up($1), T);
-A1: the RelStr of N = the RelStr of M &
-  the mapping of N = f*the mapping of M by WAYBEL_9:def 8;
-A2: the carrier of M = X & the mapping of M = id X by WAYBEL19:27,YELLOW_9:7;
+A1: the RelStr of N = the RelStr of M by WAYBEL_9:def 8;
+A2: the mapping of N = f*the mapping of M by WAYBEL_9:def 8;
+A3: the carrier of M = X by YELLOW_9:7;
+A4: the mapping of M = id X by WAYBEL19:27;
   defpred P[set] means not contradiction;
   deffunc G(set) = inf (f.:X);
-A3: for j being Element of N st P[j] holds infy(j) = G(j)
+A5: for j being Element of N st P[j] holds infy(j) = G(j)
   proof
     let j be Element of N;
     reconsider j as Element of N;
-A4: [#]N is directed & [#]N = the carrier of N by WAYBEL_0:def 6;
+A6: [#]N is directed by WAYBEL_0:def 6;
     then consider i' being Element of N such that
-A5: i' in [#]N & i' >= j & i' >= j by WAYBEL_0:def 1;
-A6: up(j) c= f.:X
+    i' in [#]N and
+A7: i' >= j
+    and i' >= j by WAYBEL_0:def 1;
+A8: up(j) c= f.:X
     proof
       let a be set;
       assume a in up(j);
       then consider i being Element of N such that
-A7:   a = N.i & i >= j;
+A9:   a = N.i
+      and i >= j;
       reconsider i as Element of N;
       reconsider i' = i as Element of M by A1;
-A8:   N.i = f.((id X).i) by A1,A2,FUNCT_2:21
-        .= f.i' by A2,FUNCT_1:35;
-      i' in X & the carrier of T <> {} by A2;
-      hence thesis by A7,A8,FUNCT_2:43;
+A10:  N.i = f.((id X).i) by A1,A2,A4,FUNCT_2:21
+        .= f.i' by A3,FUNCT_1:35;
+      i' in X by A3;
+      hence thesis by A9,A10,FUNCT_2:43;
     end;
-    then up(j) c= the carrier of T & N.i' in up(j) by A5,XBOOLE_1:1;
     then
-A9: ex_inf_of up(j), T & ex_inf_of f.:X, T by WAYBEL_0:76;
+A11: up(j) c= the carrier of T by XBOOLE_1:1;
+    N.i' in up(j) by A7;
     then
-A10: infy(j) >= inf (f.:X) by A6,YELLOW_0:35;
+A12: ex_inf_of up(j), T by A11,WAYBEL_0:76;
+A13: ex_inf_of f.:X, T by WAYBEL_0:76;
+    then
+A14: infy(j) >= inf (f.:X) by A8,A12,YELLOW_0:35;
     infy(j) is_<=_than f.:X
     proof
       let x be Element of T;
       assume x in f.:X;
       then consider y being set such that
-A11:  y in the carrier of S & y in X & x = f.y by FUNCT_2:115;
-      reconsider y as Element of N by A1,A11,YELLOW_9:7;
+A15:  y in the carrier of S and
+A16:  y in X and
+A17:  x = f.y by FUNCT_2:115;
+      reconsider y as Element of N by A1,A16,YELLOW_9:7;
       consider i being Element of N such that
-A12:  i in [#]N & i >= y & i >= j by A4,WAYBEL_0:def 1;
-      i in X by A1,A2;
-      then reconsider xi = i, xy = y as Element of S by A11;
+      i in [#]N and
+A18:  i >= y and
+A19:  i >= j by A6,WAYBEL_0:def 1;
+      i in X by A1,A3;
+      then reconsider xi = i, xy = y as Element of S by A15;
       M is full SubRelStr of S opp by YELLOW_9:7;
-      then N is full SubRelStr of S opp & xi = xi~ & xy = xy~ by A1,Th12;
-      then xi~ >= xy~ by A12,YELLOW_0:60;
+      then N is full SubRelStr of S opp by A1,Th12;
+      then xi~ >= xy~ by A18,YELLOW_0:60;
       then xi <= xy by LATTICE3:9;
       then
-A13:  f.xi <= x by A11,WAYBEL_1:def 2;
-      N.i = f.((id X).i) by A1,A2,FUNCT_2:21
-        .= f.xi by A1,A2,FUNCT_1:35;
-      then f.xi in up(j) by A12;
-      then f.xi >= infy(j) by A9,YELLOW_4:2;
-      hence thesis by A13,ORDERS_2:26;
+A20:  f.xi <= x by A17,WAYBEL_1:def 2;
+      N.i = f.((id X).i) by A1,A2,A4,FUNCT_2:21
+        .= f.xi by A1,A3,FUNCT_1:35;
+      then f.xi in up(j) by A19;
+      then f.xi >= infy(j) by A12,YELLOW_4:2;
+      hence thesis by A20,ORDERS_2:26;
     end;
-    then infy(j) <= inf (f.:X) by A9,YELLOW_0:31;
-    hence thesis by A10,ORDERS_2:25;
+    then infy(j) <= inf (f.:X) by A13,YELLOW_0:31;
+    hence thesis by A14,ORDERS_2:25;
   end;
-A14: ex j being Element of N st P[j];
+A21: ex j being Element of N st P[j];
   {infy(j) where j is Element of N: P[j]} =
-  {G(j) where j is Element of N: P[j]} from FRAENKEL:sch 6(A3)
+  {G(j) where j is Element of N: P[j]} from FRAENKEL:sch 6(A5)
     .= {inf (f.:X) where j is Element of N: P[j]}
-    .= {inf (f.:X)} from LATTICE3:sch 1(A14);
+    .= {inf (f.:X)} from LATTICE3:sch 1(A21);
   hence lim_inf N = sup {inf (f.:X)} by WAYBEL11:def 6
     .= inf (f.:X) by YELLOW_0:39;
 end;
@@ -1249,42 +1332,43 @@ proof
   let Y be non empty filtered Subset of T such that
 A1: Y = f.:X;
   set N = f*(X opp+id), M = Y opp+id;
-A2: the RelStr of N = the RelStr of X opp+id &
-  the mapping of N = f*the mapping of X opp+id by WAYBEL_9:def 8;
-A3: the carrier of M = Y & M is full SubRelStr of T opp &
-  the mapping of M = id Y by WAYBEL19:27,YELLOW_9:7;
-A4: the carrier of X opp+id = X & X opp+id is full SubRelStr of S opp &
-  the mapping of X opp+id = id X by WAYBEL19:27,YELLOW_9:7;
+A2: the RelStr of N = the RelStr of X opp+id by WAYBEL_9:def 8;
+A3: the mapping of N = f*the mapping of X opp+id by WAYBEL_9:def 8;
+A4: the carrier of M = Y by YELLOW_9:7;
+A5: the mapping of M = id Y by WAYBEL19:27;
+A6: the carrier of X opp+id = X by YELLOW_9:7;
+  the mapping of X opp+id = id X by WAYBEL19:27;
   then
-A5: the mapping of N = f|X & the carrier of T <> {} by A2,RELAT_1:94;
+A7: the mapping of N = f|X by A3,RELAT_1:94;
   then
-A6: rng the mapping of N = f.:X & dom the mapping of N = X
-  by A2,A4,FUNCT_2:def 1,RELAT_1:148;
-  then reconsider g = f|X as Function of N,M by A1,A2,A3,A4,A5,FUNCT_2:def 1
-,RELSET_1:11;
+A8: rng the mapping of N = f.:X by RELAT_1:148;
+  dom the mapping of N = X by A2,A6,FUNCT_2:def 1;
+  then reconsider g = f|X as Function of N,M by A1,A2,A4,A6,A7,A8,FUNCT_2:def 1
+  ,RELSET_1:11;
   take g;
-  thus the mapping of N = (the mapping of M)*g by A1,A3,A5,A6,RELAT_1:79;
+  thus the mapping of N = (the mapping of M)*g by A1,A5,A7,A8,RELAT_1:79;
   let m be Element of M;
   consider n being set such that
-A7: n in the carrier of S & n in X & m = f.n by A1,A3,FUNCT_2:115;
-  reconsider n as Element of N by A2,A7,YELLOW_9:7;
+A9: n in the carrier of S and
+A10: n in X and
+A11: m = f.n by A1,A4,FUNCT_2:115;
+  reconsider n as Element of N by A2,A10,YELLOW_9:7;
   take n;
   let p be Element of N;
-  p in X by A2,A4;
-  then reconsider n' = n, p' = p as Element of S by A7;
-  reconsider fp = f.p' as Element of M by A1,A2,A3,A4,FUNCT_2:43;
+  p in X by A2,A6;
+  then reconsider n' = n, p' = p as Element of S by A9;
+  reconsider fp = f.p' as Element of M by A1,A2,A4,A6,FUNCT_2:43;
   X opp+id is SubRelStr of S opp by YELLOW_9:7;
   then
-A8: N is SubRelStr of S opp & n'~ = n' & p'~ = p' by A2,Th12;
-A9: M is full SubRelStr of T opp by YELLOW_9:7;
+A12: N is SubRelStr of S opp by A2,Th12;
+A13: M is full SubRelStr of T opp by YELLOW_9:7;
   assume n <= p;
-  then n'~ <= p'~ by A8,YELLOW_0:60;
+  then n'~ <= p'~ by A12,YELLOW_0:60;
   then n' >= p' by LATTICE3:9;
   then f.n' >= f.p' by WAYBEL_1:def 2;
-  then (f.n')~ <= (f.p')~ & (f.n')~ = m & (f.p')~ = fp &
-  the carrier of M <> {} by A7,LATTICE3:9;
-  then fp >= m by A9,YELLOW_0:61;
-  hence m <= g.p by A2,A4,FUNCT_1:72;
+  then (f.n')~ <= (f.p')~ by LATTICE3:9;
+  then fp >= m by A11,A13,YELLOW_0:61;
+  hence m <= g.p by A2,A6,FUNCT_1:72;
 end;
 
 theorem
@@ -1309,14 +1393,15 @@ theorem Th32:
 proof
   let S be non empty reflexive RelStr, D be non empty Subset of S;
   set N = Net-Str D;
-  dom id D = D & rng id D = D by RELAT_1:71;
+A1: dom id D = D by RELAT_1:71;
+  rng id D = D by RELAT_1:71;
   then reconsider g = id D as Function of D, the carrier of S
-  by FUNCT_2:def 1,RELSET_1:11;
+  by A1,FUNCT_2:def 1,RELSET_1:11;
   (id the carrier of S)|D = id D by FUNCT_3:1;
   then
-A1: N = NetStr (#D, (the InternalRel of S)|_2 D, g#) by WAYBEL17:def 4;
+A2: N = NetStr (#D, (the InternalRel of S)|_2 D, g#) by WAYBEL17:def 4;
   then the InternalRel of N c= the InternalRel of S by XBOOLE_1:17;
-  hence thesis by A1,YELLOW_0:def 13,def 14;
+  hence thesis by A2,YELLOW_0:def 13,def 14;
 end;
 
 theorem Th33:
@@ -1331,41 +1416,44 @@ proof
   deffunc up(Element of N) = {N.i where i is Element of N: i >= $1};
   deffunc infy(Element of N) = "/\"(up($1), T);
   set NT = {infy(j) where j is Element of N: not contradiction};
-A1: the RelStr of N = the RelStr of M &
-  the mapping of N = f*the mapping of M by WAYBEL_9:def 8;
-A2: the carrier of M = X & the mapping of M = id X by Th32;
-A3: now
+A1: the RelStr of N = the RelStr of M by WAYBEL_9:def 8;
+A2: the mapping of N = f*the mapping of M by WAYBEL_9:def 8;
+A3: the carrier of M = X by Th32;
+A4: the mapping of M = id X by Th32;
+A5: now
     let i be Element of N;
-    thus N.i = f.((id X).i) by A1,A2,FUNCT_2:21
-      .= f.i by A1,A2,FUNCT_1:35;
+    thus N.i = f.((id X).i) by A1,A2,A4,FUNCT_2:21
+      .= f.i by A1,A3,FUNCT_1:35;
   end;
-A4: for i being Element of N holds infy(i) = f.i
+A6: for i being Element of N holds infy(i) = f.i
   proof
     let i be Element of N;
-    i in X by A1,A2;
+    i in X by A1,A3;
     then reconsider x = i as Element of S;
-A5: i <= i;
-    N.i = f.x by A3;
-    then f.x in up(i) by A5;
+A7: i <= i;
+    N.i = f.x by A5;
+    then f.x in up(i) by A7;
     then
-A6: for z being Element of T st z is_<=_than up(i) holds z <= f.x
+A8: for z being Element of T st z is_<=_than up(i) holds z <= f.x
     by LATTICE3:def 8;
     f.x is_<=_than up(i)
     proof
       let z be Element of T;
       assume z in up(i);
       then consider j being Element of N such that
-A7:   z = N.j & j >= i;
+A9:   z = N.j and
+A10:  j >= i;
       reconsider j as Element of N;
-      j in X by A1,A2;
+      j in X by A1,A3;
       then reconsider y = j as Element of S;
-      M is full SubRelStr of S & the RelStr of S = the RelStr of S by Th32;
-      then N is full SubRelStr of S by A1,Th12;
-      then y >= x by A7,YELLOW_0:60;
+A11:  M is full SubRelStr of S by Th32;
+      the RelStr of S = the RelStr of S;
+      then N is full SubRelStr of S by A1,A11,Th12;
+      then y >= x by A10,YELLOW_0:60;
       then f.y >= f.x by WAYBEL_1:def 2;
-      hence thesis by A3,A7;
+      hence thesis by A5,A9;
     end;
-    hence thesis by A6,YELLOW_0:31;
+    hence thesis by A8,YELLOW_0:31;
   end;
   NT = f.:X
   proof
@@ -1374,19 +1462,22 @@ A7:   z = N.j & j >= i;
       let x be set;
       assume x in NT;
       then consider j being Element of N such that
-A8:   x = infy(j);
+A12:  x = infy(j);
       reconsider j as Element of N;
-      x = f.j & j in X & the carrier of T <> {} by A1,A2,A4,A8;
-      hence thesis by FUNCT_2:43;
+A13:  x = f.j by A6,A12;
+      j in X by A1,A3;
+      hence thesis by A13,FUNCT_2:43;
     end;
     let y be set;
     assume y in f.:X;
     then consider x being set such that
-A9: x in the carrier of S & x in X & y = f.x by FUNCT_2:115;
-    reconsider x as Element of S by A9;
-    reconsider i = x as Element of N by A1,A9,Th32;
-    f.x = infy(i) by A4;
-    hence thesis by A9;
+A14: x in the carrier of S and
+A15: x in X and
+A16: y = f.x by FUNCT_2:115;
+    reconsider x as Element of S by A14;
+    reconsider i = x as Element of N by A1,A15,Th32;
+    f.x = infy(i) by A6;
+    hence thesis by A16;
   end;
   hence thesis by WAYBEL11:def 6;
 end;
@@ -1399,9 +1490,10 @@ theorem Th34:
 proof
   let S be non empty reflexive RelStr;
   let D be non empty directed Subset of S;
-  dom id D = D & rng id D = D by RELAT_1:71;
+A1: dom id D = D by RELAT_1:71;
+  rng id D = D by RELAT_1:71;
   then reconsider g = id D as Function of D, the carrier of S
-  by FUNCT_2:def 1,RELSET_1:11;
+  by A1,FUNCT_2:def 1,RELSET_1:11;
   (id the carrier of S)|D = id D by FUNCT_3:1;
   then Net-Str D = Net-Str (D, g) by WAYBEL17:9;
   hence thesis by WAYBEL11:def 10;
@@ -1414,29 +1506,31 @@ proof
   let T be Lawson (complete TopLattice);
   let D be directed non empty Subset of T;
   set N = Net-Str D;
-A1: the mapping of N = id D & the carrier of N = D by Th32;
+A1: the mapping of N = id D by Th32;
+A2: the carrier of N = D by Th32;
   consider K being prebasis of T;
   now
     let A be Subset of T;
     assume
-A2: sup D in A;
-A3: K c= the topology of T by CANTOR_1:def 5;
+A3: sup D in A;
+A4: K c= the topology of T by CANTOR_1:def 5;
     assume A in K;
-    then A is open by A3,PRE_TOPC:def 5;
+    then A is open by A4,PRE_TOPC:def 5;
     then A is property(S) by WAYBEL19:36;
     then consider y being Element of T such that
-A4: y in D and
-A5: for x being Element of T st x in D & x >= y holds x in A
-    by A2,WAYBEL11:def 3;
-    reconsider i = y as Element of N by A4,Th32;
+A5: y in D and
+A6: for x being Element of T st x in D & x >= y holds x in A
+    by A3,WAYBEL11:def 3;
+    reconsider i = y as Element of N by A5,Th32;
     thus N is_eventually_in A
     proof
       take i;
       let j be Element of N;
-A6:   j = N.j & y = N.i by A1,FUNCT_1:34;
+A7:   j = N.j by A1,A2,FUNCT_1:34;
+A8:   y = N.i by A1,A2,FUNCT_1:34;
       assume j >= i;
       then N.j >= N.i by Th34;
-      hence thesis by A1,A5,A6;
+      hence thesis by A2,A6,A7,A8;
     end;
   end;
   hence thesis by WAYBEL19:25;
@@ -1485,27 +1579,29 @@ A2: t = "/\"({N.i where i is Element of N: i >= j}, T);
 A3: for p being Element of M st j' <= p holds j <= e.p by Def3;
     set X = {N.i where i is Element of N: i >= j};
     set Y = {M.i where i is Element of M: i >= j'};
-A4: ex_inf_of X, T & ex_inf_of Y, T by YELLOW_0:17;
+A4: ex_inf_of X, T by YELLOW_0:17;
+A5: ex_inf_of Y, T by YELLOW_0:17;
     Y c= X
     proof
       let y be set;
       assume y in Y;
       then consider i being Element of M such that
-A5:   y = M.i & i >= j';
+A6:   y = M.i and
+A7:   i >= j';
       reconsider i as Element of M;
-      e.i >= j by A3,A5;
+      e.i >= j by A3,A7;
       then N.(e.i) in X;
-      hence thesis by A5,Th36;
+      hence thesis by A6,Th36;
     end;
     then
-A6: t <= "/\"(Y, T) by A2,A4,YELLOW_0:35;
+A8: t <= "/\"(Y, T) by A2,A4,A5,YELLOW_0:35;
     "/\"(Y, T) in infy(M);
     then "/\"(Y, T) <= "\/"(infy(M), T) by YELLOW_2:24;
-    hence thesis by A6,YELLOW_0:def 2;
+    hence thesis by A8,YELLOW_0:def 2;
   end;
-  lim_inf M = "\/"(infy(M), T) & lim_inf N = "\/"(infy(N), T)
-  by WAYBEL11:def 6;
-  hence thesis by A1,YELLOW_0:32;
+A9: lim_inf M = "\/"(infy(M), T) by WAYBEL11:def 6;
+  lim_inf N = "\/"(infy(N), T) by WAYBEL11:def 6;
+  hence thesis by A1,A9,YELLOW_0:32;
 end;
 
 theorem Th38:
@@ -1537,24 +1633,28 @@ A2: t = "/\"({M.i where i is Element of M: i >= j}, T);
       let x be Element of T;
       assume x in X;
       then consider i being Element of N such that
-A3:   x = N.i & i >= j';
+A3:   x = N.i and
+A4:   i >= j';
       reconsider i as Element of N;
       consider k being Element of M such that
-A4:   k >= j & N.i >= M.k by A1,A3;
-      M.k in Y by A4;
+A5:   k >= j and
+A6:   N.i >= M.k by A1,A4;
+      M.k in Y by A5;
       then M.k >= t by A2,YELLOW_2:24;
-      hence thesis by A3,A4,YELLOW_0:def 2;
+      hence thesis by A3,A6,YELLOW_0:def 2;
     end;
     then
-A5: t <= "/\"(X, T) by YELLOW_0:33;
+A7: t <= "/\"(X, T) by YELLOW_0:33;
     "/\"(X, T) in infy(N);
     then "/\"(X, T) <= "\/"(infy(N), T) by YELLOW_2:24;
-    hence t <= "\/"(infy(N), T) by A5,YELLOW_0:def 2;
+    hence t <= "\/"(infy(N), T) by A7,YELLOW_0:def 2;
   end;
   then "\/"(infy(N), T) >= "\/"(infy(M), T) by YELLOW_0:32;
   then lim_inf N >= "\/"(infy(M), T) by WAYBEL11:def 6;
-  then lim_inf N >= lim_inf M & lim_inf M >= lim_inf N by Th37,WAYBEL11:def 6;
-  hence thesis by YELLOW_0:def 3;
+  then
+A8: lim_inf N >= lim_inf M by WAYBEL11:def 6;
+  lim_inf M >= lim_inf N by Th37;
+  hence thesis by A8,YELLOW_0:def 3;
 end;
 
 theorem
@@ -1568,41 +1668,47 @@ proof
   let N be net of T, M be non empty full SubNetStr of N such that
 A1: for i being Element of N
   ex j being Element of N st j >= i & j in the carrier of M;
-A2: the mapping of M = (the mapping of N)|the carrier of M &
-  M is full SubRelStr of N by YELLOW_6:def 8,def 9;
+A2: the mapping of M = (the mapping of N)|the carrier of M by YELLOW_6:def 8;
+A3: M is full SubRelStr of N by YELLOW_6:def 9;
   then
-A3: the carrier of M c= the carrier of N by YELLOW_0:def 13;
+A4: the carrier of M c= the carrier of N by YELLOW_0:def 13;
   M is directed
   proof
     let x,y be Element of M;
-    reconsider i = x, j = y as Element of N by A2,YELLOW_0:59;
+    reconsider i = x, j = y as Element of N by A3,YELLOW_0:59;
     consider k being Element of N such that
-A4: k >= i & k >= j by YELLOW_6:def 5;
+A5: k >= i and
+A6: k >= j by YELLOW_6:def 5;
     consider l being Element of N such that
-A5: l >= k & l in the carrier of M by A1;
-    reconsider z = l as Element of M by A5;
+A7: l >= k and
+A8: l in the carrier of M by A1;
+    reconsider z = l as Element of M by A8;
     take z;
-    l >= i & l >= j by A4,A5,YELLOW_0:def 2;
-    hence thesis by YELLOW_6:21;
+A9: l >= i by A5,A7,YELLOW_0:def 2;
+    l >= j by A6,A7,YELLOW_0:def 2;
+    hence thesis by A9,YELLOW_6:21;
   end;
-  then reconsider K = M as net of T by A2;
-A6: now
+  then reconsider K = M as net of T by A3;
+A10: now
     set f = incl(K,N);
-A7: f = id the carrier of K by A3,YELLOW_9:def 1;
+A11: f = id the carrier of K by A4,YELLOW_9:def 1;
     hence the mapping of K = (the mapping of N)*f by A2,RELAT_1:94;
     let m be Element of N;
     consider j being Element of N such that
-A8: j >= m & j in the carrier of K by A1;
-    reconsider n = j as Element of K by A8;
+A12: j >= m and
+A13: j in the carrier of K by A1;
+    reconsider n = j as Element of K by A13;
     take n;
     let p be Element of K;
-    reconsider q = p as Element of N by A2,YELLOW_0:59;
+    reconsider q = p as Element of N by A3,YELLOW_0:59;
     assume n <= p;
-    then j <= q & f.p = q by A7,FUNCT_1:35,YELLOW_6:20;
-    hence m <= f.p by A8,YELLOW_0:def 2;
+    then
+A14: j <= q by YELLOW_6:20;
+    f.p = q by A11,FUNCT_1:35;
+    hence m <= f.p by A12,A14,YELLOW_0:def 2;
   end;
   hence M is subnet of N by YELLOW_6:def 12;
-  hence thesis by A6,Def3;
+  hence thesis by A10,Def3;
 end;
 
 theorem Th40:
@@ -1623,14 +1729,15 @@ A2: incl(N|i,N) = id the carrier of N|i by WAYBEL_9:13,YELLOW_9:def 1;
   hence the mapping of M = (the mapping of N)*f by A2,RELAT_1:94;
   let m be Element of N;
   consider n' being Element of N such that
-A3: n' >= i & n' >= m by YELLOW_6:def 5;
+A3: n' >= i and
+A4: n' >= m by YELLOW_6:def 5;
   reconsider n = n' as Element of M by A3,WAYBEL_9:def 7;
   take n;
   let p be Element of M;
   reconsider p' = p as Element of N by A1,YELLOW_0:59;
   assume n <= p;
   then n' <= p' by A1,YELLOW_0:60;
-  then m <= p' by A3,YELLOW_0:def 2;
+  then m <= p' by A4,YELLOW_0:def 2;
   hence thesis by A2,FUNCT_1:35;
 end;
 
@@ -1649,15 +1756,18 @@ A2: incl(M,N) = id the carrier of M by WAYBEL_9:13,YELLOW_9:def 1;
   now
     let k be Element of N, j be Element of M;
     consider j' being Element of N such that
-A3: j' = j & j' >= i by WAYBEL_9:def 7;
+A3: j' = j and
+A4: j' >= i by WAYBEL_9:def 7;
     assume e.j <= k;
     then
-A4: k >= j' by A2,A3,FUNCT_1:35;
-    then k >= i by A3,YELLOW_0:def 2;
+A5: k >= j' by A2,A3,FUNCT_1:35;
+    then k >= i by A4,YELLOW_0:def 2;
     then reconsider k' = k as Element of M by WAYBEL_9:def 7;
-    take k'; thus k' >= j by A1,A3,A4,YELLOW_0:61;
-    M.k' = N.(e.k') & M.k' <= M.k' by Th36;
-    hence N.k >= M.k' by A2,FUNCT_1:35;
+    take k';
+    thus k' >= j by A1,A3,A5,YELLOW_0:61;
+A6: M.k' = N.(e.k') by Th36;
+    M.k' <= M.k';
+    hence N.k >= M.k' by A2,A6,FUNCT_1:35;
   end;
   hence thesis by Th38;
 end;
@@ -1670,22 +1780,27 @@ proof
   let T be non empty RelStr, N be net of T, X be set;
   given i' being Element of N such that
 A1: for j being Element of N st j >= i' holds N.j in X;
-  [#]N is directed & [#] N = the carrier of N by WAYBEL_0:def 6;
+  [#]N is directed by WAYBEL_0:def 6;
   then consider i being Element of N such that
-A2: i in [#]N & i' <= i & i' <= i by WAYBEL_0:def 1;
-  take i; thus N.i in X by A1,A2;
+  i in [#]N and
+A2: i' <= i
+  and i' <= i by WAYBEL_0:def 1;
+  take i;
+  thus N.i in X by A1,A2;
   let x be set;
   assume x in rng the mapping of N|i;
   then consider j being set such that
-A3: j in dom the mapping of N|i & x = (the mapping of N|i).j by FUNCT_1:def 5;
-A4: dom the mapping of N|i = the carrier of N|i by FUNCT_2:def 1;
+A3: j in dom the mapping of N|i and
+A4: x = (the mapping of N|i).j by FUNCT_1:def 5;
+A5: dom the mapping of N|i = the carrier of N|i by FUNCT_2:def 1;
   reconsider j as Element of N|i by A3;
   the carrier of N|i = {y where y is Element of N: i <= y} by WAYBEL_9:12;
   then consider k being Element of N such that
-A5: j = k & i <= k by A3,A4;
-  x = (N|i).j by A3
-    .= N.k by A5,WAYBEL_9:16;
-  hence thesis by A1,A2,A5,ORDERS_2:26;
+A6: j = k and
+A7: i <= k by A3,A5;
+  x = (N|i).j by A4
+    .= N.k by A6,WAYBEL_9:16;
+  hence thesis by A1,A2,A7,ORDERS_2:26;
 end;
 
 theorem Th43:  :: see WAYBEL_2:18, for eventually-directed
@@ -1701,27 +1816,29 @@ proof
     let x,y be Element of T;
     assume x in F;
     then consider i1 being set such that
-A1: i1 in dom the mapping of N & x = (the mapping of N).i1 by FUNCT_1:def 5;
+A1: i1 in dom the mapping of N and
+A2: x = (the mapping of N).i1 by FUNCT_1:def 5;
     assume y in F;
     then consider i2 being set such that
-A2: i2 in dom the mapping of N & y = (the mapping of N).i2 by FUNCT_1:def 5;
-A3: dom the mapping of N = the carrier of N by FUNCT_2:def 1;
-    reconsider i1, i2 as Element of N by A1,A2;
+A3: i2 in dom the mapping of N and
+A4: y = (the mapping of N).i2 by FUNCT_1:def 5;
+A5: dom the mapping of N = the carrier of N by FUNCT_2:def 1;
+    reconsider i1, i2 as Element of N by A1,A3;
     consider j1 being Element of N such that
-A4: for k being Element of N st j1 <= k holds N.i1 >= N.k by WAYBEL_0:12;
+A6: for k being Element of N st j1 <= k holds N.i1 >= N.k by WAYBEL_0:12;
     consider j2 being Element of N such that
-A5: for k being Element of N st j2 <= k holds N.i2 >= N.k by WAYBEL_0:12;
+A7: for k being Element of N st j2 <= k holds N.i2 >= N.k by WAYBEL_0:12;
     consider j being Element of N such that
-A6: j2 <= j & j1 <= j by YELLOW_6:def 5;
+A8: j2 <= j and
+A9: j1 <= j by YELLOW_6:def 5;
     take z = N.j;
-    thus z in F by A3,FUNCT_1:def 5;
-    thus thesis by A1,A2,A4,A5,A6;
+    thus z in F by A5,FUNCT_1:def 5;
+    thus thesis by A2,A4,A6,A7,A8,A9;
   end;
   hence thesis;
 end;
 
 theorem Th44:
-
 :: 1.7. LEMMA, -- WAYBEL19:44 revised
   for T being Lawson (complete TopLattice)
   for N being eventually-filtered net of T holds Lim N = {inf N}
@@ -1747,36 +1864,37 @@ A5: p in Lim N;
       let u be Element of T;
       assume u in F;
       then consider i being set such that
-A6:   i in dom the mapping of N & u = (the mapping of N).i by FUNCT_1:def 5;
+A6:   i in dom the mapping of N and
+A7:   u = (the mapping of N).i by FUNCT_1:def 5;
       reconsider i as Element of N by A6;
       consider ii being Element of N such that
-A7:   for k being Element of N st ii <= k holds N.i >= N.k by WAYBEL_0:12;
+A8:   for k being Element of N st ii <= k holds N.i >= N.k by WAYBEL_0:12;
       downarrow u is closed by WAYBEL19:38;
       then
-A8:   Cl downarrow u = downarrow u by PRE_TOPC:52;
+A9:   Cl downarrow u = downarrow u by PRE_TOPC:52;
       N is_eventually_in downarrow u
       proof
         take ii;
         let j be Element of N;
         assume j >= ii;
-        then N.j <= N.i by A7;
-        hence thesis by A6,WAYBEL_0:17;
+        then N.j <= N.i by A8;
+        hence thesis by A7,WAYBEL_0:17;
       end;
-      then Lim N c= downarrow u by A8,WAYBEL19:26;
+      then Lim N c= downarrow u by A9,WAYBEL19:26;
       hence thesis by A5,WAYBEL_0:17;
     end;
     then
-A9: p <= inf N by A3,YELLOW_0:33;
+A10: p <= inf N by A3,YELLOW_0:33;
     inf N is_<=_than F by A3,YELLOW_0:33;
     then
-A10: F c= uparrow inf N by YELLOW_2:2;
+A11: F c= uparrow inf N by YELLOW_2:2;
     uparrow inf N is closed by WAYBEL19:38;
     then Cl uparrow inf N = uparrow inf N by PRE_TOPC:52;
     then
-A11: Cl F c= uparrow inf N by A10,PRE_TOPC:49;
+A12: Cl F c= uparrow inf N by A11,PRE_TOPC:49;
     p in Cl F by A5,WAYBEL_9:24;
-    then p >= inf N by A11,WAYBEL_0:18;
-    then p = inf N by A9,ORDERS_2:25;
+    then p >= inf N by A12,WAYBEL_0:18;
+    then p = inf N by A10,ORDERS_2:25;
     hence thesis by TARSKI:def 1;
   end;
   reconsider K = (sigma T) \/
@@ -1784,16 +1902,17 @@ A11: Cl F c= uparrow inf N by A10,PRE_TOPC:49;
   by WAYBEL19:30;
   now
     let A be Subset of T;
-    assume
-A12: inf F in A & A in K;
-    per cases by A12,XBOOLE_0:def 3;
+    assume that
+A13: inf F in A and
+A14: A in K;
+    per cases by A14,XBOOLE_0:def 3;
     suppose
-A13:  A in sigma T;
+A15:  A in sigma T;
       then reconsider a = A as Subset of S by A1;
-      a is open by A1,A13,PRE_TOPC:def 5;
+      a is open by A1,A15,PRE_TOPC:def 5;
       then a is upper by WAYBEL11:def 4;
       then
-A14:  A is upper by A2,WAYBEL_0:25;
+A16:  A is upper by A2,WAYBEL_0:25;
       consider i being Element of N;
       thus N is_eventually_in A
       proof
@@ -1801,29 +1920,32 @@ A14:  A is upper by A2,WAYBEL_0:25;
         let j be Element of N;
         N.j in F by A4,FUNCT_1:def 5;
         then N.j >= inf F by YELLOW_2:24;
-        hence thesis by A12,A14,WAYBEL_0:def 20;
+        hence thesis by A13,A16,WAYBEL_0:def 20;
       end;
     end;
-    suppose A in {(uparrow x)` where x is Element of T: not contradiction};
+    suppose
+      A in {(uparrow x)` where x is Element of T: not contradiction};
       then consider x being Element of T such that
-A15:  A = (uparrow x)`;
-      not inf F >= x by A12,A15,YELLOW_9:1;
+A17:  A = (uparrow x)`;
+      not inf F >= x by A13,A17,YELLOW_9:1;
       then not F is_>=_than x by YELLOW_0:33;
       then consider y being Element of T such that
-A16:  y in F & not y >= x by LATTICE3:def 8;
+A18:  y in F and
+A19:  not y >= x by LATTICE3:def 8;
       consider i being set such that
-A17:  i in the carrier of N & y = (the mapping of N).i by A4,A16,FUNCT_1:def 5;
+A20:  i in the carrier of N and
+A21:  y = (the mapping of N).i by A4,A18,FUNCT_1:def 5;
       thus N is_eventually_in A
       proof
-        reconsider i as Element of N by A17;
+        reconsider i as Element of N by A20;
         consider ii being Element of N such that
-A18:    for k being Element of N st ii <= k holds N.i >= N.k by WAYBEL_0:12;
+A22:    for k being Element of N st ii <= k holds N.i >= N.k by WAYBEL_0:12;
         take ii;
         let j be Element of N;
         assume j >= ii;
-        then N.j <= N.i & N.i = y by A17,A18;
-        then not N.j >= x by A16,ORDERS_2:26;
-        hence thesis by A15,YELLOW_9:1;
+        then N.j <= N.i by A22;
+        then not N.j >= x by A19,A21,ORDERS_2:26;
+        hence thesis by A17,YELLOW_9:1;
       end;
     end;
   end;
@@ -1834,7 +1956,6 @@ end;
 begin :: Lawson topology revisited
 
 theorem Th45:
-
 :: 1.8. THEOREM, (1) <=> (2), generalized, p. 145
   for S,T being Lawson (complete TopLattice)
   for f being meet-preserving Function of S,T holds
@@ -1847,75 +1968,75 @@ A1: [#]T <> {};
   Ts being Scott TopAugmentation of T,
   Sl being lower correct TopAugmentation of S,
   Tl being lower correct TopAugmentation of T;
-  S is TopAugmentation of S & T is TopAugmentation of T by YELLOW_9:44;
-  then
-A2: S is Refinement of Ss,Sl & T is Refinement of Ts,Tl by WAYBEL19:29;
-A3: T is TopAugmentation of Ts & S is TopAugmentation of Ss by YELLOW_9:45;
-A4: the RelStr of Ss = the RelStr of S & the RelStr of Sl = the RelStr of S &
-  the RelStr of Ts = the RelStr of T & the RelStr of Tl = the RelStr of T
-  by YELLOW_9:def 4;
+A2: S is TopAugmentation of S by YELLOW_9:44;
+A3: T is TopAugmentation of T by YELLOW_9:44;
+A4: S is Refinement of Ss,Sl by A2,WAYBEL19:29;
+A5: T is Refinement of Ts,Tl by A3,WAYBEL19:29;
+A6: T is TopAugmentation of Ts by YELLOW_9:45;
+A7: S is TopAugmentation of Ss by YELLOW_9:45;
+A8: the RelStr of Ss = the RelStr of S by YELLOW_9:def 4;
+A9: the RelStr of Sl = the RelStr of S by YELLOW_9:def 4;
+A10: the RelStr of Ts = the RelStr of T by YELLOW_9:def 4;
+A11: the RelStr of Tl = the RelStr of T by YELLOW_9:def 4;
   let f be meet-preserving Function of S,T;
-  reconsider g = f as Function of Sl,Tl by A4;
-  reconsider h = f as Function of Ss,Ts by A4;
-A5: [#]Ts <> {};
+  reconsider g = f as Function of Sl,Tl by A9,A11;
+  reconsider h = f as Function of Ss,Ts by A8,A10;
+A12: [#]Ts <> {};
   hereby
     assume
-A6: f is continuous;
+A13: f is continuous;
     now
       let P be Subset of Ts;
       reconsider A = P as Subset of Ts;
-      reconsider C = A as Subset of T by A4;
+      reconsider C = A as Subset of T by A10;
       assume
-A7:   P is open;
-      then C is open by A3,WAYBEL19:37;
+A14:  P is open;
+      then C is open by A6,WAYBEL19:37;
       then
-A8:   f"C is open by A1,A6,TOPS_2:55;
-      A is upper & h is monotone by A4,A7,WAYBEL11:def 4,WAYBEL_9:1;
-      then h"A is upper by WAYBEL17:2;
-      then f"C is upper by A4,WAYBEL_0:25;
-      hence h"P is open by A3,A8,WAYBEL19:41;
+A15:  f"C is open by A1,A13,TOPS_2:55;
+      A is upper by A14,WAYBEL11:def 4;
+      then h"A is upper by A8,A10,WAYBEL17:2,WAYBEL_9:1;
+      then f"C is upper by A8,WAYBEL_0:25;
+      hence h"P is open by A7,A15,WAYBEL19:41;
     end;
-    then h is continuous by A5,TOPS_2:55;
-    then h is directed-sups-preserving;
-    hence f is directed-sups-preserving by A4,Th6;
+    then h is continuous by A12,TOPS_2:55;
+    hence f is directed-sups-preserving by A8,A10,Th6;
     for X being non empty filtered Subset of S holds f preserves_inf_of X
     proof
       let F be non empty filtered Subset of S;
       assume ex_inf_of F,S;
       thus ex_inf_of f.:F,T by YELLOW_0:17;
       {inf F} = Lim (F opp+id) by WAYBEL19:43;
-      then Im(f,inf F) c= Lim (f*(F opp+id)) &
-      f is Function of the carrier of S, the carrier of T by A6,Th24;
+      then Im(f,inf F) c= Lim (f*(F opp+id)) by A13,Th24;
       then {f.inf F} c= Lim (f*(F opp+id)) by SETWISEO:13;
       then
-A9:   f.inf F in Lim (f*(F opp+id)) by ZFMISC_1:37;
+A16:  f.inf F in Lim (f*(F opp+id)) by ZFMISC_1:37;
       reconsider G = f.:F as filtered non empty Subset of T by WAYBEL20:25;
-A10:  rng the mapping of f*(F opp+id)
+A17:  rng the mapping of f*(F opp+id)
       = rng (f*the mapping of F opp+id) by WAYBEL_9:def 8
         .= rng (f * id F) by WAYBEL19:27
         .= rng (f|F) by RELAT_1:94
         .= G by RELAT_1:148;
       Lim (f*(F opp+id)) = {inf (f*(F opp+id))} by Th44
         .= {Inf the mapping of f*(F opp+id)} by WAYBEL_9:def 2
-        .= {inf G} by A10,YELLOW_2:def 6;
-      hence thesis by A9,TARSKI:def 1;
+        .= {inf G} by A17,YELLOW_2:def 6;
+      hence thesis by A16,TARSKI:def 1;
     end;
-    hence for X being non empty Subset of S holds f preserves_inf_of X by Th4;
+    hence for X being non empty Subset of S holds f preserves_inf_of X by
+    Th4;
   end;
   assume f is directed-sups-preserving;
-  then h is directed-sups-preserving by A4,Th6;
   then
-A11: h is continuous;
+A18: h is directed-sups-preserving by A8,A10,Th6;
   assume
-A12: for X being non empty Subset of S holds f preserves_inf_of X;
-  for X being non empty Subset of Sl
-   holds g preserves_inf_of X by A12,A4,WAYBEL_0:65;
+  for X being non empty Subset of S holds f preserves_inf_of X;
+  then for X being non empty Subset of Sl
+  holds g preserves_inf_of X by A9,A11,WAYBEL_0:65;
   then g is continuous by WAYBEL19:8;
-  hence thesis by A2,A11,WAYBEL19:24;
+  hence thesis by A4,A5,A18,WAYBEL19:24;
 end;
 
 theorem Th46:
-
 :: 1.8. THEOREM, (1) <=> (2), p. 145
   for S,T being Lawson (complete TopLattice)
   for f being SemilatticeHomomorphism of S,T holds
@@ -1946,7 +2067,6 @@ definition
 end;
 
 theorem
-
 :: 1.8. THEOREM, (1) <=> (3), p. 145
   for S,T being Lawson (complete TopLattice)
   for f being SemilatticeHomomorphism of S,T holds
@@ -1966,46 +2086,46 @@ A1: f is infs-preserving directed-sups-preserving by Th46;
     reconsider X = {"/\" ({N.i where i is Element of N:i >= j},S)
     where j is Element of N: not contradiction}
     as directed non empty Subset of S by Th25;
-A2: ex_sup_of X,S & f preserves_sup_of X by A1,WAYBEL_0:def 37,YELLOW_0:17;
-A3: the mapping of f*N = f*the mapping of N &
-    the RelStr of f*N = the RelStr of N by WAYBEL_9:def 8;
-A4: the carrier of S c= dom f by FUNCT_2:def 1;
+A2: ex_sup_of X,S by YELLOW_0:17;
+A3: f preserves_sup_of X by A1,WAYBEL_0:def 37;
+A4: the RelStr of f*N = the RelStr of N by WAYBEL_9:def 8;
+A5: the carrier of S c= dom f by FUNCT_2:def 1;
     deffunc A(Element of N) = {N.i where i is Element of N: i >= $1};
     deffunc INF(Element of N) = "/\"(A($1),S);
     defpred P[set] means not contradiction;
-A5: f.:{INF(i) where i is Element of N: P[i]}
-    = {f.INF(i) where i is Element of N: P[i]} from LATTICE3:sch 2(A4);
-A6: f.:X = Y
+A6: f.:{INF(i) where i is Element of N: P[i]}
+    = {f.INF(i) where i is Element of N: P[i]} from LATTICE3:sch 2(A5);
+A7: f.:X = Y
     proof
-A7:   now
+A8:   now
         let j be Element of N;
         let j' be Element of M such that
-A8:     j' = j;
+A9:     j' = j;
         defpred Q[Element of N] means $1 >= j;
         defpred Q'[Element of M] means $1 >= j';
         deffunc F(Element of N) = f.(N.$1);
         deffunc G(set) = f.((the mapping of N).$1);
-A9:     for v being Element of N st Q[v] holds F(v) = G(v);
+A10:    for v being Element of N st Q[v] holds F(v) = G(v);
         deffunc H(set) = (f*the mapping of N).$1;
         deffunc I(Element of M) = M.$1;
-A10:    for v being Element of N st Q[v] holds G(v) = H(v) by FUNCT_2:21;
-A11:    for v being Element of M st Q'[v] holds H(v) = I(v) by WAYBEL_9:def 8;
+A11:    for v being Element of N st Q[v] holds G(v) = H(v) by FUNCT_2:21;
+A12:    for v being Element of M st Q'[v] holds H(v) = I(v) by WAYBEL_9:def 8;
         defpred P[set] means [j',$1] in the InternalRel of N;
-A12:    for v being Element of N holds Q[v] iff P[v] by A8,ORDERS_2:def 9;
-A13:    for v being Element of M holds P[v] iff Q'[v] by A3,ORDERS_2:def 9;
+A13:    for v being Element of N holds Q[v] iff P[v] by A9,ORDERS_2:def 9;
+A14:    for v being Element of M holds P[v] iff Q'[v] by A4,ORDERS_2:def 9;
         deffunc N(Element of N) = N.$1;
         thus f.:A(j) = f.:{N(i) where i is Element of N: Q[i]}
-          .= {f.(N(k)) where k is Element of N: Q[k]} from LATTICE3:sch 2(A4)
+          .= {f.(N(k)) where k is Element of N: Q[k]} from LATTICE3:sch 2(A5)
           .= {F(k) where k is Element of N: Q[k]}
-          .= {G(s) where s is Element of N: Q[s]} from FRAENKEL:sch 6(A9)
-          .= {H(o) where o is Element of N: Q[o]} from FRAENKEL:sch 6(A10)
-          .= {H(r) where r is Element of N: P[r]} from FRAENKEL:sch 3(A12)
-          .= {H(m) where m is Element of M: P[m]} by A3
-          .= {H(q) where q is Element of M: Q'[q]} from FRAENKEL:sch 3(A13)
-          .= {I(n) where n is Element of M: Q'[n]} from FRAENKEL:sch 6(A11)
+          .= {G(s) where s is Element of N: Q[s]} from FRAENKEL:sch 6(A10)
+          .= {H(o) where o is Element of N: Q[o]} from FRAENKEL:sch 6(A11)
+          .= {H(r) where r is Element of N: P[r]} from FRAENKEL:sch 3(A13)
+          .= {H(m) where m is Element of M: P[m]} by A4
+          .= {H(q) where q is Element of M: Q'[q]} from FRAENKEL:sch 3(A14)
+          .= {I(n) where n is Element of M: Q'[n]} from FRAENKEL:sch 6(A12)
           .= {M.n where n is Element of M: n >= j'};
       end;
-A14:  now
+A15:  now
         let j be Element of N;
         A(j) c= the carrier of S
         proof
@@ -2015,37 +2135,37 @@ A14:  now
           hence thesis;
         end;
         then reconsider A = A(j) as Subset of S;
-        f preserves_inf_of A & ex_inf_of A,S
-        by A1,WAYBEL_0:def 32,YELLOW_0:17;
-        hence f."/\"(A(j),S) = "/\"(f.:A(j), T) by WAYBEL_0:def 30;
+A16:    f preserves_inf_of A by A1,WAYBEL_0:def 32;
+        ex_inf_of A,S by YELLOW_0:17;
+        hence f."/\"(A(j),S) = "/\"(f.:A(j), T) by A16,WAYBEL_0:def 30;
       end;
       thus f.:X c= Y
       proof
         let a be set;
         assume a in f.:X;
         then consider j being Element of N such that
-A15:    a = f."/\" ({N.i where i is Element of N:i >= j},S) by A5;
-A16:    a = "/\"(f.:A(j),T) by A14,A15;
-        reconsider j' = j as Element of M by A3;
-        f.:A(j) = {M.n where n is Element of M: n >= j'} by A7;
-        hence thesis by A16;
+A17:    a = f."/\" ({N.i where i is Element of N:i >= j},S) by A6;
+A18:    a = "/\"(f.:A(j),T) by A15,A17;
+        reconsider j' = j as Element of M by A4;
+        f.:A(j) = {M.n where n is Element of M: n >= j'} by A8;
+        hence thesis by A18;
       end;
       let a be set;
       assume a in Y;
       then consider j' being Element of M such that
-A17:  a = "/\"({M.n where n is Element of M: n >= j'},T);
-      reconsider j = j' as Element of N by A3;
-      a = "/\"(f.:A(j),T) by A7,A17
-        .= f."/\"(A(j),S) by A14;
-      hence thesis by A5;
+A19:  a = "/\"({M.n where n is Element of M: n >= j'},T);
+      reconsider j = j' as Element of N by A4;
+      a = "/\"(f.:A(j),T) by A8,A19
+        .= f."/\"(A(j),S) by A15;
+      hence thesis by A6;
     end;
     thus f.lim_inf N = f.sup X by WAYBEL11:def 6
-      .= sup (f.:X) by A2,WAYBEL_0:def 31
-      .= lim_inf (f*N) by A6,WAYBEL11:def 6;
+      .= sup (f.:X) by A2,A3,WAYBEL_0:def 31
+      .= lim_inf (f*N) by A7,WAYBEL11:def 6;
   end;
   assume
-A18: for N being net of S holds f.lim_inf N = lim_inf (f*N);
-A19: f is directed-sups-preserving
+A20: for N being net of S holds f.lim_inf N = lim_inf (f*N);
+A21: f is directed-sups-preserving
   proof
     let D be Subset of S;
     assume D is non empty directed;
@@ -2053,10 +2173,10 @@ A19: f is directed-sups-preserving
     assume ex_sup_of D, S;
     thus ex_sup_of f.:D, T by YELLOW_0:17;
     thus f.sup D = f.lim_inf Net-Str D' by WAYBEL17:10
-      .= lim_inf (f*Net-Str D') by A18
+      .= lim_inf (f*Net-Str D') by A20
       .= sup (f.:D) by Th33;
   end;
-A20: for X being finite Subset of S holds f preserves_inf_of X by Def1;
+A22: for X being finite Subset of S holds f preserves_inf_of X by Def1;
   now
     let X be non empty filtered Subset of S;
     reconsider fX = f.:X as filtered non empty Subset of T by WAYBEL20:25;
@@ -2065,18 +2185,17 @@ A20: for X being finite Subset of S holds f preserves_inf_of X by Def1;
       assume ex_inf_of X,S;
       thus ex_inf_of f.:X,T by YELLOW_0:17;
       f.inf X = f.lim_inf (X opp+id) by Th28
-        .= lim_inf (f*(X opp+id)) by A18
+        .= lim_inf (f*(X opp+id)) by A20
         .= inf fX by Th29
         .= lim_inf (fX opp+id) by Th28;
       hence thesis by Th28;
     end;
   end;
-  then f is infs-preserving by A20,WAYBEL_0:71;
-  hence thesis by A19,Th46;
+  then f is infs-preserving by A22,WAYBEL_0:71;
+  hence thesis by A21,Th46;
 end;
 
 theorem Th48:
-
 :: 1.11. THEOREM, (1) => (2a), p. 147
   for T being Lawson (complete continuous TopLattice)
   for S being meet-inheriting full non empty SubRelStr of T
@@ -2109,7 +2228,6 @@ A4: rng the mapping of N = Y by RELAT_1:71;
 end;
 
 theorem Th49:
-
 :: 1.11. THEOREM, (1) => (2b), p. 147
   for T being Lawson (complete continuous TopLattice)
   for S being full non empty SubRelStr of T
@@ -2126,7 +2244,7 @@ A2: X is closed;
   then reconsider D = Y as directed non empty Subset of T by YELLOW_2:7;
   set N = Net-Str D;
   assume ex_sup_of Y,T;
-  the mapping of N = id Y & the carrier of N = D by Th32;
+  the mapping of N = id Y by Th32;
   then rng the mapping of N = Y by RELAT_1:71;
   then Lim N c= Cl X by A1,Th27,WAYBEL19:26;
   then
@@ -2136,7 +2254,6 @@ A3: Lim N c= X by A2,PRE_TOPC:52;
 end;
 
 theorem Th50:
-
 :: 1.11. THEOREM, (2) => (1), p. 147
   for T being Lawson (complete continuous TopLattice)
   for S being infs-inheriting directed-sups-inheriting full non empty
@@ -2146,30 +2263,30 @@ proof
   let S be infs-inheriting directed-sups-inheriting full non empty
   SubRelStr of T;
   reconsider X = the carrier of S as Subset of T by YELLOW_0:def 13;
-  take X; thus X = the carrier of S;
+  take X;
+  thus X = the carrier of S;
   reconsider S as complete CLSubFrame of T by Th18;
   consider SL being Lawson correct TopAugmentation of S;
 A1: the RelStr of SL = the RelStr of S by YELLOW_9:def 4;
-  then
-A2: [#]SL = X;
   set f = incl(SL,T), f' = incl(S,T);
-  the carrier of S c= the carrier of T by YELLOW_0:def 13;
+A2: the carrier of S c= the carrier of T by YELLOW_0:def 13;
   then
-A3: f = id the carrier of SL & f' = id the carrier of SL by A1,YELLOW_9:def 1;
-A4: [#]SL is compact by COMPTS_1:10;
-  f' is infs-preserving & f' is directed-sups-preserving &
-  the RelStr of T = the RelStr of T by Th8,Th10;
+A3: f = id the carrier of SL by A1,YELLOW_9:def 1;
+A4: f' = id the carrier of SL by A1,A2,YELLOW_9:def 1;
+A5: [#]SL is compact by COMPTS_1:10;
+A6: f' is infs-preserving by Th8;
+  the RelStr of T = the RelStr of T;
   then
-A5: f is infs-preserving directed-sups-preserving by A1,A3,Th6;
+A7: f is infs-preserving directed-sups-preserving by A1,A3,A4,A6,
+  Th6,Th10;
   then f is SemilatticeHomomorphism of SL,T by Th5;
-  then f is continuous by A5,Th46;
-  then f.:[#]SL is compact by A4,WEIERSTR:14;
-  then X is compact by A2,A3,FUNCT_1:162;
+  then f is continuous by A7,Th46;
+  then f.:[#]SL is compact by A5,WEIERSTR:14;
+  then X is compact by A1,A3,FUNCT_1:162;
   hence thesis by COMPTS_1:16;
 end;
 
 theorem Th51:
-
 :: 1.11. THEOREM, (2) => (3+), p. 147
   for T being Lawson (complete continuous TopLattice)
   for S being infs-inheriting directed-sups-inheriting full non empty
@@ -2183,7 +2300,8 @@ proof
   let N be net of T;
   assume N is_eventually_in X;
   then consider a being Element of N such that
-A1: N.a in X & rng the mapping of N|a c= X by Th42;
+  N.a in X and
+A1: rng the mapping of N|a c= X by Th42;
   deffunc up(Element of N|a) = {N|a.i where i is Element of N|a: i >= $1};
   reconsider iN = {"/\"(up(j), T)
   where j is Element of N|a: not contradiction}
@@ -2198,9 +2316,8 @@ A2: z = "/\"(up(j), T);
     proof
       let u be set;
       assume u in up(j);
-      then consider i being Element of N|a such that
-A3:   u = (N|a).i & i >= j;
-      u in rng the mapping of N|a by A3,FUNCT_2:6;
+      then ex i being Element of N|a st ( u = (N|a).i)&( i >= j);
+      then u in rng the mapping of N|a by FUNCT_2:6;
       hence thesis by A1;
     end;
     then reconsider Xj = up(j) as Subset of S;
@@ -2208,14 +2325,14 @@ A3:   u = (N|a).i & i >= j;
     hence thesis by A2,YELLOW_0:def 18;
   end;
   then reconsider jN = iN as non empty Subset of S;
-  jN is directed & ex_sup_of jN,T by WAYBEL10:24,YELLOW_0:17;
-  then "\/"(jN,T) in the carrier of S by WAYBEL_0:def 4;
+A3: jN is directed by WAYBEL10:24;
+  ex_sup_of jN,T by YELLOW_0:17;
+  then "\/"(jN,T) in the carrier of S by A3,WAYBEL_0:def 4;
   then lim_inf (N|a) in X by WAYBEL11:def 6;
   hence thesis by Th41;
 end;
 
 theorem Th52:
-
 :: 1.11. THEOREM, (3) => (2a), p. 147
   for T being Lawson (complete continuous TopLattice)
   for S being meet-inheriting full non empty SubRelStr of T
@@ -2245,7 +2362,6 @@ A3: rng the mapping of F opp+id = Y by RELAT_1:71;
 end;
 
 theorem Th53:
-
 :: 1.11. THEOREM, (3) => (2b), p. 147
   for T being Lawson (complete continuous TopLattice)
   for S being full non empty SubRelStr of T
@@ -2269,7 +2385,6 @@ A2: rng the mapping of Net-Str F = Y by RELAT_1:71;
 end;
 
 theorem
-
 :: 1.11. THEOREM, (1) <=> (3+), p. 147
   for T being Lawson (complete continuous TopLattice)
   for S being meet-inheriting full non empty SubRelStr of T
@@ -2280,19 +2395,23 @@ proof
   let T be Lawson (complete continuous TopLattice);
   let S be meet-inheriting full non empty SubRelStr of T;
   let X be Subset of T such that
-A1: X = the carrier of S & Top T in X;
+A1: X = the carrier of S and
+A2: Top T in X;
   hereby
     assume X is closed;
     then S is infs-inheriting directed-sups-inheriting full non empty
-    SubRelStr of T by A1,Th48,Th49;
-    hence for N being net of T st N is_eventually_in X holds lim_inf N in X
+    SubRelStr of T by A1,A2,Th48,Th49;
+    hence
+    for N being net of T st N is_eventually_in X holds lim_inf N in X
     by A1,Th51;
   end;
-  assume for N being net of T st N is_eventually_in X holds lim_inf N in X;
+  assume
+  for N being net of T st N is_eventually_in X holds lim_inf N in X;
   then for N being net of T st rng the mapping of N c= the carrier of S
   holds lim_inf N in the carrier of S by A1,Th27;
-  then S is infs-inheriting directed-sups-inheriting by A1,Th52,Th53;
-  then ex X being Subset of T st X = the carrier of S & X is closed by Th50;
+  then S is infs-inheriting directed-sups-inheriting by A1,A2,Th52,Th53;
+  then ex X being Subset of T st X = the carrier of S & X is closed by
+  Th50;
   hence thesis by A1;
 end;
 

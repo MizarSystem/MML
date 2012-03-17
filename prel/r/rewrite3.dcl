@@ -12,6 +12,7 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSEQ_1"/>
@@ -39,7 +40,7 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="55">
+<Adjective nr="56">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -54,7 +55,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="30">
-<Func kind="K" nr="228">
+<Func kind="K" nr="236">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -65,12 +66,12 @@
 <LocusVar nr="2"/>
 </Typ>
 <Cluster>
-<Adjective nr="33" value="false"/>
-<Adjective nr="39"/>
-<Adjective nr="55">
+<Adjective nr="35" value="false"/>
+<Adjective nr="41"/>
+<Adjective nr="56">
 <LocusVar nr="2"/>
 </Adjective>
-<Adjective nr="56">
+<Adjective nr="57">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>

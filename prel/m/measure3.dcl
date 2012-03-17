@@ -7,6 +7,7 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="TARSKI"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
@@ -38,10 +39,10 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="10" value="false"/>
-<Adjective nr="38">
+<Adjective nr="39">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="41">
+<Adjective nr="42">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -54,13 +55,13 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="6"/>
-<Adjective nr="21">
+<Adjective nr="22">
 <LocusVar nr="2"/>
-<Func kind="K" nr="50"/>
+<Func kind="K" nr="57"/>
 </Adjective>
-<Adjective nr="63"/>
-<Adjective nr="75"/>
-<Adjective nr="80">
+<Adjective nr="64"/>
+<Adjective nr="76"/>
+<Adjective nr="81">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
@@ -68,22 +69,22 @@
 <Func kind="K" nr="21">
 <Func kind="K" nr="22">
 <LocusVar nr="2"/>
-<Func kind="K" nr="50"/>
+<Func kind="K" nr="57"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="180">
+<Func kind="K" nr="188">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
 <Adjective nr="10" value="false"/>
-<Adjective nr="38">
+<Adjective nr="39">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="79">
+<Adjective nr="80">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

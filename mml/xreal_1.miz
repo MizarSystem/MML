@@ -23,30 +23,34 @@ begin
 reserve a,b,c,d for real number;
 reserve r,s for real number;
 
-Lm1: (r in REAL+ & s in REAL+ &
-ex x',y' being Element of REAL+ st r = x' & s = y' & x' <=' y') or
-(r in [:{0},REAL+:] & s in [:{0},REAL+:] &
-ex x',y' being Element of REAL+ st r = [0,x'] & s = [0,y'] & y' <=' x') or
-s in REAL+ & r in [:{0},REAL+:] implies r <= s
+Lm1: (r in REAL+ & s in REAL+ & ex x',y' being Element of REAL+ st r = x' & s
+= y' & x' <=' y') or (r in [:{0},REAL+:] & s in [:{0},REAL+:] & ex x',y' being
+Element of REAL+ st r = [0,x'] & s = [0,y'] & y' <=' x') or s in REAL+ & r in
+[:{0},REAL+:] implies r <= s
+
 proof
   assume
-A1: (r in REAL+ & s in REAL+ &
-  ex x',y' being Element of REAL+ st r = x' & s = y' & x' <=' y') or
-  (r in [:{0},REAL+:] & s in [:{0},REAL+:] &
-  ex x',y' being Element of REAL+ st r = [0,x'] & s = [0,y'] & y' <=' x') or
-  ( s in REAL+ & r in [:{0},REAL+:]);
-  per cases;
-  case r in REAL+ & s in REAL+;
-    hence thesis by A1,
-ARYTM_0:5,XBOOLE_0:3;
-  end;
-  case r in [:{0},REAL+:] & s in [:{0},REAL+:];
 
-hence thesis
-    by A1,ARYTM_0:5,XBOOLE_0:3;
+A1: (r in REAL+ & s in REAL+ & ex x',y' being Element of REAL+ st r = x'
+  & s = y' & x' <=' y') or (r in [:{0},REAL+:] & s in [:{0},REAL+:] & ex x',y'
+
+being Element of REAL+ st r = [0,x'] & s = [0,y'] & y' <=' x') or s in REAL+ &
+  r in [:{0},REAL+:];
+
+  per cases;
+  case
+    r in REAL+ & s in REAL+;
+    hence thesis by A1,ARYTM_0:5,XBOOLE_0:3;
   end;
-  case not(r in REAL+ & s in REAL+) &
-    not (r in [:{0},REAL+:] & s in [:{0},REAL+:]);
+  case
+    r in [:{0},REAL+:] & s in [:{0},REAL+:];
+    hence thesis by A1,ARYTM_0:5,XBOOLE_0:3;
+  end;
+  case
+
+    not(r in REAL+ & s in REAL+) & not (r in [:{0},REAL+:] & s in [:{0
+    },REAL+:]);
+
     hence thesis by A1;
   end;
 end;
@@ -58,81 +62,94 @@ proof
 A1: a = [*x1,x2*];
 A2: a in REAL by XREAL_0:def 1;
   thus now
-    assume x2 <> 0;
+    assume
+    x2 <> 0;
     then a = (0,1) --> (x1,x2) by A1,ARYTM_0:def 7;
     hence contradiction by A2,ARYTM_0:10;
   end;
   hence thesis by A1,ARYTM_0:def 7;
 end;
 
-Lm3: for a',b' being Element of REAL, a,b st a' = a & b' = b
-holds +(a',b') = a + b
+Lm3: for a',b' being Element of REAL, a,b st a' = a & b' = b holds +(a',b') =
+a + b
+
 proof
   let a',b' be Element of REAL, a,b such that
-A1: a' = a & b' = b;
+A1: a' = a and
+A2: b' = b;
   consider x1,x2,y1,y2 being Element of REAL such that
-A2: a = [* x1,x2 *] and
-A3: b = [*y1,y2*] and
-A4: a+b = [*+(x1,y1),+(x2,y2)*] by XCMPLX_0:def 4;
-A5: a = x1 & b = y1 by A2,A3,Lm2;
-  x2 = 0 & y2 = 0 by A2,A3,Lm2;
-  then +(x2,y2) = 0 by ARYTM_0:13;
-  hence thesis by A1,A4,A5,ARYTM_0:def 7;
+A3: a = [* x1,x2 *] and
+A4: b = [*y1,y2*] and
+A5: a+b = [*+(x1,y1),+(x2,y2)*] by XCMPLX_0:def 4;
+A6: y2 = 0 by A4,Lm2;
+  x2 = 0 by A3,Lm2;
+  then
+A7: +(x2,y2) = 0 by A6,ARYTM_0:13;
+A8: b = y1 by A4,Lm2;
+  a = x1 by A3,Lm2;
+  hence thesis by A1,A2,A5,A8,A7,ARYTM_0:def 7;
 end;
 
 Lm4: {} in {{}} by TARSKI:def 1;
 
 Lm5: a <= b implies a + c <= b + c
 proof
-  assume
-A1: a <= b;
   reconsider x1=a, y1=b, z1=c as Element of REAL by XREAL_0:def 1;
-A2: +(y1,z1) = b + c & +(x1,z1) = a + c by Lm3;
-  per cases by A1,XXREAL_0:def 5;
+A1: +(y1,z1) = b + c by Lm3;
+A2: +(x1,z1) = a + c by Lm3;
+  assume
+A3: a <= b;
+  per cases by A3,XXREAL_0:def 5;
   suppose that
-A3: a in REAL+ and
-A4: b in REAL+ and
-A5: c in REAL+;
-    consider a'',b'' being Element of REAL+ such that
-A6: a = a'' and
-A7: b = b'' and
-A8: a'' <=' b'' by A1,A3,A4,XXREAL_0:def 5;
-    consider a',c' being Element of REAL+ such that
-A9: a = a' and
-A10: c = c' and
-A11: +(x1,z1) = a' + c' by A3,A5,ARYTM_0:def 2;
+A4: a in REAL+ and
+A5: b in REAL+ and
+A6: c in REAL+;
     consider b',c'' being Element of REAL+ such that
-A12: b = b' and
-A13: c = c'' and
-A14: +(y1,z1) = b' + c'' by A4,A5,ARYTM_0:def 2;
-    a' + c' <=' b' + c'' by A6,A7,A8,A9,A10,A12,A13,ARYTM_1:7;
-    hence thesis by A2,A11,A14,Lm1;
+A7: b = b' and
+A8: c = c'' and
+A9: +(y1,z1) = b' + c'' by A5,A6,ARYTM_0:def 2;
+    consider a',c' being Element of REAL+ such that
+A10: a = a' and
+A11: c = c' and
+A12: +(x1,z1) = a' + c' by A4,A6,ARYTM_0:def 2;
+
+    ex a'',b'' being Element of REAL+ st a = a'' & b = b'' & a'' <='
+    b'' by A3,A4,A5,XXREAL_0:def 5;
+
+    then a' + c' <=' b' + c'' by A10,A11,A7,A8,ARYTM_1:7;
+    hence thesis by A1,A2,A12,A9,Lm1;
   end;
   suppose that
-A15: a in [:{0},REAL+:] and
-A16: b in REAL+ and
-A17: c in REAL+;
-    consider a',c' being Element of REAL+ such that a = [0,a'] and
+A13: a in [:{0},REAL+:] and
+A14: b in REAL+ and
+A15: c in REAL+;
+    consider b',c'' being Element of REAL+ such that
+    b = b' and
+A16: c = c'' and
+A17: +(y1,z1) = b' + c'' by A14,A15,ARYTM_0:def 2;
+    consider a',c' being Element of REAL+ such that
+    a = [0,a'] and
 A18: c = c' and
-A19: +(x1,z1) = c' - a' by A15,A17,ARYTM_0:def 2;
-    consider b',c'' being Element of REAL+ such that b = b' and
-A20: c = c'' and
-A21: +(y1,z1) = b' + c'' by A16,A17,ARYTM_0:def 2;
-    now per cases;
-      suppose a' <=' c';
+A19: +(x1,z1) = c' - a' by A13,A15,ARYTM_0:def 2;
+    now
+      per cases;
+      suppose
+A20:    a' <=' c';
+A21:    c' -' a' <=' c' by ARYTM_1:11;
+        c' <=' b' + c'' by A18,A16,ARYTM_2:20;
         then
-A22:    c' - a' = c' -' a' by ARYTM_1:def 2;
-A23:    c' -' a' <=' c' by ARYTM_1:11;
-        c' <=' b' + c'' by A18,A20,ARYTM_2:20;
-        then c' -' a' <=' b' + c'' by A23,ARYTM_1:3;
-        hence thesis by A2,A19,A21,A22,Lm1;
+A22:    c' -' a' <=' b' + c'' by A21,ARYTM_1:3;
+        c' - a' = c' -' a' by A20,ARYTM_1:def 2;
+        hence thesis by A1,A2,A19,A17,A22,Lm1;
       end;
-      suppose not a' <=' c';
+      suppose
+        not a' <=' c';
         then c' - a' = [0,a' -' c'] by ARYTM_1:def 2;
         then c' - a' in [:{0},REAL+:] by Lm4,ZFMISC_1:106;
-        then not a + c in REAL+ & not b + c in [:{0},REAL+:]
-        by A2,A19,A21,ARYTM_0:5,XBOOLE_0:3;
-        hence thesis by XXREAL_0:def 5;
+        then
+A23:    not a + c in REAL+ by A2,A19,ARYTM_0:5,XBOOLE_0:3;
+        not b + c in [:{0},REAL+:] by A1,A17,ARYTM_0:5,XBOOLE_0:3;
+        hence thesis by A23,XXREAL_0:def 5;
       end;
     end;
     hence thesis;
@@ -141,50 +158,56 @@ A23:    c' -' a' <=' c' by ARYTM_1:11;
 A24: a in [:{0},REAL+:] and
 A25: b in [:{0},REAL+:] and
 A26: c in REAL+;
-    consider a'',b'' being Element of REAL+ such that
-A27: a = [0,a''] and
-A28: b = [0,b''] and
-A29: b'' <=' a'' by A1,A24,A25,XXREAL_0:def 5;
-    consider a',c' being Element of REAL+ such that
-A30: a = [0,a'] and
-A31: c = c' and
-A32: +(x1,z1) = c' - a' by A24,A26,ARYTM_0:def 2;
     consider b',c'' being Element of REAL+ such that
-A33: b = [0,b'] and
-A34: c = c'' and
-A35: +(y1,z1) = c'' - b' by A25,A26,ARYTM_0:def 2;
-A36: a' = a'' by A27,A30,ZFMISC_1:33;
-A37: b' = b'' by A28,A33,ZFMISC_1:33;
-    now per cases;
+A27: b = [0,b'] and
+A28: c = c'' and
+A29: +(y1,z1) = c'' - b' by A25,A26,ARYTM_0:def 2;
+    consider a'',b'' being Element of REAL+ such that
+A30: a = [0,a''] and
+A31: b = [0,b''] and
+A32: b'' <=' a'' by A3,A24,A25,XXREAL_0:def 5;
+    consider a',c' being Element of REAL+ such that
+A33: a = [0,a'] and
+A34: c = c' and
+A35: +(x1,z1) = c' - a' by A24,A26,ARYTM_0:def 2;
+A36: a' = a'' by A30,A33,ZFMISC_1:33;
+A37: b' = b'' by A31,A27,ZFMISC_1:33;
+    now
+      per cases;
       suppose
 A38:    a' <=' c';
+        then b' <=' c' by A32,A36,A37,ARYTM_1:3;
         then
-A39:    c' - a' = c' -' a' by ARYTM_1:def 2;
-        b' <=' c' by A29,A36,A37,A38,ARYTM_1:3;
-        then
-A40:    c' - b' = c' -' b' by ARYTM_1:def 2;
-        c' -' a' <=' c'' -' b' by A29,A31,A34,A36,A37,ARYTM_1:16;
-        hence thesis by A2,A31,A32,A34,A35,A39,A40,Lm1;
+A39:    c' - b' = c' -' b' by ARYTM_1:def 2;
+A40:    c' - a' = c' -' a' by A38,ARYTM_1:def 2;
+        c' -' a' <=' c'' -' b' by A32,A34,A28,A36,A37,ARYTM_1:16;
+        hence thesis by A1,A2,A34,A35,A28,A29,A40,A39,Lm1;
       end;
-      suppose not a' <=' c';
+      suppose
+        not a' <=' c';
         then
-A41:    +(x1,z1) = [0,a' -' c'] by A32,ARYTM_1:def 2;
+A41:    +(x1,z1) = [0,a' -' c'] by A35,ARYTM_1:def 2;
         then
 A42:    +(x1,z1) in [:{0},REAL+:] by Lm4,ZFMISC_1:106;
-        now per cases;
-          suppose b' <=' c';
+        now
+          per cases;
+          suppose
+            b' <=' c';
             then c' - b' = c' -' b' by ARYTM_1:def 2;
-            then not +(x1,z1) in REAL+ & not +(y1,z1) in [:{0},REAL+:]
-            by A31,A34,A35,A42,ARYTM_0:5,XBOOLE_0:3;
-            hence thesis by A2,XXREAL_0:def 5;
+
+            then
+A43:        not +(y1,z1) in [:{0},REAL+:] by A34,A28,A29,ARYTM_0:5,
+            XBOOLE_0:3;
+
+            not +(x1,z1) in REAL+ by A42,ARYTM_0:5,XBOOLE_0:3;
+            hence thesis by A1,A2,A43,XXREAL_0:def 5;
           end;
-          suppose not b' <=' c';
-            then
-A43:        +(y1,z1) = [0,b' -' c'] by A31,A34,A35,ARYTM_1:def 2;
-            then
-A44:        +(y1,z1) in [:{0},REAL+:] by Lm4,ZFMISC_1:106;
-            b' -' c' <=' a' -' c' by A29,A36,A37,ARYTM_1:17;
-            hence thesis by A2,A41,A42,A43,A44,Lm1;
+          suppose
+A44:        not b' <=' c';
+A45:        b' -' c' <=' a' -' c' by A32,A36,A37,ARYTM_1:17;
+A46:        +(y1,z1) = [0,b' -' c'] by A34,A28,A29,A44, ARYTM_1:def 2;
+            then +(y1,z1) in [:{0},REAL+:] by Lm4,ZFMISC_1:106;
+            hence thesis by A1,A2,A41,A42,A46,A45,Lm1;
           end;
         end;
         hence thesis;
@@ -193,52 +216,58 @@ A44:        +(y1,z1) in [:{0},REAL+:] by Lm4,ZFMISC_1:106;
     hence thesis;
   end;
   suppose that
-A45: a in REAL+ and
-A46: b in REAL+ and
-A47: c in [:{0},REAL+:];
-    consider a'',b'' being Element of REAL+ such that
-A48: a = a'' and
-A49: b = b'' and
-A50: a'' <=' b'' by A1,A45,A46,XXREAL_0:def 5;
-    consider a',c' being Element of REAL+ such that
-A51: a = a' and
-A52: c = [0,c'] and
-A53: +(x1,z1) = a' - c' by A45,A47,ARYTM_0:def 2;
+A47: a in REAL+ and
+A48: b in REAL+ and
+A49: c in [:{0},REAL+:];
     consider b',c'' being Element of REAL+ such that
-A54: b = b' and
-A55: c = [0,c''] and
-A56: +(y1,z1) = b' - c'' by A46,A47,ARYTM_0:def 2;
-A57: c' = c'' by A52,A55,ZFMISC_1:33;
-    now per cases;
+A50: b = b' and
+A51: c = [0,c''] and
+A52: +(y1,z1) = b' - c'' by A48,A49,ARYTM_0:def 2;
+    consider a',c' being Element of REAL+ such that
+A53: a = a' and
+A54: c = [0,c'] and
+A55: +(x1,z1) = a' - c' by A47,A49,ARYTM_0:def 2;
+A56: c' = c'' by A54,A51,ZFMISC_1:33;
+
+A57: ex a'',b'' being Element of REAL+ st a = a'' & b = b'' & a'' <='
+    b'' by A3,A47,A48,XXREAL_0:def 5;
+
+    now
+      per cases;
       suppose
 A58:    c' <=' a';
+        then c' <=' b' by A57,A53,A50,ARYTM_1:3;
         then
-A59:    a' - c' = a' -' c' by ARYTM_1:def 2;
-        c' <=' b' by A48,A49,A50,A51,A54,A58,ARYTM_1:3;
-        then
-A60:    b' - c' = b' -' c' by ARYTM_1:def 2;
-        a' -' c' <=' b' -' c'' by A48,A49,A50,A51,A54,A57,ARYTM_1:17;
-        hence thesis by A2,A53,A56,A57,A59,A60,Lm1;
+A59:    b' - c' = b' -' c' by ARYTM_1:def 2;
+A60:    a' - c' = a' -' c' by A58,ARYTM_1:def 2;
+        a' -' c' <=' b' -' c'' by A57,A53,A50,A56,ARYTM_1:17;
+        hence thesis by A1,A2,A55,A52,A56,A60,A59,Lm1;
       end;
-      suppose not c' <=' a';
+      suppose
+        not c' <=' a';
         then
-A61:    +(x1,z1) = [0,c' -' a'] by A53,ARYTM_1:def 2;
+A61:    +(x1,z1) = [0,c' -' a'] by A55,ARYTM_1:def 2;
         then
 A62:    +(x1,z1) in [:{0},REAL+:] by Lm4,ZFMISC_1:106;
-        now per cases;
-          suppose c' <=' b';
+        now
+          per cases;
+          suppose
+            c' <=' b';
             then b' - c' = b' -' c' by ARYTM_1:def 2;
-            then not +(x1,z1) in REAL+ & not +(y1,z1) in [:{0},REAL+:]
-            by A56,A57,A62,ARYTM_0:5,XBOOLE_0:3;
-            hence thesis by A2,XXREAL_0:def 5;
+
+            then
+A63:        not +(y1,z1) in [:{0},REAL+:] by A52,A56,ARYTM_0:5,
+            XBOOLE_0:3;
+
+            not +(x1,z1) in REAL+ by A62,ARYTM_0:5,XBOOLE_0:3;
+            hence thesis by A1,A2,A63,XXREAL_0:def 5;
           end;
-          suppose not c' <=' b';
-            then
-A63:        +(y1,z1) = [0,c' -' b'] by A56,A57,ARYTM_1:def 2;
-            then
-A64:        +(y1,z1) in [:{0},REAL+:] by Lm4,ZFMISC_1:106;
-            c' -' b' <=' c' -' a' by A48,A49,A50,A51,A54,ARYTM_1:16;
-            hence thesis by A2,A61,A62,A63,A64,Lm1;
+          suppose
+A64:        not c' <=' b';
+A65:        c' -' b' <=' c' -' a' by A57,A53,A50,ARYTM_1:16;
+A66:        +(y1,z1) = [0,c' -' b'] by A52,A56,A64,ARYTM_1:def 2;
+            then +(y1,z1) in [:{0},REAL+:] by Lm4,ZFMISC_1:106;
+            hence thesis by A1,A2,A61,A62,A66,A65,Lm1;
           end;
         end;
         hence thesis;
@@ -247,76 +276,84 @@ A64:        +(y1,z1) in [:{0},REAL+:] by Lm4,ZFMISC_1:106;
     hence thesis;
   end;
   suppose that
-A65: a in [:{0},REAL+:] and
-A66: b in REAL+ and
-A67: c in [:{0},REAL+:];
-    not a in REAL+ & not c in REAL+ by A65,A67,ARYTM_0:5,XBOOLE_0:3;
-    then consider a',c' being Element of REAL+ such that a = [0,a'] and
-A68: c = [0,c'] and
-A69: +(x1,z1) = [0,a' + c'] by ARYTM_0:def 2;
-    consider b',c'' being Element of REAL+ such that b = b' and
-A70: c = [0,c''] and
-A71: +(y1,z1) = b' - c'' by A66,A67,ARYTM_0:def 2;
-A72: c' = c'' by A68,A70,ZFMISC_1:33;
-A73: +(x1,z1) in [:{0},REAL+:] by A69,Lm4,ZFMISC_1:106;
-    now per cases;
-      suppose c' <=' b';
-        then b' - c'' = b' -' c'' by A72,ARYTM_1:def 2;
-        then not +(x1,z1) in REAL+ & not +(y1,z1) in [:{0},REAL+:]
-        by A71,A73,ARYTM_0:5,XBOOLE_0:3;
-        hence thesis by A2,XXREAL_0:def 5;
+A67: a in [:{0},REAL+:] and
+A68: b in REAL+ and
+A69: c in [:{0},REAL+:];
+A70: not c in REAL+ by A69,ARYTM_0:5,XBOOLE_0:3;
+    not a in REAL+ by A67,ARYTM_0:5,XBOOLE_0:3;
+    then consider a',c' being Element of REAL+ such that
+    a = [0,a'] and
+A71: c = [0,c'] and
+A72: +(x1,z1) = [0,a' + c'] by A70,ARYTM_0:def 2;
+A73: +(x1,z1) in [:{0},REAL+:] by A72,Lm4,ZFMISC_1:106;
+    consider b',c'' being Element of REAL+ such that
+    b = b' and
+A74: c = [0,c''] and
+A75: +(y1,z1) = b' - c'' by A68,A69,ARYTM_0:def 2;
+A76: c' = c'' by A71,A74,ZFMISC_1:33;
+    now
+      per cases;
+      suppose
+        c' <=' b';
+        then b' - c'' = b' -' c'' by A76,ARYTM_1:def 2;
+        then
+A77:    not +(y1,z1) in [:{0},REAL+:] by A75,ARYTM_0:5,XBOOLE_0:3;
+        not +(x1,z1) in REAL+ by A73,ARYTM_0:5,XBOOLE_0:3;
+        hence thesis by A1,A2,A77,XXREAL_0:def 5;
       end;
-      suppose not c' <=' b';
+      suppose
+A78:    not c' <=' b';
+A79:    c' <=' c' + a' by ARYTM_2:20;
+        c' -' b' <=' c' by ARYTM_1:11;
         then
-A74:    +(y1,z1) = [0,c' -' b'] by A71,A72,ARYTM_1:def 2;
-        then
-A75:    +(y1,z1) in [:{0},REAL+:] by Lm4,ZFMISC_1:106;
-A76:    c' -' b' <=' c' by ARYTM_1:11;
-        c' <=' c' + a' by ARYTM_2:20;
-        then c' -' b' <=' c' + a' by A76,ARYTM_1:3;
-        hence thesis by A2,A69,A73,A74,A75,Lm1;
+A80:    c' -' b' <=' c' + a' by A79,ARYTM_1:3;
+A81:    +(y1,z1) = [0,c' -' b'] by A75,A76,A78,ARYTM_1:def 2;
+        then +(y1,z1) in [:{0},REAL+:] by Lm4,ZFMISC_1:106;
+        hence thesis by A1,A2,A72,A73,A81,A80,Lm1;
       end;
     end;
     hence thesis;
   end;
   suppose that
-A77: a in [:{0},REAL+:] and
-A78: b in [:{0},REAL+:] and
-A79: c in [:{0},REAL+:];
-    consider a'',b'' being Element of REAL+ such that
-A80: a = [0,a''] and
-A81: b = [0,b''] and
-A82: b'' <=' a'' by A1,A77,A78,XXREAL_0:def 5;
-    not a in REAL+ & not c in REAL+ by A77,A79,ARYTM_0:5,XBOOLE_0:3;
+A82: a in [:{0},REAL+:] and
+A83: b in [:{0},REAL+:] and
+A84: c in [:{0},REAL+:];
+A85: not c in REAL+ by A84,ARYTM_0:5,XBOOLE_0:3;
+A86: not c in REAL+ by A84,ARYTM_0:5,XBOOLE_0:3;
+    not a in REAL+ by A82,ARYTM_0:5,XBOOLE_0:3;
     then consider a',c' being Element of REAL+ such that
-A83: a = [0,a'] and
-A84: c = [0,c'] and
-A85: +(x1,z1) = [0,a' + c'] by ARYTM_0:def 2;
-    not b in REAL+ & not c in REAL+ by A78,A79,ARYTM_0:5,XBOOLE_0:3;
+A87: a = [0,a'] and
+A88: c = [0,c'] and
+A89: +(x1,z1) = [0,a' + c'] by A86,ARYTM_0:def 2;
+A90: +(x1,z1) in [:{0},REAL+:] by A89,Lm4,ZFMISC_1:106;
+    not b in REAL+ by A83,ARYTM_0:5,XBOOLE_0:3;
     then consider b',c'' being Element of REAL+ such that
-A86: b = [0,b'] and
-A87: c = [0,c''] and
-A88: +(y1,z1) = [0,b' + c''] by ARYTM_0:def 2;
-A89: a' = a'' by A80,A83,ZFMISC_1:33;
-A90: b' = b'' by A81,A86,ZFMISC_1:33;
-A91: c' = c'' by A84,A87,ZFMISC_1:33;
-    then
-A92: b' + c' <=' a' + c'' by A82,A89,A90,ARYTM_1:7;
-A93: +(x1,z1) in [:{0},REAL+:] by A85,Lm4,ZFMISC_1:106;
-    +(y1,z1) in [:{0},REAL+:] by A88,Lm4,ZFMISC_1:106;
-    hence thesis by A2,A85,A88,A91,A92,A93,Lm1;
+A91: b = [0,b'] and
+A92: c = [0,c''] and
+A93: +(y1,z1) = [0,b' + c''] by A85,ARYTM_0:def 2;
+A94: +(y1,z1) in [:{0},REAL+:] by A93,Lm4,ZFMISC_1:106;
+A95: c' = c'' by A88,A92,ZFMISC_1:33;
+    consider a'',b'' being Element of REAL+ such that
+A96: a = [0,a''] and
+A97: b = [0,b''] and
+A98: b'' <=' a'' by A3,A82,A83,XXREAL_0:def 5;
+A99: b' = b'' by A97,A91,ZFMISC_1:33;
+    a' = a'' by A96,A87,ZFMISC_1:33;
+    then b' + c' <=' a' + c'' by A98,A99,A95,ARYTM_1:7;
+    hence thesis by A1,A2,A89,A93,A95,A90,A94,Lm1;
   end;
 end;
 
 Lm6: a <= b & c <= d implies a+c <= b+d
 proof
   assume
-A1: a<=b;
-  assume c <= d;
+  a<=b;
   then
-A2: b+c <= b+d by Lm5;
-  a+c <= b+c by A1,Lm5;
-  hence thesis by A2,XXREAL_0:2;
+A1: a+c <= b+c by Lm5;
+  assume
+  c <= d;
+  then b+c <= b+d by Lm5;
+  hence thesis by A1,XXREAL_0:2;
 end;
 
 Lm7: a <= b implies a-c <= b-c
@@ -327,37 +364,35 @@ end;
 
 Lm8: a < b & c <= d implies a+c < b+d
 proof
-  assume
-A1: a<b & c <= d;
+  assume that
+A1: a<b and
+A2: c <= d;
   for a,b,c,d holds a<b & c <= d implies a+c < b+d
   proof
     let a,b,c,d;
     assume
-A2: a<b;
+A3: a<b;
     assume
-A3: c <= d;
-    then
-A4: a+c <= b+d by A2,Lm6;
-    a+c <> b+d
+A4: c <= d;
+A5: a+c <> b+d
     proof
+      a+c <= d+a by A4,Lm5;
+      then
+A6:   a+c-d<=a+d-d by Lm7;
       assume
-A5:   a+c = b+d;
-      b<=a
-      proof
-        a+c <= d+a by A3,Lm5;
-        then a+c-d<=a+d-d by Lm7;
-        hence thesis by A5;
-      end;
-      hence contradiction by A2;
+      a+c = b+d;
+      hence contradiction by A3,A6;
     end;
-    hence thesis by A4,XXREAL_0:1;
+    a+c <= b+d by A3,A4,Lm6;
+    hence thesis by A5,XXREAL_0:1;
   end;
-  hence thesis by A1;
+  hence thesis by A1,A2;
 end;
 
 Lm9: 0 < a implies b < b+a
 proof
-  assume 0<a;
+  assume
+  0<a;
   then b+0<b+a by Lm8;
   hence thesis;
 end;
@@ -400,7 +435,8 @@ end;
 
 Lm10: a+c <= b+c implies a <= b
 proof
-  assume a+c <= b+c;
+  assume
+  a+c <= b+c;
   then a+c+(-c)<=b+c+(-c) by Lm5;
   hence thesis;
 end;
@@ -423,24 +459,32 @@ A2: b <= a;
   end;
 end;
 
-Lm11: for a',b' being Element of REAL, a,b st a' = a & b' = b
-holds *(a',b') = a * b
+Lm11: for a',b' being Element of REAL, a,b st a' = a & b' = b holds *(a',b') =
+a * b
+
 proof
   let a',b' be Element of REAL, a,b such that
-A1: a' = a & b' = b;
+A1: a' = a and
+A2: b' = b;
   consider x1,x2,y1,y2 being Element of REAL such that
-A2: a = [* x1,x2 *] and
-A3: b = [*y1,y2*] and
-A4: a*b = [* +(*(x1,y1),opp*(x2,y2)), +(*(x1,y2),*(x2,y1)) *]
-  by XCMPLX_0:def 5;
-A5: a = x1 & b = y1 by A2,A3,Lm2;
-A6: x2 = 0 & y2 = 0 by A2,A3,Lm2;
-  then *(x1,y2) = 0 & *(x2,y1) = 0 by ARYTM_0:14;
+A3: a = [* x1,x2 *] and
+A4: b = [*y1,y2*] and
+
+A5: a*b = [* +(*(x1,y1),opp*(x2,y2)), +(*(x1,y2),*(x2,y1)) *] by
+  XCMPLX_0:def 5;
+
+A6: b = y1 by A4,Lm2;
+  x2 = 0 by A3,Lm2;
   then
-A7: +(*(x1,y2),*(x2,y1)) = 0 by ARYTM_0:13;
-  thus *(a',b') = +(*(x1,y1),*(opp x2,y2)) by A1,A5,A6,ARYTM_0:13,14
+A7: *(x2,y1) = 0 by ARYTM_0:14;
+A8: y2 = 0 by A4,Lm2;
+  then *(x1,y2) = 0 by ARYTM_0:14;
+  then
+A9: +(*(x1,y2),*(x2,y1)) = 0 by A7,ARYTM_0:13;
+  a = x1 by A3,Lm2;
+  hence *(a',b') = +(*(x1,y1),*(opp x2,y2)) by A1,A2,A6,A8,ARYTM_0:13,14
     .= +(*(x1,y1),opp*(x2,y2)) by ARYTM_0:17
-    .= a * b by A4,A7,ARYTM_0:def 7;
+    .= a * b by A5,A9,ARYTM_0:def 7;
 end;
 reconsider o = 0 as Element of REAL+ by ARYTM_2:21;
 
@@ -449,67 +493,73 @@ proof
   assume that
 A1: a <= b and
 A2: 0 <= c;
-  reconsider x1=a, y1=b, z1=c as Element of REAL by XREAL_0:def 1;
-A3: *(y1,z1) = b * c & *(x1,z1) = a * c by Lm11;
   not o in [:{0},REAL+:] by ARYTM_0:5,XBOOLE_0:3;
   then
-A4: c in REAL+ by A2,XXREAL_0:def 5;
+A3: c in REAL+ by A2,XXREAL_0:def 5;
+  reconsider x1=a, y1=b, z1=c as Element of REAL by XREAL_0:def 1;
+A4: *(y1,z1) = b * c by Lm11;
+A5: *(x1,z1) = a * c by Lm11;
   assume
-A5: not thesis;
+A6: not thesis;
   then
-A6: c <> 0;
+A7: c <> 0;
   per cases by A1,XXREAL_0:def 5;
   suppose that
-A7: a in REAL+ and
-A8: b in REAL+;
-    consider a'',b'' being Element of REAL+ such that
-A9: a = a'' and
-A10: b = b'' and
-A11: a'' <=' b'' by A1,A7,A8,XXREAL_0:def 5;
-    consider a',c' being Element of REAL+ such that
-A12: a = a' and
-A13: c = c' and
-A14: *(x1,z1) = a' *' c' by A4,A7,ARYTM_0:def 3;
+A8: a in REAL+ and
+A9: b in REAL+;
     consider b',c'' being Element of REAL+ such that
-A15: b = b' and
-A16: c = c'' and
-A17: *(y1,z1) = b' *' c'' by A4,A8,ARYTM_0:def 3;
-    a' *' c' <=' b' *' c' by A9,A10,A11,A12,A15,ARYTM_1:8;
-    hence contradiction by A3,A5,A13,A14,A16,A17,Lm1;
+A10: b = b' and
+A11: c = c'' and
+A12: *(y1,z1) = b' *' c'' by A3,A9,ARYTM_0:def 3;
+    consider a',c' being Element of REAL+ such that
+A13: a = a' and
+A14: c = c' and
+A15: *(x1,z1) = a' *' c' by A3,A8,ARYTM_0:def 3;
+
+    ex a'',b'' being Element of REAL+ st a = a'' & b = b'' & a'' <='
+    b'' by A1,A8,A9,XXREAL_0:def 5;
+
+    then a' *' c' <=' b' *' c' by A13,A10,ARYTM_1:8;
+    hence contradiction by A4,A5,A6,A14,A15,A11,A12,Lm1;
   end;
   suppose that
-A18: a in [:{0},REAL+:] and
-A19: b in REAL+;
-    consider a',c' being Element of REAL+ such that a = [0,a'] and c = c' and
-A20: *(x1,z1) = [0,c' *' a'] by A4,A6,A18,ARYTM_0:def 3;
-    consider b',c'' being Element of REAL+ such that b = b' and c = c'' and
-A21: *(y1,z1) = b' *' c'' by A4,A19,ARYTM_0:def 3;
-    *(x1,z1) in [:{0},REAL+:] by A20,Lm4,ZFMISC_1:106;
-    then not *(x1,z1) in REAL+ & not *(y1,z1) in [:{0},REAL+:]
-    by A21,ARYTM_0:5,XBOOLE_0:3;
-    hence contradiction by A3,A5,XXREAL_0:def 5;
+A16: a in [:{0},REAL+:] and
+A17: b in REAL+;
+
+    ex a',c' being Element of REAL+ st a = [0,a'] & c = c' & *(x1,z1)
+    = [0,c' *' a'] by A3,A7,A16,ARYTM_0:def 3;
+
+    then *(x1,z1) in [:{0},REAL+:] by Lm4,ZFMISC_1:106;
+    then
+A18: not *(x1,z1) in REAL+ by ARYTM_0:5,XBOOLE_0:3;
+
+    ex b',c'' being Element of REAL+ st b = b' & c = c'' & * (y1,z1) =
+    b' *' c'' by A3,A17,ARYTM_0:def 3;
+
+    then not *(y1,z1) in [:{0},REAL+:] by ARYTM_0:5,XBOOLE_0:3;
+    hence contradiction by A4,A5,A6,A18,XXREAL_0:def 5;
   end;
   suppose that
-A22: a in [:{0},REAL+:] and
-A23: b in [:{0},REAL+:];
-    consider a'',b'' being Element of REAL+ such that
-A24: a = [0,a''] and
-A25: b = [0,b''] and
-A26: b'' <=' a'' by A1,A22,A23,XXREAL_0:def 5;
-    consider a',c' being Element of REAL+ such that
-A27: a = [0,a'] and
-A28: c = c' and
-A29: *(x1,z1) = [0,c' *' a'] by A4,A6,A22,ARYTM_0:def 3;
+A19: a in [:{0},REAL+:] and
+A20: b in [:{0},REAL+:];
     consider b',c'' being Element of REAL+ such that
-A30: b = [0,b'] and
-A31: c = c'' and
-A32: *(y1,z1) = [0,c'' *' b'] by A4,A6,A23,ARYTM_0:def 3;
-A33: a' = a'' by A24,A27,ZFMISC_1:33;
-A34: b' = b'' by A25,A30,ZFMISC_1:33;
-A35: *(x1,z1) in [:{0},REAL+:] & *(y1,z1) in [:{0},REAL+:]
-    by A29,A32,Lm4,ZFMISC_1:106;
-    b' *' c' <=' a' *' c' by A26,A33,A34,ARYTM_1:8;
-    hence contradiction by A3,A5,A28,A29,A31,A32,A35,Lm1;
+A21: b = [0,b'] and
+A22: c = c'' and
+A23: *(y1,z1) = [0,c'' *' b'] by A3,A7,A20,ARYTM_0:def 3;
+A24: *(y1,z1) in [:{0},REAL+:] by A23,Lm4,ZFMISC_1:106;
+    consider a'',b'' being Element of REAL+ such that
+A25: a = [0,a''] and
+A26: b = [0,b''] and
+A27: b'' <=' a'' by A1,A19,A20,XXREAL_0:def 5;
+A28: b' = b'' by A26,A21,ZFMISC_1:33;
+    consider a',c' being Element of REAL+ such that
+A29: a = [0,a'] and
+A30: c = c' and
+A31: *(x1,z1) = [0,c' *' a'] by A3,A7,A19,ARYTM_0:def 3;
+A32: *(x1,z1) in [:{0},REAL+:] by A31,Lm4,ZFMISC_1:106;
+    a' = a'' by A25,A29,ZFMISC_1:33;
+    then b' *' c' <=' a' *' c' by A27,A28,ARYTM_1:8;
+    hence contradiction by A4,A5,A6,A30,A31,A22,A23,A32,A24,Lm1;
   end;
 end;
 
@@ -519,16 +569,16 @@ proof
 A1: 0<c;
   assume
 A2: a<b;
-  then
-A3: a*c <= b*c by A1,Lm12;
-  a*c <> b*c
+A3: a*c <> b*c
   proof
-    assume a*c = b*c;
+    assume
+    a*c = b*c;
     then a*(c*c")=b*c*c" by XCMPLX_1:4;
     then a*1=b*(c*c") by A1,XCMPLX_0:def 7;
     then a=b*1 by A1,XCMPLX_0:def 7;
     hence contradiction by A2;
   end;
+  a*c <= b*c by A1,A2,Lm12;
   hence thesis by A3,XXREAL_0:1;
 end;
 
@@ -538,12 +588,9 @@ proof
   assume
 A1: a<b;
   take z=(a+b)/2;
-  thus a<z
-  proof
-    1*a+a<a+b by A1,Lm10;
-    then 2"*(2*a)<2"*(a+b) by Lm13;
-    hence thesis;
-  end;
+  1*a+a<a+b by A1,Lm10;
+  then 2"*(2*a)<2"*(a+b) by Lm13;
+  hence a<z;
   a+b<1*b+b by A1,Lm10;
   then 2"*(a+b)<2"*(2*b) by Lm13;
   hence thesis;
@@ -562,7 +609,8 @@ theorem
 
 Lm14: a<=b implies -b<=-a
 proof
-  assume a<=b;
+  assume
+  a<=b;
   then a-b<=b-b by Lm7;
   then a-b-a<=0-a by Lm7;
   hence thesis;
@@ -570,7 +618,8 @@ end;
 
 Lm15: -b<=-a implies a<=b
 proof
-  assume -b<=-a;
+  assume
+  -b<=-a;
   then -(-a)<=-(-b) by Lm14;
   hence thesis;
 end;
@@ -579,8 +628,10 @@ begin
 
 theorem Th11:
   a <= b iff a-c <= b-c
-proof thus a <= b implies a-c <= b-c by Lm7;
-  assume a-c <= b-c;
+proof
+  thus a <= b implies a-c <= b-c by Lm7;
+  assume
+  a-c <= b-c;
   then a+ (-c) + c <= b+ (-c)+c by Lm5;
   hence thesis;
 end;
@@ -591,12 +642,14 @@ proof
   hereby
     assume
 A1: a <= b;
-    assume c-a < c-b;
+    assume
+    c-a < c-b;
     then -(c-b)<-(c-a) by Lm15;
     then b-c < a-c;
     hence contradiction by A1,Lm7;
   end;
-  assume c-a>=c-b;
+  assume
+  c-a>=c-b;
   then -(c-a)<=-(c-b) by Lm14;
   then a-c <= b-c;
   hence thesis by Th11;
@@ -604,28 +657,32 @@ end;
 
 Lm16: a+b <= c implies a <= c-b
 proof
-  assume a+b<=c;
+  assume
+  a+b<=c;
   then a+b-b<=c-b by Lm7;
   hence thesis;
 end;
 
 Lm17: a <= b-c implies a+c <= b
 proof
-  assume a <= b-c;
+  assume
+  a <= b-c;
   then a+c <= b - c + c by Lm5;
   hence thesis;
 end;
 
 Lm18: a <= b+c implies a-b <= c
 proof
-  assume a<=b+c;
+  assume
+  a<=b+c;
   then a-b <= c+b-b by Lm7;
   hence thesis;
 end;
 
 Lm19: a-b <= c implies a <= b+c
 proof
-  assume a-b <= c;
+  assume
+  a-b <= c;
   then a + -b <= c;
   then a <= c - -b by Lm16;
   hence thesis;
@@ -634,7 +691,8 @@ end;
 theorem
   a <= b-c implies c <= b-a
 proof
-  assume a<=b-c;
+  assume
+  a<=b-c;
   then a+c <= b by Lm17;
   hence thesis by Lm16;
 end;
@@ -642,7 +700,8 @@ end;
 theorem
   a-b <= c implies a-c <= b
 proof
-  assume c>=a-b;
+  assume
+  c>=a-b;
   then c+b>=a by Lm19;
   hence thesis by Lm18;
 end;
@@ -650,9 +709,10 @@ end;
 theorem Th15:
   a <= b & c <= d implies a-d <= b-c
 proof
-  assume
-A1: a <= b & c <= d;
-  then -d <= -c by Lm14;
+  assume that
+A1: a <= b and
+A2: c <= d;
+  -d <= -c by A2,Lm14;
   then a+ -d <= b+ -c by A1,Lm6;
   hence thesis;
 end;
@@ -660,9 +720,10 @@ end;
 theorem Th16:
   a < b & c <= d implies a-d < b-c
 proof
-  assume
-A1: a < b & c <= d;
-  then - d <= - c by Lm14;
+  assume that
+A1: a < b and
+A2: c <= d;
+  - d <= - c by A2,Lm14;
   then a+ -d < b+ -c by A1,Lm8;
   hence thesis;
 end;
@@ -670,17 +731,18 @@ end;
 theorem Th17:
   a <= b & c < d implies a-d < b-c
 proof
-  assume a <= b & c < d;
-  then c-b < d-a by Th16;
+  assume that
+A1: a <= b and
+A2: c < d;
+  c-b < d-a by A1,A2,Th16;
   then -(d-a) < -(c-b) by Lm15;
   hence thesis;
 end;
 
-
-
 Lm20: a+b<=c+d implies a-c <= d-b
 proof
-  assume a+b<=c+d;
+  assume
+  a+b<=c+d;
   then a<=c+d-b by Lm16;
   then a<=c+(d-b);
   hence thesis by Lm18;
@@ -689,7 +751,8 @@ end;
 theorem
   a-b <= c-d implies a-c <= b-d
 proof
-  assume a-b<=c-d;
+  assume
+  a-b<=c-d;
   then a-b+d<=c by Lm17;
   then a+d-b<=c;
   then a+d<=c+b by Lm19;
@@ -699,7 +762,8 @@ end;
 theorem
   a-b <= c-d implies d-b <= c-a
 proof
-  assume a-b<=c-d;
+  assume
+  a-b<=c-d;
   then a-b+d<=c by Lm17;
   then a+d-b<=c;
   then a+d<=c+b by Lm19;
@@ -709,7 +773,8 @@ end;
 theorem
   a-b <= c-d implies d-c <= b-a
 proof
-  assume a-b<=c-d;
+  assume
+  a-b<=c-d;
   then a-b+d<=c by Lm17;
   then a+d-b<=c;
   then a+d<=c+b by Lm19;
@@ -726,10 +791,12 @@ theorem
 
 theorem
   a+b<=c+d iff a-c <= d-b
-proof thus a+b<=c+d implies a-c <= d-b by Lm20;
+proof
+  thus a+b<=c+d implies a-c <= d-b by Lm20;
   assume
 A1: a-c <= d-b;
-  assume c+d<a+b;
+  assume
+  c+d<a+b;
   then d<b+a-c by Lm19;
   then d<b+(a-c);
   hence thesis by A1,Lm17;
@@ -741,12 +808,14 @@ proof
   assume
 A1: a+b<=c-d;
   per cases by A1;
-  suppose a+b<=c-d;
+  suppose
+    a+b<=c-d;
     then a+b+d<=c by Lm17;
     then a+d+b<=c;
     hence thesis by Lm16;
   end;
-  suppose b+a<=c-d;
+  suppose
+    b+a<=c-d;
     then a+b+d<=c by Lm17;
     then a+d+b<=c;
     hence thesis by Lm16;
@@ -759,12 +828,14 @@ proof
   assume
 A1: c+d>=a-b;
   per cases by A1;
-  suppose c+d>=a-b;
+  suppose
+    c+d>=a-b;
     then c+d+b>=a by Lm19;
     then c+b+d>=a;
     hence thesis by Lm18;
   end;
-  suppose d+c>=a-b;
+  suppose
+    d+c>=a-b;
     then c+d+b>=a by Lm19;
     then c+b+d>=a;
     hence thesis by Lm18;
@@ -778,7 +849,8 @@ theorem
 
 Lm21: a < b implies 0 < b-a
 proof
-  assume a < b;
+  assume
+  a < b;
   then a + 0 < b;
   hence thesis by Lm19;
 end;
@@ -786,7 +858,8 @@ end;
 theorem Th27:
   a<=-b implies b<=-a
 proof
-  assume a<=-b;
+  assume
+  a<=-b;
   then a+b<=-b+b by Lm5;
   then b--a<=0;
   hence thesis by Lm21;
@@ -794,7 +867,8 @@ end;
 
 Lm22: a <= b implies 0 <= b-a
 proof
-  assume a <= b;
+  assume
+  a <= b;
   then a - a <= b - a by Lm7;
   hence thesis;
 end;
@@ -804,7 +878,8 @@ theorem Th28:
 proof
   assume
 A1: -b<=a;
-  assume b<-a;
+  assume
+  b<-a;
   then b+a<-a+a by Lm10;
   then a--b<0;
   hence thesis by A1,Lm22;
@@ -826,7 +901,8 @@ theorem
 theorem
   a < 0 implies a+b < b
 proof
-  assume a<0;
+  assume
+  a<0;
   then b+a<0+b by Lm10;
   hence thesis;
 end;
@@ -835,7 +911,8 @@ Lm23: a < b implies a-b < 0
 proof
   assume
 A1: a < b;
-  assume a-b>=0;
+  assume
+  a-b>=0;
   then a-b+b>=0+b by Lm5;
   hence thesis by A1;
 end;
@@ -848,11 +925,13 @@ A1: 0 <= a;
   assume
 A2: a+b<b;
   per cases by A2;
-  suppose a+b<b;
+  suppose
+    a+b<b;
     then a+b-b<0 by Lm23;
     hence thesis by A1;
   end;
-  suppose b-a>b;
+  suppose
+    b-a>b;
     then b+-a-b>0 by Lm21;
     hence thesis by A1;
   end;
@@ -861,7 +940,8 @@ end;
 theorem
   a <= 0 implies a+b <= b
 proof
-  assume a<=0;
+  assume
+  a<=0;
   then b+a<=0+b by Lm6;
   hence thesis;
 end;
@@ -877,91 +957,108 @@ theorem
 theorem Th37:
   a <= 0 & c <= b implies c+a <= b
 proof
-  assume a <= 0 & c <= b;
-  then a+c <= 0+b by Lm6;
+  assume that
+A1: a <= 0 and
+A2: c <= b;
+  a+c <= 0+b by A1,A2,Lm6;
   hence thesis;
 end;
 
 theorem Th38:
   a <= 0 & c < b implies c+a < b
 proof
-  assume a <= 0 & c < b;
-  then a+c < 0+b by Lm8;
+  assume that
+A1: a <= 0 and
+A2: c < b;
+  a+c < 0+b by A1,A2,Lm8;
   hence thesis;
 end;
 
 theorem Th39:
   a < 0 & c <= b implies c+a < b
 proof
-  assume a < 0 & c <= b;
-  then a+c < 0+b by Lm8;
+  assume that
+A1: a < 0 and
+A2: c <= b;
+  a+c < 0+b by A1,A2,Lm8;
   hence thesis;
 end;
 
 theorem Th40:
   0 <= a & b <= c implies b <= a+c
 proof
-  assume 0 <= a & b <= c;
-  then b+0 <= a+c by Lm6;
+  assume that
+A1: 0 <= a and
+A2: b <= c;
+  b+0 <= a+c by A1,A2,Lm6;
   hence thesis;
 end;
 
 theorem Th41:
   0 < a & b <= c implies b < a+c
 proof
-  assume 0 < a & b <= c;
-  then b+0 < a+c by Lm8;
+  assume that
+A1: 0 < a and
+A2: b <= c;
+  b+0 < a+c by A1,A2,Lm8;
   hence thesis;
 end;
 
 theorem Th42:
   0 <= a & b < c implies b < a+c
 proof
-  assume 0 <= a & b < c;
-  then b+0 < a+c by Lm8;
+  assume that
+A1: 0 <= a and
+A2: b < c;
+  b+0 < a+c by A1,A2,Lm8;
   hence thesis;
 end;
 
-Lm25: c < 0 & a < b implies b*c < a*c
+Lm24: c < 0 & a < b implies b*c < a*c
 proof
   assume
 A1: c < 0;
   assume
-A2: a<b;
-  -0<-c by A1;
-  then a*(-c)<b*(-c) by A2,Lm13;
+  a<b;
+  then a*(-c)<b*(-c) by A1,Lm13;
   then -(a*c)<-(b*c);
   hence thesis by Lm14;
 end;
 
-Lm27: 0 <= c & b <= a implies b/c <= a/c
+Lm25: 0 <= c & b <= a implies b/c <= a/c
 proof
-  assume
-A1: 0<=c & b <= a;
+  assume that
+A1: 0<=c and
+A2: b <= a;
   per cases by A1;
-  suppose c = 0;
-    then c" = 0;
-    then b*c" = 0 & a*c" = 0;
-    then b/c = 0 & a/c = 0 by XCMPLX_0:def 9;
-    hence thesis;
+  suppose
+    c = 0;
+    then
+A3: c" = 0;
+    then b*c" = 0;
+    then
+A4: b/c = 0 by XCMPLX_0:def 9;
+    a*c" = 0 by A3;
+    hence thesis by A4,XCMPLX_0:def 9;
   end;
   suppose
-A2: 0<c;
-    assume a/c < b/c;
-    then a/c*c < b/c*c by A2,Lm13;
-    then a<b/c*c by A2,XCMPLX_1:88;
-    hence contradiction by A1,A2,XCMPLX_1:88;
+A5: 0<c;
+    assume
+    a/c < b/c;
+    then a/c*c < b/c*c by A5,Lm13;
+    then a<b/c*c by A5,XCMPLX_1:88;
+    hence contradiction by A2,A5,XCMPLX_1:88;
   end;
 end;
 
-Lm28: 0 < c & a < b implies a/c < b/c
+Lm26: 0 < c & a < b implies a/c < b/c
 proof
-  assume 0<c;
-  then
-A1: 0<c";
+  assume
+A1: 0<c;
   a<b implies a/c < b/c
   proof
-    assume a<b;
+    assume
+    a<b;
     then a*c"<b*c" by A1,Lm13;
     then a/c <b*c" by XCMPLX_0:def 9;
     hence thesis by XCMPLX_0:def 9;
@@ -969,9 +1066,10 @@ A1: 0<c";
   hence thesis;
 end;
 
-Lm30: 0 < a implies a/2 < a
+Lm27: 0 < a implies a/2 < a
 proof
-  assume 0<a;
+  assume
+  0<a;
   then 0+a/2<a/2+a/2 by Lm10;
   hence thesis;
 end;
@@ -984,10 +1082,11 @@ proof
   assume
 A1: for a st a>0 holds b+a>=c;
   set d=c-b;
-  assume b<c;
+  assume
+  b<c;
   then
 A2: 0<d by Lm21;
-  then b+d/2<b+d by Lm10,Lm30;
+  then b+d/2<b+d by Lm10,Lm27;
   hence contradiction by A1,A2;
 end;
 
@@ -996,20 +1095,16 @@ theorem
 proof
   assume
 A1: for a st a<0 holds b+a<=c;
-  assume c < b;
+  set d=c-b;
+  assume
+  c < b;
   then
 A2: 0>c-b by Lm23;
-  set d=c-b;
-A3: -d>0 by A2;
-  then (-d)/2<-d by Lm30;
+  then (-d)/2<-d by Lm27;
   then c+-d/2<c+-d by Lm10;
   then c-d/2<c-d;
-  then
-A4: c < b+d/2 by Lm16;
-  (-d)/2>0 by A3;
-  then -d/2>0;
-  then d/2<0 ;
-  hence contradiction by A1,A4;
+  then c < b+d/2 by Lm16;
+  hence contradiction by A1,A2;
 end;
 
 begin
@@ -1024,8 +1119,8 @@ end;
 theorem
   0 < a implies b-a < b
 proof
-  assume 0 < a;
-  then -a < -0;
+  assume
+  0 < a;
   then b + -a < b + 0 by Lm10;
   hence thesis;
 end;
@@ -1033,7 +1128,8 @@ end;
 theorem
   a <= 0 implies b <= b-a
 proof
-  assume a<=0;
+  assume
+  a<=0;
   then b+a<=0+b by Lm6;
   hence thesis by Lm16;
 end;
@@ -1041,7 +1137,8 @@ end;
 theorem
   a < 0 implies b < b-a
 proof
-  assume a<0;
+  assume
+  a<0;
   then b+a<0+b by Lm10;
   hence thesis by Lm19;
 end;
@@ -1051,7 +1148,8 @@ theorem
 proof
   assume
 A1: a <= b;
-  assume a-b>0;
+  assume
+  a-b>0;
   then a-b+b>0+b by Lm10;
   hence thesis by A1;
 end;
@@ -1059,7 +1157,8 @@ end;
 theorem Th50:
   a <= b implies 0 <= b-a
 proof
-  assume a <= b;
+  assume
+  a <= b;
   then a - a <= b - a by Lm7;
   hence thesis;
 end;
@@ -1073,32 +1172,40 @@ theorem
 theorem
   0 <= a & b < c implies b-a < c
 proof
-  assume 0 <= a & b < c;
-  then b+0 < a+c by Th42;
+  assume that
+A1: 0 <= a and
+A2: b < c;
+  b+0 < a+c by A1,A2,Th42;
   hence thesis by Lm17;
 end;
 
 theorem
   a <= 0 & b <= c implies b <= c-a
 proof
-  assume a <= 0 & b <= c;
-  then b+a <= c by Th37;
+  assume that
+A1: a <= 0 and
+A2: b <= c;
+  b+a <= c by A1,A2,Th37;
   hence thesis by Lm16;
 end;
 
 theorem
   a <= 0 & b < c implies b < c-a
 proof
-  assume a <= 0 & b < c;
-  then b+a < c by Th38;
+  assume that
+A1: a <= 0 and
+A2: b < c;
+  b+a < c by A1,A2,Th38;
   hence thesis by Lm19;
 end;
 
 theorem
   a < 0 & b <= c implies b < c-a
 proof
-  assume a < 0 & b <= c;
-  then a+b < c by Th39;
+  assume that
+A1: a < 0 and
+A2: b <= c;
+  a+b < c by A1,A2,Th39;
   hence thesis by Lm19;
 end;
 
@@ -1108,11 +1215,13 @@ proof
   assume
 A1: a <> b;
   per cases by A1,XXREAL_0:1;
-  suppose a < b;
+  suppose
+    a < b;
     then 0 + a < b;
     hence thesis by Lm19;
   end;
-  suppose b < a;
+  suppose
+    b < a;
     then 0 + b < a;
     hence thesis by Lm19;
   end;
@@ -1125,19 +1234,15 @@ theorem
 proof
   assume
 A1: for a st a<0 holds b-a>=c;
-  assume b<c;
+  set d=b-c;
+  assume
+  b<c;
   then
 A2: 0>b-c by Lm23;
-  set d=b-c;
-A3: -d>0 by A2;
-  then (-d)/2<-d by Lm30;
+  then (-d)/2<-d by Lm27;
   then b+-d/2<b+-d by Lm10;
-  then
-A4: b-d/2<b-d;
-  (-d)/2>0 by A3;
-  then -d/2>0;
-  then d/2<0;
-  hence contradiction by A1,A4;
+  then b-d/2<b-d;
+  hence contradiction by A1,A2;
 end;
 
 theorem
@@ -1146,10 +1251,11 @@ proof
   assume
 A1: for a st a>0 holds b-a<=c;
   set d=b-c;
-  assume b>c;
+  assume
+  b>c;
   then
 A2: 0<d by Lm21;
-  then c+d/2<c+d by Lm10,Lm30;
+  then c+d/2<c+d by Lm10,Lm27;
   then c < b-d/2 by Lm19;
   hence contradiction by A1,A2;
 end;
@@ -1162,7 +1268,8 @@ theorem
 theorem
   a <= -b implies a+b <= 0
 proof
-  assume a<=-b;
+  assume
+  a<=-b;
   then a+b<=-b+b by Lm5;
   hence thesis;
 end;
@@ -1170,7 +1277,8 @@ end;
 theorem
   -a <= b implies 0 <= a+b
 proof
-  assume b>=-a;
+  assume
+  b>=-a;
   then b+a>=-a+a by Lm5;
   hence thesis;
 end;
@@ -1178,7 +1286,8 @@ end;
 theorem
   a < -b implies a+b < 0
 proof
-  assume a<-b;
+  assume
+  a<-b;
   then a+b<-b+b by Lm10;
   hence thesis;
 end;
@@ -1186,17 +1295,18 @@ end;
 theorem
   -b < a implies 0 < a+b
 proof
-  assume a>-b;
+  assume
+  a>-b;
   then a+b>-b+b by Lm10;
   hence thesis;
 end;
 
-Lm31: a <= b & c <= 0 implies b*c <= a*c
+Lm28: a <= b & c <= 0 implies b*c <= a*c
 proof
   assume
 A1: a<=b;
-  assume c <= 0;
-  then -0<=-c;
+  assume
+  c <= 0;
   then a*(-c)<=b*(-c) by A1,Lm12;
   then -(a*c)<=-(b*c);
   hence thesis by Lm15;
@@ -1208,12 +1318,12 @@ theorem
   0 <= a*a
 proof
   per cases;
-  suppose 0 <= a;
-    then 0*a <= a*a;
+  suppose
+    0 <= a;
     hence thesis;
   end;
-  suppose not 0 <= a;
-    then 0*a <= a*a;
+  suppose
+    not 0 <= a;
     hence thesis;
   end;
 end;
@@ -1222,26 +1332,32 @@ theorem
   a <= b & 0 <= c implies a*c <= b*c by Lm12;
 
 theorem
-  a <= b & c <= 0 implies b*c <= a*c by Lm31;
+  a <= b & c <= 0 implies b*c <= a*c by Lm28;
 
 theorem Th68:
   0 <= a & a <= b & 0 <= c & c <= d implies a*c <= b*d
 proof
-  assume
-A1: 0<=a & a<=b & 0<=c & c <= d;
-  then
-A2: a*c <= b*c by Lm12;
-  b*c <= b*d by A1,Lm12;
-  hence thesis by A2,XXREAL_0:2;
+  assume that
+A1: 0<=a and
+A2: a<=b and
+A3: 0<=c and
+A4: c <= d;
+A5: a*c <= b*c by A2,A3,Lm12;
+  b*c <= b*d by A1,A2,A4,Lm12;
+  hence thesis by A5,XXREAL_0:2;
 end;
 
 theorem
   a <= 0 & b <= a & c <= 0 & d <= c implies a*c <= b*d
 proof
-  assume 0>=a & a>=b & 0>=c & c>=d;
-  then -0<=-a & -a<=-b & -0<=-c & -c <= -d by Lm14;
-  then (-a)*(-c)<=(-b)*(-d) & (-a)*(-c)<=(-d)*(-b) & (-c)*(-a)<=(-d)*(-b)
-  & (-c)*(-a)<=(-b)*(-d) by Th68;
+  assume that
+A1: 0>=a and
+A2: a>=b and
+A3: 0>=c and
+A4: c>=d;
+A5: -c <= -d by A4,Lm14;
+  -a<=-b by A2,Lm14;
+  then (-a)*(-c)<=(-b)*(-d) by A1,A3,A5,Th68;
   hence thesis;
 end;
 
@@ -1249,17 +1365,19 @@ theorem
   0 < c & a < b implies a*c < b*c by Lm13;
 
 theorem
-  c < 0 & a < b implies b*c < a*c by Lm25;
+  c < 0 & a < b implies b*c < a*c by Lm24;
 
 theorem
   a < 0 & b <= a & c < 0 & d < c implies a*c < b*d
 proof
-  assume
-A1: 0>a & a>=b & 0>c & c>d;
-  then
-A2: a*c < a*d by Lm25;
-  a*d<=b*d by A1,Lm31;
-  hence thesis by A2,XXREAL_0:2;
+  assume that
+A1: 0>a and
+A2: a>=b and
+A3: 0>c and
+A4: c>d;
+A5: a*c < a*d by A1,A4,Lm24;
+  a*d<=b*d by A2,A3,A4,Lm28;
+  hence thesis by A5,XXREAL_0:2;
 end;
 
 begin
@@ -1267,25 +1385,25 @@ begin
 theorem
   0 <= a & 0 <= b & 0 <= c & 0 <= d & a*c+b*d = 0 implies a = 0 or c = 0;
 
-Lm32: c < 0 & a < b implies b/c < a/c
+Lm29: c < 0 & a < b implies b/c < a/c
 proof
   assume that
 A1: c < 0 and
 A2: a < b;
-  -0<-c by A1;
-  then a/(-c)<b/(-c) by A2,Lm28;
+  a/(-c)<b/(-c) by A1,A2,Lm26;
   then -a/c < b/(-c) by XCMPLX_1:189;
   then -a/c < -b/c by XCMPLX_1:189;
   hence thesis by Lm14;
 end;
 
-Lm33: c <= 0 & b/c < a/c implies a < b
+Lm30: c <= 0 & b/c < a/c implies a < b
 proof
   assume that
 A1: c <= 0 and
 A2: b/c < a/c;
 A3: now
-    assume c = 0;
+    assume
+    c = 0;
     then
 A4: c" = 0;
     a/c = a*c" by XCMPLX_0:def 9
@@ -1293,7 +1411,7 @@ A4: c" = 0;
       .= b/c by XCMPLX_0:def 9;
     hence contradiction by A2;
   end;
-  then a/c*c < b/c*c by A1,A2,Lm25;
+  then a/c*c < b/c*c by A1,A2,Lm24;
   then a<b/c*c by A3,XCMPLX_1:88;
   hence thesis by A3,XCMPLX_1:88;
 end;
@@ -1301,16 +1419,16 @@ end;
 begin
 
 theorem
-  0 <= c & b <= a implies b/c <= a/c by Lm27;
+  0 <= c & b <= a implies b/c <= a/c by Lm25;
 
 theorem
-  c <= 0 & a <= b implies b/c <= a/c by Lm33;
+  c <= 0 & a <= b implies b/c <= a/c by Lm30;
 
 theorem
-  0 < c & a < b implies a/c < b/c by Lm28;
+  0 < c & a < b implies a/c < b/c by Lm26;
 
 theorem
-  c < 0 & a < b implies b/c < a/c by Lm32;
+  c < 0 & a < b implies b/c < a/c by Lm29;
 
 theorem
   0 < c & 0 < a & a < b implies c/b < c/a
@@ -1319,11 +1437,9 @@ proof
 A1: 0<c and
 A2: 0<a and
 A3: a<b;
-A4: 0<b" by A2,A3;
-A5: 0<a" by A2;
-  a*b"<b*b" by A3,A4,Lm13;
+  a*b"<b*b" by A2,A3,Lm13;
   then a*b"<1 by A2,A3,XCMPLX_0:def 7;
-  then a"*(a*b")<a"*1 by A5,Lm13;
+  then a"*(a*b")<a"*1 by A2,Lm13;
   then a"*a*b"<a";
   then 1*b"<a" by A2,XCMPLX_0:def 7;
   then c*b"<c*a" by A1,Lm13;
@@ -1331,16 +1447,15 @@ A5: 0<a" by A2;
   hence thesis by XCMPLX_0:def 9;
 end;
 
-Lm35: b < 0 & a < b implies b" < a"
+Lm31: b < 0 & a < b implies b" < a"
 proof
-A1: a" = 1/a & b" = 1/b by XCMPLX_1:217;
-  assume
-A2: 0>b & a<b;
-  b*(a")<a*(a") by A2,Lm25;
-  then
-A3: b*(a")<1 by A1,A2,XCMPLX_1:88;
-  b"<0 by A2;
-  then b"*(b*(a"))>1*(b") by A3,Lm25;
+A1: a" = 1/a by XCMPLX_1:217;
+  assume that
+A2: 0>b and
+A3: a<b;
+  b*(a")<a*(a") by A2,A3,Lm24;
+  then b*(a")<1 by A1,A2,A3,XCMPLX_1:88;
+  then b"*(b*(a"))>1*(b") by A2,Lm24;
   then b"*b*(a")>1*(b");
   then 1*(a")>1*(b") by A2,XCMPLX_0:def 7;
   hence thesis;
@@ -1351,199 +1466,215 @@ begin
 theorem Th79:
   0 < b & a*b <= c implies a <= c/b
 proof
-  assume
-A1: b>0 & a*b<=c;
-  then a*b/b<=c/b by Lm27;
+  assume that
+A1: b>0 and
+A2: a*b<=c;
+  a*b/b<=c/b by A1,A2,Lm25;
   hence thesis by A1,XCMPLX_1:90;
 end;
 
 theorem Th80:
   b < 0 & a*b <= c implies c/b <= a
 proof
-  assume
-A1: b<0 & a*b<=c;
-  then a*b/b>=c/b by Lm33;
+  assume that
+A1: b<0 and
+A2: a*b<=c;
+  a*b/b>=c/b by A1,A2,Lm30;
   hence thesis by A1,XCMPLX_1:90;
 end;
 
 theorem Th81:
   0 < b & c <= a*b implies c/b <= a
 proof
-  assume
-A1: b>0 & a*b>=c;
-  then a*b/b>=c/b by Lm27;
+  assume that
+A1: b>0 and
+A2: a*b>=c;
+  a*b/b>=c/b by A1,A2,Lm25;
   hence thesis by A1,XCMPLX_1:90;
 end;
 
 theorem Th82:
   b < 0 & c <= a*b implies a <= c/b
 proof
-  assume
-A1: b<0 & a*b>=c;
-  then a*b/b<=c/b by Lm33;
+  assume that
+A1: b<0 and
+A2: a*b>=c;
+  a*b/b<=c/b by A1,A2,Lm30;
   hence thesis by A1,XCMPLX_1:90;
 end;
 
 theorem Th83:
   0 < b & a*b < c implies a< c/b
 proof
-  assume
-A1: b>0 & a*b<c;
-  then a*b/b<c/b by Lm28;
+  assume that
+A1: b>0 and
+A2: a*b<c;
+  a*b/b<c/b by A1,A2,Lm26;
   hence thesis by A1,XCMPLX_1:90;
 end;
 
 theorem Th84:
   b < 0 & a*b < c implies c/b < a
 proof
-  assume
-A1: b<0 & a*b<c;
-  then a*b/b>c/b by Lm32;
+  assume that
+A1: b<0 and
+A2: a*b<c;
+  a*b/b>c/b by A1,A2,Lm29;
   hence thesis by A1,XCMPLX_1:90;
 end;
 
 theorem Th85:
   0 < b & c < a*b implies c/b < a
 proof
-  assume
-A1: b>0 & a*b>c;
-  then a*b/b>c/b by Lm28;
+  assume that
+A1: b>0 and
+A2: a*b>c;
+  a*b/b>c/b by A1,A2,Lm26;
   hence thesis by A1,XCMPLX_1:90;
 end;
 
 theorem Th86:
   b < 0 & c < a*b implies a < c/b
 proof
-  assume
-A1: b<0 & a*b>c;
-  then a*b/b<c/b by Lm32;
+  assume that
+A1: b<0 and
+A2: a*b>c;
+  a*b/b<c/b by A1,A2,Lm29;
   hence thesis by A1,XCMPLX_1:90;
 end;
 
-Lm36: 0 < a & a <= b implies b" <= a"
+Lm32: 0 < a & a <= b implies b" <= a"
 proof
-  assume
-A1: 0<a & a<=b;
-  a*(b")<=b*(b") by A1,Lm12;
-  then
-A2: a*(b")<=1 by A1,XCMPLX_0:def 7;
-  a">=0 by A1;
-  then a"*(a*b")<=1*a" by A2,Lm12;
+  assume that
+A1: 0<a and
+A2: a<=b;
+  a*(b")<=b*(b") by A1,A2,Lm12;
+  then a*(b")<=1 by A1,A2,XCMPLX_0:def 7;
+  then a"*(a*b")<=1*a" by A1,Lm12;
   then a"*a*b"<=1*a";
   then 1*b"<=1*a" by A1,XCMPLX_0:def 7;
   hence thesis;
 end;
 
-Lm37: b < 0 & a <= b implies b" <= a"
+Lm33: b < 0 & a <= b implies b" <= a"
 proof
-  assume
-A2: 0>b & a<=b;
-  b*(a")<=a*(a") by A2,Lm31;
-  then
-A3: b*(a")<=1 by A2,XCMPLX_0:def 7;
-  b"<=0 by A2;
-  then b"*(b*(a"))>=1*(b") by A3,Lm31;
+  assume that
+A1: 0>b and
+A2: a<=b;
+  b*(a")<=a*(a") by A1,A2,Lm28;
+  then b*(a")<=1 by A1,A2,XCMPLX_0:def 7;
+  then b"*(b*(a"))>=1*(b") by A1,Lm28;
   then b"*b*a">=1*b";
-  then 1*a">=1*b" by A2,XCMPLX_0:def 7;
+  then 1*a">=1*b" by A1,XCMPLX_0:def 7;
   hence thesis;
 end;
 
 begin
 
 theorem
-  0 < a & a <= b implies b" <= a" by Lm36;
+  0 < a & a <= b implies b" <= a" by Lm32;
 
 theorem
-  b < 0 & a <= b implies b" <= a" by Lm37;
+  b < 0 & a <= b implies b" <= a" by Lm33;
 
 theorem
-  b < 0 & a < b implies b" < a" by Lm35;
+  b < 0 & a < b implies b" < a" by Lm31;
 
-Lm39: 0 < a & a < b implies b" < a"
+Lm34: 0 < a & a < b implies b" < a"
 proof
-A1: b" = 1/b & a" = 1/a by XCMPLX_1:217;
-  assume
-A2: 0<a & a<b;
-  a*(b")<b*(b") by A2,Lm13;
-  then
-A3: a*(b")<1 by A1,A2,XCMPLX_1:88;
-  a">0 by A2;
-  then a"*(a*(b"))<1*(a") by A3,Lm13;
+A1: b" = 1/b by XCMPLX_1:217;
+  assume that
+A2: 0<a and
+A3: a<b;
+  a*(b")<b*(b") by A2,A3,Lm13;
+  then a*(b")<1 by A1,A2,A3,XCMPLX_1:88;
+  then a"*(a*(b"))<1*(a") by A2,Lm13;
   then a"*a*b"<1*(a");
   then 1*b"<1*(a") by A2,XCMPLX_0:def 7;
   hence thesis;
 end;
 
 theorem
-  0 < a & a < b implies b" < a" by Lm39;
+  0 < a & a < b implies b" < a" by Lm34;
 
 theorem
   0 < b" & b" <= a" implies a <= b
 proof
-  assume b">0 & a">=b";
-  then a""<=b"" by Lm36;
+  assume that
+A1: b">0 and
+A2: a">=b";
+  a""<=b"" by A1,A2,Lm32;
   hence thesis;
 end;
 
 theorem
   a" < 0 & b" <= a" implies a <= b
 proof
-  assume a"<0 & a">=b";
-  then a""<=b"" by Lm37;
+  assume that
+A1: a"<0 and
+A2: a">=b";
+  a""<=b"" by A1,A2,Lm33;
   hence thesis;
 end;
 
 theorem
   0 < b" & b" < a" implies a < b
 proof
-  assume b">0 & a">b";
-  then a""<b"" by Lm39;
+  assume that
+A1: b">0 and
+A2: a">b";
+  a""<b"" by A1,A2,Lm34;
   hence thesis;
 end;
 
 theorem
   a" < 0 & b" < a" implies a < b
 proof
-  assume a"<0 & a">b";
-  then a""<b"" by Lm35;
+  assume that
+A1: a"<0 and
+A2: a">b";
+  a""<b"" by A1,A2,Lm31;
   hence thesis;
 end;
 
-Lm44: for a being non negative non positive (real number) holds 0 = a*b;
+Lm35: for a being non negative non positive (real number) holds 0 = a*b;
 
 begin
 
 theorem
   0 <= a & (b-a)*(b+a) <= 0 implies -a <= b & b <= a
 proof
-  assume
-A1: a>=0 & (b-a)*(b+a)<=0;
-  then
-A2: b-a>=0 & b+a<=0 or b-a<=0 & b+a>=0;
+  assume that
+A1: a>=0 and
+A2: (b-a)*(b+a)<=0;
   b+0<=b+a by A1,Lm6;
-  then b<=a+0 & b+a>=0 by A1,A2,Lm19;
-  then b<=a & b>=0-a by Lm18;
-  hence thesis;
+  then b+a>=0 by A1,A2;
+  then
+A3: b>=0-a by Lm18;
+  b-a>=0 & b+a<=0 or b-a<=0 & b+a>=0 by A2;
+  then b<=a+0 by A1,Lm19;
+  hence thesis by A3;
 end;
 
 theorem
   0 <= a & (b-a)*(b+a) < 0 implies -a < b & b < a
 proof
-  assume
-A1: a>=0 & (b-a)*(b+a)<0;
+  assume that
+A1: a>=0 and
+A2: (b-a)*(b+a)<0;
+A3: b-a>0 & b+a<0 or b-a<0 & b+a>0 by A2,Lm35;
   then
-A2: b-a>0 & b+a<0 or b-a<0 & b+a>0 by Lm44;
-A3: b+0<=b+a by A1,Lm6;
-  then b-a<=b+a-a by Lm7;
-  then b<a+0 & b+a>0 by A2,A3,Lm16;
-  then b<a & b>0-a by Lm17;
-  hence thesis;
+A4: b<a+0 by A1,Lm16;
+  b+0<=b+a by A1,Lm6;
+  then b>0-a by A1,A3,Lm17;
+  hence thesis by A4;
 end;
 
 theorem
-  0 <= a & 0 <= (b-a)*(b+a) implies b <= -a or a <= b
+  0 <= (b-a)*(b+a) implies b <= -a or a <= b
 proof
-  assume a>=0 & (b-a)*(b+a)>=0;
+  assume
+  (b-a)*(b+a)>=0;
   then b-a>=0 & b+a>=0 or b-a<=0 & b+a<=0;
   then b-a+a>=0+a or b+a<=0 by Lm6;
   then b>=0+a or b+a-a<=0-a by Lm7;
@@ -1558,39 +1689,45 @@ A1: 0<=a and
 A2: 0<=c and
 A3: a<b and
 A4: c < d;
-A5: a*d<b*d by A2,A3,A4,Lm13;
-  a*c <= a*d by A1,A4,Lm12;
+A5: a*c <= a*d by A1,A4,Lm12;
+  a*d<b*d by A2,A3,A4,Lm13;
   hence thesis by A5,XXREAL_0:2;
 end;
 
 theorem
   0 <= a & 0 < c & a < b & c <= d implies a*c < b*d
 proof
-  assume
-A1: 0<=a & 0<c & a<b & c <=d;
-  then
-A2: a*c <=a*d by Lm12;
-  a*d<b*d by A1,Lm13;
-  hence thesis by A2,XXREAL_0:2;
+  assume that
+A1: 0<=a and
+A2: 0<c and
+A3: a<b and
+A4: c <=d;
+A5: a*c <=a*d by A1,A4,Lm12;
+  a*d<b*d by A2,A3,A4,Lm13;
+  hence thesis by A5,XXREAL_0:2;
 end;
 
 theorem Th100:
   0 < a & 0 < c & a <= b & c < d implies a*c < b*d
 proof
-  assume
-A1: 0<a & 0<c & a<=b & c < d;
-  then
-A2: a*c < a*d by Lm13;
-  a*d<=b*d by A1,Lm12;
-  hence thesis by A2,XXREAL_0:2;
+  assume that
+A1: 0<a and
+A2: 0<c and
+A3: a<=b and
+A4: c < d;
+A5: a*c < a*d by A1,A4,Lm13;
+  a*d<=b*d by A2,A3,A4,Lm12;
+  hence thesis by A5,XXREAL_0:2;
 end;
 
 theorem
   0 < c & b < 0 & a < b implies c/b < c/a
 proof
-  assume
-A1: c>0 & b<0 & a<b;
-  then a">b" by Lm35;
+  assume that
+A1: c>0 and
+A2: b<0 and
+A3: a<b;
+  a">b" by A2,A3,Lm31;
   then a"*c>b"*c by A1,Lm13;
   then c/a>b"*c by XCMPLX_0:def 9;
   hence thesis by XCMPLX_0:def 9;
@@ -1599,10 +1736,12 @@ end;
 theorem
   c < 0 & 0 < a & a < b implies c/a < c/b
 proof
-  assume
-A1: c < 0 & a>0 & a<b;
-  then a">b" by Lm39;
-  then a"*c < b"*c by A1,Lm25;
+  assume that
+A1: c < 0 and
+A2: a>0 and
+A3: a<b;
+  a">b" by A2,A3,Lm34;
+  then a"*c < b"*c by A1,Lm24;
   then c/a<b"*c by XCMPLX_0:def 9;
   hence thesis by XCMPLX_0:def 9;
 end;
@@ -1610,10 +1749,12 @@ end;
 theorem
   c < 0 & b < 0 & a < b implies c/a < c/b
 proof
-  assume
-A1: c < 0 & b<0 & a<b;
-  then a">b" by Lm35;
-  then a"*c < b"*c by A1,Lm25;
+  assume that
+A1: c < 0 and
+A2: b<0 and
+A3: a<b;
+  a">b" by A2,A3,Lm31;
+  then a"*c < b"*c by A1,Lm24;
   then c/a<b"*c by XCMPLX_0:def 9;
   hence thesis by XCMPLX_0:def 9;
 end;
@@ -1621,90 +1762,108 @@ end;
 theorem
   0 < b & 0 < d & a*d <= c*b implies a/b <= c/d
 proof
-  assume
-A1: b>0 & d>0 & a*d<=c*b;
-  then a*d/b<=c by Th81;
+  assume that
+A1: b>0 and
+A2: d>0 and
+A3: a*d<=c*b;
+  a*d/b<=c by A1,A3,Th81;
   then a/b*d<=c by XCMPLX_1:75;
-  hence thesis by A1,Th79;
+  hence thesis by A2,Th79;
 end;
 
 theorem
   b < 0 & d < 0 & a*d <= c*b implies a/b <= c/d
 proof
-  assume
-A1: b<0 & d<0 & a*d<=c*b;
-  then a*d/b>=c by Th82;
+  assume that
+A1: b<0 and
+A2: d<0 and
+A3: a*d<=c*b;
+  a*d/b>=c by A1,A3,Th82;
   then a/b*d>=c by XCMPLX_1:75;
-  hence thesis by A1,Th82;
+  hence thesis by A2,Th82;
 end;
 
 theorem
   0 < b & d < 0 & a*d <= c*b implies c/d <= a/b
 proof
-  assume
-A1: b>0 & d<0 & a*d<=c*b;
-  then a*d/b<=c by Th81;
+  assume that
+A1: b>0 and
+A2: d<0 and
+A3: a*d<=c*b;
+  a*d/b<=c by A1,A3,Th81;
   then a/b*d<=c by XCMPLX_1:75;
-  hence thesis by A1,Th80;
+  hence thesis by A2,Th80;
 end;
 
 theorem
   b < 0 & 0 < d & a*d <= c*b implies c/d <= a/b
 proof
-  assume
-A1: b<0 & d>0 & a*d<=c*b;
-  then a*d/b>=c by Th82;
+  assume that
+A1: b<0 and
+A2: d>0 and
+A3: a*d<=c*b;
+  a*d/b>=c by A1,A3,Th82;
   then a/b*d>=c by XCMPLX_1:75;
-  hence thesis by A1,Th81;
+  hence thesis by A2,Th81;
 end;
 
 theorem
   0 < b & 0 < d & a*d < c*b implies a/b < c/d
 proof
-  assume
-A1: b>0 & d>0 & a*d<c*b;
-  then a*d/b<c by Th85;
+  assume that
+A1: b>0 and
+A2: d>0 and
+A3: a*d<c*b;
+  a*d/b<c by A1,A3,Th85;
   then a/b*d<c by XCMPLX_1:75;
-  hence thesis by A1,Th83;
+  hence thesis by A2,Th83;
 end;
 
 theorem
   b < 0 & d < 0 & a*d < c*b implies a/b < c/d
 proof
-  assume
-A1: b<0 & d<0 & a*d<c*b;
-  then a*d/b>c by Th86;
+  assume that
+A1: b<0 and
+A2: d<0 and
+A3: a*d<c*b;
+  a*d/b>c by A1,A3,Th86;
   then a/b*d>c by XCMPLX_1:75;
-  hence thesis by A1,Th86;
+  hence thesis by A2,Th86;
 end;
 
 theorem
   0 < b & d < 0 & a*d < c*b implies c/d < a/b
 proof
-  assume
-A1: b>0 & d<0 & a*d<c*b;
-  then a*d/b<c by Th85;
+  assume that
+A1: b>0 and
+A2: d<0 and
+A3: a*d<c*b;
+  a*d/b<c by A1,A3,Th85;
   then a/b*d<c by XCMPLX_1:75;
-  hence thesis by A1,Th84;
+  hence thesis by A2,Th84;
 end;
 
 theorem
   b < 0 & 0 < d & a*d < c*b implies c/d < a/b
 proof
-  assume
-A1: b<0 & d>0 & a*d<c*b;
-  then a*d/b>c by Th86;
+  assume that
+A1: b<0 and
+A2: d>0 and
+A3: a*d<c*b;
+  a*d/b>c by A1,A3,Th86;
   then a/b*d>c by XCMPLX_1:75;
-  hence thesis by A1,Th85;
+  hence thesis by A2,Th85;
 end;
 
 theorem
   b < 0 & d < 0 & a*b < c/d implies a*d < c/b
 proof
+  assume that
+A1: b<0 and
+A2: d<0;
   assume
-A1: b<0 & d<0;
-  assume a*b<c/d;
-  then a*b*d>c by A1,Th80;
+  a*b<c/d;
+  then a*b*d>c by A2,Th80;
   then a*d*b>c;
   hence thesis by A1,Th86;
 end;
@@ -1712,10 +1871,12 @@ end;
 theorem
   0 < b & 0 < d & a*b < c/d implies a*d < c/b
 proof
+  assume that
+A1: b>0 and
+A2: d>0;
   assume
-A1: b>0 & d>0;
-  assume a*b<c/d;
-  then a*b*d<c by A1,Th81;
+  a*b<c/d;
+  then a*b*d<c by A2,Th81;
   then a*d*b<c;
   hence thesis by A1,Th83;
 end;
@@ -1723,10 +1884,12 @@ end;
 theorem
   b < 0 & d < 0 & c/d < a*b implies c/b < a*d
 proof
+  assume that
+A1: b<0 and
+A2: d<0;
   assume
-A1: b<0 & d<0;
-  assume a*b>c/d;
-  then a*b*d<c by A1,Th82;
+  a*b>c/d;
+  then a*b*d<c by A2,Th82;
   then a*d*b<c;
   hence thesis by A1,Th84;
 end;
@@ -1734,10 +1897,12 @@ end;
 theorem
   0 < b & 0 < d & c/d < a*b implies c/b < a*d
 proof
+  assume that
+A1: b>0 and
+A2: d>0;
   assume
-A1: b>0 & d>0;
-  assume a*b>c/d;
-  then a*b*d>c by A1,Th79;
+  a*b>c/d;
+  then a*b*d>c by A2,Th79;
   then a*d*b>c;
   hence thesis by A1,Th85;
 end;
@@ -1745,10 +1910,12 @@ end;
 theorem
   b < 0 & 0 < d & a*b < c/d implies c/b < a*d
 proof
+  assume that
+A1: b<0 and
+A2: d>0;
   assume
-A1: b<0 & d>0;
-  assume a*b<c/d;
-  then a*b*d<c by A1,Th81;
+  a*b<c/d;
+  then a*b*d<c by A2,Th81;
   then a*d*b<c;
   hence thesis by A1,Th84;
 end;
@@ -1756,10 +1923,12 @@ end;
 theorem
   0 < b & d < 0 & a*b < c/d implies c/b < a*d
 proof
+  assume that
+A1: b>0 and
+A2: d<0;
   assume
-A1: b>0 & d<0;
-  assume a*b<c/d;
-  then a*b*d>c by A1,Th80;
+  a*b<c/d;
+  then a*b*d>c by A2,Th80;
   then a*d*b>c;
   hence thesis by A1,Th85;
 end;
@@ -1767,10 +1936,12 @@ end;
 theorem
   b < 0 & 0 < d & c/d < a*b implies a*d < c/b
 proof
+  assume that
+A1: b<0 and
+A2: d>0;
   assume
-A1: b<0 & d>0;
-  assume a*b>c/d;
-  then a*b*d>c by A1,Th79;
+  a*b>c/d;
+  then a*b*d>c by A2,Th79;
   then a*d*b>c;
   hence thesis by A1,Th86;
 end;
@@ -1778,10 +1949,12 @@ end;
 theorem
   0 < b & d < 0 & c/d < a*b implies a*d < c/b
 proof
+  assume that
+A1: b>0 and
+A2: d<0;
   assume
-A1: b>0 & d<0;
-  assume a*b>c/d;
-  then a*b*d<c by A1,Th82;
+  a*b>c/d;
+  then a*b*d<c by A2,Th82;
   then a*d*b<c;
   hence thesis by A1,Th83;
 end;
@@ -1793,11 +1966,9 @@ proof
 A1: 0<a and
 A2: 0<=c and
 A3: a<=b;
-A4: 0<=b" by A1,A3;
-A5: 0<=a" by A1;
-  a*b"<=b*b" by A3,A4,Lm12;
+  a*b"<=b*b" by A1,A3,Lm12;
   then a*b"<=1 by A1,A3,XCMPLX_0:def 7;
-  then a"*(a*b")<=a"*1 by A5,Lm12;
+  then a"*(a*b")<=a"*1 by A1,Lm12;
   then a"*a*b"<=a";
   then 1*b"<=a" by A1,XCMPLX_0:def 7;
   then c*b"<=c*a" by A2,Lm12;
@@ -1808,9 +1979,11 @@ end;
 theorem
   0 <= c & b < 0 & a <= b implies c/b <= c/a
 proof
-  assume
-A1: c>=0 & b<0 & a<=b;
-  then a">=b" by Lm37;
+  assume that
+A1: c>=0 and
+A2: b<0 and
+A3: a<=b;
+  a">=b" by A2,A3,Lm33;
   then a"*c>=b"*c by A1,Lm12;
   then c/a>=b"*c by XCMPLX_0:def 9;
   hence thesis by XCMPLX_0:def 9;
@@ -1821,9 +1994,11 @@ theorem
 proof
   assume
 A1: c <= 0;
-  assume a>0 & a<=b;
-  then a">=b" by Lm36;
-  then a"*c <= b"*c by A1,Lm31;
+  assume that
+A2: a>0 and
+A3: a<=b;
+  a">=b" by A2,A3,Lm32;
+  then a"*c <= b"*c by A1,Lm28;
   then c/a<=b"*c by XCMPLX_0:def 9;
   hence thesis by XCMPLX_0:def 9;
 end;
@@ -1831,10 +2006,12 @@ end;
 theorem
   c <= 0 & b < 0 & a <= b implies c/a <= c/b
 proof
-  assume
-A1: c <= 0 & b<0 & a<=b;
-  then a">=b" by Lm37;
-  then a"*c <= b"*c by A1,Lm31;
+  assume that
+A1: c <= 0 and
+A2: b<0 and
+A3: a<=b;
+  a">=b" by A2,A3,Lm33;
+  then a"*c <= b"*c by A1,Lm28;
   then c/a<=b"*c by XCMPLX_0:def 9;
   hence thesis by XCMPLX_0:def 9;
 end;
@@ -1848,23 +2025,27 @@ theorem
 theorem Th126:
   a < 0 & 0 < b implies a" < b"
 proof
-  assume a<0 & b>0;
-  then a"<0 & b">0;
-  hence thesis;
+  assume that
+A1: a<0 and
+A2: b>0;
+  a"<0 by A1;
+  hence thesis by A2;
 end;
 
 theorem
   a" < 0 & 0 < b" implies a < b
 proof
-  assume a"<0 & b">0;
-  then a""<b"" by Th126;
+  assume that
+A1: a"<0 and
+A2: b">0;
+  a""<b"" by A1,A2,Th126;
   hence thesis;
 end;
 
 begin
 
 theorem
-  a <= 0 & 0 <= a implies 0 = a*b by Lm44;
+  a <= 0 & 0 <= a implies 0 = a*b by Lm35;
 
 theorem
   0 <= a & 0 <= b implies 0 <= a*b;
@@ -1889,8 +2070,10 @@ theorem
 proof
   assume
 A1: a*b<0;
-  then a <> 0 & b <> 0;
-  hence thesis by A1;
+  then
+A2: b <> 0;
+  a <> 0 by A1;
+  hence thesis by A1,A2;
 end;
 
 theorem
@@ -1898,8 +2081,10 @@ theorem
 proof
   assume
 A1: a*b>0;
-  then a <> 0 & b <> 0;
-  hence thesis by A1;
+  then
+A2: b <> 0;
+  a <> 0 by A1;
+  hence thesis by A1,A2;
 end;
 
 theorem
@@ -1931,10 +2116,11 @@ theorem
 proof
   assume
 A1: a/b<0;
+  then
+A2: a <> 0;
   a/b = a*b" by XCMPLX_0:def 9;
   then b" <> 0 by A1;
-  then a <> 0 & b <> 0 by A1;
-  hence thesis by A1;
+  hence thesis by A1,A2;
 end;
 
 theorem
@@ -1942,10 +2128,11 @@ theorem
 proof
   assume
 A1: a/b>0;
+  then
+A2: a <> 0;
   a/b = a*b" by XCMPLX_0:def 9;
   then b" <> 0 by A1;
-  then a <> 0 & b <> 0 by A1;
-  hence thesis by A1;
+  hence thesis by A1,A2;
 end;
 
 begin
@@ -1953,7 +2140,8 @@ begin
 theorem
   a <= b implies a < b+1
 proof
-  assume a<=b;
+  assume
+  a<=b;
   then
 A1: a-1<=b-1 by Lm7;
   b-1<b-1+1 by Lm9;
@@ -1972,7 +2160,8 @@ end;
 theorem
   a <= b implies a-1 < b
 proof
-  assume a<=b;
+  assume
+  a<=b;
   then
 A1: a-1<=b-1 by Lm7;
   b-1<b-1+1 by Lm9;
@@ -1982,7 +2171,8 @@ end;
 theorem
   -1 < a implies 0 < 1+a
 proof
-  assume -1<a;
+  assume
+  -1<a;
   then -1+1<a+1 by Lm8;
   hence thesis;
 end;
@@ -1993,18 +2183,23 @@ theorem
 begin
 
 theorem
-  0 <= a & a <= 1 & 0 <= b & b <= 1 & a*b = 1 implies a=1
+  a <= 1 & 0 <= b & b <= 1 & a*b = 1 implies a=1
 proof
-  assume
-A1: 0<=a & a<=1 & 0<=b & b<=1 & a*b=1;
-  now per cases by A1;
-    case b=0;
-      hence contradiction by A1;
+  assume that
+A1: a<=1 and
+A2: 0<=b and
+A3: b<=1 and
+A4: a*b=1;
+  now
+    per cases by A2;
+    case
+      b=0;
+      hence contradiction by A4;
     end;
     case
-A2:   b>0;
-      then a=b" by A1,XCMPLX_0:def 7;
-      then a>=1" by A1,A2,Lm36;
+A5:   b>0;
+      then a=b" by A4,XCMPLX_0:def 7;
+      then a>=1" by A3,A5,Lm32;
       hence thesis by A1,XXREAL_0:1;
     end;
   end;
@@ -2014,145 +2209,169 @@ end;
 theorem
   0 <= a & 1 <= b implies a <= a*b
 proof
-  assume a>=0 & b>=1;
-  then a*b>=a*1 by Lm12;
+  assume that
+A1: a>=0 and
+A2: b>=1;
+  a*b>=a*1 by A1,A2,Lm12;
   hence thesis;
 end;
 
 theorem
   a <= 0 & b <= 1 implies a <= a*b
 proof
-  assume a<=0 & b<=1;
-  then a*b>=a*1 by Lm31;
+  assume that
+A1: a<=0 and
+A2: b<=1;
+  a*b>=a*1 by A1,A2,Lm28;
   hence thesis;
 end;
 
 theorem
   0 <= a & b <= 1 implies a*b <= a
 proof
-  assume a>=0 & b<=1;
-  then a*b<=a*1 by Lm12;
+  assume that
+A1: a>=0 and
+A2: b<=1;
+  a*b<=a*1 by A1,A2,Lm12;
   hence thesis;
 end;
 
 theorem
   a <= 0 & 1 <= b implies a*b <= a
 proof
-  assume a<=0 & b>=1;
-  then a*b<=a*1 by Lm31;
+  assume that
+A1: a<=0 and
+A2: b>=1;
+  a*b<=a*1 by A1,A2,Lm28;
   hence thesis;
 end;
 
 theorem Th157:
   0 < a & 1 < b implies a < a*b
 proof
-  assume a>0 & b>1;
-  then a*b>a*1 by Lm13;
+  assume that
+A1: a>0 and
+A2: b>1;
+  a*b>a*1 by A1,A2,Lm13;
   hence thesis;
 end;
 
 theorem
   a < 0 & b < 1 implies a < a*b
 proof
-  assume a<0 & b<1;
-  then a*b>a*1 by Lm25;
+  assume that
+A1: a<0 and
+A2: b<1;
+  a*b>a*1 by A1,A2,Lm24;
   hence thesis;
 end;
 
 theorem
   0 < a & b < 1 implies a*b < a
 proof
-  assume a>0 & b<1;
-  then a*b<a*1 by Lm13;
+  assume that
+A1: a>0 and
+A2: b<1;
+  a*b<a*1 by A1,A2,Lm13;
   hence thesis;
 end;
 
 theorem
   a < 0 & 1 < b implies a*b < a
 proof
-  assume a<0 & b>1;
-  then a*b<a*1 by Lm25;
+  assume that
+A1: a<0 and
+A2: b>1;
+  a*b<a*1 by A1,A2,Lm24;
   hence thesis;
 end;
 
 theorem
   1 <= a & 1 <= b implies 1 <= a*b
 proof
-  assume
-A1: a>=1 & b>=1;
-  then a*b>=b*1 by Lm12;
-  hence thesis by A1,XXREAL_0:2;
+  assume that
+A1: a>=1 and
+A2: b>=1;
+  a*b>=b*1 by A1,A2,Lm12;
+  hence thesis by A2,XXREAL_0:2;
 end;
 
 theorem
-  0 <= a & a <= 1 & 0 <= b & b <= 1 implies a*b <= 1
+  0 <= a & a <= 1 & b <= 1 implies a*b <= 1
 proof
-  assume
-A1: 0<=a & a<=1 & 0<=b & b<=1;
-  then a*b<=1*a by Lm12;
-  hence thesis by A1,XXREAL_0:2;
+  assume that
+A1: 0<=a and
+A2: a<=1 and
+A3: b<=1;
+  a*b<=1*a by A1,A3,Lm12;
+  hence thesis by A2,XXREAL_0:2;
 end;
 
 theorem
   1 < a & 1 <= b implies 1 < a*b
 proof
-  assume
-A1: a>1 & b>=1;
-  then a*b>b*1 by Lm13;
-  hence thesis by A1,XXREAL_0:2;
+  assume that
+A1: a>1 and
+A2: b>=1;
+  a*b>b*1 by A1,A2,Lm13;
+  hence thesis by A2,XXREAL_0:2;
 end;
 
 theorem
-  0 <= a & a < 1 & 0 <= b & b <= 1 implies a*b < 1
+  0 <= a & a < 1 & b <= 1 implies a*b < 1
 proof
-  assume
-A1: 0<=a & a<1 & 0<=b & b<=1;
-  then a*b<=1*a by Lm12;
-  hence thesis by A1,XXREAL_0:2;
+  assume that
+A1: 0<=a and
+A2: a<1 and
+A3: b<=1;
+  a*b<=1*a by A1,A3,Lm12;
+  hence thesis by A2,XXREAL_0:2;
 end;
 
 theorem
   a <= -1 & b <= -1 implies 1 <= a*b
 proof
-  assume
-A1: a<=-1 & b<=-1;
-  then
-A2: a*b>=b*(-1) by Lm31;
-  -b>=--1 by A1,Lm14;
-  hence thesis by A2,XXREAL_0:2;
+  assume that
+A1: a<=-1 and
+A2: b<=-1;
+A3: -b>=--1 by A2,Lm14;
+  a*b>=b*(-1) by A1,A2,Lm28;
+  hence thesis by A3,XXREAL_0:2;
 end;
 
 theorem
   a < -1 & b <= -1 implies 1 < a*b
 proof
-  assume
-A1: a<-1 & b<=-1;
-  then
-A2: a*b>b*(-1) by Lm25;
-  -b>=--1 by A1,Lm14;
-  hence thesis by A2,XXREAL_0:2;
+  assume that
+A1: a<-1 and
+A2: b<=-1;
+A3: -b>=--1 by A2,Lm14;
+  a*b>b*(-1) by A1,A2,Lm24;
+  hence thesis by A3,XXREAL_0:2;
 end;
 
 theorem
-  a <= 0 & -1 <= a & b <= 0 & -1 <= b implies a*b <= 1
+  a <= 0 & -1 <= a & -1 <= b implies a*b <= 1
 proof
-  assume
-A1: 0>=a & a>=-1 & 0>=b & b>=-1;
-  then
-A2: a*b<=(-1)*a by Lm31;
-  -a<=--1 by A1,Lm14;
-  hence thesis by A2,XXREAL_0:2;
+  assume that
+A1: 0>=a and
+A2: a>=-1 and
+A3: b>=-1;
+A4: -a<=--1 by A2,Lm14;
+  a*b<=(-1)*a by A1,A3,Lm28;
+  hence thesis by A4,XXREAL_0:2;
 end;
 
 theorem
-  a <= 0 & -1 < a & b <= 0 & -1 <= b implies a*b < 1
+  a <= 0 & -1 < a & -1 <= b implies a*b < 1
 proof
-  assume
-A1: 0>=a & a>-1 & 0>=b & b>=-1;
-  then
-A2: a*b<=(-1)*a by Lm31;
-  -a<--1 by A1,Lm15;
-  hence thesis by A2,XXREAL_0:2;
+  assume that
+A1: 0>=a and
+A2: a>-1 and
+A3: b>=-1;
+A4: -a<--1 by A2,Lm15;
+  a*b<=(-1)*a by A1,A3,Lm28;
+  hence thesis by A4,XXREAL_0:2;
 end;
 
 begin
@@ -2166,30 +2385,31 @@ A1: for a st a>1 holds b*a>=c;
 A2: not thesis;
 A3: b>=0
   proof
-    assume b<0;
+A4: c <= b*2 by A1;
+    assume
+    b<0;
     then
-A4: b*2<0;
-A5: c <= b*2 by A1;
-    c < 0 by A1,A4;
-    then b/c>c/c by A2,Lm32;
+A5: b*2<0;
+    then c < 0 by A1;
+    then b/c>c/c by A2,Lm29;
+    then b/c>1 by A5,A4,XCMPLX_1:60;
     then
-A6: b/c>1 by A4,A5,XCMPLX_1:60;
-    then
-A7: b*(b/c)>=c by A1;
-    b*(b/c)<c*(b/c) by A2,A6,Lm13;
-    then b*(b/c)<b by A4,A5,XCMPLX_1:88;
-    hence contradiction by A2,A7,XXREAL_0:2;
+A6: b*(b/c)>=c by A1;
+    b*(b/c)<c*(b/c) by A2,A5,A4,Lm13;
+    then b*(b/c)<b by A5,A4,XCMPLX_1:88;
+    hence contradiction by A2,A6,XXREAL_0:2;
   end;
   per cases by A3;
   suppose
-A8: b>0;
-    then b/b<c/b by A2,Lm28;
-    then 1<c/b by A8,XCMPLX_1:60;
+A7: b>0;
+    then b/b<c/b by A2,Lm26;
+    then 1<c/b by A7,XCMPLX_1:60;
     then consider d being real number such that
-A9: 1<d & d<c/b by Th7;
-    b*d<b*(c/b) by A8,A9,Lm13;
-    then b*d<c by A8,XCMPLX_1:88;
-    hence contradiction by A1,A9;
+A8: 1<d and
+A9: d<c/b by Th7;
+    b*d<b*(c/b) by A7,A9,Lm13;
+    then b*d<c by A7,XCMPLX_1:88;
+    hence contradiction by A1,A8;
   end;
   suppose
 A10: b=0;
@@ -2198,11 +2418,11 @@ A10: b=0;
   end;
 end;
 
-Lm46: 1 < a implies a" < 1
+Lm36: 1 < a implies a" < 1
 proof
   assume
 A1: 1<a;
-   1*a"<a*a" by A1,Lm13;
+  then 1*a"<a*a" by Lm13;
   hence thesis by A1,XCMPLX_0:def 7;
 end;
 
@@ -2214,47 +2434,49 @@ A1: for a st 0<a & a<1 holds b*a<=c;
   now
     let d;
     assume
-A3: d>1;
-    then 0<d" & d"<1 by Lm46;
-    then b*(d")<=c by A1;
+A2: d>1;
+    then b*(d")<=c by A1,Lm36;
     then b/d<=c by XCMPLX_0:def 9;
-    hence b<=c*d by A3,Th83;
+    hence b<=c*d by A2,Th83;
   end;
   hence thesis by Th169;
 end;
 
-Lm47: a <= b & 0 <= a implies a/b <= 1
+Lm37: a <= b & 0 <= a implies a/b <= 1
 proof
   assume
 A1: a <= b;
   assume
 A2: 0 <= a;
   per cases by A2;
-  suppose a = 0;
+  suppose
+    a = 0;
     hence thesis;
   end;
   suppose
 A3: a > 0;
-    then a/b<=b/b by A1,Lm27;
+    then a/b<=b/b by A1,Lm25;
     hence thesis by A1,A3,XCMPLX_1:60;
   end;
 end;
 
-Lm48: b <= a & 0 <= a implies b/a <= 1
+Lm38: b <= a & 0 <= a implies b/a <= 1
 proof
   assume
 A1: b <= a;
   assume
 A2: a>=0;
   per cases by A2;
-  suppose a = 0;
+  suppose
+    a = 0;
     then a" = 0;
     then b*a" < 1;
     hence thesis by XCMPLX_0:def 9;
   end;
   suppose
 A3: a > 0;
-    assume b/a>1;
+    assume
+    b/a>1;
     then b/a*a>1*a by A3,Lm13;
     hence thesis by A1,A3,XCMPLX_1:88;
   end;
@@ -2270,7 +2492,8 @@ A3: b*2 > b by A2,Th157;
   then
 A4: b > b/2 by Th85;
   per cases;
-  suppose c <= 0;
+  suppose
+    c <= 0;
     then 1/2*c <= 0;
     hence contradiction by A1,A2;
   end;
@@ -2278,74 +2501,82 @@ A4: b > b/2 by Th85;
 A5: c <= b and
 A6: c > 0;
     set a = c/(2*b);
-A7: 2*b > 0 by A2;
-A8: c/b <= 1 by A5,A6,Lm47;
     c/b*2 > c/b by A2,A6,Th157;
     then c/b > c/b/2 by Th85;
-    then c/b > c/(b*2) by XCMPLX_1:79;
-    then a < 1 by A8,XXREAL_0:2;
     then
-A9: a*c >= b by A1,A6,A7;
+A7: c/b > c/(b*2) by XCMPLX_1:79;
+    c/b <= 1 by A5,A6,Lm37;
+    then a < 1 by A7,XXREAL_0:2;
+    then
+A8: a*c >= b by A1,A2,A6;
     per cases;
-    suppose c >= b;
+    suppose
+      c >= b;
       then b = c by A5,XXREAL_0:1;
       then a*c = b/2 by A6,XCMPLX_1:93;
-      hence contradiction by A2,A9,Th85,Th157;
+      hence contradiction by A2,A8,Th85,Th157;
     end;
     suppose
-A10:  c < b;
-      a*c < c/(2*b)*b by A6,A10,Th100;
+A9:   c < b;
+      then a*c < c/(2*b)*b by A6,Th100;
       then
-A11:  a*c < c/2 by A2,XCMPLX_1:93;
-      c/2 < b/2 by A10,Lm28;
-      then a*c < b/2 by A11,XXREAL_0:2;
-      hence contradiction by A4,A9,XXREAL_0:2;
+A10:  a*c < c/2 by A2,XCMPLX_1:93;
+      c/2 < b/2 by A9,Lm26;
+      then a*c < b/2 by A10,XXREAL_0:2;
+      hence contradiction by A4,A8,XXREAL_0:2;
     end;
   end;
   suppose that
-A12: b <= c and
-A13: c > 0;
+A11: b <= c and
+A12: c > 0;
     set a = b/(2*c);
-A14: 2*c > 0 by A13;
-A15: b/c <= 1 by A12,A13,Lm48;
-    b/c*2 > b/c by A2,A13,Th157;
+    b/c*2 > b/c by A2,A12,Th157;
     then b/c > b/c/2 by Th85;
-    then b/c > b/(c*2) by XCMPLX_1:79;
-    then a < 1 by A15,XXREAL_0:2;
     then
-A16: a*c >= b by A1,A2,A14;
-    a*c = b/2 by A13,XCMPLX_1:93;
-    hence contradiction by A3,A16,Th85;
+A13: b/c > b/(c*2) by XCMPLX_1:79;
+    b/c <= 1 by A11,A12,Lm38;
+    then a < 1 by A13,XXREAL_0:2;
+    then
+A14: a*c >= b by A1,A2,A12;
+    a*c = b/2 by A12,XCMPLX_1:93;
+    hence contradiction by A3,A14,Th85;
   end;
 end;
 
 theorem
-  0 <= d & d <= 1 & 0 <= a & 0 <= b & d*a+(1-d)*b=0
-  implies d=0 & b=0 or d=1 & a=0 or a=0 & b=0
+  0 <= d & d <= 1 & 0 <= a & 0 <= b & d*a+(1-d)*b=0 implies d=0 & b=0 or
+  d=1 & a=0 or a=0 & b=0
 proof
-  assume
-A1: 0<=d & d<=1 & a>=0 & b>=0 & d*a+(1-d)*b=0;
-  then d-d<=1-d by Lm7;
-  then (d=0 or a=0) & (1-d=0 or b=0) by A1;
-  hence thesis;
+  assume that
+A1: 0<=d and
+A2: d<=1 and
+A3: a>=0 and
+A4: b>=0 and
+A5: d*a+(1-d)*b=0;
+  d-d<=1-d by A2,Lm7;
+  then 1-d=0 or b=0 by A1,A3,A4,A5;
+  hence thesis by A5;
 end;
 
 theorem
-  0 <= d & d <= 1 & a <= b implies a <= (1-d)*a+d*b
+  0 <= d & a <= b implies a <= (1-d)*a+d*b
 proof
-  assume 0<=d & d<=1 & a<=b;
-  then d*a<=d*b by Lm12;
+  assume that
+A1: 0<=d and
+A2: a<=b;
+  d*a<=d*b by A1,A2,Lm12;
   then (1-d)*a+d*a<=(1-d)*a+d*b by Lm6;
   hence thesis;
 end;
 
 theorem
-  0 <= d & d <= 1 & a <= b implies (1-d)*a+d*b <= b
+  d <= 1 & a <= b implies (1-d)*a+d*b <= b
 proof
-  assume
-A1: 0<=d & d<=1 & a<=b;
-  then 1-d>=0 by Th50;
-  then (1-d)*a<=(1-d)*b by A1,Lm12;
+  assume that
+A1: d<=1 and
+A2: a<=b;
+  1-d>=0 by A1,Th50;
+  then (1-d)*a<=(1-d)*b by A2,Lm12;
   then (1-d)*a+d*b<=(1-d)*b+d*b by Lm6;
   hence thesis;
 end;
@@ -2353,107 +2584,123 @@ end;
 theorem
   0 <= d & d <= 1 & a <= b & a <= c implies a <= (1-d)*b+d*c
 proof
-  assume
-A1: 0<=d & d<=1 & a<=b & a<=c;
+  assume that
+A1: 0<=d and
+A2: d<=1 and
+A3: a<=b and
+A4: a<=c;
+  1-d>=0 by A2,Th50;
   then
-A2: d*a<=d*c by Lm12;
-  1-d>=0 by A1,Th50;
-  then
-A3: (1-d)*a<=(1-d)*b by A1,Lm12;
-  (1-d)*a+d*a = a;
-  hence thesis by A2,A3,Lm6;
+A5: (1-d)*a<=(1-d)*b by A3,Lm12;
+A6: (1-d)*a+d*a = a;
+  d*a<=d*c by A1,A4,Lm12;
+  hence thesis by A5,A6,Lm6;
 end;
 
 theorem
   0 <= d & d <= 1 & b <= a & c <= a implies (1-d)*b+d*c <= a
 proof
-  assume
-A1: 0<=d & d<=1 & a>=b & a>=c;
+  assume that
+A1: 0<=d and
+A2: d<=1 and
+A3: a>=b and
+A4: a>=c;
+  1-d>=0 by A2,Th50;
   then
-A2: d*a>=d*c by Lm12;
-  1-d>=0 by A1,Th50;
-  then
-A3: (1-d)*a>=(1-d)*b by A1,Lm12;
-  (1-d)*a+d*a = a;
-  hence thesis by A2,A3,Lm6;
+A5: (1-d)*a>=(1-d)*b by A3,Lm12;
+A6: (1-d)*a+d*a = a;
+  d*a>=d*c by A1,A4,Lm12;
+  hence thesis by A5,A6,Lm6;
 end;
 
 theorem
   0 <= d & d <= 1 & a < b & a < c implies a < (1-d)*b+d*c
 proof
-  assume
-A1: 0 <= d & d <= 1 & a<b & a<c;
+  assume that
+A1: 0 <= d and
+A2: d <= 1 and
+A3: a<b and
+A4: a<c;
   per cases;
-  suppose d=0;
-    hence thesis by A1;
-  end;
-  suppose d=1;
-    hence thesis by A1;
+  suppose
+    d=0;
+    hence thesis by A3;
   end;
   suppose
-A2: not(d=0 or d=1);
+    d=1;
+    hence thesis by A4;
+  end;
+  suppose
+A5: not(d=0 or d=1);
+    then d<1 by A2,XXREAL_0:1;
+    then 1-d>0 by Lm21;
     then
-A3: d>0 & d<1 by A1,XXREAL_0:1;
-A4: d*a<d*c by A1,A2,Lm13;
-    1-d>0 by A3,Lm21;
-    then
-A5: (1-d)*a<(1-d)*b by A1,Lm13;
-    (1-d)*a+d*a=a;
-    hence thesis by A4,A5,Lm8;
+A6: (1-d)*a<(1-d)*b by A3,Lm13;
+A7: (1-d)*a+d*a=a;
+    d*a<d*c by A1,A4,A5,Lm13;
+    hence thesis by A6,A7,Lm8;
   end;
 end;
 
 theorem
   0 <= d & d <= 1 & b < a & c < a implies (1-d)*b+d*c < a
 proof
-  assume
-A1: 0 <= d & d <= 1 & a>b & a>c;
+  assume that
+A1: 0 <= d and
+A2: d <= 1 and
+A3: a>b and
+A4: a>c;
   per cases;
-  suppose d=0;
-    hence thesis by A1;
-  end;
-  suppose d=1;
-    hence thesis by A1;
+  suppose
+    d=0;
+    hence thesis by A3;
   end;
   suppose
-A2: not(d=0 or d=1);
+    d=1;
+    hence thesis by A4;
+  end;
+  suppose
+A5: not(d=0 or d=1);
+    then d<1 by A2,XXREAL_0:1;
+    then 1-d>0 by Lm21;
     then
-A3: d>0 & d<1 by A1,XXREAL_0:1;
-A4: d*a>d*c by A1,A2,Lm13;
-    1-d>0 by A3,Lm21;
-    then
-A5: (1-d)*a>(1-d)*b by A1,Lm13;
-    (1-d)*a+d*a=a;
-    hence thesis by A4,A5,Lm8;
+A6: (1-d)*a>(1-d)*b by A3,Lm13;
+A7: (1-d)*a+d*a=a;
+    d*a>d*c by A1,A4,A5,Lm13;
+    hence thesis by A6,A7,Lm8;
   end;
 end;
 
 theorem
   0 < d & d < 1 & a <= b & a < c implies a < (1-d)*b+d*c
 proof
-  assume
-A1: 0 < d & d < 1 & a <= b & a < c;
+  assume that
+A1: 0 < d and
+A2: d < 1 and
+A3: a <= b and
+A4: a < c;
+  1-d > 0 by A2,Lm21;
   then
-A2: d*a < d*c by Lm13;
-  1-d > 0 by A1,Lm21;
-  then
-A3: (1-d)*a <= (1-d)*b by A1,Lm12;
-  (1-d)*a+d*a = a;
-  hence thesis by A2,A3,Lm8;
+A5: (1-d)*a <= (1-d)*b by A3,Lm12;
+A6: (1-d)*a+d*a = a;
+  d*a < d*c by A1,A4,Lm13;
+  hence thesis by A5,A6,Lm8;
 end;
 
 theorem
   0 < d & d < 1 & b < a & c <= a implies (1-d)*b+d*c < a
 proof
-  assume
-A1: 0 < d & d < 1 & a > b & a >= c;
+  assume that
+A1: 0 < d and
+A2: d < 1 and
+A3: a > b and
+A4: a >= c;
+  1-d > 0 by A2,Lm21;
   then
-A2: d*a >= d*c by Lm12;
-  1-d > 0 by A1,Lm21;
-  then
-A3: (1-d)*a > (1-d)*b by A1,Lm13;
-  (1-d)*a+d*a = a;
-  hence thesis by A2,A3,Lm8;
+A5: (1-d)*a > (1-d)*b by A3,Lm13;
+A6: (1-d)*a+d*a = a;
+  d*a >= d*c by A1,A4,Lm12;
+  hence thesis by A5,A6,Lm8;
 end;
 
 theorem
@@ -2465,12 +2712,14 @@ A2: d <= 1 and
 A3: a <= (1-d)*a + d*b and
 A4: b < (1-d)*a + d*b;
   set s = (1-d)*a + d*b;
-A5: 1*s = (1-d)*s + d*s;
-  assume d <> 0;
+  assume
+  d <> 0;
   then
-A6: d*b < d*s by A1,A4,Lm13;
+A5: d*b < d*s by A1,A4,Lm13;
   1-d >= 0 by A2,Th50;
-  then (1-d)*a <= (1-d)*s by A3,Lm12;
+  then
+A6: (1-d)*a <= (1-d)*s by A3,Lm12;
+  1*s = (1-d)*s + d*s;
   hence contradiction by A5,A6,Lm8;
 end;
 
@@ -2483,12 +2732,14 @@ A2: d <= 1 and
 A3: a >= (1-d)*a + d*b and
 A4: b > (1-d)*a + d*b;
   set s = (1-d)*a + d*b;
-A5: 1*s = (1-d)*s + d*s;
-  assume d <> 0;
+  assume
+  d <> 0;
   then
-A6: d*b > d*s by A1,A4,Lm13;
+A5: d*b > d*s by A1,A4,Lm13;
   1-d >= 0 by A2,Th50;
-  then (1-d)*a >= (1-d)*s by A3,Lm12;
+  then
+A6: (1-d)*a >= (1-d)*s by A3,Lm12;
+  1*s = (1-d)*s + d*s;
   hence contradiction by A5,A6,Lm8;
 end;
 
@@ -2497,23 +2748,25 @@ begin
 theorem
   0 < a & a <= b implies 1 <= b/a
 proof
-  assume
-A1: 0<a & a<=b;
-  then b/a>=a/a by Lm27;
+  assume that
+A1: 0<a and
+A2: a<=b;
+  b/a>=a/a by A1,A2,Lm25;
   hence thesis by A1,XCMPLX_1:60;
 end;
 
 theorem
   a < 0 & b <= a implies 1 <= b/a
 proof
-  assume
-A1: a < 0 & b<=a;
-  then b/a>=a/a by Lm33;
+  assume that
+A1: a < 0 and
+A2: b<=a;
+  b/a>=a/a by A1,A2,Lm30;
   hence thesis by A1,XCMPLX_1:60;
 end;
 
 theorem
-  0 <= a & a <= b implies a/b <= 1 by Lm47;
+  0 <= a & a <= b implies a/b <= 1 by Lm37;
 
 theorem
   b <= a & a <= 0 implies a/b <= 1
@@ -2523,18 +2776,19 @@ A1: b <= a;
   assume
 A2: a <= 0;
   per cases by A2;
-  suppose a = 0;
+  suppose
+    a = 0;
     hence thesis;
   end;
   suppose
 A3: a < 0;
-    then a/b<=b/b by A1,Lm33;
+    then a/b<=b/b by A1,Lm30;
     hence thesis by A1,A3,XCMPLX_1:60;
   end;
 end;
 
 theorem
-  0 <= a & b <= a implies b/a <= 1 by Lm48;
+  0 <= a & b <= a implies b/a <= 1 by Lm38;
 
 theorem
   a <= 0 & a <= b implies b/a <= 1
@@ -2542,7 +2796,8 @@ proof
   assume
 A1: a<=0;
   per cases by A1;
-  suppose a = 0;
+  suppose
+    a = 0;
     then a" = 0;
     then b*a" = 0;
     hence thesis by XCMPLX_0:def 9;
@@ -2551,8 +2806,9 @@ A1: a<=0;
 A2: a<0;
     assume
 A3: a <= b;
-    assume b/a>1;
-    then b/a*a<1*a by A2,Lm25;
+    assume
+    b/a>1;
+    then b/a*a<1*a by A2,Lm24;
     hence thesis by A2,A3,XCMPLX_1:88;
   end;
 end;
@@ -2564,7 +2820,8 @@ proof
 A1: a>0;
   assume
 A2: a < b;
-  assume b/a<=1;
+  assume
+  b/a<=1;
   then b/a*a<=1*a by A1,Lm12;
   hence thesis by A1,A2,XCMPLX_1:88;
 end;
@@ -2572,28 +2829,31 @@ end;
 theorem
   a < 0 & b < a implies 1 < b/a
 proof
-  assume
-A1: a < 0 & b<a;
-  then b/a>a/a by Lm32;
+  assume that
+A1: a < 0 and
+A2: b<a;
+  b/a>a/a by A1,A2,Lm29;
   hence thesis by A1,XCMPLX_1:60;
 end;
 
 theorem
   0 <= a & a < b implies a/b < 1
 proof
-  assume
-A1: 0 <= a & a < b;
-  then a/b<b/b by Lm28;
-  hence thesis by A1,XCMPLX_1:60;
+  assume that
+A1: 0 <= a and
+A2: a < b;
+  a/b<b/b by A1,A2,Lm26;
+  hence thesis by A1,A2,XCMPLX_1:60;
 end;
 
 theorem
   a <= 0 & b < a implies a/b < 1
 proof
-  assume
-A1: a <= 0 & b<a;
-  then a/b<b/b by Lm32;
-  hence thesis by A1,XCMPLX_1:60;
+  assume that
+A1: a <= 0 and
+A2: b<a;
+  a/b<b/b by A1,A2,Lm29;
+  hence thesis by A1,A2,XCMPLX_1:60;
 end;
 
 theorem
@@ -2603,7 +2863,8 @@ proof
 A1: a > 0;
   assume
 A2: b < a;
-  assume b/a>=1;
+  assume
+  b/a>=1;
   then b/a*a>=1*a by A1,Lm12;
   hence thesis by A1,A2,XCMPLX_1:88;
 end;
@@ -2615,8 +2876,9 @@ proof
 A1: a<0;
   assume
 A2: a < b;
-  assume b/a>=1;
-  then b/a*a<=1*a by A1,Lm31;
+  assume
+  b/a>=1;
+  then b/a*a<=1*a by A1,Lm28;
   hence thesis by A1,A2,XCMPLX_1:88;
 end;
 
@@ -2628,7 +2890,8 @@ proof
   assume
 A1: b>=0;
   per cases by A1;
-  suppose b = 0;
+  suppose
+    b = 0;
     then b" = 0;
     then a*b" = 0;
     hence thesis by XCMPLX_0:def 9;
@@ -2637,7 +2900,8 @@ A1: b>=0;
 A2: b>0;
     assume
 A3: -b <= a;
-    assume a/b<-1;
+    assume
+    a/b<-1;
     then a/b*b<(-1)*b by A2,Lm13;
     hence thesis by A2,A3,XCMPLX_1:88;
   end;
@@ -2649,7 +2913,8 @@ proof
   assume
 A1: b >= 0;
   per cases by A1;
-  suppose b = 0;
+  suppose
+    b = 0;
     then b" = 0;
     then a*b" = 0;
     hence thesis by XCMPLX_0:def 9;
@@ -2658,7 +2923,8 @@ A1: b >= 0;
 A2: b > 0;
     assume
 A3: -a <= b;
-    assume a/b<-1;
+    assume
+    a/b<-1;
     then a/b*b<(-1)*b by A2,Lm13;
     then a<-b by A2,XCMPLX_1:88;
     hence thesis by A3,Th28;
@@ -2671,7 +2937,8 @@ proof
   assume
 A1: b<=0;
   per cases by A1;
-  suppose b=0;
+  suppose
+    b=0;
     then b" =0;
     then a*b" = 0;
     hence thesis by XCMPLX_0:def 9;
@@ -2680,8 +2947,9 @@ A1: b<=0;
 A2: b < 0;
     assume
 A3: a <= -b;
-    assume a/b<-1;
-    then a/b*b>(-1)*b by A2,Lm25;
+    assume
+    a/b<-1;
+    then a/b*b>(-1)*b by A2,Lm24;
     hence thesis by A2,A3,XCMPLX_1:88;
   end;
 end;
@@ -2692,7 +2960,8 @@ proof
   assume
 A1: b<=0;
   per cases by A1;
-  suppose b = 0;
+  suppose
+    b = 0;
     then b" =0;
     then a*b" = 0;
     hence thesis by XCMPLX_0:def 9;
@@ -2701,8 +2970,9 @@ A1: b<=0;
 A2: b < 0;
     assume
 A3: b <= -a;
-    assume a/b<-1;
-    then a/b*b>(-1)*b by A2,Lm25;
+    assume
+    a/b<-1;
+    then a/b*b>(-1)*b by A2,Lm24;
     then a>-b by A2,XCMPLX_1:88;
     hence thesis by A3,Th27;
   end;
@@ -2715,7 +2985,8 @@ proof
 A1: b>0;
   assume
 A2: -b < a;
-  assume a/b<=-1;
+  assume
+  a/b<=-1;
   then a/b*b<=(-1)*b by A1,Lm12;
   hence thesis by A1,A2,XCMPLX_1:88;
 end;
@@ -2727,7 +2998,8 @@ proof
 A1: b>0;
   assume
 A2: -a < b;
-  assume a/b<=-1;
+  assume
+  a/b<=-1;
   then a/b*b<=(-1)*b by A1,Lm12;
   then a<=-b by A1,XCMPLX_1:88;
   hence thesis by A2,Th27;
@@ -2740,8 +3012,9 @@ proof
 A1: b<0;
   assume
 A2: a < -b;
-  assume a/b<=-1;
-  then a/b*b>=(-1)*b by A1,Lm31;
+  assume
+  a/b<=-1;
+  then a/b*b>=(-1)*b by A1,Lm28;
   hence thesis by A1,A2,XCMPLX_1:88;
 end;
 
@@ -2752,8 +3025,9 @@ proof
 A1: b<0;
   assume
 A2: b < -a;
-  assume a/b<=-1;
-  then a/b*b>=(-1)*b by A1,Lm31;
+  assume
+  a/b<=-1;
+  then a/b*b>=(-1)*b by A1,Lm28;
   then a>=-b by A1,XCMPLX_1:88;
   hence thesis by A2,Th28;
 end;
@@ -2765,7 +3039,8 @@ proof
 A1: b>0;
   assume
 A2: a <= -b;
-  assume a/b>-1;
+  assume
+  a/b>-1;
   then a/b*b>(-1)*b by A1,Lm13;
   hence thesis by A1,A2,XCMPLX_1:88;
 end;
@@ -2777,7 +3052,8 @@ proof
 A1: b>0;
   assume
 A2: b <= -a;
-  assume a/b>-1;
+  assume
+  a/b>-1;
   then a/b*b>(-1)*b by A1,Lm13;
   then a>-b by A1,XCMPLX_1:88;
   hence thesis by A2,Th27;
@@ -2790,8 +3066,9 @@ proof
 A1: b<0;
   assume
 A2: -b <= a;
-  assume a/b>-1;
-  then a/b*b<(-1)*b by A1,Lm25;
+  assume
+  a/b>-1;
+  then a/b*b<(-1)*b by A1,Lm24;
   hence thesis by A1,A2,XCMPLX_1:88;
 end;
 
@@ -2802,8 +3079,9 @@ proof
 A1: b<0;
   assume
 A2: -a <= b;
-  assume a/b>-1;
-  then a/b*b<(-1)*b by A1,Lm25;
+  assume
+  a/b>-1;
+  then a/b*b<(-1)*b by A1,Lm24;
   then a<-b by A1,XCMPLX_1:88;
   hence thesis by A2,Th28;
 end;
@@ -2815,7 +3093,8 @@ proof
 A1: b>0;
   assume
 A2: a < -b;
-  assume a/b>=-1;
+  assume
+  a/b>=-1;
   then a/b*b>=(-1)*b by A1,Lm12;
   hence thesis by A1,A2,XCMPLX_1:88;
 end;
@@ -2827,7 +3106,8 @@ proof
 A1: b>0;
   assume
 A2: b < -a;
-  assume a/b>=-1;
+  assume
+  a/b>=-1;
   then a/b*b>=(-1)*b by A1,Lm12;
   then a>=-b by A1,XCMPLX_1:88;
   hence thesis by A2,Th28;
@@ -2840,8 +3120,9 @@ proof
 A1: b<0;
   assume
 A2: -b < a;
-  assume a/b>=-1;
-  then a/b*b<=(-1)*b by A1,Lm31;
+  assume
+  a/b>=-1;
+  then a/b*b<=(-1)*b by A1,Lm28;
   hence thesis by A1,A2,XCMPLX_1:88;
 end;
 
@@ -2852,8 +3133,9 @@ proof
 A1: b<0;
   assume
 A2: -a < b;
-  assume a/b>=-1;
-  then a/b*b<=(-1)*b by A1,Lm31;
+  assume
+  a/b>=-1;
+  then a/b*b<=(-1)*b by A1,Lm28;
   then a<=-b by A1,XCMPLX_1:88;
   hence thesis by A2,Th27;
 end;
@@ -2861,16 +3143,18 @@ end;
 begin
 
 theorem Th211:
-  (for a being real number st 0 < a & a < 1 holds c <= b/a) implies c <= b
+  (for a being real number st 0 < a & a < 1 holds c <= b/a)
+  implies c <= b
 proof
   assume
 A1: for a st a>0 & a<1 holds b/a>=c;
   now
     let d;
-A2: d" = 1/d by XCMPLX_1:217;
-    assume d>1;
-    then d"<1 & d">0 by Lm46;
-    then b/(d")>=c by A1;
+    assume
+    d>1;
+    then
+A2: b/(d")>=c by A1,Lm36;
+    d" = 1/d by XCMPLX_1:217;
     then b*d/1>=c by A2,XCMPLX_1:78;
     hence b*d>=c;
   end;
@@ -2887,9 +3171,10 @@ A1: for a st a>1 holds b/a<=c;
     now
       let d;
 A2:   d" = 1/d by XCMPLX_1:217;
-      assume
-A3:   0<d & d<1;
-      then d">1" by Lm39;
+      assume that
+A3:   0<d and
+A4:   d<1;
+      d">1" by A3,A4,Lm34;
       then b/(d")<=c by A1;
       then b*d/1<=c by A2,XCMPLX_1:78;
       hence b<=c/d by A3,Th79;
@@ -2902,24 +3187,24 @@ end;
 theorem
   1 <= a implies a" <= 1
 proof
-  1 <= a implies a" <= 1" by Lm36;
+  1 <= a implies a" <= 1" by Lm32;
   hence thesis;
 end;
 
 theorem
-  1 < a implies a" < 1 by Lm46;
+  1 < a implies a" < 1 by Lm36;
 
 theorem
   a <= -1 implies -1 <= a"
 proof
-  a <= -1 implies (-1)" <= a" by Lm37;
+  a <= -1 implies (-1)" <= a" by Lm33;
   hence thesis;
 end;
 
 theorem
   a < -1 implies -1 < a"
 proof
-  a < -1 implies (-1)" < a" by Lm35;
+  a < -1 implies (-1)" < a" by Lm31;
   hence thesis;
 end;
 
@@ -2929,12 +3214,13 @@ theorem
   0 < a implies 0 < a/2;
 
 theorem
-  0 < a implies a/2 < a by Lm30;
+  0 < a implies a/2 < a by Lm27;
 
 theorem
   a <= 1/2 implies 2 * a - 1 <= 0
 proof
-  assume a <= 1/2;
+  assume
+  a <= 1/2;
   then 2 * a <= 2 * (1/2) by Lm12;
   then 2 * a <= 1 + 0;
   hence thesis by Lm18;
@@ -2943,7 +3229,8 @@ end;
 theorem
   a <= 1/2 implies 0 <= 1 - 2 * a
 proof
-  assume a <= 1/2;
+  assume
+  a <= 1/2;
   then 2 * a <= 2 * (1/2) by Lm12;
   then 2 * a + 0 <= 1;
   hence thesis by Lm16;
@@ -2952,7 +3239,8 @@ end;
 theorem
   a >= 1/2 implies 2 * a - 1 >= 0
 proof
-  assume a >= 1/2;
+  assume
+  a >= 1/2;
   then 2 * a >= 2 * (1/2) by Lm12;
   then 2 * a >= 1 + 0;
   hence thesis by Lm16;
@@ -2961,7 +3249,8 @@ end;
 theorem
   a >= 1/2 implies 0 >= 1 - 2 * a
 proof
-  assume a >= 1/2;
+  assume
+  a >= 1/2;
   then 2 * a >= 2 * (1/2) by Lm12;
   then 2 * a + 0 >= 1;
   hence thesis by Lm18;
@@ -2975,8 +3264,8 @@ proof
   assume
 A1: 0<a;
   then
-A2: 0+a/3<a/3+a/3 by Lm10;
-  a/3+a/3+0<a/3+a/3+a/3 by A1,Lm10;
+A2: a/3+a/3+0<a/3+a/3+a/3 by Lm10;
+  0+a/3<a/3+a/3 by A1,Lm10;
   hence thesis by A2,XXREAL_0:2;
 end;
 
@@ -2991,11 +3280,10 @@ proof
   assume
 A1: 0<a;
   then
-A2: 0<a/4;
-A3: 0+a/4<a/4+a/4 by A1,Lm10;
-  then a/4< a/4+a/4+a/4 by A2,Lm10;
+A2: 0+a/4<a/4+a/4 by Lm10;
+  then a/4< a/4+a/4+a/4 by A1,Lm10;
   then a/4+a/4<a/4+a/4+a/4+a/4 by Lm10;
-  hence thesis by A3,XXREAL_0:2;
+  hence thesis by A2,XXREAL_0:2;
 end;
 
 theorem
@@ -3010,10 +3298,12 @@ A1: b<>0;
   then consider c being complex number such that
 A2: a=b/c by XCMPLX_1:234;
   per cases;
-  suppose c = 0;
+  suppose
+    c = 0;
     hence thesis by A2;
   end;
-  suppose c <> 0;
+  suppose
+    c <> 0;
     then c = b/a by A1,A2,XCMPLX_1:54;
     then reconsider c as real number;
     take c;
@@ -3028,9 +3318,10 @@ begin :: Addenda
 theorem
   r<s implies r < (r+s)/2 & (r+s)/2 < s
 proof
-  assume r<s;
+  assume
+  r<s;
   then
-A1: r/2 < s/2 by Lm28;
+A1: r/2 < s/2 by Lm26;
   then r/2 + r/2 < r/2 + s/2 by Lm10;
   hence r < (r+s)/2;
   r/2 + s/2 < s/2 + s/2 by A1,Lm10;
@@ -3057,44 +3348,46 @@ proof
   assume
 A1: r < t;
   then
-A2: r <> +infty & t <> -infty by XXREAL_0:3,5;
-  per cases by A2,XXREAL_0:14;
+A2: r <> +infty by XXREAL_0:3;
+A3: t <> -infty by A1,XXREAL_0:5;
+  per cases by A2,A3,XXREAL_0:14;
   suppose that
-A3: r = -infty and
-A4: t = +infty;
+A4: r = -infty and
+A5: t = +infty;
     take 0;
-    thus thesis by A3,A4;
+    thus thesis by A4,A5;
   end;
   suppose that
-A5: r = -infty and
-A6: t in REAL;
-    reconsider t as real number by A6,XREAL_0:def 1;
+A6: r = -infty and
+A7: t in REAL;
+    reconsider t as real number by A7,XREAL_0:def 1;
     consider s being real number such that
-A7: s < t by Th4;
+A8: s < t by Th4;
     take s;
     s in REAL by XREAL_0:def 1;
-    hence r < s by A5,XXREAL_0:12;
-    thus thesis by A7;
+    hence r < s by A6,XXREAL_0:12;
+    thus thesis by A8;
   end;
   suppose that
-A8: r in REAL and
-A9: t = +infty;
-    reconsider r' = r as real number by A8,XREAL_0:def 1;
+A9: r in REAL and
+A10: t = +infty;
+    reconsider r' = r as real number by A9,XREAL_0:def 1;
     consider s being real number such that
-A10: r' < s by Th3;
+A11: r' < s by Th3;
     take s;
-    thus r < s by A10;
+    thus r < s by A11;
     s in REAL by XREAL_0:def 1;
-    hence thesis by A9,XXREAL_0:9;
+    hence thesis by A10,XXREAL_0:9;
   end;
   suppose that
-A11: r in REAL and
-A12: t in REAL;
-    reconsider r,t as real number by A11,A12,XREAL_0:def 1;
+A12: r in REAL and
+A13: t in REAL;
+    reconsider r,t as real number by A12,A13,XREAL_0:def 1;
     consider s being real number such that
-A13: r < s & s < t by A1,Th7;
+A14: r < s and
+A15: s < t by A1,Th7;
     take s;
-    thus thesis by A13;
+    thus thesis by A14,A15;
   end;
 end;
 
@@ -3109,7 +3402,8 @@ A2: for q st r < q & q < s holds t <= q;
     let q such that
 A3: r < q;
     per cases;
-    suppose q < s;
+    suppose
+      q < s;
       hence thesis by A2,A3;
     end;
     suppose
@@ -3137,7 +3431,8 @@ A2: for q st r < q & q < s holds q <= t;
 A3: t < q and
 A4: q < s;
     per cases;
-    suppose r < q;
+    suppose
+      r < q;
       hence thesis by A2,A3,A4;
     end;
     suppose
@@ -3158,16 +3453,20 @@ end;
 theorem
   0 <= a & b <= c implies b-a <= c
 proof
-  assume 0 <= a & b <= c;
-  then b+0 <= a+c by Th40;
+  assume that
+A1: 0 <= a and
+A2: b <= c;
+  b+0 <= a+c by A1,A2,Th40;
   hence thesis by Lm18;
 end;
 
 theorem
   0 < a & b <= c implies b-a < c
 proof
-  assume 0 < a & b <= c;
-  then b+0 < a+c by Th41;
+  assume that
+A1: 0 < a and
+A2: b <= c;
+  b+0 < a+c by A1,A2,Th41;
   hence thesis by Lm17;
 end;
 
@@ -3175,14 +3474,16 @@ begin
 
 theorem
   a -' a = 0
-proof a-a = 0;
+proof
+  a-a = 0;
   hence thesis by XREAL_0:def 2;
 end;
 
-theorem Th50x:
+theorem Th235:
   b <= a implies a -' b = a - b
 proof
-  assume a >= b;
+  assume
+  a >= b;
   then a - b >= 0 by Th50;
   hence thesis by XREAL_0:def 2;
 end;
@@ -3190,21 +3491,24 @@ end;
 theorem
   c <= a & c <= b & a -' c = b -' c implies a = b
 proof
-  assume
-A1: a >= c & b >= c & a -' c = b -' c;
-  then a - c >= 0 by Th50;
+  assume that
+A1: a >= c and
+A2: b >= c and
+A3: a -' c = b -' c;
+  a - c >= 0 by A1,Th50;
   then
-A2: a -' c = a - c by XREAL_0:def 2;
-  b - c >= 0 by A1,Th50;
-  then a + (-c) = b + (-c) by A1,A2,XREAL_0:def 2;
+A4: a -' c = a - c by XREAL_0:def 2;
+  b - c >= 0 by A2,Th50;
+  then a + (-c) = b + (-c) by A3,A4,XREAL_0:def 2;
   hence thesis;
 end;
 
 theorem
   a >= b implies a -' b + b = a
 proof
-  assume a >= b;
-   then a - b = a -' b by Th50x;
+  assume
+  a >= b;
+  then a - b = a -' b by Th235;
   hence thesis;
 end;
 
@@ -3216,8 +3520,8 @@ proof
   assume that
 A1: a <= b and
 A2: c < a;
-A3: b -' c = b - c by A1,A2,Th50x,XXREAL_0:2;
-  b - a < b - c by A2,Th17;
-  hence thesis by A1,A3,Th50x;
+A3: b - a < b - c by A2,Th17;
+  b -' c = b - c by A1,A2,Th235,XXREAL_0:2;
+  hence thesis by A1,A3,Th235;
 end;
 

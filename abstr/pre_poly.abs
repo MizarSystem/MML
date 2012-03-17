@@ -1,0 +1,855 @@
+:: Preliminaries to Polynomials
+::  by Andrzej Trybulec
+::
+:: Received August 7, 2009
+:: Copyright (c) 2009 Association of Mizar Users
+
+environ
+
+ vocabularies MONOID_0, FUNCT_1, RELAT_1, BINOP_1, FUNCOP_1, PARTFUN1, ARYTM_1,
+      RLVECT_1, FINSEQ_1, BOOLE, FUNCT_4, CAT_1, PBOOLE, CARD_1, FINSEQ_2,
+      ORDERS_2, WELLORD1, ORDERS_1, RELAT_2, FINSET_1, TRIANG_1, MATRLIN,
+      MEASURE6, SQUARE_1, CARD_3, DTCONSTR, MSUALG_3, ALGSEQ_1, ORDINAL1,
+      ARYTM_3, FUNCT_2, FRAENKEL, FINSUB_1, SETWISEO, TARSKI, RFINSEQ,
+      POLYNOM1, FINSEQ_4, ARYTM, VALUED_0, ORDINAL2, MATRIX_2, AMI_1, FINSOP_1,
+      SETFAM_1, FUNCT_3, PRALG_1, ARROW;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS, ORDERS_1,
+      RELAT_1, XXREAL_0, XCMPLX_0, RELAT_2, FUNCT_1, PBOOLE, RELSET_1,
+      FINSET_1, FINSUB_1, SETWISEO, ORDINAL1, PARTFUN1, FUNCT_2, BINOP_2,
+      FINSOP_1, FINSEQ_1, FINSEQ_4, FUNCT_3, BINOP_1, NAT_1, XREAL_0, FINSEQ_2,
+      WELLORD1, CARD_3, WSIERP_1, FUNCOP_1, FUNCT_7, NAT_D, CLASSES1, VALUED_0,
+      VALUED_1, ORDINAL2, SETFAM_1, DOMAIN_1, ARROW, FINSEQOP;
+ constructors WELLORD2, BINOP_1, SETWISEO, CARD_3, FINSEQOP, FINSOP_1,
+      FINSEQ_4, RFINSEQ, RFUNCT_3, NAT_D, WSIERP_1, FUNCT_7, RECDEF_1, BINOP_2,
+      CLASSES1, BINARITH, ARROW, TOLER_1, ORDINAL2, RELSET_1, ORDERS_1,
+      RELAT_2, WELLORD1, DOMAIN_1, SETFAM_1, ORDINAL3, PBOOLE;
+ registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
+      ORDINAL3, FINSET_1, XXREAL_0, XREAL_0, NAT_1, BINOP_2, CARD_1, FINSEQ_1,
+      FINSEQ_2, CARD_3, PARTFUN1, VALUED_0, VALUED_1, RELSET_1, FUNCT_2,
+      SETFAM_1, FINSUB_1;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+
+
+begin :: from LANG1
+
+definition
+  let D be set;
+  let p, q be Element of D*;
+  redefine func p^q -> Element of D*;
+end;
+
+registration
+  let D be set;
+  cluster empty Element of D*;
+end;
+
+definition
+  let D be set;
+  redefine func <*> D -> empty Element of D*;
+end;
+
+definition
+  let D be non empty set;
+  let d be Element of D;
+  redefine func <*d*> -> Element of D*;
+  let e be Element of D;
+  func <*d,e*> -> Element of D*;
+end;
+
+begin :: from DTCONSTR
+
+registration
+  let X be set;
+  cluster -> FinSequence-like Element of X*;
+end;
+
+definition
+  let D be set, F be FinSequence of D*;
+  func FlattenSeq F -> Element of D* means
+:: PRE_POLY:def 1
+
+  ex g being BinOp of D* st
+  (for p, q being Element of D* holds g.(p,q) = p^q) & it = g "**" F;
+end;
+
+theorem :: PRE_POLY:1
+  for D being set, d be Element of D* holds FlattenSeq <*d*> = d;
+
+:: from SCMFSA_7, 2006.03.14, A.T.
+
+theorem :: PRE_POLY:2
+  for D being set holds FlattenSeq <*>(D*) = <*>D;
+
+theorem :: PRE_POLY:3
+  for D being set, F,G be FinSequence of D* holds
+  FlattenSeq (F ^ G) = FlattenSeq F ^ FlattenSeq G;
+
+theorem :: PRE_POLY:4
+  for D being set, p,q be Element of D* holds FlattenSeq <* p,q *> = p ^ q;
+
+theorem :: PRE_POLY:5
+  for D being set, p,q,r be Element of D* holds
+  FlattenSeq <* p,q,r *> = p ^ q ^ r;
+
+:: from SCMFSA_7, 2007.07.22, A.T.
+
+theorem :: PRE_POLY:6
+  for D being set, F,G be FinSequence of D* holds
+  F c= G implies FlattenSeq F c= FlattenSeq G;
+
+begin :: from TRIANG_1
+
+reserve A,x,y,z,u for set,
+  k,l,m,n for Element of NAT;
+
+scheme :: PRE_POLY:sch 1
+
+  Regr1 { n() -> Nat, P[set] }: for k st k <= n() holds P[k]
+provided
+ P[n()] and
+ for k st k < n() & P[k+1] holds P[k];
+
+registration
+  let n be Nat;
+  cluster Seg (n+1) -> non empty;
+end;
+
+theorem :: PRE_POLY:7
+  {}|_2 A = {};
+
+registration
+  let X be set;
+  cluster non empty Subset of Fin X;
+end;
+
+registration
+  let X be non empty set;
+  cluster non empty with_non-empty_elements Subset of Fin X;
+end;
+
+registration
+  let X be non empty set, F be non empty with_non-empty_elements Subset of Fin
+  X;
+  cluster non empty Element of F;
+end;
+
+registration
+  let X be non empty set;
+  cluster with_non-empty_element Subset of Fin X;
+end;
+
+definition
+  let X be non empty set, R be Order of X, A be Subset of X;
+  redefine func R|_2 A -> Order of A;
+end;
+
+scheme :: PRE_POLY:sch 2
+
+  SubFinite{D()->set, A()->Subset of D(), P[set]}: P[A()]
+provided
+ A() is finite and
+ P[{}(D())] and
+ for x being Element of D(), B being Subset of D() st x in A() & B c=
+A() & P[B] holds P[B \/ {x}];
+
+registration
+  let X be non empty set, F be with_non-empty_element Subset of Fin X;
+  cluster finite non empty Element of F;
+end;
+
+theorem :: PRE_POLY:8
+  for A,B being finite set st A c= B & card A = card B holds A = B;
+
+definition
+  let X be set, A be finite Subset of X, R be Order of X;
+  assume
+ R linearly_orders A;
+  func SgmX (R,A) -> FinSequence of X means
+:: PRE_POLY:def 2
+
+  rng it = A & for n,m be Nat
+st n in dom it & m in dom it & n < m holds it/.n <> it/.m & [it/.n,it/.m] in R;
+end;
+
+theorem :: PRE_POLY:9
+  for X be set, A be finite Subset of X, R be Order of X, f be
+FinSequence of X st rng f = A & for n,m be Nat st n in dom f & m in dom f & n <
+  m holds f/.n <> f/.m & [f/.n, f/.m] in R holds f = SgmX(R,A);
+
+registration
+  let X be set, F be non empty Subset of Fin X;
+  cluster -> finite Element of F;
+end;
+
+definition
+  let X be set, F be non empty Subset of Fin X;
+  redefine mode Element of F -> Subset of X;
+end;
+
+theorem :: PRE_POLY:10
+  for X being set, A being finite Subset of X, R being Order of X
+  st R linearly_orders A holds SgmX(R,A) is one-to-one;
+
+theorem :: PRE_POLY:11
+  for X being set, A being finite Subset of X, R being Order of X
+  st R linearly_orders A holds len(SgmX(R, A)) = card A;
+
+begin :: from MATRLIN
+
+reserve k,t,i,j,m,n for Nat,
+  x,y,y1,y2 for set,
+  D for non empty set;
+
+theorem :: PRE_POLY:12
+  for M be FinSequence st len M = n+1 holds len Del(M,n+1) = n;
+
+theorem :: PRE_POLY:13
+  for M being FinSequence st len M = n + 1 holds M = Del(M,len M) ^
+  <*M.(len M)*>;
+
+definition
+  let IT be Function;
+  attr IT is FinSequence-yielding means
+:: PRE_POLY:def 3
+
+  for x st x in dom IT holds IT.x
+  is FinSequence;
+end;
+
+registration
+  cluster FinSequence-yielding Function;
+end;
+
+definition
+  let F,G be FinSequence-yielding Function;
+  func F^^G -> FinSequence-yielding Function means
+:: PRE_POLY:def 4
+
+  dom it = dom F /\
+dom G & for i being set st i in dom it for f,g being FinSequence st f = F.i & g
+  = G.i holds it.i = f^g;
+end;
+
+begin :: HEYTING2
+
+reserve V, C, x, a, b for set;
+
+theorem :: PRE_POLY:14
+  for V, C being non empty set ex f be Element of PFuncs (V, C) st f <>
+  {};
+
+theorem :: PRE_POLY:15
+  for f being Element of PFuncs (V, C), g being set st g c= f holds
+  g in PFuncs (V, C);
+
+theorem :: PRE_POLY:16
+  PFuncs(V,C) c= bool [:V,C:];
+
+theorem :: PRE_POLY:17
+  V is finite & C is finite implies PFuncs (V, C) is finite;
+
+registration
+  cluster functional finite non empty set;
+end;
+
+begin :: GOBRD13
+
+registration
+  let D be set;
+  cluster -> FinSequence-yielding FinSequence of D*;
+end;
+
+registration
+  cluster FinSequence-yielding -> Function-yielding Function;
+end;
+
+begin :: POLYNOM1
+
+theorem :: PRE_POLY:18
+  for X being set, R being Relation st field R c= X holds R is
+  Relation of X;
+
+registration
+  let X be set, f be ManySortedSet of X, x, y be set;
+  cluster f+*(x,y) -> X-defined;
+end;
+
+registration
+  let X be set, f be ManySortedSet of X, x, y be set;
+  cluster f+*(x,y) -> total (X-defined Function);
+end;
+
+theorem :: PRE_POLY:19
+  for f being one-to-one Function holds card f = card rng f;
+
+definition
+  let A be set;
+  let X be set, D be FinSequence-DOMAIN of A, p be PartFunc of X,D, i be set;
+  redefine func p/.i -> Element of D;
+end;
+
+registration
+  let X be set;
+  cluster being_linear-order well-ordering Order of X;
+end;
+
+theorem :: PRE_POLY:20
+  for X being non empty set, A being non empty finite Subset of X,
+R being Order of X, x being Element of X st x in A & R linearly_orders A & for
+  y being Element of X st y in A holds [x,y] in R holds (SgmX (R,A))/.1 = x;
+
+theorem :: PRE_POLY:21
+  for X being non empty set, A being non empty finite Subset of X,
+R being Order of X, x being Element of X st x in A & R linearly_orders A & for
+y being Element of X st y in A holds [y,x] in R holds SgmX (R,A)/.len SgmX (R,A
+  ) = x;
+
+registration
+  let X be non empty set, A be non empty finite Subset of X, R be
+  being_linear-order Order of X;
+  cluster SgmX(R, A) -> non empty one-to-one;
+end;
+
+registration
+  cluster empty -> FinSequence-yielding Function;
+end;
+
+definition
+  let F, G be FinSequence-yielding FinSequence;
+  redefine func F^^G -> FinSequence-yielding FinSequence;
+end;
+
+registration
+  let i be Element of NAT, f be FinSequence;
+  cluster i |-> f -> FinSequence-yielding;
+end;
+
+registration
+  let F be FinSequence-yielding FinSequence, x be set;
+  cluster F.x -> FinSequence-like;
+end;
+
+registration
+  let F be FinSequence;
+  cluster Card F -> FinSequence-like;
+end;
+
+registration
+  cluster Cardinal-yielding FinSequence;
+end;
+
+theorem :: PRE_POLY:22
+  for f being Function holds f is Cardinal-yielding iff for y
+  being set st y in rng f holds y is Cardinal;
+
+registration
+  let F, G be Cardinal-yielding FinSequence;
+  cluster F^G -> Cardinal-yielding;
+end;
+
+registration
+  cluster -> Cardinal-yielding FinSequence of NAT;
+end;
+
+registration
+  cluster Cardinal-yielding FinSequence of NAT;
+end;
+
+definition
+  let D be set;
+  let F be FinSequence of D*;
+  redefine func Card F -> Cardinal-yielding FinSequence of NAT;
+end;
+
+registration
+  let F be FinSequence of NAT, i be Element of NAT;
+  cluster F|i -> Cardinal-yielding;
+end;
+
+theorem :: PRE_POLY:23
+  for F being Function, X being set holds Card (F|X) = (Card F)|X;
+
+registration
+  let F be empty Function;
+  cluster Card F -> empty;
+end;
+
+theorem :: PRE_POLY:24
+  for p being set holds Card <*p*> = <*card p*>;
+
+theorem :: PRE_POLY:25
+  for F, G be FinSequence holds Card (F^G) = Card F ^ Card G;
+
+registration
+  let X be set;
+  cluster <*>X -> FinSequence-yielding;
+end;
+
+registration
+  let f be FinSequence;
+  cluster <*f*> -> FinSequence-yielding;
+end;
+
+theorem :: PRE_POLY:26
+  for f being Function holds f is FinSequence-yielding iff for y
+  being set st y in rng f holds y is FinSequence;
+
+registration
+  let F, G be FinSequence-yielding FinSequence;
+  cluster F^G -> FinSequence-yielding;
+end;
+
+registration
+  let D be set, F be empty FinSequence of D*;
+  cluster FlattenSeq F -> empty;
+end;
+
+theorem :: PRE_POLY:27
+  for D being set, F being FinSequence of D* holds len FlattenSeq
+  F = Sum Card F;
+
+theorem :: PRE_POLY:28
+  for D, E being set, F being FinSequence of D*, G being
+FinSequence of E* st Card F = Card G holds len FlattenSeq F = len FlattenSeq G;
+
+theorem :: PRE_POLY:29
+  for D being set, F being FinSequence of D*, k being set st k in
+dom FlattenSeq F ex i, j being Element of NAT st i in dom F & j in dom (F.i) &
+  k = (Sum Card (F|(i-'1))) + j & (F.i).j = (FlattenSeq F).k;
+
+theorem :: PRE_POLY:30
+  for D being set, F being FinSequence of D*, i, j being Element
+  of NAT st i in dom F & j in dom (F.i) holds (Sum Card (F|(i-'1))) + j in dom
+  FlattenSeq F & (F.i).j = (FlattenSeq F).((Sum Card (F|(i-'1))) + j);
+
+theorem :: PRE_POLY:31
+  for X, Y being non empty set, f being FinSequence of X*, v being
+  Function of X, Y holds (dom f --> v)**f is FinSequence of Y*;
+
+theorem :: PRE_POLY:32
+  for X, Y being non empty set, f being FinSequence of X*, v being
+  Function of X, Y ex F being FinSequence of Y* st F = (dom f --> v)**f & v*
+  FlattenSeq f = FlattenSeq F;
+
+begin :: Functions yielding natural and real numbers -------------------------
+
+registration
+  let f be natural-valued Function, x be set, n be natural number;
+  cluster f+*(x,n) -> natural-valued;
+end;
+
+registration
+  let f be real-valued Function, x be set, n be real number;
+  cluster f+*(x,n) -> real-valued;
+end;
+
+registration
+  let X be set;
+  cluster natural-valued ManySortedSet of X;
+end;
+
+registration
+  let X be set;
+  cluster real-valued ManySortedSet of X;
+end;
+
+registration
+  let X be set;
+  cluster real-valued ManySortedSet of X;
+end;
+
+definition
+  let X be set, b1, b2 be complex-valued ManySortedSet of X;
+  redefine func b1+b2 -> ManySortedSet of X means
+:: PRE_POLY:def 5
+
+  for x being set holds
+  it.x = b1.x+b2.x;
+end;
+
+definition
+  let X be set, b1, b2 be natural-valued ManySortedSet of X;
+  func b1 -' b2 -> ManySortedSet of X means
+:: PRE_POLY:def 6
+
+  for x being set holds it.x
+  = b1.x -' b2.x;
+end;
+
+theorem :: PRE_POLY:33
+  for X being set, b, b1, b2 being real-valued ManySortedSet of X st for
+  x being set st x in X holds b.x = b1.x+b2.x holds b = b1+b2;
+
+theorem :: PRE_POLY:34
+  for X being set, b, b1, b2 being natural-valued ManySortedSet of
+  X st for x being set st x in X holds b.x = b1.x-'b2.x holds b = b1-'b2;
+
+registration
+  let X be set, b1, b2 be natural-valued ManySortedSet of X;
+  cluster b1+b2 -> natural-valued;
+  cluster b1-'b2 -> natural-valued;
+end;
+
+theorem :: PRE_POLY:35
+  for X being set, b1, b2, b3 being real-valued ManySortedSet of X
+  holds (b1+b2)+b3 = b1+(b2+b3);
+
+theorem :: PRE_POLY:36
+  for X being set, b, c, d being natural-valued ManySortedSet of X holds
+  b-'c-'d = b-'(c+d);
+
+begin :: The support of a function --------------------------------------------
+
+definition
+  let f be Function;
+  func support f means
+:: PRE_POLY:def 7
+
+  for x being set holds x in it iff f.x <> 0;
+end;
+
+theorem :: PRE_POLY:37
+  for f being Function holds support f c= dom f;
+
+definition
+  let f be Function;
+  attr f is finite-support means
+:: PRE_POLY:def 8
+
+  support f is finite;
+end;
+
+registration
+  cluster finite -> finite-support Function;
+end;
+
+registration
+  cluster natural-valued finite-support non empty Function;
+end;
+
+registration
+  let f be finite-support Function;
+  cluster support f -> finite;
+end;
+
+registration
+  let X be set;
+  cluster finite-support Function of X, NAT;
+end;
+
+registration
+  let f be finite-support Function, x, y be set;
+  cluster f+*(x,y) -> finite-support;
+end;
+
+registration
+  let X be set;
+  cluster natural-valued finite-support ManySortedSet of X;
+end;
+
+theorem :: PRE_POLY:38
+  for X being set, b1, b2 being natural-valued ManySortedSet of X
+  holds support (b1+b2) = support b1 \/ support b2;
+
+theorem :: PRE_POLY:39
+  for X being set, b1, b2 being natural-valued ManySortedSet of X
+  holds support (b1-'b2) c= support b1;
+
+begin :: Bags -----------------------------------------------------------------
+
+definition
+  let X be set;
+  mode bag of X is natural-valued finite-support ManySortedSet of X;
+end;
+
+registration
+  let X be finite set;
+  cluster -> finite-support ManySortedSet of X;
+end;
+
+registration
+  let X be set, b1, b2 be bag of X;
+  cluster b1+b2 -> finite-support;
+  cluster b1-'b2 -> finite-support;
+end;
+
+theorem :: PRE_POLY:40
+  for X being set holds X--> 0 is bag of X;
+
+definition
+  let n be Ordinal, p, q be bag of n;
+  pred p < q means
+:: PRE_POLY:def 9
+
+  ex k being Ordinal st p.k < q.k & for l being
+  Ordinal st l in k holds p.l = q.l;
+  asymmetry;
+end;
+
+theorem :: PRE_POLY:41
+  for n being Ordinal, p, q, r being bag of n st p < q & q < r
+  holds p < r;
+
+definition
+  let n be Ordinal, p, q be bag of n;
+  pred p <=' q means
+:: PRE_POLY:def 10
+
+  p < q or p = q;
+  reflexivity;
+end;
+
+theorem :: PRE_POLY:42
+  for n being Ordinal, p, q, r being bag of n st p <=' q & q <=' r
+  holds p <=' r;
+
+theorem :: PRE_POLY:43
+  for n being Ordinal, p, q, r being bag of n st p < q & q <=' r holds p
+  < r;
+
+theorem :: PRE_POLY:44
+  for n being Ordinal, p, q, r being bag of n st p <=' q & q < r holds p
+  < r;
+
+theorem :: PRE_POLY:45
+  for n being Ordinal, p, q being bag of n holds p <=' q or q <='
+  p;
+
+definition
+  let X be set, d, b be bag of X;
+  pred d divides b means
+:: PRE_POLY:def 11
+
+  for k being set holds d.k <= b.k;
+  reflexivity;
+end;
+
+theorem :: PRE_POLY:46
+  for n being set, d, b being bag of n st for k being set st k in
+  n holds d.k <= b.k holds d divides b;
+
+theorem :: PRE_POLY:47
+  for n being Ordinal, b1, b2 being bag of n st b1 divides b2
+  holds b2 -' b1 + b1 = b2;
+
+theorem :: PRE_POLY:48
+  for X being set, b1, b2 being bag of X holds b2 + b1 -' b1 = b2;
+
+theorem :: PRE_POLY:49
+  for n being Ordinal, d, b being bag of n st d divides b holds d
+  <=' b;
+
+theorem :: PRE_POLY:50
+  for n being set, b,b1,b2 being bag of n st b = b1 + b2 holds b1
+  divides b;
+
+definition
+  let X be set;
+  func Bags X means
+:: PRE_POLY:def 12
+
+  for x being set holds x in it iff x is bag of X;
+end;
+
+definition
+  let X be set;
+  redefine func Bags X -> Subset of Bags X;
+end;
+
+theorem :: PRE_POLY:51
+  Bags {} = {{}};
+
+registration
+  let X be set;
+  cluster Bags X -> non empty;
+end;
+
+definition
+  let X be set, B be non empty Subset of Bags X;
+  redefine mode Element of B -> bag of X;
+end;
+
+definition
+  let X be set;
+  func EmptyBag X -> Element of Bags X equals
+:: PRE_POLY:def 13
+  X --> 0;
+end;
+
+theorem :: PRE_POLY:52
+  for X, x being set holds (EmptyBag X).x = 0;
+
+theorem :: PRE_POLY:53
+  for X be set, b being bag of X holds b+EmptyBag X = b;
+
+theorem :: PRE_POLY:54
+  for X be set, b being bag of X holds b-'EmptyBag X = b;
+
+theorem :: PRE_POLY:55
+  for X be set, b being bag of X holds (EmptyBag X) -' b = EmptyBag X;
+
+theorem :: PRE_POLY:56
+  for X being set, b being bag of X holds b-'b = EmptyBag X;
+
+theorem :: PRE_POLY:57
+  for n being set, b1, b2 be bag of n st b1 divides b2 & b2 -' b1
+  = EmptyBag n holds b2 = b1;
+
+theorem :: PRE_POLY:58
+  for n being set, b being bag of n st b divides EmptyBag n holds
+  EmptyBag n = b;
+
+theorem :: PRE_POLY:59
+  for n being set, b being bag of n holds EmptyBag n divides b;
+
+theorem :: PRE_POLY:60
+  for n being Ordinal, b being bag of n holds EmptyBag n <=' b;
+
+definition
+  let n be Ordinal;
+  func BagOrder n -> Order of Bags n means
+:: PRE_POLY:def 14
+
+  for p, q being bag of n
+  holds [p, q] in it iff p <=' q;
+end;
+
+registration
+  let n be Ordinal;
+  cluster BagOrder n -> being_linear-order;
+end;
+
+definition
+  let X be set, f be Function of X, NAT;
+  func NatMinor f -> Subset of Funcs(X, NAT) means
+:: PRE_POLY:def 15
+
+  for g being
+  natural-valued ManySortedSet of X holds g in it iff for x being set st x in X
+  holds g.x <= f.x;
+end;
+
+theorem :: PRE_POLY:61
+  for X being set, f being Function of X, NAT holds f in NatMinor
+  f;
+
+registration
+  let X be set, f be Function of X, NAT;
+  cluster NatMinor f -> non empty functional;
+end;
+
+registration
+  let X be set, f be Function of X, NAT;
+  cluster -> natural-valued Element of NatMinor f;
+end;
+
+theorem :: PRE_POLY:62
+  for X being set, f being finite-support Function of X, NAT holds
+  NatMinor f c= Bags X;
+
+definition
+  let X be set, f be finite-support Function of X, NAT;
+  redefine func support f -> Element of Fin X;
+end;
+
+theorem :: PRE_POLY:63
+  for X being non empty set, f being finite-support Function of X,
+  NAT holds card NatMinor f = multnat $$ (support f, addnat[:](f,1));
+
+registration
+  let X be set, f be finite-support Function of X, NAT;
+  cluster NatMinor f -> finite;
+end;
+
+definition
+  let n be Ordinal, b be bag of n;
+  func divisors b -> FinSequence of Bags n means
+:: PRE_POLY:def 16
+
+  ex S being non empty
+  finite Subset of Bags n st it = SgmX(BagOrder n, S) & for p being bag of n
+  holds p in S iff p divides b;
+end;
+
+registration
+  let n be Ordinal, b be bag of n;
+  cluster divisors b -> non empty one-to-one;
+end;
+
+theorem :: PRE_POLY:64
+  for n being Ordinal,i being Element of NAT, b being bag of n st
+  i in dom divisors b holds ((divisors b)/.i) qua Element of Bags n divides b;
+
+theorem :: PRE_POLY:65
+  for n being Ordinal, b being bag of n holds (divisors b)/.1 =
+  EmptyBag n & (divisors b)/.len divisors b = b;
+
+theorem :: PRE_POLY:66
+  for n being Ordinal, i being Nat, b, b1, b2 being bag of n st i
+> 1 & i < len divisors b holds (divisors b)/.i <> EmptyBag n & (divisors b)/.i
+  <> b;
+
+theorem :: PRE_POLY:67
+  for n being Ordinal holds divisors EmptyBag n = <* EmptyBag n *>;
+
+definition
+  let n be Ordinal, b be bag of n;
+  func decomp b -> FinSequence of 2-tuples_on Bags n means
+:: PRE_POLY:def 17
+
+  dom it =
+dom divisors b & for i being Element of NAT, p being bag of n st i in dom it &
+  p = (divisors b)/.i holds it/.i = <*p, b-'p*>;
+end;
+
+theorem :: PRE_POLY:68
+  for n being Ordinal, i being Element of NAT, b being bag of n st
+i in dom decomp b ex b1, b2 being bag of n st (decomp b)/.i = <*b1, b2*> & b =
+  b1+b2;
+
+theorem :: PRE_POLY:69
+  for n being Ordinal, b, b1, b2 being bag of n st b = b1+b2 ex i
+  being Element of NAT st i in dom decomp b & (decomp b)/.i = <*b1, b2*>;
+
+theorem :: PRE_POLY:70
+  for n being Ordinal, i being Element of NAT, b,b1,b2 being bag
+of n st i in dom decomp b & (decomp b)/.i = <*b1, b2*> holds b1 = (divisors b)
+  /.i;
+
+registration
+  let n be Ordinal, b be bag of n;
+  cluster decomp b -> non empty one-to-one FinSequence-yielding;
+end;
+
+registration
+  let n be Ordinal, b be Element of Bags n;
+  cluster decomp b -> non empty one-to-one FinSequence-yielding;
+end;
+
+theorem :: PRE_POLY:71
+  for n being Ordinal, b being bag of n holds (decomp b)/.1 = <*
+  EmptyBag n, b*> & (decomp b)/.len decomp b = <*b, EmptyBag n*>;
+
+theorem :: PRE_POLY:72
+  for n being Ordinal, i being Nat, b, b1, b2 being bag of n st i
+> 1 & i < len decomp b & (decomp b)/.i = <*b1, b2*> holds b1 <> EmptyBag n & b2
+  <> EmptyBag n;
+
+theorem :: PRE_POLY:73
+  for n being Ordinal holds decomp EmptyBag n = <* <*EmptyBag n,
+  EmptyBag n*> *>;
+
+theorem :: PRE_POLY:74
+  for n being Ordinal, b being bag of n, f, g being FinSequence of
+  (3-tuples_on Bags n)* st dom f = dom decomp b & dom g = dom decomp b & (for k
+being Nat st k in dom f holds f.k = ((decomp ((((decomp b)/.k)/.1) qua Element
+  of Bags n))) ^^ ((len (decomp ((((decomp b)/.k)/.1) qua Element of Bags n)))
+|-> <*(((decomp b)/.k)/.2)*>)) & (for k being Nat st k in dom g holds g.k = ((
+len (decomp ((((decomp b)/.k)/.2) qua Element of Bags n))) |-> <*((decomp b)/.k
+  )/.1*>) ^^ (decomp ((((decomp b)/.k)/.2) qua Element of Bags n))) ex p being
+  Permutation of dom FlattenSeq f st FlattenSeq g = (FlattenSeq f)*p;
+
+theorem :: PRE_POLY:75
+  for X being set, b1, b2 being real-valued ManySortedSet of X holds
+  support (b1+b2) c= support b1 \/ support b2;
+

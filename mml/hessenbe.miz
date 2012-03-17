@@ -15,30 +15,31 @@ environ
 begin
 
 reserve PCPP for CollProjectiveSpace,
-  a,a',a1,a2,a3,b,b',b1,b2,c,c1,c3,d,d',e,o,p,p1,p2,p3,r,q,
-  q1,q2,q3,x,y for Element of PCPP;
+  a,a',a1,a2,a3,b,b',b1,b2,c,c1,c3,d,d',e,
+  o,p,p1,p2,p3,r,q, q1,q2,q3,x,y for Element of PCPP;
 
 canceled 2;
 
 theorem Th3:
-  a,b,c is_collinear implies b,c,a is_collinear & c,a,b is_collinear &
-  b,a,c is_collinear & a,c,b is_collinear & c,b,a is_collinear
+  a,b,c is_collinear implies b,c,a is_collinear & c,a,b
+  is_collinear & b,a,c is_collinear & a,c,b is_collinear & c,b,a is_collinear
 proof
   assume
 A1: a,b,c is_collinear;
+  then b,a,c is_collinear by COLLSP:9;
   then
-A2: b,a,c is_collinear by COLLSP:9;
-A3: a,c,b is_collinear by A1,COLLSP:9;
-  b,c,a is_collinear by A2,COLLSP:9;
-  hence thesis by A3,COLLSP:9;
+A2: b,c,a is_collinear by COLLSP:9;
+  a,c,b is_collinear by A1,COLLSP:9;
+  hence thesis by A2,COLLSP:9;
 end;
 
 theorem Th4:
-  a<>b & a,b,c is_collinear & a,b,d is_collinear implies a,c,d is_collinear
+  a<>b & a,b,c is_collinear & a,b,d is_collinear implies a,c,d
+  is_collinear
 proof
+A1: a,b,a is_collinear by ANPROJ_2:def 7;
   assume
-A1: a<>b & a,b,c is_collinear & a,b,d is_collinear;
-  a,b,a is_collinear by ANPROJ_2:def 7;
+  a<>b & a,b,c is_collinear & a,b,d is_collinear;
   hence thesis by A1,ANPROJ_2:def 8;
 end;
 
@@ -46,19 +47,20 @@ theorem
   p<>q & a,b,p is_collinear & a,b,q is_collinear & p,q,r is_collinear
   implies a,b,r is_collinear
 proof
-  assume
-A1: p<>q & a,b,p is_collinear & a,b,q is_collinear & p,q,r is_collinear;
+  assume that
+A1: p<>q and
+A2: a,b,p is_collinear & a,b,q is_collinear and
+A3: p,q,r is_collinear;
   now
     assume
-A2: a<>b;
-A3: b,a,p is_collinear by A1,Th3;
-    b,a,q is_collinear by A1,Th3;
-    then b,p,q is_collinear by A2,A3,Th4;
+A4: a<>b;
+    b,a,p is_collinear & b,a,q is_collinear by A2,Th3;
+    then b,p,q is_collinear by A4,Th4;
     then
-A4: p,q,b is_collinear by Th3;
-    a,p,q is_collinear by A1,A2,Th4;
+A5: p,q,b is_collinear by Th3;
+    a,p,q is_collinear by A2,A4,Th4;
     then p,q,a is_collinear by Th3;
-    hence thesis by A1,A4,ANPROJ_2:def 8;
+    hence thesis by A1,A3,A5,ANPROJ_2:def 8;
   end;
   hence thesis by ANPROJ_2:def 7;
 end;
@@ -66,12 +68,12 @@ end;
 theorem Th6:
   p<>q implies ex r st not p,q,r is_collinear
 proof
-  assume
-A1: p<>q;
   consider a,b,c such that
-A2: not a,b,c is_collinear by COLLSP:def 6;
-  p,q,a is_collinear & p,q,b is_collinear & p,q,c is_collinear implies
-  contradiction by A1,A2,ANPROJ_2:def 8;
+A1: not a,b,c is_collinear by COLLSP:def 6;
+  assume
+  p<>q;
+  then p,q,a is_collinear & p,q,b is_collinear & p,q,c is_collinear implies
+  contradiction by A1,ANPROJ_2:def 8;
   hence thesis;
 end;
 
@@ -79,1105 +81,1111 @@ theorem
   ex q,r st not p,q,r is_collinear
 proof
   consider q such that
-A1: p<>q & p<>q & p,p,q is_collinear by ANPROJ_2:def 10;
+A1: p<>q and
+  p<>q and
+  p,p,q is_collinear by ANPROJ_2:def 10;
   ex r st not p,q,r is_collinear by A1,Th6;
   hence thesis;
 end;
 
 theorem Th8:
-  not a,b,c is_collinear & a,b,b' is_collinear & a<>b' implies
-  not a,b',c is_collinear
+  not a,b,c is_collinear & a,b,b' is_collinear & a<>b' implies not
+  a,b',c is_collinear
 proof
+  assume that
+A1: not a,b,c is_collinear and
+A2: a,b,b' is_collinear and
+A3: a<>b';
   assume
-A1: not a,b,c is_collinear & a,b,b' is_collinear & a<>b';
-  assume not thesis;
-  then a,b',b is_collinear & a,b',c is_collinear by A1,Th3;
-  hence contradiction by A1,Th4;
+A4: not thesis;
+  a,b',b is_collinear by A2,Th3;
+  hence contradiction by A1,A3,A4,Th4;
 end;
 
 theorem Th9:
-  not a,b,c is_collinear & a,b,d is_collinear & a,c,d is_collinear implies a=d
+  not a,b,c is_collinear & a,b,d is_collinear & a,c,d is_collinear
+  implies a=d
 proof
+  assume that
+A1: not a,b,c is_collinear and
+A2: a,b,d is_collinear & a,c,d is_collinear;
   assume
-A1: not a,b,c is_collinear & a,b,d is_collinear & a,c,d is_collinear;
-  assume
-A2: not thesis;
-  a,d,a is_collinear &
-  a,d,b is_collinear & a,d,c is_collinear by A1,Th3,ANPROJ_2:def 7;
-  hence contradiction by A1,A2,ANPROJ_2:def 8;
+A3: not thesis;
+A4: a,d,a is_collinear by ANPROJ_2:def 7;
+  a,d,b is_collinear & a,d,c is_collinear by A2,Th3;
+  hence contradiction by A1,A3,A4,ANPROJ_2:def 8;
 end;
 
 theorem Th10:
-  not o,a,d is_collinear & o,d,d' is_collinear & a,d,x is_collinear &
-  d<>d' & a',d',x is_collinear & o,a,a' is_collinear & o<>a' implies x<>d
+  not o,a,d is_collinear & o,d,d' is_collinear & d<>d' & a',d',x
+  is_collinear & o,a,a' is_collinear & o<>a' implies x<>d
 proof
+  assume that
+A1: not o,a,d is_collinear and
+A2: o,d,d' is_collinear and
+A3: d<>d' and
+A4: a',d',x is_collinear and
+A5: o,a,a' is_collinear and
+A6: o<>a';
   assume
-A1: not o,a,d is_collinear & o,d,d' is_collinear &
-  a,d,x is_collinear & d<>d' & a',d',x is_collinear & o,a,a' is_collinear &
-  o<>a';
-  assume not thesis;
+  not thesis;
   then
-A2: d,d',a' is_collinear by A1,Th3;
-  d,d',o is_collinear by A1,Th3;
-  then d,o,a' is_collinear by A1,A2,Th4;
+A7: d,d',a' is_collinear by A4,Th3;
+  d,d',o is_collinear by A2,Th3;
+  then d,o,a' is_collinear by A3,A7,Th4;
   then
-A3: o,a',d is_collinear by Th3;
-  o,a',a is_collinear by A1,Th3;
-  hence contradiction by A1,A3,Th4;
+A8: o,a',d is_collinear by Th3;
+  o,a',a is_collinear by A5,Th3;
+  hence contradiction by A1,A6,A8,Th4;
 end;
 
 canceled;
 
 theorem Th12:
-  not a1,a2,a3 is_collinear & a1,a2,c3 is_collinear &
-  a2,a3,c1 is_collinear & a1,a3,x is_collinear & c1,c3,x is_collinear &
-  c3<>a1 & c3<>a2 & c1<>a2 & c1<>a3 implies a1<>x & a3<>x
+  not a1,a2,a3 is_collinear & a1,a2,c3 is_collinear & a2,a3,c1
+is_collinear & c1,c3,x is_collinear & c3<>a1 & c3<>a2 & c1<>a2 & c1<>a3 implies
+  a1<>x & a3<>x
 proof
-  assume
-A1: not a1,a2,a3 is_collinear & a1,a2,c3 is_collinear &
-  a2,a3,c1 is_collinear & a1,a3,x is_collinear & c1,c3,x is_collinear &
-  c3<>a1 & c3<>a2 & c1<>a2 & c1<>a3;
-A2: a1<>x
+  assume that
+A1: not a1,a2,a3 is_collinear and
+A2: a1,a2,c3 is_collinear and
+A3: a2,a3,c1 is_collinear and
+A4: c1,c3,x is_collinear and
+A5: c3<>a1 and
+A6: c3<>a2 and
+A7: c1<>a2 and
+A8: c1<>a3;
+A9: a3<>x
   proof
-    assume not thesis;
-    then a1,c3,c1 is_collinear & a1,c3,a2 is_collinear by A1,Th3;
-    then a1,c1,a2 is_collinear by A1,Th4;
-    then a2,c1,a1 is_collinear & a2,c1,a3 is_collinear by A1,Th3;
-    then a2,a1,a3 is_collinear by A1,Th4;
+    assume
+    not thesis;
+    then
+A10: a3,c1,c3 is_collinear by A4,Th3;
+    a3,c1,a2 is_collinear by A3,Th3;
+    then a3,a2,c3 is_collinear by A8,A10,Th4;
+    then
+A11: a2,c3,a3 is_collinear by Th3;
+    a2,c3,a1 is_collinear by A2,Th3;
+    then a2,a1,a3 is_collinear by A6,A11,Th4;
     hence contradiction by A1,Th3;
   end;
-  a3<>x
+  a1<>x
   proof
-    assume not thesis;
-    then a3,c1,c3 is_collinear & a3,c1,a2 is_collinear by A1,Th3;
-    then a3,a2,c3 is_collinear by A1,Th4;
-    then a2,c3,a3 is_collinear & a2,c3,a1 is_collinear by A1,Th3;
-    then a2,a1,a3 is_collinear by A1,Th4;
+    assume
+    not thesis;
+    then
+A12: a1,c3,c1 is_collinear by A4,Th3;
+    a1,c3,a2 is_collinear by A2,Th3;
+    then a1,c1,a2 is_collinear by A5,A12,Th4;
+    then
+A13: a2,c1,a1 is_collinear by Th3;
+    a2,c1,a3 is_collinear by A3,Th3;
+    then a2,a1,a3 is_collinear by A7,A13,Th4;
     hence contradiction by A1,Th3;
   end;
-  hence thesis by A2;
+  hence thesis by A9;
 end;
 
 theorem Th13:
-  not a,b,c is_collinear & a,b,d is_collinear & c,e,d is_collinear &
-  e<>c & d<>a implies not e,a,c is_collinear
+  not a,b,c is_collinear & a,b,d is_collinear & c,e,d is_collinear
+  & e<>c & d<>a implies not e,a,c is_collinear
 proof
+  assume that
+A1: not a,b,c is_collinear and
+A2: a,b,d is_collinear and
+A3: c,e,d is_collinear & e<>c and
+A4: d<>a;
   assume
-A1: not a,b,c is_collinear & a,b,d is_collinear &
-  c,e,d is_collinear & e<>c & d<>a;
-  assume not thesis;
+  not thesis;
   then c,e,a is_collinear by Th3;
-  then c,a,d is_collinear by A1,Th4;
-  then a,d,c is_collinear & a,d,b is_collinear by A1,Th3;
-  hence contradiction by A1,Th4;
+  then c,a,d is_collinear by A3,Th4;
+  then
+A5: a,d,c is_collinear by Th3;
+  a,d,b is_collinear by A2,Th3;
+  hence contradiction by A1,A4,A5,Th4;
 end;
 
 theorem Th14:
-  not p1,p2,q1 is_collinear & p1,p2,q2 is_collinear &
-  q1,q2,q3 is_collinear & p1<>q2 & q2<>q3 implies not p2,p1,q3 is_collinear
+  not p1,p2,q1 is_collinear & p1,p2,q2 is_collinear & q1,q2,q3
+  is_collinear & q2<>q3 implies not p2,p1,q3 is_collinear
 proof
+  assume that
+A1: not p1,p2,q1 is_collinear and
+A2: p1,p2,q2 is_collinear and
+A3: q1,q2,q3 is_collinear and
+A4: q2<>q3;
+A5: p1<>p2 by A1,ANPROJ_2:def 7;
   assume
-A1: not p1,p2,q1 is_collinear & p1,p2,q2 is_collinear &
-  q1,q2,q3 is_collinear & p1<>q2 & q2<>q3;
-  assume
-A2: not thesis;
-A3: p1<>p2 by A1,ANPROJ_2:def 7;
-  p1,p2,q3 is_collinear by A2,Th3;
-  then p1,q2,q3 is_collinear by A1,A3,Th4;
+A6: not thesis;
+  then p1,p2,q3 is_collinear by Th3;
+  then p1,q2,q3 is_collinear by A2,A5,Th4;
   then
-A4: q2,q3,p1 is_collinear by Th3;
-  p2,p1,q2 is_collinear by A1,Th3;
-  then p2,q2,q3 is_collinear by A2,A3,Th4;
+A7: q2,q3,p1 is_collinear by Th3;
+  p2,p1,q2 is_collinear by A2,Th3;
+  then p2,q2,q3 is_collinear by A6,A5,Th4;
   then
-A5: q2,q3,p2 is_collinear by Th3;
-  q2,q3,q1 is_collinear by A1,Th3;
-  hence contradiction by A1,A4,A5,ANPROJ_2:def 8;
+A8: q2,q3,p2 is_collinear by Th3;
+  q2,q3,q1 is_collinear by A3,Th3;
+  hence contradiction by A1,A4,A7,A8,ANPROJ_2:def 8;
 end;
 
 theorem
-  not p1,p2,q1 is_collinear & p1,p2,p3 is_collinear & q1,q2,p3 is_collinear &
-  p3<>q2 & p2<>p3 implies not p3,p2,q2 is_collinear
+  not p1,p2,q1 is_collinear & p1,p2,p3 is_collinear & q1,q2,p3
+  is_collinear & p3<>q2 & p2<>p3 implies not p3,p2,q2 is_collinear
 proof
+  assume that
+A1: not p1,p2,q1 is_collinear and
+A2: p1,p2,p3 is_collinear and
+A3: q1,q2,p3 is_collinear and
+A4: p3<>q2 and
+A5: p2<>p3;
   assume
-A1: not p1,p2,q1 is_collinear & p1,p2,p3 is_collinear &
-  q1,q2,p3 is_collinear & p3<>q2 & p2<>p3;
-  assume
-A2: not thesis;
-  p3,p2,p1 is_collinear by A1,Th3;
+A6: not thesis;
+  p3,p2,p1 is_collinear by A2,Th3;
   then
-A3: p3,q2,p1 is_collinear by A1,A2,Th4;
-  p3,q2,p2 is_collinear & p3,q2,q1 is_collinear by A1,A2,Th3;
-  hence contradiction by A1,A3,ANPROJ_2:def 8;
+A7: p3,q2,p1 is_collinear by A5,A6,Th4;
+A8: p3,q2,q1 is_collinear by A3,Th3;
+  p3,q2,p2 is_collinear by A6,Th3;
+  hence contradiction by A1,A4,A7,A8,ANPROJ_2:def 8;
 end;
 
 theorem Th16:
-  not p1,p2,q1 is_collinear & p1,p2,p3 is_collinear &
-  q1,q2,p1 is_collinear & p1<>p3 & p1<>q2 implies not p3,p1,q2 is_collinear
+  not p1,p2,q1 is_collinear & p1,p2,p3 is_collinear & q1,q2,p1
+  is_collinear & p1<>p3 & p1<>q2 implies not p3,p1,q2 is_collinear
 proof
+  assume that
+A1: not p1,p2,q1 is_collinear and
+A2: p1,p2,p3 is_collinear and
+A3: q1,q2,p1 is_collinear and
+A4: p1<>p3 and
+A5: p1<>q2;
+A6: p1,q2,q1 is_collinear by A3,Th3;
   assume
-A1: not p1,p2,q1 is_collinear & p1,p2,p3 is_collinear &
-  q1,q2,p1 is_collinear & p1<>p3 & p1<>q2;
-  assume not thesis;
-  then p1,p3,q2 is_collinear & p1,p3,p2 is_collinear by A1,Th3;
+  not thesis;
   then
-A2: p1,q2,p2 is_collinear by A1,Th4;
-  p1,q2,q1 is_collinear by A1,Th3;
-  hence contradiction by A1,A2,Th4;
+A7: p1,p3,q2 is_collinear by Th3;
+  p1,p3,p2 is_collinear by A2,Th3;
+  then p1,q2,p2 is_collinear by A4,A7,Th4;
+  hence contradiction by A1,A5,A6,Th4;
 end;
 
 theorem Th17:
   a1<>a2 & b1<>b2 & b1,b2,x is_collinear & b1,b2,y is_collinear &
-  a1,a2,x is_collinear & a1,a2,y is_collinear & not a1,a2,b1 is_collinear
-  implies x=y
+a1,a2,x is_collinear & a1,a2,y is_collinear & not a1,a2,b1 is_collinear implies
+  x=y
 proof
-  assume
-A1: a1<>a2 & b1<>b2 & b1,b2,x is_collinear & b1,b2,y is_collinear
-  & a1,a2,x is_collinear & a1,a2,y is_collinear & not a1,a2,b1 is_collinear;
-  assume
-A2: not thesis;
-A3: a1,a2,a1 is_collinear & a1,a2,a2 is_collinear &
+  assume that
+A1: a1<>a2 and
+A2: b1<>b2 & b1,b2,x is_collinear & b1,b2,y is_collinear and
+A3: a1,a2,x is_collinear & a1,a2,y is_collinear and
+A4: not a1,a2,b1 is_collinear;
+  a1,a2,a2 is_collinear by ANPROJ_2:def 7;
+  then
+A5: x,y,a2 is_collinear by A1,A3,ANPROJ_2:def 8;
   b1,b2,b1 is_collinear by ANPROJ_2:def 7;
   then
-A4: x,y,b1 is_collinear by A1,ANPROJ_2:def 8;
-A5: x,y,a1 is_collinear by A1,A3,ANPROJ_2:def 8;
-  x,y,a2 is_collinear by A1,A3,ANPROJ_2:def 8;
-  hence contradiction by A1,A2,A4,A5,ANPROJ_2:def 8;
+A6: x,y,b1 is_collinear by A2,ANPROJ_2:def 8;
+  assume
+A7: not thesis;
+  a1,a2,a1 is_collinear by ANPROJ_2:def 7;
+  then x,y,a1 is_collinear by A1,A3,ANPROJ_2:def 8;
+  hence contradiction by A4,A7,A6,A5,ANPROJ_2:def 8;
 end;
 
 canceled;
 
 theorem Th19:
-  not o,a1,a2 is_collinear & o,a1,b1 is_collinear & o,a2,b2 is_collinear
-  & o<>b1 & o<>b2 implies not o,b1,b2 is_collinear
+  not o,a1,a2 is_collinear & o,a1,b1 is_collinear & o,a2,b2
+  is_collinear & o<>b1 & o<>b2 implies not o,b1,b2 is_collinear
 proof
   assume that
-A1: not o,a1,a2 is_collinear and
-A2: o,a1,b1 is_collinear & o,a2,b2 is_collinear and
-A3: o<>b1 & o<>b2;
-  not o,b1,a2 is_collinear by A1,A2,A3,Th8;
+A1: ( not o,a1,a2 is_collinear)& o,a1,b1 is_collinear and
+A2: o,a2,b2 is_collinear and
+A3: o<>b1 and
+A4: o<>b2;
+  not o,b1,a2 is_collinear by A1,A3,Th8;
   then not o,a2,b1 is_collinear by Th3;
-  then not o,b2,b1 is_collinear by A2,A3,Th8;
+  then not o,b2,b1 is_collinear by A2,A4,Th8;
   hence thesis by Th3;
 end;
 
 reserve PCPP for Pappian CollProjectivePlane,
-  a,a1,a2,a3,b1,b2,b3,c1,c2,c3,o,p,p1,p2,p3,q,q',
-  q1,q2,q3,r,r1,r2,r3,x,y,z for Element of PCPP;
+  a,a1,a2,a3,b1,b2,b3,c1,c2,c3,o,p
+  ,p1,p2,p3,q,q', q1,q2,q3,r,r1,r2,r3,x,y,z for Element of PCPP;
 
 theorem Th20:
-  p2<>p3 & p1<>p3 & q2<>q3 & q1<>q2 & q1<>q3 &
-  not p1,p2,q1 is_collinear & p1,p2,p3 is_collinear & q1,q2,q3 is_collinear &
-  p1,q2,r3 is_collinear & q1,p2,r3 is_collinear & p1,q3,r2 is_collinear &
-  p3,q1,r2 is_collinear & p2,q3,r1 is_collinear & p3,q2,r1 is_collinear
-  implies r1,r2,r3 is_collinear
+  p2<>p3 & p1<>p3 & q2<>q3 & q1<>q2 & q1<>q3 & not p1,p2,q1
+  is_collinear & p1,p2,p3 is_collinear & q1,q2,q3 is_collinear & p1,q2,r3
+  is_collinear & q1,p2,r3 is_collinear & p1,q3,r2 is_collinear & p3,q1,r2
+  is_collinear & p2,q3,r1 is_collinear & p3,q2,r1 is_collinear implies r1,r2,r3
+  is_collinear
 proof
-  assume
-A1: p2<>p3 & p1<>p3 & q2<>q3 & q1<>q2 & q1<>q3 &
-  not p1,p2,q1 is_collinear & p1,p2,p3 is_collinear & q1,q2,q3 is_collinear &
-  p1,q2,r3 is_collinear & q1,p2,r3 is_collinear & p1,q3,r2 is_collinear &
-  p3,q1,r2 is_collinear & p2,q3,r1 is_collinear & p3,q2,r1 is_collinear;
-  then
-A2: p1<>p2 by ANPROJ_2:def 7;
-A3: now
+  assume that
+A1: p2<>p3 and
+A2: p1<>p3 and
+A3: q2<>q3 and
+A4: q1<>q2 and
+A5: q1<>q3 and
+A6: not p1,p2,q1 is_collinear and
+A7: p1,p2,p3 is_collinear and
+A8: q1,q2,q3 is_collinear and
+A9: p1,q2,r3 is_collinear and
+A10: q1,p2,r3 is_collinear and
+A11: p1,q3,r2 is_collinear and
+A12: p3,q1,r2 is_collinear and
+A13: p2,q3,r1 is_collinear and
+A14: p3,q2,r1 is_collinear;
+A15: p1<>p2 by A6,ANPROJ_2:def 7;
+A16: now
     assume
-A4: p1,p2,q2 is_collinear;
-A5: now
+A17: not p1,p2,q2 is_collinear;
+A18: now
       assume
-A6:   p3=q2;
-      p1,p3,p2 is_collinear by A1,Th3;
-      then p1,p2,r3 is_collinear by A1,A6,Th4;
-      then
-A7:   p2,p1,r3 is_collinear by Th3;
-A8:   not p2,p1,q1 is_collinear by A1,Th3;
-      p2,q1,r3 is_collinear by A1,Th3;
-      then
-A9:   p2=r3 by A7,A8,Th9;
-      q1,q3,p3 is_collinear by A1,A6,Th3;
-      then
-A10:  not q3,p1,q1 is_collinear by A1,Th13;
-      q1,q2,r2 is_collinear by A1,A6,Th3;
-      then q1,q3,r2 is_collinear by A1,Th4;
-      then
-A11:  q3,q1,r2 is_collinear by Th3;
-      q3,p1,r2 is_collinear by A1,Th3;
-      then r3,r2,r1 is_collinear by A1,A9,A10,A11,Th9;
-      hence thesis by Th3;
-    end;
-A12: now
-      assume
-A13:  p1=q2;
-A14:  r1=p2
-      proof
-A15:    not p1,q1,p2 is_collinear by A1,Th3;
-        p1,q1,q3 is_collinear by A1,A13,Th3;
-        then not p1,q3,p2 is_collinear by A1,A13,A15,Th8;
-        then
-A16:    not p2,p1,q3 is_collinear by Th3;
-        p1,p3,r1 is_collinear & p1,p3,p2 is_collinear by A1,A13,Th3;
-        then p1,p2,r1 is_collinear by A1,Th4;
-        then p2,p1,r1 is_collinear by Th3;
-        hence thesis by A1,A16,Th9;
-      end;
-      q1=r2
-      proof p1,q3,q1 is_collinear & p1,q3,r2 is_collinear by A1,A13,Th3;
-        then p1,q1,r2 is_collinear by A1,A13,Th4;
-        then
-A17:    q1,p1,r2 is_collinear by Th3;
-        not p1,p3,q1 is_collinear by A1,Th8;
-        then
-A18:    not q1,p1,p3 is_collinear by Th3;
-        q1,p3,r2 is_collinear by A1,Th3;
-        hence thesis by A17,A18,Th9;
-      end;
-      hence thesis by A1,A14,Th3;
-    end;
-    now
-      assume
-A19:  p1<>q2 & p3<>q2;
-      p2=r1 & p2=r3
-      proof
-        thus p2=r1
-        proof p1,q2,p3 is_collinear by A1,A2,A4,Th4;
-          then p3,q2,p1 is_collinear by Th3;
-          then p3,p1,r1 is_collinear by A1,A19,Th4;
-          then p1,p3,r1 is_collinear & p1,p3,p2 is_collinear by A1,Th3;
-          then p1,p2,r1 is_collinear by A1,Th4;
+A19:  not p1,p2,q3 is_collinear;
+A20:  now
+A21:    now
+          ( not p2,p1,q2 is_collinear)& p2,p1,p3 is_collinear by A7,A17,
+          Th3;
+          then not p2,p3,q2 is_collinear by A1,Th8;
           then
-A20:      p2,p1,r1 is_collinear by Th3;
-          not p2,p1,q3 is_collinear by A1,A4,A19,Th14;
-          hence thesis by A1,A20,Th9;
-        end;
-        thus p2=r3
-        proof p1,q2,p2 is_collinear by A4,Th3;
-          then p1,p2,r3 is_collinear by A1,A19,Th4;
+A22:      not q2,p2,p3 is_collinear by Th3;
+          assume
+A23:      q1,q2,p2 is_collinear;
           then
-A21:      p2,p1,r3 is_collinear by Th3;
-          not p2,p1,q1 is_collinear & p2,q1,r3 is_collinear by A1,Th3;
-          hence thesis by A21,Th9;
+A24:      p2,q1,q2 is_collinear by Th3;
+          p2<>q1 & p2,q1,r3 is_collinear by A6,A10,Th3,ANPROJ_2:def 7;
+          then p2,r3,q2 is_collinear by A24,Th4;
+          then
+A25:      q2,p2,r3 is_collinear by Th3;
+          q2,p1,r3 is_collinear & not q2,p1,p2 is_collinear by A9,A17,
+          Th3;
+          then
+A26:      q2=r3 by A25,Th9;
+A27:      q2,q1,q3 is_collinear by A8,Th3;
+          q2,q1,p2 is_collinear by A23,Th3;
+          then q2,p2,q3 is_collinear by A4,A27,Th4;
+          then
+A28:      p2,q3,q2 is_collinear by Th3;
+          p2<>q3 by A19,ANPROJ_2:def 7;
+          then p2,r1,q2 is_collinear by A13,A28,Th4;
+          then
+A29:      q2,p2,r1 is_collinear by Th3;
+          q2,p3,r1 is_collinear by A14,Th3;
+          then q2=r1 by A29,A22,Th9;
+          hence thesis by A26,ANPROJ_2:def 7;
         end;
-      end;
-      hence thesis by ANPROJ_2:def 7;
-    end;
-    hence thesis by A5,A12;
-  end;
-  now
-    assume
-A22: not p1,p2,q2 is_collinear;
-A23: now
-      assume
-A24:  p1,p2,q3 is_collinear;
-A25:  now
+A30:    now
+          ( not p2,p1,q3 is_collinear)& p2,p1,p3 is_collinear by A7,A19
+          ,Th3;
+          then not p2,p3,q3 is_collinear by A1,Th8;
+          then
+A31:      not q3,p2,p3 is_collinear by Th3;
+          assume
+A32:      q1,q2,p3 is_collinear;
+          then
+A33:      q2,q1,p3 is_collinear by Th3;
+          q2,q1,q3 is_collinear by A8,Th3;
+          then q2,q3, p3 is_collinear by A4,A33,Th4;
+          then p3,q2,q3 is_collinear by Th3;
+          then p3,r1,q3 is_collinear by A7,A14,A17,Th4;
+          then
+A34:      q3,p3,r1 is_collinear by Th3;
+          not p1,p3,q3 is_collinear by A2,A7,A19,Th8;
+          then
+A35:      not q3,p1,p3 is_collinear by Th3;
+          q1,q3,p3 is_collinear by A4,A8,A32,Th4;
+          then p3,q1,q3 is_collinear by Th3;
+          then p3,r2,q3 is_collinear by A6,A7,A12,Th4;
+          then
+A36:      q3,p3,r2 is_collinear by Th3;
+          q3,p2,r1 is_collinear by A13,Th3;
+          then
+A37:      q3=r1 by A34,A31,Th9;
+          q3,p1,r2 is_collinear by A11,Th3;
+          then q3=r2 by A36,A35,Th9;
+          hence thesis by A37,ANPROJ_2:def 7;
+        end;
+A38:    now
+          not p1,p3,q1 is_collinear by A2,A6,A7,Th8;
+          then
+A39:      not q1,p1,p3 is_collinear by Th3;
+          assume
+A40:      q1,q2,p1 is_collinear;
+          then q1,p1,q3 is_collinear by A4,A8,Th4;
+          then
+A41:      p1,q3,q1 is_collinear by Th3;
+          p1<>q3 by A19,ANPROJ_2:def 7;
+          then p1,r2,q1 is_collinear by A11,A41,Th4;
+          then
+A42:      q1,p1,r2 is_collinear by Th3;
+A43:      p1<>q2 by A17,ANPROJ_2:def 7;
+          p1,q2,q1 is_collinear by A40,Th3;
+          then p1,r3,q1 is_collinear by A9,A43,Th4;
+          then
+A44:      q1,p1,r3 is_collinear by Th3;
+          not q1,p2,p1 is_collinear by A6,Th3;
+          then
+A45:      q1=r3 by A10,A44,Th9;
+          q1,p3,r2 is_collinear by A12,Th3;
+          then q1=r2 by A42,A39,Th9;
+          hence thesis by A45,ANPROJ_2:def 7;
+        end;
         assume
-A26:    p1=q3;
-        q1=r3 & p3=r1
-        proof
-          thus q1=r3
-          proof
-            p1,q2,q1 is_collinear by A1,A26,Th3;
-            then p1,q1,r3 is_collinear by A1,A26,Th4;
-            then
-A27:        q1,p1,r3 is_collinear by Th3;
-            not q1,p1,p2 is_collinear by A1,Th3;
-            hence thesis by A1,A27,Th9;
-          end;
-          thus p3=r1
-          proof p1,p2,r1 is_collinear by A1,A26,Th3;
-            then p1,p3,r1 is_collinear by A1,A2,Th4;
-            then
-A28:        p3,p1,r1 is_collinear by Th3;
-            not p3,p1,q2 is_collinear by A1,A26,Th16;
-            hence thesis by A1,A28,Th9;
-          end;
-        end;
-        hence thesis by A1,Th3;
-      end;
-A29:  now
-        assume
-A30:    p2=q3;
-        q2=r3 & p3=r2
-        proof
-          thus q2=r3
-          proof
-A31:        q2,p1,r3 is_collinear by A1,Th3;
-            p2,q1,r3 is_collinear & p2,q1,q2 is_collinear by A1,A30,Th3;
-            then p2,q2,r3 is_collinear by A1,A30,Th4;
-            then
-A32:        q2,p2,r3 is_collinear by Th3;
-            not q2,p1,p2 is_collinear
-            proof
-A33:          not p2,q1,p1 is_collinear by A1,Th3;
-              p2,q1,q2 is_collinear by A1,A30,Th3;
-              then not p2,q2,p1 is_collinear by A1,A30,A33,Th8;
-              hence thesis by Th3;
-            end;
-            hence thesis by A31,A32,Th9;
-          end;
-          thus p3=r2
-          proof p1,p3,r2 is_collinear by A1,A2,A30,Th4;
-            then
-A34:        p3,p1,r2 is_collinear by Th3;
-            not p3,p1,q1 is_collinear
-            proof not p1,p3,q1 is_collinear by A1,Th8;
-              hence thesis by Th3;
-            end;
-            hence thesis by A1,A34,Th9;
-          end;
-        end;
-        hence thesis by A1,Th3;
+        q1,q2,p1 is_collinear or q1,q2,p2 is_collinear or q1,q2,p3
+        is_collinear;
+        hence thesis by A38,A21,A30;
       end;
       now
-        assume
-A35:    p2<>q3 & p1<>q3;
-A36:    p3=r1
-        proof p2,q3,p1 is_collinear by A24,Th3;
-          then p2,p1,r1 is_collinear & p2,p1,p3 is_collinear by A1,A35,Th3,Th4;
-          then p2,r1,p3 is_collinear by A2,Th4;
-          then
-A37:      p3,p2,r1 is_collinear by Th3;
-          not p3,q2,p2 is_collinear
-          proof
-A38:        not p2,p1,q2 is_collinear by A22,Th3;
-            p2,p1,p3 is_collinear by A1,Th3;
-            then not p2,p3,q2 is_collinear by A1,A38,Th8;
-            hence thesis by Th3;
-          end;
-          hence thesis by A1,A37,Th9;
-        end;
-        p3=r2
-        proof p1,q3,p2 is_collinear by A24,Th3;
-          then p1,p2,r2 is_collinear by A1,A35,Th4;
-          then p1,r2,p3 is_collinear by A1,A2,Th4;
-          then
-A39:      p3,p1,r2 is_collinear by Th3;
-          not p1,p3,q1 is_collinear by A1,Th8;
-          then not p3,q1,p1 is_collinear by Th3;
-          hence thesis by A1,A39,Th9;
-        end;
-        hence thesis by A36,ANPROJ_2:def 7;
-      end;
-      hence thesis by A25,A29;
-    end;
-    now
-      assume
-A40:  not p1,p2,q3 is_collinear;
-A41:  now
-        assume
-A42:    q1,q2,p1 is_collinear or
-        q1,q2,p2 is_collinear or q1,q2,p3 is_collinear;
-A43:    now
-          assume
-A44:      q1,q2,p1 is_collinear;
-          q1=r2 & q1=r3
-          proof
-            thus q1=r2
-            proof q1,p1,q3 is_collinear by A1,A44,Th4;
-              then
-A45:          p1,q3,q1 is_collinear by Th3;
-              p1<>q3 by A40,ANPROJ_2:def 7;
-              then p1,r2,q1 is_collinear by A1,A45,Th4;
-              then
-A46:          q1,p1,r2 is_collinear by Th3;
-              not p1,p3,q1 is_collinear by A1,Th8;
-              then not q1,p1,p3 is_collinear &
-              q1,p3,r2 is_collinear by A1,Th3;
-              hence thesis by A46,Th9;
-            end;
-            thus q1=r3
-            proof
-A47:          p1<>q2 by A22,ANPROJ_2:def 7;
-              p1,q2,q1 is_collinear by A44,Th3;
-              then p1,r3,q1 is_collinear by A1,A47,Th4;
-              then
-A48:          q1,p1,r3 is_collinear by Th3;
-              not q1,p2,p1 is_collinear by A1,Th3;
-              hence thesis by A1,A48,Th9;
-            end;
-          end;
-          hence thesis by ANPROJ_2:def 7;
-        end;
-A49:    now
-          assume
-A50:      q1,q2,p2 is_collinear;
-          q2=r3 & q2=r1
-          proof thus q2=r3
-            proof
-A51:          p2<>q1 by A1,ANPROJ_2:def 7;
-              p2,q1,r3 is_collinear & p2,q1,q2 is_collinear by A1,A50,Th3;
-              then p2,r3,q2 is_collinear by A51,Th4;
-              then
-A52:          q2,p2,r3 is_collinear & q2,p1,r3 is_collinear by A1,Th3;
-              not q2,p1,p2 is_collinear by A22,Th3;
-              hence thesis by A52,Th9;
-            end;
-            thus q2=r1
-            proof
-A53:          p2<>q3 by A40,ANPROJ_2:def 7;
-              q2,q1,p2 is_collinear & q2,q1,q3 is_collinear by A1,A50,Th3;
-              then q2,p2,q3 is_collinear by A1,Th4;
-              then p2,q3,q2 is_collinear by Th3;
-              then p2,r1,q2 is_collinear by A1,A53,Th4;
-              then
-A54:          q2,p2,r1 is_collinear & q2,p3,r1 is_collinear by A1,Th3;
-              not p2,p1,q2 is_collinear & p2,p1,p3 is_collinear by A1,A22,Th3;
-              then not p2,p3,q2 is_collinear by A1,Th8;
-              then not q2,p2,p3 is_collinear by Th3;
-              hence thesis by A54,Th9;
-            end;
-          end;
-          hence thesis by ANPROJ_2:def 7;
-        end;
-        now
-          assume
-A55:      q1,q2,p3 is_collinear;
-          q3=r2 & q3=r1
-          proof
-            thus q3=r2
-            proof
-              q1,q3,p3 is_collinear by A1,A55,Th4;
-              then p3,q1,q3 is_collinear by Th3;
-              then p3,r2,q3 is_collinear by A1,Th4;
-              then
-A56:          q3,p3,r2 is_collinear & q3,p1,r2 is_collinear by A1,Th3;
-              not p1,p3,q3 is_collinear by A1,A40,Th8;
-              then not q3,p1,p3 is_collinear by Th3;
-              hence thesis by A56,Th9;
-            end;
-            thus q3=r1
-            proof
-              q2,q1,q3 is_collinear & q2,q1,p3 is_collinear by A1,A55,Th3;
-              then q2,q3, p3 is_collinear by A1,Th4;
-              then p3,q2,q3 is_collinear by Th3;
-              then p3,r1,q3 is_collinear by A1,A22,Th4;
-              then
-A57:          q3,p3,r1 is_collinear & q3,p2,r1 is_collinear by A1,Th3;
-              not p2,p1,q3 is_collinear & p2,p1,p3 is_collinear by A1,A40,Th3;
-              then not p2,p3,q3 is_collinear by A1,Th8;
-              then not q3,p2,p3 is_collinear by Th3;
-              hence thesis by A57,Th9;
-            end;
-          end;
-          hence thesis by ANPROJ_2:def 7;
-        end;
-        hence thesis by A42,A43,A49;
-      end;
-      now
-        assume
-A58:    not q1,q2,p1 is_collinear & not q1,q2,p2 is_collinear &
-        not q1,q2,p3 is_collinear;
+        assume that
+A46:    not q1,q2,p1 is_collinear and
+A47:    ( not q1,q2,p2 is_collinear)& not q1,q2,p3 is_collinear;
         consider o such that
-A59:    p1,p2,o is_collinear & q1,q2,o is_collinear by ANPROJ_2:def 14;
-A60:    o,p1,p3 is_collinear & o,q1,q3 is_collinear & o,p1,p2 is_collinear &
-        o,q1,q2 is_collinear
-        proof p1,p3,o is_collinear by A1,A2,A59,Th4;
-          hence o,p1, p3 is_collinear by Th3;
-          q1,q3,o is_collinear by A1,A59,Th4;
-          hence o,q1,q3
-          is_collinear by Th3; thus thesis by A59,Th3;
-        end;
-        not o,p1,q1 is_collinear
-        proof
-          not p1,o,q1 is_collinear by A1,A58,A59,Th8;
-          hence thesis by Th3;
-        end;
-        hence thesis by A1,A2,A22,A40,A58,A59,A60,ANPROJ_2:def 13;
+A48:    p1,p2,o is_collinear and
+A49:    q1,q2,o is_collinear by ANPROJ_2:def 14;
+        not p1,o,q1 is_collinear by A6,A46,A48,A49,Th8;
+        then
+A50:    not o,p1,q1 is_collinear by Th3;
+        q1,q3,o is_collinear by A4,A8,A49,Th4;
+        then
+A51:    o,q1,q3 is_collinear by Th3;
+        p1,p3,o is_collinear by A7,A15,A48,Th4;
+        then
+A52:    o,p1,p3 is_collinear by Th3;
+        o,p1,p2 is_collinear & o,q1,q2 is_collinear by A48,A49,Th3;
+        hence
+        thesis by A1,A2,A3,A4,A5,A9,A10,A11,A12,A13,A14,A15,A17,A19,A47
+        ,A48,A49,A52,A51,A50,ANPROJ_2:def 13;
       end;
-      hence thesis by A41;
-    end;
-    hence thesis by A23;
-  end;
-  hence thesis by A3;
-end;
-
-Lm1: o
-<>b1 & a1<>b1 & o<>b2 & a2<>b2 & o<>b3 & a3<>b3 & not o,a1,a2 is_collinear &
-not o,a1,a3 is_collinear & not o,a2,a3 is_collinear & not o,c1,c3 is_collinear
-& a1,a2,c3 is_collinear &
-b1,b2,c3 is_collinear & a2,a3,c1 is_collinear & b2,b3,c1 is_collinear &
-a1,a3,c2 is_collinear & b1,b3,c2 is_collinear & o,a1,b1 is_collinear &
-o,a2,b2 is_collinear & o,a3,b3 is_collinear &
-(a1,a2,a3 is_collinear or b1,b2,b3 is_collinear) implies c1,c2,c3 is_collinear
-proof
-  assume that
-A1: o<>b1 & a1<>b1 & o<>b2 & a2<>b2 & o<>b3 & a3<>b3 and
-A2: not o,a1,a2 is_collinear & not o,a1,a3 is_collinear &
-  not o,a2,a3 is_collinear and not o,c1,c3 is_collinear and
-A3: a1,a2,c3 is_collinear & b1,b2,c3 is_collinear & a2,a3,c1 is_collinear &
-  b2,b3,c1 is_collinear & a1,a3,c2 is_collinear & b1,b3,c2 is_collinear and
-A4: o,a1,b1 is_collinear & o,a2,b2 is_collinear & o,a3,b3 is_collinear and
-A5: a1,a2,a3 is_collinear or b1,b2,b3 is_collinear;
-A6: o<>a1 & o<>a2 & a1<>a2 & o<>a3 & a1<>a3 & a2<>a3 by A2,ANPROJ_2:def 7;
-A7: b1<>b2 & b1<>b3 & b2<>b3 by A1,A2,A4,Th9;
-A8: now
-    assume
-A9: a1,a2,a3 is_collinear;
-A10: a1,a2,c1 is_collinear
-    proof a2,a3,a1 is_collinear by A9,Th3;
-      then a2,a1,c1 is_collinear by A3,A6,Th4;
-      hence thesis by Th3;
-    end;
-    a1,a2,c2 is_collinear
-    proof a1,a3,a2 is_collinear by A9,Th3;
-      hence thesis by A3,A6,Th4;
-    end;
-    hence thesis by A3,A6,A10,ANPROJ_2:def 8;
-  end;
-  now
-    assume
-A11: b1,b2,b3 is_collinear;
-A12: b1,b2,c1 is_collinear
-    proof b2,b3,b1 is_collinear by A11,Th3;
-      then b2,b1,c1 is_collinear by A3,A7,Th4;
-      hence thesis by Th3;
-    end;
-    b1,b2,c2 is_collinear
-    proof b1,b3,b2 is_collinear by A11,Th3;
-      hence thesis by A3,A7,Th4;
-    end;
-    hence thesis by A3,A7,A12,ANPROJ_2:def 8;
-  end;
-  hence thesis by A5,A8;
-end;
-
-Lm2: o
-<>b1 & a1<>b1 & o<>b2 & a2<>b2 & o<>b3 & a3<>b3 & not o,a1,a2 is_collinear &
-not o,a1,a3 is_collinear & not o,a2,a3 is_collinear & not o,c1,c3 is_collinear
-& a1,a2,c3 is_collinear &
-b1,b2,c3 is_collinear & a2,a3,c1 is_collinear & b2,b3,c1 is_collinear &
-a1,a3,c2 is_collinear & b1,b3,c2 is_collinear & o,a1,b1 is_collinear &
-o,a2,b2 is_collinear & o,a3,b3 is_collinear & o,a2,x is_collinear &
-a1,a3,x is_collinear & not c1,c3,x is_collinear implies c1,c2,c3 is_collinear
-proof
-  assume that
-A1: o<>b1 & a1<>b1 & o<>b2 & a2<>b2 & o<>b3 & a3<>b3 and
-A2: not o,a1,a2 is_collinear & not o,a1,a3 is_collinear &
-  not o,a2,a3 is_collinear and
-A3: not o,c1,c3 is_collinear and
-A4: a1,a2,c3 is_collinear & b1,b2,c3 is_collinear & a2,a3,c1 is_collinear &
-  b2,b3,c1 is_collinear & a1,a3,c2 is_collinear & b1,b3,c2 is_collinear and
-A5: o,a1,b1 is_collinear & o,a2,b2 is_collinear & o,a3,b3 is_collinear and
-A6: o,a2,x is_collinear & a1,a3,x is_collinear and
-A7: not c1,c3,x is_collinear;
-A8: o<>a1 & o<>a2 & a1<>a2 & o<>a3 & a1<>a3 & a2<>a3 by A2,ANPROJ_2:def 7;
-A9: not a1,a3,b1 is_collinear
-  proof not a1,o,a3 is_collinear & a1,o,b1 is_collinear by A2,A5,Th3;
-    then not a1,b1,a3 is_collinear by A1,Th8;
-    hence thesis by Th3;
-  end;
-A10: b1<>b2 & b1<>b3 & b2<>b3 by A1,A2,A5,Th9;
-A11: now
-    assume
-A12: a1,a2,a3 is_collinear or b1,b2,b3 is_collinear;
-A13: now
-      assume
-A14:  a1,a2,a3 is_collinear; thus thesis
-      proof
-A15:    a1,a2,c1 is_collinear
-        proof a2,a3,a1 is_collinear by A14,Th3;
-          then a2,a1,c1 is_collinear by A4,A8,Th4;
-          hence thesis by Th3;
-        end;
-        a1,a2,c2 is_collinear
-        proof a1,a3,a2 is_collinear by A14,Th3;
-          hence thesis by A4,A8,Th4;
-        end;
-        hence thesis by A4,A8,A15,ANPROJ_2:def 8;
-      end;
+      hence thesis by A20;
     end;
     now
       assume
-A16:  b1,b2,b3 is_collinear; thus thesis
-      proof
-A17:    b1,b2,c1 is_collinear
-        proof b2,b3,b1 is_collinear by A16,Th3;
-          then b2,b1,c1 is_collinear by A4,A10,Th4;
-          hence thesis by Th3;
-        end;
-        b1,b2,c2 is_collinear
-        proof b1,b3,b2 is_collinear by A16,Th3;
-          hence thesis by A4,A10,Th4;
-        end;
-        hence thesis by A4,A10,A17,ANPROJ_2:def 8;
+A53:  p1,p2,q3 is_collinear;
+A54:  now
+        assume that
+A55:    p2<>q3 and
+A56:    p1<>q3;
+        p1,q3,p2 is_collinear by A53,Th3;
+        then p1,p2,r2 is_collinear by A11,A56,Th4;
+        then p1,r2,p3 is_collinear by A7,A15,Th4;
+        then
+A57:    p3,p1,r2 is_collinear by Th3;
+        not p1,p3,q1 is_collinear by A2,A6,A7,Th8;
+        then not p3,q1,p1 is_collinear by Th3;
+        then
+A58:    p3=r2 by A12,A57,Th9;
+A59:    p2,p1,p3 is_collinear by A7,Th3;
+        p2,q3,p1 is_collinear by A53,Th3;
+        then p2,p1,r1 is_collinear by A13,A55,Th4;
+        then p2,r1,p3 is_collinear by A15,A59,Th4;
+        then
+A60:    p3,p2,r1 is_collinear by Th3;
+        ( not p2,p1,q2 is_collinear)& p2,p1,p3 is_collinear by A7,A17,
+        Th3;
+        then not p2,p3,q2 is_collinear by A1,Th8;
+        then not p3,q2,p2 is_collinear by Th3;
+        then p3=r1 by A14,A60,Th9;
+        hence thesis by A58,ANPROJ_2:def 7;
       end;
+A61:  now
+        not p1,p3,q1 is_collinear by A2,A6,A7,Th8;
+        then
+A62:    not p3,p1,q1 is_collinear by Th3;
+A63:    not p2,q1,p1 is_collinear by A6,Th3;
+A64:    p2,q1,r3 is_collinear by A10,Th3;
+        assume
+A65:    p2=q3;
+        then p2,q1,q2 is_collinear by A8,Th3;
+        then p2,q2,r3 is_collinear by A5,A65,A64,Th4;
+        then
+A66:    q2,p2,r3 is_collinear by Th3;
+        p2,q1,q2 is_collinear by A8,A65,Th3;
+        then not p2,q2,p1 is_collinear by A3,A65,A63,Th8;
+        then
+A67:    not q2,p1,p2 is_collinear by Th3;
+        p1,p3,r2 is_collinear by A7,A11,A15,A65,Th4;
+        then p3,p1,r2 is_collinear by Th3;
+        then
+A68:    p3=r2 by A12,A62,Th9;
+        q2,p1,r3 is_collinear by A9,Th3;
+        then q2=r3 by A66,A67,Th9;
+        hence thesis by A14,A68,Th3;
+      end;
+      now
+        assume
+A69:    p1=q3;
+        then p1,p2,r1 is_collinear by A13,Th3;
+        then p1,p3,r1 is_collinear by A7,A15,Th4;
+        then
+A70:    p3,p1,r1 is_collinear by Th3;
+        p1,q2,q1 is_collinear by A8,A69,Th3;
+        then p1,q1,r3 is_collinear by A3,A9,A69,Th4;
+        then
+A71:    q1,p1,r3 is_collinear by Th3;
+        not p3,p1,q2 is_collinear by A2,A3,A6,A7,A8,A69,Th16;
+        then
+A72:    p3=r1 by A14,A70,Th9;
+        not q1,p1,p2 is_collinear by A6,Th3;
+        then q1=r3 by A10,A71,Th9;
+        hence thesis by A12,A72,Th3;
+      end;
+      hence thesis by A61,A54;
     end;
-    hence thesis by A12,A13;
+    hence thesis by A18;
   end;
   now
+A73: now
+      not p1,p3,q1 is_collinear by A2,A6,A7,Th8;
+      then
+A74:  not q1,p1,p3 is_collinear by Th3;
+A75:  not p1,q1,p2 is_collinear by A6,Th3;
+      assume
+A76:  p1=q2;
+      then p1,q3,q1 is_collinear by A8,Th3;
+      then p1,q1,r2 is_collinear by A3,A11,A76,Th4;
+      then
+A77:  q1,p1,r2 is_collinear by Th3;
+A78:  p1,p3,p2 is_collinear by A7,Th3;
+      p1,p3,r1 is_collinear by A14,A76,Th3;
+      then p1,p2,r1 is_collinear by A2,A78,Th4;
+      then
+A79:  p2,p1,r1 is_collinear by Th3;
+      q1,p3,r2 is_collinear by A12,Th3;
+      then
+A80:  q1=r2 by A77,A74,Th9;
+      p1,q1,q3 is_collinear by A8,A76,Th3;
+      then not p1,q3,p2 is_collinear by A3,A76,A75,Th8;
+      then not p2,p1,q3 is_collinear by Th3;
+      then r1=p2 by A13,A79,Th9;
+      hence thesis by A10,A80,Th3;
+    end;
     assume
-A18: not a1,a2,a3 is_collinear & not b1,b2,b3 is_collinear;
+A81: p1,p2,q2 is_collinear;
+A82: now
+      assume that
+A83:  p1<>q2 and
+A84:  p3<>q2;
+      p1,q2,p2 is_collinear by A81,Th3;
+      then p1,p2,r3 is_collinear by A9,A83,Th4;
+      then
+A85:  p2,p1,r3 is_collinear by Th3;
+      p1,q2,p3 is_collinear by A7,A15,A81,Th4;
+      then p3,q2,p1 is_collinear by Th3;
+      then p3,p1,r1 is_collinear by A14,A84,Th4;
+      then
+A86:  p1,p3,r1 is_collinear by Th3;
+      p1,p3,p2 is_collinear by A7,Th3;
+      then p1,p2,r1 is_collinear by A2,A86,Th4;
+      then
+A87:  p2,p1,r1 is_collinear by Th3;
+      not p2,p1,q3 is_collinear by A3,A6,A8,A81,Th14;
+      then
+A88:  p2=r1 by A13,A87,Th9;
+      ( not p2,p1,q1 is_collinear)& p2,q1,r3 is_collinear by A6,A10,Th3;
+      then p2=r3 by A85,Th9;
+      hence thesis by A88,ANPROJ_2:def 7;
+    end;
+    now
+      assume
+A89:  p3=q2;
+      then q1,q3,p3 is_collinear by A8,Th3;
+      then
+A90:  not q3,p1,q1 is_collinear by A2,A5,A6,A7,Th13;
+      p1,p3,p2 is_collinear by A7,Th3;
+      then p1,p2,r3 is_collinear by A2,A9,A89,Th4;
+      then
+A91:  p2,p1,r3 is_collinear by Th3;
+      ( not p2,p1,q1 is_collinear)& p2,q1,r3 is_collinear by A6,A10,Th3;
+      then
+A92:  p2=r3 by A91,Th9;
+      q1,q2,r2 is_collinear by A12,A89,Th3;
+      then q1,q3,r2 is_collinear by A4,A8,Th4;
+      then
+A93:  q3,q1,r2 is_collinear by Th3;
+      q3,p1,r2 is_collinear by A11,Th3;
+      then r3,r2,r1 is_collinear by A13,A92,A90,A93,Th9;
+      hence thesis by Th3;
+    end;
+    hence thesis by A73,A82;
+  end;
+  hence thesis by A16;
+end;
+
+Lm1: o<>b1 & o<>b2 & not o,a1,a2 is_collinear & not o,a1,a3 is_collinear & not
+o,a2,a3 is_collinear & a1,a2,c3 is_collinear & b1,b2,c3 is_collinear & a2,a3,c1
+is_collinear & b2,b3,c1 is_collinear & a1,a3,c2 is_collinear & b1,b3,c2
+is_collinear & o,a1,b1 is_collinear & o,a2,b2 is_collinear & o,a3,b3
+is_collinear & (a1,a2,a3 is_collinear or b1,b2,b3 is_collinear) implies c1,c2,
+c3 is_collinear
+
+proof
+  assume that
+A1: o<>b1 and
+A2: o<>b2 and
+A3: not o,a1,a2 is_collinear and
+A4: not o,a1,a3 is_collinear and
+A5: not o,a2,a3 is_collinear and
+A6: a1,a2,c3 is_collinear and
+A7: b1,b2,c3 is_collinear and
+A8: a2,a3,c1 is_collinear and
+A9: b2,b3,c1 is_collinear and
+A10: a1,a3,c2 is_collinear and
+A11: b1,b3,c2 is_collinear and
+A12: o,a1,b1 is_collinear and
+A13: o,a2,b2 is_collinear and
+A14: o,a3,b3 is_collinear and
+A15: a1,a2,a3 is_collinear or b1,b2,b3 is_collinear;
+A16: a1<>a3 by A4,ANPROJ_2:def 7;
+A17: a2<>a3 by A5,ANPROJ_2:def 7;
+A18: a1<>a2 by A3,ANPROJ_2:def 7;
+A19: now
     assume
-A19: not thesis;
-A20: b1<>b2 & b1<>b3 & b2<>b3 by A18,ANPROJ_2:def 7;
+A20: a1,a2,a3 is_collinear;
+    then a2,a3,a1 is_collinear by Th3;
+    then a2,a1,c1 is_collinear by A8,A17,Th4;
+    then
+A21: a1,a2,c1 is_collinear by Th3;
+    a1,a3,a2 is_collinear by A20,Th3;
+    then a1,a2,c2 is_collinear by A10,A16,Th4;
+    hence thesis by A6,A18,A21,ANPROJ_2:def 8;
+  end;
+A22: b2<>b3 by A2,A5,A13,A14,Th9;
+A23: b1<>b3 by A1,A4,A12,A14,Th9;
+A24: b1<>b2 by A1,A3,A12,A13,Th9;
+  now
+    assume
+A25: b1,b2,b3 is_collinear;
+    then b2,b3,b1 is_collinear by Th3;
+    then b2,b1,c1 is_collinear by A9,A22,Th4;
+    then
+A26: b1,b2,c1 is_collinear by Th3;
+    b1,b3,b2 is_collinear by A25,Th3;
+    then b1,b2,c2 is_collinear by A11,A23,Th4;
+    hence thesis by A7,A24,A26,ANPROJ_2:def 8;
+  end;
+  hence thesis by A15,A19;
+end;
+
+Lm2: o <>b1 & a1<>b1 & o<>b2 & a2<>b2 & o<>b3 & a3<>b3 & not o,a1,a2
+is_collinear & not o,a1,a3 is_collinear & not o,a2,a3 is_collinear & not o,c1,
+c3 is_collinear & a1,a2,c3 is_collinear & b1,b2,c3 is_collinear & a2,a3,c1
+is_collinear & b2,b3,c1 is_collinear & a1,a3,c2 is_collinear & b1,b3,c2
+is_collinear & o,a1,b1 is_collinear & o,a2,b2 is_collinear & o,a3,b3
+is_collinear & o,a2,x is_collinear & a1,a3,x is_collinear & not c1,c3,x
+is_collinear implies c1,c2,c3 is_collinear
+
+proof
+  assume that
+A1: o<>b1 and
+A2: a1<>b1 and
+A3: o<>b2 and
+A4: a2<>b2 and
+A5: o<>b3 and
+A6: a3<>b3 and
+A7: not o,a1,a2 is_collinear and
+A8: not o,a1,a3 is_collinear and
+A9: not o,a2,a3 is_collinear and
+A10: not o,c1,c3 is_collinear and
+A11: a1,a2,c3 is_collinear and
+A12: b1,b2,c3 is_collinear and
+A13: a2,a3,c1 is_collinear and
+A14: b2,b3,c1 is_collinear and
+A15: a1,a3,c2 is_collinear and
+A16: b1,b3,c2 is_collinear and
+A17: o,a1,b1 is_collinear and
+A18: o,a2,b2 is_collinear and
+A19: o,a3,b3 is_collinear and
+A20: o,a2,x is_collinear and
+A21: a1,a3,x is_collinear and
+A22: not c1,c3,x is_collinear;
+A23: o<>a1 by A7,ANPROJ_2:def 7;
+A24: b1<>b3 by A1,A8,A17,A19,Th9;
+A25: a1<>a2 by A7,ANPROJ_2:def 7;
+A26: o<>a2 by A7,ANPROJ_2:def 7;
+A27: o<>a3 by A8,ANPROJ_2:def 7;
+A28: a1<>a3 by A8,ANPROJ_2:def 7;
+A29: a2<>a3 by A9,ANPROJ_2:def 7;
+  ( not a1,o,a3 is_collinear)& a1,o,b1 is_collinear by A8,A17,Th3;
+  then not a1,b1,a3 is_collinear by A2,Th8;
+  then
+A30: not a1,a3,b1 is_collinear by Th3;
+A31: now
+    ( not o,a2,a1 is_collinear)& b2,b1,c3 is_collinear by A7,A12,Th3;
+    then
+A32: a1<>c3 by A2,A3,A17,A18,Th10;
+    not a1,a2,o is_collinear by A7,Th3;
+    then not a1,c3,o is_collinear by A11,A32,Th8;
+    then
+A33: not o,a1,c3 is_collinear by Th3;
+A34: c1<>c3 by A10,ANPROJ_2:def 7;
+    o<>x by A8,A21,Th3;
+    then not o,x,a3 is_collinear by A9,A20,Th8;
+    then
+A35: not x,a3,o is_collinear by Th3;
+A36: a1<>a3 by A8,ANPROJ_2:def 7;
+    ( not o,a2,a1 is_collinear)& b2,b1,c3 is_collinear by A7,A12,Th3;
+    then
+A37: a1<>c3 by A2,A3,A17,A18,Th10;
+A38: a2,a1,c3 is_collinear by A11,Th3;
+A39: a2,a1,c3 is_collinear by A11,Th3;
+A40: a2<>c3 by A1,A4,A7,A12,A17,A18,Th10;
+    not o,b2,a3 is_collinear by A3,A9,A18,Th8;
+    then
+A41: not a3,o,b2 is_collinear by Th3;
+A42: c1<>c3 by A10,ANPROJ_2:def 7;
+A43: o,b1,a1 is_collinear by A17,Th3;
+A44: not a1,a3,o is_collinear by A8,Th3;
+    ( not o,a3,a2 is_collinear)& b3,b2,c1 is_collinear by A9,A14,Th3;
+    then
+A45: a2<>c1 by A4,A5,A18,A19,Th10;
+    a3,b3,o is_collinear by A19,Th3;
+    then not b2,o,b3 is_collinear by A3,A5,A9,A18,Th16;
+    then
+A46: not o,b3,b2 is_collinear by Th3;
+A47: o<>a2 by A7,ANPROJ_2:def 7;
+    assume that
+A48: not a1,a2,a3 is_collinear and
+A49: not b1,b2,b3 is_collinear;
+A50: b1<>b3 by A49,ANPROJ_2:def 7;
     consider z such that
-A21: a1,a3,z is_collinear & c1,c3,z is_collinear by ANPROJ_2:def 14;
+A51: a1,a3,z is_collinear and
+A52: c1,c3,z is_collinear by ANPROJ_2:def 14;
     consider p such that
-A22: o,z,p is_collinear & a2,a3,p is_collinear by ANPROJ_2:def 14;
+A53: o,z,p is_collinear and
+A54: a2,a3,p is_collinear by ANPROJ_2:def 14;
+A55: o<>p by A9,A54,Th3;
+A56: a3<>c1 by A3,A6,A9,A14,A18,A19,Th10;
+    then
+A57: a1<>z by A11,A13,A48,A52,A40,A45,A37,Th12;
+A58: a3<>z by A11,A13,A48,A52,A40,A45,A37,A56,Th12;
+A59: a3<>p
+    proof
+      assume
+      not thesis;
+      then
+A60:  a3,o,z is_collinear by A53,Th3;
+      a3,a1,z is_collinear & not a3,o,a1 is_collinear by A8,A51,Th3;
+      hence contradiction by A58,A60,Th9;
+    end;
+A61: a3,a1,x is_collinear by A21,Th3;
+A62: o,b2,a2 is_collinear by A18,Th3;
+    a1<>z by A11,A13,A48,A52,A40,A45,A37,A56,Th12;
+    then not a1,z,o is_collinear by A51,A44,Th8;
+    then not o,z,a1 is_collinear by Th3;
+    then not o,p,a1 is_collinear by A53,A55,Th8;
+    then
+A63: not o,a1,p is_collinear by Th3;
+A64: a3,z,a1 is_collinear by A51,Th3;
+A65: p,a2,a3 is_collinear by A54,Th3;
     consider q such that
-A23: o,a1,q is_collinear & p,c3,q is_collinear by ANPROJ_2:def 14;
+A66: o,a1,q is_collinear and
+A67: p,c3,q is_collinear by ANPROJ_2:def 14;
     consider r such that
-A24: p,b2,r is_collinear & q,a3,r is_collinear by ANPROJ_2:def 14;
+A68: p,b2,r is_collinear and
+A69: q,a3,r is_collinear by ANPROJ_2:def 14;
+A70: a3,q,r is_collinear by A69,Th3;
+    o,b3,a3 is_collinear & a3,a2,c1 is_collinear by A13,A19,Th3;
+    then
+A71: b2<>c1 by A4,A27,A62,A46,Th10;
+A72: a2<>c3 by A1,A4,A7,A12,A17,A18,Th10;
+    not a1,a3,o is_collinear by A8,Th3;
+    then not a1,z,o is_collinear by A51,A57,Th8;
+    then not o,z,a1 is_collinear by Th3;
+    then not o,p,a1 is_collinear by A53,A55,Th8;
+    then
+A73: b1<>p by A17,Th3;
     consider a such that
-A25: c1,c3,a is_collinear & o,a2,a is_collinear by ANPROJ_2:def 14;
+A74: c1,c3,a is_collinear and
+A75: o,a2,a is_collinear by ANPROJ_2:def 14;
+A76: c3,c1,a is_collinear by A74,Th3;
+A77: a,o,a2 is_collinear by A75,Th3;
+A78: o<>a by A10,A74,Th3;
+A79: c1<>c3 by A10,ANPROJ_2:def 7;
+A80: a2<>a
+    proof
+A81:  c3,a2,a1 is_collinear by A11,Th3;
+      assume
+A82:  not thesis;
+      then c3,a2,c1 is_collinear by A74,Th3;
+      then c3,c1,a1 is_collinear by A40,A81,Th4;
+      then
+A83:  c1,c3,a1 is_collinear by Th3;
+A84:  c1,a2,a3 is_collinear by A13,Th3;
+      c1,a2,c3 is_collinear by A74,A82,Th3;
+      then c1,c3,a3 is_collinear by A45,A84,Th4;
+      hence contradiction by A48,A74,A79,A82,A83,ANPROJ_2:def 8;
+    end;
+    assume
+A85: not thesis;
+    c3,c1,z is_collinear by A52,Th3;
+    then c3,a,z is_collinear by A76,A42,Th4;
+    then
+A86: a,z,c3 is_collinear by Th3;
+A87: o,x,a is_collinear by A20,A26,A75,Th4;
     consider q' such that
-A26: o,a1,q' is_collinear & a,a3,q' is_collinear by ANPROJ_2:def 14;
-    consider z' be Element of PCPP such that
-A27: b1,r,z' is_collinear & o,p,z' is_collinear by ANPROJ_2:def 14;
+A88: o,a1,q' is_collinear & a,a3,q' is_collinear by ANPROJ_2:def 14;
+    a3,a2,p is_collinear by A54,Th3;
+
+    then c3,q',p is_collinear by A9,A53,A75,A88,A80,A78,A36,A57,A58,
+    A64,A39,A86,Th20;
+
+    then
+A89: p,c3,q' is_collinear by Th3;
+    not a2,a1,a3 is_collinear by A48,Th3;
+    then not a2,c3,a3 is_collinear by A72,A38,Th8;
+    then p<>c3 by A54,Th3;
+    then
+A90: a,a3,q is_collinear by A23,A66,A67,A88,A89,A63,Th17;
+    then a3,q,a is_collinear by Th3;
+    then
+A91: a3,r,a is_collinear by A8,A66,A70,Th4;
+    ( not o,a3,a2 is_collinear)& b3,b2,c1 is_collinear by A9,A14,Th3;
+    then
+A92: a2<>c1 by A4,A5,A18,A19,Th10;
+A93: a<>a2
+    proof
+A94:  c3,a2,a1 is_collinear by A11,Th3;
+      assume
+A95:  not thesis;
+      then c3,a2,c1 is_collinear by A74,Th3;
+      then c3,c1,a1 is_collinear by A72,A94,Th4;
+      then
+A96:  c1,c3,a1 is_collinear by Th3;
+A97:  c1,a2,a3 is_collinear by A13,Th3;
+      c1,a2,c3 is_collinear by A74,A95,Th3;
+      then c1,c3,a3 is_collinear by A92,A97,Th4;
+      hence contradiction by A48,A74,A34,A95,A96,ANPROJ_2:def 8;
+    end;
     consider z'' be Element of PCPP such that
-A28: b3,r,z'' is_collinear & o,p,z'' is_collinear by ANPROJ_2:def 14;
-A29: a1<>c3 & a2<>c3 & a2<>c1 & a3<>c1 & c1<>c3
-    proof
-A30:  a1<>c3
-      proof not o,a2,a1 is_collinear & a2,a1,c3 is_collinear &
-        b2,b1,c3 is_collinear by A2,A4,Th3;
-        hence thesis by A1,A5,Th10;
-      end;
-      not o,a3,a2 is_collinear & b3,b2,c1 is_collinear & a3,a2,c1 is_collinear
-      by A2,A4,Th3;
-      hence thesis by A1,A2,A3,A4,A5,A30,Th10,ANPROJ_2:def 7;
-    end;
-A31: o<>p by A2,A22,Th3;
-A32: a<>c1
-    proof
-      not a2,a3,o is_collinear by A2,Th3;
-      then not a2,c1,o is_collinear by A4,A29,Th8;
-      hence thesis by A25,Th3;
-    end;
-A33: o<>a & a2<>a & o<>a2 & a1<>a3 & a1<>z & a3<>z
-    proof
-A34:  a2<>c3 by A1,A2,A4,A5,Th10;
-A35:  c1<>c3 by A3,ANPROJ_2:def 7;
-      not o,a3,a2 is_collinear & b3,b2,c1 is_collinear & a3,a2,c1 is_collinear
-      by A2,A4,Th3;
-      then
-A36:  a2<>c1 by A1,A5,Th10;
-A37:  a2<>a
-      proof
-        assume
-A38:    not thesis;
-
-then c3,a2,c1 is_collinear & c3,a2,a1 is_collinear & c1,a2,c3 is_collinear
-        & c1,a2,a3 is_collinear by A4,A25,Th3;
-        then c3,c1,a1 is_collinear & c1,c3,a3 is_collinear by A34,A36,Th4;
-        then c1,c3,a1 is_collinear & c1,c3,a3 is_collinear by Th3;
-        hence contradiction by A18,A25,A35,A38,ANPROJ_2:def 8;
-      end;
-      not o,a2,a1 is_collinear & a2,a1,c3 is_collinear &
-      b2,b1,c3 is_collinear by A2,A4,Th3;
-      then
-A39:  a1<>c3 by A1,A5,Th10;
-      a3<>c1 by A1,A2,A4,A5,Th10;
-
-hence thesis by A2,A3,A4,A18,A21,A25,A34,A36,A37,A39,Th3,Th12,ANPROJ_2:def 7;
-    end;
-    not a1,a2,o is_collinear by A2,Th3;
-    then not a1,c3,o is_collinear by A4,A29,Th8;
+A98: b3,r,z'' is_collinear & o,p,z'' is_collinear by ANPROJ_2:def 14;
+    a2,b2,o is_collinear by A18,Th3;
     then
-A40: not o,a1,c3 is_collinear by Th3;
-    a2,b2,o is_collinear by A5,Th3;
+A99: not b1,o,b2 is_collinear by A1,A3,A7,A17,Th16;
+    then not o,b1,b2 is_collinear by Th3;
     then
-A41: not b1,o,b2 is_collinear by A1,A2,A5,Th16;
-    then
-A42: not o,b1,b2 is_collinear by Th3;
-A43: not o,a,a3 is_collinear by A2,A25,A33,Th8;
-A44: b1<>b2 & b1<>p & b2<>p
+A100: b2<>c3 by A4,A11,A23,A43,A62,Th10;
+A101: a<>b2
     proof
-A45:  b1<>p
-      proof not a1,a3,o is_collinear by A2,Th3;
-        then not a1,z,o is_collinear by A21,A33,Th8;
-        then not o,z,a1 is_collinear by Th3;
-        then not o,p,a1 is_collinear by A22,A31,Th8;
-        hence thesis by A5,Th3;
-      end;
-      a2,o,b2 is_collinear & not a2,o,a3 is_collinear by A2,A5,Th3;
-      then not a2,b2,a3 is_collinear by A1,Th8;
-      hence thesis by A18,A22,A45,Th3,ANPROJ_2:def 7;
-    end;
-    not a2,a1,o is_collinear & a2,a1,c3 is_collinear by A2,A4,Th3;
-    then not a2,c3,o is_collinear by A29,Th8;
-    then
-A46: a<>c3 by A25,Th3;
-A47: a3,a,q is_collinear
-    proof
-A48:  a3,z,a1 is_collinear & a3,a2,p is_collinear by A21,A22,Th3;
-A49:  a2,a1,c3 is_collinear by A4,Th3;
-      a,z,c3 is_collinear
-      proof
-A50:    c3,c1,z is_collinear & c3,c1,a is_collinear by A21,A25,Th3;
-        c1<>c3 by A3,ANPROJ_2:def 7;
-        then c3,a,z is_collinear by A50,Th4;
-        hence thesis by Th3;
-      end;
-      then c3,q',p is_collinear by A2,A22,A25,A26,A33,A48,A49,Th20;
-      then
-A51:  p,c3,q' is_collinear by Th3;
-      not a2,a1,a3 is_collinear & a2,a1,c3 is_collinear &
-      a2<>c3 by A4,A18,A29,Th3;
-      then not a2,c3,a3 is_collinear by Th8;
-      then
-A52:  p<>c3 by A22,Th3;
-      not a1,a3,o is_collinear & a1,a3,z is_collinear & a1<>z
-      by A2,A21,A33,Th3;
-      then not a1,z,o is_collinear by Th8;
-      then not o,z,a1 is_collinear by Th3;
-      then not o,p,a1 is_collinear by A22,A31,Th8;
-      then not o,a1,p is_collinear by Th3;
-      then a,a3,q is_collinear by A8,A23,A26,A51,A52,Th17;
-      hence thesis by Th3;
-    end;
-A53: not a3,q,o is_collinear
-    proof not a3,a,o is_collinear by A43,Th3;
-      hence thesis by A2,A23,A47,Th8;
-    end;
-A54: not o,b2,b3 is_collinear
-    proof a3,b3,o is_collinear by A5,Th3;
-      then not b2,o,b3 is_collinear by A1,A2,A5,Th16;
-      hence thesis by Th3;
-    end;
-A55: b2<>c1 & b2<>c3
-    proof
-A56:  o,b1,a1 is_collinear & o,b2,a2 is_collinear by A5,Th3;
-A57:  o,b2,a2 is_collinear & o,b3,a3 is_collinear by A5,Th3;
-A58:  not o,b3,b2 is_collinear by A54,Th3;
-      b3,b2,c1 is_collinear & a3,a2,c1 is_collinear by A4,Th3;
-      hence thesis by A1,A4,A8,A42,A56,A57,A58,Th10;
-    end;
-A59: a<>b2
-    proof
+A102: c3,b2,b1 is_collinear by A12,Th3;
       assume
-A60:  not thesis;
+A103: not thesis;
+      then c3,b2,c1 is_collinear by A74,Th3;
+      then c3,c1,b1 is_collinear by A100,A102,Th4;
       then
-A61:  c1,b2,c3 is_collinear by A25,Th3;
-      c1,b2,b3 is_collinear by A4,Th3;
-      then
-A62:  c1,c3,b3 is_collinear by A55,A61,Th4;
-A63:  c3,b2,b1 is_collinear by A4,Th3;
-      c3,b2,c1 is_collinear by A25,A60,Th3;
-      then c3,c1,b1 is_collinear by A55,A63,Th4;
-      then c1,c3,b1 is_collinear by Th3;
-      hence contradiction by A18,A25,A29,A60,A62,ANPROJ_2:def 8;
+A104: c1,c3,b1 is_collinear by Th3;
+A105: c1,b2,b3 is_collinear by A14,Th3;
+      c1,b2,c3 is_collinear by A74,A103,Th3;
+      then c1,c3,b3 is_collinear by A71,A105,Th4;
+      hence contradiction by A49,A74,A34,A103,A104,ANPROJ_2:def 8;
     end;
-A64: not a,b2,a3 is_collinear
-    proof
-A65:  not a,o,a3 is_collinear by A43,Th3;
-      o,a,b2 is_collinear by A5,A8,A25,Th4;
-      then a,o,b2 is_collinear by Th3;
-      hence thesis by A59,A65,Th8;
-    end;
-A66: a3,r,a is_collinear
-    proof a3,q,a is_collinear & a3,q,r is_collinear by A24,A47,Th3;
-      hence thesis by A2,A23,Th4;
-    end;
+    not a2,a3,o is_collinear by A9,Th3;
+    then not a2,c1,o is_collinear by A13,A92,Th8;
     then
-A67: b2<>r by A64,Th3;
-A68: a<>a2
-    proof
+A106: a<>c1 by A75,Th3;
+    ( not a2,a1,o is_collinear)& a2,a1,c3 is_collinear by A7,A11,Th3;
+    then not a2,c3,o is_collinear by A72,Th8;
+    then
+A107: a<>c3 by A75,Th3;
+    o,a,b2 is_collinear by A18,A26,A75,Th4;
+    then
+A108: a,o,b2 is_collinear by Th3;
+    a2,o,b2 is_collinear & not a2,o,a3 is_collinear by A9,A18,Th3;
+    then
+A109: not a2,b2,a3 is_collinear by A4,Th8;
+    then
+A110: b2<>p by A54,Th3;
+    a3,a1,z is_collinear by A51,Th3;
+    then a3,x,z is_collinear by A36,A61,Th4;
+    then x,a3,z is_collinear by Th3;
+    then not x,z,o is_collinear by A22,A52,A35,Th8;
+    then not o,z,x is_collinear by Th3;
+    then not o,p,x is_collinear by A53,A55,Th8;
+    then not o,x,p is_collinear by Th3;
+    then
+A111: not o,a,p is_collinear by A78,A87,Th8;
+    then not a,o,p is_collinear by Th3;
+    then not a,a2,p is_collinear by A93,A77,Th8;
+    then not p,a2,a is_collinear by Th3;
+    then
+A112: not p,a3,a is_collinear by A59,A65,Th8;
+    then
+A113: p<>r by A91,Th3;
+    o,a,b2 is_collinear by A18,A26,A75,Th4;
+    then not o,b2,p is_collinear by A3,A111,Th8;
+    then not p,b2,o is_collinear by Th3;
+    then not p,r,o is_collinear by A68,A113,Th8;
+    then
+A114: z<>r by A53,Th3;
+    consider z' be Element of PCPP such that
+A115: b1,r,z' is_collinear & o,p,z' is_collinear by ANPROJ_2:def 14;
+A116: not o,a,a3 is_collinear by A9,A75,A78,Th8;
+    then not a,o,a3 is_collinear by Th3;
+    then
+A117: not a,b2,a3 is_collinear by A101,A108,Th8;
+    then
+A118: b2<>r by A91,Th3;
+A119: now
+      o,b1,q is_collinear by A17,A23,A66,Th4;
+      then
+A120: b1,o,q is_collinear by Th3;
       assume
-A69:  not thesis;
-      then c1,a2,c3 is_collinear & c1,a2,a3 is_collinear by A4,A25,Th3;
+      b1<>q;
+      then not b1,q,b2 is_collinear by A99,A120,Th8;
       then
-A70:  c1,c3,a3 is_collinear by A29,Th4;
-      c3,a2,a1 is_collinear & c3,a2,c1 is_collinear by A4,A25,A69,Th3;
-      then c3,c1,a1 is_collinear by A29,Th4;
-      then c1,c3,a1 is_collinear by Th3;
-      hence contradiction by A18,A25,A29,A69,A70,ANPROJ_2:def 8;
-    end;
-A71: not a3,o,b2 is_collinear
-    proof not o,b2,a3 is_collinear by A1,A2,A5,Th8;
-      hence thesis by Th3;
-    end;
-    thus contradiction
-    proof
-A72:  not p,o,a is_collinear
-      proof
-        o<>x by A2,A6,Th3;
-        then not o,x,a3 is_collinear by A2,A6,Th8;
-        then
-A73:    not x,a3,o is_collinear by Th3;
-        a3,a1,z is_collinear & a3,a1,x is_collinear by A6,A21,Th3;
-        then a3,x,z is_collinear by A33,Th4;
-        then x,a3,z is_collinear by Th3;
-        then not x,z,o is_collinear by A7,A21,A73,Th8;
-        then not o,z,x is_collinear by Th3;
-        then not o,p,x is_collinear by A22,A31,Th8;
-        then
-A74:    not o,x,p is_collinear by Th3;
-        o,x,a is_collinear by A6,A8,A25,Th4;
-        then not o,a,p is_collinear by A33,A74,Th8;
-        hence thesis by Th3;
-      end;
-A75:  a3<>p
-      proof
-        assume not thesis;
-        then
-A76:    a3,o,z is_collinear by A22,Th3;
-        a3,a1,z is_collinear & not a3,o,a1 is_collinear by A2,A21,Th3;
-        hence contradiction by A33,A76,Th9;
-      end;
-A77:  not a,a3,p is_collinear
-      proof not a,o,p is_collinear & a,o,a2 is_collinear by A25,A72,Th3;
-        then not a,a2,p is_collinear by A68,Th8;
-        then
-A78:    not p,a2,a is_collinear by Th3;
-        p,a2,a3 is_collinear by A22,Th3;
-        then not p,a3,a is_collinear by A75,A78,Th8;
-        hence thesis by Th3;
-      end;
+A121: not q,b1,b2 is_collinear by Th3;
+A122: b2,p,r is_collinear & q,p,c3 is_collinear by A67,A68,Th3;
+      o,b1,q is_collinear by A17,A23,A66,Th4;
       then
-A79:  p<>r by A66,Th3;
-A80:  z<>r
-      proof
-A81:    o,a,b2 is_collinear by A5,A8,A25,Th4;
-        not o,a,p is_collinear by A72,Th3;
-        then not o,b2,p is_collinear by A1,A81,Th8;
-        then not p,b2,o is_collinear by Th3;
-        then not p,r,o is_collinear by A24,A79,Th8;
-        hence thesis by A22,Th3;
-      end;
-A82:  now
-        assume
-A83:    b1=q;
-        consider z' be Element of PCPP such that
-A84:    b1,b3,z' is_collinear & p,o,z' is_collinear by ANPROJ_2:def 14;
-        b1,c3,p is_collinear & b1,c3,b2 is_collinear by A4,A23,A83,Th3;
-        then
-A85:    b1,b2,p is_collinear by A5,A40,Th4;
-A86:    not b1,b2,o is_collinear
-        proof not o,a1,a2 is_collinear &
+A123: q,b1,o is_collinear by Th3;
+A124: q<>o & b2<>p by A54,A116,A109,A90,Th3;
+      c3,c1,z is_collinear & c3,c1,a is_collinear by A52,A74,Th3;
+      then c3,z,a is_collinear by A34,Th4;
+      then
+A125: a,c3,z is_collinear by Th3;
+A126: ( not c1,c3,o is_collinear)& o,p,z is_collinear by A10,A53,Th3;
+      a3,a2,c1 is_collinear & a3,a2,p is_collinear by A13,A54,Th3;
+      then
+A127: a3,p,c1 is_collinear by A29,Th4;
+      o,a,b2 is_collinear by A18,A26,A75,Th4;
+      then
+A128: b2,o,a is_collinear by Th3;
+      q,a3,a is_collinear by A90,Th3;
+      then
+A129: q,r,a is_collinear by A8,A66,A69,Th4;
+A130: b2<>r & p<>r by A117,A91,A112,Th3;
 
-o,a1,b1 is_collinear & a2,b2,o is_collinear & o<>b1 & o<>b2 by A1,A2,A5,Th3;
-          then not b1,o,b2 is_collinear by Th16;
-          hence thesis by Th3;
-        end;
-        b1,a3,a is_collinear & o,b2,a is_collinear & b1,b3,z' is_collinear &
-        p,o,z' is_collinear & b2,b3,c1 is_collinear & p,a3,c1 is_collinear
-        proof
-          a3,a2,c1 is_collinear & a3,a2,p is_collinear by A4,A22,Th3;
-          then a3,c1,p is_collinear by A8,Th4;
-          hence thesis by A4,A5,A25,A33,A47,A83,A84,Th3,Th4;
-        end;
-        then c1,z',a is_collinear by A1,A5,A8,A44,A85,A86,Th20;
-        then
-A87:    a,c1,z' is_collinear by Th3;
-        c1,a,z is_collinear by A21,A25,A29,Th4;
-        then
-A88:    a,c1,z is_collinear by Th3;
-        p,o,z is_collinear by A22,Th3;
-        then
-A89:    b1,b3,z is_collinear by A31,A32,A72,A84,A87,A88,Th17;
-A90:    not a1,o,a3 is_collinear by A2,Th3;
-        a1,o,b1 is_collinear by A5,Th3;
-        then not a1,b1,a3 is_collinear by A1,A90,Th8;
-        then not a1,a3,b1 is_collinear by Th3;
-        then c1,c3,c2 is_collinear by A4,A8,A20,A21,A89,Th17;
-        hence contradiction by A19,Th3;
-      end;
-      now
-        assume
-A91:    b1<>q;
-A92:    q<>o & b1<>o & b2<>p & b2<>r & p<>r by A1,A44,A53,A64,A66,A77,Th3,
-        ANPROJ_2:def 7;
-A93:    not q,b1,b2 is_collinear
-        proof o,b1,q is_collinear by A5,A8,A23,Th4;
-          then b1,o,q is_collinear by Th3;
-          then not b1,q,b2 is_collinear by A41,A91,Th8;
-          hence thesis by Th3;
-        end;
-A94:    q,b1,o is_collinear & b2,p,r is_collinear
-        proof o,b1,q is_collinear by A5,A8,A23,Th4;
-          hence thesis by A24,Th3;
-        end;
-        q,p,c3 is_collinear & b2,b1,c3 is_collinear & q,r,a is_collinear &
-        o,b2,a is_collinear & b1,r,z' is_collinear & o,p,z' is_collinear
-        proof
-          q,r,a is_collinear
-          proof q,a3,a is_collinear & q,a3,r is_collinear by A24,A47,Th3;
-            hence thesis by A2,A23,Th4;
-          end;
-          hence thesis by A4,A5,A8,A23,A25,A27,Th3,Th4;
-        end;
-        then
-A95:    z',a,c3 is_collinear by A92,A93,A94,Th20;
-        c3,c1,z is_collinear & c3,c1,a is_collinear by A21,A25,Th3;
-        then c3,z,a is_collinear by A29,Th4;
-        then
-A96:    a,c3,z is_collinear by Th3;
-A97:    a,c3,z' is_collinear by A95,Th3;
-A98:    o,p,z is_collinear by A22,Th3;
-        not o,p,a is_collinear by A72,Th3;
-        then
-A99:    b1,r,z is_collinear by A27,A31,A46,A96,A97,A98,Th17;
-A100:   a3,o,b3 is_collinear by A5,Th3;
-A101:   b2,r,p is_collinear by A24,Th3;
-        o,a,b2 is_collinear by A5,A8,A25,Th4;
-        then
-A102:   b2,o,a is_collinear by Th3;
-        a3,a2,c1 is_collinear & a3,a2,p is_collinear by A4,A22,Th3;
-        then
-A103:   a3,p,c1 is_collinear by A8,Th4;
-        b3,b2,c1 is_collinear by A4,Th3;
-        then z'',c1,a is_collinear
-        by A1,A28,A44,A66,A67,A71,A79,A100,A101,A102,A103,Th20;
-        then c1,a,z'' is_collinear & c1,a,c3 is_collinear by A25,Th3;
-        then
-A104:   c1,c3,z'' is_collinear by A32,Th4;
-A105:   not c1,c3,o is_collinear by A3,Th3;
-        o,p,z is_collinear by A22,Th3;
-        then b3,r,z is_collinear by A21,A28,A29,A31,A104,A105,Th17;
-        then z,r,b1 is_collinear & z,r,b3 is_collinear by A99,Th3;
-        then z,b1,b3 is_collinear by A80,Th4;
-        then b1,b3,z is_collinear by Th3;
-        then c1,c3,c2 is_collinear by A4,A8,A9,A20,A21,Th17;
-        hence contradiction by A19,Th3;
-      end;
-      hence contradiction by A82;
+      b2,b1,c3 is_collinear & o,b2,a is_collinear by A12,A18,A26,A75,Th3
+      ,Th4;
+
+      then
+      z',a,c3 is_collinear by A1,A115,A124,A130,A121,A123,A122,A129,Th20;
+
+      then
+A131: a,c3,z' is_collinear by Th3;
+A132: b3,b2,c1 is_collinear by A14,Th3;
+      a3,o,b3 is_collinear & b2,r,p is_collinear by A19,A68,Th3;
+
+      then z'',c1,a is_collinear by A5,A6,A98,A110,A91,A118,A41,A113,
+      A128,A127,A132,Th20;
+
+      then
+A133: c1,a,z'' is_collinear by Th3;
+      c1,a,c3 is_collinear by A74,Th3;
+      then c1,c3,z'' is_collinear by A106,A133,Th4;
+      then b3,r,z is_collinear by A52,A98,A34,A55,A126,Th17;
+      then
+A134: z,r,b3 is_collinear by Th3;
+      o,p,z is_collinear & not o,p,a is_collinear by A53,A111,Th3;
+      then b1,r,z is_collinear by A115,A55,A107,A125,A131,Th17;
+      then z,r,b1 is_collinear by Th3;
+      then z,b1,b3 is_collinear by A114,A134,Th4;
+      then b1,b3,z is_collinear by Th3;
+      then c1,c3,c2 is_collinear by A15,A16,A28,A30,A50,A51,A52,Th17;
+      hence contradiction by A85,Th3;
     end;
+A135: not p,o,a is_collinear by A111,Th3;
+    now
+      a3,a2,c1 is_collinear & a3,a2,p is_collinear by A13,A54,Th3;
+      then a3,c1,p is_collinear by A29,Th4;
+      then
+A136: p,a3,c1 is_collinear by Th3;
+A137: b1,c3,b2 is_collinear by A12,Th3;
+      ( not a1,o,a3 is_collinear)& a1,o,b1 is_collinear by A8,A17,Th3;
+      then not a1,b1,a3 is_collinear by A2,Th8;
+      then
+A138: not a1,a3,b1 is_collinear by Th3;
+      assume
+A139: b1=q;
+      then
+A140: b1,a3,a is_collinear by A90,Th3;
+      c1,a,z is_collinear by A52,A74,A34,Th4;
+      then
+A141: a,c1,z is_collinear by Th3;
+      a2,b2,o is_collinear by A18,Th3;
+      then not b1,o,b2 is_collinear by A1,A3,A7,A17,Th16;
+      then
+A142: not b1,b2,o is_collinear by Th3;
+      consider z' be Element of PCPP such that
+
+A143: b1,b3,z' is_collinear & p,o,z' is_collinear by ANPROJ_2:def 14;
+
+      b1,c3,p is_collinear by A67,A139,Th3;
+      then
+A144: b1,b2,p is_collinear by A17,A33,A137,Th4;
+      o,b2,a is_collinear by A18,A75,A47,Th4;
+
+      then c1,z',a is_collinear by A5,A6,A14,A19,A27,A73,A110,A143,A144,
+      A142,A140,A136,Th20;
+
+      then
+A145: a,c1,z' is_collinear by Th3;
+      p,o,z is_collinear by A53,Th3;
+      then b1,b3,z is_collinear by A55,A106,A135,A143,A145,A141,Th17;
+      then c1,c3,c2 is_collinear by A15,A16,A28,A50,A51,A52,A138,Th17;
+      hence contradiction by A85,Th3;
+    end;
+    hence contradiction by A119;
   end;
-  hence thesis by A11;
+A146: b2<>b3 by A3,A9,A18,A19,Th9;
+A147: b1<>b2 by A1,A7,A17,A18,Th9;
+  now
+A148: now
+      assume
+A149: b1,b2,b3 is_collinear;
+      then b2,b3,b1 is_collinear by Th3;
+      then b2,b1,c1 is_collinear by A14,A146,Th4;
+      then
+A150: b1,b2,c1 is_collinear by Th3;
+      b1,b3,b2 is_collinear by A149,Th3;
+      then b1,b2,c2 is_collinear by A16,A24,Th4;
+      hence thesis by A12,A147,A150,ANPROJ_2:def 8;
+    end;
+A151: now
+      assume
+A152: a1,a2,a3 is_collinear;
+      then a2,a3,a1 is_collinear by Th3;
+      then a2,a1,c1 is_collinear by A13,A29,Th4;
+      then
+A153: a1,a2,c1 is_collinear by Th3;
+      a1,a3,a2 is_collinear by A152,Th3;
+      then a1,a2,c2 is_collinear by A15,A28,Th4;
+      hence thesis by A11,A25,A153,ANPROJ_2:def 8;
+    end;
+    assume
+    a1,a2,a3 is_collinear or b1,b2,b3 is_collinear;
+    hence thesis by A151,A148;
+  end;
+  hence thesis by A31;
 end;
 
-Lm3: o
-<>b1 & a1<>b1 & o<>b2 & a2<>b2 & o<>b3 & a3<>b3 & not o,a1,a2 is_collinear &
-not o,a1,a3 is_collinear & not o,a2,a3 is_collinear & not o,c1,c3 is_collinear
-& a1,a2,c3 is_collinear &
-b1,b2,c3 is_collinear & a2,a3,c1 is_collinear & b2,b3,c1 is_collinear &
-a1,a3,c2 is_collinear & b1,b3,c2 is_collinear & o,a1,b1 is_collinear &
-o,a2,b2 is_collinear & o,a3,b3 is_collinear implies c1,c2,c3 is_collinear
+Lm3: o <>b1 & a1<>b1 & o<>b2 & a2<>b2 & o<>b3 & a3<>b3 & not o,a1,a2
+is_collinear & not o,a1,a3 is_collinear & not o,a2,a3 is_collinear & not o,c1,
+c3 is_collinear & a1,a2,c3 is_collinear & b1,b2,c3 is_collinear & a2,a3,c1
+is_collinear & b2,b3,c1 is_collinear & a1,a3,c2 is_collinear & b1,b3,c2
+is_collinear & o,a1,b1 is_collinear & o,a2,b2 is_collinear & o,a3,b3
+is_collinear implies c1,c2,c3 is_collinear
+
 proof
   assume that
-A1: o<>b1 & a1<>b1 & o<>b2 & a2<>b2 & o<>b3 & a3<>b3 and
-A2: not o,a1,a2 is_collinear & not o,a1,a3 is_collinear &
-  not o,a2,a3 is_collinear and
-A3: not o,c1,c3 is_collinear and
-A4: a1,a2,c3 is_collinear & b1,b2,c3 is_collinear & a2,a3,c1 is_collinear &
-  b2,b3,c1 is_collinear & a1,a3,c2 is_collinear & b1,b3,c2 is_collinear and
-A5: o,a1,b1 is_collinear & o,a2,b2 is_collinear & o,a3,b3 is_collinear;
-A6: o<>a1 & o<>a2 & a1<>a2 & o<>a3 & a1<>a3 & a2<>a3 by A2,ANPROJ_2:def 7;
+A1: o<>b1 and
+A2: a1<>b1 and
+A3: o<>b2 and
+A4: a2<>b2 and
+A5: o<>b3 and
+A6: a3<>b3 and
+A7: not o,a1,a2 is_collinear and
+A8: not o,a1,a3 is_collinear and
+A9: not o,a2,a3 is_collinear and
+A10: not o,c1,c3 is_collinear and
+A11: a1,a2,c3 is_collinear & b1,b2,c3 is_collinear and
+A12: a2,a3,c1 is_collinear and
+A13: b2,b3,c1 is_collinear and
+A14: a1,a3,c2 is_collinear & b1,b3,c2 is_collinear and
+A15: o,a1,b1 is_collinear and
+A16: o,a2,b2 is_collinear and
+A17: o,a3,b3 is_collinear;
+A18: o<>a2 by A7,ANPROJ_2:def 7;
+A19: a1<>a3 by A8,ANPROJ_2:def 7;
+A20: o<>a1 & o<>a3 by A7,A8,ANPROJ_2:def 7;
   now
-    assume
-A7: not a1,a2,a3 is_collinear & not b1,b2,b3 is_collinear;
+    consider a;
+    assume that
+    not a1,a2,a3 is_collinear and
+    not b1,b2,b3 is_collinear;
     consider x such that
-A8: a1,a3,x is_collinear & o,a2,x is_collinear by ANPROJ_2:def 14;
+A21: a1,a3,x is_collinear and
+A22: o,a2,x is_collinear by ANPROJ_2:def 14;
+    consider z;
     consider y such that
-A9: b1,b3,y is_collinear & o,a2,y is_collinear by ANPROJ_2:def 14;
-    consider a such that
-A10: o,a2,a is_collinear & c1,c3,a is_collinear by ANPROJ_2:def 14;
-    consider z such that
-A11: a1,a3,z is_collinear & c1,c3,z is_collinear by ANPROJ_2:def 14;
+A23: b1,b3,y is_collinear and
+A24: o,a2,y is_collinear by ANPROJ_2:def 14;
     assume
-A12: not thesis;
-A13: now
-      assume
-A14:  c1,c3,x is_collinear & c1,c3,y is_collinear;
-      thus contradiction
-      proof
-A15:    a1<>c3 & a2<>c3 & a2<>c1 & a3<>c1 & c1<>c3
-        proof
-A16:      a1<>c3
-          proof not o,a2,a1 is_collinear & a2,a1,c3 is_collinear &
-            b2,b1,c3 is_collinear by A2,A4,Th3;
-            hence thesis by A1,A5,Th10;
-          end;
-
-not o,a3,a2 is_collinear & b3,b2,c1 is_collinear & a3,a2,c1 is_collinear
-          by A2,A4,Th3;
-          hence thesis by A1,A2,A3,A4,A5,A16,Th10,ANPROJ_2:def 7;
-        end;
-A17:    o<>a & a2<>a & o<>a2 & a1<>a3 & a1<>z & a3<>z
-        proof
-A18:      a2<>c3 by A1,A2,A4,A5,Th10;
-A19:      c1<>c3 by A3,ANPROJ_2:def 7;
-
-not o,a3,a2 is_collinear & b3,b2,c1 is_collinear & a3,a2,c1 is_collinear
-          by A2,A4,Th3;
-          then
-A20:      a2<>c1 by A1,A5,Th10;
-A21:      a2<>a
-          proof
-            assume
-A22:        not thesis;
-            then c3,a2,c1 is_collinear &
-
-c3,a2,a1 is_collinear & c1,a2,c3 is_collinear & c1,a2,a3 is_collinear by A4,A10
-            ,Th3;
-            then c3,c1,a1 is_collinear & c1,c3,a3 is_collinear by A18,A20,Th4;
-            then c1,c3,a1 is_collinear & c1,c3,a3 is_collinear by Th3;
-            hence contradiction by A7,A10,A19,A22,ANPROJ_2:def 8;
-          end;
-A23:      a1<>c3
-          proof not o,a2,a1 is_collinear & a2,a1,c3 is_collinear &
-            b2,b1,c3 is_collinear by A2,A4,Th3;
-            hence thesis by A1,A5,Th10;
-          end;
-          a3<>c1 by A1,A2,A4,A5,Th10;
-
-hence thesis by A2,A3,A4,A7,A10,A11,A18,A20,A21,A23,Th3,Th12,ANPROJ_2:def 7;
-        end;
-A24:    not o,a2,c1 is_collinear
-        proof not a2,a3,o is_collinear &
-          a2,a3,c1 is_collinear & a2<>c1 by A2,A4,A15,Th3;
-          then not a2,c1,o is_collinear by Th8;
-          hence thesis by Th3;
-        end;
-A25:    b1<>b2 & b1<>b3 & b2<>b3 by A1,A2,A5,Th9;
-A26:    b1,b3,x is_collinear by A8,A9,A14,A15,A17,A24,Th17;
-        not a1,o,a3 is_collinear
-        & a1,o,b1 is_collinear & a1<>b1 by A1,A2,A5,Th3;
-        then not a1,b1,a3 is_collinear by Th8;
-        then not a1,a3,b1 is_collinear by Th3;
-        then c1,c3,c2 is_collinear by A4,A6,A8,A14,A25,A26,Th17;
-        hence contradiction by A12,Th3;
-      end;
+A25: not thesis;
+A26: now
+      ( not o,a3,a2 is_collinear)& b3,b2,c1 is_collinear by A9,A13,Th3;
+      then
+A27:  a2<>c1 by A4,A5,A16,A17,Th10;
+      not a2,a3,o is_collinear by A9,Th3;
+      then not a2,c1,o is_collinear by A12,A27,Th8;
+      then
+A28:  not o,a2,c1 is_collinear by Th3;
+A29:  b1<>b3 by A1,A8,A15,A17,Th9;
+      ( not a1,o,a3 is_collinear)& a1,o,b1 is_collinear by A8,A15,Th3;
+      then not a1,b1,a3 is_collinear by A2,Th8;
+      then
+A30:  not a1,a3,b1 is_collinear by Th3;
+      assume that
+A31:  c1,c3,x is_collinear and
+A32:  c1,c3,y is_collinear;
+      c1<>c3 & o<>a2 by A7,A10,ANPROJ_2:def 7;
+      then b1,b3,x is_collinear by A22,A23,A24,A31,A32,A28,Th17;
+      then c1,c3,c2 is_collinear by A14,A19,A21,A31,A29,A30,Th17;
+      hence contradiction by A25,Th3;
     end;
     now
-      assume
-A27:  not c1,c3,x is_collinear or not c1,c3,y is_collinear;
-      now
+A33:  now
+A34:    not o,b1,b3 is_collinear by A1,A5,A8,A15,A17,Th19;
+A35:    o,b2,a2 is_collinear & o,b3,a3 is_collinear by A16,A17,Th3;
+
+A36:    o,b2,y is_collinear & o,b1,a1 is_collinear by A15,A16,A18,A24,
+        Th3,Th4;
+
         assume
-A28:    not c1,c3,y is_collinear;
-A29:    o,b2,y is_collinear by A5,A6,A9,Th4;
-A30:    o,b1,a1 is_collinear & o,b2,a2 is_collinear & o,b3,a3 is_collinear
-        by A5,Th3;
-        not o,b1,b2 is_collinear & not o,b2,b3 is_collinear
-        & not o,b1,b3 is_collinear by A1,A2,A5,Th19;
-        hence contradiction by A1,A3,A4,A6,A9,A12,A28,A29,A30,Lm2;
+A37:    not c1,c3,y is_collinear;
+
+        ( not o,b1,b2 is_collinear)& not o,b2,b3 is_collinear by A1,A3,
+        A5,A7,A9,A15,A16,A17,Th19;
+
+        hence contradiction by A2,A4,A6,A10,A11,A12,A13,A14,A18,A20,A23,A25,
+        A37,A36,A35,A34,Lm2;
+
       end;
-      hence thesis by A1,A2,A3,A4,A5,A8,A27,Lm2;
+      assume
+      not c1,c3,x is_collinear or not c1,c3,y is_collinear;
+
+      hence thesis by A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13,A14,A15,A16,
+      A17,A21,A22,A33,Lm2;
+
     end;
-    hence thesis by A13;
+    hence thesis by A26;
   end;
-  hence thesis by A1,A2,A3,A4,A5,Lm1;
+  hence thesis by A1,A3,A7,A8,A9,A11,A12,A13,A14,A15,A16,A17,Lm1;
 end;
 
 theorem Th21:
-  o<>b1 & a1<>b1 & o<>b2 & a2<>b2 & o<>b3 & a3<>b3 & not o,a1,a2 is_collinear &
-  not o,a1,a3 is_collinear & not o,a2,a3 is_collinear & a1,a2,c3 is_collinear &
-  b1,b2,c3 is_collinear & a2,a3,c1 is_collinear & b2,b3,c1 is_collinear &
-  a1,a3,c2 is_collinear & b1,b3,c2 is_collinear & o,a1,b1 is_collinear &
-  o,a2,b2 is_collinear & o,a3,b3 is_collinear implies c1,c2,c3 is_collinear
+  o<>b1 & a1<>b1 & o<>b2 & a2<>b2 & o<>b3 & a3<>b3 & not o,a1,a2
+  is_collinear & not o,a1,a3 is_collinear & not o,a2,a3 is_collinear & a1,a2,c3
+  is_collinear & b1,b2,c3 is_collinear & a2,a3,c1 is_collinear & b2,b3,c1
+  is_collinear & a1,a3,c2 is_collinear & b1,b3,c2 is_collinear & o,a1,b1
+  is_collinear & o,a2,b2 is_collinear & o,a3,b3 is_collinear implies c1,c2,c3
+  is_collinear
 proof
-  assume
-A1: o<>b1 & a1<>b1 & o<>b2 & a2<>b2 & o<>b3 & a3<>b3 &
-
-not o,a1,a2 is_collinear & not o,a1,a3 is_collinear & not o,a2,a3 is_collinear
-  & a1,a2,c3 is_collinear & b1,b2,c3 is_collinear & a2,a3,c1 is_collinear &
-  b2,b3,c1 is_collinear & a1,a3,c2 is_collinear & b1,b3,c2 is_collinear &
-  o,a1,b1 is_collinear & o,a2,b2 is_collinear & o,a3,b3 is_collinear;
-  then
-A2: not o,a3,a2 is_collinear by Th3;
-A3: a3,a2,c1 is_collinear & b3,b2,c1 is_collinear by A1,Th3;
-A4: o<>c1 by A1,Th3;
+  assume that
+A1: o<>b1 & a1<>b1 & o<>b2 & a2<>b2 & o<>b3 & a3<>b3 & ( not o,a1,a2
+  is_collinear)& not o,a1,a3 is_collinear and
+A2: not o,a2,a3 is_collinear and
+A3: a1,a2,c3 is_collinear & b1,b2,c3 is_collinear and
+A4: a2,a3,c1 is_collinear and
+A5: b2,b3,c1 is_collinear and
+A6: a1,a3,c2 is_collinear & b1,b3,c2 is_collinear & o,a1,b1
+  is_collinear & o, a2,b2 is_collinear & o,a3,b3 is_collinear;
+A7: o<>c1 by A2,A4,Th3;
+A8: b3,b2,c1 is_collinear by A5,Th3;
+A9: ( not o,a3,a2 is_collinear)& a3,a2,c1 is_collinear by A2,A4,Th3;
   now
     assume
-A5: o,c1,c3 is_collinear;
-    assume
-A6: not thesis;
+    o,c1,c3 is_collinear;
     then
-A7: not c1,c3,c2 is_collinear by Th3;
-    c1,c3,o is_collinear & c1<>c3 by A5,A6,Th3,ANPROJ_2:def 7;
-    then not c1,o,c2 is_collinear by A4,A7,Th8;
+A10: c1,c3,o is_collinear by Th3;
+    assume
+    not thesis;
+    then
+A11: not c1,c3,c2 is_collinear by Th3;
+    then not c1,o,c2 is_collinear by A7,A10,Th8;
     then not o,c1,c2 is_collinear by Th3;
-    hence contradiction by A1,A2,A3,A7,Lm3;
+    hence contradiction by A1,A3,A6,A9,A8,A11,Lm3;
   end;
-  hence thesis by A1,Lm3;
+  hence thesis by A1,A2,A3,A4,A5,A6,Lm3;
 end;
 
 registration
@@ -1187,26 +1195,26 @@ registration
     let PCPP be CollProjectiveSpace such that
 A1: PCPP is Pappian;
 A2: now
-      assume ex p,p1,q,q1 being Element of PCPP st
-      not ex r being Element of PCPP st
-      p,p1,r is_collinear & q,q1,r is_collinear;
-      then PCPP is up-3-dimensional CollProjectiveSpace by ANPROJ_2:def 14;
-      hence thesis;
+      assume
+      not ex p,p1,q,q1 being Element of PCPP st not ex r being Element
+      of PCPP st p,p1,r is_collinear & q,q1,r is_collinear;
+      then PCPP is Pappian CollProjectivePlane by A1,ANPROJ_2:def 14;
+      then
+      for o,p1,p2,p3,q1,q2,q3,r1,r2,r3 be Element of PCPP st o<>q1 & p1<>
+q1 & o<>q2 & p2<>q2 & o<>q3 & p3<>q3 & not o,p1,p2 is_collinear & not o,p1,p3
+is_collinear & not o,p2,p3 is_collinear & p1,p2,r3 is_collinear & q1,q2,r3
+      is_collinear & p2,p3,r1 is_collinear & q2,q3,r1 is_collinear & p1,p3,r2
+      is_collinear & q1,q3,r2 is_collinear & o,p1,q1 is_collinear & o,p2,q2
+      is_collinear & o,p3,q3 is_collinear holds r1,r2,r3 is_collinear by Th21;
+      hence thesis by ANPROJ_2:def 12;
     end;
     now
-      assume not ex p,p1,q,q1 being Element of PCPP st
-      not ex r being Element of PCPP st
-      p,p1,r is_collinear & q,q1,r is_collinear;
-      then PCPP is Pappian CollProjectivePlane by A1,ANPROJ_2:def 14;
-      then for o,p1,p2,p3,q1,q2,q3,r1,r2,r3 be Element of PCPP st
-      o<>q1 & p1<>q1 & o<>q2 & p2<>q2 & o<>q3 & p3<>q3 &
-      not o,p1,p2 is_collinear & not o,p1,p3 is_collinear &
-
-not o,p2,p3 is_collinear & p1,p2,r3 is_collinear & q1,q2,r3 is_collinear &
-      p2,p3,r1 is_collinear & q2,q3,r1 is_collinear & p1,p3,r2 is_collinear &
-      q1,q3,r2 is_collinear & o,p1,q1 is_collinear & o,p2,q2 is_collinear &
-      o,p3,q3 is_collinear holds r1,r2,r3 is_collinear by Th21;
-      hence thesis by ANPROJ_2:def 12;
+      assume
+      ex p,p1,q,q1 being Element of PCPP st not ex r being Element of
+      PCPP st p,p1,r is_collinear & q,q1,r is_collinear;
+      then PCPP is up-3-dimensional CollProjectiveSpace by
+      ANPROJ_2:def 14;
+      hence thesis;
     end;
     hence thesis by A2;
   end;

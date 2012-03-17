@@ -12,10 +12,10 @@
 <ArticleID name="XXREAL_0"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
-<ArticleID name="PARTFUN1"/>
 <ArticleID name="GLIB_000"/>
 </Signature>
 <Scheme>
@@ -28,7 +28,7 @@
 <Func kind="K" nr="73"/>
 </Adjective>
 <Adjective nr="9"/>
-<Adjective nr="26"/>
+<Adjective nr="27"/>
 <Adjective nr="33"/>
 <Adjective nr="34"/>
 </Cluster>
@@ -54,7 +54,7 @@
 <Func kind="K" nr="73"/>
 </Adjective>
 <Adjective nr="9"/>
-<Adjective nr="26"/>
+<Adjective nr="27"/>
 <Adjective nr="33"/>
 <Adjective nr="34"/>
 </Cluster>
@@ -64,7 +64,7 @@
 <Not>
 <Pred kind="R" nr="15">
 <Var nr="1"/>
-<Func kind="K" nr="114">
+<Func kind="K" nr="115">
 <Var nr="2"/>
 </Func>
 </Pred>
@@ -86,7 +86,7 @@
 <Func kind="K" nr="73"/>
 </Adjective>
 <Adjective nr="9"/>
-<Adjective nr="26"/>
+<Adjective nr="27"/>
 <Adjective nr="33"/>
 <Adjective nr="34"/>
 </Cluster>
@@ -94,7 +94,7 @@
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="114">
+<Func kind="K" nr="115">
 <Var nr="2"/>
 </Func>
 <Var nr="1"/>

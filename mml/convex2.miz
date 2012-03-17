@@ -13,13 +13,12 @@ environ
  notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0, XXREAL_0,
       REAL_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FINSET_1, NAT_1, FINSEQ_1,
       DOMAIN_1, STRUCT_0, ALGSTR_0, RLVECT_1, RLSUB_1, RLSUB_2, FINSEQ_4,
-      RLVECT_2, RVSUM_1, BHSP_1, RUSUB_4, CONVEX1, JORDAN3, CLASSES1, RFINSEQ;
+      RLVECT_2, RVSUM_1, BHSP_1, RUSUB_4, CONVEX1, JORDAN3, CLASSES1;
  constructors SETFAM_1, WELLORD2, DOMAIN_1, XXREAL_0, REAL_1, NAT_1, BINOP_2,
       PARTFUN1, FINSEQ_4, FINSOP_1, RFINSEQ, RLSUB_2, RUSUB_4, CONVEX1,
       MATRIX_2, JORDAN3, SEQ_1, RVSUM_1, CLASSES1, RELSET_1;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, NUMBERS, XXREAL_0, NAT_1, MEMBERED,
-      FINSEQ_1, STRUCT_0, RLVECT_1, COMPTS_1, RUSUB_4, CONVEX1, VALUED_0,
-      RELSET_1;
+      FINSEQ_1, STRUCT_0, RLVECT_1, RUSUB_4, CONVEX1, VALUED_0, RELSET_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, CONVEX1, FINSEQ_1, RVSUM_1;
  theorems BHSP_1, RLVECT_1, RVSUM_1, FUNCT_1, FINSEQ_1, TARSKI, ZFMISC_1,
@@ -34,244 +33,249 @@ reconsider rr = 1 as Real;
 set ff = <*rr*>;
 
 theorem
-  for V being non empty RLSStruct, M,N being convex Subset of V holds
-  M /\ N is convex;
+  for V being non empty RLSStruct, M,N being convex Subset of V holds M
+  /\ N is convex;
 
 theorem
-  for V being RealUnitarySpace-like (non empty UNITSTR), M being Subset of V,
-  F being FinSequence of the carrier of V, B being FinSequence of REAL st
-  M = {u where u is VECTOR of V :
-  for i being Element of NAT st i in (dom F /\ dom B) holds
-  ex v being VECTOR of V st v = F.i & u .|. v <= B.i} holds M is convex
+  for V being RealUnitarySpace-like (non empty UNITSTR), M being Subset
+of V, F being FinSequence of the carrier of V, B being FinSequence of REAL st M
+= {u where u is VECTOR of V : for i being Element of NAT st i in (dom F /\ dom
+B) holds ex v being VECTOR of V st v = F.i & u .|. v <= B.i} holds M is convex
 proof
   let V be RealUnitarySpace-like (non empty UNITSTR);
   let M be Subset of V;
   let F be FinSequence of the carrier of V;
   let B be FinSequence of REAL;
   assume
-A1: M = {u where u is VECTOR of V:
-  for i being Element of NAT st i in (dom F /\ dom B) holds
-  ex v being VECTOR of V st v = F.i & u.|.v <= B.i};
+A1: M = {u where u is VECTOR of V: for i being Element of NAT st i in (
+  dom F /\ dom B) holds ex v being VECTOR of V st v = F.i & u.|.v <= B.i};
   let u1,v1 be VECTOR of V;
   let r be Real;
   assume that
-A2: 0 < r & r < 1 and
-A3: u1 in M & v1 in M;
-  consider u' be VECTOR of V such that
-A4: u1 = u' and
-A5: for i being Element of NAT st i in (dom F /\ dom B) holds
-  ex v being VECTOR of V st v = F.i & u'.|.v <= B.i by A1,A3;
+A2: 0 < r and
+A3: r < 1 and
+A4: u1 in M and
+A5: v1 in M;
   consider v' be VECTOR of V such that
 A6: v1 = v' and
-A7: for i being Element of NAT st i in (dom F /\ dom B) holds
-  ex v being VECTOR of V st v = F.i & v'.|.v <= B.i by A1,A3;
-  for i being Element of NAT st i in (dom F /\ dom B) holds
-  ex v being VECTOR of V st v = F.i & (r*u1 + (1-r)*v1).|.v <= B.i
+A7: for i being Element of NAT st i in (dom F /\ dom B) holds ex v being
+  VECTOR of V st v = F.i & v'.|.v <= B.i by A1,A5;
+  consider u' be VECTOR of V such that
+A8: u1 = u' and
+A9: for i being Element of NAT st i in (dom F /\ dom B) holds ex v being
+  VECTOR of V st v = F.i & u'.|.v <= B.i by A1,A4;
+  for i being Element of NAT st i in (dom F /\ dom B) holds ex v being
+  VECTOR of V st v = F.i & (r*u1 + (1-r)*v1).|.v <= B.i
   proof
+    0 + r < 1 by A3;
+    then
+A10: 1 - r > 0 by XREAL_1:22;
     let i be Element of NAT;
     assume
-A8: i in dom F /\ dom B;
+A11: i in dom F /\ dom B;
     then i in dom B by XBOOLE_0:def 4;
     then reconsider b = B.i as Real by PARTFUN1:27;
     consider x being VECTOR of V such that
-A9: x = F.i & u'.|. x <= b by A5,A8;
-    consider y being VECTOR of V such that
-A10: y = F.i & v'.|. y <= b by A7,A8;
+A12: x = F.i and
+A13: u'.|. x <= b by A9,A11;
     take v = x;
-A11: r*(u1.|.v) <= r*b by A2,A4,A9,XREAL_1:66;
-    0 + r < 1 by A2;
-    then 1 - r > 0 by XREAL_1:22;
-    then
-A12: (1-r)*(v1.|.v) <= (1-r)*b by A6,A9,A10,XREAL_1:66;
-    (r*u1 + (1-r)*v1).|.v = (r*u1).|.v + ((1-r)*v1).|.v by BHSP_1:def 2
+A14: (r*u1 + (1-r)*v1).|.v = (r*u1).|.v + ((1-r)*v1).|.v by BHSP_1:def 2
       .= r*(u1.|.v) + ((1-r)*v1).|.v by BHSP_1:def 2
       .= r*(u1.|.v) + (1-r)*(v1.|.v) by BHSP_1:def 2;
-    then (r*u1 + (1-r)*v1).|.v <= r * b + (1-r)*(v1.|.v) by A11,XREAL_1:8;
-    then (r*u1 + (1-r)*v1).|.v - r * b <= (1-r)*(v1.|.v) by XREAL_1:22;
-    then (r*u1 + (1-r)*v1).|.v - r * b <= (1-r)*b by A12,XXREAL_0:2;
+    r*(u1.|.v) <= r*b by A2,A8,A13,XREAL_1:66;
+    then (r*u1 + (1-r)*v1).|.v <= r * b + (1-r)*(v1.|.v) by A14,XREAL_1:8;
+    then
+A15: (r*u1 + (1-r)*v1).|.v - r * b <= (1-r)*(v1.|.v) by XREAL_1:22;
+    ex y being VECTOR of V st y = F.i & v'.|. y <= b by A7,A11;
+    then (1-r)*(v1.|.v) <= (1-r)*b by A6,A12,A10,XREAL_1:66;
+    then (r*u1 + (1-r)*v1).|.v - r * b <= (1-r)*b by A15,XXREAL_0:2;
     then (r*u1 + (1-r)*v1).|.v <= r * b + (1-r)*b by XREAL_1:22;
-    hence thesis by A9;
+    hence thesis by A12;
   end;
   hence thesis by A1;
 end;
 
 theorem
-  for V being RealUnitarySpace-like (non empty UNITSTR), M being Subset of V,
-  F being FinSequence of the carrier of V, B being FinSequence of REAL st
-  M = {u where u is VECTOR of V :
-  for i being Element of NAT st i in (dom F /\ dom B) holds
-  ex v being VECTOR of V st v = F.i & u .|. v < B.i} holds M is convex
+  for V being RealUnitarySpace-like (non empty UNITSTR), M being Subset
+of V, F being FinSequence of the carrier of V, B being FinSequence of REAL st M
+= {u where u is VECTOR of V : for i being Element of NAT st i in (dom F /\ dom
+  B) holds ex v being VECTOR of V st v = F.i & u .|. v < B.i} holds M is convex
 proof
   let V be RealUnitarySpace-like (non empty UNITSTR);
   let M be Subset of V;
   let F be FinSequence of the carrier of V;
   let B be FinSequence of REAL;
   assume
-A1: M = {u where u is VECTOR of V:
-  for i being Element of NAT st i in (dom F /\ dom B) holds
-  ex v being VECTOR of V st v = F.i & u.|.v < B.i};
+A1: M = {u where u is VECTOR of V: for i being Element of NAT st i in (
+  dom F /\ dom B) holds ex v being VECTOR of V st v = F.i & u.|.v < B.i};
   let u1,v1 be VECTOR of V;
   let r be Real;
   assume that
-A2: 0 < r & r < 1 and
-A3: u1 in M & v1 in M;
-  consider u' be VECTOR of V such that
-A4: u1 = u' and
-A5: for i being Element of NAT st i in (dom F /\ dom B) holds
-  ex v being VECTOR of V st v = F.i & u'.|.v < B.i by A1,A3;
+A2: 0 < r and
+A3: r < 1 and
+A4: u1 in M and
+A5: v1 in M;
   consider v' be VECTOR of V such that
 A6: v1 = v' and
-A7: for i being Element of NAT st i in (dom F /\ dom B) holds
-  ex v being VECTOR of V st v = F.i & v'.|.v < B.i by A1,A3;
-  for i being Element of NAT st i in (dom F /\ dom B) holds
-  ex v being VECTOR of V st v = F.i & (r*u1 + (1-r)*v1).|.v < B.i
+A7: for i being Element of NAT st i in (dom F /\ dom B) holds ex v being
+  VECTOR of V st v = F.i & v'.|.v < B.i by A1,A5;
+  consider u' be VECTOR of V such that
+A8: u1 = u' and
+A9: for i being Element of NAT st i in (dom F /\ dom B) holds ex v being
+  VECTOR of V st v = F.i & u'.|.v < B.i by A1,A4;
+  for i being Element of NAT st i in (dom F /\ dom B) holds ex v being
+  VECTOR of V st v = F.i & (r*u1 + (1-r)*v1).|.v < B.i
   proof
+    0 + r < 1 by A3;
+    then
+A10: 1 - r > 0 by XREAL_1:22;
     let i be Element of NAT;
     assume
-A8: i in (dom F /\ dom B);
+A11: i in (dom F /\ dom B);
     then i in dom B by XBOOLE_0:def 4;
     then reconsider b = B.i as Real by PARTFUN1:27;
     consider x being VECTOR of V such that
-A9: x = F.i & u'.|. x < b by A5,A8;
-    consider y being VECTOR of V such that
-A10: y = F.i & v'.|. y < b by A7,A8;
+A12: x = F.i and
+A13: u'.|. x < b by A9,A11;
     take v = x;
-A11: r*(u1.|.v) < r*b by A2,A4,A9,XREAL_1:70;
-    0 + r < 1 by A2;
-    then 1 - r > 0 by XREAL_1:22;
-    then
-A12: (1-r)*(v1.|.v) <= (1-r)*b by A6,A9,A10,XREAL_1:66;
-    (r*u1 + (1-r)*v1).|.v = (r*u1).|.v + ((1-r)*v1).|.v by BHSP_1:def 2
+A14: (r*u1 + (1-r)*v1).|.v = (r*u1).|.v + ((1-r)*v1).|.v by BHSP_1:def 2
       .= r*(u1.|.v) + ((1-r)*v1).|.v by BHSP_1:def 2
       .= r*(u1.|.v) + (1-r)*(v1.|.v) by BHSP_1:def 2;
-    then (r*u1 + (1-r)*v1).|.v < r * b + (1-r)*(v1.|.v) by A11,XREAL_1:10;
-    then (r*u1 + (1-r)*v1).|.v - r * b < (1-r)*(v1.|.v) by XREAL_1:21;
-    then (r*u1 + (1-r)*v1).|.v - r * b < (1-r)*b by A12,XXREAL_0:2;
+    r*(u1.|.v) < r*b by A2,A8,A13,XREAL_1:70;
+    then (r*u1 + (1-r)*v1).|.v < r * b + (1-r)*(v1.|.v) by A14,XREAL_1:10;
+    then
+A15: (r*u1 + (1-r)*v1).|.v - r * b < (1-r)*(v1.|.v) by XREAL_1:21;
+    ex y being VECTOR of V st y = F.i & v'.|. y < b by A7,A11;
+    then (1-r)*(v1.|.v) <= (1-r)*b by A6,A12,A10,XREAL_1:66;
+    then (r*u1 + (1-r)*v1).|.v - r * b < (1-r)*b by A15,XXREAL_0:2;
     then (r*u1 + (1-r)*v1).|.v < r * b + (1-r)*b by XREAL_1:21;
-    hence thesis by A9;
+    hence thesis by A12;
   end;
   hence thesis by A1;
 end;
 
 theorem
-  for V being RealUnitarySpace-like (non empty UNITSTR), M being Subset of V,
-  F being FinSequence of the carrier of V, B being FinSequence of REAL st
-  M = {u where u is VECTOR of V :
-  for i being Element of NAT st i in (dom F /\ dom B) holds
-  ex v being VECTOR of V st v = F.i & u .|. v >= B.i} holds M is convex
+  for V being RealUnitarySpace-like (non empty UNITSTR), M being Subset
+of V, F being FinSequence of the carrier of V, B being FinSequence of REAL st M
+= {u where u is VECTOR of V : for i being Element of NAT st i in (dom F /\ dom
+B) holds ex v being VECTOR of V st v = F.i & u .|. v >= B.i} holds M is convex
 proof
   let V be RealUnitarySpace-like (non empty UNITSTR);
   let M be Subset of V;
   let F be FinSequence of the carrier of V;
   let B be FinSequence of REAL;
   assume
-A1: M = {u where u is VECTOR of V:
-  for i being Element of NAT st i in (dom F /\ dom B) holds
-  ex v being VECTOR of V st v = F.i & u.|.v >= B.i};
+A1: M = {u where u is VECTOR of V: for i being Element of NAT st i in (
+  dom F /\ dom B) holds ex v being VECTOR of V st v = F.i & u.|.v >= B.i};
   let u1,v1 be VECTOR of V;
   let r be Real;
   assume that
-A2: 0 < r & r < 1 and
-A3: u1 in M & v1 in M;
-  consider u' be VECTOR of V such that
-A4: u1 = u' and
-A5: for i being Element of NAT st i in (dom F /\ dom B) holds
-  ex v being VECTOR of V st v = F.i & u'.|.v >= B.i by A1,A3;
+A2: 0 < r and
+A3: r < 1 and
+A4: u1 in M and
+A5: v1 in M;
   consider v' be VECTOR of V such that
 A6: v1 = v' and
-A7: for i being Element of NAT st i in (dom F /\ dom B) holds
-  ex v being VECTOR of V st v = F.i & v'.|.v >= B.i by A1,A3;
-  for i being Element of NAT st i in (dom F /\ dom B) holds
-  ex v being VECTOR of V st v = F.i & (r*u1 + (1-r)*v1).|.v >= B.i
+A7: for i being Element of NAT st i in (dom F /\ dom B) holds ex v being
+  VECTOR of V st v = F.i & v'.|.v >= B.i by A1,A5;
+  consider u' be VECTOR of V such that
+A8: u1 = u' and
+A9: for i being Element of NAT st i in (dom F /\ dom B) holds ex v being
+  VECTOR of V st v = F.i & u'.|.v >= B.i by A1,A4;
+  for i being Element of NAT st i in (dom F /\ dom B) holds ex v being
+  VECTOR of V st v = F.i & (r*u1 + (1-r)*v1).|.v >= B.i
   proof
+    0 + r < 1 by A3;
+    then
+A10: 1 - r > 0 by XREAL_1:22;
     let i be Element of NAT;
     assume
-A8: i in (dom F /\ dom B);
+A11: i in (dom F /\ dom B);
     then i in dom B by XBOOLE_0:def 4;
     then reconsider b = B.i as Real by PARTFUN1:27;
     consider x being VECTOR of V such that
-A9: x = F.i & u'.|. x >= b by A5,A8;
-    consider y being VECTOR of V such that
-A10: y = F.i & v'.|. y >= b by A7,A8;
+A12: x = F.i and
+A13: u'.|. x >= b by A9,A11;
     take v = x;
-A11: r*(u1.|.v) >= r*b by A2,A4,A9,XREAL_1:66;
-    0 + r < 1 by A2;
-    then 1 - r > 0 by XREAL_1:22;
-    then
-A12: (1-r)*(v1.|.v) >= (1-r)*b by A6,A9,A10,XREAL_1:66;
-    (r*u1 + (1-r)*v1).|.v = (r*u1).|.v + ((1-r)*v1).|.v by BHSP_1:def 2
+A14: (r*u1 + (1-r)*v1).|.v = (r*u1).|.v + ((1-r)*v1).|.v by BHSP_1:def 2
       .= r*(u1.|.v) + ((1-r)*v1).|.v by BHSP_1:def 2
       .= r*(u1.|.v) + (1-r)*(v1.|.v) by BHSP_1:def 2;
-    then (r*u1 + (1-r)*v1).|.v >= r * b + (1-r)*(v1.|.v) by A11,XREAL_1:8;
-    then (r*u1 + (1-r)*v1).|.v - r * b >= (1-r)*(v1.|.v) by XREAL_1:21;
-    then (r*u1 + (1-r)*v1).|.v - r * b >= (1-r)*b by A12,XXREAL_0:2;
+    r*(u1.|.v) >= r*b by A2,A8,A13,XREAL_1:66;
+    then (r*u1 + (1-r)*v1).|.v >= r * b + (1-r)*(v1.|.v) by A14,XREAL_1:8;
+    then
+A15: (r*u1 + (1-r)*v1).|.v - r * b >= (1-r)*(v1.|.v) by XREAL_1:21;
+    ex y being VECTOR of V st y = F.i & v'.|. y >= b by A7,A11;
+    then (1-r)*(v1.|.v) >= (1-r)*b by A6,A12,A10,XREAL_1:66;
+    then (r*u1 + (1-r)*v1).|.v - r * b >= (1-r)*b by A15,XXREAL_0:2;
     then (r*u1 + (1-r)*v1).|.v >= r * b + (1-r)*b by XREAL_1:21;
-    hence thesis by A9;
+    hence thesis by A12;
   end;
   hence thesis by A1;
 end;
 
 theorem
-  for V being RealUnitarySpace-like (non empty UNITSTR), M being Subset of V,
-  F being FinSequence of the carrier of V, B being FinSequence of REAL st
-  M = {u where u is VECTOR of V :
-  for i being Element of NAT st i in (dom F /\ dom B) holds
-  ex v being VECTOR of V st v = F.i & u .|. v > B.i} holds M is convex
+  for V being RealUnitarySpace-like (non empty UNITSTR), M being Subset
+of V, F being FinSequence of the carrier of V, B being FinSequence of REAL st M
+= {u where u is VECTOR of V : for i being Element of NAT st i in (dom F /\ dom
+  B) holds ex v being VECTOR of V st v = F.i & u .|. v > B.i} holds M is convex
 proof
   let V be RealUnitarySpace-like (non empty UNITSTR);
   let M be Subset of V;
   let F be FinSequence of the carrier of V;
   let B be FinSequence of REAL;
   assume
-A1: M = {u where u is VECTOR of V:
-  for i being Element of NAT st i in (dom F /\ dom B) holds
-  ex v being VECTOR of V st v = F.i & u.|.v > B.i};
+A1: M = {u where u is VECTOR of V: for i being Element of NAT st i in (
+  dom F /\ dom B) holds ex v being VECTOR of V st v = F.i & u.|.v > B.i};
   let u1,v1 be VECTOR of V;
   let r be Real;
   assume that
-A2: 0 < r & r < 1 and
-A3: u1 in M & v1 in M;
-  consider u' be VECTOR of V such that
-A4: u1 = u' and
-A5: for i being Element of NAT st i in (dom F /\ dom B) holds
-  ex v being VECTOR of V st v = F.i & u'.|.v > B.i by A1,A3;
+A2: 0 < r and
+A3: r < 1 and
+A4: u1 in M and
+A5: v1 in M;
   consider v' be VECTOR of V such that
 A6: v1 = v' and
-A7: for i being Element of NAT st i in (dom F /\ dom B) holds
-  ex v being VECTOR of V st v = F.i & v'.|.v > B.i by A1,A3;
-  for i being Element of NAT st i in (dom F /\ dom B) holds
-  ex v being VECTOR of V st v = F.i & (r*u1 + (1-r)*v1).|.v > B.i
+A7: for i being Element of NAT st i in (dom F /\ dom B) holds ex v being
+  VECTOR of V st v = F.i & v'.|.v > B.i by A1,A5;
+  consider u' be VECTOR of V such that
+A8: u1 = u' and
+A9: for i being Element of NAT st i in (dom F /\ dom B) holds ex v being
+  VECTOR of V st v = F.i & u'.|.v > B.i by A1,A4;
+  for i being Element of NAT st i in (dom F /\ dom B) holds ex v being
+  VECTOR of V st v = F.i & (r*u1 + (1-r)*v1).|.v > B.i
   proof
+    0 + r < 1 by A3;
+    then
+A10: 1 - r > 0 by XREAL_1:22;
     let i be Element of NAT;
     assume
-A8: i in (dom F /\ dom B);
+A11: i in (dom F /\ dom B);
     then i in dom B by XBOOLE_0:def 4;
     then reconsider b = B.i as Real by PARTFUN1:27;
     consider x being VECTOR of V such that
-A9: x = F.i & u'.|. x > b by A5,A8;
-    consider y being VECTOR of V such that
-A10: y = F.i & v'.|. y > b by A7,A8;
+A12: x = F.i and
+A13: u'.|. x > b by A9,A11;
     take v = x;
-A11: r*(u1.|.v) > r*b by A2,A4,A9,XREAL_1:70;
-    0 + r < 1 by A2;
-    then 1 - r > 0 by XREAL_1:22;
-    then
-A12: (1-r)*(v1.|.v) >= (1-r)*b by A6,A9,A10,XREAL_1:66;
-    (r*u1 + (1-r)*v1).|.v = (r*u1).|.v + ((1-r)*v1).|.v by BHSP_1:def 2
+A14: (r*u1 + (1-r)*v1).|.v = (r*u1).|.v + ((1-r)*v1).|.v by BHSP_1:def 2
       .= r*(u1.|.v) + ((1-r)*v1).|.v by BHSP_1:def 2
       .= r*(u1.|.v) + (1-r)*(v1.|.v) by BHSP_1:def 2;
-    then (r*u1 + (1-r)*v1).|.v > r * b + (1-r)*(v1.|.v) by A11,XREAL_1:10;
-    then (r*u1 + (1-r)*v1).|.v - r * b > (1-r)*(v1.|.v) by XREAL_1:22;
-    then (r*u1 + (1-r)*v1).|.v - r * b > (1-r)*b by A12,XXREAL_0:2;
+    r*(u1.|.v) > r*b by A2,A8,A13,XREAL_1:70;
+    then (r*u1 + (1-r)*v1).|.v > r * b + (1-r)*(v1.|.v) by A14,XREAL_1:10;
+    then
+A15: (r*u1 + (1-r)*v1).|.v - r * b > (1-r)*(v1.|.v) by XREAL_1:22;
+    ex y being VECTOR of V st y = F.i & v'.|. y > b by A7,A11;
+    then (1-r)*(v1.|.v) >= (1-r)*b by A6,A12,A10,XREAL_1:66;
+    then (r*u1 + (1-r)*v1).|.v - r * b > (1-r)*b by A15,XXREAL_0:2;
     then (r*u1 + (1-r)*v1).|.v > r * b + (1-r)*b by XREAL_1:22;
-    hence thesis by A9;
+    hence thesis by A12;
   end;
   hence thesis by A1;
 end;
 
-Lm1: for V being RealLinearSpace, M being convex Subset of V holds
-for N being Subset of V, L being Linear_Combination of N st
-L is convex & N c= M holds Sum(L) in M
+Lm1: for V being RealLinearSpace, M being convex Subset of V holds for N being
+Subset of V, L being Linear_Combination of N st L is convex & N c= M holds Sum(
+L) in M
+
 proof
   let V be RealLinearSpace;
   let M be convex Subset of V;
@@ -283,523 +287,569 @@ A2: N c= M;
   consider F being FinSequence of the carrier of V such that
 A3: F is one-to-one and
 A4: rng F = Carrier L and
-A5: ex f being FinSequence of REAL st len f = len F & Sum(f) = 1 &
-  (for n being Nat st n in dom f holds f.n = L.(F.n) & f.n >= 0)
-  by A1,CONVEX1:def 3;
+
+A5: ex f being FinSequence of REAL st len f = len F & Sum(f) = 1 & for n
+  being Nat st n in dom f holds f.n = L.(F.n) & f.n >= 0 by A1,CONVEX1:def 3;
+
   consider f being FinSequence of REAL such that
 A6: len f = len F and
 A7: Sum(f) = 1 and
 A8: for n being Nat st n in dom f holds f.n = L.(F.n) & f.n >= 0 by A5;
-A9: len F >= 1
-  proof
-    Carrier(L) <> {} by A1,CONVEX1:21;
-    then not (Carrier(L),{} are_equipotent) by CARD_1:46;
-    then card(Carrier(L)) <> card {} by CARD_1:21;
-    then len F <> card {} by A3,A4,FINSEQ_4:77;
-    then len F > 0 by CARD_1:47;
-    then len F >= 0 + 1 by NAT_1:13;
-    hence thesis;
-  end;
-  then reconsider i = len F as non empty Element of NAT;
-  defpred P[Nat] means
-  (1/Sum(mid(f,1,$1)))*Sum(mid(L(#)F,1,$1)) in M;
-A10: len (L(#)F) = len F by RLVECT_2:def 9;
-A11: P[1]
-  proof
-    mid(f,1,1) = f|1 by JORDAN3:25;
-    then
-A12: len(mid(f,1,1)) = 1 by A6,A9,FINSEQ_1:80;
-    then 1 in dom mid(f,1,1) by FINSEQ_3:27;
-    then reconsider m = mid(f,1,1).1 as Element of REAL by PARTFUN1:27;
-    mid(f,1,1)= <* mid(f,1,1).1 *> by A12,FINSEQ_1:57;
-    then
-A13: Sum(mid(f,1,1)) = m by FINSOP_1:12;
-    mid(L(#)F,1,1) = (L(#)F)|1 by JORDAN3:25;
-    then
-A14: len(mid(L(#)F,1,1)) = 1 by A9,A10,FINSEQ_1:80;
-    1 in Seg len (L(#)F) by A9,A10;
-    then
-A15: 1 in dom (L(#)F) & 1 in dom F & 1 in dom f by A6,A10,FINSEQ_1:def 3;
-    then
-A16: F/.1 = F.1 by PARTFUN1:def 8;
-A17: mid(L(#)F,1,1).1 = (L(#)F).1 by A9,A10,JORDAN3:32
-      .=L.(F/.1)*F/.1 by A15,RLVECT_2:def 9;
-    f.1 = L.(F.1) by A8,A15
-      .= L.(F/.1) by A15,PARTFUN1:def 8;
-    then
-A18: Sum(mid(f,1,1)) = L.(F/.1) by A6,A9,A13,JORDAN3:32;
-A19: F.1 in rng F by A15,FUNCT_1:def 5;
-    then F.1 in {v where v is Element of V : L.v <> 0} by A4,RLVECT_2:def 6;
-    then consider v2 being Element of V such that
-A20: F.1 = v2 & L.v2 <> 0;
-    mid(L(#)F,1,1) = <* mid(L(#)F,1,1).1 *> by A14,FINSEQ_1:57;
-    then
-A21: (1/Sum(mid(f,1,1)))*Sum(mid(L(#)F,1,1))
-    = (1/Sum(mid(f,1,1))) * (L.(F/.1) * F/.1) by A17,RLVECT_1:61
-      .= ((1/Sum(mid(f,1,1))) * L.(F/.1)) * F/.1 by RLVECT_1:def 9
-      .= 1 * F/.1 by A16,A18,A20,XCMPLX_1:107
-      .= F/.1 by RLVECT_1:def 9;
-    Carrier(L) c= N by RLVECT_2:def 8;
-    then Carrier(L) c= M by A2,XBOOLE_1:1;
-    hence thesis by A4,A16,A19,A21;
-  end;
-A22: for k being non empty Nat st P[k] holds P[k+1]
+  not Carrier(L),{} are_equipotent by A1,CARD_1:46,CONVEX1:21;
+  then
+A9: card(Carrier(L)) <> card {} by CARD_1:21;
+  then reconsider i = len F as non empty Element of NAT by A3,A4,FINSEQ_4:77;
+A10: len (L (#) F) = len F by RLVECT_2:def 9;
+  defpred P[Nat] means (1/Sum(mid(f,1,$1)))*Sum(mid(L(#)F,1,$1)) in M;
+A11: len (L(#)F) = len F by RLVECT_2:def 9;
+A12: for k being non empty Nat st P[k] holds P[k+1]
   proof
     let k be non empty Nat;
+A13: k >= 1 by NAT_1:14;
     assume
-A23: (1/Sum(mid(f,1,k)))*Sum(mid(L(#)F,1,k)) in M;
-A24: k >= 1 by NAT_1:14;
-    now per cases;
+A14: (1/Sum(mid(f,1,k)))*Sum(mid(L(#)F,1,k)) in M;
+    now
+      per cases;
       suppose
-A25:    k >= len f;
-A26:    mid(f,1,k) = f|k by JORDAN3:25,NAT_1:14
-          .= f by A25,FINSEQ_1:79;
-A27:    mid(L(#)F,1,k) = (L(#)F)|k by JORDAN3:25,NAT_1:14
-          .= L(#)F
-        by A6,A10,A25,FINSEQ_1:79;
-A28:    mid(f,1,k+1) = f|(k+1) by JORDAN3:25,NAT_1:12
-          .= f by A25,FINSEQ_1:79,NAT_1:12;
-        mid(L(#)F,1,k+1) = (L(#)F)|(k+1) by JORDAN3:25,NAT_1:12
-          .= L(#)F by A6,A10,A25,FINSEQ_1:79,NAT_1:12;
-        hence thesis by A23,A26,A27,A28;
+A15:    k >= len f;
+A16:    mid(L(#)F,1,k+1) = (L(#)F)|(k+1) by JORDAN3:25,NAT_1:12
+          .= L(#)F by A6,A11,A15,FINSEQ_1:79,NAT_1:12;
+A17:    mid(f,1,k) = f|k by JORDAN3:25,NAT_1:14
+          .= f by A15,FINSEQ_1:79;
+A18:    mid(f,1,k+1) = f|(k+1) by JORDAN3:25,NAT_1:12
+          .= f by A15,FINSEQ_1:79,NAT_1:12;
+        mid(L(#)F,1,k) = (L(#)F)|k by JORDAN3:25,NAT_1:14
+          .= L(#)F by A6,A11,A15,FINSEQ_1:79;
+        hence thesis by A14,A17,A18,A16;
       end;
       suppose
-A29:    k < len f;
-        then
-A30:    k+1 >= 1 & k+1 <= len f by NAT_1:13,14;
+A19:    k < len f;
         mid(f,1,k) = f|k by JORDAN3:25,NAT_1:14;
         then
-A31:    len mid(f,1,k) = k by A29,FINSEQ_1:80;
-A32:    len <* mid(f,1,k+1).(k+1) *> = 1 by FINSEQ_1:57;
-        mid(f,1,k+1) = f|(k+1) by A30,JORDAN3:25;
-        then len mid(f,1,k+1) = k+1 by A30,FINSEQ_1:80;
-        then
-A33:    dom mid(f,1,k+1) = Seg (len mid(f,1,k) + len <* mid(f,1,k+
-        1).(k+1) *>) by A31,A32,FINSEQ_1:def 3;
-A34:    mid(f,1,k+1) = f|(k+1) by A30,JORDAN3:25;
-A35:    len (f|(k+1)) = k+1 by A30,FINSEQ_1:80;
-A36:    for i being Nat st i in dom mid(f,1,k) holds
-        mid(f,1,k+1).i = mid(f,1,k).i
+A20:    len mid(f,1,k) = k by A19,FINSEQ_1:80;
+
+A21:    ex i being Element of NAT st i in dom mid(f,1,k) & 0 < mid(f,1,k
+        ).i
+
         proof
-          let i be Nat;
-A37:      i in NAT by ORDINAL1:def 13;
-          assume
-A38:      i in dom mid(f,1,k);
-A39:      mid(f,1,k) = f|k by JORDAN3:25,NAT_1:14;
-          then (f|k).i = (f|k)/.i by A38,PARTFUN1:def 8;
+          take 1;
+          1 <= len f by A19,NAT_1:14;
           then
-A40:      mid(f,1,k).i = f/.i by A38,A39,FINSEQ_4:85;
-A41:      i in Seg len(f|k) by A38,A39,FINSEQ_1:def 3;
-          len(f|k) = k by A29,FINSEQ_1:80;
-          then 1 <= i & i <= k by A41,FINSEQ_1:3;
-          then 1 <= i & i <= k+1 by NAT_1:12;
-          then i in Seg (k+1) by A37;
-          then
-A42:      i in dom (f|(k+1)) by A35,FINSEQ_1:def 3;
-          then (f|(k+1)).i = (f|(k+1))/.i by PARTFUN1:def 8;
-          hence thesis by A34,A40,A42,FINSEQ_4:85;
-        end;
-        for i being Nat st i in dom <* mid(f,1,k+1).(k+1) *> holds
-        mid(f,1,k+1).(len mid(f,1,k) + i) = <* mid(f,1,k+1).(k+1) *>.i
-        proof
-          let i be Nat;
-          assume i in dom <* mid(f,1,k+1).(k+1) *>;
-          then i in Seg 1 by FINSEQ_1:55;
-          then i = 1 by FINSEQ_1:4,TARSKI:def 1;
-          hence thesis by A31,FINSEQ_1:57;
-        end;
-        then
-A43:    mid(f,1,k+1)=mid(f,1,k)^<* mid(f,1,k+1).(k+1) *>
-        by A33,A36,FINSEQ_1:def 7;
-        k+1 in Seg (k+1) by A30;
-        then
-A44:    k+1 in dom (f|(k+1)) by A35,FINSEQ_1:def 3;
-        then (f|(k+1))/.(k+1) = f/.(k+1) by FINSEQ_4:85;
-        then
-A45:    mid(f,1,k+1).(k+1) = f/.(k+1) by A34,A44,PARTFUN1:def 8;
-A46:    k+1 in Seg len f by A30;
-        then
-A47:    k+1 in dom f by FINSEQ_1:def 3;
-        then
-A48:    mid(f,1,k+1).(k+1) = f.(k+1) by A45,PARTFUN1:def 8
-          .= L.(F.(k+1)) by A8,A47;
-        k+1 in dom F by A6,A46,FINSEQ_1:def 3;
-        then mid(f,1,k+1).(k+1) = L.(F/.(k+1)) by A48,PARTFUN1:def 8;
-        then
-A49:    Sum(mid(f,1,k+1)) = Sum(mid(f,1,k)) + L.(F/.(k+1)) by A43,RVSUM_1:104;
-A50:    k < len (L(#)F) by A6,A29,RLVECT_2:def 9;
-        then
-A51:    k+1 >= 1 & k+1 <= len (L(#)F) by NAT_1:13,14;
-        mid(L(#)F,1,k) = (L(#)F)|k by JORDAN3:25,NAT_1:14;
-        then
-A52:    len mid(L(#)F,1,k) = k by A50,FINSEQ_1:80;
-A53:    len <* mid(L(#)F,1,k+1).(k+1) *> = 1 by FINSEQ_1:57;
-A54:    mid(L(#)F,1,k+1) = (L(#)F)|(k+1) by A51,JORDAN3:25;
-        then len mid(L(#)F,1,k+1) = k+1 by A51,FINSEQ_1:80;
-        then
-A55:    dom mid(L(#)F,1,k+1)
-        = Seg (len mid(L(#)F,1,k) + len <* mid(L(#)F,1,k+1).(k+1) *>)
-        by A52,A53,FINSEQ_1:def 3;
-A56:    len ((L(#)F)|(k+1)) = k+1 by A51,FINSEQ_1:80;
-A57:    for i being Nat st i in dom mid(L(#)F,1,k) holds
-        mid(L(#)F,1,k+1).i = mid(L(#)F,1,k).i
-        proof
-          let i be Nat;
-A58:      i in NAT by ORDINAL1:def 13;
-          assume
-A59:      i in dom mid(L(#)F,1,k);
-A60:      mid(L(#)F,1,k) = (L(#)F)|k by JORDAN3:25,NAT_1:14;
-          then ((L(#)F)|k).i = ((L(#)F)|k)/.i by A59,PARTFUN1:def 8;
-          then
-A61:      mid(L(#)F,1,k).i = (L(#)F)/.i by A59,A60,FINSEQ_4:85;
-A62:      i in Seg len((L(#)F)|k) by A59,A60,FINSEQ_1:def 3;
-          len((L(#)F)|k) = k by A50,FINSEQ_1:80;
-          then 1 <= i & i <= k by A62,FINSEQ_1:3;
-          then 1 <= i & i <= k+1 by NAT_1:12;
-          then i in Seg (k+1) by A58;
-          then
-A63:      i in dom ((L(#)F)|(k+1)) by A56,FINSEQ_1:def 3;
-          then ((L(#)F)|(k+1)).i = ((L(#)F)|(k+1))/.i by PARTFUN1:def 8;
-          hence thesis by A54,A61,A63,FINSEQ_4:85;
-        end;
-        for i being Nat st i in dom <* mid(L(#)F,1,k+1).(k+1) *> holds
-        mid(L(#)F,1,k+1).(len mid(L(#)F,1,k) + i)
-        = <* mid(L(#)F,1,k+1).(k+1) *>.i
-        proof
-          let i be Nat;
-          assume i in dom <* mid(L(#)F,1,k+1).(k+1) *>;
-          then i in Seg 1 by FINSEQ_1:55;
-          then i = 1 by FINSEQ_1:4,TARSKI:def 1;
-          hence thesis by A52,FINSEQ_1:57;
-        end;
-        then
-A64:    mid(L(#)F,1,k+1) = mid(L(#)F,1,k)^<* mid(L(#)F,1,k+1).(k+1 ) *>
-        by A55,A57,FINSEQ_1:def 7;
-        k+1 in Seg (k+1) by A30;
-        then
-A65:    k+1 in dom ((L(#)F)|(k+1)) by A56,FINSEQ_1:def 3;
-        then ((L(#)F)|(k+1))/.(k+1) = (L(#)F)/.(k+1) by FINSEQ_4:85;
-        then
-A66:    mid((L(#)F),1,k+1).(k+1) = (L(#)F)/.(k+1) by A54,A65,PARTFUN1:def 8;
-        k+1 <= len (L(#)F) by A6,A30,RLVECT_2:def 9;
-        then
-A67:    k+1 in dom (L(#)F) by A30,FINSEQ_3:27;
-        then
-A68:    mid((L(#)F),1,k+1).(k+1) = (L(#)F).(k+1) by A66,PARTFUN1:def 8
-          .= L.(F/.(k+1)) * F/.(k+1) by A67,RLVECT_2:def 9;
-        set r1 = Sum(mid(f,1,k));
-        set r2 = L.(F/.(k+1));
-        set w1 = Sum(mid(L(#)F,1,k));
-        set w2 = F/.(k+1);
-A69:    for i being Nat st i in dom mid(f,1,k) holds 0 <= mid(f,1,k).i
-        proof
-          let i be Nat;
-          assume i in dom mid(f,1,k);
-          then i in Seg k by A31,FINSEQ_1:def 3;
-          then
-A71:      1 <= i & i <= k by FINSEQ_1:3;
-          then
-A72:      mid(f,1,k).i = f.i by A29,JORDAN3:32;
-          1 <= i & i <= len f by A29,A71,XXREAL_0:2;
-          then i in dom f by FINSEQ_3:27;
-          hence thesis by A8,A72;
-        end;
-        ex i being Element of NAT st i in dom mid(f,1,k) & 0 < mid(f,1,k).i
-        proof
-A73:      1 in Seg len mid(f,1,k) by A24,A31;
-          1 <= len f by A29,NAT_1:14;
-          then
-A74:      1 in Seg len f;
+A22:      1 in Seg len f;
           then 1 in dom f by FINSEQ_1:def 3;
           then
-A75:      f.1 = L.(F.1) & f.1 >= 0 by A8;
-          1 in dom F by A6,A74,FINSEQ_1:def 3;
+A23:      f.1 = L.(F.1) & f.1 >= 0 by A8;
+          1 in dom F by A6,A22,FINSEQ_1:def 3;
           then F.1 in Carrier(L) by A4,FUNCT_1:def 5;
-          then F.1 in {v where v is Element of V : L.v <> 0}
-          by RLVECT_2:def 6;
-          then consider v being Element of V such that
-A76:      v = F.1 & L.v <> 0;
-          take 1;
-          thus thesis by A24,A29,A73,A75,A76,FINSEQ_1:def 3,JORDAN3:32;
+
+          then F.1 in {v where v is Element of V : L.v <> 0} by RLVECT_2:def 6;
+
+          then
+A24:      ex v being Element of V st v = F.1 & L.v <> 0;
+          1 in Seg len mid(f,1,k) by A13,A20;
+          hence thesis by A13,A19,A23,A24,FINSEQ_1:def 3,JORDAN3:32;
+        end;
+
+A25:    for i being Nat st i in dom <* mid(f,1,k+1).(k+1) *> holds mid(f,
+        1,k+1).(len mid(f,1,k) + i) = <* mid(f,1,k+1).(k+1) *>.i
+
+        proof
+          let i be Nat;
+          assume
+          i in dom <* mid(f,1,k+1).(k+1) *>;
+          then i in Seg 1 by FINSEQ_1:55;
+          then i = 1 by FINSEQ_1:4,TARSKI:def 1;
+          hence thesis by A20,FINSEQ_1:57;
+        end;
+A26:    mid(f,1,k+1) = f|(k+1) by JORDAN3:25,NAT_1:14;
+        set r1 = Sum(mid(f,1,k));
+        for i being Nat st i in dom mid(f,1,k) holds 0 <= mid(f,1,k).i
+        proof
+          let i be Nat;
+          assume
+          i in dom mid(f,1,k);
+          then
+A27:      i in Seg k by A20,FINSEQ_1:def 3;
+          then
+A28:      1 <= i by FINSEQ_1:3;
+A29:      i <= k by A27,FINSEQ_1:3;
+          then i <= len f by A19,XXREAL_0:2;
+          then
+A30:      i in dom f by A28,FINSEQ_3:27;
+          mid(f,1,k).i = f.i by A19,A28,A29,JORDAN3:32;
+          hence thesis by A8,A30;
         end;
         then
-A77:    r1 > 0 by A69,RVSUM_1:115;
-A78:    w2 in M & r2 > 0
+A31:    r1 > 0 by A21,RVSUM_1:115;
+A32:    k+1 <= len f by A19,NAT_1:13;
+        then
+A33:    len (f|(k+1)) = k+1 by FINSEQ_1:80;
+
+A34:    for i being Nat st i in dom mid(f,1,k) holds mid(f,1,k+1).i = mid
+        (f,1,k).i
+
         proof
-          k+1 in Seg len F by A6,A30;
+          let i be Nat;
+A35:      mid(f,1,k) = f|k by JORDAN3:25,NAT_1:14;
+          assume
+A36:      i in dom mid(f,1,k);
           then
-A79:      k+1 in dom F by FINSEQ_1:def 3;
+A37:      i in Seg len(f|k) by A35,FINSEQ_1:def 3;
+          len(f|k) = k by A19,FINSEQ_1:80;
+          then i <= k by A37,FINSEQ_1:3;
+          then
+A38:      i <= k+1 by NAT_1:12;
+          (f|k).i = (f|k)/.i by A36,A35,PARTFUN1:def 8;
+          then
+A39:      mid(f,1,k).i = f/.i by A36,A35,FINSEQ_4:85;
+          i in NAT & 1 <= i by A37,FINSEQ_1:3,ORDINAL1:def 13;
+          then i in Seg (k+1) by A38;
+          then
+A40:      i in dom (f|(k+1)) by A33,FINSEQ_1:def 3;
+          then (f|(k+1)).i = (f|(k+1))/.i by PARTFUN1:def 8;
+          hence thesis by A26,A39,A40,FINSEQ_4:85;
+        end;
+A41:    k+1 >= 1 by NAT_1:14;
+        then
+A42:    k+1 in Seg len f by A32;
+        then
+A43:    k+1 in dom f by FINSEQ_1:def 3;
+A44:    k+1 in dom F by A6,A42,FINSEQ_1:def 3;
+        k+1 in Seg (k+1) by A41;
+        then
+A45:    k+1 in dom (f|(k+1)) by A33,FINSEQ_1:def 3;
+        then (f|(k+1))/.(k+1) = f/.(k+1) by FINSEQ_4:85;
+        then mid(f,1,k+1).(k+1) = f/.(k+1) by A26,A45,PARTFUN1:def 8;
+        then mid(f,1,k+1).(k+1) = f.(k+1) by A43,PARTFUN1:def 8
+          .= L.(F.(k+1)) by A8,A43;
+        then
+A46:    mid(f,1,k+1).(k+1) = L.(F/.(k+1)) by A44,PARTFUN1:def 8;
+        mid(f,1,k+1) = f|(k+1) by JORDAN3:25,NAT_1:14;
+
+        then
+        len <* mid(f,1,k+1).(k+1) *> = 1 & len mid(f,1,k+1) = k+1 by A32,
+FINSEQ_1:57,80;
+
+        then
+        dom mid(f,1,k+1) = Seg (len mid(f,1,k) + len <* mid(f,1,k+ 1).(k+
+        1) *>) by A20,FINSEQ_1:def 3;
+
+        then mid(f,1,k+1)=mid(f,1,k)^<* mid(f,1,k+1).(k+1) *> by A34,A25,
+FINSEQ_1:def 7;
+
+        then
+A47:    Sum(mid(f,1,k+1)) = Sum(mid(f,1,k)) + L.(F/.(k+1)) by A46,RVSUM_1:104;
+
+A48:    mid(L(#)F,1,k+1) = (L(#)F)|(k+1) by JORDAN3:25,NAT_1:14;
+        set w2 = F/.(k+1);
+        set w1 = Sum(mid(L(#)F,1,k));
+        set r2 = L.(F/.(k+1));
+A49:    (1/(r1+r2))*r1 = r1/(r1+r2) by XCMPLX_1:100;
+A50:    w2 in M & r2 > 0
+        proof
+          k+1 in Seg len f by A41,A32;
+          then k+1 in dom f by FINSEQ_1:def 3;
+          then
+A51:      f.(k+1) = L.(F.(k+1)) & f.(k+1) >= 0 by A8;
+          k+1 in Seg len F by A6,A41,A32;
+          then
+A52:      k+1 in dom F by FINSEQ_1:def 3;
           then w2 = F.(k+1) by PARTFUN1:def 8;
           then
-A80:      w2 in Carrier(L) by A4,A79,FUNCT_1:def 5;
+A53:      w2 in Carrier(L) by A4,A52,FUNCT_1:def 5;
           Carrier(L) c= N by RLVECT_2:def 8;
-          hence w2 in M by A2,A80,TARSKI:def 3;
-          w2 in {v where v is Element of V : L.v <> 0} by A80,RLVECT_2:def 6;
-          then consider v being Element of V such that
-A81:      v = w2 & L.v <> 0;
-          k+1 in Seg len f by A30;
-          then k+1 in dom f by FINSEQ_1:def 3;
-          then f.(k+1) = L.(F.(k+1)) & f.(k+1) >= 0 by A8;
-          hence thesis by A79,A81,PARTFUN1:def 8;
+          hence w2 in M by A2,A53,TARSKI:def 3;
+
+          w2 in {v where v is Element of V : L.v <> 0} by A53,RLVECT_2:def 6;
+
+          then ex v being Element of V st v = w2 & L.v <> 0;
+          hence thesis by A52,A51,PARTFUN1:def 8;
         end;
+        then r1+r2 > r1 by XREAL_1:31;
         then
-A82:    r1+r2 > 0+(0 qua Nat) by A77,XREAL_1:10;
-A83:    0 < (1/(r1+r2))*r1 & (1/(r1+r2))*r1 < 1
+A54:    (1/(r1+r2))*r1 < 1 by A31,A49,XREAL_1:191;
+A55:    r1+r2 > 0+(0 qua Nat) by A31,A50,XREAL_1:10;
+        then 1/(r1+r2) > 0 by XREAL_1:141;
+        then
+A56:    0 < (1/(r1+r2))*r1 by A31,XREAL_1:131;
+        k+1 <= len (L(#)F) by A6,A32,RLVECT_2:def 9;
+        then
+A57:    k+1 in dom (L(#)F) by A41,FINSEQ_3:27;
+A58:    k < len (L(#)F) by A6,A19,RLVECT_2:def 9;
+        then
+A59:    k+1 <= len (L(#)F) by NAT_1:13;
+        then
+A60:    len ((L(#)F)|(k+1)) = k+1 by FINSEQ_1:80;
+
+A61:    for i being Nat st i in dom mid(L(#)F,1,k) holds mid(L(#)F,1,k+1)
+        .i = mid(L(#)F,1,k).i
+
         proof
-          1/(r1+r2) > 0 by A82,XREAL_1:141;
-          hence (1/(r1+r2))*r1 > 0 by A77,XREAL_1:131;
-A84:      r1+r2 > r1 by A78,XREAL_1:31;
-          (1/(r1+r2))*r1 = r1/(r1+r2) by XCMPLX_1:100;
-          hence thesis by A77,A84,XREAL_1:191;
+          let i be Nat;
+A62:      mid(L(#)F,1,k) = (L(#)F)|k by JORDAN3:25,NAT_1:14;
+          assume
+A63:      i in dom mid(L(#)F,1,k);
+          then
+A64:      i in Seg len((L(#)F)|k) by A62,FINSEQ_1:def 3;
+          len((L(#)F)|k) = k by A58,FINSEQ_1:80;
+          then i <= k by A64,FINSEQ_1:3;
+          then
+A65:      i <= k+1 by NAT_1:12;
+          ((L(#)F)|k).i = ((L(#)F)|k)/.i by A63,A62,PARTFUN1:def 8;
+          then
+A66:      mid(L(#)F,1,k).i = (L(#)F)/.i by A63,A62,FINSEQ_4:85;
+          i in NAT & 1 <= i by A64,FINSEQ_1:3,ORDINAL1:def 13;
+          then i in Seg (k+1) by A65;
+          then
+A67:      i in dom ((L(#)F)|(k+1)) by A60,FINSEQ_1:def 3;
+          then ((L(#)F)|(k+1)).i = ((L(#)F)|(k+1))/.i by PARTFUN1:def 8;
+          hence thesis by A48,A66,A67,FINSEQ_4:85;
         end;
-A85:    (1/(r1+r2))*r2 = 1 - (1/(r1+r2))*r1
+        k+1 in Seg (k+1) by A41;
+        then
+A68:    k+1 in dom ((L(#)F)|(k+1)) by A60,FINSEQ_1:def 3;
+        then ((L(#)F)|(k+1))/.(k+1) = (L(#)F)/.(k+1) by FINSEQ_4:85;
+
+        then mid((L(#)F),1,k+1).(k+1) = (L(#)F)/.(k+1) by A48,A68,
+PARTFUN1:def 8;
+
+        then
+A69:    mid((L(#)F),1,k+1).(k+1) = (L(#)F).(k+1) by A57,PARTFUN1:def 8
+
+          .= L.(F/.(k+1)) * F/.(k+1) by A57,RLVECT_2:def 9;
+        mid(L(#)F,1,k) = (L(#)F)|k by JORDAN3:25,NAT_1:14;
+        then
+A70:    len mid(L(#)F,1,k) = k by A58,FINSEQ_1:80;
+
+A71:    for i being Nat st i in dom <* mid(L(#)F,1,k+1).(k+1) *> holds
+
+mid(L(#)F,1,k+1).(len mid(L(#)F,1,k) + i) = <* mid(L(#)F,1,k+1).(k+1) *>.i
+
         proof
-          1 - (1/(r1+r2))*r1 = (r1+r2)*(1/(r1+r2)) - (1/(r1+r2))*r1
-          by A82,XCMPLX_1:107
-            .= (r1+r2-r1)*(1/(r1+r2));
-          hence thesis;
+          let i be Nat;
+          assume
+          i in dom <* mid(L(#)F,1,k+1).(k+1) *>;
+          then i in Seg 1 by FINSEQ_1:55;
+          then i = 1 by FINSEQ_1:4,TARSKI:def 1;
+          hence thesis by A70,FINSEQ_1:57;
         end;
-        (1/Sum(mid(f,1,k+1)))*Sum(mid(L(#)F,1,k+1))
-        = (1/(r1+r2))*(w1+r2*w2) by A49,A64,A68,FVSUM_1:87
+
+        len <* mid(L(#)F,1,k+1).(k+1) *> = 1 & len mid(L(#)F,1,k+1) = k+1
+        by A59,A48,FINSEQ_1:57,80;
+
+        then
+        dom mid(L(#)F,1,k+1) = Seg (len mid(L(#)F,1,k) + len <* mid(L(#)F
+        ,1,k+1).(k+1) *>) by A70,FINSEQ_1:def 3;
+
+        then mid(L(#)F,1,k+1) = mid(L(#)F,1,k)^<* mid(L(#)F,1,k+1).(k+1 ) *>
+        by A61,A71,FINSEQ_1:def 7;
+
+        then
+A72:    (1/Sum(mid(f,1,k+1)))*Sum(mid(L(#)F,1,k+1)) = (1/(r1+r2))*(w1+r2
+        *w2) by A47,A69,FVSUM_1:87
+
           .= (1/(r1+r2))*(1 * w1 + r2 * w2) by RLVECT_1:def 9
-          .= (1/(r1+r2))*((r1 * (1/r1)) * w1 + r2 * w2) by A77,XCMPLX_1:107
+          .= (1/(r1+r2))*((r1 * (1/r1)) * w1 + r2 * w2) by A31,XCMPLX_1:107
           .= (1/(r1+r2))*(r1 * ((1/r1)*w1) + r2 * w2) by RLVECT_1:def 9
-          .= (1/(r1+r2))*(r1 * ((1/r1)*w1))
-        +(1/(r1+r2))*(r2 * w2) by RLVECT_1:def 9
-          .= (1/(r1+r2))*r1 * ((1/r1)*w1)
-        +(1/(r1+r2))*(r2 * w2) by RLVECT_1:def 9
-          .= (1/(r1+r2))*r1 * ((1/r1)*w1)
-        +(1/(r1+r2))*r2 * w2 by RLVECT_1:def 9;
-        hence thesis by A23,A78,A83,A85,CONVEX1:def 2;
+
+          .= (1/(r1+r2))*(r1 * ((1/r1)*w1)) +(1/(r1+r2))*(r2 * w2) by
+RLVECT_1:def 9
+
+          .= (1/(r1+r2))*r1 * ((1/r1)*w1) +(1/(r1+r2))*(r2 * w2) by
+RLVECT_1:def 9
+
+          .= (1/(r1+r2))*r1 * ((1/r1)*w1) +(1/(r1+r2))*r2 * w2 by
+RLVECT_1:def 9;
+
+        1 - (1/(r1+r2))*r1 = (r1+r2)*(1/(r1+r2)) - (1/(r1+r2))*r1 by A55,
+XCMPLX_1:107
+
+          .= (r1+r2-r1)*(1/(r1+r2));
+        hence thesis by A14,A50,A56,A54,A72,CONVEX1:def 2;
       end;
     end;
     hence thesis;
   end;
-  for k being non empty Nat holds P[k] from NAT_1:sch 10(A11,A22);
+  len F > 0 by A3,A4,A9,CARD_1:47,FINSEQ_4:77;
+  then
+A73: len F >= 0 + 1 by NAT_1:13;
+A74: P[1]
+  proof
+    mid(f,1,1) = f|1 by JORDAN3:25;
+    then
+A75: len(mid(f,1,1)) = 1 by A6,A73,FINSEQ_1:80;
+    then 1 in dom mid(f,1,1) by FINSEQ_3:27;
+    then reconsider m = mid(f,1,1).1 as Element of REAL by PARTFUN1:27;
+    mid(f,1,1)= <* mid(f,1,1).1 *> by A75,FINSEQ_1:57;
+    then
+A76: Sum(mid(f,1,1)) = m by FINSOP_1:12;
+    Carrier(L) c= N by RLVECT_2:def 8;
+    then
+A77: Carrier(L) c= M by A2,XBOOLE_1:1;
+    mid(L(#)F,1,1) = (L(#)F)|1 by JORDAN3:25;
+    then len(mid(L(#)F,1,1)) = 1 by A73,A11,FINSEQ_1:80;
+    then
+A78: mid(L(#)F,1,1) = <* mid(L(#)F,1,1).1 *> by FINSEQ_1:57;
+A79: 1 in Seg len (L(#)F) by A73,A11;
+    then
+A80: 1 in dom F by A11,FINSEQ_1:def 3;
+    then
+A81: F/.1 = F.1 by PARTFUN1:def 8;
+A82: 1 in dom (L(#)F) by A79,FINSEQ_1:def 3;
+A83: F.1 in rng F by A80,FUNCT_1:def 5;
+
+    then F.1 in {v where v is Element of V : L.v <> 0} by A4,RLVECT_2:def 6;
+
+    then
+A84: ex v2 being Element of V st F.1 = v2 & L.v2 <> 0;
+    1 in dom f by A6,A11,A79,FINSEQ_1:def 3;
+    then f.1 = L.(F.1) by A8
+      .= L.(F/.1) by A80,PARTFUN1:def 8;
+    then
+A85: Sum(mid(f,1,1)) = L.(F/.1) by A6,A73,A76,JORDAN3:32;
+    mid(L(#)F,1,1).1 = (L(#)F).1 by A73,A11,JORDAN3:32
+      .=L.(F/.1)*F/.1 by A82,RLVECT_2:def 9;
+
+    then
+    (1/Sum(mid(f,1,1)))*Sum(mid(L(#)F,1,1)) = (1/Sum(mid(f,1,1))) * (L.(F
+    /.1) * F/.1) by A78,RLVECT_1:61
+
+      .= ((1/Sum(mid(f,1,1))) * L.(F/.1)) * F/.1 by RLVECT_1:def 9
+      .= 1 * F/.1 by A81,A85,A84,XCMPLX_1:107
+      .= F/.1 by RLVECT_1:def 9;
+    hence thesis by A4,A81,A83,A77;
+  end;
+  for k being non empty Nat holds P[k] from NAT_1:sch 10(A74,A12);
   then
 A86: (1/Sum(mid(f,1,i)))*Sum(mid(L(#)F,1,i)) in M;
-A87: len (L (#) F) = len F by RLVECT_2:def 9;
-  Sum(mid(f,1,len f)) = 1 by A6,A7,A9,JORDAN3:29;
-  then (1/Sum(mid(f,1,len f)))*Sum(mid(L(#)F,1,len(L(#)F)))
-  = Sum(mid(L(#)F,1,len(L(#)F))) by RLVECT_1:def 9
-    .= Sum(L (#) F) by A9,A87,JORDAN3:29;
-  hence thesis by A3,A4,A6,A86,A87,RLVECT_2:def 10;
+  Sum(mid(f,1,len f)) = 1 by A6,A7,A73,JORDAN3:29;
+
+  then (1/Sum(mid(f,1,len f)))*Sum(mid(L(#)F,1,len(L(#)F))) = Sum(mid(L(#)F,1
+  ,len(L(#)F))) by RLVECT_1:def 9
+
+    .= Sum(L (#) F) by A73,A10,JORDAN3:29;
+  hence thesis by A3,A4,A6,A86,A10,RLVECT_2:def 10;
 end;
 
-Lm2: for V being RealLinearSpace, M being Subset of V st
-for N being Subset of V, L being Linear_Combination of N st
-L is convex & N c= M holds Sum(L) in M holds M is convex
+Lm2: for V being RealLinearSpace, M being Subset of V st for N being Subset of
+V, L being Linear_Combination of N st L is convex & N c= M holds Sum(L) in M
+holds M is convex
+
 proof
   let V be RealLinearSpace;
   let M be Subset of V;
   assume
-A1: for N being Subset of V, L being Linear_Combination of N st
-  L is convex & N c= M holds Sum(L) in M;
+
+A1: for N being Subset of V, L being Linear_Combination of N st L is
+  convex & N c= M holds Sum(L) in M;
+
   let u,v be VECTOR of V;
   let r be Real;
   assume that
 A2: 0 < r and
 A3: r < 1 and
-A4: u in M and
-A5: v in M;
+A4: u in M & v in M;
   set N = {u,v};
-A6: N c= M by A4,A5,ZFMISC_1:38;
+A5: N c= M by A4,ZFMISC_1:38;
   reconsider N as Subset of V;
-  now per cases;
+  now
+    per cases;
     suppose
-A7:   u <> v;
+A6:   u <> v;
       consider L being Linear_Combination of {u,v} such that
-A8:   L.u = r & L.v = (1-r) from RLVECT_4:sch 3(A7);
+A7:   L.u = r & L.v = (1-r) from RLVECT_4:sch 3(A6);
       reconsider L as Linear_Combination of N;
-A9:   Sum(L)=r*u + (1-r)*v by A7,A8,RLVECT_2:51;
-      L is convex
+A8:   L is convex
       proof
+A9:     r-r < 1-r by A3,XREAL_1:11;
+        then v in {w where w is Element of V : L.w <> 0} by A7;
+        then
+A10:    v in Carrier L by RLVECT_2:def 6;
+
+A11:    for n being Element of NAT st n in dom <*r,1-r*> holds <*r,1-r*>.
+        n = L.(<*u,v*>.n) & <*r,1-r*>.n >= 0
+
+        proof
+          let n be Element of NAT;
+          assume
+          n in dom <*r,1-r*>;
+          then n in Seg len <*r,1-r*> by FINSEQ_1:def 3;
+          then
+A12:      n in {1,2} by FINSEQ_1:4,61;
+          now
+            per cases by A12,TARSKI:def 2;
+            suppose
+A13:          n = 1;
+              then L.(<*u,v*>.n) = r by A7,FINSEQ_1:61;
+              hence thesis by A2,A13,FINSEQ_1:61;
+            end;
+            suppose
+A14:          n = 2;
+              then L.(<*u,v*>.n) = 1-r by A7,FINSEQ_1:61;
+              hence thesis by A9,A14,FINSEQ_1:61;
+            end;
+          end;
+          hence thesis;
+        end;
+        u in {w where w is Element of V : L.w <> 0} by A2,A7;
+        then u in Carrier L by RLVECT_2:def 6;
+
+        then
+A15:    Carrier L c= {u,v} & {u,v} c= Carrier L by A10,RLVECT_2:def 8
+,ZFMISC_1:38;
+
         take F=<*u,v*>;
-        thus F is one-to-one by A7,FINSEQ_3:103;
-A10:    Carrier L c= {u,v} by RLVECT_2:def 8;
-        u in {w where w is Element of V : L.w <> 0} by A2,A8;
-        then
-A11:    u in Carrier L by RLVECT_2:def 6;
-A12:    r-r < 1-r by A3,XREAL_1:11;
-        then v in {w where w is Element of V : L.w <> 0} by A8;
-        then v in Carrier L by RLVECT_2:def 6;
-        then
-A13:    {u,v} c= Carrier L by A11,ZFMISC_1:38;
+A16:    Sum(<*r,1-r*>) = r + (1-r) by RVSUM_1:107
+          .= 1;
+        thus F is one-to-one by A6,FINSEQ_3:103;
         thus rng F = rng <*u*> \/ rng <*v*> by FINSEQ_1:44
           .= {u} \/ rng <*v*> by FINSEQ_1:55
           .= {u} \/ {v} by FINSEQ_1:55
           .= {u,v} by ENUMSET1:41
-          .= Carrier L by A10,A13,XBOOLE_0:def 10;
-        take f=<*r,1-r*>; thus
-        len f = len F & Sum(f) = 1 & (for n being Nat st n in dom f
-        holds f.n = L.(F.n) & f.n >= 0)
-        proof
-          len f = len <*u,v*> & Sum(f) = 1 &
-          (for n being Element of NAT st n in dom f
-          holds f.n = L.(<*u,v*>.n) & f.n >= 0)
-          proof
-A14:        len <*r,1-r*> = 2 by FINSEQ_1:61
-              .= len <*u,v*> by FINSEQ_1:61;
-A15:        Sum(<*r,1-r*>) = r + (1-r) by RVSUM_1:107
-              .= 1;
-            for n being Element of NAT st n in dom <*r,1-r*>
-            holds <*r,1-r*>.n = L.(<*u,v*>.n) & <*r,1-r*>.n >= 0
-            proof
-              let n be Element of NAT;
-              assume n in dom <*r,1-r*>;
-              then n in Seg len <*r,1-r*> by FINSEQ_1:def 3;
-              then
-A16:          n in {1,2} by FINSEQ_1:4,61;
-              now per cases by A16,TARSKI:def 2;
-                suppose
-A17:              n = 1;
-                  then L.(<*u,v*>.n) = r by A8,FINSEQ_1:61;
-                  hence thesis by A2,A17,FINSEQ_1:61;
-                end;
-                suppose
-A18:              n = 2;
-                  then L.(<*u,v*>.n) = 1-r by A8,FINSEQ_1:61;
-                  hence thesis by A12,A18,FINSEQ_1:61;
-                end;
-              end;
-              hence thesis;
-            end;
-            hence thesis by A14,A15;
-          end;
-          hence thesis;
-        end;
+          .= Carrier L by A15,XBOOLE_0:def 10;
+        take f=<*r,1-r*>;
+        len <*r,1-r*> = 2 by FINSEQ_1:61
+          .= len <*u,v*> by FINSEQ_1:61;
+
+        hence len f = len F & Sum(f) = 1 & for n being Nat st n in dom f holds
+        f.n = L.(F.n) & f.n >= 0 by A16,A11;
+
       end;
-      hence thesis by A1,A6,A9;
+      Sum(L)=r*u + (1-r)*v by A6,A7,RLVECT_2:51;
+      hence thesis by A1,A5,A8;
     end;
     suppose
-A19:  u = v;
+A17:  u = v;
       consider L being Linear_Combination of {u} such that
-A20:  L.u = 1 from RLVECT_4:sch 2;
-      reconsider L as Linear_Combination of N by A19,ENUMSET1:69;
-      L is convex
+A18:  L.u = 1 from RLVECT_4:sch 2;
+      reconsider L as Linear_Combination of N by A17,ENUMSET1:69;
+
+      ex F being FinSequence of the carrier of V st F is one-to-one & rng
+
+F = Carrier L & ex f being FinSequence of REAL st len f = len F & Sum(f) = 1 &
+      for n being Nat st n in dom f holds f.n = L.(F.n) & f.n >= 0
+
       proof
-        ex F being FinSequence of the carrier of V st
-        (F is one-to-one & rng F = Carrier L &
-        (ex f being FinSequence of REAL st len f = len F & Sum(f) = 1 &
-        (for n being Nat st n in dom f holds f.n = L.(F.n) & f.n >= 0)))
+        take <*u*>;
+
+A19:    ex f being FinSequence of REAL st len f = len <*u*> & Sum(f) = 1
+        & for n being Nat st n in dom f holds f.n = L.(<*u*>.n) & f.n >= 0
+
         proof
-A21:      Carrier L c= {u,v} by RLVECT_2:def 8;
-          u in {w where w is Element of V : L.w <> 0} by A20;
-          then
-A22:      u in Carrier L by RLVECT_2:def 6;
-          v in {w where w is Element of V : L.w <> 0} by A19,A20;
-          then v in Carrier L by RLVECT_2:def 6;
-          then {u,v} c= Carrier L by A22,ZFMISC_1:38;
-          then Carrier L = {u,v} by A21,XBOOLE_0:def 10;
-          then
-A23:      Carrier L = {u} by A19,ENUMSET1:69;
-A24:      ex f being FinSequence of REAL st len f = len <*u*> & Sum(f) = 1 &
-          for n being Nat st n in dom f holds f.n = L.(<*u*>.n) & f.n >= 0
+          take ff;
+
+A20:      for n being Element of NAT st n in dom ff holds ff.n = L.(<*u*>
+          .n) & ff.n >= 0
+
           proof
-A25:        len <*1*> = 1 by FINSEQ_1:56
-              .= len <*u*> by FINSEQ_1:56;
-A26:        for n being Element of NAT st n in dom ff holds
-            ff.n = L.(<*u*>.n) & ff.n >= 0
-            proof
-              let n be Element of NAT;
-              assume n in dom ff;
-              then n in {1} by FINSEQ_1:4,55;
-              then
-A27:          n = 1 by TARSKI:def 1;
-              then ff.n = 1 by FINSEQ_1:57
-                .= L.(<*u*>.n) by A20,A27,FINSEQ_1:57;
-              hence thesis by A27,FINSEQ_1:57;
-            end;
-            take ff;
-            thus thesis by A25,A26,FINSOP_1:12;
+            let n be Element of NAT;
+            assume
+            n in dom ff;
+            then n in {1} by FINSEQ_1:4,55;
+            then
+A21:        n = 1 by TARSKI:def 1;
+            then ff.n = 1 by FINSEQ_1:57
+              .= L.(<*u*>.n) by A18,A21,FINSEQ_1:57;
+            hence thesis by A21,FINSEQ_1:57;
           end;
-          take <*u*>;
-          thus thesis by A23,A24,FINSEQ_1:55,FINSEQ_3:102;
+          len <*1*> = 1 by FINSEQ_1:56
+            .= len <*u*> by FINSEQ_1:56;
+          hence thesis by A20,FINSOP_1:12;
         end;
-        hence thesis by CONVEX1:def 3;
+        u in {w where w is Element of V : L.w <> 0} by A18;
+        then
+A22:    u in Carrier L by RLVECT_2:def 6;
+        v in {w where w is Element of V : L.w <> 0} by A17,A18;
+        then v in Carrier L by RLVECT_2:def 6;
+
+        then Carrier L c= {u,v} & {u,v} c= Carrier L by A22,RLVECT_2:def 8
+,ZFMISC_1:38;
+
+        then Carrier L = {u,v} by XBOOLE_0:def 10;
+        then Carrier L = {u} by A17,ENUMSET1:69;
+        hence thesis by A19,FINSEQ_1:55,FINSEQ_3:102;
       end;
+      then L is convex by CONVEX1:def 3;
       then
-A28:  Sum(L) in M by A1,A6;
-      r*u + (1-r)*v = (r+(1-r))*u by A19,RLVECT_1:def 9
+A23:  Sum(L) in M by A1,A5;
+      r*u + (1-r)*v = (r+(1-r))*u by A17,RLVECT_1:def 9
         .= (0+1)*u;
-      hence thesis by A20,A28,RLVECT_2:50;
+      hence thesis by A18,A23,RLVECT_2:50;
     end;
   end;
   hence thesis;
 end;
 
 theorem
-  for V being RealLinearSpace, M being Subset of V holds
-  (for N being Subset of V, L being Linear_Combination of N st
-  L is convex & N c= M holds Sum(L) in M) iff M is convex by Lm1,Lm2;
+  for V being RealLinearSpace, M being Subset of V holds (for N being
+Subset of V, L being Linear_Combination of N st L is convex & N c= M holds Sum(
+  L) in M) iff M is convex by Lm1,Lm2;
 
 definition
   let V be RealLinearSpace, M be Subset of V;
   defpred P[set] means $1 is Linear_Combination of M;
   func LinComb(M) -> set means
-
-  for L being set holds
-  L in it iff L is Linear_Combination of M;
+  for L being set holds L in it iff L is
+  Linear_Combination of M;
   existence
   proof
     consider A being set such that
-A1: for x being set holds
-    x in A iff x in Funcs(the carrier of V, REAL) & P[x] from XBOOLE_0:sch 1;
+A1: for x being set holds x in A iff x in Funcs(the carrier of V, REAL
+    ) & P[x] from XBOOLE_0:sch 1;
     take A;
     let L be set;
     thus L in A implies L is Linear_Combination of M by A1;
-    assume L is Linear_Combination of M;
+    assume
+    L is Linear_Combination of M;
     hence thesis by A1;
   end;
   uniqueness
   proof
-    thus for X1,X2 being set st (for x being set holds x in X1 iff P[x]) &
-    (for x being set holds x in X2 iff P[x]) holds X1 = X2 from XBOOLE_0:sch 3;
+    thus for X1,X2 being set st (for x being set holds x in X1 iff P[x]) & (
+    for x being set holds x in X2 iff P[x]) holds X1 = X2 from XBOOLE_0:sch 3;
   end;
 end;
 
-Lm3: for V being RealLinearSpace holds
-ex L be Linear_Combination of V st L is convex
+Lm3: for V being RealLinearSpace holds ex L be Linear_Combination of V st L is
+convex
+
 proof
   let V be RealLinearSpace;
   consider u being Element of V;
   consider L being Linear_Combination of {u} such that
 A1: L.u = 1 from RLVECT_4:sch 2;
   reconsider L as Linear_Combination of V;
-A2: L is convex
+  take L;
+  L is convex
   proof
     take <*u*>;
     thus <*u*> is one-to-one by FINSEQ_3:102;
-A3: Carrier L c= {u} by RLVECT_2:def 8;
     u in {w where w is Element of V : L.w <> 0} by A1;
     then u in Carrier L by RLVECT_2:def 6;
-    then {u} c= Carrier L by ZFMISC_1:37;
-    hence Carrier L = {u} by A3,XBOOLE_0:def 10
+    then Carrier L c= {u} & {u} c= Carrier L by RLVECT_2:def 8,ZFMISC_1:37;
+    hence Carrier L = {u} by XBOOLE_0:def 10
       .= rng<*u*> by FINSEQ_1:55;
     take f = ff;
-    len f = len <*u*> & Sum(f) = 1 & for n being Element of NAT st n in dom f
-    holds f.n = L.(<*u*>.n) & f.n >= 0
+
+A2: for n being Element of NAT st n in dom f holds f.n = L.(<*u*>.n) & f.n
+    >= 0
+
     proof
-A4:   len <*1*> = 1 by FINSEQ_1:56
-        .= len <*u*> by FINSEQ_1:56;
-      for n being Element of NAT st n in dom f holds f.n = L.(<*u*>.n) &
-      f.n >= 0
-      proof
-        let n be Element of NAT;
-        assume n in dom f;
-        then n in {1} by FINSEQ_1:4,55;
-        then
-A5:     n = 1 by TARSKI:def 1;
-        then f.n = L.u by A1,FINSEQ_1:57
-          .= L.(<*u*>.n) by A5,FINSEQ_1:57;
-        hence thesis by A5,FINSEQ_1:57;
-      end;
-      hence thesis by A4,FINSOP_1:12;
+      let n be Element of NAT;
+      assume
+      n in dom f;
+      then n in {1} by FINSEQ_1:4,55;
+      then
+A3:   n = 1 by TARSKI:def 1;
+      then f.n = L.u by A1,FINSEQ_1:57
+        .= L.(<*u*>.n) by A3,FINSEQ_1:57;
+      hence thesis by A3,FINSEQ_1:57;
     end;
-    hence thesis;
+    len <*1*> = 1 by FINSEQ_1:56
+      .= len <*u*> by FINSEQ_1:56;
+    hence thesis by A2,FINSOP_1:12;
   end;
-  take L;
-  thus thesis by A2;
+  hence thesis;
 end;
 
 registration
@@ -813,8 +863,9 @@ definition
   mode Convex_Combination of V is convex Linear_Combination of V;
 end;
 
-Lm4: for V being RealLinearSpace, M being non empty Subset of V holds
-ex L being Linear_Combination of M st L is convex
+Lm4: for V being RealLinearSpace, M being non empty Subset of V holds ex L
+being Linear_Combination of M st L is convex
+
 proof
   let V be RealLinearSpace;
   let M be non empty Subset of V;
@@ -825,40 +876,37 @@ A1: u in M by XBOOLE_0:def 1;
 A2: L.u = 1 from RLVECT_4:sch 2;
   {u} c= M by A1,ZFMISC_1:37;
   then reconsider L as Linear_Combination of M by RLVECT_2:33;
-A3: L is convex
+  take L;
+  L is convex
   proof
     take <*u*>;
     thus <*u*> is one-to-one by FINSEQ_3:102;
-A4: Carrier L c= {u} by RLVECT_2:def 8;
     u in {w where w is Element of V : L.w <> 0} by A2;
     then u in Carrier L by RLVECT_2:def 6;
-    then {u} c= Carrier L by ZFMISC_1:37;
-    hence Carrier L = {u} by A4,XBOOLE_0:def 10
+    then Carrier L c= {u} & {u} c= Carrier L by RLVECT_2:def 8,ZFMISC_1:37;
+    hence Carrier L = {u} by XBOOLE_0:def 10
       .= rng <*u*> by FINSEQ_1:55;
     take f=ff;
-    len f = len <*u*> & Sum(f) = 1 & for n being Element of NAT st n in dom f
-    holds f.n = L.(<*u*>.n) & f.n >= 0
+
+A3: for n being Element of NAT st n in dom f holds f.n = L.(<*u*>.n) & f.n
+    >= 0
+
     proof
-A5:   len <*1*> = 1 by FINSEQ_1:56
-        .= len <*u*> by FINSEQ_1:56;
-      for n being Element of NAT st n in dom f holds f.n = L.(<*u*>.n) &
-      f.n >= 0
-      proof
-        let n be Element of NAT;
-        assume n in dom f;
-        then n in {1} by FINSEQ_1:4,55;
-        then
-A6:     n = 1 by TARSKI:def 1;
-        then f.n = L.u by A2,FINSEQ_1:57
-          .= L.(<*u*>.n) by A6,FINSEQ_1:57;
-        hence thesis by A6,FINSEQ_1:57;
-      end;
-      hence thesis by A5,FINSOP_1:12;
+      let n be Element of NAT;
+      assume
+      n in dom f;
+      then n in {1} by FINSEQ_1:4,55;
+      then
+A4:   n = 1 by TARSKI:def 1;
+      then f.n = L.u by A2,FINSEQ_1:57
+        .= L.(<*u*>.n) by A4,FINSEQ_1:57;
+      hence thesis by A4,FINSEQ_1:57;
     end;
-    hence thesis;
+    len <*1*> = 1 by FINSEQ_1:56
+      .= len <*u*> by FINSEQ_1:56;
+    hence thesis by A3,FINSOP_1:12;
   end;
-  take L;
-  thus thesis by A3;
+  hence thesis;
 end;
 
 registration
@@ -872,293 +920,356 @@ definition
   mode Convex_Combination of M is convex Linear_Combination of M;
 end;
 
-Lm5: for V being RealLinearSpace, W1,W2 being Subspace of V holds
-Up(W1+W2) = Up(W1) + Up(W2)
+Lm5: for V being RealLinearSpace, W1,W2 being Subspace of V holds Up(W1+W2) =
+Up(W1) + Up(W2)
+
 proof
   let V be RealLinearSpace;
   let W1,W2 being Subspace of V;
 A1: Up(W1+W2) = the carrier of W1+W2 by RUSUB_4:def 6
+
     .= {v + u where v,u is VECTOR of V : v in W1 & u in W2} by RLSUB_2:def 1;
-  for x being set st x in Up(W1+W2) holds x in Up(W1) + Up(W2)
-  proof
-    let x be set;
-    assume x in Up(W1+W2);
-    then consider v,u being VECTOR of V such that
-A2: x = v + u & v in W1 & u in W2 by A1;
-    v in the carrier of W1 & u in the carrier of W2 by A2,STRUCT_0:def 5;
-    then v in Up(W1) & u in Up(W2) by RUSUB_4:def 6;
-    then x in {u' + v' where u',v' is Element of V:
-    u' in Up(W1) & v' in Up(W2)} by A2;
-    hence thesis by RUSUB_4:def 10;
-  end;
-  then
-A3: Up(W1+W2) c= Up(W1) + Up(W2) by TARSKI:def 3;
+
   for x being set st x in Up(W1) + Up(W2) holds x in Up(W1+W2)
   proof
     let x be set;
-    assume x in Up(W1) + Up(W2);
-    then x in {u + v where u,v is Element of V:
-    u in Up(W1) & v in Up(W2)} by RUSUB_4:def 10;
+    assume
+    x in Up(W1) + Up(W2);
+
+    then x in {u + v where u,v is Element of V: u in Up(W1) & v in Up(W2)} by
+RUSUB_4:def 10;
+
     then consider u,v being Element of V such that
-A4: x = u + v & u in Up(W1) & v in Up(W2);
-    u in the carrier of W1 & v in the carrier of W2 by A4,RUSUB_4:def 6;
-    then u in W1 & v in W2 by STRUCT_0:def 5;
-    hence thesis by A1,A4;
+A2: x = u + v and
+A3: u in Up(W1) and
+A4: v in Up(W2);
+    v in the carrier of W2 by A4,RUSUB_4:def 6;
+    then
+A5: v in W2 by STRUCT_0:def 5;
+    u in the carrier of W1 by A3,RUSUB_4:def 6;
+    then u in W1 by STRUCT_0:def 5;
+    hence thesis by A1,A2,A5;
   end;
-  then Up(W1) + Up(W2) c= Up(W1+W2) by TARSKI:def 3;
-  hence thesis by A3,XBOOLE_0:def 10;
+  then
+A6: Up(W1) + Up(W2) c= Up(W1+W2) by TARSKI:def 3;
+  for x being set st x in Up(W1+W2) holds x in Up(W1) + Up(W2)
+  proof
+    let x be set;
+    assume
+    x in Up(W1+W2);
+    then consider v,u being VECTOR of V such that
+A7: x = v + u and
+A8: v in W1 and
+A9: u in W2 by A1;
+    u in the carrier of W2 by A9,STRUCT_0:def 5;
+    then
+A10: u in Up(W2) by RUSUB_4:def 6;
+    v in the carrier of W1 by A8,STRUCT_0:def 5;
+    then v in Up(W1) by RUSUB_4:def 6;
+
+    then
+    x in {u' + v' where u',v' is Element of V: u' in Up(W1) & v' in Up(W2
+    )} by A7,A10;
+
+    hence thesis by RUSUB_4:def 10;
+  end;
+  then Up(W1+W2) c= Up(W1) + Up(W2) by TARSKI:def 3;
+  hence thesis by A6,XBOOLE_0:def 10;
 end;
 
-Lm6: for V being RealLinearSpace, W1,W2 being Subspace of V holds
-Up(W1 /\ W2) = Up(W1) /\ Up(W2)
+Lm6: for V being RealLinearSpace, W1,W2 being Subspace of V holds Up(W1 /\ W2)
+= Up(W1) /\ Up(W2)
+
 proof
   let V be RealLinearSpace;
   let W1,W2 be Subspace of V;
 A1: Up(W1 /\ W2) = the carrier of W1 /\ W2 by RUSUB_4:def 6
     .= (the carrier of W1) /\ (the carrier of W2) by RLSUB_2:def 2;
-  for x being set st x in Up(W1 /\ W2) holds x in Up(W1) /\ Up(W2)
-  proof
-    let x be set;
-    assume x in Up(W1 /\ W2);
-    then x in the carrier of W1 & x in the carrier of W2 by A1,XBOOLE_0:def 4;
-    then x in Up(W1) & x in Up(W2) by RUSUB_4:def 6;
-    hence thesis by XBOOLE_0:def 4;
-  end;
-  then
-A2: Up(W1 /\ W2) c= Up(W1) /\ Up(W2) by TARSKI:def 3;
   for x being set st x in Up(W1) /\ Up(W2) holds x in Up(W1 /\ W2)
   proof
     let x be set;
-    assume x in Up(W1) /\ Up(W2);
-    then x in Up(W1) & x in Up(W2) by XBOOLE_0:def 4;
-    then x in the carrier of W1 & x in the carrier of W2 by RUSUB_4:def 6;
-    hence thesis by A1,XBOOLE_0:def 4;
+    assume
+A2: x in Up(W1) /\ Up(W2);
+    then x in Up(W2) by XBOOLE_0:def 4;
+    then
+A3: x in the carrier of W2 by RUSUB_4:def 6;
+    x in Up(W1) by A2,XBOOLE_0:def 4;
+    then x in the carrier of W1 by RUSUB_4:def 6;
+    hence thesis by A1,A3,XBOOLE_0:def 4;
   end;
-  then Up(W1) /\ Up(W2) c= Up(W1 /\ W2) by TARSKI:def 3;
-  hence thesis by A2,XBOOLE_0:def 10;
+  then
+A4: Up(W1) /\ Up(W2) c= Up(W1 /\ W2) by TARSKI:def 3;
+  for x being set st x in Up(W1 /\ W2) holds x in Up(W1) /\ Up(W2)
+  proof
+    let x be set;
+    assume
+A5: x in Up(W1 /\ W2);
+    then x in the carrier of W2 by A1,XBOOLE_0:def 4;
+    then
+A6: x in Up(W2) by RUSUB_4:def 6;
+    x in the carrier of W1 by A1,A5,XBOOLE_0:def 4;
+    then x in Up(W1) by RUSUB_4:def 6;
+    hence thesis by A6,XBOOLE_0:def 4;
+  end;
+  then Up(W1 /\ W2) c= Up(W1) /\ Up(W2) by TARSKI:def 3;
+  hence thesis by A4,XBOOLE_0:def 10;
 end;
 
 theorem
-  for V being RealLinearSpace, M be Subset of V holds Convex-Family M <> {};
+  for V being RealLinearSpace, M be Subset of V holds Convex-Family M <>
+  {};
 
-Lm7: for V being RealLinearSpace, L1, L2 being Convex_Combination of V,
-a,b being Real st a * b > 0 holds
-Carrier(a*L1 + b*L2) = Carrier(a * L1) \/ Carrier(b * L2)
+Lm7: for V being RealLinearSpace, L1, L2 being Convex_Combination of V, a,b
+being Real st a * b > 0 holds Carrier(a*L1 + b*L2) = Carrier(a * L1) \/ Carrier
+(b * L2)
+
 proof
   let V be RealLinearSpace;
   let L1, L2 be Convex_Combination of V;
   let a,b be Real;
-  assume a * b > 0;
+  assume
+  a * b > 0;
   then
 A1: not (a>=0 & b<=0 or a<=0 & b>=0) by XREAL_1:133;
   then
-A2: Carrier(L1) = Carrier(a * L1) &
-  Carrier(L2) = Carrier(b * L2) by RLVECT_2:65;
-  for x being set st x in Carrier(a * L1) \/ Carrier(b * L2) holds
-  x in Carrier(a*L1 + b*L2)
+A2: Carrier(L2) = Carrier(b * L2) by RLVECT_2:65;
+A3: Carrier(L1) = Carrier(a * L1) by A1,RLVECT_2:65;
+
+  for x being set st x in Carrier(a * L1) \/ Carrier(b * L2) holds x in
+  Carrier(a*L1 + b*L2)
+
   proof
     let x be set;
     assume
-A3: x in Carrier(a * L1) \/ Carrier(b * L2);
-    now per cases by A3,XBOOLE_0:def 3;
+A4: x in Carrier(a * L1) \/ Carrier(b * L2);
+    now
+      per cases by A4,XBOOLE_0:def 3;
       suppose
-A4:     x in Carrier(a * L1);
-        then x in {v where v is Element of V : (a * L1).v <> 0}
-        by RLVECT_2:def 6;
+A5:     x in Carrier(a * L1);
+
+        then x in {v where v is Element of V : (a * L1).v <> 0} by
+RLVECT_2:def 6;
+
         then consider v being Element of V such that
-A5:     v = x & (a * L1).v <> 0;
-A6:     L1.v > 0 by A2,A4,A5,CONVEX1:22;
+A6:     v = x and
+A7:     (a * L1).v <> 0;
+A8:     L1.v > 0 by A3,A5,A6,CONVEX1:22;
         v in Carrier(a*L1 + b*L2)
         proof
-          now per cases;
+          now
+            per cases;
             suppose
-A7:           v in Carrier(L2);
+A9:           v in Carrier(L2);
               then
-A8:           L2.v > 0 by CONVEX1:22;
-              now per cases by A1;
-                suppose a > 0 & b > 0;
-                  then a*L1.v > 0 & b*L2.v > 0 by A6,A8,XREAL_1:131;
+A10:          L2.v > 0 by CONVEX1:22;
+              now
+                per cases by A1;
+                suppose
+A11:              a > 0 & b > 0;
+                  then b*L2.v > 0 by A10,XREAL_1:131;
+                  then (b*L2).v > 0 by RLVECT_2:def 13;
                   then
-A9:               (a*L1).v > 0 & (b*L2).v > 0 by RLVECT_2:def 13;
-                  then (a*L1).v + (b*L2).v > (a*L1).v by XREAL_1:31;
-                  then (a*L1 + b*L2).v > 0 by A9,RLVECT_2:def 12;
+A12:              (a*L1).v + (b*L2).v > (a*L1).v by XREAL_1:31;
+                  a*L1.v > 0 by A8,A11,XREAL_1:131;
+                  then (a*L1).v > 0 by RLVECT_2:def 13;
+                  then (a*L1 + b*L2).v > 0 by A12,RLVECT_2:def 12;
                   hence thesis by RLVECT_2:28;
                 end;
-                suppose a < 0 & b < 0;
-
-then a*L1.v < 0 & b*L2.v < 0 by A2,A4,A5,A7,CONVEX1:22,XREAL_1:134;
+                suppose
+A13:              a < 0 & b < 0;
+                  then a*L1.v < 0 by A3,A5,A6,CONVEX1:22,XREAL_1:134;
+                  then (a*L1).v < 0 by RLVECT_2:def 13;
                   then
-A10:              (a*L1).v < 0 & (b*L2).v < 0 by RLVECT_2:def 13;
-                  then (a*L1).v + (b*L2).v < (b*L2).v by XREAL_1:32;
-                  then (a*L1 + b*L2).v < 0 by A10,RLVECT_2:def 12;
+A14:              (a*L1).v + (b*L2).v < (b*L2).v by XREAL_1:32;
+                  b*L2.v < 0 by A9,A13,CONVEX1:22,XREAL_1:134;
+                  then (b*L2).v < 0 by RLVECT_2:def 13;
+                  then (a*L1 + b*L2).v < 0 by A14,RLVECT_2:def 12;
                   hence thesis by RLVECT_2:28;
                 end;
               end;
               hence thesis;
             end;
-            suppose not v in Carrier(L2);
+            suppose
+              not v in Carrier(L2);
               then L2.v = 0 by RLVECT_2:28;
               then b*L2.v = 0;
               then (b*L2).v = 0 by RLVECT_2:def 13;
               then (a*L1).v + (b*L2).v = (a*L1).v;
-              then (a*L1 + b*L2).v <> 0 by A5,RLVECT_2:def 12;
+              then (a*L1 + b*L2).v <> 0 by A7,RLVECT_2:def 12;
               hence thesis by RLVECT_2:28;
             end;
           end;
           hence thesis;
         end;
-        hence thesis by A5;
+        hence thesis by A6;
       end;
       suppose
-A11:    x in Carrier(b * L2);
-        then x in {v where v is Element of V : (b * L2).v <> 0}
-        by RLVECT_2:def 6;
+A15:    x in Carrier(b * L2);
+
+        then x in {v where v is Element of V : (b * L2).v <> 0} by
+RLVECT_2:def 6;
+
         then consider v being Element of V such that
-A12:    v = x & (b * L2).v <> 0;
-A13:    L2.v > 0 by A2,A11,A12,CONVEX1:22;
+A16:    v = x and
+A17:    (b * L2).v <> 0;
+A18:    L2.v > 0 by A2,A15,A16,CONVEX1:22;
         v in Carrier(a*L1 + b*L2)
         proof
-          now per cases;
+          now
+            per cases;
             suppose
-A14:          v in Carrier(L1);
+A19:          v in Carrier(L1);
               then
-A15:          L1.v > 0 by CONVEX1:22;
-              now per cases by A1;
-                suppose a > 0 & b > 0;
-                  then a*L1.v > 0 & b*L2.v > 0 by A13,A15,XREAL_1:131;
+A20:          L1.v > 0 by CONVEX1:22;
+              now
+                per cases by A1;
+                suppose
+A21:              a > 0 & b > 0;
+                  then b*L2.v > 0 by A18,XREAL_1:131;
+                  then (b*L2).v > 0 by RLVECT_2:def 13;
                   then
-A16:              (a*L1).v > 0 & (b*L2).v > 0 by RLVECT_2:def 13;
-                  then (a*L1).v + (b*L2).v > (a*L1).v by XREAL_1:31;
-                  then (a*L1 + b*L2).v > 0 by A16,RLVECT_2:def 12;
+A22:              (a*L1).v + (b*L2).v > (a*L1).v by XREAL_1:31;
+                  a*L1.v > 0 by A20,A21,XREAL_1:131;
+                  then (a*L1).v > 0 by RLVECT_2:def 13;
+                  then (a*L1 + b*L2).v > 0 by A22,RLVECT_2:def 12;
                   hence thesis by RLVECT_2:28;
                 end;
-                suppose a < 0 & b < 0;
-
-then a*L1.v < 0 & b*L2.v < 0 by A2,A11,A12,A14,CONVEX1:22,XREAL_1:134;
+                suppose
+A23:              a < 0 & b < 0;
+                  then a*L1.v < 0 by A19,CONVEX1:22,XREAL_1:134;
+                  then (a*L1).v < 0 by RLVECT_2:def 13;
                   then
-A17:              (a*L1).v < 0 & (b*L2).v < 0 by RLVECT_2:def 13;
-                  then (a*L1).v + (b*L2).v < (b*L2).v by XREAL_1:32;
-                  then (a*L1 + b*L2).v < 0 by A17,RLVECT_2:def 12;
+A24:              (a*L1).v + (b*L2).v < (b*L2).v by XREAL_1:32;
+                  b*L2.v < 0 by A2,A15,A16,A23,CONVEX1:22,XREAL_1:134;
+                  then (b*L2).v < 0 by RLVECT_2:def 13;
+                  then (a*L1 + b*L2).v < 0 by A24,RLVECT_2:def 12;
                   hence thesis by RLVECT_2:28;
                 end;
               end;
               hence thesis;
             end;
-            suppose not v in Carrier(L1);
+            suppose
+              not v in Carrier(L1);
               then L1.v = 0 by RLVECT_2:28;
               then a*L1.v = 0;
               then (a*L1).v = 0 by RLVECT_2:def 13;
               then (a*L1).v + (b*L2).v = (b*L2).v;
-              then (a*L1 + b*L2).v <> 0 by A12,RLVECT_2:def 12;
+              then (a*L1 + b*L2).v <> 0 by A17,RLVECT_2:def 12;
               hence thesis by RLVECT_2:28;
             end;
           end;
           hence thesis;
         end;
-        hence thesis by A12;
+        hence thesis by A16;
       end;
     end;
     hence thesis;
   end;
+
   then
-A18: Carrier(a * L1) \/ Carrier(b * L2) c= Carrier(a*L1 + b*L2) by TARSKI:def 3
+A25: Carrier(a * L1) \/ Carrier(b * L2) c= Carrier(a*L1 + b*L2) by TARSKI:def 3
 ;
+
   Carrier(a*L1 + b*L2) c= Carrier(a*L1) \/ Carrier(b*L2) by RLVECT_2:58;
-  hence thesis by A18,XBOOLE_0:def 10;
+  hence thesis by A25,XBOOLE_0:def 10;
 end;
 
-Lm8: for F,G being Function st F,G are_fiberwise_equipotent
-for x1,x2 being set st x1 in dom F & x2 in dom F & x1 <> x2 holds
-ex z1,z2 being set st
-z1 in dom G & z2 in dom G & z1 <> z2 & F.x1 = G.z1 & F.x2 = G.z2
+Lm8: for F,G being Function st F,G are_fiberwise_equipotent for x1,x2 being
+set st x1 in dom F & x2 in dom F & x1 <> x2 holds ex z1,z2 being set st z1 in
+dom G & z2 in dom G & z1 <> z2 & F.x1 = G.z1 & F.x2 = G.z2
+
 proof
   let F,G be Function;
   assume
-A1: F,G are_fiberwise_equipotent;
+  F,G are_fiberwise_equipotent;
+  then consider H being Function such that
+A1: dom H = dom F and
+A2: rng H = dom G and
+A3: H is one-to-one and
+A4: F = G*H by CLASSES1:85;
   let x1,x2 be set;
   assume that
-A2: x1 in dom F and
-A3: x2 in dom F and
-A4: x1 <> x2;
-  consider H being Function such that
-A5: dom H = dom F & rng H = dom G & H is one-to-one & F = G*H by A1,CLASSES1:85
-;
-A6: H.x1 in dom G & H.x2 in dom G by A2,A3,A5,FUNCT_1:12;
-A7: H.x1 <> H.x2 by A2,A3,A4,A5,FUNCT_1:def 8;
-  F.x1 = G.(H.x1) & F.x2 = G.(H.x2) by A2,A3,A5,FUNCT_1:22;
-  hence thesis by A6,A7;
+A5: x1 in dom F and
+A6: x2 in dom F and
+A7: x1 <> x2;
+A8: H.x1 in dom G & H.x2 in dom G by A5,A6,A1,A2,FUNCT_1:12;
+A9: F.x2 = G.(H.x2) by A6,A4,FUNCT_1:22;
+  H.x1 <> H.x2 & F.x1 = G.(H.x1) by A5,A6,A7,A1,A3,A4,FUNCT_1:22,def 8;
+  hence thesis by A8,A9;
 end;
 
-Lm9: for V being RealLinearSpace, L being Linear_Combination of V,
-A being Subset of V st A c= Carrier(L) holds
-ex L1 being Linear_Combination of V st Carrier(L1) = A
+Lm9: for V being RealLinearSpace, L being Linear_Combination of V, A being
+Subset of V st A c= Carrier(L) holds ex L1 being Linear_Combination of V st
+Carrier(L1) = A
+
 proof
   let V be RealLinearSpace;
   let L be Linear_Combination of V;
   let A be Subset of V;
-  assume
-A1: A c= Carrier(L);
   consider F being Function such that
-A2: L = F & dom F = the carrier of V & rng F c= REAL by FUNCT_2:def 2;
-  defpred P[set,set] means
-  ($1 in A implies $2 = F.$1) & (not $1 in A implies $2 = 0);
+A1: L = F and
+A2: dom F = the carrier of V and
+A3: rng F c= REAL by FUNCT_2:def 2;
+
+  defpred P[set,set] means ($1 in A implies $2 = F.$1) & (not $1 in A implies
+  $2 = 0);
+
 A4: for x being set st x in the carrier of V ex y being set st P[x,y]
   proof
     let x be set;
-    assume x in the carrier of V;
-    now per cases;
-      suppose x in A;
+    assume
+    x in the carrier of V;
+    now
+      per cases;
+      suppose
+        x in A;
         hence thesis;
       end;
-      suppose not x in A;
+      suppose
+        not x in A;
         hence thesis;
       end;
     end;
     hence thesis;
   end;
   consider L1 being Function such that
-A5: dom L1 = the carrier of V &
-  for x being set st x in the carrier of V holds P[x,L1.x] from CLASSES1:sch 1
-  (A4);
+
+A5: dom L1 = the carrier of V & for x being set st x in the carrier of V
+  holds P[x,L1.x] from CLASSES1:sch 1 (A4);
+
   for y being set st y in rng L1 holds y in REAL
   proof
     let y be set;
-    assume y in rng L1;
+    assume
+    y in rng L1;
     then consider x being set such that
-A6: x in dom L1 & y = L1.x by FUNCT_1:def 5;
+A6: x in dom L1 and
+A7: y = L1.x by FUNCT_1:def 5;
     reconsider x as Element of V by A5,A6;
-    now per cases;
-      suppose x in A;
-        then
-A7:     y = F.x by A5,A6;
-        F.x in rng F by A2,FUNCT_1:12;
-        hence thesis by A2,A7;
+    now
+      per cases;
+      suppose
+A8:     x in A;
+A9:     F.x in rng F by A2,FUNCT_1:12;
+        y = F.x by A5,A7,A8;
+        hence thesis by A3,A9;
       end;
-      suppose not x in A;
+      suppose
+        not x in A;
         then L1.x = 0 by A5;
-        hence thesis by A6;
+        hence thesis by A7;
       end;
     end;
     hence thesis;
   end;
   then rng L1 c= REAL by TARSKI:def 3;
   then
-A8: L1 is Element of Funcs(the carrier of V, REAL) by A5,FUNCT_2:def 2;
-  reconsider A as finite Subset of V by A1,FINSET_1:13;
+A10: L1 is Element of Funcs(the carrier of V, REAL) by A5,FUNCT_2:def 2;
+  assume
+A11: A c= Carrier(L);
+  then reconsider A as finite Subset of V by FINSET_1:13;
   for v being Element of V st not v in A holds L1.v = 0 by A5;
-  then reconsider L1 as Linear_Combination of V by A8,RLVECT_2:def 5;
-  for v being set st v in A holds v in Carrier(L1)
-  proof
-    let v be set;
-    assume
-A9: v in A;
-    then reconsider v as Element of V;
-A10: L1.v = F.v by A5,A9;
-    L.v <> 0 by A1,A9,RLVECT_2:28;
-    hence thesis by A2,A10,RLVECT_2:28;
-  end;
-  then
-A11: A c= Carrier(L1) by TARSKI:def 3;
+  then reconsider L1 as Linear_Combination of V by A10,RLVECT_2:def 5;
   for v being set st v in Carrier(L1) holds v in A
   proof
     let v be set;
@@ -1171,608 +1282,634 @@ A12: v in Carrier(L1);
   then
 A13: Carrier(L1) c= A by TARSKI:def 3;
   take L1;
-  thus thesis by A11,A13,XBOOLE_0:def 10;
+  for v being set st v in A holds v in Carrier(L1)
+  proof
+    let v be set;
+    assume
+A14: v in A;
+    then reconsider v as Element of V;
+    L1.v = F.v & L.v <> 0 by A11,A5,A14,RLVECT_2:28;
+    hence thesis by A1,RLVECT_2:28;
+  end;
+  then A c= Carrier(L1) by TARSKI:def 3;
+  hence thesis by A13,XBOOLE_0:def 10;
 end;
 
 canceled;
 
 theorem Th9:
   for V being RealLinearSpace, L1,L2 being Convex_Combination of V,
-  r being Real st 0 < r & r < 1 holds
-  r*L1 + (1-r)*L2 is Convex_Combination of V
+r being Real st 0 < r & r < 1 holds r*L1 + (1-r)*L2 is Convex_Combination of V
 proof
   let V be RealLinearSpace;
   let L1,L2 be Convex_Combination of V;
   let r be Real;
-  assume
-A1: 0 < r & r < 1;
-  then
-A2: r - r < 1 - r by XREAL_1:11;
-  then
-A3: r*(1-r) > 0 by A1,XREAL_1:131;
-  consider F1 being FinSequence of the carrier of V such that
-A4: F1 is one-to-one & rng F1 = Carrier(L1) &
-  (ex f being FinSequence of REAL st len f = len F1 & Sum(f) = 1 &
-  (for n being Nat st n in dom f holds f.n = L1.(F1.n) & f.n >= 0))
-  by CONVEX1:def 3;
-  consider f1 being FinSequence of REAL such that
-A5: len f1 = len F1 & Sum(f1) = 1 & (for n being Nat st n in dom f1
-  holds f1.n = L1.(F1.n) & f1.n >= 0) by A4;
-  consider F2 being FinSequence of the carrier of V such that
-A6: F2 is one-to-one & rng F2 = Carrier(L2) &
-  (ex f being FinSequence of REAL st len f = len F2 & Sum(f) = 1 &
-  (for n being Nat st n in dom f holds f.n = L2.(F2.n) & f.n >= 0))
-  by CONVEX1:def 3;
-  consider f2 being FinSequence of REAL such that
-A7: len f2 = len F2 & Sum(f2) = 1 & (for n being Nat st n in dom f2
-  holds f2.n = L2.(F2.n) & f2.n >= 0) by A6;
-  set L = r*L1 + (1-r)*L2;
-A8: Carrier(r*L1) = Carrier(L1) & Carrier((1-r)*L2) = Carrier(L2)
-  by A1,A2,RLVECT_2:65;
-A9: Carrier(L) = Carrier(r*L1) \/ Carrier((1-r)*L2) by A3,Lm7;
-  set Top = Carrier(L) \ Carrier((1-r)*L2);
+  assume that
+A1: 0 < r and
+A2: r < 1;
+A3: Carrier(r*L1) = Carrier(L1) by A1,RLVECT_2:65;
   set Mid = Carrier(r*L1) /\ Carrier((1-r)*L2);
+  set L = r*L1 + (1-r)*L2;
+  consider F2 being FinSequence of the carrier of V such that
+A4: F2 is one-to-one and
+A5: rng F2 = Carrier(L2) and
+A6: ex f being FinSequence of REAL st len f = len F2 & Sum(f) = 1 & for
+  n being Nat st n in dom f holds f.n = L2.(F2.n) & f.n >= 0 by CONVEX1:def 3;
   set Btm = Carrier(L) \ Carrier(r*L1);
-  Top c= Carrier(L) by XBOOLE_1:36;
-  then consider Lt being Linear_Combination of V such that
-A10: Carrier(Lt) = Top by Lm9;
-  Mid c= Carrier(L) by A9,XBOOLE_1:29;
+  set Top = Carrier(L) \ Carrier((1-r)*L2);
+  consider F1 being FinSequence of the carrier of V such that
+A7: F1 is one-to-one and
+A8: rng F1 = Carrier(L1) and
+A9: ex f being FinSequence of REAL st len f = len F1 & Sum(f) = 1 & for
+  n being Nat st n in dom f holds f.n = L1.(F1.n) & f.n >= 0 by CONVEX1:def 3;
+  consider Lt being Linear_Combination of V such that
+A10: Carrier(Lt) = Top by Lm9,XBOOLE_1:36;
+A11: r - r < 1 - r by A2,XREAL_1:11;
+  then
+A12: Carrier((1-r)*L2) = Carrier(L2) by RLVECT_2:65;
+A13: r*(1-r) > 0 by A1,A11,XREAL_1:131;
+  then
+A14: Carrier(L) = Carrier(r*L1) \/ Carrier((1-r)*L2) by Lm7;
   then consider Lm being Linear_Combination of V such that
-A11: Carrier(Lm) = Mid by Lm9;
-  Btm c= Carrier(L) by XBOOLE_1:36;
-  then consider Lb being Linear_Combination of V such that
-A12: Carrier(Lb) = Btm by Lm9;
+A15: Carrier(Lm) = Mid by Lm9,XBOOLE_1:29;
+  consider Lb being Linear_Combination of V such that
+A16: Carrier(Lb) = Btm by Lm9,XBOOLE_1:36;
   consider Ft being FinSequence of the carrier of V such that
-A13: Ft is one-to-one & rng Ft = Carrier(Lt) & Sum(Lt) = Sum(Lt (#) Ft)
-  by RLVECT_2:def 10;
-  consider Fm being FinSequence of the carrier of V such that
-A14: Fm is one-to-one & rng Fm = Carrier(Lm) & Sum(Lm) = Sum(Lm (#) Fm)
-  by RLVECT_2:def 10;
+A17: Ft is one-to-one and
+A18: rng Ft = Carrier(Lt) and
+  Sum(Lt) = Sum(Lt (#) Ft) by RLVECT_2:def 10;
   consider Fb being FinSequence of the carrier of V such that
-A15: Fb is one-to-one & rng Fb = Carrier(Lb) & Sum(Lb) = Sum(Lb (#) Fb)
-  by RLVECT_2:def 10;
+A19: Fb is one-to-one and
+A20: rng Fb = Carrier(Lb) and
+  Sum(Lb) = Sum(Lb (#) Fb) by RLVECT_2:def 10;
+  consider Fm being FinSequence of the carrier of V such that
+A21: Fm is one-to-one and
+A22: rng Fm = Carrier(Lm) and
+  Sum(Lm) = Sum(Lm (#) Fm) by RLVECT_2:def 10;
+A23: rng (Ft^Fm) = rng Ft \/ rng Fm by FINSEQ_1:44
+    .= ((Carrier(L1) \/ Carrier(L2)) \ Carrier(L2)) \/ (Carrier(L1) /\
+  Carrier(L2)) by A13,A3,A12,A10,A15,A18,A22,Lm7
+    .= ( Carrier(L1) \ Carrier(L2) ) \/ ( Carrier(L2) \ Carrier(L2) ) \/ (
+  Carrier(L1) /\ Carrier(L2)) by XBOOLE_1:42
+    .= ( Carrier(L1) \ Carrier(L2) ) \/ {} \/ (Carrier(L1) /\ Carrier(L2))
+  by XBOOLE_1:37
+    .= Carrier(L1) \ (Carrier(L2) \ Carrier(L2)) by XBOOLE_1:52
+    .= Carrier(L1) \ {} by XBOOLE_1:37
+    .= rng F1 by A8;
+A24: rng Ft misses rng Fm by A10,A15,A18,A22,XBOOLE_1:17,85;
+  then
+A25: Ft^Fm is one-to-one by A17,A21,FINSEQ_3:98;
+  set F = Ft^Fm^Fb;
+  consider f2 being FinSequence of REAL such that
+A26: len f2 = len F2 and
+A27: Sum(f2) = 1 and
+A28: for n being Nat st n in dom f2 holds f2.n = L2.(F2.n) & f2.n >= 0
+  by A6;
   deffunc F(set) = L1.(Ft.$1);
   consider ft being FinSequence such that
-A16: len ft = len Ft & for j being Nat st j in dom ft holds ft.j = F(j)
+A29: len ft = len Ft & for j being Nat st j in dom ft holds ft.j = F(j)
   from FINSEQ_1:sch 2;
   rng ft c= REAL
   proof
     let y be set;
-    assume y in rng ft;
-    then consider x being set such that
-A17: x in dom ft & ft.x = y by FUNCT_1:def 5;
-    reconsider x as Element of NAT by A17;
-     x in Seg len Ft by A16,A17,FINSEQ_1:def 3;
-    then x in dom Ft by FINSEQ_1:def 3;
-    then Ft.x in rng Ft & rng Ft c= the carrier of V
-    by FINSEQ_1:def 4,FUNCT_1:12;
-    then reconsider Ftx = Ft.x as Element of V;
-A18: ft.x = L1.(Ft.x) by A16,A17;
     consider L1f being Function such that
-A19: L1 = L1f & dom L1f = the carrier of V & rng L1f c= REAL by FUNCT_2:def 2;
-    Ftx in dom L1f by A19;
-    then ft.x in rng L1f by A18,A19,FUNCT_1:12;
-    hence thesis by A17,A19;
+A30: L1 = L1f and
+A31: dom L1f = the carrier of V and
+A32: rng L1f c= REAL by FUNCT_2:def 2;
+    assume
+    y in rng ft;
+    then consider x being set such that
+A33: x in dom ft and
+A34: ft.x = y by FUNCT_1:def 5;
+    reconsider x as Element of NAT by A33;
+A35: ft.x = L1.(Ft.x) by A29,A33;
+    x in Seg len Ft by A29,A33,FINSEQ_1:def 3;
+    then x in dom Ft by FINSEQ_1:def 3;
+    then
+A36: Ft.x in rng Ft by FUNCT_1:12;
+    rng Ft c= the carrier of V by FINSEQ_1:def 4;
+    then reconsider Ftx = Ft.x as Element of V by A36;
+    Ftx in dom L1f by A31;
+    then ft.x in rng L1f by A35,A30,FUNCT_1:12;
+    hence thesis by A34,A32;
   end;
   then reconsider ft as FinSequence of REAL by FINSEQ_1:def 4;
   deffunc F(set) = L1.(Fm.$1);
   consider fm1 being FinSequence such that
-A20: len fm1 = len Fm &
-  for j being Nat st j in dom fm1 holds fm1.j = F(j) from FINSEQ_1:sch 2;
+A37: len fm1 = len Fm & for j being Nat st j in dom fm1 holds fm1.j = F(
+  j) from FINSEQ_1:sch 2;
   rng fm1 c= REAL
   proof
     let y be set;
-    assume y in rng fm1;
-    then consider x being set such that
-A21: x in dom fm1 & fm1.x = y by FUNCT_1:def 5;
-    reconsider x as Element of NAT by A21;
-     x in Seg len Fm by A20,A21,FINSEQ_1:def 3;
-    then x in dom Fm by FINSEQ_1:def 3;
-    then Fm.x in rng Fm & rng Fm c= the carrier of V
-    by FINSEQ_1:def 4,FUNCT_1:12;
-    then reconsider Fmx = Fm.x as Element of V;
-A22: fm1.x = L1.(Fm.x) by A20,A21;
     consider L1f being Function such that
-A23: L1 = L1f & dom L1f = the carrier of V & rng L1f c= REAL by FUNCT_2:def 2;
-    Fmx in dom L1f by A23;
-    then fm1.x in rng L1f by A22,A23,FUNCT_1:12;
-    hence thesis by A21,A23;
+A38: L1 = L1f and
+A39: dom L1f = the carrier of V and
+A40: rng L1f c= REAL by FUNCT_2:def 2;
+    assume
+    y in rng fm1;
+    then consider x being set such that
+A41: x in dom fm1 and
+A42: fm1.x = y by FUNCT_1:def 5;
+    reconsider x as Element of NAT by A41;
+A43: fm1.x = L1.(Fm.x) by A37,A41;
+    x in Seg len Fm by A37,A41,FINSEQ_1:def 3;
+    then x in dom Fm by FINSEQ_1:def 3;
+    then
+A44: Fm.x in rng Fm by FUNCT_1:12;
+    rng Fm c= the carrier of V by FINSEQ_1:def 4;
+    then reconsider Fmx = Fm.x as Element of V by A44;
+    Fmx in dom L1f by A39;
+    then fm1.x in rng L1f by A43,A38,FUNCT_1:12;
+    hence thesis by A42,A40;
   end;
   then reconsider fm1 as FinSequence of REAL by FINSEQ_1:def 4;
   deffunc F(set) = L2.(Fm.$1);
   consider fm2 being FinSequence such that
-A24: len fm2 = len Fm &
-  for j being Nat st j in dom fm2 holds fm2.j = F(j) from FINSEQ_1:sch 2;
-  rng fm2 c= REAL
+A45: len fm2 = len Fm & for j being Nat st j in dom fm2 holds fm2.j = F(
+  j) from FINSEQ_1:sch 2;
+A46: for x being set st x in dom(ft^fm1) holds (ft^fm1).x = L1.((Ft^Fm).x)
   proof
-    let y be set;
-    assume y in rng fm2;
-    then consider x being set such that
-A25: x in dom fm2 & fm2.x = y by FUNCT_1:def 5;
-    reconsider x as Element of NAT by A25;
-     x in Seg len Fm by A24,A25,FINSEQ_1:def 3;
-    then x in dom Fm by FINSEQ_1:def 3;
-    then Fm.x in rng Fm & rng Fm c= the carrier of V
-    by FINSEQ_1:def 4,FUNCT_1:12;
-    then reconsider Fmx = Fm.x as Element of V;
-A26: fm2.x = L2.(Fm.x) by A24,A25;
-    consider L2f being Function such that
-A27: L2 = L2f & dom L2f = the carrier of V & rng L2f c= REAL by FUNCT_2:def 2;
-    Fmx in dom L2f by A27;
-    then fm2.x in rng L2f by A26,A27,FUNCT_1:12;
-    hence thesis by A25,A27;
-  end;
-  then reconsider fm2 as FinSequence of REAL by FINSEQ_1:def 4;
-  deffunc F(set) = L2.(Fb.$1);
-  consider fb being FinSequence such that
-A28: len fb = len Fb & for j being Nat st j in dom fb holds fb.j = F(j)
-  from FINSEQ_1:sch 2;
-  rng fb c= REAL
-  proof
-    let y be set;
-    assume y in rng fb;
-    then consider x being set such that
-A29: x in dom fb & fb.x = y by FUNCT_1:def 5;
-    reconsider x as Element of NAT by A29;
-     x in Seg len Fb by A28,A29,FINSEQ_1:def 3;
-    then x in dom Fb by FINSEQ_1:def 3;
-    then Fb.x in rng Fb & rng Fb c= the carrier of V
-    by FINSEQ_1:def 4,FUNCT_1:12;
-    then reconsider Fbx = Fb.x as Element of V;
-A30: fb.x = L2.(Fb.x) by A28,A29;
-    consider L2f being Function such that
-A31: L2 = L2f & dom L2f = the carrier of V & rng L2f c= REAL by FUNCT_2:def 2;
-    Fbx in dom L2f by A31;
-    then fb.x in rng L2f by A30,A31,FUNCT_1:12;
-    hence thesis by A29,A31;
-  end;
-  then reconsider fb as FinSequence of REAL by FINSEQ_1:def 4;
-A32: rng Ft misses rng Fm by A10,A11,A13,A14,XBOOLE_1:17,85;
-A33: rng Fm misses rng Fb by A11,A12,A14,A15,XBOOLE_1:17,85;
-A34: F1, Ft^Fm are_fiberwise_equipotent
-  proof
-A35: Ft^Fm is one-to-one by A13,A14,A32,FINSEQ_3:98;
-    rng (Ft^Fm) = rng Ft \/ rng Fm by FINSEQ_1:44
-      .= ((Carrier(L1) \/ Carrier(L2)) \ Carrier(L2))
-    \/ (Carrier(L1) /\ Carrier(L2)) by A3,A8,A10,A11,A13,A14,Lm7
-      .= ( Carrier(L1) \ Carrier(L2) ) \/ ( Carrier(L2) \ Carrier(L2) )
-    \/ (Carrier(L1) /\ Carrier(L2)) by XBOOLE_1:42
-      .= ( Carrier(L1) \ Carrier(L2) ) \/ {}
-    \/ (Carrier(L1) /\ Carrier(L2)) by XBOOLE_1:37
-      .= Carrier(L1) \ (Carrier(L2) \ Carrier(L2)) by XBOOLE_1:52
-      .= Carrier(L1) \ {} by XBOOLE_1:37
-      .= rng F1 by A4;
-    hence thesis by A4,A35,RFINSEQ:39;
-  end;
-  f1, ft^fm1 are_fiberwise_equipotent
-  proof
-A36: dom L1 = the carrier of V by FUNCT_2:169;
-A37: for x being set holds x in dom f1 iff x in dom F1 & F1.x in dom L1
-    proof
-      let x be set;
-A38:  now
-        assume x in dom f1;
-        then x in Seg len F1 by A5,FINSEQ_1:def 3;
-        hence x in dom F1 by FINSEQ_1:def 3;
-        then F1.x in rng F1 by FUNCT_1:12;
-        hence F1.x in dom L1 by A4,A36;
-      end;
-      now
-        assume x in dom F1 & F1.x in dom L1;
-        then x in Seg len F1 by FINSEQ_1:def 3;
-        hence x in dom f1 by A5,FINSEQ_1:def 3;
-      end;
-      hence thesis by A38;
-    end;
-    for x being set st x in dom f1 holds f1.x = L1.(F1.x)
-     by A5;
-    then
-A40: f1 = L1*F1 by A37,FUNCT_1:20;
-A41: rng (Ft^Fm) = Carrier(Lt) \/ Carrier(Lm) by A13,A14,FINSEQ_1:44;
-A42: for x being set holds
-    x in dom (ft^fm1) iff x in dom(Ft^Fm) & (Ft^Fm).x in dom L1
-    proof
-      let x be set;
-A43:  len (ft^fm1) = len ft + len fm1 by FINSEQ_1:35
-        .= len (Ft^Fm) by A16,A20,FINSEQ_1:35;
-A44:  dom(ft^fm1) = Seg len(ft^fm1) by FINSEQ_1:def 3
-        .= dom (Ft^Fm) by A43,FINSEQ_1:def 3;
-      x in dom (ft^fm1) implies (Ft^Fm).x in dom L1
-      proof
-        assume x in dom (ft^fm1);
-        then (Ft^Fm).x in rng (Ft^Fm) by A44,FUNCT_1:12;
+    let x be set;
+    assume
+A47: x in dom (ft^fm1);
+    then reconsider n = x as Element of NAT;
+    now
+      per cases by A47,FINSEQ_1:38;
+      suppose
+A48:    n in dom ft;
+        then n in Seg len Ft by A29,FINSEQ_1:def 3;
         then
-A45:    (Ft^Fm).x in Carrier(Lt) \/ Carrier(Lm) by A13,A14,FINSEQ_1:44;
-        dom L1 = the carrier of V by FUNCT_2:169;
-        hence thesis by A45;
+A49:    n in dom Ft by FINSEQ_1:def 3;
+        ft.n = L1.(Ft.n) by A29,A48;
+        then (ft^fm1).n = L1.(Ft.n) by A48,FINSEQ_1:def 7;
+        hence thesis by A49,FINSEQ_1:def 7;
       end;
-      hence thesis by A44;
-    end;
-    for x being set st x in dom(ft^fm1) holds (ft^fm1).x = L1.((Ft^Fm).x)
-    proof
-      let x be set;
-      assume
-A46:  x in dom (ft^fm1);
-      then reconsider n = x as Element of NAT;
-      now per cases by A46,FINSEQ_1:38;
-        suppose
-A47:      n in dom ft;
-          then
-A48:      n in Seg len Ft by A16,FINSEQ_1:def 3;
-          ft.n = L1.(Ft.n) by A16,A47;
-          then
-A49:      (ft^fm1).n = L1.(Ft.n) by A47,FINSEQ_1:def 7;
-          n in dom Ft by A48,FINSEQ_1:def 3;
-          hence thesis by A49,FINSEQ_1:def 7;
-        end;
-        suppose ex m being Nat st m in dom fm1 & n = len ft + m;
-          then consider m being Element of NAT such that
-A50:      m in dom fm1 & n = len ft + m;
-A51:      m in Seg len Fm by A20,A50,FINSEQ_1:def 3;
-A52:      (ft^fm1).n = fm1.m by A50,FINSEQ_1:def 7
-            .= L1.(Fm.m) by A20,A50;
-          m in dom Fm & n = len Ft + m by A16,A50,A51,FINSEQ_1:def 3;
-          hence thesis by A52,FINSEQ_1:def 7;
-        end;
-      end;
-      hence thesis;
-    end;
-    then
-A53: (ft^fm1) = L1*(Ft^Fm) by A42,FUNCT_1:20;
-    dom F1 = dom (Ft^Fm) by A34,RFINSEQ:16;
-    hence thesis by A4,A34,A36,A40,A41,A53,BAGORDER:4;
-  end;
-  then
-A54: Sum(f1) = Sum(ft^fm1) by RFINSEQ:22;
-A55: F2, Fm^Fb are_fiberwise_equipotent
-  proof
-A56: Fm^Fb is one-to-one by A14,A15,A33,FINSEQ_3:98;
-    rng (Fm^Fb) = (Carrier(L) \ Carrier(r*L1))
-    \/ (Carrier(r*L1) /\ Carrier((1-r)*L2)) by A11,A12,A14,A15,FINSEQ_1:44
-      .= ((Carrier(L1) \/ Carrier(L2)) \ Carrier(L1))
-    \/ (Carrier(L1) /\ Carrier(L2)) by A3,A8,Lm7
-      .= ( Carrier(L1) \ Carrier(L1) ) \/ ( Carrier(L2) \ Carrier(L1) )
-    \/ (Carrier(L1) /\ Carrier(L2)) by XBOOLE_1:42
-      .= ( Carrier(L2) \ Carrier(L1) ) \/ {}
-    \/ (Carrier(L1) /\ Carrier(L2)) by XBOOLE_1:37
-      .= Carrier(L2) \ (Carrier(L1) \ Carrier(L1)) by XBOOLE_1:52
-      .= Carrier(L2) \ {} by XBOOLE_1:37
-      .= rng F2 by A6;
-    hence thesis by A6,A56,RFINSEQ:39;
-  end;
-  f2, fm2^fb are_fiberwise_equipotent
-  proof
-A57: dom L2 = the carrier of V by FUNCT_2:169;
-A58: for x being set holds x in dom f2 iff x in dom F2 & F2.x in dom L2
-    proof
-      let x be set;
-A59:  now
-        assume x in dom f2;
-        then x in Seg len F2 by A7,FINSEQ_1:def 3;
-        hence x in dom F2 by FINSEQ_1:def 3;
-        then F2.x in rng F2 by FUNCT_1:12;
-        hence F2.x in dom L2 by A6,A57;
-      end;
-      now
-        assume x in dom F2 & F2.x in dom L2;
-        then x in Seg len F2 by FINSEQ_1:def 3;
-        hence x in dom f2 by A7,FINSEQ_1:def 3;
-      end;
-      hence thesis by A59;
-    end;
-    for x being set st x in dom f2 holds f2.x = L2.(F2.x)
-     by A7;
-    then
-A61: f2 = L2*F2 by A58,FUNCT_1:20;
-A62: rng (Fm^Fb) = Carrier(Lm) \/ Carrier(Lb) by A14,A15,FINSEQ_1:44;
-A63: for x being set holds
-    x in dom (fm2^fb) iff x in dom(Fm^Fb) & (Fm^Fb).x in dom L2
-    proof
-      let x be set;
-A64:  len (fm2^fb) = len fm2 + len fb by FINSEQ_1:35
-        .= len (Fm^Fb) by A24,A28,FINSEQ_1:35;
-A65:  dom(fm2^fb) = Seg len(fm2^fb) by FINSEQ_1:def 3
-        .= dom (Fm^Fb) by A64,FINSEQ_1:def 3;
-      x in dom (fm2^fb) implies (Fm^Fb).x in dom L2
-      proof
-        assume x in dom (fm2^fb);
-        then (Fm^Fb).x in rng (Fm^Fb) by A65,FUNCT_1:12;
+      suppose
+        ex m being Nat st m in dom fm1 & n = len ft + m;
+        then consider m being Element of NAT such that
+A50:    m in dom fm1 and
+A51:    n = len ft + m;
+        m in Seg len Fm by A37,A50,FINSEQ_1:def 3;
         then
-A66:    (Fm^Fb).x in Carrier(Lm) \/ Carrier(Lb) by A14,A15,FINSEQ_1:44;
-        dom L2 = the carrier of V by FUNCT_2:169;
-        hence thesis by A66;
+A52:    m in dom Fm by FINSEQ_1:def 3;
+        (ft^fm1).n = fm1.m by A50,A51,FINSEQ_1:def 7
+          .= L1.(Fm.m) by A37,A50;
+        hence thesis by A29,A51,A52,FINSEQ_1:def 7;
       end;
-      hence thesis by A65;
-    end;
-    for x being set st x in dom(fm2^fb) holds (fm2^fb).x = L2.((Fm^Fb).x)
-    proof
-      let x be set;
-      assume
-A67:  x in dom (fm2^fb);
-      then reconsider n = x as Element of NAT;
-      now per cases by A67,FINSEQ_1:38;
-        suppose
-A68:      n in dom fm2;
-          then
-A69:      n in Seg len Fm by A24,FINSEQ_1:def 3;
-          fm2.n = L2.(Fm.n) by A24,A68;
-          then
-A70:      (fm2^fb).n = L2.(Fm.n) by A68,FINSEQ_1:def 7;
-          n in dom Fm by A69,FINSEQ_1:def 3;
-          hence thesis by A70,FINSEQ_1:def 7;
-        end;
-        suppose ex m being Nat st m in dom fb & n = len fm2 + m;
-          then consider m being Element of NAT such that
-A71:      m in dom fb & n = len fm2 + m;
-A72:      m in Seg len Fb by A28,A71,FINSEQ_1:def 3;
-A73:      (fm2^fb).n = fb.m by A71,FINSEQ_1:def 7
-            .= L2.(Fb.m) by A28,A71;
-          m in dom Fb & n = len Fm + m by A24,A71,A72,FINSEQ_1:def 3;
-          hence thesis by A73,FINSEQ_1:def 7;
-        end;
-      end;
-      hence thesis;
-    end;
-    then
-A74: (fm2^fb) = L2*(Fm^Fb) by A63,FUNCT_1:20;
-    dom F2 = dom (Fm^Fb) by A55,RFINSEQ:16;
-    hence thesis by A6,A55,A57,A61,A62,A74,BAGORDER:4;
-  end;
-  then
-A75: Sum(f2) = Sum(fm2^fb) by RFINSEQ:22;
-  set F = Ft^Fm^Fb;
-  set f = (r*ft)^(r*fm1 + (1-r)*fm2)^((1-r)*fb);
-A76: rng (Ft^Fm) = Carrier(L1) by A4,A34,CLASSES1:83;
-A77: rng Fb = Carrier(L) \ Carrier(L1) by A1,A12,A15,RLVECT_2:65;
-  then
-A78: rng (Ft^Fm) misses rng Fb by A76,XBOOLE_1:79;
-  Ft^Fm is one-to-one by A13,A14,A32,FINSEQ_3:98;
-  then
-A79: F is one-to-one by A15,A78,FINSEQ_3:98;
-A80: rng F = Carrier(L1) \/ (Carrier(L) \ Carrier(L1)) by A76,A77,FINSEQ_1:44
-    .= Carrier(L1) \/ Carrier(L) by XBOOLE_1:39
-    .= Carrier(L) by A8,A9,XBOOLE_1:7,12;
-  len f = len F & Sum(f) = 1 &
-  for n being Nat st n in dom f holds f.n = L.(F.n) & f.n >= 0
-  proof
-A81: len (r*fm1) = len fm1 by EUCLID_2:8
-      .= len ((1-r)*fm2) by A20,A24,EUCLID_2:8;
-    len f = len ((r*ft)^(r*fm1 + (1-r)*fm2)) + len((1-r)*fb) by FINSEQ_1:35
-      .= len(r*ft) + len(r*fm1 + (1-r)*fm2) + len((1-r)*fb) by FINSEQ_1:35
-      .= len ft + len(r*fm1 + (1-r)*fm2) + len((1-r)*fb) by EUCLID_2:8
-      .= len ft + len(r*fm1 + (1-r)*fm2) + len fb by EUCLID_2:8
-      .= len ft + len (r*fm1) + len fb by A81,INTEGRA5:2
-      .= len Ft + len Fm + len Fb by A16,A20,A28,EUCLID_2:8
-      .= len (Ft^Fm) + len Fb by FINSEQ_1:35;
-    hence len f = len F by FINSEQ_1:35;
-    Sum(f) = Sum((r*ft)^(r*fm1 + (1-r)*fm2)) + Sum((1-r)*fb) by RVSUM_1:105
-      .= Sum(r*ft) + Sum(r*fm1 + (1-r)*fm2) + Sum((1-r)*fb) by RVSUM_1:105
-      .= r*Sum(ft) + Sum(r*fm1 + (1-r)*fm2) + Sum((1-r)*fb) by RVSUM_1:117
-      .= r*Sum(ft) + Sum(r*fm1 + (1-r)*fm2) + (1-r)*Sum(fb) by RVSUM_1:117
-      .= r*Sum(ft) + ( Sum(r*fm1) + Sum((1-r)*fm2) ) + (1-r)*Sum(fb)
-    by A81,INTEGRA5:2
-      .= r*Sum(ft)+( r*Sum(fm1) + Sum((1-r)*fm2) )+(1-r)*Sum(fb) by RVSUM_1:117
-      .= r*Sum(ft)+( r*Sum(fm1) + (1-r)*Sum(fm2) )+(1-r)*Sum(fb) by RVSUM_1:117
-      .= r*(Sum(ft)+Sum(fm1)) + (1-r)*(Sum(fm2)+Sum(fb))
-      .= r*(Sum(ft^fm1)) + (1-r)*(Sum(fm2)+Sum(fb)) by RVSUM_1:105
-      .= r*1 + (1-r)*1 by A5,A7,A54,A75,RVSUM_1:105
-      .= 0 + 1;
-    hence Sum(f) = 1;
-    for n being Element of NAT st n in dom f holds f.n = L.(F.n) & f.n >=0
-    proof
-      let n be Element of NAT;
-      assume
-A82:  n in dom f;
-      now per cases by A82,FINSEQ_1:38;
-        suppose
-A83:      n in dom ((r*ft)^(r*fm1 + (1-r)*fm2));
-          then
-A84:      f.n = ((r*ft)^(r*fm1 + (1-r)*fm2)).n by FINSEQ_1:def 7;
-          now per cases by A83,FINSEQ_1:38;
-            suppose
-A85:          n in dom(r*ft);
-              then
-A86:           n in dom ft by VALUED_1:def 5;
-              then
-A87:          n in Seg len Ft by A16,FINSEQ_1:def 3;
-A88:          f.n = (r*ft).n by A84,A85,FINSEQ_1:def 7
-                .= r*(ft.n) by RVSUM_1:66
-                .= r*(L1.(Ft.n)) by A16,A86;
-A89:          n in dom Ft by A87,FINSEQ_1:def 3;
-              then
-A90:          Ft.n in rng Ft by FUNCT_1:12;
-A91:          Ft.n in Carrier(Lt) by A13,A89,FUNCT_1:12;
-              then reconsider Ftn = Ft.n as Element of V;
-              Ft.n in Carrier(L) & not Ft.n in Carrier(L2)
-              by A8,A10,A91,XBOOLE_0:def 5;
-              then L2.(Ftn) = 0 by RLVECT_2:28;
-              then (1-r)*L2.(Ftn) = 0;
-              then ((1-r)*L2).(Ftn) = 0 by RLVECT_2:def 13;
-              then
-A92:          f.n = (r*L1).(Ftn) + ((1-r)*L2).(Ftn) by A88,RLVECT_2:def 13
-                .= (r*L1 + (1-r)*L2).(Ft.n) by RLVECT_2:def 12;
-              len((r*ft)^(r*fm1+(1-r)*fm2))
-              = len(r*ft) + len(r*fm1 + (1-r)*fm2) by FINSEQ_1:35
-                .= len ft + len(r*fm1 + (1-r)*fm2) by EUCLID_2:8
-                .= len ft + len (r*fm1) by A81,INTEGRA5:2
-                .= len Ft + len Fm by A16,A20,EUCLID_2:8
-                .= len (Ft^Fm) by FINSEQ_1:35;
-              then n in Seg len(Ft^Fm) by A83,FINSEQ_1:def 3;
-              then n in dom (Ft^Fm) by FINSEQ_1:def 3;
-              then (Ft^Fm).n = F.n by FINSEQ_1:def 7;
-              hence f.n = L.(F.n) by A89,A92,FINSEQ_1:def 7;
-              rng Ft c= rng (Ft^Fm) by FINSEQ_1:42;
-              then Ft.n in rng (Ft^Fm) by A90;
-              then Ft.n in rng F1 by A34,CLASSES1:83;
-              then consider m' being set such that
-A93:          m' in dom F1 & F1.m' = Ft.n by FUNCT_1:def 5;
-              reconsider m' as Element of NAT by A93;
-              m' in Seg len f1 by A5,A93,FINSEQ_1:def 3;
-              then m' in dom f1 by FINSEQ_1:def 3;
-              then f1.m' = L1.(F1.m') & f1.m' >= 0 by A5;
-              hence f.n >= 0 by A1,A88,A93,XREAL_1:129;
-            end;
-            suppose ex k being Nat st k in dom(r*fm1 + (1-r)*fm2) &
-              n = len(r*ft) + k;
-              then consider m being Element of NAT such that
-A94:          m in dom(r*fm1 + (1-r)*fm2) & n=len(r*ft)+m;
-              len (r*fm1) = len fm1 by EUCLID_2:8
-                .= len ((1-r)*fm2) by A20,A24,EUCLID_2:8;
-              then len (r*fm1 + (1-r)*fm2) = len (r*fm1) by INTEGRA5:2
-                .= len fm1 by EUCLID_2:8;
-              then
-A95:          m in dom fm1 by A94,FINSEQ_3:31;
-              then
-A96:          m in dom fm2 by A20,A24,FINSEQ_3:31;
-A97:          f.n = (r*fm1 + (1-r)*fm2).m by A84,A94,FINSEQ_1:def 7
-                .= (r*fm1).m + ((1-r)*fm2).m by A94,VALUED_1:def 1
-                .= r*(fm1.m) + ((1-r)*fm2).m by RVSUM_1:66
-                .= r*(fm1.m) + (1-r)*(fm2.m) by RVSUM_1:66
-                .= r*(L1.(Fm.m)) + (1-r)*(fm2.m) by A20,A95
-                .= r*(L1.(Fm.m)) + (1-r)*(L2.(Fm.m)) by A24,A96;
-A98:         m in dom Fm by A96,A24,FINSEQ_3:31;
-              then
-A99:         Fm.m in rng Fm by FUNCT_1:12;
-              then reconsider Fmm = Fm.m as Element of V by A14;
-              r*(L1.(Fmm)) = (r*L1).(Fm.m) &
-              (1-r)*(L2.(Fmm)) = ((1-r)*L2).(Fm.m) by RLVECT_2:def 13;
-              then
-A100:         f.n = (r*L1 + (1-r)*L2).(Fm.m) by A97,RLVECT_2:def 12;
-              len((r*ft)^(r*fm1+(1-r)*fm2))
-              = len(r*ft) + len(r*fm1 + (1-r)*fm2) by FINSEQ_1:35
-                .= len ft + len(r*fm1 + (1-r)*fm2) by EUCLID_2:8
-                .= len ft + len (r*fm1) by A81,INTEGRA5:2
-                .= len Ft + len Fm by A16,A20,EUCLID_2:8
-                .= len (Ft^Fm) by FINSEQ_1:35;
-              then n in Seg len(Ft^Fm) by A83,FINSEQ_1:def 3;
-              then n in dom (Ft^Fm) by FINSEQ_1:def 3;
-              then
-A101:         (Ft^Fm).n = F.n by FINSEQ_1:def 7;
-              len(r*ft) = len Ft by A16,EUCLID_2:8;
-              hence f.n = L.(F.n) by A94,A98,A100,A101,FINSEQ_1:def 7;
-              rng Fm c= rng (Ft^Fm) by FINSEQ_1:43;
-              then Fm.m in rng (Ft^Fm) by A99;
-              then Fm.m in rng F1 by A34,CLASSES1:83;
-              then consider m' being set such that
-A102:         m' in dom F1 & F1.m' = Fm.m by FUNCT_1:def 5;
-              reconsider m' as Element of NAT by A102;
-              m' in Seg len F1 by A102,FINSEQ_1:def 3;
-              then m' in dom f1 by A5,FINSEQ_1:def 3;
-              then f1.m' = L1.(F1.m') & f1.m' >= 0 by A5;
-              then
-A103:         r*L1.(Fm.m) >= 0 by A1,A102,XREAL_1:129;
-              rng Fm c= rng (Fm^Fb) by FINSEQ_1:42;
-              then Fm.m in rng (Fm^Fb) by A99;
-              then Fm.m in rng F2 by A55,CLASSES1:83;
-              then consider m' being set such that
-A104:         m' in dom F2 & F2.m' = Fm.m by FUNCT_1:def 5;
-              reconsider m' as Element of NAT by A104;
-              m' in Seg len F2 by A104,FINSEQ_1:def 3;
-              then m' in dom f2 by A7,FINSEQ_1:def 3;
-              then f2.m' = L2.(F2.m') & f2.m' >= 0 by A7;
-              then (1-r)*L2.(Fm.m) >= 0 by A2,A104,XREAL_1:129;
-              then r*(L1.(Fm.m)) + (1-r)*(L2.(Fm.m))
-              >= 0 + (0 qua Nat) by A103,XREAL_1:9;
-              hence f.n >= 0 by A97;
-            end;
-          end;
-          hence thesis;
-        end;
-        suppose ex m being Nat st m in dom((1-r)*fb) &
-          n = len ((r*ft)^(r*fm1 + (1-r)*fm2)) + m;
-          then consider m being Element of NAT such that
-A105:     m in dom((1-r)*fb) & n=len((r*ft)^(r*fm1+(1-r)*fm2))+m;
-A106:     m in dom fb by A105,VALUED_1:def 5;
-          then
-A107:     m in Seg len Fb by A28,FINSEQ_1:def 3;
-A108:     f.n = ((1-r)*fb).m by A105,FINSEQ_1:def 7
-            .= (1-r)*(fb.m) by RVSUM_1:66
-            .= (1-r)*(L2.(Fb.m)) by A28,A106;
-A109:     m in dom Fb by A107,FINSEQ_1:def 3;
-          then
-A110:     Fb.m in rng Fb by FUNCT_1:12;
-          then reconsider Fbm = Fb.m as Element of V by A15;
-          Fb.m in Carrier(L) & not Fb.m in Carrier(L1)
-          by A8,A12,A15,A110,XBOOLE_0:def 5;
-          then L1.(Fbm) = 0 by RLVECT_2:28;
-          then r*L1.(Fbm) = 0;
-          then (r*L1).(Fbm) = 0 by RLVECT_2:def 13;
-          then
-A111:     f.n = (r*L1).(Fbm) + ((1-r)*L2).(Fbm) by A108,RLVECT_2:def 13
-            .= (r*L1 + (1-r)*L2).(Fb.m) by RLVECT_2:def 12;
-          len((r*ft)^(r*fm1+(1-r)*fm2))
-          = len(r*ft) + len(r*fm1 + (1-r)*fm2) by FINSEQ_1:35
-            .= len ft + len(r*fm1 + (1-r)*fm2) by EUCLID_2:8
-            .= len ft + len (r*fm1) by A81,INTEGRA5:2
-            .= len Ft + len Fm by A16,A20,EUCLID_2:8
-            .= len (Ft^Fm) by FINSEQ_1:35;
-          hence f.n = L.(F.n) by A105,A109,A111,FINSEQ_1:def 7;
-          rng Fb c= rng (Fm^Fb) by FINSEQ_1:43;
-          then Fb.m in rng (Fm^Fb) by A110;
-          then Fb.m in rng F2 by A55,CLASSES1:83;
-          then consider m' being set such that
-A112:     m' in dom F2 & F2.m' = Fb.m by FUNCT_1:def 5;
-          reconsider m' as Element of NAT by A112;
-          m' in Seg len F2 by A112,FINSEQ_1:def 3;
-          then m' in dom f2 by A7,FINSEQ_1:def 3;
-          then f2.m' = L2.(F2.m') & f2.m' >= 0 by A7;
-          hence f.n >= 0 by A2,A108,A112,XREAL_1:129;
-        end;
-      end;
-      hence thesis;
     end;
     hence thesis;
   end;
-  hence thesis by A79,A80,CONVEX1:def 3;
+  for x being set holds x in dom (ft^fm1) iff x in dom(Ft^Fm) & (Ft^Fm).
+  x in dom L1
+  proof
+    let x be set;
+A53: len (ft^fm1) = len ft + len fm1 by FINSEQ_1:35
+      .= len (Ft^Fm) by A29,A37,FINSEQ_1:35;
+A54: dom(ft^fm1) = Seg len(ft^fm1) by FINSEQ_1:def 3
+      .= dom (Ft^Fm) by A53,FINSEQ_1:def 3;
+    x in dom (ft^fm1) implies (Ft^Fm).x in dom L1
+    proof
+      assume
+      x in dom (ft^fm1);
+      then (Ft^Fm).x in rng (Ft^Fm) by A54,FUNCT_1:12;
+      then
+A55:  (Ft^Fm).x in Carrier(Lt) \/ Carrier(Lm) by A18,A22,FINSEQ_1:44;
+      dom L1 = the carrier of V by FUNCT_2:169;
+      hence thesis by A55;
+    end;
+    hence thesis by A54;
+  end;
+  then
+A56: (ft^fm1) = L1*(Ft^Fm) by A46,FUNCT_1:20;
+A57: dom L2 = the carrier of V by FUNCT_2:169;
+A58: for x being set holds x in dom f2 iff x in dom F2 & F2.x in dom L2
+  proof
+    let x be set;
+A59: now
+      assume
+      x in dom f2;
+      then x in Seg len F2 by A26,FINSEQ_1:def 3;
+      hence x in dom F2 by FINSEQ_1:def 3;
+      then F2.x in rng F2 by FUNCT_1:12;
+      hence F2.x in dom L2 by A5,A57;
+    end;
+    now
+      assume that
+A60:  x in dom F2 and
+      F2.x in dom L2;
+      x in Seg len F2 by A60,FINSEQ_1:def 3;
+      hence x in dom f2 by A26,FINSEQ_1:def 3;
+    end;
+    hence thesis by A59;
+  end;
+  deffunc F(set) = L2.(Fb.$1);
+  consider fb being FinSequence such that
+A61: len fb = len Fb & for j being Nat st j in dom fb holds fb.j = F(j)
+  from FINSEQ_1:sch 2;
+  rng fm2 c= REAL
+  proof
+    let y be set;
+    consider L2f being Function such that
+A62: L2 = L2f and
+A63: dom L2f = the carrier of V and
+A64: rng L2f c= REAL by FUNCT_2:def 2;
+    assume
+    y in rng fm2;
+    then consider x being set such that
+A65: x in dom fm2 and
+A66: fm2.x = y by FUNCT_1:def 5;
+    reconsider x as Element of NAT by A65;
+A67: fm2.x = L2.(Fm.x) by A45,A65;
+    x in Seg len Fm by A45,A65,FINSEQ_1:def 3;
+    then x in dom Fm by FINSEQ_1:def 3;
+    then
+A68: Fm.x in rng Fm by FUNCT_1:12;
+    rng Fm c= the carrier of V by FINSEQ_1:def 4;
+    then reconsider Fmx = Fm.x as Element of V by A68;
+    Fmx in dom L2f by A63;
+    then fm2.x in rng L2f by A67,A62,FUNCT_1:12;
+    hence thesis by A66,A64;
+  end;
+  then reconsider fm2 as FinSequence of REAL by FINSEQ_1:def 4;
+A69: len (r*fm1) = len fm1 by RVSUM_1:147
+    .= len ((1-r)*fm2) by A37,A45,RVSUM_1:147;
+  rng fb c= REAL
+  proof
+    let y be set;
+    consider L2f being Function such that
+A70: L2 = L2f and
+A71: dom L2f = the carrier of V and
+A72: rng L2f c= REAL by FUNCT_2:def 2;
+    assume
+    y in rng fb;
+    then consider x being set such that
+A73: x in dom fb and
+A74: fb.x = y by FUNCT_1:def 5;
+    reconsider x as Element of NAT by A73;
+A75: fb.x = L2.(Fb.x) by A61,A73;
+    x in Seg len Fb by A61,A73,FINSEQ_1:def 3;
+    then x in dom Fb by FINSEQ_1:def 3;
+    then
+A76: Fb.x in rng Fb by FUNCT_1:12;
+    rng Fb c= the carrier of V by FINSEQ_1:def 4;
+    then reconsider Fbx = Fb.x as Element of V by A76;
+    Fbx in dom L2f by A71;
+    then fb.x in rng L2f by A75,A70,FUNCT_1:12;
+    hence thesis by A74,A72;
+  end;
+  then reconsider fb as FinSequence of REAL by FINSEQ_1:def 4;
+  set f = (r*ft)^(r*fm1 + (1-r)*fm2)^((1-r)*fb);
+  consider f1 being FinSequence of REAL such that
+A77: len f1 = len F1 and
+A78: Sum(f1) = 1 and
+A79: for n being Nat st n in dom f1 holds f1.n = L1.(F1.n) & f1.n >= 0
+  by A9;
+  len f = len ((r*ft)^(r*fm1 + (1-r)*fm2)) + len((1-r)*fb) by FINSEQ_1:35
+    .= len(r*ft) + len(r*fm1 + (1-r)*fm2) + len((1-r)*fb) by FINSEQ_1:35
+    .= len ft + len(r*fm1 + (1-r)*fm2) + len((1-r)*fb) by RVSUM_1:147
+    .= len ft + len(r*fm1 + (1-r)*fm2) + len fb by RVSUM_1:147
+    .= len ft + len (r*fm1) + len fb by A69,INTEGRA5:2
+    .= len Ft + len Fm + len Fb by A29,A37,A61,RVSUM_1:147
+    .= len (Ft^Fm) + len Fb by FINSEQ_1:35;
+  then
+A80: len f = len F by FINSEQ_1:35;
+A81: dom L1 = the carrier of V by FUNCT_2:169;
+A82: for x being set holds x in dom f1 iff x in dom F1 & F1.x in dom L1
+  proof
+    let x be set;
+A83: now
+      assume
+      x in dom f1;
+      then x in Seg len F1 by A77,FINSEQ_1:def 3;
+      hence x in dom F1 by FINSEQ_1:def 3;
+      then F1.x in rng F1 by FUNCT_1:12;
+      hence F1.x in dom L1 by A8,A81;
+    end;
+    now
+      assume that
+A84:  x in dom F1 and
+      F1.x in dom L1;
+      x in Seg len F1 by A84,FINSEQ_1:def 3;
+      hence x in dom f1 by A77,FINSEQ_1:def 3;
+    end;
+    hence thesis by A83;
+  end;
+A85: rng (Ft^Fm) = Carrier(Lt) \/ Carrier(Lm) by A18,A22,FINSEQ_1:44;
+  for x being set st x in dom f1 holds f1.x = L1.(F1.x) by A79;
+  then
+A86: f1 = L1*F1 by A82,FUNCT_1:20;
+  Ft^Fm is one-to-one by A17,A21,A24,FINSEQ_3:98;
+  then
+A87: F1, Ft^Fm are_fiberwise_equipotent by A7,A23,RFINSEQ:39;
+  then dom F1 = dom (Ft^Fm) by RFINSEQ:16;
+  then
+A88: Sum(f1) = Sum(ft^fm1) by A8,A87,A81,A86,A85,A56,BAGORDER:4,RFINSEQ:22;
+A89: rng (Fm^Fb) = Carrier(Lm) \/ Carrier(Lb) by A22,A20,FINSEQ_1:44;
+  for x being set st x in dom f2 holds f2.x = L2.(F2.x) by A28;
+  then
+A90: f2 = L2*F2 by A58,FUNCT_1:20;
+A91: rng (Fm^Fb) = (Carrier(L) \ Carrier(r*L1)) \/ (Carrier(r*L1) /\
+  Carrier((1-r)*L2)) by A15,A16,A22,A20,FINSEQ_1:44
+    .= ((Carrier(L1) \/ Carrier(L2)) \ Carrier(L1)) \/ (Carrier(L1) /\
+  Carrier(L2)) by A13,A3,A12,Lm7
+    .= ( Carrier(L1) \ Carrier(L1) ) \/ ( Carrier(L2) \ Carrier(L1) ) \/ (
+  Carrier(L1) /\ Carrier(L2)) by XBOOLE_1:42
+    .= ( Carrier(L2) \ Carrier(L1) ) \/ {} \/ (Carrier(L1) /\ Carrier(L2))
+  by XBOOLE_1:37
+    .= Carrier(L2) \ (Carrier(L1) \ Carrier(L1)) by XBOOLE_1:52
+    .= Carrier(L2) \ {} by XBOOLE_1:37
+    .= rng F2 by A5;
+  for n being Element of NAT st n in dom f holds f.n = L.(F.n) & f.n >=0
+  proof
+    let n be Element of NAT;
+    assume
+A92: n in dom f;
+    now
+      per cases by A92,FINSEQ_1:38;
+      suppose
+A93:    n in dom ((r*ft)^(r*fm1 + (1-r)*fm2));
+        then
+A94:    f.n = ((r*ft)^(r*fm1 + (1-r)*fm2)).n by FINSEQ_1:def 7;
+        now
+          per cases by A93,FINSEQ_1:38;
+          suppose
+A95:        n in dom(r*ft);
+            len((r*ft)^(r*fm1+(1-r)*fm2)) = len(r*ft) + len(r*fm1 + (1-r
+            )*fm2) by FINSEQ_1:35
+              .= len ft + len(r*fm1 + (1-r)*fm2) by RVSUM_1:147
+              .= len ft + len (r*fm1) by A69,INTEGRA5:2
+              .= len Ft + len Fm by A29,A37,RVSUM_1:147
+              .= len (Ft^Fm) by FINSEQ_1:35;
+            then n in Seg len(Ft^Fm) by A93,FINSEQ_1:def 3;
+            then n in dom (Ft^Fm) by FINSEQ_1:def 3;
+            then
+A96:        (Ft^Fm).n = F.n by FINSEQ_1:def 7;
+A97:        n in dom ft by A95,VALUED_1:def 5;
+            then n in Seg len Ft by A29,FINSEQ_1:def 3;
+            then
+A98:        n in dom Ft by FINSEQ_1:def 3;
+            then
+A99:        Ft.n in Carrier(Lt) by A18,FUNCT_1:12;
+            then reconsider Ftn = Ft.n as Element of V;
+A100:       f.n = (r*ft).n by A94,A95,FINSEQ_1:def 7
+              .= r*(ft.n) by RVSUM_1:66
+              .= r*(L1.(Ft.n)) by A29,A97;
+            not Ft.n in Carrier(L2) by A12,A10,A99,XBOOLE_0:def 5;
+            then L2.(Ftn) = 0 by RLVECT_2:28;
+            then (1-r)*L2.(Ftn) = 0;
+            then ((1-r)*L2).(Ftn) = 0 by RLVECT_2:def 13;
+            then f.n = (r*L1).(Ftn) + ((1-r)*L2).(Ftn) by A100,RLVECT_2:def 13
+              .= (r*L1 + (1-r)*L2).(Ft.n) by RLVECT_2:def 12;
+            hence f.n = L.(F.n) by A98,A96,FINSEQ_1:def 7;
+A101:       rng Ft c= rng (Ft^Fm) by FINSEQ_1:42;
+            Ft.n in rng Ft by A98,FUNCT_1:12;
+            then consider m' being set such that
+A102:       m' in dom F1 and
+A103:       F1.m' = Ft.n by A23,A101,FUNCT_1:def 5;
+            reconsider m' as Element of NAT by A102;
+            m' in Seg len f1 by A77,A102,FINSEQ_1:def 3;
+            then m' in dom f1 by FINSEQ_1:def 3;
+            then f1.m' = L1.(F1.m') & f1.m' >= 0 by A79;
+            hence f.n >= 0 by A1,A100,A103,XREAL_1:129;
+          end;
+          suppose
+            ex k being Nat st k in dom(r*fm1 + (1-r)*fm2) & n = len(
+            r*ft) + k;
+            then consider m being Element of NAT such that
+A104:       m in dom(r*fm1 + (1-r)*fm2) and
+A105:       n=len(r*ft)+m;
+            len (r*fm1) = len fm1 by RVSUM_1:147
+              .= len ((1-r)*fm2) by A37,A45,RVSUM_1:147;
+            then
+A106:       len (r*fm1 + (1-r)*fm2) = len (r*fm1) by INTEGRA5:2
+              .= len fm1 by RVSUM_1:147;
+            then
+A107:       m in dom Fm by A37,A104,FINSEQ_3:31;
+            then
+A108:       Fm.m in rng Fm by FUNCT_1:12;
+            then reconsider Fmm = Fm.m as Element of V by A22;
+A109:       m in dom fm1 by A104,A106,FINSEQ_3:31;
+A110:       m in dom fm2 by A37,A45,A104,A106,FINSEQ_3:31;
+A111:       f.n = (r*fm1 + (1-r)*fm2).m by A94,A104,A105,FINSEQ_1:def 7
+              .= (r*fm1).m + ((1-r)*fm2).m by A104,VALUED_1:def 1
+              .= r*(fm1.m) + ((1-r)*fm2).m by RVSUM_1:66
+              .= r*(fm1.m) + (1-r)*(fm2.m) by RVSUM_1:66
+              .= r*(L1.(Fm.m)) + (1-r)*(fm2.m) by A37,A109
+              .= r*(L1.(Fm.m)) + (1-r)*(L2.(Fm.m)) by A45,A110;
+            len((r*ft)^(r*fm1+(1-r)*fm2)) = len(r*ft) + len(r*fm1 + (1-r
+            )*fm2) by FINSEQ_1:35
+              .= len ft + len(r*fm1 + (1-r)*fm2) by RVSUM_1:147
+              .= len ft + len (r*fm1) by A69,INTEGRA5:2
+              .= len Ft + len Fm by A29,A37,RVSUM_1:147
+              .= len (Ft^Fm) by FINSEQ_1:35;
+            then n in Seg len(Ft^Fm) by A93,FINSEQ_1:def 3;
+            then n in dom (Ft^Fm) by FINSEQ_1:def 3;
+            then
+A112:       (Ft^Fm).n = F.n by FINSEQ_1:def 7;
+A113:       len(r*ft) = len Ft by A29,RVSUM_1:147;
+            r*(L1.(Fmm)) = (r*L1).(Fm.m) & (1-r)*(L2.(Fmm)) = ((1-r)*L2)
+            .(Fm.m) by RLVECT_2:def 13;
+            then f.n = (r*L1 + (1-r)*L2).(Fm.m) by A111,RLVECT_2:def 12;
+            hence f.n = L.(F.n) by A105,A107,A112,A113,FINSEQ_1:def 7;
+            rng Fm c= rng (Ft^Fm) by FINSEQ_1:43;
+            then consider m' being set such that
+A114:       m' in dom F1 and
+A115:       F1.m' = Fm.m by A23,A108,FUNCT_1:def 5;
+            reconsider m' as Element of NAT by A114;
+            m' in Seg len F1 by A114,FINSEQ_1:def 3;
+            then m' in dom f1 by A77,FINSEQ_1:def 3;
+            then f1.m' = L1.(F1.m') & f1.m' >= 0 by A79;
+            then
+A116:       r*L1.(Fm.m) >= 0 by A1,A115,XREAL_1:129;
+            rng Fm c= rng (Fm^Fb) by FINSEQ_1:42;
+            then consider m' being set such that
+A117:       m' in dom F2 and
+A118:       F2.m' = Fm.m by A91,A108,FUNCT_1:def 5;
+            reconsider m' as Element of NAT by A117;
+            m' in Seg len F2 by A117,FINSEQ_1:def 3;
+            then m' in dom f2 by A26,FINSEQ_1:def 3;
+            then f2.m' = L2.(F2.m') & f2.m' >= 0 by A28;
+            then (1-r)*L2.(Fm.m) >= 0 by A11,A118,XREAL_1:129;
+            then r*(L1.(Fm.m)) + (1-r)*(L2.(Fm.m)) >= 0 + (0 qua Nat) by A116,
+XREAL_1:9;
+            hence f.n >= 0 by A111;
+          end;
+        end;
+        hence thesis;
+      end;
+      suppose
+        ex m being Nat st m in dom((1-r)*fb) & n = len ((r*ft)^(r*
+        fm1 + (1-r)*fm2)) + m;
+        then consider m being Element of NAT such that
+A119:   m in dom((1-r)*fb) and
+A120:   n=len((r*ft)^(r*fm1+(1-r)*fm2))+m;
+A121:   m in dom fb by A119,VALUED_1:def 5;
+        then m in Seg len Fb by A61,FINSEQ_1:def 3;
+        then
+A122:   m in dom Fb by FINSEQ_1:def 3;
+        then
+A123:   Fb.m in rng Fb by FUNCT_1:12;
+        then reconsider Fbm = Fb.m as Element of V by A20;
+A124:   f.n = ((1-r)*fb).m by A119,A120,FINSEQ_1:def 7
+          .= (1-r)*(fb.m) by RVSUM_1:66
+          .= (1-r)*(L2.(Fb.m)) by A61,A121;
+A125:   len((r*ft)^(r*fm1+(1-r)*fm2)) = len(r*ft) + len(r*fm1 + (1-r)*
+        fm2) by FINSEQ_1:35
+          .= len ft + len(r*fm1 + (1-r)*fm2) by RVSUM_1:147
+          .= len ft + len (r*fm1) by A69,INTEGRA5:2
+          .= len Ft + len Fm by A29,A37,RVSUM_1:147
+          .= len (Ft^Fm) by FINSEQ_1:35;
+        not Fb.m in Carrier(L1) by A3,A16,A20,A123,XBOOLE_0:def 5;
+        then L1.(Fbm) = 0 by RLVECT_2:28;
+        then r*L1.(Fbm) = 0;
+        then (r*L1).(Fbm) = 0 by RLVECT_2:def 13;
+        then f.n = (r*L1).(Fbm) + ((1-r)*L2).(Fbm) by A124,RLVECT_2:def 13
+          .= (r*L1 + (1-r)*L2).(Fb.m) by RLVECT_2:def 12;
+        hence f.n = L.(F.n) by A120,A122,A125,FINSEQ_1:def 7;
+        rng Fb c= rng (Fm^Fb) by FINSEQ_1:43;
+        then consider m' being set such that
+A126:   m' in dom F2 and
+A127:   F2.m' = Fb.m by A91,A123,FUNCT_1:def 5;
+        reconsider m' as Element of NAT by A126;
+        m' in Seg len F2 by A126,FINSEQ_1:def 3;
+        then m' in dom f2 by A26,FINSEQ_1:def 3;
+        then f2.m' = L2.(F2.m') & f2.m' >= 0 by A28;
+        hence f.n >= 0 by A11,A124,A127,XREAL_1:129;
+      end;
+    end;
+    hence thesis;
+  end;
+  then
+A128: for n being Nat st n in dom f holds f.n = L. (F.n) & f.n >= 0;
+A129: rng Fb = Carrier(L) \ Carrier(L1) by A1,A16,A20,RLVECT_2:65;
+  then rng (Ft^Fm) misses rng Fb by A8,A23,XBOOLE_1:79;
+  then
+A130: F is one-to-one by A19,A25,FINSEQ_3:98;
+A131: for x being set st x in dom(fm2^fb) holds (fm2^fb).x = L2.((Fm^Fb).x)
+  proof
+    let x be set;
+    assume
+A132: x in dom (fm2^fb);
+    then reconsider n = x as Element of NAT;
+    now
+      per cases by A132,FINSEQ_1:38;
+      suppose
+A133:   n in dom fm2;
+        then n in Seg len Fm by A45,FINSEQ_1:def 3;
+        then
+A134:   n in dom Fm by FINSEQ_1:def 3;
+        fm2.n = L2.(Fm.n) by A45,A133;
+        then (fm2^fb).n = L2.(Fm.n) by A133,FINSEQ_1:def 7;
+        hence thesis by A134,FINSEQ_1:def 7;
+      end;
+      suppose
+        ex m being Nat st m in dom fb & n = len fm2 + m;
+        then consider m being Element of NAT such that
+A135:   m in dom fb and
+A136:   n = len fm2 + m;
+        m in Seg len Fb by A61,A135,FINSEQ_1:def 3;
+        then
+A137:   m in dom Fb by FINSEQ_1:def 3;
+        (fm2^fb).n = fb.m by A135,A136,FINSEQ_1:def 7
+          .= L2.(Fb.m) by A61,A135;
+        hence thesis by A45,A136,A137,FINSEQ_1:def 7;
+      end;
+    end;
+    hence thesis;
+  end;
+  for x being set holds x in dom (fm2^fb) iff x in dom(Fm^Fb) & (Fm^Fb).
+  x in dom L2
+  proof
+    let x be set;
+A138: len (fm2^fb) = len fm2 + len fb by FINSEQ_1:35
+      .= len (Fm^Fb) by A45,A61,FINSEQ_1:35;
+A139: dom(fm2^fb) = Seg len(fm2^fb) by FINSEQ_1:def 3
+      .= dom (Fm^Fb) by A138,FINSEQ_1:def 3;
+    x in dom (fm2^fb) implies (Fm^Fb).x in dom L2
+    proof
+      assume
+      x in dom (fm2^fb);
+      then (Fm^Fb).x in rng (Fm^Fb) by A139,FUNCT_1:12;
+      then
+A140: (Fm^Fb).x in Carrier(Lm) \/ Carrier(Lb) by A22,A20,FINSEQ_1:44;
+      dom L2 = the carrier of V by FUNCT_2:169;
+      hence thesis by A140;
+    end;
+    hence thesis by A139;
+  end;
+  then
+A141: (fm2^fb) = L2*(Fm^Fb) by A131,FUNCT_1:20;
+  rng Fm misses rng Fb by A15,A16,A22,A20,XBOOLE_1:17,85;
+  then Fm^Fb is one-to-one by A21,A19,FINSEQ_3:98;
+  then
+A142: F2, Fm^Fb are_fiberwise_equipotent by A4,A91,RFINSEQ:39;
+  then dom F2 = dom (Fm^Fb) by RFINSEQ:16;
+  then
+A143: Sum(f2) = Sum(fm2^fb) by A5,A142,A57,A90,A89,A141,BAGORDER:4,RFINSEQ:22;
+A144: Sum(f) = Sum((r*ft)^(r*fm1 + (1-r)*fm2)) + Sum((1-r)*fb) by RVSUM_1:105
+    .= Sum(r*ft) + Sum(r*fm1 + (1-r)*fm2) + Sum((1-r)*fb) by RVSUM_1:105
+    .= r*Sum(ft) + Sum(r*fm1 + (1-r)*fm2) + Sum((1-r)*fb) by RVSUM_1:117
+    .= r*Sum(ft) + Sum(r*fm1 + (1-r)*fm2) + (1-r)*Sum(fb) by RVSUM_1:117
+    .= r*Sum(ft) + ( Sum(r*fm1) + Sum((1-r)*fm2) ) + (1-r)*Sum(fb) by A69,
+INTEGRA5:2
+    .= r*Sum(ft)+( r*Sum(fm1) + Sum((1-r)*fm2) )+(1-r)*Sum(fb) by RVSUM_1:117
+    .= r*Sum(ft)+( r*Sum(fm1) + (1-r)*Sum(fm2) )+(1-r)*Sum(fb) by RVSUM_1:117
+    .= r*(Sum(ft)+Sum(fm1)) + (1-r)*(Sum(fm2)+Sum(fb))
+    .= r*(Sum(ft^fm1)) + (1-r)*(Sum(fm2)+Sum(fb)) by RVSUM_1:105
+    .= r*1 + (1-r)*1 by A78,A27,A88,A143,RVSUM_1:105
+    .= 0 + 1;
+  rng F = Carrier(L1) \/ (Carrier(L) \ Carrier(L1)) by A8,A23,A129,FINSEQ_1:44
+    .= Carrier(L1) \/ Carrier(L) by XBOOLE_1:39
+    .= Carrier(L) by A3,A14,XBOOLE_1:7,12;
+  hence thesis by A130,A144,A80,A128,CONVEX1:def 3;
 end;
 
 theorem
-  for V being RealLinearSpace, M being non empty Subset of V,
-  L1,L2 being Convex_Combination of M, r being Real st 0 < r & r < 1 holds
-  r*L1 + (1-r)*L2 is Convex_Combination of M
+  for V being RealLinearSpace, M being non empty Subset of V, L1,L2
+being Convex_Combination of M, r being Real st 0 < r & r < 1 holds r*L1 + (1-r)
+  *L2 is Convex_Combination of M
 proof
   let V be RealLinearSpace;
   let M be non empty Subset of V;
   let L1,L2 be Convex_Combination of M;
   let r be Real;
+A1: r*L1 is Linear_Combination of M & (1-r)*L2 is Linear_Combination of M by
+RLVECT_2:67;
   assume
-A1: 0 < r & r < 1;
-A2: r*L1 is Linear_Combination of M by RLVECT_2:67;
-  (1-r)*L2 is Linear_Combination of M by RLVECT_2:67;
-  hence thesis by A1,A2,Th9,RLVECT_2:59;
+  0 < r & r < 1;
+  hence thesis by A1,Th9,RLVECT_2:59;
 end;
 
 theorem
-  for V being RealLinearSpace holds
-  ex L being Linear_Combination of V st L is convex by Lm3;
+  for V being RealLinearSpace holds ex L being Linear_Combination of V
+  st L is convex by Lm3;
 
 theorem
-  for V being RealLinearSpace, M being non empty Subset of V holds
-  ex L being Linear_Combination of M st L is convex by Lm4;
+  for V being RealLinearSpace, M being non empty Subset of V holds ex L
+  being Linear_Combination of M st L is convex by Lm4;
 
 begin  :: Miscellaneous
 
 theorem
-  for V being RealLinearSpace, W1,W2 being Subspace of V holds
-  Up(W1+W2) = Up(W1) + Up(W2) by Lm5;
+  for V being RealLinearSpace, W1,W2 being Subspace of V holds Up(W1+W2)
+  = Up(W1) + Up(W2) by Lm5;
 
 theorem
-  for V being RealLinearSpace, W1,W2 being Subspace of V holds
-  Up(W1 /\ W2) = Up(W1) /\ Up(W2) by Lm6;
+  for V being RealLinearSpace, W1,W2 being Subspace of V holds Up(W1 /\
+  W2) = Up(W1) /\ Up(W2) by Lm6;
 
 theorem
-  for V being RealLinearSpace, L1, L2 being Convex_Combination of V,
-  a,b being Real st a * b > 0 holds
-  Carrier(a*L1 + b*L2) = Carrier(a * L1) \/ Carrier(b * L2) by Lm7;
+  for V being RealLinearSpace, L1, L2 being Convex_Combination of V, a,b
+being Real st a * b > 0 holds Carrier(a*L1 + b*L2) = Carrier(a * L1) \/ Carrier
+  (b * L2) by Lm7;
 
 theorem
-  for F,G being Function st F,G are_fiberwise_equipotent
-  for x1,x2 being set st x1 in dom F & x2 in dom F & x1 <> x2 holds
-  ex z1,z2 being set st
-  z1 in dom G & z2 in dom G & z1 <> z2 & F.x1 = G.z1 & F.x2 = G.z2 by Lm8;
+  for F,G being Function st F,G are_fiberwise_equipotent for x1,x2 being
+  set st x1 in dom F & x2 in dom F & x1 <> x2 holds ex z1,z2 being set st z1 in
+  dom G & z2 in dom G & z1 <> z2 & F.x1 = G.z1 & F.x2 = G.z2 by Lm8;
 
 theorem
-  for V being RealLinearSpace, L being Linear_Combination of V,
-  A being Subset of V st A c= Carrier(L) holds
-  ex L1 being Linear_Combination of V st Carrier(L1) = A by Lm9;
+  for V being RealLinearSpace, L being Linear_Combination of V, A being
+  Subset of V st A c= Carrier(L) holds ex L1 being Linear_Combination of V st
+  Carrier(L1) = A by Lm9;
 

@@ -8,36 +8,39 @@ environ
 
  vocabularies ORDINAL2, AMI_1, ARYTM_1, ORDINAL1, AMI_2, RELOC, FUNCT_1,
       RELAT_1, FINSET_1, AMI_3, CAT_1, PARTFUN1, AMI_5, FUNCT_4, BOOLE,
-      AMISTD_2, ALGSEQ_1, AFINSQ_1, ARYTM, CARD_1, CARD_3, SCMNORM;
+      AMISTD_2, ALGSEQ_1, AFINSQ_1, ARYTM, CARD_1, CARD_3, SCMNORM, FINSEQ_4;
  notations TARSKI, XBOOLE_0, SETFAM_1, ORDINAL1, FINSET_1, SUBSET_1, RELAT_1,
       FUNCT_1, FUNCT_2, PARTFUN1, FUNCT_4, FUNCOP_1, CARD_1, CARD_3, AFINSQ_1,
       NUMBERS, VALUED_1, XXREAL_0, XCMPLX_0, XREAL_0, NAT_1, NAT_D, STRUCT_0,
       AMI_1;
  constructors NAT_1, NAT_D, AMI_1, VALUED_1, XXREAL_0, AFINSQ_1, FUNCT_4,
       DOMAIN_1, PARTFUN1, WELLORD2, RELSET_1;
- registrations ORDINAL1, XREAL_0, CARD_3, FRAENKEL, AMI_1, RELSET_1, XBOOLE_0,
-      SETFAM_1, RFUNCT_3, VALUED_1, FUNCT_4, RELAT_1, FINSET_1, STRUCT_0,
-      AFINSQ_1, FUNCT_1, FUNCOP_1, FINSEQ_1, CARD_1;
+ registrations ORDINAL1, XREAL_0, CARD_3, AMI_1, RELSET_1, XBOOLE_0, SETFAM_1,
+      VALUED_1, RELAT_1, FINSET_1, AFINSQ_1, FUNCT_1, FINSEQ_1, CARD_1;
  requirements BOOLE, SUBSET, NUMERALS, ARITHM;
 
 
 begin :: The instruction locations equal to NAT, 2008.02.06, A.T.
 
-registration let N be set, S be AMI-Struct over NAT,N;
- cluster -> natural Instruction-Location of S;
+registration
+  let N be set, S be AMI-Struct over NAT,N;
+  cluster -> natural Instruction-Location of S;
 end;
 
-notation let N be set, S be AMI-Struct over NAT,N;
- let l be Instruction-Location of S;
- synonym Next l for succ l;
+notation
+  let N be set, S be AMI-Struct over NAT,N;
+  let l be Instruction-Location of S;
+  synonym Next l for succ l;
 end;
 
-definition let N be set, S be AMI-Struct over NAT,N;
+definition
+  let N be set, S be AMI-Struct over NAT,N;
   let l be Instruction-Location of S;
   redefine func Next l -> Instruction-Location of S;
 end;
 
-definition let N be set, S be AMI-Struct over NAT,N;
+definition
+  let N be set, S be AMI-Struct over NAT,N;
   let l be Instruction-Location of S, k be Nat;
   redefine func l + k -> Instruction-Location of S;
   func l -' k -> Instruction-Location of S;
@@ -46,24 +49,17 @@ end;
 reserve m,j for Element of NAT;
 
 definition
- let N be with_non-empty_elements set,
- S be definite (stored-program non empty AMI-Struct over NAT,N);
-  let p be FinPartState of S , k be Element of NAT;
+  let N be with_non-empty_elements set,
+  S be definite (stored-program non empty AMI-Struct over NAT,N);
+  let p be FinPartState of S, k be Element of NAT;
   redefine func Shift(p,k) -> FinPartState of S;
-end;
-
-registration
- let N be with_non-empty_elements set,
- S be definite (stored-program non empty AMI-Struct over NAT,N);
-  let p be NAT-defined FinPartState of S , k be Element of NAT;
-  cluster Shift(p,k) -> NAT-defined FinPartState of S;
 end;
 
 definition
   let IL,N be set;
   let S be AMI-Struct over IL,N;
-  let p be finite PartFunc of NAT, the Instructions of S, k be Element of NAT;
-  redefine func Shift(p,k) -> finite PartFunc of NAT, the Instructions of S;
+  let p be PartFunc of NAT, the Instructions of S, k be Element of NAT;
+  redefine func Shift(p,k) -> PartFunc of NAT, the Instructions of S;
 end;
 
 definition
@@ -72,9 +68,11 @@ definition
   mode preProgram of S is IL-defined FinPartState of S;
 end;
 
-definition let F be Function;
- attr F is initial means
+definition
+  let F be Function;
+  attr F is initial means
 :: SCMNORM:def 1
+
   for m,n being Nat st n in dom F & m < n holds m in dom F;
 end;
 
@@ -113,13 +111,13 @@ theorem :: SCMNORM:1
   Shift(ProgramPart I,n) +* Shift(ProgramPart J,n);
 
 registration
- cluster -> initial XFinSequence;
+  cluster -> initial XFinSequence;
 end;
 
 definition
   let N be non empty with_non-empty_elements set;
   let S be halting definite (non empty stored-program AMI-Struct over NAT,N);
- func Stop S -> Program of S equals
+  func Stop S -> Program of S equals
 :: SCMNORM:def 2
   <% halt S %>;
 end;
@@ -127,7 +125,7 @@ end;
 registration
   let N be non empty with_non-empty_elements set;
   let S be halting definite (non empty stored-program AMI-Struct over NAT,N);
- cluster Stop S -> non empty;
+  cluster Stop S -> non empty;
 end;
 
 registration
@@ -148,10 +146,10 @@ theorem :: SCMNORM:3
 definition
   let N be non empty with_non-empty_elements set;
   let S be halting definite (non empty stored-program AMI-Struct over NAT,N);
- let p be finite PartFunc of NAT, the Instructions of S;
- func [p] -> preProgram of S equals
+  let p be finite PartFunc of NAT, the Instructions of S;
+  func [p] -> preProgram of S equals
 :: SCMNORM:def 3
-p;
+  p;
 end;
 
 definition
@@ -178,11 +176,10 @@ definition
   let N;
   let S be IC-Ins-separated (non empty AMI-Struct over NAT,N);
   let p be finite PartFunc of NAT, the Instructions of S;
-  let s be State of S such that
- IC s in dom p;
+  let s be State of S;
   func CurInstr(p,s) -> Instruction of S equals
 :: SCMNORM:def 4
-  p.IC s;
+  p/.IC s;
 end;
 
 definition
@@ -200,9 +197,10 @@ definition
   let S be IC-Ins-separated (non empty AMI-Struct over NAT,N);
   let p be finite PartFunc of NAT, the Instructions of S;
   let s be State of S, k be Nat;
- func Comput(p,s,k) -> State of S means
+  func Comput(p,s,k) -> State of S means
 :: SCMNORM:def 6
-   ex f being Function of NAT, product the Object-Kind of S st
+
+  ex f being Function of NAT, product the Object-Kind of S st
   it = f.k & f.0 = s & for i being Nat holds f.(i+1) = Following(p,f.i);
 end;
 
@@ -212,24 +210,25 @@ definition
   let p be finite PartFunc of NAT, the Instructions of S;
   mode Autonomy of p -> FinPartState of S means
 :: SCMNORM:def 7
-  for s1,s2 being State of S st it c= s1 & it c= s2
-  for q1,q2 being finite PartFunc of NAT, the Instructions of S
-   st p c= q1 & p c= q2
-  for i being Nat holds Comput(q1,s1,i)|dom it =  Comput(q2,s2,i)|dom it;
+
+    for s1,s2 being State of S st it c= s1 & it c= s2
+    for q being finite PartFunc of NAT, the Instructions of S
+    st p c= q
+    for i being Nat holds Comput(p,s1,i)|dom it = Comput(q,s2,i)|dom it;
 end;
 
 reserve N for non empty with_non-empty_elements set;
 
 theorem :: SCMNORM:4
   for S be IC-Ins-separated (non empty AMI-Struct over NAT,N),
-   p be finite PartFunc of NAT, the Instructions of S,
-   s be State of S holds Comput(p,s,0) = s;
+  p be finite PartFunc of NAT, the Instructions of S,
+  s be State of S holds Comput(p,s,0) = s;
 
 theorem :: SCMNORM:5
   for S be IC-Ins-separated (non empty AMI-Struct over NAT,N),
-   p be finite PartFunc of NAT, the Instructions of S,
-   s be State of S, k be Nat holds
-    Comput(p,s,k+1) = Following(p,Comput(p,s,k));
+  p be finite PartFunc of NAT, the Instructions of S,
+  s be State of S, k be Nat holds
+  Comput(p,s,k+1) = Following(p,Comput(p,s,k));
 
 theorem :: SCMNORM:6
   for S being realistic
@@ -239,23 +238,25 @@ theorem :: SCMNORM:6
 definition
   let N be non empty with_non-empty_elements set;
   let S be IC-Ins-separated halting (non empty AMI-Struct over NAT,N);
- let f be finite PartFunc of NAT, the Instructions of S;
- let s be State of S;
- pred f halts_on s means
+  let f be finite PartFunc of NAT, the Instructions of S;
+  let s be State of S;
+  pred f halts_on s means
 :: SCMNORM:def 8
- ex n being Element of NAT st
+
+  ex n being Nat st
   IC Comput(f,s,n) in dom f & CurInstr(f,Comput(f,s,n)) = halt S;
 end;
 
 definition
   let N be non empty with_non-empty_elements set;
   let S be IC-Ins-separated halting (non empty AMI-Struct over NAT,N);
- let f be finite PartFunc of NAT, the Instructions of S;
- let p be Autonomy of f;
- attr p is halting means
+  let f be finite PartFunc of NAT, the Instructions of S;
+  let p be Autonomy of f;
+  attr p is halting means
 :: SCMNORM:def 9
+
   for s being State of S st p c= s holds
-   f halts_on s;
+  f halts_on s;
 end;
 
 reserve i,j for Nat;
@@ -263,26 +264,26 @@ reserve i,j for Nat;
 theorem :: SCMNORM:7
   i <= j implies for N for S being halting IC-Ins-separated
   (non empty AMI-Struct over NAT,N),
-   f be finite PartFunc of NAT, the Instructions of S
+  f be finite PartFunc of NAT, the Instructions of S
   for s being State of S st CurInstr(f,Comput(f,s,i)) = halt S
-  holds Comput(f,s,j) =  Comput(f,s,i);
+  holds Comput(f,s,j) = Comput(f,s,i);
 
 definition
   let N be non empty with_non-empty_elements set;
   let S be halting IC-Ins-separated (non empty AMI-Struct over NAT,N);
- let f be finite PartFunc of NAT, the Instructions of S;
+  let f be finite PartFunc of NAT, the Instructions of S;
   let s be State of S such that
  f halts_on s;
   func Result(f,s) -> State of S means
 :: SCMNORM:def 10
 
-  ex k being Element of NAT st it =  Comput(f,s,k) & CurInstr(f,it) = halt S;
+  ex k being Nat st it = Comput(f,s,k) & CurInstr(f,it) = halt S;
 end;
 
 definition
   let N be non empty with_non-empty_elements set;
   let S be realistic halting IC-Ins-separated
-   (non empty AMI-Struct over NAT,N);
+  (non empty AMI-Struct over NAT,N);
   let f be finite PartFunc of NAT, the Instructions of S;
   let p be Autonomy of f;
   assume
@@ -293,55 +294,55 @@ definition
 end;
 
 definition
- let N be non empty with_non-empty_elements set;
- let S be realistic halting IC-Ins-separated (non empty AMI-Struct over NAT,N);
- let f be finite PartFunc of NAT, the Instructions of S;
- let p be FinPartState of S, F be Function;
+  let N be non empty with_non-empty_elements set;
+let S be realistic halting IC-Ins-separated (non empty AMI-Struct over NAT,N);
+  let f be finite PartFunc of NAT, the Instructions of S;
+  let p be FinPartState of S, F be Function;
   pred f,p computes F means
 :: SCMNORM:def 12
   for s being FinPartState of S st s in dom F
-  ex q being Autonomy of f st q = s +* p & q is halting & F.s c= Result(f,q);
+  ex q being Autonomy of f st q = p +* s & q is halting & F.s c= Result(f,q);
 end;
 
 reserve j,k for Element of NAT;
 
 theorem :: SCMNORM:8
-  for S being steady-programmed IC-Ins-separated
+  for S being IC-Ins-separated
   halting (non empty AMI-Struct over NAT,N)
   for s being State of S,
-      f being finite PartFunc of NAT, the Instructions of S,
-      k st IC Comput(f,s,k) in dom f & f.IC Comput(f,s,k) = halt S
+  f being finite PartFunc of NAT, the Instructions of S,
+  k st IC Comput(f,s,k) in dom f & f/.IC Comput(f,s,k) = halt S
   holds Result(f,s) = Comput(f,s,k);
 
 :: from RELOC, SCMFSA_4, SCMPDS_3, 2008.04.12, A.T. (generalized)
 
-  reserve N for with_non-empty_elements set,
-          S for IC-Ins-separated (non empty AMI-Struct over NAT,N),
-          s for State of S;
+reserve N for with_non-empty_elements set,
+  S for IC-Ins-separated (non empty AMI-Struct over NAT,N),
+  s for State of S;
 
 theorem :: SCMNORM:9
-  for l1,l2 being Instruction-Location of S , k being Element of NAT holds
+  for l1,l2 being Instruction-Location of S, k being Element of NAT holds
   Start-At(l1 + k) = Start-At(l2 +k) iff Start-At l1 = Start-At l2;
 
 theorem :: SCMNORM:10
-  for l1,l2 being Instruction-Location of S , k being Nat
+  for l1,l2 being Instruction-Location of S, k being Nat
   st Start-At l1 = Start-At l2 holds Start-At(l1 -' k) = Start-At(l2 -' k);
 
-definition let N,S;
+definition
+  let N,S;
   let p be FinPartState of S, k be Element of NAT;
   func IncrIC(p,k) -> FinPartState of S equals
 :: SCMNORM:def 13
-   p +* Start-At(IC p+k);
+  p +* Start-At(IC p+k);
 end;
-
 
 theorem :: SCMNORM:11
   for l being Instruction-Location of S
-   holds DataPart Start-At l = {};
+  holds DataPart Start-At l = {};
 
 theorem :: SCMNORM:12
   for p being FinPartState of S, k being Element of NAT
-   holds DataPart IncrIC(p,k) = DataPart p;
+  holds DataPart IncrIC(p,k) = DataPart p;
 
 definition
   let N,S;
@@ -352,17 +353,17 @@ definition
 end;
 
 theorem :: SCMNORM:13
- Data-Locations S c= dom s;
+  Data-Locations S c= dom s;
 
 theorem :: SCMNORM:14
- dom DataPart s = Data-Locations S;
+  dom DataPart s = Data-Locations S;
 
-  reserve N for non empty with_non-empty_elements set,
-   S for halting definite IC-Ins-separated realistic
-         (non empty stored-program AMI-Struct over NAT,N),
-   p for FinPartState of S,
-   l for Instruction-Location of S,
-   k for Element of NAT;
+reserve N for non empty with_non-empty_elements set,
+  S for halting definite IC-Ins-separated realistic
+  (non empty stored-program AMI-Struct over NAT,N),
+  p for FinPartState of S,
+  l for Instruction-Location of S,
+  k for Element of NAT;
 
 theorem :: SCMNORM:15
   NAT misses Data-Locations S;
@@ -372,41 +373,135 @@ theorem :: SCMNORM:16
   holds DataPart [f] = {};
 
 theorem :: SCMNORM:17
- IC S in dom Start-At l;
+  IC S in dom Start-At l;
 
 theorem :: SCMNORM:18
- IC S in dom IncrIC(p,k);
+  IC S in dom IncrIC(p,k);
 
 theorem :: SCMNORM:19
- IC Start-At l = l;
+  IC Start-At l = l;
 
 theorem :: SCMNORM:20
- IncrIC(p,k).IC S = IC p + k;
+  IncrIC(p,k).IC S = IC p + k;
 
 theorem :: SCMNORM:21
- not IC S in Data-Locations S;
+  not IC S in Data-Locations S;
 
 theorem :: SCMNORM:22
   for d being data-only FinPartState of S
-   holds not IC S in dom d;
+  holds not IC S in dom d;
 
 theorem :: SCMNORM:23
   for d being data-only FinPartState of S st IC S in dom p
-   holds IC (p+*d) = IC p;
+  holds IC (p+*d) = IC p;
 
 theorem :: SCMNORM:24
   for d being data-only FinPartState of S
-   holds d tolerates Start-At l;
+  holds d tolerates Start-At l;
 
 theorem :: SCMNORM:25
   for d being data-only FinPartState of S st IC S in dom p
-   holds IncrIC(p+*d,k) = IncrIC(p,k) +* d;
+  holds IncrIC(p+*d,k) = IncrIC(p,k) +* d;
 
 theorem :: SCMNORM:26
   for d being data-only FinPartState of S,
-      f being finite PartFunc of NAT, the Instructions of S
-   holds d tolerates f;
+  f being finite PartFunc of NAT, the Instructions of S
+  holds d tolerates f;
 
 theorem :: SCMNORM:27
   for d being data-only FinPartState of S
- holds IncrIC(d,k)|NAT = {};
+  holds IncrIC(d,k)|NAT = {};
+
+theorem :: SCMNORM:28 :: AMI_1:55
+  for S being IC-Ins-separated (non empty AMI-Struct over NAT,N),
+  p be finite PartFunc of NAT, the Instructions of S
+ for s being State of S
+  holds Comput(p,s,k+1) = Exec(p/.(IC Comput(p,s,k)), Comput(p,s,k));
+
+definition
+  let N;
+  let S be IC-Ins-separated halting
+  (non empty AMI-Struct over NAT,N);
+  let p be finite PartFunc of NAT, the Instructions of S, l be set;
+  pred p halts_at l means
+:: SCMNORM:def 15 :: AMI_1:def 45
+ l in dom p & p.l = halt S;
+end;
+
+theorem :: SCMNORM:29
+  for S being IC-Ins-separated halting
+(non empty AMI-Struct over NAT,N),
+  p be finite PartFunc of NAT, the Instructions of S,
+    s being State of S holds p halts_on s
+   iff ex i st p halts_at IC Comput(p,s,i);
+
+theorem :: SCMNORM:30
+  for S being halting IC-Ins-separated
+(non empty AMI-Struct over NAT,N),
+  p be finite PartFunc of NAT, the Instructions of S,
+  s being State of S,
+    k being Nat st p halts_on s
+  holds Result(p,s) = Comput(p,s,k) iff p halts_at IC Comput(p,s,k);
+
+theorem :: SCMNORM:31
+  for N for S being halting IC-Ins-separated
+  (non empty AMI-Struct over NAT,N),
+  p be finite PartFunc of NAT, the Instructions of S,
+  s being State of S, i st p halts_at IC Comput(p,s,i)
+   holds Result(p,s) = Comput(p,s,i);
+
+theorem :: SCMNORM:32
+  i <= j implies for N for S being halting
+IC-Ins-separated (non empty AMI-Struct over NAT,N),
+  p be finite PartFunc of NAT, the Instructions of S
+ for s
+  being State of S st p halts_at IC Comput(p,s,i)
+   holds p halts_at IC Comput(p,s,j);
+
+theorem :: SCMNORM:33 :: AMI_1:89
+  i <= j implies for N for S being halting IC-Ins-separated
+    (non empty AMI-Struct over NAT,N),
+  p be finite PartFunc of NAT, the Instructions of S
+ for s being State of S st p halts_at IC Comput(p,s,i)
+   holds Comput(p,s,j) = Comput(p,s,i);
+
+theorem :: SCMNORM:34
+   for N for S being halting
+IC-Ins-separated (non empty AMI-Struct over NAT,N),
+  p be finite PartFunc of NAT, the Instructions of S
+ for s being State of S
+  for k holds Comput(p,s,i+k) = Comput(p,Comput(p,s,i),k);
+
+theorem :: SCMNORM:35
+  for N
+  for S being IC-Ins-separated halting
+(non empty AMI-Struct over NAT,N),
+  p be finite PartFunc of NAT, the Instructions of S
+for s being State of S, k
+    st IC Comput(p,s,k) in dom p & p.IC Comput(p,s,k) = halt S
+  holds Result(p,s) = Comput(p,s,k);
+
+theorem :: SCMNORM:36
+  for N
+  for S being IC-Ins-separated halting (non empty AMI-Struct over NAT,N),
+  p be finite PartFunc of NAT, the Instructions of S
+ for s being State of S st
+  ex k st IC Comput(p,s,k) in dom p & p.IC Comput(p,s,k) = halt S
+ for i holds Result(p,s) = Result(p,Comput(p,s,i));
+
+theorem :: SCMNORM:37
+  for N
+  for S being IC-Ins-separated halting (non
+empty AMI-Struct over NAT,N),
+  p be finite PartFunc of NAT, the Instructions of S
+ for s being State of S st
+  ex k st p halts_at IC Comput(p,s,k)
+   for i holds Result(p,s) = Result(p,Comput(p,s,i));
+
+theorem :: SCMNORM:38
+  for N
+  for S being IC-Ins-separated halting (non empty AMI-Struct over NAT,N),
+  p be finite PartFunc of NAT, the Instructions of S,
+      s being State of S holds
+  p halts_on s iff ex k being Nat st p halts_at IC Comput(p,s,k);
+

@@ -11,6 +11,7 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="INCSP_1"/>
@@ -22,10 +23,10 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="27"/>
-<Adjective nr="31"/>
+<Adjective nr="28"/>
 <Adjective nr="32"/>
 <Adjective nr="33"/>
+<Adjective nr="34"/>
 </Cluster>
 </RCluster>
 <RCluster aid="COMBGRAS" nr="2">
@@ -43,7 +44,7 @@
 <LocusVar nr="2"/>
 </Typ>
 <Cluster>
-<Adjective nr="46">
+<Adjective nr="47">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>

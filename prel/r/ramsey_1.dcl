@@ -20,11 +20,11 @@
 <ArticleID name="INT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
+<ArticleID name="RELAT_2"/>
+<ArticleID name="EQREL_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="ALGSTR_0"/>
 <ArticleID name="GROUP_1"/>
-<ArticleID name="RELAT_2"/>
-<ArticleID name="EQREL_1"/>
 <ArticleID name="GROUP_2"/>
 <ArticleID name="GROUP_3"/>
 <ArticleID name="GROUP_10"/>
@@ -42,7 +42,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="200">
+<Func kind="K" nr="201">
 <LocusVar nr="2"/>
 <LocusVar nr="1"/>
 </Func>

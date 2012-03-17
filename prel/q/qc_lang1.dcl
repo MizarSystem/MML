@@ -35,6 +35,7 @@
 <Adjective nr="6"/>
 <Adjective nr="20"/>
 <Adjective nr="26"/>
+<Adjective nr="27"/>
 <Adjective nr="28">
 <LocusVar nr="1"/>
 </Adjective>

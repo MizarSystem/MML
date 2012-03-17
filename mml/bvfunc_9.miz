@@ -9,7 +9,7 @@ environ
  vocabularies FUNCT_2, MARGREL1, ZF_LANG, PARTIT1, BVFUNC_1, FUNCT_1;
  notations XBOOLE_0, SUBSET_1, XBOOLEAN, MARGREL1, FUNCT_2, BVFUNC_1;
  constructors BINARITH, BVFUNC_1;
- registrations XBOOLE_0, FUNCT_1, FUNCT_2, XBOOLEAN, MARGREL1;
+ registrations XBOOLE_0, XBOOLEAN, MARGREL1;
  requirements ARITHM, BOOLE;
  definitions BVFUNC_1, XBOOLEAN;
  theorems MARGREL1, BVFUNC_1, BVFUNC_4, BVFUNC_5, BVFUNC_6, BVFUNC_7, XBOOLEAN;
@@ -22,91 +22,95 @@ reserve Y for non empty set,
 Lm1: a '&' b '<' a
 proof
   let x be Element of Y;
-  assume (a '&' b).x = TRUE;
+  assume
+  (a '&' b).x = TRUE;
   then a.x '&' b.x = TRUE by MARGREL1:def 21;
   hence thesis by MARGREL1:45;
 end;
 
 Lm2: a '&' b '&' c '<' a & a '&' b '&' c '<' b
 proof
-A1: a '&' b '&' c = c '&' b '&' a by BVFUNC_1:7;
-  c '&' b '&' a 'imp' a = I_el(Y) by BVFUNC_6:39;
-  hence a '&' b '&' c '<' a by A1,BVFUNC_1:19;
-A2: a '&' b '&' c = a '&' c '&' b by BVFUNC_1:7;
-  a '&' c '&' b 'imp' b = I_el(Y) by BVFUNC_6:39;
-  hence thesis by A2,BVFUNC_1:19;
+
+  a '&' b '&' c = c '&' b '&' a & c '&' b '&' a 'imp' a = I_el(Y) by
+  BVFUNC_1:7,BVFUNC_6:39;
+
+  hence a '&' b '&' c '<' a by BVFUNC_1:19;
+
+  a '&' b '&' c = a '&' c '&' b & a '&' c '&' b 'imp' b = I_el(Y) by
+  BVFUNC_1:7,BVFUNC_6:39;
+
+  hence thesis by BVFUNC_1:19;
 end;
 
 Lm3: a '&' b '&' c '&' d '<' a & a '&' b '&' c '&' d '<' b
 proof
-  thus a '&' b '&' c '&' d '<' a
-  proof
-A1: a '&' b '&' c '&' d = d '&' c '&' (b '&' a) by BVFUNC_1:7
-      .=d '&' c '&' b '&' a by BVFUNC_1:7;
-    d '&' c '&' b '&' a 'imp' a = I_el(Y) by BVFUNC_6:39;
-    hence thesis by A1,BVFUNC_1:19;
-  end;
-A2: a '&' b '&' c '&' d = a '&' c '&' b '&' d by BVFUNC_1:7
+A1: d '&' c '&' b '&' a 'imp' a = I_el(Y) by BVFUNC_6:39;
+  a '&' b '&' c '&' d = d '&' c '&' (b '&' a) by BVFUNC_1:7
+    .=d '&' c '&' b '&' a by BVFUNC_1:7;
+  hence a '&' b '&' c '&' d '<' a by A1,BVFUNC_1:19;
+A2: a '&' c '&' d '&' b 'imp' b = I_el(Y) by BVFUNC_6:39;
+  a '&' b '&' c '&' d = a '&' c '&' b '&' d by BVFUNC_1:7
     .=a '&' c '&' d '&' b by BVFUNC_1:7;
-  a '&' c '&' d '&' b 'imp' b = I_el(Y) by BVFUNC_6:39;
   hence thesis by A2,BVFUNC_1:19;
 end;
 
 Lm4: a '&' b '&' c '&' d '&' e '<' a & a '&' b '&' c '&' d '&' e '<' b
 proof
-  thus a '&' b '&' c '&' d '&' e '<' a
-  proof
-A1: a '&' b '&' c '&' d '&' e =e '&' d '&' (c '&' (b '&' a)) by BVFUNC_1:7
-      .=e '&' d '&' c '&' (b '&' a) by BVFUNC_1:7
-      .=e '&' d '&' c '&' b '&' a by BVFUNC_1:7;
-    e '&' d '&' c '&' b '&' a 'imp' a = I_el(Y) by BVFUNC_6:39;
-    hence thesis by A1,BVFUNC_1:19;
-  end;
-A2: a '&' b '&' c '&' d '&' e =a '&' c '&' b '&' d '&' e by BVFUNC_1:7
+A1: e '&' d '&' c '&' b '&' a 'imp' a = I_el(Y) by BVFUNC_6:39;
+  a '&' b '&' c '&' d '&' e =e '&' d '&' (c '&' (b '&' a)) by BVFUNC_1:7
+    .=e '&' d '&' c '&' (b '&' a) by BVFUNC_1:7
+    .=e '&' d '&' c '&' b '&' a by BVFUNC_1:7;
+  hence a '&' b '&' c '&' d '&' e '<' a by A1,BVFUNC_1:19;
+A2: a '&' c '&' d '&' e '&' b 'imp' b = I_el(Y) by BVFUNC_6:39;
+  a '&' b '&' c '&' d '&' e =a '&' c '&' b '&' d '&' e by BVFUNC_1:7
     .=a '&' c '&' d '&' b '&' e by BVFUNC_1:7
     .=a '&' c '&' d '&' e '&' b by BVFUNC_1:7;
-  a '&' c '&' d '&' e '&' b 'imp' b = I_el(Y) by BVFUNC_6:39;
   hence thesis by A2,BVFUNC_1:19;
 end;
 
-Lm5: a '&' b '&' c '&' d '&' e '&' f '<' a &
-a '&' b '&' c '&' d '&' e '&' f '<' b
+Lm5: a '&' b '&' c '&' d '&' e '&' f '<' a & a '&' b '&' c '&' d '&' e '&' f
+'<' b
+
 proof
-  thus a '&' b '&' c '&' d '&' e '&' f '<' a
-  proof
-A1: a '&' b '&' c '&' d '&' e '&' f
-    =f '&' e '&' (d '&' (c '&' (b '&' a))) by BVFUNC_1:7
-      .=f '&' e '&' d '&' (c '&' (b '&' a)) by BVFUNC_1:7
-      .=f '&' e '&' d '&' c '&' (b '&' a) by BVFUNC_1:7
-      .=f '&' e '&' d '&' c '&' b '&' a by BVFUNC_1:7;
-    f '&' e '&' d '&' c '&' b '&' a 'imp' a = I_el(Y) by BVFUNC_6:39;
-    hence thesis by A1,BVFUNC_1:19;
-  end;
-A2: a '&' b '&' c '&' d '&' e '&' f
-  =f '&' e '&' (d '&' (c '&' (b '&' a))) by BVFUNC_1:7
+A1: f '&' e '&' d '&' c '&' b '&' a 'imp' a = I_el(Y) by BVFUNC_6:39;
+
+  a '&' b '&' c '&' d '&' e '&' f =f '&' e '&' (d '&' (c '&' (b '&' a)))
+  by BVFUNC_1:7
+
+    .=f '&' e '&' d '&' (c '&' (b '&' a)) by BVFUNC_1:7
+    .=f '&' e '&' d '&' c '&' (b '&' a) by BVFUNC_1:7
+    .=f '&' e '&' d '&' c '&' b '&' a by BVFUNC_1:7;
+  hence a '&' b '&' c '&' d '&' e '&' f '<' a by A1,BVFUNC_1:19;
+A2: f '&' e '&' d '&' c '&' a '&' b 'imp' b = I_el(Y) by BVFUNC_6:39;
+
+  a '&' b '&' c '&' d '&' e '&' f =f '&' e '&' (d '&' (c '&' (b '&' a)))
+  by BVFUNC_1:7
+
     .=f '&' e '&' d '&' (c '&' (b '&' a)) by BVFUNC_1:7
     .=f '&' e '&' d '&' c '&' (b '&' a) by BVFUNC_1:7
     .=f '&' e '&' d '&' c '&' a '&' b by BVFUNC_1:7;
-  f '&' e '&' d '&' c '&' a '&' b 'imp' b = I_el(Y) by BVFUNC_6:39;
   hence thesis by A2,BVFUNC_1:19;
 end;
 
-Lm6: a '&' b '&' c '&' d '&' e '&' f '&' g '<' a &
-a '&' b '&' c '&' d '&' e '&' f '&' g '<' b
+Lm6: a '&' b '&' c '&' d '&' e '&' f '&' g '<' a & a '&' b '&' c '&' d '&' e
+'&' f '&' g '<' b
+
 proof
-  thus a '&' b '&' c '&' d '&' e '&' f '&' g '<' a
-  proof
-A1: a '&' b '&' c '&' d '&' e '&' f '&' g
-    =g '&' f '&' (e '&' (d '&' (c '&' (b '&' a)))) by BVFUNC_1:7
-      .=g '&' f '&' e '&' (d '&' (c '&' (b '&' a))) by BVFUNC_1:7
-      .=g '&' f '&' e '&' d '&' (c '&' (b '&' a)) by BVFUNC_1:7
-      .=g '&' f '&' e '&' d '&' c '&' (b '&' a) by BVFUNC_1:7
-      .=g '&' f '&' e '&' d '&' c '&' b '&' a by BVFUNC_1:7;
-    g '&' f '&' e '&' d '&' c '&' b '&' a 'imp' a = I_el(Y) by BVFUNC_6:39;
-    hence thesis by A1,BVFUNC_1:19;
-  end;
-A2: a '&' b '&' c '&' d '&' e '&' f '&' g
-  =a '&' (c '&' b) '&' d '&' e '&' f '&' g by BVFUNC_1:7
+A1: g '&' f '&' e '&' d '&' c '&' b '&' a 'imp' a = I_el(Y) by BVFUNC_6:39;
+
+  a '&' b '&' c '&' d '&' e '&' f '&' g =g '&' f '&' (e '&' (d '&' (c '&'
+  (b '&' a)))) by BVFUNC_1:7
+
+    .=g '&' f '&' e '&' (d '&' (c '&' (b '&' a))) by BVFUNC_1:7
+    .=g '&' f '&' e '&' d '&' (c '&' (b '&' a)) by BVFUNC_1:7
+    .=g '&' f '&' e '&' d '&' c '&' (b '&' a) by BVFUNC_1:7
+    .=g '&' f '&' e '&' d '&' c '&' b '&' a by BVFUNC_1:7;
+  hence a '&' b '&' c '&' d '&' e '&' f '&' g '<' a by A1,BVFUNC_1:19;
+A2: a '&' g '&' f '&' e '&' d '&' c '&' b 'imp' b = I_el(Y) by BVFUNC_6:39;
+
+  a '&' b '&' c '&' d '&' e '&' f '&' g =a '&' (c '&' b) '&' d '&' e '&' f
+  '&' g by BVFUNC_1:7
+
     .=a '&' (d '&' (c '&' b)) '&' e '&' f '&' g by BVFUNC_1:7
     .=a '&' (e '&' (d '&' (c '&' b))) '&' f '&' g by BVFUNC_1:7
     .=a '&' (f '&' (e '&' (d '&' (c '&' b)))) '&' g by BVFUNC_1:7
@@ -115,51 +119,55 @@ A2: a '&' b '&' c '&' d '&' e '&' f '&' g
     .=a '&' g '&' f '&' e '&' (d '&' (c '&' b)) by BVFUNC_1:7
     .=a '&' g '&' f '&' e '&' d '&' (c '&' b) by BVFUNC_1:7
     .=a '&' g '&' f '&' e '&' d '&' c '&' b by BVFUNC_1:7;
-  a '&' g '&' f '&' e '&' d '&' c '&' b 'imp' b = I_el(Y) by BVFUNC_6:39;
   hence thesis by A2,BVFUNC_1:19;
 end;
 
-Lm7: for a,b,c,d,e,f,g being Element of Funcs(Y,BOOLEAN) holds
-(a '&' b '&' c '&' d '&' e '&' f '&' g 'imp' a = I_el(Y)) &
-(a '&' b '&' c '&' d '&' e '&' f '&' g 'imp' b = I_el(Y)) &
-(a '&' b '&' c '&' d '&' e '&' f '&' g 'imp' c = I_el(Y)) &
-(a '&' b '&' c '&' d '&' e '&' f '&' g 'imp' d = I_el(Y)) &
-(a '&' b '&' c '&' d '&' e '&' f '&' g 'imp' e = I_el(Y)) &
-(a '&' b '&' c '&' d '&' e '&' f '&' g 'imp' f = I_el(Y)) &
-(a '&' b '&' c '&' d '&' e '&' f '&' g 'imp' g = I_el(Y))
+Lm7: for a,b,c,d,e,f,g being Element of Funcs(Y,BOOLEAN) holds a '&' b '&' c
+'&' d '&' e '&' f '&' g 'imp' a = I_el(Y) & a '&' b '&' c '&' d '&' e '&' f '&'
+g 'imp' b = I_el(Y) & a '&' b '&' c '&' d '&' e '&' f '&' g 'imp' c = I_el(Y) &
+a '&' b '&' c '&' d '&' e '&' f '&' g 'imp' d = I_el(Y) & a '&' b '&' c '&' d
+'&' e '&' f '&' g 'imp' e = I_el(Y) & a '&' b '&' c '&' d '&' e '&' f '&' g
+'imp' f = I_el(Y) & a '&' b '&' c '&' d '&' e '&' f '&' g 'imp' g = I_el(Y)
+
 proof
   let a,b,c,d,e,f,g be Element of Funcs(Y,BOOLEAN);
-A1: a '&' b '&' c '&' d '&' e '&' f '&' g '<' a by Lm6;
-A2: a '&' b '&' c '&' d '&' e '&' f '&' g '<' b by Lm6;
-A3: a '&' b '&' c '&' d '&' e '&' f '&' g '<' c by Lm5;
-A4: (a '&' b '&' c '&' d '&' e '&' f '&' g '<' d) by Lm4;
-A5: (a '&' b '&' c '&' d '&' e '&' f '&' g '<' e) by Lm3;
-A6: (a '&' b '&' c '&' d '&' e '&' f '&' g '<' f) by Lm2;
-  (a '&' b '&' c '&' d '&' e '&' f '&' g '<' g) by Lm1;
-  hence thesis by A1,A2,A3,A4,A5,A6,BVFUNC_1:19;
+
+A1: a '&' b '&' c '&' d '&' e '&' f '&' g '<' a & a '&' b '&' c '&' d '&' e
+  '&' f '&' g '<' b by Lm6;
+
+A2: a '&' b '&' c '&' d '&' e '&' f '&' g '<' g by Lm1;
+
+A3: a '&' b '&' c '&' d '&' e '&' f '&' g '<' e & a '&' b '&' c '&' d '&' e
+  '&' f '&' g '<' f by Lm2,Lm3;
+
+  a '&' b '&' c '&' d '&' e '&' f '&' g '<' c & a '&' b '&' c '&' d '&' e
+  '&' f '&' g '<' d by Lm4,Lm5;
+
+  hence thesis by A1,A3,A2,BVFUNC_1:19;
 end;
 
 theorem Th1:
   (a 'or' b) '&' (b 'imp' c) '<' a 'or' c
 proof
   let z be Element of Y;
-  assume
-A1: ((a 'or' b) '&' (b 'imp' c)).z=TRUE;
-A2: ((a 'or' b) '&' (b 'imp' c)).z
-  =(a 'or' b).z '&' (b 'imp' c).z by MARGREL1:def 21
+A1: ((a 'or' b) '&' (b 'imp' c)).z =(a 'or' b).z '&' (b 'imp' c).z by
+  MARGREL1:def 21
     .=(a 'or' b).z '&' ('not' b 'or' c).z by BVFUNC_4:8
     .=(a 'or' b).z '&' (('not' b).z 'or' c.z) by BVFUNC_1:def 7
     .=(a.z 'or' b.z) '&' (('not' b).z 'or' c.z) by BVFUNC_1:def 7;
+  assume
+A2: ((a 'or' b) '&' (b 'imp' c)).z=TRUE;
   now
-    assume (a 'or' c).z<>TRUE;
+    assume
+    (a 'or' c).z<>TRUE;
     then (a 'or' c).z=FALSE by XBOOLEAN:def 3;
     then
 A3: a.z 'or' c.z=FALSE by BVFUNC_1:def 7;
     c.z=TRUE or c.z=FALSE by XBOOLEAN:def 3;
-    then (a.z 'or' b.z) '&' (('not' b).z 'or' c.z)
-    =b.z '&' 'not' b.z by A3,MARGREL1:def 20
+    then (a.z 'or' b.z) '&' (('not' b).z 'or' c.z) =b.z '&' 'not' b.z by A3,
+    MARGREL1:def 20
       .=FALSE by XBOOLEAN:138;
-    hence contradiction by A1,A2;
+    hence contradiction by A2,A1;
   end;
   hence thesis;
 end;
@@ -168,20 +176,21 @@ theorem Th2:
   a '&' (a 'imp' b) '<' b
 proof
   let z be Element of Y;
-  assume
-A1: (a '&' (a 'imp' b)).z=TRUE;
-A2: (a '&' (a 'imp' b)).z =a.z '&' (a 'imp' b).z by MARGREL1:def 21
+A1: (a '&' (a 'imp' b)).z =a.z '&' (a 'imp' b).z by MARGREL1:def 21
     .=a.z '&' ('not' a 'or' b).z by BVFUNC_4:8
     .=a.z '&' (('not' a).z 'or' b.z) by BVFUNC_1:def 7
     .=a.z '&' ('not' a).z 'or' a.z '&' b.z by XBOOLEAN:8
     .=a.z '&' 'not' a.z 'or' a.z '&' b.z by MARGREL1:def 20
     .=FALSE 'or' a.z '&' b.z by XBOOLEAN:138
     .=a.z '&' b.z;
+  assume
+A2: (a '&' (a 'imp' b)).z=TRUE;
   now
-    assume b.z<>TRUE;
+    assume
+    b.z<>TRUE;
     then a.z '&' b.z =FALSE '&' a.z by XBOOLEAN:def 3
       .=FALSE;
-    hence contradiction by A1,A2;
+    hence contradiction by A2,A1;
   end;
   hence thesis;
 end;
@@ -190,22 +199,25 @@ theorem
   (a 'imp' b) '&' 'not' b '<' 'not' a
 proof
   let z be Element of Y;
-  assume
-A1: ((a 'imp' b) '&' 'not' b).z=TRUE;
   reconsider bz = b.z as boolean set;
-A2: ((a 'imp' b) '&' 'not' b).z
-  =(a 'imp' b).z '&' ('not' b).z by MARGREL1:def 21
+A1: ((a 'imp' b) '&' 'not' b).z =(a 'imp' b).z '&' ('not' b).z by MARGREL1:
+  def 21
     .=('not' a 'or' b).z '&' ('not' b).z by BVFUNC_4:8
     .=('not' b).z '&' (('not' a).z 'or' b.z) by BVFUNC_1:def 7
     .=('not' b).z '&' ('not' a).z 'or' ('not' b).z '&' b.z by XBOOLEAN:8
     .=('not' b).z '&' ('not' a).z 'or' 'not' bz '&' bz by MARGREL1:def 20
     .=('not' b).z '&' ('not' a).z 'or' FALSE by XBOOLEAN:138
     .=('not' b).z '&' ('not' a).z;
+  assume
+A2: ((a 'imp' b) '&' 'not' b).z=TRUE;
   now
-    assume ('not' a).z<>TRUE;
-    then ('not' b).z '&' ('not' a).z =FALSE '&' ('not' b).z by XBOOLEAN:def 3
+    assume
+    ('not' a).z<>TRUE;
+    then ('not' b).z '&' ('not' a).z =FALSE '&' ('not' b).z by
+    XBOOLEAN:def
+    3
       .=FALSE;
-    hence contradiction by A1,A2;
+    hence contradiction by A2,A1;
   end;
   hence thesis;
 end;
@@ -214,21 +226,22 @@ theorem
   (a 'or' b) '&' 'not' a '<' b
 proof
   let z be Element of Y;
-  assume
-A1: ((a 'or' b) '&' 'not' a).z=TRUE;
   reconsider az = a.z as boolean set;
-A2: ((a 'or' b) '&' 'not' a).z
-  =(a 'or' b).z '&' ('not' a).z by MARGREL1:def 21
+A1: ((a 'or' b) '&' 'not' a).z =(a 'or' b).z '&' ('not' a).z by MARGREL1:def
+  21
     .=('not' a).z '&' (a.z 'or' b.z) by BVFUNC_1:def 7
     .=('not' a).z '&' a.z 'or' ('not' a).z '&' b.z by XBOOLEAN:8
     .='not' az '&' az 'or' ('not' a).z '&' b.z by MARGREL1:def 20
     .=FALSE 'or' ('not' a).z '&' b.z by XBOOLEAN:138
     .=('not' a).z '&' b.z;
+  assume
+A2: ((a 'or' b) '&' 'not' a).z=TRUE;
   now
-    assume b.z<>TRUE;
+    assume
+    b.z<>TRUE;
     then ('not' a).z '&' b.z =FALSE '&' ('not' a).z by XBOOLEAN:def 3
       .=FALSE;
-    hence contradiction by A1,A2;
+    hence contradiction by A2,A1;
   end;
   hence thesis;
 end;
@@ -237,23 +250,23 @@ theorem
   (a 'imp' b) '&' ('not' a 'imp' b) '<' b
 proof
   let z be Element of Y;
-  assume
-A1: ((a 'imp' b) '&' ('not' a 'imp' b)).z=TRUE;
   reconsider az = a.z as boolean set;
-A2: ((a 'imp' b) '&' ('not' a 'imp' b)).z
-  =(a 'imp' b).z '&' ('not' a 'imp' b).z by MARGREL1:def 21
+A1: ((a 'imp' b) '&' ('not' a 'imp' b)).z =(a 'imp' b).z '&' ('not' a 'imp'
+  b).z by MARGREL1:def 21
     .=('not' a 'or' b).z '&' ('not' a 'imp' b).z by BVFUNC_4:8
     .=('not' a 'or' b).z '&' ('not' 'not' a 'or' b).z by BVFUNC_4:8
     .=(('not' a).z 'or' b.z) '&' (a 'or' b).z by BVFUNC_1:def 7
-    .=(('not'
-  a).z 'or' b.z) '&' (a.z 'or' b.z) by BVFUNC_1:def 7;
+    .=(('not' a).z 'or' b.z) '&' (a.z 'or' b.z) by BVFUNC_1:def 7;
+  assume
+A2: ((a 'imp' b) '&' ('not' a 'imp' b)).z=TRUE;
   now
-    assume b.z<>TRUE;
+    assume
+    b.z<>TRUE;
     then b.z=FALSE by XBOOLEAN:def 3;
-    then (('not' a).z 'or' b.z) '&' (a.z 'or' b.z)
-    ='not' az '&' az by MARGREL1:def 20
+    then (('not' a).z 'or' b.z) '&' (a.z 'or' b.z) ='not' az '&' az by
+    MARGREL1:def 20
       .=FALSE by XBOOLEAN:138;
-    hence contradiction by A1,A2;
+    hence contradiction by A2,A1;
   end;
   hence thesis;
 end;
@@ -262,22 +275,23 @@ theorem
   (a 'imp' b) '&' (a 'imp' 'not' b) '<' 'not' a
 proof
   let z be Element of Y;
-  assume
-A1: ((a 'imp' b) '&' (a 'imp' 'not' b)).z=TRUE;
-A2: ((a 'imp' b) '&' (a 'imp' 'not' b)).z
-  =(a 'imp' b).z '&' (a 'imp' 'not' b).z by MARGREL1:def 21
+A1: ((a 'imp' b) '&' (a 'imp' 'not' b)).z =(a 'imp' b).z '&' (a 'imp' 'not'
+  b).z by MARGREL1:def 21
     .=('not' a 'or' b).z '&' (a 'imp' 'not' b).z by BVFUNC_4:8
     .=('not' a 'or' b).z '&' ('not' a 'or' 'not' b).z by BVFUNC_4:8
     .=(('not' a).z 'or' b.z) '&' ('not' a 'or' 'not' b).z by BVFUNC_1:def 7
-    .=(('not' a).z 'or' b.z) '&' (('not' a).z 'or' ('not'
-  b).z) by BVFUNC_1:def 7;
+    .=(('not' a).z 'or' b.z) '&' (('not' a).z 'or' ('not' b).z) by BVFUNC_1:
+  def 7;
+  assume
+A2: ((a 'imp' b) '&' (a 'imp' 'not' b)).z=TRUE;
   now
-    assume ('not' a).z<>TRUE;
+    assume
+    ('not' a).z<>TRUE;
     then ('not' a).z=FALSE by XBOOLEAN:def 3;
-    then (('not' a).z 'or' b.z) '&' (('not' a).z 'or' ('not' b).z)
-    =b.z '&' 'not' b.z by MARGREL1:def 20
+    then (('not' a).z 'or' b.z) '&' (('not' a).z 'or' ('not' b).z) =b.z '&'
+    'not' b.z by MARGREL1:def 20
       .=FALSE by XBOOLEAN:138;
-    hence contradiction by A1,A2;
+    hence contradiction by A2,A1;
   end;
   hence thesis;
 end;
@@ -286,21 +300,22 @@ theorem
   a 'imp' (b '&' c) '<' a 'imp' b
 proof
   let z be Element of Y;
-  assume
-A1: (a 'imp' (b '&' c)).z=TRUE;
-A2: (a 'imp' (b '&' c)).z =('not' a 'or' (b '&' c)).z by BVFUNC_4:8
+A1: (a 'imp' (b '&' c)).z =('not' a 'or' (b '&' c)).z by BVFUNC_4:8
     .=('not' a).z 'or' (b '&' c).z by BVFUNC_1:def 7
     .=('not' a).z 'or' (b.z '&' c.z) by MARGREL1:def 21;
+  assume
+A2: (a 'imp' (b '&' c)).z=TRUE;
   now
-    assume (a 'imp' b).z<>TRUE;
+    assume
+    (a 'imp' b).z<>TRUE;
     then (a 'imp' b).z=FALSE by XBOOLEAN:def 3;
     then ('not' a 'or' b).z=FALSE by BVFUNC_4:8;
     then
 A3: ('not' a).z 'or' b.z=FALSE by BVFUNC_1:def 7;
-    ('not' a).z 'or' (b.z '&' c.z) =(('not' a).z 'or' b.z) '&' (('not'
-    a).z 'or' c.z) by XBOOLEAN:9
+    ('not' a).z 'or' (b.z '&' c.z) =(('not' a).z 'or' b.z) '&' (('not' a).
+    z 'or' c.z) by XBOOLEAN:9
       .=FALSE by A3;
-    hence contradiction by A1,A2;
+    hence contradiction by A2,A1;
   end;
   hence thesis;
 end;
@@ -309,22 +324,23 @@ theorem
   (a 'or' b) 'imp' c '<' a 'imp' c
 proof
   let z be Element of Y;
-  assume
-A1: ((a 'or' b) 'imp' c).z=TRUE;
-A2: ((a 'or' b) 'imp' c).z =('not'( a 'or' b) 'or' c).z by BVFUNC_4:8
+A1: ((a 'or' b) 'imp' c).z =('not'( a 'or' b) 'or' c).z by BVFUNC_4:8
     .=(('not' a '&' 'not' b) 'or' c).z by BVFUNC_1:16
     .=('not' a '&' 'not' b).z 'or' c.z by BVFUNC_1:def 7
     .=(('not' a).z '&' ('not' b).z) 'or' c.z by MARGREL1:def 21;
+  assume
+A2: ((a 'or' b) 'imp' c).z=TRUE;
   now
-    assume (a 'imp' c).z<>TRUE;
+    assume
+    (a 'imp' c).z<>TRUE;
     then (a 'imp' c).z=FALSE by XBOOLEAN:def 3;
     then ('not' a 'or' c).z=FALSE by BVFUNC_4:8;
     then
 A3: ('not' a).z 'or' c.z=FALSE by BVFUNC_1:def 7;
-    (('not' a).z '&' ('not' b).z) 'or' c.z
-    =(c.z 'or' ('not' a).z) '&' (c.z 'or' ('not' b).z) by XBOOLEAN:9
+    (('not' a).z '&' ('not' b).z) 'or' c.z =(c.z 'or' ('not' a).z) '&' (c.
+    z 'or' ('not' b).z) by XBOOLEAN:9
       .=FALSE by A3;
-    hence contradiction by A1,A2;
+    hence contradiction by A2,A1;
   end;
   hence thesis;
 end;
@@ -333,19 +349,20 @@ theorem
   a 'imp' b '<' (a '&' c) 'imp' b
 proof
   let z be Element of Y;
-  assume
-A1: (a 'imp' b).z=TRUE;
-A2: (a 'imp' b).z =('not' a 'or' b).z by BVFUNC_4:8
+A1: (a 'imp' b).z =('not' a 'or' b).z by BVFUNC_4:8
     .=('not' a).z 'or' b.z by BVFUNC_1:def 7;
+  assume
+A2: (a 'imp' b).z=TRUE;
   now
-    assume ((a '&' c) 'imp' b).z<>TRUE;
+    assume
+    ((a '&' c) 'imp' b).z<>TRUE;
     then ((a '&' c) 'imp' b).z=FALSE by XBOOLEAN:def 3;
     then ('not'( a '&' c) 'or' b).z=FALSE by BVFUNC_4:8;
     then ('not'( a '&' c)).z 'or' b.z=FALSE by BVFUNC_1:def 7;
-    then (('not' a 'or' 'not' c)).z 'or' b.z=FALSE by BVFUNC_1:17;
+    then ('not' a 'or' 'not' c) .z 'or' b.z=FALSE by BVFUNC_1:17;
     then (('not' c).z 'or' ('not' a).z) 'or' b.z=FALSE by BVFUNC_1:def 7;
     then ('not' c).z 'or' (('not' a).z 'or' b.z)=FALSE;
-    hence contradiction by A1,A2;
+    hence contradiction by A2,A1;
   end;
   hence thesis;
 end;
@@ -354,30 +371,30 @@ theorem
   a 'imp' b '<' (a '&' c) 'imp' (b '&' c)
 proof
   let z be Element of Y;
-  assume
-A1: (a 'imp' b).z=TRUE;
-A2: (a 'imp' b).z =('not' a 'or' b).z by BVFUNC_4:8
+A1: (a 'imp' b).z =('not' a 'or' b).z by BVFUNC_4:8
     .=('not' a).z 'or' b.z by BVFUNC_1:def 7;
+  assume
+A2: (a 'imp' b).z=TRUE;
   now
-    assume ((a '&' c) 'imp' (b '&' c)).z<>TRUE;
+    assume
+    ((a '&' c) 'imp' (b '&' c)).z<>TRUE;
     then ((a '&' c) 'imp' (b '&' c)).z=FALSE by XBOOLEAN:def 3;
     then ('not'( a '&' c) 'or' (b '&' c)).z=FALSE by BVFUNC_4:8;
     then ('not'( a '&' c)).z 'or' (b '&' c).z=FALSE by BVFUNC_1:def 7;
-    then (('not' a 'or' 'not' c)).z 'or' (b '&' c).z=FALSE by BVFUNC_1:17;
+    then ('not' a 'or' 'not' c) .z 'or' (b '&' c).z=FALSE by BVFUNC_1:17;
     then (('not' c).z 'or' ('not' a).z) 'or' (b '&' c).z=FALSE by
-    BVFUNC_1:def 7;
+    BVFUNC_1:
+    def 7;
     then ('not' c).z 'or' (('not' a).z 'or' (b '&' c).z)=FALSE;
-    then ('not' c).z 'or' (('not' a).z 'or' (b.z '&' c.z))=FALSE
-    by MARGREL1:def 21;
     then
-A3: ('not' c).z 'or' ((('not' a).z 'or' b.z) '&' (('not' a).z 'or' c.z
-    ))=FALSE by XBOOLEAN:9;
+A3: ('not' c).z 'or' (('not' a).z 'or' (b.z '&' c.z))=FALSE by
+    MARGREL1:def 21;
     ('not' c).z 'or' ((('not' a).z 'or' b.z) '&' (('not' a).z 'or' c.z))
-    =('not' c).z 'or' c.z 'or' ('not' a).z by A1,A2
+    =('not' c).z 'or' c.z 'or' ('not' a).z by A2,A1
       .='not' c.z 'or' c.z 'or' ('not' a).z by MARGREL1:def 20
       .=TRUE 'or' ('not' a).z by XBOOLEAN:102
       .=TRUE;
-    hence contradiction by A3;
+    hence contradiction by A3,XBOOLEAN:9;
   end;
   hence thesis;
 end;
@@ -386,10 +403,10 @@ theorem
   a 'imp' b '<' a 'imp' (b 'or' c)
 proof
   let z be Element of Y;
-  assume
-A1: (a 'imp' b).z=TRUE;
-A2: (a 'imp' b).z =('not' a 'or' b).z by BVFUNC_4:8
+A1: (a 'imp' b).z =('not' a 'or' b).z by BVFUNC_4:8
     .=('not' a).z 'or' b.z by BVFUNC_1:def 7;
+  assume
+A2: (a 'imp' b).z=TRUE;
   now
     assume
 A3: (a 'imp' (b 'or' c)).z<>TRUE;
@@ -397,7 +414,7 @@ A3: (a 'imp' (b 'or' c)).z<>TRUE;
       .=('not' a).z 'or' (b 'or' c).z by BVFUNC_1:def 7
       .=('not' a).z 'or' (b.z 'or' c.z) by BVFUNC_1:def 7
       .=(('not' a).z 'or' b.z) 'or' c.z
-      .=TRUE by A1,A2;
+      .=TRUE by A2,A1;
     hence contradiction by A3;
   end;
   hence thesis;
@@ -407,23 +424,23 @@ theorem
   a 'imp' b '<' (a 'or' c) 'imp' (b 'or' c)
 proof
   let z be Element of Y;
-  assume
-A1: (a 'imp' b).z=TRUE;
-A2: (a 'imp' b).z =('not' a 'or' b).z by BVFUNC_4:8
+A1: (a 'imp' b).z =('not' a 'or' b).z by BVFUNC_4:8
     .=('not' a).z 'or' b.z by BVFUNC_1:def 7;
+  assume
+A2: (a 'imp' b).z=TRUE;
   now
     assume
 A3: ((a 'or' c) 'imp' (b 'or' c)).z<>TRUE;
-    ((a 'or' c) 'imp' (b 'or' c)).z
-    =('not'( a 'or' c) 'or' (b 'or' c)).z by BVFUNC_4:8
+    ((a 'or' c) 'imp' (b 'or' c)).z =('not'( a 'or' c) 'or' (b 'or' c)).z
+    by BVFUNC_4:8
       .=('not'( a 'or' c)).z 'or' (b 'or' c).z by BVFUNC_1:def 7
       .=('not'( a 'or' c)).z 'or' (b.z 'or' c.z) by BVFUNC_1:def 7
       .=(('not'( a 'or' c)).z 'or' b.z) 'or' c.z
       .=((('not' a '&' 'not' c)).z 'or' b.z) 'or' c.z by BVFUNC_1:16
       .=(b.z 'or' (('not' a).z '&' ('not' c).z)) 'or' c.z by MARGREL1:def 21
-      .=((('not' a).z 'or' b.z) '&' (b.z 'or' ('not'
-    c).z)) 'or' c.z by XBOOLEAN:9
-      .=b.z 'or' (('not' c).z 'or' c.z) by A1,A2
+      .=((('not' a).z 'or' b.z) '&' (b.z 'or' ('not' c).z)) 'or' c.z by
+    XBOOLEAN:9
+      .=b.z 'or' (('not' c).z 'or' c.z) by A2,A1
       .=b.z 'or' ('not' c.z 'or' c.z) by MARGREL1:def 20
       .=b.z 'or' TRUE by XBOOLEAN:102
       .=TRUE;
@@ -436,18 +453,20 @@ theorem
   a '&' b 'or' c '<' a 'or' c
 proof
   let z be Element of Y;
-  assume
-A1: (a '&' b 'or' c).z=TRUE;
-A2: (a '&' b 'or' c).z =(a '&' b).z 'or' c.z by BVFUNC_1:def 7
+A1: (a '&' b 'or' c).z =(a '&' b).z 'or' c.z by BVFUNC_1:def 7
     .=(a.z '&' b.z) 'or' c.z by MARGREL1:def 21;
+  assume
+A2: (a '&' b 'or' c).z=TRUE;
   now
-    assume (a 'or' c).z<>TRUE;
+    assume
+    (a 'or' c).z<>TRUE;
     then (a 'or' c).z=FALSE by XBOOLEAN:def 3;
     then
 A3: a.z 'or' c.z=FALSE by BVFUNC_1:def 7;
-    (a.z '&' b.z) 'or' c.z =(c.z 'or' a.z) '&' (c.z 'or' b.z) by XBOOLEAN:9
+    (a.z '&' b.z) 'or' c.z =(c.z 'or' a.z) '&' (c.z 'or' b.z) by XBOOLEAN:
+    9
       .=FALSE by A3;
-    hence contradiction by A1,A2;
+    hence contradiction by A2,A1;
   end;
   hence thesis;
 end;
@@ -456,23 +475,24 @@ theorem
   (a '&' b) 'or' (c '&' d) '<' a 'or' c
 proof
   let z be Element of Y;
-  assume
-A1: ((a '&' b) 'or' (c '&' d)).z=TRUE;
-A2: ((a '&' b) 'or' (c '&' d)).z
-  =(a '&' b).z 'or' (c '&' d).z by BVFUNC_1:def 7
+A1: ((a '&' b) 'or' (c '&' d)).z =(a '&' b).z 'or' (c '&' d).z by BVFUNC_1:
+  def 7
     .=(a.z '&' b.z) 'or' (c '&' d).z by MARGREL1:def 21
     .=(a.z '&' b.z) 'or' (c.z '&' (d).z) by MARGREL1:def 21;
+  assume
+A2: ((a '&' b) 'or' (c '&' d)).z=TRUE;
   now
-    assume (a 'or' c).z<>TRUE;
+    assume
+    (a 'or' c).z<>TRUE;
     then (a 'or' c).z=FALSE by XBOOLEAN:def 3;
     then
 A3: a.z 'or' c.z=FALSE by BVFUNC_1:def 7;
-    (a.z '&' b.z) 'or' (c.z '&' (d).z) =(c.z 'or' (a.z '&' b.z)) '&'
-    ((a.z '&' b.z) 'or' (d).z) by XBOOLEAN:9
-      .=((a.z 'or' c.z) '&' (c.z 'or' b.z)) '&'
-    ((a.z '&' b.z) 'or' (d).z) by XBOOLEAN:9
+    (a.z '&' b.z) 'or' (c.z '&' (d).z) =(c.z 'or' (a.z '&' b.z)) '&' ((a.z
+    '&' b.z) 'or' (d).z) by XBOOLEAN:9
+      .=((a.z 'or' c.z) '&' (c.z 'or' b.z)) '&' ((a.z '&' b.z) 'or' (d).z)
+    by XBOOLEAN:9
       .=FALSE by A3;
-    hence contradiction by A1,A2;
+    hence contradiction by A2,A1;
   end;
   hence thesis;
 end;
@@ -484,26 +504,26 @@ theorem
   (a 'imp' b) '&' ('not' a 'imp' c) '<' b 'or' c
 proof
   let z be Element of Y;
-  assume
-A1: ((a 'imp' b) '&' ('not' a 'imp' c)).z=TRUE;
-A2: ((a 'imp' b) '&' ('not' a 'imp' c)).z
-  =(('not' a 'or' b) '&' ('not' a 'imp' c)).z by BVFUNC_4:8
+A1: ((a 'imp' b) '&' ('not' a 'imp' c)).z =(('not' a 'or' b) '&' ('not' a
+  'imp' c)).z by BVFUNC_4:8
     .=(('not' a 'or' b) '&' ('not' 'not' a 'or' c)).z by BVFUNC_4:8
     .=('not' a 'or' b).z '&' (a 'or' c).z by MARGREL1:def 21
     .=(('not' a).z 'or' b.z) '&' (a 'or' c).z by BVFUNC_1:def 7
-    .=(('not'
-  a).z 'or' b.z) '&' (a.z 'or' c.z) by BVFUNC_1:def 7;
+    .=(('not' a).z 'or' b.z) '&' (a.z 'or' c.z) by BVFUNC_1:def 7;
+  assume
+A2: ((a 'imp' b) '&' ('not' a 'imp' c)).z=TRUE;
   now
-    assume (b 'or' c).z<>TRUE;
+    reconsider az = a.z as boolean set;
+    assume
+    (b 'or' c).z<>TRUE;
     then (b 'or' c).z=FALSE by XBOOLEAN:def 3;
     then
 A3: b.z 'or' c.z=FALSE by BVFUNC_1:def 7;
-    reconsider az = a.z as boolean set;
     c.z=TRUE or c.z=FALSE by XBOOLEAN:def 3;
-    then (('not' a).z 'or' b.z) '&' (a.z 'or' c.z)
-    ='not' az '&' az by A3,MARGREL1:def 20
+    then (('not' a).z 'or' b.z) '&' (a.z 'or' c.z) ='not' az '&' az by A3,
+    MARGREL1:def 20
       .=FALSE by XBOOLEAN:138;
-    hence contradiction by A1,A2;
+    hence contradiction by A2,A1;
   end;
   hence thesis;
 end;
@@ -512,25 +532,26 @@ theorem
   (a 'imp' c) '&' (b 'imp' 'not' c) '<' 'not' a 'or' 'not' b
 proof
   let z be Element of Y;
-  assume
-A1: ((a 'imp' c) '&' (b 'imp' 'not' c)).z=TRUE;
-A2: ((a 'imp' c) '&' (b 'imp' 'not' c)).z
-  =(a 'imp' c).z '&' (b 'imp' 'not' c).z by MARGREL1:def 21
+A1: ((a 'imp' c) '&' (b 'imp' 'not' c)).z =(a 'imp' c).z '&' (b 'imp' 'not'
+  c).z by MARGREL1:def 21
     .=('not' a 'or' c).z '&' (b 'imp' 'not' c).z by BVFUNC_4:8
     .=('not' a 'or' c).z '&' ('not' b 'or' 'not' c).z by BVFUNC_4:8
     .=(('not' a).z 'or' c.z) '&' ('not' b 'or' 'not' c).z by BVFUNC_1:def 7
-    .=(('not' a).z 'or' c.z) '&' (('not' b).z 'or' ('not' c).z)
-  by BVFUNC_1:def 7;
+    .=(('not' a).z 'or' c.z) '&' (('not' b).z 'or' ('not' c).z) by BVFUNC_1:
+  def 7;
+  assume
+A2: ((a 'imp' c) '&' (b 'imp' 'not' c)).z=TRUE;
   now
-    assume ('not' a 'or' 'not' b).z<>TRUE;
+    assume
+    ('not' a 'or' 'not' b).z<>TRUE;
     then ('not' a 'or' 'not' b).z=FALSE by XBOOLEAN:def 3;
     then
 A3: ('not' a).z 'or' ('not' b).z=FALSE by BVFUNC_1:def 7;
     ('not' b).z=TRUE or ('not' b).z=FALSE by XBOOLEAN:def 3;
-    then (('not' a).z 'or' c.z) '&' (('not' b).z 'or' ('not' c).z)
-    =c.z '&' 'not' c.z by A3,MARGREL1:def 20
+    then (('not' a).z 'or' c.z) '&' (('not' b).z 'or' ('not' c).z) =c.z '&'
+    'not' c.z by A3,MARGREL1:def 20
       .=FALSE by XBOOLEAN:138;
-    hence contradiction by A1,A2;
+    hence contradiction by A2,A1;
   end;
   hence thesis;
 end;
@@ -539,22 +560,23 @@ theorem
   (a 'or' b) '&' ('not' a 'or' c) '<' b 'or' c
 proof
   let z be Element of Y;
-  assume
-A1: ((a 'or' b) '&' ('not' a 'or' c)).z=TRUE;
-A2: ((a 'or' b) '&' ('not' a 'or' c)).z
-  =(a 'or' b).z '&' ('not' a 'or' c).z by MARGREL1:def 21
+A1: ((a 'or' b) '&' ('not' a 'or' c)).z =(a 'or' b).z '&' ('not' a 'or' c).z
+  by MARGREL1:def 21
     .=(a.z 'or' b.z) '&' ('not' a 'or' c).z by BVFUNC_1:def 7
     .=(a.z 'or' b.z) '&' (('not' a).z 'or' c.z) by BVFUNC_1:def 7;
+  assume
+A2: ((a 'or' b) '&' ('not' a 'or' c)).z=TRUE;
   now
-    assume (b 'or' c).z<>TRUE;
+    assume
+    (b 'or' c).z<>TRUE;
     then (b 'or' c).z=FALSE by XBOOLEAN:def 3;
     then
 A3: b.z 'or' c.z=FALSE by BVFUNC_1:def 7;
     c.z=TRUE or c.z=FALSE by XBOOLEAN:def 3;
-    then (a.z 'or' b.z) '&' (('not' a).z 'or' c.z)
-    =a.z '&' 'not' a.z by A3,MARGREL1:def 20
+    then (a.z 'or' b.z) '&' (('not' a).z 'or' c.z) =a.z '&' 'not' a.z by A3,
+    MARGREL1:def 20
       .=FALSE by XBOOLEAN:138;
-    hence contradiction by A1,A2;
+    hence contradiction by A2,A1;
   end;
   hence thesis;
 end;
@@ -563,33 +585,37 @@ theorem Th19:
   (a 'imp' b) '&' (c 'imp' d) '<' (a '&' c) 'imp' (b '&' d)
 proof
   let z be Element of Y;
-  assume
-A1: ((a 'imp' b) '&' (c 'imp' d)).z=TRUE;
-A2: ((a 'imp' b) '&' (c 'imp' d)).z
-  =(a 'imp' b).z '&' (c 'imp' d).z by MARGREL1:def 21
+A1: ((a 'imp' b) '&' (c 'imp' d)).z =(a 'imp' b).z '&' (c 'imp' d).z by
+  MARGREL1:def 21
     .=('not' a 'or' b).z '&' (c 'imp' d).z by BVFUNC_4:8
     .=('not' a 'or' b).z '&' ('not' c 'or' d).z by BVFUNC_4:8
     .=(('not' a).z 'or' b.z) '&' ('not' c 'or' d).z by BVFUNC_1:def 7
     .=(('not' a).z 'or' b.z) '&' (('not' c).z 'or' (d).z) by BVFUNC_1:def 7;
+  assume
+A2: ((a 'imp' b) '&' (c 'imp' d)).z=TRUE;
   now
-    assume
-A3: ((a '&' c) 'imp' (b '&' d)).z<>TRUE;
-A4: ((a '&' c) 'imp' (b '&' d)).z
-    =('not'( a '&' c) 'or' (b '&' d)).z by BVFUNC_4:8
+A3: ('not' c).z=TRUE or ('not' c).z=FALSE by XBOOLEAN:def 3;
+A4: (('not' a).z 'or' ('not' c).z)=TRUE or (('not' a).z 'or' ('not' c).z)=
+    FALSE by XBOOLEAN:def 3;
+A5: (b.z '&' (d).z)=TRUE or (b.z '&' (d).z)=FALSE by XBOOLEAN:def 3;
+A6: ((a '&' c) 'imp' (b '&' d)).z =('not'( a '&' c) 'or' (b '&' d)).z by
+    BVFUNC_4:8
       .=('not'( a '&' c)).z 'or' (b '&' d).z by BVFUNC_1:def 7
       .=('not' a 'or' 'not' c).z 'or' (b '&' d).z by BVFUNC_1:17
       .=(('not' a).z 'or' ('not' c).z) 'or' (b '&' d).z by BVFUNC_1:def 7
-      .=(('not' a).z 'or' ('not' c).z) 'or' (b.z '&' (d).z)
-    by MARGREL1:def 21;
-A5: (('not' a).z 'or' ('not' c).z)=TRUE or
-    (('not' a).z 'or' ('not' c).z)=FALSE by XBOOLEAN:def 3;
-A6: (b.z '&' (d).z)=TRUE or (b.z '&' (d).z)=FALSE by XBOOLEAN:def 3;
-A7: ('not' c).z=TRUE or ('not' c).z=FALSE by XBOOLEAN:def 3;
-    now per cases by A3,A4,A6,MARGREL1:45;
-      case b.z=FALSE; thus thesis by A1,A2,A4,A5,A7;
+      .=(('not' a).z 'or' ('not' c).z) 'or' (b.z '&' (d).z) by MARGREL1:def
+    21;
+    assume
+A7: ((a '&' c) 'imp' (b '&' d)).z<>TRUE;
+    now
+      per cases by A7,A6,A5,MARGREL1:45;
+      case
+        b.z=FALSE;
+        thus thesis by A2,A1,A6,A4,A3;
       end;
-      case (d).z=FALSE;
-        thus thesis by A1,A2,A4,A5,A7;
+      case
+        (d).z=FALSE;
+        thus thesis by A2,A1,A6,A4,A3;
       end;
     end;
     hence thesis;
@@ -607,8 +633,8 @@ end;
 theorem Th21:
   ((a 'imp' c) '&' (b 'imp' c)) '<' (a 'or' b) 'imp' c
 proof
-  ((a 'imp' c) '&' (b 'imp' c)) 'imp' ((a 'or' b) 'imp' c) = I_el Y
-  by BVFUNC_6:9;
+  ((a 'imp' c) '&' (b 'imp' c)) 'imp' ((a 'or' b) 'imp' c) = I_el Y by
+  BVFUNC_6:9;
   hence thesis by BVFUNC_1:19;
 end;
 
@@ -616,31 +642,37 @@ theorem Th22:
   (a 'imp' b) '&' (c 'imp' d) '<' (a 'or' c) 'imp' (b 'or' d)
 proof
   let z be Element of Y;
-  assume
-A1: ((a 'imp' b) '&' (c 'imp' d)).z=TRUE;
-A2: ((a 'imp' b) '&' (c 'imp' d)).z
-  =(('not' a 'or' b) '&' (c 'imp' d)).z by BVFUNC_4:8
+A1: ((a 'imp' b) '&' (c 'imp' d)).z =(('not' a 'or' b) '&' (c 'imp' d)).z by
+  BVFUNC_4:8
     .=(('not' a 'or' b) '&' ('not' c 'or' d)).z by BVFUNC_4:8
     .=('not' a 'or' b).z '&' ('not' c 'or' d).z by MARGREL1:def 21
     .=(('not' a).z 'or' b.z) '&' ('not' c 'or' d).z by BVFUNC_1:def 7
     .=(('not' a).z 'or' b.z) '&' (('not' c).z 'or' (d).z) by BVFUNC_1:def 7;
+  assume
+A2: ((a 'imp' b) '&' (c 'imp' d)).z=TRUE;
   now
-    assume
-A3: ((a 'or' c) 'imp' (b 'or' d)).z<>TRUE;
-A4: ((a 'or' c) 'imp' (b 'or' d)).z
-    =('not'( a 'or' c) 'or' (b 'or' d)).z by BVFUNC_4:8
+A3: (d).z=TRUE or (d).z=FALSE by XBOOLEAN:def 3;
+A4: (b.z 'or' (d).z)=TRUE or (b.z 'or' (d).z)=FALSE by XBOOLEAN:def 3;
+A5: (('not' a).z '&' ('not' c).z)=TRUE or (('not' a).z '&' ('not' c).z)=
+    FALSE by XBOOLEAN:def 3;
+A6: ((a 'or' c) 'imp' (b 'or' d)).z =('not'( a 'or' c) 'or' (b 'or' d)).z
+    by BVFUNC_4:8
       .=(('not' a '&' 'not' c) 'or' (b 'or' d)).z by BVFUNC_1:16
       .=('not' a '&' 'not' c).z 'or' (b 'or' d).z by BVFUNC_1:def 7
       .=(('not' a).z '&' ('not' c).z) 'or' (b 'or' d).z by MARGREL1:def 21
-      .=(('not' a).z '&' ('not' c).z) 'or' (b.z 'or' (d).z) by BVFUNC_1:def 7;
-A5: (('not' a).z '&' ('not' c).z)=TRUE or
-    (('not' a).z '&' ('not' c).z)=FALSE by XBOOLEAN:def 3;
-A6: (b.z 'or' (d).z)=TRUE or (b.z 'or' (d).z)=FALSE by XBOOLEAN:def 3;
-A7: (d).z=TRUE or (d).z=FALSE by XBOOLEAN:def 3;
-    now per cases by A3,A4,A5,MARGREL1:45;
-      case ('not' a).z=FALSE; thus thesis by A1,A2,A4,A6,A7;
+      .=(('not' a).z '&' ('not' c).z) 'or' (b.z 'or' (d).z) by BVFUNC_1:def
+    7;
+    assume
+A7: ((a 'or' c) 'imp' (b 'or' d)).z<>TRUE;
+    now
+      per cases by A7,A6,A5,MARGREL1:45;
+      case
+        ('not' a).z=FALSE;
+        thus thesis by A2,A1,A6,A4,A3;
       end;
-      case ('not' c).z=FALSE; thus thesis by A1,A2,A4,A6,A7;
+      case
+        ('not' c).z=FALSE;
+        thus thesis by A2,A1,A6,A4,A3;
       end;
     end;
     hence thesis;
@@ -656,530 +688,518 @@ proof
 end;
 
 theorem Th24:
-  for a1,b1,c1,a2,b2,c2 being Element of Funcs(Y,BOOLEAN) holds
-  (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '<' (a2 'imp' a1)
+  for a1,b1,c1,a2,b2,c2 being Element of Funcs(Y,BOOLEAN) holds (
+  b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&' 'not'( a2 '&' b2)
+  '&' 'not'( a2 '&' c2) '<' (a2 'imp' a1)
 proof
   let a1,b1,c1,a2,b2,c2 be Element of Funcs(Y,BOOLEAN);
-  (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '<' (b1 'imp' b2) by Lm4;
+A1: ((b1 'or' c1) 'imp' (b2 'or' c2)) '&' ((b2 'or' c2) 'imp' 'not' a2) '&'
+((b1 'or' c1) 'imp' 'not' a2) 'imp' ((b1 'or' c1) 'imp' 'not' a2) = I_el(Y) by
+  BVFUNC_6:39;
+  (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&' 'not'( a2
+  '&' b2) '&' 'not'( a2 '&' c2) '<' (c1 'imp' c2) by Lm4;
   then
-A1: (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2)
-  'imp' (b1 'imp' b2) = I_el(Y) by BVFUNC_1:19;
-  (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '<' (c1 'imp' c2) by Lm4;
-  then (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2)
-  'imp' (c1 'imp' c2) = I_el(Y) by BVFUNC_1:19;
+A2: (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&' 'not'( a2
+  '&' b2) '&' 'not'( a2 '&' c2) 'imp' (c1 'imp' c2) = I_el(Y) by BVFUNC_1:19;
+  (b1 'imp' b2) '&' (c1 'imp' c2) '<' (b1 'or' c1) 'imp' (b2 'or' c2) by
+  Th22;
   then
-A2: (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) 'imp'
-  (b1 'imp' b2) '&' (c1 'imp' c2) = I_el(Y) by A1,BVFUNC_6:18;
-  (b1 'imp' b2) '&' (c1 'imp' c2) '<' (b1 'or' c1) 'imp' (b2 'or' c2) by Th22;
-  then ((b1 'imp' b2) '&' (c1 'imp' c2)) 'imp' ((b1 'or' c1) 'imp' (b2 'or' c2
+A3: ((b1 'imp' b2) '&' (c1 'imp' c2)) 'imp' ((b1 'or' c1) 'imp' (b2 'or' c2
   )) = I_el(Y) by BVFUNC_1:19;
+  (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&' 'not'( a2
+  '&' b2) '&' 'not'( a2 '&' c2) '<' (b1 'imp' b2) by Lm4;
+  then (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&' 'not'( a2
+  '&' b2) '&' 'not'( a2 '&' c2) 'imp' (b1 'imp' b2) = I_el(Y) by BVFUNC_1:19;
+  then (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&' 'not'( a2
+  '&' b2) '&' 'not'( a2 '&' c2) 'imp' (b1 'imp' b2) '&' (c1 'imp' c2) = I_el(Y)
+  by A2,BVFUNC_6:18;
   then
-A3: (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2)
-  'imp' ((b1 'or' c1) 'imp' (b2 'or' c2)) = I_el(Y) by A2,BVFUNC_5:10;
-  (b1 'imp' b2) '&' (c1 'imp' c2) '&'
-  (a1 'or' b1 'or' c1) '&' 'not'( a2 '&' b2) '&' 'not'( a2 '&' c2)
-  '<' 'not'( a2 '&' b2) by Lm2;
+A4: (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&' 'not'( a2
+'&' b2) '&' 'not'( a2 '&' c2) 'imp' ((b1 'or' c1) 'imp' (b2 'or' c2)) = I_el(Y)
+  by A3,BVFUNC_5:10;
+  (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&' 'not'( a2
+  '&' b2) '&' 'not'( a2 '&' c2) '<' 'not'( a2 '&' c2) by Lm1;
   then
-A4: (b1 'imp' b2) '&' (c1 'imp' c2) '&'
-  (a1 'or' b1 'or' c1) '&' 'not'( a2 '&' b2) '&' 'not'( a2 '&' c2)
-  'imp' 'not'( a2 '&' b2) = I_el(Y) by BVFUNC_1:19;
-  (b1 'imp' b2) '&' (c1 'imp' c2) '&'
-  (a1 'or' b1 'or' c1) '&' 'not'( a2 '&' b2) '&' 'not'( a2 '&' c2)
-  '<' 'not'( a2 '&' c2) by Lm1;
-  then (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2)
-  'imp' 'not'( a2 '&' c2) = I_el(Y) by BVFUNC_1:19;
-  then (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2)
-  'imp' ('not'( a2 '&' b2) '&' 'not'( a2 '&' c2)) = I_el(Y) by A4,BVFUNC_6:18;
+A5: (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&' 'not'( a2
+  '&' b2) '&' 'not'( a2 '&' c2) 'imp' 'not'( a2 '&' c2) = I_el(Y) by BVFUNC_1
+  :19;
+  (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&' 'not'( a2
+  '&' b2) '&' 'not'( a2 '&' c2) '<' 'not'( a2 '&' b2) by Lm2;
+  then (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&' 'not'( a2
+  '&' b2) '&' 'not'( a2 '&' c2) 'imp' 'not'( a2 '&' b2) = I_el(Y) by BVFUNC_1:
+  19;
+  then (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&' 'not'( a2
+'&' b2) '&' 'not'( a2 '&' c2) 'imp' ('not'( a2 '&' b2) '&' 'not'( a2 '&' c2)) =
+  I_el(Y) by A5, BVFUNC_6:18;
   then
-A5: (b1 'imp' b2) '&' (c1 'imp' c2) '&'
-  (a1 'or' b1 'or' c1) '&' 'not'( a2 '&' b2) '&' 'not'( a2 '&' c2)
-  'imp' ((b1 'or' c1) 'imp' (b2 'or' c2)) '&' ('not'( a2 '&' b2) '&' 'not'
-  (a2 '&' c2)) = I_el(Y) by A3,BVFUNC_6:18;
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2)
-  =('not' a2 'or' 'not' b2) '&' 'not'( a2 '&' c2) by BVFUNC_1:17
+A6: (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&' 'not'( a2
+  '&' b2) '&' 'not'( a2 '&' c2) 'imp' ((b1 'or' c1) 'imp' (b2 'or' c2)) '&' (
+  'not'( a2 '&' b2) '&' 'not' (a2 '&' c2)) = I_el(Y) by A4,BVFUNC_6:18;
+  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) =('not' a2 'or' 'not' b2) '&'
+  'not'( a2 '&' c2) by BVFUNC_1:17
     .=('not' b2 'or' 'not' a2) '&' ('not' c2 'or' 'not' a2) by BVFUNC_1:17
     .=(b2 'imp' 'not' a2) '&' ('not' c2 'or' 'not' a2) by BVFUNC_4:8
     .=(b2 'imp' 'not' a2) '&' (c2 'imp' 'not' a2) by BVFUNC_4:8
     .=(b2 'or' c2) 'imp' 'not' a2 by BVFUNC_7:5;
+  then (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&' 'not'( a2
+'&' b2) '&' 'not'( a2 '&' c2) 'imp' ((b1 'or' c1) 'imp' (b2 'or' c2)) '&' ((b2
+  'or' c2) 'imp' 'not' a2) '&' ((b1 'or' c1) 'imp' 'not' a2) = I_el(Y) by A6,
+  BVFUNC_7:12;
   then
-A6: (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2)
-  'imp' ((b1 'or' c1) 'imp' (b2 'or' c2)) '&' ((b2 'or' c2) 'imp' 'not' a2) '&'
-  ((b1 'or' c1) 'imp' 'not' a2) = I_el(Y) by A5,BVFUNC_7:12;
-  ((b1 'or' c1) 'imp' (b2 'or' c2)) '&' ((b2 'or' c2) 'imp' 'not' a2) '&'
-  ((b1 'or' c1) 'imp' 'not' a2) 'imp'
-  ((b1 'or' c1) 'imp' 'not' a2) = I_el(Y) by BVFUNC_6:39;
+A7: (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&' 'not'( a2
+'&' b2) '&' 'not'( a2 '&' c2) 'imp' ((b1 'or' c1) 'imp' 'not' a2) = I_el(Y) by
+  A1,BVFUNC_5:10;
+  (a1 'or' b1 'or' c1) '&' ((b1 'or' c1) 'imp' 'not' a2) =(a1 'or' (b1
+'or' c1) ) '&' ((b1 'or' c1) 'imp' 'not' a2) & (a1 'or' (b1 'or' c1)) '&' ((b1
+  'or' c1) 'imp' 'not' a2) '<' (a1 'or' 'not' a2) by Th1,BVFUNC_1:11;
   then
-A7: (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2)
-  'imp' ((b1 'or' c1) 'imp' 'not' a2) = I_el(Y) by A6,BVFUNC_5:10;
-  (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '<' (a1 'or' b1 'or' c1) by Lm3;
-  then (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2)
-  'imp' (a1 'or' b1 'or' c1) = I_el(Y) by BVFUNC_1:19;
-  then
-A8: (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2)
-  'imp' (a1 'or' b1 'or' c1) '&' ((b1 'or' c1) 'imp' 'not' a2) = I_el(Y)
-  by A7,BVFUNC_6:18;
-A9: (a1 'or' b1 'or' c1) '&' ((b1 'or' c1) 'imp' 'not' a2)
-  =(a1 'or' (b1 'or' c1)) '&' ((b1 'or' c1) 'imp' 'not' a2) by BVFUNC_1:11;
-  (a1 'or' (b1 'or' c1)) '&' ((b1 'or' c1) 'imp' 'not' a2) '<'
-  (a1 'or' 'not' a2) by Th1;
-  then (a1 'or' b1 'or' c1) '&' ((b1 'or' c1) 'imp' 'not' a2) 'imp' (a1 'or'
-  'not' a2) =I_el(Y) by A9,BVFUNC_1:19;
-  then (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2)
-  'imp' (a1 'or' 'not' a2) = I_el(Y) by A8,BVFUNC_5:10;
-  then (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2)
-  'imp' (a2 'imp' a1) = I_el(Y) by BVFUNC_4:8;
+A8: (a1 'or' b1 'or' c1) '&' ((b1 'or' c1) 'imp' 'not' a2) 'imp' (a1 'or'
+  'not' a2) =I_el(Y) by BVFUNC_1:19;
+  (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&' 'not'( a2
+  '&' b2) '&' 'not'( a2 '&' c2) '<' (a1 'or' b1 'or' c1) by Lm3;
+  then (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&' 'not'( a2
+  '&' b2) '&' 'not'( a2 '&' c2) 'imp' (a1 'or' b1 'or' c1) = I_el(Y) by
+  BVFUNC_1:19;
+  then (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&' 'not'( a2
+  '&' b2) '&' 'not'( a2 '&' c2) 'imp' (a1 'or' b1 'or' c1) '&' ((b1 'or' c1)
+  'imp' 'not' a2) = I_el(Y) by A7,BVFUNC_6:18;
+  then (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&' 'not'( a2
+  '&' b2) '&' 'not'( a2 '&' c2) 'imp' (a1 'or' 'not' a2) = I_el(Y) by A8,
+  BVFUNC_5:10;
+  then (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&' 'not'( a2
+  '&' b2) '&' 'not'( a2 '&' c2) 'imp' (a2 'imp' a1) = I_el(Y) by BVFUNC_4:8;
   hence thesis by BVFUNC_1:19;
 end;
 
-Lm8: for a1,b1,c1,a2,b2,c2 being Element of Funcs(Y,BOOLEAN) holds
-((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&'
-(a1 'or' b1 'or' c1) '&'
-'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2)) 'imp'
-((a1 'imp' a2) '&' (b1 'imp' b2) '&' (a1 'or' b1 'or' c1) '&'
-'not'( c2 '&' a2) '&' 'not'( c2 '&' b2)) =I_el(Y)
+Lm8: for a1,b1,c1,a2,b2,c2 being Element of Funcs(Y,BOOLEAN) holds ((a1 'imp'
+a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&' 'not'( a2
+'&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2)) 'imp' ((a1 'imp' a2) '&' (
+b1 'imp' b2) '&' (a1 'or' b1 'or' c1) '&' 'not'( c2 '&' a2) '&' 'not'( c2 '&'
+b2)) =I_el(Y)
+
 proof
   let a1,b1,c1,a2,b2,c2 be Element of Funcs(Y,BOOLEAN);
-A1: ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&'
-  (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2))
-  'imp' (a1 'imp' a2) = I_el(Y) by Lm7;
-A2: ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&'
-  (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2))
-  'imp' (b1 'imp' b2) = I_el(Y) by Lm7;
-A3: ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&'
-  (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2))
-  'imp' (a1 'or' b1 'or' c1) = I_el(Y) by Lm7;
-A4: ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&'
-  (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2))
-  'imp' 'not'( a2 '&' c2) = I_el(Y) by Lm7;
-A5: ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&'
-  (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2))
-  'imp' 'not'( b2 '&' c2) = I_el(Y) by Lm7;
-  ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&'
-  (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2))
-  'imp' (a1 'imp' a2) '&' (b1 'imp' b2) = I_el(Y) by A1,A2,BVFUNC_6:18;
-  then ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&'
-  (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2))
-  'imp' (a1 'imp' a2) '&' (b1 'imp' b2) '&' (a1 'or' b1 'or' c1)
-  = I_el(Y) by A3,BVFUNC_6:18;
-  then ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&'
-  (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2))
-  'imp' (a1 'imp' a2) '&' (b1 'imp' b2) '&' (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' c2) = I_el(Y) by A4,BVFUNC_6:18;
-  hence thesis by A5,BVFUNC_6:18;
+
+A1: ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or'
+  c1) '&' 'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2)) 'imp'
+  'not'( a2 '&' c2) = I_el(Y) by Lm7;
+
+  ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or'
+
+c1) '&' 'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2)) 'imp' (
+
+a1 'imp' a2) = I_el(Y) & ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&'
+
+( a1 'or' b1 'or' c1) '&' 'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2
+  '&' c2)) 'imp' (b1 'imp' b2) = I_el(Y) by Lm7;
+
+  then
+A2: ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or'
+
+c1) '&' 'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2)) 'imp' (
+  a1 'imp' a2) '&' (b1 'imp' b2) = I_el(Y) by BVFUNC_6:18;
+
+  ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or'
+
+c1) '&' 'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2)) 'imp' (
+  a1 'or' b1 'or' c1) = I_el(Y) by Lm7;
+
+  then
+  ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or'
+
+c1) '&' 'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2)) 'imp' (
+  a1 'imp' a2) '&' (b1 'imp' b2) '&' (a1 'or' b1 'or' c1) = I_el(Y) by A2,
+  BVFUNC_6:18;
+
+  then
+A3: ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or'
+
+c1) '&' 'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2)) 'imp' (
+
+a1 'imp' a2) '&' (b1 'imp' b2) '&' (a1 'or' b1 'or' c1) '&' 'not'( a2 '&' c2) =
+  I_el(Y) by A1,BVFUNC_6:18;
+
+  ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or'
+  c1) '&' 'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2)) 'imp'
+  'not'( b2 '&' c2) = I_el(Y) by Lm7;
+
+  hence thesis by A3,BVFUNC_6:18;
 end;
 
-Lm9: for a1,b1,c1,a2,b2,c2 being Element of Funcs(Y,BOOLEAN) holds
-((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&'
-(a1 'or' b1 'or' c1) '&'
-'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2)) 'imp'
-((a1 'imp' a2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&'
-'not'( b2 '&' a2) '&' 'not'( b2 '&' c2)) = I_el(Y)
+Lm9: for a1,b1,c1,a2,b2,c2 being Element of Funcs(Y,BOOLEAN) holds ((a1 'imp'
+a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&' 'not'( a2
+'&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2)) 'imp' ((a1 'imp' a2) '&' (
+c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&' 'not'( b2 '&' a2) '&' 'not'( b2 '&'
+c2)) = I_el(Y)
+
 proof
   let a1,b1,c1,a2,b2,c2 be Element of Funcs(Y,BOOLEAN);
-A1: ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&'
-  (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2))
-  'imp' (a1 'imp' a2) = I_el(Y) by Lm7;
-A2: ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&'
-  (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2))
-  'imp' (c1 'imp' c2) = I_el(Y) by Lm7;
-A3: ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&'
-  (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2))
-  'imp' (a1 'or' b1 'or' c1) = I_el(Y) by Lm7;
-A4: ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&'
-  (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2))
-  'imp' 'not'( a2 '&' b2) = I_el(Y) by Lm7;
-A5: ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&'
-  (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2))
-  'imp' 'not'( b2 '&' c2) = I_el(Y) by Lm7;
-  ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&'
-  (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2))
-  'imp' (a1 'imp' a2) '&' (c1 'imp' c2) = I_el(Y) by A1,A2,BVFUNC_6:18;
-  then ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&'
-  (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2))
-  'imp' (a1 'imp' a2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1)
-  = I_el(Y) by A3,BVFUNC_6:18;
-  then ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&'
-  (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2))
-  'imp' (a1 'imp' a2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) = I_el(Y) by A4,BVFUNC_6:18;
-  hence thesis by A5,BVFUNC_6:18;
+
+A1: ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or'
+  c1) '&' 'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2)) 'imp'
+  'not'( a2 '&' b2) = I_el(Y) by Lm7;
+
+  ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or'
+
+c1) '&' 'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2)) 'imp' (
+
+a1 'imp' a2) = I_el(Y) & ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&'
+
+( a1 'or' b1 'or' c1) '&' 'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2
+  '&' c2)) 'imp' (c1 'imp' c2) = I_el(Y) by Lm7;
+
+  then
+A2: ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or'
+
+c1) '&' 'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2)) 'imp' (
+  a1 'imp' a2) '&' (c1 'imp' c2) = I_el(Y) by BVFUNC_6:18;
+
+  ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or'
+
+c1) '&' 'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2)) 'imp' (
+  a1 'or' b1 'or' c1) = I_el(Y) by Lm7;
+
+  then
+  ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or'
+
+c1) '&' 'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2)) 'imp' (
+  a1 'imp' a2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) = I_el(Y) by A2,
+  BVFUNC_6:18;
+
+  then
+A3: ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or'
+
+c1) '&' 'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2)) 'imp' (
+
+a1 'imp' a2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&' 'not'( a2 '&' b2) =
+  I_el(Y) by A1,BVFUNC_6:18;
+
+  ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or'
+  c1) '&' 'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2)) 'imp'
+  'not'( b2 '&' c2) = I_el(Y) by Lm7;
+
+  hence thesis by A3,BVFUNC_6:18;
 end;
 
-Lm10: for a1,b1,c1,a2,b2,c2 being Element of Funcs(Y,BOOLEAN) holds
-((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&'
-(a1 'or' b1 'or' c1) '&'
-'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2)) 'imp'
-((b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&'
-'not'( a2 '&' b2) '&' 'not'( a2 '&' c2)) =I_el(Y)
+Lm10: for a1,b1,c1,a2,b2,c2 being Element of Funcs(Y,BOOLEAN) holds ((a1 'imp'
+a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&' 'not'( a2
+'&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2)) 'imp' ((b1 'imp' b2) '&' (
+c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&' 'not'( a2 '&' b2) '&' 'not'( a2 '&'
+c2)) =I_el(Y)
+
 proof
   let a1,b1,c1,a2,b2,c2 be Element of Funcs(Y,BOOLEAN);
-A1: ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&'
-  (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2))
-  'imp' (b1 'imp' b2) = I_el(Y) by Lm7;
-A2: ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&'
-  (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2))
-  'imp' (c1 'imp' c2) = I_el(Y) by Lm7;
-A3: ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&'
-  (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2))
-  'imp' (a1 'or' b1 'or' c1) = I_el(Y) by Lm7;
-A4: ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&'
-  (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2))
-  'imp' 'not'( a2 '&' b2) = I_el(Y) by Lm7;
-A5: ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&'
-  (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2))
-  'imp' 'not'( a2 '&' c2) = I_el(Y) by Lm7;
-  ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&'
-  (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2))
-  'imp' (b1 'imp' b2) '&' (c1 'imp' c2) = I_el(Y) by A1,A2,BVFUNC_6:18;
-  then ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&'
-  (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2))
-  'imp' (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1)
-  = I_el(Y) by A3,BVFUNC_6:18;
-  then ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&'
-  (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2))
-  'imp' (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) = I_el(Y) by A4,BVFUNC_6:18;
-  hence thesis by A5,BVFUNC_6:18;
+
+A1: ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or'
+  c1) '&' 'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2)) 'imp'
+  'not'( a2 '&' b2) = I_el(Y) by Lm7;
+
+  ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or'
+
+c1) '&' 'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2)) 'imp' (
+
+b1 'imp' b2) = I_el(Y) & ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&'
+
+( a1 'or' b1 'or' c1) '&' 'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2
+  '&' c2)) 'imp' (c1 'imp' c2) = I_el(Y) by Lm7;
+
+  then
+A2: ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or'
+
+c1) '&' 'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2)) 'imp' (
+  b1 'imp' b2) '&' (c1 'imp' c2) = I_el(Y) by BVFUNC_6:18;
+
+  ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or'
+
+c1) '&' 'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2)) 'imp' (
+  a1 'or' b1 'or' c1) = I_el(Y) by Lm7;
+
+  then
+  ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or'
+
+c1) '&' 'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2)) 'imp' (
+  b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) = I_el(Y) by A2,
+  BVFUNC_6:18;
+
+  then
+A3: ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or'
+
+c1) '&' 'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2)) 'imp' (
+
+b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&' 'not'( a2 '&' b2) =
+  I_el(Y) by A1,BVFUNC_6:18;
+
+  ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or'
+  c1) '&' 'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2)) 'imp'
+  'not'( a2 '&' c2) = I_el(Y) by Lm7;
+
+  hence thesis by A3,BVFUNC_6:18;
 end;
 
 theorem
-  for a1,b1,c1,a2,b2,c2 being Element of Funcs(Y,BOOLEAN) holds
-  (a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&'
-  (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2) '<'
-  (a2 'imp' a1) '&' (b2 'imp' b1) '&' (c2 'imp' c1)
+  for a1,b1,c1,a2,b2,c2 being Element of Funcs(Y,BOOLEAN) holds (a1
+  'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&'
+'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2) '<' (a2 'imp' a1)
+  '&' (b2 'imp' b1) '&' (c2 'imp' c1)
 proof
   let a1,b1,c1,a2,b2,c2 be Element of Funcs(Y,BOOLEAN);
-A1: ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&'
-  (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2)) 'imp'
-  ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (a1 'or' b1 'or' c1) '&'
-  'not'( c2 '&' a2) '&' 'not'( c2 '&' b2)) =I_el(Y) by Lm8;
-A2: ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&'
-  (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2)) 'imp'
-  ((a1 'imp' a2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&'
-  'not'( b2 '&' a2) '&' 'not'( b2 '&' c2)) =I_el(Y) by Lm9;
-A3: ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&'
-  (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2)) 'imp'
-  ((b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2)) =I_el(Y) by Lm10;
-  ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&'
-  (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2)) 'imp'
-  ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (a1 'or' b1 'or' c1) '&'
-  'not'( c2 '&' a2) '&' 'not'( c2 '&' b2)) '&'
-  ((a1 'imp' a2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&'
-  'not'( b2 '&' a2) '&' 'not'( b2 '&' c2)) =I_el(Y) by A1,A2,BVFUNC_6:18;
+A1: ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or'
+c1) '&' 'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2)) 'imp' ((
+  b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&' 'not'( a2 '&' b2)
+  '&' 'not'( a2 '&' c2)) =I_el(Y) by Lm10;
+  ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or'
+c1) '&' 'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2)) 'imp' ((
+  a1 'imp' a2) '&' (b1 'imp' b2) '&' (a1 'or' b1 'or' c1) '&' 'not'( c2 '&' a2)
+  '&' 'not'( c2 '&' b2)) =I_el(Y) & ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1
+'imp' c2) '&' (a1 'or' b1 'or' c1) '&' 'not'( a2 '&' b2) '&' 'not'( a2 '&' c2)
+  '&' 'not'( b2 '&' c2)) 'imp' ((a1 'imp' a2) '&' (c1 'imp' c2) '&' (a1 'or' b1
+  'or' c1) '&' 'not'( b2 '&' a2) '&' 'not'( b2 '&' c2)) =I_el(Y) by Lm8,Lm9;
   then
-A4: ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&'
-  (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2)) 'imp'
-  ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (a1 'or' b1 'or' c1) '&'
-  'not'( c2 '&' a2) '&' 'not'( c2 '&' b2)) '&'
-  ((a1 'imp' a2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( b2 '&' c2)) '&'
-  ((b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2)) =I_el(Y) by A3,BVFUNC_6:18;
-  ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (a1 'or' b1 'or' c1) '&'
-  'not'( c2 '&' a2) '&' 'not'( c2 '&' b2)) '&'
-  ((a1 'imp' a2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( b2 '&' c2)) '&'
-  ((b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2)) '<'
-  ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (a1 'or' b1 'or' c1) '&'
-  'not'( c2 '&' a2) '&' 'not'( c2 '&' b2)) by Lm2;
+  ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or'
+c1) '&' 'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2)) 'imp' ((
+  a1 'imp' a2) '&' (b1 'imp' b2) '&' (a1 'or' b1 'or' c1) '&' 'not'( c2 '&' a2)
+  '&' 'not'( c2 '&' b2)) '&' ((a1 'imp' a2) '&' (c1 'imp' c2) '&' (a1 'or' b1
+  'or' c1) '&' 'not'( b2 '&' a2) '&' 'not'( b2 '&' c2)) =I_el(Y) by BVFUNC_6:
+  18;
   then
-A5: ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (a1 'or' b1 'or' c1) '&'
-  'not'( c2 '&' a2) '&' 'not'( c2 '&' b2)) '&'
-  ((a1 'imp' a2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( b2 '&' c2)) '&'
-  ((b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2)) 'imp'
-  ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (a1 'or' b1 'or' c1) '&'
-  'not'( c2 '&' a2) '&' 'not'( c2 '&' b2)) =I_el(Y) by BVFUNC_1:19;
-  ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (a1 'or' b1 'or' c1) '&'
-  'not'( c2 '&' a2) '&' 'not'( c2 '&' b2)) '&'
-  ((a1 'imp' a2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( b2 '&' c2)) '&'
-  ((b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2)) '<'
-  ((a1 'imp' a2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&'
+A2: ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or'
+c1) '&' 'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2)) 'imp' ((
+  a1 'imp' a2) '&' (b1 'imp' b2) '&' (a1 'or' b1 'or' c1) '&' 'not'( c2 '&' a2)
+  '&' 'not'( c2 '&' b2)) '&' ((a1 'imp' a2) '&' (c1 'imp' c2) '&' (a1 'or' b1
+'or' c1) '&' 'not'( a2 '&' b2) '&' 'not'( b2 '&' c2)) '&' ((b1 'imp' b2) '&' (
+  c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&' 'not'( a2 '&' b2) '&' 'not'( a2 '&'
+  c2)) =I_el(Y) by A1,BVFUNC_6:18;
+  (a1 'imp' a2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&' 'not'( a2
+  '&' b2) '&' 'not'( b2 '&' c2) '<' (b2 'imp' b1) by Th24;
+  then
+A3: (a1 'imp' a2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&' 'not'( a2
+  '&' b2) '&' 'not'( b2 '&' c2) 'imp' (b2 'imp' b1) = I_el(Y) by BVFUNC_1:19;
+  ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (a1 'or' b1 'or' c1) '&' 'not'( c2
+  '&' a2) '&' 'not'( c2 '&' b2)) '&' ((a1 'imp' a2) '&' (c1 'imp' c2) '&' (a1
+'or' b1 'or' c1) '&' 'not'( a2 '&' b2) '&' 'not'( b2 '&' c2)) '&' ((b1 'imp' b2
+  ) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&' 'not'( a2 '&' b2) '&' 'not'(
+  a2 '&' c2)) '<' ((a1 'imp' a2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&'
   'not'( a2 '&' b2) '&' 'not'( b2 '&' c2)) by Lm2;
   then
-A6: ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (a1 'or' b1 'or' c1) '&'
-  'not'( c2 '&' a2) '&' 'not'( c2 '&' b2)) '&'
-  ((a1 'imp' a2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( b2 '&' c2)) '&'
-  ((b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2)) 'imp'
-  ((a1 'imp' a2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&'
+  ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (a1 'or' b1 'or' c1) '&' 'not'( c2
+  '&' a2) '&' 'not'( c2 '&' b2)) '&' ((a1 'imp' a2) '&' (c1 'imp' c2) '&' (a1
+'or' b1 'or' c1) '&' 'not'( a2 '&' b2) '&' 'not'( b2 '&' c2)) '&' ((b1 'imp' b2
+  ) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&' 'not'( a2 '&' b2) '&' 'not'(
+a2 '&' c2)) 'imp' ((a1 'imp' a2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&'
   'not'( a2 '&' b2) '&' 'not'( b2 '&' c2)) =I_el(Y) by BVFUNC_1:19;
-A7: ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&'
-  (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2)) 'imp'
-  ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (a1 'or' b1 'or' c1) '&'
-  'not'( c2 '&' a2) '&' 'not'( c2 '&' b2)) =I_el(Y) by A4,A5,BVFUNC_5:10;
-A8: ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&'
-  (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2)) 'imp'
-  ((a1 'imp' a2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( b2 '&' c2)) =I_el(Y) by A4,A6,BVFUNC_5:10;
-  (a1 'imp' a2) '&' (b1 'imp' b2) '&' (a1 'or' c1 'or' b1) '&'
-  'not'( c2 '&' a2) '&' 'not'( c2 '&' b2) '<' (c2 'imp' c1) by Th24;
   then
-A9: (a1 'imp' a2) '&' (b1 'imp' b2) '&' (a1 'or' b1 'or' c1) '&'
-  'not'( c2 '&' a2) '&' 'not'( c2 '&' b2) '<' (c2 'imp' c1) by BVFUNC_1:11;
-A10: (a1 'imp' a2) '&' (c1 'imp' c2) '&'
-  (a1 'or' b1 'or' c1) '&' 'not'( a2 '&' b2) '&' 'not'( b2 '&' c2) '<'
-  (b2 'imp' b1) by Th24;
-A11: (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '<' (a2 'imp' a1) by Th24;
-A12: (a1 'imp' a2) '&' (b1 'imp' b2) '&' (a1 'or' b1 'or' c1) '&'
-  'not'( c2 '&' a2) '&' 'not'( c2 '&' b2) 'imp' (c2 'imp' c1) = I_el(Y)
-  by A9,BVFUNC_1:19;
-A13: (a1 'imp' a2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( b2 '&' c2) 'imp'
-  (b2 'imp' b1) = I_el(Y) by A10,BVFUNC_1:19;
-A14: (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) 'imp' (a2 'imp' a1) = I_el(Y)
-  by A11,BVFUNC_1:19;
-A15: (a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&'
-  (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2) 'imp'
-  (c2 'imp' c1) = I_el(Y) by A7,A12,BVFUNC_5:10;
-A16: (a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&'
-  (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2) 'imp'
-  (b2 'imp' b1) = I_el(Y) by A8,A13,BVFUNC_5:10;
-  (a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&'
-  (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not' (b2 '&' c2) 'imp'
-  (a2 'imp' a1) = I_el(Y) by A3,A14,BVFUNC_5:10;
-  then ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&'
-  (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2)) 'imp'
-  (a2 'imp' a1) '&' (b2 'imp' b1) = I_el(Y) by A16,BVFUNC_6:18;
-  then ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&'
-  (a1 'or' b1 'or' c1) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2)) 'imp'
-  (a2 'imp' a1) '&' (b2 'imp' b1) '&' (c2 'imp' c1) = I_el(Y)
-  by A15,BVFUNC_6:18;
+  ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or'
+c1) '&' 'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2)) 'imp' ((
+  a1 'imp' a2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&' 'not'( a2 '&' b2)
+  '&' 'not'( b2 '&' c2)) =I_el(Y) by A2,BVFUNC_5:10;
+  then
+A4: (a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or'
+c1) '&' 'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2) 'imp' (b2
+  'imp' b1) = I_el(Y) by A3,BVFUNC_5:10;
+  (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&' 'not'( a2
+  '&' b2) '&' 'not'( a2 '&' c2) '<' (a2 'imp' a1) by Th24;
+  then (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&' 'not'( a2
+  '&' b2) '&' 'not'( a2 '&' c2) 'imp' (a2 'imp' a1) = I_el(Y) by BVFUNC_1:19;
+  then (a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or'
+c1) '&' 'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not' (b2 '&' c2) 'imp' (a2
+  'imp' a1) = I_el(Y) by A1,BVFUNC_5:10;
+  then
+A5: ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or'
+c1) '&' 'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2)) 'imp' (
+  a2 'imp' a1) '&' (b2 'imp' b1) = I_el(Y) by A4,BVFUNC_6:18;
+  (a1 'imp' a2) '&' (b1 'imp' b2) '&' (a1 'or' c1 'or' b1) '&' 'not'( c2
+  '&' a2) '&' 'not'( c2 '&' b2) '<' (c2 'imp' c1) by Th24;
+  then (a1 'imp' a2) '&' (b1 'imp' b2) '&' (a1 'or' b1 'or' c1) '&' 'not'( c2
+  '&' a2) '&' 'not'( c2 '&' b2) '<' (c2 'imp' c1) by BVFUNC_1:11;
+  then
+A6: (a1 'imp' a2) '&' (b1 'imp' b2) '&' (a1 'or' b1 'or' c1) '&' 'not'( c2
+  '&' a2) '&' 'not'( c2 '&' b2) 'imp' (c2 'imp' c1) = I_el(Y) by BVFUNC_1:19;
+  ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (a1 'or' b1 'or' c1) '&' 'not'( c2
+  '&' a2) '&' 'not'( c2 '&' b2)) '&' ((a1 'imp' a2) '&' (c1 'imp' c2) '&' (a1
+'or' b1 'or' c1) '&' 'not'( a2 '&' b2) '&' 'not'( b2 '&' c2)) '&' ((b1 'imp' b2
+  ) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&' 'not'( a2 '&' b2) '&' 'not'(
+  a2 '&' c2)) '<' ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (a1 'or' b1 'or' c1) '&'
+  'not'( c2 '&' a2) '&' 'not'( c2 '&' b2)) by Lm2;
+  then
+  ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (a1 'or' b1 'or' c1) '&' 'not'( c2
+  '&' a2) '&' 'not'( c2 '&' b2)) '&' ((a1 'imp' a2) '&' (c1 'imp' c2) '&' (a1
+'or' b1 'or' c1) '&' 'not'( a2 '&' b2) '&' 'not'( b2 '&' c2)) '&' ((b1 'imp' b2
+  ) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or' c1) '&' 'not'( a2 '&' b2) '&' 'not'(
+a2 '&' c2)) 'imp' ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (a1 'or' b1 'or' c1) '&'
+  'not'( c2 '&' a2) '&' 'not'( c2 '&' b2)) =I_el(Y) by BVFUNC_1:19;
+  then
+  ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or'
+c1) '&' 'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2)) 'imp' ((
+  a1 'imp' a2) '&' (b1 'imp' b2) '&' (a1 'or' b1 'or' c1) '&' 'not'( c2 '&' a2)
+  '&' 'not'( c2 '&' b2)) =I_el(Y) by A2,BVFUNC_5:10;
+  then (a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or'
+c1) '&' 'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2) 'imp' (c2
+  'imp' c1) = I_el(Y) by A6,BVFUNC_5:10;
+  then
+  ((a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&' (a1 'or' b1 'or'
+c1) '&' 'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2)) 'imp' (
+  a2 'imp' a1) '&' (b2 'imp' b1) '&' (c2 'imp' c1) = I_el(Y) by A5,BVFUNC_6:
+  18;
   hence thesis by BVFUNC_1:19;
 end;
 
 theorem Th26:
-  for a1,b1,a2,b2 being Element of Funcs(Y,BOOLEAN) holds
-  ((a1 'imp' a2) '&' (b1 'imp' b2) '&' 'not'(a2 '&' b2))
-  'imp' 'not' (a1 '&' b1)=I_el(Y)
+  for a1,b1,a2,b2 being Element of Funcs(Y,BOOLEAN) holds ((a1
+'imp' a2) '&' (b1 'imp' b2) '&' 'not'(a2 '&' b2)) 'imp' 'not' (a1 '&' b1)=I_el(
+  Y)
 proof
   let a1,b1,a2,b2 be Element of Funcs(Y,BOOLEAN);
-  for z being Element of Y
-  st ((a1 'imp' a2) '&' (b1 'imp' b2) '&' 'not'( a2 '&' b2)).z=TRUE
-  holds ('not'( a1 '&' b1)).z=TRUE
+  for z being Element of Y st ((a1 'imp' a2) '&' (b1 'imp' b2) '&' 'not'(
+  a2 '&' b2)).z=TRUE holds ('not'( a1 '&' b1)).z=TRUE
   proof
     let z be Element of Y;
-    assume
-A1: ((a1 'imp' a2) '&' (b1 'imp' b2) '&' 'not'( a2 '&' b2)).z=TRUE;
-A2: ((a1 'imp' a2) '&' (b1 'imp' b2) '&' 'not'( a2 '&' b2)).z
-    =((a1 'imp' a2) '&' (b1 'imp' b2)).z '&' ('not'( a2 '&' b2)).z
-    by MARGREL1:def 21
-      .=((a1 'imp' a2).z '&' (b1 'imp' b2).z) '&' ('not'( a2 '&' b2)).z
-    by MARGREL1:def 21
+A1: ((a1 'imp' a2) '&' (b1 'imp' b2) '&' 'not'( a2 '&' b2)).z =((a1 'imp'
+    a2) '&' (b1 'imp' b2)).z '&' ('not'( a2 '&' b2)).z by MARGREL1:def 21
+      .=((a1 'imp' a2).z '&' (b1 'imp' b2).z) '&' ('not'( a2 '&' b2)).z by
+    MARGREL1:def 21
       .=(('not' a1 'or' a2).z '&' (b1 'imp' b2).z) '&' ('not'( a2 '&' b2)).z
     by BVFUNC_4:8
-      .=(('not' a1 'or' a2).z '&' ('not' b1 'or' b2).z) '&' ('not'
-    (a2 '&' b2)).z by BVFUNC_4:8
-      .=((('not' a1).z 'or' (a2).z) '&' ('not' b1 'or' b2).z) '&'
-    ('not'( a2 '&' b2)).z by BVFUNC_1:def 7
-      .=((('not' a1).z 'or' (a2).z) '&' (('not' b1).z 'or' (b2).z)) '&'
-    ('not'( a2 '&' b2)).z by BVFUNC_1:def 7
-      .=((('not' a1).z 'or' (a2).z) '&' (('not' b1).z 'or' (b2).z)) '&'
-    (('not' a2 'or' 'not' b2).z) by BVFUNC_1:17
-      .=((('not' a1).z 'or' (a2).z) '&' (('not' b1).z 'or' (b2).z)) '&'
-    (('not' a2).z 'or' ('not' b2).z) by BVFUNC_1:def 7;
+      .=(('not' a1 'or' a2).z '&' ('not' b1 'or' b2).z) '&' ('not' (a2 '&'
+    b2)).z by BVFUNC_4:8
+      .=((('not' a1).z 'or' (a2).z) '&' ('not' b1 'or' b2).z) '&' ('not'( a2
+    '&' b2)).z by BVFUNC_1:def 7
+      .=((('not' a1).z 'or' (a2).z) '&' (('not' b1).z 'or' (b2).z)) '&' (
+    'not'( a2 '&' b2)).z by BVFUNC_1:def 7
+      .=((('not' a1).z 'or' (a2).z) '&' (('not' b1).z 'or' (b2).z)) '&' ((
+    'not' a2 'or' 'not' b2).z) by BVFUNC_1:17
+      .=((('not' a1).z 'or' (a2).z) '&' (('not' b1).z 'or' (b2).z)) '&' ((
+    'not' a2).z 'or' ('not' b2).z) by BVFUNC_1:def 7;
+    assume
+A2: ((a1 'imp' a2) '&' (b1 'imp' b2) '&' 'not'( a2 '&' b2)).z=TRUE;
     now
-      assume
-A3:   ('not'( a1 '&' b1)).z<>TRUE;
-A4:   ('not'( a1 '&' b1)).z =('not' a1 'or' 'not' b1).z by BVFUNC_1:17
+A3:   ('not' b1).z=TRUE or ('not' b1).z=FALSE by XBOOLEAN:def 3;
+A4:   ('not' a1).z=TRUE or ('not' a1).z=FALSE by XBOOLEAN:def 3;
+A5:   ('not'( a1 '&' b1)).z =('not' a1 'or' 'not' b1).z by BVFUNC_1:17
         .=('not' a1).z 'or' ('not' b1).z by BVFUNC_1:def 7;
-A5:   ('not' a1).z=TRUE or ('not' a1).z=FALSE by XBOOLEAN:def 3;
-      ('not' b1).z=TRUE or ('not' b1).z=FALSE by XBOOLEAN:def 3;
-      then ((a1 'imp' a2) '&' (b1 'imp' b2) '&' 'not'( a2 '&' b2)).z
-      =((b2).z '&' (a2).z) '&' ('not' a2).z 'or'
-      ((a2).z '&' (b2).z) '&' ('not' b2).z by A2,A3,A4,A5,XBOOLEAN:8
-        .=(b2).z '&' ((a2).z '&' ('not' a2).z) 'or'
-      (a2).z '&' ((b2).z '&' ('not' b2).z)
-        .=(b2).z '&' ((a2).z '&' 'not' (a2).z) 'or'
-      (a2).z '&' ((b2).z '&' ('not' b2).z) by MARGREL1:def 20
-        .=(b2).z '&' ((a2).z '&' 'not' (a2).z) 'or'
-      (a2).z '&' ((b2).z '&' 'not' (b2).z) by MARGREL1:def 20
-        .=(b2).z '&' FALSE 'or'
-      (a2).z '&' ((b2).z '&' 'not' (b2).z) by XBOOLEAN:138
+      assume
+      ('not'( a1 '&' b1)).z<>TRUE;
+      then ((a1 'imp' a2) '&' (b1 'imp' b2) '&' 'not'( a2 '&' b2)).z =((b2).z
+'&' (a2).z) '&' ('not' a2).z 'or' ((a2).z '&' (b2).z) '&' ('not' b2).z by A1,
+      A5,A4,A3,XBOOLEAN:8
+        .=(b2).z '&' ((a2).z '&' ('not' a2).z) 'or' (a2).z '&' ((b2).z '&' (
+      'not' b2).z)
+        .=(b2).z '&' ((a2).z '&' 'not' (a2).z) 'or' (a2).z '&' ((b2).z '&' (
+      'not' b2).z) by MARGREL1:def 20
+        .=(b2).z '&' ((a2).z '&' 'not' (a2).z) 'or' (a2).z '&' ((b2).z '&'
+      'not' (b2).z) by MARGREL1:def 20
+        .=(b2).z '&' FALSE 'or' (a2).z '&' ((b2).z '&' 'not' (b2).z) by
+      XBOOLEAN:138
         .=FALSE 'or' FALSE '&' (a2).z by XBOOLEAN:138
         .=FALSE;
-      hence contradiction by A1;
+      hence contradiction by A2;
     end;
     hence thesis;
   end;
-  then (a1 'imp' a2) '&' (b1 'imp' b2) '&' 'not'( a2 '&' b2) '<'
-  'not'( a1 '&' b1) by BVFUNC_1:def 15;
+  then
+  (a1 'imp' a2) '&' (b1 'imp' b2) '&' 'not'( a2 '&' b2) '<' 'not'( a1 '&'
+  b1) by BVFUNC_1:def 15;
   hence thesis by BVFUNC_1:19;
 end;
 
 theorem
-  for a1,b1,c1,a2,b2,c2 being Element of Funcs(Y,BOOLEAN) holds
-  (a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2) '<'
-  'not'( a1 '&' b1) '&' 'not'( a1 '&' c1) '&' 'not'( b1 '&' c1)
+  for a1,b1,c1,a2,b2,c2 being Element of Funcs(Y,BOOLEAN) holds (a1
+'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&' 'not'( a2 '&' b2) '&' 'not'(
+  a2 '&' c2) '&' 'not'( b2 '&' c2) '<' 'not'( a1 '&' b1) '&' 'not'( a1 '&' c1)
+  '&' 'not'( b1 '&' c1)
 proof
   let a1,b1,c1,a2,b2,c2 be Element of Funcs(Y,BOOLEAN);
-A1: (a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2)
-  =(a1 'imp' a2) '&' (a1 'imp' a2) '&' ((b1 'imp' b2) '&' (b1 'imp' b2))
-  '&' (c1 'imp' c2) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2)
+A1: ((a1 'imp' a2) '&' (b1 'imp' b2) '&' 'not'( a2 '&' b2)) '&' ((a1 'imp'
+  a2) '&' (c1 'imp' c2) '&' 'not'( a2 '&' c2)) '&' ((b1 'imp' b2) '&' (c1 'imp'
+c2) '&' 'not'( b2 '&' c2)) 'imp' ((a1 'imp' a2) '&' (b1 'imp' b2) '&' 'not'( a2
+  '&' b2)) '&' ((a1 'imp' a2) '&' (c1 'imp' c2) '&' 'not'( a2 '&' c2)) =I_el(Y)
+  by BVFUNC_6:39;
+A2: ((a1 'imp' a2) '&' (c1 'imp' c2) '&' 'not'( a2 '&' c2)) 'imp' 'not'( a1
+  '&' c1)=I_el(Y) by Th26;
+  ((a1 'imp' a2) '&' (b1 'imp' b2) '&' 'not'( a2 '&' b2)) '&' ((a1 'imp'
+a2) '&' (c1 'imp' c2) '&' 'not'( a2 '&' c2)) 'imp' ((a1 'imp' a2) '&' (c1 'imp'
+  c2) '&' 'not'( a2 '&' c2)) =I_el(Y) by BVFUNC_6:39;
+  then ((a1 'imp' a2) '&' (b1 'imp' b2) '&' 'not'( a2 '&' b2)) '&' ((a1 'imp'
+  a2) '&' (c1 'imp' c2) '&' 'not'( a2 '&' c2)) '&' ((b1 'imp' b2) '&' (c1 'imp'
+c2) '&' 'not'( b2 '&' c2)) 'imp' ((a1 'imp' a2) '&' (c1 'imp' c2) '&' 'not'( a2
+  '&' c2)) =I_el(Y) by A1,BVFUNC_5:10;
+  then
+A3: ((a1 'imp' a2) '&' (b1 'imp' b2) '&' 'not'( a2 '&' b2)) '&' ((a1 'imp'
+  a2) '&' (c1 'imp' c2) '&' 'not'( a2 '&' c2)) '&' ((b1 'imp' b2) '&' (c1 'imp'
+  c2) '&' 'not'( b2 '&' c2)) 'imp' 'not'( a1 '&' c1)=I_el(Y) by A2,BVFUNC_5:10;
+A4: ((a1 'imp' a2) '&' (b1 'imp' b2) '&' 'not'( a2 '&' b2)) 'imp' 'not'( a1
+  '&' b1)=I_el(Y) by Th26;
+  ((a1 'imp' a2) '&' (b1 'imp' b2) '&' 'not'( a2 '&' b2)) '&' ((a1 'imp'
+  a2) '&' (c1 'imp' c2) '&' 'not'( a2 '&' c2)) '&' ((b1 'imp' b2) '&' (c1 'imp'
+c2) '&' 'not'( b2 '&' c2)) 'imp' ((b1 'imp' b2) '&' (c1 'imp' c2) '&' 'not'( b2
+  '&' c2)) =I_el(Y) & ((b1 'imp' b2) '&' (c1 'imp' c2) '&' 'not'( b2 '&' c2))
+  'imp' 'not'( b1 '&' c1)=I_el(Y) by Th26,BVFUNC_6:39;
+  then
+A5: ((a1 'imp' a2) '&' (b1 'imp' b2) '&' 'not'( a2 '&' b2)) '&' ((a1 'imp'
+  a2) '&' (c1 'imp' c2) '&' 'not'( a2 '&' c2)) '&' ((b1 'imp' b2) '&' (c1 'imp'
+  c2) '&' 'not'( b2 '&' c2)) 'imp' 'not'( b1 '&' c1)=I_el(Y) by BVFUNC_5:10;
+  ((a1 'imp' a2) '&' (b1 'imp' b2) '&' 'not'( a2 '&' b2)) '&' ((a1 'imp'
+a2) '&' (c1 'imp' c2) '&' 'not'( a2 '&' c2)) 'imp' ((a1 'imp' a2) '&' (b1 'imp'
+  b2) '&' 'not'( a2 '&' b2)) =I_el(Y) by BVFUNC_6:39;
+  then ((a1 'imp' a2) '&' (b1 'imp' b2) '&' 'not'( a2 '&' b2)) '&' ((a1 'imp'
+  a2) '&' (c1 'imp' c2) '&' 'not'( a2 '&' c2)) '&' ((b1 'imp' b2) '&' (c1 'imp'
+c2) '&' 'not'( b2 '&' c2)) 'imp' ((a1 'imp' a2) '&' (b1 'imp' b2) '&' 'not'( a2
+  '&' b2)) =I_el(Y) by A1,BVFUNC_5:10;
+  then ((a1 'imp' a2) '&' (b1 'imp' b2) '&' 'not'( a2 '&' b2)) '&' ((a1 'imp'
+  a2) '&' (c1 'imp' c2) '&' 'not'( a2 '&' c2)) '&' ((b1 'imp' b2) '&' (c1 'imp'
+  c2) '&' 'not'( b2 '&' c2)) 'imp' 'not'( a1 '&' b1)=I_el(Y) by A4,BVFUNC_5:10;
+  then ((a1 'imp' a2) '&' (b1 'imp' b2) '&' 'not'( a2 '&' b2)) '&' ((a1 'imp'
+  a2) '&' (c1 'imp' c2) '&' 'not'( a2 '&' c2)) '&' ((b1 'imp' b2) '&' (c1 'imp'
+c2) '&' 'not'( b2 '&' c2)) 'imp' 'not'( a1 '&' b1) '&' 'not'( a1 '&' c1) =I_el(
+  Y) by A3,BVFUNC_6:18;
+  then
+A6: ((a1 'imp' a2) '&' (b1 'imp' b2) '&' 'not'( a2 '&' b2)) '&' ((a1 'imp'
+  a2) '&' (c1 'imp' c2) '&' 'not'( a2 '&' c2)) '&' ((b1 'imp' b2) '&' (c1 'imp'
+  c2) '&' 'not'( b2 '&' c2)) 'imp' 'not'( a1 '&' b1) '&' 'not'( a1 '&' c1) '&'
+  'not'( b1 '&' c1) =I_el(Y) by A5,BVFUNC_6:18;
+  (a1 'imp' a2) '&' (b1 'imp' b2) '&' (c1 'imp' c2) '&' 'not'( a2 '&' b2)
+  '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2) =(a1 'imp' a2) '&' (a1 'imp' a2)
+  '&' ((b1 'imp' b2) '&' (b1 'imp' b2)) '&' (c1 'imp' c2) '&' 'not'( a2 '&' b2)
+  '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2)
     .=(((a1 'imp' a2) '&' (a1 'imp' a2) '&' (b1 'imp' b2)) '&' (b1 'imp' b2)
-  '&' ((c1 'imp' c2) '&' (c1 'imp' c2))) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2) by BVFUNC_1:7
-    .=((((a1 'imp' a2) '&' (b1 'imp' b2)) '&' (a1 'imp' a2)) '&' (b1 'imp' b2)
-  '&' ((c1 'imp' c2) '&' (c1 'imp' c2))) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2) by BVFUNC_1:7
+'&' ((c1 'imp' c2) '&' (c1 'imp' c2))) '&' 'not'( a2 '&' b2) '&' 'not'( a2 '&'
+  c2) '&' 'not'( b2 '&' c2) by BVFUNC_1:7
+    .=((((a1 'imp' a2) '&' (b1 'imp' b2)) '&' (a1 'imp' a2)) '&' (b1 'imp'
+b2) '&' ((c1 'imp' c2) '&' (c1 'imp' c2))) '&' 'not'( a2 '&' b2) '&' 'not'( a2
+  '&' c2) '&' 'not'( b2 '&' c2) by BVFUNC_1:7
     .=(((a1 'imp' a2) '&' (b1 'imp' b2)) '&' (a1 'imp' a2) '&' (b1 'imp' b2)
-  '&' (c1 'imp' c2) '&' (c1 'imp' c2)) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2) by BVFUNC_1:7
-    .=(((a1 'imp' a2) '&' (b1 'imp' b2)) '&'
-  (a1 'imp' a2) '&' ((b1 'imp' b2) '&' (c1 'imp' c2)) '&' (c1 'imp' c2)) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2) by BVFUNC_1:7
-    .=(((a1 'imp' a2) '&' (b1 'imp' b2)) '&'
-  ((b1 'imp' b2) '&' (c1 'imp' c2)) '&' (a1 'imp' a2) '&' (c1 'imp' c2)) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2) by BVFUNC_1:7
-    .=((a1 'imp' a2) '&' (b1 'imp' b2)) '&'
-  ((b1 'imp' b2) '&' (c1 'imp' c2)) '&' ((a1 'imp' a2) '&' (c1 'imp' c2)) '&'
-  'not'( a2 '&' b2) '&' 'not'( a2 '&' c2) '&' 'not'( b2 '&' c2) by BVFUNC_1:7
-    .=((a1 'imp' a2) '&' (b1 'imp' b2)) '&'
-  ((b1 'imp' b2) '&' (c1 'imp' c2)) '&' ((a1 'imp' a2) '&' (c1 'imp' c2)) '&'
-  'not'( a2 '&' c2) '&' 'not'( a2 '&' b2) '&' 'not'( b2 '&' c2) by BVFUNC_1:7
-    .=((a1 'imp' a2) '&' (b1 'imp' b2)) '&'
-  ((b1 'imp' b2) '&' (c1 'imp' c2)) '&'
-  ((a1 'imp' a2) '&' (c1 'imp' c2) '&' 'not'( a2 '&' c2)) '&'
-  'not'( a2 '&' b2) '&' 'not'( b2 '&' c2) by BVFUNC_1:7
-    .=((a1 'imp' a2) '&' (b1 'imp' b2)) '&'
-  ((b1 'imp' b2) '&' (c1 'imp' c2)) '&'
-  'not'( a2 '&' b2) '&' ((a1 'imp' a2) '&' (c1 'imp' c2) '&' 'not'
-  (a2 '&' c2)) '&' 'not'( b2 '&' c2) by BVFUNC_1:7
-    .=((a1 'imp' a2) '&' (b1 'imp' b2)) '&'
-  'not'( a2 '&' b2) '&' ((b1 'imp' b2) '&' (c1 'imp' c2))
-  '&' ((a1 'imp' a2) '&' (c1 'imp' c2) '&' 'not'( a2 '&' c2)) '&'
-  'not'( b2 '&' c2) by BVFUNC_1:7
-    .=((a1 'imp' a2) '&' (b1 'imp' b2) '&' 'not'( a2 '&' b2)) '&'
-  ((b1 'imp' b2) '&' (c1 'imp' c2))
-  '&' 'not'( b2 '&' c2) '&' ((a1 'imp' a2) '&' (c1 'imp' c2) '&' 'not'
-  (a2 '&' c2)) by BVFUNC_1:7
-    .=((a1 'imp' a2) '&' (b1 'imp' b2) '&' 'not'( a2 '&' b2)) '&'
-  ((b1 'imp' b2) '&' (c1 'imp' c2) '&' 'not'( b2 '&' c2)) '&'
-  ((a1 'imp' a2) '&' (c1 'imp' c2) '&' 'not'( a2 '&' c2)) by BVFUNC_1:7
-    .=(((a1 'imp' a2) '&' (b1 'imp' b2) '&' 'not'( a2 '&' b2)) '&'
-  ((a1 'imp' a2) '&' (c1 'imp' c2) '&' 'not'( a2 '&' c2)) '&'
-  ((b1 'imp' b2) '&' (c1 'imp' c2) '&' 'not'( b2 '&' c2))) by BVFUNC_1:7;
-A2: ((a1 'imp' a2) '&' (b1 'imp' b2) '&' 'not'( a2 '&' b2)) '&'
-  ((a1 'imp' a2) '&' (c1 'imp' c2) '&' 'not'( a2 '&' c2)) '&'
-  ((b1 'imp' b2) '&' (c1 'imp' c2) '&' 'not'( b2 '&' c2)) 'imp'
-  ((a1 'imp' a2) '&' (b1 'imp' b2) '&' 'not'( a2 '&' b2)) '&'
-  ((a1 'imp' a2) '&' (c1 'imp' c2) '&' 'not'( a2 '&' c2)) =I_el(Y)
-  by BVFUNC_6:39;
-A3: ((a1 'imp' a2) '&' (b1 'imp' b2) '&' 'not'( a2 '&' b2)) '&'
-  ((a1 'imp' a2) '&' (c1 'imp' c2) '&' 'not'( a2 '&' c2)) 'imp'
-  ((a1 'imp' a2) '&' (b1 'imp' b2) '&' 'not'( a2 '&' b2)) =I_el(Y)
-  by BVFUNC_6:39;
-A4: ((a1 'imp' a2) '&' (b1 'imp' b2) '&' 'not'( a2 '&' b2)) '&'
-  ((a1 'imp' a2) '&' (c1 'imp' c2) '&' 'not'( a2 '&' c2)) 'imp'
-  ((a1 'imp' a2) '&' (c1 'imp' c2) '&' 'not'( a2 '&' c2)) =I_el(Y)
-  by BVFUNC_6:39;
-A5: ((a1 'imp' a2) '&' (b1 'imp' b2) '&' 'not'( a2 '&' b2)) '&'
-  ((a1 'imp' a2) '&' (c1 'imp' c2) '&' 'not'( a2 '&' c2)) '&'
-  ((b1 'imp' b2) '&' (c1 'imp' c2) '&' 'not'( b2 '&' c2)) 'imp'
-  ((a1 'imp' a2) '&' (b1 'imp' b2) '&' 'not'( a2 '&' b2)) =I_el(Y)
-  by A2,A3,BVFUNC_5:10;
-A6: ((a1 'imp' a2) '&' (b1 'imp' b2) '&' 'not'( a2 '&' b2)) '&'
-  ((a1 'imp' a2) '&' (c1 'imp' c2) '&' 'not'( a2 '&' c2)) '&'
-  ((b1 'imp' b2) '&' (c1 'imp' c2) '&' 'not'( b2 '&' c2)) 'imp'
-  ((a1 'imp' a2) '&' (c1 'imp' c2) '&' 'not'( a2 '&' c2)) =I_el(Y)
-  by A2,A4,BVFUNC_5:10;
-A7: ((a1 'imp' a2) '&' (b1 'imp' b2) '&' 'not'( a2 '&' b2)) '&'
-  ((a1 'imp' a2) '&' (c1 'imp' c2) '&' 'not'( a2 '&' c2)) '&'
-  ((b1 'imp' b2) '&' (c1 'imp' c2) '&' 'not'( b2 '&' c2)) 'imp'
-  ((b1 'imp' b2) '&' (c1 'imp' c2) '&' 'not'( b2 '&' c2)) =I_el(Y)
-  by BVFUNC_6:39;
-A8: ((a1 'imp' a2) '&' (b1 'imp' b2) '&' 'not'( a2 '&' b2)) 'imp'
-  'not'( a1 '&' b1)=I_el(Y) by Th26;
-A9: ((a1 'imp' a2) '&' (c1 'imp' c2) '&' 'not'( a2 '&' c2)) 'imp'
-  'not'( a1 '&' c1)=I_el(Y) by Th26;
-A10: ((b1 'imp' b2) '&' (c1 'imp' c2) '&' 'not'( b2 '&' c2)) 'imp'
-  'not'( b1 '&' c1)=I_el(Y) by Th26;
-A11: ((a1 'imp' a2) '&' (b1 'imp' b2) '&' 'not'( a2 '&' b2)) '&'
-  ((a1 'imp' a2) '&' (c1 'imp' c2) '&' 'not'( a2 '&' c2)) '&'
-  ((b1 'imp' b2) '&' (c1 'imp' c2) '&' 'not'( b2 '&' c2)) 'imp'
-  'not'( a1 '&' b1)=I_el(Y) by A5,A8,BVFUNC_5:10;
-A12: ((a1 'imp' a2) '&' (b1 'imp' b2) '&' 'not'( a2 '&' b2)) '&'
-  ((a1 'imp' a2) '&' (c1 'imp' c2) '&' 'not'( a2 '&' c2)) '&'
-  ((b1 'imp' b2) '&' (c1 'imp' c2) '&' 'not'( b2 '&' c2)) 'imp'
-  'not'( a1 '&' c1)=I_el(Y) by A6,A9,BVFUNC_5:10;
-A13: ((a1 'imp' a2) '&' (b1 'imp' b2) '&' 'not'( a2 '&' b2)) '&'
-  ((a1 'imp' a2) '&' (c1 'imp' c2) '&' 'not'( a2 '&' c2)) '&'
-  ((b1 'imp' b2) '&' (c1 'imp' c2) '&' 'not'( b2 '&' c2)) 'imp'
-  'not'( b1 '&' c1)=I_el(Y) by A7,A10,BVFUNC_5:10;
-  ((a1 'imp' a2) '&' (b1 'imp' b2) '&' 'not'( a2 '&' b2)) '&'
-  ((a1 'imp' a2) '&' (c1 'imp' c2) '&' 'not'( a2 '&' c2)) '&'
-  ((b1 'imp' b2) '&' (c1 'imp' c2) '&' 'not'( b2 '&' c2)) 'imp'
-  'not'( a1 '&' b1) '&' 'not'( a1 '&' c1) =I_el(Y) by A11,A12,BVFUNC_6:18;
-  then ((a1 'imp' a2) '&' (b1 'imp' b2) '&' 'not'( a2 '&' b2)) '&'
-  ((a1 'imp' a2) '&' (c1 'imp' c2) '&' 'not'( a2 '&' c2)) '&'
-  ((b1 'imp' b2) '&' (c1 'imp' c2) '&' 'not'( b2 '&' c2)) 'imp'
-  'not'( a1 '&' b1) '&' 'not'( a1 '&' c1) '&' 'not'( b1 '&' c1) =I_el(Y)
-  by A13,BVFUNC_6:18;
-  hence thesis by A1,BVFUNC_1:19;
+'&' (c1 'imp' c2) '&' (c1 'imp' c2)) '&' 'not'( a2 '&' b2) '&' 'not'( a2 '&' c2
+  ) '&' 'not'( b2 '&' c2) by BVFUNC_1:7
+    .=(((a1 'imp' a2) '&' (b1 'imp' b2)) '&' (a1 'imp' a2) '&' ((b1 'imp' b2
+) '&' (c1 'imp' c2)) '&' (c1 'imp' c2)) '&' 'not'( a2 '&' b2) '&' 'not'( a2 '&'
+  c2) '&' 'not'( b2 '&' c2) by BVFUNC_1:7
+    .=(((a1 'imp' a2) '&' (b1 'imp' b2)) '&' ((b1 'imp' b2) '&' (c1 'imp' c2
+)) '&' (a1 'imp' a2) '&' (c1 'imp' c2)) '&' 'not'( a2 '&' b2) '&' 'not'( a2 '&'
+  c2) '&' 'not'( b2 '&' c2) by BVFUNC_1:7
+    .=((a1 'imp' a2) '&' (b1 'imp' b2)) '&' ((b1 'imp' b2) '&' (c1 'imp' c2)
+) '&' ((a1 'imp' a2) '&' (c1 'imp' c2)) '&' 'not'( a2 '&' b2) '&' 'not'( a2 '&'
+  c2) '&' 'not'( b2 '&' c2) by BVFUNC_1:7
+    .=((a1 'imp' a2) '&' (b1 'imp' b2)) '&' ((b1 'imp' b2) '&' (c1 'imp' c2)
+) '&' ((a1 'imp' a2) '&' (c1 'imp' c2)) '&' 'not'( a2 '&' c2) '&' 'not'( a2 '&'
+  b2) '&' 'not'( b2 '&' c2) by BVFUNC_1:7
+    .=((a1 'imp' a2) '&' (b1 'imp' b2)) '&' ((b1 'imp' b2) '&' (c1 'imp' c2)
+) '&' ((a1 'imp' a2) '&' (c1 'imp' c2) '&' 'not'( a2 '&' c2)) '&' 'not'( a2 '&'
+  b2) '&' 'not'( b2 '&' c2) by BVFUNC_1:7
+    .=((a1 'imp' a2) '&' (b1 'imp' b2)) '&' ((b1 'imp' b2) '&' (c1 'imp' c2)
+) '&' 'not'( a2 '&' b2) '&' ((a1 'imp' a2) '&' (c1 'imp' c2) '&' 'not' (a2 '&'
+  c2)) '&' 'not'( b2 '&' c2) by BVFUNC_1:7
+    .=((a1 'imp' a2) '&' (b1 'imp' b2)) '&' 'not'( a2 '&' b2) '&' ((b1 'imp'
+  b2) '&' (c1 'imp' c2)) '&' ((a1 'imp' a2) '&' (c1 'imp' c2) '&' 'not'( a2 '&'
+  c2)) '&' 'not'( b2 '&' c2) by BVFUNC_1:7
+    .=((a1 'imp' a2) '&' (b1 'imp' b2) '&' 'not'( a2 '&' b2)) '&' ((b1 'imp'
+  b2) '&' (c1 'imp' c2)) '&' 'not'( b2 '&' c2) '&' ((a1 'imp' a2) '&' (c1 'imp'
+  c2) '&' 'not' (a2 '&' c2)) by BVFUNC_1:7
+    .=((a1 'imp' a2) '&' (b1 'imp' b2) '&' 'not'( a2 '&' b2)) '&' ((b1 'imp'
+  b2) '&' (c1 'imp' c2) '&' 'not'( b2 '&' c2)) '&' ((a1 'imp' a2) '&' (c1 'imp'
+  c2) '&' 'not'( a2 '&' c2)) by BVFUNC_1:7
+    .=(((a1 'imp' a2) '&' (b1 'imp' b2) '&' 'not'( a2 '&' b2)) '&' ((a1
+  'imp' a2) '&' (c1 'imp' c2) '&' 'not'( a2 '&' c2)) '&' ((b1 'imp' b2) '&' (c1
+  'imp' c2) '&' 'not'( b2 '&' c2))) by BVFUNC_1:7;
+  hence thesis by A6,BVFUNC_1:19;
 end;
 
 theorem
@@ -1192,20 +1212,22 @@ theorem
   a '&' b '&' c '&' d '<' a & a '&' b '&' c '&' d '<' b by Lm3;
 
 theorem
-  a '&' b '&' c '&' d '&' e '<' a & a '&' b '&' c '&' d '&' e '<' b by Lm4;
+  a '&' b '&' c '&' d '&' e '<' a & a '&' b '&' c '&' d '&' e '<' b by
+  Lm4;
 
 theorem
-  a '&' b '&' c '&' d '&' e '&' f '<' a &
-  a '&' b '&' c '&' d '&' e '&' f '<' b by Lm5;
+  a '&' b '&' c '&' d '&' e '&' f '<' a & a '&' b '&' c '&' d '&' e '&'
+  f '<' b by Lm5;
 
 theorem
-  a '&' b '&' c '&' d '&' e '&' f '&' g '<' a &
-  a '&' b '&' c '&' d '&' e '&' f '&' g '<' b by Lm6;
+  a '&' b '&' c '&' d '&' e '&' f '&' g '<' a & a '&' b '&' c '&' d '&'
+  e '&' f '&' g '<' b by Lm6;
 
 theorem Th34:
   a '<' b & c '<' d implies a '&' c '<' b '&' d
 proof
-  assume a '<' b & c '<' d;
+  assume
+  a '<' b & c '<' d;
   then a 'imp' b = I_el Y & c 'imp' d = I_el Y by BVFUNC_1:19;
   then (a '&' c) 'imp' (b '&' d) = I_el Y by BVFUNC_6:21;
   hence thesis by BVFUNC_1:19;
@@ -1214,7 +1236,8 @@ end;
 theorem
   a '&' b '<' c implies a '&' 'not' c '<' 'not' b
 proof
-  assume a '&' b '<' c;
+  assume
+  a '&' b '<' c;
   then I_el Y = a '&' b 'imp' c by BVFUNC_1:19
     .= 'not' (a '&' b) 'or' c by BVFUNC_4:8
     .= 'not' a 'or' 'not' b 'or' c by BVFUNC_1:17
@@ -1245,7 +1268,8 @@ end;
 theorem
   a '<' b & c '<' d implies a 'or' c '<' b 'or' d
 proof
-  assume a '<' b & c '<' d;
+  assume
+  a '<' b & c '<' d;
   then a 'imp' b = I_el(Y) & c 'imp' d = I_el(Y) by BVFUNC_1:19;
   then (a 'or' c) 'imp' (b 'or' d) = I_el(Y) by BVFUNC_6:22;
   hence thesis by BVFUNC_1:19;
@@ -1261,8 +1285,7 @@ end;
 theorem
   a '&' b '<' a 'or' b
 proof
-A1: a '&' b '<' a by Lm1;
-  a '<' a 'or' b by Th39;
-  hence thesis by A1,BVFUNC_1:18;
+  a '&' b '<' a & a '<' a 'or' b by Lm1,Th39;
+  hence thesis by BVFUNC_1:18;
 end;
 

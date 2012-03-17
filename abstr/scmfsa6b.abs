@@ -15,9 +15,9 @@ environ
       SCMFSA6A, SF_MASTR;
  constructors DOMAIN_1, XXREAL_0, NAT_1, PARTFUN1, SCMFSA_5, SCMFSA6A,
       SF_MASTR, SCMNORM, SCMFSA_4, RELSET_1;
- registrations SETFAM_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1, FRAENKEL,
-      NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, CARD_3, SCMFSA_2, SCMFSA6A,
-      SF_MASTR, XBOOLE_0, SCMNORM, AMI_1, FINSEQ_1, FINSET_1;
+ registrations SETFAM_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1, NUMBERS,
+      XXREAL_0, XREAL_0, NAT_1, INT_1, CARD_3, SCMFSA_2, SCMFSA6A, SF_MASTR,
+      XBOOLE_0, SCMNORM, FINSET_1, VALUED_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
 
 
@@ -26,10 +26,12 @@ begin
 reserve m, n for Element of NAT,
   x for set,
   i for Instruction of SCM+FSA,
-  I for Program of SCM+FSA,
+  I
+  for Program of SCM+FSA,
   a for Int-Location,
   f for FinSeq-Location,
-  l, l1 for Instruction-Location of SCM+FSA,
+  l, l1 for
+  Instruction-Location of SCM+FSA,
   s,s1,s2 for State of SCM+FSA;
 
 canceled 3;
@@ -89,8 +91,9 @@ definition
   attr I is paraclosed means
 :: SCMFSA6B:def 2
 
-  for s being State of SCM+FSA, n being Element of NAT
-  st I +* Start-At insloc 0 c= s holds IC  Computation(s,n) in dom I;
+  for s being State of SCM+FSA, n being
+Element of NAT st I +* Start-At insloc 0 c= s holds IC Computation(s,n) in dom
+  I;
   attr I is parahalting means
 :: SCMFSA6B:def 3
 
@@ -98,8 +101,9 @@ definition
   attr I is keeping_0 means
 :: SCMFSA6B:def 4
 
-  for s being State of SCM+FSA st I +* Start-At insloc 0 c= s
-  for k being Element of NAT holds  Computation(s,k).intloc 0 = s.intloc 0;
+  for s being State of SCM+FSA st I +*
+Start-At insloc 0 c= s for k being Element of NAT holds Computation(s,k).intloc
+  0 = s.intloc 0;
 end;
 
 registration
@@ -109,12 +113,12 @@ end;
 canceled 3;
 
 theorem :: SCMFSA6B:18
-  for I being parahalting Program of SCM+FSA
-  st I +* Start-At insloc 0 c= s holds s is halting;
+  for I being parahalting Program of SCM+FSA st I +* Start-At
+  insloc 0 c= s holds s is halting;
 
 theorem :: SCMFSA6B:19
-  for I being parahalting Program of SCM+FSA
-  st Initialized I c= s holds s is halting;
+  for I being parahalting Program of SCM+FSA st Initialized I c= s
+  holds s is halting;
 
 registration
   let I be parahalting Program of SCM+FSA;
@@ -125,10 +129,9 @@ theorem :: SCMFSA6B:20
   s2 +*(IC s2, goto IC s2) is not halting;
 
 theorem :: SCMFSA6B:21
-  s1,s2 equal_outside NAT & I c= s1 & I c= s2 &
-  (for m st m < n holds IC Computation(s2,m) in dom I) implies
-  for m st m <= n holds  Computation(s1,m),  Computation(s2,m) equal_outside
-  NAT;
+  s1,s2 equal_outside NAT & I c= s1 & I c= s2 & (for m st m < n
+holds IC Computation(s2,m) in dom I) implies for m st m <= n holds Computation(
+  s1,m), Computation(s2,m) equal_outside NAT;
 
 registration
   cluster parahalting -> paraclosed Program of SCM+FSA;
@@ -136,12 +139,12 @@ registration
 end;
 
 theorem :: SCMFSA6B:22
-  for I being parahalting Program of SCM+FSA, a being read-write Int-Location
-  holds not a in UsedIntLoc I implies (IExec(I, s)).a = s.a;
+  for I being parahalting Program of SCM+FSA, a being read-write
+  Int-Location holds not a in UsedIntLoc I implies (IExec(I, s)).a = s.a;
 
 theorem :: SCMFSA6B:23
-  for I being parahalting Program of SCM+FSA
-  holds not f in UsedInt*Loc I implies (IExec(I, s)).f = s.f;
+  for I being parahalting Program of SCM+FSA holds not f in UsedInt*Loc
+  I implies (IExec(I, s)).f = s.f;
 
 theorem :: SCMFSA6B:24
   IC s = l & s.l = goto l implies s is not halting;
@@ -154,47 +157,43 @@ theorem :: SCMFSA6B:25
   for I being parahalting Program of SCM+FSA holds dom I <> {};
 
 theorem :: SCMFSA6B:26
-  for I being parahalting Program of SCM+FSA holds insloc 0 in dom I;
+  for I being parahalting Program of SCM+FSA holds insloc 0 in dom
+  I;
 
 theorem :: SCMFSA6B:27
-  for J being parahalting Program of SCM+FSA st J +* Start-At insloc 0 c= s1
-  for n being Element of NAT st ProgramPart Relocated(J,n) c= s2 &
-  IC s2 = insloc n & DataPart s1 = DataPart s2
-   for i being Element of NAT holds
-  IC  Computation(s1,i) + n = IC  Computation(s2,i) &
-  IncAddr(CurInstr ( Computation(s1,i)),n) = CurInstr ( Computation(s2,i)) &
-   DataPart Computation(s1,i) = DataPart Computation(s2,i);
+  for J being parahalting Program of SCM+FSA st J +* Start-At
+insloc 0 c= s1 for n being Element of NAT st ProgramPart Relocated(J,n) c= s2 &
+  IC s2 = insloc n & DataPart s1 = DataPart s2 for i being Element of NAT holds
+  IC Computation(s1,i) + n = IC Computation(s2,i) & IncAddr(CurInstr (
+Computation(s1,i)),n) = CurInstr ( Computation(s2,i)) & DataPart Computation(s1
+  ,i) = DataPart Computation(s2,i);
 
 theorem :: SCMFSA6B:28
-  for I being parahalting Program of SCM+FSA st
-  I +* Start-At insloc 0 c= s1 & I +* Start-At insloc 0 c= s2 &
-  s1,s2 equal_outside NAT holds for k being Element of NAT holds
-   Computation(s1,k),  Computation(s2,k) equal_outside NAT &
-  CurInstr  Computation(s1,k) = CurInstr  Computation(s2,k);
+  for I being parahalting Program of SCM+FSA st I +* Start-At
+  insloc 0 c= s1 & I +* Start-At insloc 0 c= s2 & s1,s2 equal_outside NAT holds
+  for k being Element of NAT holds Computation(s1,k), Computation(s2,k)
+  equal_outside NAT & CurInstr Computation(s1,k) = CurInstr Computation(s2,k);
 
 theorem :: SCMFSA6B:29
-  for I being parahalting Program of SCM+FSA st
-  I +* Start-At insloc 0 c= s1 & I +* Start-At insloc 0 c= s2 &
-  s1,s2 equal_outside NAT holds LifeSpan s1 = LifeSpan s2 &
-  Result s1, Result s2 equal_outside NAT;
+  for I being parahalting Program of SCM+FSA st I +* Start-At
+  insloc 0 c= s1 & I +* Start-At insloc 0 c= s2 & s1,s2 equal_outside NAT holds
+  LifeSpan s1 = LifeSpan s2 & Result s1, Result s2 equal_outside NAT;
 
 theorem :: SCMFSA6B:30
-  for I being parahalting Program of SCM+FSA
-  holds IC IExec(I,s) = IC Result (s +* Initialized I);
+  for I being parahalting Program of SCM+FSA holds IC IExec(I,s) =
+  IC Result (s +* Initialized I);
 
 theorem :: SCMFSA6B:31
-  for I being non empty Program of SCM+FSA
-  holds insloc 0 in dom I & insloc 0 in dom Initialized I &
-  insloc 0 in dom (I +* Start-At insloc 0);
+  for I being non empty Program of SCM+FSA holds insloc 0 in dom I
+  & insloc 0 in dom Initialized I & insloc 0 in dom (I +* Start-At insloc 0);
 
 theorem :: SCMFSA6B:32
   x in dom Macro i iff x = insloc 0 or x = insloc 1;
 
 theorem :: SCMFSA6B:33
   (Macro i).(insloc 0) = i & (Macro i).(insloc 1) = halt SCM+FSA &
-  (Initialized Macro i).insloc 0 = i &
-  (Initialized Macro i).insloc 1 = halt SCM+FSA &
-  ((Macro i) +* Start-At insloc 0).insloc 0 = i;
+  (Initialized Macro i).insloc 0 = i & (Initialized Macro i).insloc 1 = halt
+  SCM+FSA & ((Macro i) +* Start-At insloc 0).insloc 0 = i;
 
 theorem :: SCMFSA6B:34
   Initialized I c= s implies IC s = insloc 0;
@@ -204,39 +203,37 @@ registration
 end;
 
 theorem :: SCMFSA6B:35
-  for I being keeping_0 parahalting Program of SCM+FSA
-  holds IExec(I, s).intloc 0 = 1;
+  for I being keeping_0 parahalting Program of SCM+FSA holds IExec(I, s)
+  .intloc 0 = 1;
 
 begin :: The composition of macroinstructions
 
 theorem :: SCMFSA6B:36
-  for I being paraclosed Program of SCM+FSA, J being Program of SCM+FSA
-  st I +* Start-At insloc 0 c= s & s is halting for m st m <= LifeSpan s
-  holds  Computation(s,m), Computation(s+*(I ';' J),m) equal_outside NAT;
+  for I being paraclosed Program of SCM+FSA, J being Program of
+SCM+FSA st I +* Start-At insloc 0 c= s & s is halting for m st m <= LifeSpan s
+  holds Computation(s,m), Computation(s+*(I ';' J),m) equal_outside NAT;
 
 theorem :: SCMFSA6B:37
-  for I being paraclosed Program of SCM+FSA
-  st s +*I is halting & Directed I c= s & Start-At insloc 0 c= s holds
-  IC Computation(s,LifeSpan (s +*I) + 1) = insloc card I;
+  for I being paraclosed Program of SCM+FSA st s +*I is halting &
+Directed I c= s & Start-At insloc 0 c= s holds IC Computation(s,LifeSpan (s +*I
+  ) + 1) = insloc card I;
 
 theorem :: SCMFSA6B:38
-  for I being paraclosed Program of SCM+FSA
-  st s +*I is halting & Directed I c= s & Start-At insloc 0 c= s holds
-  DataPart Computation(s,LifeSpan(s+*I)) =
-  DataPart Computation(s,LifeSpan (s +*I) + 1);
+  for I being paraclosed Program of SCM+FSA st s +*I is halting &
+Directed I c= s & Start-At insloc 0 c= s holds DataPart Computation(s,LifeSpan(
+  s+*I)) = DataPart Computation(s,LifeSpan (s +*I) + 1);
 
 theorem :: SCMFSA6B:39
-  for I being parahalting Program of SCM+FSA st Initialized I c= s holds
-  for k being Element of NAT st k <= LifeSpan s holds
-  CurInstr Computation(s +* Directed I,k) <> halt SCM+FSA;
+  for I being parahalting Program of SCM+FSA st Initialized I c= s
+holds for k being Element of NAT st k <= LifeSpan s holds CurInstr Computation(
+  s +* Directed I,k) <> halt SCM+FSA;
 
 theorem :: SCMFSA6B:40
-  for I being paraclosed Program of SCM+FSA
-  st s +* (I +* Start-At insloc 0) is halting
-  for J being Program of SCM+FSA, k being Element of NAT
-  st k <= LifeSpan (s +* (I +* Start-At insloc 0))
-  holds Computation(s +* (I +* Start-At insloc 0),k),
-  Computation(s +* ((I ';' J) +* Start-At insloc 0),k) equal_outside NAT;
+  for I being paraclosed Program of SCM+FSA st s +* (I +* Start-At
+insloc 0) is halting for J being Program of SCM+FSA, k being Element of NAT st
+  k <= LifeSpan (s +* (I +* Start-At insloc 0)) holds Computation(s +* (I +*
+  Start-At insloc 0),k), Computation(s +* ((I ';' J) +* Start-At insloc 0),k)
+  equal_outside NAT;
 
 registration
   let I, J be parahalting Program of SCM+FSA;
@@ -244,20 +241,18 @@ registration
 end;
 
 theorem :: SCMFSA6B:41
-  for I being keeping_0 Program of SCM+FSA
-  st not s +* (I +* Start-At insloc 0) is halting
-  for J being Program of SCM+FSA, k being Element of NAT
-  holds Computation(s +* (I +* Start-At insloc 0),k),
-  Computation(s +* ((I ';' J) +* Start-At insloc 0),k) equal_outside NAT;
+  for I being keeping_0 Program of SCM+FSA st not s +* (I +*
+  Start-At insloc 0) is halting for J being Program of SCM+FSA, k being Element
+of NAT holds Computation(s +* (I +* Start-At insloc 0),k), Computation(s +* ((I
+  ';' J) +* Start-At insloc 0),k) equal_outside NAT;
 
 theorem :: SCMFSA6B:42
   for I being keeping_0 Program of SCM+FSA st s +* I is halting
-  for J being paraclosed Program of SCM+FSA
-  st (I ';' J) +* Start-At insloc 0 c= s for k being Element of NAT
-  holds Computation (Result(s +*I) +* (J +* Start-At insloc 0),k)
-  +* Start-At (IC (Computation ((Result(s +*I))
-  +* (J +* Start-At insloc 0),k)) + card I), Computation (s +* (I ';' J),
-  (LifeSpan (s +* I)+1+k)) equal_outside NAT;
+for J being paraclosed Program of SCM+FSA st (I ';' J) +* Start-At insloc 0 c=
+s for k being Element of NAT holds Computation (Result(s +*I) +* (J +* Start-At
+  insloc 0),k) +* Start-At (IC (Computation ((Result(s +*I)) +* (J +* Start-At
+insloc 0),k)) + card I), Computation (s +* (I ';' J), (LifeSpan (s +* I)+1+k))
+  equal_outside NAT;
 
 registration
   let I, J be keeping_0 Program of SCM+FSA;
@@ -265,13 +260,13 @@ registration
 end;
 
 theorem :: SCMFSA6B:43
-  for I being keeping_0 parahalting Program of SCM+FSA,
-  J being parahalting Program of SCM+FSA holds
-  LifeSpan (s +* Initialized (I ';' J)) = LifeSpan (s +* Initialized I) + 1
-  + LifeSpan (Result (s +* Initialized I) +* Initialized J);
+  for I being keeping_0 parahalting Program of SCM+FSA, J being
+  parahalting Program of SCM+FSA holds LifeSpan (s +* Initialized (I ';' J)) =
+  LifeSpan (s +* Initialized I) + 1 + LifeSpan (Result (s +* Initialized I) +*
+  Initialized J);
 
 theorem :: SCMFSA6B:44
-  for I being keeping_0 parahalting Program of SCM+FSA,
-  J being parahalting Program of SCM+FSA holds IExec(I ';' J,s) =
-  IExec(J,IExec(I,s)) +* Start-At (IC IExec(J,IExec(I,s)) + card I);
+  for I being keeping_0 parahalting Program of SCM+FSA, J being
+parahalting Program of SCM+FSA holds IExec(I ';' J,s) = IExec(J,IExec(I,s)) +*
+  Start-At (IC IExec(J,IExec(I,s)) + card I);
 

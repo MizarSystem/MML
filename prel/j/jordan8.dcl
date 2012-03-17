@@ -7,6 +7,7 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="TARSKI"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
@@ -24,11 +25,11 @@
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="COMPTS_1"/>
 <ArticleID name="MEMBERED"/>
+<ArticleID name="RAT_1"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
 <ArticleID name="ALGSTR_0"/>
-<ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="VALUED_1"/>
 <ArticleID name="RLVECT_1"/>
@@ -47,7 +48,7 @@
 </Cluster>
 <Func kind="K" nr="21">
 <Func kind="U" nr="1">
-<Func kind="K" nr="267">
+<Func kind="K" nr="276">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -55,19 +56,19 @@
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="19"/>
+<Adjective nr="20"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="290">
+<Func kind="K" nr="299">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="3" value="false"/>
-<Adjective nr="148"/>
-<Adjective nr="154"/>
+<Adjective nr="149"/>
 <Adjective nr="155"/>
+<Adjective nr="156"/>
 </Cluster>
 </FCluster>
 <FCluster aid="JORDAN8" nr="2">
@@ -75,17 +76,17 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="10" value="false"/>
-<Adjective nr="61">
-<Func kind="K" nr="267">
+<Adjective nr="62">
+<Func kind="K" nr="276">
 <Num nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="150" value="false"/>
 <Adjective nr="151" value="false"/>
+<Adjective nr="152" value="false"/>
 </Cluster>
 <Func kind="K" nr="21">
 <Func kind="U" nr="1">
-<Func kind="K" nr="267">
+<Func kind="K" nr="276">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -93,18 +94,18 @@
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="19"/>
+<Adjective nr="20"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="290">
+<Func kind="K" nr="299">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="148"/>
-<Adjective nr="156"/>
+<Adjective nr="149"/>
 <Adjective nr="157"/>
+<Adjective nr="158"/>
 </Cluster>
 </FCluster>
 </Registrations>

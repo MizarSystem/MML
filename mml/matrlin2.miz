@@ -18,13 +18,12 @@ environ
       FINSEQ_1, BINOP_1, STRUCT_0, RLVECT_1, GROUP_1, VECTSP_1, FINSEQ_2,
       MATRIX_1, FVSUM_1, MATRIX_3, MATRIX_6, DOMAIN_1, VECTSP_4, VECTSP_6,
       VECTSP_7, VECTSP_9, FINSEQOP, MATRIX13, MATRLIN, MATRIX15, RFINSEQ,
-      WSIERP_1, MOD_2, VECTSP_5, RANKNULL, VECTSP10, MATRIXJ1;
+      WSIERP_1, MOD_2, VECTSP_5, RANKNULL, MATRIXJ1;
  constructors FVSUM_1, VECTSP_9, MATRIX_6, LAPLACE, MATRIX15, RANKNULL,
       VECTSP10, WSIERP_1, MATRIXJ1, XXREAL_0, REALSET1, BINARITH, RELSET_1;
  registrations XBOOLE_0, FUNCT_1, FINSET_1, STRUCT_0, VECTSP_1, FUNCT_2,
       ORDINAL1, XXREAL_0, NAT_1, FINSEQ_1, RELAT_1, FINSEQ_2, MATRLIN,
-      MATRIX13, XREAL_0, VECTSP_7, VECTSP_9, FRAENKEL, VECTSP10, MATRIXJ1,
-      CARD_1;
+      MATRIX13, XREAL_0, VECTSP_9, CARD_1, RELSET_1;
  requirements ARITHM, NUMERALS, REAL, BOOLE, SUBSET;
  definitions STRUCT_0, TARSKI, RLVECT_1, FINSEQ_1, VECTSP_4, FVSUM_1, VECTSP_1,
       MATRIX_1, MATRIX13, MATRLIN, MATRIX15, FUNCT_1, VECTSP_7, RANKNULL,
@@ -40,397 +39,460 @@ environ
 
 begin :: Preliminaries
 
- reserve i, j, m, n, k for Nat,
-         x, y for set,
-         K for Field,
-         a,a1,a2 for Element of K;
+reserve i, j, m, n, k for Nat,
+  x, y for set,
+  K for Field,
+  a,a1,a2 for Element
+  of K;
 
 theorem Th1:
-  for V be VectSp of K
-    for W1,W2,W12 be Subspace of V
-      for U1,U2 be Subspace of W12 st U1 = W1 & U2 = W2
-    holds
-      W1 /\ W2 = U1 /\ U2 & W1 + W2 = U1 + U2
+  for V be VectSp of K for W1,W2,W12 be Subspace of V for U1,U2 be
+Subspace of W12 st U1 = W1 & U2 = W2 holds W1 /\ W2 = U1 /\ U2 & W1 + W2 = U1 +
+  U2
 proof
   let V be VectSp of K;
   let W1,W2,W12 be Subspace of V;
   let U1,U2 be Subspace of W12 such that
-A1:  U1 = W1 & U2 = W2;
+A1: U1 = W1 and
+A2: U2 = W2;
   reconsider U12=U1/\U2 as Subspace of V by VECTSP_4:34;
-A2:  the carrier of (W1/\W2) c= the carrier of U12
-    proof
-      let x such that
-A3:      x in the carrier of (W1/\W2);
-      x in W1/\W2 by A3,STRUCT_0:def 5;
-      then x in W1 & x in W2 by VECTSP_5:7;
-      then x in U12 by A1,VECTSP_5:7;
-      hence thesis by STRUCT_0:def 5;
-    end;
-  the carrier of U12 c= the carrier of (W1/\W2)
-    proof
-      let x such that
-A4:      x in the carrier of U12;
-      x in U1/\U2 by A4,STRUCT_0:def 5;
-      then x in U1 & x in U2 by VECTSP_5:7;
-      then x in (W1/\W2) by A1,VECTSP_5:7;
-      hence thesis by STRUCT_0:def 5;
-    end;
-  then  the carrier of (W1/\W2)=the carrier of U12 by A2,XBOOLE_0:def 10;
+A3: the carrier of U12 c= the carrier of (W1/\W2)
+  proof
+    let x;
+    assume
+    x in the carrier of U12;
+    then x in U1/\U2 by STRUCT_0:def 5;
+    then x in U1 & x in U2 by VECTSP_5:7;
+    then x in (W1/\W2) by A1,A2,VECTSP_5:7;
+    hence thesis by STRUCT_0:def 5;
+  end;
+  the carrier of (W1/\W2) c= the carrier of U12
+  proof
+    let x;
+    assume
+    x in the carrier of (W1/\W2);
+    then x in W1/\W2 by STRUCT_0:def 5;
+    then x in W1 & x in W2 by VECTSP_5:7;
+    then x in U12 by A1,A2,VECTSP_5:7;
+    hence thesis by STRUCT_0:def 5;
+  end;
+  then the carrier of (W1/\W2)=the carrier of U12 by A3,XBOOLE_0:def 10;
   hence W1/\W2=U1/\U2 by VECTSP_4:37;
   reconsider U12=U1+U2 as Subspace of V by VECTSP_4:34;
-A5:  the carrier of (W1+W2) c= the carrier of U12
-    proof
-      let x such that
-A6:     x in the carrier of (W1+W2);
-      x in W1+W2 by A6,STRUCT_0:def 5;
-      then consider v1,v2 be Vector of V such that
-A7:     v1 in W1 & v2 in W2 & v1+v2=x by VECTSP_5:5;
-   U1 is Subspace of U12 & U2 is Subspace of U12 by VECTSP_5:11;
-      then v1 in U12 & v2 in U12 by A1,A7,VECTSP_4:16;
-      then reconsider w1=v1,w2=v2 as Vector of U12 by STRUCT_0:def 5;
-      v1+v2=w1+w2 by VECTSP_4:21;
-      hence thesis by A7;
-    end;
+A4: the carrier of (W1+W2) c= the carrier of U12
+  proof
+    let x;
+    assume
+    x in the carrier of (W1+W2);
+    then x in W1+W2 by STRUCT_0:def 5;
+    then consider v1,v2 be Vector of V such that
+A5: v1 in W1 and
+A6: v2 in W2 and
+A7: v1+v2=x by VECTSP_5:5;
+    U2 is Subspace of U12 by VECTSP_5:11;
+    then
+A8: v2 in U12 by A2,A6,VECTSP_4:16;
+    U1 is Subspace of U12 by VECTSP_5:11;
+    then v1 in U12 by A1,A5,VECTSP_4:16;
+    then reconsider w1=v1,w2=v2 as Vector of U12 by A8,STRUCT_0:def 5;
+    v1+v2=w1+w2 by VECTSP_4:21;
+    hence thesis by A7;
+  end;
   the carrier of U12 c= the carrier of (W1+W2)
-    proof
-      let x such that
-A8:     x in the carrier of U12;
-      x in U1+U2 by A8,STRUCT_0:def 5;
-      then consider v1,v2 be Vector of W12 such that
-A9:    v1 in U1 & v2 in U2 & v1+v2=x by VECTSP_5:5;
-      reconsider w1=v1,w2=v2 as Vector of V by VECTSP_4:18;
-      v1+v2=w1+w2 by VECTSP_4:21;
-      then x in W1+W2 by A1,A9,VECTSP_5:5;
-      hence thesis by STRUCT_0:def 5;
-    end;
-  then  the carrier of (W1+W2)=the carrier of U12 by A5,XBOOLE_0:def 10;
+  proof
+    let x;
+    assume
+    x in the carrier of U12;
+    then x in U1+U2 by STRUCT_0:def 5;
+    then consider v1,v2 be Vector of W12 such that
+A9: v1 in U1 & v2 in U2 & v1+v2=x by VECTSP_5:5;
+    reconsider w1=v1,w2=v2 as Vector of V by VECTSP_4:18;
+    v1+v2=w1+w2 by VECTSP_4:21;
+    then x in W1+W2 by A1,A2,A9,VECTSP_5:5;
+    hence thesis by STRUCT_0:def 5;
+  end;
+  then the carrier of (W1+W2)=the carrier of U12 by A4,XBOOLE_0:def 10;
   hence thesis by VECTSP_4:37;
 end;
 
 theorem Th2:
-  for V be VectSp of K
-    for W1,W2 be Subspace of V st W1/\W2=(0).V
-       for B1 be linearly-independent Subset of W1,
-           B2 be linearly-independent Subset of W2
-       holds
-         B1\/B2 is linearly-independent Subset of W1+W2
-proof
-  let V be VectSp of K;
-  let W1,W2 be Subspace of V such that A1: W1/\W2=(0).V;
-  let B1 be linearly-independent Subset of W1;
-  let B2 be linearly-independent Subset of W2;
-A2:   W1 is Subspace of W1+W2 & W2 is Subspace of W1+W2 by VECTSP_5:11;
-  then the carrier of W1 c= the carrier of W1+W2 &
-    the carrier of W2 c= the carrier of W1+W2 by VECTSP_4:def 2;
-  then B1 c= the carrier of W1+W2 & B2 c= the carrier of W1+W2 by XBOOLE_1:1;
-  then reconsider B12=B1\/B2,B1'=B1,B2'=B2 as Subset of (W1+W2) by XBOOLE_1:8;
-  reconsider W1'=W1,W2'=W2 as Subspace of W1+W2 by VECTSP_5:11;
-  B12 is linearly-independent
-    proof
-      let L be Linear_Combination of B12 such that
-A3:      Sum(L)=0.(W1+W2);
-      set C = Carrier(L) /\ B1;
-      set D = Carrier(L) \ B1;
-      deffunc F(set) = 0.K;
-      deffunc G(set) = L.$1;
-      defpred P[set] means $1 in C;
-A4:   now let x;
-         assume x in the carrier of W1+W2;
-         then reconsider v = x as Vector of W1+W2;
-         L.v in the carrier of K;
-         hence P[x] implies G(x) in the carrier of K;
-         assume not P[x];
-         thus F(x) in the carrier of K;
-      end;
-      consider f be Function of the carrier of W1+W2, the carrier of K
-        such that
-A5:     for x st x in the carrier of W1+W2 holds
-            (P[x] implies f.x = G(x)) & (not P[x] implies f.x = F(x))
-            from FUNCT_2:sch 5(A4);
-      reconsider f as Element of Funcs(the carrier of W1+W2, the carrier of K)
-        by FUNCT_2:11;
-      deffunc G(set) = L.$1;
-      defpred C[set] means $1 in D;
-A6:   now let x;
-         assume x in the carrier of W1+W2;
-         then reconsider v = x as Vector of W1+W2;
-         L.v in the carrier of K;
-         hence C[x] implies G(x) in the carrier of K;
-         assume not C[x];
-         thus F(x) in the carrier of K;
-       end;
-       consider g be Function of the carrier of W1+W2, the carrier of K
-         such that
-A7:      for x st x in the carrier of W1+W2 holds
-            (C[x] implies g.x = G(x)) & (not C[x] implies g.x = F(x))
-            from FUNCT_2:sch 5(A6);
-       reconsider g as Element of Funcs(the carrier of W1+W2, the carrier of K)
-         by FUNCT_2:11;
-       C c= Carrier L by XBOOLE_1:17;
-       then reconsider C as finite Subset of W1+W2 by XBOOLE_1:1;
-       for u be Vector of W1+W2 holds not u in C implies f.u = 0.K by A5;
-       then reconsider f as Linear_Combination of W1+W2 by VECTSP_6:def 4;
-A8:    Carrier(f) c= B1'
-         proof
-           let x;
-           assume x in Carrier(f);
-           then
-A9:          ex u be Vector of W1+W2 st x = u & f.u <> 0.K;
-           assume not x in B1';
-           then not x in C by XBOOLE_0:def 4;
-           hence thesis by A5,A9;
-         end;
-       reconsider f as Linear_Combination of B1' by A8,VECTSP_6:def 7;
-       reconsider D as finite Subset of W1+W2;
-       for u be Vector of W1+W2 holds not u in D implies g.u = 0.K by A7;
-       then reconsider g as Linear_Combination of W1+W2 by VECTSP_6:def 4;
-A10:   Carrier(g) c= D
-         proof
-           let x;
-           assume x in Carrier(g);
-           then
-A11:         ex u be Vector of W1+W2 st x = u & g.u <> 0.K;
-           assume not x in D;
-           hence thesis by A7,A11;
-         end;
-A12:   D c= B2'
-         proof
-           let x;
-           assume x in D;
-           then x in Carrier(L) & not x in B1' & Carrier(L) c= B12
-             by VECTSP_6:def 7,XBOOLE_0:def 5;
-           hence thesis by XBOOLE_0:def 3;
-         end;
-       then Carrier(g) c= B2' by A10,XBOOLE_1:1;
-       then reconsider g as Linear_Combination of B2' by VECTSP_6:def 7;
-A13:   L = f + g
-         proof
-           let v be Vector of W1+W2;
-           now per cases;
-             suppose
-A14:           v in C;
-A15:           now assume v in D;
-                 then not v in B1' by XBOOLE_0:def 5;
-                 hence contradiction by A14,XBOOLE_0:def 4;
-               end;
-               thus (f + g).v = f.v + g.v by VECTSP_6:def 11
-                             .= L.v + g.v by A5,A14
-                             .= L.v + 0.K by A7,A15
-                             .= L.v by RLVECT_1:10;
-             end;
-             suppose
-A16:           not v in C;
-               now per cases;
-                 suppose
-A17:               v in Carrier(L);
-A18:               now assume not v in D;
-                      then not v in Carrier(L) or v in B1' by XBOOLE_0:def 5;
-                      hence contradiction by A16,A17,XBOOLE_0:def 4;
-                   end;
-                   thus (f + g). v = f.v + g.v by VECTSP_6:def 11
-                                   .= g.v + 0.K by A5,A16
-                                   .= g.v by RLVECT_1:10
-                                   .= L.v by A7,A18;
-                 end;
-                 suppose
-A19:               not v in Carrier(L);
-                   then
-A20:                 not v in C & not v in D by XBOOLE_0:def 4,def 5;
-                   thus (f + g).v = f.v + g.v by VECTSP_6:def 11
-                                 .= 0.K + g.v by A5,A20
-                                 .= 0.K + 0.K by A7,A20
-                                 .= 0.K by RLVECT_1:10
-                                 .= L.v by A19;
-                 end;
-               end;
-               hence thesis;
-             end;
-           end;
-           hence thesis;
-         end;
-       then
-A21:     Sum L = Sum(f) + Sum(g) by VECTSP_6:77;
-       Carrier f c= the carrier of W1' by A8,XBOOLE_1:1;
-       then ex f1 be Linear_Combination of W1' st
-         Carrier(f1) = Carrier(f) & Sum(f) = Sum (f1) by VECTSP_9:13;
-       then
-A22:     Sum f in W1' by STRUCT_0:def 5;
-       Carrier g c= B2 by A10,A12,XBOOLE_1:1;
-       then Carrier g c= the carrier of W2 by XBOOLE_1:1;
-       then ex g1 be Linear_Combination of W2' st
-         Carrier(g1) = Carrier(g) & Sum(g) = Sum (g1) by VECTSP_9:13;
-       then
-A23:     Sum g in W2' by STRUCT_0:def 5;
-       (0).V=(0).(W1+W2) by VECTSP_4:47;
-       then W1'/\W2'=(0).(W1+W2) & W1'+W2'=W1+W2 by A1,Th1;
-       then
-A24:     W1+W2 is_the_direct_sum_of W1',W2' by VECTSP_5:def 4;
-A25:     0.(W1+W2)=0.W1' & 0.(W1+W2)=0.W2' & 0.W1 in W1' & 0.W2 in W2'
-         by STRUCT_0:def 5,VECTSP_4:19;
-A26:   B1' is linearly-independent by A2,VECTSP_9:15;
-A27:   B2' is linearly-independent by A2,VECTSP_9:15;
-       Sum L=0.(W1+W2)+0.(W1+W2) by A3,RLVECT_1:def 7;
-       then Sum f=0.(W1+W2) & Sum g=0.(W1+W2)
-         by A21,A24,A25,A22,A23,VECTSP_5:58;
-       then Carrier f={} & Carrier g={} & {}\/{}={} by A26,A27,VECTSP_7:def 1;
-       hence thesis by A13,VECTSP_6:51,XBOOLE_1:3;
-     end;
-     hence thesis;
-end;
-
-theorem Th3:
-  for V be VectSp of K
-    for W1,W2 be Subspace of V  st W1/\W2 = (0).V
-       for B1 be Basis of W1,B2 be Basis of W2
-    holds B1\/B2 is Basis of W1+W2
+  for V be VectSp of K for W1,W2 be Subspace of V st W1/\W2=(0).V
+for B1 be linearly-independent Subset of W1, B2 be linearly-independent Subset
+  of W2 holds B1\/B2 is linearly-independent Subset of W1+W2
 proof
   let V be VectSp of K;
   let W1,W2 be Subspace of V such that
-A1:  W1/\W2=(0).V;
-  let B1 be Basis of W1,B2 be Basis of W2;
-A2:  W1 is Subspace of W1+W2 & W2 is Subspace of W1+W2 by VECTSP_5:11;
-  then the carrier of W1 c= the carrier of W1+W2 &
-    the carrier of W2 c= the carrier of W1+W2 by VECTSP_4:def 2;
-  then B1 c= the carrier of W1+W2 & B2 c= the carrier of W1+W2 by XBOOLE_1:1;
-  then reconsider B12=B1\/B2,B1'=B1,B2'=B2 as Subset of W1+W2 by XBOOLE_1:8;
+A1: W1/\W2=(0).V;
   reconsider W1'=W1,W2'=W2 as Subspace of W1+W2 by VECTSP_5:11;
-A3:  (Omega).W1 = Lin(B1) by VECTSP_7:def 3
-               .= Lin(B1') by A2,VECTSP_9:21;
-A4:  (Omega).W2 = Lin(B2) by VECTSP_7:def 3
-               .= Lin(B2') by A2,VECTSP_9:21;
-A5: Lin(B12) = Lin(B1')+Lin(B2') by VECTSP_7:20;
-A6:the carrier of Lin(B12) c= the carrier of W1+W2 by VECTSP_4:def 2;
-  the carrier of W1+W2 c= the carrier of Lin(B12)
-    proof
-      let x such that
-A7:     x in the carrier of W1+W2;
-      reconsider v=x as Vector of W1+W2 by A7;
-      x in W1+W2 by A7,STRUCT_0:def 5;
-      then consider v1,v2 be Vector of V such that
-A8:     v1 in W1 & v2 in W2 & x=v1+v2 by VECTSP_5:5;
-      v1 is Vector of W1 & v2 is Vector of W2 by A8,STRUCT_0:def 5;
-      then reconsider w1 = v1,w2 = v2 as Vector of W1+W2 by A2,VECTSP_4:18;
-      v1 in the carrier of Lin(B1') & v2 in the carrier of Lin(B2')
-        by A3,A4,A8,STRUCT_0:def 5;
-      then v1 in Lin(B1') & v2 in Lin(B2') by STRUCT_0:def 5;
-      then w1+w2 in Lin(B12) & v1+v2=w1+w2 by A5,VECTSP_4:21,VECTSP_5:5;
-      hence thesis by A8,STRUCT_0:def 5;
-    end;
-  then the carrier of Lin(B12)=the carrier of W1+W2 by A6,XBOOLE_0:def 10;
+  let B1 be linearly-independent Subset of W1;
+  let B2 be linearly-independent Subset of W2;
+A2: W2 is Subspace of W1+W2 by VECTSP_5:11;
+  then the carrier of W2 c= the carrier of W1+W2 by VECTSP_4:def 2;
   then
-A9:  Lin(B12) = the VectSpStr of W1+W2 by VECTSP_4:39;
-  B2 is linearly-independent & B1 is linearly-independent
-    by VECTSP_7:def 3;
-  then B1\/B2 is linearly-independent Subset of W1+W2 by Th2,A1;
-  hence thesis by A9,VECTSP_7:def 3;
+A3: B2 c= the carrier of W1+W2 by XBOOLE_1:1;
+A4: W1 is Subspace of W1+W2 by VECTSP_5:11;
+  then the carrier of W1 c= the carrier of W1+W2 by VECTSP_4:def 2;
+  then B1 c= the carrier of W1+W2 by XBOOLE_1:1;
+  then reconsider B12=B1\/B2,B1'=B1,B2'=B2 as Subset of (W1+W2) by
+  A3,XBOOLE_1:8;
+  B12 is linearly-independent
+  proof
+    let L be Linear_Combination of B12;
+    assume
+    Sum(L)=0.(W1+W2);
+    then
+A5: Sum L=0.(W1+W2)+0.(W1+W2) by RLVECT_1:def 7;
+    set C = Carrier(L) /\ B1;
+    defpred P[set] means $1 in C;
+    C c= Carrier L by XBOOLE_1:17;
+    then reconsider C as finite Subset of W1+W2 by XBOOLE_1:1;
+    set D = Carrier(L) \ B1;
+    deffunc G(set) = L.$1;
+    defpred C[set] means $1 in D;
+    reconsider D as finite Subset of W1+W2;
+A6: D c= B2'
+    proof
+      let x;
+      assume
+      x in D;
+      then
+A7:   x in Carrier(L) & not x in B1' by XBOOLE_0:def 5;
+      Carrier(L) c= B12 by VECTSP_6:def 7;
+      hence thesis by A7,XBOOLE_0:def 3;
+    end;
+    (0).V=(0).(W1+W2) by VECTSP_4:47;
+    then
+A8: W1'/\W2'=(0).(W1+W2) by A1,Th1;
+    W1'+W2'=W1+W2 by Th1;
+    then
+A9: W1+W2 is_the_direct_sum_of W1',W2' by A8,VECTSP_5:def 4;
+A10: B2' is linearly-independent by A2,VECTSP_9:15;
+A11: B1' is linearly-independent by A4,VECTSP_9:15;
+    deffunc F(set) = 0.K;
+A12: 0.W1 in W1' & 0.W2 in W2' by STRUCT_0:def 5;
+A13: now
+      let x;
+      assume
+      x in the carrier of W1+W2;
+      then reconsider v = x as Vector of W1+W2;
+      L.v in the carrier of K;
+      hence P[x] implies G(x) in the carrier of K;
+      assume
+      not P[x];
+      thus F(x) in the carrier of K;
+    end;
+    consider f be Function of the carrier of W1+W2, the carrier of K such that
+A14: for x st x in the carrier of W1+W2 holds (P[x] implies f.x = G(x)
+    ) & (not P[x] implies f.x = F(x)) from FUNCT_2:sch 5(A13);
+    deffunc G(set) = L.$1;
+A15: now
+      let x;
+      assume
+      x in the carrier of W1+W2;
+      then reconsider v = x as Vector of W1+W2;
+      L.v in the carrier of K;
+      hence C[x] implies G(x) in the carrier of K;
+      assume
+      not C[x];
+      thus F(x) in the carrier of K;
+    end;
+    consider g be Function of the carrier of W1+W2, the carrier of K such that
+A16: for x st x in the carrier of W1+W2 holds (C[x] implies g.x = G(x)
+    ) & (not C[x] implies g.x = F(x)) from FUNCT_2:sch 5(A15);
+    reconsider g as Element of Funcs(the carrier of W1+W2, the carrier of K)
+    by FUNCT_2:11;
+    for u be Vector of W1+W2 holds not u in D implies g.u = 0.K by A16;
+    then reconsider g as Linear_Combination of W1+W2 by VECTSP_6:def 4;
+A17: Carrier(g) c= D
+    proof
+      let x;
+      assume
+      x in Carrier(g);
+      then
+A18:  ex u be Vector of W1+W2 st x = u & g.u <> 0.K;
+      assume
+      not x in D;
+      hence thesis by A16,A18;
+    end;
+    then Carrier(g) c= B2' by A6,XBOOLE_1:1;
+    then reconsider g as Linear_Combination of B2' by VECTSP_6:def 7;
+    reconsider f as Element of Funcs(the carrier of W1+W2, the carrier of K)
+    by FUNCT_2:11;
+    for u be Vector of W1+W2 holds not u in C implies f.u = 0.K by A14;
+    then reconsider f as Linear_Combination of W1+W2 by VECTSP_6:def 4;
+A19: Carrier(f) c= B1'
+    proof
+      let x;
+      assume
+      x in Carrier(f);
+      then
+A20:  ex u be Vector of W1+W2 st x = u & f.u <> 0.K;
+      assume
+      not x in B1';
+      then not x in C by XBOOLE_0:def 4;
+      hence thesis by A14,A20;
+    end;
+    then reconsider f as Linear_Combination of B1' by VECTSP_6:def 7;
+    ex f1 be Linear_Combination of W1' st Carrier(f1) = Carrier(f) & Sum(
+    f) = Sum (f1) by A19,VECTSP_9:13 ,XBOOLE_1:1;
+    then
+A21: Sum f in W1' by STRUCT_0:def 5;
+A22: L = f + g
+    proof
+      let v be Vector of W1+W2;
+      now
+        per cases;
+        suppose
+A23:      v in C;
+A24:      now
+            assume
+            v in D;
+            then not v in B1' by XBOOLE_0:def 5;
+            hence contradiction by A23,XBOOLE_0:def 4;
+          end;
+          thus (f + g).v = f.v + g.v by VECTSP_6:def 11
+            .= L.v + g.v by A14,A23
+            .= L.v + 0.K by A16,A24
+            .= L.v by RLVECT_1:10;
+        end;
+        suppose
+A25:      not v in C;
+          now
+            per cases;
+            suppose
+A26:          v in Carrier(L);
+A27:          now
+                assume
+                not v in D;
+                then not v in Carrier(L) or v in B1' by XBOOLE_0:def 5;
+                hence contradiction by A25,A26,XBOOLE_0:def 4;
+              end;
+              thus (f + g). v = f.v + g.v by VECTSP_6:def 11
+                .= g.v + 0.K by A14,A25
+                .= g.v by RLVECT_1:10
+                .= L.v by A16,A27;
+            end;
+            suppose
+A28:          not v in Carrier(L);
+              then
+A29:          not v in D by XBOOLE_0:def 5;
+A30:          not v in C by A28,XBOOLE_0:def 4;
+              thus (f + g).v = f.v + g.v by VECTSP_6:def 11
+                .= 0.K + g.v by A14,A30
+                .= 0.K + 0.K by A16,A29
+                .= 0.K by RLVECT_1:10
+                .= L.v by A28;
+            end;
+          end;
+          hence thesis;
+        end;
+      end;
+      hence thesis;
+    end;
+    then
+A31: Sum L = Sum(f) + Sum(g) by VECTSP_6:77;
+    Carrier g c= B2 by A17,A6,XBOOLE_1:1;
+    then
+    ex g1 be Linear_Combination of W2' st Carrier(g1) = Carrier(g) & Sum(
+    g) = Sum (g1) by VECTSP_9:13 ,XBOOLE_1:1;
+    then
+A32: Sum g in W2' by STRUCT_0:def 5;
+A33: 0.(W1+W2)=0.W1' & 0.(W1+W2)=0.W2' by VECTSP_4:19;
+    then Sum f=0.(W1+W2) by A31,A21,A32,A9,A12,A5,VECTSP_5:58;
+    then
+A34: Carrier f={} by A11,VECTSP_7:def 1;
+    Sum g=0.(W1+W2) by A31,A21,A32,A9,A33,A12,A5,VECTSP_5:58;
+    then
+A35: Carrier g={} by A10,VECTSP_7:def 1;
+    {}\/{}={};
+    hence thesis by A22,A34,A35,VECTSP_6:51,XBOOLE_1:3;
+  end;
+  hence thesis;
+end;
+
+theorem Th3:
+  for V be VectSp of K for W1,W2 be Subspace of V st W1/\W2 = (0).V
+  for B1 be Basis of W1,B2 be Basis of W2 holds B1\/B2 is Basis of W1+W2
+proof
+  let V be VectSp of K;
+  let W1,W2 be Subspace of V such that
+A1: W1/\W2=(0).V;
+  let B1 be Basis of W1,B2 be Basis of W2;
+A2: W2 is Subspace of W1+W2 by VECTSP_5:11;
+  then the carrier of W2 c= the carrier of W1+W2 by VECTSP_4:def 2;
+  then
+A3: B2 c= the carrier of W1+W2 by XBOOLE_1:1;
+A4: W1 is Subspace of W1+W2 by VECTSP_5:11;
+  then the carrier of W1 c= the carrier of W1+W2 by VECTSP_4:def 2;
+  then B1 c= the carrier of W1+W2 by XBOOLE_1:1;
+  then reconsider B12=B1\/B2,B1'=B1,B2'=B2 as Subset of W1+W2 by
+  A3,XBOOLE_1:8;
+A5: (Omega).W2 = Lin(B2) by VECTSP_7:def 3
+    .= Lin(B2') by A2,VECTSP_9:21;
+A6: Lin(B12) = Lin(B1')+Lin(B2') by VECTSP_7:20;
+A7: (Omega).W1 = Lin(B1) by VECTSP_7:def 3
+    .= Lin(B1') by A4,VECTSP_9:21;
+A8: the carrier of W1+W2 c= the carrier of Lin(B12)
+  proof
+    let x such that
+A9: x in the carrier of W1+W2;
+    reconsider v=x as Vector of W1+W2 by A9;
+    x in W1+W2 by A9,STRUCT_0:def 5;
+    then consider v1,v2 be Vector of V such that
+A10: v1 in W1 and
+A11: v2 in W2 and
+A12: x=v1+v2 by VECTSP_5:5;
+    v1 is Vector of W1 & v2 is Vector of W2 by A10,A11,STRUCT_0:def 5;
+    then reconsider w1 = v1,w2 = v2 as Vector of W1+W2 by A4,A2,VECTSP_4:18;
+A13: v1+v2=w1+w2 by VECTSP_4:21;
+    v2 in the carrier of Lin(B2') by A5,A11,STRUCT_0:def 5;
+    then
+A14: v2 in Lin(B2') by STRUCT_0:def 5;
+    v1 in the carrier of Lin(B1') by A7,A10,STRUCT_0:def 5;
+    then v1 in Lin(B1') by STRUCT_0:def 5;
+    then w1+w2 in Lin(B12) by A6,A14,VECTSP_5:5;
+    hence thesis by A12,A13,STRUCT_0:def 5;
+  end;
+  the carrier of Lin(B12) c= the carrier of W1+W2 by VECTSP_4:def 2;
+  then the carrier of Lin(B12)=the carrier of W1+W2 by
+  A8,XBOOLE_0:def 10;
+  then
+A15: Lin(B12) = the VectSpStr of W1+W2 by VECTSP_4:39;
+  B2 is linearly-independent & B1 is linearly-independent by VECTSP_7:def
+  3;
+  then B1\/B2 is linearly-independent Subset of W1+W2 by A1,Th2;
+  hence thesis by A15,VECTSP_7:def 3;
+  reconsider W1'=W1,W2'=W2 as Subspace of W1+W2 by VECTSP_5:11;
 end;
 
 theorem
-  for V be finite-dimensional VectSp of K,
-      B be OrdBasis of (Omega).V
-    holds B is OrdBasis of V
+  for V be finite-dimensional VectSp of K, B be OrdBasis of (Omega).V
+  holds B is OrdBasis of V
 proof
-  let V be finite-dimensional VectSp of K,
-      B be OrdBasis of (Omega).V;
+  let V be finite-dimensional VectSp of K, B be OrdBasis of (Omega).V;
   reconsider r=rng B as Basis of (Omega).V by MATRLIN:def 4;
   r is linearly-independent by VECTSP_7:def 3;
   then reconsider R=r as linearly-independent Subset of V by VECTSP_9:15;
   Lin R = Lin r by VECTSP_9:21
-       .= the VectSpStr of V by VECTSP_7:def 3;
-  then R is Basis of V & B is one-to-one by MATRLIN:def 4,VECTSP_7:def 3;
-  hence thesis by MATRLIN:def 4;
+    .= the VectSpStr of V by VECTSP_7:def 3;
+  then
+A1: R is Basis of V by VECTSP_7:def 3;
+  B is one-to-one by MATRLIN:def 4;
+  hence thesis by A1,MATRLIN:def 4;
 end;
 
 theorem
-  for V1 be VectSp of K
-    for A be finite Subset of V1 st dim Lin(A) = card A
-  holds A is linearly-independent
+  for V1 be VectSp of K for A be finite Subset of V1 st dim Lin(A) =
+  card A holds A is linearly-independent
 proof
   let V1 be VectSp of K;
   let A be finite Subset of V1 such that
-A1:  dim Lin(A) = card A;
+A1: dim Lin(A) = card A;
   set L=Lin(A);
   A c= the carrier of L
-    proof
-      let x;
-      assume x in A;
-      then x in L by VECTSP_7:13;
-      hence thesis by STRUCT_0:def 5;
-    end;
+  proof
+    let x;
+    assume
+    x in A;
+    then x in L by VECTSP_7:13;
+    hence thesis by STRUCT_0:def 5;
+  end;
   then reconsider A'=A as Subset of L;
   Lin(A')=L by VECTSP_9:21;
   then consider B be Subset of L such that
-A2:  B c= A' & B is linearly-independent & Lin(B) = L by VECTSP_7:23;
+A2: B c= A' and
+A3: B is linearly-independent and
+A4: Lin(B) = L by VECTSP_7:23;
   reconsider B as finite Subset of L by A2;
-  B is Basis of L by A2,VECTSP_7:def 3;
+  B is Basis of L by A3,A4,VECTSP_7:def 3;
   then reconsider L as finite-dimensional VectSp of K by MATRLIN:def 3;
   card A = dim L by A1
-        .= card B by A2,VECTSP_9:30;
+    .= card B by A3,A4,VECTSP_9:30;
   then A=B by A2,CARD_FIN:1;
-  hence thesis by A2,VECTSP_9:15;
+  hence thesis by A3,VECTSP_9:15;
 end;
 
 theorem
-  for V be VectSp of K
-    for A be finite Subset of V holds dim Lin A <= card A
+  for V be VectSp of K for A be finite Subset of V holds dim Lin A <=
+  card A
 proof
   let V be VectSp of K;
   let A be finite Subset of V;
   set L=Lin(A);
   A c= the carrier of L
-    proof
-      let x;
-      assume x in A;
-      then x in L by VECTSP_7:13;
-      hence thesis by STRUCT_0:def 5;
-    end;
+  proof
+    let x;
+    assume
+    x in A;
+    then x in L by VECTSP_7:13;
+    hence thesis by STRUCT_0:def 5;
+  end;
   then reconsider A'=A as Subset of L;
   Lin(A')=L by VECTSP_9:21;
   then consider B be Subset of L such that
-A1:  B c= A' & B is linearly-independent & Lin(B) = L by VECTSP_7:23;
+A1: B c= A' and
+A2: B is linearly-independent & Lin(B) = L by VECTSP_7:23;
   reconsider B as finite Subset of L by A1;
-  B is Basis of L by A1,VECTSP_7:def 3;
+  B is Basis of L by A2,VECTSP_7:def 3;
   then reconsider L as finite-dimensional VectSp of K by MATRLIN:def 3;
-  card B = dim L & card B c= card A by A1,CARD_1:27,VECTSP_9:30;
+  card B = dim L & card B c= card A by A1,A2,CARD_1:27,VECTSP_9:30;
   hence thesis by NAT_1:40;
 end;
 
 begin :: More on the Product of Finite Sequence of Scalars and Vectors
 
- reserve V1,V2,V3 for finite-dimensional VectSp of K,
-         f,f1,f2 for Function of V1,V2,
-         g for Function of V2,V3,
-         b1,b1' for OrdBasis of V1,
-         B1 for FinSequence of V1,
-         b2 for OrdBasis of V2,
-         B2 for FinSequence of V2,
-         b3 for OrdBasis of V3,
-         B3 for FinSequence of V3,
-         v1,w1 for Element of V1,
-         R,R1,R2 for FinSequence of V1,
-         p,p1,p2 for FinSequence of K;
+reserve V1,V2,V3 for finite-dimensional VectSp of K,
+  f,f1,f2 for Function of
+  V1,V2,
+  g for Function of V2,V3,
+  b1,b1' for OrdBasis of V1,
+  B1 for FinSequence
+  of V1,
+  b2 for OrdBasis of V2,
+  B2 for FinSequence of V2,
+  b3 for OrdBasis of V3,
+  B3 for FinSequence of V3,
+  v1,w1 for Element of V1,
+  R,R1,R2 for FinSequence of
+  V1,
+  p,p1,p2 for FinSequence of K;
 
-Lm1:dom lmlt(p,R)=(dom p)/\(dom R)
+Lm1: dom lmlt(p,R)=(dom p)/\(dom R)
 proof
+
   rng p c= the carrier of K & rng R c= the carrier of V1 by FINSEQ_1:def 4;
-  then [:rng p,rng R:]c=[:the carrier of K,the carrier of V1:] by ZFMISC_1:119;
+
+  then [:rng p,rng R:]c=[:the carrier of K,the carrier of V1:] by
+  ZFMISC_1:
+  119;
+
   then [:rng p, rng R:] c= dom (the lmult of V1) by FUNCT_2:def 1;
   hence thesis by FUNCOP_1:84;
 end;
 
-Lm2:dom (p1+p2)=(dom p1)/\(dom p2)
+Lm2: dom (p1+p2)=(dom p1)/\(dom p2)
 proof
-  rng p1 c= the carrier of K & rng p2 c= the carrier of K by FINSEQ_1:def 4;
-  then [:rng p1,rng p2:]c=[:the carrier of K,the carrier of K:]by ZFMISC_1:119;
+
+  rng p1 c= the carrier of K & rng p2 c= the carrier of K by FINSEQ_1:def
+  4;
+
+  then [:rng p1,rng p2:]c=[:the carrier of K,the carrier of K:]by
+  ZFMISC_1:
+  119;
+
   then [:rng p1, rng p2:] c= dom (the addF of K) by FUNCT_2:def 1;
   hence thesis by FUNCOP_1:84;
 end;
 
-Lm3:dom (R1+R2)=(dom R1)/\(dom R2)
+Lm3: dom (R1+R2)=(dom R1)/\(dom R2)
 proof
-  rng R1 c= the carrier of V1 & rng R2 c= the carrier of V1 by FINSEQ_1:def 4;
-  then [:rng R1,rng R2:]c=[:the carrier of V1,the carrier of V1:]
-    by ZFMISC_1:119;
+
+  rng R1 c= the carrier of V1 & rng R2 c= the carrier of V1 by FINSEQ_1:
+  def 4;
+
+  then [:rng R1,rng R2:]c=[:the carrier of V1,the carrier of V1:] by
+  ZFMISC_1:119;
+
   then [:rng R1, rng R2:] c= dom (the addF of V1) by FUNCT_2:def 1;
   hence thesis by FUNCOP_1:84;
 end;
@@ -438,131 +500,175 @@ end;
 theorem Th7:
   lmlt(p1 + p2,R) = lmlt(p1,R) + lmlt(p2,R)
 proof
-  set L12=lmlt(p1+p2,R);set L1=lmlt(p1,R);set L2=lmlt(p2,R);
-A1: dom (L1+L2)=dom L1/\dom L2 & dom L1=dom p1/\dom R & dom L2=dom p2/\dom R&
-    dom (p1+p2)=dom p1/\dom p2 & dom L12=dom (p1+p2)/\dom R by Lm1,Lm2,Lm3;
-A2: dom(L1+L2) = dom p1/\dom R/\dom p2/\dom R by A1,XBOOLE_1:16
-              .= dom p1/\dom p2/\dom R/\dom R by XBOOLE_1:16
-              .= (dom p1/\dom p2)/\(dom R/\dom R) by XBOOLE_1:16
-              .= dom L12 by A1;
-  now let x such that
-A3:    x in dom (L1+L2);
-A4:    x in dom L1 & x in dom L2 & x in dom (p1+p2)by A1,A2,A3,XBOOLE_0:def 4;
-      then x in dom p1 & x in dom p2 & x in dom R by A1,XBOOLE_0:def 4;
-      then
-A5:    L1/.x=L1.x & L2/.x=L2.x & p1/.x=p1.x & p2/.x=p2.x & R/.x=R.x &
-         (p1+p2).x=(p1+p2)/.x by A4,PARTFUN1:def 8;
-      thus (L1+L2).x = L1/.x+L2/.x by A5,A3,FVSUM_1:21
-        .= (the lmult of V1).(p1/.x,R/.x)+L2/.x by A5,A4,FUNCOP_1:28
-        .= ((p1/.x)*(R/.x))+((p2/.x)*(R/.x)) by A5,A4,FUNCOP_1:28
-        .= (p1/.x+p2/.x)*R/.x by VECTSP_1:def 26
-        .= (p1+p2)/.x*R/.x by A4,A5,FVSUM_1:21
-        .= L12.x by A2,A5,A3,FUNCOP_1:28;
+  set L12=lmlt(p1+p2,R);
+  set L1=lmlt(p1,R);
+  set L2=lmlt(p2,R);
+A1: dom (L1+L2)=dom L1/\dom L2 by Lm3;
+A2: dom L12=dom (p1+p2)/\dom R by Lm1;
+A3: dom L1=dom p1/\dom R by Lm1;
+A4: dom L2=dom p2/\dom R by Lm1;
+  then
+A5: dom(L1+L2) = dom p1/\dom R/\dom p2/\dom R by A1,A3,XBOOLE_1:16
+    .= dom p1/\dom p2/\dom R/\dom R by XBOOLE_1:16
+    .= (dom p1/\dom p2)/\(dom R/\dom R) by XBOOLE_1:16
+    .= dom L12 by A2,Lm2;
+  now
+    let x such that
+A6: x in dom (L1+L2);
+A7: x in dom L2 by A1,A6,XBOOLE_0:def 4;
+    then
+A8: L2/.x=L2.x by PARTFUN1:def 8;
+    x in dom p2 by A4,A7,XBOOLE_0:def 4;
+    then
+A9: p2/.x=p2.x by PARTFUN1:def 8;
+A10: x in dom (p1+p2) by A2,A5,A6,XBOOLE_0:def 4;
+    then
+A11: (p1+p2).x=(p1+p2)/.x by PARTFUN1:def 8;
+A12: x in dom L1 by A1,A6,XBOOLE_0:def 4;
+    then x in dom p1 by A3,XBOOLE_0:def 4;
+    then
+A13: p1/.x=p1.x by PARTFUN1:def 8;
+    x in dom R by A3,A12,XBOOLE_0:def 4;
+    then
+A14: R/.x=R.x by PARTFUN1:def 8;
+A15: L1/.x=L1.x by A12,PARTFUN1:def 8;
+    hence (L1+L2).x = L1/.x+L2/.x by A6,A8,FVSUM_1:21
+      .= (the lmult of V1).(p1/.x,R/.x)+L2/.x by A12,A15,A13,A14,FUNCOP_1:28
+      .= ((p1/.x)*(R/.x))+((p2/.x)*(R/.x)) by A7,A8,A9,A14,FUNCOP_1:28
+      .= (p1/.x+p2/.x)*R/.x by VECTSP_1:def 26
+      .= (p1+p2)/.x*R/.x by A10,A13,A9,A11,FVSUM_1:21
+      .= L12.x by A5,A6,A14,A11,FUNCOP_1:28;
   end;
-  hence thesis by A2,FUNCT_1:9;
+  hence thesis by A5,FUNCT_1:9;
 end;
 
 theorem
   lmlt(p,R1 + R2) = lmlt(p,R1) + lmlt(p,R2)
 proof
-  set L12=lmlt(p,R1+R2);set L1=lmlt(p,R1);set L2=lmlt(p,R2);
-A1: dom (L1+L2)=dom L1/\dom L2 & dom L1=dom p/\dom R1 & dom L2=dom p/\dom R2&
-    dom (R1+R2)=dom R1/\dom R2 & dom L12=dom p/\dom (R1+R2) by Lm1,Lm3;
-A2: dom(L1+L2) = dom p/\dom R1/\dom p/\dom R2 by A1,XBOOLE_1:16
-              .= dom p/\dom p/\dom R1/\dom R2 by XBOOLE_1:16
-              .= dom L12 by A1,XBOOLE_1:16;
-  now let x such that
-A3:     x in dom (L1+L2);
-A4:     x in dom L1 & x in dom L2 & x in dom (R1+R2)by A1,A2,A3,XBOOLE_0:def 4;
-      then x in dom p & x in dom R1 & x in dom R2 by A1,XBOOLE_0:def 4;
-      then
-A5:     L1/.x=L1.x & L2/.x=L2.x & p/.x=p.x & R1/.x=R1.x & R2/.x=R2.x &
-           (R1+R2).x=(R1+R2)/.x by A4,PARTFUN1:def 8;
-      thus (L1+L2).x = L1/.x+L2/.x by A5,A3,FVSUM_1:21
-        .= (the lmult of V1).(p/.x,R1/.x)+L2/.x by A5,A4,FUNCOP_1:28
-        .= ((p/.x)*(R1/.x))+((p/.x)*(R2/.x)) by A5,A4,FUNCOP_1:28
-        .= p/.x*(R1/.x+R2/.x) by VECTSP_1:def 26
-        .= p/.x*(R1+R2)/.x by A4,A5,FVSUM_1:21
-        .= L12.x by A2,A5,A3,FUNCOP_1:28;
+  set L12=lmlt(p,R1+R2);
+  set L1=lmlt(p,R1);
+  set L2=lmlt(p,R2);
+A1: dom (L1+L2)=dom L1/\dom L2 by Lm3;
+A2: dom L12=dom p/\dom (R1+R2) by Lm1;
+A3: dom (R1+R2)=dom R1/\dom R2 by Lm3;
+A4: dom L1=dom p/\dom R1 by Lm1;
+A5: dom L2=dom p/\dom R2 by Lm1;
+  then
+A6: dom(L1+L2) = dom p/\dom R1/\dom p/\dom R2 by A1,A4,XBOOLE_1:16
+    .= dom p/\dom p/\dom R1/\dom R2 by XBOOLE_1:16
+    .= dom L12 by A3,A2,XBOOLE_1:16;
+  now
+    let x such that
+A7: x in dom (L1+L2);
+A8: x in dom L2 by A1,A7,XBOOLE_0:def 4;
+    then
+A9: L2/.x=L2.x by PARTFUN1:def 8;
+    x in dom R2 by A5,A8,XBOOLE_0:def 4;
+    then
+A10: R2/.x=R2.x by PARTFUN1:def 8;
+A11: x in dom (R1+R2) by A2,A6,A7,XBOOLE_0:def 4;
+    then
+A12: (R1+R2).x=(R1+R2)/.x by PARTFUN1:def 8;
+A13: x in dom L1 by A1,A7,XBOOLE_0:def 4;
+    then x in dom p by A4,XBOOLE_0:def 4;
+    then
+A14: p/.x=p.x by PARTFUN1:def 8;
+    x in dom R1 by A4,A13,XBOOLE_0:def 4;
+    then
+A15: R1/.x=R1.x by PARTFUN1:def 8;
+A16: L1/.x=L1.x by A13,PARTFUN1:def 8;
+    hence (L1+L2).x = L1/.x+L2/.x by A7,A9,FVSUM_1:21
+      .= (the lmult of V1).(p/.x,R1/.x)+L2/.x by A13,A16,A14,A15,FUNCOP_1:28
+      .= ((p/.x)*(R1/.x))+((p/.x)*(R2/.x)) by A8,A9,A14,A10,FUNCOP_1:28
+      .= p/.x*(R1/.x+R2/.x) by VECTSP_1:def 26
+      .= p/.x*(R1+R2)/.x by A11,A15,A10,A12,FVSUM_1:21
+      .= L12.x by A6,A7,A14,A12,FUNCOP_1:28;
   end;
-  hence thesis by A2,FUNCT_1:9;
+  hence thesis by A6,FUNCT_1:9;
 end;
 
 theorem Th9:
-  len p1 = len R1 & len p2 = len R2 implies
-    lmlt(p1^p2,R1^R2) = lmlt(p1,R1)^lmlt(p2,R2)
+  len p1 = len R1 & len p2 = len R2 implies lmlt(p1^p2,R1^R2) =
+  lmlt(p1,R1)^lmlt(p2,R2)
 proof
-  assume
-A1:  len p1=len R1 & len p2=len R2;
-  reconsider P1=p1 as Element of (len p1)-tuples_on the carrier of K
-    by FINSEQ_2:110;
-  reconsider P2=p2 as Element of (len p2)-tuples_on the carrier of K
-    by FINSEQ_2:110;
-  reconsider r1=R1 as Element of (len p1)-tuples_on the carrier of V1
-    by A1,FINSEQ_2:110;
-  reconsider r2=R2 as Element of (len p2)-tuples_on the carrier of V1
-    by A1,FINSEQ_2:110;
-  thus lmlt(p1^p2,R1^R2)
-       = ((the lmult of V1).:(P1,r1))^((the lmult of V1).:(P2,r2))
-          by FINSEQOP:12
-      .= lmlt(p1,R1)^lmlt(p2,R2);
+  assume that
+A1: len p1=len R1 and
+A2: len p2=len R2;
+  reconsider r2=R2 as Element of (len p2)-tuples_on the carrier of V1 by A2,
+  FINSEQ_2:110;
+  reconsider r1=R1 as Element of (len p1)-tuples_on the carrier of V1 by A1,
+  FINSEQ_2:110;
+  reconsider P1=p1 as Element of (len p1)-tuples_on the carrier of K by
+  FINSEQ_2:110;
+  reconsider P2=p2 as Element of (len p2)-tuples_on the carrier of K by
+  FINSEQ_2:110;
+  thus lmlt(p1^p2,R1^R2) = ((the lmult of V1).:(P1,r1))^((the lmult of V1).:(
+  P2,r2)) by FINSEQOP:12
+    .= lmlt(p1,R1)^lmlt(p2,R2);
 end;
 
 theorem
   len R1 = len R2 implies Sum (R1+R2)=Sum R1 + Sum R2
 proof
-  assume len R1=len R2;
-  then reconsider r1=R1,r2=R2 as
-  Element of (len R1)-tuples_on the carrier of V1 by FINSEQ_2:110;
+  assume
+  len R1=len R2;
+  then reconsider
+  r1=R1,r2=R2 as Element of (len R1)-tuples_on the carrier of V1 by
+  FINSEQ_2:110;
   thus Sum (R1+R2) = Sum (r1+r2)
-                  .= Sum R1+Sum R2 by FVSUM_1:95;
+    .= Sum R1+Sum R2 by FVSUM_1:95;
 end;
 
 theorem
   Sum lmlt(len R|->a,R) = a * Sum R
 proof
-  defpred P[Nat] means
-    for R,a st len R=$1 holds Sum lmlt(len R|->a,R) = a * Sum R;
-A1:  P[0]
-   proof
-     let R,a such that
-A2:    len R=0;
-     set L=len R|->a;
-     set M=lmlt(L,R);
-     len L=len R by FINSEQ_1:def 18;
-     then dom L=dom R by FINSEQ_3:31;
-     then dom M=dom R by MATRLIN:16;
-     then len R=len M by FINSEQ_3:31;
-     then R=<*>(the carrier of V1) & M=<*>(the carrier of V1) by A2;
-     then Sum R=0.V1 & Sum M=0.V1 by RLVECT_1:60;
-     hence thesis by VECTSP_1:59;
-   end;
-A3: for n st P[n] holds P[n+1]
-   proof
-     let n such that
-A4:    P[n];set n1=n+1;
-     let R,a such that
-A5:  len R=n1;
-     1<=n1 by NAT_1:11;
-     then n1 in dom R by A5,FINSEQ_3:27;
-     then
-A6:    R/.n1=R.n1 & R=(R|n)^<*R.n1*> & (n1|->a)=(n|->a)^<*a*>
-       by A5,FINSEQ_2:74,FINSEQ_3:61,PARTFUN1:def 8;
-     n<=n1 by NAT_1:11;
-     then
-A7:    len (R|n)=n & len (n|->a)=n & len <*a*>=1 & len <*R.n1*>=1
-       by A5,FINSEQ_1:56,80,FINSEQ_1:def 18;
-A8:  lmlt(<*a*>,<*R/.n1*>) = <*a*R/.n1*> by FINSEQ_2:88;
-A9:  dom (R|n)=Seg n by A7,FINSEQ_1:def 3;
-     thus Sum lmlt(len R|->a,R)
-         = Sum(lmlt(n|->a,R|n)^lmlt(<*a*>,<*R/.n1*>)) by A5,A6,A7,Th9
-        .= Sum lmlt(n|->a,R|n) + Sum lmlt(<*a*>,<*R/.n1*>) by RLVECT_1:58
-        .= a*Sum (R|n)+Sum <*a*R/.n1*> by A4,A7,A8
-        .= a*Sum (R|n)+ a* R/.n1 by RLVECT_1:61
-        .= a*(Sum (R|n)+R/.n1) by VECTSP_1:def 26
-        .= a* Sum R by A5,A6,A7,A9,RLVECT_1:55;
-   end;
-  for n holds P[n] from NAT_1:sch 2(A1,A3);
+  defpred P[Nat] means for R,a st len R=$1 holds Sum lmlt(len R|->a,R) = a *
+  Sum R;
+A1: for n st P[n] holds P[n+1]
+  proof
+    let n such that
+A2: P[n];
+    set n1=n+1;
+    let R,a such that
+A3: len R=n1;
+A4: len (R|n)=n by A3,FINSEQ_1:80,NAT_1:11;
+    then
+A5: dom (R|n)=Seg n by FINSEQ_1:def 3;
+    1<=n1 by NAT_1:11;
+    then n1 in dom R by A3,FINSEQ_3:27;
+    then
+A6: R/.n1=R.n1 by PARTFUN1:def 8;
+A7: lmlt(<*a*>,<*R/.n1*>) = <*a*R/.n1*> by FINSEQ_2:88;
+A8: len <*a*>=1 & len <*R.n1*>=1 by FINSEQ_1:56;
+A9: (n1|->a)=(n|->a)^<*a*> & len (n|->a)=n by FINSEQ_1:def 18,FINSEQ_2:74;
+    R=(R|n)^<*R.n1*> by A3,FINSEQ_3:61;
+    hence
+    Sum lmlt(len R|->a,R) = Sum(lmlt(n|->a,R|n)^lmlt(<*a*>,<*R/.n1*>)) by
+    A3,A6,A4,A9,A8,Th9
+      .= Sum lmlt(n|->a,R|n) + Sum lmlt(<*a*>,<*R/.n1*>) by RLVECT_1:58
+      .= a*Sum (R|n)+Sum <*a*R/.n1*> by A2,A4,A7
+      .= a*Sum (R|n)+ a* R/.n1 by RLVECT_1:61
+      .= a*(Sum (R|n)+R/.n1) by VECTSP_1:def 26
+      .= a* Sum R by A3,A6,A4,A5,RLVECT_1:55;
+  end;
+A10: P[0]
+  proof
+    let R,a such that
+A11: len R=0;
+    set L=len R|->a;
+    set M=lmlt(L,R);
+    len L=len R by FINSEQ_1:def 18;
+    then dom L=dom R by FINSEQ_3:31;
+    then dom M=dom R by MATRLIN:16;
+    then len R=len M by FINSEQ_3:31;
+    then M=<*>(the carrier of V1) by A11;
+    then
+A12: Sum M=0.V1 by RLVECT_1:60;
+    R=<*>(the carrier of V1) by A11;
+    then Sum R=0.V1 by RLVECT_1:60;
+    hence thesis by A12,VECTSP_1:59;
+  end;
+  for n holds P[n] from NAT_1:sch 2(A10,A1);
   hence thesis;
 end;
 
@@ -574,15 +680,16 @@ proof
   len L = len p by FINSEQ_1:def 18;
   then dom L=dom p by FINSEQ_3:31;
   then
-A1:  dom M=dom p by MATRLIN:16;
-  then
-A2:  len p=len M by FINSEQ_3:31;
-  now let k, a1 such that
-A3:   k in dom M & a1=p.k;
-     k in Seg len p by A1,A3,FINSEQ_1:def 3;
-     then L.k=v1 by FINSEQ_2:71;
-     hence M.k = a1*v1 by A3,FUNCOP_1:28;
+A1: dom M=dom p by MATRLIN:16;
+A2: now
+    let k, a1 such that
+A3: k in dom M and
+A4: a1=p.k;
+    k in Seg len p by A1,A3,FINSEQ_1:def 3;
+    then L.k=v1 by FINSEQ_2:71;
+    hence M.k = a1*v1 by A3,A4,FUNCOP_1:28;
   end;
+  len p=len M by A1,FINSEQ_3:31;
   hence thesis by A2,MATRLIN:13;
 end;
 
@@ -593,185 +700,210 @@ proof
   set M=lmlt(p,R);
   len (a*p)=len p by MATRIXR1:16;
   then
-A1:  dom (a*p)=dom p & dom M=dom p /\dom R & dom Ma=dom (a*p)/\dom R
-    by Lm1,FINSEQ_3:31;
-  then
-A2:  len M=len Ma by FINSEQ_3:31;
-  for k be Element of NAT
-    for v1 st k in dom Ma & v1 = M.k holds Ma.k = a * v1
-     proof
-       let k be Element of NAT;
-       let v1 such that
-A3:      k in dom Ma & v1=M.k;
-A4:      k in dom p & k in dom R & k in dom (a*p) by A1,A3,XBOOLE_0:def 4;
-       then
-A5:      p/.k=p.k & R/.k=R.k by PARTFUN1:def 8;
-       then (a*p).k=a*(p/.k) by A4,FVSUM_1:62;
-       hence  Ma.k = (a*(p/.k))*R/.k by A5,A3,FUNCOP_1:28
-                  .= a*((p/.k)*R/.k) by VECTSP_1:def 26
-                  .= a*v1 by A5,A1,A3,FUNCOP_1:28;
-     end;
-  hence thesis by A2,VECTSP_3:9;
+A1: dom (a*p)=dom p by FINSEQ_3:31;
+A2: dom Ma=dom (a*p)/\dom R by Lm1;
+A3: dom M=dom p /\dom R by Lm1;
+A4: for k be Element of NAT for v1 st k in dom Ma & v1 = M.k holds Ma.k = a
+  * v1
+  proof
+    let k be Element of NAT;
+    let v1 such that
+A5: k in dom Ma and
+A6: v1=M.k;
+    k in dom R by A2,A5,XBOOLE_0:def 4;
+    then
+A7: R/.k=R.k by PARTFUN1:def 8;
+    k in dom p by A1,A2,A5,XBOOLE_0:def 4;
+    then
+A8: p/.k=p.k by PARTFUN1:def 8;
+    k in dom (a*p) by A2,A5,XBOOLE_0:def 4;
+    then (a*p).k=a*(p/.k) by A8,FVSUM_1:62;
+    hence Ma.k = (a*(p/.k))*R/.k by A5,A7,FUNCOP_1:28
+      .= a*((p/.k)*R/.k) by VECTSP_1:def 26
+      .= a*v1 by A1,A3,A2,A5,A6,A8,A7,FUNCOP_1:28;
+  end;
+  len M=len Ma by A1,A3,A2,FINSEQ_3:31;
+  hence thesis by A4,VECTSP_3:9;
 end;
 
 theorem
-  for B1 be FinSequence of V1,W1 be Subspace of V1,
-      B2 be FinSequence of W1 st B1 = B2 holds
-   lmlt(p,B1) = lmlt(p,B2)
+  for B1 be FinSequence of V1,W1 be Subspace of V1, B2 be FinSequence of
+  W1 st B1 = B2 holds lmlt(p,B1) = lmlt(p,B2)
 proof
-  let B1 be FinSequence of V1,W1 be Subspace of V1,
-      B2 be FinSequence of W1 such that
-A1:  B1 = B2;
-  set M1=lmlt(p,B1);
+  let B1 be FinSequence of V1,W1 be Subspace of V1, B2 be FinSequence of W1
+  such that
+A1: B1 = B2;
   set M2=lmlt(p,B2);
-A2:  dom M1=dom p/\dom B1 & dom M2=dom p/\dom B2 by Lm1;
-  now let i such that
-A3:   i in dom M1;
-     i in dom p & i in dom B1 by A2,A3,XBOOLE_0:def 4;
-     then
-A4:    p.i=p/.i & B1.i=B1/.i & B2.i=B2/.i by A1,PARTFUN1:def 8;
-     hence  M1.i =  p/.i * B1/.i by A3,FUNCOP_1:28
-                .= p/.i * B2/.i by A1,A4,VECTSP_4:22
-                .= M2.i by A2,A3,A4,A1,FUNCOP_1:28;
+  set M1=lmlt(p,B1);
+A2: dom M1=dom p/\dom B1 by Lm1;
+A3: dom M2=dom p/\dom B2 by Lm1;
+  now
+    let i such that
+A4: i in dom M1;
+    i in dom p by A2,A4,XBOOLE_0:def 4;
+    then
+A5: p.i=p/.i by PARTFUN1:def 8;
+A6: i in dom B1 by A2,A4,XBOOLE_0:def 4;
+    then
+A7: B2.i=B2/.i by A1,PARTFUN1:def 8;
+A8: B1.i=B1/.i by A6,PARTFUN1:def 8;
+    hence M1.i = p/.i * B1/.i by A4,A5,FUNCOP_1:28
+      .= p/.i * B2/.i by A1,A6,A8,PARTFUN1:def 8,VECTSP_4:22
+      .= M2.i by A1,A2,A3,A4,A5,A7,FUNCOP_1:28;
   end;
-  hence thesis by A2,A1,FINSEQ_1:17;
+  hence thesis by A1,A3,Lm1,FINSEQ_1:17;
 end;
 
 theorem
-  for B1 be FinSequence of V1,W1 be Subspace of V1,
-      B2 be FinSequence of W1 st B1 = B2 holds
-   Sum B1  = Sum B2
+  for B1 be FinSequence of V1,W1 be Subspace of V1, B2 be FinSequence of
+  W1 st B1 = B2 holds Sum B1 = Sum B2
 proof
-  let B1 be FinSequence of V1,W1 be Subspace of V1,
-      B2 be FinSequence of W1 such that
-A1:  B1 = B2;
-  defpred P[Nat] means
-    for B1 be FinSequence of V1,W1 be Subspace of V1,
-      B2 be FinSequence of W1 st B1 = B2 & len B1=$1 holds
-   Sum B1  = Sum B2;
-A2:  P[0]
-   proof
-     let B1 be FinSequence of V1,W1 be Subspace of V1,
-         B2 be FinSequence of W1 such that A3:B1 = B2 & len B1=0;
-     Sum B1=0.V1 & Sum B2=0.W1 by A3,RLVECT_1:94;
-     hence thesis by VECTSP_4:19;
-   end;
-A4:  for n st P[n] holds P[n+1]
-   proof
-     let n such that
-A5:    P[n]; set n1=n+1;
-     let B1 be FinSequence of V1,W1 be Subspace of V1,
-         B2 be FinSequence of W1 such that
-A6:      B1 = B2 & len B1=n1;
-     1<=n1 by NAT_1:11;
-     then n1 in dom B1 by A6,FINSEQ_3:27;
-     then
-A7:    B1.n1=B1/.n1 & B2.n1=B2/.n1 by A6,PARTFUN1:def 8;
-A8:  len (B1|n)=n by A6,FINSEQ_1:80,NAT_1:11;
-     then
-A9:    dom (B1|n)=Seg n by FINSEQ_1:def 3;
-A10:   Sum (B1|n)=Sum (B2|n) by A5,A6,A8;
-     thus Sum B1 = Sum (B1|n)+B1/.n1 by A6,A7,A8,A9,RLVECT_1:55
-                .= Sum (B2|n)+B2/.n1 by A6,A7,A10,VECTSP_4:21
-                .=Sum B2 by A6,A7,A8,A9,RLVECT_1:55;
+  let B1 be FinSequence of V1,W1 be Subspace of V1, B2 be FinSequence of W1
+  such that
+A1: B1 = B2;
+  defpred P[Nat] means for B1 be FinSequence of V1,W1 be Subspace of V1, B2 be
+  FinSequence of W1 st B1 = B2 & len B1=$1 holds Sum B1 = Sum B2;
+A2: for n st P[n] holds P[n+1]
+  proof
+    let n such that
+A3: P[n];
+    set n1=n+1;
+    let B1 be FinSequence of V1,W1 be Subspace of V1, B2 be FinSequence of W1
+    such that
+A4: B1 = B2 and
+A5: len B1=n1;
+A6: len (B1|n)=n by A5,FINSEQ_1:80,NAT_1:11;
+    then
+A7: Sum (B1|n)=Sum (B2|n) by A3,A4;
+    1<=n1 by NAT_1:11;
+    then
+A8: n1 in dom B1 by A5,FINSEQ_3:27;
+    then
+A9: B2.n1=B2/.n1 by A4,PARTFUN1:def 8;
+A10: B1.n1=B1/.n1 by A8,PARTFUN1:def 8;
+A11: dom (B1|n)=Seg n by A6,FINSEQ_1:def 3;
+    hence Sum B1 = Sum (B1|n)+B1/.n1 by A5,A10,A6,RLVECT_1:55
+      .= Sum (B2|n)+B2/.n1 by A4,A10,A9,A7,VECTSP_4:21
+      .=Sum B2 by A4,A5,A9,A6,A11,RLVECT_1:55;
   end;
-  for n holds P[n] from NAT_1:sch 2(A2,A4);
+A12: P[0]
+  proof
+    let B1 be FinSequence of V1,W1 be Subspace of V1, B2 be FinSequence of W1;
+    assume
+    B1 = B2 & len B1=0;
+    then Sum B1=0.V1 & Sum B2=0.W1 by RLVECT_1:94;
+    hence thesis by VECTSP_4:19;
+  end;
+  for n holds P[n] from NAT_1:sch 2(A12,A2);
   then P[len B1];
   hence thesis by A1;
 end;
 
 theorem
-  i in dom R implies
-    Sum lmlt(Line(1.(K,len R),i),R) = R/.i
+  i in dom R implies Sum lmlt(Line(1.(K,len R),i),R) = R/.i
 proof
-  assume
-A1:  i in dom R;
   set ONE=1.(K,len R);
   set L=Line(ONE,i);
   set M=lmlt(L,R);
-A2:  len L=width ONE & width ONE=len R & len ONE=len R
-    by FINSEQ_1:def 18,MATRIX_1:25;
+A1: width ONE=len R by MATRIX_1:25;
+  len L=width ONE by FINSEQ_1:def 18;
+  then dom L=dom R by A1,FINSEQ_3:31;
   then
-A3:  dom L=dom R & dom R=dom ONE by FINSEQ_3:31;
+A2: dom M=dom R by MATRLIN:16;
   then
-A4:  dom M=dom R by MATRLIN:16;
-  then
-A5:  1<=i & i<=len M & len M=len R by A1,FINSEQ_3:27,31;
+A3: len M=len R by FINSEQ_3:31;
   consider f be Function of NAT, the carrier of V1 such that
-A6:   Sum M= f.(len M) and
-A7:   f.0 = 0.V1 and
-A8:   for j be Element of NAT,
-        v1 st j < len M & v1 = M.(j + 1) holds f.(j + 1) = f.j + v1
-    by RLVECT_1:def 13;
-  defpred P[Nat] means $1<i implies f.$1=0.V1;
-A9:  P[0] by A7;
-A10:  for n st P[n] holds P[n+1]
-     proof
-       let n such that
-A11:     P[n];set n1=n+1;
-       reconsider N=n as Element of NAT by ORDINAL1:def 13;
-       assume
-A12:      n1<i;
-       then n1<len M by A5,XXREAL_0:2;
-       then
-A13:     n<len M by NAT_1:13;
-       1<=n1 & n1<=len R by A5,A12,NAT_1:11,XXREAL_0:2;
-       then
-A14:     n1 in Seg len R & n1 in dom R by FINSEQ_3:27;
-       then
-A15:     L.n1=ONE*(i,n1) & [i,n1] in Indices ONE & R.n1=R/.n1
-         by A1,A2,A3,MATRIX_1:def 8,PARTFUN1:def 8,ZFMISC_1:106;
-       then L.n1=0.K by A12,MATRIX_1:def 12;
-       then M.n1 = 0.K * R/.n1 by A4,A14,A15,FUNCOP_1:28
-                .= 0.V1 by VECTSP_1:59;
-       hence f.n1 = f.N + 0.V1 by A13,A8
-                 .= 0.V1 by A12,A11,NAT_1:13,RLVECT_1:def 7;
-     end;
-A16:for n holds P[n] from NAT_1:sch 2(A9,A10);
+A4: Sum M= f.(len M) and
+A5: f.0 = 0.V1 and
+A6: for j be Element of NAT, v1 st j < len M & v1 = M.(j + 1) holds f.(
+  j + 1) = f.j + v1 by RLVECT_1:def 13;
   defpred Q[Nat] means $1<=len M implies f.$1=R/.i;
-A17:Q[i]
-     proof
-       assume
-A18:      i<=len M;
-       reconsider i1=i-1 as Element of NAT by A5,NAT_1:21;
-       i in Seg len R by A5,A1;
-       then
-A19:     L.i=ONE*(i,i) & [i,i] in Indices ONE & R.i=R/.i
-         by A1,A2,A3,MATRIX_1:def 8,PARTFUN1:def 8,ZFMISC_1:106;
-       then L.i=1_K by MATRIX_1:def 12;
-       then
-A20:      M.i = 1_K * R/.i by A1,A4,A19,FUNCOP_1:28
-             .= R/.i by VECTSP_1:def 26;
-       i1+1=i;
-       then i1<len M & i1<i by A18,NAT_1:13;
-       then f.(i1+1) = f.i1+R/.i & f.i1=0.V1 by A16,A8,A20;
-       hence thesis by RLVECT_1:def 7;
-     end;
-A21:for n st i<=n holds Q[n] implies Q[n+1]
-     proof
-       let n such that
-A22:     i <=n;
-       reconsider N=n as Element of NAT by ORDINAL1:def 13;
-       assume
-A23:     Q[n]; set n1=n+1;
-       assume
-A24:     n1<=len M;
-       then
-A25:     n<len M by NAT_1:13;
-A26:     1<=n1 & i<n1 by A22,NAT_1:11,13;
-       then
-A27:     n1 in Seg len R & n1 in dom R by A5,A24,FINSEQ_3:27;
-       then
-A28:     L.n1=ONE*(i,n1) & [i,n1] in Indices ONE & R.n1=R/.n1
-         by A1,A2,A3,MATRIX_1:def 8,PARTFUN1:def 8,ZFMISC_1:106;
-       then L.n1=0.K by A26,MATRIX_1:def 12;
-       then M.n1 = 0.K * R/.n1 by A4,A27,A28,FUNCOP_1:28
-                .= 0.V1 by VECTSP_1:59;
-       hence f.n1 = f.N + 0.V1 by A25,A8
-                 .= R/.i by A24,A23,NAT_1:13,RLVECT_1:def 7;
-     end;
-  for n st i<=n holds Q[n] from NAT_1:sch 8(A17,A21);
-  hence thesis by A5,A6;
+  defpred P[Nat] means $1<i implies f.$1=0.V1;
+  assume
+A7: i in dom R;
+  then
+A8: 1<=i by FINSEQ_3:27;
+  len ONE=len R by MATRIX_1:25;
+  then
+A9: dom R=dom ONE by FINSEQ_3:31;
+A10: for n st i<=n holds Q[n] implies Q[n+1]
+  proof
+    let n such that
+A11: i <=n;
+    set n1=n+1;
+A12: i<n1 by A11,NAT_1:13;
+    reconsider N=n as Element of NAT by ORDINAL1:def 13;
+    assume
+A13: Q[n];
+    assume
+A14: n1<=len M;
+    then
+A15: n<len M by NAT_1:13;
+A16: 1<=n1 by NAT_1:11;
+    then n1 in Seg len R by A3,A14;
+    then L.n1=ONE*(i,n1) & [i,n1] in Indices ONE by A7,A1,A9,MATRIX_1:def
+    8 ,ZFMISC_1:106;
+    then
+A17: L.n1=0.K by A12,MATRIX_1:def 12;
+A18: n1 in dom R by A2,A14,A16,FINSEQ_3:27;
+    then R.n1=R/.n1 by PARTFUN1:def 8;
+    then M.n1 = 0.K * R/.n1 by A2,A18,A17,FUNCOP_1:28
+      .= 0.V1 by VECTSP_1:59;
+    hence f.n1 = f.N + 0.V1 by A6,A15
+      .= R/.i by A13,A14,NAT_1:13,RLVECT_1:def 7;
+  end;
+A19: i<=len M by A7,A2,FINSEQ_3:27;
+A20: for n st P[n] holds P[n+1]
+  proof
+    let n such that
+A21: P[n];
+    reconsider N=n as Element of NAT by ORDINAL1:def 13;
+    set n1=n+1;
+    assume
+A22: n1<i;
+    then n1<len M by A19,XXREAL_0:2;
+    then
+A23: n<len M by NAT_1:13;
+A24: 1<=n1 & n1<=len R by A19,A3,A22,NAT_1:11,XXREAL_0:2;
+    then n1 in Seg len R;
+    then L.n1=ONE*(i,n1) & [i,n1] in Indices ONE by A7,A1,A9,MATRIX_1:def
+    8 ,ZFMISC_1:106;
+    then
+A25: L.n1=0.K by A22,MATRIX_1:def 12;
+A26: n1 in dom R by A24,FINSEQ_3:27;
+    then R.n1=R/.n1 by PARTFUN1:def 8;
+    then M.n1 = 0.K * R/.n1 by A2,A26,A25,FUNCOP_1:28
+      .= 0.V1 by VECTSP_1:59;
+    hence f.n1 = f.N + 0.V1 by A6,A23
+      .= 0.V1 by A21,A22,NAT_1:13,RLVECT_1:def 7;
+  end;
+A27: P[0] by A5;
+A28: for n holds P[n] from NAT_1:sch 2(A27,A20);
+A29: Q[i]
+  proof
+    i in Seg len R by A7,A8,A19,A3;
+    then L.i=ONE*(i,i) & [i,i] in Indices ONE by A7,A1,A9,
+    MATRIX_1:def 8 ,
+    ZFMISC_1:106;
+    then
+A30: L.i=1_K by MATRIX_1:def 12;
+    reconsider i1=i-1 as Element of NAT by A8,NAT_1:21;
+A31: i1+1=i;
+    then i1<i by NAT_1:13;
+    then
+A32: f.i1=0.V1 by A28;
+    assume
+    i<=len M;
+    then
+A33: i1<len M by A31,NAT_1:13;
+    R.i=R/.i by A7,PARTFUN1:def 8;
+    then M.i = 1_K * R/.i by A7,A2,A30,FUNCOP_1:28
+      .= R/.i by VECTSP_1:def 26;
+    then f.(i1+1) = f.i1+R/.i by A6,A33;
+    hence thesis by A32,RLVECT_1:def 7;
+  end;
+  for n st i<=n holds Q[n] from NAT_1:sch 8(A29,A10);
+  hence thesis by A19,A4;
 end;
 
 begin :: More on the Decomposition of a Vector in a Basis
@@ -779,35 +911,47 @@ begin :: More on the Decomposition of a Vector in a Basis
 theorem Th17:
   v1 + w1 |-- b1 = (v1 |-- b1) + (w1 |-- b1)
 proof
-  set vb=v1 |-- b1;set wb=w1 |-- b1;set vwb=v1+w1 |-- b1;
+  set vb=v1 |-- b1;
+  set wb=w1 |-- b1;
+  set vwb=v1+w1 |-- b1;
   consider L1 be Linear_Combination of V1 such that
-A1:  v1 = Sum(L1) & Carrier L1 c= rng b1 and
-A2:  for k st 1<=k & k<=len vb holds vb/.k = L1.(b1/.k) by MATRLIN:def 9;
-  consider L2 be Linear_Combination of V1 such that
-A3:  w1 = Sum(L2) & Carrier L2 c= rng b1 and
-A4:  for k st 1<=k & k<=len wb holds wb/.k = L2.(b1/.k) by MATRLIN:def 9;
+A1: v1 = Sum(L1) & Carrier L1 c= rng b1 and
+A2: for k st 1<=k & k<=len vb holds vb/.k = L1.(b1/.k) by MATRLIN:def 9;
   consider L3 be Linear_Combination of V1 such that
-A5:  v1+w1 = Sum(L3) & Carrier L3 c= rng b1 and
-A6:  for k st 1<=k & k<=len vwb holds vwb/.k = L3.(b1/.k) by MATRLIN:def 9;
-A7:len vb=len b1 & len wb=len b1 & len vwb=len b1 by MATRLIN:def 9;
-  then reconsider vb,wb,vwb as Element of (len b1)-tuples_on the carrier of K
-    by FINSEQ_2:110;
+A3: v1+w1 = Sum(L3) & Carrier L3 c= rng b1 and
+A4: for k st 1<=k & k<=len vwb holds vwb/.k = L3.(b1/.k) by MATRLIN:def
+  9;
+A5: len wb=len b1 by MATRLIN:def 9;
   reconsider rb1=rng b1 as Basis of V1 by MATRLIN:def 4;
+  consider L2 be Linear_Combination of V1 such that
+A6: w1 = Sum(L2) & Carrier L2 c= rng b1 and
+A7: for k st 1<=k & k<=len wb holds wb/.k = L2.(b1/.k) by MATRLIN:def 9;
+A8: len vb=len b1 by MATRLIN:def 9;
+A9: len vwb=len b1 by MATRLIN:def 9;
+  then reconsider
+  vb,wb,vwb as Element of (len b1)-tuples_on the carrier of K by A8
+  ,A5,FINSEQ_2:110;
   rb1 is linearly-independent by VECTSP_7:def 3;
   then
-A8:  L3=L1+L2 by A1,A3,A5,MATRLIN:10;
-  now let i such that
-A9:    i in Seg len b1;
-A10:   1<=i & i<=len b1 by A9,FINSEQ_1:3;
-      dom vb=dom b1 & dom wb=dom b1 & dom vwb=dom b1 & dom b1=Seg len b1
-        by A7,FINSEQ_1:def 3,FINSEQ_3:31;
-      then
-A11:    vb.i=vb/.i & wb.i=wb/.i & vwb.i=vwb/.i by A9,PARTFUN1:def 8;
-      hence vwb.i = (L1+L2).(b1/.i) by A7,A10,A6,A8
-                 .= L1.(b1/.i)+L2.(b1/.i) by VECTSP_6:def 11
-                 .= vb/.i +L2.(b1/.i) by A7,A10,A2
-                 .= vb/.i +wb/.i by A7,A10,A4
-                 .= (vb+wb).i by A9,A11,FVSUM_1:22;
+A10: L3=L1+L2 by A1,A6,A3,MATRLIN:10;
+  now
+A11: dom b1=Seg len b1 by FINSEQ_1:def 3;
+    let i such that
+A12: i in Seg len b1;
+A13: 1<=i & i<=len b1 by A12,FINSEQ_1:3;
+    dom wb=dom b1 by A5,FINSEQ_3:31;
+    then
+A14: wb.i=wb/.i by A12,A11,PARTFUN1:def 8;
+    dom vb=dom b1 by A8,FINSEQ_3:31;
+    then
+A15: vb.i=vb/.i by A12,A11,PARTFUN1:def 8;
+    dom vwb=dom b1 by A9,FINSEQ_3:31;
+    then vwb.i=vwb/.i by A12,A11,PARTFUN1:def 8;
+    hence vwb.i = (L1+L2).(b1/.i) by A4,A9,A10,A13
+      .= L1.(b1/.i)+L2.(b1/.i) by VECTSP_6:def 11
+      .= vb/.i +L2.(b1/.i) by A2,A8,A13
+      .= vb/.i +wb/.i by A7,A5,A13
+      .= (vb+wb).i by A12,A15,A14,FVSUM_1:22;
   end;
   hence thesis by FINSEQ_2:139;
 end;
@@ -815,45 +959,55 @@ end;
 theorem Th18:
   a * v1 |-- b1 = a * (v1 |-- b1)
 proof
-  set vb=v1 |-- b1;set avb=(a*v1) |-- b1;
+  set vb=v1 |-- b1;
+  set avb=(a*v1) |-- b1;
   consider L1 be Linear_Combination of V1 such that
-A1:  v1 = Sum(L1) & Carrier L1 c= rng b1 and
-A2:  for k st 1<=k & k<=len vb holds vb/.k = L1.(b1/.k) by MATRLIN:def 9;
-  consider L2 be Linear_Combination of V1 such that
-A3:  a*v1 = Sum(L2) & Carrier L2 c= rng b1 and
-A4:  for k st 1<=k & k<=len avb holds avb/.k = L2.(b1/.k) by MATRLIN:def 9;
-A5:  len vb=len b1 & len avb=len b1 & len (a*vb)=len vb
-     by MATRIXR1:16,MATRLIN:def 9;
-  then reconsider vb'=vb,avb,Avb=a*vb
-    as Element of (len b1)-tuples_on the carrier of K by FINSEQ_2:110;
+A1: v1 = Sum(L1) & Carrier L1 c= rng b1 and
+A2: for k st 1<=k & k<=len vb holds vb/.k = L1.(b1/.k) by MATRLIN:def 9;
+A3: len vb=len b1 by MATRLIN:def 9;
   reconsider rb1=rng b1 as Basis of V1 by MATRLIN:def 4;
-A6:  rb1 is linearly-independent by VECTSP_7:def 3;
-  now let i such that
-A7:    i in Seg len b1;
-A8:    1<=i & i<=len b1 by A7,FINSEQ_1:3;
-      dom vb=dom b1 & dom avb=dom b1 & dom b1=Seg len b1
-        by A5,FINSEQ_1:def 3,FINSEQ_3:31;
-      then
-A9:     vb.i=vb/.i & avb.i=avb/.i by A7,PARTFUN1:def 8;
-A10:  now per cases;
-        suppose a<>0.K;
-          then a*L1=L2 by A1,A3,A6,MATRLIN:11;
-          hence L2.(b1/.i) = a*L1.(b1/.i) by VECTSP_6:def 12
-                          .= a*(vb'/.i) by A5,A8,A2;
-        end;
-        suppose
-A11:        a=0.K;
-          then
-A12:        a*v1=0.V1 by VECTSP_1:59;
-A13:      L2 is Linear_Combination of Carrier L2 by VECTSP_6:28;
-          Carrier L2 is linearly-independent  by A3,A6,VECTSP_7:2;
-          then not b1/.i in Carrier L2 by A3,A12,A13,VECTSP_7:def 1;
-          hence L2.(b1/.i) = 0.K
-                          .= a*(vb'/.i) by A11,VECTSP_1:39;
-        end;
+  consider L2 be Linear_Combination of V1 such that
+A4: a*v1 = Sum(L2) and
+A5: Carrier L2 c= rng b1 and
+A6: for k st 1<=k & k<=len avb holds avb/.k = L2.(b1/.k) by MATRLIN:def
+  9;
+A7: len avb=len b1 by MATRLIN:def 9;
+  len (a*vb)=len vb by MATRIXR1:16;
+  then reconsider
+  vb'=vb,avb,Avb=a*vb as Element of (len b1)-tuples_on the carrier
+  of K by A3,A7,FINSEQ_2:110;
+A8: rb1 is linearly-independent by VECTSP_7:def 3;
+  now
+    let i such that
+A9: i in Seg len b1;
+A10: 1<=i & i<=len b1 by A9,FINSEQ_1:3;
+A11: now
+      per cases;
+      suppose
+        a<>0.K;
+        then a*L1=L2 by A1,A4,A5,A8,MATRLIN:11;
+        hence L2.(b1/.i) = a*L1.(b1/.i) by VECTSP_6:def 12
+          .= a*(vb'/.i) by A2,A3,A10;
       end;
-      thus avb.i = L2.(b1/.i) by A9,A5,A4,A8
-                .= Avb.i by A10,A7,A9,FVSUM_1:63;
+      suppose
+A12:    a=0.K;
+        then
+A13:    a*v1=0.V1 by VECTSP_1:59;
+        L2 is Linear_Combination of Carrier L2 & Carrier L2 is
+        linearly-independent by A5,A8,VECTSP_6:28,VECTSP_7:2;
+        then not b1/.i in Carrier L2 by A4,A13,VECTSP_7:def 1;
+        hence L2.(b1/.i) = 0.K
+          .= a*(vb'/.i) by A12,VECTSP_1:39;
+      end;
+    end;
+A14: dom b1=Seg len b1 by FINSEQ_1:def 3;
+    dom vb=dom b1 by A3,FINSEQ_3:31;
+    then
+A15: vb.i=vb/.i by A9,A14,PARTFUN1:def 8;
+    dom avb=dom b1 by A7,FINSEQ_3:31;
+    then avb.i=avb/.i by A9,A14,PARTFUN1:def 8;
+    hence avb.i = L2.(b1/.i) by A6,A7,A10
+      .= Avb.i by A9,A15,A11,FVSUM_1:63;
   end;
   hence thesis by FINSEQ_2:139;
 end;
@@ -861,411 +1015,459 @@ end;
 theorem Th19:
   i in dom b1 implies b1/.i|-- b1 = Line(1.(K,len b1),i)
 proof
-  assume
-A1:  i in dom b1;
-  then
-A2:  b1.i=b1/.i by PARTFUN1:def 8;
   set ONE=1.(K,len b1);
   set bb=b1/.i|-- b1;
+  consider KL be Linear_Combination of V1 such that
+A1: b1/.i = Sum(KL) & Carrier KL c= rng b1 and
+A2: for k st 1<=k & k<=len bb holds bb/.k=KL.(b1/.k) by MATRLIN:def 9;
+  reconsider rb1=rng b1 as Basis of V1 by MATRLIN:def 4;
+A3: rb1 is linearly-independent by VECTSP_7:def 3;
   b1/.i in {b1/.i} by TARSKI:def 1;
   then b1/.i in Lin{b1/.i} by VECTSP_7:13;
   then consider Lb be Linear_Combination of {b1/.i} such that
-A3:  b1/.i=Sum Lb by VECTSP_7:12;
-  consider KL be Linear_Combination of V1 such that
-A4:  b1/.i = Sum(KL) & Carrier KL c= rng b1 and
-A5:  for k st 1<=k & k<=len bb holds bb/.k=KL.(b1/.k) by MATRLIN:def 9;
-A6:  len b1=len bb by MATRLIN:def 9;
-  reconsider rb1=rng b1 as Basis of V1 by MATRLIN:def 4;
-A7:  rb1 is linearly-independent by VECTSP_7:def 3;
-  b1.i in rb1 by A1,FUNCT_1:def 5;
+A4: b1/.i=Sum Lb by VECTSP_7:12;
+  assume
+A5: i in dom b1;
   then
-A8:  Carrier Lb c= {b1.i} & {b1.i}c= rb1 & b1/.i<>0.V1
-    by A2,A7,VECTSP_6:def 7,VECTSP_7:3,ZFMISC_1:37;
-   then Carrier Lb c= rb1 by XBOOLE_1:1;
-   then
-A9:  Lb = KL by A3,A4,A7,MATRLIN:9;
-A10: width ONE=len b1 & Indices ONE=[:Seg len b1,Seg len b1:]
-      by MATRIX_1:25;
-   then
-A11:  len Line(ONE,i)=len b1 by FINSEQ_1:def 18;
-   now let j such that
-A12:     1<=j & j<=len bb;
-A13:    j in Seg len b1 & i in Seg len b1 & j in dom b1 & dom bb=dom b1
-          by A1,A12,A6,FINSEQ_1:3,def 3,FINSEQ_3:27,31;
+A6: b1.i=b1/.i by PARTFUN1:def 8;
+  then
+A7: Carrier Lb c= {b1.i} by VECTSP_6:def 7;
+A8: b1.i in rb1 by A5,FUNCT_1:def 5;
+  then {b1.i}c= rb1 by ZFMISC_1:37;
+  then Carrier Lb c= rb1 by A7,XBOOLE_1:1;
+  then
+A9: Lb = KL by A4,A1,A3,MATRLIN:9;
+A10: width ONE=len b1 by MATRIX_1:25;
+A11: Indices ONE=[:Seg len b1,Seg len b1:] by MATRIX_1:25;
+A12: len b1=len bb by MATRLIN:def 9;
+A13: b1/.i<>0.V1 by A6,A3,A8,VECTSP_7:3;
+A14: now
+    let j such that
+A15: 1<=j & j<=len bb;
+A16: j in Seg len b1 by A12,A15,FINSEQ_1:3;
+    i in Seg len b1 by A5,FINSEQ_1:def 3;
+    then
+A17: [i,j] in Indices ONE by A11,A16,ZFMISC_1:106;
+A18: j in dom b1 by A12,A15,FINSEQ_3:27;
+A19: dom bb=dom b1 by A12,FINSEQ_3:31;
+    now
+      per cases;
+      suppose
+A20:    i=j;
+        Lb.(b1/.i) *(b1/.i) = b1/.i by A4,VECTSP_6:43
+          .= 1_K*(b1/.i) by VECTSP_1:def 26;
         then
-A14:      [i,j] in Indices ONE by A10,ZFMISC_1:106;
-        now per cases;
-           suppose
-A15:          i=j;
-              then A16:1_K = ONE*(i,j) by A14,MATRIX_1:def 12
-                          .= Line(ONE,i).j by A10,A13,MATRIX_1:def 8;
-              Lb.(b1/.i) *(b1/.i) = b1/.i by A3,VECTSP_6:43
-                                 .= 1_K*(b1/.i) by VECTSP_1:def 26;
-              then 1_K = KL.(b1/.i) by A9,A8,VECTSP10:5
-                      .= bb/.j by A5,A12,A15;
-              hence Line(ONE,i).j=bb.j by A13,A16,PARTFUN1:def 8;
-           end;
-           suppose
-A17:          i<>j;
-              then
-A18:          0.K = ONE*(i,j) by A14,MATRIX_1:def 12
-                 .= Line(ONE,i).j by A10,A13,MATRIX_1:def 8;
-A19:          b1.j = b1/.j by A13,PARTFUN1:def 8;
-              b1 is one-to-one by MATRLIN:def 4;
-              then b1.i <> b1.j by A1,A13,A17,FUNCT_1:def 8;
-              then not b1.j in Carrier Lb by A8,TARSKI:def 1;
-              then 0.K = KL.(b1/.j) by A9,A19
-                      .= bb/.j by A5,A12;
-              hence Line(ONE,i).j=bb.j by A18,A13,PARTFUN1:def 8;
-           end;
-        end;
-        hence Line(ONE,i).j=bb.j;
-   end;
-   hence thesis by A6,A11,FINSEQ_1:18;
+A21:    1_K = KL.(b1/.i) by A13,A9,VECTSP10:5
+          .= bb/.j by A2,A15,A20;
+        1_K = ONE*(i,j) by A17,A20,MATRIX_1:def 12
+          .= Line(ONE,i).j by A10,A16,MATRIX_1:def 8;
+        hence Line(ONE,i).j=bb.j by A18,A19,A21,PARTFUN1:def 8;
+      end;
+      suppose
+A22:    i<>j;
+        b1 is one-to-one by MATRLIN:def 4;
+        then b1.i <> b1.j by A5,A18,A22,FUNCT_1:def 8;
+        then
+A23:    not b1.j in Carrier Lb by A7,TARSKI:def 1;
+A24:    0.K = ONE*(i,j) by A17,A22,MATRIX_1:def 12
+          .= Line(ONE,i).j by A10,A16,MATRIX_1:def 8;
+        b1.j = b1/.j by A18,PARTFUN1:def 8;
+        then 0.K = KL.(b1/.j) by A9,A23
+          .= bb/.j by A2,A15;
+        hence Line(ONE,i).j=bb.j by A18,A19,A24,PARTFUN1:def 8;
+      end;
+    end;
+    hence Line(ONE,i).j=bb.j;
+  end;
+  len Line(ONE,i)=len b1 by A10,FINSEQ_1:def 18;
+  hence thesis by A12,A14,FINSEQ_1:18;
 end;
 
 theorem Th20:
   0.V1|-- b1 = len b1 |-> 0.K
 proof
- per cases;
-    suppose dom b1={}; then
-A1:     len b1=0 & len (len b1|->0.K) =len b1 & len (0.V1|--b1)=len b1
-        by CARD_1:47,FINSEQ_1:def 18,MATRLIN:def 9,RELAT_1:64;
-      hence 0.V1|-- b1 = {}
-                      .= len b1 |-> 0.K by A1;
-    end;
-    suppose dom b1<>{};
-      then consider x such that
-A2:      x in dom b1 by XBOOLE_0:def 1;
-      reconsider x as Nat by A2;
-A3:   width 1.(K,len b1)=len b1 by MATRIX_1:25;
-      0.V1 = b1/.x-b1/.x by VECTSP_1:63
-          .= b1/.x+(-1_K)*(b1/.x) by VECTSP_1:59;
-      hence 0.V1|-- b1 = (b1/.x |-- b1) + ((-1_K)*(b1/.x)|--b1) by Th17
-                      .= (b1/.x |-- b1) + (-1_K)*((b1/.x)|--b1) by Th18
-                      .= Line(1.(K,len b1),x)+(-1_K)*((b1/.x)|--b1) by A2,Th19
-                      .= Line(1.(K,len b1),x)+(-1_K)*Line(1.(K,len b1),x)
-                          by A2,Th19
-                      .= Line(1.(K,len b1),x)+-Line(1.(K,len b1),x)
-                          by FVSUM_1:72
-                      .= len b1|->0.K by A3,FVSUM_1:35;
-    end;
+  per cases;
+  suppose
+A1: dom b1={};
+    then
+A2: len b1=0 by CARD_1:47,RELAT_1:64;
+    len (0.V1|--b1)=len b1 by MATRLIN:def 9;
+    hence 0.V1|-- b1 = {} by A1,CARD_1:47,RELAT_1:64
+      .= len b1 |-> 0.K by A2;
+  end;
+  suppose
+    dom b1<>{};
+    then consider x such that
+A3: x in dom b1 by XBOOLE_0:def 1;
+A4: width 1.(K,len b1)=len b1 by MATRIX_1:25;
+    reconsider x as Nat by A3;
+    0.V1 = b1/.x-b1/.x by VECTSP_1:63
+      .= b1/.x+(-1_K)*(b1/.x) by VECTSP_1:59;
+    hence 0.V1|-- b1 = (b1/.x |-- b1) + ((-1_K)*(b1/.x)|--b1) by Th17
+      .= (b1/.x |-- b1) + (-1_K)*((b1/.x)|--b1) by Th18
+      .= Line(1.(K,len b1),x)+(-1_K)*((b1/.x)|--b1) by A3,Th19
+      .= Line(1.(K,len b1),x)+(-1_K)*Line(1.(K,len b1),x) by A3,Th19
+      .= Line(1.(K,len b1),x)+-Line(1.(K,len b1),x) by FVSUM_1:72
+      .= len b1|->0.K by A4,FVSUM_1:35;
+  end;
 end;
 
 theorem Th21:
   len b1 = dim V1
 proof
   reconsider R=rng b1 as Basis of V1 by MATRLIN:def 4;
-A1:  b1 is one-to-one  by MATRLIN:def 4;
+A1: b1 is one-to-one by MATRLIN:def 4;
   thus len b1 = card Seg len b1 by FINSEQ_1:78
-             .= card dom b1 by FINSEQ_1:def 3
-             .= card R by A1,POLYFORM:2
-             .= dim V1 by VECTSP_9:def 2;
+    .= card dom b1 by FINSEQ_1:def 3
+    .= card R by A1,POLYFORM:2
+    .= dim V1 by VECTSP_9:def 2;
 end;
 
-Lm4:for V be VectSp of K
-  for W1 be Subspace of V for L1 be Linear_Combination of W1
-    ex K1 be Linear_Combination of V st
-      Carrier K1=Carrier L1 & Sum K1=Sum L1 & K1|the carrier of W1=L1
+Lm4: for V be VectSp of K for W1 be Subspace of V for L1 be Linear_Combination
+of W1 ex K1 be Linear_Combination of V st Carrier K1=Carrier L1 & Sum K1=Sum L1
+& K1|the carrier of W1=L1
+
 proof
   let V be VectSp of K;
   let W1 be Subspace of V;
   let L1 be Linear_Combination of W1;
-  defpred P[set, set] means
-    ($1 in W1 & $2 = L1.$1) or (not $1 in W1 & $2 = 0.K);
+
+  defpred P[set, set] means ($1 in W1 & $2 = L1.$1) or (not $1 in W1 & $2 = 0.
+  K);
+
+  reconsider L'= L1 as Function of W1,K;
 A1: for x st x in the carrier of V ex y st y in the carrier of K & P[x, y]
-    proof
-      let x such that x in the carrier of V;
-      per cases;
-        suppose
-A2:         x in W1;
-          then reconsider x as Vector of W1 by STRUCT_0:def 5;
-          P[x, L1.x] by A2;
-          hence thesis;
-        end;
-        suppose not x in W1;
-          hence thesis;
-        end;
+  proof
+    let x such that
+    x in the carrier of V;
+    per cases;
+    suppose
+A2:   x in W1;
+      then reconsider x as Vector of W1 by STRUCT_0:def 5;
+      P[x, L1.x] by A2;
+      hence thesis;
     end;
+    suppose
+      not x in W1;
+      hence thesis;
+    end;
+  end;
   consider K1 be Function of V,K such that
-A3:  for x st x in the carrier of V holds P[x, K1.x] from FUNCT_2:sch 1(A1);
+
+A3: for x st x in the carrier of V holds P[x, K1.x] from FUNCT_2:sch 1(
+  A1 );
+
 A4: the carrier of W1 c= the carrier of V by VECTSP_4:def 2;
   then reconsider C = Carrier(L1) as finite Subset of V by XBOOLE_1:1;
-A5:now let v be Vector of V such that
-A6:      not v in C;
-      P[v, L1.v] &  v in the carrier of W1 or P[v, 0.K] by STRUCT_0:def 5;
-      then P[v, L1.v] & L1.v = 0.K or P[v, 0.K] by A6;
-      hence K1.v = 0.K by A3;
+A5: now
+    let v be Vector of V such that
+A6: not v in C;
+    P[v, L1.v] & v in the carrier of W1 or P[v, 0.K] by STRUCT_0:def 5;
+    then P[v, L1.v] & L1.v = 0.K or P[v, 0.K] by A6;
+    hence K1.v = 0.K by A3;
   end;
-  K1 is Element of Funcs(the carrier of V, the carrier of K)
-    by FUNCT_2:11;
+
+  K1 is Element of Funcs(the carrier of V, the carrier of K) by FUNCT_2:
+  11;
+
   then reconsider K1 as Linear_Combination of V by A5,VECTSP_6:def 4;
+
+  reconsider K'= K1|the carrier of W1 as Function of the carrier of W1, the
+  carrier of K by A4,FUNCT_2:38;
+
   take K1;
-  now let x be set;
-     assume
-  A7:  x in Carrier(K1) & not x in the carrier of W1;
-     then consider v being Vector of V such that
-  A8:  x = v & K1.v <> 0.K;
-     P[v, 0.K] & P[v, K1.v] by A3,A7,A8,STRUCT_0:def 5;
-     hence contradiction by A8;
+  now
+    let x be set;
+    assume that
+A7: x in Carrier(K1) and
+A8: not x in the carrier of W1;
+    consider v being Vector of V such that
+A9: x = v and
+A10: K1.v <> 0.K by A7;
+    P[v, 0.K] by A8,A9,STRUCT_0:def 5;
+    hence contradiction by A3,A10;
   end;
   then
-A9:  Carrier(K1) c= the carrier of W1 by TARSKI:def 3;
-  reconsider L'= L1 as Function of W1,K;
-  reconsider K'= K1|the carrier of W1 as
-     Function of the carrier of W1, the carrier of K by A4,FUNCT_2:38;
-  now let x be set such that
-A10:   x in the carrier of W1;
-    P[x, L1.x] & P[x, K1.x] by A3,A4,A10,STRUCT_0:def 5;
-    hence L'.x = K'.x by A10,FUNCT_1:72;
+A11: Carrier(K1) c= the carrier of W1 by TARSKI:def 3;
+  now
+    let x be set such that
+A12: x in the carrier of W1;
+    P[x, K1.x] by A3,A4,A12;
+    hence L'.x = K'.x by A12,FUNCT_1:72,STRUCT_0:def 5;
   end;
   then L' = K' by FUNCT_2:18;
-  hence thesis by A9,VECTSP_9:11;
+  hence thesis by A11,VECTSP_9:11;
 end;
 
 theorem
-  rng(b1|m) is linearly-independent Subset of V1 &
-  for A be Subset of V1 st A = rng(b1|m) holds b1|m is OrdBasis of Lin A
+  rng(b1|m) is linearly-independent Subset of V1 & for A be Subset of V1
+  st A = rng(b1|m) holds b1|m is OrdBasis of Lin A
 proof
   reconsider RNG=rng b1 as Basis of V1 by MATRLIN:def 4;
-A1:  rng (b1|m) c= RNG & RNG is linearly-independent
-    by RELAT_1:99,VECTSP_7:def 3;
-  hence rng(b1|m) is linearly-independent Subset of V1
-    by VECTSP_7:2,XBOOLE_1:1;
+A1: RNG is linearly-independent by VECTSP_7:def 3;
+  rng (b1|m) c= RNG by RELAT_1:99;
+  hence rng(b1|m) is linearly-independent Subset of V1 by A1,VECTSP_7:2,
+  XBOOLE_1:1;
   let A be Subset of V1 such that
-A2:  A = rng(b1|m);
-A3:  A is linearly-independent by A1,A2,VECTSP_7:2;
-   A c= the carrier of Lin (A)
-     proof
-       let x;
-       assume x in A;
-       then x in Lin A by VECTSP_7:13;
-       hence thesis by STRUCT_0:def 5;
-     end;
-   then reconsider A'=A as linearly-independent Subset of Lin A
-     by A3,VECTSP_9:16;
-   Lin A'= the VectSpStr of Lin A & b1 is one-to-one
-     by MATRLIN:def 4,VECTSP_9:21;
-   then rng(b1|m) is Basis of Lin A & b1|m is one-to-one &
-     b1|m is FinSequence of Lin A
-     by A2,FINSEQ_1:def 4,FUNCT_1:84,VECTSP_7:def 3;
-   hence thesis by MATRLIN:def 4;
+A2: A = rng(b1|m);
+A3: A c= the carrier of Lin (A)
+  proof
+    let x;
+    assume
+    x in A;
+    then x in Lin A by VECTSP_7:13;
+    hence thesis by STRUCT_0:def 5;
+  end;
+  A is linearly-independent by A1,A2,RELAT_1:99,VECTSP_7:2;
+  then reconsider A'=A as linearly-independent Subset of Lin A by
+  A3,VECTSP_9:16;
+  b1 is one-to-one by MATRLIN:def 4;
+  then
+A4: b1|m is one-to-one by FUNCT_1:84;
+  Lin A'= the VectSpStr of Lin A by VECTSP_9:21;
+  then rng(b1|m) is Basis of Lin A & b1|m is FinSequence of Lin A by A2,
+  FINSEQ_1:def 4,VECTSP_7:def 3;
+  hence thesis by A4,MATRLIN:def 4;
 end;
 
 theorem
-  rng(b1/^m) is linearly-independent Subset of V1 &
-  for A be Subset of V1 st A = rng(b1/^m) holds b1/^m is OrdBasis of Lin A
+  rng(b1/^m) is linearly-independent Subset of V1 & for A be Subset of
+  V1 st A = rng(b1/^m) holds b1/^m is OrdBasis of Lin A
 proof
   reconsider RNG=rng b1 as Basis of V1 by MATRLIN:def 4;
-A1:  rng (b1/^m) c= RNG & RNG is linearly-independent
-     by FINSEQ_5:36,VECTSP_7:def 3;
-  hence rng(b1/^m) is linearly-independent Subset of V1
-    by VECTSP_7:2,XBOOLE_1:1;
+A1: RNG is linearly-independent by VECTSP_7:def 3;
+  rng (b1/^m) c= RNG by FINSEQ_5:36;
+  hence rng(b1/^m) is linearly-independent Subset of V1 by A1,VECTSP_7:2,
+  XBOOLE_1:1;
   let A be Subset of V1 such that
-A2:  A = rng(b1 /^m);
-A3:  A is linearly-independent by A1,A2,VECTSP_7:2;
-   A c= the carrier of Lin (A)
-      proof
-        let x;
-        assume x in A;
-        then x in Lin A by VECTSP_7:13;
-        hence thesis by STRUCT_0:def 5;
-      end;
-  then reconsider A'=A as linearly-independent Subset of Lin A
-    by A3,VECTSP_9:16;
-  Lin A'= the VectSpStr of Lin A & b1 is one-to-one & b1=(b1|m)^(b1/^m)
-    by MATRLIN:def 4,RFINSEQ:21,VECTSP_9:21;
-  then rng(b1/^m) is Basis of Lin A & b1/^m is one-to-one &
-    b1/^m is FinSequence of Lin A
-    by A2,FINSEQ_1:def 4,FINSEQ_3:98,VECTSP_7:def 3;
-  hence thesis by MATRLIN:def 4;
+A2: A = rng(b1 /^m);
+A3: A c= the carrier of Lin (A)
+  proof
+    let x;
+    assume
+    x in A;
+    then x in Lin A by VECTSP_7:13;
+    hence thesis by STRUCT_0:def 5;
+  end;
+  A is linearly-independent by A1,A2,FINSEQ_5:36,VECTSP_7:2;
+  then reconsider A'=A as linearly-independent Subset of Lin A by
+  A3,VECTSP_9:16;
+  b1 is one-to-one & b1=(b1|m)^(b1/^m) by MATRLIN:def 4,RFINSEQ:21;
+  then
+A4: b1/^m is one-to-one by FINSEQ_3:98;
+  Lin A'= the VectSpStr of Lin A by VECTSP_9:21;
+  then rng(b1/^m) is Basis of Lin A & b1/^m is FinSequence of Lin A by A2,
+  FINSEQ_1:def 4,VECTSP_7:def 3;
+  hence thesis by A4,MATRLIN:def 4;
 end;
 
 theorem Th24:
-   for W1,W2 be Subspace of V1 st W1/\W2=(0).V1
-     for b1 be OrdBasis of W1,b2 be OrdBasis of W2,b be OrdBasis of W1+W2
-        st b=b1^b2
-       for v,v1,v2 be Vector of W1+W2,
-           w1 be Vector of W1,w2 be Vector of W2 st v = v1+v2 & v1=w1 & v2=w2
-     holds v|-- b = (w1|--b1)^(w2|-- b2)
+  for W1,W2 be Subspace of V1 st W1/\W2=(0).V1 for b1 be OrdBasis
+  of W1,b2 be OrdBasis of W2,b be OrdBasis of W1+W2 st b=b1^b2 for v,v1,v2 be
+  Vector of W1+W2, w1 be Vector of W1,w2 be Vector of W2 st v = v1+v2 & v1=w1 &
+  v2=w2 holds v|-- b = (w1|--b1)^(w2|-- b2)
 proof
   let W1,W2 be Subspace of V1 such that
-A1:  W1/\W2=(0).V1;
-  let b1 be OrdBasis of W1,b2 be OrdBasis of W2,b be OrdBasis of W1+W2
-     such that
-A2:   b=b1^b2;
-    let v,v1,v2 be Vector of W1+W2,w1 be Vector of W1,w2 be Vector of W2
-       such that
-A3: v=v1+v2 & v1=w1 &v2=w2;
-  set vb=v|--b;
-  set wb1=w1|--b1;
+A1: W1/\W2=(0).V1;
+  [#](0).V1 = {0.V1} by VECTSP_4:def 3;
+  then
+A2: card ([#](0).V1) = 1 by CARD_1:50;
+A3: dim W1 + dim W2 = dim(W1 + W2) + dim(W1 /\ W2) by VECTSP_9:36
+    .= dim (W1+W2)+0 by A1,A2,RANKNULL:5;
+  let b1 be OrdBasis of W1,b2 be OrdBasis of W2,b be OrdBasis of W1+W2 such
+  that
+A4: b=b1^b2;
+  reconsider R=rng b as Basis of W1+W2 by MATRLIN:def 4;
+  let v,v1,v2 be Vector of W1+W2,w1 be Vector of W1,w2 be Vector of W2 such
+  that
+A5: v=v1+v2 & v1=w1 & v2=w2;
   set wb2=w2|--b2;
+  consider L2 be Linear_Combination of W2 such that
+A6: w2 = Sum(L2) and
+A7: Carrier L2 c= rng b2 and
+A8: for k st 1<=k & k<=len wb2 holds wb2/.k=L2.(b2/.k) by MATRLIN:def 9;
+A9: W2 is Subspace of W1+W2 by VECTSP_5:11;
+  then consider K2 be Linear_Combination of W1+W2 such that
+A10: Carrier(K2) = Carrier(L2) and
+A11: Sum(K2) = Sum (L2) and
+A12: K2|the carrier of W2=L2 by Lm4;
+  rng b2 c= R by A4,FINSEQ_1:43;
+  then
+A13: Carrier K2 c= R by A7,A10,XBOOLE_1:1;
+  set wb1=w1|--b1;
+  set vb=v|--b;
   consider L1 be Linear_Combination of W1 such that
-A4:  w1 = Sum(L1) & Carrier L1 c= rng b1 and
-A5:  for k st 1<=k & k<=len wb1 holds wb1/.k=L1.(b1/.k) by MATRLIN:def 9;
-A6:  W1 is Subspace of W1+W2 by VECTSP_5:11;
-   then consider K1 be Linear_Combination of W1+W2 such that
-A7:   Carrier(K1) = Carrier(L1) & Sum(K1) = Sum (L1) &
-      K1|the carrier of W1=L1 by Lm4;
-   consider L2 be Linear_Combination of W2 such that
-A8:  w2 = Sum(L2) & Carrier L2 c= rng b2 and
-A9:  for k st 1<=k & k<=len wb2 holds wb2/.k=L2.(b2/.k) by MATRLIN:def 9;
-A10:  W2 is Subspace of W1+W2 by VECTSP_5:11;
-   then consider K2 be Linear_Combination of W1+W2 such that
-A11:  Carrier(K2) = Carrier(L2) & Sum(K2) = Sum (L2) &
-      K2|the carrier of W2=L2 by Lm4;
-   consider L be Linear_Combination of W1+W2 such that
-A12:  v = Sum(L) & Carrier L c= rng b and
-A13:  for k st 1<=k & k<=len vb holds vb/.k=L.(b/.k) by MATRLIN:def 9;
-   reconsider R=rng b as Basis of W1+W2 by MATRLIN:def 4;
-   rng b1 c= R & rng b2 c= R by A2,FINSEQ_1:42,43;
-   then
-A14:  Carrier K1 c= R & Carrier K2 c= R & R is linearly-independent
-      by A4,A7,A8,A11,VECTSP_7:def 3,XBOOLE_1:1;
-   then
-A15:  L=K1+K2 by A4,A7,A8,A11,A12,A3,MATRLIN:10;
-A16:  len wb1=len b1 & len wb2=len b2 &len vb=len b & len b1=dim W1 &
-      len b2=dim W2 & len b=dim (W1+W2) & len (wb1^wb2)=len wb1+len wb2
-     by Th21,FINSEQ_1:35,MATRLIN:def 9;
-   [#](0).V1 = {0.V1} by VECTSP_4:def 3;
-   then
-A17:  card ([#](0).V1) = 1 by CARD_1:50;
-A18:  dim W1 + dim W2 = dim(W1 + W2) + dim(W1 /\ W2) by VECTSP_9:36
-                     .= dim (W1+W2)+0 by A1,A17,RANKNULL:5;
-   then
-A19:  dom b=dom (wb1^wb2) & dom wb1=dom b1 & dom vb=dom b &dom wb2=dom b2
-      by A16,FINSEQ_3:31;
-   now let k such that
-A20:   1<=k & k<=len vb;
-A21:   k in dom (wb1^wb2) by A16,A18,A20,FINSEQ_3:27;
-       now per cases by A21,FINSEQ_1:38;
-          suppose
-A22:         k in dom wb1;
-            then 1<=k & k<=len wb1 by FINSEQ_3:27;
-            then
-A23:          L1.(b1/.k) = wb1/.k by A5
-                        .= wb1.k by A22,PARTFUN1:def 8
-                        .= (wb1^wb2).k by A22,FINSEQ_1:def 7;
-A24:        K1.(b1/.k)=L1.(b1/.k) by A7,FUNCT_1:72;
-            reconsider b1k=b1/.k as Vector of W1+W2 by A6,VECTSP_4:18;
-            not b1/.k in Carrier K2
-              proof
-                assume
-A25:               b1/.k in Carrier K2;
-                then b1/.k in W2 & b1/.k in W1 by A11,STRUCT_0:def 5;
-                then b1/.k in W1/\W2 by VECTSP_5:7;
-                then b1/.k in the carrier of (0).V1 by A1,STRUCT_0:def 5;
-                then b1/.k in {0.V1} by VECTSP_4:def 3;
-                then b1/.k = 0.V1 by TARSKI:def 1
-                          .= 0.(W1+W2) by VECTSP_4:19;
-                hence thesis by A25,A14,VECTSP_7:3;
-              end;
-            then K2.b1k=0.K;
-            then
-A26:          L.b1k = K1.b1k+0.K by A15,VECTSP_6:def 11
-                   .= (wb1^wb2).k by A23,A24,RLVECT_1:def 7;
-            b1k = b1.k by A19,A22,PARTFUN1:def 8
-               .= b.k by A19,A22,A2,FINSEQ_1:def 7
-               .= b/.k by A19,A21,PARTFUN1:def 8;
-            hence (wb1^wb2).k = vb/.k by A20,A13,A26
-                             .= vb.k by A19,A21,PARTFUN1:def 8;
-          end;
-          suppose ex n st n in dom wb2 & k=len wb1+n;
-            then consider n such that
-A27:          n in dom wb2 & k=len wb1+n;
-            1<=n & n<=len wb2 by A27,FINSEQ_3:27;
-            then
-A28:          L2.(b2/.n) = wb2/.n by A9
-                        .= wb2.n by A27,PARTFUN1:def 8
-                        .= (wb1^wb2).k by A27,FINSEQ_1:def 7;
-A29:        K2.(b2/.n)=L2.(b2/.n) by A11,FUNCT_1:72;
-            reconsider b2n=b2/.n as Vector of W1+W2 by A10,VECTSP_4:18;
-            not b2/.n in Carrier K1
-              proof
-                assume
-A30:              b2/.n in Carrier K1;
-                then b2/.n in W2 & b2/.n in W1 by A7,STRUCT_0:def 5;
-                then b2/.n in W1/\W2 by VECTSP_5:7;
-                then b2/.n in the carrier of (0).V1 by A1,STRUCT_0:def 5;
-                then b2/.n in {0.V1} by VECTSP_4:def 3;
-                then b2/.n = 0.V1 by TARSKI:def 1
-                          .= 0.(W1+W2) by VECTSP_4:19;
-                hence thesis by A30,A14,VECTSP_7:3;
-              end;
-            then K1.b2n=0.K;
-            then
-A31:          L.b2n = 0.K+K2.b2n by A15,VECTSP_6:def 11
-                   .= (wb1^wb2).k by A28,A29,RLVECT_1:def 7;
-            b2n = b2.n by A19,A27,PARTFUN1:def 8
-               .= b.k by A16,A19,A27,A2,FINSEQ_1:def 7
-               .= b/.k by A19,A21,PARTFUN1:def 8;
-            hence (wb1^wb2).k = vb/.k by A20,A13,A31
-                             .= vb.k by A19,A21,PARTFUN1:def 8;
-          end;
-       end;
-       hence vb.k=(wb1^wb2).k;
+A14: w1 = Sum(L1) and
+A15: Carrier L1 c= rng b1 and
+A16: for k st 1<=k & k<=len wb1 holds wb1/.k=L1.(b1/.k) by MATRLIN:def 9;
+  consider L be Linear_Combination of W1+W2 such that
+A17: v = Sum(L) & Carrier L c= rng b and
+A18: for k st 1<=k & k<=len vb holds vb/.k=L.(b/.k) by MATRLIN:def 9;
+A19: len vb=len b by MATRLIN:def 9;
+  then
+A20: dom vb=dom b by FINSEQ_3:31;
+A21: len wb2=len b2 by MATRLIN:def 9;
+  then
+A22: dom wb2=dom b2 by FINSEQ_3:31;
+A23: R is linearly-independent by VECTSP_7:def 3;
+A24: W1 is Subspace of W1+W2 by VECTSP_5:11;
+  then consider K1 be Linear_Combination of W1+W2 such that
+A25: Carrier(K1) = Carrier(L1) and
+A26: Sum(K1) = Sum (L1) and
+A27: K1|the carrier of W1=L1 by Lm4;
+A28: len wb1=len b1 by MATRLIN:def 9;
+  then
+A29: dom wb1=dom b1 by FINSEQ_3:31;
+A30: len (wb1^wb2)=len wb1+len wb2 by FINSEQ_1:35;
+A31: len b1=dim W1 & len b2=dim W2 by Th21;
+A32: len b=dim (W1+W2) by Th21;
+  then
+A33: dom b=dom (wb1^wb2) by A28,A21,A31,A30,A3,FINSEQ_3:31;
+  rng b1 c= R by A4,FINSEQ_1:42;
+  then
+A34: Carrier K1 c= R by A15,A25,XBOOLE_1:1;
+  then
+A35: L=K1+K2 by A5,A14,A26,A6,A11,A17,A13,A23,MATRLIN:10;
+  now
+    let k such that
+A36: 1<=k & k<=len vb;
+A37: k in dom (wb1^wb2) by A28,A21,A19,A31,A32,A30,A3,A36,FINSEQ_3:27;
+    now
+      per cases by A37,FINSEQ_1:38;
+      suppose
+A38:    k in dom wb1;
+        then 1<=k & k<=len wb1 by FINSEQ_3:27;
+        then
+A39:    L1.(b1/.k) = wb1/.k by A16
+          .= wb1.k by A38,PARTFUN1:def 8
+          .= (wb1^wb2).k by A38,FINSEQ_1:def 7;
+        reconsider b1k=b1/.k as Vector of W1+W2 by A24,VECTSP_4:18;
+A40:    K1.(b1/.k)=L1.(b1/.k) by A27,FUNCT_1:72;
+        not b1/.k in Carrier K2
+        proof
+A41:      b1/.k in W1 by STRUCT_0:def 5;
+          assume
+A42:      b1/.k in Carrier K2;
+          then b1/.k in W2 by A10,STRUCT_0:def 5;
+          then b1/.k in W1/\W2 by A41,VECTSP_5:7;
+          then b1/.k in the carrier of (0).V1 by A1,STRUCT_0:def 5;
+          then b1/.k in {0.V1} by VECTSP_4:def 3;
+          then b1/.k = 0.V1 by TARSKI:def 1
+            .= 0.(W1+W2) by VECTSP_4:19;
+          hence thesis by A13,A23,A42,VECTSP_7:3;
+        end;
+        then K2.b1k=0.K;
+        then
+A43:    L.b1k = K1.b1k+0.K by A35,VECTSP_6:def 11
+          .= (wb1^wb2).k by A39,A40,RLVECT_1:def 7;
+        b1k = b1.k by A29,A38,PARTFUN1:def 8
+          .= b.k by A4,A29,A38,FINSEQ_1:def 7
+          .= b/.k by A33,A37,PARTFUN1:def 8;
+        hence (wb1^wb2).k = vb/.k by A18,A36,A43
+          .= vb.k by A33,A20,A37,PARTFUN1:def 8;
+      end;
+      suppose
+        ex n st n in dom wb2 & k=len wb1+n;
+        then consider n such that
+A44:    n in dom wb2 and
+A45:    k=len wb1+n;
+        1<=n & n<=len wb2 by A44,FINSEQ_3:27;
+        then
+A46:    L2.(b2/.n) = wb2/.n by A8
+          .= wb2.n by A44,PARTFUN1:def 8
+          .= (wb1^wb2).k by A44,A45,FINSEQ_1:def 7;
+        reconsider b2n=b2/.n as Vector of W1+W2 by A9,VECTSP_4:18;
+A47:    K2.(b2/.n)=L2.(b2/.n) by A12,FUNCT_1:72;
+        not b2/.n in Carrier K1
+        proof
+          assume
+A48:      b2/.n in Carrier K1;
+          then b2/.n in W2 & b2/.n in W1 by A25,STRUCT_0:def 5;
+          then b2/.n in W1/\W2 by VECTSP_5:7;
+          then b2/.n in the carrier of (0).V1 by A1,STRUCT_0:def 5;
+          then b2/.n in {0.V1} by VECTSP_4:def 3;
+          then b2/.n = 0.V1 by TARSKI:def 1
+            .= 0.(W1+W2) by VECTSP_4:19;
+          hence thesis by A34,A23,A48,VECTSP_7:3;
+        end;
+        then K1.b2n=0.K;
+        then
+A49:    L.b2n = 0.K+K2.b2n by A35,VECTSP_6:def 11
+          .= (wb1^wb2).k by A46,A47,RLVECT_1:def 7;
+        b2n = b2.n by A22,A44,PARTFUN1:def 8
+          .= b.k by A4,A28,A22,A44,A45,FINSEQ_1:def 7
+          .= b/.k by A33,A37,PARTFUN1:def 8;
+        hence (wb1^wb2).k = vb/.k by A18,A36,A49
+          .= vb.k by A33,A20,A37,PARTFUN1:def 8;
+      end;
+    end;
+    hence vb.k=(wb1^wb2).k;
   end;
-  hence thesis by A16,A18,FINSEQ_1:18;
+  hence thesis by A28,A21,A19,A31,A30,A3,Th21,FINSEQ_1:18;
 end;
 
 theorem Th25:
-  for W1 be Subspace of V1 st W1 = (Omega).V1
-    for w be Vector of W1, v be Vector of V1,w1 be OrdBasis of W1 st
-        v = w & b1 = w1
-    holds v|--b1 = w|-- w1
+  for W1 be Subspace of V1 st W1 = (Omega).V1 for w be Vector of
+W1, v be Vector of V1,w1 be OrdBasis of W1 st v = w & b1 = w1 holds v|--b1 = w
+  |-- w1
 proof
   let W1 be Subspace of V1 such that
-A1:  W1 = (Omega).V1;
+A1: W1 = (Omega).V1;
   let w be Vector of W1,v be Vector of V1,w1 be OrdBasis of W1 such that
-A2:  v = w & b1 = w1;
+A2: v = w and
+A3: b1 = w1;
   consider KL be Linear_Combination of W1 such that
-A3:  w = Sum(KL) & Carrier KL c= rng w1 and
-A4:  for k st 1<=k & k<=len (w|--w1) holds (w|--w1)/.k=KL.(w1/.k)
-      by MATRLIN:def 9;
+A4: w = Sum(KL) & Carrier KL c= rng w1 and
+A5: for k st 1<=k & k<=len (w|--w1) holds (w|--w1)/.k=KL.(w1/.k) by
+  MATRLIN:def 9;
   consider K1 be Linear_Combination of V1 such that
-A5:  Carrier K1=Carrier KL & Sum K1=Sum KL & K1|the carrier of W1=KL by Lm4;
-A6:  len w1 = len (w|-- w1) by MATRLIN:def 9;
-  now let k such that
-A7:    1<=k & k<=len (w|--w1);
-A8:   k in dom w1 by A7,A6,FINSEQ_3:27;
-      dom K1 = the carrier of W1 by A1,FUNCT_2:def 1;
-      then KL=K1 by A5,RELAT_1:98;
-      hence (w|--w1)/.k = K1.(w1/.k) by A4,A7
-                       .= K1.(w1.k) by A8,PARTFUN1:def 8
-                       .= K1.(b1/.k) by A2,A8,PARTFUN1:def 8;
+A6: Carrier K1=Carrier KL & Sum K1=Sum KL and
+A7: K1|the carrier of W1=KL by Lm4;
+A8: len w1 = len (w|-- w1) by MATRLIN:def 9;
+  now
+    let k such that
+A9: 1<=k & k<=len (w|--w1);
+A10: k in dom w1 by A8,A9,FINSEQ_3:27;
+    dom K1 = the carrier of W1 by A1,FUNCT_2:def 1;
+    then KL=K1 by A7,RELAT_1:98;
+    hence (w|--w1)/.k = K1.(w1/.k) by A5,A9
+      .= K1.(w1.k) by A10,PARTFUN1:def 8
+      .= K1.(b1/.k) by A3,A10,PARTFUN1:def 8;
   end;
-  hence thesis by A2,A3,A5,A6,MATRLIN:def 9;
+  hence thesis by A2,A3,A4,A6,A8,MATRLIN:def 9;
 end;
 
 theorem Th26:
-   for W1,W2 be Subspace of V1 st W1/\W2=(0).V1
-     for w1 be OrdBasis of W1,w2 be OrdBasis of W2 holds
-      w1^w2 is OrdBasis of W1+W2
+  for W1,W2 be Subspace of V1 st W1/\W2=(0).V1 for w1 be OrdBasis
+  of W1,w2 be OrdBasis of W2 holds w1^w2 is OrdBasis of W1+W2
 proof
   let W1,W2 be Subspace of V1 such that
-A1:  W1/\W2=(0).V1;
+A1: W1/\W2=(0).V1;
   let w1 be OrdBasis of W1,w2 be OrdBasis of W2;
   reconsider R1=rng w1 as Basis of W1 by MATRLIN:def 4;
   reconsider R2=rng w2 as Basis of W2 by MATRLIN:def 4;
-A2:  R1\/R2 is Basis of W1+W2 & R1\/R2=rng (w1^w2) by A1,Th3,FINSEQ_1:44;
-  then reconsider w12=w1^w2 as FinSequence of W1+W2 by FINSEQ_1:def 4;
-A3:  w1 is one-to-one & w2 is one-to-one by MATRLIN:def 4;
-  R1 misses R2
-    proof
-      assume R1 meets R2;
-      then consider x such that
-A4:      x in R1 & x in R2 by XBOOLE_0:3;
-      x in W1 & x in W2 by A4,STRUCT_0:def 5;
-      then x in W1/\W2 by VECTSP_5:7;
-      then x in the carrier of (0).V1 by A1,STRUCT_0:def 5;
-      then x in {0.V1} by VECTSP_4:def 3;
-      then x = 0.V1 by TARSKI:def 1
-            .= 0.W1 by VECTSP_4:19;
-      then not R1 is linearly-independent by A4,VECTSP_7:3;
-      hence thesis by VECTSP_7:def 3;
-    end;
+A2: R1\/R2=rng (w1^w2) by FINSEQ_1:44;
+A3: R1 misses R2
+  proof
+    assume
+    R1 meets R2;
+    then consider x such that
+A4: x in R1 and
+A5: x in R2 by XBOOLE_0:3;
+    x in W1 & x in W2 by A4,A5,STRUCT_0:def 5;
+    then x in W1/\W2 by VECTSP_5:7;
+    then x in the carrier of (0).V1 by A1,STRUCT_0:def 5;
+    then x in {0.V1} by VECTSP_4:def 3;
+    then x = 0.V1 by TARSKI:def 1
+      .= 0.W1 by VECTSP_4:19;
+    then not R1 is linearly-independent by A4,VECTSP_7:3;
+    hence thesis by VECTSP_7:def 3;
+  end;
+A6: R1\/R2 is Basis of W1+W2 by A1,Th3;
+  then reconsider w12=w1^w2 as FinSequence of W1+W2 by A2,FINSEQ_1:def 4;
+  w1 is one-to-one & w2 is one-to-one by MATRLIN:def 4;
   then w12 is one-to-one by A3,FINSEQ_3:98;
-  hence thesis by A2,MATRLIN:def 4;
+  hence thesis by A6,A2,MATRLIN:def 4;
 end;
 
 begin :: Properties of Matrices of Linear Transformations
@@ -1275,24 +1477,27 @@ definition
   redefine func AutMt(f,B1,b2) -> Matrix of len B1,len b2,K;
   coherence
   proof
-    reconsider A'=AutMt(f,B1,b2) as
-      Matrix of len AutMt(f,B1,b2),width AutMt(f,B1,b2),K by MATRIX_2:7;
-A1:  len A'=len B1 by MATRLIN:def 10;
+    reconsider A'=AutMt(f,B1,b2) as Matrix of len AutMt(f,B1,b2),width AutMt(f
+    ,B1,b2),K by MATRIX_2:7;
+A1: len A'=len B1 by MATRLIN:def 10;
     per cases;
-      suppose
-A2:       len B1=0;
-        then AutMt(f,B1,b2)={} by A1;
-        hence thesis by A2,MATRIX_1:13;end;
-      suppose len B1>0;
-        then
-A3:       len B1 in Seg len B1 & dom B1=Seg len B1 & dom B1=dom A'
-            by A1,FINSEQ_1:5,def 3,FINSEQ_3:31;
-        then f.(B1/.len B1)|--b2 = A'/.(len B1) by MATRLIN:def 10
-                                .= A'.(len B1) by A3,PARTFUN1:def 8
-                                .= Line(A',len B1) by A1,A3,MATRIX_2:10;
-        then width A'= len (f.(B1/.len B1)|--b2) by FINSEQ_1:def 18
-                    .= len b2 by MATRLIN:def 9;
-        hence thesis by MATRLIN:def 10;end;
+    suppose
+A2:   len B1=0;
+      then AutMt(f,B1,b2)={} by A1;
+      hence thesis by A2,MATRIX_1:13;
+    end;
+    suppose
+A3:   len B1>0;
+A4:   dom B1=dom A' by A1,FINSEQ_3:31;
+A5:   dom B1=Seg len B1 by FINSEQ_1:def 3;
+A6:   len B1 in Seg len B1 by A3,FINSEQ_1:5;
+      then f.(B1/.len B1)|--b2 = A'/.(len B1) by A5,MATRLIN:def 10
+        .= A'.(len B1) by A3,A5,A4,FINSEQ_1:5 ,PARTFUN1:def 8
+        .= Line(A',len B1) by A1,A6,MATRIX_2:10;
+      then width A'= len (f.(B1/.len B1)|--b2) by FINSEQ_1:def 18
+        .= len b2 by MATRLIN:def 9;
+      hence thesis by MATRLIN:def 10;
+    end;
   end;
 end;
 
@@ -1300,111 +1505,114 @@ definition
   let S be 1-sorted;
   let R be Relation;
   func R|S equals
-     R|(the carrier of S);
+  R|(the carrier of S);
   coherence;
 end;
 
 theorem
-  for f be linear-transformation of V1,V2
-    for W1,W2 be Subspace of V1,U1,U2 be Subspace of V2 st
-          ( dim W1 =0 implies dim U1 = 0 )&
-          ( dim W2 =0 implies dim U2 = 0 )&
-           V2 is_the_direct_sum_of U1,U2
-    for fW1 be linear-transformation of W1,U1,
-        fW2 be linear-transformation of W2,U2 st
-           fW1 = f | W1 &
-           fW2 = f | W2
-    for w1 be OrdBasis of W1, w2 be OrdBasis of W2,
-        u1 be OrdBasis of U1, u2 be OrdBasis of U2 st
-          w1^w2 = b1 &
-          u1^u2 = b2 holds
-  AutMt(f,b1,b2) =
-      block_diagonal(<*AutMt(fW1,w1,u1),AutMt(fW2,w2,u2)*>,0.K)
+  for f be linear-transformation of V1,V2 for W1,W2 be Subspace of V1,U1
+,U2 be Subspace of V2 st ( dim W1 =0 implies dim U1 = 0 )& ( dim W2 =0 implies
+dim U2 = 0 )& V2 is_the_direct_sum_of U1,U2 for fW1 be linear-transformation of
+W1,U1, fW2 be linear-transformation of W2,U2 st fW1 = f | W1 & fW2 = f | W2 for
+  w1 be OrdBasis of W1, w2 be OrdBasis of W2, u1 be OrdBasis of U1, u2 be
+OrdBasis of U2 st w1^w2 = b1 & u1^u2 = b2 holds AutMt(f,b1,b2) = block_diagonal
+  (<*AutMt(fW1,w1,u1),AutMt(fW2,w2,u2)*>,0.K)
 proof
   let f be linear-transformation of V1,V2;
   let W1,W2 be Subspace of V1,U1,U2 be Subspace of V2 such that
-A1:  dim W1 =0 implies dim U1 = 0 and
-A2:  dim W2 =0 implies dim U2 = 0 and
-A3:  V2 is_the_direct_sum_of U1,U2;
-A4:  U1/\U2=(0).V2 by A3,VECTSP_5:def 4;
-A5:  U1 + U2=(Omega).V2 by A3,VECTSP_5:def 4;
+A1: dim W1 =0 implies dim U1 = 0 and
+A2: dim W2 =0 implies dim U2 = 0 and
+A3: V2 is_the_direct_sum_of U1,U2;
+A4: U1/\U2=(0).V2 by A3,VECTSP_5:def 4;
   let fW1 be linear-transformation of W1,U1;
   let fW2 be linear-transformation of W2,U2 such that
-A6:  fW1=f|W1 and
-A7:  fW2=f|W2;
-  let w1 be OrdBasis of W1,w2 be OrdBasis of W2,
-      u1 be OrdBasis of U1,u2 be OrdBasis of U2 such that
-A8:  w1^w2=b1 and
-A9:  u1^u2=b2;
-  set A1=AutMt(fW1,w1,u1);
-  set A2=AutMt(fW2,w2,u2);
-  set A12=<*A1,A2*>;
+A5: fW1=f|W1 and
+A6: fW2=f|W2;
+  let w1 be OrdBasis of W1,w2 be OrdBasis of W2, u1 be OrdBasis of U1,u2 be
+  OrdBasis of U2 such that
+A7: w1^w2=b1 and
+A8: u1^u2=b2;
+A9: len b1=len w1+len w2 by A7,FINSEQ_1:35;
+A10: U1 + U2=(Omega).V2 by A3,VECTSP_5:def 4;
   set A=AutMt(f,b1,b2);
-  len w1=dim W1 & len w2=dim W2 & len u1=dim U1 & len u2=dim U2 by Th21;
+A11: len b1=len A by MATRLIN:def 10;
+  set A2=AutMt(fW2,w2,u2);
+A12: len w2=dim W2 & len u2=dim U2 by Th21;
   then
-A10:  len b1=len w1+len w2 & len b2=len u1+len u2 & len w1=len A1 &
-      len w2=len A2 & len b1=len A & len u1=width A1 & len u2=width A2
-     by A1,A2,A8,A9,FINSEQ_1:35,MATRIX13:1,MATRLIN:def 10;
-A11:   Sum Len A12=len A1+len A2 & Sum Width A12=width A1+width A2
-     by MATRIXJ1:16,20;
-  now let i;
-A12:    dom A=Seg len A & dom A=dom b1 & dom A1=dom w1 & dom A2=dom w2
-          by A10,FINSEQ_1:def 3,FINSEQ_3:31;
-A13:    dom fW1=the carrier of W1 & dom fW2 = the carrier of W2
-          by FUNCT_2:def 1;
-      reconsider uu=u1^u2 as OrdBasis of U1+U2 by A4,Th26;
-      reconsider fb=f.(b1/.i),fbi=f.(b1/.(i+len A1)) as Vector of U1+U2 by A5;
-      thus i in dom A1 implies Line(A,i)=Line(A1,i)^(width A2 |-> 0.K)
-        proof
-          assume
-A14:        i in dom A1;
-          len A1 <=len A by A10,NAT_1:11;
-          then
-A15:        dom A1=Seg len A1 & Seg len A1 c= Seg len A by FINSEQ_1:7,def 3;
-          then b1/.i = b1.i by A12,A14,PARTFUN1:def 8
-                    .= w1.i by A8,A12,A14,FINSEQ_1:def 7
-                    .= w1/.i by A12,A14,PARTFUN1:def 8;
-          then
-A16:        fb = fW1.(w1/.i) by A6,A13,FUNCT_1:70;
-A17:      Line(A1,i) = A1.i by A10,A14,A15,MATRIX_2:10
-                    .= A1/.i by A14,PARTFUN1:def 8
-                    .= fW1.(w1/.i)|-- u1 by A12,A14,MATRLIN:def 10;
-          thus Line(A,i) = A.i by A10,A14,A15,MATRIX_2:10
-                        .= A/.i by A12,A14,A15,PARTFUN1:def 8
-                        .= f.(b1/.i)|--b2 by A12,A14,A15,MATRLIN:def 10
-                        .= fb|--uu by A5,A9,Th25
-                        .= (fb+0.(U1+U2))|-- uu by RLVECT_1:def 7
-                        .= (fW1.(w1/.i)|-- u1)^(0.U2|--u2)
-                              by A4,A16,Th24,VECTSP_4:20
-                        .= Line(A1,i)^(width A2|->0.K) by A10,A17,Th20;
-        end;
-      thus i in dom A2 implies Line(A,i+len A1)=(width A1|->0.K)^Line(A2,i)
-        proof
-          assume
-A18:        i in dom A2;
-A19:      dom A2=Seg len A2 by FINSEQ_1:def 3;
-          then
-A20:        i+len A1 in dom A by A10,A18,A12,FINSEQ_1:81;
-           b1/.(i+len A1) = b1.(i+len A1)
-                            by A12,A19,A10,A18,FINSEQ_1:81,PARTFUN1:def 8
-                         .= w2.i by A10,A18,A8,A12,FINSEQ_1:def 7
-                         .= w2/.i by A12,A18,PARTFUN1:def 8;
-          then
-A21:        fbi = fW2.(w2/.i) by A7,A13,FUNCT_1:70;
-A22:      Line(A2,i) = A2.i by A19,A10,A18,MATRIX_2:10
-                    .= A2/.i by A18,PARTFUN1:def 8
-                    .= fW2.(w2/.i)|-- u2 by A12,A18,MATRLIN:def 10;
-          thus Line(A,i+len A1)
-                  = A.(i+len A1) by A10,A19,A18,A12,FINSEQ_1:81,MATRIX_2:10
-                 .= A/.(i+len A1) by A19,A10,A18,A12,FINSEQ_1:81,PARTFUN1:def 8
-                 .= f.(b1/.(i+len A1))|--b2 by A12,A20,MATRLIN:def 10
-                 .= fbi|--uu by A5,A9,Th25
-                 .= (0.(U1+U2)+fbi)|-- uu by RLVECT_1:def 7
-                 .= (0.U1|--u1)^(fW2.(w2/.i)|-- u2) by A4,A21,Th24,VECTSP_4:20
-                 .= (width A1|->0.K)^Line(A2,i) by A10,A22,Th20;
-        end;
-      end;
-  hence thesis by A10,A11,MATRIXJ1:23;
+A13: len w2=len A2 by A2,MATRIX13:1;
+  set A1=AutMt(fW1,w1,u1);
+A14: len w1=dim W1 & len u1=dim U1 by Th21;
+  then
+A15: len w1=len A1 by A1,MATRIX13:1;
+A16: len u2=width A2 by A2,A12,MATRIX13:1;
+A17: len u1=width A1 by A1,A14,MATRIX13:1;
+A18: now
+    reconsider uu=u1^u2 as OrdBasis of U1+U2 by A4,Th26;
+    let i;
+A19: dom A=Seg len A by FINSEQ_1:def 3;
+    reconsider fb=f.(b1/.i),fbi=f.(b1/.(i+len A1)) as Vector of U1+U2 by A10;
+A20: dom A=dom b1 by A11,FINSEQ_3:31;
+A21: dom A1=dom w1 by A15,FINSEQ_3:31;
+A22: dom fW1=the carrier of W1 by FUNCT_2:def 1;
+    thus i in dom A1 implies Line(A,i)=Line(A1,i)^(width A2 |-> 0.K)
+    proof
+      assume
+A23:  i in dom A1;
+A24:  dom A1=Seg len A1 by FINSEQ_1:def 3;
+      then
+A25:  Line(A1,i) = A1.i by A15,A23,MATRIX_2:10
+        .= A1/.i by A23,PARTFUN1:def 8
+        .= fW1.(w1/.i)|-- u1 by A21,A23,MATRLIN:def 10;
+      len A1 <=len A by A9,A15,A11,NAT_1:11;
+      then
+A26:  Seg len A1 c= Seg len A by FINSEQ_1:7;
+      then b1/.i = b1.i by A19,A20,A23,A24,PARTFUN1:def 8
+        .= w1.i by A7,A21,A23,FINSEQ_1:def 7
+        .= w1/.i by A21,A23,PARTFUN1:def 8;
+      then
+A27:  fb = fW1.(w1/.i) by A5,A22,FUNCT_1:70;
+      thus Line(A,i) = A.i by A11,A23,A24,A26,MATRIX_2:10
+        .= A/.i by A19,A23,A24,A26,PARTFUN1:def 8
+        .= f.(b1/.i)|--b2 by A19,A20,A23,A24,A26,MATRLIN:def 10
+        .= fb|--uu by A10,A8,Th25
+        .= (fb+0.(U1+U2))|-- uu by RLVECT_1:def 7
+        .= (fW1.(w1/.i)|-- u1)^(0.U2|--u2) by A4,A27,Th24,VECTSP_4:20
+        .= Line(A1,i)^(width A2|->0.K) by A16,A25,Th20;
+    end;
+A28: dom A2=dom w2 by A13,FINSEQ_3:31;
+A29: dom fW2 = the carrier of W2 by FUNCT_2:def 1;
+    thus i in dom A2 implies Line(A,i+len A1)=(width A1|->0.K)^Line(A2,i)
+    proof
+      assume
+A30:  i in dom A2;
+A31:  dom A2=Seg len A2 by FINSEQ_1:def 3;
+      then
+A32:  i+len A1 in dom A by A9,A15,A13,A11,A19,A30, FINSEQ_1:81;
+      b1/.(i+len A1) = b1.(i+len A1) by A9,A15,A13,A11,A19,A20,A30,A31,
+      FINSEQ_1:81 ,PARTFUN1:def 8
+        .= w2.i by A7,A15,A28,A30,FINSEQ_1:def 7
+        .= w2/.i by A28,A30,PARTFUN1:def 8;
+      then
+A33:  fbi = fW2.(w2/.i) by A6,A29,FUNCT_1:70;
+A34:  Line(A2,i) = A2.i by A13,A30,A31,MATRIX_2:10
+        .= A2/.i by A30,PARTFUN1:def 8
+        .= fW2.(w2/.i)|-- u2 by A28,A30,MATRLIN:def 10;
+      thus Line(A,i+len A1) = A.(i+len A1) by A9,A15,A13,A11,A19,A30,A31,
+      FINSEQ_1:81 ,MATRIX_2:10
+        .= A/.(i+len A1) by A9,A15,A13,A11,A19,A30,A31,FINSEQ_1:81 ,
+      PARTFUN1:def 8
+        .= f.(b1/.(i+len A1))|--b2 by A20,A32,MATRLIN:def 10
+        .= fbi|--uu by A10,A8,Th25
+        .= (0.(U1+U2)+fbi)|-- uu by RLVECT_1:def 7
+        .= (0.U1|--u1)^(fW2.(w2/.i)|-- u2) by A4,A33,Th24,VECTSP_4:20
+        .= (width A1|->0.K)^Line(A2,i) by A17,A34,Th20;
+    end;
+  end;
+  set A12=<*A1,A2*>;
+A35: Sum Len A12=len A1+len A2 & Sum Width A12=width A1+width A2 by MATRIXJ1
+  :16 ,20;
+  len b2=len u1+len u2 by A8,FINSEQ_1:35;
+  hence thesis by A9,A15,A13,A17,A16,A35,A18,MATRIXJ1:23;
 end;
 
 definition
@@ -1412,9 +1620,12 @@ definition
   let f be Function of V1,V2;
   let B1 be FinSequence of V1;
   let b2 be OrdBasis of V2;
-  assume A1:len B1 = len b2;
-  func AutEqMt(f,B1,b2) -> Matrix of len B1,len B1,K equals :Def2:
-    AutMt(f,B1,b2);
+  assume
+A1: len B1 = len b2;
+  func AutEqMt(f,B1,b2) -> Matrix of len B1,len B1,K equals
+  :Def2:
+  AutMt(f,B1,
+  b2);
   coherence by A1;
 end;
 
@@ -1423,178 +1634,210 @@ theorem Th28:
 proof
   set A=AutMt(id V1,b1,b1);
   set ONE=1.(K,len b1);
-A1:  len A=len b1 & len ONE=len b1 by MATRIX_1:def 3;
-  now let i such that
-A2:    1<=i & i<=len b1;
-A3:   i in dom A & i in dom b1 & i in Seg len b1
-        by A1,A2,FINSEQ_1:3,FINSEQ_3:27;
-      hence A.i = A/.i by PARTFUN1:def 8
-               .= ((id V1).(b1/.i))|-- b1 by A3,MATRLIN:def 10
-               .= (b1/.i) |-- b1 by FUNCT_1:34
-               .= Line(ONE,i) by A3,Th19
-               .= ONE.i by A3,MATRIX_2:10;
+A1: len A=len b1 by MATRIX_1:def 3;
+A2: now
+    let i such that
+A3: 1<=i & i<=len b1;
+A4: i in dom b1 by A3,FINSEQ_3:27;
+A5: i in Seg len b1 by A3,FINSEQ_1:3;
+    i in dom A by A1,A3,FINSEQ_3:27;
+    hence A.i = A/.i by PARTFUN1:def 8
+      .= ((id V1).(b1/.i))|-- b1 by A4,MATRLIN:def 10
+      .= (b1/.i) |-- b1 by FUNCT_1:34
+      .= Line(ONE,i) by A4,Th19
+      .= ONE.i by A5,MATRIX_2:10;
   end;
-  hence thesis by A1,FINSEQ_1:18;
+  len ONE=len b1 by MATRIX_1:def 3;
+  hence thesis by A1,A2,FINSEQ_1:18;
 end;
 
 theorem
-  AutEqMt(id V1,b1,b1') is invertible &
-    AutEqMt(id V1,b1',b1) = AutEqMt(id V1,b1,b1')~
+  AutEqMt(id V1,b1,b1') is invertible & AutEqMt(id V1,b1',b1) = AutEqMt(
+  id V1,b1,b1')~
 proof
   set A = AutEqMt(id V1,b1,b1');
-A1: len b1 = dim V1 by Th21
-          .= len b1' by Th21;
-  reconsider A'= AutEqMt(id V1,b1',b1) as Matrix of len b1,len b1,K by A1;
-A2:  A=AutMt(id V1,b1,b1') & A'=AutMt(id V1,b1',b1) by A1,Def2;
-A3:  1_K<>0.K;
+A1: 1_K<>0.K;
+A2: len b1 = dim V1 by Th21
+    .= len b1' by Th21;
+  then reconsider A'= AutEqMt(id V1,b1',b1) as Matrix of len b1,len b1,K;
+A3: A=AutMt(id V1,b1,b1') & A'=AutMt(id V1,b1',b1) by A2,Def2;
   per cases;
-    suppose len b1=0;
-      then Det A=1_K & A'=A~ by MATRIXR2:41,MATRIX_1:36;
-      hence thesis by A3,LAPLACE:34;
-    end;
-    suppose
-A4:   len b1+0>0;
-      then
-A5:     len b1>=1 by NAT_1:19;
-      dom id V1=the carrier of V1 by RELAT_1:71;
-      then
-A6:     (id V1) * (id V1) = id V1 by RELAT_1:78;
-      len b1=dim V1 by Th21;
-      then id V1 is linear & len b1 = len b1' by Th21,MOD_2:13;
-      then
-A7:     A * A' = AutMt((id V1)*(id V1),b1,b1) by A4,A2,MATRLIN:46
-              .= 1.(K,len b1) by Th28,A6;
-      then 1_K = Det (A * A') by A5,MATRIX_7:16
-              .= Det A * Det A' by A4,MATRIX11:62;
-      then Det A <> 0.K by VECTSP_1:44;
-      then
-A8:     A is invertible by LAPLACE:34;
-      then A~ is_reverse_of A by MATRIX_6:def 4;
-      then A * (A~)=1.(K,len b1) by MATRIX_6:def 2;
-      hence thesis by A7,A8,MATRIX_8:19;
-    end;
+  suppose
+    len b1=0;
+    then Det A=1_K & A'=A~ by MATRIXR2:41,MATRIX_1:36;
+    hence thesis by A1,LAPLACE:34;
+  end;
+  suppose
+A4: len b1+0>0;
+    dom id V1=the carrier of V1 by RELAT_1:71;
+    then
+A5: (id V1) * (id V1) = id V1 by RELAT_1:78;
+    len b1=dim V1 by Th21;
+    then len b1 = len b1' by Th21;
+    then
+A6: A * A' = AutMt((id V1)*(id V1),b1,b1) by A3,A4,
+    MATRLIN:46 ,MOD_2:
+    13
+      .= 1.(K,len b1) by A5,Th28;
+    len b1>=1 by A4,NAT_1:19;
+    then 1_K = Det (A * A') by A6,MATRIX_7:16
+      .= Det A * Det A' by A4,MATRIX11:62;
+    then Det A <> 0.K by VECTSP_1:44;
+    then
+A7: A is invertible by LAPLACE:34;
+    then A~ is_reverse_of A by MATRIX_6:def 4;
+    then A * (A~)=1.(K,len b1) by MATRIX_6:def 2;
+    hence thesis by A6,A7,MATRIX_8:19;
+  end;
 end;
 
 theorem Th30:
-  len p1 = len p2 & len p1 = len B1 & len p1 > 0 & j in dom b1 &
-  (for i st i in dom p2 holds p2.i = (B1/.i|--b1).j)
-     implies p1 "*" p2 = (Sum lmlt(p1,B1)|-- b1).j
+  len p1 = len p2 & len p1 = len B1 & len p1 > 0 & j in dom b1 & (
+for i st i in dom p2 holds p2.i = (B1/.i|--b1).j) implies p1 "*" p2 = (Sum lmlt
+  (p1,B1)|-- b1).j
 proof
   assume that
-A1:  len p1 = len p2 & len p1 = len B1 & len p1>0 and
-A2:  j in dom b1 and
-A3:  for i st i in dom p2 holds p2.i = (B1/.i|--b1).j;
-   deffunc m(Nat,Nat) = (B1/.$1|--b1)/.$2;
-   consider M be Matrix of len p1,len b1,K such that
-A4:  for i,j st [i,j] in Indices M holds M*(i,j) = m(i,j)
-      from MATRIX_1:sch 1;
-   deffunc mC(Nat) = Sum mlt(p1,Col(M,$1));
-   consider MC being FinSequence of K such that
-A5:   len MC = len b1 &
-      for j be Nat st j in dom MC holds MC.j = mC(j) from FINSEQ_2:sch 1;
-A6: for j st j in dom MC holds MC/.j = mC(j)
-    proof
-      let j; assume K1:j in dom MC; then
-      MC.j = mC(j) by A5;
-      hence thesis by K1,PARTFUN1:def 8;
+A1: len p1 = len p2 and
+A2: len p1 = len B1 and
+A3: len p1>0 and
+A4: j in dom b1 and
+A5: for i st i in dom p2 holds p2.i = (B1/.i|--b1).j;
+  deffunc m(Nat,Nat) = (B1/.$1|--b1)/.$2;
+  consider M be Matrix of len p1,len b1,K such that
+A6: for i,j st [i,j] in Indices M holds M*(i,j) = m(i,j) from MATRIX_1:
+  sch 1;
+A7: len M=len p1 by A3,MATRIX_1:24;
+  then
+A8: dom p1=dom M by FINSEQ_3:31;
+A9: width M=len b1 by A3,MATRIX_1:24;
+A10: dom b1 =Seg len b1 by FINSEQ_1:def 3;
+A11: dom p1=Seg len p1 by FINSEQ_1:def 3;
+A12: dom p1=dom p2 by A1,FINSEQ_3:31;
+A13: now
+    let i;
+    assume
+    1<=i & i<=len p2;
+    then
+A14: i in dom p1 by A1,A11,FINSEQ_1:3;
+    then
+A15: [i,j] in Indices M by A4,A9,A8,A10,ZFMISC_1:106;
+    len ((B1/.i)|--b1)=len b1 by MATRLIN:def 9;
+    then
+A16: dom ((B1/.i)|--b1)=dom b1 by FINSEQ_3:31;
+    thus Col(M,j).i = M*(i,j) by A8,A14,MATRIX_1:def 9
+      .= ((B1/.i)|--b1)/.j by A6,A15
+      .= ((B1/.i)|--b1).j by A4,A16,PARTFUN1:def 8
+      .= p2.i by A5,A12,A14;
+  end;
+  deffunc mC(Nat) = Sum mlt(p1,Col(M,$1));
+  consider MC being FinSequence of K such that
+A17: len MC = len b1 & for j be Nat st j in dom MC holds MC.j = mC(j)
+  from FINSEQ_2:sch 1;
+A18: for j st j in dom MC holds MC/.j = mC(j)
+  proof
+    let j;
+    assume
+A19: j in dom MC;
+    then MC.j = mC(j) by A17;
+    hence thesis by A19,PARTFUN1:def 8;
+  end;
+A20: dom b1=dom MC by A17,FINSEQ_3:31;
+A21: dom p1=dom B1 by A2,FINSEQ_3:31;
+A22: now
+    let i such that
+A23: i in dom B1;
+A24: len Line(M,i) = width M by MATRIX_1:def 8;
+    len ((B1/.i)|--b1)=len b1 by MATRLIN:def 9;
+    then
+A25: dom Line(M,i)=dom ((B1/.i)|--b1) by A9,A24,FINSEQ_3:31;
+A26: dom Line(M,i)=Seg width M by A24,FINSEQ_1:def 3;
+A27: now
+      let k such that
+A28:  k in dom ((B1/.i)|--b1);
+A29:  [i,k] in Indices M by A21,A8,A23,A25,A26,A28,ZFMISC_1:106;
+      thus Line(M,i).k = M*(i,k) by A25,A26,A28,MATRIX_1:def 8
+        .= ((B1/.i)|--b1)/.k by A6,A29
+        .= ((B1/.i)|--b1).k by A28,PARTFUN1:def 8;
     end;
-A7: len M=len p1 & width M=len b1 & len Col(M,j) = len M
-     by A1,FINSEQ_1:def 18,MATRIX_1:24;
-   then
-A8: dom p1=dom p2 & dom p1=dom B1 & dom p1=dom M & dom p1=Seg len p1 &
-    dom b1=dom MC & dom b1 =Seg len b1 by A1,A5,FINSEQ_1:def 3,FINSEQ_3:31;
-   b1 <> {} by A2;
-   then len b1<>0;
-   then
-A9: len b1>0;
-A10:now let i such that
-       A11: 1<=i & i<=len p2;
-       A12:i in dom p1 by A11,A1,A8,FINSEQ_1:3;
-       A13:[i,j] in Indices M by A2,A12,A8,A7,ZFMISC_1:106;
-         len ((B1/.i)|--b1)=len b1 by MATRLIN:def 9;
-         then
-       A14: dom ((B1/.i)|--b1)=dom b1 by FINSEQ_3:31;
-        thus Col(M,j).i = M*(i,j) by A8,A12,MATRIX_1:def 9
-                       .= ((B1/.i)|--b1)/.j by A4,A13
-                       .= ((B1/.i)|--b1).j by A2,A14,PARTFUN1:def 8
-                       .= p2.i by A8,A3,A12;
-   end;
-   len (Sum(lmlt(p1,B1))|--b1)=len b1 by MATRLIN:def 9;
-   then
-A15: dom (Sum(lmlt(p1,B1))|--b1)=dom b1 by FINSEQ_3:31;
-A16:now let i such that
-       A17:  i in dom B1;
-         len Line(M,i) = width M & len ((B1/.i)|--b1)=len b1
-            by MATRIX_1:def 8,MATRLIN:def 9;
-         then
-       A18: dom Line(M,i)=dom ((B1/.i)|--b1) & dom Line(M,i)=Seg width M
-            by A7,FINSEQ_1:def 3,FINSEQ_3:31;
-       A19:now let k such that
-            A20: k in dom ((B1/.i)|--b1);
-            A21: [i,k] in Indices M by A20,A18,A8,A17,ZFMISC_1:106;
-               thus Line(M,i).k = M*(i,k) by A20,A18,MATRIX_1:def 8
-                               .= ((B1/.i)|--b1)/.k by A4,A21
-                               .= ((B1/.i)|--b1).k by A20,PARTFUN1:def 8;
-           end;
-         thus B1/.i = Sum lmlt((B1/.i)|--b1,b1) by MATRLIN:40
-                 .= Sum lmlt(Line(M,i),b1) by A18,A19,FINSEQ_1:17;
-   end;
-K2:j in dom MC by A8,A2;
-   thus (Sum(lmlt(p1,B1))|--b1).j = (Sum(lmlt(p1,B1))|--b1)/.j
-                 by A2,A15,PARTFUN1:def 8
-             .= (Sum(lmlt(MC,b1))|--b1)/.j by A5,A6,A1,A16,A9,MATRLIN:38
-             .= MC/.j by A5,MATRLIN:41
-             .= MC.j by K2,PARTFUN1:def 8
-             .= Sum(mlt(p1,Col(M,j))) by A2,A5,A8
-             .= p1"*"p2 by A1,A7,A10,FINSEQ_1:18;
+    thus B1/.i = Sum lmlt((B1/.i)|--b1,b1) by MATRLIN:40
+      .= Sum lmlt(Line(M,i),b1) by A25,A27,FINSEQ_1:17;
+  end;
+A30: b1 <> {} by A4;
+A31: len Col(M,j) = len M by FINSEQ_1:def 18;
+  len (Sum(lmlt(p1,B1))|--b1)=len b1 by MATRLIN:def 9;
+  then dom (Sum(lmlt(p1,B1))|--b1)=dom b1 by FINSEQ_3:31;
+  hence (Sum(lmlt(p1,B1))|--b1).j = (Sum(lmlt(p1,B1))|--b1)/.j by A4,
+  PARTFUN1:def 8
+    .= (Sum(lmlt(MC,b1))|--b1)/.j by A2,A3,A17,A18,A30,A22,MATRLIN:38
+    .= MC/.j by A17,MATRLIN:41
+    .= MC.j by A4,A20,PARTFUN1:def 8
+    .= Sum(mlt(p1,Col(M,j))) by A4,A17,A20
+    .= p1"*"p2 by A1,A7,A31,A13,FINSEQ_1:18;
 end;
 
 theorem Th31:
-  len b1>0 & f is linear implies
-    LineVec2Mx(v1|-- b1)*AutMt(f,b1,b2) = LineVec2Mx (f.v1 |-- b2)
+  len b1>0 & f is linear implies LineVec2Mx(v1|-- b1)*AutMt(f,b1,
+  b2) = LineVec2Mx (f.v1 |-- b2)
 proof
-  assume
-A1: len b1>0 & f is linear;
-  set vb=v1|-- b1;set fb=f.v1 |-- b2;set L=LineVec2Mx vb;
-  set A=AutMt(f,b1,b2);set LA=L*A;set Lf=LineVec2Mx fb;
-A2:  len vb=len b1 & len fb=len b2 by MATRLIN:def 9;
+  assume that
+A1: len b1>0 and
+A2: f is linear;
+  set A=AutMt(f,b1,b2);
+  set fb=f.v1 |-- b2;
+  set vb=v1|-- b1;
+  set L=LineVec2Mx vb;
+  set LA=L*A;
+  set Lf=LineVec2Mx fb;
+A3: len A=len b1 by MATRLIN:def 10;
+  len fb=len b2 by MATRLIN:def 9;
   then
-A3:  len L=1 & width L=len b1 by MATRIX_1:24;
-A4:  len A=len b1 & width A = len b2 by A1,MATRLIN:44,def 10;
+A4: width Lf=len b2 by MATRIX_1:24;
+A5: len vb=len b1 by MATRLIN:def 9;
   then
-A5:  len LA=1 & width LA=len b2 by A3,MATRIX_3:def 4;
-A6:  len Lf=1 & width Lf=len b2 by A2,MATRIX_1:24;
-  now let i,j such that
-     A7:  [i,j] in Indices LA;
-     A8:  i in dom LA & dom LA=Seg 1 & dom b2=Seg len b2 & j in Seg len b2
-          by A5,A7,FINSEQ_1:def 3,ZFMISC_1:106;
-        then
-     A9:  i=1 by FINSEQ_1:4,TARSKI:def 1;
-     A10: len (f*b1)=len b1 & len Col(A,j)=len A by FINSEQ_1:def 18,FINSEQ_2:37
-;
-     A11: now let k such that
-          A12: k in dom Col(A,j);
-          A13: dom A=dom Col(A,j) & dom A=Seg len A & dom A=dom b1 &
-                 dom (f*b1)=dom b1 by A4,A10,FINSEQ_1:def 3,FINSEQ_3:31;
-              then
-          A14: A.k=A/.k by A12,PARTFUN1:def 8;
-          A15: f.(b1/.k) = f.(b1.k) by A12,A13,PARTFUN1:def 8
-                        .= (f*b1).k by A12,A13,FUNCT_1:23
-                        .= (f*b1)/.k by A12,A13,PARTFUN1:def 8;
-              thus Col(A,j).k = A*(k,j) by A12,A13,MATRIX_1:def 9
-                       .= Line(A,k).j by A8,A4,MATRIX_1:def 8
-                       .= (A/.k).j by A4,A12,A13,A14,MATRIX_2:10
-                       .= ((f*b1)/.k|--b2).j by A15,A12,A13,MATRLIN:def 10;
-          end;
-        thus Lf*(i,j) = Line(Lf,i).j by A6,A8,MATRIX_1:def 8
-                     .= (f.v1 |-- b2).j by A9,MATRIX15:25
-                     .= (f.(Sum(lmlt(v1|--b1,b1)))|--b2).j by MATRLIN:40
-                     .= (Sum lmlt(v1|--b1,f*b1) |--b2).j by A1,A2,MATRLIN:22
-                     .= (v1|-- b1)"*"Col(A,j) by A1,A2,A4,A11,Th30,A8,A10
-                     .= Line(L,1)"*"Col(A,j)  by MATRIX15:25
-                     .= LA*(i,j) by A3,A4,A7,A9,MATRIX_3:def 4;
+A6: width L=len b1 by MATRIX_1:24;
+  len L=1 by MATRIX_1:24;
+  then
+A7: len LA=1 by A6,A3,MATRIX_3:def 4;
+A8: width A = len b2 by A1,MATRLIN:44;
+  then
+A9: width LA=len b2 by A6,A3,MATRIX_3:def 4;
+A10: now
+A11: dom b2=Seg len b2 by FINSEQ_1:def 3;
+A12: dom LA=Seg 1 by A7,FINSEQ_1:def 3;
+A13: len (f*b1)=len b1 by FINSEQ_2:37;
+    let i,j such that
+A14: [i,j] in Indices LA;
+A15: j in Seg len b2 by A9,A14,ZFMISC_1:106;
+    i in dom LA by A14,ZFMISC_1:106;
+    then
+A16: i=1 by A12,FINSEQ_1:4,TARSKI:def 1;
+A17: len Col(A,j)=len A by FINSEQ_1:def 18;
+A18: now
+A19:  dom (f*b1)=dom b1 by A13,FINSEQ_3:31;
+A20:  dom A=dom Col(A,j) by A17,FINSEQ_3:31;
+      let k such that
+A21:  k in dom Col(A,j);
+A22:  dom A=Seg len A & A.k=A/.k by A21,A20,FINSEQ_1:def 3,PARTFUN1:def 8;
+A23:  dom A=dom b1 by A3,FINSEQ_3:31;
+      then
+A24:  f.(b1/.k) = f.(b1.k) by A21,A20,PARTFUN1:def 8
+        .= (f*b1).k by A21,A20,A23,FUNCT_1:23
+        .= (f*b1)/.k by A21,A20,A23,A19,PARTFUN1:def 8;
+      thus Col(A,j).k = A*(k,j) by A21,A20,MATRIX_1:def 9
+        .= Line(A,k).j by A8,A15,MATRIX_1:def 8
+        .= (A/.k).j by A3,A21,A20,A22,MATRIX_2:10
+        .= ((f*b1)/.k|--b2).j by A21,A20,A23,A24,MATRLIN:def 10;
+    end;
+    thus Lf*(i,j) = Line(Lf,i).j by A4,A15,MATRIX_1:def 8
+      .= (f.v1 |-- b2).j by A16,MATRIX15:25
+      .= (f.(Sum(lmlt(v1|--b1,b1)))|--b2).j by MATRLIN:40
+      .= (Sum lmlt(v1|--b1,f*b1) |--b2).j by A2,A5,MATRLIN:22
+      .= (v1|-- b1)"*"Col(A,j) by A1,A5,A3,A11,A15,A13,A17,A18, Th30
+      .= Line(L,1)"*"Col(A,j) by MATRIX15:25
+      .= LA*(i,j) by A6,A3,A14,A16,MATRIX_3:def 4;
   end;
-  hence thesis by A5,A6,MATRIX_1:21;
+  len Lf=1 by MATRIX_1:24;
+  hence thesis by A7,A9,A4,A10,MATRIX_1:21;
 end;
 
 begin :: Linear Transformations of Matrices
@@ -1602,29 +1845,32 @@ begin :: Linear Transformations of Matrices
 definition
   let K,V1,V2,b1,B2;
   let M be Matrix of len b1,len B2,K;
-  func Mx2Tran(M,b1,B2) -> Function of V1, V2 means :Def3:
-    for v be Vector of V1 holds
-      it.v = Sum lmlt (Line(LineVec2Mx(v|--b1) * M,1),B2);
+  func Mx2Tran(M,b1,B2) -> Function of V1, V2 means
+  :Def3:
+  for v be Vector of
+  V1 holds it.v = Sum lmlt (Line(LineVec2Mx(v|--b1) * M,1),B2);
   existence
   proof
     deffunc F(Element of V1)=Sum lmlt(Line(LineVec2Mx($1|--b1) * M,1),B2);
     consider f be Function of V1,V2 such that
-      A1:for x be Element of V1 holds f.x = F(x) from FUNCT_2:sch 4;
+A1: for x be Element of V1 holds f.x = F(x) from FUNCT_2:sch 4;
     take f;
     thus thesis by A1;
   end;
   uniqueness
   proof
     let F1,F2 be Function of V1, V2 such that
-      A2:for v be Vector of V1 holds
-           F1.v = Sum lmlt (Line(LineVec2Mx(v|--b1) * M,1),B2) and
-      A3:for v be Vector of V1 holds
-           F2.v = Sum lmlt (Line(LineVec2Mx(v|--b1) * M,1),B2);
-    now let x such that
-      A4: x in the carrier of V1;
-          reconsider v=x as Vector of V1 by A4;
-        thus F1.x = Sum lmlt (Line(LineVec2Mx(v|--b1) * M,1),B2) by A2
-                 .= F2.x by A3;
+A2: for v be Vector of V1 holds F1.v = Sum lmlt (Line(LineVec2Mx(v|--b1
+    ) * M,1),B2) and
+A3: for v be Vector of V1 holds F2.v = Sum lmlt (Line(LineVec2Mx(v|--b1
+    ) * M,1),B2);
+    now
+      let x;
+      assume
+      x in the carrier of V1;
+      then reconsider v=x as Vector of V1;
+      thus F1.x = Sum lmlt (Line(LineVec2Mx(v|--b1) * M,1),B2) by A2
+        .= F2.x by A3;
     end;
     hence thesis by FUNCT_2:18;
   end;
@@ -1632,62 +1878,78 @@ end;
 
 theorem Th32:
   for M be Matrix of len b1,len b2,K st len b1 > 0 holds
-    LineVec2Mx(Mx2Tran(M,b1,b2).v1|--b2) = LineVec2Mx(v1|--b1) * M
+  LineVec2Mx(Mx2Tran(M,b1,b2).v1|--b2) = LineVec2Mx(v1|--b1) * M
 proof
-  let M be Matrix of len b1,len b2,K such that
-A1:  len b1 > 0;
   set L=LineVec2Mx(v1|--b1);
+A1: width L=len (v1|--b1) & len (v1|--b1)=len b1 by MATRIX_1:24,MATRLIN:def
+  9;
+  let M be Matrix of len b1,len b2,K such that
+A2: len b1 > 0;
+A3: len M=len b1 by A2,MATRIX_1:24;
   set LM=L*M;
-  len L=1 & width L=len (v1|--b1) & len (v1|--b1)=len b1 & len M=len b1 &
-    width M=len b2 by A1,MATRIX_1:24,MATRLIN:def 9;
+  width M=len b2 by A2,MATRIX_1:24;
+  then width LM=len b2 by A1,A3,MATRIX_3:def 4;
+  then len Line(LM,1)=len b2 by FINSEQ_1:def 18;
   then
-A2:  len LM=1 & width LM=len b2 by MATRIX_3:def 4;
-  then
-A3:  len Line(LM,1)=len b2 by FINSEQ_1:def 18;
-  Sum lmlt (Line(LM,1),b2)|--b2=Line(LM,1) by A3,MATRLIN:41;
-  hence LM = LineVec2Mx(Sum lmlt (Line(LM,1),b2)|--b2)
-        by A2,MATRIX15:25
-          .= LineVec2Mx(Mx2Tran(M,b1,b2).v1|--b2) by Def3;
+A4: Sum lmlt (Line(LM,1),b2)|--b2=Line(LM,1) by MATRLIN:41;
+  len L=1 by MATRIX_1:24;
+  then len LM=1 by A1,A3,MATRIX_3:def 4;
+  hence LM = LineVec2Mx(Sum lmlt (Line(LM,1),b2)|--b2) by A4,MATRIX15:25
+    .= LineVec2Mx(Mx2Tran(M,b1,b2).v1|--b2) by Def3;
 end;
 
 theorem Th33:
-  for M be Matrix of len b1,len B2,K st len b1 = 0
-    holds Mx2Tran(M,b1,B2).v1 = 0.V2
+  for M be Matrix of len b1,len B2,K st len b1 = 0 holds Mx2Tran(M
+  ,b1,B2).v1 = 0.V2
 proof
   let M be Matrix of len b1,len B2,K such that
-A1:  len b1 = 0;
-  set L=LineVec2Mx(v1|--b1);set LM=L*M;set LL=Line(LM,1);
-A2:  width L=len (v1|--b1) & len (v1|--b1)=len b1 & len M=len b1
-    by MATRIX_1:24,def 3,MATRLIN:def 9;
+A1: len b1 = 0;
+  set L=LineVec2Mx(v1|--b1);
+  set LM=L*M;
+  set LL=Line(LM,1);
+A2: width L=len (v1|--b1) & len (v1|--b1)=len b1 by MATRIX_1:24,MATRLIN:def
+  9;
+A3: len M=len b1 by MATRIX_1:def 3;
   then width M=0 by A1,MATRIX_1:def 4;
-  then width LM=0 by A2,MATRIX_3:def 4;
-  then len LL=0 by FINSEQ_1:def 18;
-  then dom LL={} & dom lmlt(LL,B2)=dom LL/\dom B2 by Lm1,FINSEQ_1:4,def 3;
-  then lmlt(LL,B2)=<*>(the carrier of V2);
+  then width LM=0 by A2,A3,MATRIX_3:def 4;
+  then
+A4: dom LL={};
+  dom lmlt(LL,B2)=dom LL/\dom B2 by Lm1;
+  then lmlt(LL,B2)=<*>(the carrier of V2) by A4;
   then Sum lmlt(LL,B2)=0.V2 by RLVECT_1:60;
   hence thesis by Def3;
 end;
 
-Lm5:for A,B being Matrix of K st len A=len B & width A=width B holds
-    for i st 1<=i & i<=len A holds Line(A+B,i)=Line(A,i)+Line(B,i)
+Lm5: for A,B being Matrix of K st width A=width B holds for i st 1<=i & i<=len
+A holds Line(A+B,i)=Line(A,i)+Line(B,i)
+
 proof
   let A,B be Matrix of K such that
-A1: len A=len B & width A=width B;
-  let i such that
-A2: 1<=i & i<=len A;
-A3: i in dom A by A2,FINSEQ_3:27;
+A1: width A=width B;
+  let i;
+  assume
+  1<=i & i<=len A;
+  then
+A2: i in dom A by FINSEQ_3:27;
+
   reconsider LB=Line(B,i) as Element of (width A)-tuples_on the carrier of K
-    by A1;
+  by A1;
+
   per cases;
-    suppose width A>0;
-      then width A in Seg width A by FINSEQ_1:5;
-      then [i,width A] in Indices A by A3,ZFMISC_1:106;
-      hence thesis by A1,MATRIX_4:59;end;
-    suppose width A=0;
-      then width (A+B)=0 & len (Line(A,i)+LB)=0 by FINSEQ_1:def 18
-,MATRIX_3:def 3;
-      then len Line(A+B,i)=0 & Line(A,i)+Line(B,i)={} by FINSEQ_1:def 18;
-      hence thesis;end;
+  suppose
+    width A>0;
+    then width A in Seg width A by FINSEQ_1:5;
+    then [i,width A] in Indices A by A2,ZFMISC_1:106;
+    hence thesis by A1,MATRIX_4:59;
+  end;
+  suppose
+A3: width A=0;
+    then len (Line(A,i)+LB)=0;
+    then
+A4: Line(A,i)+Line(B,i)={};
+    width (A+B)=0 by A3,MATRIX_3:def 3;
+    hence thesis by A4;
+  end;
 end;
 
 definition
@@ -1696,26 +1958,29 @@ definition
   redefine func Mx2Tran(M,b1,B2) -> linear-transformation of V1, V2;
   coherence
   proof
-  set Mx=Mx2Tran(M,b1,B2);
-  per cases;
+    set Mx=Mx2Tran(M,b1,B2);
+    per cases;
     suppose
-A1:     len b1=0;
-A2:   now let v1,w1 be Vector of V1;
-        thus Mx.(v1+w1) = 0.V2 by Th33,A1
-                       .= 0.V2+0.V2 by RLVECT_1:def 7
-                       .= Mx.v1+0.V2 by Th33,A1
-                       .= Mx.v1+Mx.w1 by Th33,A1;
+A1:   len b1=0;
+A2:   now
+        let a be Scalar of K,v1 be Vector of V1;
+        thus Mx.(a*v1) = 0.V2 by A1,Th33
+          .= a*0.V2 by VECTSP_1:59
+          .= a*Mx.v1 by A1,Th33;
       end;
-      now let a be Scalar of K,v1 be Vector of V1;
-        thus Mx.(a*v1) = 0.V2 by Th33,A1
-                      .= a*0.V2 by VECTSP_1:59
-                      .= a*Mx.v1 by Th33,A1;
+      now
+        let v1,w1 be Vector of V1;
+        thus Mx.(v1+w1) = 0.V2 by A1,Th33
+          .= 0.V2+0.V2 by RLVECT_1:def 7
+          .= Mx.v1+0.V2 by A1,Th33
+          .= Mx.v1+Mx.w1 by A1,Th33;
       end;
       hence thesis by A2,MOD_2:def 5;
     end;
     suppose
-A3:    len b1>0;
-A4:   now let v1,w1 be Vector of V1;
+A3:   len b1>0;
+A4:   now
+        let v1,w1 be Vector of V1;
         set vb=v1|--b1;
         set wb=w1|--b1;
         set vwb=v1+w1|--b1;
@@ -1725,80 +1990,110 @@ A4:   now let v1,w1 be Vector of V1;
         set LLvw=Line(Lvw * M,1);
         set LLv=Line(Lv * M,1);
         set LLw=Line(Lw * M,1);
-A5:     len Lv=1 & width Lv=len vb & len Lw=1 & width Lw=len wb &
-          width Lvw=len vwb & len M=len b1 & len b1=len vb & len b1=len wb &
-          len b1=len vwb by A3,MATRIX_1:24,MATRLIN:def 9;
+A5:     len Lw=1 by MATRIX_1:24;
+A6:     len b1=len vb by MATRLIN:def 9;
+A7:     len M=len b1 by A3,MATRIX_1:24;
+A8:     width Lv=len vb by MATRIX_1:24;
         then
-A6:       len (Lv*M)=1 & len(Lw*M)=1 & width (Lvw*M)=width M &
-          width (Lv*M)=width M & width(Lw*M)=width M by MATRIX_3:def 4;
+A9:     width (Lv*M)=width M by A7,A6,MATRIX_3:def 4;
+        then
+A10:    len LLv= width M by FINSEQ_1:def 18;
+A11:    len Lv=1 by MATRIX_1:24;
+        then
+A12:    len (Lv*M)=1 by A8,A7,A6,MATRIX_3:def 4;
+A13:    len b1=len wb by MATRLIN:def 9;
+        width Lvw=len vwb & len b1=len vwb by MATRIX_1:24,MATRLIN:def 9;
+        then width (Lvw*M)=width M by A7,MATRIX_3:def 4;
+        then
+A14:    len LLvw=width M by FINSEQ_1:def 18;
+A15:    dom lmlt(LLvw,B2) = dom LLvw/\dom B2 by Lm1
+          .= dom LLv/\dom B2 by A14,A10,FINSEQ_3:31
+          .= dom lmlt(LLv,B2) by Lm1;
+A16:    width Lw=len wb by MATRIX_1:24;
+        then
+A17:    width(Lw*M)=width M by A7,A13,MATRIX_3:def 4;
+        then
+A18:    len LLw=width M by FINSEQ_1:def 18;
+A19:    dom lmlt(LLvw,B2) = dom LLvw/\dom B2 by Lm1
+          .= dom LLw/\dom B2 by A14,A18,FINSEQ_3:31
+          .= dom lmlt(LLw,B2) by Lm1;
+        then
+A20:    len lmlt(LLvw,B2)=len lmlt(LLw,B2) by FINSEQ_3:31;
         Lvw = LineVec2Mx (vb+wb) by Th17
-           .= Lv+Lw by A5,MATRIX15:27;
-        then Lvw *M = Lv * M +Lw*M by A3,A5,MATRIX_4:63;
-        then LLvw=LLv+LLw by A6,Lm5;
+          .= Lv+Lw by A6,A13,MATRIX15:27;
+        then Lvw *M = Lv * M +Lw*M by A3,A11,A8,A5,A16,A7,A6,A13,
+        MATRIX_4
+        :63;
+        then LLvw=LLv+LLw by A12,A9,A17,Lm5;
         then
-A7:       lmlt(LLvw,B2)=lmlt(LLv,B2)+lmlt(LLw,B2) by Th7;
-A8:       len LLvw=width M & len LLw=width M & len LLv= width M
-          by A6,FINSEQ_1:def 18;
-A9:     dom lmlt(LLvw,B2) = dom LLvw/\dom B2 by Lm1
-                         .= dom LLv/\dom B2 by A8,FINSEQ_3:31
-                         .= dom lmlt(LLv,B2) by Lm1;
-        then
-A10:      len lmlt(LLvw,B2)=len lmlt(LLv,B2) by FINSEQ_3:31;
-A11:      dom lmlt(LLvw,B2) = dom LLvw/\dom B2 by Lm1
-                           .= dom LLw/\dom B2 by A8,FINSEQ_3:31
-                           .= dom lmlt(LLw,B2) by Lm1;
-        then
-A12:      len lmlt(LLvw,B2)=len lmlt(LLw,B2) by FINSEQ_3:31;
-        now let i be Element of NAT such that A13:i in dom lmlt(LLv,B2);
-           lmlt(LLv,B2)/.i=lmlt(LLv,B2).i & lmlt(LLw,B2)/.i=lmlt(LLw,B2).i
-             by A9,A11,A13,PARTFUN1:def 8;
-           hence lmlt(LLvw,B2).i= lmlt(LLv,B2)/.i + lmlt(LLw,B2)/.i
-             by A7,A9,A13,FVSUM_1:21;
+A21:    lmlt(LLvw,B2)=lmlt(LLv,B2)+lmlt(LLw,B2) by Th7;
+A22:    now
+          let i be Element of NAT such that
+A23:      i in dom lmlt(LLv,B2);
+          lmlt(LLv,B2)/.i=lmlt(LLv,B2).i & lmlt(LLw,B2)/.i=lmlt(LLw,B2).i
+          by A15,A19,A23,PARTFUN1:def 8;
+          hence lmlt(LLvw,B2).i= lmlt(LLv,B2)/.i + lmlt(LLw,B2)/.i by A21,A15,
+          A23,FVSUM_1:21;
         end;
-        then Sum lmlt(LLvw,B2)= Sum (lmlt(LLv,B2))+Sum (lmlt(LLw,B2))
-          by A10,A12,RLVECT_2:4;
+        len lmlt(LLvw,B2)=len lmlt(LLv,B2) by A15,FINSEQ_3:31;
+        then Sum lmlt(LLvw,B2)= Sum (lmlt(LLv,B2))+Sum (lmlt(LLw,B2)) by
+        A20,A22,RLVECT_2:4;
         hence Mx.(v1+w1) = Sum (lmlt(LLv,B2))+Sum(lmlt(LLw,B2)) by Def3
-                        .= Mx.v1+Sum(lmlt(LLw,B2)) by Def3
-                        .= Mx.v1+Mx.w1 by Def3;
+          .= Mx.v1+Sum(lmlt(LLw,B2)) by Def3
+          .= Mx.v1+Mx.w1 by Def3;
       end;
-      now let a be Scalar of K,v1 be Vector of V1;
+      now
+        let a be Scalar of K,v1 be Vector of V1;
         set vb=v1|--b1;
         set avb=a*v1|--b1;
         set Lav=LineVec2Mx avb;
         set Lv=LineVec2Mx vb;
         set LLav=Line(Lav * M,1);
         set LLv=Line(Lv * M,1);
-A14:      len Lv=1 & width Lv=len vb & width Lav=len avb & len M=len b1 &
-          len b1=len vb & len b1=len avb by A3,MATRIX_1:24,MATRLIN:def 9;
+A24:    len M=len b1 by A3,MATRIX_1:24;
+        width Lav=len avb & len b1=len avb by MATRIX_1:24,MATRLIN:def 9;
+        then width (Lav*M)=width M by A24,MATRIX_3:def 4;
         then
-A15:      len (Lv*M)=1 & width (Lav*M)=width M & width (Lv*M)=width M
-          by MATRIX_3:def 4;
+A25:    len LLav=width M by FINSEQ_1:def 18;
+A26:    width Lv=len vb & len b1=len vb by MATRIX_1:24,MATRLIN:def 9;
+        then width (Lv*M)=width M by A24,MATRIX_3:def 4;
+        then len LLv= width M by FINSEQ_1:def 18;
+        then
+A27:    dom LLav=dom LLv by A25,FINSEQ_3:31;
         Lav = LineVec2Mx (a*vb) by Th18
-           .= a*Lv by MATRIX15:29;
-        then Lav *M = a*(Lv * M) by A14,MATRIX15:1;
+          .= a*Lv by MATRIX15:29;
         then
-A16:      LLav = a*LLv by A15,MATRIXR1:20;
-A17:    len LLav=width M & len LLv= width M by A15,FINSEQ_1:def 18;
-A18:    dom lmlt(LLav,B2)=dom LLav/\dom B2 & dom LLav=dom LLv
-          & dom LLv/\dom B2=dom lmlt(LLv,B2) by Lm1,A17,FINSEQ_3:31;
+A28:    Lav *M = a*(Lv * M) by A24,A26,MATRIX15:1;
+A29:    dom lmlt(LLav,B2)=dom LLav/\dom B2 by Lm1;
+A30:    dom LLv/\dom B2=dom lmlt(LLv,B2) by Lm1;
+        len Lv=1 by MATRIX_1:24;
+        then len (Lv*M)=1 by A24,A26,MATRIX_3:def 4;
         then
-A19:      len lmlt(LLav,B2)=len lmlt(LLv,B2) by FINSEQ_3:31;
-        now let i be Element of NAT such that
-A20:         i in dom lmlt(LLv,B2);
-A21:       i in dom LLv & i in dom LLav & i in dom B2
-             by A20,A18,XBOOLE_0:def 4;
-           then
-A22:         LLv.i=LLv/.i & LLav.i=LLav/.i & B2.i=B2/.i &
-             lmlt(LLv,B2).i=lmlt(LLv,B2)/.i by A20,PARTFUN1:def 8;
-           hence lmlt(LLav,B2).i = (the lmult of V2).(LLav/.i,B2/.i)
-                                    by A18,A20,FUNCOP_1:28
-                                .= (a*LLv/.i)*B2/.i by A16,A21,A22,FVSUM_1:62
-                                .= a*(LLv/.i*B2/.i) by VECTSP_1:def 26
-                                .= a*lmlt(LLv,B2)/.i by A20,A22,FUNCOP_1:28;
+A31:    LLav = a*LLv by A28,MATRIXR1:20;
+A32:    now
+          let i be Element of NAT such that
+A33:      i in dom lmlt(LLv,B2);
+A34:      lmlt(LLv,B2).i=lmlt(LLv,B2)/.i by A33,PARTFUN1:def 8;
+          i in dom LLv by A30,A33,XBOOLE_0:def 4;
+          then
+A35:      LLv.i=LLv/.i by PARTFUN1:def 8;
+          i in dom B2 by A30,A33,XBOOLE_0:def 4;
+          then
+A36:      B2.i=B2/.i by PARTFUN1:def 8;
+A37:      i in dom LLav by A27,A30,A33,XBOOLE_0:def 4;
+          then
+A38:      LLav.i=LLav/.i by PARTFUN1:def 8;
+          hence
+          lmlt(LLav,B2).i = (the lmult of V2).(LLav/.i,B2/.i) by A29,A27,
+          A30,A33,A36,FUNCOP_1:28
+            .= (a*LLv/.i)*B2/.i by A31,A37,A35,A38, FVSUM_1:62
+            .= a*(LLv/.i*B2/.i) by VECTSP_1:def 26
+            .= a*lmlt(LLv,B2)/.i by A33,A35,A36,A34, FUNCOP_1:28;
         end;
-        then Sum lmlt(LLav,B2)= a*Sum lmlt(LLv,B2) by A19,VECTSP_3:10;
+        len lmlt(LLav,B2)=len lmlt(LLv,B2) by A29,A27,A30,FINSEQ_3:31;
+        then Sum lmlt(LLav,B2)= a*Sum lmlt(LLv,B2) by A32,VECTSP_3:10;
         hence Mx.(a*v1) = a*Sum lmlt(LLv,B2) by Def3
-                       .= a*Mx.v1 by Def3;
+          .= a*Mx.v1 by Def3;
       end;
       hence thesis by A4,MOD_2:def 5;
     end;
@@ -1806,115 +2101,145 @@ A22:         LLv.i=LLv/.i & LLav.i=LLav/.i & B2.i=B2/.i &
 end;
 
 theorem Th34:
-   f is linear implies Mx2Tran(AutMt(f,b1,b2),b1,b2) = f
+  f is linear implies Mx2Tran(AutMt(f,b1,b2),b1,b2) = f
 proof
   assume
 A1: f is linear;
   set A=AutMt(f,b1,b2);
   set M=Mx2Tran(A,b1,b2);
   per cases;
-    suppose
-A2:     len b1=0;
-      now let x such that
-A3:       x in the carrier of V1;
-         reconsider R=rng b1 as Basis of V1 by MATRLIN:def 4;
-A4:      b1 is one-to-one by MATRLIN:def 4;
-         dim V1 = card R by VECTSP_9:def 2
-               .= card dom b1 by A4,POLYFORM:2
-               .= 0 by A2,CARD_1:47,FINSEQ_1:4,def 3;
-         then (Omega).V1 = (0).V1 by VECTSP_9:33;
-         then the carrier of V1 = {0.V1} by VECTSP_4:def 3;
-         then x=0.V1 by A3,TARSKI:def 1;
-         hence f.x = f.(0.K*0.V1) by VECTSP_1:60
-                  .= 0.K*(f.(0.V1)) by A1,MOD_2:def 5
-                  .= 0.V2 by VECTSP_1:60
-                  .= M.x by A2,A3,Th33;
-      end;
-      hence thesis by FUNCT_2:18;
+  suppose
+A2: len b1=0;
+    now
+A3:   b1 is one-to-one by MATRLIN:def 4;
+      reconsider R=rng b1 as Basis of V1 by MATRLIN:def 4;
+      let x such that
+A4:   x in the carrier of V1;
+X:    Seg len b1 = {} by A2,CARD_1:47,FINSEQ_1:4,def 3;
+      dim V1 = card R by VECTSP_9:def 2
+        .= card dom b1 by A3,POLYFORM:2
+        .= 0 by A2,CARD_1:47,FINSEQ_1:4,def 3,X;
+      then (Omega).V1 = (0).V1 by VECTSP_9:33;
+      then the carrier of V1 = {0.V1} by VECTSP_4:def 3;
+      then x=0.V1 by A4,TARSKI:def 1;
+      hence f.x = f.(0.K*0.V1) by VECTSP_1:60
+        .= 0.K*(f.(0.V1)) by A1,MOD_2:def 5
+        .= 0.V2 by VECTSP_1:60
+        .= M.x by A2,A4,Th33;
     end;
-    suppose
-A5:   len b1>0;
-A6:   dom M=the carrier of V1 & dom f=the carrier of V1 &
-        rng b1 is Subset of V1 by FINSEQ_1:def 4,FUNCT_2:def 1;
-      reconsider fb=f*b1,Mf=M*b1 as FinSequence;
-A7:   len fb=len b1 & len Mf=len b1 by A6,FINSEQ_2:33;
-      now let i such that
-A8:       1<=i & i<=len fb;
-A9:      i in dom fb & dom fb=dom b1 & dom fb=dom Mf
-           by A7,A8,FINSEQ_3:27,31;
-         then
-A10:       b1.i = b1/.i by PARTFUN1:def 8;
-         LineVec2Mx(M.(b1/.i)|--b2) = LineVec2Mx(b1/.i|--b1) * A by A5,Th32
-                     .= LineVec2Mx (f.(b1/.i) |-- b2) by A1,A5,Th31;
-         then M.(b1/.i)|--b2 = Line(LineVec2Mx(f.(b1/.i)|--b2),1)
-                               by MATRIX15:25
-                            .= f.(b1/.i)|--b2 by MATRIX15:25;
-         then M.(b1/.i)=f.(b1/.i) by MATRLIN:39;
-         hence fb.i = M.(b1/.i) by A10,A9,FUNCT_1:22
-                   .= Mf.i by A10,A9,FUNCT_1:22;
-      end;
-      then Mf=fb by A7,FINSEQ_1:18;
-      hence thesis by A1,A5,MATRLIN:26;
+    hence thesis by FUNCT_2:18;
+  end;
+  suppose
+A5: len b1>0;
+    reconsider fb=f*b1,Mf=M*b1 as FinSequence;
+A6: rng b1 is Subset of V1 by FINSEQ_1:def 4;
+    dom f=the carrier of V1 by FUNCT_2:def 1;
+    then
+A7: len fb=len b1 by A6,FINSEQ_2:33;
+    dom M=the carrier of V1 by FUNCT_2:def 1;
+    then
+A8: len Mf=len b1 by A6,FINSEQ_2:33;
+    now
+A9:   dom fb=dom Mf by A7,A8,FINSEQ_3:31;
+      let i;
+      assume
+      1<=i & i<=len fb;
+      then
+A10:  i in dom fb by FINSEQ_3:27;
+      dom fb=dom b1 by A7,FINSEQ_3:31;
+      then
+A11:  b1.i = b1/.i by A10,PARTFUN1:def 8;
+      LineVec2Mx(M.(b1/.i)|--b2) = LineVec2Mx(b1/.i|--b1) * A by A5,
+      Th32
+        .= LineVec2Mx (f.(b1/.i) |-- b2) by A1,A5,Th31;
+      then M.(b1/.i)|--b2 = Line(LineVec2Mx(f.(b1/.i)|--b2),1) by
+      MATRIX15
+      :25
+        .= f.(b1/.i)|--b2 by MATRIX15:25;
+      then M.(b1/.i)=f.(b1/.i) by MATRLIN:39;
+      hence fb.i = M.(b1/.i) by A10,A11,FUNCT_1:22
+        .= Mf.i by A10,A9,A11,FUNCT_1:22;
     end;
+    hence thesis by A1,A5,A7,A8,FINSEQ_1:18,MATRLIN:26;
+  end;
 end;
 
 theorem Th35:
-  for A,B be Matrix of K st
-    i in dom A & width A = len B holds
-    LineVec2Mx(Line(A,i)) * B = LineVec2Mx(Line(A*B,i))
+  for A,B be Matrix of K st i in dom A & width A = len B holds
+  LineVec2Mx(Line(A,i)) * B = LineVec2Mx(Line(A*B,i))
 proof
   let A,B be Matrix of K such that
-A1: i in dom A & width A = len B;
-  set L=LineVec2Mx(Line(A,i));
+A1: i in dom A and
+A2: width A = len B;
+A3: width (A*B)=width B by A2,MATRIX_3:def 4;
   set LAB=LineVec2Mx(Line(A*B,i));
-A2:len L=1 & width L=len Line(A,i) & len LAB=1 & width LAB=len Line(A*B,i)
-     & len Line(A*B,i) =width (A*B) & width (A*B)=width B & len (A*B)=len A &
-     len Line(A,i)=width A by A1,FINSEQ_1:def 18,MATRIX_1:24,MATRIX_3:def 4;
+A4: width LAB=len Line(A*B,i) & len Line(A*B,i) =width (A*B) by FINSEQ_1:def
+  18 ,MATRIX_1:24;
+  set L=LineVec2Mx(Line(A,i));
+A5: width L=len Line(A,i) & len Line(A,i)=width A by FINSEQ_1:def 18 ,
+  MATRIX_1:24;
   then
-A3:  len (L*B)=1 & width (L*B)=width B & dom A=dom (A*B)
-    by A1,FINSEQ_3:31,MATRIX_3:def 4;
-  now let j,k such that
-A4:    [j,k] in Indices (L*B);
-A5:   Indices (L*B)=[:Seg 1,Seg width B:] by A3,FINSEQ_1:def 3;
-A6:   j in Seg 1 & k in Seg width (A*B) by A2,A4,A5,ZFMISC_1:106;
-     then
-A7:    j=1 & [i,k] in Indices (A*B)
-       by A1,A3,FINSEQ_1:4,TARSKI:def 1,ZFMISC_1:106;
-     hence (L*B)*(j,k) = Line(L,1)"*"Col(B,k) by A1,A2,A4,MATRIX_3:def 4
-                      .= Line(A,i)"*"Col(B,k) by MATRIX15:25
-                      .= (A*B)*(i,k) by A1,A7,MATRIX_3:def 4
-                      .= Line(A*B,i).k by A6,MATRIX_1:def 8
-                      .= Line(LAB,j).k by A7,MATRIX15:25
-                      .= LAB*(j,k) by A2,A6,MATRIX_1:def 8;
+A6: width (L*B)=width B by A2,MATRIX_3:def 4;
+  len L=1 by FINSEQ_1:def 18;
+  then
+A7: len (L*B)=1 by A2,A5,MATRIX_3:def 4;
+  len (A*B)=len A by A2,MATRIX_3:def 4;
+  then
+A8: dom A=dom (A*B) by FINSEQ_3:31;
+A9: now
+    let j,k such that
+A10: [j,k] in Indices (L*B);
+A11: k in Seg width (A*B) by A3,A6,A10,ZFMISC_1:106;
+    then
+A12: [i,k] in Indices (A*B) by A1,A8,ZFMISC_1:106;
+    Indices (L*B)=[:Seg 1,Seg width B:] by A7,A6,FINSEQ_1:def 3;
+    then j in Seg 1 by A10,ZFMISC_1:106;
+    then
+A13: j=1 by FINSEQ_1:4,TARSKI:def 1;
+    hence (L*B)*(j,k) = Line(L,1)"*"Col(B,k) by A2,A5,A10,MATRIX_3:def 4
+      .= Line(A,i)"*"Col(B,k) by MATRIX15:25
+      .= (A*B)*(i,k) by A2,A12,MATRIX_3:def 4
+      .= Line(A*B,i).k by A11,MATRIX_1:def 8
+      .= Line(LAB,j).k by A13,MATRIX15:25
+      .= LAB*(j,k) by A4,A11,MATRIX_1:def 8;
   end;
-  hence thesis by A2,A3,MATRIX_1:21;
+  len LAB=1 by FINSEQ_1:def 18;
+  hence thesis by A4,A3,A7,A6,A9,MATRIX_1:21;
 end;
 
 theorem Th36:
-  for M be Matrix of len b1,len b2,K holds
-    AutMt(Mx2Tran(M,b1,b2),b1,b2) = M
+  for M be Matrix of len b1,len b2,K holds AutMt(Mx2Tran(M,b1,b2),
+  b1,b2) = M
 proof
   let M be Matrix of len b1,len b2,K;
   set MX=Mx2Tran(M,b1,b2);
   set A=AutMt(MX,b1,b2);
   set ONE=1.(K,len b1);
-A1:len M=len b1 & len A=len b1 & len ONE=len b1 & width ONE=len b1
-     by MATRIX_1:25,26;
-  now let i such that
-A2:    1<=i & i<=len M;
-A3:   i in dom b1 & i in dom A & i in dom ONE & i in Seg len b1
-        by A1,A2,FINSEQ_1:3,FINSEQ_3:27;
-      then A/.i=MX.(b1/.i)|--b2 by MATRLIN:def 10;
-      then LineVec2Mx(A/.i) = LineVec2Mx(b1/.i|--b1) * M by A1,A2,Th32
-                           .= LineVec2Mx(Line(ONE,i))*M by A3,Th19
-                           .= LineVec2Mx(Line(ONE*M,i)) by A1,A3,Th35
-                           .= LineVec2Mx(Line(M,i)) by A1,MATRIXR2:68;
-      then A/.i = Line(LineVec2Mx(Line(M,i)),1) by MATRIX15:25
-               .= Line(M,i) by MATRIX15:25
-               .= M.i by A3,MATRIX_2:10;
-      hence M.i = A.i by A3,PARTFUN1:def 8;
+A1: len M=len b1 by MATRIX_1:26;
+A2: len A=len b1 by MATRIX_1:26;
+A3: len ONE=len b1 by MATRIX_1:25;
+  now
+    let i such that
+A4: 1<=i & i<=len M;
+A5: i in Seg len b1 by A1,A4,FINSEQ_1:3;
+A6: i in dom ONE by A1,A3,A4,FINSEQ_3:27;
+    A/.i in (the carrier of K)*;
+    then reconsider Ai = A/.i as FinSequence of K by FINSEQ_1:def 11;
+A7: i in dom b1 by A1,A4,FINSEQ_3:27;
+    then A/.i=MX.(b1/.i)|--b2 by MATRLIN:def 10;
+    then LineVec2Mx(Ai qua FinSequence of K) = LineVec2Mx(b1/.i|--b1) * M
+             by A1,A4,Th32
+      .= LineVec2Mx(Line(ONE,i))*M by A7,Th19
+      .= LineVec2Mx(Line(ONE*M,i)) by A1,A6,Th35, MATRIX_1:25
+      .= LineVec2Mx(Line(M,i)) by A1,MATRIXR2:68;
+    then
+A8: Ai = Line(LineVec2Mx(Line(M,i)),1) by MATRIX15:25
+      .= Line(M,i) by MATRIX15:25
+      .= M.i by A5,MATRIX_2:10;
+    i in dom A by A1,A2,A4,FINSEQ_3:27;
+    hence M.i = A.i by A8,PARTFUN1:def 8;
   end;
-  hence thesis by A1,FINSEQ_1:18;
+  hence thesis by A2,FINSEQ_1:18,MATRIX_1:26;
 end;
 
 definition
@@ -1924,79 +2249,95 @@ definition
   redefine func A+B -> Matrix of n,m,K;
   coherence
   proof
-A1:   len (A+B)=len A & width (A+B)=width A & len A=n
-    by MATRIX_1:def 3,MATRIX_3:def 3;
+A1: width (A+B)=width A & len A=n by MATRIX_1:def 3,MATRIX_3:def 3;
+A2: len (A+B)=len A by MATRIX_3:def 3;
     per cases;
-      suppose
-A2:       n=0;
-        then A+B={} by A1;
-        hence thesis by A2,MATRIX_1:13;
-      end;
-      suppose n>0;
-        then width A=m by MATRIX_1:24;
-        hence thesis by A1,MATRIX_2:7;
-      end;
+    suppose
+A3:   n=0;
+      then A+B={} by A2,MATRIX_1:def 3;
+      hence thesis by A3,MATRIX_1:13;
+    end;
+    suppose
+      n>0;
+      then width A=m by MATRIX_1:24;
+      hence thesis by A2,A1,MATRIX_2:7;
+    end;
   end;
 end;
 
 theorem
-  for A,B be Matrix of len b1,len B2,K holds
-    Mx2Tran(A+B,b1,B2) = Mx2Tran(A,b1,B2) + Mx2Tran(B,b1,B2)
+  for A,B be Matrix of len b1,len B2,K holds Mx2Tran(A+B,b1,B2) =
+  Mx2Tran(A,b1,B2) + Mx2Tran(B,b1,B2)
 proof
   let A,B be Matrix of len b1,len B2,K;
   set AB=A+B;
   set M=Mx2Tran(A+B,b1,B2);
   set MA=Mx2Tran(A,b1,B2);
   set MB=Mx2Tran(B,b1,B2);
-  now let x such that
-A1:    x in the carrier of V1;
-     reconsider v=x as Element of V1 by A1;
-     now per cases;
-        suppose
-A2:         len b1=0;
-          hence M.x = 0.V2 by A1,Th33
-                   .= 0.V2+0.V2 by RLVECT_1:def 7
-                   .= MA.v+0.V2 by A2,Th33
-                   .= MA.v+MB.v by A2,Th33
-                   .= (MA+MB).x by MATRLIN:def 5;
+  now
+    let x such that
+A1: x in the carrier of V1;
+    reconsider v=x as Element of V1 by A1;
+    now
+      per cases;
+      suppose
+A2:     len b1=0;
+        hence M.x = 0.V2 by A1,Th33
+          .= 0.V2+0.V2 by RLVECT_1:def 7
+          .= MA.v+0.V2 by A2,Th33
+          .= MA.v+MB.v by A2,Th33
+          .= (MA+MB).x by MATRLIN:def 5;
+      end;
+      suppose
+A3:     len b1>0;
+        set L=LineVec2Mx(v|--b1);
+A4:     width L=len (v|--b1) & len (v|--b1)=len b1 by MATRIX_1:24,MATRLIN
+        :def 9;
+        set mB=lmlt(Line(L*B,1),B2);
+A5:     len B=len b1 & width B=len B2 by A3,MATRIX_1:24;
+        then
+A6:     width (L*B)=len B2 by A4,MATRIX_3:def 4;
+        then len Line(L*B,1)=len B2 by FINSEQ_1:def 18;
+        then dom Line(L*B,1)=dom B2 by FINSEQ_3:31;
+        then
+A7:     dom mB=dom B2 by MATRLIN:16;
+        then
+A8:     len mB=len B2 by FINSEQ_3:31;
+A9:     len A=len b1 by A3,MATRIX_1:24;
+A10:    len L=1 by MATRIX_1:24;
+        then
+A11:    len (L*A)=1 by A9,A4,MATRIX_3:def 4;
+        set mA=lmlt(Line(L*A,1),B2);
+A12:    width A=len B2 by A3,MATRIX_1:24;
+        then
+A13:    width (L*A)=len B2 by A9,A4,MATRIX_3:def 4;
+        then len Line(L*A,1)=len B2 by FINSEQ_1:def 18;
+        then dom Line(L*A,1)=dom B2 by FINSEQ_3:31;
+        then
+A14:    dom mA=dom B2 by MATRLIN:16;
+        then
+A15:    len mA=len B2 by FINSEQ_3:31;
+A16:    dom (mA+mB) = dom B2/\dom B2 by A14,A7,Lm3
+          .= dom B2;
+        then
+A17:    len (mA+mB)=len B2 by FINSEQ_3:31;
+A18:    now
+          let k be Element of NAT such that
+A19:      k in dom mA;
+          mA/.k=mA.k & mB/.k=mB.k by A14,A7,A19,PARTFUN1:def 8;
+          hence (mA+mB).k = mA/.k + mB/.k by A14,A16,A19,FVSUM_1:21;
         end;
-        suppose
-A3:         len b1>0;
-           set L=LineVec2Mx(v|--b1);
-           set mA=lmlt(Line(L*A,1),B2);
-           set mB=lmlt(Line(L*B,1),B2);
-A4:         len L=1 & len A=len b1 & len B=len b1 & width A=len B2 &
-              width B=len B2 & width L=len (v|--b1) & len (v|--b1)=len b1
-              by A3,MATRIX_1:24,MATRLIN:def 9;
-           then
-A5:         len (L*A)=1 & width (L*A)=len B2 & len (L*B)=1 &
-              width (L*B)=len B2 by MATRIX_3:def 4;
-           then len Line(L*A,1)=len B2 & len Line(L*B,1)=len B2
-             by FINSEQ_1:def 18;
-           then dom Line(L*A,1)=dom B2 & dom Line(L*B,1)=dom B2
-             by FINSEQ_3:31;
-           then
-A6:          dom mA=dom B2 & dom mB=dom B2 by MATRLIN:16;
-           then
-A7:          len mA=len B2 & len mB=len B2 by FINSEQ_3:31;
-A8:        dom (mA+mB) = dom B2/\dom B2  by A6,Lm3
-                      .= dom B2;
-           then
-A9:          len (mA+mB)=len B2 by FINSEQ_3:31;
-A10:       now let k be Element of NAT such that
-A11:k            in dom mA;
-              mA/.k=mA.k & mB/.k=mB.k by A6,A11,PARTFUN1:def 8;
-              hence (mA+mB).k = mA/.k + mB/.k by A6,A8,A11,FVSUM_1:21;
-           end;
-           thus M.x = Sum lmlt (Line(L * AB,1),B2) by Def3
-                   .= Sum lmlt (Line(L * A+L*B,1),B2) by A3,A4,MATRIX_4:62
-                   .= Sum lmlt (Line(L * A,1)+Line(L*B,1),B2)by A5,Lm5
-                   .= Sum (mA + mB) by Th7
-                   .= Sum mA +Sum mB by A7,A9,A10,RLVECT_2:4
-                   .= MA.v+Sum mB by Def3
-                   .= MA.v+MB.v by Def3
-                   .= (MA+MB).x by MATRLIN:def 5;
-        end;
+        thus M.x = Sum lmlt (Line(L * AB,1),B2) by Def3
+          .= Sum lmlt (Line(L * A+L*B,1),B2) by A3,A10,A9,A12,A5,A4
+        , MATRIX_4
+        :62
+          .= Sum lmlt (Line(L * A,1)+Line(L*B,1),B2)by A11,A13,A6,Lm5
+          .= Sum (mA + mB) by Th7
+          .= Sum mA +Sum mB by A15,A8,A17,A18,RLVECT_2:4
+          .= MA.v+Sum mB by Def3
+          .= MA.v+MB.v by Def3
+          .= (MA+MB).x by MATRLIN:def 5;
+      end;
     end;
     hence M.x=(MA+MB).x;
   end;
@@ -2004,158 +2345,179 @@ A11:k            in dom mA;
 end;
 
 theorem
-  for A be Matrix of len b1,len B2,K holds
-    a * Mx2Tran(A,b1,B2) = Mx2Tran(a * A,b1,B2)
+  for A be Matrix of len b1,len B2,K holds a * Mx2Tran(A,b1,B2) =
+  Mx2Tran(a * A,b1,B2)
 proof
   let A be Matrix of len b1,len B2,K;
   set aA=a*A;
   set aM=Mx2Tran(aA,b1,B2);
   set M=Mx2Tran(A,b1,B2);
-  now let x such that
-A1:    x in the carrier of V1;
-     reconsider v=x as Element of V1 by A1;
-     set L=LineVec2Mx(v|--b1);
-     set amA=lmlt(a*Line(L*A,1),B2);
-     set mA=lmlt(Line(L*A,1),B2);
-A2:    len L=1 & width L=len (v|--b1) & len (v|--b1)=len b1
-       & len A=len b1 by MATRIX_1:24,def 3,MATRLIN:def 9;
-     then
-A3:    len (L*A)=1 by MATRIX_3:def 4;
-     len (a*Line(L*A,1))=len Line(L*A,1) by MATRIXR1:16;
-     then
-A4:    dom amA=dom (a*Line(L*A,1))/\dom B2 &
-       dom (a*Line(L*A,1))=dom Line(L*A,1) &
-       dom mA=dom (Line(L*A,1))/\dom B2 by Lm1,FINSEQ_3:31;
-     then
-A5:    len mA=len amA by FINSEQ_3:31;
-A6:  now let k be Element of NAT such that
-A7:        k in dom mA;
-A8:      k in dom Line(L*A,1) & k in dom (a*Line(L*A,1)) & k in dom B2
-         by A7,A4,XBOOLE_0:def 4;
-       then
-A9:     Line(L*A,1).k=Line(L*A,1)/.k & B2.k=B2/.k & mA.k=mA/.k
-         by A7,PARTFUN1:def 8;
-       then
-A10:     (a*Line(L*A,1)).k=a*(Line(L*A,1)/.k) by A8,FVSUM_1:62;
-       thus amA.k = (a*(Line(L*A,1)/.k))*B2/.k by A4,A7,A9,A10,FUNCOP_1:28
-                 .= a*((Line(L*A,1)/.k)*B2/.k) by VECTSP_1:def 26
-                 .= a*(mA/.k) by A7,A9,FUNCOP_1:28;
-     end;
-     thus aM.x = Sum lmlt (Line(L * aA,1),B2) by Def3
-              .= Sum lmlt (Line(a*(L*A),1),B2) by A2,MATRIXR1:22
-              .= Sum amA by A3,MATRIXR1:20
-              .= a*Sum mA by A5,A6,VECTSP_3:10
-              .= a*M.v by Def3
-              .= (a*M).x by MATRLIN:def 6;
+  now
+    let x;
+    assume
+    x in the carrier of V1;
+    then reconsider v=x as Element of V1;
+    set L=LineVec2Mx(v|--b1);
+    set amA=lmlt(a*Line(L*A,1),B2);
+    set mA=lmlt(Line(L*A,1),B2);
+A1: width L=len (v|--b1) & len (v|--b1)=len b1 by MATRIX_1:24,MATRLIN:def
+    9;
+A2: len A=len b1 by MATRIX_1:def 3;
+    len L=1 by MATRIX_1:24;
+    then
+A3: len (L*A)=1 by A1,A2,MATRIX_3:def 4;
+A4: dom mA=dom (Line(L*A,1))/\dom B2 by Lm1;
+    len (a*Line(L*A,1))=len Line(L*A,1) by MATRIXR1:16;
+    then
+A5: dom (a*Line(L*A,1))=dom Line(L*A,1) by FINSEQ_3:31;
+A6: dom amA=dom (a*Line(L*A,1))/\dom B2 by Lm1;
+    then
+A7: len mA=len amA by A5,A4,FINSEQ_3:31;
+A8: now
+      let k be Element of NAT such that
+A9:   k in dom mA;
+A10:  mA.k=mA/.k by A9,PARTFUN1:def 8;
+      k in dom Line(L*A,1) by A4,A9,XBOOLE_0:def 4;
+      then
+A11:  Line(L*A,1).k=Line(L*A,1)/.k by PARTFUN1:def 8;
+      k in dom B2 by A4,A9,XBOOLE_0:def 4;
+      then
+A12:  B2.k=B2/.k by PARTFUN1:def 8;
+      k in dom (a*Line(L*A,1)) by A5,A4,A9,XBOOLE_0:def 4;
+      then (a*Line(L*A,1)).k=a*(Line(L*A,1)/.k) by A11,FVSUM_1:62;
+      hence amA.k = (a*(Line(L*A,1)/.k))*B2/.k by A6,A5,A4,A9,A12,
+      FUNCOP_1:28
+        .= a*((Line(L*A,1)/.k)*B2/.k) by VECTSP_1:def 26
+        .= a*(mA/.k) by A9,A11,A12,A10,FUNCOP_1:28;
+    end;
+    thus aM.x = Sum lmlt (Line(L * aA,1),B2) by Def3
+      .= Sum lmlt (Line(a*(L*A),1),B2) by A1,A2,MATRIXR1:22
+      .= Sum amA by A3,MATRIXR1:20
+      .= a*Sum mA by A7,A8,VECTSP_3:10
+      .= a*M.v by Def3
+      .= (a*M).x by MATRLIN:def 6;
   end;
   hence thesis by FUNCT_2:18;
 end;
 
 theorem
-  for A,B be Matrix of len b1,len b2,K st Mx2Tran(A,b1,b2)=Mx2Tran(B,b1,b2)
-    holds A = B
+  for A,B be Matrix of len b1,len b2,K st Mx2Tran(A,b1,b2)=Mx2Tran(B,b1,
+  b2) holds A = B
 proof
   let A,B be Matrix of len b1,len b2,K;
-  assume Mx2Tran(A,b1,b2)=Mx2Tran(B,b1,b2);
+  assume
+  Mx2Tran(A,b1,b2)=Mx2Tran(B,b1,b2);
   hence A = AutMt(Mx2Tran(B,b1,b2),b1,b2) by Th36
-         .= B by Th36;
+    .= B by Th36;
 end;
 
 theorem
-  for A be Matrix of len b1,len b2,K
-    for B be Matrix of len b2,len B3,K st width A = len B
-      for AB be Matrix of len b1,len B3,K st AB = A*B holds
-        Mx2Tran(AB,b1,B3) = Mx2Tran(B,b2,B3) * Mx2Tran(A,b1,b2)
+  for A be Matrix of len b1,len b2,K for B be Matrix of len b2,len B3,K
+  st width A = len B for AB be Matrix of len b1,len B3,K st AB = A*B holds
+  Mx2Tran(AB,b1,B3) = Mx2Tran(B,b2,B3) * Mx2Tran(A,b1,b2)
 proof
   let A be Matrix of len b1,len b2,K;
   let B be Matrix of len b2,len B3,K such that
-A1:  width A = len B;
-  let AB be Matrix of len b1,len B3,K such that
-A2:  AB = A*B;
-  set MAB=Mx2Tran(AB,b1,B3);
-  set MA=Mx2Tran(A,b1,b2);
+A1: width A = len B;
   set MB=Mx2Tran(B,b2,B3);
-  now let x such that
-A3:    x in the carrier of V1;
-     reconsider v=x as Element of V1 by A3;
-     set L=LineVec2Mx(v|--b1);
-A4:   len L=1 & width L=len (v|--b1) & len (v|--b1)=len b1 &
-        len A=len b1 & len B=len b2
-        by MATRIX_1:24,def 3,MATRLIN:def 9;
-     then
-A5:    len (L*A)=len L & width (L*A)=width A by MATRIX_3:def 4;
-     then
-A6:    dom (L*A)=Seg 1 & 1 in Seg 1 & len Line(L * A,1)=width A
-       by A4,FINSEQ_1:def 3,def 18;
-     dom (MB*MA) = the carrier of V1 by FUNCT_2:def 1;
-     hence (MB*MA).x = MB.(MA.v) by FUNCT_1:22
-                    .= MB.Sum lmlt (Line(L * A,1),b2) by Def3
-                    .= Sum lmlt
-                     (Line(LineVec2Mx(Sum lmlt(Line(L*A,1),b2)|--b2)*B,1),B3)
-                         by Def3
-                    .= Sum lmlt (Line(LineVec2Mx(Line(L*A,1))*B,1),B3)
-                         by A1,A4,A6,MATRLIN:41
-                    .= Sum lmlt (Line(LineVec2Mx(Line(L*A*B,1)),1),B3)
-                         by A1,A5,A6,Th35
-                    .= Sum lmlt (Line(LineVec2Mx(Line(L*AB,1)),1),B3)
-                         by A1,A2,A4,MATRIX_3:35
-                    .= Sum lmlt (Line(L*AB,1),B3) by MATRIX15:25
-                    .= MAB.x by Def3;
+  set MA=Mx2Tran(A,b1,b2);
+  let AB be Matrix of len b1,len B3,K such that
+A2: AB = A*B;
+  set MAB=Mx2Tran(AB,b1,B3);
+  now
+    let x;
+    assume
+    x in the carrier of V1;
+    then reconsider v=x as Element of V1;
+    set L=LineVec2Mx(v|--b1);
+A3: len A=len b1 by MATRIX_1:def 3;
+A4: width L=len (v|--b1) & len (v|--b1)=len b1 by MATRIX_1:24,MATRLIN:def
+    9;
+    then len L=1 & len (L*A)=len L by A3,MATRIX_1:24,MATRIX_3:def 4;
+    then
+A5: dom (L*A)=Seg 1 by FINSEQ_1:def 3;
+A6: width (L*A)=width A by A4,A3,MATRIX_3:def 4;
+    then
+A7: len B=len b2 & len Line(L * A,1)=width A by FINSEQ_1:def 18 ,
+    MATRIX_1:def 3;
+A8: 1 in Seg 1;
+    dom (MB*MA) = the carrier of V1 by FUNCT_2:def 1;
+    hence (MB*MA).x = MB.(MA.v) by FUNCT_1:22
+      .= MB.Sum lmlt (Line(L * A,1),b2) by Def3
+      .= Sum lmlt (Line(LineVec2Mx(Sum lmlt(Line(L*A,1),b2)|--b2)*B,1),B3)
+    by Def3
+      .= Sum lmlt (Line(LineVec2Mx(Line(L*A,1))*B,1),B3) by A1,A7,MATRLIN:
+    41
+      .= Sum lmlt (Line(LineVec2Mx(Line(L*A*B,1)),1),B3) by A1,A6,A5,A8,
+    Th35
+      .= Sum lmlt (Line(LineVec2Mx(Line(L*AB,1)),1),B3) by A1,A2,A4,A3,
+    MATRIX_3:35
+      .= Sum lmlt (Line(L*AB,1),B3) by MATRIX15:25
+      .= MAB.x by Def3;
   end;
   hence thesis by FUNCT_2:18;
 end;
 
 theorem Th41:
-   for A be Matrix of len b1,len b2,K st len b1>0 & len b2>0
-      holds
-    v1 in ker Mx2Tran(A,b1,b2) iff v1|--b1 in Space_of_Solutions_of (A@)
+  for A be Matrix of len b1,len b2,K st len b1>0 & len b2>0 holds
+  v1 in ker Mx2Tran(A,b1,b2) iff v1|--b1 in Space_of_Solutions_of (A@)
 proof
   let A be Matrix of len b1,len b2,K such that
-A1:  len b1>0 & len b2>0;
+A1: len b1>0 and
+A2: len b2>0;
   set AT=A@;
-  set SA=Space_of_Solutions_of AT;
-  set M=Mx2Tran(A,b1,b2);
-A2:  len A=len b1 & width A=len b2 by A1,MATRIX_1:24;
+A3: width A=len b2 by A1,MATRIX_1:24;
   then
-A3:  len AT=len b2 & width AT=len b1 & (width AT=0 implies len AT=0)
-    by A1,MATRIX_2:12;
+A4: len AT=len b2 by A2,MATRIX_2:12;
   set L=LineVec2Mx(v1|--b1);
-A4:  width L=len (v1|--b1) & len (v1|--b1) =len b1 & len (len b2|->0.K)=len b2
-     by FINSEQ_1:def 18,MATRIX_1:24,MATRLIN:def 9;
+  set M=Mx2Tran(A,b1,b2);
+  set SA=Space_of_Solutions_of AT;
+A5: width L=len (v1|--b1) by MATRIX_1:24;
+A6: len (len b2|->0.K)=len b2 by FINSEQ_1:def 18;
   then
-A5:  len ColVec2Mx(v1|--b1)=len (v1|--b1) & width ColVec2Mx(v1|--b1)=1 &
-     width ColVec2Mx(len b2|->0.K)=1 & width (L*A)=width A &
-     width LineVec2Mx(len b2|->0.K)=len b2
-     by A1,A2,MATRIX_1:24,MATRIX_3:def 4;
+A7: width LineVec2Mx(len b2|->0.K)=len b2 by MATRIX_1:24;
+A8: width ColVec2Mx(len b2|->0.K)=1 by A2,A6,MATRIX_1:24;
+A9: len (v1|--b1) =len b1 by MATRLIN:def 9;
+  then
+A10: len ColVec2Mx(v1|--b1)=len (v1|--b1) & width ColVec2Mx(v1|--b1)=1 by A1
+  , MATRIX_1:24;
+A11: len A=len b1 by A1,MATRIX_1:24;
+  then
+A12: width AT=0 implies len AT=0 by A1,A2,A3,MATRIX_2:12;
+A13: width AT=len b1 by A2,A11,A3,MATRIX_2:12;
   thus v1 in ker M implies v1|--b1 in SA
-    proof
-      assume
-A6:      v1 in ker M;
-      M.v1 = 0.V2 by A6,RANKNULL:10;
-      then L * A = LineVec2Mx(0.V2|-- b2) by Th32,A1
-                .= LineVec2Mx(len b2|->0.K ) by Th20;
-      then ColVec2Mx(len b2|->0.K)=  AT*ColVec2Mx(v1|--b1)
-        by A4,A1,A2,MATRIX_3:24;
-      then ColVec2Mx(v1|--b1) in Solutions_of(AT,ColVec2Mx(len b2|->0.K))
-        by A3,A4,A5;
-      then v1|--b1 in Solutions_of(AT,len b2|->0.K);
-      then v1|--b1 in the carrier of SA by A3,MATRIX15:def 5;
-      hence thesis by STRUCT_0:def 5;
-    end;
-  assume v1|--b1 in SA;
+  proof
+    assume
+    v1 in ker M;
+    then M.v1 = 0.V2 by RANKNULL:10;
+    then L * A = LineVec2Mx(0.V2|-- b2) by A1,Th32
+      .= LineVec2Mx(len b2|->0.K ) by Th20;
+    then ColVec2Mx(len b2|->0.K)= AT*ColVec2Mx(v1|--b1) by A2,A11,A3,A5,A9,
+    MATRIX_3:24;
+    then
+    ColVec2Mx(v1|--b1) in Solutions_of(AT,ColVec2Mx(len b2|->0.K)) by A13,
+    A9,A10,A8;
+    then v1|--b1 in Solutions_of(AT,len b2|->0.K);
+    then v1|--b1 in the carrier of SA by A4,A12,MATRIX15:def 5;
+    hence thesis by STRUCT_0:def 5;
+  end;
+  assume
+  v1|--b1 in SA;
   then v1|--b1 in the carrier of SA by STRUCT_0:def 5;
-  then v1|--b1 in Solutions_of(AT,len b2|->0.K) by A3,MATRIX15:def 5;
-  then ex f be FinSequence of K  st f=v1|--b1 &
-    ColVec2Mx f in Solutions_of(AT,ColVec2Mx(len b2|->0.K));
-  then ex X be Matrix of K st
-     X = ColVec2Mx(v1|--b1) & len X = width AT &
-     width X = width ColVec2Mx(len b2|->0.K) & ColVec2Mx(len b2|->0.K)=AT*X;
-  then ColVec2Mx(len b2|->0.K)=(L*A)@ by A4,A1,A2,MATRIX_3:24;
-  then L*A = LineVec2Mx(len b2|->0.K) by A1,A2,A5,MATRIX_2:14
-          .= LineVec2Mx(0.V2|--b2) by Th20;
-  then LineVec2Mx(0.V2|--b2)=LineVec2Mx(M.v1|-- b2) by Th32,A1;
+  then v1|--b1 in Solutions_of(AT,len b2|->0.K) by A4,A12,MATRIX15:def 5;
+  then
+  ex f be FinSequence of K st f=v1|--b1 & ColVec2Mx f in Solutions_of(AT,
+  ColVec2Mx(len b2|->0.K));
+  then ex X be Matrix of K st X = ColVec2Mx(v1|--b1) & len X = width AT &
+  width X = width ColVec2Mx(len b2|->0.K) & ColVec2Mx(len b2|->0.K)=AT*X;
+  then
+A14: ColVec2Mx(len b2|->0.K)=(L*A)@ by A2,A11,A3,A5,A9,MATRIX_3:24;
+  width (L*A)=width A by A11,A5,A9,MATRIX_3:def 4;
+  then L*A = LineVec2Mx(len b2|->0.K) by A2,A3,A7,A14,MATRIX_2:14
+    .= LineVec2Mx(0.V2|--b2) by Th20;
+  then LineVec2Mx(0.V2|--b2)=LineVec2Mx(M.v1|-- b2) by A1,Th32;
   then 0.V2|--b2 = Line(LineVec2Mx(M.v1|-- b2),1) by MATRIX15:25
-                .= M.v1|-- b2 by MATRIX15:25;
+    .= M.v1|-- b2 by MATRIX15:25;
   then M.v1=0.V2 by MATRLIN:39;
   hence thesis by RANKNULL:10;
 end;
@@ -2163,52 +2525,55 @@ end;
 theorem Th42:
   V1 is trivial iff dim V1 = 0
 proof
-  hereby assume
-A1:  V1 is trivial;
+  hereby
+    assume
+A1: V1 is trivial;
     the carrier of V1 c= {0.V1}
-      proof
-        let x be set;
-        assume
-A2:       x in the carrier of V1;
-        then reconsider v=x as Element of V1;
-        x=0.V1 by A1,A2,STRUCT_0:def 19;
-        hence thesis by TARSKI:def 1;
-      end;
+    proof
+      let x be set;
+      assume
+A2:   x in the carrier of V1;
+      then reconsider v=x as Element of V1;
+      x=0.V1 by A1,A2,STRUCT_0:def 19;
+      hence thesis by TARSKI:def 1;
+    end;
     then the carrier of (Omega).V1 = {0.V1} by ZFMISC_1:39
-                                  .= the carrier of (0).V1 by VECTSP_4:def 3;
+      .= the carrier of (0).V1 by VECTSP_4:def 3;
     then (Omega).V1=(0).V1 by VECTSP_4:37;
     hence dim V1=0 by VECTSP_9:33;
   end;
-  assume dim V1=0;
+  assume
+  dim V1=0;
   then
-A3:  (Omega).V1=(0).V1 by VECTSP_9:33;
-  now let v1;
-      v1 in (0).V1 by A3,STRUCT_0:def 5;
-     hence v1=0.V1 by VECTSP_4:46;
+A3: (Omega).V1=(0).V1 by VECTSP_9:33;
+  now
+    let v1;
+    v1 in (0).V1 by A3,STRUCT_0:def 5;
+    hence v1=0.V1 by VECTSP_4:46;
   end;
   hence thesis by STRUCT_0:def 19;
 end;
 
 theorem Th43:
-  for V1,V2 be VectSp of K
-    for f be linear-transformation of V1,V2 holds
-      f is one-to-one iff ker f = (0).V1
+  for V1,V2 be VectSp of K for f be linear-transformation of V1,V2
+  holds f is one-to-one iff ker f = (0).V1
 proof
   let V1,V2 be VectSp of K;
   let f be linear-transformation of V1,V2;
   ker f=(0).V1 implies f is one-to-one
   proof
     assume
-A1:    ker f=(0).V1;
+A1: ker f=(0).V1;
     let x,y such that
-A2:    x in dom f & y in dom f & f.x=f.y;
+A2: x in dom f & y in dom f and
+A3: f.x=f.y;
     reconsider x'=x,y'=y as Element of V1 by A2,FUNCT_2:def 1;
-    x'-y' in ker f by A2,RANKNULL:17;
+    x'-y' in ker f by A3,RANKNULL:17;
     then x'-y' in the carrier of (0).V1 by A1,STRUCT_0:def 5;
     then x'-y' in {0.V1} by VECTSP_4:def 3;
     then x'+-y'=0.V1 by TARSKI:def 1;
     hence x = --y' by VECTSP_1:63
-           .= y by RLVECT_1:30;
+      .= y by RLVECT_1:30;
   end;
   hence thesis by RANKNULL:15;
 end;
@@ -2227,24 +2592,26 @@ definition
   redefine func f+g -> linear-transformation of V1,V2;
   coherence
   proof
-A1:  now let v1,w1 be Vector of V1;
-       thus (f+g).(v1+w1) = f.(v1+w1)+g.(v1+w1) by MATRLIN:def 5
-                         .= f.v1+f.w1+g.(v1+w1) by MOD_2:def 5
-                         .= f.v1+f.w1+(g.v1+g.w1) by MOD_2:def 5
-                         .= f.v1+(f.w1+(g.v1+g.w1)) by RLVECT_1:def 6
-                         .= f.v1+(g.v1+(g.w1+f.w1)) by RLVECT_1:def 6
-                         .= (f.v1+g.v1)+(f.w1+g.w1) by RLVECT_1:def 6
-                         .= (f+g).v1+(f.w1+g.w1) by MATRLIN:def 5
-                         .= (f+g).v1+(f+g).w1 by MATRLIN:def 5;
-     end;
-     now let a be Scalar of K,v1 be Vector of V1;
-       thus (f+g).(a*v1) = f.(a*v1)+g.(a*v1) by MATRLIN:def 5
-                        .= a*f.v1 +g.(a*v1) by MOD_2:def 5
-                        .= a*f.v1 +a*g.v1 by MOD_2:def 5
-                        .= a*(f.v1+g.v1) by VECTSP_1:def 26
-                        .= a*(f+g).v1 by MATRLIN:def 5;
-     end;
-     hence thesis by A1,MOD_2:def 5;
+A1: now
+      let a be Scalar of K,v1 be Vector of V1;
+      thus (f+g).(a*v1) = f.(a*v1)+g.(a*v1) by MATRLIN:def 5
+        .= a*f.v1 +g.(a*v1) by MOD_2:def 5
+        .= a*f.v1 +a*g.v1 by MOD_2:def 5
+        .= a*(f.v1+g.v1) by VECTSP_1:def 26
+        .= a*(f+g).v1 by MATRLIN:def 5;
+    end;
+    now
+      let v1,w1 be Vector of V1;
+      thus (f+g).(v1+w1) = f.(v1+w1)+g.(v1+w1) by MATRLIN:def 5
+        .= f.v1+f.w1+g.(v1+w1) by MOD_2:def 5
+        .= f.v1+f.w1+(g.v1+g.w1) by MOD_2:def 5
+        .= f.v1+(f.w1+(g.v1+g.w1)) by RLVECT_1:def 6
+        .= f.v1+(g.v1+(g.w1+f.w1)) by RLVECT_1:def 6
+        .= (f.v1+g.v1)+(f.w1+g.w1) by RLVECT_1:def 6
+        .= (f+g).v1+(f.w1+g.w1) by MATRLIN:def 5
+        .= (f+g).v1+(f+g).w1 by MATRLIN:def 5;
+    end;
+    hence thesis by A1,MOD_2:def 5;
   end;
 end;
 
@@ -2255,19 +2622,21 @@ definition
   redefine func a*f -> linear-transformation of V1,V2;
   coherence
   proof
-A1: now let v1,w1 be Vector of V1;
-      thus (a*f).(v1+w1) = a*(f.(v1+w1)) by MATRLIN:def 6
-                        .= a*(f.v1+f.w1) by MOD_2:def 5
-                        .= a*f.v1+a*f.w1 by VECTSP_1:def 26
-                        .= (a*f).v1+a*f.w1 by MATRLIN:def 6
-                        .= (a*f).v1+(a*f).w1 by MATRLIN:def 6;
-    end;
-    now let b be Scalar of K,v1 be Vector of V1;
+A1: now
+      let b be Scalar of K,v1 be Vector of V1;
       thus (a*f).(b*v1) = a*(f.(b*v1)) by MATRLIN:def 6
-                       .= a*(b*f.v1) by MOD_2:def 5
-                       .= (a*b)*f.v1 by VECTSP_1:def 26
-                       .= b*(a*f.v1) by VECTSP_1:def 26
-                       .= b*(a*f).v1 by MATRLIN:def 6;
+        .= a*(b*f.v1) by MOD_2:def 5
+        .= (a*b)*f.v1 by VECTSP_1:def 26
+        .= b*(a*f.v1) by VECTSP_1:def 26
+        .= b*(a*f).v1 by MATRLIN:def 6;
+    end;
+    now
+      let v1,w1 be Vector of V1;
+      thus (a*f).(v1+w1) = a*(f.(v1+w1)) by MATRLIN:def 6
+        .= a*(f.v1+f.w1) by MOD_2:def 5
+        .= a*f.v1+a*f.w1 by VECTSP_1:def 26
+        .= (a*f).v1+a*f.w1 by MATRLIN:def 6
+        .= (a*f).v1+(a*f).w1 by MATRLIN:def 6;
     end;
     hence thesis by A1,MOD_2:def 5;
   end;
@@ -2283,197 +2652,211 @@ definition
 end;
 
 theorem Th44:
-  for A be Matrix of len b1,len b2,K st the_rank_of A = len b1 holds
-    Mx2Tran(A,b1,b2) is one-to-one
+  for A be Matrix of len b1,len b2,K st the_rank_of A = len b1
+  holds Mx2Tran(A,b1,b2) is one-to-one
 proof
   let A be Matrix of len b1,len b2,K such that
-A1:   the_rank_of A = len b1;
-  set M=Mx2Tran(A,b1,b2);
+A1: the_rank_of A = len b1;
   set S=Space_of_Solutions_of (A@);
-A2:now per cases;
-    suppose len b1=0;
+  set M=Mx2Tran(A,b1,b2);
+A2: now
+    per cases;
+    suppose
+      len b1=0;
       then dim V1=0 by Th21;
-      then (Omega).V1=(0).V1 & the carrier of ker M c= the carrier of V1
-         &  the carrier of (0).V1 ={0.V1}
-         by VECTSP_4:def 2,def 3,VECTSP_9:33;
-       hence the carrier of ker M c= {0.V1};
+      then
+A3:   (Omega).V1=(0).V1 by VECTSP_9:33;
+      the carrier of ker M c= the carrier of V1 by VECTSP_4:def 2;
+      hence the carrier of ker M c= {0.V1} by A3,VECTSP_4:def 3;
     end;
     suppose
-A3:     len b1>0;
-       then
-A4:      len A=len b1 & width A=len b2 & len b1<= width A
-           by A1,MATRIX13:74,MATRIX_1:24;
-A5:      width (A@) = len A by A3,A4,MATRIX_2:12;
-       thus the carrier of ker M c= {0.V1}
-         proof
-           let x such that
-A6:          x in the carrier of ker M;
-           the carrier of ker M c= the carrier of V1 by VECTSP_4:def 2;
-           then reconsider v=x as Element of V1 by A6;
-           dim S = len b1 - the_rank_of (A@) by A3,A4,A5,MATRIX15:68
-                .= len b1 - len b1 by A1,MATRIX13:84
-                .= 0;
-           then
-A7:          (Omega).S=(0).S by VECTSP_9:33;
-           v in ker M by A6,STRUCT_0:def 5;
-           then v|--b1 in S by Th41,A3,A4;
-           then v|--b1 in the carrier of (0).S by A7,STRUCT_0:def 5;
-           then v|--b1 in the carrier of (0).((len b1)-VectSp_over K)
-             by A4,A5,VECTSP_4:47;
-           then v|--b1 in {0.((len b1)-VectSp_over K)} by VECTSP_4:def 3;
-           then v|--b1 = 0.((len b1)-VectSp_over K) by TARSKI:def 1
-                      .= len b1 |->0.K by MATRIX13:102
-                      .= 0.V1|-- b1 by Th20;
-           then v=0.V1 by MATRLIN:39;
-           hence thesis by TARSKI:def 1;
-         end;
+A4:   len b1>0;
+A5:   len b1<= width A by A1,MATRIX13:74;
+      then
+A6:   width (A@) = len A by A4,MATRIX_2:12;
+A7:   len A=len b1 by A4,MATRIX_1:24;
+A8:   width A=len b2 by A4,MATRIX_1:24;
+      thus the carrier of ker M c= {0.V1}
+      proof
+        let x such that
+A9:     x in the carrier of ker M;
+        the carrier of ker M c= the carrier of V1 by VECTSP_4:def 2;
+        then reconsider v=x as Element of V1 by A9;
+        dim S = len b1 - the_rank_of (A@) by A4,A7,A6,MATRIX15:68
+          .= len b1 - len b1 by A1,MATRIX13:84
+          .= 0;
+        then
+A10:    (Omega).S=(0).S by VECTSP_9:33;
+        v in ker M by A9,STRUCT_0:def 5;
+        then v|--b1 in S by A4,A8,A5,Th41;
+        then v|--b1 in the carrier of (0).S by A10,STRUCT_0:def 5;
+        then v|--b1 in the carrier of (0).((len b1)-VectSp_over K) by A7,A6,
+        VECTSP_4:47;
+        then v|--b1 in {0.((len b1)-VectSp_over K)} by VECTSP_4:def 3;
+        then v|--b1 = 0.((len b1)-VectSp_over K) by TARSKI:def 1
+          .= len b1 |->0.K by MATRIX13:102
+          .= 0.V1|-- b1 by Th20;
+        then v=0.V1 by MATRLIN:39;
+        hence thesis by TARSKI:def 1;
+      end;
     end;
   end;
   0.V1 in ker M by RANKNULL:11;
   then 0.V1 in the carrier of ker M by STRUCT_0:def 5;
   then {0.V1} c= the carrier of ker M by ZFMISC_1:37;
   then the carrier of ker M = {0.V1} by A2,XBOOLE_0:def 10
-                           .= the carrier of (0).V1 by VECTSP_4:def 3;
+    .= the carrier of (0).V1 by VECTSP_4:def 3;
   then ker M=(0).V1 by VECTSP_4:37;
   hence thesis by Th43;
 end;
 
-Lm6:the_rank_of 1.(K,n)=n
+Lm6: the_rank_of 1.(K,n)=n
 proof
-A1: n in NAT by ORDINAL1:def 13;
+A1: 1_K<>0.K;
   n+0>0 or n=0;
-  then n>=1 or n=0 by NAT_1:19;
-  then Det 1.(K,n) = 1_K & 1_K<>0.K by A1,MATRIXR2:41,MATRIX_7:16;
-  hence thesis by MATRIX13:83;
+  then
+A2: n>=1 or n=0 by NAT_1:19;
+  n in NAT by ORDINAL1:def 13;
+  then Det 1.(K,n) = 1_K by A2,MATRIXR2:41,MATRIX_7:16;
+  hence thesis by A1,MATRIX13:83;
 end;
 
 theorem Th45:
   MX2FinS 1.(K,n) is OrdBasis of n-VectSp_over K
 proof
   set ONE=1.(K,n);
-  for i,j st [i,j] in Indices ONE & ONE*(i,j) <> 0.K holds i=j
-    by MATRIX_1:def 12;
+A1: the_rank_of ONE=n by Lm6;
   then
-A1:  ONE is diagonal by MATRIX_1:def 15;
-  the_rank_of ONE=n by Lm6;
-  then lines ONE is Basis of n-VectSp_over K & ONE is one-to-one
-    by A1,MATRIX13:105,111;
-  hence thesis by MATRLIN:def 4;
+A2: ONE is one-to-one by MATRIX13:105;
+  for i,j st [i,j] in Indices ONE & ONE*(i,j) <> 0.K holds i=j by MATRIX_1
+  :def 12;
+  then ONE is diagonal by MATRIX_1:def 15;
+  then lines ONE is Basis of n-VectSp_over K by A1,MATRIX13:111;
+  hence thesis by A2,MATRLIN:def 4;
 end;
 
 theorem Th46:
-  for M be OrdBasis of (len b2)-VectSp_over K st M = MX2FinS 1.(K,len b2)
-    for v1 be Vector of (len b2)-VectSp_over K holds
-      v1|--M = v1
+  for M be OrdBasis of (len b2)-VectSp_over K st M = MX2FinS 1.(K,
+  len b2) for v1 be Vector of (len b2)-VectSp_over K holds v1|--M = v1
 proof
   let M be OrdBasis of (len b2)-VectSp_over K such that
-A1:  M = MX2FinS 1.(K,len b2);
+A1: M = MX2FinS 1.(K,len b2);
   let v1 be Vector of (len b2)-VectSp_over K;
   set vM=v1|--M;
   consider KL be Linear_Combination of (len b2)-VectSp_over K such that
-A2:  v1 = Sum(KL) & Carrier KL c= rng M and
-A3:  for k st 1<=k & k<=len (v1|--M) holds vM/.k=KL.(M/.k)
-     by MATRLIN:def 9;
-  reconsider t1=v1 as Element of (len b2)-tuples_on the carrier of K
-    by MATRIX13:102;
-A4:  len t1=len b2 & len vM=len M & len M=dim ((len b2)-VectSp_over K) &
-     dim ((len b2)-VectSp_over K) =len b2
-     by Th21,FINSEQ_1:def 18,MATRIX13:112,MATRLIN:def 9;
-  now let i such that
-A5:    1<=i & i<=len t1;
-     set F=FinS2MX(KL (#) M);
-A6:    i in Seg len b2 by A4,A5,FINSEQ_1:3;
-A7:    the_rank_of 1.(K,len b2)=len b2 by Lm6;
-A8:    len F=len M & len Col(F,i)=len F by FINSEQ_1:def 18,VECTSP_6:def 8;
-     then
-A9:    i in dom Col(F,i) & dom Col(F,i)=dom F & dom F= dom M &
-       dom M= dom vM & width F=len b2
-       by A4,A5,FINSEQ_3:27,31,MATRIX_1:25;
-     then
-A10:   Col(F,i).i = F*(i,i) by MATRIX_1:def 9
-                 .= Line(F,i).i by A6,A9,MATRIX_1:def 8;
-A11:   M/.i = M.i by A9,PARTFUN1:def 8
-           .= Line(1.(K,len b2),i) by A1,A6,MATRIX_2:10;
-A12:   width 1.(K,len b2)=len b2 &
-         Indices 1.(K,len b2)=[:Seg len b2,Seg len b2:] &
-         [i,i] in [:Seg len b2,Seg len b2:]
-         by A6,MATRIX_1:25,ZFMISC_1:106;
-     then
-A13:   Line(1.(K,len b2),i).i = 1.(K,len b2)*(i,i) by A6,MATRIX_1:def 8
-                             .= 1_K by A12,MATRIX_1:def 12;
-     Line(F,i) = (KL (#) M).i by A6,A4,A8,MATRIX_2:10
-              .= KL.(M/.i) * M/.i by A9,VECTSP_6:def 8;
-     then
-A14:   Col(F,i).i = (KL.(M/.i) * Line(1.(K,len b2),i)).i
-                       by A10,A11,A12,MATRIX13:102
-                 .= KL.(M/.i)*1_K by A6,A12,A13,FVSUM_1:63
-                 .= KL.(M/.i) by VECTSP_1:def 13;
-     now let j such that
-A15:      j in dom Col(F,i) & j<>i;
-A16:    dom Col(F,i)=Seg len b2 by A8,A4,FINSEQ_1:def 3;
-A17:    Col(F,i).j = F*(j,i) by A15,A9,MATRIX_1:def 9
-                  .= Line(F,j).i by A6,A9,MATRIX_1:def 8;
-A18:    M/.j = M.j by A9,A15,PARTFUN1:def 8
-            .= Line(1.(K,len b2),j) by A1,A15,A16,MATRIX_2:10;
-A19:    [j,i] in [:Seg len b2,Seg len b2:] by A6,A15,A16,ZFMISC_1:106;
-A20:    Line(1.(K,len b2),j).i = 1.(K,len b2)*(j,i) by A6,A12,MATRIX_1:def 8
-                              .= 0.K by A19,A15,A12,MATRIX_1:def 12;
-        Line(F,j) = (KL (#) M).j by A4,A8,A15,A16,MATRIX_2:10
-                 .= KL.(M/.j) * M/.j by A9,A15,VECTSP_6:def 8;
-        hence Col(F,i).j = (KL.(M/.j) * Line(1.(K,len b2),j)).i
-                              by A17,A12,A18,MATRIX13:102
-                        .= KL.(M/.j)*0.K by A6,A12,A20,FVSUM_1:63
-                        .= 0.K by VECTSP_1:36;
-     end;
-     then Col(F,i).i = Sum Col(F,i) by A9,MATRIX_3:14
-                    .= v1.i by A1,A2,A6,A7,MATRIX13:105,107;
-     hence t1.i = vM/.i by A3,A4,A5,A14
-               .= vM.i by A9,PARTFUN1:def 8;
-   end;
-   hence thesis by A4,FINSEQ_1:18;
+A2: v1 = Sum(KL) & Carrier KL c= rng M and
+A3: for k st 1<=k & k<=len (v1|--M) holds vM/.k=KL.(M/.k) by MATRLIN:def
+  9;
+  reconsider t1=v1 as Element of (len b2)-tuples_on the carrier of K by
+  MATRIX13:102;
+A4: len t1=len b2 by FINSEQ_1:def 18;
+A5: len M=dim ((len b2)-VectSp_over K) & dim ((len b2)-VectSp_over K) =len
+  b2 by Th21,MATRIX13:112;
+A6: len vM=len M by MATRLIN:def 9;
+  now
+A7: dom M= dom vM by A6,FINSEQ_3:31;
+A8: the_rank_of 1.(K,len b2)=len b2 by Lm6;
+    set F=FinS2MX(KL (#) M);
+A9: Indices 1.(K,len b2)=[:Seg len b2,Seg len b2:] by MATRIX_1:25;
+    let i such that
+A10: 1<=i & i<=len t1;
+A11: i in Seg len b2 by A4,A10,FINSEQ_1:3;
+    then
+A12: [i,i] in [:Seg len b2,Seg len b2:] by ZFMISC_1:106;
+A13: width 1.(K,len b2)=len b2 by MATRIX_1:25;
+    then
+A14: Line(1.(K,len b2),i).i = 1.(K,len b2)*(i,i) by A11,
+    MATRIX_1:def 8
+      .= 1_K by A9,A12,MATRIX_1:def 12;
+A15: len Col(F,i)=len F by FINSEQ_1:def 18;
+    then
+A16: dom Col(F,i)=dom F by FINSEQ_3:31;
+A17: len F=len M by VECTSP_6:def 8;
+    then
+A18: dom F= dom M by FINSEQ_3:31;
+A19: i in dom Col(F,i) by A4,A5,A10,A17,A15,FINSEQ_3:27;
+A20: width F=len b2 by A5,A17,MATRIX_1:25;
+    now
+      let j such that
+A21:  j in dom Col(F,i) and
+A22:  j<>i;
+A23:  dom Col(F,i)=Seg len b2 by A5,A17,A15,FINSEQ_1:def 3;
+      then
+A24:  [j,i] in [:Seg len b2,Seg len b2:] by A11,A21,ZFMISC_1:106;
+A25:  Line(F,j) = (KL (#) M).j by A5,A17,A21,A23,MATRIX_2:10
+        .= KL.(M/.j) * M/.j by A16,A21,VECTSP_6:def 8;
+A26:  Col(F,i).j = F*(j,i) by A16,A21,MATRIX_1:def 9
+        .= Line(F,j).i by A11,A20,MATRIX_1:def 8;
+A27:  Line(1.(K,len b2),j).i = 1.(K,len b2)*(j,i) by A11,A13,MATRIX_1:def
+      8
+        .= 0.K by A9,A22,A24,MATRIX_1:def 12;
+      M/.j = M.j by A16,A18,A21,PARTFUN1:def 8
+        .= Line(1.(K,len b2),j) by A1,A21,A23,MATRIX_2:10;
+      hence Col(F,i).j = (KL.(M/.j) * Line(1.(K,len b2),j)).i by A13,A26,
+      A25,MATRIX13:102
+        .= KL.(M/.j)*0.K by A11,A13,A27,FVSUM_1:63
+        .= 0.K by VECTSP_1:36;
+    end;
+    then
+A28: Col(F,i).i = Sum Col(F,i) by A19,MATRIX_3:14
+      .= v1.i by A1,A2,A11,A8,MATRIX13:105,107;
+A29: Line(F,i) = (KL (#) M).i by A5,A11,A17,MATRIX_2:10
+      .= KL.(M/.i) * M/.i by A19,A16,VECTSP_6:def 8;
+A30: Col(F,i).i = F*(i,i) by A19,A16,MATRIX_1:def 9
+      .= Line(F,i).i by A11,A20,MATRIX_1:def 8;
+    M/.i = M.i by A19,A16,A18,PARTFUN1:def 8
+      .= Line(1.(K,len b2),i) by A1,A11,MATRIX_2:10;
+    then Col(F,i).i = (KL.(M/.i) * Line(1.(K,len b2),i)).i by A30,
+    A13,A29,
+    MATRIX13:102
+      .= KL.(M/.i)*1_K by A11,A13,A14,FVSUM_1:63
+      .= KL.(M/.i) by VECTSP_1:def 13;
+    hence t1.i = vM/.i by A3,A4,A6,A5,A10,A28
+      .= vM.i by A19,A16,A18,A7,PARTFUN1:def 8;
+  end;
+  hence thesis by A4,A6,A5,FINSEQ_1:18;
 end;
 
 theorem Th47:
-  for M be OrdBasis of (len b2)-VectSp_over K st M = MX2FinS 1.(K,len b2)
-    for A be Matrix of len b1,len M,K st A = AutMt(f,b1,b2) & f is linear
-      holds
-    Mx2Tran(A,b1,M).v1 = f.v1 |-- b2
+  for M be OrdBasis of (len b2)-VectSp_over K st M = MX2FinS 1.(K,
+  len b2) for A be Matrix of len b1,len M,K st A = AutMt(f,b1,b2) & f is linear
+  holds Mx2Tran(A,b1,M).v1 = f.v1 |-- b2
 proof
   let M be OrdBasis of (len b2)-VectSp_over K such that
-A1:   M = MX2FinS 1.(K,len b2);
+A1: M = MX2FinS 1.(K,len b2);
   let A be Matrix of len b1,len M,K such that
-A2:   A = AutMt(f,b1,b2)& f is linear;
-  reconsider f'=f as linear-transformation of V1,V2 by A2;
+A2: A = AutMt(f,b1,b2) and
+A3: f is linear;
+  reconsider f'=f as linear-transformation of V1,V2 by A3;
   set MM=Mx2Tran(A,b1,M);
-   per cases;
-     suppose
-A3:      len b1=0;
-       then dim V1=0 by Th21;
-       then (Omega).V1=(0).V1 by VECTSP_9:33;
-       then
-A4:      the carrier of V1={0.V1} by VECTSP_4:def 3;
-       v1=0.V1 by A4,TARSKI:def 1;
-       then v1 in ker f' by RANKNULL:11;
-       hence f.v1|--b2 = 0.V2|--b2 by RANKNULL:10
-                      .= len b2|-> 0.K by Th20
-                      .= 0.((len b2)-VectSp_over K) by MATRIX13:102
-                      .= MM.v1 by Th33,A3;
-     end;
-     suppose
-A5:      len b1>0;
-       then LineVec2Mx(MM.v1|--M) = LineVec2Mx(v1|--b1)*A by Th32
-                                 .= LineVec2Mx(f.v1|--b2) by A2,A5,Th31;
-       hence f.v1|--b2 = Line(LineVec2Mx(MM.v1|--M),1) by MATRIX15:25
-                      .= MM.v1|--M by MATRIX15:25
-                      .= MM.v1 by A1,Th46;
-     end;
+  per cases;
+  suppose
+A4: len b1=0;
+    then dim V1=0 by Th21;
+    then (Omega).V1=(0).V1 by VECTSP_9:33;
+    then the carrier of V1={0.V1} by VECTSP_4:def 3;
+    then v1=0.V1 by TARSKI:def 1;
+    then v1 in ker f' by RANKNULL:11;
+    hence f.v1|--b2 = 0.V2|--b2 by RANKNULL:10
+      .= len b2|-> 0.K by Th20
+      .= 0.((len b2)-VectSp_over K) by MATRIX13:102
+      .= MM.v1 by A4,Th33;
+  end;
+  suppose
+A5: len b1>0;
+    then LineVec2Mx(MM.v1|--M) = LineVec2Mx(v1|--b1)*A by Th32
+      .= LineVec2Mx(f.v1|--b2) by A2,A3,A5,Th31;
+    hence f.v1|--b2 = Line(LineVec2Mx(MM.v1|--M),1) by MATRIX15:25
+      .= MM.v1|--M by MATRIX15:25
+      .= MM.v1 by A1,Th46;
+  end;
 end;
 
 definition
-  let K be add-associative right_zeroed right_complementable
-     Abelian associative well-unital distributive(non empty doubleLoopStr),
-      V1,V2 be Abelian add-associative right_zeroed
-            right_complementable VectSp-like (non empty VectSpStr over K);
+  let K be add-associative right_zeroed right_complementable Abelian
+associative well-unital distributive(non empty doubleLoopStr), V1,V2 be Abelian
+  add-associative right_zeroed right_complementable VectSp-like (non empty
+  VectSpStr over K);
   let W be Subspace of V1;
   let f be Function of V1,V2;
   redefine func f|W -> Function of W,V2;
@@ -2491,203 +2874,220 @@ definition
   let f be linear-transformation of V1, V2;
   redefine func f|W -> linear-transformation of W,V2;
   coherence
-    proof
-      set F=f|W;
-A1:   dom F=the carrier of W by FUNCT_2:def 1;
-A2:   now let v1,w1 be Vector of W;
-         reconsider v2=v1,w2=w1 as Vector of V1 by VECTSP_4:18;
-         v1+w1=v2+w2 by VECTSP_4:21;
-         hence F.(v1+w1) = f.(v2+w2) by A1,FUNCT_1:70
-                        .= f.v2+f.w2 by MOD_2:def 5
-                        .= F.v1+f.w2 by A1,FUNCT_1:70
-                        .= F.v1+F.w1 by A1,FUNCT_1:70;
-    end;
-  now let a be Scalar of K,v1 be Vector of W;
+  proof
+    set F=f|W;
+A1: dom F=the carrier of W by FUNCT_2:def 1;
+A2: now
+      let a be Scalar of K,v1 be Vector of W;
       reconsider v2=v1 as Vector of V1 by VECTSP_4:18;
       a*v1=a*v2 by VECTSP_4:22;
       hence F.(a*v1) = f.(a*v2) by A1,FUNCT_1:70
-                    .= a*f.v2 by MOD_2:def 5
-                    .= a*F.v1 by A1,FUNCT_1:70;
-  end;
-  hence thesis by A2,MOD_2:def 5;
+        .= a*f.v2 by MOD_2:def 5
+        .= a*F.v1 by A1,FUNCT_1:70;
+    end;
+    now
+      let v1,w1 be Vector of W;
+      reconsider v2=v1,w2=w1 as Vector of V1 by VECTSP_4:18;
+      v1+w1=v2+w2 by VECTSP_4:21;
+      hence F.(v1+w1) = f.(v2+w2) by A1,FUNCT_1:70
+        .= f.v2+f.w2 by MOD_2:def 5
+        .= F.v1+f.w2 by A1,FUNCT_1:70
+        .= F.v1+F.w1 by A1,FUNCT_1:70;
+    end;
+    hence thesis by A2,MOD_2:def 5;
   end;
 end;
 
-Lm7:for A be Matrix of len b1,len b2,K st len b1>0 & len b2>0
-      holds nullity Mx2Tran(A,b1,b2) = len b1 - the_rank_of A
+Lm7: for A be Matrix of len b1,len b2,K st len b1>0 & len b2>0 holds nullity
+Mx2Tran(A,b1,b2) = len b1 - the_rank_of A
+
 proof
-  let A be Matrix of len b1,len b2,K such that
-A1:  len b1>0 & len b2>0;
-  set M=Mx2Tran(A,b1,b2);
-  reconsider  BB=MX2FinS 1.(K,len b1) as OrdBasis of (len b1)-VectSp_over K
-    by Th45;
-A2:  len BB = dim ((len b1)-VectSp_over K) by Th21
-           .= len b1 by MATRIX13:112;
   set I=id V1;
-A3:  AutMt(I,b1,b1)=1.(K,len b1) by Th28;
-  reconsider AI=AutMt(I,b1,b1) as Matrix of len b1,len BB,K by A2;
-  set MAI=Mx2Tran(AI,b1,BB);
-  set KER=ker Mx2Tran(A,b1,b2);
-  set MK=MAI|KER;
+
+  reconsider BB=MX2FinS 1.(K,len b1) as OrdBasis of (len b1)-VectSp_over K by
+  Th45;
+
+  let A be Matrix of len b1,len b2,K such that
+A1: len b1>0 and
+A2: len b2>0;
+  len BB = dim ((len b1)-VectSp_over K) by Th21
+    .= len b1 by MATRIX13:112;
+  then reconsider AI=AutMt(I,b1,b1) as Matrix of len b1,len BB,K;
+A3: AutMt(I,b1,b1)=1.(K,len b1) & 0.K<>1_K by Th28;
   len b1+0>0 by A1;
   then len b1>=1 by NAT_1:19;
-  then Det 1.(K,len b1)=1_K & 0.K<>1_K by MATRIX_7:16;
+  then Det 1.(K,len b1)=1_K by MATRIX_7:16;
   then
-A4:  the_rank_of AI=len b1 by A3,MATRIX13:83;
-  then MAI is one-to-one by Th44;
-  then
-A5:  MK is one-to-one by FUNCT_1:84;
-  dim ((len b1)-VectSp_over K) = len b1 by MATRIX13:112
-                              .= dim V1 by Th21
-                              .= rank MAI by A4,Th44,RANKNULL:45
-                              .= dim im MAI;
-  then
-A6:  (Omega).((len b1)-VectSp_over K) = (Omega).(im MAI) by VECTSP_9:32;
+A4: the_rank_of AI=len b1 by A3,MATRIX13:83;
   set S=Space_of_Solutions_of (A@);
+  set KER=ker Mx2Tran(A,b1,b2);
+  set MAI=Mx2Tran(AI,b1,BB);
+  set MK=MAI|KER;
+A5: dom MK=the carrier of KER by FUNCT_2:def 1;
+A6: the carrier of im MK c= the carrier of S
+  proof
+    let x such that
+A7: x in the carrier of im MK;
+
+    the carrier of im MK c= the carrier of (len b1)-VectSp_over K by
+    VECTSP_4:def 2;
+
+    then reconsider v=x as Element of (len b1)-VectSp_over K by A7;
+    v in im MK by A7,STRUCT_0:def 5;
+    then consider w be Element of KER such that
+A8: v = MK.w by RANKNULL:13;
+A9: w in KER by STRUCT_0:def 5;
+    then w in V1 by VECTSP_4:17;
+    then reconsider W=w as Vector of V1 by STRUCT_0:def 5;
+    MK.w = MAI.w by A5,FUNCT_1:70
+      .= I.W |--b1 by Th47
+      .= W|--b1 by FUNCT_1:34;
+    then MK.w in S by A1,A2,A9,Th41;
+    hence thesis by A8,STRUCT_0:def 5;
+  end;
   len A = len b1 & width A=len b2 by A1,MATRIX_1:24;
   then
-A7: width (A@)=len b1 by A1,MATRIX_2:12;
-A8:  dom MK=the carrier of KER by FUNCT_2:def 1;
-A9:the carrier of im MK c= the carrier of S
-    proof
-      let x such that
-A10:    x in the carrier of im MK;
-      the carrier of im MK c= the carrier of (len b1)-VectSp_over K
-        by VECTSP_4:def 2;
-      then reconsider v=x as Element of (len b1)-VectSp_over K by A10;
-      v in im MK by A10,STRUCT_0:def 5;
-      then consider w be Element of KER such that
-A11:    v = MK.w by RANKNULL:13;
-A12:    w in KER by STRUCT_0:def 5;
-      then w in V1 by VECTSP_4:17;
-      then reconsider W=w as Vector of V1 by STRUCT_0:def 5;
-      MK.w = MAI.w by A8,FUNCT_1:70
-          .= I.W |--b1 by Th47
-          .= W|--b1 by FUNCT_1:34;
-      then MK.w in S by A1,A12,Th41;
-      hence thesis by A11,STRUCT_0:def 5;
-    end;
-  the carrier of S c= the carrier of im MK
-    proof
-      let x such that
-A13:      x in the carrier of S;
-A14:    the carrier of S c= the carrier of (len b1)-VectSp_over K
-        by A7,VECTSP_4:def 2;
-      reconsider v=x as Element of (len b1)-VectSp_over K by A13,A14;
-      v in im MAI by A6,STRUCT_0:def 5;
-      then consider w be Element of V1 such that
-A15:     v = MAI.w by RANKNULL:13;
-A16:  v in S by A13,STRUCT_0:def 5;
-      MAI.w = I.w |-- b1 by Th47
-           .= w|--b1 by FUNCT_1:34;
-      then w in KER by A1,A15,A16,Th41;
-      then reconsider W=w as Element of KER by STRUCT_0:def 5;
-      v = MK.W by A15,A8,FUNCT_1:70;
-      then v in im MK by RANKNULL:13;
-      hence thesis by STRUCT_0:def 5;
-    end;
-  then the carrier of S = the carrier of im MK by A9,XBOOLE_0:def 10;
+A10: width (A@)=len b1 by A2,MATRIX_2:12;
+  dim ((len b1)-VectSp_over K) = len b1 by MATRIX13:112
+    .= dim V1 by Th21
+    .= rank MAI by A4,Th44,RANKNULL:45
+    .= dim im MAI;
   then
-A17:  im MK = S by A7,VECTSP_4:37;
-  thus nullity Mx2Tran(A,b1,b2) = rank MK by A5,RANKNULL:45
-                               .= len b1-the_rank_of (A@)
-                                    by A1,A7,A17,MATRIX15:68
-                               .= len b1-the_rank_of A by MATRIX13:84;
+A11: (Omega).((len b1)-VectSp_over K) = (Omega).(im MAI) by
+  VECTSP_9:32;
+  the carrier of S c= the carrier of im MK
+  proof
+    let x such that
+A12: x in the carrier of S;
+
+    the carrier of S c= the carrier of (len b1)-VectSp_over K by A10,
+    VECTSP_4:def 2;
+
+    then reconsider v=x as Element of (len b1)-VectSp_over K by A12;
+A13: v in S by A12,STRUCT_0:def 5;
+    v in im MAI by A11,STRUCT_0:def 5;
+    then consider w be Element of V1 such that
+A14: v = MAI.w by RANKNULL:13;
+    MAI.w = I.w |-- b1 by Th47
+      .= w|--b1 by FUNCT_1:34;
+    then w in KER by A1,A2,A14,A13,Th41;
+    then reconsider W=w as Element of KER by STRUCT_0:def 5;
+    v = MK.W by A5,A14,FUNCT_1:70;
+    then v in im MK by RANKNULL:13;
+    hence thesis by STRUCT_0:def 5;
+  end;
+  then the carrier of S = the carrier of im MK by A6,XBOOLE_0:def 10;
+  then
+A15: im MK = S by A10,VECTSP_4:37;
+  MAI is one-to-one by A4,Th44;
+  then MK is one-to-one by FUNCT_1:84;
+  hence nullity Mx2Tran(A,b1,b2) = rank MK by RANKNULL:45
+    .= len b1-the_rank_of (A@) by A1,A10,A15,MATRIX15:68
+    .= len b1-the_rank_of A by MATRIX13:84;
+  set M=Mx2Tran(A,b1,b2);
 end;
 
 begin :: The Main Theorem
 
 theorem Th48:
-  for f be linear-transformation of V1,V2 holds
-    rank f = the_rank_of AutMt(f,b1,b2)
+  for f be linear-transformation of V1,V2 holds rank f =
+  the_rank_of AutMt(f,b1,b2)
 proof
   let f be linear-transformation of V1,V2;
   set A=AutMt(f,b1,b2);
   per cases;
-     suppose len b1=0;
-        then len A=0 & the_rank_of A<=len A & dim V1=0 &
-          dim V1= rank(f) + nullity(f)
-          by Th21,MATRIX13:74,MATRIX_1:def 3,RANKNULL:44;
-        then the_rank_of A=0 & rank f=0;
-        hence thesis;
-     end;
-     suppose len b1>0& len b2=0;
-        then width A=0 & the_rank_of A <= width A & dim im f <= dim V2
-          & dim V2=0 by Th21,MATRIX13:74,MATRIX_1:24,VECTSP_9:29;
-        then  the_rank_of A=0 & dim im f=0;
-        hence thesis;
-     end;
-     suppose
-A1:      len b1>0 & len b2>0;
-A2:     rank f+nullity f = dim V1 by RANKNULL:44
-                        .= len b1 by Th21;
-        nullity f = nullity Mx2Tran(A,b1,b2) by Th34
-                 .= len b1 - the_rank_of A by A1,Lm7;
-        hence thesis by A2;
-     end;
+  suppose
+A1: len b1=0;
+    then len A=0 by MATRIX_1:def 3;
+    then dim V1= rank(f) + nullity(f) & the_rank_of A=0 by MATRIX13:74 ,
+    RANKNULL:44;
+    hence thesis by A1,Th21;
+  end;
+  suppose
+A2: len b1>0& len b2=0;
+    then width A=0 by MATRIX_1:24;
+    then
+A3: the_rank_of A=0 by MATRIX13:74;
+    dim V2=0 by A2,Th21;
+    hence thesis by A3,VECTSP_9:29;
+  end;
+  suppose
+A4: len b1>0 & len b2>0;
+A5: rank f+nullity f = dim V1 by RANKNULL:44
+      .= len b1 by Th21;
+    nullity f = nullity Mx2Tran(A,b1,b2) by Th34
+      .= len b1 - the_rank_of A by A4,Lm7;
+    hence thesis by A5;
+  end;
 end;
 
 theorem
-  for M be Matrix of len b1,len b2,K holds
-    rank Mx2Tran(M,b1,b2) = the_rank_of M
+  for M be Matrix of len b1,len b2,K holds rank Mx2Tran(M,b1,b2) =
+  the_rank_of M
 proof
   let M be Matrix of len b1,len b2,K;
-  thus rank Mx2Tran(M,b1,b2) = the_rank_of AutMt(Mx2Tran(M,b1,b2),b1,b2)
-                                 by Th48
-                            .= the_rank_of M by Th36;
+  thus rank Mx2Tran(M,b1,b2) = the_rank_of AutMt(Mx2Tran(M,b1,b2),b1,b2) by
+  Th48
+    .= the_rank_of M by Th36;
 end;
 
 theorem
-  for f be linear-transformation of V1,V2 st dim V1=dim V2 holds
-    ker f is non trivial iff Det AutEqMt(f,b1,b2) = 0.K
+  for f be linear-transformation of V1,V2 st dim V1=dim V2 holds ker f
+  is non trivial iff Det AutEqMt(f,b1,b2) = 0.K
 proof
   let f be linear-transformation of V1,V2 such that
-A1:  dim V1=dim V2;
+A1: dim V1=dim V2;
   set A=AutEqMt(f,b1,b2);
-A2:  len b1=dim V1 & dim V2=len b2 & rank f=the_rank_of AutMt(f,b1,b2)
-     by Th21,Th48;
+  dim V2=len b2 by Th21;
   then
-A3:  A=AutMt(f,b1,b2) & dim V1=rank f+nullity f by A1,Def2,RANKNULL:44;
-  hereby assume ker f is non trivial;
+A2: A=AutMt(f,b1,b2) by A1,Def2,Th21;
+A3: dim V1=rank f+nullity f by RANKNULL:44;
+A4: len b1=dim V1 & rank f=the_rank_of AutMt(f,b1,b2) by Th21,Th48;
+  hereby
+    assume
+    ker f is non trivial;
     then rank f <> dim V1 by A3,Th42;
-    hence Det A = 0.K by A2,A3,MATRIX13:83;
+    hence Det A = 0.K by A4,A2,MATRIX13:83;
   end;
-  assume Det A=0.K;
-  then dim ker f<>0 by A2,A3,MATRIX13:83;
+  assume
+  Det A=0.K;
+  then dim ker f<>0 by A4,A2,A3,MATRIX13:83;
   hence thesis by Th42;
 end;
 
-Lm8:for f be linear-transformation of V1,V2,g be Function of V2,V3
-    holds g * f = (g|im f)*f
+Lm8: for f be linear-transformation of V1,V2,g be Function of V2,V3 holds g * f
+= (g|im f)*f
+
 proof
   let f be linear-transformation of V1,V2,g be Function of V2,V3;
   dom f=[#]V1 by FUNCT_2:def 1;
   then [#]im f = f.:dom f by RANKNULL:def 2
-              .= rng f by RELAT_1:146;
+    .= rng f by RELAT_1:146;
   hence (g|im f)* f = g*(id rng f)*f by RELAT_1:94
-                   .= g*((id rng f)*f) by RELAT_1:55
-                   .= g*f by RELAT_1:80;
+    .= g*((id rng f)*f) by RELAT_1:55
+    .= g*f by RELAT_1:80;
 end;
 
 theorem
-   for f be linear-transformation of V1,V2,
-       g be linear-transformation of V2,V3 st g|im f is one-to-one holds
-     rank (g*f) = rank f & nullity (g*f) = nullity f
+  for f be linear-transformation of V1,V2, g be linear-transformation of
+  V2,V3 st g|im f is one-to-one holds rank (g*f) = rank f & nullity (g*f) =
+  nullity f
 proof
-  let f be linear-transformation of V1,V2,
-      g be linear-transformation of V2,V3 such that
+  let f be linear-transformation of V1,V2, g be linear-transformation of V2,V3
+  such that
 A1: g|im f is one-to-one;
   the carrier of im (g*f) = [#]im (g*f)
-                         .= (g*f).:[#]V1 by RANKNULL:def 2
-                         .= ((g|im f)*f).:([#]V1) by Lm8
-                         .= (g|im f).:(f.:[#]V1) by RELAT_1:159
-                         .= (g|im f).:([#]im f) by RANKNULL:def 2
-                         .= [#]im (g|im f) by RANKNULL:def 2
-                         .= the carrier of im(g|im f);
+    .= (g*f).:[#]V1 by RANKNULL:def 2
+    .= ((g|im f)*f).:([#]V1) by Lm8
+    .= (g|im f).:(f.:[#]V1) by RELAT_1:159
+    .= (g|im f).:([#]im f) by RANKNULL:def 2
+    .= [#]im (g|im f) by RANKNULL:def 2
+    .= the carrier of im(g|im f);
   then
-A2:  rank(g*f) = rank (g|im f) by VECTSP_4:37
-              .= rank f by A1,RANKNULL:45;
+A2: rank(g*f) = rank (g|im f) by VECTSP_4:37
+    .= rank f by A1,RANKNULL:45;
   nullity(f) + rank (f) = dim V1 by RANKNULL:44
-                       .= nullity(g*f) + rank (g*f) by RANKNULL:44;
+    .= nullity(g*f) + rank (g*f) by RANKNULL:44;
   hence thesis by A2;
 end;
+

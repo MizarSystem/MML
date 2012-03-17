@@ -27,26 +27,24 @@ reserve l for FinSequence of QC-variables;
 reserve P,Q for QC-pred_symbol;
 reserve V for non empty Subset of QC-variables;
 
-scheme QCFuncUniq { D() -> non empty set, F1() -> (Function of QC-WFF, D()),
-  F2() -> (Function of QC-WFF, D()), V() -> (Element of D()),
-  A(set) -> (Element of D()), N(set) -> (Element of D()),
-  C(set,set) -> (Element of D()), Q(set,set) -> Element of D()} : F1() = F2()
+scheme
+  QCFuncUniq { D() -> non empty set, F1() -> (Function of QC-WFF, D()), F2()
+-> (Function of QC-WFF, D()), V() -> (Element of D()), A(set) -> (Element of D(
+  )), N(set) -> (Element of D()), C(set,set) -> (Element of D()), Q(set,set) ->
+  Element of D()} : F1() = F2()
 provided
-A1: for p for d1,d2 being Element of D() holds
-(p = VERUM implies F1().p = V()) & (p is atomic implies F1().p = A(p)) &
-(p is negative & d1 = F1().the_argument_of p implies F1().p = N(d1)) &
-(p is conjunctive &
-d1 = F1().the_left_argument_of p & d2 = F1().the_right_argument_of p
-implies F1().p = C(d1, d2)) &
-(p is universal & d1 = F1().the_scope_of p implies F1().p = Q(p, d1))
-and
-A2: for p for d1,d2 being Element of D() holds
-(p = VERUM implies F2().p = V()) & (p is atomic implies F2().p = A(p)) &
-(p is negative & d1 = F2().the_argument_of p implies F2().p = N(d1)) &
-(p is conjunctive &
-d1 = F2().the_left_argument_of p & d2 = F2().the_right_argument_of p
-implies F2().p = C(d1, d2)) &
-(p is universal & d1 = F2().the_scope_of p implies F2().p = Q(p, d1))
+A1: for p for d1,d2 being Element of D() holds (p = VERUM implies F1().p
+= V()) & (p is atomic implies F1().p = A(p)) & (p is negative & d1 = F1().
+the_argument_of p implies F1().p = N(d1)) & (p is conjunctive & d1 = F1().
+the_left_argument_of p & d2 = F1().the_right_argument_of p implies F1().p = C(
+d1, d2)) & (p is universal & d1 = F1().the_scope_of p implies F1().p = Q(p, d1)
+) and
+A2: for p for d1,d2 being Element of D() holds (p = VERUM implies F2().p
+= V()) & (p is atomic implies F2().p = A(p)) & (p is negative & d1 = F2().
+the_argument_of p implies F2().p = N(d1)) & (p is conjunctive & d1 = F2().
+the_left_argument_of p & d2 = F2().the_right_argument_of p implies F2().p = C(
+d1, d2)) & (p is universal & d1 = F2().the_scope_of p implies F2().p = Q(p, d1)
+)
 proof
   defpred Prop[Element of QC-WFF] means F1().$1 = F2().$1;
 A3: for k for P being (QC-pred_symbol of k),l being QC-variable_list of k
@@ -58,264 +56,239 @@ A4: P!l is atomic by QC_LANG1:def 17;
     hence F1().(P!l) = A(P!l) by A1
       .= F2().(P!l) by A2,A4;
   end;
-  F1().VERUM = V() & F2().VERUM = V() by A1,A2;
-  then
-A5: Prop[VERUM];
-A6: for p st Prop[p] holds Prop['not' p]
-  proof
-    let p such that
-A7: F1().p = F2().p;
-A8: 'not' p is negative by QC_LANG1:def 18;
-    then
-A9: the_argument_of 'not' p = p by QC_LANG1:def 23;
-    hence F1().'not' p = N(F2().p) by A1,A7,A8
-      .= F2().'not' p by A2,A8,A9;
-  end;
-A10: for p,q st Prop[p] & Prop[q] holds Prop[p '&' q]
-  proof
-    let p,q such that
-A11: F1().p = F2().p & F1().q = F2().q;
-A12: p '&' q is conjunctive by QC_LANG1:def 19;
-    then
-A13: the_left_argument_of (p '&' q) = p & the_right_argument_of (p '&' q) = q
-    by QC_LANG1:def 24,def 25;
-    hence F1().(p '&' q) = C(F2().p,F2().q) by A1,A11,A12
-      .= F2().(p '&' q) by A2,A12,A13;
-  end;
-A14: for x,p holds Prop[p] implies Prop[All(x,p)]
+A5: for x,p holds Prop[p] implies Prop[All(x,p)]
   proof
     let x be bound_QC-variable, p be Element of QC-WFF such that
-A15: F1().p = F2().p;
-A16: All(x,p) is universal by QC_LANG1:def 20;
-    then the_scope_of All(x,p) = p & bound_in All(x,p) = x
-    by QC_LANG1:def 26,def 27;
-    hence F1().All(x,p)
-    = Q(All(x,p), F2().the_scope_of All(x,p)) by A1,A15,A16
-      .= F2().All(x,p) by A2,A16;
+A6: F1().p = F2().p;
+A7: All(x,p) is universal by QC_LANG1:def 20;
+    then the_scope_of All(x,p) = p by QC_LANG1:def 27;
+    hence
+    F1().All(x,p) = Q(All(x,p), F2().the_scope_of All(x,p)) by A1,A6,A7
+      .= F2().All(x,p) by A2,A7;
   end;
-  Prop[p] from QC_LANG1:sch 1(A3,A5,A6,A10,A14);
+A8: for p,q st Prop[p] & Prop[q] holds Prop[p '&' q]
+  proof
+    let p,q such that
+A9: F1().p = F2().p & F1().q = F2().q;
+A10: p '&' q is conjunctive by QC_LANG1:def 19;
+    then
+A11: the_left_argument_of (p '&' q) = p & the_right_argument_of (p '&' q)
+    = q by QC_LANG1:def 24,def 25;
+    hence F1().(p '&' q) = C(F2().p,F2().q) by A1,A9,A10
+      .= F2().(p '&' q) by A2,A10,A11;
+  end;
+A12: for p st Prop[p] holds Prop['not' p]
+  proof
+    let p such that
+A13: F1().p = F2().p;
+A14: 'not' p is negative by QC_LANG1:def 18;
+    then
+A15: the_argument_of 'not' p = p by QC_LANG1:def 23;
+    hence F1().'not' p = N(F2().p) by A1,A13,A14
+      .= F2().'not' p by A2,A14,A15;
+  end;
+  F1().VERUM = V() by A1;
+  then
+A16: Prop[VERUM] by A2;
+  Prop[p] from QC_LANG1:sch 1(A3,A16,A12,A8,A5);
   hence thesis by FUNCT_2:113;
 end;
 
-scheme QCDefD { D() -> non empty set, V() -> (Element of D()),
-  p() -> (Element of QC-WFF), A(Element of QC-WFF) -> (Element of D()),
-  N(Element of D()) -> (Element of D()),
-  C((Element of D()), Element of D()) -> (Element of D()),
-  Q((Element of QC-WFF), Element of D()) -> Element of D()} :
-  (ex d being (Element of D()), F being Function of QC-WFF, D() st d = F.p() &
-  for p being Element of QC-WFF for d1,d2 being Element of D() holds
-  (p = VERUM implies F.p = V()) & (p is atomic implies F.p = A(p)) &
-  (p is negative & d1 = F.the_argument_of p implies F.p = N(d1)) &
-  (p is conjunctive &
-  d1 = F.the_left_argument_of p & d2 = F.the_right_argument_of p
-  implies F.p = C(d1, d2)) &
-  (p is universal & d1 = F.the_scope_of p implies F.p = Q(p, d1)) ) &
-  for x1,x2 being Element of D() st (ex F being Function of QC-WFF, D() st
-  x1 = F.p() & for p being Element of QC-WFF
-  for d1,d2 being Element of D() holds (p = VERUM implies F.p = V()) &
-  (p is atomic implies F.p = A(p)) & (p is negative & d1 = F.the_argument_of p
-  implies F.p = N(d1)) & (p is conjunctive &
-  d1 = F.the_left_argument_of p & d2 = F.the_right_argument_of p
-  implies F.p = C(d1, d2)) &
-  (p is universal & d1 = F.the_scope_of p implies F.p = Q(p, d1)) ) &
-  (ex F being Function of QC-WFF, D() st x2 = F.p() &
-  for p being Element of QC-WFF for d1,d2 being Element of D() holds
-  (p = VERUM implies F.p = V()) & (p is atomic implies F.p = A(p)) &
-  (p is negative & d1 = F.the_argument_of p implies F.p = N(d1)) &
-  (p is conjunctive &
-  d1 = F.the_left_argument_of p & d2 = F.the_right_argument_of p
-  implies F.p = C(d1, d2)) &
-  (p is universal & d1 = F.the_scope_of p implies F.p = Q(p, d1)) )
-  holds x1 = x2
-proof
-  thus ex d being (Element of D()), F being Function of QC-WFF, D() st
-  d = F.p() & for p being Element of QC-WFF
-  for d1,d2 being Element of D() holds (p = VERUM implies F.p = V()) &
-  (p is atomic implies F.p = A(p)) & (p is negative & d1 = F.the_argument_of p
-  implies F.p = N(d1)) & (p is conjunctive &
-  d1 = F.the_left_argument_of p & d2 = F.the_right_argument_of p
-  implies F.p = C(d1, d2)) &
-  (p is universal & d1 = F.the_scope_of p implies F.p = Q(p, d1))
+scheme
+  QCDefD { D() -> non empty set, V() -> (Element of D()), p() -> (Element of
+  QC-WFF), A(Element of QC-WFF) -> (Element of D()), N(Element of D()) -> (
+  Element of D()), C((Element of D()), Element of D()) -> (Element of D()), Q((
+  Element of QC-WFF), Element of D()) -> Element of D()} : (ex d being (Element
+of D()), F being Function of QC-WFF, D() st d = F.p() & for p being Element of
+QC-WFF for d1,d2 being Element of D() holds (p = VERUM implies F.p = V()) & (p
+  is atomic implies F.p = A(p)) & (p is negative & d1 = F.the_argument_of p
+implies F.p = N(d1)) & (p is conjunctive & d1 = F.the_left_argument_of p & d2 =
+F.the_right_argument_of p implies F.p = C(d1, d2)) & (p is universal & d1 = F.
+the_scope_of p implies F.p = Q(p, d1)) ) & for x1,x2 being Element of D() st (
+  ex F being Function of QC-WFF, D() st x1 = F.p() & for p being Element of
+QC-WFF for d1,d2 being Element of D() holds (p = VERUM implies F.p = V()) & (p
+  is atomic implies F.p = A(p)) & (p is negative & d1 = F.the_argument_of p
+implies F.p = N(d1)) & (p is conjunctive & d1 = F.the_left_argument_of p & d2 =
+F.the_right_argument_of p implies F.p = C(d1, d2)) & (p is universal & d1 = F.
+the_scope_of p implies F.p = Q(p, d1)) ) & (ex F being Function of QC-WFF, D()
+  st x2 = F.p() & for p being Element of QC-WFF for d1,d2 being Element of D()
+holds (p = VERUM implies F.p = V()) & (p is atomic implies F.p = A(p)) & (p is
+negative & d1 = F.the_argument_of p implies F.p = N(d1)) & (p is conjunctive &
+d1 = F.the_left_argument_of p & d2 = F.the_right_argument_of p implies F.p = C(
+  d1, d2)) & (p is universal & d1 = F.the_scope_of p implies F.p = Q(p, d1)) )
+  holds x1 = x2 proof
+  thus ex d being (Element of D()), F being Function of QC-WFF, D() st d = F.p
+  () & for p being Element of QC-WFF for d1,d2 being Element of D() holds (p =
+VERUM implies F.p = V()) & (p is atomic implies F.p = A(p)) & (p is negative &
+  d1 = F.the_argument_of p implies F.p = N(d1)) & (p is conjunctive & d1 = F.
+the_left_argument_of p & d2 = F.the_right_argument_of p implies F.p = C(d1, d2)
+  ) & (p is universal & d1 = F.the_scope_of p implies F.p = Q(p, d1))
   proof
     consider F being Function of QC-WFF, D() such that
-A1: F.VERUM = V() & for p being Element of QC-WFF holds
-    (p is atomic implies F.p = A(p)) &
-    (p is negative implies F.p = N(F.the_argument_of p)) &
-    (p is conjunctive implies
-    F.p = C(F.the_left_argument_of p, F.the_right_argument_of p)) &
-    (p is universal implies F.p = Q(p, F.the_scope_of p)) from QC_LANG1:sch 3;
-    take F.p(), F; thus thesis by A1;
+A1: F.VERUM = V() & for p being Element of QC-WFF holds (p is atomic
+implies F.p = A(p)) & (p is negative implies F.p = N(F.the_argument_of p)) & (p
+    is conjunctive implies F.p = C(F.the_left_argument_of p, F.
+the_right_argument_of p)) & (p is universal implies F.p = Q(p, F.the_scope_of p
+    )) from QC_LANG1:sch 3;
+    take F.p(), F;
+    thus thesis by A1;
   end;
   let x1,x2 be Element of D();
   given F1 being Function of QC-WFF, D() such that
 A2: x1 = F1.p() and
-A3: for p being Element of QC-WFF for d1,d2 being Element of D() holds
-  (p = VERUM implies F1.p = V()) & (p is atomic implies F1.p = A(p)) &
-  (p is negative & d1 = F1.the_argument_of p implies F1.p = N(d1)) &
-  (p is conjunctive & d1 = F1.the_left_argument_of p &
-  d2 = F1.the_right_argument_of p implies F1.p = C(d1, d2)) &
-  (p is universal & d1 = F1.the_scope_of p implies F1.p = Q(p, d1));
+A3: for p being Element of QC-WFF for d1,d2 being Element of D() holds (
+  p = VERUM implies F1.p = V()) & (p is atomic implies F1.p = A(p)) & (p is
+negative & d1 = F1.the_argument_of p implies F1.p = N(d1)) & (p is conjunctive
+& d1 = F1.the_left_argument_of p & d2 = F1.the_right_argument_of p implies F1.p
+= C(d1, d2)) & (p is universal & d1 = F1.the_scope_of p implies F1.p = Q(p, d1)
+  );
   given F2 being Function of QC-WFF, D() such that
 A4: x2 = F2.p() and
-A5: for p being Element of QC-WFF for d1,d2 being Element of D() holds
-  (p = VERUM implies F2.p = V()) & (p is atomic implies F2.p = A(p)) &
-  (p is negative & d1 = F2.the_argument_of p implies F2.p = N(d1)) &
-  (p is conjunctive & d1 = F2.the_left_argument_of p &
-  d2 = F2.the_right_argument_of p implies F2.p = C(d1, d2)) &
-  (p is universal & d1 = F2.the_scope_of p implies F2.p = Q(p, d1));
+A5: for p being Element of QC-WFF for d1,d2 being Element of D() holds (
+  p = VERUM implies F2.p = V()) & (p is atomic implies F2.p = A(p)) & (p is
+negative & d1 = F2.the_argument_of p implies F2.p = N(d1)) & (p is conjunctive
+& d1 = F2.the_left_argument_of p & d2 = F2.the_right_argument_of p implies F2.p
+= C(d1, d2)) & (p is universal & d1 = F2.the_scope_of p implies F2.p = Q(p, d1)
+  );
   F1 = F2 from QCFuncUniq(A3,A5);
   hence thesis by A2,A4;
 end;
 
-scheme QCDResult'VERUM { D() -> non empty set,
-  F(Element of QC-WFF) -> (Element of D()), V() -> (Element of D()),
-  A(Element of QC-WFF) -> (Element of D()),
-  N(Element of D()) -> (Element of D()),
-  C((Element of D()), Element of D()) -> (Element of D()),
-  Q((Element of QC-WFF), Element of D()) -> Element of D()} : F(VERUM) = V()
+scheme
+  QCDResult'VERUM { D() -> non empty set, F(Element of QC-WFF) -> (Element of
+  D()), V() -> (Element of D()), A(Element of QC-WFF) -> (Element of D()), N(
+  Element of D()) -> (Element of D()), C((Element of D()), Element of D()) -> (
+Element of D()), Q((Element of QC-WFF), Element of D()) -> Element of D()} : F(
+  VERUM) = V()
 provided
-A1: for p being QC-formula, d being Element of D() holds d = F(p) iff
-ex F being Function of QC-WFF, D() st d = F.p & for p being Element of QC-WFF
-for d1,d2 being Element of D() holds (p = VERUM implies F.p = V()) &
-(p is atomic implies F.p = A(p)) & (p is negative & d1 = F.the_argument_of p
-implies F.p = N(d1)) & (p is conjunctive &
-d1 = F.the_left_argument_of p & d2 = F.the_right_argument_of p
-implies F.p = C(d1, d2)) &
-(p is universal & d1 = F.the_scope_of p implies F.p = Q(p, d1))
-proof consider F being Function of QC-WFF, D() such that
-A2: F(VERUM) = F.VERUM & for p being Element of QC-WFF
-  for d1,d2 being Element of D() holds (p = VERUM implies F.p = V()) &
-  (p is atomic implies F.p = A(p)) & (p is negative & d1 = F.the_argument_of p
-  implies F.p = N(d1)) & (p is conjunctive &
-  d1 = F.the_left_argument_of p & d2 = F.the_right_argument_of p
-  implies F.p = C(d1, d2)) &
-  (p is universal & d1 = F.the_scope_of p implies F.p = Q(p, d1)) by A1;
-  thus thesis by A2;
+A1: for p being QC-formula, d being Element of D() holds d = F(p) iff ex
+F being Function of QC-WFF, D() st d = F.p & for p being Element of QC-WFF for
+d1,d2 being Element of D() holds (p = VERUM implies F.p = V()) & (p is atomic
+implies F.p = A(p)) & (p is negative & d1 = F.the_argument_of p implies F.p = N
+(d1)) & (p is conjunctive & d1 = F.the_left_argument_of p & d2 = F.
+the_right_argument_of p implies F.p = C(d1, d2)) & (p is universal & d1 = F.
+the_scope_of p implies F.p = Q(p, d1))
+proof
+  ex F being Function of QC-WFF, D() st F(VERUM) = F.VERUM & for p being
+Element of QC-WFF for d1,d2 being Element of D() holds ( p = VERUM implies F.p
+  = V()) & (p is atomic implies F.p = A(p)) & (p is negative & d1 = F.
+  the_argument_of p implies F.p = N(d1)) & (p is conjunctive & d1 = F.
+the_left_argument_of p & d2 = F.the_right_argument_of p implies F.p = C( d1, d2
+  )) & (p is universal & d1 = F.the_scope_of p implies F.p = Q(p, d1)) by A1;
+  hence thesis;
 end;
 
-scheme QCDResult'atomic { D() -> non empty set, V() -> (Element of D()),
-  F(Element of QC-WFF) -> (Element of D()), p() -> QC-formula,
-  A(Element of QC-WFF) -> (Element of D()),
-  N(Element of D()) -> (Element of D()),
-  C((Element of D()), Element of D()) -> (Element of D()),
-  Q((Element of QC-WFF), Element of D()) -> Element of D()} : F(p()) = A(p())
+scheme
+  QCDResult'atomic { D() -> non empty set, V() -> (Element of D()), F(Element
+  of QC-WFF) -> (Element of D()), p() -> QC-formula, A(Element of QC-WFF) -> (
+  Element of D()), N(Element of D()) -> (Element of D()), C((Element of D()),
+Element of D()) -> (Element of D()), Q((Element of QC-WFF), Element of D()) ->
+  Element of D()} : F(p()) = A(p())
 provided
-A1: for p being QC-formula, d being Element of D() holds d = F(p) iff
-ex F being Function of QC-WFF, D() st d = F.p & for p being Element of QC-WFF
-for d1,d2 being Element of D() holds (p = VERUM implies F.p = V()) &
-(p is atomic implies F.p = A(p)) & (p is negative & d1 = F.the_argument_of p
-implies F.p = N(d1)) & (p is conjunctive &
-d1 = F.the_left_argument_of p & d2 = F.the_right_argument_of p
-implies F.p = C(d1, d2)) &
-(p is universal & d1 = F.the_scope_of p implies F.p = Q(p, d1))
-and
+A1: for p being QC-formula, d being Element of D() holds d = F(p) iff ex
+F being Function of QC-WFF, D() st d = F.p & for p being Element of QC-WFF for
+d1,d2 being Element of D() holds (p = VERUM implies F.p = V()) & (p is atomic
+implies F.p = A(p)) & (p is negative & d1 = F.the_argument_of p implies F.p = N
+(d1)) & (p is conjunctive & d1 = F.the_left_argument_of p & d2 = F.
+the_right_argument_of p implies F.p = C(d1, d2)) & (p is universal & d1 = F.
+the_scope_of p implies F.p = Q(p, d1)) and
 A2: p() is atomic
-proof consider F being Function of QC-WFF, D() such that
-A3: F(p()) = F.p() & for p being Element of QC-WFF
-  for d1,d2 being Element of D() holds (p = VERUM implies F.p = V()) &
-  (p is atomic implies F.p = A(p)) & (p is negative & d1 = F.the_argument_of p
-  implies F.p = N(d1)) & (p is conjunctive &
-  d1 = F.the_left_argument_of p & d2 = F.the_right_argument_of p
-  implies F.p = C(d1, d2)) &
-  (p is universal & d1 = F.the_scope_of p implies F.p = Q(p, d1)) by A1;
-  thus thesis by A2,A3;
+proof
+  ex F being Function of QC-WFF, D() st F(p()) = F.p() & for p being
+Element of QC-WFF for d1,d2 being Element of D() holds ( p = VERUM implies F.p
+  = V()) & (p is atomic implies F.p = A(p)) & (p is negative & d1 = F .
+  the_argument_of p implies F.p = N(d1)) & (p is conjunctive & d1 = F.
+the_left_argument_of p & d2 = F.the_right_argument_of p implies F.p = C( d1, d2
+  )) & (p is universal & d1 = F.the_scope_of p implies F.p = Q(p, d1)) by A1;
+  hence thesis by A2;
 end;
 
-scheme QCDResult'negative { D() -> non empty set, V() -> (Element of D()),
-  p() -> QC-formula, A(Element of QC-WFF) -> (Element of D()),
-  N(Element of D()) -> (Element of D()),
-  C((Element of D()), Element of D()) -> (Element of D()),
-  Q((Element of QC-WFF), Element of D()) -> (Element of D()),
-  F(Element of QC-WFF) -> (Element of D()) } :
-  F(p()) = N(F(the_argument_of p()))
+scheme
+  QCDResult'negative { D() -> non empty set, V() -> (Element of D()), p() ->
+  QC-formula, A(Element of QC-WFF) -> (Element of D()), N(Element of D()) -> (
+  Element of D()), C((Element of D()), Element of D()) -> (Element of D()), Q((
+  Element of QC-WFF), Element of D()) -> (Element of D()), F(Element of QC-WFF)
+  -> (Element of D()) } : F(p()) = N(F(the_argument_of p()))
 provided
-A1: for p being QC-formula, d being Element of D() holds d = F(p) iff
-ex F being Function of QC-WFF, D() st d = F.p & for p being Element of QC-WFF
-for d1,d2 being Element of D() holds (p = VERUM implies F.p = V()) &
-(p is atomic implies F.p = A(p)) & (p is negative & d1 = F.the_argument_of p
-implies F.p = N(d1)) & (p is conjunctive &
-d1 = F.the_left_argument_of p & d2 = F.the_right_argument_of p
-implies F.p = C(d1, d2)) &
-(p is universal & d1 = F.the_scope_of p implies F.p = Q(p, d1))
-and
+A1: for p being QC-formula, d being Element of D() holds d = F(p) iff ex
+F being Function of QC-WFF, D() st d = F.p & for p being Element of QC-WFF for
+d1,d2 being Element of D() holds (p = VERUM implies F.p = V()) & (p is atomic
+implies F.p = A(p)) & (p is negative & d1 = F.the_argument_of p implies F.p = N
+(d1)) & (p is conjunctive & d1 = F.the_left_argument_of p & d2 = F.
+the_right_argument_of p implies F.p = C(d1, d2)) & (p is universal & d1 = F.
+the_scope_of p implies F.p = Q(p, d1)) and
 A2: p() is negative
-proof consider F being Function of QC-WFF, D() such that
+proof
+  consider F being Function of QC-WFF, D() such that
 A3: F(p()) = F.p() and
-A4: for p being Element of QC-WFF for d1,d2 being Element of D() holds
-  (p = VERUM implies F.p = V()) & (p is atomic implies F.p = A(p)) &
-  (p is negative & d1 = F.the_argument_of p implies F.p = N(d1)) &
-  (p is conjunctive &
-  d1 = F.the_left_argument_of p & d2 = F.the_right_argument_of p
-  implies F.p = C(d1, d2)) &
-  (p is universal & d1 = F.the_scope_of p implies F.p = Q(p, d1)) by A1;
+A4: for p being Element of QC-WFF for d1,d2 being Element of D() holds (
+  p = VERUM implies F.p = V()) & (p is atomic implies F.p = A(p)) & (p is
+negative & d1 = F.the_argument_of p implies F.p = N(d1)) & (p is conjunctive &
+d1 = F.the_left_argument_of p & d2 = F.the_right_argument_of p implies F.p = C(
+  d1, d2)) & (p is universal & d1 = F.the_scope_of p implies F.p = Q(p, d1)) by
+  A1;
   F.(the_argument_of p()) = F(the_argument_of p()) by A1,A4;
   hence thesis by A2,A3,A4;
 end;
 
-scheme QCDResult'conjunctive { D() -> non empty set, V() -> (Element of D()),
-  A(Element of QC-WFF) -> (Element of D()),
-  N(Element of D()) -> (Element of D()),
-  C((Element of D()), Element of D()) -> (Element of D()),
-  Q((Element of QC-WFF), Element of D()) -> (Element of D()),
-  F(Element of QC-WFF) -> (Element of D()), p() -> QC-formula } :
-  for d1,d2 being Element of D() st
-  d1 = F(the_left_argument_of p()) & d2 = F(the_right_argument_of p()) holds
-  F(p()) = C(d1,d2)
+scheme
+  QCDResult'conjunctive { D() -> non empty set, V() -> (Element of D()), A(
+Element of QC-WFF) -> (Element of D()), N(Element of D()) -> (Element of D()),
+C((Element of D()), Element of D()) -> (Element of D()), Q((Element of QC-WFF),
+Element of D()) -> (Element of D()), F(Element of QC-WFF) -> (Element of D()),
+  p() -> QC-formula } : for d1,d2 being Element of D() st d1 = F(
+the_left_argument_of p()) & d2 = F(the_right_argument_of p()) holds F(p()) = C(
+  d1,d2)
 provided
-A1: for p being QC-formula, d being Element of D() holds d = F(p) iff
-ex F being Function of QC-WFF, D() st d = F.p & for p being Element of QC-WFF
-for d1,d2 being Element of D() holds (p = VERUM implies F.p = V()) &
-(p is atomic implies F.p = A(p)) & (p is negative & d1 = F.the_argument_of p
-implies F.p = N(d1)) & (p is conjunctive &
-d1 = F.the_left_argument_of p & d2 = F.the_right_argument_of p
-implies F.p = C(d1, d2)) &
-(p is universal & d1 = F.the_scope_of p implies F.p = Q(p, d1))
-and
+A1: for p being QC-formula, d being Element of D() holds d = F(p) iff ex
+F being Function of QC-WFF, D() st d = F.p & for p being Element of QC-WFF for
+d1,d2 being Element of D() holds (p = VERUM implies F.p = V()) & (p is atomic
+implies F.p = A(p)) & (p is negative & d1 = F.the_argument_of p implies F.p = N
+(d1)) & (p is conjunctive & d1 = F.the_left_argument_of p & d2 = F.
+the_right_argument_of p implies F.p = C(d1, d2)) & (p is universal & d1 = F.
+the_scope_of p implies F.p = Q(p, d1)) and
 A2: p() is conjunctive
 proof
-  let d1,d2 be Element of D() such that
-A3: d1 = F(the_left_argument_of p()) & d2 = F(the_right_argument_of p());
   consider F being Function of QC-WFF, D() such that
-A4: F(p()) = F.p() and
-A5: for p being Element of QC-WFF for d1,d2 being Element of D() holds
-  (p = VERUM implies F.p = V()) & (p is atomic implies F.p = A(p)) &
-  (p is negative & d1 = F.the_argument_of p implies F.p = N(d1)) &
-  (p is conjunctive &
-  d1 = F.the_left_argument_of p & d2 = F.the_right_argument_of p
-  implies F.p = C(d1, d2)) &
-  (p is universal & d1 = F.the_scope_of p implies F.p = Q(p, d1)) by A1;
-  F.(the_left_argument_of p()) = d1 & F.(the_right_argument_of p()) = d2
-  by A1,A3,A5;
-  hence thesis by A2,A4,A5;
+A3: F(p()) = F.p() and
+A4: for p being Element of QC-WFF for d1,d2 being Element of D() holds (
+  p = VERUM implies F.p = V()) & (p is atomic implies F.p = A(p)) & (p is
+negative & d1 = F.the_argument_of p implies F.p = N(d1)) & (p is conjunctive &
+d1 = F.the_left_argument_of p & d2 = F.the_right_argument_of p implies F.p = C(
+  d1, d2)) & (p is universal & d1 = F.the_scope_of p implies F.p = Q(p, d1)) by
+  A1;
+  let d1,d2 be Element of D();
+  assume
+  d1 = F(the_left_argument_of p()) & d2 = F(the_right_argument_of p());
+  then F.(the_left_argument_of p()) = d1 & F.(the_right_argument_of p()) = d2
+  by A1,A4;
+  hence thesis by A2,A3,A4;
 end;
 
-scheme QCDResult'universal { D() -> non empty set, V() -> (Element of D()),
-  p() -> QC-formula, A(Element of QC-WFF) -> (Element of D()),
-  N(Element of D()) -> (Element of D()),
-  C((Element of D()), Element of D()) -> (Element of D()),
-  Q((Element of QC-WFF), Element of D()) -> (Element of D()),
-  F(Element of QC-WFF) -> (Element of D()) } :
-  F(p()) = Q(p(),F(the_scope_of p()))
+scheme
+  QCDResult'universal { D() -> non empty set, V() -> (Element of D()), p() ->
+  QC-formula, A(Element of QC-WFF) -> (Element of D()), N(Element of D()) -> (
+  Element of D()), C((Element of D()), Element of D()) -> (Element of D()), Q((
+  Element of QC-WFF), Element of D()) -> (Element of D()), F(Element of QC-WFF)
+  -> (Element of D()) } : F(p()) = Q(p(),F(the_scope_of p()))
 provided
-A1: for p being QC-formula, d being Element of D() holds d = F(p) iff
-ex F being Function of QC-WFF, D() st d = F.p & for p being Element of QC-WFF
-for d1,d2 being Element of D() holds (p = VERUM implies F.p = V()) &
-(p is atomic implies F.p = A(p)) & (p is negative & d1 = F.the_argument_of p
-implies F.p = N(d1)) & (p is conjunctive &
-d1 = F.the_left_argument_of p & d2 = F.the_right_argument_of p
-implies F.p = C(d1, d2)) &
-(p is universal & d1 = F.the_scope_of p implies F.p = Q(p, d1))
-and
+A1: for p being QC-formula, d being Element of D() holds d = F(p) iff ex
+F being Function of QC-WFF, D() st d = F.p & for p being Element of QC-WFF for
+d1,d2 being Element of D() holds (p = VERUM implies F.p = V()) & (p is atomic
+implies F.p = A(p)) & (p is negative & d1 = F.the_argument_of p implies F.p = N
+(d1)) & (p is conjunctive & d1 = F.the_left_argument_of p & d2 = F.
+the_right_argument_of p implies F.p = C(d1, d2)) & (p is universal & d1 = F.
+the_scope_of p implies F.p = Q(p, d1)) and
 A2: p() is universal
-proof consider F being Function of QC-WFF, D() such that
+proof
+  consider F being Function of QC-WFF, D() such that
 A3: F(p()) = F.p() and
-A4: for p being Element of QC-WFF for d1,d2 being Element of D() holds
-  (p = VERUM implies F.p = V()) & (p is atomic implies F.p = A(p)) &
-  (p is negative & d1 = F.the_argument_of p implies F.p = N(d1)) &
-  (p is conjunctive &
-  d1 = F.the_left_argument_of p & d2 = F.the_right_argument_of p
-  implies F.p = C(d1, d2)) &
-  (p is universal & d1 = F.the_scope_of p implies F.p = Q(p, d1)) by A1;
+A4: for p being Element of QC-WFF for d1,d2 being Element of D() holds (
+  p = VERUM implies F.p = V()) & (p is atomic implies F.p = A(p)) & (p is
+negative & d1 = F.the_argument_of p implies F.p = N(d1)) & (p is conjunctive &
+d1 = F.the_left_argument_of p & d2 = F.the_right_argument_of p implies F.p = C(
+  d1, d2)) & (p is universal & d1 = F.the_scope_of p implies F.p = Q(p, d1)) by
+  A1;
   F.(the_scope_of p()) = F(the_scope_of p()) by A1,A4;
   hence thesis by A2,A3,A4;
 end;
@@ -327,7 +300,7 @@ theorem
 proof
   set k = the_arity_of P;
   set QCP = {Q : the_arity_of Q = k };
-  QCP = k-ary_QC-pred_symbols & P in QCP;
+  P in QCP;
   hence thesis;
 end;
 
@@ -336,14 +309,16 @@ definition
   let V;
   canceled;
   func variables_in(l,V) -> Subset of V equals
-  { l.k : 1 <= k & k <= len l & l.k in V };
+  { l.k : 1 <= k & k <= len l & l
+  .k in V };
   coherence
   proof
     set A = { l.k : 1 <= k & k <= len l & l.k in V };
     A c= V
     proof
       let x be set;
-      assume x in A;
+      assume
+      x in A;
       then ex k st l.k = x & 1 <= k & k <= len l & l.k in V;
       hence thesis;
     end;
@@ -358,83 +333,97 @@ theorem
 deffunc F1(Element of QC-WFF) = still_not-bound_in $1;
 deffunc A1(Element of QC-WFF) = still_not-bound_in(the_arguments_of $1);
 deffunc N1(Subset of bound_QC-variables) = $1;
-deffunc C1(Subset of bound_QC-variables,
-Subset of bound_QC-variables) = $1 \/ $2;
-deffunc Q1(Element of QC-WFF, Subset of bound_QC-variables) =
-$2 \ {bound_in $1};
 
-Lm1: for p being QC-formula,
-d being Subset of bound_QC-variables holds d = F1(p) iff
-ex F being Function of QC-WFF, (bool bound_QC-variables) st d = F.p &
-for p being Element of QC-WFF
-for d1,d2 being Subset of bound_QC-variables holds
-(p = VERUM implies F.p = ({} bound_QC-variables)) &
-(p is atomic implies F.p = A1(p)) &
-(p is negative & d1 = F.the_argument_of p implies F.p = N1(d1)) &
-(p is conjunctive &
-d1 = F.the_left_argument_of p & d2 = F.the_right_argument_of p implies
-F.p = C1(d1,d2)) &
-(p is universal & d1 = F.the_scope_of p implies F.p = Q1(p,d1))
+deffunc C1(Subset of bound_QC-variables, Subset of bound_QC-variables) = $1 \/
+$2;
+
+deffunc Q1(Element of QC-WFF, Subset of bound_QC-variables) = $2 \ {bound_in
+$1};
+
+Lm1: for p being QC-formula, d being Subset of bound_QC-variables holds d = F1
+(p) iff ex F being Function of QC-WFF, (bool bound_QC-variables) st d = F.p &
+for p being Element of QC-WFF for d1,d2 being Subset of bound_QC-variables
+holds (p = VERUM implies F.p = ({} bound_QC-variables)) & (p is atomic implies
+F.p = A1(p)) & (p is negative & d1 = F.the_argument_of p implies F.p = N1(d1))
+& (p is conjunctive & d1 = F.the_left_argument_of p & d2 = F.
+the_right_argument_of p implies F.p = C1(d1,d2)) & (p is universal & d1 = F.
+the_scope_of p implies F.p = Q1(p,d1))
+
 proof
   let p be QC-formula, d be Subset of bound_QC-variables;
-  thus d = still_not-bound_in p implies
-  ex F being Function of QC-WFF, (bool bound_QC-variables) st d = F.p &
-  for p being Element of QC-WFF
-  for d1,d2 being Subset of bound_QC-variables holds
-  (p = VERUM implies F.p = ({} bound_QC-variables)) &
-  (p is atomic implies F.p = still_not-bound_in(the_arguments_of p)) &
-  (p is negative & d1 = F.the_argument_of p implies F.p = d1) &
-  (p is conjunctive &
-  d1 = F.the_left_argument_of p & d2 = F.the_right_argument_of p
-  implies F.p = d1 \/ d2) & (p is universal & d1 = F.the_scope_of p implies
-  F.p = d1 \ {bound_in p})
+
+  thus d = still_not-bound_in p implies ex F being Function of QC-WFF, (bool
+
+bound_QC-variables) st d = F.p & for p being Element of QC-WFF for d1,d2 being
+  Subset of bound_QC-variables holds (p = VERUM implies F.p = ({}
+  bound_QC-variables)) & (p is atomic implies F.p = still_not-bound_in(
+
+the_arguments_of p)) & (p is negative & d1 = F.the_argument_of p implies F.p =
+  d1) & (p is conjunctive & d1 = F.the_left_argument_of p & d2 = F.
+  the_right_argument_of p implies F.p = d1 \/ d2) & (p is universal & d1 = F.
+  the_scope_of p implies F.p = d1 \ {bound_in p})
+
   proof
-    assume d = still_not-bound_in p;
-    then consider F being Function of QC-WFF, bool bound_QC-variables such
-    that
-A1: d = F.p & for p being Element of QC-WFF holds F.VERUM = {} &
-    (p is atomic implies F.p = { (the_arguments_of p).k :
-    1 <= k & k <= len the_arguments_of p &
-    (the_arguments_of p).k in bound_QC-variables }) &
-    (p is negative implies F.p = F.the_argument_of p) &
-    (p is conjunctive implies F.p = (F.the_left_argument_of p) \/
-    (F.the_right_argument_of p)) &
-    (p is universal implies F.p = (F.the_scope_of p) \ {bound_in p})
-    by QC_LANG1:def 29;
-    take F; thus d = F.p by A1;
+    assume
+    d = still_not-bound_in p;
+    then consider
+    F being Function of QC-WFF, bool bound_QC-variables such that
+
+A1: d = F.p & for p being Element of QC-WFF holds F.VERUM = {} & (p is
+    atomic implies F.p = { (the_arguments_of p).k : 1 <= k & k <= len
+
+the_arguments_of p & (the_arguments_of p).k in bound_QC-variables }) & (p is
+
+negative implies F.p = F.the_argument_of p) & (p is conjunctive implies F.p = (
+    F.the_left_argument_of p) \/ (F.the_right_argument_of p)) & (p is universal
+    implies F.p = (F.the_scope_of p) \ {bound_in p}) by QC_LANG1:def 29;
+
+    take F;
+    thus d = F.p by A1;
     let p be Element of QC-WFF;
     let d1,d2 be Subset of bound_QC-variables;
-    thus (p = VERUM implies F.p = {}(bound_QC-variables)) &
-    (p is atomic implies F.p = still_not-bound_in (the_arguments_of p)) &
-    (p is negative & d1 = F.the_argument_of p implies F.p = d1) by A1;
+
+    thus (p = VERUM implies F.p = {}(bound_QC-variables)) & (p is atomic
+
+implies F.p = still_not-bound_in (the_arguments_of p)) & (p is negative & d1 =
+    F.the_argument_of p implies F.p = d1) by A1;
+
     thus thesis by A1;
   end;
   given F being Function of QC-WFF, (bool bound_QC-variables) such that
 A2: d = F.p and
-A3: for p being Element of QC-WFF
-  for d1,d2 being Subset of bound_QC-variables holds
-  (p = VERUM implies F.p = ({} bound_QC-variables)) &
-  (p is atomic implies F.p = still_not-bound_in(the_arguments_of p)) &
-  (p is negative & d1 = F.the_argument_of p implies F.p = d1) &
-  (p is conjunctive &
-  d1 = F.the_left_argument_of p & d2 = F.the_right_argument_of p
-  implies F.p = d1 \/ d2) & (p is universal & d1 = F.the_scope_of p implies
-  F.p = d1 \ {bound_in p});
+
+A3: for p being Element of QC-WFF for d1,d2 being Subset of
+
+bound_QC-variables holds (p = VERUM implies F.p = ({} bound_QC-variables)) & (p
+  is atomic implies F.p = still_not-bound_in(the_arguments_of p)) & (p is
+
+negative & d1 = F.the_argument_of p implies F.p = d1) & (p is conjunctive & d1
+
+= F.the_left_argument_of p & d2 = F.the_right_argument_of p implies F.p = d1 \/
+
+d2) & (p is universal & d1 = F.the_scope_of p implies F.p = d1 \ {bound_in p});
+
   now
     let p be Element of QC-WFF;
     thus F.VERUM = {} by A3;
-    thus p is atomic implies F.p = { (the_arguments_of p).k :
-    1 <= k & k <= len the_arguments_of p &
-    (the_arguments_of p).k in bound_QC-variables }
+
+    thus p is atomic implies F.p = { (the_arguments_of p).k : 1 <= k & k <=
+    len the_arguments_of p & (the_arguments_of p).k in bound_QC-variables }
+
     proof
-      assume p is atomic;
+      assume
+      p is atomic;
       then F.p = still_not-bound_in the_arguments_of p by A3;
       hence thesis;
     end;
     thus p is negative implies F.p = F.the_argument_of p by A3;
-    thus p is conjunctive implies F.p = (F.the_left_argument_of p) \/
-    (F.the_right_argument_of p) by A3;
-    assume p is universal;
+
+    thus p is conjunctive implies F.p = (F.the_left_argument_of p) \/ (F.
+    the_right_argument_of p) by A3;
+
+    assume
+    p is universal;
     hence F.p = (F.the_scope_of p) \ {bound_in p} by A3;
   end;
   hence thesis by A2,QC_LANG1:def 29;
@@ -448,8 +437,8 @@ proof
 end;
 
 theorem Th8:
-  for p being QC-formula st p is atomic holds
-  still_not-bound_in p = still_not-bound_in the_arguments_of p
+  for p being QC-formula st p is atomic holds still_not-bound_in p
+  = still_not-bound_in the_arguments_of p
 proof
   let p be QC-formula such that
 A1: p is atomic;
@@ -468,17 +457,17 @@ A1: P!l is atomic by QC_LANG1:def 17;
 end;
 
 theorem Th10:
-  for p being QC-formula st p is negative holds
-  still_not-bound_in p = still_not-bound_in the_argument_of p
+  for p being QC-formula st p is negative holds still_not-bound_in
+  p = still_not-bound_in the_argument_of p
 proof
   let p be QC-formula such that
 A1: p is negative;
-  thus F1(p) = N1(F1(the_argument_of p)) from QCDResult'negative(Lm1,A1);
+  thus F1(p) = N1(F1(the_argument_of p)) from QCDResult'negative(Lm1,A1 );
 end;
 
 theorem Th11:
-  for p being QC-formula holds
-  still_not-bound_in 'not' p = still_not-bound_in p
+  for p being QC-formula holds still_not-bound_in 'not' p =
+  still_not-bound_in p
 proof
   let p be QC-formula;
 A1: 'not' p is negative by QC_LANG1:def 18;
@@ -491,41 +480,41 @@ theorem Th12:
 
 theorem Th13:
   for p being QC-formula st p is conjunctive holds
-  still_not-bound_in p = (still_not-bound_in the_left_argument_of p) \/
-  (still_not-bound_in the_right_argument_of p)
+  still_not-bound_in p = (still_not-bound_in the_left_argument_of p) \/ (
+  still_not-bound_in the_right_argument_of p)
 proof
   let p be QC-formula such that
 A1: p is conjunctive;
-  for d1,d2 being Subset of bound_QC-variables st
-  d1 = F1(the_left_argument_of p) & d2 = F1(the_right_argument_of p) holds
-  F1(p) = C1(d1,d2) from QCDResult'conjunctive(Lm1,A1);
+  for d1,d2 being Subset of bound_QC-variables st d1 = F1(
+the_left_argument_of p) & d2 = F1(the_right_argument_of p) holds F1(p) = C1(d1,
+  d2) from QCDResult'conjunctive(Lm1,A1);
   hence thesis;
 end;
 
 theorem Th14:
-  for p,q being QC-formula holds still_not-bound_in(p '&' q) =
-  (still_not-bound_in p) \/ (still_not-bound_in q)
+  for p,q being QC-formula holds still_not-bound_in(p '&' q) = (
+  still_not-bound_in p) \/ (still_not-bound_in q)
 proof
   let p,q be QC-formula;
   set pq = p '&' q;
 A1: pq is conjunctive by QC_LANG1:def 19;
-  then the_left_argument_of pq = p & the_right_argument_of pq = q
-  by QC_LANG1:def 24,def 25;
+  then the_left_argument_of pq = p & the_right_argument_of pq = q by
+  QC_LANG1:def 24,def 25;
   hence thesis by A1,Th13;
 end;
 
 theorem Th15:
-  for p being QC-formula st p is universal holds still_not-bound_in p =
-  (still_not-bound_in the_scope_of p) \ {bound_in p}
+  for p being QC-formula st p is universal holds
+  still_not-bound_in p = (still_not-bound_in the_scope_of p) \ {bound_in p}
 proof
   let p be QC-formula such that
 A1: p is universal;
-  thus F1(p) = Q1(p,F1(the_scope_of p)) from QCDResult'universal(Lm1,A1);
+  thus F1(p) = Q1(p,F1(the_scope_of p)) from QCDResult'universal(Lm1,A1 );
 end;
 
 theorem Th16:
-  for p being QC-formula
-  holds still_not-bound_in All(x,p) = (still_not-bound_in p) \ {x}
+  for p being QC-formula holds still_not-bound_in All(x,p) = (
+  still_not-bound_in p) \ {x}
 proof
   let p be QC-formula;
   set a = All(x,p);
@@ -536,46 +525,49 @@ end;
 
 theorem Th17:
   for p being QC-formula st p is disjunctive holds
-  still_not-bound_in p = (still_not-bound_in the_left_disjunct_of p) \/
-  (still_not-bound_in the_right_disjunct_of p)
+  still_not-bound_in p = (still_not-bound_in the_left_disjunct_of p) \/ (
+  still_not-bound_in the_right_disjunct_of p)
 proof
   let p be QC-formula;
-  assume p is disjunctive;
-  then
-A1: p = (the_left_disjunct_of p) 'or' (the_right_disjunct_of p) by QC_LANG2:53;
   set p1 = the_left_disjunct_of p;
   set p2 = the_right_disjunct_of p;
-  p = 'not'('not' p1 '&' 'not' p2) by A1,QC_LANG2:def 3;
-  then still_not-bound_in p = still_not-bound_in 'not' p1 '&' 'not' p2 by Th11
-    .= (still_not-bound_in 'not' p1) \/ (still_not-bound_in 'not' p2) by Th14
+  assume
+  p is disjunctive;
+  then p = (the_left_disjunct_of p) 'or' (the_right_disjunct_of p) by
+  QC_LANG2:53;
+  then p = 'not'('not' p1 '&' 'not' p2) by QC_LANG2:def 3;
+  then still_not-bound_in p = still_not-bound_in 'not' p1 '&' 'not' p2 by
+  Th11
+    .= (still_not-bound_in 'not' p1) \/ (still_not-bound_in 'not' p2) by
+  Th14
     .= (still_not-bound_in p1) \/ (still_not-bound_in 'not' p2) by Th11
     .= (still_not-bound_in p1) \/ (still_not-bound_in p2) by Th11;
   hence thesis;
 end;
 
 theorem
-  for p,q being QC-formula holds still_not-bound_in p 'or' q
-  = (still_not-bound_in p) \/ (still_not-bound_in q)
+  for p,q being QC-formula holds still_not-bound_in p 'or' q = (
+  still_not-bound_in p) \/ (still_not-bound_in q)
 proof
   let p,q be QC-formula;
-  p 'or' q is disjunctive &
-  the_left_disjunct_of(p 'or' q) = p & the_right_disjunct_of(p 'or' q) = q
-  by QC_LANG2:45,def 10;
-  hence thesis by Th17;
+A1: the_right_disjunct_of(p 'or' q) = q by QC_LANG2:45;
+  p 'or' q is disjunctive & the_left_disjunct_of(p 'or' q) = p by QC_LANG2
+  :45 ,def 10;
+  hence thesis by A1,Th17;
 end;
 
 theorem Th19:
   for p being QC-formula st p is conditional holds
-  still_not-bound_in p = (still_not-bound_in the_antecedent_of p) \/
-  (still_not-bound_in the_consequent_of p)
+  still_not-bound_in p = (still_not-bound_in the_antecedent_of p) \/ (
+  still_not-bound_in the_consequent_of p)
 proof
   let p be QC-formula;
-  assume p is conditional;
-  then
-A1: p = (the_antecedent_of p) => (the_consequent_of p) by QC_LANG2:54;
   set p1 = the_antecedent_of p;
   set p2 = the_consequent_of p;
-  p = 'not'(p1 '&' 'not' p2) by A1,QC_LANG2:def 2;
+  assume
+  p is conditional;
+  then p = (the_antecedent_of p) => (the_consequent_of p) by QC_LANG2:54;
+  then p = 'not'(p1 '&' 'not' p2) by QC_LANG2:def 2;
   then still_not-bound_in p = still_not-bound_in p1 '&' 'not' p2 by Th11
     .= (still_not-bound_in p1) \/ (still_not-bound_in 'not' p2) by Th14
     .= (still_not-bound_in p1) \/ (still_not-bound_in p2) by Th11;
@@ -583,56 +575,57 @@ A1: p = (the_antecedent_of p) => (the_consequent_of p) by QC_LANG2:54;
 end;
 
 theorem Th20:
-  for p,q being QC-formula holds still_not-bound_in p => q
-  = (still_not-bound_in p) \/ (still_not-bound_in q)
+  for p,q being QC-formula holds still_not-bound_in p => q = (
+  still_not-bound_in p) \/ (still_not-bound_in q)
 proof
   let p,q be QC-formula;
-  p => q is conditional &
-  the_antecedent_of(p => q) = p & the_consequent_of(p => q) = q
-  by QC_LANG2:46,def 11;
-  hence thesis by Th19;
+A1: the_consequent_of(p => q) = q by QC_LANG2:46;
+  p => q is conditional & the_antecedent_of(p => q) = p by QC_LANG2:46,def
+  11;
+  hence thesis by A1,Th19;
 end;
 
 theorem Th21:
   for p being QC-formula st p is biconditional holds
-  still_not-bound_in p = (still_not-bound_in the_left_side_of p) \/
-  (still_not-bound_in the_right_side_of p)
+  still_not-bound_in p = (still_not-bound_in the_left_side_of p) \/ (
+  still_not-bound_in the_right_side_of p)
 proof
   let p be QC-formula;
-  assume p is biconditional;
-  then
-A1: p = (the_left_side_of p) <=> (the_right_side_of p) by QC_LANG2:55;
   set p1 = the_left_side_of p;
   set p2 = the_right_side_of p;
-  p = (p1 => p2) '&' (p2 => p1) by A1,QC_LANG2:def 4;
-  then still_not-bound_in p
-  = (still_not-bound_in p1 => p2) \/ (still_not-bound_in p2 => p1) by Th14
-    .= (still_not-bound_in p1) \/ (still_not-bound_in p2) \/
-  (still_not-bound_in p2 => p1) by Th20
-    .= (still_not-bound_in p1) \/ (still_not-bound_in p2) \/
-  ((still_not-bound_in p1) \/ (still_not-bound_in p2)) by Th20
+  assume
+  p is biconditional;
+  then p = (the_left_side_of p) <=> (the_right_side_of p) by QC_LANG2:55;
+  then p = (p1 => p2) '&' (p2 => p1) by QC_LANG2:def 4;
+  then still_not-bound_in p = (still_not-bound_in p1 => p2) \/ (
+  still_not-bound_in p2 => p1) by Th14
+    .= (still_not-bound_in p1) \/ (still_not-bound_in p2) \/ (
+  still_not-bound_in p2 => p1) by Th20
+    .= (still_not-bound_in p1) \/ (still_not-bound_in p2) \/ ((
+  still_not-bound_in p1) \/ (still_not-bound_in p2)) by Th20
     .= (still_not-bound_in p1) \/ (still_not-bound_in p2);
   hence thesis;
 end;
 
 theorem
-  for p,q being QC-formula holds still_not-bound_in p <=> q
-  = (still_not-bound_in p) \/ (still_not-bound_in q)
+  for p,q being QC-formula holds still_not-bound_in p <=> q = (
+  still_not-bound_in p) \/ (still_not-bound_in q)
 proof
   let p,q be QC-formula;
-  p <=> q is biconditional &
-  the_left_side_of(p <=> q) = p & the_right_side_of(p <=> q) = q
-  by QC_LANG2:47,def 12;
-  hence thesis by Th21;
+A1: the_right_side_of(p <=> q) = q by QC_LANG2:47;
+  p <=> q is biconditional & the_left_side_of(p <=> q) = p by QC_LANG2:47
+  ,def 12;
+  hence thesis by A1,Th21;
 end;
 
 theorem Th23:
-  for p being QC-formula holds
-  still_not-bound_in Ex(x,p) = (still_not-bound_in p) \ {x}
+  for p being QC-formula holds still_not-bound_in Ex(x,p) = (
+  still_not-bound_in p) \ {x}
 proof
   let p be QC-formula;
   Ex(x,p) = 'not' All(x,'not' p) by QC_LANG2:def 5;
-  hence still_not-bound_in Ex(x,p) = still_not-bound_in All(x,'not' p) by Th11
+  hence still_not-bound_in Ex(x,p) = still_not-bound_in All(x,'not' p) by
+  Th11
     .= (still_not-bound_in 'not' p) \ {x} by Th16
     .= (still_not-bound_in p) \ {x} by Th11;
 end;
@@ -646,43 +639,48 @@ proof
   let p be QC-formula;
   thus p is closed implies 'not' p is closed
   proof
-    assume still_not-bound_in p = {};
+    assume
+    still_not-bound_in p = {};
     hence still_not-bound_in 'not' p = {} by Th11;
   end;
-  assume still_not-bound_in 'not' p = {};
+  assume
+  still_not-bound_in 'not' p = {};
   hence still_not-bound_in p = {} by Th11;
 end;
 
 theorem Th26:
-  for p,q being QC-formula holds
-  p is closed & q is closed iff p '&' q is closed
+  for p,q being QC-formula holds p is closed & q is closed iff p
+  '&' q is closed
 proof
   let p,q be QC-formula;
   thus p is closed & q is closed implies p '&' q is closed
   proof
-    assume still_not-bound_in p = {} & still_not-bound_in q = {};
+    assume
+    still_not-bound_in p = {} & still_not-bound_in q = {};
     then (still_not-bound_in p) \/ (still_not-bound_in q) = {};
     hence still_not-bound_in p '&' q = {} by Th14;
   end;
   assume
 A1: still_not-bound_in p '&' q = {};
-  still_not-bound_in p '&' q =
-  (still_not-bound_in p) \/ (still_not-bound_in q) by Th14;
+  still_not-bound_in p '&' q = (still_not-bound_in p) \/ (
+  still_not-bound_in q) by Th14;
   hence still_not-bound_in p={} & still_not-bound_in q={} by A1,XBOOLE_1:15;
 end;
 
 theorem Th27:
-  for p being QC-formula holds
-  All(x,p) is closed iff still_not-bound_in p c= {x}
+  for p being QC-formula holds All(x,p) is closed iff
+  still_not-bound_in p c= {x}
 proof
   let p be QC-formula;
   thus All(x,p) is closed implies still_not-bound_in p c= {x}
   proof
-    assume still_not-bound_in All(x,p) = {};
+    assume
+    still_not-bound_in All(x,p) = {};
     then {} = (still_not-bound_in p) \ {x} by Th16;
     hence thesis by XBOOLE_1:37;
   end;
-  assume still_not-bound_in p c= {x};
+  assume
+  still_not-bound_in p c= {x};
   then {} = (still_not-bound_in p) \ {x} by XBOOLE_1:37;
   hence still_not-bound_in All(x,p) = {} by Th16;
 end;
@@ -691,60 +689,57 @@ theorem
   for p being QC-formula st p is closed holds All(x,p) is closed
 proof
   let p be QC-formula;
-  assume still_not-bound_in p = {};
+  assume
+  still_not-bound_in p = {};
   then still_not-bound_in p c= {x} by XBOOLE_1:2;
   hence thesis by Th27;
 end;
 
 theorem
-  for p,q being QC-formula holds
-  p is closed & q is closed iff p 'or' q is closed
+  for p,q being QC-formula holds p is closed & q is closed iff p 'or' q
+  is closed
 proof
   let p,q be QC-formula;
-  p 'or' q = 'not'('not' p '&' 'not' q) by QC_LANG2:def 3;
-  then (p 'or' q is closed iff 'not' p '&' 'not' q is closed) &
-  ('not' p '&' 'not' q is closed iff 'not' p is closed & 'not' q is closed) &
-  ('not' p is closed iff p is closed) & ('not' q is closed iff q is closed)
-  by Th25,Th26;
-  hence thesis;
+A1: p 'or' q = 'not'('not' p '&' 'not' q) by QC_LANG2:def 3;
+  'not' p '&' 'not' q is closed iff 'not' p is closed & 'not' q is closed
+  by Th26;
+  hence thesis by A1,Th25;
 end;
 
 theorem Th30:
-  for p,q being QC-formula holds
-  p is closed & q is closed iff p => q is closed
+  for p,q being QC-formula holds p is closed & q is closed iff p
+  => q is closed
 proof
   let p,q be QC-formula;
-  p => q = 'not'(p '&' 'not' q) by QC_LANG2:def 2;
-  then (p => q is closed iff p '&' 'not' q is closed) &
-  (p '&' 'not' q is closed iff p is closed & 'not' q is closed) &
-  ('not' q is closed iff q is closed) by Th25,Th26;
-  hence thesis;
+A1: p => q = 'not'(p '&' 'not' q) by QC_LANG2:def 2;
+  p '&' 'not' q is closed iff p is closed & 'not' q is closed by Th26;
+  hence thesis by A1,Th25;
 end;
 
 theorem
-  for p,q being QC-formula holds
-  p is closed & q is closed iff p <=> q is closed
+  for p,q being QC-formula holds p is closed & q is closed iff p <=> q
+  is closed
 proof
   let p,q be QC-formula;
   p <=> q = (p => q) '&' (q => p) by QC_LANG2:def 4;
-  then (p <=> q is closed iff p => q is closed & q => p is closed) &
-  (q => p is closed iff p is closed & q is closed) &
-  (p => q is closed iff p is closed & q is closed) by Th26,Th30;
-  hence thesis;
+  then p <=> q is closed iff p => q is closed & q => p is closed by Th26;
+  hence thesis by Th30;
 end;
 
 theorem Th32:
-  for p being QC-formula holds
-  Ex(x,p) is closed iff still_not-bound_in p c= {x}
+  for p being QC-formula holds Ex(x,p) is closed iff
+  still_not-bound_in p c= {x}
 proof
   let p be QC-formula;
   thus Ex(x,p) is closed implies still_not-bound_in p c= {x}
   proof
-    assume still_not-bound_in Ex(x,p) = {};
+    assume
+    still_not-bound_in Ex(x,p) = {};
     then {} = (still_not-bound_in p) \ {x} by Th23;
     hence thesis by XBOOLE_1:37;
   end;
-  assume still_not-bound_in p c= {x};
+  assume
+  still_not-bound_in p c= {x};
   then {} = (still_not-bound_in p) \ {x} by XBOOLE_1:37;
   hence still_not-bound_in Ex(x,p) = {} by Th23;
 end;
@@ -753,7 +748,8 @@ theorem
   for p being QC-formula st p is closed holds Ex(x,p) is closed
 proof
   let p be QC-formula;
-  assume still_not-bound_in p = {};
+  assume
+  still_not-bound_in p = {};
   then still_not-bound_in p c= {x} by XBOOLE_1:2;
   hence thesis by Th32;
 end;
@@ -761,10 +757,10 @@ end;
 definition
   let k;
   func x.k -> bound_QC-variable equals
-
   [4,k];
   coherence
-  proof 4 in {4} & k in NAT by TARSKI:def 1;
+  proof
+    4 in {4} by TARSKI:def 1;
     hence thesis by ZFMISC_1:def 2;
   end;
 end;
@@ -779,16 +775,17 @@ A1: i in {4} and
 A2: j in NAT and
 A3: [i,j] = x by ZFMISC_1:def 2;
   reconsider j as Element of NAT by A2;
-  take j; thus thesis by A1,A3,TARSKI:def 1;
+  take j;
+  thus thesis by A1,A3,TARSKI:def 1;
 end;
 
 definition
   let k;
   func a.k -> free_QC-variable equals
-
   [6,k];
   coherence
-  proof 6 in {6} & k in NAT by TARSKI:def 1;
+  proof
+    6 in {6} by TARSKI:def 1;
     hence thesis by ZFMISC_1:def 2;
   end;
 end;
@@ -803,95 +800,103 @@ A1: x in {6} and
 A2: y in NAT and
 A3: [x,y] = a by ZFMISC_1:def 2;
   reconsider i = y as Element of NAT by A2;
-  take i; thus thesis by A1,A3,TARSKI:def 1;
+  take i;
+  thus thesis by A1,A3,TARSKI:def 1;
 end;
 
 theorem
-  for c being Element of fixed_QC-variables
-  for a being Element of free_QC-variables holds c <> a
+  for c being Element of fixed_QC-variables for a being Element of
+  free_QC-variables holds c <> a
 proof
   let c be Element of fixed_QC-variables;
   let a be Element of free_QC-variables;
   consider a1,a2 being set such that
-A1: a1 in {6} & a2 in NAT & a = [a1,a2] by ZFMISC_1:def 2;
+A1: a1 in {6} and
+  a2 in NAT and
+A2: a = [a1,a2] by ZFMISC_1:def 2;
   consider c1,c2 being set such that
-A2: c1 in {5} & c2 in NAT & c = [c1,c2] by ZFMISC_1:def 2;
-  a1 = 6 & c1 = 5 by A1,A2,TARSKI:def 1;
-  hence thesis by A1,A2,ZFMISC_1:33;
+A3: c1 in {5} and
+  c2 in NAT and
+A4: c = [c1,c2] by ZFMISC_1:def 2;
+A5: c1 = 5 by A3,TARSKI:def 1;
+  a1 = 6 by A1,TARSKI:def 1;
+  hence thesis by A2,A4,A5,ZFMISC_1:33;
 end;
 
 theorem
-  for c being Element of fixed_QC-variables
-  for x being Element of bound_QC-variables holds c <> x
+  for c being Element of fixed_QC-variables for x being Element of
+  bound_QC-variables holds c <> x
 proof
   let c be Element of fixed_QC-variables;
   let x be Element of bound_QC-variables;
   consider x1,x2 being set such that
-A1: x1 in {4} & x2 in NAT & x = [x1,x2] by ZFMISC_1:def 2;
+A1: x1 in {4} and
+  x2 in NAT and
+A2: x = [x1,x2] by ZFMISC_1:def 2;
   consider c1,c2 being set such that
-A2: c1 in {5} & c2 in NAT & c = [c1,c2] by ZFMISC_1:def 2;
-  x1 = 4 & c1 = 5 by A1,A2,TARSKI:def 1;
-  hence thesis by A1,A2,ZFMISC_1:33;
+A3: c1 in {5} and
+  c2 in NAT and
+A4: c = [c1,c2] by ZFMISC_1:def 2;
+A5: c1 = 5 by A3,TARSKI:def 1;
+  x1 = 4 by A1,TARSKI:def 1;
+  hence thesis by A2,A4,A5,ZFMISC_1:33;
 end;
 
 theorem
-  for a being Element of free_QC-variables
-  for x being Element of bound_QC-variables holds a <> x
+  for a being Element of free_QC-variables for x being Element of
+  bound_QC-variables holds a <> x
 proof
   let a be Element of free_QC-variables;
   let x be Element of bound_QC-variables;
   consider x1,x2 being set such that
-A1: x1 in {4} & x2 in NAT & x = [x1,x2] by ZFMISC_1:def 2;
+A1: x1 in {4} and
+  x2 in NAT and
+A2: x = [x1,x2] by ZFMISC_1:def 2;
   consider a1,a2 being set such that
-A2: a1 in {6} & a2 in NAT & a = [a1,a2] by ZFMISC_1:def 2;
-  x1 = 4 & a1 = 6 by A1,A2,TARSKI:def 1;
-  hence thesis by A1,A2,ZFMISC_1:33;
+A3: a1 in {6} and
+  a2 in NAT and
+A4: a = [a1,a2] by ZFMISC_1:def 2;
+A5: a1 = 6 by A3,TARSKI:def 1;
+  x1 = 4 by A1,TARSKI:def 1;
+  hence thesis by A2,A4,A5,ZFMISC_1:33;
 end;
 
 definition
   let V;
   let p;
   func Vars(p,V) -> Subset of V means
-  :
-  Def5: ex F being Function of QC-WFF, bool V st it = F.p &
-  for p being Element of QC-WFF for d1,d2 being Subset of V holds
-  (p = VERUM implies F.p = {}(V)) &
-  (p is atomic implies F.p = variables_in(the_arguments_of p,V)) &
-  (p is negative & d1 = F.the_argument_of p implies F.p = d1) &
-  (p is conjunctive & d1 = F.the_left_argument_of p &
-  d2 = F.the_right_argument_of p implies F.p = d1 \/ d2) &
-  (p is universal & d1 = F.the_scope_of p implies F.p = d1);
+  : Def5:
+  ex F being Function of QC-WFF,
+bool V st it = F.p & for p being Element of QC-WFF for d1,d2 being Subset of V
+holds (p = VERUM implies F.p = {}(V)) & (p is atomic implies F.p = variables_in
+(the_arguments_of p,V)) & (p is negative & d1 = F.the_argument_of p implies F.p
+  = d1) & (p is conjunctive & d1 = F.the_left_argument_of p & d2 = F.
+  the_right_argument_of p implies F.p = d1 \/ d2) & (p is universal & d1 = F.
+  the_scope_of p implies F.p = d1);
   correctness
   proof
-    deffunc A(Element of QC-WFF) = variables_in(the_arguments_of $1,V);
-    deffunc N(Subset of V) = $1;
-    deffunc C(Subset of V,Subset of V) = $1 \/ $2;
     deffunc Q(Element of QC-WFF,Subset of V) = $2;
-    thus (ex d being (Subset of V), F being Function of QC-WFF, bool V st
-    d = F.p & for p being Element of QC-WFF for d1,d2 being Subset of V holds
-    (p = VERUM implies F.p = {}V) & (p is atomic implies F.p = A(p)) &
-    (p is negative & d1 = F.the_argument_of p implies F.p = N(d1)) &
-    (p is conjunctive &
-    d1 = F.the_left_argument_of p & d2 = F.the_right_argument_of p
-    implies F.p = C(d1, d2)) &
-    (p is universal & d1 = F.the_scope_of p implies F.p = Q(p, d1)) ) &
-    for x1,x2 being Subset of V st (ex F being Function of QC-WFF, bool V st
-    x1 = F.p & for p being Element of QC-WFF for d1,d2 being Subset of V holds
-    (p = VERUM implies F.p = {}V) & (p is atomic implies F.p = A(p)) &
-    (p is negative & d1 = F.the_argument_of p implies F.p = N(d1)) &
-    (p is conjunctive &
-    d1 = F.the_left_argument_of p & d2 = F.the_right_argument_of p
-    implies F.p = C(d1, d2)) &
-    (p is universal & d1 = F.the_scope_of p implies F.p = Q(p, d1)) ) &
-    (ex F being Function of QC-WFF, bool V st x2 = F.p &
-    for p being Element of QC-WFF for d1,d2 being Subset of V holds
-    (p = VERUM implies F.p = {}V) & (p is atomic implies F.p = A(p)) &
-    (p is negative & d1 = F.the_argument_of p implies F.p = N(d1)) &
-    (p is conjunctive &
-    d1 = F.the_left_argument_of p & d2 = F.the_right_argument_of p
-    implies F.p = C(d1, d2)) &
-    (p is universal & d1 = F.the_scope_of p implies F.p = Q(p, d1)) )
-    holds x1 = x2 from QCDefD;
+    deffunc C(Subset of V,Subset of V) = $1 \/ $2;
+    deffunc N(Subset of V) = $1;
+    deffunc A(Element of QC-WFF) = variables_in(the_arguments_of $1,V);
+    thus (ex d being (Subset of V), F being Function of QC-WFF, bool V st d =
+    F.p & for p being Element of QC-WFF for d1,d2 being Subset of V holds (p =
+VERUM implies F.p = {}V) & (p is atomic implies F.p = A(p)) & (p is negative &
+    d1 = F.the_argument_of p implies F.p = N(d1)) & (p is conjunctive & d1 = F.
+the_left_argument_of p & d2 = F.the_right_argument_of p implies F.p = C(d1, d2)
+) & (p is universal & d1 = F.the_scope_of p implies F.p = Q(p, d1)) ) & for x1,
+x2 being Subset of V st (ex F being Function of QC-WFF, bool V st x1 = F.p &
+    for p being Element of QC-WFF for d1,d2 being Subset of V holds (p = VERUM
+implies F.p = {}V) & (p is atomic implies F.p = A(p)) & (p is negative & d1 = F
+    .the_argument_of p implies F.p = N(d1)) & (p is conjunctive & d1 = F.
+the_left_argument_of p & d2 = F.the_right_argument_of p implies F.p = C(d1, d2)
+) & (p is universal & d1 = F.the_scope_of p implies F.p = Q(p, d1)) ) & (ex F
+being Function of QC-WFF, bool V st x2 = F.p & for p being Element of QC-WFF
+for d1,d2 being Subset of V holds (p = VERUM implies F.p = {}V) & (p is atomic
+implies F.p = A(p)) & (p is negative & d1 = F.the_argument_of p implies F.p = N
+    (d1)) & (p is conjunctive & d1 = F.the_left_argument_of p & d2 = F.
+the_right_argument_of p implies F.p = C(d1, d2)) & (p is universal & d1 = F.
+    the_scope_of p implies F.p = Q(p, d1)) ) holds x1 = x2 from QCDefD;
   end;
 end;
 
@@ -902,14 +907,18 @@ Lm2: now
   deffunc N(Subset of V) = $1;
   deffunc C(Subset of V,Subset of V) = $1 \/ $2;
   deffunc Q(Element of QC-WFF,Subset of V) = $2;
-A1: for X being Subset of V holds X = F1(p) iff
-  ex F being Function of QC-WFF, bool V st X = F.p &
-  for p being Element of QC-WFF for d1,d2 being Subset of V holds
-  (p = VERUM implies F.p = {}(V)) & (p is atomic implies F.p = A(p)) &
-  (p is negative & d1 = F.the_argument_of p implies F.p = N(d1)) &
-  (p is conjunctive & d1 = F.the_left_argument_of p &
-  d2 = F.the_right_argument_of p implies F.p = C(d1,d2)) &
-  (p is universal & d1 = F.the_scope_of p implies F.p = Q(p,d1)) by Def5;
+
+A1: for X being Subset of V holds X = F1(p) iff ex F being Function of
+  QC-WFF, bool V st X = F.p & for p being Element of QC-WFF for d1,d2 being
+
+Subset of V holds (p = VERUM implies F.p = {}(V)) & (p is atomic implies F.p =
+
+A(p)) & (p is negative & d1 = F.the_argument_of p implies F.p = N(d1)) & (p is
+  conjunctive & d1 = F.the_left_argument_of p & d2 = F.the_right_argument_of p
+
+implies F.p = C(d1,d2)) & (p is universal & d1 = F.the_scope_of p implies F.p =
+  Q(p,d1)) by Def5;
+
   thus F1(VERUM) = {}(V) from QCDResult'VERUM(A1)
     .= {};
   thus p is atomic implies Vars(p,V) = variables_in(the_arguments_of p,V)
@@ -922,23 +931,28 @@ A2: p is atomic;
   proof
     assume
 A3: p is negative;
-    thus F1(p) = N(F1(the_argument_of p)) from QCDResult'negative(A1,A3);
+    thus F1(p) = N(F1(the_argument_of p)) from QCDResult'negative(A1, A3);
   end;
-  thus p is conjunctive implies Vars(p,V) =
-  Vars(the_left_argument_of p,V) \/ Vars(the_right_argument_of p,V)
+
+  thus p is conjunctive implies Vars(p,V) = Vars(the_left_argument_of p,V) \/
+  Vars(the_right_argument_of p,V)
+
   proof
     assume
 A4: p is conjunctive;
-    for d1,d2 being Subset of V st
-    d1 = F1(the_left_argument_of p) & d2 = F1(the_right_argument_of p) holds
-    F1(p) = C(d1,d2) from QCDResult'conjunctive(A1,A4);
+
+    for d1,d2 being Subset of V st d1 = F1(the_left_argument_of p) & d2 =
+
+F1(the_right_argument_of p) holds F1(p) = C(d1,d2) from QCDResult'conjunctive(
+    A1,A4);
+
     hence thesis;
   end;
   thus p is universal implies Vars(p,V) = Vars(the_scope_of p,V)
   proof
     assume
 A5: p is universal;
-    thus F1(p) = Q(p,F1(the_scope_of p)) from QCDResult'universal(A1,A5);
+    thus F1(p) = Q(p,F1(the_scope_of p)) from QCDResult'universal(A1, A5);
   end;
 end;
 
@@ -948,19 +962,20 @@ theorem
   Vars(VERUM,V) = {} by Lm2;
 
 theorem Th47:
-  p is atomic implies Vars(p,V) = variables_in(the_arguments_of p, V) &
-  Vars(p,V) = { (the_arguments_of p).k :
-  1 <= k & k <= len (the_arguments_of p) & (the_arguments_of p).k in V }
+  p is atomic implies Vars(p,V) = variables_in(the_arguments_of p,
+V) & Vars(p,V) = { (the_arguments_of p).k : 1 <= k & k <= len (the_arguments_of
+  p) & (the_arguments_of p).k in V }
 proof
-  assume p is atomic;
+  assume
+  p is atomic;
   hence Vars(p,V) = variables_in(the_arguments_of p, V) by Lm2;
   hence thesis;
 end;
 
 theorem Th48:
-  for P being QC-pred_symbol of k for l being QC-variable_list of k
-  holds Vars(P!l,V) = variables_in(l, V) &
-  Vars((P!l),V) = { l.i : 1 <= i & i <= len l & l.i in V }
+  for P being QC-pred_symbol of k for l being QC-variable_list of
+  k holds Vars(P!l,V) = variables_in(l, V) & Vars((P!l),V) = { l.i : 1 <= i & i
+  <= len l & l.i in V }
 proof
   let P be QC-pred_symbol of k;
   let l be QC-variable_list of k;
@@ -989,16 +1004,16 @@ proof
 end;
 
 theorem
-  p is conjunctive implies Vars(p,V) =
-  Vars(the_left_argument_of p,V) \/ Vars(the_right_argument_of p,V) by Lm2;
+  p is conjunctive implies Vars(p,V) = Vars(the_left_argument_of p,V) \/
+  Vars(the_right_argument_of p,V) by Lm2;
 
 theorem Th53:
   Vars(p '&' q,V) = Vars(p,V) \/ Vars(q,V)
 proof
   set pq = p '&' q;
 A1: p '&' q is conjunctive by QC_LANG1:def 19;
-  then the_left_argument_of pq = p & the_right_argument_of pq = q
-  by QC_LANG1:def 24,def 25;
+  then the_left_argument_of pq = p & the_right_argument_of pq = q by
+  QC_LANG1:def 24,def 25;
   hence thesis by A1,Lm2;
 end;
 
@@ -1014,37 +1029,39 @@ A1: All(x,p) is universal by QC_LANG1:def 20;
 end;
 
 theorem Th56:
-  p is disjunctive implies Vars(p,V) =
-  Vars(the_left_disjunct_of p,V) \/ Vars(the_right_disjunct_of p,V)
+  p is disjunctive implies Vars(p,V) = Vars(the_left_disjunct_of p
+  ,V) \/ Vars(the_right_disjunct_of p,V)
 proof
   set p1 = the_left_disjunct_of p;
   set p2 = the_right_disjunct_of p;
-  assume p is disjunctive;
+  assume
+  p is disjunctive;
   then p = p1 'or' p2 by QC_LANG2:53;
   then p = 'not'('not' p1 '&' 'not' p2) by QC_LANG2:def 3;
   hence Vars(p,V) = Vars('not' p1 '&' 'not' p2, V) by Th50
     .= Vars('not' p1, V) \/ Vars('not' p2, V) by Th53
     .= Vars(p1, V) \/ Vars('not' p2, V) by Th50
-    .= Vars(the_left_disjunct_of p,V) \/ Vars(the_right_disjunct_of p,V)
-  by Th50;
+    .= Vars(the_left_disjunct_of p,V) \/ Vars(the_right_disjunct_of p,V) by
+  Th50;
 end;
 
 theorem
   Vars(p 'or' q, V) = Vars(p,V) \/ Vars(q,V)
 proof
-  p 'or' q is disjunctive &
-  the_left_disjunct_of p 'or' q = p & the_right_disjunct_of p 'or' q = q
-  by QC_LANG2:45,def 10;
-  hence thesis by Th56;
+A1: the_right_disjunct_of p 'or' q = q by QC_LANG2:45;
+  p 'or' q is disjunctive & the_left_disjunct_of p 'or' q = p by QC_LANG2:
+  45 ,def 10;
+  hence thesis by A1,Th56;
 end;
 
 theorem Th58:
-  p is conditional implies Vars(p,V) =
-  Vars(the_antecedent_of p,V) \/ Vars(the_consequent_of p,V)
+  p is conditional implies Vars(p,V) = Vars(the_antecedent_of p,V)
+  \/ Vars(the_consequent_of p,V)
 proof
   set p1 = the_antecedent_of p;
   set p2 = the_consequent_of p;
-  assume p is conditional;
+  assume
+  p is conditional;
   then p = p1 => p2 by QC_LANG2:54;
   then p = 'not'(p1 '&' 'not' p2) by QC_LANG2:def 2;
   hence Vars(p,V) = Vars(p1 '&' 'not' p2, V) by Th50
@@ -1055,19 +1072,20 @@ end;
 theorem Th59:
   Vars(p => q,V) = Vars(p,V) \/ Vars(q,V)
 proof
-  p => q is conditional &
-  the_antecedent_of p => q = p & the_consequent_of p => q = q
-  by QC_LANG2:46,def 11;
-  hence thesis by Th58;
+A1: the_consequent_of p => q = q by QC_LANG2:46;
+  p => q is conditional & the_antecedent_of p => q = p by QC_LANG2:46,def
+  11;
+  hence thesis by A1,Th58;
 end;
 
 theorem Th60:
-  p is biconditional implies Vars(p,V) =
-  Vars(the_left_side_of p,V) \/ Vars(the_right_side_of p,V)
+  p is biconditional implies Vars(p,V) = Vars(the_left_side_of p,V
+  ) \/ Vars(the_right_side_of p,V)
 proof
   set p1 = the_left_side_of p;
   set p2 = the_right_side_of p;
-  assume p is biconditional;
+  assume
+  p is biconditional;
   then p = p1 <=> p2 by QC_LANG2:55;
   then p = (p1 => p2) '&' (p2 => p1) by QC_LANG2:def 4;
   hence Vars(p,V) = Vars(p1 => p2, V) \/ Vars(p2 => p1, V) by Th53
@@ -1079,19 +1097,20 @@ end;
 theorem
   Vars(p <=> q,V) = Vars(p,V) \/ Vars(q,V)
 proof
-  p <=> q is biconditional &
-  the_left_side_of p <=> q = p & the_right_side_of p <=> q = q
-  by QC_LANG2:47,def 12;
-  hence thesis by Th60;
+A1: the_right_side_of p <=> q = q by QC_LANG2:47;
+  p <=> q is biconditional & the_left_side_of p <=> q = p by QC_LANG2:47 ,
+  def 12;
+  hence thesis by A1,Th60;
 end;
 
 theorem
-  p is existential implies Vars(p,V) =
-  Vars(the_argument_of the_scope_of the_argument_of p, V)
+  p is existential implies Vars(p,V) = Vars(the_argument_of the_scope_of
+  the_argument_of p, V)
 proof
   set p1 = the_argument_of the_scope_of the_argument_of p;
   set x = bound_in the_argument_of p;
-  assume p is existential;
+  assume
+  p is existential;
   then p = Ex(x,p1) by QC_LANG2:56;
   then p = 'not' All(x,'not' p1) by QC_LANG2:def 5;
   then Vars(p,V) = Vars(All(x,'not' p1), V) by Th50
@@ -1105,15 +1124,13 @@ theorem
 proof
   Ex(x,p) = 'not' All(x,'not' p) by QC_LANG2:def 5;
   hence Vars(Ex(x,p), V) = Vars(All(x,'not' p), V) by Th50
-    .= Vars('not'
-  p, V) by Th55
+    .= Vars('not' p, V) by Th55
     .= Vars(p, V) by Th50;
 end;
 
 definition
   let p;
   func Free p -> Subset of free_QC-variables equals
-
   Vars(p,free_QC-variables);
   correctness;
 end;
@@ -1125,8 +1142,8 @@ theorem
 
 theorem
   for P being QC-pred_symbol of k for l being QC-variable_list of k
-  holds Free(P!l) = { l.i : 1 <= i & i <= len l & l.i in free_QC-variables }
-  by Th48;
+  holds Free(P!l) = { l.i : 1 <= i & i <= len l & l.i in free_QC-variables } by
+  Th48;
 
 theorem
   Free 'not' p = Free p by Th50;
@@ -1145,8 +1162,7 @@ theorem
 proof
   p 'or' q = 'not'('not' p '&' 'not' q) by QC_LANG2:def 3;
   hence Free(p 'or' q) = Free('not' p '&' 'not' q) by Th50
-    .= Free 'not'
-  p \/ Free 'not' q by Th53
+    .= Free 'not' p \/ Free 'not' q by Th53
     .= Free p \/ Free 'not' q by Th50
     .= Free p \/ Free q by Th50;
 end;
@@ -1156,8 +1172,7 @@ theorem Th72:
 proof
   p => q = 'not'(p '&' 'not' q) by QC_LANG2:def 2;
   hence Free(p => q) = Free(p '&' 'not' q) by Th50
-    .= Free p \/ Free 'not'
-  q by Th53
+    .= Free p \/ Free 'not' q by Th53
     .= Free p \/ Free q by Th50;
 end;
 
@@ -1183,7 +1198,8 @@ end;
 definition
   let p;
   func Fixed p -> Subset of fixed_QC-variables equals
-  Vars(p,fixed_QC-variables);
+  Vars(p,
+  fixed_QC-variables);
   correctness;
 end;
 
@@ -1194,8 +1210,8 @@ theorem Th76:
 
 theorem
   for P being QC-pred_symbol of k for l being QC-variable_list of k
-  holds Fixed(P!l) = { l.i : 1 <= i & i <= len l & l.i in
-  fixed_QC-variables } by Th48;
+holds Fixed(P!l) = { l.i : 1 <= i & i <= len l & l.i in fixed_QC-variables } by
+  Th48;
 
 theorem
   Fixed 'not' p = Fixed p by Th50;
@@ -1214,8 +1230,7 @@ theorem
 proof
   p 'or' q = 'not'('not' p '&' 'not' q) by QC_LANG2:def 3;
   hence Fixed(p 'or' q) = Fixed('not' p '&' 'not' q) by Th50
-    .= Fixed 'not'
-  p \/ Fixed 'not' q by Th53
+    .= Fixed 'not' p \/ Fixed 'not' q by Th53
     .= Fixed p \/ Fixed 'not' q by Th50
     .= Fixed p \/ Fixed q by Th50;
 end;

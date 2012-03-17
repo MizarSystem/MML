@@ -10,16 +10,15 @@ environ
       CARD_5, ORDINAL2, ORDERS_1, WELLORD1, WAYBEL_0, SETFAM_1, CAT_1, FUNCT_4,
       CARD_2, FINSET_1, ORDINAL1, REALSET1, FUNCOP_1, NEWTON, NORMSP_1,
       WELLFND1, ARYTM;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS, NAT_1,
-      RELAT_1, FUNCT_1, BINOP_1, SETFAM_1, DOMAIN_1, STRUCT_0, RELSET_1,
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS,
+      RELAT_1, FUNCT_1, BINOP_1, SETFAM_1, DOMAIN_1, NAT_1, STRUCT_0,
+      RELSET_1,
       PARTFUN1, FUNCT_2, FUNCT_4, FUNCOP_1, ORDINAL1, WELLORD1, ORDINAL2,
-      FINSET_1, CARD_2, ORDERS_2, REALSET1, CARD_5, RFUNCT_3,
-      WAYBEL_0;
+      FINSET_1, CARD_2, ORDERS_2, CARD_5, RFUNCT_3, WAYBEL_0;
  constructors SETFAM_1, WELLORD1, BINOP_1, FUNCT_4, ORDINAL2, NAT_1, CARD_2,
       REALSET1, CARD_5, RFUNCT_3, WAYBEL_0, RELSET_1;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, PARTFUN1, FUNCOP_1,
-      FRAENKEL, CARD_1, REALSET1, CARD_5, STRUCT_0, ORDERS_2, ALTCAT_1,
-      WAYBEL_0, FUNCT_1;
+      CARD_1, REALSET1, CARD_5, STRUCT_0, WAYBEL_0, FUNCT_1;
  requirements NUMERALS, SUBSET, BOOLE;
  definitions TARSKI, RELAT_1, FUNCT_1, WELLORD1, WAYBEL_0, XBOOLE_0, BINOP_1,
       FUNCOP_1;
@@ -36,46 +35,47 @@ begin :: Preliminaries
 canceled;
 
 theorem Th2:
-  for X being functional set
-  st for f, g being Function st f in X & g in X holds f tolerates g
-  holds union X is Function
+  for X being functional set st for f, g being Function st f in X &
+  g in X holds f tolerates g holds union X is Function
 proof
   let X be functional set;
   assume
 A1: for f, g being Function st f in X & g in X holds f tolerates g;
-A2: union X is Relation-like
-  proof
-    let x be set;
-    assume x in union X;
-    then consider ux being set such that
-A3: x in ux & ux in X by TARSKI:def 4;
-    thus thesis by A3,RELAT_1:def 1;
-  end;
-  union X is Function-like
+A2: union X is Function-like
   proof
     let x,y1,y2 be set;
-    assume
-A4: [x,y1] in union X & [x,y2] in union X & y1<>y2;
-    then consider fx being set such that
-A5: [x, y1] in fx & fx in X by TARSKI:def 4;
+    assume that
+A3: [x,y1] in union X and
+A4: [x,y2] in union X and
+A5: y1<>y2;
     consider gx being set such that
-A6: [x, y2] in gx & gx in X by A4,TARSKI:def 4;
-    reconsider fx, gx as Function by A5,A6;
-    fx tolerates gx by A1,A5,A6;
-    then consider h being Function such that
-A7: fx c= h & gx c= h by PARTFUN1:131;
-    thus contradiction by A4,A5,A6,A7,FUNCT_1:def 1;
+A6: [x, y2] in gx and
+A7: gx in X by A4,TARSKI:def 4;
+    consider fx being set such that
+A8: [x, y1] in fx and
+A9: fx in X by A3,TARSKI:def 4;
+    reconsider fx, gx as Function by A9,A7;
+    fx tolerates gx by A1,A9,A7;
+    then ex h being Function st fx c= h & gx c= h by PARTFUN1:131;
+    hence contradiction by A5,A8,A6,FUNCT_1:def 1;
+  end;
+  union X is Relation-like
+  proof
+    let x be set;
+    assume
+    x in union X;
+    then ex ux being set st x in ux & ux in X by TARSKI:def 4;
+    hence thesis by RELAT_1:def 1;
   end;
   hence thesis by A2;
 end;
 
-scheme PFSeparation {X, Y() -> set, P[set]}:
-  ex PFS being Subset of PFuncs(X(), Y()) st
-  for pfs being PartFunc of X(), Y() holds pfs in PFS iff P[pfs]
-proof
+scheme
+  PFSeparation {X, Y() -> set, P[set]}: ex PFS being Subset of PFuncs(X(), Y()
+  ) st for pfs being PartFunc of X(), Y() holds pfs in PFS iff P[pfs] proof
   consider fs being Subset of PFuncs (X(), Y()) such that
-A1: for f being set holds f in fs iff f in PFuncs(X(), Y()) & P[f]
-  from SUBSET_1:sch 1;
+A1: for f being set holds f in fs iff f in PFuncs(X(), Y()) & P[f] from
+  SUBSET_1:sch 1;
   take fs;
   let pfs be PartFunc of X(), Y();
   pfs in PFuncs(X(), Y()) by PARTFUN1:119;
@@ -96,8 +96,8 @@ registration
 end;
 
 theorem Th3:
-  for M being regular Aleph, X being set
-  st X c= M & card X in M holds sup X in M
+  for M being regular Aleph, X being set st X c= M & card X in M
+  holds sup X in M
 proof
   let M be regular Aleph;
   cf M = M by CARD_5:def 4;
@@ -107,8 +107,8 @@ end;
 :: Relational structures
 
 theorem Th4:
-  for R being RelStr, x being set
-  holds (the InternalRel of R)-Seg x c= the carrier of R
+  for R being RelStr, x being set holds (the InternalRel of R)-Seg
+  x c= the carrier of R
 proof
   let R be RelStr, x be set;
   set r = the InternalRel of R, c = the carrier of R;
@@ -118,11 +118,10 @@ end;
 
 definition
   let R be RelStr, X be Subset of R;
-  redefine
-  attr X is lower means
+  redefine attr X is lower means
   :Def1:
-  for x, y being set
-  st x in X & [y, x] in the InternalRel of R holds y in X;
+  for x, y being set st x in X & [y, x]
+  in the InternalRel of R holds y in X;
   compatibility
   proof
     hereby
@@ -136,53 +135,59 @@ A3:   [y, x] in the InternalRel of R;
       hence y in X by A1,A2,WAYBEL_0:def 19;
     end;
     assume
-A4: for x, y being set
-    st x in X & [y, x] in the InternalRel of R holds y in X;
+A4: for x, y being set st x in X & [y, x] in the InternalRel of R
+    holds y in X;
     let x,y be Element of R such that
 A5: x in X;
-    assume y <= x;
+    assume
+    y <= x;
     then [y,x] in the InternalRel of R by ORDERS_2:def 9;
     hence thesis by A4,A5;
   end;
 end;
 
 theorem Th5:
-  for R being RelStr, X being Subset of R, x being set
-  st X is lower & x in X holds (the InternalRel of R)-Seg x c= X
+  for R being RelStr, X being Subset of R, x being set st X is
+  lower & x in X holds (the InternalRel of R)-Seg x c= X
 proof
   let R be RelStr, X be Subset of R, x be set such that
 A1: X is lower & x in X;
   let z be set;
-  assume z in (the InternalRel of R)-Seg x;
+  assume
+  z in (the InternalRel of R)-Seg x;
   then [z,x] in (the InternalRel of R) by WELLORD1:def 1;
   hence thesis by A1,Def1;
 end;
 
 theorem Th6:
-  for R being RelStr, X being lower Subset of R,
-  Y being Subset of R, x being set
-  st Y = X \/ {x} & (the InternalRel of R)-Seg x c= X holds Y is lower
+  for R being RelStr, X being lower Subset of R, Y being Subset of
+  R, x being set st Y = X \/ {x} & (the InternalRel of R)-Seg x c= X holds Y is
+  lower
 proof
   let R be RelStr, X be lower Subset of R, Y be Subset of R, x be set;
   set r = the InternalRel of R;
-  assume
-A1: Y = X \/ {x} & r-Seg x c= X;
+  assume that
+A1: Y = X \/ {x} and
+A2: r-Seg x c= X;
   let z, y be set;
-  assume
-A2: z in Y & [y, z] in r;
-  per cases by A1,A2,XBOOLE_0:def 3;
-  suppose z in X;
-    then y in X by A2,Def1;
+  assume that
+A3: z in Y and
+A4: [y, z] in r;
+  per cases by A1,A3,XBOOLE_0:def 3;
+  suppose
+    z in X;
+    then y in X by A4,Def1;
     hence thesis by A1,XBOOLE_0:def 3;
-  end;
-  suppose z in {x} & y = z;
-    hence thesis by A2;
   end;
   suppose
-A3: z in {x} & y <> z;
+    z in {x} & y = z;
+    hence thesis by A3;
+  end;
+  suppose
+A5: z in {x} & y <> z;
     then z = x by TARSKI:def 1;
-    then y in r-Seg x by A2,A3,WELLORD1:def 1;
-    hence thesis by A1,XBOOLE_0:def 3;
+    then y in r-Seg x by A4,A5,WELLORD1:def 1;
+    hence thesis by A1,A2,XBOOLE_0:def 3;
   end;
 end;
 
@@ -192,7 +197,8 @@ definition
   let R be RelStr;
   attr R is well_founded means
   :Def2:
-  the InternalRel of R is_well_founded_in the carrier of R;
+  the InternalRel of R is_well_founded_in
+  the carrier of R;
 end;
 
 registration
@@ -203,15 +209,16 @@ registration
     take R = RelStr(#{{}}, er#);
     thus R is non empty;
     let Y be set;
-    assume Y c= the carrier of R & Y <> {};
-    then
-A1: Y = {{}} by ZFMISC_1:39;
+    assume
+A1: Y c= the carrier of R & Y <> {};
     take e = {};
-    thus e in Y by A1,TARSKI:def 1;
-    assume (the InternalRel of R)-Seg e /\ Y <> {};
+    Y = {{}} by A1,ZFMISC_1:39;
+    hence e in Y by TARSKI:def 1;
+    assume
+    (the InternalRel of R)-Seg e /\ Y <> {};
     then consider x being set such that
 A2: x in (the InternalRel of R)-Seg e /\ Y by XBOOLE_0:def 1;
-    x in (the InternalRel of R)-Seg e & x in Y by A2,XBOOLE_0:def 4;
+    x in (the InternalRel of R)-Seg e by A2,XBOOLE_0:def 4;
     hence contradiction by WELLORD1:def 1;
   end;
 end;
@@ -220,7 +227,8 @@ definition
   let R be RelStr, X be Subset of R;
   attr X is well_founded means
   :Def3:
-  the InternalRel of R is_well_founded_in X;
+  the InternalRel of R is_well_founded_in
+  X;
 end;
 
 registration
@@ -231,7 +239,8 @@ registration
     reconsider e = {} as Subset of R by XBOOLE_1:2;
     take e;
     let Y be set;
-    assume Y c= e & Y <> {};
+    assume
+    Y c= e & Y <> {};
     hence thesis;
   end;
 end;
@@ -240,14 +249,16 @@ definition
   let R be RelStr;
   func well_founded-Part R -> Subset of R means
   :Def4:
-  it = union {S where S is Subset of R : S is well_founded lower};
+  it = union {S where S
+  is Subset of R : S is well_founded lower};
   existence
   proof
     set IT = {S where S is Subset of R : S is well_founded lower};
     IT c= bool the carrier of R
     proof
       let x be set;
-      assume x in IT;
+      assume
+      x in IT;
       then ex S being Subset of R st x = S & S is well_founded lower;
       hence thesis;
     end;
@@ -263,47 +274,55 @@ registration
   cluster well_founded-Part R -> lower well_founded;
   coherence
   proof
-    set wfp = well_founded-Part R, r = the InternalRel of R,
-    IT = {S where S is Subset of R : S is well_founded lower};
+    set wfp = well_founded-Part R, r = the InternalRel of R, IT = {S where S
+    is Subset of R : S is well_founded lower};
 A1: wfp = union IT by Def4;
     hereby
       let x, y be set;
-      assume
-A2:   x in wfp & [y, x] in r;
-      then consider Y being set such that
-A3:   x in Y & Y in IT by A1,TARSKI:def 4;
+      assume that
+A2:   x in wfp and
+A3:   [y, x] in r;
+      consider Y being set such that
+A4:   x in Y and
+A5:   Y in IT by A1,A2,TARSKI:def 4;
       consider S being Subset of R such that
-A4:   Y = S & S is well_founded lower by A3;
-      y in S by A2,A3,A4,Def1;
-      hence y in wfp by A1,A3,A4,TARSKI:def 4;
+A6:   Y = S and
+A7:   S is well_founded lower by A5;
+      y in S by A3,A4,A6,A7,Def1;
+      hence y in wfp by A1,A5,A6,TARSKI:def 4;
     end;
     let Y be set;
-    assume
-A5: Y c= wfp & Y <> {};
-    then consider y being set such that
-A6: y in Y by XBOOLE_0:def 1;
+    assume that
+A8: Y c= wfp and
+A9: Y <> {};
+    consider y being set such that
+A10: y in Y by A9,XBOOLE_0:def 1;
     consider YY being set such that
-A7: y in YY & YY in IT by A1,A5,A6,TARSKI:def 4;
+A11: y in YY and
+A12: YY in IT by A1,A8,A10,TARSKI:def 4;
     consider S being Subset of R such that
-A8: YY = S & S is well_founded lower by A7;
-A9: r is_well_founded_in S by A8,Def3;
+A13: YY = S and
+A14: S is well_founded lower by A12;
     set YS = Y /\ S;
-    YS c= S & YS <> {} by A6,A7,A8,XBOOLE_0:def 4,XBOOLE_1:17;
+A15: r is_well_founded_in S by A14,Def3;
+    YS c= S & YS <> {} by A10,A11,A13,XBOOLE_0:def 4,XBOOLE_1:17;
     then consider a being set such that
-A10: a in YS & r-Seg a misses YS by A9,WELLORD1:def 3;
-A11: a in Y & a in S by A10,XBOOLE_0:def 4;
+A16: a in YS and
+A17: r-Seg a misses YS by A15,WELLORD1:def 3;
+A18: a in Y by A16,XBOOLE_0:def 4;
+    a in S by A16,XBOOLE_0:def 4;
     then
-A12: r-Seg a /\ Y = r-Seg a /\ S /\ Y by A8,Th5,XBOOLE_1:28
+A19: r-Seg a /\ Y = r-Seg a /\ S /\ Y by A14,Th5,XBOOLE_1:28
       .= r-Seg a /\ YS by XBOOLE_1:16;
-    r-Seg a /\ YS = {} by A10,XBOOLE_0:def 7;
-    then r-Seg a misses Y by A12,XBOOLE_0:def 7;
-    hence thesis by A11;
+    r-Seg a /\ YS = {} by A17,XBOOLE_0:def 7;
+    then r-Seg a misses Y by A19,XBOOLE_0:def 7;
+    hence thesis by A18;
   end;
 end;
 
 theorem Th7:
-  for R being non empty RelStr, x be Element of R
-  holds {x} is well_founded Subset of R
+  for R being non empty RelStr, x be Element of R holds {x} is
+  well_founded Subset of R
 proof
   let R be non empty RelStr, x be Element of R;
   set r = the InternalRel of R;
@@ -311,168 +330,184 @@ proof
   sx is well_founded
   proof
     let Y be set;
-    assume
-A1: Y c= sx & Y <> {};
+    assume that
+A1: Y c= sx and
+A2: Y <> {};
     take x;
-    Y = sx by A1,ZFMISC_1:39;
+    Y = sx by A1,A2,ZFMISC_1:39;
     hence x in Y by TARSKI:def 1;
-    assume not thesis;
+    assume
+    not thesis;
     then consider a being set such that
-A2: a in r-Seg x /\ Y by XBOOLE_0:4;
-    a in r-Seg x & a in Y by A2,XBOOLE_0:def 4;
-    then a <> x & a = x by A1,TARSKI:def 1,WELLORD1:def 1;
-    hence contradiction;
+A3: a in r-Seg x /\ Y by XBOOLE_0:4;
+    a in r-Seg x by A3,XBOOLE_0:def 4;
+    then
+A4: a <> x by WELLORD1:def 1;
+    a in Y by A3,XBOOLE_0:def 4;
+    hence contradiction by A1,A4,TARSKI:def 1;
   end;
   hence thesis;
 end;
 
 theorem Th8:
-  for R being RelStr, X, Y being well_founded Subset of R
-  st X is lower holds X \/ Y is well_founded Subset of R
+  for R being RelStr, X, Y being well_founded Subset of R st X is
+  lower holds X \/ Y is well_founded Subset of R
 proof
   let R be RelStr, X, Y be well_founded Subset of R;
   set r = the InternalRel of R;
   assume
 A1: X is lower;
-A2: r is_well_founded_in X by Def3;
-A3: r is_well_founded_in Y by Def3;
   reconsider XY = X \/ Y as Subset of R;
+A2: r is_well_founded_in Y by Def3;
+A3: r is_well_founded_in X by Def3;
   XY is well_founded
   proof
     let Z be set such that
-A4: Z c= XY & Z <> {};
+A4: Z c= XY and
+A5: Z <> {};
     set XZ = X /\ Z;
-A5: XZ c= X by XBOOLE_1:17;
+A6: XZ c= X by XBOOLE_1:17;
     per cases;
-    suppose XZ = {};
+    suppose
+      XZ = {};
       then X misses Z by XBOOLE_0:def 7;
       then Z c= Y by A4,XBOOLE_1:73;
-      hence thesis by A3,A4,WELLORD1:def 3;
+      hence thesis by A2,A5,WELLORD1:def 3;
     end;
-    suppose XZ <> {};
+    suppose
+      XZ <> {};
       then consider a being set such that
-A6:   a in XZ & r-Seg a misses XZ by A2,A5,WELLORD1:def 3;
+A7:   a in XZ and
+A8:   r-Seg a misses XZ by A3,A6,WELLORD1:def 3;
+A9:   a in X by A7,XBOOLE_0:def 4;
       take a;
-      thus a in Z by A6,XBOOLE_0:def 4;
-      assume r-Seg a /\ Z <> {};
+      thus a in Z by A7,XBOOLE_0:def 4;
+      assume
+      r-Seg a /\ Z <> {};
       then consider b being set such that
-A7:   b in r-Seg a /\ Z by XBOOLE_0:def 1;
-A8:   b in r-Seg a & b in Z by A7,XBOOLE_0:def 4;
-      then
-A9:   b <> a & [b,a] in r by WELLORD1:def 1;
-      a in X by A6,XBOOLE_0:def 4;
+A10:  b in r-Seg a /\ Z by XBOOLE_0:def 1;
+A11:  b in Z by A10,XBOOLE_0:def 4;
+A12:  b in r-Seg a by A10,XBOOLE_0:def 4;
+      then [b,a] in r by WELLORD1:def 1;
       then b in X by A1,A9,Def1;
-      then b in XZ by A8,XBOOLE_0:def 4;
-      hence contradiction by A6,A8,XBOOLE_0:3;
+      then b in XZ by A11,XBOOLE_0:def 4;
+      hence contradiction by A8,A12,XBOOLE_0:3;
     end;
   end;
   hence thesis;
 end;
 
 theorem Th9:
-  for R being RelStr
-  holds R is well_founded iff well_founded-Part R = the carrier of R
+  for R being RelStr holds R is well_founded iff well_founded-Part
+  R = the carrier of R
 proof
   let R be RelStr;
-  set r = the InternalRel of R, c = the carrier of R,
-  wfp = well_founded-Part R;
+  set r = the InternalRel of R, c = the carrier of R, wfp = well_founded-Part
+  R;
+  set IT = {S where S is Subset of R : S is well_founded lower};
   c c= c;
   then reconsider cs = c as Subset of R;
-  set IT = {S where S is Subset of R : S is well_founded lower};
 A1: wfp = union IT by Def4;
   hereby
-    assume
-A2: R is well_founded;
-A3: cs is lower
+A2: cs is lower
     proof
-      let x, y be set; thus thesis by ZFMISC_1:106;
+      let x, y be set;
+      thus thesis by ZFMISC_1:106;
     end;
-    r is_well_founded_in cs by A2,Def2;
+    assume
+    R is well_founded;
+    then r is_well_founded_in cs by Def2;
     then cs is well_founded by Def3;
-    then cs in IT by A3;
+    then cs in IT by A2;
     then cs c= wfp by A1,ZFMISC_1:92;
     hence wfp = c by XBOOLE_0:def 10;
   end;
   assume
-A4: wfp = c;
+A3: wfp = c;
   let Y be set;
-  assume
-A5: Y c= c & Y <> {};
-  then consider y being set such that
-A6: y in Y by XBOOLE_0:def 1;
+  assume that
+A4: Y c= c and
+A5: Y <> {};
+  consider y being set such that
+A6: y in Y by A5,XBOOLE_0:def 1;
   consider YY being set such that
-A7: y in YY & YY in IT by A1,A4,A5,A6,TARSKI:def 4;
+A7: y in YY and
+A8: YY in IT by A1,A3,A4,A6,TARSKI:def 4;
   consider S being Subset of R such that
-A8: YY = S & S is well_founded lower by A7;
-A9: r is_well_founded_in S by A8,Def3;
+A9: YY = S and
+A10: S is well_founded lower by A8;
   set YS = Y /\ S;
-  YS c= S & YS <> {} by A6,A7,A8,XBOOLE_0:def 4,XBOOLE_1:17;
+A11: r is_well_founded_in S by A10,Def3;
+  YS c= S & YS <> {} by A6,A7,A9,XBOOLE_0:def 4,XBOOLE_1:17;
   then consider a being set such that
-A10: a in YS & r-Seg a misses YS by A9,WELLORD1:def 3;
-A11: r-Seg a /\ YS = {} by A10,XBOOLE_0:def 7;
-A12: a in Y & a in S by A10,XBOOLE_0:def 4;
-  then r-Seg a /\ Y = r-Seg a /\ S /\ Y by A8,Th5,XBOOLE_1:28
+A12: a in YS and
+A13: r-Seg a misses YS by A11,WELLORD1:def 3;
+A14: a in Y by A12,XBOOLE_0:def 4;
+  a in S by A12,XBOOLE_0:def 4;
+  then
+A15: r-Seg a /\ Y = r-Seg a /\ S /\ Y by A10,Th5,XBOOLE_1:28
     .= r-Seg a /\ YS by XBOOLE_1:16;
-  then r-Seg a misses Y by A11,XBOOLE_0:def 7;
-  hence thesis by A12;
+  r-Seg a /\ YS = {} by A13,XBOOLE_0:def 7;
+  then r-Seg a misses Y by A15,XBOOLE_0:def 7;
+  hence thesis by A14;
 end;
 
 theorem Th10:
-  for R being non empty RelStr, x being Element of R
-  st (the InternalRel of R)-Seg x c= well_founded-Part R
-  holds x in well_founded-Part R
+  for R being non empty RelStr, x being Element of R st (the
+  InternalRel of R)-Seg x c= well_founded-Part R holds x in well_founded-Part R
 proof
   let R be non empty RelStr, x be Element of R;
-  set wfp = well_founded-Part R,
-  IT = {S where S is Subset of R : S is well_founded lower},
-  xwfp = wfp \/ {x};
+  set wfp = well_founded-Part R, IT = {S where S is Subset of R : S is
+  well_founded lower}, xwfp = wfp \/ {x};
 A1: wfp = union IT by Def4;
   x in {x} by TARSKI:def 1;
   then
 A2: x in xwfp by XBOOLE_0:def 3;
   reconsider xwfp as Subset of R;
-  assume (the InternalRel of R)-Seg x c= wfp;
-  then
-A3: xwfp is lower by Th6;
   {x} is well_founded Subset of R by Th7;
-  then xwfp is well_founded by Th8;
+  then
+A3: xwfp is well_founded by Th8;
+  assume
+  (the InternalRel of R)-Seg x c= wfp;
+  then xwfp is lower by Th6;
   then xwfp in IT by A3;
   hence thesis by A1,A2,TARSKI:def 4;
 end;
 
 :: Well-founded induction
 
-scheme WFMin {R() -> non empty RelStr, x() -> Element of R(), P[set]}:
-  ex x being Element of R() st P[x] & not ex y being Element of R()
-  st x <> y & P[y] & [y,x] in the InternalRel of R()
+scheme
+  WFMin {R() -> non empty RelStr, x() -> Element of R(), P[set]}: ex x being
+Element of R() st P[x] & not ex y being Element of R() st x <> y & P[y] & [y,x]
+  in the InternalRel of R()
 provided
-A1: P[x()]
-and
+A1: P[x()] and
 A2: R() is well_founded
 proof
-  set c = the carrier of R(), r = the InternalRel of R(),
-  Z = {x where x is Element of c: P[x]};
-A3: Z is Subset of c from DOMAIN_1:sch 7;
-  x() in Z by A1;
+  set c = the carrier of R(), r = the InternalRel of R(), Z = {x where x is
+  Element of c: P[x]};
+A3: x() in Z by A1;
+  Z is Subset of c from DOMAIN_1:sch 7;
   then reconsider Z as non empty Subset of c by A3;
   r is_well_founded_in c by A2,Def2;
   then consider a being set such that
-A4: a in Z & r-Seg a misses Z by WELLORD1:def 3;
+A4: a in Z and
+A5: r-Seg a misses Z by WELLORD1:def 3;
   reconsider a as Element of R() by A4;
   take a;
   ex a' being Element of c st a' = a & P[a'] by A4;
   hence P[a];
   given y being Element of R() such that
-A5: a <> y & P[y] & [y,a] in r;
-  y in Z & y in r-Seg a by A5,WELLORD1:def 1;
-  hence contradiction by A4,XBOOLE_0:3;
+A6: a <> y & P[y] & [y,a] in r;
+  y in Z & y in r-Seg a by A6,WELLORD1:def 1;
+  hence contradiction by A5,XBOOLE_0:3;
 end;
+:: WF iff WFInduction
 
-theorem Th11: :: WF iff WFInduction
-  for R being non empty RelStr holds R is well_founded iff for S being set
-  st for x being Element of R
-  st (the InternalRel of R)-Seg x c= S holds x in S
-  holds the carrier of R c= S
+theorem Th11:
+  for R being non empty RelStr holds R is well_founded iff for S
+  being set st for x being Element of R st (the InternalRel of R)-Seg x c= S
+  holds x in S holds the carrier of R c= S
 proof
   let R be non empty RelStr;
   set c = the carrier of R, r = the InternalRel of R;
@@ -481,511 +516,556 @@ proof
 A1: R is well_founded;
     let S be set such that
 A2: for x being Element of c st r-Seg x c= S holds x in S;
-    assume not c c= S;
-    then consider x being set such that
-A3: x in c & not x in S by TARSKI:def 3;
-    reconsider x as Element of R by A3;
     defpred P[set] means $1 in c & not $1 in S;
-A4: P[x] by A3;
+    assume
+    not c c= S;
+    then consider x being set such that
+A3: x in c and
+A4: not x in S by TARSKI:def 3;
+    reconsider x as Element of R by A3;
+A5: P[x] by A4;
     consider x0 being Element of R such that
-A5: P[x0] and
-A6: not ex y being Element of R
-    st x0 <> y & P[y] & [y,x0] in r from WFMin(A4, A1);
+A6: P[x0] and
+A7: not ex y being Element of R st x0 <> y & P[y] & [y,x0] in r from
+    WFMin(A5, A1);
     now
-      assume not r-Seg x0 c= S;
+      assume
+      not r-Seg x0 c= S;
       then consider z being set such that
-A7:   z in r-Seg x0 & not z in S by TARSKI:def 3;
-A8:   x0 <> z & [z, x0] in r by A7,WELLORD1:def 1;
+A8:   z in r-Seg x0 and
+A9:   not z in S by TARSKI:def 3;
+A10:  x0 <> z by A8,WELLORD1:def 1;
+A11:  [z, x0] in r by A8,WELLORD1:def 1;
       then reconsider z as Element of R by ZFMISC_1:106;
       z = z;
-      hence contradiction by A6,A7,A8;
+      hence contradiction by A7,A9,A10,A11;
     end;
-    hence contradiction by A2,A5;
+    hence contradiction by A2,A6;
   end;
   assume
-A9: for S being set st for x being Element of c st r-Seg x c= S holds x in S
-  holds c c= S;
-  assume not R is well_founded;
+A12: for S being set st for x being Element of c st r-Seg x c= S holds x
+  in S holds c c= S;
+  assume
+  not R is well_founded;
   then not r is_well_founded_in c by Def2;
   then consider Y being set such that
-A10: Y c= c & Y <> {} and
-A11: not ex a being set st a in Y & r-Seg a misses Y by WELLORD1:def 3;
+A13: Y c= c & Y <> {} and
+A14: not ex a being set st a in Y & r-Seg a misses Y by WELLORD1:def
+  3;
   now
     let x be Element of c such that
-A12: r-Seg x c= c\Y;
-    assume not x in c\Y;
+A15: r-Seg x c= c\Y;
+    assume
+    not x in c\Y;
     then x in Y by XBOOLE_0:def 5;
-    then r-Seg x meets Y by A11;
-    then consider z being set such that
-A13: z in r-Seg x & z in Y by XBOOLE_0:3;
-    thus contradiction by A12,A13,XBOOLE_0:def 5;
+    then r-Seg x meets Y by A14;
+    then ex z being set st z in r-Seg x & z in Y by XBOOLE_0:3;
+    hence contradiction by A15,XBOOLE_0:def 5;
   end;
-  then c c= c\Y by A9;
-  hence contradiction by A10,XBOOLE_1:1,38;
+  then c c= c\Y by A12;
+  hence contradiction by A13,XBOOLE_1:1,38;
 end;
 
-scheme WFInduction {R() -> non empty RelStr, P[set]}:
-  for x being Element of R() holds P[x]
+scheme
+  WFInduction {R() -> non empty RelStr, P[set]}: for x being Element of R()
+  holds P[x]
 provided
-A1: for x being Element of R() st for y being Element of R()
-st y <> x & [y,x] in the InternalRel of R() holds P[y] holds P[x]
-and
+A1: for x being Element of R() st for y being Element of R() st y <> x &
+[y,x] in the InternalRel of R() holds P[y] holds P[x] and
 A2: R() is well_founded
 proof
-  set c = the carrier of R(), r = the InternalRel of R(),
-  Z = {x where x is Element of c: P[x]};
+  set c = the carrier of R(), r = the InternalRel of R(), Z = {x where x is
+  Element of c: P[x]};
   now
     let x be Element of c such that
 A3: r-Seg x c= Z;
     reconsider x' = x as Element of R();
     now
       let y' be Element of R();
-      assume y' <> x' & [y',x'] in r;
+      assume
+      y' <> x' & [y',x'] in r;
       then y' in r-Seg x' by WELLORD1:def 1;
       then y' in Z by A3;
-      then consider y being Element of c such that
-A4:   y = y' & P[y];
-      thus P[y'] by A4;
+      then ex y being Element of c st y = y' & P[y];
+      hence P[y'];
     end;
     then P[x'] by A1;
     hence x in Z;
   end;
   then
-A5: c c= Z by A2,Th11;
+A4: c c= Z by A2,Th11;
   let x be Element of R();
   x in c;
-  then x in Z by A5;
-  then consider x' being Element of c such that
-A6: x = x' & P[x'];
-  thus thesis by A6;
+  then x in Z by A4;
+  then ex x' being Element of c st x = x' & P[x'];
+  hence thesis;
 end;
 
 :: Well-foundedness and recursive definitions
 
 definition
-  let R be non empty RelStr, V be non empty set, H be Function of
-  [:the carrier of R, PFuncs(the carrier of R, V):], V, F be Function;
+  let R be non empty RelStr, V be non empty set, H be Function of [:the
+  carrier of R, PFuncs(the carrier of R, V):], V, F be Function;
   pred F is_recursively_expressed_by H means
   :Def5:
   for x being Element of R
   holds F.x = H.(x, F|(the InternalRel of R)-Seg x);
 end;
+:: Well foundedness and existence
 
-theorem :: Well foundedness and existence
-  for R being non empty RelStr holds R is well_founded iff
-  for V being non empty set, H being Function of
-  [:the carrier of R, PFuncs(the carrier of R, V):], V
-  ex F being Function of the carrier of R, V
-  st F is_recursively_expressed_by H
+theorem
+  for R being non empty RelStr holds R is well_founded iff for V being
+non empty set, H being Function of [:the carrier of R, PFuncs(the carrier of R,
+  V):], V ex F being Function of the carrier of R, V st F
+  is_recursively_expressed_by H
 proof
   let R be non empty RelStr;
   set c = the carrier of R, r = the InternalRel of R;
-  defpred PDR[ ] means for V being non empty set,
-  H being Function of [:c, PFuncs(c, V):], V ex F being Function of c, V
-  st F is_recursively_expressed_by H;
-  thus R is well_founded implies PDR[ ]
-  proof
-    assume
-A1: R is well_founded;
-    let V be non empty set, H be Function of [:c, PFuncs(c, V):], V;
-    defpred P[PartFunc of c, V] means dom $1 is lower &
-    for x being set st x in dom $1 holds $1.x = H.[x, $1 | r-Seg x];
-    consider fs being Subset of PFuncs(c, V) such that
-A2: for f being PartFunc of c, V holds f in fs iff P[f] from PFSeparation;
-    now
-      let f, g be Function;
-      assume
-A3:   f in fs & g in fs;
-      then reconsider ff = f, gg = g as PartFunc of c,V by PARTFUN1:120;
-      assume not f tolerates g;
-      then consider x being set such that
-A4:   x in dom ff /\ dom gg & ff.x <> gg.x by PARTFUN1:def 6;
-      reconsider x as Element of R by A4;
-      defpred P[set] means $1 in dom ff & $1 in dom gg & ff.$1 <> gg.$1;
-A5:   P[x] by A4,XBOOLE_0:def 4;
-      consider x0 being Element of R such that
-A6:   P[x0] and
-A7:   not ex y being Element of R
-      st x0 <> y & P[y] & [y,x0] in the InternalRel of R from WFMin(A5, A1);
-      ff | r-Seg x0 = gg | r-Seg x0
-      proof
-        set fr = ff | r-Seg x0, gr = gg | r-Seg x0;
-        assume
-A8:     not thesis;
-A9:     dom ff is lower by A2,A3;
-        then
-A10:    dom fr = r-Seg x0 by A6,Th5,RELAT_1:91;
-A11:    dom gg is lower by A2,A3;
-        then dom fr = dom gr by A6,A10,Th5,RELAT_1:91;
-        then consider x1 being set such that
-A12:    x1 in dom fr & fr.x1 <> gr.x1 by A8,FUNCT_1:9;
-A13:    [x1, x0] in r by A10,A12,WELLORD1:def 1;
-        reconsider x1 as Element of R by A12;
-A14:    fr.x1 = ff.x1 & gr.x1 = gg.x1 by A10,A12,FUNCT_1:72;
-A15:    x1 <> x0 by A10,A12,WELLORD1:def 1;
-        x1 in dom ff & x1 in dom gg by A6,A9,A11,A13,Def1;
-        hence contradiction by A7,A12,A13,A14,A15;
-      end;
-      then ff.x0 = H.[x0, gg | r-Seg x0] by A2,A3,A6
-        .= gg.x0 by A2,A3,A6;
-      hence contradiction by A6;
-    end;
-    then reconsider ufs=union fs as Function by Th2;
-A16: dom ufs c= c
-    proof
-      let y be set;
-      assume y in dom ufs;
-      then [y, ufs.y] in ufs by FUNCT_1:8;
-      then consider fx being set such that
-A17:  [y, ufs.y] in fx & fx in fs by TARSKI:def 4;
-      consider ff being Function such that
-A18:  ff = fx & dom ff c= c & rng ff c= V by A17,PARTFUN1:def 5;
-      y in dom ff by A17,A18,RELAT_1:def 4;
-      hence thesis by A18;
-    end;
-A19: rng ufs c= V
-    proof
-      let y be set;
-      assume y in rng ufs;
-      then consider x being set such that
-A20:  x in dom ufs & y = ufs.x by FUNCT_1:def 5;
-      [x, y] in ufs by A20,FUNCT_1:8;
-      then consider fx being set such that
-A21:  [x, y] in fx & fx in fs by TARSKI:def 4;
-      consider ff being Function such that
-A22:  ff = fx & dom ff c= c & rng ff c= V by A21,PARTFUN1:def 5;
-      y in rng ff by A21,A22,RELAT_1:def 5;
-      hence thesis by A22;
-    end;
-A23: now
-      let x be set;
-      assume x in dom ufs;
-      then [x, ufs.x] in ufs by FUNCT_1:8;
-      then consider fx being set such that
-A24:  [x, ufs.x] in fx & fx in fs by TARSKI:def 4;
-      reconsider ff = fx as PartFunc of c, V by A24,PARTFUN1:120;
-A25:  x in dom ff by A24,FUNCT_1:8;
-A26:  dom ff is lower by A2,A24;
-A27:  ff c= ufs by A24,ZFMISC_1:92;
-      thus ufs.x = ff.x by A24,FUNCT_1:8
-        .= H.[x, ff | r-Seg x] by A2,A24,A25
-        .= H.[x, ufs | r-Seg x] by A25,A26,A27,Th5,GRFUNC_1:95;
-    end;
-A28: now
-      let x, y be set;
-      assume
-A29:  x in dom ufs & [y, x] in r;
-      then [x, ufs.x] in ufs by FUNCT_1:8;
-      then consider fx being set such that
-A30:  [x, ufs.x] in fx & fx in fs by TARSKI:def 4;
-      reconsider ff = fx as PartFunc of c, V by A30,PARTFUN1:120;
-A31:  dom ff is lower by A2,A30;
-      x in dom ff by A30,FUNCT_1:8;
-      then
-A32:  y in dom ff by A29,A31,Def1;
-      ff c= ufs by A30,ZFMISC_1:92;
-      then dom ff c= dom ufs by GRFUNC_1:8;
-      hence y in dom ufs by A32;
-    end;
-A33: dom ufs = c
-    proof
-      assume dom ufs <> c;
-      then consider x being set such that
-A34:  not (x in dom ufs iff x in c) by TARSKI:2;
-      reconsider x as Element of R by A16,A34;
-      defpred P[set] means $1 in c & not $1 in dom ufs;
-A35:  P[x] by A34;
-      consider x0 being Element of R such that
-A36:  P[x0] and
-A37:  not ex y being Element of R
-      st x0 <> y & P[y] & [y,x0] in the InternalRel of R from WFMin(A35, A1);
-      set nv = x0 .--> H.[x0, ufs | r-Seg x0], nf = ufs +* nv;
-A38:  dom nf = dom ufs \/ dom nv by FUNCT_4:def 1;
-A39:  dom nv = {x0} by FUNCOP_1:19;
-      then x0 in dom nv by TARSKI:def 1;
-      then x0 in dom nf by A38,XBOOLE_0:def 3;
-      then
-A40:  [x0, nf.x0] in nf by FUNCT_1:8;
-A41:  dom nf c= c
-      proof
-        let x be set;
-        assume
-A42:    x in dom nf & not x in c;
-        then not x in dom ufs by A16;
-        then x in dom nv by A38,A42,XBOOLE_0:def 3;
-        hence contradiction by A39,A42;
-      end;
-      rng nf c= V
-      proof
-        let x be set;
-        assume
-A43:    x in rng nf;
-A44:    rng nf c= rng ufs \/ rng nv by FUNCT_4:18;
-        assume
-A45:    not x in V;
-        then not x in rng ufs by A19;
-        then
-A46:    x in rng nv by A43,A44,XBOOLE_0:def 3;
-        rng nv = {H.[x0, ufs | r-Seg x0]} by FUNCOP_1:14;
-        then
-A47:    x = H.(x0, ufs | r-Seg x0) by A46,TARSKI:def 1;
-        ufs in PFuncs(c, V) by A16,A19,PARTFUN1:def 5;
-        then ufs is PartFunc of c, V by PARTFUN1:120;
-        then ufs | r-Seg x0 is PartFunc of c, V by PARTFUN1:44;
-        then ufs | r-Seg x0 in PFuncs(c, V) by PARTFUN1:119;
-        hence contradiction by A45,A47,BINOP_1:29;
-      end;
-      then nf in PFuncs(c, V) by A41,PARTFUN1:def 5;
-      then reconsider nf as PartFunc of c, V by PARTFUN1:120;
-A48:  dom nf is lower
-      proof
-        let x, y be set;
-        assume
-A49:    x in dom nf & [y,x] in r;
-        assume
-A50:    not y in dom nf;
-        then
-A51:    not y in dom ufs by A38,XBOOLE_0:def 3;
-        then not x in dom ufs by A28,A49;
-        then x in dom nv by A38,A49,XBOOLE_0:def 3;
-        then
-A52:    x = x0 by A39,TARSKI:def 1;
-        reconsider y as Element of R by A49,ZFMISC_1:106;
-        not y in dom nv by A38,A50,XBOOLE_0:def 3;
-        then y <> x0 by A39,TARSKI:def 1;
-        hence contradiction by A37,A49,A51,A52;
-      end;
-      now
-        let x be set;
-        assume
-A53:    x in dom nf;
-        per cases by A38,A53,XBOOLE_0:def 3;
-        suppose
-A54:      x in dom ufs;
-          then
-A55:      not x in dom nv by A36,A39,TARSKI:def 1;
-A56:      {x0} misses r-Seg x
-          proof
-            assume {x0} meets r-Seg x;
-            then consider y being set such that
-A57:        y in {x0} & y in r-Seg x by XBOOLE_0:3;
-            y = x0 by A57,TARSKI:def 1;
-            then [x0, x] in r by A57,WELLORD1:def 1;
-            hence contradiction by A28,A36,A54;
-          end;
-          thus nf.x = ufs.x by A55,FUNCT_4:12
-            .= H.[x, ufs | r-Seg x] by A23,A54
-            .= H.[x, nf | r-Seg x] by A39,A56,FUNCT_4:76;
-        end;
-        suppose
-A58:      x in dom nv;
-          then
-A59:      x = x0 by A39,TARSKI:def 1;
-A60:      {x0} misses r-Seg x0
-          proof
-            assume {x0} meets r-Seg x0;
-            then consider x being set such that
-A61:        x in {x0} & x in r-Seg x0 by XBOOLE_0:3;
-            x = x0 by A61,TARSKI:def 1;
-            hence contradiction by A61,WELLORD1:def 1;
-          end;
-          thus nf.x = nv.x0 by A58,A59,FUNCT_4:14
-            .= H.[x0, ufs | r-Seg x0] by FUNCOP_1:87
-            .= H.[x, nf | r-Seg x] by A39,A59,A60,FUNCT_4:76;
-        end;
-      end;
-      then nf in fs by A2,A48;
-      then [x0, nf.x0] in ufs by A40,TARSKI:def 4;
-      hence contradiction by A36,FUNCT_1:8;
-    end;
-    then reconsider ufs as Function of c, V by A19,FUNCT_2:def 1,RELSET_1:11;
-    take ufs;
-    let x be Element of c;
-    thus thesis by A23,A33;
-  end;
-  assume
-A62: PDR[ ];
+  defpred PDR[ ] means for V being non empty set, H being Function of [:c,
+PFuncs(c, V):], V ex F being Function of c, V st F is_recursively_expressed_by
+  H;
   reconsider ac = omega +` card c as infinite Cardinal;
   set V = nextcard ac;
   deffunc F(Element of c, Element of PFuncs(c, V)) = sup rng $2;
-A63: for x being Element of c, p being Element of PFuncs(c, V)
-  holds F(x,p) in V
+A1: for x being Element of c, p being Element of PFuncs(c, V) holds F(x,p)
+  in V
   proof
     let x be Element of c, p be Element of PFuncs(c, V);
     card dom p c= card c & card rng p c= card dom p by CARD_1:27,28;
     then
-A64: card rng p c= card c by XBOOLE_1:1;
+A2: card rng p c= card c by XBOOLE_1:1;
     card c c= ac by CARD_3:140;
-    then card rng p c= ac by A64,XBOOLE_1:1;
+    then card rng p c= ac by A2,XBOOLE_1:1;
     then
-A65: card rng p in V by CARD_1:32,ORDINAL1:22;
+A3: card rng p in V by CARD_1:32,ORDINAL1:22;
     V is regular by CARD_5:42;
-    hence thesis by A65,Th3;
+    hence thesis by A3,Th3;
   end;
   consider H being Function of [:c, PFuncs(c, V):], V such that
-A66: for x being Element of c, p being Element of PFuncs(c, V)
-  holds H.(x,p) = F(x,p) from FUNCT_7:sch 1(A63);
-  consider rk being Function of c, V such that
-A67: rk is_recursively_expressed_by H by A62;
-A68: dom rk = c by FUNCT_2:def 1;
-  let Y be set;
+A4: for x being Element of c, p being Element of PFuncs(c, V) holds H.
+  (x,p) = F(x,p) from FUNCT_7:sch 1(A1);
+  thus R is well_founded implies PDR[ ]
+  proof
+    assume
+A5: R is well_founded;
+    let V be non empty set, H be Function of [:c, PFuncs(c, V):], V;
+    defpred P[PartFunc of c, V] means dom $1 is lower & for x being set st x
+    in dom $1 holds $1.x = H.[x, $1 | r-Seg x];
+    consider fs being Subset of PFuncs(c, V) such that
+A6: for f being PartFunc of c, V holds f in fs iff P[f] from
+    PFSeparation;
+    now
+      let f, g be Function;
+      assume that
+A7:   f in fs and
+A8:   g in fs;
+      reconsider ff = f, gg = g as PartFunc of c,V by A7,A8,PARTFUN1:120;
+      defpred P[set] means $1 in dom ff & $1 in dom gg & ff.$1 <> gg.$1;
+      assume
+      not f tolerates g;
+      then consider x being set such that
+A9:   x in dom ff /\ dom gg and
+A10:  ff.x <> gg.x by PARTFUN1:def 6;
+      reconsider x as Element of R by A9;
+A11:  P[x] by A9,A10,XBOOLE_0:def 4;
+      consider x0 being Element of R such that
+A12:  P[x0] and
+A13:  not ex y being Element of R st x0 <> y & P[y] & [y,x0] in the
+      InternalRel of R from WFMin(A11, A5 );
+      ff | r-Seg x0 = gg | r-Seg x0
+      proof
+        set fr = ff | r-Seg x0, gr = gg | r-Seg x0;
+        assume
+A14:    not thesis;
+A15:    dom ff is lower by A6,A7;
+        then
+A16:    dom fr = r-Seg x0 by A12,Th5,RELAT_1:91;
+A17:    dom gg is lower by A6,A8;
+        then dom fr = dom gr by A12,A16,Th5,RELAT_1:91;
+        then consider x1 being set such that
+A18:    x1 in dom fr and
+A19:    fr.x1 <> gr.x1 by A14,FUNCT_1:9;
+A20:    [x1, x0] in r by A16,A18,WELLORD1:def 1;
+        reconsider x1 as Element of R by A18;
+A21:    fr.x1 = ff.x1 & gr.x1 = gg.x1 by A16,A18,FUNCT_1:72;
+A22:    x1 <> x0 by A16,A18,WELLORD1:def 1;
+A23:    x1 in dom gg by A12,A17,A20,Def1;
+        x1 in dom ff by A12,A15,A20,Def1;
+        hence contradiction by A13,A19,A20,A21,A22,A23;
+      end;
+      then ff.x0 = H.[x0, gg | r-Seg x0] by A6,A7,A12
+        .= gg.x0 by A6,A8,A12;
+      hence contradiction by A12;
+    end;
+    then reconsider ufs=union fs as Function by Th2;
+A24: now
+      let x be set;
+      assume
+      x in dom ufs;
+      then [x, ufs.x] in ufs by FUNCT_1:8;
+      then consider fx being set such that
+A25:  [x, ufs.x] in fx and
+A26:  fx in fs by TARSKI:def 4;
+      reconsider ff = fx as PartFunc of c, V by A26,PARTFUN1:120;
+A27:  x in dom ff by A25,FUNCT_1:8;
+A28:  dom ff is lower & ff c= ufs by A6,A26,ZFMISC_1:92;
+      thus ufs.x = ff.x by A25,FUNCT_1:8
+        .= H.[x, ff | r-Seg x] by A6,A26,A27
+        .= H.[x, ufs | r-Seg x] by A27,A28,Th5,GRFUNC_1:95;
+    end;
+A29: dom ufs c= c
+    proof
+      let y be set;
+      assume
+      y in dom ufs;
+      then [y, ufs.y] in ufs by FUNCT_1:8;
+      then consider fx being set such that
+A30:  [y, ufs.y] in fx and
+A31:  fx in fs by TARSKI:def 4;
+      consider ff being Function such that
+A32:  ff = fx and
+A33:  dom ff c= c and
+      rng ff c= V by A31,PARTFUN1:def 5;
+      y in dom ff by A30,A32,RELAT_1:def 4;
+      hence thesis by A33;
+    end;
+A34: rng ufs c= V
+    proof
+      let y be set;
+      assume
+      y in rng ufs;
+      then consider x being set such that
+A35:  x in dom ufs & y = ufs.x by FUNCT_1:def 5;
+      [x, y] in ufs by A35,FUNCT_1:8;
+      then consider fx being set such that
+A36:  [x, y] in fx and
+A37:  fx in fs by TARSKI:def 4;
+      consider ff being Function such that
+A38:  ff = fx and
+      dom ff c= c and
+A39:  rng ff c= V by A37,PARTFUN1:def 5;
+      y in rng ff by A36,A38,RELAT_1:def 5;
+      hence thesis by A39;
+    end;
+A40: now
+      let x, y be set;
+      assume that
+A41:  x in dom ufs and
+A42:  [y, x] in r;
+      [x, ufs.x] in ufs by A41,FUNCT_1:8;
+      then consider fx being set such that
+A43:  [x, ufs.x] in fx and
+A44:  fx in fs by TARSKI:def 4;
+      reconsider ff = fx as PartFunc of c, V by A44,PARTFUN1:120;
+      ff c= ufs by A44,ZFMISC_1:92;
+      then
+A45:  dom ff c= dom ufs by GRFUNC_1:8;
+      dom ff is lower & x in dom ff by A6,A43,A44,FUNCT_1:8;
+      then y in dom ff by A42,Def1;
+      hence y in dom ufs by A45;
+    end;
+A46: dom ufs = c
+    proof
+      defpred P[set] means $1 in c & not $1 in dom ufs;
+      assume
+      dom ufs <> c;
+      then consider x being set such that
+A47:  not (x in dom ufs iff x in c) by TARSKI:2;
+      reconsider x as Element of R by A29,A47;
+A48:  P[x] by A47;
+      consider x0 being Element of R such that
+A49:  P[x0] and
+A50:  not ex y being Element of R st x0 <> y & P[y] & [y,x0] in the
+      InternalRel of R from WFMin(A48, A5 );
+      set nv = x0 .--> H.[x0, ufs | r-Seg x0], nf = ufs +* nv;
+A51:  dom nv = {x0} by FUNCOP_1:19;
+A52:  rng nf c= V
+      proof
+        ufs in PFuncs(c, V) by A29,A34,PARTFUN1:def 5;
+        then ufs is PartFunc of c, V by PARTFUN1:120;
+        then ufs | r-Seg x0 is PartFunc of c, V by PARTFUN1:44;
+        then
+A53:    ufs | r-Seg x0 in PFuncs(c, V) by PARTFUN1:119;
+        let x be set;
+        assume
+A54:    x in rng nf;
+        assume
+A55:    not x in V;
+        then rng nf c= rng ufs \/ rng nv & not x in rng ufs by A34,
+        FUNCT_4
+        :18;
+        then
+A56:    x in rng nv by A54,XBOOLE_0:def 3;
+        rng nv = {H.[x0, ufs | r-Seg x0]} by FUNCOP_1:14;
+        then x = H.(x0, ufs | r-Seg x0) by A56,TARSKI:def 1;
+        hence contradiction by A55,A53,BINOP_1:29;
+      end;
+A57:  dom nf = dom ufs \/ dom nv by FUNCT_4:def 1;
+      dom nf c= c
+      proof
+        let x be set;
+        assume that
+A58:    x in dom nf and
+A59:    not x in c;
+        not x in dom ufs by A29,A59;
+        then x in dom nv by A57,A58,XBOOLE_0:def 3;
+        hence contradiction by A51,A59;
+      end;
+      then
+A60:  nf in PFuncs(c, V) by A52,PARTFUN1:def 5;
+      x0 in dom nv by A51,TARSKI:def 1;
+      then x0 in dom nf by A57,XBOOLE_0:def 3;
+      then
+A61:  [x0, nf.x0] in nf by FUNCT_1:8;
+      reconsider nf as PartFunc of c, V by A60,PARTFUN1:120;
+A62:  now
+        let x be set;
+        assume
+A63:    x in dom nf;
+        per cases by A57,A63,XBOOLE_0:def 3;
+        suppose
+A64:      x in dom ufs;
+A65:      {x0} misses r-Seg x
+          proof
+            assume
+            {x0} meets r-Seg x;
+            then consider y being set such that
+A66:        y in {x0} and
+A67:        y in r-Seg x by XBOOLE_0:3;
+            y = x0 by A66,TARSKI:def 1;
+            then [x0, x] in r by A67,WELLORD1:def 1;
+            hence contradiction by A40,A49,A64;
+          end;
+          not x in dom nv by A49,A51,A64,TARSKI:def 1;
+          hence nf.x = ufs.x by FUNCT_4:12
+            .= H.[x, ufs | r-Seg x] by A24,A64
+            .= H.[x, nf | r-Seg x] by A51,A65,FUNCT_4:76;
+        end;
+        suppose
+A68:      x in dom nv;
+A69:      {x0} misses r-Seg x0
+          proof
+            assume
+            {x0} meets r-Seg x0;
+            then consider x being set such that
+A70:        x in {x0} and
+A71:        x in r-Seg x0 by XBOOLE_0:3;
+            x = x0 by A70,TARSKI:def 1;
+            hence contradiction by A71,WELLORD1:def 1;
+          end;
+A72:      x = x0 by A51,A68,TARSKI:def 1;
+          hence nf.x = nv.x0 by A68,FUNCT_4:14
+            .= H.[x0, ufs | r-Seg x0] by FUNCOP_1:87
+            .= H.[x, nf | r-Seg x] by A51,A72,A69,FUNCT_4:76;
+        end;
+      end;
+      dom nf is lower
+      proof
+        let x, y be set;
+        assume that
+A73:    x in dom nf and
+A74:    [y,x] in r;
+        assume
+A75:    not y in dom nf;
+        then
+A76:    not y in dom ufs by A57,XBOOLE_0:def 3;
+        then not x in dom ufs by A40,A74;
+        then x in dom nv by A57,A73,XBOOLE_0:def 3;
+        then
+A77:    x = x0 by A51,TARSKI:def 1;
+        reconsider y as Element of R by A74,ZFMISC_1:106;
+        not y in dom nv by A57,A75,XBOOLE_0:def 3;
+        then y <> x0 by A51,TARSKI:def 1;
+        hence contradiction by A50,A74,A76,A77;
+      end;
+      then nf in fs by A6,A62;
+      then [x0, nf.x0] in ufs by A61,TARSKI:def 4;
+      hence contradiction by A49,FUNCT_1:8;
+    end;
+    then reconsider ufs as Function of c, V by A34,FUNCT_2:def 1,RELSET_1:11;
+    take ufs;
+    let x be Element of c;
+    thus thesis by A24,A46;
+  end;
   assume
-A69: Y c= c & Y <> {};
-  then consider b being set such that
-A70: b in Y by XBOOLE_0:def 1;
+  PDR[ ];
+  then consider rk being Function of c, V such that
+A78: rk is_recursively_expressed_by H;
+  let Y be set;
+  assume that
+A79: Y c= c and
+A80: Y <> {};
   set m = inf (rk.:Y);
-  rk.b in V by A69,A70,FUNCT_2:7;
-  then rk.b in rk.:Y & rk.b is Ordinal
-  by A68,A69,A70,FUNCT_1:def 12;
+  consider b being set such that
+A81: b in Y by A80,XBOOLE_0:def 1;
+A82: dom rk = c by FUNCT_2:def 1;
+  then rk.b in rk.:Y by A79,A81,FUNCT_1:def 12;
   then m in rk.:Y by ORDINAL2:25;
   then consider a being set such that
-A71: a in dom rk & a in Y & rk.a = m by FUNCT_1:def 12;
+A83: a in dom rk and
+A84: a in Y and
+A85: rk.a = m by FUNCT_1:def 12;
   take a;
-  thus a in Y by A71;
-  assume r-Seg(a) /\ Y <> {};
+  thus a in Y by A84;
+  assume
+  r-Seg(a) /\ Y <> {};
   then consider e being set such that
-A72: e in r-Seg(a) /\ Y by XBOOLE_0:def 1;
-A73: e in r-Seg a & e in Y by A72,XBOOLE_0:def 4;
-  then reconsider rke = rk.e as Ordinal by A69,FUNCT_2:7,ORDINAL1:23;
-  rke in rk.:Y by A68,A69,A73,FUNCT_1:def 12;
-  then
-A74: m c= rk.e by ORDINAL2:22;
-  reconsider a as Element of c by A71;
+A86: e in r-Seg(a) /\ Y by XBOOLE_0:def 1;
+A87: e in r-Seg a by A86,XBOOLE_0:def 4;
+  reconsider a as Element of c by A83;
   reconsider rkra = rk | r-Seg a as Element of PFuncs(c,V) by PARTFUN1:119;
-A75: rk.a = H.(a, rkra) by A67,Def5
-    .= sup rng rkra by A66;
-  rke in rng rkra by A68,A69,A73,FUNCT_1:73;
-  hence contradiction by A71,A74,A75,ORDINAL1:7,ORDINAL2:27;
+A88: rk.a = H.(a, rkra) by A78,Def5
+    .= sup rng rkra by A4;
+A89: e in Y by A86,XBOOLE_0:def 4;
+  then reconsider rke = rk.e as Ordinal by A79,FUNCT_2:7,ORDINAL1:23;
+  rke in rk.:Y by A82,A79,A89,FUNCT_1:def 12;
+  then
+A90: m c= rk.e by ORDINAL2:22;
+  rke in rng rkra by A82,A79,A87,A89,FUNCT_1:73;
+  hence contradiction by A85,A90,A88,ORDINAL1:7,ORDINAL2:27;
 end;
 
-theorem :: Uniqueness implies well-foundedness
-  for R being non empty RelStr, V being non trivial set
-  st for H being Function of
-  [:the carrier of R, PFuncs(the carrier of R, V):], V,
-  F1, F2 being Function of the carrier of R, V
-  st F1 is_recursively_expressed_by H & F2 is_recursively_expressed_by H
-  holds F1 = F2 holds R is well_founded
+:: Uniqueness implies well-foundedness
+
+theorem
+  for R being non empty RelStr, V being non trivial set st for H being
+Function of [:the carrier of R, PFuncs(the carrier of R, V):], V, F1, F2 being
+  Function of the carrier of R, V st F1 is_recursively_expressed_by H & F2
+  is_recursively_expressed_by H holds F1 = F2 holds R is well_founded
 proof
   let R be non empty RelStr, V be non trivial set;
-  set c = the carrier of R, r = the InternalRel of R, PF = PFuncs(c, V),
-  wfp = well_founded-Part R;
+  set c = the carrier of R, r = the InternalRel of R, PF = PFuncs(c, V), wfp =
+  well_founded-Part R;
   consider a0, a1 being set such that
-A1: a0 in V & a1 in V & a0 <> a1 by REALSET1:14;
-  set a01 = {a0, a1};
-A2: a01 c= V by A1,ZFMISC_1:38;
+A1: a0 in V and
+A2: a1 in V and
+A3: a0 <> a1 by REALSET1:14;
   set F3 = c --> a1, F4 = wfp --> a0, F2 = F3 +* F4;
-A3: dom F3 = c by FUNCOP_1:19;
-A4: dom F4 = wfp by FUNCOP_1:19;
-A5: dom F2 = dom F3 \/ dom F4 by FUNCT_4:def 1
-    .= c by A3,A4,XBOOLE_1:12;
-  reconsider F1 = c --> a0 as Function of c, V by A1,FUNCOP_1:57;
-  rng F3 \/ rng F4 c= {a0} \/ {a1} by XBOOLE_1:13;
-  then rng F3 \/ rng F4 c= a01 & rng F2 c= rng F3 \/ rng F4
-  by ENUMSET1:41,FUNCT_4:18;
-  then rng F2 c= a01 by XBOOLE_1:1;
-  then rng F2 c= V by A2,XBOOLE_1:1;
-  then reconsider F2 as Function of c, V by A5,FUNCT_2:def 1,RELSET_1:11;
-  defpred P[set,Function,set] means
-  (ex x being set st x in dom $2 & $2.x = a1) iff $3 = a1;
-A6: now
-    let x be Element of c, y be Element of PF;
+A4: dom F3 = c by FUNCOP_1:19;
+  defpred P[set,Function,set] means (ex x being set st x in dom $2 & $2.x = a1
+  ) iff $3 = a1;
+  set a01 = {a0, a1};
+A5: now
     reconsider u = a1, v = a0 as Element of a01 by TARSKI:def 2;
+    let x be Element of c, y be Element of PF;
     per cases;
     suppose
-A7:   ex x being set st x in dom y & y.x = a1;
-      take u; thus P[x,y,u] by A7;
+A6:   ex x being set st x in dom y & y.x = a1;
+      take u;
+      thus P[x,y,u] by A6;
     end;
     suppose
-A8:   not ex x being set st x in dom y & y.x = a1;
-      take v; thus P[x,y,v] by A1,A8;
+A7:   not ex x being set st x in dom y & y.x = a1;
+      take v;
+      thus P[x,y,v] by A3,A7;
     end;
   end;
   consider H being Function of [:c, PF:], a01 such that
-A9: for x being Element of c,
-  y being Element of PF holds P[x,y,H.(x,y)] from BINOP_1:sch 3(A6);
-A10: rng H c= a01;
-A11: dom H = [:c, PF:] & rng H c= V by A2,FUNCT_2:def 1,XBOOLE_1:1;
-  then reconsider H as Function of [:c, PF:], V by FUNCT_2:def 1,RELSET_1:11;
-A12: F1 is_recursively_expressed_by H
-  proof
-    let x be Element of c;
-    reconsider F1r = F1 | r-Seg x as Element of PF by PARTFUN1:119;
-    now
-      let z be set;
-      assume
-A13:  z in dom F1r;
-      then z in r-Seg x & z in dom F1 by RELAT_1:86;
-      then F1r.z = F1.z by FUNCT_1:72
-        .= a0 by A13,FUNCOP_1:13;
-      hence F1r.z <> a1 by A1;
-    end;
-    then
-A14: H.(x, F1r) <> a1 by A9;
-A15: H.[x, F1r] in rng H by A11,FUNCT_1:def 5;
-    thus F1.x = a0 by FUNCOP_1:13
-      .= H.(x, F1 | r-Seg x) by A10,A14,A15,TARSKI:def 2;
-  end;
-A16: F2 is_recursively_expressed_by H
+A8: for x being Element of c, y being Element of PF holds P[x,y,H.(x,y)
+  ] from BINOP_1:sch 3(A5);
+A9: a01 c= V by A1,A2,ZFMISC_1:38;
+  then
+A10: rng H c= V by XBOOLE_1:1;
+  rng F3 \/ rng F4 c= {a0} \/ {a1} by XBOOLE_1:13;
+  then
+A11: rng F3 \/ rng F4 c= a01 by ENUMSET1:41;
+  rng F2 c= rng F3 \/ rng F4 by FUNCT_4:18;
+  then rng F2 c= a01 by A11,XBOOLE_1:1;
+  then
+A12: rng F2 c= V by A9,XBOOLE_1:1;
+A13: rng H c= a01;
+A14: dom H = [:c, PF:] by FUNCT_2:def 1;
+  then reconsider H as Function of [:c, PF:], V by A10,FUNCT_2:def 1,RELSET_1:
+  11;
+A15: dom F4 = wfp by FUNCOP_1:19;
+A16: dom F2 = dom F3 \/ dom F4 by FUNCT_4:def 1
+    .= c by A4,A15,XBOOLE_1:12;
+  then reconsider F2 as Function of c, V by A12,FUNCT_2:def 1,RELSET_1:11;
+A17: F2 is_recursively_expressed_by H
   proof
     let x be Element of c;
     reconsider F2r = F2 | r-Seg x as Element of PF by PARTFUN1:119;
     per cases;
     suppose
-A17:  x in wfp;
+A18:  x in wfp;
       now
         let z be set;
-        assume z in dom F2r;
+A19:    r-Seg x c= wfp by A18,Th5;
+        assume
+        z in dom F2r;
         then
-A18:    z in r-Seg x & z in dom F2 by RELAT_1:86;
-A19:    r-Seg x c= wfp by A17,Th5;
-        F2r.z = F2.z by A18,FUNCT_1:72
-          .= F4.z by A4,A18,A19,FUNCT_4:14
-          .= a0 by A18,A19,FUNCOP_1:13;
-        hence F2r.z <> a1 by A1;
+A20:    z in r-Seg x by RELAT_1:86;
+        then F2r.z = F2.z by FUNCT_1:72
+          .= F4.z by A15,A20,A19,FUNCT_4:14
+          .= a0 by A20,A19,FUNCOP_1:13;
+        hence F2r.z <> a1 by A3;
       end;
       then
-A20:  H.(x, F2r)<>a1 by A9;
-A21:  H.[x, F2r] in rng H by A11,FUNCT_1:def 5;
-      F4.x = a0 by A17,FUNCOP_1:13;
-      hence F2.x = a0 by A4,A17,FUNCT_4:14
-        .= H.(x, F2 | r-Seg x) by A10,A20,A21,TARSKI:def 2;
+A21:  H.(x, F2r)<>a1 by A8;
+A22:  H.[x, F2r] in rng H by A14,FUNCT_1:def 5;
+      F4.x = a0 by A18,FUNCOP_1:13;
+      hence F2.x = a0 by A15,A18,FUNCT_4:14
+        .= H.(x, F2 | r-Seg x) by A13,A21,A22,TARSKI:def 2;
     end;
     suppose
-A22:  not x in wfp;
+A23:  not x in wfp;
       then not r-Seg x c= wfp by Th10;
       then consider z being set such that
-A23:  z in r-Seg x & not z in wfp by TARSKI:def 3;
-A24:  r-Seg x c= c by Th4;
+A24:  z in r-Seg x and
+A25:  not z in wfp by TARSKI:def 3;
+A26:  r-Seg x c= c by Th4;
       then
-A25:  z in dom F2r by A5,A23,RELAT_1:86;
-A26:  F2r.z = F2.z by A23,FUNCT_1:72
-        .= F3.z by A4,A23,FUNCT_4:12
-        .= a1 by A23,A24,FUNCOP_1:13;
-      thus F2.x = F3.x by A4,A22,FUNCT_4:12
+A27:  z in dom F2r by A16,A24,RELAT_1:86;
+A28:  F2r.z = F2.z by A24,FUNCT_1:72
+        .= F3.z by A15,A25,FUNCT_4:12
+        .= a1 by A24,A26,FUNCOP_1:13;
+      thus F2.x = F3.x by A15,A23,FUNCT_4:12
         .= a1 by FUNCOP_1:13
-        .= H.(x, F2 | r-Seg x) by A9,A25,A26;
+        .= H.(x, F2 | r-Seg x) by A8,A27,A28;
     end;
   end;
+  reconsider F1 = c --> a0 as Function of c, V by A1,FUNCOP_1:57;
   assume
-A27: for H being Function of [:c, PF:], V, F1, F2 being Function of c, V
-  st F1 is_recursively_expressed_by H & F2 is_recursively_expressed_by H
-  holds F1 = F2;
-  assume not R is well_founded;
+A29: for H being Function of [:c, PF:], V, F1, F2 being Function of c, V
+st F1 is_recursively_expressed_by H & F2 is_recursively_expressed_by H holds F1
+  = F2;
+  assume
+  not R is well_founded;
   then wfp <> c by Th9;
   then consider x being set such that
-A28: not (x in wfp iff x in c) by TARSKI:2;
-A29: F1.x = a0 by A28,FUNCOP_1:13;
-  F2.x = F3.x by A4,A28,FUNCT_4:12
-    .= a1 by A28,FUNCOP_1:13;
-  hence contradiction by A1,A12,A16,A27,A29;
+A30: not (x in wfp iff x in c) by TARSKI:2;
+A31: F1 is_recursively_expressed_by H
+  proof
+    let x be Element of c;
+    reconsider F1r = F1 | r-Seg x as Element of PF by PARTFUN1:119;
+A32: H.[x, F1r] in rng H by A14,FUNCT_1:def 5;
+    now
+      let z be set;
+      assume
+A33:  z in dom F1r;
+      then z in r-Seg x by RELAT_1:86;
+      then F1r.z = F1.z by FUNCT_1:72
+        .= a0 by A33,FUNCOP_1:13;
+      hence F1r.z <> a1 by A3;
+    end;
+    then
+A34: H.(x, F1r) <> a1 by A8;
+    thus F1.x = a0 by FUNCOP_1:13
+      .= H.(x, F1 | r-Seg x) by A13,A34,A32,TARSKI:def 2;
+  end;
+A35: F1.x = a0 by A30,FUNCOP_1:13;
+  F2.x = F3.x by A15,A30,FUNCT_4:12
+    .= a1 by A30,FUNCOP_1:13;
+  hence contradiction by A3,A31,A17,A29,A35;
 end;
 
-theorem :: Well-foundedness implies uniqueness
-  for R being non empty well_founded RelStr, V being non empty set,
-  H being Function of [:the carrier of R, PFuncs(the carrier of R, V):], V,
-  F1, F2 being Function of the carrier of R, V
-  st F1 is_recursively_expressed_by H & F2 is_recursively_expressed_by H
-  holds F1 = F2
+:: Well-foundedness implies uniqueness
+
+theorem
+  for R being non empty well_founded RelStr, V being non empty set, H
+being Function of [:the carrier of R, PFuncs(the carrier of R, V):], V, F1, F2
+being Function of the carrier of R, V st F1 is_recursively_expressed_by H & F2
+  is_recursively_expressed_by H holds F1 = F2
 proof
   let R be non empty well_founded RelStr, V be non empty set;
   set c = the carrier of R, r = the InternalRel of R;
@@ -993,30 +1073,35 @@ proof
   assume that
 A1: F1 is_recursively_expressed_by H and
 A2: F2 is_recursively_expressed_by H;
-A3: dom F1 = c & dom F2 = c by FUNCT_2:def 1;
-  assume F1 <> F2;
+  defpred P[set] means F1.$1 <> F2.$1;
+A3: dom F2 = c by FUNCT_2:def 1;
+  assume
+  F1 <> F2;
   then consider x being Element of c such that
 A4: F1.x <> F2.x by FUNCT_2:113;
   reconsider x as Element of R;
-  defpred P[set] means F1.$1 <> F2.$1;
-A5: P[x] by A4;
-A6: R is well_founded;
+A5: R is well_founded;
+A6: P[x] by A4;
   consider x0 being Element of R such that
 A7: P[x0] and
-A8: not ex y being Element of R
-  st x0 <> y & P[y] & [y,x0] in r from WFMin(A5, A6);
+A8: not ex y being Element of R st x0 <> y & P[y] & [y,x0] in r from
+  WFMin(A6, A5);
+A9: dom F1 = c by FUNCT_2:def 1;
   F1 | r-Seg x0 = F2 | r-Seg x0
   proof
     set fr = F1 | r-Seg x0, gr = F2 | r-Seg x0;
-A9: dom fr = r-Seg x0 & dom gr = r-Seg x0 by A3,Th4,RELAT_1:91;
-    assume not thesis;
+    assume
+A10: not thesis;
+A11: dom fr = r-Seg x0 by A9,Th4,RELAT_1:91;
+    dom gr = r-Seg x0 by A3,Th4,RELAT_1:91;
     then consider x1 being set such that
-A10: x1 in dom fr & fr.x1 <> gr.x1 by A9,FUNCT_1:9;
-A11: [x1, x0] in r by A9,A10,WELLORD1:def 1;
-    reconsider x1 as Element of R by A10;
-A12: fr.x1 = F1.x1 & gr.x1 = F2.x1 by A9,A10,FUNCT_1:72;
-    x1 <> x0 by A9,A10,WELLORD1:def 1;
-    hence contradiction by A8,A10,A11,A12;
+A12: x1 in dom fr and
+A13: fr.x1 <> gr.x1 by A11,A10,FUNCT_1:9;
+A14: [x1, x0] in r by A11,A12,WELLORD1:def 1;
+    reconsider x1 as Element of R by A12;
+A15: x1 <> x0 by A11,A12,WELLORD1:def 1;
+    fr.x1 = F1.x1 & gr.x1 = F2.x1 by A11,A12,FUNCT_1:72;
+    hence contradiction by A8,A13,A14,A15;
   end;
   then F1.x0 = H.(x0, F2 | r-Seg x0) by A1,Def5
     .= F2.x0 by A2,Def5;
@@ -1030,80 +1115,91 @@ definition
   canceled;
   attr f is descending means
   :Def7:
-  for n being Element of NAT
-  holds f.(n+1) <> f.n & [f.(n+1), f.n] in the InternalRel of R;
+  for n being Nat holds f.(n+1)
+  <> f.n & [f.(n+1), f.n] in the InternalRel of R;
 end;
 
-theorem :: omega chains
-  for R being non empty RelStr holds
-  R is well_founded iff not ex f being sequence of R st f is descending
+:: omega chains
+
+theorem
+  for R being non empty RelStr holds R is well_founded iff not ex f
+  being sequence of R st f is descending
 proof
   let R be non empty RelStr;
   set c = the carrier of R, r = the InternalRel of R;
   hereby
-    assume R is well_founded;
+    assume
+    R is well_founded;
     then
 A1: r is_well_founded_in c by Def2;
     given f being sequence of R such that
 A2: f is descending;
-A3: dom f = NAT & rng f c= c by FUNCT_2:def 1;
+A3: dom f = NAT by FUNCT_2:def 1;
     then rng f <> {} by RELAT_1:65;
     then consider a being set such that
-A4: a in rng f & r-Seg(a) misses rng f by A1,WELLORD1:def 3;
+A4: a in rng f and
+A5: r-Seg(a) misses rng f by A1,WELLORD1:def 3;
     consider n being set such that
-A5: n in dom f & a = f.n by A4,FUNCT_1:def 5;
-    reconsider n as Element of NAT by A5;
+A6: n in dom f and
+A7: a = f.n by A4,FUNCT_1:def 5;
+    reconsider n as Element of NAT by A6;
     f.(n+1)<>f.n & [f.(n+1),f.n] in the InternalRel of R by A2,Def7;
     then
-A6: f.(n+1) in r-Seg(f.n) by WELLORD1:def 1;
+A8: f.(n+1) in r-Seg(f.n) by WELLORD1:def 1;
     f.(n+1) in rng f by A3,FUNCT_1:def 5;
-    hence contradiction by A4,A5,A6,XBOOLE_0:3;
+    hence contradiction by A5,A7,A8,XBOOLE_0:3;
   end;
   assume
-A7: not ex f being sequence of R st f is descending;
-  assume not R is well_founded;
+A9: not ex f being sequence of R st f is descending;
+  assume
+  not R is well_founded;
   then not r is_well_founded_in c by Def2;
   then consider Y being set such that
-A8: Y c= c & Y <> {} and
-A9: for a being set holds not a in Y or r-Seg(a) meets Y by WELLORD1:def 3;
+A10: Y c= c and
+A11: Y <> {} and
+A12: for a being set holds not a in Y or r-Seg(a) meets Y by
+  WELLORD1:def 3;
   deffunc G(set,set) = choose (r-Seg($2) /\ Y);
   consider f being Function such that
-A10: dom f = NAT and
-A11: f.0 = choose Y and
-A12: for n being Nat holds f.(n+1) = G(n,f.n) from NAT_1:sch 11;
-  defpred P[Element of NAT] means f.$1 in Y;
-A13: P[0] by A8,A11;
-A14: now
-    let n be Element of NAT;
-    assume P[n];
-    then r-Seg(f.n) meets Y by A9;
+A13: dom f = NAT and
+A14: f.0 = choose Y and
+A15: for n being Nat holds f.(n+1) = G(n,f.n) from NAT_1:sch 11;
+  defpred P[Nat] means f.$1 in Y;
+A16: now
+    let n be Nat;
+    assume
+    P[n];
+    then r-Seg(f.n) meets Y by A12;
     then
-A15: r-Seg(f.n) /\ Y <> {} by XBOOLE_0:def 7;
-    f.(n+1) = choose (r-Seg(f.n) /\ Y) by A12;
-    hence P[n+1] by A15,XBOOLE_0:def 4;
+A17: r-Seg(f.n) /\ Y <> {} by XBOOLE_0:def 7;
+    f.(n+1) = choose (r-Seg(f.n) /\ Y) by A15;
+    hence P[n+1] by A17,XBOOLE_0:def 4;
   end;
-A16: for n being Element of NAT holds P[n] from NAT_1:sch 1(A13, A14);
+A18: P[0] by A11,A14;
+A19: for n being Nat holds P[n] from NAT_1:sch 2(A18, A16);
   rng f c= c
   proof
     let y be set;
-    assume y in rng f;
+    assume
+    y in rng f;
     then consider x being set such that
-A17: x in dom f & y = f.x by FUNCT_1:def 5;
-    reconsider n = x as Element of NAT by A10,A17;
-    f.n in Y by A16;
-    hence thesis by A8,A17;
+A20: x in dom f and
+A21: y = f.x by FUNCT_1:def 5;
+    reconsider n = x as Element of NAT by A13,A20;
+    f.n in Y by A19;
+    hence thesis by A10,A21;
   end;
-  then reconsider f as sequence of R by A10,FUNCT_2:4;
+  then reconsider f as sequence of R by A13,FUNCT_2:4;
   now
-    let n be Element of NAT;
-    r-Seg(f.n) meets Y by A9,A16;
+    let n be Nat;
+    r-Seg(f.n) meets Y by A12,A19;
     then
-A18: r-Seg(f.n) /\ Y <> {} by XBOOLE_0:def 7;
-    f.(n+1) = choose (r-Seg(f.n) /\ Y) by A12;
-    then f.(n+1) in r-Seg(f.n) by A18,XBOOLE_0:def 4;
+A22: r-Seg(f.n) /\ Y <> {} by XBOOLE_0:def 7;
+    f.(n+1) = choose (r-Seg(f.n) /\ Y) by A15;
+    then f.(n+1) in r-Seg(f.n) by A22,XBOOLE_0:def 4;
     hence f.(n+1) <> f.n & [f.(n+1), f.n] in r by WELLORD1:def 1;
   end;
   then f is descending by Def7;
-  hence contradiction by A7;
+  hence contradiction by A9;
 end;
 

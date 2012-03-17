@@ -8,6 +8,7 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="WELLORD2"/>
 <ArticleID name="MCART_1"/>
@@ -45,7 +46,7 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="9"/>
-<Adjective nr="20">
+<Adjective nr="21">
 <Func kind="K" nr="11">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
@@ -75,7 +76,7 @@
 <Func kind="F" nr="2"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="76">
+<Func kind="K" nr="84">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>
@@ -130,7 +131,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Pred kind="V" nr="27">
+<Pred kind="V" nr="28">
 <Fraenkel>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -147,7 +148,7 @@
 </Pred>
 </Fraenkel>
 </Pred>
-<Pred kind="V" nr="27">
+<Pred kind="V" nr="28">
 <Func kind="F" nr="1"/>
 </Pred>
 <For>
@@ -195,7 +196,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Pred kind="R" nr="17">
+<Pred kind="R" nr="18">
 <Func kind="F" nr="1"/>
 <Fraenkel>
 <Typ kind="M" nr="2">
@@ -283,7 +284,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Pred kind="R" nr="17">
+<Pred kind="R" nr="18">
 <Func kind="F" nr="1"/>
 <Fraenkel>
 <Typ kind="M" nr="2">
@@ -341,8 +342,8 @@
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="9"/>
-<Adjective nr="26"/>
-<Adjective nr="33"/>
+<Adjective nr="27"/>
+<Adjective nr="34"/>
 </Cluster>
 </Typ>
 <Pred kind="P" nr="1">
@@ -357,8 +358,8 @@
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="9"/>
-<Adjective nr="26"/>
-<Adjective nr="33"/>
+<Adjective nr="27"/>
+<Adjective nr="34"/>
 </Cluster>
 </Typ>
 <Not>
@@ -375,9 +376,9 @@
 </Cluster>
 </Typ>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="117">
+<Func kind="K" nr="125">
 <Var nr="1"/>
-<Func kind="K" nr="119">
+<Func kind="K" nr="127">
 <Var nr="2"/>
 </Func>
 </Func>
@@ -402,7 +403,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Pred kind="R" nr="17">
+<Pred kind="R" nr="18">
 <Func kind="F" nr="1"/>
 <Fraenkel>
 <Typ kind="M" nr="2">

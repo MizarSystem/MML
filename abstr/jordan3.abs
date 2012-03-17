@@ -15,7 +15,8 @@ environ
  constructors PARTFUN1, XXREAL_0, REAL_1, NAT_1, SEQ_4, REALSET1, RFINSEQ,
       NAT_D, FINSEQ_5, TOPREAL1, BINOP_2, RELSET_1;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, XXREAL_0, XREAL_0,
-      NAT_1, MEMBERED, FINSEQ_1, FINSEQ_5, STRUCT_0, EUCLID, SPPOL_2, XXREAL_2;
+      NAT_1, MEMBERED, FINSEQ_1, FINSEQ_5, STRUCT_0, EUCLID, SPPOL_2, XXREAL_2,
+      CARD_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
 
 
@@ -34,28 +35,27 @@ reserve f for FinSequence of D;
 canceled 14;
 
 theorem :: JORDAN3:15
-  for i be Nat for p,q being FinSequence st len p<i
-  & (i<=len p +len q or i<=len (p^q)) holds (p^q).i=q.(i-len p);
+  for i be Nat for p,q being FinSequence st len p<i & (i<=len p +
+  len q or i<=len (p^q)) holds (p^q).i=q.(i-len p);
 
 canceled;
 
 theorem :: JORDAN3:17
-  for x being set,f being FinSequence of D st 1<=len f holds
-  (f^<*x*>).1=f.1 & (f^<*x*>).1=f/.1 &
-  (<*x*>^f).(len f +1)=f.len f & (<*x*>^f).(len f +1)=f/.len f;
+  for x being set,f being FinSequence of D st 1<=len f holds (f^<*
+x*>).1=f.1 & (f^<*x*>).1=f/.1 & (<*x*>^f).(len f +1)=f.len f & (<*x*>^f).(len f
+  +1)=f/.len f;
 
 theorem :: JORDAN3:18
   for f being FinSequence st len f=1 holds Rev f=f;
 
 theorem :: JORDAN3:19
-  for f being FinSequence of D,k being Nat holds
-  len (f/^k)=len f-'k;
+  for f being FinSequence of D,k being Nat holds len (f/^k)=len f-'k;
 
 canceled;
 
 theorem :: JORDAN3:21
-  for f being FinSequence of D,l1,l2 being Nat holds
-  (f/^l1)|(l2-'l1)=(f|l2)/^l1;
+  for f being FinSequence of D,l1,l2 being Nat holds (f/^l1)|(l2-'l1)=(f
+  |l2)/^l1;
 
 begin
 
@@ -64,44 +64,47 @@ begin
 ::-------------------------------------------:
 
 definition
-  let D;
-  let f be FinSequence of D,k1,k2 be Nat;
-  func mid(f,k1,k2) -> FinSequence of D equals
+  let f be FinSequence,k1,k2 be Nat;
+  func mid(f,k1,k2) -> FinSequence equals
 :: JORDAN3:def 1
 
-  (f/^(k1-'1))|(k2-'k1+1) if k1<=k2 otherwise Rev ((f/^(k2-'1))|(k1-'k2+1));
+  (f/^(k1-'1))|(k2-'k1+1)
+  if k1<=k2 otherwise Rev ((f/^(k2-'1))|(k1-'k2+1));
+end;
+
+definition
+  let D;
+  let f be FinSequence of D,k1,k2 be Nat;
+  redefine func mid(f,k1,k2) -> FinSequence of D;
 end;
 
 theorem :: JORDAN3:22
-  for f being FinSequence of D,k1,k2 being Element of NAT
-  st 1<=k1 & k1<=len f & 1<=k2 & k2<=len f
-  holds Rev mid(f,k1,k2)=mid(Rev f,len f-'k2+1,len f-'k1+1);
+  for f being FinSequence of D,k1,k2 being Element of NAT st 1<=k1
+  & k1<=len f & 1<=k2 & k2<=len f holds Rev mid(f,k1,k2)=mid(Rev f,len f-'k2+1,
+  len f-'k1+1);
 
 theorem :: JORDAN3:23
-  for n,m being Element of NAT,f being FinSequence of D st
-  1<= m &m+n<=len f holds (f/^n).m=f.(m+n);
+  for n,m being Element of NAT,f being FinSequence of D st 1<= m &
+  m+n<=len f holds (f/^n).m=f.(m+n);
 
 theorem :: JORDAN3:24
-  for i being Element of NAT,f being FinSequence of D st
-  1<=i & i<=len f holds (Rev f).i=f.(len f -i+1);
+  for i being Element of NAT,f being FinSequence of D st 1<=i & i
+  <=len f holds (Rev f).i=f.(len f -i+1);
 
 theorem :: JORDAN3:25
-  for f being FinSequence of D,k being Nat st
-  1<=k holds mid(f,1,k)=f|k;
+  for f being FinSequence of D,k being Nat st 1<=k holds mid(f,1,k)=f|k;
 
 theorem :: JORDAN3:26
-  for f being FinSequence of D,k being Element of NAT st
-  k<=len f holds mid(f,k,len f)=f/^(k-'1);
+  for f being FinSequence of D,k being Element of NAT st k<=len f
+  holds mid(f,k,len f)=f/^(k-'1);
 
 theorem :: JORDAN3:27
-  for f being FinSequence of D,k1,k2 being Element of NAT st
-  1<=k1 & k1<=len f & 1<=k2 & k2<=len f holds mid(f,k1,k2).1=f.k1 &
-  (k1<=k2 implies len mid(f,k1,k2) = k2 -' k1 +1 &
-  for i being Element of NAT st 1<=i & i<=len mid(f,k1,k2)
-  holds mid(f,k1,k2).i=f.(i+k1-'1))
-  & (k1>k2 implies len mid(f,k1,k2) = k1 -' k2 +1 &
-  for i being Element of NAT st 1<=i & i<=len mid(f,k1,k2)
-  holds mid(f,k1,k2).i=f.(k1-'i+1));
+  for f being FinSequence of D,k1,k2 being Element of NAT st 1<=k1
+& k1<=len f & 1<=k2 & k2<=len f holds mid(f,k1,k2).1=f.k1 & (k1<=k2 implies len
+mid(f,k1,k2) = k2 -' k1 +1 & for i being Element of NAT st 1<=i & i<=len mid(f,
+k1,k2) holds mid(f,k1,k2).i=f.(i+k1-'1)) & (k1>k2 implies len mid(f,k1,k2) = k1
+-' k2 +1 & for i being Element of NAT st 1<=i & i<=len mid(f,k1,k2) holds mid(f
+  ,k1,k2).i=f.(k1-'i+1));
 
 theorem :: JORDAN3:28
   for f being FinSequence of D,k1,k2 being Element of NAT holds
@@ -114,46 +117,44 @@ theorem :: JORDAN3:30
   for f being FinSequence of D st 1<=len f holds mid(f,len f,1)=Rev f;
 
 theorem :: JORDAN3:31
-  for f being FinSequence of D, k1,k2,i being Element of NAT
-  st 1<=k1 & k1<=k2 & k2<=len f & 1<=i &
-  (i<=k2-'k1+1 or i<=k2-k1+1 or i<=k2+1-k1) holds
-  mid(f,k1,k2).i=f.(i+k1-'1) & mid(f,k1,k2).i=f.(i-'1+k1) &
-  mid(f,k1,k2).i=f.(i+k1-1) & mid(f,k1,k2).i=f.(i-1+k1);
+  for f being FinSequence of D, k1,k2,i being Element of NAT st 1
+  <=k1 & k1<=k2 & k2<=len f & 1<=i & (i<=k2-'k1+1 or i<=k2-k1+1 or i<=k2+1-k1)
+holds mid(f,k1,k2).i=f.(i+k1-'1) & mid(f,k1,k2).i=f.(i-'1+k1) & mid(f,k1,k2).i=
+  f.(i+k1-1) & mid(f,k1,k2).i=f.(i-1+k1);
 
 theorem :: JORDAN3:32
-  for f being FinSequence of D,k,i being Nat
-  st 1<=i & i<=k & k<=len f holds mid(f,1,k).i=f.i;
+  for f being FinSequence of D,k,i being Nat st 1<=i & i<=k & k<=
+  len f holds mid(f,1,k).i=f.i;
 
 theorem :: JORDAN3:33
-  for f being FinSequence of D, k1,k2 being Element of NAT
-  st 1<=k1 & k1<=k2 & k2<=len f holds len mid(f,k1,k2)<=len f;
+  for f being FinSequence of D, k1,k2 being Element of NAT st 1<=k1 & k1
+  <=k2 & k2<=len f holds len mid(f,k1,k2)<=len f;
 
 theorem :: JORDAN3:34
-  for f being FinSequence of TOP-REAL n st 2<=len f
-  holds f.1 in L~f & f/.1 in L~f & f.len f in L~f & f/.len f in L~f;
+  for f being FinSequence of TOP-REAL n st 2<=len f holds f.1 in L~f & f
+  /.1 in L~f & f.len f in L~f & f/.len f in L~f;
 
 theorem :: JORDAN3:35
-  for p1,p2,q1,q2 being Point of TOP-REAL 2 st
-  (p1`1 = p2`1 or p1`2 = p2`2)& q1 in LSeg(p1,p2) & q2 in LSeg(p1,p2)
-  holds q1`1 = q2`1 or q1`2 = q2`2;
+  for p1,p2,q1,q2 being Point of TOP-REAL 2 st (p1`1 = p2`1 or p1
+  `2 = p2`2)& q1 in LSeg(p1,p2) & q2 in LSeg(p1,p2) holds q1`1 = q2`1 or q1`2 =
+  q2`2;
 
 theorem :: JORDAN3:36
-  for p1,p2,q1,q2 being Point of TOP-REAL 2 st
-  (p1`1 = p2`1 or p1`2 = p2`2)& LSeg(q1,q2) c= LSeg(p1,p2)
-  holds q1`1 = q2`1 or q1`2 = q2`2;
+  for p1,p2,q1,q2 being Point of TOP-REAL 2 st (p1`1 = p2`1 or p1
+  `2 = p2`2)& LSeg(q1,q2) c= LSeg(p1,p2) holds q1`1 = q2`1 or q1`2 = q2`2;
 
 theorem :: JORDAN3:37
-  for f being FinSequence of TOP-REAL 2,n being Element of NAT
-  st 2<=n & f is being_S-Seq holds f|n is being_S-Seq;
+  for f being FinSequence of TOP-REAL 2,n being Element of NAT st
+  2<=n & f is being_S-Seq holds f|n is being_S-Seq;
 
 theorem :: JORDAN3:38
-  for f being FinSequence of TOP-REAL 2,n being Element of NAT
-  st n<=len f & 2<=len f-'n & f is being_S-Seq holds f/^n is being_S-Seq;
+  for f being FinSequence of TOP-REAL 2,n being Element of NAT st
+  n<=len f & 2<=len f-'n & f is being_S-Seq holds f/^n is being_S-Seq;
 
 theorem :: JORDAN3:39
-  for f being FinSequence of TOP-REAL 2,k1,k2 being Element of NAT
-  st f is being_S-Seq & 1<=k1 & k1<=len f & 1<=k2 & k2<=len f & k1<>k2 holds
-  mid(f,k1,k2) is being_S-Seq;
+  for f being FinSequence of TOP-REAL 2,k1,k2 being Element of NAT st f
+is being_S-Seq & 1<=k1 & k1<=len f & 1<=k2 & k2<=len f & k1<>k2 holds mid(f,k1,
+  k2) is being_S-Seq;
 
 begin
 
@@ -168,79 +169,77 @@ definition
   func Index(p,f) -> Element of NAT means
 :: JORDAN3:def 2
 
-  ex S being non empty Subset of NAT st
-  it = min S & S = { i: p in LSeg(f,i) };
+  ex S being non empty Subset
+  of NAT st it = min S & S = { i: p in LSeg(f,i) };
 end;
 
 theorem :: JORDAN3:40
-  for f being FinSequence of TOP-REAL 2,
-  p being Point of TOP-REAL 2, i being Element of NAT st p in LSeg(f,i)
-  holds Index(p,f) <= i;
+  for f being FinSequence of TOP-REAL 2, p being Point of TOP-REAL
+  2, i being Element of NAT st p in LSeg(f,i) holds Index(p,f) <= i;
 
 theorem :: JORDAN3:41
-  for f being FinSequence of TOP-REAL 2,
-  p being Point of TOP-REAL 2 st p in L~f
-  holds 1<=Index(p,f) & Index(p,f) < len f;
+  for f being FinSequence of TOP-REAL 2, p being Point of TOP-REAL
+  2 st p in L~f holds 1<=Index(p,f) & Index(p,f) < len f;
 
 theorem :: JORDAN3:42
-  for f being FinSequence of TOP-REAL 2,
-  p being Point of TOP-REAL 2 st p in L~f holds p in LSeg(f,Index(p,f));
+  for f being FinSequence of TOP-REAL 2, p being Point of TOP-REAL
+  2 st p in L~f holds p in LSeg(f,Index(p,f));
 
 theorem :: JORDAN3:43
-  for f being FinSequence of TOP-REAL 2, p being Point of TOP-REAL 2
-  st p in LSeg(f,1) holds Index(p,f) = 1;
+  for f being FinSequence of TOP-REAL 2, p being Point of TOP-REAL
+  2 st p in LSeg(f,1) holds Index(p,f) = 1;
 
 theorem :: JORDAN3:44
-  for f being FinSequence of TOP-REAL 2, p being Point of TOP-REAL 2
-  st len f >= 2 holds Index(f/.1,f) = 1;
+  for f being FinSequence of TOP-REAL 2, p being Point of TOP-REAL
+  2 st len f >= 2 holds Index(f/.1,f) = 1;
 
 theorem :: JORDAN3:45
-  for f being FinSequence of TOP-REAL 2,
-  p being Point of TOP-REAL 2,i1 being Nat st f is being_S-Seq
-  & 1<i1 & i1<=len f & p=f.i1 holds Index(p,f) + 1 = i1;
+  for f being FinSequence of TOP-REAL 2, p being Point of TOP-REAL
+2,i1 being Nat st f is being_S-Seq & 1<i1 & i1<=len f & p=f.i1 holds Index(p,f)
+  + 1 = i1;
 
 theorem :: JORDAN3:46
   for f be FinSequence of TOP-REAL 2 for p be Point of TOP-REAL 2
-  for i1 be Element of NAT st f is s.n.c. & p in LSeg(f,i1) holds
-  i1=Index(p,f) or i1=Index(p,f)+1;
+  for i1 be Element of NAT st f is s.n.c. & p in LSeg(f,i1) holds i1=Index(p,f)
+  or i1=Index(p,f)+1;
 
 theorem :: JORDAN3:47
   for f be FinSequence of TOP-REAL 2 for p be Point of TOP-REAL 2
-  for i1 be Element of NAT st f is unfolded s.n.c. &
-  i1+1<=len f & p in LSeg(f,i1) & p <> f.i1 holds i1=Index(p,f);
+for i1 be Element of NAT st f is unfolded s.n.c. & i1+1<=len f & p in LSeg(f,i1
+  ) & p <> f.i1 holds i1=Index(p,f);
 
 definition
   let g be FinSequence of TOP-REAL 2, p1,p2 be Point of TOP-REAL 2;
   pred g is_S-Seq_joining p1,p2 means
 :: JORDAN3:def 3
 
-  g is being_S-Seq & g.1 = p1 & g.len g = p2;
+  g is being_S-Seq & g.1 = p1 & g.
+  len g = p2;
 end;
 
 theorem :: JORDAN3:48
-  for g being FinSequence of TOP-REAL 2, p1,p2 being Point of TOP-REAL 2 st
-  g is_S-Seq_joining p1,p2 holds Rev g is_S-Seq_joining p2,p1;
+  for g being FinSequence of TOP-REAL 2, p1,p2 being Point of
+  TOP-REAL 2 st g is_S-Seq_joining p1,p2 holds Rev g is_S-Seq_joining p2,p1;
 
 theorem :: JORDAN3:49
-  for f,g being FinSequence of TOP-REAL 2,
-  p being Point of TOP-REAL 2,j be Nat st p in L~f
-  & g=<*p*>^mid(f,Index(p,f)+1,len f) & 1<=j & j+1<=len g
-  holds LSeg(g,j) c= LSeg(f,Index(p,f)+j-'1);
+  for f,g being FinSequence of TOP-REAL 2, p being Point of
+TOP-REAL 2,j be Nat st p in L~f & g=<*p*>^mid(f,Index(p,f)+1,len f) & 1<=j & j+
+  1<=len g holds LSeg(g,j) c= LSeg(f,Index(p,f)+j-'1);
 
 theorem :: JORDAN3:50
   for f,g being FinSequence of TOP-REAL 2, p being Point of TOP-REAL 2
-  st f is being_S-Seq & p in L~f & p<>f.(Index(p,f)+1) &
-  g=<*p*>^mid(f,Index(p,f)+1,len f) holds g is_S-Seq_joining p,f/.len f;
+st f is being_S-Seq & p in L~f & p<>f.(Index(p,f)+1) & g=<*p*>^mid(f,Index(p,f)
+  +1,len f) holds g is_S-Seq_joining p,f/.len f;
 
 theorem :: JORDAN3:51
-  for f,g being FinSequence of TOP-REAL 2,
-  p being Point of TOP-REAL 2,j be Nat st p in L~f & 1<=j & j+1<=len g
-  & g=mid(f,1,Index(p,f))^<*p*> holds LSeg(g,j) c= LSeg(f,j);
+  for f,g being FinSequence of TOP-REAL 2, p being Point of
+TOP-REAL 2,j be Nat st p in L~f & 1<=j & j+1<=len g & g=mid(f,1,Index(p,f))^<*p
+  *> holds LSeg(g,j) c= LSeg(f,j);
 
 theorem :: JORDAN3:52
-  for f,g being FinSequence of TOP-REAL 2, p being Point of TOP-REAL 2
-  st f is being_S-Seq & p in L~f & p<>f.1 & g=mid(f,1,Index(p,f))^<*p*>
-  holds g is_S-Seq_joining f/.1,p;
+  for f,g being FinSequence of TOP-REAL 2, p being Point of
+TOP-REAL 2 st f is being_S-Seq & p in L~f & p<>f.1 & g=mid(f,1,Index(p,f))^<*p
+  *> holds g is_S-Seq_joining f/.1,p;
 
 begin
 
@@ -253,27 +252,28 @@ definition
   func L_Cut(f,p) -> FinSequence of TOP-REAL 2 equals
 :: JORDAN3:def 4
 
-  <*p*>^mid(f,Index(p,f)+1,len f) if p<>f.(Index(p,f)+1)
-  otherwise mid(f,Index(p,f)+1,len f);
+  <*p*>^mid(f,Index
+  (p,f)+1,len f) if p<>f.(Index(p,f)+1) otherwise mid(f,Index(p,f)+1,len f);
   func R_Cut(f,p) -> FinSequence of TOP-REAL 2 equals
 :: JORDAN3:def 5
 
-  mid(f,1,Index(p,f))^<*p*> if p<>f.1 otherwise <*p*>;
+  mid(f,1,Index(p,f
+  ))^<*p*> if p<>f.1 otherwise <*p*>;
 end;
 
 theorem :: JORDAN3:53
-  for f being FinSequence of TOP-REAL 2, p being Point of TOP-REAL 2
-  st f is being_S-Seq & p in L~f & p = f.(Index(p,f)+1) & p <> f.len f
-  holds Index(p,Rev f) + Index(p,f) + 1 = len f;
+  for f being FinSequence of TOP-REAL 2, p being Point of TOP-REAL
+  2 st f is being_S-Seq & p in L~f & p = f.(Index(p,f)+1) & p <> f.len f holds
+  Index(p,Rev f) + Index(p,f) + 1 = len f;
 
 theorem :: JORDAN3:54
-  for f be FinSequence of TOP-REAL 2
-  for p be Point of TOP-REAL 2 st f is unfolded s.n.c. &
-  p in L~f & p <> f.(Index(p,f)+1) holds Index(p,Rev f) + Index(p,f) = len f;
+  for f be FinSequence of TOP-REAL 2 for p be Point of TOP-REAL 2
+st f is unfolded s.n.c. & p in L~f & p <> f.(Index(p,f)+1) holds Index(p,Rev f)
+  + Index(p,f) = len f;
 
 theorem :: JORDAN3:55
-  for D for f being FinSequence of D, k being Element of NAT,
-  p being Element of D holds (<*p*>^f)|(k+1) = <*p*>^(f|k);
+  for D for f being FinSequence of D, k being Element of NAT, p
+  being Element of D holds (<*p*>^f)|(k+1) = <*p*>^(f|k);
 
 theorem :: JORDAN3:56
   for D for f being FinSequence of D, k1,k2 being Element of NAT
@@ -289,42 +289,38 @@ theorem :: JORDAN3:56
 :: end;
 
 theorem :: JORDAN3:57
-  for f being FinSequence of TOP-REAL 2, p being Point of TOP-REAL 2
-  st f is being_S-Seq & p in L~f holds L_Cut(Rev f,p) = Rev R_Cut(f,p);
+  for f being FinSequence of TOP-REAL 2, p being Point of TOP-REAL
+  2 st f is being_S-Seq & p in L~f holds L_Cut(Rev f,p) = Rev R_Cut(f,p);
 
 theorem :: JORDAN3:58
-  for f being FinSequence of TOP-REAL 2,
-  p being Point of TOP-REAL 2 st p in L~f holds (L_Cut(f,p)).1=p &
-  for i st 1<i & i<=len L_Cut(f,p) holds
-  (p = f.(Index(p,f)+1) implies (L_Cut(f,p)).i=f.(Index(p,f)+i)) &
-  (p <> f.(Index(p,f)+1) implies (L_Cut(f,p)).i=f.(Index(p,f)+i-1));
+  for f being FinSequence of TOP-REAL 2, p being Point of TOP-REAL
+2 st p in L~f holds (L_Cut(f,p)).1=p & for i st 1<i & i<=len L_Cut(f,p) holds (
+p = f.(Index(p,f)+1) implies (L_Cut(f,p)).i=f.(Index(p,f)+i)) & (p <> f.(Index(
+  p,f)+1) implies (L_Cut(f,p)).i=f.(Index(p,f)+i-1));
 
 theorem :: JORDAN3:59
-  for f be FinSequence of TOP-REAL 2
-  for p be Point of TOP-REAL 2 st p in L~f holds
-  R_Cut(f,p).(len R_Cut(f,p)) = p &
-  for i be Element of NAT st 1<=i & i<=Index(p,f) holds R_Cut(f,p).i = f.i;
+  for f be FinSequence of TOP-REAL 2 for p be Point of TOP-REAL 2
+st p in L~f holds R_Cut(f,p).(len R_Cut(f,p)) = p & for i be Element of NAT st
+  1<=i & i<=Index(p,f) holds R_Cut(f,p).i = f.i;
 
 theorem :: JORDAN3:60
-  for f be FinSequence of TOP-REAL 2
-  for p be Point of TOP-REAL 2 st p in L~f holds
-  ( p<>f.1 implies len R_Cut(f,p)=Index(p,f)+1 ) &
-  ( p=f.1 implies len R_Cut(f,p)=Index(p,f) );
+  for f be FinSequence of TOP-REAL 2 for p be Point of TOP-REAL 2 st p
+  in L~f holds ( p<>f.1 implies len R_Cut(f,p)=Index(p,f)+1 ) & ( p=f.1 implies
+  len R_Cut(f,p)=Index(p,f) );
 
 theorem :: JORDAN3:61
-  for f be FinSequence of TOP-REAL 2
-  for p be Point of TOP-REAL 2 st p in L~f holds
-  ( p=f.(Index(p,f)+1) implies len L_Cut(f,p) = len f-Index(p,f) ) &
-  ( p<>f.(Index(p,f)+1) implies len L_Cut(f,p) = len f-Index(p,f)+1 );
+  for f be FinSequence of TOP-REAL 2 for p be Point of TOP-REAL 2
+st p in L~f holds ( p=f.(Index(p,f)+1) implies len L_Cut(f,p) = len f-Index(p,f
+  ) ) & ( p<>f.(Index(p,f)+1) implies len L_Cut(f,p) = len f-Index(p,f)+1 );
 
 definition
   let p1,p2,q1,q2 be Point of TOP-REAL 2;
   pred LE q1,q2,p1,p2 means
 :: JORDAN3:def 6
 
-  q1 in LSeg(p1,p2) & q2 in LSeg(p1,p2) & for r1,r2 being Real st
-  0<=r1 & r1<=1 & q1=(1-r1)*p1+r1*p2 &
-  0<=r2 & r2<=1 & q2=(1-r2)*p1+r2*p2 holds r1<=r2;
+  q1 in LSeg(p1,p2) & q2 in LSeg(p1,p2) & for
+r1,r2 being Real st 0<=r1 & r1<=1 & q1=(1-r1)*p1+r1*p2 & 0<=r2 & r2<=1 & q2=(1-
+  r2)*p1+r2*p2 holds r1<=r2;
 end;
 
 definition
@@ -336,28 +332,26 @@ definition
 end;
 
 theorem :: JORDAN3:62
-  for p1,p2,q1,q2 being Point of TOP-REAL 2 st
-  LE q1,q2,p1,p2 & LE q2,q1,p1,p2 holds q1=q2;
+  for p1,p2,q1,q2 being Point of TOP-REAL 2 st LE q1,q2,p1,p2 & LE q2,q1
+  ,p1,p2 holds q1=q2;
 
 theorem :: JORDAN3:63
-  for p1,p2,q1,q2 being Point of TOP-REAL 2 st
-  q1 in LSeg(p1,p2) & q2 in LSeg(p1,p2) & p1<>p2
-  holds (LE q1,q2,p1,p2 or LT q2,q1,p1,p2)
-  & not(LE q1,q2,p1,p2 & LT q2,q1,p1,p2);
+  for p1,p2,q1,q2 being Point of TOP-REAL 2 st q1 in LSeg(p1,p2) &
+q2 in LSeg(p1,p2) & p1<>p2 holds (LE q1,q2,p1,p2 or LT q2,q1,p1,p2) & not(LE q1
+  ,q2,p1,p2 & LT q2,q1,p1,p2);
 
 theorem :: JORDAN3:64
-  for f be FinSequence of TOP-REAL 2 for p,q be Point of TOP-REAL 2 st
-  p in L~f & q in L~f & Index(p,f)<Index(q,f) holds q in L~L_Cut(f,p);
+  for f be FinSequence of TOP-REAL 2 for p,q be Point of TOP-REAL
+  2 st p in L~f & q in L~f & Index(p,f)<Index(q,f) holds q in L~L_Cut(f,p);
 
 theorem :: JORDAN3:65
-  for p,q,p1,p2 being Point of TOP-REAL 2 st
-  LE p,q,p1,p2 holds q in LSeg(p,p2) & p in LSeg(p1,q);
+  for p,q,p1,p2 being Point of TOP-REAL 2 st LE p,q,p1,p2 holds q
+  in LSeg(p,p2) & p in LSeg(p1,q);
 
 theorem :: JORDAN3:66
-  for f be FinSequence of TOP-REAL 2
-  for p,q be Point of TOP-REAL 2 st p in L~f & q in L~f & p<>q &
-  Index(p,f) = Index(q,f) & LE p,q,f/.(Index(p,f)),f/.(Index(p,f)+1) holds
-  q in L~L_Cut(f,p);
+  for f be FinSequence of TOP-REAL 2 for p,q be Point of TOP-REAL
+2 st p in L~f & q in L~f & p<>q & Index(p,f) = Index(q,f) & LE p,q,f/.(Index(p,
+  f)),f/.(Index(p,f)+1) holds q in L~L_Cut(f,p);
 
 begin
 
@@ -371,94 +365,91 @@ definition
   func B_Cut(f,p,q) -> FinSequence of TOP-REAL 2 equals
 :: JORDAN3:def 8
 
-  R_Cut(L_Cut(f,p),q) if p in L~f & q in L~f & Index(p,f)<Index(q,f)
-  or Index(p,f)=Index(q,f) & LE p,q,f/.(Index(p,f)),f/.(Index(p,f)+1)
-  otherwise Rev (R_Cut(L_Cut(f,q),p));
+  R_Cut(L_Cut(f,p
+),q) if p in L~f & q in L~f & Index(p,f)<Index(q,f) or Index(p,f)=Index(q,f) &
+  LE p,q,f/.(Index(p,f)),f/.(Index(p,f)+1) otherwise Rev (R_Cut(L_Cut(f,q),p));
 end;
 
 theorem :: JORDAN3:67
-  for f being FinSequence of TOP-REAL 2, p being Point of TOP-REAL 2
-  st f is being_S-Seq & p in L~f & p<>f.1
-   holds R_Cut(f,p) is_S-Seq_joining f/.1,p;
+  for f being FinSequence of TOP-REAL 2, p being Point of TOP-REAL
+2 st f is being_S-Seq & p in L~f & p<>f.1 holds R_Cut(f,p) is_S-Seq_joining f/.
+  1,p;
 
 theorem :: JORDAN3:68
-  for f being FinSequence of TOP-REAL 2,
-  p being Point of TOP-REAL 2 st f is being_S-Seq & p in L~f &
-  p<>f.len f holds L_Cut(f,p) is_S-Seq_joining p,f/.len f;
+  for f being FinSequence of TOP-REAL 2, p being Point of TOP-REAL
+2 st f is being_S-Seq & p in L~f & p<>f.len f holds L_Cut(f,p) is_S-Seq_joining
+  p,f/.len f;
 
 theorem :: JORDAN3:69
-  for f being FinSequence of TOP-REAL 2,
-  p being Point of TOP-REAL 2 st f is being_S-Seq & p in L~f &
-  p<>f.len f holds L_Cut(f,p) is being_S-Seq;
+  for f being FinSequence of TOP-REAL 2, p being Point of TOP-REAL
+  2 st f is being_S-Seq & p in L~f & p<>f.len f holds L_Cut(f,p) is being_S-Seq
+;
 
 theorem :: JORDAN3:70
-  for f being FinSequence of TOP-REAL 2,
-  p being Point of TOP-REAL 2 st f is being_S-Seq & p in L~f &
-  p<>f.1 holds R_Cut(f,p) is being_S-Seq;
+  for f being FinSequence of TOP-REAL 2, p being Point of TOP-REAL
+  2 st f is being_S-Seq & p in L~f & p<>f.1 holds R_Cut(f,p) is being_S-Seq;
 
 theorem :: JORDAN3:71
-  for f being FinSequence of TOP-REAL 2,
-  p,q being Point of TOP-REAL 2 st f is being_S-Seq & p in L~f & q in L~f &
-  p<>q holds B_Cut(f,p,q) is_S-Seq_joining p,q;
+  for f being FinSequence of TOP-REAL 2, p,q being Point of
+TOP-REAL 2 st f is being_S-Seq & p in L~f & q in L~f & p<>q holds B_Cut(f,p,q)
+  is_S-Seq_joining p,q;
 
 theorem :: JORDAN3:72
-  for f being FinSequence of TOP-REAL 2,
-  p,q being Point of TOP-REAL 2 st f is being_S-Seq & p in L~f & q in L~f &
-  p<>q holds B_Cut(f,p,q) is being_S-Seq;
+  for f being FinSequence of TOP-REAL 2, p,q being Point of TOP-REAL 2
+  st f is being_S-Seq & p in L~f & q in L~f & p<>q holds B_Cut(f,p,q) is
+  being_S-Seq;
 
 theorem :: JORDAN3:73
-  for f,g being FinSequence of TOP-REAL 2 st f.len f=g.1 &
-  f is being_S-Seq & g is being_S-Seq & L~f /\ L~g={g.1}
-   holds f^mid(g,2,len g) is being_S-Seq;
+  for f,g being FinSequence of TOP-REAL 2 st f.len f=g.1 & f is
+  being_S-Seq & g is being_S-Seq & L~f /\ L~g={g.1} holds f^mid(g,2,len g) is
+  being_S-Seq;
 
 theorem :: JORDAN3:74
-  for f,g being FinSequence of TOP-REAL 2 st f.len f=g.1 &
-  f is being_S-Seq & g is being_S-Seq & L~f /\ L~g={g.1}
-  holds f^mid(g,2,len g) is_S-Seq_joining f/.1,g/.len g;
+  for f,g being FinSequence of TOP-REAL 2 st f.len f=g.1 & f is
+  being_S-Seq & g is being_S-Seq & L~f /\ L~g={g.1} holds f^mid(g,2,len g)
+  is_S-Seq_joining f/.1,g/.len g;
 
 theorem :: JORDAN3:75
-  for f being FinSequence of TOP-REAL 2,
-  n being Element of NAT holds L~(f/^n) c= L~f;
+  for f being FinSequence of TOP-REAL 2, n being Element of NAT holds L~
+  (f/^n) c= L~f;
 
 theorem :: JORDAN3:76
-  for f being FinSequence of TOP-REAL 2,
-  p being Point of TOP-REAL 2 st p in L~f holds L~R_Cut(f,p) c= L~f;
+  for f being FinSequence of TOP-REAL 2, p being Point of TOP-REAL
+  2 st p in L~f holds L~R_Cut(f,p) c= L~f;
 
 theorem :: JORDAN3:77
-  for f be FinSequence of TOP-REAL 2
-  for p be Point of TOP-REAL 2 st p in L~f holds L~L_Cut(f,p) c= L~f;
+  for f be FinSequence of TOP-REAL 2 for p be Point of TOP-REAL 2
+  st p in L~f holds L~L_Cut(f,p) c= L~f;
 
 theorem :: JORDAN3:78
-  for f,g being FinSequence of TOP-REAL 2,
-  p being Point of TOP-REAL 2 st f.len f=g.1 & p in L~f &
-  f is being_S-Seq & g is being_S-Seq & L~f /\ L~g={g.1} & p<>f.len f
-  holds L_Cut(f,p)^mid(g,2,len g) is_S-Seq_joining p,g/.len g;
+  for f,g being FinSequence of TOP-REAL 2, p being Point of
+TOP-REAL 2 st f.len f=g.1 & p in L~f & f is being_S-Seq & g is being_S-Seq & L~
+f /\ L~g={g.1} & p<>f.len f holds L_Cut(f,p)^mid(g,2,len g) is_S-Seq_joining p,
+  g/.len g;
 
 theorem :: JORDAN3:79
-  for f,g being FinSequence of TOP-REAL 2,
-  p being Point of TOP-REAL 2 st f.len f=g.1 & p in L~f &
-  f is being_S-Seq & g is being_S-Seq & L~f /\ L~g={g.1} & p<>f.len f
-  holds L_Cut(f,p)^mid(g,2,len g) is being_S-Seq;
+  for f,g being FinSequence of TOP-REAL 2, p being Point of TOP-REAL 2
+st f.len f=g.1 & p in L~f & f is being_S-Seq & g is being_S-Seq & L~f /\ L~g={g
+  .1} & p<>f.len f holds L_Cut(f,p)^mid(g,2,len g) is being_S-Seq;
 
 theorem :: JORDAN3:80
-  for f,g being FinSequence of TOP-REAL 2 st f.len f=g.1 &
-  f is being_S-Seq & g is being_S-Seq & L~f /\ L~g={g.1}
-  holds mid(f,1,len f-'1)^g is being_S-Seq;
+  for f,g being FinSequence of TOP-REAL 2 st f.len f=g.1 & f is
+being_S-Seq & g is being_S-Seq & L~f /\ L~g={g.1} holds mid(f,1,len f-'1)^g is
+  being_S-Seq;
 
 theorem :: JORDAN3:81
-  for f,g being FinSequence of TOP-REAL 2 st f.len f=g.1 &
-  f is being_S-Seq & g is being_S-Seq & L~f /\ L~g={g.1}
-  holds mid(f,1,len f-'1)^g is_S-Seq_joining f/.1,g/.len g;
+  for f,g being FinSequence of TOP-REAL 2 st f.len f=g.1 & f is
+  being_S-Seq & g is being_S-Seq & L~f /\ L~g={g.1} holds mid(f,1,len f-'1)^g
+  is_S-Seq_joining f/.1,g/.len g;
 
 theorem :: JORDAN3:82
-  for f,g being FinSequence of TOP-REAL 2,
-  p being Point of TOP-REAL 2 st f.len f=g.1 & p in L~g &
-  f is being_S-Seq & g is being_S-Seq & L~f /\ L~g={g.1} & p<>g.1
-  holds mid(f,1,len f -'1)^R_Cut(g,p) is_S-Seq_joining f/.1,p;
+  for f,g being FinSequence of TOP-REAL 2, p being Point of
+TOP-REAL 2 st f.len f=g.1 & p in L~g & f is being_S-Seq & g is being_S-Seq & L~
+f /\ L~g={g.1} & p<>g.1 holds mid(f,1,len f -'1)^R_Cut(g,p) is_S-Seq_joining f
+  /.1,p;
 
 theorem :: JORDAN3:83
-  for f,g being FinSequence of TOP-REAL 2,
-  p being Point of TOP-REAL 2 st f.len f=g.1 & p in L~g &
-  f is being_S-Seq & g is being_S-Seq & L~f /\ L~g={g.1} & p<>g.1
-  holds mid(f,1,len f -'1)^R_Cut(g,p) is being_S-Seq;
+  for f,g being FinSequence of TOP-REAL 2, p being Point of TOP-REAL 2
+st f.len f=g.1 & p in L~g & f is being_S-Seq & g is being_S-Seq & L~f /\ L~g={g
+  .1} & p<>g.1 holds mid(f,1,len f -'1)^R_Cut(g,p) is being_S-Seq;
 

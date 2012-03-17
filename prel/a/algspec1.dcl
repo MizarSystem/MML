@@ -7,6 +7,7 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="TARSKI"/>
@@ -18,7 +19,6 @@
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
-<ArticleID name="PARTFUN1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="UNIALG_1"/>
 <ArticleID name="PBOOLE"/>
@@ -48,8 +48,8 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="40" value="false"/>
-<Adjective nr="49" value="false"/>
+<Adjective nr="41" value="false"/>
+<Adjective nr="50" value="false"/>
 <Adjective nr="62"/>
 <Adjective nr="87"/>
 </Cluster>
@@ -67,9 +67,9 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="6"/>
-<Adjective nr="13">
+<Adjective nr="14">
 <LocusVar nr="2"/>
-<Func kind="K" nr="136">
+<Func kind="K" nr="144">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
@@ -77,7 +77,7 @@
 <Func kind="K" nr="21">
 <Func kind="K" nr="22">
 <LocusVar nr="2"/>
-<Func kind="K" nr="136">
+<Func kind="K" nr="144">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -86,7 +86,7 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="6"/>
-<Adjective nr="13">
+<Adjective nr="14">
 <LocusVar nr="2"/>
 <LocusVar nr="1"/>
 </Adjective>
@@ -106,7 +106,7 @@
 <LocusVar nr="4"/>
 </Func>
 <Cluster>
-<Adjective nr="49" value="false"/>
+<Adjective nr="50" value="false"/>
 <Adjective nr="62"/>
 </Cluster>
 </FCluster>
@@ -114,7 +114,7 @@
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="40" value="false"/>
+<Adjective nr="41" value="false"/>
 <Adjective nr="87"/>
 </Cluster>
 </Typ>
@@ -125,14 +125,14 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="40" value="false"/>
+<Adjective nr="41" value="false"/>
 </Cluster>
 </CCluster>
 <CCluster aid="ALGSPEC1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="49" value="false"/>
+<Adjective nr="50" value="false"/>
 <Adjective nr="87"/>
 </Cluster>
 </Typ>
@@ -143,7 +143,7 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="49" value="false"/>
+<Adjective nr="50" value="false"/>
 </Cluster>
 </CCluster>
 </Registrations>

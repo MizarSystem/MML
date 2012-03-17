@@ -14,12 +14,12 @@ environ
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, XCMPLX_0, NUMBERS, XXREAL_0,
       XREAL_0, COMPLEX1, REAL_1, NAT_1, NEWTON, PREPOWER, POWER, RELAT_1,
       FUNCT_1, RELSET_1, PARTFUN1, VALUED_0, VALUED_1, SEQ_1, SEQ_2, FUNCT_2,
-      SEQM_3, FUNCOP_1, SERIES_1, LIMFUNC1, RCOMP_1, SEQFUNC, STRUCT_0,
-      PRE_TOPC, TOPS_2, BORSUK_1, COMPTS_1, TOPMETR, TSEP_1, TMAP_1, PSCOMP_1,
-      TOPREALB, METRIC_1, PARTFUN3;
- constructors NAT_1, SEQM_3, PROB_1, LIMFUNC1, NEWTON, PREPOWER,
-      FUNCOP_1, SERIES_1, COMPTS_1, TMAP_1, BORSUK_4, TOPREALB, PARTFUN3,
-      SEQ_1, SEQFUNC, SETFAM_1;
+      FUNCOP_1, SERIES_1, LIMFUNC1, RCOMP_1, SEQFUNC, STRUCT_0, PRE_TOPC,
+      TOPS_2, BORSUK_1, TOPMETR, TSEP_1, TMAP_1, PSCOMP_1, TOPREALB, METRIC_1,
+      PARTFUN3;
+ constructors NAT_1, SEQM_3, PROB_1, LIMFUNC1, NEWTON, PREPOWER, FUNCOP_1,
+      SERIES_1, COMPTS_1, TMAP_1, BORSUK_4, TOPREALB, PARTFUN3, SEQ_1, SEQFUNC,
+      SETFAM_1;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, ORDINAL1, RELSET_1, FUNCT_2,
       NUMBERS, XXREAL_0, XREAL_0, MEMBERED, NEWTON, FCONT_3, STRUCT_0,
       PRE_TOPC, METRIC_1, BORSUK_1, TOPMETR, PSCOMP_1, BORSUK_3, BORSUK_4,
@@ -29,11 +29,11 @@ environ
       STRUCT_0, LIMFUNC1, PROB_1;
  theorems PRE_TOPC, RCOMP_1, XBOOLE_0, TARSKI, FUNCT_1, RELAT_1, TOPREALB,
       URYSOHN3, TSEP_1, JGRAPH_5, XREAL_0, TOPREALA, TOPMETR, ABSVALUE,
-      FUNCT_2, XREAL_1, TOPS_2, SEQ_1, TMAP_1, TOPS_1, XBOOLE_1, BORSUK_1,
-      FUNCOP_1, NEWTON, TOPREAL6, GRFUNC_1, RFUNCT_1, SEQFUNC, METRIC_1,
-      GOBOARD6, RSSPACE, SEQ_2, SEQ_4, XCMPLX_1, SERIES_1, COMPLEX1, XCMPLX_0,
-      ORDINAL1, POWER, PREPOWER, NAT_1, UNIFORM1, MESFUNC1, RELSET_1, XXREAL_0,
-      VALUED_0, VALUED_1, XXREAL_1;
+      FUNCT_2, XREAL_1, TOPS_2, SEQ_1, TMAP_1, TOPS_1, XBOOLE_1, FUNCOP_1,
+      NEWTON, TOPREAL6, GRFUNC_1, RFUNCT_1, SEQFUNC, METRIC_1, GOBOARD6,
+      RSSPACE, SEQ_2, SEQ_4, XCMPLX_1, SERIES_1, COMPLEX1, XCMPLX_0, ORDINAL1,
+      POWER, PREPOWER, NAT_1, UNIFORM1, MESFUNC1, RELSET_1, XXREAL_0, VALUED_0,
+      VALUED_1, XXREAL_1;
  schemes NAT_1, RECDEF_1, FUNCT_2;
 
 begin
@@ -43,28 +43,29 @@ reserve r, s for real number,
   f, g, h for real-valued Function;
 
 theorem Th1:
-  for a,b,c being real number st |.a-b.| <= c holds b-c <= a & a <= b+c
+  for a,b,c being real number st |.a-b.| <= c holds b-c <= a & a <=
+  b+c
 proof
   let a,b,c be real number;
   assume
 A1: |.a-b.| <= c;
 A2: |.a-b.| >= 0 by COMPLEX1:132;
   then
-A3: b <= b+c & b >= b-c by A1,XREAL_1:33,45;
+A3: b <= b+c by A1,XREAL_1:33;
+A4: b >= b-c by A1,A2,XREAL_1:45;
   per cases;
   suppose
-A4: a-b >= 0;
-    then
-A5: |.a-b.| = a-b by ABSVALUE:def 1;
-    a >= 0 qua Nat + b by A4,XREAL_1:21;
-    hence thesis by A1,A3,A5,XREAL_1:22,XXREAL_0:2;
+    a-b >= 0;
+    then |.a-b.| = a-b & a >= 0 qua Nat + b by ABSVALUE:def 1,XREAL_1:21;
+    hence thesis by A1,A4,XREAL_1:22,XXREAL_0:2;
   end;
-  suppose a-b < 0;
+  suppose
+    a-b < 0;
     then
-A6: |.a-b.| = -(a-b) by ABSVALUE:def 1
+A5: |.a-b.| = -(a-b) by ABSVALUE:def 1
       .= b-a;
     then 0 qua Nat+a <= b by A2,XREAL_1:21;
-    hence thesis by A1,A3,A6,XREAL_1:14,XXREAL_0:2;
+    hence thesis by A1,A3,A5,XREAL_1:14,XXREAL_0:2;
   end;
 end;
 
@@ -73,46 +74,44 @@ canceled 2;
 theorem Th4:
   f c= g implies h-f c= h-g
 proof
+A1: dom(h-g) = dom h /\ dom g by VALUED_1:12;
+A2: dom(h-f) = dom h /\ dom f by VALUED_1:12;
   assume
-A1: f c= g;
+A3: f c= g;
+  then dom f c= dom g by GRFUNC_1:8;
   then
-A2: dom f c= dom g by GRFUNC_1:8;
-A3: dom(h-g) = dom h /\ dom g by VALUED_1:12;
-A4: dom(h-f) = dom h /\ dom f by VALUED_1:12;
-  then
-A5: dom(h-f) c= dom(h-g) by A2,A3,XBOOLE_1:27;
+A4: dom(h-f) c= dom(h-g) by A1,A2,XBOOLE_1:27;
   now
     let x be set;
     assume
-A6: x in dom(h-f);
+A5: x in dom(h-f);
     then
-A7: x in dom f by A4,XBOOLE_0:def 4;
-    thus (h-f).x = h.x - f.x by A6,VALUED_1:13
-      .= h.x - g.x by A1,A7,GRFUNC_1:8
-      .= (h-g).x by A5,A6,VALUED_1:13;
+A6: x in dom f by A2,XBOOLE_0:def 4;
+    thus (h-f).x = h.x - f.x by A5,VALUED_1:13
+      .= h.x - g.x by A3,A6,GRFUNC_1:8
+      .= (h-g).x by A4,A5,VALUED_1:13;
   end;
-  hence thesis by A5,GRFUNC_1:8;
+  hence thesis by A4,GRFUNC_1:8;
 end;
 
 theorem
   f c= g implies f-h c= g-h
 proof
+A1: dom(f-h) = dom f /\ dom h by VALUED_1:12;
+A2: dom(g-h) = dom g /\ dom h by VALUED_1:12;
   assume
-A1: f c= g;
+A3: f c= g;
+  then dom f c= dom g by GRFUNC_1:8;
   then
-A2: dom f c= dom g by GRFUNC_1:8;
-A3: dom(f-h) = dom f /\ dom h by VALUED_1:12;
-  dom(g-h) = dom g /\ dom h by VALUED_1:12;
-  then
-A4: dom(f-h) c= dom(g-h) by A2,A3,XBOOLE_1:27;
+A4: dom(f-h) c= dom(g-h) by A1,A2,XBOOLE_1:27;
   now
     let x be set;
     assume
 A5: x in dom(f-h);
     then
-A6: x in dom f by A3,XBOOLE_0:def 4;
+A6: x in dom f by A1,XBOOLE_0:def 4;
     thus (f-h).x = f.x - h.x by A5,VALUED_1:13
-      .= g.x - h.x by A1,A6,GRFUNC_1:8
+      .= g.x - h.x by A3,A6,GRFUNC_1:8
       .= (g-h).x by A4,A5,VALUED_1:13;
   end;
   hence thesis by A4,GRFUNC_1:8;
@@ -122,7 +121,8 @@ definition
   let f be real-valued Function, r be real number, X be set;
   pred f,X is_absolutely_bounded_by r means
   :Def1:
-  for x being set st x in X /\ dom f holds abs(f.x) <= r;
+  for x being set st x in X
+  /\ dom f holds abs(f.x) <= r;
 end;
 
 registration
@@ -140,8 +140,8 @@ registration
 end;
 
 theorem
-  for T1 being empty TopSpace, T2 being TopSpace
-  for f being Function of T1,T2 holds f is continuous
+  for T1 being empty TopSpace, T2 being TopSpace for f being Function of
+  T1,T2 holds f is continuous
 proof
   let T1 be empty TopSpace, T2 being TopSpace;
   let f be Function of T1,T2;
@@ -151,107 +151,115 @@ proof
 end;
 
 theorem
-  for f,g being summable Real_Sequence
-  st for n being Element of NAT holds f.n <= g.n holds Sum f <= Sum g
+  for f,g being summable Real_Sequence st for n being Element of NAT
+  holds f.n <= g.n holds Sum f <= Sum g
 proof
   let f,g be summable Real_Sequence;
-A1: Partial_Sums f is convergent & Partial_Sums g is convergent
-  by SERIES_1:def 2;
-A2: Sum f = lim Partial_Sums f & Sum g = lim Partial_Sums g by SERIES_1:def 3;
-  assume for n being Element of NAT holds f.n <= g.n;
-  then for n being Element of NAT holds
-  (Partial_Sums f).n <= (Partial_Sums g).n by SERIES_1:17;
+A1: Sum f = lim Partial_Sums f & Sum g = lim Partial_Sums g by SERIES_1:def
+  3;
+  assume
+  for n being Element of NAT holds f.n <= g.n;
+  then
+A2: for n being Element of NAT holds (Partial_Sums f).n <= (Partial_Sums g).
+  n by SERIES_1:17;
+  Partial_Sums f is convergent & Partial_Sums g is convergent by SERIES_1:
+  def 2;
   hence thesis by A1,A2,SEQ_2:32;
 end;
 
 theorem Th8:
-  for f being Real_Sequence st f is absolutely_summable
-  holds abs Sum f <= Sum abs f
+  for f being Real_Sequence st f is absolutely_summable holds abs
+  Sum f <= Sum abs f
 proof
   let f be Real_Sequence;
-  assume f is absolutely_summable;
-  then abs f is summable & f is summable by SERIES_1:40,def 5;
-  then
-A1: Partial_Sums abs f is convergent & Partial_Sums f is convergent
-  by SERIES_1:def 2;
-  then
-A2: abs Partial_Sums f is convergent by SEQ_4:26;
-  defpred P[Element of NAT] means
-  (abs Partial_Sums f).$1 <= (Partial_Sums abs f).$1;
+  defpred P[Element of NAT] means (abs Partial_Sums f).$1 <= (Partial_Sums abs
+  f).$1;
+A1: now
+    let n be Element of NAT;
+    assume
+    P[n];
+    then |.(Partial_Sums f).n.| <= (Partial_Sums abs f).n by SEQ_1:16;
+    then
+    |.(Partial_Sums f).n+f.(n+1).| <= |.(Partial_Sums f).n.|+|.f.(n+1) .|
+& |.( Partial_Sums f).n.|+|.f.(n+1).| <= (Partial_Sums abs f).n+|.f.(n+1) .| by
+    COMPLEX1:142,XREAL_1:8;
+    then
+    |.(Partial_Sums f).n+f.(n+1).| <= (Partial_Sums abs f).n+|.f.(n+1) .|
+    by XXREAL_0:2;
+    then |.(Partial_Sums f).(n+1).| <= (Partial_Sums abs f).n+|.f.(n+1).| by
+    SERIES_1:def 1;
+    then (abs Partial_Sums f).(n+1) <= (Partial_Sums abs f).n+|.f.(n+1).| by
+    SEQ_1:16;
+    then
+    (abs Partial_Sums f).(n+1) <= (Partial_Sums abs f).n+(abs f).(n+1) by
+    SEQ_1:16;
+    hence P[n+1] by SERIES_1:def 1;
+  end;
   (abs Partial_Sums f).0 = abs ((Partial_Sums f).0) by SEQ_1:16
     .= abs (f.0) by SERIES_1:def 1
     .= (abs f).0 by SEQ_1:16;
   then
-A3: P[0] by SERIES_1:def 1;
-A4: now
-    let n be Element of NAT;
-    assume P[n];
-    then |.(Partial_Sums f).n.| <= (Partial_Sums abs f).n by SEQ_1:16;
-    then |.(Partial_Sums f).n+f.(n+1).| <= |.(Partial_Sums f).n.|+|.f.(n+1)
-    .| &
-    |.(Partial_Sums f).n.|+|.f.(n+1).| <= (Partial_Sums abs f).n+|.f.(n+1).|
-    by COMPLEX1:142,XREAL_1:8;
-    then |.(Partial_Sums f).n+f.(n+1).| <= (Partial_Sums abs f).n+|.f.(n+1) .|
-    by XXREAL_0:2;
-    then |.(Partial_Sums f).(n+1).| <= (Partial_Sums abs f).n+|.f.(n+1).|
-    by SERIES_1:def 1;
-    then (abs Partial_Sums f).(n+1) <= (Partial_Sums abs f).n+|.f.(n+1).|
-    by SEQ_1:16;
-    then (abs Partial_Sums f).(n+1) <= (Partial_Sums abs f).n+(abs f).(n+1)
-    by SEQ_1:16;
-    hence P[n+1] by SERIES_1:def 1;
-  end;
-  for n being Element of NAT holds P[n] from NAT_1:sch 1(A3,A4);
-  then lim abs Partial_Sums f <= lim Partial_Sums abs f by A1,A2,SEQ_2:32;
-  then abs lim Partial_Sums f <= lim Partial_Sums abs f by A1,SEQ_4:27;
+A2: P[0] by SERIES_1:def 1;
+A3: for n being Element of NAT holds P[n] from NAT_1:sch 1(A2,A1);
+  assume
+A4: f is absolutely_summable;
+  then abs f is summable by SERIES_1:def 5;
+  then
+A5: Partial_Sums abs f is convergent by SERIES_1:def 2;
+  f is summable by A4,SERIES_1:40;
+  then
+A6: Partial_Sums f is convergent by SERIES_1:def 2;
+  then abs Partial_Sums f is convergent by SEQ_4:26;
+  then lim abs Partial_Sums f <= lim Partial_Sums abs f by A5,
+  A3,SEQ_2:32;
+  then abs lim Partial_Sums f <= lim Partial_Sums abs f by A6,SEQ_4:27;
   then abs lim Partial_Sums f <= Sum abs f by SERIES_1:def 3;
   hence thesis by SERIES_1:def 3;
 end;
 
 theorem Th9:
-  for f being Real_Sequence for a,r being positive (real number) st r < 1 &
-  for n being natural number holds |.f.n-f.(n+1).| <= a*(r to_power n)
-  holds f is convergent &
-  for n being natural number holds |.(lim f)-(f.n).| <= a*(r to_power n)/(1-r)
+  for f being Real_Sequence for a,r being positive (real number) st
+  r < 1 & for n being natural number holds |.f.n-f.(n+1).| <= a*(r to_power n)
+holds f is convergent & for n being natural number holds |.(lim f)-(f.n).| <= a
+  *(r to_power n)/(1-r)
 proof
   let f be Real_Sequence;
   let a,r be positive (real number);
-  assume
-A1: r < 1;
-  assume
-A2: for n being natural number holds |.f.n-f.(n+1).| <= a*(r to_power n);
   deffunc S(Nat, Real) = f.($1+1)-f.$1;
   consider g being Function of NAT, REAL such that
-A3: g.0 = f.0 & for n being Nat holds
-  g.(n+1) = S(n,g.n) from NAT_1:sch 12;
+A1: g.0 = f.0 & for n being Nat holds g.(n+1) = S(n,g.n) from NAT_1:sch
+  12;
   now
     let n be Element of NAT;
     thus f.(n+1) = f.(n+1)-f.n+f.n
-      .= f.n+g.(n+1) by A3;
+      .= f.n+g.(n+1) by A1;
   end;
   then
-A4: f = Partial_Sums g by A3,SERIES_1:def 1;
-A5: |.r.| = r by COMPLEX1:129;
-  then
-A6: r GeoSeq is summable by A1,SERIES_1:28;
-  then
-A7: (a*r")(#)(r GeoSeq) is summable by SERIES_1:13;
-A8: now
+A2: f = Partial_Sums g by A1,SERIES_1:def 1;
+A3: now
     let n be Element of NAT;
     (abs g).n = abs (g.n) by SEQ_1:16;
     hence 0 <= (abs g).n by COMPLEX1:132;
   end;
-  now
-    set m = 1;
+A4: |.r.| = r by COMPLEX1:129;
+  assume
+A5: r < 1;
+  then
+A6: r GeoSeq is summable by A4,SERIES_1:28;
+  assume
+A7: for n being natural number holds |.f.n-f.(n+1).| <= a*(r to_power n);
+A8: now
     let n be Element of NAT;
-    assume m <= n;
+    set m = 1;
+    assume
+    m <= n;
     then consider k being Nat such that
 A9: n = 1+k by NAT_1:10;
-    g.n = S(k,g.k) by A3,A9;
+    g.n = S(k,g.k) by A1,A9;
     then (abs g).n = |.f.n-f.k.| by A9,SEQ_1:16
       .= |.f.k-f.n.| by COMPLEX1:146;
     then
-A10: (abs g).n <= a*(r to_power k) by A2,A9;
+A10: (abs g).n <= a*(r to_power k) by A7,A9;
     a*1*(r to_power k) = a*(r"*r)*(r to_power k) by XCMPLX_0:def 7
       .= (a*r")*(r*(r to_power k))
       .= (a*r")*((r to_power 1)*(r to_power k)) by POWER:30
@@ -260,176 +268,190 @@ A10: (abs g).n <= a*(r to_power k) by A2,A9;
       .= (a*r")*((r GeoSeq).n) by PREPOWER:def 1;
     hence (abs g).n <= ((a*r")(#)(r GeoSeq)).n by A10,SEQ_1:13;
   end;
-  then abs g is summable by A7,A8,SERIES_1:22;
+  (a*r")(#)(r GeoSeq) is summable by A6,SERIES_1:13;
+  then abs g is summable by A3,A8,SERIES_1:22;
   then
 A11: g is absolutely_summable by SERIES_1:def 5;
   then g is summable by SERIES_1:40;
-  hence f is convergent by A4,SERIES_1:def 2;
+  hence f is convergent by A2,SERIES_1:def 2;
   let n be natural number;
   reconsider n' = n as Element of NAT by ORDINAL1:def 13;
-  lim f = Sum g by A4,SERIES_1:def 3;
-  then
-A12: lim f = f.n+Sum(g^\(n'+1)) by A4,A11,SERIES_1:18,40;
-A13: (a*(r to_power n))(#)(r GeoSeq) is summable by A6,SERIES_1:13;
-  now
+A12: now
     let k be Element of NAT;
     (abs (g^\(n'+1))).k = |.(g^\(n'+1)).k.| by SEQ_1:16;
     hence 0 <= (abs (g^\(n'+1))).k by COMPLEX1:132;
     (abs (g^\(n'+1))).k = |.(g^\(n'+1)).k.| by SEQ_1:16
       .= |.g.(n'+1+k).| by NAT_1:def 3
-      .= |.f.(n'+k+1)-f.(n'+k).| by A3
+      .= |.f.(n'+k+1)-f.(n'+k).| by A1
       .= |.f.(n'+k)-f.(n'+k+1).| by UNIFORM1:13;
-    then (abs (g^\(n'+1))).k <= a*(r to_power (n'+k)) by A2;
-    then (abs (g^\(n'+1))).k <= a*((r to_power n')*(r to_power k))
-    by POWER:32;
+    then (abs (g^\(n'+1))).k <= a*(r to_power (n'+k)) by A7;
+    then (abs (g^\(n'+1))).k <= a*((r to_power n')*(r to_power k)) by
+    POWER:32;
     then (abs (g^\(n'+1))).k <= a*(r to_power n')*(r to_power k);
     then (abs (g^\(n'+1))).k <= a*(r to_power n')*(r|^k) by POWER:46;
-    then (abs (g^\(n'+1))).k <= a*(r to_power n')*((r GeoSeq).k)
-    by PREPOWER:def 1;
-    hence (abs (g^\(n'+1))).k <= ((a*(r to_power n))(#)(r GeoSeq)).k
-    by SEQ_1:13;
+    then (abs (g^\(n'+1))).k <= a*(r to_power n')*((r GeoSeq).k) by
+    PREPOWER:def 1;
+    hence (abs (g^\(n'+1))).k <= ((a*(r to_power n))(#)(r GeoSeq)).k by
+    SEQ_1:13;
   end;
+A13: (a*(r to_power n))(#)(r GeoSeq) is summable by A6,SERIES_1:13;
+  then abs (g^\(n'+1)) is summable by A12,SERIES_1:24;
   then
-A14: Sum abs (g^\(n'+1)) <= Sum ((a*(r to_power n))(#)(r GeoSeq)) &
-  abs (g^\(n'+1)) is summable by A13,SERIES_1:24;
+A14: (g^\(n'+1)) is absolutely_summable by SERIES_1:def 5;
+  lim f = Sum g by A2,SERIES_1:def 3;
+  then lim f = f.n+Sum(g^\(n'+1)) by A2,A11,SERIES_1:18,40;
   then
-A15: Sum abs (g^\(n'+1)) <= Sum ((a*(r to_power n))(#)(r GeoSeq)) &
-  (g^\(n'+1)) is absolutely_summable by SERIES_1:def 5;
-A16: Sum ((a*(r to_power n))(#)(r GeoSeq))
-  = (a*(r to_power n))*Sum (r GeoSeq) by A6,SERIES_1:13
-    .= (a*(r to_power n))*(1/(1-r)) by A1,A5,SERIES_1:28
+A15: |.(lim f)-(f.n).| <= Sum abs (g^\(n'+1)) by A14,Th8;
+A16: Sum abs (g^\(n'+1)) <= Sum ((a*(r to_power n))(#)(r GeoSeq)) by A13,A12
+  , SERIES_1:24;
+  Sum ((a*(r to_power n))(#)(r GeoSeq)) = (a*(r to_power n))*Sum (r
+  GeoSeq) by A6,SERIES_1:13
+    .= (a*(r to_power n))*(1/(1-r)) by A5,A4,SERIES_1:28
     .= (a*(r to_power n))/(1-r) by XCMPLX_1:100;
-  |.(lim f)-(f.n).| <= Sum abs (g^\(n'+1)) by A12,A15,Th8;
-  hence thesis by A14,A16,XXREAL_0:2;
+  hence thesis by A16,A15,XXREAL_0:2;
 end;
 
 theorem
-  for f being Real_Sequence for a,r being positive (real number) st r < 1 &
-  for n being natural number holds |.f.n-f.(n+1).| <= a*(r to_power n)
-  holds lim f >= f.0-a/(1-r) & lim f <= f.0+a/(1-r)
+  for f being Real_Sequence for a,r being positive (real number) st r <
+1 & for n being natural number holds |.f.n-f.(n+1).| <= a*(r to_power n) holds
+  lim f >= f.0-a/(1-r) & lim f <= f.0+a/(1-r)
 proof
   let f be Real_Sequence;
   let a,r be positive (real number);
   assume
 A1: r < 1;
+A2: r to_power 0 = 1 by POWER:29;
   assume
-A2: for n being natural number holds |.f.n-f.(n+1).| <= a*(r to_power n);
-  r to_power 0 = 1 by POWER:29;
+  for n being natural number holds |.f.n-f.(n+1).| <= a*(r to_power n);
   then |.(lim f)-(f.0).| <= a*1/(1-r) by A1,A2,Th9;
   hence thesis by Th1;
 end;
 
 theorem Th11:
-  for X,Z being non empty set
-  for F being Functional_Sequence of X,REAL st Z common_on_dom F
-  for a,r being positive (real number) st r < 1 &
-  for n being natural number holds
-  (F.n)-(F.(n+1)), Z is_absolutely_bounded_by a*(r to_power n)
-  holds F is_unif_conv_on Z & for n being natural number holds
-  lim(F,Z)-(F.n), Z is_absolutely_bounded_by a*(r to_power n)/(1-r)
+  for X,Z being non empty set for F being Functional_Sequence of X
+,REAL st Z common_on_dom F for a,r being positive (real number) st r < 1 & for
+  n being natural number holds (F.n)-(F.(n+1)), Z is_absolutely_bounded_by a*(r
+to_power n) holds F is_unif_conv_on Z & for n being natural number holds lim(F,
+  Z)-(F.n), Z is_absolutely_bounded_by a*(r to_power n)/(1-r)
 proof
   let X,Z be non empty set;
   let F be Functional_Sequence of X,REAL such that
 A1: Z common_on_dom F;
-  let a,r be positive (real number) such that
-A2: r < 1;
-  assume
-A3: for n being natural number holds
-  (F.n)-(F.(n+1)), Z is_absolutely_bounded_by a*(r to_power n);
-  Z c= dom(F.0) & dom(F.0) c= X by A1,SEQFUNC:def 10;
+  Z c= dom(F.0) by A1,SEQFUNC:def 10;
   then reconsider Z' = Z as non empty Subset of X by XBOOLE_1:1;
   deffunc ff(Element of Z') = lim(F # $1);
+  let a,r be positive (real number) such that
+A2: r < 1;
   consider f being Function of Z',REAL such that
-A4: for x being Element of Z' holds f.x = ff(x) from FUNCT_2:sch 4;
+A3: for x being Element of Z' holds f.x = ff(x) from FUNCT_2:sch 4;
   reconsider f as PartFunc of X,REAL by RELSET_1:17;
+  assume
+A4: for n being natural number holds (F.n)-(F.(n+1)), Z
+  is_absolutely_bounded_by a*(r to_power n);
   thus F is_unif_conv_on Z
   proof
     thus Z common_on_dom F by A1;
-    take f; thus Z = dom f by FUNCT_2:def 1;
-    let p be Real such that
-A5: p > 0;
-A6: 1-r > 0 by A2,XREAL_1:52;
+    take f;
+    thus Z = dom f by FUNCT_2:def 1;
+A5: 1-r > 0 by A2,XREAL_1:52;
+    let p be Real;
+    assume
+    p > 0;
     then p*(1-r) > 0 by A5,XREAL_1:131;
     then
-A7: p*(1-r)/a > 0 by XREAL_1:141;
+A6: p*(1-r)/a > 0 by XREAL_1:141;
     consider k being Element of NAT such that
-A8: k >= 1+log(r, p*(1-r)/a) by MESFUNC1:11;
-    k > log(r, p*(1-r)/a) by A8,XREAL_1:41;
+A7: k >= 1+log(r, p*(1-r)/a) by MESFUNC1:11;
+A8: a*(p*(1-r)/a) = p*(1-r)*(a/a) & a/a = 1 by XCMPLX_1:60,76;
+    k > log(r, p*(1-r)/a) by A7,XREAL_1:41;
     then r to_power k < r to_power log(r, p*(1-r)/a) by A2,POWER:45;
-    then r to_power k < p*(1-r)/a & a <> 0 by A2,A7,POWER:def 3;
-    then a*(r to_power k) < a*(p*(1-r)/a) & a*(p*(1-r)/a) = p*(1-r)*(a/a) &
-    a/a = 1 by XCMPLX_1:60,76,XREAL_1:70;
-    then a*(r to_power k)/(1-r) < (p*(1-r))/(1-r) by A6,XREAL_1:76;
+    then r to_power k < p*(1-r)/a by A2,A6,POWER:def 3;
+    then a*(r to_power k) < a*(p*(1-r)/a) by XREAL_1:70;
+    then a*(r to_power k)/(1-r) < (p*(1-r))/(1-r) by A5,A8,XREAL_1:76;
     then
-A9: a*(r to_power k)/(1-r) < p by A6,XCMPLX_1:90;
+A9: a*(r to_power k)/(1-r) < p by A5,XCMPLX_1:90;
     take k;
     let n be Element of NAT, x be Element of X;
-    assume
-A10: n>=k & x in Z;
-    then n = k or n > k by XXREAL_0:1;
-    then r to_power n <= r to_power k by A2,POWER:45;
-    then a*(r to_power n) <= a*(r to_power k) & 1-r > 1-1 by A2,XREAL_1:12,66;
-    then
-A11: a*(r to_power n)/(1-r) <= a*(r to_power k)/(1-r) by XREAL_1:74;
+    assume that
+A10: n>=k and
+A11: x in Z;
+A12: (F.n).x = (F#x).n & |.(F.n).x - f.x.| = |.(f.x) - (F.n).x.| by
+    COMPLEX1:146 ,SEQFUNC:def 11;
     now
       let n be natural number;
-A12:  n in NAT & n+1 in NAT by ORDINAL1:def 13;
-      then Z c= dom (F.n) & Z c= dom (F.(n+1)) by A1,SEQFUNC:def 10;
-      then x in dom (F.n) /\ dom (F.(n+1)) by A10,XBOOLE_0:def 4;
+A13:  n in NAT by ORDINAL1:def 13;
+      then
+A14:  (F#x).n = (F.n).x by SEQFUNC:def 11;
+A15:  Z c= dom (F.(n+1)) by A1,SEQFUNC:def 10;
+      Z c= dom (F.n) by A1,A13,SEQFUNC:def 10;
+      then x in dom (F.n) /\ dom (F.(n+1)) by A11,A15,XBOOLE_0:def 4;
       then x in dom ((F.n)-(F.(n+1))) by VALUED_1:12;
-      then ((F.n)-(F.(n+1))).x = (F.n).x-(F.(n+1)).x &
-      (F.n)-(F.(n+1)), Z is_absolutely_bounded_by a*(r to_power n) &
-      x in Z /\ dom ((F.n)-(F.(n+1))) by A3,A10,VALUED_1:13,XBOOLE_0:def 4;
-      then |.(F.n).x-(F.(n+1)).x.| <= a*(r to_power n) &
-      (F#x).n = (F.n).x & (F#x).(n+1) = F.(n+1).x by A12,Def1,SEQFUNC:def 11;
-      hence |.(F#x).n-(F#x).(n+1).| <= a*(r to_power n);
+      then
+A16:  ((F.n)-(F.(n+1))).x = (F.n).x-(F.(n+1)).x & x in Z /\ dom ((F.n)-(F
+      .(n+1))) by A11,VALUED_1:13,XBOOLE_0:def 4;
+      (F.n)-(F.(n+1)), Z is_absolutely_bounded_by a*(r to_power n) by A4;
+      then |.(F.n).x-(F.(n+1)).x.| <= a*(r to_power n) by A16,Def1;
+      hence |.(F#x).n-(F#x).(n+1).| <= a*(r to_power n) by A14, SEQFUNC:def
+      11;
     end;
-    then |.(lim (F#x)) - ((F#x).n).| <= a*(r to_power n)/(1-r) by A2,Th9;
     then
-A13: |.(lim (F#x)) - ((F#x).n).| <= a*(r to_power k)/(1-r) by A11,XXREAL_0:2;
-    (F.n).x = (F#x).n & f.x = lim (F#x) &
-    |.(F.n).x - f.x.| = |.(f.x) - (F.n).x.|
-    by A4,A10,COMPLEX1:146,SEQFUNC:def 11;
-    hence |.(F.n).x - f.x.| < p by A9,A13,XXREAL_0:2;
+A17: |.(lim (F#x)) - ((F#x).n).| <= a*(r to_power n)/(1-r) by A2,Th9;
+    n = k or n > k by A10,XXREAL_0:1;
+    then r to_power n <= r to_power k by A2,POWER:45;
+    then
+A18: a*(r to_power n) <= a*(r to_power k) by XREAL_1:66;
+    1-r > 1-1 by A2,XREAL_1:12;
+    then a*(r to_power n)/(1-r) <= a*(r to_power k)/(1-r) by A18,XREAL_1:
+    74;
+    then
+A19: |.(lim (F#x)) - ((F#x).n).| <= a*(r to_power k)/(1-r) by A17,
+    XXREAL_0:2;
+    f.x = lim (F#x) by A3,A11;
+    hence |.(F.n).x - f.x.| < p by A9,A19,A12,XXREAL_0:2;
   end;
   then
-A14: F is_point_conv_on Z by SEQFUNC:23;
+A20: F is_point_conv_on Z by SEQFUNC:23;
   let n' be natural number, z being set;
   reconsider n = n' as Element of NAT by ORDINAL1:def 13;
   assume
-A15: z in Z /\ dom (lim(F,Z)-(F.n'));
-  then
-A16: z in Z' & z in dom (lim(F,Z)-(F.n')) by XBOOLE_0:def 4;
-  reconsider x = z as Element of X by A15;
-A17: Z = dom lim(F,Z) by A14,SEQFUNC:def 14;
+A21: z in Z /\ dom (lim(F,Z)-(F.n'));
+  then reconsider x = z as Element of X;
+A22: z in Z' by A21,XBOOLE_0:def 4;
   now
     let n be natural number;
-A18: n in NAT & n+1 in NAT by ORDINAL1:def 13;
-    then Z c= dom (F.n) & Z c= dom (F.(n+1)) by A1,SEQFUNC:def 10;
-    then z in dom (F.n) /\ dom (F.(n+1)) by A16,XBOOLE_0:def 4;
-    then x in dom ((F.n)-(F.(n+1))) &
-    (F#x).n = (F.n).x & (F#x).(n+1) = F.(n+1).x
-    by A18,SEQFUNC:def 11,VALUED_1:12;
-    then x in Z /\ dom ((F.n)-(F.(n+1))) &
-    (F.n)-(F.(n+1)), Z is_absolutely_bounded_by a*(r to_power n) &
-    ((F.n)-(F.(n+1))).x = (F#x).n-(F#x).(n+1)
-    by A3,A16,VALUED_1:13,XBOOLE_0:def 4;
-    hence |.(F#x).n-(F#x).(n+1).| <= a*(r to_power n) by Def1;
+A23: (F#x).(n+1) = F.(n+1).x by SEQFUNC:def 11;
+A24: Z c= dom (F.(n+1)) by A1,SEQFUNC:def 10;
+A25: n in NAT by ORDINAL1:def 13;
+    then Z c= dom (F.n) by A1,SEQFUNC:def 10;
+    then z in dom (F.n) /\ dom (F.(n+1)) by A22,A24,XBOOLE_0:def 4;
+    then
+A26: x in dom ((F.n)-(F.(n+1))) by VALUED_1:12;
+    then
+A27: x in Z /\ dom ((F.n)-(F.(n+1))) by A22,XBOOLE_0:def 4;
+A28: (F.n)-(F.(n+1)), Z is_absolutely_bounded_by a*(r to_power n) by A4;
+    (F#x).n = (F.n).x by A25,SEQFUNC:def 11;
+    then ((F.n)-(F.(n+1))).x = (F#x).n-(F#x).(n+1) by A26,
+    A23,VALUED_1:13;
+    hence |.(F#x).n-(F#x).(n+1).| <= a*(r to_power n) by A27,A28,Def1;
   end;
-  then |.(lim (F#x)) - ((F#x).n).| <= a*(r to_power n)/(1-r) by A2,Th9;
-  then |.lim(F,Z).x-(F#x).n.| <= a*(r to_power n)/(1-r)
-  by A14,A16,A17,SEQFUNC:def 14;
-  then |.lim(F,Z).x-(F.n).x.| <= a*(r to_power n)/(1-r) by SEQFUNC:def 11;
-  hence thesis by A16,VALUED_1:13;
+  then
+A29: |.(lim (F#x)) - ((F#x).n).| <= a*(r to_power n)/(1-r) by A2,Th9;
+  Z = dom lim(F,Z) by A20,SEQFUNC:def 14;
+  then |.lim(F,Z).x-(F#x).n.| <= a*(r to_power n)/(1-r) by A20,A22,A29,
+  SEQFUNC:def 14;
+  then
+A30: |.lim(F,Z).x-(F.n).x.| <= a*(r to_power n)/(1-r) by
+  SEQFUNC:def 11;
+  z in dom (lim(F,Z)-(F.n')) by A21,XBOOLE_0:def 4;
+  hence thesis by A30,VALUED_1:13;
 end;
 
 theorem Th12:
-  for X,Z being non empty set for F being Functional_Sequence of X,REAL
-  st Z common_on_dom F for a,r being positive (real number) st r < 1 &
-  for n being natural number holds
-  (F.n)-(F.(n+1)), Z is_absolutely_bounded_by a*(r to_power n)
-  for z being Element of Z holds
-  lim(F,Z).z >= F.0 .z-a/(1-r) & lim(F,Z).z <= F.0 .z+a/(1-r)
+  for X,Z being non empty set for F being Functional_Sequence of X
+,REAL st Z common_on_dom F for a,r being positive (real number) st r < 1 & for
+  n being natural number holds (F.n)-(F.(n+1)), Z is_absolutely_bounded_by a*(r
+to_power n) for z being Element of Z holds lim(F,Z).z >= F.0 .z-a/(1-r) & lim(F
+  ,Z).z <= F.0 .z+a/(1-r)
 proof
   let X,Z be non empty set;
   let F be Functional_Sequence of X,REAL;
@@ -439,28 +461,32 @@ A1: Z common_on_dom F;
   assume
 A2: r < 1;
   assume
-A3: for n being natural number
-  holds (F.n)-(F.(n+1)), Z is_absolutely_bounded_by a*(r to_power n);
-  let z be Element of Z;
-  F is_unif_conv_on Z by A1,A2,A3,Th11;
-  then F is_point_conv_on Z by SEQFUNC:23;
-  then z in Z & Z c= dom (F.0) & dom lim(F,Z) = Z by A1,SEQFUNC:def 10,def 14;
-  then z in dom (lim(F,Z)) /\ dom (F.0) by XBOOLE_0:def 4;
+A3: for n being natural number holds (F.n)-(F.(n+1)), Z
+  is_absolutely_bounded_by a*(r to_power n);
+  then F is_point_conv_on Z by A1,A2,Th11,SEQFUNC:23;
   then
-A4: z in dom (lim(F,Z)-(F.0)) & r to_power 0 = 1 by POWER:29,VALUED_1:12;
-  then lim(F,Z)-(F.0), Z is_absolutely_bounded_by a*1/(1-r) &
-  z in Z /\ dom (lim(F,Z)-(F.0)) by A1,A2,A3,Th11,XBOOLE_0:def 4;
-  then |.(lim(F,Z)-(F.0)).z.| <= a*1/(1-r) by Def1;
-  then |.lim(F,Z).z-(F.0).z.| <= a*1/(1-r) by A4,VALUED_1:13;
+A4: dom lim(F,Z) = Z by SEQFUNC:def 14;
+  r to_power 0 = 1 by POWER:29;
+  then
+A5: lim(F,Z)-(F.0), Z is_absolutely_bounded_by a*1/(1-r) by A1,A2,A3,
+  Th11;
+  let z be Element of Z;
+  z in Z & Z c= dom (F.0) by A1,SEQFUNC:def 10;
+  then z in dom (lim(F,Z)) /\ dom (F.0) by A4,XBOOLE_0:def 4;
+  then
+A6: z in dom (lim(F,Z)-(F.0)) by VALUED_1:12;
+  then z in Z /\ dom (lim(F,Z)-(F.0)) by XBOOLE_0:def 4;
+  then |.(lim(F,Z)-(F.0)).z.| <= a*1/(1-r) by A5,Def1;
+  then |.lim(F,Z).z-(F.0).z.| <= a*1/(1-r) by A6,VALUED_1:13;
   hence thesis by Th1;
 end;
 
 theorem Th13:
-  for X,Z being non empty set for F being Functional_Sequence of X,REAL
-  st Z common_on_dom F for a,r being positive (real number)
-  for f being Function of Z, REAL st r < 1 & for n being natural number holds
-  (F.n)-f, Z is_absolutely_bounded_by a*(r to_power n)
-  holds F is_point_conv_on Z & lim(F,Z) = f
+  for X,Z being non empty set for F being Functional_Sequence of X
+  ,REAL st Z common_on_dom F for a,r being positive (real number) for f being
+  Function of Z, REAL st r < 1 & for n being natural number holds (F.n)-f, Z
+is_absolutely_bounded_by a*(r to_power n) holds F is_point_conv_on Z & lim(F,Z)
+  = f
 proof
   let X,Z be non empty set;
   let F be Functional_Sequence of X,REAL;
@@ -468,86 +494,93 @@ proof
 A1: Z common_on_dom F;
   let a,r be positive (real number);
   let f be Function of Z, REAL;
+A2: dom f = Z by FUNCT_2:def 1;
+  Z c= dom (F.0) by A1,SEQFUNC:def 10;
+  then reconsider g = f as PartFunc of X,REAL by A2,RELSET_1:13,XBOOLE_1:1;
   assume
-A2: r < 1;
+A3: r < 1;
   assume
-A3: for n being natural number
-  holds (F.n)-f, Z is_absolutely_bounded_by a*(r to_power n);
-A4: dom f = Z by FUNCT_2:def 1;
-  Z c= dom (F.0) & dom (F.0) c= X by A1,SEQFUNC:def 10;
-  then reconsider g = f as PartFunc of X,REAL by A4,RELSET_1:13,XBOOLE_1:1;
+A4: for n being natural number holds (F.n)-f, Z is_absolutely_bounded_by
+  a*(r to_power n);
 A5: now
     let x be Element of X such that
 A6: x in Z;
     let p be Real such that
 A7: p > 0;
-A8: 1-r > 0 by A2,XREAL_1:52;
-    then p*(1-r) > 0 by A7,XREAL_1:131;
-    then
-A9: p*(1-r)/a > 0 by XREAL_1:141;
     consider k being Element of NAT such that
-A10: k >= 1+log(r, p*(1-r)/a) by MESFUNC1:11;
-    k > log(r, p*(1-r)/a) by A10,XREAL_1:41;
-    then r to_power k < r to_power log(r, p*(1-r)/a) by A2,POWER:45;
-    then r to_power k < p*(1-r)/a & a <> 0 by A2,A9,POWER:def 3;
-    then a*(r to_power k) < a*(p*(1-r)/a) & a*(p*(1-r)/a) = p*(1-r)*(a/a) &
-    a/a = 1 by XCMPLX_1:60,76,XREAL_1:70;
-    then a*(r to_power k)/(1-r) < (p*(1-r))/(1-r) by A8,XREAL_1:76;
+A8: k >= 1+log(r, p*(1-r)/a) by MESFUNC1:11;
+    k > log(r, p*(1-r)/a) by A8,XREAL_1:41;
     then
-A11: a*(r to_power k)/(1-r) < p by A8,XCMPLX_1:90;
+A9: r to_power k < r to_power log(r, p*(1-r)/a) by A3,POWER:45;
+A10: a*(p*(1-r)/a) = p*(1-r)*(a/a) & a/a = 1 by XCMPLX_1:60,76;
+A11: 1-r > 0 by A3,XREAL_1:52;
+    then p*(1-r) > 0 by A7,XREAL_1:131;
+    then p*(1-r)/a > 0 by XREAL_1:141;
+    then r to_power k < p*(1-r)/a by A3,A9,POWER:def 3;
+    then a*(r to_power k) < a*(p*(1-r)/a) by XREAL_1:70;
+    then a*(r to_power k)/(1-r) < (p*(1-r))/(1-r) by A11,A10,XREAL_1:76;
+    then
+A12: a*(r to_power k)/(1-r) < p by A11,XCMPLX_1:90;
     take k;
     let n be Element of NAT;
-    assume n >= k;
-    then n = k or n > k by XXREAL_0:1;
-    then r to_power n <= r to_power k by A2,POWER:45;
-    then a*(r to_power n) <= a*(r to_power k) & 1-r > 1-1 by A2,XREAL_1:12,66;
-    then
-A12: a*(r to_power n)/(1-r) <= a*(r to_power k)/(1-r) by XREAL_1:74;
     Z c= dom (F.n) by A1,SEQFUNC:def 10;
-    then x in dom (F.n) /\ dom f by A4,A6,XBOOLE_0:def 4;
-    then x in dom ((F.n)-f) by VALUED_1:12;
-    then x in Z /\ dom ((F.n)-f) & ((F.n)-f).x = (F.n).x-f.x &
-    (F.n)-f, Z is_absolutely_bounded_by a*(r to_power n)
-    by A3,A6,VALUED_1:13,XBOOLE_0:def 4;
+    then x in dom (F.n) /\ dom f by A2,A6,XBOOLE_0:def 4;
     then
-A13: |.(F.n).x-f.x.| <= a*(r to_power n) by Def1;
+A13: x in dom ((F.n)-f) by VALUED_1:12;
+    then
+A14: ((F.n)-f).x = (F.n).x-f.x by VALUED_1:13;
+    assume
+    n >= k;
+    then n = k or n > k by XXREAL_0:1;
+    then r to_power n <= r to_power k by A3,POWER:45;
+    then
+A15: a*(r to_power n) <= a*(r to_power k) by XREAL_1:66;
+A16: (F.n)-f, Z is_absolutely_bounded_by a*(r to_power n) by A4;
     r to_power n >= 0 by POWER:39;
-    then 1-r <= 1 & a*(r to_power n) >= a*0 by XREAL_1:45;
-    then a*(r to_power n)*(1-r) <= a*(r to_power n)*1 & 0 < 1 by XREAL_1:66;
-    then a*(r to_power n)/1 <= a*(r to_power n)/(1-r) by A8,XREAL_1:104;
-    then a*(r to_power n) <= a*(r to_power k)/(1-r) by A12,XXREAL_0:2;
-    then abs((F.n).x - g.x) <= a*(r to_power k)/(1-r) by A13,XXREAL_0:2;
-    hence abs((F.n).x - g.x) < p by A11,XXREAL_0:2;
-  end; thus
-A14: F is_point_conv_on Z
+    then a*(r to_power n)*(1-r) <= a*(r to_power n)*1 by XREAL_1:45,66;
+    then
+A17: a*(r to_power n)/1 <= a*(r to_power n)/(1-r) by A11,XREAL_1:104;
+    1-r > 1-1 by A3,XREAL_1:12;
+    then a*(r to_power n)/(1-r) <= a*(r to_power k)/(1-r) by A15,XREAL_1:
+    74;
+    then
+A18: a*(r to_power n) <= a*(r to_power k)/(1-r) by A17,XXREAL_0:2;
+    x in Z /\ dom ((F.n)-f) by A6,A13,XBOOLE_0:def 4;
+    then |.(F.n).x-f.x.| <= a*(r to_power n) by A14,A16,Def1;
+    then abs((F.n).x - g.x) <= a*(r to_power k)/(1-r) by A18,XXREAL_0:2;
+    hence abs((F.n).x - g.x) < p by A12,XXREAL_0:2;
+  end;
+  thus
+A19: F is_point_conv_on Z
   proof
     thus Z common_on_dom F by A1;
-    take g; thus Z = dom g by FUNCT_2:def 1;
+    take g;
+    thus Z = dom g by FUNCT_2:def 1;
     thus thesis by A5;
   end;
   now
     let x be Element of X;
     assume
-A15: x in dom g;
-    then
-A16: F#x is convergent by A4,A14,SEQFUNC:21;
-    for p being real number st 0 < p ex n being Element of NAT st
-    for m being Element of NAT st n <= m holds abs((F#x).m-g.x) < p
+A20: x in dom g;
+A21: for p being real number st 0 < p ex n being Element of NAT st for m
+    being Element of NAT st n <= m holds abs((F#x).m-g.x) < p
     proof
       let p be real number;
       reconsider p' = p as Real by XREAL_0:def 1;
-      assume 0 < p;
+      assume
+      0 < p;
       then consider n being Element of NAT such that
-A17:  for m being Element of NAT st n <= m holds
-      abs((F.m).x-g.x) < p' by A4,A5,A15;
+A22:  for m being Element of NAT st n <= m holds abs((F.m).x-g.x) <
+      p' by A2,A5,A20;
       take n;
       let m be Element of NAT;
       (F.m).x = (F#x).m by SEQFUNC:def 11;
-      hence thesis by A17;
+      hence thesis by A22;
     end;
-    hence g.x = lim(F#x) by A16,SEQ_2:def 7;
+    F#x is convergent by A2,A19,A20,SEQFUNC:21;
+    hence g.x = lim(F#x) by A21,SEQ_2:def 7;
   end;
-  hence thesis by A4,A14,SEQFUNC:def 14;
+  hence thesis by A2,A19,SEQFUNC:def 14;
 end;
 
 :: Topology
@@ -563,94 +596,94 @@ registration
 end;
 
 theorem Th14:
-  for X, Y being non empty TopSpace, X1, X2 being non empty SubSpace of X
-  for f1 being Function of X1,Y, f2 being Function of X2,Y st
-  X1 misses X2 or f1|(X1 meet X2) = f2|(X1 meet X2)
-  for x being Point of X holds
-  (x in the carrier of X1 implies (f1 union f2).x = f1.x) &
-  (x in the carrier of X2 implies (f1 union f2).x = f2.x)
+  for X, Y being non empty TopSpace, X1, X2 being non empty
+  SubSpace of X for f1 being Function of X1,Y, f2 being Function of X2,Y st X1
+misses X2 or f1|(X1 meet X2) = f2|(X1 meet X2) for x being Point of X holds (x
+in the carrier of X1 implies (f1 union f2).x = f1.x) & (x in the carrier of X2
+  implies (f1 union f2).x = f2.x)
 proof
   let X, Y be non empty TopSpace, X1, X2 be non empty SubSpace of X;
   let f1 be Function of X1,Y, f2 be Function of X2,Y;
   assume
 A1: X1 misses X2 or f1|(X1 meet X2) = f2|(X1 meet X2);
-  set F = f1 union f2;
   let x be Point of X;
+  set F = f1 union f2;
 A2: X1 is SubSpace of X1 union X2 by TSEP_1:22;
-A3: X2 is SubSpace of X1 union X2 by TSEP_1:22;
   hereby
-    assume x in the carrier of X1;
+    assume
+    x in the carrier of X1;
     hence F.x = (F|the carrier of X1).x by FUNCT_1:72
       .= (F|X1).x by A2,TMAP_1:def 4
       .= f1.x by A1,TMAP_1:def 12;
   end;
-  assume x in the carrier of X2;
+A3: X2 is SubSpace of X1 union X2 by TSEP_1:22;
+  assume
+  x in the carrier of X2;
   hence F.x = (F|the carrier of X2).x by FUNCT_1:72
     .= (F|X2).x by A3,TMAP_1:def 4
     .= f2.x by A1,TMAP_1:def 12;
 end;
 
 theorem Th15:
-  for X, Y being non empty TopSpace, X1, X2 being non empty SubSpace of X
-  for f1 being Function of X1,Y, f2 being Function of X2,Y st
-  X1 misses X2 or f1|(X1 meet X2) = f2|(X1 meet X2) holds
-  rng (f1 union f2) c= rng f1 \/ rng f2
+  for X, Y being non empty TopSpace, X1, X2 being non empty
+  SubSpace of X for f1 being Function of X1,Y, f2 being Function of X2,Y st X1
+  misses X2 or f1|(X1 meet X2) = f2|(X1 meet X2) holds rng (f1 union f2) c= rng
+  f1 \/ rng f2
 proof
   let X, Y be non empty TopSpace, X1, X2 be non empty SubSpace of X;
   let f1 be Function of X1,Y, f2 be Function of X2,Y;
+  set F = f1 union f2;
   assume
 A1: X1 misses X2 or f1|(X1 meet X2) = f2|(X1 meet X2);
-  set F = f1 union f2;
   thus rng F c= rng f1 \/ rng f2
   proof
-    let y be set;
-    assume y in rng F;
-    then consider x being set such that
-A2: x in dom F and
-A3: F.x = y by FUNCT_1:def 5;
-A4: the carrier of X1 = dom f1 & the carrier of X2 = dom f2 by FUNCT_2:def 1;
-A5: the carrier of X1 union X2 = (the carrier of X1) \/ the carrier of X2
+A2: the carrier of X1 union X2 = (the carrier of X1) \/ the carrier of X2
     by TSEP_1:def 2;
-A6: x is Point of X by A2,PRE_TOPC:55;
-    per cases by A2,A5,XBOOLE_0:def 3;
+A3: the carrier of X2 = dom f2 by FUNCT_2:def 1;
+    let y be set;
+A4: the carrier of X1 = dom f1 by FUNCT_2:def 1;
+    assume
+    y in rng F;
+    then consider x being set such that
+A5: x in dom F and
+A6: F.x = y by FUNCT_1:def 5;
+A7: x is Point of X by A5,PRE_TOPC:55;
+    per cases by A5,A2,XBOOLE_0:def 3;
     suppose
-A7:   x in the carrier of X1;
-      then
-A8:   f1.x in rng f1 by A4,FUNCT_1:def 5;
-      F.x = f1.x by A1,A6,A7,Th14;
-      hence thesis by A3,A8,XBOOLE_0:def 3;
+      x in the carrier of X1;
+      then f1.x in rng f1 & F.x = f1.x by A1,A4,A7,Th14,FUNCT_1:def 5;
+      hence thesis by A6,XBOOLE_0:def 3;
     end;
     suppose
-A9:   x in the carrier of X2;
-      then
-A10:  f2.x in rng f2 by A4,FUNCT_1:def 5;
-      F.x = f2.x by A1,A6,A9,Th14;
-      hence thesis by A3,A10,XBOOLE_0:def 3;
+      x in the carrier of X2;
+      then f2.x in rng f2 & F.x = f2.x by A1,A3,A7,Th14,FUNCT_1:def 5;
+      hence thesis by A6,XBOOLE_0:def 3;
     end;
   end;
 end;
 
 theorem Th16:
-  for X, Y being non empty TopSpace, X1, X2 being non empty SubSpace of X
-  for f1 being Function of X1,Y, f2 being Function of X2,Y st
-  X1 misses X2 or f1|(X1 meet X2) = f2|(X1 meet X2) holds
-  (for A being Subset of X1 holds (f1 union f2).:A = f1.:A) &
-  (for A being Subset of X2 holds (f1 union f2).:A = f2.:A)
+  for X, Y being non empty TopSpace, X1, X2 being non empty
+  SubSpace of X for f1 being Function of X1,Y, f2 being Function of X2,Y st X1
+misses X2 or f1|(X1 meet X2) = f2|(X1 meet X2) holds (for A being Subset of X1
+holds (f1 union f2).:A = f1.:A) & for A being Subset of X2 holds (f1 union f2)
+  .:A = f2.:A
 proof
   let X, Y be non empty TopSpace, X1, X2 be non empty SubSpace of X;
   let f1 be Function of X1,Y, f2 be Function of X2,Y;
   assume
 A1: X1 misses X2 or f1|(X1 meet X2) = f2|(X1 meet X2);
   set F = f1 union f2;
-A2: the carrier of X1 union X2 = (the carrier of X1) \/ the carrier of X2
-  by TSEP_1:def 2;
+A2: the carrier of X1 union X2 = (the carrier of X1) \/ the carrier of X2 by
+  TSEP_1:def 2;
   hereby
     let A be Subset of X1;
     thus (f1 union f2).:A = f1.:A
     proof
       hereby
         let y be set;
-        assume y in (f1 union f2).:A;
+        assume
+        y in (f1 union f2).:A;
         then consider x being Element of X1 union X2 such that
 A3:     x in A and
 A4:     y = F.x by FUNCT_2:116;
@@ -659,43 +692,44 @@ A4:     y = F.x by FUNCT_2:116;
         hence y in f1.:A by A3,A4,FUNCT_2:43;
       end;
       let y be set;
-      assume y in f1.:A;
+      assume
+      y in f1.:A;
       then consider x being Element of X1 such that
-A5:   x in A and
-A6:   y = f1.x by FUNCT_2:116;
+A5:   x in A & y = f1.x by FUNCT_2:116;
       x is Point of X by PRE_TOPC:55;
       then
-A7:   F.x = f1.x by A1,Th14;
+A6:   F.x = f1.x by A1,Th14;
       x in the carrier of X1 union X2 by A2,XBOOLE_0:def 3;
-      hence thesis by A5,A6,A7,FUNCT_2:43;
+      hence thesis by A5,A6,FUNCT_2:43;
     end;
   end;
   let A be Subset of X2;
   hereby
     let y be set;
-    assume y in (f1 union f2).:A;
+    assume
+    y in (f1 union f2).:A;
     then consider x being Element of X1 union X2 such that
-A8: x in A and
-A9: y = F.x by FUNCT_2:116;
+A7: x in A and
+A8: y = F.x by FUNCT_2:116;
     x is Point of X by PRE_TOPC:55;
-    then F.x = f2.x by A1,A8,Th14;
-    hence y in f2.:A by A8,A9,FUNCT_2:43;
+    then F.x = f2.x by A1,A7,Th14;
+    hence y in f2.:A by A7,A8,FUNCT_2:43;
   end;
   let y be set;
-  assume y in f2.:A;
+  assume
+  y in f2.:A;
   then consider x being Element of X2 such that
-A10: x in A and
-A11: y = f2.x by FUNCT_2:116;
+A9: x in A & y = f2.x by FUNCT_2:116;
   x is Point of X by PRE_TOPC:55;
   then
-A12: F.x = f2.x by A1,Th14;
+A10: F.x = f2.x by A1,Th14;
   x in the carrier of X1 union X2 by A2,XBOOLE_0:def 3;
-  hence thesis by A10,A11,A12,FUNCT_2:43;
+  hence thesis by A9,A10,FUNCT_2:43;
 end;
 
 theorem Th17:
-  f c= g & g,X is_absolutely_bounded_by r implies
-  f,X is_absolutely_bounded_by r
+  f c= g & g,X is_absolutely_bounded_by r implies f,X
+  is_absolutely_bounded_by r
 proof
   assume that
 A1: f c= g and
@@ -705,170 +739,169 @@ A2: g,X is_absolutely_bounded_by r;
 A3: x in X /\ dom f;
   then
 A4: x in dom f by XBOOLE_0:def 4;
-A5: dom f c= dom g by A1,GRFUNC_1:8;
-  x in X by A3,XBOOLE_0:def 4;
+A5: x in X by A3,XBOOLE_0:def 4;
+  dom f c= dom g by A1,GRFUNC_1:8;
   then x in X /\ dom g by A4,A5,XBOOLE_0:def 4;
   then abs(g.x) <= r by A2,Def1;
   hence thesis by A1,A4,GRFUNC_1:8;
 end;
 
 theorem Th18:
-  (X c= dom f or dom g c= dom f) & f|X = g|X & f,X is_absolutely_bounded_by r
-  implies g,X is_absolutely_bounded_by r
+  (X c= dom f or dom g c= dom f) & f|X = g|X & f,X
+  is_absolutely_bounded_by r implies g,X is_absolutely_bounded_by r
 proof
   assume that
 A1: X c= dom f or dom g c= dom f and
 A2: f|X = g|X and
 A3: f,X is_absolutely_bounded_by r;
   let x be set;
-  assume x in X /\ dom g;
+  assume
+A4: x in X /\ dom g;
   then
-A4: x in X & x in dom g by XBOOLE_0:def 4;
+A5: x in X by XBOOLE_0:def 4;
   then
-A5: x in X /\ dom f by A1,XBOOLE_0:def 4;
-  f.x = (f|X).x by A4,FUNCT_1:72
-    .= g.x by A2,A4,FUNCT_1:72;
-  hence thesis by A3,A5,Def1;
+A6: f.x = (f|X).x by FUNCT_1:72
+    .= g.x by A2,A5,FUNCT_1:72;
+  x in dom g by A4,XBOOLE_0:def 4;
+  then x in X /\ dom f by A1,A5,XBOOLE_0:def 4;
+  hence thesis by A3,A6,Def1;
 end;
 
 reserve T for non empty TopSpace,
   A for closed Subset of T;
 
 theorem Th19:
-  r > 0 & T is normal implies
-  for f being continuous Function of T|A, R^1 st f,A is_absolutely_bounded_by r
-  ex g being continuous Function
-  of T, R^1 st g,dom g is_absolutely_bounded_by r/3 &
-  f-g,A is_absolutely_bounded_by 2*r/3
+  r > 0 & T is normal implies for f being continuous Function of T
+|A, R^1 st f,A is_absolutely_bounded_by r ex g being continuous Function of T,
+R^1 st g,dom g is_absolutely_bounded_by r/3 & f-g,A is_absolutely_bounded_by 2*
+  r/3
 proof
   assume that
 A1: r > 0 and
 A2: T is normal;
+  set C2 = R^1(right_closed_halfline(r/3));
+  set C1 = R^1(left_closed_halfline(-r/3));
+  set A2 = right_closed_halfline(r/3);
+  set A1 = left_closed_halfline(-r/3);
   let f be continuous Function of T|A, R^1 such that
 A3: for x being set st x in A /\ dom f holds abs(f.x) <= r;
-  set A1 = left_closed_halfline(-r/3);
-  set A2 = right_closed_halfline(r/3);
-  set C1 = R^1(left_closed_halfline(-r/3));
-  set C2 = R^1(right_closed_halfline(r/3));
-A4: A1 = C1 & A2 = C2 by TOPREALB:def 3;
-A5: --r/3 > 0 by A1,XREAL_1:141;
-  then
-A6: -r/3 < r/3;
-  then
-A7: f"A1 misses f"A2 by FUNCT_1:141,XXREAL_1:279;
-  f"C1 is closed & f"C2 is closed by PRE_TOPC:def 12;
-  then reconsider D1 = f"C1, D2 = f"C2 as closed Subset of T
-  by PRE_TOPC:39,TSEP_1:12;
-  consider F being Function of T, R^1 such that
-A8: F is continuous and
-A9: for x being Point of T holds
-  0 <= F.x & F.x <= 1 & (x in D1 implies F.x = 0) &
-  (x in D2 implies F.x = 1) by A2,A4,A7,URYSOHN3:23;
   reconsider r1 = r as Real by XREAL_0:def 1;
   set e = 2*r1/3;
   0 < 2*r by A1,XREAL_1:131;
-  then
-A10: e > 0 by XREAL_1:141;
-  then consider h being Function of
-  Closed-Interval-TSpace(0,1),Closed-Interval-TSpace(e*0+-r1/3,e*1+-r1/3)
-  such that
-A11: h is being_homeomorphism and
-A12: for w being Real st w in [. 0,1 .] holds h.w = e*w+-r1/3 by JGRAPH_5:39;
-A13: the carrier of Closed-Interval-TSpace(-r/3,r/3) = [.-r/3,r/3.]
-  by A6,TOPMETR:25;
-A14: the carrier of Closed-Interval-TSpace(0,1) = [. 0,1 .] by TOPMETR:25;
-  set g1 = h*F;
-A15: dom F = the carrier of T by FUNCT_2:def 1;
-A16: dom h = the carrier of Closed-Interval-TSpace(0,1) by FUNCT_2:def 1;
-A17: rng F c= [. 0,1 .]
+  then e > 0 by XREAL_1:141;
+  then consider h being Function of Closed-Interval-TSpace(0,1),
+  Closed-Interval-TSpace(e*0+-r1/3,e*1+-r1/3) such that
+A4: h is being_homeomorphism and
+A5: for w being Real st w in [. 0,1 .] holds h.w = e*w+-r1/3 by
+  JGRAPH_5:39;
+A6: h is continuous by A4,TOPS_2:def 5;
+A7: the carrier of Closed-Interval-TSpace(0,1) = [. 0,1 .] by TOPMETR:25;
+  f"C1 is closed & f"C2 is closed by PRE_TOPC:def 12;
+  then reconsider D1 = f"C1, D2 = f"C2 as closed Subset of T by PRE_TOPC:39,
+  TSEP_1:12;
+A8: A1 = C1 by TOPREALB:def 3;
+A9: A2 = C2 by TOPREALB:def 3;
+A10: --r/3 > 0 by A1,XREAL_1:141;
+  then f"A1 misses f"A2 by FUNCT_1:141,XXREAL_1:279;
+  then consider F being Function of T, R^1 such that
+A11: F is continuous and
+A12: for x being Point of T holds 0 <= F.x & F.x <= 1 & (x in D1 implies
+  F.x = 0) & (x in D2 implies F.x = 1) by A2,A8,A9,URYSOHN3:23;
+A13: rng F c= [. 0,1 .]
   proof
     let y be set;
-    assume y in rng F;
+    assume
+    y in rng F;
     then consider x being set such that
-A18: x in dom F and
-A19: F.x = y by FUNCT_1:def 5;
-    0 <= F.x & F.x <= 1 by A9,A18;
-    hence thesis by A19,XXREAL_1:1;
+A14: x in dom F and
+A15: F.x = y by FUNCT_1:def 5;
+    0 <= F.x & F.x <= 1 by A12,A14;
+    hence thesis by A15,XXREAL_1:1;
   end;
+  then reconsider F1 = F as Function of T, Closed-Interval-TSpace(0,1) by A7,
+  FUNCT_2:8;
+A16: the carrier of Closed-Interval-TSpace(-r/3,r/3) = [.-r/3,r/3.] by A1,
+  TOPMETR:25;
+  set g1 = h*F;
+A17: rng g1 c= the carrier of Closed-Interval-TSpace(-r/3,r/3);
+  dom F = the carrier of T & dom h = the carrier of
+  Closed-Interval-TSpace(0,1 ) by FUNCT_2:def 1;
   then
-A20: dom g1 = the carrier of T by A14,A15,A16,RELAT_1:46;
-A21: rng g1 c= the carrier of Closed-Interval-TSpace(-r/3,r/3);
-  then reconsider g1 as Function of T, Closed-Interval-TSpace(-r/3,r/3)
-  by A20,FUNCT_2:4;
-A22: rng g1 c= the carrier of Closed-Interval-TSpace(-r/3,r/3);
-A23: h is continuous by A11,TOPS_2:def 5;
+A18: dom g1 = the carrier of T by A7,A13,RELAT_1:46;
+  then reconsider g1 as Function of T, Closed-Interval-TSpace(-r/3,r/3) by
+  A17,
+  FUNCT_2:4;
   reconsider g = g1 as Function of T, R^1 by TOPREALA:28;
-  reconsider F1 = F as Function of T, Closed-Interval-TSpace(0,1)
-  by A14,A17,FUNCT_2:8;
-  F1 is continuous by A8,PRE_TOPC:57;
-  then h*F1 is continuous by A23;
-  then reconsider g as continuous Function of T, R^1 by PRE_TOPC:56;
+  F1 is continuous by A11,PRE_TOPC:57;
+  then reconsider g as continuous Function of T, R^1 by A6,PRE_TOPC:56;
   take g;
+A19: rng g1 c= the carrier of Closed-Interval-TSpace(-r/3,r/3);
   thus g,dom g is_absolutely_bounded_by r/3
   proof
     let x be set;
-    assume x in dom g /\ dom g;
+    assume
+    x in dom g /\ dom g;
     then g.x in rng g by FUNCT_1:def 5;
-    then -r/3 <= g.x & g.x <= r/3 by A13,A22,XXREAL_1:1;
+    then -r/3 <= g.x & g.x <= r/3 by A16,A19,XXREAL_1:1;
     hence thesis by ABSVALUE:12;
   end;
   thus f-g,A is_absolutely_bounded_by 2*r/3
   proof
+A20: 1 in [. 0,1 .] by XXREAL_1:1;
+A21: 0 in [. 0,1 .] by XXREAL_1:1;
     let x be set such that
-A24: x in A /\ dom(f-g);
-A25: dom(f-g) = dom f /\ dom g by VALUED_1:12;
-A26: x in dom(f-g) by A24,XBOOLE_0:def 4;
+A22: x in A /\ dom(f-g);
+A23: x in dom(f-g) by A22,XBOOLE_0:def 4;
     then
-A27: x in dom f by A25,XBOOLE_0:def 4;
-    x in A by A24,XBOOLE_0:def 4;
-    then x in A /\ dom f by A27,XBOOLE_0:def 4;
+A24: (f-g).x = f.x - g.x by VALUED_1:13;
+    dom(f-g) = dom f /\ dom g by VALUED_1:12;
     then
-A28: abs(f.x) <= r by A3;
+A25: x in dom f by A23,XBOOLE_0:def 4;
+    x in A by A22,XBOOLE_0:def 4;
+    then x in A /\ dom f by A25,XBOOLE_0:def 4;
     then
-A29: -r <= f.x by ABSVALUE:12;
-A30: 0 in [. 0,1 .] by XXREAL_1:1;
-A31: 1 in [. 0,1 .] by XXREAL_1:1;
-A32: (f-g).x = f.x - g.x by A26,VALUED_1:13;
+A26: abs(f.x) <= r by A3;
+    then
+A27: -r <= f.x by ABSVALUE:12;
     per cases;
     suppose
-A33:  f.x <= -r/3;
+A28:  f.x <= -r/3;
       then f.x in A1 by XXREAL_1:234;
-      then x in f"A1 by A27,FUNCT_1:def 13;
-      then F.x = 0 by A4,A9;
+      then x in f"A1 by A25,FUNCT_1:def 13;
+      then F.x = 0 by A8,A12;
       then
-A34:  g.x = h.0 by A20,A24,FUNCT_1:22
-        .= -r1/3 by A12,A30;
+A29:  g.x = h.0 by A18,A22,FUNCT_1:22
+        .= -r1/3 by A5,A21;
       -r = -2*r/3 - r/3;
       then
-A35:  -2*r/3 <= f.x + r/3 by A29,XREAL_1:22;
-      f.x + r/3 <= -r/3 + r/3 by A33,XREAL_1:8;
-      hence thesis by A10,A32,A34,A35,ABSVALUE:12;
+A30:  -2*r/3 <= f.x + r/3 by A27,XREAL_1:22;
+      f.x + r/3 <= -r/3 + r/3 by A28,XREAL_1:8;
+      hence thesis by A1,A24,A29,A30,ABSVALUE:12;
     end;
     suppose
-A36:  r/3 <= f.x;
+A31:  r/3 <= f.x;
       then f.x in A2 by XXREAL_1:236;
-      then x in f"A2 by A27,FUNCT_1:def 13;
-      then F.x = 1 by A4,A9;
+      then x in f"A2 by A25,FUNCT_1:def 13;
+      then F.x = 1 by A9,A12;
       then
-A37:  g.x = h.1 by A20,A24,FUNCT_1:22
-        .= r1/3 by A12,A31;
-      -2*r/3 + r/3 <= f.x by A5,A36;
+A32:  g.x = h.1 by A18,A22,FUNCT_1:22
+        .= r1/3 by A5,A20;
+      f.x <= r/3 + 2*r/3 by A26,ABSVALUE:12;
       then
-A38:  -2*r/3 <= f.x - r/3 by XREAL_1:21;
-      f.x <= r/3 + 2*r/3 by A28,ABSVALUE:12;
-      then f.x - r/3 <= 2*r/3 by XREAL_1:22;
-      hence thesis by A32,A37,A38,ABSVALUE:12;
+A33:  f.x - r/3 <= 2*r/3 by XREAL_1:22;
+      -2*r/3 + r/3 <= f.x by A10,A31;
+      then -2*r/3 <= f.x - r/3 by XREAL_1:21;
+      hence thesis by A24,A32,A33,ABSVALUE:12;
     end;
     suppose
-A39:  -r/3 < f.x & f.x < r/3;
-A40:  -2*r/3 = -r/3-r/3;
-      g.x in rng g by A20,A24,FUNCT_1:def 5;
+A34:  -r/3 < f.x & f.x < r/3;
+A35:  g.x in rng g by A18,A22,FUNCT_1:def 5;
+      then -2*r/3 = -r/3-r/3 & g.x <= r/3 by A16,A17,XXREAL_1:1;
       then
-A41:  -r/3 <= g.x & g.x <= r/3 by A13,A21,XXREAL_1:1;
-      then
-A42:  -2*r/3 <= f.x - g.x by A39,A40,XREAL_1:15;
-      f.x - g.x <= r/3 - -r/3 by A39,A41,XREAL_1:16;
-      hence thesis by A32,A42,ABSVALUE:12;
+A36:  -2*r/3 <= f.x - g.x by A34,XREAL_1:15;
+      -r/3 <= g.x by A16,A17,A35,XXREAL_1:1;
+      then f.x - g.x <= r/3 - -r/3 by A34,XREAL_1:16;
+      hence thesis by A24,A36,ABSVALUE:12;
     end;
   end;
 end;
@@ -876,79 +909,77 @@ end;
 :: Urysohn Lemma, simple case
 
 theorem Th20:
-  (for A, B being non empty closed Subset of T st A misses B
-  ex f being continuous Function of T, R^1 st f.:A = {0} & f.:B = {1})
-  implies T is normal
+  (for A, B being non empty closed Subset of T st A misses B ex f
+  being continuous Function of T, R^1 st f.:A = {0} & f.:B = {1}) implies T is
+  normal
 proof
   assume
-A1: for A, B being non empty closed Subset of T st A misses B
-  ex f being continuous Function of T, R^1 st f.:A = {0} & f.:B = {1};
-  let W, V be Subset of T such that
-A2: W <> {} & V <> {} and
-A3: W is closed & V is closed and
-A4: W misses V;
-  consider f being continuous Function of T, R^1 such that
-A5: f.:W = {0} and
-A6: f.:V = {1} by A1,A2,A3,A4;
-  set P = f"R^1(left_open_halfline(1/2));
+A1: for A, B being non empty closed Subset of T st A misses B ex f being
+  continuous Function of T, R^1 st f.:A = {0} & f.:B = {1};
+  let W, V be Subset of T;
+  assume
+  W <> {} & V <> {} & W is closed & V is closed & W misses V;
+  then consider f being continuous Function of T, R^1 such that
+A2: f.:W = {0} and
+A3: f.:V = {1} by A1;
   set Q = f"R^1(right_open_halfline(1/2));
-A7: R^1(left_open_halfline(1/2)) = left_open_halfline(1/2) by TOPREALB:def 3;
-A8: R^1(right_open_halfline(1/2)) = right_open_halfline(1/2) by TOPREALB:def 3;
+  set P = f"R^1(left_open_halfline(1/2));
   take P, Q;
   [#]R^1 <> {};
   hence P is open & Q is open by TOPS_2:55;
-A9: dom f = the carrier of T by FUNCT_2:def 1;
+A4: R^1(left_open_halfline(1/2)) = left_open_halfline(1/2) by TOPREALB:def 3;
+A5: dom f = the carrier of T by FUNCT_2:def 1;
   thus W c= P
   proof
     let a be set;
+A6: 0 in left_open_halfline(1/2) by XXREAL_1:233;
     assume
-A10: a in W;
+A7: a in W;
     then f.a in f.:W by FUNCT_2:43;
-    then
-A11: f.a = 0 by A5,TARSKI:def 1;
-    0 in left_open_halfline(1/2) by XXREAL_1:233;
-    hence thesis by A7,A9,A10,A11,FUNCT_1:def 13;
+    then f.a = 0 by A2,TARSKI:def 1;
+    hence thesis by A4,A5,A7,A6,FUNCT_1:def 13;
   end;
+A8: R^1(right_open_halfline(1/2)) = right_open_halfline(1/2) by TOPREALB:def
+  3;
   thus V c= Q
   proof
     let a be set;
+A9: 1 in right_open_halfline(1/2) by XXREAL_1:235;
     assume
-A12: a in V;
+A10: a in V;
     then f.a in f.:V by FUNCT_2:43;
-    then
-A13: f.a = 1 by A6,TARSKI:def 1;
-    1 in right_open_halfline(1/2) by XXREAL_1:235;
-    hence thesis by A8,A9,A12,A13,FUNCT_1:def 13;
+    then f.a = 1 by A3,TARSKI:def 1;
+    hence thesis by A8,A5,A10,A9,FUNCT_1:def 13;
   end;
-  thus thesis by A7,A8,FUNCT_1:141,XXREAL_1:275;
+  thus thesis by A4,A8,FUNCT_1:141,XXREAL_1:275;
 end;
 
 theorem Th21:
-  for f being Function of T,R^1, x being Point of T holds
-  f is_continuous_at x iff
-  for e being real number st e>0 ex H being Subset of T st
+  for f being Function of T,R^1, x being Point of T holds f
+is_continuous_at x iff for e being real number st e>0 ex H being Subset of T st
   H is open & x in H & for y being Point of T st y in H holds abs(f.y-f.x)<e
 proof
   let f be Function of T,R^1, x be Point of T;
-  thus f is_continuous_at x implies
-  for e being real number st e>0 ex H being Subset of T st
-  H is open & x in H & for y being Point of T st y in H holds abs(f.y-f.x)<e
+  thus f is_continuous_at x implies for e being real number st e>0 ex H being
+Subset of T st H is open & x in H & for y being Point of T st y in H holds abs(
+  f.y-f.x)<e
   proof
+    reconsider fx=f.x as Point of RealSpace by TOPMETR:16,def 7;
     assume
 A1: f is_continuous_at x;
     let e be real number such that
 A2: e>0;
-    reconsider fx=f.x as Point of RealSpace by TOPMETR:16,def 7;
     reconsider G=Ball(fx,e) as Subset of R^1 by TOPMETR:16,def 7;
-A3: G is open by TOPMETR:21,def 7;
-    fx in G by A2,GOBOARD6:4;
+    G is open & fx in G by A2,GOBOARD6:4,TOPMETR:21,def 7;
     then consider H being Subset of T such that
-A4: H is open & x in H & f.:H c= G by A1,A3,TMAP_1:48;
+A3: H is open & x in H and
+A4: f.:H c= G by A1,TMAP_1:48;
     take H;
-    thus H is open & x in H by A4;
-    let y be Point of T such that
-A5: y in H;
-    dom f=the carrier of T by FUNCT_2:def 1;
+    thus H is open & x in H by A3;
+A5: dom f=the carrier of T by FUNCT_2:def 1;
+    let y be Point of T;
+    assume
+    y in H;
     then
 A6: f.y in f.:H by A5,FUNCT_1:def 12;
     then f.y in G by A4;
@@ -957,91 +988,91 @@ A6: f.y in f.:H by A5,FUNCT_1:def 12;
     hence thesis by TOPMETR:15;
   end;
   assume
-A7: for e being real number st e>0 ex H being Subset of T st
-  H is open & x in H & for y being Point of T st y in H holds abs(f.y-f.x)<e;
+A7: for e being real number st e>0 ex H being Subset of T st H is open
+  & x in H & for y being Point of T st y in H holds abs(f.y-f.x)<e;
   now
-    let G be Subset of R^1 such that
-A8: G is open & f.x in G;
     reconsider fx=f.x as Point of RealSpace by TOPMETR:16,def 7;
-    consider r being real number such that
-A9: r>0 & Ball(fx,r) c= G by A8,TOPMETR:22,def 7;
+    let G be Subset of R^1;
+    assume
+    G is open & f.x in G;
+    then consider r being real number such that
+A8: r>0 and
+A9: Ball(fx,r) c= G by TOPMETR:22,def 7;
     consider H being Subset of T such that
-A10: H is open & x in H &
-    for y being Point of T st y in H holds abs(f.y-f.x)<r by A7,A9;
+A10: H is open & x in H and
+A11: for y being Point of T st y in H holds abs(f.y-f.x)<r by A7,A8;
     take H;
     thus H is open & x in H by A10;
     thus f.:H c= G
     proof
       let a be set;
-      assume a in f.:H;
+      assume
+      a in f.:H;
       then consider y being set such that
-A11:  y in dom f & y in H & a=f.y by FUNCT_1:def 12;
-      reconsider y as Point of T by A11;
-      abs(f.y-f.x)<r by A10,A11;
-      then abs(-(f.y-f.x))< r by COMPLEX1:138;
-      then
-A12:  abs(f.x-f.y)<r;
+A12:  y in dom f and
+A13:  y in H and
+A14:  a=f.y by FUNCT_1:def 12;
+      reconsider y as Point of T by A12;
       reconsider fy=f.y as Point of RealSpace by TOPMETR:16,def 7;
-      dist(fx,fy)<r by A12,TOPMETR:15;
+      abs(f.y-f.x)<r by A11,A13;
+      then abs(-(f.y-f.x))< r by COMPLEX1:138;
+      then abs(f.x-f.y)<r;
+      then dist(fx,fy)<r by TOPMETR:15;
       then fy in Ball(fx,r) by METRIC_1:12;
-      hence thesis by A9,A11;
+      hence thesis by A9,A14;
     end;
   end;
   hence thesis by TMAP_1:48;
 end;
 
 theorem Th22:
-  for F being Functional_Sequence of the carrier of T, REAL
-  st F is_unif_conv_on the carrier of T &
-  for i being Element of NAT holds F.i is continuous Function of T, R^1
-  holds lim(F, the carrier of T) is continuous Function of T, R^1
+  for F being Functional_Sequence of the carrier of T, REAL st F
+  is_unif_conv_on the carrier of T & for i being Element of NAT holds F.i is
+  continuous Function of T, R^1 holds lim(F, the carrier of T) is continuous
+  Function of T, R^1
 proof
   let F be Functional_Sequence of the carrier of T, REAL such that
-A1: F is_unif_conv_on the carrier of T &
-  for i being Element of NAT holds F.i is continuous Function of T, R^1;
-  the carrier of T common_on_dom F & F is_point_conv_on the carrier of T &
-  for r being Real st 0<r ex k being Element of NAT st
-  for n being Element of NAT
-  for x being Point of T st n>=k & x in the carrier of T
-  holds abs((F.n).x-(lim(F,the carrier of T)).x)<r by A1,SEQFUNC:44;
-  then dom lim(F, the carrier of T) = the carrier of T &
-  for x being Element of the carrier of T st x in dom lim(F, the carrier of T)
-  holds (lim(F, the carrier of T)).x = lim(F#x) by SEQFUNC:def 14;
-  then reconsider l=lim(F, the carrier of T) as Function of T,R^1
-  by FUNCT_2:def 1,TOPMETR:24;
+A1: F is_unif_conv_on the carrier of T and
+A2: for i being Element of NAT holds F.i is continuous Function of T,
+  R^1;
+  F is_point_conv_on the carrier of T by A1,SEQFUNC:44;
+  then dom lim(F, the carrier of T) = the carrier of T by SEQFUNC:def 14;
+  then reconsider l=lim(F, the carrier of T) as Function of T,R^1 by
+  FUNCT_2:def
+  1,TOPMETR:24;
   now
     let p be Point of T;
     now
       let e be real number such that
-A2:   e>0;
+A3:   e>0;
       reconsider e3=e/3 as Real;
-A3:   e3>0 by A2,XREAL_1:141;
+A4:   e3>0 by A3,XREAL_1:141;
       then consider k being Element of NAT such that
-A4:   for n being Element of NAT
-      for x being Point of T st n>=k & x in the carrier of T
-      holds abs((F.n).x-(lim(F,the carrier of T)).x)<e3 by A1,SEQFUNC:44;
-      reconsider Fk=F.k as continuous Function of T, R^1 by A1;
+A5:   for n being Element of NAT for x being Point of T st n>=k & x in
+      the carrier of T holds abs((F.n).x-(lim(F,the carrier of T)).x)<e3 by A1,
+      SEQFUNC:44;
+      reconsider Fk=F.k as continuous Function of T, R^1 by A2;
+A6:   abs(Fk.p-l.p)<e3 by A5;
       Fk is_continuous_at p by TMAP_1:49;
       then consider H being Subset of T such that
-A5:   H is open & p in H & for y being Point of T st y in H
-      holds abs(Fk.y-Fk.p)<e3 by A3,Th21;
+A7:   H is open & p in H and
+A8:   for y being Point of T st y in H holds abs(Fk.y-Fk.p)<e3 by A4,
+      Th21;
       take H;
-      thus H is open & p in H by A5;
+      thus H is open & p in H by A7;
       let y be Point of T such that
-A6:   y in H;
-      abs(Fk.p-l.p)<e3 & abs(Fk.y-l.y)<e3 by A4;
+A9:   y in H;
+      abs(Fk.y-l.y)<e3 by A5;
+      then abs(-(Fk.y-l.y))<e3 by COMPLEX1:138;
       then
-A7:   abs(Fk.p-l.p)<e3 & abs(-(Fk.y-l.y))<e3 by COMPLEX1:138;
-A8:   abs((Fk.p-l.p)+(-Fk.y+l.y)) <= abs(Fk.p-l.p)+abs(-(Fk.y-l.y))
-      by COMPLEX1:142;
-      abs(Fk.p-l.p)+abs(-(Fk.y-l.y)) < e3+e3 by A7,XREAL_1:10;
+      abs((Fk.p-l.p)+(-Fk.y+l.y)) <= abs(Fk.p-l.p)+abs(-(Fk.y-l.y)) & abs
+      (Fk.p-l.p )+abs(-(Fk.y-l.y)) < e3+e3 by A6,COMPLEX1:142,XREAL_1:10;
+      then abs((Fk.p-l.p)+(-Fk.y+l.y)) < 2*e3 by XXREAL_0:2;
       then
-A9:   abs((Fk.p-l.p)+(-Fk.y+l.y)) < 2*e3 by A8,XXREAL_0:2;
-A10:  abs(Fk.y-Fk.p+((Fk.p-l.p)+(-Fk.y+l.y))) <=
-      abs(Fk.y-Fk.p)+abs((Fk.p-l.p)+(-Fk.y+l.y)) by COMPLEX1:142;
-      abs(Fk.y-Fk.p)+abs((Fk.p-l.p)+(-Fk.y+l.y)) < e3+2*e3
-      by A5,A6,A9,XREAL_1:10;
-      hence abs(l.y-l.p)<e by A10,XXREAL_0:2;
+      abs(Fk.y-Fk.p+((Fk.p-l.p)+(-Fk.y+l.y))) <= abs(Fk.y-Fk.p)+abs((Fk.p
+-l.p)+(-Fk .y+l.y)) & abs(Fk.y-Fk.p)+abs((Fk.p-l.p)+(-Fk.y+l.y)) < e3+2*e3 by
+      A8,A9,COMPLEX1:142,XREAL_1:10;
+      hence abs(l.y-l.p)<e by XXREAL_0:2;
     end;
     hence l is_continuous_at p by Th21;
   end;
@@ -1050,22 +1081,22 @@ end;
 
 theorem Th23:
   for T being non empty TopSpace for f being Function of T, R^1
-  for r being positive (real number) holds
-  f, the carrier of T is_absolutely_bounded_by r iff
-  f is Function of T, Closed-Interval-TSpace(-r,r)
+  for r being positive (real number) holds f, the carrier of T
+is_absolutely_bounded_by r iff f is Function of T, Closed-Interval-TSpace(-r,r)
 proof
   let T be non empty TopSpace;
   let f be Function of T, R^1;
   let r be positive (real number);
 A1: dom f = the carrier of T by FUNCT_2:def 1;
-  thus f, the carrier of T is_absolutely_bounded_by r implies
-  f is Function of T, Closed-Interval-TSpace(-r,r)
+  thus f, the carrier of T is_absolutely_bounded_by r implies f is Function of
+  T, Closed-Interval-TSpace(-r,r)
   proof
     assume
 A2: f, the carrier of T is_absolutely_bounded_by r;
     now
       let x be set;
-      assume x in the carrier of T;
+      assume
+      x in the carrier of T;
       then x in (the carrier of T) /\ dom f by A1;
       then abs(f.x)<=r by A2,Def1;
       then 2*abs(f.x)<=2*r by XREAL_1:66;
@@ -1074,15 +1105,18 @@ A2: f, the carrier of T is_absolutely_bounded_by r;
       then abs((-2)*f.x)<=r--r by COMPLEX1:151;
       then abs(-r+r-2*f.x)<=r--r;
       then f.x in [.-r,r.] by RCOMP_1:9;
-      hence f.x in the carrier of Closed-Interval-TSpace(-r,r) by TOPMETR:25;
+      hence f.x in the carrier of Closed-Interval-TSpace(-r,r) by TOPMETR:
+      25;
     end;
     hence thesis by A1,FUNCT_2:5;
   end;
   assume
 A3: f is Function of T, Closed-Interval-TSpace(-r,r);
   let x be set;
-  assume x in (the carrier of T) /\ dom f;
-  then f.x in the carrier of Closed-Interval-TSpace(-r,r) by A3,FUNCT_2:7;
+  assume
+  x in (the carrier of T) /\ dom f;
+  then f.x in the carrier of Closed-Interval-TSpace(-r,r) by A3,
+  FUNCT_2:7;
   then f.x in [.-r,r.] by TOPMETR:25;
   then abs(-r+r-2*f.x)<=r--r by RCOMP_1:9;
   then abs((-2)*f.x)<=r--r;
@@ -1094,79 +1128,92 @@ A3: f is Function of T, Closed-Interval-TSpace(-r,r);
 end;
 
 theorem Th24:
-  f-g, X is_absolutely_bounded_by r implies g-f, X is_absolutely_bounded_by r
+  f-g, X is_absolutely_bounded_by r implies g-f, X
+  is_absolutely_bounded_by r
 proof
-A1: dom (f-g)= dom f /\ dom g by VALUED_1:12
-    .= dom (g-f) by VALUED_1:12;
   assume
-A2: f-g, X is_absolutely_bounded_by r;
+A1: f-g, X is_absolutely_bounded_by r;
   let x be set;
   assume
-A3: x in X /\ dom (g-f);
+A2: x in X /\ dom (g-f);
   then
-A4: x in dom (g-f) by XBOOLE_0:def 4;
-  abs((f-g).x) <= r by A1,A2,A3,Def1;
-  then abs(f.x-g.x) <= r by A1,A4,VALUED_1:13;
+A3: x in dom (g-f) by XBOOLE_0:def 4;
+A4: dom (f-g)= dom f /\ dom g by VALUED_1:12
+    .= dom (g-f) by VALUED_1:12;
+  then abs((f-g).x) <= r by A1,A2,Def1;
+  then abs(f.x-g.x) <= r by A4,A3,VALUED_1:13;
   then abs(-(f.x-g.x)) <= r by COMPLEX1:138;
   then abs(g.x-f.x) <= r;
-  hence thesis by A4,VALUED_1:13;
+  hence thesis by A3,VALUED_1:13;
 end;
 
 :: Tietze Extension Theorem
 
 theorem
-  T is normal implies for A for f being Function
-  of T|A, Closed-Interval-TSpace(-1,1) st f is continuous
-  ex g being continuous Function of T, Closed-Interval-TSpace(-1,1) st g|A = f
+  T is normal implies for A for f being Function of T|A,
+Closed-Interval-TSpace(-1,1) st f is continuous ex g being continuous Function
+  of T, Closed-Interval-TSpace(-1,1) st g|A = f
 proof
   assume
 A1: T is normal;
   let A;
   let f be Function of T|A, Closed-Interval-TSpace(-1,1) such that
 A2: f is continuous;
-A3: the carrier of Closed-Interval-TSpace(-1,1) = [. -1,1 .] by TOPMETR:25;
-A4: the carrier of T|A = A by PRE_TOPC:29;
+A3: the carrier of T|A = A by PRE_TOPC:29;
+A4: the carrier of Closed-Interval-TSpace(-1,1) = [. -1,1 .] by TOPMETR:25;
   per cases;
-  suppose A is empty;
+  suppose
+    A is empty;
     then reconsider A1 = A as empty Subset of T;
     set g = T --> R^1(0);
     g = (the carrier of T) --> 0 by TOPREALB:def 2;
     then
-A6: rng g = {0} by FUNCOP_1:14;
+A5: rng g = {0} by FUNCOP_1:14;
     rng g c= the carrier of Closed-Interval-TSpace(-1,1)
     proof
       let y be set;
-      assume y in rng g;
-      then y = 0 by A6,TARSKI:def 1;
-      hence thesis by A3,XXREAL_1:1;
+      assume
+      y in rng g;
+      then y = 0 by A5,TARSKI:def 1;
+      hence thesis by A4,XXREAL_1:1;
     end;
-    then reconsider g as Function
-    of T, Closed-Interval-TSpace(-1,1) by FUNCT_2:8;
-    reconsider g as continuous Function of T, Closed-Interval-TSpace(-1,1)
-    by PRE_TOPC:57;
+    then reconsider g as Function of T, Closed-Interval-TSpace(-1,1) by
+    FUNCT_2:
+    8;
+    reconsider g as continuous Function of T, Closed-Interval-TSpace(-1,1) by
+    PRE_TOPC:57;
     take g;
     g|A1 is empty;
     hence thesis;
   end;
-  suppose A is non empty;
+  suppose
+    A is non empty;
     then reconsider A1 = A as non empty Subset of T;
     set DF = Funcs(the carrier of T,the carrier of R^1);
     set D = {q where q is Element of DF: q is continuous Function of T,R^1};
+    reconsider f1 = f as Function of T|A1,R^1 by TOPREALA:28;
+    defpred Z[Element of NAT,set,set] means ex E2 being continuous Function of
+T,R^1 st E2 = $2 & (f-E2,A is_absolutely_bounded_by 2/3*(2/3)|^$1 implies ex g
+    being continuous Function of T,R^1 st $3 = E2+g & g,the carrier of T
+is_absolutely_bounded_by 1/3*(2/3)|^($1+1) & f-E2-g,A is_absolutely_bounded_by
+    2/3*(2/3)|^($1+1));
+A6: 2/3 > 0;
+    f1 is continuous by A2,PRE_TOPC:56;
+    then reconsider f1 = f as continuous Function of T|A1,R^1;
     T --> R^1(0) is Element of DF by FUNCT_2:11;
     then T --> R^1(0) in D;
     then reconsider D as non empty set;
-    reconsider f1 = f as Function of T|A1,R^1 by TOPREALA:28;
-    f1 is continuous by A2,PRE_TOPC:56;
-    then reconsider f1 = f as continuous Function of T|A1,R^1;
     f1,A is_absolutely_bounded_by 1
     proof
       let x be set;
-      assume x in A /\ dom f1;
+      assume
+      x in A /\ dom f1;
       then x in dom f1 by XBOOLE_0:def 4;
       then
 A7:   f1.x in rng f1 by FUNCT_1:def 5;
-      rng f1 c= the carrier of Closed-Interval-TSpace(-1,1) by RELAT_1:def 19;
-      then -1 <= f1.x & f1.x <= 1 by A3,A7,XXREAL_1:1;
+      rng f1 c= the carrier of Closed-Interval-TSpace(-1,1) by RELAT_1:
+      def 19;
+      then -1 <= f1.x & f1.x <= 1 by A4,A7,XXREAL_1:1;
       hence thesis by ABSVALUE:12;
     end;
     then consider g0 being continuous Function of T, R^1 such that
@@ -1175,359 +1222,380 @@ A9: f1-g0,A is_absolutely_bounded_by 2*1/3 by A1,Th19;
     g0 in DF by FUNCT_2:11;
     then g0 in D;
     then reconsider g0d = g0 as Element of D;
-    defpred Z[Element of NAT,set,set] means
-    ex E2 being continuous Function of T,R^1 st E2 = $2 &
-    (f-E2,A is_absolutely_bounded_by 2/3*(2/3)|^$1 implies
-    ex g being continuous Function of T,R^1 st $3 = E2+g &
-    g,the carrier of T is_absolutely_bounded_by 1/3*(2/3)|^($1+1) &
-    f-E2-g,A is_absolutely_bounded_by 2/3*(2/3)|^($1+1));
-A10: for n being Element of NAT for x being Element of D
-    ex y being Element of D st Z[n,x,y]
+A10: for n being Element of NAT for x being Element of D ex y being
+    Element of D st Z[n,x,y]
     proof
       let n be Element of NAT, x be Element of D;
       x in D;
       then consider E2 being Element of DF such that
-A11:  E2 = x & E2 is continuous Function of T, R^1;
-      reconsider E2 as continuous Function of T, R^1 by A11;
+A11:  E2 = x and
+A12:  E2 is continuous Function of T, R^1;
+      reconsider E2 as continuous Function of T, R^1 by A12;
       per cases;
       suppose
-A12:    not f-E2,A is_absolutely_bounded_by 2/3*(2/3)|^n;
+A13:    not f-E2,A is_absolutely_bounded_by 2/3*(2/3)|^n;
         take x, E2;
-        thus thesis by A11,A12;
+        thus thesis by A11,A13;
       end;
       suppose
-A13:    f-E2,A is_absolutely_bounded_by 2/3*(2/3)|^n;
-        reconsider E2a = E2 as RealMap of T by TOPMETR:24;
-        reconsider E2a as continuous RealMap of T by TOPREAL6:83;
+A14:    f-E2,A is_absolutely_bounded_by 2/3*(2/3)|^n;
         reconsider E2b = E2|A as Function of T|A1, R^1 by PRE_TOPC:30;
         reconsider E2b as continuous Function of T|A1, R^1 by TOPMETR:10;
         E2b c= E2 by RELAT_1:88;
         then
-A14:    f-E2b,A is_absolutely_bounded_by 2/3*(2/3)|^n by A13,Th4,Th17;
-        set k = f1-E2b;
-        reconsider k as Function of T|A1, R^1 by TOPMETR:24;
+A15:    f-E2b,A is_absolutely_bounded_by 2/3*(2/3)|^n by A14,Th4,
+        Th17;
+        set r = 2/3*(2/3)|^n;
         reconsider f1c = f1, E2c = E2b as RealMap of T|A1 by TOPMETR:24;
+        set k = f1-E2b;
+        reconsider E2a = E2 as RealMap of T by TOPMETR:24;
+        reconsider E2a as continuous RealMap of T by TOPREAL6:83;
+        reconsider k as Function of T|A1, R^1 by TOPMETR:24;
         reconsider f1c, E2c as continuous RealMap of T|A1 by TOPREAL6:83;
+A16:    dom f = the carrier of T|A & dom E2b = the carrier of T|A by
+        FUNCT_2:def 1;
         f1c-E2c is continuous;
         then
-A15:    k is continuous by TOPREAL6:83;
-        set r = 2/3*(2/3)|^n;
+A17:    k is continuous by TOPREAL6:83;
         (2/3)|^n > 0 by NEWTON:102;
-        then r > 0 by XREAL_1:131;
         then consider g being continuous Function of T, R^1 such that
-A16:    g,dom g is_absolutely_bounded_by r/3 and
-A17:    k-g,A is_absolutely_bounded_by 2*r/3 by A1,A14,A15,Th19;
+A18:    g,dom g is_absolutely_bounded_by r/3 and
+A19:    k-g,A is_absolutely_bounded_by 2*r/3 by A1,A15,A17,Th19,
+        XREAL_1:131;
         reconsider ga = g as RealMap of T by TOPMETR:24;
         reconsider ga as continuous RealMap of T by TOPREAL6:83;
         set y = E2a+ga;
         reconsider y1 = y as Function of T, R^1 by TOPMETR:24;
-A18:    y1 in DF by FUNCT_2:11;
-        y1 is continuous Function of T, R^1 by TOPREAL6:83;
-        then y in D by A18;
+        y1 in DF & y1 is continuous Function of T, R^1 by FUNCT_2:11,
+        TOPREAL6:83;
+        then y in D;
         then reconsider y as Element of D;
         take y, E2;
         thus E2 = x by A11;
-        assume f-E2,A is_absolutely_bounded_by 2/3*(2/3)|^n;
+        assume
+        f-E2,A is_absolutely_bounded_by 2/3*(2/3)|^n;
         take g;
         thus y = E2+g;
-A19:    2/3*(2/3)|^n = (2/3)|^(n+1) by NEWTON:11;
-        hence g,the carrier of T is_absolutely_bounded_by 1/3*(2/3)|^(n+1)
-        by A16,FUNCT_2:def 1;
-A20:    dom f = the carrier of T|A by FUNCT_2:def 1;
-A21:    dom E2b = the carrier of T|A by FUNCT_2:def 1;
-A22:    dom g = the carrier of T by FUNCT_2:def 1;
-A23:    dom(f-E2b-g) = dom(f-E2b) /\ dom g by VALUED_1:12
-          .= dom f /\ dom E2b /\ dom g by VALUED_1:12
-          .= A by A4,A20,A21,A22,XBOOLE_1:28;
-        (f-E2b-g)|A = ((f-E2b)|A) - g by RFUNCT_1:63
+A20:    2/3*(2/3)|^n = (2/3)|^(n+1) by NEWTON:11;
+        hence g,the carrier of T is_absolutely_bounded_by 1/3*(2/3)|^(n+1) by
+        A18,FUNCT_2:def 1;
+A21:    dom g = the carrier of T by FUNCT_2:def 1;
+A22:    (f-E2b-g)|A = ((f-E2b)|A) - g by RFUNCT_1:63
           .= f - E2b|A - g by RFUNCT_1:63
           .= f - E2|A - g by RELAT_1:101
           .= (f-E2)|A - g by RFUNCT_1:63
           .= (f-E2-g)|A by RFUNCT_1:63;
-        hence thesis
-        by A17,A19,A23,Th18;
+        dom(f-E2b-g) = dom(f-E2b) /\ dom g by VALUED_1:12
+          .= dom f /\ dom E2b /\ dom g by VALUED_1:12
+          .= A by A3,A16,A21,XBOOLE_1:28;
+        hence thesis by A19,A20,A22,Th18;
       end;
     end;
     consider F being Function of NAT,D such that
-A24: F.0 = g0d and
-A25: for n being Element of NAT holds Z[n,F.n,F.(n+1)]
-    from RECDEF_1:sch 2(A10);
-A26: dom F = NAT by FUNCT_2:def 1;
-A27: the carrier of RealSpace = REAL & the carrier of R^1 = REAL
-    by METRIC_1:def 14,TOPMETR:16,def 7;
-    now
+A23: F.0 = g0d and
+A24: for n being Element of NAT holds Z[n,F.n,F.(n+1)] from RECDEF_1:
+    sch 2(A10);
+A25: now
       let n be Element of NAT;
-      Z[n,F.n,F.(n+1)] by A25;
-      hence F.n is PartFunc of the carrier of T,REAL by METRIC_1:def 14
-,TOPMETR:16,def 7;
+      Z[n,F.n,F.(n+1)] by A24;
+      hence F.n is PartFunc of the carrier of T,REAL by METRIC_1:def 14 ,
+      TOPMETR:16,def 7;
     end;
-    then reconsider F as Functional_Sequence of the carrier of T,REAL
-    by A26,SEQFUNC:1;
-    now
-      let n be Element of NAT;
-      Z[n,F.n,F.(n+1)] by A25;
-      hence the carrier of T c= dom(F.n) by FUNCT_2:def 1;
-    end;
-    then
-A28: the carrier of T common_on_dom F by SEQFUNC:def 10;
-A29: 2/9 > 0 & 2/3 > 0;
-    defpred P[Nat] means F.$1 is continuous Function of T,R^1 &
-    F.$1-F.($1+1), the carrier of T
-    is_absolutely_bounded_by (2/9)*((2/3) to_power $1) &
-    F.$1-f, A1 is_absolutely_bounded_by (2/3)*((2/3) to_power $1);
+    dom F = NAT by FUNCT_2:def 1;
+    then reconsider F as Functional_Sequence of the carrier of T,REAL by A25,
+    SEQFUNC:1;
     consider E2 being continuous Function of T,R^1 such that
-A30: E2 = F.0 & (f-E2,A is_absolutely_bounded_by 2/3*(2/3)|^0 implies
-    ex g being continuous Function of T,R^1 st F.(0 qua Nat+1) = E2+g &
-    g,the carrier of T is_absolutely_bounded_by 1/3*(2/3)|^(0 qua Nat+1) &
-    f-E2-g,A is_absolutely_bounded_by 2/3*(2/3)|^(0 qua Nat+1)) by A25;
-A31: 2*1/3 = (2/3)*1 & (2/3) to_power 0 = 1 & (2/3)|^0 = 1
-    by NEWTON:9,POWER:29;
+A26: E2 = F.0 and
+A27: f-E2,A is_absolutely_bounded_by 2/3*(2/3)|^0 implies ex g being
+    continuous Function of T,R^1 st F.(0 qua Nat+1) = E2+g & g,the carrier of T
+    is_absolutely_bounded_by 1/3*(2/3)|^(0 qua Nat+1) & f-E2-g,A
+    is_absolutely_bounded_by 2/3*(2/3)|^(0 qua Nat+1) by A24;
+    (2/3)|^0 = 1 by NEWTON:9;
     then consider g1 being continuous Function of T,R^1 such that
-A32: F.(0 qua Nat+1) = E2+g1 &
-    g1,the carrier of T is_absolutely_bounded_by 1/3*(2/3)|^(0 qua Nat+1) &
-    f-E2-g1,A is_absolutely_bounded_by 2/3*(2/3)|^(0 qua Nat+1) by A9,A24,A30;
-A33: 1/3*(2/3)|^1 = 1/3*(2/3) by NEWTON:10;
-A34: dom g1 = the carrier of T by FUNCT_2:def 1
+A28: F.(0 qua Nat+1) = E2+g1 and
+A29: g1,the carrier of T is_absolutely_bounded_by 1/3*(2/3)|^(0 qua
+    Nat+ 1) and
+    f-E2-g1,A is_absolutely_bounded_by 2/3*(2/3)|^(0 qua Nat+1) by A9,A23
+    ,A26,A27;
+A30: dom g1 = the carrier of T by FUNCT_2:def 1
       .= dom E2 by FUNCT_2:def 1;
-A35: dom (g1+E2-E2) = dom (g1+E2) /\ dom E2 by VALUED_1:12
-      .= (dom g1 /\ dom E2) /\ dom E2 by VALUED_1:def 1
-      .= dom g1 by A34;
-    now
-      let a be set;
-      assume
-A36:  a in dom g1;
-      hence (g1+E2-E2).a = (g1+E2).a - E2.a by A35,VALUED_1:13
-        .= g1.a+E2.a-E2.a by A36,VALUED_1:1
-        .= g1.a;
-    end;
-    then 1/3*(2/3)|^(0 qua Nat+1) = (2/9)*1 & F.(0 qua Nat+1)-F.0 = g1
-    by A30,A32,A33,A35,FUNCT_1:9;
-    then
-A37: P[0] by A9,A24,A31,A32,Th24;
-A38: now
+    defpred P[Nat] means F.$1 is continuous Function of T,R^1 & F.$1-F.($1+1),
+the carrier of T is_absolutely_bounded_by (2/9)*((2/3) to_power $1) & F.$1-f,
+    A1 is_absolutely_bounded_by (2/3)*((2/3) to_power $1);
+A31: now
       let n be Element of NAT;
-      consider E2 being continuous Function of T,R^1 such that
-A39:  E2 = F.n & (f-E2,A is_absolutely_bounded_by 2/3*(2/3)|^n implies
-      ex g being continuous Function of T,R^1 st F.(n+1) = E2+g &
-      g,the carrier of T is_absolutely_bounded_by 1/3*(2/3)|^(n+1) &
-      f-E2-g,A is_absolutely_bounded_by 2/3*(2/3)|^(n+1)) by A25;
-      assume P[n];
-      then F.n-f, A1 is_absolutely_bounded_by (2/3)*((2/3)|^n) by POWER:46;
-      then consider g being continuous Function of T,R^1 such that
-A40:  F.(n+1) = E2+g &
-      g,the carrier of T is_absolutely_bounded_by 1/3*(2/3)|^(n+1) &
-      f-E2-g,A is_absolutely_bounded_by 2/3*(2/3)|^(n+1) by A39,Th24;
-      reconsider E2'=E2 as continuous RealMap of T by A27,TOPREAL6:83;
-      reconsider g'=g as continuous RealMap of T by A27,TOPREAL6:83;
-A41:  E2'+g' is continuous RealMap of T;
-      consider E3 being continuous Function of T,R^1 such that
-A42:  E3 = F.(n+1) & (f-E3,A is_absolutely_bounded_by 2/3*(2/3)|^(n+1) implies
-      ex g being continuous Function of T,R^1 st F.((n+1)+1) = E3+g &
-      g,the carrier of T is_absolutely_bounded_by 1/3*(2/3)|^((n+1)+1) &
-      f-E3-g,A is_absolutely_bounded_by 2/3*(2/3)|^((n+1)+1)) by A25;
-A43:  f-E2-g,A is_absolutely_bounded_by 2/3*((2/3) to_power (n+1))
-      by A40,POWER:46;
-A44:  dom f = [#](T|A1) by FUNCT_2:def 1
+A32:  dom f = [#](T|A1) by FUNCT_2:def 1
         .= A by PRE_TOPC:def 10;
-A45:  dom (f-E2-g) = dom (f-E2) /\ dom g by VALUED_1:12
+      consider E2 being continuous Function of T,R^1 such that
+A33:  E2 = F.n &( f-E2,A is_absolutely_bounded_by 2/3*(2/3)|^n
+      implies ex g being continuous Function of T,R^1 st F.(n+1) = E2+g & g,the
+      carrier of T is_absolutely_bounded_by 1/3*(2/3)|^(n+1) & f-E2-g,A
+      is_absolutely_bounded_by 2 /3*(2/3)|^(n+1)) by A24;
+      assume
+      P[n];
+      then F.n-f, A1 is_absolutely_bounded_by (2/3)*((2/3)|^n) by
+      POWER:46;
+      then consider g being continuous Function of T,R^1 such that
+A34:  F.(n+1) = E2+g and
+      g,the carrier of T is_absolutely_bounded_by 1/3*(2/3)|^(n+1) and
+A35:  f-E2-g,A is_absolutely_bounded_by 2/3*(2/3)|^(n+1) by A33,
+      Th24;
+A36:  dom (f-E2-g) = dom (f-E2) /\ dom g by VALUED_1:12
         .= (dom f) /\ (dom E2) /\ dom g by VALUED_1:12
         .= (dom f) /\ (the carrier of T) /\ dom g by FUNCT_2:def 1
-        .= (dom f) /\ dom g by A44,XBOOLE_1:28
+        .= (dom f) /\ dom g by A32,XBOOLE_1:28
         .= (dom f) /\ the carrier of T by FUNCT_2:def 1
-        .= A by A44,XBOOLE_1:28;
-A46:  dom (f-(E2+g)) = (dom f) /\ dom (E2+g) by VALUED_1:12
-        .= A /\ (dom E2 /\ dom g) by A44,VALUED_1:def 1
+        .= A by A32,XBOOLE_1:28;
+      reconsider g'=g as continuous RealMap of T by METRIC_1:def 14,TOPMETR:16
+      ,def 7,TOPREAL6:83;
+      consider E3 being continuous Function of T,R^1 such that
+A37:  E3 = F.(n+1) and
+A38:  f-E3,A is_absolutely_bounded_by 2/3*(2/3)|^(n+1) implies ex g
+being continuous Function of T,R^1 st F.((n+1)+1) = E3+g & g,the carrier of T
+      is_absolutely_bounded_by 1/3*(2/3)|^((n+1)+1) & f-E3-g,A
+      is_absolutely_bounded_by 2/3*(2/3)|^((n+1)+1) by A24;
+A39:  dom (f-(E2+g)) = (dom f) /\ dom (E2+g) by VALUED_1:12
+        .= A /\ (dom E2 /\ dom g) by A32,VALUED_1:def 1
         .= A /\ (dom E2 /\ the carrier of T) by FUNCT_2:def 1
         .= A /\ ((the carrier of T) /\ the carrier of T) by FUNCT_2:def 1
         .= A by XBOOLE_1:28;
-A47:  dom (f-E2) = A/\dom E2 by A44,VALUED_1:12
-        .= A /\ the carrier of T
-      by FUNCT_2:def 1
+A40:  dom (f-E2) = A/\dom E2 by A32,VALUED_1:12
+        .= A /\ the carrier of T by FUNCT_2:def 1
         .= A by XBOOLE_1:28;
-A48:  now
+A41:  now
         let a be set;
         assume
-A49:    a in A;
-        hence (f-E2-g).a = (f-E2).a - g.a by A45,VALUED_1:13
-          .= f.a - E2.a - g.a by A47,A49,VALUED_1:13
+A42:    a in A;
+        hence (f-E2-g).a = (f-E2).a - g.a by A36,VALUED_1:13
+          .= f.a - E2.a - g.a by A40,A42,VALUED_1:13
           .= f.a - (E2.a + g.a)
-          .= f.a - (E2+g).a by A49,VALUED_1:1
-          .= (f-(E2+g)).a by A46,A49,VALUED_1:13;
+          .= f.a - (E2+g).a by A42,VALUED_1:1
+          .= (f-(E2+g)).a by A39,A42,VALUED_1:13;
       end;
-      then
-A50:  f-F.(n+1), A1 is_absolutely_bounded_by (2/3)*((2/3) to_power ( n+1 ))
-      by A40,A43,A45,A46,FUNCT_1:9;
-      consider gx being continuous Function of T,R^1 such that
-A51:  F.((n+1)+1) = E3+gx &
-      gx,the carrier of T is_absolutely_bounded_by 1/3*(2/3)|^((n+1)+1) &
-      f-E3-gx,A is_absolutely_bounded_by 2/3*(2/3)|^((n+1)+1)
-      by A40,A42,A45,A46,A48,FUNCT_1:9;
-A52:  (2/9)*((2/3) to_power (n+1)) = 1/3*(2/3)*((2/3) |^ (n+1)) by POWER:46
+      then consider gx being continuous Function of T,R^1 such that
+A43:  F.((n+1)+1) = E3+gx and
+A44:  gx,the carrier of T is_absolutely_bounded_by 1/3*(2/3)|^((n+1)+
+      1) and
+      f-E3-gx,A is_absolutely_bounded_by 2/3*(2/3)|^((n+1)+1) by A34,A35,
+      A37,A38,A36,A39,FUNCT_1:9;
+A45:  dom gx = the carrier of T by FUNCT_2:def 1
+        .= dom E3 by FUNCT_2:def 1;
+      reconsider E2'=E2 as continuous RealMap of T by METRIC_1:def 14 ,TOPMETR
+      :16,def 7,TOPREAL6:83;
+A46:  (2/9)*((2/3) to_power (n+1)) = 1/3*(2/3)*((2/3) |^ (n+1)) by POWER:
+      46
         .= 1/3*((2/3)*((2/3) |^ (n+1)))
         .= 1/3*((2/3)|^((n+1)+1)) by NEWTON:11;
-A53:  dom gx = the carrier of T by FUNCT_2:def 1
-        .= dom E3 by FUNCT_2:def 1;
-A54:  dom (gx+E3-E3) = dom (gx+E3) /\ dom E3 by VALUED_1:12
+A47:  dom (gx+E3-E3) = dom (gx+E3) /\ dom E3 by VALUED_1:12
         .= (dom gx /\ dom E3) /\ dom E3 by VALUED_1:def 1
-        .= dom gx by A53;
+        .= dom gx by A45;
       now
         let a be set;
         assume
-A55:    a in dom gx;
-        hence (gx+E3-E3).a = (gx+E3).a - E3.a by A54,VALUED_1:13
-          .= gx.a+E3.a-E3.a by A55,VALUED_1:1
+A48:    a in dom gx;
+        hence (gx+E3-E3).a = (gx+E3).a - E3.a by A47,VALUED_1:13
+          .= gx.a+E3.a-E3.a by A48,VALUED_1:1
           .= gx.a;
       end;
-      then F.((n+1)+1)-F.(n+1) = gx by A42,A51,A54,FUNCT_1:9;
-      hence P[n+1] by A27,A40,A41,A50,A51,A52,Th24,TOPREAL6:83;
+      then
+A49:  F.((n+1)+1)-F.(n+1) = gx by A37,A43,A47,FUNCT_1:9;
+      f-E2-g,A is_absolutely_bounded_by 2/3*((2/3) to_power (n+1)) by A35
+      ,POWER:46;
+      then E2'+g' is continuous RealMap of T & f-F.(n+1), A1
+is_absolutely_bounded_by ( 2/3)*((2/3) to_power ( n+1 )) by A34,A36,A39,A41
+      ,FUNCT_1:9;
+      hence P[n+1] by A34,A44,A46,A49,Th24,METRIC_1:def 14,TOPMETR:16,def 7
+      ,TOPREAL6:83;
     end;
-A56: for n being Element of NAT holds P[n] from NAT_1:sch 1(A37,A38);
-A57: now
-      let n be natural number;
-      n in NAT by ORDINAL1:def 13;
-      hence (F.n)-(F.(n+1)), the carrier of T
-      is_absolutely_bounded_by (2/9)*((2/3) to_power n) by A56;
+A50: dom (g1+E2-E2) = dom (g1+E2) /\ dom E2 by VALUED_1:12
+      .= (dom g1 /\ dom E2) /\ dom E2 by VALUED_1:def 1
+      .= dom g1 by A30;
+    now
+      let a be set;
+      assume
+A51:  a in dom g1;
+      hence (g1+E2-E2).a = (g1+E2).a - E2.a by A50,VALUED_1:13
+        .= g1.a+E2.a-E2.a by A51,VALUED_1:1
+        .= g1.a;
     end;
     then
-A58: F is_unif_conv_on the carrier of T by A28,A29,Th11;
-    then reconsider h = lim(F, the carrier of T) as continuous Function of T,
-    R^1 by A56,Th22;
+A52: F.(0 qua Nat+1)-F.0 = g1 by A26,A28,A50,FUNCT_1:9;
+    (2/3) to_power 0 = 1 & 1/3*(2/3)|^1 = 1/3*(2/3) by NEWTON:10,POWER:29;
+    then
+A53: P[0] by A9,A23,A29,A52,Th24;
+A54: for n being Element of NAT holds P[n] from NAT_1:sch 1(A53,A31);
+A55: now
+      let n be natural number;
+      n in NAT by ORDINAL1:def 13;
+      hence
+      (F.n)-(F.(n+1)), the carrier of T is_absolutely_bounded_by (2/9)*((
+      2/3) to_power n) by A54;
+    end;
+    dom f = the carrier of T|A1 & rng f c= REAL by FUNCT_2:def 1,VALUED_0
+    :def 3;
+    then
+A56: f is Function of A1,REAL by A3,FUNCT_2:4;
+    now
+      let n be Element of NAT;
+      Z[n,F.n,F.(n+1)] by A24;
+      hence the carrier of T c= dom(F.n) by FUNCT_2:def 1;
+    end;
+    then
+A57: the carrier of T common_on_dom F by SEQFUNC:def 10;
+    then
+A58: A1 common_on_dom F by SEQFUNC:24;
 A59: now
       let n be natural number;
       n in NAT by ORDINAL1:def 13;
-      hence (F.n)-f, A1 is_absolutely_bounded_by (2/3)*((2/3) to_power n)
-      by A56;
+      hence (F.n)-f, A1 is_absolutely_bounded_by (2/3)*((2/3) to_power n) by
+      A54;
     end;
-A60: A1 common_on_dom F by A28,SEQFUNC:24;
-    dom f = the carrier of T|A1 &
-    rng f c= REAL by FUNCT_2:def 1,VALUED_0:def 3;
+A60: 2/9 > 0;
+    then F is_unif_conv_on the carrier of T by A57,A6,A55,Th11;
+    then reconsider
+    h = lim(F, the carrier of T) as continuous Function of T, R^1
+    by A54,Th22;
+    F is_point_conv_on the carrier of T by A57,A60,A6,A55,Th11, SEQFUNC
+    :23;
     then
-A61: f is Function of A1,REAL by A4,FUNCT_2:4;
-    F is_point_conv_on the carrier of T by A58,SEQFUNC:23;
-    then
-A62: h|A1 = lim(F, A1) by SEQFUNC:25
-      .= f by A29,A59,A60,A61,Th13;
+A61: h|A1 = lim(F, A1) by SEQFUNC:25
+      .= f by A6,A59,A58,A56,Th13;
     h, the carrier of T is_absolutely_bounded_by 1
     proof
       let x be set;
-      assume x in (the carrier of T) /\ dom h;
+      assume
+      x in (the carrier of T) /\ dom h;
       then reconsider z = x as Element of T;
-      dom (F.0) = the carrier of T by A24,FUNCT_2:def 1;
-      then z in (the carrier of T) /\ dom (F.0) &
-      F.0, the carrier of T is_absolutely_bounded_by 1/3 by A8,A24;
-      then |.F.0 .z.| <= 1/3 by Def1;
-      then F.0 .z >= -1/3 & F.0 .z <= 1/3 by ABSVALUE:12;
-      then F.0 .z-(2/9)/(1-2/3) >= -1/3-(2/9)/(1-2/3) &
-      F.0 .z+(2/9)/(1-2/3) <= 1/3+(2/9)/(1-2/3) &
-      h.z >= F.0 .z-(2/9)/(1-2/3) & h.z <= F.0 .z+(2/9)/(1-2/3)
-      by A28,A29,A57,Th12,XREAL_1:9,11;
-      then h.z >= -1 & h.z <= 1 by XXREAL_0:2;
-      hence thesis by ABSVALUE:12;
+A62:  dom (F.0) = the carrier of T by A23,FUNCT_2:def 1;
+      then z in (the carrier of T) /\ dom (F.0);
+      then
+A63:  |.F.0 .z.| <= 1/3 by A8,A23,A62,Def1;
+      then F.0 .z >= -1/3 by ABSVALUE:12;
+      then
+A64:  F.0 .z-(2/9)/(1-2/3) >= -1/3-(2/9)/(1-2/3) by XREAL_1:11;
+      F.0 .z <= 1/3 by A63,ABSVALUE:12;
+      then
+A65:  F.0 .z+(2/9)/(1-2/3) <= 1/3+(2/9)/(1-2/3) by XREAL_1:9;
+      h.z <= F.0 .z+(2/9)/(1-2/3) by A57,A60,A6,A55,Th12;
+      then
+A66:  h.z <= 1 by A65,XXREAL_0:2;
+      h.z >= F.0 .z-(2/9)/(1-2/3) by A57,A60,A6,A55,Th12;
+      then h.z >= -1 by A64,XXREAL_0:2;
+      hence thesis by A66,ABSVALUE:12;
     end;
     then reconsider h as Function of T, Closed-Interval-TSpace(-1,1) by Th23;
-    R^1 [.-1,1 .] = [#] Closed-Interval-TSpace(-1,1) by A3,TOPREALB:def 3;
-    then Closed-Interval-TSpace(-1,1) = R^1|R^1 [.-1,1 .] by PRE_TOPC:def 10;
+    R^1 [.-1,1 .] = [#] Closed-Interval-TSpace(-1,1) by A4,TOPREALB:def
+    3;
+    then Closed-Interval-TSpace(-1,1) = R^1|R^1 [.-1,1 .] by PRE_TOPC:
+    def 10;
     then h is continuous by TOPMETR:9;
-    hence thesis by A62;
+    hence thesis by A61;
   end;
 end;
 
 theorem
-  (for A being non empty closed Subset of T
-  for f being continuous Function of T|A, Closed-Interval-TSpace(-1,1)
-  ex g being continuous Function of T, Closed-Interval-TSpace(-1,1) st g|A = f)
-  implies T is normal
+  (for A being non empty closed Subset of T for f being continuous
+Function of T|A, Closed-Interval-TSpace(-1,1) ex g being continuous Function of
+  T, Closed-Interval-TSpace(-1,1) st g|A = f) implies T is normal
 proof
   assume
-A1: for A being non empty closed Subset of T
-  for f being continuous Function of T|A, Closed-Interval-TSpace(-1,1)
-  ex g being continuous Function
-  of T, Closed-Interval-TSpace(-1,1) st g|A = f;
-  for C, D being non empty closed Subset of T st C misses D holds
-  ex f being continuous Function of T, R^1 st f.:C = {0} & f.:D = {1}
+A1: for A being non empty closed Subset of T for f being continuous
+Function of T|A, Closed-Interval-TSpace(-1,1) ex g being continuous Function of
+  T, Closed-Interval-TSpace(-1,1) st g|A = f;
+  for C, D being non empty closed Subset of T st C misses D holds ex f
+  being continuous Function of T, R^1 st f.:C = {0} & f.:D = {1}
   proof
+    set f2 = T --> R^1(1);
+    set f1 = T --> R^1(0);
     let C, D being non empty closed Subset of T such that
 A2: C misses D;
-    set f1 = T --> R^1(0);
-    set f2 = T --> R^1(1);
     set g1 = f1|(T|C), g2 = f2|(T|D);
-A3: g1 is continuous & g2 is continuous by TMAP_1:68;
     set f = g1 union g2;
-A4: the carrier of T|C = C & the carrier of T|D = D by PRE_TOPC:29;
-    the carrier of T|(C\/D) = C \/ D by PRE_TOPC:29;
+A3: the carrier of T|D = D by PRE_TOPC:29;
+    g2 = f2|the carrier of T|D by TMAP_1:def 3;
     then
-A5: T|(C\/D) = (T|C) union (T|D) by A4,TSEP_1:def 2;
-A6: the carrier of Closed-Interval-TSpace(-1,1) = [. -1,1 .] by TOPMETR:25;
-A7: T|C misses T|D by A2,A4,TSEP_1:def 3;
+A4: rng g2 c= rng f2 by RELAT_1:99;
+    g1 = f1|the carrier of T|C by TMAP_1:def 3;
+    then rng g1 c= rng f1 by RELAT_1:99;
     then
-A8: rng f c= rng g1 \/ rng g2 by Th15;
-    g1 = f1|the carrier of T|C & g2 = f2|the carrier of T|D by TMAP_1:def 3;
-    then rng g1 c= rng f1 & rng g2 c= rng f2 by RELAT_1:99;
-    then rng g1 \/ rng g2 c= rng f1 \/ rng f2 by XBOOLE_1:13;
+A5: rng g1 \/ rng g2 c= rng f1 \/ rng f2 by A4,XBOOLE_1:13;
+A6: f1 = (the carrier of T) --> 0 by TOPREALB:def 2;
     then
-A9: rng f c= rng f1 \/ rng f2 by A8,XBOOLE_1:1;
-A10: f1 = (the carrier of T) --> 0 by TOPREALB:def 2;
+A7: rng f1 = {0} by FUNCOP_1:14;
+A8: f2 = (the carrier of T) --> 1 by TOPREALB:def 2;
     then
-A11: rng f1 = {0} by FUNCOP_1:14;
-A12: f2 = (the carrier of T) --> 1 by TOPREALB:def 2;
+A9: rng f2 = {1} by FUNCOP_1:14;
+A10: the carrier of T|C = C by PRE_TOPC:29;
     then
-A13: rng f2 = {1} by FUNCOP_1:14;
-    rng f c= [. -1,1 .]
+A11: T|C misses T|D by A2,A3,TSEP_1:def 3;
+    then rng f c= rng g1 \/ rng g2 by Th15;
+    then
+A12: rng f c= rng f1 \/ rng f2 by A5,XBOOLE_1:1;
+A13: rng f c= [. -1,1 .]
     proof
       let x be set;
-      assume x in rng f;
-      then x in {0} or x in {1} by A9,A11,A13,XBOOLE_0:def 3;
+      assume
+      x in rng f;
+      then x in {0} or x in {1} by A12,A7,A9,XBOOLE_0:def 3;
       then x = 0 or x = 1 by TARSKI:def 1;
       hence thesis by XXREAL_1:1;
     end;
-    then reconsider h = f as Function
-    of T|(C\/D), Closed-Interval-TSpace(-1,1) by A5,A6,FUNCT_2:8;
-    f is continuous Function of (T|C) union (T|D), R^1 by A3,A7,TMAP_1:148;
+    the carrier of T|(C\/D) = C \/ D by PRE_TOPC:29;
     then
-A14: h is continuous by A5,PRE_TOPC:57;
-    C \/ D is closed by TOPS_1:36;
-    then consider g being continuous Function
-    of T, Closed-Interval-TSpace(-1,1) such that
-A15: g|(C\/D) = f by A1,A14;
-    reconsider F = g as continuous Function
-    of T, R^1 by PRE_TOPC:56,TOPREALA:28;
-    take F;
-A16: C c= C;
-A17: f1.:C = {0}
+A14: T|(C\/D) = (T|C) union (T|D) by A10,A3,TSEP_1:def 2;
+A15: f2.:D = {1}
     proof
-      thus f1.:C c= {0} by A10,FUNCOP_1:96;
+      thus f2.:D c= {1} by A8,FUNCOP_1:96;
       let y be set;
-      assume y in {0};
+      consider c being set such that
+A16:  c in D by XBOOLE_0:def 1;
+      assume
+      y in {1};
       then
-A18:  y = 0 by TARSKI:def 1;
-A19:  dom f1 = the carrier of T by FUNCOP_1:19;
+A17:  y = 1 by TARSKI:def 1;
+      dom f2 = the carrier of T & f2.c = 1 by A8,A16,FUNCOP_1:13,19;
+      hence thesis by A17,A16,FUNCT_1:def 12;
+    end;
+A18: D c= D;
+A19: f1.:C = {0}
+    proof
+      thus f1.:C c= {0} by A6,FUNCOP_1:96;
+      let y be set;
       consider c being set such that
 A20:  c in C by XBOOLE_0:def 1;
-      f1.c = 0 by A10,A20,FUNCOP_1:13;
-      hence thesis by A18,A19,A20,FUNCT_1:def 12;
-    end;
-    thus F.:C = f.:C by A15,FUNCT_2:174,XBOOLE_1:7
-      .= g1.:C by A4,A7,A16,Th16
-      .= (f1|C).:C by A4,TMAP_1:def 3
-      .= {0} by A17,RELAT_1:162;
-A21: D c= D;
-A22: f2.:D = {1}
-    proof
-      thus f2.:D c= {1} by A12,FUNCOP_1:96;
-      let y be set;
-      assume y in {1};
+      assume
+      y in {0};
       then
-A23:  y = 1 by TARSKI:def 1;
-A24:  dom f2 = the carrier of T by FUNCOP_1:19;
-      consider c being set such that
-A25:  c in D by XBOOLE_0:def 1;
-      f2.c = 1 by A12,A25,FUNCOP_1:13;
-      hence thesis by A23,A24,A25,FUNCT_1:def 12;
+A21:  y = 0 by TARSKI:def 1;
+      dom f1 = the carrier of T & f1.c = 0 by A6,A20,FUNCOP_1:13,19;
+      hence thesis by A21,A20,FUNCT_1:def 12;
     end;
-    thus F.:D = f.:D by A15,FUNCT_2:174,XBOOLE_1:7
-      .= g2.:D by A4,A7,A21,Th16
-      .= (f2|D).:D by A4,TMAP_1:def 3
-      .= {1} by A22,RELAT_1:162;
+A22: C \/ D is closed by TOPS_1:36;
+    the carrier of Closed-Interval-TSpace(-1,1) = [. -1,1 .] by TOPMETR:25;
+    then reconsider
+    h = f as Function of T|(C\/D), Closed-Interval-TSpace(-1,1) by
+    A14,A13,FUNCT_2:8;
+    g1 is continuous & g2 is continuous by TMAP_1:68;
+    then f is continuous Function of (T|C) union (T|D), R^1 by
+    A11, TMAP_1:
+    148;
+    then h is continuous by A14,PRE_TOPC:57;
+    then consider
+    g being continuous Function of T, Closed-Interval-TSpace(-1,1)
+    such that
+A23: g|(C\/D) = f by A1,A22;
+    reconsider F = g as continuous Function of T, R^1 by PRE_TOPC:56,TOPREALA:
+    28;
+    take F;
+A24: C c= C;
+    thus F.:C = f.:C by A23,FUNCT_2:174,XBOOLE_1:7
+      .= g1.:C by A10,A11,A24,Th16
+      .= (f1|C).:C by A10,TMAP_1:def 3
+      .= {0} by A19,RELAT_1:162;
+    thus F.:D = f.:D by A23,FUNCT_2:174,XBOOLE_1:7
+      .= g2.:D by A3,A11,A18,Th16
+      .= (f2|D).:D by A3,TMAP_1:def 3
+      .= {1} by A15,RELAT_1:162;
   end;
   hence thesis by Th20;
 end;

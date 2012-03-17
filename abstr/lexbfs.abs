@@ -15,18 +15,18 @@ environ
       FINSUB_1, MCART_1, VALUED_0, TARSKI;
  notations TARSKI, XBOOLE_0, ZFMISC_1, MCART_1, CARD_1, NUMBERS, SUBSET_1,
       XXREAL_0, VALUED_0, XREAL_0, RELAT_1, RELAT_2, WELLORD1, MEMBERED,
-      XXREAL_2, PARTFUN1, FUNCT_1, FUNCT_2, PBOOLE, ORDINAL1, POLYNOM1,
-      FINSET_1, XCMPLX_0, NAT_1, NAT_D, FUNCOP_1, FUNCT_4, GLIB_000, GLIB_001,
-      GLIB_002, GLIB_003, BAGORDER, TERMORD, UPROOTS, CHORD, FINSEQ_1,
-      DOMAIN_1, ABIAN, RELSET_1, RECDEF_1, FINSUB_1, RFUNCT_3;
+      XXREAL_2, PARTFUN1, FUNCT_1, FUNCT_2, PBOOLE, ORDINAL1, FINSET_1,
+      XCMPLX_0, NAT_1, NAT_D, FUNCOP_1, FUNCT_4, GLIB_000, GLIB_001, BAGORDER,
+      TERMORD, UPROOTS, CHORD, FINSEQ_1, DOMAIN_1, ABIAN, RELSET_1, RECDEF_1,
+      FINSUB_1, RFUNCT_3, PRE_POLY;
  constructors WELLORD1, DOMAIN_1, FUNCT_4, XXREAL_0, XXREAL_2, NAT_D, BAGORDER,
       TERMORD, UPROOTS, GLIB_002, GLIB_003, CHORD, RECDEF_1, FINSUB_1, MCART_1,
-      RFUNCT_3, WELLORD2, RELSET_1, PBOOLE;
+      RFUNCT_3, WELLORD2, RELSET_1, PBOOLE, PRE_POLY;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
       FINSET_1, XXREAL_0, XREAL_0, XXREAL_2, NAT_1, INT_1, MEMBERED, FINSEQ_1,
-      PRE_CIRC, CARD_1, UPROOTS, FUNCT_2, GLIB_000, ABIAN, POLYNOM1, HEYTING3,
-      BAGORDER, TERMORD, CARD_FIN, GLIB_001, GLIB_002, GLIB_003, CHORD,
-      VALUED_0, FINSUB_1, PARTFUN1, FINSEQ_2, RELSET_1;
+      CARD_1, UPROOTS, FUNCT_2, GLIB_000, ABIAN, HEYTING3, BAGORDER, TERMORD,
+      CARD_FIN, GLIB_001, CHORD, VALUED_0, FINSUB_1, PARTFUN1, RELSET_1,
+      PRE_POLY;
  requirements NUMERALS, SUBSET, BOOLE, REAL, ARITHM;
 
 
@@ -35,9 +35,9 @@ begin
 :: More general than GRAPH_2:4
 
 theorem :: LEXBFS:1
-  for A,B being Element of NAT, X being non empty set
-  for F being Function of NAT, X st F is one-to-one
-  holds card {F.w where w is Element of NAT: A <= w & w <= A + B} = B+1;
+  for A,B being Element of NAT, X being non empty set for F being
+Function of NAT, X st F is one-to-one holds card {F.w where w is Element of NAT
+  : A <= w & w <= A + B} = B+1;
 
 theorem :: LEXBFS:2
   for n,m,k being Nat st m <= k & n < m holds k -' m < k -' n;
@@ -47,7 +47,8 @@ definition
   attr S is with_finite-elements means
 :: LEXBFS:def 1
 
-  for x being Element of S holds x is finite;
+  for x being Element of S holds x
+  is finite;
 end;
 
 registration
@@ -64,21 +65,22 @@ definition
   let f,g be Function;
   func f .\/ g -> Function means
 :: LEXBFS:def 2
-  dom it = dom f \/ dom g &
-  for x being set st x in dom f \/ dom g holds it.x = f.x \/ g.x;
+
+  dom it = dom f \/ dom g & for x being
+  set st x in dom f \/ dom g holds it.x = f.x \/ g.x;
 end;
 
 theorem :: LEXBFS:3
-for m,n,k being Nat holds m in ((Seg k) \ Seg (k -' n)) iff k -' n < m & m <= k
-;
+  for m,n,k being Nat holds m in ((Seg k) \ Seg (k -' n)) iff k -'
+  n < m & m <= k;
 
 theorem :: LEXBFS:4
-  for n,k,m being Nat st n <= m holds
-  ((Seg k) \ Seg (k -' n)) c= ((Seg k) \ Seg (k -' m));
+  for n,k,m being Nat st n <= m holds ((Seg k) \ Seg (k -' n)) c= (
+  (Seg k) \ Seg (k -' m));
 
 theorem :: LEXBFS:5
-  for n,k being Nat st n < k holds
-  ((Seg k) \ Seg (k -' n)) \/ {k -' n} = (Seg k) \ Seg (k -' (n+1));
+  for n,k being Nat st n < k holds ((Seg k) \ Seg (k -' n)) \/ {k
+  -' n} = (Seg k) \ Seg (k -' (n+1));
 
 definition
   let f be Relation;
@@ -98,26 +100,27 @@ definition
 end;
 
 theorem :: LEXBFS:6
-  for X being Ordinal, a, b be finite Subset of X st a <> b
-  holds (a,1)-bag <> (b,1)-bag;
+  for X being Ordinal, a, b be finite Subset of X st a <> b holds (
+  a,1)-bag <> (b,1)-bag;
 
 definition
   let F be natural-valued Function, S be set, k be Nat;
   func F.incSubset(S,k) -> natural-valued Function means
 :: LEXBFS:def 4
 
-  dom it = dom F &
-  for y being set holds (y in S & y in dom F implies it.y = F.y + k) &
-  (not y in S implies it.y = F.y);
+  dom it = dom F
+  & for y being set holds (y in S & y in dom F implies it.y = F.y + k) & (not y
+  in S implies it.y = F.y);
 end;
 
 definition
-  let n be Ordinal, T be connected TermOrder of n,
-  B be non empty finite Subset of Bags n;
+  let n be Ordinal, T be connected TermOrder of n, B be non empty finite
+  Subset of Bags n;
   func max(B,T) -> bag of n means
 :: LEXBFS:def 5
 
-  it in B & for x being bag of n st x in B holds x <= it,T;
+  it in B & for x being bag of n st x
+  in B holds x <= it,T;
 end;
 
 registration
@@ -130,15 +133,19 @@ begin :: More on Sequences
 definition
   let s be ManySortedSet of NAT;
   attr s is iterative means
-:: LEXBFS:def 6                              ::dGSITERATIVE:
-  for k, n being Nat st s.k = s.n holds s.(k+1) = s.(n+1);
+:: LEXBFS:def 6
+
+  for k, n being Nat st s.k = s.n holds s.(k+
+  1) = s.(n+1);
 end;
 
 definition
   let S be ManySortedSet of NAT;
   attr S is eventually-constant means
 :: LEXBFS:def 7
-  ex n being Nat st for m being Nat st n <= m holds S.n = S.m;
+
+  ex n being Nat st for m being Nat
+  st n <= m holds S.n = S.m;
 end;
 
 registration
@@ -146,16 +153,16 @@ registration
 end;
 
 theorem :: LEXBFS:7
-  for Gs being ManySortedSet of NAT
-  st Gs is halting & Gs is iterative holds Gs is eventually-constant;
+  for Gs being ManySortedSet of NAT st Gs is halting & Gs is
+  iterative holds Gs is eventually-constant;
 
 registration
   cluster halting iterative -> eventually-constant ManySortedSet of NAT;
 end;
 
 theorem :: LEXBFS:8
-  for Gs being ManySortedSet of NAT
-  st Gs is eventually-constant holds Gs is halting;
+  for Gs being ManySortedSet of NAT st Gs is eventually-constant
+  holds Gs is halting;
 
 registration
   cluster eventually-constant -> halting ManySortedSet of NAT;
@@ -163,13 +170,11 @@ end;
 
 theorem :: LEXBFS:9
   for Gs being iterative eventually-constant ManySortedSet of NAT
-  for n being Nat st Gs.Lifespan() <= n
-  holds Gs.(Gs.Lifespan()) = Gs.n;
+  for n being Nat st Gs.Lifespan() <= n holds Gs.(Gs.Lifespan()) = Gs.n;
 
 theorem :: LEXBFS:10
   for Gs being iterative eventually-constant ManySortedSet of NAT
-  for n,m being Nat st Gs.Lifespan() <= n & n <= m
-  holds Gs.m = Gs.n;
+  for n,m being Nat st Gs.Lifespan() <= n & n <= m holds Gs.m = Gs.n;
 
 begin :: Vertex numbering sequences
 
@@ -177,7 +182,9 @@ definition
   let G be finite _Graph;
   mode preVNumberingSeq of G -> ManySortedSet of NAT means
 :: LEXBFS:def 8
-  for i being Nat holds it.i is PartFunc of the_Vertices_of G, NAT;
+
+    for i being
+    Nat holds it.i is PartFunc of the_Vertices_of G, NAT;
 end;
 
 definition
@@ -189,13 +196,11 @@ definition
   let G be finite _Graph, S be preVNumberingSeq of G;
   attr S is vertex-numbering means
 :: LEXBFS:def 9
-  S.0 = {} &
-  S is iterative &
-  S is halting &
-  S.Lifespan() = G.order() &
-  for n being Nat st n < S.Lifespan() :: adds one at a time
-   ex w being Vertex of G st not w in dom (S.n) &
-                     (S.(n+1)) = (S.n) +* (w .--> (S.Lifespan()-'n));
+
+  S.0 = {} & S is iterative & S is
+  halting & S.Lifespan() = G.order() & for n being Nat st n < S.Lifespan() ex w
+  being Vertex of G st not w in dom (S.n) & (S.(n+1)) = (S.n) +* (w .--> (S
+  .Lifespan()-'n));
 end;
 
 registration
@@ -220,84 +225,79 @@ definition
   func S.PickedAt(n) -> set means
 :: LEXBFS:def 10
 
-  it = choose the_Vertices_of G if n >= S.Lifespan() otherwise
-  not it in dom (S.n) & S.(n+1) = S.n +* (it .--> (S.Lifespan()-'n));
+  it = choose the_Vertices_of G if n
+  >= S.Lifespan() otherwise not it in dom (S.n) & S.(n+1) = S.n +* (it .--> (S
+  .Lifespan()-'n));
 end;
 
 theorem :: LEXBFS:11
-for G being finite _Graph, S being VNumberingSeq of G, n being Nat
- st n < S.Lifespan()
-  holds S.PickedAt(n) in dom (S.(n+1)) &
-  dom (S.(n+1)) = dom (S.n) \/ {S.PickedAt(n)};
+  for G being finite _Graph, S being VNumberingSeq of G, n being
+Nat st n < S.Lifespan() holds S.PickedAt(n) in dom (S.(n+1)) & dom (S.(n+1)) =
+  dom (S.n) \/ {S.PickedAt(n)};
 
 theorem :: LEXBFS:12
-for G being finite _Graph, S being VNumberingSeq of G, n being Nat
- st n < S.Lifespan()
-  holds (S.(n+1)).(S.PickedAt(n)) = S.Lifespan()-'n;
+  for G being finite _Graph, S being VNumberingSeq of G, n being
+  Nat st n < S.Lifespan() holds (S.(n+1)).(S.PickedAt(n)) = S.Lifespan()-'n;
 
 theorem :: LEXBFS:13
-for G being finite _Graph, S being VNumberingSeq of G, n being Nat
-  st n <= S.Lifespan() holds card dom (S.n) = n;
+  for G being finite _Graph, S being VNumberingSeq of G, n being Nat st
+  n <= S.Lifespan() holds card dom (S.n) = n;
 
 theorem :: LEXBFS:14
-for G being finite _Graph, S being VNumberingSeq of G, n being Nat
- holds rng (S.n) = (Seg S.Lifespan()) \ Seg (S.Lifespan()-'n);
+  for G being finite _Graph, S being VNumberingSeq of G, n being
+  Nat holds rng (S.n) = (Seg S.Lifespan()) \ Seg (S.Lifespan()-'n);
 
 theorem :: LEXBFS:15
-for G being finite _Graph, S being VNumberingSeq of G, n being Nat, x being set
-  holds (S.n).x <= S.Lifespan() &  (x in dom (S.n) implies 1 <= (S.n).x);
+  for G being finite _Graph, S being VNumberingSeq of G, n being
+Nat, x being set holds (S.n).x <= S.Lifespan() & (x in dom (S.n) implies 1 <= (
+  S.n).x);
 
 theorem :: LEXBFS:16
-for G being finite _Graph, S being VNumberingSeq of G, n,m being Nat
- st S.Lifespan() -' n < m & m <= S.Lifespan()
-  ex v being Vertex of G st v in dom (S.n) & (S.n).v = m;
+  for G being finite _Graph, S being VNumberingSeq of G, n,m being
+Nat st S.Lifespan() -' n < m & m <= S.Lifespan() ex v being Vertex of G st v in
+  dom (S.n) & (S.n).v = m;
 
 theorem :: LEXBFS:17
-for G being finite _Graph, S being VNumberingSeq of G, m, n being Nat
- st m <= n holds S.m c= S.n;
+  for G being finite _Graph, S being VNumberingSeq of G, m, n
+  being Nat st m <= n holds S.m c= S.n;
 
 theorem :: LEXBFS:18
-for G being finite _Graph, S being VNumberingSeq of G, n being Nat
-  holds S.n is one-to-one;
+  for G being finite _Graph, S being VNumberingSeq of G, n being
+  Nat holds S.n is one-to-one;
 
 theorem :: LEXBFS:19
-for G being finite _Graph, S being VNumberingSeq of G, m,n being Nat,
-    v being set
- st v in dom (S.m) & v in dom (S.n)
-  holds (S.m).v = (S.n).v;
+  for G being finite _Graph, S being VNumberingSeq of G, m,n being
+  Nat, v being set st v in dom (S.m) & v in dom (S.n) holds (S.m).v = (S.n).v;
 
 theorem :: LEXBFS:20
-for G being finite _Graph, S being VNumberingSeq of G, m,n being Nat,
-    v being set
- st v in dom (S.m) & (S.m).v = n
-  holds S.PickedAt(S.Lifespan()-'n) = v;
+  for G being finite _Graph, S being VNumberingSeq of G, m,n being
+Nat, v being set st v in dom (S.m) & (S.m).v = n holds S.PickedAt(S.Lifespan()
+  -'n) = v;
 
 theorem :: LEXBFS:21
-for G being finite _Graph, S being VNumberingSeq of G, m, n being Nat
- st n < S.Lifespan() & n < m holds S.PickedAt(n) in dom (S.m) &
-  (S.m).(S.PickedAt(n)) = S.Lifespan() -' n;
+  for G being finite _Graph, S being VNumberingSeq of G, m, n
+being Nat st n < S.Lifespan() & n < m holds S.PickedAt(n) in dom (S.m) & (S.m).
+  (S.PickedAt(n)) = S.Lifespan() -' n;
 
 :: Inequalities relating the vlabel and the current iteration
 
 theorem :: LEXBFS:22
-for G being finite _Graph, S being VNumberingSeq of G, m being Nat, v being set
- st v in dom (S.m)
-  holds S.Lifespan() -' (S.m).v < m & S.Lifespan() -' m < (S.m).v;
+  for G being finite _Graph, S being VNumberingSeq of G, m being
+  Nat, v being set st v in dom (S.m) holds S.Lifespan() -' (S.m).v < m & S
+  .Lifespan() -' m < (S.m).v;
 
 :: If a vertex has a larger vlabel than we do at some point in the
 :: algorithm, then it must have been in the vlabel when we were picked
 
 theorem :: LEXBFS:23
-for G being finite _Graph, S being VNumberingSeq of G, i being Nat,
-    a,b being set
- st a in dom (S.i) & b in dom (S.i) & (S.i).a < (S.i).b
-  holds b in dom (S.(S.Lifespan() -' (S.i).a));
+  for G being finite _Graph, S being VNumberingSeq of G, i being
+Nat, a,b being set st a in dom (S.i) & b in dom (S.i) & (S.i).a < (S.i).b holds
+  b in dom (S.(S.Lifespan() -' (S.i).a));
 
 theorem :: LEXBFS:24
-for G being finite _Graph, S being VNumberingSeq of G, i being Nat,
-    a,b being set
- st a in dom (S.i) & b in dom (S.i) & (S.i).a < (S.i).b
-  holds not a in dom (S.(S.Lifespan() -' (S.i).b));
+  for G being finite _Graph, S being VNumberingSeq of G, i being
+Nat, a,b being set st a in dom (S.i) & (S.i).a < (S.i).b holds not a in dom (S.
+  (S.Lifespan() -' (S.i).b));
 
 begin :: Lexicographic Breadth-First Search
 
@@ -315,9 +315,8 @@ end;
 
 definition
   let G be _Graph;
-  mode LexBFS:Labeling of G is Element of
-                            [: PFuncs(the_Vertices_of G, NAT),
-                               Funcs(the_Vertices_of G, Fin NAT) :];
+  mode LexBFS:Labeling of G is Element of [: PFuncs(the_Vertices_of G, NAT),
+    Funcs(the_Vertices_of G, Fin NAT) :];
 end;
 
 registration
@@ -330,7 +329,8 @@ definition
   let G be _Graph;
   func LexBFS:Init(G) -> LexBFS:Labeling of G equals
 :: LEXBFS:def 11
-  [ {}, the_Vertices_of G --> {} ];
+  [ {}, the_Vertices_of G
+  --> {} ];
 end;
 
 definition
@@ -338,61 +338,56 @@ definition
   func LexBFS:PickUnnumbered(L) -> Vertex of G means
 :: LEXBFS:def 12
 
-  it = choose the_Vertices_of G
-    if dom L`1 = the_Vertices_of G
-    otherwise
-  ex S being non empty finite Subset of bool NAT,
-     B being non empty finite Subset of Bags NAT,
-     F being Function
-    st S = rng F &
-       F = L`2 | (the_Vertices_of G \ dom L`1) &
-     (for x being finite Subset of NAT holds x in S implies ((x,1)-bag in B)) &
-     (for x being set holds x in B implies
-       ex y being finite Subset of NAT st y in S & x = (y,1)-bag) &
-        it = choose (F " {support max(B,InvLexOrder NAT)});
+  it = choose
+the_Vertices_of G if dom L`1 = the_Vertices_of G otherwise ex S being non empty
+finite Subset of bool NAT, B being non empty finite Subset of Bags NAT, F being
+Function st S = rng F & F = L`2 | (the_Vertices_of G \ dom L`1) & (for x being
+finite Subset of NAT holds x in S implies ((x,1)-bag in B)) & (for x being set
+holds x in B implies ex y being finite Subset of NAT st y in S & x = (y,1)-bag)
+  & it = choose (F " {support max(B,InvLexOrder NAT)});
 end;
 
 definition
-  let G be finite _Graph, L be LexBFS:Labeling of G,
-      v be Vertex of G, n be Nat;
+  let G be finite _Graph, L be LexBFS:Labeling of G, v be Vertex of G, n be
+  Nat;
   func LexBFS:Update(L, v, n) -> LexBFS:Labeling of G equals
 :: LEXBFS:def 13
-  [ L`1 +* (v .--> (G.order()-'n)),
-    L`2 .\/ ((G.AdjacentSet({v}) \ dom L`1) --> {G.order()-'n}) ];
+  [ L`1 +* (v .-->
+(G.order()-'n)), L`2 .\/ ((G.AdjacentSet({v}) \ dom L`1) --> {G.order()-'n}) ];
 end;
 
 theorem :: LEXBFS:25
-for G being finite _Graph, L being LexBFS:Labeling of G,
-    v being Vertex of G, x being set, k being Nat
- st not x in G.AdjacentSet({v})
-  holds L`2.x = (LexBFS:Update(L,v,k))`2.x;
+  for G being finite _Graph, L being LexBFS:Labeling of G, v being
+Vertex of G, x being set, k being Nat st not x in G.AdjacentSet({v}) holds L`2.
+  x = (LexBFS:Update(L,v,k))`2.x;
 
 theorem :: LEXBFS:26
-for G being finite _Graph, L being LexBFS:Labeling of G,
-    v being Vertex of G, x being set, k being Nat
- st x in dom L`1
-  holds LexBFS:Update(L,v,k)`2.x = L`2.x;
+  for G being finite _Graph, L being LexBFS:Labeling of G, v being
+Vertex of G, x being set, k being Nat st x in dom L`1 holds LexBFS:Update(L,v,k
+  )`2.x = L`2.x;
 
 theorem :: LEXBFS:27
-for G being finite _Graph, L being LexBFS:Labeling of G,
-    v be Vertex of G, x being set, k being Nat
-  st x in G.AdjacentSet({v}) & not x in dom L`1
-  holds LexBFS:Update(L,v,k)`2.x = L`2.x \/ {G.order() -' k};
+  for G being finite _Graph, L being LexBFS:Labeling of G, v be
+Vertex of G, x being set, k being Nat st x in G.AdjacentSet({v}) & not x in dom
+  L`1 holds LexBFS:Update(L,v,k)`2.x = L`2.x \/ {G.order() -' k};
 
 definition
   let G be finite _Graph, L be LexBFS:Labeling of G;
   func LexBFS:Step(L) -> LexBFS:Labeling of G equals
 :: LEXBFS:def 14
-  L if G.order() <= card (dom L`1)
-    otherwise
-  LexBFS:Update(L, LexBFS:PickUnnumbered(L), card dom L`1);
+
+  L if G.order() <=
+card (dom L`1) otherwise LexBFS:Update(L, LexBFS:PickUnnumbered(L), card dom L
+  `1);
 end;
 
 definition
   let G be _Graph;
   mode LexBFS:LabelingSeq of G -> ManySortedSet of NAT means
 :: LEXBFS:def 15
-  for n being Nat holds it.n is LexBFS:Labeling of G;
+
+    for n
+    being Nat holds it.n is LexBFS:Labeling of G;
 end;
 
 definition
@@ -409,15 +404,18 @@ definition
   let G be finite _Graph, S be LexBFS:LabelingSeq of G;
   func S``1 -> preVNumberingSeq of G means
 :: LEXBFS:def 16
-  for n being Nat holds it.n = (S.n)`1;
+
+  for n being Nat holds it.n
+  = (S.n)`1;
 end;
 
 definition
   let G be finite _Graph;
   func LexBFS:CSeq(G) -> LexBFS:LabelingSeq of G means
 :: LEXBFS:def 17
-  it.0 = LexBFS:Init(G) &
-  for n being Nat holds it.(n+1) = LexBFS:Step(it.n);
+
+  it.0 =
+  LexBFS:Init(G) & for n being Nat holds it.(n+1) = LexBFS:Step(it.n);
 end;
 
 theorem :: LEXBFS:28
@@ -435,42 +433,38 @@ end;
 
 :: the vertex picked has the largest v2label
 
-theorem :: LEXBFS:29  :: tLexBFSPick01:
-for G being finite _Graph, L be LexBFS:Labeling of G, x being set
- st not x in dom L`1 & dom L`1 <> the_Vertices_of G
- holds (L`2.x,1)-bag <= (L`2.(LexBFS:PickUnnumbered(L)),1)-bag, InvLexOrder NAT
-;
+theorem :: LEXBFS:29
+  for G being finite _Graph, L be LexBFS:Labeling of G, x being
+set st not x in dom L`1 & dom L`1 <> the_Vertices_of G holds (L`2.x,1)-bag <= (
+  L`2.(LexBFS:PickUnnumbered(L)),1)-bag, InvLexOrder NAT;
 
 :: the vertex picked is not currently in the vlabel
 
-theorem :: LEXBFS:30  :: tLexBFSPick02:
-for G being finite _Graph, L be LexBFS:Labeling of G
- st dom L`1 <> the_Vertices_of G
-  holds not LexBFS:PickUnnumbered(L) in dom L`1;
+theorem :: LEXBFS:30
+  for G being finite _Graph, L be LexBFS:Labeling of G st dom L`1
+  <> the_Vertices_of G holds not LexBFS:PickUnnumbered(L) in dom L`1;
 
 theorem :: LEXBFS:31
-for G being finite _Graph, n being Nat
- st card dom ((LexBFS:CSeq(G)).n)`1 < G.order()
-  holds ((LexBFS:CSeq(G)).(n+1))`1 =
-  ((LexBFS:CSeq(G)).n)`1 +*
-     (LexBFS:PickUnnumbered((LexBFS:CSeq(G)).n) .-->
-            (G.order()-'(card (dom ((LexBFS:CSeq(G)).n)`1))));
+  for G being finite _Graph, n being Nat st card dom ((LexBFS:CSeq
+(G)).n)`1 < G.order() holds ((LexBFS:CSeq(G)).(n+1))`1 = ((LexBFS:CSeq(G)).n)`1
+  +* (LexBFS:PickUnnumbered((LexBFS:CSeq(G)).n) .--> (G.order()-'(card (dom ((
+  LexBFS:CSeq(G)).n)`1))));
 
 theorem :: LEXBFS:32
-for G being finite _Graph, n being Nat
- st n <= G.order() holds card dom ((LexBFS:CSeq(G)).n)`1 = n;
+  for G being finite _Graph, n being Nat st n <= G.order() holds
+  card dom ((LexBFS:CSeq(G)).n)`1 = n;
 
 theorem :: LEXBFS:33
-  for G being finite _Graph, n being Nat st G.order() <= n
-  holds (LexBFS:CSeq(G)).(G.order()) = (LexBFS:CSeq(G)).n;
+  for G being finite _Graph, n being Nat st G.order() <= n holds (
+  LexBFS:CSeq(G)).(G.order()) = (LexBFS:CSeq(G)).n;
 
 theorem :: LEXBFS:34
-for G being finite _Graph, m,n being Nat
- st G.order() <= m & m <= n
-  holds (LexBFS:CSeq(G)).m = (LexBFS:CSeq(G)).n;
+  for G being finite _Graph, m,n being Nat st G.order() <= m & m
+  <= n holds (LexBFS:CSeq(G)).m = (LexBFS:CSeq(G)).n;
 
 theorem :: LEXBFS:35
-  for G being finite _Graph holds LexBFS:CSeq(G) is eventually-constant;
+  for G being finite _Graph holds LexBFS:CSeq(G) is
+  eventually-constant;
 
 registration
   let G be finite _Graph;
@@ -478,20 +472,20 @@ registration
 end;
 
 theorem :: LEXBFS:36
-for G being finite _Graph, n being Nat holds
-  dom ((LexBFS:CSeq(G)).n)`1 = the_Vertices_of(G) iff G.order() <= n;
+  for G being finite _Graph, n being Nat holds dom ((LexBFS:CSeq(G
+  )).n)`1 = the_Vertices_of(G) iff G.order() <= n;
 
 theorem :: LEXBFS:37
-for G being finite _Graph holds (LexBFS:CSeq(G)).Lifespan() = G.order();
+  for G being finite _Graph holds (LexBFS:CSeq(G)).Lifespan() = G
+  .order();
 
 theorem :: LEXBFS:38
-  :: A moze porobic osobne twierdzenia dla innych wlasnosci? halting?
-for G being finite _Graph
-  holds (LexBFS:CSeq(G))``1 is eventually-constant;
+  for G being finite _Graph holds (LexBFS:CSeq(G))``1 is
+  eventually-constant;
 
 theorem :: LEXBFS:39
-for G being finite _Graph
- holds (LexBFS:CSeq(G))``1.Lifespan() = (LexBFS:CSeq(G)).Lifespan();
+  for G being finite _Graph holds (LexBFS:CSeq(G))``1.Lifespan() =
+  (LexBFS:CSeq(G)).Lifespan();
 
 registration
   let G be finite _Graph;
@@ -499,132 +493,113 @@ registration
 end;
 
 theorem :: LEXBFS:40
-for G being finite _Graph
- holds (LexBFS:CSeq(G))``1.Result() = (LexBFS:CSeq(G)).Result()`1;
+  for G being finite _Graph holds (LexBFS:CSeq(G))``1.Result() = (
+  LexBFS:CSeq(G)).Result()`1;
 
 theorem :: LEXBFS:41
-:: do czego to jest potrzebne skoro PickedAt = Pickunnumbered
-for G being finite _Graph, n being Nat st n < G.order()
-  holds ((LexBFS:CSeq(G))``1).PickedAt(n) =
-  LexBFS:PickUnnumbered((LexBFS:CSeq(G)).n);
+  for G being finite _Graph, n being Nat st n < G.order() holds ((
+  LexBFS:CSeq(G))``1).PickedAt(n) = LexBFS:PickUnnumbered((LexBFS:CSeq(G)).n);
 
 theorem :: LEXBFS:42
-:: to chyba nie jest twierdzenie
-for G being finite _Graph, n being Nat st n < G.order()
- ex w being Vertex of G
-  st w = LexBFS:PickUnnumbered((LexBFS:CSeq(G)).n) &
-     for v being set holds
-       ((v in G.AdjacentSet({w}) &
-         not v in dom ((LexBFS:CSeq(G)).n)`1 implies
-           (((LexBFS:CSeq(G)).(n+1)))`2.v =
-            (((LexBFS:CSeq(G)).n))`2.v \/ {G.order() -' n}) &
-       ((not v in G.AdjacentSet({w}) or
-          v in dom (((LexBFS:CSeq(G)).n))`1) implies
-           (((LexBFS:CSeq(G)).(n+1)))`2.v =
-            (((LexBFS:CSeq(G)).n))`2.v));
+  for G being finite _Graph, n being Nat st n < G.order() ex w
+  being Vertex of G st w = LexBFS:PickUnnumbered((LexBFS:CSeq(G)).n) & for v
+being set holds (v in G.AdjacentSet({w}) & not v in dom ((LexBFS:CSeq(G)).n)`1
+  implies ((LexBFS:CSeq(G)).(n+1)) `2.v = (((LexBFS:CSeq(G)).n))`2.v \/ {G
+.order() -' n}) & ((not v in G.AdjacentSet({w}) or v in dom (((LexBFS:CSeq(G)).
+  n))`1) implies ((LexBFS:CSeq(G)).(n+1)) `2.v = (((LexBFS:CSeq(G)).n))`2.v);
 
 theorem :: LEXBFS:43
-for G being finite _Graph, i being Nat, v being set holds
- ((LexBFS:CSeq(G)).i)`2.v c= (Seg G.order()) \ Seg (G.order()-'i);
-
-:: LexBFS: Property L1
+  for G being finite _Graph, i being Nat, v being set holds ((
+  LexBFS:CSeq(G)).i)`2.v c= (Seg G.order()) \ Seg (G.order()-'i);
 
 theorem :: LEXBFS:44
   for G being finite _Graph, x being set, i,j being Nat st i <= j
   holds ((LexBFS:CSeq(G)).i)`2.x c= ((LexBFS:CSeq(G)).j)`2.x;
 
 theorem :: LEXBFS:45
-  for G being finite _Graph, m,n being Nat, x, y being set
-  st n < G.order() & n < m & y = LexBFS:PickUnnumbered((LexBFS:CSeq(G)).n) &
-  not x in dom ((LexBFS:CSeq(G)).n)`1 & x in G.AdjacentSet({y})
-  holds (G.order() -' n) in ((LexBFS:CSeq(G)).m)`2.x;
+  for G being finite _Graph, m,n being Nat, x, y being set st n <
+  G.order() & n < m & y = LexBFS:PickUnnumbered((LexBFS:CSeq(G)).n) & not x in
+dom ((LexBFS:CSeq(G)).n)`1 & x in G.AdjacentSet({y}) holds (G.order() -' n) in
+  ((LexBFS:CSeq(G)).m)`2.x;
 
 theorem :: LEXBFS:46
-  for G being finite _Graph, m,n being Nat st m < n for x being set
-  st not G.order()-'m in ((LexBFS:CSeq(G)).(m+1))`2.x
-  holds not G.order()-'m in ((LexBFS:CSeq(G)).n)`2.x;
+  for G being finite _Graph, m,n being Nat st m < n for x being
+set st not G.order()-'m in ((LexBFS:CSeq(G)).(m+1))`2.x holds not G.order()-'m
+  in ((LexBFS:CSeq(G)).n)`2.x;
 
 :: More general version of the above:
 :: if the value added during step k doesn't appear in a later step (n),
 :: then that value cannot appear in an even later step (m)
 
 theorem :: LEXBFS:47
-for G being finite _Graph, m,n,k being Nat
- st k < n & n <= m
-  for x being set st not G.order()-'k in ((LexBFS:CSeq(G)).n)`2.x
-   holds not G.order()-'k in ((LexBFS:CSeq(G)).m)`2.x;
+  for G being finite _Graph, m,n,k being Nat st k < n & n <= m for
+x being set st not G.order()-'k in ((LexBFS:CSeq(G)).n)`2.x holds not G.order()
+  -'k in ((LexBFS:CSeq(G)).m)`2.x;
 
 :: relates a value in a vertex's v2label to the vertex chosen at that time
 
 theorem :: LEXBFS:48
-for G being finite _Graph, m,n being Nat, x being Vertex of G
- st n in ((LexBFS:CSeq(G)).m)`2.x
-  ex y being Vertex of G
-  st ((LexBFS:PickUnnumbered((LexBFS:CSeq(G)).(G.order()-'n))) = y &
-  not y in dom ((LexBFS:CSeq(G)).(G.order()-'n))`1 &  x in G.AdjacentSet({y}));
+  for G being finite _Graph, m,n being Nat, x being Vertex of G st
+n in ((LexBFS:CSeq(G)).m)`2.x ex y being Vertex of G st (LexBFS:PickUnnumbered(
+  (LexBFS:CSeq(G)).(G.order()-'n))) = y & not y in dom ((LexBFS:CSeq(G)).(G
+  .order()-'n))`1 & x in G.AdjacentSet({y});
 
 theorem :: LEXBFS:49
-for G being finite _Graph holds
-  dom ((LexBFS:CSeq(G)).Result())`1 = the_Vertices_of G;
+  for G being finite _Graph holds dom ((LexBFS:CSeq(G)).Result())
+  `1 = the_Vertices_of G;
 
-theorem :: LEXBFS:50  :: tLexBFS05:
-  for G being finite _Graph
-  holds ((LexBFS:CSeq(G)).Result()`1)" is VertexScheme of G;
+theorem :: LEXBFS:50
+  for G being finite _Graph holds ((LexBFS:CSeq(G)).Result()`1)"
+  is VertexScheme of G;
 
 :: A vertex with a vlabel of k must have had the largest v2label when chosen
 
 theorem :: LEXBFS:51
-for G being finite _Graph, i,j being Nat, a,b being Vertex of G
- st a in dom ((LexBFS:CSeq(G)).i)`1 & b in dom ((LexBFS:CSeq(G)).i)`1 &
-    ((LexBFS:CSeq(G)).i)`1.a < ((LexBFS:CSeq(G)).i)`1.b &
-    j = G.order() -' ((LexBFS:CSeq(G)).i)`1.b
-  holds (((LexBFS:CSeq(G)).j)`2.a,1)-bag <=
-        ((((LexBFS:CSeq(G)).j)`2).b,1)-bag, InvLexOrder NAT;
+  for G being finite _Graph, i,j being Nat, a,b being Vertex of G
+  st a in dom ((LexBFS:CSeq(G)).i)`1 & b in dom ((LexBFS:CSeq(G)).i)`1 & ((
+  LexBFS:CSeq(G)).i)`1.a < ((LexBFS:CSeq(G)).i)`1.b & j = G.order() -' ((
+  LexBFS:CSeq(G)).i)`1.b holds (((LexBFS:CSeq(G)).j)`2.a,1)-bag <= ((((
+  LexBFS:CSeq(G)).j)`2).b,1)-bag, InvLexOrder NAT;
 
 :: Any value in our v2label corresponds to a vertex that we are
 :: adjacent to in our in our vlabel
 
 theorem :: LEXBFS:52
-for G being finite _Graph, i,j being Nat,v being Vertex of G
- st j in ((LexBFS:CSeq(G)).i)`2.v
-  ex w being Vertex of G st w in dom ((LexBFS:CSeq(G)).i)`1 &
-     (((LexBFS:CSeq(G)).i)`1).w = j & v in G.AdjacentSet{w};
+  for G being finite _Graph, i,j being Nat,v being Vertex of G st
+j in ((LexBFS:CSeq(G)).i)`2.v ex w being Vertex of G st w in dom ((LexBFS:CSeq(
+  G)).i)`1 & (((LexBFS:CSeq(G)).i)`1).w = j & v in G.AdjacentSet{w};
 
 definition
   let G be _Graph, F be PartFunc of the_Vertices_of G, NAT;
   attr F is with_property_L3 means
 :: LEXBFS:def 18
-  for a,b,c being Vertex of G
-   st a in dom F & b in dom F & c in dom F &
-      F.a < F.b & F.b < F.c &
-      a,c are_adjacent & not b,c are_adjacent
-    ex d being Vertex of G st d in dom F & F.c < F.d &
-        b,d are_adjacent & not a,d are_adjacent &
-        for e being Vertex of G
-         st e <> d & e,b are_adjacent & not e,a are_adjacent
-          holds F.e < F.d;
+
+  for a,b,c being Vertex of G st a in
+  dom F & b in dom F & c in dom F & F.a < F.b & F.b < F.c & a,c are_adjacent &
+  not b,c are_adjacent ex d being Vertex of G st d in dom F & F.c < F.d & b,d
+  are_adjacent & not a,d are_adjacent & for e being Vertex of G st e <> d & e,b
+  are_adjacent & not e,a are_adjacent holds F.e < F.d;
 end;
 
 theorem :: LEXBFS:53
-for G being finite _Graph, n being Nat
- holds ((LexBFS:CSeq(G)).n)`1 is with_property_L3;
+  for G being finite _Graph, n being Nat holds ((LexBFS:CSeq(G)).n
+  )`1 is with_property_L3;
 
 theorem :: LEXBFS:54  :: Theorem 4.3, Golumbic p. 86
-for G being finite chordal _Graph, L be PartFunc of the_Vertices_of G, NAT
- st L is with_property_L3 & dom L = the_Vertices_of G
-  for V being VertexScheme of G st V" = L holds V is perfect;
+  for G being finite chordal _Graph, L be PartFunc of
+the_Vertices_of G, NAT st L is with_property_L3 & dom L = the_Vertices_of G for
+  V being VertexScheme of G st V" = L holds V is perfect;
 
 theorem :: LEXBFS:55 :: Theorem 4.3, Golumbic p. 86
-for G being finite chordal _Graph
- holds (((LexBFS:CSeq(G)).Result())`1)" is perfect VertexScheme of G;
+  for G being finite chordal _Graph holds (((LexBFS:CSeq(G)).Result())`1
+  )" is perfect VertexScheme of G;
 
 begin :: The Maximum Cardinality Search algorithm
 
 definition
   let G be _Graph;
-  mode MCS:Labeling of G is Element of
-                            [: PFuncs(the_Vertices_of G, NAT),
-                               Funcs(the_Vertices_of G, NAT) :];
+  mode MCS:Labeling of G is Element of [: PFuncs(the_Vertices_of G, NAT),
+    Funcs(the_Vertices_of G, NAT) :];
 end;
 
 definition
@@ -638,43 +613,47 @@ definition
   let G be finite _Graph, L be MCS:Labeling of G;
   func MCS:PickUnnumbered(L) -> Vertex of G means
 :: LEXBFS:def 20
-  it = choose the_Vertices_of G if dom L`1 = the_Vertices_of G
-  otherwise
-    ex S being finite non empty natural-membered set, F being Function
-     st S = rng F
-      & F = L`2 | (the_Vertices_of G \ dom (L`1))
-      & it = choose (F " {max S});
+
+  it = choose
+  the_Vertices_of G if dom L`1 = the_Vertices_of G otherwise ex S being finite
+  non empty natural-membered set, F being Function st S = rng F & F = L`2 | (
+  the_Vertices_of G \ dom (L`1)) & it = choose (F " {max S});
 end;
 
 definition
   let G be finite _Graph, L be MCS:Labeling of G, v be set;
   func MCS:LabelAdjacent(L, v) -> MCS:Labeling of G equals
 :: LEXBFS:def 21
-   [ L`1, (L`2).incSubset(G.AdjacentSet({v}) \ dom L`1, 1) ];
+  [ L`1, (L`2)
+  .incSubset(G.AdjacentSet({v}) \ dom L`1, 1) ];
 end;
 
 definition
- let G be finite _Graph, L be MCS:Labeling of G,
-    v be Vertex of G, n be Nat;
- func MCS:Update(L, v, n) -> MCS:Labeling of G means
+  let G be finite _Graph, L be MCS:Labeling of G, v be Vertex of G, n be Nat;
+  func MCS:Update(L, v, n) -> MCS:Labeling of G means
 :: LEXBFS:def 22
-    ex M being MCS:Labeling of G st M = [L`1 +* (v .--> (G.order()-'n)), L`2]
-     & it = MCS:LabelAdjacent(M, v);
+
+  ex M being
+  MCS:Labeling of G st M = [L`1 +* (v .--> (G.order()-'n)), L`2] & it =
+  MCS:LabelAdjacent(M, v);
 end;
 
 definition
   let G be finite _Graph, L be MCS:Labeling of G;
   func MCS:Step(L) -> MCS:Labeling of G equals
 :: LEXBFS:def 23
-  L if G.order() <= card dom (L`1)
-    otherwise MCS:Update(L, MCS:PickUnnumbered(L), card dom (L`1));
+
+  L if G.order() <= card
+  dom (L`1) otherwise MCS:Update(L, MCS:PickUnnumbered(L), card dom (L`1));
 end;
 
 definition
   let G be _Graph;
   mode MCS:LabelingSeq of G -> ManySortedSet of NAT means
 :: LEXBFS:def 24
-  for n being Nat holds it.n is MCS:Labeling of G;
+
+    for n being
+    Nat holds it.n is MCS:Labeling of G;
 end;
 
 definition
@@ -691,13 +670,16 @@ definition
   let G be finite _Graph, S be MCS:LabelingSeq of G;
   func S``1 -> preVNumberingSeq of G means
 :: LEXBFS:def 25
-  for n being Nat holds it.n = (S.n)`1;
+
+  for n being Nat holds it.n
+  = (S.n)`1;
 end;
 
 definition
   let G be finite _Graph;
   func MCS:CSeq(G) -> MCS:LabelingSeq of G means
 :: LEXBFS:def 26
+
   it.0 = MCS:Init(G) &
   for n being Nat holds it.(n+1) = MCS:Step(it.n);
 end;
@@ -711,61 +693,57 @@ registration
 end;
 
 theorem :: LEXBFS:57
-for G being finite _Graph, v being set holds ((MCS:Init(G))`2).v = 0;
+  for G being finite _Graph, v being set holds ((MCS:Init(G))`2).v
+  = 0;
 
 theorem :: LEXBFS:58
-for G being finite _Graph, L be MCS:Labeling of G, x being set
- st not x in dom L`1 &
-    dom L`1 <> the_Vertices_of G
-  holds (L`2).x <= (L`2).(MCS:PickUnnumbered(L));
+  for G being finite _Graph, L be MCS:Labeling of G, x being set
+  st not x in dom L`1 & dom L`1 <> the_Vertices_of G holds (L`2).x <= (L`2).(
+  MCS:PickUnnumbered(L));
 
 theorem :: LEXBFS:59
-for G being finite _Graph, L be MCS:Labeling of G
- st dom L`1 <> the_Vertices_of G
-  holds not MCS:PickUnnumbered(L) in dom L`1;
+  for G being finite _Graph, L be MCS:Labeling of G st dom L`1 <>
+  the_Vertices_of G holds not MCS:PickUnnumbered(L) in dom L`1;
 
 theorem :: LEXBFS:60
-for G being finite _Graph, L be MCS:Labeling of G, v,x being set
- st not x in G.AdjacentSet({v})
-  holds (L`2).x = (MCS:LabelAdjacent(L,v))`2.x;
+  for G being finite _Graph, L be MCS:Labeling of G, v,x being set
+  st not x in G.AdjacentSet({v}) holds (L`2).x = (MCS:LabelAdjacent(L,v))`2.x;
 
 theorem :: LEXBFS:61
-for G being finite _Graph, L be MCS:Labeling of G, v,x being set
- st x in dom L`1
-  holds L`2.x = (MCS:LabelAdjacent(L,v))`2.x;
+  for G being finite _Graph, L be MCS:Labeling of G, v,x being set
+  st x in dom L`1 holds L`2.x = (MCS:LabelAdjacent(L,v))`2.x;
 
 theorem :: LEXBFS:62
-for G being finite _Graph, L being MCS:Labeling of G, v,x being set
- st x in dom L`2 & x in G.AdjacentSet{v} & not x in dom L`1
-  holds (MCS:LabelAdjacent(L,v))`2.x = (L`2).x + 1;
+  for G being finite _Graph, L being MCS:Labeling of G, v,x being
+  set st x in dom L`2 & x in G.AdjacentSet{v} & not x in dom L`1 holds (
+  MCS:LabelAdjacent(L,v))`2.x = (L`2).x + 1;
 
-theorem :: LEXBFS:63 :: po co to?
-for G being finite _Graph, L being MCS:Labeling of G, v being set
- st dom L`2 = the_Vertices_of G
-  holds dom (MCS:LabelAdjacent(L,v))`2 = the_Vertices_of G;
+theorem :: LEXBFS:63
+  for G being finite _Graph, L being MCS:Labeling of G, v being set st
+  dom L`2 = the_Vertices_of G holds dom (MCS:LabelAdjacent(L,v))`2 =
+  the_Vertices_of G;
 
- theorem :: LEXBFS:64
-for G being finite _Graph, n being Nat
- st card dom (((MCS:CSeq(G)).n))`1 < G.order()
-  holds ((MCS:CSeq(G)).(n+1))`1 =
-    ((MCS:CSeq(G)).n)`1 +*
-       (MCS:PickUnnumbered((MCS:CSeq(G)).n) .-->
-         (G.order()-'(card (dom ((MCS:CSeq(G)).n)`1))));
+theorem :: LEXBFS:64
+  for G being finite _Graph, n being Nat st card dom (((MCS:CSeq(G
+  )).n))`1 < G.order() holds ((MCS:CSeq(G)).(n+1))`1 = ((MCS:CSeq(G)).n)`1 +* (
+MCS:PickUnnumbered((MCS:CSeq(G)).n) .--> (G.order()-'(card (dom ((MCS:CSeq(G)).
+  n)`1))));
 
 theorem :: LEXBFS:65
-for G being finite _Graph, n being Nat
- st n <= G.order() holds card dom ((MCS:CSeq(G)).n)`1 = n;
+  for G being finite _Graph, n being Nat st n <= G.order() holds
+  card dom ((MCS:CSeq(G)).n)`1 = n;
 
 theorem :: LEXBFS:66
-  for G being finite _Graph, n being Nat st G.order() <= n
-  holds (MCS:CSeq(G)).(G.order()) = (MCS:CSeq(G)).n;
+  for G being finite _Graph, n being Nat st G.order() <= n holds (
+  MCS:CSeq(G)).(G.order()) = (MCS:CSeq(G)).n;
 
 theorem :: LEXBFS:67
-for G being finite _Graph, m,n being Nat st G.order() <= m & m <= n
-  holds (MCS:CSeq(G)).m = (MCS:CSeq(G)).n;
+  for G being finite _Graph, m,n being Nat st G.order() <= m & m
+  <= n holds (MCS:CSeq(G)).m = (MCS:CSeq(G)).n;
 
 theorem :: LEXBFS:68
-  for G being finite _Graph holds MCS:CSeq(G) is eventually-constant;
+  for G being finite _Graph holds MCS:CSeq(G) is
+  eventually-constant;
 
 registration
   let G be finite _Graph;
@@ -773,22 +751,24 @@ registration
 end;
 
 theorem :: LEXBFS:69
-for G being finite _Graph, n being Nat
- holds dom ((MCS:CSeq(G)).n)`1 = the_Vertices_of G iff G.order() <= n;
+  for G being finite _Graph, n being Nat holds dom ((MCS:CSeq(G)).
+  n)`1 = the_Vertices_of G iff G.order() <= n;
 
 theorem :: LEXBFS:70
-  for G being finite _Graph holds (MCS:CSeq(G)).Lifespan() = G.order();
+  for G being finite _Graph holds (MCS:CSeq(G)).Lifespan() = G
+  .order();
 
 theorem :: LEXBFS:71
-  :: A moze porobic osobne twierdzenia dla innych wlasnosci?
-for G being finite _Graph holds (MCS:CSeq(G))``1 is eventually-constant;
+  for G being finite _Graph holds (MCS:CSeq(G))``1 is
+  eventually-constant;
 
 theorem :: LEXBFS:72
-for G being finite _Graph
- holds (MCS:CSeq(G))``1.Lifespan() = (MCS:CSeq(G)).Lifespan();
+  for G being finite _Graph holds (MCS:CSeq(G))``1.Lifespan() = (
+  MCS:CSeq(G)).Lifespan();
 
-theorem :: LEXBFS:73   :: cluster is below
-  for G being finite _Graph holds MCS:CSeq(G)``1 is vertex-numbering;
+theorem :: LEXBFS:73
+  for G being finite _Graph holds MCS:CSeq(G)``1 is
+  vertex-numbering;
 
 registration
   let G be finite _Graph;
@@ -796,44 +776,42 @@ registration
 end;
 
 theorem :: LEXBFS:74
-  for G being finite _Graph, n being Nat st n < G.order()
-  holds ((MCS:CSeq(G))``1).PickedAt(n) = MCS:PickUnnumbered((MCS:CSeq(G)).n);
+  for G being finite _Graph, n being Nat st n < G.order() holds ((
+  MCS:CSeq(G))``1).PickedAt(n) = MCS:PickUnnumbered((MCS:CSeq(G)).n);
 
 theorem :: LEXBFS:75
-for G being finite _Graph, n being Nat st n < G.order()
- ex w being Vertex of G st w = MCS:PickUnnumbered((MCS:CSeq(G)).n) &
-  for v being set holds
-       (v in G.AdjacentSet({w}) & not v in dom (((MCS:CSeq(G)).n)`1)
-         implies (((MCS:CSeq(G)).(n+1))`2).v = (((MCS:CSeq(G)).n)`2).v + 1) &
-       (not v in G.AdjacentSet({w}) or v in dom (((MCS:CSeq(G)).n)`1)
-         implies (((MCS:CSeq(G)).(n+1))`2).v = (((MCS:CSeq(G)).n)`2).v);
+  for G being finite _Graph, n being Nat st n < G.order() ex w
+being Vertex of G st w = MCS:PickUnnumbered((MCS:CSeq(G)).n) & for v being set
+holds (v in G.AdjacentSet({w}) & not v in dom (((MCS:CSeq(G)).n)`1) implies (((
+  MCS:CSeq(G)).(n+1))`2).v = (((MCS:CSeq(G)).n)`2).v + 1) & (not v in G
+.AdjacentSet({w}) or v in dom (((MCS:CSeq(G)).n)`1) implies (((MCS:CSeq(G)).(n+
+  1))`2).v = (((MCS:CSeq(G)).n)`2).v);
 
 theorem :: LEXBFS:76
-for G being finite _Graph, n being Nat, x being set
- st not x in dom ((MCS:CSeq(G)).n)`1
-  holds (((MCS:CSeq(G)).n)`2).x =
-                       card (G.AdjacentSet({x}) /\ (dom ((MCS:CSeq(G)).n)`1));
+  for G being finite _Graph, n being Nat, x being set st not x in
+dom ((MCS:CSeq(G)).n)`1 holds (((MCS:CSeq(G)).n)`2).x = card (G.AdjacentSet({x}
+  ) /\ (dom ((MCS:CSeq(G)).n)`1));
 
 definition
   let G be _Graph, F be PartFunc of the_Vertices_of G, NAT;
   attr F is with_property_T means
 :: LEXBFS:def 27
-  for a,b,c being Vertex of G
-   st a in dom F & b in dom F & c in dom F &
-      F.a < F.b & F.b < F.c & a,c are_adjacent & not b,c are_adjacent
-    ex d being Vertex of G
-     st d in dom F & F.b < F.d & b,d are_adjacent & not a,d are_adjacent;
+
+  for a,b,c being Vertex of G st a in
+  dom F & b in dom F & c in dom F & F.a < F.b & F.b < F.c & a,c are_adjacent &
+  not b,c are_adjacent ex d being Vertex of G st d in dom F & F.b < F.d & b,d
+  are_adjacent & not a,d are_adjacent;
 end;
 
 theorem :: LEXBFS:77
-for G being finite _Graph, n being Nat
- holds ((MCS:CSeq(G)).n)`1 is with_property_T;
+  for G being finite _Graph, n being Nat holds ((MCS:CSeq(G)).n)`1 is
+  with_property_T;
 
-theorem :: LEXBFS:78  :: LexBFS also has property T
-for G being finite _Graph
- holds ((LexBFS:CSeq(G)).Result())`1 is with_property_T;
+theorem :: LEXBFS:78
+  for G being finite _Graph holds ((LexBFS:CSeq(G)).Result())`1 is
+  with_property_T;
 
 theorem :: LEXBFS:79 :: Tarjan (SIAM Journal of Computing; 13(3):August 1984)
-for G being finite chordal _Graph, L being PartFunc of the_Vertices_of G, NAT
- st L is with_property_T & dom L = the_Vertices_of G
-  for V being VertexScheme of G st V" = L holds V is perfect;
+  for G being finite chordal _Graph, L being PartFunc of the_Vertices_of
+  G, NAT st L is with_property_T & dom L = the_Vertices_of G for V being
+  VertexScheme of G st V" = L holds V is perfect;

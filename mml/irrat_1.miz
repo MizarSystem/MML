@@ -12,8 +12,8 @@ environ
       FINSEQ_2, GROUP_1, SIN_COS, IRRAT_1, FUNCOP_1;
  notations XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XXREAL_0, XREAL_0,
       INT_1, COMPLEX1, NAT_1, FUNCT_1, PARTFUN1, FUNCOP_1, VALUED_0, VALUED_1,
-      SEQ_1, SEQ_2, POWER, SEQM_3, FINSEQ_1, RVSUM_1, SERIES_1, FINSEQ_2,
-      RFINSEQ, SIN_COS, RAT_1, SQUARE_1, LIMFUNC1, INT_2, PEPIN, NEWTON;
+      SEQ_1, SEQ_2, POWER, FINSEQ_1, RVSUM_1, SERIES_1, FINSEQ_2, RFINSEQ,
+      SIN_COS, RAT_1, SQUARE_1, LIMFUNC1, INT_2, PEPIN, NEWTON;
  constructors ARYTM_0, REAL_1, NAT_1, NAT_D, SEQ_2, PARTFUN1, RVSUM_1,
       LIMFUNC1, COMSEQ_3, RFINSEQ, BINARITH, SIN_COS, PEPIN, SEQ_1, SERIES_1,
       POWER, RELSET_1;
@@ -52,31 +52,32 @@ proof
 A1: p is prime;
   then
 A2: p>1 by INT_2:def 5;
-  assume sqrt p is rational;
+  assume
+  sqrt p is rational;
   then consider i, n such that
-A3: n<>0 & sqrt p=i/n &
-  for i1 being Integer, n1 being Element of NAT st n1<>0 & sqrt p=i1/n1
-  holds n<=n1 by RAT_1:25;
-A4: i=sqrt p*n by A3,XCMPLX_1:88;
-  sqrt p>=0 & n>=0 by SQUARE_1:def 4;
-  then i>=0 by A4;
-  then reconsider m = i as Element of NAT by INT_1:16;
-A5: m^2 = (sqrt p)^2*n^2 by A4
+A3: n<>0 and
+A4: sqrt p=i/n and
+A5: for i1 being Integer, n1 being Element of NAT st n1<>0 & sqrt p=i1/
+  n1 holds n<=n1 by RAT_1:25;
+A6: i=sqrt p*n by A3,A4,XCMPLX_1:88;
+  sqrt p>=0 by SQUARE_1:def 4;
+  then reconsider m = i as Element of NAT by A6,INT_1:16;
+A7: m^2 = (sqrt p)^2*n^2 by A6
     .= p*n^2 by SQUARE_1:def 4;
   then p divides m^2 by NAT_D:def 3;
   then p divides m by A1,NEWTON:98;
   then consider m1 being Nat such that
-A6: m=p*m1 by NAT_D:def 3;
-  n^2 = p*(p*m1^2)/p by A2,A5,A6,XCMPLX_1:90
+A8: m=p*m1 by NAT_D:def 3;
+  n^2 = p*(p*m1^2)/p by A2,A7,A8,XCMPLX_1:90
     .= p*m1^2 by A2,XCMPLX_1:90;
   then p divides n^2 by NAT_D:def 3;
   then p divides n by A1,NEWTON:98;
   then consider n1 being Nat such that
-A7: n=p*n1 by NAT_D:def 3;
-A8: n1<>0 by A3,A7;
-A9: m1/n1 = sqrt p by A2,A3,A6,A7,XCMPLX_1:92;
-  p*n1>1*n1 by A2,A8,XREAL_1:100;
-  hence contradiction by A3,A7,A8,A9;
+A9: n=p*n1 by NAT_D:def 3;
+A10: m1/n1 = sqrt p by A2,A4,A8,A9,XCMPLX_1:92;
+A11: n1<>0 by A3,A9;
+  then p*n1>1*n1 by A2,XREAL_1:100;
+  hence contradiction by A5,A9,A11,A10;
 end;
 
 theorem
@@ -102,10 +103,10 @@ end;
 
 begin :: A proof that e = e
 
-scheme LambdaRealSeq{F(set)->real number}:
-  (ex seq st for n holds seq.n=F(n)) & (for seq1, seq2 st
-  (for n holds seq1.n=F(n)) & (for n holds seq2.n=F(n)) holds seq1=seq2)
-proof
+scheme
+  LambdaRealSeq{F(set)->real number}: (ex seq st for n holds seq.n=F(n)) & for
+seq1, seq2 st (for n holds seq1.n=F(n)) & (for n holds seq2.n=F(n)) holds seq1=
+  seq2 proof
   thus ex seq st for n holds seq.n=F(n) from SEQ_1:sch 1;
   let seq1, seq2;
   assume
@@ -128,25 +129,22 @@ definition
   correctness
   proof
     deffunc F(Element of NAT)=($1-k)/$1;
-    thus (ex seq being Real_Sequence st
-    for n being Element of NAT holds seq.n=F(n)) &
-    (for seq1, seq2 being Real_Sequence st
-    (for n being Element of NAT holds seq1.n=F(n)) &
-    (for n being Element of NAT holds seq2.n=F(n)) holds seq1=seq2)
-    from LambdaRealSeq;
+    thus (ex seq being Real_Sequence st for n being Element of NAT holds seq.n
+    =F(n)) & for seq1, seq2 being Real_Sequence st (for n being Element of NAT
+holds seq1.n=F(n)) & (for n being Element of NAT holds seq2.n=F(n)) holds seq1=
+    seq2 from LambdaRealSeq;
   end;
   func bseq(k) -> Real_Sequence means
   :Def2:
-  for n holds it.n=(n choose k)*(n ^ (-k));
+  for n holds it.n=(n choose k)*(n
+  ^ (-k));
   correctness
   proof
     deffunc F(Element of NAT)=($1 choose k)*($1 ^ (-k));
-    thus (ex seq being Real_Sequence st
-    for n being Element of NAT holds seq.n=F(n)) &
-    (for seq1, seq2 being Real_Sequence st
-    (for n being Element of NAT holds seq1.n=F(n)) &
-    (for n being Element of NAT holds seq2.n=F(n)) holds seq1=seq2)
-    from LambdaRealSeq;
+    thus (ex seq being Real_Sequence st for n being Element of NAT holds seq.n
+    =F(n)) & for seq1, seq2 being Real_Sequence st (for n being Element of NAT
+holds seq1.n=F(n)) & (for n being Element of NAT holds seq2.n=F(n)) holds seq1=
+    seq2 from LambdaRealSeq;
   end;
 end;
 
@@ -154,16 +152,15 @@ definition
   let n be natural number;
   func cseq(n) -> Real_Sequence means
   :Def3:
-  for k holds it.k=(n choose k)*(n ^ (-k));
+  for k holds it.k=(n choose k)*(n
+  ^ (-k));
   correctness
   proof
     deffunc F(Element of NAT)=(n choose $1)*(n ^ (-$1));
-    thus (ex seq being Real_Sequence st
-    for n being Element of NAT holds seq.n=F(n)) &
-    (for seq1, seq2 being Real_Sequence st
-    (for n being Element of NAT holds seq1.n=F(n)) &
-    (for n being Element of NAT holds seq2.n=F(n)) holds seq1=seq2)
-    from LambdaRealSeq;
+    thus (ex seq being Real_Sequence st for n being Element of NAT holds seq.n
+    =F(n)) & for seq1, seq2 being Real_Sequence st (for n being Element of NAT
+holds seq1.n=F(n)) & (for n being Element of NAT holds seq2.n=F(n)) holds seq1=
+    seq2 from LambdaRealSeq;
   end;
 end;
 
@@ -181,12 +178,10 @@ definition
   correctness
   proof
     deffunc F(Element of NAT)=(1+(1/$1)) ^ $1;
-    thus (ex seq being Real_Sequence st
-    for n being Element of NAT holds seq.n=F(n)) &
-    (for seq1, seq2 being Real_Sequence st
-    (for n being Element of NAT holds seq1.n=F(n)) &
-    (for n being Element of NAT holds seq2.n=F(n)) holds seq1=seq2)
-    from LambdaRealSeq;
+    thus (ex seq being Real_Sequence st for n being Element of NAT holds seq.n
+    =F(n)) & for seq1, seq2 being Real_Sequence st (for n being Element of NAT
+holds seq1.n=F(n)) & (for n being Element of NAT holds seq2.n=F(n)) holds seq1=
+    seq2 from LambdaRealSeq;
   end;
 end;
 
@@ -197,12 +192,10 @@ definition
   correctness
   proof
     deffunc F(Element of NAT)=1/($1!);
-    thus (ex seq being Real_Sequence st
-    for n being Element of NAT holds seq.n=F(n)) &
-    (for seq1, seq2 being Real_Sequence st
-    (for n being Element of NAT holds seq1.n=F(n)) &
-    (for n being Element of NAT holds seq2.n=F(n)) holds seq1=seq2)
-    from LambdaRealSeq;
+    thus (ex seq being Real_Sequence st for n being Element of NAT holds seq.n
+    =F(n)) & for seq1, seq2 being Real_Sequence st (for n being Element of NAT
+holds seq1.n=F(n)) & (for n being Element of NAT holds seq2.n=F(n)) holds seq1=
+    seq2 from LambdaRealSeq;
   end;
 end;
 
@@ -241,8 +234,8 @@ A2: k <= n by A1,XXREAL_0:2;
   end;
   suppose
 A3: k+1>n & k<=n;
-    then k>=n & k<=n by NAT_1:13;
-    then k=n by XXREAL_0:1;
+    then k>=n by NAT_1:13;
+    then k=n by A3,XXREAL_0:1;
     hence thesis by A3,NEWTON:def 3;
   end;
   suppose
@@ -282,8 +275,8 @@ end;
 theorem Th9:
   aseq(k) is convergent & lim(aseq(k))=1
 proof
-A1: for eps be real number st 0<eps
-  ex N st for n st N<=n holds abs(aseq(k).n-1)<eps
+A1: for eps be real number st 0<eps ex N st for n st N<=n holds abs(aseq(k).
+  n-1)<eps
   proof
     let eps be real number;
     assume
@@ -293,18 +286,17 @@ A3: N>k/eps by SEQ_4:10;
     take N;
     let n;
     assume
-A5: n>=N;
+A4: n>=N;
+    then n>(k/eps) by A3,XXREAL_0:2;
+    then (k/eps)*eps<n*eps by A2,XREAL_1:70;
     then
-A6: n>0 by A2,A3;
-    then
-A7: abs(aseq(k).n-1) = abs((1-(k/n))-1) by Th8
+A5: k<n*eps by A2,XCMPLX_1:88;
+A6: n>0 by A2,A3,A4;
+    then abs(aseq(k).n-1) = abs((1-(k/n))-1) by Th8
       .= abs(-(k/n))
       .= abs(k/n) by COMPLEX1:138
       .= k/n by ABSVALUE:def 1;
-    n>(k/eps) by A3,A5,XXREAL_0:2;
-    then (k/eps)*eps<n*eps by A2,XREAL_1:70;
-    then k<n*eps by A2,XCMPLX_1:88;
-    hence thesis by A6,A7,XREAL_1:85;
+    hence thesis by A6,A5,XREAL_1:85;
   end;
   thus aseq(k) is convergent
   proof
@@ -315,14 +307,15 @@ A7: abs(aseq(k).n-1) = abs((1-(k/n))-1) by Th8
 end;
 
 theorem Th10:
-  for seq st for n being Nat holds seq.n=x holds seq is convergent & lim(seq)=x
+  for seq st for n being Nat holds seq.n=x holds seq is convergent
+  & lim(seq)=x
 proof
   let seq;
-X: x in REAL by XREAL_0:def 1;
   assume
 A1: for n being Nat holds seq.n=x;
+  x in REAL by XREAL_0:def 1;
   then
-A2: seq is constant by X,VALUED_0:def 18;
+A2: seq is constant by A1,VALUED_0:def 18;
   hence seq is convergent;
   thus lim(seq) = seq.0 by A2,SEQ_4:41
     .= x by A1;
@@ -345,70 +338,70 @@ proof
 end;
 
 theorem Th13:
-  bseq(k) is convergent & lim(bseq(k))=1/(k!) & lim(bseq(k))=eseq.k
+  bseq(k) is convergent & lim(bseq(k))=1/(k!) & lim(bseq(k))=eseq.
+  k
 proof
-  defpred P[Nat] means bseq($1) is convergent &
-  lim(bseq($1))=1/($1!);
-A1: P[0]
-  proof
-    reconsider bseq0 = NAT --> 1 as Real_Sequence by FUNCOP_1:57;
-    for n being Nat holds bseq0.n=1
-     proof let n be Nat;
-   n in NAT by ORDINAL1:def 13;
-      hence thesis by FUNCOP_1:13;
-     end;
-    then
-A2: bseq0 is convergent & lim(bseq0)=1 by Th10;
-A3: for n st n>=1 holds bseq(0).n=bseq0.n
-    proof
-      let n;
-      assume n>=1;
-      thus bseq(0).n = 1 by Th11
-        .= bseq0.n by FUNCOP_1:13;
-    end;
-    hence bseq(0) is convergent by A2,SEQ_4:31;
-    thus thesis by A2,A3,NEWTON:18,SEQ_4:32;
-  end;
-A4: now
+  defpred P[Nat] means bseq($1) is convergent & lim(bseq($1))=1/($1!);
+A1: now
     let k;
     assume
-A5: P[k];
+A2: P[k];
     thus P[k+1]
     proof
       deffunc F(Element of NAT)=(1/(k+1))*(bseq(k).$1);
       consider seq such that
-A6:   for n holds seq.n = F(n) from SEQ_1:sch 1;
-A7:   seq = (1/(k+1))(#)(bseq(k)) by A6,SEQ_1:13;
-A8:   seq is convergent & lim(seq)=1/((k+1)!)
-      proof
-        thus seq is convergent by A5,A7,SEQ_2:21;
-        thus lim(seq) = (1/(k+1))*(1/(k!)) by A5,A7,SEQ_2:22
-          .= 1/((k+1)!) by Th12;
-      end;
+A3:   for n holds seq.n = F(n) from SEQ_1:sch 1;
       deffunc G(Element of NAT)=seq.$1*(aseq(k).$1);
       consider seq1 such that
-A9:   for n holds seq1.n=G(n) from SEQ_1:sch 1;
-A10:  seq1=seq(#)(aseq(k)) by A9,SEQ_1:12;
-A11:  seq1 is convergent & lim(seq1)=1/((k+1)!)
-      proof
-A12:    aseq(k) is convergent & lim(aseq(k))=1 by Th9;
-        hence seq1 is convergent by A8,A10,SEQ_2:28;
-        thus lim(seq1) = lim(seq)*lim(aseq(k)) by A8,A10,A12,SEQ_2:29
-          .= 1/((k+1)!) by A8,A12;
-      end;
-A13:  for n st n>=1 holds bseq(k+1).n=seq1.n
+A4:   for n holds seq1.n=G(n) from SEQ_1:sch 1;
+A5:   for n st n>=1 holds bseq(k+1).n=seq1.n
       proof
         let n;
-        assume n>=1;
+        assume
+        n>=1;
         hence bseq(k+1).n = (1/(k+1))*(bseq(k).n)*(aseq(k).n) by Th7
-          .= (seq.n)*(aseq(k).n) by A6
-          .= seq1.n by A9;
+          .= (seq.n)*(aseq(k).n) by A3
+          .= seq1.n by A4;
       end;
-      hence bseq(k+1) is convergent by A11,SEQ_4:31;
-      thus thesis by A11,A13,SEQ_4:32;
+A6:   seq = (1/(k+1))(#)(bseq(k)) by A3,SEQ_1:13;
+      then
+A7:   seq is convergent by A2,SEQ_2:21;
+A8:   lim(seq) = (1/(k+1))*(1/(k!)) by A2,A6,SEQ_2:22
+        .= 1/((k+1)!) by Th12;
+A9:   aseq(k) is convergent by Th9;
+A10:  seq1=seq(#)(aseq(k)) by A4,SEQ_1:12;
+      then
+A11:  seq1 is convergent by A7,A9,SEQ_2:28;
+      hence bseq(k+1) is convergent by A5,SEQ_4:31;
+      lim(seq1) = lim(seq)*lim(aseq(k)) by A7,A10,A9,SEQ_2:29
+        .= 1/((k+1)!) by A8,Th9;
+      hence thesis by A11,A5,SEQ_4:32;
     end;
   end;
-  for k holds P[k] from NAT_1:sch 1(A1,A4);
+A12: P[0]
+  proof
+    reconsider bseq0 = NAT --> 1 as Real_Sequence by FUNCOP_1:57;
+A13: for n being Nat holds bseq0.n=1
+    proof
+      let n be Nat;
+      n in NAT by ORDINAL1:def 13;
+      hence thesis by FUNCOP_1:13;
+    end;
+    then
+A14: bseq0 is convergent by Th10;
+A15: for n st n>=1 holds bseq(0).n=bseq0.n
+    proof
+      let n;
+      assume
+      n>=1;
+      thus bseq(0).n = 1 by Th11
+        .= bseq0.n by FUNCOP_1:13;
+    end;
+    hence bseq(0) is convergent by A14,SEQ_4:31;
+    lim(bseq0)=1 by A13,Th10;
+    hence thesis by A14,A15,NEWTON:18,SEQ_4:32;
+  end;
+  for k holds P[k] from NAT_1:sch 1(A12,A1);
   hence bseq(k) is convergent & lim(bseq(k))=1/(k!);
   hence thesis by Def5;
 end;
@@ -418,70 +411,72 @@ end;
 theorem Th14:
   k<n implies 0<aseq(k).n & aseq(k).n<=1
 proof
+A1: aseq(k).n=(n-k)/n by Def1;
   assume
-A1: k<n;
-A2: aseq(k).n=(n-k)/n by Def1;
-  n-k>0 by A1,XREAL_1:52;
-  hence aseq(k).n>0 by A1,A2,XREAL_1:141;
+A2: k<n;
+  then n-k>0 by XREAL_1:52;
+  hence aseq(k).n>0 by A2,A1,XREAL_1:141;
   1-(k/n)<=1-0 by XREAL_1:8;
-  hence thesis by A1,Th8;
+  hence thesis by A2,Th8;
 end;
 
 theorem Th15:
-  n>0 implies 0<=bseq(k).n & bseq(k).n<=1/(k!) & bseq(k).n<=eseq.k &
-  0<=cseq(n).k & cseq(n).k<=1/(k!) & cseq(n).k<=eseq.k
+  n>0 implies 0<=bseq(k).n & bseq(k).n<=1/(k!) & bseq(k).n<=eseq.k
+  & 0<=cseq(n).k & cseq(n).k<=1/(k!) & cseq(n).k<=eseq.k
 proof
+  defpred P[Element of NAT] means bseq($1).n<=1/($1!);
   assume
 A1: n>0;
-A2: bseq(k).n=(n choose k)*(n ^ (-k)) by Def2;
-  n ^ (-k)>0 by A1,POWER:39;
-  hence
-A3: 0<=bseq(k).n by A2;
-  defpred P[Element of NAT] means bseq($1).n<=1/($1!);
-A4: P[0] by Th11,NEWTON:18;
-A5: now
+  then
+A2: n ^ (-k)>0 by POWER:39;
+A3: now
     let k;
     assume
-A6: P[k];
+A4: P[k];
     thus P[k+1]
     proof
       per cases;
       suppose
-A7:     k<n;
-A8:     bseq(k+1).n=(1/(k+1))*(bseq(k).n)*(aseq(k).n) by A1,Th7;
-        (1/(k+1))*(bseq(k).n)<=(1/(k+1))*(1/(k!)) by A6,XREAL_1:66;
+A5:     k<n;
+        (1/(k+1))*(bseq(k).n)<=(1/(k+1))*(1/(k!)) by A4,XREAL_1:66;
         then
-A9:     (1/(k+1))*(bseq(k).n)<=1/((k+1)!) by Th12;
-        aseq(k).n>=0 by A7,Th14;
+A6:     (1/(k+1))*(bseq(k).n)<=1/((k+1)!) by Th12;
+        aseq(k).n>=0 by A5,Th14;
         then
-A10:    (1/(k+1))*(bseq(k).n)*(aseq(k).n)<=(1/((k+1)!))*(aseq(k).n )
-        by A9,XREAL_1:66;
-        aseq(k).n<=1 by A7,Th14;
-        then 1/((k+1)!)*(aseq(k).n)<=1/((k+1)!) by XREAL_1:155;
-        hence thesis by A8,A10,XXREAL_0:2;
+A7:     (1/(k+1))*(bseq(k).n)*(aseq(k).n)<=(1/((k+1)!))*(aseq(k).n ) by
+        A6,XREAL_1:66;
+        aseq(k).n<=1 by A5,Th14;
+        then
+A8:     1/((k+1)!)*(aseq(k).n)<=1/((k+1)!) by XREAL_1:155;
+        bseq(k+1).n=(1/(k+1))*(bseq(k).n)*(aseq(k).n) by A1,Th7;
+        hence thesis by A7,A8,XXREAL_0:2;
       end;
-      suppose k>=n;
+      suppose
+        k>=n;
         then
-A11:    k+1>n by NAT_1:13;
+A9:     k+1>n by NAT_1:13;
         bseq(k+1).n = (n choose (k+1))*(n ^ (-(k+1))) by Def2
-          .= 0*(n ^ (-(k+1))) by A11,NEWTON:def 3
+          .= 0*(n ^ (-(k+1))) by A9,NEWTON:def 3
           .= 0;
         hence thesis;
       end;
     end;
   end;
-  for k holds P[k] from NAT_1:sch 1(A4,A5);
+A10: bseq(k).n=(n choose k)*(n ^ (-k)) by Def2;
+  hence 0<=bseq(k).n by A2;
+A11: P[0] by Th11,NEWTON:18;
+  for k holds P[k] from NAT_1:sch 1(A11,A3);
   hence
 A12: bseq(k).n<=1/(k!);
   hence bseq(k).n<=eseq.k by Def5;
-  hence thesis by A3,A12,Th3;
+  hence thesis by A10,A2,A12,Th3;
 end;
 
 :: n>0 implies (1+(1/n)) ^ n = Sum (\k:(n choose k)*(n ^ (-k)))
 
 theorem Th16:
-  for seq st seq^\1 is summable holds
-  seq is summable & Sum(seq)=(seq.0)+Sum(seq^\1)
+  for seq st seq^\1 is summable holds seq is summable & Sum(seq)=(
+  seq.0)+Sum(seq^\1)
 proof
   let seq;
   assume
@@ -492,21 +487,21 @@ A1: seq^\1 is summable;
 end;
 
 theorem Th17:
-  for D being non empty set, sq being FinSequence of D
-  st 1<=k & k<len sq holds (sq/^1).k=sq.(k+1)
+  for D being non empty set, sq being FinSequence of D st 1<=k & k
+  <len sq holds (sq/^1).k=sq.(k+1)
 proof
   let D be non empty set, sq be FinSequence of D;
-  assume
-A1: 1<=k & k<len sq;
+  assume that
+A1: 1<=k and
+A2: k<len sq;
+A3: len sq=(len sq-1)+1;
+  k+1<=len sq by A2,NAT_1:13;
   then
-A2: len(sq)>=1 by XXREAL_0:2;
-  then
-A3: len(sq/^1)=len sq-1 by RFINSEQ:def 2;
-A4: k+1<=len sq by A1,NAT_1:13;
-  len sq=(len sq-1)+1;
-  then k<=len sq-1 by A4,XREAL_1:8;
-  then k in dom(sq/^1) by A1,A3,FINSEQ_3:27;
-  hence thesis by A2,RFINSEQ:def 2;
+A4: k<=len sq-1 by A3,XREAL_1:8;
+A5: len(sq)>=1 by A1,A2,XXREAL_0:2;
+  then len(sq/^1)=len sq-1 by RFINSEQ:def 2;
+  then k in dom(sq/^1) by A1,A4,FINSEQ_3:27;
+  hence thesis by A5,RFINSEQ:def 2;
 end;
 
 theorem Th18:
@@ -515,148 +510,156 @@ proof
   let sq;
   assume
 A1: len sq>0;
-  then 1<=1 & 0+1<=len sq by NAT_1:13;
+  then 0+1<=len sq by NAT_1:13;
   then
 A2: 1 in dom sq by FINSEQ_3:27;
-  sq is non empty by A1,CARD_1:47;
-  hence Sum(sq) = Sum(<*sq/.1*>^(sq/^1)) by FINSEQ_5:32
+  thus Sum(sq) = Sum(<*sq/.1*>^(sq/^1)) by A1,CARD_1:47,FINSEQ_5:32
     .= Sum(<*sq.1*>^(sq/^1)) by A2,PARTFUN1:def 8
     .= (sq.1)+Sum(sq/^1) by RVSUM_1:106;
 end;
 
 theorem Th19:
-  for n holds for seq, sq st len(sq)=n & (for k st k<n holds seq.k=sq.(k+1)) &
-  (for k st k>=n holds seq.k=0) holds seq is summable & Sum(seq)=Sum(sq)
+  for n holds for seq, sq st len(sq)=n & (for k st k<n holds seq.k
+=sq.(k+1)) & (for k st k>=n holds seq.k=0) holds seq is summable & Sum(seq)=Sum
+  (sq)
 proof
-  defpred P[Element of NAT] means for seq, sq st len(sq)=$1 &
-  (for k st k<$1 holds seq.k=sq.(k+1)) & (for k st k>=$1 holds seq.k=0) holds
-  seq is summable & Sum(seq)=Sum(sq);
-  now
-    let seq, sq;
-    assume
-A1: len(sq)=0 & (for k st k<0 holds seq.k=sq.(k+1)) &
-    (for k st k>=0 holds seq.k=0);
-    then sq is Element of 0-tuples_on REAL by FINSEQ_2:110;
-    then
-A2: Sum(sq)=0 by RVSUM_1:109;
-    defpred P[Nat] means Partial_Sums(seq).$1=0;
-    seq.0=0 by A1;
-    then
-A3: P[0] by SERIES_1:def 1;
-A4: now
-      let k be Nat;
-      assume
-A5:   P[k];
-      k in NAT by ORDINAL1:def 13;
-      then Partial_Sums(seq).(k+1)
-      = (Partial_Sums(seq).k)+(seq.(k+1)) by SERIES_1:def 1;
-      hence P[k+1] by A1,A5;
-    end;
-    for k being Nat holds P[k] from NAT_1:sch 2(A3,A4);
-    then
-A6: Partial_Sums(seq) is convergent & lim(Partial_Sums(seq))=0 by Th10;
-    hence seq is summable by SERIES_1:def 2;
-    thus Sum(seq) = Sum(sq) by A2,A6,SERIES_1:def 3;
-  end;
-  then
-A7: P[0];
+  defpred P[Element of NAT] means for seq, sq st len(sq)=$1 & (for k st k<$1
+holds seq.k=sq.(k+1)) & (for k st k>=$1 holds seq.k=0) holds seq is summable &
+  Sum(seq)=Sum(sq);
   now
     let n;
     assume
-A8: for seq, sq st len(sq)=n & (for k st k<n holds seq.k=sq.(k+1)) &
+A1: for seq, sq st len(sq)=n & (for k st k<n holds seq.k=sq.(k+1)) &
     (for k st k>=n holds seq.k=0) holds seq is summable & Sum(seq)=Sum(sq);
     let seq, sq;
-    assume
-A9: len(sq)=n+1 & (for k st k<n+1 holds seq.k=sq.(k+1)) &
-    (for k st k>=n+1 holds seq.k=0);
+    assume that
+A2: len(sq)=n+1 and
+A3: for k st k<n+1 holds seq.k=sq.(k+1) and
+A4: for k st k>=n+1 holds seq.k=0;
+A5: now
+      let k;
+A6:   k+1>=0+1 by XREAL_1:8;
+      assume
+      k<n;
+      then
+A7:   k+1<n+1 by XREAL_1:8;
+      thus (seq^\1).k = seq.(k+1) by NAT_1:def 3
+        .= sq.((k+1)+1) by A3,A7
+        .= (sq/^1).(k+1) by A2,A7,A6,Th17;
+    end;
+A8: now
+      let k;
+      assume
+      k>=n;
+      then
+A9:   k+1>=n+1 by XREAL_1:8;
+      thus (seq^\1).k = seq.(k+1) by NAT_1:def 3
+        .= 0 by A4,A9;
+    end;
     n+1>=0+1 by XREAL_1:8;
     then
-A10: len(sq/^1) = len(sq)-1 by A9,RFINSEQ:def 2
-      .= n by A9;
-A11: now
-      let k;
-      assume k<n;
-      then
-A12:  k+1<n+1 by XREAL_1:8;
-A13:  k+1>=0+1 by XREAL_1:8;
-      thus (seq^\1).k = seq.(k+1) by NAT_1:def 3
-        .= sq.((k+1)+1) by A9,A12
-        .= (sq/^1).(k+1) by A9,A12,A13,Th17;
-    end;
-    now
-      let k;
-      assume k>=n;
-      then
-A14:  k+1>=n+1 by XREAL_1:8;
-      thus (seq^\1).k = seq.(k+1) by NAT_1:def 3
-        .= 0 by A9,A14;
-    end;
+A10: len(sq/^1) = len(sq)-1 by A2,RFINSEQ:def 2
+      .= n by A2;
     then
-A15: seq^\1 is summable & Sum(seq^\1)=Sum(sq/^1) by A8,A10,A11;
+A11: Sum(seq^\1)=Sum(sq/^1) by A1,A5,A8;
+A12: seq^\1 is summable by A1,A10,A5,A8;
     hence seq is summable by Th16;
-    thus Sum(seq) = (seq.0)+Sum(seq^\1) by A15,Th16
-      .= (sq.(0+1))+Sum(seq^\1) by A9
-      .= Sum(sq) by A9,A15,Th18;
+    thus Sum(seq) = (seq.0)+Sum(seq^\1) by A12,Th16
+      .= (sq.(0+1))+Sum(seq^\1) by A3
+      .= Sum(sq) by A2,A11,Th18;
   end;
   then
-A16: P[k] implies P[k+1];
-  thus P[n] from NAT_1:sch 1(A7,A16);
+A13: P[k] implies P[k+1];
+  now
+    let seq, sq;
+    assume that
+A14: len(sq)=0 and
+    for k st k<0 holds seq.k=sq.(k+1) and
+A15: for k st k>=0 holds seq.k=0;
+    sq is Element of 0-tuples_on REAL by A14,FINSEQ_2:110;
+    then
+A16: Sum(sq)=0 by RVSUM_1:109;
+    defpred P[Nat] means Partial_Sums(seq).$1=0;
+A17: now
+      let k be Nat;
+      k in NAT by ORDINAL1:def 13;
+      then
+A18:  Partial_Sums(seq).(k+1) = (Partial_Sums(seq).k)+(seq.(k+1)) by
+      SERIES_1:def 1;
+      assume
+      P[k];
+      hence P[k+1] by A15,A18;
+    end;
+    seq.0=0 by A15;
+    then
+A19: P[0] by SERIES_1:def 1;
+A20: for k being Nat holds P[k] from NAT_1:sch 2(A19,A17);
+    then Partial_Sums(seq) is convergent by Th10;
+    hence seq is summable by SERIES_1:def 2;
+    lim(Partial_Sums(seq))=0 by A20,Th10;
+    hence Sum(seq) = Sum(sq) by A16,SERIES_1:def 3;
+  end;
+  then
+A21: P[0];
+  thus P[n] from NAT_1:sch 1(A21,A13);
 end;
 
 theorem Th20:
-  x<>0 & y<>0 & k<=n implies
-  ((x,y) In_Power n).(k+1)=(n choose k)*(x ^ (n-k))*(y ^ k)
+  k<=n implies ((x,y) In_Power n).(k+1)=(n choose k)*(x ^ (n-k))*(
+  y ^ k)
 proof
-  assume
-A1: x<>0 & y<>0 & k<=n;
-A2: k+1>=0+1 by XREAL_1:8;
   reconsider i1 = (k+1)-1 as Element of NAT;
-  reconsider l = n-i1 as Element of NAT by A1,INT_1:18;
-A3: len((x,y) In_Power n)=n+1 by NEWTON:def 4;
-  1<=k+1 & k+1<=n+1 by A1,A2,XREAL_1:8;
-  then k+1 in dom((x,y) In_Power n) by A3,FINSEQ_3:27;
-  hence ((x,y) In_Power n).(k+1)
-     = (n choose i1)*(x ^ l)*(y|^i1) by NEWTON:def 4
+A1: k+1>=0+1 & len((x,y) In_Power n)=n+1 by NEWTON:def 4,XREAL_1:8;
+  assume
+A2: k<=n;
+  then reconsider l = n-i1 as Element of NAT by INT_1:18;
+  k+1<=n+1 by A2,XREAL_1:8;
+  then k+1 in dom((x,y) In_Power n) by A1,FINSEQ_3:27;
+  hence ((x,y) In_Power n).(k+1) = (n choose i1)*(x ^ l)*(y|^i1) by NEWTON:
+  def 4
     .= (n choose k)*(x ^ (n-k))*(y ^ k);
 end;
 
 theorem Th21:
   n>0 & k<=n implies cseq(n).k=((1,1/n) In_Power n).(k+1)
 proof
-  assume
-A1: n>0 & k<=n;
-  thus ((1,1/n) In_Power n).(k+1)
-  = (n choose k)*(1 ^ (n-k))*((1/n) ^ k) by A1,Th20
+  assume that
+A1: n>0 and
+A2: k<=n;
+  thus ((1,1/n) In_Power n).(k+1) = (n choose k)*(1 ^ (n-k))*((1/n) ^ k) by A2
+  ,Th20
     .= (n choose k)*1*((1/n) ^ k) by POWER:31
     .= (n choose k)*(n ^ (-k)) by A1,POWER:37
     .= cseq(n).k by Def3;
 end;
 
 theorem Th22:
-  n>0 implies
-  cseq(n) is summable & Sum(cseq(n))=(1+(1/n)) ^ n & Sum(cseq(n))=dseq.n
+  n>0 implies cseq(n) is summable & Sum(cseq(n))=(1+(1/n)) ^ n &
+  Sum(cseq(n))=dseq.n
 proof
-  assume
-A1: n>0;
-A2: len((1,1/n) In_Power n)=n+1 by NEWTON:def 4;
-A3: now
+A1: now
     let k;
-    assume k<n+1;
-    then k<=n by NAT_1:13;
-    hence cseq(n).k=((1,1/n) In_Power n).(k+1) by A1,Th21;
-  end;
-A4: now
-    let k;
-    assume k>=n+1;
+    assume
+    k>=n+1;
     then
-A5: k>n by NAT_1:13;
+A2: k>n by NAT_1:13;
     thus cseq(n).k = (n choose k)*(n ^ (-k)) by Def3
-      .= 0*(n ^ (-k)) by A5,NEWTON:def 3
+      .= 0*(n ^ (-k)) by A2,NEWTON:def 3
       .= 0;
   end;
-  hence cseq(n) is summable by A2,A3,Th19;
+  assume
+A3: n>0;
+A4: now
+    let k;
+    assume
+    k<n+1;
+    then k<=n by NAT_1:13;
+    hence cseq(n).k=((1,1/n) In_Power n).(k+1) by A3,Th21;
+  end;
+A5: len((1,1/n) In_Power n)=n+1 by NEWTON:def 4;
+  hence cseq(n) is summable by A4,A1,Th19;
   thus (1+(1/n)) ^ n = Sum((1,1/n) In_Power n) by NEWTON:41
-    .= Sum(cseq(n)) by A2,A3,A4,Th19;
+    .= Sum(cseq(n)) by A5,A4,A1,Th19;
   hence thesis by Def4;
 end;
 
@@ -698,78 +701,81 @@ end;
 :: lim(\n:(1+(1/n)) ^ n) = Sum (\k:1/(k!))
 
 theorem Th25:
-  for K holds for dseqK being Real_Sequence st
-  for n holds dseqK.n=Partial_Sums(cseq(n)).K holds
-  dseqK is convergent & lim(dseqK)=Partial_Sums(eseq).K
+  for K holds for dseqK being Real_Sequence st for n holds dseqK.n
+  =Partial_Sums(cseq(n)).K holds dseqK is convergent & lim(dseqK)=Partial_Sums(
+  eseq).K
 proof
-  defpred P[Element of NAT] means for dseqK being Real_Sequence st
-  for n holds dseqK.n=Partial_Sums(cseq(n)).$1 holds
-  dseqK is convergent & lim(dseqK)=Partial_Sums(eseq).$1;
-  now
-    let dseq0 be Real_Sequence;
-    assume
-A1: for n holds dseq0.n=Partial_Sums(cseq(n)).0;
-    now
-      let n;
-      thus dseq0.n = Partial_Sums(cseq(n)).0 by A1
-        .= cseq(n).0 by SERIES_1:def 1
-        .= bseq(0).n by Th3;
-    end;
-    then
-A2: dseq0 = bseq(0) by FUNCT_2:113;
-    hence dseq0 is convergent by Th13;
-    thus lim(dseq0) = eseq.0 by A2,Th13
-      .= Partial_Sums(eseq).0 by SERIES_1:def 1;
-  end;
-  then
-A3: P[0];
+  defpred P[Element of NAT] means for dseqK being Real_Sequence st for n holds
+  dseqK.n=Partial_Sums(cseq(n)).$1 holds dseqK is convergent & lim(dseqK)=
+  Partial_Sums(eseq).$1;
   now
     let K;
-    assume
-A4: for dseqK being Real_Sequence st
-    for n holds dseqK.n=Partial_Sums(cseq(n)).K holds
-    dseqK is convergent & lim(dseqK)=Partial_Sums(eseq).K;
     deffunc F(Element of NAT)=Partial_Sums(cseq($1)).K;
     consider dseqK being Real_Sequence such that
-A5: for n holds dseqK.n=F(n) from SEQ_1:sch 1;
-A6: dseqK is convergent & lim(dseqK)=Partial_Sums(eseq).K by A4,A5;
+A1: for n holds dseqK.n=F(n) from SEQ_1:sch 1;
+    assume
+A2: for dseqK being Real_Sequence st for n holds dseqK.n=Partial_Sums(
+    cseq(n)).K holds dseqK is convergent & lim(dseqK)=Partial_Sums(eseq).K;
+    then
+A3: dseqK is convergent by A1;
     let dseqK1 be Real_Sequence;
     assume
-A7: for n holds dseqK1.n=Partial_Sums(cseq(n)).(K+1);
+A4: for n holds dseqK1.n=Partial_Sums(cseq(n)).(K+1);
     now
       let n;
-      thus dseqK1.n = Partial_Sums(cseq(n)).(K+1) by A7
+      thus dseqK1.n = Partial_Sums(cseq(n)).(K+1) by A4
         .= Partial_Sums(cseq(n)).K+cseq(n).(K+1) by SERIES_1:def 1
-        .= dseqK.n+cseq(n).(K+1) by A5
+        .= dseqK.n+cseq(n).(K+1) by A1
         .= dseqK.n+bseq(K+1).n by Th3
         .= (dseqK+bseq(K+1)).n by SEQ_1:11;
     end;
     then
-A8: dseqK1=dseqK+bseq(K+1) by FUNCT_2:113;
-A9: bseq(K+1) is convergent by Th13;
-    hence dseqK1 is convergent by A6,A8,SEQ_2:19;
-    thus lim(dseqK1) = lim(dseqK)+lim(bseq(K+1)) by A6,A8,A9,SEQ_2:20
+A5: dseqK1=dseqK+bseq(K+1) by FUNCT_2:113;
+A6: lim(dseqK)=Partial_Sums(eseq).K by A2,A1;
+A7: bseq(K+1) is convergent by Th13;
+    hence dseqK1 is convergent by A3,A5,SEQ_2:19;
+    thus lim(dseqK1) = lim(dseqK)+lim(bseq(K+1)) by A3,A5,A7,SEQ_2:20
       .= Partial_Sums(eseq).K+eseq.(K+1) by A6,Th13
       .= Partial_Sums(eseq).(K+1) by SERIES_1:def 1;
   end;
   then
-A10: P[n] implies P[n+1];
-  thus P[n] from NAT_1:sch 1(A3,A10);
+A8: P[n] implies P[n+1];
+  now
+    let dseq0 be Real_Sequence;
+    assume
+A9: for n holds dseq0.n=Partial_Sums(cseq(n)).0;
+    now
+      let n;
+      thus dseq0.n = Partial_Sums(cseq(n)).0 by A9
+        .= cseq(n).0 by SERIES_1:def 1
+        .= bseq(0).n by Th3;
+    end;
+    then
+A10: dseq0 = bseq(0) by FUNCT_2:113;
+    hence dseq0 is convergent by Th13;
+    thus lim(dseq0) = eseq.0 by A10,Th13
+      .= Partial_Sums(eseq).0 by SERIES_1:def 1;
+  end;
+  then
+A11: P[0];
+  thus P[n] from NAT_1:sch 1(A11,A8);
 end;
 
 theorem Th26:
-  seq is convergent & lim(seq)=x implies
-  for eps st eps>0 holds ex N st for n st n>=N holds seq.n>x-eps
+  seq is convergent & lim(seq)=x implies for eps st eps>0 holds ex
+  N st for n st n>=N holds seq.n>x-eps
 proof
   assume
 A1: seq is convergent & lim(seq)=x;
   let eps;
-  assume eps>0;
+  assume
+  eps>0;
   then consider N such that
 A2: for n st n>=N holds abs(seq.n-x)<eps by A1,SEQ_2:def 7;
   take N;
   let n;
-  assume n>=N;
+  assume
+  n>=N;
   then abs(seq.n-x)<eps by A2;
   then seq.n-x>-eps by SEQ_2:9;
   then (seq.n-x)+x>-eps+x by XREAL_1:8;
@@ -777,56 +783,58 @@ A2: for n st n>=N holds abs(seq.n-x)<eps by A1,SEQ_2:def 7;
 end;
 
 theorem Th27:
-  (for eps st eps>0 holds ex N st for n st n>=N holds seq.n>x-eps) &
-  (ex N st for n st n>=N holds seq.n<=x) implies
-  seq is convergent & lim(seq)=x
+  (for eps st eps>0 holds ex N st for n st n>=N holds seq.n>x-eps)
+& (ex N st for n st n>=N holds seq.n<=x) implies seq is convergent & lim(seq)=x
 proof
-  assume
-A1: (for eps st eps>0 holds ex N st for n st n>=N holds seq.n>x-eps) &
-  (ex N st for n st n>=N holds seq.n<=x);
-A2: for eps be real number st eps>0
-  ex N st for n st n>=N holds abs(seq.n-x)<eps
+  assume that
+A1: for eps st eps>0 holds ex N st for n st n>=N holds seq.n>x-eps and
+A2: ex N st for n st n>=N holds seq.n<=x;
+A3: for eps be real number st eps>0 ex N st for n st n>=N holds abs(seq.n-x)
+  <eps
   proof
     let eps be real number;
     assume
-A3: eps>0;
-    then consider N1 being Element of NAT such that
-A4: for n st n>=N1 holds seq.n>x-eps by A1;
+A4: eps>0;
+    then
+A5: x+eps>x+0 by XREAL_1:8;
     consider N2 being Element of NAT such that
-A5: for n st n>=N2 holds seq.n<=x by A1;
+A6: for n st n>=N2 holds seq.n<=x by A2;
+    consider N1 being Element of NAT such that
+A7: for n st n>=N1 holds seq.n>x-eps by A1,A4;
     take N = max(N1,N2);
     let n;
-    assume n>=N;
-    then n>=N1 & n>=N2 by XXREAL_0:30;
+    assume
+A8: n>=N;
+    then n>=N1 by XXREAL_0:30;
+    then seq.n>x-eps by A7;
     then
-A6: seq.n>x-eps & seq.n<=x by A4,A5;
-    then
-A7: seq.n-x>(x-eps)-x by XREAL_1:11;
-    x+eps>x+0 by A3,XREAL_1:8;
-    then seq.n<x+eps by A6,XXREAL_0:2;
+A9: seq.n-x>(x-eps)-x by XREAL_1:11;
+    seq.n<=x by A6,A8,XXREAL_0:30;
+    then seq.n<x+eps by A5,XXREAL_0:2;
     then seq.n-x<eps by XREAL_1:21;
-    hence thesis by A7,SEQ_2:9;
+    hence thesis by A9,SEQ_2:9;
   end;
   hence seq is convergent by SEQ_2:def 6;
-  hence thesis by A2,SEQ_2:def 7;
+  hence thesis by A3,SEQ_2:def 7;
 end;
 
 theorem Th28:
-  seq is summable implies
-  for eps st eps>0 holds ex K st Partial_Sums(seq).K>Sum(seq)-eps
+  seq is summable implies for eps st eps>0 holds ex K st
+  Partial_Sums(seq).K>Sum(seq)-eps
 proof
   assume
-A1: seq is summable;
+  seq is summable;
+  then
+A1: Partial_Sums(seq) is convergent by SERIES_1:def 2;
   let eps;
   assume
-A2: eps>0;
-  Partial_Sums(seq) is convergent by A1,SERIES_1:def 2;
+  eps>0;
   then consider K such that
-A3: for k st k>=K holds
-  Partial_Sums(seq).k>lim(Partial_Sums(seq))-eps by A2,Th26;
+A2: for k st k>=K holds Partial_Sums(seq).k>lim(Partial_Sums(seq))-eps
+  by A1,Th26;
   take K;
   Sum(seq)=lim(Partial_Sums(seq)) by SERIES_1:def 3;
-  hence thesis by A3;
+  hence thesis by A2;
 end;
 
 theorem Th29:
@@ -840,20 +848,21 @@ A1: n>=1;
 end;
 
 theorem Th30:
-  seq is summable & (for k holds seq.k>=0) implies
-  Sum(seq)>=Partial_Sums(seq).K
+  seq is summable & (for k holds seq.k>=0) implies Sum(seq)>=
+  Partial_Sums(seq).K
 proof
-  assume
-A1: seq is summable & (for k holds seq.k>=0);
-  then
-A2: seq^\(K+1) is summable by SERIES_1:15;
-  now
+  assume that
+A1: seq is summable and
+A2: for k holds seq.k>=0;
+A3: now
     let k;
     (seq^\(K+1)).k = seq.(K+1+k) by NAT_1:def 3;
-    hence (seq^\(K+1)).k>=0 by A1;
+    hence (seq^\(K+1)).k>=0 by A2;
   end;
-  then Sum(seq^\(K+1))>=0 by A2,SERIES_1:21;
-  then Partial_Sums(seq).K+Sum(seq^\(K+1))>=Partial_Sums(seq).K+0 by XREAL_1:8;
+  seq^\(K+1) is summable by A1,SERIES_1:15;
+  then Sum(seq^\(K+1))>=0 by A3,SERIES_1:21;
+  then Partial_Sums(seq).K+Sum(seq^\(K+1))>=Partial_Sums(seq).K+0 by
+  XREAL_1:8;
   hence thesis by A1,SERIES_1:18;
 end;
 
@@ -863,35 +872,32 @@ proof
   for eps st eps>0 holds ex N st for n st n>=N holds dseq.n>Sum(eseq)-eps
   proof
     let eps;
-    assume eps>0;
-    then
-A1: eps/2>0 by XREAL_1:141;
+    assume
+A1: eps>0;
     then consider K such that
-A2: Partial_Sums(eseq).K>Sum(eseq)-eps/2 by Th24,Th28;
+A2: Partial_Sums(eseq).K>Sum(eseq)-eps/2 by Th24,Th28,XREAL_1:141;
+A3: Partial_Sums(eseq).K-eps/2>Sum(eseq)-eps/2-eps/2 by A2,XREAL_1:11;
     deffunc F(Element of NAT)=Partial_Sums(cseq($1)).K;
     consider dseqK being Real_Sequence such that
-A3: for n holds dseqK.n=F(n) from SEQ_1:sch 1;
-    dseqK is convergent & lim(dseqK)=Partial_Sums(eseq).K by A3,Th25;
+A4: for n holds dseqK.n=F(n) from SEQ_1:sch 1;
+    dseqK is convergent & lim(dseqK)=Partial_Sums(eseq).K by A4,Th25;
     then consider N such that
-A4: for n st n>=N holds dseqK.n>Partial_Sums(eseq).K-eps/2 by A1,Th26;
+A5: for n st n>=N holds dseqK.n>Partial_Sums(eseq).K-eps/2 by A1,
+    Th26, XREAL_1:141;
     take N1 = N+1;
     let n;
     assume
-A5: n>=N1;
+A6: n>=N1;
+    then ( for k holds cseq(n).k>=0)& cseq(n) is summable by Th15,Th22;
+    then Sum(cseq(n))>=Partial_Sums(cseq n).K by Th30;
+    then dseq.n>=Partial_Sums(cseq n).K by A6,Th22;
+    then
+A7: dseq.n>=dseqK.n by A4;
     N+1>=N+0 by XREAL_1:8;
-    then
-A6: n>=N by A5,XXREAL_0:2;
-A7: for k holds cseq(n).k>=0 by A5,Th15;
-    cseq(n) is summable by A5,Th22;
-    then Sum(cseq(n))>=Partial_Sums(cseq n).K by A7,Th30;
-    then dseq.n>=Partial_Sums(cseq n).K by A5,Th22;
-    then
-A8: dseq.n>=dseqK.n by A3;
-    dseqK.n>Partial_Sums(eseq).K-eps/2 by A4,A6;
-    then
-A9: dseq.n>Partial_Sums(eseq).K-eps/2 by A8,XXREAL_0:2;
-    Partial_Sums(eseq).K-eps/2>Sum(eseq)-eps/2-eps/2 by A2,XREAL_1:11;
-    hence thesis by A9,XXREAL_0:2;
+    then n>=N by A6,XXREAL_0:2;
+    then dseqK.n>Partial_Sums(eseq).K-eps/2 by A5;
+    then dseq.n>Partial_Sums(eseq).K-eps/2 by A7,XXREAL_0:2;
+    hence thesis by A3,XXREAL_0:2;
   end;
   hence thesis by Th27,Th29;
 end;
@@ -900,14 +906,12 @@ end;
 
 definition
   redefine func number_e equals
-
   Sum eseq;
   compatibility by Th23,Th31;
 end;
 
 definition
   redefine func number_e equals
-
   exp_R(1);
   compatibility by Th24;
 end;
@@ -917,29 +921,30 @@ begin :: number_e is irrational
 theorem Th32:
   x is rational implies ex n st n>=2 & n!*x is integer
 proof
-  assume x is rational;
+  assume
+  x is rational;
   then consider i, n such that
-A1: n<>0 & x=i/n by RAT_1:24;
+A1: n<>0 and
+A2: x=i/n by RAT_1:24;
   per cases;
-  suppose n<1+1;
-    then
-A2: n<=1 by NAT_1:13;
-    n>0 by A1;
-    then n>=0+1 by NAT_1:13;
-    then n=1 by A2,XXREAL_0:1;
-    then reconsider x1 = x as Integer by A1;
+  suppose
+A3: n<1+1;
+A4: n>=0+1 by A1,NAT_1:13;
+    n<=1 by A3,NAT_1:13;
+    then n=1 by A4,XXREAL_0:1;
+    then reconsider x1 = x as Integer by A2;
     take n = 2;
     n!*x1 is integer;
     hence thesis;
   end;
   suppose
-A3: n>=2;
+A5: n>=2;
     take n;
-    thus n>=2 by A3;
-    reconsider m = n-1 as Element of NAT by A3,INT_1:18,XXREAL_0:2;
+    thus n>=2 by A5;
+    reconsider m = n-1 as Element of NAT by A5,INT_1:18,XXREAL_0:2;
     n!*x = (m+1)*(m!)*x by NEWTON:21
       .= (n*x)*(m!)
-      .= i*(m!) by A1,XCMPLX_1:88;
+      .= i*(m!) by A1,A2,XCMPLX_1:88;
     hence thesis;
   end;
 end;
@@ -961,223 +966,212 @@ end;
 theorem Th35:
   seq is summable & (for n holds seq.n>0) implies Sum(seq)>0
 proof
-  assume
-A1: seq is summable & (for n holds seq.n>0);
-  then
-A2: Sum(seq)=(Partial_Sums(seq).0)+Sum(seq^\(0+1)) by SERIES_1:18
+  assume that
+A1: seq is summable and
+A2: for n holds seq.n>0;
+A3: Sum(seq)=(Partial_Sums(seq).0)+Sum(seq^\(0+1)) by A1,SERIES_1:18
     .= seq.0+Sum(seq^\1) by SERIES_1:def 1;
-A3: seq^\1 is summable by A1,SERIES_1:15;
-  now
+A4: now
     let n;
     (seq^\1).n = seq.(1+n) by NAT_1:def 3;
-    hence (seq^\1).n>=0 by A1;
+    hence (seq^\1).n>=0 by A2;
   end;
-  then Sum(seq^\1)>=0 by A3,SERIES_1:21;
-  then Sum(seq)>0+0 by A1,A2,XREAL_1:10;
+  seq^\1 is summable by A1,SERIES_1:15;
+  then Sum(seq^\1)>=0 by A4,SERIES_1:21;
+  then Sum(seq)>0+0 by A2,A3,XREAL_1:10;
   hence thesis;
 end;
 
 theorem Th36:
   n!*Sum(eseq^\(n+1))>0
 proof
-A1: n!>0 by NEWTON:23;
-A2: eseq^\(n+1) is summable by Th24,SERIES_1:15;
-  now
+A1: now
     let k;
-A3: (eseq^\(n+1)).k = eseq.(n+1+k) by NAT_1:def 3
+A2: (n+1+k)!>0 by NEWTON:23;
+    (eseq^\(n+1)).k = eseq.(n+1+k) by NAT_1:def 3
       .= 1/((n+1+k)!) by Def5;
-    (n+1+k)!>0 by NEWTON:23;
-    hence (eseq^\(n+1)).k>0 by A3;
+    hence (eseq^\(n+1)).k>0 by A2;
   end;
-  then Sum(eseq^\(n+1))>0 by A2,Th35;
-  hence thesis by A1,XREAL_1:131;
+  eseq^\(n+1) is summable by Th24,SERIES_1:15;
+  then n!>0 & Sum(eseq^\(n+1))>0 by A1,Th35,NEWTON:23;
+  hence thesis by XREAL_1:131;
 end;
 
 theorem Th37:
   k<=n implies (n!)/(k!) is integer
 proof
-  assume k<=n;
-  then reconsider m = n-k as Element of NAT by INT_1:18;
   defpred P[Element of NAT] means (($1+k)!)/(k!) is integer;
+  assume
+  k<=n;
+  then reconsider m = n-k as Element of NAT by INT_1:18;
 A1: n=m+k;
-  for m holds ((m+k)!)/(k!) is integer
-  proof
-    k!<>0 by NEWTON:23;
-    then
-A2: P[0] by XCMPLX_1:60;
-    now
-      let m;
-      assume ((m+k)!)/(k!) is integer;
-      then reconsider i = ((m+k)!)/(k!) as Integer;
-A3:   (m+k+1)*i is Integer;
-      ((m+1)+k)! = (m+k+1)*((m+k)!) by NEWTON:21;
-      then (((m+1)+k)!)/(k!) = (m+k+1)*((m+k)!)*(k!)"
-        .= (m+k+1)*(((m+k)!)*(k!)")
-        .= (m+k+1)*(((m+k)!)/(k!));
-      hence (((m+1)+k)!)/(k!) is integer by A3;
-    end;
-    then
-A4: for n being Element of NAT holds P[n] implies P[n+1];
-    for n being Element of NAT holds P[n] from NAT_1:sch 1(A2,A4);
-    hence thesis;
+  now
+    let m;
+A2: (((m+1)+k)!)/(k!) = (m+k+1)*((m+k)!)*(k!)" by NEWTON:21
+      .= (m+k+1)*(((m+k)!)*(k!)")
+      .= (m+k+1)*(((m+k)!)/(k!));
+    assume
+    ((m+k)!)/(k!) is integer;
+    then reconsider i = ((m+k)!)/(k!) as Integer;
+    (m+k+1)*i is Integer;
+    hence (((m+1)+k)!)/(k!) is integer by A2;
   end;
+  then
+A3: for n being Element of NAT holds P[n] implies P[n+1];
+  k!<>0 by NEWTON:23;
+  then
+A4: P[0] by XCMPLX_1:60;
+  for n being Element of NAT holds P[n] from NAT_1:sch 1(A4,A3);
   hence thesis by A1;
 end;
 
 theorem Th38:
   n!*Partial_Sums(eseq).n is integer
 proof
-  defpred P[Element of NAT] means $1<=n implies
-  n!*Partial_Sums(eseq).$1 is integer;
-  for k st k<=n holds n!*Partial_Sums(eseq).k is integer
-  proof
-    now
-      assume 0<=n;
-      n!*Partial_Sums(eseq).0 = n!*eseq.0 by SERIES_1:def 1
-        .= (n!)/(0!) by Th33;
-      hence n!*Partial_Sums(eseq).0 is integer by Th37;
-    end;
-    then
-A1: P[0];
-    now
-      let k;
-      assume
-A2:   k<=n implies n!*Partial_Sums(eseq).k is integer;
-      assume
-A3:   k+1<=n;
-      k+0<=k+1 by XREAL_1:8;
-
-then reconsider i = n!*Partial_Sums(eseq).k as Integer by A2,A3,XXREAL_0:2;
-      n!*eseq.(k+1) = (n!)/((k+1)!) by Th33;
-      then reconsider j = n!*eseq.(k+1) as Integer by A3,Th37;
-A4:   n!*Partial_Sums(eseq).(k+1)
-      = n!*(Partial_Sums(eseq).k+eseq.(k+1)) by SERIES_1:def 1
-        .= n!*Partial_Sums(eseq).k+n!*eseq.(k+1);
-      i+j is Integer;
-      hence n!*Partial_Sums(eseq).(k+1) is integer by A4;
-    end;
-    then
-A5: P[k] implies P[k+1];
-    for k holds P[k] from NAT_1:sch 1(A1,A5);
-    hence thesis;
+  defpred P[Element of NAT] means $1<=n implies n!*Partial_Sums(eseq).$1 is
+  integer;
+  now
+    let k;
+    assume
+A1: k<=n implies n!*Partial_Sums(eseq).k is integer;
+    assume
+A2: k+1<=n;
+    k+0<=k+1 by XREAL_1:8;
+    then reconsider i = n!*Partial_Sums(eseq).k as Integer by A1,A2,
+    XXREAL_0:2;
+    n!*eseq.(k+1) = (n!)/((k+1)!) by Th33;
+    then reconsider j = n!*eseq.(k+1) as Integer by A2,Th37;
+A3: i+j is Integer;
+    n!*Partial_Sums(eseq).(k+1) = n!*(Partial_Sums(eseq).k+eseq.(k+1)) by
+    SERIES_1:def 1
+      .= n!*Partial_Sums(eseq).k+n!*eseq.(k+1);
+    hence n!*Partial_Sums(eseq).(k+1) is integer by A3;
   end;
+  then
+A4: P[k] implies P[k+1];
+  now
+    assume
+    0<=n;
+    n!*Partial_Sums(eseq).0 = n!*eseq.0 by SERIES_1:def 1
+      .= (n!)/(0!) by Th33;
+    hence n!*Partial_Sums(eseq).0 is integer by Th37;
+  end;
+  then
+A5: P[0];
+  for k holds P[k] from NAT_1:sch 1(A5,A4);
   hence thesis;
 end;
 
 theorem Th39:
   x=1/(n+1) implies (n!)/((n+k+1)!)<=x ^ (k+1)
 proof
-  assume
-A1: x=1/(n+1);
   defpred P[Element of NAT] means (n!)/((n+$1+1)!)<=x ^ ($1+1);
-  for k holds (n!)/((n+k+1)!)<=x ^ (k+1)
-  proof
-A2: now
-A3:   n+1<>0 & n!<>0 by NEWTON:23;
-      (n!)/((n+1)!) = (n!)/((n+1)*(n!)) by NEWTON:21
-        .= (n!)*((n+1)*(n!))"
-        .= (n!)*((n+1)"*(n!)") by XCMPLX_1:205
-        .= (n!)*(n!)"*(n+1)"
-        .= 1*(n+1)" by A3,XCMPLX_0:def 7
-        .= x by A1;
-      hence P[0] by POWER:30;
-    end;
-A4: now
-      let k;
-      assume
-A5:   P[k];
-      n+(k+1)>=n+0 by XREAL_1:8;
-      then n+(k+1)+1>=n+1 by XREAL_1:8;
-      then 1/(n+(k+1)+1)<=1/(n+1) by XREAL_1:87;
-      then
-A7:   (n+(k+1)+1)"<=1/(n+1);
-A8:   x ^ (k+1)*x = x ^ (k+1)*(x^1) by POWER:30
-        .= x ^ ((k+1)+1) by A1,POWER:32;
-      (n!)/((n+(k+1)+1)!) = (n!)*((n+(k+1)+1)!)"
-        .= (n!)*((n+(k+1)+1)*((n+k+1)!))" by NEWTON:21
-        .= (n!)*((n+(k+1)+1)"*((n+k+1)!)") by XCMPLX_1:205
-        .= (n!)*((n+k+1)!)"*(n+(k+1)+1)"
-        .= (n!)/((n+k+1)!)*(n+(k+1)+1)";
-      hence P[k+1] by A1,A5,A7,A8,XREAL_1:68;
-    end;
-    thus for n holds P[n] from NAT_1:sch 1(A2,A4);
+A1: n!<>0 by NEWTON:23;
+  assume
+A2: x=1/(n+1);
+A3: now
+    let k;
+    assume
+A4: P[k];
+A5: (n!)/((n+(k+1)+1)!) = (n!)*((n+(k+1)+1)!)"
+      .= (n!)*((n+(k+1)+1)*((n+k+1)!))" by NEWTON:21
+      .= (n!)*((n+(k+1)+1)"*((n+k+1)!)") by XCMPLX_1:205
+      .= (n!)*((n+k+1)!)"*(n+(k+1)+1)"
+      .= (n!)/((n+k+1)!)*(n+(k+1)+1)";
+    n+(k+1)>=n+0 by XREAL_1:8;
+    then n+(k+1)+1>=n+1 by XREAL_1:8;
+    then
+A6: (n+(k+1)+1)"<=1/(n+1) by XREAL_1:87;
+    x ^ (k+1)*x = x ^ (k+1)*(x^1) by POWER:30
+      .= x ^ ((k+1)+1) by A2,POWER:32;
+    hence P[k+1] by A2,A4,A6,A5,XREAL_1:68;
   end;
+  (n!)/((n+1)!) = (n!)/((n+1)*(n!)) by NEWTON:21
+    .= (n!)*((n+1)*(n!))"
+    .= (n!)*((n+1)"*(n!)") by XCMPLX_1:205
+    .= (n!)*(n!)"*(n+1)"
+    .= 1*(n+1)" by A1,XCMPLX_0:def 7
+    .= x by A2;
+  then
+A7: P[0] by POWER:30;
+  for n holds P[n] from NAT_1:sch 1(A7,A3);
   hence thesis;
 end;
 
 theorem Th40:
   n>0 & x=1/(n+1) implies n!*Sum(eseq^\(n+1))<=x/(1-x)
 proof
-  assume
-A1: n>0 & x=1/(n+1);
-  then
-A2: n+1>0+1 by XREAL_1:8;
-A4: 0<x & x<1 by A1,A2,XREAL_1:214;
+  assume that
+A1: n>0 and
+A2: x=1/(n+1);
   deffunc F(Element of NAT)=x ^ ($1+1);
   consider seq being Real_Sequence such that
-A5: for k holds seq.k=F(k) from SEQ_1:sch 1;
-A6: seq.0 = x ^ (0+1) by A5
-    .= x by POWER:30;
-A7: abs x=x by A1,ABSVALUE:def 1;
-A8: abs x<1 by A4,ABSVALUE:def 1;
-A9: now
+A3: for k holds seq.k=F(k) from SEQ_1:sch 1;
+A4: now
     let k;
-    thus seq.(k+1) = x ^ (k+1+1) by A5
-      .= x ^ 1*(x^(k+1)) by A1,POWER:32
-      .= x*(x^(k+1)) by POWER:30
-      .= x*seq.k by A5;
-  end;
-  then
-A10: seq is summable & Sum(seq)=seq.0/(1-x) by A4,A7,SERIES_1:29;
-A11: Sum(seq)=x/(1-x) by A6,A8,A9,SERIES_1:29;
-A12: eseq^\(n+1) is summable by Th24,SERIES_1:15;
-  now
-    let k;
-A13: (n!(#)(eseq^\(n+1))).k = n!*((eseq^\(n+1)).k) by SEQ_1:13
+A5: (n!(#)(eseq^\(n+1))).k = n!*((eseq^\(n+1)).k) by SEQ_1:13
       .= n!*eseq.(n+1+k) by NAT_1:def 3
       .= n!*(1/((n+k+1)!)) by Def5
       .= n!/((n+k+1)!);
     hence (n!(#)(eseq^\(n+1))).k>=0;
-    seq.k=x ^ (k+1) by A5;
-    hence (n!(#)(eseq^\(n+1))).k<=seq.k by A1,A13,Th39;
+    seq.k=x ^ (k+1) by A3;
+    hence (n!(#)(eseq^\(n+1))).k<=seq.k by A2,A5,Th39;
   end;
-  then Sum(n!(#)(eseq^\(n+1)))<=Sum(seq) by A10,SERIES_1:24;
-  hence thesis by A11,A12,SERIES_1:13;
+A6: seq.0 = x ^ (0+1) by A3
+    .= x by POWER:30;
+A7: eseq^\(n+1) is summable by Th24,SERIES_1:15;
+  n+1>0+1 by A1,XREAL_1:8;
+  then
+A8: x<1 by A2,XREAL_1:214;
+A9: now
+    let k;
+    thus seq.(k+1) = x ^ (k+1+1) by A3
+      .= x ^ 1*(x^(k+1)) by A2,POWER:32
+      .= x*(x^(k+1)) by POWER:30
+      .= x*seq.k by A3;
+  end;
+  abs x=x by A2,ABSVALUE:def 1;
+  then seq is summable by A8,A9,SERIES_1:29;
+  then
+A10: Sum(n!(#)(eseq^\(n+1)))<=Sum(seq) by A4,SERIES_1:24;
+  abs x<1 by A2,A8,ABSVALUE:def 1;
+  then Sum(seq)=x/(1-x) by A6,A9,SERIES_1:29;
+  hence thesis by A7,A10,SERIES_1:13;
 end;
 
 theorem Th41:
   for n be real number st n>=2 & x=1/(n+1) holds x/(1-x)<1
 proof
   let n be real number;
-A1: n+1 > n by XREAL_1:31;
-  assume
-A2: n>=2 & x=1/(n+1);
-  then
-A3: x>0;
-  2<n+1 by A1,A2,XXREAL_0:2;
+  assume that
+A1: n>=2 and
+A2: x=1/(n+1);
+  n+1 > n by XREAL_1:31;
+  then 2<n+1 by A1,XXREAL_0:2;
   then 2/(n+1)<1 by XREAL_1:191;
-  then 2*x<1 by A2;
-  then x+x<1;
+  then x+x<1 by A2;
   then x<1-x by XREAL_1:22;
-  hence thesis by A3,XREAL_1:191;
+  hence thesis by A1,A2,XREAL_1:191;
 end;
 
 theorem
   number_e is irrational
 proof
-  assume number_e is rational;
+  assume
+  number_e is rational;
   then consider n such that
-A1: n>=2 & n!*number_e is integer by Th32;
-A2: n!*number_e = n!*((Partial_Sums(eseq).n)+Sum(eseq^\(n+1)))
-  by Th24,SERIES_1:18
-    .= n!*(Partial_Sums(eseq).n)+n!*Sum(eseq^\(n+1));
-  reconsider ne = n!*number_e as Integer by A1;
-  reconsider ne1 = n!*Partial_Sums(eseq).n as Integer by Th38;
-A3: n!*Sum(eseq^\(n+1))=ne-ne1 by A2;
+A1: n>=2 and
+A2: n!*number_e is integer by Th32;
+  reconsider ne = n!*number_e as Integer by A2;
   set x = 1/(n+1);
-A4: x/(1-x)<1 by A1,Th41;
-  n!*Sum(eseq^\(n+1))<=x/(1-x) by A1,Th40;
-  then n!*Sum(eseq^\(n+1))<0+1 by A4,XXREAL_0:2;
+  reconsider ne1 = n!*Partial_Sums(eseq).n as Integer by Th38;
+  n!*number_e = n!*((Partial_Sums(eseq).n)+Sum(eseq^\(n+1))) by Th24,
+  SERIES_1:18
+    .= n!*(Partial_Sums(eseq).n)+n!*Sum(eseq^\(n+1));
+  then
+A3: n!*Sum(eseq^\(n+1))=ne-ne1;
+  x/(1-x)<1 & n!*Sum(eseq^\(n+1))<=x/(1-x) by A1,Th40,Th41;
+  then n!*Sum(eseq^\(n+1))<0+1 by XXREAL_0:2;
   hence contradiction by A3,Th36,INT_1:20;
 end;
 

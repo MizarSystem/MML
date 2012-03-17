@@ -20,9 +20,8 @@ environ
       TOPS_1, NATTRA_1, LATTICE3, CANTOR_1, ORDERS_3, WAYBEL_1, WAYBEL_3,
       WAYBEL_5, WAYBEL_8, YELLOW_8, WAYBEL11, MEMBERED, RELSET_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCT_2,
-      FUNCOP_1, MEMBERED, ABIAN, STRUCT_0, TOPS_1, BORSUK_1, LATTICE3,
-      WAYBEL_0, YELLOW_1, WAYBEL_2, WAYBEL_3, WAYBEL_9, WAYBEL10, WAYBEL11,
-      PRE_CIRC, PRE_TOPC;
+      FUNCOP_1, MEMBERED, ABIAN, STRUCT_0, TOPS_1, LATTICE3, WAYBEL_0,
+      YELLOW_1, WAYBEL_2, WAYBEL_3, WAYBEL_9, WAYBEL10, WAYBEL11, PRE_TOPC;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, XBOOLE_0, WAYBEL_0, PRE_TOPC, RELAT_1, LATTICE3, YELLOW_0,
       WAYBEL_1, WAYBEL_3, WAYBEL11, YELLOW_8, WELLORD1, SUBSET_1, STRUCT_0;
@@ -52,49 +51,48 @@ definition
 A1: dom f = NAT & for x be set st x in NAT holds
     (C[x] implies f.x = F(x)) & (not C[x] implies f.x = G(x)) from
     PARTFUN1:sch 1;
-    rng f = {a,b}
+A2: rng f c= {a,b}
     proof
-      thus rng f c= {a,b}
-      proof
-        let x be set;
-        assume x in rng f;
-        then consider y be set such that
-A2:     y in dom f & x = f.y by FUNCT_1:def 5;
-        per cases;
-        suppose C[y];
-          then f.y = a by A1;
-          hence thesis by A2,TARSKI:def 2;
-        end;
-        suppose not C[y];
-          then f.y = b by A1,A2;
-          hence thesis by A2,TARSKI:def 2;
-        end;
+      let x be set;
+      assume x in rng f;
+      then consider y be set such that
+A3:   y in dom f and
+A4:   x = f.y by FUNCT_1:def 5;
+      per cases;
+      suppose C[y];
+        then f.y = a by A1;
+        hence thesis by A4,TARSKI:def 2;
       end;
-      for y be set st y in {a,b} ex x be set st x in dom f & y = f.x
-      proof
-        let y be set;
-        assume
-A3:     y in {a,b};
-        per cases by A3,TARSKI:def 2;
-        suppose
-A4:       y = a;
-          take 2;
-          C[2]
-          proof
-            take 1;
-            thus thesis;
-          end;
-          hence thesis by A1,A4;
-        end;
-        suppose
-A5:       y = b;
-          take 1;
-          for k be Element of NAT holds 1 <> 2*k by NAT_1:15;
-          hence thesis by A1,A5;
-        end;
+      suppose not C[y];
+        then f.y = b by A1,A3;
+        hence thesis by A4,TARSKI:def 2;
       end;
-      hence thesis by FUNCT_1:19;
     end;
+    for y be set st y in {a,b} ex x be set st x in dom f & y = f.x
+    proof
+      let y be set;
+      assume
+A5:   y in {a,b};
+      per cases by A5,TARSKI:def 2;
+      suppose
+A6:     y = a;
+        take 2;
+        C[2]
+        proof
+          take 1;
+          thus thesis;
+        end;
+        hence thesis by A1,A6;
+      end;
+      suppose
+A7:     y = b;
+        take 1;
+        for k be Element of NAT holds 1 <> 2*k by NAT_1:15;
+        hence thesis by A1,A7;
+      end;
+    end;
+    then {a,b} c= rng f by FUNCT_1:19;
+    then rng f = {a,b} by A2,XBOOLE_0:def 10;
     then reconsider f as Function of NAT, S by A1,FUNCT_2:def 1,RELSET_1:11;
     take f;
     let i be Element of NAT;
@@ -103,12 +101,13 @@ A5:       y = b;
   uniqueness
   proof
     let f1, f2 be Function of NAT, S;
-A6: dom f1 = NAT & dom f2 = NAT by FUNCT_2:def 1;
+A8: dom f1 = NAT by FUNCT_2:def 1;
+A9: dom f2 = NAT by FUNCT_2:def 1;
     assume that
-A7: for i being Element of NAT holds
+A10: for i being Element of NAT holds
     ((ex k be Element of NAT st i = 2*k) implies f1.i = a) &
     ((not ex k be Element of NAT st i = 2*k) implies f1.i = b) and
-A8: for i being Element of NAT holds
+A11: for i being Element of NAT holds
     ((ex k be Element of NAT st i = 2*k) implies f2.i = a) &
     ((not ex k be Element of NAT st i = 2*k) implies f2.i = b);
     for k be set st k in NAT holds f1.k = f2.k
@@ -118,19 +117,19 @@ A8: for i being Element of NAT holds
       then reconsider k' = k as Element of NAT;
       per cases;
       suppose
-A9:     ex l be Element of NAT st k = 2*l;
-        then f1.k = a by A7
-          .= f2.k by A8,A9;
+A12:    ex l be Element of NAT st k = 2*l;
+        then f1.k = a by A10
+          .= f2.k by A11,A12;
         hence thesis;
       end;
       suppose
-A10:    not ex l be Element of NAT st k = 2*l;
-        then f1.k' = b by A7
-          .= f2.k' by A8,A10;
+A13:    not ex l be Element of NAT st k = 2*l;
+        then f1.k' = b by A10
+          .= f2.k' by A11,A13;
         hence thesis;
       end;
     end;
-    hence thesis by A6,FUNCT_1:9;
+    hence thesis by A8,A9,FUNCT_1:9;
   end;
 end;
 
@@ -148,19 +147,20 @@ proof
     let y be set;
     assume y in f.:{A(x) where x is Element of B(): P[x]};
     then consider z being set such that
-A2: z in dom f & z in {A(x) where x is Element of B(): P[x]}
-    & y = f.z by FUNCT_1:def 12;
+    z in dom f and
+A2: z in {A(x) where x is Element of B(): P[x]} and
+A3: y = f.z by FUNCT_1:def 12;
     ex x being Element of B() st z = A(x) & P[x] by A2;
-    hence thesis by A2;
+    hence thesis by A3;
   end;
   let y be set;
   assume y in {f.A(x) where x is Element of B(): P[x]};
   then consider x being Element of B() such that
-A3: y = f.A(x) & P[x];
-  A(x) in the carrier of C();
-  then A(x) in dom f &
-  A(x) in {A(z) where z is Element of B(): P[z]} by A1,A3;
-  hence thesis by A3,FUNCT_1:def 12;
+A4: y = f.A(x) and
+A5: P[x];
+A6: A(x) in the carrier of C();
+  A(x) in {A(z) where z is Element of B(): P[z]} by A5;
+  hence thesis by A1,A4,A6,FUNCT_1:def 12;
 end;
 
 scheme FuncFraenkelSL{ B, C() -> LATTICE,
@@ -177,19 +177,20 @@ proof
     let y be set;
     assume y in f.:{A(x) where x is Element of B(): P[x]};
     then consider z being set such that
-A2: z in dom f & z in {A(x) where x is Element of B(): P[x]}
-    & y = f.z by FUNCT_1:def 12;
+    z in dom f and
+A2: z in {A(x) where x is Element of B(): P[x]} and
+A3: y = f.z by FUNCT_1:def 12;
     ex x being Element of B() st z = A(x) & P[x] by A2;
-    hence thesis by A2;
+    hence thesis by A3;
   end;
   let y be set;
   assume y in {f.A(x) where x is Element of B(): P[x]};
   then consider x being Element of B() such that
-A3: y = f.A(x) & P[x];
-  A(x) in the carrier of C();
-  then A(x) in dom f &
-  A(x) in {A(z) where z is Element of B(): P[z]} by A1,A3;
-  hence thesis by A3,FUNCT_1:def 12;
+A4: y = f.A(x) and
+A5: P[x];
+A6: A(x) in the carrier of C();
+  A(x) in {A(z) where z is Element of B(): P[z]} by A5;
+  hence thesis by A1,A4,A6,FUNCT_1:def 12;
 end;
 
 theorem Th1:
@@ -204,13 +205,13 @@ A1: f is monotone;
   for x, y being Element of S st x in f"P & y <= x holds y in f"P
   proof
     let x, y be Element of S;
-    assume
-A2: x in f"P & y <= x;
-    then
-A3: f.y <= f.x by A1,WAYBEL_1:def 2;
+    assume that
+A2: x in f"P and
+A3: y <= x;
+A4: f.y <= f.x by A1,A3,WAYBEL_1:def 2;
     reconsider fy = f.y, fx = f.x as Element of T;
     fx in P by A2,FUNCT_2:46;
-    then fy in P by A3,WAYBEL_0:def 19;
+    then fy in P by A4,WAYBEL_0:def 19;
     hence thesis by FUNCT_2:46;
   end;
   hence thesis by WAYBEL_0:def 19;
@@ -228,13 +229,13 @@ A1: f is monotone;
   for x, y being Element of S st x in f"P & y >= x holds y in f"P
   proof
     let x, y be Element of S;
-    assume
-A2: x in f"P & y >= x;
-    then
-A3: f.y >= f.x by A1,WAYBEL_1:def 2;
+    assume that
+A2: x in f"P and
+A3: y >= x;
+A4: f.y >= f.x by A1,A3,WAYBEL_1:def 2;
     reconsider fy = f.y, fx = f.x as Element of T;
     fx in P by A2,FUNCT_2:46;
-    then fy in P by A3,WAYBEL_0:def 20;
+    then fy in P by A4,WAYBEL_0:def 20;
     hence thesis by FUNCT_2:46;
   end;
   hence thesis by WAYBEL_0:def 20;
@@ -300,32 +301,35 @@ proof
 A1: f is directed-sups-preserving;
   let x, y be Element of S such that
 A2: x <= y;
-  x <= y & y <= y by A2;
+  y <= y;
   then
-A3: {x, y} is_<=_than y by YELLOW_0:8;
-  for b being Element of S st {x, y} is_<=_than b holds y <= b by YELLOW_0:8;
+A3: {x, y} is_<=_than y by A2,YELLOW_0:8;
+  A4: for
+ b being Element of S st {x, y} is_<=_than b holds y <= b by YELLOW_0:8;
   then
-A4: y = sup {x, y} & ex_sup_of {x, y},S by A3,YELLOW_0:30;
+A5: y = sup {x, y} by A3,YELLOW_0:30;
+A6: ex_sup_of {x, y},S by A3,A4,YELLOW_0:30;
   for a, b being Element of S st a in {x, y} & b in {x, y}
   ex z being Element of S st z in {x, y} & a <= z & b <= z
   proof
     let a, b be Element of S such that
-A5: a in {x, y} & b in {x, y};
+A7: a in {x, y} and
+A8: b in {x, y};
     take y;
     thus y in {x, y} by TARSKI:def 2;
-    thus thesis by A2,A5,TARSKI:def 2;
+    thus thesis by A2,A7,A8,TARSKI:def 2;
   end;
   then {x, y} is directed non empty by WAYBEL_0:def 1;
   then
-A6: f preserves_sup_of {x, y} by A1,WAYBEL_0:def 37;
+A9: f preserves_sup_of {x, y} by A1,WAYBEL_0:def 37;
   then
-A7: sup(f.:{x, y}) = f.y by A4,WAYBEL_0:def 31;
-A8: dom f = the carrier of S by FUNCT_2:def 1;
+A10: sup(f.:{x, y}) = f.y by A5,A6,WAYBEL_0:def 31;
+A11: dom f = the carrier of S by FUNCT_2:def 1;
   then
-A9: f.y = sup{f.x, f.y} by A7,FUNCT_1:118;
-  f.:{x, y} = {f.x, f.y} by A8,FUNCT_1:118;
-  then ex_sup_of {f.x, f.y}, T by A4,A6,WAYBEL_0:def 31;
-  then {f.x, f.y} is_<=_than f.y by A9,YELLOW_0:def 9;
+A12: f.y = sup{f.x, f.y} by A10,FUNCT_1:118;
+  f.:{x, y} = {f.x, f.y} by A11,FUNCT_1:118;
+  then ex_sup_of {f.x, f.y}, T by A6,A9,WAYBEL_0:def 31;
+  then {f.x, f.y} is_<=_than f.y by A12,YELLOW_0:def 9;
   hence f.x <= f.y by YELLOW_0:8;
 end;
 
@@ -359,7 +363,6 @@ A5: f.x in V by XBOOLE_0:def 5;
     then
 A6: f.y in downarrow (f.y) by WAYBEL_0:17;
     downarrow (f.y) is closed by Lm3;
-    then V is open;
     then U1 is open by A1,A4,TOPS_2:55;
     then reconsider U1 as upper Subset of S by WAYBEL11:def 4;
     x in U1 by A2,A5,FUNCT_1:def 13;
@@ -386,29 +389,27 @@ proof
   let f be Function of S, T;
   assume
 A1: f is directed-sups-preserving;
-  then
-A2: f is monotone;
   thus f is continuous
   proof
     let P1 be Subset of T;
     reconsider P1' = P1 as Subset of T;
     assume P1 is closed;
     then
-A3: P1' is directly_closed lower by WAYBEL11:7;
+A2: P1' is directly_closed lower by WAYBEL11:7;
     now
       let D be non empty directed Subset of S;
       assume
-A4:   D c= f"P1;
-A5:   f preserves_sup_of D by A1,WAYBEL_0:def 37;
+A3:   D c= f"P1;
+A4:   f preserves_sup_of D by A1,WAYBEL_0:def 37;
       ex_sup_of D,S by WAYBEL_0:75;
       then
-A6:   sup (f.:D) = f.sup D by A5,WAYBEL_0:def 31;
+A5:   sup (f.:D) = f.sup D by A4,WAYBEL_0:def 31;
       reconsider fD = f.:D as directed Subset of T by A1,YELLOW_2:17;
-      fD c= P1 by A4,BORSUK_1:5;
-      then sup fD in P1' by A3,WAYBEL11:def 2;
-      hence sup D in f"P1 by A6,FUNCT_2:46;
+      fD c= P1 by A3,BORSUK_1:5;
+      then sup fD in P1' by A2,WAYBEL11:def 2;
+      hence sup D in f"P1 by A5,FUNCT_2:46;
     end;
-    then f"P1 is directly_closed lower by A2,A3,Th1,WAYBEL11:def 2;
+    then f"P1 is directly_closed lower by A1,A2,Th1,WAYBEL11:def 2;
     hence thesis by WAYBEL11:7;
   end;
 end;
@@ -425,15 +426,14 @@ registration
     let W be RelStr;
     per cases;
     suppose
-   S is non empty;
+      S is non empty;
       assume W in rng f;
-      then W in {T};
       hence thesis by TARSKI:def 1;
     end;
     suppose
-A2:   S is empty;
+A1:   S is empty;
       assume W in rng f;
-      hence thesis by A2;
+      hence thesis by A1;
     end;
   end;
 end;
@@ -474,47 +474,45 @@ A1: for a be set holds a in X iff a in the carrier of MonMaps (S, T) & P[a]
     hereby
       assume f in the carrier of SX;
       then f in X by YELLOW_0:def 15;
-      then consider f' be Function of S, T such that
-A2:   f' = f & f' is continuous by A1;
-      thus f is continuous by A2;
+      then ex f' be Function of S, T st ( f' = f)&( f' is continuous)
+      by A1;
+      hence f is continuous;
     end;
     assume
-A3: f is continuous;
-    then
-A4: f is monotone;
+A2: f is continuous;
     f in Funcs (the carrier of S, the carrier of T) by FUNCT_2:11;
-    then f in the carrier of MonMaps (S, T) by A4,YELLOW_1:def 6;
-    then f in X by A1,A3;
+    then f in the carrier of MonMaps (S, T) by A2,YELLOW_1:def 6;
+    then f in X by A1,A2;
     hence thesis by YELLOW_0:def 15;
   end;
   uniqueness
   proof
     let A1, A2 be strict full SubRelStr of MonMaps (S, T);
     assume that
-A5: for f being Function of S,T holds f in the carrier of A1 iff
+A3: for f being Function of S,T holds f in the carrier of A1 iff
     f is continuous and
-A6: for f being Function of S,T holds f in the carrier of A2 iff
+A4: for f being Function of S,T holds f in the carrier of A2 iff
     f is continuous;
-A7: the carrier of A1 c= the carrier of MonMaps (S, T) by YELLOW_0:def 13;
-A8: the carrier of A2 c= the carrier of MonMaps (S, T) by YELLOW_0:def 13;
+A5: the carrier of A1 c= the carrier of MonMaps (S, T) by YELLOW_0:def 13;
+A6: the carrier of A2 c= the carrier of MonMaps (S, T) by YELLOW_0:def 13;
     the carrier of A1 = the carrier of A2
     proof
       hereby
         let x be set;
         assume
-A9:     x in the carrier of A1;
+A7:     x in the carrier of A1;
         then reconsider y = x as Element of A1;
-        reconsider y as Function of S, T by A7,A9,WAYBEL10:10;
-        y is continuous by A5,A9;
-        hence x in the carrier of A2 by A6;
+        reconsider y as Function of S, T by A5,A7,WAYBEL10:10;
+        y is continuous by A3,A7;
+        hence x in the carrier of A2 by A4;
       end;
       let x be set;
       assume
-A10:  x in the carrier of A2;
+A8:   x in the carrier of A2;
       then reconsider y = x as Element of A2;
-      reconsider y as Function of S, T by A8,A10,WAYBEL10:10;
-      y is continuous by A6,A10;
-      hence thesis by A5;
+      reconsider y as Function of S, T by A6,A8,WAYBEL10:10;
+      y is continuous by A4,A8;
+      hence thesis by A3;
     end;
     hence thesis by YELLOW_0:58;
   end;
@@ -552,48 +550,49 @@ A1: for x,y being Element of NAT holds [x,y] in R iff P[x,y]
     thus the carrier of N = NAT;
     thus the mapping of N = (a,b),...;
     let i, j be Element of N, i', j' be Element of NAT such that
-A2: i = i' & j = j';
+A2: i = i' and
+A3: j = j';
     reconsider x = i, y = j as Element of NAT;
     [x,y] in the InternalRel of N iff P[x,y] by A1;
-    hence thesis by A2,ORDERS_2:def 9;
+    hence thesis by A2,A3,ORDERS_2:def 9;
   end;
   uniqueness
   proof
     let it1,it2 be strict non empty NetStr over S such that
-A3: the carrier of it1 = NAT and
-A4: the mapping of it1 = (a,b),... and
-A5: for i, j being Element of it1,
+A4: the carrier of it1 = NAT and
+A5: the mapping of it1 = (a,b),... and
+A6: for i, j being Element of it1,
     i', j' being Element of NAT st i = i' & j = j'
     holds i <= j iff i' <= j' and
-A6: the carrier of it2 = NAT and
-A7: the mapping of it2 = (a,b),... and
-A8: for i, j being Element of it2,
+A7: the carrier of it2 = NAT and
+A8: the mapping of it2 = (a,b),... and
+A9: for i, j being Element of it2,
     i', j' being Element of NAT st i = i' & j = j' holds i <= j iff i' <= j';
     the InternalRel of it1 = the InternalRel of it2
     proof
       let x,y be set;
       hereby
         assume
-A9:     [x,y] in the InternalRel of it1;
+A10:    [x,y] in the InternalRel of it1;
         then reconsider i=x, j=y as Element of it1 by ZFMISC_1:106;
-        reconsider i1 = i, i2 = j as Element of NAT by A3;
-        reconsider i'=x, j'=y as Element of it2 by A3,A6,A9,ZFMISC_1:106;
-        i <= j by A9,ORDERS_2:def 9;
-        then i1 <= i2 by A5;
-        then i' <= j' by A8;
+        reconsider i1 = i, i2 = j as Element of NAT by A4;
+        reconsider i'=x, j'=y as Element of it2 by A4,A7,A10,ZFMISC_1:106;
+        i <= j by A10,ORDERS_2:def 9;
+        then i1 <= i2 by A6;
+        then i' <= j' by A9;
         hence [x,y] in the InternalRel of it2 by ORDERS_2:def 9;
       end;
       assume
-A10:  [x,y] in the InternalRel of it2;
+A11:  [x,y] in the InternalRel of it2;
       then reconsider i=x, j=y as Element of it2 by ZFMISC_1:106;
-      reconsider i'=x, j'=y as Element of it1 by A3,A6,A10,ZFMISC_1:106;
-      reconsider i1 = i, i2 = j as Element of NAT by A6;
-      i <= j by A10,ORDERS_2:def 9;
-      then i1 <= i2 by A8;
-      then i' <= j' by A5;
+      reconsider i'=x, j'=y as Element of it1 by A4,A7,A11,ZFMISC_1:106;
+      reconsider i1 = i, i2 = j as Element of NAT by A7;
+      i <= j by A11,ORDERS_2:def 9;
+      then i1 <= i2 by A9;
+      then i' <= j' by A6;
       hence thesis by ORDERS_2:def 9;
     end;
-    hence thesis by A3,A4,A6,A7;
+    hence thesis by A4,A5,A7,A8;
   end;
 end;
 
@@ -614,36 +613,40 @@ registration
     thus L is transitive
     proof
       let x, y, z be Element of L;
-      assume
-A1:   x <= y & y <= z;
+      assume that
+A1:   x <= y and
+A2:   y <= z;
       reconsider x' = x, y' = y, z' = z as Element of NAT by Def3;
-      x' <= y' & y' <= z' by A1,Def3;
-      then x' <= z' by XXREAL_0:2;
+A3:   x' <= y' by A1,Def3;
+      y' <= z' by A2,Def3;
+      then x' <= z' by A3,XXREAL_0:2;
       hence thesis by Def3;
     end;
-    thus L is directed
+    [#]L is directed
     proof
-      [#]L is directed
-      proof
-        let x, y be Element of L;
-        assume x in [#]L & y in [#]L;
-        reconsider x' = x, y' = y as Element of NAT by Def3;
-        set z' = x' + y';
-        reconsider z = z' as Element of L by Def3;
-        reconsider z as Element of L;
-        take z;
-        z in the carrier of L & x' <= z' & y' <= z' by NAT_1:11;
-        hence thesis by Def3;
-      end;
-      hence thesis by WAYBEL_0:def 6;
+      let x, y be Element of L;
+      assume that x in [#]L
+      and y in [#]L;
+      reconsider x' = x, y' = y as Element of NAT by Def3;
+      set z' = x' + y';
+      reconsider z = z' as Element of L by Def3;
+      reconsider z as Element of L;
+      take z;
+A4:   x' <= z' by NAT_1:11;
+      y' <= z' by NAT_1:11;
+      hence thesis by A4,Def3;
     end;
+    hence L is directed by WAYBEL_0:def 6;
     thus L is antisymmetric
     proof
       let x, y be Element of L;
       reconsider x' = x, y' = y as Element of NAT by Def3;
-      assume x <= y & y <= x;
-      then x' <= y' & y' <= x' by Def3;
-      hence thesis by XXREAL_0:1;
+      assume that
+A5:   x <= y and
+A6:   y <= x;
+A7:   x' <= y' by A5,Def3;
+      y' <= x' by A6,Def3;
+      hence thesis by A7,XXREAL_0:1;
     end;
   end;
 end;
@@ -678,50 +681,50 @@ proof
   let S be non empty RelStr;
   let a, b be Element of S,
   i, j be Element of Net-Str (a,b), i', j' be Element of NAT;
-  assume
-A1: i' = i & j' = i' + 1 & j' = j;
+  assume that
+A1: i' = i and
+A2: j' = i' + 1 and
+A3: j' = j;
   per cases;
   suppose
-A2: a <> b;
+A4: a <> b;
     defpred C[Element of NAT] means ex k be Element of NAT st $1 = 2*k;
     thus Net-Str (a, b).i = a implies Net-Str (a, b).j = b
     proof
       assume
-A3:   Net-Str (a, b).i = a;
+A5:   Net-Str (a, b).i = a;
       C[i']
       proof
         assume
-A4:     not C[i'];
+A6:     not C[i'];
         Net-Str (a, b).i = (a,b),....i by Def3
-          .= b by A1,A4,Def1;
-        hence thesis by A2,A3;
+          .= b by A1,A6,Def1;
+        hence thesis by A4,A5;
       end;
-      then consider k be Element of NAT such that
-A5:   i' = 2*k;
-A6:   for k be Element of NAT holds j' <> 2*k by A1,A5;
+      then
+A7:   for k be Element of NAT holds j' <> 2*k by A2;
       Net-Str (a, b).j = (a,b),....j by Def3
-        .= b by A1,A6,Def1;
+        .= b by A3,A7,Def1;
       hence thesis;
     end;
     assume
-A7: Net-Str (a, b).i = b;
-A8: not C[i']
+A8: Net-Str (a, b).i = b;
+A9: not C[i']
     proof
       assume
-A9:   C[i'];
+A10:  C[i'];
       Net-Str (a, b).i = (a,b),....i by Def3
-        .= a by A1,A9,Def1;
-      hence thesis by A2,A7;
+        .= a by A1,A10,Def1;
+      hence thesis by A4,A8;
     end;
-A10: C[j']
+A11: C[j']
     proof
       assume not C[j'];
-      then consider kl be Element of NAT such that
-A11:  j' = 2*kl + 1 by SCHEME1:1;
-      thus thesis by A1,A8,A11;
+      then ex kl be Element of NAT st ( j' = 2*kl + 1) by SCHEME1:1;
+      hence thesis by A2,A9;
     end;
     Net-Str (a, b).j = (a,b),....j by Def3
-      .= a by A1,A10,Def1;
+      .= a by A3,A11,Def1;
     hence thesis;
   end;
   suppose a = b;
@@ -736,7 +739,8 @@ proof
   let S be with_infima Poset;
   let a, b be Element of S;
   set N = Net-Str (a,b);
-A1: for j be Element of N holds {N.i where i is Element of N : i >= j} = {a,b}
+  A1: for
+ j be Element of N holds {N.i where i is Element of N : i >= j} = {a,b}
   proof
     let j be Element of N;
     thus {N.i where i is Element of N : i >= j} c= {a,b}
@@ -744,7 +748,8 @@ A1: for j be Element of N holds {N.i where i is Element of N : i >= j} = {a,b}
       let x be set;
       assume x in {N.i where i is Element of N : i >= j};
       then consider i1 be Element of N such that
-A2:   x = N.i1 & i1 >= j;
+A2:   x = N.i1
+      and i1 >= j;
       N.i1 = a or N.i1 = b by Th5;
       hence thesis by A2,TARSKI:def 2;
     end;
@@ -761,43 +766,43 @@ A4:     x = a;
         now per cases;
           suppose
 A5:         C[J];
-            N.j = (a,b),....j by Def3
+A6:         N.j = (a,b),....j by Def3
               .= a by A5,Def1;
-            then j <= j & x = N.j by A4;
-            hence thesis;
+            j <= j;
+            hence thesis by A4,A6;
           end;
           suppose
-A6:         not C[J];
-A7:         N.j = (a,b),....j by Def3
-              .= b by A6,Def1;
+A7:         not C[J];
+A8:         N.j = (a,b),....j by Def3
+              .= b by A7,Def1;
             reconsider k = J + 1 as Element of N by Def3;
-A8:         N.k = a by A7,Th6;
+A9:         N.k = a by A8,Th6;
             J + 1 >= J by NAT_1:11;
             then k >= j by Def3;
-            hence thesis by A4,A8;
+            hence thesis by A4,A9;
           end;
         end;
         hence thesis;
       end;
       suppose
-A9:     x = b;
+A10:    x = b;
         now per cases;
           suppose
-A10:        not C[J];
-            N.j = (a,b),....j by Def3
-              .= b by A10,Def1;
-            then j <= j & x = N.j by A9;
-            hence thesis;
+A11:        not C[J];
+A12:        N.j = (a,b),....j by Def3
+              .= b by A11,Def1;
+            j <= j;
+            hence thesis by A10,A12;
           end;
           suppose
-A11:        C[J];
-A12:        N.j = (a,b),....j by Def3
-              .= a by A11,Def1;
+A13:        C[J];
+A14:        N.j = (a,b),....j by Def3
+              .= a by A13,Def1;
             reconsider k = J + 1 as Element of N by Def3;
-A13:        N.k = b by A12,Th6;
+A15:        N.k = b by A14,Th6;
             J + 1 >= J by NAT_1:11;
             then k >= j by Def3;
-            hence thesis by A9,A13;
+            hence thesis by A10,A15;
           end;
         end;
         hence thesis;
@@ -811,34 +816,32 @@ A13:        N.k = b by A12,Th6;
   deffunc Q1(Element of N) = "/\"(F($1), S);
   deffunc Q2(Element of N) = "/\"(G($1), S);
   deffunc F(set) = a "/\" b;
-A14: for jj be Element of N holds Q1(jj) = F(jj)
+A16: for jj be Element of N holds Q1(jj) = F(jj)
   proof
     let jj be Element of N;
     Q1(jj) = Q2(jj) by A1
       .= a "/\" b by YELLOW_0:40;
     hence thesis;
   end;
-A15: {Q1(j3) where j3 is Element of N : R[j3]} =
-  {F(j4) where j4 is Element of N : R[j4]} from FRAENKEL:sch 5(A14);
-  {a "/\" b where j4 is Element of N : R[j4]} = {a "/\" b}
+A17: {Q1(j3) where j3 is Element of N : R[j3]} =
+  {F(j4) where j4 is Element of N : R[j4]} from FRAENKEL:sch 5(A16);
+A18: {a "/\" b where j4 is Element of N : R[j4]} c= {a "/\" b}
   proof
-    thus {a "/\" b where j4 is Element of N : R[j4]} c= {a "/\" b}
-    proof
-      let x be set;
-      assume x in {a "/\" b where j4 is Element of N : R[j4]};
-      then consider q be Element of N such that
-A16:  x = a "/\" b & R[q];
-      thus thesis by A16,TARSKI:def 1;
-    end;
-    thus {a "/\" b} c= {a "/\" b where j4 is Element of N : R[j4]}
-    proof
-      let x be set;
-      assume x in {a "/\" b};
-      then x = a "/\" b by TARSKI:def 1;
-      hence thesis;
-    end;
+    let x be set;
+    assume x in {a "/\" b where j4 is Element of N : R[j4]};
+    then ex q be Element of N st ( x = a "/\" b)&( R[q]);
+    hence thesis by TARSKI:def 1;
   end;
-  hence thesis by A15,YELLOW_0:39;
+  {a "/\" b} c= {a "/\" b where j4 is Element of N : R[j4]}
+  proof
+    let x be set;
+    assume x in {a "/\" b};
+    then x = a "/\" b by TARSKI:def 1;
+    hence thesis;
+  end;
+  then {a "/\" b where j4 is Element of N : R[j4]} = {a "/\" b} by A18,
+  XBOOLE_0:def 10;
+  hence thesis by A17,YELLOW_0:39;
 end;
 
 Lm5: for S being with_infima Poset, a, b being Element of S st a <= b holds
@@ -873,7 +876,8 @@ A2: for j being Element of fN holds
       let x be set;
       assume x in {fN.i where i is Element of fN : i >= j};
       then consider i1 be Element of fN such that
-A3:   x = fN.i1 & i1 >= j;
+A3:   x = fN.i1
+      and i1 >= j;
       reconsider I1 = i1 as Element of N by A1;
       i1 in the carrier of N by A1;
       then
@@ -899,63 +903,63 @@ A8:     x = f.a;
         now per cases;
           suppose
 A9:         C[J];
-            fN.j = (f * the mapping of N).j by WAYBEL_9:def 8
+A10:        fN.j = (f * the mapping of N).j by WAYBEL_9:def 8
               .= f.((the mapping of N).j) by A7,FUNCT_1:23
               .= f.((a,b),....j) by Def3
               .= f.a by A9,Def1;
-            then j <= j & x = fN.j by A8;
-            hence thesis;
+            j <= j;
+            hence thesis by A8,A10;
           end;
           suppose
-A10:        not C[J];
-A11:        N.jj = (a,b),....jj by Def3
-              .= b by A10,Def1;
+A11:        not C[J];
+A12:        N.jj = (a,b),....jj by Def3
+              .= b by A11,Def1;
             reconsider k = J + 1 as Element of fN by A1,Def3;
             reconsider kk = k as Element of N by A1;
             kk in the carrier of N;
             then
-A12:        kk in dom the mapping of N by FUNCT_2:def 1;
-A13:        fN.k = (f * the mapping of N).k by WAYBEL_9:def 8
-              .= f.(N.kk) by A12,FUNCT_1:23
-              .= f.a by A11,Th6;
+A13:        kk in dom the mapping of N by FUNCT_2:def 1;
+A14:        fN.k = (f * the mapping of N).k by WAYBEL_9:def 8
+              .= f.(N.kk) by A13,FUNCT_1:23
+              .= f.a by A12,Th6;
             J + 1 >= J by NAT_1:11;
             then kk >= jj by Def3;
             then [jj,kk] in the InternalRel of N by ORDERS_2:def 9;
             then k >= j by A1,ORDERS_2:def 9;
-            hence thesis by A8,A13;
+            hence thesis by A8,A14;
           end;
         end;
         hence thesis;
       end;
       suppose
-A14:    x = f.b;
+A15:    x = f.b;
         now per cases;
           suppose
-A15:        not C[J];
-            fN.j = (f * the mapping of N).j by WAYBEL_9:def 8
+A16:        not C[J];
+A17:        fN.j = (f * the mapping of N).j by WAYBEL_9:def 8
               .= f.((the mapping of N).j) by A7,FUNCT_1:23
               .= f.((a,b),....j) by Def3
-              .= f.b by A15,Def1;
-            then j <= j & x = fN.j by A14;
-            hence thesis;
+              .= f.b by A16,Def1;
+            j <= j;
+            hence thesis by A15,A17;
           end;
           suppose
-A16:        C[J];
-A17:        N.jj = (a,b),....j by Def3
-              .= a by A16,Def1;
+A18:        C[J];
+A19:        N.jj = (a,b),....j by Def3
+              .= a by A18,Def1;
             reconsider k = J + 1 as Element of fN by A1,Def3;
             reconsider kk = k as Element of N by Def3;
             kk in the carrier of N;
             then
-A18:        kk in dom the mapping of N by FUNCT_2:def 1;
-A19:        fN.k = (f * the mapping of N).k by WAYBEL_9:def 8
-              .= f.(N.kk) by A18,FUNCT_1:23
-              .= f.b by A17,Th6;
+A20:        kk in dom the mapping of N by FUNCT_2:def 1;
+A21:        fN.k = (f * the mapping of N).k by WAYBEL_9:def 8
+              .= f.(N.kk) by A20,FUNCT_1:23
+              .= f.b by A19,Th6;
             J + 1 >= J by NAT_1:11;
             then kk >= jj by Def3;
             then [jj,kk] in the InternalRel of N by ORDERS_2:def 9;
             then k >= j by A1,ORDERS_2:def 9;
-            hence thesis by A14,A19;
+            hence thesis by A15,A21;
           end;
         end;
         hence thesis;
@@ -969,34 +973,32 @@ A19:        fN.k = (f * the mapping of N).k by WAYBEL_9:def 8
   deffunc Q1(Element of fN) = "/\"(F($1), T);
   deffunc Q2(Element of fN) = "/\"(G($1), T);
   deffunc F(set) = f.a "/\" f.b;
-A20: for jj be Element of fN holds Q1(jj) = F(jj)
+A22: for jj be Element of fN holds Q1(jj) = F(jj)
   proof
     let jj be Element of fN;
     Q1(jj) = Q2(jj) by A2
       .= f.a "/\" f.b by YELLOW_0:40;
     hence thesis;
   end;
-A21: {Q1(j3) where j3 is Element of fN : R[j3]} =
-  {F(j4) where j4 is Element of fN : R[j4]} from FRAENKEL:sch 5(A20);
-  {f.a "/\" f.b where j4 is Element of fN : R[j4]} = {f.a "/\" f.b}
+A23: {Q1(j3) where j3 is Element of fN : R[j3]} =
+  {F(j4) where j4 is Element of fN : R[j4]} from FRAENKEL:sch 5(A22);
+  A24: {f.a "/\" f.b where j4 is Element of fN : R[j4]} c= {f.a "/\" f.b}
   proof
-    thus {f.a "/\" f.b where j4 is Element of fN : R[j4]} c= {f.a "/\" f.b}
-    proof
-      let x be set;
-      assume x in {f.a "/\" f.b where j4 is Element of fN : R[j4]};
-      then consider q be Element of fN such that
-A22:  x = f.a "/\" f.b & R[q];
-      thus thesis by A22,TARSKI:def 1;
-    end;
-    thus {f.a "/\" f.b} c= {f.a "/\" f.b where j4 is Element of fN : R[j4]}
-    proof
-      let x be set;
-      assume x in {f.a "/\" f.b};
-      then x = f.a "/\" f.b by TARSKI:def 1;
-      hence thesis;
-    end;
+    let x be set;
+    assume x in {f.a "/\" f.b where j4 is Element of fN : R[j4]};
+    then ex q be Element of fN st ( x = f.a "/\" f.b)&( R[q]);
+    hence thesis by TARSKI:def 1;
   end;
-  hence thesis by A21,YELLOW_0:39;
+  {f.a "/\" f.b} c= {f.a "/\" f.b where j4 is Element of fN : R[j4]}
+  proof
+    let x be set;
+    assume x in {f.a "/\" f.b};
+    then x = f.a "/\" f.b by TARSKI:def 1;
+    hence thesis;
+  end;
+  then {f.a "/\" f.b where j4 is Element of fN : R[j4]} = {f.a "/\" f.b} by A24
+  ,XBOOLE_0:def 10;
+  hence thesis by A23,YELLOW_0:39;
 end;
 
 definition
@@ -1024,24 +1026,26 @@ A4: (the InternalRel of S)|_2 D c= the InternalRel of S by XBOOLE_1:17;
       assume
 A5:   [x,y] in (the InternalRel of S)|_2 D;
       then
-A6:   x in D & y in D by ZFMISC_1:106;
+A6:   x in D by ZFMISC_1:106;
+A7:   y in D by A5,ZFMISC_1:106;
       reconsider x' = x, y' = y as Element of M by A1,A5,ZFMISC_1:106;
-      x' = ((id the carrier of S)|D).x' &
-      y' = ((id the carrier of S)|D).y' by A3,A6,FUNCT_1:35;
-      then M.x' <= M.y' by A2,A4,A5,ORDERS_2:def 9;
+A8:   x' = ((id the carrier of S)|D).x' by A3,A6,FUNCT_1:35;
+      y' = ((id the carrier of S)|D).y' by A3,A7,FUNCT_1:35;
+      then M.x' <= M.y' by A2,A4,A5,A8,ORDERS_2:def 9;
       then x' <= y' by WAYBEL11:def 10;
       hence [x,y] in the InternalRel of M by ORDERS_2:def 9;
     end;
     assume
-A7: [x,y] in the InternalRel of M;
+A9: [x,y] in the InternalRel of M;
     then reconsider x' = x, y' = y as Element of M by ZFMISC_1:106;
-    x' <= y' by A7,ORDERS_2:def 9;
+    x' <= y' by A9,ORDERS_2:def 9;
     then M.x' <= M.y' by WAYBEL11:def 10;
     then
-A8: [M.x', M.y'] in the InternalRel of S by ORDERS_2:def 9;
-    x' = ((id the carrier of S)|D).x' & y' = ((id the carrier of S)|D). y'
-    by A1,A3,FUNCT_1:35;
-    hence [x,y] in (the InternalRel of S)|_2 D by A1,A2,A7,A8,XBOOLE_0:def 4;
+A10: [M.x', M.y'] in the InternalRel of S by ORDERS_2:def 9;
+A11: x' = ((id the carrier of S)|D).x' by A1,A3,FUNCT_1:35;
+    y' = ((id the carrier of S)|D). y' by A1,A3,FUNCT_1:35;
+    hence [x,y] in (the InternalRel of S)|_2 D by A1,A2,A9,A10,A11,
+    XBOOLE_0:def 4;
   end;
   hence thesis by A1,A2,RELAT_1:def 2;
 end;
@@ -1105,6 +1109,7 @@ A3:   b is_<=_than Y;
     end;
     hence thesis by A2,YELLOW_0:31;
   end;
+
   rng the mapping of N = { F(j) where j is Element of N: P[j]} by WAYBEL11:19
     .= {G(j) where j is Element of N: P[j]} from FRAENKEL:sch 5(A1);
   hence lim_inf N = Sup the mapping of N by YELLOW_2:def 5
@@ -1158,8 +1163,7 @@ scheme NetFraenkelS{B, B1, C() -> non empty TopRelStr,
   f().:{A(x) where x is Element of B(): P[x]} =
   {f().A(x) where x is Element of B1(): P[x]}
 provided
-A1: the carrier of C() c= dom f()
-and
+A1: the carrier of C() c= dom f() and
 A2: the carrier of B() = the carrier of B1()
 proof
   set f = f();
@@ -1169,30 +1173,32 @@ proof
     let y be set;
     assume y in f.:{A(x) where x is Element of B(): P[x]};
     then consider z being set such that
-A3: z in dom f & z in {A(x) where x is Element of B(): P[x]}
-    & y = f.z by FUNCT_1:def 12;
+    z in dom f and
+A3: z in {A(x) where x is Element of B(): P[x]} and
+A4: y = f.z by FUNCT_1:def 12;
     consider x being Element of B() such that
-A4: z = A(x) & P[x] by A3;
+A5: z = A(x) and
+A6: P[x] by A3;
     reconsider x as Element of B1() by A2;
-    y = f.A(x) & P[x] by A3,A4;
-    hence thesis;
+    y = f.A(x) by A4,A5;
+    hence thesis by A6;
   end;
   let y be set;
   assume y in {f.A(x) where x is Element of B1(): P[x]};
   then consider x being Element of B1() such that
-A5: y = f.A(x) & P[x];
+A7: y = f.A(x) and
+A8: P[x];
   reconsider x as Element of B() by A2;
-  A(x) in the carrier of C();
-  then A(x) in dom f &
-  A(x) in {A(z) where z is Element of B(): P[z]} by A1,A5;
-  hence thesis by A5,FUNCT_1:def 12;
+A9: A(x) in the carrier of C();
+  A(x) in {A(z) where z is Element of B(): P[z]} by A8;
+  hence thesis by A1,A7,A9,FUNCT_1:def 12;
 end;
 
 theorem Th12:
   for S, T being continuous lower-bounded LATTICE,
   f being Function of S, T holds ( f is directed-sups-preserving implies
-  ( for x being Element of S holds
-  f.x = "\/"({ f.w where w is Element of S : w << x },T) ))
+  for x being Element of S holds
+  f.x = "\/"({ f.w where w is Element of S : w << x },T) )
 proof
   let S, T be continuous lower-bounded LATTICE;
   let f be Function of S, T;
@@ -1208,7 +1214,7 @@ A5: f.:{ A(w) where w is Element of S : P[w] } =
   {f.A(w) where w is Element of S : P[w] } from FuncFraenkelSL(A4);
   f.x = f.(sup waybelow x) by WAYBEL_3:def 5
     .= "\/"({f.w where w is Element of S : w << x },T) by A2,A3,A5,
-WAYBEL_0:def 31;
+  WAYBEL_0:def 31;
   hence thesis;
 end;
 
@@ -1238,8 +1244,9 @@ A5: f.:{ A(w) where w is Element of S : P[w] } =
   { f.A(w) where w is Element of S : Q[w] } from FuncFraenkelSL(A4);
   then
 A6: f.Y = "\/"(f.:waybelow Y,T) by A1;
-  ex_sup_of f.:waybelow X,T & ex_sup_of f.:waybelow Y,T by YELLOW_0:17;
-  hence thesis by A2,A3,A5,A6,RELAT_1:156,YELLOW_0:34;
+A7: ex_sup_of f.:waybelow X,T by YELLOW_0:17;
+  ex_sup_of f.:waybelow Y,T by YELLOW_0:17;
+  hence thesis by A2,A3,A5,A6,A7,RELAT_1:156,YELLOW_0:34;
 end;
 
 theorem Th14:
@@ -1247,8 +1254,8 @@ theorem Th14:
   T being continuous lower-bounded LATTICE, f being Function of S, T holds
   ( ( for x being Element of S holds
   f.x = "\/"({ f.w where w is Element of S : w << x },T) ) implies
-  ( for x being Element of S, y being Element of T
-  holds y << f.x iff ex w being Element of S st w << x & y << f.w ))
+  for x being Element of S, y being Element of T
+  holds y << f.x iff ex w being Element of S st w << x & y << f.w )
 proof
   let S be up-complete lower-bounded LATTICE;
   let T be continuous lower-bounded LATTICE;
@@ -1263,7 +1270,7 @@ A2: f is monotone by Th13;
     assume
 A3: y << f.x;
     reconsider D = f.:(waybelow x) as non empty directed Subset of T
-    by A2,YELLOW_2:17;
+    by A1,Th13,YELLOW_2:17;
 A4: f.x = "\/"({ f.w where w is Element of S : w << x },T) by A1;
 A5: the carrier of S c= dom f by FUNCT_2:def 1;
     defpred P[Element of S] means $1 << x;
@@ -1271,18 +1278,22 @@ A5: the carrier of S c= dom f by FUNCT_2:def 1;
     f.:{ A(w) where w is Element of S : P[w] } =
     { f.A(w) where w is Element of S : P[w] } from FuncFraenkelSL(A5);
     then consider w being Element of T such that
-A6: w in D & y << w by A3,A4,WAYBEL_4:54;
+A6: w in D and
+A7: y << w by A3,A4,WAYBEL_4:54;
     consider v be set such that
-A7: v in the carrier of S & v in waybelow x & w = f.v by A6,FUNCT_2:115;
-    reconsider v as Element of S by A7;
+A8: v in the carrier of S and
+A9: v in waybelow x and
+A10: w = f.v by A6,FUNCT_2:115;
+    reconsider v as Element of S by A8;
     take v;
-    thus v << x & y << f.v by A6,A7,WAYBEL_3:7;
+    thus v << x & y << f.v by A7,A9,A10,WAYBEL_3:7;
   end;
   given w being Element of S such that
-A8: w << x & y << f.w;
-  w <= x by A8,WAYBEL_3:1;
+A11: w << x and
+A12: y << f.w;
+  w <= x by A11,WAYBEL_3:1;
   then f.w <= f.x by A2,WAYBEL_1:def 2;
-  hence thesis by A8,WAYBEL_3:2;
+  hence thesis by A12,WAYBEL_3:2;
 end;
 
 theorem Th15:
@@ -1294,15 +1305,16 @@ proof
   let S, T be non empty RelStr;
   let D be Subset of S;
   let f be Function of S, T;
-  assume ex_sup_of D,S & ex_sup_of f.:D,T or
+  assume that
+A1: ex_sup_of D,S & ex_sup_of f.:D,T or
   S is complete antisymmetric & T is complete antisymmetric;
-  then
-A1: ex_sup_of D,S & ex_sup_of f.:D,T by YELLOW_0:17;
+A2: ex_sup_of D,S by A1,YELLOW_0:17;
+A3: ex_sup_of f.:D,T by A1,YELLOW_0:17;
   assume
-A2: f is monotone;
-  D is_<=_than sup D by A1,YELLOW_0:def 9;
-  then f.:D is_<=_than f.(sup D) by A2,YELLOW_2:16;
-  hence thesis by A1,YELLOW_0:def 9;
+A4: f is monotone;
+  D is_<=_than sup D by A2,YELLOW_0:def 9;
+  then f.:D is_<=_than f.(sup D) by A4,YELLOW_2:16;
+  hence thesis by A3,YELLOW_0:def 9;
 end;
 
 theorem Th16:
@@ -1315,7 +1327,7 @@ proof
   let S, T be non empty reflexive antisymmetric RelStr;
   let D be directed non empty Subset of S;
   let f be Function of S, T;
-  assume
+  assume that
 A1: ex_sup_of D,S & ex_sup_of f.:D,T or S is up-complete & T is up-complete;
   assume
 A2: f is monotone;
@@ -1336,15 +1348,16 @@ proof
   let S, T be non empty RelStr;
   let D be Subset of S;
   let f be Function of S, T;
-  assume ex_inf_of D,S & ex_inf_of f.:D,T or
+  assume that
+A1: ex_inf_of D,S & ex_inf_of f.:D,T or
   S is complete antisymmetric & T is complete antisymmetric;
-  then
-A1: ex_inf_of D,S & ex_inf_of f.:D,T by YELLOW_0:17;
+A2: ex_inf_of D,S by A1,YELLOW_0:17;
+A3: ex_inf_of f.:D,T by A1,YELLOW_0:17;
   assume
-A2: f is monotone;
-  inf D is_<=_than D by A1,YELLOW_0:def 10;
-  then f.(inf D) is_<=_than f.:D by A2,YELLOW_2:15;
-  hence thesis by A1,YELLOW_0:def 10;
+A4: f is monotone;
+  inf D is_<=_than D by A2,YELLOW_0:def 10;
+  then f.(inf D) is_<=_than f.:D by A4,YELLOW_2:15;
+  hence thesis by A3,YELLOW_0:def 10;
 end;
 
 Lm7: for S, T being complete LATTICE, D being Subset of S,
@@ -1483,58 +1496,57 @@ proof
 A1: j' = j;
   assume
 A2: f is monotone;
-A3: {(f*N).l where l is Element of (f*N) : l >= j'} =
+A3: dom f = the carrier of S by FUNCT_2:def 1;
+A4: the RelStr of (f*N) = the RelStr of N by WAYBEL_9:def 8;
+A5: dom (the mapping of N) = the carrier of N by FUNCT_2:def 1;
+A6: {(f*N).l where l is Element of (f*N) : l >= j'} c=
   f.:{N.l1 where l1 is Element of N : l1 >= j}
   proof
-A4: dom f = the carrier of S by FUNCT_2:def 1;
-A5: the RelStr of (f*N) = the RelStr of N by WAYBEL_9:def 8;
-A6: dom (the mapping of N) = the carrier of N by FUNCT_2:def 1;
-    thus {(f*N).l where l is Element of (f*N) : l >= j'} c=
-    f.:{N.l1 where l1 is Element of N : l1 >= j}
-    proof
-      let s be set;
-      assume s in {(f*N).l where l is Element of (f*N) : l >= j'};
-      then consider x being Element of (f*N) such that
-A7:   s = (f*N).x & x >= j';
-      reconsider x as Element of N by A5;
-      [j',x] in the InternalRel of (f*N) by A7,ORDERS_2:def 9;
-      then
-A8:   x >= j by A1,A5,ORDERS_2:def 9;
-A9:   s = (f*the mapping of N).x by A7,WAYBEL_9:def 8
-        .= f.(N.x) by A6,FUNCT_1:23;
-      N.x in dom f & N.x in {N.z where z is Element of N : z >= j} by A4,A8;
-      hence thesis
-      by A9,FUNCT_1:def 12;
-    end;
-    thus f.:{N.l1 where l1 is Element of N : l1 >= j} c=
-    {(f*N).l where l is Element of (f*N) : l >= j'}
-    proof
-      let s be set;
-      assume s in f.:{N.l1 where l1 is Element of N : l1 >= j};
-      then consider x be set such that
-A10:  x in dom f & x in {N.l1 where l1 is Element of N : l1 >= j} &
-      s = f.x by FUNCT_1:def 12;
-      consider l2 being Element of N such that
-A11:  x = N.l2 & l2 >= j by A10;
-      reconsider l2' = l2 as Element of (f*N) by A5;
-A12:  s = (f*the mapping of N).l2 by A6,A10,A11,FUNCT_1:23
-        .= (f*N).l2' by WAYBEL_9:def 8;
-      [j, l2] in the InternalRel of N by A11,ORDERS_2:def 9;
-      then l2' >= j' by A1,A5,ORDERS_2:def 9;
-      hence thesis by A12;
-    end;
+    let s be set;
+    assume s in {(f*N).l where l is Element of (f*N) : l >= j'};
+    then consider x being Element of (f*N) such that
+A7: s = (f*N).x and
+A8: x >= j';
+    reconsider x as Element of N by A4;
+    [j',x] in the InternalRel of (f*N) by A8,ORDERS_2:def 9;
+    then
+A9: x >= j by A1,A4,ORDERS_2:def 9;
+A10: s = (f*the mapping of N).x by A7,WAYBEL_9:def 8
+      .= f.(N.x) by A5,FUNCT_1:23;
+    N.x in {N.z where z is Element of N : z >= j} by A9;
+    hence thesis
+    by A3,A10,FUNCT_1:def 12;
+  end;
+A11: f.:{N.l1 where l1 is Element of N : l1 >= j} c=
+  {(f*N).l where l is Element of (f*N) : l >= j'}
+  proof
+    let s be set;
+    assume s in f.:{N.l1 where l1 is Element of N : l1 >= j};
+    then consider x be set such that
+    x in dom f and
+A12: x in {N.l1 where l1 is Element of N : l1 >= j} and
+A13: s = f.x by FUNCT_1:def 12;
+    consider l2 being Element of N such that
+A14: x = N.l2 and
+A15: l2 >= j by A12;
+    reconsider l2' = l2 as Element of (f*N) by A4;
+A16: s = (f*the mapping of N).l2 by A5,A13,A14,FUNCT_1:23
+      .= (f*N).l2' by WAYBEL_9:def 8;
+    [j, l2] in the InternalRel of N by A15,ORDERS_2:def 9;
+    then l2' >= j' by A1,A4,ORDERS_2:def 9;
+    hence thesis by A16;
   end;
   set K = {N.k where k is Element of N: k >= j};
   K c= the carrier of S
   proof
     let r be set;
     assume r in K;
-    then consider f being Element of N such that
-A13: r = N.f & f >= j;
-    thus thesis by A13;
+    then ex f being Element of N st ( r = N.f)&( f >= j);
+    hence thesis;
   end;
   then reconsider K as Subset of S;
-  {(f*N).l where l is Element of (f*N) : l >= j'} = f.:K by A3;
+  {(f*N).l where l is Element of (f*N) : l >= j'} = f.:K by A6,A11,
+  XBOOLE_0:def 10;
   hence thesis by A2,Lm7;
 end;
 
@@ -1551,9 +1563,7 @@ A1: [#]T <> {};
   then not f.x in downarrow t by WAYBEL_0:17;
   then
 A2: f.x in (downarrow t)` by XBOOLE_0:def 5;
-  downarrow t is closed by Lm3;
-  then
-A3: (downarrow t)` is open;
+A3: downarrow t is closed by Lm3;
   set U1 = f"((downarrow t)`);
 A4: U1 is open by A1,A3,TOPS_2:55;
   set D = {"/\"({N.k where k is Element of N: k >= j},S)
@@ -1561,22 +1571,24 @@ A4: U1 is open by A1,A3,TOPS_2:55;
   now
     let f be set;
     assume f in D;
-    then consider j be Element of N such that
-A5: f = "/\"({N.k where k is Element of N: k >= j},S);
-    thus f in the carrier of S by A5;
+
+    then ex j be Element of N st ( f = "/\"({N.k where k is Element
+    of N: k >= j},S));
+    hence f in the carrier of S;
   end;
   then reconsider D as Subset of S by TARSKI:def 3;
   reconsider D as non empty directed Subset of S by WAYBEL11:30;
-A6: x in U1 by A2,FUNCT_2:46;
+A5: x in U1 by A2,FUNCT_2:46;
   U1 is property(S) by A4,WAYBEL11:15;
   then consider y being Element of S such that
-A7: y in D & for x being Element of S st x in D & x >= y holds x in U1
-  by A6,WAYBEL11:def 3;
+A6: y in D and
+A7: for x being Element of S st x in D & x >= y holds x in U1
+  by A5,WAYBEL11:def 3;
   consider j be Element of N such that
-A8: y = "/\"({N.k where k is Element of N: k >= j},S) by A7;
+A8: y = "/\"({N.k where k is Element of N: k >= j},S) by A6;
   y <= y;
   then
-A9: y in U1 by A7;
+A9: y in U1 by A6,A7;
   the RelStr of (f * N) = the RelStr of N by WAYBEL_9:def 8;
   then reconsider j' = j as Element of (f * N);
 A10: dom f = the carrier of S by FUNCT_2:def 1;
@@ -1586,25 +1598,26 @@ A10: dom f = the carrier of S by FUNCT_2:def 1;
   now
     let g be set;
     assume g in fD;
-    then consider j be Element of (f*N) such that
-A11: g = "/\" ({(f*N).k where k is Element of (f*N) : k >= j},T);
-    thus g in the carrier of T by A11;
+
+    then ex j be Element of (f*N) st ( g = "/\" ({(f*N).k where k is
+    Element of (f*N) : k >= j},T));
+    hence g in the carrier of T;
   end;
   then reconsider fD as Subset of T by TARSKI:def 3;
-A12: f.y <= fy by A8,Th20;
+A11: f.y <= fy by A8,Th20;
   fy in fD;
   then fy <= sup fD by YELLOW_2:24;
-  then f.y <= t by A12,ORDERS_2:26;
+  then f.y <= t by A11,ORDERS_2:26;
   then f.y in downarrow t by WAYBEL_0:17;
   then
-A13: y in f"(downarrow t) by A10,FUNCT_1:def 13;
+A12: y in f"(downarrow t) by A10,FUNCT_1:def 13;
   f"((downarrow t)`) = f"([#]T) \ f"(downarrow t) by FUNCT_1:138
     .= [#]S \ f"(downarrow t) by TOPS_2:52
     .= (f"(downarrow t))`;
   then
-A14: y in U1 /\ U1` by A9,A13,XBOOLE_0:def 4;
+A13: y in U1 /\ U1` by A9,A12,XBOOLE_0:def 4;
   U1 misses U1` by XBOOLE_1:79;
-  hence contradiction by A14,XBOOLE_0:4;
+  hence contradiction by A13,XBOOLE_0:4;
 end;
 
 Lm10: for L being continuous Scott TopLattice,
@@ -1767,63 +1780,65 @@ proof
   let S, T be continuous lower-bounded Scott TopLattice;
   let f be Function of S, T;
   assume
-A1: ( for x being Element of S, y being Element of T
-  holds y << f.x iff ex w being Element of S st w << x & y << f.w );
+A1: for x being Element of S, y being Element of T
+  holds y << f.x iff ex w being Element of S st w << x & y << f.w;
 A2: [#]T <> {};
-  thus f is continuous
-  proof
-    now
-      let U1 be Subset of T;
+
+  now
+    let U1 be Subset of T;
+    assume
+A3: U1 is open;
+    set U1' = U1;
+A4: U1' is upper by A3,WAYBEL11:def 4;
+    reconsider fU = f"U1 as Subset of S;
+
+A5: Int fU c= fU by TOPS_1:44;
+    fU c= Int fU
+    proof
+      let xx be set;
       assume
-A3:   U1 is open;
-      set U1' = U1;
-A4:   U1' is upper by A3,WAYBEL11:def 4;
-      reconsider fU = f"U1 as Subset of S;
-      Int fU = fU
+A6:   xx in fU;
+      then reconsider x = xx as Element of S;
+A7:   f.x in U1 by A6,FUNCT_1:def 13;
+      reconsider p = f.x as Element of T;
+      consider u being Element of T such that
+A8:   u << p and
+A9:   u in U1' by A3,A7,Lm10;
+      consider w being Element of S such that
+A10:  w << x and
+A11:  u << f.w by A1,A8;
+      f.:(wayabove w) c= U1
       proof
-        thus Int fU c= fU by TOPS_1:44;
-        thus fU c= Int fU
-        proof
-          let xx be set;
-          assume
-A5:       xx in fU;
-          then reconsider x = xx as Element of S;
-A6:       f.x in U1 by A5,FUNCT_1:def 13;
-          reconsider p = f.x as Element of T;
-          consider u being Element of T such that
-A7:       u << p & u in U1' by A3,A6,Lm10;
-          consider w being Element of S such that
-A8:       w << x & u << f.w by A1,A7;
-          f.:(wayabove w) c= U1
-          proof
-            let h be set;
-            assume h in f.:(wayabove w);
-            then consider z be set such that
-A9:         z in dom f & z in wayabove w & h = f.z by FUNCT_1:def 12;
-            reconsider z as Element of S by A9;
-            w << z by A9,WAYBEL_3:8;
-            then u << f.z by A1,A8;
-            then u <= f.z by WAYBEL_3:1;
-            hence thesis by A4,A7,A9,WAYBEL_0:def 20;
-          end;
-          then
-A10:      f"(f.:(wayabove w)) c= f"U1 by RELAT_1:178;
-          wayabove w c= f"(f.:(wayabove w)) by FUNCT_2:50;
-          then
-A11:      wayabove w c= f"U1 by A10,XBOOLE_1:1;
-A12:      Int
+        let h be set;
+        assume h in f.:(wayabove w);
+        then consider z be set such that
+A12:    z in dom f and
+A13:    z in wayabove w and
+A14:    h = f.z by FUNCT_1:def 12;
+        reconsider z as Element of S by A12;
+        w << z by A13,WAYBEL_3:8;
+        then u << f.z by A1,A11;
+        then u <= f.z by WAYBEL_3:1;
+        hence thesis by A4,A9,A14,WAYBEL_0:def 20;
+      end;
+      then
+A15:  f"(f.:(wayabove w)) c= f"U1 by RELAT_1:178;
+      wayabove w c= f"(f.:(wayabove w)) by FUNCT_2:50;
+      then
+A16:  wayabove w c= f"U1 by A15,XBOOLE_1:1;
+A17:  Int
 
 fU = union {wayabove g where g is Element of S : wayabove g c= fU} by Lm14;
-A13:      x in wayabove w by A8;
-          wayabove w in {wayabove g where g is Element of S : wayabove g c= fU
-          } by A11;
-          hence thesis by A12,A13,TARSKI:def 4;
-        end;
-      end;
-      hence f"U1 is open;
+A18:  x in wayabove w by A10;
+
+      wayabove w in {wayabove g where g is Element of S : wayabove g c= fU
+      } by A16;
+      hence thesis by A17,A18,TARSKI:def 4;
     end;
-    hence thesis by A2,TOPS_2:55;
+    hence f"U1 is open by A5,XBOOLE_0:def 10;
   end;
+
+  hence f is continuous by A2,TOPS_2:55;
 end;
 
 begin :: Necessary and sufficient conditions of Scott-continuity
@@ -1833,7 +1848,7 @@ begin :: Necessary and sufficient conditions of Scott-continuity
 theorem
   for S, T being complete Scott TopLattice, f being Function of S, T holds
   f is continuous iff for N be net of S holds f.(lim_inf N) <= lim_inf (f*N)
-              by Lm4,Lm9,Lm8;
+  by Lm4,Lm8,Lm9;
 
 :: Proposition 2.1, p. 112, (1) <=> (3)
 
@@ -1878,13 +1893,12 @@ end;
 theorem Th23:
   for S, T being continuous complete Scott TopLattice,
   f being Function of S, T holds ( f is continuous iff
-  ( for x being Element of S, y being Element of T
-  holds y << f.x iff ex w being Element of S st w << x & y << f.w ))
+  for x being Element of S, y being Element of T
+  holds y << f.x iff ex w being Element of S st w << x & y << f.w )
 proof
   let S, T be continuous complete Scott TopLattice, f be Function of S, T;
   hereby
     assume f is continuous;
-    then f is directed-sups-preserving;
     then for x being Element of S holds
     f.x = "\/"({ f.w where w is Element of S : w << x },T) by Th12;
     hence for x being Element of S, y being Element of T
@@ -1903,8 +1917,8 @@ theorem Th24:
 proof
   let S, T be continuous complete Scott TopLattice, f be Function of S, T;
   thus f is continuous implies
-    for x being Element of S holds
-    f.x = "\/"({ f.w where w is Element of S : w << x },T) by Th12;
+  for x being Element of S holds
+  f.x = "\/"({ f.w where w is Element of S : w << x },T) by Th12;
   assume for x being Element of S holds
   f.x = "\/"({ f.w where w is Element of S : w << x },T);
   then f is directed-sups-preserving by Lm16;
@@ -1915,60 +1929,65 @@ Lm17: for S, T being complete Scott TopLattice, f being Function of S, T holds
 S is algebraic & T is algebraic implies
 ( ( for x being Element of S, y being Element of T
 holds y << f.x iff ex w being Element of S st w << x & y << f.w ) implies
-( for x being Element of S, k being Element of T st
+for x being Element of S, k being Element of T st
 k in the carrier of CompactSublatt T
 holds (k <= f.x iff ex j being Element of S st
-j in the carrier of CompactSublatt S & j <= x & k <= f.j) ) )
+j in the carrier of CompactSublatt S & j <= x & k <= f.j) )
 proof
   let S, T be complete Scott TopLattice, f be Function of S, T;
+  assume that
+A1: S is algebraic and
+A2: T is algebraic;
+A3: S is continuous by A1,WAYBEL_8:7;
+A4: T is continuous by A2,WAYBEL_8:7;
   assume
-A1: S is algebraic & T is algebraic;
-  then
-A2: S is continuous & T is continuous by WAYBEL_8:7;
-  assume
-A3: for x being Element of S, y being Element of T
+A5: for x being Element of S, y being Element of T
   holds y << f.x iff ex w being Element of S st w << x & y << f.w;
-  then f is continuous by A2,Th23;
   then
-A4: f is monotone;
+A6: f is continuous by A3,A4,Th23;
   let x be Element of S, k be Element of T;
   assume
-A5: k in the carrier of CompactSublatt T;
+A7: k in the carrier of CompactSublatt T;
   hereby
     assume k <= f.x;
-    then k << f.x by A5,WAYBEL_8:1;
+    then k << f.x by A7,WAYBEL_8:1;
     then consider w being Element of S such that
-A6: w << x & k << f.w by A3;
+A8: w << x and
+A9: k << f.w by A5;
     consider w1 being Element of S such that
-A7: w1 in the carrier of CompactSublatt S & w <= w1 & w1 <= x
-    by A1,A6,WAYBEL_8:7;
-A8: w <= x & k <= f.w by A6,WAYBEL_3:1;
+A10: w1 in the carrier of CompactSublatt S and
+A11: w <= w1 and
+A12: w1 <= x
+    by A1,A8,WAYBEL_8:7;
+A13: k <= f.w by A9,WAYBEL_3:1;
     take w1;
-    thus w1 in the carrier of CompactSublatt S by A7;
-    thus w1 <= x by A7;
-    f.w <= f.w1 by A4,A7,WAYBEL_1:def 2;
-    hence k <= f.w1 by A8,ORDERS_2:26;
+    thus w1 in the carrier of CompactSublatt S by A10;
+    thus w1 <= x by A12;
+    f.w <= f.w1 by A6,A11,WAYBEL_1:def 2;
+    hence k <= f.w1 by A13,ORDERS_2:26;
   end;
   given j being Element of S such that
-A9: j in the carrier of CompactSublatt S & j <= x & k <= f.j;
-  f is continuous by A2,A3,Lm15;
-  then f is monotone;
-  then f.j <= f.x by A9,WAYBEL_1:def 2;
-  hence thesis by A9,ORDERS_2:26;
+  j in the carrier of CompactSublatt S and
+A14: j <= x and
+A15: k <= f.j;
+  f is continuous by A3,A4,A5,Lm15;
+  then f.j <= f.x by A14,WAYBEL_1:def 2;
+  hence thesis by A15,ORDERS_2:26;
 end;
 
 Lm18: for S, T being complete Scott TopLattice, f being Function of S, T holds
-S is algebraic & T is algebraic implies
+T is algebraic implies
 ( ( for x being Element of S, k being Element of T st
 k in the carrier of CompactSublatt T
 holds (k <= f.x iff ex j being Element of S st
 j in the carrier of CompactSublatt S & j <= x & k <= f.j) ) implies
-( for x being Element of S, y being Element of T
-holds y << f.x iff ex w being Element of S st w << x & y << f.w ))
+for x being Element of S, y being Element of T
+holds y << f.x iff ex w being Element of S st w << x & y << f.w )
 proof
   let S, T be complete Scott TopLattice, f be Function of S, T;
-  assume
-A1: S is algebraic & T is algebraic;
+  assume that
+
+A1: T is algebraic;
   assume
 A2: for x being Element of S, k being Element of T st
   k in the carrier of CompactSublatt T
@@ -1978,31 +1997,40 @@ A2: for x being Element of S, k being Element of T st
   hereby
     assume y << f.x;
     then consider w being Element of T such that
-A3: w in the carrier of CompactSublatt T & y <= w & w <= f.x by A1,WAYBEL_8:7;
+A3: w in the carrier of CompactSublatt T and
+A4: y <= w and
+A5: w <= f.x by A1,WAYBEL_8:7;
     consider j being Element of S such that
-A4: j in the carrier of CompactSublatt S & j <= x & w <= f.j by A2,A3;
+A6: j in the carrier of CompactSublatt S and
+A7: j <= x and
+A8: w <= f.j by A2,A3,A5;
     take j;
-    thus j << x by A4,WAYBEL_8:1;
-    thus y << f.j by A3,A4,WAYBEL_8:1;
+    thus j << x by A6,A7,WAYBEL_8:1;
+    thus y << f.j by A3,A4,A8,WAYBEL_8:1;
   end;
   given w being Element of S such that
-A5: w << x & y << f.w;
+A9: w << x and
+A10: y << f.w;
   consider h being Element of T such that
-A6: h in the carrier of CompactSublatt T & y <= h & h <= f.w
-  by A1,A5,WAYBEL_8:7;
+A11: h in the carrier of CompactSublatt T and
+A12: y <= h and
+A13: h <= f.w
+  by A1,A10,WAYBEL_8:7;
   consider j being Element of S such that
-A7: j in the carrier of CompactSublatt S & j <= w & h <= f.j by A2,A6;
-  j << x by A5,A7,WAYBEL_3:2;
+A14: j in the carrier of CompactSublatt S and
+A15: j <= w and
+A16: h <= f.j by A2,A11,A13;
+  j << x by A9,A15,WAYBEL_3:2;
   then j <= x by WAYBEL_3:1;
-  then h <= f.x by A2,A6,A7;
-  hence thesis by A6,WAYBEL_8:1;
+  then h <= f.x by A2,A11,A14,A16;
+  hence thesis by A11,A12,WAYBEL_8:1;
 end;
 
 Lm19: for S, T being complete Scott TopLattice, f being Function of S, T holds
 S is algebraic & T is algebraic implies ( ( for x being Element of S holds
 f.x = "\/"({ f.w where w is Element of S : w << x },T) ) implies
-( for x being Element of S holds
-f.x = "\/"({ f.w where w is Element of S : w <= x & w is compact },T) ) )
+for x being Element of S holds
+f.x = "\/"({ f.w where w is Element of S : w <= x & w is compact },T) )
 proof
   let S, T be complete Scott TopLattice, f be Function of S, T;
   assume that
@@ -2066,9 +2094,9 @@ A6: f.X = "\/"(f.:compactbelow X,T) by A3,WAYBEL_8:def 2;
     { f.A(w) where w is Element of S : Q[w]} from FuncFraenkelSL(A5);
     then
 A7: f.Y = "\/"(f.:compactbelow Y,T) by A4,WAYBEL_8:def 2;
-    ex_sup_of f.:compactbelow X,T & ex_sup_of f.:compactbelow Y,T by
-YELLOW_0:17;
-    hence thesis by A2,A6,A7,RELAT_1:156,YELLOW_0:34;
+A8: ex_sup_of f.:compactbelow X,T by YELLOW_0:17;
+    ex_sup_of f.:compactbelow Y,T by YELLOW_0:17;
+    hence thesis by A2,A6,A7,A8,RELAT_1:156,YELLOW_0:34;
   end;
 end;
 
@@ -2096,19 +2124,22 @@ A4: FW c= FX
     let a be set;
     assume a in { f.w where w is Element of S : w <= x & w is compact };
     then consider w be Element of S such that
-A5: a = f.w & w <= x & w is compact;
-    w << w by A5,WAYBEL_3:def 2;
-    then w << x by A5,WAYBEL_3:2;
+A5: a = f.w and
+A6: w <= x and
+A7: w is compact;
+    w << w by A7,WAYBEL_3:def 2;
+    then w << x by A6,WAYBEL_3:2;
     hence thesis by A5;
   end;
-A6: fx is_>=_than FX
+A8: fx is_>=_than FX
   proof
     let b be Element of T;
     assume b in FX;
     then consider ww be Element of S such that
-A7: b = f.ww & ww << x;
-    ww <= x by A7,WAYBEL_3:1;
-    hence thesis by A2,A7,WAYBEL_1:def 2;
+A9: b = f.ww and
+A10: ww << x;
+    ww <= x by A10,WAYBEL_3:1;
+    hence thesis by A2,A9,WAYBEL_1:def 2;
   end;
   for b being Element of T st b is_>=_than FX holds fx <= b
   proof
@@ -2117,7 +2148,7 @@ A7: b = f.ww & ww << x;
     then b is_>=_than FW by A4,YELLOW_0:9;
     hence thesis by A3,YELLOW_0:32;
   end;
-  hence thesis by A6,YELLOW_0:30;
+  hence thesis by A8,YELLOW_0:30;
 end;
 
 :: Proposition 2.1, p. 112, (1) <=> (6)
@@ -2131,27 +2162,29 @@ theorem
   j in the carrier of CompactSublatt S & j <= x & k <= f.j) )
 proof
   let S, T be complete Scott TopLattice, f be Function of S, T;
-  assume
-A1: S is algebraic & T is algebraic;
-  then
-A2: S is continuous & T is continuous by WAYBEL_8:7;
+  assume that
+A1: S is algebraic and
+A2: T is algebraic;
+A3: S is continuous by A1,WAYBEL_8:7;
+A4: T is continuous by A2,WAYBEL_8:7;
   hereby
     assume f is continuous;
-    then ( for x being Element of S, y being Element of T
+    then for x being Element of S, y being Element of T
     holds y << f.x iff ex w being Element of S st
-    w << x & y << f.w ) by A2,Th23;
+    w << x & y << f.w by A3,A4,Th23;
     hence for x being Element of S, k being Element of T st
     k in the carrier of CompactSublatt T
     holds (k <= f.x iff ex j being Element of S st
-    j in the carrier of CompactSublatt S & j <= x & k <= f.j) by A1,Lm17;
+    j in the carrier of CompactSublatt S & j <= x & k <= f.j) by A1,A2,Lm17;
   end;
   assume for x being Element of S, k being Element of T st
   k in the carrier of CompactSublatt T
   holds (k <= f.x iff ex j being Element of S st
   j in the carrier of CompactSublatt S & j <= x & k <= f.j);
   then for x being Element of S, y being Element of T
-  holds y << f.x iff ex w being Element of S st w << x & y << f.w by A1,Lm18;
-  hence thesis by A2,Th23;
+  holds y << f.x iff ex w being Element of S st w << x & y << f.w by A2,
+  Lm18;
+  hence thesis by A3,A4,Th23;
 end;
 
 :: Proposition 2.1, p. 112, (1) <=> (7)
@@ -2163,23 +2196,24 @@ theorem
   f.x = "\/"({ f.w where w is Element of S : w <= x & w is compact },T ) )
 proof
   let S, T be complete Scott TopLattice, f be Function of S, T;
-  assume
-A1: S is algebraic & T is algebraic;
-  then
-A2: S is continuous & T is continuous by WAYBEL_8:7;
+  assume that
+A1: S is algebraic and
+A2: T is algebraic;
+A3: S is continuous by A1,WAYBEL_8:7;
+A4: T is continuous by A2,WAYBEL_8:7;
   hereby
     assume f is continuous;
     then for x being Element of S holds
-    f.x = "\/"({ f.w where w is Element of S : w << x },T) by A2,Th24;
+    f.x = "\/"({ f.w where w is Element of S : w << x },T) by A3,A4,Th24;
     hence for x being Element of S holds
     f.x = "\/"({ f.w where w is Element of S : w <= x & w is compact },T )
-    by A1,Lm19;
+    by A1,A2,Lm19;
   end;
   assume for x being Element of S holds f.x = "\/"
   ({ f.w where w is Element of S : w <= x & w is compact },T );
   then for x being Element of S holds
   f.x = "\/"({ f.w where w is Element of S : w << x },T) by Th26;
-  hence thesis by A2,Th24;
+  hence thesis by A3,A4,Th24;
 end;
 
 theorem

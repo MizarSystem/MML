@@ -45,100 +45,114 @@ definition
 end;
 
 theorem Th1:
-  ({a,b} on P implies {b,a} on P)
-  & ({a,b,c} on P implies {a,c,b} on P & {b,a,c} on P & {b,c,a} on P &
-  {c,a,b} on P & {c,b,a} on P) & (a on P,Q implies a on Q,P)
-  & (a on P,Q,R implies a on P,R,Q & a on Q,P,R & a on Q,R,P &
+  ({a,b} on P implies {b,a} on P) & ({a,b,c} on P implies {a,c,b}
+  on P & {b,a,c} on P & {b,c,a} on P & {c,a,b} on P & {c,b,a} on P) & (a on P,Q
+implies a on Q,P) & (a on P,Q,R implies a on P,R,Q & a on Q,P,R & a on Q,R,P &
   a on R,P,Q & a on R,Q,P)
 proof
   thus {a,b} on P implies {b,a} on P;
-  thus {a,b,c} on P implies {a,c,b} on P & {b,a,c} on P &
-  {b,c,a} on P & {c,a,b} on P & {c,b,a} on P
+  thus {a,b,c} on P implies {a,c,b} on P & {b,a,c} on P & {b,c,a} on P & {c,a,
+  b} on P & {c,b,a} on P
   proof
-    assume {a,b,c} on P;
-    then a on P & b on P & c on P by INCSP_1:12;
-    hence thesis by INCSP_1:12;
+    assume
+A1: {a,b,c} on P;
+    then
+A2: c on P by INCSP_1:12;
+    a on P & b on P by A1,INCSP_1:12;
+    hence thesis by A2,INCSP_1:12;
   end;
   thus a on P,Q implies a on Q,P
   proof
-    assume a on P,Q;
+    assume
+    a on P,Q;
     then a on P & a on Q by Def2;
     hence thesis by Def2;
   end;
-  assume a on P,Q,R;
-  then a on P & a on Q & a on R by Def3;
-  hence thesis by Def3;
+  assume
+A3: a on P,Q,R;
+  then
+A4: a on R by Def3;
+  a on P & a on Q by A3,Def3;
+  hence thesis by A4,Def3;
 end;
 
 definition
   let IT be IncProjStr;
   attr IT is configuration means
   :Def4:
-  for p,q being POINT of IT, P,Q being LINE of IT
-  st p on P & q on P & p on Q & q on Q holds p = q or P = Q;
+  for p,q being POINT of IT, P,Q being
+  LINE of IT st p on P & q on P & p on Q & q on Q holds p = q or P = Q;
 end;
 
 theorem Th2:
-  G is configuration iff for p,q,P,Q st {p,q} on P & {p,q} on Q holds
-  p = q or P = Q
+  G is configuration iff for p,q,P,Q st {p,q} on P & {p,q} on Q
+  holds p = q or P = Q
 proof
   hereby
     assume
 A1: G is configuration;
     let p,q,P,Q;
-    assume {p,q} on P & {p,q} on Q;
-    then p on P & q on P & p on Q & q on Q by INCSP_1:11;
-    hence p = q or P = Q by A1,Def4;
+    assume that
+A2: {p,q} on P and
+A3: {p,q} on Q;
+A4: p on Q & q on Q by A3,INCSP_1:11;
+    p on P & q on P by A2,INCSP_1:11;
+    hence p = q or P = Q by A1,A4,Def4;
   end;
   hereby
     assume
-A2: for p,q,P,Q st {p,q} on P & {p,q} on Q holds p = q or P = Q;
+A5: for p,q,P,Q st {p,q} on P & {p,q} on Q holds p = q or P = Q;
     now
       let p,q,P,Q;
-      assume p on P & q on P & p on Q & q on Q;
+      assume
+      p on P & q on P & p on Q & q on Q;
       then {p,q} on P & {p,q} on Q by INCSP_1:11;
-      hence p = q or P = Q by A2;
+      hence p = q or P = Q by A5;
     end;
     hence G is configuration by Def4;
   end;
 end;
 
 theorem Th3:
-  G is configuration iff
-  for p,q,P,Q st p on P,Q & q on P,Q holds p = q or P = Q
+  G is configuration iff for p,q,P,Q st p on P,Q & q on P,Q holds p
+  = q or P = Q
 proof
   hereby
     assume
 A1: G is configuration;
     let p,q,P,Q;
-    assume p on P,Q & q on P,Q;
-    then p on P & q on P & p on Q & q on Q by Def2;
-    hence p = q or P = Q by A1,Def4;
+    assume
+A2: p on P,Q & q on P,Q;
+    then
+A3: p on Q & q on Q by Def2;
+    p on P & q on P by A2,Def2;
+    hence p = q or P = Q by A1,A3,Def4;
   end;
   hereby
     assume
-A2: for p,q,P,Q st p on P,Q & q on P,Q holds p = q or P = Q;
+A4: for p,q,P,Q st p on P,Q & q on P,Q holds p = q or P = Q;
     now
       let p,q,P,Q;
-      assume p on P & q on P & p on Q & q on Q;
+      assume
+      p on P & q on P & p on Q & q on Q;
       then p on P,Q & q on P,Q by Def2;
-      hence p = q or P = Q by A2;
+      hence p = q or P = Q by A4;
     end;
     hence G is configuration by Def4;
   end;
 end;
 
 theorem Th4:
-  G is IncProjSp iff G is configuration & (for p,q ex P st {p,q} on P)
-  & (ex p,P st p|'P)
-  & (for P ex a,b,c st a,b,c are_mutually_different & {a,b,c} on P)
-  & (for a,b,c,d,p,M,N,P,Q st {a,b,p} on M & {c,d,p} on N & {a,c} on P &
-  {b,d} on Q & p|'P & p|'Q & M<>N holds ex q st q on P,Q)
+  G is IncProjSp iff G is configuration & (for p,q ex P st {p,q} on
+P) & (ex p,P st p|'P) & (for P ex a,b,c st a,b,c are_mutually_different & {a,b,
+c} on P) & for a,b,c,d,p,M,N,P,Q st {a,b,p} on M & {c,d,p} on N & {a,c} on P &
+  {b,d} on Q & p|'P & p|'Q & M<>N holds ex q st q on P,Q
 proof
   hereby
     assume
 A1: G is IncProjSp;
-    then for p,q,P,Q st p on P & q on P & p on Q & q on Q holds p = q or P = Q
+    then
+    for p,q,P,Q st p on P & q on P & p on Q & q on Q holds p = q or P = Q
     by INCPROJ:def 9;
     hence G is configuration by Def4;
     thus for p,q ex P st {p,q} on P
@@ -154,71 +168,78 @@ A2:   p on P & q on P by A1,INCPROJ:def 10;
     proof
       let P;
       consider a,b,c such that
-A3:   a<>b & b<>c & c <>a & a on P & b on P & c on P by A1,INCPROJ:def 12;
+A3:   a<>b & b<>c & c <>a and
+A4:   a on P & b on P & c on P by A1,INCPROJ:def 12;
       take a,b,c;
       thus a,b,c are_mutually_different by A3,ZFMISC_1:def 5;
-      thus thesis by A3,INCSP_1:12;
+      thus thesis by A4,INCSP_1:12;
     end;
-    thus for a,b,c,d,p,M,N,P,Q st {a,b,p} on M & {c,d,p} on N & {a,c} on P &
-    {b,d} on Q & p|'P & p|'Q & M<>N holds ex q st q on P,Q
+    thus for a,b,c,d,p,M,N,P,Q st {a,b,p} on M & {c,d,p} on N & {a,c} on P & {
+    b,d} on Q & p|'P & p|'Q & M<>N holds ex q st q on P,Q
     proof
       let a,b,c,d,p,M,N,P,Q such that
-A4:   {a,b,p} on M & {c,d,p} on N and
-A5:   {a,c} on P & {b,d} on Q and
-A6:   p|'P & p|'Q & M<>N;
-A7:   a on M & b on M & p on M & c on N & d on N & p on N by A4,INCSP_1:12;
-      a on P & c on P & b on Q & d on Q by A5,INCSP_1:11;
+A5:   {a,b,p} on M and
+A6:   {c,d,p} on N and
+A7:   {a,c} on P and
+A8:   {b,d} on Q and
+A9:   p|'P & p|'Q & M<>N;
+A10:  a on M & b on M by A5,INCSP_1:12;
+A11:  a on P & c on P by A7,INCSP_1:11;
+A12:  d on N & p on N by A6,INCSP_1:12;
+A13:  b on Q & d on Q by A8,INCSP_1:11;
+      p on M & c on N by A5,A6,INCSP_1:12;
       then consider q such that
-A8:   q on P & q on Q by A1,A6,A7,INCPROJ:def 13;
+A14:  q on P & q on Q by A1,A9,A10,A12,A11,A13,INCPROJ:def 13;
       take q;
-      thus thesis by A8,Def2;
+      thus thesis by A14,Def2;
     end;
   end;
   hereby
     assume that
-A9: G is configuration and
-A10: for p,q ex P st {p,q} on P and
-A11: ex p,P st p|'P and
-A12: for P ex a,b,c st a,b,c are_mutually_different & {a,b,c} on P and
-A13: for a,b,c,d,p,M,N,P,Q st {a,b,p} on M & {c,d,p} on N & {a,c} on P &
-    {b,d} on Q & p|'P & p|'Q & M<>N holds ex q st q on P,Q;
-A14: for p,q,P,Q st p on P & q on P & p on Q & q on Q holds
-    p = q or P = Q by A9,Def4;
-A15: now
+A15: G is configuration and
+A16: for p,q ex P st {p,q} on P and
+A17: ex p,P st p|'P and
+A18: for P ex a,b,c st a,b,c are_mutually_different & {a,b,c} on P and
+A19: for a,b,c,d,p,M,N,P,Q st {a,b,p} on M & {c,d,p} on N & {a,c} on P
+    & {b,d} on Q & p|'P & p|'Q & M<>N holds ex q st q on P,Q;
+A20: now
       let p,q;
       consider P such that
-A16:  {p,q} on P by A10;
+A21:  {p,q} on P by A16;
       take P;
-      thus p on P & q on P by A16,INCSP_1:11;
+      thus p on P & q on P by A21,INCSP_1:11;
     end;
-    consider p,P such that
-A17: p|'P by A11;
-A18: now
+A22: now
       let P;
       consider a,b,c such that
-A19:  a,b,c are_mutually_different & {a,b,c} on P by A12;
-A20:  a<>b & b<>c & c <>a by A19,ZFMISC_1:def 5;
-      a on P & b on P & c on P by A19,INCSP_1:12;
-      hence ex a,b,c st a<>b & b<>c & c <>a & a on P & b on P & c on P by A20;
+A23:  a,b,c are_mutually_different and
+A24:  {a,b,c} on P by A18;
+A25:  a<>b & b<>c by A23,ZFMISC_1:def 5;
+A26:  b on P & c on P by A24,INCSP_1:12;
+      c <>a & a on P by A23,A24,INCSP_1:12,ZFMISC_1:def 5;
+      hence
+      ex a,b,c st a<>b & b<>c & c <>a & a on P & b on P & c on P by A25,
+      A26;
     end;
-    for a,b,c,d,p,q,M,N,P,Q st a on M & b on M & c on N & d on N & p on M &
-    p on N & a on P
-    & c on P & b on Q & d on Q & not p on P & not p on Q & M<>N holds
-    ex q st q on P & q on Q
+A27: for a,b,c,d,p,q,M,N,P,Q st a on M & b on M & c on N & d on N & p on M
+& p on N & a on P & c on P & b on Q & d on Q & not p on P & not p on Q & M<>N
+    holds ex q st q on P & q on Q
     proof
       let a,b,c,d,p,q,M,N,P,Q such that
-A21:  a on M & b on M & c on N & d on N & p on M & p on N & a on P &
-      c on P & b on Q & d on Q and
-A22:  not p on P & not p on Q & M<>N;
-A23:  {a,b,p} on M & {c,d,p} on N by A21,INCSP_1:12;
-      {a,c} on P & {b,d} on Q by A21,INCSP_1:11;
+A28:  a on M & b on M & c on N & d on N & p on M & p on N and
+A29:  a on P & c on P & b on Q & d on Q and
+A30:  ( not p on P)& not p on Q & M<>N;
+A31:  {a,c} on P & {b,d} on Q by A29,INCSP_1:11;
+      {a,b,p} on M & {c,d,p} on N by A28,INCSP_1:12;
       then consider q1 being POINT of G such that
-A24:  q1 on P,Q by A13,A22,A23;
+A32:  q1 on P,Q by A19,A30,A31;
       take q1;
-      thus thesis by A24,Def2;
+      thus thesis by A32,Def2;
     end;
-    hence G is IncProjSp by A14,A15,A17,A18,INCPROJ:def 9,def 10,def 11,def 12
-    ,def 13;
+    for p,q,P,Q st p on P & q on P & p on Q & q on Q holds p = q or P = Q
+    by A15,Def4;
+    hence G is IncProjSp by A17,A20,A22,A27,INCPROJ:def 9,def 10,def 11 ,
+    def 12,def 13;
   end;
 end;
 
@@ -266,30 +287,36 @@ definition
   let G,a,b,c,d;
   pred a,b,c,d is_a_quadrangle means
   :Def6:
-  a,b,c is_a_triangle
-  & b,c,d is_a_triangle & c,d,a is_a_triangle & d,a,b is_a_triangle;
+  a,b,c is_a_triangle & b,c,d
+  is_a_triangle & c,d,a is_a_triangle & d,a,b is_a_triangle;
 end;
 
 theorem Th7:
   G is IncProjSp implies ex A,B st A<>B
 proof
-  assume
-A1: G is IncProjSp;
   consider a;
-  consider A,B,C such that
-A2: a on A & a on B & a on C & A<>B & B<>C & C<>A by A1,PROJRED1:5;
+  assume
+  G is IncProjSp;
+  then consider A,B,C such that
+  a on A and
+  a on B and
+  a on C and
+A1: A<>B and
+  B<>C and
+  C<>A by PROJRED1:5;
   take A,B;
-  thus thesis by A2;
+  thus thesis by A1;
 end;
 
 theorem Th8:
-  G is IncProjSp & a on A implies
-  ex b,c st {b,c} on A & a,b,c are_mutually_different
+  G is IncProjSp implies ex b,c st {b,c} on A & a,b,c
+  are_mutually_different
 proof
   assume
-A1: G is IncProjSp & a on A;
+A1: G is IncProjSp;
   then consider b such that
-A2: b on A & b<>a & b<>a by PROJRED1:8;
+A2: b on A & b<>a and
+  b<>a by PROJRED1:8;
   consider c such that
 A3: c on A & c <>a & c <>b by A1,PROJRED1:8;
   take b,c;
@@ -297,48 +324,59 @@ A3: c on A & c <>a & c <>b by A1,PROJRED1:8;
 end;
 
 theorem Th9:
-  G is IncProjSp & a on A & A<>B implies ex b st b on A & b|'B & a<>b
+  G is IncProjSp & A<>B implies ex b st b on A & b|'B & a<>b
 proof
-  assume
-A1: G is IncProjSp & a on A & A<>B;
-  then consider b,c such that
-A2: {b,c} on A & a,b,c are_mutually_different by Th8;
-A3: a<>b & a<>c & b<>c by A2,ZFMISC_1:def 5;
-A4: b on A & c on A by A2,INCSP_1:11;
-  now per cases by A1,A3,A4,INCPROJ:def 9;
-    case b|'B;
-      hence thesis by A3,A4;
+  assume that
+A1: G is IncProjSp and
+A2: A<>B;
+  consider b,c such that
+A3: {b,c} on A and
+A4: a,b,c are_mutually_different by A1,Th8;
+A5: a<>c by A4,ZFMISC_1:def 5;
+A6: c on A by A3,INCSP_1:11;
+A7: b<>c by A4,ZFMISC_1:def 5;
+A8: b on A by A3,INCSP_1:11;
+A9: a<>b by A4,ZFMISC_1:def 5;
+  now
+    per cases by A1,A2,A7,A8,A6,INCPROJ:def 9;
+    case
+      b|'B;
+      hence thesis by A9,A8;
     end;
-    case c|'B;
-      hence thesis by A3,A4;
+    case
+      c|'B;
+      hence thesis by A5,A6;
     end;
   end;
   hence thesis;
 end;
 
 theorem Th10:
-  G is configuration & {a1,a2} on A & a1<>a2 & b|'A
-  implies a1,a2,b is_a_triangle
+  G is configuration & {a1,a2} on A & a1<>a2 & b|'A implies a1,a2,
+  b is_a_triangle
 proof
-  assume
-A1: G is configuration & {a1,a2} on A & a1<>a2 & b|'A & a1,a2,b is_collinear;
-  then
-A2: a1 on A & a2 on A by INCSP_1:11;
-  consider P such that
-A3: a1 on P & a2 on P & b on P by A1,Th5;
-  thus contradiction by A1,A2,A3,Def4;
+  assume that
+A1: G is configuration and
+A2: {a1,a2} on A and
+A3: a1<>a2 & b|'A and
+A4: a1,a2,b is_collinear;
+A5: a1 on A & a2 on A by A2,INCSP_1:11;
+  ex P st a1 on P & a2 on P & b on P by A4,Th5;
+  hence contradiction by A1,A3,A5,Def4;
 end;
 
 theorem Th11:
-  a,b,c is_collinear implies a,c,b is_collinear & b,a,c is_collinear
-  & b,c,a is_collinear & c,a,b is_collinear & c,b,a is_collinear
+  a,b,c is_collinear implies a,c,b is_collinear & b,a,c
+  is_collinear & b,c,a is_collinear & c,a,b is_collinear & c,b,a is_collinear
 proof
-  assume a,b,c is_collinear;
+  assume
+  a,b,c is_collinear;
   then consider P such that
 A1: {a,b,c} on P by Def5;
-  {a,c,b} on P & {b,a,c} on P & {b,c,a} on P &
-  {c,a,b} on P & {c,b,a} on P by A1,Th1;
-  hence thesis by Def5;
+A2: {c,b,a} on P by A1,Th1;
+A3: {b,c,a} on P & {c,a,b} on P by A1,Th1;
+  {a,c,b} on P & {b,a,c} on P by A1,Th1;
+  hence thesis by A3,A2,Def5;
 end;
 
 theorem
@@ -346,76 +384,98 @@ theorem
   & b,c,a is_a_triangle & c,a,b is_a_triangle & c,b,a is_a_triangle by Th11;
 
 theorem Th13:
-  a,b,c,d is_a_quadrangle implies
-  a,c,b,d is_a_quadrangle & b,a,c,d is_a_quadrangle
-  & b,c,a,d is_a_quadrangle & c,a,b,d is_a_quadrangle
-  & c,b,a,d is_a_quadrangle & a,b,d,c is_a_quadrangle
-  & a,c,d,b is_a_quadrangle & b,a,d,c is_a_quadrangle
-  & b,c,d,a is_a_quadrangle & c,a,d,b is_a_quadrangle
-  & c,b,d,a is_a_quadrangle & a,d,b,c is_a_quadrangle
-  & a,d,c,b is_a_quadrangle & b,d,a,c is_a_quadrangle
-  & b,d,c,a is_a_quadrangle & c,d,a,b is_a_quadrangle
-  & c,d,b,a is_a_quadrangle & d,a,b,c is_a_quadrangle
-  & d,a,c,b is_a_quadrangle & d,b,a,c is_a_quadrangle
-  & d,b,c,a is_a_quadrangle & d,c,a,b is_a_quadrangle
-  & d,c,b,a is_a_quadrangle
+  a,b,c,d is_a_quadrangle implies a,c,b,d is_a_quadrangle & b,a,c,
+d is_a_quadrangle & b,c,a,d is_a_quadrangle & c,a,b,d is_a_quadrangle & c,b,a,d
+  is_a_quadrangle & a,b,d,c is_a_quadrangle & a,c,d,b is_a_quadrangle & b,a,d,c
+  is_a_quadrangle & b,c,d,a is_a_quadrangle & c,a,d,b is_a_quadrangle & c,b,d,a
+  is_a_quadrangle & a,d,b,c is_a_quadrangle & a,d,c,b is_a_quadrangle & b,d,a,c
+  is_a_quadrangle & b,d,c,a is_a_quadrangle & c,d,a,b is_a_quadrangle & c,d,b,a
+  is_a_quadrangle & d,a,b,c is_a_quadrangle & d,a,c,b is_a_quadrangle & d,b,a,c
+  is_a_quadrangle & d,b,c,a is_a_quadrangle & d,c,a,b is_a_quadrangle & d,c,b,a
+  is_a_quadrangle
 proof
-  assume a,b,c,d is_a_quadrangle;
+  assume
+A1: a,b,c,d is_a_quadrangle;
   then
-A1: a,b,c is_a_triangle & b,c,d is_a_triangle & c,d,a is_a_triangle
-  & d,a,b is_a_triangle by Def6;
+A2: a,b,c is_a_triangle by Def6;
   then
-A2: a,c,b is_a_triangle & b,a,c is_a_triangle & b,c,a is_a_triangle
-  & c,a,b is_a_triangle & c,b,a is_a_triangle by Th11;
-A3: b,d,c is_a_triangle & c,b,d is_a_triangle & c,d,b is_a_triangle
-  & d,b,c is_a_triangle & d,c,b is_a_triangle by A1,Th11;
-A4: c,a,d is_a_triangle & d,c,a is_a_triangle & d,a,c is_a_triangle
-  & a,c,d is_a_triangle & a,d,c is_a_triangle by A1,Th11;
-A5: d,b,a is_a_triangle & a,d,b is_a_triangle & a,b,d is_a_triangle
-  & b,d,a is_a_triangle & b,a,d is_a_triangle by A1,Th11;
-  hence a,c,b,d is_a_quadrangle by A2,A3,A4,Def6;
-  thus b,a,c,d is_a_quadrangle by A2,A3,A4,A5,Def6;
-  thus b,c,a,d is_a_quadrangle by A2,A3,A4,A5,Def6;
-  thus c,a,b,d is_a_quadrangle by A2,A3,A4,A5,Def6;
-  thus c,b,a,d is_a_quadrangle by A2,A3,A4,A5,Def6;
-  thus a,b,d,c is_a_quadrangle by A2,A3,A4,A5,Def6;
-  thus a,c,d,b is_a_quadrangle by A2,A3,A4,A5,Def6;
-  thus b,a,d,c is_a_quadrangle by A2,A3,A4,A5,Def6;
-  thus b,c,d,a is_a_quadrangle by A1,Def6;
-  thus c,a,d,b is_a_quadrangle by A2,A3,A4,A5,Def6;
-  thus c,b,d,a is_a_quadrangle by A2,A3,A4,A5,Def6;
-  thus a,d,b,c is_a_quadrangle by A2,A3,A4,A5,Def6;
-  thus a,d,c,b is_a_quadrangle by A2,A3,A4,A5,Def6;
-  thus b,d,a,c is_a_quadrangle by A2,A3,A4,A5,Def6;
-  thus b,d,c,a is_a_quadrangle by A2,A3,A4,A5,Def6;
-  thus c,d,a,b is_a_quadrangle by A1,Def6;
-  thus c,d,b,a is_a_quadrangle by A2,A3,A4,A5,Def6;
-  thus d,a,b,c is_a_quadrangle by A1,Def6;
-  thus d,a,c,b is_a_quadrangle by A2,A3,A4,A5,Def6;
-  thus d,b,a,c is_a_quadrangle by A2,A3,A4,A5,Def6;
-  thus d,b,c,a is_a_quadrangle by A2,A3,A4,A5,Def6;
-  thus d,c,a,b is_a_quadrangle by A2,A3,A4,A5,Def6;
-  thus thesis by A2,A3,A4,A5,Def6;
+A3: a,c,b is_a_triangle by Th11;
+A4: c,b,a is_a_triangle by A2,Th11;
+A5: b,c,a is_a_triangle by A2,Th11;
+A6: c,a,b is_a_triangle by A2,Th11;
+A7: b,a,c is_a_triangle by A2,Th11;
+A8: c,d,a is_a_triangle by A1,Def6;
+  then
+A9: c,a,d is_a_triangle by Th11;
+A10: a,d,c is_a_triangle by A8,Th11;
+A11: d,a,c is_a_triangle by A8,Th11;
+A12: d,a,b is_a_triangle by A1,Def6;
+  then
+A13: d,b,a is_a_triangle by Th11;
+A14: b,a,d is_a_triangle by A12,Th11;
+A15: a,b,d is_a_triangle by A12,Th11;
+A16: b,d,a is_a_triangle by A12,Th11;
+A17: a,d,b is_a_triangle by A12,Th11;
+A18: b,c,d is_a_triangle by A1,Def6;
+  then
+A19: c,b,d is_a_triangle by Th11;
+  hence a,c,b,d is_a_quadrangle by A3,A11,A16,Def6;
+A20: a,c,d is_a_triangle by A8,Th11;
+A21: c,d,b is_a_triangle by A18,Th11;
+  hence b,a,c,d is_a_quadrangle by A7,A20,A13,Def6;
+A22: d,b,c is_a_triangle by A18,Th11;
+  hence b,c,a,d is_a_quadrangle by A5,A9,A17,Def6;
+A23: d,c,a is_a_triangle by A8,Th11;
+A24: b,d,c is_a_triangle by A18,Th11;
+  hence c,a,b,d is_a_quadrangle by A6,A23,A15,Def6;
+A25: d,c,b is_a_triangle by A18,Th11;
+  hence c,b,a,d is_a_quadrangle by A4,A10,A14,Def6;
+  thus a,b,d,c is_a_quadrangle by A6,A24,A23,A15,Def6;
+  thus a,c,d,b is_a_quadrangle by A7,A21,A20,A13,Def6;
+  thus b,a,d,c is_a_quadrangle by A4,A25,A10,A14,Def6;
+  thus b,c,d,a is_a_quadrangle by A2,A18,A8,A12,Def6;
+  thus c,a,d,b is_a_quadrangle by A5,A22,A9,A17,Def6;
+  thus c,b,d,a is_a_quadrangle by A3,A19,A11,A16,Def6;
+  thus a,d,b,c is_a_quadrangle by A5,A22,A9,A17,Def6;
+  thus a,d,c,b is_a_quadrangle by A4,A25,A10,A14,Def6;
+  thus b,d,a,c is_a_quadrangle by A3,A19,A11,A16,Def6;
+  thus b,d,c,a is_a_quadrangle by A6,A24,A23,A15,Def6;
+  thus c,d,a,b is_a_quadrangle by A2,A18,A8,A12,Def6;
+  thus c,d,b,a is_a_quadrangle by A7,A21,A20,A13,Def6;
+  thus d,a,b,c is_a_quadrangle by A2,A18,A8,A12,Def6;
+  thus d,a,c,b is_a_quadrangle by A3,A19,A11,A16,Def6;
+  thus d,b,a,c is_a_quadrangle by A7,A21,A20,A13,Def6;
+  thus d,b,c,a is_a_quadrangle by A5,A22,A9,A17,Def6;
+  thus d,c,a,b is_a_quadrangle by A6,A24,A23,A15,Def6;
+  thus thesis by A4,A25,A10,A14,Def6;
 end;
 
 theorem Th14:
-  G is configuration & {a1,a2} on A & {b1,b2} on B & a1,a2|'B & b1,b2|'A
-  & a1<>a2 & b1<>b2 implies a1,a2,b1,b2 is_a_quadrangle
+  G is configuration & {a1,a2} on A & {b1,b2} on B & a1,a2|'B & b1
+  ,b2|'A & a1<>a2 & b1<>b2 implies a1,a2,b1,b2 is_a_quadrangle
 proof
-  assume
-A1: G is configuration & {a1,a2} on A & {b1,b2} on B & a1,a2|'B & b1,b2|'A
-  & a1<>a2 & b1<>b2;
+  assume that
+A1: G is configuration and
+A2: {a1,a2} on A and
+A3: {b1,b2} on B and
+A4: a1,a2|'B and
+A5: b1,b2|'A and
+A6: a1<>a2 and
+A7: b1<>b2;
+  b1|'A by A5,Def1;
   then
-A2: a1|'B & a2|'B & b1|'A & b2|'A by Def1;
+A8: a1,a2,b1 is_a_triangle by A1,A2,A6,Th10;
+  b2|'A by A5,Def1;
+  then a1,a2,b2 is_a_triangle by A1,A2,A6,Th10;
   then
-A3: a1,a2,b1 is_a_triangle by A1,Th10;
-  b1,b2,a2 is_a_triangle by A1,A2,Th10;
+A9: b2,a1,a2 is_a_triangle by Th11;
+  a2|'B by A4,Def1;
+  then b1,b2,a2 is_a_triangle by A1,A3,A7,Th10;
   then
-A4: a2,b1,b2 is_a_triangle by Th11;
-A5: b1,b2,a1 is_a_triangle by A1,A2,Th10;
-  a1,a2,b2 is_a_triangle by A1,A2,Th10;
-  then b2,a1,a2 is_a_triangle by Th11;
-  hence thesis by A3,A4,A5,Def6;
+A10: a2,b1,b2 is_a_triangle by Th11;
+  a1|'B by A4,Def1;
+  then b1,b2,a1 is_a_triangle by A1,A3,A7,Th10;
+  hence thesis by A8,A10,A9,Def6;
 end;
 
 theorem Th15:
@@ -426,32 +486,36 @@ A1: G is IncProjSp;
   then consider A,B such that
 A2: A<>B by Th7;
   consider a,b such that
-A3: a on A & a|'B & b on B & b|'A by A1,A2,PROJRED1:3;
-  consider p such that
-A4: p on A & p|'B & a<>p by A1,A3,Th9;
+A3: a on A & a|'B and
+A4: b on B & b|'A by A1,A2,PROJRED1:3;
   consider q such that
-A5: q on B & q|'A & b<>q by A1,A3,Th9;
-A6: G is configuration by A1,Th4;
+A5: q on B & q|'A and
+A6: b<>q by A1,A3,Th9;
+A7: {b,q} on B & b,q|'A by A4,A5,Def1,INCSP_1:11;
+A8: G is configuration by A1,Th4;
+  consider p such that
+A9: p on A & p|'B and
+A10: a<>p by A1,A3,Th9;
   take a,p,b,q;
-A7: {a,p} on A & {b,q} on B by A3,A4,A5,INCSP_1:11;
-  a,p|'B & b,q|'A by A3,A4,A5,Def1;
-  hence thesis by A4,A5,A6,A7,Th14;
+  {a,p} on A & a,p|'B by A3,A9,Def1,INCSP_1:11;
+  hence thesis by A10,A6,A8,A7,Th14;
 end;
 
 definition
   let G be IncProjSp;
-  mode Quadrangle of G -> Element of
-    [:the Points of G,the Points of G,the Points of G,the Points of G:] means
+  mode Quadrangle of G -> Element of [:the Points of G,the Points of G,the
+    Points of G,the Points of G:] means
     it`1,it`2,it`3,it`4 is_a_quadrangle;
   existence
   proof
     consider a,b,c,d being POINT of G such that
 A1: a,b,c,d is_a_quadrangle by Th15;
-    reconsider e = [a,b,c,d] as Element of
-    [:the Points of G,the Points of G,the Points of G,the Points of G:];
-A2: e`1 = a & e`2 = b & e`3 = c & e`4 = d by MCART_1:59;
+    reconsider e = [a,b,c,d] as Element of [:the Points of G,the Points of G,
+    the Points of G,the Points of G:];
+A2: e`3 = c by MCART_1:59;
     take e;
-    thus thesis by A1,A2;
+    e`1 = a & e`2 = b by MCART_1:59;
+    hence thesis by A1,A2,MCART_1:59;
   end;
 end;
 
@@ -471,16 +535,16 @@ A1: a <> b;
 end;
 
 theorem Th16:
-  for G be IncProjSp, a,b be POINT of G, L be LINE of G
-  st a <> b holds a on a*b & b on a*b & a*b = b*a &
-  (a on L & b on L implies L = a*b)
+  for G be IncProjSp, a,b be POINT of G, L be LINE of G st a <> b
+  holds a on a*b & b on a*b & a*b = b*a & (a on L & b on L implies L = a*b)
 proof
   let G be IncProjSp, a,b be POINT of G, L be LINE of G;
   assume
 A1: a <> b;
   then {a,b} on a*b by Def8;
   hence a on a*b & b on a*b & a*b = b*a by A1,Def8,INCSP_1:11;
-  assume a on L & b on L;
+  assume
+  a on L & b on L;
   then {a,b} on L by INCSP_1:11;
   hence thesis by A1,Def8;
 end;
@@ -498,14 +562,14 @@ A2: for p,q ex M st {p,q} on M;
 A3: a,b,c is_a_triangle by A1;
   consider P such that
 A4: {a,b} on P by A2;
-A5: a on P & b on P by A4,INCSP_1:11;
   take c,P;
-  thus thesis by A3,A5,Th5;
+  a on P & b on P by A4,INCSP_1:11;
+  hence thesis by A3,Th5;
 end;
 
 theorem Th18:
-  (ex a,b,c,d st a,b,c,d is_a_quadrangle)
-  implies (ex a,b,c st a,b,c is_a_triangle)
+  (ex a,b,c,d st a,b,c,d is_a_quadrangle) implies ex a,b,c st a,b,
+  c is_a_triangle
 proof
   given a,b,c,d such that
 A1: a,b,c,d is_a_quadrangle;
@@ -518,9 +582,11 @@ theorem Th19:
 proof
   assume that
 A1: a,b,c is_a_triangle and
-A2: {a,b} on P & {a,c} on Q;
-  a on P & b on P & a on Q & c on Q by A2,INCSP_1:11;
-  hence thesis by A1,Th5;
+A2: {a,b} on P and
+A3: {a,c} on Q;
+A4: c on Q by A3,INCSP_1:11;
+  a on P & b on P by A2,INCSP_1:11;
+  hence thesis by A1,A4,Th5;
 end;
 
 theorem Th20:
@@ -529,18 +595,20 @@ theorem Th20:
 proof
   assume that
 A1: a,b,c,d is_a_quadrangle and
-A2: {a,b} on P & {a,c} on Q & {a,d} on R;
-  a,b,c is_a_triangle by A1,Def6;
-  then
-A3: P<>Q by A2,Th19;
+A2: {a,b} on P and
+A3: {a,c} on Q and
+A4: {a,d} on R;
   c,d,a is_a_triangle by A1,Def6;
   then a,c,d is_a_triangle by Th11;
   then
-A4: Q<>R by A2,Th19;
+A5: Q<>R by A3,A4,Th19;
   d,a,b is_a_triangle by A1,Def6;
   then a,d,b is_a_triangle by Th11;
-  then R<>P by A2,Th19;
-  hence thesis by A3,A4,ZFMISC_1:def 5;
+  then
+A6: R<>P by A2,A4,Th19;
+  a,b,c is_a_triangle by A1,Def6;
+  then P<>Q by A2,A3,Th19;
+  hence thesis by A5,A6,ZFMISC_1:def 5;
 end;
 
 theorem Th21:
@@ -549,22 +617,31 @@ theorem Th21:
 proof
   assume that
 A1: G is configuration and
-A2: a on P,Q,R & P,Q,R are_mutually_different &
-  a|'A & p on A,P & q on A,Q & r on A,R;
-A3: a on P & a on Q & a on R by A2,Def3;
-A4: P<>Q & Q<>R & R<>P by A2,ZFMISC_1:def 5;
-A5: p on A & p on P & q on A & q on Q & r on A & r on R by A2,Def2;
+A2: a on P,Q,R and
+A3: P,Q,R are_mutually_different and
+A4: a|'A and
+A5: p on A,P and
+A6: q on A,Q and
+A7: r on A,R;
+A8: a on R & r on R by A2,A7,Def2,Def3;
+A9: a on Q & q on Q by A2,A6,Def2,Def3;
+  Q<>R & q on A by A3,A6,Def2,ZFMISC_1:def 5;
   then
-A6: p<>q by A1,A2,A3,A4,Def4;
-A7: q<>r by A1,A2,A3,A4,A5,Def4;
-  r<>p by A1,A2,A3,A4,A5,Def4;
-  hence thesis by A6,A7,ZFMISC_1:def 5;
+A10: q<>r by A1,A4,A9,A8,Def4;
+A11: p on P by A5,Def2;
+A12: a on P & p on A by A2,A5,Def2,Def3;
+  R<>P by A3,ZFMISC_1:def 5;
+  then
+A13: r<>p by A1,A4,A12,A11,A8,Def4;
+  P<>Q by A3,ZFMISC_1:def 5;
+  then p<>q by A1,A4,A12,A11,A9,Def4;
+  hence thesis by A10,A13,ZFMISC_1:def 5;
 end;
 
 theorem Th22:
-  G is configuration & (for p,q ex M st {p,q} on M)
-  & (for P,Q ex a st a on P,Q) & (ex a,b,c,d st a,b,c,d is_a_quadrangle)
-  implies for P ex a,b,c st a,b,c are_mutually_different & {a,b,c} on P
+  G is configuration & (for p,q ex M st {p,q} on M) & (for P,Q ex
+a st a on P,Q) & (ex a,b,c,d st a,b,c,d is_a_quadrangle) implies for P ex a,b,c
+  st a,b,c are_mutually_different & {a,b,c} on P
 proof
   assume that
 A1: G is configuration and
@@ -578,76 +655,89 @@ A5: a,b,c,d is_a_quadrangle by A4;
 A6: a,b,c is_a_triangle by A5,Def6;
     thus ex a,b,c st a,b,c are_mutually_different & {a,b,c} on P
     proof
-      now per cases by A6,Th5;
+      now
+        per cases by A6,Th5;
         case
 A7:       a|'P;
           consider B such that
 A8:       {a,b} on B by A2;
-          consider C such that
-A9:       {a,c} on C by A2;
           consider D such that
-A10:      {a,d} on D by A2;
-          a on B & a on C & a on D by A8,A9,A10,INCSP_1:11;
+A9:       {a,d} on D by A2;
+          consider C such that
+A10:      {a,c} on C by A2;
+A11:      a on D by A9,INCSP_1:11;
+A12:      a on C by A10,INCSP_1:11;
+          a on B by A8,INCSP_1:11;
           then
-A11:      a on B,C,D by Def3;
-A12:      B,C,D are_mutually_different by A5,A8,A9,A10,Th20;
+A13:      a on B,C,D by A12,A11,Def3;
           consider p such that
-A13:      p on P,B by A3;
+A14:      p on P,B by A3;
+A15:      B,C,D are_mutually_different by A5,A8,A10,A9,Th20;
           consider q such that
-A14:      q on P,C by A3;
+A16:      q on P,C by A3;
+A17:      q on P by A16,Def2;
           consider r such that
-A15:      r on P,D by A3;
-          p on P & q on P & r on P by A13,A14,A15,Def2;
-          then {p,q,r} on P by INCSP_1:12;
-          hence thesis by A1,A7,A11,A12,A13,A14,A15,Th21;
+A18:      r on P,D by A3;
+A19:      r on P by A18,Def2;
+          p on P by A14,Def2;
+          then {p,q,r} on P by A17,A19,INCSP_1:12;
+          hence thesis by A1,A7,A13,A15,A14,A16,A18,Th21;
         end;
         case
-A16:      b|'P;
+A20:      b|'P;
           consider B such that
-A17:      {b,a} on B by A2;
-          consider C such that
-A18:      {b,c} on C by A2;
+A21:      {b,a} on B by A2;
           consider D such that
-A19:      {b,d} on D by A2;
-          b on B & b on C & b on D by A17,A18,A19,INCSP_1:11;
+A22:      {b,d} on D by A2;
+          consider C such that
+A23:      {b,c} on C by A2;
+A24:      b on D by A22,INCSP_1:11;
+A25:      b on C by A23,INCSP_1:11;
+          b on B by A21,INCSP_1:11;
           then
-A20:      b on B,C,D by Def3;
+A26:      b on B,C,D by A25,A24,Def3;
+          consider q such that
+A27:      q on P,C by A3;
           b,a,c,d is_a_quadrangle by A5,Th13;
           then
-A21:      B,C,D are_mutually_different by A17,A18,A19,Th20;
+A28:      B,C,D are_mutually_different by A21,A23,A22,Th20;
           consider p such that
-A22:      p on P,B by A3;
-          consider q such that
-A23:      q on P,C by A3;
+A29:      p on P,B by A3;
+A30:      q on P by A27,Def2;
           consider r such that
-A24:      r on P,D by A3;
-          p on P & q on P & r on P by A22,A23,A24,Def2;
-          then {p,q,r} on P by INCSP_1:12;
-          hence thesis by A1,A16,A20,A21,A22,A23,A24,Th21;
+A31:      r on P,D by A3;
+A32:      r on P by A31,Def2;
+          p on P by A29,Def2;
+          then {p,q,r} on P by A30,A32,INCSP_1:12;
+          hence thesis by A1,A20,A26,A28,A29,A27,A31,Th21;
         end;
         case
-A25:      c|'P;
+A33:      c|'P;
           consider B such that
-A26:      {c,a} on B by A2;
-          consider C such that
-A27:      {c,b} on C by A2;
+A34:      {c,a} on B by A2;
           consider D such that
-A28:      {c,d} on D by A2;
-          c on B & c on C & c on D by A26,A27,A28,INCSP_1:11;
+A35:      {c,d} on D by A2;
+          consider C such that
+A36:      {c,b} on C by A2;
+A37:      c on D by A35,INCSP_1:11;
+A38:      c on C by A36,INCSP_1:11;
+          c on B by A34,INCSP_1:11;
           then
-A29:      c on B,C,D by Def3;
+A39:      c on B,C,D by A38,A37,Def3;
+          consider q such that
+A40:      q on P,C by A3;
           c,a,b,d is_a_quadrangle by A5,Th13;
           then
-A30:      B,C,D are_mutually_different by A26,A27,A28,Th20;
+A41:      B,C,D are_mutually_different by A34,A36,A35,Th20;
           consider p such that
-A31:      p on P,B by A3;
-          consider q such that
-A32:      q on P,C by A3;
+A42:      p on P,B by A3;
+A43:      q on P by A40,Def2;
           consider r such that
-A33:      r on P,D by A3;
-          p on P & q on P & r on P by A31,A32,A33,Def2;
-          then {p,q,r} on P by INCSP_1:12;
-          hence thesis by A1,A25,A29,A30,A31,A32,A33,Th21;
+A44:      r on P,D by A3;
+A45:      r on P by A44,Def2;
+          p on P by A42,Def2;
+          then {p,q,r} on P by A43,A45,INCSP_1:12;
+          hence thesis by A1,A33,A39,A41,A42,A40,A44,Th21;
         end;
       end;
       hence thesis;
@@ -656,9 +746,9 @@ A33:      r on P,D by A3;
 end;
 
 theorem Th23:
-  G is IncProjectivePlane iff G is configuration
-  & (for p,q ex M st {p,q} on M) & (for P,Q ex a st a on P,Q)
-  & (ex a,b,c,d st a,b,c,d is_a_quadrangle)
+  G is IncProjectivePlane iff G is configuration & (for p,q ex M
+  st {p,q} on M) & (for P,Q ex a st a on P,Q) & ex a,b,c,d st a,b,c,d
+  is_a_quadrangle
 proof
   hereby
     assume
@@ -684,18 +774,17 @@ A6: ex a,b,c,d st a,b,c,d is_a_quadrangle;
     ex a,b,c st a,b,c is_a_triangle by A6,Th18;
     then
 A7: ex p,P st p|'P by A4,Th17;
-A8: for P ex a,b,c st a,b,c are_mutually_different & {a,b,c} on P
-    by A3,A4,A5,A6,Th22;
-    for a,b,c,d,p,M,N,P,Q st {a,b,p} on M & {c,d,p} on N & {a,c} on P &
-    {b,d} on Q & p|'P & p|'Q & M<>N holds ex q st q on P,Q by A5;
-    then reconsider G'=G as IncProjSp by A3,A4,A7,A8,Th4;
+    ( for P ex a,b,c st a,b,c are_mutually_different & {a,b,c} on P)& for
+a,b,c,d, p,M,N,P,Q st {a,b,p} on M & {c,d,p} on N & {a,c} on P & {b,d} on Q & p
+    |'P & p|' Q & M<>N holds ex q st q on P,Q by A3,A4,A5,A6,Th22;
+    then reconsider G'=G as IncProjSp by A3,A4,A7,Th4;
     for P,Q being LINE of G' ex a being POINT of G' st a on P & a on Q
     proof
       let P,Q be LINE of G';
       consider a being POINT of G' such that
-A9:   a on P,Q by A5;
+A8:   a on P,Q by A5;
       take a;
-      thus thesis by A9,Def2;
+      thus thesis by A8,Def2;
     end;
     hence G is IncProjectivePlane by INCPROJ:def 14;
   end;
@@ -721,15 +810,16 @@ A1: A <> B;
 end;
 
 theorem Th24:
-  A <> B implies A*B on A & A*B on B & A*B = B*A
-  & (a on A & a on B implies a=A*B)
+  A <> B implies A*B on A & A*B on B & A*B = B*A & (a on A & a on
+  B implies a=A*B)
 proof
   assume
 A1: A <> B;
   then A*B on A,B by Def9;
   then A*B on B,A by Th1;
   hence A*B on A & A*B on B & A*B = B*A by A1,Def2,Def9;
-  assume a on A & a on B;
+  assume
+  a on A & a on B;
   then a on A,B by Def2;
   hence thesis by A1,Def9;
 end;
@@ -737,21 +827,24 @@ end;
 theorem
   A<>B & a on A & q|'A & a<>A*B implies (q*a)*B on B & (q*a)*B|'A
 proof
-  assume
-A1: A<>B & a on A & q|'A & a<>A*B;
-A2: G is configuration by Th23;
-A3: a|'B by A1,Th24;
-  then
-A4: q*a<>B by A1,Th16;
-  hence (q*a)*B on B by Th24;
+  assume that
+A1: A<>B and
+A2: a on A and
+A3: q|'A and
+A4: a<>A*B;
   set D=q*a;
+A5: a on D & q on D by A2,A3,Th16;
   set d=D*B;
+A6: G is configuration by Th23;
+A7: a|'B by A1,A2,A4,Th24;
+  then
+A8: q*a<>B by A2,A3,Th16;
+  hence (q*a)*B on B by Th24;
   assume
-A5: d on A;
-A6: a on D & q on D by A1,Th16;
-  d on D by A4,Th24;
-  then a = d by A1,A2,A5,A6,Def4;
-  hence thesis by A3,A4,Th24;
+A9: d on A;
+  d on D by A8,Th24;
+  then a = d by A2,A3,A6,A9,A5,Def4;
+  hence thesis by A7,A8,Th24;
 end;
 
 begin :: 3. SOME USEFUL PROPOSITIONS
@@ -766,24 +859,22 @@ proof
   assume that
 A1: a,b,c is_a_triangle and
 A2: not a,b,c are_mutually_different;
-  now per cases by A2,ZFMISC_1:def 5;
+  now
+    per cases by A2,ZFMISC_1:def 5;
     case
 A3:   a=b;
-      consider P such that
-A4:   b on P & c on P by INCPROJ:def 10;
-      thus contradiction by A1,A3,A4,Th5;
+      ex P st b on P & c on P by INCPROJ:def 10;
+      hence contradiction by A1,A3,Th5;
     end;
     case
-A5:   b=c;
-      consider P such that
-A6:   a on P & b on P by INCPROJ:def 10;
-      thus contradiction by A1,A5,A6,Th5;
+A4:   b=c;
+      ex P st a on P & b on P by INCPROJ:def 10;
+      hence contradiction by A1,A4,Th5;
     end;
     case
-A7:   c =a;
-      consider P such that
-A8:   b on P & c on P by INCPROJ:def 10;
-      thus contradiction by A1,A7,A8,Th5;
+A5:   c =a;
+      ex P st b on P & c on P by INCPROJ:def 10;
+      hence contradiction by A1,A5,Th5;
     end;
   end;
   hence thesis;
@@ -795,33 +886,40 @@ proof
   assume that
 A1: a,b,c,d is_a_quadrangle and
 A2: not a,b,c,d are_mutually_different;
-  now per cases by A2,ZFMISC_1:def 6;
-    case a=b;
+  now
+    per cases by A2,ZFMISC_1:def 6;
+    case
+      a=b;
       then not a,b,c are_mutually_different by ZFMISC_1:def 5;
       then not a,b,c is_a_triangle by Th26;
       hence contradiction by A1,Def6;
     end;
-    case b=c;
+    case
+      b=c;
       then not a,b,c are_mutually_different by ZFMISC_1:def 5;
       then not a,b,c is_a_triangle by Th26;
       hence contradiction by A1,Def6;
     end;
-    case c =a;
+    case
+      c =a;
       then not a,b,c are_mutually_different by ZFMISC_1:def 5;
       then not a,b,c is_a_triangle by Th26;
       hence contradiction by A1,Def6;
     end;
-    case d=a;
+    case
+      d=a;
       then not d,a,b are_mutually_different by ZFMISC_1:def 5;
       then not d,a,b is_a_triangle by Th26;
       hence contradiction by A1,Def6;
     end;
-    case d=b;
+    case
+      d=b;
       then not d,a,b are_mutually_different by ZFMISC_1:def 5;
       then not d,a,b is_a_triangle by Th26;
       hence contradiction by A1,Def6;
     end;
-    case d=c;
+    case
+      d=c;
       then not b,c,d are_mutually_different by ZFMISC_1:def 5;
       then not b,c,d is_a_triangle by Th26;
       hence contradiction by A1,Def6;
@@ -833,131 +931,166 @@ end;
 reserve G for IncProjectivePlane;
 
 theorem Th28:
-  for a,b,c,d being POINT of G st a*c = b*d
-  holds a = c or b = d or c = d or a*c = c*d
+  for a,b,c,d being POINT of G st a*c = b*d holds a = c or b = d
+  or c = d or a*c = c*d
 proof
   let a,b,c,d be POINT of G;
-  assume
-A1: a*c = b*d & not (a = c or b = d or c = d);
-  then c on a*c & d on a*c & c on c*d & d on c*d by Th16;
-  hence thesis by A1,INCPROJ:def 9;
+  assume that
+A1: a*c = b*d & not a = c & not b = d and
+A2: not c = d;
+  c on a*c & d on a*c by A1,Th16;
+  hence thesis by A2,Th16;
 end;
 
 theorem
-  for a,b,c,d being POINT of G st a*c = b*d
-  holds a = c or b = d or c = d or a on c*d
+  for a,b,c,d being POINT of G st a*c = b*d holds a = c or b = d or c =
+  d or a on c*d
 proof
   let a,b,c,d be POINT of G;
-  assume
-A1: a*c = b*d & not (a = c or b = d or c = d);
-  then a*c = c*d by Th28;
-  hence thesis by A1,Th16;
+  assume that
+A1: a*c = b*d and
+A2: not a = c and
+A3: ( not b = d)& not c = d;
+  a*c = c*d by A1,A2,A3,Th28;
+  hence thesis by A2,Th16;
 end;
 
 theorem
-  for G being IncProjectivePlane, e,m,m' being POINT of G,
-  I being LINE of G st m on I & m' on I & m<>m' & e|'I holds
-  m*e<>m'*e & e*m<>e*m'
+  for G being IncProjectivePlane, e,m,m' being POINT of G, I being LINE
+  of G st m on I & m' on I & m<>m' & e|'I holds m*e<>m'*e & e*m<>e*m'
 proof
   let G be IncProjectivePlane, e,m,m' be POINT of G, I be LINE of G such that
-A1: m on I & m' on I & m<>m' & e |'I;
+A1: m on I and
+A2: m' on I and
+A3: m<>m' and
+A4: e |'I;
   set L1=m*e,L2=m'*e;
-A2: now
+A5: now
+    m on L1 by A1,A4,Th16;
+    then
+A6: m on I,L1 by A1,Def2;
+    e on L1 by A1,A4,Th16;
+    then
+A7: m=I*L1 by A4,A6,Def9;
     assume
-A3: m*e=m'*e;
-A4: m on L1 & m' on L2 & e on L1 & e on L2 by A1,Th16;
-    then m on I,L1 & m' on I,L2 by A1,Def2;
-    then m=I*L1 & m'=I*L2 by A1,A4,Def9;
-    hence contradiction by A1,A3;
+A8: m*e=m'*e;
+    m' on L2 by A2,A4,Th16;
+    then
+A9: m' on I,L2 by A2,Def2;
+    e on L2 by A2,A4,Th16;
+    hence contradiction by A3,A4,A8,A9,A7,Def9;
   end;
   now
     assume
-A5: e*m=e*m';
-    m*e=e*m by A1,Th16;
-    hence contradiction by A1,A2,A5,Th16;
+A10: e*m=e*m';
+    m*e=e*m by A1,A4,Th16;
+    hence contradiction by A2,A4,A5,A10,Th16;
   end;
-  hence thesis by A2;
+  hence thesis by A5;
 end;
 
 theorem
-  for G being IncProjectivePlane, e being POINT of G,
-  I,L1,L2 being LINE of G st e on L1 & e on L2 & L1<>L2 & e|'I
-  holds I*L1<>I*L2 & L1*I<>L2*I
+  for G being IncProjectivePlane, e being POINT of G, I,L1,L2 being LINE
+  of G st e on L1 & e on L2 & L1<>L2 & e|'I holds I*L1<>I*L2 & L1*I<>L2*I
 proof
   let G be IncProjectivePlane, e be POINT of G, I,L1,L2 be LINE of G such that
-A1: e on L1 & e on L2 & L1<>L2 & e |'I;
+A1: e on L1 and
+A2: e on L2 and
+A3: L1<>L2 and
+A4: e |'I;
   set p1=I*L1,p2=I*L2;
-A2: now
+A5: now
+    p1 on L1 by A1,A4,Th24;
+    then
+A6: {e,p1} on L1 by A1,INCSP_1:11;
+    p1 on I by A1,A4,Th24;
+    then
+A7: L1=e*p1 by A4,A6,Def8;
     assume
-A3: I*L1=I*L2;
-A4: p1 on I & p2 on I & p1 on L1 & p2 on L2 by A1,Th24;
-    then {e,p1} on L1 & {e,p2} on L2 by A1,INCSP_1:11;
-    then L1=e*p1 & L2=e*p2 by A1,A4,Def8;
-    hence contradiction by A1,A3;
+A8: I*L1=I*L2;
+    p2 on L2 by A2,A4,Th24;
+    then
+A9: {e,p2} on L2 by A2,INCSP_1:11;
+    p2 on I by A2,A4,Th24;
+    hence contradiction by A3,A4,A8,A9,A7,Def8;
   end;
   now
     assume
-A5: L1*I=L2*I;
-    L1*I=I*L1 by A1,Th24;
-    hence contradiction by A1,A2,A5,Th24;
+A10: L1*I=L2*I;
+    L1*I=I*L1 by A1,A4,Th24;
+    hence contradiction by A2,A4,A5,A10,Th24;
   end;
-  hence thesis by A2;
+  hence thesis by A5;
 end;
 
 theorem
-  for G being IncProjSp, a,b,q,q1 being POINT of G
-  st q on a*b & q on a*q1 & q<>a & q1<>a & a<>b holds q1 on a*b
+  for G being IncProjSp, a,b,q,q1 being POINT of G st q on a*b & q on a*
+  q1 & q<>a & q1<>a & a<>b holds q1 on a*b
 proof
   let G be IncProjSp, a,b,q,q1 be POINT of G;
-  assume
-A1: q on a*b & q on a*q1 & q<>a & q1<>a & a<>b;
-  then a on a*b & a on a*q1 by Th16;
+  assume that
+A1: q on a*b & q on a*q1 & q<>a and
+A2: q1<>a and
+A3: a<>b;
+  a on a*b & a on a*q1 by A2,A3,Th16;
   then a*b = a*q1 by A1,INCPROJ:def 9;
-  hence thesis by A1,Th16;
+  hence thesis by A2,Th16;
 end;
 
 theorem
-  for G being IncProjSp, a,b,c being POINT of G
-  st c on a*b & a<>c holds b on a*c
+  for G being IncProjSp, a,b,c being POINT of G st c on a*b & a<>c holds
+  b on a*c
 proof
   let G be IncProjSp, a,b,c be POINT of G;
-  assume
-A1: c on a*b & a<>c;
+  assume that
+A1: c on a*b and
+A2: a<>c;
   now
     assume
-A2: a<>b;
-    then a on a*b & a on a*c & c on a*c by A1,Th16;
-    then a*b = a*c by A1,INCPROJ:def 9;
-    hence thesis by A2,Th16;
+A3: a<>b;
+    then a on a*b by Th16;
+    then a*b = a*c by A1,A2,Th16;
+    hence thesis by A3,Th16;
   end;
-  hence thesis by A1,Th16;
+  hence thesis by A2,Th16;
 end;
 
 theorem
-  for G being IncProjectivePlane, q1,q2,r1,r2 being POINT of G,
-  H being LINE of G st r1<>r2 & r1 on H & r2 on H & q1|'H & q2|'H
-  holds q1*r1<>q2*r2
+  for G being IncProjectivePlane, q1,q2,r1,r2 being POINT of G, H being
+  LINE of G st r1<>r2 & r1 on H & r2 on H & q1|'H & q2|'H holds q1*r1<>q2*r2
 proof
-  let G be IncProjectivePlane, q1,q2,r1,r2 be POINT of G,
-  H be LINE of G such that
-A1: r1<>r2 & r1 on H & r2 on H & q1|'H & q2|'H & q1*r1 = q2*r2;
+  let G be IncProjectivePlane, q1,q2,r1,r2 be POINT of G, H be LINE of G such
+  that
+A1: r1<>r2 and
+A2: r1 on H and
+A3: r2 on H and
+A4: q1|'H and
+A5: q2|'H and
+A6: q1*r1 = q2*r2;
   set L1=q1*r1,L2=q2*r2;
-A2: q1 on L1 & q2 on L2 & r1 on L1 & r2 on L2 by A1,Th16;
-  then r1 on L1,H & r2 on L2,H by A1,Def2;
-  then r1=L1*H & r2=L2*H by A1,A2,Def9;
-  hence contradiction by A1;
+A7: q1 on L1 by A2,A4,Th16;
+  r2 on L2 by A3,A5,Th16;
+  then
+A8: r2 on L2,H by A3,Def2;
+  r1 on L1 by A2,A4,Th16;
+  then r1 on L1,H by A2,Def2;
+  then r1=L1*H by A4,A7,Def9;
+  hence contradiction by A1,A4,A6,A7,A8,Def9;
 end;
 
 theorem Th35:
-  for a,b,c being POINT of G st a on b*c holds a=c or b=c or b on c*a
+  for a,b,c being POINT of G st a on b*c holds a=c or b=c or b on
+  c*a
 proof
   let a,b,c be POINT of G;
   assume that
 A1: a on b*c and
 A2: a<>c and
 A3: b<>c;
-A4: b on b*c & c on b*c by A3,Th16;
-  then {c,a} on b*c by A1,INCSP_1:11;
+  c on b*c by A3,Th16;
+  then
+A4: {c,a} on b*c by A1,INCSP_1:11;
+  b on b*c by A3,Th16;
   hence thesis by A2,A4,Def8;
 end;
 
@@ -965,33 +1098,45 @@ theorem
   for a,b,c being POINT of G st a on b*c holds b=a or b=c or c on b*a
 proof
   let a,b,c be POINT of G;
-  assume
-A1: a on b*c & b<>a & b<>c;
-  then b*c = c*b by Th16;
-  hence thesis by A1,Th35;
+  assume that
+A1: a on b*c & b<>a and
+A2: b<>c;
+  b*c = c*b by A2,Th16;
+  hence thesis by A1,A2,Th35;
 end;
 
 theorem
-  for e,x1,x2,p1,p2 being POINT of G for H,I being LINE of G
-  st x1 on I & x2 on I & e on H & e |'I & x1<>x2 & p1<>e & p2 <>e &
-  p1 on e*x1 & p2 on e*x2
-  holds ex r being POINT of G st r on p1*p2 & r on H & r<>e
+  for e,x1,x2,p1,p2 being POINT of G for H,I being LINE of G st x1 on I
+& x2 on I & e |'I & x1<>x2 & p1<>e & p2 <>e & p1 on e*x1 & p2 on e*x2 holds ex
+  r being POINT of G st r on p1*p2 & r on H & r<>e
 proof
   let e,x1,x2,p1,p2 be POINT of G;
   let H,I be LINE of G such that
-A1: x1 on I & x2 on I & e on H & e|'I & x1<>x2 & p1<>e & p2<>e &
-  p1 on e*x1 & p2 on e*x2;
+A1: x1 on I and
+A2: x2 on I and
+A3: e|'I and
+A4: x1<>x2 and
+A5: p1<>e and
+A6: p2<>e and
+A7: p1 on e*x1 and
+A8: p2 on e*x2;
   set L1=e*x1,L2=e*x2,L=p1*p2;
+A9: e on L1 by A1,A3,Th16;
+A10: e on L2 by A2,A3,Th16;
+  x1 on L1 & x2 on L2 by A1,A2,A3,Th16;
+  then
+A11: L1 <> L2 by A1,A2,A3,A4,A9,INCPROJ:def 9;
+  then
+A12: p1<>p2 by A5,A7,A8,A9,A10,INCPROJ:def 9;
+  then p2 on L by Th16;
+  then
+A13: L<>L1 by A6,A8,A9,A10,A11,INCPROJ:def 9;
   consider r being POINT of G such that
-A2: r on L & r on H by INCPROJ:def 14;
-A3: e on L1 & e on L2 & x1 on L1 & x2 on L2 by A1,Th16;
-  then
-A4: L1 <> L2 by A1,INCPROJ:def 9;
-  then p1<>p2 by A1,A3,INCPROJ:def 9;
-  then
-A5: p1 on L & p2 on L by Th16;
-  then L<>L1 by A1,A3,A4,INCPROJ:def 9;
-  then r<>e by A1,A2,A3,A5,INCPROJ:def 9;
-  hence thesis by A2;
+A14: r on L and
+A15: r on H by INCPROJ:def 14;
+  p1 on L by A12,Th16;
+  then r<>e by A5,A7,A14,A9,A13,INCPROJ:def 9;
+  hence thesis by A14,A15;
 end;
+
 

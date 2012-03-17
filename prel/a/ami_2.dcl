@@ -16,27 +16,28 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="AMI_2"/>
 </Signature>
 <FCluster aid="AMI_2" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="125"/>
+<Func kind="K" nr="133"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster aid="AMI_2" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="124"/>
+<Func kind="K" nr="132"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster aid="AMI_2" nr="3">
 <ArgTypes/>
-<Func kind="K" nr="128"/>
+<Func kind="K" nr="136"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
@@ -45,13 +46,13 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="115">
-<Func kind="K" nr="129"/>
+<Func kind="K" nr="123">
+<Func kind="K" nr="137"/>
 </Func>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="126"/>
+<Func kind="K" nr="134"/>
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="36">
@@ -60,6 +61,15 @@
 </Func>
 <Cluster>
 <Adjective nr="21"/>
+</Cluster>
+</FCluster>
+<FCluster aid="AMI_2" nr="5">
+<ArgTypes/>
+<Func kind="K" nr="25">
+<Func kind="K" nr="136"/>
+</Func>
+<Cluster>
+<Adjective nr="31"/>
 </Cluster>
 </FCluster>
 </Registrations>

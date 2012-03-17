@@ -7,6 +7,7 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="TARSKI"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
@@ -27,10 +28,10 @@
 </Signature>
 <FCluster aid="COMPTRIG" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="199"/>
+<Func kind="K" nr="208"/>
 <Cluster>
-<Adjective nr="21"/>
-<Adjective nr="24" value="false"/>
+<Adjective nr="22"/>
+<Adjective nr="25" value="false"/>
 </Cluster>
 </FCluster>
 </Registrations>

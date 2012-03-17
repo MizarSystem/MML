@@ -14,7 +14,7 @@ environ
       NAT_1, CARD_1, FUNCT_4, STRUCT_0, GRAPH_1, CAT_1, CAT_3;
  constructors PARTFUN1, BINOP_1, REAL_1, NAT_1, ALGSTR_1, CAT_3, RELSET_1;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, FINSET_1, XREAL_0, NAT_1, ORDINAL1,
-      CAT_1, CARD_1, STRUCT_0, PARTFUN1, FUNCT_2;
+      CARD_1, STRUCT_0, PARTFUN1, FUNCT_2, RELSET_1;
  requirements NUMERALS, SUBSET, BOOLE;
 
 
@@ -27,10 +27,8 @@ definition
   canceled;
   redefine pred a,b are_isomorphic means
 :: CAT_4:def 2
-
-  Hom(a,b)<>{} & Hom(b,a)<>{} &
-  ex f being Morphism of a,b, f' being Morphism of b,a
-  st f*f' = id b & f'*f = id a;
+  Hom(a,b)<>{} & Hom(b,a)<>{} & ex f
+  being Morphism of a,b, f' being Morphism of b,a st f*f' = id b & f'*f = id a;
 end;
 
 begin :: Cartesian Categories
@@ -39,50 +37,44 @@ definition
   let C be Category;
   attr C is with_finite_product means
 :: CAT_4:def 3
-  for I being finite set, F being Function of I,the carrier of C
-  ex a being Object of C, F' being Projections_family of a,I
-  st cods F' = F & a is_a_product_wrt F';
+  for I being finite set, F being Function
+of I,the carrier of C ex a being Object of C, F' being Projections_family of a,
+  I st cods F' = F & a is_a_product_wrt F';
 end;
 
 theorem :: CAT_4:1
-  for C being Category holds C is with_finite_product iff
-  (ex a being Object of C st a is terminal) & for a,b being Object of C
-  ex c being Object of C, p1,p2 being Morphism of C
-  st dom p1 = c & dom p2 = c & cod p1 = a & cod p2 = b &
-  c is_a_product_wrt p1,p2;
+  for C being Category holds C is with_finite_product iff (ex a
+  being Object of C st a is terminal) & for a,b being Object of C ex c being
+Object of C, p1,p2 being Morphism of C st dom p1 = c & dom p2 = c & cod p1 = a
+  & cod p2 = b & c is_a_product_wrt p1,p2;
 
 definition
-  struct (CatStr)ProdCatStr (# carrier,carrier' -> set,
-    Source,Target -> Function of the carrier', the carrier,
-    Comp -> PartFunc of [:the carrier', the carrier' :],the carrier',
-    Id -> Function of the carrier, the carrier',
-    TerminalObj -> Element of the carrier,
-    CatProd -> Function of [:the carrier,the carrier:],the carrier,
-    Proj1,Proj2 -> Function of [:the carrier,the carrier:],the carrier' #);
+  struct (CatStr)ProdCatStr (# carrier,carrier' -> set, Source,Target ->
+Function of the carrier', the carrier, Comp -> PartFunc of [:the carrier', the
+    carrier' :],the carrier', Id -> Function of the carrier, the carrier',
+TerminalObj -> Element of the carrier, CatProd -> Function of [:the carrier,the
+carrier:],the carrier, Proj1,Proj2 -> Function of [:the carrier,the carrier:],
+    the carrier' #);
 end;
 
 registration
- cluster non void non empty ProdCatStr;
+  cluster non void non empty ProdCatStr;
 end;
 
 definition
   let C be non void non empty ProdCatStr;
   func [1]C -> Object of C equals
 :: CAT_4:def 4
-
   the TerminalObj of C;
   let a,b be Object of C;
   func a[x]b -> Object of C equals
 :: CAT_4:def 5
-
   (the CatProd of C).(a,b);
   func pr1(a,b) -> Morphism of C equals
 :: CAT_4:def 6
-
   (the Proj1 of C).(a,b);
   func pr2(a,b) -> Morphism of C equals
 :: CAT_4:def 7
-
   (the Proj2 of C).(a,b);
 end;
 
@@ -90,13 +82,13 @@ definition
   let o,m;
   func c1Cat(o,m) -> strict ProdCatStr equals
 :: CAT_4:def 8
-  ProdCatStr(# {o},{m},m:->o,m:->o,(m,m):->m,o:->m,
-    Extract(o),(o,o):->o,(o,o):->m,(o,o):->m #);
+  ProdCatStr(# {o},{m},m:->o,m:->o
+    ,(m,m):->m,o:->m, Extract(o),(o,o):->o,(o,o):->m,(o,o):->m #);
 end;
 
 registration
   let o,m;
- cluster c1Cat(o,m) -> non void non empty;
+  cluster c1Cat(o,m) -> non void non empty;
 end;
 
 theorem :: CAT_4:2
@@ -122,8 +114,8 @@ theorem :: CAT_4:6
   for f,g being Morphism of c1Cat(o,m) holds f = g;
 
 theorem :: CAT_4:7
-  for a,b being Object of c1Cat(o,m), f being Morphism of c1Cat(o,m)
-  holds f in Hom(a,b);
+  for a,b being Object of c1Cat(o,m), f being Morphism of c1Cat(o,m
+  ) holds f in Hom(a,b);
 
 theorem :: CAT_4:8
   for a,b being Object of c1Cat(o,m), f being Morphism of c1Cat(o,m)
@@ -136,19 +128,18 @@ theorem :: CAT_4:10
   for a being Object of c1Cat(o,m) holds a is terminal;
 
 theorem :: CAT_4:11
-  for c being Object of c1Cat(o,m), p1,p2 being Morphism of c1Cat(o,m)
-  holds c is_a_product_wrt p1,p2;
+  for c being Object of c1Cat(o,m), p1,p2 being Morphism of c1Cat(
+  o,m) holds c is_a_product_wrt p1,p2;
 
 definition
   let IT be Category-like non void non empty ProdCatStr;
   attr IT is Cartesian means
 :: CAT_4:def 9
 
-  the TerminalObj of IT is terminal &
-  for a,b being Object of IT holds
-  cod((the Proj1 of IT).(a,b)) = a & cod((the Proj2 of IT).(a,b)) = b &
-  (the CatProd of IT).(a,b)
-  is_a_product_wrt (the Proj1 of IT).(a,b),(the Proj2 of IT).(a,b);
+  the TerminalObj of IT is terminal & for a,
+b being Object of IT holds cod((the Proj1 of IT).(a,b)) = a & cod((the Proj2 of
+IT).(a,b)) = b & (the CatProd of IT).(a,b) is_a_product_wrt (the Proj1 of IT).(
+  a,b),(the Proj2 of IT).(a,b);
 end;
 
 theorem :: CAT_4:12
@@ -159,8 +150,8 @@ registration
 end;
 
 definition
-  mode Cartesian_category is
-   Cartesian (Category-like non void non empty ProdCatStr);
+  mode Cartesian_category is Cartesian (Category-like non void non empty
+    ProdCatStr);
 end;
 
 reserve C for Cartesian_category;
@@ -179,7 +170,6 @@ definition
   let C,a;
   func term(a) -> Morphism of a,[1]C means
 :: CAT_4:def 10
-
   not contradiction;
 end;
 
@@ -214,8 +204,8 @@ theorem :: CAT_4:23
   C is with_finite_product;
 
 theorem :: CAT_4:24
-  Hom(a,b) <> {} & Hom(b,a) <> {}
-  implies pr1(a,b) is retraction & pr2(a,b) is retraction;
+  Hom(a,b) <> {} & Hom(b,a) <> {} implies pr1(a,b) is retraction & pr2(a
+  ,b) is retraction;
 
 definition
   let C,a,b,c;
@@ -225,7 +215,8 @@ definition
   func <:f,g:> -> Morphism of c,a[x]b means
 :: CAT_4:def 11
 
-  pr1(a,b)*it = f & pr2(a,b)*it = g;
+  pr1(a,b)*it = f & pr2(a,b)
+  *it = g;
 end;
 
 theorem :: CAT_4:25
@@ -235,17 +226,17 @@ theorem :: CAT_4:26
   <:pr1(a,b),pr2(a,b):> = id(a[x]b);
 
 theorem :: CAT_4:27
-  for f being Morphism of c,a, g being Morphism of c,b, h being Morphism of d,c
-  st Hom(c,a)<>{} & Hom(c,b)<>{} & Hom(d,c)<>{} holds <:f*h,g*h:> = <:f,g:>*h;
+  for f being Morphism of c,a, g being Morphism of c,b, h being
+Morphism of d,c st Hom(c,a)<>{} & Hom(c,b)<>{} & Hom(d,c)<>{} holds <:f*h,g*h:>
+  = <:f,g:>*h;
 
 theorem :: CAT_4:28
-  for f,k being Morphism of c,a, g,h being Morphism of c,b
-  st Hom(c,a) <> {} & Hom(c,b) <> {} & <:f,g:> = <:k,h:> holds f = k & g = h;
+  for f,k being Morphism of c,a, g,h being Morphism of c,b st Hom(
+  c,a) <> {} & Hom(c,b) <> {} & <:f,g:> = <:k,h:> holds f = k & g = h;
 
 theorem :: CAT_4:29
-  for f being Morphism of c,a, g being Morphism of c,b
-  st Hom(c,a) <> {} & Hom(c,b) <> {} & (f is monic or g is monic)
-  holds <:f,g:> is monic;
+  for f being Morphism of c,a, g being Morphism of c,b st Hom(c,a) <> {}
+  & Hom(c,b) <> {} & (f is monic or g is monic) holds <:f,g:> is monic;
 
 theorem :: CAT_4:30
   Hom(a,a[x][1]C) <> {} & Hom(a,[1]C[x]a) <> {};
@@ -254,25 +245,21 @@ definition
   let C,a;
   func lambda(a) -> Morphism of [1]C[x]a,a equals
 :: CAT_4:def 12
-
   pr2([1]C,a);
   func lambda'(a) -> Morphism of a,[1]C[x]a equals
 :: CAT_4:def 13
-
   <:term a,id a:>;
   func rho(a) -> Morphism of a[x][1]C,a equals
 :: CAT_4:def 14
-
   pr1(a,[1]C);
   func rho'(a) -> Morphism of a,a[x][1]C equals
 :: CAT_4:def 15
-
   <:id a,term a:>;
 end;
 
 theorem :: CAT_4:31
-  lambda(a)*lambda'(a) = id a & lambda'(a)*lambda(a) = id([1]C[x]a) &
-  rho(a)*rho'(a) = id a & rho'(a)*rho(a) = id(a[x][1]C);
+  lambda(a)*lambda'(a) = id a & lambda'(a)*lambda(a) = id([1]C[x]a
+  ) & rho(a)*rho'(a) = id a & rho'(a)*rho(a) = id(a[x][1]C);
 
 theorem :: CAT_4:32
   a, a[x][1]C are_isomorphic & a,[1]C[x]a are_isomorphic;
@@ -281,7 +268,6 @@ definition
   let C,a,b;
   func Switch(a,b) -> Morphism of a[x]b,b[x]a equals
 :: CAT_4:def 16
-
   <:pr2(a,b),pr1(a,b):>;
 end;
 
@@ -298,7 +284,6 @@ definition
   let C,a;
   func Delta a -> Morphism of a,a[x]a equals
 :: CAT_4:def 17
-
   <:id a,id a:>;
 end;
 
@@ -306,24 +291,28 @@ theorem :: CAT_4:36
   Hom(a,a[x]a) <> {};
 
 theorem :: CAT_4:37
-  for f being Morphism of a,b st Hom(a,b) <> {} holds <:f,f:> = Delta(b)*f;
+  for f being Morphism of a,b st Hom(a,b) <> {} holds <:f,f:> = Delta(b)
+  *f;
 
 definition
   let C,a,b,c;
   func Alpha(a,b,c) -> Morphism of (a[x]b)[x]c,a[x](b[x]c) equals
 :: CAT_4:def 18
-  <:pr1(a,b)*pr1(a[x]b,c),<:pr2(a,b)*pr1(a[x]b,c),pr2(a[x]b,c):>:>;
+  <:pr1(a,b)*
+  pr1(a[x]b,c),<:pr2(a,b)*pr1(a[x]b,c),pr2(a[x]b,c):>:>;
   func Alpha'(a,b,c) -> Morphism of a[x](b[x]c),(a[x]b)[x]c equals
 :: CAT_4:def 19
-  <:<:pr1(a,b[x]c),pr1(b,c)*pr2(a,b[x]c):>,pr2(b,c)*pr2(a,b[x]c):>;
+  <:<:pr1(a,b
+  [x]c),pr1(b,c)*pr2(a,b[x]c):>,pr2(b,c)*pr2(a,b[x]c):>;
 end;
 
 theorem :: CAT_4:38
-  Hom((a[x]b)[x]c,a[x](b[x]c)) <> {} & Hom(a[x](b[x]c),(a[x]b)[x]c) <> {};
+  Hom((a[x]b)[x]c,a[x](b[x]c)) <> {} & Hom(a[x](b[x]c),(a[x]b)[x]c
+  ) <> {};
 
 theorem :: CAT_4:39
-  Alpha(a,b,c)*Alpha'(a,b,c) = id(a[x](b[x]c)) &
-  Alpha'(a,b,c)*Alpha(a,b,c) = id((a[x]b)[x]c);
+  Alpha(a,b,c)*Alpha'(a,b,c) = id(a[x](b[x]c)) & Alpha'(a,b,c)*
+  Alpha(a,b,c) = id((a[x]b)[x]c);
 
 theorem :: CAT_4:40
   (a[x]b)[x]c,a[x](b[x]c) are_isomorphic;
@@ -333,7 +322,6 @@ definition
   let f be Morphism of a,b, g be Morphism of c,d;
   func f[x]g -> Morphism of a[x]c,b[x]d equals
 :: CAT_4:def 20
-
   <:f*pr1(a,c),g*pr2(a,c):>;
 end;
 
@@ -344,20 +332,18 @@ theorem :: CAT_4:42
   (id a)[x](id b) = id(a[x]b);
 
 theorem :: CAT_4:43
-  for f being Morphism of a,b, h being Morphism of c,d,
-  g being Morphism of e,a, k being Morphism of e,c
-  st Hom(a,b) <> {} & Hom(c,d) <> {} & Hom(e,a) <> {} & Hom(e,c) <> {}
-  holds (f[x]h)*<:g,k:> = <:f*g,h*k:>;
+  for f being Morphism of a,b, h being Morphism of c,d, g being
+  Morphism of e,a, k being Morphism of e,c st Hom(a,b) <> {} & Hom(c,d) <> {} &
+  Hom(e,a) <> {} & Hom(e,c) <> {} holds (f[x]h)*<:g,k:> = <:f*g,h*k:>;
 
 theorem :: CAT_4:44
-  for f being Morphism of c,a, g being Morphism of c,b
-  st Hom(c,a) <> {} & Hom(c,b) <> {} holds <:f,g:> = (f[x]g)*Delta(c);
+  for f being Morphism of c,a, g being Morphism of c,b st Hom(c,a) <> {}
+  & Hom(c,b) <> {} holds <:f,g:> = (f[x]g)*Delta(c);
 
 theorem :: CAT_4:45
-  for f being Morphism of a,b, h being Morphism of c,d,
-  g being Morphism of e,a, k being Morphism of s,c
-  st Hom(a,b) <> {} & Hom(c,d) <> {} & Hom(e,a) <> {} & Hom(s,c) <> {}
-  holds (f[x]h)*(g[x]k) = (f*g)[x](h*k);
+  for f being Morphism of a,b, h being Morphism of c,d, g being Morphism
+  of e,a, k being Morphism of s,c st Hom(a,b) <> {} & Hom(c,d) <> {} & Hom(e,a)
+  <> {} & Hom(s,c) <> {} holds (f[x]h)*(g[x]k) = (f*g)[x](h*k);
 
 begin :: Categories with Finite Coproducts
 
@@ -365,50 +351,44 @@ definition
   let C be Category;
   attr C is with_finite_coproduct means
 :: CAT_4:def 21
-  for I being finite set, F being Function of I,the carrier of C
-  ex a being Object of C, F' being Injections_family of a,I
-  st doms F' = F & a is_a_coproduct_wrt F';
+  for I being finite set, F being
+  Function of I,the carrier of C ex a being Object of C, F' being
+  Injections_family of a,I st doms F' = F & a is_a_coproduct_wrt F';
 end;
 
 theorem :: CAT_4:46
-  for C being Category holds C is with_finite_coproduct iff
-  (ex a being Object of C st a is initial) & for a,b being Object of C
-  ex c being Object of C, i1,i2 being Morphism of C
-  st dom i1 = a & dom i2 = b & cod i1 = c & cod i2 = c &
-  c is_a_coproduct_wrt i1,i2;
+  for C being Category holds C is with_finite_coproduct iff (ex a
+  being Object of C st a is initial) & for a,b being Object of C ex c being
+Object of C, i1,i2 being Morphism of C st dom i1 = a & dom i2 = b & cod i1 = c
+  & cod i2 = c & c is_a_coproduct_wrt i1,i2;
 
 definition
-  struct (CatStr)CoprodCatStr (# carrier,carrier' -> set,
-    Source,Target -> Function of the carrier', the carrier,
-    Comp -> PartFunc of [:the carrier', the carrier' :],the carrier',
-    Id -> Function of the carrier, the carrier',
-    Initial -> Element of the carrier,
-    Coproduct -> Function of [:the carrier,the carrier:],the carrier,
-    Incl1,Incl2 -> Function of [:the carrier,the carrier:],the carrier' #);
+  struct (CatStr)CoprodCatStr (# carrier,carrier' -> set, Source,Target ->
+Function of the carrier', the carrier, Comp -> PartFunc of [:the carrier', the
+carrier' :],the carrier', Id -> Function of the carrier, the carrier', Initial
+-> Element of the carrier, Coproduct -> Function of [:the carrier,the carrier:]
+    ,the carrier, Incl1,Incl2 -> Function of [:the carrier,the carrier:],the
+    carrier' #);
 end;
 
 registration
- cluster non void non empty CoprodCatStr;
+  cluster non void non empty CoprodCatStr;
 end;
 
 definition
   let C be non void non empty CoprodCatStr;
   func [0]C -> Object of C equals
 :: CAT_4:def 22
-
   the Initial of C;
   let a,b be Object of C;
   func a+b -> Object of C equals
 :: CAT_4:def 23
-
   (the Coproduct of C).(a,b);
   func in1(a,b) -> Morphism of C equals
 :: CAT_4:def 24
-
   (the Incl1 of C).(a,b);
   func in2(a,b) -> Morphism of C equals
 :: CAT_4:def 25
-
   (the Incl2 of C).(a,b);
 end;
 
@@ -416,8 +396,8 @@ definition
   let o,m;
   func c1Cat*(o,m) -> strict CoprodCatStr equals
 :: CAT_4:def 26
-  CoprodCatStr(# {o},{m},m:->o,m:->o,(m,m):->m,o:->m,
-    Extract(o),(o,o):->o,(o,o):->m,(o,o):->m #);
+  CoprodCatStr(# {o},{m},m:->o,
+    m:->o,(m,m):->m,o:->m, Extract(o),(o,o):->o,(o,o):->m,(o,o):->m #);
 end;
 
 theorem :: CAT_4:47
@@ -425,7 +405,7 @@ theorem :: CAT_4:47
 
 registration
   let o,m;
- cluster c1Cat*(o,m) -> non void non empty;
+  cluster c1Cat*(o,m) -> non void non empty;
 end;
 
 registration
@@ -448,8 +428,8 @@ theorem :: CAT_4:51
   for f,g being Morphism of c1Cat*(o,m) holds f = g;
 
 theorem :: CAT_4:52
-  for a,b being Object of c1Cat*(o,m), f being Morphism of c1Cat*(o,m)
-  holds f in Hom(a,b);
+  for a,b being Object of c1Cat*(o,m), f being Morphism of c1Cat*(
+  o,m) holds f in Hom(a,b);
 
 theorem :: CAT_4:53
   for a,b being Object of c1Cat*(o,m), f being Morphism of c1Cat*(o,m)
@@ -462,19 +442,18 @@ theorem :: CAT_4:55
   for a being Object of c1Cat*(o,m) holds a is initial;
 
 theorem :: CAT_4:56
-  for c being Object of c1Cat*(o,m),
-  i1,i2 being Morphism of c1Cat*(o,m) holds c is_a_coproduct_wrt i1,i2;
+  for c being Object of c1Cat*(o,m), i1,i2 being Morphism of
+  c1Cat*(o,m) holds c is_a_coproduct_wrt i1,i2;
 
 definition
   let IT be Category-like non void non empty CoprodCatStr;
   attr IT is Cocartesian means
 :: CAT_4:def 27
 
-  the Initial of IT is initial &
-  for a,b being Object of IT holds
-  dom((the Incl1 of IT).(a,b)) = a & dom((the Incl2 of IT).(a,b)) = b &
-  (the Coproduct of IT).(a,b)
-  is_a_coproduct_wrt (the Incl1 of IT).(a,b),(the Incl2 of IT).(a,b);
+  the Initial of IT is initial & for a,b
+  being Object of IT holds dom((the Incl1 of IT).(a,b)) = a & dom((the Incl2 of
+  IT).(a,b)) = b & (the Coproduct of IT).(a,b) is_a_coproduct_wrt (the Incl1 of
+  IT).(a,b),(the Incl2 of IT).(a,b);
 end;
 
 theorem :: CAT_4:57
@@ -485,8 +464,8 @@ registration
 end;
 
 definition
-  mode Cocartesian_category is Cocartesian
-    (Category-like non void non empty CoprodCatStr);
+  mode Cocartesian_category is Cocartesian (Category-like non void non empty
+    CoprodCatStr);
 end;
 
 reserve C for Cocartesian_category;
@@ -502,7 +481,6 @@ definition
   let C,a;
   func init a -> Morphism of [0]C, a means
 :: CAT_4:def 28
-
   not contradiction;
 end;
 
@@ -534,13 +512,12 @@ theorem :: CAT_4:68
   C is with_finite_coproduct;
 
 theorem :: CAT_4:69
-  Hom(a,b) <> {} & Hom(b,a) <> {}
-  implies in1(a,b) is coretraction & in2(a,b) is coretraction;
+  Hom(a,b) <> {} & Hom(b,a) <> {} implies in1(a,b) is coretraction & in2
+  (a,b) is coretraction;
 
 definition
   let C,a,b;
-  redefine
-  func in1(a,b) -> Morphism of a,a+b;
+  redefine func in1(a,b) -> Morphism of a,a+b;
   func in2(a,b) -> Morphism of b,a+b;
 end;
 
@@ -552,7 +529,8 @@ definition
   func [$f,g$] -> Morphism of a+b,c means
 :: CAT_4:def 29
 
-  it*in1(a,b) = f & it*in2(a,b) = g;
+  it*in1(a,b) = f & it*in2(a,b
+  ) = g;
 end;
 
 theorem :: CAT_4:70
@@ -562,17 +540,17 @@ theorem :: CAT_4:71
   [$in1(a,b),in2(a,b)$] = id(a+b);
 
 theorem :: CAT_4:72
-  for f being Morphism of a,c, g being Morphism of b,c, h being Morphism of c,d
-  st Hom(a,c)<>{} & Hom(b,c)<>{} & Hom(c,d)<>{} holds [$h*f,h*g$] = h*[$f,g$];
+  for f being Morphism of a,c, g being Morphism of b,c, h being
+Morphism of c,d st Hom(a,c)<>{} & Hom(b,c)<>{} & Hom(c,d)<>{} holds [$h*f,h*g$]
+  = h*[$f,g$];
 
 theorem :: CAT_4:73
-  for f,k being Morphism of a,c, g,h being Morphism of b,c
-  st Hom(a,c) <> {} & Hom(b,c) <> {} & [$f,g$] = [$k,h$] holds f = k & g = h;
+  for f,k being Morphism of a,c, g,h being Morphism of b,c st Hom(
+  a,c) <> {} & Hom(b,c) <> {} & [$f,g$] = [$k,h$] holds f = k & g = h;
 
 theorem :: CAT_4:74
-  for f being Morphism of a,c, g being Morphism of b,c
-  st Hom(a,c) <> {} & Hom(b,c) <> {} & (f is epi or g is epi)
-  holds [$f,g$] is epi;
+  for f being Morphism of a,c, g being Morphism of b,c st Hom(a,c) <> {}
+  & Hom(b,c) <> {} & (f is epi or g is epi) holds [$f,g$] is epi;
 
 theorem :: CAT_4:75
   a, a+[0]C are_isomorphic & a,[0]C+a are_isomorphic;
@@ -587,7 +565,6 @@ definition
   let C,a;
   func nabla a -> Morphism of a+a,a equals
 :: CAT_4:def 30
-
   [$id a,id a$];
 end;
 
@@ -596,7 +573,6 @@ definition
   let f be Morphism of a,c, g be Morphism of b,d;
   func f+g -> Morphism of a+b,c+d equals
 :: CAT_4:def 31
-
   [$in1(c,d)*f,in2(c,d)*g$];
 end;
 
@@ -607,18 +583,16 @@ theorem :: CAT_4:79
   (id a)+(id b) = id(a+b);
 
 theorem :: CAT_4:80
-  for f being Morphism of a,c, h being Morphism of b,d,
-  g being Morphism of c,e, k being Morphism of d,e
-  st Hom(a,c) <> {} & Hom(b,d) <> {} & Hom(c,e) <> {} & Hom(d,e) <> {}
-  holds [$g,k$]*(f+h) = [$g*f,k*h$];
+  for f being Morphism of a,c, h being Morphism of b,d, g being
+  Morphism of c,e, k being Morphism of d,e st Hom(a,c) <> {} & Hom(b,d) <> {} &
+  Hom(c,e) <> {} & Hom(d,e) <> {} holds [$g,k$]*(f+h) = [$g*f,k*h$];
 
 theorem :: CAT_4:81
-  for f being Morphism of a,c, g being Morphism of b,c
-  st Hom(a,c) <> {} & Hom(b,c) <> {} holds nabla(c)*(f+g) = [$f,g$];
+  for f being Morphism of a,c, g being Morphism of b,c st Hom(a,c) <> {}
+  & Hom(b,c) <> {} holds nabla(c)*(f+g) = [$f,g$];
 
 theorem :: CAT_4:82
-  for f being Morphism of a,c, h being Morphism of b,d,
-  g being Morphism of c,e, k being Morphism of d,s
-  st Hom(a,c) <> {} & Hom(b,d) <> {} & Hom(c,e) <> {} & Hom(d,s) <> {}
-  holds (g+k)*(f+h) = (g*f)+(k*h);
+  for f being Morphism of a,c, h being Morphism of b,d, g being Morphism
+  of c,e, k being Morphism of d,s st Hom(a,c) <> {} & Hom(b,d) <> {} & Hom(c,e)
+  <> {} & Hom(d,s) <> {} holds (g+k)*(f+h) = (g*f)+(k*h);
 

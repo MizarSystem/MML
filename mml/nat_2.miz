@@ -10,7 +10,7 @@ environ
       MATRIX_2, FINSEQ_4, REALSET1, ARYTM;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, XCMPLX_0, XREAL_0, REALSET1,
       NUMBERS, INT_1, NAT_1, NAT_D, POWER, ABIAN, FUNCT_1, PARTFUN1, FINSEQ_1,
-      BINARITH, XXREAL_0;
+      XXREAL_0;
  constructors XXREAL_0, REAL_1, NAT_1, NAT_D, MEMBERED, SERIES_1, REALSET1,
       BINARITH, ABIAN;
  registrations RELSET_1, XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, REALSET1,
@@ -25,26 +25,26 @@ begin :: Preliminaries
 
 reserve i, j, k, l, m, n, t for Nat;
 
-scheme NonUniqPiFinRecExD{D() -> non empty set, A() -> Element of D(),
-  N() -> Nat, P[set,set,set]}:
-  ex p be FinSequence of D() st len p = N() & (p/.1 = A() or N() = 0) &
-  for n be Nat st 1 <= n & n < N() holds P[n,p/.n,p/.(n+1)]
+scheme
+  NonUniqPiFinRecExD{D() -> non empty set, A() -> Element of D(), N() -> Nat,
+P[set,set,set]}: ex p be FinSequence of D() st len p = N() & (p/.1 = A() or N()
+  = 0) & for n be Nat st 1 <= n & n < N() holds P[n,p/.n,p/.(n+1)]
 provided
-A1: for n be Nat st 1 <= n & n < N() for x be Element of D()
-ex y be Element of D() st P[n,x,y]
+A1: for n be Nat st 1 <= n & n < N() for x be Element of D() ex y be
+Element of D() st P[n,x,y]
 proof
-A2: for n be Element of NAT st 1 <= n & n < N() holds for x be Element of D()
-  ex y be Element of D() st P[n,x,y] by A1;
+A2: for n be Element of NAT st 1 <= n & n < N() holds for x be Element of D(
+  ) ex y be Element of D() st P[n,x,y] by A1;
   consider p be FinSequence of D() such that
 A3: len p = N() and
-A4: (p.1 = A() or N() = 0) and
+A4: p.1 = A() or N() = 0 and
 A5: for n be Element of NAT st 1 <= n & n < N() holds P[n,p.n,p.(n+1)]
   from RECDEF_1:sch 4(A2);
   take p;
   thus len p = N() by A3;
   now
-    assume N() <> 0;
-    then N() > 0;
+    assume
+    N() <> 0;
     then N() >= 0 + 1 by NAT_1:13;
     hence p/.1 = A() by A3,A4,FINSEQ_4:24;
   end;
@@ -53,26 +53,26 @@ A5: for n be Element of NAT st 1 <= n & n < N() holds P[n,p.n,p.(n+1)]
   assume that
 A6: 1 <= n and
 A7: n < N();
-X: n in NAT by ORDINAL1:def 13;
   n + 1 <= N() by A7,NAT_1:13;
-  then p.n = p/.n & p.(n+1) = p/.(n+1) by A3,A6,A7,FINSEQ_4:24,NAT_1:11;
-  hence thesis by A5,A6,A7,X;
+  then
+A8: p.(n+1) = p/.(n+1) by A3,FINSEQ_4:24,NAT_1:11;
+  n in NAT & p.n = p/.n by A3,A6,A7,FINSEQ_4:24,ORDINAL1:def 13;
+  hence thesis by A5,A6,A7,A8;
 end;
 
 canceled;
 
 theorem
-  for x,y be real number st x >= 0 & y > 0 holds x / ( [\ x / y /] + 1 ) < y
+  for x,y be real number st x >= 0 & y > 0 holds x / ( [\ x / y /] + 1 )
+  < y
 proof
   let x,y be real number such that
 A1: x >= 0 and
 A2: y > 0;
-  x / y >= 0 by A1,A2;
-  then [\ x / y /] >= 0 by INT_1:80;
-  then
-A3: [\ x / y /] + 1 > 0 + 0;
   (x / y) * y < ( [\ x / y /] + 1 ) * y by A2,INT_1:52,XREAL_1:70;
-  then x < ( [\ x / y /] + 1 ) * y by A2,XCMPLX_1:88;
+  then
+A3: x < ( [\ x / y /] + 1 ) * y by A2,XCMPLX_1:88;
+  [\ x / y /] >= 0 by A1,A2,INT_1:80;
   hence thesis by A3,XREAL_1:85;
 end;
 
@@ -83,15 +83,15 @@ canceled;
 theorem Th4:
   0 div n = 0
 proof
-  now per cases by NAT_D:def 1;
-    suppose ex t be Nat st 0 = n * (0 div n) + t & t < n;
-      then consider t be Nat such that
-A1:   0 = n * (0 div n) + t and
-A2:   t < n;
-      n * (0 div n) = 0 by A1;
-      hence thesis by A2,XCMPLX_1:6;
+  now
+    per cases by NAT_D:def 1;
+    suppose
+A1:   ex t be Nat st 0 = n * (0 div n) + t & t < n;
+      then n * (0 div n) = 0;
+      hence thesis by A1,XCMPLX_1:6;
     end;
-    suppose 0 div n = 0 & n = 0;
+    suppose
+      0 div n = 0 & n = 0;
       hence thesis;
     end;
   end;
@@ -109,7 +109,7 @@ end;
 theorem
   n div 1 = n
 proof
-  n = 1 * n + 0 & 0 < 1;
+  n = 1 * n + 0;
   hence thesis by NAT_D:def 1;
 end;
 
@@ -118,9 +118,8 @@ theorem
 proof
   assume that
 A1: i <= j and
-A2: k <= j and
-A3: i = j -' k + l;
-  i - l = j - k by A2,A3,XREAL_1:235;
+A2: k <= j & i = j -' k + l;
+  i - l = j - k by A2,XREAL_1:235;
   hence k = j - i + l
     .= j -' i + l by A1,XREAL_1:235;
 end;
@@ -128,15 +127,16 @@ end;
 theorem
   i in Seg n implies n -' i + 1 in Seg n
 proof
-  assume i in Seg n;
-  then
-A1: 1 <= i & i <= n by FINSEQ_1:3;
+A1: 1 <= n -' i + 1 by NAT_1:11;
+  assume
+A2: i in Seg n;
+  then 1 <= i by FINSEQ_1:3;
   then n - i <= n - 1 by XREAL_1:15;
-  then n - i + 1 <= n by XREAL_1:21;
   then
-A2: n -' i + 1 <= n by A1,XREAL_1:235;
-  1 <= n -' i + 1 by NAT_1:11;
-  hence thesis by A2,FINSEQ_1:3;
+A3: n - i + 1 <= n by XREAL_1:21;
+  i <= n by A2,FINSEQ_1:3;
+  then n -' i + 1 <= n by A3,XREAL_1:235;
+  hence thesis by A1,FINSEQ_1:3;
 end;
 
 theorem
@@ -156,10 +156,12 @@ proof
   assume
 A1: i >= j;
   per cases by A1,XXREAL_0:1;
-  suppose i = j;
+  suppose
+    i = j;
     hence thesis by XREAL_1:234;
   end;
-  suppose i > j;
+  suppose
+    i > j;
     then j - i < 0 by XREAL_1:51;
     hence thesis by XREAL_0:def 2;
   end;
@@ -175,15 +177,18 @@ A1: j <= i;
     i - j < i - 0 by XREAL_1:17;
     hence thesis by A1,XREAL_1:235;
   end;
-  suppose j > i;
+  suppose
+    j > i;
     hence thesis by Th10;
   end;
 end;
 
 theorem Th12:
-  k <= n implies 2 to_power n = (2 to_power k) * (2 to_power (n-'k))
+  k <= n implies 2 to_power n = (2 to_power k) * (2 to_power (n-'k
+  ))
 proof
-  assume k <= n;
+  assume
+  k <= n;
   then n = k + (n -' k) by XREAL_1:237;
   hence thesis by POWER:32;
 end;
@@ -191,7 +196,8 @@ end;
 theorem
   k <= n implies 2 to_power k divides 2 to_power n
 proof
-  assume k <= n;
+  assume
+  k <= n;
   then 2 to_power n = (2 to_power k) * (2 to_power (n-'k)) by Th12;
   hence thesis by NAT_D:def 3;
 end;
@@ -202,20 +208,16 @@ proof
   assume that
 A1: k > 0 and
 A2: n div k = 0;
-  consider t be Nat such that
-A3: n = k * (n div k) + t and
-A4: t < k by A1,NAT_D:def 1;
-  thus thesis by A2,A3,A4;
+  ex t be Nat st n = k * (n div k) + t & t < k by A1,NAT_D:def 1;
+  hence thesis by A2;
 end;
 
 theorem
   k > 0 & k <= n implies n div k >= 1
 proof
-  assume that
-A1: k > 0 and
-A2: k <= n;
-  n div k <> 0 by A1,A2,Th14;
-  then n div k > 0;
+  assume
+  k > 0 & k <= n;
+  then n div k <> 0 by Th14;
   then n div k >= 0 + 1 by NAT_1:13;
   hence thesis;
 end;
@@ -223,7 +225,8 @@ end;
 theorem
   k <> 0 implies (n+k) div k = (n div k) + 1
 proof
-  assume k <> 0;
+  assume
+  k <> 0;
   then consider t be Nat such that
 A1: n = k * (n div k) + t and
 A2: t < k by NAT_D:def 1;
@@ -232,50 +235,51 @@ A2: t < k by NAT_D:def 1;
 end;
 
 theorem
-  k divides n & 1 <= n & 1 <= i & i <= k implies
-  (n -' i) div k = (n div k) - 1
+  k divides n & 1 <= n & 1 <= i & i <= k implies (n -' i) div k = (n div
+  k) - 1
 proof
   assume that
 A1: k divides n and
 A2: 1 <= n and
 A3: 1 <= i and
 A4: i <= k;
-A5: n = k * (n div k) by A1,NAT_D:3;
+A5: k-'i < k by A3,A4,Th11;
 A6: k <= n by A1,A2,NAT_D:7;
+  then i + k <= k + n by A4,XREAL_1:9;
+  then
+A7: i <= n by XREAL_1:8;
   n div k > 0
   proof
-    assume not n div k > 0;
+    assume
+    not n div k > 0;
     then n div k = 0;
     hence contradiction by A3,A4,A6,Th14;
   end;
   then n div k >= 0 + 1 by NAT_1:13;
   then
-A7: (n div k)-'1 = (n div k) - 1 by XREAL_1:235;
-  i >= 0 + 1 by A3;
-  then
-A8: k-'i < k by A4,Th11;
-  i + k <= k + n by A4,A6,XREAL_1:9;
-  then i <= n by XREAL_1:8;
-  then n -' i = k * (n div k) - k * 1 + k - i by A5,XREAL_1:235
-    .= k * ((n div k)-'1) + (k - i) by A7
+A8: (n div k)-'1 = (n div k) - 1 by XREAL_1:235;
+  n = k * (n div k) by A1,NAT_D:3;
+  then n -' i = k * (n div k) - k * 1 + k - i by A7,XREAL_1:235
+    .= k * ((n div k)-'1) + (k - i) by A8
     .= k * ((n div k)-'1) + (k-'i) by A4,XREAL_1:235;
-  hence thesis by A7,A8,NAT_D:def 1;
+  hence thesis by A8,A5,NAT_D:def 1;
 end;
 
 theorem
   k <= n implies (2 to_power n) div (2 to_power k) = 2 to_power (n -' k)
 proof
-A1: 2 to_power k > 0 by POWER:39;
-  assume k <= n;
-  then 2 to_power n = (2 to_power k) * (2 to_power (n-'k)) by Th12;
-  hence thesis
-  by A1,NAT_D:18;
+  assume
+  k <= n;
+  then 2 to_power k > 0 & 2 to_power n = (2 to_power k) * (2 to_power (n-'k))
+  by Th12,POWER:39;
+  hence thesis by NAT_D:18;
 end;
 
 theorem
   n > 0 implies 2 to_power n mod 2 = 0
 proof
-  assume n > 0;
+  assume
+  n > 0;
   then
 A1: n >= 0 + 1 by NAT_1:13;
   2 to_power n = 2 to_power (n - 1 + 1)
@@ -292,22 +296,25 @@ proof
 A1: n > 0;
   thus n mod 2 = 0 implies (n -' 1) mod 2 = 1
   proof
-    assume
-A2: n mod 2 = 0;
     consider t be Nat such that
-A3: n = 2 * t + (n mod 2) and (n mod 2) < 2 by NAT_D:def 2;
-    t > 0 by A1,A2,A3;
+A2: n = 2 * t + (n mod 2) and
+    (n mod 2) < 2 by NAT_D:def 2;
+    assume
+A3: n mod 2 = 0;
+    then t > 0 by A1,A2;
     then
 A4: t >= 0 + 1 by NAT_1:13;
     n >= 0 + 1 by A1,NAT_1:13;
-    then n -' 1 = 2 * (t - 1 + 1) - 1 by A2,A3,XREAL_1:235
+    then n -' 1 = 2 * (t - 1 + 1) - 1 by A3,A2,XREAL_1:235
       .= 2 * (t - 1) + (1 + 1 - 1)
       .= 2 * (t-'1) + 1 by A4,XREAL_1:235;
     hence thesis by NAT_D:def 2;
   end;
-  assume (n -' 1) mod 2 = 1;
+  assume
+  (n -' 1) mod 2 = 1;
   then consider t be Nat such that
-A5: n -' 1 = 2 * t + 1 and 1 < 2 by NAT_D:def 2;
+A5: n -' 1 = 2 * t + 1 and
+  1 < 2 by NAT_D:def 2;
   n >= 0 + 1 by A1,NAT_1:13;
   then n = 2 * t + 1 + 1 by A5,XREAL_1:237
     .= 2 * (t + 1) + 0;
@@ -318,9 +325,9 @@ theorem
   for n be non empty Nat st n <> 1 holds n > 1
 proof
   let n be non empty Nat;
+A1: n >= 1 by NAT_1:14;
   assume
-A1: n <> 1;
-  n >= 1 by NAT_1:14;
+  n <> 1;
   hence thesis by A1,XXREAL_0:1;
 end;
 
@@ -330,9 +337,9 @@ proof
   assume that
 A1: n <= k and
 A2: k < n + n;
-A3: k - n < n + n - n by A2,XREAL_1:11;
-  k = n + (k - n)
+A3: k = n + (k - n)
     .= n * 1 + (k-'n) by A1,XREAL_1:235;
+  k - n < n + n - n by A2,XREAL_1:11;
   hence thesis by A3,NAT_D:def 1;
 end;
 
@@ -342,13 +349,15 @@ proof
 A1: n in NAT by ORDINAL1:def 13;
   thus n is even implies n mod 2 = 0
   proof
-    assume n is even;
+    assume
+    n is even;
     then consider k be Element of NAT such that
 A2: n = 2*k by A1,ABIAN:def 2;
     n = 2*k + 0 by A2;
     hence thesis by NAT_D:def 2;
   end;
-  assume n mod 2 = 0;
+  assume
+  n mod 2 = 0;
   then ex k be Nat st n = 2*k + 0 & 0 < 2 by NAT_D:def 2;
   hence thesis;
 end;
@@ -361,62 +370,67 @@ proof
 end;
 
 theorem
-  1 <= t & k <= n & 2*t divides k implies
-  (n div t is even iff (n-'k) div t is even)
+  1 <= t & k <= n & 2*t divides k implies (n div t is even iff (n-'k)
+  div t is even)
 proof
   assume that
 A1: 1 <= t and
 A2: k <= n and
 A3: 2*t divides k;
+  consider r be Nat such that
+A4: k = 2 * t * r by A3,NAT_D:def 3;
   thus n div t is even implies (n-'k) div t is even
   proof
-    assume n div t is even;
+    assume
+    n div t is even;
     then consider p be Element of NAT such that
-A4: n div t = 2 * p by ABIAN:def 2;
+A5: n div t = 2 * p by ABIAN:def 2;
     consider q be Nat such that
-A5: n = t * (2 * p) + q and
-A6: q < t by A1,A4,NAT_D:def 1;
-    consider r be Nat such that
-A7: k = 2 * t * r by A3,NAT_D:def 3;
-A8: 2 * t <> 0 by A1;
-    then
-A9: 2 * t > 0;
-    2 * t * r <= 2 * t * p + q / (2 * t) * (2 * t) by A2,A5,A7,A8,XCMPLX_1:88;
-    then 2 * t * r <= 2 * t * (p + q / (2 * t));
-    then
-A10: r <= p + q / (2 * t) by A9,XREAL_1:70;
+A6: n = t * (2 * p) + q and
+A7: q < t by A1,A5,NAT_D:def 1;
     1 * t < 2 * t by A1,XREAL_1:70;
-    then t + q < 2 * t + t by A6,XREAL_1:10;
+    then t + q < 2 * t + t by A7,XREAL_1:10;
     then
-A11: q < 2 * t by XREAL_1:8;
-    now per cases;
-      suppose q <> 0;
-        thus q / (2 * t) < 1 by A11,XREAL_1:191;
+A8: q < 2 * t by XREAL_1:8;
+    now
+      per cases;
+      suppose
+        q <> 0;
+        thus q / (2 * t) < 1 by A8,XREAL_1:191;
       end;
-      suppose q = 0;
+      suppose
+        q = 0;
         hence q / (2 * t) < 1;
       end;
     end;
-    then p + q / (2 * t) < p + 1 by XREAL_1:8;
-    then p + q / (2 * t) + r < p + 1 + (p + q / (2 * t)) by A10,XREAL_1:10;
+    then
+A9: p + q / (2 * t) < p + 1 by XREAL_1:8;
+    consider r be Nat such that
+A10: k = 2 * t * r by A3,NAT_D:def 3;
+A11: 2 * t <> 0 by A1;
+    then 2 * t * r <= 2 * t * p + q / (2 * t) * (2 * t) by A2,A6,A10,
+    XCMPLX_1:88;
+    then 2 * t * r <= 2 * t * (p + q / (2 * t));
+    then r <= p + q / (2 * t) by A11,XREAL_1:70;
+    then p + q / (2 * t) + r < p + 1 + (p + q / (2 * t)) by
+    A9,XREAL_1:10;
     then r < p + 1 by XREAL_1:8;
     then
 A12: r <= p by NAT_1:13;
-    (n-'k) = t * (2 * p) + q - 2 * t * r by A2,A5,A7,XREAL_1:235
+    (n-'k) = t * (2 * p) + q - 2 * t * r by A2,A6,A10,XREAL_1:235
       .= t * (2 * (p - r)) + q
       .= t * (2 * (p-'r)) + q by A12,XREAL_1:235;
-    hence thesis by A6,NAT_D:def 1;
+    hence thesis by A7,NAT_D:def 1;
   end;
-  assume (n-'k) div t is even;
+  assume
+  (n-'k) div t is even;
   then consider p be Element of NAT such that
 A13: (n-'k) div t = 2 * p by ABIAN:def 2;
   consider q be Nat such that
 A14: n-'k = t * (2 * p) + q and
 A15: q < t by A1,A13,NAT_D:def 1;
-A16: n - k = t * (2 * p) + q by A2,A14,XREAL_1:235;
-  consider r be Nat such that
-A17: k = 2 * t * r by A3,NAT_D:def 3;
-  n = t * (2 * (p + r)) + q by A16,A17;
+  n - k = t * (2 * p) + q by A2,A14,XREAL_1:235;
+  then n = t * (2 * (p + r)) + q by A4;
   hence thesis by A15,NAT_D:def 1;
 end;
 
@@ -436,21 +450,21 @@ A4: k * r + k * (m div k) >= k + k * (m div k) by XREAL_1:8;
   per cases;
   suppose
 A5: k <> 0;
-    then consider t1 be Nat such that
-A6: n = k * (n div k) + t1 and t1 < k by NAT_D:def 1;
-    consider t2 be Nat such that
-A7: m = k * (m div k) + t2 and
-A8: t2 < k by A5,NAT_D:def 1;
-A9: m < k + k * (m div k) by A7,A8,XREAL_1:8;
-A10: k * (n div k) <= n by A6,NAT_1:11;
-    m - (k * (n div k)) < (k + k * (m div k)) - (k + k * (m div k))
-    by A3,A4,A9,XREAL_1:16;
-    then m - (k * (n div k)) < 0;
-    then m - n < (k * (n div k)) - (k * (n div k)) by A10,XREAL_1:15;
+    then ex t2 be Nat st m = k * (m div k) + t2 & t2 < k by NAT_D:def 1;
+    then m < k + k * (m div k) by XREAL_1:8;
+    then
+    m - (k * (n div k)) < (k + k * (m div k)) - (k + k * (m div k)) by A3
+    ,A4,XREAL_1:16;
+    then
+A6: m - (k * (n div k)) < 0;
+    ex t1 be Nat st n = k * (n div k) + t1 & t1 < k by A5,NAT_D:def 1;
+    then k * (n div k) <= n by NAT_1:11;
+    then m - n < (k * (n div k)) - (k * (n div k)) by A6,XREAL_1:15;
     then m < 0 + n by XREAL_1:21;
     hence contradiction by A1;
   end;
-  suppose k = 0;
+  suppose
+    k = 0;
     hence contradiction by A2,NAT_D:def 1;
   end;
 end;
@@ -458,7 +472,8 @@ end;
 theorem
   k <= 2 * n implies (k+1) div 2 <= n
 proof
-  assume k <= 2 * n;
+  assume
+  k <= 2 * n;
   then k + 1 <= 2 * n + 1 by XREAL_1:8;
   then (k + 1) div 2 <= (2 * n + 1) div 2 by Th26;
   hence thesis by NAT_D:def 1;
@@ -477,7 +492,8 @@ end;
 theorem
   (n div k) div i = n div (k*i)
 proof
-  now per cases;
+  now
+    per cases;
     suppose
 A1:   i = 0;
       hence (n div k) div i = 0 by NAT_D:def 1
@@ -485,28 +501,31 @@ A1:   i = 0;
     end;
     suppose
 A2:   i <> 0;
-      now per cases;
+      now
+        per cases;
         suppose
 A3:       k = 0;
           then n div k = 0 by NAT_D:def 1;
           hence thesis by A3,Th4;
         end;
-        suppose k <> 0;
-          then consider t1 be Nat such that
-A4:       n = k * (n div k) + t1 and
-A5:       t1 < k by NAT_D:def 1;
+        suppose
+A4:       k <> 0;
           consider t2 be Nat such that
-A6:       n div k = i * ((n div k) div i) + t2 and
-A7:       t2 < i by A2,NAT_D:def 1;
-A8:       n = k * i * ((n div k) div i) + (k * t2 + t1) by A4,A6;
-          t2 + 1 <= i by A7,NAT_1:13;
+A5:       n div k = i * ((n div k) div i) + t2 and
+A6:       t2 < i by A2,NAT_D:def 1;
+          t2 + 1 <= i by A6,NAT_1:13;
           then
-A9:       k * (t2 + 1) <= k * i by XREAL_1:66;
-          k * t2 + t1 < k * t2 + k * 1 by A5,XREAL_1:8;
-          then (k * t2 + t1) - (k * i) < (k * (t2 + 1)) - (k * (t2 + 1))
-          by A9,XREAL_1:16;
-          then k * t2 + t1 < 0 + k * i by XREAL_1:21;
-          hence thesis by A8,NAT_D:def 1;
+A7:       k * (t2 + 1) <= k * i by XREAL_1:66;
+          consider t1 be Nat such that
+A8:       n = k * (n div k) + t1 and
+A9:       t1 < k by A4,NAT_D:def 1;
+          k * t2 + t1 < k * t2 + k * 1 by A9,XREAL_1:8;
+          then (k * t2 + t1) - (k * i) < (k * (t2 + 1)) - (k * (t2 + 1)) by
+          A7,XREAL_1:16;
+          then
+A10:      k * t2 + t1 < 0 + k * i by XREAL_1:21;
+          n = k * i * ((n div k) div i) + (k * t2 + t1) by A8,A5;
+          hence thesis by A10,NAT_D:def 1;
         end;
       end;
       hence thesis;
@@ -526,43 +545,47 @@ definition
     proof
       assume
 A1:   n is trivial;
-      assume
-A2:   n <> 0 & n <> 1;
-      then
-A3:   n > 1+0 by NAT_1:26;
+      assume that
+A2:   n <> 0 and
+A3:   n <> 1;
+A4:   n > 1+0 by A2,A3,NAT_1:26;
       reconsider n as Nat;
-      n = { k where k is Element of NAT : k < n } by AXIOMS:30;
-      then
-A4:   0 in n & 1 in n by A3;
       consider x being set such that
 A5:   n = {x} by A1,A2,REALSET1:def 4;
-      0 = x & 1 = x by A4,A5,TARSKI:def 1;
-      hence contradiction;
+A6:   n = { k where k is Element of NAT : k < n } by AXIOMS:30;
+      then
+A7:   1 in n by A4;
+      0 in n by A2,A6;
+      then 0 = x by A5,TARSKI:def 1;
+      hence contradiction by A7,A5,TARSKI:def 1;
     end;
     assume
-A6: n = 0 or n = 1;
-    per cases by A6;
-    suppose n = 0;
+A8: n = 0 or n = 1;
+    per cases by A8;
+    suppose
+      n = 0;
       hence n is empty or ex x being set st n = {x};
     end;
     suppose
-A7:   n = 1;
-A8:   for x being set holds x in { k where k is Element of NAT : k < 1 }
+A9:   n = 1;
+A10:  for x being set holds x in { k where k is Element of NAT : k < 1 }
       iff x in { 0 }
       proof
         let x be set;
         hereby
-          assume x in { k where k is Element of NAT : k < 1 };
+          assume
+          x in { k where k is Element of NAT : k < 1 };
           then ex k being Element of NAT st x = k & k < 1;
           then x = 0 by NAT_1:14;
           hence x in {0 } by TARSKI:def 1;
         end;
-        assume x in {0};
+        assume
+        x in {0};
         then x = 0 by TARSKI:def 1;
         hence thesis;
       end;
       1 = { k where k is Element of NAT : k < 1 } by AXIOMS:30;
-      then n = {0} by A7,A8,TARSKI:2;
+      then n = {0} by A9,A10,TARSKI:2;
       hence n is empty or ex x being set st n = {x};
     end;
   end;
@@ -590,32 +613,35 @@ proof
   hence thesis;
 end;
 
-scheme Indfrom2 { P[set] } : for k be non trivial Nat holds P[k]
+scheme
+  Indfrom2 { P[set] } : for k be non trivial Nat holds P[k]
 provided
-A1: P[2]
-and
+A1: P[2] and
 A2: for k be non trivial Nat st P[k] holds P[k + 1]
 proof
   defpred P[non empty Nat] means $1 is non trivial implies P[$1];
-A3: P[1] by Def1;
-A4: now
+A3: now
     let k be non empty Nat;
     assume
-A5: P[k];
+A4: P[k];
     now
-      assume k + 1 is non trivial;
+      assume
+      k + 1 is non trivial;
       per cases;
-      suppose k = 1;
+      suppose
+        k = 1;
         hence P[k + 1] by A1;
       end;
-      suppose k <> 1;
+      suppose
+        k <> 1;
         then k is non trivial by Def1;
-        hence P[k + 1] by A2,A5;
+        hence P[k + 1] by A2,A4;
       end;
     end;
     hence P[k+1];
   end;
-  for k be non empty Nat holds P[k] from NAT_1:sch 10(A3,A4);
+A5: P[1] by Def1;
+  for k be non empty Nat holds P[k] from NAT_1:sch 10(A5,A3);
   hence thesis;
 end;
 

@@ -8,10 +8,11 @@ environ
 
  vocabularies ANALOAF, REALSET1, TDGROUP, DIRAF, BINOP_1, FUNCT_1, RLVECT_1,
       ARYTM_1, VECTSP_1, MCART_1, RELAT_1, AFVECT0, ALGSTR_0;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, STRUCT_0, ALGSTR_0, ANALOAF,
-      TDGROUP, FUNCT_1, FUNCT_2, MCART_1, BINOP_1, RELAT_1, VECTSP_1, RLVECT_1;
+ notations TARSKI, ZFMISC_1, SUBSET_1, STRUCT_0, ALGSTR_0, ANALOAF, TDGROUP,
+      FUNCT_1, FUNCT_2, MCART_1, BINOP_1, RELAT_1, VECTSP_1, RLVECT_1;
  constructors BINOP_1, DOMAIN_1, TDGROUP, RELSET_1;
- registrations XBOOLE_0, SUBSET_1, RELSET_1, STRUCT_0, VECTSP_1, TDGROUP;
+ registrations XBOOLE_0, SUBSET_1, RELSET_1, STRUCT_0, VECTSP_1, TDGROUP,
+      RELAT_1;
  requirements SUBSET, BOOLE;
 
 
@@ -22,14 +23,13 @@ definition
   attr IT is WeakAffVect-like means
 :: AFVECT0:def 1
 
-  (for a,b,c being Element of IT st a,b // c,c holds a=b) &
-  (for a,b,c,d,p,q being Element of IT st
-  a,b // p,q & c,d // p,q holds a,b // c,d) & (for a,b,c being Element of IT
-  ex d being Element of IT st a,b // c,d) &
-  (for a,b,c,a',b',c' being Element of IT st
-  a,b // a',b' & a,c // a',c' holds b,c // b',c') &
-  (for a,c being Element of IT ex b being Element of IT st a,b // b,c) &
-  (for a,b,c,d being Element of IT st a,b // c,d holds a,c // b,d);
+  (for a,b,c being Element of IT st a
+,b // c,c holds a=b) & (for a,b,c,d,p,q being Element of IT st a,b // p,q & c,d
+// p,q holds a,b // c,d) & (for a,b,c being Element of IT ex d being Element of
+IT st a,b // c,d) & (for a,b,c,a',b',c' being Element of IT st a,b // a',b' & a
+  ,c // a',c' holds b,c // b',c') & (for a,c being Element of IT ex b being
+  Element of IT st a,b // b,c) & for a,b,c,d being Element of IT st a,b // c,d
+  holds a,c // b,d;
 end;
 
 registration
@@ -84,8 +84,8 @@ theorem :: AFVECT0:11
   a,b // a',b' & c,d // b,a & c,d' // b',a' implies d = d';
 
 theorem :: AFVECT0:12
-  a,b // a',b' & c,d // c',d' & b,f // c,d & b',f' // c',d'
-  implies a,f // a',f';
+  a,b // a',b' & c,d // c',d' & b,f // c,d & b',f' // c',d' implies a,f
+  // a',f';
 
 theorem :: AFVECT0:13
   a,b // a',b' & a,c // c',b' implies b,c // c',a';
@@ -108,7 +108,7 @@ end;
 canceled 2;
 
 theorem :: AFVECT0:16
-  ex a,b st (a<>b & not MDist a,b);
+  ex a,b st a<>b & not MDist a,b;
 
 canceled;
 
@@ -217,8 +217,8 @@ theorem :: AFVECT0:44
   PSym(q,PSym(p,PSym(q,a))) = PSym(PSym(q,p),a);
 
 theorem :: AFVECT0:45
-  PSym(p,PSym(q,a)) = PSym(q,PSym(p,a)) iff p = q or MDist p,q or
-  MDist q,PSym(p,q);
+  PSym(p,PSym(q,a)) = PSym(q,PSym(p,a)) iff p = q or MDist p,q or MDist
+  q,PSym(p,q);
 
 theorem :: AFVECT0:46
   PSym(p,PSym(q,PSym(r,a))) = PSym(r,PSym(q,PSym(p,a)));
@@ -254,7 +254,8 @@ definition
   func Padd(o) -> BinOp of the carrier of AFV means
 :: AFVECT0:def 7
 
-  for a,b holds it.(a,b) = Padd(o,a,b);
+  for a,b holds it.(a
+  ,b) = Padd(o,a,b);
 end;
 
 definition
@@ -262,14 +263,16 @@ definition
   func Pcom(o) -> UnOp of the carrier of AFV means
 :: AFVECT0:def 8
 
-  for a holds it.a = Pcom(o,a);
+  for a holds it.a =
+  Pcom(o,a);
 end;
 
 definition
   let AFV,o;
   func GroupVect(AFV,o) -> strict addLoopStr equals
 :: AFVECT0:def 9
-  addLoopStr(#the carrier of AFV,Padd(o),o#);
+  addLoopStr(#the carrier of
+    AFV,Padd(o),o#);
 end;
 
 registration
@@ -280,16 +283,16 @@ end;
 canceled 6;
 
 theorem :: AFVECT0:55
-  the carrier of GroupVect(AFV,o) = the carrier of AFV
-  & the addF of GroupVect(AFV,o) = Padd(o) & 0.GroupVect(AFV,o) = o;
+  the carrier of GroupVect(AFV,o) = the carrier of AFV & the addF of
+  GroupVect(AFV,o) = Padd(o) & 0.GroupVect(AFV,o) = o;
 
 reserve a,b,c for Element of GroupVect(AFV,o);
 
 canceled;
 
 theorem :: AFVECT0:57
-  for a,b being Element of GroupVect(AFV,o),
-  a',b' being Element of AFV st a=a' & b=b' holds a + b = (Padd(o)).(a',b');
+  for a,b being Element of GroupVect(AFV,o), a',b' being Element of AFV
+  st a=a' & b=b' holds a + b = (Padd(o)).(a',b');
 
 registration
   let AFV,o;
@@ -298,8 +301,8 @@ registration
 end;
 
 theorem :: AFVECT0:58
-  for a being Element of GroupVect(AFV,o),
-  a' being Element of AFV st a=a' holds -a = (Pcom(o)).a';
+  for a being Element of GroupVect(AFV,o), a' being Element of AFV
+  st a=a' holds -a = (Pcom(o)).a';
 
 theorem :: AFVECT0:59
   0.GroupVect(AFV,o) = o;
@@ -324,8 +327,8 @@ reserve AFV for AffVect,
   o for Element of AFV;
 
 theorem :: AFVECT0:67
-  for a being Element of GroupVect(AFV,o)
-  st a + a = 0.(GroupVect(AFV,o)) holds a = 0.(GroupVect(AFV,o));
+  for a being Element of GroupVect(AFV,o) st a + a = 0.(GroupVect(
+  AFV,o)) holds a = 0.(GroupVect(AFV,o));
 
 registration
   let AFV,o;
@@ -352,7 +355,8 @@ registration
 end;
 
 theorem :: AFVECT0:70
-  for ADG being Proper_Uniquely_Two_Divisible_Group holds AV(ADG) is AffVect;
+  for ADG being Proper_Uniquely_Two_Divisible_Group holds AV(ADG)
+  is AffVect;
 
 registration
   let ADG be Proper_Uniquely_Two_Divisible_Group;
@@ -360,12 +364,12 @@ registration
 end;
 
 theorem :: AFVECT0:71
-  for AFV being strict AffVect holds (for o being Element of AFV holds
-  AFV = AV(GroupVect(AFV,o)));
+  for AFV being strict AffVect holds for o being Element of AFV
+  holds AFV = AV(GroupVect(AFV,o));
 
 theorem :: AFVECT0:72
-  for AS being strict AffinStruct holds (AS is AffVect iff
-  (ex ADG being Proper_Uniquely_Two_Divisible_Group st AS = AV(ADG)));
+  for AS being strict AffinStruct holds (AS is AffVect iff ex ADG being
+  Proper_Uniquely_Two_Divisible_Group st AS = AV(ADG) );
 
 definition
   let X,Y be non empty addLoopStr;
@@ -373,9 +377,9 @@ definition
   pred f is_Iso_of X,Y means
 :: AFVECT0:def 10
 
-  f is one-to-one & rng(f) = the carrier of Y &
-  (for a,b being Element of X holds
-  (f.(a+b) = (f.a)+(f.b) & f.(0.X) = 0.Y & f.(-a) = -(f.a)));
+  f is one-to-one & rng(f) = the carrier of
+Y & for a,b being Element of X holds f.(a+b) = (f.a)+(f.b) & f.(0.X) = 0.Y & f.
+  (-a) = -(f.a);
 end;
 
 definition
@@ -383,7 +387,8 @@ definition
   pred X,Y are_Iso means
 :: AFVECT0:def 11
 
-  ex f being Function of the carrier of X,the carrier of Y st f is_Iso_of X,Y;
+  ex f being Function of the carrier of X,the
+  carrier of Y st f is_Iso_of X,Y;
 end;
 
 reserve ADG for Proper_Uniquely_Two_Divisible_Group;
@@ -392,21 +397,21 @@ reserve f for Function of the carrier of ADG,the carrier of ADG;
 canceled 2;
 
 theorem :: AFVECT0:75
-  for o' being Element of ADG, o being Element of AV(ADG) st
-  (for x being Element of ADG holds f.x = o'+x) & o=o'
-  holds (for a,b being Element of ADG holds (f.(a+b) =(Padd(o)).(f.a,f.b)
-  & f.(0.ADG) = 0.(GroupVect(AV(ADG),o)) & f.(-a) = (Pcom(o)).(f.a)));
+  for o' being Element of ADG, o being Element of AV(ADG) st (for
+x being Element of ADG holds f.x = o'+x) & o=o' holds for a,b being Element of
+ADG holds f.(a+b) =(Padd(o)).(f.a,f.b) & f.(0.ADG) = 0.(GroupVect(AV(ADG),o)) &
+  f.(-a) = (Pcom(o)).(f.a);
 
 theorem :: AFVECT0:76
-  for o' being Element of ADG st (for b being Element of ADG holds f.b = o'+b)
-  holds f is one-to-one;
+  for o' being Element of ADG st (for b being Element of ADG holds
+  f.b = o'+b) holds f is one-to-one;
 
 theorem :: AFVECT0:77
-  for o' being Element of ADG, o being Element of AV(ADG) st
-  (for b being Element of ADG holds f.b = o'+b)
-  holds rng(f) = the carrier of GroupVect(AV(ADG),o);
+  for o' being Element of ADG, o being Element of AV(ADG) st (for
+  b being Element of ADG holds f.b = o'+b) holds rng(f) = the carrier of
+  GroupVect(AV(ADG),o);
 
 theorem :: AFVECT0:78
-  for ADG being Proper_Uniquely_Two_Divisible_Group, o' being Element of ADG,
-  o being Element of AV(ADG) st o=o' holds ADG,GroupVect(AV(ADG),o) are_Iso;
+  for ADG being Proper_Uniquely_Two_Divisible_Group, o' being Element of
+ADG, o being Element of AV(ADG) st o=o' holds ADG,GroupVect(AV(ADG),o) are_Iso;
 

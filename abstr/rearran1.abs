@@ -14,10 +14,9 @@ environ
       PARTFUN1, FINSEQ_1, VALUED_1, SEQ_1, RFUNCT_1, FINSEQOP, RVSUM_1,
       CLASSES1, RFINSEQ, RFUNCT_3;
  constructors REAL_1, NAT_1, FINSEQOP, RVSUM_1, RFINSEQ, RFUNCT_3, SEQ_1,
-      CLASSES1, RELSET_1;
- registrations XBOOLE_0, SUBSET_1, RELSET_1, PARTFUN1, FINSET_1, NUMBERS,
-      XXREAL_0, XREAL_0, NAT_1, MEMBERED, FINSEQ_1, RFUNCT_3, VALUED_0, CARD_1,
-      FINSEQ_2;
+      CLASSES1, RELSET_1, BINOP_2;
+ registrations SUBSET_1, RELSET_1, PARTFUN1, FINSET_1, NUMBERS, XXREAL_0,
+      XREAL_0, NAT_1, MEMBERED, FINSEQ_1, VALUED_0, CARD_1, FINSEQ_2, FUNCT_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
 
 
@@ -28,8 +27,8 @@ reserve n,m,k for Element of NAT,
   r for Real;
 
 definition
-  let D be non empty set, E be real-membered set, F be PartFunc of D,E,
-  r be Real;
+  let D be non empty set, E be real-membered set, F be PartFunc of D,E, r be
+  Real;
   redefine func r(#)F ->Element of PFuncs(D,REAL);
 end;
 
@@ -38,12 +37,13 @@ definition
   attr IT is terms've_same_card_as_number means
 :: REARRAN1:def 1
 
-  for n be Nat st 1<=n & n<=len IT
-  for B being finite set st B = IT.n holds card B = n;
+  for n be Nat st 1<=n &
+  n<=len IT for B being finite set st B = IT.n holds card B = n;
   attr IT is ascending means
 :: REARRAN1:def 2
 
-  for n be Nat st 1<=n & n<=len IT - 1 holds IT.n c= IT.(n+1);
+  for n be Nat st 1<=n & n<=len IT - 1 holds
+  IT.n c= IT.(n+1);
 end;
 
 definition
@@ -52,7 +52,8 @@ definition
   attr IT is lenght_equal_card_of_set means
 :: REARRAN1:def 3
 
-  ex B being finite set st B = union X & len IT = card B;
+  ex B being finite set st B
+  = union X & len IT = card B;
 end;
 
 registration
@@ -63,222 +64,211 @@ end;
 
 definition
   let D be non empty finite set;
-  mode RearrangmentGen of D is
-    terms've_same_card_as_number ascending lenght_equal_card_of_set
-    FinSequence of bool(D);
+  mode RearrangmentGen of D is terms've_same_card_as_number ascending
+    lenght_equal_card_of_set FinSequence of bool(D);
 end;
 
 reserve C,D for non empty finite set,
   a for FinSequence of bool D;
 
 theorem :: REARRAN1:1
-  for a be FinSequence of bool D holds
-  a is lenght_equal_card_of_set iff len a = card D;
+  for a be FinSequence of bool D holds a is
+  lenght_equal_card_of_set iff len a = card D;
 
 theorem :: REARRAN1:2
-  for a be FinSequence holds
-  a is ascending iff for n,m st n<=m & n in dom a & m in dom a holds a.n c= a.m
-;
+  for a be FinSequence holds a is ascending iff for n,m st n<=m & n
+  in dom a & m in dom a holds a.n c= a.m;
 
 theorem :: REARRAN1:3
   for a be terms've_same_card_as_number lenght_equal_card_of_set
   FinSequence of bool D holds a.(len a) = D;
 
 theorem :: REARRAN1:4
-  for a be lenght_equal_card_of_set FinSequence of bool D holds len a <> 0;
+  for a be lenght_equal_card_of_set FinSequence of bool D holds len
+  a <> 0;
 
 theorem :: REARRAN1:5
-  for a be ascending terms've_same_card_as_number FinSequence of bool D holds
-  for n,m holds n in dom a & m in dom a & n<>m implies a.n <> a.m;
+  for a be ascending terms've_same_card_as_number FinSequence of
+  bool D holds for n,m holds n in dom a & m in dom a & n<>m implies a.n <> a.m;
 
 theorem :: REARRAN1:6
-  for a be ascending terms've_same_card_as_number FinSequence of bool D holds
-  for n holds 1 <= n & n <= len a - 1 implies a.n <> a.(n+1);
+  for a be ascending terms've_same_card_as_number FinSequence of bool D
+  holds for n holds 1 <= n & n <= len a - 1 implies a.n <> a.(n+1);
 
 theorem :: REARRAN1:7
-  for a be terms've_same_card_as_number FinSequence of bool D
-  st n in dom a holds a.n <> {};
+  for a be terms've_same_card_as_number FinSequence of bool D st n
+  in dom a holds a.n <> {};
 
 theorem :: REARRAN1:8
-  for a be terms've_same_card_as_number FinSequence of bool D
-  st 1<=n & n<=len a - 1 holds a.(n+1) \ a.n <> {};
+  for a be terms've_same_card_as_number FinSequence of bool D st 1
+  <=n & n<=len a - 1 holds a.(n+1) \ a.n <> {};
 
 theorem :: REARRAN1:9
   for a be terms've_same_card_as_number lenght_equal_card_of_set
   FinSequence of bool D ex d be Element of D st a.1 = {d};
 
 theorem :: REARRAN1:10
-  for a be terms've_same_card_as_number ascending FinSequence of bool D
-  st 1<=n & n<=len a - 1 ex d be Element of D st
-  a.(n+1) \ a.n = {d} & a.(n+1) = a.n \/ {d} & a.(n+1) \ {d} = a.n;
+  for a be terms've_same_card_as_number ascending FinSequence of
+bool D st 1<=n & n<=len a - 1 ex d be Element of D st a.(n+1) \ a.n = {d} & a.(
+  n+1) = a.n \/ {d} & a.(n+1) \ {d} = a.n;
 
 definition
   let D be non empty finite set, A be RearrangmentGen of D;
   func Co_Gen A -> RearrangmentGen of D means
 :: REARRAN1:def 4
 
-  for m be Nat st 1 <= m & m <= len it - 1 holds it.m = D \ A.(len A -m);
+  for m be Nat st 1 <= m &
+  m <= len it - 1 holds it.m = D \ A.(len A -m);
 end;
 
 theorem :: REARRAN1:11
   for A be RearrangmentGen of D holds Co_Gen(Co_Gen A) = A;
 
 theorem :: REARRAN1:12
-  for F be PartFunc of D,REAL, A be RearrangmentGen of C
-  st F is total & card C = card D holds len MIM FinS(F,D) = len CHI(A,C);
+  for F be PartFunc of D,REAL, A be RearrangmentGen of C st F is
+  total & card C = card D holds len MIM FinS(F,D) = len CHI(A,C);
 
 definition
-  let D,C be non empty finite set, A be RearrangmentGen of C,
-  F be PartFunc of D,REAL;
+  let D,C be non empty finite set, A be RearrangmentGen of C, F be PartFunc of
+  D,REAL;
   func Rland (F,A) -> PartFunc of C,REAL equals
 :: REARRAN1:def 5
-  Sum (MIM(FinS(F,D)) (#) CHI(A,C));
+  Sum (MIM(FinS(F,D)) (#) CHI(A,
+  C));
   func Rlor(F,A) -> PartFunc of C,REAL equals
 :: REARRAN1:def 6
-  Sum (MIM(FinS(F,D)) (#) CHI(Co_Gen A,C));
+  Sum (MIM(FinS(F,D)) (#) CHI(
+  Co_Gen A,C));
 end;
 
 theorem :: REARRAN1:13
-  for F be PartFunc of D,REAL, A be RearrangmentGen of C
-  st F is total & card C = card D holds dom Rland(F,A) = C;
+  for F be PartFunc of D,REAL, A be RearrangmentGen of C st F is
+  total & card C = card D holds dom Rland(F,A) = C;
 
 theorem :: REARRAN1:14
-  for c be Element of C, F be PartFunc of D,REAL, A be RearrangmentGen of C
-  st F is total & card C = card D holds
-  (c in A.1 implies (MIM(FinS(F,D)) (#) CHI(A,C))#c = MIM(FinS(F,D))) &
-  for n st 1<=n & n<len A & c in A.(n+1) \ A.n holds
-  (MIM(FinS(F,D)) (#) CHI(A,C))#c = (n |-> (0 qua Real)) ^ (MIM(FinS(F,D)/^n));
+  for c be Element of C, F be PartFunc of D,REAL, A be
+RearrangmentGen of C st F is total & card C = card D holds (c in A.1 implies (
+MIM(FinS(F,D)) (#) CHI(A,C))#c = MIM(FinS(F,D))) & for n st 1<=n & n<len A & c
+in A.(n+1) \ A.n holds (MIM(FinS(F,D)) (#) CHI(A,C))#c = (n |-> (0 qua Real)) ^
+  (MIM(FinS(F,D)/^n));
 
 theorem :: REARRAN1:15
-  for c be Element of C, F be PartFunc of D,REAL, A be RearrangmentGen of C
-  st F is total & card C = card D holds
-  (c in A.1 implies (Rland(F,A)).c = FinS(F,D).1) &
-  for n st 1<=n & n<len A & c in A.(n+1) \ A.n holds
-  Rland(F,A).c = FinS(F,D).(n+1);
+  for c be Element of C, F be PartFunc of D,REAL, A be
+RearrangmentGen of C st F is total & card C = card D holds (c in A.1 implies (
+  Rland(F,A)).c = FinS(F,D).1) & for n st 1<=n & n<len A & c in A.(n+1) \ A.n
+  holds Rland(F,A).c = FinS(F,D).(n+1);
 
 theorem :: REARRAN1:16
-  for F be PartFunc of D,REAL, A be RearrangmentGen of C
-  st F is total & card C = card D holds rng Rland(F,A) = rng FinS(F,D);
+  for F be PartFunc of D,REAL, A be RearrangmentGen of C st F is
+  total & card C = card D holds rng Rland(F,A) = rng FinS(F,D);
 
 theorem :: REARRAN1:17
-  for F be PartFunc of D,REAL, A be RearrangmentGen of C
-  st F is total & card C = card D holds
-  Rland(F,A), FinS(F,D) are_fiberwise_equipotent;
+  for F be PartFunc of D,REAL, A be RearrangmentGen of C st F is
+  total & card C = card D holds Rland(F,A), FinS(F,D) are_fiberwise_equipotent;
 
 theorem :: REARRAN1:18
-  for F be PartFunc of D,REAL, A be RearrangmentGen of C
-  st F is total & card C = card D holds FinS(Rland(F,A),C) = FinS(F,D);
+  for F be PartFunc of D,REAL, A be RearrangmentGen of C st F is
+  total & card C = card D holds FinS(Rland(F,A),C) = FinS(F,D);
 
 theorem :: REARRAN1:19
-  for F be PartFunc of D,REAL, A be RearrangmentGen of C
-  st F is total & card C = card D holds Sum (Rland(F,A),C) = Sum (F,D);
+  for F be PartFunc of D,REAL, A be RearrangmentGen of C st F is
+  total & card C = card D holds Sum (Rland(F,A),C) = Sum (F,D);
 
 theorem :: REARRAN1:20
-  for F be PartFunc of D,REAL, A be RearrangmentGen of C
-  st F is total & card C = card D holds
-  FinS(Rland(F,A) - r,C) = FinS(F-r,D) & Sum (Rland(F,A)-r,C) = Sum (F-r,D);
+  for F be PartFunc of D,REAL, A be RearrangmentGen of C st F is total &
+card C = card D holds FinS(Rland(F,A) - r,C) = FinS(F-r,D) & Sum (Rland(F,A)-r,
+  C) = Sum (F-r,D);
 
 theorem :: REARRAN1:21
-  for F be PartFunc of D,REAL, A be RearrangmentGen of C
-  st F is total & card C = card D holds dom Rlor(F,A) = C;
+  for F be PartFunc of D,REAL, A be RearrangmentGen of C st F is
+  total & card C = card D holds dom Rlor(F,A) = C;
 
 theorem :: REARRAN1:22
-  for c be Element of C, F be PartFunc of D,REAL, A be RearrangmentGen of C
-  st F is total & card C = card D holds
-  (c in (Co_Gen A).1 implies (Rlor(F,A)).c = FinS(F,D).1) &
-  for n st 1<=n & n<len (Co_Gen A) & c in (Co_Gen A).(n+1) \ (Co_Gen A).n
-  holds Rlor(F,A).c = FinS(F,D).(n+1);
+  for c be Element of C, F be PartFunc of D,REAL, A be
+  RearrangmentGen of C st F is total & card C = card D holds (c in (Co_Gen A).1
+implies (Rlor(F,A)).c = FinS(F,D).1) & for n st 1<=n & n<len (Co_Gen A) & c in
+  (Co_Gen A).(n+1) \ (Co_Gen A).n holds Rlor(F,A).c = FinS(F,D).(n+1);
 
 theorem :: REARRAN1:23
-  for F be PartFunc of D,REAL, A be RearrangmentGen of C
-  st F is total & card C = card D holds rng Rlor(F,A) = rng FinS(F,D);
+  for F be PartFunc of D,REAL, A be RearrangmentGen of C st F is
+  total & card C = card D holds rng Rlor(F,A) = rng FinS(F,D);
 
 theorem :: REARRAN1:24
-  for F be PartFunc of D,REAL, A be RearrangmentGen of C
-  st F is total & card C = card D
-  holds Rlor(F,A), FinS(F,D) are_fiberwise_equipotent;
+  for F be PartFunc of D,REAL, A be RearrangmentGen of C st F is
+  total & card C = card D holds Rlor(F,A), FinS(F,D) are_fiberwise_equipotent;
 
 theorem :: REARRAN1:25
-  for F be PartFunc of D,REAL, A be RearrangmentGen of C
-  st F is total & card C = card D holds FinS(Rlor(F,A),C) = FinS(F,D);
+  for F be PartFunc of D,REAL, A be RearrangmentGen of C st F is
+  total & card C = card D holds FinS(Rlor(F,A),C) = FinS(F,D);
 
 theorem :: REARRAN1:26
-  for F be PartFunc of D,REAL, A be RearrangmentGen of C
-  st F is total & card C = card D holds Sum (Rlor(F,A),C) = Sum (F,D);
+  for F be PartFunc of D,REAL, A be RearrangmentGen of C st F is
+  total & card C = card D holds Sum (Rlor(F,A),C) = Sum (F,D);
 
 theorem :: REARRAN1:27
-  for F be PartFunc of D,REAL, A be RearrangmentGen of C
-  st F is total & card C = card D
-  holds FinS((Rlor(F,A)) - r,C) = FinS(F-r,D) & Sum (Rlor(F,A)-r,C) = Sum
-  (F-r,D);
+  for F be PartFunc of D,REAL, A be RearrangmentGen of C st F is total &
+card C = card D holds FinS((Rlor(F,A)) - r,C) = FinS(F-r,D) & Sum (Rlor(F,A)-r,
+  C) = Sum (F-r,D);
 
 theorem :: REARRAN1:28
-  for F be PartFunc of D,REAL, A be RearrangmentGen of C
-  st F is total & card C = card D
-  holds Rlor(F,A), Rland(F,A) are_fiberwise_equipotent &
-  FinS(Rlor(F,A),C) = FinS(Rland(F,A),C) &
-  Sum (Rlor(F,A),C) = Sum (Rland(F,A),C);
+  for F be PartFunc of D,REAL, A be RearrangmentGen of C st F is total &
+  card C = card D holds Rlor(F,A), Rland(F,A) are_fiberwise_equipotent & FinS(
+  Rlor(F,A),C) = FinS(Rland(F,A),C) & Sum (Rlor(F,A),C) = Sum (Rland(F,A),C);
 
 theorem :: REARRAN1:29
-  for F be PartFunc of D,REAL, A be RearrangmentGen of C
-  st F is total & card C = card D
-  holds max+(Rland(F,A) - r), max+(F - r) are_fiberwise_equipotent &
-  FinS(max+(Rland(F,A) - r), C) = FinS(max+(F - r), D) &
-  Sum (max+(Rland(F,A) - r), C) = Sum (max+(F - r), D);
+  for F be PartFunc of D,REAL, A be RearrangmentGen of C st F is total &
+  card C = card D holds max+(Rland(F,A) - r), max+(F - r)
+are_fiberwise_equipotent & FinS(max+(Rland(F,A) - r), C) = FinS(max+(F - r), D)
+  & Sum (max+(Rland(F,A) - r), C) = Sum (max+(F - r), D);
 
 theorem :: REARRAN1:30
-  for F be PartFunc of D,REAL, A be RearrangmentGen of C
-  st F is total & card C = card D holds
-  max-(Rland(F,A) - r), max-(F - r) are_fiberwise_equipotent &
-  FinS(max-(Rland(F,A) - r), C) = FinS(max-(F - r), D) &
-  Sum (max-(Rland(F,A) - r), C) = Sum (max-(F - r), D);
+  for F be PartFunc of D,REAL, A be RearrangmentGen of C st F is total &
+  card C = card D holds max-(Rland(F,A) - r), max-(F - r)
+are_fiberwise_equipotent & FinS(max-(Rland(F,A) - r), C) = FinS(max-(F - r), D)
+  & Sum (max-(Rland(F,A) - r), C) = Sum (max-(F - r), D);
 
 theorem :: REARRAN1:31
-  for F be PartFunc of D,REAL, A be RearrangmentGen of C
-  st F is total & card D = card C
-  holds len FinS(Rland(F,A),C) = card C & 1<=len FinS(Rland(F,A),C);
+  for F be PartFunc of D,REAL, A be RearrangmentGen of C st F is
+  total & card D = card C holds len FinS(Rland(F,A),C) = card C & 1<=len FinS(
+  Rland(F,A),C);
 
 theorem :: REARRAN1:32
-  for F be PartFunc of D,REAL, A be RearrangmentGen of C
-  st F is total & card D = card C & n in dom A holds
-  FinS(Rland(F,A),C) | n = FinS(Rland(F,A),A.n);
+  for F be PartFunc of D,REAL, A be RearrangmentGen of C st F is total &
+card D = card C & n in dom A holds FinS(Rland(F,A),C) | n = FinS(Rland(F,A),A.n
+  );
 
 theorem :: REARRAN1:33
-  for F be PartFunc of D,REAL, A be RearrangmentGen of C
-  st F is total & card D = card C holds Rland(F-r,A) = Rland(F,A) - r;
+  for F be PartFunc of D,REAL, A be RearrangmentGen of C st F is total &
+  card D = card C holds Rland(F-r,A) = Rland(F,A) - r;
 
 theorem :: REARRAN1:34
-  for F be PartFunc of D,REAL, A be RearrangmentGen of C
-  st F is total & card C = card D
-  holds max+(Rlor(F,A) - r), max+(F - r) are_fiberwise_equipotent &
-  FinS(max+(Rlor(F,A) - r), C) = FinS(max+(F - r), D) &
-  Sum (max+(Rlor(F,A) - r), C) = Sum (max+(F - r), D);
+  for F be PartFunc of D,REAL, A be RearrangmentGen of C st F is total &
+card C = card D holds max+(Rlor(F,A) - r), max+(F - r) are_fiberwise_equipotent
+& FinS(max+(Rlor(F,A) - r), C) = FinS(max+(F - r), D) & Sum (max+(Rlor(F,A) - r
+  ), C) = Sum (max+(F - r), D);
 
 theorem :: REARRAN1:35
-  for F be PartFunc of D,REAL, A be RearrangmentGen of C
-  st F is total & card C = card D holds
-  max-(Rlor(F,A) - r), max-(F - r) are_fiberwise_equipotent &
-  FinS(max-(Rlor(F,A) - r), C) = FinS(max-(F - r), D) &
-  Sum (max-(Rlor(F,A) - r), C) = Sum (max-(F - r), D);
+  for F be PartFunc of D,REAL, A be RearrangmentGen of C st F is total &
+card C = card D holds max-(Rlor(F,A) - r), max-(F - r) are_fiberwise_equipotent
+& FinS(max-(Rlor(F,A) - r), C) = FinS(max-(F - r), D) & Sum (max-(Rlor(F,A) - r
+  ), C) = Sum (max-(F - r), D);
 
 theorem :: REARRAN1:36
-  for F be PartFunc of D,REAL, A be RearrangmentGen of C
-  st F is total & card D = card C
-  holds len FinS(Rlor(F,A),C) = card C & 1<=len FinS(Rlor(F,A),C);
+  for F be PartFunc of D,REAL, A be RearrangmentGen of C st F is
+total & card D = card C holds len FinS(Rlor(F,A),C) = card C & 1<=len FinS(Rlor
+  (F,A),C);
 
 theorem :: REARRAN1:37
-  for F be PartFunc of D,REAL, A be RearrangmentGen of C
-  st F is total & card D = card C & n in dom A holds
-  FinS(Rlor(F,A),C) | n = FinS(Rlor(F,A),(Co_Gen A).n);
+  for F be PartFunc of D,REAL, A be RearrangmentGen of C st F is total &
+  card D = card C & n in dom A holds FinS(Rlor(F,A),C) | n = FinS(Rlor(F,A),(
+  Co_Gen A).n);
 
 theorem :: REARRAN1:38
-  for F be PartFunc of D,REAL, A be RearrangmentGen of C
-  st F is total & card D = card C holds Rlor(F-r,A) = Rlor(F,A) - r;
+  for F be PartFunc of D,REAL, A be RearrangmentGen of C st F is total &
+  card D = card C holds Rlor(F-r,A) = Rlor(F,A) - r;
 
 theorem :: REARRAN1:39
-  for F be PartFunc of D,REAL, A be RearrangmentGen of C
-  st F is total & card D = card C holds
-  Rland(F,A) , F are_fiberwise_equipotent & Rlor
-  (F,A) , F are_fiberwise_equipotent &
-  rng Rland(F,A) = rng F & rng Rlor(F,A) = rng F;
+  for F be PartFunc of D,REAL, A be RearrangmentGen of C st F is total &
+card D = card C holds Rland(F,A) , F are_fiberwise_equipotent & Rlor (F,A) , F
+  are_fiberwise_equipotent & rng Rland(F,A) = rng F & rng Rlor(F,A) = rng F;
 

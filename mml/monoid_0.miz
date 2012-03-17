@@ -12,10 +12,10 @@ environ
       ALGSTR_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, REAL_1, MCART_1,
       DOMAIN_1, BINOP_2, REALSET1, STRUCT_0, RELAT_1, FINSEQOP, FUNCT_1,
-      FINSEQ_1, PARTFUN1, FUNCT_2, BINOP_1, FINSEQ_2, INT_1, GROUP_1,
-      VECTSP_1, SETWISEO, FUNCOP_1, GR_CY_1, ALGSTR_0;
- constructors RELAT_2, PARTFUN1, BINOP_1, SETWISEO, BINOP_2,
-      FINSEQOP, REALSET1, VECTSP_2, GR_CY_1, RELSET_1;
+      FINSEQ_1, PARTFUN1, FUNCT_2, BINOP_1, FINSEQ_2, INT_1, GROUP_1, VECTSP_1,
+      SETWISEO, FUNCOP_1, GR_CY_1, ALGSTR_0;
+ constructors RELAT_2, PARTFUN1, BINOP_1, SETWISEO, BINOP_2, FINSEQOP,
+      REALSET1, VECTSP_2, GR_CY_1, RELSET_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, PARTFUN1,
       FUNCT_2, NUMBERS, BINOP_2, MEMBERED, FINSEQ_1, REALSET1, STRUCT_0,
       GROUP_1, ALGSTR_0;
@@ -25,7 +25,7 @@ environ
  theorems TARSKI, NAT_1, INT_1, FINSEQ_1, BINOP_1, GROUP_1, FINSEQOP, SETWISEO,
       VECTSP_1, MCART_1, ZFMISC_1, FUNCT_1, FUNCT_2, FUNCT_4, FUNCOP_1,
       PARTFUN1, GR_CY_1, GRFUNC_1, RELAT_1, RELSET_1, XBOOLE_1, XCMPLX_1,
-      NUMBERS, BINOP_2, FRAENKEL, SUBSET_1;
+      NUMBERS, BINOP_2;
  schemes FUNCT_2, BINOP_1, XBOOLE_0;
 
 begin :: Updating
@@ -43,23 +43,27 @@ definition
   let IT be 1-sorted;
   attr IT is constituted-Functions means
   :Def1:
-  for a being Element of IT holds a is Function;
+  for a being Element of IT
+  holds a is Function;
   attr IT is constituted-FinSeqs means
   :Def2:
-  for a being Element of IT holds a is FinSequence;
+  for a being Element of IT holds
+  a is FinSequence;
 end;
 
 registration
   cluster constituted-Functions 1-sorted;
   existence
-  proof consider f being Function;
+  proof
+    consider f being Function;
     take X = 1-sorted(#{f}#);
     let a be Element of X;
-    thus thesis by TARSKI:def 1;
+    thus thesis;
   end;
   cluster constituted-FinSeqs 1-sorted;
   existence
-  proof consider f being FinSequence;
+  proof
+    consider f being FinSequence;
     take X = 1-sorted(#{f}#);
     let a be Element of X;
     thus thesis by TARSKI:def 1;
@@ -93,7 +97,8 @@ definition
   let D be set, p,q be FinSequence of D;
   redefine func p^q -> Element of D*;
   coherence
-  proof thus p^q is Element of D* by FINSEQ_1:def 11;
+  proof
+    thus p^q is Element of D* by FINSEQ_1:def 11;
   end;
 end;
 
@@ -106,51 +111,54 @@ definition
   let D be non empty set;
   let IT be BinOp of D;
   attr IT is left-invertible means
-
-  for a,b being Element of D
-  ex l being Element of D st IT.(l,a) = b;
+  for a,b being Element of D ex l being
+  Element of D st IT.(l,a) = b;
   attr IT is right-invertible means
-
-  for a,b being Element of D
-  ex r being Element of D st IT.(a,r) = b;
+  for a,b being Element of D ex r being
+  Element of D st IT.(a,r) = b;
   attr IT is invertible means
   :Def5:
-  for a,b being Element of D ex r,l being Element of D st
-  IT.(a,r) = b & IT.(l,a) = b;
+  for a,b being Element of D ex r,l being
+  Element of D st IT.(a,r) = b & IT.(l,a) = b;
   attr IT is left-cancelable means
-  for a,b,c being Element of D st IT.(a,b) = IT.(a,c) holds b = c;
+  for a,b,c being Element of D st IT.(a,b) =
+  IT.(a,c) holds b = c;
   attr IT is right-cancelable means
-  for a,b,c being Element of D st IT.(b,a) = IT.(c,a) holds b = c;
+  for a,b,c being Element of D st IT.(b,a) =
+  IT.(c,a) holds b = c;
   attr IT is cancelable means
-
-  for a,b,c being Element of D st
-  IT.(a,b) = IT.(a,c) or IT.(b,a) = IT.(c,a) holds b = c;
+  for a,b,c being Element of D st IT.(a,b) = IT.(a
+  ,c) or IT.(b,a) = IT.(c,a) holds b = c;
   attr IT is uniquely-decomposable means
-  IT is having_a_unity & for a,b being Element of D st
-  IT.(a,b) = the_unity_wrt IT holds a = b & b = the_unity_wrt IT;
+  IT is having_a_unity & for a,b being
+Element of D st IT.(a,b) = the_unity_wrt IT holds a = b & b = the_unity_wrt IT;
 end;
 
 theorem Th1:
-  for D be non empty set, f being BinOp of D holds
-  f is invertible iff f is left-invertible right-invertible
+  for D be non empty set, f being BinOp of D holds f is invertible
+  iff f is left-invertible right-invertible
 proof
   let D be non empty set, f be BinOp of D;
   thus f is invertible implies f is left-invertible right-invertible
   proof
     assume
-A1: for a,b being Element of D ex r,l being Element of D st
-    f.(a,r) = b & f.(l,a) = b;
+A1: for a,b being Element of D ex r,l being Element of D st f.(a,r) =
+    b & f.(l,a) = b;
     now
       let a,b be Element of D;
       consider r,l being Element of D such that
-A2:   f.(a,r) = b & f.(l,a) = b by A1;
-      take l; thus f.(l,a) = b by A2;
+      f.(a,r) = b and
+A2:   f.(l,a) = b by A1;
+      take l;
+      thus f.(l,a) = b by A2;
     end;
     hence for a,b being Element of D ex l being Element of D st f.(l,a) = b;
     let a,b be Element of D;
     consider r,l being Element of D such that
-A3: f.(a,r) = b & f.(l,a) = b by A1;
-    take r; thus thesis by A3;
+A3: f.(a,r) = b and
+    f.(l,a) = b by A1;
+    take r;
+    thus thesis by A3;
   end;
   assume that
 A4: for a,b being Element of D ex l being Element of D st f.(l,a) = b and
@@ -160,79 +168,82 @@ A5: for a,b being Element of D ex r being Element of D st f.(a,r) = b;
 A6: f.(l,a) = b by A4;
   consider r being Element of D such that
 A7: f.(a,r) = b by A5;
-  take r, l; thus thesis by A6,A7;
+  take r, l;
+  thus thesis by A6,A7;
 end;
 
 theorem Th2:
-  for D be non empty set, f being BinOp of D holds
-  f is cancelable iff f is left-cancelable right-cancelable
+  for D be non empty set, f being BinOp of D holds f is cancelable
+  iff f is left-cancelable right-cancelable
 proof
   let D be non empty set, f be BinOp of D;
   thus f is cancelable implies f is left-cancelable right-cancelable
   proof
     assume
-A1: for a,b,c being Element of D st
-    f.(a,b) = f.(a,c) or f.(b,a) = f.(c,a) holds b = c;
-    hence for a,b,c being Element of D st f.(a,b) = f.(a,c) holds b = c; thus
-    for a,b,c being Element of D st f.(b,a) = f.(c,a) holds b = c by A1;
+A1: for a,b,c being Element of D st f.(a,b) = f.(a,c) or f.(b,a) = f.(
+    c,a) holds b = c;
+    hence for a,b,c being Element of D st f.(a,b) = f.(a,c) holds b = c;
+    thus for a,b,c being Element of D st f.(b,a) = f.(c,a) holds b = c by A1;
   end;
-  assume that
-A2: for a,b,c being Element of D st f.(a,b) = f.(a,c) holds b = c and
-A3: for a,b,c being Element of D st f.(b,a) = f.(c,a) holds b = c;
-  thus for a,b,c being Element of D st
-  f.(a,b) = f.(a,c) or f.(b,a) = f.(c,a) holds b = c by A2,A3;
+  assume
+  ( for a,b,c being Element of D st f.(a,b) = f.(a,c) holds b = c)&
+  for a,b,c being Element of D st f.(b,a) = f.(c,a) holds b = c;
+  hence for a,b,c being Element of D st f.(a,b) = f.(a,c) or f.(b,a) = f.(c,a)
+  holds b = c;
 end;
 
 theorem Th3:
-  for f being BinOp of {x} holds f = (x,x) .--> x &
-  f is having_a_unity & f is commutative & f is associative & f is idempotent &
-  f is invertible cancelable uniquely-decomposable
+  for f being BinOp of {x} holds f = (x,x) .--> x & f is
+  having_a_unity & f is commutative & f is associative & f is idempotent & f is
+  invertible cancelable uniquely-decomposable
 proof
   let f be BinOp of {x};
   reconsider a = x as Element of {x} by TARSKI:def 1;
-A1: dom f = [:{x},{x}:] & dom ((x,x) .--> x) = {[x,x]} & [:{x},{x}:] = {[x,x]}
-  by FUNCT_2:def 1,ZFMISC_1:35;
-  now
+A1: [:{x},{x}:] = {[x,x]} by ZFMISC_1:35;
+A2: now
     let y;
     assume
-A2: y in {[x,x]};
+A3: y in {[x,x]};
     then reconsider b = y as Element of [:{x},{x}:] by ZFMISC_1:35;
     thus f.y = f.b
       .= x by TARSKI:def 1
-      .= ((x,x) .--> x).y by A2,FUNCOP_1:13;
+      .= ((x,x) .--> x).y by A3,FUNCOP_1:13;
   end;
-  hence f = (x,x) .--> x by A1,FUNCT_1:9;
-A3: now
+  dom f = [:{x},{x}:] & dom ((x,x) .--> x) = {[x,x]} by FUNCT_2:def 1;
+  hence f = (x,x) .--> x by A1,A2,FUNCT_1:9;
+A4: now
     let a,b be Element of {x};
-    a = x & b = x by TARSKI:def 1;
-    hence a = b;
+    a = x by TARSKI:def 1;
+    hence a = b by TARSKI:def 1;
   end;
   then for b being Element of {x} holds f.(a,b) = b & f.(b,a) = b;
   then
-A4: a is_a_unity_wrt f by BINOP_1:11;
+A5: a is_a_unity_wrt f by BINOP_1:11;
   hence ex a being Element of {x} st a is_a_unity_wrt f;
-  thus for a,b being Element of {x} holds f.(a,b) = f.(b,a) by A3;
-  thus for a,b,c being Element of {x} holds
-  f.(a,f.(b,c)) = f.(f.(a,b),c) by A3;
-  thus for a being Element of {x} holds f.(a,a) = a by A3;
-  thus for a,b being Element of {x} ex r,l being Element of {x} st
-  f.(a,r) = b & f.(l,a) = b
+  thus for a,b being Element of {x} holds f.(a,b) = f.(b,a) by A4;
+  thus for a,b,c being Element of {x} holds f.(a,f.(b,c)) = f.(f.(a,b),c) by
+  A4;
+  thus for a being Element of {x} holds f.(a,a) = a by A4;
+  thus for a,b being Element of {x} ex r,l being Element of {x} st f.(a,r) = b
+  & f.(l,a) = b
   proof
     let a,b be Element of {x};
     take a,a;
-    thus thesis by A3;
+    thus thesis by A4;
   end;
-  thus for a,b,c being Element of {x} st
-  f.(a,b) = f.(a,c) or f.(b,a) = f.(c,a) holds b = c by A3;
-  thus ex a being Element of {x} st a is_a_unity_wrt f by A4;
-  let a,b be Element of {x}; thus thesis by A3;
+  thus for a,b,c being Element of {x} st f.(a,b) = f.(a,c) or f.(b,a) = f.(c,a
+  ) holds b = c by A4;
+  thus ex a being Element of {x} st a is_a_unity_wrt f by A5;
+  let a,b be Element of {x};
+  thus thesis by A4;
 end;
 
 begin :: Semigroups
 
 reserve G for non empty multMagma,
   D for non empty set,
-  a,b,c,r,l for Element of G;
+  a,b,c,r,l for Element
+  of G;
 
 definition
   let IT be non empty multMagma;
@@ -246,8 +257,8 @@ definition
       given e being Element of IT such that
 A1:   for h being Element of IT holds h * e = h & e * h = h;
       take e;
-      for a being Element of IT
-      holds (the multF of IT).(e,a) = a & (the multF of IT).(a,e) = a
+      for a being Element of IT holds (the multF of IT).(e,a) = a & (the
+      multF of IT).(a,e) = a
       proof
         let a be Element of IT;
         thus (the multF of IT).(e,a) = e*a
@@ -268,7 +279,7 @@ end;
 definition
   let G;
   redefine attr G is commutative means
-
+  :Def11:
   the multF of G is commutative;
   compatibility
   proof
@@ -295,8 +306,7 @@ A2: for a,b holds op(G).(a,b) = op(G).(b,a);
       assume
 A3:   a*b*c = a*(b*c);
       let a,b,c;
-      op(G).(a,b) = a*b & op(G).(b,c) = b*c & op(G).(a*b,c) = a*b*c &
-      op(G).(a,b*c) = a*(b*c);
+      op(G).(a*b,c) = a*b*c & op(G).(a,b*c) = a*(b*c);
       hence thesis by A3;
     end;
     assume
@@ -309,51 +319,46 @@ end;
 definition
   let IT be non empty multMagma;
   attr IT is idempotent means
-
   the multF of IT is idempotent;
   attr IT is left-invertible means
-
   the multF of IT is left-invertible;
   attr IT is right-invertible means
-
   the multF of IT is right-invertible;
   attr IT is invertible means
   :Def16:
   the multF of IT is invertible;
   attr IT is left-cancelable means
-
   the multF of IT is left-cancelable;
   attr IT is right-cancelable means
-
   the multF of IT is right-cancelable;
   attr IT is cancelable means
-
   the multF of IT is cancelable;
   attr IT is uniquely-decomposable means
   :Def20:
-  the multF of IT is uniquely-decomposable;
+  the multF of IT is
+  uniquely-decomposable;
 end;
 
 registration
   cluster unital commutative associative cancelable idempotent invertible
-    uniquely-decomposable constituted-Functions constituted-FinSeqs
-    strict (non empty multMagma);
+    uniquely-decomposable constituted-Functions constituted-FinSeqs strict (non
+    empty multMagma);
   existence
-  proof consider p being FinSequence, o being BinOp of {p};
+  proof
+    consider p being FinSequence, o being BinOp of {p};
     take G = multMagma(#{p},o#);
-    thus op(G) is having_a_unity & op(G) is commutative
-     & op(G) is associative &
-    op(G) is cancelable & op(G) is idempotent &
-    op(G) is invertible uniquely-decomposable by Th3;
-    thus (for x being Element of G holds x is Function) &
-    (for x being Element of G holds x is FinSequence) by TARSKI:def 1;
+    thus op(G) is having_a_unity & op(G) is commutative & op(G) is associative
+    & op(G) is cancelable & op(G) is idempotent & op(G) is invertible
+    uniquely-decomposable by Th3;
+    thus (for x being Element of G holds x is Function) & for x being Element
+    of G holds x is FinSequence by TARSKI:def 1;
     thus thesis;
   end;
 end;
 
 theorem Th4:
-  G is unital implies
-  the_unity_wrt the multF of G is_a_unity_wrt the multF of G
+  G is unital implies the_unity_wrt the multF of G is_a_unity_wrt
+  the multF of G
 proof
   given a such that
 A1: a is_a_unity_wrt op(G);
@@ -361,8 +366,8 @@ A1: a is_a_unity_wrt op(G);
 end;
 
 theorem
-  G is unital iff for a holds (the_unity_wrt the multF of G)*a = a &
-  a*(the_unity_wrt the multF of G) = a
+  G is unital iff for a holds (the_unity_wrt the multF of G)*a = a & a*(
+  the_unity_wrt the multF of G) = a
 proof
   set u = the_unity_wrt the multF of G;
   thus G is unital implies for b holds u*b = b & b*u = b
@@ -370,7 +375,7 @@ proof
     given a such that
 A1: a is_a_unity_wrt op(G);
     let b;
-    a*b = (op(G)).(a,b) & b*a = (op(G)).(b,a) & u = a by A1,BINOP_1:def 8;
+    u = a by A1,BINOP_1:def 8;
     hence thesis by A1,BINOP_1:11;
   end;
   assume
@@ -396,8 +401,8 @@ proof
 A1: a is_a_unity_wrt the multF of G;
     take a;
     let b;
-    a*b = (op(G)).(a,b) & b*a = (op(G)).(b,a) & a is_a_left_unity_wrt op(G) &
-    a is_a_right_unity_wrt the multF of G by A1,BINOP_1:def 7;
+    a is_a_left_unity_wrt op(G) & a is_a_right_unity_wrt the multF of G by
+    A1, BINOP_1:def 7;
     hence thesis by BINOP_1:def 5,def 6;
   end;
   given a such that
@@ -442,8 +447,7 @@ A1: for a,b,c holds op(G).(a,op(G).(b,c)) = op(G).(op(G).(a,b),c);
   assume
 A2: a*b*c = a*(b*c);
   let a,b,c;
-  op(G).(a,b) = a*b & op(G).(b,c) = b*c & op(G).(a*b,c) = a*b*c &
-  op(G).(a,b*c) = a*(b*c);
+  op(G).(a*b,c) = a*b*c & op(G).(a,b*c) = a*(b*c);
   hence thesis by A2;
 end;
 
@@ -456,11 +460,13 @@ proof
   proof
     assume
 A1: op(G).(a,a) = a;
-    let a; thus thesis by A1;
+    let a;
+    thus thesis by A1;
   end;
   assume
 A2: a*a = a;
-  let a; thus op(G).(a,a) = a*a
+  let a;
+  thus op(G).(a,a) = a*a
     .= a by A2;
 end;
 
@@ -474,14 +480,16 @@ A1: for a,b ex l st op(G).(l,a) = b;
     let a,b;
     consider l such that
 A2: op(G).(l,a) = b by A1;
-    take l; thus thesis by A2;
+    take l;
+    thus thesis by A2;
   end;
   assume
 A3: for a,b ex l st l*a = b;
   let a,b;
   consider l such that
 A4: l*a = b by A3;
-  take l; thus thesis by A4;
+  take l;
+  thus thesis by A4;
 end;
 
 theorem
@@ -494,14 +502,16 @@ A1: for a,b ex r st op(G).(a,r) = b;
     let a,b;
     consider r such that
 A2: op(G).(a,r) = b by A1;
-    take r; thus thesis by A2;
+    take r;
+    thus thesis by A2;
   end;
   assume
 A3: for a,b ex r st a*r = b;
   let a,b;
   consider r such that
 A4: a*r = b by A3;
-  take r; thus thesis by A4;
+  take r;
+  thus thesis by A4;
 end;
 
 theorem Th12:
@@ -514,14 +524,16 @@ A1: for a,b ex r,l st op(G).(a,r) = b & op(G).(l,a) = b;
     let a,b;
     consider r, l such that
 A2: op(G).(a,r) = b & op(G).(l,a) = b by A1;
-    take r, l; thus thesis by A2;
+    take r, l;
+    thus thesis by A2;
   end;
   assume
 A3: for a,b ex r,l st a*r = b & l*a = b;
   let a,b;
   consider r, l such that
 A4: a*r = b & l*a = b by A3;
-  take r, l; thus thesis by A4;
+  take r, l;
+  thus thesis by A4;
 end;
 
 theorem
@@ -559,121 +571,128 @@ A2: for a,b,c st b*a = c*a holds b = c;
 end;
 
 theorem Th15:
-  G is cancelable iff for a,b,c st a*b = a*c or b*a = c*a holds b = c
+  G is cancelable iff for a,b,c st a*b = a*c or b*a = c*a holds b
+  = c
 proof
   thus G is cancelable implies for a,b,c st a*b = a*c or b*a = c*a holds b=c
   proof
     assume
-A1: op(G).(a,b) = op(G).(a,c) or op(G).(b,a) = op(G).(c,a) implies b = c;
+A1: op(G).(a,b) = op(G).(a,c) or op(G).(b,a) = op(G).(c,a) implies b =
+    c;
     let a,b,c;
     thus thesis by A1;
   end;
   assume
 A2: for a,b,c st a*b = a*c or b*a = c*a holds b = c;
   let a,b,c;
-  a*b = op(G).(a,b) & a*c = op(G).(a,c) &
-  b*a = op(G).(b,a) & c*a = op(G).(c,a);
-  hence thesis by A2;
+A3: b*a = op(G).(b,a) & c*a = op(G).(c,a);
+  a*b = op(G).(a,b) & a*c = op(G).(a,c);
+  hence thesis by A2,A3;
 end;
 
 theorem Th16:
-  G is uniquely-decomposable iff the multF of G is having_a_unity &
-  for a,b being Element of G st a*b = the_unity_wrt the multF of G
-  holds a = b & b = the_unity_wrt the multF of G
+  G is uniquely-decomposable iff the multF of G is having_a_unity
+& for a,b being Element of G st a*b = the_unity_wrt the multF of G holds a = b
+  & b = the_unity_wrt the multF of G
 proof
-  thus G is uniquely-decomposable implies op(G) is having_a_unity &
-  for a,b being Element of G st a*b = the_unity_wrt op(G)
-  holds a = b & b = the_unity_wrt the multF of G
+  thus G is uniquely-decomposable implies op(G) is having_a_unity & for a,b
+being Element of G st a*b = the_unity_wrt op(G) holds a = b & b = the_unity_wrt
+  the multF of G
   proof
-    assume
-A1: op(G) is having_a_unity & for a,b being Element of G st
-    op(G).(a,b) = the_unity_wrt op(G) holds a = b & b = the_unity_wrt op(G);
-    hence op(G) is having_a_unity;
+    assume that
+A1: op(G) is having_a_unity and
+A2: for a,b being Element of G st op(G).(a,b) = the_unity_wrt op(G)
+    holds a = b & b = the_unity_wrt op(G);
+    thus op(G) is having_a_unity by A1;
     let a,b be Element of G;
-    thus thesis by A1;
+    thus thesis by A2;
   end;
-  assume
-A2: op(G) is having_a_unity & for a,b being Element of G st
-  a*b = the_unity_wrt op(G) holds a = b & b = the_unity_wrt op(G);
-  hence op(G) is having_a_unity;
+  assume that
+A3: op(G) is having_a_unity and
+A4: for a,b being Element of G st a*b = the_unity_wrt op(G) holds a = b
+  & b = the_unity_wrt op(G);
+  thus op(G) is having_a_unity by A3;
   let a,b be Element of G;
   a*b = op(G).(a,b);
-  hence thesis by A2;
+  hence thesis by A4;
 end;
 
 theorem Th17:
-  G is associative implies
-  (G is invertible iff G is unital & the multF of G is having_an_inverseOp)
+  G is associative implies (G is invertible iff G is unital & the
+  multF of G is having_an_inverseOp)
 proof
   assume
 A1: G is associative;
   thus G is invertible implies G is unital & op(G) is having_an_inverseOp
   proof
+    consider e being Element of G;
     assume
 A2: G is invertible;
-    consider e being Element of G;
-    consider x,y being Element of G such that
-A3: e*x = e & y*e = e by A2,Th12;
-A4: now
+    then consider x,y being Element of G such that
+A3: e*x = e and
+A4: y*e = e by Th12;
+A5: now
       let a;
-      consider b,c such that
-A5:   e*b = a & c*e = a by A2,Th12;
-      thus y*a = a by A1,A3,A5,Lm2;
-      thus a*x = a by A1,A3,A5,Lm2;
+A6:   ex b,c st e*b = a & c*e = a by A2,Th12;
+      hence y*a = a by A1,A4,Lm2;
+      thus a*x = a by A1,A3,A6,Lm2;
     end;
     then
-A6: y*x = x & y*x = y;
-    hence G is unital by A4,Th6;
+A7: y*x = x & y*x = y;
+    hence G is unital by A5,Th6;
     defpred P[Element of G,Element of G] means $1*$2 = x & $2*$1 = x;
-A7: for a ex b st P[a,b]
+A8: for a ex b st P[a,b]
     proof
       let a;
       consider b,c such that
-A8:   a*b = x & c*a = x by A2,Th12;
+A9:   a*b = x & c*a = x by A2,Th12;
       take b;
-      c*(a*b) = c*a*b & x*b = b & c*x = c by A1,A4,A6,Lm2;
-      hence thesis by A8;
+      c*(a*b) = c*a*b & x*b = b by A1,A5,A7,Lm2;
+      hence thesis by A5,A9;
     end;
-    ex f being Function of the carrier of G,the carrier of G
-    st for x being Element of G holds P[x,f.x] from FUNCT_2:sch 3(A7);
+    ex f being Function of the carrier of G,the carrier of G st for x
+    being Element of G holds P[x,f.x] from FUNCT_2:sch 3(A8);
     then consider u being UnOp of carr(G) such that
-A9: for a being Element of G holds P[a,(u.a)];
-    take u;
-    let a;
+A10: for a being Element of G holds P[a,(u.a)];
     now
       let b;
       x*b = op(G).(x,b) & b*x = op(G).(b,x);
-      hence op(G).(x,b) = b & op(G).(b,x) = b by A4,A6;
+      hence op(G).(x,b) = b & op(G).(b,x) = b by A5,A7;
     end;
     then x is_a_unity_wrt op(G) by BINOP_1:11;
-    then x = the_unity_wrt op(G) & op(G).(a,u.a) = a*(u.a) &
-    op(G).(u.a,a) = (u.a)*a by BINOP_1:def 8;
-    hence thesis by A9;
+    then
+A11: x = the_unity_wrt op(G) by BINOP_1:def 8;
+    take u;
+    let a;
+    op(G).(a,u.a) = a*(u.a) & op(G).(u.a,a) = (u.a)*a;
+    hence thesis by A10,A11;
   end;
   assume
-A10: op(G) is having_a_unity;
+A12: op(G) is having_a_unity;
   given u being UnOp of carr(G) such that
-A11: u is_an_inverseOp_wrt op(G);
+A13: u is_an_inverseOp_wrt op(G);
   let a,c;
   take l = (u.a)*c, r = c*(u.a);
   thus op(G).(a,l) = a*l
     .= a*(u.a)*c by A1,Lm2
-    .= op(G).(the_unity_wrt op(G),c) by A11,FINSEQOP:def 1
-    .= c by A10,SETWISEO:23;
+    .= op(G).(the_unity_wrt op(G),c) by A13,FINSEQOP:def 1
+    .= c by A12,SETWISEO:23;
   thus op(G).(r,a) = r*a
     .= c*((u.a)*a) by A1,Lm2
-    .= op(G).(c,the_unity_wrt op(G)) by A11,FINSEQOP:def 1
-    .= c by A10,SETWISEO:23;
+    .= op(G).(c,the_unity_wrt op(G)) by A13,FINSEQOP:def 1
+    .= c by A12,SETWISEO:23;
 end;
 
 Lm3: G is invertible iff G is left-invertible right-invertible
 proof
   thus G is invertible implies G is left-invertible right-invertible
   proof
-    assume op(G) is invertible;
+    assume
+    op(G) is invertible;
     hence op(G) is left-invertible right-invertible by Th1;
   end;
-  assume op(G) is left-invertible right-invertible;
+  assume
+  op(G) is left-invertible right-invertible;
   hence op(G) is invertible by Th1;
 end;
 
@@ -681,10 +700,12 @@ Lm4: G is cancelable iff G is left-cancelable right-cancelable
 proof
   thus G is cancelable implies G is left-cancelable right-cancelable
   proof
-    assume op(G) is cancelable;
+    assume
+    op(G) is cancelable;
     hence op(G) is left-cancelable right-cancelable by Th2;
   end;
-  assume op(G) is left-cancelable right-cancelable;
+  assume
+  op(G) is left-cancelable right-cancelable;
   hence op(G) is cancelable by Th2;
 end;
 
@@ -701,8 +722,8 @@ A2: for b holds a*b = b & b*a = b by Th6;
   op(G) is invertible by A1,Def16;
   then consider l,r being Element of G such that
 A3: op(G).(b,l) = a & op(G).(r,b) = a by Def5;
-A4: b*l = a & r*b = a by A3;
   take l;
+A4: b*l = a & r*b = a by A3;
   r = r*a by A2
     .= a*l by A1,A4,Lm2
     .= l by A2;
@@ -714,9 +735,10 @@ registration
   coherence
   proof
     let G be non empty multMagma;
-    assume G is associative Group-like;
+    assume
+    G is associative Group-like;
     then reconsider G as associative Group-like (non empty multMagma);
-    G is unital associative & op(G) is having_an_inverseOp by GROUP_1:36;
+    op(G) is having_an_inverseOp by GROUP_1:36;
     hence thesis by Th17;
   end;
   cluster associative invertible -> Group-like (non empty multMagma);
@@ -736,10 +758,11 @@ registration
   coherence
   proof
     let G be non empty multMagma;
-    assume G is associative invertible;
+    assume
+    G is associative invertible;
     then reconsider G as associative invertible (non empty multMagma);
-    for a,b,c being Element of G st
-    a*b = a*c or b*a = c*a holds b = c by GROUP_1:14;
+    for a,b,c being Element of G st a*b = a*c or b*a = c*a holds b = c by
+    GROUP_1:14;
     hence thesis by Th15;
   end;
 end;
@@ -753,7 +776,8 @@ definition
   let IT be non empty multLoopStr;
   redefine attr IT is well-unital means
   :Def21:
-  1.IT is_a_unity_wrt the multF of IT;
+  1.IT is_a_unity_wrt the multF
+  of IT;
   compatibility
   proof
     thus IT is well-unital implies 1.IT is_a_unity_wrt the multF of IT
@@ -781,12 +805,13 @@ A2: 1.IT is_a_unity_wrt the multF of IT;
 end;
 
 theorem Th18:
-  M is well-unital iff for a being Element of M holds
-  (1.M)*a = a & a*(1.M) = a
+  M is well-unital iff for a being Element of M holds (1.M)*a = a
+  & a*(1.M) = a
 proof
 A1: M is well-unital iff un(M) is_a_unity_wrt op(M) by Def21;
-  hence M is well-unital implies
-  for a being Element of M holds un(M)*a = a & a*un(M) = a by BINOP_1:11;
+  hence
+  M is well-unital implies for a being Element of M holds un(M)*a = a & a
+  *un(M) = a by BINOP_1:11;
   assume
 A2: for a being Element of M holds un(M)*a = a & a*un(M) = a;
   now
@@ -798,35 +823,36 @@ A2: for a being Element of M holds un(M)*a = a & a*un(M) = a;
 end;
 
 theorem Th19:
-  for M being non empty multLoopStr st M is well-unital holds
-  1.M = the_unity_wrt the multF of M
+  for M being non empty multLoopStr st M is well-unital holds 1.M
+  = the_unity_wrt the multF of M
 proof
   let M be non empty multLoopStr;
-  assume un(M) is_a_unity_wrt the multF of M;
+  assume
+  un(M) is_a_unity_wrt the multF of M;
   hence thesis by BINOP_1:def 8;
 end;
 
 registration
   cluster well-unital commutative associative cancelable idempotent invertible
-    uniquely-decomposable unital constituted-Functions
-    constituted-FinSeqs strict (non empty multLoopStr);
+uniquely-decomposable unital constituted-Functions constituted-FinSeqs strict (
+    non empty multLoopStr);
   existence
-  proof consider p being FinSequence,
-    o being BinOp of {p}, e being Element of {p};
+  proof
+    consider p being FinSequence, o being BinOp of {p}, e being Element of {p};
     take G = multLoopStr(#{p},o,e#);
     reconsider e as Element of G;
     reconsider o as BinOp of G;
     now
       let b be Element of G;
-      o.(e,b) = p & o.(b,e) = p & b = p by TARSKI:def 1;
-      hence o.(e,b) = b & o.(b,e) = b;
+      o.(e,b) = p & o.(b,e) = p by TARSKI:def 1;
+      hence o.(e,b) = b & o.(b,e) = b by TARSKI:def 1;
     end;
     hence un(G) is_a_unity_wrt op(G) by BINOP_1:11;
     hence op(G) is commutative & op(G) is associative & op(G) is cancelable &
-    op(G) is idempotent & op(G) is invertible uniquely-decomposable &
-    ex e being Element of G st e is_a_unity_wrt op(G) by Th3;
-    thus (for x being Element of G holds x is Function) &
-    (for x being Element of G holds x is FinSequence) by TARSKI:def 1;
+op(G) is idempotent & op(G) is invertible uniquely-decomposable & ex e being
+    Element of G st e is_a_unity_wrt op(G) by Th3;
+    thus (for x being Element of G holds x is Function) & for x being Element
+    of G holds x is FinSequence by TARSKI:def 1;
     thus thesis;
   end;
 end;
@@ -839,9 +865,11 @@ definition
   let G be multMagma;
   mode MonoidalExtension of G -> multLoopStr means
     :Def22:
-    the multMagma of it = the multMagma of G;
+    the multMagma of it
+    = the multMagma of G;
   existence
-  proof consider g being Element of G;
+  proof
+    consider g being Element of G;
     take M = multLoopStr(#carr(G), op(G), g#);
     thus thesis;
   end;
@@ -859,10 +887,9 @@ registration
 end;
 
 theorem Th20:
-  for M being MonoidalExtension of G holds
-  the carrier of M = the carrier of G & the multF of M = the multF of G &
-  for a,b being Element of M, a',b' being Element of G st a = a' & b = b'
-  holds a*b = a'*b'
+  for M being MonoidalExtension of G holds the carrier of M = the
+carrier of G & the multF of M = the multF of G & for a,b being Element of M, a'
+  ,b' being Element of G st a = a' & b = b' holds a*b = a'*b'
 proof
   let M be MonoidalExtension of G;
 A1: the multMagma of M = the multMagma of G by Def22;
@@ -875,7 +902,8 @@ registration
   let G be multMagma;
   cluster strict MonoidalExtension of G;
   existence
-  proof consider g being Element of G;
+  proof
+    consider g being Element of G;
     set M = multLoopStr(#carr(G), op(G), g#);
     the multMagma of M = the multMagma of G;
     then M is MonoidalExtension of G by Def22;
@@ -884,42 +912,46 @@ registration
 end;
 
 theorem Th21:
-  for G being non empty multMagma, M being MonoidalExtension of G holds
-  (G is unital implies M is unital) &
-  (G is commutative implies M is commutative) &
-  (G is associative implies M is associative) &
-  (G is invertible implies M is invertible) &
-  (G is uniquely-decomposable implies M is uniquely-decomposable) &
-  (G is cancelable implies M is cancelable)
+  for G being non empty multMagma, M being MonoidalExtension of G
+  holds (G is unital implies M is unital) & (G is commutative implies M is
+  commutative) & (G is associative implies M is associative) & (G is invertible
+  implies M is invertible) & (G is uniquely-decomposable implies M is
+  uniquely-decomposable) & (G is cancelable implies M is cancelable)
 proof
   let G be non empty multMagma, M be MonoidalExtension of G;
 A1: the multMagma of M = the multMagma of G by Def22;
   thus G is unital implies M is unital
   proof
-    assume op(G) is having_a_unity;
+    assume
+    op(G) is having_a_unity;
     hence op(M) is having_a_unity by A1;
   end;
   thus G is commutative implies M is commutative
   proof
-    assume op(G) is commutative;
+    assume
+    op(G) is commutative;
     hence op(M) is commutative by A1;
   end;
   thus G is associative implies M is associative
   proof
-    assume op(G) is associative;
+    assume
+    op(G) is associative;
     hence op(M) is associative by A1;
   end;
   thus G is invertible implies M is invertible
   proof
-    assume op(G) is invertible;
+    assume
+    op(G) is invertible;
     hence op(M) is invertible by A1;
   end;
   thus G is uniquely-decomposable implies M is uniquely-decomposable
   proof
-    assume op(G) is uniquely-decomposable;
+    assume
+    op(G) is uniquely-decomposable;
     hence op(M) is uniquely-decomposable by A1;
   end;
-  assume op(G) is cancelable;
+  assume
+  op(G) is cancelable;
   hence op(M) is cancelable by A1;
 end;
 
@@ -931,7 +963,6 @@ registration
     let M be MonoidalExtension of G;
     let a be Element of M;
     the multMagma of M = the multMagma of G by Def22;
-    then a is Element of G;
     hence thesis;
   end;
 end;
@@ -944,7 +975,6 @@ registration
     let M be MonoidalExtension of G;
     let a be Element of M;
     the multMagma of M = the multMagma of G by Def22;
-    then a is Element of G;
     hence thesis;
   end;
 end;
@@ -991,11 +1021,8 @@ registration
   existence
   proof
     set M = multLoopStr(#carr(G), op(G), the_unity_wrt op(G)#);
-    M is MonoidalExtension of G
-    proof
-      thus the multMagma of M = the multMagma of G;
-    end;
-    then reconsider M as MonoidalExtension of G;
+    the multMagma of M = the multMagma of G;
+    then reconsider M as MonoidalExtension of G by Def22;
     take M;
     thus un(M) is_a_unity_wrt op(M) by Th4;
     thus thesis;
@@ -1003,15 +1030,15 @@ registration
 end;
 
 theorem Th22:
-  for G being unital (non empty multMagma)
-  for M1,M2 being well-unital strict MonoidalExtension of G holds M1 = M2
+  for G being unital (non empty multMagma) for M1,M2 being
+  well-unital strict MonoidalExtension of G holds M1 = M2
 proof
   let G be unital (non empty multMagma);
   let M1,M2 be well-unital strict MonoidalExtension of G;
-  the multMagma of M1 = the multMagma of G &
-  the multMagma of M2 = the multMagma of G &
-  un(M1) = the_unity_wrt op(M1) & un(M2) = the_unity_wrt op(M2) by Def22,Th19;
-  hence thesis;
+A1: un(M1) = the_unity_wrt op(M1) & un(M2) = the_unity_wrt op(M2) by Th19;
+  the multMagma of M1 = the multMagma of G & the multMagma of M2 = the
+  multMagma of G by Def22;
+  hence thesis by A1;
 end;
 
 begin :: Subsystems
@@ -1020,7 +1047,8 @@ definition
   let G be multMagma;
   mode SubStr of G -> multMagma means
     :Def23:
-    the multF of it c= the multF of G;
+    the multF of it c= the multF of
+    G;
   existence;
 end;
 
@@ -1049,22 +1077,21 @@ registration
   cluster unital associative commutative cancelable idempotent invertible
     uniquely-decomposable strict (non empty SubStr of G);
   existence
-  proof consider a being Element of G such that
+  proof
+    consider a being Element of G such that
 A1: for b being Element of G holds a*b = b & b*a = b by Th6;
+A2: a = a*a by A1;
     consider f being BinOp of {a};
     set H = multMagma(#{a},f#);
-X:  f = (a,a) .--> a by Th3
-     .= [a,a] .--> a;
-Y:  a = a*a & a*a = op(G).(a,a) by A1;
-    op(G).(a,a) = op(G).[a,a] & dom op(G) = [:carr(G),carr(G):]
-     by FUNCT_2:def 1;
-    then op(H) c= op(G) by FUNCT_4:8,X,Y;
+A3: dom op(G) = [:carr(G),carr(G):] by FUNCT_2:def 1;
+    f = (a,a) .--> a by Th3
+      .= [a,a] .--> a;
+    then op(H) c= op(G) by A2,A3,FUNCT_4:8;
     then reconsider H as non empty SubStr of G by Def23;
     take H;
-    thus op(H) is having_a_unity & op(H) is associative &
-     op(H) is commutative &
-    op(H) is cancelable & op(H) is idempotent &
-    op(H) is invertible uniquely-decomposable by Th3;
+    thus op(H) is having_a_unity & op(H) is associative & op(H) is commutative
+    & op(H) is cancelable & op(H) is idempotent & op(H) is invertible
+    uniquely-decomposable by Th3;
     thus thesis;
   end;
 end;
@@ -1073,20 +1100,22 @@ definition
   let G be multMagma;
   mode MonoidalSubStr of G -> multLoopStr means
     :Def24:
-    the multF of it c= the multF of G &
-    for M being multLoopStr st G = M holds 1.it = 1.M;
+    the multF of it c= the
+    multF of G & for M being multLoopStr st G = M holds 1.it = 1.M;
   existence
-  proof consider M being MonoidalExtension of G;
-A1: the multMagma of M = the multMagma of G by Def22;
-A2: now
+  proof
+    consider M being MonoidalExtension of G;
+A1: now
       given M being multLoopStr such that
-A3:   G = M;
-      take M; thus op(M) c= op(G) by A3;
-      thus for N being multLoopStr st G = N holds un(M) = un(N) by A3;
+A2:   G = M;
+      take M;
+      thus op(M) c= op(G) by A2;
+      thus for N being multLoopStr st G = N holds un(M) = un(N) by A2;
     end;
-    (ex M being multLoopStr st G = M) or for N being multLoopStr st G = N
+A3: (ex M being multLoopStr st G = M) or for N being multLoopStr st G = N
     holds un(M) = un(N);
-    hence thesis by A1,A2;
+    the multMagma of M = the multMagma of G by Def22;
+    hence thesis by A1,A3;
   end;
 end;
 
@@ -1094,11 +1123,13 @@ registration
   let G be multMagma;
   cluster strict MonoidalSubStr of G;
   existence
-  proof consider N being MonoidalSubStr of G;
-A1: op(the multLoopStr of N) c= op(G) by Def24;
+  proof
+    consider N being MonoidalSubStr of G;
     un(the multLoopStr of N) = un(N);
-    then for M being multLoopStr st G = M
-    holds un(the multLoopStr of N) = un(M) by Def24;
+    then
+A1: for M being multLoopStr st G = M holds un(the multLoopStr of N) = un(M
+    ) by Def24;
+    op(the multLoopStr of N) c= op(G) by Def24;
     then the multLoopStr of N is MonoidalSubStr of G by A1,Def24;
     hence thesis;
   end;
@@ -1110,11 +1141,12 @@ registration
   existence
   proof
     per cases;
-    suppose G is multLoopStr;
+    suppose
+      G is multLoopStr;
       then reconsider L = G as multLoopStr;
       for N being multLoopStr st G = N holds 1.the multLoopStr of L = 1.N;
-      then reconsider M = the multLoopStr of L as MonoidalSubStr of G
-      by Def24;
+      then reconsider M = the multLoopStr of L as MonoidalSubStr of G by
+      Def24;
       take M;
       thus M is strict;
       thus the carrier of M is non empty;
@@ -1122,8 +1154,8 @@ registration
     suppose
 A1:   G is not multLoopStr;
       consider M being strict MonoidalExtension of G;
-A2:   the multMagma of M = the multMagma of G by Def22;
-      for N being multLoopStr st G = N holds 1.M = 1.N by A1;
+A2:   for N being multLoopStr st G = N holds 1.M = 1.N by A1;
+      the multMagma of M = the multMagma of G by Def22;
       then reconsider M as MonoidalSubStr of G by A2,Def24;
       take M;
       thus thesis;
@@ -1135,19 +1167,22 @@ definition
   let M be multLoopStr;
   redefine mode MonoidalSubStr of M means
     :Def25:
-    the multF of it c= the multF of M & 1.it = 1.M;
+    the multF of it c= the multF
+    of M & 1.it = 1.M;
   compatibility
   proof
     let N be multLoopStr;
     thus N is MonoidalSubStr of M implies op(N) c= op(M) & un(N) = un(M)
     proof
       assume
-      op(N) c= op(M) & for K being multLoopStr st M = K holds un(N) = un(K);
+      op(N) c= op(M) & for K being multLoopStr st M = K holds un(N) =
+      un(K);
       hence thesis;
     end;
-    assume op(N) c= op(M) & un(N) = un(M);
-    hence op(N) c=
-    op(M) & for K being multLoopStr st M = K holds un(N) = un(K);
+    assume
+    op(N) c= op(M) & un(N) = un(M);
+    hence
+    op(N) c= op(M) & for K being multLoopStr st M = K holds un(N) = un(K);
   end;
 end;
 
@@ -1161,12 +1196,10 @@ registration
     reconsider e = a as Element of {a} by TARSKI:def 1;
     consider f being BinOp of {a};
     set H = multLoopStr(#{a},f,e#);
-A1: 1.H = 1.G;
-X:  [a,a] .--> a = {[a,a]} --> a;
-    f = (a,a) .--> a & a = a*a & a*a = op(G).(a,a) &
-    dom op(G) = [:carr(G),carr(G):] by Th3,Th18,FUNCT_2:def 1;
-    then op(H) c= op(G) by FUNCT_4:8,X;
-    then reconsider H as non empty MonoidalSubStr of G by A1,Def25;
+A1: a = a*a & dom op(G) = [:carr(G),carr(G):] by Th18,FUNCT_2:def 1;
+    [a,a] .--> a = {[a,a]} --> a & f = (a,a) .--> a by Th3;
+    then 1.H = 1.G & op(H) c= op(G) by A1,FUNCT_4:8;
+    then reconsider H as non empty MonoidalSubStr of G by Def25;
     take H;
     now
       let b be Element of H;
@@ -1174,15 +1207,15 @@ X:  [a,a] .--> a = {[a,a]} --> a;
       hence op(H).(un(H),b) = b & op(H).(b,un(H)) = b by TARSKI:def 1;
     end;
     hence un(H) is_a_unity_wrt op(H) by BINOP_1:11;
-    thus op(H) is associative & op(H) is commutative &
-    op(H) is cancelable & op(H) is idempotent &
-    op(H) is invertible uniquely-decomposable by Th3;
+    thus op(H) is associative & op(H) is commutative & op(H) is cancelable &
+    op(H) is idempotent & op(H) is invertible uniquely-decomposable by Th3;
     thus thesis;
   end;
 end;
 
 theorem Th23:
-  for G being multMagma, M being MonoidalSubStr of G holds M is SubStr of G
+  for G being multMagma, M being MonoidalSubStr of G holds M is
+  SubStr of G
 proof
   let G be multMagma, M be MonoidalSubStr of G;
   thus op(M) c= op(G) by Def24;
@@ -1215,8 +1248,8 @@ definition
   redefine mode SubStr of G2 -> SubStr of G1;
   coherence
   proof
-    let G be SubStr of G2;
     reconsider H = G2 as SubStr of G1 by Th23;
+    let G be SubStr of G2;
     G is SubStr of H;
     hence thesis;
   end;
@@ -1228,10 +1261,11 @@ definition
   coherence
   proof
     let M' be MonoidalSubStr of M;
-    op(M') c= op(M) & op(M) c= op(G) & un(M') = un(M) &
-    for N being multLoopStr st G = N holds un(M) = un(N) by Def24;
-    hence op(M') c= op(G) & for N being multLoopStr st G = N holds un(M') = un(
-    N) by XBOOLE_1:1;
+A1: un(M') = un(M) by Def24;
+    op(M') c= op(M) & op(M) c= op(G) by Def24;
+    hence
+    op(M') c= op(G) & for N being multLoopStr st G = N holds un(M') = un(
+    N) by A1,Def24,XBOOLE_1:1;
   end;
 end;
 
@@ -1247,23 +1281,31 @@ reserve H for non empty SubStr of G,
   N for non empty MonoidalSubStr of G;
 
 theorem Th25:
-  the carrier of H c= the carrier of G & the carrier of N c= the carrier of G
-proof op(H) c= op(G) & op(N) c= op(G) by Def23,Def24;
+  the carrier of H c= the carrier of G & the carrier of N c= the
+  carrier of G
+proof
+A1: dom op(N) = [:carr(N), carr(N):] by FUNCT_2:def 1;
+A2: dom op(G) = [:carr(G), carr(G):] by FUNCT_2:def 1;
+  op(H) c= op(G) by Def23;
   then
-A1: dom op(H) c= dom op(G) & dom op(H) = [:carr(H), carr(H):] &
-  dom op(N) c= dom op(G) & dom op(N) = [:carr(N), carr(N):] &
-  dom op(G) = [:carr(G), carr(G):] by FUNCT_2:def 1,GRFUNC_1:8;
+A3: dom op(H) c= dom op(G) by GRFUNC_1:8;
+A4: dom op(H) = [:carr(H), carr(H):] by FUNCT_2:def 1;
   thus carr(H) c= carr(G)
   proof
     let x;
-    assume x in carr(H);
-    then [x,x] in dom op(H) by A1,ZFMISC_1:106;
-    hence thesis by A1,ZFMISC_1:106;
+    assume
+    x in carr(H);
+    then [x,x] in dom op(H) by A4,ZFMISC_1:106;
+    hence thesis by A3,A2,ZFMISC_1:106;
   end;
   let x;
-  assume x in carr(N);
+  op(N) c= op(G) by Def24;
+  then
+A5: dom op(N) c= dom op(G) by GRFUNC_1:8;
+  assume
+  x in carr(N);
   then [x,x] in dom op(N) by A1,ZFMISC_1:106;
-  hence thesis by A1,ZFMISC_1:106;
+  hence thesis by A5,A2,ZFMISC_1:106;
 end;
 
 theorem Th26:
@@ -1276,8 +1318,8 @@ proof
 end;
 
 theorem Th27:
-  for a,b being Element of H, a',b' being Element of G st
-  a = a' & b = b' holds a*b = a'*b'
+  for a,b being Element of H, a',b' being Element of G st a = a' &
+  b = b' holds a*b = a'*b'
 proof
   let a,b be Element of H, a',b' be Element of G such that
 A1: a = a' & b = b';
@@ -1287,73 +1329,78 @@ A2: dom op(H) = [:carr(H), carr(H):] & op(H) c= op(G) by Def23,FUNCT_2:def 1;
 end;
 
 theorem Th28:
-  for H1,H2 being non empty SubStr of G
-  st the carrier of H1 = the carrier of H2
-  holds the multMagma of H1 = the multMagma of H2
+  for H1,H2 being non empty SubStr of G st the carrier of H1 = the
+  carrier of H2 holds the multMagma of H1 = the multMagma of H2
 proof
   let H1,H2 be non empty SubStr of G;
+A1: op(H2) c= op(G) by Def23;
+  op(H1) c= op(G) & dom op(H1) = [:carr(H1), carr(H1):] by Def23, FUNCT_2:
+  def 1;
+  then
+A2: op(H1) = op(G)||carr(H1) by GRFUNC_1:64;
   assume
-A1: carr(H1) = carr(H2);
-  then op(H1) c= op(G) & op(H2) c= op(G) &
-  dom op(H1) = [:carr(H1), carr(H1):] &
-  dom op(H2) = [:carr(H1), carr(H1):] by Def23,FUNCT_2:def 1;
-  then the multMagma of H1 = multMagma(#carr(H1), op(H1)#) &
-  the multMagma of H2 = multMagma(#carr(H2), op(H2)#) &
-  op(H1) = op(G)||carr(H1) & op(H2) = op(G)||carr(H1) by GRFUNC_1:64;
-  hence thesis by A1;
+A3: carr(H1) = carr(H2);
+  then dom op(H2) = [:carr(H1), carr(H1):] by FUNCT_2:def 1;
+  hence thesis by A3,A1,A2,GRFUNC_1:64;
 end;
 
 theorem
-  for H1,H2 being non empty MonoidalSubStr of M st
-  the carrier of H1 = the carrier of H2 holds
-  the multLoopStr of H1 = the multLoopStr of H2
+  for H1,H2 being non empty MonoidalSubStr of M st the carrier of H1 =
+  the carrier of H2 holds the multLoopStr of H1 = the multLoopStr of H2
 proof
   let H1,H2 be non empty MonoidalSubStr of M such that
 A1: the carrier of H1 = the carrier of H2;
   reconsider N1 = H1, N2 = H2 as SubStr of M by Th23;
-  the multMagma of N1 = the multMagma of N2 & un(H1) = un(M) & un(H2) = un(M)
-  by A1,Def25,Th28;
-  hence thesis;
+A2: un(H1) = un(M) & un(H2) = un(M) by Def25;
+  the multMagma of N1 = the multMagma of N2 by A1,Th28;
+  hence thesis by A2;
 end;
 
 theorem Th30:
-  for H1,H2 being non empty SubStr of G
-  st the carrier of H1 c= the carrier of H2 holds H1 is SubStr of H2
+  for H1,H2 being non empty SubStr of G st the carrier of H1 c=
+  the carrier of H2 holds H1 is SubStr of H2
 proof
   let H1,H2 be non empty SubStr of G;
-  assume carr(H1) c= carr(H2);
-  then op(H1) c= op(G) & op(H2) c= op(G) &
-  dom op(H1) = [:carr(H1), carr(H1):] &
-  [:carr(H1), carr(H1):] c= [:carr(H2), carr(H2):] &
-  dom op(H2) = [:carr(H2), carr(H2):] by Def23,FUNCT_2:def 1,ZFMISC_1:119;
-  then op(G)||carr(H2)||carr(H1) =
-  op(G)||carr(H1) & op(H1) = op(G)||carr(H1) &
-  op(H2) = op(G)||carr(H2) by FUNCT_1:82,GRFUNC_1:64;
-  hence op(H1) c= op(H2) by RELAT_1:88;
+  assume
+  carr(H1) c= carr(H2);
+  then [:carr(H1), carr(H1):] c= [:carr(H2), carr(H2):] by ZFMISC_1:119;
+  then
+A1: op(G)||carr(H2)||carr(H1) = op(G)||carr(H1) by FUNCT_1:82;
+  op(H2) c= op(G) & dom op(H2) = [:carr(H2), carr(H2):] by Def23, FUNCT_2:
+  def 1;
+  then
+A2: op(H2) = op(G)||carr(H2) by GRFUNC_1:64;
+  op(H1) c= op(G) & dom op(H1) = [:carr(H1), carr(H1):] by Def23, FUNCT_2:
+  def 1;
+  then op(H1) = op(G)||carr(H1) by GRFUNC_1:64;
+  hence op(H1) c= op(H2) by A1,A2,RELAT_1:88;
 end;
 
 theorem
-  for H1,H2 being non empty MonoidalSubStr of M st
-  the carrier of H1 c= the carrier of H2 holds H1 is MonoidalSubStr of H2
+  for H1,H2 being non empty MonoidalSubStr of M st the carrier of H1 c=
+  the carrier of H2 holds H1 is MonoidalSubStr of H2
 proof
   let H1,H2 be non empty MonoidalSubStr of M such that
 A1: carr(H1) c= carr(H2);
   H1 is SubStr of M & H2 is SubStr of M by Th23;
   then H1 is SubStr of H2 by A1,Th30;
   hence op(H1) c= op(H2) by Def23;
-  un(H1) = un(M) & un(H2) = un(M) by Def25;
-  hence thesis;
+  un(H1) = un(M) by Def25;
+  hence thesis by Def25;
 end;
 
 theorem Th32:
-  G is unital & the_unity_wrt the multF of G in the carrier of H implies
-  H is unital & the_unity_wrt the multF of G = the_unity_wrt the multF of H
+  G is unital & the_unity_wrt the multF of G in the carrier of H
+implies H is unital & the_unity_wrt the multF of G = the_unity_wrt the multF of
+  H
 proof
   set e' = the_unity_wrt op(G);
-  assume G is unital;
+  assume
+  G is unital;
   then
 A1: e' is_a_unity_wrt op(G) by Th4;
-  assume the_unity_wrt op(G) in carr(H);
+  assume
+  the_unity_wrt op(G) in carr(H);
   then reconsider e = the_unity_wrt op(G) as Element of H;
 A2: now
     let a be Element of H;
@@ -1375,23 +1422,23 @@ A2: now
 end;
 
 theorem Th33:
-  for M being well-unital (non empty multLoopStr)
-  for N being non empty MonoidalSubStr of M holds N is well-unital
+  for M being well-unital (non empty multLoopStr) for N being non
+  empty MonoidalSubStr of M holds N is well-unital
 proof
-  let M be well-unital (non empty multLoopStr),
-  N be non empty MonoidalSubStr of M;
-A1: N is SubStr of M by Th23;
-A2: un(N) = un(M) & un(M) is_a_unity_wrt op(M) by Def21,Def24;
+  let M be well-unital (non empty multLoopStr), N be non empty MonoidalSubStr
+  of M;
+A1: un(M) is_a_unity_wrt op(M) by Def21;
+A2: N is SubStr of M & un(N) = un(M) by Def24,Th23;
   now
     let a be Element of N;
     carr(N) c= carr(M) by Th25;
     then reconsider a' = a as Element of M by TARSKI:def 3;
     thus op(N).(un(N),a) = (un(N))*a
-      .= (un(M))*a' by A1,A2,Th27
-      .= a by A2,BINOP_1:11;
+      .= (un(M))*a' by A2,Th27
+      .= a by A1,BINOP_1:11;
     thus op(N).(a,un(N)) = a*(un(N))
-      .= a'*(un(M)) by A1,A2,Th27
-      .= a by A2,BINOP_1:11;
+      .= a'*(un(M)) by A2,Th27
+      .= a by A1,BINOP_1:11;
   end;
   hence un(N) is_a_unity_wrt op(N) by BINOP_1:11;
 end;
@@ -1420,8 +1467,9 @@ A1: G is associative;
   now
     let a,b,c be Element of H;
     carr(H) c= carr(G) by Th25;
-    then reconsider a' = a, b' = b, c' = c, ab = a*b, bc = b*c as
-    Element of G by TARSKI:def 3;
+    then reconsider
+    a' = a, b' = b, c' = c, ab = a*b, bc = b*c as Element of G by
+    TARSKI:def 3;
     thus a*b*c = ab*c' by Th27
       .= a'*b'*c' by Th27
       .= a'*(b'*c') by A1,Lm2
@@ -1436,8 +1484,7 @@ theorem Th36:
 proof
   assume
 A1: G is idempotent;
-  then
-A2: carr(H) c= carr(G) & for a being Element of G holds a* a = a by Th9,Th25;
+A2: carr(H) c= carr(G) by Th25;
   now
     let a be Element of H;
     reconsider a' = a as Element of G by A2,TARSKI:def 3;
@@ -1452,50 +1499,50 @@ theorem Th37:
 proof
   assume
 A1: G is cancelable;
-  then
-A2: carr(H) c= carr(G) &
-  for a,b,c being Element of G st a*b = a*c or b*a = c*a holds b = c
-  by Th15,Th25;
+A2: carr(H) c= carr(G) by Th25;
   now
     let a,b,c be Element of H;
     reconsider a' = a, b' = b, c' = c as Element of G by A2,TARSKI:def 3;
-    a*b = a'*b' & a*c = a'*c' & b*a = b'*a' & c*a = c'*a' by Th27;
-    hence a*b = a*c or b*a = c*a implies b = c by A1,Th15;
+A3: b*a = b'*a' & c*a = c'*a' by Th27;
+    a*b = a'*b' & a*c = a'*c' by Th27;
+    hence a*b = a*c or b*a = c*a implies b = c by A1,A3,Th15;
   end;
   hence thesis by Th15;
 end;
 
 theorem Th38:
-  the_unity_wrt the multF of G in the carrier of H &
-  G is uniquely-decomposable implies H is uniquely-decomposable
+  the_unity_wrt the multF of G in the carrier of H & G is
+  uniquely-decomposable implies H is uniquely-decomposable
 proof
   assume
 A1: the_unity_wrt op(G) in carr(H);
-  assume
-A2: op(G) is having_a_unity & for a,b being Element of G
-  st op(G).(a,b) = the_unity_wrt op(G) holds a = b & b = the_unity_wrt op(G);
-  then G is unital by Def10;
-  then
-A3: H is unital & the_unity_wrt op(G) = the_unity_wrt op(H) by A1,Th32;
+  assume that
+A2: op(G) is having_a_unity and
+A3: for a,b being Element of G st op(G).(a,b) = the_unity_wrt op(G)
+  holds a = b & b = the_unity_wrt op(G);
+A4: G is unital by A2,Def10;
+  then H is unital by A1,Th32;
   hence op(H) is having_a_unity by Def10;
   let a,b be Element of H;
   carr(H) c= carr(G) by Th25;
   then reconsider a' = a, b' = b as Element of G by TARSKI:def 3;
-  op(H).(a,b) = a*b
+A5: op(H).(a,b) = a*b
     .= a'*b' by Th27
     .= op(G).(a',b');
-  hence thesis by A2,A3;
+  the_unity_wrt op(G) = the_unity_wrt op(H) by A1,A4,Th32;
+  hence thesis by A3,A5;
 end;
 
 theorem Th39:
-  for M being well-unital uniquely-decomposable (non empty multLoopStr)
-  for N being non empty MonoidalSubStr of M holds N is uniquely-decomposable
+  for M being well-unital uniquely-decomposable (non empty
+  multLoopStr) for N being non empty MonoidalSubStr of M holds N is
+  uniquely-decomposable
 proof
   let M be well-unital uniquely-decomposable (non empty multLoopStr);
   let N be non empty MonoidalSubStr of M;
-  N is SubStr of M & un(M) = the_unity_wrt op(M) & un(M) = un(N)
-  by Def25,Th19,Th23;
-  hence thesis by Th38;
+A1: un(M) = un(N) by Def25;
+  N is SubStr of M & un(M) = the_unity_wrt op(M) by Th19,Th23;
+  hence thesis by A1,Th38;
 end;
 
 registration
@@ -1606,106 +1653,108 @@ registration
   coherence by Th39;
 end;
 
-scheme SubStrEx1 {G() -> non empty multMagma, D() -> non empty Subset of G()}:
-  ex H being strict non empty SubStr of G() st the carrier of H = D()
+scheme
+  SubStrEx1 {G() -> non empty multMagma, D() -> non empty Subset of G()}: ex H
+  being strict non empty SubStr of G() st the carrier of H = D()
 provided
 A1: for x,y being Element of D() holds x*y in D()
 proof
   set op = the multF of G(), carr = the carrier of G();
-A2: [:D(),D():] c= [:carr,carr:] & dom op = [:carr,carr:] by FUNCT_2:def 1;
-  then
-A3: dom (op||D()) = [:D(),D():] by RELAT_1:91;
-  rng (op||D()) c= D()
+A2: dom op = [:carr,carr:] by FUNCT_2:def 1;
+A3: rng (op||D()) c= D()
   proof
     let x;
-    assume x in rng (op||D());
+    assume
+    x in rng (op||D());
     then consider y such that
-A4: y in dom (op||D()) & x = (op||D()).y by FUNCT_1:def 5;
+A4: y in dom (op||D()) and
+A5: x = (op||D()).y by FUNCT_1:def 5;
     reconsider y as Element of [:D(),D():] by A2,A4,RELAT_1:91;
     reconsider y1 = y`1, y2 = y`2 as Element of D();
     y = [y1,y2] by MCART_1:23;
-    then x = y1*y2 by A4,FUNCT_1:70;
+    then x = y1*y2 by A4,A5,FUNCT_1:70;
     hence thesis by A1;
   end;
+  dom (op||D()) = [:D(),D():] by A2,RELAT_1:91;
   then reconsider f = op||D() as BinOp of D() by A3,FUNCT_2:def 1,RELSET_1:11;
   f c= op by RELAT_1:88;
   then reconsider H = multMagma(#D(),f#) as strict non empty SubStr of G() by
   Def23;
-  take H; thus thesis;
+  take H;
+  thus thesis;
 end;
 
-scheme SubStrEx2 {G() -> non empty multMagma, P[set]}:
-  ex H being strict non empty SubStr of G() st
-  for x being Element of G() holds x in the carrier of H iff P[x]
+scheme
+  SubStrEx2 {G() -> non empty multMagma, P[set]}: ex H being strict non empty
+SubStr of G() st for x being Element of G() holds x in the carrier of H iff P[x
+  ]
 provided
-A1: for x,y being Element of G() holds P[x] & P[y] implies P[x*y]
-and
+A1: for x,y being Element of G() holds P[x] & P[y] implies P[x*y] and
 A2: ex x being Element of G() st P[x]
 proof
   consider X such that
 A3: x in X iff x in carr(G()) & P[x] from XBOOLE_0:sch 1;
-  consider x being Element of G() such that
-A4: P[x] by A2;
-  reconsider X as non empty set by A3,A4;
+  reconsider X as non empty set by A2,A3;
   X c= carr(G())
   proof
-    let x; thus thesis by A3;
+    let x;
+    thus thesis by A3;
   end;
   then reconsider X as non empty Subset of G();
-A5: now
+A4: now
     let x,y be Element of X;
-    P[x] & P[y] by A3;
+    ( P[x])& P[y] by A3;
     then P[x*y] by A1;
     hence x*y in X by A3;
   end;
   consider H being strict non empty SubStr of G() such that
-A6: the carrier of H = X from SubStrEx1(A5);
-  take H; thus thesis by A3,A6;
+A5: the carrier of H = X from SubStrEx1(A4);
+  take H;
+  thus thesis by A3,A5;
 end;
 
-scheme MonoidalSubStrEx1 {G() -> non empty multLoopStr,
-  D() -> non empty Subset of G()}:
-  ex H being strict non empty MonoidalSubStr of G() st the carrier of H = D()
+scheme
+  MonoidalSubStrEx1 {G() -> non empty multLoopStr, D() -> non empty Subset of
+G()}: ex H being strict non empty MonoidalSubStr of G() st the carrier of H = D
+  ()
 provided
-A1: for x,y being Element of D() holds x*y in D()
-and
+A1: for x,y being Element of D() holds x*y in D() and
 A2: 1.G() in D()
-proof reconsider G = G() as non empty multMagma;
+proof
+  reconsider G = G() as non empty multMagma;
   reconsider D = D() as non empty Subset of G;
 A3: for x,y being Element of D holds x*y in D by A1;
   consider H being strict non empty SubStr of G such that
 A4: the carrier of H = D from SubStrEx1(A3);
   reconsider e = 1.G() as Element of H by A2,A4;
   set N = multLoopStr(#the carrier of H, the multF of H, e#);
-  N is MonoidalSubStr of G()
-  proof
-    thus op(N) c= op(G()) by Def23;
-    thus thesis;
-  end;
-  then reconsider N as strict non empty MonoidalSubStr of G();
-  take N; thus thesis by A4;
+  op(N) c= op(G()) & for M being multLoopStr st G() = M holds 1.N = 1.M by
+  Def23;
+  then reconsider N as strict non empty MonoidalSubStr of G() by Def25;
+  take N;
+  thus thesis by A4;
 end;
 
-scheme MonoidalSubStrEx2 {G() -> non empty multLoopStr, P[set]}:
-  ex M being strict non empty MonoidalSubStr of G() st
-  for x being Element of G() holds x in the carrier of M iff P[x]
+scheme
+  MonoidalSubStrEx2 {G() -> non empty multLoopStr, P[set]}: ex M being strict
+  non empty MonoidalSubStr of G() st for x being Element of G() holds x in the
+  carrier of M iff P[x]
 provided
-A1: for x,y being Element of G() holds P[x] & P[y] implies P[x*y]
-and
+A1: for x,y being Element of G() holds P[x] & P[y] implies P[x*y] and
 A2: P[1.G()]
 proof
   reconsider G = G() as non empty multMagma;
-A3: for x,y being Element of G holds P[x] & P[y] implies P[x*y] by A1;
-A4: ex x being Element of G st P[x] by A2;
+A3: ex x being Element of G st P[x] by A2;
+A4: for x,y being Element of G holds P[x] & P[y] implies P[x*y] by A1;
   consider H being strict non empty SubStr of G such that
-A5: for x being Element of G holds x in the carrier of H
-  iff P[x] from SubStrEx2(A3,A4);
+A5: for x being Element of G holds x in the carrier of H iff P[x] from
+  SubStrEx2(A4,A3);
   reconsider e = 1.G() as Element of H by A2,A5;
   set M = multLoopStr(#carr(H), op(H), e#);
-A6: 1.G() = 1.M;
-  the multF of H c= the multF of G() by Def23;
-  then reconsider M as strict non empty MonoidalSubStr of G() by A6,Def25;
-  take M; thus thesis by A5;
+  1.G() = 1.M & the multF of H c= the multF of G() by Def23;
+  then reconsider M as strict non empty MonoidalSubStr of G() by Def25;
+  take M;
+  thus thesis by A5;
 end;
 
 notation
@@ -1718,7 +1767,6 @@ begin :: Monoids on natural numbers
 definition
   func <REAL,+> -> unital associative invertible commutative cancelable strict
   (non empty multMagma) equals
-
   multMagma(#REAL, addreal#);
   coherence by GROUP_1:92;
 end;
@@ -1731,8 +1779,8 @@ theorem
 canceled;
 
 theorem Th43:
-  for N being non empty SubStr of <REAL,+> for a,b being Element of N,
-  x,y being Real st a = x & b = y holds a*b = x+y
+  for N being non empty SubStr of <REAL,+> for a,b being Element
+  of N, x,y being Real st a = x & b = y holds a*b = x+y
 proof
   let N be non empty SubStr of <REAL,+>;
   let a,b be Element of N;
@@ -1751,52 +1799,50 @@ proof
 A1: for b being Element of N holds a*b = b & b*a = b by Th6;
   carr(N) c= REAL by Th25;
   then reconsider x = a as Real by TARSKI:def 3;
-A2: x+0 = a*a by A1
-    .= x+x by Th43;
   now
     let b be Element of N;
     a*b = op(N).(a,b) & b*a = op(N).(b,a);
     hence op(N).(a,b) = b & op(N).(b,a) = b by A1;
   end;
-  then a is_a_unity_wrt op(N) by BINOP_1:11;
+  then
+A2: a is_a_unity_wrt op(N) by BINOP_1:11;
+  x+0 = a*a by A1
+    .= x+x by Th43;
   hence thesis by A2,BINOP_1:def 8;
 end;
 
 registration
   let G be unital (non empty multMagma);
-  cluster associative invertible -> unital cancelable Group-like
-    (non empty SubStr of G);
+  cluster associative invertible -> unital cancelable Group-like (non empty
+    SubStr of G);
   coherence;
 end;
 
 definition
-  redefine func INT.Group -> unital invertible strict
-  (non empty SubStr of <REAL,+>);
+  redefine func INT.Group -> unital invertible strict (non empty SubStr of
+  <REAL,+>);
   coherence
   proof
-A1: INT.Group = multMagma(#INT,addint#) & dom addint = [:INT,INT:] &
-    [:INT,INT:] c= [:REAL,REAL:] & dom addreal = [:REAL,REAL:]
-    by FUNCT_2:def 1,GR_CY_1:def 4,NUMBERS:15,ZFMISC_1:119;
+    dom addreal = [:REAL,REAL:] by FUNCT_2:def 1;
     then
-A2: dom (addreal||INT) = [:INT,INT:] by RELAT_1:91;
-    now
+A1: dom (addreal||INT) = [:INT,INT:] by
+    NUMBERS:15,RELAT_1:91 ,ZFMISC_1
+    :119;
+A2: now
       let x;
       assume
 A3:   x in [:INT,INT:];
       then
-A4:   x`1 in INT & x`2 in INT & x = [x`1,x`2] by MCART_1:10,23;
+A4:   x = [x`1,x`2] by MCART_1:23;
       reconsider i1 = x`1, i2 = x`2 as Element of INT by A3,MCART_1:10;
       thus addint.x = addint.(i1,i2) by A3,MCART_1:23
         .= addreal.(i1,i2) by GR_CY_1:def 2
-        .= (addreal||INT).x by A2,A3,A4,FUNCT_1:70;
+        .= (addreal||INT).x by A1,A3,A4,FUNCT_1:70;
     end;
-    then
-A5: addint = addreal||INT by A1,A2,FUNCT_1:9;
-    INT.Group is SubStr of <REAL,+>
-    proof
-      thus op(INT.Group) c= op(<REAL,+>) by A5,GR_CY_1:def 4,RELAT_1:88;
-    end;
-    hence thesis;
+    dom addint = [:INT,INT:] by FUNCT_2:def 1;
+    then addint = addreal||INT by A1,A2,FUNCT_1:9;
+    then op(INT.Group) c= op(<REAL,+>) by GR_CY_1:def 4,RELAT_1:88;
+    hence thesis by Def23;
   end;
 end;
 
@@ -1806,43 +1852,46 @@ end;
 canceled;
 
 theorem
-  for G being strict non empty SubStr of <REAL,+> holds
-  G = INT.Group iff the carrier of G = INT by Th28,GR_CY_1:def 4;
+  for G being strict non empty SubStr of <REAL,+> holds G = INT.Group
+  iff the carrier of G = INT by Th28,GR_CY_1:def 4;
 
 theorem
-  x is Element of INT.Group iff x is Integer by GR_CY_1:def 4,INT_1:def 2;
+  x is Element of INT.Group iff x is Integer by GR_CY_1:def 4,INT_1:def
+  2;
 
 definition
-  func <NAT,+> ->
-  unital uniquely-decomposable strict (non empty SubStr of INT.Group) means
-  :
-  Def27: the carrier of it = NAT;
+  func <NAT,+> -> unital uniquely-decomposable strict (non empty SubStr of
+  INT.Group) means
+  : Def27:
+  the carrier of it = NAT;
   existence
   proof
     set f = addint||NAT;
-    [:NAT,NAT:] c= [:INT,INT:] & dom addint = [:INT,INT:]
-    by FUNCT_2:def 1,NUMBERS:17,ZFMISC_1:119;
+    dom addint = [:INT,INT:] by FUNCT_2:def 1;
     then
-A1: dom f = [:NAT,NAT:] by RELAT_1:91;
+A1: dom f = [:NAT,NAT:] by NUMBERS:17,RELAT_1:91,ZFMISC_1:119;
     rng f c= NAT
     proof
       let x;
-      assume x in rng f;
+      assume
+      x in rng f;
       then consider y such that
-A2:   y in dom f & x = f.y by FUNCT_1:def 5;
+A2:   y in dom f and
+A3:   x = f.y by FUNCT_1:def 5;
       reconsider n1 = y`1, n2 = y`2 as Element of NAT by A1,A2,MCART_1:10;
       reconsider i1 = n1, i2 = n2 as Integer;
-      x = addint.y by A2,FUNCT_1:70
+      x = addint.y by A2,A3,FUNCT_1:70
         .= addint.(i1,i2) by A1,A2,MCART_1:23
-        .= n1+n2 by GR_CY_1:14;
+        .= n1+n2 by BINOP_2:def 20;
       hence thesis;
     end;
     then reconsider f as BinOp of NAT by A1,FUNCT_2:def 1,RELSET_1:11;
     f c= op(INT.Group) by GR_CY_1:def 4,RELAT_1:88;
-    then reconsider N = multMagma(#NAT,f#)
-    as strict non empty SubStr of INT.Group by Def23;
+    then reconsider
+    N = multMagma(#NAT,f#) as strict non empty SubStr of INT.Group
+    by Def23;
     reconsider a = 0 as Element of N;
-A3: now
+A4: now
       let b be Element of N;
       reconsider n = b as Element of NAT;
       thus a*b = 0+n by Th43
@@ -1850,31 +1899,29 @@ A3: now
       thus b*a = n+0 by Th43
         .= b;
     end;
-    then
-A4: N is unital by Th6;
-    then
-A5: op(N) is having_a_unity by Def10;
     now
       let b be Element of N;
       thus op(N).(a,b) = a*b
-        .= b by A3;
+        .= b by A4;
       thus op(N).(b,a) = b*a
-        .= b by A3;
+        .= b by A4;
     end;
     then
-A6: a is_a_unity_wrt op(N) by BINOP_1:11;
+A5: a is_a_unity_wrt op(N) by BINOP_1:11;
     then
-A7: the_unity_wrt op(N) = a by BINOP_1:def 8;
-    now
+A6: the_unity_wrt op(N) = a by BINOP_1:def 8;
+A7: now
       let a,b be Element of N such that
 A8:   a*b = the_unity_wrt op(N);
       reconsider n = a, m = b as Element of NAT;
-      a*b = n+m by Th43;
-      then a = 0 & b = 0 by A7,A8,NAT_1:7;
-      hence a = b & b = the_unity_wrt op(N) by A6,BINOP_1:def 8;
+A9:   a*b = n+m by Th43;
+      then a = 0 by A6,A8,NAT_1:7;
+      hence a = b & b = the_unity_wrt op(N) by A5,A8,A9,BINOP_1:def 8;
     end;
-    then N is uniquely-decomposable by A5,Th16;
-    hence thesis by A4;
+A10: N is unital by A4,Th6;
+    then op(N) is having_a_unity by Def10;
+    then N is uniquely-decomposable by A7,Th16;
+    hence thesis by A10;
   end;
   uniqueness by Th28;
 end;
@@ -1883,9 +1930,8 @@ end;
 :: <NAT,+> is unital commutative associative cancelable uniquely-decomposable;
 
 definition
-  func <NAT,+,0> -> well-unital strict (non empty MonoidalExtension of <NAT,+>)
-  means
-
+  func <NAT,+,0> -> well-unital strict (non empty MonoidalExtension of <NAT,+>
+  ) means
   not contradiction;
   existence;
   uniqueness by Th22;
@@ -1897,7 +1943,6 @@ end;
 
 definition
   redefine func addnat equals
-
   the multF of <NAT,+>;
   compatibility
   proof
@@ -1929,8 +1974,8 @@ proof
 end;
 
 theorem
-  for n1,n2 being Element of NAT, m1,m2 being Element of <NAT,+,0>
-  st n1 = m1 & n2 = m2 holds m1*m2 = n1+n2
+  for n1,n2 being Element of NAT, m1,m2 being Element of <NAT,+,0> st n1
+  = m1 & n2 = m2 holds m1*m2 = n1+n2
 proof
   op(<NAT,+,0>) = op(<NAT,+>) by Th20;
   then <NAT,+,0> is SubStr of <NAT,+> qua SubStr of <REAL,+> by Def23;
@@ -1948,35 +1993,24 @@ end;
 theorem
   addnat = addreal||NAT & addnat = addint||NAT
 proof
-  carr(<NAT,+>) = NAT & op(<REAL,+>) = addreal & op(INT.Group) = addint &
-  op(<NAT,+>) = addnat by Def27,GR_CY_1:def 4;
-  hence thesis by Th26;
+  carr(<NAT,+>) = NAT by Def27;
+  hence thesis by Th26,GR_CY_1:def 4;
 end;
 
 theorem
   0 is_a_unity_wrt addnat & addnat is uniquely-decomposable
 proof
-A1: addnat is having_a_unity & the_unity_wrt addnat = 0 by Th44,Th49;
-  ex n being Element of NAT st n is_a_unity_wrt addnat by SETWISEO:def 2;
-  hence 0 is_a_unity_wrt addnat by A1,BINOP_1:def 8;
+  the_unity_wrt addnat = 0 & ex n being Element of NAT st n is_a_unity_wrt
+  addnat by Th44,Th49,SETWISEO:def 2;
+  hence 0 is_a_unity_wrt addnat by BINOP_1:def 8;
   thus thesis by Def20,Th49;
 end;
 
 definition
   func <REAL,*> -> unital commutative associative strict (non empty multMagma)
   equals
-
   multMagma(#REAL,multreal#);
-  coherence
-  proof
-    set R = multMagma(#REAL,multreal#);
-    R is unital commutative associative
-    proof
-      thus op(R) is having_a_unity & op(R) is commutative &
-       op(R) is associative;
-    end;
-    hence thesis;
-  end;
+  coherence by Def10,Def11,Def12;
 end;
 
 canceled;
@@ -1987,8 +2021,8 @@ theorem
 canceled;
 
 theorem Th58:
-  for N being non empty SubStr of <REAL,*>
-  for a,b being Element of N, x,y being Real st a = x & b = y holds a*b = x*y
+  for N being non empty SubStr of <REAL,*> for a,b being Element
+  of N, x,y being Real st a = x & b = y holds a*b = x*y
 proof
   let N be non empty SubStr of <REAL,*>;
   let a,b be Element of N;
@@ -2001,8 +2035,8 @@ end;
 canceled;
 
 theorem
-  for N being unital (non empty SubStr of <REAL,*>) holds
-  the_unity_wrt the multF of N = 0 or the_unity_wrt the multF of N = 1
+  for N being unital (non empty SubStr of <REAL,*>) holds the_unity_wrt
+  the multF of N = 0 or the_unity_wrt the multF of N = 1
 proof
   let N be unital (non empty SubStr of <REAL,*>);
   set e = the_unity_wrt op(N);
@@ -2016,35 +2050,37 @@ proof
 end;
 
 definition
-  func <NAT,*> -> unital uniquely-decomposable strict
-  (non empty SubStr of <REAL,*>) means
+  func <NAT,*> -> unital uniquely-decomposable strict (non empty SubStr of
+  <REAL,*>) means
   :Def31:
   the carrier of it = NAT;
   existence
   proof
     set f = multreal||NAT;
-    [:NAT,NAT:] c= [:REAL,REAL:] & dom multreal = [:REAL,REAL:]
-    by FUNCT_2:def 1;
+    dom multreal = [:REAL,REAL:] by FUNCT_2:def 1;
     then
 A1: dom f = [:NAT,NAT:] by RELAT_1:91;
     rng f c= NAT
     proof
       let x;
-      assume x in rng f;
+      assume
+      x in rng f;
       then consider y such that
-A2:   y in dom f & x = f.y by FUNCT_1:def 5;
+A2:   y in dom f and
+A3:   x = f.y by FUNCT_1:def 5;
       reconsider n1 = y`1, n2 = y`2 as Element of NAT by A1,A2,MCART_1:10;
-      x = multreal.y by A2,FUNCT_1:70
+      x = multreal.y by A2,A3,FUNCT_1:70
         .= multreal.(n1,n2) by A1,A2,MCART_1:23
         .= n1*n2 by BINOP_2:def 11;
       hence thesis;
     end;
     then reconsider f as BinOp of NAT by A1,FUNCT_2:def 1,RELSET_1:11;
     f c= op(<REAL,*>) by RELAT_1:88;
-    then reconsider N = multMagma(#NAT,f#)
-    as strict (non empty SubStr of <REAL,*> ) by Def23;
+    then reconsider
+    N = multMagma(#NAT,f#) as strict (non empty SubStr of <REAL,*>
+    ) by Def23;
     reconsider a = 1 as Element of N;
-A3: now
+A4: now
       let b be Element of N;
       reconsider n = b as Element of NAT;
       thus a*b = 1*n by Th58
@@ -2052,31 +2088,29 @@ A3: now
       thus b*a = n*1 by Th58
         .= b;
     end;
-    then
-A4: N is unital by Th6;
-    then
-A5: op(N) is having_a_unity by Def10;
     now
       let b be Element of N;
       thus op(N).(a,b) = a*b
-        .= b by A3;
+        .= b by A4;
       thus op(N).(b,a) = b*a
-        .= b by A3;
+        .= b by A4;
     end;
     then
-A6: a is_a_unity_wrt op(N) by BINOP_1:11;
+A5: a is_a_unity_wrt op(N) by BINOP_1:11;
     then
-A7: the_unity_wrt op(N) = a by BINOP_1:def 8;
-    now
+A6: the_unity_wrt op(N) = a by BINOP_1:def 8;
+A7: now
       let a,b be Element of N such that
 A8:   a*b = the_unity_wrt op(N);
       reconsider n = a, m = b as Element of NAT;
-      a*b = n*m by Th58;
-      then a = 1 & b = 1 by A7,A8,NAT_1:15;
-      hence a = b & b = the_unity_wrt op(N) by A6,BINOP_1:def 8;
+A9:   a*b = n*m by Th58;
+      then a = 1 by A6,A8,NAT_1:15;
+      hence a = b & b = the_unity_wrt op(N) by A5,A8,A9,BINOP_1:def 8;
     end;
-    then N is uniquely-decomposable by A5,Th16;
-    hence thesis by A4;
+A10: N is unital by A4,Th6;
+    then op(N) is having_a_unity by Def10;
+    then N is uniquely-decomposable by A7,Th16;
+    hence thesis by A10;
   end;
   uniqueness by Th28;
 end;
@@ -2085,9 +2119,8 @@ end;
 :: <NAT,*> is unital commutative associative uniquely-decomposable;
 
 definition
-  func <NAT,*,1> -> well-unital strict (non empty MonoidalExtension of <NAT,*>)
-  means
-
+  func <NAT,*,1> -> well-unital strict (non empty MonoidalExtension of <NAT,*>
+  ) means
   not contradiction;
   uniqueness by Th22;
   existence;
@@ -2098,7 +2131,6 @@ end;
 
 definition
   redefine func multnat equals
-
   the multF of <NAT,*>;
   compatibility
   proof
@@ -2119,18 +2151,19 @@ theorem Th61:
   <NAT,*> = multMagma(#NAT,multnat#) by Def31;
 
 theorem
-  for n1,n2 being Element of NAT, m1,m2 being Element of <NAT,*>
-  st n1 = m1 & n2 = m2 holds m1*m2 = n1*n2 by Th58;
+  for n1,n2 being Element of NAT, m1,m2 being Element of <NAT,*> st n1 =
+  m1 & n2 = m2 holds m1*m2 = n1*n2 by Th58;
 
 theorem Th63:
   the_unity_wrt the multF of <NAT,*> = 1
-proof carr(<NAT,*>) = NAT by Def31;
+proof
+  carr(<NAT,*>) = NAT by Def31;
   hence thesis by Th32,BINOP_2:7;
 end;
 
 theorem
-  for n1,n2 being Element of NAT, m1,m2 being Element of <NAT,*,1>
-  st n1 = m1 & n2 = m2 holds m1*m2 = n1*n2
+  for n1,n2 being Element of NAT, m1,m2 being Element of <NAT,*,1> st n1
+  = m1 & n2 = m2 holds m1*m2 = n1*n2
 proof
   let n1,n2 be Element of NAT, m1,m2 be Element of <NAT,*,1>;
   the multMagma of <NAT,*,1> = <NAT,*> by Def22;
@@ -2165,13 +2198,15 @@ definition
   func D*+^ -> unital associative cancelable uniquely-decomposable
   constituted-FinSeqs strict (non empty multMagma) means
   :Def34:
-  the carrier of it = D* & for p,q being Element of it holds p [*] q = p^q;
+  the carrier of
+  it = D* & for p,q being Element of it holds p [*] q = p^q;
   existence
   proof
-    deffunc F(Element of D*,Element of D*) = (($1 qua Element of D*)
-    ^($2 qua Element of D*));
+    deffunc F(Element of D*,Element of D*) = (($1 qua Element of D*) ^($2 qua
+    Element of D*));
     consider f being BinOp of D* such that
-A1: for a,b being Element of D* holds f.(a,b) = F(a,b) from BINOP_1:sch 4;
+A1: for a,b being Element of D* holds f.(a,b) = F(a,b) from BINOP_1:
+    sch 4;
     set G = multMagma(#D*, f#);
     G is constituted-FinSeqs
     proof
@@ -2205,47 +2240,52 @@ A2:   now
       hence N is associative by Lm2;
       now
         let a,b,c be Element of N;
-        a*b = a^b & a*c = a^c & b*a = b^a & c*a = c^a by A1;
-        hence a*b = a*c or b*a = c*a implies b = c by FINSEQ_1:46;
+A3:     b*a = b^a & c*a = c^a by A1;
+        a*b = a^b & a*c = a^c by A1;
+        hence a*b = a*c or b*a = c*a implies b = c by A3,FINSEQ_1:46;
       end;
       hence N is cancelable by Th15;
       N is unital by A2,Th6;
       hence op(N) is having_a_unity by Def10;
+      let a',b be Element of N;
       now
         let b be Element of N;
         a[*]b = f.(a,b) & b[*]a = f.(b,a);
         hence f.(a,b) = b & f.(b,a) = b by A2;
       end;
       then
-A3:   a is_a_unity_wrt op(N) by BINOP_1:11;
-      let a',b be Element of N;
-      assume f.(a',b) = the_unity_wrt op(N);
-      then {} = a'[*]b by A3,BINOP_1:def 8
+A4:   a is_a_unity_wrt op(N) by BINOP_1:11;
+      assume
+      f.(a',b) = the_unity_wrt op(N);
+      then
+A5:   {} = a'[*]b by A4,BINOP_1:def 8
         .= a'^b by A1;
-      then a = a' & a = b;
-      hence thesis by A3,BINOP_1:def 8;
+      then a = b;
+      hence thesis by A4,A5,BINOP_1:def 8;
     end;
     then reconsider G as unital associative cancelable uniquely-decomposable
     constituted-FinSeqs strict (non empty multMagma);
-    take G; thus thesis by A1;
+    take G;
+    thus thesis by A1;
   end;
   uniqueness
   proof
     let G1,G2 be unital associative cancelable uniquely-decomposable
     constituted-FinSeqs strict (non empty multMagma) such that
-A4: carr(G1) = D* & for p,q being Element of G1 holds p [*] q = p^q and
-A5: carr(G2) = D* & for p,q being Element of G2 holds p [*] q = p^q;
+A6: carr(G1) = D* and
+A7: for p,q being Element of G1 holds p [*] q = p^q and
+A8: carr(G2) = D* and
+A9: for p,q being Element of G2 holds p [*] q = p^q;
     set f1 = op(G1), f2 = op(G2);
     now
       let a,b be Element of D*;
+      reconsider a2 = a, b2 = b as Element of G2 by A8;
+      reconsider a1 = a, b1 = b as Element of G1 by A6;
       reconsider p = a, q = b as Element of D*;
-      reconsider a1 = a, b1 = b as Element of G1 by A4;
-      reconsider a2 = a, b2 = b as Element of G2 by A5;
-      f2.(a,b) = a2[*]b2 & a2[*]b2 = p^q &
-      f1.(a,b) = a1[*]b1 & a1[*]b1 = p^q by A4,A5;
+      a2[*]b2 = p^q & a1[*]b1 = p^q by A7,A9;
       hence f1.(a,b) = f2.(a,b);
     end;
-    hence thesis by A4,A5,BINOP_1:2;
+    hence thesis by A6,A8,BINOP_1:2;
   end;
 end;
 
@@ -2253,14 +2293,13 @@ definition
   let D;
   func D*+^+<0> -> well-unital strict (non empty MonoidalExtension of D*+^)
   means
-
   not contradiction;
   correctness by Th22;
   func D-concatenation -> BinOp of D* equals
-
   the multF of D*+^;
   correctness
-  proof carr(D*+^) = D* by Def34;
+  proof
+    carr(D*+^) = D* by Def34;
     hence thesis;
   end;
 end;
@@ -2272,9 +2311,8 @@ theorem Th69:
   the_unity_wrt the multF of D*+^ = {}
 proof
   set N = D*+^, f = op(N);
-A1: carr(N) = D* & for p,q being Element of D*+^ holds p[*]q = p^q by Def34;
-  {} = <*>D;
-  then reconsider a = {} as Element of N by A1,FINSEQ_1:def 11;
+  carr(N) = D* & {} = <*>D by Def34;
+  then reconsider a = {} as Element of N by FINSEQ_1:def 11;
   now
     let b be Element of N;
     thus f.(a,b) = a[*]b
@@ -2289,13 +2327,12 @@ A1: carr(N) = D* & for p,q being Element of D*+^ holds p[*]q = p^q by Def34;
 end;
 
 theorem
-  the carrier of D*+^+<0> = D* & the multF of D*+^+<0> = D-concatenation &
-  1.(D*+^+<0>) = {}
+  the carrier of D*+^+<0> = D* & the multF of D*+^+<0> = D-concatenation
+  & 1.(D*+^+<0>) = {}
 proof
   set M = D*+^+<0>;
-  the multMagma of M = D*+^ & the_unity_wrt op(M) = un(M) &
-  the_unity_wrt the multF of D*+^ = {} by Def22,Th19,Th69;
-  hence thesis by Def34;
+  the multMagma of M = D*+^ & the_unity_wrt op(M) = un(M) by Def22,Th19;
+  hence thesis by Def34,Th69;
 end;
 
 theorem
@@ -2309,8 +2346,8 @@ proof
 end;
 
 theorem Th72:
-  for F being non empty SubStr of D*+^
-  for p,q being Element of F holds p[*]q = p^q
+  for F being non empty SubStr of D*+^ for p,q being Element of F
+  holds p[*]q = p^q
 proof
   let F be non empty SubStr of D*+^, p,q be Element of F;
   carr(F) c= carr(D*+^) by Th25;
@@ -2320,8 +2357,8 @@ proof
 end;
 
 theorem
-  for F being unital (non empty SubStr of D*+^) holds
-  the_unity_wrt the multF of F = {}
+  for F being unital (non empty SubStr of D*+^) holds the_unity_wrt the
+  multF of F = {}
 proof
   let F be unital (non empty SubStr of D*+^);
   set p = the_unity_wrt op(F);
@@ -2334,8 +2371,8 @@ A1: op(F) is having_a_unity by Def10;
 end;
 
 theorem
-  for F being non empty SubStr of D*+^
-  st {} is Element of F holds F is unital & the_unity_wrt the multF of F = {}
+  for F being non empty SubStr of D*+^ st {} is Element of F holds F is
+  unital & the_unity_wrt the multF of F = {}
 proof
   let F be non empty SubStr of D*+^;
   the_unity_wrt op(D*+^) = {} by Th69;
@@ -2346,34 +2383,38 @@ theorem
   for A,B being non empty set st A c= B holds A*+^ is SubStr of B*+^
 proof
   let A,B be non empty set;
-  assume A c= B;
+  carr(A*+^) = A* by Def34;
   then
-A1: A* c= B* by FINSEQ_1:83;
+A1: dom op(A*+^) = [:A*,A*:] by FUNCT_2:def 1;
+  carr(B*+^) = B* by Def34;
   then
-A2: [:A*,A*:] c= [:B*,B*:] by ZFMISC_1:119;
-  carr(A*+^) = A* & carr(B*+^) = B* by Def34;
+A2: dom op(B*+^) = [:B*,B*:] by FUNCT_2:def 1;
+  assume
+  A c= B;
   then
-A3: dom op(A*+^) = [:A*,A*:] & dom op(B*+^) = [:B*,B*:] by FUNCT_2:def 1;
-  now
+A3: A* c= B* by FINSEQ_1:83;
+A4: now
     let x;
     assume
-A4: x in [:A*,A*:];
+A5: x in [:A*,A*:];
     then
-A5: x`1 in A* & x`2 in A* by MCART_1:10;
+A6: x`1 in A* & x`2 in A* by MCART_1:10;
     then reconsider x1 = x`1, x2 = x`2 as Element of A*+^ by Def34;
-    reconsider y1 = x`1, y2 = x`2 as Element of B*+^ by A1,A5,Def34;
-    thus op(A*+^).x = x1[*]x2 by A4,MCART_1:23
+    reconsider y1 = x`1, y2 = x`2 as Element of B*+^ by A3,A6,Def34;
+    thus op(A*+^).x = x1[*]x2 by A5,MCART_1:23
       .= x1^x2 by Def34
       .= y1[*]y2 by Def34
-      .= op(B*+^).x by A4,MCART_1:23;
+      .= op(B*+^).x by A5,MCART_1:23;
   end;
-  hence op(A*+^) c= op(B*+^) by A2,A3,GRFUNC_1:8;
+  [:A*,A*:] c= [:B*,B*:] by A3,ZFMISC_1:119;
+  hence op(A*+^) c= op(B*+^) by A1,A2,A4,GRFUNC_1:8;
 end;
 
 theorem
-  D-concatenation is having_a_unity & the_unity_wrt (D-concatenation) = {} &
-  D-concatenation is associative
-proof multMagma(#D*,D-concatenation#) = D*+^ by Def34;
+  D-concatenation is having_a_unity & the_unity_wrt (D-concatenation) =
+  {} & D-concatenation is associative
+proof
+  multMagma(#D*,D-concatenation#) = D*+^ by Def34;
   hence thesis by Def10,Def12,Th69;
 end;
 
@@ -2381,49 +2422,41 @@ begin :: Monoids of mappings
 
 definition
   let X be set;
-  func GPFuncs X -> unital associative constituted-Functions strict
-  (non empty multMagma) means
+  func GPFuncs X -> unital associative constituted-Functions strict (non empty
+  multMagma) means
   :Def37:
-  the carrier of it = PFuncs(X,X) &
-  for f,g being Element of it holds f [*] g = f(*)g;
+  the carrier of it = PFuncs(X,X) & for f,g being
+  Element of it holds f [*] g = f(*)g;
   existence
   proof
+    reconsider g = id X as PartFunc of X,X;
     set D = PFuncs(X,X);
-    defpred P[Element of D,Element of D,Element of D] means
-    ex f,g being PartFunc of X,X st $1 = f & $2 = g & $3 = f(*)g;
+    defpred P[Element of D,Element of D,Element of D] means ex f,g being
+    PartFunc of X,X st $1 = f & $2 = g & $3 = f(*)g;
 A1: for a,b being Element of D ex c being Element of D st P[a,b,c]
     proof
       let a,b be Element of D;
       reconsider f = a, g = b as PartFunc of X,X by PARTFUN1:120;
       reconsider c = f*g as Element of D by PARTFUN1:119;
-      take c, f, g; thus thesis;
+      take c, f, g;
+      thus thesis;
     end;
     consider f being BinOp of D such that
-A2: for a,b being Element of D holds P[a,b,f.(a,b)] from BINOP_1:sch 3(A1);
+A2: for a,b being Element of D holds P[a,b,f.(a,b)] from BINOP_1:sch 3
+    (A1);
     set G = multMagma(#D, f#);
     G is constituted-Functions
     proof
       let x be Element of G;
-      thus thesis by PARTFUN1:120;
+      thus thesis;
     end;
     then reconsider G as constituted-Functions strict non empty multMagma;
 A3: now
       let a,b be Element of G;
-      consider g,h being PartFunc of X,X such that
-A4:   a = g & b = h & f.(a,b) = g(*)h by A2;
-      thus a[*]b = a(*)b by A4;
+      ex g,h being PartFunc of X,X st a = g & b = h & f.(a,b) = g(*)h by A2;
+      hence a[*]b = a(*)b;
     end;
-    reconsider g = id X as PartFunc of X,X;
-    reconsider f1 = g as Element of G by PARTFUN1:119;
-A5: now
-      let h be Element of G;
-      reconsider j = h as PartFunc of X,X by PARTFUN1:120;
-      thus f1[*]h = g(*)j by A3
-        .= h by PARTFUN1:37;
-      thus h[*]f1 = j(*)g by A3
-        .= h by PARTFUN1:36;
-    end;
-    now
+A4: now
       let f',g,h be Element of G;
       reconsider fg = f'[*]g, gh = g[*]h as Element of G;
       thus f'[*]g[*]h = fg(*)h by A3
@@ -2432,48 +2465,57 @@ A5: now
         .= f'(*)gh by A3
         .= f'[*](g[*]h) by A3;
     end;
-    then reconsider G as unital associative constituted-Functions strict
-    (non empty multMagma) by A5,Lm2,Th6;
-    take G; thus carr(G) = PFuncs(X,X);
+    reconsider f1 = g as Element of G by PARTFUN1:119;
+    now
+      let h be Element of G;
+      reconsider j = h as PartFunc of X,X by PARTFUN1:120;
+      thus f1[*]h = g(*)j by A3
+        .= h by PARTFUN1:37;
+      thus h[*]f1 = j(*)g by A3
+        .= h by PARTFUN1:36;
+    end;
+    then reconsider
+    G as unital associative constituted-Functions strict (non empty
+    multMagma) by A4,Lm2,Th6;
+    take G;
+    thus carr(G) = PFuncs(X,X);
     let g,h be Element of G;
     reconsider g' = g, h' = h as Element of D;
-    f.(g,h) = g [*] h &
-    ex g,h being PartFunc of X,X st g' = g & h' = h & f.(g',h') = g(*)h by A2;
+    ex g,h being PartFunc of X,X st g' = g & h' = h & f.(g',h') = g(*)h by
+    A2;
     hence thesis;
   end;
   uniqueness
   proof
-    let G1,G2 be unital associative constituted-Functions strict
-    (non empty multMagma) such that
-A6: carr(G1) = PFuncs(X,X) &
-    for f,g being Element of G1 holds f [*] g = f(*)g and
-A7: carr(G2) = PFuncs(X,X) &
-    for f,g being Element of G2 holds f [*] g = f(*)g;
+    let G1,G2 be unital associative constituted-Functions strict (non empty
+    multMagma) such that
+A5: carr(G1) = PFuncs(X,X) and
+A6: for f,g being Element of G1 holds f [*] g = f(*)g and
+A7: carr(G2) = PFuncs(X,X) and
+A8: for f,g being Element of G2 holds f [*] g = f(*)g;
     set f1 = op(G1), f2 = op(G2);
     now
       let a,b be Element of G1;
-      reconsider a' = a, b' = b as Element of G2 by A6,A7;
-      f1.(a,b) = a[*]b & a[*]b = a(*)b & f2.(a',b') = a'[*]b' &
-      a'[*]b' = a'(*)b' by A6,A7;
+      reconsider a' = a, b' = b as Element of G2 by A5,A7;
+      a[*]b = a(*)b & a'[*]b' = a'(*)b' by A6,A8;
       hence f1.(a,b) = f2.(a,b);
     end;
-    hence thesis by A6,A7,BINOP_1:2;
+    hence thesis by A5,A7,BINOP_1:2;
   end;
 end;
 
 definition
   let X be set;
-  func MPFuncs X -> well-unital strict
-  (non empty MonoidalExtension of GPFuncs X) means
-
+  func MPFuncs X -> well-unital strict (non empty MonoidalExtension of GPFuncs
+  X) means
   not contradiction;
   existence;
   uniqueness by Th22;
   func X-composition -> BinOp of PFuncs(X,X) equals
-
   the multF of GPFuncs X;
   correctness
-  proof carr(GPFuncs X) = PFuncs(X,X) by Def37;
+  proof
+    carr(GPFuncs X) = PFuncs(X,X) by Def37;
     hence thesis;
   end;
 end;
@@ -2483,16 +2525,18 @@ end;
 
 theorem
   x is Element of GPFuncs X iff x is PartFunc of X,X
-proof carr(GPFuncs X) = PFuncs(X,X) by Def37;
+proof
+  carr(GPFuncs X) = PFuncs(X,X) by Def37;
   hence thesis by PARTFUN1:119,120;
 end;
 
 theorem Th78:
   the_unity_wrt the multF of GPFuncs X = id X
-proof reconsider g = id X as PartFunc of X,X;
-A1: g in PFuncs(X,X) & carr(GPFuncs X) = PFuncs(X,X) by Def37,PARTFUN1:119;
-  then reconsider f = g as Element of GPFuncs X;
+proof
+  reconsider g = id X as PartFunc of X,X;
   set op = op(GPFuncs X);
+A1: carr(GPFuncs X) = PFuncs(X,X) by Def37;
+  then reconsider f = g as Element of GPFuncs X by PARTFUN1:119;
   now
     let h be Element of GPFuncs X;
     reconsider j = h as PartFunc of X,X by A1,PARTFUN1:120;
@@ -2508,8 +2552,8 @@ A1: g in PFuncs(X,X) & carr(GPFuncs X) = PFuncs(X,X) by Def37,PARTFUN1:119;
 end;
 
 theorem Th79:
-  for F being non empty SubStr of GPFuncs X
-  for f,g being Element of F holds f [*] g = f (*) g
+  for F being non empty SubStr of GPFuncs X for f,g being Element
+  of F holds f [*] g = f (*) g
 proof
   let F be non empty SubStr of GPFuncs X;
   let f,g be Element of F;
@@ -2520,8 +2564,8 @@ proof
 end;
 
 theorem Th80:
-  for F being non empty SubStr of GPFuncs X st id X is Element of F holds
-  F is unital & the_unity_wrt the multF of F = id X
+  for F being non empty SubStr of GPFuncs X st id X is Element of
+  F holds F is unital & the_unity_wrt the multF of F = id X
 proof
   let F be non empty SubStr of GPFuncs X;
   the_unity_wrt op(GPFuncs X) = id X by Th78;
@@ -2531,36 +2575,43 @@ end;
 theorem
   Y c= X implies GPFuncs Y is SubStr of GPFuncs X
 proof
-  assume Y c= X;
+  carr(GPFuncs Y) = PFuncs(Y,Y) by Def37;
   then
-A1: PFuncs(Y,Y) c= PFuncs(X,X) by PARTFUN1:128;
+A1: dom op(GPFuncs Y) = [:PFuncs(Y,Y),PFuncs(Y,Y):] by FUNCT_2:def 1;
+  carr(GPFuncs X) = PFuncs(X,X) by Def37;
   then
-A2: [:PFuncs(Y,Y),PFuncs(Y,Y):] c= [:PFuncs(X,X),PFuncs(X,X):]
-  by ZFMISC_1:119;
-  carr(GPFuncs Y) = PFuncs(Y,Y) & carr(GPFuncs X) = PFuncs(X,X) by Def37;
+A2: dom op(GPFuncs X) = [:PFuncs(X,X),PFuncs(X,X):] by FUNCT_2:def 1;
+  assume
+  Y c= X;
   then
-A3: dom op(GPFuncs Y) = [:PFuncs(Y,Y),PFuncs(Y,Y):] &
-  dom op(GPFuncs X) = [:PFuncs(X,X),PFuncs(X,X):] by FUNCT_2:def 1;
-  now
+A3: PFuncs(Y,Y) c= PFuncs(X,X) by PARTFUN1:128;
+A4: now
     let x;
     assume
-A4: x in [:PFuncs(Y,Y),PFuncs(Y,Y):];
+A5: x in [:PFuncs(Y,Y),PFuncs(Y,Y):];
     then
-A5: x`1 in PFuncs(Y,Y) & x`2 in PFuncs(Y,Y) by MCART_1:10;
+A6: x`1 in PFuncs(Y,Y) & x`2 in PFuncs(Y,Y) by MCART_1:10;
     then reconsider x1 = x`1, x2 = x`2 as Element of GPFuncs Y by Def37;
-    reconsider y1 = x`1, y2 = x`2 as Element of GPFuncs X by A1,A5,Def37;
-    thus op(GPFuncs Y).x = x1[*]x2 by A4,MCART_1:23
+    reconsider y1 = x`1, y2 = x`2 as Element of GPFuncs X by A3,A6,Def37;
+    thus op(GPFuncs Y).x = x1[*]x2 by A5,MCART_1:23
       .= x1(*)x2 by Def37
       .= y1[*]y2 by Def37
-      .= op(GPFuncs X).x by A4,MCART_1:23;
+      .= op(GPFuncs X).x by A5,MCART_1:23;
   end;
-  hence op(GPFuncs Y) c= op(GPFuncs X) by A2,A3,GRFUNC_1:8;
+  [:PFuncs(Y,Y),PFuncs(Y,Y):] c= [:PFuncs(X,X),PFuncs(X,X):] by A3,
+  ZFMISC_1:119;
+  hence op(GPFuncs Y) c= op(GPFuncs X) by A1,A2,A4,GRFUNC_1:8;
 end;
 
 Lm6: x in Funcs(X,X) implies x is Function of X,X
 proof
-  assume x in Funcs(X,X);
-  then ex f being Function st x = f & dom f = X & rng f c= X by FUNCT_2:def 2;
+  assume
+  x in Funcs(X,X);
+
+  then ex f being Function st x = f & dom f = X & rng f c= X by
+  FUNCT_2:def
+  2;
+
   hence thesis by FUNCT_2:4;
 end;
 
@@ -2570,10 +2621,9 @@ definition
   :Def40:
   the carrier of it = Funcs(X,X);
   existence
-  proof consider f being Function of X,X;
-    f in Funcs(X,X) & Funcs(X,X) c= PFuncs(X,X) &
-    carr(GPFuncs X) = PFuncs(X,X) by Def37,FUNCT_2:12,141;
-    then reconsider F = Funcs(X,X) as non empty Subset of GPFuncs X;
+  proof
+    Funcs(X,X) c= PFuncs(X,X) by FUNCT_2:141;
+    then reconsider F = Funcs(X,X) as non empty Subset of GPFuncs X by Def37;
 A1: for x,y being Element of F holds x [*] y in F
     proof
       let x,y be Element of F;
@@ -2586,7 +2636,9 @@ A2: the carrier of G = F from SubStrEx1(A1);
     id X in F by FUNCT_2:12;
     then reconsider G as unital strict (non empty SubStr of GPFuncs X) by A2,
     Th80;
-    take G; thus thesis by A2;
+    take G;
+    thus thesis by A2;
+    consider f being Function of X,X;
   end;
   uniqueness by Th28;
 end;
@@ -2597,7 +2649,8 @@ end;
 definition
   let X be set;
   func MFuncs X -> well-unital strict MonoidalExtension of GFuncs X means
-  not contradiction;
+  not
+  contradiction;
   correctness by Th22;
 end;
 
@@ -2606,27 +2659,30 @@ end;
 
 theorem
   x is Element of GFuncs X iff x is Function of X,X
-proof carr(GFuncs X) = Funcs(X,X) by Def40;
+proof
+  carr(GFuncs X) = Funcs(X,X) by Def40;
   hence thesis by Lm6,FUNCT_2:12;
 end;
 
 theorem Th83:
   the multF of GFuncs X = (X-composition)||Funcs(X,X)
-proof op(GFuncs X) c= op(GPFuncs X) & X-composition = op(GPFuncs X) &
-  dom op(GFuncs X) = [:carr(GFuncs X), carr(GFuncs X):] &
-  carr(GFuncs X) = Funcs(X,X) by Def23,Def40,FUNCT_2:def 1;
-  hence thesis by GRFUNC_1:64;
+proof
+A1: carr(GFuncs X) = Funcs(X,X) by Def40;
+  op(GFuncs X) c= op(GPFuncs X) & dom op(GFuncs X) = [:carr(GFuncs X),
+  carr( GFuncs X):] by Def23,FUNCT_2:def 1;
+  hence thesis by A1,GRFUNC_1:64;
 end;
 
 theorem Th84:
   the_unity_wrt the multF of GFuncs X = id X
-proof id X in Funcs(X,X) & carr(GFuncs X) = Funcs(X,X) by Def40,FUNCT_2:12;
+proof
+  id X in Funcs(X,X) & carr(GFuncs X) = Funcs(X,X) by Def40,FUNCT_2:12;
   hence thesis by Th80;
 end;
 
 theorem
-  the carrier of MFuncs X = Funcs(X,X) &
-  the multF of MFuncs X = (X-composition)||Funcs(X,X) & 1.MFuncs X = id X
+  the carrier of MFuncs X = Funcs(X,X) & the multF of MFuncs X = (X
+  -composition)||Funcs(X,X) & 1.MFuncs X = id X
 proof
   the_unity_wrt op(GFuncs X) = id X & the multMagma of MFuncs X = GFuncs X
   by Def22,Th84;
@@ -2638,77 +2694,84 @@ definition
   func GPerms X -> unital invertible strict (non empty SubStr of GFuncs X)
   means
   :Def42:
-  for f being Element of GFuncs X holds
-  f in the carrier of it iff f is Permutation of X;
+  for f being Element of GFuncs X holds f in the carrier of it iff
+  f is Permutation of X;
   existence
   proof
     defpred P[Element of GFuncs X] means $1 is Permutation of X;
-A1: for x,y being Element of GFuncs X st P[x] & P[y] holds P[x [*] y]
+A1: ex x being Element of GFuncs X st P[x]
+    proof
+      consider f being Permutation of X;
+      carr(GFuncs X) = Funcs(X,X) by Def40;
+      then reconsider x = f as Element of GFuncs X by FUNCT_2:12;
+      take x;
+      thus thesis;
+    end;
+A2: carr(GFuncs X) = Funcs(X,X) by Def40;
+    then reconsider f = id X as Element of GFuncs X by FUNCT_2:12;
+A3: for x,y being Element of GFuncs X st P[x] & P[y] holds P[x [*] y]
     proof
       let x,y be Element of GFuncs X;
-      assume x is Permutation of X & y is Permutation of X;
+      assume
+      x is Permutation of X & y is Permutation of X;
       then reconsider f = x, g = y as Permutation of X;
       x[*]y = f*g by Th79;
       hence thesis;
     end;
-A2: ex x being Element of GFuncs X st P[x]
-    proof consider f being Permutation of X;
-      carr(GFuncs X) = Funcs(X,X) by Def40;
-      then reconsider x = f as Element of GFuncs X by FUNCT_2:12;
-      take x; thus thesis;
-    end;
     consider G being strict non empty SubStr of GFuncs X such that
-A3: for f being Element of GFuncs X holds
-    f in the carrier of G iff P[f] from SubStrEx2(A1,A2);
-A4: carr(GFuncs X) = Funcs(X,X) by Def40;
-    then reconsider f = id X as Element of GFuncs X by FUNCT_2:12;
-    f in carr(G) by A3;
+A4: for f being Element of GFuncs X holds f in the carrier of G iff P[
+    f] from SubStrEx2(A3,A1);
+    f in carr(G) by A4;
     then reconsider G as unital strict (non empty SubStr of GFuncs X) by Th80;
     now
+      reconsider i = f as Element of G by A4;
       let a,b be Element of G;
       carr(G) c= carr(GFuncs X) by Th25;
       then reconsider a' = a, b' = b as Element of GFuncs X by TARSKI:def 3;
-      reconsider i = f as Element of G by A3;
-      reconsider f = a', g = b' as Permutation of X by A3;
-      reconsider f' = f" as Element of GFuncs X by A4,FUNCT_2:12;
-      reconsider f' as Element of G by A3;
+      reconsider f = a', g = b' as Permutation of X by A4;
+A5:   i = f(*)(f") & i = f"(*)f by FUNCT_2:88;
+      reconsider f' = f" as Element of GFuncs X by A2,FUNCT_2:12;
+A6:   g(*)i = g & i(*)g = g by FUNCT_2:23;
+      reconsider f' as Element of G by A4;
       reconsider r = f'[*]b, l = b[*]f' as Element of G;
       take r,l;
-      i = f(*)(f") & i = f"(*)f & g(*)i = g & i(*)g = g & a[*]f' = f(*)(f")
-      & f'[*]a = f"(*)f & i[*]b = (id X)(*)g & b[*]i = g(*)
-      id X by Th79,FUNCT_2:23,88;
-      hence a[*]r = b & l[*]a = b by Lm2;
+A7:   i[*]b = (id X)(*)g & b[*]i = g(*) id X by Th79;
+      a[*]f' = f(*)(f") & f'[*]a = f"(*)f by Th79;
+      hence a[*]r = b & l[*]a = b by A5,A6,A7,Lm2;
     end;
-    then reconsider G as unital invertible strict (non empty SubStr of GFuncs X
-    ) by Th12;
-    take G; thus thesis by A3;
+    then reconsider
+    G as unital invertible strict (non empty SubStr of GFuncs X )
+    by Th12;
+    take G;
+    thus thesis by A4;
   end;
   uniqueness
   proof
-    let G1,G2 be unital invertible strict (non empty SubStr of GFuncs X)
-    such that
-A5: for f being Element of GFuncs X holds
-    f in carr(G1) iff f is Permutation of X and
-A6: for f being Element of GFuncs X holds
-    f in carr(G2) iff f is Permutation of X;
-A7: carr(G1) c= carr(GFuncs X) & carr(G2) c= carr(GFuncs X) by Th25;
+    let G1,G2 be unital invertible strict (non empty SubStr of GFuncs X) such
+    that
+A8: for f being Element of GFuncs X holds f in carr(G1) iff f is
+    Permutation of X and
+A9: for f being Element of GFuncs X holds f in carr(G2) iff f is
+    Permutation of X;
+A10: carr(G2) c= carr(GFuncs X) by Th25;
+A11: carr(G1) c= carr(GFuncs X) by Th25;
     carr(G1) = carr(G2)
     proof
       thus carr(G1) c= carr(G2)
       proof
         let x;
         assume
-A8:     x in carr(G1);
-        then reconsider f = x as Element of GFuncs X by A7;
-        f is Permutation of X by A5,A8;
-        hence thesis by A6;
+A12:    x in carr(G1);
+        then reconsider f = x as Element of GFuncs X by A11;
+        f is Permutation of X by A8,A12;
+        hence thesis by A9;
       end;
       let x;
       assume
-A9:   x in carr(G2);
-      then reconsider f = x as Element of GFuncs X by A7;
-      f is Permutation of X by A6,A9;
-      hence thesis by A5;
+A13:  x in carr(G2);
+      then reconsider f = x as Element of GFuncs X by A10;
+      f is Permutation of X by A9,A13;
+      hence thesis by A8;
     end;
     hence thesis by Th28;
   end;
@@ -2719,22 +2782,29 @@ end;
 
 theorem Th86:
   x is Element of GPerms X iff x is Permutation of X
-proof carr(GPerms X) c= carr(GFuncs X) by Th25;
-  then carr(GFuncs X) = Funcs(X,X) &
-  (x is Permutation of X implies x in Funcs(X,X)) & (x is Element of GPerms X
-  implies x is Element of GFuncs X) by Def40,FUNCT_2:12,TARSKI:def 3;
-  hence thesis by Def42;
+proof
+A1: x is Permutation of X implies x in Funcs(X,X) by FUNCT_2:12;
+  carr(GPerms X) c= carr(GFuncs X) by Th25;
+  then
+A2: x is Element of GPerms X implies x is Element of GFuncs X by
+  TARSKI:
+  def 3;
+  carr(GFuncs X) = Funcs(X,X) by Def40;
+  hence thesis by A1,A2,Def42;
 end;
 
 theorem Th87:
   the_unity_wrt the multF of GPerms X = id X & 1_GPerms X = id X
-proof reconsider i = id X as Element of GPerms X by Th86;
+proof
+  reconsider i = id X as Element of GPerms X by Th86;
   now
     let a be Element of GPerms X;
     reconsider f = a as Permutation of X by Th86;
-    a[*]i = a(*)i & i[*]a = i(*)a by Th79;
-    then op(GPerms X).(a,i) = f(*)i & op(GPerms X).(i,a) = i(*)f;
-    hence op(GPerms X).(i,a) = a & op(GPerms X).(a,i) = a by FUNCT_2:23;
+    a[*]i = a(*)i by Th79;
+    then
+A1: op(GPerms X).(a,i) = f(*)i;
+    i[*]a = i(*)a by Th79;
+    hence op(GPerms X).(i,a) = a & op(GPerms X).(a,i) = a by A1,FUNCT_2:23;
   end;
   then i is_a_unity_wrt op(GPerms X) by BINOP_1:11;
   hence the_unity_wrt op(GPerms X) = id X by BINOP_1:def 8;
@@ -2746,28 +2816,31 @@ theorem
 proof
   let f be Element of GPerms X;
   reconsider g = f as Permutation of X by Th86;
+A1: g(*)(g") = id X & g"(*)g = id X by FUNCT_2:88;
   reconsider b = g" as Element of GPerms X by Th86;
   reconsider b as Element of GPerms X;
-  g(*)(g") = id X & g"(*)g = id X & id X = 1_GPerms X & f[*]b = g(*)(g") &
-  b[*]f = g"(*)g by Th79,Th87,FUNCT_2:88;
-  hence thesis by GROUP_1:def 6;
+A2: b[*]f = g"(*)g by Th79;
+  id X = 1_GPerms X & f[*]b = g(*)(g") by Th79,Th87;
+  hence thesis by A1,A2,GROUP_1:def 6;
 end;
 
 :: 2005.05.13, A.T.
 
 theorem
-  for S being 1-sorted st the carrier of S is functional
-  holds S is constituted-Functions
+  for S being 1-sorted st the carrier of S is functional holds S is
+  constituted-Functions
 proof
   let S be 1-sorted such that
 A1: the carrier of S is functional;
   let a be Element of S;
   per cases;
-  suppose the carrier of S = {};
-    hence thesis by SUBSET_1:def 2;
+  suppose
+    the carrier of S = {};
+    hence thesis;
   end;
-  suppose the carrier of S <> {};
-    hence thesis by A1,FUNCT_1:def 19;
+  suppose
+    the carrier of S <> {};
+    thus thesis by A1;
   end;
 end;
 

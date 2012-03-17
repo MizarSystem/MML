@@ -11,7 +11,7 @@ environ
  notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCOP_1,
       FUNCT_4, NUMBERS, FUNCT_2, STRUCT_0, GRAPH_1, CAT_1, OPPCAT_1;
  constructors PARTFUN1, OPPCAT_1, FUNCOP_1, RELSET_1;
- registrations XBOOLE_0, RELSET_1, FUNCOP_1, CAT_1, STRUCT_0;
+ registrations XBOOLE_0, RELSET_1, STRUCT_0;
  requirements SUBSET, BOOLE;
  definitions CAT_1, FUNCOP_1;
  theorems TARSKI, FUNCT_2, FUNCOP_1, FUNCT_4, CAT_1, OPPCAT_1, RELSET_1,
@@ -28,26 +28,9 @@ reserve C,D for Category;
 reserve a,b,c,d for Object of C;
 reserve f,g,h,i,j,k,p1,p2,q1,q2,i1,i2,j1,j2 for Morphism of C;
 
-definition
-  let I,A;
-  let F be Function of I,A;
-  let x be set;
-  assume
-A1: x in I;
-  redefine func F/.x equals
-  :Def1:
-  F.x;
-  compatibility
-  proof
-    let a be Element of A;
-    x in dom F by A1,FUNCT_2:def 1;
-    hence thesis by PARTFUN1:def 8;
-  end;
-end;
-
-scheme LambdaIdx{I()->set,A()->non empty set,F(set)->Element of A()}:
-  ex F being Function of I(),A() st for x st x in I() holds F/.x = F(x)
-proof
+scheme
+  LambdaIdx{I()->set,A()->non empty set,F(set)->Element of A()}: ex F being
+  Function of I(),A() st for x st x in I() holds F/.x = F(x) proof
 A1: for x st x in I() holds F(x) in A();
   consider IT being Function of I(),A() such that
 A2: for x st x in I() holds IT.x = F(x) from FUNCT_2:sch 2(A1);
@@ -56,12 +39,12 @@ A2: for x st x in I() holds IT.x = F(x) from FUNCT_2:sch 2(A1);
   assume
 A3: x in I();
   hence F(x) = IT.x by A2
-    .= IT/.x by A3,Def1;
+    .= IT/.x by A3,FUNCT_2:def 14;
 end;
 
 theorem Th1:
-  for F1,F2 being Function of I,A st for x st x in I holds F1/.x = F2/.x
-  holds F1 = F2
+  for F1,F2 being Function of I,A st for x st x in I holds F1/.x =
+  F2/.x holds F1 = F2
 proof
   let F1,F2 be Function of I,A such that
 A1: for x st x in I holds F1/.x = F2/.x;
@@ -69,19 +52,18 @@ A1: for x st x in I holds F1/.x = F2/.x;
     let x;
     assume
 A2: x in I;
-    hence F1.x = F1/.x by Def1
+    hence F1.x = F1/.x by FUNCT_2:def 14
       .= F2/.x by A1,A2
-      .= F2.x by A2,Def1;
+      .= F2.x by A2,FUNCT_2:def 14;
   end;
   hence thesis by FUNCT_2:18;
 end;
 
-scheme FuncIdxcorrectness{I()->set,A()->non empty set,F(set)->Element of A()}:
-  (ex F being Function of I(),A() st for x st x in I() holds F/.x = F(x)) &
-  (for F1,F2 being Function of I(),A() st
-  (for x st x in I() holds F1/.x = F(x)) &
-  (for x st x in I() holds F2/.x = F(x)) holds F1 = F2)
-proof
+scheme
+  FuncIdxcorrectness{I()->set,A()->non empty set,F(set)->Element of A()}: (ex
+F being Function of I(),A() st for x st x in I() holds F/.x = F(x)) & for F1,F2
+being Function of I(),A() st (for x st x in I() holds F1/.x = F(x)) & (for x st
+  x in I() holds F2/.x = F(x)) holds F1 = F2 proof
   thus ex F being Function of I(),A() st for x st x in I() holds F/.x = F(x)
   from LambdaIdx;
   let F1,F2 be Function of I(),A() such that
@@ -111,22 +93,23 @@ proof
   assume
 A1: x in I;
   hence a = (I --> a).x by FUNCOP_1:13
-    .= (I --> a)/.x by A1,Def1;
+    .= (I --> a)/.x by A1,FUNCT_2:def 14;
 end;
 
 canceled 4;
 
 theorem Th7:
-  x1 <> x2 implies for y1,y2 being Element of A
-  holds ((x1,x2) --> (y1,y2))/.x1 = y1 & ((x1,x2) --> (y1,y2))/.x2 = y2
+  x1 <> x2 implies for y1,y2 being Element of A holds ((x1,x2) -->
+  (y1,y2))/.x1 = y1 & ((x1,x2) --> (y1,y2))/.x2 = y2
 proof
   assume
 A1: x1 <> x2;
   let y1,y2 be Element of A;
   set h = (x1,x2) --> (y1,y2);
-  h.x1 = y1 & h.x2 = y2 & x1 in {x1,x2} & x2 in {x1,x2} by A1,FUNCT_4:66
-  ,TARSKI:def 2;
-  hence thesis by Def1;
+A2: h.x2 = y2 & x1 in {x1,x2} by FUNCT_4:66,TARSKI:def 2;
+A3: x2 in {x1,x2} by TARSKI:def 2;
+  h.x1 = y1 by A1,FUNCT_4:66;
+  hence thesis by A2,A3,FUNCT_2:def 14;
 end;
 
 begin :: Indexed families of morphisms
@@ -134,30 +117,30 @@ begin :: Indexed families of morphisms
 definition
   let C,I;
   let F be Function of I,the carrier' of C;
-  canceled;
+  canceled 2;
   func doms F -> Function of I, the carrier of C means
   :Def3:
-  for x st x in I holds it/.x = dom(F/.x);
+  for x st x in I
+  holds it/.x = dom(F/.x);
   correctness
   proof
-    set A = the carrier of C;
     deffunc F(set) = dom(F/.$1);
+    set A = the carrier of C;
     thus (ex F being Function of I,A st for x st x in I holds F/.x = F(x)) &
-    (for F1,F2 being Function of I,A st (for x st x in I holds F1/.x = F(x)) &
-    (for x st x in I holds F2/.x = F(x))
-    holds F1 = F2) from FuncIdxcorrectness;
+for F1,F2 being Function of I,A st (for x st x in I holds F1/.x = F(x)) & (for
+    x st x in I holds F2/.x = F(x)) holds F1 = F2 from FuncIdxcorrectness;
   end;
   func cods F -> Function of I, the carrier of C means
   :Def4:
-  for x st x in I holds it/.x = cod(F/.x);
+  for x st x in I
+  holds it/.x = cod(F/.x);
   correctness
   proof
-    set A = the carrier of C;
     deffunc F(set) = cod(F/.$1);
+    set A = the carrier of C;
     thus (ex F being Function of I,A st for x st x in I holds F/.x = F(x)) &
-    (for F1,F2 being Function of I,A st (for x st x in I holds F1/.x = F(x)) &
-    (for x st x in I holds F2/.x = F(x))
-    holds F1 = F2) from FuncIdxcorrectness;
+for F1,F2 being Function of I,A st (for x st x in I holds F1/.x = F(x)) & (for
+    x st x in I holds F2/.x = F(x)) holds F1 = F2 from FuncIdxcorrectness;
   end;
 end;
 
@@ -192,32 +175,40 @@ end;
 theorem Th10:
   doms((x1,x2)-->(p1,p2)) = (x1,x2)-->(dom p1,dom p2)
 proof
-  set F = (x1,x2)-->(p1,p2), f = x1 .--> p1, g = x2 .--> p2,
-  F' = (x1,x2)-->(dom p1,dom p2), f' = x1.-->(dom p1), g' = x2.-->(dom p2);
-A1: dom f = {x1} & dom f' = {x1} & dom g = {x2} & dom g' = {x2}
-  by FUNCOP_1:19;
-A2: F = f +* g & F' = f' +* g' by FUNCT_4:def 4;
+  set F = (x1,x2)-->(p1,p2), f = x1 .--> p1, g = x2 .--> p2, F' = (x1,x2)-->(
+  dom p1,dom p2), f' = x1.-->(dom p1), g' = x2.-->(dom p2);
+A1: dom g = {x2} by FUNCOP_1:19;
+A2: dom g' = {x2} & F' = f' +* g' by FUNCOP_1:19,FUNCT_4:def 4;
+A3: F = f +* g by FUNCT_4:def 4;
+A4: dom f = {x1} by FUNCOP_1:19;
   now
     let x;
     assume
-A3: x in {x1,x2};
+A5: x in {x1,x2};
     then
-A4: x in dom F by FUNCT_4:65;
-    now per cases by A2,A4,FUNCT_4:13;
+A6: x in dom F by FUNCT_4:65;
+    now
+      per cases by A3,A6,FUNCT_4:13;
       case
-A5:     x in dom f & not x in dom g;
-        then F.x = f.x & F'.x = f'.x by A1,A2,FUNCT_4:12;
-        then F.x = p1 & F'.x = dom p1 by A1,A5,FUNCOP_1:13;
-        hence F/.x = p1 & F'/.x = dom p1 by A3,Def1;
+A7:     x in dom f & not x in dom g;
+        then F.x = f.x by A3,FUNCT_4:12;
+        then
+A8:     F.x = p1 by A4,A7,FUNCOP_1:13;
+        F'.x = f'.x by A1,A2,A7,FUNCT_4:12;
+        then F'.x = dom p1 by A4,A7,FUNCOP_1:13;
+        hence F/.x = p1 & F'/.x = dom p1 by A5,A8,FUNCT_2:def 14;
       end;
       case
-A6:     x in dom g;
-        then F.x = g.x & F'.x = g'.x by A1,A2,FUNCT_4:14;
-        then F.x = p2 & F'.x = dom p2 by A1,A6,FUNCOP_1:13;
-        hence F/.x = p2 & F'/.x = dom p2 by A3,Def1;
+A9:     x in dom g;
+        then F.x = g.x by A3,FUNCT_4:14;
+        then
+A10:    F.x = p2 by A1,A9,FUNCOP_1:13;
+        F'.x = g'.x by A1,A2,A9,FUNCT_4:14;
+        then F'.x = dom p2 by A1,A9,FUNCOP_1:13;
+        hence F/.x = p2 & F'/.x = dom p2 by A5,A10,FUNCT_2:def 14;
       end;
     end;
-    hence (doms F)/.x = F'/.x by A3,Def3;
+    hence (doms F)/.x = F'/.x by A5,Def3;
   end;
   hence thesis by Th1;
 end;
@@ -225,32 +216,40 @@ end;
 theorem Th11:
   cods((x1,x2)-->(p1,p2)) = (x1,x2)-->(cod p1,cod p2)
 proof
-  set F = (x1,x2)-->(p1,p2), f = x1 .--> p1, g = x2 .--> p2,
-  F' = (x1,x2)-->(cod p1,cod p2), f' = x1.-->(cod p1), g' = x2.-->(cod p2);
-A1: dom f = {x1} & dom f' = {x1} & dom g = {x2} & dom g' = {x2}
-  by FUNCOP_1:19;
-A2: F = f +* g & F' = f' +* g' by FUNCT_4:def 4;
+  set F = (x1,x2)-->(p1,p2), f = x1 .--> p1, g = x2 .--> p2, F' = (x1,x2)-->(
+  cod p1,cod p2), f' = x1.-->(cod p1), g' = x2.-->(cod p2);
+A1: dom g = {x2} by FUNCOP_1:19;
+A2: dom g' = {x2} & F' = f' +* g' by FUNCOP_1:19,FUNCT_4:def 4;
+A3: F = f +* g by FUNCT_4:def 4;
+A4: dom f = {x1} by FUNCOP_1:19;
   now
     let x;
     assume
-A3: x in {x1,x2};
+A5: x in {x1,x2};
     then
-A4: x in dom F by FUNCT_4:65;
-    now per cases by A2,A4,FUNCT_4:13;
+A6: x in dom F by FUNCT_4:65;
+    now
+      per cases by A3,A6,FUNCT_4:13;
       case
-A5:     x in dom f & not x in dom g;
-        then F.x = f.x & F'.x = f'.x by A1,A2,FUNCT_4:12;
-        then F.x = p1 & F'.x = cod p1 by A1,A5,FUNCOP_1:13;
-        hence F/.x = p1 & F'/.x = cod p1 by A3,Def1;
+A7:     x in dom f & not x in dom g;
+        then F.x = f.x by A3,FUNCT_4:12;
+        then
+A8:     F.x = p1 by A4,A7,FUNCOP_1:13;
+        F'.x = f'.x by A1,A2,A7,FUNCT_4:12;
+        then F'.x = cod p1 by A4,A7,FUNCOP_1:13;
+        hence F/.x = p1 & F'/.x = cod p1 by A5,A8,FUNCT_2:def 14;
       end;
       case
-A6:     x in dom g;
-        then F.x = g.x & F'.x = g'.x by A1,A2,FUNCT_4:14;
-        then F.x = p2 & F'.x = cod p2 by A1,A6,FUNCOP_1:13;
-        hence F/.x = p2 & F'/.x = cod p2 by A3,Def1;
+A9:     x in dom g;
+        then F.x = g.x by A3,FUNCT_4:14;
+        then
+A10:    F.x = p2 by A1,A9,FUNCOP_1:13;
+        F'.x = g'.x by A1,A2,A9,FUNCT_4:14;
+        then F'.x = cod p2 by A1,A9,FUNCOP_1:13;
+        hence F/.x = p2 & F'/.x = cod p2 by A5,A10,FUNCT_2:def 14;
       end;
     end;
-    hence (cods F)/.x = F'/.x by A3,Def4;
+    hence (cods F)/.x = F'/.x by A5,Def4;
   end;
   hence thesis by Th1;
 end;
@@ -260,15 +259,15 @@ definition
   let F be Function of I,the carrier' of C;
   func F opp -> Function of I,the carrier' of C opp means
   :Def5:
-  for x st x in I holds it/.x = (F/.x) opp;
+  for x st x in
+  I holds it/.x = (F/.x) opp;
   correctness
   proof
-    set A = the carrier' of C opp;
     deffunc F(set) = (F/.$1) opp;
+    set A = the carrier' of C opp;
     thus (ex F being Function of I,A st for x st x in I holds F/.x = F(x)) &
-    (for F1,F2 being Function of I,A st (for x st x in I holds F1/.x = F(x)) &
-    (for x st x in I holds F2/.x = F(x))
-    holds F1 = F2) from FuncIdxcorrectness;
+for F1,F2 being Function of I,A st (for x st x in I holds F1/.x = F(x)) & (for
+    x st x in I holds F2/.x = F(x)) holds F1 = F2 from FuncIdxcorrectness;
   end;
 end;
 
@@ -297,7 +296,8 @@ A1: x1 <> x2;
     assume
 A2: x in {x1,x2};
     then x = x1 or x = x2 by TARSKI:def 2;
-    then F/.x = p1 & F'/.x = p1 opp or F/.x = p2 & F'/.x = p2 opp by A1,Th7;
+    then F/.x = p1 & F'/.x = p1 opp or F/.x = p2 & F'/.x = p2 opp by A1,
+    Th7;
     hence F opp/.x = F'/.x by A2,Def5;
   end;
   hence thesis by Th1;
@@ -308,11 +308,10 @@ theorem
 proof
   let F be Function of I,the carrier' of C;
   now
-    C opp = CatStr (#the carrier of C, the carrier' of C,
-      the Target of C, the Source of C, ~(the Comp of C), the Id of C#) &
-    C opp opp = CatStr (#the carrier of C opp, the carrier' of C opp,
-      the Target of C opp, the Source of C opp,
-      ~(the Comp of C opp), the Id of C opp#) by OPPCAT_1:def 1;
+    C opp = CatStr (#the carrier of C, the carrier' of C, the Target of C,
+the Source of C, ~(the Comp of C), the Id of C#) & C opp opp = CatStr (#the
+carrier of C opp, the carrier' of C opp, the Target of C opp, the Source of C
+      opp, ~(the Comp of C opp), the Id of C opp#) by OPPCAT_1:def 1;
     hence the carrier' of C = the carrier' of C opp opp;
     let x;
     assume
@@ -329,15 +328,15 @@ definition
   let F be Function of I,the carrier' of C opp;
   func opp F -> Function of I,the carrier' of C means
   :Def6:
-  for x st x in I holds it/.x = opp (F/.x);
+  for x st x in I
+  holds it/.x = opp (F/.x);
   correctness
   proof
-    set A = the carrier' of C;
     deffunc F(set) = opp (F/.$1);
+    set A = the carrier' of C;
     thus (ex F being Function of I,A st for x st x in I holds F/.x = F(x)) &
-    (for F1,F2 being Function of I,A st (for x st x in I holds F1/.x = F(x)) &
-    (for x st x in I holds F2/.x = F(x))
-    holds F1 = F2) from FuncIdxcorrectness;
+for F1,F2 being Function of I,A st (for x st x in I holds F1/.x = F(x)) & (for
+    x st x in I holds F2/.x = F(x)) holds F1 = F2 from FuncIdxcorrectness;
   end;
 end;
 
@@ -357,8 +356,8 @@ A1: x in I;
 end;
 
 theorem
-  x1 <> x2 implies for p1,p2 being Morphism of C opp holds
-  opp ((x1,x2)-->(p1,p2)) = (x1,x2)-->(opp p1,opp p2)
+  x1 <> x2 implies for p1,p2 being Morphism of C opp holds opp ((x1,x2)
+  -->(p1,p2)) = (x1,x2)-->(opp p1,opp p2)
 proof
   assume
 A1: x1 <> x2;
@@ -369,7 +368,8 @@ A1: x1 <> x2;
     assume
 A2: x in {x1,x2};
     then x = x1 or x = x2 by TARSKI:def 2;
-    then F/.x = p1 & F'/.x = opp p1 or F/.x = p2 & F'/.x = opp p2 by A1,Th7;
+    then F/.x = p1 & F'/.x = opp p1 or F/.x = p2 & F'/.x = opp p2 by A1,
+    Th7;
     hence opp F/.x = F'/.x by A2,Def6;
   end;
   hence thesis by Th1;
@@ -395,36 +395,36 @@ definition
   let F be Function of I,the carrier' of C, f;
   func F*f -> Function of I,the carrier' of C means
   :Def7:
-  for x st x in I holds it/.x = (F/.x)*f;
+  for x st x in I
+  holds it/.x = (F/.x)*f;
   correctness
   proof
-    set A = the carrier' of C;
     deffunc F(set) = (F/.$1)*f;
+    set A = the carrier' of C;
     thus (ex F being Function of I,A st for x st x in I holds F/.x = F(x)) &
-    (for F1,F2 being Function of I,A st (for x st x in I holds F1/.x = F(x)) &
-    (for x st x in I holds F2/.x = F(x))
-    holds F1 = F2) from FuncIdxcorrectness;
+for F1,F2 being Function of I,A st (for x st x in I holds F1/.x = F(x)) & (for
+    x st x in I holds F2/.x = F(x)) holds F1 = F2 from FuncIdxcorrectness;
   end;
   func f*F -> Function of I,the carrier' of C means
   :Def8:
-  for x st x in I holds it/.x = f*(F/.x);
+  for x st x in I
+  holds it/.x = f*(F/.x);
   correctness
   proof
-    set A = the carrier' of C;
     deffunc F(set) = f*(F/.$1);
+    set A = the carrier' of C;
     thus (ex F being Function of I,A st for x st x in I holds F/.x = F(x)) &
-    (for F1,F2 being Function of I,A st (for x st x in I holds F1/.x = F(x)) &
-    (for x st x in I holds F2/.x = F(x))
-    holds F1 = F2) from FuncIdxcorrectness;
+for F1,F2 being Function of I,A st (for x st x in I holds F1/.x = F(x)) & (for
+    x st x in I holds F2/.x = F(x)) holds F1 = F2 from FuncIdxcorrectness;
   end;
 end;
 
 theorem Th18:
   x1 <> x2 implies ((x1,x2)-->(p1,p2))*f = (x1,x2)-->(p1*f,p2*f)
 proof
+  set F = (x1,x2)-->(p1,p2), F' = (x1,x2)-->(p1*f,p2*f);
   assume
 A1: x1 <> x2;
-  set F = (x1,x2)-->(p1,p2), F' = (x1,x2)-->(p1*f,p2*f);
   now
     let x;
     assume
@@ -439,9 +439,9 @@ end;
 theorem Th19:
   x1 <> x2 implies f*((x1,x2)-->(p1,p2)) = (x1,x2)-->(f*p1,f*p2)
 proof
+  set F = (x1,x2)-->(p1,p2), F' = (x1,x2)-->(f*p1,f*p2);
   assume
 A1: x1 <> x2;
-  set F = (x1,x2)-->(p1,p2), F' = (x1,x2)-->(f*p1,f*p2);
   now
     let x;
     assume
@@ -454,8 +454,8 @@ A2: x in {x1,x2};
 end;
 
 theorem Th20:
-  for F being Function of I,the carrier' of C st doms F = I-->cod f
-  holds doms(F*f) = I-->dom f & cods(F*f) = cods F
+  for F being Function of I,the carrier' of C st doms F = I-->cod
+  f holds doms(F*f) = I-->dom f & cods(F*f) = cods F
 proof
   let F be Function of I,the carrier' of C such that
 A1: doms F = I-->cod f;
@@ -488,8 +488,8 @@ A5: dom(F/.x) = (I-->cod f)/.x by A1,Def3
 end;
 
 theorem Th21:
-  for F being Function of I,the carrier' of C st cods F = I-->dom f
-  holds doms(f*F) = doms F & cods(f*F) = I-->cod f
+  for F being Function of I,the carrier' of C st cods F = I-->dom
+  f holds doms(f*F) = doms F & cods(f*F) = I-->cod f
 proof
   let F be Function of I,the carrier' of C such that
 A1: cods F = I-->dom f;
@@ -526,15 +526,15 @@ definition
   let F,G be Function of I,the carrier' of C;
   func F"*"G -> Function of I,the carrier' of C means
   :Def9:
-  for x st x in I holds it/.x = (F/.x)*(G/.x);
+  for x st x in I
+  holds it/.x = (F/.x)*(G/.x);
   correctness
   proof
-    set A = the carrier' of C;
     deffunc F(set) = (F/.$1)*(G/.$1);
+    set A = the carrier' of C;
     thus (ex F being Function of I,A st for x st x in I holds F/.x = F(x)) &
-    (for F1,F2 being Function of I,A st (for x st x in I holds F1/.x = F(x)) &
-    (for x st x in I holds F2/.x = F(x))
-    holds F1 = F2) from FuncIdxcorrectness;
+for F1,F2 being Function of I,A st (for x st x in I holds F1/.x = F(x)) & (for
+    x st x in I holds F2/.x = F(x)) holds F1 = F2 from FuncIdxcorrectness;
   end;
 end;
 
@@ -573,20 +573,21 @@ A5: cod(G/.x) = (doms F)/.x by A1,Def4
 end;
 
 theorem
-  x1 <> x2 implies
-  ((x1,x2)-->(p1,p2))"*"((x1,x2)-->(q1,q2)) = (x1,x2)-->(p1*q1,p2*q2)
+  x1 <> x2 implies ((x1,x2)-->(p1,p2))"*"((x1,x2)-->(q1,q2)) = (x1,x2)
+  -->(p1*q1,p2*q2)
 proof
+  set F1 = (x1,x2)-->(p1,p2), F2 = (x1,x2)-->(q1,q2), G = (x1,x2)-->(p1*q1,p2*
+  q2);
   assume
 A1: x1 <> x2;
-  set F1 = (x1,x2)-->(p1,p2), F2 = (x1,x2)-->(q1,q2),
-  G = (x1,x2)-->(p1*q1,p2*q2);
   now
     let x;
     assume
 A2: x in {x1,x2};
     then x = x1 or x = x2 by TARSKI:def 2;
-    then F1/.x = p1 & F2/.x = q1 & G/.x = p1*q1 or
-    F1/.x = p2 & F2/.x = q2 & G/.x = p2*q2 by A1,Th7;
+    then
+    F1/.x = p1 & F2/.x = q1 & G/.x = p1*q1 or F1/.x = p2 & F2/.x = q2 & G
+    /.x = p2*q2 by A1,Th7;
     hence (F1"*"F2)/.x = G/.x by A2,Def9;
   end;
   hence thesis by Th1;
@@ -629,10 +630,12 @@ definition
   let IT be Morphism of C;
   attr IT is retraction means
   :Def10:
-  ex g st cod g = dom IT & IT*g = id(cod IT);
+  ex g st cod g = dom IT & IT*g = id(cod
+  IT);
   attr IT is coretraction means
   :Def11:
-  ex g st dom g = cod IT & g*IT = id(dom IT);
+  ex g st dom g = cod IT & g*IT = id(dom
+  IT);
 end;
 
 theorem Th26:
@@ -643,7 +646,8 @@ A1: cod g = dom f and
 A2: f*g = id(cod f);
   let p1,p2 such that
 A3: dom p1 = cod f and
-A4: dom p2 = cod f and cod p1 = cod p2 and
+A4: dom p2 = cod f and
+  cod p1 = cod p2 and
 A5: p1*f = p2*f;
   thus p1 = p1*(f*g) by A2,A3,CAT_1:47
     .= (p2*f)*g by A1,A3,A5,CAT_1:43
@@ -657,7 +661,8 @@ proof
   given g such that
 A1: dom g = cod f and
 A2: g*f = id(dom f);
-  let p1,p2 such that dom p1 = dom p2 and
+  let p1,p2 such that
+  dom p1 = dom p2 and
 A3: cod p1 = dom f and
 A4: cod p2 = dom f and
 A5: f*p1 = f*p2;
@@ -668,7 +673,8 @@ A5: f*p1 = f*p2;
 end;
 
 theorem
-  f is retraction & g is retraction & dom g = cod f implies g*f is retraction
+  f is retraction & g is retraction & dom g = cod f implies g*f is
+  retraction
 proof
   given i such that
 A1: cod i = dom f and
@@ -691,8 +697,8 @@ A7: cod(i*j) = dom f by A1,A3,A5,CAT_1:42;
 end;
 
 theorem
-  f is coretraction & g is coretraction & dom g = cod f
-  implies g*f is coretraction
+  f is coretraction & g is coretraction & dom g = cod f implies g*f is
+  coretraction
 proof
   given i such that
 A1: dom i = cod f and
@@ -700,17 +706,17 @@ A2: i*f = id(dom f);
   given j such that
 A3: dom j = cod g and
 A4: j*g = id(dom g);
-  assume
-A5: dom g = cod f;
-  take i*j;
-A6: cod j = cod(j*g) by A3,CAT_1:42
+A5: cod j = cod(j*g) by A3,CAT_1:42
     .= dom g by A4,CAT_1:44;
-A7: cod g = cod(g*f) by A5,CAT_1:42;
-  hence dom(i*j) = cod(g*f) by A1,A3,A5,A6,CAT_1:42;
-  thus i*j*(g*f) = i*(j*(g*f)) by A1,A3,A5,A6,A7,CAT_1:43
-    .= i*(j*g*f) by A3,A5,CAT_1:43
-    .= id(dom f) by A2,A4,A5,CAT_1:46
-    .= id(dom(g*f)) by A5,CAT_1:42;
+  assume
+A6: dom g = cod f;
+  take i*j;
+A7: cod g = cod(g*f) by A6,CAT_1:42;
+  hence dom(i*j) = cod(g*f) by A1,A3,A6,A5,CAT_1:42;
+  thus i*j*(g*f) = i*(j*(g*f)) by A1,A3,A6,A5,A7,CAT_1:43
+    .= i*(j*g*f) by A3,A6,CAT_1:43
+    .= id(dom f) by A2,A4,A6,CAT_1:46
+    .= id(dom(g*f)) by A6,CAT_1:42;
 end;
 
 theorem
@@ -751,21 +757,21 @@ A1: cod i = dom f and
 A2: f*i = id(cod f);
   assume
 A3: f is monic;
-  take i; thus
+  take i;
+  thus
 A4: dom i = dom(f*i) by A1,CAT_1:42
     .= cod f by A2,CAT_1:44;
+  then
+A5: cod(i*f) = dom f by A1,CAT_1:42;
   thus cod i = dom f by A1;
   thus f*i = id cod f by A2;
-  now
-    thus dom(i*f) = dom f by A4,CAT_1:42
-      .= dom(id(dom f)) by CAT_1:44;
-    thus cod(i*f) = dom f by A1,A4,CAT_1:42;
-    thus cod(id(dom f)) = dom f by CAT_1:44;
-    thus f*(i*f) = id(cod f)*f by A1,A2,A4,CAT_1:43
-      .= f by CAT_1:46
-      .= f * id(dom f) by CAT_1:47;
-  end;
-  hence i*f = id(dom f) by A3,CAT_1:def 10;
+A6: dom(i*f) = dom f by A4,CAT_1:42
+    .= dom(id(dom f)) by CAT_1:44;
+A7: cod(id(dom f)) = dom f by CAT_1:44;
+  f*(i*f) = id(cod f)*f by A1,A2,A4,CAT_1:43
+    .= f by CAT_1:46
+    .= f * id(dom f) by CAT_1:47;
+  hence i*f = id(dom f) by A3,A6,A5,A7,CAT_1:def 10;
 end;
 
 theorem Th33:
@@ -777,19 +783,19 @@ A2: i*f = id(dom f);
   assume
 A3: f is epi;
   take i;
-  thus dom i = cod f by A1; thus
+  thus dom i = cod f by A1;
+  thus
 A4: cod i = cod(i*f) by A1,CAT_1:42
     .= dom f by A2,CAT_1:44;
-  now
-    thus dom(f*i) = cod f by A1,A4,CAT_1:42;
-    thus dom(id(cod f)) = cod f by CAT_1:44;
-    thus cod(f*i) = cod f by A4,CAT_1:42
-      .= cod(id(cod f)) by CAT_1:44;
-    thus f*i*f = f * id(dom f) by A1,A2,A4,CAT_1:43
-      .= f by CAT_1:47
-      .= id(cod f)*f by CAT_1:46;
-  end;
-  hence f*i = id cod f by A3,CAT_1:def 11;
+  then
+A5: dom(f*i) = cod f by A1,CAT_1:42;
+A6: dom(id(cod f)) = cod f by CAT_1:44;
+A7: cod(f*i) = cod f by A4,CAT_1:42
+    .= cod(id(cod f)) by CAT_1:44;
+  f*i*f = f * id(dom f) by A1,A2,A4,CAT_1:43
+    .= f by CAT_1:47
+    .= id(cod f)*f by CAT_1:46;
+  hence f*i = id cod f by A3,A7,A5,A6,CAT_1:def 11;
   thus i*f = id(dom f) by A2;
 end;
 
@@ -798,11 +804,13 @@ theorem
 proof
   thus f is invertible implies f is retraction & f is coretraction
   proof
-    assume ex g st dom g = cod f & cod g = dom f &
-    f*g = id cod f & g*f = id dom f;
+    assume
+    ex g st dom g = cod f & cod g = dom f & f*g = id cod f & g*f = id
+    dom f;
     hence thesis by Def10,Def11;
   end;
-  assume f is retraction;
+  assume
+  f is retraction;
   hence thesis by Th26,Th33;
 end;
 
@@ -821,7 +829,8 @@ A2: f*i = id(cod f);
 end;
 
 theorem
-  for T being Functor of C,D st f is coretraction holds T.f is coretraction
+  for T being Functor of C,D st f is coretraction holds T.f is
+  coretraction
 proof
   let T be Functor of C,D;
   given i such that
@@ -852,7 +861,8 @@ A2: f*i = id(cod f);
   given i being Morphism of C opp such that
 A3: dom i = cod(f opp) and
 A4: i*(f opp) = id(dom(f opp));
-  take opp i; thus
+  take opp i;
+  thus
 A5: cod(opp i) = cod(f opp) by A3,OPPCAT_1:10
     .= dom f by OPPCAT_1:9;
   thus f*(opp i) = (f*(opp i)) opp by OPPCAT_1:def 4
@@ -881,7 +891,8 @@ A2: i*f = id(dom f);
   given i being Morphism of C opp such that
 A3: cod i = dom(f opp) and
 A4: (f opp)*i = id(cod(f opp));
-  take opp i; thus
+  take opp i;
+  thus
 A5: dom(opp i) = dom(f opp) by A3,OPPCAT_1:10
     .= cod f by OPPCAT_1:9;
   thus (opp i)*f = ((opp i)*f) opp by OPPCAT_1:def 4
@@ -899,7 +910,6 @@ definition
   assume
 A1: b is terminal;
   func term(a,b) -> Morphism of a,b means
-
   not contradiction;
   existence;
   uniqueness
@@ -915,7 +925,8 @@ end;
 theorem Th39:
   b is terminal implies dom(term(a,b)) = a & cod(term(a,b)) = b
 proof
-  assume b is terminal;
+  assume
+  b is terminal;
   then Hom(a,b) <> {} by CAT_1:def 15;
   hence thesis by CAT_1:23;
 end;
@@ -951,7 +962,6 @@ definition
   assume
 A1: a is initial;
   func init(a,b) -> Morphism of a,b means
-
   not contradiction;
   existence;
   uniqueness
@@ -967,7 +977,8 @@ end;
 theorem Th42:
   a is initial implies dom(init(a,b)) = a & cod(init(a,b)) = b
 proof
-  assume a is initial;
+  assume
+  a is initial;
   then Hom(a,b) <> {} by CAT_1:def 16;
   hence thesis by CAT_1:23;
 end;
@@ -1001,8 +1012,8 @@ begin :: Products
 definition
   let C,a,I;
   mode Projections_family of a,I -> Function of I,the carrier' of C means
-    :Def14:
-    doms it = I --> a;
+    :
+    Def14: doms it = I --> a;
   existence
   proof
     take F = I-->id a;
@@ -1012,7 +1023,8 @@ definition
 end;
 
 theorem Th45:
-  for F being Projections_family of a,I st x in I holds dom(F/.x) = a
+  for F being Projections_family of a,I st x in I holds dom(F/.x)
+  = a
 proof
   let F be Projections_family of a,I such that
 A1: x in I;
@@ -1022,8 +1034,8 @@ A1: x in I;
 end;
 
 theorem Th46:
-  for F being Function of {},the carrier' of C
-  holds F is Projections_family of a,{}
+  for F being Function of {},the carrier' of C holds F is
+  Projections_family of a,{}
 proof
   let F be Function of {},the carrier' of C;
   thus {} --> a = doms F;
@@ -1047,8 +1059,8 @@ A2: x in {y};
 end;
 
 theorem Th48:
-  dom p1 = a & dom p2 = a
-  implies (x1,x2)-->(p1,p2) is Projections_family of a,{x1,x2}
+  dom p1 = a & dom p2 = a implies (x1,x2)-->(p1,p2) is
+  Projections_family of a,{x1,x2}
 proof
   assume
 A1: dom p1 = a & dom p2 = a;
@@ -1060,29 +1072,32 @@ end;
 canceled;
 
 theorem Th50:
-  for F being Projections_family of a,I st cod f = a
-  holds F*f is Projections_family of dom f,I
+  for F being Projections_family of a,I st cod f = a holds F*f is
+  Projections_family of dom f,I
 proof
   let F be Projections_family of a,I;
-  assume cod f = a;
+  assume
+  cod f = a;
   then doms F = I-->cod f by Def14;
   hence doms(F*f) = I --> dom f by Th20;
 end;
 
 theorem
-  for F being Function of I,the carrier' of C,
-  G being Projections_family of a,I st doms F = cods G
-  holds F"*"G is Projections_family of a,I
+  for F being Function of I,the carrier' of C, G being
+Projections_family of a,I st doms F = cods G holds F"*"G is Projections_family
+  of a,I
 proof
   let F be Function of I,the carrier' of C;
   let G be Projections_family of a,I;
-  assume doms F = cods G;
+  assume
+  doms F = cods G;
   then doms(F"*"G) = doms G by Th22;
   hence doms(F"*"G) = I --> a by Def14;
 end;
 
 theorem
-  for F being Projections_family of cod f,I holds (f opp)*(F opp) = (F*f) opp
+  for F being Projections_family of cod f,I holds (f opp)*(F opp) = (F*f
+  ) opp
 proof
   let F be Projections_family of cod f, I;
   now
@@ -1107,168 +1122,182 @@ definition
   let F be Function of I,the carrier' of C;
   pred a is_a_product_wrt F means
   :Def15:
-  F is Projections_family of a,I &
-  for b for F' being Projections_family of b,I st cods F = cods F'
-  ex h st h in Hom(b,a) & for k st k in Hom(b,a) holds
-  (for x st x in I holds (F/.x)*k = F'/.x) iff h = k;
+  F is Projections_family of a,I & for
+b for F' being Projections_family of b,I st cods F = cods F' ex h st h in Hom(b
+,a) & for k st k in Hom(b,a) holds (for x st x in I holds (F/.x)*k = F'/.x) iff
+  h = k;
 end;
 
 theorem Th53:
-  for F being Projections_family of c,I, F' being Projections_family of d,I
-  st c is_a_product_wrt F & d is_a_product_wrt F' & cods F = cods F'
-  holds c,d are_isomorphic
+  for F being Projections_family of c,I, F' being
+  Projections_family of d,I st c is_a_product_wrt F & d is_a_product_wrt F' &
+  cods F = cods F' holds c,d are_isomorphic
 proof
-  let F be Projections_family of c,I, F' be Projections_family of d,I such that
+  let F be Projections_family of c,I, F' be Projections_family of d,I such
+  that
 A1: c is_a_product_wrt F and
 A2: d is_a_product_wrt F' and
 A3: cods F = cods F';
-  consider f such that
-A4: f in Hom(d,c) and
-A5: for k st k in Hom(d,c) holds
-  (for x st x in I holds (F/.x)*k = F'/.x ) iff f = k by A1,A3,Def15;
-  consider g such that
-A6: g in Hom(c,d) and
-A7: for k st k in Hom(c,d) holds
-  (for x st x in I holds (F'/.x)*k = F/.x ) iff g = k by A2,A3,Def15;
-  thus Hom(c,d) <> {} by A6;
-  reconsider g as Morphism of c,d by A6,CAT_1:def 7;
-  take g,f;
-A8: dom f = d & cod g = d & cod f = c & dom g = c by A4,A6,CAT_1:18;
-  hence dom f = cod g & cod f = dom g;
   cods F' = cods F';
-  then consider gf being Morphism of C such that gf in Hom(d,d) and
-A9: for k st k in Hom(d,d) holds
-  (for x st x in I holds (F'/.x)*k = F'/.x ) iff gf = k by A2,Def15;
-A10: now
-    set k = id d;
-    thus k in Hom(d,d) by CAT_1:55;
-    let x;
-    assume x in I;
-    then dom(F'/.x) = d by Th45;
-    hence (F'/.x)*k = F'/.x by CAT_1:47;
-  end;
-  now dom(g*f) = d & cod(g*f) = d by A8,CAT_1:42;
-    hence g*f in Hom(d,d);
-    let x;
-    assume
-A11: x in I;
-    then dom(F'/.x) = d by Th45;
-    hence (F'/.x)*(g*f) = (F'/.x)*g*f by A8,CAT_1:43
-      .= (F/.x)*f by A6,A7,A11
-      .= F'/.x by A4,A5,A11;
-  end;
-  hence g*f = gf by A9
-    .= id cod g by A8,A9,A10;
-A12: now
+  then consider gf being Morphism of C such that
+  gf in Hom(d,d) and
+A4: for k st k in Hom(d,d) holds (for x st x in I holds (F'/.x)*k = F'
+  /.x ) iff gf = k by A2,Def15;
+  consider f such that
+A5: f in Hom(d,c) and
+A6: for k st k in Hom(d,c) holds (for x st x in I holds (F/.x)*k = F'/.x
+  ) iff f = k by A1,A3,Def15;
+  cods F = cods F;
+  then consider fg being Morphism of C such that
+  fg in Hom(c,c) and
+A7: for k st k in Hom(c,c) holds (for x st x in I holds (F/.x)*k = F/.x
+  ) iff fg = k by A1,Def15;
+  consider g such that
+A8: g in Hom(c,d) and
+A9: for k st k in Hom(c,d) holds (for x st x in I holds (F'/.x)*k = F/.x
+  ) iff g = k by A2,A3,Def15;
+  thus Hom(c,d) <> {} by A8;
+  reconsider g as Morphism of c,d by A8,CAT_1:def 7;
+A10: cod g = d by A8,CAT_1:18;
+A11: now
     set k = id c;
     thus k in Hom(c,c) by CAT_1:55;
     let x;
-    assume x in I;
+    assume
+    x in I;
     then dom(F/.x) = c by Th45;
     hence (F/.x)*k = F/.x by CAT_1:47;
   end;
-  cods F = cods F;
-  then consider fg being Morphism of C such that fg in Hom(c,c) and
-A13: for k st k in Hom(c,c) holds
-  (for x st x in I holds (F/.x)*k = F/.x ) iff fg = k by A1,Def15;
-  now dom(f*g) = c & cod(f*g) = c by A8,CAT_1:42;
+A12: now
+    set k = id d;
+    thus k in Hom(d,d) by CAT_1:55;
+    let x;
+    assume
+    x in I;
+    then dom(F'/.x) = d by Th45;
+    hence (F'/.x)*k = F'/.x by CAT_1:47;
+  end;
+  take g,f;
+A13: dom g = c by A8,CAT_1:18;
+  hence dom f = cod g & cod f = dom g by A5,A10,CAT_1:18;
+A14: cod f = c by A5,CAT_1:18;
+A15: dom f = d by A5,CAT_1:18;
+  now
+    dom(g*f) = d & cod(g*f) = d by A15,A10,A14,A13,CAT_1:42;
+    hence g*f in Hom(d,d);
+    let x;
+    assume
+A16: x in I;
+    then dom(F'/.x) = d by Th45;
+    hence (F'/.x)*(g*f) = (F'/.x)*g*f by A10,A14,A13,CAT_1:43
+      .= (F/.x)*f by A8,A9,A16
+      .= F'/.x by A5,A6,A16;
+  end;
+  hence g*f = gf by A4
+    .= id cod g by A10,A4,A12;
+  now
+    dom(f*g) = c & cod(f*g) = c by A15,A10,A14,A13,CAT_1:42;
     hence f*g in Hom(c,c);
     let x;
     assume
-A14: x in I;
+A17: x in I;
     then dom(F/.x) = c by Th45;
-    hence (F/.x)*(f*g) = (F/.x)*f*g by A8,CAT_1:43
-      .= (F'/.x)*g by A4,A5,A14
-      .= F/.x by A6,A7,A14;
+    hence (F/.x)*(f*g) = (F/.x)*f*g by A15,A10,A14,CAT_1:43
+      .= (F'/.x)*g by A5,A6,A17
+      .= F/.x by A8,A9,A17;
   end;
-  hence f*g = fg by A13
-    .= id dom g by A8,A12,A13;
+  hence f*g = fg by A7
+    .= id dom g by A13,A11,A7;
 end;
 
 theorem Th54:
   for F being Projections_family of c,I st c is_a_product_wrt F &
-  for x1,x2 st x1 in I & x2 in I holds Hom(cod(F/.x1),cod(F/.x2)) <> {}
-  for x st x in I holds F/.x is retraction
+for x1,x2 st x1 in I & x2 in I holds Hom(cod(F/.x1),cod(F/.x2)) <> {} for x st
+  x in I holds F/.x is retraction
 proof
   let F be Projections_family of c,I such that
 A1: c is_a_product_wrt F and
-A2: for x1,x2 st x1 in I & x2 in I holds Hom(cod(F/.x1),cod(F/.x2)) <> {};
+A2: for x1,x2 st x1 in I & x2 in I holds Hom(cod(F/.x1),cod(F/.x2)) <>
+  {};
   let x such that
 A3: x in I;
   set d = cod(F/.x);
-  defpred P[set,set] means ($1 = x implies $2 = id d) &
-  ($1 <> x implies $2 in Hom(d,cod(F/.$1)));
+  defpred P[set,set] means ($1 = x implies $2 = id d) & ($1 <> x implies $2 in
+  Hom(d,cod(F/.$1)));
 A4: for y st y in I holds ex z st z in the carrier' of C & P[y,z]
   proof
     let y;
-    assume y in I;
+    consider z being Element of Hom(d,cod(F/.y));
+    assume
+    y in I;
     then
 A5: Hom(d,cod(F/.y)) <> {} by A2,A3;
-    consider z being Element of Hom(d,cod(F/.y));
-A6: z is Morphism of d,cod(F/.y) by A5,CAT_1:21;
+    then
+A6: z is Morphism of d,cod(F/.y) by CAT_1:21;
     per cases;
     suppose
 A7:   y = x;
       take z = id d;
       thus z in the carrier' of C;
-      thus thesis
-      by A7;
+      thus thesis by A7;
     end;
     suppose
 A8:   y <> x;
       take z;
       thus z in the carrier' of C by A6;
-      thus thesis
-      by A5,A8;
+      thus thesis by A5,A8;
     end;
   end;
   consider F' being Function such that
 A9: dom F' = I & rng F' c= the carrier' of C and
 A10: for y st y in I holds P[y,F'.y] from WELLORD2:sch 1(A4);
-  reconsider F' as Function of I,the carrier' of C by A9,FUNCT_2:def 1
-  ,RELSET_1:11;
+  reconsider F' as Function of I,the carrier' of C by A9,FUNCT_2:def 1 ,
+  RELSET_1:11;
   now
-    now
-      let y;
-      assume
-A11:  y in I;
-      then F'.y = F'/.y & F'.x = F'/.x by A3,Def1;
-      then (y = x implies F'/.y = id d) &
-      (y <> x implies F'/.y in Hom(d,cod(F/.y))) by A10,A11;
-      then dom(F'/.y) = d by CAT_1:18,44;
-      hence (doms F')/.y = d by A11,Def3
-        .= (I-->d)/.y by A11,Th2;
-    end;
-    hence doms F' = I --> d by Th1;
-    hence F' is Projections_family of d,I by Def14;
-    now
-      let y;
-      assume
-A12:  y in I;
-      then F'.y = F'/.y & F'.x = F'/.x by A3,Def1;
-      then (y = x implies F'/.y = id d) &
-      (y <> x implies F'/.y in Hom(d,cod(F/.y))) by A10,A12;
-      then cod(F'/.y) = cod(F/.y) by CAT_1:18,44;
-      hence (cods F')/.y = cod(F/.y) by A12,Def4
-        .= (cods F)/.y by A12,Def4;
-    end;
-    hence cods F = cods F' by Th1;
+    let y;
+    assume
+A11: y in I;
+    then
+A12: F'.y = F'/.y by FUNCT_2:def 14;
+    then
+A13: y <> x implies F'/.y in Hom(d,cod(F/.y)) by A10,A11;
+    y = x implies F'/.y = id d by A10,A11,A12;
+    then dom(F'/.y) = d by A13,CAT_1:18,44;
+    hence (doms F')/.y = d by A11,Def3
+      .= (I-->d)/.y by A11,Th2;
   end;
+  then doms F' = I --> d by Th1;
+  then
+A14: F' is Projections_family of d,I by Def14;
+  now
+    let y;
+    assume
+A15: y in I;
+    then
+A16: F'.y = F'/.y by FUNCT_2:def 14;
+    then
+A17: y <> x implies F'/.y in Hom(d,cod(F/.y)) by A10,A15;
+    y = x implies F'/.y = id d by A10,A15,A16;
+    then cod(F'/.y) = cod(F/.y) by A17,CAT_1:18,44;
+    hence (cods F')/.y = cod(F/.y) by A15,Def4
+      .= (cods F)/.y by A15,Def4;
+  end;
+  then cods F = cods F' by Th1;
   then consider i such that
-A13: i in Hom(d,c) and
-A14: for k st k in Hom(d,c) holds
-  (for y st y in I holds (F/.y)*k = F'/.y) iff i = k by A1,Def15;
+A18: i in Hom(d,c) and
+A19: for k st k in Hom(d,c) holds (for y st y in I holds (F/.y)*k = F'/.
+  y) iff i = k by A1,A14,Def15;
   take i;
-  thus cod i = c by A13,CAT_1:18
+  thus cod i = c by A18,CAT_1:18
     .= dom(F/.x) by A3,Th45;
-  thus (F/.x)*i = F'/.x by A3,A13,A14
-    .= F'.x by A3,Def1
+  thus (F/.x)*i = F'/.x by A3,A18,A19
+    .= F'.x by A3,FUNCT_2:def 14
     .= id d by A3,A10;
 end;
 
 theorem Th55:
-  for F being Function of {},the carrier' of C holds
-  a is_a_product_wrt F iff a is terminal
+  for F being Function of {},the carrier' of C holds a
+  is_a_product_wrt F iff a is terminal
 proof
   let F be Function of {},the carrier' of C;
   thus a is_a_product_wrt F implies a is terminal
@@ -1277,95 +1306,106 @@ proof
 A1: a is_a_product_wrt F;
     let b;
     consider F' being Projections_family of b,{};
-    cods F = {} & cods F' = {};
+    cods F = {};
     then consider h such that
 A2: h in Hom(b,a) and
-A3: for k st k in Hom(b,a) holds
-    (for x st x in {} holds (F/.x)*k = F'/.x ) iff h = k by A1,Def15; thus
-    Hom(b,a)<>{} by A2;
+A3: for k st k in Hom(b,a) holds (for x st x in {} holds (F/.x)*k = F'
+    /.x ) iff h = k by A1,Def15;
+    thus Hom(b,a)<>{} by A2;
     reconsider f = h as Morphism of b,a by A2,CAT_1:def 7;
     take f;
     let g be Morphism of b,a;
-    g in Hom(b,a) & for x st x in {} holds (F/.x)*g = F'/.x by A2,CAT_1:def 7;
-    hence thesis by A3;
+A4: for x st x in {} holds (F/.x)*g = F'/.x;
+    g in Hom(b,a) by A2,CAT_1:def 7;
+    hence thesis by A3,A4;
   end;
   assume
-A4: a is terminal;
+A5: a is terminal;
   thus F is Projections_family of a,{} by Th46;
   let b;
-  let F' be Projections_family of b,{} such that cods F = cods F';
   consider h being Morphism of b,a such that
-A5: for g being Morphism of b,a holds h = g by A4,CAT_1:def 15;
+A6: for g being Morphism of b,a holds h = g by A5,CAT_1:def 15;
+  let F' be Projections_family of b,{} such that
+  cods F = cods F';
   take h;
-  Hom(b,a)<>{} by A4,CAT_1:def 15;
+  Hom(b,a)<>{} by A5,CAT_1:def 15;
   hence h in Hom(b,a) by CAT_1:def 7;
   let k;
-  assume k in Hom(b,a);
+  assume
+  k in Hom(b,a);
   then k is Morphism of b,a by CAT_1:def 7;
-  hence thesis by A5;
+  hence thesis by A6;
 end;
 
 theorem Th56:
-  for F being Projections_family of a,I
-  st a is_a_product_wrt F & dom f = b & cod f = a & f is invertible
-  holds b is_a_product_wrt F*f
+  for F being Projections_family of a,I st a is_a_product_wrt F &
+  dom f = b & cod f = a & f is invertible holds b is_a_product_wrt F*f
 proof
   let F be Projections_family of a,I such that
 A1: a is_a_product_wrt F and
-A2: dom f = b & cod f = a and
-A3: f is invertible;
-  thus F*f is Projections_family of b,I by A2,Th50;
+A2: dom f = b and
+A3: cod f = a and
+A4: f is invertible;
+  thus F*f is Projections_family of b,I by A2,A3,Th50;
   let c;
-  let F' be Projections_family of c,I such that
-A4: cods(F*f) = cods F';
-  doms F = I-->cod f by A2,Def14;
-  then cods F = cods F' by A4,Th20;
+A5: doms F = I-->cod f by A3,Def14;
+  let F' be Projections_family of c,I;
+  assume
+  cods(F*f) = cods F';
+  then cods F = cods F' by A5,Th20;
   then consider h such that
-A5: h in Hom(c,a) and
-A6: for k st k in Hom(c,a) holds
-  (for x st x in I holds (F/.x)*k = F'/.x) iff h = k by A1,Def15;
+A6: h in Hom(c,a) and
+A7: for k st k in Hom(c,a) holds (for x st x in I holds (F/.x)*k = F'/.x
+  ) iff h = k by A1,Def15;
+A8: cod h = a by A6,CAT_1:18;
   consider g such that
-A7: dom g = cod f & cod g = dom f and
-A8: f*g = id cod f and
-A9: g*f = id dom f by A3,CAT_1:def 12;
-  take gh = g*h;
-A10: cod h = a & dom h = c by A5,CAT_1:18;
-  then dom(g*h) = c & cod(g*h) = b by A2,A7,CAT_1:42;
-  hence gh in Hom(c,b);
-  let k;
-  assume k in Hom(c,b);
+A9: dom g = cod f and
+A10: cod g = dom f and
+A11: f*g = id cod f and
+A12: g*f = id dom f by A4,CAT_1:def 12;
+  dom h = c by A6,CAT_1:18;
   then
-A11: dom k = c & cod k = b by CAT_1:18;
+A13: dom(g*h) = c by A3,A9,A8,CAT_1:42;
+  take gh = g*h;
+  cod(g*h) = b by A2,A3,A9,A10,A8,CAT_1:42;
+  hence gh in Hom(c,b) by A13;
+  let k;
+  assume
+A14: k in Hom(c,b);
+  then
+A15: cod k = b by CAT_1:18;
+A16: dom k = c by A14,CAT_1:18;
   thus (for x st x in I holds ((F*f)/.x)*k = F'/.x) implies gh = k
   proof
     assume
-A12: for x st x in I holds ((F*f)/.x)*k = F'/.x;
-    now dom(f*k) = c & cod(f*k) = a by A2,A11,CAT_1:42;
+A17: for x st x in I holds ((F*f)/.x)*k = F'/.x;
+    now
+      dom(f*k) = c & cod(f*k) = a by A2,A3,A16,A15,CAT_1:42;
       hence f*k in Hom(c,a);
       let x;
       assume
-A13:  x in I;
+A18:  x in I;
       then dom(F/.x) = a by Th45;
-      hence (F/.x)*(f*k) = (F/.x)*f*k by A2,A11,CAT_1:43
-        .= ((F*f)/.x)*k by A13,Def7
-        .= F'/.x by A12,A13;
+      hence (F/.x)*(f*k) = (F/.x)*f*k by A2,A3,A15,CAT_1:43
+        .= ((F*f)/.x)*k by A18,Def7
+        .= F'/.x by A17,A18;
     end;
-    then g*(f*k) = g*h by A6;
-    hence gh = (id b)*k by A2,A7,A9,A11,CAT_1:43
-      .= k by A11,CAT_1:46;
+    then g*(f*k) = g*h by A7;
+    hence gh = (id b)*k by A2,A9,A12,A15,CAT_1:43
+      .= k by A15,CAT_1:46;
   end;
   assume
-A14: gh = k;
+A19: gh = k;
   let x;
   assume
-A15: x in I;
+A20: x in I;
   then
-A16: dom(F/.x) = a by Th45;
-  thus ((F*f)/.x)*k = ((F/.x)*f)*k by A15,Def7
-    .= (F/.x)*(f*(g*h)) by A2,A11,A14,A16,CAT_1:43
-    .= (F/.x)*((id cod f)*h) by A2,A7,A8,A10,CAT_1:43
-    .= (F/.x)*h by A2,A10,CAT_1:46
-    .= F'/.x by A5,A6,A15;
+A21: dom(F/.x) = a by Th45;
+  thus ((F*f)/.x)*k = ((F/.x)*f)*k by A20,Def7
+    .= (F/.x)*(f*(g*h)) by A2,A3,A15,A19,A21,CAT_1:43
+    .= (F/.x)*((id cod f)*h) by A3,A9,A10,A11,A8,CAT_1:43
+    .= (F/.x)*h by A3,A8,CAT_1:46
+    .= F'/.x by A6,A7,A20;
 end;
 
 theorem
@@ -1379,39 +1419,39 @@ proof
 A1: cods F = cods F';
   take h = F'/.y;
 A2: y in {y} by TARSKI:def 1;
-  now
-    thus dom h = b by A2,Th45;
-    thus cod h = (cods F)/.y by A1,A2,Def4
-      .= cod(F/.y) by A2,Def4
-      .= cod(id a) by A2,Th2
-      .= a by CAT_1:44;
-  end;
-  hence h in Hom(b,a);
-  let k;
-  assume k in Hom(b,a);
   then
-A3: cod k = a by CAT_1:18;
+A3: dom h = b by Th45;
+  cod h = (cods F)/.y by A1,A2,Def4
+    .= cod(F/.y) by A2,Def4
+    .= cod(id a) by A2,Th2
+    .= a by CAT_1:44;
+  hence h in Hom(b,a) by A3;
+  let k;
+  assume
+  k in Hom(b,a);
+  then
+A4: cod k = a by CAT_1:18;
   thus (for x st x in {y} holds (F/.x)*k = F'/.x) implies h = k
   proof
     assume
-A4: for x st x in {y} holds (F/.x)*k = F'/.x;
-    thus k = (id a)*k by A3,CAT_1:46
+A5: for x st x in {y} holds (F/.x)*k = F'/.x;
+    thus k = (id a)*k by A4,CAT_1:46
       .= (F/.y)*k by A2,Th2
-      .= h by A2,A4;
+      .= h by A2,A5;
   end;
   assume
-A5: h = k;
+A6: h = k;
   let x;
   assume
-A6: x in {y};
-  hence F'/.x = k by A5,TARSKI:def 1
-    .= (id a)*k by A3,CAT_1:46
-    .= (F/.x)*k by A6,Th2;
+A7: x in {y};
+  hence F'/.x = k by A6,TARSKI:def 1
+    .= (id a)*k by A4,CAT_1:46
+    .= (F/.x)*k by A7,Th2;
 end;
 
 theorem
-  for F being Projections_family of a,I st a is_a_product_wrt F &
-  for x st x in I holds cod(F/.x) is terminal holds a is terminal
+  for F being Projections_family of a,I st a is_a_product_wrt F & for x
+  st x in I holds cod(F/.x) is terminal holds a is terminal
 proof
   let F be Projections_family of a,I such that
 A1: a is_a_product_wrt F and
@@ -1449,9 +1489,9 @@ A7:   cod(F/.x) is terminal by A2;
     then cods F = cods F' by Th1;
     then consider h such that
 A8: h in Hom(b,a) and
-A9: for k st k in Hom(b,a) holds
-    (for x st x in I holds (F/.x)*k = F'/.x) iff h = k by A1,Def15; thus
-    Hom(b,a)<>{} by A8;
+A9: for k st k in Hom(b,a) holds (for x st x in I holds (F/.x)*k = F'
+    /.x) iff h = k by A1,Def15;
+    thus Hom(b,a)<>{} by A8;
     reconsider h as Morphism of b,a by A8,CAT_1:def 7;
     take h;
     let g be Morphism of b,a;
@@ -1459,19 +1499,23 @@ A9: for k st k in Hom(b,a) holds
       thus g in Hom(b,a) by A8,CAT_1:def 7;
       let x;
       set c = cod(F/.x);
+A10:  cod g = a by A8,CAT_1:23;
       assume
-A10:  x in I;
+A11:  x in I;
       then c is terminal by A2;
       then consider f being Morphism of b,c such that
-A11:  for f' being Morphism of b,c holds f = f' by CAT_1:def 15;
-      dom g = b & cod g = a & dom(F/.x) = a by A8,A10,Th45,CAT_1:23;
-      then dom((F/.x)*g) = b & cod((F/.x)*g) = c by CAT_1:42;
-      then (F/.x)*g in Hom(b,c);
+A12:  for f' being Morphism of b,c holds f = f' by CAT_1:def 15;
+A13:  dom(F/.x) = a by A11,Th45;
       then
-A12:  (F/.x)*g is Morphism of b,c by CAT_1:def 7;
-      F'/.x = term(b,c) by A3,A10;
-      hence F'/.x = f by A11
-        .= (F/.x)*g by A11,A12;
+A14:  cod((F/.x)*g) = c by A10,CAT_1:42;
+      dom g = b by A8,CAT_1:23;
+      then dom((F/.x)*g) = b by A10,A13,CAT_1:42;
+      then (F/.x)*g in Hom(b,c) by A14;
+      then
+A15:  (F/.x)*g is Morphism of b,c by CAT_1:def 7;
+      F'/.x = term(b,c) by A3,A11;
+      hence F'/.x = f by A12
+        .= (F/.x)*g by A12,A15;
     end;
     hence h = g by A9;
   end;
@@ -1482,14 +1526,14 @@ definition
   let C,c,p1,p2;
   pred c is_a_product_wrt p1,p2 means
   :Def16:
-  dom p1 = c & dom p2 = c &
-  for d,f,g st f in Hom(d,cod p1) & g in Hom(d,cod p2) ex h st h in Hom(d,c) &
-  for k st k in Hom(d,c) holds p1*k = f & p2*k = g iff h = k;
+  dom p1 = c & dom p2 = c & for d,
+f,g st f in Hom(d,cod p1) & g in Hom(d,cod p2) ex h st h in Hom(d,c) & for k st
+  k in Hom(d,c) holds p1*k = f & p2*k = g iff h = k;
 end;
 
 theorem Th59:
-  x1 <> x2 implies
-  (c is_a_product_wrt p1,p2 iff c is_a_product_wrt (x1,x2)-->(p1,p2))
+  x1 <> x2 implies (c is_a_product_wrt p1,p2 iff c
+  is_a_product_wrt (x1,x2)-->(p1,p2))
 proof
   set F = (x1,x2)-->(p1,p2), I = {x1,x2};
   assume
@@ -1504,186 +1548,226 @@ A2: c is_a_product_wrt p1,p2;
     let F' be Projections_family of b,I such that
 A3: cods F = cods F';
     set f = F'/.x1, g = F'/.x2;
-A4: x1 in I & x2 in I by TARSKI:def 2;
-    then (cods F)/.x1 = cod(F/.x1) & (cods F)/.x2 = cod(F/.x2) by Def4;
-    then cod f = cod(F/.x1) & cod g = cod(F/.x2) by A3,A4,Def4;
-    then cod f = cod p1 & cod g = cod p2 & dom f = b & dom g = b
-    by A1,A4,Th7,Th45;
-    then f in Hom(b,cod p1) & g in Hom(b,cod p2);
+A4: x1 in I by TARSKI:def 2;
+    then (cods F)/.x1 = cod(F/.x1) by Def4;
+    then cod f = cod(F/.x1) by A3,A4,Def4;
+    then
+A5: cod f = cod p1 by A1,Th7;
+A6: x2 in I by TARSKI:def 2;
+    then (cods F)/.x2 = cod(F/.x2) by Def4;
+    then cod g = cod(F/.x2) by A3,A6,Def4;
+    then
+A7: cod g = cod p2 by A1,Th7;
+    dom g = b by A6,Th45;
+    then
+A8: g in Hom(b,cod p2) by A7;
+    dom f = b by A4,Th45;
+    then f in Hom(b,cod p1) by A5;
     then consider h such that
-A5: h in Hom(b,c) and
-A6: for k st k in Hom(b,c) holds p1*k = f & p2*k = g iff h = k by A2,Def16;
+A9: h in Hom(b,c) and
+A10: for k st k in Hom(b,c) holds p1*k = f & p2*k = g iff h = k by A2,
+    A8, Def16;
     take h;
-    thus h in Hom(b,c) by A5;
+    thus h in Hom(b,c) by A9;
     let k such that
-A7: k in Hom(b,c);
+A11: k in Hom(b,c);
     thus (for x st x in I holds (F/.x)*k = F'/.x ) implies h = k
     proof
-      assume for x st x in I holds (F/.x)*k = F'/.x;
-      then (F/.x1)*k = f & (F/.x2)*k = g by A4;
-      then p1*k = f & p2*k = g by A1,Th7;
-      hence thesis by A6,A7;
+      assume
+A12:  for x st x in I holds (F/.x)*k = F'/.x;
+      then (F/.x2)*k = g by A6;
+      then
+A13:  p2*k = g by A1,Th7;
+      (F/.x1)*k = f by A4,A12;
+      then p1*k = f by A1,Th7;
+      hence thesis by A10,A11,A13;
     end;
     assume
-A8: h = k;
-    let x such that
-A9: x in I;
-    p1*k = f & p2*k = g by A6,A7,A8;
-    then (F/.x1)*k = f & (F/.x2)*k = g & (x = x1 or x = x2)
-    by A1,A9,Th7,TARSKI:def 2;
-    hence thesis;
+    h = k;
+    then
+A14: p1*k = f & p2*k = g by A10,A11;
+    let x;
+    assume
+    x in I;
+    then x = x1 or x = x2 by TARSKI:def 2;
+    hence thesis by A1,A14,Th7;
   end;
   assume
-A10: c is_a_product_wrt F;
-  then x1 in I & x2 in
-  I & F is Projections_family of c,I by Def15,TARSKI:def 2;
-  then dom(F/.x1) = c & dom(F/.x2) = c by Th45;
-  hence dom p1 = c & dom p2 = c by A1,Th7;
+A15: c is_a_product_wrt F;
+  then
+A16: F is Projections_family of c,I by Def15;
+  x2 in I by TARSKI:def 2;
+  then
+A17: dom(F/.x2) = c by A16,Th45;
+  x1 in I by TARSKI:def 2;
+  then dom(F/.x1) = c by A16,Th45;
+  hence dom p1 = c & dom p2 = c by A1,A17,Th7;
   let d,f,g such that
-A11: f in Hom(d,cod p1) and
-A12: g in Hom(d,cod p2);
-  dom f = d & dom g = d by A11,A12,CAT_1:18;
+A18: f in Hom(d,cod p1) and
+A19: g in Hom(d,cod p2);
+  dom f = d & dom g = d by A18,A19,CAT_1:18;
   then reconsider F' = (x1,x2) --> (f,g) as Projections_family of d,I by Th48;
   cods F = (x1,x2)-->(cod p1,cod p2) by Th11
-    .= (x1,x2)-->(cod f,cod p2) by A11,CAT_1:18
-    .= (x1,x2)-->(cod f,cod g) by A12,CAT_1:18
+    .= (x1,x2)-->(cod f,cod p2) by A18,CAT_1:18
+    .= (x1,x2)-->(cod f,cod g) by A19,CAT_1:18
     .= cods F' by Th11;
   then consider h such that
-A13: h in Hom(d,c) and
-A14: for k st k in Hom(d,c) holds
-  (for x st x in I holds (F/.x)*k = F'/.x ) iff h = k by A10,Def15;
+A20: h in Hom(d,c) and
+A21: for k st k in Hom(d,c) holds (for x st x in I holds (F/.x)*k = F'/.
+  x ) iff h = k by A15,Def15;
   take h;
-  thus h in Hom(d,c) by A13;
+  thus h in Hom(d,c) by A20;
   let k such that
-A15: k in Hom(d,c);
+A22: k in Hom(d,c);
   thus p1*k = f & p2*k = g implies h = k
   proof
     assume
-A16: p1*k = f & p2*k = g;
+A23: p1*k = f & p2*k = g;
     now
       let x;
-      assume x in I;
+      assume
+      x in I;
       then x = x1 or x = x2 by TARSKI:def 2;
       then F/.x = p1 & F'/.x = f or F/.x = p2 & F'/.x = g by A1,Th7;
-      hence (F/.x)*k = F'/.x by A16;
+      hence (F/.x)*k = F'/.x by A23;
     end;
-    hence thesis by A14,A15;
+    hence thesis by A21,A22;
   end;
-  assume h = k;
-  then x1 in I & x2 in I & for x st x in I holds (F/.x)*k = F'/.x
-  by A14,A15,TARSKI:def 2;
-  then (F/.x1)*k = F'/.x1 & (F/.x2)*k = F'/.x2;
-  then (F/.x1)*k = f & (F/.x2)*k = g by A1,Th7;
-  hence thesis by A1,Th7;
+  assume
+A24: h = k;
+  x2 in I by TARSKI:def 2;
+  then (F/.x2)*k = F'/.x2 by A21,A22,A24;
+  then
+A25: (F/.x2)*k = g by A1,Th7;
+  x1 in I by TARSKI:def 2;
+  then (F/.x1)*k = F'/.x1 by A21,A22,A24;
+  then (F/.x1)*k = f by A1,Th7;
+  hence thesis by A1,A25,Th7;
 end;
 
 theorem
-  Hom(c,a) <> {} & Hom(c,b) <> {} implies
-  for p1 being Morphism of c,a, p2 being Morphism of c,b
-  holds c is_a_product_wrt p1,p2 iff
-  for d st Hom(d,a)<>{} & Hom(d,b)<>{} holds Hom(d,c) <> {} &
-  for f being Morphism of d,a, g being Morphism of d,b
-  ex h being Morphism of d,c st
-  for k being Morphism of d,c holds p1*k = f & p2*k = g iff h = k
+  Hom(c,a) <> {} & Hom(c,b) <> {} implies for p1 being Morphism of c,a,
+p2 being Morphism of c,b holds c is_a_product_wrt p1,p2 iff for d st Hom(d,a)<>
+  {} & Hom(d,b)<>{} holds Hom(d,c) <> {} & for f being Morphism of d,a, g being
+Morphism of d,b ex h being Morphism of d,c st for k being Morphism of d,c holds
+  p1*k = f & p2*k = g iff h = k
 proof
-  assume
-A1: Hom(c,a) <> {} & Hom(c,b) <> {};
+  assume that
+A1: Hom(c,a) <> {} and
+A2: Hom(c,b) <> {};
   let p1 be Morphism of c,a, p2 be Morphism of c,b;
-  thus c is_a_product_wrt p1,p2 implies
-  for d st Hom(d,a)<>{} & Hom(d,b)<>{} holds Hom(d,c) <> {} &
-  for f being Morphism of d,a, g being Morphism of d,b
-  ex h being Morphism of d,c st
-  for k being Morphism of d,c holds p1*k = f & p2*k = g iff h = k
+  thus c is_a_product_wrt p1,p2 implies for d st Hom(d,a)<>{} & Hom(d,b)<>{}
+holds Hom(d,c) <> {} & for f being Morphism of d,a, g being Morphism of d,b ex
+h being Morphism of d,c st for k being Morphism of d,c holds p1*k = f & p2*k =
+  g iff h = k
   proof
-    assume that dom p1 = c & dom p2 = c and
-A2: for d,f,g st f in Hom(d,cod p1) & g in Hom(d,cod p2)
-    ex h st h in Hom(d,c) &
-    for k st k in Hom(d,c) holds p1*k = f & p2*k = g iff h = k;
+    assume that
+    dom p1 = c and
+    dom p2 = c and
+A3: for d,f,g st f in Hom(d,cod p1) & g in Hom(d,cod p2) ex h st h in
+    Hom(d,c) & for k st k in Hom(d,c) holds p1*k = f & p2*k = g iff h = k;
     let d such that
-A3: Hom(d,a)<>{} & Hom(d,b)<>{};
+A4: Hom(d,a)<>{} and
+A5: Hom(d,b)<>{};
     consider f being Morphism of d,a, g being Morphism of d,b;
-A4: cod p1 = a & cod p2 = b by A1,CAT_1:23;
-    then f in Hom(d,cod p1) & g in Hom(d,cod p2) by A3,CAT_1:def 7;
+A6: cod p2 = b by A2,CAT_1:23;
     then
-A5: ex h st h in Hom(d,c) &
-    for k st k in Hom(d,c) holds p1*k = f & p2*k = g iff h = k by A2;
+A7: g in Hom(d,cod p2) by A5,CAT_1:def 7;
+A8: cod p1 = a by A1,CAT_1:23;
+    then f in Hom(d,cod p1) by A4,CAT_1:def 7;
+    then
+A9: ex h st h in Hom(d,c) & for k st k in Hom(d,c) holds p1*k = f & p2*k
+    = g iff h = k by A3,A7;
     hence Hom(d,c) <> {};
     let f be Morphism of d,a, g be Morphism of d,b;
-    f in Hom(d,cod p1) & g in Hom(d,cod p2) by A3,A4,CAT_1:def 7;
+A10: g in Hom(d,cod p2) by A5,A6,CAT_1:def 7;
+    f in Hom(d,cod p1) by A4,A8,CAT_1:def 7;
     then consider h such that
-A6: h in Hom(d,c) and
-A7: for k st k in Hom(d,c) holds p1*k = f & p2*k = g iff h = k by A2;
-    reconsider h as Morphism of d,c by A6,CAT_1:def 7;
+A11: h in Hom(d,c) and
+A12: for k st k in Hom(d,c) holds p1*k = f & p2*k = g iff h = k by A3,
+    A10;
+    reconsider h as Morphism of d,c by A11,CAT_1:def 7;
     take h;
     let k be Morphism of d,c;
-    p1*k = p1*(k qua Morphism of C) & p2*k = p2*(k qua Morphism of C) &
-    k in Hom(d,c) by A1,A5,CAT_1:def 7,def 13;
-    hence thesis by A7;
+A13: k in Hom(d,c) by A9,CAT_1:def 7;
+    p1*k = p1*(k qua Morphism of C) & p2*k = p2*(k qua Morphism of C) by
+    A1,A2,A9,CAT_1:def 13;
+    hence thesis by A12,A13;
   end;
   assume
-A8: for d st Hom(d,a)<>{} & Hom(d,b)<>{} holds Hom(d,c) <> {} &
-  for f being Morphism of d,a, g being Morphism of d,b
-  ex h being Morphism of d,c st
+A14: for d st Hom(d,a)<>{} & Hom(d,b)<>{} holds Hom(d,c) <> {} & for f
+  being Morphism of d,a, g being Morphism of d,b ex h being Morphism of d,c st
   for k being Morphism of d,c holds p1*k = f & p2*k = g iff h = k;
-  thus dom p1 = c & dom p2 = c by A1,CAT_1:23;
+  thus dom p1 = c & dom p2 = c by A1,A2,CAT_1:23;
   let d,f,g such that
-A9: f in Hom(d,cod p1) and
-A10: g in Hom(d,cod p2);
-A11: cod p1 = a & cod p2 = b by A1,CAT_1:23;
-  then f is Morphism of d,a & g is Morphism of d,b &
-  Hom(d,a) <> {} & Hom(d,b) <> {} by A9,A10,CAT_1:def 7;
+A15: f in Hom(d,cod p1) and
+A16: g in Hom(d,cod p2);
+A17: Hom(d,a) <> {} by A1,A15,CAT_1:23;
+A18: cod p1 = a by A1,CAT_1:23;
+  then
+A19: f is Morphism of d,a by A15,CAT_1:def 7;
+A20: cod p2 = b by A2,CAT_1:23;
+  then g is Morphism of d,b by A16,CAT_1:def 7;
   then consider h being Morphism of d,c such that
-A12: for k being Morphism of d,c holds p1*k = f & p2*k = g iff h = k by A8;
+A21: for k being Morphism of d,c holds p1*k = f & p2*k = g iff h = k by
+  A14,A16,A20,A19,A17;
   reconsider h' = h as Morphism of C;
   take h';
-A13: Hom(d,c) <> {} by A8,A9,A10,A11;
+A22: Hom(d,c) <> {} by A14,A15,A16,A18,A20;
   hence h' in Hom(d,c) by CAT_1:def 7;
   let k;
-  assume k in Hom(d,c);
+  assume
+  k in Hom(d,c);
   then reconsider k' = k as Morphism of d,c by CAT_1:def 7;
-  p1*k = p1*k' & p2*k = p2*k' by A1,A13,CAT_1:def 13;
-  hence thesis by A12;
+  p1*k = p1*k' & p2*k = p2*k' by A1,A2,A22,CAT_1:def 13;
+  hence thesis by A21;
 end;
 
 theorem
-  c is_a_product_wrt p1,p2 & d is_a_product_wrt q1,q2 &
-  cod p1 = cod q1 & cod p2 = cod q2 implies c,d are_isomorphic
+  c is_a_product_wrt p1,p2 & d is_a_product_wrt q1,q2 & cod p1 = cod q1
+  & cod p2 = cod q2 implies c,d are_isomorphic
 proof
   assume that
 A1: c is_a_product_wrt p1,p2 and
 A2: d is_a_product_wrt q1,q2 and
 A3: cod p1 = cod q1 & cod p2 = cod q2;
   set I = {0,1}, F = (0,1)-->(p1,p2), F' = (0,1)-->(q1,q2);
-  now dom p1 = c & dom p2 = c & dom q1 = d & dom q2 = d by A1,A2,Def16;
-    hence F is Projections_family of c,I & F' is Projections_family of d,I
-    by Th48;
-    thus c is_a_product_wrt F & d is_a_product_wrt F' by A1,A2,Th59;
-    thus cods F = (0,1)-->(cod q1,cod q2) by A3,Th11
-      .= cods F' by Th11;
-  end;
-  hence thesis by Th53;
+A4: c is_a_product_wrt F & d is_a_product_wrt F' by A1,A2,Th59;
+  dom q1 = d & dom q2 = d by A2,Def16;
+  then
+A5: F' is Projections_family of d,I by Th48;
+  dom p1 = c & dom p2 = c by A1,Def16;
+  then
+A6: F is Projections_family of c,I by Th48;
+  cods F = (0,1)-->(cod q1,cod q2) by A3,Th11
+    .= cods F' by Th11;
+  hence thesis by A6,A5,A4,Th53;
 end;
 
 theorem
-  c is_a_product_wrt p1,p2 & Hom(cod p1,cod p2) <> {} & Hom(cod p2,cod p1 ) <>
-  {} implies p1 is retraction & p2 is retraction
+  c is_a_product_wrt p1,p2 & Hom(cod p1,cod p2) <> {} & Hom(cod p2,cod
+  p1 ) <> {} implies p1 is retraction & p2 is retraction
 proof
   assume that
 A1: c is_a_product_wrt p1,p2 and
 A2: Hom(cod p1,cod p2) <> {} & Hom(cod p2,cod p1) <> {};
   set I = {0,1}, F = (0,1)-->(p1,p2);
-A3: F/.0 = p1 & F/.1 = p2 by Th7;
-  now dom p1 = c & dom p2 = c by A1,Def16;
+A3: F/.0 = p1 by Th7;
+A4: now
+    dom p1 = c & dom p2 = c by A1,Def16;
     hence F is Projections_family of c,I by Th48;
     thus c is_a_product_wrt F by A1,Th59;
     let x1,x2;
-    assume x1 in I & x2 in I;
-    then (x1 = 0 or x1 = 1) & (x2 = 0 or x2 = 1) by TARSKI:def 2;
-    hence Hom(cod(F/.x1),cod(F/.x2)) <> {} by A2,A3,CAT_1:56;
+    assume that
+A5: x1 in I and
+A6: x2 in I;
+A7: x2 = 0 or x2 = 1 by A6,TARSKI:def 2;
+    x1 = 0 or x1 = 1 by A5,TARSKI:def 2;
+    hence Hom(cod(F/.x1),cod(F/.x2)) <> {} by A2,A3,A7,Th7,CAT_1:56;
   end;
-  then 0 in I & 1 in I & for x st x in I holds F/.x is retraction
-  by Th54,TARSKI:def 2;
-  hence thesis by A3;
+A8: 1 in I by TARSKI:def 2;
+  F/.1 = p2 & 0 in I by Th7,TARSKI:def 2;
+  hence thesis by A3,A4,A8,Th54;
 end;
 
 theorem Th63:
@@ -1691,19 +1775,18 @@ theorem Th63:
   implies h = id c
 proof
   assume that
-A1: dom p1 = c and
-A2: dom p2 = c and
-A3: for d,f,g st f in Hom(d,cod p1) & g in Hom(d,cod p2)
-  ex h st h in Hom(d,c) &
-  for k st k in Hom(d,c) holds p1*k = f & p2*k = g iff h = k and
-A4: h in Hom(c,c) and
-A5: p1*h = p1 & p2*h = p2;
-  p1 in Hom(c,cod p1) & p2 in Hom(c,cod p2) by A1,A2;
-  then consider i such that i in Hom(c,c) and
-A6: for k st k in Hom(c,c) holds p1*k = p1 & p2*k = p2 iff i = k by A3;
-  id c in Hom(c,c) & p1*(id c) = p1 & p2*(id c) = p2 by A1,A2,CAT_1:47,55;
-  hence id c = i by A6
-    .= h by A4,A5,A6;
+A1: dom p1 = c & dom p2 = c and
+A2: for d,f,g st f in Hom(d,cod p1) & g in Hom(d,cod p2) ex h st h in
+  Hom(d,c) & for k st k in Hom(d,c) holds p1*k = f & p2*k = g iff h = k and
+A3: h in Hom(c,c) & p1*h = p1 & p2*h = p2;
+  p1 in Hom(c,cod p1) & p2 in Hom(c,cod p2) by A1;
+  then consider i such that
+  i in Hom(c,c) and
+A4: for k st k in Hom(c,c) holds p1*k = p1 & p2*k = p2 iff i = k by A2;
+A5: id c in Hom(c,c) by CAT_1:55;
+  p1*(id c) = p1 & p2*(id c) = p2 by A1,CAT_1:47;
+  hence id c = i by A4,A5
+    .= h by A3,A4;
 end;
 
 theorem
@@ -1714,81 +1797,94 @@ proof
 A1: c is_a_product_wrt p1,p2 and
 A2: dom f = d & cod f = c & f is invertible;
   dom p1 = c & dom p2 = c by A1,Def16;
-  then c is_a_product_wrt (0,1)-->(p1,p2) &
-  (0,1)-->(p1,p2) is Projections_family of c,{0,1} by A1,Th48,Th59;
-  then d is_a_product_wrt ((0,1)-->(p1,p2))*f by A2,Th56;
+  then
+A3: (0,1)-->(p1,p2) is Projections_family of c,{0,1} by Th48;
+  c is_a_product_wrt (0,1)-->(p1,p2) by A1,Th59;
+  then d is_a_product_wrt ((0,1)-->(p1,p2))*f by A2,A3,Th56;
   then d is_a_product_wrt (0,1)-->(p1*f,p2*f) by Th18;
   hence thesis by Th59;
 end;
 
 theorem
-  c is_a_product_wrt p1,p2 & cod p2 is terminal
-  implies c,cod p1 are_isomorphic
+  c is_a_product_wrt p1,p2 & cod p2 is terminal implies c,cod p1
+  are_isomorphic
 proof
   set a = cod p1, b = cod p2;
   assume that
 A1: c is_a_product_wrt p1,p2 and
 A2: b is terminal;
-A3: dom p1 = c & dom p2 = c by A1,Def16;
-  hence Hom(c,a)<>{} by CAT_1:19;
-  reconsider p = p1 as Morphism of c,a by A3,CAT_1:22;
-  take p;
   set f = id(a),g = term(a,b);
   dom g = a & cod g = b by A2,Th39;
   then f in Hom(a,a) & g in Hom(a,b) by CAT_1:55;
   then consider h such that
-A4: h in Hom(a,c) and
-A5: for k st k in Hom(a,c) holds p1*k = f & p2*k = g iff h = k by A1,Def16;
+A3: h in Hom(a,c) and
+A4: for k st k in Hom(a,c) holds p1*k = f & p2*k = g iff h = k by A1,
+  Def16;
+A5: dom h = a by A3,CAT_1:18;
+A6: dom p1 = c by A1,Def16;
+  then reconsider p = p1 as Morphism of c,a by CAT_1:22;
+A7: cod h = c by A3,CAT_1:18;
+  then
+A8: cod(h*p) = c by A5,CAT_1:42;
+A9: dom p2 = c by A1,Def16;
+  then
+A10: cod(p2*(h*p)) = b by A8,CAT_1:42;
+A11: dom(h*p) = c by A6,A5,CAT_1:42;
+  then
+A12: h*p in Hom(c,c) by A8;
+  dom(p2*(h*p)) = c by A9,A11,A8,CAT_1:42;
+  then
+A13: p2*(h*p) = term(c,b) by A2,A10,Th40
+    .= p2 by A2,A9,Th40;
+  thus Hom(c,a)<>{} by A6,CAT_1:19;
+  take p;
   take h;
-  thus dom h = cod p & cod h = dom p by A3,A4,CAT_1:18; thus
-A6: p*h = id cod p by A4,A5;
-  now
-A7: dom h = a & cod h = c by A4,CAT_1:18;
-    then
-A8: dom(h*p) = c & cod(h*p) = c by A3,CAT_1:42;
-    hence h*p in Hom(c,c);
-    thus p1*(h*p) = (id cod p)*p by A3,A6,A7,CAT_1:43
-      .= p by CAT_1:46;
-    dom(p2*(h*p)) = c & cod(p2*(h*p)) = b by A3,A8,CAT_1:42;
-    hence p2*(h*p) = term(c,b) by A2,Th40
-      .= p2 by A2,A3,Th40;
-  end;
-  hence id dom p = h*p by A1,A3,Th63;
+  thus dom h = cod p & cod h = dom p by A6,A3,CAT_1:18;
+  thus p*h = id cod p by A3,A4;
+  then p1*(h*p) = (id cod p)*p by A6,A5,A7,CAT_1:43
+    .= p by CAT_1:46;
+  hence id dom p = h*p by A1,A6,A13,A12,Th63;
 end;
 
 theorem
-  c is_a_product_wrt p1,p2 & cod p1 is terminal
-  implies c,cod p2 are_isomorphic
+  c is_a_product_wrt p1,p2 & cod p1 is terminal implies c,cod p2
+  are_isomorphic
 proof
   set a = cod p1, b = cod p2;
   assume that
 A1: c is_a_product_wrt p1,p2 and
 A2: a is terminal;
-A3: dom p1 = c & dom p2 = c by A1,Def16;
-  hence Hom(c,b)<>{} by CAT_1:19;
-  reconsider p = p2 as Morphism of c,b by A3,CAT_1:22;
-  take p;
   set f = id(b),g = term(b,a);
   dom g = b & cod g = a by A2,Th39;
   then f in Hom(b,b) & g in Hom(b,a) by CAT_1:55;
   then consider h such that
-A4: h in Hom(b,c) and
-A5: for k st k in Hom(b,c) holds p1*k = g & p2*k = f iff h = k by A1,Def16;
+A3: h in Hom(b,c) and
+A4: for k st k in Hom(b,c) holds p1*k = g & p2*k = f iff h = k by A1,
+  Def16;
+A5: dom h = b by A3,CAT_1:18;
+A6: dom p2 = c by A1,Def16;
+  then reconsider p = p2 as Morphism of c,b by CAT_1:22;
+A7: cod h = c by A3,CAT_1:18;
+  then
+A8: cod(h*p) = c by A5,CAT_1:42;
+A9: dom p1 = c by A1,Def16;
+  then
+A10: cod(p1*(h*p)) = a by A8,CAT_1:42;
+A11: dom(h*p) = c by A6,A5,CAT_1:42;
+  then
+A12: h*p in Hom(c,c) by A8;
+  dom(p1*(h*p)) = c by A9,A11,A8,CAT_1:42;
+  then
+A13: p1*(h*p) = term(c,a) by A2,A10,Th40
+    .= p1 by A2,A9,Th40;
+  thus Hom(c,b)<>{} by A6,CAT_1:19;
+  take p;
   take h;
-  thus dom h = cod p & cod h = dom p by A3,A4,CAT_1:18; thus
-A6: p*h = id cod p by A4,A5;
-  now
-A7: dom h = b & cod h = c by A4,CAT_1:18;
-    then
-A8: dom(h*p) = c & cod(h*p) = c by A3,CAT_1:42;
-    hence h*p in Hom(c,c);
-    dom(p1*(h*p)) = c & cod(p1*(h*p)) = a by A3,A8,CAT_1:42;
-    hence p1*(h*p) = term(c,a) by A2,Th40
-      .= p1 by A2,A3,Th40;
-    thus p2*(h*p) = (id cod p)*p by A3,A6,A7,CAT_1:43
-      .= p by CAT_1:46;
-  end;
-  hence id dom p = h*p by A1,A3,Th63;
+  thus dom h = cod p & cod h = dom p by A6,A3,CAT_1:18;
+  thus p*h = id cod p by A3,A4;
+  then p2*(h*p) = (id cod p)*p by A6,A5,A7,CAT_1:43
+    .= p by CAT_1:46;
+  hence id dom p = h*p by A1,A6,A13,A12,Th63;
 end;
 
 begin :: Coproducts
@@ -1796,8 +1892,8 @@ begin :: Coproducts
 definition
   let C,c,I;
   mode Injections_family of c,I -> Function of I,the carrier' of C means
-    :Def17:
-    cods it = I --> c;
+    :
+    Def17: cods it = I --> c;
   existence
   proof
     take F = I-->id c;
@@ -1807,7 +1903,8 @@ definition
 end;
 
 theorem Th67:
-  for F being Injections_family of c,I st x in I holds cod(F/.x) = c
+  for F being Injections_family of c,I st x in I holds cod(F/.x) =
+  c
 proof
   let F be Injections_family of c,I such that
 A1: x in I;
@@ -1817,8 +1914,8 @@ A1: x in I;
 end;
 
 theorem
-  for F being Function of {},the carrier' of C
-  holds F is Injections_family of a,{}
+  for F being Function of {},the carrier' of C holds F is
+  Injections_family of a,{}
 proof
   let F be Function of {},the carrier' of C;
   thus {} --> a = cods F;
@@ -1842,8 +1939,8 @@ A2: x in {y};
 end;
 
 theorem Th70:
-  cod p1 = c & cod p2 = c
-  implies (x1,x2)-->(p1,p2) is Injections_family of c,{x1,x2}
+  cod p1 = c & cod p2 = c implies (x1,x2)-->(p1,p2) is
+  Injections_family of c,{x1,x2}
 proof
   assume
 A1: cod p1 = c & cod p2 = c;
@@ -1855,34 +1952,35 @@ end;
 canceled;
 
 theorem Th72:
-  for F being Injections_family of b,I st dom f = b
-  holds f*F is Injections_family of cod f,I
+  for F being Injections_family of b,I st dom f = b holds f*F is
+  Injections_family of cod f,I
 proof
   let F be Injections_family of b,I;
-  assume dom f = b;
+  assume
+  dom f = b;
   then cods F = I--> dom f by Def17;
   hence cods(f*F) = I --> cod f by Th21;
 end;
 
 theorem
-  for F being Injections_family of b,I,
-  G being Function of I,the carrier' of C st doms F = cods G
-  holds F"*"G is Injections_family of b,I
+  for F being Injections_family of b,I, G being Function of I,the
+  carrier' of C st doms F = cods G holds F"*"G is Injections_family of b,I
 proof
   let F be Injections_family of b,I;
   let G be Function of I,the carrier' of C;
-  assume doms F = cods G;
+  assume
+  doms F = cods G;
   then cods(F"*"G) = cods F by Th22;
   hence cods(F"*"G) = I --> b by Def17;
 end;
 
 theorem Th74:
-  for F be Function of I,the carrier' of C holds
-  F is Projections_family of c,I iff F opp is Injections_family of c opp,I
+  for F be Function of I,the carrier' of C holds F is
+  Projections_family of c,I iff F opp is Injections_family of c opp,I
 proof
   let F be Function of I,the carrier' of C;
-  thus F is Projections_family of c,I
-  implies F opp is Injections_family of c opp,I
+  thus F is Projections_family of c,I implies F opp is Injections_family of c
+  opp,I
   proof
     assume
 A1: doms F = I --> c;
@@ -1917,12 +2015,13 @@ A4: x in I;
 end;
 
 theorem Th75:
-  for F be Function of I,the carrier' of C opp, c being Object of C opp holds
-  F is Injections_family of c,I iff opp F is Projections_family of opp c,I
+  for F be Function of I,the carrier' of C opp, c being Object of
+  C opp holds F is Injections_family of c,I iff opp F is Projections_family of
+  opp c,I
 proof
   let F be Function of I,the carrier' of C opp, c be Object of C opp;
-  thus F is Injections_family of c,I
-  implies opp F is Projections_family of opp c,I
+  thus F is Injections_family of c,I implies opp F is Projections_family of
+  opp c,I
   proof
     assume
 A1: cods F = I --> c;
@@ -1958,7 +2057,8 @@ A4: x in I;
 end;
 
 theorem
-  for F being Injections_family of dom f,I holds (F opp)*(f opp) = (f*F) opp
+  for F being Injections_family of dom f,I holds (F opp)*(f opp) = (f*F)
+  opp
 proof
   let F be Injections_family of dom f, I;
   now
@@ -1984,14 +2084,14 @@ definition
   pred c is_a_coproduct_wrt F means
   :Def18:
   F is Injections_family of c,I &
-  for d for F' being Injections_family of d,I st doms F = doms F'
-  ex h st h in Hom(c,d) & for k st k in Hom(c,d) holds
-  (for x st x in I holds k*(F/.x) = F'/.x) iff h = k;
+  for d for F' being Injections_family of d,I st doms F = doms F' ex h st h in
+Hom(c,d) & for k st k in Hom(c,d) holds (for x st x in I holds k*(F/.x) = F'/.x
+  ) iff h = k;
 end;
 
 theorem
-  for F being Function of I,the carrier' of C holds
-  c is_a_product_wrt F iff c opp is_a_coproduct_wrt F opp
+  for F being Function of I,the carrier' of C holds c is_a_product_wrt F
+  iff c opp is_a_coproduct_wrt F opp
 proof
   let F be Function of I,the carrier' of C;
   thus c is_a_product_wrt F implies c opp is_a_coproduct_wrt F opp
@@ -2019,8 +2119,8 @@ A3:   x in I;
     then cods F = cods oppF' by Th1;
     then consider h such that
 A4: h in Hom(opp d,c) and
-A5: for k st k in Hom(opp d,c) holds
-    (for x st x in I holds (F/.x)*k = oppF'/.x ) iff h = k by A1,Def15;
+A5: for k st k in Hom(opp d,c) holds (for x st x in I holds (F/.x)*k =
+    oppF'/.x ) iff h = k by A1,Def15;
     take h opp;
     h opp in Hom(c opp,(opp d) opp) by A4,OPPCAT_1:13;
     hence h opp in Hom(c opp,d) by OPPCAT_1:5;
@@ -2053,15 +2153,16 @@ A10:    dom k = cod(F opp/.x) by A6,CAT_1:18;
       hence thesis by OPPCAT_1:8;
     end;
     assume
-A11: h opp = k;
+    h opp = k;
+    then
+A11: h = opp k by OPPCAT_1:7;
     let x such that
 A12: x in I;
     F is Projections_family of c,I by A1,Def15;
     then dom(F/.x) = c by A12,Th45;
     then
 A13: cod opp k = dom(F/.x) by A7,CAT_1:18;
-    h = opp k by A11,OPPCAT_1:7;
-    then (F/.x)*(opp k) = oppF'/.x by A5,A7,A12;
+    (F/.x)*(opp k) = oppF'/.x by A5,A7,A12,A11;
     then ((opp k) opp)*((F/.x)opp) = (oppF'/.x)opp by A13,OPPCAT_1:17;
     then k*((F/.x)opp) = (oppF'/.x)opp by OPPCAT_1:8;
     hence k*(F opp/.x) = (oppF'/.x)opp by A12,Def5
@@ -2075,297 +2176,319 @@ A14: c opp is_a_coproduct_wrt F opp;
   let d;
   let F' be Projections_family of d,I such that
 A15: cods F = cods F';
-  reconsider F'opp = F' opp as Injections_family of d opp,I by Th74;
-  now
+A16: now
     let x;
     assume
-A16: x in I;
+A17: x in I;
     hence (doms(F opp))/.x = dom((F opp)/.x) by Def3
-      .= dom((F/.x) opp) by A16,Def5
+      .= dom((F/.x) opp) by A17,Def5
       .= cod(F/.x) by OPPCAT_1:9
-      .= (cods F')/.x by A15,A16,Def4
-      .= cod(F'/.x) by A16,Def4
+      .= (cods F')/.x by A15,A17,Def4
+      .= cod(F'/.x) by A17,Def4
       .= dom((F'/.x)opp) by OPPCAT_1:9
-      .= dom((F' opp)/.x) by A16,Def5
-      .= (doms(F' opp))/.x by A16,Def3;
+      .= dom((F' opp)/.x) by A17,Def5
+      .= (doms(F' opp))/.x by A17,Def3;
   end;
-  then doms(F opp) = doms(F'opp) by Th1;
+  reconsider F'opp = F' opp as Injections_family of d opp,I by Th74;
+  doms(F opp) = doms(F'opp) by A16,Th1;
   then consider h being Morphism of C opp such that
-A17: h in Hom(c opp,d opp) and
-A18: for k being Morphism of C opp st k in Hom(c opp,d opp) holds
-  (for x st x in I holds k*(F opp/.x) = F'opp/.x) iff h = k by A14,Def18;
+A18: h in Hom(c opp,d opp) and
+A19: for k being Morphism of C opp st k in Hom(c opp,d opp) holds (for x
+  st x in I holds k*(F opp/.x) = F'opp/.x) iff h = k by A14,Def18;
   take opp h;
-  opp h in Hom(opp(d opp),opp(c opp)) by A17,OPPCAT_1:14;
+  opp h in Hom(opp(d opp),opp(c opp)) by A18,OPPCAT_1:14;
   then opp h in Hom(d,opp(c opp)) by OPPCAT_1:4;
   hence opp h in Hom(d,c) by OPPCAT_1:4;
   let k;
   assume
-A19: k in Hom(d,c);
+A20: k in Hom(d,c);
   then
-A20: k opp in Hom(c opp,d opp) by OPPCAT_1:13;
+A21: k opp in Hom(c opp,d opp) by OPPCAT_1:13;
   thus (for x st x in I holds (F/.x)*k = F'/.x) implies opp h = k
   proof
     assume
-A21: for x st x in I holds (F/.x)*k = F'/.x;
+A22: for x st x in I holds (F/.x)*k = F'/.x;
     now
       let x such that
-A22:  x in I;
+A23:  x in I;
       F opp is Injections_family of c opp,I by A14,Def18;
-      then cod(F opp/.x) = c opp by A22,Th67;
-      then cod((F/.x)opp) = c opp by A22,Def5;
+      then cod(F opp/.x) = c opp by A23,Th67;
+      then cod((F/.x)opp) = c opp by A23,Def5;
       then dom(F/.x) = c opp by OPPCAT_1:9;
       then dom(F/.x) = c by OPPCAT_1:def 2;
       then
-A23:  cod k = dom(F/.x) by A19,CAT_1:18;
-      (F/.x)*k = F'/.x by A21,A22;
-      then (k opp)*((F/.x)opp) = (F'/.x) opp by A23,OPPCAT_1:17;
-      hence F'opp/.x = (k opp)*((F/.x)opp) by A22,Def5
-        .= (k opp)*(F opp/.x) by A22,Def5;
+A24:  cod k = dom(F/.x) by A20,CAT_1:18;
+      (F/.x)*k = F'/.x by A22,A23;
+      then (k opp)*((F/.x)opp) = (F'/.x) opp by A24,OPPCAT_1:17;
+      hence F'opp/.x = (k opp)*((F/.x)opp) by A23,Def5
+        .= (k opp)*(F opp/.x) by A23,Def5;
     end;
-    then h = k opp by A18,A20;
+    then h = k opp by A19,A21;
     hence thesis by OPPCAT_1:7;
   end;
   assume
-A24: opp h = k;
+  opp h = k;
+  then
+A25: h = k opp by OPPCAT_1:8;
   let x such that
-A25: x in I;
+A26: x in I;
   F opp is Injections_family of c opp,I by A14,Def18;
-  then cod(F opp/.x) = c opp by A25,Th67;
-  then cod((F/.x)opp) = c opp by A25,Def5;
+  then cod(F opp/.x) = c opp by A26,Th67;
+  then cod((F/.x)opp) = c opp by A26,Def5;
   then dom(F/.x) = c opp by OPPCAT_1:9;
   then dom(F/.x) = c by OPPCAT_1:def 2;
   then
-A26: cod k = dom(F/.x) by A19,CAT_1:18;
-  h = k opp by A24,OPPCAT_1:8;
-  then (k opp)*(F opp/.x) = F'opp/.x by A18,A20,A25;
-  then (k opp)*(F opp/.x) = (F'/.x)opp by A25,Def5;
+A27: cod k = dom(F/.x) by A20,CAT_1:18;
+  (k opp)*(F opp/.x) = F'opp/.x by A19,A21,A26,A25;
+  then (k opp)*(F opp/.x) = (F'/.x)opp by A26,Def5;
   hence F'/.x = (k opp)*(F opp/.x) by OPPCAT_1:def 4
-    .= (k opp)*((F/.x)opp) by A25,Def5
-    .= ((F/.x)*k) opp by A26,OPPCAT_1:17
+    .= (k opp)*((F/.x)opp) by A26,Def5
+    .= ((F/.x)*k) opp by A27,OPPCAT_1:17
     .= (F/.x)*k by OPPCAT_1:def 4;
 end;
 
 theorem Th78:
-  for F being Injections_family of c,I, F' being Injections_family of d,I
-  st c is_a_coproduct_wrt F & d is_a_coproduct_wrt F' & doms F = doms F'
+  for F being Injections_family of c,I, F' being Injections_family
+  of d,I st c is_a_coproduct_wrt F & d is_a_coproduct_wrt F' & doms F = doms F'
   holds c,d are_isomorphic
 proof
   let F be Injections_family of c,I, F' be Injections_family of d,I such that
 A1: c is_a_coproduct_wrt F and
 A2: d is_a_coproduct_wrt F' and
 A3: doms F = doms F';
-  consider f such that
-A4: f in Hom(c,d) and
-A5: for k st k in Hom(c,d) holds
-  (for x st x in I holds k*(F/.x) = F'/.x ) iff f = k by A1,A3,Def18;
-  consider g such that
-A6: g in Hom(d,c) and
-A7: for k st k in Hom(d,c) holds
-  (for x st x in I holds k*(F'/.x) = F/.x ) iff g = k by A2,A3,Def18;
-  thus Hom(c,d) <> {} by A4;
-  reconsider f as Morphism of c,d by A4,CAT_1:def 7;
-  take f,g;
-A8: cod f = d & dom g = d & dom f = c & cod g = c by A4,A6,CAT_1:18;
-  hence dom g = cod f & cod g = dom f;
   doms F' = doms F';
-  then consider fg being Morphism of C such that fg in Hom(d,d) and
-A9: for k st k in Hom(d,d) holds
-  (for x st x in I holds k*(F'/.x) = F'/.x) iff fg = k by A2,Def18;
-A10: now
-    set k = id d;
-    thus k in Hom(d,d) by CAT_1:55;
-    let x;
-    assume x in I;
-    then cod(F'/.x) = d by Th67;
-    hence k*(F'/.x) = F'/.x by CAT_1:46;
-  end;
-  now cod(f*g) = d & dom(f*g) = d by A8,CAT_1:42;
-    hence f*g in Hom(d,d);
-    let x;
-    assume
-A11: x in I;
-    then cod(F'/.x) = d by Th67;
-    hence f*g*(F'/.x) = f*(g*(F'/.x)) by A8,CAT_1:43
-      .= f*(F/.x) by A6,A7,A11
-      .= F'/.x by A4,A5,A11;
-  end;
-  hence f*g = fg by A9
-    .= id cod f by A8,A9,A10;
-A12: now
+  then consider fg being Morphism of C such that
+  fg in Hom(d,d) and
+A4: for k st k in Hom(d,d) holds (for x st x in I holds k*(F'/.x) = F'
+  /.x) iff fg = k by A2,Def18;
+  consider f such that
+A5: f in Hom(c,d) and
+A6: for k st k in Hom(c,d) holds (for x st x in I holds k*(F/.x) = F'/.x
+  ) iff f = k by A1,A3,Def18;
+  thus Hom(c,d) <> {} by A5;
+  reconsider f as Morphism of c,d by A5,CAT_1:def 7;
+A7: dom f = c by A5,CAT_1:18;
+A8: now
     set k = id c;
     thus k in Hom(c,c) by CAT_1:55;
     let x;
-    assume x in I;
+    assume
+    x in I;
     then cod(F/.x) = c by Th67;
     hence k*(F/.x) = F/.x by CAT_1:46;
   end;
+A9: now
+    set k = id d;
+    thus k in Hom(d,d) by CAT_1:55;
+    let x;
+    assume
+    x in I;
+    then cod(F'/.x) = d by Th67;
+    hence k*(F'/.x) = F'/.x by CAT_1:46;
+  end;
   doms F = doms F;
-  then consider gf being Morphism of C such that gf in Hom(c,c) and
-A13: for k st k in Hom(c,c) holds
-  (for x st x in I holds k*(F/.x) = F/.x ) iff gf = k by A1,Def18;
-  now cod(g*f) = c & dom(g*f) = c by A8,CAT_1:42;
+  then consider gf being Morphism of C such that
+  gf in Hom(c,c) and
+A10: for k st k in Hom(c,c) holds (for x st x in I holds k*(F/.x) = F/.x
+  ) iff gf = k by A1,Def18;
+  consider g such that
+A11: g in Hom(d,c) and
+A12: for k st k in Hom(d,c) holds (for x st x in I holds k*(F'/.x) = F/.x
+  ) iff g = k by A2,A3,Def18;
+  take f,g;
+A13: cod f = d by A5,CAT_1:18;
+  hence dom g = cod f & cod g = dom f by A11,A7,CAT_1:18;
+A14: dom g = d by A11,CAT_1:18;
+A15: cod g = c by A11,CAT_1:18;
+  now
+    cod(f*g) = d & dom(f*g) = d by A13,A14,A7,A15,CAT_1:42;
+    hence f*g in Hom(d,d);
+    let x;
+    assume
+A16: x in I;
+    then cod(F'/.x) = d by Th67;
+    hence f*g*(F'/.x) = f*(g*(F'/.x)) by A14,A7,A15,CAT_1:43
+      .= f*(F/.x) by A11,A12,A16
+      .= F'/.x by A5,A6,A16;
+  end;
+  hence f*g = fg by A4
+    .= id cod f by A13,A4,A9;
+  now
+    cod(g*f) = c & dom(g*f) = c by A13,A14,A7,A15,CAT_1:42;
     hence g*f in Hom(c,c);
     let x;
     assume
-A14: x in I;
+A17: x in I;
     then cod(F/.x) = c by Th67;
-    hence g*f*(F/.x) = g*(f*(F/.x)) by A8,CAT_1:43
-      .= g*(F'/.x) by A4,A5,A14
-      .= F/.x by A6,A7,A14;
+    hence g*f*(F/.x) = g*(f*(F/.x)) by A13,A14,A7,CAT_1:43
+      .= g*(F'/.x) by A5,A6,A17
+      .= F/.x by A11,A12,A17;
   end;
-  hence g*f = gf by A13
-    .= id dom f by A8,A12,A13;
+  hence g*f = gf by A10
+    .= id dom f by A7,A8,A10;
 end;
 
 theorem Th79:
   for F being Injections_family of c,I st c is_a_coproduct_wrt F &
-  for x1,x2 st x1 in I & x2 in I holds Hom(dom(F/.x1),dom(F/.x2)) <> {}
-  for x st x in I holds F/.x is coretraction
+for x1,x2 st x1 in I & x2 in I holds Hom(dom(F/.x1),dom(F/.x2)) <> {} for x st
+  x in I holds F/.x is coretraction
 proof
   let F be Injections_family of c,I such that
 A1: c is_a_coproduct_wrt F and
-A2: for x1,x2 st x1 in I & x2 in I holds Hom(dom(F/.x1),dom(F/.x2)) <> {};
+A2: for x1,x2 st x1 in I & x2 in I holds Hom(dom(F/.x1),dom(F/.x2)) <>
+  {};
   let x such that
 A3: x in I;
   set d = dom(F/.x);
-  defpred P[set,set] means ($1 = x implies $2 = id d) &
-  ($1 <> x implies $2 in Hom(dom(F/.$1),d));
+  defpred P[set,set] means ($1 = x implies $2 = id d) & ($1 <> x implies $2 in
+  Hom(dom(F/.$1),d));
 A4: for y st y in I holds ex z st z in the carrier' of C & P[y,z]
   proof
     let y;
-    assume y in I;
+    consider z being Element of Hom(dom(F/.y),d);
+    assume
+    y in I;
     then
 A5: Hom(dom(F/.y),d) <> {} by A2,A3;
-    consider z being Element of Hom(dom(F/.y),d);
-A6: z is Morphism of dom(F/.y),d by A5,CAT_1:21;
+    then
+A6: z is Morphism of dom(F/.y),d by CAT_1:21;
     per cases;
     suppose
 A7:   y = x;
       take z = id d;
       thus z in the carrier' of C;
-      thus thesis
-      by A7;
+      thus thesis by A7;
     end;
     suppose
 A8:   y <> x;
       take z;
       thus z in the carrier' of C by A6;
-      thus thesis
-      by A5,A8;
+      thus thesis by A5,A8;
     end;
   end;
   consider F' being Function such that
 A9: dom F' = I & rng F' c= the carrier' of C and
 A10: for y st y in I holds P[y,F'.y] from WELLORD2:sch 1(A4);
-  reconsider F' as Function of I,the carrier' of C by A9,FUNCT_2:def 1
-  ,RELSET_1:11;
+  reconsider F' as Function of I,the carrier' of C by A9,FUNCT_2:def 1 ,
+  RELSET_1:11;
   now
-    now
-      let y;
-      assume
-A11:  y in I;
-      then F'.y = F'/.y & F'.x = F'/.x by A3,Def1;
-      then (y = x implies F'/.y = id d) &
-      (y <> x implies F'/.y in Hom(dom(F/.y),d)) by A10,A11;
-      then cod(F'/.y) = d by CAT_1:18,44;
-      hence (cods F')/.y = d by A11,Def4
-        .= (I-->d)/.y by A11,Th2;
-    end;
-    hence cods F' = I --> d by Th1;
-    hence F' is Injections_family of d,I by Def17;
-    now
-      let y;
-      assume
-A12:  y in I;
-      then F'.y = F'/.y & F'.x = F'/.x by A3,Def1;
-      then (y = x implies F'/.y = id d) &
-      (y <> x implies F'/.y in Hom(dom(F/.y),d)) by A10,A12;
-      then dom(F'/.y) = dom(F/.y) by CAT_1:18,44;
-      hence (doms F')/.y = dom(F/.y) by A12,Def3
-        .= (doms F)/.y by A12,Def3;
-    end;
-    hence doms F = doms F' by Th1;
+    let y;
+    assume
+A11: y in I;
+    then
+A12: F'.y = F'/.y by FUNCT_2:def 14;
+    then
+A13: y <> x implies F'/.y in Hom(dom(F/.y),d) by A10,A11;
+    y = x implies F'/.y = id d by A10,A11,A12;
+    then cod(F'/.y) = d by A13,CAT_1:18,44;
+    hence (cods F')/.y = d by A11,Def4
+      .= (I-->d)/.y by A11,Th2;
   end;
+  then cods F' = I --> d by Th1;
+  then
+A14: F' is Injections_family of d,I by Def17;
+  now
+    let y;
+    assume
+A15: y in I;
+    then
+A16: F'.y = F'/.y by FUNCT_2:def 14;
+    then
+A17: y <> x implies F'/.y in Hom(dom(F/.y),d) by A10,A15;
+    y = x implies F'/.y = id d by A10,A15,A16;
+    then dom(F'/.y) = dom(F/.y) by A17,CAT_1:18,44;
+    hence (doms F')/.y = dom(F/.y) by A15,Def3
+      .= (doms F)/.y by A15,Def3;
+  end;
+  then doms F = doms F' by Th1;
   then consider i such that
-A13: i in Hom(c,d) and
-A14: for k st k in Hom(c,d) holds
-  (for y st y in I holds k*(F/.y) = F'/.y) iff i = k by A1,Def18;
+A18: i in Hom(c,d) and
+A19: for k st k in Hom(c,d) holds (for y st y in I holds k*(F/.y) = F'/.
+  y) iff i = k by A1,A14,Def18;
   take i;
-  thus dom i = c by A13,CAT_1:18
+  thus dom i = c by A18,CAT_1:18
     .= cod(F/.x) by A3,Th67;
-  thus i*(F/.x) = F'/.x by A3,A13,A14
-    .= F'.x by A3,Def1
+  thus i*(F/.x) = F'/.x by A3,A18,A19
+    .= F'.x by A3,FUNCT_2:def 14
     .= id d by A3,A10;
 end;
 
 theorem Th80:
-  for F being Injections_family of a,I
-  st a is_a_coproduct_wrt F & dom f = a & cod f = b & f is invertible
-  holds b is_a_coproduct_wrt f*F
+  for F being Injections_family of a,I st a is_a_coproduct_wrt F &
+  dom f = a & cod f = b & f is invertible holds b is_a_coproduct_wrt f*F
 proof
   let F be Injections_family of a,I such that
 A1: a is_a_coproduct_wrt F and
-A2: dom f = a & cod f = b and
-A3: f is invertible;
-  thus f*F is Injections_family of b,I by A2,Th72;
+A2: dom f = a and
+A3: cod f = b and
+A4: f is invertible;
+  thus f*F is Injections_family of b,I by A2,A3,Th72;
   let c;
-  let F' be Injections_family of c,I such that
-A4: doms(f*F) = doms F';
-  cods F = I-->dom f by A2,Def17;
-  then doms F = doms F' by A4,Th21;
+A5: cods F = I-->dom f by A2,Def17;
+  let F' be Injections_family of c,I;
+  assume
+  doms(f*F) = doms F';
+  then doms F = doms F' by A5,Th21;
   then consider h such that
-A5: h in Hom(a,c) and
-A6: for k st k in Hom(a,c) holds
-  (for x st x in I holds k*(F/.x) = F'/.x) iff h = k by A1,Def18;
+A6: h in Hom(a,c) and
+A7: for k st k in Hom(a,c) holds (for x st x in I holds k*(F/.x) = F'/.x
+  ) iff h = k by A1,Def18;
+A8: dom h = a by A6,CAT_1:18;
   consider g such that
-A7: dom g = cod f & cod g = dom f and
-A8: f*g = id cod f and
-A9: g*f = id dom f by A3,CAT_1:def 12;
-  take hg = h*g;
-A10: dom h = a & cod h = c by A5,CAT_1:18;
-  then cod(h*g) = c & dom(h*g) = b by A2,A7,CAT_1:42;
-  hence hg in Hom(b,c);
-  let k;
-  assume k in Hom(b,c);
+A9: dom g = cod f and
+A10: cod g = dom f and
+A11: f*g = id cod f and
+A12: g*f = id dom f by A4,CAT_1:def 12;
+  cod h = c by A6,CAT_1:18;
   then
-A11: cod k = c & dom k = b by CAT_1:18;
+A13: cod(h*g) = c by A2,A10,A8,CAT_1:42;
+  take hg = h*g;
+  dom(h*g) = b by A2,A3,A9,A10,A8,CAT_1:42;
+  hence hg in Hom(b,c) by A13;
+  let k;
+  assume
+A14: k in Hom(b,c);
+  then
+A15: dom k = b by CAT_1:18;
+A16: cod k = c by A14,CAT_1:18;
   thus (for x st x in I holds k*((f*F)/.x) = F'/.x) implies hg = k
   proof
     assume
-A12: for x st x in I holds k*((f*F)/.x) = F'/.x;
-    now cod(k*f) = c & dom(k*f) = a by A2,A11,CAT_1:42;
+A17: for x st x in I holds k*((f*F)/.x) = F'/.x;
+    now
+      cod(k*f) = c & dom(k*f) = a by A2,A3,A16,A15,CAT_1:42;
       hence k*f in Hom(a,c);
       let x;
       assume
-A13:  x in I;
+A18:  x in I;
       then cod(F/.x) = a by Th67;
-      hence k*f*(F/.x) = k*(f*(F/.x)) by A2,A11,CAT_1:43
-        .= k*((f*F)/.x) by A13,Def8
-        .= F'/.x by A12,A13;
+      hence k*f*(F/.x) = k*(f*(F/.x)) by A2,A3,A15,CAT_1:43
+        .= k*((f*F)/.x) by A18,Def8
+        .= F'/.x by A17,A18;
     end;
-    then k*f*g = h*g by A6;
-    hence hg = k*(id b) by A2,A7,A8,A11,CAT_1:43
-      .= k by A11,CAT_1:47;
+    then k*f*g = h*g by A7;
+    hence hg = k*(id b) by A3,A10,A11,A15,CAT_1:43
+      .= k by A15,CAT_1:47;
   end;
   assume
-A14: hg = k;
+A19: hg = k;
   let x;
   assume
-A15: x in I;
+A20: x in I;
   then
-A16: cod(F/.x) = a by Th67;
+A21: cod(F/.x) = a by Th67;
   then
-A17: cod(f*(F/.x)) = b by A2,CAT_1:42;
-  thus k*((f*F)/.x) = k*(f*(F/.x)) by A15,Def8
-    .= h*(g*(f*(F/.x))) by A2,A7,A10,A14,A17,CAT_1:43
-    .= h*((id dom f)*(F/.x)) by A2,A7,A9,A16,CAT_1:43
-    .= h*(F/.x) by A2,A16,CAT_1:46
-    .= F'/.x by A5,A6,A15;
+A22: cod(f*(F/.x)) = b by A2,A3,CAT_1:42;
+  thus k*((f*F)/.x) = k*(f*(F/.x)) by A20,Def8
+    .= h*(g*(f*(F/.x))) by A2,A3,A9,A10,A8,A19,A22,CAT_1:43
+    .= h*((id dom f)*(F/.x)) by A2,A9,A12,A21,CAT_1:43
+    .= h*(F/.x) by A2,A21,CAT_1:46
+    .= F'/.x by A6,A7,A20;
 end;
 
 theorem Th81:
-  for F being Injections_family of a,{} holds
-  a is_a_coproduct_wrt F iff a is initial
+  for F being Injections_family of a,{} holds a is_a_coproduct_wrt
+  F iff a is initial
 proof
   let F be Injections_family of a,{};
   thus a is_a_coproduct_wrt F implies a is initial
@@ -2374,32 +2497,35 @@ proof
 A1: a is_a_coproduct_wrt F;
     let b;
     consider F' being Injections_family of b,{};
-    doms F = {} & doms F' = {};
+    doms F = {};
     then consider h such that
 A2: h in Hom(a,b) and
-A3: for k st k in Hom(a,b) holds
-    (for x st x in {} holds k*(F/.x) = F'/.x ) iff h = k by A1,Def18; thus
-    Hom(a,b)<>{} by A2;
+A3: for k st k in Hom(a,b) holds (for x st x in {} holds k*(F/.x) = F'
+    /.x ) iff h = k by A1,Def18;
+    thus Hom(a,b)<>{} by A2;
     reconsider f = h as Morphism of a,b by A2,CAT_1:def 7;
     take f;
     let g be Morphism of a,b;
-    g in Hom(a,b) & for x st x in {} holds g*(F/.x) = F'/.x by A2,CAT_1:def 7;
-    hence thesis by A3;
+A4: for x st x in {} holds g*(F/.x) = F'/.x;
+    g in Hom(a,b) by A2,CAT_1:def 7;
+    hence thesis by A3,A4;
   end;
   assume
-A4: a is initial;
+A5: a is initial;
   thus F is Injections_family of a,{};
   let b;
-  let F' be Injections_family of b,{} such that doms F = doms F';
   consider h being Morphism of a,b such that
-A5: for g being Morphism of a,b holds h = g by A4,CAT_1:def 16;
+A6: for g being Morphism of a,b holds h = g by A5,CAT_1:def 16;
+  let F' be Injections_family of b,{} such that
+  doms F = doms F';
   take h;
-  Hom(a,b)<>{} by A4,CAT_1:def 16;
+  Hom(a,b)<>{} by A5,CAT_1:def 16;
   hence h in Hom(a,b) by CAT_1:def 7;
   let k;
-  assume k in Hom(a,b);
+  assume
+  k in Hom(a,b);
   then k is Morphism of a,b by CAT_1:def 7;
-  hence thesis by A5;
+  hence thesis by A6;
 end;
 
 theorem
@@ -2413,39 +2539,39 @@ proof
 A1: doms F = doms F';
   take h = F'/.y;
 A2: y in {y} by TARSKI:def 1;
-  now
-    thus cod h = b by A2,Th67;
-    thus dom h = (doms F)/.y by A1,A2,Def3
-      .= dom(F/.y) by A2,Def3
-      .= dom(id a) by A2,Th2
-      .= a by CAT_1:44;
-  end;
-  hence h in Hom(a,b);
-  let k;
-  assume k in Hom(a,b);
   then
-A3: dom k = a by CAT_1:18;
+A3: cod h = b by Th67;
+  dom h = (doms F)/.y by A1,A2,Def3
+    .= dom(F/.y) by A2,Def3
+    .= dom(id a) by A2,Th2
+    .= a by CAT_1:44;
+  hence h in Hom(a,b) by A3;
+  let k;
+  assume
+  k in Hom(a,b);
+  then
+A4: dom k = a by CAT_1:18;
   thus (for x st x in {y} holds k*(F/.x) = F'/.x) implies h = k
   proof
     assume
-A4: for x st x in {y} holds k*(F/.x) = F'/.x;
-    thus k = k*(id a) by A3,CAT_1:47
+A5: for x st x in {y} holds k*(F/.x) = F'/.x;
+    thus k = k*(id a) by A4,CAT_1:47
       .= k*(F/.y) by A2,Th2
-      .= h by A2,A4;
+      .= h by A2,A5;
   end;
   assume
-A5: h = k;
+A6: h = k;
   let x;
   assume
-A6: x in {y};
-  hence F'/.x = k by A5,TARSKI:def 1
-    .= k*(id a) by A3,CAT_1:47
-    .= k*(F/.x) by A6,Th2;
+A7: x in {y};
+  hence F'/.x = k by A6,TARSKI:def 1
+    .= k*(id a) by A4,CAT_1:47
+    .= k*(F/.x) by A7,Th2;
 end;
 
 theorem
-  for F being Injections_family of a,I st a is_a_coproduct_wrt F &
-  for x st x in I holds dom(F/.x) is initial holds a is initial
+  for F being Injections_family of a,I st a is_a_coproduct_wrt F & for x
+  st x in I holds dom(F/.x) is initial holds a is initial
 proof
   let F be Injections_family of a,I such that
 A1: a is_a_coproduct_wrt F and
@@ -2483,9 +2609,9 @@ A7:   dom(F/.x) is initial by A2;
     then doms F = doms F' by Th1;
     then consider h such that
 A8: h in Hom(a,b) and
-A9: for k st k in Hom(a,b) holds
-    (for x st x in I holds k*(F/.x) = F'/.x) iff h = k by A1,Def18; thus
-    Hom(a,b)<>{} by A8;
+A9: for k st k in Hom(a,b) holds (for x st x in I holds k*(F/.x) = F'
+    /.x) iff h = k by A1,Def18;
+    thus Hom(a,b)<>{} by A8;
     reconsider h as Morphism of a,b by A8,CAT_1:def 7;
     take h;
     let g be Morphism of a,b;
@@ -2493,19 +2619,23 @@ A9: for k st k in Hom(a,b) holds
       thus g in Hom(a,b) by A8,CAT_1:def 7;
       let x;
       set c = dom(F/.x);
+A10:  dom g = a by A8,CAT_1:23;
       assume
-A10:  x in I;
+A11:  x in I;
       then c is initial by A2;
       then consider f being Morphism of c,b such that
-A11:  for f' being Morphism of c,b holds f = f' by CAT_1:def 16;
-      cod g = b & dom g = a & cod(F/.x) = a by A8,A10,Th67,CAT_1:23;
-      then cod(g*(F/.x)) = b & dom(g*(F/.x)) = c by CAT_1:42;
-      then g*(F/.x) in Hom(c,b);
+A12:  for f' being Morphism of c,b holds f = f' by CAT_1:def 16;
+A13:  cod(F/.x) = a by A11,Th67;
       then
-A12:  g*(F/.x) is Morphism of c,b by CAT_1:def 7;
-      F'/.x = init(c,b) by A3,A10;
-      hence F'/.x = f by A11
-        .= g*(F/.x) by A11,A12;
+A14:  dom(g*(F/.x)) = c by A10,CAT_1:42;
+      cod g = b by A8,CAT_1:23;
+      then cod(g*(F/.x)) = b by A10,A13,CAT_1:42;
+      then g*(F/.x) in Hom(c,b) by A14;
+      then
+A15:  g*(F/.x) is Morphism of c,b by CAT_1:def 7;
+      F'/.x = init(c,b) by A3,A11;
+      hence F'/.x = f by A12
+        .= g*(F/.x) by A12,A15;
     end;
     hence h = g by A9;
   end;
@@ -2516,93 +2646,103 @@ definition
   let C,c,i1,i2;
   pred c is_a_coproduct_wrt i1,i2 means
   :Def19:
-  cod i1 = c & cod i2 = c &
-  for d,f,g st f in Hom(dom i1,d) & g in Hom(dom i2,d) ex h st h in Hom(c,d) &
-  for k st k in Hom(c,d) holds k*i1 = f & k*i2 = g iff h = k;
+  cod i1 = c & cod i2 = c & for
+d,f,g st f in Hom(dom i1,d) & g in Hom(dom i2,d) ex h st h in Hom(c,d) & for k
+  st k in Hom(c,d) holds k*i1 = f & k*i2 = g iff h = k;
 end;
 
 theorem
   c is_a_product_wrt p1,p2 iff c opp is_a_coproduct_wrt p1 opp, p2 opp
 proof
   set i1 = p1 opp,i2 = p2 opp;
-  thus c is_a_product_wrt p1,p2
-  implies c opp is_a_coproduct_wrt p1 opp, p2 opp
+  thus c is_a_product_wrt p1,p2 implies c opp is_a_coproduct_wrt p1 opp, p2
+  opp
   proof
     assume that
 A1: dom p1 = c & dom p2 = c and
-A2: for d,f,g st f in Hom(d,cod p1) & g in Hom(d,cod p2)
-    ex h st h in Hom(d,c) &
-    for k st k in Hom(d,c) holds p1*k = f & p2*k = g iff h = k;
+A2: for d,f,g st f in Hom(d,cod p1) & g in Hom(d,cod p2) ex h st h in
+    Hom(d,c) & for k st k in Hom(d,c) holds p1*k = f & p2*k = g iff h = k;
     dom p1 = c opp & dom p2 = c opp by A1,OPPCAT_1:def 2;
     hence
 A3: cod i1 = c opp & cod i2 = c opp by OPPCAT_1:9;
     let d be Object of C opp, f,g be Morphism of C opp;
-    assume f in Hom(dom i1,d) & g in Hom(dom i2,d);
-    then opp f in Hom(opp d, opp(dom i1)) & opp g in Hom(opp d,opp(dom i2))
-    by OPPCAT_1:14;
-    then opp f in Hom(opp d, cod opp i1) & opp g in Hom(opp d,cod opp i2)
-    by OPPCAT_1:12;
-    then opp f in Hom(opp d, cod p1) & opp g in Hom(opp d,cod p2)
-    by OPPCAT_1:7;
+    assume that
+A4: f in Hom(dom i1,d) and
+A5: g in Hom(dom i2,d);
+    opp g in Hom(opp d,opp(dom i2)) by A5,OPPCAT_1:14;
+    then opp g in Hom(opp d,cod opp i2) by OPPCAT_1:12;
+    then
+A6: opp g in Hom(opp d,cod p2) by OPPCAT_1:7;
+    opp f in Hom(opp d, opp(dom i1)) by A4,OPPCAT_1:14;
+    then opp f in Hom(opp d, cod opp i1) by OPPCAT_1:12;
+    then opp f in Hom(opp d, cod p1) by OPPCAT_1:7;
     then consider h such that
-A4: h in Hom(opp d,c) and
-A5: for k st k in Hom(opp d,c)
-    holds p1*k = opp f & p2*k = opp g iff h = k by A2;
+A7: h in Hom(opp d,c) and
+A8: for k st k in Hom(opp d,c) holds p1*k = opp f & p2*k = opp g iff
+    h = k by A2,A6;
     take h opp;
-    h opp in Hom(c opp,(opp d) opp) by A4,OPPCAT_1:13;
+    h opp in Hom(c opp,(opp d) opp) by A7,OPPCAT_1:13;
     hence h opp in Hom(c opp,d) by OPPCAT_1:5;
     let k be Morphism of C opp;
     assume
-A6: k in Hom(c opp,d);
+A9: k in Hom(c opp,d);
     then opp k in Hom(opp d,opp(c opp)) by OPPCAT_1:14;
     then opp k in Hom(opp d,c) by OPPCAT_1:4;
-    then p1*(opp k) = opp f & p2*(opp k) = opp g iff h = opp k by A5;
-    then p1*(opp k) = f opp & p2*(opp k) = g opp iff h = k opp
-    by OPPCAT_1:def 5;
+    then p1*(opp k) = opp f & p2*(opp k) = opp g iff h = opp k by A8;
+    then p1*(opp k) = f opp & p2*(opp k) = g opp iff h = k opp by
+    OPPCAT_1
+    :def 5;
     then p1*(opp k) = f & p2*(opp k) = g iff h = k by OPPCAT_1:def 4;
-    then ((opp i1)*(opp k) = f & (opp i2)*(opp k) = g iff h opp = k)
-    & dom k = c opp by A6,CAT_1:18,OPPCAT_1:7,def 4;
-    then opp(k*i1) = f & opp(k*i2) = g iff h opp = k by A3,OPPCAT_1:19;
+    then
+A10: (opp i1)*(opp k) = f & (opp i2)*(opp k) = g iff h opp = k by
+    OPPCAT_1:7,def 4;
+    dom k = c opp by A9,CAT_1:18;
+    then opp(k*i1) = f & opp(k*i2) = g iff h opp = k by A3,A10,
+    OPPCAT_1:19;
     then (k*i1)opp = f & (k*i2)opp = g iff h opp = k by OPPCAT_1:def 5;
     hence thesis by OPPCAT_1:def 4;
   end;
   assume that
-A7: cod i1 = c opp & cod i2 = c opp and
-A8: for d being Object of C opp, f,g being Morphism of C opp
-  st f in Hom(dom i1,d) & g in Hom(dom i2,d)
-  ex h being Morphism of C opp st h in Hom(c opp,d) &
-  for k being Morphism of C opp
-  st k in Hom(c opp,d) holds k*i1 = f & k*i2 = g iff h = k;
-  dom p1 = c opp & dom p2 = c opp by A7,OPPCAT_1:9;
-  hence
-A9: dom p1 = c & dom p2 = c by OPPCAT_1:def 2;
+A11: cod i1 = c opp & cod i2 = c opp and
+A12: for d being Object of C opp, f,g being Morphism of C opp st f in
+  Hom(dom i1,d) & g in Hom(dom i2,d) ex h being Morphism of C opp st h in Hom(c
+opp,d) & for k being Morphism of C opp st k in Hom(c opp,d) holds k*i1 = f & k*
+  i2 = g iff h = k;
+A13: dom p1 = c opp & dom p2 = c opp by A11,OPPCAT_1:9;
+  hence dom p1 = c & dom p2 = c by OPPCAT_1:def 2;
   let d,f,g;
-  assume f in Hom(d,cod p1) & g in Hom(d,cod p2);
-  then f opp in Hom((cod p1) opp,d opp) & g opp in Hom((cod p2)opp,d opp)
-  by OPPCAT_1:13;
-  then f opp in Hom(dom (p1 opp),d opp) & g opp in Hom(dom (p2 opp),d opp)
-  by OPPCAT_1:11;
+  assume that
+A14: f in Hom(d,cod p1) and
+A15: g in Hom(d,cod p2);
+  g opp in Hom((cod p2)opp,d opp) by A15,OPPCAT_1:13;
+  then
+A16: g opp in Hom(dom (p2 opp),d opp) by OPPCAT_1:11;
+  f opp in Hom((cod p1) opp,d opp) by A14,OPPCAT_1:13;
+  then f opp in Hom(dom (p1 opp),d opp) by OPPCAT_1:11;
   then consider h being Morphism of C opp such that
-A10: h in Hom(c opp,d opp) and
-A11: for k being Morphism of C opp st k in Hom(c opp,d opp)
-  holds k*i1 = f opp & k*i2 = g opp iff h = k by A8;
+A17: h in Hom(c opp,d opp) and
+A18: for k being Morphism of C opp st k in Hom(c opp,d opp) holds k*i1 =
+  f opp & k*i2 = g opp iff h = k by A12,A16;
   take opp h;
   h = (opp h) opp by OPPCAT_1:8;
-  hence opp h in Hom(d,c) by A10,OPPCAT_1:13;
+  hence opp h in Hom(d,c) by A17,OPPCAT_1:13;
   let k;
   assume
-A12: k in Hom(d,c);
+A19: k in Hom(d,c);
   then k opp in Hom(c opp,d opp) by OPPCAT_1:13;
-  then (k opp)*i1 = f opp & (k opp)*i2 = g opp iff h = k opp by A11;
-  then ((k opp)*i1 = f & (k opp)*i2 = g iff h opp = k opp) & cod k = c
-  by A12,CAT_1:18,OPPCAT_1:def 4;
-  then (p1*k) opp = f & (p2*k) opp = g iff h opp = k by A9,OPPCAT_1:17,def 4;
+  then (k opp)*i1 = f opp & (k opp)*i2 = g opp iff h = k opp by A18;
+  then
+A20: (k opp)*i1 = f & (k opp)*i2 = g iff h opp = k opp by OPPCAT_1:def
+  4;
+  cod k = c by A19,CAT_1:18;
+  then (p1*k) opp = f & (p2*k) opp = g iff h opp = k by A13,A20,OPPCAT_1:
+  17 ,def 2,def 4;
   hence thesis by OPPCAT_1:def 4,def 5;
 end;
 
 theorem Th85:
-  x1 <> x2 implies
-  (c is_a_coproduct_wrt i1,i2 iff c is_a_coproduct_wrt (x1,x2)-->(i1,i2))
+  x1 <> x2 implies (c is_a_coproduct_wrt i1,i2 iff c
+  is_a_coproduct_wrt (x1,x2)-->(i1,i2))
 proof
   set F = (x1,x2)-->(i1,i2), I = {x1,x2};
   assume
@@ -2617,206 +2757,245 @@ A2: c is_a_coproduct_wrt i1,i2;
     let F' be Injections_family of b,I such that
 A3: doms F = doms F';
     set f = F'/.x1, g = F'/.x2;
-A4: x1 in I & x2 in I by TARSKI:def 2;
-    then (doms F)/.x1 = dom(F/.x1) & (doms F)/.x2 = dom(F/.x2) by Def3;
-    then dom f = dom(F/.x1) & dom g = dom(F/.x2) by A3,A4,Def3;
-    then dom f = dom i1 & dom g = dom i2 & cod f = b & cod g = b
-    by A1,A4,Th7,Th67;
-    then f in Hom(dom i1,b) & g in Hom(dom i2,b);
+A4: x1 in I by TARSKI:def 2;
+    then (doms F)/.x1 = dom(F/.x1) by Def3;
+    then dom f = dom(F/.x1) by A3,A4,Def3;
+    then
+A5: dom f = dom i1 by A1,Th7;
+A6: x2 in I by TARSKI:def 2;
+    then (doms F)/.x2 = dom(F/.x2) by Def3;
+    then dom g = dom(F/.x2) by A3,A6,Def3;
+    then
+A7: dom g = dom i2 by A1,Th7;
+    cod g = b by A6,Th67;
+    then
+A8: g in Hom(dom i2,b) by A7;
+    cod f = b by A4,Th67;
+    then f in Hom(dom i1,b) by A5;
     then consider h such that
-A5: h in Hom(c,b) and
-A6: for k st k in Hom(c,b) holds k*i1 = f & k*i2 = g iff h = k by A2,Def19;
+A9: h in Hom(c,b) and
+A10: for k st k in Hom(c,b) holds k*i1 = f & k*i2 = g iff h = k by A2,
+    A8, Def19;
     take h;
-    thus h in Hom(c,b) by A5;
+    thus h in Hom(c,b) by A9;
     let k such that
-A7: k in Hom(c,b);
+A11: k in Hom(c,b);
     thus (for x st x in I holds k*(F/.x) = F'/.x ) implies h = k
     proof
-      assume for x st x in I holds k*(F/.x) = F'/.x;
-      then k*(F/.x1) = f & k*(F/.x2) = g by A4;
-      then k*i1 = f & k*i2 = g by A1,Th7;
-      hence thesis by A6,A7;
+      assume
+A12:  for x st x in I holds k*(F/.x) = F'/.x;
+      then k*(F/.x2) = g by A6;
+      then
+A13:  k*i2 = g by A1,Th7;
+      k*(F/.x1) = f by A4,A12;
+      then k*i1 = f by A1,Th7;
+      hence thesis by A10,A11,A13;
     end;
     assume
-A8: h = k;
-    let x such that
-A9: x in I;
-    k*i1 = f & k*i2 = g by A6,A7,A8;
-    then k*(F/.x1) = f & k*(F/.x2) = g & (x = x1 or x = x2)
-    by A1,A9,Th7,TARSKI:def 2;
-    hence thesis;
+    h = k;
+    then
+A14: k*i1 = f & k*i2 = g by A10,A11;
+    let x;
+    assume
+    x in I;
+    then x = x1 or x = x2 by TARSKI:def 2;
+    hence thesis by A1,A14,Th7;
   end;
   assume
-A10: c is_a_coproduct_wrt F;
-  then x1 in I & x2 in I & F is Injections_family of c,I by Def18,TARSKI:def 2;
-  then cod(F/.x1) = c & cod(F/.x2) = c by Th67;
-  hence cod i1 = c & cod i2 = c by A1,Th7;
+A15: c is_a_coproduct_wrt F;
+  then
+A16: F is Injections_family of c,I by Def18;
+  x2 in I by TARSKI:def 2;
+  then
+A17: cod(F/.x2) = c by A16,Th67;
+  x1 in I by TARSKI:def 2;
+  then cod(F/.x1) = c by A16,Th67;
+  hence cod i1 = c & cod i2 = c by A1,A17,Th7;
   let d,f,g such that
-A11: f in Hom(dom i1,d) and
-A12: g in Hom(dom i2,d);
-  cod f = d & cod g = d by A11,A12,CAT_1:18;
+A18: f in Hom(dom i1,d) and
+A19: g in Hom(dom i2,d);
+  cod f = d & cod g = d by A18,A19,CAT_1:18;
   then reconsider F' = (x1,x2) --> (f,g) as Injections_family of d,I by Th70;
   doms F = (x1,x2)-->(dom i1,dom i2) by Th10
-    .= (x1,x2)-->(dom f,dom i2) by A11,CAT_1:18
-    .= (x1,x2)-->(dom f,dom g) by A12,CAT_1:18
+    .= (x1,x2)-->(dom f,dom i2) by A18,CAT_1:18
+    .= (x1,x2)-->(dom f,dom g) by A19,CAT_1:18
     .= doms F' by Th10;
   then consider h such that
-A13: h in Hom(c,d) and
-A14: for k st k in Hom(c,d) holds
-  (for x st x in I holds k*(F/.x) = F'/.x ) iff h = k by A10,Def18;
+A20: h in Hom(c,d) and
+A21: for k st k in Hom(c,d) holds (for x st x in I holds k*(F/.x) = F'/.
+  x ) iff h = k by A15,Def18;
   take h;
-  thus h in Hom(c,d) by A13;
+  thus h in Hom(c,d) by A20;
   let k such that
-A15: k in Hom(c,d);
+A22: k in Hom(c,d);
   thus k*i1 = f & k*i2 = g implies h = k
   proof
     assume
-A16: k*i1 = f & k*i2 = g;
+A23: k*i1 = f & k*i2 = g;
     now
       let x;
-      assume x in I;
+      assume
+      x in I;
       then x = x1 or x = x2 by TARSKI:def 2;
       then F/.x = i1 & F'/.x = f or F/.x = i2 & F'/.x = g by A1,Th7;
-      hence k*(F/.x) = F'/.x by A16;
+      hence k*(F/.x) = F'/.x by A23;
     end;
-    hence thesis by A14,A15;
+    hence thesis by A21,A22;
   end;
-  assume h = k;
-  then x1 in I & x2 in I & for x st x in I holds k*(F/.x) = F'/.x
-  by A14,A15,TARSKI:def 2;
-  then k*(F/.x1) = F'/.x1 & k*(F/.x2) = F'/.x2;
-  then k*(F/.x1) = f & k*(F/.x2) = g by A1,Th7;
-  hence thesis by A1,Th7;
+  assume
+A24: h = k;
+  x2 in I by TARSKI:def 2;
+  then k*(F/.x2) = F'/.x2 by A21,A22,A24;
+  then
+A25: k*(F/.x2) = g by A1,Th7;
+  x1 in I by TARSKI:def 2;
+  then k*(F/.x1) = F'/.x1 by A21,A22,A24;
+  then k*(F/.x1) = f by A1,Th7;
+  hence thesis by A1,A25,Th7;
 end;
 
 theorem
-  c is_a_coproduct_wrt i1,i2 & d is_a_coproduct_wrt j1,j2 &
-  dom i1 = dom j1 & dom i2 = dom j2 implies c,d are_isomorphic
+  c is_a_coproduct_wrt i1,i2 & d is_a_coproduct_wrt j1,j2 & dom i1 = dom
+  j1 & dom i2 = dom j2 implies c,d are_isomorphic
 proof
   assume that
 A1: c is_a_coproduct_wrt i1,i2 and
 A2: d is_a_coproduct_wrt j1,j2 and
 A3: dom i1 = dom j1 & dom i2 = dom j2;
   set I = {0,1}, F = (0,1)-->(i1,i2), F' = (0,1)-->(j1,j2);
-  now cod i1 = c & cod i2 = c & cod j1 = d & cod j2 = d by A1,A2,Def19;
-    hence F is Injections_family of c,I & F' is Injections_family of d,I
-    by Th70;
-    thus c is_a_coproduct_wrt F & d is_a_coproduct_wrt F' by A1,A2,Th85;
-    thus doms F = (0,1)-->(dom j1,dom j2) by A3,Th10
-      .= doms F' by Th10;
-  end;
-  hence thesis by Th78;
+A4: c is_a_coproduct_wrt F & d is_a_coproduct_wrt F' by A1,A2,Th85;
+  cod j1 = d & cod j2 = d by A2,Def19;
+  then
+A5: F' is Injections_family of d,I by Th70;
+  cod i1 = c & cod i2 = c by A1,Def19;
+  then
+A6: F is Injections_family of c,I by Th70;
+  doms F = (0,1)-->(dom j1,dom j2) by A3,Th10
+    .= doms F' by Th10;
+  hence thesis by A6,A5,A4,Th78;
 end;
 
 theorem
-  Hom(a,c) <> {} & Hom(b,c) <> {} implies
-  for i1 being Morphism of a,c, i2 being Morphism of b,c
-  holds c is_a_coproduct_wrt i1,i2 iff
-  for d st Hom(a,d)<>{} & Hom(b,d)<>{} holds Hom(c,d) <> {} &
-  for f being Morphism of a,d, g being Morphism of b,d
-  ex h being Morphism of c,d st
-  for k being Morphism of c,d holds k*i1 = f & k*i2 = g iff h = k
+  Hom(a,c) <> {} & Hom(b,c) <> {} implies for i1 being Morphism of a,c,
+i2 being Morphism of b,c holds c is_a_coproduct_wrt i1,i2 iff for d st Hom(a,d)
+<>{} & Hom(b,d)<>{} holds Hom(c,d) <> {} & for f being Morphism of a,d, g being
+Morphism of b,d ex h being Morphism of c,d st for k being Morphism of c,d holds
+  k*i1 = f & k*i2 = g iff h = k
 proof
-  assume
-A1: Hom(a,c) <> {} & Hom(b,c) <> {};
+  assume that
+A1: Hom(a,c) <> {} and
+A2: Hom(b,c) <> {};
   let i1 be Morphism of a,c, i2 be Morphism of b,c;
-  thus c is_a_coproduct_wrt i1,i2 implies
-  for d st Hom(a,d)<>{} & Hom(b,d)<>{} holds Hom(c,d) <> {} &
-  for f being Morphism of a,d, g being Morphism of b,d
-  ex h being Morphism of c,d st
-  for k being Morphism of c,d holds k*i1 = f & k*i2 = g iff h = k
+  thus c is_a_coproduct_wrt i1,i2 implies for d st Hom(a,d)<>{} & Hom(b,d)<>{}
+holds Hom(c,d) <> {} & for f being Morphism of a,d, g being Morphism of b,d ex
+h being Morphism of c,d st for k being Morphism of c,d holds k*i1 = f & k*i2 =
+  g iff h = k
   proof
-    assume that cod i1 = c & cod i2 = c and
-A2: for d,f,g st f in Hom(dom i1,d) & g in Hom(dom i2,d)
-    ex h st h in Hom(c,d) &
-    for k st k in Hom(c,d) holds k*i1 = f & k*i2 = g iff h = k;
+    assume that
+    cod i1 = c and
+    cod i2 = c and
+A3: for d,f,g st f in Hom(dom i1,d) & g in Hom(dom i2,d) ex h st h in
+    Hom(c,d) & for k st k in Hom(c,d) holds k*i1 = f & k*i2 = g iff h = k;
     let d such that
-A3: Hom(a,d)<>{} & Hom(b,d)<>{};
+A4: Hom(a,d)<>{} and
+A5: Hom(b,d)<>{};
     consider f being Morphism of a,d, g being Morphism of b,d;
-A4: dom i1 = a & dom i2 = b by A1,CAT_1:23;
-    then f in Hom(dom i1,d) & g in Hom(dom i2,d) by A3,CAT_1:def 7;
+A6: dom i2 = b by A2,CAT_1:23;
     then
-A5: ex h st h in Hom(c,d) &
-    for k st k in Hom(c,d) holds k*i1 = f & k*i2 = g iff h = k by A2;
+A7: g in Hom(dom i2,d) by A5,CAT_1:def 7;
+A8: dom i1 = a by A1,CAT_1:23;
+    then f in Hom(dom i1,d) by A4,CAT_1:def 7;
+    then
+A9: ex h st h in Hom(c,d) & for k st k in Hom(c,d) holds k*i1 = f & k*i2
+    = g iff h = k by A3,A7;
     hence Hom(c,d) <> {};
     let f be Morphism of a,d, g be Morphism of b,d;
-    f in Hom(dom i1,d) & g in Hom(dom i2,d) by A3,A4,CAT_1:def 7;
+A10: g in Hom(dom i2,d) by A5,A6,CAT_1:def 7;
+    f in Hom(dom i1,d) by A4,A8,CAT_1:def 7;
     then consider h such that
-A6: h in Hom(c,d) and
-A7: for k st k in Hom(c,d) holds k*i1 = f & k*i2 = g iff h = k by A2;
-    reconsider h as Morphism of c,d by A6,CAT_1:def 7;
+A11: h in Hom(c,d) and
+A12: for k st k in Hom(c,d) holds k*i1 = f & k*i2 = g iff h = k by A3,
+    A10;
+    reconsider h as Morphism of c,d by A11,CAT_1:def 7;
     take h;
     let k be Morphism of c,d;
-    k*i1 = k*(i1 qua Morphism of C) & k*i2 = k*(i2 qua Morphism of C) &
-    k in Hom(c,d) by A1,A5,CAT_1:def 7,def 13;
-    hence thesis by A7;
+A13: k in Hom(c,d) by A9,CAT_1:def 7;
+    k*i1 = k*(i1 qua Morphism of C) & k*i2 = k*(i2 qua Morphism of C) by
+    A1,A2,A9,CAT_1:def 13;
+    hence thesis by A12,A13;
   end;
   assume
-A8: for d st Hom(a,d)<>{} & Hom(b,d)<>{} holds Hom(c,d) <> {} &
-  for f being Morphism of a,d, g being Morphism of b,d
-  ex h being Morphism of c,d st
+A14: for d st Hom(a,d)<>{} & Hom(b,d)<>{} holds Hom(c,d) <> {} & for f
+  being Morphism of a,d, g being Morphism of b,d ex h being Morphism of c,d st
   for k being Morphism of c,d holds k*i1 = f & k*i2 = g iff h = k;
-  thus cod i1 = c & cod i2 = c by A1,CAT_1:23;
+  thus cod i1 = c & cod i2 = c by A1,A2,CAT_1:23;
   let d,f,g such that
-A9: f in Hom(dom i1,d) and
-A10: g in Hom(dom i2,d);
-A11: dom i1 = a & dom i2 = b by A1,CAT_1:23;
-  then f is Morphism of a,d & g is Morphism of b,d &
-  Hom(a,d) <> {} & Hom(b,d) <> {} by A9,A10,CAT_1:def 7;
+A15: f in Hom(dom i1,d) and
+A16: g in Hom(dom i2,d);
+A17: Hom(a,d) <> {} by A1,A15,CAT_1:23;
+A18: dom i1 = a by A1,CAT_1:23;
+  then
+A19: f is Morphism of a,d by A15,CAT_1:def 7;
+A20: dom i2 = b by A2,CAT_1:23;
+  then g is Morphism of b,d by A16,CAT_1:def 7;
   then consider h being Morphism of c,d such that
-A12: for k being Morphism of c,d holds k*i1 = f & k*i2 = g iff h = k by A8;
+A21: for k being Morphism of c,d holds k*i1 = f & k*i2 = g iff h = k by
+  A14,A16,A20,A19,A17;
   reconsider h' = h as Morphism of C;
   take h';
-A13: Hom(c,d) <> {} by A8,A9,A10,A11;
+A22: Hom(c,d) <> {} by A14,A15,A16,A18,A20;
   hence h' in Hom(c,d) by CAT_1:def 7;
   let k;
-  assume k in Hom(c,d);
+  assume
+  k in Hom(c,d);
   then reconsider k' = k as Morphism of c,d by CAT_1:def 7;
-  k*i1 = k'*i1 & k*i2 = k'*i2 by A1,A13,CAT_1:def 13;
-  hence thesis by A12;
+  k*i1 = k'*i1 & k*i2 = k'*i2 by A1,A2,A22,CAT_1:def 13;
+  hence thesis by A21;
 end;
 
 theorem
-  c is_a_coproduct_wrt i1,i2 &
-  Hom(dom i1,dom i2) <> {} & Hom(dom i2,dom i1) <> {}
-  implies i1 is coretraction & i2 is coretraction
+  c is_a_coproduct_wrt i1,i2 & Hom(dom i1,dom i2) <> {} & Hom(dom i2,dom
+  i1) <> {} implies i1 is coretraction & i2 is coretraction
 proof
   assume that
 A1: c is_a_coproduct_wrt i1,i2 and
 A2: Hom(dom i1,dom i2) <> {} & Hom(dom i2,dom i1) <> {};
   set I = {0,1}, F = (0,1)-->(i1,i2);
-A3: F/.0 = i1 & F/.1 = i2 by Th7;
-  now cod i1 = c & cod i2 = c by A1,Def19;
+A3: F/.0 = i1 by Th7;
+A4: now
+    cod i1 = c & cod i2 = c by A1,Def19;
     hence F is Injections_family of c,I by Th70;
     thus c is_a_coproduct_wrt F by A1,Th85;
     let x1,x2;
-    assume x1 in I & x2 in I;
-    then (x1 = 0 or x1 = 1) & (x2 = 0 or x2 = 1) by TARSKI:def 2;
-    hence Hom(dom(F/.x1),dom(F/.x2)) <> {} by A2,A3,CAT_1:56;
+    assume that
+A5: x1 in I and
+A6: x2 in I;
+A7: x2 = 0 or x2 = 1 by A6,TARSKI:def 2;
+    x1 = 0 or x1 = 1 by A5,TARSKI:def 2;
+    hence Hom(dom(F/.x1),dom(F/.x2)) <> {} by A2,A3,A7,Th7,CAT_1:56;
   end;
-  then 0 in I & 1 in I & for x st x in I holds F/.x is coretraction
-  by Th79,TARSKI:def 2;
-  hence thesis by A3;
+A8: 1 in I by TARSKI:def 2;
+  F/.1 = i2 & 0 in I by Th7,TARSKI:def 2;
+  hence thesis by A3,A4,A8,Th79;
 end;
 
 theorem Th89:
-  c is_a_coproduct_wrt i1,i2 & h in Hom(c,c) & h*i1 = i1 & h*i2 = i2
-  implies h = id c
+  c is_a_coproduct_wrt i1,i2 & h in Hom(c,c) & h*i1 = i1 & h*i2 =
+  i2 implies h = id c
 proof
   assume that
-A1: cod i1 = c and
-A2: cod i2 = c and
-A3: for d,f,g st f in Hom(dom i1,d) & g in Hom(dom i2,d)
-  ex h st h in Hom(c,d) &
-  for k st k in Hom(c,d) holds k*i1 = f & k*i2 = g iff h = k and
-A4: h in Hom(c,c) and
-A5: h*i1 = i1 & h*i2 = i2;
-  i1 in Hom(dom i1,c) & i2 in Hom(dom i2,c) by A1,A2;
-  then consider i such that i in Hom(c,c) and
-A6: for k st k in Hom(c,c) holds k*i1 = i1 & k*i2 = i2 iff i = k by A3;
-  id c in Hom(c,c) & (id c)*i1 = i1 & (id c)*i2 = i2 by A1,A2,CAT_1:46,55;
-  hence id c = i by A6
-    .= h by A4,A5,A6;
+A1: cod i1 = c & cod i2 = c and
+A2: for d,f,g st f in Hom(dom i1,d) & g in Hom(dom i2,d) ex h st h in
+  Hom(c,d) & for k st k in Hom(c,d) holds k*i1 = f & k*i2 = g iff h = k and
+A3: h in Hom(c,c) & h*i1 = i1 & h*i2 = i2;
+  i1 in Hom(dom i1,c) & i2 in Hom(dom i2,c) by A1;
+  then consider i such that
+  i in Hom(c,c) and
+A4: for k st k in Hom(c,c) holds k*i1 = i1 & k*i2 = i2 iff i = k by A2;
+A5: id c in Hom(c,c) by CAT_1:55;
+  (id c)*i1 = i1 & (id c)*i2 = i2 by A1,CAT_1:46;
+  hence id c = i by A4,A5
+    .= h by A3,A4;
 end;
 
 theorem
@@ -2827,82 +3006,95 @@ proof
 A1: c is_a_coproduct_wrt i1,i2 and
 A2: dom f = c & cod f = d & f is invertible;
   cod i1 = c & cod i2 = c by A1,Def19;
-  then c is_a_coproduct_wrt (0,1)-->(i1,i2) &
-  (0,1)-->(i1,i2) is Injections_family of c,{0,1} by A1,Th70,Th85;
-  then d is_a_coproduct_wrt f*((0,1)-->(i1,i2)) by A2,Th80;
+  then
+A3: (0,1)-->(i1,i2) is Injections_family of c,{0,1} by Th70;
+  c is_a_coproduct_wrt (0,1)-->(i1,i2) by A1,Th85;
+  then d is_a_coproduct_wrt f*((0,1)-->(i1,i2)) by A2,A3,Th80;
   then d is_a_coproduct_wrt (0,1)-->(f*i1,f*i2) by Th19;
   hence thesis by Th85;
 end;
 
 theorem
-  c is_a_coproduct_wrt i1,i2 & dom i2 is initial
-  implies dom i1,c are_isomorphic
+  c is_a_coproduct_wrt i1,i2 & dom i2 is initial implies dom i1,c
+  are_isomorphic
 proof
   set a = dom i1, b = dom i2;
   assume that
 A1: c is_a_coproduct_wrt i1,i2 and
 A2: b is initial;
-A3: cod i1 = c & cod i2 = c by A1,Def19;
-  hence Hom(a,c)<>{} by CAT_1:19;
-  reconsider i = i1 as Morphism of a,c by A3,CAT_1:22;
-  take i;
   set f = id(a),g = init(b,a);
   cod g = a & dom g = b by A2,Th42;
   then f in Hom(a,a) & g in Hom(b,a) by CAT_1:55;
   then consider h such that
-A4: h in Hom(c,a) and
-A5: for k st k in Hom(c,a) holds k*i1 = f & k*i2 = g iff h = k by A1,Def19;
+A3: h in Hom(c,a) and
+A4: for k st k in Hom(c,a) holds k*i1 = f & k*i2 = g iff h = k by A1,
+  Def19;
+A5: cod h = a by A3,CAT_1:18;
+A6: cod i1 = c by A1,Def19;
+  then reconsider i = i1 as Morphism of a,c by CAT_1:22;
+A7: dom h = c by A3,CAT_1:18;
+  then
+A8: dom(i*h) = c by A5,CAT_1:42;
+A9: cod i2 = c by A1,Def19;
+  then
+A10: dom(i*h*i2) = b by A8,CAT_1:42;
+A11: cod(i*h) = c by A6,A5,CAT_1:42;
+  then
+A12: i*h in Hom(c,c) by A8;
+  cod(i*h*i2) = c by A9,A11,A8,CAT_1:42;
+  then
+A13: i*h*i2 = init(b,c) by A2,A10,Th43
+    .= i2 by A2,A9,Th43;
+  thus Hom(a,c)<>{} by A6,CAT_1:19;
+  take i;
   take h;
-  thus dom h = cod i & cod h = dom i by A3,A4,CAT_1:18;
-  now
-A6: cod h = a & dom h = c by A4,CAT_1:18;
-    then
-A7: cod(i*h) = c & dom(i*h) = c by A3,CAT_1:42;
-    hence i*h in Hom(c,c);
-    thus i*h*i1 = i*(h*i1) by A3,A6,CAT_1:43
-      .= i*(id dom i) by A4,A5
-      .= i by CAT_1:47;
-    cod(i*h*i2) = c & dom(i*h*i2) = b by A3,A7,CAT_1:42;
-    hence i*h*i2 = init(b,c) by A2,Th43
-      .= i2 by A2,A3,Th43;
-  end;
-  hence i*h = id cod i by A1,A3,Th89;
-  thus id dom i = h*i by A4,A5;
+  thus dom h = cod i & cod h = dom i by A6,A3,CAT_1:18;
+  i*h*i1 = i*(h*i1) by A6,A5,A7,CAT_1:43
+    .= i*(id dom i) by A3,A4
+    .= i by CAT_1:47;
+  hence i*h = id cod i by A1,A6,A13,A12,Th89;
+  thus id dom i = h*i by A3,A4;
 end;
 
 theorem
-  c is_a_coproduct_wrt i1,i2 & dom i1 is initial
-  implies dom i2,c are_isomorphic
+  c is_a_coproduct_wrt i1,i2 & dom i1 is initial implies dom i2,c
+  are_isomorphic
 proof
   set a = dom i1, b = dom i2;
   assume that
 A1: c is_a_coproduct_wrt i1,i2 and
 A2: a is initial;
-A3: cod i1 = c & cod i2 = c by A1,Def19;
-  hence Hom(b,c)<>{} by CAT_1:19;
-  reconsider i = i2 as Morphism of b,c by A3,CAT_1:22;
-  take i;
   set f = id(b),g = init(a,b);
   cod g = b & dom g = a by A2,Th42;
   then f in Hom(b,b) & g in Hom(a,b) by CAT_1:55;
   then consider h such that
-A4: h in Hom(c,b) and
-A5: for k st k in Hom(c,b) holds k*i1 = g & k*i2 = f iff h = k by A1,Def19;
+A3: h in Hom(c,b) and
+A4: for k st k in Hom(c,b) holds k*i1 = g & k*i2 = f iff h = k by A1,
+  Def19;
+A5: cod h = b by A3,CAT_1:18;
+A6: cod i2 = c by A1,Def19;
+  then reconsider i = i2 as Morphism of b,c by CAT_1:22;
+A7: dom h = c by A3,CAT_1:18;
+  then
+A8: dom(i*h) = c by A5,CAT_1:42;
+A9: cod i1 = c by A1,Def19;
+  then
+A10: dom(i*h*i1) = a by A8,CAT_1:42;
+A11: cod(i*h) = c by A6,A5,CAT_1:42;
+  then
+A12: i*h in Hom(c,c) by A8;
+  cod(i*h*i1) = c by A9,A11,A8,CAT_1:42;
+  then
+A13: i*h*i1 = init(a,c) by A2,A10,Th43
+    .= i1 by A2,A9,Th43;
+  thus Hom(b,c)<>{} by A6,CAT_1:19;
+  take i;
   take h;
-  thus dom h = cod i & cod h = dom i by A3,A4,CAT_1:18;
-  now
-A6: cod h = b & dom h = c by A4,CAT_1:18;
-    then
-A7: cod(i*h) = c & dom(i*h) = c by A3,CAT_1:42;
-    hence i*h in Hom(c,c);
-    cod(i*h*i1) = c & dom(i*h*i1) = a by A3,A7,CAT_1:42;
-    hence i*h*i1 = init(a,c) by A2,Th43
-      .= i1 by A2,A3,Th43;
-    thus i*h*i2 = i*(h*i2) by A3,A6,CAT_1:43
-      .= i*(id dom i) by A4,A5
-      .= i by CAT_1:47;
-  end;
-  hence i*h = id cod i by A1,A3,Th89;
-  thus id dom i = h*i by A4,A5;
+  thus dom h = cod i & cod h = dom i by A6,A3,CAT_1:18;
+  i*h*i2 = i*(h*i2) by A6,A5,A7,CAT_1:43
+    .= i*(id dom i) by A3,A4
+    .= i by CAT_1:47;
+  hence i*h = id cod i by A1,A6,A13,A12,Th89;
+  thus id dom i = h*i by A3,A4;
 end;
 

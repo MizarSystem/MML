@@ -12,17 +12,17 @@ environ
       TARSKI, ARYTM_3, SQUARE_1, RLVECT_1, GROUP_1, PROB_1, INTEGRA1, MESFUNC2,
       MESFUNC5, SUPINF_1, SUPINF_2, MESFUNC7, FUNCT_3, RFUNCT_3, VALUED_0,
       XXREAL_2;
- notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, VALUED_0, XCMPLX_0,
-      XREAL_0, COMPLEX1, REAL_1, XXREAL_0, XXREAL_2, MEASURE1, NAT_1, SUPINF_1,
-      RELAT_1, RELSET_1, SETWISEO, PARTFUN1, FINSEQ_1, FINSEQ_2, SETWOP_2,
-      BINOP_1, FUNCT_2, NEWTON, SQUARE_1, PROB_1, SUPINF_2, EXTREAL1, POWER,
-      MESFUNC5, MESFUNC1, MESFUNC2, MEASURE6;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, VALUED_0, XREAL_0,
+      COMPLEX1, REAL_1, XXREAL_0, XXREAL_2, MEASURE1, NAT_1, SUPINF_1, RELAT_1,
+      RELSET_1, SETWISEO, PARTFUN1, FINSEQ_1, FINSEQ_2, SETWOP_2, BINOP_1,
+      FUNCT_2, NEWTON, SQUARE_1, PROB_1, SUPINF_2, EXTREAL1, POWER, MESFUNC5,
+      MESFUNC1, MESFUNC2, MEASURE6;
  constructors REAL_1, NAT_1, DOMAIN_1, FINSOP_1, EXTREAL1, BINOP_1, NEWTON,
       POWER, MESFUNC1, MEASURE6, MESFUNC2, MEASURE3, SETWISEO, EXTREAL2,
       SQUARE_1, MESFUNC5, SUPINF_1, XCMPLX_0, RELSET_1;
  registrations SUBSET_1, NAT_1, RELSET_1, XREAL_0, MEMBERED, ORDINAL1,
-      FINSEQ_1, MEASURE1, NUMBERS, XXREAL_0, XCMPLX_0, XBOOLE_0, VALUED_0,
-      POWER, XXREAL_3;
+      FINSEQ_1, MEASURE1, NUMBERS, XXREAL_0, XBOOLE_0, VALUED_0, POWER,
+      XXREAL_3;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, MESFUNC1, MEASURE6, MESFUNC5, XCMPLX_0, NUMBERS, SQUARE_1;
  theorems ABSVALUE, SETWISEO, POWER, HOLDER_1, TARSKI, SUPINF_1, PARTFUN1,
@@ -41,96 +41,102 @@ reserve X for non empty set,
   E for Element of S;
 
 theorem Th1:
-  (for x be Element of X st x in dom f holds f.x <= g.x)
-  implies g-f is nonnegative
+  (for x be Element of X st x in dom f holds f.x <= g.x) implies g-
+  f is nonnegative
 proof
   assume
 A1: for x be Element of X st x in dom f holds f.x <= g.x;
   now
     let y be R_eal;
-    assume y in rng (g-f);
+    assume
+    y in rng (g-f);
     then consider x being set such that
-A2: x in dom (g-f) & y = (g-f).x by FUNCT_1:def 5;
-    dom (g-f) = (dom g /\ dom f)\((g"{+infty} /\ f"{+infty}) \/ (g"{-infty} /\
-    f"{-infty})) by MESFUNC1:def 4;
+A2: x in dom (g-f) and
+A3: y = (g-f).x by FUNCT_1:def 5;
+    dom (g-f) = (dom g /\ dom f)\((g"{+infty} /\ f"{+infty}) \/ (g"{-infty
+    } /\ f"{-infty})) by MESFUNC1:def 4;
     then x in dom g /\ dom f by A2,XBOOLE_0:def 5;
-    then
-A4: x in dom f & x in dom g by XBOOLE_0:def 4;
-      0. <= g.x-f.x by A1,A4,XXREAL_3:43;
-      then 0. <=(g-f).x by A2,MESFUNC1:def 4;
-   hence 0 <= y by A2;
+    then x in dom f by XBOOLE_0:def 4;
+    then 0. <= g.x-f.x by A1,XXREAL_3:43;
+    hence 0 <= y by A2,A3,MESFUNC1:def 4;
   end;
   then rng (g-f) is nonnegative by SUPINF_2:def 15;
   hence thesis by SUPINF_2:def 22;
 end;
 
 theorem Th2:
-  for Y be set, f be PartFunc of X,ExtREAL, r be Real holds
-  (r(#)f)|Y = r(#)(f|Y)
+  for Y be set, f be PartFunc of X,ExtREAL, r be Real holds (r(#)f)
+  |Y = r(#)(f|Y)
 proof
   let Y be set, f be PartFunc of X,ExtREAL, r be Real;
-A1: dom ((r(#)f)|Y) = dom (r(#)f) /\ Y by RELAT_1:90
-    .= dom f /\ Y by MESFUNC1:def 6
-    .= dom (f|Y) by RELAT_1:90
-    .= dom (r(#)(f|Y)) by MESFUNC1:def 6;
-  now
+A1: now
     let x be Element of X;
     assume
 A2: x in dom ((r(#)f)|Y);
-    then x in dom (r(#)f) /\ Y by RELAT_1:90;
     then
-A3: x in dom (r(#)f) & x in Y by XBOOLE_0:def 4;
+A3: x in dom (r(#)f) /\ Y by RELAT_1:90;
+    then
+A4: x in Y by XBOOLE_0:def 4;
+A5: x in dom (r(#)f) by A3,XBOOLE_0:def 4;
     then x in dom f by MESFUNC1:def 6;
-    then x in dom f /\ Y by A3,XBOOLE_0:def 4;
+    then x in dom f /\ Y by A4,XBOOLE_0:def 4;
     then
-A4: x in dom (f|Y) by RELAT_1:90;
+A6: x in dom (f|Y) by RELAT_1:90;
     then
-A5: x in dom (r(#)(f|Y)) by MESFUNC1:def 6;
+A7: x in dom (r(#)(f|Y)) by MESFUNC1:def 6;
     thus ((r(#)f)|Y).x = (r(#)f).x by A2,FUNCT_1:70
-      .= (R_EAL r)*((f.x)) by A3,MESFUNC1:def 6
-      .= (R_EAL r)*((f|Y).x) by A4,FUNCT_1:70
-      .= (r(#)(f|Y)).x by A5,MESFUNC1:def 6;
+      .= (R_EAL r)*((f.x)) by A5,MESFUNC1:def 6
+      .= (R_EAL r)*((f|Y).x) by A6,FUNCT_1:70
+      .= (r(#)(f|Y)).x by A7,MESFUNC1:def 6;
   end;
+  dom ((r(#)f)|Y) = dom (r(#)f) /\ Y by RELAT_1:90
+    .= dom f /\ Y by MESFUNC1:def 6
+    .= dom (f|Y) by RELAT_1:90
+    .= dom (r(#)(f|Y)) by MESFUNC1:def 6;
   hence thesis by A1,PARTFUN1:34;
 end;
 
 theorem Th3:
-  f is_integrable_on M & g is_integrable_on M & g-f is nonnegative implies
-  ex E be Element of S st
-  E = dom f /\ dom g & Integral(M,f|E) <= Integral(M,g|E)
+  f is_integrable_on M & g is_integrable_on M & g-f is nonnegative
+  implies ex E be Element of S st E = dom f /\ dom g & Integral(M,f|E) <=
+  Integral(M,g|E)
 proof
   assume that
-A1: f is_integrable_on M & g is_integrable_on M and
-A2: g-f is nonnegative;
-A3: ex E2 be Element of S st
-  E2 = dom g & g is_measurable_on E2 by A1,MESFUNC5:def 17;
+A1: f is_integrable_on M and
+A2: g is_integrable_on M and
+A3: g-f is nonnegative;
   set h=(-1)(#)f;
-A4: h is_integrable_on M & Integral(M,h) = R_EAL (-1) * Integral(M,f)
-  by A1,MESFUNC5:116;
+A4: h is_integrable_on M by A1,MESFUNC5:116;
   then consider E be Element of S such that
-A5: E = dom h /\ dom g &
-  Integral(M,h+g) = Integral(M,h|E)+Integral(M,g|E) by A1,MESFUNC5:115;
-  g+(-f) is nonnegative by A2,MESFUNC2:9;
+A5: E = dom h /\ dom g and
+A6: Integral(M,h+g) = Integral(M,h|E)+Integral(M,g|E) by A2, MESFUNC5
+  :115;
+A7: ex E3 be Element of S st E3 = dom h & h is_measurable_on E3 by A4,
+  MESFUNC5:def 17;
+A8: g|E is_integrable_on M by A2,MESFUNC5:103;
   then
-A6: h+g is nonnegative by MESFUNC2:11;
-  ex E3 be Element of S st
-  E3 = dom h & h is_measurable_on E3 by A4,MESFUNC5:def 17;
-  then ex A be Element of S st A = dom(h+g) & (h+g) is_measurable_on A
-  by A3,MESFUNC5:53;
-  then
-A7: 0 <= Integral(M,h|E)+Integral(M,g|E) by A5,A6,MESFUNC5:96;
-A8: f|E is_integrable_on M by A1,MESFUNC5:103;
+A9: Integral(M,g|E) < +infty by MESFUNC5:102;
+  -infty < Integral(M,g|E) by A8,MESFUNC5:102;
+  then reconsider c2=Integral(M,g|E) as Real by A9,XXREAL_0:14;
   take E;
-  h|E = (-1)(#)(f|E) by Th2;
+A10: h|E = (-1)(#)(f|E) by Th2;
+  g+(-f) is nonnegative by A3,MESFUNC2:9;
   then
-A9: 0 <= R_EAL(-1) * Integral(M,f|E) + Integral(M,g|E) by A7,A8,MESFUNC5:116;
-  -infty < Integral(M,f|E) & Integral(M,f|E) < +infty by A8,MESFUNC5:102;
-  then reconsider c1=Integral(M,f|E) as Real by XXREAL_0:14;
-  g|E is_integrable_on M by A1,MESFUNC5:103;
-  then -infty < Integral(M,g|E) & Integral(M,g|E) < +infty by MESFUNC5:102;
-  then reconsider c2=Integral(M,g|E) as Real by XXREAL_0:14;
-  R_EAL (-1) * Integral(M,f|E) = (-1)*c1 by EXTREAL1:13;
-  then 0 <= -c1 + c2 by A9,SUPINF_2:1;
+A11: h+g is nonnegative by MESFUNC2:11;
+A12: f|E is_integrable_on M by A1,MESFUNC5:103;
+  then
+A13: Integral(M,f|E) < +infty by MESFUNC5:102;
+  -infty < Integral(M,f|E) by A12,MESFUNC5:102;
+  then reconsider c1=Integral(M,f|E) as Real by A13,XXREAL_0:14;
+A14: R_EAL (-1) * Integral(M,f|E) = (-1)*c1 by EXTREAL1:13;
+  ex E2 be Element of S st E2 = dom g & g is_measurable_on E2 by A2,
+  MESFUNC5:def 17;
+  then ex A be Element of S st A = dom(h+g) & (h+g) is_measurable_on A by
+  A7,MESFUNC5:53;
+  then 0 <= Integral(M,h|E)+Integral(M,g|E) by A6,A11,MESFUNC5:96;
+  then 0 <= R_EAL(-1) * Integral(M,f|E) + Integral(M,g|E) by A12,A10,
+  MESFUNC5:116;
+  then 0 <= -c1 + c2 by A14,SUPINF_2:1;
   then 0 +c1 <=-c1+c2+c1 by XREAL_1:8;
   hence thesis by A5,MESFUNC1:def 6;
 end;
@@ -146,7 +152,8 @@ registration
     take |.f.|;
     now
       let x be set;
-      assume x in dom |.f.|;
+      assume
+      x in dom |.f.|;
       then (|.f.|).x = |.f.x.| by MESFUNC1:def 10;
       hence 0. <= (|.f.|).x by EXTREAL2:51;
     end;
@@ -161,7 +168,8 @@ registration
   proof
     now
       let x be set;
-      assume x in dom |.f.|;
+      assume
+      x in dom |.f.|;
       then (|.f.|).x = |.f.x.| by MESFUNC1:def 10;
       hence 0. <= (|.f.|).x by EXTREAL2:51;
     end;
@@ -170,127 +178,136 @@ registration
 end;
 
 theorem
-  f is_integrable_on M implies ex F be Function of NAT,S st
-  ( for n be Element of NAT holds
-  F.n = dom f /\ great_eq_dom(|.f.|, R_EAL(1/(n+1))) ) &
-  dom f \ eq_dom(f, 0.) = union rng F &
-  for n be Element of NAT holds F.n in S & M.(F.n) <+infty
+  f is_integrable_on M implies ex F be Function of NAT,S st ( for n be
+Element of NAT holds F.n = dom f /\ great_eq_dom(|.f.|, R_EAL(1/(n+1))) ) & dom
+f \ eq_dom(f, 0.) = union rng F & for n be Element of NAT holds F.n in S & M.(F
+  .n) <+infty
 proof
   assume
 A1: f is_integrable_on M;
   then consider E be Element of S such that
-A2: E = dom f & f is_measurable_on E by MESFUNC5:def 17;
-A3: |.f.| is_measurable_on E by A2,MESFUNC2:29;
+A2: E = dom f and
+A3: f is_measurable_on E by MESFUNC5:def 17;
+  defpred P[Element of NAT,set] means $2 = E /\ great_eq_dom(|.f.|, R_EAL(1/(
+  $1+1)));
 A4: dom |.f.| = E by A2,MESFUNC1:def 10;
-  defpred P[Element of NAT,set] means
-  $2 = E /\ great_eq_dom(|.f.|, R_EAL(1/($1+1)));
-A5: for n be Element of NAT ex Z be Element of S st P[n,Z]
+  now
+    let x be set;
+    assume
+A5: x in E \ eq_dom(f, 0.);
+    then reconsider z=x as Element of X;
+    reconsider y=f.z as R_eal;
+A6: x in E by A5,XBOOLE_0:def 5;
+    then
+A7: x in dom |.f.| by A2,MESFUNC1:def 10;
+    not x in eq_dom(f, 0.) by A5,XBOOLE_0:def 5;
+    then not y = 0. by A2,A6,MESFUNC1:def 16;
+    then 0. < |.f.z.| by EXTREAL2:52;
+    then 0. < (|.f.|).z by A7,MESFUNC1:def 10;
+    then x in great_dom(|.f.|, 0.) by A7,MESFUNC1:def 14;
+    hence x in E /\ great_dom(|.f.|, 0.) by A6,XBOOLE_0:def 4;
+  end;
+  then
+A8: E \ eq_dom(f, 0.) c= E /\ great_dom(|.f.|, 0.) by TARSKI:def 3;
+  now
+    let x be set;
+    assume
+A9: x in E /\ great_dom(|.f.|, 0.);
+    then reconsider z=x as Element of X;
+    x in great_dom(|.f.|, 0.) by A9,XBOOLE_0:def 4;
+    then
+A10: 0. < (|.f.|).z by MESFUNC1:def 14;
+A11: x in E by A9,XBOOLE_0:def 4;
+    then x in dom |.f.| by A2,MESFUNC1:def 10;
+    then
+A12: 0. < |.f.z.| by A10,MESFUNC1:def 10;
+    not x in eq_dom(f, 0.)
+    proof
+      assume
+      x in eq_dom(f, 0.);
+      then f.z = 0. by MESFUNC1:def 16;
+      hence contradiction by A12,EXTREAL2:53;
+    end;
+    hence x in E \ eq_dom(f, 0.) by A11,XBOOLE_0:def 5;
+  end;
+  then
+A13: E /\ great_dom(|.f.|, 0.) c= E \ eq_dom(f, 0.) by TARSKI:def 3;
+A14: |.f.| is_measurable_on E by A2,A3,MESFUNC2:29;
+A15: for n be Element of NAT ex Z be Element of S st P[n,Z]
   proof
     let n be Element of NAT;
     take Z = E /\ great_eq_dom(|.f.|, R_EAL(1/(n+1)));
-    thus thesis by A3,A4,MESFUNC1:31;
+    thus thesis by A14,A4,MESFUNC1:31;
   end;
   consider F be Function of NAT,S such that
-A6: for n be Element of NAT holds P[n,F.n] from FUNCT_2:sch 10(A5);
-  take F;
-  for n be Element of NAT holds
-  F.n = E /\ great_eq_dom(|.f.|, R_EAL(0+1/(n+1))) by A6;
-  then
-A7: E /\ great_dom(|.f.|, R_EAL 0) = union rng F by MESFUNC1:26;
-  now
-    let x be set;
-    assume
-A8: x in E /\ great_dom(|.f.|, 0.);
-    then
-A9: x in E & x in great_dom(|.f.|, 0.) by XBOOLE_0:def 4;
-    reconsider z=x as Element of X by A8;
-A10: 0. < (|.f.|).z by A9,MESFUNC1:def 14;
-    x in dom |.f.| by A2,A9,MESFUNC1:def 10;
-    then
-A11: 0. < |.f.z.| by A10,MESFUNC1:def 10;
-    not x in eq_dom(f, 0.)
-    proof
-      assume x in eq_dom(f, 0.);
-      then f.z = 0. by MESFUNC1:def 16;
-      hence contradiction by A11,EXTREAL2:53;
-    end;
-    hence x in E \ eq_dom(f, 0.) by A9,XBOOLE_0:def 5;
-  end;
-  then
-A12: E /\ great_dom(|.f.|, 0.) c= E \ eq_dom(f, 0.) by TARSKI:def 3;
-  now
-    let x be set;
-    assume
-A13: x in E \ eq_dom(f, 0.);
-    then
-A14: x in E & not x in eq_dom(f, 0.) by XBOOLE_0:def 5;
-    reconsider z=x as Element of X by A13;
-    reconsider y=f.z as R_eal;
-    not y = 0. by A2,A14,MESFUNC1:def 16;
-    then
-A15: 0. < |.f.z.| by EXTREAL2:52;
-A16: x in dom |.f.| by A2,A14,MESFUNC1:def 10;
-    then 0. < (|.f.|).z by A15,MESFUNC1:def 10;
-    then x in great_dom(|.f.|, 0.) by A16,MESFUNC1:def 14;
-    hence x in E /\ great_dom(|.f.|, 0.) by A14,XBOOLE_0:def 4;
-  end;
-  then
-A17: E \ eq_dom(f, 0.) c= E /\ great_dom(|.f.|, 0.) by TARSKI:def 3;
-  for n be Element of NAT holds F.n in S & M.(F.n) <+infty
+A16: for n be Element of NAT holds P[n,F.n] from FUNCT_2:sch 10(A15);
+A17: for n be Element of NAT holds F.n in S & M.(F.n) <+infty
   proof
     let n be Element of NAT;
     set d = R_EAL(1/(n+1));
     set En=F.n;
     set g= (|.f.|)|En;
-A18: F.n = E /\ great_eq_dom(|.f.| ,R_EAL(1/(n+1))) by A6;
+A18: g is nonnegative by MESFUNC5:21;
+    set z = R_EAL(1/(n+1));
+A19: (|.f.|)|E=|.f.| by A4,RELAT_1:98;
+A20: F.n = E /\ great_eq_dom(|.f.| ,R_EAL(1/(n+1))) by A16;
     then
-A19: F.n c= E & F.n c= great_eq_dom(|.f.|, R_EAL(1/(n+1))) by XBOOLE_1:17;
-A20: dom g = En by A4,A18,RELAT_1:91,XBOOLE_1:17;
-A21: |.f.| is_measurable_on En by A3,A18,MESFUNC1:34,XBOOLE_1:17;
+A21: dom g = En by A4,RELAT_1:91,XBOOLE_1:17;
     dom |.f.| /\ En = E /\ En by A2,MESFUNC1:def 10;
-    then dom |.f.| /\ En = En by A18,XBOOLE_1:17,28;
     then
-A22: g is_measurable_on En by A21,MESFUNC5:48;
-A23: g is nonnegative by MESFUNC5:21;
+A22: dom |.f.| /\ En = En by A20,XBOOLE_1:17,28;
+    |.f.| is_measurable_on En by A14,A20,MESFUNC1:34,XBOOLE_1:17;
+    then
+A23: g is_measurable_on En by A22,MESFUNC5:48;
+    then
+A24: integral+(M,g) =Integral(M,g) by A21,MESFUNC5:21,94;
+    |.f.| is_integrable_on M by A1,A2,A3,MESFUNC5:106;
+    then
+A25: Integral(M,|.f.|) < +infty by MESFUNC5:102;
+A26: z < +infty by XXREAL_0:9;
+    then
+A27: z* M.En / z = M.En by XXREAL_3:99;
+    F.n c= E by A20,XBOOLE_1:17;
+    then
+A28: Integral(M,g) <= Integral(M,|.f.|) by A2,A3,A4,A19,MESFUNC2:29 ,
+    MESFUNC5:99;
     consider nf be PartFunc of X,ExtREAL such that
-A24: nf is_simple_func_in S & dom nf = En &
-    for x be set st x in En holds nf.x=d by MESFUNC5:47;
-    for x be set st x in dom nf holds nf.x >= 0 by A24;
+A29: nf is_simple_func_in S and
+A30: dom nf = En and
+A31: for x be set st x in En holds nf.x=d by MESFUNC5:47;
+    for x be set st x in dom nf holds nf.x >= 0 by A30,A31;
     then
-A25: nf is nonnegative by SUPINF_2:71;
-A26: nf is_measurable_on En by A24,MESFUNC2:37;
-    for x be Element of X st x in dom nf holds nf.x <= g.x
+A32: nf is nonnegative by SUPINF_2:71;
+    then
+A33: Integral(M,nf) = integral'(M,nf) by A29,MESFUNC5:95;
+A34: F.n c= great_eq_dom(|.f.|, R_EAL(1/(n+1))) by A20,XBOOLE_1:17;
+A35: for x be Element of X st x in dom nf holds nf.x <= g.x
     proof
       let x be Element of X;
       assume
-A27:  x in dom nf;
+A36:  x in dom nf;
       then
-A28:  g.x = |.f.| .x by A20,A24,FUNCT_1:70;
-      R_EAL(1/(n+1)) <= |.f.| .x by A19,A24,A27,MESFUNC1:def 15;
-      hence thesis by A24,A27,A28;
+A37:  R_EAL(1/(n+1)) <= |.f.| .x by A34,A30,MESFUNC1:def 15;
+      g.x = |.f.| .x by A21,A30,A36,FUNCT_1:70;
+      hence thesis by A30,A31,A36,A37;
     end;
+    nf is_measurable_on En by A29,MESFUNC2:37;
+    then integral+(M,nf) <= integral+(M,g) by A21,A23,A18,A30,A32,A35,
+    MESFUNC5:91;
     then
-A29: integral+(M,nf) <= integral+(M,g) by A20,A22,A23,A24,A25,A26,MESFUNC5:91;
-A30: integral+(M,g) =Integral(M,g) & integral+(M,nf) = Integral(M,nf) &
-    Integral(M,nf) = integral'(M,nf) by A20,A22,A23,A24,A25,MESFUNC5:94,95;
-    then
-A31: integral+(M,nf) = R_EAL(1/(n+1)) * M.(En) by A24,MESFUNC5:110;
-    |.f.| is_integrable_on M by A1,A2,MESFUNC5:106;
-    then
-A32: Integral(M,|.f.|) < +infty by MESFUNC5:102;
-    (|.f.|)|E=|.f.| by A4,RELAT_1:98;
-    then Integral(M,g) <= Integral(M,|.f.|) by A2,A4,A19,MESFUNC2:29
-,MESFUNC5:99;
-    then integral+(M,nf) <= Integral(M,|.f.|) by A29,A30,XXREAL_0:2;
-    then
-A33: R_EAL(1/(n+1)) * M.En < +infty by A31,A32,XXREAL_0:2;
-    set z = R_EAL(1/(n+1));
-    z < +infty by XXREAL_0:9;
-    then z* M.En / z = M.En & +infty / z = +infty
-     by XXREAL_3:94,99;
-    hence thesis by A33,XXREAL_3:91;
+A38: integral+(M,nf) <= Integral(M,|.f.|) by A24,A28,XXREAL_0:2;
+A39: +infty / z = +infty by A26,XXREAL_3:94;
+    integral+(M,nf) = Integral(M,nf) by A29,A32,MESFUNC5:95;
+    then integral+(M,nf) = R_EAL(1/(n+1)) * M.(En) by A30,A31,A33,
+    MESFUNC5:110;
+    then R_EAL(1/(n+1)) * M.En < +infty by A25,A38,XXREAL_0:2;
+    hence thesis by A27,A39,XXREAL_3:91;
   end;
-  hence thesis by A2,A6,A7,A12,A17,XBOOLE_0:def 10;
+  take F;
+  for n be Element of NAT holds F.n = E /\ great_eq_dom(|.f.|, R_EAL(0+1/(
+  n+1))) by A16;
+  then E /\ great_dom(|.f.|, R_EAL 0) = union rng F by MESFUNC1:26;
+  hence thesis by A2,A16,A13,A8,A17,XBOOLE_0:def 10;
 end;
 
 begin  ::  The first mean value theorem for integrals
@@ -298,13 +315,6 @@ begin  ::  The first mean value theorem for integrals
 notation
   let F be Relation;
   synonym F is extreal-yielding for F is ext-real-valued;
-end;
-
-definition
-  let k be natural number;
-  let x be Element of ExtREAL;
-  redefine func k |-> x -> FinSequence of ExtREAL;
-  coherence by FINSEQ_2:77;
 end;
 
 registration
@@ -321,7 +331,8 @@ definition
   canceled;
   func multextreal -> BinOp of ExtREAL means
   :Def2:
-  for x,y be Element of ExtREAL holds it.(x,y) = x*y;
+  for x,y be Element of
+  ExtREAL holds it.(x,y) = x*y;
   existence from BINOP_1:sch 4;
   uniqueness from BINOP_2:sch 2;
 end;
@@ -330,20 +341,22 @@ registration
   cluster multextreal -> commutative associative;
   coherence
   proof
-A1: for a,b be Element of ExtREAL holds multextreal.(a,b) = multextreal.(b,a)
-    proof
-      let a, b be Element of ExtREAL;
-      multextreal.(a,b) = a * b by Def2;
-      hence thesis by Def2;
-    end;
-    for a,b,c be Element of ExtREAL holds
-    multextreal.(a, multextreal.(b,c)) = multextreal.(multextreal.(a,b),c)
+A1: for a,b,c be Element of ExtREAL holds multextreal.(a, multextreal.(b,c
+    )) = multextreal.(multextreal.(a,b),c)
     proof
       let a, b, c be Element of ExtREAL;
       multextreal.(a, multextreal.(b,c)) = multextreal.(a, b * c) by Def2;
       then multextreal.(a, multextreal.(b,c)) = a * (b * c) by Def2;
       then multextreal.(a, multextreal.(b,c)) = a * b * c by XXREAL_3:77;
-      then multextreal.(a, multextreal.(b,c)) = multextreal.(a * b, c) by Def2;
+      then multextreal.(a, multextreal.(b,c)) = multextreal.(a * b, c) by
+      Def2;
+      hence thesis by Def2;
+    end;
+    for a,b be Element of ExtREAL holds multextreal.(a,b) = multextreal.(b
+    ,a)
+    proof
+      let a, b be Element of ExtREAL;
+      multextreal.(a,b) = a * b by Def2;
       hence thesis by Def2;
     end;
     hence thesis by A1,BINOP_1:def 2,def 3;
@@ -352,21 +365,21 @@ end;
 
 Lm1: 1. is_a_unity_wrt multextreal
 proof
-  for r be Element of ExtREAL holds multextreal.(1.,r) = r
-  proof
-    let r be Element of ExtREAL;
-    multextreal.(1.,r) = 1. * r by Def2;
-    hence thesis by XXREAL_3:92;
-  end;
-  then
-A1: 1. is_a_left_unity_wrt multextreal by BINOP_1:def 5;
   for r be Element of ExtREAL holds multextreal.(r,1.) = r
   proof
     let r be Element of ExtREAL;
     multextreal.(r,1.) = r * 1. by Def2;
     hence thesis by XXREAL_3:92;
   end;
-  then 1. is_a_right_unity_wrt multextreal by BINOP_1:def 6;
+  then
+A1: 1. is_a_right_unity_wrt multextreal by BINOP_1:def 6;
+  for r be Element of ExtREAL holds multextreal.(1.,r) = r
+  proof
+    let r be Element of ExtREAL;
+    multextreal.(1.,r) = 1. * r by Def2;
+    hence thesis by XXREAL_3:92;
+  end;
+  then 1. is_a_left_unity_wrt multextreal by BINOP_1:def 5;
   hence thesis by A1,BINOP_1:def 7;
 end;
 
@@ -382,7 +395,8 @@ definition
   let F be extreal-yielding FinSequence;
   func Product F -> Element of ExtREAL means
   :Def3:
-  ex f being FinSequence of ExtREAL st f = F & it = multextreal $$ f;
+  ex f being FinSequence of
+  ExtREAL st f = F & it = multextreal $$ f;
   existence
   proof
     rng F c= ExtREAL by VALUED_0:def 2;
@@ -403,7 +417,6 @@ definition
   let x be Element of ExtREAL;
   let k be natural number;
   func x |^ k equals
-
   Product (k |-> x);
   coherence;
 end;
@@ -447,24 +460,28 @@ registration
   cluster f^g -> extreal-yielding;
   coherence
   proof
-A1: rng f c= ExtREAL & rng g c= ExtREAL by VALUED_0:def 2;
-    rng (f^g) = rng f \/ rng g by FINSEQ_1:44;
-    then rng (f^g) c= ExtREAL by A1,XBOOLE_1:8;
+A1: rng (f^g) = rng f \/ rng g by FINSEQ_1:44;
+A2: rng g c= ExtREAL by VALUED_0:def 2;
+    rng f c= ExtREAL by VALUED_0:def 2;
+    then rng (f^g) c= ExtREAL by A2,A1,XBOOLE_1:8;
     hence thesis by VALUED_0:def 2;
   end;
 end;
 
 theorem Th8:
-  for F being extreal-yielding FinSequence, r be Element of ExtREAL holds
-  Product (F^<*r*>) = Product F * r
+  for F being extreal-yielding FinSequence, r be Element of ExtREAL
+  holds Product (F^<*r*>) = Product F * r
 proof
   let F be extreal-yielding FinSequence, r be Element of ExtREAL;
-  rng F c= ExtREAL & rng (F^<*r*>) c= ExtREAL by VALUED_0:def 2;
+A1: rng (F^<*r*>) c= ExtREAL by VALUED_0:def 2;
+  rng F c= ExtREAL by VALUED_0:def 2;
   then reconsider Fr = F^<*r*>, Ff = F as FinSequence of ExtREAL by
-FINSEQ_1:def 4;
+  A1, FINSEQ_1
+  :def 4;
   reconsider Ff1=Ff as extreal-yielding FinSequence;
   Product (F^<*r*>) = multextreal $$ Fr by Def3;
-  then Product (F^<*r*>) = multextreal.(multextreal $$ Ff,r) by FINSOP_1:5;
+  then Product (F^<*r*>) = multextreal.(multextreal $$ Ff,r) by
+  FINSOP_1:5;
   then Product (F^<*r*>) = multextreal.(Product Ff1,r) by Def3;
   hence thesis by Def2;
 end;
@@ -478,24 +495,26 @@ proof
 end;
 
 theorem Th10:
-  for x be Element of ExtREAL, k be natural number holds x|^(k+1) = x|^k*x
+  for x be Element of ExtREAL, k be natural number holds x|^(k+1)
+  = x|^k*x
 proof
   let x be Element of ExtREAL;
   defpred P[Nat] means x|^($1+1) = x|^$1*x;
-  x|^(0+1) = Product(<*x*>) by FINSEQ_2:73;
-  then x|^(0+1) = x by Th7;
-  then x|^(0+1) =1. * x by XXREAL_3:92;
-  then
-A1: P[0] by Th6,FINSEQ_2:72;
-A2: for k be Nat st P[k] holds P[k+1]
+A1: for k be Nat st P[k] holds P[k+1]
   proof
     let k be Nat;
-    assume x|^(k+1) = x|^k*x;
+    assume
+    x|^(k+1) = x|^k*x;
     reconsider k1=k+1 as Element of NAT;
     Product((k1+1) |-> x) = Product((k1 |-> x) ^ <*x*>) by FINSEQ_2:74;
     hence thesis by Th8;
   end;
-  for k be Nat holds P[k] from NAT_1:sch 2(A1,A2);
+  x|^(0+1) = Product(<*x*>) by FINSEQ_2:73;
+  then x|^(0+1) = x by Th7;
+  then x|^(0+1) =1. * x by XXREAL_3:92;
+  then
+A2: P[0] by Th6,FINSEQ_2:72;
+  for k be Nat holds P[k] from NAT_1:sch 2(A2,A1);
   hence thesis;
 end;
 
@@ -503,87 +522,92 @@ definition
   let k be natural number, X,f;
   func f|^k -> PartFunc of X,ExtREAL means
   :Def5:
-  dom it = dom f &
-  for x be Element of X st x in dom it holds it.x = (f.x)|^k;
+  dom it = dom f & for x be
+  Element of X st x in dom it holds it.x = (f.x)|^k;
   existence
   proof
-    defpred X[set] means $1 in dom f;
     deffunc U(set) = (f.$1) |^ k;
+    defpred X[set] means $1 in dom f;
     consider f3 being PartFunc of X, ExtREAL such that
 A1: for d be Element of X holds d in dom f3 iff X[d] and
-A2: for d be Element of X st d in dom f3 holds f3/.d = U(d)
-    from PARTFUN2:sch 2;
+A2: for d be Element of X st d in dom f3 holds f3/.d = U(d) from
+    PARTFUN2:sch 2;
     take f3;
-    (for x be set st x in dom f3 holds x in dom f) &
     for x be set st x in dom f holds x in dom f3 by A1;
-    then dom f3 c= dom f & dom f c= dom f3 by TARSKI:def 3;
-    hence dom f3 = dom f by XBOOLE_0:def 10;
+    then
+A3: dom f c= dom f3 by TARSKI:def 3;
+    for x be set st x in dom f3 holds x in dom f by A1;
+    then dom f3 c= dom f by TARSKI:def 3;
+    hence dom f3 = dom f by A3,XBOOLE_0:def 10;
     let d be Element of X;
     assume
-A3: d in dom f3;
+A4: d in dom f3;
     then f3/.d = (f.d) |^ k by A2;
-    hence thesis by A3,PARTFUN1:def 8;
+    hence thesis by A4,PARTFUN1:def 8;
   end;
   uniqueness
   proof
     let f1,f2 be PartFunc of X, ExtREAL;
     assume that
-A4: dom f1= dom f &
-    for d being Element of X st d in dom f1 holds f1.d=(f.d) |^ k and
-A5: dom f2= dom f &
-    for d being Element of X st d in dom f2 holds f2.d=(f.d) |^ k;
+A5: dom f1= dom f and
+A6: for d being Element of X st d in dom f1 holds f1.d=(f.d) |^ k and
+A7: dom f2= dom f and
+A8: for d being Element of X st d in dom f2 holds f2.d=(f.d) |^ k;
     for d being Element of X st d in dom f holds f1.d = f2.d
     proof
       let d be Element of X;
-      assume d in dom f;
-      then f1.d=(f.d) |^ k & f2.d=(f.d) |^ k by A4,A5;
-      hence thesis;
+      assume
+A9:   d in dom f;
+      then f1.d=(f.d) |^ k by A5,A6;
+      hence thesis by A7,A8,A9;
     end;
-    hence f1=f2 by A4,A5,PARTFUN1:34;
+    hence f1=f2 by A5,A7,PARTFUN1:34;
   end;
 end;
 
 theorem Th11:
-  for x be Element of ExtREAL, y be real number, k be natural number st
-  x=y holds x|^k = y|^k
+  for x be Element of ExtREAL, y be real number, k be natural
+  number st x=y holds x|^k = y|^k
 proof
   let x be Element of ExtREAL, y be real number, k be natural number;
+  defpred P[natural number] means x|^$1=y|^$1;
   assume
 A1: x=y;
-  defpred P[natural number] means x|^$1=y|^$1;
-  x|^0 = 1. by Th6,FINSEQ_2:72;
-  then
-A2: P[0] by NEWTON:9;
-A3: for k be natural number st P[k] holds P[k+1]
+A2: for k be natural number st P[k] holds P[k+1]
   proof
-    let k be natural number;
     reconsider y1=y as Element of REAL by XREAL_0:def 1;
-    assume P[k];
+    let k be natural number;
+    assume
+    P[k];
     then (x|^k)*x = (y1|^k)*y1 by A1,EXTREAL1:13;
     then (x|^k)*x = y|^(k+1) by NEWTON:11;
     hence thesis by Th10;
   end;
-  for k be natural number holds P[k] from NAT_1:sch 2(A2,A3);
+  x|^0 = 1. by Th6,FINSEQ_2:72;
+  then
+A3: P[0] by NEWTON:9;
+  for k be natural number holds P[k] from NAT_1:sch 2(A3,A2);
   hence thesis;
 end;
 
 theorem Th12:
-  for x be Element of ExtREAL, k be natural number st 0 <=x holds 0 <= x|^k
+  for x be Element of ExtREAL, k be natural number st 0 <=x holds
+  0 <= x|^k
 proof
   let x be Element of ExtREAL, k be natural number;
+  defpred P[natural number] means 0 <= x|^$1;
   assume
 A1: 0 <=x;
-  defpred P[natural number] means 0 <= x|^$1;
-A2: P[0] by Th6,FINSEQ_2:72;
-A3: for k be natural number st P[k] holds P[k+1]
+A2: for k be natural number st P[k] holds P[k+1]
   proof
     let k be natural number;
     assume
-A4: P[k];
+A3: P[k];
     x|^(k+1)=(x|^k)*x by Th10;
-    hence thesis by A1,A4;
+    hence thesis by A1,A3;
   end;
-  for k be natural number holds P[k] from NAT_1:sch 2(A2,A3);
+A4: P[0] by Th6,FINSEQ_2:72;
+  for k be natural number holds P[k] from NAT_1:sch 2(A4,A2);
   hence thesis;
 end;
 
@@ -591,330 +615,360 @@ theorem Th13:
   for k be natural number st 1<=k holds +infty|^k =+infty
 proof
   defpred P[Nat] means +infty|^$1 = +infty;
-A1: P[1] by Th9;
-A2: for k be non empty Nat st P[k] holds P[k+1]
+A1: for k be non empty Nat st P[k] holds P[k+1]
   proof
     let k be non empty Nat;
     assume
-A3: P[k];
+A2: P[k];
     +infty|^(k+1)=(+infty|^k)*+infty by Th10;
-    hence thesis by A3,XXREAL_3:def 5;
+    hence thesis by A2,XXREAL_3:def 5;
   end;
-  for k be non empty Nat holds P[k] from NAT_1:sch 10(A1,A2);
+A3: P[1] by Th9;
+  for k be non empty Nat holds P[k] from NAT_1:sch 10(A3,A1);
   hence thesis;
 end;
 
 theorem Th14:
-  for k be natural number, X,S,f,E st
-  E c= dom f & f is_measurable_on E holds (|.f.|) |^ k is_measurable_on E
+  for k be natural number, X,S,f,E st E c= dom f & f
+  is_measurable_on E holds (|.f.|) |^ k is_measurable_on E
 proof
   let k be natural number;
   let X,S,f,E;
   reconsider k1=k as Element of NAT by ORDINAL1:def 13;
-  assume
-A1: E c= dom f & f is_measurable_on E;
-A2: dom ((|.f.|)|^k) = dom |.f.| by Def5;
+  assume that
+A1: E c= dom f and
+A2: f is_measurable_on E;
+A3: dom ((|.f.|)|^k) = dom |.f.| by Def5;
   then
-A3: dom ((|.f.|)|^k) = dom f by MESFUNC1:def 10;
+A4: dom ((|.f.|)|^k) = dom f by MESFUNC1:def 10;
   per cases;
   suppose
-A4: k = 0;
-A5: for r be real number st 1 < r holds
-    E /\ less_dom((|.f.|)|^k,R_EAL r) in S
+A5: k = 0;
+A6: for r be real number st 1 < r holds E /\ less_dom((|.f.|)|^k,R_EAL r)
+    in S
     proof
       let r be real number;
       assume
-A6:   1 < r;
+A7:   1 < r;
       E c= less_dom((|.f.|)|^k,R_EAL r)
       proof
         let x be set;
         assume
-A7:     x in E;
-        then ((|.f.|)|^k).x = ((|.f.|).x)|^k by A1,A3,Def5;
-        then ((|.f.|)|^k).x < r by A4,A6,Th6,FINSEQ_2:72;
-        hence thesis by A1,A3,A7,MESFUNC1:def 12;
+A8:     x in E;
+        then ((|.f.|)|^k).x = ((|.f.|).x)|^k by A1,A4,Def5;
+        then ((|.f.|)|^k).x < r by A5,A7,Th6,FINSEQ_2:72;
+        hence thesis by A1,A4,A8,MESFUNC1:def 12;
       end;
       then E /\ less_dom((|.f.|)|^k,R_EAL r) = E by XBOOLE_1:28;
       hence thesis;
     end;
-A8: E c= dom ((|.f.|)|^k) by A1,A2,MESFUNC1:def 10;
-    for r be real number holds
-    E /\ less_dom((|.f.|)|^k,R_EAL r) in S
+A9: E c= dom ((|.f.|)|^k) by A1,A3,MESFUNC1:def 10;
+    for r be real number holds E /\ less_dom((|.f.|)|^k,R_EAL r) in S
     proof
       let r be real number;
       now
         assume
-A9:     r <= 1;
+A10:    r <= 1;
         E c= great_eq_dom((|.f.|)|^k,R_EAL r)
         proof
           let x be set;
           assume
-A10:      x in E;
-          then ((|.f.|)|^k).x = ((|.f.|).x)|^k by A1,A3,Def5;
-          then r <= ((|.f.|)|^k).x by A4,A9,Th6,FINSEQ_2:72;
-          hence thesis
-          by A1,A3,A10,MESFUNC1:def 15;
+A11:      x in E;
+          then ((|.f.|)|^k).x = ((|.f.|).x)|^k by A1,A4,Def5;
+          then r <= ((|.f.|)|^k).x by A5,A10,Th6,FINSEQ_2:72;
+          hence thesis by A1,A4,A11,MESFUNC1:def 15;
         end;
         then E /\ great_eq_dom((|.f.|)|^k,R_EAL r) = E by XBOOLE_1:28;
-        then E /\ less_dom((|.f.|)|^k,R_EAL r) = E \ E by A8,MESFUNC1:21;
+        then E /\ less_dom((|.f.|)|^k,R_EAL r) = E \ E by A9,
+        MESFUNC1:21;
         hence thesis;
       end;
-      hence thesis by A5;
+      hence thesis by A6;
     end;
     hence thesis by MESFUNC1:def 17;
   end;
   suppose
-A11: k <> 0;
+A12: k <> 0;
     then
-A12: 1 <= k by NAT_1:14;
-A13: 1/k * k = 1 by A11,XCMPLX_1:88;
+A13: 1/k * k = 1 by XCMPLX_1:88;
 A14: for r be real number st 0 < r holds great_eq_dom((|.f.|)|^k,R_EAL r)
     = great_eq_dom(|.f.|,R_EAL r to_power (1/k))
     proof
       let r be real number;
       assume
 A15:  0 < r;
-A16:  great_eq_dom(|.f.|,R_EAL r to_power (1/k))
-      c= great_eq_dom((|.f.|)|^k,R_EAL r)
+A16:  great_eq_dom((|.f.|)|^k,R_EAL r) c= great_eq_dom(|.f.|,R_EAL r
+      to_power (1/k))
       proof
         let x be set;
         assume
-A17:    x in great_eq_dom(|.f.|,R_EAL r to_power (1/k));
+A17:    x in great_eq_dom((|.f.|)|^k,R_EAL r);
         then
-A18:    x in dom |.f.| by MESFUNC1:def 15;
-        then |.f.| .x = |.f.x.| by MESFUNC1:def 10;
+A18:    x in dom ((|.f.|)|^k) by MESFUNC1:def 15;
         then
-A19:    0 <= |.f.| .x by EXTREAL2:51;
-A20:    ((|.f.|)|^k).x = (|.f.| .x)|^k by A2,A18,Def5;
-A21:    now
-          assume |.f.| .x = +infty;
-          then ((|.f.|).x) |^k = +infty by A11,Th13,NAT_1:14;
-          hence r <= ((|.f.|)|^k).x by A20,XXREAL_0:3;
+A19:    |.f.| .x = |.f.x.| by A3,MESFUNC1:def 10;
+        then
+A20:    0 <= |.f.| .x by EXTREAL2:51;
+        per cases;
+        suppose
+          |.f.| .x = +infty;
+          then R_EAL r to_power (1/k) <= |.f.| .x by XXREAL_0:3;
+          hence thesis by A3,A18,MESFUNC1:def 15;
+        end;
+        suppose
+          |.f.| .x <> +infty;
+          then reconsider fx= |.f.| .x as Element of REAL by A20,XXREAL_0:14;
+A21:      r <= ((|.f.|)|^k).x by A17,MESFUNC1:def 15;
+          ((|.f.|)|^k).x = ((|.f.|).x)|^k by A18,Def5;
+          then
+A22:      r <= fx to_power k1 by A21,Th11;
+          (fx to_power k) to_power (1/k) = fx to_power (k * 1/k) by A12,
+          A19,EXTREAL2:51,HOLDER_1:2;
+          then
+A23:      (fx to_power k) to_power (1/k) = fx by A13,POWER:30;
+          r is Real by XREAL_0:def 1;
+          then r to_power (1/k) <= (fx to_power k) to_power (1/k) by A12,A15,
+          A22,HOLDER_1:3;
+          hence thesis by A3,A18,A23,MESFUNC1:def 15;
+        end;
+      end;
+      great_eq_dom(|.f.|,R_EAL r to_power (1/k)) c= great_eq_dom((|.f.|)
+      |^k,R_EAL r)
+      proof
+        let x be set;
+        assume
+A24:    x in great_eq_dom(|.f.|,R_EAL r to_power (1/k));
+        then
+A25:    x in dom |.f.| by MESFUNC1:def 15;
+        then
+A26:    ((|.f.|)|^k).x = (|.f.| .x)|^k by A3,Def5;
+        |.f.| .x = |.f.x.| by A25,MESFUNC1:def 10;
+        then
+A27:    0 <= |.f.| .x by EXTREAL2:51;
+A28:    now
+          assume
+          |.f.| .x <> +infty;
+          then reconsider fx = |.f.| .x as Element of REAL by A27,XXREAL_0:14;
+          reconsider R = r to_power (1/k) as Real by XREAL_0:def 1;
+A29:      0 < r to_power (1/k) by A15,POWER:39;
+A30:      R to_power k1 = r to_power (1/k*k) by A15,POWER:38;
+A31:      ((|.f.|)|^k).x = fx|^k by A26,Th11;
+          R_EAL r to_power (1/k) <= |.f.| .x by A24,MESFUNC1:def 15;
+          then r to_power 1 <= fx to_power k by A12,A13,
+          A29,A30, HOLDER_1:
+          3;
+          hence r <=((|.f.|) |^k).x by A31,POWER:30;
         end;
         now
-          assume |.f.| .x <> +infty;
-          then reconsider fx = |.f.| .x as Element of REAL by A19,XXREAL_0:14;
-A22:      ((|.f.|)|^k).x = fx|^k by A20,Th11;
-A23:      R_EAL r to_power (1/k) <= |.f.| .x by A17,MESFUNC1:def 15;
-A24:      0 < r to_power (1/k) by A15,POWER:39;
-          reconsider R = r to_power (1/k) as Real by XREAL_0:def 1;
-          R to_power k1 = r to_power (1/k*k) by A15,POWER:38;
-          then
-A25:      r to_power 1 <= fx to_power k by A12,A13,A23,A24,HOLDER_1:3;
-          thus r <=((|.f.|) |^k).x by A22,A25,POWER:30;
+          assume
+          |.f.| .x = +infty;
+          then ((|.f.|).x) |^k = +infty by A12,Th13,NAT_1:14;
+          hence r <= ((|.f.|)|^k).x by A26,XXREAL_0:3;
         end;
-
-hence thesis by A2,A18,A21,MESFUNC1:def 15;
-      end;
-      great_eq_dom((|.f.|)|^k,R_EAL r)
-      c= great_eq_dom(|.f.|,R_EAL r to_power (1/k))
-      proof
-        let x be set;
-        assume
-A26:    x in great_eq_dom((|.f.|)|^k,R_EAL r);
-        then
-A27:    x in dom ((|.f.|)|^k) by MESFUNC1:def 15;
-        then
-A28:    |.f.| .x = |.f.x.| by A2,MESFUNC1:def 10;
-        then
-A29:    0 <= |.f.| .x by EXTREAL2:51;
-        per cases;
-        suppose |.f.| .x = +infty;
-          then R_EAL r to_power (1/k) <= |.f.| .x by XXREAL_0:3;
-          hence thesis
-          by A2,A27,MESFUNC1:def 15;
-        end;
-        suppose |.f.| .x <> +infty;
-          then reconsider fx= |.f.| .x as Element of REAL by A29,XXREAL_0:14;
-A30:      0 < 1/k by A12;
-A31:      r <= ((|.f.|)|^k).x by A26,MESFUNC1:def 15;
-          ((|.f.|)|^k).x = ((|.f.|).x)|^k by A27,Def5;
-          then ((|.f.|)|^k).x = fx|^k by Th11;
-          then
-A32:      r <= fx to_power k1 by A31;
-          r is Real by XREAL_0:def 1;
-          then
-A33:      r to_power (1/k) <= (fx to_power k) to_power (1/k)
-          by A15,A30,A32,HOLDER_1:3;
-          0 < k by A11;
-          then (fx to_power k) to_power (1/k) = fx to_power (k * 1/k)
-          by A28,EXTREAL2:51,HOLDER_1:2;
-          then (fx to_power k) to_power (1/k) = fx by A13,POWER:30;
-          hence thesis
-          by A2,A27,A33,MESFUNC1:def 15;
-        end;
+        hence thesis by A3,A25,A28,MESFUNC1:def 15;
       end;
       hence thesis by A16,XBOOLE_0:def 10;
     end;
-A34: |.f.| is_measurable_on E by A1,MESFUNC2:29;
-    for r be real number holds
-    E /\ great_eq_dom((|.f.|)|^k,R_EAL r) in S
+A32: |.f.| is_measurable_on E by A1,A2,MESFUNC2:29;
+    for r be real number holds E /\ great_eq_dom((|.f.|)|^k,R_EAL r) in S
     proof
       let r be real number;
       per cases;
       suppose
-A35:    r <= 0;
+A33:    r <= 0;
         E c= great_eq_dom((|.f.|)|^k,R_EAL r)
         proof
           let x be set;
           assume
-A36:      x in E;
+A34:      x in E;
           then
-A37:      ((|.f.|)|^k).x = ((|.f.|).x)|^k by A1,A3,Def5;
-          (|.f.|).x = |.f.x.| by A1,A2,A3,A36,MESFUNC1:def 10;
-          then r <= ((|.f.|)|^k).x by A35,A37,Th12,EXTREAL2:51;
-          hence thesis
-          by A1,A3,A36,MESFUNC1:def 15;
+A35:      (|.f.|).x = |.f.x.| by A1,A3,A4,MESFUNC1:def 10;
+          ((|.f.|)|^k).x = ((|.f.|).x)|^k by A1,A4,A34,Def5;
+          then r <= ((|.f.|)|^k).x by A33,A35,Th12,EXTREAL2:51;
+          hence thesis by A1,A4,A34,MESFUNC1:def 15;
         end;
         then E /\ great_eq_dom((|.f.|)|^k,R_EAL r) = E by XBOOLE_1:28;
         hence thesis;
       end;
-      suppose 0 <r;
-        then E /\ great_eq_dom((|.f.|)|^k,R_EAL r) =
-        E /\ great_eq_dom(|.f.|,R_EAL r to_power (1/k)) by A14;
-        hence thesis
-        by A1,A2,A3,A34,MESFUNC1:31;
+      suppose
+        0 <r;
+        then E /\ great_eq_dom((|.f.|)|^k,R_EAL r) = E /\ great_eq_dom(|.f.|,
+        R_EAL r to_power (1/k)) by A14;
+        hence thesis by A1,A3,A4,A32,MESFUNC1:31;
       end;
     end;
-    hence thesis by A1,A3,MESFUNC1:31;
+    hence thesis by A1,A4,MESFUNC1:31;
   end;
 end;
 
 theorem Th15:
-  dom f /\ dom g = E & f is real-valued & g is real-valued &
-  f is_measurable_on E & g is_measurable_on E implies f(#)g is_measurable_on E
+  dom f /\ dom g = E & f is real-valued & g is real-valued & f
+  is_measurable_on E & g is_measurable_on E implies f(#)g is_measurable_on E
 proof
-  assume
-A1: dom f /\ dom g = E & f is real-valued & g is real-valued &
-  f is_measurable_on E & g is_measurable_on E;
-A2: dom ((|.f+g.|)|^2) = dom |.f+g.| &
-  dom ((|.f-g.|)|^2) = dom |.f-g.| by Def5;
-  then
-A3: dom ((|.f+g.|)|^2) = dom (f+g) &
-  dom ((|.f-g.|)|^2) = dom (f-g) by MESFUNC1:def 10;
-  then
-A4: dom ((|.f+g.|)|^2) = dom f /\ dom g &
-  dom ((|.f-g.|)|^2) = dom f /\ dom g by A1,MESFUNC2:2;
-  then
-A5: dom ((|.f+g.|)|^2) c= dom f & dom ((|.f+g.|)|^2) c= dom g &
-  dom ((|.f-g.|)|^2) c= dom f & dom ((|.f-g.|)|^2) c= dom g by XBOOLE_1:17;
+  assume that
+A1: dom f /\ dom g = E and
+A2: f is real-valued and
+A3: g is real-valued and
+A4: f is_measurable_on E and
+A5: g is_measurable_on E;
 A6: dom (f(#)g) = dom f /\ dom g by MESFUNC1:def 5;
-A7: dom ((1/4)(#)(|.f+g.|)|^2) = dom ((|.f+g.|)|^2) &
-  dom ((1/4)(#)(|.f-g.|)|^2) = dom ((|.f-g.|)|^2) by MESFUNC1:def 6;
-A8: for x be Element of X st
-  x in dom ((|.f+g.|)|^2) holds |. ((|.f+g.|)|^2).x .| < +infty
+A7: dom ((1/4)(#)(|.f+g.|)|^2) = dom ((|.f+g.|)|^2) by MESFUNC1:def 6;
+A8: dom ((|.f-g.|)|^2) = dom |.f-g.| by Def5;
+  then
+A9: dom ((|.f-g.|)|^2) = dom (f-g) by MESFUNC1:def 10;
+  then
+A10: dom ((|.f-g.|)|^2) = dom f /\ dom g by A2,MESFUNC2:2;
+  then
+A11: dom ((|.f-g.|)|^2) c= dom g by XBOOLE_1:17;
+A12: dom ((1/4)(#)(|.f-g.|)|^2) = dom ((|.f-g.|)|^2) by MESFUNC1:def 6;
+A13: dom ((|.f+g.|)|^2) = dom |.f+g.| by Def5;
+  then
+A14: dom ((|.f+g.|)|^2) = dom (f+g) by MESFUNC1:def 10;
+  then
+A15: dom ((|.f+g.|)|^2) = dom f /\ dom g by A2,MESFUNC2:2;
+  then
+A16: dom ((|.f+g.|)|^2) c= dom g by XBOOLE_1:17;
+A17: dom ((|.f+g.|)|^2) c= dom f by A15,XBOOLE_1:17;
+  for x be Element of X st x in dom ((|.f+g.|)|^2) holds |. ((|.f+g.|)|^2
+  ).x .| < +infty
   proof
     let x be Element of X;
     assume
-A9: x in dom ((|. f+g .|)|^2);
-    then |.f.x.| < +infty & |.g.x.| < +infty by A1,A5,MESFUNC2:def 1;
-    then reconsider c1 = f.x, c2 = g.x as Real by EXTREAL2:102;
-    ((|.f+g.|)|^2).x = ((|.f+g.|).x)|^(1+1) by A9,Def5;
+A18: x in dom ((|. f+g .|)|^2);
     then
-A10: ((|.f+g.|)|^2).x = (|.f+g.| .x)|^1 * (|.f+g.| .x) by Th10;
+A19: |.g.x.| < +infty by A3,A16,MESFUNC2:def 1;
+    |.f.x.| < +infty by A2,A17,A18,MESFUNC2:def 1;
+    then reconsider c1 = f.x, c2 = g.x as Real by A19,EXTREAL2:102;
     f.x + g.x = c1 + c2 by SUPINF_2:1;
     then |. f.x + g.x .| = abs(c1+c2) by EXTREAL2:49;
     then
-A11: |. f.x + g.x .| * |. f.x + g.x .| = abs(c1+c2)*abs(c1+c2) by EXTREAL1:13;
-    |.f+g.| .x = |.(f+g).x.| & |.(f+g).x.| = |. f.x+g.x .|
-    by A2,A3,A9,MESFUNC1:def 3,def 10;
-    then |.((|.f+g.|)|^2).x.|
-    = |. |. f.x + g.x .| * |. f.x + g.x .| .| by A10,Th9
+A20: |. f.x + g.x .| * |. f.x + g.x .| = abs(c1+c2)*abs(c1+c2) by
+    EXTREAL1:13;
+    ((|.f+g.|)|^2).x = ((|.f+g.|).x)|^(1+1) by A18,Def5;
+    then
+A21: ((|.f+g.|)|^2).x = (|.f+g.| .x)|^1 * (|.f+g.| .x) by Th10;
+A22: |.(f+g).x.| = |. f.x+g.x .| by A14,A18,MESFUNC1:def 3;
+    |.f+g.| .x = |.(f+g).x.| by A13,A18,MESFUNC1:def 10;
+    then
+    |.((|.f+g.|)|^2).x.| = |. |. f.x + g.x .| * |. f.x + g.x .| .| by A21
+    ,A22,Th9
       .= |. |.(f.x + g.x) * (f.x + g.x).| .| by EXTREAL2:56
       .= |.(f.x + g.x) * (f.x + g.x).| by EXTREAL2:70
       .= |. f.x + g.x .| * |. f.x + g.x .| by EXTREAL2:56;
-    hence thesis by A11,XXREAL_0:9;
+    hence thesis by A20,XXREAL_0:9;
   end;
-  for x be Element of X st
-  x in dom ((|.f-g.|)|^2) holds |.((|.f-g.|)|^2).x .| < +infty
+  then (|.f+g.|)|^2 is real-valued by MESFUNC2:def 1;
+  then
+A23: (1/4)(#)(|.f+g.|)|^2 is real-valued by MESFUNC2:12;
+  then
+A24: dom ((1/4)(#)(|.f+g.|)|^2 - (1/4)(#)(|.f-g.|)|^2) = dom((1/4)(#)(|.f+g
+  .|)|^2) /\ dom((1/4)(#)(|.f-g.|)|^2) by MESFUNC2:2;
+  for x be Element of X st x in dom (f(#)g) holds (f(#)g).x = ((1/4)(#)(
+  |.f+g.|) |^ 2 - (1/4)(#)(|.f-g.|) |^ 2).x
   proof
     let x be Element of X;
     assume
-A12: x in dom ((|.f-g.|)|^2);
-    then |.f.x.| < +infty & |.g.x.| < +infty by A1,A5,MESFUNC2:def 1;
-    then reconsider c1 = f.x, c2 = g.x as Real by EXTREAL2:102;
-    ((|.f-g.|)|^2).x = ((|.f-g.|).x)|^(1+1) by A12,Def5;
+A25: x in dom (f(#)g);
     then
-A13: ((|.f-g.|)|^2).x = ((|.f-g.|).x)|^1 * (|.f-g.|).x by Th10;
+A26: |.g.x.| <+infty by A3,A15,A16,A6,MESFUNC2:def 1;
+    |.f.x.| <+infty by A2,A15,A17,A6,A25,MESFUNC2:def 1;
+    then reconsider c1 = f.x, c2 = g.x as Real by A26,EXTREAL2:102;
+    f.x + g.x = c1 + c2 by SUPINF_2:1;
+    then |. f.x+g.x .| = abs(c1+c2) by EXTREAL2:49;
+    then
+A27: |. f.x+g.x .| * |. f.x+g.x .| = abs(c1+c2)*abs(c1+c2) by
+    EXTREAL1
+    :13;
+    ((1/4)(#)(|.f+g.|)|^2).x = R_EAL(1/4) * ((|.f+g.|)|^2).x by A15,A6,
+    A7,A25,MESFUNC1:def 6;
+    then ((1/4)(#)(|.f+g.|)|^2).x = R_EAL(1/4) * (|.f+g.| .x)|^(1+1) by A15,
+    A6,A25,Def5;
+    then
+A28: ((1/4)(#)(|.f+g.|)|^2).x = R_EAL(1/4) * ((|.f+g.| .x)|^1 * (|.f+g.| .
+    x) ) by Th10;
+A29: |.f+g.| .x = |.(f+g).x.| by A13,A15,A6,A25,MESFUNC1:def 10;
+    |.(f+g).x.| = |. f.x+g.x .| by A14,A15,A6,A25,MESFUNC1:def 3;
+    then ((1/4)(#)(|.f+g.|)|^2).x = R_EAL(1/4) * (|. f.x+g.x .| * |. f. x+g.x
+    .| ) by A29,A28,Th9;
+    then
+A30: ((1/4)(#)(|.f+g.|)|^2).x=(1/4)*(abs(c1+c2)*abs(c1+c2)) by A27,
+    EXTREAL1:13;
+    (abs(c1-c2)*abs(c1-c2)) = (abs(c1-c2))^2;
+    then
+A31: (abs(c1-c2)*abs(c1-c2)) = (c1-c2)^2 by COMPLEX1:161;
+    ((1/4)(#)(|.f-g.|)|^2).x = R_EAL(1/4) * ((|.f-g.|)|^2).x by A10,A6,
+    A12,A25,MESFUNC1:def 6;
+    then ((1/4)(#)(|.f-g.|)|^2).x = R_EAL(1/4) * (|.f-g.| .x)|^(1+1) by A10,
+    A6,A25,Def5;
+    then
+A32: ((1/4)(#)(|.f-g.|)|^2).x = R_EAL(1/4) * ((|.f-g.| .x)|^1 * (|.f-g.| .
+    x) ) by Th10;
+    f.x - g.x = c1 - c2 by SUPINF_2:5;
+    then |. f.x-g.x .| = abs(c1-c2) by EXTREAL2:49;
+    then
+A33: |. f.x-g.x .| * |. f.x-g.x .| = abs(c1-c2)*abs(c1-c2) by
+    EXTREAL1
+    :13;
+A34: |.f-g.| .x = |.(f-g).x.| by A8,A10,A6,A25,MESFUNC1:def 10;
+    |.(f-g).x.| = |. f.x-g.x .| by A9,A10,A6,A25,MESFUNC1:def 4;
+    then ((1/4)(#)(|.f-g.|)|^2).x = R_EAL(1/4) * (|. f.x-g.x .| * |. f.x-g.x
+    .|) by A34,A32,Th9;
+    then
+A35: ((1/4)(#)(|.f-g.|)|^2).x=(1/4)*(abs(c1-c2)*abs(c1-c2)) by A33,
+    EXTREAL1:13;
+    (abs(c1+c2)*abs(c1+c2)) = (abs(c1+c2))^2;
+    then (abs(c1+c2)*abs(c1+c2)) = (c1+c2)^2 by COMPLEX1:161;
+    then
+    ((1/4)(#)(|.f+g.|)|^2).x -((1/4)(#)(|.f-g.|)|^2).x =(1/4)*(c1^2+2*c1*
+    c2+c2^2) - (1/4)*(c1^2-2*c1*c2+c2^2) by A30,A35,A31,SUPINF_2:5
+      .= c1*c2
+      .= (f.x)*(g.x) by EXTREAL1:13
+      .= (f(#)g).x by A25,MESFUNC1:def 5;
+    hence thesis by A15,A10,A6,A7,A12,A24,A25,MESFUNC1:def 4;
+  end;
+  then
+A36: f(#)g = (1/4)(#)(|.f+g.|)|^2 - (1/4)(#)(|.f-g.|)|^2 by A15,A10,A6,A7,
+  A12,A24,PARTFUN1:34;
+A37: dom ((|.f-g.|)|^2) c= dom f by A10,XBOOLE_1:17;
+  for x be Element of X st x in dom ((|.f-g.|)|^2) holds |.((|.f-g.|)|^2)
+  .x .| < +infty
+  proof
+    let x be Element of X;
+    assume
+A38: x in dom ((|.f-g.|)|^2);
+    then
+A39: |.g.x.| < +infty by A3,A11,MESFUNC2:def 1;
+    |.f.x.| < +infty by A2,A37,A38,MESFUNC2:def 1;
+    then reconsider c1 = f.x, c2 = g.x as Real by A39,EXTREAL2:102;
     f.x - g.x = c1 - c2 by SUPINF_2:5;
     then |. f.x-g.x.| = abs(c1-c2) by EXTREAL2:49;
     then
-A14: |. f.x-g.x .| * |. f.x-g.x .| = abs(c1-c2)*abs(c1-c2) by EXTREAL1:13;
-    ((|.f-g.|).x) = |.(f-g).x.| by A2,A12,MESFUNC1:def 10;
-    then ((|.f-g.|).x) = |. f.x-g.x .| by A3,A12,MESFUNC1:def 4;
-    then |.((|.f-g.|)|^2).x.|
-    = |. |. f.x - g.x .| * |. f.x - g.x .| .| by A13,Th9
+A40: |. f.x-g.x .| * |. f.x-g.x .| = abs(c1-c2)*abs(c1-c2) by
+    EXTREAL1:13;
+    ((|.f-g.|)|^2).x = ((|.f-g.|).x)|^(1+1) by A38,Def5;
+    then
+A41: ((|.f-g.|)|^2).x = ((|.f-g.|).x)|^1 * (|.f-g.|).x by Th10;
+    ((|.f-g.|).x) = |.(f-g).x.| by A8,A38,MESFUNC1:def 10;
+    then ((|.f-g.|).x) = |. f.x-g.x .| by A9,A38,MESFUNC1:def 4;
+    then
+    |.((|.f-g.|)|^2).x.| = |. |. f.x - g.x .| * |. f.x - g.x .| .| by A41
+    ,Th9
       .= |. |.(f.x - g.x) * (f.x - g.x).| .| by EXTREAL2:56
       .= |.(f.x - g.x) * (f.x - g.x).| by EXTREAL2:70
       .= |. f.x - g.x .| * |. f.x - g.x .| by EXTREAL2:56;
-    hence thesis by A14,XXREAL_0:9;
+    hence thesis by A40,XXREAL_0:9;
   end;
-  then (|.f+g.|)|^2 is real-valued & (|.f-g.|)|^2 is real-valued
-   by A8,MESFUNC2:def 1;
+  then (|.f-g.|)|^2 is real-valued by MESFUNC2:def 1;
   then
-A15: (1/4)(#)(|.f+g.|)|^2 is real-valued & (1/4)(#)(|.f-g.|)|^2 is real-valued
-  by MESFUNC2:12;
-A16: f(#)g = (1/4)(#)(|.f+g.|)|^2 - (1/4)(#)(|.f-g.|)|^2
-  proof
-A17: dom ((1/4)(#)(|.f+g.|)|^2 - (1/4)(#)(|.f-g.|)|^2)
-    = dom((1/4)(#)(|.f+g.|)|^2) /\ dom((1/4)(#)(|.f-g.|)|^2) by A15,MESFUNC2:2;
-    for x be Element of X st x in dom (f(#)g) holds
-    (f(#)g).x = ((1/4)(#)(|.f+g.|) |^ 2 - (1/4)(#)(|.f-g.|) |^ 2).x
-    proof
-      let x be Element of X;
-      assume
-A18:  x in dom (f(#)g);
-      then
-A19:  |.(f+g).x.| = |. f.x+g.x .| & |.(f-g).x.| = |. f.x-g.x .| &
-      |.f+g.| .x = |.(f+g).x.| & |.f-g.| .x = |.(f-g).x.|
-      by A2,A3,A4,A6,MESFUNC1:def 3,def 4,def 10;
-      ((1/4)(#)(|.f+g.|)|^2).x = R_EAL(1/4) * ((|.f+g.|)|^2).x &
-      ((1/4)(#)(|.f-g.|)|^2).x = R_EAL(1/4) * ((|.f-g.|)|^2).x
-      by A4,A6,A7,A18,MESFUNC1:def 6;
-      then ((1/4)(#)(|.f+g.|)|^2).x = R_EAL(1/4) * (|.f+g.| .x)|^(1+1) &
-      ((1/4)(#)(|.f-g.|)|^2).x = R_EAL(1/4) * (|.f-g.| .x)|^(1+1)
-      by A4,A6,A18,Def5;
-      then ((1/4)(#)(|.f+g.|)|^2).x = R_EAL(1/4) * ((|.f+g.| .x)|^1 * (|.f+g.|
-      .x)) &
-      ((1/4)(#)(|.f-g.|)|^2).x = R_EAL(1/4) * ((|.f-g.| .x)|^1 * (|.f-g.| .x))
-      by Th10;
-      then
-A20:  ((1/4)(#)(|.f+g.|)|^2).x = R_EAL(1/4) * (|. f.x+g.x .| * |. f. x+g.x
-      .|) &
-      ((1/4)(#)(|.f-g.|)|^2).x = R_EAL(1/4) * (|. f.x-g.x .| * |. f.x-g.x .|)
-      by A19,Th9;
-      |.f.x.| <+infty & |.g.x.| <+infty by A1,A4,A5,A6,A18,MESFUNC2:def 1;
-      then reconsider c1 = f.x, c2 = g.x as Real by EXTREAL2:102;
-      f.x + g.x = c1 + c2 & f.x - g.x = c1 - c2 by SUPINF_2:1,5;
-      then |. f.x+g.x .| = abs(c1+c2) & |. f.x-g.x .| = abs(c1-c2)
-      by EXTREAL2:49;
-      then |. f.x+g.x .| * |. f.x+g.x .| = abs(c1+c2)*abs(c1+c2) &
-      |. f.x-g.x .| * |. f.x-g.x .| = abs(c1-c2)*abs(c1-c2) by EXTREAL1:13;
-      then
-A21:  ((1/4)(#)(|.f+g.|)|^2).x=(1/4)*(abs(c1+c2)*abs(c1+c2)) &
-      ((1/4)(#)(|.f-g.|)|^2).x=(1/4)*(abs(c1-c2)*abs(c1-c2))
-      by A20,EXTREAL1:13;
-      (abs(c1+c2)*abs(c1+c2)) = (abs(c1+c2))^2 &
-      (abs(c1-c2)*abs(c1-c2)) = (abs(c1-c2))^2;
-      then (abs(c1+c2)*abs(c1+c2)) = (c1+c2)^2 &
-      (abs(c1-c2)*abs(c1-c2)) = (c1-c2)^2 by COMPLEX1:161;
-      then (abs(c1+c2)*abs(c1+c2)) = c1^2+2*c1*c2+c2^2 &
-      (abs(c1-c2)*abs(c1-c2)) = c1^2-2*c1*c2+c2^2;
-      then ((1/4)(#)(|.f+g.|)|^2).x -((1/4)(#)(|.f-g.|)|^2).x
-      =(1/4)*(c1^2+2*c1*c2+c2^2) - (1/4)*(c1^2-2*c1*c2+c2^2) by A21,SUPINF_2:5
-        .= c1*c2
-        .= (f.x)*(g.x) by EXTREAL1:13
-        .= (f(#)g).x by A18,MESFUNC1:def 5;
-      hence thesis by A4,A6,A7,A17,A18,MESFUNC1:def 4;
-    end;
-    hence thesis by A4,A6,A7,A17,PARTFUN1:34;
-  end;
-  f+g is_measurable_on E & f-g is_measurable_on E by A1,A4,A5,MESFUNC2:7,13;
-  then (|.f+g.|)|^2 is_measurable_on E &
-  (|.f-g.|)|^2 is_measurable_on E by A1,A3,A4,Th14;
-  then (1/4)(#)(|.f+g.|)|^2 is_measurable_on E &
-  (1/4)(#)(|.f-g.|)|^2 is_measurable_on E by A1,A4,MESFUNC5:55;
-  hence thesis by A1,A4,A7,A15,A16,MESFUNC2:13;
+A42: (1/4)(#)(|.f-g.|)|^2 is real-valued by MESFUNC2:12;
+  f+g is_measurable_on E by A2,A3,A4,A5,MESFUNC2:7;
+  then (|.f+g.|)|^2 is_measurable_on E by A1,A14,A15,Th14;
+  then
+A43: (1/4)(#)(|.f+g.|)|^2 is_measurable_on E by A1,A15,MESFUNC5:55;
+  f-g is_measurable_on E by A1,A2,A3,A4,A5,MESFUNC2:13,XBOOLE_1:17;
+  then (|.f-g.|)|^2 is_measurable_on E by A1,A9,A10,Th14;
+  then (1/4)(#)(|.f-g.|)|^2 is_measurable_on E by A1,A10,MESFUNC5:55;
+  hence thesis by A1,A10,A12,A23,A42,A36,A43,MESFUNC2:13;
 end;
 
 theorem Th16:
@@ -928,311 +982,367 @@ A2: UB in REAL by SUPINF_1:def 11;
   rng f is bounded_below by A1,XXREAL_2:def 11;
   then consider LB being LowerBound of rng f such that
 A3: LB in REAL by SUPINF_1:def 12;
-A4: UB < +infty & -infty < LB by A2,A3,XXREAL_0:9,12;
   now
     let x be Element of X;
-    assume x in dom f;
-    then f.x in rng f by FUNCT_1:12;
-    then f.x <= UB & LB <= f.x by XXREAL_2:def 1,def 2;
+    assume
+A4: x in dom f;
+    then LB <= f.x by FUNCT_1:12,XXREAL_2:def 2;
+    then -infty < f.x by A3,XXREAL_0:2,12;
     then
-A5: f.x < +infty & -infty < f.x by A4,XXREAL_0:2;
-    then -(+infty) < f.x by XXREAL_3:23;
+A5: -(+infty) < f.x by XXREAL_3:23;
+    f.x <= UB by A4,FUNCT_1:12,XXREAL_2:def 1;
+    then f.x < +infty by A2,XXREAL_0:2,9;
     hence |. f.x .| < +infty by A5,EXTREAL2:59;
   end;
   hence thesis by MESFUNC2:def 1;
 end;
 
 theorem
-  for M be sigma_Measure of S, f,g be PartFunc of X, ExtREAL,
-  E be Element of S, F be non empty Subset of ExtREAL st
-  dom f /\ dom g = E & rng f = F & g is real-valued &
-  f is_measurable_on E & rng f is bounded & g is_integrable_on M holds
-  (f(#)g)|E is_integrable_on M & ex c be Element of REAL st
-  c >= inf F & c <= sup F &
-  Integral(M, (f(#)|.g.|)|E) = R_EAL c * Integral(M, (|.g.|)|E)
+  for M be sigma_Measure of S, f,g be PartFunc of X, ExtREAL, E be
+Element of S, F be non empty Subset of ExtREAL st dom f /\ dom g = E & rng f =
+  F & g is real-valued & f is_measurable_on E & rng f is bounded & g
+is_integrable_on M holds (f(#)g)|E is_integrable_on M & ex c be Element of REAL
+st c >= inf F & c <= sup F & Integral(M, (f(#)|.g.|)|E) = R_EAL c * Integral(M,
+  (|.g.|)|E)
 proof
-  let M be sigma_Measure of S, f,g be PartFunc of X, ExtREAL,
-  E be Element of S, F be non empty Subset of ExtREAL;
-  assume
-A1: dom f /\ dom g = E & rng f = F & g is real-valued & f is_measurable_on E &
-  rng f is bounded & g is_integrable_on M;
-  then consider E1 be Element of S such that
-A2: E1 = dom g & g is_measurable_on E1 by MESFUNC5:def 17;
-A3: E1 = dom |.g.| & |.g.| is_measurable_on E1
-  by A2,MESFUNC1:def 10,MESFUNC2:29;
+  let M be sigma_Measure of S, f,g be PartFunc of X, ExtREAL, E be Element of
+  S, F be non empty Subset of ExtREAL;
+  assume that
+A1: dom f /\ dom g = E and
+A2: rng f = F and
+A3: g is real-valued and
+A4: f is_measurable_on E and
+A5: rng f is bounded and
+A6: g is_integrable_on M;
+A7: dom ((f(#)|.g.|)|E) = dom (f(#)|.g.|) /\ E by RELAT_1:90;
+A8: rng f is Subset of REAL by A5,Th16,MESFUNC2:35;
+  then not +infty in rng f;
   then
-A4: g is_measurable_on E & |.g.| is_measurable_on E by A1,A2,MESFUNC1:34
-,XBOOLE_1:17;
-A5: rng f is bounded_below & rng f is bounded_above by A1,XXREAL_2:def 11;
-A6: f is real-valued by A1,Th16;
-A7: rng f is Subset of REAL by A1,Th16,MESFUNC2:35;
-  then not +infty in rng f & not -infty in rng f;
-  then rng f <> {+infty} & rng f <> {-infty} by TARSKI:def 1;
-  then reconsider k0=inf F, l0=sup F as Real by A1,A5,XXREAL_2:57,58;
-  |.inf F.|=abs k0 & |.sup F.|=abs l0 by EXTREAL2:49;
-  then reconsider k1= |.inf F.|, l1= |.sup F.| as Real;
-A8: dom |.g.| = dom g by MESFUNC1:def 10;
-A9: E c= dom f & E c= dom g by A1,XBOOLE_1:17;
+A9: rng f <> {+infty} by TARSKI:def 1;
+A10: rng f is bounded_above by A5,XXREAL_2:def 11;
+  not -infty in rng f by A8;
   then
-A10: E c= dom |.g.| by MESFUNC1:def 10;
-A11: dom (f(#)g) = E by A1,MESFUNC1:def 5;
+A11: rng f <> {-infty} by TARSKI:def 1;
+  rng f is bounded_below by A5,XXREAL_2:def 11;
+  then reconsider k0=inf F, l0=sup F as Real by A2,A10,A9,A11,XXREAL_2:57,58;
+A12: |.sup F.|=abs l0 by EXTREAL2:49;
+  |.inf F.|=abs k0 by EXTREAL2:49;
+  then reconsider k1= |.inf F.|, l1= |.sup F.| as Real by A12;
+A13: E c= dom f by A1,XBOOLE_1:17;
+A14: sup F is UpperBound of rng f by A2,XXREAL_2:def 3;
+A15: E c= dom g by A1,XBOOLE_1:17;
   then
-A12: dom((f(#)g)|E) = E by RELAT_1:91;
-  then
-A13: dom (|.(f(#)g)|E.|) = E by MESFUNC1:def 10;
-  dom ( ((k1+l1)(#)|.g.|)|E ) = dom ( (k1+l1)(#)(|.g.|)|E ) by Th2;
-  then dom ( ((k1+l1)(#)|.g.|)|E ) = dom ((|.g.|)|E) by MESFUNC1:def 6;
-  then
-A14: dom ( ((k1+l1)(#)|.g.|)|E ) = E by A10,RELAT_1:91;
-A15: dom ((k1+l1)(#)|.g.|) = dom |.g.| by MESFUNC1:def 6;
-A16: dom (f(#)|.g.|) = dom f /\ dom |.g.| by MESFUNC1:def 5;
-  then
-A17: dom (f(#)|.g.|) = E by A1,MESFUNC1:def 10;
-A18: dom ((f(#)|.g.|)|E) = dom (f(#)|.g.|) /\ E by RELAT_1:90;
-A19: inf F is LowerBound of rng f & sup F is UpperBound of rng f
-  by A1,XXREAL_2:def 3,def 4;
-A20: for x be Element of X st x in E holds |. f.x .| <= |.inf F.| + |.sup F.|
-  proof
-    let x be Element of X;
-    assume x in E;
-    then
-A21: f.x in rng f by A9,FUNCT_1:12;
-    then reconsider fx=f.x as Real by A7;
-A22: k0 <=fx & fx <=l0 by A19,A21,XXREAL_2:def 1,def 2;
-    l0 <= abs l0 & 0 <= abs k0 by COMPLEX1:132,162;
-    then l0+abs k0 <=abs l0 + abs k0 & l0+0 <=l0+abs k0 by XREAL_1:8;
-    then
-A23: l0 <=abs l0 + abs k0 by XXREAL_0:2;
-    0 <= abs l0 by COMPLEX1:132;
-    then
-A24: -abs k0 -abs l0 <= -abs k0 -0 by XREAL_1:12;
-    -abs k0 <= k0 by COMPLEX1:162;
-    then -abs k0 -abs l0 <= k0 by A24,XXREAL_0:2;
-    then -(abs k0 + abs l0) <= fx & fx <= abs k0 + abs l0
-    by A22,A23,XXREAL_0:2;
-    then
-A25: abs fx <= abs k0 + abs l0 by ABSVALUE:12;
-    abs fx = |.f.x.| & abs k0= |.inf F.| & abs l0 = |.sup F.| by EXTREAL2:49;
-    hence thesis by A25,SUPINF_2:1;
-  end;
-A26: |.g.| is_integrable_on M by A1,A2,MESFUNC5:106;
-  then
-A27: (|.g.|)|E is_integrable_on M by MESFUNC5:103;
-  (k1+l1)(#)|.g.| is_integrable_on M by A26,MESFUNC5:116;
-  then
-A28: ((k1+l1)(#)|.g.|)|E is_integrable_on M by MESFUNC5:103;
-A29: f(#)g is_measurable_on E by A1,A4,A6,Th15;
-  dom (f(#)g) /\ E = E by A11;
-  then
-A30: (f(#)g)|E is_measurable_on E by A29,MESFUNC5:48;
-A31: for x be Element of X st x in dom ((f(#)g)|E) holds
-  |.((f(#)g)|E).x.| <= (((k1+l1)(#)|.g.|)|E).x
-  proof
-    let x be Element of X;
-    assume
-A32: x in dom ((f(#)g)|E);
-    then
-A33: ((f(#)g)|E).x = (f(#)g).x by FUNCT_1:70;
-    dom (f|E) = E & dom (g|E) = E by A1,RELAT_1:91,XBOOLE_1:17;
-    then
-A34: (f|E).x = f.x & (g|E).x = g.x by A12,A32,FUNCT_1:70;
-    0 <= |.(g|E).x.| by EXTREAL2:51;
-    then
-A35: |.(f|E).x.|*|.(g|E).x.| <= (|.inf F.| + |.sup F.|)*|.(g|E).x.|
-    by A12,A20,A32,A34,XXREAL_3:82;
-A36: (((k1+l1)(#)|.g.|)|E).x = ((k1+l1)(#)|.g.|).x by A12,A14,A32,FUNCT_1:70;
-    |.(f(#)g).x.| = |. f.x * g.x .| by A11,A12,A32,MESFUNC1:def 5;
-    then
-A37: |.((f(#)g)|E).x.| = |.(f|E).x.|*|.(g|E).x.| by A33,A34,EXTREAL2:56;
-    ((k1+l1)(#)|.g.|).x = R_EAL(k1+l1) * |.g.| .x
-    by A10,A12,A15,A32,MESFUNC1:def 6;
-    then (((k1+l1)(#)|.g.|)|E).x = R_EAL(k1+l1)*|.(g|E).x.|
-    by A10,A12,A32,A34,A36,MESFUNC1:def 10;
-    hence thesis by A35,A37,SUPINF_2:1;
-  end;
-  then (f(#)g)|E is_integrable_on M by A12,A14,A28,A30,MESFUNC5:108;
-  then
-A38: |.((f(#)g)|E).| is_integrable_on M by A12,A30,MESFUNC5:106;
+A16: E c= dom |.g.| by MESFUNC1:def 10;
+A17: dom |.g.| = dom g by MESFUNC1:def 10;
   for x be Element of X st x in dom |.g.| holds |. |.g.| .x.| < +infty
   proof
     let x be Element of X;
     assume
-A39: x in dom |.g.|;
+A18: x in dom |.g.|;
     then |. |.g.| .x.| = |.|.g.x.|.| by MESFUNC1:def 10;
     then |. |.g.| .x.| = |.g.x.| by EXTREAL2:70;
-    hence thesis by A1,A8,A39,MESFUNC2:def 1;
+    hence thesis by A3,A17,A18,MESFUNC2:def 1;
   end;
   then
-A40: |.g.| is real-valued by MESFUNC2:def 1;
+A19: |.g.| is real-valued by MESFUNC2:def 1;
+A20: f is real-valued by A5,Th16;
+  consider E1 be Element of S such that
+A21: E1 = dom g and
+A22: g is_measurable_on E1 by A6,MESFUNC5:def 17;
+A23: E1 = dom |.g.| by A21,MESFUNC1:def 10;
+  |.g.| is_measurable_on E1 by A21,A22,MESFUNC2:29;
+  then
+A24: |.g.| is_measurable_on E by A1,A21,MESFUNC1:34,XBOOLE_1:17;
   dom f /\ dom |.g.| = E by A1,MESFUNC1:def 10;
   then
-A41: f(#)|.g.| is_measurable_on E by A1,A4,A6,A40,Th15;
-  dom (f(#)|.g.|) /\ E = E by A17;
+A25: f(#)|.g.| is_measurable_on E by A4,A24,A20,A19,Th15;
+A26: |.g.| is_integrable_on M by A6,A21,A22,MESFUNC5:106;
   then
-A42: (f(#)|.g.|)|E is_measurable_on E by A41,MESFUNC5:48;
-  for x be Element of X st x in dom ((f(#)|.g.|)|E) holds
-  |.((f(#)|.g.|)|E).x.| <= |.((f(#)g)|E).| .x
+A27: (|.g.|)|E is_integrable_on M by MESFUNC5:103;
+A28: dom (f(#)|.g.|) = dom f /\ dom |.g.| by MESFUNC1:def 5;
+  then
+A29: dom (f(#)|.g.|) = E by A1,MESFUNC1:def 10;
+A30: dom (k0(#)|.g.|) = dom |.g.| by MESFUNC1:def 6;
+  then
+A31: dom ((k0(#)|.g.|)|E) = E by A16,RELAT_1:91;
+A32: inf F is LowerBound of rng f by A2,XXREAL_2:def 4;
+A33: for x be Element of X st x in E holds inf F*|.g.x.| <= (f.x)*|.g.x.| &
+  (f.x)*|.g.x.| <= sup F*|.g.x.|
+  proof
+    let x be Element of X;
+A34: 0 <= |.g.x.| by EXTREAL2:51;
+    assume
+A35: x in E;
+    then
+A36: f.x <= sup F by A13,A14,FUNCT_1:12,XXREAL_2:def 1;
+    inf F <= f.x by A13,A32,A35,FUNCT_1:12,XXREAL_2:def 2;
+    hence thesis by A36,A34,XXREAL_3:82;
+  end;
+  for x be Element of X st x in dom ((k0(#)|.g.|)|E) holds ((k0(#)|.g.|)
+  |E).x <= ((f(#)|.g.|)|E).x
   proof
     let x be Element of X;
     assume
-A43: x in dom ((f(#)|.g.|)|E);
-    then |. (f(#)|.g.|).x.| = |. f.x*|.g.|.x .| by A17,A18,MESFUNC1:def 5
-      .= |. f.x*|.g.x.| .| by A1,A8,A9,A16,A18,A43,MESFUNC1:def 10
+A37: x in dom ((k0(#)|.g.|)|E);
+    then
+A38: ((k0(#)|.g.|)|E).x = (k0(#)|.g.|).x by FUNCT_1:70;
+    (f(#)|.g.|).x = (f.x)*(|.g.|.x) by A29,A31,A37,MESFUNC1:def 5;
+    then
+A39: (f(#)|.g.|).x = (f.x)*|.g.x.| by A16,A31,A37,MESFUNC1:def 10;
+    (k0(#)|.g.|).x = (R_EAL k0)*(|.g.|).x by A16,A30,A31,A37,
+    MESFUNC1:def 6;
+    then (k0(#)|.g.|).x = (R_EAL k0)*|.g.x.| by A16,A31,A37, MESFUNC1:
+    def 10;
+    then (k0(#)|.g.|).x <= (f(#)|.g.|).x by A33,A31,A37,A39;
+    hence thesis by A29,A7,A31,A37,A38,FUNCT_1:70;
+  end;
+  then
+A40: (f(#)|.g.|)|E - (k0(#)|.g.|)|E is nonnegative by Th1;
+A41: dom (l0(#)|.g.|) = dom |.g.| by MESFUNC1:def 6;
+  then
+A42: dom ((l0(#)|.g.|)|E) = E by A16,RELAT_1:91;
+A43: dom (f(#)g) = E by A1,MESFUNC1:def 5;
+  then
+A44: dom((f(#)g)|E) = E by RELAT_1:91;
+  then
+A45: dom (|.(f(#)g)|E.|) = E by MESFUNC1:def 10;
+A46: for x be Element of X st x in dom ((f(#)|.g.|)|E) holds |.((f(#)|.g.|)|
+  E).x.| <= |.((f(#)g)|E).| .x
+  proof
+    let x be Element of X;
+    assume
+A47: x in dom ((f(#)|.g.|)|E);
+    then
+A48: ((f(#)|.g.|)|E).x = (f(#)|.g.|).x by FUNCT_1:70;
+    |. (f(#)|.g.|).x.| = |. f.x*|.g.|.x .| by A29,A7,A47,MESFUNC1:def 5
+      .= |. f.x*|.g.x.| .| by A1,A17,A15,A28,A7,A47,MESFUNC1:def 10
       .= |.f.x.| * |. |.g.x.| .| by EXTREAL2:56
       .= |.f.x.|*|.g.x.| by EXTREAL2:70;
     then
-A44: |. (f(#)|.g.|).x.| = |. f.x*g.x .| by EXTREAL2:56;
-    dom |.f(#)g.| = E by A11,MESFUNC1:def 10;
+A49: |. (f(#)|.g.|).x.| = |. f.x*g.x .| by EXTREAL2:56;
+    dom |.f(#)g.| = E by A43,MESFUNC1:def 10;
     then
-A45: |.(f(#)g).|.x = |.(f(#)g).x.| by A17,A18,A43,MESFUNC1:def 10;
-A46: ((f(#)|.g.|)|E).x = (f(#)|.g.|).x by A43,FUNCT_1:70;
-    |. ((f(#)g)|E).x .| = |. (f(#)g).x .| by A12,A17,A18,A43,FUNCT_1:70;
-    then |.((f(#)g)|E).| .x = |. f(#)g .| .x
-    by A13,A17,A18,A43,A45,MESFUNC1:def 10;
-    hence thesis by A11,A17,A18,A43,A44,A45,A46,MESFUNC1:def 5;
+A50: |.(f(#)g).|.x = |.(f(#)g).x.| by A29,A7,A47,MESFUNC1:def 10;
+    |. ((f(#)g)|E).x .| = |. (f(#)g).x .| by A44,A29,A7,A47,FUNCT_1:70;
+    then |.((f(#)g)|E).| .x = |. f(#)g .| .x by A45,A29,A7,A47,A50,
+    MESFUNC1:def 10;
+    hence thesis by A43,A29,A7,A47,A49,A50,A48,MESFUNC1:def 5;
   end;
-  then
-A47: (f(#)|.g.|)|E is_integrable_on M by A13,A17,A18,A38,A42,MESFUNC5:108;
-A48: for x be Element of X st x in E holds
-  inf F*|.g.x.| <= (f.x)*|.g.x.| & (f.x)*|.g.x.| <= sup F*|.g.x.|
-  proof
-    let x be Element of X;
-    assume x in E;
-    then f.x in rng f by A9,FUNCT_1:12;
-    then
-A49: inf F <= f.x & f.x <= sup F by A19,XXREAL_2:def 1,def 2;
-    0 <= |.g.x.| by EXTREAL2:51;
-    hence thesis by A49,XXREAL_3:82;
-  end;
-A50: dom (k0(#)|.g.|) = dom |.g.| & dom (l0(#)|.g.|) = dom |.g.|
-  by MESFUNC1:def 6;
-  then
-A51: dom ((k0(#)|.g.|)|E) = E & dom ((l0(#)|.g.|)|E) = E by A10,RELAT_1:91;
-A52: dom (f(#)|.g.|) c= dom (l0(#)|.g.|) by A16,A50,XBOOLE_1:17;
-  Integral(M, (k0(#)|.g.|)|E) = Integral(M, k0(#)((|.g.|)|E)) &
   Integral(M, (l0(#)|.g.|)|E) = Integral(M, l0(#)((|.g.|)|E)) by Th2;
   then
-A53: Integral(M, (k0(#)|.g.|)|E) = R_EAL k0 * Integral(M, (|.g.|)|E) &
-  Integral(M, (l0(#)|.g.|)|E) = R_EAL l0 * Integral(M, (|.g.|)|E)
-  by A27,MESFUNC5:116;
+A51: Integral(M, (l0(#)|.g.|)|E) = R_EAL l0 * Integral(M, (|.g.|)|E) by A27
+  ,MESFUNC5:116;
+A52: dom (f(#)g) /\ E = E by A43;
+  g is_measurable_on E by A1,A21,A22,MESFUNC1:34,XBOOLE_1:17;
+  then f(#)g is_measurable_on E by A1,A3,A4,A20,Th15;
+  then
+A53: (f(#)g)|E is_measurable_on E by A52,MESFUNC5:48;
+A54: for x be Element of X st x in E holds |. f.x .| <= |.inf F.| + |.sup F
+  .|
+  proof
+    0 <= abs k0 by COMPLEX1:132;
+    then
+A55: l0+0 <=l0+abs k0 by XREAL_1:8;
+    l0 <= abs l0 by COMPLEX1:162;
+    then l0+abs k0 <=abs l0 + abs k0 by XREAL_1:8;
+    then
+A56: l0 <=abs l0 + abs k0 by A55,XXREAL_0:2;
+    0 <= abs l0 by COMPLEX1:132;
+    then
+A57: -abs k0 -abs l0 <= -abs k0 -0 by XREAL_1:12;
+    -abs k0 <= k0 by COMPLEX1:162;
+    then
+A58: -abs k0 -abs l0 <= k0 by A57,XXREAL_0:2;
+    let x be Element of X;
+A59: abs k0= |.inf F.| by EXTREAL2:49;
+    assume
+A60: x in E;
+    then f.x in rng f by A13,FUNCT_1:12;
+    then reconsider fx=f.x as Real by A8;
+A61: abs l0 = |.sup F.| by EXTREAL2:49;
+    fx <=l0 by A13,A14,A60,FUNCT_1:12,XXREAL_2:def 1;
+    then
+A62: fx <= abs k0 + abs l0 by A56,XXREAL_0:2;
+    k0 <=fx by A13,A32,A60,FUNCT_1:12,XXREAL_2:def 2;
+    then -(abs k0 + abs l0) <= fx by A58,XXREAL_0:2;
+    then
+A63: abs fx <= abs k0 + abs l0 by A62,ABSVALUE:12;
+    abs fx = |.f.x.| by EXTREAL2:49;
+    hence thesis by A63,A59,A61,SUPINF_2:1;
+  end;
+  dom ( ((k1+l1)(#)|.g.|)|E ) = dom ( (k1+l1)(#)(|.g.|)|E ) by Th2;
+  then dom ( ((k1+l1)(#)|.g.|)|E ) = dom ((|.g.|)|E) by MESFUNC1:def 6;
+  then
+A64: dom ( ((k1+l1)(#)|.g.|)|E ) = E by A16,RELAT_1:91;
+A65: dom ((k1+l1)(#)|.g.|) = dom |.g.| by MESFUNC1:def 6;
+A66: for x be Element of X st x in dom ((f(#)g)|E) holds |.((f(#)g)|E).x.|
+  <= (((k1+l1)(#)|.g.|)|E).x
+  proof
+    let x be Element of X;
+    assume
+A67: x in dom ((f(#)g)|E);
+    then
+A68: ((f(#)g)|E).x = (f(#)g).x by FUNCT_1:70;
+    dom (f|E) = E by A1,RELAT_1:91,XBOOLE_1:17;
+    then
+A69: (f|E).x = f.x by A44,A67,FUNCT_1:70;
+    dom (g|E) = E by A1,RELAT_1:91,XBOOLE_1:17;
+    then
+A70: (g|E).x = g.x by A44,A67,FUNCT_1:70;
+    0 <= |.(g|E).x.| by EXTREAL2:51;
+    then
+A71: |.(f|E).x.|*|.(g|E).x.| <= (|.inf F.| + |.sup F.|)*|.(g|E).x.| by A44
+    ,A54,A67,A69,XXREAL_3:82;
+A72: (((k1+l1)(#)|.g.|)|E).x = ((k1+l1)(#)|.g.|).x by A44,A64,A67,FUNCT_1:
+    70;
+    |.(f(#)g).x.| = |. f.x * g.x .| by A43,A44,A67,MESFUNC1:def 5;
+    then
+A73: |.((f(#)g)|E).x.| = |.(f|E).x.|*|.(g|E).x.| by A68,A69,A70,
+    EXTREAL2:56;
+    ((k1+l1)(#)|.g.|).x = R_EAL(k1+l1) * |.g.| .x by A16,A44,A65,A67,
+    MESFUNC1:def 6;
+    then
+    (((k1+l1)(#)|.g.|)|E).x = R_EAL(k1+l1)*|.(g|E).x.| by A16,A44,A67,A70
+    ,A72,MESFUNC1:def 10;
+    hence thesis by A71,A73,SUPINF_2:1;
+  end;
+  (k1+l1)(#)|.g.| is_integrable_on M by A26,MESFUNC5:116;
+  then
+A74: ((k1+l1)(#)|.g.|)|E is_integrable_on M by MESFUNC5:103;
+  then (f(#)g)|E is_integrable_on M by A44,A64,A53,A66,MESFUNC5:108;
+  then
+A75: |.((f(#)g)|E).| is_integrable_on M by A44,A53,MESFUNC5:106;
+  dom (f(#)|.g.|) /\ E = E by A29;
+  then (f(#)|.g.|)|E is_measurable_on E by A25,MESFUNC5:48;
+  then
+A76: (f(#)|.g.|)|E is_integrable_on M by A45,A29,A7,A75,
+  A46, MESFUNC5:
+  108;
+  then
+A77: -infty < Integral(M, (f(#)|.g.|)|E) by MESFUNC5:102;
   k0(#)|.g.| is_integrable_on M by A26,MESFUNC5:116;
-  then
-A54: (k0(#)|.g.|)|E is_integrable_on M by MESFUNC5:103;
-  for x be Element of X st x in dom ((k0(#)|.g.|)|E) holds
-  ((k0(#)|.g.|)|E).x <= ((f(#)|.g.|)|E).x
-  proof
-    let x be Element of X;
-    assume
-A55: x in dom ((k0(#)|.g.|)|E);
-    then (k0(#)|.g.|).x = (R_EAL k0)*(|.g.|).x &
-    (f(#)|.g.|).x = (f.x)*(|.g.|.x) by A10,A17,A50,A51,MESFUNC1:def 5,def 6;
-    then (k0(#)|.g.|).x = (R_EAL k0)*|.g.x.| &
-    (f(#)|.g.|).x = (f.x)*|.g.x.| by A10,A51,A55,MESFUNC1:def 10;
-    then
-A56: (k0(#)|.g.|).x <= (f(#)|.g.|).x by A48,A51,A55;
-    ((k0(#)|.g.|)|E).x = (k0(#)|.g.|).x by A55,FUNCT_1:70;
-    hence thesis by A17,A18,A51,A55,A56,FUNCT_1:70;
-  end;
-  then (f(#)|.g.|)|E - (k0(#)|.g.|)|E is nonnegative by Th1;
+  then (k0(#)|.g.|)|E is_integrable_on M by MESFUNC5:103;
   then consider V1 be Element of S such that
-A57: V1 = dom((k0(#)|.g.|)|E) /\ dom((f(#)|.g.|)|E) &
-  Integral(M,((k0(#)|.g.|)|E)|V1) <= Integral(M,((f(#)|.g.|)|E)|V1)
-  by A47,A54,Th3;
-A58: ((k0(#)|.g.|)|E)|V1 = (k0(#)|.g.|)|E & ((f(#)|.g.|)|E)|V1 = (f(#)|.g.|)|E
-  by A17,A18,A51,A57,RELAT_1:97;
-  l0(#)|.g.| is_integrable_on M by A26,MESFUNC5:116;
-  then
-A59: (l0(#)|.g.|)|E is_integrable_on M by MESFUNC5:103;
-  for x be Element of X st x in dom ((f(#)|.g.|)|E) holds
-  ((f(#)|.g.|)|E).x <= ((l0(#)|.g.|)|E).x
+A78: V1 = dom((k0(#)|.g.|)|E) /\ dom((f(#)|.g.|)|E) and
+A79: Integral(M,((k0(#)|.g.|)|E)|V1) <= Integral(M,((f(#)|.g.|)|E)|V1)
+  by A76,A40,Th3;
+A80: ((f(#)|.g.|)|E)|V1 = (f(#)|.g.|)|E by A29,A7,A31,A78,RELAT_1:97;
+A81: dom (f(#)|.g.|) c= dom (l0(#)|.g.|) by A28,A41,XBOOLE_1:17;
+  for x be Element of X st x in dom ((f(#)|.g.|)|E) holds ((f(#)|.g.|)|E
+  ).x <= ((l0(#)|.g.|)|E).x
   proof
     let x be Element of X;
     assume
-A60: x in dom ((f(#)|.g.|)|E);
-    then (f(#)|.g.|).x = (f.x)*(|.g.|).x & (l0(#)|.g.|).x = (R_EAL l0)*(|.
-    g.|.x) by A17,A18,A52,MESFUNC1:def 5,def 6;
-    then (f(#)|.g.|).x = (f.x)*|.g.x.| & (l0(#)|.g.|).x = (R_EAL l0)*|.g.x .|
-    by A10,A17,A18,A60,MESFUNC1:def 10;
+A82: x in dom ((f(#)|.g.|)|E);
     then
-A61: (f(#)|.g.|).x <= (l0(#)|.g.|).x by A17,A18,A48,A60;
-    ((f(#)|.g.|)|E).x = (f(#)|.g.|).x by A60,FUNCT_1:70;
-    hence thesis by A17,A18,A51,A60,A61,FUNCT_1:70;
+A83: ((f(#)|.g.|)|E).x = (f(#)|.g.|).x by FUNCT_1:70;
+    (f(#)|.g.|).x = (f.x)*(|.g.|).x by A29,A7,A82,MESFUNC1:def 5;
+    then
+A84: (f(#)|.g.|).x = (f.x)*|.g.x.| by A16,A29,A7,A82,MESFUNC1:def
+    10;
+    (l0(#)|.g.|).x = (R_EAL l0)*(|. g.|.x) by A29,A7,A81,A82,
+    MESFUNC1:def 6;
+    then (l0(#)|.g.|).x = (R_EAL l0)*|.g.x .| by A16,A29,A7,A82,
+    MESFUNC1:def 10;
+    then (f(#)|.g.|).x <= (l0(#)|.g.|).x by A29,A7,A33,A82,A84;
+    hence thesis by A29,A7,A42,A82,A83,FUNCT_1:70;
   end;
-  then (l0(#)|.g.|)|E - (f(#)|.g.|)|E is nonnegative by Th1;
+  then
+A85: (l0(#)|.g.|)|E - (f(#)|.g.|)|E is nonnegative by Th1;
+  Integral(M, (k0(#)|.g.|)|E) = Integral(M, k0(#)((|.g.|)|E)) by Th2;
+  then
+A86: Integral(M, (k0(#)|.g.|)|E) = R_EAL k0 * Integral(M, (|.g.|)|E) by A27
+  ,MESFUNC5:116;
+  l0(#)|.g.| is_integrable_on M by A26,MESFUNC5:116;
+  then (l0(#)|.g.|)|E is_integrable_on M by MESFUNC5:103;
   then consider V2 be Element of S such that
-A62: V2 = dom((l0(#)|.g.|)|E) /\ dom((f(#)|.g.|)|E) &
-  Integral(M,((f(#)|.g.|)|E)|V2) <= Integral(M,((l0(#)|.g.|)|E)|V2)
-  by A47,A59,Th3;
-A63: ((f(#)|.g.|)|E)|V2 = (f(#)|.g.|)|E & ((l0(#)|.g.|)|E)|V2 = (l0(#)|.g.|)|E
-  by A17,A18,A51,A62,RELAT_1:97;
-A64: -infty < Integral(M, (f(#)|.g.|)|E) &
-  Integral(M, (f(#)|.g.|)|E) < +infty by A47,MESFUNC5:102;
-  ex c be Element of REAL st c >= inf F & c <= sup F &
-  Integral(M,(f(#)|.g.|)|E) = R_EAL c * Integral(M,(|.g.|)|E)
+A87: V2 = dom((l0(#)|.g.|)|E) /\ dom((f(#)|.g.|)|E) and
+A88: Integral(M,((f(#)|.g.|)|E)|V2) <= Integral(M,((l0(#)|.g.|)|E)|V2)
+  by A76,A85,Th3;
+A89: ((f(#)|.g.|)|E)|V2 = (f(#)|.g.|)|E by A29,A7,A42,A87,RELAT_1:97;
+A90: ((l0(#)|.g.|)|E)|V2 = (l0(#)|.g.|)|E by A29,A7,A42,A87,RELAT_1:97;
+A91: Integral(M, (f(#)|.g.|)|E) < +infty by A76,MESFUNC5:102;
+A92: ((k0(#)|.g.|)|E)|V1 = (k0(#)|.g.|)|E by A29,A7,A31,A78,RELAT_1:97;
+  ex c be Element of REAL st c >= inf F & c <= sup F & Integral(M,(f(#)
+  |.g.|)|E) = R_EAL c * Integral(M,(|.g.|)|E)
   proof
     per cases;
     suppose
-A65:  Integral(M, (|.g.|)|E) <> 0.;
+A93:  Integral(M, (|.g.|)|E) <> 0.;
+      reconsider c3 = Integral(M, (f(#)|.g.|)|E) as Real by A77,A91,
+      XXREAL_0:14;
+      set c2 = Integral(M, (f(#)|.g.|)|E) / Integral(M, (|.g.|)|E);
+A94:  Integral(M, (|.g.|)|E) < +infty by A27,MESFUNC5:102;
+A95:  -infty < Integral(M, (|.g.|)|E) by A27,MESFUNC5:102;
+      then reconsider c1=Integral(M, (|.g.|)|E) as Real by A94,XXREAL_0:14;
+      Integral(M, (f(#)|.g.|)|E) / Integral(M, (|.g.|)|E) = c3 /c1 by
+      EXTREAL1:32;
+      then reconsider c = c2 as Element of REAL;
+A96:  Integral(M, (|.g.|)|E)/Integral(M, (|.g.|)|E) =c1/c1 by EXTREAL1:
+      32;
+      Integral(M, (|.g.|)|E) / Integral(M, (|.g.|)|E) = c1 / c1 by
+      EXTREAL1:32;
       then
-A66:  Integral(M, (|.g.|)|E) > 0. by A3,MESFUNC5:98;
-A67:  -infty < Integral(M, (|.g.|)|E) & Integral(M, (|.g.|)|E) < +infty
-      by A27,MESFUNC5:102;
-      then reconsider c1=Integral(M, (|.g.|)|E) as Real by XXREAL_0:14;
-A68:  Integral(M, (|.g.|)|E)/Integral(M, (|.g.|)|E) =c1/c1 by EXTREAL1:32;
-      inf F * Integral(M, (|.g.|)|E) = k0*c1 &
+A97:  c3 * (c1 / c1) = Integral(M, (f(#)|.g.|)|E) * ( Integral(M, (|.g.|
+      )|E) / Integral(M, (|.g.|)|E) ) by EXTREAL1:13;
+      Integral(M, (f(#)|.g.|)|E) / Integral(M, (|.g.|)|E) = c3 / c1 by
+      EXTREAL1:32;
+      then Integral(M,(|.g.|)|E) * ( Integral(M,(f(#)|.g.|)|E) / Integral(M,(
+      |.g .|)|E) ) = c1 * (c3 / c1) by EXTREAL1:13;
+      then
+A98:  R_EAL c * Integral(M, (|.g.|)|E) = Integral(M, (f(#)|.g.|)|E) by
+      A93,A95,A94,A97,XXREAL_3:99;
+A99:  Integral(M, (|.g.|)|E) > 0. by A21,A22,A23,A93
+      ,MESFUNC2:29 ,MESFUNC5
+      :98;
       sup F * Integral(M, (|.g.|)|E) = l0*c1 by EXTREAL1:13;
       then
-A69:  (inf F * Integral(M, (|.g.|)|E)) / Integral(M, (|.g.|)|E) = k0 *c1 /c1 &
-      (sup F * Integral(M, (|.g.|)|E)) / Integral(M, (|.g.|)|E) = l0*c1/c1
-      by EXTREAL1:32;
-      k0*c1/c1=k0*(c1/c1) & l0*c1/c1=l0*(c1/c1);
+A100: (sup F * Integral(M, (|.g.|)|E)) / Integral(M, (|.g.|)|E) = l0*c1/
+      c1 by EXTREAL1:32;
+      l0*c1/c1=l0*(c1/c1);
       then
-A70:  inf F * Integral(M, (|.g.|)|E) / Integral(M, (|.g.|)|E)
-      = inf F *(Integral(M, (|.g.|)|E) / Integral(M, (|.g.|)|E)) &
-      sup F * Integral(M, (|.g.|)|E) / Integral(M, (|.g.|)|E)
-      = sup F *(Integral(M, (|.g.|)|E) / Integral(M, (|.g.|)|E))
-      by A68,A69,EXTREAL1:13;
-      inf F * (Integral(M,(|.g.|)|E) / Integral(M,(|.g.|)|E)) = inf F * 1. &
-      sup F * (Integral(M,(|.g.|)|E) / Integral(M,(|.g.|)|E)) = sup F * 1.
-      by A65,A67,XXREAL_3:89;
+A101: sup F * Integral(M, (|.g.|)|E) / Integral(M, (|.g.|)|E) = sup F *(
+      Integral(M, (|.g.|)|E) / Integral(M, (|.g.|)|E)) by A96,A100,EXTREAL1:13;
+      inf F * Integral(M, (|.g.|)|E) = k0*c1 by EXTREAL1:13;
       then
-A71:  inf F * (Integral(M, (|.g.|)|E) / Integral(M, (|.g.|)|E)) = inf F &
-      sup F * (Integral(M, (|.g.|)|E) / Integral(M, (|.g.|)|E)) = sup F
+A102: (inf F * Integral(M, (|.g.|)|E)) / Integral(M, (|.g.|)|E) = k0 *c1
+      /c1 by EXTREAL1:32;
+      k0*c1/c1=k0*(c1/c1);
+      then
+A103: inf F * Integral(M, (|.g.|)|E) / Integral(M, (|.g.|)|E) = inf F *(
+      Integral(M, (|.g.|)|E) / Integral(M, (|.g.|)|E)) by A96,A102,EXTREAL1:13;
+      sup F * (Integral(M,(|.g.|)|E) / Integral(M,(|.g.|)|E)) = sup F *
+      1. by A93,A95,A94,XXREAL_3:89;
+      then sup F * (Integral(M, (|.g.|)|E) / Integral(M, (|.g.|)|E)) = sup F
       by XXREAL_3:92;
-      set c2 = Integral(M, (f(#)|.g.|)|E) / Integral(M, (|.g.|)|E);
-      reconsider c3 = Integral(M, (f(#)|.g.|)|E) as Real by A64,XXREAL_0:14;
-      Integral(M, (f(#)|.g.|)|E) / Integral(M, (|.g.|)|E) = c3 /c1
-      by EXTREAL1:32;
-      then reconsider c = c2 as Element of REAL;
-A72:  c >= inf F & c <= sup F
-      by A53,A57,A58,A62,A63,A66,A70,A71,XXREAL_3:90;
-      Integral(M, (f(#)|.g.|)|E) / Integral(M, (|.g.|)|E) = c3 / c1 &
-      Integral(M, (|.g.|)|E) / Integral(M, (|.g.|)|E) = c1 / c1
-      by EXTREAL1:32;
-      then Integral(M,(|.g.|)|E)
-      * ( Integral(M,(f(#)|.g.|)|E) / Integral(M,(|.g.|)|E) )
-      = c1 * (c3 / c1) & c3 * (c1 / c1) = Integral(M, (f(#)|.g.|)|E)
-      * ( Integral(M, (|.g.|)|E) / Integral(M, (|.g.|)|E) ) by EXTREAL1:13;
-      then R_EAL c * Integral(M, (|.g.|)|E) = Integral(M, (f(#)|.g.|)|E)
-      by A65,A67,XXREAL_3:99;
-      hence thesis by A72;
+      then
+A104: c <= sup F by A51,A88,A89,A90,A99,A101,XXREAL_3:90;
+      inf F * (Integral(M,(|.g.|)|E) / Integral(M,(|.g.|)|E)) = inf F *
+      1. by A93,A95,A94,XXREAL_3:89;
+      then inf F * (Integral(M, (|.g.|)|E) / Integral(M, (|.g.|)|E)) = inf F
+      by XXREAL_3:92;
+      then c >= inf F by A86,A79,A92,A80,A99,A103,XXREAL_3:90;
+      hence thesis by A104,A98;
     end;
     suppose
-A73:  Integral(M, (|.g.|)|E) = 0.;
+A105: Integral(M, (|.g.|)|E) = 0.;
+      then 0. <= Integral(M, (f(#)|.g.|)|E) by A29,A7,A31,A86,A78,A79,
+      A80,RELAT_1:97;
+      then
+A106: Integral(M, (f(#)|.g.|)|E) = 0. by A29,A7,A42,A51,A87,A88,
+      A89,A105,RELAT_1:97;
       consider y be set such that
-A74:  y in F by XBOOLE_0:def 1;
-      reconsider y as Element of ExtREAL by A74;
-      inf F <= y & y <= sup F by A74,XXREAL_2:3,4;
+A107: y in F by XBOOLE_0:def 1;
+      reconsider y as Element of ExtREAL by A107;
+A108: y <= sup F by A107,XXREAL_2:4;
+      inf F <= y by A107,XXREAL_2:3;
       then
-A75:  inf F <= k0 & k0 <= sup F by XXREAL_0:2;
-      0. <= Integral(M, (f(#)|.g.|)|E) by A53,A57,A58,A73;
-      then
-A76:  Integral(M, (f(#)|.g.|)|E) = 0. by A53,A62,A63,A73;
-      R_EAL k0 * Integral(M, (|.g.|)|E) = 0. by A73;
-      hence thesis by A75,A76;
+A109: k0 <= sup F by A108,XXREAL_0:2;
+      R_EAL k0 * Integral(M, (|.g.|)|E) = 0. by A105;
+      hence thesis by A109,A106;
     end;
   end;
-  hence thesis by A12,A14,A28,A30,A31,MESFUNC5:108;
+  hence thesis by A44,A64,A74,A53,A66,MESFUNC5:108;
 end;
 
 begin  ::  Selected properties of integrals
@@ -1244,23 +1354,26 @@ reserve a,b for real number;
 theorem Th18:
   (|.f.|)|A = |.(f|A).|
 proof
-A1: dom((|.f.|)|A) = dom |.f.| /\ A & dom(f|A) = dom f /\ A by RELAT_1:90;
+  dom((|.f.|)|A) = dom |.f.| /\ A by RELAT_1:90;
   then
-A2: dom((|.f.|)|A) = dom f /\ A & dom|.(f|A).| = dom f /\ A by MESFUNC1:def 10;
+A1: dom((|.f.|)|A) = dom f /\ A by MESFUNC1:def 10;
+A2: dom(f|A) = dom f /\ A by RELAT_1:90;
+  then
+A3: dom|.(f|A).| = dom f /\ A by MESFUNC1:def 10;
   now
     let x be Element of X;
     assume
-A3: x in dom((|.f.|)|A);
+A4: x in dom((|.f.|)|A);
+    then (|.(f|A).|).x = |. (f|A).x .| by A1,A3,MESFUNC1:def 10;
     then
-A4: ((|.f.|)|A).x = (|.f.|).x by FUNCT_1:70;
-    x in dom f by A2,A3,XBOOLE_0:def 4;
+A5: (|.(f|A).|).x = |. f.x .| by A2,A1,A4,FUNCT_1:70;
+    x in dom f by A1,A4,XBOOLE_0:def 4;
     then
-A5: x in dom |.f.| by MESFUNC1:def 10;
-    (|.(f|A).|).x = |. (f|A).x .| by A2,A3,MESFUNC1:def 10;
-    then (|.(f|A).|).x = |. f.x .| by A1,A2,A3,FUNCT_1:70;
-    hence ((|.f.|)|A).x = (|.(f|A).|).x by A4,A5,MESFUNC1:def 10;
+A6: x in dom |.f.| by MESFUNC1:def 10;
+    ((|.f.|)|A).x = (|.f.|).x by A4,FUNCT_1:70;
+    hence ((|.f.|)|A).x = (|.(f|A).|).x by A6,A5,MESFUNC1:def 10;
   end;
-  hence thesis by A2,PARTFUN1:34;
+  hence thesis by A1,A3,PARTFUN1:34;
 end;
 
 theorem Th19:
@@ -1268,160 +1381,167 @@ theorem Th19:
 proof
   set F = |.f.|;
   set G = |.g.|;
-A1: dom(|.f.|+|.g.|) =
-  (dom F /\ dom G)\((F"{-infty} /\ G"{+infty}) \/ (F"{+infty} /\ G"{-infty}))
-  by MESFUNC1:def 3;
-  F is without-infty & G is without-infty by MESFUNC5:18;
-  then not -infty in rng F & not -infty in rng G by MESFUNC5:def 3;
-  then F"{-infty} = {} & G"{-infty} = {} by FUNCT_1:142;
-  then dom(|.f.|+|.g.|) = dom f /\ dom G by A1,MESFUNC1:def 10;
+  F is without-infty by MESFUNC5:18;
+  then not -infty in rng F by MESFUNC5:def 3;
+  then
+A1: F"{-infty} = {} by FUNCT_1:142;
+  G is without-infty by MESFUNC5:18;
+  then not -infty in rng G by MESFUNC5:def 3;
+  then
+A2: G"{-infty} = {} by FUNCT_1:142;
+  dom(|.f.|+|.g.|) = (dom F /\ dom G)\((F"{-infty} /\ G"{+infty}) \/ (F"{
+  +infty} /\ G"{-infty})) by MESFUNC1:def 3;
+  then dom(|.f.|+|.g.|) = dom f /\ dom G by A1,A2,MESFUNC1:def 10;
   hence dom(|.f.|+|.g.|) = dom f /\ dom g by MESFUNC1:def 10;
   dom |.f+g.| = dom(f+g) by MESFUNC1:def 10
-    .= (dom f /\ dom g)
-  \((f"{-infty} /\ g"{+infty}) \/ (f"{+infty} /\ g"{-infty}))
-  by MESFUNC1:def 3
-    .= dom f /\
-  (dom g \((f"{-infty} /\ g"{+infty}) \/ (f"{+infty} /\ g"{-infty})))
-  by XBOOLE_1:49;
+    .= (dom f /\ dom g) \((f"{-infty} /\ g"{+infty}) \/ (f"{+infty} /\ g"{
+  -infty})) by MESFUNC1:def 3
+    .= dom f /\ (dom g \((f"{-infty} /\ g"{+infty}) \/ (f"{+infty} /\ g"{
+  -infty}))) by XBOOLE_1:49;
   then dom |.f+g.| c= dom f by XBOOLE_1:17;
   hence thesis by MESFUNC1:def 10;
 end;
 
 theorem Th20:
-  (|.f.|)|(dom |.f+g.|) + (|.g.|)|(dom |.f+g.|) = (|.f.|+|.g.|)|(dom |.f+g.|)
+  (|.f.|)|(dom |.f+g.|) + (|.g.|)|(dom |.f+g.|) = (|.f.|+|.g.|)|(
+  dom |.f+g.|)
 proof
-A1: dom |.f+g.| c= dom |.f.| & dom |.f+g.| c= dom |.g.| by Th19;
+A1: (|.g.|)|(dom |.f+g.|) = |.(g|(dom |.f+g.|)).| by Th18;
+A2: dom |.f+g.| c= dom |.g.| by Th19;
   then
-A2: dom |.f+g.| c= dom f & dom |.f+g.| c= dom g by MESFUNC1:def 10;
-  dom(f|(dom |.f+g.|)) = dom f /\ dom |.f+g.| &
+A3: dom |.f+g.| c= dom g by MESFUNC1:def 10;
   dom(g|(dom |.f+g.|)) = dom g /\ dom |.f+g.| by RELAT_1:90;
   then
-A3: dom(f|(dom |.f+g.|)) = dom |.f+g.| &
-  dom(g|(dom |.f+g.|)) = dom |.f+g.| by A2,XBOOLE_1:28;
+A4: dom(g|(dom |.f+g.|)) = dom |.f+g.| by A3,XBOOLE_1:28;
   then
-A4: dom |.(f|(dom |.f+g.|)).| = dom |.f+g.| &
-  dom |.(g|(dom |.f+g.|)).| = dom |.f+g.| by MESFUNC1:def 10;
-A5: (|.f.|)|(dom |.f+g.|) = |.(f|(dom |.f+g.|)).| &
-  (|.g.|)|(dom |.f+g.|) = |.(g|(dom |.f+g.|)).| by Th18;
+A5: dom |.(g|(dom |.f+g.|)).| = dom |.f+g.| by MESFUNC1:def 10;
+A6: dom |.f+g.| c= dom |.f.| by Th19;
   then
-A6: dom((|.f.|)|(dom |.f+g.|) + (|.g.|)|(dom |.f+g.|))
-  = dom (f|(dom |.f+g.|)) /\ dom (g|(dom |.f+g.|)) by Th19
-    .= dom |.f+g.| by A3;
-  dom |.f+g.| /\ dom |.f+g.| c= dom f /\ dom g by A2,XBOOLE_1:27;
+A7: dom |.f+g.| c= dom f by MESFUNC1:def 10;
+  then dom |.f+g.| /\ dom |.f+g.| c= dom f /\ dom g by A3,XBOOLE_1:27;
   then
-A7: dom |.f+g.| c= dom(|.f.|+|.g.|) by Th19;
+A8: dom |.f+g.| c= dom(|.f.|+|.g.|) by Th19;
   then
-A8: dom((|.f.|+|.g.|)|(dom |.f+g.|)) = dom |.f+g.| by RELAT_1:91;
+A9: dom((|.f.|+|.g.|)|(dom |.f+g.|)) = dom |.f+g.| by RELAT_1:91;
+  dom(f|(dom |.f+g.|)) = dom f /\ dom |.f+g.| by RELAT_1:90;
+  then
+A10: dom(f|(dom |.f+g.|)) = dom |.f+g.| by A7,XBOOLE_1:28;
+A11: (|.f.|)|(dom |.f+g.|) = |.(f|(dom |.f+g.|)).| by Th18;
+  then
+A12: dom((|.f.|)|(dom |.f+g.|) + (|.g.|)|(dom |.f+g.|)) = dom (f|(dom |.f+g
+  .|)) /\ dom (g|(dom |.f+g.|)) by A1,Th19
+    .= dom |.f+g.| by A10,A4;
+A13: dom |.(f|(dom |.f+g.|)).| = dom |.f+g.| by A10,MESFUNC1:def 10;
   now
     let x be Element of X;
     assume
-A9: x in dom((|.f.|+|.g.|)|(dom |.f+g.|));
+A14: x in dom((|.f.|+|.g.|)|(dom |.f+g.|));
     then
-A10: ((|.f.|+|.g.|)|(dom |.f+g.|)).x = (|.f.|+|.g.|).x by FUNCT_1:70
-      .= (|.f.|).x + (|.g.|).x by A7,A8,A9,MESFUNC1:def 3
-      .= |. f.x .| + (|.g.|).x by A1,A8,A9,MESFUNC1:def 10;
-A11: x in dom |.f+g.| by A7,A9,RELAT_1:91;
-    then ((|.f.|)|(dom |.f+g.|) + (|.g.|)|(dom |.f+g.|)).x
-    = ((|.f.|)|(dom |.f+g.|)).x + ((|.g.|)|(dom |.f+g.|)).x
-    by A6,MESFUNC1:def 3
-      .= |.(f|(dom |.f+g.|)).x .| + |.(g|(dom |.f+g.|)).|.x
-    by A4,A5,A11,MESFUNC1:def 10
-      .= |.(f|(dom |.f+g.|)).x .| + |.(g|(dom |.f+g.|)).x .|
-    by A4,A11,MESFUNC1:def 10
-      .= |. f.x .| + |.(g|(dom |.f+g.|)).x .| by A11,FUNCT_1:72
-      .= |. f.x .| + |. g.x .| by A11,FUNCT_1:72;
-    hence ((|.f.|+|.g.|)|(dom |.f+g.|)).x
-    = ((|.f.|)|(dom |.f+g.|) + (|.g.|)|(dom |.f+g.|)).x
-    by A1,A8,A9,A10,MESFUNC1:def 10;
+A15: ((|.f.|+|.g.|)|(dom |.f+g.|)).x = (|.f.|+|.g.|).x by FUNCT_1:70
+      .= (|.f.|).x + (|.g.|).x by A8,A9,A14,MESFUNC1:def 3
+      .= |. f.x .| + (|.g.|).x by A6,A9,A14,MESFUNC1:def 10;
+A16: x in dom |.f+g.| by A8,A14,RELAT_1:91;
+    then
+    ((|.f.|)|(dom |.f+g.|) + (|.g.|)|(dom |.f+g.|)).x = ((|.f.|)|(dom |.f
+    +g.|)).x + ((|.g.|)|(dom |.f+g.|)).x by A12,MESFUNC1:def 3
+      .= |.(f|(dom |.f+g.|)).x .| + |.(g|(dom |.f+g.|)).|.x by A13,A11,A1,
+    A16,MESFUNC1:def 10
+      .= |.(f|(dom |.f+g.|)).x .| + |.(g|(dom |.f+g.|)).x .| by A5,A16,
+    MESFUNC1:def 10
+      .= |. f.x .| + |.(g|(dom |.f+g.|)).x .| by A16,FUNCT_1:72
+      .= |. f.x .| + |. g.x .| by A16,FUNCT_1:72;
+    hence ((|.f.|+|.g.|)|(dom |.f+g.|)).x = ((|.f.|)|(dom |.f+g.|) + (|.g.|)|(
+    dom |.f+g.|)).x by A2,A9,A14,A15,MESFUNC1:def 10;
   end;
-  hence thesis by A6,A8,PARTFUN1:34;
+  hence thesis by A12,A8,PARTFUN1:34,RELAT_1:91;
 end;
 
 theorem Th21:
   x in dom |.f+g.| implies (|.f+g.|).x <= (|.f.|+|.g.|).x
 proof
+A1: |. f.x + g.x .| <= |. f.x .| + |. g.x .| by EXTREAL2:61;
   assume
-A1: x in dom |.f+g.|;
+A2: x in dom |.f+g.|;
+  then x in dom (f+g) by MESFUNC1:def 10;
   then
-A2: x in dom (f+g) by MESFUNC1:def 10;
-  then x in (dom f /\ dom g)
-  \ ((f"{-infty} /\ g"{+infty}) \/ (f"{+infty} /\ g"{-infty}))
-  by MESFUNC1:def 3;
-  then x in dom f /\ dom g &
-  not x in (f"{-infty} /\ g"{+infty}) \/ (f"{+infty} /\ g"{-infty})
-  by XBOOLE_0:def 5;
+A3: |. (f+g).x .| <= |. f.x .| + |. g.x .| by A1,MESFUNC1:def 3;
+A4: dom |.f+g.| c= dom |.g.| by Th19;
   then
-A3: x in dom f & x in dom g &
-  not x in (f"{-infty} /\ g"{+infty}) & not x in (f"{+infty} /\ g"{-infty})
-  by XBOOLE_0:def 3,def 4;
-  then (not x in f"{-infty} or not x in g"{+infty}) &
-  (not x in f"{+infty} or not x in g"{-infty}) by XBOOLE_0:def 4;
-  then (not f.x in {-infty} or not g.x in {+infty}) &
-  (not f.x in {+infty} or not g.x in {-infty}) by A3,FUNCT_1:def 13;
-  then (f.x <> -infty or g.x <> +infty) &
-  (f.x <> +infty or g.x <> -infty) by TARSKI:def 1;
-  then |. f.x + g.x .| <= |. f.x .| + |. g.x .| by EXTREAL2:61;
+A5: |. g.x .| = |.g.| .x by A2,MESFUNC1:def 10;
+  x in dom |.g.| by A2,A4;
   then
-A4: |. (f+g).x .| <= |. f.x .| + |. g.x .| by A2,MESFUNC1:def 3;
-A5: dom |.f+g.| c= dom |.f.| & dom |.f+g.| c= dom |.g.| by Th19;
+A6: x in dom g by MESFUNC1:def 10;
+A7: dom |.f+g.| c= dom |.f.| by Th19;
+  then x in dom |.f.| by A2;
+  then x in dom f by MESFUNC1:def 10;
+  then x in dom f /\ dom g by A6,XBOOLE_0:def 4;
   then
-A6: |. f.x .| = |.f.| .x & |. g.x .| = |.g.| .x by A1,MESFUNC1:def 10;
-  x in dom |.f.| & x in dom |.g.| by A1,A5;
-  then x in dom f & x in dom g by MESFUNC1:def 10;
-  then x in dom f /\ dom g by XBOOLE_0:def 4;
-  then x in dom(|.f.| + |.g.|) by Th19;
-  then |. f.x .| + |. g.x .| = (|.f.| + |.g.|).x by A6,MESFUNC1:def 3;
-  hence thesis by A1,A4,MESFUNC1:def 10;
+A8: x in dom(|.f.| + |.g.|) by Th19;
+  |. f.x .| = |.f.| .x by A2,A7,MESFUNC1:def 10;
+  then |. f.x .| + |. g.x .| = (|.f.| + |.g.|).x by
+  A5,A8,MESFUNC1:def 3;
+  hence thesis by A2,A3,MESFUNC1:def 10;
 end;
 
 theorem
-  f is_integrable_on M & g is_integrable_on M implies ex E be Element of S st
-  E = dom(f+g) &
-  Integral(M,(|.f+g.|)|E) <= Integral(M,(|.f.|)|E) + Integral(M,(|.g.|)|E)
+  f is_integrable_on M & g is_integrable_on M implies ex E be Element of
+S st E = dom(f+g) & Integral(M,(|.f+g.|)|E) <= Integral(M,(|.f.|)|E) + Integral
+  (M,(|.g.|)|E)
 proof
-  assume
-A1: f is_integrable_on M & g is_integrable_on M;
-  then (ex A be Element of S st A = dom f & f is_measurable_on A) &
-  (ex A be Element of S st A = dom g & g is_measurable_on A)
-  by MESFUNC5:def 17;
+  assume that
+A1: f is_integrable_on M and
+A2: g is_integrable_on M;
+  ex A be Element of S st A = dom g & g is_measurable_on A by A2, MESFUNC5
+  :def 17;
   then
-A2: |.f.| is_integrable_on M & |.g.| is_integrable_on M by A1,MESFUNC5:106;
-  then
-A3: |.f.|+|.g.| is_integrable_on M by MESFUNC5:114;
-  set F = |.f.|;
-  set G = |.g.|;
-A4: f+g is_integrable_on M by A1,MESFUNC5:114;
-  then ex A be Element of S st A = dom(f+g) & f+g is_measurable_on A
-  by MESFUNC5:def 17;
+A3: |.g.| is_integrable_on M by A2,MESFUNC5:106;
+A4: f+g is_integrable_on M by A1,A2,MESFUNC5:114;
+  then ex A be Element of S st A = dom(f+g) & f+g is_measurable_on A by
+  MESFUNC5:def 17;
   then
 A5: |.f+g.| is_integrable_on M by A4,MESFUNC5:106;
-  for x be Element of X st
-  x in dom |.f+g.| holds (|.f+g.|).x <= (|.f.|+|.g.|).x by Th21;
-  then (|.f.|+|.g.|) - |.f+g.| is nonnegative by Th1;
-  then consider E be Element of S such that
-A6: E = dom(|.f.|+|.g.|) /\ dom |.f+g.| &
-  Integral(M,(|.f+g.|)|E) <= Integral(M,(|.f.|+|.g.|)|E) by A3,A5,Th3;
-  take E;
-  F|E is_integrable_on M & G|E is_integrable_on M by A2,MESFUNC5:103;
-  then consider E1 be Element of S such that
-A7: E1 = dom (F|E) /\ dom (G|E) &
-  Integral(M,F|E+G|E) = Integral(M,(F|E)|E1) + Integral(M,(G|E)|E1)
-  by MESFUNC5:115;
-A8: dom (|.f.|+|.g.|) = dom f /\ dom g by Th19;
-A9: dom |.f+g.| = dom(f+g) by MESFUNC1:def 10
-    .= (dom f /\ dom g)
-  \((f"{-infty} /\ g"{+infty}) \/ (f"{+infty} /\ g"{-infty}))
-  by MESFUNC1:def 3;
+  for x be Element of X st x in dom |.f+g.| holds (|.f+g.|).x <= (|.f.|+
+  |.g.|).x by Th21;
   then
-A10: E = dom |.f+g.| by A6,A8,XBOOLE_1:28,36;
-  dom(F|E) = dom F /\ E & dom(G|E) = dom G /\ E by RELAT_1:90;
-  then dom(F|E) = dom f /\ E & dom(G|E) = dom g /\ E by MESFUNC1:def 10;
-  then E1 = (dom f /\ E /\ E) /\ dom g by A7,XBOOLE_1:16;
+A6: (|.f.|+|.g.|) - |.f+g.| is nonnegative by Th1;
+  set G = |.g.|;
+  set F = |.f.|;
+A7: dom |.f+g.| = dom(f+g) by MESFUNC1:def 10
+    .= (dom f /\ dom g) \((f"{-infty} /\ g"{+infty}) \/ (f"{+infty} /\ g"{
+  -infty})) by MESFUNC1:def 3;
+  ex A be Element of S st A = dom f & f is_measurable_on A by A1, MESFUNC5
+  :def 17;
+  then
+A8: |.f.| is_integrable_on M by A1,MESFUNC5:106;
+  then |.f.|+|.g.| is_integrable_on M by A3,MESFUNC5:114;
+  then consider E be Element of S such that
+A9: E = dom(|.f.|+|.g.|) /\ dom |.f+g.| and
+A10: Integral(M,(|.f+g.|)|E) <= Integral(M,(|.f.|+|.g.|)|E) by A5,
+  A6,Th3;
+A11: G|E is_integrable_on M by A3,MESFUNC5:103;
+  F|E is_integrable_on M by A8,MESFUNC5:103;
+  then consider E1 be Element of S such that
+A12: E1 = dom (F|E) /\ dom (G|E) and
+A13: Integral(M,F|E+G|E) = Integral(M,(F|E)|E1) + Integral(M,(G|E)|E1)
+  by A11,MESFUNC5:115;
+  take E;
+  dom(G|E) = dom G /\ E by RELAT_1:90;
+  then
+A14: dom(G|E) = dom g /\ E by MESFUNC1:def 10;
+A15: dom (|.f.|+|.g.|) = dom f /\ dom g by Th19;
+  then
+A16: E = dom |.f+g.| by A9,A7,XBOOLE_1:28,36;
+  dom(F|E) = dom F /\ E by RELAT_1:90;
+  then dom(F|E) = dom f /\ E by MESFUNC1:def 10;
+  then E1 = (dom f /\ E /\ E) /\ dom g by A12,A14,XBOOLE_1:16;
   then E1 = (dom f /\ (E /\ E)) /\ dom g by XBOOLE_1:16;
   then E1 = dom f /\ dom g /\ E by XBOOLE_1:16;
-  then E1 = E by A6,A8,A9,XBOOLE_1:28,36;
-  then (F|E)|E1 = F|E & (G|E)|E1 = G|E by FUNCT_1:82;
-  hence thesis by A6,A7,A10,Th20,MESFUNC1:def 10;
+  then
+A17: E1 = E by A9,A15,A7,XBOOLE_1:28,36;
+  then
+A18: (G|E)|E1 = G|E by FUNCT_1:82;
+  (F|E)|E1 = F|E by A17,FUNCT_1:82;
+  hence thesis by A10,A13,A16,A18,Th20,MESFUNC1:def 10;
 end;
 
 theorem Th23:
@@ -1430,178 +1550,192 @@ proof
 A1: dom max+(chi(A,X)) = dom chi(A,X) by MESFUNC2:def 2;
   now
     let x be Element of X;
+A2: rng chi(A,X) c= {0,1} by FUNCT_3:48;
     assume
-A2: x in dom max+(chi(A,X));
+A3: x in dom max+(chi(A,X));
     then
-A3: (max+(chi(A,X))).x = max((chi(A,X)).x,0.) by MESFUNC2:def 2;
-A4: (chi(A,X)).x in rng chi(A,X) by A1,A2,FUNCT_1:12;
-    rng chi(A,X) c= {0,1} by FUNCT_3:48;
-    then (chi(A,X)).x = 0 or (chi(A,X)).x = 1 by A4,TARSKI:def 2;
-    hence (max+(chi(A,X))).x = (chi(A,X)).x by A3,XXREAL_0:def 10;
+A4: (max+(chi(A,X))).x = max((chi(A,X)).x,0.) by MESFUNC2:def 2;
+    (chi(A,X)).x in rng chi(A,X) by A1,A3,FUNCT_1:12;
+    hence (max+(chi(A,X))).x = (chi(A,X)).x by A4,A2,XXREAL_0:def 10;
   end;
   hence thesis by A1,PARTFUN1:34;
 end;
 
 theorem Th24:
-  M.E < +infty implies
-  chi(E,X) is_integrable_on M & Integral(M,chi(E,X)) = M.E &
-  Integral(M,(chi(E,X))|E) = M.E
+  M.E < +infty implies chi(E,X) is_integrable_on M & Integral(M,
+  chi(E,X)) = M.E & Integral(M,(chi(E,X))|E) = M.E
 proof
-  assume
-A1: M.E < +infty;
   reconsider XX = X as Element of S by MEASURE1:21;
-A2: XX = dom chi(E,X) & chi(E,X) is_measurable_on XX
-  by FUNCT_3:def 3,MESFUNC2:32;
-  then
-A3: XX = dom(max+(chi(E,X))) & max+(chi(E,X)) is_measurable_on XX by Th23;
   set F = XX \ E;
-  for x be set st x in dom max+(chi(E,X)) holds 0. <= (max+(chi(E,X))).x
-  by MESFUNC2:14;
-  then
-A4: max+(chi(E,X)) is nonnegative by SUPINF_2:71;
-  then
-A5: (max+(chi(E,X)))|E is nonnegative by MESFUNC5:21;
-A6: integral+(M,(max+ chi(E,X))|(E\/F))
-  = integral+(M,(max+ chi(E,X))|E) + integral+(M,(max+ chi(E,X))|F)
-  by A3,A4,MESFUNC5:87,XBOOLE_1:79;
-A7: XX /\ F = F & XX /\ E = E by XBOOLE_1:28;
-  then
-A8: dom((max+(chi(E,X)))|F) = F &
-  dom((max+(chi(E,X)))|E) = E by A3,RELAT_1:90;
-  max+(chi(E,X)) is_measurable_on E &
-  max+(chi(E,X)) is_measurable_on F by A3,MESFUNC1:34;
-  then
-A9: (max+(chi(E,X)))|E is_measurable_on E &
-  (max+(chi(E,X)))|F is_measurable_on F by A3,A7,MESFUNC5:48;
-  E \/ F = XX by A7,XBOOLE_1:51;
-  then
-A10: (max+ chi(E,X))|(E\/F) = max+ chi(E,X) by A3,RELAT_1:98;
-  now
+A1: now
     let x be Element of X;
-    assume
-A11: x in dom((max+(chi(E,X)))|F);
-    then chi(E,X).x = 0 by A8,FUNCT_3:43;
-    then (max+(chi(E,X))).x = 0 by Th23;
-    hence ((max+(chi(E,X)))|F).x = 0 by A11,FUNCT_1:70;
-  end;
-  then integral+(M,(max+ chi(E,X))|F) = 0 by A8,A9,MESFUNC5:93;
-  then
-A12: integral+(M,max+ chi(E,X)) = integral+(M,(max+ chi(E,X))|E)
-  by A6,A10,XXREAL_3:4;
-A13: now
-    let x be set;
-    assume
-A14: x in dom((max+(chi(E,X)))|E);
-    then chi(E,X).x = 1 by A8,FUNCT_3:def 3;
-    then (max+(chi(E,X))).x = 1 by Th23;
-    hence ((max+(chi(E,X)))|E).x = 1 by A14,FUNCT_1:70;
-  end;
-  then (max+(chi(E,X)))|E is_simple_func_in S by A8,MESFUNC6:2;
-  then integral+(M,max+ chi(E,X)) = integral'(M,(max+ chi(E,X))|E)
-  by A4,A12,MESFUNC5:21,83;
-  then
-A15: integral+(M,max+ chi(E,X)) = R_EAL 1 * M.(dom((max+(chi(E,X)))|E))
-  by A8,A13,MESFUNC5:110;
-  then
-A16: integral+(M,max+ chi(E,X)) < +infty by A1,A8,XXREAL_3:92;
-A17: XX = dom(max- chi(E,X)) & max- chi(E,X) is_measurable_on XX
-  by A2,MESFUNC2:28,def 3;
-  now
-    let x be Element of X;
-    assume
-A18: x in dom(max- chi(E,X));
-A19: now
-      assume x in E;
-      then
-  chi(E,X).x = 1 by FUNCT_3:def 3;
+A2: now
+      assume
+      x in E;
+      then chi(E,X).x = 1 by FUNCT_3:def 3;
       hence max(-(chi(E,X).x),0.) = 0. by XXREAL_0:def 10;
     end;
-    now
-      assume not x in E;
+A3: now
+      assume
+      not x in E;
       then chi(E,X).x = 0. by FUNCT_3:def 3;
       then -chi(E,X).x = 0;
       hence max(-(chi(E,X).x),0.) = 0.;
     end;
-    hence (max-(chi(E,X))).x = 0 by A18,A19,MESFUNC2:def 3;
+    assume
+    x in dom(max- chi(E,X));
+    hence (max-(chi(E,X))).x = 0 by A2,A3,MESFUNC2:def 3;
   end;
+A4: XX = dom chi(E,X) by FUNCT_3:def 3;
   then
-A21: integral+(M,max- chi(E,X)) = 0 by A17,MESFUNC5:93;
-  hence chi(E,X) is_integrable_on M by A2,A16,MESFUNC5:def 17;
-  Integral(M,chi(E,X)) = R_EAL 1 * M.E by A8,A15,A21,XXREAL_3:15;
+A5: XX = dom(max+(chi(E,X))) by Th23;
+A6: XX /\ F = F by XBOOLE_1:28;
+  then
+A7: dom((max+(chi(E,X)))|F) = F by A5,RELAT_1:90;
+A8: now
+    let x be Element of X;
+    assume
+A9: x in dom((max+(chi(E,X)))|F);
+    then chi(E,X).x = 0 by A7,FUNCT_3:43;
+    then (max+(chi(E,X))).x = 0 by Th23;
+    hence ((max+(chi(E,X)))|F).x = 0 by A9,FUNCT_1:70;
+  end;
+A10: chi(E,X) is_measurable_on XX by MESFUNC2:32;
+  then
+A11: max+(chi(E,X)) is_measurable_on XX by Th23;
+  then max+(chi(E,X)) is_measurable_on F by MESFUNC1:34;
+  then
+A12: integral+(M,(max+ chi(E,X))|F) = 0 by A5,A6,A7,
+  A8,MESFUNC5:48,93;
+  XX = dom(max- chi(E,X)) by A4,MESFUNC2:def 3;
+  then
+A13: integral+(M,max- chi(E,X)) = 0 by A4,A10,
+  A1,MESFUNC2:28,MESFUNC5:93;
+A14: XX /\ E = E by XBOOLE_1:28;
+  then
+A15: dom((max+(chi(E,X)))|E) = E by A5,RELAT_1:90;
+  E \/ F = XX by A14,XBOOLE_1:51;
+  then
+A16: (max+ chi(E,X))|(E\/F) = max+ chi(E,X) by A5,RELAT_1:98;
+A17: for x be set st x in dom max+(chi(E,X)) holds 0. <= (max+(chi(E,X))).x
+  by MESFUNC2:14;
+  then
+A18: max+(chi(E,X)) is nonnegative by SUPINF_2:71;
+  then integral+(M,(max+ chi(E,X))|(E\/F)) = integral+(M,(max+ chi(E,X))|E) +
+  integral+(M,(max+ chi(E,X))|F) by A5,A11,MESFUNC5:87,XBOOLE_1:79;
+  then
+A19: integral+(M,max+ chi(E,X)) = integral+(M,(max+ chi(E,X))|E) by
+  A16,
+  A12,XXREAL_3:4;
+A20: now
+    let x be set;
+    assume
+A21: x in dom((max+(chi(E,X)))|E);
+    then chi(E,X).x = 1 by A15,FUNCT_3:def 3;
+    then (max+(chi(E,X))).x = 1 by Th23;
+    hence ((max+(chi(E,X)))|E).x = 1 by A21,FUNCT_1:70;
+  end;
+  then (max+(chi(E,X)))|E is_simple_func_in S by A15,MESFUNC6:2;
+  then integral+(M,max+ chi(E,X)) = integral'(M,(max+ chi(E,X))|E) by A18,A19
+  ,
+  MESFUNC5:21,83;
+  then
+A22: integral+(M,max+ chi(E,X)) = R_EAL 1 * M.(dom((max+(chi(E,X)))|E)) by
+  A15,A20,MESFUNC5:110;
+  max+(chi(E,X)) is_measurable_on E by A11,MESFUNC1:34;
+  then (max+(chi(E,X)))|E is_measurable_on E by A5,A14,MESFUNC5:48;
+  then
+A23: (chi(E,X))|E is_measurable_on E by Th23;
+  (max+(chi(E,X)))|E is nonnegative by A17,MESFUNC5:21,SUPINF_2:71;
+  then
+A24: (chi(E,X))|E is nonnegative by Th23;
+  E = dom((chi(E,X))|E) by A15,Th23;
+  then
+A25: Integral(M,(chi(E,X))|E) =integral+(M,(chi(E,X))|E) by A23,A24,
+  MESFUNC5:94;
+  assume
+  M.E < +infty;
+  then integral+(M,max+ chi(E,X)) < +infty by A15,A22,XXREAL_3:92;
+  hence chi(E,X) is_integrable_on M by A4,A10,A13,MESFUNC5:def 17;
+  Integral(M,chi(E,X)) = R_EAL 1 * M.E by A15,A22,A13,XXREAL_3:15;
   hence Integral(M,chi(E,X)) = M.E by XXREAL_3:92;
-A22: E = dom((chi(E,X))|E) & (chi(E,X))|E is_measurable_on E by A8,A9,Th23;
-A23: (chi(E,X))|E is nonnegative by A5,Th23;
-A24: (chi(E,X))|E = (max+ chi(E,X))|E by Th23;
-  Integral(M,(chi(E,X))|E) =integral+(M,(chi(E,X))|E) by A22,A23,MESFUNC5:94;
-  hence thesis by A8,A12,A15,A24,XXREAL_3:92;
+  (chi(E,X))|E = (max+ chi(E,X))|E by Th23;
+  hence thesis by A15,A19,A22,A25,XXREAL_3:92;
 end;
 
 theorem Th25:
-  M.(E1/\E2) < +infty implies Integral(M,(chi(E1,X))|E2) = M.(E1/\E2)
+  M.(E1/\E2) < +infty implies Integral(M,(chi(E1,X))|E2) = M.(E1/\
+  E2)
 proof
-  assume
-A1: M.(E1/\E2) < +infty;
   reconsider XX = X as Element of S by MEASURE1:21;
-A2: XX = dom chi(E1,X) & chi(E1,X) is_measurable_on XX
-  by FUNCT_3:def 3,MESFUNC2:32;
-  now
-    let x be set;
-    assume x in dom chi(E1,X);
-    then
-A3: (chi(E1,X)).x in rng chi(E1,X) by FUNCT_1:12;
-    rng chi(E1,X) c= {0,1} by FUNCT_3:48;
-    hence 0. <= (chi(E1,X)).x by A3;
-  end;
-  then
-A4: chi(E1,X) is nonnegative by SUPINF_2:71;
-  E1 /\ E2 misses E2 \ E1 & E2 = (E1 /\ E2) \/ (E2 \ E1) by XBOOLE_1:51,89;
-  then
-A5: Integral(M,(chi(E1,X))|E2)
-  = Integral(M,(chi(E1,X))|(E1/\E2)) + Integral(M,(chi(E1,X))|(E2\E1))
-  by A2,A4,MESFUNC5:97;
-A6: dom((chi(E1,X))|(E1/\E2)) = dom(chi(E1,X)) /\ (E1/\E2) by RELAT_1:90
+A1: E2 = (E1 /\ E2) \/ (E2 \ E1) by XBOOLE_1:51;
+  set F = E2\E1;
+A2: dom((chi(E1,X))|(E1/\E2)) = dom(chi(E1,X)) /\ (E1/\E2) by RELAT_1:90
     .= X /\ (E1/\E2) by FUNCT_3:def 3;
-A7: dom(chi(E1/\E2,X)|(E1/\E2)) = dom(chi(E1/\E2,X)) /\ (E1/\E2) by RELAT_1:90
+A3: dom(chi(E1/\E2,X)|(E1/\E2)) = dom(chi(E1/\E2,X)) /\ (E1/\E2) by RELAT_1
+  :90
     .= X /\ (E1/\E2) by FUNCT_3:def 3;
   now
     let x be Element of X;
     assume
-A8: x in dom((chi(E1,X))|(E1/\E2));
+A4: x in dom((chi(E1,X))|(E1/\E2));
     then
-A9: x in X & x in E1 /\ E2 by A6,XBOOLE_0:def 4;
+A5: (chi(E1/\E2,X)|(E1/\E2)).x = (chi(E1/\E2,X)).x by A2,A3,
+    FUNCT_1:70;
+A6: x in E1 /\ E2 by A2,A4,XBOOLE_0:def 4;
     then
-A10: x in E1 by XBOOLE_0:def 4;
-A11: ((chi(E1,X))|(E1/\E2)).x = (chi(E1,X)).x by A8,FUNCT_1:70
-      .= 1 by A10,FUNCT_3:def 3;
-    (chi(E1/\E2,X)|(E1/\E2)).x = (chi(E1/\E2,X)).x by A6,A7,A8,FUNCT_1:70;
-    hence ((chi(E1,X))|(E1/\E2)).x = (chi(E1/\E2,X)|(E1/\E2)).x
-    by A9,A11,FUNCT_3:def 3;
+A7: x in E1 by XBOOLE_0:def 4;
+    ((chi(E1,X))|(E1/\E2)).x = (chi(E1,X)).x by A4,FUNCT_1:70
+      .= 1 by A7,FUNCT_3:def 3;
+    hence ((chi(E1,X))|(E1/\E2)).x = (chi(E1/\E2,X)|(E1/\E2)).x by A6,A5,
+    FUNCT_3:def 3;
   end;
-  then (chi(E1,X))|(E1/\E2) = chi(E1/\E2,X)|(E1/\E2) by A6,A7,PARTFUN1:34;
   then
-A12: Integral(M,(chi(E1,X))|(E1/\E2)) = M.(E1/\E2) by A1,Th24;
-  set F = E2\E1;
-A13: F = dom((chi(E1,X))|(E2\E1)) by A2,RELAT_1:91;
+A8: (chi(E1,X))|(E1/\E2) = chi(E1/\E2,X)|(E1/\E2) by A2,A3,PARTFUN1:
+  34;
+  assume
+  M.(E1/\E2) < +infty;
+  then
+A9: Integral(M,(chi(E1,X))|(E1/\E2)) = M.(E1/\E2) by A8,Th24;
+A10: XX = dom chi(E1,X) by FUNCT_3:def 3;
+  then
+A11: F = dom((chi(E1,X))|(E2\E1)) by RELAT_1:91;
   then F = dom(chi(E1,X)) /\ F by RELAT_1:90;
   then
-A14: (chi(E1,X))|(E2\E1) is_measurable_on F by MESFUNC2:32,MESFUNC5:48;
+A12: (chi(E1,X))|(E2\E1) is_measurable_on F by MESFUNC2:32,MESFUNC5:48;
+  now
+    let x be set;
+    assume
+    x in dom chi(E1,X);
+    then
+A13: (chi(E1,X)).x in rng chi(E1,X) by FUNCT_1:12;
+    rng chi(E1,X) c= {0,1} by FUNCT_3:48;
+    hence 0. <= (chi(E1,X)).x by A13;
+  end;
+  then
+A14: chi(E1,X) is nonnegative by SUPINF_2:71;
   now
     let x be Element of X;
     assume
 A15: x in dom ((chi(E1,X))|(E2\E1));
     E2 \ E1 c= X \ E1 by XBOOLE_1:33;
-    then (chi(E1,X)).x = 0 by A13,A15,FUNCT_3:43;
+    then (chi(E1,X)).x = 0 by A11,A15,FUNCT_3:43;
     hence 0= ((chi(E1,X))|(E2\E1)).x by A15,FUNCT_1:70;
   end;
-  then integral+(M,(chi(E1,X))|(E2\E1)) = 0 by A13,A14,MESFUNC5:93;
-  then Integral(M,(chi(E1,X))|(E2\E1)) = 0. by A4,A13,A14,MESFUNC5:21,94;
-  hence thesis by A5,A12,XXREAL_3:4;
+  then integral+(M,(chi(E1,X))|(E2\E1)) = 0 by A11,A12,MESFUNC5:93;
+  then
+A16: Integral(M,(chi(E1,X))|(E2\E1)) = 0. by A14,A11,A12
+  ,MESFUNC5:21,94;
+  chi(E1,X) is_measurable_on XX by MESFUNC2:32;
+  then Integral(M,(chi(E1,X))|E2) = Integral(M,(chi(E1,X))|(E1/\E2)) +
+  Integral(M,(chi(E1,X))|(E2\E1)) by A10,A14,A1,MESFUNC5:97,XBOOLE_1:89;
+  hence thesis by A9,A16,XXREAL_3:4;
 end;
 
 theorem
-  f is_integrable_on M & E c= dom f & M.E < +infty &
-  (for x be Element of X st x in E holds a <= f.x & f.x <= b) implies
-  (R_EAL a)*M.E <= Integral(M,f|E) & Integral(M,f|E) <= (R_EAL b)*M.E
+  f is_integrable_on M & E c= dom f & M.E < +infty & (for x be Element
+of X st x in E holds a <= f.x & f.x <= b) implies (R_EAL a)*M.E <= Integral(M,f
+  |E) & Integral(M,f|E) <= (R_EAL b)*M.E
 proof
   reconsider a1=a,b1=b as Element of REAL by XREAL_0:def 1;
   assume that
@@ -1611,70 +1745,81 @@ A3: M.E < +infty and
 A4: for x be Element of X st x in E holds a <= f.x & f.x <= b;
   set C = chi(E,X);
 A5: f|E is_integrable_on M by A1,MESFUNC5:103;
-  chi(E,X) is_integrable_on M by A3,Th24;
-  then
-A6: C|E is_integrable_on M by MESFUNC5:103;
-  then
-A7: a1(#)(C|E) is_integrable_on M &
-  b1(#)(C|E) is_integrable_on M by MESFUNC5:116;
-  for x be Element of X st x in dom(a1(#)(C|E)) holds
-  (a1(#)(C|E)).x <= (f|E).x
+  for x be Element of X st x in dom(a1(#)(C|E)) holds (a1(#)(C|E)).x <= (
+  f|E).x
   proof
     let x be Element of X;
     assume
-A8: x in dom(a1(#)(C|E));
+A6: x in dom(a1(#)(C|E));
     then
-A9: x in dom(C|E) by MESFUNC1:def 6;
+A7: x in dom(C|E) by MESFUNC1:def 6;
     then x in dom C /\ E by RELAT_1:90;
     then
-A10: x in dom chi(E,X) & x in E by XBOOLE_0:def 4;
+A8: x in E by XBOOLE_0:def 4;
     then a <= f.x by A4;
     then
-A11: a <= (f|E).x by A10,FUNCT_1:72;
-    (a1(#)(C|E)).x = R_EAL a * (C|E).x by A8,MESFUNC1:def 6
-      .= R_EAL a * C.x by A9,FUNCT_1:70
-      .= R_EAL a * 1. by A10,FUNCT_3:def 3;
-    hence thesis by A11,XXREAL_3:92;
+A9: a <= (f|E).x by A8,FUNCT_1:72;
+    (a1(#)(C|E)).x = R_EAL a * (C|E).x by A6,MESFUNC1:def 6
+      .= R_EAL a * C.x by A7,FUNCT_1:70
+      .= R_EAL a * 1. by A8,FUNCT_3:def 3;
+    hence thesis by A9,XXREAL_3:92;
   end;
-  then (f|E) - (a1(#)(C|E)) is nonnegative by Th1;
+  then
+A10: (f|E) - (a1(#)(C|E)) is nonnegative by Th1;
+  chi(E,X) is_integrable_on M by A3,Th24;
+  then
+A11: C|E is_integrable_on M by MESFUNC5:103;
+  then a1(#)(C|E) is_integrable_on M by MESFUNC5:116;
   then consider E1 be Element of S such that
-A12: E1 = dom(f|E) /\ dom(a1(#)(C|E)) &
-  Integral(M,(a1(#)(C|E))|E1) <= Integral(M,(f|E)|E1) by A5,A7,Th3;
+A12: E1 = dom(f|E) /\ dom(a1(#)(C|E)) and
+A13: Integral(M,(a1(#)(C|E))|E1) <= Integral(M,(f|E)|E1) by A5,A10,
+  Th3;
   dom(f|E) = dom f /\ E by RELAT_1:90;
   then
-A13: dom(f|E) = E by A2,XBOOLE_1:28;
-  dom(a1(#)(C|E)) = dom(C|E) & dom(b1(#)(C|E)) = dom(C|E) by MESFUNC1:def 6;
-  then dom(a1(#)(C|E)) = dom C /\ E &
-  dom(b1(#)(C|E)) = dom C /\ E by RELAT_1:90;
-  then dom(a1(#)(C|E)) = X /\ E & dom(b1(#)(C|E)) = X /\ E by FUNCT_3:def 3;
+A14: dom(f|E) = E by A2,XBOOLE_1:28;
+  dom(a1(#)(C|E)) = dom(C|E) by MESFUNC1:def 6;
+  then dom(a1(#)(C|E)) = dom C /\ E by RELAT_1:90;
+  then dom(a1(#)(C|E)) = X /\ E by FUNCT_3:def 3;
   then
-A14: dom(a1(#)(C|E)) = E & dom(b1(#)(C|E)) = E by XBOOLE_1:28;
+A15: dom(a1(#)(C|E)) = E by XBOOLE_1:28;
+  then
+A16: (f|E)|E1 = f|E by A12,A14,RELAT_1:98;
+  dom(b1(#)(C|E)) = dom(C|E) by MESFUNC1:def 6;
+  then dom(b1(#)(C|E)) = dom C /\ E by RELAT_1:90;
+  then dom(b1(#)(C|E)) = X /\ E by FUNCT_3:def 3;
+  then
+A17: dom(b1(#)(C|E)) = E by XBOOLE_1:28;
   for x be Element of X st x in dom(f|E) holds (f|E).x <= (b1(#)(C|E)).x
   proof
     let x be Element of X;
     assume
-A15: x in dom(f|E);
+A18: x in dom(f|E);
     then
-A16: x in dom(C|E) by A13,A14,MESFUNC1:def 6;
+A19: x in dom(C|E) by A14,A15,MESFUNC1:def 6;
     then x in dom C /\ E by RELAT_1:90;
     then
-A17: x in dom chi(E,X) & x in E by XBOOLE_0:def 4;
+A20: x in E by XBOOLE_0:def 4;
     then f.x <= b by A4;
     then
-A18: (f|E).x <= b by A17,FUNCT_1:72;
-    (b1(#)(C|E)).x = R_EAL b * (C|E).x by A13,A14,A15,MESFUNC1:def 6
-      .= R_EAL b * C.x by A16,FUNCT_1:70
-      .= R_EAL b * 1. by A17,FUNCT_3:def 3;
-    hence thesis by A18,XXREAL_3:92;
+A21: (f|E).x <= b by A20,FUNCT_1:72;
+    (b1(#)(C|E)).x = R_EAL b * (C|E).x by A14,A17,A18,MESFUNC1:def 6
+      .= R_EAL b * C.x by A19,FUNCT_1:70
+      .= R_EAL b * 1. by A20,FUNCT_3:def 3;
+    hence thesis by A21,XXREAL_3:92;
   end;
-  then (b1(#)(C|E)) - (f|E) is nonnegative by Th1;
+  then
+A22: (b1(#)(C|E)) - (f|E) is nonnegative by Th1;
+  b1(#)(C|E) is_integrable_on M by A11,MESFUNC5:116;
   then consider E2 be Element of S such that
-A19: E2 = dom(f|E) /\ dom(b1(#)(C|E)) &
-  Integral(M,(f|E)|E2) <= Integral(M,(b1(#)(C|E))|E2) by A5,A7,Th3;
-A20: (a1(#)(C|E))|E1 = a1(#)(C|E) & (b1(#)(C|E))|E2 = b1(#)(C|E) &
-  (f|E)|E1 = f|E & (f|E)|E2 = f|E by A12,A13,A14,A19,RELAT_1:98;
+A23: E2 = dom(f|E) /\ dom(b1(#)(C|E)) and
+A24: Integral(M,(f|E)|E2) <= Integral(M,(b1(#)(C|E))|E2) by A5,A22,
+  Th3;
+A25: (b1(#)(C|E))|E2 = b1(#)(C|E) by A14,A17,A23,RELAT_1:98;
   E = E/\E;
-  then Integral(M,C|E) = M.E by A3,Th25;
-  hence thesis by A6,A12,A19,A20,MESFUNC5:116;
+  then
+A26: Integral(M,C|E) = M.E by A3,Th25;
+A27: (f|E)|E2 = f|E by A14,A17,A23,RELAT_1:98;
+  (a1(#)(C|E))|E1 = a1(#)(C|E) by A12,A14,A15,RELAT_1:98;
+  hence thesis by A11,A13,A24,A25,A16,A27,A26,MESFUNC5:116;
 end;
 

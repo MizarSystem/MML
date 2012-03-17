@@ -10,10 +10,10 @@ environ
       RLSUB_1, RELAT_1, RLVECT_1, REALSET1, QC_LANG1, SUBSET_1, RLVECT_3,
       BOOLE, PARTFUN1, ARYTM_1, ALGSTR_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, BINOP_1, REALSET1,
-      DOMAIN_1, STRUCT_0, ALGSTR_0, GROUP_1, RLVECT_1, VECTSP_1, FUNCSDOM,
-      VECTSP_2, VECTSP_4, VECTSP_5, VECTSP_6, MOD_3;
+      DOMAIN_1, STRUCT_0, ALGSTR_0, GROUP_1, VECTSP_1, FUNCSDOM, VECTSP_2,
+      VECTSP_4, VECTSP_5, VECTSP_6, MOD_3;
  constructors BINOP_1, REALSET2, VECTSP_5, VECTSP_6, MOD_3, RELSET_1;
- registrations XBOOLE_0, RELSET_1, STRUCT_0, VECTSP_1, VECTSP_4;
+ registrations RELSET_1, STRUCT_0, VECTSP_1, VECTSP_4;
  requirements SUBSET, BOOLE;
  definitions TARSKI, XBOOLE_0, REALSET1, STRUCT_0;
  theorems FUNCT_2, MOD_3, TARSKI, VECTSP_1, VECTSP_4, VECTSP_5, VECTSP_6,
@@ -24,13 +24,15 @@ begin
 reserve x for set,
   K for Ring,
   r for Scalar of K,
-  V, M, M1, M2, N for LeftMod of K,
+  V, M, M1, M2, N for LeftMod
+  of K,
   a for Vector of V,
   m, m1, m2 for Vector of M,
   n, n1, n2 for Vector of N,
   A for Subset of V,
   l for Linear_Combination of A,
-  W, W1, W2, W3 for Subspace of V;
+  W, W1, W2, W3 for Subspace of
+  V;
 
 notation
   let K, V;
@@ -40,9 +42,9 @@ end;
 theorem
   M1 = the VectSpStr of M2 implies (x in M1 iff x in M2)
 proof
+A1: x in M1 iff x in the carrier of M1 by STRUCT_0:def 5;
   assume
-A1: M1 = the VectSpStr of M2;
-  x in M1 iff x in the carrier of M1 by STRUCT_0:def 5;
+  M1 = the VectSpStr of M2;
   hence thesis by A1,STRUCT_0:def 5;
 end;
 
@@ -57,7 +59,8 @@ end;
 
 theorem Th3:
   the VectSpStr of V is strict Subspace of V
-proof (Omega).V = the VectSpStr of V by VECTSP_4:def 4;
+proof
+  (Omega).V = the VectSpStr of V by VECTSP_4:def 4;
   hence thesis;
 end;
 
@@ -66,15 +69,17 @@ theorem Th4:
 proof
   set W=(Omega).V;
 A1: W = the VectSpStr of V by VECTSP_4:def 4;
-A2: dom(the addF of W) =
-  [:the carrier of W,the carrier of W:] by FUNCT_2:def 1;
-  dom(the lmult of W)
-  = [:the carrier of K, the carrier of W:] by FUNCT_2:def 1;
-  then the carrier of V c= the carrier of W & 0.V = 0.W &
-  the addF of V = (the addF of W)||the carrier of V &
-  the lmult of V = (the lmult of W) |
-  [:the carrier of K, the carrier of V:] by A1,A2,RELAT_1:97;
-  hence thesis by VECTSP_4:def 2;
+  then
+A2: 0.V = 0.W;
+  dom(the lmult of W) = [:the carrier of K, the carrier of W:] by FUNCT_2:
+  def 1;
+  then
+A3: the lmult of V = (the lmult of W) | [:the carrier of K, the carrier of V
+  :] by A1,RELAT_1:97;
+  dom(the addF of W) = [:the carrier of W,the carrier of W:] by FUNCT_2:
+  def 1;
+  then the addF of V = (the addF of W)||the carrier of V by A1,RELAT_1:97;
+  hence thesis by A1,A2,A3,VECTSP_4:def 2;
 end;
 
 begin
@@ -87,7 +92,8 @@ definition
   :Def2:
   0.K = 1_K;
   compatibility
-  proof thus K is trivial implies 0.K = 1_K by STRUCT_0:def 19;
+  proof
+    thus K is trivial implies 0.K = 1_K by STRUCT_0:def 19;
     assume
 A1: 0.K = 1_K;
     now
@@ -100,18 +106,21 @@ A1: 0.K = 1_K;
 end;
 
 theorem Th5:
-  K is trivial implies (for r holds r = 0.K) & (for a holds a = 0.V)
+  K is trivial implies (for r holds r = 0.K) & for a holds a = 0.V
 proof
-  assume K is trivial;
+  assume
+  K is trivial;
   then
 A1: 0.K = 1_K by Def2;
 A2: now
-    let r; thus r = r*1_K by VECTSP_1:def 13
-      .= 0.K by A1,VECTSP_1:36;
+    let a;
+    thus a = 1_K*a by VECTSP_1:def 26
+      .= 0.V by A1,VECTSP_1:59;
   end;
   now
-    let a; thus a = 1_K*a by VECTSP_1:def 26
-      .= 0.V by A1,VECTSP_1:59;
+    let r;
+    thus r = r*1_K by VECTSP_1:def 13
+      .= 0.K by A1,VECTSP_1:36;
   end;
   hence thesis by A2;
 end;
@@ -119,34 +128,37 @@ end;
 theorem
   K is trivial implies V is trivial
 proof
-  assume
-A1: K is trivial & V is non trivial;
-  then ex a st a <> 0.V by STRUCT_0:def 19;
+  assume that
+A1: K is trivial and
+A2: V is non trivial;
+  ex a st a <> 0.V by A2,STRUCT_0:def 19;
   hence contradiction by A1,Th5;
 end;
 
 theorem
   V is trivial iff the VectSpStr of V = (0).V
 proof
+  set X = the carrier of (0).V;
   reconsider W = the VectSpStr of V as strict Subspace of V by Th3;
   reconsider Z=(0).V as Subspace of W by VECTSP_4:50;
-  set X = the carrier of (0).V;
 A1: now
-    assume V is non trivial;
+    assume
+    W <> Z;
     then consider a such that
-A2: a <> 0.V by STRUCT_0:def 19;
-    not a in {0.V} by A2,TARSKI:def 1;
-    then not a in X by VECTSP_4:def 3;
-    hence W <> (0).V;
-  end;
-  now
-    assume W <> Z;
-    then consider a such that
-A3: not a in Z by VECTSP_4:40;
-    not a in X by A3,STRUCT_0:def 5;
+A2: not a in Z by VECTSP_4:40;
+    not a in X by A2,STRUCT_0:def 5;
     then not a in {0.V} by VECTSP_4:def 3;
     then a <> 0.V by TARSKI:def 1;
     hence V is non trivial by STRUCT_0:def 19;
+  end;
+  now
+    assume
+    V is non trivial;
+    then consider a such that
+A3: a <> 0.V by STRUCT_0:def 19;
+    not a in {0.V} by A3,TARSKI:def 1;
+    then not a in X by VECTSP_4:def 3;
+    hence W <> (0).V;
   end;
   hence thesis by A1;
 end;
@@ -157,7 +169,6 @@ definition
   let K,V;
   let W be strict Subspace of V;
   func @W -> Element of Submodules(V) equals
-
   W;
   coherence by VECTSP_5:def 3;
 end;
@@ -177,7 +188,6 @@ definition
   let A be Subset of W;
   canceled;
   func @A -> Subset of V equals
-
   A;
   coherence by Th9;
 end;
@@ -199,7 +209,8 @@ theorem Th12:
   A c= [#]Lin(A)
 proof
   let x;
-  assume x in A;
+  assume
+  x in A;
   then x in Lin(A) by MOD_3:12;
   hence thesis by STRUCT_0:def 5;
 end;
@@ -209,11 +220,14 @@ theorem Th13:
 proof
   assume
 A1: A<>{} & A is linearly-closed;
-  now per cases;
-    suppose 0.K<>1_K;
+  now
+    per cases;
+    suppose
+      0.K<>1_K;
       hence thesis by A1,VECTSP_6:40;
     end;
-    suppose 0.K=1_K;
+    suppose
+      0.K=1_K;
       then K is trivial by Def2;
       then Sum(l) = 0.V by Th5;
       hence thesis by A1,VECTSP_4:4;
@@ -231,19 +245,18 @@ proof
 A1: 0.V in A & A is linearly-closed;
   thus A c= [#]Lin(A) by Th12;
   let x;
-  assume x in [#]Lin(A);
+  assume
+  x in [#]Lin(A);
   then x in Lin(A) by STRUCT_0:def 5;
   then ex l st x = Sum(l) by MOD_3:11;
   hence thesis by A1,Th13;
 end;
 
-begin
-::   2. Cyclic submodule
+begin ::   2. Cyclic submodule
 
 definition
   let K,V,a;
   func <:a:> -> strict Subspace of V equals
-
   Lin({a});
   correctness;
 end;
@@ -259,35 +272,35 @@ definition
 end;
 
 theorem Th16:
-  M c= N implies
-  (x in M implies x in N) & (x is Vector of M implies x is Vector of N)
+  M c= N implies (x in M implies x in N) & (x is Vector of M
+  implies x is Vector of N)
 proof
   assume
 A1: M c= N;
   thus x in M implies x in N
   proof
-    assume
-A2: x in M;
     reconsider M' = M as Subspace of N by A1,Def7;
-    x in M' by A2;
+    assume
+    x in M;
+    then x in M';
     hence thesis by VECTSP_4:17;
   end;
   thus x is Vector of M implies x is Vector of N
   proof
-    assume
-A3: x is Vector of M;
     reconsider M' = M as Subspace of N by A1,Def7;
-    x is Vector of M' by A3;
+    assume
+    x is Vector of M;
+    then x is Vector of M';
     hence thesis by VECTSP_4:18;
   end;
 end;
 
 theorem
-  M c= N implies 0.M = 0.N & (m1 = n1 & m2 = n2 implies m1 + m2 = n1 + n2)
-  & (m = n implies r * m = r * n) & (m = n implies - n = - m)
-  & (m1 = n1 & m2 = n2 implies m1 - m2 = n1 - n2) & 0.N in M & 0.M in N
-  & (n1 in M & n2 in M implies n1 + n2 in M) & (n in M implies r * n in M)
-  & (n in M implies - n in M) & (n1 in M & n2 in M implies n1 - n2 in M)
+  M c= N implies 0.M = 0.N & (m1 = n1 & m2 = n2 implies m1 + m2 = n1 +
+n2) & (m = n implies r * m = r * n) & (m = n implies - n = - m) & (m1 = n1 & m2
+  = n2 implies m1 - m2 = n1 - n2) & 0.N in M & 0.M in N & (n1 in M & n2 in M
+implies n1 + n2 in M) & (n in M implies r * n in M) & (n in M implies - n in M)
+  & (n1 in M & n2 in M implies n1 - n2 in M)
 proof
   assume
 A1: M c= N;
@@ -299,39 +312,41 @@ A1: M c= N;
   end;
   thus m1 = n1 & m2 = n2 implies m1 + m2 = n1 + n2
   proof
-    assume
-A2: m1 = n1 & m2 = n2;
     reconsider M' = M as Subspace of N by A1,Def7;
+    assume that
+A2: m1 = n1 and
+A3: m2 = n2;
     reconsider m1'=m1, m2'=m2 as Vector of M';
-    m1' = n1 & m2' = n2 by A2;
-    hence thesis by VECTSP_4:21;
+    m1' = n1 by A2;
+    hence thesis by A3,VECTSP_4:21;
   end;
   thus m = n implies r * m = r * n
   proof
-    assume
-A3: m = n;
     reconsider M' = M as Subspace of N by A1,Def7;
     reconsider m'=m as Vector of M';
-    m' = n by A3;
+    assume
+    m = n;
+    then m' = n;
     hence thesis by VECTSP_4:22;
   end;
   thus m = n implies - n = - m
   proof
-    assume
-A4: m = n;
     reconsider M' = M as Subspace of N by A1,Def7;
     reconsider m'=m as Vector of M';
-    m' = n by A4;
+    assume
+    m = n;
+    then m' = n;
     hence thesis by VECTSP_4:23;
   end;
   thus m1 = n1 & m2 = n2 implies m1 - m2 = n1 - n2
   proof
-    assume
-A5: m1 = n1 & m2 = n2;
     reconsider M' = M as Subspace of N by A1,Def7;
+    assume that
+A4: m1 = n1 and
+A5: m2 = n2;
     reconsider m1'=m1, m2'=m2 as Vector of M';
-    m1' = n1 & m2' = n2 by A5;
-    hence thesis by VECTSP_4:24;
+    m1' = n1 by A4;
+    hence thesis by A5,VECTSP_4:24;
   end;
   thus 0.N in M
   proof
@@ -347,89 +362,92 @@ A5: m1 = n1 & m2 = n2;
   end;
   thus n1 in M & n2 in M implies n1 + n2 in M
   proof
-    assume
-A6: n1 in M & n2 in M;
     reconsider M' = M as Subspace of N by A1,Def7;
-    n1 in M' & n2 in M' by A6;
-    hence thesis by VECTSP_4:28;
+    assume that
+A6: n1 in M and
+A7: n2 in M;
+    n1 in M' by A6;
+    hence thesis by A7,VECTSP_4:28;
   end;
   thus n in M implies r * n in M
   proof
-    assume
-A7: n in M;
     reconsider M' = M as Subspace of N by A1,Def7;
-    n in M' by A7;
+    assume
+    n in M;
+    then n in M';
     hence thesis by VECTSP_4:29;
   end;
   thus n in M implies - n in M
   proof
-    assume
-A8: n in M;
     reconsider M' = M as Subspace of N by A1,Def7;
-    n in M' by A8;
+    assume
+    n in M;
+    then n in M';
     hence thesis by VECTSP_4:30;
   end;
   thus n1 in M & n2 in M implies n1 - n2 in M
   proof
-    assume
-A9: n1 in M & n2 in M;
     reconsider M' = M as Subspace of N by A1,Def7;
-    n1 in M' & n2 in M' by A9;
-    hence thesis by VECTSP_4:31;
+    assume that
+A8: n1 in M and
+A9: n2 in M;
+    n1 in M' by A8;
+    hence thesis by A9,VECTSP_4:31;
   end;
 end;
 
 theorem
-  M1 c= N & M2 c= N implies 0.M1 = 0.M2 & 0.M1 in M2
-  & (the carrier of M1 c= the carrier of M2 implies M1 c= M2)
-  & ((for n st n in M1 holds n in M2) implies M1 c= M2)
-  & (the carrier of M1 = the carrier of M2
-  & M1 is strict & M2 is strict implies M1 = M2) & (0).M1 c= M2
+  M1 c= N & M2 c= N implies 0.M1 = 0.M2 & 0.M1 in M2 & (the carrier of
+  M1 c= the carrier of M2 implies M1 c= M2) & ((for n st n in M1 holds n in M2)
+implies M1 c= M2) & (the carrier of M1 = the carrier of M2 & M1 is strict & M2
+  is strict implies M1 = M2) & (0).M1 c= M2
 proof
-  assume
-A1: M1 c= N & M2 c= N;
+  assume that
+A1: M1 c= N and
+A2: M2 c= N;
   thus 0.M1 = 0.M2
   proof
-    reconsider M1'=M1, M2'=M2 as Subspace of N by A1,Def7;
+    reconsider M1'=M1, M2'=M2 as Subspace of N by A1,A2,Def7;
     0.M1' = 0.M2' by VECTSP_4:20;
     hence thesis;
   end;
   thus 0.M1 in M2
   proof
-    reconsider M1'=M1, M2'=M2 as Subspace of N by A1,Def7;
+    reconsider M1'=M1, M2'=M2 as Subspace of N by A1,A2,Def7;
     0.M1' in M2' by VECTSP_4:26;
     hence thesis;
   end;
   thus the carrier of M1 c= the carrier of M2 implies M1 c= M2
   proof
+    reconsider M1'=M1, M2'=M2 as Subspace of N by A1,A2,Def7;
     assume
-A2: the carrier of M1 c= the carrier of M2;
-    reconsider M1'=M1, M2'=M2 as Subspace of N by A1,Def7;
-    M1' is Subspace of M2' by A2,VECTSP_4:35;
+    the carrier of M1 c= the carrier of M2;
+    then M1' is Subspace of M2' by VECTSP_4:35;
     hence thesis by Def7;
   end;
   thus (for n st n in M1 holds n in M2) implies M1 c= M2
   proof
+    reconsider M1'=M1, M2'=M2 as Subspace of N by A1,A2,Def7;
     assume
-A3: for n st n in M1 holds n in M2;
-    reconsider M1'=M1, M2'=M2 as Subspace of N by A1,Def7;
-    M1' is Subspace of M2' by A3,VECTSP_4:36;
+    for n st n in M1 holds n in M2;
+    then M1' is Subspace of M2' by VECTSP_4:36;
     hence thesis by Def7;
   end;
-  thus the carrier of M1 = the carrier of M2
-  & M1 is strict & M2 is strict implies M1 = M2
+  thus the carrier of M1 = the carrier of M2 & M1 is strict & M2 is strict
+  implies M1 = M2
   proof
     assume that
-A4: the carrier of M1 = the carrier of M2 and
-A5: M1 is strict & M2 is strict;
-    reconsider M1'=M1 as strict Subspace of N by A1,A5,Def7;
-    reconsider M2'=M2 as strict Subspace of N by A1,A5,Def7;
-    M1' = M2' by A4,VECTSP_4:37;
+A3: the carrier of M1 = the carrier of M2 and
+A4: M1 is strict and
+A5: M2 is strict;
+    reconsider M2'=M2 as strict Subspace of N by A2,A5,Def7;
+    reconsider M1'=M1 as strict Subspace of N by A1,A4,Def7;
+    M1' = M2' by A3,VECTSP_4:37;
     hence thesis;
   end;
   thus (0).M1 c= M2
   proof
-    reconsider M1'=M1, M2'=M2 as Subspace of N by A1,Def7;
+    reconsider M1'=M1, M2'=M2 as Subspace of N by A1,A2,Def7;
     (0).M1' is Subspace of M2' by VECTSP_4:51;
     hence thesis by Def7;
   end;
@@ -440,18 +458,18 @@ canceled 2;
 theorem
   for V,M being strict LeftMod of K holds V c= M & M c= V implies V = M
 proof
-  let V,M be strict LeftMod of K such that
-A1: V c= M and
-A2: M c= V;
-A3: V is Subspace of M by A1,Def7;
-  M is Subspace of V by A2,Def7;
-  hence thesis by A3,VECTSP_4:33;
+  let V,M be strict LeftMod of K;
+  assume
+  V c= M & M c= V;
+  then V is Subspace of M & M is Subspace of V by Def7;
+  hence thesis by VECTSP_4:33;
 end;
 
 theorem
   V c= M & M c= N implies V c= N
 proof
-  assume V c= M & M c= N;
+  assume
+  V c= M & M c= N;
   then V is Subspace of M & M is Subspace of N by Def7;
   then V is Subspace of N by VECTSP_4:34;
   hence thesis by Def7;
@@ -460,7 +478,8 @@ end;
 theorem
   M c= N implies (0).M c= N
 proof
-  assume M c= N;
+  assume
+  M c= N;
   then reconsider M' = M as Subspace of N by Def7;
   (0).M' is Subspace of N by VECTSP_4:49;
   hence thesis by Def7;
@@ -469,7 +488,8 @@ end;
 theorem
   M c= N implies (0).N c= M
 proof
-  assume M c= N;
+  assume
+  M c= N;
   then reconsider M' = M as Subspace of N by Def7;
   (0).N is Subspace of M' by VECTSP_4:50;
   hence thesis by Def7;
@@ -478,7 +498,8 @@ end;
 theorem
   M c= N implies M c= (Omega).N
 proof
-  assume M c= N;
+  assume
+  M c= N;
   then
 A1: M is Subspace of N by Def7;
   N is Subspace of (Omega).N by Th4;
@@ -503,8 +524,8 @@ end;
 theorem
   W1 c= W2 implies W1 /\ W3 c= W2 /\ W3
 proof
-  W1 is Subspace of W2 implies W1 /\ W3 is Subspace of W2 /\ W3
-  by VECTSP_5:22;
+  W1 is Subspace of W2 implies W1 /\ W3 is Subspace of W2 /\ W3 by
+  VECTSP_5:22;
   hence thesis by Def7;
 end;
 
@@ -518,8 +539,8 @@ end;
 theorem
   W1 c= W2 & W1 c= W3 implies W1 c= W2 /\ W3
 proof
-  W1 is Subspace of W2 & W1 is Subspace of W3 implies
-  W1 is Subspace of W2 /\ W3 by VECTSP_5:24;
+  W1 is Subspace of W2 & W1 is Subspace of W3 implies W1 is Subspace of W2
+  /\ W3 by VECTSP_5:24;
   hence thesis by Def7;
 end;
 
@@ -555,8 +576,8 @@ end;
 theorem
   W1 c= W2 implies W2 + (W1 /\ W3) = (W1 + W2) /\ (W2 + W3)
 proof
-  W1 is Subspace of W2 implies W2 + (W1 /\ W3) = (W1 + W2) /\ (W2 + W3)
-  by VECTSP_5:35;
+  W1 is Subspace of W2 implies W2 + (W1 /\ W3) = (W1 + W2) /\ (W2 + W3) by
+  VECTSP_5:35;
   hence thesis by Def7;
 end;
 
@@ -570,8 +591,8 @@ end;
 theorem
   W1 c= W3 & W2 c= W3 implies W1 + W2 c= W3
 proof
-  W1 is Subspace of W3 & W2 is Subspace of W3 implies
-  W1 + W2 is Subspace of W3 by VECTSP_5:40;
+  W1 is Subspace of W3 & W2 is Subspace of W3 implies W1 + W2 is Subspace
+  of W3 by VECTSP_5:40;
   hence thesis by Def7;
 end;
 
@@ -579,7 +600,8 @@ theorem
   for A,B being Subset of V st A c= B holds Lin(A) c= Lin(B)
 proof
   let A,B be Subset of V;
-  assume A c= B;
+  assume
+  A c= B;
   then Lin(A) is Subspace of Lin(B) by MOD_3:17;
   hence thesis by Def7;
 end;
@@ -598,7 +620,8 @@ proof
   assume
 A1: M1 c= M2;
   let x;
-  assume x in [#]M1;
+  assume
+  x in [#]M1;
   then x in M1 by STRUCT_0:def 5;
   then x in M2 by A1,Th16;
   hence thesis by STRUCT_0:def 5;
@@ -619,7 +642,8 @@ proof
 A1: [#]W1 c= [#]W2;
   now
     let a;
-    assume a in W1;
+    assume
+    a in W1;
     then a in [#]W1 by STRUCT_0:def 5;
     hence a in W2 by A1,STRUCT_0:def 5;
   end;
@@ -632,11 +656,11 @@ theorem
 theorem
   (0).W c= V & (0).V c= W & (0).W1 c= W2
 proof
-A1: (0).W is Subspace of V by VECTSP_4:49;
-A2: (0).V is Subspace of W by VECTSP_4:50;
-A3: (0).W1 is Subspace of W2 by VECTSP_4:51;
-  thus (0).W c= V by A1,Def7;
-  thus (0).V c= W by A2,Def7;
-  thus thesis by A3,Def7;
+  (0).W is Subspace of V by VECTSP_4:49;
+  hence (0).W c= V by Def7;
+  (0).V is Subspace of W by VECTSP_4:50;
+  hence (0).V c= W by Def7;
+  (0).W1 is Subspace of W2 by VECTSP_4:51;
+  hence thesis by Def7;
 end;
 

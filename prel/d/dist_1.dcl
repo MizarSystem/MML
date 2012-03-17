@@ -12,6 +12,7 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
@@ -65,12 +66,13 @@
 <Adjective nr="9"/>
 <Adjective nr="11"/>
 <Adjective nr="20"/>
-<Adjective nr="31"/>
 <Adjective nr="32"/>
 <Adjective nr="33"/>
-<Adjective nr="55"/>
-<Adjective nr="166"/>
-<Adjective nr="169"/>
+<Adjective nr="34"/>
+<Adjective nr="56"/>
+<Adjective nr="57"/>
+<Adjective nr="167"/>
+<Adjective nr="170"/>
 </Cluster>
 </RCluster>
 <FCluster aid="DIST_1" nr="1">
@@ -82,17 +84,17 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="373">
+<Func kind="K" nr="382">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="9"/>
 <Adjective nr="10"/>
-<Adjective nr="24">
-<Func kind="K" nr="372">
+<Adjective nr="25">
+<Func kind="K" nr="381">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="193">
+<Func kind="K" nr="201">
 <Func kind="K" nr="64"/>
 </Func>
 </Adjective>

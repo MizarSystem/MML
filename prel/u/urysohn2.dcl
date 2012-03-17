@@ -13,6 +13,7 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="NAT_1"/>
 <ArticleID name="XXREAL_0"/>
@@ -31,7 +32,7 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="60"/>
+<Adjective nr="62"/>
 </Cluster>
 <Func kind="K" nr="10">
 <Func kind="K" nr="64"/>
@@ -42,12 +43,12 @@
 <Func kind="K" nr="64"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="154">
+<Func kind="K" nr="162">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="60"/>
+<Adjective nr="62"/>
 </Cluster>
 </FCluster>
 </Registrations>

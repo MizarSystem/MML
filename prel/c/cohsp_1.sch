@@ -60,6 +60,7 @@
 </Not>
 </For>
 </Not>
+<And>
 <Pred kind="R" nr="2">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
@@ -67,6 +68,7 @@
 <Pred kind="P" nr="1">
 <Func kind="F" nr="1"/>
 </Pred>
+</And>
 <Pred kind="V" nr="10">
 <Func kind="F" nr="1"/>
 </Pred>

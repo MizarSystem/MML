@@ -10,6 +10,7 @@
 <ArticleID name="TARSKI"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FUNCOP_1"/>
@@ -23,7 +24,7 @@
 </Signature>
 <FCluster aid="CQC_THE1" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="176"/>
+<Func kind="K" nr="184"/>
 <Cluster>
 <Adjective nr="10" value="false"/>
 </Cluster>

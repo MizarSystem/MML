@@ -1,6 +1,6 @@
 :: Probability on Finite and Discrete Set and Uniform Distribution
 ::  by Hiroyuki Okazaki
-:: 
+::
 :: Received May 5, 2009
 :: Copyright (c) 2009 Association of Mizar Users
 
@@ -9,15 +9,15 @@ environ
  vocabularies DIST_1, FINSEQ_1, RELAT_1, SETFAM_1, FINSEQ_4, FUNCT_1, RPR_1,
       CARD_1, SEQ_1, BOOLE, ARYTM, TARSKI, ARYTM_3, RLVECT_1, PROB_1, PROB_2,
       FINSET_1, UPROOTS, MATRPROB, SEQM_3;
- notations TARSKI, XBOOLE_0, SUBSET_1, FINSET_1, CARD_1, ORDINAL1, NUMBERS,
-      DOMAIN_1, XCMPLX_0, XXREAL_0, REAL_1, RELAT_1, FUNCT_1, RELSET_1,
-      PARTFUN1, FINSEQ_1, FINSEQ_2, VALUED_1, FUNCT_2, BINOP_2, NAT_1,
-      SETFAM_1, SEQ_1, RPR_1, PROB_2, RVSUM_1, UPROOTS, MATRPROB;
+ notations TARSKI, XBOOLE_0, SUBSET_1, FINSET_1, CARD_1, NUMBERS, XCMPLX_0,
+      XXREAL_0, BINOP_2, REAL_1, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1,
+      FINSEQ_1, FINSEQ_2, VALUED_1, FUNCT_2, NAT_1, SETFAM_1, SEQ_1, RPR_1,
+      PROB_2, RVSUM_1, UPROOTS, MATRPROB;
  constructors DOMAIN_1, RPR_1, RVSUM_1, SEQ_1, BINOP_2, SETWOP_2, PARTFUN3,
-      INTEGRA2, PROB_2, VALUED_1, UPROOTS, MATRPROB, RELSET_1;
- registrations FUNCT_1, SUBSET_1, NAT_1, XREAL_0, XXREAL_0, MEMBERED, ORDINAL1,
-      UPROOTS, ALGSTR_0, FINSEQ_1, FUNCT_2, RELAT_1, XBOOLE_0, FINSET_1,
-      NUMBERS, VALUED_0, VALUED_1, ASYMPT_0, CARD_1, MATRPROB, ENTROPY1;
+      INTEGRA2, PROB_2, VALUED_1, UPROOTS, MATRPROB, RELSET_1, REAL_1;
+ registrations FUNCT_1, SUBSET_1, NAT_1, XREAL_0, XXREAL_0, ORDINAL1, UPROOTS,
+      FINSEQ_1, FUNCT_2, RELAT_1, XBOOLE_0, FINSET_1, NUMBERS, VALUED_0,
+      VALUED_1, CARD_1, MATRPROB, ENTROPY1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, RPR_1, FINSEQ_1, RELAT_1, FUNCT_1;
  theorems XREAL_0, TARSKI, FINSEQ_2, CARD_2, FINSEQ_4, FUNCT_1, FINSEQ_1,
@@ -38,26 +38,23 @@ definition
   correctness;
 end;
 
-theorem defwe:
-  for S be non empty finite set, s be FinSequence of S
-  holds whole_event (s) = s"S
-  proof
-    let S be non empty finite set,
-    s be FinSequence of S;
-    P1: s"S c= s"rng s by RELAT_1:170;
-    s"rng s c= s"S by RELAT_1:178;
-    then
-    s"rng s = s"S by P1,XBOOLE_0:def 10;
-    hence thesis by RELAT_1:169;
-  end;
+theorem Th1:
+  for S be non empty finite set, s be FinSequence of S holds
+  whole_event (s) = s"S
+proof
+  let S be non empty finite set, s be FinSequence of S;
+  s"S c= s"rng s & s"rng s c= s"S by RELAT_1:170,178;
+  then s"rng s = s"S by XBOOLE_0:def 10;
+  hence thesis by RELAT_1:169;
+end;
 
-notation let S be non empty finite set,
-  s be FinSequence of S,
-  x be set;
+notation
+  let S be non empty finite set, s be FinSequence of S, x be set;
   synonym event_pick (x,s) for Coim(s,x);
 end;
 
-definition let S be non empty finite set, s be FinSequence of S, x be set;
+definition
+  let S be non empty finite set, s be FinSequence of S, x be set;
   redefine func event_pick (x,s) -> Event of whole_event(s);
   correctness by RELAT_1:167;
 end;
@@ -65,1107 +62,1194 @@ end;
 definition
   let S be non empty finite set, s be FinSequence of S, x be set;
   func frequency(x,s) -> Nat equals
-    card (event_pick(x,s));
+  card (event_pick(x,s));
   correctness;
 end;
 
 theorem
-  for S be non empty finite set,
-  s be FinSequence of S, e be set st e in whole_event(s)
-  ex x be Element of S st e in event_pick(x,s)
-  proof
-    let S be non empty finite set,
-    s be FinSequence of S,
-    e be set;
-    assume AS: e in whole_event(s);
-    then e in s"S by defwe;
-    then s.e in S by FUNCT_1:def 13;
-    then consider x be Element of S such that L1: x=s.e;
-    CON: x in {x} by TARSKI:def 1;
-    take x;
-    thus thesis by CON,AS,L1,FUNCT_1:def 13;
-  end;
+  for S be non empty finite set, s be FinSequence of S, e be set st e in
+  whole_event(s) ex x be Element of S st e in event_pick(x,s)
+proof
+  let S be non empty finite set, s be FinSequence of S, e be set;
+  assume
+A1: e in whole_event(s);
+  then e in s"S by Th1;
+  then s.e in S by FUNCT_1:def 13;
+  then consider x be Element of S such that
+A2: x=s.e;
+  take x;
+  x in {x} by TARSKI:def 1;
+  hence thesis by A1,A2,FUNCT_1:def 13;
+end;
 
-theorem nazo6:
-  for S be non empty finite set,
-  s be FinSequence of S holds card whole_event(s) = len s
-  proof
-    let S be non empty finite set,
-    s be FinSequence of S;
-    card whole_event(s)= card Seg len s by FINSEQ_1:def 3
+theorem Th3:
+  for S be non empty finite set, s be FinSequence of S holds card
+  whole_event(s) = len s
+proof
+  let S be non empty finite set, s be FinSequence of S;
+  card whole_event(s)= card Seg len s by FINSEQ_1:def 3
     .= len s by FINSEQ_1:78;
-    hence thesis;
-  end;
+  hence thesis;
+end;
 
-definition let S be non empty finite set,
-  s be FinSequence of S, x be set;
+definition
+  let S be non empty finite set, s be FinSequence of S, x be set;
   func FDprobability (x,s) -> Real equals
   frequency(x,s) / (len s);
   correctness by XREAL_0:def 1;
 end;
 
 theorem
-  for S be non empty finite set,
-  s be FinSequence of S, x be set holds
+  for S be non empty finite set, s be FinSequence of S, x be set holds
   frequency(x,s)=(len s)* FDprobability (x,s)
-  proof
-    let S be non empty finite set, s be FinSequence of S,x be set;
-    per cases;
-    suppose s is non empty;
-      hence thesis by XCMPLX_1:88;
-    end;
-    suppose s is empty; then
-      event_pick(x,s)={} by RELAT_1:172;
-      then frequency(x,s)=0;
-      hence thesis;
-    end;
+proof
+  let S be non empty finite set, s be FinSequence of S,x be set;
+  per cases;
+  suppose
+    s is non empty;
+    hence thesis by XCMPLX_1:88;
   end;
+  suppose
+    s is empty;
+    then event_pick(x,s)={} by RELAT_1:172;
+    then frequency(x,s)=0;
+    hence thesis;
+  end;
+end;
 
-definition let S be non empty finite set, s be FinSequence of S;
+definition
+  let S be non empty finite set, s be FinSequence of S;
   func FDprobSEQ (s) -> FinSequence of REAL means
-  :defFREQDIST:
-  dom it= Seg (card (S)) & for n be Nat st n in dom it
-  holds it.n=FDprobability((canFS(S)).n,s);
+  :Def3:
+  dom it= Seg (card (S)
+  ) & for n be Nat st n in dom it holds it.n=FDprobability((canFS(S)).n,s);
   existence
   proof
-    defpred P[Nat,set] means
-    $2=FDprobability((canFS(S)).$1,s);
-    P0: for k be Nat st k in Seg (card (S))
-    ex x being Element of REAL st P[k,x];
+    defpred P[Nat,set] means $2=FDprobability((canFS(S)).$1,s);
+A1: for k be Nat st k in Seg (card (S)) ex x being Element of REAL st P[k,
+    x];
     consider g be FinSequence of REAL such that
-    P1: dom g =Seg (card (S))
-    & for n be Nat st n in Seg (card (S)) holds P[n,g.n]
-    from FINSEQ_1:sch 5(P0);
+A2: dom g =Seg (card (S)) & for n be Nat st n in Seg (card (S)) holds
+    P[n,g.n] from FINSEQ_1:sch 5(A1);
     take g;
-    thus thesis by P1;
+    thus thesis by A2;
   end;
   uniqueness
   proof
     let g,h be FinSequence of REAL;
-    assume
-    A1: dom g =Seg (card (S)) & for n be Nat st n in dom g
-    holds g.n=FDprobability((canFS(S)).n,s);
-    assume
-    A2: dom h =Seg (card (S)) & for n be Nat st n in dom h
-    holds h.n=FDprobability((canFS(S)).n,s);
-    A6: len g =card (S) by A1,FINSEQ_1:def 3
-    .=len h by A2,FINSEQ_1:def 3;
-    now let n be Nat;
-      assume A6: n in dom g;
-      thus g.n = FDprobability((canFS(S)).n,s) by A6,A1
-      .= h.n by A6,A1,A2;
+    assume that
+A3: dom g =Seg (card (S)) and
+A4: for n be Nat st n in dom g holds g.n=FDprobability((canFS(S)).n,s);
+    assume that
+A5: dom h =Seg (card (S)) and
+A6: for n be Nat st n in dom h holds h.n=FDprobability((canFS(S)).n,s);
+A7: now
+      let n be Nat;
+      assume
+A8:   n in dom g;
+      hence g.n = FDprobability((canFS(S)).n,s) by A4
+        .= h.n by A3,A5,A6,A8;
     end;
-    hence thesis by FINSEQ_2:10,A6;
+    len g =card (S) by A3,FINSEQ_1:def 3
+      .=len h by A5,FINSEQ_1:def 3;
+    hence thesis by A7,FINSEQ_2:10;
   end;
 end;
 
 theorem
-  for S be non empty finite set,
-  s be non empty FinSequence of S, x be set holds
-  FDprobability(x,s)=prob(event_pick(x,s)) by nazo6;
+  for S be non empty finite set, s be non empty FinSequence of S, x be
+  set holds FDprobability(x,s)=prob(event_pick(x,s)) by Th3;
 
-definition let S be non empty finite set,
-  s,t be FinSequence of S;
-  pred s,t -are_prob_equivalent means :defequiv:
-  for x be set holds FDprobability (x,s)=FDprobability (x,t);
+definition
+  let S be non empty finite set, s,t be FinSequence of S;
+  pred s,t -are_prob_equivalent means
+  :Def4:
+  for x be set holds FDprobability
+  (x,s)=FDprobability (x,t);
   reflexivity;
   symmetry;
 end;
 
-theorem EQX01:
-  for S be non empty finite set, s,t,u be FinSequence of S st
-  s,t -are_prob_equivalent & t,u -are_prob_equivalent holds
-  s,u -are_prob_equivalent
-  proof
-    let S be non empty finite set;
-    let s,t,u be FinSequence of S;
-  assume AS1: s,t -are_prob_equivalent & t,u -are_prob_equivalent;
-  now let x be set;
-    thus FDprobability (x,s)=FDprobability (x,t) by AS1,defequiv
-    .=FDprobability (x,u) by AS1,defequiv;
+theorem Th6:
+  for S be non empty finite set, s,t,u be FinSequence of S st s,t
+-are_prob_equivalent & t,u -are_prob_equivalent holds s,u -are_prob_equivalent
+proof
+  let S be non empty finite set;
+  let s,t,u be FinSequence of S;
+  assume that
+A1: s,t -are_prob_equivalent and
+A2: t,u -are_prob_equivalent;
+  now
+    let x be set;
+    thus FDprobability (x,s)=FDprobability (x,t) by A1,Def4
+      .=FDprobability (x,u) by A2,Def4;
   end;
-  hence s,u -are_prob_equivalent by defequiv;
+  hence s,u -are_prob_equivalent by Def4;
 end;
 
-definition let S be non empty finite set, s be FinSequence of S;
+definition
+  let S be non empty finite set, s be FinSequence of S;
   func Finseq-EQclass(s) -> non empty Subset of S* equals
-    {t where t is FinSequence of S: s,t -are_prob_equivalent};
+  {t where t is
+  FinSequence of S: s,t -are_prob_equivalent};
   correctness
   proof
-    P0P: s in {t where t is FinSequence of S: s,t -are_prob_equivalent};
-    {t where t is FinSequence of S: s,t -are_prob_equivalent } c= S*
+A1: {t where t is FinSequence of S: s,t -are_prob_equivalent } c= S*
     proof
       let x be set;
-      assume x in {t where t is FinSequence of S : s,t -are_prob_equivalent };
-      then ex t be FinSequence of S
-      st x=t & s,t -are_prob_equivalent;
+      assume
+      x in {t where t is FinSequence of S : s,t -are_prob_equivalent };
+      then ex t be FinSequence of S st x=t & s,t -are_prob_equivalent;
       hence x in S* by FINSEQ_1:def 11;
     end;
-    hence thesis by P0P;
+    s in {t where t is FinSequence of S: s,t -are_prob_equivalent};
+    hence thesis by A1;
   end;
 end;
 
-theorem EQX02:
-  for S be non empty finite set, s,t be FinSequence of S holds
-  (s,t -are_prob_equivalent iff t in Finseq-EQclass(s))
-  proof
-    let S be non empty finite set, s,t be FinSequence of S;
-    now assume t in Finseq-EQclass(s); then
-      ex t0 be FinSequence of S
-      st t=t0 & s,t0 -are_prob_equivalent;
-      hence s,t -are_prob_equivalent;
-    end;
-    hence s,t -are_prob_equivalent iff t in Finseq-EQclass(s);
+theorem Th7:
+  for S be non empty finite set, s,t be FinSequence of S holds (s,t
+  -are_prob_equivalent iff t in Finseq-EQclass(s))
+proof
+  let S be non empty finite set, s,t be FinSequence of S;
+  now
+    assume
+    t in Finseq-EQclass(s);
+    then ex t0 be FinSequence of S st t=t0 & s,t0 -are_prob_equivalent;
+    hence s,t -are_prob_equivalent;
   end;
+  hence s,t -are_prob_equivalent iff t in Finseq-EQclass(s);
+end;
 
-theorem EQX03:
-  for S be non empty finite set,
-  s be FinSequence of S holds s in Finseq-EQclass(s);
+theorem Th8:
+  for S be non empty finite set, s be FinSequence of S holds s in
+  Finseq-EQclass(s);
 
-theorem EQX04:
-  for S be non empty finite set,
-  s,t be FinSequence of S holds
-  s,t -are_prob_equivalent iff Finseq-EQclass(s) = Finseq-EQclass(t)
-  proof
-    let S be non empty finite set,
-    s,t be FinSequence of S;
-    P1: now assume
-    P10: s,t -are_prob_equivalent;
-    now let x be set;
-      assume x in Finseq-EQclass(s); then
-      consider u be FinSequence of S such that
-      P11: x=u & s,u -are_prob_equivalent;
-      t,u -are_prob_equivalent by EQX01,P10,P11;
-      hence x in Finseq-EQclass(t) by P11;
-    end; then
-    P11: Finseq-EQclass(s) c= Finseq-EQclass(t) by TARSKI:def 3;
-    now let x be set;
-      assume x in Finseq-EQclass(t);
+theorem Th9:
+  for S be non empty finite set, s,t be FinSequence of S holds s,t
+  -are_prob_equivalent iff Finseq-EQclass(s) = Finseq-EQclass(t)
+proof
+  let S be non empty finite set, s,t be FinSequence of S;
+A1: now
+    assume
+A2: s,t -are_prob_equivalent;
+    now
+      let x be set;
+      assume
+      x in Finseq-EQclass(t);
       then consider u be FinSequence of S such that
-      P11: x=u & t,u -are_prob_equivalent;
-      s,u -are_prob_equivalent by EQX01,P11,P10;
-      hence x in Finseq-EQclass(s) by P11;
+A3:   x=u and
+A4:   t,u -are_prob_equivalent;
+      s,u -are_prob_equivalent by A2,A4,Th6;
+      hence x in Finseq-EQclass(s) by A3;
     end;
-    then Finseq-EQclass(t) c= Finseq-EQclass(s) by TARSKI:def 3;
-    hence Finseq-EQclass(t) = Finseq-EQclass(s) by XBOOLE_0:def 10,P11;
+    then
+A5: Finseq-EQclass(t) c= Finseq-EQclass(s) by TARSKI:def 3;
+    now
+      let x be set;
+      assume
+      x in Finseq-EQclass(s);
+      then consider u be FinSequence of S such that
+A6:   x=u and
+A7:   s,u -are_prob_equivalent;
+      t,u -are_prob_equivalent by A2,A7,Th6;
+      hence x in Finseq-EQclass(t) by A6;
+    end;
+    then Finseq-EQclass(s) c= Finseq-EQclass(t) by TARSKI:def 3;
+    hence Finseq-EQclass(t) = Finseq-EQclass(s) by A5,XBOOLE_0:def 10;
   end;
-  now assume Finseq-EQclass(s) = Finseq-EQclass(t);
+  now
+    assume
+    Finseq-EQclass(s) = Finseq-EQclass(t);
     then s in Finseq-EQclass(t);
-    hence s,t -are_prob_equivalent by EQX02;
+    hence s,t -are_prob_equivalent by Th7;
   end;
-  hence thesis by P1;
+  hence thesis by A1;
 end;
 
 definition
   let S be non empty finite set;
-  defpred P[set] means ex u being FinSequence of S st
-  $1 = Finseq-EQclass(u);
+  defpred P[set] means ex u being FinSequence of S st $1 = Finseq-EQclass(u);
   func distribution_family(S) -> non empty Subset-Family of S* means
-  :defQuot:
-  for A being Subset of S* holds
-  A in it iff ex s being FinSequence of S st A = Finseq-EQclass(s);
+  :Def6:
+  for A being Subset of S* holds A in it iff ex s being FinSequence of S st A =
+  Finseq-EQclass(s);
   existence
   proof
-    consider T be Subset-Family of S* such that
-    P1: for A being Subset of S* holds A in T
-    iff P[A] from SUBSET_1:sch 3;
     consider s be Element of S*;
-    Finseq-EQclass(s) in T by P1;
-    hence thesis by P1;
+    consider T be Subset-Family of S* such that
+A1: for A being Subset of S* holds A in T iff P[A] from SUBSET_1:sch 3;
+    Finseq-EQclass(s) in T by A1;
+    hence thesis by A1;
   end;
   uniqueness
   proof
     let F1,F2 be non empty Subset-Family of S*;
     assume that
-    A1: for A being Subset of S* holds A in F1 iff P[A] and
-    A2: for A being Subset of S* holds A in F2 iff P[A];
-    thus thesis from SUBSET_1:sch 4(A1,A2);
+A2: for A being Subset of S* holds A in F1 iff P[A] and
+A3: for A being Subset of S* holds A in F2 iff P[A];
+    thus thesis from SUBSET_1:sch 4(A2,A3);
   end;
 end;
 
-theorem EQX05:
-  for S be non empty finite set,
-  s,t be FinSequence of S holds
-  s,t -are_prob_equivalent iff FDprobSEQ(s) = FDprobSEQ(t)
-  proof
-    let S be non empty finite set,
-    s,t be FinSequence of S;
-    P0: now assume AS: s,t -are_prob_equivalent;
-    P1: dom FDprobSEQ (t) = Seg (card (S)) by defFREQDIST;
-    now let n be Nat;
-      assume P21: n in dom FDprobSEQ (t);
-      thus (FDprobSEQ (t)).n
-       =FDprobability((canFS(S)).n,t) by P21,defFREQDIST
-      .=FDprobability((canFS(S)).n,s) by AS,defequiv;
-    end;
-    hence FDprobSEQ (s)=FDprobSEQ (t) by P1, defFREQDIST;
-  end;
-  now assume AS: FDprobSEQ (s) = FDprobSEQ (t);
+theorem Th10:
+  for S be non empty finite set, s,t be FinSequence of S holds s,t
+  -are_prob_equivalent iff FDprobSEQ(s) = FDprobSEQ(t)
+proof
+  let S be non empty finite set, s,t be FinSequence of S;
+A1: now
+    assume
+A2: FDprobSEQ (s) = FDprobSEQ (t);
     for x be set holds FDprobability(x,t) =FDprobability(x,s)
-    proof let x be set;
+    proof
+      let x be set;
       per cases;
-      suppose x in S;
+      suppose
+        x in S;
         then x in rng canFS(S) by FUNCT_2:def 3;
         then consider n be set such that
-        C11: n in dom (canFS(S)) & x=(canFS(S)).n by FUNCT_1:def 5;
-        reconsider n as Element of NAT by C11;
-        len canFS(S) = card (S) by UPROOTS:5; then
-        C110:n in Seg (card (S)) by C11,FINSEQ_1:def 3; then
-        C12: n in dom (FDprobSEQ (s)) by defFREQDIST;
-        C13: n in dom (FDprobSEQ (t)) by C110,defFREQDIST;
-        thus FDprobability(x,s) = (FDprobSEQ (s)).n by C12,defFREQDIST,C11
-        .= FDprobability(x,t) by C11,C13,defFREQDIST,AS;
+A3:     n in dom (canFS(S)) and
+A4:     x=(canFS(S)).n by FUNCT_1:def 5;
+        reconsider n as Element of NAT by A3;
+        len canFS(S) = card (S) by UPROOTS:5;
+        then
+A5:     n in Seg (card (S)) by A3,FINSEQ_1:def 3;
+        then
+A6:     n in dom (FDprobSEQ (t)) by Def3;
+        n in dom (FDprobSEQ (s)) by A5,Def3;
+        hence FDprobability(x,s) = (FDprobSEQ (s)).n by A4,Def3
+          .= FDprobability(x,t) by A2,A4,A6,Def3;
       end;
-      suppose C2: not x in S;
-        C21P: s"{x} = {}
+      suppose
+A7:     not x in S;
+A8:     t"{x} = {}
         proof
-          assume s"{x} <> {}; then
-          consider y be set such that
-          AA1: y in s"{x} by XBOOLE_0:def 1;
-          AA2:y in dom s & s.y in {x} by FUNCT_1:def 13,AA1;
-          then s.y in rng s by FUNCT_1:12;
-          then s.y in S & s.y=x by AA2,TARSKI:def 1;
-          hence contradiction by C2;
-        end;
-        C22P: t"{x} = {}
-        proof
-          assume t"{x} <> {};
+          assume
+          t"{x} <> {};
           then consider y be set such that
-          AA1: y in t"{x} by XBOOLE_0:def 1;
-          AA2:y in dom t & t.y in {x} by FUNCT_1:def 13,AA1;
+A9:       y in t"{x} by XBOOLE_0:def 1;
+          y in dom t by A9,FUNCT_1:def 13;
           then t.y in rng t by FUNCT_1:12;
-          then t.y in S & t.y=x by AA2,TARSKI:def 1;
-          hence contradiction by C2;
+          then
+A10:      t.y in S;
+          t.y in {x} by A9,FUNCT_1:def 13;
+          hence contradiction by A7,A10,TARSKI:def 1;
         end;
-        thus FDprobability(x,s)=0 by C21P .=FDprobability(x,t) by C22P;
+        s"{x} = {}
+        proof
+          assume
+          s"{x} <> {};
+          then consider y be set such that
+A11:      y in s"{x} by XBOOLE_0:def 1;
+          y in dom s by A11,FUNCT_1:def 13;
+          then s.y in rng s by FUNCT_1:12;
+          then
+A12:      s.y in S;
+          s.y in {x} by A11,FUNCT_1:def 13;
+          hence contradiction by A7,A12,TARSKI:def 1;
+        end;
+        hence FDprobability(x,s)=0
+          .=FDprobability(x,t) by A8;
       end;
     end;
-    hence s,t -are_prob_equivalent by defequiv;
+    hence s,t -are_prob_equivalent by Def4;
   end;
-  hence thesis by P0;
+  now
+    assume
+A13: s,t -are_prob_equivalent;
+A14: now
+      let n be Nat;
+      assume
+      n in dom FDprobSEQ (t);
+      hence (FDprobSEQ (t)).n =FDprobability((canFS(S)).n,t) by Def3
+        .=FDprobability((canFS(S)).n,s) by A13,Def4;
+    end;
+    dom FDprobSEQ (t) = Seg (card (S)) by Def3;
+    hence FDprobSEQ (s)=FDprobSEQ (t) by A14,Def3;
+  end;
+  hence thesis by A1;
 end;
 
 theorem
-  for S be non empty finite set,
-  s,t be FinSequence of S st t in Finseq-EQclass(s)
-  holds FDprobSEQ(s)=FDprobSEQ(t)
-  proof
-    let S be non empty finite set,
-    s,t be FinSequence of S;
-    assume t in Finseq-EQclass(s);
-    then ex w be FinSequence of S
-    st t=w & s,w -are_prob_equivalent;
-    hence thesis by EQX05;
-  end;
+  for S be non empty finite set, s,t be FinSequence of S st t in
+  Finseq-EQclass(s) holds FDprobSEQ(s)=FDprobSEQ(t)
+proof
+  let S be non empty finite set, s,t be FinSequence of S;
+  assume
+  t in Finseq-EQclass(s);
+  then ex w be FinSequence of S st t=w & s,w -are_prob_equivalent;
+  hence thesis by Th10;
+end;
 
-definition let S be non empty finite set;
+definition
+  let S be non empty finite set;
   func GenProbSEQ (S) -> Function of distribution_family(S),REAL* means
-  :defFREQDIST2:
-  for x be Element of distribution_family(S) holds
-  ex s be FinSequence of S st s in x & it.x=FDprobSEQ (s);
+  :Def7:
+for x be Element of distribution_family(S) holds ex s be FinSequence of S st s
+  in x & it.x=FDprobSEQ (s);
   existence
   proof
-    defpred P[set,set] means
-    ex s be FinSequence of S st s in $1 & $2=FDprobSEQ (s);
-    P0: for x being Element of distribution_family(S)
-    ex y be Element of REAL* st P[x,y]
+    defpred P[set,set] means ex s be FinSequence of S st s in $1 & $2=
+    FDprobSEQ (s);
+A1: for x being Element of distribution_family(S) ex y be Element of REAL*
+    st P[x,y]
     proof
       let x be Element of distribution_family(S);
       reconsider A =x as Subset of S*;
       consider s being FinSequence of S such that
-      P02: A = Finseq-EQclass(s) by defQuot;
+A2:   A = Finseq-EQclass(s) by Def6;
       FDprobSEQ (s) in REAL* by FINSEQ_1:def 11;
-      hence thesis by EQX03,P02;
+      hence thesis by A2,Th8;
     end;
     consider g be Function of distribution_family(S), REAL* such that
-    P1: for x being Element of distribution_family(S) holds P[x,g.x]
-    from FUNCT_2:sch 3(P0);
+A3: for x being Element of distribution_family(S) holds P[x,g.x] from
+    FUNCT_2:sch 3(A1);
     take g;
-    thus thesis by P1;
+    thus thesis by A3;
   end;
   uniqueness
   proof
     let g,h be Function of distribution_family(S), REAL*;
     assume
-    A1: for x be Element of distribution_family(S) holds
-    ex s be FinSequence of S st s in x & g.x=FDprobSEQ (s);
+A4: for x be Element of distribution_family(S) holds ex s be
+    FinSequence of S st s in x & g.x=FDprobSEQ (s);
     assume
-    A2: for x be Element of distribution_family(S) holds
-    ex s be FinSequence of S st s in x & h.x=FDprobSEQ (s);
-    now let x be Element of distribution_family(S);
+A5: for x be Element of distribution_family(S) holds ex s be
+    FinSequence of S st s in x & h.x=FDprobSEQ (s);
+    now
+      let x be Element of distribution_family(S);
       reconsider A =x as Subset of S*;
       consider u being FinSequence of S such that
-      P02: A = Finseq-EQclass(u) by defQuot;
-      consider s be FinSequence of S such that
-      A3: s in x & g.x=FDprobSEQ (s) by A1;
+A6:   A = Finseq-EQclass(u) by Def6;
       consider t be FinSequence of S such that
-      A4: t in x & h.x=FDprobSEQ (t) by A2;
-      A5: u,s -are_prob_equivalent by EQX02,P02,A3;
-      t,u -are_prob_equivalent by EQX02,P02,A4;
-      then t,s -are_prob_equivalent by A5,EQX01;
-      hence g.x = h.x by A3,A4,EQX05;
+A7:   t in x and
+A8:   h.x=FDprobSEQ (t) by A5;
+A9:   t,u -are_prob_equivalent by A6,A7,Th7;
+      consider s be FinSequence of S such that
+A10:  s in x and
+A11:  g.x=FDprobSEQ (s) by A4;
+      u,s -are_prob_equivalent by A6,A10,Th7;
+      then t,s -are_prob_equivalent by A9,Th6;
+      hence g.x = h.x by A11,A8,Th10;
     end;
     hence thesis by FUNCT_2:def 9;
   end;
 end;
 
-theorem EQX07:
-  for S be non empty finite set, s be FinSequence of S holds
-  (GenProbSEQ (S)).(Finseq-EQclass(s)) = FDprobSEQ (s)
-  proof
-    let S be non empty finite set,
-    s be FinSequence of S;
-    Finseq-EQclass(s) is Element of distribution_family(S) by defQuot;
-    then consider u be FinSequence of S such that
-    P2: u in Finseq-EQclass(s) & (GenProbSEQ (S)).(Finseq-EQclass(s))
-    =FDprobSEQ (u) by defFREQDIST2;
-    s,u -are_prob_equivalent by P2,EQX02;
-    hence thesis by P2,EQX05;
-  end;
+theorem Th12:
+  for S be non empty finite set, s be FinSequence of S holds (
+  GenProbSEQ (S)).(Finseq-EQclass(s)) = FDprobSEQ (s)
+proof
+  let S be non empty finite set, s be FinSequence of S;
+  Finseq-EQclass(s) is Element of distribution_family(S) by Def6;
+  then consider u be FinSequence of S such that
+A1: u in Finseq-EQclass(s) and
+A2: (GenProbSEQ (S)).(Finseq-EQclass(s)) =FDprobSEQ (u) by Def7;
+  s,u -are_prob_equivalent by A1,Th7;
+  hence thesis by A2,Th10;
+end;
 
-EQX08: for S be non empty finite set holds GenProbSEQ (S) is one-to-one
-  proof
-    let S be non empty finite set;
-    now let x1,x2 be set;
-      assume AS: x1 in distribution_family(S)
-      & x2 in distribution_family(S)
-      & (GenProbSEQ (S)).x1 =(GenProbSEQ (S)).x2;
-      then consider u be FinSequence of S such that
-      P2: u in x1 & (GenProbSEQ (S)).x1 =FDprobSEQ (u) by defFREQDIST2;
-      consider v be FinSequence of S such that
-      P3: v in x2 & (GenProbSEQ (S)).x2 =FDprobSEQ (v) by defFREQDIST2,AS;
-      P4: u,v -are_prob_equivalent by EQX05,AS,P2,P3;
-      reconsider A1 =x1 as Subset of S* by AS;
-      consider u1 being FinSequence of S such that
-      P02: A1 = Finseq-EQclass(u1) by defQuot,AS;
-      reconsider A2 =x2 as Subset of S* by AS;
-      consider u2 being FinSequence of S such that
-      P03: A2 = Finseq-EQclass(u2) by defQuot,AS;
-      P5: u1,u -are_prob_equivalent by EQX02,P2,P02;
-      P6: v,u2 -are_prob_equivalent by EQX02,P3,P03;
-      u1,v -are_prob_equivalent by EQX01,P4,P5;
-      then u1,u2 -are_prob_equivalent by EQX01,P6;
-      hence x1=x2 by P02,P03,EQX04;
-    end;
-    hence thesis by FUNCT_2:25;
+Lm1: for S be non empty finite set holds GenProbSEQ (S) is one-to-one
+proof
+  let S be non empty finite set;
+  now
+    let x1,x2 be set;
+    assume that
+A1: x1 in distribution_family(S) and
+A2: x2 in distribution_family(S) and
+A3: (GenProbSEQ (S)).x1 =(GenProbSEQ (S)).x2;
+    reconsider A1 =x1 as Subset of S* by A1;
+    consider u1 being FinSequence of S such that
+A4: A1 = Finseq-EQclass(u1) by A1,Def6;
+    reconsider A2 =x2 as Subset of S* by A2;
+    consider u2 being FinSequence of S such that
+A5: A2 = Finseq-EQclass(u2) by A2,Def6;
+    consider v be FinSequence of S such that
+A6: v in x2 and
+A7: (GenProbSEQ (S)).x2 =FDprobSEQ (v) by A2,Def7;
+    consider u be FinSequence of S such that
+A8: u in x1 and
+A9: (GenProbSEQ (S)).x1 =FDprobSEQ (u) by A1,Def7;
+A10: u,v -are_prob_equivalent by A3,A9,A7,Th10;
+    u1,u -are_prob_equivalent by A8,A4,Th7;
+    then
+A11: u1,v -are_prob_equivalent by A10,Th6;
+    v,u2 -are_prob_equivalent by A6,A5,Th7;
+    then u1,u2 -are_prob_equivalent by A11,Th6;
+    hence x1=x2 by A4,A5,Th9;
   end;
+  hence thesis by FUNCT_2:25;
+end;
 
-registration let S be non empty finite set;
+registration
+  let S be non empty finite set;
   cluster GenProbSEQ S -> one-to-one;
-  coherence by EQX08;
+  coherence by Lm1;
 end;
 
 definition
-  let S be non empty finite set,
-  p be ProbFinS FinSequence of REAL;
-  assume AS: len p=card S &
-  ex s be FinSequence of S st FDprobSEQ (s)=p;
+  let S be non empty finite set, p be ProbFinS FinSequence of REAL;
+  assume
+A1: ex s be FinSequence of S st FDprobSEQ (s)=p;
   func distribution( p,S ) -> Element of distribution_family(S) means
-  :defBUNBPU:
-  (GenProbSEQ S).it = p;
+  :Def8:
+  (
+  GenProbSEQ S).it = p;
   existence
   proof
-    consider s be FinSequence of S such that L1: FDprobSEQ (s)=p by AS;
+    consider s be FinSequence of S such that
+A2: FDprobSEQ (s)=p by A1;
     consider CS be non empty Subset of S* such that
-    L3: CS=Finseq-EQclass(s);
-    reconsider CS as Element of distribution_family(S) by defQuot,L3;
+A3: CS=Finseq-EQclass(s);
+    reconsider CS as Element of distribution_family(S) by A3,Def6;
     take CS;
-    thus thesis by L1,EQX07,L3;
+    thus thesis by A2,A3,Th12;
   end;
   uniqueness
   proof
     let CS1,CS2 be Element of distribution_family(S);
-    assume U1:(GenProbSEQ (S)).CS1 = p;
-    assume U2:(GenProbSEQ (S)).CS2 = p;
-    CS1 in dom (GenProbSEQ (S)) &
-    CS2 in dom (GenProbSEQ (S)) by FUNCT_1:def 4,U1,U2;
-    hence thesis by FUNCT_1:def 8,U1,U2;
+    assume
+A4: (GenProbSEQ (S)).CS1 = p;
+    then
+A5: CS1 in dom (GenProbSEQ (S)) by FUNCT_1:def 4;
+    assume
+A6: (GenProbSEQ (S)).CS2 = p;
+    then CS2 in dom (GenProbSEQ (S)) by FUNCT_1:def 4;
+    hence thesis by A4,A6,A5,FUNCT_1:def 8;
   end;
 end;
 
-definition let S be non empty finite set,
-  s be FinSequence of S;
-  func freqSEQ (s) -> FinSequence of NAT means :defDIST:
-  dom it= Seg (card S) & for n be Nat st n in dom it
-  holds it.n=(len s) * (FDprobSEQ(s)).n;
+definition
+  let S be non empty finite set, s be FinSequence of S;
+  func freqSEQ (s) -> FinSequence of NAT means
+  :Def9:
+  dom it= Seg (card S) &
+  for n be Nat st n in dom it holds it.n=(len s) * (FDprobSEQ(s)).n;
   existence
   proof
     defpred P[Nat,set ] means $2=(len s) * (FDprobSEQ(s)).$1;
-    P0: for k be Nat st k in Seg (card (S))
-    ex x being Element of NAT st P[k,x]
+A1: for k be Nat st k in Seg (card (S)) ex x being Element of NAT st P[k,x
+    ]
     proof
+A2:   rng (canFS(S))= S by FUNCT_2:def 3;
       let k be Nat;
-      assume SAS1: k in Seg(card (S));
-      then SAS3P:
-      k in dom FDprobSEQ(s) by defFREQDIST;
+      assume
+A3:   k in Seg(card (S));
+      Seg (len canFS(S))=Seg (card S) by UPROOTS:5;
+      then k in dom (canFS(S)) by A3,FINSEQ_1:def 3;
+      then (canFS(S)).k is Element of S by A2,FUNCT_1:12;
+      then consider a be Element of S such that
+A4:   a=(canFS(S)).k;
       consider y be Real such that
-      SAS4: y =(len s)*(FDprobSEQ(s)).k;
-      Seg (len canFS(S))=Seg (card S) by UPROOTS:5; then
-      SAS5:k in dom (canFS(S)) by SAS1,FINSEQ_1:def 3;
-      rng (canFS(S))= S by FUNCT_2:def 3;
-      then (canFS(S)).k is Element of S by SAS5,FUNCT_1:12;
-      then consider a be Element of S such that SAS7: a=(canFS(S)).k;
-      SAS8:y=(len s)*FDprobability(a,s) by SAS3P,SAS4,SAS7,defFREQDIST;
-      SAS9: y is Element of NAT
+A5:   y =(len s)*(FDprobSEQ(s)).k;
+      take y;
+      k in dom FDprobSEQ(s) by A3,Def3;
+      then
+A6:   y=(len s)*FDprobability(a,s) by A5,A4,Def3;
+      y is Element of NAT
       proof
         per cases;
-          suppose s={};
-            hence thesis by SAS8;
-          end;
-          suppose s<>{};
-            hence thesis by SAS8,XCMPLX_1:88;
-          end;
+        suppose
+          s={};
+          hence thesis by A6;
+        end;
+        suppose
+          s<>{};
+          hence thesis by A6,XCMPLX_1:88;
+        end;
       end;
-      take y;
-      thus thesis by SAS4,SAS9;
+      hence thesis by A5;
     end;
     consider g be FinSequence of NAT such that
-    P1: dom g =Seg (card (S))
-    & for n be Nat st n in Seg (card (S)) holds P[n,g.n]
-    from FINSEQ_1:sch 5(P0);
+A7: dom g =Seg (card (S)) & for n be Nat st n in Seg (card (S)) holds
+    P[n,g.n] from FINSEQ_1:sch 5(A1);
     take g;
-    thus thesis by P1;
+    thus thesis by A7;
   end;
   uniqueness
   proof
     let g,h be FinSequence of NAT;
-    assume
-    A1: dom g =Seg (card (S)) & for n be Nat st n in dom g
-    holds g.n=(len s) * (FDprobSEQ(s)).n;
-    assume
-    A2: dom h =Seg (card (S)) & for n be Nat st n in dom h
-    holds h.n=(len s) * (FDprobSEQ(s)).n;
-    A6: len g =card (S) by A1,FINSEQ_1:def 3
-    .=len h by A2,FINSEQ_1:def 3;
-    now let n be Nat;
-      assume A6: n in dom g;
-      thus g.n =(len s) * (FDprobSEQ(s)).n by A6,A1
-      .= h.n by A6,A1,A2;
+    assume that
+A8: dom g =Seg (card (S)) and
+A9: for n be Nat st n in dom g holds g.n=(len s) * (FDprobSEQ(s)).n;
+    assume that
+A10: dom h =Seg (card (S)) and
+A11: for n be Nat st n in dom h holds h.n=(len s) * (FDprobSEQ(s)).n;
+A12: now
+      let n be Nat;
+      assume
+A13:  n in dom g;
+      hence g.n =(len s) * (FDprobSEQ(s)).n by A9
+        .= h.n by A8,A10,A11,A13;
     end;
-    hence thesis by FINSEQ_2:10,A6;
+    len g =card (S) by A8,FINSEQ_1:def 3
+      .=len h by A10,FINSEQ_1:def 3;
+    hence thesis by A12,FINSEQ_2:10;
   end;
 end;
 
-theorem nazonazo:
-  for S be non empty finite set,
-  s be non empty FinSequence of S, n be Nat st n in Seg (card S)
-  ex x be Element of S st (freqSEQ(s)).n=frequency(x,s)& x=(canFS(S)).n
-  proof
-    let S be non empty finite set,
-    s be non empty FinSequence of S, n be Nat;
-    assume SAS1: n in Seg(card (S));
-    SAS2: n in dom freqSEQ(s)
-    & n in dom FDprobSEQ(s) by defDIST,defFREQDIST,SAS1;
-    consider y be Real such that
-    SAS4: y =(len s)*(FDprobSEQ(s)).n;
-    Seg (len canFS(S))=Seg (card S) by UPROOTS:5; then
-    SAS5:n in dom (canFS(S)) by SAS1,FINSEQ_1:def 3;
-    rng (canFS(S))= S by FUNCT_2:def 3;
-    then (canFS(S)).n is Element of S by SAS5,FUNCT_1:12;
-    then consider a be Element of S such that SAS7: a=(canFS(S)).n;
-    SAS8: y=(len s)*FDprobability(a,s) by SAS2,defFREQDIST,SAS4,SAS7;
-    T2: y= frequency(a,s) by SAS8,XCMPLX_1:88;
-    take a;
-    thus thesis by SAS2,T2,SAS7,defDIST,SAS4;
-  end;
+theorem Th13:
+  for S be non empty finite set, s be non empty FinSequence of S,
+n be Nat st n in Seg (card S) ex x be Element of S st (freqSEQ(s)).n=frequency(
+  x,s)& x=(canFS(S)).n
+proof
+  let S be non empty finite set, s be non empty FinSequence of S, n be Nat;
+  consider y be Real such that
+A1: y =(len s)*(FDprobSEQ(s)).n;
+A2: rng (canFS(S))= S by FUNCT_2:def 3;
+  assume
+A3: n in Seg(card (S));
+  then
+A4: n in dom freqSEQ(s) by Def9;
+  Seg (len canFS(S))=Seg (card S) by UPROOTS:5;
+  then n in dom (canFS(S)) by A3,FINSEQ_1:def 3;
+  then (canFS(S)).n is Element of S by A2,FUNCT_1:12;
+  then consider a be Element of S such that
+A5: a=(canFS(S)).n;
+  take a;
+  n in dom FDprobSEQ(s) by A3,Def3;
+  then y=(len s)*FDprobability(a,s) by A1,A5,Def3;
+  then y= frequency(a,s) by XCMPLX_1:88;
+  hence thesis by A4,A1,A5,Def9;
+end;
 
-theorem nnnazo1:
+theorem Th14:
   for S be non empty finite set, s be FinSequence of S holds
   freqSEQ (s) =(len s)* ((FDprobSEQ(s)))
-  proof
-    let S be non empty finite set,
-    s be FinSequence of S;
-    P1: dom ((len s) (#) ( (FDprobSEQ(s))))
-    =dom (FDprobSEQ(s)) by VALUED_1:def 5
-    .=Seg (card (S)) by defFREQDIST
-    .= dom (freqSEQ (s)) by defDIST;
-    now let m be Nat;
-      assume A1: m in dom ((len s) (#) ( (FDprobSEQ(s))));
-      hence ((len s) (#) ( (FDprobSEQ(s)))).m
-      =(len s)* ( (FDprobSEQ(s))).m by VALUED_1:def 5
-      .= (freqSEQ (s)).m by A1,P1,defDIST;
-    end;
-    hence freqSEQ s = (len s) (#) (FDprobSEQ s) by FINSEQ_1:17,P1;
+proof
+  let S be non empty finite set, s be FinSequence of S;
+A1: dom ((len s) (#) ( (FDprobSEQ(s)))) =dom (FDprobSEQ(s)) by VALUED_1:def
+  5
+    .=Seg (card (S)) by Def3
+    .= dom (freqSEQ (s)) by Def9;
+  now
+    let m be Nat;
+    assume
+A2: m in dom ((len s) (#) ( (FDprobSEQ(s))));
+    hence ((len s) (#) ( (FDprobSEQ(s)))).m =(len s)* ( (FDprobSEQ(s))).m by
+    VALUED_1:def 5
+      .= (freqSEQ (s)).m by A1,A2,Def9;
   end;
+  hence freqSEQ s = (len s) (#) (FDprobSEQ s) by A1,FINSEQ_1:17;
+end;
 
-theorem nnazo2:
-  for S be non empty finite set,
-  s be FinSequence of S holds
-  Sum ( freqSEQ (s))=(len s)* Sum(FDprobSEQ(s))
-  proof
-    let S be non empty finite set,
-    s be FinSequence of S;
-    freqSEQ (s) =(len s)*FDprobSEQ(s) by nnnazo1;
-    hence thesis by RVSUM_1:117;
-  end;
+theorem Th15:
+  for S be non empty finite set, s be FinSequence of S holds Sum (
+  freqSEQ (s))=(len s)* Sum(FDprobSEQ(s))
+proof
+  let S be non empty finite set, s be FinSequence of S;
+  freqSEQ (s) =(len s)*FDprobSEQ(s) by Th14;
+  hence thesis by RVSUM_1:117;
+end;
 
 theorem
-  for S be non empty finite set,
-  s be non empty FinSequence of S, n be Nat st n in dom s
-  ex m be Nat st (freqSEQ(s)).m = frequency(s.n,s) & s.n=(canFS(S)).m
-  proof
-    let S be non empty finite set,
-    s be non empty FinSequence of S,
-    n be Nat;
-    assume AS: n in dom s;
-    set x=s.n;
-    x in rng s by FUNCT_1:12,AS;
-    then x in S;
-    then x in rng (canFS S) by FUNCT_2:def 3;
-    then consider m be set such that
-    DM: m in dom (canFS(S))& x=(canFS(S)).m by FUNCT_1:def 5;
-    reconsider m as Nat by DM;
-    Seg len (canFS(S))= Seg (card (S)) by UPROOTS:5;
-    then J1P: dom (canFS(S))=Seg(card (S)) by FINSEQ_1:def 3;
-    consider xx be Element of S such that J2: (freqSEQ(s)).m
-    =frequency(xx,s)& xx=(canFS(S)).m by nazonazo,J1P,DM;
-    take m;
-    thus thesis by DM,J2;
-  end;
+  for S be non empty finite set, s be non empty FinSequence of S, n be
+Nat st n in dom s ex m be Nat st (freqSEQ(s)).m = frequency(s.n,s) & s.n=(canFS
+  (S)).m
+proof
+  let S be non empty finite set, s be non empty FinSequence of S, n be Nat;
+  set x=s.n;
+  assume
+  n in dom s;
+  then x in rng s by FUNCT_1:12;
+  then x in S;
+  then x in rng (canFS S) by FUNCT_2:def 3;
+  then consider m be set such that
+A1: m in dom (canFS(S)) and
+A2: x=(canFS(S)).m by FUNCT_1:def 5;
+  reconsider m as Nat by A1;
+  take m;
+  Seg len (canFS(S))= Seg (card (S)) by UPROOTS:5;
+  then dom (canFS(S))=Seg(card (S)) by FINSEQ_1:def 3;
+  then
+  ex xx be Element of S st (freqSEQ(s)).m =frequency(xx,s) & xx=(canFS(S)).
+  m by A1,Th13;
+  hence thesis by A2;
+end;
 
-theorem LMCARD1:
-  for n be Nat, S be Function,L be FinSequence of NAT
-  st S is disjoint_valued & dom S = dom L & n=len L
-  & for i be Nat st i in dom S holds
-  S.i is finite & L.i = card (S.i)
-  holds union rng S is finite &
-  card (union rng S) = Sum L
-  proof
-    defpred P[Nat] means
-    for S be Function,L be FinSequence of NAT
-    st S is disjoint_valued & dom S = dom L & $1=len L
-    & for i be Nat st i in dom S holds
-    S.i is finite & L.i = card (S.i) holds
-    union rng S is finite & card (union rng S ) = Sum L;
-    P0: P[0]
-    proof
+theorem Th17:
+  for n be Nat, S be Function,L be FinSequence of NAT st S is
+disjoint_valued & dom S = dom L & n=len L & for i be Nat st i in dom S holds S.
+i is finite & L.i = card (S.i) holds union rng S is finite & card (union rng S)
+  = Sum L
+proof
+  defpred P[Nat] means for S be Function,L be FinSequence of NAT st S is
+disjoint_valued & dom S = dom L & $1=len L & for i be Nat st i in dom S holds S
+.i is finite & L.i = card (S.i) holds union rng S is finite & card (union rng S
+  ) = Sum L;
+A1: now
+    let n be Nat;
+    assume
+A2: P[n];
+    now
       let S be Function,L be FinSequence of NAT;
-      assume AS0:
-      S is disjoint_valued & dom S = dom L & 0=len L
-      & for i be Nat st i in dom S holds
-      S.i is finite & L.i = card (S.i);
-      P0: L= {} by AS0;
-      then S= {} by AS0;
-      then for X be set st X in rng S holds X c= {}; then
-      P3P: union rng S c= {} by ZFMISC_1:94;
-      thus union rng S is finite &
-      card (union rng S) = Sum L by P3P,P0,RVSUM_1:102;
-    end;
-    PN: now let n be Nat;
-    assume P1: P[n];
-    now let S be Function,L be FinSequence of NAT;
-      assume
-      ASN: S is disjoint_valued & dom S = dom L & (n+1)=len L
-      & for i be Nat st i in dom S holds
-      S.i is finite & L.i = card (S.i);
+      assume that
+A3:   S is disjoint_valued and
+A4:   dom S = dom L and
+A5:   (n+1)=len L and
+A6:   for i be Nat st i in dom S holds S.i is finite & L.i = card (S.
+      i);
       reconsider SN=S|(Seg n) as Function;
       reconsider LN=L|n as FinSequence of NAT;
-      n+1 in Seg (len L) by ASN,FINSEQ_1:6; then
-      Q0: n+1 in dom S by ASN,FINSEQ_1:def 3;
-      Q1:SN is disjoint_valued
-      proof
-        now let x,y be set;
-          assume
-          A1: x <> y;
+A7:   n=len LN by A5,FINSEQ_1:80,NAT_1:12;
+      now
+        let x be set;
+        assume
+        x in (union rng S);
+        then consider y be set such that
+A8:     x in y and
+A9:     y in rng S by TARSKI:def 4;
+        consider i be set such that
+A10:    i in dom S and
+A11:    y=S.i by A9,FUNCT_1:def 5;
+A12:    i in Seg (n+1) by A4,A5,A10,FINSEQ_1:def 3;
+        reconsider i as Element of NAT by A4,A10;
+A13:    i <= n+1 by A12,FINSEQ_1:3;
+A14:    1<=i by A12,FINSEQ_1:3;
+        now
           per cases;
-            suppose x in dom SN & y in dom SN;
-              then SN.x=S.x & SN.y= S.y by FUNCT_1:70;
-              hence SN.x misses SN.y by A1,ASN,PROB_2:def 3;
-            end;
-            suppose A12: not (x in dom SN & y in dom SN );
-              now per cases by A12;
-                suppose not x in dom SN;
-                  then SN.x= {} by FUNCT_1:def 4;
-                  then SN.x /\ SN.y = {};
-                  hence SN.x misses SN.y by XBOOLE_0:def 7;
-                end;
-                suppose not y in dom SN;
-                  then SN.y= {} by FUNCT_1:def 4;
-                  then SN.x /\ SN.y = {};
-                  hence SN.x misses SN.y by XBOOLE_0:def 7;
-                end;
-              end;
-              hence SN.x misses SN.y;
-            end;
+          suppose
+            i=n+1;
+            hence x in (union rng SN) \/ S.(n+1) by A8,A11, XBOOLE_0:def 3;
+          end;
+          suppose
+            i<> n+1;
+            then i < n+1 by A13,XXREAL_0:1;
+            then i <= n by NAT_1:13;
+            then i in Seg n by A14;
+            then i in dom S /\ Seg n by A10,XBOOLE_0:def 4;
+            then
+A15:        i in dom SN by RELAT_1:90;
+            then S.i = SN.i by FUNCT_1:70;
+            then y in rng SN by A11,A15,FUNCT_1:def 5;
+            then x in (union rng SN) by A8,TARSKI:def 4;
+            hence x in (union rng SN) \/ S.(n+1) by XBOOLE_0:def 3;
+          end;
         end;
-        hence thesis by PROB_2:def 3;
+        hence x in (union rng SN) \/ S.(n+1);
       end;
-      Q2:dom SN = dom S /\ Seg n by RELAT_1:90
-      .= dom LN by RELAT_1:90,ASN;
-      Q3:n=len LN by FINSEQ_1:80,ASN,NAT_1:12;
-      Q4:for i be Nat st i in dom SN holds
-      SN.i is finite & LN.i = card (SN.i)
+      then
+A16:  (union rng S) c= (union rng SN) \/ S.(n+1) by TARSKI:def 3;
+A17:  (union rng SN) \/ S.(n+1) c= (union rng S)
+      proof
+        let x be set;
+        assume
+A18:    x in (union rng SN) \/ S.(n+1);
+        now
+          per cases by A18,XBOOLE_0:def 3;
+          suppose
+A19:        x in S.(n+1);
+            n+1 in Seg (n+1) by FINSEQ_1:6;
+            then n+1 in dom S by A4,A5,FINSEQ_1:def 3;
+            then S.(n+1) in rng S by FUNCT_1:def 5;
+            hence x in union rng S by A19,TARSKI:def 4;
+          end;
+          suppose
+            x in (union rng SN);
+            then consider y be set such that
+A20:        x in y and
+A21:        y in rng SN by TARSKI:def 4;
+            consider i be set such that
+A22:        i in dom SN and
+A23:        y=SN.i by A21,FUNCT_1:def 5;
+            i in dom S /\ Seg n by A22,RELAT_1:90;
+            then
+A24:        i in dom S by XBOOLE_0:def 4;
+            SN.i = S.i by A22,FUNCT_1:70;
+            then y in rng S by A23,A24,FUNCT_1:def 5;
+            hence x in (union rng S) by A20,TARSKI:def 4;
+          end;
+        end;
+        hence x in (union rng S);
+      end;
+      then
+A25:  (union rng SN) \/ S.(n+1) = (union rng S) by A16,XBOOLE_0:def
+      10;
+A26:  for i be Nat st i in dom SN holds SN.i is finite & LN.i = card (SN.i
+      )
       proof
         let i be Nat;
-        assume A2P:i in dom SN; then
-        A2:i in dom S /\ Seg n by RELAT_1:90; then
-        A3:i in dom S & i in Seg n by XBOOLE_0:def 4;
-        LN.i = L.i by FUNCT_1:71,ASN,A2
-        .= card (S.i) by ASN,A3
-        .= card (SN.i) by A2P,FUNCT_1:70;
+        assume
+A27:    i in dom SN;
+        then
+A28:    i in dom S /\ Seg n by RELAT_1:90;
+        then
+A29:    i in dom S by XBOOLE_0:def 4;
+        LN.i = L.i by A4,A28,FUNCT_1:71
+          .= card (S.i) by A6,A29
+          .= card (SN.i) by A27,FUNCT_1:70;
         hence thesis;
       end;
-      Q5:union rng SN is finite &
-      card (union rng SN ) = Sum LN by P1,Q1,Q2,Q3,Q4;
-      Q6: (union rng SN) \/ S.(n+1) = (union rng S)
-      proof
-        now let x be set;
-          assume x in (union rng S);
-          then consider y be set such that
-          A9: x in y & y in rng S by TARSKI:def 4;
-          consider i be set such that
-          A3: i in dom S & y=S.i by A9,FUNCT_1:def 5;
-          A4:i in Seg (n+1) by ASN,FINSEQ_1:def 3,A3;
-          reconsider i as Element of NAT by ASN,A3;
-          A5: 1<=i & i <= n+1 by FINSEQ_1:3,A4;
-          now per cases;
-            suppose i=n+1;
-              hence x in (union rng SN) \/ S.(n+1) by XBOOLE_0:def 3,A3,A9;
+      now
+        let x,y be set;
+        assume
+A30:    x <> y;
+        per cases;
+        suppose
+          x in dom SN & y in dom SN;
+          then SN.x=S.x & SN.y= S.y by FUNCT_1:70;
+          hence SN.x misses SN.y by A3,A30,PROB_2:def 3;
+        end;
+        suppose
+A31:      not (x in dom SN & y in dom SN );
+          now
+            per cases by A31;
+            suppose
+              not x in dom SN;
+              then SN.x= {} by FUNCT_1:def 4;
+              then SN.x /\ SN.y = {};
+              hence SN.x misses SN.y by XBOOLE_0:def 7;
             end;
-            suppose i<> n+1;
-              then i < n+1 by A5,XXREAL_0:1;
-              then i <= n by NAT_1:13;
-              then i in Seg n by A5;
-              then i in dom S /\ Seg n by A3,XBOOLE_0:def 4;
-              then
-              A8: i in dom SN by RELAT_1:90;
-              then S.i = SN.i by FUNCT_1:70;
-              then y in rng SN by FUNCT_1:def 5,A3,A8;
-              then x in (union rng SN) by A9,TARSKI:def 4;
-              hence x in (union rng SN) \/ S.(n+1) by XBOOLE_0:def 3;
+            suppose
+              not y in dom SN;
+              then SN.y= {} by FUNCT_1:def 4;
+              then SN.x /\ SN.y = {};
+              hence SN.x misses SN.y by XBOOLE_0:def 7;
             end;
           end;
-          hence x in (union rng SN) \/ S.(n+1);
+          hence SN.x misses SN.y;
         end;
-        then
-        L1: (union rng S) c= (union rng SN) \/ S.(n+1) by TARSKI:def 3;
-        (union rng SN) \/ S.(n+1) c= (union rng S)
-        proof
-          let x be set;
-          assume A3P: x in (union rng SN) \/ S.(n+1);
-          now per cases by A3P,XBOOLE_0:def 3;
-            suppose C1: x in S.(n+1);
-              n+1 in Seg (n+1) by FINSEQ_1:6;
-              then n+1 in dom S by ASN,FINSEQ_1:def 3;
-              then S.(n+1) in rng S by FUNCT_1:def 5;
-              hence x in union rng S by C1,TARSKI:def 4;
-            end;
-            suppose x in (union rng SN);
-              then consider y be set such that
-              A9: x in y & y in rng SN by TARSKI:def 4;
-              consider i be set such that
-              A3: i in dom SN & y=SN.i by A9,FUNCT_1:def 5;
-              A4: i in dom S /\ Seg n by RELAT_1:90,A3;
-              A5: SN.i = S.i by FUNCT_1:70,A3;
-              i in dom S by A4,XBOOLE_0:def 4;
-              then y in rng S by A3,A5,FUNCT_1:def 5;
-              hence x in (union rng S) by A9,TARSKI:def 4;
-            end;
-          end;
-          hence x in (union rng S);
-        end;
-        hence thesis by L1,XBOOLE_0:def 10;
       end;
-      AA: 1<= (n+1) & n+1 <= len L by ASN,NAT_1:11;
-      Q7P:L= (L|n)^ <* L/.len L *> by ASN,FINSEQ_5:24
-      .=LN^<*L.(n+1)*> by AA,ASN,FINSEQ_4:24;
-      reconsider USN= union rng SN as finite set by P1,Q1,Q2,Q3,Q4;
-      reconsider S1= S.(n+1) as finite set by ASN,Q0;
-      union rng S = USN \/ S1 by Q6;
+      then
+A32:  SN is disjoint_valued by PROB_2:def 3;
+A33:  dom SN = dom S /\ Seg n by RELAT_1:90
+        .= dom LN by A4,RELAT_1:90;
+      then
+A34:  card (union rng SN ) = Sum LN by A2,A32,A7,A26;
+      reconsider USN= union rng SN as finite set by A2,A32,A33,A7,A26;
+A35:  1<= (n+1) by NAT_1:11;
+A36:  L= (L|n)^ <* L/.len L *> by A5,FINSEQ_5:24
+        .=LN^<*L.(n+1)*> by A5,A35,FINSEQ_4:24;
+      n+1 in Seg (len L) by A5,FINSEQ_1:6;
+      then
+A37:  n+1 in dom S by A4,FINSEQ_1:def 3;
+      then reconsider S1= S.(n+1) as finite set by A6;
+      union rng S = USN \/ S1 by A16,A17,XBOOLE_0:def 10;
       hence (union rng S) is finite;
       for z be set st z in rng SN holds z misses S.(n+1)
       proof
         let y be set;
         assume
-        A2: y in rng SN;
-        consider i be set such that
-        A3: i in dom SN & y=SN.i by A2,FUNCT_1:def 5;
-        A4P: i in dom S /\ Seg n by A3,RELAT_1:90; then
-        A4:i in Seg n by XBOOLE_0:def 4;
-        reconsider i as Element of NAT by A4P;
-        i <= n by FINSEQ_1:3,A4; then
-        A0P: i <> n+1 by NAT_1:13;
-        y=S.i by A3,FUNCT_1:70;
-        hence thesis by A0P,PROB_2:def 3,ASN;
+        y in rng SN;
+        then consider i be set such that
+A38:    i in dom SN and
+A39:    y=SN.i by FUNCT_1:def 5;
+A40:    i in dom S /\ Seg n by A38,RELAT_1:90;
+        then
+A41:    i in Seg n by XBOOLE_0:def 4;
+        reconsider i as Element of NAT by A40;
+        i <= n by A41,FINSEQ_1:3;
+        then
+A42:    i <> n+1 by NAT_1:13;
+        y=S.i by A38,A39,FUNCT_1:70;
+        hence thesis by A3,A42,PROB_2:def 3;
       end;
-      then
-      Q9: union rng SN misses S.(n+1) by ZFMISC_1:98;
-      Q8: card ((union rng SN) \/ S.(n+1) )
-      =card (USN)+ card (S1) by Q9,CARD_2:53;
-      thus card (union rng S ) = Sum LN + L.(n+1) by Q5,ASN,Q0,Q8,Q6
-      .= Sum L by Q7P,RVSUM_1:104;
+      then union rng SN misses S.(n+1) by ZFMISC_1:98;
+      then card ((union rng SN) \/ S.(n+1) ) =card (USN)+ card (S1) by
+      CARD_2:53;
+      hence card (union rng S ) = Sum LN + L.(n+1) by A6,A37,A34,A25
+        .= Sum L by A36,RVSUM_1:104;
     end;
     hence P[n+1];
   end;
-  thus for n be Nat holds P[n] from NAT_1:sch 2(P0,PN);
-end;
-
-theorem LMCARD:
-  for S be Function,L be FinSequence of NAT
-  st S is disjoint_valued & dom S = dom L
-  & for i be Nat st i in dom S holds
-  S.i is finite & L.i = card (S.i)
-  holds union rng S is finite
-  & card (union rng S ) = Sum L
+A43: P[0]
   proof
     let S be Function,L be FinSequence of NAT;
-    assume AS: S is disjoint_valued & dom S = dom L
-    & for i be Nat st i in dom S holds
-    S.i is finite & L.i = card (S.i);
-    len L is Element of NAT;
-    hence thesis by LMCARD1,AS;
+    assume that
+    S is disjoint_valued and
+A44: dom S = dom L and
+A45: 0=len L and
+    for i be Nat st i in dom S holds S.i is finite & L.i = card (S.i);
+A46: L= {} by A45;
+    then S= {} by A44;
+    then for X be set st X in rng S holds X c= {};
+    then union rng S c= {} by ZFMISC_1:94;
+    hence union rng S is finite & card (union rng S) = Sum L by A46,RVSUM_1:
+    102;
   end;
+  thus for n be Nat holds P[n] from NAT_1:sch 2(A43,A1);
+end;
 
-theorem DISTSUM:
-  for S be non empty finite set,
-  s be non empty FinSequence of S holds
-  Sum freqSEQ (s) = len s
+theorem Th18:
+  for S be Function,L be FinSequence of NAT st S is
+  disjoint_valued & dom S = dom L & for i be Nat st i in dom S holds S.i is
+  finite & L.i = card (S.i) holds union rng S is finite & card (union rng S ) =
+  Sum L
+proof
+  let S be Function,L be FinSequence of NAT;
+A1: len L is Element of NAT;
+  assume
+  S is disjoint_valued & dom S = dom L & for i be Nat st i in dom S
+  holds S.i is finite & L.i = card (S.i);
+  hence thesis by A1,Th17;
+end;
+
+theorem Th19:
+  for S be non empty finite set, s be non empty FinSequence of S
+  holds Sum freqSEQ (s) = len s
+proof
+  let S be non empty finite set, s be non empty FinSequence of S;
+  set L= freqSEQ (s);
+  defpred P[set,set] means ex z be Element of S st z=(canFS(S)).$1 & $2 =
+  event_pick(z,s);
+  len (canFS(S))= card (S) by UPROOTS:5;
+  then
+A1: dom (canFS(S))=Seg(card (S)) by FINSEQ_1:def 3;
+A2: for x be set st x in dom L ex y be set st P[x,y]
   proof
-    let S be non empty finite set,
-    s be non empty FinSequence of S;
-    set L= freqSEQ (s);
-    defpred P[set,set] means ex z be Element of S
-    st z=(canFS(S)).$1 & $2 = event_pick(z,s);
-    len (canFS(S))= card (S) by UPROOTS:5;
-    then PP0: dom (canFS(S))=Seg(card (S)) by FINSEQ_1:def 3;
-    PP1: for x,y1,y2 be set
-    st x in dom L & P[x,y1] & P[x,y2] holds y1 = y2;
-    PP2: for x be set st x in dom L ex y be set st P[x,y]
-    proof
-      let x be set;
-      assume x in dom L;
-      then LPP22P:x in Seg (card (S)) by defDIST;
-      set z= (canFS(S)).x;
-      rng (canFS(S))=S by FUNCT_2:def 3;
-      then reconsider z as Element of S by FUNCT_1:12,LPP22P,PP0;
-      consider y be set such that
-      LPP25: y=s"{z};
-      LPP26: y=event_pick(z,s) by LPP25;
-      take y;
-      thus thesis by LPP26;
-    end;
-    consider T be Function such that
-    P1:dom T = dom L &
-    for x be set st x in dom L holds P[x,T.x] from FUNCT_1:sch 2(PP1,PP2);
-    LMISS1: for a,b be set st
-    a in dom T & b in dom T & a<>b holds
-    T.a misses T.b
-    proof
-      let a,b be set;
-      assume ZTA: a in dom T & b in dom T & a<>b;
-      ZT1: a in dom(canFS(S)) & b in dom(canFS(S)) by P1,ZTA,PP0,defDIST;
-      ZT2:(canFS(S)).a<>(canFS(S)).b by ZTA,FUNCT_1:def 8,ZT1;
-      consider za be Element of S such that ZT3: za=(canFS(S)).a &
-      T.a=event_pick(za,s) by P1,ZTA;
-      consider zb be Element of S such that ZT4: zb=(canFS(S)).b &
-      T.b=event_pick(zb,s) by P1,ZTA;
-      thus thesis by ZT3,ZT4,FUNCT_1:141,ZFMISC_1:17,ZT2;
-    end;
-    for a,b be set st a<>b holds T.a misses T.b
-    proof
-      let a,b be set;
-      assume ANB: a<>b;
-      now per cases;
-        case a in dom T & b in dom T;
-          hence thesis by LMISS1,ANB;
-        end;
-        case not a in dom T;
-          then T.a={} by FUNCT_1:def 4;
-          hence thesis by XBOOLE_1:65;
-        end;
-        case a in dom T & not b in dom T;
-          then T.b={} by FUNCT_1:def 4;
-          hence thesis by XBOOLE_1:65;
-        end;
-      end;
-      hence thesis;
-    end; then
-    Q1: T is disjoint_valued by PROB_2:def 3;
-    Q3: for i be Nat st i in dom T holds
-    T.i is finite & L.i = card (T.i)
-    proof
-      let i be Nat;
-      assume ASQ3: i in dom T;
-      then consider zi be Element of S such that Q3C1: zi=(canFS(S)).i &
-      T.i=event_pick(zi,s) by P1;
-      Q3C3:dom L= Seg (card (S)) by defDIST;
-      Q3C4:i in dom (FDprobSEQ(s)) by P1,ASQ3,Q3C3,defFREQDIST;
-      L.i =(len s) * (FDprobSEQ(s)).i by defDIST,ASQ3,P1
-      .=(len s)*FDprobability((canFS(S)).i,s) by Q3C4,defFREQDIST
-      .= card (T.i) by Q3C1,XCMPLX_1:88;
-      hence thesis;
-    end;
-    reconsider T1=union rng T as finite set by Q1,P1,Q3,LMCARD;
-    for X be set st X in rng T holds X c= Seg (len s)
-    proof
-      let X be set;
-      assume X in rng T;
-      then consider j be set such that
-      RNGT1: j in dom T & X =T.j by FUNCT_1:def 5;
-      consider zj be Element of S such that
-      RNGT2: zj=(canFS(S)).j & T.j = event_pick(zj,s) by P1,RNGT1;
-      X c= whole_event(s) by RNGT1,RNGT2;
-      hence thesis by FINSEQ_1:def 3;
-    end; then
-    L1: union rng T c= Seg (len s) by ZFMISC_1:94;
-    Seg (len s) c=union rng T
-    proof
-      assume CNTRSEGLS: not Seg (len s) c=union rng T;
-      consider ne be set such that SEGLS1:
-      ne in Seg (len s) & not ne in union rng T by TARSKI:def 3,CNTRSEGLS;
-      SEGLS2: ne in dom s by SEGLS1,FINSEQ_1:def 3;
-      set yne=s.ne;
-      SEGLS4: yne in rng s by SEGLS2,FUNCT_1:def 5;
-      reconsider yne as Element of S by SEGLS4;
-      rng (canFS(S))=S by FUNCT_2:def 3;
-      then consider nne be set such that
-      SEGLS6: nne in dom(canFS(S))&
-      yne=(canFS(S)).nne by FUNCT_1:def 5;
-      NINDOML:nne in dom L by defDIST,PP0,SEGLS6;
-      then consider zne be Element of S such that
-      SEGLS7: zne=(canFS(S)).nne &
-      T.nne = event_pick(zne,s) by P1;
-      s.ne in {s.ne} by TARSKI:def 1;
-      then SEGLS9: ne in T.nne by SEGLS7,SEGLS6,FUNCT_1:def 13,SEGLS2;
-      T.nne in rng T by FUNCT_1:12,NINDOML,P1;
-      hence contradiction by SEGLS1,TARSKI:def 4,SEGLS9;
-    end;
+    let x be set;
+    set z= (canFS(S)).x;
+    assume
+    x in dom L;
     then
-    Q5: T1 = Seg (len s) by L1,XBOOLE_0:def 10;
-    thus Sum freqSEQ (s) = card (T1) by Q1,P1,Q3,LMCARD
-    .= len s by FINSEQ_1:78,Q5;
+A3: x in Seg (card (S)) by Def9;
+    rng (canFS(S))=S by FUNCT_2:def 3;
+    then reconsider z as Element of S by A1,A3,FUNCT_1:12;
+    consider y be set such that
+A4: y=s"{z};
+    take y;
+    y=event_pick(z,s) by A4;
+    hence thesis;
   end;
-
-theorem FREQDISTSUM:
-  for S be non empty finite set,
-  s be non empty FinSequence of S holds Sum FDprobSEQ (s) = 1
+A5: for x,y1,y2 be set st x in dom L & P[x,y1] & P[x,y2] holds y1 = y2;
+  consider T be Function such that
+A6: dom T = dom L & for x be set st x in dom L holds P[x,T.x] from
+  FUNCT_1:sch 2(A5,A2);
+A7: for a,b be set st a in dom T & b in dom T & a<>b holds T.a misses T.b
   proof
-    let S be non empty finite set,
-    s be non empty FinSequence of S;
-    Sum freqSEQ(s) = len s by DISTSUM;
-    then (len s)* Sum( (FDprobSEQ(s))) = (len s)*1 by nnazo2;
-    hence thesis by XCMPLX_1:5;
+    let a,b be set;
+    assume that
+A8: a in dom T & b in dom T and
+A9: a<>b;
+    a in dom(canFS(S)) & b in dom(canFS(S)) by A1,A6,A8,Def9;
+    then
+A10: (canFS(S)).a<>(canFS(S)).b by A9,FUNCT_1:def 8;
+    (ex za be Element of S st za=(canFS(S)).a & T.a=event_pick (za,s) )&
+    ex zb be Element of S st zb=(canFS(S)).b & T.b=event_pick (zb,s) by A6,A8;
+    hence thesis by A10,FUNCT_1:141,ZFMISC_1:17;
   end;
-
-theorem FREQDISTSUM2:
-  for S be non empty finite set,
-  s be non empty FinSequence of S holds FDprobSEQ (s) is ProbFinS
+  for a,b be set st a<>b holds T.a misses T.b
   proof
-    let S be non empty finite set,
-    s be non empty FinSequence of S;
-    L0: Sum FDprobSEQ (s) = 1 by FREQDISTSUM;
-    for i be Element of NAT st i in dom (FDprobSEQ(s))
-    holds (FDprobSEQ(s)).i>=0
-    proof
-      let i be Element of NAT;
-      assume CAS: i in dom (FDprobSEQ(s));
-      (FDprobSEQ(s)).i =FDprobability((canFS(S)).i,s) by CAS,defFREQDIST;
-      hence thesis;
+    let a,b be set;
+    assume
+A11: a<>b;
+    now
+      per cases;
+      case
+        a in dom T & b in dom T;
+        hence thesis by A7,A11;
+      end;
+      case
+        not a in dom T;
+        then T.a={} by FUNCT_1:def 4;
+        hence thesis by XBOOLE_1:65;
+      end;
+      case
+        a in dom T & not b in dom T;
+        then T.b={} by FUNCT_1:def 4;
+        hence thesis by XBOOLE_1:65;
+      end;
     end;
-    hence thesis by L0,MATRPROB:def 5;
+    hence thesis;
   end;
+  then
+A12: T is disjoint_valued by PROB_2:def 3;
+A13: Seg (len s) c=union rng T
+  proof
+    assume
+    not Seg (len s) c=union rng T;
+    then consider ne be set such that
+A14: ne in Seg (len s) and
+A15: not ne in union rng T by TARSKI:def 3;
+    set yne=s.ne;
+A16: ne in dom s by A14,FINSEQ_1:def 3;
+    then yne in rng s by FUNCT_1:def 5;
+    then reconsider yne as Element of S;
+    rng (canFS(S))=S by FUNCT_2:def 3;
+    then consider nne be set such that
+A17: nne in dom(canFS(S)) and
+A18: yne=(canFS(S)).nne by FUNCT_1:def 5;
+A19: nne in dom L by A1,A17,Def9;
+    then
+A20: T.nne in rng T by A6,FUNCT_1:12;
+A21: s.ne in {s.ne} by TARSKI:def 1;
+    ex zne be Element of S st zne=(canFS(S)).nne & T.nne = event_pick(zne,
+    s) by A6,A19;
+    then ne in T.nne by A16,A18,A21,FUNCT_1:def 13;
+    hence contradiction by A15,A20,TARSKI:def 4;
+  end;
+A22: for i be Nat st i in dom T holds T.i is finite & L.i = card (T.i)
+  proof
+    let i be Nat;
+    assume
+A23: i in dom T;
+    then
+A24: ex zi be Element of S st zi=(canFS(S)).i & T.i=event_pick (zi,s) by
+    A6;
+    dom L= Seg (card (S)) by Def9;
+    then
+A25: i in dom (FDprobSEQ(s)) by A6,A23,Def3;
+    L.i =(len s) * (FDprobSEQ(s)).i by A6,A23,Def9
+      .=(len s)*FDprobability((canFS(S)).i,s) by A25,Def3
+      .= card (T.i) by A24,XCMPLX_1:88;
+    hence thesis;
+  end;
+  then reconsider T1=union rng T as finite set by A6,A12,Th18;
+  for X be set st X in rng T holds X c= Seg (len s)
+  proof
+    let X be set;
+    assume
+    X in rng T;
+    then consider j be set such that
+A26: j in dom T and
+A27: X =T.j by FUNCT_1:def 5;
+    ex zj be Element of S st zj=(canFS(S)).j & T.j = event_pick(zj,s) by
+    A6,A26;
+    then X c= whole_event(s) by A27;
+    hence thesis by FINSEQ_1:def 3;
+  end;
+  then union rng T c= Seg (len s) by ZFMISC_1:94;
+  then
+A28: T1 = Seg (len s) by A13,XBOOLE_0:def 10;
+  thus Sum freqSEQ (s) = card (T1) by A6,A12,A22,Th18
+    .= len s by A28,FINSEQ_1:78;
+end;
+
+theorem Th20:
+  for S be non empty finite set, s be non empty FinSequence of S
+  holds Sum FDprobSEQ (s) = 1
+proof
+  let S be non empty finite set, s be non empty FinSequence of S;
+  Sum freqSEQ(s) = len s by Th19;
+  then (len s)* Sum( (FDprobSEQ(s))) = (len s)*1 by Th15;
+  hence thesis by XCMPLX_1:5;
+end;
+
+theorem Th21:
+  for S be non empty finite set, s be non empty FinSequence of S
+  holds FDprobSEQ (s) is ProbFinS
+proof
+  let S be non empty finite set, s be non empty FinSequence of S;
+A1: for i be Element of NAT st i in dom (FDprobSEQ(s)) holds (FDprobSEQ(s)).
+  i>=0
+  proof
+    let i be Element of NAT;
+    assume
+    i in dom (FDprobSEQ(s));
+    then (FDprobSEQ(s)).i =FDprobability((canFS(S)).i,s) by Def3;
+    hence thesis;
+  end;
+  Sum FDprobSEQ (s) = 1 by Th20;
+  hence thesis by A1,MATRPROB:def 5;
+end;
 
 definition
   let S be non empty finite set;
   mode distProbFinS of S -> ProbFinS FinSequence of REAL means
-  :defdistProbFinS:
-  len it=card S & ex s be FinSequence of S st FDprobSEQ (s)=it;
+    :Def10:
+    len it=
+    card S & ex s be FinSequence of S st FDprobSEQ (s)=it;
   existence
   proof
     consider a be Element of S;
     set s=<*a*>;
-    reconsider p=FDprobSEQ (s) as ProbFinS FinSequence of REAL
-    by FREQDISTSUM2;
-    dom p= Seg (card (S)) by defFREQDIST;
+    reconsider p=FDprobSEQ (s) as ProbFinS FinSequence of REAL by Th21;
+    dom p= Seg (card (S)) by Def3;
     then len (p) =card S by FINSEQ_1:def 3;
     hence thesis;
   end;
 end;
 
-theorem pbf:
-  for S be non empty finite set,
-  p be distProbFinS of S holds
-  p is ProbFinS FinSequence of REAL
-  & len p=card S & (ex s be FinSequence of S st FDprobSEQ (s)=p)
-  & distribution( p,S ) is Element of distribution_family(S)
-  & (GenProbSEQ (S)).distribution( p,S ) = p
-  proof
-    let S be non empty finite set,
-    p be distProbFinS of S;
-    thus p is ProbFinS FinSequence of REAL;
-    thus P1: len p=card S & (ex s be FinSequence of S st FDprobSEQ (s)=p)
-    by defdistProbFinS;
-    thus distribution(p,S) is Element of distribution_family(S);
-    thus (GenProbSEQ S).distribution(p,S) = p by defBUNBPU,P1;
-  end;
+theorem Th22:
+  for S be non empty finite set, p be distProbFinS of S holds p is
+  ProbFinS FinSequence of REAL & len p=card S & (ex s be FinSequence of S st
+FDprobSEQ (s)=p) & distribution( p,S ) is Element of distribution_family(S) & (
+  GenProbSEQ (S)).distribution( p,S ) = p
+proof
+  let S be non empty finite set, p be distProbFinS of S;
+  thus p is ProbFinS FinSequence of REAL;
+  thus
+A1: len p=card S & ex s be FinSequence of S st FDprobSEQ (s)=p by Def10;
+  thus distribution(p,S) is Element of distribution_family(S);
+  thus (GenProbSEQ S).distribution(p,S) = p by A1,Def8;
+end;
 
 begin :: uniform distribution
 
-definition let S be non empty finite set, s be FinSequence of S;
+definition
+  let S be non empty finite set, s be FinSequence of S;
   pred s is_uniformly_distributed means
-  :defunidistseq:
-  for n be Nat st n in dom FDprobSEQ (s) holds
-  (FDprobSEQ (s)).n=1/(card S);
+  :Def11:
+  for n be Nat st n in dom
+  FDprobSEQ (s) holds (FDprobSEQ (s)).n=1/(card S);
 end;
 
-theorem THUDEQ0:
-  for S be non empty finite set,
-  s be FinSequence of S st s is_uniformly_distributed
-  holds FDprobSEQ (s) is constant
+theorem Th23:
+  for S be non empty finite set, s be FinSequence of S st s
+  is_uniformly_distributed holds FDprobSEQ (s) is constant
+proof
+  let S be non empty finite set, s be FinSequence of S;
+  assume
+A1: s is_uniformly_distributed;
+  let a,b be set;
+  assume that
+A2: a in dom FDprobSEQ(s) and
+A3: b in dom FDprobSEQ(s);
+  reconsider na=a,nb=b as Nat by A2,A3;
+  (FDprobSEQ (s)).na = 1/card S by A1,A2,Def11
+    .= (FDprobSEQ (s)).nb by A1,A3,Def11;
+  hence thesis;
+end;
+
+theorem Th24:
+  for S be non empty finite set, s,t be FinSequence of S st s
+  is_uniformly_distributed & s,t -are_prob_equivalent holds t
+  is_uniformly_distributed
+proof
+  let S be non empty finite set, s,t be FinSequence of S;
+  assume that
+A1: s is_uniformly_distributed and
+A2: s,t -are_prob_equivalent;
+  FDprobSEQ (s)=FDprobSEQ (t) by A2,Th10;
+  then
+  for n be Nat st n in dom FDprobSEQ (t) holds (FDprobSEQ (t)).n=1/(card S
+  ) by A1,Def11;
+  hence thesis by Def11;
+end;
+
+theorem Th25:
+  for S be non empty finite set, s,t be FinSequence of S st s
+  is_uniformly_distributed & t is_uniformly_distributed holds s,t
+  -are_prob_equivalent
+proof
+  let S be non empty finite set, s,t be FinSequence of S;
+  assume that
+A1: s is_uniformly_distributed and
+A2: t is_uniformly_distributed;
+A3: dom FDprobSEQ (s)= Seg (card (S)) & dom FDprobSEQ (t)= Seg (card (S)) by
+  Def3;
+  for n be set st n in dom FDprobSEQ (s) holds (FDprobSEQ (s)).n=(
+  FDprobSEQ (t)).n
   proof
-    let S be non empty finite set,
-    s be FinSequence of S;
-    assume AS: s is_uniformly_distributed;
-    let a,b be set;
-    assume a: a in dom FDprobSEQ(s) & b in dom FDprobSEQ(s);
-    then reconsider na=a,nb=b as Nat;
-    (FDprobSEQ (s)).na = 1/card S by a,AS,defunidistseq
-    .= (FDprobSEQ (s)).nb by a,AS,defunidistseq;
+    let n be set;
+    assume
+A4: n in dom FDprobSEQ (s);
+    then (FDprobSEQ (s)).n= 1/(card S) by A1,Def11;
+    hence thesis by A2,A3,A4,Def11;
+  end;
+  then FDprobSEQ (s) = FDprobSEQ (t) by A3,FUNCT_1:9;
+  hence thesis by Th10;
+end;
+
+theorem Th26:
+  for S be non empty finite set holds canFS(S)
+  is_uniformly_distributed
+proof
+  let S be non empty finite set;
+  set s = canFS(S);
+A1: len s= card S by UPROOTS:5;
+  then dom s= Seg(card S) by FINSEQ_1:def 3;
+  then
+A2: dom s=dom FDprobSEQ (s) by Def3;
+  for n be Nat st n in dom s holds (FDprobSEQ (s)).n=1/(card S)
+  proof
+    let n be Nat;
+    assume
+A3: n in dom s;
+    then (FDprobSEQ (s)).n=FDprobability(s.n,s) by A2,Def3
+      .= card ({n}) /(len s) by A3,FINSEQ_5:4
+      .= 1/(card S) by A1,CARD_1:50;
     hence thesis;
   end;
+  hence thesis by A2,Def11;
+end;
 
-theorem THUDEQ:
-  for S be non empty finite set,
-  s,t be FinSequence of S
-  st s is_uniformly_distributed &
-  s,t -are_prob_equivalent holds
-  t is_uniformly_distributed
-  proof
-    let S be non empty finite set,
-    s,t be FinSequence of S;
-    assume AS:s is_uniformly_distributed & s,t -are_prob_equivalent; then
-    L1: FDprobSEQ (s)=FDprobSEQ (t) by EQX05;
-    for n be Nat st n in dom FDprobSEQ (t) holds
-    (FDprobSEQ (t)).n=1/(card S) by L1,AS,defunidistseq;
-    hence thesis by defunidistseq;
-  end;
+Lm2: for S be non empty finite set, s be FinSequence of S st s in
+Finseq-EQclass(canFS(S)) holds s is_uniformly_distributed
 
-theorem THUDEQ2:
-  for S be non empty finite set,
-  s,t be FinSequence of S st s is_uniformly_distributed &
-  t is_uniformly_distributed holds
-  s,t -are_prob_equivalent
+proof
+  let S be non empty finite set, s be FinSequence of S;
+  consider CS be non empty Subset of S* such that
+A1: CS=Finseq-EQclass(canFS(S));
+  reconsider CS as Element of distribution_family(S) by A1,Def6;
+  assume
+  s in Finseq-EQclass(canFS(S));
+  then s,canFS(S) -are_prob_equivalent by Th7;
+  hence thesis by Th24,Th26;
+end;
+
+Lm3: for S be non empty finite set, s be FinSequence of S st s
+is_uniformly_distributed holds for t be FinSequence of S st t
+is_uniformly_distributed holds t in Finseq-EQclass(s)
+
+proof
+  let S be non empty finite set, s be FinSequence of S;
+  assume
+A1: s is_uniformly_distributed;
+
+  for t be FinSequence of S st t is_uniformly_distributed holds t in
+  Finseq-EQclass(s)
+
   proof
-    let S be non empty finite set,
-    s,t be FinSequence of S;
-    assume AS:s is_uniformly_distributed &
+    let t be FinSequence of S;
+    assume
     t is_uniformly_distributed;
-    L1: dom FDprobSEQ (s)= Seg (card (S)) &
-    dom FDprobSEQ (t)= Seg (card (S)) by defFREQDIST;
-    for n be set st n in dom FDprobSEQ (s) holds
-    (FDprobSEQ (s)).n=(FDprobSEQ (t)).n
-    proof
-      let n be set;
-      assume n in dom FDprobSEQ (s); then
-      (FDprobSEQ (s)).n= 1/(card S)
-      &(FDprobSEQ (t)).n= 1/(card S) by defunidistseq,AS,L1;
-      hence thesis;
-    end;
-    then FDprobSEQ (s) = FDprobSEQ (t) by L1,FUNCT_1:9;
-    hence thesis by EQX05;
-  end;
-
-theorem THUDS:
-  for S be non empty finite set holds
-  canFS(S) is_uniformly_distributed
-  proof
-    let S be non empty finite set;
-    set s = canFS(S);
-    L0: len s= card S by UPROOTS:5;then
-    dom s= Seg(card S) by FINSEQ_1:def 3;
-    then L01: dom s=dom FDprobSEQ (s) by defFREQDIST;
-    for n be Nat st n in dom s
-    holds (FDprobSEQ (s)).n=1/(card S)
-    proof
-      let n be Nat;
-      assume ASB: n in dom s; then
-      (FDprobSEQ (s)).n=FDprobability(s.n,s) by defFREQDIST,L01
-      .= card ({n}) /(len s) by FINSEQ_5:4,ASB
-      .= 1/(card S) by L0,CARD_1:50;
-      hence thesis;
-    end;
-    hence thesis by defunidistseq,L01;
-  end;
-
-  THCFS:
-  for S be non empty finite set,
-  s be FinSequence of S st s in Finseq-EQclass(canFS(S)) holds
-  s is_uniformly_distributed
-  proof
-    let S be non empty finite set, s be FinSequence of S;
-    consider CS be non empty Subset of S*
-    such that L3: CS=Finseq-EQclass(canFS(S));
-    reconsider CS as Element of distribution_family(S) by defQuot,L3;
-    assume s in Finseq-EQclass(canFS(S)); then
-    s,canFS(S) -are_prob_equivalent by EQX02;
-    hence thesis by THUDEQ,THUDS;
-  end;
-
-  THCFS2:
-  for S be non empty finite set,
-  s be FinSequence of S
-  st s is_uniformly_distributed holds
-  for t be FinSequence of S st
-  t is_uniformly_distributed holds
-  t in Finseq-EQclass(s)
-  proof
-    let S be non empty finite set,
-    s be FinSequence of S;
-    assume L1: s is_uniformly_distributed;
-    for t be FinSequence of S st t is_uniformly_distributed holds
-    t in Finseq-EQclass(s)
-    proof
-      let t be FinSequence of S;
-      assume t is_uniformly_distributed;
-      then s,t -are_prob_equivalent by L1,THUDEQ2;
-      hence thesis;
-    end;
+    then s,t -are_prob_equivalent by A1,Th25;
     hence thesis;
   end;
+  hence thesis;
+end;
 
-definition let S be non empty finite set;
+definition
+  let S be non empty finite set;
   func uniform_distribution(S) -> Element of distribution_family(S) means
-  :defunidist:
-  for s be FinSequence of S holds s in it iff s is_uniformly_distributed;
+  :
+  Def12: for
+ s be FinSequence of S holds s in it iff s is_uniformly_distributed;
   existence
   proof
-    consider s be FinSequence of S such that L1: s=canFS(S);
-    L2: s is_uniformly_distributed by L1,THUDS;
-    consider CS be non empty Subset of S*
-    such that L3: CS=Finseq-EQclass(s);
-    reconsider CS as Element of distribution_family(S) by defQuot,L3;
-    for t be FinSequence of S
-    st t in CS holds
-    s,t -are_prob_equivalent by EQX02,L3; then
-    L5: for t be FinSequence of S
-    st t in CS holds t is_uniformly_distributed by L2,THUDEQ;
+    consider s be FinSequence of S such that
+A1: s=canFS(S);
+    consider CS be non empty Subset of S* such that
+A2: CS=Finseq-EQclass(s);
+    reconsider CS as Element of distribution_family(S) by A2,Def6;
     take CS;
-    thus thesis by L2,L5,THCFS2,L3;
+A3: s is_uniformly_distributed by A1,Th26;
+    for t be FinSequence of S st t in CS holds s,t -are_prob_equivalent by
+    A2,Th7;
+    then
+    for t be FinSequence of S st t in CS holds t is_uniformly_distributed
+    by A3,Th24;
+    hence thesis by A3,A2,Lm3;
   end;
   uniqueness
   proof
     let A,B be Element of distribution_family(S);
-    assume U1:
-    for s be FinSequence of S holds s in A iff s is_uniformly_distributed;
-    assume U2:
-    for s be FinSequence of S holds s in B iff s is_uniformly_distributed;
-    N1: for s be set st s in A holds s in B
+    assume
+A4: for s be FinSequence of S holds s in A iff s
+    is_uniformly_distributed;
+    assume
+A5: for s be FinSequence of S holds s in B iff s
+    is_uniformly_distributed;
+A6: for s be set st s in B holds s in A
     proof
       let s be set;
-      assume A1:s in A;
+      assume
+A7:   s in B;
       then reconsider s as Element of S*;
-      s is_uniformly_distributed by U1,A1;
-      hence thesis by U2;
+      s is_uniformly_distributed by A5,A7;
+      hence thesis by A4;
     end;
-    for s be set st s in B holds s in A
+    for s be set st s in A holds s in B
     proof
       let s be set;
-      assume A1: s in B;
+      assume
+A8:   s in A;
       then reconsider s as Element of S*;
-      s is_uniformly_distributed by U2,A1;
-      hence thesis by U1;
+      s is_uniformly_distributed by A4,A8;
+      hence thesis by A5;
     end;
-    hence thesis by N1,TARSKI:2;
+    hence thesis by A6,TARSKI:2;
   end;
 end;
 
@@ -1174,61 +1258,65 @@ registration
   cluster constant distProbFinS of S;
   existence
   proof
-    consider s be FinSequence of S such that L1: s=canFS(S);
+    consider s be FinSequence of S such that
+A1: s=canFS(S);
     reconsider s as Element of S* by FINSEQ_1:def 11;
-    consider p be FinSequence of REAL
-    such that L3: p= FDprobSEQ (s);
-    T1: p is constant by THUDEQ0,L3,L1,THUDS;
-    T2: p is ProbFinS by L1,FREQDISTSUM2,L3;
-    T3: dom p= Seg (card (S)) by defFREQDIST,L3;
-    T4:len p=card S by T3,FINSEQ_1:def 3;
+    consider p be FinSequence of REAL such that
+A2: p= FDprobSEQ (s);
     take p;
-    thus thesis by T1,defdistProbFinS,L3,T2,T4;
+    dom p= Seg (card (S)) by A2,Def3;
+    then
+A3: len p=card S by FINSEQ_1:def 3;
+    p is constant & p is ProbFinS by A1,A2,Th21,Th23,Th26;
+    hence thesis by A2,A3,Def10;
   end;
 end;
 
 definition
   let S be non empty finite set;
   func Uniform_FDprobSEQ(S) -> constant distProbFinS of S equals
-    FDprobSEQ (canFS(S));
+  FDprobSEQ (
+  canFS(S));
   coherence
   proof
     set s=canFS(S);
     reconsider s as Element of S* by FINSEQ_1:def 11;
-    consider p be FinSequence of REAL such that L3:p= FDprobSEQ (s);
-    L4: p is constant by THUDEQ0,L3,THUDS;
-    T2: p is ProbFinS by FREQDISTSUM2,L3;
-    T3: dom p= Seg (card (S)) by defFREQDIST,L3;
-    len p=card (S) by T3,FINSEQ_1:def 3;
-    hence thesis by defdistProbFinS,L3,T2,L4;
+    consider p be FinSequence of REAL such that
+A1: p= FDprobSEQ (s);
+    dom p= Seg (card (S)) by A1,Def3;
+    then
+A2: len p=card (S) by FINSEQ_1:def 3;
+    p is constant & p is ProbFinS by A1,Th21,Th23,Th26;
+    hence thesis by A1,A2,Def10;
   end;
 end;
 
 theorem
-  for S be non empty finite set holds
-  uniform_distribution(S)=distribution(Uniform_FDprobSEQ(S),S)
+  for S be non empty finite set holds uniform_distribution(S)=
+  distribution(Uniform_FDprobSEQ(S),S)
+proof
+  let S be non empty finite set;
+  set p=Uniform_FDprobSEQ(S),s=canFS(S);
+A1: s is_uniformly_distributed by Th26;
+A2: for t be FinSequence of S st t is_uniformly_distributed holds t in
+  Finseq-EQclass(s)
   proof
-    let S be non empty finite set;
-    set p=Uniform_FDprobSEQ(S),s=canFS(S);
-    ES1:s is_uniformly_distributed by THUDS;
-    ZZ0: (GenProbSEQ (S)).(Finseq-EQclass(s)) = p by EQX07;
-    ZZ1:for t be FinSequence of S st
-    t in Finseq-EQclass(s) holds
-    t is_uniformly_distributed by THCFS;
-    nazo:Finseq-EQclass(s) is
-    Element of distribution_family(S) by defQuot;
-    for t be FinSequence of S st
-    t is_uniformly_distributed holds t in Finseq-EQclass(s)
-    proof
-      let t be FinSequence of S;
-      assume t is_uniformly_distributed;
-      then s,t -are_prob_equivalent by THUDEQ2,ES1;
-      hence thesis;
-    end;
-    then T1: Finseq-EQclass(s)=uniform_distribution(S)
-    by ZZ1,defunidist,nazo;
-    ZZ02:(GenProbSEQ (S)).distribution( p,S ) =
-    (GenProbSEQ (S)).(Finseq-EQclass(s)) by ZZ0,pbf;
-    dom (GenProbSEQ (S)) = distribution_family(S) by FUNCT_2:def 1;
-    hence thesis by ZZ02,T1,FUNCT_1:def 8;
+    let t be FinSequence of S;
+    assume
+    t is_uniformly_distributed;
+    then s,t -are_prob_equivalent by A1,Th25;
+    hence thesis;
   end;
+  (for t be FinSequence of S st t in Finseq-EQclass(s) holds t
+is_uniformly_distributed)& Finseq-EQclass(s) is Element of distribution_family(
+  S) by Def6,Lm2;
+  then
+A3: Finseq-EQclass(s)=uniform_distribution(S) by A2,Def12;
+  (GenProbSEQ (S)).(Finseq-EQclass(s)) = p by Th12;
+  then
+A4: (GenProbSEQ (S)).distribution( p,S ) = (GenProbSEQ (S)).(Finseq-EQclass(s
+  )) by Th22;
+  dom (GenProbSEQ (S)) = distribution_family(S) by FUNCT_2:def 1;
+  hence thesis by A3,A4,FUNCT_1:def 8;
+end;
+

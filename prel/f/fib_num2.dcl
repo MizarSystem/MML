@@ -13,6 +13,7 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="INT_1"/>
@@ -22,7 +23,6 @@
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="RELAT_2"/>
-<ArticleID name="PARTFUN1"/>
 <ArticleID name="FUNCT_7"/>
 <ArticleID name="ABIAN"/>
 <ArticleID name="XXREAL_0"/>
@@ -36,16 +36,16 @@
 <Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="4"/>
-<Adjective nr="29"/>
-<Adjective nr="44"/>
+<Adjective nr="30"/>
+<Adjective nr="46"/>
 </Cluster>
 </RCluster>
 <FCluster aid="FIB_NUM2" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="28"/>
-<Adjective nr="55" value="false"/>
+<Adjective nr="29"/>
+<Adjective nr="56" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -54,15 +54,15 @@
 </Func>
 <Cluster>
 <Adjective nr="23"/>
-<Adjective nr="55" value="false"/>
+<Adjective nr="56" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster aid="FIB_NUM2" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="28"/>
-<Adjective nr="55"/>
+<Adjective nr="29"/>
+<Adjective nr="56"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -71,7 +71,7 @@
 </Func>
 <Cluster>
 <Adjective nr="23"/>
-<Adjective nr="55"/>
+<Adjective nr="56"/>
 </Cluster>
 </FCluster>
 <FCluster aid="FIB_NUM2" nr="3">
@@ -79,7 +79,7 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="12"/>
-<Adjective nr="25">
+<Adjective nr="26">
 <Func kind="K" nr="56"/>
 <Func kind="K" nr="56"/>
 </Adjective>
@@ -94,8 +94,8 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="29"/>
-<Adjective nr="44"/>
+<Adjective nr="30"/>
+<Adjective nr="46"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -105,14 +105,14 @@
 </Func>
 <Cluster>
 <Adjective nr="7"/>
-<Adjective nr="36"/>
+<Adjective nr="37"/>
 </Cluster>
 </FCluster>
 <FCluster aid="FIB_NUM2" nr="4">
 <ArgTypes/>
 <Func kind="K" nr="51"/>
 <Cluster>
-<Adjective nr="62"/>
+<Adjective nr="63"/>
 </Cluster>
 </FCluster>
 <FCluster aid="FIB_NUM2" nr="5">
@@ -122,7 +122,7 @@
 <Func kind="K" nr="56"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="109">
+<Func kind="K" nr="117">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

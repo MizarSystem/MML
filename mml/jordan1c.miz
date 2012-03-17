@@ -10,13 +10,12 @@ environ
       ARYTM_3, PCOMPS_1, MATRIX_1, JORDAN8, METRIC_1, ABSVALUE, MCART_1,
       TREES_1, FINSEQ_1, PSCOMP_1, GROUP_1, GOBOARD5, FUNCT_5, RELAT_1,
       LATTICES, SQUARE_1, RCOMP_1, COMPTS_1, BOOLE, SEQ_2, ORDINAL2, FUNCT_1,
-      JORDAN1A, CONNSP_1, SUBSET_1, TOPS_1, SPPOL_1;
+      JORDAN1A, TOPS_1, SPPOL_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XXREAL_0,
-      XREAL_0, COMPLEX1, REAL_1, RELSET_1, INT_1, XXREAL_2, STRUCT_0, NAT_1,
-      NAT_D, FINSEQ_1, MATRIX_1, RCOMP_1, TOPS_1, SEQ_4, FUNCT_2, PRE_TOPC,
-      NEWTON, BINARITH, CONNSP_1, COMPTS_1, EUCLID, PCOMPS_1, METRIC_1,
-      METRIC_6, TOPREAL1, TOPREAL2, GOBOARD5, JORDAN8, JORDAN2C, SPPOL_1,
-      PSCOMP_1, TOPREAL6, SEQ_2;
+      XREAL_0, COMPLEX1, REAL_1, RELSET_1, INT_1, XXREAL_2, STRUCT_0, NAT_D,
+      FINSEQ_1, MATRIX_1, RCOMP_1, TOPS_1, FUNCT_2, PRE_TOPC, NEWTON, COMPTS_1,
+      EUCLID, PCOMPS_1, METRIC_1, METRIC_6, TOPREAL1, TOPREAL2, GOBOARD5,
+      JORDAN8, JORDAN2C, SPPOL_1, PSCOMP_1, TOPREAL6, SEQ_2;
  constructors PARTFUN1, REAL_1, NAT_1, RCOMP_1, NEWTON, BINARITH, TOPS_1,
       CONNSP_1, COMPTS_1, TBSP_1, TOPREAL2, GOBOARD1, SPPOL_1, GOBOARD5,
       PSCOMP_1, JORDAN2C, TOPREAL6, JORDAN8, SEQ_1, XXREAL_2, NAT_D, SEQ_4,
@@ -38,7 +37,8 @@ begin
 
 reserve C for Simple_closed_curve,
   i, j, n for Element of NAT,
-  p for Point of TOP-REAL 2;
+  p for Point of
+  TOP-REAL 2;
 
 Lm1: now
   let r be real number, j;
@@ -46,14 +46,16 @@ Lm1: now
     .= [\ r /];
 end;
 
-Lm2: for a, b, c being real number st a <> 0 & b <> 0 holds
-(a/b)*((c/a) * b) = c
+Lm2: for a, b, c being real number st a <> 0 & b <> 0 holds (a/b)*((c/a) * b)
+= c
+
 proof
   let a, b, c be real number;
-  assume
-A1: a <> 0 & b <> 0;
+  assume that
+A1: a <> 0 and
+A2: b <> 0;
   (a/b)*((c/a) * b) = (a/b)*b * (c/a)
-    .= a * (c/a) by A1,XCMPLX_1:88
+    .= a * (c/a) by A2,XCMPLX_1:88
     .= c by A1,XCMPLX_1:88;
   hence thesis;
 end;
@@ -62,387 +64,422 @@ Lm3: for p being Point of TOP-REAL 2 holds p is Point of Euclid 2
 proof
   let p be Point of TOP-REAL 2;
   TopSpaceMetr Euclid 2 = the TopStruct of TOP-REAL 2 by EUCLID:def 8;
+
   then the TopStruct of TOP-REAL 2 = TopStruct (#the carrier of Euclid 2,
     Family_open_set Euclid 2#) by PCOMPS_1:def 6;
+
   hence thesis;
 end;
 
 Lm4: for r being real number st r > 0 holds 2*(r/4) < r
 proof
   let r be real number;
+A1: 2*(r/4) = r/2;
   assume
-A1: r > 0;
-  2*(r/4) = r/2;
+  r > 0;
   hence thesis by A1,XREAL_1:218;
 end;
 
 canceled;
 
 theorem Th2:
-  [i,j] in Indices Gauge(C,n) & [i+1,j] in Indices Gauge(C,n) implies
-  dist(Gauge(C,n)*(1,1),Gauge(C,n)*(2,1)) =
-  Gauge(C,n)*(i+1,j)`1 - Gauge(C,n)*(i,j)`1
+  [i,j] in Indices Gauge(C,n) & [i+1,j] in Indices Gauge(C,n)
+implies dist(Gauge(C,n)*(1,1),Gauge(C,n)*(2,1)) = Gauge(C,n)*(i+1,j)`1 - Gauge(
+  C,n)*(i,j)`1
 proof
   set G = Gauge(C,n);
-  assume
-A1: [i,j] in Indices G & [i+1,j] in Indices G;
-  then 1 <= j & j <= width G & 1 <= i & i < i+1 & i+1 <= len G
-  by MATRIX_1:39,XREAL_1:31;
+  assume that
+A1: [i,j] in Indices G and
+A2: [i+1,j] in Indices G;
+A3: j <= width G by A1,MATRIX_1:39;
+  1 <= j by A1,MATRIX_1:39;
   then
-A2: 1 <= width G & i <= len G & 1 <= i+1 by XXREAL_0:2;
-  len G >= 4 by JORDAN8:13;
-  then 2 <= len G & 1 <= len G by XXREAL_0:2;
+A4: 1 <= width G by A3,XXREAL_0:2;
+A5: len G >= 4 by JORDAN8:13;
+  then 2 <= len G by XXREAL_0:2;
   then
-A3: [1,1] in Indices G & [2,1] in Indices G by A2,MATRIX_1:37;
-  dist(G*(i,j),G*(i+1,j)) = (E-bound C - W-bound C)/2|^n by A1,GOBRD14:20;
-  then dist(G*(1,1),G*(1+1,1)) = dist(G*(i,j),G*(i+1,j)) by A3,GOBRD14:20
-    .= G*(i+1,j)`1 - G*(i,j)`1 by A1,GOBRD14:15;
+A6: [2,1] in Indices G by A4,MATRIX_1:37;
+A7: dist(G*(i,j),G*(i+1,j)) = (E-bound C - W-bound C)/2|^n by A1,A2,
+  GOBRD14:20;
+  1 <= len G by A5,XXREAL_0:2;
+  then [1,1] in Indices G by A4,MATRIX_1:37;
+  then dist(G*(1,1),G*(1+1,1)) = dist(G*(i,j),G*(i+1,j)) by A6,A7,
+  GOBRD14:20
+    .= G*(i+1,j)`1 - G*(i,j)`1 by A1,A2,GOBRD14:15;
   hence thesis;
 end;
 
 theorem Th3:
-  [i,j] in Indices Gauge(C,n) & [i,j+1] in Indices Gauge(C,n) implies
-  dist(Gauge(C,n)*(1,1),Gauge(C,n)*(1,2)) =
-  Gauge(C,n)*(i,j+1)`2 - Gauge(C,n)*(i,j)`2
+  [i,j] in Indices Gauge(C,n) & [i,j+1] in Indices Gauge(C,n)
+implies dist(Gauge(C,n)*(1,1),Gauge(C,n)*(1,2)) = Gauge(C,n)*(i,j+1)`2 - Gauge(
+  C,n)*(i,j)`2
 proof
   set G = Gauge(C,n);
-  assume
-A1: [i,j] in Indices G & [i,j+1] in Indices G;
+  assume that
+A1: [i,j] in Indices G and
+A2: [i,j+1] in Indices G;
+A3: 1 <= j+1 by A2,MATRIX_1:39;
+  len G >= 4 by JORDAN8:13;
   then
-A2: 1 <= j & j < j+1 & j + 1 <= width G & 1 <= i & i <= len G
-  by MATRIX_1:39,XREAL_1:31;
-  1 <= j+1 by A1,MATRIX_1:39;
-  then
-A3: 1 <= width G & 1 <= i+1 by A2,NAT_1:11,XXREAL_0:2;
-A4: len G >= 4 by JORDAN8:13;
+A4: 1 <= len G by XXREAL_0:2;
   2|^n + 3 >= 3 by NAT_1:11;
   then width G >= 3 by JORDAN1A:49;
-  then 2 <= width G & 1 <= len G by A4,XXREAL_0:2;
+  then 2 <= width G by XXREAL_0:2;
   then
-A5: [1,1] in Indices G & [1,2] in Indices G by A3,MATRIX_1:37;
-  dist(G*(i,j),G*(i,j+1)) = (N-bound C - S-bound C)/2|^n by A1,GOBRD14:19;
-  then dist(G*(1,1),G*(1,1+1)) = dist(G*(i,j),G*(i,j+1)) by A5,GOBRD14:19
-    .= G*(i,j+1)`2 - G*(i,j)`2 by A1,GOBRD14:16;
+A5: [1,2] in Indices G by A4,MATRIX_1:37;
+  j + 1 <= width G by A2,MATRIX_1:39;
+  then 1 <= width G by A3,XXREAL_0:2;
+  then
+A6: [1,1] in Indices G by A4,MATRIX_1:37;
+  dist(G*(i,j),G*(i,j+1)) = (N-bound C - S-bound C)/2|^n by A1,A2,
+  GOBRD14:19;
+  then dist(G*(1,1),G*(1,1+1)) = dist(G*(i,j),G*(i,j+1)) by A6,A5,
+  GOBRD14:19
+    .= G*(i,j+1)`2 - G*(i,j)`2 by A1,A2,GOBRD14:16;
   hence thesis;
 end;
 TopSpaceMetr Euclid 2 = the TopStruct of TOP-REAL 2 by EUCLID:def 8;
-then
 
+then
 Lm5: the TopStruct of TOP-REAL 2 = TopStruct (#the carrier of Euclid 2,
   Family_open_set Euclid 2#) by PCOMPS_1:def 6;
 
-Lm6: for r being real number, q being Point of Euclid 2 st
-1 <= i & i+1 <= len Gauge (C,n) & 1 <= j & j+1 <= width Gauge (C,n) &
-r > 0 & p = q & dist(Gauge(C,n)*(1,1),Gauge(C,n)*(1,2)) < r/4 &
-dist(Gauge(C,n)*(1,1),Gauge(C,n)*(2,1)) < r/4 & p in cell (Gauge(C,n),i,j) &
-Gauge(C,n)*(i,j) in Ball (q, r) & Gauge(C,n)*(i+1,j) in Ball (q, r) &
-Gauge(C,n)*(i,j+1) in Ball (q, r) & Gauge(C,n)*(i+1,j+1) in Ball (q, r) holds
-cell(Gauge(C,n),i,j) c= Ball (q,r)
+Lm6: for r being real number, q being Point of Euclid 2 st 1 <= i & i+1 <= len
+Gauge (C,n) & 1 <= j & j+1 <= width Gauge (C,n) & r > 0 & p = q & dist(Gauge(C,
+n)*(1,1),Gauge(C,n)*(1,2)) < r/4 & dist(Gauge(C,n)*(1,1),Gauge(C,n)*(2,1)) < r/
+4 & p in cell (Gauge(C,n),i,j) holds cell(Gauge(C,n),i,j) c= Ball (q,r)
+
 proof
   let r be real number, q be Point of Euclid 2;
   assume that
-A1: 1 <= i & i+1 <= len Gauge (C,n) & 1 <= j & j+1 <= width Gauge (C,n) and
-A2: r > 0 & p = q & dist(Gauge(C,n)*(1,1),Gauge(C,n)*(1,2)) < r/4 &
-  dist(Gauge(C,n)*(1,1),Gauge(C,n)*(2,1)) < r/4 & p in cell (Gauge(C,n),i,j) &
-  Gauge(C,n)*(i,j) in Ball (q, r) & Gauge(C,n)*(i+1,j) in Ball (q, r) &
-  Gauge(C,n)*(i,j+1) in Ball (q, r) & Gauge(C,n)*(i+1,j+1) in Ball (q, r);
+A1: 1 <= i and
+A2: i+1 <= len Gauge (C,n) and
+A3: 1 <= j and
+A4: j+1 <= width Gauge (C,n) and
+A5: r > 0 and
+A6: p = q and
+A7: dist(Gauge(C,n)*(1,1),Gauge(C,n)*(1,2)) < r/4 and
+A8: dist(Gauge(C,n)*(1,1),Gauge(C,n)*(2,1)) < r/4 and
+A9: p in cell (Gauge(C,n),i,j);
+  set G = Gauge(C,n);
+  set I = i, J = j, l = r/4;
   let x be set;
   assume
-A3: x in cell(Gauge(C,n),i,j);
-  set I = i, J = j, l = r/4;
-  reconsider Q = q, X = x as Point of TOP-REAL 2 by A3,Lm5;
-  reconsider x' = x as Point of Euclid 2 by A3,Lm3;
-  set G = Gauge(C,n);
-A4: 1 <= 1 + i by NAT_1:11;
-  i < i + 1 & j < j+1 by XREAL_1:31;
+A10: x in cell(Gauge(C,n),i,j);
+  then reconsider Q = q, X = x as Point of TOP-REAL 2 by Lm5;
+A11: Q`1 <= G*(I+1,J)`1 by A1,A2,A3,A4,A6,A9,JORDAN9:19;
+A12: G*(I,J)`2 <= Q`2 by A1,A2,A3,A4,A6,A9,JORDAN9:19;
+A13: G*(I,J)`1 <= X`1 by A1,A2,A3,A4,A10,JORDAN9:19;
+  j < j+1 by XREAL_1:31;
   then
-A5: i <= len G & j <= width G by A1,XXREAL_0:2;
+A14: j <= width G by A4,XXREAL_0:2;
+  i < i + 1 by XREAL_1:31;
   then
-A6: [i,j] in Indices G & [i+1,j] in Indices G by A1,A4,MATRIX_1:37;
+A15: i <= len G by A2,XXREAL_0:2;
   then
-A7: G*(I+1,J)`1 - G*(I,J)`1 < l by A2,Th2;
-  1 <= j+1 by A1,XREAL_1:31;
-  then [i,j+1] in Indices G by A1,A5,MATRIX_1:37;
+A16: [i,j] in Indices G by A1,A3,A14,MATRIX_1:37;
+A17: X`2 <= G*(I,J+1)`2 by A1,A2,A3,A4,A10,JORDAN9:19;
+A18: G*(I,J)`2 <= X`2 by A1,A2,A3,A4,A10,JORDAN9:19;
+A19: Q`2 <= G*(I,J+1)`2 by A1,A2,A3,A4,A6,A9,JORDAN9:19;
+A20: X`1 <= G*(I+1,J)`1 by A1,A2,A3,A4,A10,JORDAN9:19;
+  1 <= j+1 by A3,XREAL_1:31;
+  then [i,j+1] in Indices G by A1,A4,A15,MATRIX_1:37;
   then
-A8: G*(I,J+1)`2 - G*(I,J)`2 < l by A2,A6,Th3;
-A9: G*(I,J)`1 <= Q`1 & Q`1 <= G*(I+1,J)`1 by A1,A2,JORDAN9:19;
-A10: G*(I,J)`2 <= Q`2 & Q`2 <= G*(I,J+1)`2 by A1,A2,JORDAN9:19;
-A11: G*(I,J)`1 <= X`1 & X`1 <= G*(I+1,J)`1 by A1,A3,JORDAN9:19;
-  G*(I,J)`2 <= X`2 & X`2 <= G*(I,J+1)`2 by A1,A3,JORDAN9:19;
+A21: G*(I,J+1)`2 - G*(I,J)`2 < l by A7,A16,Th3;
+  1 <= 1 + i by NAT_1:11;
+  then [i+1,j] in Indices G by A2,A3,A14,MATRIX_1:37;
+  then G*(I+1,J)`1 - G*(I,J)`1 < l by A8,A16,Th2;
+
   then
-A12: dist (Q,X) <= (G*(I+1,J)`1 - G*(I,J)`1 ) +
-  ( G*(I,J+1)`2 - G*(I,J)`2 ) by A9,A10,A11,TOPREAL6:104;
-  (G*(I+1,J)`1 - G*(I,J)`1 ) +
-  ( G*(I,J+1)`2 - G*(I,J)`2 ) <= l + l by A7,A8,XREAL_1:9;
+A22: (G*(I+1,J)`1 - G*(I,J)`1 ) + ( G*(I,J+1)`2 - G*(I,J)`2 ) <= l + l by
+  A21,XREAL_1:9;
+
+  G*(I,J)`1 <= Q`1 by A1,A2,A3,A4,A6,A9,JORDAN9:19;
+
+  then dist (Q,X) <= (G*(I+1,J)`1 - G*(I,J)`1 ) + ( G*(I,J+1)`2 - G*(I,J)`2 )
+  by A11,A12,A19,A13,A20,A18,A17,TOPREAL6:104;
+
   then
-A13: dist (p,X) <= l + l by A2,A12,XXREAL_0:2;
-  2*(r/4) < r by A2,Lm4;
-  then dist (X, p) < r by A13,XXREAL_0:2;
-  then dist (x', q) < r by A2,TOPREAL6:def 1;
+A23: dist (p,X) <= l + l by A6,A22,XXREAL_0:2;
+  reconsider x' = x as Point of Euclid 2 by A10,Lm3;
+  2*(r/4) < r by A5,Lm4;
+  then dist (X, p) < r by A23,XXREAL_0:2;
+  then dist (x', q) < r by A6,TOPREAL6:def 1;
   hence thesis by METRIC_1:12;
 end;
 
-theorem Th4: :: JORDAN1A:27
-  for S being Subset of TOP-REAL 2 st S is Bounded holds proj1.:S is bounded
+theorem Th4:
+  for S being Subset of TOP-REAL 2 st S is Bounded holds proj1.:S
+  is bounded
 proof
   let S be Subset of TOP-REAL 2;
-  assume S is Bounded;
+  assume
+  S is Bounded;
   then reconsider C = S as bounded Subset of Euclid 2 by JORDAN2C:def 2;
   consider r being Real, x being Point of Euclid 2 such that
 A1: 0 < r and
 A2: C c= Ball(x,r) by METRIC_6:def 10;
-  reconsider p = x as Point of TOP-REAL 2 by TOPREAL3:13;
   reconsider P = Ball(x,r) as Subset of TOP-REAL 2 by TOPREAL3:13;
+  reconsider p = x as Point of TOP-REAL 2 by TOPREAL3:13;
   set t = max(abs(p`1-r),abs(p`1+r));
   now
-    assume abs(p`1-r) <= 0 & abs(p`1+r) <= 0;
-    then abs(p`1-r) = 0 & abs(p`1+r) = 0 by COMPLEX1:132;
-    then abs(r-p`1) = 0 & abs(p`1+r) = 0 by UNIFORM1:13;
-    then r-p`1 = 0 & p`1+r = 0 by ABSVALUE:7;
-    hence contradiction by A1;
+    assume that
+A3: abs(p`1-r) <= 0 and
+A4: abs(p`1+r) <= 0;
+    abs(p`1-r) = 0 by A3,COMPLEX1:132;
+    then abs(r-p`1) = 0 by UNIFORM1:13;
+    then
+A5: r-p`1 = 0 by ABSVALUE:7;
+    abs(p`1+r) = 0 by A4,COMPLEX1:132;
+    hence contradiction by A1,A5,ABSVALUE:7;
   end;
   then
-A3: t > 0 by XXREAL_0:30;
-A4: proj1.:P = ].p`1-r,p`1+r.[ by TOPREAL6:51;
+A6: t > 0 by XXREAL_0:30;
+A7: proj1.:P = ].p`1-r,p`1+r.[ by TOPREAL6:51;
   for s being real number st s in proj1.:S holds abs(s) < t
   proof
     let s being real number;
     proj1.:S c= proj1.:P by A2,RELAT_1:156;
-    hence thesis by A4,JCT_MISC:12;
+    hence thesis by A7,JCT_MISC:12;
   end;
-  hence thesis by A3,SEQ_4:14;
+  hence thesis by A6,SEQ_4:14;
 end;
 
 theorem
-  for C1 being non empty compact Subset of TOP-REAL 2,
-  C2, S being non empty Subset of TOP-REAL 2 holds
-  S = C1 \/ C2 & proj1.:C2 is non empty bounded_below
-  implies W-bound S = min(W-bound C1, W-bound C2)
+  for C1 being non empty compact Subset of TOP-REAL 2, C2, S being non
+  empty Subset of TOP-REAL 2 holds S = C1 \/ C2 & proj1.:C2 is non empty
+  bounded_below implies W-bound S = min(W-bound C1, W-bound C2)
 proof
-  let C1 be non empty compact Subset of TOP-REAL 2,
-  C2, S be non empty Subset of TOP-REAL 2;
-  assume
-A1: S = C1 \/ C2 & proj1.:C2 is non empty bounded_below;
+  let C1 be non empty compact Subset of TOP-REAL 2, C2, S be non empty Subset
+  of TOP-REAL 2;
+  assume that
+A1: S = C1 \/ C2 and
+A2: proj1.:C2 is non empty bounded_below;
   set P1 = proj1.:C1, P2 = proj1.:C2, PS = proj1.:S;
-A2: W-bound C1 = inf P1 & W-bound C2 = inf P2 by SPRECT_1:48;
-A3: P1 is non empty bounded_below &
-  P2 is non empty bounded_below by A1,SPRECT_1:46;
+A3: W-bound C1 = inf P1 by SPRECT_1:48;
+A4: P1 is non empty bounded_below by SPRECT_1:46;
+A5: W-bound C2 = inf P2 by SPRECT_1:48;
   thus W-bound S = inf PS by SPRECT_1:48
     .= inf(P1 \/ P2) by A1,RELAT_1:153
-    .= min(W-bound C1, W-bound C2) by A2,A3,SPRECT_1:52;
+    .= min(W-bound C1, W-bound C2) by A2,A3,A5,A4,SPRECT_1:52;
 end;
 
-Lm7: for X being Subset of TOP-REAL 2 holds
-p in X & X is Bounded implies inf (proj1|X) <= p`1 & p`1 <= sup (proj1|X)
+Lm7: for X being Subset of TOP-REAL 2 holds p in X & X is Bounded implies inf
+(proj1|X) <= p`1 & p`1 <= sup (proj1|X)
+
 proof
-  let X be Subset of TOP-REAL 2;
   set T = TOP-REAL 2;
-  assume
-A1: p in X & X is Bounded;
-  then reconsider X as non empty Subset of TOP-REAL 2;
-  reconsider p' = p as Point of T|X by A1,PRE_TOPC:29;
-A2: the carrier of T|X = X by PRE_TOPC:29;
-A3: (proj1|X).:X = proj1.:X by RELAT_1:162;
-A4: proj1.:X is bounded by A1,Th4;
+  let X be Subset of TOP-REAL 2;
+  assume that
+A1: p in X and
+A2: X is Bounded;
+  reconsider X as non empty Subset of TOP-REAL 2 by A1;
+A3: the carrier of T|X = X by PRE_TOPC:29;
+A4: (proj1|X).:X = proj1.:X by RELAT_1:162;
+A5: proj1.:X is bounded by A2,Th4;
+  then (proj1|X).:X is bounded_below by A4,XXREAL_2:def 11;
   then
-A5: (proj1|X).:X is bounded_above by A3,XXREAL_2:def 11;
-  (proj1|X).:X is bounded_below by A3,A4,XXREAL_2:def 11;
-  then
-A6: proj1|X is bounded_below by A2,PSCOMP_1:def 11;
-  proj1|X is bounded_above by A2,A5,PSCOMP_1:def 12;
+A6: proj1|X is bounded_below by A3,PSCOMP_1:def 11;
+  (proj1|X).:X is bounded_above by A4,A5,XXREAL_2:def 11;
+  then proj1|X is bounded_above by A3,PSCOMP_1:def 12;
   then reconsider f = proj1|X as bounded RealMap of T|X by A6;
-  (proj1|X).p' = p`1 by A1,PSCOMP_1:69;
-  then inf f <= p`1 & p`1 <= sup f by PSCOMP_1:47,50;
-  hence thesis;
-end;
-
-Lm8: for X being Subset of TOP-REAL 2 holds
-p in X & X is Bounded implies inf (proj2|X) <= p`2 & p`2 <= sup (proj2|X)
-proof
-  let X be Subset of TOP-REAL 2;
-  set T = TOP-REAL 2;
-  assume
-A1: p in X & X is Bounded;
-  then reconsider X as non empty Subset of TOP-REAL 2;
   reconsider p' = p as Point of T|X by A1,PRE_TOPC:29;
-A2: the carrier of T|X = X by PRE_TOPC:29;
-A3: (proj2|X).:X = proj2.:X by RELAT_1:162;
-A4: proj2.:X is bounded by A1,JCT_MISC:23;
-  then
-A5: (proj2|X).:X is bounded_above by A3,XXREAL_2:def 11;
-  (proj2|X).:X is bounded_below by A3,A4,XXREAL_2:def 11;
-  then
-A6: proj2|X is bounded_below by A2,PSCOMP_1:def 11;
-  proj2|X is bounded_above by A2,A5,PSCOMP_1:def 12;
-  then reconsider f = proj2|X as bounded RealMap of T|X by A6;
-  (proj2|X).p' = p`2 by A1,PSCOMP_1:70;
-  then inf f <= p`2 & p`2 <= sup f by PSCOMP_1:47,50;
-  hence thesis;
+A7: (proj1|X).p' = p`1 by A1,PSCOMP_1:69;
+  then inf f <= p`1 by PSCOMP_1:47;
+  hence thesis by A7,PSCOMP_1:50;
 end;
 
-theorem Th6: :: PSCOMP_1:68
-  for X being Subset of TOP-REAL 2 holds p in X & X is Bounded implies
-  W-bound X <= p`1 & p`1 <= E-bound X & S-bound X <= p`2 & p`2 <= N-bound X
+Lm8: for X being Subset of TOP-REAL 2 holds p in X & X is Bounded implies inf
+(proj2|X) <= p`2 & p`2 <= sup (proj2|X)
+
+proof
+  set T = TOP-REAL 2;
+  let X be Subset of TOP-REAL 2;
+  assume that
+A1: p in X and
+A2: X is Bounded;
+  reconsider X as non empty Subset of TOP-REAL 2 by A1;
+A3: the carrier of T|X = X by PRE_TOPC:29;
+A4: (proj2|X).:X = proj2.:X by RELAT_1:162;
+A5: proj2.:X is bounded by A2,JCT_MISC:23;
+  then (proj2|X).:X is bounded_below by A4,XXREAL_2:def 11;
+  then
+A6: proj2|X is bounded_below by A3,PSCOMP_1:def 11;
+  (proj2|X).:X is bounded_above by A4,A5,XXREAL_2:def 11;
+  then proj2|X is bounded_above by A3,PSCOMP_1:def 12;
+  then reconsider f = proj2|X as bounded RealMap of T|X by A6;
+  reconsider p' = p as Point of T|X by A1,PRE_TOPC:29;
+A7: (proj2|X).p' = p`2 by A1,PSCOMP_1:70;
+  then inf f <= p`2 by PSCOMP_1:47;
+  hence thesis by A7,PSCOMP_1:50;
+end;
+
+theorem Th6:
+  for X being Subset of TOP-REAL 2 holds p in X & X is Bounded
+implies W-bound X <= p`1 & p`1 <= E-bound X & S-bound X <= p`2 & p`2 <= N-bound
+  X
 proof
   let X be Subset of TOP-REAL 2;
-  assume
-A1: p in X & X is Bounded;
+  assume that
+A1: p in X and
+A2: X is Bounded;
   W-bound X = inf (proj1|X) by PSCOMP_1:def 30;
-  hence W-bound X <= p`1 by A1,Lm7;
+  hence W-bound X <= p`1 by A1,A2,Lm7;
   E-bound X = sup (proj1|X) by PSCOMP_1:def 32;
-  hence E-bound X >= p`1 by A1,Lm7;
+  hence E-bound X >= p`1 by A1,A2,Lm7;
   S-bound X = inf (proj2|X) by PSCOMP_1:def 33;
-  hence S-bound X <= p`2 by A1,Lm8;
+  hence S-bound X <= p`2 by A1,A2,Lm8;
   N-bound X = sup (proj2|X) by PSCOMP_1:def 31;
-  hence thesis by A1,Lm8;
+  hence thesis by A1,A2,Lm8;
 end;
 
-Lm9: for C being Subset of TOP-REAL 2 st C is Bounded
-for h being real number st BDD C <> {} & h > W-bound BDD C &
-(for p st p in BDD C holds p`1 >= h) holds contradiction
+Lm9: for C being Subset of TOP-REAL 2 st C is Bounded for h being real number
+st BDD C <> {} & h > W-bound BDD C & (for p st p in BDD C holds p`1 >= h) holds
+contradiction
+
 proof
   let C be Subset of TOP-REAL 2 such that
 A1: C is Bounded;
+  set X = proj1|BDD C;
   let h be real number;
   assume that
 A2: BDD C <> {} and
 A3: h > W-bound BDD C and
-A4: (for p st p in BDD C holds p`1 >= h);
+A4: for p st p in BDD C holds p`1 >= h;
   reconsider T = (TOP-REAL 2)|BDD C as non empty TopSpace by A2;
-  set X = proj1|BDD C;
   the carrier of T = BDD C by PRE_TOPC:29;
   then X.:the carrier of T = proj1.:BDD C by RELAT_1:162;
   then X.:the carrier of T is bounded by A1,Th4,JORDAN2C:114;
   then X.:the carrier of T is bounded_below by XXREAL_2:def 11;
   then reconsider X as bounded_below RealMap of T by PSCOMP_1:def 11;
-A6: inf X = W-bound BDD C by PSCOMP_1:def 30;
-A7: h is Real by XREAL_0:def 1;
-  for p being Point of T holds X.p >= h
+A5: for p being Point of T holds X.p >= h
   proof
     let p be Point of T;
-A8: the carrier of T = BDD C by PRE_TOPC:29;
+A6: the carrier of T = BDD C by PRE_TOPC:29;
     then p in BDD C;
     then reconsider p' = p as Point of TOP-REAL 2;
-    X.p = proj1.p' by A8,FUNCT_1:72;
+    X.p = proj1.p' by A6,FUNCT_1:72;
     then X.p = p'`1 by PSCOMP_1:def 28;
-    hence thesis by A4,A8;
+    hence thesis by A4,A6;
   end;
-  hence thesis by A3,A6,A7,PSCOMP_1:48;
+A7: h is Real by XREAL_0:def 1;
+  inf X = W-bound BDD C by PSCOMP_1:def 30;
+  hence thesis by A3,A7,A5,PSCOMP_1:48;
 end;
 
-Lm10: for C being Subset of TOP-REAL 2 st C is Bounded
-for h being real number st BDD C <> {} & h < E-bound BDD C &
-(for p st p in BDD C holds p`1 <= h) holds contradiction
+Lm10: for C being Subset of TOP-REAL 2 st C is Bounded for h being real number
+st BDD C <> {} & h < E-bound BDD C & (for p st p in BDD C holds p`1 <= h) holds
+contradiction
+
 proof
   let C be Subset of TOP-REAL 2 such that
 A1: C is Bounded;
+  set X = proj1|BDD C;
   let h be real number;
   assume that
 A2: BDD C <> {} and
 A3: h < E-bound BDD C and
-A4: (for p st p in BDD C holds p`1 <= h);
+A4: for p st p in BDD C holds p`1 <= h;
   reconsider T = (TOP-REAL 2)|BDD C as non empty TopSpace by A2;
-  set X = proj1|BDD C;
   the carrier of T = BDD C by PRE_TOPC:29;
   then X.:the carrier of T = proj1.:BDD C by RELAT_1:162;
   then X.:the carrier of T is bounded by A1,Th4,JORDAN2C:114;
   then X.:the carrier of T is bounded_above by XXREAL_2:def 11;
   then reconsider X as bounded_above RealMap of T by PSCOMP_1:def 12;
-A6: sup X = E-bound BDD C by PSCOMP_1:def 32;
-  for p being Point of T holds X.p <= h
+A5: for p being Point of T holds X.p <= h
   proof
     let p be Point of T;
-A7: the carrier of T = BDD C by PRE_TOPC:29;
+A6: the carrier of T = BDD C by PRE_TOPC:29;
     then p in BDD C;
     then reconsider p' = p as Point of TOP-REAL 2;
-    X.p = proj1.p' by A7,FUNCT_1:72;
+    X.p = proj1.p' by A6,FUNCT_1:72;
     then X.p = p'`1 by PSCOMP_1:def 28;
-    hence thesis by A4,A7;
+    hence thesis by A4,A6;
   end;
-  hence thesis by A3,A6,PSCOMP_1:51;
+  sup X = E-bound BDD C by PSCOMP_1:def 32;
+  hence thesis by A3,A5,PSCOMP_1:51;
 end;
 
-Lm11: for C being Subset of TOP-REAL 2 st C is Bounded
-for h being real number st BDD C <> {} & h < N-bound BDD C &
-(for p st p in BDD C holds p`2 <= h) holds contradiction
+Lm11: for C being Subset of TOP-REAL 2 st C is Bounded for h being real number
+st BDD C <> {} & h < N-bound BDD C & (for p st p in BDD C holds p`2 <= h) holds
+contradiction
+
 proof
   let C be Subset of TOP-REAL 2 such that
 A1: C is Bounded;
+  set X = proj2|BDD C;
   let h be real number;
   assume that
 A2: BDD C <> {} and
 A3: h < N-bound BDD C and
-A4: (for p st p in BDD C holds p`2 <= h);
+A4: for p st p in BDD C holds p`2 <= h;
   reconsider T = (TOP-REAL 2)|BDD C as non empty TopSpace by A2;
-  set X = proj2|BDD C;
   the carrier of T = BDD C by PRE_TOPC:29;
   then X.:the carrier of T = proj2.:BDD C by RELAT_1:162;
   then X.:the carrier of T is bounded by A1,JCT_MISC:23,JORDAN2C:114;
   then X.:the carrier of T is bounded_above by XXREAL_2:def 11;
   then reconsider X as bounded_above RealMap of T by PSCOMP_1:def 12;
-A6: sup X = N-bound BDD C by PSCOMP_1:def 31;
-  for p being Point of T holds X.p <= h
+A5: for p being Point of T holds X.p <= h
   proof
     let p be Point of T;
-A7: the carrier of T = BDD C by PRE_TOPC:29;
+A6: the carrier of T = BDD C by PRE_TOPC:29;
     then p in BDD C;
     then reconsider p' = p as Point of TOP-REAL 2;
-    X.p = proj2.p' by A7,FUNCT_1:72;
+    X.p = proj2.p' by A6,FUNCT_1:72;
     then X.p = p'`2 by PSCOMP_1:def 29;
-    hence thesis by A4,A7;
+    hence thesis by A4,A6;
   end;
-  hence thesis by A3,A6,PSCOMP_1:51;
+  sup X = N-bound BDD C by PSCOMP_1:def 31;
+  hence thesis by A3,A5,PSCOMP_1:51;
 end;
 
-Lm12: for C being Subset of TOP-REAL 2 st C is Bounded
-for h being real number st BDD C <> {} & h > S-bound BDD C &
-(for p st p in BDD C holds p`2 >= h) holds contradiction
+Lm12: for C being Subset of TOP-REAL 2 st C is Bounded for h being real number
+st BDD C <> {} & h > S-bound BDD C & (for p st p in BDD C holds p`2 >= h) holds
+contradiction
+
 proof
   let C be Subset of TOP-REAL 2 such that
 A1: C is Bounded;
+  set X = proj2|BDD C;
   let h be real number;
   assume that
 A2: BDD C <> {} and
 A3: h > S-bound BDD C and
-A4: (for p st p in BDD C holds p`2 >= h);
+A4: for p st p in BDD C holds p`2 >= h;
   reconsider T = (TOP-REAL 2)|BDD C as non empty TopSpace by A2;
-  set X = proj2|BDD C;
   the carrier of T = BDD C by PRE_TOPC:29;
   then X.:the carrier of T = proj2.:BDD C by RELAT_1:162;
   then X.:the carrier of T is bounded by A1,JCT_MISC:23,JORDAN2C:114;
   then X.:the carrier of T is bounded_below by XXREAL_2:def 11;
   then reconsider X as bounded_below RealMap of T by PSCOMP_1:def 11;
-A6: inf X = S-bound BDD C by PSCOMP_1:def 33;
-A7: h is Real by XREAL_0:def 1;
-  for p being Point of T holds X.p >= h
+A5: for p being Point of T holds X.p >= h
   proof
     let p be Point of T;
-A8: the carrier of T = BDD C by PRE_TOPC:29;
+A6: the carrier of T = BDD C by PRE_TOPC:29;
     then p in BDD C;
     then reconsider p' = p as Point of TOP-REAL 2;
-    X.p = proj2.p' by A8,FUNCT_1:72;
+    X.p = proj2.p' by A6,FUNCT_1:72;
     then X.p = p'`2 by PSCOMP_1:def 29;
-    hence thesis by A4,A8;
+    hence thesis by A4,A6;
   end;
-  hence thesis by A3,A6,A7,PSCOMP_1:48;
+A7: h is Real by XREAL_0:def 1;
+  inf X = S-bound BDD C by PSCOMP_1:def 33;
+  hence thesis by A3,A7,A5,PSCOMP_1:48;
 end;
 
 Lm13: now
   let C be Subset of TOP-REAL 2;
   assume
-A1: C is Bounded;
+  C is Bounded;
   then UBD C is_outside_component_of C by JORDAN2C:76;
-  then
-A2: UBD C is_a_component_of C` by JORDAN2C:def 4;
-  C` <> {} by A1,JORDAN2C:74;
-  hence UBD C is non empty by A2,SPRECT_1:6;
+  hence UBD C is non empty by JORDAN2C:def 4;
 end;
 
 canceled 11;
 
 theorem Th18:
-  for C being compact Subset of TOP-REAL 2 holds
-  BDD C <> {} implies W-bound C <= W-bound BDD C
+  for C being compact Subset of TOP-REAL 2 holds BDD C <> {}
+  implies W-bound C <= W-bound BDD C
 proof
   let C be compact Subset of TOP-REAL 2;
   set WC = W-bound C, WB = W-bound BDD C;
@@ -450,35 +487,43 @@ proof
   assume that
 A1: BDD C <> {} and
 A2: WC > WB;
-A3: hal > WB & hal < WC by A2,XREAL_1:228;
-  now per cases;
-    suppose for q1 being Point of TOP-REAL 2 st q1 in BDD C holds q1`1 >= hal;
+A3: hal < WC by A2,XREAL_1:228;
+  now
+    per cases;
+    suppose
+      for q1 being Point of TOP-REAL 2 st q1 in BDD C holds q1`1 >=
+      hal;
       hence contradiction by A1,A2,Lm9,XREAL_1:228;
     end;
-    suppose ex q1 being Point of TOP-REAL 2 st q1 in BDD C & q1`1 < hal;
+    suppose
+      ex q1 being Point of TOP-REAL 2 st q1 in BDD C & q1`1 < hal;
       then consider q1 being Point of TOP-REAL 2 such that
-A4:   q1 in BDD C & q1`1 < hal;
-A5:   q1`1 < WC by A3,A4,XXREAL_0:2;
+A4:   q1 in BDD C and
+A5:   q1`1 < hal;
       set Q = |[(WC + q1`1)/2,q1`2]|;
       set WH = west_halfline Q;
 A6:   Q`1 = (WC + q1`1)/2 by EUCLID:56;
-      then q1`2 = Q`2 & q1`1 < Q`1 by A5,EUCLID:56,XREAL_1:228;
-      then
-A7:   q1 in WH by TOPREAL1:def 15;
+A7:   q1`1 < WC by A3,A5,XXREAL_0:2;
       WH misses C
       proof
-        assume WH meets C;
+A8:     Q`1 < WC by A7,A6,XREAL_1:228;
+        assume
+        WH meets C;
         then consider y being set such that
-A8:     y in WH /\ C by XBOOLE_0:4;
-A9:     y in WH & y in C by A8,XBOOLE_0:def 4;
-        reconsider y as Point of TOP-REAL 2 by A8;
-A10:    y`1 <= Q`1 & y`2 = Q`2 by A9,TOPREAL1:def 15;
-        Q`1 < WC by A5,A6,XREAL_1:228;
-        then y`1 < WC by A10,XXREAL_0:2;
-        hence thesis by A9,PSCOMP_1:71;
+A9:     y in WH /\ C by XBOOLE_0:4;
+A10:    y in C by A9,XBOOLE_0:def 4;
+A11:    y in WH by A9,XBOOLE_0:def 4;
+        reconsider y as Point of TOP-REAL 2 by A9;
+        y`1 <= Q`1 by A11,TOPREAL1:def 15;
+        then y`1 < WC by A8,XXREAL_0:2;
+        hence thesis by A10,PSCOMP_1:71;
       end;
-      then WH c= UBD C by JORDAN2C:134;
-      then q1 in BDD C /\ UBD C by A4,A7,XBOOLE_0:def 4;
+      then
+A12:  WH c= UBD C by JORDAN2C:134;
+A13:  q1`2 = Q`2 by EUCLID:56;
+      q1`1 < Q`1 by A7,A6,XREAL_1:228;
+      then q1 in WH by A13,TOPREAL1:def 15;
+      then q1 in BDD C /\ UBD C by A4,A12,XBOOLE_0:def 4;
       then BDD C meets UBD C by XBOOLE_0:def 7;
       hence contradiction by JORDAN2C:28;
     end;
@@ -487,8 +532,8 @@ A10:    y`1 <= Q`1 & y`2 = Q`2 by A9,TOPREAL1:def 15;
 end;
 
 theorem Th19:
-  for C being compact Subset of TOP-REAL 2 holds
-  BDD C <> {} implies E-bound C >= E-bound BDD C
+  for C being compact Subset of TOP-REAL 2 holds BDD C <> {}
+  implies E-bound C >= E-bound BDD C
 proof
   let C be compact Subset of TOP-REAL 2;
   set WC = E-bound BDD C, WB = E-bound C;
@@ -496,35 +541,43 @@ proof
   assume that
 A1: BDD C <> {} and
 A2: WC > WB;
-A3: hal > WB & hal < WC by A2,XREAL_1:228;
-  now per cases;
-    suppose for q1 being Point of TOP-REAL 2 st q1 in BDD C holds q1`1 <= hal;
+A3: hal > WB by A2,XREAL_1:228;
+  now
+    per cases;
+    suppose
+      for q1 being Point of TOP-REAL 2 st q1 in BDD C holds q1`1 <=
+      hal;
       hence contradiction by A1,A2,Lm10,XREAL_1:228;
     end;
-    suppose ex q1 being Point of TOP-REAL 2 st q1 in BDD C & q1`1 > hal;
+    suppose
+      ex q1 being Point of TOP-REAL 2 st q1 in BDD C & q1`1 > hal;
       then consider q1 being Point of TOP-REAL 2 such that
-A4:   q1 in BDD C & q1`1 > hal;
-A5:   q1`1 > WB by A3,A4,XXREAL_0:2;
+A4:   q1 in BDD C and
+A5:   q1`1 > hal;
       set Q = |[(WB + q1`1)/2,q1`2]|;
       set WH = east_halfline Q;
 A6:   Q`1 = (WB + q1`1)/2 by EUCLID:56;
-      then q1`2 = Q`2 & q1`1 > Q`1 by A5,EUCLID:56,XREAL_1:228;
-      then
-A7:   q1 in WH by TOPREAL1:def 13;
+A7:   q1`1 > WB by A3,A5,XXREAL_0:2;
       WH misses C
       proof
-        assume WH /\ C <> {};
+A8:     Q`1 > WB by A7,A6,XREAL_1:228;
+        assume
+        WH /\ C <> {};
         then consider y being set such that
-A8:     y in WH /\ C by XBOOLE_0:def 1;
-A9:     y in WH & y in C by A8,XBOOLE_0:def 4;
-        reconsider y as Point of TOP-REAL 2 by A8;
-A10:    y`1 >= Q`1 & y`2 = Q`2 by A9,TOPREAL1:def 13;
-        Q`1 > WB by A5,A6,XREAL_1:228;
-        then y`1 > WB by A10,XXREAL_0:2;
-        hence thesis by A9,PSCOMP_1:71;
+A9:     y in WH /\ C by XBOOLE_0:def 1;
+A10:    y in C by A9,XBOOLE_0:def 4;
+A11:    y in WH by A9,XBOOLE_0:def 4;
+        reconsider y as Point of TOP-REAL 2 by A9;
+        y`1 >= Q`1 by A11,TOPREAL1:def 13;
+        then y`1 > WB by A8,XXREAL_0:2;
+        hence thesis by A10,PSCOMP_1:71;
       end;
-      then WH c= UBD C by JORDAN2C:135;
-      then q1 in BDD C /\ UBD C by A4,A7,XBOOLE_0:def 4;
+      then
+A12:  WH c= UBD C by JORDAN2C:135;
+A13:  q1`2 = Q`2 by EUCLID:56;
+      q1`1 > Q`1 by A7,A6,XREAL_1:228;
+      then q1 in WH by A13,TOPREAL1:def 13;
+      then q1 in BDD C /\ UBD C by A4,A12,XBOOLE_0:def 4;
       then BDD C meets UBD C by XBOOLE_0:4;
       hence contradiction by JORDAN2C:28;
     end;
@@ -533,8 +586,8 @@ A10:    y`1 >= Q`1 & y`2 = Q`2 by A9,TOPREAL1:def 13;
 end;
 
 theorem Th20:
-  for C being compact Subset of TOP-REAL 2 holds
-  BDD C <> {} implies S-bound C <= S-bound BDD C
+  for C being compact Subset of TOP-REAL 2 holds BDD C <> {}
+  implies S-bound C <= S-bound BDD C
 proof
   let C be compact Subset of TOP-REAL 2;
   set WC = S-bound C, WB = S-bound BDD C;
@@ -542,35 +595,43 @@ proof
   assume that
 A1: BDD C <> {} and
 A2: WC > WB;
-A3: hal > WB & hal < WC by A2,XREAL_1:228;
-  now per cases;
-    suppose for q1 being Point of TOP-REAL 2 st q1 in BDD C holds q1`2 >= hal;
+A3: hal < WC by A2,XREAL_1:228;
+  now
+    per cases;
+    suppose
+      for q1 being Point of TOP-REAL 2 st q1 in BDD C holds q1`2 >=
+      hal;
       hence contradiction by A1,A2,Lm12,XREAL_1:228;
     end;
-    suppose ex q1 being Point of TOP-REAL 2 st q1 in BDD C & q1`2 < hal;
+    suppose
+      ex q1 being Point of TOP-REAL 2 st q1 in BDD C & q1`2 < hal;
       then consider q1 being Point of TOP-REAL 2 such that
-A4:   q1 in BDD C & q1`2 < hal;
-A5:   q1`2 < WC by A3,A4,XXREAL_0:2;
+A4:   q1 in BDD C and
+A5:   q1`2 < hal;
       set Q = |[q1`1,(WC + q1`2)/2]|;
       set WH = south_halfline Q;
 A6:   Q`2 = (WC + q1`2)/2 by EUCLID:56;
-      then q1`1 = Q`1 & q1`2 < Q`2 by A5,EUCLID:56,XREAL_1:228;
-      then
-A7:   q1 in WH by TOPREAL1:def 14;
+A7:   q1`2 < WC by A3,A5,XXREAL_0:2;
       WH misses C
       proof
-        assume WH /\ C <> {};
+A8:     Q`2 < WC by A7,A6,XREAL_1:228;
+        assume
+        WH /\ C <> {};
         then consider y being set such that
-A8:     y in WH /\ C by XBOOLE_0:def 1;
-A9:     y in WH & y in C by A8,XBOOLE_0:def 4;
-        reconsider y as Point of TOP-REAL 2 by A8;
-A10:    y`2 <= Q`2 & y`1 = Q`1 by A9,TOPREAL1:def 14;
-        Q`2 < WC by A5,A6,XREAL_1:228;
-        then y`2 < WC by A10,XXREAL_0:2;
-        hence thesis by A9,PSCOMP_1:71;
+A9:     y in WH /\ C by XBOOLE_0:def 1;
+A10:    y in C by A9,XBOOLE_0:def 4;
+A11:    y in WH by A9,XBOOLE_0:def 4;
+        reconsider y as Point of TOP-REAL 2 by A9;
+        y`2 <= Q`2 by A11,TOPREAL1:def 14;
+        then y`2 < WC by A8,XXREAL_0:2;
+        hence thesis by A10,PSCOMP_1:71;
       end;
-      then WH c= UBD C by JORDAN2C:136;
-      then q1 in BDD C /\ UBD C by A4,A7,XBOOLE_0:def 4;
+      then
+A12:  WH c= UBD C by JORDAN2C:136;
+A13:  q1`1 = Q`1 by EUCLID:56;
+      q1`2 < Q`2 by A7,A6,XREAL_1:228;
+      then q1 in WH by A13,TOPREAL1:def 14;
+      then q1 in BDD C /\ UBD C by A4,A12,XBOOLE_0:def 4;
       then BDD C meets UBD C by XBOOLE_0:4;
       hence contradiction by JORDAN2C:28;
     end;
@@ -579,8 +640,8 @@ A10:    y`2 <= Q`2 & y`1 = Q`1 by A9,TOPREAL1:def 14;
 end;
 
 theorem Th21:
-  for C being compact Subset of TOP-REAL 2 holds
-  BDD C <> {} implies N-bound C >= N-bound BDD C
+  for C being compact Subset of TOP-REAL 2 holds BDD C <> {}
+  implies N-bound C >= N-bound BDD C
 proof
   let C be compact Subset of TOP-REAL 2;
   set WC = N-bound BDD C, WB = N-bound C;
@@ -588,35 +649,43 @@ proof
   assume that
 A1: BDD C <> {} and
 A2: WC > WB;
-A3: hal > WB & hal < WC by A2,XREAL_1:228;
-  now per cases;
-    suppose for q1 being Point of TOP-REAL 2 st q1 in BDD C holds q1`2 <= hal;
+A3: hal > WB by A2,XREAL_1:228;
+  now
+    per cases;
+    suppose
+      for q1 being Point of TOP-REAL 2 st q1 in BDD C holds q1`2 <=
+      hal;
       hence contradiction by A1,A2,Lm11,XREAL_1:228;
     end;
-    suppose ex q1 being Point of TOP-REAL 2 st q1 in BDD C & q1`2 > hal;
+    suppose
+      ex q1 being Point of TOP-REAL 2 st q1 in BDD C & q1`2 > hal;
       then consider q1 being Point of TOP-REAL 2 such that
-A4:   q1 in BDD C & q1`2 > hal;
-A5:   q1`2 > WB by A3,A4,XXREAL_0:2;
+A4:   q1 in BDD C and
+A5:   q1`2 > hal;
       set Q = |[q1`1,(WB + q1`2)/2]|;
       set WH = north_halfline Q;
 A6:   Q`2 = (WB + q1`2)/2 by EUCLID:56;
-      then q1`1 = Q`1 & q1`2 > Q`2 by A5,EUCLID:56,XREAL_1:228;
-      then
-A7:   q1 in WH by TOPREAL1:def 12;
+A7:   q1`2 > WB by A3,A5,XXREAL_0:2;
       WH misses C
       proof
-        assume WH /\ C <> {};
+A8:     Q`2 > WB by A7,A6,XREAL_1:228;
+        assume
+        WH /\ C <> {};
         then consider y being set such that
-A8:     y in WH /\ C by XBOOLE_0:def 1;
-A9:     y in WH & y in C by A8,XBOOLE_0:def 4;
-        reconsider y as Point of TOP-REAL 2 by A8;
-A10:    y`2 >= Q`2 & y`1 = Q`1 by A9,TOPREAL1:def 12;
-        Q`2 > WB by A5,A6,XREAL_1:228;
-        then y`2 > WB by A10,XXREAL_0:2;
-        hence thesis by A9,PSCOMP_1:71;
+A9:     y in WH /\ C by XBOOLE_0:def 1;
+A10:    y in C by A9,XBOOLE_0:def 4;
+A11:    y in WH by A9,XBOOLE_0:def 4;
+        reconsider y as Point of TOP-REAL 2 by A9;
+        y`2 >= Q`2 by A11,TOPREAL1:def 12;
+        then y`2 > WB by A8,XXREAL_0:2;
+        hence thesis by A10,PSCOMP_1:71;
       end;
-      then WH c= UBD C by JORDAN2C:137;
-      then q1 in BDD C /\ UBD C by A4,A7,XBOOLE_0:def 4;
+      then
+A12:  WH c= UBD C by JORDAN2C:137;
+A13:  q1`1 = Q`1 by EUCLID:56;
+      q1`2 > Q`2 by A7,A6,XREAL_1:228;
+      then q1 in WH by A13,TOPREAL1:def 12;
+      then q1 in BDD C /\ UBD C by A4,A12,XBOOLE_0:def 4;
       then BDD C meets UBD C by XBOOLE_0:4;
       hence contradiction by JORDAN2C:28;
     end;
@@ -625,219 +694,224 @@ A10:    y`2 >= Q`2 & y`1 = Q`1 by A9,TOPREAL1:def 12;
 end;
 
 theorem Th22:
-  for C being compact non vertical Subset of TOP-REAL 2
-  for I being Integer st p in BDD C &
-  I = [\ ((p`1 - W-bound C) / (E-bound C - W-bound C) * 2|^n) + 2 /] holds
-  1 < I
+  for C being compact non vertical Subset of TOP-REAL 2 for I
+being Integer st p in BDD C & I = [\ ((p`1 - W-bound C) / (E-bound C - W-bound
+  C) * 2|^n) + 2 /] holds 1 < I
 proof
   let C be compact non vertical Subset of TOP-REAL 2;
   set W = W-bound C, E = E-bound C;
   set pW = p`1 - W, EW = E - W;
   let I be Integer;
-  assume
-A1: p in BDD C & I = [\ (pW / EW * 2|^n) + 2 /];
-  then
-A2: W <= W-bound BDD C by Th18;
-A3: EW > 0 by SPRECT_1:33,XREAL_1:52;
-  set K = [\ pW / EW * 2|^n /];
+  assume that
+A1: p in BDD C and
+A2: I = [\ (pW / EW * 2|^n) + 2 /];
+A3: W <= W-bound BDD C by A1,Th18;
   BDD C is Bounded by JORDAN2C:114;
   then p`1 >= W-bound BDD C by A1,Th6;
-  then p`1 >= W by A2,XXREAL_0:2;
-  then pW >= 0 by XREAL_1:50;
+  then p`1 >= W by A3,XXREAL_0:2;
   then
-A4: pW / EW * 2|^n + 1 >= 0 + 1 by A3,XREAL_1:8;
+A4: pW >= 0 by XREAL_1:50;
+  set K = [\ pW / EW * 2|^n /];
   pW / EW * 2|^n - 1 < K by INT_1:def 4;
-  then pW / EW * 2|^n - 1 + 2 < K + 2 by XREAL_1:8;
-  then 1 < K + 2 by A4,XXREAL_0:2;
-  hence thesis by A1,INT_1:51;
+  then
+A5: pW / EW * 2|^n - 1 + 2 < K + 2 by XREAL_1:8;
+  EW > 0 by SPRECT_1:33,XREAL_1:52;
+  then pW / EW * 2|^n + 1 >= 0 + 1 by A4,XREAL_1:8;
+  then 1 < K + 2 by A5,XXREAL_0:2;
+  hence thesis by A2,INT_1:51;
 end;
 
 theorem Th23:
-  for C being compact non vertical Subset of TOP-REAL 2
-  for I being Integer st p in BDD C &
-  I = [\ ((p`1 - W-bound C) / (E-bound C - W-bound C) * 2|^n) + 2 /] holds
-  I + 1 <= len Gauge (C, n)
+  for C being compact non vertical Subset of TOP-REAL 2 for I
+being Integer st p in BDD C & I = [\ ((p`1 - W-bound C) / (E-bound C - W-bound
+  C) * 2|^n) + 2 /] holds I + 1 <= len Gauge (C, n)
 proof
   let C be compact non vertical Subset of TOP-REAL 2;
   set W = W-bound C, E = E-bound C;
   set EW = E-W, pW = p`1 - W;
   let I be Integer;
-  assume
-A1: p in BDD C & I = [\ (pW / EW * 2|^n) + 2 /];
-A2: len Gauge (C, n) = 2|^n + 3 by JORDAN8:def 1;
-A3: EW > 0 by SPRECT_1:33,XREAL_1:52;
-A4: E >= E-bound BDD C by A1,Th19;
+  assume that
+A1: p in BDD C and
+A2: I = [\ (pW / EW * 2|^n) + 2 /];
+A3: E >= E-bound BDD C by A1,Th19;
   BDD C is Bounded by JORDAN2C:114;
   then p`1 <= E-bound BDD C by A1,Th6;
-  then p`1 <= E by A4,XXREAL_0:2;
-  then p`1 - W <= EW by XREAL_1:11;
-  then pW / EW <= 1 by A3,XREAL_1:187;
+  then p`1 <= E by A3,XXREAL_0:2;
+  then
+A4: p`1 - W <= EW by XREAL_1:11;
+  EW > 0 by SPRECT_1:33,XREAL_1:52;
+  then pW / EW <= 1 by A4,XREAL_1:187;
   then pW / EW * 2|^n <= 1 * 2|^n by XREAL_1:66;
   then
 A5: pW / EW * 2|^n + 3 <= 2|^n + 3 by XREAL_1:9;
-  I <= (pW / EW * 2|^n) + 2 by A1,INT_1:def 4;
-  then I + 1 <= (pW / EW * 2|^n) + 2 + 1 by XREAL_1:8;
-  hence thesis by A2,A5,XXREAL_0:2;
+  I <= (pW / EW * 2|^n) + 2 by A2,INT_1:def 4;
+  then
+A6: I + 1 <= (pW / EW * 2|^n) + 2 + 1 by XREAL_1:8;
+  len Gauge (C, n) = 2|^n + 3 by JORDAN8:def 1;
+  hence thesis by A5,A6,XXREAL_0:2;
 end;
 
 theorem Th24:
-  for C being compact non horizontal Subset of TOP-REAL 2
-  for J being Integer st p in BDD C &
-  J = [\ ((p`2 - S-bound C) / (N-bound C - S-bound C) * 2|^n) + 2 /] holds
-  1 < J & J+1 <= width Gauge (C, n)
+  for C being compact non horizontal Subset of TOP-REAL 2 for J
+being Integer st p in BDD C & J = [\ ((p`2 - S-bound C) / (N-bound C - S-bound
+  C) * 2|^n) + 2 /] holds 1 < J & J+1 <= width Gauge (C, n)
 proof
   let C be compact non horizontal Subset of TOP-REAL 2;
   set W = S-bound C, E = N-bound C;
   set EW = E-W, pW = p`2 - W;
   let I be Integer;
-  assume
-A1: p in BDD C & I = [\ (pW / EW * 2|^n) + 2 /];
-A2: len Gauge (C, n) = 2|^n + 3 & len Gauge (C, n) = width Gauge (C, n)
-  by JORDAN8:def 1;
+  assume that
+A1: p in BDD C and
+A2: I = [\ (pW / EW * 2|^n) + 2 /];
 A3: EW > 0 by SPRECT_1:34,XREAL_1:52;
-A4: E >= N-bound BDD C & W <= S-bound BDD C by A1,Th20,Th21;
   set K = [\ pW / EW * 2|^n /];
+  pW / EW * 2|^n - 1 < K by INT_1:def 4;
+  then
+A4: pW / EW * 2|^n - 1 + 2 < K + 2 by XREAL_1:8;
+A5: W <= S-bound BDD C by A1,Th20;
   BDD C is Bounded by JORDAN2C:114;
   then p`2 >= S-bound BDD C by A1,Th6;
-  then p`2 >= W by A4,XXREAL_0:2;
+  then p`2 >= W by A5,XXREAL_0:2;
   then pW >= 0 by XREAL_1:50;
-  then
-A5: pW / EW * 2|^n + 1 >= 0 + 1 by A3,XREAL_1:8;
-  pW / EW * 2|^n - 1 < K by INT_1:def 4;
-  then pW / EW * 2|^n - 1 + 2 < K + 2 by XREAL_1:8;
-  then 1 < K + 2 by A5,XXREAL_0:2;
-  hence 1 < I by A1,INT_1:51;
+  then pW / EW * 2|^n + 1 >= 0 + 1 by A3,XREAL_1:8;
+  then 1 < K + 2 by A4,XXREAL_0:2;
+  hence 1 < I by A2,INT_1:51;
+A6: len Gauge (C, n) = width Gauge (C, n) by JORDAN8:def 1;
+A7: E >= N-bound BDD C by A1,Th21;
   BDD C is Bounded by JORDAN2C:114;
   then p`2 <= N-bound BDD C by A1,Th6;
-  then p`2 <= E by A4,XXREAL_0:2;
+  then p`2 <= E by A7,XXREAL_0:2;
   then p`2 - W <= EW by XREAL_1:11;
   then pW / EW <= 1 by A3,XREAL_1:187;
   then pW / EW * 2|^n <= 1 * 2|^n by XREAL_1:66;
   then
-A6: pW / EW * 2|^n + 3 <= 2|^n + 3 by XREAL_1:9;
-  I <= (pW / EW * 2|^n) + 2 by A1,INT_1:def 4;
-  then I + 1 <= (pW / EW * 2|^n) + 2 + 1 by XREAL_1:8;
-  hence thesis by A2,A6,XXREAL_0:2;
+A8: pW / EW * 2|^n + 3 <= 2|^n + 3 by XREAL_1:9;
+  I <= (pW / EW * 2|^n) + 2 by A2,INT_1:def 4;
+  then
+A9: I + 1 <= (pW / EW * 2|^n) + 2 + 1 by XREAL_1:8;
+  len Gauge (C, n) = 2|^n + 3 by JORDAN8:def 1;
+  hence thesis by A6,A8,A9,XXREAL_0:2;
 end;
 
 theorem Th25:
-  for I being Integer st
-  I = [\ ((p`1 - W-bound C) / (E-bound C - W-bound C) * 2|^n) + 2 /] holds
-  (W-bound C) + (((E-bound C)-(W-bound C))/(2|^n))*(I-2) <= p`1
+  for I being Integer st I = [\ ((p`1 - W-bound C) / (E-bound C -
+W-bound C) * 2|^n) + 2 /] holds (W-bound C) + (((E-bound C)-(W-bound C))/(2|^n)
+  )*(I-2) <= p`1
 proof
   set E = E-bound C, W = W-bound C, EW = E-bound C - W-bound C;
   set PW = p`1 - W;
   set KI = [\ (PW / EW * 2|^n) /];
   let I be Integer;
-  assume I = [\ (PW / EW * 2|^n) + 2 /];
+A1: EW > 0 by TOPREAL5:23,XREAL_1:52;
+  2|^n > 0 by NEWTON:102;
   then
-A1: I - 2 = [\ (PW / EW * 2|^n) /] by Lm1;
-  E > W by TOPREAL5:23;
+A2: (EW/(2|^n))*(PW / EW * 2|^n) = PW by A1,Lm2;
+  assume
+  I = [\ (PW / EW * 2|^n) + 2 /];
   then
-A2: EW > 0 & 2|^n > 0 by NEWTON:102,XREAL_1:52;
-A4: (EW/(2|^n))*(PW / EW * 2|^n) = PW by A2,Lm2;
-A5: W + PW = p`1;
+A3: I - 2 = [\ (PW / EW * 2|^n) /] by Lm1;
   KI <= PW / EW * 2|^n by INT_1:def 4;
-  then (EW/(2|^n))*KI <= (EW/(2|^n))*(PW / EW * 2|^n) by A2,XREAL_1:66;
-  hence thesis by A1,A4,A5,XREAL_1:8;
+  then
+A4: (EW/(2|^n))*KI <= (EW/(2|^n))*(PW / EW * 2|^n) by A1,XREAL_1:66;
+  W + PW = p`1;
+  hence thesis by A3,A2,A4,XREAL_1:8;
 end;
 
 theorem Th26:
-  for I being Integer st
-  I = [\ ((p`1 - W-bound C) / (E-bound C - W-bound C) * 2|^n) + 2 /] holds
-  p`1 < (W-bound C) + (((E-bound C)-(W-bound C))/(2|^n))*(I-1)
+  for I being Integer st I = [\ ((p`1 - W-bound C) / (E-bound C -
+W-bound C) * 2|^n) + 2 /] holds p`1 < (W-bound C) + (((E-bound C)-(W-bound C))/
+  (2|^n))*(I-1)
 proof
   set W = W-bound C, E = E-bound C;
   set EW = E - W, PW = p`1 - W;
   let I be Integer;
-  assume
-A1: I = [\ (PW / EW * 2|^n) + 2 /];
   set KI = I - 1;
-  I > (PW / EW * 2|^n) + 2 - 1 by A1,INT_1:def 4;
+A1: 2|^n > 0 by NEWTON:102;
+  assume
+  I = [\ (PW / EW * 2|^n) + 2 /];
+  then I > (PW / EW * 2|^n) + 2 - 1 by INT_1:def 4;
   then
 A2: I - 1 > (PW / EW * 2|^n) + 1 - 1 by XREAL_1:11;
-  E > W by TOPREAL5:23;
+A3: EW > 0 by TOPREAL5:23,XREAL_1:52;
+  then EW/(2|^n) > 0 by A1,XREAL_1:141;
   then
-A3: EW > 0 & 2|^n > 0 by NEWTON:102,XREAL_1:52;
-  then
-A4: EW/(2|^n) > 0 by XREAL_1:141;
-A5: (EW/(2|^n))*(PW / EW * 2|^n) = PW by A3,Lm2;
-A6: W + PW = p`1;
-  (EW/(2|^n))*KI > (EW/(2|^n))*(PW / EW * 2|^n) by A2,A4,XREAL_1:70;
-  hence thesis by A5,A6,XREAL_1:8;
+A4: (EW/(2|^n))*KI > (EW/(2|^n))*(PW / EW * 2|^n) by A2,XREAL_1:70;
+A5: W + PW = p`1;
+  (EW/(2|^n))*(PW / EW * 2|^n) = PW by A3,A1,Lm2;
+  hence thesis by A5,A4,XREAL_1:8;
 end;
 
 theorem Th27:
-  for J being Integer st
-  J = [\ ((p`2 - S-bound C) / (N-bound C - S-bound C) * 2|^n) + 2 /] holds
-  (S-bound C) + ((N-bound C - S-bound C)/(2|^n))*(J-2) <= p`2
+  for J being Integer st J = [\ ((p`2 - S-bound C) / (N-bound C -
+S-bound C) * 2|^n) + 2 /] holds (S-bound C) + ((N-bound C - S-bound C)/(2|^n))*
+  (J-2) <= p`2
 proof
   set E = N-bound C, W = S-bound C, EW = N-bound C - S-bound C;
   set PW = p`2 - W;
   set KI = [\ (PW / EW * 2|^n) /];
   let I be Integer;
-  assume I = [\ (PW / EW * 2|^n) + 2 /];
+A1: EW > 0 by TOPREAL5:22,XREAL_1:52;
+  2|^n > 0 by NEWTON:102;
   then
-A1: I - 2 = [\ (PW / EW * 2|^n) /] by Lm1;
-  E > W by TOPREAL5:22;
+A2: (EW/(2|^n))*(PW / EW * 2|^n) = PW by A1,Lm2;
+  assume
+  I = [\ (PW / EW * 2|^n) + 2 /];
   then
-A2: EW > 0 & 2|^n > 0 by NEWTON:102,XREAL_1:52;
-A4: (EW/(2|^n))*(PW / EW * 2|^n) = PW by A2,Lm2;
-A5: W + PW = p`2;
+A3: I - 2 = [\ (PW / EW * 2|^n) /] by Lm1;
   KI <= PW / EW * 2|^n by INT_1:def 4;
-  then (EW/(2|^n))*KI <= (EW/(2|^n))*(PW / EW * 2|^n) by A2,XREAL_1:66;
-  hence thesis by A1,A4,A5,XREAL_1:8;
+  then
+A4: (EW/(2|^n))*KI <= (EW/(2|^n))*(PW / EW * 2|^n) by A1,XREAL_1:66;
+  W + PW = p`2;
+  hence thesis by A3,A2,A4,XREAL_1:8;
 end;
 
 theorem Th28:
-  for J being Integer st
-  J = [\ ((p`2 - S-bound C) / (N-bound C - S-bound C) * 2|^n) + 2 /] holds
-  p`2 < (S-bound C) + ((N-bound C - S-bound C)/(2|^n))*(J-1)
+  for J being Integer st J = [\ ((p`2 - S-bound C) / (N-bound C -
+S-bound C) * 2|^n) + 2 /] holds p`2 < (S-bound C) + ((N-bound C - S-bound C)/(2
+  |^n))*(J-1)
 proof
   set W = S-bound C, E = N-bound C;
   set EW = E - W, PW = p`2 - W;
   let I be Integer;
-  assume
-A1: I = [\ (PW / EW * 2|^n) + 2 /];
   set KI = I - 1;
-  I > (PW / EW * 2|^n) + 2 - 1 by A1,INT_1:def 4;
+A1: 2|^n > 0 by NEWTON:102;
+  assume
+  I = [\ (PW / EW * 2|^n) + 2 /];
+  then I > (PW / EW * 2|^n) + 2 - 1 by INT_1:def 4;
   then
 A2: I - 1 > (PW / EW * 2|^n) + 1 - 1 by XREAL_1:11;
-  E > W by TOPREAL5:22;
+A3: W + PW = p`2;
+A4: EW > 0 by TOPREAL5:22,XREAL_1:52;
   then
-A3: EW > 0 & 2|^n > 0 by NEWTON:102,XREAL_1:52;
-  then
-A4: EW/(2|^n) > 0 by XREAL_1:141;
-A5: (EW/(2|^n)) * (PW / EW * 2|^n) = PW by A3,Lm2;
-A6: W + PW = p`2;
-  (EW/(2|^n))*KI > PW by A2,A4,A5,XREAL_1:70;
-  hence thesis by A6,XREAL_1:8;
+A5: EW/(2|^n) > 0 by A1,XREAL_1:141;
+  (EW/(2|^n)) * (PW / EW * 2|^n) = PW by A4,A1,Lm2;
+  then (EW/(2|^n))*KI > PW by A2,A5,XREAL_1:70;
+  hence thesis by A3,XREAL_1:8;
 end;
 
 theorem Th29:
-  for C being closed Subset of TOP-REAL 2,
-  p being Point of Euclid 2 st p in BDD C
-  ex r being Real st r > 0 & Ball(p,r) c= BDD C
+  for C being closed Subset of TOP-REAL 2, p being Point of Euclid
+  2 st p in BDD C ex r being Real st r > 0 & Ball(p,r) c= BDD C
 proof
   let C be closed Subset of TOP-REAL 2, p be Point of Euclid 2;
-  assume
-A1: p in BDD C;
   set W = Int BDD C;
-  p in W by A1,TOPS_1:55;
+  assume
+  p in BDD C;
+  then p in W by TOPS_1:55;
   then consider r being real number such that
-A2: r > 0 & Ball(p,r) c= BDD C by GOBOARD6:8;
+A1: r > 0 and
+A2: Ball(p,r) c= BDD C by GOBOARD6:8;
   reconsider r as Real by XREAL_0:def 1;
   take r;
-  thus thesis by A2;
+  thus thesis by A1,A2;
 end;
 
-theorem Th30:
-  for p, q being Point of TOP-REAL 2, r being real number st
-  dist(Gauge(C,n)*(1,1),Gauge(C,n)*(1,2)) < r &
-  dist(Gauge(C,n)*(1,1),Gauge(C,n)*(2,1)) < r &
-  p in cell (Gauge (C, n), i, j) & q in cell (Gauge (C, n), i, j) &
-  1 <= i & i+1 <= len Gauge (C,n) & 1 <= j & j+1 <= width Gauge(C,n) holds
-  dist (p,q) < 2 * r
+theorem
+  for p, q being Point of TOP-REAL 2, r being real number st dist(Gauge(
+C,n)*(1,1),Gauge(C,n)*(1,2)) < r & dist(Gauge(C,n)*(1,1),Gauge(C,n)*(2,1)) < r
+& p in cell (Gauge (C, n), i, j) & q in cell (Gauge (C, n), i, j) & 1 <= i & i+
+1 <= len Gauge (C,n) & 1 <= j & j+1 <= width Gauge(C,n) holds dist (p,q) < 2 *
+  r
 proof
   set G = Gauge (C, n);
   let p, q be Point of TOP-REAL 2, r be real number;
@@ -846,298 +920,297 @@ A1: dist(G*(1,1),G*(1,2)) < r and
 A2: dist(G*(1,1),G*(2,1)) < r and
 A3: p in cell (G, i, j) and
 A4: q in cell (G, i, j) and
-A5: 1 <= i & i+1 <= len G and
-A6: 1 <= j & j+1 <= width G;
-A7: i <= i+1 & j <= j+1 & 1 <= i+1 & 1 <= j+1 by NAT_1:11;
-  then i <= len G & j <= width G by A5,A6,XXREAL_0:2;
+A5: 1 <= i and
+A6: i+1 <= len G and
+A7: 1 <= j and
+A8: j+1 <= width G;
+A9: p`1 <= G*(i+1,j)`1 by A3,A5,A6,A7,A8,JORDAN9:19;
+A10: p`2 <= G*(i,j+1)`2 by A3,A5,A6,A7,A8,JORDAN9:19;
+A11: G*(i,j)`2 <= p`2 by A3,A5,A6,A7,A8,JORDAN9:19;
+  j <= j+1 by NAT_1:11;
   then
-A8: [i,j+1] in Indices G & [i,j] in Indices G & [i+1,j] in Indices G
-  by A5,A6,A7,MATRIX_1:37;
-A9: G*(i,j)`1 <= p`1 & p`1 <= G*(i+1,j)`1 &
-  G*(i,j)`2 <= p`2 & p`2 <= G*(i,j+1)`2 by A3,A5,A6,JORDAN9:19;
-  G*(i,j)`1 <= q`1 & q`1 <= G*(i+1,j)`1 &
-  G*(i,j)`2 <= q`2 & q`2 <= G*(i,j+1)`2 by A4,A5,A6,JORDAN9:19;
+A12: j <= width G by A8,XXREAL_0:2;
+  i <= i+1 by NAT_1:11;
   then
-A10: dist (p,q) <= (G*(i+1,j)`1 - G*(i,j)`1 ) +
-  ( G*(i,j+1)`2 - G*(i,j)`2 ) by A9,TOPREAL6:104;
-A11: G*(i+1,j)`1 - G*(i,j)`1 < r by A2,A8,Th2;
-  G*(i,j+1)`2 - G*(i,j)`2 < r by A1,A8,Th3;
-  then (G*(i+1,j)`1 - G*(i,j)`1 ) +
-  ( G*(i,j+1)`2 - G*(i,j)`2 ) < r + r by A11,XREAL_1:10;
-  hence thesis by A10,XXREAL_0:2;
+A13: i <= len G by A6,XXREAL_0:2;
+  then
+A14: [i,j] in Indices G by A5,A7,A12,MATRIX_1:37;
+A15: q`2 <= G*(i,j+1)`2 by A4,A5,A6,A7,A8,JORDAN9:19;
+A16: G*(i,j)`2 <= q`2 by A4,A5,A6,A7,A8,JORDAN9:19;
+A17: q`1 <= G*(i+1,j)`1 by A4,A5,A6,A7,A8,JORDAN9:19;
+A18: G*(i,j)`1 <= q`1 by A4,A5,A6,A7,A8,JORDAN9:19;
+  1 <= j+1 by NAT_1:11;
+  then [i,j+1] in Indices G by A5,A8,A13,MATRIX_1:37;
+  then
+A19: G*(i,j+1)`2 - G*(i,j)`2 < r by A1,A14,Th3;
+  1 <= i+1 by NAT_1:11;
+  then [i+1,j] in Indices G by A6,A7,A12,MATRIX_1:37;
+  then G*(i+1,j)`1 - G*(i,j)`1 < r by A2,A14,Th2;
+  then
+A20: (G*(i+1,j)`1 - G*(i,j)`1 ) + ( G*(i,j+1)`2 - G*(i,j)`2 ) < r + r by
+  A19,XREAL_1:10;
+  G*(i,j)`1 <= p`1 by A3,A5,A6,A7,A8,JORDAN9:19;
+  then dist (p,q) <= (G*(i+1,j)`1 - G*(i,j)`1 ) + ( G*(i,j+1)`2 - G*(i,j)`2 )
+  by A9,A11,A10,A18,A17,A16,A15,TOPREAL6:104;
+  hence thesis by A20,XXREAL_0:2;
 end;
 
 theorem
-  for C being compact Subset of TOP-REAL 2 holds
-  p in BDD C implies p`2 <> N-bound BDD C
+  for C being compact Subset of TOP-REAL 2 holds p in BDD C implies p`2
+  <> N-bound BDD C
 proof
-  let C be compact Subset of TOP-REAL 2;
-  assume
-A1: p in BDD C;
   reconsider P = p as Point of Euclid 2 by Lm3;
-  consider r being Real such that
-A2: r > 0 & Ball(P,r) c= BDD C by A1,Th29;
+  let C be compact Subset of TOP-REAL 2;
+A1: BDD C is Bounded by JORDAN2C:114;
   assume
-A3: p`2 = N-bound BDD C;
-A4: BDD C is Bounded by JORDAN2C:114;
-A5: 0 < r/2 by A2,XREAL_1:141;
-A6: r/2 < r by A2,XREAL_1:218;
-A7: p`2 + r/2 > p`2 + 0 by A5,XREAL_1:8;
+  p in BDD C;
+  then consider r being Real such that
+A2: r > 0 and
+A3: Ball(P,r) c= BDD C by Th29;
   set EX = |[p`1, p`2 + r/2]|;
-  P = |[p`1,p`2]| by EUCLID:57;
+  0 < r/2 by A2,XREAL_1:141;
   then
-A8: EX in Ball(P,r) by A2,A6,GOBOARD6:11;
-  not EX in BDD C
+A4: p`2 + r/2 > p`2 + 0 by XREAL_1:8;
+  assume
+A5: p`2 = N-bound BDD C;
+A6: not EX in BDD C
   proof
-    assume EX in BDD C;
-    then EX`2 <= N-bound BDD C by A4,Th6;
-    hence thesis by A3,A7,EUCLID:56;
+    assume
+    EX in BDD C;
+    then EX`2 <= N-bound BDD C by A1,Th6;
+    hence thesis by A5,A4,EUCLID:56;
   end;
-  hence thesis by A2,A8;
+A7: P = |[p`1,p`2]| by EUCLID:57;
+  r/2 < r by A2,XREAL_1:218;
+  then EX in Ball(P,r) by A2,A7,GOBOARD6:11;
+  hence thesis by A3,A6;
 end;
 
 theorem
-  for C being compact Subset of TOP-REAL 2 holds
-  p in BDD C implies p`1 <> E-bound BDD C
+  for C being compact Subset of TOP-REAL 2 holds p in BDD C implies p`1
+  <> E-bound BDD C
 proof
-  let C be compact Subset of TOP-REAL 2;
-  assume
-A1: p in BDD C;
   reconsider P = p as Point of Euclid 2 by Lm3;
-  consider r being Real such that
-A2: r > 0 & Ball(P,r) c= BDD C by A1,Th29;
+  let C be compact Subset of TOP-REAL 2;
+A1: BDD C is Bounded by JORDAN2C:114;
   assume
-A3: p`1 = E-bound BDD C;
-A4: BDD C is Bounded by JORDAN2C:114;
-A5: 0 < r/2 by A2,XREAL_1:141;
-A6: r/2 < r by A2,XREAL_1:218;
-A7: p`1 + r/2 > p`1 + 0 by A5,XREAL_1:8;
+  p in BDD C;
+  then consider r being Real such that
+A2: r > 0 and
+A3: Ball(P,r) c= BDD C by Th29;
   set EX = |[p`1 + r/2, p`2]|;
-  P = |[p`1,p`2]| by EUCLID:57;
+  0 < r/2 by A2,XREAL_1:141;
   then
-A8: EX in Ball(P,r) by A2,A6,GOBOARD6:10;
-  not EX in BDD C
+A4: p`1 + r/2 > p`1 + 0 by XREAL_1:8;
+  assume
+A5: p`1 = E-bound BDD C;
+A6: not EX in BDD C
   proof
-    assume EX in BDD C;
-    then EX`1 <= E-bound BDD C by A4,Th6;
-    hence thesis by A3,A7,EUCLID:56;
+    assume
+    EX in BDD C;
+    then EX`1 <= E-bound BDD C by A1,Th6;
+    hence thesis by A5,A4,EUCLID:56;
   end;
-  hence thesis by A2,A8;
+A7: P = |[p`1,p`2]| by EUCLID:57;
+  r/2 < r by A2,XREAL_1:218;
+  then EX in Ball(P,r) by A2,A7,GOBOARD6:10;
+  hence thesis by A3,A6;
 end;
 
 theorem
-  for C being compact Subset of TOP-REAL 2 holds
-  p in BDD C implies p`2 <> S-bound BDD C
+  for C being compact Subset of TOP-REAL 2 holds p in BDD C implies p`2
+  <> S-bound BDD C
 proof
-  let C be compact Subset of TOP-REAL 2;
-  assume
-A1: p in BDD C;
   reconsider P = p as Point of Euclid 2 by Lm3;
-  consider r being Real such that
-A2: r > 0 & Ball(P,r) c= BDD C by A1,Th29;
+  let C be compact Subset of TOP-REAL 2;
+A1: BDD C is Bounded by JORDAN2C:114;
   assume
-A3: p`2 = S-bound BDD C;
-A4: BDD C is Bounded by JORDAN2C:114;
-A5: 0 < r/2 by A2,XREAL_1:141;
-A6: r/2 < r by A2,XREAL_1:218;
-  p`2 + r/2 > p`2 + 0 by A5,XREAL_1:8;
-  then
-A7: p`2 - r/2 < p`2 by XREAL_1:21;
+  p in BDD C;
+  then consider r being Real such that
+A2: r > 0 and
+A3: Ball(P,r) c= BDD C by Th29;
   set EX = |[p`1, p`2 - r/2]|;
-  P = |[p`1,p`2]| by EUCLID:57;
+  0 < r/2 by A2,XREAL_1:141;
+  then p`2 + r/2 > p`2 + 0 by XREAL_1:8;
   then
-A8: EX in Ball(P,r) by A2,A6,GOBOARD6:13;
-  not EX in BDD C
+A4: p`2 - r/2 < p`2 by XREAL_1:21;
+  assume
+A5: p`2 = S-bound BDD C;
+A6: not EX in BDD C
   proof
-    assume EX in BDD C;
-    then EX`2 >= S-bound BDD C by A4,Th6;
-    hence thesis by A3,A7,EUCLID:56;
+    assume
+    EX in BDD C;
+    then EX`2 >= S-bound BDD C by A1,Th6;
+    hence thesis by A5,A4,EUCLID:56;
   end;
-  hence thesis by A2,A8;
+A7: P = |[p`1,p`2]| by EUCLID:57;
+  r/2 < r by A2,XREAL_1:218;
+  then EX in Ball(P,r) by A2,A7,GOBOARD6:13;
+  hence thesis by A3,A6;
 end;
 
 theorem Th34:
-  for C being compact Subset of TOP-REAL 2 holds
-  p in BDD C implies p`1 <> W-bound BDD C
+  for C being compact Subset of TOP-REAL 2 holds p in BDD C
+  implies p`1 <> W-bound BDD C
 proof
-  let C be compact Subset of TOP-REAL 2;
-  assume
-A1: p in BDD C;
   reconsider P = p as Point of Euclid 2 by Lm3;
-  consider r being Real such that
-A2: r > 0 & Ball(P,r) c= BDD C by A1,Th29;
+  let C be compact Subset of TOP-REAL 2;
+A1: BDD C is Bounded by JORDAN2C:114;
   assume
-A3: p`1 = W-bound BDD C;
-A4: BDD C is Bounded by JORDAN2C:114;
-A5: 0 < r/2 by A2,XREAL_1:141;
-A6: r/2 < r by A2,XREAL_1:218;
-  p`1 + r/2 > p`1 + 0 by A5,XREAL_1:8;
-  then
-A7: p`1 - r/2 < p`1 by XREAL_1:21;
+  p in BDD C;
+  then consider r being Real such that
+A2: r > 0 and
+A3: Ball(P,r) c= BDD C by Th29;
   set EX = |[p`1 - r/2, p`2]|;
-  P = |[p`1,p`2]| by EUCLID:57;
+  0 < r/2 by A2,XREAL_1:141;
+  then p`1 + r/2 > p`1 + 0 by XREAL_1:8;
   then
-A8: EX in Ball(P,r) by A2,A6,GOBOARD6:12;
-  not EX in BDD C
+A4: p`1 - r/2 < p`1 by XREAL_1:21;
+  assume
+A5: p`1 = W-bound BDD C;
+A6: not EX in BDD C
   proof
-    assume EX in BDD C;
-    then EX`1 >= W-bound BDD C by A4,Th6;
-    hence thesis by A3,A7,EUCLID:56;
+    assume
+    EX in BDD C;
+    then EX`1 >= W-bound BDD C by A1,Th6;
+    hence thesis by A5,A4,EUCLID:56;
   end;
-  hence thesis by A2,A8;
+A7: P = |[p`1,p`2]| by EUCLID:57;
+  r/2 < r by A2,XREAL_1:218;
+  then EX in Ball(P,r) by A2,A7,GOBOARD6:12;
+  hence thesis by A3,A6;
 end;
 
 theorem
-  p in BDD C implies ex n,i,j being Element of NAT st
-  1 < i & i < len Gauge(C,n) & 1 < j & j < width Gauge(C,n) &
-  p`1 <> (Gauge(C,n)*(i,j))`1 &
-  p in cell(Gauge(C,n),i,j) & cell(Gauge(C,n),i,j) c= BDD C
+  p in BDD C implies ex n,i,j being Element of NAT st 1 < i & i < len
+Gauge(C,n) & 1 < j & j < width Gauge(C,n) & p`1 <> (Gauge(C,n)*(i,j))`1 & p in
+  cell(Gauge(C,n),i,j) & cell(Gauge(C,n),i,j) c= BDD C
 proof
-  assume
-A1: p in BDD C;
   reconsider P = p as Point of Euclid 2 by Lm3;
-  consider r being Real such that
-A2: r > 0 & Ball(P,r) c= BDD C by A1,Th29;
-  set l = r/4;
-  l > 0 by A2,XREAL_1:141;
-  then consider n being Element of NAT such that 1 < n and
-A3: dist(Gauge(C,n)*(1,1),Gauge(C,n)*(1,2)) < l and
-A4: dist(Gauge(C,n)*(1,1),Gauge(C,n)*(2,1)) < l by GOBRD14:21;
-  take n;
-  set G = Gauge(C,n);
   set W = W-bound C, E = E-bound C, S = S-bound C, N = N-bound C;
   set EW = E-W, NS = N-S;
-  set I = [\ ((p`1 - W) / EW * 2|^n) + 2 /],
-  J = [\ ((p`2 - S) / NS * 2|^n) + 2 /];
-A5: 1 < I & I+1 <= len G by A1,Th22,Th23;
-A6: 1 < J & J+1 <= width G by A1,Th24;
-  then reconsider I, J as Element of NAT by A5,INT_1:16;
-A7: S + (NS/(2|^n))*(J-1) > p`2 by Th28;
-A8: 1 <= I + 1 & 1 <= J + 1 by NAT_1:11;
-A9: I < I + 1 & J < J + 1 by XREAL_1:31;
+  assume
+A1: p in BDD C;
+  then consider r being Real such that
+A2: r > 0 and
+A3: Ball(P,r) c= BDD C by Th29;
+  set l = r/4;
+  l > 0 by A2,XREAL_1:141;
+  then consider n being Element of NAT such that
+  1 < n and
+A4: dist(Gauge(C,n)*(1,1),Gauge(C,n)*(1,2)) < l and
+A5: dist(Gauge(C,n)*(1,1),Gauge(C,n)*(2,1)) < l by GOBRD14:21;
+  set I = [\ ((p`1 - W) / EW * 2|^n) + 2 /], J = [\ ((p`2 - S) / NS * 2|^n) +
+  2 /];
+A6: 1 < J by A1,Th24;
+  set G = Gauge(C,n);
+A7: I+1 <= len G by A1,Th23;
+A8: J+1 <= width G by A1,Th24;
+  take n;
+A9: 1 < I by A1,Th22;
+  then reconsider I, J as Element of NAT by A6,INT_1:16;
+A10: I < I + 1 by XREAL_1:31;
   then
-A10: I <= len G & J <= width G by A5,A6,XXREAL_0:2;
-  then [I,J] in Indices G by A5,A6,MATRIX_1:37;
-  then G*(I,J) = |[W+(EW/(2|^n))*(I-2), S+(NS/(2|^n))*(J-2)]|
-  by JORDAN8:def 1;
-  then G*(I,J)`1 = W+(EW/(2|^n))*(I-2) &
-  G*(I,J)`2 = S+(NS/(2|^n))*(J-2) by EUCLID:56;
+A11: I <= len G by A7,XXREAL_0:2;
+  reconsider GIJ = G*(I,J) as Point of Euclid 2 by Lm3;
+  reconsider GIJ = G*(I+1,J) as Point of Euclid 2 by Lm3;
+  reconsider GIJ = G*(I+1,J+1) as Point of Euclid 2 by Lm5;
+  reconsider GIJ = G*(I,J+1) as Point of Euclid 2 by Lm5;
+  1 <= J + 1 by NAT_1:11;
+  then [I,J+1] in Indices G by A9,A8,A11,MATRIX_1:37;
+  then G*(I,J+1) = |[W+(EW/(2|^n))*(I-2), S+(NS/(2|^n))*(J+1-2)]| by
+  JORDAN8:def 1;
   then
-A11: G*(I,J)`1 <= p`1 & G*(I,J)`2 <= p`2 by Th25,Th27;
-  [I+1,J] in Indices G by A1,Th23,A6,A8,A10,MATRIX_1:37;
-  then G*(I+1,J) = |[W+(EW/(2|^n))*(I+1-2), S+(NS/(2|^n))*(J-2)]|
-  by JORDAN8:def 1;
+A12: G*(I,J+1)`2 = S+(NS/(2|^n))*(J-1) by EUCLID:56;
+  then
+A13: p`2 < G*(I,J+1)`2 by Th28;
+A14: J < J + 1 by XREAL_1:31;
+  then
+A15: J <= width G by A8,XXREAL_0:2;
+  then [I,J] in Indices G by A9,A6,A11,MATRIX_1:37;
+  then
+A16: G*(I,J) = |[W+(EW/(2|^n))*(I-2), S+(NS/(2|^n))*(J-2)]| by JORDAN8:
+  def 1;
+  then G*(I,J)`1 = W+(EW/(2|^n))*(I-2) by EUCLID:56;
+  then
+A17: G*(I,J)`1 <= p`1 by Th25;
+  1 <= I + 1 by NAT_1:11;
+  then [I+1,J] in Indices G by A7,A6,A15,MATRIX_1:37;
+  then G*(I+1,J) = |[W+(EW/(2|^n))*(I+1-2), S+(NS/(2|^n))*(J-2)]| by
+  JORDAN8:def 1;
   then G*(I+1,J)`1 = W+(EW/(2|^n))*(I-1) by EUCLID:56;
   then
-A12: p`1 < G*(I+1,J)`1 by Th26;
-  [I,J+1] in Indices G by A5,A1,Th24,A8,A10,MATRIX_1:37;
-  then G*(I,J+1) = |[W+(EW/(2|^n))*(I-2), S+(NS/(2|^n))*(J+1-2)]|
-  by JORDAN8:def 1;
+A18: p`1 < G*(I+1,J)`1 by Th26;
+  G*(I,J)`2 = S+(NS/(2|^n))*(J-2) by A16,EUCLID:56;
   then
-A13: G*(I,J+1)`2 = S+(NS/(2|^n))*(J-1) by EUCLID:56;
+A19: G*(I,J)`2 <= p`2 by Th27;
+A20: S + (NS/(2|^n))*(J-1) > p`2 by Th28;
   then
-A14: p`2 < G*(I,J+1)`2 by Th28;
-A15: p in cell(G,I,J) by A5,A6,A7,A11,A12,A13,JORDAN9:19;
-  reconsider GIJ = G*(I,J) as Point of Euclid 2 by Lm3;
-  GIJ in cell (G,I,J) by A5,A6,JORDAN9:22;
-  then
-A16: dist (G*(I,J),p) <= 2*(r/4) by A3,A4,A5,A6,A15,Th30;
-A17: 2*(r/4) < r by A2,Lm4;
-  then dist (G*(I,J), p) < r by A16,XXREAL_0:2;
-  then dist (GIJ, P) < r by TOPREAL6:def 1;
-  then
-A18: GIJ in Ball (P, r) by METRIC_1:12;
-  reconsider GIJ = G*(I+1,J) as Point of Euclid 2 by Lm3;
-  GIJ in cell (G,I,J) by A5,A6,JORDAN9:22;
-  then dist (G*(I+1,J),p) <= 2*(r/4) by A3,A4,A5,A6,A15,Th30;
-  then dist (G*(I+1,J), p) < r by A17,XXREAL_0:2;
-  then dist (GIJ, P) < r by TOPREAL6:def 1;
-  then
-A19: GIJ in Ball (P, r) by METRIC_1:12;
-  reconsider GIJ = G*(I+1,J+1) as Point of Euclid 2 by Lm5;
-  GIJ in cell (G,I,J) by A5,A6,JORDAN9:22;
-  then dist (G*(I+1,J+1),p) <= 2*(r/4) by A3,A4,A5,A6,A15,Th30;
-  then dist (G*(I+1,J+1), p) < r by A17,XXREAL_0:2;
-  then
-A20: dist (GIJ, P) < r by TOPREAL6:def 1;
-  reconsider GIJ = G*(I,J+1) as Point of Euclid 2 by Lm5;
-  GIJ in cell (G,I,J) by A5,A6,JORDAN9:22;
-  then dist (G*(I,J+1),p) <= 2*(r/4) by A3,A4,A5,A6,A15,Th30;
-  then dist (G*(I,J+1), p) < r by A17,XXREAL_0:2;
-  then dist (GIJ, P) < r by TOPREAL6:def 1;
-  then
-A21: G*(I,J+1) in Ball(P,r) & G*(I+1,J+1) in Ball(P,r) by A20,METRIC_1:12;
+A21: p in cell(G,I,J) by A9,A7,A6,A8,A17,A19,A18,A12,JORDAN9:19;
   per cases;
   suppose
 A22: p`1 <> G*(I,J)`1;
     take I, J;
-    thus 1 < I & I < len G & 1 < J & J < width G by A5,A6,A9,XXREAL_0:2;
-    cell(G,I,J) c= Ball(P,r) by A2,A3,A4,A5,A6,A15,A18,A19,A21,Lm6;
-    hence thesis by A2,A5,A6,A7,A11,A12,A13,A22,JORDAN9:19,XBOOLE_1:1;
+    thus 1 < I & I < len G & 1 < J & J < width G by A1,A7,A8,A10,A14,Th22,
+    Th24,XXREAL_0:2;
+    cell(G,I,J) c= Ball(P,r) by A2,A4,A5,A9,A7,A6,A8,A21,Lm6;
+    hence thesis by A3,A9,A7,A6,A8,A20,A17,A19,A18,A12,A22,JORDAN9:19 ,
+    XBOOLE_1:1;
   end;
   suppose
 A23: p`1 = G*(I,J)`1;
-    set q = G*(I-'1,J);
-    reconsider GIJ = G*(I-'1,J) as Point of Euclid 2 by Lm3;
-A24: I-'1+1 = I by A5,XREAL_1:237;
-A25: 1 <= I-'1 & I-'1+1 <= len G &
-    1 <= J & J + 1 <= width G by A1,A5,A10,Th24,NAT_D:49,XREAL_1:237;
     then
-A26: GIJ in cell (G,I-'1,J) by JORDAN9:22;
-A27: I-'1 < I by A25,NAT_D:51;
+A24: p`1 <= G*(I-'1+1,J)`1 by A9,XREAL_1:237;
+A25: I-'1+1 <= len G by A9,A11,XREAL_1:237;
+A26: 1 <= J by A1,Th24;
+A27: 1 <= I-'1 by A1,Th22,NAT_D:49;
+    then I-'1 < I by NAT_D:51;
     then
-A28: p`1 <= G*(I-'1+1,J)`1 &
-    p`1 > G*(I-'1,J)`1 by A5,A10,A23,A25,GOBOARD5:4,XREAL_1:237;
-A29: G*(I-'1,J)`2 = G*(I,J)`2 by A24,A25,JORDAN9:18;
-A30: G*(I-'1,J+1)`2 = G*(I,J+1)`2 by A24,A25,JORDAN9:18;
-    then
-A31: p in cell (G,I-'1,J) by A11,A14,A25,A28,A29,JORDAN9:19;
-    then dist (p,q) < 2*l by A3,A4,A25,A26,Th30;
-    then dist (q, p) < r by A17,XXREAL_0:2;
-    then dist (GIJ, P) < r by TOPREAL6:def 1;
-    then
-A32: GIJ in Ball (P, r) by METRIC_1:12;
+A28: p`1 > G*(I-'1,J)`1 by A11,A15,A23,A27,A26,GOBOARD5:4;
     take I-'1, J;
+A29: J + 1 <= width G by A1,Th24;
+A30: 1 <= I-'1 by A1,Th22,NAT_D:49;
+    then
+A31: I-'1 < I by NAT_D:51;
     len G = width G by JORDAN8:def 1;
     then
-A33: 1 <= J & J <= len G by A6,A9,XXREAL_0:2;
+A32: J <= len G by A8,A14,XXREAL_0:2;
     I-'1 <> 1
     proof
-      assume I-'1 = 1;
+      assume
+      I-'1 = 1;
       then 1 = I - 1 by NAT_D:39;
-      then G*(I,J)`1 = W-bound C by A33,JORDAN8:14;
+      then G*(I,J)`1 = W-bound C by A6,A32,JORDAN8:14;
+      then p`1 <= W-bound BDD C by A1,A23,Th18;
       then
-A34:  p`1 <= W-bound BDD C by A1,A23,Th18;
-      p`1 <> W-bound BDD C by A1,Th34;
-      then
-A35:  p`1 < W-bound BDD C by A34,XXREAL_0:1;
+A33:  p`1 < W-bound BDD C by A1,Th34,XXREAL_0:1;
       BDD C is Bounded by JORDAN2C:114;
-      hence thesis by A1,A35,Th6;
+      hence thesis by A1,A33,Th6;
     end;
-    hence 1 < I-'1 & I-'1 < len G & 1 < J & J < width G
-    by A1,A9,A10,A25,A27,Th24,XXREAL_0:1,2;
+    hence 1 < I-'1 & I-'1 < len G & 1 < J & J < width G by A1,A14,A11,A30,A29,
+    A31,Th24,XXREAL_0:1,2;
+A34: I-'1+1 <= len G by A9,A11,XREAL_1:237;
+A35: J + 1 <= width G by A1,Th24;
+A36: p`1 <= G*(I-'1+1,J)`1 by A9,A23,XREAL_1:237;
+A37: 1 <= J by A1,Th24;
+A38: I-'1+1 = I by A9,XREAL_1:237;
+    then
+A39: G*(I-'1,J)`2 = G*(I,J)`2 by A11,A30,A37,A29,JORDAN9:18;
+A40: G*(I-'1,J+1)`2 = G*(I,J+1)`2 by A11,A38,A30,A37,A29,JORDAN9:18;
+    p`1 > G*(I-'1,J)`1 by A11,A15,A23,A30,A37,A31,GOBOARD5:4;
+    then p in cell (G,I-'1,J) by A19,A13,A30,A34,A37,A29,A36,A39,A40,
+    JORDAN9:19;
+    then cell(G,I-'1,J) c= Ball(P,r) by A2,A4,A5,A27,A25,A26,A35,Lm6;
+    hence thesis by A3,A19,A13,A39,A40,A27,A25,A26,A35,A24,A28, JORDAN9:19
+    ,XBOOLE_1:1;
+    reconsider GIJ = G*(I-'1,J) as Point of Euclid 2 by Lm3;
+    set q = G*(I-'1,J);
     set q = G*(I-'1,J+1);
     reconsider GIJ = G*(I-'1,J+1) as Point of Euclid 2 by Lm3;
-A36: 1 <= I-'1 & I-'1+1 <= len G &
-    1 <= J & J + 1 <= width G by A1,A5,A10,Th24,NAT_D:49,XREAL_1:237;
-    then
-A37: GIJ in cell (G,I-'1,J) by JORDAN9:22;
-    I-'1 < I by A36,NAT_D:51;
-    then
-A38: p`1 <= G*(I-'1+1,J)`1 &
-    p`1 > G*(I-'1,J)`1 by A5,A10,A23,A36,GOBOARD5:4,XREAL_1:237;
-    then p in cell (G,I-'1,J) by A11,A14,A29,A30,A36,JORDAN9:19;
-    then dist (q, p) < 2*(r/4) by A3,A4,A36,A37,Th30;
-    then dist (q, p) < r by A17,XXREAL_0:2;
-    then dist (GIJ, P) < r by TOPREAL6:def 1;
-    then G*(I-'1+1,J) in Ball(P,r) & G*(I-'1,J+1) in Ball(P,r) &
-    G*(I-'1+1,J+1) in Ball(P,r) by A5,A18,A21,METRIC_1:12,XREAL_1:237;
-    then cell(G,I-'1,J) c= Ball(P,r) by A2,A3,A4,A31,A32,A36,Lm6;
-    hence thesis by A2,A11,A14,A29,A30,A36,A38,JORDAN9:19,XBOOLE_1:1;
   end;
 end;
 
 theorem
-  for C being Subset of TOP-REAL 2 st C is Bounded holds UBD C is non empty
-  by Lm13;
+  for C being Subset of TOP-REAL 2 st C is Bounded holds UBD C is non
+  empty by Lm13;
 

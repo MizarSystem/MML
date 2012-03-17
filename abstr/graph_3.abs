@@ -12,10 +12,10 @@ environ
       FINSEQ_4, ARYTM, STRUCT_0, AMI_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0,
       RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCOP_1, FUNCT_4, NAT_1, INT_1,
-      FINSET_1, FINSEQ_1, FINSEQ_2, FINSEQ_4, XXREAL_2, SEQ_1, STRUCT_0,
-      GRAPH_1, GRAPH_2, MSSCYC_1, ABIAN, XXREAL_0;
+      FINSET_1, FINSEQ_1, FINSEQ_2, FINSEQ_4, XXREAL_2, STRUCT_0, GRAPH_1,
+      GRAPH_2, MSSCYC_1, ABIAN, XXREAL_0;
  constructors WELLORD2, FUNCT_4, XXREAL_0, NAT_1, FINSEQ_4, BINARITH, ABIAN,
-      LANG1, GRAPH_2, MSSCYC_1, VALUED_1, SEQ_1, XXREAL_2, RELSET_1;
+      LANG1, GRAPH_2, MSSCYC_1, VALUED_1, SEQ_1, XXREAL_2, RELSET_1, PRE_POLY;
  registrations XBOOLE_0, ORDINAL1, FUNCOP_1, FINSET_1, XXREAL_0, XREAL_0,
       NAT_1, INT_1, CARD_1, MEMBERED, FINSEQ_1, ABIAN, GRAPH_2, MSSCYC_1,
       RELAT_1, XXREAL_2, STRUCT_0, RELSET_1;
@@ -35,12 +35,13 @@ registration
 end;
 
 theorem :: GRAPH_3:1
-  for i, j being Integer holds (i is even iff j is even) iff (i-j) is even;
+  for i, j being Integer holds (i is even iff j is even) iff (i-j) is
+  even;
 
 theorem :: GRAPH_3:2
-  for p being FinSequence, m, n, a being Element of NAT
-  st a in dom (m, n)-cut p ex k being Element of NAT st
-  k in dom p & p.k = ((m,n)-cut p).a & k+1 = m+a & m <= k & k <= n;
+  for p being FinSequence, m, n, a being Element of NAT st a in dom
+(m, n)-cut p ex k being Element of NAT st k in dom p & p.k = ((m,n)-cut p).a &
+  k+1 = m+a & m <= k & k <= n;
 
 definition
   let G be Graph;
@@ -50,7 +51,8 @@ end;
 reserve G for Graph,
   v, v1, v2 for Vertex of G,
   c for Chain of G,
-  p, p1, p2 for Path of G,
+  p, p1, p2
+  for Path of G,
   vs, vs1, vs2 for FinSequence of the carrier of G,
   e, X for set,
   n, m for Element of NAT;
@@ -67,9 +69,8 @@ theorem :: GRAPH_3:8
   (m,n)-cut p is Path of G;
 
 theorem :: GRAPH_3:9
-  rng p1 misses rng p2 &
-  vs1 is_vertex_seq_of p1 & vs2 is_vertex_seq_of p2 & vs1.len vs1 = vs2.1
-  implies p1^p2 is Path of G;
+  rng p1 misses rng p2 & vs1 is_vertex_seq_of p1 & vs2
+  is_vertex_seq_of p2 & vs1.len vs1 = vs2.1 implies p1^p2 is Path of G;
 
 canceled 2;
 
@@ -82,47 +83,44 @@ registration
 end;
 
 theorem :: GRAPH_3:13
-  for p being cyclic Path of G
-  holds ((m+1,len p)-cut p)^(1,m)-cut p is cyclic Path of G;
+  for p being cyclic Path of G holds ((m+1,len p)-cut p)^(1,m)-cut
+  p is cyclic Path of G;
 
 theorem :: GRAPH_3:14
-  m+1 in dom p implies len (((m+1,len p)-cut p)^(1,m)-cut p) = len p &
-  rng (((m+1,len p)-cut p)^(1,m)-cut p) = rng p &
-  (((m+1,len p)-cut p)^(1,m)-cut p).1 = p.(m+1);
+  m+1 in dom p implies len (((m+1,len p)-cut p)^(1,m)-cut p) = len
+p & rng (((m+1,len p)-cut p)^(1,m)-cut p) = rng p & (((m+1,len p)-cut p)^(1,m)
+  -cut p).1 = p.(m+1);
 
 theorem :: GRAPH_3:15
-  for p being cyclic Path of G st n in dom p ex p' being cyclic Path of G
-  st p'.1 = p.n & len p' = len p & rng p' = rng p;
+  for p being cyclic Path of G st n in dom p ex p' being cyclic
+  Path of G st p'.1 = p.n & len p' = len p & rng p' = rng p;
 
 theorem :: GRAPH_3:16  :: see MSSCYC_1:4
-  for s, t being Vertex of G
-  st s = (the Source of G).e & t = (the Target of G).e
-  holds <*t, s*> is_vertex_seq_of <*e*>;
+  for s, t being Vertex of G st s = (the Source of G).e & t = (the
+  Target of G).e holds <*t, s*> is_vertex_seq_of <*e*>;
 
 theorem :: GRAPH_3:17
-  e in the carrier' of G & vs is_vertex_seq_of c &
-  vs.len vs = (the Source of G).e implies c^<*e*> is Chain of G &
-  ex vs' being FinSequence of the carrier of G
-  st vs' = vs^'<*(the Source of G).e, (the Target of G).e*> &
-  vs' is_vertex_seq_of c^<*e*> & vs'.1 = vs.1 &
-  vs'.len vs' = (the Target of G).e;
+  e in the carrier' of G & vs is_vertex_seq_of c & vs.len vs = (
+the Source of G).e implies c^<*e*> is Chain of G & ex vs' being FinSequence of
+  the carrier of G st vs' = vs^'<*(the Source of G).e, (the Target of G).e*> &
+vs' is_vertex_seq_of c^<*e*> & vs'.1 = vs.1 & vs'.len vs' = (the Target of G).e
+;
 
 theorem :: GRAPH_3:18
-  e in the carrier' of G & vs is_vertex_seq_of c &
-  vs.len vs = (the Target of G).e implies c^<*e*> is Chain of G &
-  ex vs' being FinSequence of the carrier of G
-  st vs' = vs^'<*(the Target of G).e, (the Source of G).e*> &
-  vs' is_vertex_seq_of c^<*e*> & vs'.1 = vs.1 &
-  vs'.len vs' = (the Source of G).e;
+  e in the carrier' of G & vs is_vertex_seq_of c & vs.len vs = (
+the Target of G).e implies c^<*e*> is Chain of G & ex vs' being FinSequence of
+  the carrier of G st vs' = vs^'<*(the Target of G).e, (the Source of G).e*> &
+vs' is_vertex_seq_of c^<*e*> & vs'.1 = vs.1 & vs'.len vs' = (the Source of G).e
+;
 
 theorem :: GRAPH_3:19
-  vs is_vertex_seq_of c implies for n being Element of NAT st n in dom c holds
-  (vs.n = (the Target of G).(c.n) & vs.(n+1) = (the Source of G).(c.n) or
+  vs is_vertex_seq_of c implies for n being Element of NAT st n in dom c
+  holds (vs.n = (the Target of G).(c.n) & vs.(n+1) = (the Source of G).(c.n) or
   vs.n = (the Source of G).(c.n) & vs.(n+1) = (the Target of G).(c.n));
 
 theorem :: GRAPH_3:20
-  vs is_vertex_seq_of c & e in rng c implies
-  (the Target of G).e in rng vs & (the Source of G).e in rng vs;
+  vs is_vertex_seq_of c & e in rng c implies (the Target of G).e
+  in rng vs & (the Source of G).e in rng vs;
 
 definition
   let G be Graph, X be set;
@@ -136,16 +134,14 @@ theorem :: GRAPH_3:22
   e in the carrier' of G & e in X implies G-VSet X is non empty;
 
 theorem :: GRAPH_3:23
-  G is connected iff
-  for v1, v2 st v1 <> v2 ex c, vs st c is non empty & vs is_vertex_seq_of c &
-  vs.1 = v1 & vs.len vs = v2;
+  G is connected iff for v1, v2 st v1 <> v2 ex c, vs st c is non
+  empty & vs is_vertex_seq_of c & vs.1 = v1 & vs.len vs = v2;
 
 theorem :: GRAPH_3:24
-  for G being connected Graph, X being set, v being Vertex of G
-  st X meets the carrier' of G & not v in G-VSet X
-  ex v' being Vertex of G, e being Element of the carrier' of G st
-  v' in G-VSet X & not e in X &
-  (v' = (the Target of G).e or v' = (the Source of G).e);
+  for G being connected Graph, X being set, v being Vertex of G st
+X meets the carrier' of G & not v in G-VSet X ex v' being Vertex of G, e being
+Element of the carrier' of G st v' in G-VSet X & not e in X & (v' = (the Target
+  of G).e or v' = (the Source of G).e);
 
 begin :: Degree of a vertex
 
@@ -154,20 +150,23 @@ definition
   func Edges_In(v, X) -> Subset of the carrier' of G means
 :: GRAPH_3:def 1
 
-  for e being set holds e in it iff e in the carrier' of G &
-  e in X & (the Target of G).e = v;
+  for e being
+set holds e in it iff e in the carrier' of G & e in X & (the Target of G).e = v
+  ;
   func Edges_Out(v, X) -> Subset of the carrier' of G means
 :: GRAPH_3:def 2
 
-  for e being set holds e in it iff e in the carrier' of G &
-  e in X & (the Source of G).e = v;
+  for e being
+set holds e in it iff e in the carrier' of G & e in X & (the Source of G).e = v
+  ;
 end;
 
 definition
   let G be Graph, v be Vertex of G, X be set;
   func Edges_At(v, X) -> Subset of the carrier' of G equals
 :: GRAPH_3:def 3
-  Edges_In(v, X) \/ Edges_Out(v, X);
+  Edges_In(v, X) \/
+  Edges_Out(v, X);
 end;
 
 registration
@@ -188,10 +187,12 @@ definition
   let G be Graph, v be Vertex of G;
   func Edges_In v -> Subset of the carrier' of G equals
 :: GRAPH_3:def 4
-  Edges_In(v, the carrier' of G);
+  Edges_In(v, the
+  carrier' of G);
   func Edges_Out v -> Subset of the carrier' of G equals
 :: GRAPH_3:def 5
-  Edges_Out(v, the carrier' of G);
+  Edges_Out(v, the
+  carrier' of G);
 end;
 
 theorem :: GRAPH_3:25
@@ -209,7 +210,8 @@ end;
 reserve G for finite Graph,
   v for Vertex of G,
   c for Chain of G,
-  vs for FinSequence of the carrier of G,
+  vs for
+  FinSequence of the carrier of G,
   X1, X2 for set;
 
 theorem :: GRAPH_3:27
@@ -222,7 +224,8 @@ definition
   let G be finite Graph, v be Vertex of G, X be set;
   func Degree(v, X) -> Element of NAT equals
 :: GRAPH_3:def 6
-  card Edges_In(v, X) + card Edges_Out(v, X);
+  card Edges_In(v, X) + card
+  Edges_Out(v, X);
 end;
 
 theorem :: GRAPH_3:29
@@ -232,31 +235,31 @@ theorem :: GRAPH_3:30
   Degree(v, X) <> 0 implies Edges_At(v, X) is non empty;
 
 theorem :: GRAPH_3:31
-  e in the carrier' of G & not e in X &
-  (v = (the Target of G).e or v = (the Source of G).e)
-  implies Degree v <> Degree(v, X);
+  e in the carrier' of G & not e in X & (v = (the Target of G).e
+  or v = (the Source of G).e) implies Degree v <> Degree(v, X);
 
 theorem :: GRAPH_3:32
-  X2 c= X1 implies
-  card Edges_In(v, X1\X2) = card Edges_In(v, X1) - card Edges_In(v, X2);
+  X2 c= X1 implies card Edges_In(v, X1\X2) = card Edges_In(v, X1)
+  - card Edges_In(v, X2);
 
 theorem :: GRAPH_3:33
-  X2 c= X1 implies
-  card Edges_Out(v, X1\X2) = card Edges_Out(v, X1) - card Edges_Out(v, X2);
+  X2 c= X1 implies card Edges_Out(v, X1\X2) = card Edges_Out(v, X1
+  ) - card Edges_Out(v, X2);
 
 theorem :: GRAPH_3:34
-  X2 c= X1 implies Degree(v, X1 \ X2) = Degree(v, X1) - Degree(v, X2);
+  X2 c= X1 implies Degree(v, X1 \ X2) = Degree(v, X1) - Degree(v,
+  X2);
 
 theorem :: GRAPH_3:35
-  Edges_In(v, X) = Edges_In(v, X/\the carrier' of G) &
-  Edges_Out(v, X) = Edges_Out(v, X/\the carrier' of G);
+  Edges_In(v, X) = Edges_In(v, X/\the carrier' of G) & Edges_Out(v
+  , X) = Edges_Out(v, X/\the carrier' of G);
 
 theorem :: GRAPH_3:36
   Degree(v, X) = Degree(v, X/\the carrier' of G);
 
 theorem :: GRAPH_3:37
-  c is non empty & vs is_vertex_seq_of c
-  implies (v in rng vs iff Degree(v, rng c) <> 0);
+  c is non empty & vs is_vertex_seq_of c implies (v in rng vs iff
+  Degree(v, rng c) <> 0);
 
 theorem :: GRAPH_3:38
   for G being non void finite connected Graph, v being Vertex of G
@@ -269,10 +272,10 @@ definition
   func AddNewEdge(v1, v2) -> strict Graph means
 :: GRAPH_3:def 7
 
-  the carrier of it = the carrier of G &
-  the carrier' of it = (the carrier' of G) \/ {the carrier' of G} &
-  the Source of it = (the Source of G) +* ((the carrier' of G) .--> v1) &
-  the Target of it = (the Target of G) +* ((the carrier' of G) .--> v2);
+  the carrier of it = the
+carrier of G & the carrier' of it = (the carrier' of G) \/ {the carrier' of G}
+  & the Source of it = (the Source of G) +* ((the carrier' of G) .--> v1) & the
+  Target of it = (the Target of G) +* ((the carrier' of G) .--> v2);
 end;
 
 registration
@@ -283,23 +286,25 @@ end;
 reserve G for Graph,
   v, v1, v2 for Vertex of G,
   c for Chain of G,
-  p for Path of G,
+  p for Path
+  of G,
   vs for FinSequence of the carrier of G,
-  v' for Vertex of AddNewEdge(v1, v2),
+  v' for Vertex of AddNewEdge(v1,
+  v2),
   p' for Path of AddNewEdge(v1, v2),
-  vs' for FinSequence of the carrier of AddNewEdge(v1, v2);
+  vs' for FinSequence of the carrier of
+  AddNewEdge(v1, v2);
 
 theorem :: GRAPH_3:39
-  (the carrier' of G) in the carrier' of AddNewEdge(v1, v2) &
-  the carrier' of G = (the carrier'
-   of AddNewEdge(v1, v2)) \ {the carrier' of G} &
-  (the Source of AddNewEdge(v1, v2)).(the carrier' of G) = v1 &
-  (the Target of AddNewEdge(v1, v2)).(the carrier' of G) = v2;
+  (the carrier' of G) in the carrier' of AddNewEdge(v1, v2) & the
+carrier' of G = (the carrier' of AddNewEdge(v1, v2)) \ {the carrier' of G} & (
+  the Source of AddNewEdge(v1, v2)).(the carrier' of G) = v1 & (the Target of
+  AddNewEdge(v1, v2)).(the carrier' of G) = v2;
 
 theorem :: GRAPH_3:40
-  e in the carrier' of G
-  implies (the Source of AddNewEdge(v1, v2)).e = (the Source of G).e &
-  (the Target of AddNewEdge(v1, v2)).e = (the Target of G).e;
+  e in the carrier' of G implies (the Source of AddNewEdge(v1, v2)
+).e = (the Source of G).e & (the Target of AddNewEdge(v1, v2)).e = (the Target
+  of G).e;
 
 theorem :: GRAPH_3:41
   vs' = vs & vs is_vertex_seq_of c implies vs' is_vertex_seq_of c;
@@ -317,27 +322,27 @@ theorem :: GRAPH_3:45
   v' = v2 & v1 <> v2 implies Edges_Out(v', X) = Edges_Out(v2, X);
 
 theorem :: GRAPH_3:46
-  v' = v1 & v1 <> v2 & (the carrier' of G) in X
-  implies Edges_Out(v', X) = Edges_Out(v1, X) \/ {the carrier' of G} &
-  Edges_Out(v1, X) misses {the carrier' of G};
+  v' = v1 & (the carrier' of G) in X implies Edges_Out(v', X) =
+Edges_Out(v1, X) \/ {the carrier' of G} & Edges_Out(v1, X) misses {the carrier'
+  of G};
 
 theorem :: GRAPH_3:47
-  v' = v2 & v1 <> v2 & (the carrier' of G) in X
-  implies Edges_In(v', X) = Edges_In(v2, X) \/ {the carrier' of G} &
-  Edges_In(v2, X) misses {the carrier' of G};
+  v' = v2 & (the carrier' of G) in X implies Edges_In(v', X) =
+  Edges_In(v2, X) \/ {the carrier' of G} & Edges_In(v2, X) misses {the carrier'
+  of G};
 
 theorem :: GRAPH_3:48
-  v' = v & v <> v1 & v <> v2 implies Edges_In(v', X) = Edges_In(v, X);
+  v' = v & v <> v2 implies Edges_In(v', X) = Edges_In(v, X);
 
 theorem :: GRAPH_3:49
-  v' = v & v <> v1 & v <> v2 implies Edges_Out(v', X) = Edges_Out(v, X);
+  v' = v & v <> v1 implies Edges_Out(v', X) = Edges_Out(v, X);
 
 theorem :: GRAPH_3:50
   not (the carrier' of G) in rng p' implies p' is Path of G;
 
 theorem :: GRAPH_3:51
-  not (the carrier' of G) in rng p' & vs = vs' & vs' is_vertex_seq_of p'
-  implies vs is_vertex_seq_of p';
+  not (the carrier' of G) in rng p' & vs = vs' & vs'
+  is_vertex_seq_of p' implies vs is_vertex_seq_of p';
 
 registration
   let G be connected Graph, v1, v2 be Vertex of G;
@@ -346,12 +351,13 @@ end;
 
 reserve G for finite Graph,
   v, v1, v2 for Vertex of G,
-  vs for FinSequence of the carrier of G,
+  vs for FinSequence of
+  the carrier of G,
   v' for Vertex of AddNewEdge(v1, v2);
 
 theorem :: GRAPH_3:52
-  v' = v & v1 <> v2 & (v = v1 or v = v2) & (the carrier' of G) in X
-  implies Degree(v', X) = Degree(v, X) +1;
+  v' = v & v1 <> v2 & (v = v1 or v = v2) & (the carrier' of G) in
+  X implies Degree(v', X) = Degree(v, X) +1;
 
 theorem :: GRAPH_3:53
   v' = v & v <> v1 & v <> v2 implies Degree(v', X) = Degree(v, X);
@@ -374,17 +380,17 @@ definition
   func G-CycleSet -> FinSequence-DOMAIN of the carrier' of G means
 :: GRAPH_3:def 8
 
-  for x being set holds x in it iff x is cyclic Path of G;
+  for
+  x being set holds x in it iff x is cyclic Path of G;
 end;
 
 theorem :: GRAPH_3:56
   {} is Element of G-CycleSet;
 
 theorem :: GRAPH_3:57
-  for c being Element of G-CycleSet st v in G-VSet rng c holds
-  { c' where c' is Element of G-CycleSet : rng c' = rng c &
-  ex vs st vs is_vertex_seq_of c' & vs.1 = v}
-  is non empty Subset of G-CycleSet;
+  for c being Element of G-CycleSet st v in G-VSet rng c holds {
+  c' where c' is Element of G-CycleSet : rng c' = rng c & ex vs st vs
+  is_vertex_seq_of c' & vs.1 = v} is non empty Subset of G-CycleSet;
 
 definition
   let G, v;
@@ -394,9 +400,9 @@ definition
   func Rotate(c, v) -> Element of G-CycleSet equals
 :: GRAPH_3:def 9
 
-  choose
-  { c' where c' is Element of G-CycleSet : rng c' = rng c &
-  ex vs st vs is_vertex_seq_of c' & vs.1 = v };
+  choose { c' where
+c' is Element of G-CycleSet : rng c' = rng c & ex vs st vs is_vertex_seq_of c'
+  & vs.1 = v };
 end;
 
 definition
@@ -407,34 +413,37 @@ definition
   func CatCycles(c1, c2) -> Element of G-CycleSet means
 :: GRAPH_3:def 10
 
-  ex v being Vertex of G st v = choose ((G-VSet rng c1) /\ (G-VSet rng c2)) &
-  it = Rotate(c1, v)^Rotate(c2, v);
+  ex v being
+Vertex of G st v = choose ((G-VSet rng c1) /\ (G-VSet rng c2)) & it = Rotate(c1
+  , v)^Rotate(c2, v);
 end;
 
 theorem :: GRAPH_3:58
-  for G being Graph, c1, c2 be Element of G-CycleSet
-  st G-VSet rng c1 meets G-VSet rng c2 & rng c1 misses rng c2 &
-  (c1 <> {} or c2 <> {}) holds CatCycles(c1, c2) is non empty;
+  for G being Graph, c1, c2 be Element of G-CycleSet st G-VSet rng
+  c1 meets G-VSet rng c2 & rng c1 misses rng c2 & (c1 <> {} or c2 <> {}) holds
+  CatCycles(c1, c2) is non empty;
 
 reserve G for finite Graph,
   v for Vertex of G,
-  vs for FinSequence of the carrier of G;
+  vs for FinSequence of the
+  carrier of G;
 
 definition
   let G, v;
   let X be set;
-  assume that
+  assume
  Degree(v, X) <> 0;
   func X-PathSet v -> FinSequence-DOMAIN of the carrier' of G equals
 :: GRAPH_3:def 11
 
-  { c where c is Element of X* : c is Path of G & c is non empty &
-  ex vs st vs is_vertex_seq_of c & vs.1 = v };
+  {
+  c where c is Element of X* : c is Path of G & c is non empty & ex vs st vs
+  is_vertex_seq_of c & vs.1 = v };
 end;
 
 theorem :: GRAPH_3:59
-  for p being Element of X-PathSet v, Y being finite set
-  st Y = the carrier' of G & Degree(v, X) <> 0 holds len p <= card Y;
+  for p being Element of X-PathSet v, Y being finite set st Y =
+  the carrier' of G & Degree(v, X) <> 0 holds len p <= card Y;
 
 definition
   let G, v;
@@ -445,21 +454,21 @@ definition
   func X-CycleSet v -> non empty Subset of G-CycleSet equals
 :: GRAPH_3:def 12
 
-  { c where c is Element of G-CycleSet : rng c c= X & c is non empty &
-  ex vs st vs is_vertex_seq_of c & vs.1 = v };
+  { c where
+  c is Element of G-CycleSet : rng c c= X & c is non empty & ex vs st vs
+  is_vertex_seq_of c & vs.1 = v };
 end;
 
 theorem :: GRAPH_3:60
   Degree(v, X) <> 0 & (for v holds Degree(v, X) is even) implies
-  for c being Element of X-CycleSet v
-  holds c is non empty & rng c c= X & v in G-VSet rng c;
+for c being Element of X-CycleSet v holds c is non empty & rng c c= X & v in G
+  -VSet rng c;
 
 theorem :: GRAPH_3:61
-  for G be finite connected Graph, c be Element of G-CycleSet
-  st rng c <> the carrier' of G & c is non empty
-  holds {v' where v' is Vertex of G :
-  v' in G-VSet rng c & Degree v' <> Degree(v', rng c)}
-  is non empty Subset of the carrier of G;
+  for G be finite connected Graph, c be Element of G-CycleSet st
+rng c <> the carrier' of G & c is non empty holds {v' where v' is Vertex of G :
+v' in G-VSet rng c & Degree v' <> Degree(v', rng c)} is non empty Subset of the
+  carrier of G;
 
 definition
   let G be finite connected Graph, c be Element of G-CycleSet;
@@ -469,18 +478,17 @@ definition
   func ExtendCycle c -> Element of G-CycleSet means
 :: GRAPH_3:def 13
 
-  ex c' being Element of G-CycleSet, v being Vertex of G
-  st v = choose {v' where v' is Vertex of G :
-  v' in G-VSet rng c & Degree v' <> Degree(v', rng c)} &
-  c' = choose (((the carrier' of G) \ rng c)-CycleSet v) &
-   it = CatCycles(c, c');
+  ex c' being
+Element of G-CycleSet, v being Vertex of G st v = choose {v' where v' is Vertex
+  of G : v' in G-VSet rng c & Degree v' <> Degree(v', rng c)} & c' = choose (((
+  the carrier' of G) \ rng c)-CycleSet v) & it = CatCycles(c, c');
 end;
 
 theorem :: GRAPH_3:62
-  for G being finite connected Graph, c being Element of G-CycleSet
-  st rng c <> the carrier' of G & c is non empty &
-  for v being Vertex of G holds Degree v is even
-  holds ExtendCycle c is non empty & card rng c < card rng ExtendCycle c;
+  for G being finite connected Graph, c being Element of G
+  -CycleSet st rng c <> the carrier' of G & c is non empty & for v being Vertex
+  of G holds Degree v is even holds ExtendCycle c is non empty & card rng c <
+  card rng ExtendCycle c;
 
 begin :: Euler paths
 
@@ -494,18 +502,16 @@ definition
 end;
 
 theorem :: GRAPH_3:63
-  for G being connected Graph, p being Path of G,
-  vs being FinSequence of the carrier of G
-  st p is Eulerian & vs is_vertex_seq_of p holds rng vs = the carrier of G;
+  for G being connected Graph, p being Path of G, vs being
+FinSequence of the carrier of G st p is Eulerian & vs is_vertex_seq_of p holds
+  rng vs = the carrier of G;
 
 theorem :: GRAPH_3:64  :: Cyclic Euler paths
-  for G being finite connected Graph holds
-  (ex p being cyclic Path of G st p is Eulerian) iff
-  (for v being Vertex of G holds Degree v is even);
+  for G being finite connected Graph holds (ex p being cyclic Path
+  of G st p is Eulerian) iff for v being Vertex of G holds Degree v is even;
 
 theorem :: GRAPH_3:65 :: Non-cyclic Euler paths
-  for G being finite connected Graph holds
-  (ex p being Path of G st p is non cyclic & p is Eulerian) iff
-  (ex v1, v2 being Vertex of G st v1 <> v2 &
-  for v being Vertex of G holds Degree v is even iff v<>v1 & v <> v2);
+  for G being finite connected Graph holds (ex p being Path of G st p is
+non cyclic & p is Eulerian) iff ex v1, v2 being Vertex of G st v1 <> v2 & for v
+  being Vertex of G holds Degree v is even iff v<>v1 & v <> v2;
 

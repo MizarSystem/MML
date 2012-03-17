@@ -1,0 +1,4552 @@
+:: Preliminaries to Polynomials
+::  by Andrzej Trybulec
+::
+:: Received August 7, 2009
+:: Copyright (c) 2009 Association of Mizar Users
+
+environ
+
+ vocabularies MONOID_0, FUNCT_1, RELAT_1, BINOP_1, FUNCOP_1, PARTFUN1, ARYTM_1,
+      RLVECT_1, FINSEQ_1, BOOLE, FUNCT_4, CAT_1, PBOOLE, CARD_1, FINSEQ_2,
+      ORDERS_2, WELLORD1, ORDERS_1, RELAT_2, FINSET_1, TRIANG_1, MATRLIN,
+      MEASURE6, SQUARE_1, CARD_3, DTCONSTR, MSUALG_3, ALGSEQ_1, ORDINAL1,
+      ARYTM_3, FUNCT_2, FRAENKEL, FINSUB_1, SETWISEO, TARSKI, RFINSEQ,
+      POLYNOM1, FINSEQ_4, ARYTM, VALUED_0, ORDINAL2, MATRIX_2, AMI_1, FINSOP_1,
+      SETFAM_1, FUNCT_3, PRALG_1, ARROW;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS, ORDERS_1,
+      RELAT_1, XXREAL_0, XCMPLX_0, RELAT_2, FUNCT_1, PBOOLE, RELSET_1,
+      FINSET_1, FINSUB_1, SETWISEO, ORDINAL1, PARTFUN1, FUNCT_2, BINOP_2,
+      FINSOP_1, FINSEQ_1, FINSEQ_4, FUNCT_3, BINOP_1, NAT_1, XREAL_0, FINSEQ_2,
+      WELLORD1, CARD_3, WSIERP_1, FUNCOP_1, FUNCT_7, NAT_D, CLASSES1, VALUED_0,
+      VALUED_1, ORDINAL2, SETFAM_1, DOMAIN_1, ARROW, FINSEQOP;
+ constructors WELLORD2, BINOP_1, SETWISEO, CARD_3, FINSEQOP, FINSOP_1,
+      FINSEQ_4, RFINSEQ, RFUNCT_3, NAT_D, WSIERP_1, FUNCT_7, RECDEF_1, BINOP_2,
+      CLASSES1, BINARITH, ARROW, TOLER_1, ORDINAL2, RELSET_1, ORDERS_1,
+      RELAT_2, WELLORD1, DOMAIN_1, SETFAM_1, ORDINAL3, PBOOLE;
+ registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
+      ORDINAL3, FINSET_1, XXREAL_0, XREAL_0, NAT_1, BINOP_2, CARD_1, FINSEQ_1,
+      FINSEQ_2, CARD_3, PARTFUN1, VALUED_0, VALUED_1, RELSET_1, FUNCT_2,
+      SETFAM_1, FINSUB_1;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+ definitions TARSKI, XBOOLE_0, FUNCT_1, CARD_3, RELAT_2, PBOOLE, RELSET_1,
+      WELLORD2, RELAT_1, BINOP_1, FINSEQ_2, VALUED_0, FUNCOP_1, SETFAM_1,
+      SEQM_3, WELLORD1, SUBSET_1;
+ theorems FUNCT_1, FINSET_1, FINSEQ_3, FINSEQ_4, ZFMISC_1, FINSEQ_1, FUNCT_2,
+      FUNCOP_1, TARSKI, FUNCT_7, BINOP_1, RELAT_1, FINSEQ_2, CARD_3, RFINSEQ,
+      RELSET_1, CARD_1, ORDINAL1, RVSUM_1, FINSEQ_5, NAT_1, PBOOLE, NAT_2,
+      SUBSET_1, ORDERS_1, WELLSET1, WELLORD1, RELAT_2, ORDINAL3, FINSEQ_6,
+      SETWISEO, SETWOP_2, CARD_2, FUNCT_5, FINSUB_1, PARTFUN2, XBOOLE_0,
+      XBOOLE_1, PARTFUN1, BINOP_2, XREAL_1, XXREAL_0, VALUED_0, VALUED_1,
+      NAT_D, SETFAM_1, ARROW, WELLORD2, FINSOP_1;
+ schemes SETWISEO, FUNCT_2, FINSEQ_2, FINSEQ_1, PBOOLE, RELSET_1, FINSEQ_4,
+      ORDINAL1, FUNCT_7, SUBSET_1, XBOOLE_0, BINOP_1, NAT_1, PRE_CIRC,
+      CLASSES1;
+
+begin :: from LANG1
+
+definition
+  let D be set;
+  let p, q be Element of D*;
+  redefine func p^q -> Element of D*;
+  coherence
+  proof
+    p^q is FinSequence of D;
+    hence thesis by FINSEQ_1:def 11;
+  end;
+end;
+
+registration
+  let D be set;
+  cluster empty Element of D*;
+  existence
+  proof
+    <*> D is Element of D* by FINSEQ_1:def 11;
+    hence thesis;
+  end;
+end;
+
+definition
+  let D be set;
+  redefine func <*> D -> empty Element of D*;
+  coherence by FINSEQ_1:def 11;
+end;
+
+definition
+  let D be non empty set;
+  let d be Element of D;
+  redefine func <*d*> -> Element of D*;
+  coherence
+  proof
+    <*d*> is FinSequence of D;
+    hence thesis by FINSEQ_1:def 11;
+  end;
+  let e be Element of D;
+  func <*d,e*> -> Element of D*;
+  coherence
+  proof
+    <*d,e*> = <*d*>^<*e*> by FINSEQ_1:def 9;
+    hence thesis by FINSEQ_1:def 11;
+  end;
+end;
+
+begin :: from DTCONSTR
+
+registration
+  let X be set;
+  cluster -> FinSequence-like Element of X*;
+  coherence;
+end;
+
+definition
+  let D be set, F be FinSequence of D*;
+  func FlattenSeq F -> Element of D* means
+  :Def14:
+  ex g being BinOp of D* st
+  (for p, q being Element of D* holds g.(p,q) = p^q) & it = g "**" F;
+  existence
+  proof
+    deffunc F(Element of D*,Element of D*) = $1^$2;
+    consider g being BinOp of D* such that
+A1: for a, b being Element of D* holds g.(a,b) = F(a,b) from BINOP_1:sch 4;
+    take g "**" F, g;
+    thus thesis by A1;
+  end;
+  uniqueness
+  proof
+    let it1, it2 be Element of D*;
+    given g1 being BinOp of D* such that
+A2: for p, q being Element of D* holds g1.(p,q) = p^q and
+A3: it1 = g1 "**" F;
+    given g2 being BinOp of D* such that
+A4: for p, q being Element of D* holds g2.(p,q) = p^q and
+A5: it2 = g2 "**" F;
+    now
+      let a, b be Element of D*;
+      thus g1.(a,b) = a^b by A2
+        .= g2.(a,b) by A4;
+    end;
+    hence thesis by A3,A5,BINOP_1:2;
+  end;
+end;
+
+theorem Th13D:
+  for D being set, d be Element of D* holds FlattenSeq <*d*> = d
+proof
+  let D be set, d be Element of D*;
+  ex g being BinOp of D* st
+  (for p, q being Element of D* holds g.(p,q) = p^q) &
+  FlattenSeq <*d*> = g "**" <* d *> by Def14;
+  hence thesis by FINSOP_1:12;
+end;
+
+:: from SCMFSA_7, 2006.03.14, A.T.
+
+theorem Th20D:
+  for D being set holds FlattenSeq <*>(D*) = <*>D
+proof
+  let D be set;
+  consider g being BinOp of D* such that
+A1: for d1,d2 being Element of D* holds g.(d1,d2) = d1^d2 and
+A2: FlattenSeq <*>(D*) = g "**" <*>(D*) by Def14;
+A3: {} is Element of D* by FINSEQ_1:66;
+  reconsider p = {} as Element of D* by FINSEQ_1:66;
+  now
+    let a be Element of D*;
+    thus g.({},a) = {} ^ a by A1,A3
+      .= a by FINSEQ_1:47;
+    thus g.(a,{}) = a ^ {} by A1,A3
+      .= a by FINSEQ_1:47;
+  end;
+  then
+A4: p is_a_unity_wrt g by BINOP_1:11;
+  then g is having_a_unity by SETWISEO:def 2;
+  then g "**" <*>(D*) = the_unity_wrt g by FINSOP_1:11;
+  hence thesis by A2,A4,BINOP_1:def 8;
+end;
+
+theorem Th21D:
+  for D being set, F,G be FinSequence of D* holds
+  FlattenSeq (F ^ G) = FlattenSeq F ^ FlattenSeq G
+proof
+  let D be set, F,G be FinSequence of D*;
+  consider g being BinOp of D* such that
+A1: for d1,d2 being Element of D* holds g.(d1,d2) = d1^d2 and
+A2: FlattenSeq (F ^ G) = g "**" F ^ G by Def14;
+  now
+    let a,b,c be Element of D*;
+    thus g.(a,g.(b,c)) = a ^ g.(b,c) by A1
+      .= a ^ (b ^ c) by A1
+      .= a ^ b ^ c by FINSEQ_1:45
+      .= g.(a,b) ^ c by A1
+      .= g.(g.(a,b),c) by A1;
+  end;
+  then
+A3: g is associative by BINOP_1:def 3;
+A4: {} is Element of D* by FINSEQ_1:66;
+  reconsider p = {} as Element of D* by FINSEQ_1:66;
+  now
+    let a be Element of D*;
+    thus g.({},a) = {} ^ a by A1,A4
+      .= a by FINSEQ_1:47;
+    thus g.(a,{}) = a ^ {} by A1,A4
+      .= a by FINSEQ_1:47;
+  end;
+  then p is_a_unity_wrt g by BINOP_1:11;
+  then g is having_a_unity or len F >= 1 & len G >= 1 by SETWISEO:def 2;
+  hence FlattenSeq (F ^ G) = g.(g "**" F,g "**" G) by A2,A3,FINSOP_1:6
+    .= (g "**" F) ^ (g "**" G) by A1
+    .= FlattenSeq F ^ (g "**" G) by A1,Def14
+    .= FlattenSeq F ^ FlattenSeq G by A1,Def14;
+end;
+
+theorem
+  for D being set, p,q be Element of D* holds FlattenSeq <* p,q *> = p ^ q
+proof
+  let D be set, p,q be Element of D*;
+  consider g being BinOp of D* such that
+A1: for d1,d2 being Element of D* holds g.(d1,d2) = d1^d2 and
+A2: FlattenSeq <* p,q *> = g "**" <* p,q *> by Def14;
+  thus FlattenSeq <* p,q *> = g.(p,q) by A2,FINSOP_1:13
+    .= p ^ q by A1;
+end;
+
+theorem
+  for D being set, p,q,r be Element of D* holds
+  FlattenSeq <* p,q,r *> = p ^ q ^ r
+proof
+  let D be set, p,q,r be Element of D*;
+  consider g being BinOp of D* such that
+A1: for d1,d2 being Element of D* holds g.(d1,d2) = d1^d2 and
+A2: FlattenSeq <* p,q,r *> = g "**" <* p,q,r *> by Def14;
+  thus FlattenSeq <* p,q,r *> = g.(g.(p,q),r) by A2,FINSOP_1:15
+    .= g.(p,q) ^ r by A1
+    .= p ^ q ^ r by A1;
+end;
+
+:: from SCMFSA_7, 2007.07.22, A.T.
+
+theorem
+  for D being set, F,G be FinSequence of D* holds
+  F c= G implies FlattenSeq F c= FlattenSeq G
+proof
+  let D be set, F,G be FinSequence of D*;
+  assume F c= G;
+  then consider F' being FinSequence of D* such that
+A1: F ^ F' = G by FINSEQ_4:97;
+  FlattenSeq F ^ FlattenSeq F' = FlattenSeq G by A1,Th21D;
+  hence thesis by FINSEQ_6:12;
+end;
+
+begin :: from TRIANG_1
+
+reserve A,x,y,z,u for set,
+  k,l,m,n for Element of NAT;
+
+scheme
+  Regr1 { n() -> Nat, P[set] }: for k st k <= n() holds P[k]
+provided
+A1: P[n()] and
+A2: for k st k < n() & P[k+1] holds P[k]
+proof
+  reconsider n'=n() as Element of NAT by ORDINAL1:def 13;
+  defpred X[Nat] means $1 <= n() & not P[$1];
+  assume
+  not thesis;
+  then
+A3: ex k be Nat st X[k];
+A4: for l be Nat st X[l] holds l <= n';
+  consider l being Nat such that
+A5: X[l] and
+A6: for n being Nat st X[n] holds n <= l from NAT_1:sch 6(A4,A3);
+A7: l in NAT by ORDINAL1:def 13;
+A8: l < n() by A1,A5,XXREAL_0:1;
+  then l + 1 <= n() by NAT_1:13;
+  then P[l+1] by A6,XREAL_1:31;
+  hence contradiction by A2,A5,A8,A7;
+end;
+
+registration
+  let n be Nat;
+  cluster Seg (n+1) -> non empty;
+  coherence;
+end;
+
+theorem
+  {}|_2 A = {};
+
+registration
+  let X be set;
+  cluster non empty Subset of Fin X;
+  existence
+  proof
+    {} in Fin X by FINSUB_1:18;
+    then {{}} is Subset of Fin X by ZFMISC_1:37;
+    hence thesis;
+  end;
+end;
+
+registration
+  let X be non empty set;
+  cluster non empty with_non-empty_elements Subset of Fin X;
+  existence
+  proof
+    consider x be Element of X;
+    {x} in Fin X by FINSUB_1:def 5;
+    then reconsider s = {{x}} as Subset of Fin X by SUBSET_1:55;
+    take s;
+    thus s is non empty;
+    assume
+    {} in s;
+    hence contradiction;
+  end;
+end;
+
+registration
+  let X be non empty set, F be non empty with_non-empty_elements Subset of Fin
+  X;
+  cluster non empty Element of F;
+  existence
+  proof
+    consider f be Element of F;
+    f <> {};
+    hence thesis;
+  end;
+end;
+
+registration
+  let X be non empty set;
+  cluster with_non-empty_element Subset of Fin X;
+  existence
+  proof
+    consider x be Element of X;
+    {x} in Fin X by FINSUB_1:def 5;
+    then reconsider s = {{x}} as Subset of Fin X by SUBSET_1:55;
+    take s;
+    thus thesis;
+  end;
+end;
+
+definition
+  let X be non empty set, R be Order of X, A be Subset of X;
+  redefine func R|_2 A -> Order of A;
+  coherence
+  proof
+    R partially_orders X by ORDERS_1:140;
+    hence R |_2 A is Order of A by ORDERS_1:131,141;
+  end;
+end;
+
+scheme
+  SubFinite{D()->set, A()->Subset of D(), P[set]}: P[A()]
+provided
+A1: A() is finite and
+A2: P[{}(D())] and
+A3: for x being Element of D(), B being Subset of D() st x in A() & B c=
+A() & P[B] holds P[B \/ {x}]
+proof
+  now
+    defpred X[set] means ex B be set st B=$1 & P[B];
+    assume
+    A() <> {};
+    consider G being set such that
+A4: for x be set holds x in G iff x in bool A() & X[x] from XBOOLE_0:
+    sch 1;
+    G c= bool A()
+    proof
+      let x be set;
+      assume
+      x in G;
+      hence thesis by A4;
+    end;
+    then reconsider GA=G as Subset-Family of A();
+    {} c= A() by XBOOLE_1:2;
+    then GA <> {} by A2,A4;
+    then consider B be set such that
+A5: B in GA and
+A6: for X being set st X in GA holds B c= X implies B=X by A1,
+    FINSET_1:18;
+A7: ex A st A = B & P[A] by A4,A5;
+    now
+      consider x being Element of A() \ B;
+      assume
+      B <> A();
+      then not A() c= B by A5,XBOOLE_0:def 10;
+      then
+A8:   A() \ B <> {} by XBOOLE_1:37;
+      then not x in B by XBOOLE_0:def 5;
+      then not {x} c= B by ZFMISC_1:37;
+      then
+A9:   B \/ {x} <> B by XBOOLE_1:7;
+A10:  x in A() by A8,XBOOLE_0:def 5;
+      then {x} c= A() by ZFMISC_1:37;
+      then
+A11:  B \/ {x} c= A() by A5,XBOOLE_1:8;
+      B is Subset of D() by A5,XBOOLE_1:1;
+      then P[B \/ {x}] by A3,A5,A7,A10;
+      then B \/ {x} in GA by A4,A11;
+      hence contradiction by A6,A9,XBOOLE_1:7;
+    end;
+    hence thesis by A7;
+  end;
+  hence thesis by A2;
+end;
+
+registration
+  let X be non empty set, F be with_non-empty_element Subset of Fin X;
+  cluster finite non empty Element of F;
+  existence
+  proof
+    consider x be non empty set such that
+A1: x in F by SETFAM_1:def 11;
+    reconsider x1 = x as Element of F by A1;
+    take x1;
+    thus thesis;
+  end;
+end;
+
+theorem Th3:
+  for A,B being finite set st A c= B & card A = card B holds A = B
+proof
+  let A,B be finite set;
+  assume
+A1: A c= B;
+  assume
+A2: card A = card B;
+  reconsider A as Subset of B by A1;
+  set f = incl A;
+  rng f = B by A2,FINSEQ_4:78;
+  hence thesis by RELAT_1:71;
+end;
+
+definition
+  let X be set, A be finite Subset of X, R be Order of X;
+  assume
+A1: R linearly_orders A;
+  func SgmX (R,A) -> FinSequence of X means
+  :Def2T:
+  rng it = A & for n,m be Nat
+st n in dom it & m in dom it & n < m holds it/.n <> it/.m & [it/.n,it/.m] in R;
+  existence
+  proof
+    per cases;
+    suppose
+A2:   A is empty;
+      take <*>X;
+      thus thesis by A2;
+    end;
+    suppose
+A3:   A is non empty;
+      then reconsider X' = X as non empty set;
+      reconsider A1 = A as non empty finite Subset of X' by A3;
+      reconsider R' = R as Order of X';
+      deffunc F(set) = $1;
+      deffunc V(Element of A1) =
+       { F(x) where x is Element of A1: x <=_R',$1 & x <> $1 };
+      deffunc U(Element of A1) = card V($1) +^ 1;
+X:    for x being Element of A1 holds U(x) is Element of NAT
+       proof let a be Element of A1;
+         defpred P[Element of A1] means $1 <=_R',a & $1 <> a;
+         { F(x) where x is Element of A1: P[x] } is finite from PRE_CIRC:sch 1;
+         then reconsider X = { F(x) where x is Element of A1: P[x] }
+           as finite set;
+         reconsider n = card X as Element of NAT;
+         n +^ 1 = n + 1 by CARD_2:49;
+        hence U(a) is Element of NAT;
+       end;
+      consider f being Function of A1,NAT such that
+A5:   for x being Element of A1 holds f.x = U(x) from FUNCT_2:sch 9(X);
+O62:  for x being Element of A1 holds not x in V(x)
+       proof let a be Element of A1;
+        assume a in V(a);
+         then ex x being Element of A1 st x = a & x <=_R',a & x <> a;
+        hence thesis;
+       end;
+XX:  for x being Element of A1 holds V(x) c= A1
+       proof let a be Element of A1;
+        let y be set;
+        assume y in V(a);
+         then ex x being Element of A1 st x = y & x <=_R',a & x <> a;
+        hence thesis;
+       end;
+      rng f c= Seg card A1
+      proof
+        let y be set;
+        assume
+        y in rng f;
+        then consider x1 being set such that
+A6:     x1 in dom f and
+A7:     y = f.x1 by FUNCT_1:def 5;
+        reconsider y1 = y as Nat by A7;
+        reconsider x2 = x1 as Element of A1 by A6;
+         defpred P[Element of A1] means $1 <=_R',x2 & $1 <> x2;
+        { F(x) where x is Element of A1: P[x] }
+           is finite from PRE_CIRC:sch 1;
+        then reconsider Vx2 = V(x2) as finite set;
+        Vx2 <> A1 by O62;
+        then
+y:       card Vx2 <> card A1 by XX,Th3;
+        (card Vx2) <= card A1 by NAT_1:44,XX;
+        then (card Vx2) < card A1 by y,XXREAL_0:1;
+        then
+A9:     (card Vx2) + 1 <= card A1 by NAT_1:13;
+A10:    y = (card Vx2) +^ 1 by A5,A7
+         .= (card Vx2) + 1 by CARD_2:49;
+        then (0 qua natural number) + 1 <= y1 by XREAL_1:8;
+        hence thesis by A9,A10,FINSEQ_1:3;
+      end;
+      then reconsider f1 = f as Function of A1,Seg card A1 by FUNCT_2:8;
+A4:   R |_2 A c= R by XBOOLE_1:17;
+B11:  R is_connected_in A by A1,ORDERS_1:def 8;
+      then
+A11:  R|_2 A is connected by ORDERS_1:185;
+      field (R'|_2 A1) = A by ORDERS_1:100;
+      then
+A12:  R|_2 A is_connected_in A by A11,RELAT_2:def 14;
+D12:  R' is_transitive_in A by A1,ORDERS_1:def 8;
+D13:  R' is_antisymmetric_in A by A1,ORDERS_1:def 8;
+      for x1,x2 be set st x1 in A1 & x2 in A1 & f.x1 = f.x2 holds x1 = x2
+      proof
+        let x1,x2 be set;
+        assume that
+A13:    x1 in A1 and
+A14:    x2 in A1 and
+A15:    f.x1 = f.x2;
+        reconsider x2' = x2 as Element of A1 by A14;
+        reconsider x1' = x1 as Element of A1 by A13;
+         defpred P[Element of A1] means $1 <=_R',x1' & $1 <> x1';
+        { F(x) where x is Element of A1: P[x] }
+           is finite from PRE_CIRC:sch 1;
+        then reconsider Vx1 = V(x1') as finite set;
+         defpred P[Element of A1] means $1 <=_R',x2' & $1 <> x2';
+        { F(x) where x is Element of A1: P[x] }
+           is finite from PRE_CIRC:sch 1;
+        then reconsider Vx2 = V(x2') as finite set;
+XX1:  for x1,x2 being Element of A1 st x1 <=_R|_2 A, x2
+       holds V(x1) c= V(x2)
+       proof let x1,x2 be Element of A1;
+        assume x1 <=_R|_2 A, x2;
+         then
+z:        [x1,x2] in R|_2 A by ARROW:def 4;
+        let x;
+        assume x in V(x1);
+         then consider a being Element of A such that
+W1:      a =x and
+W2:      a <=_R',x1 and
+W3:      a <> x1;
+xx:      [a,x1] in R' by W2,ARROW:def 4;
+         then [a,x2] in R' by z,A4,RELAT_2:def 8,D12;
+         then
+A:       a <=_R',x2 by ARROW:def 4;
+         a <> x2 by W3,xx,z,A4,D13,RELAT_2:def 4;
+        hence x in V(x2) by W1,A;
+       end;
+        f.x1' = (card Vx1) +^ 1 by A5
+         .= (card Vx1) + 1 by CARD_2:49;
+        then
+A16:    (card Vx1) + 1 = (card Vx2) +^ 1 by A5,A15
+           .= (card Vx2) + 1 by CARD_2:49;
+        now
+          per cases;
+          suppose
+            x1' = x2';
+            hence thesis;
+          end;
+          suppose
+            x1' <> x2';
+            then
+C18:        [x1',x2'] in R|_2 A or [x2',x1'] in R|_2 A by A12,
+            RELAT_2
+            :def 6;
+XX2:   for x1,x2 being Element of A1 st x1<>x2 & x1<=_R|_2 A, x2
+         holds x1 in V(x2)
+    proof let x1,x2 be Element of A1 such that
+Z1:   x1<>x2;
+      assume x1<=_R|_2 A, x2;
+      then [x1,x2] in R|_2 A by ARROW:def 4;
+      then x1 <=_R', x2 by ARROW:def 4,A4;
+     hence x1 in V(x2) by Z1;
+    end;
+A19:        now
+              per cases by C18,ARROW:def 4;
+              suppose x1' <=_R|_2 A, x2';
+                hence Vx1 = Vx2 by A16,Th3,XX1;
+              end;
+              suppose x2' <=_R|_2 A, x1';
+                hence Vx1 = Vx2 by A16,Th3,XX1;
+              end;
+            end;
+            now
+              assume
+A20:          x1' <> x2';
+              then
+C21:          [x1',x2'] in R|_2 A or [x2',x1'] in R|_2 A by A12,
+              RELAT_2:def 6;
+              per cases by C21,ARROW:def 4;
+              suppose
+                x1'<=_R|_2 A, x2';
+                hence contradiction by A19,O62,A20,XX2;
+              end;
+              suppose
+                x2'<=_R|_2 A, x1';
+                hence contradiction by A19,O62,A20,XX2;
+              end;
+            end;
+            hence thesis;
+          end;
+        end;
+        hence thesis;
+      end;
+      then
+A22:  f1 is one-to-one by FUNCT_2:25;
+A23:  for x1,x2 be Element of A1 st f.x1 qua Nat < f.x2
+     holds x1 <=_R',x2 & x1 <> x2
+      proof
+        let x1,x2 be Element of A1;
+         defpred P[Element of A1] means $1 <=_R',x1 & $1 <> x1;
+        { F(x) where x is Element of A1: P[x] }
+           is finite from PRE_CIRC:sch 1;
+        then reconsider Vx1 = V(x1) as finite set;
+         defpred P[Element of A1] means $1 <=_R',x2 & $1 <> x2;
+        { F(x) where x is Element of A1: P[x] }
+           is finite from PRE_CIRC:sch 1;
+        then reconsider Vx2 = V(x2) as finite set;
+        assume
+A24:    f.x1 < f.x2;
+P1:    f.x1 = (card Vx1) +^ 1 by A5
+         .= (card Vx1) + 1 by CARD_2:49;
+        f.x2 = (card Vx2) +^ 1 by A5
+           .= (card Vx2) + 1 by CARD_2:49;
+        then
+A25:    (card Vx1)+1-1 < (card Vx2)+1-1 by XREAL_1:11,P1,A24;
+        reconsider Cx2 = card Vx2 as Cardinal;
+        reconsider Cx1 = card Vx1 as Cardinal;
+A26:    card(card Vx2) = card Vx2;
+        card(card Vx1) = card Vx1;
+        then Cx1 in Cx2 by A26,A25,NAT_1:42;
+        then Vx2 \ Vx1 <> {} by CARD_2:4;
+        then consider a be set such that
+A27:    a in (Vx2 \ Vx1) by XBOOLE_0:def 1;
+A28:    not a in Vx1 by A27,XBOOLE_0:def 5;
+A29:    a in Vx2 by A27;
+        Vx2 c= A1 by XX;
+        then reconsider a as Element of A1 by A29;
+B31:    ex x being Element of A1 st a=x & x <=_R',x2 & x <> x2 by A29;
+        then
+C31:    [a,x2] in R' by ARROW:def 4;
+        now
+          per cases by A28;
+          suppose
+            not a <=_R', x1;
+            then
+A32:        not [a,x1] in R' by ARROW:def 4;
+            now
+              per cases;
+              suppose
+                x1 = a;
+                hence thesis by B31;
+              end;
+              suppose
+S:              x1 <> a;
+                then
+A:               [x1,a] in R' by B11,A32,RELAT_2:def 6;
+                then [x1,x2] in R' by C31,D12,RELAT_2:def 8;
+                hence x1 <=_R',x2 by ARROW:def 4;
+                assume x1 = x2;
+                 then a = x1 by A,C31,D13,RELAT_2:def 4;
+                hence contradiction by S;
+              end;
+            end;
+            hence thesis;
+          end;
+          suppose
+            a = x1;
+            hence thesis by B31;
+          end;
+        end;
+        hence thesis;
+      end;
+      card Seg card A1 = card A1 by FINSEQ_1:78;
+      then rng f1 = Seg card A1 by A22,FINSEQ_4:78;
+      then dom ((f1 qua Function)") = Seg card A1 by A22,FUNCT_1:55;
+      then reconsider g1 = (f1 qua Function)" as FinSequence by FINSEQ_1:def 2;
+A33:  dom f1 = A by FUNCT_2:def 1;
+      then
+A34:  rng g1 = A by A22,FUNCT_1:55;
+      then reconsider g = g1 as FinSequence of X by FINSEQ_1:def 4;
+      take g;
+      thus rng g = A by A22,A33,FUNCT_1:55;
+      let n,m be Nat;
+      assume that
+A35:  n in dom g and
+A36:  m in dom g and
+A37:  n < m;
+      reconsider gn = g.n as Element of A1 by A34,A35,FUNCT_1:def 5;
+      n in rng f by A22,A35,FUNCT_1:55;
+      then
+A38:  n = f.(gn) by A22,FUNCT_1:57;
+      reconsider gm = g.m as Element of A1 by A34,A36,FUNCT_1:def 5;
+A39:  gm = g/.m by A36,PARTFUN1:def 8;
+A40:  m in rng f by A22,A36,FUNCT_1:55;
+      then m = f.(gm) by A22,FUNCT_1:57;
+      then gn <=_R', gm by A23,A37,A38;
+      then [gn,gm] in R by ARROW:def 4;
+      then
+A41:  [gn,gm] in R|_2 A by XBOOLE_0:def 4;
+      gn = g/.n by A35,PARTFUN1:def 8;
+      hence thesis by A22,A37,A40,A38,A4,A41,A39,FUNCT_1:57;
+    end;
+  end;
+  uniqueness
+  proof
+    let p',q' be FinSequence of X;
+    assume that
+A42: rng p' = A and
+A43: for n,m being Nat st n in dom p' & m in dom p' & n < m holds p'/.
+    n <> p'/.m & [p'/.n,p'/.m] in R and
+A44: rng q' = A and
+A45: for n,m being Nat st n in dom q' & m in dom q' & n < m holds q'/.
+    n <> q'/.m & [q'/.n,q'/.m] in R;
+    per cases;
+    suppose
+A46:  A is empty;
+      then p' is empty by A42;
+      hence thesis by A44,A46;
+    end;
+    suppose
+A47:  A is non empty;
+      then reconsider X' = X as non empty set;
+      reconsider A' = A as non empty finite Subset of X' by A47;
+      reconsider R' = R as Order of X';
+      set E = <*>(A');
+      defpred X[FinSequence of A'] means ($1 is FinSequence
+of A' & for n,m being Nat st n in dom $1 & m in dom $1 & n <
+m holds $1/.n <> $1/.m & [$1/.n,$1/.m] in R) implies for q being FinSequence of
+A' st rng q = rng $1 & for n,m be Nat st n in dom q & m in
+      dom q & n < m holds q/.n <> q/.m & [q/.n,q/.m] in R holds q=$1;
+      reconsider p = p', q = q' as FinSequence of A' by A42
+      ,A44,FINSEQ_1:def 4;
+A48:  for p being FinSequence of A' for x being
+      Element of A' st X[p] holds X[p^<*x*> qua FinSequence of A']
+      proof
+        let p be FinSequence of A', x be Element of A';
+        assume
+A49:     X[p];
+:::        assume
+:::A50:     not X[p^<*x*> qua FinSequence of A'];
+        assume
+        p^<*x*> is FinSequence of A';
+        assume
+A50:    for n,m be Nat st n in dom (p^<*x*>) & m in dom (p^<*x*>) &
+          n < m
+         holds (p^<*x*> qua FinSequence of A')/.n
+             <> (p^<*x*> qua FinSequence of A')/.m
+           & [(p^<*x*> qua FinSequence of A')/.n,
+              (p^<*x*> qua FinSequence of A')/.m] in R;
+
+        let q be FinSequence of A';
+        assume that
+A51:    rng q = rng (p^<*x*>) and
+A52:    for n,m be Nat st n in dom q & m in dom q & n < m holds q/.n
+        <> q /.m & [q/.n,q/.m] in R;
+        deffunc V(Nat) = q.$1;
+A53:    q <> 0 by A51;
+        then consider n be Nat such that
+A54:    len q = n+1 by NAT_1:6;
+        reconsider n as Element of NAT by ORDINAL1:def 13;
+        ex q' being FinSequence st len q' = n & for m be Nat st m in dom
+        q' holds q'.m = V(m) from FINSEQ_1:sch 2;
+        then consider q' being FinSequence such that
+A55:    len q' = n and
+A56:    for m be Nat st m in dom q' holds q'.m = q.m;
+        1 in Seg 1 by FINSEQ_1:4,TARSKI:def 1;
+        then
+A57:    1 in dom <*x*> by FINSEQ_1:def 8;
+A58:    ex m be Element of A' st m=x & for l be
+Element of A' st l in rng (p^<*x*>) & l <> x holds [l,m] in R
+        proof
+          reconsider m = x as Element of A';
+          take m;
+          thus m=x;
+          thus for l be Element of A' st l in rng (p^<*x*>)
+          & l <> x holds [l,m] in R
+          proof
+            let l be Element of A';
+            assume that
+A59:        l in rng (p^<*x*>) and
+A60:        l <> x;
+            consider y such that
+A61:        y in dom (p^<*x*>) and
+A62:        l=(p^<*x*>).y by A59,FUNCT_1:def 5;
+A63:        l = (p^<*x*> qua FinSequence of A')/.y by A61,A62,PARTFUN1:def 8;
+            reconsider k=y as Element of NAT by A61;
+A64:        k <> len p + 1
+            proof
+              assume
+              k = len p + 1;
+              then (p^<*x*>).k = <*x*>.1 by A57,FINSEQ_1:def 7
+                .= x by FINSEQ_1:def 8;
+              hence contradiction by A60,A62;
+            end;
+A65:        y in Seg len (p^<*x*>) by A61,FINSEQ_1:def 3;
+            then k <= len (p^<*x*>) by FINSEQ_1:3;
+            then k <= len p + len <*x*> by FINSEQ_1:35;
+            then k <= len p + 1 by FINSEQ_1:56;
+            then k < len p + 1 by A64,XXREAL_0:1;
+            then k < len p + len <*x*> by FINSEQ_1:56;
+            then
+A66:        k < len(p^<*x*>) by FINSEQ_1:35;
+            1 <= k by A65,FINSEQ_1:3;
+            then 1 - len(p^<*x*>) < k - k by A66,XREAL_1:17;
+            then 1 < len(p^<*x*>) by XREAL_1:50;
+            then len(p^<*x*>) in Seg len(p^<*x*>) by FINSEQ_1:3;
+            then
+A67:        len(p^<*x*>) in dom (p^<*x*>) by FINSEQ_1:def 3;
+            m = (p^<*x*>).(len p + 1) by FINSEQ_1:59
+              .= (p^<*x*>).(len p + len <*x*>) by FINSEQ_1:56
+              .= (p^<*x*>).(len(p^<*x*>)) by FINSEQ_1:35;
+            then m = (p^<*x*> qua FinSequence of A')/.(len(p^<*x*>))
+             by A67,PARTFUN1:def 8;
+            hence thesis by A50,A61,A63,A66,A67;
+          end;
+        end;
+A68:    for m be Nat st m in dom <*x*> holds q.(len q' + m) = <*x*>.m
+        proof
+          let m be Nat;
+          assume
+          m in dom <*x*>;
+          then
+A69:      m in {1} by FINSEQ_1:4,def 8;
+A70:      q.(len q' + m) = x
+          proof
+            consider d1 being Element of A' such that
+A71:        d1=x and
+A72:        for l being Element of A' st l in rng
+            (p^<*x*>) & l<>x holds [l,d1] in R by A58;
+            reconsider d = d1 as Element of A';
+A73:        rng q c= A';
+            len q in Seg len q by A53,FINSEQ_1:5;
+            then
+A74:        len q in dom q by FINSEQ_1:def 3;
+            then q.len q in rng q by FUNCT_1:def 5;
+            then reconsider
+            k = q.len q as Element of A';
+A75:        k = q/.len q by A74,PARTFUN1:def 8;
+            field R = X by ORDERS_1:97;
+            then
+A76:        R is_antisymmetric_in X by RELAT_2:def 12;
+            assume
+            q.(len q' + m) <> x;
+            then
+A78:        q.len q <> x by A54,A55,A69,TARSKI:def 1;
+            x in {x} by TARSKI:def 1;
+            then x in rng <*x*> by FINSEQ_1:55;
+            then x in rng p \/ rng <*x*> by XBOOLE_0:def 3;
+            then x in rng q by A51,FINSEQ_1:44;
+            then consider y such that
+A79:        y in dom q and
+A80:        x=q.y by FUNCT_1:def 5;
+A81:        y in Seg len q by A79,FINSEQ_1:def 3;
+            reconsider y as Element of NAT by A79;
+            y <= len q by A81,FINSEQ_1:3;
+            then
+A82:        y < len q by A78,A80,XXREAL_0:1;
+            q.len q in rng (p^<*x*>) by A51,A74,FUNCT_1:def 5;
+            then
+A83:        [k,d] in R by A78,A72;
+A85:        d = q/.y by A71,A79,A80,PARTFUN1:def 8;
+            then
+A86:        [d,k] in R by A52,A79,A74,A82,A75;
+            k <> d by A52,A79,A74,A82,A75,A85;
+            hence contradiction by A83,A86,A76,RELAT_2:def 4;
+          end;
+          m=1 by A69,TARSKI:def 1;
+          hence thesis by A70,FINSEQ_1:57;
+        end;
+        now
+          let x;
+A87:      n <= n + 1 by NAT_1:11;
+          assume
+          x in rng q';
+          then consider y such that
+A88:      y in dom q' and
+A89:      x=q'.y by FUNCT_1:def 5;
+A90:      y in Seg len q' by A88,FINSEQ_1:def 3;
+          reconsider y as Element of NAT by A88;
+          y <= n by A55,A90,FINSEQ_1:3;
+          then
+A91:      y <= n+1 by A87,XXREAL_0:2;
+          1 <= y by A90,FINSEQ_1:3;
+          then y in dom q by A54,A91,FINSEQ_3:27;
+          then  q.y in rng q by FUNCT_1:def 5;
+          then  q.y in A';
+          hence x in A' by A56,A88,A89;
+        end;
+        then rng q' c= A' by TARSKI:
+        def 3;
+        then reconsider f=q' as FinSequence of A' by
+        FINSEQ_1:def 4;
+        dom q = Seg (n+1) by A54,FINSEQ_1:def 3
+          .= Seg (len q' + len <*x*>) by A55,FINSEQ_1:56;
+        then
+A93:    q'^<*x*> = q by A56,A68,FINSEQ_1:def 7;
+A94:    not x in rng p
+        proof
+          len p + 1 = len p + len <*x*> by FINSEQ_1:56
+            .= len (p^<*x*>) by FINSEQ_1:35;
+          then (len p + 1) in Seg (len(p^<*x*>)) by FINSEQ_1:6;
+          then
+A95:      (len p + 1) in dom (p^<*x*>) by FINSEQ_1:def 3;
+          assume
+          x in rng p;
+          then consider y such that
+A96:      y in dom p and
+A97:      x=p.y by FUNCT_1:def 5;
+A98:      y in Seg len p by A96,FINSEQ_1:def 3;
+A99:      dom p c= dom (p^<*x*>) by FINSEQ_1:39;
+          reconsider y as Element of NAT by A96;
+          x = (p^<*x*> qua FinSequence of A').y by A96,A97,FINSEQ_1:def 7;
+          then
+A100:     x = (p^<*x*> qua FinSequence of A')/.y by A96,A99,PARTFUN1:def 8;
+          y <= len p by A98,FINSEQ_1:3;
+          then
+A101:     y < len p + 1 by NAT_1:13;
+          x = (p^<*x*> qua FinSequence of A').(len p + 1 ) by FINSEQ_1:59;
+          then (p^<*x*> qua FinSequence of A')/.y
+           = (p^<*x*> qua FinSequence of A')/.(len p + 1 ) by A95,A100,
+          PARTFUN1:def 8;
+          hence contradiction by A50,A96,A95,A99,A101;
+        end;
+A102:   for z holds z in rng p \/ {x} \ {x} iff z in rng p
+        proof
+          let z;
+          thus z in rng p \/ {x} \ {x} implies z in rng p
+          proof
+            assume
+A103:       z in rng p \/ {x} \ {x};
+            then
+X:           not z in {x} by XBOOLE_0:def 5;
+             z in rng p \/ {x} by A103,XBOOLE_0:def 5;
+            hence thesis by XBOOLE_0:def 3,X;
+          end;
+          assume
+A104:     z in rng p;
+          then
+A105:     z in rng p \/ {x} by XBOOLE_0:def 3;
+          not z in {x} by A94,A104,TARSKI:def 1;
+          hence thesis by A105,XBOOLE_0:def 5;
+        end;
+        rng (p^<*x*>) = rng p \/ rng <*x*> by FINSEQ_1:44
+          .= rng p \/ {x} by FINSEQ_1:56;
+        then
+A106:   rng p = rng (p^<*x*>) \ {x} by A102,TARSKI:2;
+A107:   rng f = rng p & for l,m be Nat st l in dom f & m in dom f & l <
+        m holds f/.l <> f/.m & [f/.l,f/.m] in R
+        proof
+A108:     not x in rng f
+          proof
+            len f + 1 = len f + len <*x*> by FINSEQ_1:56
+              .= len (f^<*x*>) by FINSEQ_1:35;
+            then (len f + 1) in Seg (len(f^<*x*>)) by FINSEQ_1:6;
+            then
+A109:       (len f + 1) in dom (f^<*x*>) by FINSEQ_1:def 3;
+            assume
+            x in rng f;
+            then consider y such that
+A110:       y in dom f and
+A111:       x=f.y by FUNCT_1:def 5;
+A112:       y in Seg len f by A110,FINSEQ_1:def 3;
+A113:       dom f c= dom (f^<*x*>) by FINSEQ_1:39;
+            reconsider y as Element of NAT by A110;
+            x = q.y by A56,A110,A111;
+            then
+A114:       x = q/.y by A93,A110,A113,PARTFUN1:def 8;
+            y <= len f by A112,FINSEQ_1:3;
+            then
+A115:       y < len f + 1 by NAT_1:13;
+            x = q.(len f + 1) by A93,FINSEQ_1:59;
+            then q/.y = q/.(len f + 1) by A93,A109,A114, PARTFUN1:def 8;
+            hence contradiction by A52,A93,A110,A109,A113,A115;
+          end;
+A116:     for z holds z in rng f \/ {x} \ {x} iff z in rng f
+         proof
+            let z;
+            hereby
+              assume
+A117:         z in rng f \/ {x} \ {x};
+              then
+X:             not z in {x} by XBOOLE_0:def 5;
+               z in rng f \/ {x} by A117,XBOOLE_0:def 5;
+              hence z in rng f by XBOOLE_0:def 3,X;
+            end;
+            assume
+A118:       z in rng f;
+            then
+A119:       z in rng f \/ {x} by XBOOLE_0:def 3;
+            not z in {x} by A108,A118,TARSKI:def 1;
+            hence thesis by A119,XBOOLE_0:def 5;
+          end;
+          rng (f^<*x*>) = rng f \/ rng <*x*> by FINSEQ_1:44
+            .= rng f \/ {x} by FINSEQ_1:56;
+          hence rng f = rng p by A51,A93,A106,A116,TARSKI:2;
+          let l,m be Nat;
+          assume that
+A120:     l in dom f and
+A121:     m in dom f and
+A122:     l < m;
+A123:     f.m = f/.m by A121,PARTFUN1:def 8;
+A124:     dom f c= dom q by A93,FINSEQ_1:39;
+          then q.m = q/.m by A121,PARTFUN1:def 8;
+          then
+A125:     f/.m = q/.m by A56,A121,A123;
+A126:     f.l = f/.l by A120,PARTFUN1:def 8;
+          q.l = q/.l by A124,A120,PARTFUN1:def 8;
+          then f/.l = q/.l by A56,A120,A126;
+          hence thesis by A52,A124,A120,A121,A122,A125;
+        end;
+        p is FinSequence of A' & for l,m be Nat st l
+        in dom p & m in dom p & l < m holds p/.l <> p/.m & [p/.l,p/.m] in R
+        proof
+          thus p is FinSequence of A';
+          let l,m be Nat;
+          assume that
+A127:     l in dom p and
+A128:     m in dom p and
+A129:     l < m;
+A130:     dom p c= dom (p^<*x*>) by FINSEQ_1:39;
+          p.m = (p^<*x*>).m by A128,FINSEQ_1:def 7;
+          then p.m = (p^<*x*> qua FinSequence of A')/.m
+             by A128,A130,PARTFUN1:def 8;
+          then
+A131:     p/.m = (p^<*x*> qua FinSequence of A')/.m by A128,PARTFUN1:def 8;
+          p.l = (p^<*x*>).l by A127,FINSEQ_1:def 7;
+          then p.l = (p^<*x*> qua FinSequence of A')/.l
+           by A127,A130,PARTFUN1:def 8;
+          then p/.l = (p^<*x*> qua FinSequence of A')/.l
+           by A127,PARTFUN1:def 8;
+          hence thesis by A50,A127,A128,A129,A130,A131;
+        end;
+        hence thesis by A49,A93,A107;
+      end;
+A132: now
+        let n,m be Nat;
+        assume that
+A133:   n in dom p and
+A134:   m in dom p and
+A135:   n < m;
+A136:   p/.m = p.m by A134,PARTFUN1:def 8
+          .= p'/.m by A134,PARTFUN1:def 8;
+        p/.n = p.n by A133,PARTFUN1:def 8
+          .= p'/.n by A133,PARTFUN1:def 8;
+        hence p/.n <> p/.m & [p/.n,p/.m] in R by A43,A133,A134,A135,A136;
+      end;
+A137: now
+        let n,m be Nat;
+        assume that
+A138:   n in dom q and
+A139:   m in dom q and
+A140:   n < m;
+A141:   q/.m = q.m by A139,PARTFUN1:def 8
+          .= q'/.m by A139,PARTFUN1:def 8;
+        q/.n = q.n by A138,PARTFUN1:def 8
+          .= q'/.n by A138,PARTFUN1:def 8;
+        hence q/.n <> q/.m & [q/.n,q/.m] in R by A45,A138,A139,A140,A141;
+      end;
+A142: X[E];
+      for p be FinSequence of A' holds X [p] from
+      FINSEQ_2:sch 2(A142,A48);
+      hence thesis by A42,A44,A132,A137;
+    end;
+  end;
+end;
+
+theorem
+  for X be set, A be finite Subset of X, R be Order of X, f be
+FinSequence of X st rng f = A & for n,m be Nat st n in dom f & m in dom f & n <
+  m holds f/.n <> f/.m & [f/.n, f/.m] in R holds f = SgmX(R,A)
+proof
+  let X be set, A be finite Subset of X, R be Order of X, f be FinSequence of
+  X;
+  assume that
+A1: rng f = A and
+A2: for n,m be Nat st n in dom f & m in dom f & n < m holds f/.n <> f/.m
+  & [f/.n,f/.m] in R;
+  now
+    let a,b be set;
+    assume that
+A3: a in A and
+A4: b in A and
+A5: a <> b;
+    consider n being Nat such that
+A6: n in dom f and
+A7: f.n = a by A1,A3,FINSEQ_2:11;
+    consider m being Nat such that
+A8: m in dom f and
+A9: f.m = b by A1,A4,FINSEQ_2:11;
+A10: f/.m = f.m by A8,PARTFUN1:def 8;
+A11: f/.n = f.n by A6,PARTFUN1:def 8;
+    now
+      assume that
+A12:  not [a,b] in R and
+A13:  not [b,a] in R;
+      per cases;
+      suppose
+        n = m;
+        hence contradiction by A5,A7,A9;
+      end;
+      suppose
+A14:    n <> m;
+        now
+          per cases by A14,XXREAL_0:1;
+          suppose
+            n > m;
+            hence contradiction by A2,A6,A7,A8,A9,A11,A10,A13;
+          end;
+          suppose
+            m > n;
+            hence contradiction by A2,A6,A7,A8,A9,A11,A10,A12;
+          end;
+        end;
+        hence contradiction;
+      end;
+    end;
+    hence [a,b] in R or [b,a] in R;
+  end;
+  then
+A15: R is_connected_in A by RELAT_2:def 6;
+A16: field R = X by ORDERS_1:97;
+  then R is_antisymmetric_in X by RELAT_2:def 12;
+  then
+A17: R is_antisymmetric_in A by ORDERS_1:94;
+  R is_transitive_in X by A16,RELAT_2:def 16;
+  then
+A18: R is_transitive_in A by ORDERS_1:95;
+  R is_reflexive_in X by A16,RELAT_2:def 9;
+  then R is_reflexive_in A by ORDERS_1:93;
+  then R linearly_orders A by A17,A18,A15,ORDERS_1:def 8;
+  hence thesis by A1,A2,Def2T;
+end;
+
+registration
+  let X be set, F be non empty Subset of Fin X;
+  cluster -> finite Element of F;
+  coherence;
+end;
+
+definition
+  let X be set, F be non empty Subset of Fin X;
+  redefine mode Element of F -> Subset of X;
+  coherence
+  proof
+    let a be Element of F;
+    thus thesis by FINSUB_1:32;
+  end;
+end;
+
+theorem Th8T:
+  for X being set, A being finite Subset of X, R being Order of X
+  st R linearly_orders A holds SgmX(R,A) is one-to-one
+proof
+  let X be set, A be finite Subset of X, R be Order of X;
+  set f = (SgmX(R, A));
+  assume
+A1: R linearly_orders A;
+  then rng f = A by Def2T;
+  then reconsider f as FinSequence of A by FINSEQ_1:def 4;
+  f is one-to-one
+  proof
+    let k,l be set;
+    assume that
+A2: k in dom f and
+A3: l in dom f and
+A4: f.k = f.l;
+    reconsider k,l as Element of NAT by A2,A3;
+    reconsider fk = f.k as Element of A by A2,FINSEQ_2:13;
+    reconsider fl = f.l as Element of A by A3,FINSEQ_2:13;
+A5: fl = f/.l by A3,PARTFUN1:def 8;
+A6: fk = f/.k by A2,PARTFUN1:def 8;
+    now
+A7:   f/.l = f.l by A3,PARTFUN1:def 8
+        .= SgmX(R,A)/.l by A3,PARTFUN1:def 8;
+A8:   f/.k = f.k by A2,PARTFUN1:def 8
+        .= SgmX(R,A)/.k by A2,PARTFUN1:def 8;
+      assume
+A9:   k <> l;
+      per cases by A9,XXREAL_0:1;
+      suppose
+        k < l;
+        hence contradiction by A1,A2,A3,A4,A6,A5,A8,A7,Def2T;
+      end;
+      suppose
+        l < k;
+        hence contradiction by A1,A2,A3,A4,A6,A5,A8,A7,Def2T;
+      end;
+    end;
+    hence thesis;
+  end;
+  hence thesis;
+end;
+
+theorem
+  for X being set, A being finite Subset of X, R being Order of X
+  st R linearly_orders A holds len(SgmX(R, A)) = card A
+proof
+  let X be set, A be finite Subset of X, R be Order of X;
+  set f = SgmX(R, A);
+A1: dom f = Seg(len f) by FINSEQ_1:def 3;
+  Seg(len f),len f are_equipotent by FINSEQ_1:75;
+  then
+A2: card Seg(len f) = card (len f) by CARD_1:21;
+  assume
+A3: R linearly_orders A;
+  then
+A4: f is one-to-one by Th8T;
+  rng f = A by A3,Def2T;
+  then Seg(len f),A are_equipotent by A1,A4,WELLORD2:def 4;
+  hence thesis by A2,CARD_1:21;
+end;
+
+begin :: from MATRLIN
+
+reserve k,t,i,j,m,n for Nat,
+  x,y,y1,y2 for set,
+  D for non empty set;
+
+theorem Th3:
+  for M be FinSequence st len M = n+1 holds len Del(M,n+1) = n
+proof
+  let M be FinSequence;
+  assume
+A1: len M = n+1;
+  then n+1 in Seg len M by FINSEQ_1:6;
+  then n+1 in dom M by FINSEQ_1:def 3;
+  hence thesis by A1,FINSEQ_3:118;
+end;
+
+theorem
+  for M being FinSequence st len M = n + 1 holds M = Del(M,len M) ^
+  <*M.(len M)*>
+proof
+  let M be FinSequence;
+  assume
+A1: len M = n + 1;
+  then M <> {};
+  then consider q be FinSequence,x such that
+A2: M = q ^ <*x*> by FINSEQ_1:63;
+  reconsider n as Element of NAT by ORDINAL1:def 13;
+A3: n+1 = n+1;
+A4: len M = len q + len <*x*> by A2,FINSEQ_1:35
+    .= len q + 1 by FINSEQ_1:56;
+  then
+A5: len Del(M,len M) = len q by Th3;
+A6: dom q = Seg len q by FINSEQ_1:def 3;
+A7: now
+    let i be Nat;
+    assume
+A8: i in dom q;
+    then i<=len q by A6,FINSEQ_1:3;
+    then i in NAT & i<len M by A4,NAT_1:13,ORDINAL1:def 13;
+    hence Del(M,len M).i = M.i by A1,A3,FINSEQ_3:119
+      .= q.i by A2,A8,FINSEQ_1:def 7;
+  end;
+  M.(len M) = x by A2,A4,FINSEQ_1:59;
+  hence thesis by A2,A5,A7,FINSEQ_2:10;
+end;
+
+definition
+  let IT be Function;
+  attr IT is FinSequence-yielding means
+  :Def1M:
+  for x st x in dom IT holds IT.x
+  is FinSequence;
+end;
+
+registration
+  cluster FinSequence-yielding Function;
+  existence
+  proof
+    consider f being FinSequence,I be set;
+    take F = I --> f;
+    let x;
+    assume
+A1: x in dom F;
+:::    dom (I --> f) = I by FUNCOP_1:19;
+    hence thesis by FUNCOP_1:13;
+  end;
+end;
+
+definition
+  let F,G be FinSequence-yielding Function;
+  func F^^G -> FinSequence-yielding Function means
+  :Def2M:
+  dom it = dom F /\
+dom G & for i being set st i in dom it for f,g being FinSequence st f = F.i & g
+  = G.i holds it.i = f^g;
+  existence
+  proof
+    defpred P[set,set] means for f be FinSequence, g be FinSequence st f = F.
+    $1 & g = G.$1 holds $2 = f^g;
+A1: for i be set st i in dom F /\ dom G ex u be set st P[i,u]
+    proof
+      let i be set;
+      assume
+      i in dom F /\ dom G;
+      then i in dom F & i in dom G by XBOOLE_0:def 4;
+      then reconsider f = F.i, g = G.i as FinSequence by Def1M;
+      take f^g;
+      thus thesis;
+    end;
+    consider H being Function such that
+A2: dom H = dom F /\ dom G & for i be set st i in dom F /\ dom G holds
+    P[i,H.i] from CLASSES1:sch 1(A1);
+    for x be set st x in dom H holds H.x is FinSequence
+    proof
+      let x be set;
+      assume
+A3:   x in dom H;
+      then x in dom F by A2,XBOOLE_0:def 4;
+      then reconsider f = F.x as FinSequence by Def1M;
+      x in dom G by A2,A3,XBOOLE_0:def 4;
+      then reconsider g = G.x as FinSequence by Def1M;
+      H.x = f^g by A2,A3;
+      hence thesis;
+    end;
+    then reconsider H as FinSequence-yielding Function by Def1M;
+    take H;
+    thus thesis by A2;
+  end;
+  uniqueness
+  proof
+    let F1,F2 be FinSequence-yielding Function such that
+A4: dom F1 = dom F /\ dom G and
+A5: for i be set st i in dom F1 for f,g being FinSequence st f = F.i
+    & g = G.i holds F1.i = f^g and
+A6: dom F2 = dom F /\ dom G and
+A7: for i be set st i in dom F2 for f,g being FinSequence st f = F.i
+    & g = G.i holds F2.i = f^g;
+    now
+      let x;
+      assume
+A8:   x in dom F1;
+      then x in dom F & x in dom G by A4,XBOOLE_0:def 4;
+      then reconsider f = F.x, g = G.x as FinSequence by Def1M;
+      thus F1.x = f^g by A5,A8
+        .= F2.x by A4,A6,A7,A8;
+    end;
+    hence thesis by A4,A6,FUNCT_1:9;
+  end;
+end;
+
+begin :: HEYTING2
+
+reserve V, C, x, a, b for set;
+
+theorem
+  for V, C being non empty set ex f be Element of PFuncs (V, C) st f <>
+  {}
+proof
+  let V, C be non empty set;
+  consider a be set such that
+A1: a in V by XBOOLE_0:def 1;
+  consider b be set such that
+A2: b in C by XBOOLE_0:def 1;
+  set f = {[a,b]};
+  {a} c= V by A1,ZFMISC_1:37;
+  then
+A3: dom f c= V by RELAT_1:23;
+  {b} c= C by A2,ZFMISC_1:37;
+  then rng f c= C by RELAT_1:23;
+  then reconsider f as Element of PFuncs (V, C) by A3,PARTFUN1:def 5;
+  f <> {};
+  hence thesis;
+end;
+
+theorem
+  for f being Element of PFuncs (V, C), g being set st g c= f holds
+  g in PFuncs (V, C)
+proof
+  let f be Element of PFuncs (V, C), g be set;
+  consider f1 be Function such that
+A1: f1 = f and
+A2: dom f1 c= V and
+A3: rng f1 c= C by PARTFUN1:def 5;
+  assume
+A4: g c= f;
+  then reconsider g' = g as Function;
+  rng g' c= rng f1 by A4,A1,RELAT_1:25;
+  then
+A5: rng g' c= C by A3,XBOOLE_1:1;
+  dom g' c= dom f1 by A4,A1,RELAT_1:25;
+  then dom g' c= V by A2,XBOOLE_1:1;
+  hence thesis by A5,PARTFUN1:def 5;
+end;
+
+theorem Th4:
+  PFuncs(V,C) c= bool [:V,C:]
+proof
+  let x be set;
+  assume
+  x in PFuncs(V,C);
+  then consider f being Function such that
+A1: x = f and
+A2: dom f c= V and
+A3: rng f c= C by PARTFUN1:def 5;
+A4: f c= [: dom f, rng f:] by RELAT_1:21;
+  [:dom f, rng f:] c= [:V,C:] by A2,A3,ZFMISC_1:119;
+  then f c= [:V,C:] by A4,XBOOLE_1:1;
+  hence thesis by A1;
+end;
+
+theorem Th5:
+  V is finite & C is finite implies PFuncs (V, C) is finite
+proof
+  assume that
+A1: V is finite and
+A2: C is finite;
+  PFuncs(V,C) c= bool [:V,C:] by Th4;
+  hence thesis by A1,A2;
+end;
+
+registration
+  cluster functional finite non empty set;
+  existence
+  proof
+    consider A, B be finite non empty set;
+    take P = PFuncs(A,B);
+    thus P is functional;
+    thus P is finite by Th5;
+    thus thesis;
+  end;
+end;
+
+begin :: GOBRD13
+
+registration
+  let D be set;
+  cluster -> FinSequence-yielding FinSequence of D*;
+  coherence
+  proof
+    let f be FinSequence of D*;
+    let x be set;
+    assume
+A1: x in dom f;
+    then reconsider x as Element of NAT;
+    f.x in D* by A1,FINSEQ_2:13;
+    hence thesis;
+  end;
+end;
+
+registration
+  cluster FinSequence-yielding -> Function-yielding Function;
+  coherence
+  proof
+    let f be Function;
+    assume
+A1: f is FinSequence-yielding;
+    let x be set;
+    thus thesis by A1,Def1M;
+  end;
+end;
+
+begin :: POLYNOM1
+
+theorem Th4:
+  for X being set, R being Relation st field R c= X holds R is
+  Relation of X
+proof
+  let X be set, R be Relation;
+  assume
+A1: field R c= X;
+  R c= [:X,X:]
+  proof
+    let x,y be set;
+    assume
+    [x,y] in R;
+    then x in field R & y in field R by RELAT_1:30;
+    hence thesis by A1,ZFMISC_1:def 2;
+  end;
+  hence thesis;
+end;
+
+registration
+  let X be set, f be ManySortedSet of X, x, y be set;
+  cluster f+*(x,y) -> X-defined;
+  coherence
+  proof
+    dom (f+*(x,y)) = dom f by FUNCT_7:32
+      .= X by PARTFUN1:def 4;
+    hence thesis by RELAT_1:def 18;
+  end;
+end;
+
+registration
+  let X be set, f be ManySortedSet of X, x, y be set;
+  cluster f+*(x,y) -> total (X-defined Function);
+  coherence
+  proof
+    dom (f+*(x,y)) = dom f by FUNCT_7:32
+      .= X by PARTFUN1:def 4;
+    hence thesis by PARTFUN1:def 4;
+  end;
+end;
+
+theorem Th7:
+  for f being one-to-one Function holds card f = card rng f
+proof
+  let f be one-to-one Function;
+A1: rng f = dom(f") & dom f = rng(f") by FUNCT_1:55;
+  card rng f c= card dom f & card rng (f") c= card dom (f") by CARD_2:80;
+  then card rng f = card dom f by A1,XBOOLE_0:def 10;
+  hence thesis by CARD_1:104;
+end;
+
+definition
+  let A be set;
+  let X be set, D be FinSequence-DOMAIN of A, p be PartFunc of X,D, i be set;
+  redefine func p/.i -> Element of D;
+  coherence;
+end;
+
+registration
+  let X be set;
+  cluster being_linear-order well-ordering Order of X;
+  existence
+  proof
+    consider R being Relation such that
+A1: R is well-ordering and
+A2: field R = X by WELLSET1:9;
+    reconsider R as Relation of X by A2,Th4;
+A3: R is connected by A1,WELLORD1:def 4;
+    R is reflexive by A1,WELLORD1:def 4;
+    then R is_reflexive_in X by A2,RELAT_2:def 9;
+    then dom R = X by ORDERS_1:98;
+    then reconsider R as Order of X by A1,PARTFUN1:def 4,WELLORD1:def 4;
+    take R;
+    thus thesis by A1,A3,ORDERS_1:def 5;
+  end;
+end;
+
+theorem Th8:
+  for X being non empty set, A being non empty finite Subset of X,
+R being Order of X, x being Element of X st x in A & R linearly_orders A & for
+  y being Element of X st y in A holds [x,y] in R holds (SgmX (R,A))/.1 = x
+proof
+  let X be non empty set, A be non empty finite Subset of X, R be Order of X,
+  x be Element of X;
+  assume that
+A1: x in A and
+A2: R linearly_orders A and
+A3: for y being Element of X st y in A holds [x,y] in R and
+A4: SgmX (R,A)/.1 <> x;
+A5: A = rng SgmX (R,A) by A2,Def2T;
+  then consider i being Element of NAT such that
+A6: i in dom SgmX (R,A) and
+A7: SgmX (R,A)/.i = x by A1,PARTFUN2:4;
+  SgmX (R,A) is non empty by A2,RELAT_1:60,Def2T;
+  then
+A8: 1 in dom SgmX (R,A) by FINSEQ_5:6;
+  then SgmX (R,A)/.1 in A by A5,PARTFUN2:4;
+  then
+A9: [x, SgmX (R,A)/.1] in R by A3;
+  field R = X by ORDERS_1:97;
+  then
+A10: R is_antisymmetric_in X by RELAT_2:def 12;
+  1 <= i by A6,FINSEQ_3:27;
+  then 1 < i by A4,A7,XXREAL_0:1;
+  then [SgmX (R,A)/.1, x] in R by A2,A6,A7,A8,Def2T;
+  hence contradiction by A4,A9,A10,RELAT_2:def 4;
+end;
+
+theorem Th9:
+  for X being non empty set, A being non empty finite Subset of X,
+R being Order of X, x being Element of X st x in A & R linearly_orders A & for
+y being Element of X st y in A holds [y,x] in R holds SgmX (R,A)/.len SgmX (R,A
+  ) = x
+proof
+  let X be non empty set, A be non empty finite Subset of X, R be Order of X,
+  x be Element of X;
+  assume that
+A1: x in A and
+A2: R linearly_orders A and
+A3: for y being Element of X st y in A holds [y,x] in R and
+A4: SgmX (R,A)/.len SgmX (R,A) <> x;
+  set L = len SgmX (R,A);
+A5: A = rng SgmX (R,A) by A2,Def2T;
+  then consider i being Element of NAT such that
+A6: i in dom SgmX (R,A) and
+A7: SgmX (R,A)/.i = x by A1,PARTFUN2:4;
+  SgmX (R,A) is non empty by A2,RELAT_1:60,Def2T;
+  then
+A8: L in dom SgmX (R,A) by FINSEQ_5:6;
+  then SgmX (R,A)/.L in A by A5,PARTFUN2:4;
+  then
+A9: [SgmX (R,A)/.L,x] in R by A3;
+  field R = X by ORDERS_1:97;
+  then
+A10: R is_antisymmetric_in X by RELAT_2:def 12;
+  i <= L by A6,FINSEQ_3:27;
+  then i < L by A4,A7,XXREAL_0:1;
+  then [x, SgmX (R,A)/.L] in R by A2,A6,A7,A8,Def2T;
+  hence contradiction by A4,A9,A10,RELAT_2:def 4;
+end;
+
+registration
+  let X be non empty set, A be non empty finite Subset of X, R be
+  being_linear-order Order of X;
+  cluster SgmX(R, A) -> non empty one-to-one;
+  coherence
+  proof
+    field R = X by ORDERS_1:100;
+    then R linearly_orders A by ORDERS_1:133,134;
+    hence thesis by RELAT_1:60,Th8T,Def2T;
+  end;
+end;
+
+registration
+  cluster empty -> FinSequence-yielding Function;
+  coherence
+  proof
+    let F be Function such that
+A1: F is empty;
+    let x be set;
+    thus thesis by A1;
+  end;
+end;
+
+definition
+  let F, G be FinSequence-yielding FinSequence;
+  redefine func F^^G -> FinSequence-yielding FinSequence;
+  coherence
+  proof
+    dom (F^^G) = dom F /\ dom G by Def2M
+      .= Seg len F /\ dom G by FINSEQ_1:def 3
+      .= Seg len F /\ Seg len G by FINSEQ_1:def 3
+      .= Seg min(len F, len G) by FINSEQ_2:2;
+    hence thesis by FINSEQ_1:def 2;
+  end;
+end;
+
+registration
+  let i be Element of NAT, f be FinSequence;
+  cluster i |-> f -> FinSequence-yielding;
+  coherence
+  proof
+    let x be set;
+    assume
+    x in dom (i |-> f);
+    then x in Seg i by FUNCOP_1:19;
+    hence thesis by FUNCOP_1:13;
+  end;
+end;
+
+registration
+  let F be FinSequence-yielding FinSequence, x be set;
+  cluster F.x -> FinSequence-like;
+  coherence
+  proof
+    per cases;
+    suppose
+      not x in dom F;
+      hence thesis by FUNCT_1:def 4;
+    end;
+    suppose
+      x in dom F;
+      hence thesis by Def1M;
+    end;
+  end;
+end;
+
+registration
+  let F be FinSequence;
+  cluster Card F -> FinSequence-like;
+  coherence
+  proof
+    dom Card F = dom F by CARD_3:def 2
+      .= Seg len F by FINSEQ_1:def 3;
+    hence thesis by FINSEQ_1:def 2;
+  end;
+end;
+
+registration
+  cluster Cardinal-yielding FinSequence;
+  existence
+  proof
+    take {};
+    {} is Cardinal-yielding
+    proof
+      let x be set;
+      thus thesis;
+    end;
+    hence thesis;
+  end;
+end;
+
+theorem Th10:
+  for f being Function holds f is Cardinal-yielding iff for y
+  being set st y in rng f holds y is Cardinal
+proof
+  let f be Function;
+  hereby
+    assume
+A1: f is Cardinal-yielding;
+    let y be set;
+    assume
+    y in rng f;
+    then ex x being set st x in dom f & y = f.x by FUNCT_1:def 5;
+    hence y is Cardinal by A1,CARD_3:def 1;
+  end;
+  assume
+A2: for y being set st y in rng f holds y is Cardinal;
+  let x be set;
+  assume
+  x in dom f;
+  then f.x in rng f by FUNCT_1:def 5;
+  hence thesis by A2;
+end;
+
+registration
+  let F, G be Cardinal-yielding FinSequence;
+  cluster F^G -> Cardinal-yielding;
+  coherence
+  proof
+A1: rng (F^G) = rng F \/ rng G by FINSEQ_1:44;
+    now
+      let y be set;
+      assume
+      y in rng (F^G);
+      then y in rng F or y in rng G by A1,XBOOLE_0:def 3;
+      hence y is Cardinal by Th10;
+    end;
+    hence thesis by Th10;
+  end;
+end;
+
+registration
+  cluster -> Cardinal-yielding FinSequence of NAT;
+  coherence
+  proof
+    let f be FinSequence of NAT;
+    let x be set;
+    assume
+    x in dom f;
+    thus thesis;
+  end;
+end;
+
+registration
+  cluster Cardinal-yielding FinSequence of NAT;
+  existence
+  proof
+    take <*>NAT;
+    thus thesis;
+  end;
+end;
+
+definition
+  let D be set;
+  let F be FinSequence of D*;
+  redefine func Card F -> Cardinal-yielding FinSequence of NAT;
+  coherence
+  proof
+    rng Card F c= NAT
+    proof
+      let y be set;
+      assume
+      y in rng Card F;
+      then consider x being set such that
+A1:   x in dom Card F and
+A2:   y = (Card F).x by FUNCT_1:def 5;
+      reconsider Fx = F.x as finite set;
+      x in dom F by A1,CARD_3:def 2;
+      then y = card Fx by A2,CARD_3:def 2;
+      hence thesis;
+    end;
+    hence thesis by FINSEQ_1:def 4;
+  end;
+end;
+
+registration
+  let F be FinSequence of NAT, i be Element of NAT;
+  cluster F|i -> Cardinal-yielding;
+  coherence;
+end;
+
+theorem Th11:
+  for F being Function, X being set holds Card (F|X) = (Card F)|X
+proof
+  let F be Function, X be set;
+A1: dom ((Card F)|X) = dom (Card F) /\ X by RELAT_1:90
+    .= dom F /\ X by CARD_3:def 2
+    .= dom (F|X) by RELAT_1:90;
+  now
+    let x be set;
+A2: dom (F|X) c= dom F by RELAT_1:89;
+    assume
+A3: x in dom (F|X);
+    hence ((Card F)|X).x = (Card F).x by A1,FUNCT_1:70
+      .= card (F.x) by A3,A2,CARD_3:def 2
+      .= card ((F|X).x) by A3,FUNCT_1:70;
+  end;
+  hence thesis by A1,CARD_3:def 2;
+end;
+
+registration
+  let F be empty Function;
+  cluster Card F -> empty;
+  coherence
+  proof
+    dom F is empty;
+    then dom Card F is empty by CARD_3:def 2;
+    hence thesis;
+  end;
+end;
+
+theorem Th12:
+  for p being set holds Card <*p*> = <*card p*>
+proof
+  let p be set;
+  set Cp = <*card p*>;
+A1: dom Cp = {1} by FINSEQ_1:4,55;
+  now
+    let x be set;
+    assume
+    x in dom Cp;
+    then x = 1 by A1,TARSKI:def 1;
+    hence Cp.x is Cardinal by FINSEQ_1:57;
+  end;
+  then reconsider Cp as Cardinal-Function by CARD_3:def 1;
+A2: dom <*p*> = {1} by FINSEQ_1:4,55;
+  now
+    let x be set;
+    assume
+    x in dom <*p*>;
+    then
+A3: x = 1 by A2,TARSKI:def 1;
+    hence <*card p*>.x = card p by FINSEQ_1:57
+      .= card (<*p*>.x) by A3,FINSEQ_1:57;
+  end;
+  then Card <*p*> = Cp by A1,A2,CARD_3:def 2;
+  hence thesis;
+end;
+
+theorem Th13:
+  for F, G be FinSequence holds Card (F^G) = Card F ^ Card G
+proof
+  let F, G be FinSequence;
+A1: dom Card G = dom G by CARD_3:def 2;
+  then
+A2: len Card G = len G by FINSEQ_3:31;
+A3: dom Card F = dom F by CARD_3:def 2;
+  then
+A4: len Card F = len F by FINSEQ_3:31;
+A5: now
+    let x be set;
+    assume
+A6: x in dom (F^G);
+    then reconsider k = x as Element of NAT;
+    x in Seg (len F + len G) by A6,FINSEQ_1:def 7;
+    then
+A7: 1 <= k by FINSEQ_1:3;
+    per cases;
+    suppose
+      k <= len F;
+      then
+A8:   k in dom F by A7,FINSEQ_3:27;
+      hence (Card F ^ Card G).x = (Card F).k by A3,FINSEQ_1:def 7
+        .= card (F.k) by A8,CARD_3:def 2
+        .= card ((F^G).x) by A8,FINSEQ_1:def 7;
+    end;
+    suppose
+      len F < k;
+      then not k in dom F by FINSEQ_3:27;
+      then consider n being Nat such that
+A9:   n in dom G and
+A10:  k = len F + n by A6,FINSEQ_1:38;
+      thus (Card F ^ Card G).x = (Card G).n by A1,A4,A9,A10,FINSEQ_1:def 7
+        .= card (G.n) by A9,CARD_3:def 2
+        .= card ((F^G).x) by A9,A10,FINSEQ_1:def 7;
+    end;
+  end;
+  dom (Card F ^ Card G) = Seg (len Card F + len Card G) by FINSEQ_1:def 7
+    .= dom (F ^ G) by A4,A2,FINSEQ_1:def 7;
+  hence thesis by A5,CARD_3:def 2;
+end;
+
+registration
+  let X be set;
+  cluster <*>X -> FinSequence-yielding;
+  coherence;
+end;
+
+registration
+  let f be FinSequence;
+  cluster <*f*> -> FinSequence-yielding;
+  coherence
+  proof
+    let x be set;
+    assume
+    x in dom <*f*>;
+    then x in {1} by FINSEQ_1:4,55;
+    then x = 1 by TARSKI:def 1;
+    hence thesis by FINSEQ_1:57;
+  end;
+end;
+
+theorem Th14:
+  for f being Function holds f is FinSequence-yielding iff for y
+  being set st y in rng f holds y is FinSequence
+proof
+  let f be Function;
+  hereby
+    assume
+A1: f is FinSequence-yielding;
+    let y be set;
+    assume
+    y in rng f;
+    then ex x being set st x in dom f & y = f.x by FUNCT_1:def 5;
+    hence y is FinSequence by A1,Def1M;
+  end;
+  assume
+A2: for y being set st y in rng f holds y is FinSequence;
+  let x be set;
+  assume
+  x in dom f;
+  then f.x in rng f by FUNCT_1:def 5;
+  hence thesis by A2;
+end;
+
+registration
+  let F, G be FinSequence-yielding FinSequence;
+  cluster F^G -> FinSequence-yielding;
+  coherence
+  proof
+A1: rng (F^G) = rng F \/ rng G by FINSEQ_1:44;
+    now
+      let y be set;
+      assume
+      y in rng (F^G);
+      then y in rng F or y in rng G by A1,XBOOLE_0:def 3;
+      hence y is FinSequence by Th14;
+    end;
+    hence thesis by Th14;
+  end;
+end;
+
+registration
+  let D be set, F be empty FinSequence of D*;
+  cluster FlattenSeq F -> empty;
+  coherence
+  proof
+    F = <*>(D*);
+    then FlattenSeq F = <*>D by Th20D;
+    hence thesis;
+  end;
+end;
+
+theorem Th30:
+  for D being set, F being FinSequence of D* holds len FlattenSeq
+  F = Sum Card F
+proof
+  let D be set;
+  defpred P[FinSequence of D*] means len FlattenSeq $1 = Sum Card $1;
+A1: now
+    let F be FinSequence of D*, p be Element of D* such that
+A2: P[F];
+    len FlattenSeq (F^<*p*>) = len (FlattenSeq F ^ FlattenSeq <*p*>) by
+    Th21D
+      .= (Sum Card F) + len FlattenSeq <*p*> by A2,FINSEQ_1:35
+      .= (Sum Card F) + len p by Th13D
+      .= Sum ((Card F)^<*len p*>) by RVSUM_1:104
+      .= Sum ((Card F) ^ Card <*p*>) by Th12
+      .= Sum Card (F^<*p*>) by Th13;
+    hence P[F^<*p*>];
+  end;
+A3: P[<*>(D*)] by RVSUM_1:102;
+  thus for F be FinSequence of D* holds P[F] from FINSEQ_2:sch 2(A3, A1);
+end;
+
+theorem Th31:
+  for D, E being set, F being FinSequence of D*, G being
+FinSequence of E* st Card F = Card G holds len FlattenSeq F = len FlattenSeq G
+proof
+  let D, E be set, F be FinSequence of D*, G be FinSequence of E*;
+  assume
+  Card F = Card G;
+  hence len FlattenSeq F = Sum Card G by Th30
+    .= len FlattenSeq G by Th30;
+end;
+
+theorem Th32:
+  for D being set, F being FinSequence of D*, k being set st k in
+dom FlattenSeq F ex i, j being Element of NAT st i in dom F & j in dom (F.i) &
+  k = (Sum Card (F|(i-'1))) + j & (F.i).j = (FlattenSeq F).k
+proof
+  let D be set;
+  set F = <*>(D*);
+  defpred P[FinSequence of D*] means for k being set st k in dom FlattenSeq $1
+ex i,j be Element of NAT st i in dom $1 & j in dom ($1.i) & k = (Sum Card ($1|(
+  i-'1))) + j & ($1.i).j = (FlattenSeq $1).k;
+A1: for F be FinSequence of D*, p be Element of D* st P[F] holds P[F^<*p*>]
+  proof
+    let F be FinSequence of D*, p be Element of D*;
+    assume
+A2: P[F];
+    let k be set;
+A3: FlattenSeq (F^<*p*>) = FlattenSeq F ^ FlattenSeq <*p*> by Th21D
+      .= FlattenSeq F ^ p by Th13D;
+A4: Sum Card F = len FlattenSeq F & (F^<*p*>)|len F = F by Th30,FINSEQ_5:
+    26;
+    assume
+A5: k in dom FlattenSeq (F^<*p*>);
+    then reconsider m = k as Element of NAT;
+    per cases;
+    suppose
+A6:   not k in dom FlattenSeq F;
+      take i = len F + 1;
+      take j = m-'Sum Card ((F^<*p*>)|(i-'1));
+A7:   1 <= len F +1 by NAT_1:11;
+      len (F^<*p*>) = len F + len <*p*> by FINSEQ_1:35
+        .= len F +1 by FINSEQ_1:56;
+      hence i in dom (F^<*p*>) by A7,FINSEQ_3:27;
+A8:   (Sum Card ((F^<*p*>)|(i-'1))) = len FlattenSeq F by A4,NAT_D:34;
+      m <= len (FlattenSeq F ^ p) by A5,A3,FINSEQ_3:27;
+      then m <= len FlattenSeq F + len p by FINSEQ_1:35;
+      then
+A9:   j <= len p by A8,NAT_D:53;
+      1 in dom <*p*> by FINSEQ_5:6;
+      then
+A10:  (F^<*p*>).i = <*p*>.1 by FINSEQ_1:def 7
+        .= p by FINSEQ_1:57;
+      1 <= m by A5,FINSEQ_3:27;
+      then
+A11:  len FlattenSeq F < m by A6,FINSEQ_3:27;
+      then len FlattenSeq F +1 <= m by NAT_1:13;
+      then 1 <= j by A8,NAT_D:55;
+      hence
+A12:  j in dom ((F^<*p*>).i) by A10,A9,FINSEQ_3:27;
+      thus k = (Sum Card ((F^<*p*>)|(i-'1))) + j by A8,A11,XREAL_1:237;
+      hence thesis by A3,A8,A10,A12,FINSEQ_1:def 7;
+    end;
+    suppose
+A13:  k in dom FlattenSeq F;
+      then consider i, j being Element of NAT such that
+A14:  i in dom F and
+A15:  j in dom (F.i) and
+A16:  k = (Sum Card (F|(i-'1))) + j and
+A17:  (F.i).j = (FlattenSeq F).k by A2;
+      take i, j;
+      dom F c= dom (F^<*p*>) by FINSEQ_1:39;
+      hence i in dom (F^<*p*>) by A14;
+      thus j in dom ((F^<*p*>).i) by A14,A15,FINSEQ_1:def 7;
+A18:  i-'1 <= i by NAT_D:35;
+      i <= len F by A14,FINSEQ_3:27;
+      hence k = (Sum Card ((F^<*p*>)|(i-'1))) + j by A16,A18,FINSEQ_5:25 ,
+      XXREAL_0:2;
+      (F^<*p*>).i = (F.i) by A14,FINSEQ_1:def 7;
+      hence thesis by A3,A13,A17,FINSEQ_1:def 7;
+    end;
+  end;
+A19: P[F];
+  thus for F being FinSequence of D* holds P[F] from FINSEQ_2:sch 2(A19, A1);
+end;
+
+theorem Th33:
+  for D being set, F being FinSequence of D*, i, j being Element
+  of NAT st i in dom F & j in dom (F.i) holds (Sum Card (F|(i-'1))) + j in dom
+  FlattenSeq F & (F.i).j = (FlattenSeq F).((Sum Card (F|(i-'1))) + j)
+proof
+  let D be set;
+  set F = <*>(D*);
+  defpred P[FinSequence of D*] means for i, j be Element of NAT st i in dom $1
+& j in dom ($1.i) holds (Sum Card ($1|(i-'1))) + j in dom FlattenSeq $1 & ($1.i
+  ).j = (FlattenSeq $1).((Sum Card ($1|(i-'1))) + j);
+A1: for F be FinSequence of D*, p be Element of D* st P[F] holds P[F^<*p*>]
+  proof
+    let F be FinSequence of D*, p be Element of D*;
+    assume
+A2: for i, j being Element of NAT st i in dom F & j in dom (F.i) holds
+(Sum Card (F|(i-'1))) + j in dom FlattenSeq F & (F.i).j = (FlattenSeq F).((Sum
+    Card (F|(i-'1))) + j);
+    let i, j be Element of NAT;
+    assume that
+A3: i in dom (F^<*p*>) and
+A4: j in dom ((F^<*p*>).i);
+A5: FlattenSeq (F^<*p*>) = FlattenSeq F ^ FlattenSeq <*p*> by Th21D
+      .= FlattenSeq F ^ p by Th13D;
+    per cases;
+    suppose
+A6:   not i in dom F;
+      1 <= i by A3,FINSEQ_3:27;
+      then len F < i by A6,FINSEQ_3:27;
+      then
+A7:   len F + 1 <= i by NAT_1:13;
+A8:   len (F^<*p*>) = len F + len <*p*> by FINSEQ_1:35
+        .= len F + 1 by FINSEQ_1:57;
+      i <= len (F^<*p*>) by A3,FINSEQ_3:27;
+      then
+A9:   i = len F + 1 by A8,A7,XXREAL_0:1;
+      then i-'1 = len F by NAT_D:34;
+      then
+A10:  (F^<*p*>)|(i-'1) = F by FINSEQ_5:26;
+A11:  Sum Card F = len FlattenSeq F by Th30;
+      1 in dom <*p*> by FINSEQ_5:6;
+      then
+A12:  (F^<*p*>).i = <*p*>.1 by A9,FINSEQ_1:def 7
+        .= p by FINSEQ_1:57;
+      hence
+      (Sum Card ((F^<*p*>)|(i-'1))) + j in dom FlattenSeq (F^<*p*>) by A4
+      ,A5,A10,A11,FINSEQ_1:41;
+      thus thesis by A4,A5,A12,A10,A11,FINSEQ_1:def 7;
+    end;
+    suppose
+A13:  i in dom F;
+      then
+A14:  j in dom (F.i) by A4,FINSEQ_1:def 7;
+      then
+A15:  (Sum Card (F|(i-'1))) + j in dom FlattenSeq F by A2,A13;
+A16:  i-'1 <= i by NAT_D:35;
+      i <= len F by A13,FINSEQ_3:27;
+      then
+A17:  (F^<*p*>)|(i-'1) = F|(i-'1) by A16,FINSEQ_5:25,XXREAL_0:2;
+      dom FlattenSeq F c= dom FlattenSeq (F^<*p*>) by A5,FINSEQ_1:39;
+      hence (Sum Card ((F^<*p*>)|(i-'1))) + j in dom FlattenSeq (F^<*p*>) by
+      A17,A15;
+      thus ((F^<*p*>).i).j = (F.i).j by A13,FINSEQ_1:def 7
+        .= (FlattenSeq F).((Sum Card (F|(i-'1))) + j) by A2,A13,A14
+        .= (FlattenSeq (F^<*p*>)).((Sum Card ((F^<*p*>)|(i-'1)))+j) by A5,
+      A17,A15,FINSEQ_1:def 7;
+    end;
+  end;
+A18: P[F];
+  thus for F being FinSequence of D* holds P[F] from FINSEQ_2:sch 2(A18, A1);
+end;
+
+theorem Th35:
+  for X, Y being non empty set, f being FinSequence of X*, v being
+  Function of X, Y holds (dom f --> v)**f is FinSequence of Y*
+proof
+  let X, Y be non empty set, f be FinSequence of X*, v be Function of X, Y;
+  set F = (dom f --> v)**f;
+A1: dom F = dom (dom f --> v) /\ dom f by PBOOLE:def 24
+    .= dom f /\ dom f by FUNCOP_1:19
+    .= dom f;
+A2: rng F c= Y*
+  proof
+    let y be set;
+    assume
+    y in rng F;
+    then consider x being set such that
+A3: x in dom F and
+A4: y = F.x by FUNCT_1:def 5;
+    reconsider x as Element of NAT by A1,A3;
+    f.x in X* by A1,A3,FINSEQ_2:13;
+    then
+A5: f.x is FinSequence of X by FINSEQ_1:def 11;
+    y = (dom f --> v).x * (f.x) by A3,A4,PBOOLE:def 24
+      .= v*(f.x) by A1,A3,FUNCOP_1:13;
+    then y is FinSequence of Y by A5,FINSEQ_2:36;
+    hence thesis by FINSEQ_1:def 11;
+  end;
+  dom F = Seg len f by A1,FINSEQ_1:def 3;
+  then F is FinSequence-like by FINSEQ_1:def 2;
+  hence thesis by A2,FINSEQ_1:def 4;
+end;
+
+theorem
+  for X, Y being non empty set, f being FinSequence of X*, v being
+  Function of X, Y ex F being FinSequence of Y* st F = (dom f --> v)**f & v*
+  FlattenSeq f = FlattenSeq F
+proof
+  let X, Y be non empty set, f be FinSequence of X*, v be Function of X, Y;
+  reconsider F = (dom f --> v)**f as FinSequence of Y* by Th35;
+  take F;
+  thus F = (dom f --> v)**f;
+  set Fl = FlattenSeq F;
+  set fl = FlattenSeq f;
+  reconsider vfl = v*fl as FinSequence of Y;
+  now
+    len fl = len vfl by FINSEQ_2:37;
+    hence
+A1: dom fl = dom vfl by FINSEQ_3:31;
+A2: dom F = dom (dom f --> v) /\ dom f by PBOOLE:def 24
+      .= dom f /\ dom f by FUNCOP_1:19
+      .= dom f;
+A3: now
+      let k be set;
+      assume
+A4:   k in dom f;
+      then reconsider k1=k as Element of NAT;
+A5:   F.k = ((dom f --> v).k)*(f.k) by A2,A4,PBOOLE:def 24
+        .= v*(f.k) by A4,FUNCOP_1:13;
+      f.k1 in X* by A4,FINSEQ_2:13;
+      then reconsider fk = f.k as FinSequence of X by FINSEQ_1:def 11;
+      thus (Card f).k = len fk by A4,CARD_3:def 2
+        .= len (F.k) by A5,FINSEQ_2:37
+        .= (Card F).k by A2,A4,CARD_3:def 2;
+    end;
+A6: dom f = dom Card f & dom f = dom Card F by A2,CARD_3:def 2;
+    then
+A7: Card f = Card F by A3,FUNCT_1:9;
+    len fl = len Fl by A6,A3,Th31,FUNCT_1:9;
+    hence dom fl = dom Fl by FINSEQ_3:31;
+    let k be Nat;
+    assume
+A8: k in dom fl;
+    then consider i, j being Element of NAT such that
+A9: i in dom f and
+A10: j in dom (f.i) and
+A11: k = (Sum Card (f|(i-'1))) + j and
+A12: (f.i).j = fl.k by Th32;
+    f.i in X* by A9,FINSEQ_2:13;
+    then reconsider fi = f.i as FinSequence of X by FINSEQ_1:def 11;
+    F.i = ((dom f --> v).i)*(f.i) by A2,A9,PBOOLE:def 24
+      .= v*(f.i) by A9,FUNCOP_1:13;
+    then len fi = len (F.i) by FINSEQ_2:37;
+    then
+A13: j in dom (F.i) by A10,FINSEQ_3:31;
+    f.i in X* by A9,FINSEQ_2:13;
+    then dom v = X & f.i is FinSequence of X by FINSEQ_1:def 11,FUNCT_2:
+    def 1;
+    then rng (f.i) c= dom v by FINSEQ_1:def 4;
+    then
+A14: j in dom (v*(f.i)) by A10,RELAT_1:46;
+    Card (F|(i-'1)) = Card (F|Seg (i-'1)) by FINSEQ_1:def 15
+      .= (Card f)|Seg (i-'1) by A7,Th11
+      .= Card (f|Seg(i-'1)) by Th11
+      .= Card (f|(i-'1)) by FINSEQ_1:def 15;
+    then Fl.k = (F.i).j by A2,A9,A11,A13,Th33
+      .= (((dom f --> v).i)*(f.i)).j by A2,A9,PBOOLE:def 24
+      .= (v*(f.i)).j by A9,FUNCOP_1:13
+      .= v.((f.i).j) by A14,FUNCT_1:22;
+    hence vfl.k = Fl.k by A1,A8,A12,FUNCT_1:22;
+  end;
+  hence thesis by FINSEQ_1:17;
+end;
+
+begin :: Functions yielding natural and real numbers -------------------------
+
+registration
+  let f be natural-valued Function, x be set, n be natural number;
+  cluster f+*(x,n) -> natural-valued;
+  coherence
+  proof
+    set F = f+*(x,n);
+    let a be set such that
+    a in dom F;
+    per cases;
+    suppose
+      x in dom f & x = a;
+      hence thesis by FUNCT_7:33;
+    end;
+    suppose
+      x in dom f & x <> a;
+      then F.a = f.a by FUNCT_7:34;
+      hence thesis;
+    end;
+    suppose
+      not x in dom f;
+      then F.a = f.a by FUNCT_7:def 3;
+      hence thesis;
+    end;
+  end;
+end;
+
+registration
+  let f be real-valued Function, x be set, n be real number;
+  cluster f+*(x,n) -> real-valued;
+  coherence
+  proof
+    set F = f+*(x,n);
+    let a be set such that
+    a in dom F;
+    per cases;
+    suppose
+      x in dom f & x = a;
+      hence thesis by FUNCT_7:33;
+    end;
+    suppose
+      x in dom f & x <> a;
+      then F.a = f.a by FUNCT_7:34;
+      hence thesis;
+    end;
+    suppose
+      not x in dom f;
+      then F.a = f.a by FUNCT_7:def 3;
+      hence thesis;
+    end;
+  end;
+end;
+
+registration
+  let X be set;
+  cluster natural-valued ManySortedSet of X;
+  existence
+  proof
+    set f = X --> 0;
+    reconsider f as ManySortedSet of X;
+    take f;
+    thus thesis;
+  end;
+end;
+
+registration
+  let X be set;
+  cluster real-valued ManySortedSet of X;
+  existence
+  proof
+    consider b being natural-valued ManySortedSet of X;
+    b is real-valued;
+    hence thesis;
+  end;
+end;
+
+registration
+  let X be set;
+  cluster real-valued ManySortedSet of X;
+  existence
+  proof
+    consider b being natural-valued ManySortedSet of X;
+    b is real-valued;
+    hence thesis;
+  end;
+end;
+
+definition
+  let X be set, b1, b2 be complex-valued ManySortedSet of X;
+  redefine func b1+b2 -> ManySortedSet of X means
+  :Def5:
+  for x being set holds
+  it.x = b1.x+b2.x;
+  coherence
+  proof
+A1: X /\ X = X;
+    dom b1 = X & dom b2 = X by PARTFUN1:def 4;
+    then dom(b1+b2) = X by A1,VALUED_1:def 1;
+    hence thesis by PARTFUN1:def 4,RELAT_1:def 18;
+  end;
+  compatibility
+  proof
+    let f be ManySortedSet of X;
+A2: dom b1 = X & dom b2 = X by PARTFUN1:def 4;
+    then
+A3: dom f = dom b1 /\ dom b2 by PARTFUN1:def 4;
+    thus f = b1+b2 implies for x being set holds f.x = b1.x+b2.x
+    proof
+      assume
+A4:   f = b1+b2;
+      let x be set;
+      per cases;
+      suppose
+        x in X;
+        hence thesis by A2,A3,A4,VALUED_1:def 1;
+      end;
+      suppose
+A5:     not x in X;
+        then b1.x = 0 & b2.x = 0 by A2,FUNCT_1:def 4;
+        hence thesis by A2,A3,A5,FUNCT_1:def 4;
+      end;
+    end;
+    assume
+    for x being set holds f.x = b1.x+b2.x;
+    then for c being set st c in dom f holds f.c = b1.c+b2.c;
+    hence thesis by A3,VALUED_1:def 1;
+  end;
+end;
+
+definition
+  let X be set, b1, b2 be natural-valued ManySortedSet of X;
+  func b1 -' b2 -> ManySortedSet of X means
+  :Def6:
+  for x being set holds it.x
+  = b1.x -' b2.x;
+  existence
+  proof
+    deffunc F(set) = b1.$1 -' b2.$1;
+    consider f being ManySortedSet of X such that
+A1: for i being set st i in X holds f.i = F(i) from PBOOLE:sch 4;
+    take f;
+    let x be set;
+    per cases;
+    suppose
+      x in X;
+      hence thesis by A1;
+    end;
+    suppose
+A2:   not x in X;
+A3:   dom b2 = X by PARTFUN1:def 4;
+A4:   dom b1 = X by PARTFUN1:def 4;
+      dom f = X by PARTFUN1:def 4;
+      hence f.x = 0 by A2,FUNCT_1:def 4
+        .= 0-'0 by XREAL_1:234
+        .= 0-'b2.x by A2,A3,FUNCT_1:def 4
+        .= b1.x-'b2.x by A2,A4,FUNCT_1:def 4;
+    end;
+  end;
+  uniqueness
+  proof
+    let it1, it2 be ManySortedSet of X such that
+A5: for x being set holds it1.x = b1.x-'b2.x and
+A6: for x being set holds it2.x = b1.x-'b2.x;
+    now
+      let x be set;
+      assume
+      x in X;
+      thus it1.x = b1.x-'b2.x by A5
+        .= it2.x by A6;
+    end;
+    hence it1 = it2 by PBOOLE:3;
+  end;
+end;
+
+theorem
+  for X being set, b, b1, b2 being real-valued ManySortedSet of X st for
+  x being set st x in X holds b.x = b1.x+b2.x holds b = b1+b2
+proof
+  let X be set, b, b1, b2 be real-valued ManySortedSet of X;
+  assume
+A1: for x being set st x in X holds b.x = b1.x+b2.x;
+  now
+    let x be set;
+    per cases;
+    suppose
+      x in X;
+      hence b.x = b1.x+b2.x by A1;
+    end;
+    suppose
+A2:   not x in X;
+A3:   dom b2 = X by PARTFUN1:def 4;
+A4:   dom b1 = X by PARTFUN1:def 4;
+      dom b = X by PARTFUN1:def 4;
+      hence b.x = 0 qua Nat + (0 qua Nat) by A2,FUNCT_1:def 4
+        .= 0 qua Nat+b2.x by A2,A3,FUNCT_1:def 4
+        .= b1.x+b2.x by A2,A4,FUNCT_1:def 4;
+    end;
+  end;
+  hence thesis by Def5;
+end;
+
+theorem Th38:
+  for X being set, b, b1, b2 being natural-valued ManySortedSet of
+  X st for x being set st x in X holds b.x = b1.x-'b2.x holds b = b1-'b2
+proof
+  let X be set, b, b1, b2 be natural-valued ManySortedSet of X;
+  assume
+A1: for x being set st x in X holds b.x = b1.x-'b2.x;
+  now
+    let x be set;
+    per cases;
+    suppose
+      x in X;
+      hence b.x = b1.x -' b2.x by A1;
+    end;
+    suppose
+A2:   not x in X;
+A3:   dom b2 = X by PARTFUN1:def 4;
+A4:   dom b1 = X by PARTFUN1:def 4;
+      dom b = X by PARTFUN1:def 4;
+      hence b.x = 0 by A2,FUNCT_1:def 4
+        .= 0-'0 by XREAL_1:234
+        .= 0-'b2.x by A2,A3,FUNCT_1:def 4
+        .= b1.x-'b2.x by A2,A4,FUNCT_1:def 4;
+    end;
+  end;
+  hence thesis by Def6;
+end;
+
+registration
+  let X be set, b1, b2 be natural-valued ManySortedSet of X;
+  cluster b1+b2 -> natural-valued;
+  coherence;
+  cluster b1-'b2 -> natural-valued;
+  coherence
+  proof
+    set f = b1 -' b2;
+    rng f c= NAT
+    proof
+      let y be set;
+      assume
+      y in rng f;
+      then consider x being set such that
+      x in dom f and
+A1:   y = f.x by FUNCT_1:def 5;
+      f.x = b1.x -' b2.x by Def6;
+      hence thesis by A1;
+    end;
+    hence thesis by VALUED_0:def 6;
+  end;
+end;
+
+theorem Th39:
+  for X being set, b1, b2, b3 being real-valued ManySortedSet of X
+  holds (b1+b2)+b3 = b1+(b2+b3)
+proof
+  let X be set, b1, b2, b3 be real-valued ManySortedSet of X;
+  now
+    let x be set;
+    assume
+    x in X;
+    thus ((b1+b2)+b3).x = (b1+b2).x+b3.x by Def5
+      .= b1.x+b2.x+b3.x by Def5
+      .= b1.x+(b2.x+b3.x)
+      .= b1.x+(b2+b3).x by Def5
+      .= (b1+(b2+b3)).x by Def5;
+  end;
+  hence thesis by PBOOLE:3;
+end;
+
+theorem
+  for X being set, b, c, d being natural-valued ManySortedSet of X holds
+  b-'c-'d = b-'(c+d)
+proof
+  let X be set, b, c, d be natural-valued ManySortedSet of X;
+  now
+    let x be set;
+    assume
+    x in X;
+    thus (b-'c-'d).x = (b-'c).x -' d.x by Def6
+      .= b.x-'c.x-'d.x by Def6
+      .= b.x-'(c.x+d.x) by NAT_2:32
+      .= b.x-'(c+d).x by Def5;
+  end;
+  hence thesis by Th38;
+end;
+
+begin :: The support of a function --------------------------------------------
+
+definition
+  let f be Function;
+  func support f means
+  :Def7:
+  for x being set holds x in it iff f.x <> 0;
+  existence
+  proof
+    defpred P[set] means f.$1 <> 0;
+    consider A being set such that
+A1: for x being set holds x in A iff x in dom f & P[x] from XBOOLE_0:
+    sch 1;
+    take A;
+    let x be set;
+    thus x in A implies f.x <> 0 by A1;
+    assume
+A2: f.x <> 0;
+    then x in dom f by FUNCT_1:def 4;
+    hence thesis by A1,A2;
+  end;
+  uniqueness
+  proof
+    let A,B be set such that
+A3: for x being set holds x in A iff f.x <> 0 and
+A4: for x being set holds x in B iff f.x <> 0;
+    for x being set holds x in A iff x in B
+    proof
+      let x be set;
+      x in A iff f.x <> 0 by A3;
+      hence thesis by A4;
+    end;
+    hence thesis by TARSKI:2;
+  end;
+end;
+
+theorem Th41:
+  for f being Function holds support f c= dom f
+proof
+  let f be Function, x be set;
+  assume
+  x in support f;
+  then f.x <> 0 by Def7;
+  hence thesis by FUNCT_1:def 4;
+end;
+
+definition
+  let f be Function;
+  attr f is finite-support means
+  :Def8:
+  support f is finite;
+end;
+
+registration
+  cluster finite -> finite-support Function;
+  coherence
+  proof
+    let f be Function;
+    assume
+    f is finite;
+    then dom f is finite;
+    hence support f is finite by Th41,FINSET_1:13;
+  end;
+end;
+
+registration
+  cluster natural-valued finite-support non empty Function;
+  existence
+  proof
+    take f = 0 .--> 1;
+    thus f is natural-valued;
+    thus f is finite-support;
+    thus thesis;
+  end;
+end;
+
+registration
+  let f be finite-support Function;
+  cluster support f -> finite;
+  coherence by Def8;
+end;
+
+registration
+  let X be set;
+  cluster finite-support Function of X, NAT;
+  existence
+  proof
+    set f = X --> 0;
+A1: dom f = X by FUNCOP_1:19;
+    reconsider f as Function of X, NAT;
+    take f;
+    now
+A2:   support f c= dom f by Th41;
+      assume
+      support f <> {};
+      then consider x being set such that
+A3:   x in support f by XBOOLE_0:def 1;
+      f.x <> 0 by A3,Def7;
+      hence contradiction by A1,A3,A2,FUNCOP_1:13;
+    end;
+    hence support f is finite;
+  end;
+end;
+
+registration
+  let f be finite-support Function, x, y be set;
+  cluster f+*(x,y) -> finite-support;
+  coherence
+  proof
+    set F = f+*(x,y);
+    support F c= support f \/ {x}
+    proof
+      let a be set;
+      assume
+      a in support F;
+      then
+A1:   F.a <> 0 by Def7;
+      per cases;
+      suppose
+        x in dom f & a = x;
+        then a in {x} by TARSKI:def 1;
+        hence thesis by XBOOLE_0:def 3;
+      end;
+      suppose
+        x in dom f & a <> x;
+        then F.a = f.a by FUNCT_7:34;
+        then a in support f by A1,Def7;
+        hence thesis by XBOOLE_0:def 3;
+      end;
+      suppose
+        not x in dom f;
+        then F.a = f.a by FUNCT_7:def 3;
+        then a in support f by A1,Def7;
+        hence thesis by XBOOLE_0:def 3;
+      end;
+    end;
+    hence support (f+*(x,y)) is finite;
+  end;
+end;
+
+registration
+  let X be set;
+  cluster natural-valued finite-support ManySortedSet of X;
+  existence
+  proof
+    set f = X --> 0;
+A1: dom f = X by FUNCOP_1:19;
+    reconsider f as ManySortedSet of X;
+    take f;
+    thus f is natural-valued;
+    support f = {}
+    proof
+      assume
+      not thesis;
+      then consider x being set such that
+A2:   x in support f by XBOOLE_0:def 1;
+      support f c= dom f by Th41;
+      then f.x = 0 by A1,A2,FUNCOP_1:13;
+      hence contradiction by A2,Def7;
+    end;
+    hence thesis by Def8;
+  end;
+end;
+
+theorem Th42:
+  for X being set, b1, b2 being natural-valued ManySortedSet of X
+  holds support (b1+b2) = support b1 \/ support b2
+proof
+  let X be set, b1, b2 be natural-valued ManySortedSet of X;
+  now
+    let x be set;
+    hereby
+      assume
+      x in support b1 \/ support b2;
+      then x in support b1 or x in support b2 by XBOOLE_0:def 3;
+      then b1.x <> 0 or b2.x <> 0 by Def7;
+      then b1.x + b2.x <> 0;
+      hence (b1+b2).x <> 0 by Def5;
+    end;
+    assume
+A1: (b1+b2).x <> 0;
+    assume
+A2: not x in support b1 \/ support b2;
+    then not x in support b1 by XBOOLE_0:def 3;
+    then
+A3: b1.x = 0 by Def7;
+    not x in support b2 by A2,XBOOLE_0:def 3;
+    then b1.x+b2.x = 0 by A3,Def7;
+    hence contradiction by A1,Def5;
+  end;
+  hence thesis by Def7;
+end;
+
+theorem Th43:
+  for X being set, b1, b2 being natural-valued ManySortedSet of X
+  holds support (b1-'b2) c= support b1
+proof
+  let X be set, b1, b2 be natural-valued ManySortedSet of X;
+  thus support (b1-'b2) c= support b1
+  proof
+    let x be set;
+    assume
+A1: x in support (b1-'b2);
+    assume
+    not x in support b1;
+    then b1.x = 0 by Def7;
+    then b1.x-'b2.x = 0 by NAT_2:10;
+    then (b1-'b2).x = 0 by Def6;
+    hence contradiction by A1,Def7;
+  end;
+end;
+
+begin :: Bags -----------------------------------------------------------------
+
+definition
+  let X be set;
+  mode bag of X is natural-valued finite-support ManySortedSet of X;
+end;
+
+registration
+  let X be finite set;
+  cluster -> finite-support ManySortedSet of X;
+  coherence
+  proof
+    let f be ManySortedSet of X;
+    support f c= dom f & dom f = X by Th41,PARTFUN1:def 4;
+    hence support f is finite;
+  end;
+end;
+
+registration
+  let X be set, b1, b2 be bag of X;
+  cluster b1+b2 -> finite-support;
+  coherence
+  proof
+    support (b1+b2) = support b1 \/ support b2 by Th42;
+    hence support (b1+b2) is finite;
+  end;
+  cluster b1-'b2 -> finite-support;
+  coherence
+  proof
+    support (b1-'b2) c= support b1 by Th43;
+    hence support (b1-'b2) is finite;
+  end;
+end;
+
+theorem Th44:
+  for X being set holds X--> 0 is bag of X
+proof
+  let X be set;
+  set f = X --> 0;
+A1: dom f = X by FUNCOP_1:19;
+  support f = {}
+  proof
+    assume
+    not thesis;
+    then consider x being set such that
+A2: x in support f by XBOOLE_0:def 1;
+    support f c= dom f by Th41;
+    then f.x = 0 by A1,A2,FUNCOP_1:13;
+    hence contradiction by A2,Def7;
+  end;
+  hence thesis by Def8;
+end;
+
+definition
+  let n be Ordinal, p, q be bag of n;
+  pred p < q means
+  :Def11:
+  ex k being Ordinal st p.k < q.k & for l being
+  Ordinal st l in k holds p.l = q.l;
+  asymmetry
+  proof
+    let p, q be bag of n;
+    given k being Ordinal such that
+A1: p.k < q.k and
+A2: for l being Ordinal st l in k holds p.l = q.l;
+    given k1 being Ordinal such that
+A3: q.k1 < p.k1 and
+A4: for l being Ordinal st l in k1 holds q.l = p.l;
+    per cases by ORDINAL1:24;
+    suppose
+      k in k1;
+      hence contradiction by A1,A4;
+    end;
+    suppose
+      k1 in k;
+      hence contradiction by A2,A3;
+    end;
+    suppose
+      k1 = k;
+      hence contradiction by A1,A3;
+    end;
+  end;
+end;
+
+theorem Th45:
+  for n being Ordinal, p, q, r being bag of n st p < q & q < r
+  holds p < r
+proof
+  let n be Ordinal, p, q, r be bag of n;
+  assume that
+A1: p < q and
+A2: q < r;
+  consider k being Ordinal such that
+A3: p.k < q.k and
+A4: for l being Ordinal st l in k holds p.l = q.l by A1,Def11;
+  consider m being Ordinal such that
+A5: q.m < r.m and
+A6: for l being Ordinal st l in m holds q.l = r.l by A2,Def11;
+  take n = k /\ m;
+A7: n c= m & n <> m iff n c< m by XBOOLE_0:def 8;
+A8: n c= k & n <> k iff n c< k by XBOOLE_0:def 8;
+  now
+    per cases by ORDINAL1:24;
+    suppose
+      k in m;
+      hence p.n < r.n by A3,A6,A8,A7,ORDINAL1:21,ORDINAL3:16,XBOOLE_1:17;
+    end;
+    suppose
+      m in k;
+      hence p.n < r.n by A4,A5,A8,A7,ORDINAL1:21,ORDINAL3:16,XBOOLE_1:17;
+    end;
+    suppose
+      m = k;
+      hence p.n < r.n by A3,A5,XXREAL_0:2;
+    end;
+  end;
+  hence p.n < r.n;
+  let l be Ordinal;
+A9: n c= m by XBOOLE_1:17;
+  assume
+A10: l in n;
+  n c= k by XBOOLE_1:17;
+  hence p.l = q.l by A4,A10
+    .= r.l by A6,A9,A10;
+end;
+
+definition
+  let n be Ordinal, p, q be bag of n;
+  pred p <=' q means
+  :Def12:
+  p < q or p = q;
+  reflexivity;
+end;
+
+theorem Th46:
+  for n being Ordinal, p, q, r being bag of n st p <=' q & q <=' r
+  holds p <=' r
+proof
+  let n be Ordinal, p, q, r be bag of n;
+  assume that
+A1: p <=' q and
+A2: q <=' r;
+A3: q < r or q = r by A2,Def12;
+  p < q or p = q by A1,Def12;
+  then p < r or p <=' r by A3,Th45;
+  hence thesis by Def12;
+end;
+
+theorem
+  for n being Ordinal, p, q, r being bag of n st p < q & q <=' r holds p
+  < r
+proof
+  let n be Ordinal, p, q, r be bag of n such that
+A1: p < q and
+A2: q <=' r;
+  q < r or q = r by A2,Def12;
+  hence thesis by A1,Th45;
+end;
+
+theorem
+  for n being Ordinal, p, q, r being bag of n st p <=' q & q < r holds p
+  < r
+proof
+  let n be Ordinal, p, q, r be bag of n such that
+A1: p <=' q and
+A2: q < r;
+  p < q or p = q by A1,Def12;
+  hence thesis by A2,Th45;
+end;
+
+theorem Th49:
+  for n being Ordinal, p, q being bag of n holds p <=' q or q <='
+  p
+proof
+  let n be Ordinal, p, q be bag of n;
+  assume
+A1: not p <=' q;
+  then consider i being set such that
+A2: i in n and
+A3: p.i <> q.i by PBOOLE:3;
+A4: not p < q by A1,Def12;
+  reconsider j = i as Ordinal by A2;
+  defpred P[set] means p.$1 <> q.$1;
+A5: ex i being Ordinal st P[i] by A2,A3;
+  consider m being Ordinal such that
+A6: P[m] and
+A7: for n being Ordinal st P[n] holds m c= n from ORDINAL1:sch 1(A5);
+A8: for l being Ordinal st l in m holds q.l = p.l by A7,ORDINAL1:7;
+  per cases by A6,XXREAL_0:1;
+  suppose
+    p.m < q.m;
+    hence thesis by A4,A8,Def11;
+  end;
+  suppose
+    p.m > q.m;
+    then q < p by A8,Def11;
+    hence thesis by Def12;
+  end;
+end;
+
+definition
+  let X be set, d, b be bag of X;
+  pred d divides b means
+  :Def13:
+  for k being set holds d.k <= b.k;
+  reflexivity;
+end;
+
+theorem Th50:
+  for n being set, d, b being bag of n st for k being set st k in
+  n holds d.k <= b.k holds d divides b
+proof
+  let n be set, d, b be bag of n;
+  assume
+A1: for k being set st k in n holds d.k <= b.k;
+  let k be set;
+  per cases;
+  suppose
+    k in dom d;
+    then k in n by PARTFUN1:def 4;
+    hence thesis by A1;
+  end;
+  suppose
+    not k in dom d;
+    hence thesis by FUNCT_1:def 4;
+  end;
+end;
+
+theorem Th51:
+  for n being Ordinal, b1, b2 being bag of n st b1 divides b2
+  holds b2 -' b1 + b1 = b2
+proof
+  let n be Ordinal, b1, b2 be bag of n such that
+A1: b1 divides b2;
+  now
+    let k be set;
+    assume
+    k in n;
+    then reconsider k' = k as Ordinal;
+A2: b1.k' <= b2.k' by A1,Def13;
+    thus (b2 -' b1 + b1).k = (b2-'b1).k + b1.k by Def5
+      .= b2.k -' b1.k + b1.k by Def6
+      .= b2.k + b1.k -' b1.k by A2,NAT_D:38
+      .= b2.k by NAT_D:34;
+  end;
+  hence thesis by PBOOLE:3;
+end;
+
+theorem Th52:
+  for X being set, b1, b2 being bag of X holds b2 + b1 -' b1 = b2
+proof
+  let X be set, b1, b2 be bag of X;
+  now
+    let k be set;
+    assume
+    k in X;
+    thus (b2 + b1 -' b1).k = (b2+b1).k -' b1.k by Def6
+      .= b2.k+b1.k -' b1.k by Def5
+      .= b2.k by NAT_D:34;
+  end;
+  hence thesis by PBOOLE:3;
+end;
+
+theorem Th53:
+  for n being Ordinal, d, b being bag of n st d divides b holds d
+  <=' b
+proof
+  let n be Ordinal, d, b be bag of n;
+  assume that
+A1: d divides b and
+A2: not d < b;
+  now
+    defpred P[set] means d.$1 < b.$1;
+    let p be set;
+    assume
+    p in n;
+    then reconsider p' = p as Ordinal;
+    assume
+A3: d.p <> b.p;
+    d.p' <= b.p' by A1,Def13;
+    then d.p' < b.p' by A3,XXREAL_0:1;
+    then
+A4: ex p being Ordinal st P[p];
+    consider k being Ordinal such that
+A5: P[k] and
+A6: for m being Ordinal st P[m] holds k c= m from ORDINAL1:sch 1(A4);
+    now
+      let l be Ordinal;
+      assume
+      l in k;
+      then
+A7:   b.l <= d.l by A6,ORDINAL1:7;
+      d.l <= b.l by A1,Def13;
+      hence d.l = b.l by A7,XXREAL_0:1;
+    end;
+    hence contradiction by A2,A5,Def11;
+  end;
+  hence thesis by PBOOLE:3;
+end;
+
+theorem Th54:
+  for n being set, b,b1,b2 being bag of n st b = b1 + b2 holds b1
+  divides b
+proof
+  let n be set, b,b1,b2 be bag of n;
+  assume
+A1: b = b1 + b2;
+  now
+    let k be set;
+    assume
+    k in n;
+    b.k = b1.k+b2.k by A1,Def5;
+    hence b1.k <= b.k by NAT_1:11;
+  end;
+  hence thesis by Th50;
+end;
+
+definition
+  let X be set;
+  func Bags X means
+  :Def14:
+  for x being set holds x in it iff x is bag of X;
+  existence
+  proof
+    defpred P[set] means $1 is bag of X;
+    consider A being set such that
+A1: for x being set holds x in A iff x in Funcs(X,NAT) & P[x] from
+    XBOOLE_0:sch 1;
+    take A;
+    let x be set;
+    thus x in A implies x is bag of X by A1;
+    assume
+A2: x is bag of X;
+    then reconsider b = x as bag of X;
+    dom b = X & rng b c= NAT by PARTFUN1:def 4,VALUED_0:def 6;
+    then x in Funcs(X,NAT) by FUNCT_2:def 2;
+    hence thesis by A1,A2;
+  end;
+  uniqueness
+  proof
+    let A,B be set such that
+A3: for x being set holds x in A iff x is bag of X and
+A4: for x being set holds x in B iff x is bag of X;
+    now
+      let x be set;
+      x in A iff x is bag of X by A3;
+      hence x in A iff x in B by A4;
+    end;
+    hence thesis by TARSKI:2;
+  end;
+end;
+
+definition
+  let X be set;
+  redefine func Bags X -> Subset of Bags X;
+  coherence
+  proof
+    Bags X c= Bags X;
+    hence thesis;
+  end;
+end;
+
+theorem
+  Bags {} = {{}}
+proof
+  now
+    let x be set;
+    hereby
+      assume
+      x in {{}};
+      then x = {} by TARSKI:def 1;
+      hence x is bag of {} by PARTFUN1:def 4,RELAT_1:60,def 18;
+    end;
+    assume
+    x is bag of {};
+    then reconsider x' = x as ManySortedSet of {};
+    dom x' = {} by PARTFUN1:def 4;
+    then x' = {};
+    hence x in {{}} by TARSKI:def 1;
+  end;
+  hence thesis by Def14;
+end;
+
+registration
+  let X be set;
+  cluster Bags X -> non empty;
+  coherence
+  proof
+    X --> 0 is bag of X by Th44;
+    hence thesis by Def14;
+  end;
+end;
+
+definition
+  let X be set, B be non empty Subset of Bags X;
+  redefine mode Element of B -> bag of X;
+  coherence
+  proof
+    let b be Element of B;
+    thus thesis by Def14;
+  end;
+end;
+
+definition
+  let X be set;
+  func EmptyBag X -> Element of Bags X equals
+  X --> 0;
+  coherence
+  proof
+    X --> 0 is bag of X by Th44;
+    hence thesis by Def14;
+  end;
+end;
+
+theorem Th56:
+  for X, x being set holds (EmptyBag X).x = 0
+proof
+  let X, x be set;
+A1: dom (X --> 0) = X by FUNCOP_1:19;
+  per cases;
+  suppose
+    x in X;
+    hence thesis by FUNCOP_1:13;
+  end;
+  suppose
+    not x in X;
+    hence thesis by A1,FUNCT_1:def 4;
+  end;
+end;
+
+theorem
+  for X be set, b being bag of X holds b+EmptyBag X = b
+proof
+  let X be set, b be bag of X;
+  now
+    let x be set;
+    assume
+    x in X;
+    then
+A1: (EmptyBag X).x = 0 by FUNCOP_1:13;
+    thus (b+EmptyBag X).x = b.x+(EmptyBag X).x by Def5
+      .= b.x by A1;
+  end;
+  hence thesis by PBOOLE:3;
+end;
+
+theorem Th58:
+  for X be set, b being bag of X holds b-'EmptyBag X = b
+proof
+  let X be set, b be bag of X;
+  now
+    let x be set;
+    assume
+    x in X;
+    then
+A1: (EmptyBag X).x = 0 by FUNCOP_1:13;
+    thus (b-'EmptyBag X).x = b.x-'(EmptyBag X).x by Def6
+      .= b.x by A1,NAT_D:40;
+  end;
+  hence thesis by PBOOLE:3;
+end;
+
+theorem
+  for X be set, b being bag of X holds (EmptyBag X) -' b = EmptyBag X
+proof
+  let X be set, b be bag of X;
+  now
+    let x be set;
+    assume
+    x in X;
+    then
+A1: (EmptyBag X).x = 0 by FUNCOP_1:13;
+    thus ((EmptyBag X)-'b).x = (EmptyBag X).x-'b.x by Def6
+      .= (EmptyBag X).x by A1,NAT_2:10;
+  end;
+  hence thesis by PBOOLE:3;
+end;
+
+theorem Th60:
+  for X being set, b being bag of X holds b-'b = EmptyBag X
+proof
+  let X be set, b be bag of X;
+  now
+    let x be set;
+    assume
+    x in X;
+    thus (b-'b).x = b.x -' b.x by Def6
+      .= 0 by XREAL_1:234
+      .= (EmptyBag X).x by Th56;
+  end;
+  hence thesis by PBOOLE:3;
+end;
+
+theorem Th61:
+  for n being set, b1, b2 be bag of n st b1 divides b2 & b2 -' b1
+  = EmptyBag n holds b2 = b1
+proof
+  let n be set, b1, b2 be bag of n such that
+A1: b1 divides b2 and
+A2: b2 -' b1 = EmptyBag n;
+  now
+    let k be set;
+    assume
+    k in n;
+    0 = (b2-'b1).k by A2,Th56
+      .= b2.k -' b1.k by Def6;
+    then
+A3: b2.k <= b1.k by NAT_D:36;
+    b1.k <= b2.k by A1,Def13;
+    hence b2.k = b1.k by A3,XXREAL_0:1;
+  end;
+  hence thesis by PBOOLE:3;
+end;
+
+theorem Th62:
+  for n being set, b being bag of n st b divides EmptyBag n holds
+  EmptyBag n = b
+proof
+  let n be set, b be bag of n;
+  assume
+A1: b divides EmptyBag n;
+  now
+    let k be set;
+    assume
+    k in n;
+    (EmptyBag n).k = 0 by Th56;
+    hence (EmptyBag n).k = b.k by A1,Def13;
+  end;
+  hence thesis by PBOOLE:3;
+end;
+
+theorem Th63:
+  for n being set, b being bag of n holds EmptyBag n divides b
+proof
+  let n be set, b be bag of n;
+  let k be set;
+  thus thesis by Th56;
+end;
+
+theorem
+  for n being Ordinal, b being bag of n holds EmptyBag n <=' b by Th53,
+  Th63;
+
+definition
+  let n be Ordinal;
+  func BagOrder n -> Order of Bags n means
+  :Def16:
+  for p, q being bag of n
+  holds [p, q] in it iff p <=' q;
+  existence
+  proof
+    defpred P[set,set] means ex b1,b2 be Element of Bags n st $1 = b1 & $2 =
+    b2 & b1 <=' b2;
+    consider BO being Relation of Bags n, Bags n such that
+A1: for x, y being set holds [x,y] in BO iff x in Bags n & y in Bags n
+    & P[x,y] from RELSET_1:sch 1;
+A2: BO is_antisymmetric_in Bags n
+    proof
+      let x, y be set;
+      assume that
+      x in Bags n and
+      y in Bags n and
+A3:   [x,y] in BO and
+A4:   [y,x] in BO;
+A5:   ex b1', b2' being Element of Bags n st y = b1' & x = b2' & b1' <='
+      b2' by A1,A4;
+      consider b1, b2 being Element of Bags n such that
+A6:   x = b1 & y = b2 and
+A7:   b1 <=' b2 by A1,A3;
+      b1 < b2 or b1 = b2 by A7,Def12;
+      hence thesis by A6,A5,Def12;
+    end;
+A8: BO is_reflexive_in Bags n
+    proof
+      let x be set;
+      assume
+      x in Bags n;
+      hence thesis by A1;
+    end;
+    then
+A9: dom BO = Bags n & field BO = Bags n by ORDERS_1:98;
+    BO is_transitive_in Bags n
+    proof
+      let x, y, z be set such that
+      x in Bags n and
+      y in Bags n and
+      z in Bags n and
+A10:  [x,y] in BO and
+A11:  [y,z] in BO;
+      consider b1, b2 being Element of Bags n such that
+A12:  x = b1 and
+A13:  y = b2 & b1 <=' b2 by A1,A10;
+      consider b1', b2' being Element of Bags n such that
+A14:  y = b1' and
+A15:  z = b2' and
+A16:  b1' <=' b2' by A1,A11;
+      reconsider B1 = b1, B2' = b2' as bag of n;
+      B1 <=' B2' by A13,A14,A16,Th46;
+      hence thesis by A1,A12,A15;
+    end;
+    then reconsider BO as Order of Bags n by A8,A2,A9,PARTFUN1:def 4,RELAT_2:
+    def 9,def 12,def 16;
+    take BO;
+    let p, q be bag of n;
+    hereby
+      assume
+      [p, q] in BO;
+      then ex b1, b2 being Element of Bags n st p = b1 & q = b2 & b1 <=' b2 by
+      A1;
+      hence p <=' q;
+    end;
+    p in Bags n & q in Bags n by Def14;
+    hence thesis by A1;
+  end;
+  uniqueness
+  proof
+    let B1, B2 be Order of Bags n such that
+A17: for p, q being bag of n holds [p, q] in B1 iff p <=' q and
+A18: for p, q being bag of n holds [p, q] in B2 iff p <=' q;
+    let a, b be set;
+    hereby
+      assume
+A19:  [a,b] in B1;
+      then consider b1, b2 being set such that
+A20:  [a,b] = [b1,b2] and
+A21:  b1 in Bags n & b2 in Bags n by RELSET_1:6;
+      reconsider b1, b2 as bag of n by A21,Def14;
+      b1 <=' b2 by A17,A19,A20;
+      hence [a,b] in B2 by A18,A20;
+    end;
+    assume
+A22: [a,b] in B2;
+    then consider b1, b2 being set such that
+A23: [a,b] = [b1,b2] and
+A24: b1 in Bags n & b2 in Bags n by RELSET_1:6;
+    reconsider b1, b2 as bag of n by A24,Def14;
+    b1 <=' b2 by A18,A22,A23;
+    hence thesis by A17,A23;
+  end;
+end;
+
+Lm1: for n being Ordinal holds BagOrder n is_reflexive_in Bags n
+proof
+  let n be Ordinal;
+  let x be set;
+  assume
+  x in Bags n;
+  then reconsider x' = x as bag of n by Def14;
+  x' <=' x';
+  hence thesis by Def16;
+end;
+
+Lm2: for n being Ordinal holds BagOrder n is_antisymmetric_in Bags n
+proof
+  let n be Ordinal;
+  set BO = BagOrder n;
+  let x, y be set;
+  assume that
+A1: x in Bags n & y in Bags n and
+A2: [x,y] in BO and
+A3: [y,x] in BO;
+  reconsider b1 = x, b2 = y as bag of n by A1,Def14;
+  b1 <=' b2 by A2,Def16;
+  then
+A4: b1 < b2 or b1 = b2 by Def12;
+  reconsider b1' = y, b2' = x as bag of n by A1,Def14;
+  b1' <=' b2' by A3,Def16;
+  hence thesis by A4,Def12;
+end;
+
+Lm3: for n being Ordinal holds BagOrder n is_transitive_in Bags n
+proof
+  let n be Ordinal;
+  set BO = BagOrder n;
+  let x, y, z be set such that
+A1: x in Bags n and
+A2: y in Bags n and
+A3: z in Bags n and
+A4: [x,y] in BO & [y,z] in BO;
+  reconsider b1'= y, b2' = z as bag of n by A2,A3,Def14;
+  reconsider b1 = x, b2 = y as bag of n by A1,A2,Def14;
+  reconsider B1 = b1, B2' = b2' as bag of n;
+  b1 <=' b2 & b1' <=' b2' by A4,Def16;
+  then B1 <=' B2' by Th46;
+  hence thesis by Def16;
+end;
+
+Lm4: for n being Ordinal holds BagOrder n linearly_orders Bags n
+proof
+  let n be Ordinal;
+  set BO = BagOrder n;
+A1: BO is_transitive_in Bags n by Lm3;
+A2: BO is_connected_in Bags n
+  proof
+    let x, y be set;
+    assume that
+A3: x in Bags n & y in Bags n and
+    x <> y and
+A4: not [x,y] in BO;
+    reconsider p = x, q = y as bag of n by A3,Def14;
+    not p <=' q by A4,Def16;
+    then q <=' p by Th49;
+    hence thesis by Def16;
+  end;
+  BO is_reflexive_in Bags n & BO is_antisymmetric_in Bags n by Lm1,Lm2;
+  hence thesis by A1,A2,ORDERS_1:def 8;
+end;
+
+registration
+  let n be Ordinal;
+  cluster BagOrder n -> being_linear-order;
+  coherence
+  proof
+    set BO = BagOrder n;
+    BO linearly_orders Bags n by Lm4;
+    then field BO = Bags n & BO is_connected_in Bags n by
+    ORDERS_1:100,def 8;
+    then BO is connected by RELAT_2:def 14;
+    hence thesis by ORDERS_1:def 5;
+  end;
+end;
+
+definition
+  let X be set, f be Function of X, NAT;
+  func NatMinor f -> Subset of Funcs(X, NAT) means
+  :Def17:
+  for g being
+  natural-valued ManySortedSet of X holds g in it iff for x being set st x in X
+  holds g.x <= f.x;
+  existence
+  proof
+    defpred P[set] means ex g being natural-valued ManySortedSet of X st $1 =
+    g & for x being set st x in X holds g.x <= f.x;
+    consider IT being Subset of Funcs(X, NAT) such that
+A1: for h being set holds h in IT iff h in Funcs(X, NAT) & P[h] from
+    SUBSET_1:sch 1;
+    take IT;
+    let g be natural-valued ManySortedSet of X;
+    hereby
+      assume
+      g in IT;
+      then
+      ex g1 being natural-valued ManySortedSet of X st g1 = g & for x being
+      set st x in X holds g1.x <= f.x by A1;
+      hence for x being set st x in X holds g.x <= f.x;
+    end;
+    dom g = X & rng g c= NAT by PARTFUN1:def 4,VALUED_0:def 6;
+    then g is Function of X, NAT by RELSET_1:11;
+    then
+A2: g in Funcs(X, NAT) by FUNCT_2:11;
+    assume
+    for x being set st x in X holds g.x <= f.x;
+    hence thesis by A1,A2;
+  end;
+  uniqueness
+  proof
+    let it1, it2 be Subset of Funcs(X, NAT) such that
+A3: for g being natural-valued ManySortedSet of X holds g in it1 iff
+    for x being set st x in X holds g.x <= f.x and
+A4: for g being natural-valued ManySortedSet of X holds g in it2 iff
+    for x being set st x in X holds g.x <= f.x;
+    now
+      let h be Element of Funcs(X, NAT);
+      hereby
+        assume
+        h in it1;
+        then for x being set st x in X holds h.x <= f.x by A3;
+        hence h in it2 by A4;
+      end;
+      assume
+      h in it2;
+      then for x being set st x in X holds h.x <= f.x by A4;
+      hence h in it1 by A3;
+    end;
+    hence thesis by SUBSET_1:8;
+  end;
+end;
+
+theorem Th65:
+  for X being set, f being Function of X, NAT holds f in NatMinor
+  f
+proof
+  let X be set, f be Function of X, NAT;
+  for x being set st x in X holds f.x <= f.x;
+  hence thesis by Def17;
+end;
+
+registration
+  let X be set, f be Function of X, NAT;
+  cluster NatMinor f -> non empty functional;
+  coherence by Th65;
+end;
+
+registration
+  let X be set, f be Function of X, NAT;
+  cluster -> natural-valued Element of NatMinor f;
+  coherence
+  proof
+    let x be Element of NatMinor f;
+    rng x c= NAT by FUNCT_2:169;
+    hence thesis by VALUED_0:def 6;
+  end;
+end;
+
+theorem Th66:
+  for X being set, f being finite-support Function of X, NAT holds
+  NatMinor f c= Bags X
+proof
+  let X be set, f be finite-support Function of X, NAT;
+  let x be set;
+  assume
+  x in NatMinor f;
+  then reconsider x' = x as Element of NatMinor f;
+A1: dom x' = X by FUNCT_2:169;
+  then
+A2: x' is ManySortedSet of X by PARTFUN1:def 4,RELAT_1:def 18;
+  support x' c= support f
+  proof
+    let a be set;
+A3: support x' c= dom x' by Th41;
+    assume
+A4: a in support x';
+    then x'.a <> 0 by Def7;
+    then f.a <> 0 by A1,A2,A4,A3,Def17;
+    hence thesis by Def7;
+  end;
+  then x is bag of X by A1,Def8,PARTFUN1:def 4,RELAT_1:def 18;
+  hence thesis by Def14;
+end;
+
+definition
+  let X be set, f be finite-support Function of X, NAT;
+  redefine func support f -> Element of Fin X;
+  coherence
+  proof
+    dom f = X by FUNCT_2:def 1;
+    then support f c= X by Th41;
+    hence thesis by FINSUB_1:def 5;
+  end;
+end;
+
+theorem Th67:
+  for X being non empty set, f being finite-support Function of X,
+  NAT holds card NatMinor f = multnat $$ (support f, addnat[:](f,1))
+proof
+  let X be non empty set;
+  defpred P[Element of Fin X] means for f being Function of X, NAT st for x
+being Element of X st not x in $1 holds f.x = 0 holds card NatMinor f = multnat
+  $$ ($1, addnat[:](f,1));
+  let f be finite-support Function of X, NAT;
+A1: for x being Element of X holds not x in support f implies f.x = 0 by
+  Def7;
+A2: for B being Element of Fin X, b being Element of X holds P[B] & not b in
+  B implies P[B \/ {.b.}]
+  proof
+    let B be Element of Fin X, b be Element of X such that
+A3: P[B] and
+A4: not b in B;
+    let f be Function of X, NAT such that
+A5: for x being Element of X st not x in B \/ {b} holds f.x = 0;
+    set g = f+*(b,0);
+    g|B = f|B by A4,FUNCT_7:94;
+    then addnat[:](g,1)|B = addnat[:](f,1)|B by FUNCOP_1:36;
+    then
+A6: (multnat $$ (B, addnat[:](g,1))) = (multnat $$ (B, addnat[:](f,1) ))
+    by SETWOP_2:9;
+A7: dom f = X by FUNCT_2:def 1;
+    for x being Element of X st not x in B holds g.x = 0
+    proof
+      let x be Element of X such that
+A8:   not x in B;
+      per cases;
+      suppose
+        x = b;
+        hence thesis by A7,FUNCT_7:33;
+      end;
+      suppose
+A9:     x <> b;
+A10:    now
+          assume
+          x in B \/ {b};
+          then x in B or x in {b} by XBOOLE_0:def 3;
+          hence contradiction by A8,A9,TARSKI:def 1;
+        end;
+        thus g.x = f.x by A9,FUNCT_7:34
+          .= 0 by A5,A10;
+      end;
+    end;
+    then
+A11: card NatMinor g = (multnat $$ (B, addnat[:](g,1))) by A3;
+    then reconsider ng = NatMinor g as functional finite non empty set;
+    reconsider fb1 = f.b+1 as non empty Element of NAT;
+    dom (addnat[:](f,1)) = X by FUNCT_2:def 1;
+    then
+A12: addnat[:](f,1).b = addnat.(f.b,1) by FUNCOP_1:35
+      .= f.b+1 by BINOP_2:def 23;
+    set cng = card ng;
+A13: f.b < f.b+1 by XREAL_1:31;
+    [:ng,f.b+1 :],NatMinor f are_equipotent
+    proof
+      deffunc F(Element of ng,Element of fb1) = $1+*(b,$2);
+A14:  for p being Element of ng, l being Element of fb1 holds F(p,l) in
+      NatMinor f
+      proof
+        let p be Element of ng, l be Element of fb1;
+        reconsider q = p as Element of NatMinor g;
+        fb1 c= NAT & l in fb1;
+        then reconsider k = l as Element of NAT;
+        p in NatMinor g;
+        then
+A15:    dom p = X by FUNCT_2:169;
+        then dom(p+*(b,l)) = X by FUNCT_7:32;
+        then reconsider
+        pbl = q+*(b,k) as natural-valued ManySortedSet of X by
+        PARTFUN1:def 4 ,RELAT_1:def 18;
+        for x being set st x in X holds pbl.x <= f.x
+        proof
+          let x be set;
+          assume
+A16:      x in X;
+          per cases;
+          suppose
+A17:        x = b;
+A18:        k < fb1 by NAT_1:45;
+            pbl.x = k by A15,A17,FUNCT_7:33;
+            hence thesis by A17,A18,NAT_1:13;
+          end;
+          suppose
+A19:        x <> b;
+            q is ManySortedSet of X by A15,PARTFUN1:def 4,RELAT_1:def 18;
+            then
+A20:        q.x <= g.x by A16,Def17;
+            pbl.x = q.x by A19,FUNCT_7:34;
+            hence thesis by A19,A20,FUNCT_7:34;
+          end;
+        end;
+        hence thesis by Def17;
+      end;
+      consider r being Function of [:ng,fb1:], NatMinor f such that
+A21:  for p being Element of ng, l being Element of fb1 holds r.(p,l)
+      = F(p,l) from FUNCT_7:sch 1(A14);
+      take r;
+      thus r is one-to-one
+      proof
+        let x1,x2 be set;
+        assume that
+A22:    x1 in dom r and
+A23:    x2 in dom r and
+A24:    r.x1 = r.x2;
+        consider p2, l2 being set such that
+A25:    x2 = [p2,l2] by A23,RELAT_1:def 1;
+        reconsider p2 as Element of NatMinor g by A23,A25,ZFMISC_1:106;
+A26:    dom p2 = X by FUNCT_2:169;
+A27:    l2 in fb1 by A23,A25,ZFMISC_1:106;
+        consider p1, l1 being set such that
+A28:    x1 = [p1,l1] by A22,RELAT_1:def 1;
+        reconsider p1 as Element of NatMinor g by A22,A28,ZFMISC_1:106;
+A29:    dom p1 = X by FUNCT_2:169;
+        then reconsider
+        p1' = p1, p2' = p2 as natural-valued ManySortedSet of X by
+        A26,PARTFUN1:def 4 ,RELAT_1:def 18;
+        l1 in fb1 by A22,A28,ZFMISC_1:106;
+        then
+A30:    p1+*(b,l1) = r.(p1,l1) by A21
+          .= r.(p2,l2) by A24,A28,A25
+          .= p2+*(b,l2) by A21,A27;
+A31:    now
+          let x be set;
+          assume
+          x in X;
+          per cases;
+          suppose
+A32:        x = b;
+A33:        g.b = 0 by A7,FUNCT_7:33;
+            hence p1'.x = 0 by A32,Def17
+              .= p2'.x by A32,A33,Def17;
+          end;
+          suppose
+A34:        x <> b;
+            hence p1'.x = (p1+*(b,l1)).x by FUNCT_7:34
+              .= p2'.x by A30,A34,FUNCT_7:34;
+          end;
+        end;
+        l1 = (p1+*(b,l1)).b by A29,FUNCT_7:33
+          .= l2 by A30,A26,FUNCT_7:33;
+        hence thesis by A28,A25,A31,PBOOLE:3;
+      end;
+      thus
+A35:  dom r = [:ng,f.b+1 :] by FUNCT_2:def 1;
+      thus rng r c= NatMinor f;
+      thus NatMinor f c= rng r
+      proof
+        let x be set;
+        assume
+        x in NatMinor f;
+        then reconsider e = x as Element of NatMinor f;
+A36:    dom e = X by FUNCT_2:169;
+        then dom (e+*(b,0)) = X by FUNCT_7:32;
+        then reconsider
+        eb0 = e+*(b,0) as natural-valued ManySortedSet of X by
+        PARTFUN1:def 4 ,RELAT_1:def 18;
+A37:    e is ManySortedSet of X by A36,PARTFUN1:def 4,RELAT_1:def 18;
+        now
+          let x be set;
+          assume
+A38:      x in X;
+          per cases;
+          suppose
+            x = b;
+            hence eb0.x <= g.x by A36,FUNCT_7:33;
+          end;
+          suppose
+A39:        x <> b;
+            then
+A40:        eb0.x = e.x by FUNCT_7:34;
+            e.x <= f.x by A37,A38,Def17;
+            hence eb0.x <= g.x by A39,A40,FUNCT_7:34;
+          end;
+        end;
+        then reconsider eb0 as Element of NatMinor g by Def17;
+        e.b <= f.b by A37,Def17;
+        then e.b < fb1 by A13,XXREAL_0:2;
+        then
+A41:    e.b in fb1 by NAT_1:45;
+        then
+A42:    [eb0,e.b] in dom r by A35,ZFMISC_1:106;
+        e = e+*(b,e.b) by FUNCT_7:37
+          .= eb0+*(b,e.b) by FUNCT_7:36;
+        then e = r.(eb0,e.b) by A21,A41;
+        hence thesis by A42,FUNCT_1:def 5;
+      end;
+    end;
+    hence card NatMinor f = card [:ng,f.b+1 :] by CARD_1:21
+      .= cng * card(f.b+1) by CARD_2:65
+      .= cng * (f.b+1) by CARD_1:def 5
+      .= multnat.(multnat $$ (B, addnat[:](f,1)), f.b+1) by A11,A6, BINOP_2
+    :def 24
+      .= multnat $$ (B \/ {.b.}, addnat[:](f,1)) by A4,A12,SETWOP_2:4;
+  end;
+A43: P[{}.X]
+  proof
+    let f be Function of X, NAT such that
+A44: for x being Element of X st not x in {}.X holds f.x = 0;
+    now
+      let x be set;
+      hereby
+        assume
+A45:    x in NatMinor f;
+        then reconsider x' = x as Function of X, NAT by FUNCT_2:121;
+        now
+          let c be Element of X;
+          f.c = 0 by A44;
+          hence x'.c = f.c by A45,Def17;
+        end;
+        hence x = f by FUNCT_2:113;
+        reconsider x'' = x' as natural-valued ManySortedSet of X;
+      end;
+      thus x = f implies x in NatMinor f by Th65;
+    end;
+    then NatMinor f = {f} by TARSKI:def 1;
+    hence card NatMinor f = 1 by CARD_1:50
+      .= multnat $$ ({}.X, addnat[:](f,1)) by BINOP_2:10,SETWISEO:40;
+  end;
+  for B being Element of Fin X holds P[B] from SETWISEO:sch 2(A43,A2);
+  hence thesis by A1;
+end;
+
+registration
+  let X be set, f be finite-support Function of X, NAT;
+  cluster NatMinor f -> finite;
+  coherence
+  proof
+    per cases;
+    suppose
+      X is empty;
+      then NatMinor f c= Funcs({},NAT);
+      then NatMinor f c= {{}} by FUNCT_5:64;
+      hence thesis;
+    end;
+    suppose
+      X is not empty;
+      then reconsider X as non empty set;
+      reconsider f as finite-support Function of X, NAT;
+      card NatMinor f = multnat $$ (support f, addnat[:](f,1)) by Th67;
+      hence thesis;
+    end;
+  end;
+end;
+
+definition
+  let n be Ordinal, b be bag of n;
+  func divisors b -> FinSequence of Bags n means
+  :Def18:
+  ex S being non empty
+  finite Subset of Bags n st it = SgmX(BagOrder n, S) & for p being bag of n
+  holds p in S iff p divides b;
+  existence
+  proof
+    dom b = n & rng b c= NAT by PARTFUN1:def 4,VALUED_0:def 6;
+    then reconsider f = b as finite-support Function of n, NAT by RELSET_1:11;
+    reconsider S = NatMinor f as non empty finite Subset of Bags n by Th66;
+    take IT = SgmX(BagOrder n, S);
+    take S;
+    thus IT = SgmX(BagOrder n, S);
+    let p be bag of n;
+    thus p in S implies p divides b
+    proof
+      assume
+      p in S;
+      then for x being set st x in n holds p.x <= b.x by Def17;
+      hence thesis by Th50;
+    end;
+    assume
+    p divides b;
+    then for x being set st x in n holds p.x <= b.x by Def13;
+    hence thesis by Def17;
+  end;
+  uniqueness
+  proof
+    let it1, it2 be FinSequence of Bags n;
+    given S1 being non empty finite Subset of Bags n such that
+A1: it1 = SgmX(BagOrder n, S1) and
+A2: for p being bag of n holds p in S1 iff p divides b;
+    given S2 being non empty finite Subset of Bags n such that
+A3: it2 = SgmX(BagOrder n, S2) and
+A4: for p being bag of n holds p in S2 iff p divides b;
+    now
+      let x be set;
+      hereby
+        assume
+A5:     x in S1;
+        then reconsider x' = x as Element of Bags n;
+        x' divides b by A2,A5;
+        hence x in S2 by A4;
+      end;
+      assume
+A6:   x in S2;
+      then reconsider x' = x as Element of Bags n;
+      x' divides b by A4,A6;
+      hence x in S1 by A2;
+    end;
+    hence thesis by A1,A3,TARSKI:2;
+  end;
+end;
+
+registration
+  let n be Ordinal, b be bag of n;
+  cluster divisors b -> non empty one-to-one;
+  coherence
+  proof
+    ex S being non empty finite Subset of Bags n st divisors b = SgmX(
+BagOrder n, S) & for p being bag of n holds p in S iff p divides b by Def18;
+    hence thesis;
+  end;
+end;
+
+theorem Th68:
+  for n being Ordinal,i being Element of NAT, b being bag of n st
+  i in dom divisors b holds ((divisors b)/.i) qua Element of Bags n divides b
+proof
+  let n be Ordinal,i be Element of NAT, b be bag of n;
+  assume
+  i in dom divisors b;
+  then
+A1: (divisors b)/.i = (divisors b).i & (divisors b).i in rng divisors b by
+  FUNCT_1:def 5,PARTFUN1:def 8;
+  (divisors b)/.i is Element of Bags n;
+  then reconsider pid = (divisors b)/.i as bag of n;
+  consider S being non empty finite Subset of Bags n such that
+A2: divisors b = SgmX(BagOrder n, S) and
+A3: for p being bag of n holds p in S iff p divides b by Def18;
+  BagOrder n linearly_orders S by Lm4,ORDERS_1:134;
+  then pid in S by A2,A1,Def2T;
+  hence thesis by A3;
+end;
+
+theorem Th69:
+  for n being Ordinal, b being bag of n holds (divisors b)/.1 =
+  EmptyBag n & (divisors b)/.len divisors b = b
+proof
+  let n be Ordinal, b be bag of n;
+  consider S being non empty finite Subset of Bags n such that
+A1: divisors b = SgmX(BagOrder n, S) and
+A2: for p being bag of n holds p in S iff p divides b by Def18;
+A3: now
+    let y be Element of Bags n;
+    assume
+    y in S;
+    then y divides b by A2;
+    then y <=' b by Th53;
+    hence [y,b] in BagOrder n by Def16;
+  end;
+A4: now
+    let y be Element of Bags n;
+    assume
+    y in S;
+    EmptyBag n <=' y by Th53,Th63;
+    hence [EmptyBag n, y] in BagOrder n by Def16;
+  end;
+A5: BagOrder n linearly_orders S by Lm4,ORDERS_1:134;
+  EmptyBag n divides b by Th63;
+  then EmptyBag n in S by A2;
+  hence (divisors b)/.1 = EmptyBag n by A1,A5,A4,Th8;
+  b in S by A2;
+  hence thesis by A1,A5,A3,Th9;
+end;
+
+theorem Th70:
+  for n being Ordinal, i being Nat, b, b1, b2 being bag of n st i
+> 1 & i < len divisors b holds (divisors b)/.i <> EmptyBag n & (divisors b)/.i
+  <> b
+proof
+  let n be Ordinal, i be Nat, b, b1, b2 be bag of n;
+A1: 1 in dom divisors b & len divisors b in dom divisors b by FINSEQ_5:6;
+A2: (divisors b)/.1 = EmptyBag n & (divisors b)/.len divisors b = b by Th69;
+  assume
+A3: i > 1 & i < len divisors b;
+  then i in dom divisors b by FINSEQ_3:27;
+  hence thesis by A2,A1,A3,PARTFUN2:17;
+end;
+
+theorem Th71:
+  for n being Ordinal holds divisors EmptyBag n = <* EmptyBag n *>
+proof
+  let n be Ordinal;
+  consider S being non empty finite Subset of Bags n such that
+A1: divisors EmptyBag n = SgmX(BagOrder n, S) and
+A2: for p being bag of n holds p in S iff p divides EmptyBag n by Def18;
+A3: S c= { EmptyBag n}
+  proof
+    let x be set;
+    assume
+A4: x in S;
+    then reconsider b = x as bag of n by Def14;
+    b divides EmptyBag n by A2,A4;
+    then b = EmptyBag n by Th62;
+    hence thesis by TARSKI:def 1;
+  end;
+A5: BagOrder n linearly_orders S by Lm4,ORDERS_1:134;
+  EmptyBag n in S by A2;
+  then { EmptyBag n } c= S by ZFMISC_1:37;
+  then S = { EmptyBag n} by A3,XBOOLE_0:def 10;
+  then
+A6: rng divisors EmptyBag n = {EmptyBag n} by A1,A5,Def2T;
+  len divisors EmptyBag n = card rng divisors EmptyBag n by Th7
+    .= 1 by A6,CARD_1:50;
+  hence thesis by A6,FINSEQ_1:56;
+end;
+
+definition
+  let n be Ordinal, b be bag of n;
+  func decomp b -> FinSequence of 2-tuples_on Bags n means
+  :Def19:
+  dom it =
+dom divisors b & for i being Element of NAT, p being bag of n st i in dom it &
+  p = (divisors b)/.i holds it/.i = <*p, b-'p*>;
+  existence
+  proof
+    defpred P[Nat,set] means for p being bag of n st p = (divisors b)/.$1
+    holds $2 = <*p,b-'p*>;
+A1: for k being Nat st k in Seg len divisors b ex d being Element of 2
+    -tuples_on Bags n st P[k,d]
+    proof
+      let k be Nat such that
+      k in Seg len divisors b;
+      reconsider p = (divisors b)/.k as bag of n by Def14;
+      reconsider b1=p, b2=b-'p as Element of Bags n by Def14;
+      len<*p,b-'p*> = 2 by FINSEQ_1:61;
+      then reconsider d = <*b1,b2*> as Element of 2-tuples_on Bags n by
+      FINSEQ_2
+      :110;
+      take d;
+      thus thesis;
+    end;
+    consider f being FinSequence of 2-tuples_on Bags n such that
+A2: len f = len divisors b and
+A3: for n being Nat st n in Seg len divisors b holds P[n,f/.n] from
+    FINSEQ_4:sch 1(A1);
+    take f;
+    thus dom f = dom divisors b by A2,FINSEQ_3:31;
+    let i be Element of NAT, p be bag of n such that
+A4: i in dom f and
+A5: p = (divisors b)/.i;
+    i in Seg len divisors b by A2,A4,FINSEQ_1:def 3;
+    hence thesis by A3,A5;
+  end;
+  uniqueness
+  proof
+    let F,G be FinSequence of 2-tuples_on Bags n such that
+A6: dom F = dom divisors b and
+A7: for i being Element of NAT, p being bag of n st i in dom F & p = (
+    divisors b)/.i holds F/.i = <*p, b-'p*> and
+A8: dom G = dom divisors b and
+A9: for i being Element of NAT, p being bag of n st i in dom G & p =
+    (divisors b)/.i holds G/.i = <*p, b-'p*>;
+    now
+      let i be Nat;
+      reconsider p = (divisors b)/.i as bag of n by Def14;
+      assume
+A10:  i in dom F;
+      hence F/.i = <*p,b-'p*> by A7
+        .= G/.i by A6,A8,A9,A10;
+    end;
+    hence thesis by A6,A8,FINSEQ_5:13;
+  end;
+end;
+
+theorem Th72:
+  for n being Ordinal, i being Element of NAT, b being bag of n st
+i in dom decomp b ex b1, b2 being bag of n st (decomp b)/.i = <*b1, b2*> & b =
+  b1+b2
+proof
+  let n be Ordinal, i be Element of NAT, b be bag of n;
+  reconsider p = (divisors b)/.i as bag of n by Def14;
+  assume
+A1: i in dom decomp b;
+  take p, b-'p;
+  thus (decomp b)/.i = <*p,b-'p*> by A1,Def19;
+  i in dom divisors b by A1,Def19;
+  hence thesis by Th51,Th68;
+end;
+
+theorem Th73:
+  for n being Ordinal, b, b1, b2 being bag of n st b = b1+b2 ex i
+  being Element of NAT st i in dom decomp b & (decomp b)/.i = <*b1, b2*>
+proof
+  let n be Ordinal, b, b1, b2 be bag of n;
+  consider S being non empty finite Subset of Bags n such that
+A1: divisors b = SgmX(BagOrder n, S) and
+A2: for p being bag of n holds p in S iff p divides b by Def18;
+A3: BagOrder n linearly_orders S by Lm4,ORDERS_1:134;
+  assume
+A4: b = b1+b2;
+  then b1 divides b by Th54;
+  then b1 in S by A2;
+  then b1 in rng divisors b by A1,A3,Def2T;
+  then consider i being Element of NAT such that
+A5: i in dom divisors b and
+A6: (divisors b)/.i= b1 by PARTFUN2:4;
+  take i;
+  thus i in dom decomp b by A5,Def19;
+  then (decomp b)/.i = <*b1, b-'b1*> by A6,Def19;
+  hence thesis by A4,Th52;
+end;
+
+theorem Th74:
+  for n being Ordinal, i being Element of NAT, b,b1,b2 being bag
+of n st i in dom decomp b & (decomp b)/.i = <*b1, b2*> holds b1 = (divisors b)
+  /.i
+proof
+  let n be Ordinal, i be Element of NAT, b,b1,b2 be bag of n;
+  reconsider p = (divisors b)/.i as bag of n by Def14;
+  assume
+  i in dom decomp b & (decomp b)/.i = <*b1, b2*>;
+  then <*b1,b2*> = <*p,b-'p*> by Def19;
+  hence thesis by FINSEQ_1:98;
+end;
+
+registration
+  let n be Ordinal, b be bag of n;
+  cluster decomp b -> non empty one-to-one FinSequence-yielding;
+  coherence
+  proof
+A1: dom divisors b = dom decomp b by Def19;
+    hence decomp b is non empty;
+    now
+      let k,m be Element of NAT;
+      assume
+A2:   k in dom decomp b;
+      assume
+A3:   m in dom decomp b;
+      then consider bm1, bm2 being bag of n such that
+A4:   (decomp b)/.m = <*bm1, bm2*> and
+      b = bm1+bm2 by Th72;
+      assume
+      (decomp b)/.k = (decomp b)/.m;
+      then (divisors b)/.k = bm1 by A2,A4,Th74
+        .= (divisors b)/.m by A3,A4,Th74;
+      hence k = m by A1,A2,A3,PARTFUN2:17;
+    end;
+    hence decomp b is one-to-one by PARTFUN2:16;
+    let x be set;
+    assume
+A5: x in dom decomp b;
+    then reconsider k = x as Element of NAT;
+    reconsider p = (divisors b)/.k as bag of n by Def14;
+    (decomp b)/.k = <*p,b-'p*> by A5,Def19;
+    hence thesis by A5,PARTFUN1:def 8;
+  end;
+end;
+
+registration
+  let n be Ordinal, b be Element of Bags n;
+  cluster decomp b -> non empty one-to-one FinSequence-yielding;
+  coherence;
+end;
+
+theorem
+  for n being Ordinal, b being bag of n holds (decomp b)/.1 = <*
+  EmptyBag n, b*> & (decomp b)/.len decomp b = <*b, EmptyBag n*>
+proof
+  let n be Ordinal, b be bag of n;
+  reconsider p = (divisors b)/.1 as bag of n by Def14;
+  p = EmptyBag n & 1 in dom decomp b by Th69,FINSEQ_5:6;
+  hence (decomp b)/.1 = <*EmptyBag n, b-'EmptyBag n*> by Def19
+    .= <*EmptyBag n, b*> by Th58;
+  reconsider p = (divisors b)/.len decomp b as bag of n by Def14;
+  dom decomp b = dom divisors b by Def19;
+  then len decomp b = len divisors b by FINSEQ_3:31;
+  then
+A1: p = b by Th69;
+  len decomp b in dom decomp b by FINSEQ_5:6;
+  hence (decomp b)/.len decomp b = <*b,b-'b*> by A1,Def19
+    .= <*b, EmptyBag n*> by Th60;
+end;
+
+theorem
+  for n being Ordinal, i being Nat, b, b1, b2 being bag of n st i
+> 1 & i < len decomp b & (decomp b)/.i = <*b1, b2*> holds b1 <> EmptyBag n & b2
+  <> EmptyBag n
+proof
+  let n be Ordinal, i be Nat, b, b1, b2 be bag of n such that
+A1: i > 1 & i < len decomp b and
+A2: (decomp b)/.i = <*b1, b2*>;
+  reconsider p = (divisors b)/.i as bag of n by Def14;
+A3: i in dom decomp b by A1,FINSEQ_3:27;
+  then
+A4: (decomp b)/.i = <*p,b-'p*> by Def19;
+  then
+A5: b2 = b-'p by A2,FINSEQ_1:98;
+A6: dom decomp b = dom divisors b by Def19;
+  then
+A7: len decomp b = len divisors b by FINSEQ_3:31;
+  b1 = p by A2,A4,FINSEQ_1:98;
+  hence b1 <> EmptyBag n by A1,A7,Th70;
+  assume
+  b2 = EmptyBag n;
+  then p = b by A6,A3,A5,Th61,Th68;
+  hence contradiction by A1,A7,Th70;
+end;
+
+theorem
+  for n being Ordinal holds decomp EmptyBag n = <* <*EmptyBag n,
+  EmptyBag n*> *>
+proof
+  let n be Ordinal;
+  len<*EmptyBag n, EmptyBag n*> = 2 by FINSEQ_1:61;
+  then reconsider
+  E = <*EmptyBag n, EmptyBag n*> as Element of 2-tuples_on Bags n
+  by FINSEQ_2:110;
+  reconsider e = <* E *> as FinSequence of 2-tuples_on Bags n;
+A1: dom e = Seg 1 by FINSEQ_1:55;
+A2: <* EmptyBag n *> = divisors EmptyBag n by Th71;
+A3: for i being Element of NAT, p being bag of n st i in dom e & p = (
+  divisors EmptyBag n)/.i holds e/.i = <*p, (EmptyBag n)-'p*>
+  proof
+    let i be Element of NAT, p be bag of n such that
+A4: i in dom e and
+A5: p = (divisors EmptyBag n)/.i;
+A6: i = 1 by A1,A4,FINSEQ_1:4,TARSKI:def 1;
+    then
+A7: (divisors EmptyBag n)/.i = EmptyBag n by A2,FINSEQ_4:25;
+    thus e/.i = E by A6,FINSEQ_4:25
+      .= <*p, (EmptyBag n)-'p*> by A5,A7,Th58;
+  end;
+  dom e = dom divisors EmptyBag n by A2,A1,FINSEQ_1:55;
+  hence thesis by A3,Def19;
+end;
+
+theorem
+  for n being Ordinal, b being bag of n, f, g being FinSequence of
+  (3-tuples_on Bags n)* st dom f = dom decomp b & dom g = dom decomp b & (for k
+being Nat st k in dom f holds f.k = ((decomp ((((decomp b)/.k)/.1) qua Element
+  of Bags n))) ^^ ((len (decomp ((((decomp b)/.k)/.1) qua Element of Bags n)))
+|-> <*(((decomp b)/.k)/.2)*>)) & (for k being Nat st k in dom g holds g.k = ((
+len (decomp ((((decomp b)/.k)/.2) qua Element of Bags n))) |-> <*((decomp b)/.k
+  )/.1*>) ^^ (decomp ((((decomp b)/.k)/.2) qua Element of Bags n))) ex p being
+  Permutation of dom FlattenSeq f st FlattenSeq g = (FlattenSeq f)*p
+proof
+  let n be Ordinal, b be bag of n, f, g be FinSequence of (3-tuples_on Bags n)
+  * such that
+A1: dom f = dom decomp b and
+A2: dom g = dom decomp b and
+A3: for k being Nat st k in dom f holds f.k = ((decomp ((((decomp b)/.k)
+  /.1) qua Element of Bags n))) ^^ ((len (decomp ((((decomp b)/.k)/.1) qua
+  Element of Bags n))) |-> <*(((decomp b)/.k)/.2)*>) and
+A4: for k being Nat st k in dom g holds g.k = ((len (decomp ((((decomp b
+)/.k)/.2) qua Element of Bags n))) |-> <*(((decomp b)/.k)/.1)*>) ^^ (decomp (((
+  (decomp b)/.k)/.2) qua Element of Bags n));
+  set Ff = FlattenSeq f, Fg = FlattenSeq g, db = decomp b;
+A5: Fg is one-to-one
+  proof
+    let k1, k2 be set such that
+A6: k1 in dom Fg and
+A7: k2 in dom Fg and
+A8: Fg.k1 = Fg.k2;
+    consider i1, j1 being Element of NAT such that
+A9: i1 in dom g and
+A10: j1 in dom (g.i1) and
+A11: k1 = (Sum Card (g|(i1-'1))) + j1 and
+A12: (g.i1).j1 = Fg.k1 by A6,Th32;
+    set ddbi11 = decomp (((db/.i1)/.2) qua Element of Bags n);
+A13: g.i1 = ((len ddbi11) |-> <*(db/.i1)/.1*>)^^ddbi11 by A4,A9;
+    then
+A14: dom (g.i1) = dom ddbi11 /\ dom ((len ddbi11) |-> <*(db/.i1)/.1*>) by
+    Def2M
+      .= dom ddbi11 /\ Seg len ddbi11 by FUNCOP_1:19
+      .= dom ddbi11 /\ dom ddbi11 by FINSEQ_1:def 3
+      .= dom ddbi11;
+    then
+A15: ddbi11/.j1 = ddbi11.j1 by A10,PARTFUN1:def 8;
+    dom ddbi11 = Seg len ddbi11 by FINSEQ_1:def 3;
+    then
+A16: ((len ddbi11) |-> <*(db/.i1)/.1*>).j1 = <*(db/.i1)/.1*> by A10,A14
+    ,FUNCOP_1:13;
+    consider b11, b12 being bag of n such that
+A17: db/.i1 = <*b11,b12*> and
+    b = b11+b12 by A2,A9,Th72;
+    reconsider b11' = b11, b12' = b12 as Element of Bags n by Def14;
+A18: b11' = b11 & b12' = b12;
+    then (db/.i1)/.2 = b12 by A17,FINSEQ_4:26;
+    then consider b111, b112 being bag of n such that
+A19: ddbi11/.j1 = <*b111, b112*> and
+A20: b12 = b111+b112 by A10,A14,Th72;
+    (db/.i1)/.1 = b11 by A17,A18,FINSEQ_4:26;
+    then
+A21: (g.i1).j1 = <*b11*>^<*b111,b112*> by A10,A13,A19,A15,A16,
+    Def2M
+      .= <*b11,b111,b112*> by FINSEQ_1:60;
+    consider i2, j2 being Element of NAT such that
+A22: i2 in dom g and
+A23: j2 in dom (g.i2) and
+A24: k2 = (Sum Card (g|(i2-'1))) + j2 and
+A25: (g.i2).j2 = Fg.k2 by A7,Th32;
+    set ddbi21 = decomp (((db/.i2)/.2) qua Element of Bags n);
+A26: g.i2 = ((len ddbi21) |-> <*(db/.i2)/.1*>) ^^ ddbi21 by A4,A22;
+    then
+A27: dom (g.i2) = dom ddbi21 /\ dom ((len ddbi21) |-> <*(db/.i2)/.1*>) by
+    Def2M
+      .= dom ddbi21 /\ Seg len ddbi21 by FUNCOP_1:19
+      .= dom ddbi21 /\ dom ddbi21 by FINSEQ_1:def 3
+      .= dom ddbi21;
+    then
+A28: ddbi21/.j2 = ddbi21.j2 by A23,PARTFUN1:def 8;
+    dom ddbi21 = Seg len ddbi21 by FINSEQ_1:def 3;
+    then
+A29: ((len ddbi21) |-> <*(db/.i2)/.1*>).j2 = <*(db/.i2)/.1*> by A23,A27
+    ,FUNCOP_1:13;
+    consider b21, b22 being bag of n such that
+A30: db/.i2 = <*b21,b22*> and
+    b = b21+b22 by A2,A22,Th72;
+    reconsider b21' = b21, b22' = b22 as Element of Bags n by Def14;
+A31: b21' = b21 & b22' = b22;
+    then (db/.i2)/.2 = b22 by A30,FINSEQ_4:26;
+    then consider b211, b212 being bag of n such that
+A32: ddbi21/.j2 = <*b211, b212*> and
+A33: b22 = b211+b212 by A23,A27,Th72;
+    (db/.i2)/.1 = b21 by A30,A31,FINSEQ_4:26;
+    then
+A34: (g.i2).j2 = <*b21*>^<*b211,b212*> by A23,A26,A32,A28,A29,
+    Def2M
+      .= <*b21,b211, b212*> by FINSEQ_1:60;
+    then
+A35: b111 = b211 & b112 = b212 by A8,A12,A25,A21,FINSEQ_1:99;
+A36: db/.i2 = db.i2 by A2,A22,PARTFUN1:def 8;
+A37: db/.i1 = db.i1 by A2,A9,PARTFUN1:def 8;
+    b11 = b21 by A8,A12,A25,A21,A34,FINSEQ_1:99;
+    then i1 = i2 by A2,A9,A22,A37,A17,A20,A36,A30,A33,A35,
+    FUNCT_1:def 8;
+    hence thesis by A10,A11,A23,A24,A19,A15,A27,A32,A28,A35,
+    FUNCT_1:def 8;
+  end;
+  now
+    let y be set;
+    hereby
+      assume
+      y in rng Ff;
+      then consider k being set such that
+A38:  k in dom Ff and
+A39:  y = Ff.k by FUNCT_1:def 5;
+      reconsider k as Element of NAT by A38;
+      consider i, j being Element of NAT such that
+A40:  i in dom f and
+A41:  j in dom (f.i) and
+      k = (Sum Card (f|(i-'1))) + j and
+A42:  (f.i).j = Ff.k by A38,Th32;
+      set ddbi1 = decomp (((db/.i)/.1) qua Element of Bags n);
+A43:  f.i = ddbi1 ^^ ((len ddbi1) |-> <*(db/.i)/.2*>) by A3,A40;
+      then
+A44:  dom (f.i) = dom ddbi1 /\ dom ((len ddbi1) |-> <*(db/.i)/.2*>) by
+      Def2M
+        .= dom ddbi1 /\ Seg len ddbi1 by FUNCOP_1:19
+        .= dom ddbi1 /\ dom ddbi1 by FINSEQ_1:def 3
+        .= dom ddbi1;
+      dom ddbi1 = Seg len ddbi1 by FINSEQ_1:def 3;
+      then
+A45:  ((len ddbi1) |-> <*(db/.i)/.2*>).j = <*(db/.i)/.2*> by A41,A44,
+      FUNCOP_1:13;
+      consider b1, b2 being bag of n such that
+A46:  db/.i = <*b1,b2*> and
+A47:  b = b1+b2 by A1,A40,Th72;
+      reconsider b1' = b1, b2' = b2 as Element of Bags n by Def14;
+A48:  b1' = b1 & b2' = b2;
+      then
+A49:  (db/.i)/.2 = b2 by A46,FINSEQ_4:26;
+      (db/.i)/.1 = b1 by A46,A48,FINSEQ_4:26;
+      then consider b11, b12 being bag of n such that
+A50:  ddbi1/.j = <*b11, b12*> and
+A51:  b1 = b11+b12 by A41,A44,Th72;
+      b = b11+(b12+b2) by A47,A51,Th39;
+      then consider i' being Element of NAT such that
+A52:  i' in dom decomp b and
+A53:  (decomp b)/.i' = <*b11, b12+b2*> by Th73;
+      set b3 = b12+b2;
+      reconsider b11' = b11, b3' = b3 as Element of Bags n by Def14;
+      consider j' being Element of NAT such that
+A54:  j' in dom decomp b3 and
+A55:  (decomp b3)/.j' = <*b12, b2*> by Th73;
+      set ddbi'2 = decomp ((((decomp b)/.i')/.2) qua Element of Bags n);
+A56:  (decomp b)/.i' = <*b11', b3'*> by A53;
+      then
+A57:  ((decomp b)/.i')/.1 = b11 & ddbi'2 = decomp b3 by
+      FINSEQ_4:26;
+A58:  g.i' = ((len ddbi'2) |-> <*((decomp b)/.i')/.1*>) ^^ ddbi'2 by A2,
+      A4,A52;
+      then
+A59:  dom (g.i') = dom ((len ddbi'2) |-> <*((decomp b)/.i')/.1*>) /\ dom
+      ddbi'2 by Def2M
+        .= Seg len ddbi'2 /\ dom ddbi'2 by FUNCOP_1:19
+        .= dom ddbi'2 /\ dom ddbi'2 by FINSEQ_1:def 3
+        .= dom ddbi'2;
+      then
+A60:  j' in dom (g.i') by A54,A56,FINSEQ_4:26;
+      then
+A61:  j' in Seg len ddbi'2 by A59,FINSEQ_1:def 3;
+A62:  (decomp b3)/.j' = (decomp b3).j' by A54,PARTFUN1:def 8;
+      set m = (Sum Card (g|(i'-'1))) + j';
+A63:  m in dom Fg & Fg.m = (g.i').j' by A2,A52,A60,Th33;
+A64:  (g.i').j' = (((len ddbi'2) |-> <*((decomp b)/.i')/.1*>)).j' ^ (
+      ddbi'2).j' by A58,A60,Def2M
+        .= <*b11*>^<*b12,b2*> by A55,A57,A61,A62,FUNCOP_1:13
+        .= <*b11,b12,b2*> by FINSEQ_1:60;
+      ddbi1/.j = ddbi1.j by A41,A44,PARTFUN1:def 8;
+      then (f.i).j = <*b11,b12*>^<*b2*> by A41,A43,A49,A50,A45, Def2M
+        .= <*b11,b12,b2*> by FINSEQ_1:60;
+      hence y in rng Fg by A39,A42,A64,A63,FUNCT_1:def 5;
+    end;
+    assume
+    y in rng Fg;
+    then consider k being set such that
+A65: k in dom Fg and
+A66: y = Fg.k by FUNCT_1:def 5;
+    reconsider k as Element of NAT by A65;
+    consider i, j being Element of NAT such that
+A67: i in dom g and
+A68: j in dom (g.i) and
+    k = (Sum Card (g|(i-'1))) + j and
+A69: (g.i).j = Fg.k by A65,Th32;
+    set ddbi1 = decomp (((db/.i)/.2) qua Element of Bags n);
+A70: g.i = ((len ddbi1) |-> <*(db/.i)/.1*>) ^^ ddbi1 by A4,A67;
+    then
+A71: dom (g.i) = dom ddbi1 /\ dom ((len ddbi1) |-> <*(db/.i)/.1*>) by
+    Def2M
+      .= dom ddbi1 /\ Seg len ddbi1 by FUNCOP_1:19
+      .= dom ddbi1 /\ dom ddbi1 by FINSEQ_1:def 3
+      .= dom ddbi1;
+    dom ddbi1 = Seg len ddbi1 by FINSEQ_1:def 3;
+    then
+A72: ((len ddbi1) |-> <*(db/.i)/.1*>).j = <*(db/.i)/.1*> by A68,A71,
+    FUNCOP_1:13;
+    consider b1, b2 being bag of n such that
+A73: db/.i = <*b1,b2*> and
+A74: b = b1+b2 by A2,A67,Th72;
+    reconsider b1' = b1, b2' = b2 as Element of Bags n by Def14;
+A75: b1' = b1 & b2' = b2;
+    then
+A76: (db/.i)/.1 = b1 by A73,FINSEQ_4:26;
+    (db/.i)/.2 = b2 by A73,A75,FINSEQ_4:26;
+    then consider b11, b12 being bag of n such that
+A77: ddbi1/.j = <*b11, b12*> and
+A78: b2 = b11+b12 by A68,A71,Th72;
+    ddbi1/.j = ddbi1.j by A68,A71,PARTFUN1:def 8;
+    then
+A79: (g.i).j = <*b1*>^<*b11,b12*> by A68,A70,A76,A77,
+    A72,Def2M
+      .= <*b1,b11,b12*> by FINSEQ_1:60;
+    set b3 = b1+b11;
+    reconsider b3' = b3, b12' = b12 as Element of Bags n by Def14;
+    consider j' being Element of NAT such that
+A80: j' in dom decomp b3 and
+A81: (decomp b3)/.j' = <*b1, b11*> by Th73;
+A82: (decomp b3)/.j' = (decomp b3).j' by A80,PARTFUN1:def 8;
+    b = b1+b11+b12 by A74,A78,Th39;
+    then consider i' being Element of NAT such that
+A83: i' in dom decomp b and
+A84: (decomp b)/.i' = <*b1+b11, b12*> by Th73;
+    set ddbi'2 = decomp ((((decomp b)/.i')/.1) qua Element of Bags n);
+    set m = (Sum Card (f|(i'-'1))) + j';
+A85: (decomp b)/.i' = <*b3', b12'*> by A84;
+    then
+A86: ((decomp b)/.i')/.1 = b3 by FINSEQ_4:26;
+    then
+A87: j' in Seg len ddbi'2 by A80,FINSEQ_1:def 3;
+A88: f.i' = ddbi'2 ^^ ((len ddbi'2) |-> <*((decomp b)/.i')/.2*>) by A1,A3,
+    A83;
+    then
+A89: dom (f.i') = dom ((len ddbi'2) |-> <*((decomp b)/.i')/.2*>) /\ dom
+    ddbi'2 by Def2M
+      .= Seg len ddbi'2 /\ dom ddbi'2 by FUNCOP_1:19
+      .= dom ddbi'2 /\ dom ddbi'2 by FINSEQ_1:def 3
+      .= dom ddbi'2;
+    then
+A90: m in dom Ff & Ff.m = (f.i').j' by A1,A83,A80,A86,Th33;
+A91: ((decomp b)/.i')/.2 = b12 by A85,FINSEQ_4:26;
+    (f.i').j' = (ddbi'2).j' ^ (((len ddbi'2) |-> <*((decomp b)/.i')/.2*>)
+    ).j' by A80,A88,A86,A89,Def2M
+      .= <*b1,b11*>^<*b12*> by A81,A91,A86,A87,A82,FUNCOP_1:13
+      .= <*b1,b11,b12*> by FINSEQ_1:60;
+    hence y in rng Ff by A66,A69,A79,A90,FUNCT_1:def 5;
+  end;
+  then
+A92: rng Ff = rng Fg by TARSKI:2;
+  Ff is one-to-one
+  proof
+    let k1, k2 be set such that
+A93: k1 in dom Ff and
+A94: k2 in dom Ff and
+A95: Ff.k1 = Ff.k2;
+    consider i1, j1 being Element of NAT such that
+A96: i1 in dom f and
+A97: j1 in dom (f.i1) and
+A98: k1 = (Sum Card (f|(i1-'1))) + j1 and
+A99: (f.i1).j1 = Ff.k1 by A93,Th32;
+    set ddbi11 = decomp (((db/.i1)/.1) qua Element of Bags n);
+A100: f.i1 = ddbi11 ^^ ((len ddbi11) |-> <*(db/.i1)/.2*>) by A3,A96;
+    then
+A101: dom (f.i1) = dom ddbi11 /\ dom ((len ddbi11) |-> <*(db/.i1)/.2*>) by
+    Def2M
+      .= dom ddbi11 /\ Seg len ddbi11 by FUNCOP_1:19
+      .= dom ddbi11 /\ dom ddbi11 by FINSEQ_1:def 3
+      .= dom ddbi11;
+    then
+A102: ddbi11/.j1 = ddbi11.j1 by A97,PARTFUN1:def 8;
+    dom ddbi11 = Seg len ddbi11 by FINSEQ_1:def 3;
+    then
+A103: ((len ddbi11) |-> <*(db/.i1)/.2*>).j1 = <*(db/.i1)/.2*> by A97,A101,
+    FUNCOP_1:13;
+    consider b11, b12 being bag of n such that
+A104: db/.i1 = <*b11,b12*> and
+    b = b11+b12 by A1,A96,Th72;
+    reconsider b11' = b11, b12' = b12 as Element of Bags n by Def14;
+A105: b11' = b11 & b12' = b12;
+    then (db/.i1)/.1 = b11 by A104,FINSEQ_4:26;
+    then consider b111, b112 being bag of n such that
+A106: ddbi11/.j1 = <*b111, b112*> and
+A107: b11 = b111+b112 by A97,A101,Th72;
+    (db/.i1)/.2 = b12 by A104,A105,FINSEQ_4:26;
+    then
+A108: (f.i1).j1 = <*b111,b112*>^<*b12*> by A97,A100,
+    A106,A102,A103, Def2M
+      .= <*b111,b112,b12*> by FINSEQ_1:60;
+    consider i2, j2 being Element of NAT such that
+A109: i2 in dom f and
+A110: j2 in dom (f.i2) and
+A111: k2 = (Sum Card (f|(i2-'1))) + j2 and
+A112: (f.i2).j2 = Ff.k2 by A94,Th32;
+    set ddbi21 = decomp (((db/.i2)/.1) qua Element of Bags n);
+A113: f.i2 = ddbi21 ^^ ((len ddbi21) |-> <*(db/.i2)/.2*>) by A3,A109;
+    then
+A114: dom (f.i2) = dom ddbi21 /\ dom ((len ddbi21) |-> <*(db/.i2)/.2*>) by
+    Def2M
+      .= dom ddbi21 /\ Seg len ddbi21 by FUNCOP_1:19
+      .= dom ddbi21 /\ dom ddbi21 by FINSEQ_1:def 3
+      .= dom ddbi21;
+    then
+A115: ddbi21/.j2 = ddbi21.j2 by A110,PARTFUN1:def 8;
+    dom ddbi21 = Seg len ddbi21 by FINSEQ_1:def 3;
+    then
+A116: ((len ddbi21) |-> <*(db/.i2)/.2*>).j2 = <*(db/.i2)/.2*> by A110,A114,
+    FUNCOP_1:13;
+    consider b21, b22 being bag of n such that
+A117: db/.i2 = <*b21,b22*> and
+    b = b21+b22 by A1,A109,Th72;
+    reconsider b21' = b21, b22' = b22 as Element of Bags n by Def14;
+A118: b21' = b21 & b22' = b22;
+    then (db/.i2)/.1 = b21 by A117,FINSEQ_4:26;
+    then consider b211, b212 being bag of n such that
+A119: ddbi21/.j2 = <*b211, b212*> and
+A120: b21 = b211+b212 by A110,A114,Th72;
+    (db/.i2)/.2 = b22 by A117,A118,FINSEQ_4:26;
+    then
+A121: (f.i2).j2 = <*b211,b212*>^<*b22*> by A110,A113,A119,A115,A116,
+    Def2M
+      .= <*b211,b212,b22*> by FINSEQ_1:60;
+    then
+A122: b111 = b211 & b112 = b212 by A95,A99,A112,A108,FINSEQ_1:99;
+A123: db/.i2 = db.i2 by A1,A109,PARTFUN1:def 8;
+A124: db/.i1 = db.i1 by A1,A96,PARTFUN1:def 8;
+    b12 = b22 by A95,A99,A112,A108,A121,FINSEQ_1:99;
+    then i1 = i2 by A1,A96,A109,A124,A104,A107,A123,A117,A120,A122, FUNCT_1:
+    def 8;
+    hence thesis by A97,A98,A110,A111,A106,A102,A114,A119,A115,A122, FUNCT_1:
+    def 8;
+  end;
+  then Ff, Fg are_fiberwise_equipotent by A92,A5,RFINSEQ:39;
+  hence thesis by RFINSEQ:17;
+end;
+
+theorem
+  for X being set, b1, b2 being real-valued ManySortedSet of X holds
+  support (b1+b2) c= support b1 \/ support b2
+proof
+  let X be set, b1, b2 be real-valued ManySortedSet of X;
+  let x be set;
+  assume
+  x in support (b1+b2);
+  then
+A1: (b1+b2).x <> 0 by Def7;
+  assume
+A2: not x in support b1 \/ support b2;
+  then not x in support b1 by XBOOLE_0:def 3;
+  then
+A3: b1.x = 0 by Def7;
+  not x in support b2 by A2,XBOOLE_0:def 3;
+  then b1.x+b2.x = 0 by A3,Def7;
+  hence contradiction by A1,Def5;
+end;
+

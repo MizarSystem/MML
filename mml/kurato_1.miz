@@ -10,12 +10,12 @@ environ
       RCOMP_1, PROB_1, INCPROJ, SETFAM_1, AMI_1, TOPMETR, RAT_1, BORSUK_5,
       ARYTM_1, SUPINF_1, ARYTM;
  notations XBOOLE_0, TARSKI, ZFMISC_1, SUBSET_1, SETFAM_1, STRUCT_0, CARD_1,
-      NUMBERS, XXREAL_0, PRE_TOPC, TOPS_1, ENUMSET1, FINSET_1, XXREAL_1,
-      RCOMP_1, NAT_1, SEQ_4, TOPMETR, TOPS_2, BORSUK_5, PROB_1;
- constructors SETFAM_1, NAT_1, PROB_1, RCOMP_1, TOPS_1, TOPS_2,
-      TOPMETR, PSCOMP_1, BORSUK_5, SEQ_4;
+      NUMBERS, XXREAL_0, PRE_TOPC, TOPS_1, ENUMSET1, FINSET_1, RCOMP_1, NAT_1,
+      SEQ_4, TOPMETR, TOPS_2, BORSUK_5, PROB_1;
+ constructors SETFAM_1, NAT_1, PROB_1, RCOMP_1, TOPS_1, TOPS_2, TOPMETR,
+      PSCOMP_1, BORSUK_5, SEQ_4;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, FINSET_1, XXREAL_0, MEMBERED,
-      TOPS_1, TOPMETR, TOPREAL6, BORSUK_5, STRUCT_0;
+      TOPS_1, TOPMETR, BORSUK_5, STRUCT_0, COMPTS_1;
  requirements SUBSET, BOOLE, NUMERALS, REAL, ARITHM;
  definitions XBOOLE_0, TARSKI, ZFMISC_1, SETFAM_1, BORSUK_5, TOPS_2, SUBSET_1,
       STRUCT_0;
@@ -37,22 +37,20 @@ theorem Th1:
   A-`-`-`- = A-`-
 proof
   set B = Cl (Cl A)`;
-A1: Cl Int B c= Cl B by PRE_TOPC:49,TOPS_1:44;
   set U = (Cl A)`;
   U = Int U by TOPS_1:55;
   then U c= Int Cl U by PRE_TOPC:48,TOPS_1:48;
-  then Cl U c= Cl Int Cl U by PRE_TOPC:49;
-  then Cl Int B = B by A1,XBOOLE_0:def 10;
+  then Cl Int B c= Cl B & Cl U c= Cl Int Cl U by PRE_TOPC:49,TOPS_1:44;
+  then Cl Int B = B by XBOOLE_0:def 10;
   hence thesis by TOPS_1:def 1;
 end;
 
-Lm1: for T being 1-sorted, A, B being Subset-Family of T holds
-A \/ B is Subset-Family of T;
+Lm1: for T being 1-sorted, A, B being Subset-Family of T holds A \/ B is
+Subset-Family of T;
 
 definition
   let T, A;
   func Kurat14Part A equals
-
   { A, A-, A-`, A-`-, A-`-`, A-`-`-, A-`-`-` };
   coherence;
 end;
@@ -66,34 +64,36 @@ end;
 definition
   let T, A;
   func Kurat14Set A -> Subset-Family of T equals
-  { A, A-, A-`, A-`-, A-`-`, A-`-`-, A-`-`-` } \/
-  { A`, A`-, A`-`, A`-`-, A`-`-`, A`-`-`-, A`-`-`-` };
+  { A, A-, A-`, A-`-, A-`-`, A-
+  `-`-, A-`-`-` } \/ { A`, A`-, A`-`, A`-`-, A`-`-`, A`-`-`-, A`-`-`-` };
   coherence
   proof
-    set X1 = { A, Cl A, (Cl A)`, Cl (Cl A)`, (Cl (Cl A)`)`,
-    Cl (Cl (Cl A)`)`, (Cl (Cl (Cl A)`)`)` },
-    X2 = { A`, Cl A`, (Cl A`)`, Cl (Cl A`)`, (Cl (Cl A`)`)`,
+    set X1 = { A, Cl A, (Cl A)`, Cl (Cl A)`, (Cl (Cl A)`)`, Cl (Cl (Cl A)`)`,
+(Cl (Cl (Cl A)`)`)` }, X2 = { A`, Cl A`, (Cl A`)`, Cl (Cl A`)`, (Cl (Cl A`)`)`,
     Cl (Cl (Cl A`)`)`, (Cl (Cl (Cl A`)`)`)` };
-    X1 c= bool the carrier of T
-    proof
-      let x be set;
-      assume x in X1;
-      then x = A or x = Cl A or x = (Cl A)` or x = Cl (Cl A)`
-      or x = (Cl (Cl A)`)` or
-      x = Cl (Cl (Cl A)`)` or x = (Cl (Cl (Cl A)`)`)` by ENUMSET1:def 5;
-      hence thesis;
-    end;
-    then reconsider X1 as Subset-Family of T;
     X2 c= bool the carrier of T
     proof
       let x be set;
-      assume x in X2;
-      then x = A` or x = Cl A` or x = (Cl A`)` or x = Cl (Cl A`)` or
-      x = (Cl (Cl A`)`)` or
-      x = Cl (Cl (Cl A`)`)` or x = (Cl (Cl (Cl A`)`)`)` by ENUMSET1:def 5;
+      assume
+      x in X2;
+      then
+      x = A` or x = Cl A` or x = (Cl A`)` or x = Cl (Cl A`)` or x = (Cl (
+Cl A`)`)` or x = Cl (Cl (Cl A`)`)` or x = (Cl (Cl (Cl A`)`)`)` by ENUMSET1:
+      def 5;
       hence thesis;
     end;
     then reconsider X2 as Subset-Family of T;
+    X1 c= bool the carrier of T
+    proof
+      let x be set;
+      assume
+      x in X1;
+      then
+      x = A or x = Cl A or x = (Cl A)` or x = Cl (Cl A)` or x = (Cl (Cl A)
+      `)` or x = Cl (Cl (Cl A)`)` or x = (Cl (Cl (Cl A)`)`)` by ENUMSET1:def 5;
+      hence thesis;
+    end;
+    then reconsider X1 as Subset-Family of T;
     X1 \/ X2 is Subset-Family of T;
     hence thesis;
   end;
@@ -103,137 +103,190 @@ theorem
   Kurat14Set A = Kurat14Part A \/ Kurat14Part A`;
 
 theorem Th3:
-  A in Kurat14Set A & A- in Kurat14Set A & A-` in Kurat14Set A &
-  A-`- in Kurat14Set A & A-`-` in Kurat14Set A &
-  A-`-`- in Kurat14Set A & A-`-`-` in Kurat14Set A
+  A in Kurat14Set A & A- in Kurat14Set A & A-` in Kurat14Set A & A-
+  `- in Kurat14Set A & A-`-` in Kurat14Set A & A-`-`- in Kurat14Set A & A-`-`-`
+  in Kurat14Set A
 proof
-A1: Kurat14Part A c= Kurat14Set A by XBOOLE_1:7;
-  A in Kurat14Part A & Cl A in Kurat14Part A & (Cl A)` in Kurat14Part A &
-  Cl (Cl A)` in Kurat14Part A & (Cl (Cl A)`)` in Kurat14Part A &
-  Cl (Cl (Cl A)`)` in Kurat14Part A & (Cl (Cl (Cl A)`)`)` in Kurat14Part A
+A1: Cl A in Kurat14Part A & (Cl A)` in Kurat14Part A by ENUMSET1:def 5;
+A2: Cl (Cl A)` in Kurat14Part A & (Cl (Cl A)`)` in Kurat14Part A by ENUMSET1
+  :def 5;
+A3: Cl (Cl (Cl A)`)` in Kurat14Part A & (Cl (Cl (Cl A)`)`)` in Kurat14Part A
   by ENUMSET1:def 5;
-  hence thesis by A1;
+  Kurat14Part A c= Kurat14Set A & A in Kurat14Part A by ENUMSET1:def 5 ,
+  XBOOLE_1:7;
+  hence thesis by A1,A2,A3;
 end;
 
 theorem Th4:
-  A` in Kurat14Set A & A`- in Kurat14Set A &
-  A`-` in Kurat14Set A & A`-`- in Kurat14Set A &
-  A`-`-` in Kurat14Set A & A`-`-`- in Kurat14Set A & A`-`-`-` in Kurat14Set A
+  A` in Kurat14Set A & A`- in Kurat14Set A & A`-` in Kurat14Set A &
+A`-`- in Kurat14Set A & A`-`-` in Kurat14Set A & A`-`-`- in Kurat14Set A & A`-`
+  -`-` in Kurat14Set A
 proof
-A1: Kurat14Part A` c= Kurat14Set A by XBOOLE_1:7;
-  A` in Kurat14Part A` & Cl A` in Kurat14Part A` &
-  (Cl A`)` in Kurat14Part A` &
-  Cl (Cl A`)` in Kurat14Part A` & (Cl (Cl A`)`)` in Kurat14Part A` &
-  Cl (Cl (Cl A`)`)` in Kurat14Part A` & (Cl (Cl (Cl A`)`)`)` in Kurat14Part A`
-  by ENUMSET1:def 5;
-  hence thesis by A1;
+A1: Cl A` in Kurat14Part A` & (Cl A`)` in Kurat14Part A` by ENUMSET1:def 5;
+A2: Cl (Cl A`)` in Kurat14Part A` & (Cl (Cl A`)`)` in Kurat14Part A` by
+  ENUMSET1:def 5;
+A3: Cl (Cl (Cl A`)`)` in Kurat14Part A` & (Cl (Cl (Cl A`)`)`)` in
+  Kurat14Part A` by ENUMSET1:def 5;
+  Kurat14Part A` c= Kurat14Set A & A` in Kurat14Part A` by ENUMSET1:def 5
+  ,XBOOLE_1:7;
+  hence thesis by A1,A2,A3;
 end;
 
 definition
   let T, A;
   func Kurat14ClPart A -> Subset-Family of T equals
-  { A-, A-`-, A-`-`-, A`-, A`-`-, A`-`-`- };
+  { A-, A-`-, A-`-`-, A`-, A
+  `-`-, A`-`-`- };
   coherence
   proof
-A1: {Cl A, Cl (Cl A)`, Cl (Cl (Cl A)`)`, Cl A`, Cl (Cl A`)`, Cl (Cl (Cl A`)`)`}
-    = { Cl A, Cl (Cl A)`, Cl (Cl (Cl A)`)` } \/ { Cl A`, Cl (Cl A`)`,
-    Cl (Cl (Cl A`)`)` } by ENUMSET1:53;
-A2: { Cl A, Cl (Cl A)`, Cl (Cl (Cl A)`)` } is Subset-Family of T
-    by MEASURE1:8;
-    { Cl A`, Cl (Cl A`)`, Cl (Cl (Cl A`)`)` } is Subset-Family of T
-    by MEASURE1:8;
-    hence thesis by A1,A2,Lm1;
+A1: { Cl A`, Cl (Cl A`)`, Cl (Cl (Cl A`)`)` } is Subset-Family of T by
+    MEASURE1:8;
+    {Cl A, Cl (Cl A)`, Cl (Cl (Cl A)`)`, Cl A`, Cl (Cl A`)`, Cl (Cl (Cl A`
+)`)`} = { Cl A, Cl (Cl A)`, Cl (Cl (Cl A)`)` } \/ { Cl A`, Cl (Cl A`)`, Cl (Cl
+(Cl A`)` )` } & { Cl A, Cl (Cl A)`, Cl (Cl (Cl A)`)` } is Subset-Family of T by
+    ENUMSET1:53,MEASURE1:8;
+    hence thesis by A1,Lm1;
   end;
   func Kurat14OpPart A -> Subset-Family of T equals
-  { A-`, A-`-`, A-`-`-`, A`-`, A`-`-`, A`-`-`-` };
+  { A-`, A-`-`, A-`-`-`, A`-
+  `, A`-`-`, A`-`-`-` };
   coherence
   proof
-A3: { (Cl A)`, (Cl (Cl A)`)`, (Cl (Cl (Cl A)`)`)`,
-    (Cl A`)`, (Cl (Cl A`)`)`, (Cl (Cl (Cl A`)`)`)` } =
-    { (Cl A)`, (Cl (Cl A)`)`, (Cl (Cl (Cl A)`)`)` } \/
-    { (Cl A`)`, (Cl (Cl A`)`)`, (Cl (Cl (Cl A`)`)`)` } by ENUMSET1:53;
-A4: { (Cl A)`, (Cl (Cl A)`)`, (Cl (Cl (Cl A)`)`)` } is Subset-Family of T
-    by MEASURE1:8;
-    { (Cl A`)`, (Cl (Cl A`)`)`, (Cl (Cl (Cl A`)`)`)` } is Subset-Family of T
-    by MEASURE1:8;
-    hence thesis by A3,A4,Lm1;
+A2: { (Cl A`)`, (Cl (Cl A`)`)`, (Cl (Cl (Cl A`)`)`)` } is Subset-Family of
+    T by MEASURE1:8;
+    { (Cl A)`, (Cl (Cl A)`)`, (Cl (Cl (Cl A)`)`)`, (Cl A`)`, (Cl (Cl A`)`)
+`, (Cl (Cl (Cl A`)`)`)` } = { (Cl A)`, (Cl (Cl A)`)`, (Cl (Cl (Cl A)`)`)` } \/
+{ (Cl A `)`, (Cl (Cl A`)`)`, (Cl (Cl (Cl A`)`)`)` } & { (Cl A)`, (Cl (Cl A)`)`,
+    (Cl ( Cl (Cl A)`)`)` } is Subset-Family of T by ENUMSET1:53,MEASURE1:8;
+    hence thesis by A2,Lm1;
   end;
 end;
 
-Lm2: Kurat14Set A = { Cl A, Cl (Cl A)`, Cl (Cl (Cl A)`)`,
-Cl A`, Cl (Cl A`)`, Cl (Cl (Cl A`)`)` } \/ { A, A` } \/
-{ (Cl A)`, (Cl (Cl A)`)`, (Cl (Cl (Cl A)`)`)`,
-(Cl A`)`, (Cl (Cl A`)`)`, (Cl (Cl (Cl A`)`)`)` }
-proof
-  set Y1 = { Cl A, Cl (Cl A)`, Cl (Cl (Cl A)`)`,
-  Cl A`, Cl (Cl A`)`, Cl (Cl (Cl A`)`)` }, Y2 = { A, A` },
-  Y3 = { (Cl A)`, (Cl (Cl A)`)`, (Cl (Cl (Cl A)`)`)`,
-  (Cl A`)`, (Cl (Cl A`)`)`, (Cl (Cl (Cl A`)`)`)` };
-  set Y = Y1 \/ Y2 \/ Y3;
-A1: Y3 c= Y & Y1 \/ Y2 c= Y by XBOOLE_1:7;
-  Y1 c= Y1 \/ Y2 & Y2 c= Y1 \/ Y2 by XBOOLE_1:7;
-  then
-A2: Y1 c= Y & Y2 c= Y by A1,XBOOLE_1:1;
-A3: Cl A in Y1 & Cl (Cl A)` in Y1 & Cl (Cl (Cl A)`)` in Y1 &
-  Cl A` in Y1 & Cl (Cl A`)` in Y1 & Cl (Cl (Cl A`)`)` in Y1 by ENUMSET1:def 4;
-A4: A in Y2 & A` in Y2 by TARSKI:def 2;
-  (Cl A)` in Y3 & (Cl (Cl A)`)` in Y3 & (Cl (Cl (Cl A)`)`)` in Y3 &
-  (Cl A`)` in Y3 & (Cl (Cl A`)`)` in Y3 & (Cl (Cl (Cl A`)`)`)` in Y3
-  by ENUMSET1:def 4;
-  then
-A5: Cl A in Y & Cl (Cl A)` in Y & Cl (Cl (Cl A)`)` in Y &
-  Cl A` in Y & Cl (Cl A`)` in Y & Cl (Cl (Cl A`)`)` in Y & A in Y & A` in Y &
-  (Cl A)` in Y & (Cl (Cl A)`)` in Y & (Cl (Cl (Cl A)`)`)` in Y &
-  (Cl A`)` in Y & (Cl (Cl A`)`)` in Y & (Cl (Cl (Cl A`)`)`)` in Y
-  by A1,A2,A3,A4;
-  Kurat14Set A = Y
-  proof
-    thus Kurat14Set A c= Y
-    proof
-      let x be set;
-      assume
-A6:   x in Kurat14Set A;
-      per cases by A6,XBOOLE_0:def 3;
-      suppose x in { A, Cl A, (Cl A)`, Cl (Cl A)`, (Cl (Cl A)`)`,
-        Cl (Cl (Cl A)`)`, (Cl (Cl (Cl A)`)`)` };
-        hence thesis by A5,ENUMSET1:def 5;
-      end;
-      suppose x in { A`, Cl A`, (Cl A`)`, Cl (Cl A`)`, (Cl (Cl A`)`)`,
-        Cl (Cl (Cl A`)`)`, (Cl (Cl (Cl A`)`)`)` };
-        hence thesis by A5,ENUMSET1:def 5;
-      end;
-    end;
-    thus Y c= Kurat14Set A
-    proof
-      let x be set;
-      assume x in Y;
-      then
-A7:   x in { Cl A, Cl (Cl A)`, Cl (Cl (Cl A)`)`,
-      Cl A`, Cl (Cl A`)`, Cl (Cl (Cl A`)`)` } \/ { A, A` } or
-      x in { (Cl A)`, (Cl (Cl A)`)`, (Cl (Cl (Cl A)`)`)`,
-      (Cl A`)`, (Cl (Cl A`)`)`, (Cl (Cl (Cl A`)`)`)` } by XBOOLE_0:def 3;
-      per cases by A7,XBOOLE_0:def 3;
-      suppose x in { Cl A, Cl (Cl A)`, Cl (Cl (Cl A)`)`,
-        Cl A`, Cl (Cl A`)`, Cl (Cl (Cl A`)`)` };
-        then x = Cl A or x = Cl (Cl A)` or x = Cl (Cl (Cl A)`)` or
+Lm2: Kurat14Set A = { Cl A, Cl (Cl A)`, Cl (Cl (Cl A)`)`, Cl A`, Cl (Cl A`)`,
+Cl (Cl (Cl A`)`)` } \/ { A, A` } \/ { (Cl A)`, (Cl (Cl A)`)`, (Cl (Cl (Cl A)`)`
+)`, (Cl A`)`, (Cl (Cl A`)`)`, (Cl (Cl (Cl A`)`)`)` }
 
-x = Cl A` or x = Cl (Cl A`)` or x = Cl (Cl (Cl A`)`)` by ENUMSET1:def 4;
-        hence thesis by Th3,Th4;
-      end;
-      suppose x in { A, A` };
-        then x = A or x = A` by TARSKI:def 2;
-        hence thesis by Th3,Th4;
-      end;
-      suppose x in { (Cl A)`, (Cl (Cl A)`)`, (Cl (Cl (Cl A)`)`)`,
-        (Cl A`)`, (Cl (Cl A`)`)`, (Cl (Cl (Cl A`)`)`)` };
-        then x = (Cl A)` or x = (Cl (Cl A)`)` or x = (Cl (Cl (Cl A)`)`)` or
-        x = (Cl A`)` or x = (Cl (Cl A`)`)` or x = (Cl (Cl (Cl A`)`)`)`
-        by ENUMSET1:def 4;
-        hence thesis by Th3,Th4;
-      end;
+proof
+
+  set Y1 = { Cl A, Cl (Cl A)`, Cl (Cl (Cl A)`)`, Cl A`, Cl (Cl A`)`, Cl (Cl (
+
+Cl A`)`)` }, Y2 = { A, A` }, Y3 = { (Cl A)`, (Cl (Cl A)`)`, (Cl (Cl (Cl A)`)`)`
+  , (Cl A`)`, (Cl (Cl A`)`)`, (Cl (Cl (Cl A`)`)`)` };
+
+  set Y = Y1 \/ Y2 \/ Y3;
+A1: Y3 c= Y by XBOOLE_1:7;
+A2: Y c= Kurat14Set A
+  proof
+    let x be set;
+    assume
+    x in Y;
+
+    then
+A3: x in { Cl A, Cl (Cl A)`, Cl (Cl (Cl A)`)`, Cl A`, Cl (Cl A`)`, Cl (Cl
+
+(Cl A`)`)` } \/ { A, A` } or x in { (Cl A)`, (Cl (Cl A)`)`, (Cl (Cl (Cl A)`)`)`
+    , (Cl A`)`, (Cl (Cl A`)`)`, (Cl (Cl (Cl A`)`)`)` } by XBOOLE_0:def 3;
+
+    per cases by A3,XBOOLE_0:def 3;
+    suppose
+
+      x in { Cl A, Cl (Cl A)`, Cl (Cl (Cl A)`)`, Cl A`, Cl (Cl A`)`,
+      Cl (Cl (Cl A`)`)` };
+
+      then x = Cl A or x = Cl (Cl A)` or x = Cl (Cl (Cl A)`)` or x = Cl A` or
+      x = Cl (Cl A`)` or x = Cl (Cl (Cl A`)`)` by ENUMSET1:def 4;
+
+      hence thesis by Th3,Th4;
+    end;
+    suppose
+      x in { A, A` };
+      then x = A or x = A` by TARSKI:def 2;
+      hence thesis by Th3,Th4;
+    end;
+    suppose
+
+      x in { (Cl A)`, (Cl (Cl A)`)`, (Cl (Cl (Cl A)`)`)`, (Cl A`)`, (
+      Cl (Cl A`)`)`, (Cl (Cl (Cl A`)`)`)` };
+
+      then x = (Cl A)` or x = (Cl (Cl A)`)` or x = (Cl (Cl (Cl A)`)`)` or x =
+
+(Cl A`)` or x = (Cl (Cl A`)`)` or x = (Cl (Cl (Cl A`)`)`)` by ENUMSET1:def
+      4;
+
+      hence thesis by Th3,Th4;
     end;
   end;
-  hence thesis;
+A4: Y1 \/ Y2 c= Y by XBOOLE_1:7;
+  (Cl (Cl A)`)` in Y3 by ENUMSET1:def 4;
+  then
+A5: (Cl (Cl A)`)` in Y by A1;
+  (Cl A)` in Y3 by ENUMSET1:def 4;
+  then
+A6: (Cl A)` in Y by A1;
+  Y2 c= Y1 \/ Y2 by XBOOLE_1:7;
+  then
+A7: Y2 c= Y by A4,XBOOLE_1:1;
+  (Cl (Cl (Cl A`)`)`)` in Y3 by ENUMSET1:def 4;
+  then
+A8: (Cl (Cl (Cl A`)`)`)` in Y by A1;
+  (Cl (Cl A`)`)` in Y3 by ENUMSET1:def 4;
+  then
+A9: (Cl (Cl A`)`)` in Y by A1;
+  (Cl A`)` in Y3 by ENUMSET1:def 4;
+  then
+A10: (Cl A`)` in Y by A1;
+  (Cl (Cl (Cl A)`)`)` in Y3 by ENUMSET1:def 4;
+  then
+A11: (Cl (Cl (Cl A)`)`)` in Y by A1;
+  A in Y2 by TARSKI:def 2;
+  then
+A12: A in Y by A7;
+  Y1 c= Y1 \/ Y2 by XBOOLE_1:7;
+  then
+A13: Y1 c= Y by A4,XBOOLE_1:1;
+  A` in Y2 by TARSKI:def 2;
+  then
+A14: A` in Y by A7;
+  Cl (Cl (Cl A`)`)` in Y1 by ENUMSET1:def 4;
+  then
+A15: Cl (Cl (Cl A`)`)` in Y by A13;
+  Cl (Cl A`)` in Y1 by ENUMSET1:def 4;
+  then
+A16: Cl (Cl A`)` in Y by A13;
+  Cl A` in Y1 by ENUMSET1:def 4;
+  then
+A17: Cl A` in Y by A13;
+  Cl (Cl (Cl A)`)` in Y1 by ENUMSET1:def 4;
+  then
+A18: Cl (Cl (Cl A)`)` in Y by A13;
+  Cl (Cl A)` in Y1 by ENUMSET1:def 4;
+  then
+A19: Cl (Cl A)` in Y by A13;
+  Cl A in Y1 by ENUMSET1:def 4;
+  then
+A20: Cl A in Y by A13;
+  Kurat14Set A c= Y
+  proof
+    let x be set;
+    assume
+A21: x in Kurat14Set A;
+    per cases by A21,XBOOLE_0:def 3;
+    suppose
+
+      x in { A, Cl A, (Cl A)`, Cl (Cl A)`, (Cl (Cl A)`)`, Cl (Cl (Cl
+      A)`)`, (Cl (Cl (Cl A)`)`)` };
+
+      hence thesis by A20,A19,A18,A12,A6,A5,A11,ENUMSET1:def 5;
+    end;
+    suppose
+
+      x in { A`, Cl A`, (Cl A`)`, Cl (Cl A`)`, (Cl (Cl A`)`)`, Cl (Cl
+      (Cl A`)`)`, (Cl (Cl (Cl A`)`)`)` };
+
+      hence thesis by A17,A16,A15,A14,A10,A9,A8,ENUMSET1:def 5;
+    end;
+  end;
+  hence thesis by A2,XBOOLE_0:def 10;
 end;
 
 theorem
@@ -246,14 +299,14 @@ registration
 end;
 
 theorem Th6:
-  for Q being Subset of T holds
-  Q in Kurat14Set A implies Q` in Kurat14Set A & Q- in Kurat14Set A
+  for Q being Subset of T holds Q in Kurat14Set A implies Q` in
+  Kurat14Set A & Q- in Kurat14Set A
 proof
   let Q be Subset of T;
-  set k1 = Cl A, k2 = (Cl A)`, k3 = Cl (Cl A)`,
-  k4 = (Cl (Cl A)`)`, k5 = Cl (Cl (Cl A)`)`, k6 = (Cl (Cl (Cl A)`)`)`,
-  k7 = Cl A`, k8 = (Cl A`)`, k9 = Cl (Cl A`)`,
-  k10 = (Cl (Cl A`)`)`, k11 = Cl (Cl (Cl A`)`)`, k12 = (Cl (Cl (Cl A`)`)`)`;
+  set k1 = Cl A, k2 = (Cl A)`, k3 = Cl (Cl A)`, k4 = (Cl (Cl A)`)`, k5 = Cl (
+Cl (Cl A)`)`, k6 = (Cl (Cl (Cl A)`)`)`, k7 = Cl A`, k8 = (Cl A`)`, k9 = Cl (Cl
+A`)`, k10 = (Cl (Cl A`)`)`, k11 = Cl (Cl (Cl A`)`)`, k12 = (Cl (Cl (Cl A`)`)`)`
+  ;
   assume
 A1: Q in Kurat14Set A;
   per cases by A1,XBOOLE_0:def 3;
@@ -263,120 +316,118 @@ A2: Q in { A, k1, k2, k3, k4, k5, k6 };
     proof
       per cases by A2,ENUMSET1:def 5;
       suppose
-A3:     Q = A;
+        Q = A;
         then
-A4:     Cl Q in { A, Cl A, (Cl A)`, Cl (Cl A)`, (Cl (Cl A)`)`,
-        Cl (Cl (Cl A)`)`, (Cl (Cl (Cl A)`)`)` } by ENUMSET1:def 5;
-        Q` in { A`, Cl A`, (Cl A`)`, Cl (Cl A`)`, (Cl (Cl A`)`)`,
-        Cl (Cl (Cl A`)`)`, (Cl (Cl (Cl A`)`)`)` } by A3,ENUMSET1:def 5;
-        hence thesis by A4,XBOOLE_0:def 3;
+        Cl Q in { A, Cl A, (Cl A)`, Cl (Cl A)`, (Cl (Cl A)`)`, Cl (Cl (Cl
+A)`)`, (Cl (Cl (Cl A)`)`)` } & Q` in { A`, Cl A`, (Cl A`)`, Cl (Cl A`)`, (Cl (
+        Cl A`)`)`, Cl (Cl (Cl A`)`)`, (Cl (Cl (Cl A`)`)`)` } by ENUMSET1:def 5;
+        hence thesis by XBOOLE_0:def 3;
       end;
       suppose
-A5:     Q = Cl A;
+        Q = Cl A;
         then
-A6:     Cl Q in { A, Cl A, (Cl A)`, Cl (Cl A)`, (Cl (Cl A)`)`,
-        Cl (Cl (Cl A)`)`, (Cl (Cl (Cl A)`)`)` } by ENUMSET1:def 5;
-        Q` in { A, k1, k2, k3, k4, k5, k6 } by A5,ENUMSET1:def 5;
-        hence thesis by A6,XBOOLE_0:def 3;
+        Cl Q in { A, Cl A, (Cl A)`, Cl (Cl A)`, (Cl (Cl A)`)`, Cl (Cl (Cl
+        A)`)`, (Cl (Cl (Cl A)`)`)` } & Q` in { A, k1, k2, k3, k4, k5, k6 } by
+        ENUMSET1:def 5;
+        hence thesis by XBOOLE_0:def 3;
       end;
       suppose
-A7:     Q = (Cl A)`;
+        Q = (Cl A)`;
         then
-A8:     Cl Q in { A, Cl A, (Cl A)`, Cl (Cl A)`, (Cl (Cl A)`)`,
-        Cl (Cl (Cl A)`)`, (Cl (Cl (Cl A)`)`)` } by ENUMSET1:def 5;
-        Q` in { A, Cl A, (Cl A)`, k3, k4, k5, k6 } by A7,ENUMSET1:def 5;
-        hence thesis by A8,XBOOLE_0:def 3;
+        Cl Q in { A, Cl A, (Cl A)`, Cl (Cl A)`, (Cl (Cl A)`)`, Cl (Cl (Cl
+A)`)`, (Cl (Cl (Cl A)`)`)` } & Q` in { A, Cl A, (Cl A)`, k3, k4, k5, k6 } by
+        ENUMSET1:def 5;
+        hence thesis by XBOOLE_0:def 3;
       end;
       suppose
-A9:     Q = Cl (Cl A)`;
+        Q = Cl (Cl A)`;
         then
-A10:    Cl Q in { A, Cl A, (Cl A)`, Cl (Cl A)`, (Cl (Cl A)`)`,
-        Cl (Cl (Cl A)`)`, (Cl (Cl (Cl A)`)`)` } by ENUMSET1:def 5;
-        Q` in { A, k1, k2, k3, k4, k5, k6 } by A9,ENUMSET1:def 5;
-        hence thesis by A10,XBOOLE_0:def 3;
+        Cl Q in { A, Cl A, (Cl A)`, Cl (Cl A)`, (Cl (Cl A)`)`, Cl (Cl (Cl
+        A)`)`, (Cl (Cl (Cl A)`)`)` } & Q` in { A, k1, k2, k3, k4, k5, k6 } by
+        ENUMSET1:def 5;
+        hence thesis by XBOOLE_0:def 3;
       end;
       suppose
-A11:    Q = (Cl (Cl A)`)`;
+        Q = (Cl (Cl A)`)`;
         then
-A12:    Cl Q in { A, Cl A, (Cl A)`, Cl (Cl A)`, (Cl (Cl A)`)`,
-        Cl (Cl (Cl A)`)`, (Cl (Cl (Cl A)`)`)` } by ENUMSET1:def 5;
-        Q` in { A, k1, k2, Cl (Cl A)`, k4, k5, k6 } by A11,ENUMSET1:def 5;
-        hence thesis by A12,XBOOLE_0:def 3;
+        Cl Q in { A, Cl A, (Cl A)`, Cl (Cl A)`, (Cl (Cl A)`)`, Cl (Cl (Cl
+A)`)`, (Cl (Cl (Cl A)`)`)` } & Q` in { A, k1, k2, Cl (Cl A)`, k4, k5, k6 } by
+        ENUMSET1:def 5;
+        hence thesis by XBOOLE_0:def 3;
       end;
       suppose
-A13:    Q = Cl (Cl (Cl A)`)`;
+        Q = Cl (Cl (Cl A)`)`;
         then
-A14:    Cl Q in { A, Cl A, (Cl A)`, Cl (Cl A)`, (Cl (Cl A)`)`,
-        Cl (Cl (Cl A)`)`, (Cl (Cl (Cl A)`)`)` } by ENUMSET1:def 5;
-        Q` in { A, k1, k2, k3, k4, k5, k6 } by A13,ENUMSET1:def 5;
-        hence thesis by A14,XBOOLE_0:def 3;
+        Cl Q in { A, Cl A, (Cl A)`, Cl (Cl A)`, (Cl (Cl A)`)`, Cl (Cl (Cl
+        A)`)`, (Cl (Cl (Cl A)`)`)` } & Q` in { A, k1, k2, k3, k4, k5, k6 } by
+        ENUMSET1:def 5;
+        hence thesis by XBOOLE_0:def 3;
       end;
       suppose
-A15:    Q = (Cl (Cl (Cl A)`)`)`;
+A3:     Q = (Cl (Cl (Cl A)`)`)`;
         Cl (Cl (Cl (Cl A)`)`)` = Cl (Cl A)` by Th1;
         then
-A16:    Cl Q in { A, Cl A, (Cl A)`, Cl (Cl A)`, (Cl (Cl A)`)`,
-        Cl (Cl (Cl A)`)`, (Cl (Cl (Cl A)`)`)` } by A15,ENUMSET1:def 5;
-        Q` in { A, k1, k2, k3, k4, k5, k6 } by A15,ENUMSET1:def 5;
-        hence thesis by A16,XBOOLE_0:def 3;
+A4:     Cl Q in { A, Cl A, (Cl A)`, Cl (Cl A)`, (Cl (Cl A)`)`, Cl (Cl (Cl
+        A)`)`, (Cl (Cl (Cl A)`)`)` } by A3,ENUMSET1:def 5;
+        Q` in { A, k1, k2, k3, k4, k5, k6 } by A3,ENUMSET1:def 5;
+        hence thesis by A4,XBOOLE_0:def 3;
       end;
     end;
     hence thesis;
   end;
   suppose
-A17: Q in { A`, k7, k8, k9, k10, k11, k12 };
+A5: Q in { A`, k7, k8, k9, k10, k11, k12 };
     Q` in Kurat14Set A & Cl Q in Kurat14Set A
     proof
-      per cases by A17,ENUMSET1:def 5;
+      per cases by A5,ENUMSET1:def 5;
       suppose
-A18:    Q = A`;
+        Q = A`;
         then
-A19:    Cl Q in { A`, Cl A`, k8, k9, k10, k11, k12 } by ENUMSET1:def 5;
-        Q` in { A, k1, k2, k3, k4, k5, k6 } by A18,ENUMSET1:def 5;
-        hence thesis by A19,XBOOLE_0:def 3;
+        Cl Q in { A`, Cl A`, k8, k9, k10, k11, k12 } & Q` in { A, k1, k2,
+        k3, k4, k5, k6 } by ENUMSET1:def 5;
+        hence thesis by XBOOLE_0:def 3;
       end;
       suppose
-A20:    Q = Cl A`;
+        Q = Cl A`;
         then
-A21:    Cl Q in { A`, Cl A`, k8, k9, k10, k11, k12} by ENUMSET1:def 5;
-        Q` in { A`, k7, (Cl A`)`, k9, k10, k11, k12} by A20,ENUMSET1:def 5;
-        hence thesis by A21,XBOOLE_0:def 3;
+        Cl Q in { A`, Cl A`, k8, k9, k10, k11, k12} & Q` in { A`, k7, (Cl
+        A`)`, k9, k10, k11, k12} by ENUMSET1:def 5;
+        hence thesis by XBOOLE_0:def 3;
       end;
       suppose
-A22:    Q = (Cl A`)`;
-        then
-A23:    Cl Q in { A`, k7, k8, Cl (Cl A`)`, k10, k11, k12} by ENUMSET1:def 5;
-        Q` in { A`, Cl A`, k8, k9, k10, k11, k12} by A22,ENUMSET1:def 5;
-        hence thesis by A23,XBOOLE_0:def 3;
+        Q = (Cl A`)`;
+        then Cl Q in { A`, k7, k8, Cl (Cl A`)`, k10, k11, k12} & Q` in { A`,
+        Cl A`, k8, k9, k10, k11, k12} by ENUMSET1:def 5;
+        hence thesis by XBOOLE_0:def 3;
       end;
       suppose
-A24:    Q = Cl (Cl A`)`;
+        Q = Cl (Cl A`)`;
         then
-A25:    Cl Q in { A`, k7, k8, k9, k10, k11, k12} by ENUMSET1:def 5;
-        Q` in { A`, k7, k8, k9, k10, k11, k12} by A24,ENUMSET1:def 5;
-        hence thesis by A25,XBOOLE_0:def 3;
+        Cl Q in { A`, k7, k8, k9, k10, k11, k12} & Q` in { A`, k7, k8, k9
+        , k10, k11, k12} by ENUMSET1:def 5;
+        hence thesis by XBOOLE_0:def 3;
       end;
       suppose
-A26:    Q = (Cl (Cl A`)`)`;
+        Q = (Cl (Cl A`)`)`;
         then
-A27:    Cl Q in { A`, k7, k8, k9, k10, k11, k12} by ENUMSET1:def 5;
-        Q` in { A`, k7, k8, k9, k10, k11, k12} by A26,ENUMSET1:def 5;
-        hence thesis by A27,XBOOLE_0:def 3;
+        Cl Q in { A`, k7, k8, k9, k10, k11, k12} & Q` in { A`, k7, k8, k9
+        , k10, k11, k12} by ENUMSET1:def 5;
+        hence thesis by XBOOLE_0:def 3;
       end;
       suppose
-A28:    Q = Cl (Cl (Cl A`)`)`;
+        Q = Cl (Cl (Cl A`)`)`;
         then
-A29:    Cl Q in { A`, k7, k8, k9, k10, k11, k12} by ENUMSET1:def 5;
-        Q` in { A`, k7, k8, k9, k10, k11, k12} by A28,ENUMSET1:def 5;
-        hence thesis by A29,XBOOLE_0:def 3;
+        Cl Q in { A`, k7, k8, k9, k10, k11, k12} & Q` in { A`, k7, k8, k9
+        , k10, k11, k12} by ENUMSET1:def 5;
+        hence thesis by XBOOLE_0:def 3;
       end;
       suppose
-A30:    Q = (Cl (Cl (Cl A`)`)`)`;
+A6:     Q = (Cl (Cl (Cl A`)`)`)`;
         then Cl Q = Cl (Cl A`)` by Th1;
         then
-A31:    Cl Q in { A`, k7, k8, k9, k10, k11, k12} by ENUMSET1:def 5;
-        Q` in { A`, k7, k8, k9, k10, k11, k12} by A30,ENUMSET1:def 5;
-        hence thesis by A31,XBOOLE_0:def 3;
+A7:     Cl Q in { A`, k7, k8, k9, k10, k11, k12} by ENUMSET1:def 5;
+        Q` in { A`, k7, k8, k9, k10, k11, k12} by A6,ENUMSET1:def 5;
+        hence thesis by A7,XBOOLE_0:def 3;
       end;
     end;
     hence thesis;
@@ -386,14 +437,14 @@ end;
 theorem
   card Kurat14Set A <= 14
 proof
-  set X = { A, Cl A, (Cl A)`, Cl (Cl A)`, (Cl (Cl A)`)`,
-  Cl (Cl (Cl A)`)`, (Cl (Cl (Cl A)`)`)` },
-  Y = { A`, Cl A`, (Cl A`)`, Cl (Cl A`)`, (Cl (Cl A`)`)`,
-  Cl (Cl (Cl A`)`)`, (Cl (Cl (Cl A`)`)`)` };
-A1: card (X \/ Y) <= card X + card Y by CARD_2:62;
+  set X = { A, Cl A, (Cl A)`, Cl (Cl A)`, (Cl (Cl A)`)`, Cl (Cl (Cl A)`)`, (Cl
+(Cl (Cl A)`)`)` }, Y = { A`, Cl A`, (Cl A`)`, Cl (Cl A`)`, (Cl (Cl A`)`)`, Cl (
+  Cl (Cl A`)`)`, (Cl (Cl (Cl A`)`)`)` };
   card X <= 7 & card Y <= 7 by CARD_2:74;
-  then card X + card Y <= 7 + 7 by XREAL_1:9;
-  hence thesis by A1,XXREAL_0:2;
+  then card (X \/ Y) <= card X + card Y & card X + card Y <= 7 + 7 by
+  CARD_2
+  :62 ,XREAL_1:9;
+  hence thesis by XXREAL_0:2;
 end;
 
 begin :: Seven Kuratowski Sets
@@ -401,16 +452,19 @@ begin :: Seven Kuratowski Sets
 definition
   let T, A;
   func Kurat7Set A -> Subset-Family of T equals
-  { A, Int A, Cl A, Int Cl A, Cl Int A, Cl Int Cl A, Int Cl Int A };
+  { A, Int A, Cl A, Int Cl A, Cl
+  Int A, Cl Int Cl A, Int Cl Int A };
   coherence
   proof
     set X = { A, Int A, Cl A, Int Cl A, Cl Int A, Cl Int Cl A, Int Cl Int A };
     X c= bool the carrier of T
     proof
       let x be set;
-      assume x in X;
-      then x = A or x = Int A or x = Cl A or x = Int Cl A or x = Cl Int A
-      or x = Cl Int Cl A or x = Int Cl Int A by ENUMSET1:def 5;
+      assume
+      x in X;
+      then
+      x = A or x = Int A or x = Cl A or x = Int Cl A or x = Cl Int A or x
+      = Cl Int Cl A or x = Int Cl Int A by ENUMSET1:def 5;
       hence thesis;
     end;
     hence thesis;
@@ -420,15 +474,15 @@ end;
 canceled;
 
 theorem
-  Kurat7Set A = { A } \/ { Int A, Int Cl A, Int Cl Int A } \/
-  { Cl A, Cl Int A, Cl Int Cl A }
+  Kurat7Set A = { A } \/ { Int A, Int Cl A, Int Cl Int A } \/ { Cl A, Cl
+  Int A, Cl Int Cl A }
 proof
   Kurat7Set A = { A } \/ { Int A, Cl A, Int Cl A, Cl Int A, Cl Int Cl A,
   Int Cl Int A } by ENUMSET1:56
-    .= { A } \/ ({ Int A, Int Cl A, Int Cl Int A } \/
-  { Cl A, Cl Int A, Cl Int Cl A }) by BORSUK_5:3
-    .= { A } \/ { Int A, Int Cl A, Int Cl Int A } \/
-  { Cl A, Cl Int A, Cl Int Cl A } by XBOOLE_1:4;
+    .= { A } \/ ({ Int A, Int Cl A, Int Cl Int A } \/ { Cl A, Cl Int A, Cl
+  Int Cl A }) by BORSUK_5:3
+    .= { A } \/ { Int A, Int Cl A, Int Cl Int A } \/ { Cl A, Cl Int A, Cl
+  Int Cl A } by XBOOLE_1:4;
   hence thesis;
 end;
 
@@ -439,8 +493,8 @@ registration
 end;
 
 theorem Th10:
-  for Q being Subset of T holds
-  Q in Kurat7Set A implies Int Q in Kurat7Set A & Cl Q in Kurat7Set A
+  for Q being Subset of T holds Q in Kurat7Set A implies Int Q in
+  Kurat7Set A & Cl Q in Kurat7Set A
 proof
   let Q be Subset of T;
   assume
@@ -448,32 +502,35 @@ A1: Q in Kurat7Set A;
   Int Q in Kurat7Set A & Cl Q in Kurat7Set A
   proof
     per cases by A1,ENUMSET1:def 5;
-    suppose Q = A;
-      hence thesis by ENUMSET1:def 5;
-    end;
-    suppose Q = Int A;
-      hence thesis by ENUMSET1:def 5;
-    end;
     suppose
-A2:   Q = Cl A;
-      thus thesis by A2,ENUMSET1:def 5;
-    end;
-    suppose Q = Int Cl A;
+      Q = A;
       hence thesis by ENUMSET1:def 5;
     end;
     suppose
-A3:   Q = Cl Int A;
-      thus thesis by A3,ENUMSET1:def 5;
+      Q = Int A;
+      hence thesis by ENUMSET1:def 5;
     end;
     suppose
-A4:   Q = Cl Int Cl A;
+      Q = Cl A;
+      hence thesis by ENUMSET1:def 5;
+    end;
+    suppose
+      Q = Int Cl A;
+      hence thesis by ENUMSET1:def 5;
+    end;
+    suppose
+      Q = Cl Int A;
+      hence thesis by ENUMSET1:def 5;
+    end;
+    suppose
+A2:   Q = Cl Int Cl A;
       Int Cl Int Cl A = Int Cl A by TDLAT_1:5;
-      hence thesis by A4,ENUMSET1:def 5;
+      hence thesis by A2,ENUMSET1:def 5;
     end;
     suppose
-A5:   Q = Int Cl Int A;
+A3:   Q = Int Cl Int A;
       then Cl Q = Cl Int A by TOPS_1:58;
-      hence thesis by A5,ENUMSET1:def 5;
+      hence thesis by A3,ENUMSET1:def 5;
     end;
   end;
   hence thesis;
@@ -483,7 +540,8 @@ begin :: The Set Generating Exactly Fourteen Kuratowski Sets
 
 definition
   func KurExSet -> Subset of R^1 equals
-  {1} \/ RAT (2,4) \/ ]. 4, 5 .[ \/ ]. 5,+infty .[;
+  {1} \/ RAT (2,4) \/ ]. 4, 5 .[ \/ ]. 5
+  ,+infty .[;
   coherence by TOPMETR:24;
 end;
 
@@ -492,10 +550,9 @@ canceled;
 theorem Th12:
   Cl KurExSet = {1} \/ [. 2,+infty .[
 proof
-  reconsider B = {1},
-  C = RAT (2,4) \/ ]. 4, 5 .[ \/ ]. 5,+infty .[ as Subset of R^1
-  by TOPMETR:24;
   set A = KurExSet;
+  reconsider B = {1}, C = RAT (2,4) \/ ]. 4, 5 .[ \/ ]. 5,+infty .[ as Subset
+  of R^1 by TOPMETR:24;
   A = {1} \/ (RAT (2,4) \/ ]. 4, 5 .[ \/ ]. 5,+infty .[) by XBOOLE_1:113;
   then
 A1: Cl A = Cl B \/ Cl C by PRE_TOPC:50;
@@ -504,52 +561,56 @@ A1: Cl A = Cl B \/ Cl C by PRE_TOPC:50;
 end;
 
 theorem Th13:
-  (Cl KurExSet)` = ]. -infty, 1 .[ \/ ]. 1, 2 .[ by Th12,BORSUK_5:95;
+  (Cl KurExSet)` = ]. -infty, 1 .[ \/ ]. 1, 2 .[ by Th12,BORSUK_5:
+  95;
 
 theorem Th14:
   Cl (Cl KurExSet)` = ]. -infty, 2 .] by Th13,BORSUK_5:96;
 
 theorem Th15:
-  (Cl (Cl KurExSet)`)` = ]. 2,+infty .[ by Th14,TOPMETR:24,XXREAL_1:224,288;
+  (Cl (Cl KurExSet)`)` = ]. 2,+infty .[ by Th14,TOPMETR:24,
+  XXREAL_1:224,288;
 
 theorem Th16:
   Cl (Cl (Cl KurExSet)`)` = [. 2,+infty .[ by Th15,BORSUK_5:75;
 
 theorem Th17:
-  (Cl (Cl (Cl KurExSet)`)`)` = ]. -infty, 2 .[
-   by Th16,TOPMETR:24,XXREAL_1:224,294;
+  (Cl (Cl (Cl KurExSet)`)`)` = ]. -infty, 2 .[ by Th16,TOPMETR:24,
+  XXREAL_1:224,294;
 
 theorem Th18:
-  KurExSet` = ]. -infty, 1 .[ \/ ]. 1, 2 .] \/ IRRAT(2,4) \/ {4} \/ {5}
+  KurExSet` = ]. -infty, 1 .[ \/ ]. 1, 2 .] \/ IRRAT(2,4) \/ {4}
+  \/ {5}
 proof
-  reconsider B = {1},
-  C = RAT (2,4) \/ ]. 4, 5 .[ \/ ]. 5,+infty .[ as Subset of R^1
-  by TOPMETR:24;
   set A = KurExSet;
-A1: A = {1} \/ (RAT (2,4) \/ ]. 4, 5 .[ \/ ]. 5,+infty .[) by XBOOLE_1:113;
-A2: B` = ]. -infty, 1 .[ \/ ]. 1,+infty .[ by BORSUK_5:90;
-  C` = ]. -infty, 2 .] \/ IRRAT(2,4) \/ {4} \/ {5} by BORSUK_5:89;
-  hence thesis by A1,A2,BORSUK_5:92,XBOOLE_1:53;
+  reconsider B = {1}, C = RAT (2,4) \/ ]. 4, 5 .[ \/ ]. 5,+infty .[ as Subset
+  of R^1 by TOPMETR:24;
+A1: C` = ]. -infty, 2 .] \/ IRRAT(2,4) \/ {4} \/ {5} by BORSUK_5:89;
+  A = {1} \/ (RAT (2,4) \/ ]. 4, 5 .[ \/ ]. 5,+infty .[) & B` = ]. -infty,
+  1 .[ \/ ]. 1,+infty .[ by BORSUK_5:90,XBOOLE_1:113;
+  hence thesis by A1,BORSUK_5:92,XBOOLE_1:53;
 end;
 
 theorem Th19:
   Cl KurExSet` = ]. -infty, 4 .] \/ {5} by Th18,BORSUK_5:101;
 
 theorem Th20:
-  (Cl KurExSet`)` = ]. 4, 5 .[ \/ ]. 5,+infty .[ by Th19,BORSUK_5:102;
+  (Cl KurExSet`)` = ]. 4, 5 .[ \/ ]. 5,+infty .[ by Th19,BORSUK_5:
+  102;
 
 theorem Th21:
   Cl (Cl KurExSet`)` = [. 4,+infty .[ by Th20,BORSUK_5:81;
 
 theorem Th22:
-  (Cl (Cl KurExSet`)`)` = ]. -infty, 4 .[ by Th21,TOPMETR:24,XXREAL_1:224,294;
+  (Cl (Cl KurExSet`)`)` = ]. -infty, 4 .[ by Th21,TOPMETR:24,
+  XXREAL_1:224,294;
 
 theorem Th23:
   Cl (Cl (Cl KurExSet`)`)` = ]. -infty, 4 .] by Th22,BORSUK_5:77;
 
 theorem Th24:
-  (Cl (Cl (Cl KurExSet`)`)`)` = ]. 4,+infty .[
-   by Th23,TOPMETR:24,XXREAL_1:224,288;
+  (Cl (Cl (Cl KurExSet`)`)`)` = ]. 4,+infty .[ by Th23,TOPMETR:24,
+  XXREAL_1:224,288;
 
 begin :: The Set Generating Exactly Seven Kuratowski Sets
 
@@ -557,17 +618,18 @@ theorem Th25:
   Int KurExSet = ]. 4, 5 .[ \/ ]. 5,+infty .[ by Th20,TOPS_1:def 1;
 
 theorem Th26:
-  Cl Int KurExSet = [. 4,+infty .[ by Th20,BORSUK_5:81,TOPS_1:def 1;
+  Cl Int KurExSet = [. 4,+infty .[ by Th20,BORSUK_5:81,TOPS_1:def
+  1;
 
 theorem Th27:
   Int Cl Int KurExSet = ]. 4,+infty .[
 proof
   set A = KurExSet;
-  (Cl (Cl A`)`)` = ]. -infty, 4 .[ by Th21,TOPMETR:24,XXREAL_1:224,294;
-  then
-A1: Cl (Cl (Cl A`)`)` = ]. -infty, 4 .] by BORSUK_5:77;
   Cl Int A = Cl (Cl A`)` by TOPS_1:def 1;
-  then Int Cl Int A = (Cl (Cl (Cl A`)`)`)` by TOPS_1:def 1;
+  then
+A1: Int Cl Int A = (Cl (Cl (Cl A`)`)`)` by TOPS_1:def 1;
+  (Cl (Cl A`)`)` = ]. -infty, 4 .[ by Th21,TOPMETR:24,XXREAL_1:224,294;
+  then Cl (Cl (Cl A`)`)` = ]. -infty, 4 .] by BORSUK_5:77;
   hence thesis by A1,TOPMETR:24,XXREAL_1:224,288;
 end;
 
@@ -630,9 +692,9 @@ theorem
   Cl Int Cl KurExSet <> Int KurExSet
 proof
   set A = KurExSet;
-A1: 2 in Cl Int Cl A by Th29,XXREAL_1:236;
-  Int A = ]. 4, 5.[ \/ ]. 5,+infty .[ by Th20,TOPS_1:def 1;
-  hence thesis by A1,XXREAL_1:223;
+  2 in Cl Int Cl A & Int A = ]. 4, 5.[ \/ ]. 5,+infty .[ by Th20,Th29,
+  TOPS_1:def 1,XXREAL_1:236;
+  hence thesis by XXREAL_1:223;
 end;
 
 theorem
@@ -659,9 +721,9 @@ theorem Th38:
   Int Cl KurExSet <> Int KurExSet
 proof
   set A = KurExSet;
-A1: 5 in Int Cl A by Th28,XXREAL_1:235;
-  Int A = ]. 4, 5 .[ \/ ]. 5,+infty .[ by Th20,TOPS_1:def 1;
-  hence thesis by A1,XXREAL_1:205;
+  5 in Int Cl A & Int A = ]. 4, 5 .[ \/ ]. 5,+infty .[ by Th20,Th28,
+  TOPS_1:def 1,XXREAL_1:235;
+  hence thesis by XXREAL_1:205;
 end;
 
 theorem
@@ -697,15 +759,16 @@ theorem Th42:
   Cl KurExSet <> KurExSet
 proof
   set A = KurExSet;
-  5 in [. 2,+infty .[ by XXREAL_1:236;
+  ( not 5 in {1})& not 5 in RAT (2, 4) by BORSUK_5:52,TARSKI:def 1;
+  then ( not 5 in ]. 4, 5 .[)& not 5 in {1} \/ RAT (2, 4) by
+  XBOOLE_0:def 3
+  ,XXREAL_1:4;
   then
-A1: 5 in Cl A by Th12,XBOOLE_0:def 3;
-A2: not 5 in ]. 4, 5 .[ by XXREAL_1:4;
-A3: not 5 in ]. 5,+infty .[ by XXREAL_1:235;
-  not 5 in {1} & not 5 in RAT (2, 4) by BORSUK_5:52,TARSKI:def 1;
-  then not 5 in {1} \/ RAT (2, 4) by XBOOLE_0:def 3;
-  then not 5 in {1} \/ RAT (2, 4) \/ ]. 4, 5 .[ by A2,XBOOLE_0:def 3;
-  hence thesis by A1,A3,XBOOLE_0:def 3;
+A1: ( not 5 in ]. 5,+infty .[)& not 5 in {1} \/ RAT (2, 4) \/ ]. 4, 5 .[ by
+  XBOOLE_0:def 3,XXREAL_1:235;
+  5 in [. 2,+infty .[ by XXREAL_1:236;
+  then 5 in Cl A by Th12,XBOOLE_0:def 3;
+  hence thesis by A1,XBOOLE_0:def 3;
 end;
 
 theorem Th43:
@@ -733,18 +796,18 @@ theorem Th45:
   Int Cl Int KurExSet <> Int KurExSet
 proof
   set A = KurExSet;
-A1: 5 in Int Cl Int A by Th27,XXREAL_1:235;
-  Int A = ]. 4, 5 .[ \/ ]. 5,+infty .[ by Th20,TOPS_1:def 1;
-  hence thesis by A1,XXREAL_1:205;
+  5 in Int Cl Int A & Int A = ]. 4, 5 .[ \/ ]. 5,+infty .[ by Th20,Th27,
+  TOPS_1:def 1,XXREAL_1:235;
+  hence thesis by XXREAL_1:205;
 end;
 
 theorem
   Cl Int KurExSet <> Int KurExSet
 proof
   set A = KurExSet;
-A1: 4 in Cl Int A by Th26,XXREAL_1:236;
-  Int A = ]. 4, 5 .[ \/ ]. 5,+infty .[ by Th20,TOPS_1:def 1;
-  hence thesis by A1,XXREAL_1:223;
+  4 in Cl Int A & Int A = ]. 4, 5 .[ \/ ]. 5,+infty .[ by Th20,Th26,
+  TOPS_1:def 1,XXREAL_1:236;
+  hence thesis by XXREAL_1:223;
 end;
 
 begin :: Final Proofs For Seven
@@ -758,7 +821,8 @@ proof
 end;
 
 theorem Th48:
-  Int KurExSet, Int Cl KurExSet, Int Cl Int KurExSet are_mutually_different
+  Int KurExSet, Int Cl KurExSet, Int Cl Int KurExSet
+  are_mutually_different
 proof
   set A1 = Int KurExSet, A2 = Int Cl KurExSet, A3 = Int Cl Int KurExSet;
   thus A1 <> A2 by Th38;
@@ -767,7 +831,8 @@ proof
 end;
 
 theorem Th49:
-  Cl KurExSet, Cl Int KurExSet, Cl Int Cl KurExSet are_mutually_different
+  Cl KurExSet, Cl Int KurExSet, Cl Int Cl KurExSet
+  are_mutually_different
 proof
   set A1 = Cl KurExSet, A2 = Cl Int KurExSet, A3 = Cl Int Cl KurExSet;
   thus A1 <> A2 by Th40;
@@ -776,21 +841,23 @@ proof
 end;
 
 theorem Th50:
-  for X being set st X in
-  { Int KurExSet, Int Cl KurExSet, Int Cl Int KurExSet } holds
-  X is open non empty Subset of R^1
+  for X being set st X in { Int KurExSet, Int Cl KurExSet, Int Cl
+  Int KurExSet } holds X is open non empty Subset of R^1
 proof
   let X be set;
   assume
 A1: X in { Int KurExSet, Int Cl KurExSet, Int Cl Int KurExSet };
   per cases by A1,ENUMSET1:def 1;
-  suppose X = Int KurExSet;
+  suppose
+    X = Int KurExSet;
     hence thesis by Th20,TOPS_1:def 1;
   end;
-  suppose X = Int Cl KurExSet;
+  suppose
+    X = Int Cl KurExSet;
     hence thesis by Th28;
   end;
-  suppose X = Int Cl Int KurExSet;
+  suppose
+    X = Int Cl Int KurExSet;
     hence thesis by Th27;
   end;
 end;
@@ -798,27 +865,30 @@ end;
 canceled;
 
 theorem Th52:
-  for X being set st X in
-  { Int KurExSet, Int Cl KurExSet, Int Cl Int KurExSet } holds X <> REAL
+  for X being set st X in { Int KurExSet, Int Cl KurExSet, Int Cl
+  Int KurExSet } holds X <> REAL
 proof
   let X be set;
   assume
 A1: X in { Int KurExSet, Int Cl KurExSet, Int Cl Int KurExSet };
   per cases by A1,ENUMSET1:def 1;
-  suppose X = Int KurExSet;
+  suppose
+    X = Int KurExSet;
     hence thesis by Th25,XXREAL_1:205;
   end;
-  suppose X = Int Cl KurExSet;
+  suppose
+    X = Int Cl KurExSet;
     hence thesis by Th28,BORSUK_5:71;
   end;
-  suppose X = Int Cl Int KurExSet;
+  suppose
+    X = Int Cl Int KurExSet;
     hence thesis by Th27,BORSUK_5:71;
   end;
 end;
 
 theorem
-  for X being set st X in
-  { Cl KurExSet, Cl Int KurExSet, Cl Int Cl KurExSet } holds X <> REAL
+  for X being set st X in { Cl KurExSet, Cl Int KurExSet, Cl Int Cl
+  KurExSet } holds X <> REAL
 proof
   let X be set;
   assume
@@ -826,36 +896,39 @@ A1: X in { Cl KurExSet, Cl Int KurExSet, Cl Int Cl KurExSet };
   per cases by A1,ENUMSET1:def 1;
   suppose
 A2: X = Cl KurExSet;
-A3: not 0 in {1};
-    not 0 in [. 2,+infty .[ by XXREAL_1:236;
-    hence thesis by A2,A3,Th12,XBOOLE_0:def 3;
+    ( not 0 in {1})& not 0 in [. 2,+infty .[ by XXREAL_1:236;
+    hence thesis by A2,Th12,XBOOLE_0:def 3;
   end;
-  suppose X = Cl Int KurExSet;
+  suppose
+    X = Cl Int KurExSet;
     hence thesis by Th26,BORSUK_5:72;
   end;
-  suppose X = Cl Int Cl KurExSet;
+  suppose
+    X = Cl Int Cl KurExSet;
     hence thesis by Th29,BORSUK_5:72;
   end;
 end;
 
 theorem Th54:
-  { Int KurExSet, Int Cl KurExSet, Int Cl Int KurExSet } misses
-  { Cl KurExSet, Cl Int KurExSet, Cl Int Cl KurExSet }
+  { Int KurExSet, Int Cl KurExSet, Int Cl Int KurExSet } misses {
+  Cl KurExSet, Cl Int KurExSet, Cl Int Cl KurExSet }
 proof
-  set X = { Int KurExSet, Int Cl KurExSet, Int Cl Int KurExSet },
-  Y = { Cl KurExSet, Cl Int KurExSet, Cl Int Cl KurExSet };
-  assume X meets Y;
+  set X = { Int KurExSet, Int Cl KurExSet, Int Cl Int KurExSet }, Y = { Cl
+  KurExSet, Cl Int KurExSet, Cl Int Cl KurExSet };
+  assume
+  X meets Y;
   then consider x being set such that
-A1: x in X & x in Y by XBOOLE_0:3;
-  x is open non empty Subset of R^1 &
-  x is closed Subset of R^1 by A1,Th50,ENUMSET1:def 1;
+A1: x in X and
+A2: x in Y by XBOOLE_0:3;
+  x is open non empty Subset of R^1 & x is closed Subset of R^1 by A1,A2,
+  Th50,ENUMSET1:def 1;
   hence thesis by A1,Th52,BORSUK_5:57;
 end;
 
 theorem Th55:
-  Int KurExSet, Int Cl KurExSet, Int Cl Int KurExSet,
-  Cl KurExSet, Cl Int KurExSet, Cl Int Cl KurExSet
-  are_mutually_different by Th48,Th49,Th54,BORSUK_5:7;
+  Int KurExSet, Int Cl KurExSet, Int Cl Int KurExSet, Cl KurExSet,
+  Cl Int KurExSet, Cl Int Cl KurExSet are_mutually_different by Th48,Th49,Th54,
+  BORSUK_5:7;
 
 registration
   cluster KurExSet -> non closed non open;
@@ -863,43 +936,50 @@ registration
 end;
 
 theorem Th56:
-  { Int KurExSet, Int Cl KurExSet, Int Cl Int KurExSet,
-  Cl KurExSet, Cl Int KurExSet, Cl Int Cl KurExSet } misses { KurExSet }
+  { Int KurExSet, Int Cl KurExSet, Int Cl Int KurExSet, Cl
+  KurExSet, Cl Int KurExSet, Cl Int Cl KurExSet } misses { KurExSet }
 proof
   set A = KurExSet;
-  assume { Int KurExSet, Int Cl KurExSet, Int Cl Int KurExSet,
-  Cl KurExSet, Cl Int KurExSet, Cl Int Cl KurExSet } meets { KurExSet };
+  assume
+  { Int KurExSet, Int Cl KurExSet, Int Cl Int KurExSet, Cl KurExSet,
+  Cl Int KurExSet, Cl Int Cl KurExSet } meets { KurExSet };
   then
-A1: KurExSet in { Int KurExSet, Int Cl KurExSet, Int Cl Int KurExSet,
-  Cl KurExSet, Cl Int KurExSet, Cl Int Cl KurExSet } by ZFMISC_1:56;
+A1: KurExSet in { Int KurExSet, Int Cl KurExSet, Int Cl Int KurExSet, Cl
+  KurExSet, Cl Int KurExSet, Cl Int Cl KurExSet } by ZFMISC_1:56;
   per cases by A1,ENUMSET1:def 4;
-  suppose A = Int A;
+  suppose
+    A = Int A;
     hence thesis;
   end;
-  suppose A = Int Cl A;
+  suppose
+    A = Int Cl A;
     hence thesis;
   end;
-  suppose A = Int Cl Int A;
+  suppose
+    A = Int Cl Int A;
     hence thesis;
   end;
-  suppose A = Cl A;
+  suppose
+    A = Cl A;
     hence thesis;
   end;
-  suppose A = Cl Int A;
+  suppose
+    A = Cl Int A;
     hence thesis;
   end;
-  suppose A = Cl Int Cl A;
+  suppose
+    A = Cl Int Cl A;
     hence thesis;
   end;
 end;
 
 theorem Th57:
-  KurExSet, Int KurExSet, Int Cl KurExSet, Int Cl Int KurExSet,
-  Cl KurExSet, Cl Int KurExSet, Cl Int Cl KurExSet are_mutually_different
+  KurExSet, Int KurExSet, Int Cl KurExSet, Int Cl Int KurExSet, Cl
+  KurExSet, Cl Int KurExSet, Cl Int Cl KurExSet are_mutually_different
 proof
-  Int KurExSet, Int Cl KurExSet, Int Cl Int KurExSet,
-  Cl KurExSet, Cl Int KurExSet, Cl Int Cl KurExSet, KurExSet
-  are_mutually_different by Th55,Th56,BORSUK_5:8;
+  Int KurExSet, Int Cl KurExSet, Int Cl Int KurExSet, Cl KurExSet, Cl Int
+  KurExSet, Cl Int Cl KurExSet, KurExSet are_mutually_different by Th55,Th56,
+  BORSUK_5:8;
   hence thesis by BORSUK_5:9;
 end;
 
@@ -922,22 +1002,28 @@ registration
     assume
 A1: the carrier of R^1 in Kurat14ClPart KurExSet;
     per cases by A1,ENUMSET1:def 4,TOPMETR:24;
-    suppose REAL = Cl A;
+    suppose
+      REAL = Cl A;
       hence thesis by Th12,BORSUK_5:103;
     end;
-    suppose REAL = Cl (Cl A)`;
+    suppose
+      REAL = Cl (Cl A)`;
       hence thesis by Th14,BORSUK_5:73;
     end;
-    suppose REAL = Cl (Cl (Cl A)`)`;
+    suppose
+      REAL = Cl (Cl (Cl A)`)`;
       hence thesis by Th16,BORSUK_5:72;
     end;
-    suppose REAL = Cl A`;
+    suppose
+      REAL = Cl A`;
       hence thesis by Th19,BORSUK_5:104;
     end;
-    suppose REAL = Cl (Cl A`)`;
+    suppose
+      REAL = Cl (Cl A`)`;
       hence thesis by Th21,BORSUK_5:72;
     end;
-    suppose REAL = Cl (Cl (Cl A`)`)`;
+    suppose
+      REAL = Cl (Cl (Cl A`)`)`;
       hence thesis by Th23,BORSUK_5:73;
     end;
   end;
@@ -948,22 +1034,28 @@ A1: the carrier of R^1 in Kurat14ClPart KurExSet;
     assume
 A2: the carrier of R^1 in Kurat14OpPart KurExSet;
     per cases by A2,ENUMSET1:def 4,TOPMETR:24;
-    suppose REAL = (Cl A)`;
+    suppose
+      REAL = (Cl A)`;
       hence thesis by Th12,BORSUK_5:106;
     end;
-    suppose REAL = (Cl (Cl A)`)`;
+    suppose
+      REAL = (Cl (Cl A)`)`;
       hence thesis by Th14,BORSUK_5:106;
     end;
-    suppose REAL = (Cl (Cl (Cl A)`)`)`;
+    suppose
+      REAL = (Cl (Cl (Cl A)`)`)`;
       hence thesis by Th16,BORSUK_5:106;
     end;
-    suppose REAL = (Cl A`)`;
+    suppose
+      REAL = (Cl A`)`;
       hence thesis by Th19,BORSUK_5:106;
     end;
-    suppose REAL = (Cl (Cl A`)`)`;
+    suppose
+      REAL = (Cl (Cl A`)`)`;
       hence thesis by Th21,BORSUK_5:106;
     end;
-    suppose REAL = (Cl (Cl (Cl A`)`)`)`;
+    suppose
+      REAL = (Cl (Cl (Cl A`)`)`)`;
       hence thesis by Th23,BORSUK_5:106;
     end;
   end;
@@ -973,26 +1065,29 @@ registration
   cluster Kurat14Set KurExSet -> with_proper_subsets;
   coherence
   proof
-    reconsider AA = { KurExSet, KurExSet` } as Subset-Family of R^1
-    by MEASURE1:7;
+    reconsider AA = { KurExSet, KurExSet` } as Subset-Family of R^1 by
+    MEASURE1:7;
     AA is with_proper_subsets
     proof
       assume
 A1:   the carrier of R^1 in AA;
       per cases by A1,TARSKI:def 2,TOPMETR:24;
-      suppose REAL = KurExSet;
+      suppose
+        REAL = KurExSet;
         then [#]R^1 = KurExSet by TOPMETR:24;
         hence thesis;
       end;
-      suppose REAL = KurExSet`;
+      suppose
+        REAL = KurExSet`;
         then [#]R^1 = KurExSet` by TOPMETR:24;
         hence thesis by TOPS_1:29;
       end;
     end;
     then
-A2: AA \/ Kurat14ClPart KurExSet is with_proper_subsets by SETFAM_1:63;
-    Kurat14Set KurExSet =
-    AA \/ Kurat14ClPart KurExSet \/ Kurat14OpPart KurExSet by Lm2;
+A2: AA \/ Kurat14ClPart KurExSet is with_proper_subsets by
+    SETFAM_1:63;
+    Kurat14Set KurExSet = AA \/ Kurat14ClPart KurExSet \/ Kurat14OpPart
+    KurExSet by Lm2;
     hence thesis by A2,SETFAM_1:63;
   end;
 end;
@@ -1002,20 +1097,22 @@ registration
   coherence
   proof
     reconsider E = {}R^1 as Subset of R^1;
-    assume {} in Kurat14Set KurExSet;
+    assume
+    {} in Kurat14Set KurExSet;
     then E` in Kurat14Set KurExSet by Th6;
     hence thesis by SETFAM_1:def 13;
   end;
 end;
 
 theorem Th59:
-  for A being with_non-empty_elements set, B being set st B c= A holds
-  B is with_non-empty_elements
+  for A being with_non-empty_elements set, B being set st B c= A
+  holds B is with_non-empty_elements
 proof
   let A be with_non-empty_elements set, B be set;
   assume
 A1: B c= A;
-  assume {} in B;
+  assume
+  {} in B;
   hence thesis by A1;
 end;
 
@@ -1023,20 +1120,20 @@ registration
   cluster Kurat14ClPart KurExSet -> with_non-empty_elements;
   coherence
   proof
-    Kurat14Set KurExSet = { KurExSet, KurExSet`} \/ Kurat14ClPart KurExSet \/
-    Kurat14OpPart KurExSet by Lm2;
+    Kurat14Set KurExSet = { KurExSet, KurExSet`} \/ Kurat14ClPart KurExSet
+    \/ Kurat14OpPart KurExSet by Lm2;
     then
-A1: { KurExSet, KurExSet`} \/ Kurat14ClPart KurExSet c= Kurat14Set KurExSet
-    by XBOOLE_1:7;
-    Kurat14ClPart KurExSet c= { KurExSet, KurExSet`} \/ Kurat14ClPart KurExSet
-    by XBOOLE_1:7;
+A1: { KurExSet, KurExSet`} \/ Kurat14ClPart KurExSet c= Kurat14Set
+    KurExSet by XBOOLE_1:7;
+    Kurat14ClPart KurExSet c= { KurExSet, KurExSet`} \/ Kurat14ClPart
+    KurExSet by XBOOLE_1:7;
     hence thesis by A1,Th59,XBOOLE_1:1;
   end;
   cluster Kurat14OpPart KurExSet -> with_non-empty_elements;
   coherence
   proof
-    Kurat14Set KurExSet = { KurExSet, KurExSet`} \/ Kurat14ClPart KurExSet \/
-    Kurat14OpPart KurExSet by Lm2;
+    Kurat14Set KurExSet = { KurExSet, KurExSet`} \/ Kurat14ClPart KurExSet
+    \/ Kurat14OpPart KurExSet by Lm2;
     hence thesis by Th59,XBOOLE_1:7;
   end;
 end;
@@ -1054,18 +1151,17 @@ theorem Th60:
   for F, G being with_proper_subsets with_non-empty_elements
   Subset-Family of R^1 st F is open & G is closed holds F misses G
 proof
-  let F, G be with_proper_subsets with_non-empty_elements
-  Subset-Family of R^1;
+  let F, G be with_proper_subsets with_non-empty_elements Subset-Family of R^1;
   assume
 A1: F is open & G is closed;
-  assume F meets G;
+  assume
+  F meets G;
   then consider x being set such that
 A2: x in F and
 A3: x in G by XBOOLE_0:3;
   reconsider x as Subset of R^1 by A2;
-A4: x is open by A1,A2,TOPS_2:def 1;
-  x is closed by A1,A3,TOPS_2:def 2;
-  then x = {} or x = REAL by A4,BORSUK_5:57;
+  x is open & x is closed by A1,A2,A3,TOPS_2:def 1,def 2;
+  then x = {} or x = REAL by BORSUK_5:57;
   hence thesis by A2,SETFAM_1:def 13,TOPMETR:24;
 end;
 
@@ -1074,14 +1170,16 @@ registration
   coherence
   proof
     let P be Subset of R^1;
-    assume P in Kurat14ClPart KurExSet;
+    assume
+    P in Kurat14ClPart KurExSet;
     hence thesis by ENUMSET1:def 4;
   end;
   cluster Kurat14OpPart KurExSet -> open;
   coherence
   proof
     let P be Subset of R^1;
-    assume P in Kurat14OpPart KurExSet;
+    assume
+    P in Kurat14OpPart KurExSet;
     hence thesis by ENUMSET1:def 4;
   end;
 end;
@@ -1102,33 +1200,36 @@ theorem Th62:
 proof
   set A = KurExSet;
 A1: Cl (Cl (Cl A`)`)` = ]. -infty, 4 .] by Th22,BORSUK_5:77;
-A2: not 4 in Cl (Cl A)` by Th14,XXREAL_1:234;
-  not 6 in ]. -infty, 4 .] & not 6 in {5} by TARSKI:def 1,XXREAL_1:234;
+  5 in {5} by TARSKI:def 1;
+  then 5 in Cl A` by Th19,XBOOLE_0:def 3;
   then
-A3: not 6 in Cl A` by Th19,XBOOLE_0:def 3;
-A4: not 5 in Cl (Cl (Cl A`)`)` by Th23,XXREAL_1:234;
-  5 in [. 2,+infty .[ by XXREAL_1:236;
+A2: Cl Int A = Cl (Cl A`)` & Cl A` <> Cl (Cl (Cl A`)`)` by A1,TOPS_1:
+  def 1 ,XXREAL_1:234;
+  ( not 5 in Cl (Cl (Cl A`)`)`)& 5 in [. 2,+infty .[ by Th23,XXREAL_1:234,
+  236;
   then
-A5: Cl A <> Cl (Cl (Cl A`)`)` by A4,Th12,XBOOLE_0:def 3;
-A6: Cl (Cl (Cl A)`)` = [. 2,+infty .[ by Th15,BORSUK_5:75;
-A7: 4 in Cl (Cl (Cl A)`)` by Th16,XXREAL_1:236;
-A8: Cl (Cl A)` <> Cl (Cl (Cl A`)`)` by A1,A2,XXREAL_1:234;
-A9: Cl (Cl (Cl A)`)` <> Cl A` by A3,A6,XXREAL_1:236;
+A3: Cl A <> Cl (Cl (Cl A`)`)` by Th12,XBOOLE_0:def 3;
+  ( not 5 in Cl (Cl (Cl A`)`)`)& Cl (Cl A`)` = [. 4,+infty .[ by Th20,
+  Th23, BORSUK_5:81,XXREAL_1:234;
+  then
+A4: Cl (Cl A`)` <> Cl (Cl (Cl A`)`)` by XXREAL_1:236;
   5 in Cl (Cl (Cl A)`)` by Th16,XXREAL_1:236;
   then
-A10: Cl (Cl (Cl A)`)` <> Cl (Cl (Cl A`)`)` by Th23,XXREAL_1:234;
-A11: Cl Int Cl A = Cl (Cl (Cl A)`)` & Cl Int A = Cl (Cl A`)` by TOPS_1:def 1;
-  5 in {5} by TARSKI:def 1;
+A5: Cl (Cl (Cl A)`)` <> Cl (Cl (Cl A`)`)` by Th23,XXREAL_1:234;
+  ( not 6 in ]. -infty, 4 .])& not 6 in {5} by TARSKI:def 1,XXREAL_1:234;
   then
-A12: 5 in Cl A` by Th19,XBOOLE_0:def 3;
-A13: not 5 in Cl (Cl (Cl A`)`)` by Th23,XXREAL_1:234;
-A14: Cl A` <> Cl (Cl (Cl A`)`)` by A1,A12,XXREAL_1:234;
-  Cl (Cl A`)` = [. 4,+infty .[ by Th20,BORSUK_5:81;
-  then Cl (Cl A`)` <> Cl (Cl (Cl A`)`)` by A13,XXREAL_1:236;
-  then Cl A, Cl (Cl A)`, Cl (Cl (Cl A)`)`, Cl A`,
-  Cl (Cl A`)`, Cl (Cl (Cl A`)`)`
-
-are_mutually_different by A2,A5,A7,A8,A9,A10,A11,A14,Th31,Th33,ZFMISC_1:def 8;
+A6: not 6 in Cl A` by Th19,XBOOLE_0:def 3;
+  Cl (Cl (Cl A)`)` = [. 2,+infty .[ by Th15,BORSUK_5:75;
+  then
+A7: Cl (Cl (Cl A)`)` <> Cl A` by A6,XXREAL_1:236;
+A8: 4 in Cl (Cl (Cl A)`)` & Cl Int Cl A = Cl (Cl (Cl A)`)` by Th16,TOPS_1:
+  def 1 ,XXREAL_1:236;
+A9: not 4 in Cl (Cl A)` by Th14,XXREAL_1:234;
+  then Cl (Cl A)` <> Cl (Cl (Cl A`)`)` by A1,XXREAL_1:234;
+  then
+  Cl A, Cl (Cl A)`, Cl (Cl (Cl A)`)`, Cl A`, Cl (Cl A`)`, Cl (Cl (Cl A`)`
+  )` are_mutually_different by A9,A3,A7,A5,A8,A2,A4,Th31,Th33,ZFMISC_1:def
+  8;
   hence thesis by BORSUK_5:4;
 end;
 
@@ -1136,37 +1237,39 @@ theorem Th63:
   card (Kurat14OpPart KurExSet) = 6
 proof
   set A = KurExSet;
-A1: (Cl A)` = ]. -infty, 1 .[ \/ ]. 1, 2 .[ by Th12,BORSUK_5:95;
-A2: (Cl (Cl (Cl A)`)`)` = ]. -infty, 2 .[ by Th16,TOPMETR:24,XXREAL_1:224,294;
-A3: (Cl (Cl (Cl A`)`)`)` = ]. 4,+infty .[ by Th23,TOPMETR:24,XXREAL_1:224,288;
-A4: 4 in (Cl (Cl A)`)` by Th15,XXREAL_1:235;
+A1: ( not 5 in ]. -infty, 1 .[)& not 5 in ]. 1, 2 .[ by XXREAL_1:4;
+  (Cl A)` = ]. -infty, 1 .[ \/ ]. 1, 2 .[ & 5 in (Cl (Cl (Cl A`)`)`)` by
+  Th12,Th24,BORSUK_5:95,XXREAL_1:235;
+  then
+A2: (Cl A)` <> (Cl (Cl (Cl A`)`)`)` by A1,XBOOLE_0:def 3;
+A3: (Cl (Cl (Cl A)`)`)` = ]. -infty, 2 .[ by Th16,TOPMETR:24,XXREAL_1:224,
+  294;
   6 in ]. 5,+infty .[ by XXREAL_1:235;
+  then 6 in (Cl A`)` by Th20,XBOOLE_0:def 3;
   then
-A5: 6 in (Cl A`)` by Th20,XBOOLE_0:def 3;
-A6: 5 in (Cl (Cl (Cl A`)`)`)` by Th24,XXREAL_1:235;
-  not 5 in ]. -infty, 1 .[ & not 5 in ]. 1, 2 .[ by XXREAL_1:4;
+A4: (Cl (Cl (Cl A)`)`)` <> (Cl A`)` by A3,XXREAL_1:233;
+A5: 4 in (Cl (Cl A)`)` by Th15,XXREAL_1:235;
+  ( not 5 in ]. 4, 5 .[)& not 5 in ]. 5,+infty .[ by XXREAL_1:4,235;
   then
-A7: (Cl A)` <> (Cl (Cl (Cl A`)`)`)` by A1,A6,XBOOLE_0:def 3;
+A6: not 5 in (Cl A`)` by Th20,XBOOLE_0:def 3;
   (Cl A)` <> (Cl Int Cl A)` by Th31,BORSUK_5:105;
   then
-A8: (Cl A)` <> (Cl (Cl (Cl A)`)`)` by TOPS_1:def 1;
-A9: (Cl (Cl A)`)` <> (Cl (Cl (Cl A)`)`)` by A2,A4,XXREAL_1:233;
-A10: (Cl (Cl A)`)` <> (Cl (Cl (Cl A`)`)`)` by A3,A4,XXREAL_1:235;
-A11: (Cl (Cl (Cl A)`)`)` <> (Cl A`)` by A2,A5,XXREAL_1:233;
-A12: not 5 in (Cl (Cl (Cl A)`)`)` by Th17,XXREAL_1:233;
-  (Cl Int Cl A)` = (Cl (Cl (Cl A)`)`)` & (Cl Int A)` = (Cl (Cl A`)`)`
-  by TOPS_1:def 1;
+A7: (Cl A)` <> (Cl (Cl (Cl A)`)`)` by TOPS_1:def 1;
+A8: not 5 in (Cl (Cl A`)`)` by Th22,XXREAL_1:233;
+  (Cl (Cl (Cl A`)`)`)` = ]. 4,+infty .[ by Th23,TOPMETR:24,XXREAL_1:224,
+  288;
   then
-A13: (Cl (Cl (Cl A)`)`)` <> (Cl (Cl A`)`)` by Th33,BORSUK_5:105;
-A14: not 5 in ]. 4, 5 .[ by XXREAL_1:4;
-  not 5 in ]. 5,+infty .[ by XXREAL_1:235;
+A9: (Cl (Cl A)`)` <> (Cl (Cl (Cl A`)`)`)` by A5,XXREAL_1:235;
+  (Cl Int Cl A)` = (Cl (Cl (Cl A)`)`)` & (Cl Int A)` = (Cl (Cl A`)`)` by
+  TOPS_1:def 1;
   then
-A15: not 5 in (Cl A`)` by A14,Th20,XBOOLE_0:def 3;
-A16: 5 in (Cl (Cl (Cl A`)`)`)` by Th24,XXREAL_1:235;
-  not 5 in (Cl (Cl A`)`)` by Th22,XXREAL_1:233;
+A10: (Cl (Cl (Cl A)`)`)` <> (Cl (Cl A`)`)` by Th33,BORSUK_5:105;
+A11: ( not 5 in (Cl (Cl (Cl A)`)`)`)& 5 in (Cl (Cl (Cl A`)`)`)` by Th17,Th24
+  , XXREAL_1:233,235;
+  (Cl (Cl A)`)` <> (Cl (Cl (Cl A)`)`)` by A3,A5,XXREAL_1:233;
   then (Cl A)`, (Cl (Cl A)`)`, (Cl (Cl (Cl A)`)`)`, (Cl A`)`, (Cl (Cl A`)`)`,
-  (Cl (Cl (Cl A`)`)`)` are_mutually_different
-  by A7,A8,A9,A10,A11,A12,A13,A15,A16,ZFMISC_1:def 8;
+  (Cl (Cl (Cl A`)`)`)` are_mutually_different by A2,A7,A9,A4,A10,A6,A11,
+  A8,ZFMISC_1:def 8;
   hence thesis by BORSUK_5:4;
 end;
 
@@ -1174,14 +1277,17 @@ theorem Th64:
   { KurExSet, KurExSet` } misses Kurat14ClPart KurExSet
 proof
   set A = KurExSet;
-  assume { A, A` } meets Kurat14ClPart A;
+  assume
+  { A, A` } meets Kurat14ClPart A;
   then consider x being set such that
-A1: x in { A, A` } & x in Kurat14ClPart A by XBOOLE_0:3;
-  reconsider x as Subset of R^1 by A1;
-A2: x is closed by A1,TOPS_2:def 2;
+A1: x in { A, A` } and
+A2: x in Kurat14ClPart A by XBOOLE_0:3;
+  reconsider x as Subset of R^1 by A2;
   x = A or x = A` by A1,TARSKI:def 2;
-  then x` = A by A1,TOPS_2:def 2;
-  hence thesis by A2;
+  then
+A3: x` = A by A2,TOPS_2:def 2;
+  x is closed by A2,TOPS_2:def 2;
+  hence thesis by A3;
 end;
 
 registration
@@ -1192,7 +1298,8 @@ end;
 theorem Th65:
   KurExSet <> KurExSet`
 proof
-  assume KurExSet = KurExSet`;
+  assume
+  KurExSet = KurExSet`;
   then KurExSet meets KurExSet` by XBOOLE_1:66;
   hence thesis by XBOOLE_1:79;
 end;
@@ -1201,29 +1308,33 @@ theorem Th66:
   { KurExSet, KurExSet` } misses Kurat14OpPart KurExSet
 proof
   set A = KurExSet;
-  assume { A, A` } meets Kurat14OpPart A;
+  assume
+  { A, A` } meets Kurat14OpPart A;
   then consider x being set such that
-A1: x in { A, A` } & x in Kurat14OpPart A by XBOOLE_0:3;
-  reconsider x as Subset of R^1 by A1;
-A2: x is open by A1,TOPS_2:def 1;
+A1: x in { A, A` } and
+A2: x in Kurat14OpPart A by XBOOLE_0:3;
+  reconsider x as Subset of R^1 by A2;
   x = A or x = A` by A1,TARSKI:def 2;
-  then x` = A by A1,TOPS_2:def 1;
-  hence thesis by A2;
+  then
+A3: x` = A by A2,TOPS_2:def 1;
+  x is open by A2,TOPS_2:def 1;
+  hence thesis by A3;
 end;
 
 theorem
   card Kurat14Set KurExSet = 14
 proof
   set A = KurExSet;
-A1: card (Kurat14ClPart A \/ Kurat14OpPart A) = 6 + 6
-  by Th60,Th62,Th63,CARD_2:53
-    .= 12;
   set B = { A, A` };
-A2: B misses (Kurat14ClPart A \/ Kurat14OpPart A) by Th64,Th66,XBOOLE_1:70;
-  card Kurat14Set A = card (B \/ Kurat14ClPart A \/ Kurat14OpPart A) by Lm2
+A1: B misses (Kurat14ClPart A \/ Kurat14OpPart A) by Th64,Th66,XBOOLE_1:70;
+A2: card (Kurat14ClPart A \/ Kurat14OpPart A) = 6 + 6 by Th60,Th62,Th63,
+  CARD_2:53
+    .= 12;
+  card Kurat14Set A = card (B \/ Kurat14ClPart A \/ Kurat14OpPart A) by
+  Lm2
     .= card (B \/ (Kurat14ClPart A \/ Kurat14OpPart A)) by XBOOLE_1:4
-    .= card B + card (Kurat14ClPart A \/ Kurat14OpPart A) by A2,CARD_2:53
-    .= 2 + 12 by A1,Th65,CARD_2:76
+    .= card B + card (Kurat14ClPart A \/ Kurat14OpPart A) by A1,CARD_2:53
+    .= 2 + 12 by A2,Th65,CARD_2:76
     .= 14;
   hence thesis;
 end;
@@ -1233,12 +1344,10 @@ begin :: Properties of Kuratowski Sets
 definition
   let T be TopStruct, A be Subset-Family of T;
   attr A is Cl-closed means
-
   for P being Subset of T st P in A holds Cl P in A;
   attr A is Int-closed means
-
-  for P being Subset of T st
-  P in A holds Int P in A;
+  for P being Subset of T st P in A holds Int P in
+  A;
 end;
 
 registration
@@ -1249,13 +1358,15 @@ registration
   coherence
   proof
     let P be Subset of T;
-    assume P in Kurat14Set A;
+    assume
+    P in Kurat14Set A;
     hence thesis by Th6;
   end;
   cluster Kurat14Set A -> compl-closed;
   coherence
   proof
-    for P be Subset of T st P in Kurat14Set A holds P` in Kurat14Set A by Th6;
+    for P be Subset of T st P in Kurat14Set A holds P` in Kurat14Set A by
+    Th6;
     hence thesis by PROB_1:def 1;
   end;
 end;
@@ -1268,14 +1379,16 @@ registration
   coherence
   proof
     let P be Subset of T;
-    assume P in Kurat7Set A;
+    assume
+    P in Kurat7Set A;
     hence thesis by Th10;
   end;
   cluster Kurat7Set A -> Cl-closed;
   coherence
   proof
     let P be Subset of T;
-    assume P in Kurat7Set A;
+    assume
+    P in Kurat7Set A;
     hence thesis by Th10;
   end;
 end;

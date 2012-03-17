@@ -12,6 +12,7 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="ENUMSET1"/>
@@ -31,73 +32,73 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="25"/>
+<Adjective nr="26"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="25"/>
+<Adjective nr="26"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="203">
+<Func kind="K" nr="211">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="25"/>
+<Adjective nr="26"/>
 </Cluster>
 </FCluster>
 <FCluster aid="QUATERN2" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="213"/>
+<Func kind="K" nr="221"/>
 <Cluster>
-<Adjective nr="37" value="false"/>
-<Adjective nr="56"/>
+<Adjective nr="39" value="false"/>
+<Adjective nr="57"/>
 </Cluster>
 </FCluster>
 <FCluster aid="QUATERN2" nr="3">
 <ArgTypes/>
-<Func kind="K" nr="213"/>
+<Func kind="K" nr="221"/>
 <Cluster>
-<Adjective nr="56"/>
-<Adjective nr="61"/>
-<Adjective nr="86"/>
+<Adjective nr="57"/>
+<Adjective nr="62"/>
 <Adjective nr="87"/>
 <Adjective nr="88"/>
+<Adjective nr="89"/>
 </Cluster>
 </FCluster>
 <FCluster aid="QUATERN2" nr="4">
 <ArgTypes/>
-<Func kind="K" nr="214"/>
+<Func kind="K" nr="222"/>
 <Cluster>
-<Adjective nr="37" value="false"/>
-<Adjective nr="84"/>
+<Adjective nr="39" value="false"/>
+<Adjective nr="85"/>
 </Cluster>
 </FCluster>
 <FCluster aid="QUATERN2" nr="5">
 <ArgTypes/>
-<Func kind="K" nr="214"/>
+<Func kind="K" nr="222"/>
 <Cluster>
-<Adjective nr="84"/>
-<Adjective nr="100"/>
+<Adjective nr="85"/>
+<Adjective nr="101"/>
 </Cluster>
 </FCluster>
 <FCluster aid="QUATERN2" nr="6">
 <ArgTypes/>
-<Func kind="K" nr="214"/>
+<Func kind="K" nr="222"/>
 <Cluster>
-<Adjective nr="41" value="false"/>
-<Adjective nr="61"/>
-<Adjective nr="82"/>
-<Adjective nr="84"/>
-<Adjective nr="86"/>
+<Adjective nr="43" value="false"/>
+<Adjective nr="62"/>
+<Adjective nr="83"/>
+<Adjective nr="85"/>
 <Adjective nr="87"/>
 <Adjective nr="88"/>
-<Adjective nr="93"/>
-<Adjective nr="99"/>
-<Adjective nr="101"/>
+<Adjective nr="89"/>
+<Adjective nr="94"/>
+<Adjective nr="100"/>
 <Adjective nr="102"/>
+<Adjective nr="103"/>
 </Cluster>
 </FCluster>
 <CCluster aid="QUATERN2" nr="1">
@@ -106,11 +107,11 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="213"/>
+<Func kind="K" nr="221"/>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="25"/>
+<Adjective nr="26"/>
 </Cluster>
 </CCluster>
 <CCluster aid="QUATERN2" nr="2">
@@ -119,11 +120,11 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="214"/>
+<Func kind="K" nr="222"/>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="25"/>
+<Adjective nr="26"/>
 </Cluster>
 </CCluster>
 </Registrations>

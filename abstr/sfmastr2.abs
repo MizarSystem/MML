@@ -11,14 +11,15 @@ environ
       SFMASTR1, SCMFSA_9, CARD_3, ARYTM_1, SCMFSA9A, ABSVALUE, PRE_FF,
       SFMASTR2, ARYTM, AMI_5;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, NAT_1, RELAT_1,
-      FUNCT_1, FUNCT_2, FUNCT_4, PRE_FF, CARD_3, AMI_1, SCMNORM, SCMFSA_2,
-      SCMFSA6A, SCMFSA6B, SF_MASTR, SCMFSA6C, SCMFSA7B, SCMFSA_9, SFMASTR1,
-      SCMFSA9A, INT_2, XXREAL_0;
+      FUNCT_1, FUNCT_2, PRE_FF, CARD_3, AMI_1, SCMNORM, SCMFSA_2, SCMFSA6A,
+      SCMFSA6B, SF_MASTR, SCMFSA6C, SCMFSA7B, SCMFSA_9, SFMASTR1, SCMFSA9A,
+      INT_2, XXREAL_0;
  constructors XXREAL_0, NAT_1, INT_2, PRE_FF, SCMFSA6A, SCMFSA6B, SCMFSA6C,
-      SCMFSA7B, SCMFSA_9, SFMASTR1, SCMFSA9A, SEQ_1, SCMNORM, RELSET_1;
- registrations SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1, FINSET_1, FRAENKEL,
-      NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, CARD_3, SCMFSA_2, SF_MASTR,
-      SCMFSA6B, SCMFSA6C, SCMFSA7B, SCMFSA8A, SCMFSA_9, SFMASTR1, XBOOLE_0;
+      SCMFSA7B, SCMFSA_9, SFMASTR1, SCMFSA9A, SEQ_1, SCMNORM, RELSET_1,
+      PRE_POLY;
+ registrations SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1, FINSET_1, NUMBERS,
+      XXREAL_0, XREAL_0, NAT_1, INT_1, CARD_3, SCMFSA_2, SF_MASTR, SCMFSA6B,
+      SCMFSA6C, SCMFSA7B, SCMFSA8A, SCMFSA_9, SFMASTR1, XBOOLE_0;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
 
 
@@ -26,48 +27,50 @@ begin :: SCM+FSA preliminaries
 
 reserve s, s1, s2 for State of SCM+FSA,
   a, b for Int-Location,
-  d for read-write Int-Location,
+  d for
+  read-write Int-Location,
   f for FinSeq-Location,
   I for Program of SCM+FSA,
-  J for good Program of SCM+FSA,
+  J for
+  good Program of SCM+FSA,
   k, m for Element of NAT;
-
 :: set D = Int-Locations U FinSeq-Locations;
 :: set SAt = Start-At insloc 0;
 :: set IL = the Instruction-Locations of SCM+FSA;
+:: UILIE:
 
-theorem :: SFMASTR2:1  :: UILIE:
-  I is_closed_on Initialize s & I is_halting_on Initialize s &
-  not b in UsedIntLoc I implies IExec(I, s).b = (Initialize s).b;
+theorem :: SFMASTR2:1
+  I is_closed_on Initialize s & I is_halting_on Initialize s & not
+  b in UsedIntLoc I implies IExec(I, s).b = (Initialize s).b;
 
-theorem :: SFMASTR2:2  :: UILIEF:
-  I is_closed_on Initialize s & I is_halting_on Initialize s &
-  not f in UsedInt*Loc I implies IExec(I, s).f = (Initialize s).f;
+theorem :: SFMASTR2:2
+  I is_closed_on Initialize s & I is_halting_on Initialize s & not f in
+  UsedInt*Loc I implies IExec(I, s).f = (Initialize s).f;
 
-theorem :: SFMASTR2:3  :: UILIErw:
-  ( I is_closed_on Initialize s & I is_halting_on Initialize s
-  or I is parahalting ) & (s.intloc 0 = 1 or a is read-write)
-  & not a in UsedIntLoc I implies IExec(I, s).a = s.a;
+theorem :: SFMASTR2:3
+  ( I is_closed_on Initialize s & I is_halting_on Initialize s or I
+is parahalting ) & (s.intloc 0 = 1 or a is read-write) & not a in UsedIntLoc I
+  implies IExec(I, s).a = s.a;
 
-theorem :: SFMASTR2:4  :: InitC:
-  s.intloc 0 = 1 implies (I is_closed_on s iff I is_closed_on Initialize s);
+theorem :: SFMASTR2:4
+  s.intloc 0 = 1 implies (I is_closed_on s iff I is_closed_on
+  Initialize s);
 
-theorem :: SFMASTR2:5  :: InitH:
-  s.intloc 0 = 1 implies ( I is_closed_on s & I is_halting_on s
-  iff I is_closed_on Initialize s & I is_halting_on Initialize s);
+theorem :: SFMASTR2:5
+  s.intloc 0 = 1 implies ( I is_closed_on s & I is_halting_on s iff
+  I is_closed_on Initialize s & I is_halting_on Initialize s);
 
-theorem :: SFMASTR2:6  :: Restr0:
-  for Iloc being Subset of Int-Locations,
-  Floc being Subset of FinSeq-Locations
-  holds s1 | (Iloc \/ Floc) = s2 | (Iloc \/ Floc)
-  iff (for x being Int-Location st x in Iloc holds s1.x = s2.x) &
-  (for x being FinSeq-Location st x in Floc holds s1.x = s2.x);
+theorem :: SFMASTR2:6
+  for Iloc being Subset of Int-Locations, Floc being Subset of
+  FinSeq-Locations holds s1 | (Iloc \/ Floc) = s2 | (Iloc \/ Floc) iff (for x
+  being Int-Location st x in Iloc holds s1.x = s2.x) & for x being
+  FinSeq-Location st x in Floc holds s1.x = s2.x;
 
-theorem :: SFMASTR2:7  :: Restr1:
-  for Iloc being Subset of Int-Locations
-  holds s1 | (Iloc \/ FinSeq-Locations) = s2 | (Iloc \/ FinSeq-Locations)
-  iff (for x being Int-Location st x in Iloc holds s1.x = s2.x) &
-  (for x being FinSeq-Location holds s1.x = s2.x);
+theorem :: SFMASTR2:7
+  for Iloc being Subset of Int-Locations holds s1 | (Iloc \/
+  FinSeq-Locations) = s2 | (Iloc \/ FinSeq-Locations) iff (for x being
+  Int-Location st x in Iloc holds s1.x = s2.x) & for x being FinSeq-Location
+  holds s1.x = s2.x;
 
 begin :: Another times macro instruction
 
@@ -75,8 +78,8 @@ definition
   let a be Int-Location, I be Program of SCM+FSA;
   func times(a, I) -> Program of SCM+FSA equals
 :: SFMASTR2:def 1
-  (1-stRWNotIn ({a} \/ UsedIntLoc I)) := a ';'
-  while>0 ( 1-stRWNotIn ({a} \/ UsedIntLoc I), I ';'
+  (1-stRWNotIn ({a} \/
+  UsedIntLoc I)) := a ';' while>0 ( 1-stRWNotIn ({a} \/ UsedIntLoc I), I ';'
   SubFrom(1-stRWNotIn ({a} \/ UsedIntLoc I), intloc 0) );
 end;
 
@@ -85,10 +88,10 @@ notation
   synonym a times I for times(a, I);
 end;
 
-theorem :: SFMASTR2:8  :: timesUsed:
+theorem :: SFMASTR2:8
   {b} \/ UsedIntLoc I c= UsedIntLoc times(b, I);
 
-theorem :: SFMASTR2:9  :: timesUsedF:
+theorem :: SFMASTR2:9
   UsedInt*Loc times(b, I) = UsedInt*Loc I;
 
 registration
@@ -98,35 +101,33 @@ end;
 
 definition
   let s be State of SCM+FSA, I be Program of SCM+FSA, a be Int-Location;
-
-func StepTimes(a, I, s) -> Function of NAT, product the Object-Kind of SCM+FSA
-  equals
+  func StepTimes(a, I, s) -> Function of NAT, product the Object-Kind of
+  SCM+FSA equals
 :: SFMASTR2:def 2
-
-  StepWhile>0(1-stRWNotIn ({a} \/ UsedIntLoc I), I ';'
-  SubFrom(1-stRWNotIn ({a} \/ UsedIntLoc I), intloc 0),
-  Exec(1-stRWNotIn ({a} \/ UsedIntLoc I) := a, Initialize s));
+  StepWhile>0(1-stRWNotIn ({a} \/ UsedIntLoc I), I ';' SubFrom(1
+  -stRWNotIn ({a} \/ UsedIntLoc I), intloc 0), Exec(1-stRWNotIn ({a} \/
+  UsedIntLoc I) := a, Initialize s));
 end;
 
-theorem :: SFMASTR2:10  :: ST0i0:
+theorem :: SFMASTR2:10
   StepTimes(a, J, s).0.intloc 0 = 1;
 
-theorem :: SFMASTR2:11  :: ST0i0a:
-  s.intloc 0 = 1 or a is read-write
-  implies StepTimes(a, J, s).0.(1-stRWNotIn ({a} \/ UsedIntLoc J)) = s.a;
+theorem :: SFMASTR2:11
+  s.intloc 0 = 1 or a is read-write implies StepTimes(a, J, s).0.(
+  1-stRWNotIn ({a} \/ UsedIntLoc J)) = s.a;
 
-theorem :: SFMASTR2:12  :: ST1i0:
-  StepTimes(a, J, s).k.intloc 0 = 1 & J is_closed_on StepTimes(a, J, s).k &
-  J is_halting_on StepTimes(a, J, s).k implies
-  StepTimes(a, J, s).(k+1).intloc 0 = 1 &
-  (StepTimes(a, J, s).k.(1-stRWNotIn ({a} \/ UsedIntLoc J)) > 0
-  implies StepTimes(a, J, s).(k+1).(1-stRWNotIn ({a} \/ UsedIntLoc J))
-  = StepTimes(a, J, s).k.(1-stRWNotIn ({a} \/ UsedIntLoc J)) - 1);
+theorem :: SFMASTR2:12
+  StepTimes(a, J, s).k.intloc 0 = 1 & J is_closed_on StepTimes(a,
+J, s).k & J is_halting_on StepTimes(a, J, s).k implies StepTimes(a, J, s).(k+1)
+  .intloc 0 = 1 & (StepTimes(a, J, s).k.(1-stRWNotIn ({a} \/ UsedIntLoc J)) > 0
+  implies StepTimes(a, J, s).(k+1).(1-stRWNotIn ({a} \/ UsedIntLoc J)) =
+  StepTimes(a, J, s).k.(1-stRWNotIn ({a} \/ UsedIntLoc J)) - 1);
 
-theorem :: SFMASTR2:13  :: STi0:
-  s.intloc 0 = 1 or a is read-write implies StepTimes(a, I, s).0.a = s.a;
+theorem :: SFMASTR2:13
+  s.intloc 0 = 1 or a is read-write implies StepTimes(a, I, s).0.a
+  = s.a;
 
-theorem :: SFMASTR2:14  :: STf0:
+theorem :: SFMASTR2:14
   StepTimes(a, I, s).0.f = s.f;
 
 definition
@@ -134,59 +135,55 @@ definition
   pred ProperTimesBody a, I, s means
 :: SFMASTR2:def 3
 
-  for k being Element of NAT st k < s.a
-  holds I is_closed_on StepTimes(a,I,s).k &
-  I is_halting_on StepTimes(a,I,s).k;
+  for k being Element of NAT st k <
+s.a holds I is_closed_on StepTimes(a,I,s).k & I is_halting_on StepTimes(a,I,s).
+  k;
 end;
 
-theorem :: SFMASTR2:15  :: timespara:
+theorem :: SFMASTR2:15
   I is parahalting implies ProperTimesBody a, I, s;
 
-theorem :: SFMASTR2:16  :: ST0:
-  ProperTimesBody a, J, s implies
-  for k st k <= s.a holds StepTimes(a, J, s).k.intloc 0 = 1;
-
-theorem :: SFMASTR2:17  :: AU0:
-  (s.intloc 0 = 1 or a is read-write) & ProperTimesBody a, J, s implies
-  for k st k <= s.a holds
-  StepTimes(a, J, s).k.(1-stRWNotIn({a} \/ UsedIntLoc J))+k = s.a;
-
-theorem :: SFMASTR2:18  :: STAU:
-  ProperTimesBody a, J, s & 0 <= s.a & (s.intloc 0 = 1 or a is read-write)
-  implies for k st k >= s.a holds
-  StepTimes(a, J, s).k.(1-stRWNotIn({a} \/ UsedIntLoc J)) = 0 &
+theorem :: SFMASTR2:16
+  ProperTimesBody a, J, s implies for k st k <= s.a holds
   StepTimes(a, J, s).k.intloc 0 = 1;
 
-theorem :: SFMASTR2:19  :: ST0_D:
-  s.intloc 0 = 1 implies
-  StepTimes(a, I, s).0 | ((UsedIntLoc I) \/ FinSeq-Locations)
-  = s | ((UsedIntLoc I) \/ FinSeq-Locations);
+theorem :: SFMASTR2:17
+  (s.intloc 0 = 1 or a is read-write) & ProperTimesBody a, J, s
+  implies for k st k <= s.a holds StepTimes(a, J, s).k.(1-stRWNotIn({a} \/
+  UsedIntLoc J))+k = s.a;
 
-theorem :: SFMASTR2:20  :: STi1:
-  StepTimes(a, J, s).k.intloc 0 = 1 &
-  J is_halting_on Initialize StepTimes(a, J, s).k &
-  J is_closed_on Initialize StepTimes(a, J, s).k &
-  StepTimes(a, J, s).k.(1-stRWNotIn ({a} \/ UsedIntLoc J)) > 0
-  implies StepTimes(a, J, s).(k+1) | ((UsedIntLoc J) \/ FinSeq-Locations)
-  = IExec(J, StepTimes(a, J, s).k) | ((UsedIntLoc J) \/ FinSeq-Locations);
+theorem :: SFMASTR2:18
+  ProperTimesBody a, J, s & 0 <= s.a & (s.intloc 0 = 1 or a is
+read-write) implies for k st k >= s.a holds StepTimes(a, J, s).k.(1-stRWNotIn({
+  a} \/ UsedIntLoc J)) = 0 & StepTimes(a, J, s).k.intloc 0 = 1;
 
-theorem :: SFMASTR2:21  :: STi1a:
-  (ProperTimesBody a, J, s or J is parahalting) & k < s.a &
-  (s.intloc 0 = 1 or a is read-write)
-  implies StepTimes(a, J, s).(k+1) | ((UsedIntLoc J) \/ FinSeq-Locations)
-  = IExec(J, StepTimes(a, J, s).k) | ((UsedIntLoc J) \/ FinSeq-Locations);
+theorem :: SFMASTR2:19
+  s.intloc 0 = 1 implies StepTimes(a, I, s).0 | ((UsedIntLoc I) \/
+  FinSeq-Locations) = s | ((UsedIntLoc I) \/ FinSeq-Locations);
 
-theorem :: SFMASTR2:22  :: IE_times0:
-  s.a <= 0 & s.intloc 0 = 1
-  implies IExec(times(a, I), s) | ((UsedIntLoc I) \/ FinSeq-Locations)
-  = s | ((UsedIntLoc I) \/ FinSeq-Locations);
+theorem :: SFMASTR2:20
+  StepTimes(a, J, s).k.intloc 0 = 1 & J is_halting_on Initialize
+  StepTimes(a, J, s).k & J is_closed_on Initialize StepTimes(a, J, s).k &
+StepTimes(a, J, s).k.(1-stRWNotIn ({a} \/ UsedIntLoc J)) > 0 implies StepTimes(
+a, J, s).(k+1) | ((UsedIntLoc J) \/ FinSeq-Locations) = IExec(J, StepTimes(a, J
+  , s).k) | ((UsedIntLoc J) \/ FinSeq-Locations);
 
-theorem :: SFMASTR2:23  :: IE_times1:
-  s.a = k & (ProperTimesBody a, J, s or J is parahalting) &
-  (s.intloc 0 = 1 or a is read-write)
-  implies DataPart IExec(times(a, J), s) = DataPart StepTimes(a, J, s).k;
+theorem :: SFMASTR2:21
+  (ProperTimesBody a, J, s or J is parahalting) & k < s.a & (s.
+  intloc 0 = 1 or a is read-write) implies StepTimes(a, J, s).(k+1) | ((
+  UsedIntLoc J) \/ FinSeq-Locations) = IExec(J, StepTimes(a, J, s).k) | ((
+  UsedIntLoc J) \/ FinSeq-Locations);
 
-theorem :: SFMASTR2:24  :: timeshc:
+theorem :: SFMASTR2:22
+  s.a <= 0 & s.intloc 0 = 1 implies IExec(times(a, I), s) | ((UsedIntLoc
+  I) \/ FinSeq-Locations) = s | ((UsedIntLoc I) \/ FinSeq-Locations);
+
+theorem :: SFMASTR2:23
+  s.a = k & (ProperTimesBody a, J, s or J is parahalting) & (s.
+  intloc 0 = 1 or a is read-write) implies DataPart IExec(times(a, J), s) =
+  DataPart StepTimes(a, J, s).k;
+
+theorem :: SFMASTR2:24
   s.intloc 0 = 1 & (ProperTimesBody a, J, s or J is parahalting)
   implies times(a, J) is_closed_on s & times(a, J) is_halting_on s;
 
@@ -196,40 +193,38 @@ definition
   let d be read-write Int-Location;
   func triv-times(d) -> Program of SCM+FSA equals
 :: SFMASTR2:def 4
-  times( d, while=0(d, Macro(d := d)) ';' SubFrom(d, intloc 0) );
+  times( d, while=0(d, Macro(d
+  := d)) ';' SubFrom(d, intloc 0) );
 end;
 
-theorem :: SFMASTR2:25  :: SA0:
+theorem :: SFMASTR2:25
   s.d <= 0 implies IExec(triv-times(d), s).d = s.d;
 
-theorem :: SFMASTR2:26   :: trivtimes
+theorem :: SFMASTR2:26
   0 <= s.d implies IExec(triv-times(d), s).d = 0;
 
 begin :: A macro for the Fibonacci sequence
 
 definition
   let N, result be Int-Location;
-
+  func Fib-macro (N, result) -> Program of SCM+FSA equals
+:: SFMASTR2:def 5
+  (1-stNotUsed times(N
+  , AddTo(result, (1-stRWNotIn {N, result}))';' swap(result, 1-stRWNotIn {N,
+result}))) := N ';' (SubFrom(result, result)) ';' ((1-stRWNotIn {N, result}) :=
+intloc 0) ';' times(N, AddTo(result, (1-stRWNotIn {N, result})) ';' swap(result
+, (1-stRWNotIn {N, result})) ) ';' (N := (1-stNotUsed times(N, AddTo(result, 1
+  -stRWNotIn {N, result})';' swap(result, 1-stRWNotIn {N, result}))));
+end;
 :: set next = 1-stRWNotIn {N, result};
 ::      local variable
 :: set Nsave = 1-stNotUsed times(N, AddTo(result, next)';'swap(result, next));
 ::      for saving and restoring N
 :: - requires: N <> result
-:: - does not change N
-  func Fib-macro (N, result) -> Program of SCM+FSA equals
-:: SFMASTR2:def 5
-  (1-stNotUsed times(N, AddTo(result, (1-stRWNotIn {N, result}))';'
-  swap(result, 1-stRWNotIn {N, result}))) := N ';'
-  (SubFrom(result, result)) ';' ((1-stRWNotIn {N, result}) := intloc 0) ';'
-  times(N, AddTo(result, (1-stRWNotIn {N, result})) ';'
-  swap(result, (1-stRWNotIn {N, result})) ) ';'
-  (N := (1-stNotUsed times(N, AddTo(result, 1-stRWNotIn {N, result})';'
-  swap(result, 1-stRWNotIn {N, result}))));
-end;
+:: - does not change N:: Fib, new times
 
-theorem :: SFMASTR2:27  :: Fib, new times
-  for N, result being read-write Int-Location st N <> result
-  for n being Element of NAT st n = s.N
-  holds IExec(Fib-macro(N, result), s).result = Fib n &
+theorem :: SFMASTR2:27
+  for N, result being read-write Int-Location st N <> result for n being
+Element of NAT st n = s.N holds IExec(Fib-macro(N, result), s).result = Fib n &
   IExec(Fib-macro(N, result), s).N = s.N;
 

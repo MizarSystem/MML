@@ -9,14 +9,12 @@ environ
  vocabularies PRE_TOPC, NORMSP_1, RLVECT_1, FUNCT_1, ARYTM, ARYTM_1, VECTSP_1,
       ARYTM_3, RELAT_1, ABSVALUE, ORDINAL2, BINOP_1, LATTICES, FUNCSDOM, SEQ_1,
       SEQ_2, REALSET1, PREPOWER, SERIES_1, BHSP_3, RSSPACE, RSSPACE3, ALGSTR_2,
-      LOPBAN_1, LOPBAN_2, SUPINF_2, GROUP_1, STRUCT_0, ALGSTR_0;
- notations XBOOLE_0, ZFMISC_1, SUBSET_1, FUNCT_1, PARTFUN1, FUNCT_2,
-      BINOP_1, XXREAL_0,
-      XCMPLX_0, XREAL_0, ORDINAL1, REAL_1, NAT_1,
-      NUMBERS, COMPLEX1, SEQ_1, SEQ_4, SERIES_1, PREPOWER,
-      STRUCT_0, ALGSTR_0, PRE_TOPC,
-      PSCOMP_1, RLVECT_1, GROUP_1, VECTSP_1, NORMSP_1, FUNCSDOM,
-      RSSPACE, RSSPACE3, LOPBAN_1;
+      LOPBAN_1, LOPBAN_2, GROUP_1, STRUCT_0, ALGSTR_0;
+ notations XBOOLE_0, ZFMISC_1, SUBSET_1, FUNCT_1, PARTFUN1, FUNCT_2, BINOP_1,
+      XXREAL_0, XCMPLX_0, XREAL_0, ORDINAL1, REAL_1, NAT_1, NUMBERS, COMPLEX1,
+      SEQ_1, SEQ_4, SERIES_1, PREPOWER, STRUCT_0, ALGSTR_0, PRE_TOPC, PSCOMP_1,
+      RLVECT_1, GROUP_1, VECTSP_1, NORMSP_1, FUNCSDOM, RSSPACE, RSSPACE3,
+      LOPBAN_1;
  constructors PARTFUN1, XXREAL_0, REAL_1, NAT_1, INT_2, BINOP_2, PREPOWER,
       SERIES_1, FUNCSDOM, PSCOMP_1, RSSPACE3, LOPBAN_1, VECTSP_1, SEQ_1,
       XXREAL_2, SEQ_4, RELSET_1;
@@ -33,13 +31,20 @@ environ
 begin :: Banach Algebra of Bounded Linear Operators
 
 theorem Th1:
-  for X,Y,Z be RealLinearSpace for f be LinearOperator of X,Y
-  for g be LinearOperator of Y,Z holds g*f is LinearOperator of X,Z
+  for X,Y,Z be RealLinearSpace for f be LinearOperator of X,Y for g
+  be LinearOperator of Y,Z holds g*f is LinearOperator of X,Z
 proof
   let X,Y,Z be RealLinearSpace;
   let f be LinearOperator of X,Y;
   let g be LinearOperator of Y,Z;
 A1: now
+    let v be VECTOR of X, a be Real;
+    thus (g*f).(a*v) =g.(f.(a*v)) by FUNCT_2:21
+      .=g.(a*f.v) by LOPBAN_1:def 6
+      .=a*g.(f.v) by LOPBAN_1:def 6
+      .=a*(g*f).(v) by FUNCT_2:21;
+  end;
+  now
     let v,w be VECTOR of X;
     thus (g*f).(v+w) =g.(f.(v+w)) by FUNCT_2:21
       .=g.(f.v+f.w) by LOPBAN_1:def 5
@@ -47,67 +52,60 @@ A1: now
       .=(g*f).(v)+g.(f.w) by FUNCT_2:21
       .=(g*f).(v)+(g*f).(w) by FUNCT_2:21;
   end;
-  now
-    let v be VECTOR of X, a be Real;
-    thus (g*f).(a*v) =g.(f.(a*v)) by FUNCT_2:21
-      .=g.(a*f.v) by LOPBAN_1:def 6
-      .=a*g.(f.v) by LOPBAN_1:def 6
-      .=a*(g*f).(v) by FUNCT_2:21;
-  end;
   hence thesis by A1,LOPBAN_1:def 5,def 6;
 end;
 
 theorem Th2:
   for X,Y,Z be RealNormSpace for f be bounded LinearOperator of X,Y
-  for g be bounded LinearOperator of Y,Z
-  holds g*f is bounded LinearOperator of X,Z
-  & for x be VECTOR of X holds ||.((g*f).x).||
-  <=(BoundedLinearOperatorsNorm(Y,Z).g)
-  *(BoundedLinearOperatorsNorm(X,Y).f )*||.x.||
-  & (BoundedLinearOperatorsNorm(X,Z).(g*f))
-  <=(BoundedLinearOperatorsNorm(Y,Z).g) *(BoundedLinearOperatorsNorm(X,Y).f)
+for g be bounded LinearOperator of Y,Z holds g*f is bounded LinearOperator of X
+,Z & for x be VECTOR of X holds ||.((g*f).x).|| <=(BoundedLinearOperatorsNorm(Y
+  ,Z).g) *(BoundedLinearOperatorsNorm(X,Y).f )*||.x.|| & (
+BoundedLinearOperatorsNorm(X,Z).(g*f)) <=(BoundedLinearOperatorsNorm(Y,Z).g) *(
+  BoundedLinearOperatorsNorm(X,Y).f)
 proof
   let X,Y,Z be RealNormSpace;
   let f be bounded LinearOperator of X,Y;
   let g be bounded LinearOperator of Y,Z;
-  reconsider ff=f as Point of
-  R_NormSpace_of_BoundedLinearOperators(X,Y) by LOPBAN_1:def 10;
-  reconsider gg=g as Point of
-  R_NormSpace_of_BoundedLinearOperators(Y,Z) by LOPBAN_1:def 10;
+  reconsider ff=f as Point of R_NormSpace_of_BoundedLinearOperators(X,Y) by
+  LOPBAN_1:def 10;
+  reconsider gg=g as Point of R_NormSpace_of_BoundedLinearOperators(Y,Z) by
+  LOPBAN_1:def 10;
 A1: now
     let v be VECTOR of X;
-A2: ||.(g*f).v.|| = ||.g.(f.v).|| by FUNCT_2:21;
-A3: ||.g.(f.(v)).|| <=||.gg.|| * ||.f.(v).|| by LOPBAN_1:38;
     0 <= ||.gg.|| by NORMSP_1:8;
-    then ||.gg.|| * ||.f.(v).|| <=||.gg.|| * ( ||.ff.|| * ||.v.||)
-    by LOPBAN_1:38,XREAL_1:66;
-    hence ||.(g*f).v.|| <=(||.gg.|| * ||.ff.||) * ||.v.|| by A2,A3,XXREAL_0:2;
+    then
+A2: ||.gg.|| * ||.f.(v).|| <=||.gg.|| * ( ||.ff.|| * ||.v.||) by
+    LOPBAN_1:38,XREAL_1:66;
+    ||.(g*f).v.|| = ||.g.(f.v).|| & ||.g.(f.(v)).|| <=||.gg.|| * ||.f.(v)
+    .|| by FUNCT_2:21,LOPBAN_1:38;
+    hence ||.(g*f).v.|| <=(||.gg.|| * ||.ff.||) * ||.v.|| by A2,XXREAL_0:2;
   end;
-  0 <= ||.gg.|| & 0 <= ||.ff.|| by NORMSP_1:8;
-  then
-A4: 0 <= ||.gg.|| * ||.ff.||;
+A3: 0 <= ||.gg.|| & 0 <= ||.ff.|| by NORMSP_1:8;
+  then reconsider gf=g*f as bounded LinearOperator of X,Z by A1,
+  Th1,LOPBAN_1:def
+  9;
   set K = ||.gg.|| * ||.ff.||;
-A5: (BoundedLinearOperatorsNorm(X,Y).f) = ||.ff.|| by NORMSP_1:def 1;
-A6: (BoundedLinearOperatorsNorm(Y,Z).g) = ||.gg.|| by NORMSP_1:def 1;
-A7: now
-    let t be VECTOR of X such that
-A8: ||.t.|| <= 1;
-A9: K*||.t.|| <=K*1 by A4,A8,XREAL_1:66;
+A4: (BoundedLinearOperatorsNorm(X,Y).f) = ||.ff.|| & (
+  BoundedLinearOperatorsNorm (Y,Z).g) = ||.gg.|| by NORMSP_1:def 1;
+A5: now
+    let t be VECTOR of X;
+    assume
+    ||.t.|| <= 1;
+    then
+A6: K*||.t.|| <=K*1 by A3,XREAL_1:66;
     ||.(g*f).t.|| <=K* ||.t.|| by A1;
-    hence ||.(g*f).t.|| <=K by A9,XXREAL_0:2;
+    hence ||.(g*f).t.|| <=K by A6,XXREAL_0:2;
   end;
-
-reconsider gf=g*f as bounded LinearOperator of X,Z by A1,A4,Th1,LOPBAN_1:def 9;
-A10: now
-    let r be Real such that
-A11: r in PreNorms(gf);
-    consider t be VECTOR of X such that
-A12: r=||.gf.t.|| & ||.t.|| <= 1 by A11;
-    thus r <=K by A7,A12;
+A7: now
+    let r be Real;
+    assume
+    r in PreNorms(gf);
+    then ex t be VECTOR of X st r=||.gf.t.|| & ||.t.|| <= 1;
+    hence r <=K by A5;
   end;
-  (for s be real number st s in PreNorms(gf) holds s <=K)
-  implies sup PreNorms(gf) <=K by SEQ_4:62;
-  hence thesis by A1,A5,A6,A10,LOPBAN_1:36;
+  (for s be real number st s in PreNorms(gf) holds s <=K) implies sup
+  PreNorms(gf) <=K by SEQ_4:62;
+  hence thesis by A1,A4,A7,LOPBAN_1:36;
 end;
 
 definition
@@ -121,8 +119,8 @@ definition
   let X be RealNormSpace;
   let f,g be Element of BoundedLinearOperators(X,X);
   func f + g -> Element of BoundedLinearOperators(X,X) equals
-  Add_ ( BoundedLinearOperators(X,X), R_VectorSpace_of_LinearOperators(X,X) )
-  .(f,g);
+  Add_ (
+  BoundedLinearOperators(X,X), R_VectorSpace_of_LinearOperators(X,X) ) .(f,g);
   correctness;
 end;
 
@@ -130,7 +128,8 @@ definition
   let X be RealNormSpace;
   let f,g be Element of BoundedLinearOperators(X,X);
   func g*f -> Element of BoundedLinearOperators(X,X) equals
-  modetrans(g,X,X)*modetrans(f,X,X);
+  modetrans(g,X,X)*
+  modetrans(f,X,X);
   correctness by LOPBAN_1:def 10;
 end;
 
@@ -139,8 +138,8 @@ definition
   let f be Element of BoundedLinearOperators(X,X);
   let a be Real;
   func a*f -> Element of BoundedLinearOperators(X,X) equals
-  Mult_(BoundedLinearOperators(X,X),
-  R_VectorSpace_of_LinearOperators(X,X)).(a,f);
+  Mult_(
+  BoundedLinearOperators(X,X), R_VectorSpace_of_LinearOperators(X,X)).(a,f);
   correctness;
 end;
 
@@ -148,14 +147,15 @@ definition
   let X be RealNormSpace;
   func FuncMult(X) -> BinOp of BoundedLinearOperators(X,X) means
   :Def4:
-  for f,g being Element of BoundedLinearOperators(X,X) holds it.(f,g) = f*g;
+  for f,
+  g being Element of BoundedLinearOperators(X,X) holds it.(f,g) = f*g;
   existence
   proof
-    deffunc F(Element of BoundedLinearOperators(X,X),
-    Element of BoundedLinearOperators(X,X)) = $1*$2;
+    deffunc F(Element of BoundedLinearOperators(X,X), Element of
+    BoundedLinearOperators(X,X)) = $1*$2;
     consider F being BinOp of BoundedLinearOperators(X,X) such that
-A1: for x,y being Element of BoundedLinearOperators(X,X) holds
-    F.(x,y) = F(x,y) from BINOP_1:sch 4;
+A1: for x,y being Element of BoundedLinearOperators(X,X) holds F.(x,y)
+    = F(x,y) from BINOP_1:sch 4;
     take F;
     let f,g be Element of BoundedLinearOperators(X,X);
     thus thesis by A1;
@@ -163,10 +163,10 @@ A1: for x,y being Element of BoundedLinearOperators(X,X) holds
   uniqueness
   proof
     let it1,it2 be BinOp of BoundedLinearOperators(X,X) such that
-A2: for f,g being Element of
-    BoundedLinearOperators(X,X) holds it1.(f,g) = f*g and
-A3: for f,g being Element of
-    BoundedLinearOperators(X,X) holds it2.(f,g) = f*g;
+A2: for f,g being Element of BoundedLinearOperators(X,X) holds it1.(f,
+    g) = f*g and
+A3: for f,g being Element of BoundedLinearOperators(X,X) holds it2.(f,
+    g) = f*g;
     now
       let f,g be Element of BoundedLinearOperators(X,X);
       thus it1.(f,g) = f*g by A2
@@ -177,34 +177,31 @@ A3: for f,g being Element of
 end;
 
 theorem Th3:
-  for X be RealNormSpace holds
-  id (the carrier of X) is bounded LinearOperator of X,X
+  for X be RealNormSpace holds id (the carrier of X) is bounded
+  LinearOperator of X,X
 proof
   let X be RealNormSpace;
-A1: id (the carrier of X) is LinearOperator of X,X
-  proof
-A2: now
-      let v,w be VECTOR of X;
-      thus ( id (the carrier of X)).(v+w) =v+w by FUNCT_1:35
-        .=(id (the carrier of X)).v + w by FUNCT_1:35
-        .=(id (the carrier of X)).v + (id (the carrier of X)).w by FUNCT_1:35;
-    end;
-    now
-      let v be VECTOR of X, a be Real;
-      thus (id (the carrier of X)).(a*v) =a*v by FUNCT_1:35
-        .=a*(id (the carrier of X)).(v) by FUNCT_1:35;
-    end;
-    hence thesis by A2,LOPBAN_1:def 5,def 6;
+A1: now
+    let v,w be VECTOR of X;
+    thus ( id (the carrier of X)).(v+w) =v+w by FUNCT_1:35
+      .=(id (the carrier of X)).v + w by FUNCT_1:35
+      .=(id (the carrier of X)).v + (id (the carrier of X)).w by FUNCT_1:35;
   end;
-  for v be VECTOR of X holds
-  ||.id (the carrier of X).v.|| <=1* ||.v.|| by FUNCT_1:35;
-  hence thesis by A1,LOPBAN_1:def 9;
+A2: now
+    let v be VECTOR of X, a be Real;
+    thus (id (the carrier of X)).(a*v) =a*v by FUNCT_1:35
+      .=a*(id (the carrier of X)).(v) by FUNCT_1:35;
+  end;
+  for v be VECTOR of X holds ||.id (the carrier of X).v.|| <=1* ||.v.|| by
+  FUNCT_1:35;
+  hence thesis by A1,A2,LOPBAN_1:def 5,def 6,def 9;
 end;
 
 definition
   let X be RealNormSpace;
   func FuncUnit(X) -> Element of BoundedLinearOperators(X,X) equals
-  id (the carrier of X);
+  id (the
+  carrier of X);
   coherence
   proof
     id (the carrier of X) is bounded LinearOperator of X,X by Th3;
@@ -213,8 +210,8 @@ definition
 end;
 
 theorem Th4:
-  for X be RealNormSpace for f,g,h be bounded LinearOperator of X,X holds
-  h = f*g iff for x be VECTOR of X holds h.x = f.(g.x)
+  for X be RealNormSpace for f,g,h be bounded LinearOperator of X,X
+  holds h = f*g iff for x be VECTOR of X holds h.x = f.(g.x)
 proof
   let X be RealNormSpace;
   let f,g,h be bounded LinearOperator of X,X;
@@ -248,51 +245,53 @@ proof
 end;
 
 theorem Th6:
-  for X be RealNormSpace for f be bounded LinearOperator of X,X holds
-  f*(id the carrier of X) = f & (id the carrier of X )*f=f
+  for X be RealNormSpace for f be bounded LinearOperator of X,X
+  holds f*(id the carrier of X) = f & (id the carrier of X )*f=f
 proof
   let X be RealNormSpace;
-  let f be bounded LinearOperator of X,X;
   reconsider ii=(id the carrier of X) as bounded LinearOperator of X,X by Th3;
+  let f be bounded LinearOperator of X,X;
 A1: now
     let x be VECTOR of X;
-    thus ( f*(id the carrier of X)).x =( f*ii).x
-      .=f.(ii.x) by Th4
+    thus ( (id the carrier of X)*f).x =( ii*f).x
+      .=ii.(f.x) by Th4
       .=f.x by FUNCT_1:35;
   end;
   now
     let x be VECTOR of X;
-    thus ( (id the carrier of X)*f).x =( ii*f).x
-      .=ii.(f.x) by Th4
+    thus ( f*(id the carrier of X)).x =( f*ii).x
+      .=f.(ii.x) by Th4
       .=f.x by FUNCT_1:35;
   end;
   hence thesis by A1,FUNCT_2:113;
 end;
 
 theorem Th7:
-  for X be RealNormSpace for f,g,h be Element of BoundedLinearOperators(X,X)
-  holds f*(g*h) =(f*g)*h
+  for X be RealNormSpace for f,g,h be Element of
+  BoundedLinearOperators(X,X) holds f*(g*h) =(f*g)*h
 proof
   let X be RealNormSpace;
   let f,g,h be Element of BoundedLinearOperators(X,X);
-  modetrans((g*h),X,X) =modetrans(g,X,X)*modetrans(h,X,X) by LOPBAN_1:def 12;
-  then modetrans(f,X,X)*modetrans((g*h),X,X)
-  =(modetrans(f,X,X)*modetrans(g,X,X))*modetrans(h,X,X) by Th5;
+  modetrans((g*h),X,X) =modetrans(g,X,X)*modetrans(h,X,X) by LOPBAN_1:def
+  12;
+  then
+  modetrans(f,X,X)*modetrans((g*h),X,X) =(modetrans(f,X,X)*modetrans(g,X,X
+  ))*modetrans(h,X,X) by Th5;
   hence thesis by LOPBAN_1:def 12;
 end;
 
 theorem Th8:
-  for X be RealNormSpace for f be Element of BoundedLinearOperators(X,X) holds
-  f*FuncUnit(X)= f & FuncUnit(X)*f=f
+  for X be RealNormSpace for f be Element of BoundedLinearOperators
+  (X,X) holds f*FuncUnit(X)= f & FuncUnit(X)*f=f
 proof
   let X be RealNormSpace;
   let f be Element of BoundedLinearOperators(X,X);
   (id the carrier of X) is bounded LinearOperator of X,X by Th3;
-  then (id the carrier of X)
-  is Element of BoundedLinearOperators(X,X) by LOPBAN_1:def 10;
+  then (id the carrier of X) is Element of BoundedLinearOperators(X,X) by
+  LOPBAN_1:def 10;
   then
-A1: modetrans( (id (the carrier of X)),X,X)
-  = (id the carrier of X) by LOPBAN_1:def 12;
+A1: modetrans( (id (the carrier of X)),X,X) = (id the carrier of X) by
+  LOPBAN_1:def 12;
   hence f*FuncUnit(X) =modetrans(f,X,X) by Th6
     .=f by LOPBAN_1:def 12;
   thus FuncUnit(X)*f =modetrans(f,X,X) by A1,Th6
@@ -300,36 +299,34 @@ A1: modetrans( (id (the carrier of X)),X,X)
 end;
 
 theorem Th9:
-  for X be RealNormSpace
-  for f,g,h be Element of BoundedLinearOperators(X,X) holds f *(g+h)=f*g + f*h
+  for X be RealNormSpace for f,g,h be Element of
+  BoundedLinearOperators(X,X) holds f *(g+h)=f*g + f*h
 proof
   let X be RealNormSpace;
   let f,g,h be Element of BoundedLinearOperators(X,X);
   set BLOP=R_NormSpace_of_BoundedLinearOperators(X,X);
-  set ADD=Add_(BoundedLinearOperators(X,X),
-  R_VectorSpace_of_LinearOperators(X,X));
+  set ADD=Add_(BoundedLinearOperators(X,X), R_VectorSpace_of_LinearOperators(X
+  ,X));
   set mf=modetrans(f,X,X);
   set mg=modetrans(g,X,X);
   set mh=modetrans(h,X,X);
   set mgh=modetrans(g+h, X,X);
   ADD.(mf*mg, mf*mh) =mf*mgh
   proof
-    reconsider gg = g as VECTOR of BLOP;
-    reconsider hh = h as VECTOR of BLOP;
-A1: gg=mg by LOPBAN_1:def 12;
-A2: hh=mh by LOPBAN_1:def 12;
-    reconsider k=mf*mgh as VECTOR of BLOP by LOPBAN_1:def 10;
-    reconsider fg=mf*mg as VECTOR of BLOP by LOPBAN_1:def 10;
     reconsider fh=mf*mh as VECTOR of BLOP by LOPBAN_1:def 10;
+    reconsider fg=mf*mg as VECTOR of BLOP by LOPBAN_1:def 10;
+    reconsider k=mf*mgh as VECTOR of BLOP by LOPBAN_1:def 10;
+    reconsider hh = h as VECTOR of BLOP;
+    reconsider gg = g as VECTOR of BLOP;
+A1: gg=mg & hh=mh by LOPBAN_1:def 12;
     for x be VECTOR of X holds (mf*mgh).x=(mf*mg).x + (mf*mh).x
     proof
       let x be VECTOR of X;
-A3:   g+h=gg+hh;
-      modetrans(g+h, X,X) =g+h by LOPBAN_1:def 12;
+      g+h=gg+hh & modetrans(g+h, X,X) =g+h by LOPBAN_1:def 12;
       then
-A4:   mgh.x=mg.x+mh.x by A1,A2,A3,LOPBAN_1:41;
+A2:   mgh.x=mg.x+mh.x by A1,LOPBAN_1:41;
       thus (mf*mgh).x=mf.(mgh.x) by Th4
-        .=mf.(mg.x) +mf.(mh.x) by A4,LOPBAN_1:def 5
+        .=mf.(mg.x) +mf.(mh.x) by A2,LOPBAN_1:def 5
         .=(mf*mg).x+mf.(mh.x) by Th4
         .=(mf*mg).x+ (mf*mh).x by Th4;
     end;
@@ -340,37 +337,34 @@ A4:   mgh.x=mg.x+mh.x by A1,A2,A3,LOPBAN_1:41;
 end;
 
 theorem Th10:
-  for X be RealNormSpace
-  for f,g,h be Element of BoundedLinearOperators(X,X) holds
-  (g+h)*f = g*f + h*f
+  for X be RealNormSpace for f,g,h be Element of
+  BoundedLinearOperators(X,X) holds (g+h)*f = g*f + h*f
 proof
   let X be RealNormSpace;
   let f,g,h be Element of BoundedLinearOperators(X,X);
   set BLOP=R_NormSpace_of_BoundedLinearOperators(X,X);
-  set ADD=Add_(BoundedLinearOperators(X,X),
-  R_VectorSpace_of_LinearOperators(X,X));
+  set ADD=Add_(BoundedLinearOperators(X,X), R_VectorSpace_of_LinearOperators(X
+  ,X));
   set mf=modetrans(f,X,X);
   set mg=modetrans(g,X,X);
   set mh=modetrans(h,X,X);
   set mgh=modetrans(g+h, X,X);
   ADD.(mg*mf, mh*mf) =mgh*mf
   proof
-    reconsider gg = g as VECTOR of BLOP;
-    reconsider hh = h as VECTOR of BLOP;
-A1: gg=mg by LOPBAN_1:def 12;
-A2: hh=mh by LOPBAN_1:def 12;
-    reconsider k=mgh*mf as VECTOR of BLOP by LOPBAN_1:def 10;
-    reconsider gf=mg*mf as VECTOR of BLOP by LOPBAN_1:def 10;
     reconsider hf=mh*mf as VECTOR of BLOP by LOPBAN_1:def 10;
+    reconsider gf=mg*mf as VECTOR of BLOP by LOPBAN_1:def 10;
+    reconsider k=mgh*mf as VECTOR of BLOP by LOPBAN_1:def 10;
+    reconsider hh = h as VECTOR of BLOP;
+    reconsider gg = g as VECTOR of BLOP;
+A1: gg=mg & hh=mh by LOPBAN_1:def 12;
     for x be VECTOR of X holds (mgh*mf).x=(mg*mf).x + (mh*mf).x
     proof
       let x be VECTOR of X;
-A3:   g+h=gg+hh;
-      modetrans(g+h, X,X) =g+h by LOPBAN_1:def 12;
+      g+h=gg+hh & modetrans(g+h, X,X) =g+h by LOPBAN_1:def 12;
       then
-A4:   mgh.(mf.x)=mg.(mf.x)+mh.(mf.x) by A1,A2,A3,LOPBAN_1:41; thus
-      (mgh*mf).x=mgh.(mf.x) by Th4
-        .=(mg*mf).x+mh.(mf.x) by A4,Th4
+A2:   mgh.(mf.x)=mg.(mf.x)+mh.(mf.x) by A1,LOPBAN_1:41;
+      thus (mgh*mf).x=mgh.(mf.x) by Th4
+        .=(mg*mf).x+mh.(mf.x) by A2,Th4
         .=(mg*mf).x+ (mh*mf).x by Th4;
     end;
     then k=gf+hf by LOPBAN_1:41;
@@ -380,8 +374,8 @@ A4:   mgh.(mf.x)=mg.(mf.x)+mh.(mf.x) by A1,A2,A3,LOPBAN_1:41; thus
 end;
 
 theorem Th11:
-  for X be RealNormSpace for f,g be Element of BoundedLinearOperators(X,X)
-  for a,b be Real holds (a*b)*(f*g)=(a*f)*(b*g)
+  for X be RealNormSpace for f,g be Element of
+  BoundedLinearOperators(X,X) for a,b be Real holds (a*b)*(f*g)=(a*f)*(b*g)
 proof
   let X be RealNormSpace;
   let f,g be Element of BoundedLinearOperators(X,X);
@@ -395,25 +389,23 @@ proof
   set mbg=modetrans(b*g,X,X);
   EXMULT.(a*b,mf*mg)=maf*mbg
   proof
-    reconsider ff = f, gg = g as VECTOR of BLOP;
-A1: ff=mf by LOPBAN_1:def 12;
-A2: gg=mg by LOPBAN_1:def 12;
-    reconsider fg=mf*mg as VECTOR of BLOP by LOPBAN_1:def 10;
     reconsider k=(maf)*(mbg) as VECTOR of BLOP by LOPBAN_1:def 10;
+    reconsider fg=mf*mg as VECTOR of BLOP by LOPBAN_1:def 10;
+    reconsider ff = f, gg = g as VECTOR of BLOP;
+A1: gg=mg by LOPBAN_1:def 12;
+A2: ff=mf by LOPBAN_1:def 12;
     for x be VECTOR of X holds ( (maf)*(mbg)).x=(a*b)*(mf*mg).x
     proof
       let x be VECTOR of X;
       set y=b*mg.x;
-A3:   a*f=a*ff;
-      modetrans(a*f, X,X) =a*f by LOPBAN_1:def 12;
+      a*f=a*ff & modetrans(a*f, X,X) =a*f by LOPBAN_1:def 12;
       then
-A4:   maf.y=a*mf.y by A1,A3,LOPBAN_1:42;
-A5:   b*g=b*gg;
-      modetrans(b*g, X,X) =b*g by LOPBAN_1:def 12;
+A3:   maf.y=a*mf.y by A2,LOPBAN_1:42;
+      b*g=b*gg & modetrans(b*g, X,X) =b*g by LOPBAN_1:def 12;
       then
-A6:   mbg.x=b*mg.x by A2,A5,LOPBAN_1:42;
+A4:   mbg.x=b*mg.x by A1,LOPBAN_1:42;
       thus (maf*mbg).x=maf.(mbg.x) by Th4
-        .=a*(b*mf.(mg.x)) by A4,A6,LOPBAN_1:def 6
+        .=a*(b*mf.(mg.x)) by A3,A4,LOPBAN_1:def 6
         .=(a*b)*mf.(mg.x) by RLVECT_1:def 9
         .=(a*b)*(mf*mg).x by Th4;
     end;
@@ -424,34 +416,31 @@ A6:   mbg.x=b*mg.x by A2,A5,LOPBAN_1:42;
 end;
 
 theorem Th12:
-  for X be RealNormSpace for f,g be Element of BoundedLinearOperators(X,X)
-  for a be Real holds a*(f*g) =(a*f)*g
+  for X be RealNormSpace for f,g be Element of
+  BoundedLinearOperators(X,X) for a be Real holds a*(f*g) =(a*f)*g
 proof
   let X be RealNormSpace;
   let f,g be Element of BoundedLinearOperators(X,X);
   let a be Real;
-  set RRL=RLSStruct (# BoundedLinearOperators(X,X),
-    Zero_(BoundedLinearOperators(X,X), R_VectorSpace_of_LinearOperators(X,X)),
-    Add_(BoundedLinearOperators(X,X), R_VectorSpace_of_LinearOperators(X,X)),
-    Mult_(BoundedLinearOperators(X,X),
-    R_VectorSpace_of_LinearOperators(X,X)) #);
+  set RRL=RLSStruct (# BoundedLinearOperators(X,X), Zero_(
+    BoundedLinearOperators(X,X), R_VectorSpace_of_LinearOperators(X,X)), Add_(
+    BoundedLinearOperators(X,X), R_VectorSpace_of_LinearOperators(X,X)), Mult_(
+    BoundedLinearOperators(X,X), R_VectorSpace_of_LinearOperators(X,X)) #);
   reconsider gg=g as Element of RRL;
-A1: a*(f*g)=(a*1)*(f*g)
-    .=(a*f)*(1*g) by Th11;
-  (1*g)=1*gg
+A1: (1*g)=1*gg
     .=g by RLVECT_1:def 9;
+  a*(f*g)=(a*1)*(f*g)
+    .=(a*f)*(1*g) by Th11;
   hence thesis by A1;
 end;
 
 definition
   let X be RealNormSpace;
   func Ring_of_BoundedLinearOperators(X) -> doubleLoopStr equals
-
   doubleLoopStr
   (# BoundedLinearOperators(X,X), Add_(BoundedLinearOperators(X,X),
-    R_VectorSpace_of_LinearOperators(X,X)), FuncMult(X), FuncUnit(X),
-    Zero_(BoundedLinearOperators(X,X), R_VectorSpace_of_LinearOperators(X,X))
-  #);
+    R_VectorSpace_of_LinearOperators(X,X)), FuncMult(X), FuncUnit(X), Zero_(
+    BoundedLinearOperators(X,X), R_VectorSpace_of_LinearOperators(X,X)) #);
   correctness;
 end;
 
@@ -465,10 +454,10 @@ Lm1: now
   let X be RealNormSpace;
   set F = Ring_of_BoundedLinearOperators(X);
   let x, e be Element of F;
+  reconsider f = x as Element of BoundedLinearOperators(X,X);
   assume
 A1: e = FuncUnit(X);
-  reconsider f = x as Element of BoundedLinearOperators(X,X);
-  thus x * e = f * (FuncUnit(X)) by A1,Def4
+  hence x * e = f * (FuncUnit(X)) by Def4
     .= x by Th8;
   thus e * x = (FuncUnit(X)) * f by A1,Def4
     .= x by Th8;
@@ -479,37 +468,33 @@ registration
   cluster Ring_of_BoundedLinearOperators(X) -> unital;
   coherence
   proof
-    reconsider e = FuncUnit(X) as Element of
-    Ring_of_BoundedLinearOperators(X);
+    reconsider e = FuncUnit(X) as Element of Ring_of_BoundedLinearOperators(X);
     take e;
     thus thesis by Lm1;
   end;
 end;
 
 theorem Th13:
-  for X be RealNormSpace
-  for x,y,z being Element of Ring_of_BoundedLinearOperators(X) holds
-  x+y = y+x & (x+y)+z = x+(y+z) &
-  x+(0.Ring_of_BoundedLinearOperators(X)) = x & (ex t being Element of
-  Ring_of_BoundedLinearOperators(X) st x+t=
-  0.Ring_of_BoundedLinearOperators(X)) & (x*y)*z = x*(y*z) &
-  x*(1.Ring_of_BoundedLinearOperators(X)) = x &
-  (1.Ring_of_BoundedLinearOperators(X))*x = x & x*(y+z) = x*y + x*z &
-  (y+z)*x = y*x + z*x
+  for X be RealNormSpace for x,y,z being Element of
+  Ring_of_BoundedLinearOperators(X) holds x+y = y+x & (x+y)+z = x+(y+z) & x+(0.
+  Ring_of_BoundedLinearOperators(X)) = x & (ex t being Element of
+Ring_of_BoundedLinearOperators(X) st x+t= 0.Ring_of_BoundedLinearOperators(X))
+  & (x*y)*z = x*(y*z) & x*(1.Ring_of_BoundedLinearOperators(X)) = x & (1.
+Ring_of_BoundedLinearOperators(X))*x = x & x*(y+z) = x*y + x*z & (y+z)*x = y*x
+  + z*x
 proof
   let X be RealNormSpace;
   let x,y,z be Element of Ring_of_BoundedLinearOperators(X);
   set RBLOP=Ring_of_BoundedLinearOperators(X);
   set BLOP=BoundedLinearOperators(X,X);
-  set ADD=Add_(BoundedLinearOperators(X,X),
-  R_VectorSpace_of_LinearOperators(X,X));
+  set ADD=Add_(BoundedLinearOperators(X,X), R_VectorSpace_of_LinearOperators(X
+  ,X));
   set MULT= FuncMult(X);
   set UNIT=FuncUnit(X);
-  set RRL=RLSStruct (# BoundedLinearOperators(X,X),
-    Zero_(BoundedLinearOperators(X,X), R_VectorSpace_of_LinearOperators(X,X)),
-    Add_(BoundedLinearOperators(X,X), R_VectorSpace_of_LinearOperators(X,X)),
-    Mult_(BoundedLinearOperators(X,X),
-    R_VectorSpace_of_LinearOperators(X,X)) #);
+  set RRL=RLSStruct (# BoundedLinearOperators(X,X), Zero_(
+    BoundedLinearOperators(X,X), R_VectorSpace_of_LinearOperators(X,X)), Add_(
+    BoundedLinearOperators(X,X), R_VectorSpace_of_LinearOperators(X,X)), Mult_(
+    BoundedLinearOperators(X,X), R_VectorSpace_of_LinearOperators(X,X)) #);
   reconsider f=x, g=y, h=z as Element of RRL;
   thus x+y =f+g
     .= y+x by RLVECT_1:5;
@@ -547,7 +532,8 @@ A1: f + s = 0.RRL by ALGSTR_0:def 11;
 end;
 
 theorem Th14:
-  for X be RealNormSpace holds Ring_of_BoundedLinearOperators(X) is Ring
+  for X be RealNormSpace holds Ring_of_BoundedLinearOperators(X)
+  is Ring
 proof
   let X be RealNormSpace;
   set R = Ring_of_BoundedLinearOperators X;
@@ -556,35 +542,32 @@ A1: R is right_complementable
     let x be Element of R;
     thus ex t being Element of R st x+t= 0.R by Th13;
   end;
-  for x,y,z being Element of R holds x+y = y+x & (x+y)+z = x+(y+z) &
-  x+(0.Ring_of_BoundedLinearOperators(X)) = x & (ex t being Element of
-  Ring_of_BoundedLinearOperators(X) st x+t=
-  0.Ring_of_BoundedLinearOperators(X)) & (x*y)*z = x*(y*z) &
-  x*(1.Ring_of_BoundedLinearOperators(X)) = x &
-  (1.Ring_of_BoundedLinearOperators(X))*x = x & x*(y+z) = x*y + x*z &
-  (y+z)*x = y*x + z*x by Th13;
-  hence thesis by A1,GROUP_1:def 4,RLVECT_1:def 5,def 6,def 7,VECTSP_1:def 16
-,def 18;
+  for x,y,z being Element of R holds x+y = y+x & (x+y)+z = x+(y+z) & x+(0.
+  Ring_of_BoundedLinearOperators(X)) = x & (ex t being Element of
+Ring_of_BoundedLinearOperators(X) st x+t= 0.Ring_of_BoundedLinearOperators(X))
+  & (x*y)*z = x*(y*z) & x*(1.Ring_of_BoundedLinearOperators(X)) = x & (1.
+Ring_of_BoundedLinearOperators(X))*x = x & x*(y+z) = x*y + x*z & (y+z)*x = y*x
+  + z*x by Th13;
+  hence thesis by A1,GROUP_1:def 4,RLVECT_1:def 5,def 6,def 7 ,VECTSP_1:def
+  16,def 18;
 end;
 
 registration
   let X be RealNormSpace;
-  cluster Ring_of_BoundedLinearOperators(X) ->
-    Abelian add-associative right_zeroed right_complementable
-    associative left_unital right_unital distributive;
+  cluster Ring_of_BoundedLinearOperators(X) -> Abelian add-associative
+    right_zeroed right_complementable associative left_unital right_unital
+    distributive;
   coherence by Th14;
 end;
 
 definition
   let X be RealNormSpace;
   func R_Algebra_of_BoundedLinearOperators(X) -> AlgebraStr equals
-
   AlgebraStr
-  (# BoundedLinearOperators(X,X), FuncMult(X),
-    Add_(BoundedLinearOperators(X,X), R_VectorSpace_of_LinearOperators(X,X)),
-    Mult_(BoundedLinearOperators(X,X), R_VectorSpace_of_LinearOperators(X,X)),
-    FuncUnit(X), Zero_(BoundedLinearOperators(X,X),
-    R_VectorSpace_of_LinearOperators(X,X)) #);
+(# BoundedLinearOperators(X,X), FuncMult(X), Add_(BoundedLinearOperators(X,X),
+    R_VectorSpace_of_LinearOperators(X,X)), Mult_(BoundedLinearOperators(X,X),
+    R_VectorSpace_of_LinearOperators(X,X)), FuncUnit(X), Zero_(
+    BoundedLinearOperators(X,X), R_VectorSpace_of_LinearOperators(X,X)) #);
   correctness;
 end;
 
@@ -598,10 +581,10 @@ Lm2: now
   let X be RealNormSpace;
   set F = R_Algebra_of_BoundedLinearOperators(X);
   let x, e be Element of F;
+  reconsider f = x as Element of BoundedLinearOperators(X,X);
   assume
 A1: e = FuncUnit(X);
-  reconsider f = x as Element of BoundedLinearOperators(X,X);
-  thus x * e = f * (FuncUnit(X)) by A1,Def4
+  hence x * e = f * (FuncUnit(X)) by Def4
     .= x by Th8;
   thus e * x = (FuncUnit(X)) * f by A1,Def4
     .= x by Th8;
@@ -612,8 +595,8 @@ registration
   cluster R_Algebra_of_BoundedLinearOperators(X) -> unital;
   coherence
   proof
-    reconsider e = FuncUnit(X) as
-    Element of R_Algebra_of_BoundedLinearOperators(X);
+    reconsider e = FuncUnit(X) as Element of
+    R_Algebra_of_BoundedLinearOperators(X);
     take e;
     thus thesis by Lm2;
   end;
@@ -621,29 +604,28 @@ end;
 
 theorem Th15:
   for X be RealNormSpace for x,y,z being Element of
-  R_Algebra_of_BoundedLinearOperators(X) for a,b be Real holds x+y = y+x &
-  (x+y)+z = x+(y+z) & x+(0.R_Algebra_of_BoundedLinearOperators(X)) = x &
-  (ex t being Element of R_Algebra_of_BoundedLinearOperators(X) st x+t=
-  0.R_Algebra_of_BoundedLinearOperators(X)) & (x*y)*z = x*(y*z) &
-  x*(1.R_Algebra_of_BoundedLinearOperators(X)) = x &
-  (1.R_Algebra_of_BoundedLinearOperators(X))*x = x & x*(y+z) = x*y + x*z &
-  (y+z)*x = y*x + z*x & a*(x*y) = (a*x)*y & a*(x+y) = a*x + a*y &
-  (a+b)*x = a*x + b*x & (a*b)*x = a*(b*x) & (a*b)*(x*y)=(a*x)*(b*y)
+R_Algebra_of_BoundedLinearOperators(X) for a,b be Real holds x+y = y+x & (x+y)+
+  z = x+(y+z) & x+(0.R_Algebra_of_BoundedLinearOperators(X)) = x & (ex t being
+  Element of R_Algebra_of_BoundedLinearOperators(X) st x+t= 0.
+  R_Algebra_of_BoundedLinearOperators(X)) & (x*y)*z = x*(y*z) & x*(1.
+  R_Algebra_of_BoundedLinearOperators(X)) = x & (1.
+R_Algebra_of_BoundedLinearOperators(X))*x = x & x*(y+z) = x*y + x*z & (y+z)*x =
+y*x + z*x & a*(x*y) = (a*x)*y & a*(x+y) = a*x + a*y & (a+b)*x = a*x + b*x & (a*
+  b)*x = a*(b*x) & (a*b)*(x*y)=(a*x)*(b*y)
 proof
   let X be RealNormSpace;
   let x,y,z be Element of R_Algebra_of_BoundedLinearOperators(X);
   let a,b be Real;
   set RBLOP=R_Algebra_of_BoundedLinearOperators(X);
   set BLOP=BoundedLinearOperators(X,X);
-  set ADD=Add_(BoundedLinearOperators(X,X),
-  R_VectorSpace_of_LinearOperators(X,X));
+  set ADD=Add_(BoundedLinearOperators(X,X), R_VectorSpace_of_LinearOperators(X
+  ,X));
   set MULT= FuncMult(X);
   set UNIT=FuncUnit(X);
-  set RRL=RLSStruct (# BoundedLinearOperators(X,X),
-    Zero_(BoundedLinearOperators(X,X), R_VectorSpace_of_LinearOperators(X,X)),
-    Add_(BoundedLinearOperators(X,X), R_VectorSpace_of_LinearOperators(X,X)),
-    Mult_(BoundedLinearOperators(X,X),
-    R_VectorSpace_of_LinearOperators(X,X)) #);
+  set RRL=RLSStruct (# BoundedLinearOperators(X,X), Zero_(
+    BoundedLinearOperators(X,X), R_VectorSpace_of_LinearOperators(X,X)), Add_(
+    BoundedLinearOperators(X,X), R_VectorSpace_of_LinearOperators(X,X)), Mult_(
+    BoundedLinearOperators(X,X), R_VectorSpace_of_LinearOperators(X,X)) #);
   reconsider f=x, g=y, h=z as Element of RRL;
   thus x+y =f+g
     .= y+x by RLVECT_1:5;
@@ -697,13 +679,13 @@ end;
 
 definition
   mode BLAlgebra is Abelian add-associative right_zeroed right_complementable
-    associative right_unital right-distributive
-    Algebra-like (non empty AlgebraStr);
+associative right_unital right-distributive Algebra-like (non empty AlgebraStr)
+  ;
 end;
 
 theorem
-  for X be RealNormSpace holds
-  R_Algebra_of_BoundedLinearOperators(X) is BLAlgebra
+  for X be RealNormSpace holds R_Algebra_of_BoundedLinearOperators(X) is
+  BLAlgebra
 proof
   let X be RealNormSpace;
   set R = R_Algebra_of_BoundedLinearOperators X;
@@ -712,24 +694,24 @@ A1: R is right_complementable
     let x be Element of R;
     thus ex t being Element of R st x+t= 0.R by Th15;
   end;
-  for x,y,z being Element of R for a,b be Real holds x+y = y+x &
-  (x+y)+z = x+(y+z) & x+(0.R_Algebra_of_BoundedLinearOperators(X)) = x &
-  (ex t being Element of R_Algebra_of_BoundedLinearOperators(X) st x+t=
-  0.R_Algebra_of_BoundedLinearOperators(X)) & (x*y)*z = x*(y*z) &
-  x*(1.R_Algebra_of_BoundedLinearOperators(X)) = x &
-  (1.R_Algebra_of_BoundedLinearOperators(X))*x = x & x*(y+z) = x*y + x*z &
-  (y+z)*x = y*x + z*x & a*(x*y) = (a*x)*y & a*(x+y) = a*x + a*y &
-  (a+b)*x = a*x + b*x & (a*b)*x = a*(b*x) by Th15;
-  hence thesis by A1,FUNCSDOM:def 20,GROUP_1:def 4,RLVECT_1:def 5,def 6,def 7
-,VECTSP_1:def 11,def 13;
+  for x,y,z being Element of R for a,b be Real holds x+y = y+x & (x+y)+z =
+  x+(y+z) & x+(0.R_Algebra_of_BoundedLinearOperators(X)) = x & (ex t being
+  Element of R_Algebra_of_BoundedLinearOperators(X) st x+t= 0.
+  R_Algebra_of_BoundedLinearOperators(X)) & (x*y)*z = x*(y*z) & x*(1.
+  R_Algebra_of_BoundedLinearOperators(X)) = x & (1.
+R_Algebra_of_BoundedLinearOperators(X))*x = x & x*(y+z) = x*y + x*z & (y+z)*x =
+y*x + z*x & a*(x*y) = (a*x)*y & a*(x+y) = a*x + a*y & (a+b)*x = a*x + b*x & (a*
+  b)*x = a*(b*x) by Th15;
+  hence thesis by A1,FUNCSDOM:def 20,GROUP_1:def 4,RLVECT_1:def 5,def 6 ,def
+  7,VECTSP_1:def 11,def 13;
 end;
 
 registration
   cluster l1_Space -> complete;
   coherence
   proof
-    thus for vseq be sequence of l1_Space st
-    vseq is Cauchy_sequence_by_Norm holds vseq is convergent by RSSPACE3:11;
+    thus for vseq be sequence of l1_Space st vseq is Cauchy_sequence_by_Norm
+    holds vseq is convergent by RSSPACE3:11;
   end;
 end;
 
@@ -739,21 +721,19 @@ registration
   proof
     set a=1/2;
     reconsider x = a GeoSeq as Real_Sequence;
-    abs(a) = 1/2 by ABSVALUE:def 1;
-    then
-A1: x is summable by SERIES_1:28;
+A1: abs(a) = 1/2 by ABSVALUE:def 1;
     defpred P[Element of NAT] means 0 <= x.$1;
-A2: P[0] by PREPOWER:4;
-A3: for n being Element of NAT st P[n] holds P[n+1]
+A2: for n being Element of NAT st P[n] holds P[n+1]
     proof
       let n be Element of NAT;
+A3:   x.(n+1) = x.n * a by PREPOWER:4;
       assume
-A4:   P[n];
-      x.(n+1) = x.n * a by PREPOWER:4;
-      hence thesis by A4;
+      P[n];
+      hence thesis by A3;
     end;
-    for n being Element of NAT holds P[n] from NAT_1:sch 1(A2,A3);
-    then x is absolutely_summable by A1,SERIES_1:41;
+A4: P[0] by PREPOWER:4;
+    for n being Element of NAT holds P[n] from NAT_1:sch 1(A4,A2);
+    then x is absolutely_summable by A1,SERIES_1:28,41;
     then seq_id(x) is absolutely_summable by RSSPACE:3;
     then reconsider v=x as VECTOR of l1_Space by RSSPACE3:8;
     (seq_id v).0 = x.0 by RSSPACE:3
@@ -773,22 +753,23 @@ registration
 end;
 
 theorem Th17:
-  for X be non trivial RealNormSpace ex w be VECTOR of X st ||. w .|| = 1
+  for X be non trivial RealNormSpace ex w be VECTOR of X st ||. w
+  .|| = 1
 proof
   let X be non trivial RealNormSpace;
   consider v be VECTOR of X such that
 A1: v <> 0.X by STRUCT_0:def 19;
+  set a= ||. v .||;
+  reconsider w=a"*v as VECTOR of X;
+  take w;
 A2: ||. v .|| <> 0 by A1,NORMSP_1:def 2;
   then
 A3: 0 < ||. v .|| by NORMSP_1:8;
-  set a= ||. v .||;
-  reconsider w=a"*v as VECTOR of X;
 A4: abs(a") =abs(1*a")
     .=abs( 1/a) by XCMPLX_0:def 9
     .=1/abs(a) by ABSVALUE:15
     .=1*abs(a)" by XCMPLX_0:def 9
     .=a"by A3,ABSVALUE:def 1;
-  take w;
   thus ||.w.|| =abs(a")*||.v.|| by NORMSP_1:def 2
     .=1 by A2,A4,XCMPLX_0:def 7;
 end;
@@ -801,38 +782,39 @@ proof
   consider v be VECTOR of X such that
 A1: ||.v.|| = 1 by Th17;
   reconsider ii=(id the carrier of X) as bounded LinearOperator of X,X by Th3;
-A2: ii.v =v by FUNCT_1:35;
-A3: now
-    let r be Real such that
-A4: r in PreNorms(ii);
-    consider t be VECTOR of X such that
-A5: r=||.ii.t.|| & ||.t.|| <= 1 by A4;
-    thus r <=1 by A5,FUNCT_1:35;
+A2: now
+    let r be Real;
+    assume
+    r in PreNorms(ii);
+    then ex t be VECTOR of X st r=||.ii.t.|| & ||.t.|| <= 1;
+    hence r <=1 by FUNCT_1:35;
   end;
-A6: (for s be real number st s in PreNorms(ii) holds s <= 1)
-  implies sup PreNorms(ii) <= 1 by SEQ_4:62;
-A7: 1 in {||.ii.t.|| where t is VECTOR of X : ||.t.|| <= 1 } by A1,A2;
+  ii.v =v by FUNCT_1:35;
+  then
+A3: 1 in {||.ii.t.|| where t is VECTOR of X : ||.t.|| <= 1 } by A1;
   PreNorms(ii) is non empty bounded_above by LOPBAN_1:32;
-  then 1 <=sup PreNorms(ii) by A7,SEQ_4:def 4;
-  then sup PreNorms(ii) =1 by A3,A6,XXREAL_0:1;
+  then
+A4: 1 <=sup PreNorms(ii) by A3,SEQ_4:def 4;
+  (for s be real number st s in PreNorms(ii) holds s <= 1) implies sup
+  PreNorms(ii) <= 1 by SEQ_4:62;
+  then sup PreNorms(ii) =1 by A2,A4,XXREAL_0:1;
   hence thesis by LOPBAN_1:36;
 end;
 
 definition
-  struct(AlgebraStr,NORMSTR) Normed_AlgebraStr (# carrier -> set,
-    multF,addF -> (BinOp of the carrier),
-    Mult -> (Function of [:REAL,the carrier:],the carrier),
-    OneF,ZeroF -> Element of the carrier,
-    norm -> Function of the carrier, REAL#);
+  struct(AlgebraStr,NORMSTR) Normed_AlgebraStr (# carrier -> set, multF,addF
+    -> (BinOp of the carrier), Mult -> (Function of [:REAL,the carrier:],the
+carrier), OneF,ZeroF -> Element of the carrier, norm -> Function of the carrier
+    , REAL#);
 end;
 
 registration
   cluster non empty Normed_AlgebraStr;
   existence
   proof
-    consider A being non empty set, m being BinOp of A, a being BinOp of A,
-    M being Function of [:REAL,A:],A, U being Element of A,
-    Z being Element of A, n being Function of A,REAL;
+    consider A being non empty set, m being BinOp of A, a being BinOp of A, M
+being Function of [:REAL,A:],A, U being Element of A, Z being Element of A, n
+    being Function of A,REAL;
     take Normed_AlgebraStr(#A,m,a,M,U,Z,n#);
     thus the carrier of Normed_AlgebraStr(#A,m,a,M,U,Z,n#) is non empty;
   end;
@@ -840,14 +822,13 @@ end;
 
 definition
   let X be RealNormSpace;
-
-func R_Normed_Algebra_of_BoundedLinearOperators(X) -> Normed_AlgebraStr equals
-  Normed_AlgebraStr (# BoundedLinearOperators(X,X), FuncMult(X),
-    Add_(BoundedLinearOperators(X,X), R_VectorSpace_of_LinearOperators(X,X)),
-    Mult_(BoundedLinearOperators(X,X), R_VectorSpace_of_LinearOperators(X,X)),
-    FuncUnit(X), Zero_(BoundedLinearOperators(X,X),
-    R_VectorSpace_of_LinearOperators(X,X)), BoundedLinearOperatorsNorm(X,X)
-  #);
+  func R_Normed_Algebra_of_BoundedLinearOperators(X) -> Normed_AlgebraStr
+  equals
+  Normed_AlgebraStr (# BoundedLinearOperators(X,X), FuncMult(X), Add_(
+    BoundedLinearOperators(X,X), R_VectorSpace_of_LinearOperators(X,X)), Mult_(
+BoundedLinearOperators(X,X), R_VectorSpace_of_LinearOperators(X,X)), FuncUnit(X
+), Zero_(BoundedLinearOperators(X,X), R_VectorSpace_of_LinearOperators(X,X)),
+    BoundedLinearOperatorsNorm(X,X) #);
   correctness;
 end;
 
@@ -861,10 +842,10 @@ Lm3: now
   let X be RealNormSpace;
   set F = R_Normed_Algebra_of_BoundedLinearOperators(X);
   let x, e be Element of F;
+  reconsider f = x as Element of BoundedLinearOperators(X,X);
   assume
 A1: e = FuncUnit(X);
-  reconsider f = x as Element of BoundedLinearOperators(X,X);
-  thus x * e = f * (FuncUnit(X)) by A1,Def4
+  hence x * e = f * (FuncUnit(X)) by Def4
     .= x by Th8;
   thus e * x = (FuncUnit(X)) * f by A1,Def4
     .= x by Th8;
@@ -875,8 +856,8 @@ registration
   cluster R_Normed_Algebra_of_BoundedLinearOperators(X) -> unital;
   coherence
   proof
-    reconsider e = FuncUnit(X) as
-    Element of R_Normed_Algebra_of_BoundedLinearOperators(X);
+    reconsider e = FuncUnit(X) as Element of
+    R_Normed_Algebra_of_BoundedLinearOperators(X);
     take e;
     thus thesis by Lm3;
   end;
@@ -884,33 +865,29 @@ end;
 
 theorem Th19:
   for X be RealNormSpace for x,y,z being Element of
-  R_Normed_Algebra_of_BoundedLinearOperators(X)
-  for a,b be real number holds
-  x+y = y+x & (x+y)+z = x+(y+z) &
-  x+(0.R_Normed_Algebra_of_BoundedLinearOperators(X)) = x &
-  (ex t being Element of R_Normed_Algebra_of_BoundedLinearOperators(X) st x+t=
-  0.R_Normed_Algebra_of_BoundedLinearOperators(X)) & (x*y)*z = x*(y*z) &
-  x*(1.R_Normed_Algebra_of_BoundedLinearOperators(X)) = x &
-  (1.R_Normed_Algebra_of_BoundedLinearOperators(X))*x = x &
-  x*(y+z) = x*y + x*z & (y+z)*x = y*x + z*x & a*(x*y) = (a*x)*y &
-  (a*b)*(x*y)=(a*x)*(b*y) & a*(x+y) = a*x + a*y & (a+b)*x = a*x + b*x &
-  (a*b)*x = a*(b*x) & 1*x =x
+R_Normed_Algebra_of_BoundedLinearOperators(X) for a,b be real number holds x+y
+= y+x & (x+y)+z = x+(y+z) & x+(0.R_Normed_Algebra_of_BoundedLinearOperators(X))
+= x & (ex t being Element of R_Normed_Algebra_of_BoundedLinearOperators(X) st x
++t= 0.R_Normed_Algebra_of_BoundedLinearOperators(X)) & (x*y)*z = x*(y*z) & x*(
+  1.R_Normed_Algebra_of_BoundedLinearOperators(X)) = x & (1.
+R_Normed_Algebra_of_BoundedLinearOperators(X))*x = x & x*(y+z) = x*y + x*z & (y
++z)*x = y*x + z*x & a*(x*y) = (a*x)*y & (a*b)*(x*y)=(a*x)*(b*y) & a*(x+y) = a*x
+  + a*y & (a+b)*x = a*x + b*x & (a*b)*x = a*(b*x) & 1*x =x
 proof
   let X be RealNormSpace;
   let x,y,z be Element of R_Normed_Algebra_of_BoundedLinearOperators(X);
   let a,b be real number;
-   reconsider a1=a, b1=b as Real by XREAL_0:def 1;
+  reconsider a1=a, b1=b as Real by XREAL_0:def 1;
   set RBLOP=R_Normed_Algebra_of_BoundedLinearOperators(X);
   set BLOP=BoundedLinearOperators(X,X);
-  set ADD=Add_(BoundedLinearOperators(X,X),
-  R_VectorSpace_of_LinearOperators(X,X));
+  set ADD=Add_(BoundedLinearOperators(X,X), R_VectorSpace_of_LinearOperators(X
+  ,X));
   set MULT= FuncMult(X);
   set UNIT=FuncUnit(X);
-  set RRL=RLSStruct (# BoundedLinearOperators(X,X),
-    Zero_(BoundedLinearOperators(X,X), R_VectorSpace_of_LinearOperators(X,X)),
-    Add_(BoundedLinearOperators(X,X), R_VectorSpace_of_LinearOperators(X,X)),
-    Mult_(BoundedLinearOperators(X,X),
-    R_VectorSpace_of_LinearOperators(X,X)) #);
+  set RRL=RLSStruct (# BoundedLinearOperators(X,X), Zero_(
+    BoundedLinearOperators(X,X), R_VectorSpace_of_LinearOperators(X,X)), Add_(
+    BoundedLinearOperators(X,X), R_VectorSpace_of_LinearOperators(X,X)), Mult_(
+    BoundedLinearOperators(X,X), R_VectorSpace_of_LinearOperators(X,X)) #);
   reconsider f=x, g=y, h=z as Element of RRL;
   thus x+y =f+g
     .= y+x by RLVECT_1:5;
@@ -965,70 +942,64 @@ A1: f + s = 0.RRL by ALGSTR_0:def 11;
 end;
 
 theorem Th20:
-  for X be RealNormSpace holds R_Normed_Algebra_of_BoundedLinearOperators(X)
-  is RealNormSpace-like Abelian add-associative
-  right_zeroed right_complementable
-  associative right_unital right-distributive
-  Algebra-like RealLinearSpace-like
+  for X be RealNormSpace holds
+  R_Normed_Algebra_of_BoundedLinearOperators(X) is RealNormSpace-like Abelian
+  add-associative right_zeroed right_complementable associative right_unital
+  right-distributive Algebra-like RealLinearSpace-like
 proof
   let X be RealNormSpace;
-A1: for x,y,z being Element of R_Normed_Algebra_of_BoundedLinearOperators(X)
-  for a,b be Real holds x+y = y+x & (x+y)+z = x+(y+z) &
-  x+(0.R_Normed_Algebra_of_BoundedLinearOperators(X)) = x &
-  (ex t being Element of R_Normed_Algebra_of_BoundedLinearOperators(X) st x+t=
-  0.R_Normed_Algebra_of_BoundedLinearOperators(X)) & (x*y)*z = x*(y*z) &
-  x*(1.R_Normed_Algebra_of_BoundedLinearOperators(X)) = x &
-  (1.R_Normed_Algebra_of_BoundedLinearOperators(X))*x = x &
-  x*(y+z) = x*y + x*z & (y+z)*x = y*x + z*x & a*(x*y) = (a*x)*y &
-  (a*b)*(x*y)=(a*x)*(b*y) & a*(x+y) = a*x + a*y & (a+b)*x = a*x + b*x &
-  (a*b)*x = a*(b*x) & 1*x=x by Th19;
   set RBLOP=R_Normed_Algebra_of_BoundedLinearOperators(X);
   set BS=R_NormSpace_of_BoundedLinearOperators(X,X);
-  set ADD=Add_(BoundedLinearOperators(X,X),
-  R_VectorSpace_of_LinearOperators(X,X));
+  set ADD=Add_(BoundedLinearOperators(X,X), R_VectorSpace_of_LinearOperators(X
+  ,X));
   set EXMULT =Mult_(BoundedLinearOperators(X,X),
   R_VectorSpace_of_LinearOperators(X,X));
   set NRM=BoundedLinearOperatorsNorm(X,X);
-A2: RBLOP is right_complementable
+A1: now
+    let x,y be Point of RBLOP;
+    let a be Real;
+    reconsider x1 =x, y1 =y as Point of BS;
+A2: ||.x1.|| + ||. y1.|| = NRM.(x1) + ||. y1.|| by NORMSP_1:def 1
+      .= NRM.(x1) + NRM.(y1) by NORMSP_1:def 1
+      .= ||.x.|| +( the norm of RBLOP ).y by NORMSP_1:def 1
+      .= ||.x.|| + ||.y.|| by NORMSP_1:def 1;
+    ||.x + y.|| = NRM.(ADD.(x,y)) by NORMSP_1:def 1
+      .= ||.x1 + y1.|| by NORMSP_1:def 1;
+    hence ||.x + y.|| <= ||.x.|| + ||. y.|| by A2,NORMSP_1:def 2;
+A3: ||.x1.|| = NRM.(x1) by NORMSP_1:def 1
+      .= ||.x.|| by NORMSP_1:def 1;
+    0.BS=0.RBLOP;
+    hence ||.x.|| = 0 iff x= 0.RBLOP by A3,NORMSP_1:def 2;
+    thus ||.a*x.|| = NRM.(EXMULT.(a,x)) by NORMSP_1:def 1
+      .= ||.a*x1.|| by NORMSP_1:def 1
+      .=abs(a)* ||.x.|| by A3,NORMSP_1:def 2;
+  end;
+A4: RBLOP is right_complementable
   proof
     let x be Element of RBLOP;
     thus ex t being Element of RBLOP st x+t= 0.RBLOP by Th19;
   end;
-A3: (for a be real number for v,w being VECTOR of RBLOP
-  holds a * (v + w) = a * v + a * w) &
-  (for a,b be real number for v being VECTOR of RBLOP
-  holds (a + b) * v = a * v + b * v) &
-  (for a,b be real number for v being VECTOR of RBLOP
-  holds (a * b) * v = a * (b * v)) &
-  (for v being VECTOR of RBLOP holds 1 * v = v) by Th19;
-  now
-    let x,y be Point of RBLOP;
-    let a be Real;
-    reconsider x1 =x, y1 =y as Point of BS;
-A4: ||.x + y.|| = NRM.(ADD.(x,y)) by NORMSP_1:def 1
-      .= ||.x1 + y1.|| by NORMSP_1:def 1;
-    ||.x1.|| + ||. y1.|| = NRM.(x1) + ||. y1.|| by NORMSP_1:def 1
-      .= NRM.(x1) + NRM.(y1) by NORMSP_1:def 1
-      .= ||.x.|| +( the norm of RBLOP ).y by NORMSP_1:def 1
-      .= ||.x.|| + ||.y.|| by NORMSP_1:def 1;
-    hence ||.x + y.|| <= ||.x.|| + ||. y.|| by A4,NORMSP_1:def 2;
-A5: ||.x1.|| = NRM.(x1) by NORMSP_1:def 1
-      .= ||.x.|| by NORMSP_1:def 1;
-    0.BS=0.RBLOP;
-    hence ||.x.|| = 0 iff x= 0.RBLOP by A5,NORMSP_1:def 2;
-    thus ||.a*x.|| = NRM.(EXMULT.(a,x)) by NORMSP_1:def 1
-      .= ||.a*x1.|| by NORMSP_1:def 1
-      .=abs(a)* ||.x.|| by A5,NORMSP_1:def 2;
-  end;
-  hence thesis by A1,A2,A3,FUNCSDOM:def 20,GROUP_1:def 4,NORMSP_1:def 2
-,RLVECT_1:def 5,def 6,def 7,def 9,VECTSP_1:def 11,def 13;
+A5: ( for a,b be real number for v being VECTOR of RBLOP holds (a + b) * v =
+a * v + b * v)& for a,b be real number for v being VECTOR of RBLOP holds (a * b
+  ) * v = a * (b * v) by Th19;
+  ( for x,y,z being Element of R_Normed_Algebra_of_BoundedLinearOperators(
+  X) for a,b be Real holds x+y = y+x & (x+y)+z = x+(y+z) & x+(0.
+  R_Normed_Algebra_of_BoundedLinearOperators(X)) = x & (ex t being Element of
+  R_Normed_Algebra_of_BoundedLinearOperators(X) st x+t= 0.
+  R_Normed_Algebra_of_BoundedLinearOperators(X)) & (x*y)*z = x*(y*z) & x*(1.
+  R_Normed_Algebra_of_BoundedLinearOperators(X)) = x & (1.
+R_Normed_Algebra_of_BoundedLinearOperators(X))*x = x & x*(y+z) = x*y + x*z & (y
++z)*x = y*x + z*x & a*(x*y) = (a*x)*y & (a*b)*(x*y)=(a*x)*(b*y) & a*(x+y) = a*x
++ a*y & (a+b)*x = a*x + b*x & (a*b)*x = a*(b*x) & 1*x=x)& for a be real number
+  for v,w being VECTOR of RBLOP holds a * (v + w) = a * v + a * w by Th19;
+  hence thesis by A4,A5,A1,FUNCSDOM:def 20,GROUP_1:def 4,NORMSP_1:def 2 ,
+  RLVECT_1:def 5,def 6,def 7,def 9,VECTSP_1:def 11,def 13;
 end;
 
 registration
-  cluster RealNormSpace-like Abelian add-associative
-    right_zeroed right_complementable
-    associative right_unital right-distributive
-    Algebra-like RealLinearSpace-like strict (non empty Normed_AlgebraStr);
+  cluster RealNormSpace-like Abelian add-associative right_zeroed
+right_complementable associative right_unital right-distributive Algebra-like
+    RealLinearSpace-like strict (non empty Normed_AlgebraStr);
   existence
   proof
     consider X be RealNormSpace;
@@ -1039,48 +1010,46 @@ end;
 
 definition
   mode Normed_Algebra is RealNormSpace-like Abelian add-associative
-    right_zeroed right_complementable
-    associative right_unital right-distributive
+right_zeroed right_complementable associative right_unital right-distributive
     Algebra-like RealLinearSpace-like (non empty Normed_AlgebraStr);
 end;
 
 registration
   let X be RealNormSpace;
-  cluster R_Normed_Algebra_of_BoundedLinearOperators(X)
-    -> RealNormSpace-like Abelian add-associative
-    right_zeroed right_complementable
-    associative right_unital right-distributive
-    Algebra-like RealLinearSpace-like;
+  cluster R_Normed_Algebra_of_BoundedLinearOperators(X) -> RealNormSpace-like
+    Abelian add-associative right_zeroed right_complementable associative
+    right_unital right-distributive Algebra-like RealLinearSpace-like;
   correctness by Th20;
 end;
 
 definition
   let X be non empty Normed_AlgebraStr;
   attr X is Banach_Algebra-like_1 means
-  for x,y being Element of X holds ||. x*y .|| <= ||.x.|| * ||.y.||;
+  for x,y being Element of X holds ||. x
+  *y .|| <= ||.x.|| * ||.y.||;
   attr X is Banach_Algebra-like_2 means
-
+  :Def10:
   ||. 1.X .|| = 1;
   attr X is Banach_Algebra-like_3 means
-  for a being Real for x,y being Element of X holds a*(x*y)=x*(a*y);
+  for a being Real for x,y being Element
+  of X holds a*(x*y)=x*(a*y);
 end;
 
 definition
   let X be Normed_Algebra;
   attr X is Banach_Algebra-like means
   :Def12:
-  X is Banach_Algebra-like_1 Banach_Algebra-like_2 Banach_Algebra-like_3
-  left_unital left-distributive complete;
+  X is Banach_Algebra-like_1
+  Banach_Algebra-like_2 Banach_Algebra-like_3 left_unital left-distributive
+  complete;
 end;
 
 registration
-  cluster Banach_Algebra-like ->
-    Banach_Algebra-like_1 Banach_Algebra-like_2 Banach_Algebra-like_3
-    left-distributive left_unital complete Normed_Algebra;
+  cluster Banach_Algebra-like -> Banach_Algebra-like_1 Banach_Algebra-like_2
+Banach_Algebra-like_3 left-distributive left_unital complete Normed_Algebra;
   coherence by Def12;
   cluster Banach_Algebra-like_1 Banach_Algebra-like_2 Banach_Algebra-like_3
-    left-distributive left_unital complete ->
-    Banach_Algebra-like Normed_Algebra;
+left-distributive left_unital complete -> Banach_Algebra-like Normed_Algebra;
   coherence by Def12;
 end;
 
@@ -1089,33 +1058,31 @@ registration
   cluster R_Normed_Algebra_of_BoundedLinearOperators(X) -> Banach_Algebra-like;
   coherence
   proof
-    set RBLOP=R_Normed_Algebra_of_BoundedLinearOperators(X);
-    set BLOP=BoundedLinearOperators(X,X);
-    set BS=R_NormSpace_of_BoundedLinearOperators(X,X);
-    set ADD=Add_(BoundedLinearOperators(X,X),
-    R_VectorSpace_of_LinearOperators(X,X));
-    set MULT= FuncMult(X);
-    set UNIT=FuncUnit(X);
     set NRM=BoundedLinearOperatorsNorm(X,X);
+    set UNIT=FuncUnit(X);
+    set MULT= FuncMult(X);
+    set ADD=Add_(BoundedLinearOperators(X,X), R_VectorSpace_of_LinearOperators
+    (X,X));
+    set BS=R_NormSpace_of_BoundedLinearOperators(X,X);
+    set BLOP=BoundedLinearOperators(X,X);
+    set RBLOP=R_Normed_Algebra_of_BoundedLinearOperators(X);
     thus RBLOP is Banach_Algebra-like_1
     proof
       let x,y be Point of RBLOP;
       reconsider x1=x,y1=y as Element of BLOP;
-A1:   ||.x * y.|| = NRM.(MULT.(x,y)) by NORMSP_1:def 1
-        .= NRM.(x1*y1) by Def4
-        .= NRM.(modetrans(x1,X,X)*modetrans(y1,X,X));
-      NRM.(modetrans(x1,X,X)) *NRM.(modetrans(y1,X,X))
-      =NRM.(x1)*NRM.(modetrans(y1,X,X)) by LOPBAN_1:def 12
+A1:   NRM.(modetrans(x1,X,X)) *NRM.(modetrans(y1,X,X)) =NRM.(x1)*NRM.(
+      modetrans(y1,X,X)) by LOPBAN_1:def 12
         .=NRM.(x1) *NRM.(y1) by LOPBAN_1:def 12
         .= ||.x .|| * NRM.(y) by NORMSP_1:def 1
         .= ||.x .|| * ||.y .|| by NORMSP_1:def 1;
+      ||.x * y.|| = NRM.(MULT.(x,y)) by NORMSP_1:def 1
+        .= NRM.(x1*y1) by Def4
+        .= NRM.(modetrans(x1,X,X)*modetrans(y1,X,X));
       hence thesis by A1,Th2;
     end;
-    thus RBLOP is Banach_Algebra-like_2
-    proof
-      thus ||. 1.RBLOP .|| = NRM.(id (the carrier of X)) by NORMSP_1:def 1
-        .= 1 by Th18;
-    end;
+    ||. 1.RBLOP .|| = NRM.(id (the carrier of X)) by NORMSP_1:def 1
+      .= 1 by Th18;
+    hence RBLOP is Banach_Algebra-like_2 by Def10;
     thus RBLOP is Banach_Algebra-like_3
     proof
       let a be Real;
@@ -1145,51 +1112,53 @@ A1:   ||.x * y.|| = NRM.(MULT.(x,y)) by NORMSP_1:def 1
 A2:   seq is Cauchy_sequence_by_Norm;
       reconsider seq1=seq as sequence of BS;
       now
-        let r be Real such that
-A3:     r > 0;
-        consider k be Element of NAT such that
-A4:     for n, m be Element of NAT st
-        n >= k & m >= k holds ||.(seq.n) - (seq.m).|| < r
-        by A2,A3,RSSPACE3:10;
+        let r be Real;
+        assume
+        r > 0;
+        then consider k be Element of NAT such that
+A3:     for n, m be Element of NAT st n >= k & m >= k holds ||.(seq.n)
+        - (seq.m).|| < r by A2,RSSPACE3:10;
         now
           let n, m be Element of NAT such that
-A5:       n >= k & m >= k;
-          ||.(seq1.n) - (seq1.m).||
-          = NRM.((seq1.n) +(- (seq1.m))) by NORMSP_1:def 1
+A4:       n >= k & m >= k;
+          ||.(seq1.n) - (seq1.m).|| = NRM.((seq1.n) +(- (seq1.m))) by
+          NORMSP_1:def 1
             .= NRM. (ADD.(seq1.n,(-1)*(seq1.m))) by RLVECT_1:29
             .= NRM. (ADD.(seq.n,(-1)*(seq.m)))
             .= NRM.((seq.n) +(- (seq.m))) by RLVECT_1:29
             .= ||.(seq.n) - (seq.m).|| by NORMSP_1:def 1;
-          hence ||.(seq1.n) - (seq1.m).|| < r by A4,A5;
+          hence ||.(seq1.n) - (seq1.m).|| < r by A3,A4;
         end;
-        hence ex k be Element of NAT st for n, m be Element of NAT st
-        n >= k & m >= k holds ||.(seq1.n) - (seq1.m).|| < r;
+        hence ex k be Element of NAT st for n, m be Element of NAT st n >= k &
+        m >= k holds ||.(seq1.n) - (seq1.m).|| < r;
       end;
       then seq1 is Cauchy_sequence_by_Norm by RSSPACE3:10;
       then seq1 is convergent by LOPBAN_1:def 16;
       then consider g1 be Point of BS such that
-A6:   for r be Real st 0 < r
-      ex m be Element of NAT st for n be Element of NAT st m <= n
-      holds ||.(seq1.n) - g1.|| < r by NORMSP_1:def 9;
+A5:   for r be Real st 0 < r ex m be Element of NAT st for n be
+      Element of NAT st m <= n holds ||.(seq1.n) - g1.|| < r by NORMSP_1:def 9;
       reconsider g=g1 as Point of RBLOP;
       now
-        let r be Real such that
-A7:     0 < r;
-        consider m be Element of NAT such that
-A8:     for n be Element of NAT st m <= n holds
-        ||.(seq1.n) - g1.|| < r by A6,A7;
+        let r be Real;
+        assume
+        0 < r;
+        then consider m be Element of NAT such that
+A6:     for n be Element of NAT st m <= n holds ||.(seq1.n) - g1.|| <
+        r by A5;
         now
           let n be Element of NAT such that
-A9:       m <= n;
-          ||.(seq1.n) - (g1).|| = NRM.((seq1.n) +(- (g1))) by NORMSP_1:def 1
+A7:       m <= n;
+          ||.(seq1.n) - (g1).|| = NRM.((seq1.n) +(- (g1))) by NORMSP_1:
+          def 1
             .= NRM. (ADD.(seq1.n,(-1)*(g1))) by RLVECT_1:29
             .= NRM. (ADD.(seq.n,(-1)*(g)))
             .= NRM.((seq.n) +(- (g))) by RLVECT_1:29
             .= ||.(seq.n) - (g).|| by NORMSP_1:def 1;
-          hence ||.(seq.n) - (g).|| < r by A8,A9;
+          hence ||.(seq.n) - (g).|| < r by A6,A7;
         end;
-        hence ex m be Element of NAT st for n be Element of NAT st m <= n
-        holds ||.(seq.n) - g.|| < r;
+        hence
+        ex m be Element of NAT st for n be Element of NAT st m <= n holds
+        ||.(seq.n) - g.|| < r;
       end;
       hence seq is convergent by NORMSP_1:def 9;
     end;
@@ -1212,14 +1181,14 @@ definition
 end;
 
 theorem
-  for X being RealNormSpace holds
-  1.Ring_of_BoundedLinearOperators(X) = FuncUnit(X);
+  for X being RealNormSpace holds 1.Ring_of_BoundedLinearOperators(X) =
+  FuncUnit(X);
 
 theorem
-  for X being RealNormSpace holds
-  1.R_Algebra_of_BoundedLinearOperators(X) = FuncUnit(X);
+  for X being RealNormSpace holds 1.R_Algebra_of_BoundedLinearOperators(
+  X) = FuncUnit(X);
 
 theorem
-  for X being RealNormSpace holds
-  1.R_Normed_Algebra_of_BoundedLinearOperators(X) = FuncUnit(X);
+  for X being RealNormSpace holds 1.
+  R_Normed_Algebra_of_BoundedLinearOperators(X) = FuncUnit(X);
 

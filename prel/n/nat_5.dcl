@@ -7,6 +7,7 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="TARSKI"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
@@ -21,7 +22,6 @@
 <ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_1"/>
 <ArticleID name="RELAT_2"/>
-<ArticleID name="PARTFUN1"/>
 <ArticleID name="FINSUB_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -36,10 +36,8 @@
 <ArticleID name="VECTSP_1"/>
 <ArticleID name="VECTSP_2"/>
 <ArticleID name="NORMSP_1"/>
-<ArticleID name="MATRIX_1"/>
-<ArticleID name="FVSUM_1"/>
-<ArticleID name="MATRLIN"/>
-<ArticleID name="POLYNOM1"/>
+<ArticleID name="WELLORD1"/>
+<ArticleID name="PRE_POLY"/>
 <ArticleID name="ALGSEQ_1"/>
 <ArticleID name="POLYNOM3"/>
 <ArticleID name="UPROOTS"/>
@@ -53,15 +51,15 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="6"/>
-<Adjective nr="24">
+<Adjective nr="25">
 <LocusVar nr="1"/>
-<Func kind="K" nr="48"/>
+<Func kind="K" nr="55"/>
 </Adjective>
 </Cluster>
 <Func kind="K" nr="21">
 <Func kind="K" nr="22">
 <LocusVar nr="1"/>
-<Func kind="K" nr="48"/>
+<Func kind="K" nr="55"/>
 </Func>
 </Func>
 </Typ>
@@ -74,16 +72,16 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="359">
+<Func kind="K" nr="320">
 <LocusVar nr="3"/>
-<Func kind="K" nr="367">
+<Func kind="K" nr="328">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="19"/>
+<Adjective nr="20"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>

@@ -15,9 +15,9 @@ environ
       TREES_2, TREES_3, TREES_4, LANG1, DTCONSTR, PBOOLE, MSUALG_1, MSAFREE,
       MSUALG_3;
  constructors MULTOP_1, PROB_2, MSUALG_3, MSAFREE, RELSET_1, CAT_3;
- registrations XBOOLE_0, FUNCT_1, RELSET_1, FRAENKEL, FINSEQ_1, RELAT_1,
-      TREES_3, STRUCT_0, DTCONSTR, MSUALG_1, MSUALG_3, MSAFREE, ORDINAL1,
-      PBOOLE;
+ registrations XBOOLE_0, FUNCT_1, RELSET_1, FINSEQ_1, RELAT_1, TREES_3,
+      STRUCT_0, DTCONSTR, MSUALG_1, MSUALG_3, MSAFREE, ORDINAL1, PBOOLE,
+      PRE_POLY;
  requirements BOOLE, SUBSET;
  definitions TARSKI, MSUALG_1, PBOOLE, PROB_2;
  theorems MSAFREE, MSUALG_3, LANG1, FINSEQ_1, CARD_3, PBOOLE, FUNCT_1, FUNCT_2,
@@ -33,146 +33,135 @@ proof
   let f,g be Function;
   assume
 A1: g in product f;
-  then
-A2: dom g = dom f by CARD_3:18;
   let y be set;
-  assume y in rng g;
+  assume
+  y in rng g;
   then consider x being set such that
-A3: x in dom g & y = g.x by FUNCT_1:def 5;
-  y in f.x by A1,A2,A3,CARD_3:18;
-  hence thesis by A2,A3,CARD_5:10;
+A2: x in dom g and
+A3: y = g.x by FUNCT_1:def 5;
+A4: dom g = dom f by A1,CARD_3:18;
+  then y in f.x by A1,A2,A3,CARD_3:18;
+  hence thesis by A4,A2,CARD_5:10;
 end;
 
-scheme DTConstrUniq{DT()->non empty DTConstrStr, D()->non empty set,
-  G(set) -> Element of D(), H(set, set, set) -> Element of D(),
-  f1, f2() -> Function of TS(DT()), D() }: f1() = f2()
+scheme
+  DTConstrUniq{DT()->non empty DTConstrStr, D()->non empty set, G(set) ->
+Element of D(), H(set, set, set) -> Element of D(), f1, f2() -> Function of TS(
+  DT()), D() }: f1() = f2()
 provided
-A1: for t being Symbol of DT() st t in Terminals DT()
-holds f1().(root-tree t) = G(t)
-and
-A2: for nt being Symbol of DT(),
-ts being FinSequence of TS(DT()) st nt ==> roots ts
-for x being FinSequence of D() st x = f1() * ts
-holds f1().(nt-tree ts) = H(nt, ts, x)
-and
-A3: for t being Symbol of DT() st t in Terminals DT()
-holds f2().(root-tree t) = G(t)
-and
-A4: for nt being Symbol of DT(),
-ts being FinSequence of TS(DT()) st nt ==> roots ts
-for x being FinSequence of D() st x = f2() * ts
-holds f2().(nt-tree ts) = H(nt, ts, x)
+A1: for t being Symbol of DT() st t in Terminals DT() holds f1().(
+root-tree t) = G(t) and
+A2: for nt being Symbol of DT(), ts being FinSequence of TS(DT()) st nt
+==> roots ts for x being FinSequence of D() st x = f1() * ts holds f1().(nt
+-tree ts) = H(nt, ts, x) and
+A3: for t being Symbol of DT() st t in Terminals DT() holds f2().(
+root-tree t) = G(t) and
+A4: for nt being Symbol of DT(), ts being FinSequence of TS(DT()) st nt
+==> roots ts for x being FinSequence of D() st x = f2() * ts holds f2().(nt
+-tree ts) = H(nt, ts, x)
 proof
   defpred P[set] means f1().$1 = f2().$1;
-A5: for s being Symbol of DT() st s in Terminals DT() holds P[root-tree s]
-  proof
-    let s be Symbol of DT();
-    assume
-A6: s in Terminals DT();
-    hence f1().(root-tree s) = G(s) by A1
-      .= f2().(root-tree s) by A3,A6;
-  end;
-A7: for nt being Symbol of DT(),
-  ts being FinSequence of TS(DT()) st nt ==> roots ts &
-  for t being DecoratedTree of the carrier of DT() st t in rng ts
+A5: for nt being Symbol of DT(), ts being FinSequence of TS(DT()) st nt ==>
+  roots ts & for t being DecoratedTree of the carrier of DT() st t in rng ts
   holds P[t] holds P[nt-tree ts]
   proof
     let nt be Symbol of DT(), ts be FinSequence of TS(DT());
-    assume
-A8: nt ==> roots ts &
-    for t being DecoratedTree of the carrier of DT() st t in rng ts
+    assume that
+A6: nt ==> roots ts and
+A7: for t being DecoratedTree of the carrier of DT() st t in rng ts
     holds f1().t = f2().t;
-A9: rng ts c= TS(DT()) by FINSEQ_1:def 4;
+A8: rng ts c= TS(DT()) by FINSEQ_1:def 4;
     then
-A10: rng ts c= dom f1() by FUNCT_2:def 1;
-    then dom (f1() * ts) = dom ts by RELAT_1:46
-      .= Seg len ts by FINSEQ_1:def 3;
-    then reconsider ntv1 = f1() * ts as FinSequence by FINSEQ_1:def 2;
-A11: dom (f1() * ts) = dom ts by A10,RELAT_1:46;
-    rng ntv1 c= D() by RELAT_1:def 19;
-    then reconsider ntv1 as FinSequence of D() by FINSEQ_1:def 4;
-    rng ts c= dom f2() by A9,FUNCT_2:def 1;
+A9: rng ts c= dom f1() by FUNCT_2:def 1;
     then
-A12: dom (f2() * ts) = dom ts by RELAT_1:46;
-    now
+A10: dom (f1() * ts) = dom ts by RELAT_1:46;
+    rng ts c= dom f2() by A8,FUNCT_2:def 1;
+    then
+A11: dom (f2() * ts) = dom ts by RELAT_1:46;
+A12: now
       let x be set;
       assume
 A13:  x in dom ts;
-      then reconsider t =ts.x as Element of FinTrees the carrier of DT()
-      by DTCONSTR:2;
+      then reconsider t =ts.x as Element of FinTrees the carrier of DT() by
+      DTCONSTR:2;
       t in rng ts by A13,FUNCT_1:def 5;
       then
-A14:  f1().t = f2().t by A8;
-      thus (f1() * ts).x = f1().t by A11,A13,FUNCT_1:22
-        .= (f2() * ts).x by A12,A13,A14,FUNCT_1:22;
+A14:  f1().t = f2().t by A7;
+      thus (f1() * ts).x = f1().t by A10,A13,FUNCT_1:22
+        .= (f2() * ts).x by A11,A13,A14,FUNCT_1:22;
     end;
-    then
-A15: f1() * ts = f2() * ts by A11,A12,FUNCT_1:9;
-    thus f1().(nt-tree ts) = H(nt, ts, ntv1) by A2,A8
-      .= f2().(nt-tree ts) by A4,A8,A15;
+    dom (f1() * ts) = dom ts by A9,RELAT_1:46
+      .= Seg len ts by FINSEQ_1:def 3;
+    then reconsider ntv1 = f1() * ts as FinSequence by FINSEQ_1:def 2;
+    rng ntv1 c= D() by RELAT_1:def 19;
+    then reconsider ntv1 as FinSequence of D() by FINSEQ_1:def 4;
+    thus f1().(nt-tree ts) = H(nt, ts, ntv1) by A2,A6
+      .= f2().(nt-tree ts) by A4,A6,A10,A11,A12,FUNCT_1:9;
   end;
-A16: for t being DecoratedTree of the carrier of DT() st t in TS(DT())
-  holds P[t] from DTCONSTR:sch 7 (A5, A7);
+A15: for s being Symbol of DT() st s in Terminals DT() holds P[root-tree s]
+  proof
+    let s be Symbol of DT();
+    assume
+A16: s in Terminals DT();
+    hence f1().(root-tree s) = G(s) by A1
+      .= f2().(root-tree s) by A3,A16;
+  end;
+A17: for t being DecoratedTree of the carrier of DT() st t in TS(DT()) holds
+  P[t] from DTCONSTR:sch 7 (A15, A5);
   now
     let x be set;
     assume
-A17: x in TS(DT());
+A18: x in TS(DT());
     then reconsider x' = x as Element of FinTrees the carrier of DT();
     x' = x;
-    hence f1().x = f2().x by A16,A17;
+    hence f1().x = f2().x by A17,A18;
   end;
   hence thesis by FUNCT_2:18;
 end;
 
 theorem Th2: :: MSAFREE:5
-  for S being non void non empty ManySortedSign,
-  X being ManySortedSet of the carrier of S
-  for o,b being set st [o,b] in REL(X) holds
-  o in [:the carrier' of S,{the carrier of S}:] &
-  b in ([:the carrier' of S,{the carrier of S}:] \/ Union coprod X)*
+  for S being non void non empty ManySortedSign, X being
+ManySortedSet of the carrier of S for o,b being set st [o,b] in REL(X) holds o
+  in [:the carrier' of S,{the carrier of S}:] & b in ([:the carrier' of S,{the
+  carrier of S}:] \/ Union coprod X)*
 proof
-  let S be non void non empty ManySortedSign,
-  X be ManySortedSet of the carrier of S;
+  let S be non void non empty ManySortedSign, X be ManySortedSet of the
+  carrier of S;
   let o,b be set;
   assume
 A1: [o,b] in REL(X);
-  then reconsider o'=o as Element of
-  [:the carrier' of S,{the carrier of S}:] \/ Union(coprod X)
-  by ZFMISC_1:106;
-  reconsider b'=b as Element of
-  ([:the carrier' of S,{the carrier of S}:] \/ Union(coprod X))*
-  by A1,ZFMISC_1:106;
+  then reconsider
+  o'=o as Element of [:the carrier' of S,{the carrier of S}:] \/
+  Union(coprod X) by ZFMISC_1:106;
+  reconsider b'=b as Element of ([:the carrier' of S,{the carrier of S}:] \/
+  Union(coprod X))* by A1,ZFMISC_1:106;
 A2: [o',b'] in REL(X) by A1;
   hence o in [:the carrier' of S,{the carrier of S}:] by MSAFREE:def 9;
   thus thesis by A2;
 end;
 
-theorem  :: MSAFREE:5
-  for S being non void non empty ManySortedSign,
-  X being ManySortedSet of the carrier of S
-  for o being OperSymbol of S, b being FinSequence st
-  [[o,the carrier of S],b] in REL(X) holds len b = len (the_arity_of o) &
-  for x be set st x in dom b holds
-  (b.x in [:the carrier' of S,{the carrier of S}:] implies
-  for o1 be OperSymbol of S st [o1,the carrier of S] = b.x holds
-  the_result_sort_of o1 = (the_arity_of o).x) &
-  (b.x in Union(coprod X) implies b.x in coprod((the_arity_of o).x,X))
+theorem :: MSAFREE:5
+  for S being non void non empty ManySortedSign, X being ManySortedSet
+of the carrier of S for o being OperSymbol of S, b being FinSequence st [[o,the
+carrier of S],b] in REL(X) holds len b = len (the_arity_of o) & for x be set st
+  x in dom b holds (b.x in [:the carrier' of S,{the carrier of S}:] implies for
+  o1 be OperSymbol of S st [o1,the carrier of S] = b.x holds the_result_sort_of
+  o1 = (the_arity_of o).x) & (b.x in Union(coprod X) implies b.x in coprod((
+  the_arity_of o).x,X))
 proof
-  let S be non void non empty ManySortedSign,
-  X be ManySortedSet of the carrier of S,
-  o be OperSymbol of S, b be FinSequence;
+  let S be non void non empty ManySortedSign, X be ManySortedSet of the
+  carrier of S, o be OperSymbol of S, b be FinSequence;
   assume
 A1: [[o,the carrier of S],b] in REL(X);
-  then reconsider b'=b as Element of
-  ([:the carrier' of S,{the carrier of S}:] \/ Union coprod X)* by Th2;
+  then reconsider
+  b'=b as Element of ([:the carrier' of S,{the carrier of S}:] \/
+  Union coprod X)* by Th2;
   len b' = len the_arity_of o by A1,MSAFREE:5;
   hence len b = len the_arity_of o;
-  for x be set st x in dom b' holds
-  (b'.x in [:the carrier' of S,{the carrier of S}:]
-  implies for o1 be OperSymbol of S st [o1,the carrier of S] = b'.x
-  holds the_result_sort_of o1 = (the_arity_of o).x) &
-  (b'.x in Union(coprod X) implies b'.x in coprod((the_arity_of o).x,X))
-  by A1,MSAFREE:5;
+  for x be set st x in dom b' holds (b'.x in [:the carrier' of S,{the
+carrier of S}:] implies for o1 be OperSymbol of S st [o1,the carrier of S] = b'
+.x holds the_result_sort_of o1 = (the_arity_of o).x) & (b'.x in Union(coprod X)
+  implies b'.x in coprod((the_arity_of o).x,X)) by A1,MSAFREE:5;
   hence thesis;
 end;
 
@@ -196,13 +185,16 @@ registration
     let M be ManySortedSet of I such that
 A1: M is empty-yielding;
     let x,y be set;
-    assume x <> y;
+    assume
+    x <> y;
     per cases;
-    suppose x in dom M & y in dom M;
-      then M.x is empty & M.y is empty by A1,FUNCT_1:def 14;
+    suppose
+      x in dom M & y in dom M;
+      then M.x is empty by A1,FUNCT_1:def 14;
       hence thesis by XBOOLE_1:65;
     end;
-    suppose not (x in dom M & y in dom M);
+    suppose
+      not (x in dom M & y in dom M);
       then M.x = {} or M.y = {} by FUNCT_1:def 4;
       hence thesis by XBOOLE_1:65;
     end;
@@ -213,7 +205,8 @@ registration
   let I be set;
   cluster disjoint_valued ManySortedSet of I;
   existence
-  proof consider M being empty-yielding ManySortedSet of I;
+  proof
+    consider M being empty-yielding ManySortedSet of I;
     take M;
     thus thesis;
   end;
@@ -226,65 +219,74 @@ definition
   let F be ManySortedFunction of X,D;
   func Flatten F -> Function of Union X, Union D means
   :Def1:
-  for i being Element of I, x being set st x in X.i holds it.x = F.i.x;
+  for i being
+  Element of I, x being set st x in X.i holds it.x = F.i.x;
   existence
   proof
-    defpred P[set,set] means
-    for i being Element of I st $1 in X.i holds $2 = F.i.$1;
+    defpred P[set,set] means for i being Element of I st $1 in X.i holds $2 =
+    F.i.$1;
 A1: for x be set st x in Union X ex y be set st y in Union D & P[x,y]
     proof
       let e be set;
-      assume e in Union X;
+      assume
+      e in Union X;
       then consider i being set such that
-A2:   i in dom X & e in X.i by CARD_5:10;
+A2:   i in dom X and
+A3:   e in X.i by CARD_5:10;
       reconsider i as Element of I by A2,PARTFUN1:def 4;
       take u = F.i.e;
-A3:   F.i.e in D.i by A2,FUNCT_2:7;
       i in I;
-      then i in dom D by PARTFUN1:def 4;
-      hence u in Union D by A3,CARD_5:10;
+      then
+A4:   i in dom D by PARTFUN1:def 4;
+      F.i.e in D.i by A3,FUNCT_2:7;
+      hence u in Union D by A4,CARD_5:10;
       let i' be Element of I;
-      assume e in X.i';
-      then X.i' meets X.i by A2,XBOOLE_0:3;
+      assume
+      e in X.i';
+      then X.i' meets X.i by A3,XBOOLE_0:3;
       hence thesis by PROB_2:def 3;
     end;
     consider f being Function of Union X, Union D such that
-A4: for e being set st e in Union X holds P[e,f.e] from FUNCT_2:sch 1(A1);
+A5: for e being set st e in Union X holds P[e,f.e] from FUNCT_2:sch 1
+    (A1);
     take f;
     let i be Element of I, x be set;
     assume
-A5: x in X.i;
+A6: x in X.i;
     i in I;
     then i in dom X by PARTFUN1:def 4;
-    then x in Union X by A5,CARD_5:10;
-    hence thesis by A4,A5;
+    then x in Union X by A6,CARD_5:10;
+    hence thesis by A5,A6;
   end;
   correctness
   proof
     let F1,F2 be Function of Union X, Union D such that
-A6: for i being Element of I, x being set st x in X.i holds F1.x = F.i.x and
-A7: for i being Element of I, x being set st x in X.i holds F2.x = F.i.x;
+A7: for i being Element of I, x being set st x in X.i holds F1.x = F.
+    i.x and
+A8: for i being Element of I, x being set st x in X.i holds F2.x = F.
+    i.x;
     now
       let x be set;
-      assume x in Union X;
+      assume
+      x in Union X;
       then consider i being set such that
-A8:   i in dom X & x in X.i by CARD_5:10;
-      reconsider i as Element of I by A8,PARTFUN1:def 4;
-      thus F1.x = F.i.x by A6,A8
-        .= F2.x by A7,A8;
+A9:   i in dom X and
+A10:  x in X.i by CARD_5:10;
+      reconsider i as Element of I by A9,PARTFUN1:def 4;
+      thus F1.x = F.i.x by A7,A10
+        .= F2.x by A8,A10;
     end;
     hence F1 = F2 by FUNCT_2:18;
   end;
 end;
 
 theorem Th4:
-  for I being non empty set, X being disjoint_valued ManySortedSet of I,
-  D being non-empty ManySortedSet of I
-  for F1,F2 be ManySortedFunction of X,D st Flatten F1 = Flatten F2
-  holds F1 = F2
+  for I being non empty set, X being disjoint_valued ManySortedSet
+of I, D being non-empty ManySortedSet of I for F1,F2 be ManySortedFunction of X
+  ,D st Flatten F1 = Flatten F2 holds F1 = F2
 proof
-  let I be non empty set, X be disjoint_valued ManySortedSet of I,
-  D be non-empty ManySortedSet of I;
+  let I be non empty set, X be disjoint_valued ManySortedSet of I, D be
+  non-empty ManySortedSet of I;
   let F1,F2 be ManySortedFunction of X,D;
   assume
 A1: Flatten F1 = Flatten F2;
@@ -318,68 +320,74 @@ definition
   let S be non empty ManySortedSign;
   func SingleAlg S -> strict MSAlgebra over S means
   :Def3:
-  for i being set st i in the carrier of S holds (the Sorts of it).i = {i};
+  for i being set st
+  i in the carrier of S holds (the Sorts of it).i = {i};
   existence
   proof
     deffunc F(set) = {$1};
     consider f being ManySortedSet of the carrier of S such that
-A1: for i being set st i in the carrier of S holds f.i = F(i)
-    from PBOOLE:sch 4;
-    consider Ch being ManySortedFunction of
-    f# * the Arity of S, f * the ResultSort of S;
+A1: for i being set st i in the carrier of S holds f.i = F(i) from
+    PBOOLE:sch 4;
+    consider Ch being ManySortedFunction of f# * the Arity of S, f * the
+    ResultSort of S;
     take MSAlgebra(#f,Ch#);
     thus thesis by A1;
   end;
   uniqueness
   proof
     let A1,A2 be strict MSAlgebra over S such that
-A2: for i being set st i in the carrier of S
-    holds (the Sorts of A1).i = {i} and
-A3: for i being set st i in the carrier of S holds (the Sorts of A2).i = {i};
+A2: for i being set st i in the carrier of S holds (the Sorts of A1).i
+    = {i} and
+A3: for i being set st i in the carrier of S holds (the Sorts of A2).i
+    = {i};
     set B = the Sorts of A1;
-A4: dom(the ResultSort of S) = the carrier' of S by FUNCT_2:def 1;
     now
       let i be set;
       assume
-A5:   i in the carrier of S;
+A4:   i in the carrier of S;
       hence (the Sorts of A1).i = {i} by A2
-        .= (the Sorts of A2).i by A3,A5;
+        .= (the Sorts of A2).i by A3,A4;
     end;
     then
-A6: the Sorts of A1 = the Sorts of A2 by PBOOLE:3;
+A5: the Sorts of A1 = the Sorts of A2 by PBOOLE:3;
+A6: dom(the ResultSort of S) = the carrier' of S by FUNCT_2:def 1;
     now
       let i be set;
       set A = (B*the ResultSort of S).i;
       assume
 A7:   i in the carrier' of S;
       then
-A8:   A = B.((the ResultSort of S).i) by A4,FUNCT_1:23
+A8:   A = B.((the ResultSort of S).i) by A6,FUNCT_1:23
         .= {(the ResultSort of S).i} by A2,A7,FUNCT_2:7;
       then reconsider A as non empty set;
-      reconsider f1=(the Charact of A1).i, f2=(the Charact of A2).i
-      as Function of (B# * the Arity of S).i, A by A6,A7,PBOOLE:def 18;
+      reconsider f1=(the Charact of A1).i, f2=(the Charact of A2).i as
+      Function of (B# * the Arity of S).i, A by A5,A7,PBOOLE:def 18;
       now
         let x be set;
-        assume x in (B# * the Arity of S).i;
-        then f1.x in A & f2.x in A by FUNCT_2:7;
-        then f1.x = (the ResultSort of S).i & f2.x = (the ResultSort of S).i
-        by A8,TARSKI:def 1;
-        hence f1.x = f2.x;
+        assume
+A9:     x in (B# * the Arity of S).i;
+        then f1.x in A by FUNCT_2:7;
+        then
+A10:    f1.x = (the ResultSort of S).i by A8,TARSKI:def 1;
+        f2.x in A by A9,FUNCT_2:7;
+        hence f1.x = f2.x by A8,A10,TARSKI:def 1;
       end;
       hence (the Charact of A1).i = (the Charact of A2).i by FUNCT_2:18;
     end;
-    hence thesis by A6,PBOOLE:3;
+    hence thesis by A5,PBOOLE:3;
   end;
 end;
 
-Lm1: for S being non empty ManySortedSign holds
-SingleAlg S is non-empty disjoint_valued
+Lm1: for S being non empty ManySortedSign holds SingleAlg S is non-empty
+disjoint_valued
+
 proof
   let S be non empty ManySortedSign;
   set F = the Sorts of SingleAlg S;
   hereby
     let x be set;
-    assume x in the carrier of S;
+    assume
+    x in the carrier of S;
     then F.x = {x} by Def3;
     hence F.x is non empty;
   end;
@@ -391,12 +399,12 @@ A2: x in dom F & y in dom F;
     dom F = the carrier of S by PARTFUN1:def 4;
     then
 A3: F.x = {x} & F.y = {y} by A2,Def3;
-    assume F.x meets F.y;
-
-::   then {x} /\ {y} <> {} by A3,BOOLE:118;
+    assume
+    F.x meets F.y;
     hence contradiction by A1,A3,ZFMISC_1:17;
   end;
-  suppose not (x in dom F & y in dom F);
+  suppose
+    not (x in dom F & y in dom F);
     then F.x = {} or F.y = {} by FUNCT_1:def 4;
     hence thesis by XBOOLE_1:65;
   end;
@@ -406,7 +414,8 @@ registration
   let S be non empty ManySortedSign;
   cluster non-empty disjoint_valued MSAlgebra over S;
   existence
-  proof SingleAlg S is non-empty disjoint_valued by Lm1;
+  proof
+    SingleAlg S is non-empty disjoint_valued by Lm1;
     hence thesis;
   end;
 end;
@@ -425,208 +434,215 @@ registration
 end;
 
 theorem Th5:
-  for S being non void non empty ManySortedSign, o being OperSymbol of S,
-  A1 be non-empty disjoint_valued MSAlgebra over S,
-  A2 be non-empty MSAlgebra over S, f be ManySortedFunction of A1,A2,
-  a be Element of Args(o,A1) holds (Flatten f)*a = f#a
+  for S being non void non empty ManySortedSign, o being OperSymbol
+  of S, A1 be non-empty disjoint_valued MSAlgebra over S, A2 be non-empty
+MSAlgebra over S, f be ManySortedFunction of A1,A2, a be Element of Args(o,A1)
+  holds (Flatten f)*a = f#a
 proof
-  let S be non void non empty ManySortedSign, o be OperSymbol of S,
-  A1 be non-empty disjoint_valued MSAlgebra over S,
-  A2 be non-empty MSAlgebra over S, f be ManySortedFunction of A1,A2,
-  a be Element of Args(o,A1);
+  let S be non void non empty ManySortedSign, o be OperSymbol of S, A1 be
+non-empty disjoint_valued MSAlgebra over S, A2 be non-empty MSAlgebra over S, f
+  be ManySortedFunction of A1,A2, a be Element of Args(o,A1);
 A1: dom(the Arity of S) = the carrier' of S by FUNCT_2:def 1;
-A2: dom the Sorts of A1 = the carrier of S by PARTFUN1:def 4;
-A3: dom the Sorts of A2 = the carrier of S by PARTFUN1:def 4;
   set s = the_arity_of o;
-A4: rng s c= the carrier of S by FINSEQ_1:def 4;
   a in ((the Sorts of A1)# * the Arity of S).o;
   then a in (the Sorts of A1)#.((the Arity of S).o) by A1,FUNCT_1:23;
   then
-A5: a in product((the Sorts of A1)*s) by PBOOLE:def 19;
-A6: union rng((the Sorts of A1)*s) c= union rng the Sorts of A1
-  by RELAT_1:45,ZFMISC_1:95;
-  rng a c= Union ((the Sorts of A1)*s) by A5,Th1;
-  then rng a c= union rng ((the Sorts of A1)*s) by CARD_3:def 4;
-  then rng a c= union rng the Sorts of A1 by A6,XBOOLE_1:1;
+A2: a in product((the Sorts of A1)*s) by PBOOLE:def 19;
+  then rng a c= Union ((the Sorts of A1)*s) by Th1;
+  then union rng((the Sorts of A1)*s) c= union rng the Sorts of A1 & rng a c=
+  union rng ((the Sorts of A1)*s) by CARD_3:def 4,RELAT_1:45,ZFMISC_1:95;
+  then rng a c= union rng the Sorts of A1 by XBOOLE_1:1;
   then rng a c= Union the Sorts of A1 by CARD_3:def 4;
   then rng a c= dom(Flatten f) by FUNCT_2:def 1;
   then
-A7: dom((Flatten f)*a) = dom a by RELAT_1:46;
-A8: dom a = dom((the Sorts of A1)*s) by A5,CARD_3:18;
-A9: dom((the Sorts of A1)*s) = dom s by A2,A4,RELAT_1:46;
-A10: dom s = dom((the Sorts of A2)*s) by A3,A4,RELAT_1:46;
-  now
+A3: dom((Flatten f)*a) = dom a by RELAT_1:46;
+A4: rng s c= the carrier of S by FINSEQ_1:def 4;
+  dom the Sorts of A1 = the carrier of S by PARTFUN1:def 4;
+  then
+A5: dom((the Sorts of A1)*s) = dom s by A4,RELAT_1:46;
+A6: dom a = dom((the Sorts of A1)*s) by A2,CARD_3:18;
+A7: now
     let x be set;
-A11: dom((the Sorts of A2)*s) c= dom s by RELAT_1:44;
     assume
-A12: x in dom((the Sorts of A2)*s);
-    then s.x in rng s by A11,FUNCT_1:def 5;
-    then reconsider z = s.x as SortSymbol of S by A4;
-A13: (the Sorts of A2).(s.x) = ((the Sorts of A2)*s).x by A11,A12,FUNCT_1:23;
-    (the Sorts of A1).(s.x) = ((the Sorts of A1)*s).x by A11,A12,FUNCT_1:23;
+A8: x in dom((the Sorts of A2)*s);
+A9: dom((the Sorts of A2)*s) c= dom s by RELAT_1:44;
     then
-A14: a.x in (the Sorts of A1).z by A5,A9,A11,A12,CARD_3:18;
-    ((Flatten f)*a).x = (Flatten f).(a.x) by A8,A9,A11,A12,FUNCT_1:23
-      .=f.z.(a.x) by A14,Def1;
-    hence ((Flatten f)*a).x in ((the Sorts of A2)*s).x by A13,A14,FUNCT_2:7;
+A10: (the Sorts of A2).(s.x) = ((the Sorts of A2)*s).x by
+    A8,FUNCT_1:
+    23;
+    s.x in rng s by A9,A8,FUNCT_1:def 5;
+    then reconsider z = s.x as SortSymbol of S by A4;
+    (the Sorts of A1).(s.x) = ((the Sorts of A1)*s).x by A9,A8, FUNCT_1
+    :23;
+    then
+A11: a.x in (the Sorts of A1).z by A2,A5,A9,A8,CARD_3:18;
+    ((Flatten f)*a).x = (Flatten f).(a.x) by A6,A5,A9,A8,FUNCT_1:23
+      .=f.z.(a.x) by A11,Def1;
+    hence ((Flatten f)*a).x in ((the Sorts of A2)*s).x by A10,A11,FUNCT_2:7;
   end;
-  then (Flatten f)*a in
-  product((the Sorts of A2)*s) by A7,A8,A9,A10,CARD_3:18;
+  dom the Sorts of A2 = the carrier of S by PARTFUN1:def 4;
+  then dom s = dom((the Sorts of A2)*s) by A4,RELAT_1:46;
+  then (Flatten f)*a in product((the Sorts of A2)*s) by A3,A6,A5,A7,
+  CARD_3:18;
   then (Flatten f)*a in (the Sorts of A2)#.((the Arity of S).o) by
-PBOOLE:def 19;
+  PBOOLE
+  :def 19;
   then reconsider x = (Flatten f)*a as Element of Args(o,A2) by A1,FUNCT_1:23;
   now
     let n be Nat;
     assume
-A15: n in dom a;
+A12: n in dom a;
     then
-A16: (the_arity_of o)/.n = s.n by A8,A9,PARTFUN1:def 8;
-    a.n in ((the Sorts of A1)*s).n by A5,A8,A15,CARD_3:18;
+    (the_arity_of o)/.n = s.n & a.n in ((the Sorts of A1)*s).n by A2,A6,
+    A5,CARD_3:18,PARTFUN1:def 8;
     then
-A17: a.n in (the Sorts of A1).((the_arity_of o)/.n)
-    by A8,A9,A15,A16,FUNCT_1:23;
-    thus x.n =(Flatten f).(a.n) by A15,FUNCT_1:23
-      .= (f.((the_arity_of o)/.n)).(a.n) by A17,Def1;
+A13: a.n in (the Sorts of A1).((the_arity_of o)/.n) by A6,A5,A12,
+    FUNCT_1:23;
+    thus x.n =(Flatten f).(a.n) by A12,FUNCT_1:23
+      .= (f.((the_arity_of o)/.n)).(a.n) by A13,Def1;
   end;
   hence thesis by MSUALG_3:def 8;
 end;
 
 registration
-  let S be non void non empty ManySortedSign,
-  X be non-empty ManySortedSet of the carrier of S;
+  let S be non void non empty ManySortedSign, X be non-empty ManySortedSet of
+  the carrier of S;
   cluster FreeSort X -> disjoint_valued;
   coherence
   proof
-    set F = FreeSort X;
     let x,y be set;
+    set F = FreeSort X;
     per cases;
-    suppose x in dom F & y in dom F;
-      then reconsider s1=x, s2=y as SortSymbol of S by PARTFUN1:def 4
-;
-      assume x <> y;
+    suppose
+      x in dom F & y in dom F;
+      then reconsider s1=x, s2=y as SortSymbol of S by PARTFUN1:def 4;
+      assume
+      x <> y;
       then F.s1 misses F.s2 by MSAFREE:13;
       hence thesis;
     end;
     suppose
 A1:   not (x in dom F & y in dom F);
-      assume x <> y;
+      assume
+      x <> y;
       F.x = {} or F.y = {} by A1,FUNCT_1:def 4;
       hence thesis by XBOOLE_1:65;
     end;
   end;
 end;
 
-scheme FreeSortUniq{ S() -> non void non empty ManySortedSign,
-  X,D() -> non-empty ManySortedSet of the carrier of S(),
-  G(set) -> Element of Union D(), H(set, set, set) -> Element of Union D(),
-  f1, f2() -> ManySortedFunction of FreeSort X(), D() }: f1() = f2()
+scheme
+  FreeSortUniq{ S() -> non void non empty ManySortedSign, X,D() -> non-empty
+ManySortedSet of the carrier of S(), G(set) -> Element of Union D(), H(set, set
+, set) -> Element of Union D(), f1, f2() -> ManySortedFunction of FreeSort X(),
+  D() }: f1() = f2()
 provided
-A1: for o being OperSymbol of S(), ts being Element of Args(o,FreeMSA X())
-for x being FinSequence of Union D() st x = (Flatten f1()) * ts holds
-f1().(the_result_sort_of o).(Den(o,FreeMSA X()).ts) = H(o, ts, x)
-and
-A2: for s being SortSymbol of S(), y be set st y in FreeGen(s,X())
-holds f1().s.y = G(y)
-and
-A3: for o being OperSymbol of S(), ts being Element of Args(o,FreeMSA X())
-for x being FinSequence of Union D() st x = (Flatten f2()) * ts holds
-f2().(the_result_sort_of o).(Den(o,FreeMSA X()).ts) = H(o, ts, x)
-and
-A4: for s being SortSymbol of S(), y be set st y in FreeGen(s,X())
-holds f2().s.y = G(y)
+A1: for o being OperSymbol of S(), ts being Element of Args(o,FreeMSA X(
+)) for x being FinSequence of Union D() st x = (Flatten f1()) * ts holds f1().(
+the_result_sort_of o).(Den(o,FreeMSA X()).ts) = H(o, ts, x) and
+A2: for s being SortSymbol of S(), y be set st y in FreeGen(s,X()) holds
+f1().s.y = G(y) and
+A3: for o being OperSymbol of S(), ts being Element of Args(o,FreeMSA X(
+)) for x being FinSequence of Union D() st x = (Flatten f2()) * ts holds f2().(
+the_result_sort_of o).(Den(o,FreeMSA X()).ts) = H(o, ts, x) and
+A4: for s being SortSymbol of S(), y be set st y in FreeGen(s,X()) holds
+f2().s.y = G(y)
 proof
   reconsider D = Union D() as non empty set;
-A5: DTConMSA X() =
-  DTConstrStr (# [:the carrier' of S(),{the carrier of S()}:]
-    \/ Union coprod X(), REL X()#) by MSAFREE:def 10;
-A6: Terminals DTConMSA X() = Union coprod X() by MSAFREE:6;
-A7: TS DTConMSA X() = union rng FreeSort X() by MSAFREE:12
+  TS DTConMSA X() = union rng FreeSort X() by MSAFREE:12
     .= Union FreeSort X() by CARD_3:def 4;
-A8: dom X() = the carrier of S() by PARTFUN1:def 4;
-  deffunc F(Element of DTConMSA(X())) =G(root-tree $1);
-  consider G being
-  Function of the carrier of DTConMSA(X()), Union D() such that
-A9: for t being Element of DTConMSA(X()) holds G.t = F(t) from FUNCT_2:sch 4;
-  reconsider G as Function of the carrier of DTConMSA(X()), D;
-A10: now
+  then reconsider
+  f1 = Flatten f1(), f2 = Flatten f2() as Function of TS DTConMSA X
+  (), D;
+  deffunc O(Element of DTConMSA X(), Element of (TS DTConMSA X())*,Element of
+  (Union D())*) = H($1`1,$2,$3);
+  consider H being Function of [:the carrier of DTConMSA X(),(TS DTConMSA X())
+  *,(Union D())*:], Union D() such that
+A5: for nt be Element of DTConMSA X(), ts be Element of (TS DTConMSA X(
+  ))*, x being Element of (Union D())* holds H.(nt,ts,x) = O(nt,ts,x) from
+  MULTOP_1:sch 4;
+  reconsider H as Function of [:the carrier of DTConMSA X(),(TS DTConMSA X())*
+  ,D*:],D;
+  deffunc Hf(Element of DTConMSA X(), FinSequence of TS DTConMSA X(),
+  FinSequence of D) = H.($1, $2, $3);
+A6: DTConMSA X() = DTConstrStr (# [:the carrier' of S(),{the carrier of S()}
+    :] \/ Union coprod X(), REL X()#) by MSAFREE:def 10;
+A7: now
     let f be ManySortedFunction of FreeSort X(), D() such that
-A11: for s being SortSymbol of S(), y being set st y in FreeGen(s,X())
+A8: for o being OperSymbol of S(), ts being Element of Args(o,FreeMSA
+    X()) for x being FinSequence of D st x = (Flatten f) * ts holds f.(
+    the_result_sort_of o).(Den(o,FreeMSA X()).ts) = H(o, ts, x);
+    let nt be Element of DTConMSA(X()), ts be FinSequence of TS(DTConMSA(X()));
+    assume
+A9: nt ==> roots ts;
+    then [nt,roots ts] in REL X() by A6,LANG1:def 1;
+    then consider
+    o being OperSymbol of S(), x2 being Element of {the carrier of S(
+    )} such that
+A10: nt = [o,x2] by Th2,DOMAIN_1:9;
+    let x be FinSequence of D;
+    assume
+A11: x = (Flatten f) * ts;
+A12: FreeMSA X() = MSAlgebra (# FreeSort X(), FreeOper X() #) by MSAFREE:
+    def 16;
+A13: x2 = the carrier of S() by TARSKI:def 1;
+    then
+A14: nt = Sym(o,X()) by A10,MSAFREE:def 11;
+    then
+A15: ts in ((FreeSort X())# * (the Arity of S())).o by A9,
+    MSAFREE:10;
+    ((FreeSort X()) * (the ResultSort of S())).o = (FreeSort X()).
+    the_result_sort_of o by FUNCT_2:21;
+    then
+A16: DenOp(o,X()).ts in (FreeSort X()).the_result_sort_of o by A15,
+    FUNCT_2:7;
+    (Flatten f).([o,the carrier of S()]-tree ts) = (Flatten f).(DenOp(o,X
+    ()).ts) by A9,A10,A13,A14,MSAFREE:def 14
+      .= f.(the_result_sort_of o).(DenOp(o,X()).ts) by A16,Def1
+      .= f.(the_result_sort_of o).(Den(o,FreeMSA X()).ts) by A12,MSAFREE:def
+    15
+      .= H(o, ts, x) by A8,A12,A15,A11
+      .= H(nt`1, ts, x) by A10,MCART_1:7;
+    hence (Flatten f).(nt-tree ts) = H.(nt, ts, x) by A5,A10,A13;
+  end;
+  then
+A17: for nt be Element of DTConMSA X(), ts be FinSequence of TS DTConMSA X()
+st nt ==> roots ts for x being FinSequence of D st x = f1*ts holds f1.(nt-tree
+  ts) = Hf(nt, ts, x) by A1;
+  deffunc F(Element of DTConMSA(X())) =G(root-tree $1);
+A18: Terminals DTConMSA X() = Union coprod X() by MSAFREE:6;
+  consider G being Function of the carrier of DTConMSA(X()), Union D() such
+  that
+A19: for t being Element of DTConMSA(X()) holds G.t = F(t) from FUNCT_2:
+  sch 4;
+  reconsider G as Function of the carrier of DTConMSA(X()), D;
+  deffunc Gf(Element of DTConMSA(X()))=G.$1;
+A20: dom X() = the carrier of S() by PARTFUN1:def 4;
+A21: now
+    let f be ManySortedFunction of FreeSort X(), D() such that
+A22: for s being SortSymbol of S(), y being set st y in FreeGen(s,X())
     holds f.s.y = G(y);
     let t be Element of DTConMSA(X());
     assume
-A12: t in Terminals DTConMSA X();
+A23: t in Terminals DTConMSA X();
+    then reconsider s = t`2 as SortSymbol of S() by A18,A20,CARD_3:33;
+    t`1 in X().(t`2) by A18,A23,CARD_3:33;
     then
-A13: t`2 in dom X() & t`1 in X().(t`2) & t = [t`1,t`2] by A6,CARD_3:33;
-    reconsider s = t`2 as SortSymbol of S() by A6,A8,A12,CARD_3:33;
-A14: root-tree[t`1,s] in FreeGen(s,X()) by A13,MSAFREE:def 17;
-    hence (Flatten f).root-tree t = f.s.root-tree[t`1,s] by A13,Def1
-      .= G(root-tree t) by A11,A13,A14
-      .= G.t by A9;
+A24: root-tree[t`1,s] in FreeGen(s,X()) by MSAFREE:def 17;
+A25: t = [t`1,t`2] by A18,A23,CARD_3:33;
+    hence (Flatten f).root-tree t = f.s.root-tree[t`1,s] by A24,Def1
+      .= G(root-tree t) by A22,A25,A24
+      .= G.t by A19;
   end;
-  deffunc O(Element of DTConMSA X(),
-  Element of (TS DTConMSA X())*,Element of (Union D())*) = H($1`1,$2,$3);
-  consider H being Function of
-  [:the carrier of DTConMSA X(),(TS DTConMSA X())*,(Union D())*:], Union D()
-  such that
-A15: for nt be Element of DTConMSA X(), ts be Element of (TS DTConMSA X())*,
-  x being Element of (Union D())*
-  holds H.(nt,ts,x) = O(nt,ts,x) from MULTOP_1:sch 4;
-  reconsider H as Function of
-  [:the carrier of DTConMSA X(),(TS DTConMSA X())*,D*:],D;
-A16: now
-    let f be ManySortedFunction of FreeSort X(), D() such that
-A17: for o being OperSymbol of S(), ts being Element of Args(o,FreeMSA X())
-    for x being FinSequence of D st x = (Flatten f) * ts
-    holds f.(the_result_sort_of o).(Den(o,FreeMSA X()).ts) = H(o, ts, x);
-A18: FreeMSA X() = MSAlgebra (# FreeSort X(), FreeOper X() #)
-    by MSAFREE:def 16;
-    let nt be Element of DTConMSA(X()),
-    ts be FinSequence of TS(DTConMSA(X()));
-    assume
-A19: nt ==> roots ts;
-    then [nt,roots ts] in REL X() by A5,LANG1:def 1;
-    then nt in [:the carrier' of S(),{the carrier of S()}:] by Th2;
-    then consider o being OperSymbol of S(),
-    x2 being Element of {the carrier of S()} such that
-A20: nt = [o,x2] by DOMAIN_1:9;
-A21: x2 = the carrier of S() by TARSKI:def 1;
-    then
-A22: nt = Sym(o,X()) by A20,MSAFREE:def 11;
-    then
-A23: ts in ((FreeSort X())# * (the Arity of S())).o by A19,MSAFREE:10;
-    let x be FinSequence of D;
-    assume
-A24: x = (Flatten f) * ts;
-    ((FreeSort X()) * (the ResultSort of S())).o
-    = (FreeSort X()).the_result_sort_of o by FUNCT_2:21;
-    then
-A25: DenOp(o,X()).ts in (FreeSort X()).the_result_sort_of o by A23,FUNCT_2:7;
-    (Flatten f).([o,the carrier of S()]-tree ts)
-    = (Flatten f).(DenOp(o,X()).ts) by A19,A20,A21,A22,MSAFREE:def 14
-      .= f.(the_result_sort_of o).(DenOp(o,X()).ts) by A25,Def1
-      .= f.(the_result_sort_of o).(Den(o,FreeMSA X()).ts) by A18,MSAFREE:def 15
-      .= H(o, ts, x) by A17,A18,A23,A24
-      .= H(nt`1, ts, x) by A20,MCART_1:7;
-    hence (Flatten f).(nt-tree ts) = H.(nt, ts, x) by A15,A20,A21;
-  end;
-  reconsider f1 = Flatten f1(), f2 = Flatten f2() as
-  Function of TS DTConMSA X(), D by A7;
-  deffunc Gf(Element of DTConMSA(X()))=G.$1;
-  deffunc Hf(Element of DTConMSA X(),
-  FinSequence of TS DTConMSA X(),FinSequence of D) = H.($1, $2, $3);
-A26: for t being Element of DTConMSA(X()) st
-  t in Terminals DTConMSA X() holds f1.root-tree t = Gf(t) by A2,A10;
-A27: for nt be Element of DTConMSA X(),
-  ts be FinSequence of TS DTConMSA X() st nt ==> roots ts
-  for x being FinSequence of D st x = f1*ts
-  holds f1.(nt-tree ts) = Hf(nt, ts, x) by A1,A16;
-A28: for t being Symbol of DTConMSA X() st
-  t in Terminals DTConMSA X() holds f2.root-tree t = Gf(t) by A4,A10;
-A29: for nt be Element of DTConMSA X(),
-  ts be FinSequence of TS DTConMSA X() st nt ==> roots ts
-  for x being FinSequence of D st x = f2*ts
-  holds f2.(nt-tree ts) = Hf(nt, ts, x) by A3,A16;
-  f1 = f2 from DTConstrUniq(A26,A27,A28,A29);
+  then
+A26: for t being Symbol of DTConMSA X() st t in Terminals DTConMSA X() holds
+  f2.root-tree t = Gf(t) by A4;
+A27: for nt be Element of DTConMSA X(), ts be FinSequence of TS DTConMSA X()
+st nt ==> roots ts for x being FinSequence of D st x = f2*ts holds f2.(nt-tree
+  ts) = Hf(nt, ts, x) by A3,A7;
+A28: for t being Element of DTConMSA(X()) st t in Terminals DTConMSA X()
+  holds f1.root-tree t = Gf(t) by A2,A21;
+  f1 = f2 from DTConstrUniq(A28,A17,A26,A27);
   hence thesis by Th4;
 end;
 
@@ -648,8 +664,8 @@ registration
 end;
 
 registration
-  let S be non void non empty ManySortedSign,
-  X be non-empty ManySortedSet of the carrier of S;
+  let S be non void non empty ManySortedSign, X be non-empty ManySortedSet of
+  the carrier of S;
   cluster the Sorts of FreeMSA X -> disjoint_valued;
   coherence
   proof
@@ -659,8 +675,8 @@ registration
 end;
 
 registration
-  let S be non void non empty ManySortedSign,
-  X be non-empty ManySortedSet of the carrier of S;
+  let S be non void non empty ManySortedSign, X be non-empty ManySortedSet of
+  the carrier of S;
   cluster FreeMSA X -> disjoint_valued;
   coherence
   proof
@@ -668,154 +684,145 @@ registration
   end;
 end;
 
-scheme ExtFreeGen{ S() -> non void non empty ManySortedSign,
-  X() -> non-empty ManySortedSet of the carrier of S(),
-  MSA() -> non-empty MSAlgebra over S(), P[set,set,set],
-  IT1, IT2() -> ManySortedFunction of FreeMSA X(), MSA() }: IT1() = IT2()
+scheme
+  ExtFreeGen{ S() -> non void non empty ManySortedSign, X() -> non-empty
+ManySortedSet of the carrier of S(), MSA() -> non-empty MSAlgebra over S(), P[
+set,set,set], IT1, IT2() -> ManySortedFunction of FreeMSA X(), MSA() }: IT1() =
+  IT2()
 provided
-A1: IT1() is_homomorphism FreeMSA X(), MSA()
-and
+A1: IT1() is_homomorphism FreeMSA X(), MSA() and
 A2: for s being SortSymbol of S(), x,y being set st y in FreeGen(s,X())
-holds IT1().s.y = x iff P[s,x,y]
-and
-A3: IT2() is_homomorphism FreeMSA X(), MSA()
-and
+holds IT1().s.y = x iff P[s,x,y] and
+A3: IT2() is_homomorphism FreeMSA X(), MSA() and
 A4: for s being SortSymbol of S(), x,y being set st y in FreeGen(s,X())
 holds IT2().s.y = x iff P[s,x,y]
 proof
-A5: FreeMSA X() = MSAlgebra (# FreeSort X(), FreeOper X() #) by MSAFREE:def 16;
-  then reconsider f1 = IT1(), f2 = IT2() as
-  ManySortedFunction of FreeSort X(), the Sorts of MSA();
-  defpred Z[set,set] means
-  for s being SortSymbol of S() st $1 in FreeGen(s,X()) holds P[s,$2,$1];
-A6: for x be set st x in Union FreeGen X()
-  ex y be set st y in Union the Sorts of MSA() & Z[x,y]
+  defpred Z[set,set] means for s being SortSymbol of S() st $1 in FreeGen(s,X(
+  )) holds P[s,$2,$1];
+A5: FreeMSA X() = MSAlgebra (# FreeSort X(), FreeOper X() #) by MSAFREE:def
+  16;
+  then reconsider
+  f1 = IT1(), f2 = IT2() as ManySortedFunction of FreeSort X(), the
+  Sorts of MSA();
+A6: for x be set st x in Union FreeGen X() ex y be set st y in Union the
+  Sorts of MSA() & Z[x,y]
   proof
     let e be set;
-    assume e in Union FreeGen X();
+A7: dom(the Sorts of MSA()) = the carrier of S() by PARTFUN1:def 4;
+    assume
+    e in Union FreeGen X();
     then consider s being set such that
-A7: s in dom FreeGen X() & e in (FreeGen X()).s by CARD_5:10;
-    reconsider s as SortSymbol of S() by A7,PARTFUN1:def 4;
+A8: s in dom FreeGen X() and
+A9: e in (FreeGen X()).s by CARD_5:10;
+    reconsider s as SortSymbol of S() by A8,PARTFUN1:def 4;
+A10: e in FreeGen(s,X()) by A9,MSAFREE:def 18;
     take u = IT1().s.e;
-A8: e in FreeGen(s,X()) by A7,MSAFREE:def 18;
     f1.s is Function of (FreeSort X()).s,(the Sorts of MSA()).s;
-    then
-A9: u in (the Sorts of MSA()).s by A8,FUNCT_2:7;
-    dom(the Sorts of MSA()) = the carrier of S() by PARTFUN1:def 4
-;
-    hence u in Union the Sorts of MSA() by A9,CARD_5:10;
+    then u in (the Sorts of MSA()).s by A10,FUNCT_2:7;
+    hence u in Union the Sorts of MSA() by A7,CARD_5:10;
     let s' be SortSymbol of S();
     assume
-A10: e in FreeGen(s',X());
-    then (FreeSort X()).s' /\ (FreeSort X()).s <> {} by A8,XBOOLE_0:def 4;
+A11: e in FreeGen(s',X());
+    then (FreeSort X()).s' /\ (FreeSort X()).s <> {} by A10,
+    XBOOLE_0:def 4;
     then (FreeSort X()).s' meets (FreeSort X()).s by XBOOLE_0:def 7;
     then s = s' by MSAFREE:13;
-    hence thesis by A2,A10;
+    hence thesis by A2,A11;
   end;
-  consider G being Function of Union FreeGen X(),
-  Union the Sorts of MSA() such that
-A11: for e being set st e in Union FreeGen X() holds Z[e,G.e]
-  from FUNCT_2:sch 1(A6);
+  consider G being Function of Union FreeGen X(), Union the Sorts of MSA()
+  such that
+A12: for e being set st e in Union FreeGen X() holds Z[e,G.e] from
+  FUNCT_2:sch 1(A6);
+  deffunc Gf(set) = G/.($1);
+  defpred P[set,set] means for o being OperSymbol of S(), a being Element of
+  Args(o,MSA()) st $1 = [o,a] holds $2 = Den(o,MSA()).a;
   consider R being set such that
-
-:: uzycie tutaj "set" powoduje, ze schemat nie jest
-:: akceptowany - pluskwa w schematyzatorze !
-A12: R = { [o,a] where o is Element of the carrier' of S(),
-  a is Element of Args(o,MSA()): not contradiction };
-  defpred P[set,set] means
-  for o being OperSymbol of S(), a being Element of Args(o,MSA())
-  st $1 = [o,a] holds $2 = Den(o,MSA()).a;
-A13: for x be set st x in R ex y be set st y in Union the Sorts of MSA()
-  & P[x,y]
+A13: R = { [o,a] where o is Element of the carrier' of S(), a is Element
+  of Args(o,MSA()): not contradiction };
+A14: for s be SortSymbol of S(), y be set st y in FreeGen(s,X()) holds f1.s.
+  y = Gf(y)
+  proof
+    let s be SortSymbol of S(), y be set;
+A15: dom(FreeGen X()) = the carrier of S() by PARTFUN1:def 4;
+    assume
+A16: y in FreeGen(s,X());
+    then y in (FreeGen X()).s by MSAFREE:def 18;
+    then
+A17: y in Union FreeGen X() by A15,CARD_5:10;
+    then P[s,G.y,y] by A12,A16;
+    hence f1.s.y = G.y by A2,A16
+      .= G/.y by A17,FUNCT_2:def 14;
+  end;
+A18: for x be set st x in R ex y be set st y in Union the Sorts of MSA() & P
+  [x,y]
   proof
     let e be set;
-    assume e in R;
-    then consider o being OperSymbol of S(),
-    a being Element of Args(o,MSA()) such that
-A14: e = [o,a] by A12;
+    assume
+    e in R;
+    then consider
+    o being OperSymbol of S(), a being Element of Args(o,MSA()) such
+    that
+A19: e = [o,a] by A13;
     reconsider u = Den(o,MSA()).a as set;
     take u;
     u in union rng the Sorts of MSA() by TARSKI:def 4;
     hence u in Union the Sorts of MSA() by CARD_3:def 4;
     let o' be OperSymbol of S(), x' be Element of Args(o',MSA());
-    assume e = [o',x'];
-    then o = o' & a = x' by A14,ZFMISC_1:33;
-    hence thesis;
+    assume
+A20: e = [o',x'];
+    then o = o' by A19,ZFMISC_1:33;
+    hence thesis by A19,A20,ZFMISC_1:33;
   end;
   consider H being Function of R, Union the Sorts of MSA() such that
-A15: for e being set st e in R holds P[e,H.e] from FUNCT_2:sch 1(A13);
-  deffunc Gf(set) = G/.($1);
-  deffunc Hf(set,::OperSymbol of S(),
-  set,
-
-::   Element of Args(o,FreeMSA X()),
-::       FinSequence of Union the Sorts of MSA()
-  set) = H/.[$1,$3];
-A16: for o being OperSymbol of S(), ts being Element of Args(o,FreeMSA X())
-  for x being FinSequence of Union the Sorts of MSA()
-  st x = (Flatten f1) * ts holds
-  f1.(the_result_sort_of o).(Den(o,FreeMSA X()).ts) = Hf(o, ts, x)
-  proof
-    let o be OperSymbol of S(), ts be Element of Args(o,FreeMSA X()),
-    x be FinSequence of Union the Sorts of MSA();
-A17: (Flatten f1) * ts = IT1()#ts by A5,Th5;
-    assume
-A18: x = (Flatten f1) * ts;
-    then reconsider a = x as Element of Args(o,MSA()) by A17;
-A19: [o,a] in R by A12;
-    thus f1.(the_result_sort_of o).(Den(o,FreeMSA X()).ts)
-    = Den(o,MSA()).a by A1,A17,A18,MSUALG_3:def 9
-      .= H.[o,x] by A15,A19
-      .= H/.[o,x] by A19,CAT_3:def 1;
-  end;
-A20: for s be SortSymbol of S(), y be set st y in FreeGen(s,X())
-  holds f1.s.y = Gf(y)
+A21: for e being set st e in R holds P[e,H.e] from FUNCT_2:sch 1(A18);
+A22: for s be SortSymbol of S(),y be set st y in FreeGen(s,X()) holds f2.s.y
+  = Gf(y)
   proof
     let s be SortSymbol of S(), y be set;
+A23: dom(FreeGen X()) = the carrier of S() by PARTFUN1:def 4;
     assume
-A21: y in FreeGen(s,X());
+A24: y in FreeGen(s,X());
+    then y in (FreeGen X()).s by MSAFREE:def 18;
     then
-A22: y in (FreeGen X()).s by MSAFREE:def 18;
-    dom(FreeGen X()) = the carrier of S() by PARTFUN1:def 4;
-    then
-A23: y in Union FreeGen X() by A22,CARD_5:10;
-    then P[s,G.y,y] by A11,A21;
-    hence f1.s.y = G.y by A2,A21
-      .= G/.y by A23,CAT_3:def 1;
+A25: y in Union FreeGen X() by A23,CARD_5:10;
+    then P[s,G.y,y] by A12,A24;
+    hence f2.s.y = G.y by A4,A24
+      .= G/.y by A25,FUNCT_2:def 14;
   end;
-A24: for o being OperSymbol of S(), ts being Element of Args(o,FreeMSA X())
-  for x being FinSequence of Union the Sorts of MSA()
-  st x = (Flatten f2) * ts holds
-  f2.(the_result_sort_of o).(Den(o,FreeMSA X()).ts) = Hf(o, ts, x)
+  deffunc Hf(set, set, set) = H/.[$1,$3];
+A26: for o being OperSymbol of S(), ts being Element of Args(o,FreeMSA X())
+  for x being FinSequence of Union the Sorts of MSA() st x = (Flatten f2) * ts
+  holds f2.(the_result_sort_of o).(Den(o,FreeMSA X()).ts) = Hf(o, ts, x)
   proof
-    let o be OperSymbol of S(), ts be Element of Args(o,FreeMSA X()),
-    x be FinSequence of Union the Sorts of MSA();
-A25: (Flatten f2) * ts = IT2()#ts by A5,Th5;
+    let o be OperSymbol of S(), ts be Element of Args(o,FreeMSA X()), x be
+    FinSequence of Union the Sorts of MSA();
     assume
-A26: x = (Flatten f2) * ts;
-    then reconsider a = x as Element of Args(o,MSA()) by A25;
-A27: [o,a] in R by A12;
-    thus f2.(the_result_sort_of o).(Den(o,FreeMSA X()).ts)
-    = Den(o,MSA()).a by A3,A25,A26,MSUALG_3:def 9
-      .= H.[o,x] by A15,A27
-      .= H/.[o,x] by A27,CAT_3:def 1;
+A27: x = (Flatten f2) * ts;
+A28: (Flatten f2) * ts = IT2()#ts by A5,Th5;
+    then reconsider a = x as Element of Args(o,MSA()) by A27;
+A29: [o,a] in R by A13;
+    thus f2.(the_result_sort_of o).(Den(o,FreeMSA X()).ts) = Den(o,MSA()).a by
+    A3,A28,A27,MSUALG_3:def 9
+      .= H.[o,x] by A21,A29
+      .= H/.[o,x] by A29,FUNCT_2:def 14;
   end;
-A28: for s be SortSymbol of S(),y be set st y in FreeGen(s,X())
-  holds f2.s.y = Gf(y)
+A30: for o being OperSymbol of S(), ts being Element of Args(o,FreeMSA X())
+  for x being FinSequence of Union the Sorts of MSA() st x = (Flatten f1) * ts
+  holds f1.(the_result_sort_of o).(Den(o,FreeMSA X()).ts) = Hf(o, ts, x)
   proof
-    let s be SortSymbol of S(), y be set;
+    let o be OperSymbol of S(), ts be Element of Args(o,FreeMSA X()), x be
+    FinSequence of Union the Sorts of MSA();
     assume
-A29: y in FreeGen(s,X());
-    then
-A30: y in (FreeGen X()).s by MSAFREE:def 18;
-    dom(FreeGen X()) = the carrier of S() by PARTFUN1:def 4;
-    then
-A31: y in Union FreeGen X() by A30,CARD_5:10;
-    then P[s,G.y,y] by A11,A29;
-    hence f2.s.y = G.y by A4,A29
-      .= G/.y by A31,CAT_3:def 1;
+A31: x = (Flatten f1) * ts;
+A32: (Flatten f1) * ts = IT1()#ts by A5,Th5;
+    then reconsider a = x as Element of Args(o,MSA()) by A31;
+A33: [o,a] in R by A13;
+    thus f1.(the_result_sort_of o).(Den(o,FreeMSA X()).ts) = Den(o,MSA()).a by
+    A1,A32,A31,MSUALG_3:def 9
+      .= H.[o,x] by A21,A33
+      .= H/.[o,x] by A33,FUNCT_2:def 14;
   end;
-  f1 = f2 from FreeSortUniq(A16,A20,A24,A28);
+  f1 = f2 from FreeSortUniq(A30,A14,A26,A22);
   hence thesis;
 end;
 

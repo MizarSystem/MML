@@ -16,7 +16,7 @@ environ
  constructors PARTFUN1, FUNCOP_1, REAL_1, SQUARE_1, NAT_1, COMPLEX1, SEQ_2,
       VALUED_1, SEQ_1, RELSET_1;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, FUNCT_2, NUMBERS, XXREAL_0,
-      XREAL_0, MEMBERED, VALUED_1, VALUED_0, SEQM_3, SEQ_4, FUNCOP_1, COMPLEX1;
+      XREAL_0, MEMBERED, VALUED_1, VALUED_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions VALUED_1, SEQ_2, PARTFUN1;
  theorems COMSEQ_1, SEQ_2, FINSEQ_2, COMPLEX1, NAT_1, SUBSET_1, FUNCT_2,
@@ -33,16 +33,15 @@ reserve s,s',s1 for Complex_Sequence;
 theorem Th1:
   g<>0c & r<>0c implies |.g"-r".|=|.g-r.|/(|.g.|*|.r.|)
 proof
-  assume that
-A1: g<>0c and
-A2: r<>0c;
+  assume
+A1: g<>0c & r<>0c;
   thus |.g"-r".|=|.1r/g-r".| by COMPLEX1:def 7,XCMPLX_1:217
     .=|.1r/g-1r/r.| by COMPLEX1:def 7,XCMPLX_1:217
     .=|.1r/g+-1r/r.|
     .=|.1r/g+-1r*r".| by XCMPLX_0:def 9
     .=|.1r/g+(-1r)*r".|
     .=|.1r/g+(-1r)/r.| by XCMPLX_0:def 9
-    .=|.(1r*r+(-1r)*g)/(r*g).| by A1,A2,XCMPLX_1:117
+    .=|.(1r*r+(-1r)*g)/(r*g).| by A1,XCMPLX_1:117
     .=|.r-g.|/|.g*r.| by COMPLEX1:153,def 7
     .=|.-(g-r).|/(|.g.|*|.r.|) by COMPLEX1:151
     .=|.g-r.|/(|.g.|*|.r.|) by COMPLEX1:138;
@@ -52,77 +51,80 @@ theorem Th2:
   for n ex r being Real st 0<r & for m st m<=n holds |.s.m.|<r
 proof
   let n;
-  defpred P[Element of NAT] means
-  ex r being real number st 0<r & for m st m<=$1 holds |.s.m.|<r;
-A1: P[0]
-  proof
-    take R=|.s.0.|+1;
-    0+0 < |.s.0.| +1 by COMPLEX1:132,XREAL_1:10;
-    hence 0<R;
-    let m such that
-A2: m <= 0;
-    m=0 by A2,NAT_1:2;
-    then |.s.m.| +0 < R by XREAL_1:10;
-    hence thesis;
-  end;
-A3: for n st P[n] holds P[n+1]
+  defpred P[Element of NAT] means ex r being real number st 0<r & for m st m<=
+  $1 holds |.s.m.|<r;
+A1: for n st P[n] holds P[n+1]
   proof
     let n;
     given R1 be real number such that
-A4: 0<R1 and
-A5: for m st m <= n holds |.s.m.| < R1;
-A6: now
+A2: 0<R1 and
+A3: for m st m <= n holds |.s.m.| < R1;
+A4: now
       assume
-A7:   |.s.(n+1).| <= R1;
-      take R=R1+1;
-      thus R>0 by A4;
-      let m such that
-A8:   m <= n+1;
-A9:   now
-        assume m <= n;
-        then
-A10:    |.s.m.| < R1 by A5;
-        R1+0<R by XREAL_1:10;
-        hence |.s.m.| < R by A10,XXREAL_0:2;
-      end;
-      now
-        assume
-A11:    m=n+1;
-        R1+0 <R by XREAL_1:10;
-        hence |.s.m.| < R by A7,A11,XXREAL_0:2;
-      end;
-      hence |.s.m.| < R by A8,A9,NAT_1:8;
-    end;
-    now
-      assume
-A12:  R1 <= |.s.(n+1).|;
+A5:   R1 <= |.s.(n+1).|;
       take R= |.s.(n+1).| +1;
       0+0<R by COMPLEX1:132,XREAL_1:10;
       hence 0<R;
       let m such that
-A13:  m<=n+1;
-A14:  now
-        assume m<=n;
-        then |.s.m.| <R1 by A5;
-        then |.s.m.| < |.s.(n+1).| by A12,XXREAL_0:2;
+A6:   m<=n+1;
+A7:   now
+        assume
+        m<=n;
+        then |.s.m.| <R1 by A3;
+        then |.s.m.| < |.s.(n+1).| by A5,XXREAL_0:2;
         then |.s.m.| + 0 < R by XREAL_1:10;
         hence |.s.m.| < R;
       end;
       now
-        assume m=n+1;
+        assume
+        m=n+1;
         then |.s.m.| +0 <R by XREAL_1:10;
         hence |.s.m.| < R;
       end;
-      hence |.s.m.| <R by A13,A14,NAT_1:8;
+      hence |.s.m.| <R by A6,A7,NAT_1:8;
     end;
-    hence thesis
-    by A6;
+    now
+      assume
+A8:   |.s.(n+1).| <= R1;
+      take R=R1+1;
+      thus R>0 by A2;
+      let m such that
+A9:   m <= n+1;
+A10:  now
+        assume
+        m <= n;
+        then
+A11:    |.s.m.| < R1 by A3;
+        R1+0<R by XREAL_1:10;
+        hence |.s.m.| < R by A11,XXREAL_0:2;
+      end;
+      now
+A12:    R1+0 <R by XREAL_1:10;
+        assume
+        m=n+1;
+        hence |.s.m.| < R by A8,A12,XXREAL_0:2;
+      end;
+      hence |.s.m.| < R by A9,A10,NAT_1:8;
+    end;
+    hence thesis by A4;
   end;
-  for n holds P[n] from NAT_1:sch 1(A1,A3);
+A13: P[0]
+  proof
+    take R=|.s.0.|+1;
+    0+0 < |.s.0.| +1 by COMPLEX1:132,XREAL_1:10;
+    hence 0<R;
+    let m;
+    assume
+    m <= 0;
+    then m=0 by NAT_1:2;
+    then |.s.m.| +0 < R by XREAL_1:10;
+    hence thesis;
+  end;
+  for n holds P[n] from NAT_1:sch 1(A13,A1);
   then consider R being real number such that
-A15: R>0 & for m st m<=n holds |.s.m.|<R;
+A14: R>0 & for m st m<=n holds |.s.m.|<R;
   R is Real by XREAL_0:def 1;
-  hence thesis by A15;
+  hence thesis by A14;
 end;
 
 begin :: Conjugate Sequences
@@ -133,24 +135,24 @@ definition
   deffunc F(set) = (f/.$1)*';
   func f*' ->PartFunc of C,COMPLEX means
   :Def1:
-  dom it = dom f & for c being Element of C st c in dom it holds
-  it.c = (f/.c)*';
+  dom it = dom f & for c being
+  Element of C st c in dom it holds it.c = (f/.c)*';
   existence
   proof
     defpred P[set] means $1 in dom f;
     consider F being PartFunc of C,COMPLEX such that
 A1: for c being Element of C holds c in dom F iff P[c] and
-A2: for c being Element of C st c in dom F holds F.c = F(c) from SEQ_1:sch 3;
+A2: for c being Element of C st c in dom F holds F.c = F(c) from SEQ_1
+    :sch 3;
     take F;
     thus dom f = dom F by A1,SUBSET_1:8;
     thus thesis by A2;
   end;
   uniqueness
   proof
-    thus for h,g being PartFunc of C,COMPLEX st
-    (dom h=dom f & for c be Element of C st c in dom h holds h.c = F(c)) &
-    (dom g=dom f & for c be Element of C st c in dom g holds g.c = F(c))
-    holds h = g from SEQ_1:sch 4;
+    thus for h,g being PartFunc of C,COMPLEX st (dom h=dom f & for c be
+Element of C st c in dom h holds h.c = F(c)) & (dom g=dom f & for c be Element
+    of C st c in dom g holds g.c = F(c)) holds h = g from SEQ_1:sch 4;
   end;
 end;
 
@@ -159,12 +161,13 @@ definition
   let f be Function of C,COMPLEX;
   redefine func f*' means
   :Def2:
-  dom it = C & for n being Element of C holds it.n=(f.n)*';
+  dom it = C & for n being Element of C holds
+  it.n=(f.n)*';
   compatibility
   proof
     let IT be PartFunc of C,COMPLEX;
-    thus IT = f*' implies
-    dom IT = C & for c being Element of C holds IT.c = (f.c)*'
+    thus IT = f*' implies dom IT = C & for c being Element of C holds IT.c = (
+    f.c)*'
     proof
       assume
 A1:   IT = f*';
@@ -175,12 +178,12 @@ A2:   dom IT = dom f by Def1
       f.c = f/.c;
       hence thesis by A1,A2,Def1;
     end;
-    assume that
-A3: dom IT = C and
-A4: for c being Element of C holds IT.c = (f.c)*';
-A5: dom IT = dom f by A3,FUNCT_2:def 1;
-    for c being Element of C st c in dom IT holds IT.c = (f/.c)*' by A4;
-    hence IT = f*' by A5,Def1;
+    assume
+    dom IT = C & for c being Element of C holds IT.c = (f.c)*';
+    then
+    dom IT = dom f & for c being Element of C st c in dom IT holds IT.c =
+    (f/.c) *' by FUNCT_2:def 1;
+    hence IT = f*' by Def1;
   end;
 end;
 
@@ -276,27 +279,29 @@ definition
   let s;
   redefine attr s is bounded means
   :Def3:
-  ex r being Real st for n holds |.s.n.|<r;
+  ex r being Real st for n holds |.s.n
+  .|<r;
   compatibility
-   proof
+  proof
     thus s is bounded implies ex r being Real st for n holds |.s.n.|<r
-     proof
+    proof
       given r being real number such that
-G:     for y being set st y in dom s holds abs(s.y) < r;
-       reconsider r as Element of REAL by XREAL_0:def 1;
+A1:   for y being set st y in dom s holds abs(s.y) < r;
+      reconsider r as Element of REAL by XREAL_0:def 1;
       take r;
       let n;
-       n in NAT;
-       then n in dom s by FUNCT_2:def 1;
-      hence thesis by G;
-     end;
+      n in NAT;
+      then n in dom s by FUNCT_2:def 1;
+      hence thesis by A1;
+    end;
     given r being Real such that
-G:   for n holds |.s.n.|<r;
+A2: for n holds |.s.n.|<r;
     take r;
     let y being set;
-    assume y in dom s;
-    hence thesis by G;
-   end;
+    assume
+    y in dom s;
+    hence thesis by A2;
+  end;
 end;
 
 reconsider sc = NAT --> 0c as Complex_Sequence;
@@ -318,7 +323,8 @@ theorem Th8:
 proof
   thus s is bounded implies ex r being Real st (0<r & for n holds |.s.n.|<r)
   proof
-    assume s is bounded;
+    assume
+    s is bounded;
     then consider r being Real such that
 A1: for n holds |.s.n.|<r by Def3;
     take r;
@@ -340,7 +346,8 @@ definition
   let s;
   attr s is convergent means
   :Def4:
-  ex g st for p be Real st 0<p ex n st for m st n<=m holds |.s.m-g.|<p;
+  ex g st for p be Real st 0<p ex n st for m
+  st n<=m holds |.s.m-g.|<p;
 end;
 
 definition
@@ -349,7 +356,8 @@ definition
 A1: s is convergent;
   func lim s -> Element of COMPLEX means
   :Def5:
-  for p be Real st 0<p ex n st for m st n<=m holds |.s.m-it.|<p;
+  for p be Real st 0<p ex n st
+  for m st n<=m holds |.s.m-it.|<p;
   existence by A1,Def4;
   uniqueness
   proof
@@ -359,33 +367,31 @@ A2: for p be Real st 0<p ex n1 st for m st n1<=m holds |.s.m-g1.|<p and
 A3: for p be Real st 0<p ex n2 st for m st n2<=m holds |.s.m-g2.|<p and
 A4: g1<>g2;
     reconsider p = |.g1 - g2.|/2 as Real;
-    |.g1-g2.| > 0 by A4,COMPLEX1:148;
-    then
-A5: p > 0 by XREAL_1:141;
+A5: |.g1-g2.| > 0 by A4,COMPLEX1:148;
     then consider n1 such that
-A6: for m st n1<=m holds |.s.m-g1.|<p by A2;
+A6: for m st n1<=m holds |.s.m-g1.|<p by A2,XREAL_1:141;
     consider n2 such that
-A7: for m st n2<=m holds |.s.m-g2.|<p by A3,A5;
+A7: for m st n2<=m holds |.s.m-g2.|<p by A3,A5,XREAL_1:141;
     reconsider n = max(n1,n2) as Element of NAT by FINSEQ_2:1;
     for m st n <= m holds 2*p<2*p
     proof
       let m;
       assume
 A8:   n <= m;
-      n1<=n by XXREAL_0:25;
-      then n + n1 <= n + m by A8,XREAL_1:9;
-      then n1<=m by XREAL_1:8;
-      then
-A9:   |.s.m - g1.|< p by A6;
       n2<=n by XXREAL_0:25;
       then n + n2 <= n + m by A8,XREAL_1:9;
       then n2<=m by XREAL_1:8;
-      then |.s.m - g2.|< p by A7;
       then
-A10:  |.s.m - g1.| + |.s.m - g2.| <p + p by A9,XREAL_1:10;
+A9:   |.s.m - g2.|< p by A7;
       |.g1 - g2.| = |.g1 - s.m - (g2 - s.m).|;
       then |.g1 - g2.| <= |.g1-s.m.| + |.g2-s.m.| by COMPLEX1:143;
-      then |.g1 - g2.| <= |.s.m - g1.| + |.g2-s.m.| by COMPLEX1:146;
+      then
+A10:  |.g1 - g2.| <= |.s.m - g1.| + |.g2-s.m.| by COMPLEX1:146;
+      n1<=n by XXREAL_0:25;
+      then n + n1 <= n + m by A8,XREAL_1:9;
+      then n1<=m by XREAL_1:8;
+      then |.s.m - g1.|< p by A6;
+      then |.s.m - g1.| + |.s.m - g2.| <p + p by A9,XREAL_1:10;
       hence thesis by A10,COMPLEX1:146;
     end;
     hence contradiction;
@@ -393,7 +399,8 @@ A10:  |.s.m - g1.| + |.s.m - g2.| <p + p by A9,XREAL_1:10;
 end;
 
 theorem Th9:
-  (ex g st for n being Element of NAT holds s.n = g) implies s is convergent
+  (ex g st for n being Element of NAT holds s.n = g) implies s is
+  convergent
 proof
   given g such that
 A1: for n being Element of NAT holds s.n = g;
@@ -402,7 +409,8 @@ A1: for n being Element of NAT holds s.n = g;
     let p be Real such that
 A2: 0<p;
     take k = 0;
-    let n such that k<=n;
+    let n such that
+    k<=n;
     s.n = g by A1;
     hence |.s.n - g.| < p by A2,COMPLEX1:130;
   end;
@@ -410,21 +418,22 @@ A2: 0<p;
 end;
 
 theorem Th10:
-  for g st for n being Element of NAT holds s.n = g holds lim s = g
+  for g st for n being Element of NAT holds s.n = g holds lim s =
+  g
 proof
   let g;
   assume
 A1: for n being Element of NAT holds s.n = g;
-  then
-A2: s is convergent by Th9;
-  now
+A2: now
     let p be Real such that
 A3: 0<p;
     take k = 0;
-    let n such that k<=n;
+    let n such that
+    k<=n;
     s.n = g by A1;
     hence |.s.n - g.| < p by A3,COMPLEX1:130;
   end;
+  s is convergent by A1,Th9;
   hence thesis by A2,Def5;
 end;
 reconsider cs = NAT --> 0 as Real_Sequence by FUNCOP_1:57;
@@ -442,21 +451,25 @@ registration
     |.s.| is convergent
     proof
       consider g such that
-A1:   for p be Real st 0<p ex n st for m st n<=m holds |.s.m-g.|<p by Def4;
+A1:   for p be Real st 0<p ex n st for m st n<=m holds |.s.m-g.|<p by
+      Def4;
       take R=|.g.|;
       let p be real number;
-A2:   p is Real by XREAL_0:def 1;
-      assume 0<p;
+      assume
+A2:   0<p;
+      p is Real by XREAL_0:def 1;
       then consider n such that
 A3:   for m st n<=m holds |.s.m-g.|<p by A1,A2;
       take n;
       let m;
-      assume n<=m;
+      assume
+      n<=m;
       then |.s.m-g.|<p by A3;
-      then abs(|.s.m.|- |.g.|) + |.s.m-g.| < p+|.s.m-g.|
-      by COMPLEX1:150,XREAL_1:10;
-      then abs(|.s.m.|- |.g.|) + |.s.m-g.|- |.s.m-g.| <
-      p+|.s.m-g.|- |.s.m-g.| by XREAL_1:11;
+      then abs(|.s.m.|- |.g.|) + |.s.m-g.| < p+|.s.m-g.| by COMPLEX1:150,
+      XREAL_1:10;
+      then
+      abs(|.s.m.|- |.g.|) + |.s.m-g.|- |.s.m-g.| < p+|.s.m-g.|- |.s.m-g.|
+      by XREAL_1:11;
       hence thesis by VALUED_1:18;
     end;
     hence thesis;
@@ -466,27 +479,29 @@ end;
 theorem Th11:
   s is convergent implies lim |.s.| = |.lim s.|
 proof
+  set g = lim s;
   assume
 A1: s is convergent;
   then reconsider s1 = s as convergent Complex_Sequence;
   reconsider w = |.s1.| as Real_Sequence;
 A2: w is convergent;
-  set g = lim s;
   reconsider w = |.lim s.| as Real;
   now
     let p be real number;
-A3: p is Real by XREAL_0:def 1;
-    assume 0<p;
+    assume
+A3: 0<p;
+    p is Real by XREAL_0:def 1;
     then consider n such that
 A4: for m st n<=m holds |.s.m-g.|<p by A1,A3,Def5;
     take n;
     let m;
-    assume n<=m;
+    assume
+    n<=m;
     then |.s.m-g.|<p by A4;
-    then abs(|.s.m.|- |.g.|) + |.s.m-g.| < p+|.s.m-g.|
-    by COMPLEX1:150,XREAL_1:10;
-    then abs(|.s.m.|- |.g.|) + |.s.m-g.|- |.s.m-g.| <
-    p+|.s.m-g.|- |.s.m-g.| by XREAL_1:11;
+    then abs(|.s.m.|- |.g.|) + |.s.m-g.| < p+|.s.m-g.| by COMPLEX1:150,
+    XREAL_1:10;
+    then abs(|.s.m.|- |.g.|) + |.s.m-g.|- |.s.m-g.| < p+|.s.m-g.|- |.s.m-g.|
+    by XREAL_1:11;
     hence abs(|.s.|.m - w) < p by VALUED_1:18;
   end;
   hence thesis by A2,SEQ_2:def 7;
@@ -498,10 +513,12 @@ registration
   coherence
   proof
     consider g such that
-A1: for p being Real st 0<p ex n st for m st n<=m holds |.s.m-g.|<p by Def4;
+A1: for p being Real st 0<p ex n st for m st n<=m holds |.s.m-g.|<p by
+    Def4;
     take r = g*';
     let p be Real;
-    assume 0<p;
+    assume
+    0<p;
     then consider n such that
 A2: for m st n<=m holds |.s.m-g.|<p by A1;
     take n;
@@ -517,14 +534,14 @@ end;
 theorem Th12:
   s is convergent implies lim(s*') = (lim s)*'
 proof
+  set g = lim s;
   assume
 A1: s is convergent;
   then reconsider s1 = s as convergent Complex_Sequence;
-A2: s1*' is convergent;
-  set g = lim s;
-  now
+A2: now
     let p be Real;
-    assume 0<p;
+    assume
+    0<p;
     then consider n such that
 A3: for m st n<=m holds |.s.m-g.|<p by A1,Def5;
     take n;
@@ -535,98 +552,101 @@ A4: n<=m;
       .= |.s.m - g.| by COMPLEX1:139;
     hence |.(s*').m - (lim s)*'.| < p by A3,A4;
   end;
+  s1*' is convergent;
   hence thesis by A2,Def5;
 end;
 
 begin :: Main Theorems
 
 theorem Th13:
-  s is convergent & s' is convergent implies (s + s') is convergent
+  s is convergent & s' is convergent implies (s + s') is
+  convergent
 proof
-  assume
-A1: s is convergent & s' is convergent;
-  then consider g such that
-A2: for p be Real st 0<p ex n st for m st n<=m holds |.s.m-g.|<p by Def4;
+  assume that
+A1: s is convergent and
+A2: s' is convergent;
+  consider g such that
+A3: for p be Real st 0<p ex n st for m st n<=m holds |.s.m-g.|<p by A1,
+  Def4;
   consider g' such that
-A3: for p be Real st 0<p ex n st for m st n<=m holds |.s'.m-g'.|<p by A1,Def4;
+A4: for p be Real st 0<p ex n st for m st n<=m holds |.s'.m-g'.|<p by A2
+  ,Def4;
   take g1 = g + g';
   let p be Real;
-  assume p>0;
-  then
-A4: p/2 > 0 by XREAL_1:141;
+  assume
+A5: p>0;
   then consider n1 such that
-A5: for m st n1<=m holds |.s.m - g.|<p/2 by A2;
+A6: for m st n1<=m holds |.s.m - g.|<p/2 by A3,XREAL_1:141;
   consider n2 such that
-A6: for m st n2<=m holds |.s'.m - g'.|<p/2 by A3,A4;
+A7: for m st n2<=m holds |.s'.m - g'.|<p/2 by A4,A5,XREAL_1:141;
   reconsider n = max(n1,n2) as Element of NAT by FINSEQ_2:1;
   take n;
   let m such that
-A7: n<=m;
-  n1<=n by XXREAL_0:25;
-  then n + n1 <= n + m by A7,XREAL_1:9;
-  then n1<=m by XREAL_1:8;
-  then
-A8: |.s.m - g.|<p/2 by A5;
+A8: n<=m;
   n2<=n by XXREAL_0:25;
-  then n + n2 <= n + m by A7,XREAL_1:9;
+  then n + n2 <= n + m by A8,XREAL_1:9;
   then n2<=m by XREAL_1:8;
-  then |.s'.m - g'.|<p/2 by A6;
   then
-A9: |.s.m - g.| + |.s'.m - g'.| < p/2 + p/2 by A8,XREAL_1:10;
-  |.(s + s').m - g1.| = |.s.m + s'.m - (g + g').| by VALUED_1:1
+A9: |.s'.m - g'.|<p/2 by A7;
+A10: |.(s + s').m - g1.| = |.s.m + s'.m - (g + g').| by VALUED_1:1
     .= |.(s.m - g) + (s'.m - g').|;
-  then |.s.m - g.| + |.s'.m - g'.| + |.(s + s').m - g1.| <
-  p + (|.s.m - g.| + |.s'.m - g'.|) by A9,COMPLEX1:142,XREAL_1:10;
+  n1<=n by XXREAL_0:25;
+  then n + n1 <= n + m by A8,XREAL_1:9;
+  then n1<=m by XREAL_1:8;
+  then |.s.m - g.|<p/2 by A6;
+  then |.s.m - g.| + |.s'.m - g'.| < p/2 + p/2 by A9,XREAL_1:10;
+  then |.s.m - g.| + |.s'.m - g'.| + |.(s + s').m - g1.| < p + (|.s.m - g.| +
+  |.s'.m - g'.|) by A10,COMPLEX1:142,XREAL_1:10;
   hence thesis by XREAL_1:8;
 end;
 
 theorem Th14:
-  s is convergent & s' is convergent implies lim (s + s')=(lim s)+(lim s')
+  s is convergent & s' is convergent implies lim (s + s')=(lim s)+
+  (lim s')
 proof
-  assume
-A1: s is convergent & s' is convergent;
-  then
-A2: s + s' is convergent by Th13;
-  for p be Real st 0<p ex n st for m st n<=m holds
-  |.(s + s').m-((lim s)+(lim s')).|<p
+  assume that
+A1: s is convergent and
+A2: s' is convergent;
+A3: for p be Real st 0<p ex n st for m st n<=m holds |.(s + s').m-((lim s)+(
+  lim s')).|<p
   proof
     let p be Real;
-    assume 0<p;
+    assume
+    0<p;
     then
-A3: 0<p/2 by XREAL_1:141;
+A4: 0<p/2 by XREAL_1:141;
     then consider n1 such that
-A4: for m st n1<=m holds |.s.m-lim s.|<p/2 by A1,Def5;
+A5: for m st n1<=m holds |.s.m-lim s.|<p/2 by A1,Def5;
     consider n2 such that
-A5: for m st n2<=m holds |.s'.m-lim s'.|<p/2 by A1,A3,Def5;
+A6: for m st n2<=m holds |.s'.m-lim s'.|<p/2 by A2,A4,Def5;
     reconsider n = max(n1,n2) as Element of NAT by FINSEQ_2:1;
     take n;
     let m such that
-A6: n<=m;
-    n1<=n by XXREAL_0:25;
-    then n + n1 <= n + m by A6,XREAL_1:9;
-    then n1<=m by XREAL_1:8;
-    then
-A7: |.s.m-lim s.|<p/2 by A4;
+A7: n<=m;
     n2<=n by XXREAL_0:25;
-    then n + n2 <= n + m by A6,XREAL_1:9;
+    then n + n2 <= n + m by A7,XREAL_1:9;
     then n2<=m by XREAL_1:8;
-    then |.s'.m-lim s'.|<p/2 by A5;
     then
-A8: |.s.m-lim s.| + |.s'.m-lim s'.| < p/2 + p/2 by A7,XREAL_1:10;
-    |.(s + s').m-((lim s)+(lim s')).| =
-    |.s.m + s'.m - ((lim s)+(lim s')).| by VALUED_1:1
+A8: |.s'.m-lim s'.|<p/2 by A6;
+A9: |.(s + s').m-((lim s)+(lim s')).| = |.s.m + s'.m - ((lim s)+(lim s'))
+    .| by VALUED_1:1
       .=|.(s.m -lim s) + (s'.m - lim s').|;
-    then |.s.m-lim s.| + |.s'.m -lim s'.| +
-    |.(s + s').m-((lim s)+(lim s')).| <
-    p + (|.s.m-lim s.| + |.s'.m -lim s'.|) by A8,COMPLEX1:142,XREAL_1:10;
+    n1<=n by XXREAL_0:25;
+    then n + n1 <= n + m by A7,XREAL_1:9;
+    then n1<=m by XREAL_1:8;
+    then |.s.m-lim s.|<p/2 by A5;
+    then |.s.m-lim s.| + |.s'.m-lim s'.| < p/2 + p/2 by A8,XREAL_1:10;
+    then |.s.m-lim s.| + |.s'.m -lim s'.| + |.(s + s').m-((lim s)+(lim s')).|
+    < p + (|.s.m-lim s.| + |.s'.m -lim s'.|) by A9,COMPLEX1:142,XREAL_1:10;
     hence thesis by XREAL_1:8;
   end;
-  hence thesis by A2,Def5;
+  s + s' is convergent by A1,A2,Th13;
+  hence thesis by A3,Def5;
 end;
 
 theorem
-  s is convergent & s' is convergent implies
-  lim |.(s + s').| = |.(lim s)+(lim s').|
+  s is convergent & s' is convergent implies lim |.(s + s').| = |.(lim s
+  )+(lim s').|
 proof
   assume
 A1: s is convergent & s' is convergent;
@@ -636,8 +656,8 @@ A1: s is convergent & s' is convergent;
 end;
 
 theorem
-  s is convergent & s' is convergent implies
-  lim (s + s')*' = (lim s)*' + (lim s')*'
+  s is convergent & s' is convergent implies lim (s + s')*' = (lim s)*'
+  + (lim s')*'
 proof
   assume
 A1: s is convergent & s' is convergent;
@@ -647,112 +667,112 @@ A1: s is convergent & s' is convergent;
     .= (lim s)*' + (lim s')*' by COMPLEX1:118;
 end;
 
-registration let s be convergent Complex_Sequence, c be complex number;
- cluster c(#)s -> convergent Complex_Sequence;
- coherence
-proof
-X: c in COMPLEX by XCMPLX_0:def 2;
- now let c be Element of COMPLEX;
- per cases;
- suppose
-A3: c =0c;
-    now
-      let n;
-      thus (c(#)s).n = 0c*s.n by A3,VALUED_1:6
-        .= 0c;
+registration
+  let s be convergent Complex_Sequence, c be complex number;
+  cluster c(#)s -> convergent Complex_Sequence;
+  coherence
+  proof
+A1: now
+      let c be Element of COMPLEX;
+      per cases;
+      suppose
+A2:     c =0c;
+        now
+          let n;
+          thus (c(#)s).n = 0c*s.n by A2,VALUED_1:6
+            .= 0c;
+        end;
+        hence c(#)s is convergent by Th9;
+      end;
+      suppose
+A3:     c <> 0c;
+        thus c(#)s is convergent
+        proof
+          consider g such that
+A4:       for p be Real st 0<p ex n st for m st n<=m holds |.s.m-g.|<
+          p by Def4;
+          take g'= c*g;
+          let p be Real such that
+A5:       0<p;
+A6:       |.c.|>0 by A3,COMPLEX1:133;
+          p/|.c.| = p*(|.c.|)" by XCMPLX_0:def 9;
+          then consider n such that
+A7:       for m st n<=m holds |.s.m-g.|<p/|.c.| by A6,A4,A5,
+          XREAL_1:131;
+          take n;
+          let m;
+          assume
+          n<=m;
+          then |.s.m-g.|<p/|.c.| by A7;
+          then |.s.m-g.|*|.c.|<p / |.c.|*|.c.| by A6,XREAL_1:70;
+          then |.s.m-g.|*|.c.|<p * (|.c.|)"*|.c.| by XCMPLX_0:def 9;
+          then |.s.m-g.|*|.c.|<p * ((|.c.|)"*|.c.|);
+          then
+A8:       |.s.m-g.|*|.c.|<p * 1 by A6,XCMPLX_0:def 7;
+          |.(c(#)s).m-g'.| = |.c*s.m-c*g.| by VALUED_1:6
+            .= |.c*(s.m-g).|
+            .= |.s.m-g.|*|.c.| by COMPLEX1:151;
+          hence thesis by A8;
+        end;
+      end;
     end;
-    hence c(#)s is convergent by Th9;
+    c in COMPLEX by XCMPLX_0:def 2;
+    hence thesis by A1;
   end;
- suppose
-A4: c <> 0c;
-    thus c(#)s is convergent
-    proof
-A5:   |.c.|>0 by A4,COMPLEX1:133;
-      then
-A6:   (|.c.|)" >0;
-      consider g such that
-A7:   for p be Real st 0<p ex n st for m st n<=m holds |.s.m-g.|<p by Def4;
-      take g'= c*g;
-      let p be Real such that
-A8:   0<p;
-      p/|.c.| = p*(|.c.|)" by XCMPLX_0:def 9;
-      then p / |.c.| > 0 by A6,A8,XREAL_1:131;
-      then consider n such that
-A9:   for m st n<=m holds |.s.m-g.|<p/|.c.| by A7;
-      take n;
-      let m;
-      assume n<=m;
-      then
-A10:  |.s.m-g.|<p/|.c.| by A9;
-A11:  |.(c(#)s).m-g'.| = |.c*s.m-c*g.| by VALUED_1:6
-        .= |.c*(s.m-g).|
-        .= |.s.m-g.|*|.c.| by COMPLEX1:151;
-      |.s.m-g.|*|.c.|<p / |.c.|*|.c.| by A5,A10,XREAL_1:70;
-      then |.s.m-g.|*|.c.|<p * (|.c.|)"*|.c.| by XCMPLX_0:def 9;
-      then |.s.m-g.|*|.c.|<p * ((|.c.|)"*|.c.|);
-      then |.s.m-g.|*|.c.|<p * 1 by A5,XCMPLX_0:def 7;
-      hence thesis by A11;
-    end;
-  end;
-end;
-  hence thesis by X;
-end;
 end;
 
 theorem
   s is convergent implies r(#)s is convergent;
 
 theorem Th18:
- for r being complex number holds
-  s is convergent implies lim(r(#)s)=r*(lim s)
-proof let r be complex number;
+  for r being complex number holds s is convergent implies lim(r
+  (#)s)=r*(lim s)
+proof
+  let r be complex number;
+  reconsider r as Element of COMPLEX by XCMPLX_0:def 2;
   assume
 A1: s is convergent;
-  then
-A2: r(#)s is convergent;
-  reconsider r as Element of COMPLEX by XCMPLX_0:def 2;
-A3: now
+A2: now
     assume
-A4: r=0c;
-    now
-      let n;
-      thus (r(#)s).n = 0c*s.n by A4,VALUED_1:6
-        .= 0c;
+A3: r<>0c;
+    thus for p be Real st p>0 holds ex n st for m st n<=m holds |.(r(#)s)
+    .m-r*(lim s).| <p
+    proof
+      let p be Real such that
+A4:   p>0;
+A5:   |.r.|>0 by A3,COMPLEX1:133;
+      p/|.r.| = p*(|.r.|)" by XCMPLX_0:def 9;
+      then p / |.r.| > 0 by A5,A4,XREAL_1:131;
+      then consider n such that
+A6:   for m st n<=m holds |.s.m-(lim s).|< p/|.r.| by A1,Def5;
+      take n;
+      let m;
+      assume
+      n<=m;
+      then |.s.m-(lim s).|<p/|.r.| by A6;
+      then |.s.m-(lim s).|*|.r.|<p / |.r.|*|.r.| by A5,XREAL_1:70;
+      then |.s.m-(lim s).|*|.r.|< p * (|.r.|)"*|.r.| by XCMPLX_0:def 9;
+      then |.s.m-(lim s).|*|.r.|< p * ((|.r.|)"*|.r.|);
+      then
+A7:   |.s.m-(lim s).|*|.r.|< p * 1 by A5,XCMPLX_0:def 7;
+      |.(r(#)s).m - r*(lim s).|=|.r*s.m - r*(lim s).| by VALUED_1:6
+        .= |. r *(s.m-(lim s)).|
+        .= |.s.m-(lim s).|*|.r.| by COMPLEX1:151;
+      hence thesis by A7;
     end;
-    hence lim (r(#)s) = r * (lim s) by A4,Th10;
+    hence lim (r(#)s) = r * (lim s) by A1,Def5;
   end;
   now
     assume
-A5: r<>0c;
-    thus for p be Real st p>0 holds ex n st for m st n<=m holds
-    |.(r(#)s).m-r*(lim s).| <p
-    proof
-A6:   |.r.|>0 by A5,COMPLEX1:133;
-      then
-A7:   (|.r.|)" >0;
-      let p be Real such that
-A8:   p>0;
-      p/|.r.| = p*(|.r.|)" by XCMPLX_0:def 9;
-      then p / |.r.| > 0 by A7,A8,XREAL_1:131;
-      then consider n such that
-A9:   for m st n<=m holds |.s.m-(lim s).|< p/|.r.| by A1,Def5;
-      take n;
-      let m;
-      assume n<=m;
-      then
-A10:  |.s.m-(lim s).|<p/|.r.| by A9;
-A11:  |.(r(#)s).m - r*(lim s).|=|.r*s.m - r*(lim s).| by VALUED_1:6
-        .= |. r *(s.m-(lim s)).|
-        .= |.s.m-(lim s).|*|.r.| by COMPLEX1:151;
-      |.s.m-(lim s).|*|.r.|<p / |.r.|*|.r.| by A6,A10,XREAL_1:70;
-      then |.s.m-(lim s).|*|.r.|< p * (|.r.|)"*|.r.| by XCMPLX_0:def 9;
-      then |.s.m-(lim s).|*|.r.|< p * ((|.r.|)"*|.r.|);
-      then |.s.m-(lim s).|*|.r.|< p * 1 by A6,XCMPLX_0:def 7;
-      hence thesis by A11;
+A8: r=0c;
+    now
+      let n;
+      thus (r(#)s).n = 0c*s.n by A8,VALUED_1:6
+        .= 0c;
     end;
-    hence lim (r(#)s) = r * (lim s) by A2,Def5;
+    hence lim (r(#)s) = r * (lim s) by A8,Th10;
   end;
-  hence thesis by A3;
+  hence thesis by A2;
 end;
 
 theorem
@@ -760,7 +780,6 @@ theorem
 proof
   assume
 A1: s is convergent;
-  then r(#)s is convergent;
   hence lim |.(r(#)s).| = |.lim (r(#)s).| by Th11
     .= |.r*(lim s).| by A1,Th18
     .= |.r.|*|.(lim s).| by COMPLEX1:151;
@@ -771,7 +790,6 @@ theorem
 proof
   assume
 A1: s is convergent;
-  then r(#)s is convergent;
   hence lim (r(#)s)*' = (lim (r(#)s))*' by Th12
     .= (r*(lim s))*' by A1,Th18
     .= (r*')*(lim s)*' by COMPLEX1:121;
@@ -783,7 +801,8 @@ theorem
 theorem Th22:
   s is convergent implies lim(-s)=-(lim s)
 proof
-  assume s is convergent;
+  assume
+  s is convergent;
   then lim(-s) = (-1)*(lim s) by Th18
     .= - 1r*(lim s) by COMPLEX1:def 7;
   hence thesis by COMPLEX1:def 7;
@@ -794,7 +813,6 @@ theorem
 proof
   assume
 A1: s is convergent;
-  then - s is convergent;
   hence lim |.-s.| = |.lim (-s).| by Th11
     .= |.-(lim s).| by A1,Th22
     .= |.lim s.| by COMPLEX1:138;
@@ -805,7 +823,6 @@ theorem
 proof
   assume
 A1: s is convergent;
-  then -s is convergent;
   hence lim (-s)*' = (lim (-s))*' by Th12
     .= (-(lim s))*' by A1,Th22
     .= -(lim s)*' by COMPLEX1:119;
@@ -814,26 +831,28 @@ end;
 theorem Th25:
   s is convergent & s' is convergent implies s - s' is convergent
 proof
-  assume
-A1: s is convergent & s' is convergent;
-  then - s' is convergent;
+  assume that
+A1: s is convergent and
+A2: s' is convergent;
+  - s' is convergent by A2;
   hence thesis by A1,Th13;
 end;
 
 theorem Th26:
-  s is convergent & s' is convergent implies lim(s - s')=(lim s)-(lim s')
+  s is convergent & s' is convergent implies lim(s - s')=(lim s)-(
+  lim s')
 proof
-  assume
-A1: s is convergent & s' is convergent;
-  then -s' is convergent;
-   lim(s - s') = (lim s) + lim(-s') by A1,Th14
-    .= (lim s) + -(lim s') by A1,Th22;
+  assume that
+A1: s is convergent and
+A2: s' is convergent;
+  lim(s - s') = (lim s) + lim(-s') by A1,A2,Th14
+    .= (lim s) + -(lim s') by A2,Th22;
   hence thesis;
 end;
 
 theorem
-  s is convergent & s' is convergent implies
-  lim |.s - s'.| = |.(lim s) - (lim s').|
+  s is convergent & s' is convergent implies lim |.s - s'.| = |.(lim s)
+  - (lim s').|
 proof
   assume
 A1: s is convergent & s' is convergent;
@@ -843,8 +862,8 @@ A1: s is convergent & s' is convergent;
 end;
 
 theorem
-  s is convergent & s' is convergent implies
-  lim (s - s')*' = (lim s)*' - (lim s')*'
+  s is convergent & s' is convergent implies lim (s - s')*' = (lim s)*'
+  - (lim s')*'
 proof
   assume
 A1: s is convergent & s' is convergent;
@@ -859,9 +878,11 @@ registration
   coherence
   proof
     let s;
-    assume s is convergent;
+    assume
+    s is convergent;
     then consider g such that
-A1: for p be Real st 0<p ex n st for m st n<=m holds |.s.m-g.|<p by Def4;
+A1: for p be Real st 0<p ex n st for m st n<=m holds |.s.m-g.|<p by
+    Def4;
     consider n1 such that
 A2: for m st n1<=m holds |.s.m-g.|<1 by A1;
     now
@@ -869,14 +890,14 @@ A2: for m st n1<=m holds |.s.m-g.|<1 by A1;
       0+0 < R by COMPLEX1:132,XREAL_1:10;
       hence 0<R;
       let m;
-      assume n1<=m;
+A3:   |.s.m.|- |.g.|+|.g.|=|.s.m.|;
+      assume
+      n1<=m;
       then
-A3:   |.s.m-g.|<1 by A2;
+A4:   |.s.m-g.|<1 by A2;
       |.s.m.| - |.g.| <= |.s.m-g.| by COMPLEX1:145;
-      then
-A4:   |.s.m.| - |.g.| < 1 by A3,XXREAL_0:2;
-      |.s.m.|- |.g.|+|.g.|=|.s.m.|;
-      hence |.s.m.|<R by A4,XREAL_1:8;
+      then |.s.m.| - |.g.| < 1 by A4,XXREAL_0:2;
+      hence |.s.m.|<R by A3,XREAL_1:8;
     end;
     then consider R1 be real number such that
 A5: 0<R1 and
@@ -885,20 +906,22 @@ A6: for m st n1<=m holds |.s.m.|< R1;
 A7: 0<R2 and
 A8: for m st m<=n1 holds |.s.m.|< R2 by Th2;
     take R=R1+R2;
-A9: R1+0 < R by A7,XREAL_1:10;
-A10: R2+0 < R by A5,XREAL_1:10;
     let m;
-A11: now
-      assume n1<=m;
-      then |.s.m.|< R1 by A6;
+A9: R2+0 < R by A5,XREAL_1:10;
+A10: now
+      assume
+      m<=n1;
+      then |.s.m.|< R2 by A8;
       hence thesis by A9,XXREAL_0:2;
     end;
+A11: R1+0 < R by A7,XREAL_1:10;
     now
-      assume m<=n1;
-      then |.s.m.|< R2 by A8;
-      hence thesis by A10,XXREAL_0:2;
+      assume
+      n1<=m;
+      then |.s.m.|< R1 by A6;
+      hence thesis by A11,XXREAL_0:2;
     end;
-    hence thesis by A11;
+    hence thesis by A10;
   end;
 end;
 
@@ -908,125 +931,129 @@ registration
 end;
 
 theorem Th29:
-  s is convergent Complex_Sequence & s' is convergent Complex_Sequence
-  implies s (#) s' is convergent
+  s is convergent Complex_Sequence & s' is convergent
+  Complex_Sequence implies s (#) s' is convergent
 proof
   assume that
 A1: s is convergent Complex_Sequence and
 A2: s' is convergent Complex_Sequence;
   consider g1 such that
-A3: for p being Real st 0<p ex n st for m st n<=m holds |.s.m-g1.|<p
-  by A1,Def4;
+A3: for p being Real st 0<p ex n st for m st n<=m holds |.s.m-g1.|<p by
+  A1,Def4;
   consider g2 such that
-A4: for p being Real st 0<p ex n st for m st n<=m holds |.s'.m-g2.|<p
-  by A2,Def4;
+A4: for p being Real st 0<p ex n st for m st n<=m holds |.s'.m-g2.|<p by
+  A2,Def4;
   take g=g1*g2;
+  let p be Real;
   consider R such that
 A5: 0<R and
 A6: for n holds |.s.n.|<R by A1,Th8;
-A7: 0<=|.g2.| by COMPLEX1:132;
-A8: 0+0<|.g2.|+R by A5,COMPLEX1:132,XREAL_1:10;
-  let p be Real;
+A7: 0+0<|.g2.|+R by A5,COMPLEX1:132,XREAL_1:10;
   assume
-A9: 0<p;
+A8: 0<p;
   then consider n1 such that
-A10: for m st n1<=m holds |.s.m-g1.|<p/(|.g2.|+R) by A3,A8,XREAL_1:141;
+A9: for m st n1<=m holds |.s.m-g1.|<p/(|.g2.|+R) by A3,A7,XREAL_1:
+  141;
   consider n2 such that
-A11: for m st n2<=m holds |.s'.m-g2.|<p/(|.g2.|+R) by A4,A9,A8,XREAL_1:141;
+A10: for m st n2<=m holds |.s'.m-g2.|<p/(|.g2.|+R) by A4,A7,A8,XREAL_1:
+  141;
   take n=n1+n2;
   let m such that
-A12: n<=m;
-A13: 0<=|.s.m.| by COMPLEX1:132;
-A14: 0<=|.s'.m-g2.| by COMPLEX1:132;
-  n2<=n by NAT_1:12;
-  then n2<=m by A12,XXREAL_0:2;
-  then
-A15: |.s'.m-g2.|<p/(|.g2.|+R) by A11;
+A11: n<=m;
   n1<=n1+n2 by NAT_1:12;
-  then n1<=m by A12,XXREAL_0:2;
+  then n1<=m by A11,XXREAL_0:2;
   then
-A16: |.s.m-g1.|<=p/(|.g2.|+R) by A10;
+A12: |.s.m-g1.|<=p/(|.g2.|+R) by A9;
+  0<=|.g2.| & |.(s.m-g1)*g2.|=|.g2.|*|.s.m-g1.| by COMPLEX1:132,151;
+  then
+A13: |.(s.m-g1)*g2.|<=|.g2.|*(p/(|.g2.|+R)) by A12,XREAL_1:66;
   |.((s(#)s').m)-g.|=|.(s.m*s'.m) -s.m*g2+s.m*g2-g1*g2.| by VALUED_1:5
     .=|.s.m*(s'.m-g2)+(s.m-g1)*g2.|;
   then
-A17: |.((s(#)s').m)-g.|<= |.s.m*(s'.m-g2).|+|.(s.m-g1)*g2.| by COMPLEX1:142;
+A14: |.((s(#)s').m)-g.|<= |.s.m*(s'.m-g2).|+|.(s.m-g1)*g2.| by
+  COMPLEX1
+  :142;
+  n2<=n by NAT_1:12;
+  then n2<=m by A11,XXREAL_0:2;
+  then
+A15: |.s'.m-g2.|<p/(|.g2.|+R) by A10;
+A16: 0<=|.s.m.| & 0<=|.s'.m-g2.| by COMPLEX1:132;
   |.s.m.|<R by A6;
-  then |.s.m.|*|.s'.m-g2.|<R*(p/(|.g2.|+R)) by A13,A14,A15,XREAL_1:98;
+  then |.s.m.|*|.s'.m-g2.|<R*(p/(|.g2.|+R)) by A16,A15,XREAL_1:98;
   then
-A18: |.s.m*(s'.m-g2).|<R*(p/(|.g2.|+R)) by COMPLEX1:151;
-  |.(s.m-g1)*g2.|=|.g2.|*|.s.m-g1.| by COMPLEX1:151;
-  then
-A19: |.(s.m-g1)*g2.|<=|.g2.|*(p/(|.g2.|+R)) by A7,A16,XREAL_1:66;
+A17: |.s.m*(s'.m-g2).|<R*(p/(|.g2.|+R)) by COMPLEX1:151;
   R*(p/(|.g2.|+R))+|.g2.|*(p/(|.g2.|+R)) =(p/(|.g2.|+R))*(|.g2.|+R)
-    .=p by A8,XCMPLX_1:88;
-  then |.s.m*(s'.m-g2).|+|.(s.m-g1)*g2.|<p by A18,A19,XREAL_1:10;
-  hence thesis by A17,XXREAL_0:2;
+    .=p by A7,XCMPLX_1:88;
+  then |.s.m*(s'.m-g2).|+|.(s.m-g1)*g2.|<p by A17,A13,XREAL_1:10;
+  hence thesis by A14,XXREAL_0:2;
 end;
 
 theorem Th30:
-  s is convergent Complex_Sequence & s' is convergent Complex_Sequence
-  implies lim(s(#)s')=(lim s)*(lim s')
+  s is convergent Complex_Sequence & s' is convergent
+  Complex_Sequence implies lim(s(#)s')=(lim s)*(lim s')
 proof
   assume that
 A1: s is convergent Complex_Sequence and
 A2: s' is convergent Complex_Sequence;
-A3: s(#)s' is convergent by A1,A2,Th29;
   consider R such that
-A4: 0<R and
-A5: for n holds |.s.n.|<R by A1,Th8;
+A3: 0<R and
+A4: for n holds |.s.n.|<R by A1,Th8;
+A5: 0+0<|.(lim s').|+R by A3,COMPLEX1:132,XREAL_1:10;
 A6: 0<=|.(lim s').| by COMPLEX1:132;
-A7: 0+0<|.(lim s').|+R by A4,COMPLEX1:132,XREAL_1:10;
-  now
+A7: now
     let p be Real;
-    assume 0<p;
+    assume
+    0<p;
     then
-A8: 0<p/(|.(lim s').|+R) by A7,XREAL_1:141;
+A8: 0<p/(|.(lim s').|+R) by A5,XREAL_1:141;
     then consider n1 such that
-A9: for m st n1<=m holds |.s.m-(lim s).|<p/(|.(lim s').|+R) by A1,Def5;
+A9: for m st n1<=m holds |.s.m-(lim s).|<p/(|.(lim s').|+R) by A1,
+    Def5;
     consider n2 such that
-A10: for m st n2<=m holds |.s'.m-(lim s').|<p/(|.(lim s').|+R) by A2,A8,Def5;
+A10: for m st n2<=m holds |.s'.m-(lim s').|<p/(|.(lim s').|+R) by A2,
+    A8,Def5;
     take n=n1+n2;
     let m such that
 A11: n<=m;
-A12: 0<=|.s.m.| by COMPLEX1:132;
-A13: 0<=|.s'.m-(lim s').| by COMPLEX1:132;
-    n2<=n by NAT_1:12;
-    then n2<=m by A11,XXREAL_0:2;
-    then
-A14: |.s'.m-(lim s').|<p/(|.(lim s').|+R) by A10;
     n1<=n1+n2 by NAT_1:12;
     then n1<=m by A11,XXREAL_0:2;
     then
-A15: |.s.m-(lim s).|<=p/(|.(lim s').|+R) by A9;
-    |.((s(#)s').m)-(lim s)*(lim s').| =|.(s.m*s'.m-s.m*(lim s')+s.m*(lim s'))-
-    (lim s)*(lim s').| by VALUED_1:5
-      .=|.s.m*(s'.m-(lim s'))+
-    (s.m-(lim s))*(lim s').|;
+A12: |.s.m-(lim s).|<=p/(|.(lim s').|+R) by A9;
+    |.(s.m-(lim s))*(lim s').| =|.(lim s').|*|.s.m-(lim s).| by COMPLEX1:
+    151;
     then
-A16: |.((s(#)s').m)-(lim s)*(lim s').|<=
-    |.s.m*(s'.m-(lim s')).|+|.(s.m-(lim s))*(lim s').| by COMPLEX1:142;
-    |.s.m.|<R by A5;
-    then |.s.m.|*|.s'.m-(lim s').|<R*(p/(|.(lim s').|+R))
-    by A12,A13,A14,XREAL_1:98;
+A13: |.(s.m-(lim s))*(lim s').|<=|.(lim s').|* (p/(|.(lim s').|+R)) by A6,
+    A12,XREAL_1:66;
+A14: 0<=|.s.m.| & 0<=|.s'.m-(lim s').| by COMPLEX1:132;
+    n2<=n by NAT_1:12;
+    then n2<=m by A11,XXREAL_0:2;
+    then
+A15: |.s'.m-(lim s').|<p/(|.(lim s').|+R) by A10;
+    |.((s(#)s').m)-(lim s)*(lim s').| =|.(s.m*s'.m-s.m*(lim s')+s.m*(lim
+    s'))- (lim s)*(lim s').| by VALUED_1:5
+      .=|.s.m*(s'.m-(lim s'))+ (s.m-(lim s))*(lim s').|;
+    then
+A16: |.((s(#)s').m)-(lim s)*(lim s').|<= |.s.m*(s'.m-(lim s')).|+|.(s.m-(
+    lim s))*(lim s').| by COMPLEX1:142;
+    |.s.m.|<R by A4;
+    then |.s.m.|*|.s'.m-(lim s').|<R*(p/(|.(lim s').|+R)) by A14,A15,
+    XREAL_1:98;
     then
 A17: |.s.m*(s'.m-(lim s')).|<R*(p/(|.(lim s').|+R)) by COMPLEX1:151;
-    |.(s.m-(lim s))*(lim s').| =|.(lim s').|*|.s.m-(lim s).| by COMPLEX1:151;
-    then
-A18: |.(s.m-(lim s))*(lim s').|<=|.(lim s').|*
-    (p/(|.(lim s').|+R)) by A6,A15,XREAL_1:66;
-    R*(p/(|.(lim s').|+R))+|.(lim s').|*(p/(|.(lim s').|+R))
-    =(p/(|.(lim s').|+R))*(|.(lim s').|+R)
-      .=p by A7,XCMPLX_1:88;
-    then |.s.m*(s'.m-(lim s')).|+|.(s.m-(lim s))*
-    (lim s').|<p by A17,A18,XREAL_1:10;
+    R*(p/(|.(lim s').|+R))+|.(lim s').|*(p/(|.(lim s').|+R)) =(p/(|.(lim
+    s').|+R))*(|.(lim s').|+R)
+      .=p by A5,XCMPLX_1:88;
+    then |.s.m*(s'.m-(lim s')).|+|.(s.m-(lim s))* (lim s').|<p by A17,A13,
+    XREAL_1:10;
     hence |.((s(#)s').m)-(lim s)*(lim s').|<p by A16,XXREAL_0:2;
   end;
-  hence thesis by A3,Def5;
+  s(#)s' is convergent by A1,A2,Th29;
+  hence thesis by A7,Def5;
 end;
 
 theorem
-  s is convergent & s' is convergent implies
-  lim |.s(#)s'.| = |.lim s.|*|.lim s'.|
+  s is convergent & s' is convergent implies lim |.s(#)s'.| = |.lim s.|*
+  |.lim s'.|
 proof
   assume
 A1: s is convergent & s' is convergent;
@@ -1037,8 +1064,8 @@ A1: s is convergent & s' is convergent;
 end;
 
 theorem
-  s is convergent & s' is convergent implies
-  lim (s(#)s')*' = (lim s)*' * (lim s')*'
+  s is convergent & s' is convergent implies lim (s(#)s')*' = (lim s)*'
+  * (lim s')*'
 proof
   assume
 A1: s is convergent & s' is convergent;
@@ -1049,8 +1076,8 @@ A1: s is convergent & s' is convergent;
 end;
 
 theorem Th33:
-  s is convergent implies ((lim s)<>0c implies
-  ex n st for m st n<=m holds |.(lim s).|/2<|.s.m.|)
+  s is convergent implies ((lim s)<>0c implies ex n st for m st n
+  <=m holds |.(lim s).|/2<|.s.m.|)
 proof
   assume that
 A1: s is convergent and
@@ -1061,158 +1088,156 @@ A2: (lim s)<>0c;
 A3: for m st n1<=m holds |.s.m-(lim s).|<|.(lim s).|/2 by A1,Def5;
   take n=n1;
   let m;
-  assume n<=m;
+  assume
+  n<=m;
   then
 A4: |.s.m-(lim s).|<|.(lim s).|/2 by A3;
-A5: |.(lim s).|- |.s.m.|<=|.(lim s)-s.m.| by COMPLEX1:145;
-  |.(lim s)-s.m.|=|.-(s.m-(lim s)).|
+A5: |.(lim s)-s.m.|=|.-(s.m-(lim s)).|
     .=|.s.m-(lim s).| by COMPLEX1:138;
-  then
-A6: |.(lim s).|- |.s.m.|<|.(lim s).|/2 by A4,A5,XXREAL_0:2;
-A7: |.(lim s).|/2+(|.s.m.|- |.(lim s).|/2) =|.s.m.|;
-  |.(lim s).|- |.s.m.|+(|.s.m.|- |.(lim s).|/2) =|.(lim s).|/2;
-  hence thesis by A6,A7,XREAL_1:8;
+A6: |.(lim s).|/2+(|.s.m.|- |.(lim s).|/2) =|.s.m.| & |.(lim s).|- |.s.m.|+
+  (|.s. m.|- |.(lim s).|/2) =|.(lim s).|/2;
+  |.(lim s).|- |.s.m.|<=|.(lim s)-s.m.| by COMPLEX1:145;
+  then |.(lim s).|- |.s.m.|<|.(lim s).|/2 by A4,A5,XXREAL_0:2;
+  hence thesis by A6,XREAL_1:8;
 end;
 
 theorem Th34:
-  s is convergent & (lim s)<>0c & s is non-zero implies s" is convergent
+  s is convergent & (lim s)<>0c & s is non-zero implies s" is
+  convergent
 proof
   assume that
 A1: s is convergent and
 A2: (lim s)<>0c and
 A3: s is non-zero;
-A4: 0<|.(lim s).| by A2,COMPLEX1:133;
-A5: 0<>|.(lim s).| by A2,COMPLEX1:133;
   consider n1 such that
-A6: for m st n1<=m holds |.(lim s).|/2<|.s.m.| by A1,A2,Th33;
-  0*0<|.(lim s).|*|.(lim s).| by A4,XREAL_1:98;
-  then
-A7: 0<(|.(lim s).|*|.(lim s).|)/2 by XREAL_1:217;
+A4: for m st n1<=m holds |.(lim s).|/2<|.s.m.| by A1,A2,Th33;
   take g=(lim s)";
   let p be Real;
   assume
-A8: 0<p;
-  then 0*0<p*((|.(lim s).|*|.(lim s).|)/2) by A7,XREAL_1:98;
+A5: 0<p;
+A6: 0<|.(lim s).| by A2,COMPLEX1:133;
+  then 0*0<|.(lim s).|*|.(lim s).| by XREAL_1:98;
+  then 0<(|.(lim s).|*|.(lim s).|)/2 by XREAL_1:217;
+  then 0*0<p*((|.(lim s).|*|.(lim s).|)/2) by A5,XREAL_1:98;
   then consider n2 such that
-A9: for m st n2<=m holds
-  |.s.m-(lim s).|<p*((|.(lim s).|*|.(lim s).|)/2) by A1,Def5;
+A7: for m st n2<=m holds |.s.m-(lim s).|<p*((|.(lim s).|*|.(lim s).|)/2
+  ) by A1,Def5;
   take n=n1+n2;
   let m such that
-A10: n<=m;
-  n2<=n by NAT_1:12;
-  then n2<=m by A10,XXREAL_0:2;
-  then
-A11: |.s.m-(lim s).|<p*((|.(lim s).|*|.(lim s).|)/2) by A9;
+A8: n<=m;
   n1<=n1+n2 by NAT_1:12;
-  then n1<=m by A10,XXREAL_0:2;
+  then n1<=m by A8,XXREAL_0:2;
   then
-A12: |.(lim s).|/2<|.s.m.| by A6;
-A13: s.m<>0c by A3,COMSEQ_1:3;
-  then s.m*(lim s)<>0c by A2,XCMPLX_1:6;
-  then 0<|.s.m*(lim s).| by COMPLEX1:133;
-  then 0<|.s.m.|*|.(lim s).| by COMPLEX1:151;
+A9: |.(lim s).|/2<|.s.m.| by A4;
+A10: 0<|.(lim s).|/2 by A6,XREAL_1:217;
+  then 0*0<p*(|.(lim s).|/2) by A5,XREAL_1:98;
   then
-A14: |.s.m-(lim s).|/(|.s.m.|*|.(lim s).|)<
-  (p*((|.(lim s).|*|.(lim s).|)/2))/(|.s.m.|*|.(lim s).|) by A11,XREAL_1:76;
-A15: (p*((|.(lim s).|*|.(lim s).|)/2))/(|.s.m.|*|.(lim s).|)
-  =(p*(2"*(|.(lim s).|*|.(lim s).|)))*
-  (|.s.m.|*|.(lim s).|)" by XCMPLX_0:def 9
+A11: (p*(|.(lim s).|/2))/|.s.m.|< (p*(|.(lim s).|/2))/(|.(lim s).|/2) by A9
+  ,A10,XREAL_1:78;
+A12: 0<>|.(lim s).|/2 by A2,COMPLEX1:133;
+A13: (p*(|.(lim s).|/2))/(|.(lim s).|/2 ) =(p*(|.(lim s).|/2))*(|.(lim s).|/
+  2 )" by XCMPLX_0:def 9
+    .=p*((|.(lim s).|/2)*(|.(lim s).|/2 )")
+    .=p*1 by A12,XCMPLX_0:def 7
+    .=p;
+A14: 0<>|.(lim s).| by A2,COMPLEX1:133;
+A15: (p*((|.(lim s).|*|.(lim s).|)/2))/(|.s.m.|*|.(lim s).|) =(p*(2"*(|.(lim
+  s).|*|.(lim s).|)))* (|.s.m.|*|.(lim s).|)" by XCMPLX_0:def 9
     .=p*2"*((|.(lim s).|*|.(lim s).|)*(|.(lim s).|*|.s.m.|)")
-    .=p*2"*((|.(lim s).|*|.(lim s).|)*
-  (|.(lim s).|"*|.s.m.|")) by XCMPLX_1:205
+    .=p*2"*((|.(lim s).|*|.(lim s).|)* (|.(lim s).|"*|.s.m.|")) by XCMPLX_1:
+  205
     .=p*2"*(|.(lim s).|*(|.(lim s).|*|.(lim s).|")*|.s.m.|")
-    .=p*2"*(|.(lim s).|*1*|.s.m.|") by A5,XCMPLX_0:def 7
+    .=p*2"*(|.(lim s).|*1*|.s.m.|") by A14,XCMPLX_0:def 7
     .=p*(|.(lim s).|/2)*|.s.m.|"
     .=(p*(|.(lim s).|/2))/|.s.m.| by XCMPLX_0:def 9;
-A16: |.(s").m-(lim s)".|=|.(s.m)"-(lim s)".| by VALUED_1:10
-    .=|.s.m-(lim s).|/(|.s.m.|*|.(lim s).|) by A2,A13,Th1;
-A17: 0<|.(lim s).|/2 by A4,XREAL_1:217;
-A18: 0<>|.(lim s).|/2 by A2,COMPLEX1:133;
-  0*0<p*(|.(lim s).|/2) by A8,A17,XREAL_1:98;
+A16: s.m<>0c by A3,COMSEQ_1:3;
+  then s.m*(lim s)<>0c by A2,XCMPLX_1:6;
+  then 0<|.s.m*(lim s).| by COMPLEX1:133;
   then
-A19: (p*(|.(lim s).|/2))/|.s.m.|<
-  (p*(|.(lim s).|/2))/(|.(lim s).|/2) by A12,A17,XREAL_1:78;
-  (p*(|.(lim s).|/2))/(|.(lim s).|/2 )
-  =(p*(|.(lim s).|/2))*(|.(lim s).|/2 )" by XCMPLX_0:def 9
-    .=p*((|.(lim s).|/2)*(|.(lim s).|/2 )")
-    .=p*1 by A18,XCMPLX_0:def 7
-    .=p;
-  hence thesis by A14,A15,A16,A19,XXREAL_0:2;
+A17: 0<|.s.m.|*|.(lim s).| by COMPLEX1:151;
+  n2<=n by NAT_1:12;
+  then n2<=m by A8,XXREAL_0:2;
+  then |.s.m-(lim s).|<p*((|.(lim s).|*|.(lim s).|)/2) by A7;
+  then
+A18: |.s.m-(lim s).|/(|.s.m.|*|.(lim s).|)< (p*((|.(lim s).|*|.(lim s).|)/2)
+  )/(|.s.m.|*|.(lim s).|) by A17,XREAL_1:76;
+  |.(s").m-(lim s)".|=|.(s.m)"-(lim s)".| by VALUED_1:10
+    .=|.s.m-(lim s).|/(|.s.m.|*|.(lim s).|) by A2,A16,Th1;
+  hence thesis by A18,A15,A11,A13,XXREAL_0:2;
 end;
 
 theorem Th35:
-  s is convergent & (lim s)<>0c & s is non-zero implies lim s"=(lim s)"
+  s is convergent & (lim s)<>0c & s is non-zero implies lim s"=(
+  lim s)"
 proof
   assume that
 A1: s is convergent and
 A2: (lim s)<>0c and
 A3: s is non-zero;
-A4: s" is convergent by A1,A2,A3,Th34;
-A5: 0<|.(lim s).| by A2,COMPLEX1:133;
-A6: 0<>|.(lim s).| by A2,COMPLEX1:133;
   consider n1 such that
-A7: for m st n1<=m holds |.(lim s).|/2<|.s.m.| by A1,A2,Th33;
-  0*0<|.(lim s).|*|.(lim s).| by A5,XREAL_1:98;
+A4: for m st n1<=m holds |.(lim s).|/2<|.s.m.| by A1,A2,Th33;
+A5: 0<|.(lim s).| by A2,COMPLEX1:133;
+  then 0*0<|.(lim s).|*|.(lim s).| by XREAL_1:98;
   then
-A8: 0<(|.(lim s).|*|.(lim s).|)/2 by XREAL_1:217;
-  now
+A6: 0<(|.(lim s).|*|.(lim s).|)/2 by XREAL_1:217;
+A7: 0<>|.(lim s).| by A2,COMPLEX1:133;
+A8: now
     let p be Real;
+A9: 0<>|.(lim s).|/2 by A2,COMPLEX1:133;
+A10: (p*(|.(lim s).|/2))/(|.(lim s).|/2 ) =(p*(|.(lim s).|/2))*(|.(lim s)
+    .|/2 )" by XCMPLX_0:def 9
+      .=p*((|.(lim s).|/2)*(|.(lim s).|/2 )")
+      .=p*1 by A9,XCMPLX_0:def 7
+      .=p;
     assume
-A9: 0<p;
-    then 0*0<p*((|.(lim s).|*|.(lim s).|)/2) by A8,XREAL_1:98;
+A11: 0<p;
+    then 0*0<p*((|.(lim s).|*|.(lim s).|)/2) by A6,XREAL_1:98;
     then consider n2 such that
-A10: for m st n2<=m holds
-    |.s.m-(lim s).|<p*((|.(lim s).|*|.(lim s).|)/2) by A1,Def5;
+A12: for m st n2<=m holds |.s.m-(lim s).|<p*((|.(lim s).|*|.(lim s).|)
+    /2) by A1,Def5;
     take n=n1+n2;
     let m such that
-A11: n<=m;
-    n2<=n by NAT_1:12;
-    then n2<=m by A11,XXREAL_0:2;
-    then
-A12: |.s.m-(lim s).|<p*((|.(lim s).|*|.(lim s).|)/2) by A10;
+A13: n<=m;
     n1<=n1+n2 by NAT_1:12;
-    then n1<=m by A11,XXREAL_0:2;
+    then n1<=m by A13,XXREAL_0:2;
     then
-A13: |.(lim s).|/2<|.s.m.| by A7;
-A14: s.m<>0c by A3,COMSEQ_1:3;
-    then s.m*(lim s)<>0c by A2,XCMPLX_1:6;
-    then 0<|.s.m*(lim s).| by COMPLEX1:133;
-    then 0<|.s.m.|*|.(lim s).| by COMPLEX1:151;
+A14: |.(lim s).|/2<|.s.m.| by A4;
+A15: 0<|.(lim s).|/2 by A5,XREAL_1:217;
+    then 0*0<p*(|.(lim s).|/2) by A11,XREAL_1:98;
     then
-A15: |.s.m-(lim s).|/(|.s.m.|*|.(lim s).|)<
-    (p*((|.(lim s).|*|.(lim s).|)/2))/(|.s.m.|*|.(lim s).|)
-     by A12,XREAL_1:76;
-A16: (p*((|.(lim s).|*|.(lim s).|)/2))/(|.s.m.|*|.(lim s).|)
-    =(p*(2"*(|.(lim s).|*|.(lim s).|)))*
-    (|.s.m.|*|.(lim s).|)" by XCMPLX_0:def 9
+A16: (p*(|.(lim s).|/2))/|.s.m.|< (p*(|.(lim s).|/2))/(|.(lim s).|/2) by
+    A14,A15,XREAL_1:78;
+A17: (p*((|.(lim s).|*|.(lim s).|)/2))/(|.s.m.|*|.(lim s).|) =(p*(2"*(|.(
+    lim s).|*|.(lim s).|)))* (|.s.m.|*|.(lim s).|)" by XCMPLX_0:def 9
       .=p*2"*((|.(lim s).|*|.(lim s).|)*(|.(lim s).|*|.s.m.|)")
-      .=p*2"*((|.(lim s).|*|.(lim s).|)*
-    (|.(lim s).|"*|.s.m.|")) by XCMPLX_1:205
+      .=p*2"*((|.(lim s).|*|.(lim s).|)* (|.(lim s).|"*|.s.m.|")) by
+    XCMPLX_1:205
       .=p*2"*(|.(lim s).|*(|.(lim s).|*|.(lim s).|")*|.s.m.|")
-      .=p*2"*(|.(lim s).|*1*|.s.m.|") by A6,XCMPLX_0:def 7
+      .=p*2"*(|.(lim s).|*1*|.s.m.|") by A7,XCMPLX_0:def 7
       .=p*(|.(lim s).|/2)*|.s.m.|"
       .=(p*(|.(lim s).|/2))/|.s.m.| by XCMPLX_0:def 9;
-A17: |.(s").m-(lim s)".|=|.(s.m)"-(lim s)".| by VALUED_1:10
-      .=|.s.m-(lim s).|/(|.s.m.|*|.(lim s).|) by A2,A14,Th1;
-A18: 0<|.(lim s).|/2 by A5,XREAL_1:217;
-A19: 0<>|.(lim s).|/2 by A2,COMPLEX1:133;
-    0*0<p*(|.(lim s).|/2) by A9,A18,XREAL_1:98;
+A18: s.m<>0c by A3,COMSEQ_1:3;
+    then s.m*(lim s)<>0c by A2,XCMPLX_1:6;
+    then 0<|.s.m*(lim s).| by COMPLEX1:133;
     then
-A20: (p*(|.(lim s).|/2))/|.s.m.|<
-    (p*(|.(lim s).|/2))/(|.(lim s).|/2) by A13,A18,XREAL_1:78;
-    (p*(|.(lim s).|/2))/(|.(lim s).|/2 )
-    =(p*(|.(lim s).|/2))*(|.(lim s).|/2 )" by XCMPLX_0:def 9
-      .=p*((|.(lim s).|/2)*(|.(lim s).|/2 )")
-      .=p*1 by A19,XCMPLX_0:def 7
-      .=p;
-    hence |.(s").m-(lim s)".|<p by A15,A16,A17,A20,XXREAL_0:2;
+A19: 0<|.s.m.|*|.(lim s).| by COMPLEX1:151;
+    n2<=n by NAT_1:12;
+    then n2<=m by A13,XXREAL_0:2;
+    then |.s.m-(lim s).|<p*((|.(lim s).|*|.(lim s).|)/2) by A12;
+    then
+A20: |.s.m-(lim s).|/(|.s.m.|*|.(lim s).|)< (p*((|.(lim s).|*|.(lim s).|)/
+    2))/(|.s.m.|*|.(lim s).|) by A19,XREAL_1:76;
+    |.(s").m-(lim s)".|=|.(s.m)"-(lim s)".| by VALUED_1:10
+      .=|.s.m-(lim s).|/(|.s.m.|*|.(lim s).|) by A2,A18,Th1;
+    hence |.(s").m-(lim s)".|<p by A20,A17,A16,A10,XXREAL_0:2;
   end;
-  hence thesis by A4,Def5;
+  s" is convergent by A1,A2,A3,Th34;
+  hence thesis by A8,Def5;
 end;
 
 theorem
-  s is convergent & (lim s)<>0c & s is non-zero implies
-  lim |.s".| = (|.lim s.|)"
+  s is convergent & (lim s)<>0c & s is non-zero implies lim |.s".| = (|.
+  lim s.|)"
 proof
   assume
 A1: s is convergent & (lim s)<>0c & s is non-zero;
@@ -1223,8 +1248,8 @@ A1: s is convergent & (lim s)<>0c & s is non-zero;
 end;
 
 theorem
-  s is convergent & (lim s)<>0c & s is non-zero implies
-  lim (s")*' = ((lim s)*')"
+  s is convergent & (lim s)<>0c & s is non-zero implies lim (s")*' = ((
+  lim s)*')"
 proof
   assume
 A1: s is convergent & (lim s)<>0c & s is non-zero;
@@ -1235,37 +1260,33 @@ A1: s is convergent & (lim s)<>0c & s is non-zero;
 end;
 
 theorem Th38:
-  s' is convergent & s is convergent & (lim s)<>0c
-  & s is non-zero implies s'/"s is convergent
+  s' is convergent & s is convergent & (lim s)<>0c & s is non-zero
+  implies s'/"s is convergent
 proof
   assume that
 A1: s' is convergent and
-A2: s is convergent and
-A3: (lim s)<>0c and
-A4: s is non-zero;
-  s" is convergent by A2,A3,A4,Th34;
+A2: s is convergent & (lim s)<>0c & s is non-zero;
+  s" is convergent by A2,Th34;
   hence thesis by A1,Th29;
 end;
 
 theorem Th39:
-  s' is convergent & s is convergent & (lim s)<>0c
-  & s is non-zero implies lim(s'/"s)=(lim s')/(lim s)
+  s' is convergent & s is convergent & (lim s)<>0c & s is non-zero
+  implies lim(s'/"s)=(lim s')/(lim s)
 proof
   assume that
 A1: s' is convergent and
-A2: s is convergent and
-A3: (lim s)<>0c and
-A4: s is non-zero;
-  s" is convergent by A2,A3,A4,Th34;
+A2: s is convergent & (lim s)<>0c & s is non-zero;
+  s" is convergent by A2,Th34;
   then lim (s'(#)(s"))=(lim s')*(lim s") by A1,Th30
-    .=(lim s')*(lim s)" by A2,A3,A4,Th35
+    .=(lim s')*(lim s)" by A2,Th35
     .=(lim s')/(lim s) by XCMPLX_0:def 9;
   hence thesis;
 end;
 
 theorem
-  s' is convergent & s is convergent & (lim s)<>0c
-  & s is non-zero implies lim |.(s'/"s).|=|.(lim s').|/|.(lim s).|
+  s' is convergent & s is convergent & (lim s)<>0c & s is non-zero
+  implies lim |.(s'/"s).|=|.(lim s').|/|.(lim s).|
 proof
   assume
 A1: s' is convergent & s is convergent & (lim s)<>0c & s is non-zero;
@@ -1276,8 +1297,8 @@ A1: s' is convergent & s is convergent & (lim s)<>0c & s is non-zero;
 end;
 
 theorem
-  s' is convergent & s is convergent & (lim s)<>0c
-  & s is non-zero implies lim (s'/"s)*' = ((lim s')*')/((lim s)*')
+  s' is convergent & s is convergent & (lim s)<>0c & s is non-zero
+  implies lim (s'/"s)*' = ((lim s')*')/((lim s)*')
 proof
   assume
 A1: s' is convergent & s is convergent & (lim s)<>0c & s is non-zero;
@@ -1288,87 +1309,92 @@ A1: s' is convergent & s is convergent & (lim s)<>0c & s is non-zero;
 end;
 
 theorem Th42:
-  s is convergent & s1 is bounded & (lim s)=0c implies s(#)s1 is convergent
+  s is convergent & s1 is bounded & (lim s)=0c implies s(#)s1 is
+  convergent
 proof
   assume that
 A1: s is convergent and
 A2: s1 is bounded and
 A3: (lim s) = 0c;
   take g=0c;
-  let p be Real such that
-A4: 0<p;
   consider R such that
-A5: 0<R and
-A6: for m holds |.s1.m.|<R by A2,Th8;
-A7: 0<p/R by A4,A5,XREAL_1:141;
+A4: 0<R and
+A5: for m holds |.s1.m.|<R by A2,Th8;
+  let p be Real such that
+A6: 0<p;
+A7: 0<p/R by A6,A4,XREAL_1:141;
   then consider n1 such that
 A8: for m st n1<=m holds |.s.m-0c.|<p/R by A1,A3,Def5;
   take n=n1;
   let m such that
 A9: n<=m;
+A10: |.((s(#)s1).m)-g.|=|.s.m*s1.m.| by VALUED_1:5
+    .=|.s.m.|*|.s1.m.| by COMPLEX1:151;
   |.s.m.|=|.s.m-0c.|;
   then
-A10: |.s.m.|<p/R by A8,A9;
-A11: |.((s(#)s1).m)-g.|=|.s.m*s1.m.| by VALUED_1:5
-    .=|.s.m.|*|.s1.m.| by COMPLEX1:151;
+A11: |.s.m.|<p/R by A8,A9;
   now
-    assume
-A12: |.s1.m.|<>0;
     (p/R)*R=p*R"*R by XCMPLX_0:def 9
       .=p*(R"*R)
-      .=p*1 by A5,XCMPLX_0:def 7
+      .=p*1 by A4,XCMPLX_0:def 7
       .=p;
     then
-A13: (p/R)*|.s1.m.|<p by A6,A7,XREAL_1:70;
-    0<=|.s1.m.| by COMPLEX1:132;
-    then |.((s(#)s1).m)-g.|<(p/R)*|.s1.m.| by A10,A11,A12,XREAL_1:70;
-    hence thesis by A13,XXREAL_0:2;
+A12: (p/R)*|.s1.m.|<p by A5,A7,XREAL_1:70;
+A13: 0<=|.s1.m.| by COMPLEX1:132;
+    assume
+    |.s1.m.|<>0;
+    then |.((s(#)s1).m)-g.|<(p/R)*|.s1.m.| by A11,A10,A13,XREAL_1:70;
+    hence thesis by A12,XXREAL_0:2;
   end;
-  hence thesis by A4,A11;
+  hence thesis by A6,A10;
 end;
 
 theorem Th43:
-  s is convergent & s1 is bounded & (lim s)=0c implies lim(s(#)s1)=0c
+  s is convergent & s1 is bounded & (lim s)=0c implies lim(s(#)s1)
+  =0c
 proof
   assume that
 A1: s is convergent and
 A2: s1 is bounded and
 A3: lim s=0c;
-A4: s(#)s1 is convergent by A1,A2,A3,Th42;
-  now
-    let p be Real such that
-A5: 0<p;
+A4: now
     consider R such that
-A6: 0<R and
-A7: for m holds |.s1.m.|<R by A2,Th8;
-A8: 0<p/R by A5,A6,XREAL_1:141;
+A5: 0<R and
+A6: for m holds |.s1.m.|<R by A2,Th8;
+    let p be Real such that
+A7: 0<p;
+A8: 0<p/R by A7,A5,XREAL_1:141;
     then consider n1 such that
 A9: for m st n1<=m holds |.s.m-0c.|<p/R by A1,A3,Def5;
     take n=n1;
     let m;
-    assume n<=m;
-    then
-A10: |.s.m-0c.|<p/R by A9;
-A11: |.((s(#)s1).m)-0c.|=|.s.m*s1.m.| by VALUED_1:5
-      .=|.s.m.|*|.s1.m.| by COMPLEX1:151;
     (p/R)*R=p*R"*R by XCMPLX_0:def 9
       .=p*(R"*R)
-      .=p*1 by A6,XCMPLX_0:def 7;
+      .=p*1 by A5,XCMPLX_0:def 7;
     then
-A12: (p/R)*|.s1.m.|<p by A7,A8,XREAL_1:70;
+A10: (p/R)*|.s1.m.|<p by A6,A8,XREAL_1:70;
+    assume
+    n<=m;
+    then
+A11: |.s.m-0c.|<p/R by A9;
+A12: |.((s(#)s1).m)-0c.|=|.s.m*s1.m.| by VALUED_1:5
+      .=|.s.m.|*|.s1.m.| by COMPLEX1:151;
 A13: 0<=|.s1.m.| by COMPLEX1:132;
     now
-      assume |.s1.m.|<>0;
-      then |.((s(#)s1).m)-0c.|<(p/R)*|.s1.m.| by A10,A11,A13,XREAL_1:70;
-      hence |.((s(#)s1).m)-0c.|<p by A12,XXREAL_0:2;
+      assume
+      |.s1.m.|<>0;
+      then |.((s(#)s1).m)-0c.|<(p/R)*|.s1.m.| by A11,A12,A13,XREAL_1:70;
+      hence |.((s(#)s1).m)-0c.|<p by A10,XXREAL_0:2;
     end;
-    hence |.((s(#)s1).m)-0c.|<p by A5,A11;
+    hence |.((s(#)s1).m)-0c.|<p by A7,A12;
   end;
+  s(#)s1 is convergent by A1,A2,A3,Th42;
   hence thesis by A4,Def5;
 end;
 
 theorem
-  s is convergent & s1 is bounded & (lim s)=0c implies lim |.s(#)s1.| = 0
+  s is convergent & s1 is bounded & (lim s)=0c implies lim |.s(#)s1.| =
+  0
 proof
   assume
 A1: s is convergent & s1 is bounded & (lim s)=0c;
@@ -1378,7 +1404,8 @@ A1: s is convergent & s1 is bounded & (lim s)=0c;
 end;
 
 theorem
-  s is convergent & s1 is bounded & (lim s)=0c implies lim (s(#)s1)*' = 0c
+  s is convergent & s1 is bounded & (lim s)=0c implies lim (s(#)s1)*' =
+  0c
 proof
   assume
 A1: s is convergent & s1 is bounded & (lim s)=0c;

@@ -1,6 +1,6 @@
 :: Properties of Primes and Multiplicative Group of a Field
 ::  by Kenichi Arai and Hiroyuki Okazaki
-:: 
+::
 :: Received April 7, 2009
 :: Copyright (c) 2009 Association of Mizar Users
 
@@ -12,20 +12,18 @@ environ
       FINSET_1, GRAPH_1, FINSEQ_1, POLYNOM1, POLYNOM2, ALGSEQ_1, POLYNOM3,
       POLYNOM5, SQUARE_1, HURWITZ, GR_CY_3, EULER_1, INT_5, MATRIX_2, UNIROOTS,
       FUNCT_7, VECTSP_2, STRUCT_0;
- notations TARSKI, XBOOLE_0, SUBSET_1, ZFMISC_1, ORDINAL1, FINSET_1, CARD_1,
-      DOMAIN_1, NUMBERS, XCMPLX_0, XREAL_0, INT_1, INT_2, NAT_1, NAT_D,
-      XXREAL_0, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_7, BINOP_1, GROUP_2,
-      STRUCT_0, ALGSTR_0, GROUP_1, GROUP_4, GR_CY_1, VECTSP_1, VECTSP_2,
-      BHSP_1, ALGSEQ_1, POLYNOM3, POLYNOM4, POLYNOM5, BINARITH, NEWTON,
-      EULER_1, INT_3, HURWITZ, REALSET1, PEPIN, INT_5, INT_7, ABIAN, UNIROOTS;
+ notations TARSKI, XBOOLE_0, SUBSET_1, FINSET_1, CARD_1, DOMAIN_1, NUMBERS,
+      XCMPLX_0, INT_1, INT_2, NAT_1, NAT_D, XXREAL_0, RELAT_1, FUNCT_1,
+      FUNCT_2, FUNCT_7, BINOP_1, GROUP_2, STRUCT_0, ALGSTR_0, GROUP_1, GROUP_4,
+      GR_CY_1, VECTSP_2, BHSP_1, ALGSEQ_1, POLYNOM3, POLYNOM4, POLYNOM5,
+      NEWTON, EULER_1, INT_3, HURWITZ, REALSET1, INT_5, INT_7, ABIAN, UNIROOTS;
  constructors REAL_1, NAT_D, NAT_3, PEPIN, EUCLID, REALSET1, GROUP_4, ARYTM_1,
       ARYTM_0, GR_CY_1, INT_3, WSIERP_1, BINARITH, BHSP_1, POLYNOM2, POLYNOM4,
       POLYNOM5, WELLORD2, ALGSTR_1, HURWITZ, UPROOTS, RECDEF_1, INT_5, GROUP_5,
       EULER_1, INT_7, ABIAN, UNIROOTS, FUNCT_7, RELSET_1;
- registrations XBOOLE_0, STRUCT_0, XREAL_0, ORDINAL1, NAT_1, INT_1, GROUP_1,
-      GROUP_2, FINSET_1, GR_CY_1, ALGSTR_0, VECTSP_1, INT_3, XXREAL_0,
-      SUBSET_1, RELAT_1, CARD_1, ALGSTR_1, POLYNOM3, POLYNOM4, POLYNOM5,
-      REALSET1, WSIERP_1, NEWTON, INT_5, ABIAN, UNIROOTS, FUNCT_7, INT_7;
+ registrations XBOOLE_0, STRUCT_0, XREAL_0, ORDINAL1, NAT_1, INT_1, GROUP_2,
+      FINSET_1, GR_CY_1, VECTSP_1, INT_3, XXREAL_0, RELAT_1, CARD_1, ALGSTR_1,
+      POLYNOM3, POLYNOM4, POLYNOM5, WSIERP_1, NEWTON, INT_7;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions STRUCT_0, GROUP_1, INT_3, CARD_1, TARSKI, ALGSTR_0, REALSET1,
       BINOP_1, POLYNOM3, HURWITZ, INT_7, SQUARE_1, UNIROOTS, FUNCT_7;
@@ -40,34 +38,38 @@ begin :: Properties of Primes
 
 :: Safe Prime & Sophie_Germain Prime & Mersenne number
 
-theorem LMPQ:
-  for p,q be Prime, k be Nat st k divides p*q
-  holds k = 1 or k = p or k = q or k = p*q
+theorem Th1:
+  for p,q be Prime, k be Nat st k divides p*q holds k = 1 or k = p
+  or k = q or k = p*q
 proof
   let p,q be Prime, k be Nat;
   assume
 A1: k divides p*q;
   per cases by PEPIN:2;
-    suppose k,p are_relative_prime;
-      then k divides q by A1,PEPIN:3;
-      hence k = 1 or k = p or k = q or k = p*q by INT_2:def 5;
-    end;
-    suppose k gcd p = p;
-      then p divides k by NAT_D:def 5;
-      then consider l be Nat such that
-A2:   k = p*l by NAT_D:def 3;
-      consider m be Nat such that
-A3:   k*m = p*q by A1,NAT_D:def 3;
-      p*(l*m) = p*q by A2,A3;
-      then l*m = q by XCMPLX_1:5;
-      then l divides q by NAT_D:def 3;
-      then l = 1 or l = q by INT_2:def 5;
-      hence k = 1 or k = p or k = q or k = p*q by A2;
-    end;
+  suppose
+    k,p are_relative_prime;
+    then k divides q by A1,PEPIN:3;
+    hence k = 1 or k = p or k = q or k = p*q by INT_2:def 5;
+  end;
+  suppose
+    k gcd p = p;
+    then p divides k by NAT_D:def 5;
+    then consider l be Nat such that
+A2: k = p*l by NAT_D:def 3;
+    consider m be Nat such that
+A3: k*m = p*q by A1,NAT_D:def 3;
+    p*(l*m) = p*q by A2,A3;
+    then l*m = q by XCMPLX_1:5;
+    then l divides q by NAT_D:def 3;
+    then l = 1 or l = q by INT_2:def 5;
+    hence k = 1 or k = p or k = q or k = p*q by A2;
+  end;
 end;
 
-definition let p be Nat;
-  attr p is Safe means  :defASP:
+definition
+  let p be Nat;
+  attr p is Safe means
+  :Def1:
   ex sgp be Prime st 2*sgp+1 = p;
 end;
 
@@ -75,20 +77,20 @@ registration
   cluster Safe Prime;
   existence
   proof
-    reconsider sgp = 2 as Prime by INT_2:44;
     reconsider p = 5 as Prime by PEPIN:64;
-A1: p = 2*sgp+1;
+    reconsider sgp = 2 as Prime by INT_2:44;
     take p;
-    thus thesis by A1,defASP;
+    p = 2*sgp+1;
+    hence thesis by Def1;
   end;
 end;
 
-theorem SP1:
+theorem Th2:
   for p be Safe Prime holds p >= 5
 proof
   let p be Safe Prime;
   consider q be Prime such that
-A1: 2*q+1 = p by defASP;
+A1: 2*q+1 = p by Def1;
   q > 1 by INT_2:def 5;
   then q >= 1+1 by NAT_1:13;
   then 2*q >= 2*2 by XREAL_1:66;
@@ -96,86 +98,96 @@ A1: 2*q+1 = p by defASP;
   hence thesis by A1;
 end;
 
-theorem SPM1:
+theorem Th3:
   for p be Safe Prime holds p mod 2 = 1
 proof
   let p be Safe Prime;
-  p >= 4+1 by SP1;
+  p >= 4+1 by Th2;
   then p > 4 by NAT_1:13;
   then p > 4-2 by XREAL_1:53;
   then p is odd by PEPIN:17;
   hence thesis by NAT_2:24;
 end;
 
-theorem SPM2:
+theorem Th4:
   for p be Safe Prime st p <> 7 holds p mod 3 = 2
 proof
   let p be Safe Prime;
-  assume
-A1: p <> 7;
-  consider q be Prime such that
-A2: 2*q+1 = p by defASP;
   set k = p mod 3;
-  0 <= k & k < 2+1 by INT_3:9; then
-A3: 0 <= k & k <=0+2 by NAT_1:13;
-    now assume
+  consider q be Prime such that
+A1: 2*q+1 = p by Def1;
+  assume
+A2: p <> 7;
+A3: now
+    assume
 A4: k = 0 or k = 1;
-      now per cases by A4;
-        suppose k = 0;
-          then 3 divides p by INT_1:89;
-          then 3 = p by INT_2:def 5;
-          hence contradiction by SP1;
-        end;
-        suppose k = 1; then
-A5:       3 divides (2*q+1-1) by A2,PEPIN:8;
-          2,3 are_relative_prime by INT_2:44,47,PEPIN:44;
-          then 2 gcd 3 = 1 by INT_2:def 4;
-          then 3 divides q by A5,WSIERP_1:36;
-          then 3 = q by INT_2:def 5;
-          hence contradiction by A1,A2;
-        end;
+    now
+      per cases by A4;
+      suppose
+        k = 0;
+        then 3 divides p by INT_1:89;
+        then 3 = p by INT_2:def 5;
+        hence contradiction by Th2;
       end;
-      hence contradiction;
+      suppose
+A5:     k = 1;
+        2,3 are_relative_prime by INT_2:44,47,PEPIN:44;
+        then
+A6:     2 gcd 3 = 1 by INT_2:def 4;
+        3 divides (2*q+1-1) by A1,A5,PEPIN:8;
+        then 3 divides q by A6,WSIERP_1:36;
+        then 3 = q by INT_2:def 5;
+        hence contradiction by A2,A1;
+      end;
     end;
-    hence thesis by A3,NAT_1:27;
+    hence contradiction;
+  end;
+  k < 2+1 by INT_3:9;
+  then k <=0+2 by NAT_1:13;
+  hence thesis by A3,NAT_1:27;
 end;
 
-theorem SPM3:
+theorem Th5:
   for p be Safe Prime st p <> 5 holds p mod 4 = 3
 proof
   let p be Safe Prime;
-  assume
-A1: p <> 5;
-  consider q be Prime such that
-A2: 2*q+1 = p by defASP;
   set k = p mod 4;
-  0 <= k & k < 3+1 by INT_3:9; then
-A3: 0 <= k & k <= 0+3 by NAT_1:13;
-    now assume
+  consider q be Prime such that
+A1: 2*q+1 = p by Def1;
+  assume
+A2: p <> 5;
+A3: now
+    assume
 A4: k = 0 or k = 1 or k = 2;
-      now per cases by A4;
-        suppose k = 0;
-          then 4 divides p by INT_1:89;
-          hence contradiction by INT_2:def 5,INT_2:46;
-        end;
-        suppose k = 1;
-          then (p div 4)*4+1 = 2*q+1 by A2,INT_1:86;
-          then q = (p div 4)*2;
-          then 2 divides q by INT_1:def 9;
-          then 2 = q by INT_2:def 5;
-          hence contradiction by A1,A2;
-        end;
-        suppose k=2;
-          then p = (p div 4)*4+2 by INT_1:86
-          .=((p div 4)*2+1)*2;
-          then 2 divides p by INT_1:def 9;
-          then 2 = p by INT_2:def 5;
-          hence contradiction by SP1;
-        end;
+    now
+      per cases by A4;
+      suppose
+        k = 0;
+        then 4 divides p by INT_1:89;
+        hence contradiction by INT_2:46,def 5;
       end;
-      hence contradiction;
+      suppose
+        k = 1;
+        then (p div 4)*4+1 = 2*q+1 by A1,INT_1:86;
+        then q = (p div 4)*2;
+        then 2 divides q by INT_1:def 9;
+        then 2 = q by INT_2:def 5;
+        hence contradiction by A2,A1;
+      end;
+      suppose
+        k=2;
+        then p = (p div 4)*4+2 by INT_1:86
+          .=((p div 4)*2+1)*2;
+        then 2 divides p by INT_1:def 9;
+        then 2 = p by INT_2:def 5;
+        hence contradiction by Th2;
+      end;
     end;
-    hence thesis by A3,NAT_1:28;
+    hence contradiction;
+  end;
+  k < 3+1 by INT_3:9;
+  then k <= 0+3 by NAT_1:13;
+  hence thesis by A3,NAT_1:28;
 end;
 
 theorem
@@ -184,21 +196,21 @@ proof
   let p be Safe Prime;
   assume
 A1: p <> 7;
-A2: 3*p mod 6 = 3*p mod 3*2
-  .= 3*(p mod 2) by INT_4:20
-  .= 3*1 by SPM1;
-A3: 4*p mod 6 = 2*(2*p) mod 2*3
-  .= 2*((2*p) mod 3) by INT_4:20
-  .= 2*(((2 mod 3)*(p mod 3)) mod 3) by INT_3:15
-  .= 2*((2*(p mod 3)) mod 3) by NAT_D:24
-  .= 2*((2*2) mod 3) by SPM2,A1
-  .= 2*((1+3*1) mod 3)
-  .= 2*(1 mod 3) by INT_3:8
-  .= 2*1 by PEPIN:5;
+A2: 4*p mod 6 = 2*(2*p) mod 2*3
+    .= 2*((2*p) mod 3) by INT_4:20
+    .= 2*(((2 mod 3)*(p mod 3)) mod 3) by INT_3:15
+    .= 2*((2*(p mod 3)) mod 3) by NAT_D:24
+    .= 2*((2*2) mod 3) by A1,Th4
+    .= 2*((1+3*1) mod 3)
+    .= 2*(1 mod 3) by INT_3:8
+    .= 2*1 by PEPIN:5;
+A3: 3*p mod 6 = 3*p mod 3*2
+    .= 3*(p mod 2) by INT_4:20
+    .= 3*1 by Th3;
   p mod 6 = (p+6*p) mod 6 by INT_3:8
-  .= (3*p+4*p) mod 6
-  .= (3*1+2*1) mod 6 by A2,A3,INT_3:14
-  .= 5 by NAT_D:24;
+    .= (3*p+4*p) mod 6
+    .= (3*1+2*1) mod 6 by A3,A2,INT_3:14
+    .= 5 by NAT_D:24;
   hence thesis;
 end;
 
@@ -208,288 +220,320 @@ proof
   let p be Safe Prime;
   assume
 A1: p > 7;
-  then p > 7-2 by XREAL_1:53; then
-A2: p mod 4 = 3 by SPM3;
-A3: 4*p mod 12 = 4*p mod 4*3
-  .= 4*(p mod 3) by INT_4:20
-  .= 4*2 by SPM2,A1;
-A4: 9*p mod 12 = 3*(3*p) mod 3*4
-  .= 3*((3*p) mod 4) by INT_4:20
-  .= 3*(((3 mod 4)*(p mod 4)) mod 4) by INT_3:15
-  .= 3*((3 * 3) mod 4) by A2,NAT_D:24
-  .= 3*((1+4*2) mod 4)
-  .= 3*(1 mod 4) by INT_3:8
-  .= 3*1 by PEPIN:5;
+  then p > 7-2 by XREAL_1:53;
+  then
+A2: p mod 4 = 3 by Th5;
+A3: 9*p mod 12 = 3*(3*p) mod 3*4
+    .= 3*((3*p) mod 4) by INT_4:20
+    .= 3*(((3 mod 4)*(p mod 4)) mod 4) by INT_3:15
+    .= 3*((3 * 3) mod 4) by A2,NAT_D:24
+    .= 3*((1+4*2) mod 4)
+    .= 3*(1 mod 4) by INT_3:8
+    .= 3*1 by PEPIN:5;
+A4: 4*p mod 12 = 4*p mod 4*3
+    .= 4*(p mod 3) by INT_4:20
+    .= 4*2 by A1,Th4;
   p mod 12 = (p+12*p) mod 12 by INT_3:8
-  .= (4*p+9*p) mod 12
-  .= (4*2+3*1) mod 12 by A3,A4,INT_3:14
-  .= 11 by NAT_D:24;
+    .= (4*p+9*p) mod 12
+    .= (4*2+3*1) mod 12 by A4,A3,INT_3:14
+    .= 11 by NAT_D:24;
   hence thesis;
 end;
 
 theorem
   for p be Safe Prime st p > 5 holds p mod 8 = 3 or p mod 8 = 7
 proof
+  8 = 2*4;
+  then
+A1: 2 divides 8 by NAT_D:def 3;
   let p be Safe Prime;
-  assume
-A1: p > 5;
-  consider q be Prime such that
-A2: 2*q+1 = p by defASP;
-  8 = 2*4; then
-A3: 2 divides 8 & 4 divides 8 by NAT_D:def 3;
   set k = p mod 8;
-  0 <= k & k < 7+1 by INT_3:9; then
-A4: 0 <= k & k <= 0+7 by NAT_1:13;
-    now assume A5: k = 0 or k = 1 or k = 2 or k = 4 or k = 5 or k = 6;
-      now per cases by A5;
-        suppose k = 0;
-          then 8 divides p by INT_1:89;
-          then 2 divides p by A3,INT_2:13;
-          then 2 = p by INT_2:def 5;
-          hence contradiction by SP1;
-        end;
-        suppose k=1;
-          then (p div 8)*8+1 = 2*q+1 by A2,INT_1:86;
-          then q = (p div 8)*4;
-          then 4 divides q by INT_1:def 9;
-          hence contradiction by INT_2:def 5,INT_2:46;
-        end;
-        suppose k=2;
-          then p = (p div 8)*8+2 by INT_1:86
-          .=((p div 8)*4+1)*2;
-          then 2 divides p by INT_1:def 9;
-          then 2 = p by INT_2:def 5;
-          hence contradiction by SP1;
-        end;
-        suppose k = 4;
-          then p=(p div 8)*8+4 by INT_1:86
-          .=((p div 8)*4+2)*2;
-          then 2 divides p by INT_1:def 9;
-          then 2 = p by INT_2:def 5;
-          hence contradiction by SP1;
-        end;
-        suppose k = 5;
-          then (p div 8)*8+5 = 2*q+1 by A2,INT_1:86;
-          then q = ((p div 8)*2+1)*2;
-          then 2 divides q by INT_1:def 9;
-          then 2 = q by INT_2:def 5;
-          hence contradiction by A1,A2;
-        end;
-        suppose k = 6;
-          then p=(p div 8)*8+6 by INT_1:86
-          .= ((p div 8)*4+3)*2;
-          then 2 divides p by INT_1:def 9;
-          then 2 = p by INT_2:def 5;
-          hence contradiction by SP1;
-        end;
+  consider q be Prime such that
+A2: 2*q+1 = p by Def1;
+  assume
+A3: p > 5;
+A4: now
+    assume
+A5: k = 0 or k = 1 or k = 2 or k = 4 or k = 5 or k = 6;
+    now
+      per cases by A5;
+      suppose
+        k = 0;
+        then 8 divides p by INT_1:89;
+        then 2 divides p by A1,INT_2:13;
+        then 2 = p by INT_2:def 5;
+        hence contradiction by Th2;
       end;
-      hence contradiction;
+      suppose
+        k=1;
+        then (p div 8)*8+1 = 2*q+1 by A2,INT_1:86;
+        then q = (p div 8)*4;
+        then 4 divides q by INT_1:def 9;
+        hence contradiction by INT_2:46,def 5;
+      end;
+      suppose
+        k=2;
+        then p = (p div 8)*8+2 by INT_1:86
+          .=((p div 8)*4+1)*2;
+        then 2 divides p by INT_1:def 9;
+        then 2 = p by INT_2:def 5;
+        hence contradiction by Th2;
+      end;
+      suppose
+        k = 4;
+        then p=(p div 8)*8+4 by INT_1:86
+          .=((p div 8)*4+2)*2;
+        then 2 divides p by INT_1:def 9;
+        then 2 = p by INT_2:def 5;
+        hence contradiction by Th2;
+      end;
+      suppose
+        k = 5;
+        then (p div 8)*8+5 = 2*q+1 by A2,INT_1:86;
+        then q = ((p div 8)*2+1)*2;
+        then 2 divides q by INT_1:def 9;
+        then 2 = q by INT_2:def 5;
+        hence contradiction by A3,A2;
+      end;
+      suppose
+        k = 6;
+        then p=(p div 8)*8+6 by INT_1:86
+          .= ((p div 8)*4+3)*2;
+        then 2 divides p by INT_1:def 9;
+        then 2 = p by INT_2:def 5;
+        hence contradiction by Th2;
+      end;
     end;
-    hence thesis by A4,NAT_1:32;
+    hence contradiction;
+  end;
+  k < 7+1 by INT_3:9;
+  then k <= 0+7 by NAT_1:13;
+  hence thesis by A4,NAT_1:32;
 end;
 
-definition let p be Nat;
-  attr p is Sophie_Germain means  :defSGP:
-   2*p+1 is Prime;
+definition
+  let p be Nat;
+  attr p is Sophie_Germain means
+  :Def2:
+  2*p+1 is Prime;
 end;
 
 registration
   cluster Sophie_Germain Prime;
   existence
   proof
-  reconsider sgp = 2 as Prime by INT_2:44;
-  reconsider p = 5 as Prime by PEPIN:64;
-A1: p = 2*sgp+1;
-  take sgp;
-  thus thesis by A1,defSGP;
+    reconsider p = 5 as Prime by PEPIN:64;
+    reconsider sgp = 2 as Prime by INT_2:44;
+    take sgp;
+    p = 2*sgp+1;
+    hence thesis by Def2;
   end;
 end;
 
 theorem
-  for p be Sophie_Germain Prime st p > 2 holds p mod 4 = 1 or p mod 4 = 3
+  for p be Sophie_Germain Prime st p > 2 holds p mod 4 = 1 or p mod 4 =
+  3
 proof
   let p be Sophie_Germain Prime;
+  set k = p mod 4;
   assume
 A1: p > 2;
-  set k = p mod 4;
-  0 <= k & k < 3+1 by INT_3:9; then
-A2: 0 <= k & k <= 0+3 by NAT_1:13;
-    now assume
+A2: now
+    assume
 A3: k = 0 or k = 2;
-      now per cases by A3;
-        suppose k = 0;
-          then 4 divides p by INT_1:89;
-          hence contradiction by INT_2:def 5,INT_2:46;
-        end;
-        suppose k = 2;
-          then p = (p div 4)*4+2 by INT_1:86
-          .= ((p div 4)*2+1)*2;
-          then 2 divides p by INT_1:def 9;
-          hence contradiction by INT_2:def 5,A1;
-        end;
+    now
+      per cases by A3;
+      suppose
+        k = 0;
+        then 4 divides p by INT_1:89;
+        hence contradiction by INT_2:46,def 5;
       end;
-      hence contradiction;
+      suppose
+        k = 2;
+        then p = (p div 4)*4+2 by INT_1:86
+          .= ((p div 4)*2+1)*2;
+        then 2 divides p by INT_1:def 9;
+        hence contradiction by A1,INT_2:def 5;
+      end;
     end;
-    hence thesis by A2,NAT_1:28;
+    hence contradiction;
+  end;
+  k < 3+1 by INT_3:9;
+  then k <= 0+3 by NAT_1:13;
+  hence thesis by A2,NAT_1:28;
 end;
 
-theorem SGSP0:
+theorem Th10:
   for p be Safe Prime ex q be Sophie_Germain Prime st p = 2*q+1
 proof
   let p be Safe Prime;
   consider q be Prime such that
-A1: 2*q+1 = p by defASP;
-  q is Sophie_Germain Prime by A1,defSGP;
+A1: 2*q+1 = p by Def1;
+  q is Sophie_Germain Prime by A1,Def2;
   hence thesis by A1;
 end;
 
-SGSP2:
-  for p be Nat st p > 2 holds 2*p+1 > 5
+Lm1: for p be Nat st p > 2 holds 2*p+1 > 5
 proof
   let p be Nat;
-  assume p > 2;
+  assume
+  p > 2;
   then 2*p > 2*2 by XREAL_1:70;
   then 2*p+1 > 4+1 by XREAL_1:10;
   hence thesis;
 end;
 
-theorem SGSP3:
-  for p be Safe Prime ex q be Sophie_Germain Prime st Euler p = 2*q
+theorem Th11:
+  for p be Safe Prime ex q be Sophie_Germain Prime st Euler p = 2*
+  q
 proof
   let p be Safe Prime;
-  consider q be Sophie_Germain Prime such that
-A1: p = 2*q+1 by SGSP0;
-  Euler p = p-1 by EULER_1:21;
+A1: Euler p = p-1 by EULER_1:21;
+  ex q be Sophie_Germain Prime st p = 2*q+1 by Th10;
   hence thesis by A1;
 end;
 
 theorem
-  for p1,p2 be Safe Prime, N be Nat st p1 <> p2 & N = p1*p2
-  holds ex q1,q2 be Sophie_Germain Prime st Euler (N) = 4*q1*q2
+  for p1,p2 be Safe Prime, N be Nat st p1 <> p2 & N = p1*p2 holds ex q1,
+  q2 be Sophie_Germain Prime st Euler (N) = 4*q1*q2
 proof
   let p1,p2 be Safe Prime, N be Nat;
-  assume
-A1: p1 <> p2 & N = p1*p2;
-  consider q1 be Sophie_Germain Prime such that
-A2: Euler p1 = 2*q1 by SGSP3;
+  assume that
+A1: p1 <> p2 and
+A2: N = p1*p2;
+A3: p2 > 1 by INT_2:def 5;
   consider q2 be Sophie_Germain Prime such that
-A3: Euler p2 = 2*q2 by SGSP3;
-  p1 > 1 & p2 > 1 by INT_2:def 5;
-  then Euler (N) = Euler p1 * Euler p2 by A1,INT_2:47,EULER_1:22
-  .= 4*q1*q2 by A2,A3;
+A4: Euler p2 = 2*q2 by Th11;
+  consider q1 be Sophie_Germain Prime such that
+A5: Euler p1 = 2*q1 by Th11;
+  p1 > 1 by INT_2:def 5;
+  then Euler (N) = Euler p1 * Euler p2 by A1,A2,A3,EULER_1:22,INT_2:47
+    .= 4*q1*q2 by A5,A4;
   hence thesis;
 end;
 
-theorem SF1:
-  for p be Safe Prime ex q be Sophie_Germain Prime st card (Z/Z*(p)) = 2*q
+theorem Th13:
+  for p be Safe Prime ex q be Sophie_Germain Prime st card (Z/Z*(p
+  )) = 2*q
 proof
   let p be Safe Prime;
   consider q be Sophie_Germain Prime such that
-A1: 2*q+1 = p by SGSP0;
+A1: 2*q+1 = p by Th10;
   p-1 =2*q by A1;
   hence thesis by INT_7:23;
 end;
 
-theorem SF2:
+theorem Th14:
   for G being cyclic finite Group, n,m being Nat st card G = n*m
   ex a being Element of G st ord a = n & gr {a} is strict Subgroup of G
 proof
   let G be cyclic finite Group;
   let n,m be Nat;
-  assume
-A1: card G = n*m;
   consider g be Element of G such that
-A2: ord g = card G by GR_CY_1:43;
-   m in NAT & n in NAT by ORDINAL1:def 13; then
-A4: ord (g|^m) = n by INT_7:30,A1,A2;
-  consider a be Element of G such that
-A5: ord a = n by A4;
+A1: ord g = card G by GR_CY_1:43;
+A2: m in NAT by ORDINAL1:def 13;
+A3: n in NAT by ORDINAL1:def 13;
+  assume
+  card G = n*m;
+  then ord (g|^m) = n by A1,A2,A3,INT_7:30;
+  then consider a be Element of G such that
+A4: ord a = n;
   take a;
-  thus thesis by A5;
+  thus thesis by A4;
 end;
 
 theorem
-  for p be Safe Prime ex q be Sophie_Germain Prime,
-  H1,H2,Hq,H2q be strict Subgroup of (Z/Z*(p))
-  st card H1 = 1 & card H2 = 2 & card Hq = q & card H2q = 2*q
-  & for H be strict Subgroup of (Z/Z*(p))
-  holds H = H1 or H = H2 or H = Hq or H = H2q
+  for p be Safe Prime ex q be Sophie_Germain Prime, H1,H2,Hq,H2q be
+strict Subgroup of (Z/Z*(p)) st card H1 = 1 & card H2 = 2 & card Hq = q & card
+H2q = 2*q & for H be strict Subgroup of (Z/Z*(p)) holds H = H1 or H = H2 or H =
+  Hq or H = H2q
 proof
   let p be Safe Prime;
   consider q be Sophie_Germain Prime such that
-A1: card (Z/Z*(p)) = 2*q by SF1;
+A1: card (Z/Z*(p)) = 2*q by Th13;
 A2: Z/Z*(p) is cyclic Group by INT_7:31;
-    Z/Z*(p) is strict Subgroup of Z/Z*(p) by GROUP_2:63;
-  then consider H2q be strict Subgroup of Z/Z*(p) such that
-A3: card H2q = 2*q by A1;
-  consider a being Element of (Z/Z*(p)) such that
-A5: ord a = 2 & gr {a} is strict Subgroup of (Z/Z*(p)) by A1,A2,SF2;
+  then consider a being Element of (Z/Z*(p)) such that
+A3: ord a = 2 and
+  gr {a} is strict Subgroup of (Z/Z*(p)) by A1,Th14;
   consider b being Element of (Z/Z*(p)) such that
-a5: ord b = q & gr {b} is strict Subgroup of (Z/Z*(p)) by A1,A2,SF2;
-  card gr {a} = 2 & card gr {b} = q by a5,A5,GR_CY_1:27;
-  then consider H2,Hq be strict Subgroup of Z/Z*(p) such that
-A6: card H2 = 2 & card Hq = q;
+A4: ord b = q and
+  gr {b} is strict Subgroup of (Z/Z*(p)) by A1,A2,Th14;
+A5: card gr {b} = q by A4,GR_CY_1:27;
   card (1).Z/Z*(p) = 1 by GROUP_2:81;
   then consider H1 be strict Subgroup of Z/Z*(p) such that
-A7: card H1 = 1;
-A8: now let H be strict Subgroup of Z/Z*(p);
-      consider G1 be strict Subgroup of Z/Z*(p) such that
-A9:   card G1 = card H & for G2 being strict Subgroup of Z/Z*(p) st
-      card G2 = card H holds G2 = G1 by A2,GROUP_2:178,A1,GR_CY_2:28;
-A10:  G1 = H by A9;
-      now per cases by INT_2:44,A1,GROUP_2:178,LMPQ;
-        suppose card H = 1;
-          hence H = H1 or H = H2 or H = Hq or H = H2q by A7,A9,A10;
-        end;
-        suppose card H = 2;
-          hence H = H1 or H = H2 or H = Hq or H = H2q by A6,A9,A10;
-        end;
-        suppose card H = q;
-          hence H = H1 or H = H2 or H = Hq or H = H2q by A6,A9,A10;
-        end;
-        suppose card H = 2*q;
-          hence H = H1 or H = H2 or H = Hq or H = H2q by A3,A9,A10;
-        end;
-      end;
-    hence H = H1 or H = H2 or H = Hq or H = H2q;
-    end;
+A6: card H1 = 1;
+  Z/Z*(p) is strict Subgroup of Z/Z*(p) by GROUP_2:63;
+  then consider H2q be strict Subgroup of Z/Z*(p) such that
+A7: card H2q = 2*q by A1;
+  card gr {a} = 2 by A3,GR_CY_1:27;
+  then consider H2,Hq be strict Subgroup of Z/Z*(p) such that
+A8: card H2 = 2 and
+A9: card Hq = q by A5;
   take q,H1,H2,Hq,H2q;
-  thus thesis by A3,A6,A7,A8;
+  now
+    let H be strict Subgroup of Z/Z*(p);
+    consider G1 be strict Subgroup of Z/Z*(p) such that
+    card G1 = card H and
+A10: for G2 being strict Subgroup of Z/Z*(p) st card G2 = card H holds
+    G2 = G1 by A1,A2,GROUP_2:178,GR_CY_2:28;
+A11: G1 = H by A10;
+    now
+      per cases by A1,Th1,GROUP_2:178,INT_2:44;
+      suppose
+        card H = 1;
+        hence H = H1 or H = H2 or H = Hq or H = H2q by A6,A10,A11;
+      end;
+      suppose
+        card H = 2;
+        hence H = H1 or H = H2 or H = Hq or H = H2q by A8,A10,A11;
+      end;
+      suppose
+        card H = q;
+        hence H = H1 or H = H2 or H = Hq or H = H2q by A9,A10,A11;
+      end;
+      suppose
+        card H = 2*q;
+        hence H = H1 or H = H2 or H = Hq or H = H2q by A7,A10,A11;
+      end;
+    end;
+    hence H = H1 or H = H2 or H = Hq or H = H2q;
+  end;
+  hence thesis by A7,A8,A9,A6;
 end;
 
 definition
   let n be Nat;
   func Mersenne(n) -> Nat equals
   2|^n-1;
-  correctness by PREPOWER:19,NAT_1:21;
+  correctness by NAT_1:21,PREPOWER:19;
 end;
 
-MSLm1: 2|^2 = 4
+Lm2: 2|^2 = 4
 proof
   2|^2 = 2|^(1+1)
-  .= 2|^1*2 by NEWTON:11
-  .= 2*2 by NEWTON:10;
+    .= 2|^1*2 by NEWTON:11
+    .= 2*2 by NEWTON:10;
   hence thesis;
 end;
 
-MSLm2: 2|^3 = 8
+Lm3: 2|^3 = 8
 proof
   2|^3 = 2|^(2+1)
-  .= 4*2 by MSLm1,NEWTON:11;
+    .= 4*2 by Lm2,NEWTON:11;
   hence thesis;
 end;
 
-MSLm3: 2|^4 = 16
+Lm4: 2|^4 = 16
 proof
   2|^4 = 2|^(2+2)
-  .= 4*4 by MSLm1,NEWTON:13;
+    .= 4*4 by Lm2,NEWTON:13;
   hence thesis;
 end;
 
-MSLm4: 2|^8 = 256
+Lm5: 2|^8 = 256
 proof
   2|^8 = 2|^(4+4)
-  .= 16*16 by MSLm3,NEWTON:13;
+    .= 16*16 by Lm4,NEWTON:13;
   hence thesis;
 end;
 
@@ -497,44 +541,44 @@ theorem
   Mersenne(0) = 0
 proof
   thus Mersenne(0) = 1-1 by NEWTON:9
-  .= 0;
+    .= 0;
 end;
 
 theorem
   Mersenne(1) = 1
 proof
   thus Mersenne(1) = 2-1 by NEWTON:10
-  .= 1;
+    .= 1;
 end;
 
 theorem
-  Mersenne(2) = 3 by MSLm1;
+  Mersenne(2) = 3 by Lm2;
 
 theorem
-  Mersenne(3) = 7 by MSLm2;
+  Mersenne(3) = 7 by Lm3;
 
 theorem
   Mersenne(5) = 31
 proof
   thus Mersenne(5) = 2|^(3+2)-1
-  .= 2|^3*2|^2-1 by NEWTON:13
-  .= 31 by MSLm1,MSLm2;
+    .= 2|^3*2|^2-1 by NEWTON:13
+    .= 31 by Lm2,Lm3;
 end;
 
 theorem
   Mersenne(7) = 127
 proof
   thus Mersenne(7) = 2|^(4+3)-1
-  .= 2|^4*2|^3-1 by NEWTON:13
-  .= 127 by MSLm2,MSLm3;
+    .= 2|^4*2|^3-1 by NEWTON:13
+    .= 127 by Lm3,Lm4;
 end;
 
 theorem
   Mersenne(11) = 23*89
 proof
   thus Mersenne(11) = 2|^(8+3)-1
-  .= 2|^8*2|^3-1 by NEWTON:13
-  .= 23*89 by MSLm2,MSLm4;
+    .= 2|^8*2|^3-1 by NEWTON:13
+    .= 23*89 by Lm3,Lm5;
 end;
 
 theorem
@@ -544,237 +588,258 @@ proof
   assume
 A1: p <> 2;
   p > 1 by INT_2:def 5;
-  then 2*p > 2*1 by XREAL_1:70; then
+  then 2*p > 2*1 by XREAL_1:70;
+  then
 A2: 2*p > 2-1 by XREAL_1:53;
   Mersenne(p) mod 2*p = 2*2|^(p-'1)-1 mod 2*p by PEPIN:27
-  .= ((2*2|^(p-'1) mod 2*p)-(1 mod 2*p)) mod 2*p by INT_6:7
-  .= (2*(2|^(p-'1) mod p)-(1 mod 2*p)) mod 2*p by INT_4:20
-  .= (2*1-(1 mod 2*p)) mod 2*p by PEPIN:38,INT_2:44,INT_2:47,A1
-  .= (2*1-1) mod 2*p by PEPIN:5,A2;
-  hence thesis by PEPIN:5,A2;
+    .= ((2*2|^(p-'1) mod 2*p)-(1 mod 2*p)) mod 2*p by INT_6:7
+    .= (2*(2|^(p-'1) mod p)-(1 mod 2*p)) mod 2*p by INT_4:20
+    .= (2*1-(1 mod 2*p)) mod 2*p by A1,INT_2:44,47,PEPIN:38
+    .= (2*1-1) mod 2*p by A2,PEPIN:5;
+  hence thesis by A2,PEPIN:5;
 end;
 
 theorem
   for p be Prime st p <> 2 holds Mersenne(p) mod 8 = 7
 proof
   let p be Prime;
+A1: p > 1 by INT_2:def 5;
+  then
+A2: p >= 1+1 by NAT_1:13;
   assume
-A1: p <> 2;
-A2: p > 1 by INT_2:def 5; then
-A3: p >= 1+1 by NAT_1:13; then
-A4: p > 2 + 0 by XXREAL_0:1,A1;
-A5: p-'1 > 0 by A2,NAT_D:49;
-    p-2 > 2-2 by XREAL_1:16,A4; then
-A6: p-'2 > 0 by A3,XREAL_1:235;
+  p <> 2;
+  then p > 2 + 0 by A2,XXREAL_0:1;
+  then p-2 > 2-2 by XREAL_1:16;
+  then
+A3: p-'2 > 0 by A2,XREAL_1:235;
+A4: p-'1 > 0 by A1,NAT_D:49;
   Mersenne(p) mod 8 = 2*2|^(p-'1)-1 mod 8 by PEPIN:27
-  .= ((2*2|^(p-'1) mod 2*4)-(1 mod 8)) mod 8 by INT_6:7
-  .= (2*(2|^(p-'1) mod 4)-(1 mod 8)) mod 8 by INT_4:20
-  .= (2*(2*2|^(p-'1-'1) mod 2*2)-(1 mod 8)) mod 8 by PEPIN:27,A5
-  .= (2*(2*2|^(p-'2) mod 2*2)-(1 mod 8)) mod 8 by NAT_D:45
-  .= (2*(2*( 2|^(p-'2) mod 2))-(1 mod 8)) mod 8 by INT_4:20
-  .= (4*(2|^(p-'2) mod 2)-1) mod 8 by PEPIN:5
-  .= (4*0-1) mod 8 by A6, PEPIN:37
-  .= (-1+8*1) mod 8 by INT_3:8
-  .= 7 by NAT_D:24;
+    .= ((2*2|^(p-'1) mod 2*4)-(1 mod 8)) mod 8 by INT_6:7
+    .= (2*(2|^(p-'1) mod 4)-(1 mod 8)) mod 8 by INT_4:20
+    .= (2*(2*2|^(p-'1-'1) mod 2*2)-(1 mod 8)) mod 8 by A4,PEPIN:27
+    .= (2*(2*2|^(p-'2) mod 2*2)-(1 mod 8)) mod 8 by NAT_D:45
+    .= (2*(2*( 2|^(p-'2) mod 2))-(1 mod 8)) mod 8 by INT_4:20
+    .= (4*(2|^(p-'2) mod 2)-1) mod 8 by PEPIN:5
+    .= (4*0-1) mod 8 by A3,PEPIN:37
+    .= (-1+8*1) mod 8 by INT_3:8
+    .= 7 by NAT_D:24;
   hence thesis;
 end;
 
 theorem
-  for p be Sophie_Germain Prime st p > 2 & p mod 4 = 3
-  holds ex q be Safe Prime st q divides Mersenne(p)
+  for p be Sophie_Germain Prime st p > 2 & p mod 4 = 3 holds ex q be
+  Safe Prime st q divides Mersenne(p)
 proof
   let p be Sophie_Germain Prime;
-  assume
-A1: p > 2 & p mod 4 = 3;
+  assume that
+A1: p > 2 and
+A2: p mod 4 = 3;
   set q = 2*p+1;
-A2:  q > 5 by A1,SGSP2;
-B2: q is Safe Prime by defSGP,defASP;
-A3: q mod 8 = 7
-    proof
-      p = (p div 4)*4+3 by A1,INT_1:86;
-      then q = (p div 4)*8+7;
-      then q mod 8 = 7 mod 8 by NAT_D:21
-      .= 7 by NAT_D:24;
-      hence thesis;
-    end;
-A4: q > 5-3 by A2,XREAL_1:53; then
-A5: 2 is_quadratic_residue_mod q by A3,INT_5:43,B2;
-  2,q are_relative_prime by INT_2:44,INT_2:47,A4,B2;
-  then 2 gcd q = 1 by INT_2:def 4;
-  then (2|^((2*p+1-'1) div 2)-1) mod q = 0 by A4,A5,INT_5:20,B2;
+A3: q is Safe Prime by Def1,Def2;
+  q > 5 by A1,Lm1;
+  then
+A4: q > 5-3 by XREAL_1:53;
+  then 2,q are_relative_prime by A3,INT_2:44,47;
+  then
+A5: 2 gcd q = 1 by INT_2:def 4;
+  p = (p div 4)*4+3 by A2,INT_1:86;
+  then q = (p div 4)*8+7;
+  then q mod 8 = 7 mod 8 by NAT_D:21
+    .= 7 by NAT_D:24;
+  then 2 is_quadratic_residue_mod q by A3,A4,INT_5:43;
+  then (2|^((2*p+1-'1) div 2)-1) mod q = 0 by A3,A4,A5,INT_5:20;
   then (2|^((2*p) div 2)-1) mod q = 0 by NAT_D:34;
   then (2|^p-1) mod q = 0 by NAT_D:18;
   then q divides 2|^p-1 by INT_1:89;
-  hence thesis by B2;
+  hence thesis by A3;
 end;
 
 theorem
-  for p be Sophie_Germain Prime st p > 2 & p mod 4 = 1
-  holds ex q be Safe Prime st Mersenne(p) mod q = q-2
+  for p be Sophie_Germain Prime st p > 2 & p mod 4 = 1 holds ex q be
+  Safe Prime st Mersenne(p) mod q = q-2
 proof
   let p be Sophie_Germain Prime;
-  assume
-A1: p > 2 & p mod 4 = 1;
-    set q = 2*p+1;
-B2: q is Safe Prime by defSGP,defASP;
-A2: q > 5 by A1,SGSP2;
-A3: q mod 8 = 3
-    proof
-      p = (p div 4)*4+1 by A1,INT_1:86;
-      then q = (p div 4)*8+3;
-      then q mod 8 = 3 mod 8 by NAT_D:21
-      .= 3 by NAT_D:24;
-      hence thesis;
-    end;
-A4: q > 5-3 by A2,XREAL_1:53; then
-A5: not 2 is_quadratic_residue_mod q by A3,INT_5:44,B2;
-  2,q are_relative_prime by INT_2:44,INT_2:47,A4,B2;
-  then 2 gcd q = 1 by INT_2:def 4;
-  then 2|^((2*p+1-'1) div 2) mod q = q-1 by A4,A5,INT_5:19,B2; then
-A6: 2|^((2*p) div 2) mod q = q-1 by NAT_D:34;
-A7: q > 5-4 by A2,XREAL_1:53; then
-    q >= 1+1 by NAT_1:13; then
-A8: q-2 is Nat by NAT_1:21;
+  assume that
+A1: p > 2 and
+A2: p mod 4 = 1;
+  set q = 2*p+1;
+A3: q is Safe Prime by Def1,Def2;
+A4: q > 5 by A1,Lm1;
+  then
+A5: q > 5-3 by XREAL_1:53;
+  then 2,q are_relative_prime by A3,INT_2:44,47;
+  then
+A6: 2 gcd q = 1 by INT_2:def 4;
+  p = (p div 4)*4+1 by A2,INT_1:86;
+  then q = (p div 4)*8+3;
+  then q mod 8 = 3 mod 8 by NAT_D:21
+    .= 3 by NAT_D:24;
+  then not 2 is_quadratic_residue_mod q by A3,A5,INT_5:44;
+  then 2|^((2*p+1-'1) div 2) mod q = q-1 by A3,A5,A6,INT_5:19;
+  then
+A7: 2|^((2*p) div 2) mod q = q-1 by NAT_D:34;
+A8: q > 5-4 by A4,XREAL_1:53;
+  then q >= 1+1 by NAT_1:13;
+  then
+A9: q-2 is Nat by NAT_1:21;
   Mersenne(p) mod q = ((2|^p mod q)-(1 mod q)) mod q by INT_6:7
-  .= ((q-1)-(1 mod q)) mod q by A6,NAT_D:18
-  .= ((q-1)-1) mod q by PEPIN:5,A7
-  .= q-2 by NAT_D:24,XREAL_1:46,A8;
-  hence thesis by B2;
+    .= ((q-1)-(1 mod q)) mod q by A7,NAT_D:18
+    .= ((q-1)-1) mod q by A8,PEPIN:5
+    .= q-2 by A9,NAT_D:24,XREAL_1:46;
+  hence thesis by A3;
 end;
 
-theorem LmST1:
+theorem Th27:
   for a,n be Nat st a > 1 holds a-1 divides a|^n-1
 proof
   let a,n be Nat;
+A1: 2|^n-1 is Nat by NAT_1:21,PREPOWER:19;
   assume
-A1: a > 1;
-A2: 2|^n-1 is Nat by PREPOWER:19,NAT_1:21;
-A3: a >= 1+1 by NAT_1:13,A1;
-    per cases by A3,XXREAL_0:1;
-      suppose
-A4:     a = 2;
-        then a|^n-1 mod (a-1) = 0 by RADIX_2:1,A2;
-        hence thesis by INT_1:89,A4;
-      end;
-      suppose
-A5:     a > 2; then
-A6:     a-1 > 2-1 by XREAL_1:11;
-A7:     a-1 is Nat by NAT_1:20,A5;
-        a mod (a-1) = (a+(a-1)*(-1)) mod (a-1) by INT_3:8
-        .= 1 by PEPIN:5,A6; then
-A8:     (a|^n) mod (a-1) = 1 by PEPIN:36,A6,A7;
-        (a|^n-1) mod (a-1) = ((a|^n mod (a-1))-(1 mod (a-1))) mod (a-1)
-        by INT_6:7
-        .= (1-1) mod (a-1) by PEPIN:5,A6,A8
-        .= 0 by NAT_D:26,A7;
-        hence thesis by INT_1:89,A6,A7;
-      end;
+  a > 1;
+  then
+A2: a >= 1+1 by NAT_1:13;
+  per cases by A2,XXREAL_0:1;
+  suppose
+A3: a = 2;
+    then a|^n-1 mod (a-1) = 0 by A1,RADIX_2:1;
+    hence thesis by A3,INT_1:89;
+  end;
+  suppose
+A4: a > 2;
+    then
+A5: a-1 > 2-1 by XREAL_1:11;
+A6: a-1 is Nat by A4,NAT_1:20;
+    a mod (a-1) = (a+(a-1)*(-1)) mod (a-1) by INT_3:8
+      .= 1 by A5,PEPIN:5;
+    then
+A7: (a|^n) mod (a-1) = 1 by A5,A6,PEPIN:36;
+    (a|^n-1) mod (a-1) = ((a|^n mod (a-1))-(1 mod (a-1))) mod (a-1) by
+    INT_6:7
+      .= (1-1) mod (a-1) by A5,A7,PEPIN:5
+      .= 0 by A6,NAT_D:26;
+    hence thesis by A5,A6,INT_1:89;
+  end;
 end;
 
-LmST2:
-  for a,p be Nat st p > 1 & a|^p-1 is Prime holds a > 1
+Lm6: for a,p be Nat st p > 1 & a|^p-1 is Prime holds a > 1
 proof
   let a,p be Nat;
-  assume
-A1: p > 1 & a|^p-1 is Prime;
-  assume
-A2: a <= 1;
-    now assume
-A3: a = 0 or a = 1;
-      now per cases by A3;
-        suppose a = 0;
-          then a|^p-1 = 0-1 by A1,NEWTON:103;
-          hence contradiction by A1;
-        end;
-        suppose a = 1;
-          then a|^p-1 = 1-1 by NEWTON:15;
-          hence contradiction by INT_2:def 5,A1;
-        end;
-      end;
-      hence contradiction;
-    end;
-  hence contradiction by A2,NAT_1:26;
-end;
-
-theorem LmST3:
-  for a,p be Nat st p > 1 & a|^p-1 is Prime holds a = 2 & p is Prime
-proof
-  let a,p be Nat;
-  assume
-A1: p > 1 & a|^p-1 is Prime;
-  now
-A2: a > 1 by A1,LmST2; then
-A3: a >= 1+1 by NAT_1:13;
-    p >= 1+1 by NAT_1:13,A1;
-    then a < a|^p by A2,PREPOWER:21; then
-A4: a-1 < a|^p-1 by XREAL_1:11;
-      now assume
-A5:   a > 2; then
-A6:   a-1 > 2-1 by XREAL_1:11;
-A7:   a-1 is Element of NAT by NAT_1:20,A5;
-      a-1 divides a|^p-1 by A1,LmST2,LmST1;
-      hence contradiction by A1,A4,A6,A7,NAT_4:12;
-      end;
-    hence a = 2 by XXREAL_0:1,A3;
+  assume that
+A1: p > 1 and
+A2: a|^p-1 is Prime;
+A3: now
     assume
-A8: not p is Prime;
-    consider n be Element of NAT such that
-A9: n divides p & 1 < n & n < p by NAT_4:12,A1,A8;
-    consider q be Nat such that
-A10: p = n*q by A9,NAT_D:def 3;
-    a|^n-1 divides (a|^n)|^q-1 by LmST1,PEPIN:26,A2,A9; then
-A11: a|^n-1 divides a|^p-1 by NEWTON:14,A10;
-    a|^n < a|^p by A2,A9,PEPIN:71; then
-A12: a|^n-1 < a|^p-1 by XREAL_1:11;
-    a >= 0+1 by A1,LmST2; then
-A13: a|^n-1 is Element of NAT by PREPOWER:19,NAT_1:21;
-    1+1 <= n by NAT_1:13,A9;
-    then 2 < 2|^n by PREPOWER:21; then
-A14: 2+1 <= 2|^n  by NAT_1:13;
-    2|^n <= a|^n by A3,PREPOWER:17;
-    then 2+1 <= a|^n by A14,XXREAL_0:2;
-    then 2 < a|^n by NAT_1:13;
-    then 2-1 < a|^n-1 by XREAL_1:11;
-    hence contradiction by NAT_4:12,A1,A11,A12,A13;
+A4: a = 0 or a = 1;
+    now
+      per cases by A4;
+      suppose
+        a = 0;
+        then a|^p-1 = 0-1 by A1,NEWTON:103;
+        hence contradiction by A2;
+      end;
+      suppose
+        a = 1;
+        then a|^p-1 = 1-1 by NEWTON:15;
+        hence contradiction by A2,INT_2:def 5;
+      end;
     end;
+    hence contradiction;
+  end;
+  assume
+  a <= 1;
+  hence contradiction by A3,NAT_1:26;
+end;
+
+theorem Th28:
+  for a,p be Nat st p > 1 & a|^p-1 is Prime holds a = 2 & p is
+  Prime
+proof
+  let a,p be Nat;
+  assume that
+A1: p > 1 and
+A2: a|^p-1 is Prime;
+  now
+A3: a > 1 by A1,A2,Lm6;
+    then
+A4: a >= 1+1 by NAT_1:13;
+    p >= 1+1 by A1,NAT_1:13;
+    then a < a|^p by A3,PREPOWER:21;
+    then
+A5: a-1 < a|^p-1 by XREAL_1:11;
+    now
+      assume
+A6:   a > 2;
+      then
+A7:   a-1 > 2-1 by XREAL_1:11;
+A8:   a-1 is Element of NAT by A6,NAT_1:20;
+      a-1 divides a|^p-1 by A1,A2,Lm6,Th27;
+      hence contradiction by A2,A5,A7,A8,NAT_4:12;
+    end;
+    hence a = 2 by A4,XXREAL_0:1;
+    assume
+    not p is Prime;
+    then consider n be Element of NAT such that
+A9: n divides p and
+A10: 1 < n and
+A11: n < p by A1,NAT_4:12;
+    consider q be Nat such that
+A12: p = n*q by A9,NAT_D:def 3;
+    1+1 <= n by A10,NAT_1:13;
+    then 2 < 2|^n by PREPOWER:21;
+    then
+A13: 2+1 <= 2|^n by NAT_1:13;
+    2|^n <= a|^n by A4,PREPOWER:17;
+    then 2+1 <= a|^n by A13,XXREAL_0:2;
+    then 2 < a|^n by NAT_1:13;
+    then
+A14: 2-1 < a|^n-1 by XREAL_1:11;
+    a >= 0+1 by A1,A2,Lm6;
+    then
+A15: a|^n-1 is Element of NAT by NAT_1:21,PREPOWER:19;
+    a|^n < a|^p by A3,A11,PEPIN:71;
+    then
+A16: a|^n-1 < a|^p-1 by XREAL_1:11;
+    a|^n-1 divides (a|^n)|^q-1 by A3,A10,Th27,PEPIN:26;
+    then a|^n-1 divides a|^p-1 by A12,NEWTON:14;
+    hence contradiction by A2,A16,A15,A14,NAT_4:12;
+  end;
   hence thesis;
 end;
 
 theorem
-  for p be Nat st p > 1 & Mersenne(p) is Prime holds p is Prime by LmST3;
+  for p be Nat st p > 1 & Mersenne(p) is Prime holds p is Prime by Th28;
 
 :: Other theorems
 
-theorem INTPOW:
-  for a be Integer,x,n be Nat holds a|^x mod n = (a mod n)|^x mod n
+theorem Th30:
+  for a be Integer,x,n be Nat holds a|^x mod n = (a mod n)|^x mod
+  n
 proof
   let a be Integer;
   let x, n be Nat;
   defpred P[Nat] means a|^$1 mod n = (a mod n)|^$1 mod n;
-A1: P[0]
-    proof
-      a|^0 = 1 & (a mod n)|^0 = 1 by NEWTON:9;
-      hence thesis;
-    end;
-A2: for x be Nat st P[x] holds P[x+1]
-    proof
-      let x be Nat;
-      assume
-A3:   a|^x mod n = (a mod n)|^x mod n;
-A4:   a|^(x+1) mod n = (a|^x)*a mod n by NEWTON:11
-        .= (a|^x mod n)*(a mod n) mod n by INT_3:15;
-      (a mod n)|^(x+1) mod n = ((a mod n)|^x)*(a mod n) mod n by NEWTON:11
-        .= ((a mod n)|^x mod n)*((a mod n) mod n) mod n by INT_3:15
-        .= ((a mod n)|^x mod n)*(a mod n) mod n by INT_3:13;
-      hence thesis by A3,A4;
-    end;
-  for n be Nat holds P[n] from NAT_1:sch 2(A1,A2);
+A1: for x be Nat st P[x] holds P[x+1]
+  proof
+    let x be Nat;
+A2: a|^(x+1) mod n = (a|^x)*a mod n by NEWTON:11
+      .= (a|^x mod n)*(a mod n) mod n by INT_3:15;
+A3: (a mod n)|^(x+1) mod n = ((a mod n)|^x)*(a mod n) mod n by NEWTON:11
+      .= ((a mod n)|^x mod n)*((a mod n) mod n) mod n by INT_3:15
+      .= ((a mod n)|^x mod n)*(a mod n) mod n by INT_3:13;
+    assume
+    a|^x mod n = (a mod n)|^x mod n;
+    hence thesis by A2,A3;
+  end;
+  a|^0 = 1 by NEWTON:9;
+  then
+A4: P[0] by NEWTON:9;
+  for n be Nat holds P[n] from NAT_1:sch 2(A4,A1);
   hence thesis;
 end;
 
-theorem THP:
-  for x,y,n be Integer st x,n are_relative_prime & x,y are_congruent_mod n
-  holds y,n are_relative_prime
+theorem Th31:
+  for x,y,n be Integer st x,n are_relative_prime & x,y
+  are_congruent_mod n holds y,n are_relative_prime
 proof
   let x,y,n be Integer;
   assume that
@@ -784,91 +849,99 @@ A3: not y,n are_relative_prime;
   consider z be Integer such that
 A4: n*z = x-y by A2,INT_1:def 3;
   set gcdyn = y gcd n;
-A6: gcdyn divides y by INT_2:31;
-A7: gcdyn divides n by INT_2:32;
-A8: gcdyn divides n*z by INT_2:32,INT_2:12;
-A9: gcdyn divides n*z+y by A8,A6,WSIERP_1:9;
-A10: gcdyn divides (x gcd n) by A4,A9,A7,INT_2:33;
-A11: gcdyn divides 1 by A10,A1,INT_2:def 4;
-A12: gcdyn = 1 or gcdyn = -1 by A11,INT_2:17;
+A5: gcdyn divides y by INT_2:31;
+A6: gcdyn divides n by INT_2:32;
+  gcdyn divides n*z by INT_2:12,32;
+  then gcdyn divides n*z+y by A5,WSIERP_1:9;
+  then gcdyn divides (x gcd n) by A4,A6,INT_2:33;
+  then gcdyn divides 1 by A1,INT_2:def 4;
+  then
+A7: gcdyn = 1 or gcdyn = -1 by INT_2:17;
   0 <= gcdyn;
-  hence contradiction by A3,INT_2:def 4,A12;
+  hence contradiction by A3,A7,INT_2:def 4;
 end;
 
 theorem
-  for a,x be Nat, p be Prime st a,p are_relative_prime
-  & a,x*x are_congruent_mod p holds x,p are_relative_prime
+  for a,x be Nat, p be Prime st a,p are_relative_prime & a,x*x
+  are_congruent_mod p holds x,p are_relative_prime
 proof
   let a,x be Nat;
   let p be Prime;
+  assume that
+A1: a,p are_relative_prime and
+A2: a,x*x are_congruent_mod p;
   assume
-A1: a,p are_relative_prime & a,x*x are_congruent_mod p;
-  assume
-A2: not x,p are_relative_prime;
-  reconsider ai = a, dpi = p, xx = x*x as Integer;
-  x*x,p are_relative_prime by A1,THP; then
-A4: x*x gcd p = 1 by INT_2:def 4;
-  x gcd p = p by A2,PEPIN:2;
+  not x,p are_relative_prime;
+  then x gcd p = p by PEPIN:2;
   then p divides x by NAT_D:def 5;
-  then p divides x*x & p divides p by NAT_D:9;
-  then p divides 1 by A4, NAT_D:def 5;
+  then
+A3: p divides x*x by NAT_D:9;
+  x*x,p are_relative_prime by A1,A2,Th31;
+  then x*x gcd p = 1 by INT_2:def 4;
+  then p divides 1 by A3,NAT_D:def 5;
   then p = 1 by INT_2:17;
   hence contradiction by INT_2:def 5;
+  reconsider ai = a, dpi = p, xx = x*x as Integer;
 end;
 
 theorem
-  for a,x be Integer, p be Prime st a,p are_relative_prime
-  & a,x*x are_congruent_mod p holds x,p are_relative_prime
+  for a,x be Integer, p be Prime st a,p are_relative_prime & a,x*x
+  are_congruent_mod p holds x,p are_relative_prime
 proof
   let a,x be Integer;
   let p be Prime;
+  assume that
+A1: a,p are_relative_prime and
+A2: a,x*x are_congruent_mod p;
+  x*x,p are_relative_prime by A1,A2,Th31;
+  then
+A3: x*x gcd p = 1 by INT_2:def 4;
   assume
-A1: a,p are_relative_prime & a,x*x are_congruent_mod p;
-  assume
-A2: not x,p are_relative_prime;
-  x*x,p are_relative_prime by A1,THP; then
-A4: x*x gcd p = 1 by INT_2:def 4;
-A5: x gcd p <> 1 & x gcd p >= 0 by A2,INT_2:def 4;
-  (x gcd p) divides (x*x) & (x gcd p) divides p by INT_2:31,INT_2:12;
-  then (x gcd p) = 1 or (x gcd p) = -1 by INT_2:33,INT_2:17,A4;
-  hence contradiction by A5;
+A4: not x,p are_relative_prime;
+A5: (x gcd p) divides p by INT_2:31;
+A6: x gcd p >= 0;
+  (x gcd p) divides (x*x) by INT_2:12,31;
+  then (x gcd p) = 1 or (x gcd p) = -1 by A3,A5,INT_2:17,33;
+  hence contradiction by A4,A6,INT_2:def 4;
 end;
 
-Lmmod1:
-  for n be Nat, a be Integer st n <> 0 holds (a mod n),a are_congruent_mod n
+Lm7: for n be Nat, a be Integer st n <> 0 holds (a mod n),a are_congruent_mod
+n
+
 proof
   let n be Nat;
   let a be Integer;
+A1: (a mod n) mod n = a mod n by INT_3:13;
   assume
-A1: n <> 0;
-  (a mod n) mod n = a mod n by INT_3:13;
+  n <> 0;
   hence thesis by A1,INT_3:12;
 end;
 
-Lmmod2:
-  for n be Nat, a be Integer st n <> 0 ex an be Nat st an,a are_congruent_mod n
+Lm8: for n be Nat, a be Integer st n <> 0 ex an be Nat st an,a
+are_congruent_mod n
+
 proof
   let n be Nat;
   let a be Integer;
   assume
 A1: n <> 0;
-  reconsider an = a mod n as Element of NAT by INT_1:16,INT_1:84;
+  reconsider an = a mod n as Element of NAT by INT_1:16,84;
   take an;
-  thus thesis by A1,Lmmod1;
+  thus thesis by A1,Lm7;
 end;
 
-Lmsm1:
-  for a,b,n,x be Nat st a,b are_congruent_mod n & n <> 0
-  holds a|^x,b|^x are_congruent_mod n
+Lm9: for a,b,n,x be Nat st a,b are_congruent_mod n & n <> 0 holds a|^x,b|^x
+are_congruent_mod n
+
 proof
   let a,b,n,x be Nat;
-  assume
-A1: a,b are_congruent_mod n & n <> 0;
-  (a|^x) mod n = ((a mod n)|^x) mod n
-  & (b|^x) mod n = ((b mod n)|^x) mod n by PEPIN:12;
-  then (a|^x) mod n = ((a mod n)|^x) mod n
-  & (b|^x) mod n = ((a mod n)|^x) mod n by A1,INT_3:12;
-  hence thesis by INT_3:12,A1;
+  assume that
+A1: a,b are_congruent_mod n and
+A2: n <> 0;
+A3: (a|^x) mod n = ((a mod n)|^x) mod n by PEPIN:12;
+  (b|^x) mod n = ((b mod n)|^x) mod n by PEPIN:12;
+  then (b|^x) mod n = ((a mod n)|^x) mod n by A1,INT_3:12;
+  hence thesis by A2,A3,INT_3:12;
 end;
 
 theorem
@@ -877,69 +950,73 @@ theorem
 proof
   let a,b be Integer;
   let n,x be Nat;
-  assume
-A1: a,b are_congruent_mod n & n <> 0;
+  assume that
+A1: a,b are_congruent_mod n and
+A2: n <> 0;
   consider an be Nat such that
-A2: an,a are_congruent_mod n by A1,Lmmod2;
+A3: an,a are_congruent_mod n by A2,Lm8;
+  b mod n >= 0 by A2,INT_3:9;
+  then b mod n is Element of NAT by INT_1:16;
+  then consider nb be Nat such that
+A4: nb = b mod n;
   reconsider ai = an as Integer;
-A4: an mod n = a mod n by A2,INT_3:12;
-A5: a|^x mod n = (a mod n)|^x mod n
-  & b|^x mod n = (b mod n)|^x mod n by INTPOW;
-  b mod n is Integer & b mod n >= 0 by A1,INT_3:9; then
-A6: b mod n is Element of NAT by INT_1:16;
-A7: b mod n = (b mod n) mod n by INT_3:13;
-  consider nb be Nat such that
-A8: nb = b mod n by A6;
+A5: ai,b are_congruent_mod n by A1,A3,INT_1:36;
   reconsider bi = nb as Integer;
-A10: b,bi are_congruent_mod n by A1,A7,A8,INT_3:12;
-  ai,b are_congruent_mod n by A1,A2,INT_1:36;
-  then an,nb are_congruent_mod n by A10,INT_1:36;
-  then an|^x,nb|^x are_congruent_mod n by A1,Lmsm1; then
-A11: (an|^x mod n) = (nb|^x mod n) by INT_3:12;
-  (a mod n)|^x mod n = (b mod n)|^x mod n by A4,A8,A11,PEPIN:12;
-  hence thesis by A1,INT_3:12,A5;
+  b mod n = (b mod n) mod n by INT_3:13;
+  then b,bi are_congruent_mod n by A2,A4,INT_3:12;
+  then an,nb are_congruent_mod n by A5,INT_1:36;
+  then an|^x,nb|^x are_congruent_mod n by A2,Lm9;
+  then
+A6: (an|^x mod n) = (nb|^x mod n) by INT_3:12;
+A7: b|^x mod n = (b mod n)|^x mod n by Th30;
+A8: a|^x mod n = (a mod n)|^x mod n by Th30;
+  an mod n = a mod n by A3,INT_3:12;
+  then (a mod n)|^x mod n = (b mod n)|^x mod n by A4,A6,PEPIN:12;
+  hence thesis by A2,A8,A7,INT_3:12;
 end;
 
 theorem
-  for a be Integer, n be Prime st a*a mod n = 1
-  holds a,1 are_congruent_mod n or a,(-1) are_congruent_mod n
+  for a be Integer, n be Prime st a*a mod n = 1 holds a,1
+  are_congruent_mod n or a,(-1) are_congruent_mod n
 proof
   let a be Integer;
   let n be Prime;
-A0: n > 1 by INT_2:def 5;
-  assume
-A1: a*a mod n = 1;
-  0 = n*0; then
-A2: n divides 0 by INT_1:def 9;
-A3: 1 mod n = 1 by A0,PEPIN:5;
-A4: a mod n <> 0
-    proof
-      assume
-A5:   a mod n = 0;
-      a*a mod n = (a mod n)*(a mod n) mod n by INT_3:15
-      .= 0 by A2,INT_1:89,A5;
-      hence contradiction by A1;
-    end;
   reconsider cLa = a mod n as Integer;
-  cLa mod n = a mod n by INT_3:13; then
-A7: a,cLa are_congruent_mod n by INT_3:12;
-A8: cLa*cLa mod n = 1 by A1,INT_3:15;
-A9: a mod n >= 0 & a mod n < n by INT_3:9;
-  cLa <> 0 & cLa >= 0 & cLa < n by A4,INT_3:9;
-  then 0+1 <= cLa & cLa < n by INT_1:20;
-  then cLa-1 is Element of NAT by INT_1:18;
-  then consider ax be Nat such that
-A10: ax = cLa-1;
-  cLa+1 is Element of NAT by A9,INT_1:16;
-  then consider ay be Nat such that
-A11: ay = cLa+1;
-  cLa*cLa,1 are_congruent_mod n by A3,A8,INT_3:12; then
-A12: n divides cLa*cLa-1 by INT_2:19;
-  n divides (cLa+1)*(cLa-1) by A12;
-  then n divides (cLa-(-1)) or n divides (cLa-1) by A10,A11,NEWTON:98;
-  then cLa,(-1) are_congruent_mod n
-  or cLa,1 are_congruent_mod n by INT_2:19;
-  hence thesis by INT_1:36,A7;
+  n > 1 by INT_2:def 5;
+  then
+A1: 1 mod n = 1 by PEPIN:5;
+  assume
+A2: a*a mod n = 1;
+  then cLa*cLa mod n = 1 by INT_3:15;
+  then cLa*cLa,1 are_congruent_mod n by A1,INT_3:12;
+  then n divides cLa*cLa-1 by INT_2:19;
+  then
+A3: n divides (cLa+1)*(cLa-1);
+  0 = n*0;
+  then
+A4: n divides 0 by INT_1:def 9;
+A5: a mod n <> 0
+  proof
+    assume
+A6: a mod n = 0;
+    a*a mod n = (a mod n)*(a mod n) mod n by INT_3:15
+      .= 0 by A4,A6,INT_1:89;
+    hence contradiction by A2;
+  end;
+  cLa >= 0 by INT_3:9;
+  then 0+1 <= cLa by A5,INT_1:20;
+  then
+A7: cLa-1 is Element of NAT by INT_1:18;
+  cLa mod n = a mod n by INT_3:13;
+  then
+A8: a,cLa are_congruent_mod n by INT_3:12;
+  a mod n >= 0 by INT_3:9;
+  then cLa+1 is Element of NAT by INT_1:16;
+  then n divides (cLa-(-1)) or n divides (cLa-1) by A7,A3,NEWTON:98;
+  then cLa,(-1) are_congruent_mod n or cLa,1 are_congruent_mod n by
+  INT_2:
+  19;
+  hence thesis by A8,INT_1:36;
 end;
 
 begin :: Multiplicative Group of a Field
@@ -948,308 +1025,344 @@ theorem
   for p be Prime holds Z/Z*(p) = MultGroup (INT.Ring(p))
 proof
   let p be Prime;
-A1: 0 in Segm(p) by GR_CY_1:10;
-A2: 1 < p by INT_2:def 5;
-A3: 0 = In (0,Segm(p)) by A1,FUNCT_7:def 1;
-A4: the carrier of (Z/Z*(p))
-  = NonZero INT.Ring p by A2,A3,INT_7:def 2
-  .= the carrier of MultGroup (INT.Ring(p)) by UNIROOTS:def 1;
-A5: Segm(p) \ {0} = NonZero INT.Ring p
-    by A1,FUNCT_7:def 1
-  .= the carrier of MultGroup (INT.Ring(p)) by UNIROOTS:def 1;
-  the multF of Z/Z*(p) = (multint p) || (Segm(p) \ {0}) by INT_7:def 2,A2
-  .= the multF of MultGroup (INT.Ring(p)) by UNIROOTS:def 1,A5;
+A1: 0 in Segm(p) by NAT_1:45;
+  then
+A2: Segm(p) \ {0} = NonZero INT.Ring p by FUNCT_7:def 1
+    .= the carrier of MultGroup (INT.Ring(p)) by UNIROOTS:def 1;
+A3: 1 < p by INT_2:def 5;
+  then
+A4: the multF of Z/Z*(p) = (multint p) || (Segm(p) \ {0}) by
+  INT_7:def 2
+    .= the multF of MultGroup (INT.Ring(p)) by A2,UNIROOTS:def 1;
+  0 = In (0,Segm(p)) by A1,FUNCT_7:def 1;
+  then the carrier of (Z/Z*(p)) = NonZero INT.Ring p by A3,INT_7:def 2
+    .= the carrier of MultGroup (INT.Ring(p)) by UNIROOTS:def 1;
   hence Z/Z*(p) = MultGroup (INT.Ring(p)) by A4;
 end;
 
-registration let F be commutative Skew-Field;
+registration
+  let F be commutative Skew-Field;
   cluster MultGroup (F) -> commutative;
   coherence
   proof
     let x,y be Element of MultGroup F;
-    x in the carrier of MultGroup F
-    & y in the carrier of MultGroup F; then
-A1: x in NonZero F &
-    y in NonZero F by UNIROOTS: def 1;
+    x in the carrier of MultGroup F;
+    then x in NonZero F by UNIROOTS:def 1;
     then reconsider x1 = x as Element of F;
-    reconsider y1 = y as Element of F by A1;
+    y in the carrier of MultGroup F;
+    then y in NonZero F by UNIROOTS:def 1;
+    then reconsider y1 = y as Element of F;
     x*y = x1*y1 by UNIROOTS:19
-    .= y*x by UNIROOTS:19;
+      .= y*x by UNIROOTS:19;
     hence thesis;
   end;
 end;
 
 theorem
-  for F be commutative Skew-Field, x be Element of MultGroup (F),
-  x1 be Element of F st x = x1 holds x" = x1"
+  for F be commutative Skew-Field, x be Element of MultGroup (F), x1 be
+  Element of F st x = x1 holds x" = x1"
 proof
-  let F be commutative Skew-Field,
-      h be Element of MultGroup (F),
-      hp be Element of F;
+  let F be commutative Skew-Field, h be Element of MultGroup (F), hp be
+  Element of F;
   assume
 A1: h = hp;
+  set hpd = hp";
   h in the carrier of MultGroup (F);
   then h in NonZero F by UNIROOTS:def 1;
-  then not h in {0.F} by XBOOLE_0:def 5; then
+  then not h in {0.F} by XBOOLE_0:def 5;
+  then
 A2: h <> 0.F by TARSKI:def 1;
-  set hpd = hp";
-  hp*hpd = 1.F by A1,A2,VECTSP_1:def 22; then
-  hpd <> 0.F by VECTSP_1:36;
+  then hp*hpd = 1.F by A1,VECTSP_1:def 22;
+  then hpd <> 0.F by VECTSP_1:36;
   then not hpd in {0.F} by TARSKI:def 1;
   then hpd in NonZero F by XBOOLE_0:def 5;
   then reconsider g = hpd as Element of MultGroup (F) by UNIROOTS:def 1;
-A4: 1_F = 1_MultGroup F by UNIROOTS:20;
+A3: 1_F = 1_MultGroup F by UNIROOTS:20;
   g * h = hpd*hp by A1,UNIROOTS:19
-  .= 1_(MultGroup (F)) by A1,A2,VECTSP_1:def 22,A4;
+    .= 1_(MultGroup (F)) by A1,A2,A3,VECTSP_1:def 22;
   hence thesis by GROUP_1:def 6;
 end;
 
-LM0X62a:
-  for F be commutative Skew-Field, G be Subgroup of MultGroup (F),
-  n be Nat st 0 < n ex f be Polynomial of F st deg f = n &
-  for x,xn be Element of F, xz be Element of G st x = xz & xn = xz|^n
-  holds eval(f,x) = xn-1.F
+Lm10: for F be commutative Skew-Field, G be Subgroup of MultGroup (F), n be
+Nat st 0 < n ex f be Polynomial of F st deg f = n & for x,xn be Element of F,
+xz be Element of G st x = xz & xn = xz|^n holds eval(f,x) = xn-1.F
+
 proof
-  let F be commutative Skew-Field,
-  G be Subgroup of MultGroup (F), n be Nat;
-  assume 0 < n; then
-A1: 0+1 < n+1 by XREAL_1:10;
+  let F be commutative Skew-Field, G be Subgroup of MultGroup (F), n be Nat;
   reconsider n0 = n as Element of NAT by ORDINAL1:def 13;
   set f = (<%0.F, 1_(F)%>)`^n0-1_.(F);
-A2: now let x,xn be Element of F, xz be Element of G;
-      assume
-A3:   x = xz & xn = xz|^n;
-      the carrier of G c= the carrier of MultGroup (F) by GROUP_2:def 5;
-      then reconsider xxz = xz as Element of MultGroup (F) by TARSKI:def 3;
-A4:   xn = xxz|^n0 by GROUP_4:3,A3
-      .=(power F).(x,n0) by UNIROOTS:32,A3;
-      thus eval(f,x) = eval((<%0.F,1_(F)%>)`^n0,x)-eval(1_.(F),x)
-      by POLYNOM4:24
+A1: now
+    let x,xn be Element of F, xz be Element of G;
+    assume that
+A2: x = xz and
+A3: xn = xz|^n;
+    the carrier of G c= the carrier of MultGroup (F) by GROUP_2:def 5;
+    then reconsider xxz = xz as Element of MultGroup (F) by TARSKI:def 3;
+A4: xn = xxz|^n0 by A3,GROUP_4:3
+      .=(power F).(x,n0) by A2,UNIROOTS:32;
+    thus eval(f,x) = eval((<%0.F,1_(F)%>)`^n0,x)-eval(1_.(F),x) by POLYNOM4:24
       .= eval((<%0.F,1_(F)%>)`^n0,x)-1_F by POLYNOM4:21
       .= (power F).(eval(<%0.F,1_(F)%>,x),n0)-1_F by POLYNOM5:23
       .= xn-1_F by A4,POLYNOM5:49;
-    end;
-A5: len <%0.F,1_(F)%> = 2 by POLYNOM5:41;
-A6: len((<%0.F,1_(F)%>)`^n0) = n*2-n+1 by A5,POLYNOM5:24
-  .= n+1;
-  len(1_.(F)) = 1 by POLYNOM4:7; then
-A7: len(-1_.(F)) = 1 by POLYNOM4:11;
-  len (f) = max(n+1,1) by A6,A7,POLYNOM4:10,A1
-  .= n+1 by XXREAL_0:def 10,A1;
+  end;
+  assume
+  0 < n;
+  then
+A5: 0+1 < n+1 by XREAL_1:10;
+  len(1_.(F)) = 1 by POLYNOM4:7;
+  then
+A6: len(-1_.(F)) = 1 by POLYNOM4:11;
+  len <%0.F,1_(F)%> = 2 by POLYNOM5:41;
+  then len((<%0.F,1_(F)%>)`^n0) = n*2-n+1 by POLYNOM5:24
+    .= n+1;
+  then len (f) = max(n+1,1) by A5,A6,POLYNOM4:10
+    .= n+1 by A5,XXREAL_0:def 10;
   then deg f = n;
-  hence thesis by A2;
+  hence thesis by A1;
 end;
 
-LM0X62:
-  for F be commutative Skew-Field, G be Subgroup of MultGroup (F),
-  a,b be Element of G, n be Nat st G is finite & 0 < n & ord a = n
-  & b |^n = 1_G holds b is Element of gr {a}
+Lm11: for F be commutative Skew-Field, G be Subgroup of MultGroup (F), a,b be
+Element of G, n be Nat st G is finite & 0 < n & ord a = n & b |^n = 1_G holds b
+is Element of gr {a}
+
 proof
-  let F be commutative Skew-Field, G be Subgroup of MultGroup (F),
-  a, b be Element of G, n be Nat;
-  assume
-A1: G is finite & 0 < n & ord a = n & b |^n = 1_G;
-  assume
-A2: not b is Element of gr {a};
-A3: the carrier of G c= the carrier of MultGroup (F) by GROUP_2:def 5;
-  reconsider L = F as unital (non empty doubleLoopStr);
+
+  let F be commutative Skew-Field, G be Subgroup of MultGroup (F), a, b be
+  Element of G, n be Nat;
+
+  assume that
+A1: G is finite and
+A2: 0 < n and
+A3: ord a = n and
+A4: b |^n = 1_G;
   consider f be Polynomial of F such that
-A4: deg f = n & for x,xn be Element of F, xz be Element of G st x = xz
-    & xn = xz|^n holds eval(f,x) = xn-1.F by A1,LM0X62a;
-A5: for x be Element of G st x|^n = 1_G holds x in Roots(f)
-    proof
-      let x1 be Element of G;
-      assume
-A6:   x1|^n = 1_G;
-      x1 in the carrier of G;
-      then x1 in the carrier of MultGroup (F) by A3;
-      then x1 in NonZero F by UNIROOTS: def 1;
-      then reconsider x3 = x1 as Element of F;
-A7:   1_F = 1_MultGroup F by UNIROOTS:20; then
-A8:   x1|^n = 1.F by GROUP_2:53,A6;
-      reconsider x2 = x1|^n as Element of F by GROUP_2:53,A6,A7;
-      eval(f,x3) = x2-1.F by A4
-      .=0.F by RLVECT_1:28,A8;
-      then x3 is_a_root_of f by POLYNOM5:def 6;
-      hence x1 in Roots(f) by POLYNOM5:def 9;
-    end;
-A9: the carrier of gr {a} c= Roots(f)
-    proof
-      let x be set;
-      assume
-A10:   x in the carrier of gr {a};
-      the carrier of gr {a} c= the carrier of G by GROUP_2:def 5;
-      then reconsider x1=x as Element of G by A10;
-      x1 in gr {a} by A10,STRUCT_0:def 5;
-      then consider j be Integer such that
-A11:  x1 = a|^j by GR_CY_1:25;
-      x1|^n = a|^(j*n) by GROUP_1:67,A11
-        .= (a|^n)|^j by GROUP_1:67
-        .= (1_G)|^j by A1,GROUP_1:82
-        .= 1_G by GROUP_1:61;
-      hence x in Roots(f) by A5;
-    end;
-  reconsider RF = Roots(f) as finite set by INT_7:27,A4;
-  consider m,n0 be Element of NAT such that
-A12: n0 = deg f & m = card(Roots(f)) & m <= n0 by INT_7:27,A4;
+A5: deg f = n and
+
+A6: for x,xn be Element of F, xz be Element of G st x = xz & xn = xz|^n
+  holds eval(f,x) = xn-1.F by A2,Lm10;
+
+  reconsider RF = Roots(f) as finite set by A5,INT_7:27;
+  assume
+A7: not b is Element of gr {a};
+A8: the carrier of G c= the carrier of MultGroup (F) by GROUP_2:def 5;
+A9: for x be Element of G st x|^n = 1_G holds x in Roots(f)
+  proof
+    let x1 be Element of G;
+A10: 1_F = 1_MultGroup F by UNIROOTS:20;
+    x1 in the carrier of G;
+    then x1 in the carrier of MultGroup (F) by A8;
+    then x1 in NonZero F by UNIROOTS:def 1;
+    then reconsider x3 = x1 as Element of F;
+    assume
+A11: x1|^n = 1_G;
+    then
+A12: x1|^n = 1.F by A10,GROUP_2:53;
+    reconsider x2 = x1|^n as Element of F by A11,A10,GROUP_2:53;
+    eval(f,x3) = x2-1.F by A6
+      .=0.F by A12,RLVECT_1:28;
+    then x3 is_a_root_of f by POLYNOM5:def 6;
+    hence x1 in Roots(f) by POLYNOM5:def 9;
+  end;
+A13: the carrier of gr {a} c= Roots(f)
+  proof
+    let x be set;
+    assume
+A14: x in the carrier of gr {a};
+    the carrier of gr {a} c= the carrier of G by GROUP_2:def 5;
+    then reconsider x1=x as Element of G by A14;
+    x1 in gr {a} by A14,STRUCT_0:def 5;
+    then consider j be Integer such that
+A15: x1 = a|^j by GR_CY_1:25;
+    x1|^n = a|^(j*n) by A15,GROUP_1:67
+      .= (a|^n)|^j by GROUP_1:67
+      .= (1_G)|^j by A3,GROUP_1:82
+      .= 1_G by GROUP_1:61;
+    hence x in Roots(f) by A9;
+  end;
+  b in Roots(f) by A4,A9;
+  then {b} c= Roots(f) by ZFMISC_1:37;
+  then
+A16: (the carrier of gr {a}) \/ {b} c= Roots(f) by A13,XBOOLE_1:8;
   reconsider gra = gr {a} as finite Group by A1;
-A13: n = card gra by GR_CY_1:27,A1
-  .= card (the carrier of gr {a});
-  b in Roots(f) by A1,A5;
-  then {b} c= Roots(f) by ZFMISC_1:37; then
-A14: (the carrier of gr {a}) \/ {b} c= Roots(f) by A9,XBOOLE_1:8;
-  reconsider XX = the carrier of gr {a} as finite set by A13;
-A15: card ((the carrier of gr {a}) \/ {b}) = card ( XX \/ {b} )
-  .= n0+1 by A4,A12,A13,CARD_2:54,A2;
-  card (n0+1) c= card(m) by CARD_1:27,A14,A15,A12;
+A17: n = card gra by A1,A3,GR_CY_1:27
+    .= card (the carrier of gr {a});
+  then reconsider XX = the carrier of gr {a} as finite set;
+  consider m,n0 be Element of NAT such that
+A18: n0 = deg f and
+A19: m = card(Roots(f)) and
+A20: m <= n0 by A5,INT_7:27;
+  card ((the carrier of gr {a}) \/ {b}) = card ( XX \/ {b} )
+    .= n0+1 by A7,A5,A18,A17,CARD_2:54;
+  then card (n0+1) c= card(m) by A19,A16,CARD_1:27;
   then n0+1 <= m by NAT_1:41;
-  hence contradiction by NAT_1:16,A12,XXREAL_0:2;
+  hence contradiction by A20,NAT_1:16,XXREAL_0:2;
+  reconsider L = F as unital (non empty doubleLoopStr);
 end;
 
 theorem
   for F be commutative Skew-Field, G be finite Subgroup of MultGroup(F)
   holds G is cyclic Group
 proof
-  let F be commutative Skew-Field,
-  G be finite Subgroup of MultGroup(F);
-  assume not G is cyclic Group; then
-A1: not ex x be Element of G st ord x = card (G) by GR_CY_1:43;
-A2: for x be Element of G holds ord x < card (G)
-    proof
-      let x be Element of G;
-      ord x <= card (G) by NAT_D:7,GR_CY_1:28;
-      hence thesis by XXREAL_0:1,A1;
-    end;
+  let F be commutative Skew-Field, G be finite Subgroup of MultGroup(F);
   consider a be Element of G;
   defpred P[Nat,Element of G,Element of G] means ord $2 < ord $3;
-A3: for n being Element of NAT for x being Element of G ex y being Element of G
-    st P[n,x,y]
+  assume
+  not G is cyclic Group;
+  then
+A1: not ex x be Element of G st ord x = card (G) by GR_CY_1:43;
+A2: for x be Element of G holds ord x < card (G)
+  proof
+    let x be Element of G;
+    ord x <= card (G) by GR_CY_1:28,NAT_D:7;
+    hence thesis by A1,XXREAL_0:1;
+  end;
+A3: for n being Element of NAT for x being Element of G ex y being Element
+  of G st P[n,x,y]
+  proof
+    let n be Element of NAT, x be Element of G;
+    set n = ord x;
+    n < card G by A2;
+    then
+A4: card gr {x} <> card G by GR_CY_1:27;
+    the carrier of (gr {x}) c= the carrier of G by GROUP_2:def 5;
+    then the carrier of (gr {x}) c< the carrier of G by A4,XBOOLE_0:def 8;
+    then (the carrier of G) \ (the carrier of (gr {x})) <> {} by
+    XBOOLE_1:
+    105;
+    then consider z be set such that
+A5: z in (the carrier of G) \ (the carrier of (gr {x})) by
+    XBOOLE_0:def 1;
+    reconsider z as Element of G by A5;
+    set m = ord z;
+    set l = m lcm n;
+    n divides (m lcm n) by INT_2:def 2;
+    then consider j be Integer such that
+A6: l = n*j by INT_1:def 9;
+A7: 1 <= card gr {x} by GROUP_1:90;
+    then
+A8: 1 <= n by GR_CY_1:27;
+    then l/n = j by A6,XCMPLX_1:90;
+    then
+A9: j is Element of NAT by INT_1:16;
+    not m divides n
     proof
-      let n be Element of NAT, x be Element of G;
-      set n = ord x;
-A4:   n < card G by A2;
-A5:   the carrier of (gr {x}) c= the carrier of G by GROUP_2:def 5;
-A6:   card gr {x} <> card G by A4,GR_CY_1:27;
-      the carrier of (gr {x}) c< the carrier of G by XBOOLE_0:def 8,A5,A6;
-      then (the carrier of G) \ (the carrier of (gr {x})) <> {}
-      by XBOOLE_1:105;
-      then consider z be set such that
-A7:   z in (the carrier of G) \ (the carrier of (gr {x})) by XBOOLE_0:def 1;
-      reconsider z as Element of G by A7;
-      set m = ord z;
-      reconsider d = m gcd n as Nat;
-      reconsider H = gr {z } as strict Subgroup of G;
-A16:  1 <= card gr {x} by GROUP_1:90; then
-A17:  1 <= n by GR_CY_1:27;
-A18:  n <> 0 by A16,GR_CY_1:27;
-A19:  1 <= card gr {z} by GROUP_1:90; then
-A20:  1 <= m by GR_CY_1:27;
-A21:  m <> 0 by A19,GR_CY_1:27;
-      set l = m lcm n;
-      consider m0,n0 be Element of NAT such that
-A22:  l = n0*m0 & n0 gcd m0 = 1 & n0 divides n & m0 divides m
-      & n0 <> 0 & m0 <> 0 by INT_7:17,A17,A20;
-      consider j be Integer such that
-A23:  n = n0*j by A22,INT_1:def 9;
-A24:  n/n0 is Integer by A22,XCMPLX_1:90,A23;
-      reconsider d1 = n/n0 as Element of NAT by INT_1:16,A24;
-      consider u be Integer such that
-A25:  m = m0* u by A22,INT_1:def 9;
-A26:  m/m0 is Integer by A22,XCMPLX_1:90,A25;
-      reconsider d2 = m/m0 as Element of NAT by INT_1:16,A26;
-      set y = (x|^d1)*(z|^d2);
-      n = d1*n0 by A22,XCMPLX_1:88; then
-A27:  ord (x|^d1) = n0 by INT_7:30;
-      m = d2*m0 by A22,XCMPLX_1:88;
-      then ord (z|^d2) = m0 by INT_7:30; then
-A28:  ord y = m0*n0 by A27,INT_7:25,A22;
-A29:  not m divides n
-      proof
-        assume m divides n;
-        then consider j be Integer such that
-A31:    n = m*j by INT_1:def 9;
-A32:    z|^n = (z|^m)|^j by GROUP_1:67,A31
+      assume
+      m divides n;
+      then consider j be Integer such that
+A10:  n = m*j by INT_1:def 9;
+A11:  0 < n by A7,GR_CY_1:27;
+      z|^n = (z|^m)|^j by A10,GROUP_1:67
         .= (1_(G))|^j by GROUP_1:82
         .= 1_(G) by GROUP_1:61;
-        0 < n by A16,GR_CY_1:27;
-        then z is Element of gr {x} by A32,LM0X62;
-        hence contradiction by A7,XBOOLE_0:def 5;
-      end;
-A33:  n <> l by INT_2:def 2,A29;
-A34:  n divides (m lcm n) by INT_2:def 2;
-      consider j be Integer such that
-A35:  l = n*j by A34,INT_1:def 9;
-A36:  l/n = j by A17,A35,XCMPLX_1:90;
-A37:  j is Element of NAT by INT_1:16,A36;
-      j <> 0 by A18,A21,INT_2:4,A35;
-      then n*1 <= n*j by XREAL_1:66,A37,NAT_1:14;
-      then n < l by XXREAL_0:1,A35,A33;
-      hence ex y be Element of G st n < ord y by A28,A22;
+      then z is Element of gr {x} by A11,Lm11;
+      hence contradiction by A5,XBOOLE_0:def 5;
     end;
+    then
+A12: n <> l by INT_2:def 2;
+A13: 1 <= card gr {z} by GROUP_1:90;
+    then
+A14: m <> 0 by GR_CY_1:27;
+    1 <= m by A13,GR_CY_1:27;
+    then consider m0,n0 be Element of NAT such that
+A15: l = n0*m0 and
+A16: n0 gcd m0 = 1 and
+A17: n0 divides n and
+A18: m0 divides m and
+A19: n0 <> 0 and
+A20: m0 <> 0 by A8,INT_7:17;
+    ex u be Integer st m = m0* u by A18,INT_1:def 9;
+    then m/m0 is Integer by A20,XCMPLX_1:90;
+    then reconsider d2 = m/m0 as Element of NAT by INT_1:16;
+    ex j be Integer st n = n0*j by A17,INT_1:def 9;
+    then n/n0 is Integer by A19,XCMPLX_1:90;
+    then reconsider d1 = n/n0 as Element of NAT by INT_1:16;
+    set y = (x|^d1)*(z|^d2);
+    m = d2*m0 by A20,XCMPLX_1:88;
+    then
+A21: ord (z|^d2) = m0 by INT_7:30;
+    n <> 0 by A7,GR_CY_1:27;
+    then j <> 0 by A14,A6,INT_2:4;
+    then n*1 <= n*j by A9,NAT_1:14,XREAL_1:66;
+    then
+A22: n < l by A12,A6,XXREAL_0:1;
+    n = d1*n0 by A19,XCMPLX_1:88;
+    then ord (x|^d1) = n0 by INT_7:30;
+    then ord y = m0*n0 by A16,A21,INT_7:25;
+    hence ex y be Element of G st n < ord y by A15,A22;
+    reconsider H = gr {z } as strict Subgroup of G;
+    reconsider d = m gcd n as Nat;
+  end;
   consider f being Function of NAT, the carrier of G such that
-A38: f.0 = a & for n being Element of NAT holds P[n,f.n,f.(n+1)]
-  from RECDEF_1:sch 2(A3);
+A23: f.0 = a & for n being Element of NAT holds P[n,f.n,f.(n+1)] from
+  RECDEF_1:sch 2(A3);
   deffunc F(Element of NAT) = ord (f.$1);
   consider g be Function of NAT, NAT such that
-A39: for k be Element of NAT holds g.k=F(k) from FUNCT_2:sch 4;
-A40: now let k be Element of NAT;
-A41:   g.k = ord (f.k) by A39;
-       g.(k+1) = ord (f.(k+1)) by A39;
-       hence g.k < g.(k+1) by A38,A41;
-     end;
-A42: for k,m be Element of NAT holds g.k < g.(k+1+m)
-     proof
-       let k be Element of NAT;
-       defpred P[Element of NAT] means g.k < g.(k+1+$1);
-A43:   P[0] by A40;
-A44:   now let m be Element of NAT;
-         assume
-A45:     P[m];
-         g.(k+1+m) < g.((k+1+m) + 1) by A40;
-         hence P[m+1] by A45, XXREAL_0:2;
-       end;
-       for m be Element of NAT holds P[m] from NAT_1:sch 1(A43,A44);
-       hence thesis;
-     end;
-A46: for k,m be Element of NAT st k < m holds g.k < g.m
-     proof
-       let k, m be Element of NAT;
-       assume
-A47:   k < m;
-       then m-k is Element of NAT by INT_1:18;
-       then reconsider mk = m-k as Nat;
-       m-k <> 0 by A47;
-       then consider n0 be Nat such that
-A48:   mk = n0+1 by NAT_1:6;
-       reconsider n = n0 as Element of NAT by ORDINAL1:def 13;
-       m = k+1+n by A48;
-       hence thesis by A42;
-     end;
-  g is one-to-one
-  proof
-    now let x1,x2 be set;
-      assume
-A49:  x1 in NAT & x2 in NAT & g.x1 = g.x2;
-      then reconsider xx1 = x1,xx2 = x2 as Element of NAT;
-        xx1 <= xx2 & xx2 <= xx1 by A46,A49;
-        hence x2 = x1 by XXREAL_0:1;
-    end;
-    hence thesis by FUNCT_2:25;
+A24: for k be Element of NAT holds g.k=F(k) from FUNCT_2:sch 4;
+A25: now
+    let k be Element of NAT;
+A26: g.(k+1) = ord (f.(k+1)) by A24;
+    g.k = ord (f.k) by A24;
+    hence g.k < g.(k+1) by A23,A26;
   end;
-  then dom g, rng g are_equipotent by WELLORD2:def 4; then
-A50: card dom g = card rng g by CARD_1:21;
-A51: rng g c= Segm card G
-     proof
-       let y be set;
-       assume y in rng g;
-       then consider x be set such that
-A52:   x in NAT & y=g.x by FUNCT_2:17;
-       reconsider x as Element of NAT by A52;
-       reconsider gg = g.x as Element of NAT;
-       g.x = ord (f.x) by A39;
-       then gg < card G by A2;
-       hence y in Segm(card G) by A52,NAT_1:45;
-     end;
-  card rng g = card NAT by FUNCT_2:def 1,A50;
-  hence contradiction by A51;
+A27: for k,m be Element of NAT holds g.k < g.(k+1+m)
+  proof
+    let k be Element of NAT;
+    defpred P[Element of NAT] means g.k < g.(k+1+$1);
+A28: now
+      let m be Element of NAT;
+      assume
+A29:  P[m];
+      g.(k+1+m) < g.((k+1+m) + 1) by A25;
+      hence P[m+1] by A29,XXREAL_0:2;
+    end;
+A30: P[0] by A25;
+    for m be Element of NAT holds P[m] from NAT_1:sch 1(A30,A28);
+    hence thesis;
+  end;
+A31: for k,m be Element of NAT st k < m holds g.k < g.m
+  proof
+    let k, m be Element of NAT;
+    assume
+A32: k < m;
+    then m-k is Element of NAT by INT_1:18;
+    then reconsider mk = m-k as Nat;
+    m-k <> 0 by A32;
+    then consider n0 be Nat such that
+A33: mk = n0+1 by NAT_1:6;
+    reconsider n = n0 as Element of NAT by ORDINAL1:def 13;
+    m = k+1+n by A33;
+    hence thesis by A27;
+  end;
+  now
+    let x1,x2 be set;
+    assume that
+A34: x1 in NAT and
+A35: x2 in NAT and
+A36: g.x1 = g.x2;
+    reconsider xx1 = x1,xx2 = x2 as Element of NAT by A34,A35;
+A37: xx2 <= xx1 by A31,A36;
+    xx1 <= xx2 by A31,A36;
+    hence x2 = x1 by A37,XXREAL_0:1;
+  end;
+  then g is one-to-one by FUNCT_2:25;
+  then dom g, rng g are_equipotent by WELLORD2:def 4;
+  then card dom g = card rng g by CARD_1:21;
+  then
+A38: card rng g = card NAT by FUNCT_2:def 1;
+  rng g c= Segm card G
+  proof
+    let y be set;
+    assume
+    y in rng g;
+    then consider x be set such that
+A39: x in NAT and
+A40: y=g.x by FUNCT_2:17;
+    reconsider x as Element of NAT by A39;
+    reconsider gg = g.x as Element of NAT;
+    g.x = ord (f.x) by A24;
+    then gg < card G by A2;
+    hence y in Segm(card G) by A40,NAT_1:45;
+  end;
+  hence contradiction by A38;
 end;
+

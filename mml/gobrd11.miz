@@ -11,15 +11,14 @@ environ
       ARYTM_3, GOBOARD2, TREES_1, ARYTM_1, FINSEQ_1, MCART_1, GOBOARD1,
       METRIC_1, TOPS_1, RELAT_1, FUNCT_1, ARYTM, PCOMPS_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, TOPREAL1, GOBOARD1, ORDINAL1, XXREAL_0,
-      NUMBERS, XREAL_0, REAL_1, NAT_1, NAT_D, SQUARE_1, BINARITH, STRUCT_0,
-      PRE_TOPC, FINSEQ_1, MATRIX_1, METRIC_1, TOPS_1, CONNSP_1, PCOMPS_1,
-      RLVECT_1, RLTOPSP1, EUCLID, GOBOARD2, GOBOARD5, CONNSP_3;
+      NUMBERS, XREAL_0, REAL_1, NAT_1, NAT_D, SQUARE_1, STRUCT_0, PRE_TOPC,
+      FINSEQ_1, MATRIX_1, METRIC_1, TOPS_1, CONNSP_1, PCOMPS_1, RLVECT_1,
+      RLTOPSP1, EUCLID, GOBOARD2, GOBOARD5, CONNSP_3;
  constructors SETFAM_1, REAL_1, SQUARE_1, NAT_1, BINARITH, TOPS_1, CONNSP_1,
       PCOMPS_1, GOBOARD2, GOBOARD5, CONNSP_3, GOBOARD1, NAT_D, FUNCSDOM,
       CONVEX1;
  registrations SUBSET_1, RELSET_1, XXREAL_0, XREAL_0, MEMBERED, STRUCT_0,
-      PRE_TOPC, EUCLID, TOPREAL1, GOBOARD1, GOBOARD2, GOBOARD5, XBOOLE_0,
-      RLTOPSP1;
+      PRE_TOPC, EUCLID, GOBOARD1, GOBOARD2, GOBOARD5, XBOOLE_0, RLTOPSP1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, XBOOLE_0, EUCLID, SQUARE_1;
  theorems TARSKI, NAT_1, SPPOL_1, GOBOARD7, GOBOARD8, PRE_TOPC, CONNSP_1,
@@ -38,102 +37,114 @@ reserve i,j,k for Element of NAT,
 Lm1: sqrt 2>0 by SQUARE_1:93;
 
 theorem Th1:
-  for A being Subset of GX, p being Point of GX st
-  p in A & A is connected holds A c= Component_of p
+  for A being Subset of GX, p being Point of GX st p in A & A is
+  connected holds A c= Component_of p
 proof
   let A be Subset of GX, p be Point of GX;
-  assume
-A1: p in A & A is connected;
   consider F being Subset-Family of GX such that
-A2: (for B being Subset of GX holds B in F iff
-  B is connected & p in B) & union F = Component_of p by CONNSP_1:def 7;
-A3: A in F by A1,A2;
+A1: for B being Subset of GX holds B in F iff B is connected & p in B and
+A2: union F = Component_of p by CONNSP_1:def 7;
+  assume
+  p in A & A is connected;
+  then
+A3: A in F by A1;
   A c= union F
   proof
-    let x; thus thesis by A3,TARSKI:def 4;
+    let x;
+    thus thesis by A3,TARSKI:def 4;
   end;
   hence thesis by A2;
 end;
 
 theorem
-  for A,B,C being Subset of GX st C is_a_component_of GX
-  & A c= C & B is connected & Cl A meets Cl B holds B c= C
+  for A,B,C being Subset of GX st C is_a_component_of GX & A c= C & B is
+  connected & Cl A meets Cl B holds B c= C
 proof
   let A,B,C be Subset of GX;
-  assume
-A1: C is_a_component_of GX & A c= C & B is connected & (Cl A) /\ (Cl B) <>{};
-  then consider p being Point of GX such that
-A2: p in (Cl A) /\ (Cl B) by SUBSET_1:10;
+  assume that
+A1: C is_a_component_of GX and
+A2: A c= C and
+A3: B is connected and
+A4: (Cl A) /\ (Cl B) <>{};
+  consider p being Point of GX such that
+A5: p in (Cl A) /\ (Cl B) by A4,SUBSET_1:10;
   reconsider C' = C as Subset of GX;
   C' is closed by A1,CONNSP_1:35;
   then Cl C = C by PRE_TOPC:52;
   then
-A3: Cl A c= C by A1,PRE_TOPC:49;
-A4: p in (Cl A) & p in (Cl B) by A2,XBOOLE_0:def 4;
+A6: Cl A c= C by A2,PRE_TOPC:49;
+  p in (Cl A) by A5,XBOOLE_0:def 4;
   then
-A5: Component_of p=C' by A1,A3,CONNSP_1:44;
-A6: Cl B c= Component_of p by A1,A4,Th1,CONNSP_1:20;
+A7: Component_of p=C' by A1,A6,CONNSP_1:44;
+  p in (Cl B) by A5,XBOOLE_0:def 4;
+  then
+A8: Cl B c= Component_of p by A3,Th1,CONNSP_1:20;
   B c= Cl B by PRE_TOPC:48;
-  hence thesis by A5,A6,XBOOLE_1:1;
+  hence thesis by A7,A8,XBOOLE_1:1;
 end;
 
 reserve GZ for non empty TopSpace;
 
 theorem
-  for A,B being Subset of GZ st A is_a_component_of GZ &
-  B is_a_component_of GZ holds A \/ B is a_union_of_components of GZ
+  for A,B being Subset of GZ st A is_a_component_of GZ & B
+  is_a_component_of GZ holds A \/ B is a_union_of_components of GZ
 proof
   let A,B be Subset of GZ;
-  assume
-A1: A is_a_component_of GZ & B is_a_component_of GZ;
   {A,B} c= bool (the carrier of GZ)
   proof
     let x;
-    assume x in {A,B};
+    assume
+    x in {A,B};
     then x=A or x=B by TARSKI:def 2;
     hence thesis;
   end;
   then reconsider F2={A,B} as Subset-Family of GZ;
   reconsider F=F2 as Subset-Family of GZ;
-A2: for B1 being Subset of GZ
-  st B1 in F holds B1 is_a_component_of GZ by A1,TARSKI:def 2;
+  assume
+  A is_a_component_of GZ & B is_a_component_of GZ;
+  then
+A1: for B1 being Subset of GZ st B1 in F holds B1 is_a_component_of GZ by
+  TARSKI:def 2;
   A \/ B=union F by ZFMISC_1:93;
-  hence thesis by A2,CONNSP_3:def 2;
+  hence thesis by A1,CONNSP_3:def 2;
 end;
 
 theorem
-  for B1,B2,V being Subset of GX
-  holds Down(B1 \/ B2,V)=Down(B1,V) \/ Down(B2,V)
+  for B1,B2,V being Subset of GX holds Down(B1 \/ B2,V)=Down(B1,V) \/
+  Down(B2,V)
 proof
   let B1,B2,V be Subset of GX;
-  Down(B1 \/ B2,V)=(B1 \/ B2)/\ V & Down(B1,V)=B1 /\ V & Down(B2,V)=B2 /\ V
-  by CONNSP_3:def 5;
-  hence thesis by XBOOLE_1:23;
+A1: Down(B2,V)=B2 /\ V by CONNSP_3:def 5;
+  Down(B1 \/ B2,V)=(B1 \/ B2)/\ V & Down(B1,V)=B1 /\ V by CONNSP_3:def 5;
+  hence thesis by A1,XBOOLE_1:23;
 end;
 
 theorem
-  for B1,B2,V being Subset of GX
-  holds Down(B1 /\ B2,V)=Down(B1,V) /\ Down(B2,V)
+  for B1,B2,V being Subset of GX holds Down(B1 /\ B2,V)=Down(B1,V) /\
+  Down(B2,V)
 proof
   let B1,B2,V be Subset of GX;
-A1: Down(B1 /\ B2,V)=(B1 /\ B2)/\ V & Down(B1,V)=B1 /\ V & Down(B2,V)=B2 /\ V
-  by CONNSP_3:def 5;
-  then Down(B1 /\ B2,V)=B1 /\(B2 /\ (V /\ V)) by XBOOLE_1:16
+  Down(B1 /\ B2,V)=(B1 /\ B2)/\ V by CONNSP_3:def 5;
+  then
+A1: Down(B1 /\ B2,V)=B1 /\(B2 /\ (V /\ V)) by XBOOLE_1:16
     .=B1 /\(B2 /\ V /\ V) by XBOOLE_1:16
     .= (B1 /\ V)/\ (B2 /\ V) by XBOOLE_1:16;
-  hence thesis by A1;
+  Down(B1,V)=B1 /\ V by CONNSP_3:def 5;
+  hence thesis by A1,CONNSP_3:def 5;
 end;
 
 reserve f for non constant standard special_circular_sequence,
-  G for non empty-yielding Matrix of TOP-REAL 2;
+  G for non
+  empty-yielding Matrix of TOP-REAL 2;
 
 theorem Th6:
   (L~f)` <> {}
 proof
-  LSeg(1/2*((GoB f)*(1,width GoB f -' 1)+(GoB f)*(1,width GoB f))-|[1,0 ]| ,
-  (GoB f)*(1,width GoB f)+|[-1,1]|) misses (L~f) by GOBOARD8:33;
-  then LSeg(1/2*((GoB f)*(1,width GoB f -' 1)+(GoB f)*(1,width GoB f))-|[1,0
-  ]|, (GoB f)*(1,width GoB f)+|[-1,1]|) c= (L~f)` by SUBSET_1:43;
+  LSeg(1/2*((GoB f)*(1,width GoB f -' 1)+(GoB f)*(1,width GoB f))-|[1,0 ]|
+  , (GoB f)*(1,width GoB f)+|[-1,1]|) misses (L~f) by GOBOARD8:33;
+  then
+  LSeg(1/2*((GoB f)*(1,width GoB f -' 1)+(GoB f)*(1,width GoB f))-|[1,0 ]|
+  , (GoB f)*(1,width GoB f)+|[-1,1]|) c= (L~f)` by SUBSET_1:43;
   hence thesis;
 end;
 
@@ -146,209 +157,219 @@ end;
 Lm2: the carrier of TOP-REAL 2 = REAL 2 by EUCLID:25;
 
 theorem
-  for f holds the carrier of TOP-REAL 2 =
-  union {cell(GoB f,i,j):i<=len GoB f & j<=width GoB f}
+  for f holds the carrier of TOP-REAL 2 = union {cell(GoB f,i,j):i<=len
+  GoB f & j<=width GoB f}
 proof
   let f;
   set j1=len GoB f, j2=width GoB f;
   thus the carrier of TOP-REAL 2 c= union {cell(GoB f,i,j):i<=j1 & j<=j2}
   proof
     let x;
-    assume x in (the carrier of TOP-REAL 2);
+    assume
+    x in (the carrier of TOP-REAL 2);
     then reconsider p=x as Point of TOP-REAL 2;
     set r=p`1;
 A1: now
-      assume
-A2:   not( r<(GoB f)*(1,1)`1 or (GoB f)*(len GoB f,1)`1 <=r);
+      assume that
+A2:   not r<(GoB f)*(1,1)`1 and
+A3:   not (GoB f)*(len GoB f,1)`1 <=r;
       now
+        reconsider l=len GoB f as Element of NAT;
+        defpred P[Element of NAT] means $1=0 or(1<=$1 & $1<len GoB f implies (
+        GoB f)*($1+1,1)`1<=r);
+        1<len GoB f by GOBOARD7:34;
+        then 1+1<=len GoB f by NAT_1:13;
+        then
+A4:     1+1-1<=l-1 by XREAL_1:11;
         assume
-A3:     not ex j st 1<=j & j<len GoB f
-        & (GoB f)*(j,1)`1<=r & r<(GoB f)*(j+1,1)`1;
-        defpred P[Element of NAT] means
-        $1=0 or(1<=$1 & $1<len GoB f implies (GoB f)*($1+1,1)`1<=r);
-A4:     P[0];
-A5:     for k holds P[k] implies P[k+1]
+A5:     not ex j st 1<=j & j<len GoB f & (GoB f)*(j,1)`1<=r & r<(GoB f
+        )*(j+1,1)`1;
+A6:     for k holds P[k] implies P[k+1]
         proof
           let k;
           assume
-A6:       (k=0 or ( 1<=k & k<len GoB f implies (GoB f)*(k+1,1)`1<=r));
-          k+1=0 or(1<=k+1 & k+1<len GoB f implies (GoB f)*(k+1+1,1)`1<=r)
+A7:       k=0 or ( 1<=k & k<len GoB f implies (GoB f)*(k+1,1)`1<=r);
+          1<=k+1 & k+1<len GoB f implies (GoB f)*(k+1+1,1)`1<=r
           proof
-            (1<=k+1 & k+1<len GoB f implies (GoB f)*(k+1+1,1)`1<=r)
-            proof
+            assume
+A8:         1<=k+1 & k+1<len GoB f;
+            now
+A9:           0<=k by NAT_1:2;
               assume
-A7:           1<=k+1 & k+1<len GoB f;
-              now
-                assume
-A8:             r< (GoB f)*(k+1+1,1)`1;
-                then
-A9:             k<>0 by A2,A3,GOBOARD7:34;
-                0<=k by NAT_1:2;
-                then 0+1<=k by A9,NAT_1:13;
-                hence contradiction by A3,A6,A7,A8,XREAL_1:147;
-              end;
-              hence thesis;
+A10:          r< (GoB f)*(k+1+1,1)`1;
+              then k<>0 by A2,A5,GOBOARD7:34;
+              then 0+1<=k by A9,NAT_1:13;
+              hence contradiction by A5,A7,A8,A10,XREAL_1:147;
             end;
             hence thesis;
           end;
           hence thesis;
         end;
-A10:    for j holds P[j] from NAT_1:sch 1(A4,A5);
-        1<len GoB f by GOBOARD7:34;
-        then
-A11:    1+1<=len GoB f by NAT_1:13;
-        reconsider l=len GoB f as Element of NAT;
-A12:    1+1-1<=l-1 by A11,XREAL_1:11;
+A11:    P[0];
+A12:    for j holds P[j] from NAT_1:sch 1(A11,A6);
 A13:    l-1<l-1+1 by XREAL_1:31;
-        then reconsider l1=l-1 as Element of NAT by A12,SPPOL_1:7;
-        0<l1 by A12;
-        hence contradiction by A2,A10,A12,A13;
+        then reconsider l1=l-1 as Element of NAT by A4,SPPOL_1:7;
+        0<l1 by A4;
+        hence contradiction by A3,A12,A4,A13;
       end;
-
-hence ex j st 1<=j & j<len GoB f & (GoB f)*(j,1)`1<=r & r<(GoB f)*(j+1,1)`1;
+      hence
+      ex j st 1<=j & j<len GoB f & (GoB f)*(j,1)`1<=r & r<(GoB f)*(j+1,1)
+      `1;
     end;
-    now per cases by A1;
+    now
+      per cases by A1;
       case
 A14:    r<(GoB f)*(1,1)`1;
         reconsider G=GoB f as Go-board;
-        1 <= 1 & 1 <= width G by GOBOARD7:35;
+        1 <= width G by GOBOARD7:35;
         then
-A15:    v_strip(G,0) = { |[r1,s]| : r1 <= G*(1,1)`1 } by GOBOARD5:11;
+A15:    v_strip(G,0) = { |[r1,s]| : r1 <= G*(1,1)`1 } by
+        GOBOARD5:11;
         |[r,p`2]| in { |[r1,s]| : r1 <= (GoB f)*(1,1)`1 } by A14;
         then p in v_strip(GoB f,0) by A15,EUCLID:57;
-        hence ex j0 being Element of NAT st j0<=j1 & x in v_strip(GoB f,j0)
-        by NAT_1:2;
+        hence ex j0 being Element of NAT st j0<=j1 & x in v_strip(GoB f,j0) by
+        NAT_1:2;
       end;
       case
 A16:    (GoB f)*(len GoB f,1)`1 <=r;
         reconsider G=GoB f as Go-board;
-        1 <= 1 & 1 <= width G by GOBOARD7:35;
+        1 <= width G by GOBOARD7:35;
         then
-A17:    v_strip(G,len G) = { |[r1,s]| : G*(len G,1)`1<=r1} by GOBOARD5:10;
+A17:    v_strip(G,len G) = { |[r1,s]| : G*(len G,1)`1<=r1} by
+        GOBOARD5:10;
         |[r,p`2]| in { |[r1,s]| : (GoB f)*(len G,1)`1 <=r1} by A16;
         then p in v_strip(GoB f,len GoB f) by A17,EUCLID:57;
         hence ex j0 being Element of NAT st j0<=j1 & x in v_strip(GoB f,j0);
       end;
-      case ex j st 1<=j & j<len GoB f
-        & (GoB f)*(j,1)`1<=r & r<(GoB f)*(j+1,1)`1;
-        then consider j such that
-A18:    1<=j & j<len GoB f & (GoB f)*(j,1)`1<=r & r<(GoB f)*(j+1,1)`1;
+      case
+A18:    ex j st 1<=j & j<len GoB f & (GoB f)*(j,1)`1<=r & r<(GoB f)*(
+        j+1,1)`1;
         reconsider G=GoB f as Go-board;
-        1 <= 1 & 1 <= width G by GOBOARD7:35;
-        then
-A19:    v_strip(G,j)
-        = { |[r1,s]| : G*(j,1)`1<=r1 & r1<=G*(j+1,1)`1} by A18,GOBOARD5:9;
-        |[r,p`2]| in { |[r1,s]| : G*(j,1)`1<=r1 & r1<=G* (j+1,1)`1 } by A18;
-        then p in v_strip(GoB f,j) by A19,EUCLID:57;
+        consider j such that
+A19:    1<=j and
+A20:    j<len GoB f and
+A21:    (GoB f)*(j,1)`1<=r & r<(GoB f)*(j+1,1)`1 by A18;
+A22:    |[r,p`2]| in { |[r1,s]| : G*(j,1)`1<=r1 & r1<=G* (j+1,1)`1 } by
+        A21;
+        1 <= width G by GOBOARD7:35;
+        then v_strip(G,j) = { |[r1,s]| : G*(j,1)`1<=r1 & r1<=G*(j+1,1)`1} by
+        A19,A20, GOBOARD5:9;
+        then p in v_strip(GoB f,j) by A22,EUCLID:57;
         hence ex j0 being Element of NAT st j0<=j1 & x in v_strip(GoB f,j0) by
-A18;
+        A20;
       end;
     end;
     then consider j0 being Element of NAT such that
-A20: j0<=j1 & x in v_strip(GoB f,j0);
+A23: j0<=j1 and
+A24: x in v_strip(GoB f,j0);
     set s=p`2;
-A21: now
-      assume
-A22:  not( s<(GoB f)*(1,1)`2 or (GoB f)*(1,width GoB f)`2 <=s);
+A25: now
+      assume that
+A26:  not s<(GoB f)*(1,1)`2 and
+A27:  not (GoB f)*(1,width GoB f)`2 <=s;
       now
+        reconsider l=width GoB f as Element of NAT;
+        defpred P[Element of NAT] means $1=0 or (1<=$1 & $1<width GoB f
+        implies (GoB f)*(1,$1+1)`2<=s);
+        1<width GoB f by GOBOARD7:35;
+        then 1+1<=width GoB f by NAT_1:13;
+        then
+A28:    1+1-1<=l-1 by XREAL_1:11;
         assume
-A23:    not ex j st 1<=j & j<width GoB f
-        & (GoB f)*(1,j)`2<=s & s<(GoB f)*(1,j+1)`2;
-        defpred P[Element of NAT] means
-        $1=0 or (1<=$1 & $1<width GoB f implies (GoB f)*(1,$1+1)`2<=s);
-A24:    P[0];
-A25:    for k holds P[k] implies P[k+1]
+A29:    not ex j st 1<=j & j<width GoB f & (GoB f)*(1,j)`2<=s & s<(
+        GoB f)*(1,j+1)`2;
+A30:    for k holds P[k] implies P[k+1]
         proof
           let k;
           assume
-A26:      (k=0 or ( 1<=k & k<width GoB f implies (GoB f)*(1,k+1)`2<=s));
-          k+1=0 or(1<=k+1 & k+1<width GoB f implies (GoB f)*(1,k+1+1)`2<= s )
+A31:      k=0 or ( 1<=k & k<width GoB f implies (GoB f)*(1,k+1)`2<=s);
+          1<=k+1 & k+1<width GoB f implies (GoB f)*(1,k+1+1)`2<=s
           proof
-            (1<=k+1 & k+1<width GoB f implies (GoB f)*(1,k+1+1)`2<=s)
-            proof
+            assume
+A32:        1<=k+1 & k+1<width GoB f;
+            now
+A33:          0<=k by NAT_1:2;
               assume
-A27:          1<=k+1 & k+1<width GoB f;
-              now
-                assume
-A28:            s< (GoB f)*(1,k+1+1)`2;
-                then
-A29:            k<>0 by A22,A23,GOBOARD7:35;
-                0<=k by NAT_1:2;
-                then 0+1<=k by A29,NAT_1:13;
-                hence contradiction by A23,A26,A27,A28,XREAL_1:147;
-              end;
-              hence thesis;
+A34:          s< (GoB f)*(1,k+1+1)`2;
+              then k<>0 by A26,A29,GOBOARD7:35;
+              then 0+1<=k by A33,NAT_1:13;
+              hence contradiction by A29,A31,A32,A34,XREAL_1:147;
             end;
             hence thesis;
           end;
           hence thesis;
         end;
-A30:    for j holds P[j] from NAT_1:sch 1(A24,A25);
-        1<width GoB f by GOBOARD7:35;
-        then
-A31:    1+1<=width GoB f by NAT_1:13;
-        reconsider l=width GoB f as Element of NAT;
-A32:    1+1-1<=l-1 by A31,XREAL_1:11;
-A33:    l-1<l-1+1 by XREAL_1:31;
-        then reconsider l1=l-1 as Element of NAT by A32,SPPOL_1:7;
-        0<l1 by A32;
-        hence contradiction by A22,A30,A32,A33;
+A35:    P[0];
+A36:    for j holds P[j] from NAT_1:sch 1(A35,A30);
+A37:    l-1<l-1+1 by XREAL_1:31;
+        then reconsider l1=l-1 as Element of NAT by A28,SPPOL_1:7;
+        0<l1 by A28;
+        hence contradiction by A27,A36,A28,A37;
       end;
-
-hence ex j st 1<=j & j<width GoB f & (GoB f)*(1,j)`2<=s & s<(GoB f)*(1,j+1)
-      `2;
+      hence
+      ex j st 1<=j & j<width GoB f & (GoB f)*(1,j)`2<=s & s<(GoB f)*(1,j+
+      1) `2;
     end;
-    now per cases by A21;
+    now
+      per cases by A25;
       case
-A34:    s<(GoB f)*(1,1)`2;
+A38:    s<(GoB f)*(1,1)`2;
         reconsider G=GoB f as Go-board;
         1 <= len G by GOBOARD7:34;
         then
-A35:    h_strip(G,0) = { |[r1,s1]| : s1 <= G*(1,1)`2 } by GOBOARD5:8;
-        |[r,s]| in { |[r1,s1]| : s1 <= (GoB f)*(1,1)`2 } by A34;
-        then p in h_strip(GoB f,0) by A35,EUCLID:57;
-        hence ex i0 being Element of NAT
-        st i0<=j2 & x in h_strip(GoB f,i0) by NAT_1:2;
+A39:    h_strip(G,0) = { |[r1,s1]| : s1 <= G*(1,1)`2 } by
+        GOBOARD5:8;
+        |[r,s]| in { |[r1,s1]| : s1 <= (GoB f)*(1,1)`2 } by A38;
+        then p in h_strip(GoB f,0) by A39,EUCLID:57;
+        hence ex i0 being Element of NAT st i0<=j2 & x in h_strip(GoB f,i0) by
+        NAT_1:2;
       end;
       case
-A36:    (GoB f)*(1,width GoB f)`2 <=s;
+A40:    (GoB f)*(1,width GoB f)`2 <=s;
         reconsider G=GoB f as Go-board;
-        1 <= 1 & 1 <= len G by GOBOARD7:34;
+        1 <= len G by GOBOARD7:34;
         then
-A37:    h_strip(G,width G) = { |[r1,s1]| : G*(1,width G)`2<=s1} by GOBOARD5:7;
-        |[r,s]| in { |[r1,s1]| : (GoB f)*(1,width G)`2 <=s1} by A36;
-        then p in h_strip(GoB f,width GoB f) by A37,EUCLID:57;
+A41:    h_strip(G,width G) = { |[r1,s1]| : G*(1,width G)`2<=s1} by
+        GOBOARD5:7;
+        |[r,s]| in { |[r1,s1]| : (GoB f)*(1,width G)`2 <=s1} by A40;
+        then p in h_strip(GoB f,width GoB f) by A41,EUCLID:57;
         hence ex i0 being Element of NAT st i0<=j2 & x in h_strip(GoB f,i0);
       end;
-      case ex j st 1<=j & j<width GoB f
-        & (GoB f)*(1,j)`2<=s & s<(GoB f)*(1,j+1)`2;
-        then consider j such that
-A38:    1<=j & j<width GoB f & (GoB f)*(1,j)`2<=s & s<(GoB f)*(1,j+1)`2;
+      case
+A42:    ex j st 1<=j & j<width GoB f & (GoB f)*(1,j)`2<=s & s<(GoB f)
+        *(1,j+1)`2;
         reconsider G=GoB f as Go-board;
-        1 <= 1 & 1 <= len G by GOBOARD7:34;
-        then
-A39:    h_strip(G,j)
-        = { |[r1,s1]| : G*(1,j)`2<=s1 & s1<=G*(1,j+1)`2} by A38,GOBOARD5:6;
-        |[r,s]| in { |[r1,s1]| : G*(1,j)`2<=s1 & s1<=G* (1,j+1)`2 } by A38;
-        then p in h_strip(GoB f,j) by A39,EUCLID:57;
+        consider j such that
+A43:    1<=j and
+A44:    j<width GoB f and
+A45:    (GoB f)*(1,j)`2<=s & s<(GoB f)*(1,j+1)`2 by A42;
+A46:    |[r,s]| in { |[r1,s1]| : G*(1,j)`2<=s1 & s1<=G* (1,j+1)`2 } by
+        A45;
+        1 <= len G by GOBOARD7:34;
+        then h_strip(G,j) = { |[r1,s1]| : G*(1,j)`2<=s1 & s1<=G*(1,j+1)`2} by
+        A43,A44, GOBOARD5:6;
+        then p in h_strip(GoB f,j) by A46,EUCLID:57;
         hence ex i0 being Element of NAT st i0<=j2 & x in h_strip(GoB f,i0) by
-A38;
+        A44;
       end;
     end;
     then consider i0 being Element of NAT such that
-A40: i0<=j2 & x in h_strip(GoB f,i0);
-A41: x in v_strip(GoB f,j0) /\ h_strip(GoB f,i0) by A20,A40,XBOOLE_0:def 4;
+A47: i0<=j2 and
+A48: x in h_strip(GoB f,i0);
     reconsider X0=cell(GoB f,j0,i0) as set;
-    x in X0 & X0 in {cell(GoB f,i,j):i<=j1 & j<=j2}
-    by A20,A40,A41,GOBOARD5:def 3;
-    hence thesis by TARSKI:def 4;
+    x in v_strip(GoB f,j0) /\ h_strip(GoB f,i0) by A24,A48,XBOOLE_0:def 4;
+    then
+A49: x in X0 by GOBOARD5:def 3;
+    X0 in {cell(GoB f,i,j):i<=j1 & j<=j2} by A23,A47;
+    hence thesis by A49,TARSKI:def 4;
   end;
   let x;
-  assume x in union {cell(GoB f,i,j):i<=j1 & j<=j2};
+  assume
+  x in union {cell(GoB f,i,j):i<=j1 & j<=j2};
   then consider X0 being set such that
-A42: x in X0 & X0 in {cell(GoB f,i,j):i<=j1 & j<=j2} by TARSKI:def 4;
-  ex i,j st X0=cell(GoB f,i,j) &(i<=j1 & j<=j2) by A42;
-  hence thesis by A42;
+A50: x in X0 & X0 in {cell(GoB f,i,j):i<=j1 & j<=j2} by TARSKI:def 4;
+  ex i,j st X0=cell(GoB f,i,j) & i<=j1 & j<=j2 by A50;
+  hence thesis by A50;
 end;
 
 Lm3: for s1 holds { |[ tb,sb ]|:sb>=s1} is Subset of TOP-REAL 2
@@ -357,7 +378,8 @@ proof
   { |[ tb,sb ]|:sb>=s1} c= REAL 2
   proof
     let y be set;
-    assume y in { |[ tb,sb ]|:sb>=s1};
+    assume
+    y in { |[ tb,sb ]|:sb>=s1};
     then ex t7,s7 being Real st |[ t7,s7 ]|=y & s7>=s1;
     hence thesis by Lm2;
   end;
@@ -370,7 +392,8 @@ proof
   { |[ tb,sb ]|:sb>s1} c= REAL 2
   proof
     let y be set;
-    assume y in { |[ tb,sb ]|:sb>s1};
+    assume
+    y in { |[ tb,sb ]|:sb>s1};
     then ex t7,s7 being Real st |[ t7,s7 ]|=y & s7>s1;
     hence thesis by Lm2;
   end;
@@ -383,7 +406,8 @@ proof
   { |[ tb,sb ]|:sb<=s1} c= REAL 2
   proof
     let y be set;
-    assume y in { |[ tb,sb ]|:sb<=s1};
+    assume
+    y in { |[ tb,sb ]|:sb<=s1};
     then ex t7,s7 being Real st |[ t7,s7 ]|=y & s7<=s1;
     hence thesis by Lm2;
   end;
@@ -396,7 +420,8 @@ proof
   { |[ tb,sb ]|:sb<s1} c= REAL 2
   proof
     let y be set;
-    assume y in { |[ tb,sb ]|:sb<s1};
+    assume
+    y in { |[ tb,sb ]|:sb<s1};
     then ex t7,s7 being Real st |[ t7,s7 ]|=y & s7<s1;
     hence thesis by Lm2;
   end;
@@ -409,7 +434,8 @@ proof
   { |[ sb,tb ]|:sb<=s1} c= REAL 2
   proof
     let y be set;
-    assume y in { |[ sb,tb ]|:sb<=s1};
+    assume
+    y in { |[ sb,tb ]|:sb<=s1};
     then ex s7,t7 being Real st |[ s7,t7 ]|=y & s7<=s1;
     hence thesis by Lm2;
   end;
@@ -422,7 +448,8 @@ proof
   { |[ sb,tb ]|:sb<s1} c= REAL 2
   proof
     let y be set;
-    assume y in { |[ sb,tb ]|:sb<s1};
+    assume
+    y in { |[ sb,tb ]|:sb<s1};
     then ex s7,t7 being Real st |[ s7,t7 ]|=y & s7<s1;
     hence thesis by Lm2;
   end;
@@ -435,7 +462,8 @@ proof
   { |[ sb,tb ]|:sb>=s1} c= REAL 2
   proof
     let y be set;
-    assume y in { |[ sb,tb ]|:sb>=s1};
+    assume
+    y in { |[ sb,tb ]|:sb>=s1};
     then ex s7,t7 being Real st |[ s7,t7 ]|=y & s7>=s1;
     hence thesis by Lm2;
   end;
@@ -448,7 +476,8 @@ proof
   { |[ sb,tb ]|:sb>s1} c= REAL 2
   proof
     let y be set;
-    assume y in { |[ sb,tb ]|:sb>s1};
+    assume
+    y in { |[ sb,tb ]|:sb>s1};
     then ex s7,t7 being Real st |[ s7,t7 ]|=y & s7>s1;
     hence thesis by Lm2;
   end;
@@ -456,271 +485,274 @@ proof
 end;
 
 theorem Th8:
-  for P1,P2 being Subset of TOP-REAL 2 st
-  P1={ |[r,s]| : s <= s1 } & P2={ |[r2,s2]| : s2 > s1 } holds P1=P2`
+  for P1,P2 being Subset of TOP-REAL 2 st P1={ |[r,s]| : s <= s1 }
+  & P2={ |[r2,s2]| : s2 > s1 } holds P1=P2`
 proof
   let P1,P2 be Subset of TOP-REAL 2;
   assume
 A1: P1={ |[r,s]| : s <= s1 } & P2={ |[r2,s2]| : s2 > s1 };
-A2: P1 c= P2`
-  proof
-    let x;
-    assume x in P1;
-    then consider r,s such that
-A3: |[r,s]|=x & ( s <= s1) by A1;
-    for r2,s2 holds not (|[r2,s2]|=x & s2 > s1) by A3,SPPOL_2:1;
-    then x in (REAL 2) & not x in P2 by A1,A3,Lm2;
-    then x in (REAL 2) \ P2 by XBOOLE_0:def 5;
-    then x in (the carrier of TOP-REAL 2) \ P2 by EUCLID:25;
-    hence thesis by SUBSET_1:def 5;
-  end;
-  P2` c= P1
+A2: P2` c= P1
   proof
     let x;
     assume
-A4: x in P2`;
-    then x in (the carrier of TOP-REAL 2) \ P2 by SUBSET_1:def 5;
-    then x in (REAL 2) \ P2 by EUCLID:25;
-    then
-A5: x in (REAL 2) & not x in P2 by XBOOLE_0:def 5;
-    reconsider p=x as Point of TOP-REAL 2 by A4;
-A6: p=|[p`1,p`2]| by EUCLID:57;
-    then p`2 <= s1 by A1,A5;
-    hence thesis by A1,A6;
+A3: x in P2`;
+    then reconsider p=x as Point of TOP-REAL 2;
+A4: p=|[p`1,p`2]| by EUCLID:57;
+    x in (the carrier of TOP-REAL 2) \ P2 by A3,SUBSET_1:def 5;
+    then not x in P2 by XBOOLE_0:def 5;
+    then p`2 <= s1 by A1,A4;
+    hence thesis by A1,A4;
+  end;
+  P1 c= P2`
+  proof
+    let x;
+    assume
+A5: x in P1;
+    then ex r,s st |[r,s]|=x & s <= s1 by A1;
+    then for r2,s2 holds not (|[r2,s2]|=x & s2 > s1) by SPPOL_2:1;
+    then not x in P2 by A1;
+    then x in (the carrier of TOP-REAL 2) \ P2 by A5,XBOOLE_0:def 5;
+    hence thesis by SUBSET_1:def 5;
   end;
   hence thesis by A2,XBOOLE_0:def 10;
 end;
 
 theorem Th9:
-  for P1,P2 being Subset of TOP-REAL 2 st
-  P1={ |[r,s]| : s >= s1 } & P2={ |[r2,s2]| : s2 < s1 } holds P1=P2`
+  for P1,P2 being Subset of TOP-REAL 2 st P1={ |[r,s]| : s >= s1 }
+  & P2={ |[r2,s2]| : s2 < s1 } holds P1=P2`
 proof
   let P1,P2 be Subset of TOP-REAL 2;
   assume
 A1: P1={ |[r,s]| : s >= s1 } & P2={ |[r2,s2]| : s2 < s1 };
-A2: P1 c= P2`
-  proof
-    let x;
-    assume x in P1;
-    then consider r,s such that
-A3: |[r,s]|=x & ( s >= s1) by A1;
-    not ex r2,s2 st |[r2,s2]|=x & s2 < s1 by A3,SPPOL_2:1;
-    then not x in P2 by A1;
-    then x in (the carrier of TOP-REAL 2) \ P2 by A3,XBOOLE_0:def 5;
-    hence thesis by SUBSET_1:def 5;
-  end;
-  P2` c= P1
+A2: P2` c= P1
   proof
     let x;
     assume
-A4: x in P2`;
-    then x in (the carrier of TOP-REAL 2) \ P2 by SUBSET_1:def 5;
-    then x in (REAL 2) \ P2 by EUCLID:25;
-    then
-A5: x in (REAL 2) & not x in P2 by XBOOLE_0:def 5;
-    reconsider p=x as Point of TOP-REAL 2 by A4;
-A6: p=|[p`1,p`2]| by EUCLID:57;
-    then p`2 >= s1 by A1,A5;
-    hence thesis by A1,A6;
+A3: x in P2`;
+    then reconsider p=x as Point of TOP-REAL 2;
+A4: p=|[p`1,p`2]| by EUCLID:57;
+    x in (the carrier of TOP-REAL 2) \ P2 by A3,SUBSET_1:def 5;
+    then not x in P2 by XBOOLE_0:def 5;
+    then p`2 >= s1 by A1,A4;
+    hence thesis by A1,A4;
+  end;
+  P1 c= P2`
+  proof
+    let x;
+    assume
+A5: x in P1;
+    then ex r,s st |[r,s]|=x & s >= s1 by A1;
+    then not ex r2,s2 st |[r2,s2]|=x & s2 < s1 by SPPOL_2:1;
+    then not x in P2 by A1;
+    then x in (the carrier of TOP-REAL 2) \ P2 by A5,XBOOLE_0:def 5;
+    hence thesis by SUBSET_1:def 5;
   end;
   hence thesis by A2,XBOOLE_0:def 10;
 end;
 
 theorem Th10:
-  for P1,P2 being Subset of TOP-REAL 2 st
-  P1={ |[s,r]| : s >= s1 } & P2={ |[s2,r2]| : s2 < s1 } holds P1=P2`
+  for P1,P2 being Subset of TOP-REAL 2 st P1={ |[s,r]| : s >= s1 }
+  & P2={ |[s2,r2]| : s2 < s1 } holds P1=P2`
 proof
   let P1,P2 be Subset of TOP-REAL 2;
   assume
 A1: P1={ |[s,r]| : s >= s1 } & P2={ |[s2,r2]| : s2 < s1 };
-A2: P1 c= P2`
-  proof
-    let x;
-    assume x in P1;
-    then consider s,r such that
-A3: |[s,r]|=x & ( s >= s1) by A1;
-    not ex s2,r2 st |[s2,r2]|=x & s2 < s1 by A3,SPPOL_2:1;
-    then not x in P2 by A1;
-    then x in (the carrier of TOP-REAL 2) \ P2 by A3,XBOOLE_0:def 5;
-    hence thesis by SUBSET_1:def 5;
-  end;
-  P2` c= P1
+A2: P2` c= P1
   proof
     let x;
     assume
-A4: x in P2`;
-    then x in (the carrier of TOP-REAL 2) \ P2 by SUBSET_1:def 5;
-    then x in (REAL 2) \ P2 by EUCLID:25;
-    then
-A5: x in (REAL 2) & not x in P2 by XBOOLE_0:def 5;
-    reconsider p=x as Point of TOP-REAL 2 by A4;
-A6: p=|[p`1,p`2]| by EUCLID:57;
-    then p`1 >= s1 by A1,A5;
-    hence thesis by A1,A6;
+A3: x in P2`;
+    then reconsider p=x as Point of TOP-REAL 2;
+A4: p=|[p`1,p`2]| by EUCLID:57;
+    x in (the carrier of TOP-REAL 2) \ P2 by A3,SUBSET_1:def 5;
+    then not x in P2 by XBOOLE_0:def 5;
+    then p`1 >= s1 by A1,A4;
+    hence thesis by A1,A4;
+  end;
+  P1 c= P2`
+  proof
+    let x;
+    assume
+A5: x in P1;
+    then ex s,r st |[s,r]|=x & s >= s1 by A1;
+    then not ex s2,r2 st |[s2,r2]|=x & s2 < s1 by SPPOL_2:1;
+    then not x in P2 by A1;
+    then x in (the carrier of TOP-REAL 2) \ P2 by A5,XBOOLE_0:def 5;
+    hence thesis by SUBSET_1:def 5;
   end;
   hence thesis by A2,XBOOLE_0:def 10;
 end;
 
 theorem Th11:
-  for P1,P2 being Subset of TOP-REAL 2 st
-  P1={ |[s,r]| : s <= s1 } & P2={ |[s2,r2]| : s2 > s1 } holds P1=P2`
+  for P1,P2 being Subset of TOP-REAL 2 st P1={ |[s,r]| : s <= s1 }
+  & P2={ |[s2,r2]| : s2 > s1 } holds P1=P2`
 proof
   let P1,P2 be Subset of TOP-REAL 2;
   assume
 A1: P1={ |[s,r]| : s <= s1 } & P2={ |[s2,r2]| : s2 > s1 };
-A2: P1 c= P2`
-  proof
-    let x;
-    assume x in P1;
-    then consider s,r such that
-A3: |[s,r]|=x & ( s <= s1) by A1;
-    not ex s2,r2 st |[s2,r2]|=x & s2 > s1 by A3,SPPOL_2:1;
-    then not x in { |[s2,r2]| : s2 > s1 };
-    then x in (the carrier of TOP-REAL 2) \ P2 by A1,A3,XBOOLE_0:def 5;
-    hence thesis by SUBSET_1:def 5;
-  end;
-  P2` c= P1
+A2: P2` c= P1
   proof
     let x;
     assume
-A4: x in P2`;
-    then x in (the carrier of TOP-REAL 2) \ P2 by SUBSET_1:def 5;
-    then x in (REAL 2) \ P2 by EUCLID:25;
-    then
-A5: x in (REAL 2) & not x in P2 by XBOOLE_0:def 5;
-    reconsider p=x as Point of TOP-REAL 2 by A4;
-A6: p=|[p`1,p`2]| by EUCLID:57;
-    then p`1 <= s1 by A1,A5;
-    hence thesis by A1,A6;
+A3: x in P2`;
+    then reconsider p=x as Point of TOP-REAL 2;
+A4: p=|[p`1,p`2]| by EUCLID:57;
+    x in (the carrier of TOP-REAL 2) \ P2 by A3,SUBSET_1:def 5;
+    then not x in P2 by XBOOLE_0:def 5;
+    then p`1 <= s1 by A1,A4;
+    hence thesis by A1,A4;
+  end;
+  P1 c= P2`
+  proof
+    let x;
+    assume
+A5: x in P1;
+    then ex s,r st |[s,r]|=x & s <= s1 by A1;
+    then not ex s2,r2 st |[s2,r2]|=x & s2 > s1 by SPPOL_2:1;
+    then not x in { |[s2,r2]| : s2 > s1 };
+    then x in (the carrier of TOP-REAL 2) \ P2 by A1,A5,XBOOLE_0:def 5;
+    hence thesis by SUBSET_1:def 5;
   end;
   hence thesis by A2,XBOOLE_0:def 10;
 end;
 
 theorem Th12:
-  for P being Subset of TOP-REAL 2, s1
-  st P= { |[r,s]| : s <= s1 } holds P is closed
+  for P being Subset of TOP-REAL 2, s1 st P= { |[r,s]| : s <= s1 }
+  holds P is closed
 proof
   let P be Subset of TOP-REAL 2, s1;
-  assume
-A1: P= { |[r,s]| : s <= s1 };
   reconsider P1= { |[r,s]| : s > s1 } as Subset of TOP-REAL 2 by Lm4;
-A2: P=P1` by A1,Th8;
+  assume
+  P= { |[r,s]| : s <= s1 };
+  then
+A1: P=P1` by Th8;
   P1 is open by JORDAN1:27;
-  hence thesis by A2,TOPS_1:30;
+  hence thesis by A1,TOPS_1:30;
 end;
 
 theorem Th13:
-  for P being Subset of TOP-REAL 2,s1
-  st P={ |[r,s]| : s1 <= s } holds P is closed
+  for P being Subset of TOP-REAL 2,s1 st P={ |[r,s]| : s1 <= s }
+  holds P is closed
 proof
   let P be Subset of TOP-REAL 2, s1;
-  assume
-A1: P= { |[r,s]| : s1 <= s };
   reconsider P1= { |[r,s]| : s1 > s } as Subset of TOP-REAL 2 by Lm6;
-A2: P=P1` by A1,Th9;
+  assume
+  P= { |[r,s]| : s1 <= s };
+  then
+A1: P=P1` by Th9;
   P1 is open by JORDAN1:28;
-  hence thesis by A2,TOPS_1:30;
+  hence thesis by A1,TOPS_1:30;
 end;
 
 theorem Th14:
-  for P being Subset of TOP-REAL 2, s1
-  st P= { |[s,r]| : s <= s1 } holds P is closed
+  for P being Subset of TOP-REAL 2, s1 st P= { |[s,r]| : s <= s1 }
+  holds P is closed
 proof
   let P be Subset of TOP-REAL 2, s1;
-  assume
-A1: P= { |[s,r]| : s <= s1 };
   reconsider P1= { |[s,r]| : s > s1 } as Subset of TOP-REAL 2 by Lm10;
-A2: P=P1` by A1,Th11;
+  assume
+  P= { |[s,r]| : s <= s1 };
+  then
+A1: P=P1` by Th11;
   P1 is open by JORDAN1:25;
-  hence thesis by A2,TOPS_1:30;
+  hence thesis by A1,TOPS_1:30;
 end;
 
 theorem Th15:
-  for P being Subset of TOP-REAL 2,s1
-  st P={ |[s,r]| : s1 <= s } holds P is closed
+  for P being Subset of TOP-REAL 2,s1 st P={ |[s,r]| : s1 <= s }
+  holds P is closed
 proof
   let P be Subset of TOP-REAL 2, s1;
-  assume
-A1: P= { |[s,r]| : s >= s1 };
   reconsider P1= { |[s,r]| : s < s1 } as Subset of TOP-REAL 2 by Lm8;
-A2: P=P1` by A1,Th10;
+  assume
+  P= { |[s,r]| : s >= s1 };
+  then
+A1: P=P1` by Th10;
   P1 is open by JORDAN1:26;
-  hence thesis by A2,TOPS_1:30;
+  hence thesis by A1,TOPS_1:30;
 end;
 
 theorem Th16:
   for G being Matrix of TOP-REAL 2 holds h_strip(G,j) is closed
 proof
   let G be Matrix of TOP-REAL 2;
-  now per cases;
+  now
+    per cases;
     case
 A1:   j<1;
 A2:   now
-        assume j >= width G;
+        assume
+        j >= width G;
         then h_strip(G,j)={ |[r,s]| : G*(1,j)`2 <= s } by GOBOARD5:def 2;
         hence thesis by Th13;
       end;
       now
-        assume j<width G;
-        then h_strip(G,j) = { |[r,s]| : s <= G*(1,j+1)`2 }
-        by A1,GOBOARD5:def 2;
+        assume
+        j<width G;
+        then h_strip(G,j) = { |[r,s]| : s <= G*(1,j+1)`2 } by A1,GOBOARD5:
+        def 2;
         hence thesis by Th12;
       end;
       hence thesis by A2;
     end;
-    case 1 <= j & j < width G;
+    case
+      1 <= j & j < width G;
       then
-A3:   h_strip(G,j) = { |[r,s]| : G*(1,j)`2 <= s & s <= G*(1,j+1)`2 }
-      by GOBOARD5:def 2;
-A4:   { |[r,s]| : G*(1,j)`2 <= s & s <= G*(1,j+1)`2 }=
-      { |[r1,s1]| : G*(1,j)`2 <= s1} /\ {|[r2,s2]| : s2 <= G*(1,j+1)`2 }
-      proof
-A5:     { |[r1,s1]| : G*(1,j)`2 <= s1} /\ {|[r2,s2]| : s2 <= G*(1,j+1)`2 }
-        c= { |[r,s]| : G*(1,j)`2 <= s & s <= G*(1,j+1)`2 }
-        proof
-          let x;
-          assume x in { |[r1,s1]| : G*(1,j)`2 <= s1} /\ {|[r2,s2]| : s2 <= G*
-          (1,j+1)`2 };
-          then
-A6:       x in { |[r1,s1]| : G*(1,j)`2 <= s1} &
-          x in {|[r2,s2]| : s2 <= G*(1,j+1)`2 } by XBOOLE_0:def 4;
-          then consider r1,s1 such that
-A7:       |[r1,s1]|=x & G*(1,j)`2 <= s1;
-          consider r2,s2 such that
-A8:       |[r2,s2]|=x & s2 <= G*(1,j+1)`2 by A6;
-          r1=r2 & s1=s2 by A7,A8,SPPOL_2:1;
-          hence thesis by A7,A8;
-        end;
-A9:     { |[r,s]| : G*(1,j)`2 <= s & s <= G*(1,j+1)`2 }
-        c= {|[r1,s1]| : s1 <= G*(1,j+1)`2 }
-        proof
-          let x;
-          assume x in { |[r,s]| : G*(1,j)`2 <= s & s <= G*(1,j+1)`2 };
-          then ex r,s st x=|[r,s]| &(G*(1,j)`2 <= s & s <= G*(1,j+1)`2);
-          hence thesis;
-        end;
-        { |[r,s]| : G*(1,j)`2 <= s & s <= G*(1,j+1)`2 }
-        c= {|[r1,s1]| : G*(1,j)`2 <= s1 }
-        proof
-          let x;
-          assume x in { |[r,s]| : G*(1,j)`2 <= s & s <= G*(1,j+1)`2 };
-          then ex r,s st x=|[r,s]| &(G*(1,j)`2 <= s & s <= G*(1,j+1)`2);
-          hence thesis;
-        end;
-        then { |[r,s]| : G*(1,j)`2 <= s & s <= G*(1,j+1)`2 }
-        c= { |[r1,s1]| : G*(1,j)`2 <= s1} /\ {|[r2,s2]| : s2 <= G*(1,j+1)`2 }
-        by A9,XBOOLE_1:19;
-        hence thesis by A5,XBOOLE_0:def 10;
-      end;
-      reconsider P1={ |[r1,s1]| : G*(1,j)`2 <= s1} as Subset of TOP-REAL 2
-      by Lm3;
+A3:   h_strip(G,j) = { |[r,s]| : G*(1,j)`2 <= s & s <= G*(1,j+1)`2 } by
+      GOBOARD5:def 2;
       reconsider P2={ |[r1,s1]| : s1<= G*(1,j+1)`2 } as Subset of TOP-REAL 2
       by Lm5;
-A10:  P1 is closed by Th13;
-      P2 is closed by Th12;
-      hence thesis by A3,A4,A10,TOPS_1:35;
+      reconsider P1={ |[r1,s1]| : G*(1,j)`2 <= s1} as Subset of TOP-REAL 2 by
+      Lm3;
+A4:   { |[r,s]| : G*(1,j)`2 <= s & s <= G*(1,j+1)`2 }= { |[r1,s1]| : G*(1
+      ,j)`2 <= s1} /\ {|[r2,s2]| : s2 <= G*(1,j+1)`2 }
+      proof
+A5:     { |[r1,s1]| : G*(1,j)`2 <= s1} /\ {|[r2,s2]| : s2 <= G*(1,j+1)`2
+        } c= { |[r,s]| : G*(1,j)`2 <= s & s <= G*(1,j+1)`2 }
+        proof
+          let x;
+          assume
+A6:       x in { |[r1,s1]| : G*(1,j)`2 <= s1} /\ {|[r2,s2]| : s2 <= G
+          * (1,j+1)`2 };
+          then
+A7:       x in { |[r1,s1]| : G*(1,j)`2 <= s1} by XBOOLE_0:def 4;
+          x in {|[r2,s2]| : s2 <= G*(1,j+1)`2 } by A6,XBOOLE_0:def 4;
+          then consider r2,s2 such that
+A8:       |[r2,s2]|=x and
+A9:       s2 <= G*(1,j+1)`2;
+          consider r1,s1 such that
+A10:      |[r1,s1]|=x and
+A11:      G*(1,j)`2 <= s1 by A7;
+          s1=s2 by A10,A8,SPPOL_2:1;
+          hence thesis by A10,A11,A9;
+        end;
+A12:    { |[r,s]| : G*(1,j)`2 <= s & s <= G*(1,j+1)`2 } c= {|[r1,s1]| : G
+        *(1,j)`2 <= s1 }
+        proof
+          let x;
+          assume
+          x in { |[r,s]| : G*(1,j)`2 <= s & s <= G*(1,j+1)`2 };
+          then ex r,s st x=|[r,s]| & G*(1,j)`2 <= s & s <= G*(1,j+1)`2;
+          hence thesis;
+        end;
+        { |[r,s]| : G*(1,j)`2 <= s & s <= G*(1,j+1)`2 } c= {|[r1,s1]| :
+        s1 <= G*(1,j+1)`2 }
+        proof
+          let x;
+          assume
+          x in { |[r,s]| : G*(1,j)`2 <= s & s <= G*(1,j+1)`2 };
+          then ex r,s st x=|[r,s]| & G*(1,j)`2 <= s & s <= G*(1,j+1)`2;
+          hence thesis;
+        end;
+        then { |[r,s]| : G*(1,j)`2 <= s & s <= G*(1,j+1)`2 } c= { |[r1,s1]| :
+G*(1,j)`2 <= s1} /\ {|[r2,s2]| : s2 <= G*(1,j+1)`2 } by A12,XBOOLE_1:19;
+        hence thesis by A5,XBOOLE_0:def 10;
+      end;
+      P1 is closed & P2 is closed by Th12,Th13;
+      hence thesis by A3,A4,TOPS_1:35;
     end;
-    case j >= width G;
+    case
+      j >= width G;
       then h_strip(G,j) = { |[r,s]| : G*(1,j)`2 <= s } by GOBOARD5:def 2;
       hence thesis by Th13;
     end;
@@ -732,76 +764,84 @@ theorem Th17:
   for G being Matrix of TOP-REAL 2 holds v_strip(G,j) is closed
 proof
   let G be Matrix of TOP-REAL 2;
-  now per cases;
+  now
+    per cases;
     case
 A1:   j<1;
 A2:   now
-        assume j >= len G;
+        assume
+        j >= len G;
         then v_strip(G,j)={ |[s,r]| : G*(j,1)`1 <= s } by GOBOARD5:def 1;
         hence thesis by Th15;
       end;
       now
-        assume j<len G;
-        then v_strip(G,j) = { |[s,r]| : s <= G*(j+1,1)`1 }
-        by A1,GOBOARD5:def 1;
+        assume
+        j<len G;
+        then v_strip(G,j) = { |[s,r]| : s <= G*(j+1,1)`1 } by A1,GOBOARD5:
+        def 1;
         hence thesis by Th14;
       end;
       hence thesis by A2;
     end;
-    case 1 <= j & j < len G;
+    case
+      1 <= j & j < len G;
       then
-A3:   v_strip(G,j) = { |[s,r]| : G*(j,1)`1 <= s & s <= G*(j+1,1)`1 }
-      by GOBOARD5:def 1;
-A4:   { |[s,r]| : G*(j,1)`1 <= s & s <= G*(j+1,1)`1 }=
-      { |[s1,r1]| : G*(j,1)`1 <= s1} /\ {|[s2,r2]| : s2 <= G*(j+1,1)`1 }
-      proof
-A5:     { |[s1,r1]| : G*(j,1)`1 <= s1} /\ {|[s2,r2]| : s2 <= G*(j+1,1)`1 }
-        c= { |[s,r]| : G*(j,1)`1 <= s & s <= G*(j+1,1)`1 }
-        proof
-          let x;
-          assume x in { |[s1,r1]| : G*(j,1)`1 <= s1} /\ {|[s2,r2]| : s2 <= G*
-          (j+1,1)`1 };
-          then
-A6:       x in { |[s1,r1]| : G*(j,1)`1 <= s1} &
-          x in {|[s2,r2]| : s2 <= G*(j+1,1)`1 } by XBOOLE_0:def 4;
-          then ex s1,r1 st |[s1,r1]|=x & G*(j,1)`1 <= s1;
-          then consider r1,s1 such that
-A7:       |[s1,r1]|=x & G*(j,1)`1 <= s1;
-          consider s2,r2 such that
-A8:       |[s2,r2]|=x & s2 <= G*(j+1,1)`1 by A6;
-          r1=r2 & s1=s2 by A7,A8,SPPOL_2:1;
-          hence thesis by A7,A8;
-        end;
-A9:     { |[s,r]| : G*(j,1)`1 <= s & s <= G*(j+1,1)`1 }
-        c= {|[s1,r1]| : s1 <= G*(j+1,1)`1 }
-        proof
-          let x;
-          assume x in { |[s,r]| : G*(j,1)`1 <= s & s <= G*(j+1,1)`1 };
-          then ex s,r st x=|[s,r]| &(G*(j,1)`1 <= s & s <= G*(j+1,1)`1);
-          hence thesis;
-        end;
-        { |[s,r]| : G*(j,1)`1 <= s & s <= G*(j+1,1)`1 }
-        c= {|[s1,r1]| : G*(j,1)`1 <= s1 }
-        proof
-          let x;
-          assume x in { |[s,r]| : G*(j,1)`1 <= s & s <= G*(j+1,1)`1 };
-          then ex s,r st x=|[s,r]| &(G*(j,1)`1 <= s & s <= G*(j+1,1)`1);
-          hence thesis;
-        end;
-        then { |[s,r]| : G*(j,1)`1 <= s & s <= G*(j+1,1)`1 }
-        c= { |[s1,r1]| : G*(j,1)`1 <= s1} /\ {|[s2,r2]| : s2 <= G*(j+1,1)`1 }
-        by A9,XBOOLE_1:19;
-        hence thesis by A5,XBOOLE_0:def 10;
-      end;
-      reconsider P1={ |[s1,r1]| : G*(j,1)`1 <= s1} as Subset of TOP-REAL 2
-      by Lm9;
+A3:   v_strip(G,j) = { |[s,r]| : G*(j,1)`1 <= s & s <= G*(j+1,1)`1 } by
+      GOBOARD5:def 1;
       reconsider P2={ |[s1,r1]| : s1<= G*(j+1,1)`1 } as Subset of TOP-REAL 2
       by Lm7;
-A10:  P1 is closed by Th15;
-      P2 is closed by Th14;
-      hence thesis by A3,A4,A10,TOPS_1:35;
+      reconsider P1={ |[s1,r1]| : G*(j,1)`1 <= s1} as Subset of TOP-REAL 2 by
+      Lm9;
+A4:   { |[s,r]| : G*(j,1)`1 <= s & s <= G*(j+1,1)`1 }= { |[s1,r1]| : G*(j
+      ,1)`1 <= s1} /\ {|[s2,r2]| : s2 <= G*(j+1,1)`1 }
+      proof
+A5:     { |[s1,r1]| : G*(j,1)`1 <= s1} /\ {|[s2,r2]| : s2 <= G*(j+1,1)`1
+        } c= { |[s,r]| : G*(j,1)`1 <= s & s <= G*(j+1,1)`1 }
+        proof
+          let x;
+          assume
+A6:       x in { |[s1,r1]| : G*(j,1)`1 <= s1} /\ {|[s2,r2]| : s2 <= G
+          * (j+1,1)`1 };
+          then
+A7:       x in {|[s2,r2]| : s2 <= G*(j+1,1)`1 } by XBOOLE_0:def 4;
+          x in { |[s1,r1]| : G*(j,1)`1 <= s1} by A6,XBOOLE_0:def 4;
+          then ex s1,r1 st |[s1,r1]|=x & G*(j,1)`1 <= s1;
+          then consider r1,s1 such that
+A8:       |[s1,r1]|=x and
+A9:       G*(j,1)`1 <= s1;
+          consider s2,r2 such that
+A10:      |[s2,r2]|=x and
+A11:      s2 <= G*(j+1,1)`1 by A7;
+          s1=s2 by A8,A10,SPPOL_2:1;
+          hence thesis by A8,A9,A11;
+        end;
+A12:    { |[s,r]| : G*(j,1)`1 <= s & s <= G*(j+1,1)`1 } c= {|[s1,r1]| : G
+        *(j,1)`1 <= s1 }
+        proof
+          let x;
+          assume
+          x in { |[s,r]| : G*(j,1)`1 <= s & s <= G*(j+1,1)`1 };
+          then ex s,r st x=|[s,r]| & G*(j,1)`1 <= s & s <= G*(j+1,1)`1;
+          hence thesis;
+        end;
+        { |[s,r]| : G*(j,1)`1 <= s & s <= G*(j+1,1)`1 } c= {|[s1,r1]| :
+        s1 <= G*(j+1,1)`1 }
+        proof
+          let x;
+          assume
+          x in { |[s,r]| : G*(j,1)`1 <= s & s <= G*(j+1,1)`1 };
+          then ex s,r st x=|[s,r]| & G*(j,1)`1 <= s & s <= G*(j+1,1)`1;
+          hence thesis;
+        end;
+        then { |[s,r]| : G*(j,1)`1 <= s & s <= G*(j+1,1)`1 } c= { |[s1,r1]| :
+G*(j,1)`1 <= s1} /\ {|[s2,r2]| : s2 <= G*(j+1,1)`1 } by A12,XBOOLE_1:19;
+        hence thesis by A5,XBOOLE_0:def 10;
+      end;
+      P1 is closed & P2 is closed by Th14,Th15;
+      hence thesis by A3,A4,TOPS_1:35;
     end;
-    case j >= len G;
+    case
+      j >= len G;
       then v_strip(G,j) = { |[s,r]| : G*(j,1)`1 <= s } by GOBOARD5:def 1;
       hence thesis by Th15;
     end;
@@ -810,82 +850,90 @@ A10:  P1 is closed by Th15;
 end;
 
 theorem Th18:
-  G is X_equal-in-line implies v_strip(G,0) = { |[r,s]| : r <= G*(1,1)`1 }
+  G is X_equal-in-line implies v_strip(G,0) = { |[r,s]| : r <= G*(
+  1,1)`1 }
 proof
-  assume
-A1: G is X_equal-in-line;
   0 <> width G by GOBOARD1:def 5;
-  then 1 <= width G by NAT_1:14;
+  then
+A1: 1 <= width G by NAT_1:14;
+  assume
+  G is X_equal-in-line;
   hence thesis by A1,GOBOARD5:11;
 end;
 
 theorem Th19:
-  G is X_equal-in-line implies
-  v_strip(G,len G) = { |[r,s]| : G*(len G,1)`1 <= r }
+  G is X_equal-in-line implies v_strip(G,len G) = { |[r,s]| : G*(
+  len G,1)`1 <= r }
 proof
-  assume
-A1: G is X_equal-in-line;
   0 <> width G by GOBOARD1:def 5;
-  then 1 <= width G by NAT_1:14;
+  then
+A1: 1 <= width G by NAT_1:14;
+  assume
+  G is X_equal-in-line;
   hence thesis by A1,GOBOARD5:10;
 end;
 
 theorem Th20:
-  G is X_equal-in-line & 1 <= i & i < len G
-  implies v_strip(G,i) = { |[r,s]| : G*(i,1)`1 <= r & r <= G*(i+1,1)`1 }
+  G is X_equal-in-line & 1 <= i & i < len G implies v_strip(G,i) =
+  { |[r,s]| : G*(i,1)`1 <= r & r <= G*(i+1,1)`1 }
 proof
   assume
 A1: G is X_equal-in-line;
-  assume
-A2: 1 <= i & i < len G;
   0 <> width G by GOBOARD1:def 5;
-  then 1 <= width G by NAT_1:14;
+  then
+A2: 1 <= width G by NAT_1:14;
+  assume
+  1 <= i & i < len G;
   hence thesis by A1,A2,GOBOARD5:9;
 end;
 
 theorem Th21:
-  G is Y_equal-in-column implies h_strip(G,0) = { |[r,s]| : s <= G*(1,1)`2 }
+  G is Y_equal-in-column implies h_strip(G,0) = { |[r,s]| : s <= G
+  *(1,1)`2 }
 proof
-  assume
-A1: G is Y_equal-in-column;
   0 <> len G by GOBOARD1:def 5;
-  then 1 <= len G by NAT_1:14;
+  then
+A1: 1 <= len G by NAT_1:14;
+  assume
+  G is Y_equal-in-column;
   hence thesis by A1,GOBOARD5:8;
 end;
 
 theorem Th22:
-  G is Y_equal-in-column implies
-  h_strip(G,width G) = { |[r,s]| : G*(1,width G)`2 <= s }
+  G is Y_equal-in-column implies h_strip(G,width G) = { |[r,s]| :
+  G*(1,width G)`2 <= s }
 proof
-  assume
-A1: G is Y_equal-in-column;
   0 <> len G by GOBOARD1:def 5;
-  then 1 <= len G by NAT_1:14;
+  then
+A1: 1 <= len G by NAT_1:14;
+  assume
+  G is Y_equal-in-column;
   hence thesis by A1,GOBOARD5:7;
 end;
 
 theorem Th23:
-  G is Y_equal-in-column & 1 <= j & j < width G
-  implies h_strip(G,j) = { |[r,s]| : G*(1,j)`2 <= s & s <= G*(1,j+1)`2 }
+  G is Y_equal-in-column & 1 <= j & j < width G implies h_strip(G,
+  j) = { |[r,s]| : G*(1,j)`2 <= s & s <= G*(1,j+1)`2 }
 proof
   assume
 A1: G is Y_equal-in-column;
-  assume
-A2: 1 <= j & j < width G;
   0 <> len G by GOBOARD1:def 5;
-  then 1 <= len G by NAT_1:14;
+  then
+A2: 1 <= len G by NAT_1:14;
+  assume
+  1 <= j & j < width G;
   hence thesis by A1,A2,GOBOARD5:6;
 end;
 
-reserve G for non empty-yielding X_equal-in-line Y_equal-in-column
-  Matrix of TOP-REAL 2;
+reserve G for non empty-yielding X_equal-in-line Y_equal-in-column Matrix of
+  TOP-REAL 2;
 
 theorem Th24:
   cell(G,0,0) = { |[r,s]| : r <= G*(1,1)`1 & s <= G*(1,1)`2 }
 proof
 A1: cell(G,0,0) = v_strip(G,0) /\ h_strip(G,0) by GOBOARD5:def 3;
-A2: v_strip(G,0) = { |[r,s]| : r <= G*(1,1)`1 } by Th18;
-A3: h_strip(G,0) = { |[r,s]| : s <= G*(1,1)`2 } by Th21;
+A2: h_strip(G,0) = { |[r,s]| : s <= G*(1,1)`2 } by Th21;
+A3: v_strip(G,0) = { |[r,s]| : r <= G*(1,1)`1 } by Th18;
   thus cell(G,0,0) c= { |[r,s]| : r <= G*(1,1)`1 & s <= G*(1,1)`2 }
   proof
     let x be set;
@@ -894,29 +942,34 @@ A4: x in cell(G,0,0);
     then x in v_strip(G,0) by A1,XBOOLE_0:def 4;
     then consider r1,s1 such that
 A5: x = |[r1,s1]| and
-A6: r1 <= G*(1,1)`1 by A2;
+A6: r1 <= G*(1,1)`1 by A3;
     x in h_strip(G,0) by A1,A4,XBOOLE_0:def 4;
     then consider r2,s2 such that
 A7: x = |[r2,s2]| and
-A8: s2 <= G*(1,1)`2 by A3;
-    r1 = r2 & s1 = s2 by A5,A7,SPPOL_2:1;
+A8: s2 <= G*(1,1)`2 by A2;
+    s1 = s2 by A5,A7,SPPOL_2:1;
     hence thesis by A5,A6,A8;
   end;
   let x be set;
-  assume x in { |[r,s]| : r <= G*(1,1)`1 & s <= G*(1,1)`2 };
-  then ex r,s st x = |[r,s]| & r <= G*(1,1)`1 & s <= G*(1,1)`2;
-  then x in v_strip(G,0) & x in h_strip(G,0) by A2,A3;
-  hence thesis by A1,XBOOLE_0:def 4;
+  assume
+  x in { |[r,s]| : r <= G*(1,1)`1 & s <= G*(1,1)`2 };
+  then
+A9: ex r,s st x = |[r,s]| & r <= G*(1,1)`1 & s <= G*(1,1)`2;
+  then
+A10: x in h_strip(G,0) by A2;
+  x in v_strip(G,0) by A3,A9;
+  hence thesis by A1,A10,XBOOLE_0:def 4;
 end;
 
 theorem Th25:
-  cell(G,0,width G) = { |[r,s]| : r <= G*(1,1)`1 & G*(1,width G)`2 <= s }
+  cell(G,0,width G) = { |[r,s]| : r <= G*(1,1)`1 & G*(1,width G)`2
+  <= s }
 proof
 A1: cell(G,0,width G) = v_strip(G,0) /\ h_strip(G,width G) by GOBOARD5:def 3;
-A2: v_strip(G,0) = { |[r,s]| : r <= G*(1,1)`1 } by Th18;
-A3: h_strip(G,width G) = { |[r,s]| : G*(1,width G)`2 <= s } by Th22;
-  thus cell(G,0,width G)
-  c= { |[r,s]| : r <= G*(1,1)`1 & G*(1,width G)`2 <= s }
+A2: h_strip(G,width G) = { |[r,s]| : G*(1,width G)`2 <= s } by Th22;
+A3: v_strip(G,0) = { |[r,s]| : r <= G*(1,1)`1 } by Th18;
+  thus cell(G,0,width G) c= { |[r,s]| : r <= G*(1,1)`1 & G*(1,width G)`2 <= s
+  }
   proof
     let x be set;
     assume
@@ -924,62 +977,73 @@ A4: x in cell(G,0,width G);
     then x in v_strip(G,0) by A1,XBOOLE_0:def 4;
     then consider r1,s1 such that
 A5: x = |[r1,s1]| and
-A6: r1 <= G*(1,1)`1 by A2;
+A6: r1 <= G*(1,1)`1 by A3;
     x in h_strip(G,width G) by A1,A4,XBOOLE_0:def 4;
     then consider r2,s2 such that
 A7: x = |[r2,s2]| and
-A8: G*(1,width G)`2 <= s2 by A3;
-    r1 = r2 & s1 = s2 by A5,A7,SPPOL_2:1;
+A8: G*(1,width G)`2 <= s2 by A2;
+    s1 = s2 by A5,A7,SPPOL_2:1;
     hence thesis by A5,A6,A8;
   end;
   let x be set;
-  assume x in { |[r,s]| : r <= G*(1,1)`1 & G*(1,width G)`2 <= s };
-  then ex r,s st x = |[r,s]| & r <= G*(1,1)`1 & G*(1,width G)`2 <= s;
-  then x in v_strip(G,0) & x in h_strip(G,width G) by A2,A3;
-  hence thesis by A1,XBOOLE_0:def 4;
+  assume
+  x in { |[r,s]| : r <= G*(1,1)`1 & G*(1,width G)`2 <= s };
+  then
+A9: ex r,s st x = |[r,s]| & r <= G*(1,1)`1 & G*(1,width G)`2 <= s;
+  then
+A10: x in h_strip(G,width G) by A2;
+  x in v_strip(G,0) by A3,A9;
+  hence thesis by A1,A10,XBOOLE_0:def 4;
 end;
 
 theorem Th26:
-  1 <= j & j < width G implies cell(G,0,j)
-  = { |[r,s]| : r <= G*(1,1)`1 & G*(1,j)`2 <= s & s <= G*(1,j+1)`2 }
+  1 <= j & j < width G implies cell(G,0,j) = { |[r,s]| : r <= G*(1
+  ,1)`1 & G*(1,j)`2 <= s & s <= G*(1,j+1)`2 }
 proof
+A1: cell(G,0,j) = v_strip(G,0) /\ h_strip(G,j) by GOBOARD5:def 3;
   assume
-A1: 1 <= j & j < width G;
-A2: cell(G,0,j) = v_strip(G,0) /\ h_strip(G,j) by GOBOARD5:def 3;
+  1 <= j & j < width G;
+  then
+A2: h_strip(G,j) = { |[r,s]| : G*(1,j)`2 <= s & s <= G*(1,j+1)`2 } by
+  Th23;
 A3: v_strip(G,0) = { |[r,s]| : r <= G*(1,1)`1 } by Th18;
-A4: h_strip(G,j) = { |[r,s]| : G*(1,j)`2 <= s & s <= G*(1,j+1)`2 } by A1,Th23;
-  thus cell(G,0,j) c=
-  { |[r,s]| : r <= G*(1,1)`1 & G*(1,j)`2 <= s & s <= G*(1,j+1)`2 }
+  thus cell(G,0,j) c= { |[r,s]| : r <= G*(1,1)`1 & G*(1,j)`2 <= s & s <= G*(1,
+  j+1)`2 }
   proof
     let x be set;
     assume
-A5: x in cell(G,0,j);
-    then x in v_strip(G,0) by A2,XBOOLE_0:def 4;
+A4: x in cell(G,0,j);
+    then x in v_strip(G,0) by A1,XBOOLE_0:def 4;
     then consider r1,s1 such that
-A6: x = |[r1,s1]| and
-A7: r1 <= G*(1,1)`1 by A3;
-    x in h_strip(G,j) by A2,A5,XBOOLE_0:def 4;
+A5: x = |[r1,s1]| and
+A6: r1 <= G*(1,1)`1 by A3;
+    x in h_strip(G,j) by A1,A4,XBOOLE_0:def 4;
     then consider r2,s2 such that
-A8: x = |[r2,s2]| and
-A9: G*(1,j)`2 <= s2 & s2 <= G*(1,j+1)`2 by A4;
-    r1 = r2 & s1 = s2 by A6,A8,SPPOL_2:1;
-    hence thesis by A6,A7,A9;
+A7: x = |[r2,s2]| and
+A8: G*(1,j)`2 <= s2 & s2 <= G*(1,j+1)`2 by A2;
+    s1 = s2 by A5,A7,SPPOL_2:1;
+    hence thesis by A5,A6,A8;
   end;
   let x be set;
-  assume x in { |[r,s]| : r <= G*(1,1)`1 & G*(1,j)`2 <= s & s <= G*
-  (1,j+1)`2 };
-  then ex r,s st
-  x = |[r,s]| & r <= G*(1,1)`1 & G*(1,j)`2 <= s & s <= G*(1,j+1)`2;
-  then x in v_strip(G,0) & x in h_strip(G,j) by A3,A4;
-  hence thesis by A2,XBOOLE_0:def 4;
+  assume
+  x in { |[r,s]| : r <= G*(1,1)`1 & G*(1,j)`2 <= s & s <= G* (1,j+1)
+  `2 };
+  then
+A9: ex r,s st x = |[r,s]| & r <= G*(1,1)`1 & G*(1,j)`2 <= s & s <= G*(1,j+1
+  )`2;
+  then
+A10: x in h_strip(G,j) by A2;
+  x in v_strip(G,0) by A3,A9;
+  hence thesis by A1,A10,XBOOLE_0:def 4;
 end;
 
 theorem Th27:
-  cell(G,len G,0) = { |[r,s]| : G*(len G,1)`1 <= r & s <= G*(1,1)`2 }
+  cell(G,len G,0) = { |[r,s]| : G*(len G,1)`1 <= r & s <= G*(1,1)
+  `2 }
 proof
 A1: cell(G,len G,0) = v_strip(G,len G) /\ h_strip(G,0) by GOBOARD5:def 3;
-A2: v_strip(G,len G) = { |[r,s]| : G*(len G,1)`1 <= r } by Th19;
-A3: h_strip(G,0) = { |[r,s]| : s <= G*(1,1)`2 } by Th21;
+A2: h_strip(G,0) = { |[r,s]| : s <= G*(1,1)`2 } by Th21;
+A3: v_strip(G,len G) = { |[r,s]| : G*(len G,1)`1 <= r } by Th19;
   thus cell(G,len G,0) c= { |[r,s]| : G*(len G,1)`1 <= r & s <= G*(1,1)`2 }
   proof
     let x be set;
@@ -988,31 +1052,35 @@ A4: x in cell(G,len G,0);
     then x in v_strip(G,len G) by A1,XBOOLE_0:def 4;
     then consider r1,s1 such that
 A5: x = |[r1,s1]| and
-A6: G*(len G,1)`1 <= r1 by A2;
+A6: G*(len G,1)`1 <= r1 by A3;
     x in h_strip(G,0) by A1,A4,XBOOLE_0:def 4;
     then consider r2,s2 such that
 A7: x = |[r2,s2]| and
-A8: s2 <= G*(1,1)`2 by A3;
-    r1 = r2 & s1 = s2 by A5,A7,SPPOL_2:1;
+A8: s2 <= G*(1,1)`2 by A2;
+    s1 = s2 by A5,A7,SPPOL_2:1;
     hence thesis by A5,A6,A8;
   end;
   let x be set;
-  assume x in { |[r,s]| : G*(len G,1)`1 <= r & s <= G*(1,1)`2 };
-  then ex r,s st x = |[r,s]| & G*(len G,1)`1 <= r & s <= G*(1,1)`2;
-  then x in v_strip(G,len G) & x in h_strip(G,0) by A2,A3;
-  hence thesis by A1,XBOOLE_0:def 4;
+  assume
+  x in { |[r,s]| : G*(len G,1)`1 <= r & s <= G*(1,1)`2 };
+  then
+A9: ex r,s st x = |[r,s]| & G*(len G,1)`1 <= r & s <= G*(1,1)`2;
+  then
+A10: x in h_strip(G,0) by A2;
+  x in v_strip(G,len G) by A3,A9;
+  hence thesis by A1,A10,XBOOLE_0:def 4;
 end;
 
 theorem Th28:
-  cell(G,len G,width G)
-  = { |[r,s]| : G*(len G,1)`1 <= r & G*(1,width G)`2 <= s }
+  cell(G,len G,width G) = { |[r,s]| : G*(len G,1)`1 <= r & G*(1,
+  width G)`2 <= s }
 proof
-A1: cell(G,len G,width G) = v_strip(G,len G) /\ h_strip(G,width G)
-  by GOBOARD5:def 3;
-A2: v_strip(G,len G) = { |[r,s]| : G*(len G,1)`1 <= r } by Th19;
-A3: h_strip(G,width G) = { |[r,s]| : G*(1,width G)`2 <= s } by Th22;
-  thus cell(G,len G,width G) c=
-  { |[r,s]| : G*(len G,1)`1 <= r & G*(1,width G)`2 <= s }
+A1: cell(G,len G,width G) = v_strip(G,len G) /\ h_strip(G,width G) by
+  GOBOARD5:def 3;
+A2: h_strip(G,width G) = { |[r,s]| : G*(1,width G)`2 <= s } by Th22;
+A3: v_strip(G,len G) = { |[r,s]| : G*(len G,1)`1 <= r } by Th19;
+  thus cell(G,len G,width G) c= { |[r,s]| : G*(len G,1)`1 <= r & G*(1,width G)
+  `2 <= s }
   proof
     let x be set;
     assume
@@ -1020,1710 +1088,1607 @@ A4: x in cell(G,len G,width G);
     then x in v_strip(G,len G) by A1,XBOOLE_0:def 4;
     then consider r1,s1 such that
 A5: x = |[r1,s1]| and
-A6: G*(len G,1)`1 <= r1 by A2;
+A6: G*(len G,1)`1 <= r1 by A3;
+    x in h_strip(G,width G) by A1,A4,XBOOLE_0:def 4;
+    then consider r2,s2 such that
+A7: x = |[r2,s2]| and
+A8: G*(1,width G)`2 <= s2 by A2;
+    s1 = s2 by A5,A7,SPPOL_2:1;
+    hence thesis by A5,A6,A8;
+  end;
+  let x be set;
+  assume
+  x in { |[r,s]| : G*(len G,1)`1 <= r & G*(1,width G)`2 <= s };
+  then
+A9: ex r,s st x = |[r,s]| & G*(len G,1)`1 <= r & G*(1,width G)`2 <= s;
+  then
+A10: x in h_strip(G,width G) by A2;
+  x in v_strip(G,len G) by A3,A9;
+  hence thesis by A1,A10,XBOOLE_0:def 4;
+end;
+
+theorem Th29:
+  1 <= j & j < width G implies cell(G,len G,j) = { |[r,s]| : G*(
+  len G,1)`1 <= r & G*(1,j)`2 <= s & s <= G*(1,j+1)`2 }
+proof
+A1: cell(G,len G,j) = v_strip(G,len G) /\ h_strip(G,j) by GOBOARD5:def 3;
+  assume
+  1 <= j & j < width G;
+  then
+A2: h_strip(G,j) = { |[r,s]| : G*(1,j)`2 <= s & s <= G* (1,j+1)`2 } by
+  Th23;
+A3: v_strip(G,len G) = { |[r,s]| : G*(len G,1)`1 <= r } by Th19;
+  thus cell(G,len G,j) c= { |[r,s]| : G*(len G,1)`1 <= r & G*(1,j)`2 <= s & s
+  <= G*(1,j+1)`2 }
+  proof
+    let x be set;
+    assume
+A4: x in cell(G,len G,j);
+    then x in v_strip(G,len G) by A1,XBOOLE_0:def 4;
+    then consider r1,s1 such that
+A5: x = |[r1,s1]| and
+A6: G*(len G,1)`1 <= r1 by A3;
+    x in h_strip(G,j) by A1,A4,XBOOLE_0:def 4;
+    then consider r2,s2 such that
+A7: x = |[r2,s2]| and
+A8: G*(1,j)`2 <= s2 & s2 <= G*(1,j+1)`2 by A2;
+    s1 = s2 by A5,A7,SPPOL_2:1;
+    hence thesis by A5,A6,A8;
+  end;
+  let x be set;
+  assume
+  x in { |[r,s]| : G*(len G,1)`1 <= r & G*(1,j)`2 <= s & s <= G*(1,j+
+  1)`2 };
+  then
+A9: ex r,s st x = |[r,s]| & G*(len G,1)`1 <= r & G*(1,j)`2 <= s & s <= G*(1
+  ,j+1)`2;
+  then
+A10: x in h_strip(G,j) by A2;
+  x in v_strip(G,len G) by A3,A9;
+  hence thesis by A1,A10,XBOOLE_0:def 4;
+end;
+
+theorem Th30:
+  1 <= i & i < len G implies cell(G,i,0) = { |[r,s]|: G*(i,1)`1 <=
+  r & r <= G*(i+1,1)`1 & s <= G* (1,1)`2 }
+proof
+A1: cell(G,i,0) = v_strip(G,i) /\ h_strip(G,0) by GOBOARD5:def 3;
+  assume
+  1 <= i & i < len G;
+  then
+A2: v_strip(G,i) = { |[r,s]| : G*(i,1)`1 <= r & r <= G* (i+1,1)`1 } by
+  Th20;
+A3: h_strip(G,0) = { |[r,s]| : s <= G*(1,1)`2 } by Th21;
+  thus cell(G,i,0) c= { |[r,s]| : G*(i,1)`1 <= r & r <= G*(i+1,1)`1 & s <= G*(
+  1,1)`2 }
+  proof
+    let x be set;
+    assume
+A4: x in cell(G,i,0);
+    then x in v_strip(G,i) by A1,XBOOLE_0:def 4;
+    then consider r1,s1 such that
+A5: x = |[r1,s1]| and
+A6: G*(i,1)`1 <= r1 & r1 <= G*(i+1,1)`1 by A2;
+    x in h_strip(G,0) by A1,A4,XBOOLE_0:def 4;
+    then consider r2,s2 such that
+A7: x = |[r2,s2]| and
+A8: s2 <= G*(1,1)`2 by A3;
+    s1 = s2 by A5,A7,SPPOL_2:1;
+    hence thesis by A5,A6,A8;
+  end;
+  let x be set;
+  assume
+  x in { |[r,s]| : G*(i,1)`1 <= r & r <= G*(i+1,1)`1 & s <= G* (1,1)
+  `2 };
+  then
+A9: ex r,s st x = |[r,s]| & G*(i,1)`1 <= r & r <= G*(i+1,1)`1 & s <= G*(1,1
+  )`2;
+  then
+A10: x in h_strip(G,0) by A3;
+  x in v_strip(G,i) by A2,A9;
+  hence thesis by A1,A10,XBOOLE_0:def 4;
+end;
+
+theorem Th31:
+  1 <= i & i < len G implies cell(G,i,width G) = { |[r,s]|: G*(i,1
+  )`1 <= r & r <= G*(i+1,1)`1 & G*(1,width G)`2 <= s }
+proof
+A1: cell(G,i,width G) = v_strip(G,i) /\ h_strip(G,width G) by GOBOARD5:def 3;
+  assume
+  1 <= i & i < len G;
+  then
+A2: v_strip(G,i) = { |[r,s]| : G*(i,1)`1 <= r & r <= G* (i+1,1)`1 } by
+  Th20;
+A3: h_strip(G,width G) = { |[r,s]| : G*(1,width G)`2 <= s } by Th22;
+  thus cell(G,i,width G) c= { |[r,s]| : G*(i,1)`1 <= r & r <= G*(i+1,1)`1 & G*
+  (1,width G)`2 <= s }
+  proof
+    let x be set;
+    assume
+A4: x in cell(G,i,width G);
+    then x in v_strip(G,i) by A1,XBOOLE_0:def 4;
+    then consider r1,s1 such that
+A5: x = |[r1,s1]| and
+A6: G*(i,1)`1 <= r1 & r1 <= G*(i+1,1)`1 by A2;
     x in h_strip(G,width G) by A1,A4,XBOOLE_0:def 4;
     then consider r2,s2 such that
 A7: x = |[r2,s2]| and
 A8: G*(1,width G)`2 <= s2 by A3;
-    r1 = r2 & s1 = s2 by A5,A7,SPPOL_2:1;
+    s1 = s2 by A5,A7,SPPOL_2:1;
     hence thesis by A5,A6,A8;
   end;
   let x be set;
-  assume x in { |[r,s]| : G*(len G,1)`1 <= r & G*(1,width G)`2 <= s };
-  then ex r,s st x = |[r,s]| & G*(len G,1)`1 <= r & G*(1,width G)`2 <= s;
-  then x in v_strip(G,len G) & x in h_strip(G,width G) by A2,A3;
-  hence thesis by A1,XBOOLE_0:def 4;
-end;
-
-theorem Th29:
-  1 <= j & j < width G implies cell(G,len G,j)
-  = { |[r,s]| : G*(len G,1)`1 <= r & G*(1,j)`2 <= s & s <= G*(1,j+1)`2 }
-proof
   assume
-A1: 1 <= j & j < width G;
-A2: cell(G,len G,j) = v_strip(G,len G) /\ h_strip(G,j) by GOBOARD5:def 3;
-A3: v_strip(G,len G) = { |[r,s]| : G*(len G,1)`1 <= r } by Th19;
-A4: h_strip(G,j) = { |[r,s]| : G*(1,j)`2 <= s & s <= G*
-  (1,j+1)`2 } by A1,Th23;
-  thus cell(G,len G,j) c=
-  { |[r,s]| : G*(len G,1)`1 <= r & G*(1,j)`2 <= s & s <= G*(1,j+1)`2 }
-  proof
-    let x be set;
-    assume
-A5: x in cell(G,len G,j);
-    then x in v_strip(G,len G) by A2,XBOOLE_0:def 4;
-    then consider r1,s1 such that
-A6: x = |[r1,s1]| and
-A7: G*(len G,1)`1 <= r1 by A3;
-    x in h_strip(G,j) by A2,A5,XBOOLE_0:def 4;
-    then consider r2,s2 such that
-A8: x = |[r2,s2]| and
-A9: G*(1,j)`2 <= s2 & s2 <= G*(1,j+1)`2 by A4;
-    r1 = r2 & s1 = s2 by A6,A8,SPPOL_2:1;
-    hence thesis by A6,A7,A9;
-  end;
-  let x be set;
-  assume x in { |[r,s]| : G*(len G,1)`1 <= r & G*(1,j)`2 <= s & s <=
-  G*(1,j+1)`2 };
-  then ex r,s st
-  x = |[r,s]| & G*(len G,1)`1 <= r & G*(1,j)`2 <= s & s <= G*(1,j+1)`2;
-  then x in v_strip(G,len G) & x in h_strip(G,j) by A3,A4;
-  hence thesis by A2,XBOOLE_0:def 4;
-end;
-
-theorem Th30:
-  1 <= i & i < len G implies
-  cell(G,i,0) = { |[r,s]|: G*(i,1)`1 <= r & r <= G*(i+1,1)`1 & s <= G*
-  (1,1)`2 }
-proof
-  assume
-A1: 1 <= i & i < len G;
-A2: cell(G,i,0) = v_strip(G,i) /\ h_strip(G,0) by GOBOARD5:def 3;
-A3: v_strip(G,i) = { |[r,s]| : G*(i,1)`1 <= r & r <= G*
-  (i+1,1)`1 } by A1,Th20;
-A4: h_strip(G,0) = { |[r,s]| : s <= G*(1,1)`2 } by Th21;
-  thus cell(G,i,0) c=
-  { |[r,s]| : G*(i,1)`1 <= r & r <= G*(i+1,1)`1 & s <= G*(1,1)`2 }
-  proof
-    let x be set;
-    assume
-A5: x in cell(G,i,0);
-    then x in v_strip(G,i) by A2,XBOOLE_0:def 4;
-    then consider r1,s1 such that
-A6: x = |[r1,s1]| and
-A7: G*(i,1)`1 <= r1 & r1 <= G*(i+1,1)`1 by A3;
-    x in h_strip(G,0) by A2,A5,XBOOLE_0:def 4;
-    then consider r2,s2 such that
-A8: x = |[r2,s2]| and
-A9: s2 <= G*(1,1)`2 by A4;
-    r1 = r2 & s1 = s2 by A6,A8,SPPOL_2:1;
-    hence thesis by A6,A7,A9;
-  end;
-  let x be set;
-  assume x in { |[r,s]| : G*(i,1)`1 <= r & r <= G*(i+1,1)`1 & s <= G*
-  (1,1)`2 };
-  then ex r,s st
-  x = |[r,s]| & G*(i,1)`1 <= r & r <= G*(i+1,1)`1 & s <= G*(1,1)`2;
-  then x in v_strip(G,i) & x in h_strip(G,0) by A3,A4;
-  hence thesis by A2,XBOOLE_0:def 4;
-end;
-
-theorem Th31:
-  1 <= i & i < len G implies cell(G,i,width G)
-  = { |[r,s]|: G*(i,1)`1 <= r & r <= G*(i+1,1)`1 & G*(1,width G)`2 <= s }
-proof
-  assume
-A1: 1 <= i & i < len G;
-A2: cell(G,i,width G) = v_strip(G,i) /\ h_strip(G,width G) by GOBOARD5:def 3;
-A3: v_strip(G,i) = { |[r,s]| : G*(i,1)`1 <= r & r <= G*
-  (i+1,1)`1 } by A1,Th20;
-A4: h_strip(G,width G) = { |[r,s]| : G*(1,width G)`2 <= s } by Th22;
-  thus cell(G,i,width G) c=
-  { |[r,s]| : G*(i,1)`1 <= r & r <= G*(i+1,1)`1 & G*(1,width G)`2 <= s }
-  proof
-    let x be set;
-    assume
-A5: x in cell(G,i,width G);
-    then x in v_strip(G,i) by A2,XBOOLE_0:def 4;
-    then consider r1,s1 such that
-A6: x = |[r1,s1]| and
-A7: G*(i,1)`1 <= r1 & r1 <= G*(i+1,1)`1 by A3;
-    x in h_strip(G,width G) by A2,A5,XBOOLE_0:def 4;
-    then consider r2,s2 such that
-A8: x = |[r2,s2]| and
-A9: G*(1,width G)`2 <= s2 by A4;
-    r1 = r2 & s1 = s2 by A6,A8,SPPOL_2:1;
-    hence thesis by A6,A7,A9;
-  end;
-  let x be set;
-  assume x in { |[r,s]| : G*(i,1)`1 <= r & r <= G*(i+1,1)`1 & G*
-  (1,width G)`2 <= s };
-  then ex r,s st
-  x = |[r,s]| & G*(i,1)`1 <= r & r <= G*(i+1,1)`1 & G*(1,width G)`2 <= s;
-  then x in v_strip(G,i) & x in h_strip(G,width G) by A3,A4;
-  hence thesis by A2,XBOOLE_0:def 4;
+  x in { |[r,s]| : G*(i,1)`1 <= r & r <= G*(i+1,1)`1 & G* (1,width G)
+  `2 <= s };
+  then
+A9: ex r,s st x = |[r,s]| & G*(i,1)`1 <= r & r <= G*(i+1,1)`1 & G*(1,width
+  G)`2 <= s;
+  then
+A10: x in h_strip(G,width G) by A3;
+  x in v_strip(G,i) by A2,A9;
+  hence thesis by A1,A10,XBOOLE_0:def 4;
 end;
 
 theorem Th32:
   1 <= i & i < len G & 1 <= j & j < width G implies cell(G,i,j) =
-  { |[r,s]| : G*(i,1)`1 <= r & r <= G*(i+1,1)`1 &
-  G*(1,j)`2 <= s & s <= G*(1,j+1)`2 }
+{ |[r,s]| : G*(i,1)`1 <= r & r <= G*(i+1,1)`1 & G*(1,j)`2 <= s & s <= G*(1,j+1)
+  `2 }
 proof
   assume that
 A1: 1 <= i & i < len G and
 A2: 1 <= j & j < width G;
-A3: cell(G,i,j) = v_strip(G,i) /\ h_strip(G,j) by GOBOARD5:def 3;
-A4: v_strip(G,i) = { |[r,s]| : G*(i,1)`1 <= r & r <= G*
-  (i+1,1)`1 } by A1,Th20;
-A5: h_strip(G,j) = { |[r,s]| : G*(1,j)`2 <= s & s <= G*
-  (1,j+1)`2 } by A2,Th23;
-  thus cell(G,i,j) c= { |[r,s]| : G*(i,1)`1 <= r & r <= G*(i+1,1)`1 &
-  G*(1,j)`2 <= s & s <= G*(1,j+1)`2 }
+A3: h_strip(G,j) = { |[r,s]| : G*(1,j)`2 <= s & s <= G* (1,j+1)`2 } by A2,
+  Th23;
+A4: cell(G,i,j) = v_strip(G,i) /\ h_strip(G,j) by GOBOARD5:def 3;
+A5: v_strip(G,i) = { |[r,s]| : G*(i,1)`1 <= r & r <= G* (i+1,1)`1 } by A1,
+  Th20;
+  thus cell(G,i,j) c= { |[r,s]| : G*(i,1)`1 <= r & r <= G*(i+1,1)`1 & G*(1,j)
+  `2 <= s & s <= G*(1,j+1)`2 }
   proof
     let x be set;
     assume
 A6: x in cell(G,i,j);
-    then x in v_strip(G,i) by A3,XBOOLE_0:def 4;
+    then x in v_strip(G,i) by A4,XBOOLE_0:def 4;
     then consider r1,s1 such that
 A7: x = |[r1,s1]| and
-A8: G*(i,1)`1 <= r1 & r1 <= G*(i+1,1)`1 by A4;
-    x in h_strip(G,j) by A3,A6,XBOOLE_0:def 4;
+A8: G*(i,1)`1 <= r1 & r1 <= G*(i+1,1)`1 by A5;
+    x in h_strip(G,j) by A4,A6,XBOOLE_0:def 4;
     then consider r2,s2 such that
 A9: x = |[r2,s2]| and
-A10: G*(1,j)`2 <= s2 & s2 <= G*(1,j+1)`2 by A5;
-    r1 = r2 & s1 = s2 by A7,A9,SPPOL_2:1;
+A10: G*(1,j)`2 <= s2 & s2 <= G*(1,j+1)`2 by A3;
+    s1 = s2 by A7,A9,SPPOL_2:1;
     hence thesis by A7,A8,A10;
   end;
   let x be set;
-  assume x in { |[r,s]| : G*(i,1)`1 <= r & r <= G*(i+1,1)`1 &
-  G*(1,j)`2 <= s & s <= G*(1,j+1)`2 };
-  then ex r,s st x = |[r,s]| &
-  G*(i,1)`1 <= r & r <= G*(i+1,1)`1 & G*(1,j)`2 <= s & s <= G*(1,j+1)`2;
-  then x in v_strip(G,i) & x in h_strip(G,j) by A4,A5;
-  hence thesis by A3,XBOOLE_0:def 4;
+  assume
+  x in { |[r,s]| : G*(i,1)`1 <= r & r <= G*(i+1,1)`1 & G*(1,j)`2 <= s
+  & s <= G*(1,j+1)`2 };
+  then
+A11: ex r,s st x = |[r,s]| & G*(i,1)`1 <= r & r <= G*(i+1,1)`1 & G*(1,j)`2
+  <= s & s <= G*(1,j+1)`2;
+  then
+A12: x in h_strip(G,j) by A3;
+  x in v_strip(G,i) by A5,A11;
+  hence thesis by A4,A12,XBOOLE_0:def 4;
 end;
 
 theorem Th33:
   for G being Matrix of TOP-REAL 2 holds cell(G,i,j) is closed
 proof
   let G be Matrix of TOP-REAL 2;
-A1: cell(G,i,j)=h_strip(G,j) /\ v_strip(G,i) by GOBOARD5:def 3;
-A2: h_strip(G,j) is closed by Th16;
-  v_strip(G,i) is closed by Th17;
-  hence thesis by A1,A2,TOPS_1:35;
+A1: v_strip(G,i) is closed by Th17;
+  cell(G,i,j)=h_strip(G,j) /\ v_strip(G,i) & h_strip(G,j) is closed by
+  Th16, GOBOARD5:def 3;
+  hence thesis by A1,TOPS_1:35;
 end;
 
 theorem Th34:
-  for G being non empty-yielding Matrix of TOP-REAL 2 holds
-  1<=len G & 1<=width G
+  for G being non empty-yielding Matrix of TOP-REAL 2 holds 1<=len
+  G & 1<=width G
 proof
   let G be non empty-yielding Matrix of TOP-REAL 2;
-  not(len G=0 or width G=0) by GOBOARD1:def 5;
+  ( not len G=0)& not width G=0 by GOBOARD1:def 5;
   hence thesis by NAT_1:14;
 end;
 
 theorem
-  for G being Go-board holds
-  i<=len G & j<=width G implies cell(G,i,j)=Cl Int cell(G,i,j)
+  for G being Go-board holds i<=len G & j<=width G implies cell(G,i,j)=
+  Cl Int cell(G,i,j)
 proof
   let G be Go-board;
+  set Y = Int cell(G,i,j);
   assume
 A1: i<=len G & j<=width G;
-  set Y = Int cell(G,i,j);
-A2: Cl Y c= Cl cell(G,i,j) by PRE_TOPC:49,TOPS_1:44;
-  cell(G,i,j) is closed by Th33;
-  then
-A3: Cl Y c= cell(G,i,j) by A2,PRE_TOPC:52;
-  cell(G,i,j) c= Cl Y
+A2: cell(G,i,j) c= Cl Y
   proof
     let x;
     assume
-A4: x in cell(G,i,j);
+A3: x in cell(G,i,j);
     then reconsider p=x as Point of TOP-REAL 2;
-    for G0 being Subset of TOP-REAL 2 st G0 is open holds
-    p in G0 implies Y meets G0
+    for G0 being Subset of TOP-REAL 2 st G0 is open holds p in G0 implies
+    Y meets G0
     proof
       let G0 be Subset of TOP-REAL 2;
       assume
-A5:   G0 is open;
+A4:   G0 is open;
       now
-        assume
-A6:     p in G0;
         reconsider u=p as Point of Euclid 2 by EUCLID:25;
+        assume
+A5:     p in G0;
+        j>=0 by NAT_1:2;
+        then
+A6:     j=0 or 0+1<=j by NAT_1:13;
         reconsider v=u as Element of REAL 2;
-X:      TopSpaceMetr Euclid 2 = the TopStruct of TOP-REAL 2 by EUCLID:def 8;
+A7:     TopSpaceMetr Euclid 2 = the TopStruct of TOP-REAL 2 by EUCLID:def
+        8;
         then reconsider G00=G0 as Subset of TopSpaceMetr Euclid 2;
-        G00 is open by A5,PRE_TOPC:60,X;
+        G00 is open by A4,A7,PRE_TOPC:60;
         then consider r be real number such that
-A7:     r>0 & Ball(u,r) c= G00 by A5,A6,TOPMETR:22;
+A8:     r>0 and
+A9:     Ball(u,r) c= G00 by A5,TOPMETR:22;
         reconsider r as Real by XREAL_0:def 1;
         i>=0 by NAT_1:2;
         then
-A8:     i=0 or 0+1<=i by NAT_1:13;
-        j>=0 by NAT_1:2;
-        then
-A9:     j=0 or 0+1<=j by NAT_1:13;
-        now per cases by A1,A8,A9,XXREAL_0:1;
+A10:    i=0 or 0+1<=i by NAT_1:13;
+        now
+          per cases by A1,A10,A6,XXREAL_0:1;
           case
-A10:        i=0 & j=0;
-            then p in { |[r2,s2]| : r2 <= G*(1,1)`1 & s2 <= G*(1,1)`2 }
-            by A4,Th24;
+A11:        i=0 & j=0;
+            then
+            p in { |[r2,s2]| : r2 <= G*(1,1)`1 & s2 <= G*(1,1)`2 } by A3,
+            Th24;
             then consider r2,s2 such that
-A11:        p=|[r2,s2]| &( r2 <= G*(1,1)`1 & s2 <= G*(1,1)`2);
+A12:        p=|[r2,s2]| and
+A13:        r2 <= G*(1,1)`1 and
+A14:        s2 <= G*(1,1)`2;
             set r3=r2-r/2 ,s3=s2-r/2;
+A15:        r*2">0 by A8,XREAL_1:131;
+            then s3<s3+r/2 by XREAL_1:31;
+            then
+A16:        s3<G*(1,1)`2 by A14,XXREAL_0:2;
             reconsider q0=|[r3,s3]| as Point of TOP-REAL 2;
-A12:        p`1=r2 & p`2=s2 by A11,EUCLID:56;
-A13:        q0`1=r3 & q0`2=s3 by EUCLID:56;
             reconsider u0=q0 as Point of Euclid 2 by EUCLID:25;
+            r3<r3+r/2 by A15,XREAL_1:31;
+            then r3<G*(1,1)`1 by A13,XXREAL_0:2;
+            then
+            u0 in { |[r1,s1]| : r1 < G*(1,1)`1 & s1 < G* (1,1)`2 } by A16;
+            then
+A17:        u0 in Y by A11,GOBOARD6:21;
             reconsider v0=u0 as Element of REAL 2;
-A14:        r*2">0 by A7,XREAL_1:131;
-            then r3<r3+r/2 by XREAL_1:31;
-            then
-A15:        r3<G*(1,1)`1 by A11,XXREAL_0:2;
-            s3<s3+r/2 by A14,XREAL_1:31;
-            then
-A16:        s3<G*(1,1)`2 by A11,XXREAL_0:2;
-A17:        r2-r3 =r/2;
-A18:        s2-s3=r/2;
-A19:        r/2*sqrt 2>=0 by A14,Lm1;
-A20:        (r/2)^2 + (r/2)^2= 2*((r/2)^2)
-              .=(sqrt 2)^2*((r/2)^2) by SQUARE_1:def 4
-              .=(r/2*sqrt 2)^2;
-A21:        dist(u,u0) = (Pitag_dist 2).(v,v0) by METRIC_1:def 1;
+A18:        q0`1=r3 & q0`2=s3 by EUCLID:56;
             sqrt 2/2<1 by Lm1,SQUARE_1:86,XREAL_1:191;
             then
-A22:        r*(sqrt 2/2)<r*1 by A7,XREAL_1:70;
-            sqrt ((r/2)^2 + (r/2)^2) =r*((sqrt 2)/2) by A19,A20,SQUARE_1:89;
-            then (Pitag_dist 2).(v,v0)<r by A12,A13,A17,A18,A22,TOPREAL3:12;
+A19:        r*(sqrt 2/2)<r*1 by A8,XREAL_1:70;
+            (r/2)^2 + (r/2)^2= 2*((r/2)^2)
+              .=(sqrt 2)^2*((r/2)^2) by SQUARE_1:def 4
+              .=(r/2*sqrt 2)^2;
             then
-A23:        u0 in Ball(u,r) by A21,METRIC_1:12;
-            u0 in { |[r1,s1]| : r1 < G*(1,1)`1 & s1 < G* (1,1)`2 } by A15,A16;
-            then u0 in Y by A10,GOBOARD6:21;
-            hence Y /\ G0 <> {}(TOP-REAL 2) by A7,A23,XBOOLE_0:def 4;
+A20:        sqrt ((r/2)^2 + (r/2)^2) =r*((sqrt 2)/2) by A8,Lm1,
+            SQUARE_1:89;
+A21:        r2-r3 =r/2 & s2-s3=r/2;
+            p`1=r2 & p`2=s2 by A12,EUCLID:56;
+            then dist(u,u0) = (Pitag_dist 2).(v,v0) & (Pitag_dist 2).(v,v0)<r
+            by A18,A21,A19,A20,METRIC_1:def 1,TOPREAL3:12;
+            then u0 in Ball(u,r) by METRIC_1:12;
+            hence Y /\ G0 <> {}(TOP-REAL 2) by A9,A17,XBOOLE_0:def 4;
           end;
           case
-A24:        i=0 & j=width G;
+A22:        i=0 & j=width G;
             then p in { |[r2,s2]| : r2 <= G*(1,1)`1 & G*(1,width G)`2 <=s2 }
-            by A4,Th25;
+            by A3,Th25;
             then consider r2,s2 such that
-A25:        p=|[r2,s2]| &( r2 <= G*(1,1)`1 & G*(1,width G)`2<=s2);
+A23:        p=|[r2,s2]| and
+A24:        r2 <= G*(1,1)`1 and
+A25:        G*(1,width G)`2<=s2;
             set r3=r2-r/2,s3=s2+r/2;
+A26:        r*2">0 by A8,XREAL_1:131;
+            then s3>s2 by XREAL_1:31;
+            then
+A27:        s3>G*(1,width G)`2 by A25,XXREAL_0:2;
             reconsider q0=|[r3,s3]| as Point of TOP-REAL 2;
-A26:        p`1=r2 & p`2=s2 by A25,EUCLID:56;
-A27:        q0`1=r3 & q0`2=s3 by EUCLID:56;
             reconsider u0=q0 as Point of Euclid 2 by EUCLID:25;
+            r3<r3+r/2 by A26,XREAL_1:31;
+            then r3<G*(1,1)`1 by A24,XXREAL_0:2;
+            then u0 in { |[r1,s1]| : r1 < G*(1,1)`1 & G*(1,width G)`2<s1 } by
+            A27;
+            then
+A28:        u0 in Y by A22,GOBOARD6:22;
             reconsider v0=u0 as Element of REAL 2;
-A28:        r*2">0 by A7,XREAL_1:131;
-            then r3<r3+r/2 by XREAL_1:31;
+A29:        q0`1=r3 & q0`2=s3 by EUCLID:56;
+            sqrt 2/2<1 by Lm1,SQUARE_1:86,XREAL_1:191;
             then
-A29:        r3<G*(1,1)`1 by A25,XXREAL_0:2;
-            s3>s2 by A28,XREAL_1:31;
-            then
-A30:        s3>G*(1,width G)`2 by A25,XXREAL_0:2;
-A31:        r/2*sqrt 2>=0 by A28,Lm1;
-A32:        (r/2)^2 + (r/2)^2= 2*((r/2)^2)
+A30:        r*(sqrt 2/2)<r*1 by A8,XREAL_1:70;
+            (r/2)^2 + (r/2)^2= 2*((r/2)^2)
               .=(sqrt 2)^2*((r/2)^2) by SQUARE_1:def 4
               .=(r/2*sqrt 2)^2;
-A33:        dist(u,u0) = (Pitag_dist 2).(v,v0) by METRIC_1:def 1;
-            sqrt 2/2<1 by Lm1,SQUARE_1:86,XREAL_1:191;
-            then r*(sqrt 2/2)<r*1 by A7,XREAL_1:70;
-            then sqrt ((r2 - r3)^2 + (s2 - s3)^2)<r by A31,A32,SQUARE_1:89;
-            then dist(u,u0) < r by A26,A27,A33,TOPREAL3:12;
             then
-A34:        u0 in Ball(u,r) by METRIC_1:12;
-            u0 in { |[r1,s1]| : r1 < G*(1,1)`1 & G*(1,width G)`2<s1 }
-            by A29,A30;
-            then u0 in Y & u0 in G0 by A7,A24,A34,GOBOARD6:22;
-            hence Y /\ G0 <> {}(TOP-REAL 2) by XBOOLE_0:def 4;
+A31:        dist(u,u0) = (Pitag_dist 2).(v,v0) & sqrt ((r2 - r3)^2 + (s2
+            - s3)^2)<r by A8,A30,Lm1,METRIC_1:def 1,SQUARE_1:89;
+            p`1=r2 & p`2=s2 by A23,EUCLID:56;
+            then dist(u,u0) < r by A29,A31,TOPREAL3:12;
+            then u0 in Ball(u,r) by METRIC_1:12;
+            hence Y /\ G0 <> {}(TOP-REAL 2) by A9,A28,XBOOLE_0:def 4;
           end;
           case
-A35:        i=0 & 1<=j & j<width G;
-            then p in { |[r2,s2]| :
-            r2 <= G*(1,1)`1 & G*(1,j)`2 <=s2 & s2<=G*(1,j+1)`2} by A4,Th26;
+A32:        i=0 & 1<=j & j<width G;
+            then
+            p in { |[r2,s2]| : r2 <= G*(1,1)`1 & G*(1,j)`2 <=s2 & s2<=G*(
+            1,j+1)`2} by A3,Th26;
             then consider r2,s2 such that
-A36:        p=|[r2,s2]|
-            &( r2 <= G*(1,1)`1 & G*(1,j)`2 <=s2 & s2<=G*(1,j+1)`2);
-            now per cases by A36,XXREAL_0:1;
+A33:        p=|[r2,s2]| and
+A34:        r2 <= G*(1,1)`1 and
+A35:        G*(1,j)`2 <=s2 and
+A36:        s2<=G*(1,j+1)`2;
+            now
+              per cases by A35,A36,XXREAL_0:1;
               case
 A37:            s2=G*(1,j)`2;
-                set rl=G*(1,j+1)`2 - G*(1,j)`2;
-                set rm=min(r,rl);
-A38:            rm<=r & rm<=rl by XXREAL_0:17;
-A39:            j<j+1 by NAT_1:13;
-A40:            j+1<=width G by A35,NAT_1:13;
-                1<=len G by Th34;
-                then G*(1,j)`2<G*(1,j+1)`2 by A35,A39,A40,GOBOARD5:5;
-                then
-A41:            rl>0 by XREAL_1:52;
-                then rm>0 by A7,XXREAL_0:21;
-                then
-A42:            rm/2>0 by XREAL_1:141;
-A43:            rl/2>0 by A41,XREAL_1:141;
-A44:            rm/2<=rl/2 by A38,XREAL_1:74;
-                rm/2<=r/2 by A38,XREAL_1:74;
-                then (rm/2)^2<=(r/2)^2 by A42,SQUARE_1:77;
-                then
-A45:            (r/2)^2+(rm/2)^2<=(r/2)^2+(r/2)^2 by XREAL_1:9;
-                0<=(rm/2)^2 & 0<=(r/2)^2 by XREAL_1:65;
-                then 0+0<=(r/2)^2+(rm/2)^2;
-                then
-A46:            sqrt((r/2)^2+(rm/2)^2)<=sqrt((r/2)^2+(r/2) ^2)
-                by A45,SQUARE_1:94;
-                set r3=r2-r/2 ,s3=s2+rm/2;
-                set q0=|[r3,s3]|;
-A47:            p`1=r2 & p`2=s2 by A36,EUCLID:56;
-A48:            q0`1=r3 & q0`2=s3 by EUCLID:56;
-                reconsider u0=q0 as Point of Euclid 2 by EUCLID:25;
-                reconsider v0=u0 as Element of REAL 2;
-A49:            r*2">0 by A7,XREAL_1:131;
-                then r3<r3+r/2 by XREAL_1:31;
-                then
-A50:            r3<G*(1,1)`1 by A36,XXREAL_0:2;
-                s3>s2 by A42,XREAL_1:31;
-                then
-A51:            s3>G*(1,j)`2 by A36,XXREAL_0:2;
-A52:            G*(1,j)`2+rm/2<=G*(1,j)`2+rl/2 by A44,XREAL_1:8;
-                G*(1,j)`2+(G*(1,j+1)`2-G*(1,j)`2)/2
-                <G*(1,j)`2+(G*(1,j+1)`2-G*(1,j)`2)/2
-                +(G*(1,j+1)`2-G*(1,j)`2)/2 by A43,XREAL_1:31;
-                then
-A53:            s3<G*(1,j+1)`2 by A37,A52,XXREAL_0:2;
-A54:            r/2*sqrt 2>=0 by A49,Lm1;
-A55:            (r/2)^2 + (r/2)^2= 2*((r/2)^2)
-                  .=(sqrt 2)^2*((r/2)^2) by SQUARE_1:def 4
-                  .=(r/2*sqrt 2)^2;
-A56:            dist(u,u0) = (Pitag_dist 2).(v,v0) by METRIC_1:def 1;
+A38:            p`1=r2 & p`2=s2 by A33,EUCLID:56;
                 sqrt 2/2<1 by Lm1,SQUARE_1:86,XREAL_1:191;
                 then
-A57:            r*(sqrt 2/2)<r*1 by A7,XREAL_1:70;
-                sqrt ((r/2)^2 + (r/2)^2)
-                =r*((sqrt 2)/2) by A54,A55,SQUARE_1:89;
-                then sqrt ((r2 - r3)^2 + (s2 - s3)^2)<r by A46,A57,XXREAL_0:2;
-                then dist(u,u0) < r by A47,A48,A56,TOPREAL3:12;
+A39:            r*(sqrt 2/2)<r*1 by A8,XREAL_1:70;
+                (r/2)^2 + (r/2)^2= 2*((r/2)^2)
+                  .=(sqrt 2)^2*((r/2)^2) by SQUARE_1:def 4
+                  .=(r/2*sqrt 2)^2;
                 then
-A58:            u0 in Ball(u,r) by METRIC_1:12;
-                u0 in { |[r1,s1]| : r1 < G*(1,1)`1
-                & G*(1,j)`2<s1 & s1<G*(1,j+1)`2} by A50,A51,A53;
-                then u0 in Y by A35,GOBOARD6:23;
-                hence Y /\ G0 <> {}(TOP-REAL 2) by A7,A58,XBOOLE_0:def 4;
+A40:            sqrt ((r/2)^2 + (r/2)^2) =r*((sqrt 2)/2) by A8,Lm1,
+                SQUARE_1:89;
+                set rl=G*(1,j+1)`2 - G*(1,j)`2;
+                set rm=min(r,rl);
+                set r3=r2-r/2 ,s3=s2+rm/2;
+                set q0=|[r3,s3]|;
+A41:            q0`1=r3 & q0`2=s3 by EUCLID:56;
+                reconsider u0=q0 as Point of Euclid 2 by EUCLID:25;
+                reconsider v0=u0 as Element of REAL 2;
+A42:            1<=len G by Th34;
+                j<j+1 & j+1<=width G by A32,NAT_1:13;
+                then G*(1,j)`2<G*(1,j+1)`2 by A32,A42,GOBOARD5:5;
+                then
+A43:            rl>0 by XREAL_1:52;
+                then
+A44:            rm>0 by A8,XXREAL_0:21;
+                then s3>s2 by XREAL_1:31,141;
+                then
+A45:            s3>G*(1,j)`2 by A35,XXREAL_0:2;
+                rm/2<=r/2 by XREAL_1:74,XXREAL_0:17;
+                then (rm/2)^2<=(r/2)^2 by A44,SQUARE_1:77;
+                then
+A46:            (r/2)^2+(rm/2)^2<=(r/2)^2+(r/2)^2 by XREAL_1:9;
+                0<=(rm/2)^2 & 0<=(r/2)^2 by XREAL_1:65;
+                then
+sqrt((r/2)^2+(rm/2)^2)<=sqrt((r/2)^2+(r/2) ^2) by A46,SQUARE_1:94;
+                then dist(u,u0) = (Pitag_dist 2).(v,v0) & sqrt ((r2 - r3)^2 +
+                (s2 - s3)^2)<r by A39,A40,METRIC_1:def 1,XXREAL_0:2;
+                then dist(u,u0) < r by A38,A41,TOPREAL3:12;
+                then
+A47:            u0 in Ball(u,r) by METRIC_1:12;
+                rm/2<=rl/2 by XREAL_1:74,XXREAL_0:17;
+                then
+A48:            G*(1,j)`2+rm/2<=G*(1,j)`2+rl/2 by XREAL_1:8;
+                r*2">0 by A8,XREAL_1:131;
+                then r3<r3+r/2 by XREAL_1:31;
+                then
+A49:            r3<G*(1,1)`1 by A34,XXREAL_0:2;
+                G*(1,j)`2+(G*(1,j+1)`2-G*(1,j)`2)/2 <G*(1,j)`2+(G*(1,j+1)
+`2-G*(1,j)`2)/2 +(G*(1,j+1)`2-G*(1,j)`2)/2 by A43,XREAL_1:31,141;
+                then s3<G*(1,j+1)`2 by A37,A48,XXREAL_0:2;
+                then
+                u0 in { |[r1,s1]| : r1 < G*(1,1)`1 & G*(1,j)`2<s1 & s1<G*
+                (1,j+1)`2} by A49,A45;
+                then u0 in Y by A32,GOBOARD6:23;
+                hence Y /\ G0 <> {}(TOP-REAL 2) by A9,A47,XBOOLE_0:def 4;
               end;
               case
-A59:            (G*(1,j)`2 <s2 & s2<G*(1,j+1)`2);
+A50:            G*(1,j)`2 <s2 & s2<G*(1,j+1)`2;
                 set r3=r2-r/2,s3=s2;
                 reconsider q0=|[r3,s3]| as Point of TOP-REAL 2;
-A60:            p`1=r2 & p`2=s2 by A36,EUCLID:56;
+                reconsider u0=q0 as Point of Euclid 2 by EUCLID:25;
+                r*2">0 by A8,XREAL_1:131;
+                then r3<r3+r/2 by XREAL_1:31;
+                then r3<G*(1,1)`1 by A34,XXREAL_0:2;
+                then u0 in { |[r1,s1]| : r1 < G*(1,1)`1 & G*(1,j)`2<s1 & s1<G
+                *(1,j+1)`2} by A50;
+                then
+A51:            u0 in Y by A32,GOBOARD6:23;
+                reconsider v0=u0 as Element of REAL 2;
+A52:            q0`1=r3 & q0`2=s3 by EUCLID:56;
+                sqrt 2/2<1 by Lm1,SQUARE_1:86,XREAL_1:191;
+                then
+A53:            r*(sqrt 2/2)<r*1 by A8,XREAL_1:70;
+A54:            (r/2)^2 >=0 by XREAL_1:65;
+                then (r/2)^2 + 0 <=(r/2)^2 + (r/2)^2 by XREAL_1:8;
+                then
+A55:            sqrt((r/2)^2 + 0^2)<=sqrt((r/2)^2 + (r/2)^2) by A54,
+                SQUARE_1:94;
+A56:            p`1=r2 & p`2=s2 by A33,EUCLID:56;
+                (r/2)^2 + (r/2)^2= 2*((r/2)^2)
+                  .=(sqrt 2)^2*((r/2)^2) by SQUARE_1:def 4
+                  .=(r/2*sqrt 2)^2;
+                then sqrt ((r/2)^2 + (r/2)^2) =r*((sqrt 2)/2) by A8,Lm1
+                ,SQUARE_1:89;
+                then dist(u,u0) = (Pitag_dist 2).(v,v0) & sqrt((r2 - r3)^2 +
+                (s2 - s3)^2)<r by A53,A55,METRIC_1:def 1,XXREAL_0:2;
+                then dist(u,u0) < r by A56,A52,TOPREAL3:12;
+                then u0 in Ball(u,r) by METRIC_1:12;
+                hence Y /\ G0 <> {} by A9,A51,XBOOLE_0:def 4;
+              end;
+              case
+A57:            s2=G*(1,j+1)`2;
+A58:            p`1=r2 & p`2=s2 by A33,EUCLID:56;
+                sqrt 2/2<1 by Lm1,SQUARE_1:86,XREAL_1:191;
+                then
+A59:            r*(sqrt 2/2)<r*1 by A8,XREAL_1:70;
+                (r/2)^2 + (r/2)^2= 2*((r/2)^2)
+                  .=(sqrt 2)^2*((r/2)^2) by SQUARE_1:def 4
+                  .=(r/2*sqrt 2)^2;
+                then
+A60:            sqrt ((r/2)^2 + (r/2)^2) =r*((sqrt 2)/2) by A8,Lm1
+                ,SQUARE_1:89;
+                set rl=G*(1,j+1)`2 - G*(1,j)`2;
+                set rm=min(r,rl);
+                set r3=r2-r/2,s3=s2-rm/2;
+                reconsider q0=|[r3,s3]| as Point of TOP-REAL 2;
 A61:            q0`1=r3 & q0`2=s3 by EUCLID:56;
                 reconsider u0=q0 as Point of Euclid 2 by EUCLID:25;
                 reconsider v0=u0 as Element of REAL 2;
-A62:            r*2">0 by A7,XREAL_1:131;
-                then r3<r3+r/2 by XREAL_1:31;
+A62:            1<=len G by Th34;
+                j<j+1 & j+1<=width G by A32,NAT_1:13;
+                then G*(1,j)`2<G*(1,j+1)`2 by A32,A62,GOBOARD5:5;
                 then
-A63:            r3<G*(1,1)`1 by A36,XXREAL_0:2;
-A64:            (r/2)^2 >=0 by XREAL_1:65;
-A65:            r/2*sqrt 2>=0 by A62,Lm1;
-A66:            (r/2)^2 + (r/2)^2= 2*((r/2)^2)
-                  .=(sqrt 2)^2*((r/2)^2) by SQUARE_1:def 4
-                  .=(r/2*sqrt 2)^2;
-A67:            dist(u,u0) = (Pitag_dist 2).(v,v0) by METRIC_1:def 1;
-                sqrt 2/2<1 by Lm1,SQUARE_1:86,XREAL_1:191;
+A63:            rl>0 by XREAL_1:52;
                 then
-A68:            r*(sqrt 2/2)<r*1 by A7,XREAL_1:70;
-A69:            sqrt ((r/2)^2 + (r/2)^2)
-                =r*((sqrt 2)/2) by A65,A66,SQUARE_1:89;
-                (r/2)^2 + 0 <=(r/2)^2 + (r/2)^2 by A64,XREAL_1:8;
-                then sqrt((r/2)^2 + 0^2)<=sqrt((r/2)^2 + (r/2)^2)
-                by A64,SQUARE_1:94;
-                then sqrt((r2 - r3)^2 + (s2 - s3)^2)<r by A68,A69,XXREAL_0:2;
-                then dist(u,u0) < r by A60,A61,A67,TOPREAL3:12;
+A64:            rm>0 by A8,XXREAL_0:21;
+                then s3<s3+rm/2 by XREAL_1:31,141;
                 then
-A70:            u0 in Ball(u,r) by METRIC_1:12;
-                u0 in { |[r1,s1]| : r1 < G*(1,1)`1 &
-                G*(1,j)`2<s1 & s1<G*(1,j+1)`2} by A59,A63;
-                then u0 in Y by A35,GOBOARD6:23;
-                hence Y /\ G0 <> {} by A7,A70,XBOOLE_0:def 4;
-              end;
-              case
-A71:            s2=G*(1,j+1)`2;
-                set rl=G*(1,j+1)`2 - G*(1,j)`2;
-                set rm=min(r,rl);
-A72:            rm<=r & rm<=rl by XXREAL_0:17;
-A73:            j<j+1 by NAT_1:13;
-A74:            j+1<=width G by A35,NAT_1:13;
-                1<=len G by Th34;
-                then G*(1,j)`2<G*(1,j+1)`2 by A35,A73,A74,GOBOARD5:5;
+A65:            s3<G*(1,j+1)`2 by A36,XXREAL_0:2;
+                rm/2<=r/2 by XREAL_1:74,XXREAL_0:17;
+                then (rm/2)^2<=(r/2)^2 by A64,SQUARE_1:77;
                 then
-A75:            rl>0 by XREAL_1:52;
-                then rm>0 by A7,XXREAL_0:21;
-                then
-A76:            rm/2>0 by XREAL_1:141;
-A77:            rl/2>0 by A75,XREAL_1:141;
-A78:            rm/2<=rl/2 by A72,XREAL_1:74;
-                rm/2<=r/2 by A72,XREAL_1:74;
-                then (rm/2)^2<=(r/2)^2 by A76,SQUARE_1:77;
-                then
-A79:            (r/2)^2+(rm/2)^2<=(r/2)^2+(r/2)^2 by XREAL_1:9;
+A66:            (r/2)^2+(rm/2)^2<=(r/2)^2+(r/2)^2 by XREAL_1:9;
                 0<=(rm/2)^2 & 0<=(r/2)^2 by XREAL_1:65;
-                then 0+0<=(r/2)^2+(rm/2)^2;
+                then sqrt((r/2)^2+(rm/2)^2)<=sqrt((r/2)^2+(r/2) ^2) by A66,
+                SQUARE_1:94;
+                then dist(u,u0) = (Pitag_dist 2).(v,v0) & sqrt ((r2 - r3)^2 +
+                (s2 - s3)^2)<r by A59,A60,METRIC_1:def 1,XXREAL_0:2;
+                then dist(u,u0) < r by A58,A61,TOPREAL3:12;
                 then
-A80:            sqrt((r/2)^2+(rm/2)^2)<=sqrt((r/2)^2+(r/2) ^2)
-                by A79,SQUARE_1:94;
-                set r3=r2-r/2,s3=s2-rm/2;
-                reconsider q0=|[r3,s3]| as Point of TOP-REAL 2;
-A81:            p`1=r2 & p`2=s2 by A36,EUCLID:56;
-A82:            q0`1=r3 & q0`2=s3 by EUCLID:56;
-                reconsider u0=q0 as Point of Euclid 2 by EUCLID:25;
-                reconsider v0=u0 as Element of REAL 2;
-A83:            r*2">0 by A7,XREAL_1:131;
+A67:            u0 in Ball(u,r) by METRIC_1:12;
+                rm/2<=rl/2 by XREAL_1:74,XXREAL_0:17;
+                then
+A68:            G*(1,j+1)`2-rm/2>=G*(1,j+1)`2-rl/2 by XREAL_1:12;
+                r*2">0 by A8,XREAL_1:131;
                 then r3<r3+r/2 by XREAL_1:31;
                 then
-A84:            r3<G*(1,1)`1 by A36,XXREAL_0:2;
-                s3<s3+rm/2 by A76,XREAL_1:31;
-                then
-A85:            s3<G*(1,j+1)`2 by A36,XXREAL_0:2;
-A86:            G*(1,j+1)`2-rm/2>=G*(1,j+1)`2-rl/2 by A78,XREAL_1:12;
-                G*(1,j+1)`2-(G*(1,j+1)`2-G*(1,j)`2)/2
-                >G*(1,j+1)`2-(G*(1,j+1)`2-G*(1,j)`2)/2
-                -(G*(1,j+1)`2-G*(1,j)`2)/2 by A77,XREAL_1:46;
-                then
-A87:            s3>G*(1,j)`2 by A71,A86,XXREAL_0:2;
-A88:            r/2*sqrt 2>=0 by A83,Lm1;
-A89:            (r/2)^2 + (r/2)^2= 2*((r/2)^2)
-                  .=(sqrt 2)^2*((r/2)^2) by SQUARE_1:def 4
-                  .=(r/2*sqrt 2)^2;
-A90:            dist(u,u0) = (Pitag_dist 2).(v,v0) by METRIC_1:def 1;
-                sqrt 2/2<1 by Lm1,SQUARE_1:86,XREAL_1:191;
-                then
-A91:            r*(sqrt 2/2)<r*1 by A7,XREAL_1:70;
-                sqrt ((r/2)^2 + (r/2)^2)
-                =r*((sqrt 2)/2) by A88,A89,SQUARE_1:89;
-                then sqrt ((r2 - r3)^2 + (s2 - s3)^2)<r by A80,A91,XXREAL_0:2;
-                then dist(u,u0) < r by A81,A82,A90,TOPREAL3:12;
-                then
-A92:            u0 in Ball(u,r) by METRIC_1:12;
-                u0 in { |[r1,s1]| : r1 < G*(1,1)`1
-                & G*(1,j)`2<s1 & s1<G*(1,j+1)`2} by A84,A85,A87;
-                then u0 in Y by A35,GOBOARD6:23;
-                hence Y /\ G0 <> {} by A7,A92,XBOOLE_0:def 4;
+A69:            r3<G*(1,1)`1 by A34,XXREAL_0:2;
+                G*(1,j+1)`2-(G*(1,j+1)`2-G*(1,j)`2)/2 >G*(1,j+1)`2-(G*(1
+,j+1)`2-G*(1,j)`2)/2 -(G*(1,j+1)`2-G*(1,j)`2)/2 by A63,XREAL_1:46,141;
+                then s3>G*(1,j)`2 by A57,A68,XXREAL_0:2;
+                then u0 in { |[r1,s1]| : r1 < G*(1,1)`1 & G*(1,j)`2<s1 & s1<G
+                *(1,j+1)`2} by A69,A65;
+                then u0 in Y by A32,GOBOARD6:23;
+                hence Y /\ G0 <> {} by A9,A67,XBOOLE_0:def 4;
               end;
             end;
             hence Y /\ G0 <> {}(TOP-REAL 2);
           end;
           case
-A93:        i=len G & j=0;
-            then p in { |[r2,s2]| : r2 >= G*(len G,1)`1 & G*(1,1)`2 >=s2 }
-            by A4,Th27;
+A70:        i=len G & j=0;
+            then p in { |[r2,s2]| : r2 >= G*(len G,1)`1 & G*(1,1)`2 >=s2 } by
+            A3,Th27;
             then consider r2,s2 such that
-A94:        p=|[r2,s2]| &( r2 >= G*(len G,1)`1 & G*(1,1)`2>=s2);
+A71:        p=|[r2,s2]| and
+A72:        r2 >= G*(len G,1)`1 and
+A73:        G*(1,1)`2>=s2;
             set r3=r2+r/2,s3=s2-r/2;
+A74:        r*2">0 by A8,XREAL_1:131;
+            then r3>r2 by XREAL_1:31;
+            then
+A75:        r3>G*(len G,1)`1 by A72,XXREAL_0:2;
             reconsider q0=|[r3,s3]| as Point of TOP-REAL 2;
-A95:        p`1=r2 & p`2=s2 by A94,EUCLID:56;
-A96:        q0`1=r3 & q0`2=s3 by EUCLID:56;
             reconsider u0=q0 as Point of Euclid 2 by EUCLID:25;
+            s3<s3+r/2 by A74,XREAL_1:31;
+            then s3<G*(1,1)`2 by A73,XXREAL_0:2;
+            then u0 in { |[r1,s1]| : r1 > G*(len G,1)`1 & G*(1,1)`2>s1 } by
+            A75;
+            then
+A76:        u0 in Y by A70,GOBOARD6:24;
             reconsider v0=u0 as Element of REAL 2;
-A97:        r*2">0 by A7,XREAL_1:131;
-            then s3<s3+r/2 by XREAL_1:31;
+A77:        q0`1=r3 & q0`2=s3 by EUCLID:56;
+            sqrt 2/2<1 by Lm1,SQUARE_1:86,XREAL_1:191;
             then
-A98:        s3<G*(1,1)`2 by A94,XXREAL_0:2;
-            r3>r2 by A97,XREAL_1:31;
-            then
-A99:        r3>G*(len G,1)`1 by A94,XXREAL_0:2;
-A100:       r/2*sqrt 2>=0 by A97,Lm1;
-A101:       (r/2)^2 + (r/2)^2= 2*((r/2)^2)
+A78:        r*(sqrt 2/2)<r*1 by A8,XREAL_1:70;
+            (r/2)^2 + (r/2)^2= 2*((r/2)^2)
               .=(sqrt 2)^2*((r/2)^2) by SQUARE_1:def 4
               .=(r/2*sqrt 2)^2;
-A102:       dist(u,u0) = (Pitag_dist 2).(v,v0) by METRIC_1:def 1;
-            sqrt 2/2<1 by Lm1,SQUARE_1:86,XREAL_1:191;
-            then r*(sqrt 2/2)<r*1 by A7,XREAL_1:70;
-            then sqrt ((r2 - r3)^2 + (s2 - s3)^2)<r by A100,A101,SQUARE_1:89;
-            then dist(u,u0) < r by A95,A96,A102,TOPREAL3:12;
             then
-A103:       u0 in Ball(u,r) by METRIC_1:12;
-            u0 in { |[r1,s1]| : r1 > G*(len G,1)`1 & G*(1,1)`2>s1 }
-            by A98,A99;
-            then u0 in Y by A93,GOBOARD6:24;
-            hence Y /\ G0 <> {} by A7,A103,XBOOLE_0:def 4;
+A79:        dist(u,u0) = (Pitag_dist 2).(v,v0) & sqrt ((r2 - r3)^2 + (s2
+            - s3)^2)<r by A8,A78,Lm1,METRIC_1:def 1,SQUARE_1:89;
+            p`1=r2 & p`2=s2 by A71,EUCLID:56;
+            then dist(u,u0) < r by A77,A79,TOPREAL3:12;
+            then u0 in Ball(u,r) by METRIC_1:12;
+            hence Y /\ G0 <> {} by A9,A76,XBOOLE_0:def 4;
           end;
           case
-A104:       i=len G & j=width G;
-            then p in { |[r2,s2]| : G*(len G,1)`1<=r2 & G*(1,width G)`2<= s2 }
-            by A4,Th28;
+A80:        i=len G & j=width G;
+            sqrt 2/2<1 by Lm1,SQUARE_1:86,XREAL_1:191;
+            then
+A81:        r*(sqrt 2/2)<r*1 by A8,XREAL_1:70;
+            (r/2)^2 + (r/2)^2= 2*((r/2)^2)
+              .=(sqrt 2)^2*((r/2)^2) by SQUARE_1:def 4
+              .=(r/2*sqrt 2)^2;
+            then
+A82:        sqrt ((r/2)^2 + (r/2)^2) =r*((sqrt 2)/2) by A8,Lm1,
+            SQUARE_1:89;
+            p in { |[r2,s2]| : G*(len G,1)`1<=r2 & G*(1,width G)`2<= s2
+            } by A3,A80,Th28;
             then consider r2,s2 such that
-A105:       p=|[r2,s2]| &( G*(len G,1)`1<=r2 & G*(1,width G)`2<=s2);
+A83:        p=|[r2,s2]| and
+A84:        G*(len G,1)`1<=r2 and
+A85:        G*(1,width G)`2<=s2;
             set r3=r2+r/2,s3=s2+r/2;
+A86:        r*2">0 by A8,XREAL_1:131;
+            then s2<s2+r/2 by XREAL_1:31;
+            then
+A87:        s3>G*(1,width G)`2 by A85,XXREAL_0:2;
             reconsider q0=|[r3,s3]| as Point of TOP-REAL 2;
-A106:       p`1=r2 & p`2=s2 by A105,EUCLID:56;
-A107:       q0`1=r3 & q0`2=s3 by EUCLID:56;
             reconsider u0=q0 as Point of Euclid 2 by EUCLID:25;
+            r2<r2+r/2 by A86,XREAL_1:31;
+            then r3>G*(len G,1)`1 by A84,XXREAL_0:2;
+            then u0 in { |[r1,s1]| : r1 > G*(len G,1)`1 & s1 > G*(1,width G)
+            `2 } by A87;
+            then
+A88:        u0 in Y by A80,GOBOARD6:25;
             reconsider v0=u0 as Element of REAL 2;
-A108:       r*2">0 by A7,XREAL_1:131;
-            then r2<r2+r/2 by XREAL_1:31;
-            then
-A109:       r3>G*(len G,1)`1 by A105,XXREAL_0:2;
-            s2<s2+r/2 by A108,XREAL_1:31;
-            then
-A110:       s3>G*(1,width G)`2 by A105,XXREAL_0:2;
-A111:       r2-r3=-r/2;
-A112:       s2-s3=-r/2;
-A113:       r/2*sqrt 2>=0 by A108,Lm1;
-A114:       (r/2)^2 + (r/2)^2= 2*((r/2)^2)
-              .=(sqrt 2)^2*((r/2)^2) by SQUARE_1:def 4
-              .=(r/2*sqrt 2)^2;
-A115:       (-r/2)^2=(r/2)^2;
-A116:       dist(u,u0) = (Pitag_dist 2).(v,v0) by METRIC_1:def 1;
-            sqrt 2/2<1 by Lm1,SQUARE_1:86,XREAL_1:191;
-            then
-A117:       r*(sqrt 2/2)<r*1 by A7,XREAL_1:70;
-            sqrt ((r/2)^2 + (r/2)^2) =r*((sqrt 2)/2) by A113,A114,SQUARE_1:89;
-            then dist(u,u0) < r
-            by A106,A107,A111,A112,A115,A116,A117,TOPREAL3:12;
-            then
-A118:       u0 in Ball(u,r) by METRIC_1:12;
-            u0 in { |[r1,s1]| : r1 > G*(len G,1)`1 & s1 > G*(1,width G) `2 }
-            by A109,A110;
-            then u0 in Y by A104,GOBOARD6:25;
-            hence Y /\ G0 <> {} by A7,A118,XBOOLE_0:def 4;
+A89:        q0`1=r3 & q0`2=s3 by EUCLID:56;
+A90:        (-r/2)^2=(r/2)^2 & dist(u,u0) = (Pitag_dist 2).(v,v0) by
+            METRIC_1:def 1;
+A91:        r2-r3=-r/2 & s2-s3=-r/2;
+            p`1=r2 & p`2=s2 by A83,EUCLID:56;
+            then dist(u,u0) < r by A89,A91,A90,A81,A82,TOPREAL3:12;
+            then u0 in Ball(u,r) by METRIC_1:12;
+            hence Y /\ G0 <> {} by A9,A88,XBOOLE_0:def 4;
           end;
           case
-A119:       i=len G & 1<=j & j<width G;
-            then p in { |[r2,s2]| :
-            r2 >= G*(len G,1)`1 & G*(1,j)`2 <=s2 & s2<=G*(1,j+1)`2}
-            by A4,Th29;
+A92:        i=len G & 1<=j & j<width G;
+            then p in { |[r2,s2]| : r2 >= G*(len G,1)`1 & G*(1,j)`2 <=s2 & s2
+            <=G*(1,j+1)`2} by A3,Th29;
             then consider r2,s2 such that
-A120:       p=|[r2,s2]|
-            &( r2 >= G*(len G,1)`1 & G*(1,j)`2 <=s2 & s2<=G*(1,j+1)`2);
-            now per cases by A120,XXREAL_0:1;
+A93:        p=|[r2,s2]| and
+A94:        r2 >= G*(len G,1)`1 and
+A95:        G*(1,j)`2 <=s2 and
+A96:        s2<=G*(1,j+1)`2;
+            now
+              per cases by A95,A96,XXREAL_0:1;
               case
-A121:           s2=G*(1,j)`2;
+A97:            s2=G*(1,j)`2;
+A98:            p`1=r2 & p`2=s2 by A93,EUCLID:56;
+                sqrt 2/2<1 by Lm1,SQUARE_1:86,XREAL_1:191;
+                then
+A99:            r*(sqrt 2/2)<r*1 by A8,XREAL_1:70;
+                (r/2)^2 + (r/2)^2= 2*((r/2)^2)
+                  .=(sqrt 2)^2*((r/2)^2) by SQUARE_1:def 4
+                  .=(r/2*sqrt 2)^2;
+                then
+A100:           sqrt ((r/2)^2 + (r/2)^2) =r*((sqrt 2)/2) by A8,Lm1
+                ,SQUARE_1:89;
                 set rl=G*(1,j+1)`2 - G*(1,j)`2;
                 set rm=min(r,rl);
-A122:           rm<=r & rm<=rl by XXREAL_0:17;
-A123:           j<j+1 by NAT_1:13;
-A124:           j+1<=width G by A119,NAT_1:13;
-                1<=len G by Th34;
-                then G*(1,j)`2<G*(1,j+1)`2 by A119,A123,A124,GOBOARD5:5;
-                then
-A125:           rl>0 by XREAL_1:52;
-                then rm>0 by A7,XXREAL_0:21;
-                then
-A126:           rm/2>0 by XREAL_1:141;
-A127:           rl/2>0 by A125,XREAL_1:141;
-A128:           rm/2<=rl/2 by A122,XREAL_1:74;
-                rm/2<=r/2 by A122,XREAL_1:74;
-                then (rm/2)^2<=(r/2)^2 by A126,SQUARE_1:77;
-                then
-A129:           (r/2)^2+(rm/2)^2<=(r/2)^2+(r/2)^2 by XREAL_1:9;
-                0<=(rm/2)^2 & 0<=(r/2)^2 by XREAL_1:65;
-                then 0+0<=(r/2)^2+(rm/2)^2;
-                then
-A130:           sqrt((r/2)^2+(rm/2)^2)<=sqrt((r/2)^2+(r/2) ^2
-                ) by A129,SQUARE_1:94;
                 set r3=r2+r/2 ,s3=s2+rm/2;
                 reconsider q0=|[r3,s3]| as Point of TOP-REAL 2;
-A131:           p`1=r2 & p`2=s2 by A120,EUCLID:56;
-A132:           q0`1=r3 & q0`2=s3 by EUCLID:56;
+A101:           q0`1=r3 & q0`2=s3 by EUCLID:56;
                 reconsider u0=q0 as Point of Euclid 2 by EUCLID:25;
                 reconsider v0=u0 as Element of REAL 2;
-A133:           r*2">0 by A7,XREAL_1:131;
+A102:           1<=len G by Th34;
+                j<j+1 & j+1<=width G by A92,NAT_1:13;
+                then G*(1,j)`2<G*(1,j+1)`2 by A92,A102,GOBOARD5:5;
+                then
+A103:           rl>0 by XREAL_1:52;
+                then
+A104:           rm>0 by A8,XXREAL_0:21;
+                then s3>s2 by XREAL_1:31,141;
+                then
+A105:           s3>G*(1,j)`2 by A95,XXREAL_0:2;
+                rm/2<=r/2 by XREAL_1:74,XXREAL_0:17;
+                then (rm/2)^2<=(r/2)^2 by A104,SQUARE_1:77;
+                then
+A106:           (r/2)^2+(rm/2)^2<=(r/2)^2+(r/2)^2 by XREAL_1:9;
+                0<=(rm/2)^2 & 0<=(r/2)^2 by XREAL_1:65;
+                then sqrt((r/2)^2+(rm/2)^2)<=sqrt((r/2)^2+(r/2) ^2 ) by A106,
+                SQUARE_1:94;
+                then dist(u,u0) = (Pitag_dist 2).(v,v0) & sqrt ((r2 - r3)^2 +
+                (s2 - s3)^2)<r by A99,A100,METRIC_1:def 1,XXREAL_0:2;
+                then dist(u,u0) < r by A98,A101,TOPREAL3:12;
+                then
+A107:           u0 in Ball(u,r) by METRIC_1:12;
+                rm/2<=rl/2 by XREAL_1:74,XXREAL_0:17;
+                then
+A108:           G*(1,j)`2+rm/2<=G*(1,j)`2+rl/2 by XREAL_1:8;
+                r*2">0 by A8,XREAL_1:131;
                 then r2<r2+r/2 by XREAL_1:31;
                 then
-A134:           r3>G*(len G,1)`1 by A120,XXREAL_0:2;
-                s3>s2 by A126,XREAL_1:31;
-                then
-A135:           s3>G*(1,j)`2 by A120,XXREAL_0:2;
-A136:           G*(1,j)`2+rm/2<=G*(1,j)`2+rl/2 by A128,XREAL_1:8;
-                G*(1,j)`2+(G*(1,j+1)`2-G*(1,j)`2)/2
-                <G*(1,j)`2+(G*(1,j+1)`2-G*(1,j)`2)/2
-                +(G*(1,j+1)`2-G*(1,j)`2)/2 by A127,XREAL_1:31;
-                then
-A137:           s3<G*(1,j+1)`2 by A121,A136,XXREAL_0:2;
-A138:           r/2*sqrt 2>=0 by A133,Lm1;
-A139:           (r/2)^2 + (r/2)^2= 2*((r/2)^2)
-                  .=(sqrt 2)^2*((r/2)^2) by SQUARE_1:def 4
-                  .=(r/2*sqrt 2)^2;
-A140:           dist(u,u0) = (Pitag_dist 2).(v,v0) by METRIC_1:def 1;
-                sqrt 2/2<1 by Lm1,SQUARE_1:86,XREAL_1:191;
-                then
-A141:           r*(sqrt 2/2)<r*1 by A7,XREAL_1:70;
-                sqrt ((r/2)^2 + (r/2)^2)
-                =r*((sqrt 2)/2) by A138,A139,SQUARE_1:89;
-
-then sqrt ((r2 - r3)^2 + (s2 - s3)^2)<r by A130,A141,XXREAL_0:2;
-                then dist(u,u0) < r by A131,A132,A140,TOPREAL3:12;
-                then
-A142:           u0 in Ball(u,r) by METRIC_1:12;
-                u0 in { |[r1,s1]| : r1 > G*(len G,1)`1
-                & G*(1,j)`2<s1 & s1<G*(1,j+1)`2} by A134,A135,A137;
-                then u0 in Y by A119,GOBOARD6:26;
-                hence Y /\ G0 <> {} by A7,A142,XBOOLE_0:def 4;
+A109:           r3>G*(len G,1)`1 by A94,XXREAL_0:2;
+                G*(1,j)`2+(G*(1,j+1)`2-G*(1,j)`2)/2 <G*(1,j)`2+(G*(1,j+1
+)`2-G*(1,j)`2)/2 +(G*(1,j+1)`2-G*(1,j)`2)/2 by A103,XREAL_1:31,141;
+                then s3<G*(1,j+1)`2 by A97,A108,XXREAL_0:2;
+                then u0 in { |[r1,s1]| : r1 > G*(len G,1)`1 & G*(1,j)`2<s1 &
+                s1<G*(1,j+1)`2} by A109,A105;
+                then u0 in Y by A92,GOBOARD6:26;
+                hence Y /\ G0 <> {} by A9,A107,XBOOLE_0:def 4;
               end;
               case
-A143:           (G*(1,j)`2 <s2 & s2<G*(1,j+1)`2);
+A110:           G*(1,j)`2 <s2 & s2<G*(1,j+1)`2;
                 set r3=r2+r/2,s3=s2;
                 reconsider q0=|[r3,s3]| as Point of TOP-REAL 2;
-A144:           p`1=r2 & p`2=s2 by A120,EUCLID:56;
-A145:           q0`1=r3 & q0`2=s3 by EUCLID:56;
                 reconsider u0=q0 as Point of Euclid 2 by EUCLID:25;
-                reconsider v0=u0 as Element of REAL 2;
-A146:           r*2">0 by A7,XREAL_1:131;
+                r*2">0 by A8,XREAL_1:131;
                 then r2<r2+r/2 by XREAL_1:31;
+                then r3>G*(len G,1)`1 by A94,XXREAL_0:2;
+                then u0 in { |[r1,s1]| : r1 > G*(len G,1)`1 & G*(1,j)`2<s1 &
+                s1<G*(1,j+1)`2} by A110;
                 then
-A147:           r3>G*(len G,1)`1 by A120,XXREAL_0:2;
-A148:           (r/2)^2 >=0 by XREAL_1:65;
-A149:           r/2*sqrt 2>=0 by A146,Lm1;
-A150:           (r/2)^2 + (r/2)^2= 2*((r/2)^2)
-                  .=(sqrt 2)^2*((r/2)^2) by SQUARE_1:def 4
-                  .=(r/2*sqrt 2)^2;
-A151:           dist(u,u0) = (Pitag_dist 2).(v,v0) by METRIC_1:def 1;
+A111:           u0 in Y by A92,GOBOARD6:26;
+                reconsider v0=u0 as Element of REAL 2;
+A112:           q0`1=r3 & q0`2=s3 by EUCLID:56;
                 sqrt 2/2<1 by Lm1,SQUARE_1:86,XREAL_1:191;
                 then
-A152:           r*(sqrt 2/2)<r*1 by A7,XREAL_1:70;
-A153:           sqrt ((r/2)^2 + (r/2)^2)
-                =r*((sqrt 2)/2) by A149,A150,SQUARE_1:89;
-                (r/2)^2 + 0 <=(r/2)^2 + (r/2)^2 by A148,XREAL_1:8;
-                then sqrt((r/2)^2 + 0^2)<=sqrt((r/2)^2 + (r/2)^2)
-                by A148,SQUARE_1:94;
-                then sqrt((r2 - r3)^2 + (s2 - s3)^2)<r by A152,A153,XXREAL_0:2;
-                then dist(u,u0) < r by A144,A145,A151,TOPREAL3:12;
+A113:           r*(sqrt 2/2)<r*1 by A8,XREAL_1:70;
+A114:           (r/2)^2 >=0 by XREAL_1:65;
+                then (r/2)^2 + 0 <=(r/2)^2 + (r/2)^2 by XREAL_1:8;
                 then
-A154:           u0 in Ball(u,r) by METRIC_1:12;
-                u0 in { |[r1,s1]| : r1 > G*(len G,1)`1 &
-                G*(1,j)`2<s1 & s1<G*(1,j+1)`2} by A143,A147;
-                then u0 in Y by A119,GOBOARD6:26;
-                hence Y /\ G0 <> {} by A7,A154,XBOOLE_0:def 4;
+A115:           sqrt((r/2)^2 + 0^2)<=sqrt((r/2)^2 + (r/2)^2) by A114,
+                SQUARE_1:94;
+A116:           p`1=r2 & p`2=s2 by A93,EUCLID:56;
+                (r/2)^2 + (r/2)^2= 2*((r/2)^2)
+                  .=(sqrt 2)^2*((r/2)^2) by SQUARE_1:def 4
+                  .=(r/2*sqrt 2)^2;
+                then sqrt ((r/2)^2 + (r/2)^2) =r*((sqrt 2)/2) by A8,Lm1
+                ,SQUARE_1:89;
+                then dist(u,u0) = (Pitag_dist 2).(v,v0) & sqrt((r2 - r3)^2 +
+                (s2 - s3)^2)<r by A113,A115,METRIC_1:def 1,XXREAL_0:2;
+                then dist(u,u0) < r by A116,A112,TOPREAL3:12;
+                then u0 in Ball(u,r) by METRIC_1:12;
+                hence Y /\ G0 <> {} by A9,A111,XBOOLE_0:def 4;
               end;
               case
-A155:           s2=G*(1,j+1)`2;
+A117:           s2=G*(1,j+1)`2;
+A118:           p`1=r2 & p`2=s2 by A93,EUCLID:56;
+                sqrt 2/2<1 by Lm1,SQUARE_1:86,XREAL_1:191;
+                then
+A119:           r*(sqrt 2/2)<r*1 by A8,XREAL_1:70;
+                (r/2)^2 + (r/2)^2= 2*((r/2)^2)
+                  .=(sqrt 2)^2*((r/2)^2) by SQUARE_1:def 4
+                  .=(r/2*sqrt 2)^2;
+                then
+A120:           sqrt ((r/2)^2 + (r/2)^2) =r*((sqrt 2)/2) by A8,Lm1
+                ,SQUARE_1:89;
                 set rl=G*(1,j+1)`2 - G*(1,j)`2;
                 set rm=min(r,rl);
-A156:           rm<=r & rm<=rl by XXREAL_0:17;
-A157:           j<j+1 by NAT_1:13;
-A158:           j+1<=width G by A119,NAT_1:13;
-                1<=len G by Th34;
-                then G*(1,j)`2<G*(1,j+1)`2 by A119,A157,A158,GOBOARD5:5;
-                then
-A159:           rl>0 by XREAL_1:52;
-                then rm>0 by A7,XXREAL_0:21;
-                then
-A160:           rm/2>0 by XREAL_1:141;
-A161:           rl/2>0 by A159,XREAL_1:141;
-A162:           rm/2<=rl/2 by A156,XREAL_1:74;
-                rm/2<=r/2 by A156,XREAL_1:74;
-                then (rm/2)^2<=(r/2)^2 by A160,SQUARE_1:77;
-                then
-A163:           (r/2)^2+(rm/2)^2<=(r/2)^2+(r/2)^2 by XREAL_1:9;
-                0<=(rm/2)^2 & 0<=(r/2)^2 by XREAL_1:65;
-                then 0+0<=(r/2)^2+(rm/2)^2;
-                then
-A164:           sqrt((r/2)^2+(rm/2)^2)<=sqrt((r/2)^2+(r/2) ^2
-                ) by A163,SQUARE_1:94;
                 set r3=r2+r/2,s3=s2-rm/2;
                 reconsider q0=|[r3,s3]| as Point of TOP-REAL 2;
-A165:           p`1=r2 & p`2=s2 by A120,EUCLID:56;
-A166:           q0`1=r3 & q0`2=s3 by EUCLID:56;
+A121:           q0`1=r3 & q0`2=s3 by EUCLID:56;
                 reconsider u0=q0 as Point of Euclid 2 by EUCLID:25;
                 reconsider v0=u0 as Element of REAL 2;
-A167:           r*2">0 by A7,XREAL_1:131;
+A122:           1<=len G by Th34;
+                j<j+1 & j+1<=width G by A92,NAT_1:13;
+                then G*(1,j)`2<G*(1,j+1)`2 by A92,A122,GOBOARD5:5;
+                then
+A123:           rl>0 by XREAL_1:52;
+                then
+A124:           rm>0 by A8,XXREAL_0:21;
+                then s3<s3+rm/2 by XREAL_1:31,141;
+                then
+A125:           s3<G*(1,j+1)`2 by A96,XXREAL_0:2;
+                rm/2<=r/2 by XREAL_1:74,XXREAL_0:17;
+                then (rm/2)^2<=(r/2)^2 by A124,SQUARE_1:77;
+                then
+A126:           (r/2)^2+(rm/2)^2<=(r/2)^2+(r/2)^2 by XREAL_1:9;
+                0<=(rm/2)^2 & 0<=(r/2)^2 by XREAL_1:65;
+                then sqrt((r/2)^2+(rm/2)^2)<=sqrt((r/2)^2+(r/2) ^2 ) by A126,
+                SQUARE_1:94;
+                then dist(u,u0) = (Pitag_dist 2).(v,v0) & sqrt ((r2 - r3)^2 +
+                (s2 - s3)^2)<r by A119,A120,METRIC_1:def 1,XXREAL_0:2;
+                then dist(u,u0) < r by A118,A121,TOPREAL3:12;
+                then
+A127:           u0 in Ball(u,r) by METRIC_1:12;
+                rm/2<=rl/2 by XREAL_1:74,XXREAL_0:17;
+                then
+A128:           G*(1,j+1)`2-rm/2>=G*(1,j+1)`2-rl/2 by XREAL_1:12;
+                r*2">0 by A8,XREAL_1:131;
                 then r2<r2+r/2 by XREAL_1:31;
                 then
-A168:           r3>G*(len G,1)`1 by A120,XXREAL_0:2;
-                s3<s3+rm/2 by A160,XREAL_1:31;
-                then
-A169:           s3<G*(1,j+1)`2 by A120,XXREAL_0:2;
-A170:           G*(1,j+1)`2-rm/2>=G*(1,j+1)`2-rl/2 by A162,XREAL_1:12;
-                G*(1,j+1)`2-(G*(1,j+1)`2-G*(1,j)`2)/2
-                >G*(1,j+1)`2-(G*(1,j+1)`2-G*(1,j)`2)/2
-                -(G*(1,j+1)`2-G*(1,j)`2)/2 by A161,XREAL_1:46;
-                then
-A171:           s3>G*(1,j)`2 by A155,A170,XXREAL_0:2;
-A172:           r/2*sqrt 2>=0 by A167,Lm1;
-A173:           (r/2)^2 + (r/2)^2= 2*((r/2)^2)
-                  .=(sqrt 2)^2*((r/2)^2) by SQUARE_1:def 4
-                  .=(r/2*sqrt 2)^2;
-A174:           dist(u,u0) = (Pitag_dist 2).(v,v0) by METRIC_1:def 1;
-                sqrt 2/2<1 by Lm1,SQUARE_1:86,XREAL_1:191;
-                then
-A175:           r*(sqrt 2/2)<r*1 by A7,XREAL_1:70;
-                sqrt ((r/2)^2 + (r/2)^2)
-                =r*((sqrt 2)/2) by A172,A173,SQUARE_1:89;
-
-then sqrt ((r2 - r3)^2 + (s2 - s3)^2)<r by A164,A175,XXREAL_0:2;
-                then dist(u,u0) < r by A165,A166,A174,TOPREAL3:12;
-                then
-A176:           u0 in Ball(u,r) by METRIC_1:12;
-                u0 in { |[r1,s1]| : r1 > G*(len G,1)`1
-                & G*(1,j)`2<s1 & s1<G*(1,j+1)`2} by A168,A169,A171;
-                then u0 in Y by A119,GOBOARD6:26;
-                hence Y /\ G0 <> {}(TOP-REAL 2) by A7,A176,XBOOLE_0:def 4;
+A129:           r3>G*(len G,1)`1 by A94,XXREAL_0:2;
+                G*(1,j+1)`2-(G*(1,j+1)`2-G*(1,j)`2)/2 >G*(1,j+1)`2-(G*(1
+,j+1)`2-G*(1,j)`2)/2 -(G*(1,j+1)`2-G*(1,j)`2)/2 by A123,XREAL_1:46,141;
+                then s3>G*(1,j)`2 by A117,A128,XXREAL_0:2;
+                then u0 in { |[r1,s1]| : r1 > G*(len G,1)`1 & G*(1,j)`2<s1 &
+                s1<G*(1,j+1)`2} by A129,A125;
+                then u0 in Y by A92,GOBOARD6:26;
+                hence Y /\ G0 <> {}(TOP-REAL 2) by A9,A127,XBOOLE_0:def 4;
               end;
             end;
             hence Y /\ G0 <> {}(TOP-REAL 2);
           end;
           case
-A177:       1<=i & i<len G & j=0;
-            then p in { |[r2,s2]| :
-            G*(i,1)`1 <=r2 & r2<=G*(i+1,1)`1 & s2 <= G*(1,1)`2 } by A4,Th30;
+A130:       1<=i & i<len G & j=0;
+            then p in { |[r2,s2]| : G*(i,1)`1 <=r2 & r2<=G*(i+1,1)`1 & s2 <=
+            G*(1,1)`2 } by A3, Th30;
             then consider r2,s2 such that
-A178:       p=|[r2,s2]|
-            &( G*(i,1)`1 <=r2 & r2<=G*(i+1,1)`1 & s2 <= G*(1,1)`2);
-            now per cases by A178,XXREAL_0:1;
+A131:       p=|[r2,s2]| and
+A132:       G*(i,1)`1 <=r2 and
+A133:       r2<=G*(i+1,1)`1 and
+A134:       s2 <= G*(1,1)`2;
+            now
+              per cases by A132,A133,XXREAL_0:1;
               case
-A179:           r2=G*(i,1)`1;
+A135:           r2=G*(i,1)`1;
+                (r/2)^2 + (r/2)^2= 2*((r/2)^2)
+                  .=(sqrt 2)^2*((r/2)^2) by SQUARE_1:def 4
+                  .=(r/2*sqrt 2)^2;
+                then
+A136:           sqrt ((r/2)^2 + (r/2)^2) =r*((sqrt 2)/2) by A8,Lm1
+                ,SQUARE_1:89;
                 set sl=G*(i+1,1)`1 - G*(i,1)`1;
                 set sm=min(r,sl);
-A180:           sm<=r & sm<=sl by XXREAL_0:17;
-A181:           i<i+1 by NAT_1:13;
-A182:           i+1<=len G by A177,NAT_1:13;
-                1<=width G by Th34;
-                then G*(i,1)`1<G*(i+1,1)`1 by A177,A181,A182,GOBOARD5:4;
-                then
-A183:           sl>0 by XREAL_1:52;
-                then sm>0 by A7,XXREAL_0:21;
-                then
-A184:           sm/2>0 by XREAL_1:141;
-A185:           sl/2>0 by A183,XREAL_1:141;
-A186:           sm/2<=sl/2 by A180,XREAL_1:74;
-                sm/2<=r/2 by A180,XREAL_1:74;
-                then (sm/2)^2<=(r/2)^2 by A184,SQUARE_1:77;
-                then
-A187:           (r/2)^2+(sm/2)^2<=(r/2)^2+(r/2)^2 by XREAL_1:9;
-                0<=(sm/2)^2 & 0<=(r/2)^2 by XREAL_1:65;
-                then 0+0<=(r/2)^2+(sm/2)^2;
-                then
-A188:           sqrt((r/2)^2+(sm/2)^2)<=sqrt((r/2)^2+(r/2) ^2
-                ) by A187,SQUARE_1:94;
                 set s3=s2-r/2,r3=r2+sm/2;
                 reconsider q0=|[r3,s3]| as Point of TOP-REAL 2;
-A189:           p`1=r2 & p`2=s2 by A178,EUCLID:56;
-A190:           q0`1=r3 & q0`2=s3 by EUCLID:56;
+A137:           q0`1=r3 & q0`2=s3 by EUCLID:56;
                 reconsider u0=q0 as Point of Euclid 2 by EUCLID:25;
                 reconsider v0=u0 as Element of REAL 2;
-A191:           r*2">0 by A7,XREAL_1:131;
-                then s3<s3+r/2 by XREAL_1:31;
+A138:           1<=width G by Th34;
+                i<i+1 & i+1<=len G by A130,NAT_1:13;
+                then G*(i,1)`1<G*(i+1,1)`1 by A130,A138,GOBOARD5:4;
                 then
-A192:           s3<G*(1,1)`2 by A178,XXREAL_0:2;
-                r3>r2 by A184,XREAL_1:31;
+A139:           sl>0 by XREAL_1:52;
                 then
-A193:           r3>G*(i,1)`1 by A178,XXREAL_0:2;
-A194:           G*(i,1)`1+sm/2<=G*(i,1)`1+sl/2 by A186,XREAL_1:8;
-                G*(i,1)`1+(G*(i+1,1)`1-G*(i,1)`1)/2
-                <G*(i,1)`1+(G*(i+1,1)`1-G*(i,1)`1)/2
-                +(G*(i+1,1)`1-G*(i,1)`1)/2 by A185,XREAL_1:31;
+A140:           sm>0 by A8,XXREAL_0:21;
+                then r3>r2 by XREAL_1:31,141;
                 then
-A195:           r3<G*(i+1,1)`1 by A179,A194,XXREAL_0:2;
-A196:           r/2*sqrt 2>=0 by A191,Lm1;
-A197:           (r/2)^2 + (r/2)^2= 2*((r/2)^2)
-                  .=(sqrt 2)^2*((r/2)^2) by SQUARE_1:def 4
-                  .=(r/2*sqrt 2)^2;
-A198:           dist(u,u0) = (Pitag_dist 2).(v,v0) by METRIC_1:def 1;
+A141:           r3>G*(i,1)`1 by A132,XXREAL_0:2;
                 sqrt 2/2<1 by Lm1,SQUARE_1:86,XREAL_1:191;
                 then
-A199:           r*(sqrt 2/2)<r*1 by A7,XREAL_1:70;
-                sqrt ((r/2)^2 + (r/2)^2)
-                =r*((sqrt 2)/2) by A196,A197,SQUARE_1:89;
-                then sqrt ((p`1 - q0`1)^2 + (p`2 - q0`2)^2)<r
-                by A188,A189,A190,A199,XXREAL_0:2;
-                then dist(u,u0) < r by A198,TOPREAL3:12;
+A142:           r*(sqrt 2/2)<r*1 by A8,XREAL_1:70;
+                sm/2<=r/2 by XREAL_1:74,XXREAL_0:17;
+                then (sm/2)^2<=(r/2)^2 by A140,SQUARE_1:77;
                 then
-A200:           u0 in Ball(u,r) by METRIC_1:12;
-                u0 in { |[r1,s1]| :
-                G*(i,1)`1<r1 & r1<G*(i+1,1)`1 & s1 < G*(1,1)`2}
-                by A192,A193,A195;
-                then u0 in Y by A177,GOBOARD6:27;
-                hence Y /\ G0 <> {}(TOP-REAL 2) by A7,A200,XBOOLE_0:def 4;
+A143:           (r/2)^2+(sm/2)^2<=(r/2)^2+(r/2)^2 by XREAL_1:9;
+                0<=(sm/2)^2 & 0<=(r/2)^2 by XREAL_1:65;
+                then
+A144:           sqrt((r/2)^2+(sm/2)^2)<=sqrt((r/2)^2+(r/2) ^2 ) by A143,
+                SQUARE_1:94;
+                p`1=r2 & p`2=s2 by A131,EUCLID:56;
+                then dist(u,u0) = (Pitag_dist 2).(v,v0) & sqrt ((p`1 - q0`1)
+^2 + (p`2 - q0`2)^2)< r by A144,A137,A142,A136,METRIC_1:def 1,XXREAL_0:2;
+                then dist(u,u0) < r by TOPREAL3:12;
+                then
+A145:           u0 in Ball(u,r) by METRIC_1:12;
+                sm/2<=sl/2 by XREAL_1:74,XXREAL_0:17;
+                then
+A146:           G*(i,1)`1+sm/2<=G*(i,1)`1+sl/2 by XREAL_1:8;
+                r*2">0 by A8,XREAL_1:131;
+                then s3<s3+r/2 by XREAL_1:31;
+                then
+A147:           s3<G*(1,1)`2 by A134,XXREAL_0:2;
+                G*(i,1)`1+(G*(i+1,1)`1-G*(i,1)`1)/2 <G*(i,1)`1+(G*(i+1,1
+)`1-G*(i,1)`1)/2 +(G*(i+1,1)`1-G*(i,1)`1)/2 by A139,XREAL_1:31,141;
+                then r3<G*(i+1,1)`1 by A135,A146,XXREAL_0:2;
+                then u0 in { |[r1,s1]| : G*(i,1)`1<r1 & r1<G*(i+1,1)`1 & s1 <
+                G*(1,1)`2} by A147,A141;
+                then u0 in Y by A130,GOBOARD6:27;
+                hence Y /\ G0 <> {}(TOP-REAL 2) by A9,A145,XBOOLE_0:def 4;
               end;
               case
-A201:           (G*(i,1)`1 <r2 & r2<G*(i+1,1)`1);
+A148:           G*(i,1)`1 <r2 & r2<G*(i+1,1)`1;
                 set s3=s2-r/2,r3=r2;
                 reconsider q0=|[r3,s3]| as Point of TOP-REAL 2;
-A202:           p`1=r2 & p`2=s2 by A178,EUCLID:56;
-A203:           q0`1=r3 & q0`2=s3 by EUCLID:56;
                 reconsider u0=q0 as Point of Euclid 2 by EUCLID:25;
-                reconsider v0=u0 as Element of REAL 2;
-A204:           r*2">0 by A7,XREAL_1:131;
+                r*2">0 by A8,XREAL_1:131;
                 then s3<s3+r/2 by XREAL_1:31;
+                then s3<G*(1,1)`2 by A134,XXREAL_0:2;
+                then u0 in { |[r1,s1]| : G*(i,1)`1<r1 & r1<G*(i+1,1)`1 & s1 <
+                G*(1,1)`2 } by A148;
                 then
-A205:           s3<G*(1,1)`2 by A178,XXREAL_0:2;
-A206:           (r/2)^2 >=0 by XREAL_1:65;
-A207:           r/2*sqrt 2>=0 by A204,Lm1;
-A208:           (r/2)^2 + (r/2)^2= 2*((r/2)^2)
-                  .=(sqrt 2)^2*((r/2)^2) by SQUARE_1:def 4
-                  .=(r/2*sqrt 2)^2;
-A209:           dist(u,u0) = (Pitag_dist 2).(v,v0) by METRIC_1:def 1;
+A149:           u0 in Y by A130,GOBOARD6:27;
+                reconsider v0=u0 as Element of REAL 2;
+A150:           q0`1=r3 & q0`2=s3 by EUCLID:56;
                 sqrt 2/2<1 by Lm1,SQUARE_1:86,XREAL_1:191;
                 then
-A210:           r*(sqrt 2/2)<r*1 by A7,XREAL_1:70;
-A211:           sqrt ((r/2)^2 + (r/2)^2)
-                =r*((sqrt 2)/2) by A207,A208,SQUARE_1:89;
-                0^2 + (r/2)^2 <=(r/2)^2 + (r/2)^2 by A206,XREAL_1:8;
-                then sqrt(0^2 + (r/2)^2 )<=sqrt((r/2)^2 + (r/2)^2)
-                by A206,SQUARE_1:94;
-                then sqrt((r2 - r3)^2 + (s2 - s3)^2
-                )<r by A210,A211,XXREAL_0:2;
-                then dist(u,u0) < r by A202,A203,A209,TOPREAL3:12;
+A151:           r*(sqrt 2/2)<r*1 by A8,XREAL_1:70;
+A152:           (r/2)^2 >=0 by XREAL_1:65;
+                then 0^2 + (r/2)^2 <=(r/2)^2 + (r/2)^2 by XREAL_1:8;
                 then
-A212:           u0 in Ball(u,r) by METRIC_1:12;
-                u0 in { |[r1,s1]| :
-                G*(i,1)`1<r1 & r1<G*(i+1,1)`1 & s1 < G*(1,1)`2 } by A201,A205;
-                then u0 in Y by A177,GOBOARD6:27;
-                hence Y /\ G0 <> {}(TOP-REAL 2) by A7,A212,XBOOLE_0:def 4;
+A153:           sqrt(0^2 + (r/2)^2 )<=sqrt((r/2)^2 + (r/2)^2) by A152,
+                SQUARE_1:94;
+A154:           p`1=r2 & p`2=s2 by A131,EUCLID:56;
+                (r/2)^2 + (r/2)^2= 2*((r/2)^2)
+                  .=(sqrt 2)^2*((r/2)^2) by SQUARE_1:def 4
+                  .=(r/2*sqrt 2)^2;
+                then sqrt ((r/2)^2 + (r/2)^2) =r*((sqrt 2)/2) by A8,Lm1
+                ,SQUARE_1:89;
+                then dist(u,u0) = (Pitag_dist 2).(v,v0) & sqrt((r2 - r3)^2 +
+                (s2 - s3)^2 )<r by A151,A153,METRIC_1:def 1,XXREAL_0:2;
+                then dist(u,u0) < r by A154,A150,TOPREAL3:12;
+                then u0 in Ball(u,r) by METRIC_1:12;
+                hence Y /\ G0 <> {}(TOP-REAL 2) by A9,A149,XBOOLE_0:def 4;
               end;
               case
-A213:           r2=G*(i+1,1)`1;
+A155:           r2=G*(i+1,1)`1;
+                (r/2)^2 + (r/2)^2= 2*((r/2)^2)
+                  .=(sqrt 2)^2*((r/2)^2) by SQUARE_1:def 4
+                  .=(r/2*sqrt 2)^2;
+                then
+A156:           sqrt ((r/2)^2 + (r/2)^2) =r*((sqrt 2)/2) by A8,Lm1
+                ,SQUARE_1:89;
                 set sl=G*(i+1,1)`1 - G*(i,1)`1;
                 set sm=min(r,sl);
-A214:           sm<=r & sm<=sl by XXREAL_0:17;
-A215:           i<i+1 by NAT_1:13;
-A216:           i+1<=len G by A177,NAT_1:13;
-                1<=width G by Th34;
-                then G*(i,1)`1<G*(i+1,1)`1 by A177,A215,A216,GOBOARD5:4;
-                then
-A217:           sl>0 by XREAL_1:52;
-                then sm>0 by A7,XXREAL_0:21;
-                then
-A218:           sm/2>0 by XREAL_1:141;
-A219:           sl/2>0 by A217,XREAL_1:141;
-A220:           sm/2<=sl/2 by A214,XREAL_1:74;
-                sm/2<=r/2 by A214,XREAL_1:74;
-                then (sm/2)^2<=(r/2)^2 by A218,SQUARE_1:77;
-                then
-A221:           (r/2)^2+(sm/2)^2<=(r/2)^2+(r/2)^2 by XREAL_1:9;
-                0<=(sm/2)^2 & 0<=(r/2)^2 by XREAL_1:65;
-                then 0+0<=(r/2)^2+(sm/2)^2;
-                then
-A222:           sqrt((r/2)^2+(sm/2)^2)<=sqrt((r/2)^2+(r/2) ^2
-                ) by A221,SQUARE_1:94;
                 set s3=s2-r/2,r3=r2-sm/2;
                 reconsider q0=|[r3,s3]| as Point of TOP-REAL 2;
-A223:           p`1=r2 & p`2=s2 by A178,EUCLID:56;
-A224:           q0`1=r3 & q0`2=s3 by EUCLID:56;
+A157:           q0`1=r3 & q0`2=s3 by EUCLID:56;
                 reconsider u0=q0 as Point of Euclid 2 by EUCLID:25;
                 reconsider v0=u0 as Element of REAL 2;
-A225:           r*2">0 by A7,XREAL_1:131;
+A158:           1<=width G by Th34;
+                i<i+1 & i+1<=len G by A130,NAT_1:13;
+                then G*(i,1)`1<G*(i+1,1)`1 by A130,A158,GOBOARD5:4;
+                then
+A159:           sl>0 by XREAL_1:52;
+                then
+A160:           sm>0 by A8,XXREAL_0:21;
+                then r3<r3+sm/2 by XREAL_1:31,141;
+                then
+A161:           r3<G*(i+1,1)`1 by A133,XXREAL_0:2;
+                sqrt 2/2<1 by Lm1,SQUARE_1:86,XREAL_1:191;
+                then
+A162:           r*(sqrt 2/2)<r*1 by A8,XREAL_1:70;
+                sm/2<=r/2 by XREAL_1:74,XXREAL_0:17;
+                then (sm/2)^2<=(r/2)^2 by A160,SQUARE_1:77;
+                then
+A163:           (r/2)^2+(sm/2)^2<=(r/2)^2+(r/2)^2 by XREAL_1:9;
+                0<=(sm/2)^2 & 0<=(r/2)^2 by XREAL_1:65;
+                then
+A164:           sqrt((r/2)^2+(sm/2)^2)<=sqrt((r/2)^2+(r/2) ^2 ) by A163,
+                SQUARE_1:94;
+                p`1=r2 & p`2=s2 by A131,EUCLID:56;
+                then dist(u,u0) = (Pitag_dist 2).(v,v0) & sqrt ((p`1 - q0`1)
+^2 + (p`2 - q0`2)^2)< r by A164,A157,A162,A156,METRIC_1:def 1,XXREAL_0:2;
+                then dist(u,u0) < r by TOPREAL3:12;
+                then
+A165:           u0 in Ball(u,r) by METRIC_1:12;
+                sm/2<=sl/2 by XREAL_1:74,XXREAL_0:17;
+                then
+A166:           G*(i+1,1)`1-sm/2>=G*(i+1,1)`1-sl/2 by XREAL_1:12;
+                r*2">0 by A8,XREAL_1:131;
                 then s3<s3+r/2 by XREAL_1:31;
                 then
-A226:           s3<G*(1,1)`2 by A178,XXREAL_0:2;
-                r3<r3+sm/2 by A218,XREAL_1:31;
-                then
-A227:           r3<G*(i+1,1)`1 by A178,XXREAL_0:2;
-A228:           G*(i+1,1)`1-sm/2>=G*(i+1,1)`1-sl/2 by A220,XREAL_1:12;
-                G*(i+1,1)`1-(G*(i+1,1)`1-G*(i,1)`1)/2
-                >G*(i+1,1)`1-(G*(i+1,1)`1-G*(i,1)`1)/2
-                -(G*(i+1,1)`1-G*(i,1)`1)/2 by A219,XREAL_1:46;
-                then
-A229:           r3>G*(i,1)`1 by A213,A228,XXREAL_0:2;
-A230:           r/2*sqrt 2>=0 by A225,Lm1;
-A231:           (r/2)^2 + (r/2)^2= 2*((r/2)^2)
-                  .=(sqrt 2)^2*((r/2)^2) by SQUARE_1:def 4
-                  .=(r/2*sqrt 2)^2;
-A232:           dist(u,u0) = (Pitag_dist 2).(v,v0) by METRIC_1:def 1;
-                sqrt 2/2<1 by Lm1,SQUARE_1:86,XREAL_1:191;
-                then
-A233:           r*(sqrt 2/2)<r*1 by A7,XREAL_1:70;
-                sqrt ((r/2)^2 + (r/2)^2)
-                =r*((sqrt 2)/2) by A230,A231,SQUARE_1:89;
-                then sqrt ((p`1 - q0`1)^2 + (p`2 - q0`2)^2)<r
-                by A222,A223,A224,A233,XXREAL_0:2;
-                then dist(u,u0) < r by A232,TOPREAL3:12;
-                then
-A234:           u0 in Ball(u,r) by METRIC_1:12;
-                u0 in { |[r1,s1]| :
-                G*(i,1)`1<r1 & r1<G*(i+1,1)`1 & s1 < G*(1,1)`2 }
-                by A226,A227,A229;
-                then u0 in Y by A177,GOBOARD6:27;
-                hence Y /\ G0 <> {}(TOP-REAL 2) by A7,A234,XBOOLE_0:def 4;
+A167:           s3<G*(1,1)`2 by A134,XXREAL_0:2;
+                G*(i+1,1)`1-(G*(i+1,1)`1-G*(i,1)`1)/2 >G*(i+1,1)`1-(G*(i
++1,1)`1-G*(i,1)`1)/2 -(G*(i+1,1)`1-G*(i,1)`1)/2 by A159,XREAL_1:46,141;
+                then r3>G*(i,1)`1 by A155,A166,XXREAL_0:2;
+                then u0 in { |[r1,s1]| : G*(i,1)`1<r1 & r1<G*(i+1,1)`1 & s1 <
+                G*(1,1)`2 } by A167,A161;
+                then u0 in Y by A130,GOBOARD6:27;
+                hence Y /\ G0 <> {}(TOP-REAL 2) by A9,A165,XBOOLE_0:def 4;
               end;
             end;
             hence Y /\ G0 <> {}(TOP-REAL 2);
           end;
           case
-A235:       1<=i & i<len G & j=width G;
-            then p in { |[r2,s2]| : G*(i,1)`1 <=r2 & r2<=G*(i+1,1)`1
-            & s2>=G*(1,width G)`2} by A4,Th31;
+A168:       1<=i & i<len G & j=width G;
+            then p in { |[r2,s2]| : G*(i,1)`1 <=r2 & r2<=G*(i+1,1)`1 & s2>=G*
+            (1,width G)`2} by A3,Th31;
             then consider r2,s2 such that
-A236:       p=|[r2,s2]| &( G*(i,1)`1 <=r2 & r2<=G*(i+1,1)`1
-            & s2>=G*(1,width G)`2);
-            now per cases by A236,XXREAL_0:1;
+A169:       p=|[r2,s2]| and
+A170:       G*(i,1)`1 <=r2 and
+A171:       r2<=G*(i+1,1)`1 and
+A172:       s2>=G*(1,width G)`2;
+            now
+              per cases by A170,A171,XXREAL_0:1;
               case
-A237:           r2=G*(i,1)`1;
+A173:           r2=G*(i,1)`1;
+A174:           p`1=r2 & p`2=s2 by A169,EUCLID:56;
+                sqrt 2/2<1 by Lm1,SQUARE_1:86,XREAL_1:191;
+                then
+A175:           r*(sqrt 2/2)<r*1 by A8,XREAL_1:70;
+                (r/2)^2 + (r/2)^2= 2*((r/2)^2)
+                  .=(sqrt 2)^2*((r/2)^2) by SQUARE_1:def 4
+                  .=(r/2*sqrt 2)^2;
+                then
+A176:           sqrt ((r/2)^2 + (r/2)^2) =r*((sqrt 2)/2) by A8,Lm1
+                ,SQUARE_1:89;
                 set rl=G*(i+1,1)`1 - G*(i,1)`1;
                 set rm=min(r,rl);
-A238:           rm<=r & rm<=rl by XXREAL_0:17;
-A239:           i<i+1 by NAT_1:13;
-A240:           i+1<=len G by A235,NAT_1:13;
-                1<=width G by Th34;
-                then G*(i,1)`1<G*(i+1,1)`1 by A235,A239,A240,GOBOARD5:4;
-                then
-A241:           rl>0 by XREAL_1:52;
-                then rm>0 by A7,XXREAL_0:21;
-                then
-A242:           rm/2>0 by XREAL_1:141;
-A243:           rl/2>0 by A241,XREAL_1:141;
-A244:           rm/2<=rl/2 by A238,XREAL_1:74;
-                rm/2<=r/2 by A238,XREAL_1:74;
-                then (rm/2)^2<=(r/2)^2 by A242,SQUARE_1:77;
-                then
-A245:           (r/2)^2+(rm/2)^2<=(r/2)^2+(r/2)^2 by XREAL_1:9;
-                0<=(rm/2)^2 & 0<=(r/2)^2 by XREAL_1:65;
-                then 0+0<=(r/2)^2+(rm/2)^2;
-                then
-A246:           sqrt((r/2)^2+(rm/2)^2)<=sqrt((r/2)^2+(r/2) ^2
-                ) by A245,SQUARE_1:94;
                 set s3=s2+r/2,r3=r2+rm/2;
                 reconsider q0=|[r3,s3]| as Point of TOP-REAL 2;
-A247:           p`1=r2 & p`2=s2 by A236,EUCLID:56;
-A248:           q0`1=r3 & q0`2=s3 by EUCLID:56;
+A177:           q0`1=r3 & q0`2=s3 by EUCLID:56;
                 reconsider u0=q0 as Point of Euclid 2 by EUCLID:25;
                 reconsider v0=u0 as Element of REAL 2;
-A249:           r*2">0 by A7,XREAL_1:131;
+A178:           1<=width G by Th34;
+                i<i+1 & i+1<=len G by A168,NAT_1:13;
+                then G*(i,1)`1<G*(i+1,1)`1 by A168,A178,GOBOARD5:4;
+                then
+A179:           rl>0 by XREAL_1:52;
+                then
+A180:           rm>0 by A8,XXREAL_0:21;
+                then r3>r2 by XREAL_1:31,141;
+                then
+A181:           r3>G*(i,1)`1 by A170,XXREAL_0:2;
+                rm/2<=r/2 by XREAL_1:74,XXREAL_0:17;
+                then (rm/2)^2<=(r/2)^2 by A180,SQUARE_1:77;
+                then
+A182:           (r/2)^2+(rm/2)^2<=(r/2)^2+(r/2)^2 by XREAL_1:9;
+                0<=(rm/2)^2 & 0<=(r/2)^2 by XREAL_1:65;
+                then sqrt((r/2)^2+(rm/2)^2)<=sqrt((r/2)^2+(r/2) ^2 ) by A182,
+                SQUARE_1:94;
+                then dist(u,u0) = (Pitag_dist 2).(v,v0) & sqrt ((r2 - r3)^2 +
+                (s2 - s3)^2)<r by A175,A176,METRIC_1:def 1,XXREAL_0:2;
+                then dist(u,u0) < r by A174,A177,TOPREAL3:12;
+                then
+A183:           u0 in Ball(u,r) by METRIC_1:12;
+                rm/2<=rl/2 by XREAL_1:74,XXREAL_0:17;
+                then
+A184:           G*(i,1)`1+rm/2<=G*(i,1)`1+rl/2 by XREAL_1:8;
+                r*2">0 by A8,XREAL_1:131;
                 then s2<s2+r/2 by XREAL_1:31;
                 then
-A250:           s3>G*(1,width G)`2 by A236,XXREAL_0:2;
-                r3>r2 by A242,XREAL_1:31;
-                then
-A251:           r3>G*(i,1)`1 by A236,XXREAL_0:2;
-A252:           G*(i,1)`1+rm/2<=G*(i,1)`1+rl/2 by A244,XREAL_1:8;
-                G*(i,1)`1+(G*(i+1,1)`1-G*(i,1)`1)/2
-                <G*(i,1)`1+(G*(i+1,1)`1-G*(i,1)`1)/2
-                +(G*(i+1,1)`1-G*(i,1)`1)/2 by A243,XREAL_1:31;
-                then
-A253:           r3<G*(i+1,1)`1 by A237,A252,XXREAL_0:2;
-A254:           r/2*sqrt 2>=0 by A249,Lm1;
-A255:           (r/2)^2 + (r/2)^2= 2*((r/2)^2)
-                  .=(sqrt 2)^2*((r/2)^2) by SQUARE_1:def 4
-                  .=(r/2*sqrt 2)^2;
-A256:           dist(u,u0) = (Pitag_dist 2).(v,v0) by METRIC_1:def 1;
-                sqrt 2/2<1 by Lm1,SQUARE_1:86,XREAL_1:191;
-                then
-A257:           r*(sqrt 2/2)<r*1 by A7,XREAL_1:70;
-                sqrt ((r/2)^2 + (r/2)^2)
-                =r*((sqrt 2)/2) by A254,A255,SQUARE_1:89;
-
-then sqrt ((r2 - r3)^2 + (s2 - s3)^2)<r by A246,A257,XXREAL_0:2;
-                then dist(u,u0) < r by A247,A248,A256,TOPREAL3:12;
-                then
-A258:           u0 in Ball(u,r) by METRIC_1:12;
-                u0 in { |[r1,s1]| :
-                G*(i,1)`1<r1 & r1<G*(i+1,1)`1 & s1 > G*(1,width G)`2 }
-                by A250,A251,A253;
-                then u0 in Y by A235,GOBOARD6:28;
-                hence Y /\ G0 <> {}(TOP-REAL 2) by A7,A258,XBOOLE_0:def 4;
+A185:           s3>G*(1,width G)`2 by A172,XXREAL_0:2;
+                G*(i,1)`1+(G*(i+1,1)`1-G*(i,1)`1)/2 <G*(i,1)`1+(G*(i+1,1
+)`1-G*(i,1)`1)/2 +(G*(i+1,1)`1-G*(i,1)`1)/2 by A179,XREAL_1:31,141;
+                then r3<G*(i+1,1)`1 by A173,A184,XXREAL_0:2;
+                then u0 in { |[r1,s1]| : G*(i,1)`1<r1 & r1<G*(i+1,1)`1 & s1 >
+                G*(1,width G)`2 } by A185,A181;
+                then u0 in Y by A168,GOBOARD6:28;
+                hence Y /\ G0 <> {}(TOP-REAL 2) by A9,A183,XBOOLE_0:def 4;
               end;
               case
-A259:           (G*(i,1)`1 <r2 & r2<G*(i+1,1)`1);
+A186:           G*(i,1)`1 <r2 & r2<G*(i+1,1)`1;
                 set s3=s2+r/2,r3=r2;
                 reconsider q0=|[r3,s3]| as Point of TOP-REAL 2;
-A260:           p`1=r2 & p`2=s2 by A236,EUCLID:56;
-A261:           q0`1=r3 & q0`2=s3 by EUCLID:56;
                 reconsider u0=q0 as Point of Euclid 2 by EUCLID:25;
-                reconsider v0=u0 as Element of REAL 2;
-A262:           r*2">0 by A7,XREAL_1:131;
+                r*2">0 by A8,XREAL_1:131;
                 then s2<s3 by XREAL_1:31;
+                then s3>G*(1,width G)`2 by A172,XXREAL_0:2;
+                then u0 in { |[r1,s1]| : G*(i,1)`1<r1 & r1<G*(i+1,1)`1 & s1 >
+                G*(1,width G)`2 } by A186;
                 then
-A263:           s3>G*(1,width G)`2 by A236,XXREAL_0:2;
-A264:           (r/2)^2 >=0 by XREAL_1:65;
-A265:           r/2*sqrt 2>=0 by A262,Lm1;
-A266:           (r/2)^2 + (r/2)^2= 2*((r/2)^2)
-                  .=(sqrt 2)^2*((r/2)^2) by SQUARE_1:def 4
-                  .=(r/2*sqrt 2)^2;
-A267:           dist(u,u0) = (Pitag_dist 2).(v,v0) by METRIC_1:def 1;
+A187:           u0 in Y by A168,GOBOARD6:28;
+                reconsider v0=u0 as Element of REAL 2;
+A188:           q0`1=r3 & q0`2=s3 by EUCLID:56;
                 sqrt 2/2<1 by Lm1,SQUARE_1:86,XREAL_1:191;
                 then
-A268:           r*(sqrt 2/2)<r*1 by A7,XREAL_1:70;
-A269:           sqrt ((r/2)^2 + (r/2)^2)
-                =r*((sqrt 2)/2) by A265,A266,SQUARE_1:89;
-                (r/2)^2 + 0^2 <=(r/2)^2 + (r/2)^2 by A264,XREAL_1:8;
-                then sqrt((r/2)^2 + 0^2)<=sqrt((r/2)^2 + (r/2)^2)
-                by A264,SQUARE_1:94;
-                then sqrt((r2 - r3)^2 + (s2 - s3)^2)<r by A268,A269,XXREAL_0:2;
-                then dist(u,u0) < r by A260,A261,A267,TOPREAL3:12;
+A189:           r*(sqrt 2/2)<r*1 by A8,XREAL_1:70;
+A190:           (r/2)^2 >=0 by XREAL_1:65;
+                then (r/2)^2 + 0^2 <=(r/2)^2 + (r/2)^2 by XREAL_1:8;
                 then
-A270:           u0 in Ball(u,r) by METRIC_1:12;
-                u0 in { |[r1,s1]| :
-                G*(i,1)`1<r1 & r1<G*(i+1,1)`1 & s1 > G*(1,width G)`2 }
-                by A259,A263;
-                then u0 in Y by A235,GOBOARD6:28;
-                hence Y /\ G0 <> {}(TOP-REAL 2) by A7,A270,XBOOLE_0:def 4;
+A191:           sqrt((r/2)^2 + 0^2)<=sqrt((r/2)^2 + (r/2)^2) by A190,
+                SQUARE_1:94;
+A192:           p`1=r2 & p`2=s2 by A169,EUCLID:56;
+                (r/2)^2 + (r/2)^2= 2*((r/2)^2)
+                  .=(sqrt 2)^2*((r/2)^2) by SQUARE_1:def 4
+                  .=(r/2*sqrt 2)^2;
+                then sqrt ((r/2)^2 + (r/2)^2) =r*((sqrt 2)/2) by A8,Lm1
+                ,SQUARE_1:89;
+                then dist(u,u0) = (Pitag_dist 2).(v,v0) & sqrt((r2 - r3)^2 +
+                (s2 - s3)^2)<r by A189,A191,METRIC_1:def 1,XXREAL_0:2;
+                then dist(u,u0) < r by A192,A188,TOPREAL3:12;
+                then u0 in Ball(u,r) by METRIC_1:12;
+                hence Y /\ G0 <> {}(TOP-REAL 2) by A9,A187,XBOOLE_0:def 4;
               end;
               case
-A271:           r2=G*(i+1,1)`1;
-                set rl=G*(i+1,1)`1 - G*(i,1)`1;
-                set rm=min(r,rl);
-A272:           rm<=r & rm<=rl by XXREAL_0:17;
-A273:           i<i+1 by NAT_1:13;
-A274:           i+1<=len G by A235,NAT_1:13;
-                1<=width G by Th34;
-                then G*(i,1)`1<G*(i+1,1)`1 by A235,A273,A274,GOBOARD5:4;
-                then
-A275:           rl>0 by XREAL_1:52;
-                then rm>0 by A7,XXREAL_0:21;
-                then
-A276:           rm/2>0 by XREAL_1:141;
-A277:           rl/2>0 by A275,XREAL_1:141;
-A278:           rm/2<=rl/2 by A272,XREAL_1:74;
-                rm/2<=r/2 by A272,XREAL_1:74;
-                then (rm/2)^2<=(r/2)^2 by A276,SQUARE_1:77;
-                then
-A279:           (r/2)^2+(rm/2)^2<=(r/2)^2+(r/2)^2 by XREAL_1:9;
-                0<=(rm/2)^2 & 0<=(r/2)^2 by XREAL_1:65;
-                then 0+0<=(r/2)^2+(rm/2)^2;
-                then
-A280:           sqrt((r/2)^2+(rm/2)^2)<=sqrt((r/2)^2+(r/2) ^2
-                ) by A279,SQUARE_1:94;
-                set s3=s2+r/2,r3=r2-rm/2;
-                reconsider q0=|[r3,s3]| as Point of TOP-REAL 2;
-A281:           p`1=r2 & p`2=s2 by A236,EUCLID:56;
-A282:           q0`1=r3 & q0`2=s3 by EUCLID:56;
-                reconsider u0=q0 as Point of Euclid 2 by EUCLID:25;
-                reconsider v0=u0 as Element of REAL 2;
-A283:           r*2">0 by A7,XREAL_1:131;
-                then s3>s2 by XREAL_1:31;
-                then
-A284:           s3>G*(1,width G)`2 by A236,XXREAL_0:2;
-                r3<r3+rm/2 by A276,XREAL_1:31;
-                then
-A285:           r3<G*(i+1,1)`1 by A236,XXREAL_0:2;
-A286:           G*(i+1,1)`1-rm/2>=G*(i+1,1)`1-rl/2 by A278,XREAL_1:12;
-                G*(i+1,1)`1-(G*(i+1,1)`1-G*(i,1)`1)/2
-                >G*(i+1,1)`1-(G*(i+1,1)`1-G*(i,1)`1)/2
-                -(G*(i+1,1)`1-G*(i,1)`1)/2 by A277,XREAL_1:46;
-                then
-A287:           r3>G*(i,1)`1 by A271,A286,XXREAL_0:2;
-A288:           r/2*sqrt 2>=0 by A283,Lm1;
-A289:           (r/2)^2 + (r/2)^2= 2*((r/2)^2)
-                  .=(sqrt 2)^2*((r/2)^2) by SQUARE_1:def 4
-                  .=(r/2*sqrt 2)^2;
-A290:           dist(u,u0) = (Pitag_dist 2).(v,v0) by METRIC_1:def 1;
+A193:           r2=G*(i+1,1)`1;
+A194:           p`1=r2 & p`2=s2 by A169,EUCLID:56;
                 sqrt 2/2<1 by Lm1,SQUARE_1:86,XREAL_1:191;
                 then
-A291:           r*(sqrt 2/2)<r*1 by A7,XREAL_1:70;
-                sqrt ((r/2)^2 + (r/2)^2)
-                =r*((sqrt 2)/2) by A288,A289,SQUARE_1:89;
-
-then sqrt ((r2 - r3)^2 + (s2 - s3)^2)<r by A280,A291,XXREAL_0:2;
-                then dist(u,u0) < r by A281,A282,A290,TOPREAL3:12;
+A195:           r*(sqrt 2/2)<r*1 by A8,XREAL_1:70;
+                (r/2)^2 + (r/2)^2= 2*((r/2)^2)
+                  .=(sqrt 2)^2*((r/2)^2) by SQUARE_1:def 4
+                  .=(r/2*sqrt 2)^2;
                 then
-A292:           u0 in Ball(u,r) by METRIC_1:12;
-                u0 in { |[r1,s1]| :
-                G*(i,1)`1<r1 & r1<G*(i+1,1)`1 & s1 > G*(1,width G)`2}
-                by A284,A285,A287;
-                then u0 in Y by A235,GOBOARD6:28;
-                hence Y /\ G0 <> {}(TOP-REAL 2) by A7,A292,XBOOLE_0:def 4;
+A196:           sqrt ((r/2)^2 + (r/2)^2) =r*((sqrt 2)/2) by A8,Lm1
+                ,SQUARE_1:89;
+                set rl=G*(i+1,1)`1 - G*(i,1)`1;
+                set rm=min(r,rl);
+                set s3=s2+r/2,r3=r2-rm/2;
+                reconsider q0=|[r3,s3]| as Point of TOP-REAL 2;
+A197:           q0`1=r3 & q0`2=s3 by EUCLID:56;
+                reconsider u0=q0 as Point of Euclid 2 by EUCLID:25;
+                reconsider v0=u0 as Element of REAL 2;
+A198:           1<=width G by Th34;
+                i<i+1 & i+1<=len G by A168,NAT_1:13;
+                then G*(i,1)`1<G*(i+1,1)`1 by A168,A198,GOBOARD5:4;
+                then
+A199:           rl>0 by XREAL_1:52;
+                then
+A200:           rm>0 by A8,XXREAL_0:21;
+                then r3<r3+rm/2 by XREAL_1:31,141;
+                then
+A201:           r3<G*(i+1,1)`1 by A171,XXREAL_0:2;
+                rm/2<=r/2 by XREAL_1:74,XXREAL_0:17;
+                then (rm/2)^2<=(r/2)^2 by A200,SQUARE_1:77;
+                then
+A202:           (r/2)^2+(rm/2)^2<=(r/2)^2+(r/2)^2 by XREAL_1:9;
+                0<=(rm/2)^2 & 0<=(r/2)^2 by XREAL_1:65;
+                then sqrt((r/2)^2+(rm/2)^2)<=sqrt((r/2)^2+(r/2) ^2 ) by A202,
+                SQUARE_1:94;
+                then dist(u,u0) = (Pitag_dist 2).(v,v0) & sqrt ((r2 - r3)^2 +
+                (s2 - s3)^2)<r by A195,A196,METRIC_1:def 1,XXREAL_0:2;
+                then dist(u,u0) < r by A194,A197,TOPREAL3:12;
+                then
+A203:           u0 in Ball(u,r) by METRIC_1:12;
+                rm/2<=rl/2 by XREAL_1:74,XXREAL_0:17;
+                then
+A204:           G*(i+1,1)`1-rm/2>=G*(i+1,1)`1-rl/2 by XREAL_1:12;
+                r*2">0 by A8,XREAL_1:131;
+                then s3>s2 by XREAL_1:31;
+                then
+A205:           s3>G*(1,width G)`2 by A172,XXREAL_0:2;
+                G*(i+1,1)`1-(G*(i+1,1)`1-G*(i,1)`1)/2 >G*(i+1,1)`1-(G*(i
++1,1)`1-G*(i,1)`1)/2 -(G*(i+1,1)`1-G*(i,1)`1)/2 by A199,XREAL_1:46,141;
+                then r3>G*(i,1)`1 by A193,A204,XXREAL_0:2;
+                then u0 in { |[r1,s1]| : G*(i,1)`1<r1 & r1<G*(i+1,1)`1 & s1 >
+                G*(1,width G)`2} by A205,A201;
+                then u0 in Y by A168,GOBOARD6:28;
+                hence Y /\ G0 <> {}(TOP-REAL 2) by A9,A203,XBOOLE_0:def 4;
               end;
             end;
             hence Y /\ G0 <> {}(TOP-REAL 2);
           end;
           case
-A293:       1<=i & i<len G & 1<=j & j<width G;
-            then p in { |[r2,s2]| : G*(i,1)`1 <=r2 & r2<=G*(i+1,1)`1 &
-            G*(1,j)`2 <=s2 & s2<=G*(1,j+1)`2} by A4,Th32;
+A206:       1<=i & i<len G & 1<=j & j<width G;
+            then p in { |[r2,s2]| : G*(i,1)`1 <=r2 & r2<=G*(i+1,1)`1 & G*(1,j
+            )`2 <=s2 & s2<=G*(1,j+1)`2} by A3,Th32;
             then consider r2,s2 such that
-A294:       p=|[r2,s2]| &( G*(i,1)`1 <=r2 & r2<=G*(i+1,1)`1 &
-            G*(1,j)`2 <=s2 & s2<=G*(1,j+1)`2);
-            now per cases by A294,XXREAL_0:1;
+A207:       p=|[r2,s2]| and
+A208:       G*(i,1)`1 <=r2 and
+A209:       r2<=G*(i+1,1)`1 and
+A210:       G*(1,j)`2 <=s2 and
+A211:       s2<=G*(1,j+1)`2;
+            now
+              per cases by A208,A209,A210,A211,XXREAL_0:1;
               case
-A295:           r2=G*(i,1)`1 & s2=G*(1,j)`2;
-                set rl=G*(1,j+1)`2 - G*(1,j)`2;
+A212:           r2=G*(i,1)`1 & s2=G*(1,j)`2;
                 set rl1=G*(i+1,1)`1 - G*(i,1)`1;
+                set rl=G*(1,j+1)`2 - G*(1,j)`2;
                 set rm=min(r,rl);
                 set rm1=min(r,rl1);
-A296:           rm<=r & rm<=rl by XXREAL_0:17;
-A297:           rm1<=r & rm1<=rl1 by XXREAL_0:17;
-A298:           j<j+1 by NAT_1:13;
-A299:           j+1<=width G by A293,NAT_1:13;
-A300:           i<i+1 by NAT_1:13;
-A301:           i+1<=len G by A293,NAT_1:13;
-                1<=len G by Th34;
-                then G*(1,j)`2<G*(1,j+1)`2 by A293,A298,A299,GOBOARD5:5;
-                then
-A302:           rl>0 by XREAL_1:52;
-                then rm>0 by A7,XXREAL_0:21;
-                then
-A303:           rm/2>0 by XREAL_1:141;
-A304:           rl/2>0 by A302,XREAL_1:141;
-A305:           rm/2<=rl/2 by A296,XREAL_1:74;
-                rm/2<=r/2 by A296,XREAL_1:74;
-                then
-A306:           (rm/2)^2<=(r/2)^2 by A303,SQUARE_1:77;
-                1<=width G by Th34;
-                then G*(i,1)`1<G*(i+1,1)`1 by A293,A300,A301,GOBOARD5:4;
-                then
-A307:           rl1>0 by XREAL_1:52;
-                then rm1>0 by A7,XXREAL_0:21;
-                then
-A308:           rm1/2>0 by XREAL_1:141;
-A309:           rl1/2>0 by A307,XREAL_1:141;
-A310:           rm1/2<=rl1/2 by A297,XREAL_1:74;
-                rm1/2<=r/2 by A297,XREAL_1:74;
-                then (rm1/2)^2<=(r/2)^2 by A308,SQUARE_1:77;
-                then
-A311:           (rm1/2)^2+(rm/2)^2<=(r/2)^2+(r/2)^2 by A306,XREAL_1:9;
-                0<=(rm/2)^2 & 0<=(rm1/2)^2 by XREAL_1:65;
-                then 0+0<=(rm1/2)^2+(rm/2)^2;
-                then
-A312:           sqrt((rm1/2)^2+(rm/2)^2)<=sqrt((r/2)^2+(r/ 2)^2
-                ) by A311,SQUARE_1:94;
                 set r3=r2+rm1/2,s3=s2+rm/2;
+A213:           1<=width G by Th34;
+                i<i+1 & i+1<=len G by A206,NAT_1:13;
+                then G*(i,1)`1<G*(i+1,1)`1 by A206,A213,GOBOARD5:4;
+                then
+A214:           rl1>0 by XREAL_1:52;
+                then
+A215:           rm1>0 by A8,XXREAL_0:21;
+                then r3>r2 by XREAL_1:31,141;
+                then
+A216:           r3>G*(i,1)`1 by A208,XXREAL_0:2;
+                rm1/2<=rl1/2 by XREAL_1:74,XXREAL_0:17;
+                then
+A217:           G*(i,1)`1+rm1/2<=G*(i,1)`1+rl1/2 by XREAL_1:8;
+                G*(i,1)`1+(G*(i+1,1)`1-G*(i,1)`1)/2 <G*(i,1)`1+(G*(i+1,1
+)`1-G*(i,1)`1)/2 +(G*(i+1,1)`1-G*(i,1)`1)/2 by A214,XREAL_1:31,141;
+                then
+A218:           r3<G*(i+1,1)`1 by A212,A217,XXREAL_0:2;
+                rm/2<=rl/2 by XREAL_1:74,XXREAL_0:17;
+                then
+A219:           G*(1,j)`2+rm/2<=G*(1,j)`2+rl/2 by XREAL_1:8;
                 reconsider q0=|[r3,s3]| as Point of TOP-REAL 2;
-A313:           p`1=r2 & p`2=s2 by A294,EUCLID:56;
-A314:           q0`1=r3 & q0`2=s3 by EUCLID:56;
+A220:           q0`1=r3 & q0`2=s3 by EUCLID:56;
                 reconsider u0=q0 as Point of Euclid 2 by EUCLID:25;
                 reconsider v0=u0 as Element of REAL 2;
-A315:           r*2">0 by A7,XREAL_1:131;
-                s3>s2 by A303,XREAL_1:31;
+A221:           1<=len G by Th34;
+                j<j+1 & j+1<=width G by A206,NAT_1:13;
+                then G*(1,j)`2<G*(1,j+1)`2 by A206,A221,GOBOARD5:5;
                 then
-A316:           s3>G*(1,j)`2 by A294,XXREAL_0:2;
-A317:           G*(1,j)`2+rm/2<=G*(1,j)`2+rl/2 by A305,XREAL_1:8;
-                G*(1,j)`2+(G*(1,j+1)`2-G*(1,j)`2)/2
-                <G*(1,j)`2+(G*(1,j+1)`2-G*(1,j)`2)/2
-                +(G*(1,j+1)`2-G*(1,j)`2)/2 by A304,XREAL_1:31;
+A222:           rl>0 by XREAL_1:52;
                 then
-A318:           s3<G*(1,j+1)`2 by A295,A317,XXREAL_0:2;
-                r3>r2 by A308,XREAL_1:31;
+A223:           rm>0 by A8,XXREAL_0:21;
+                then s3>s2 by XREAL_1:31,141;
                 then
-A319:           r3>G*(i,1)`1 by A294,XXREAL_0:2;
-A320:           G*(i,1)`1+rm1/2<=G*(i,1)`1+rl1/2 by A310,XREAL_1:8;
-                G*(i,1)`1+(G*(i+1,1)`1-G*(i,1)`1)/2
-                <G*(i,1)`1+(G*(i+1,1)`1-G*(i,1)`1)/2
-                +(G*(i+1,1)`1-G*(i,1)`1)/2 by A309,XREAL_1:31;
+A224:           s3>G*(1,j)`2 by A210,XXREAL_0:2;
+                rm1/2<=r/2 by XREAL_1:74,XXREAL_0:17;
                 then
-A321:           r3<G*(i+1,1)`1 by A295,A320,XXREAL_0:2;
-A322:           r/2*sqrt 2>=0 by A315,Lm1;
-A323:           (r/2)^2 + (r/2)^2= 2*((r/2)^2)
-                  .=(sqrt 2)^2*((r/2)^2) by SQUARE_1:def 4
-                  .=(r/2*sqrt 2)^2;
-A324:           dist(u,u0) = (Pitag_dist 2).(v,v0) by METRIC_1:def 1;
+A225:           (rm1/2)^2<=(r/2)^2 by A215,SQUARE_1:77;
+                rm/2<=r/2 by XREAL_1:74,XXREAL_0:17;
+                then (rm/2)^2<=(r/2)^2 by A223,SQUARE_1:77;
+                then
+A226:           (rm1/2)^2+(rm/2)^2<=(r/2)^2+(r/2)^2 by A225,
+                XREAL_1:9;
                 sqrt 2/2<1 by Lm1,SQUARE_1:86,XREAL_1:191;
                 then
-A325:           r*(sqrt 2/2)<r*1 by A7,XREAL_1:70;
-                sqrt ((r/2)^2 + (r/2)^2)
-                =r*((sqrt 2)/2) by A322,A323,SQUARE_1:89;
-
-then sqrt ((r2 - r3)^2 + (s2 - s3)^2)<r by A312,A325,XXREAL_0:2;
-                then dist(u,u0) < r by A313,A314,A324,TOPREAL3:12;
-                then
-A326:           u0 in Ball(u,r) by METRIC_1:12;
-                u0 in { |[r1,s1]| : G*(i,1)`1 < r1 & r1 < G*(i+1,1)`1 &
-                G*(1,j)`2 < s1 & s1 < G*(1,j+1)`2 } by A316,A318,A319,A321;
-                then u0 in Y by A293,GOBOARD6:29;
-                hence Y /\ G0 <> {}(TOP-REAL 2) by A7,A326,XBOOLE_0:def 4;
-              end;
-              case
-A327:           r2=G*(i,1)`1 &(G*(1,j)`2 <s2 & s2<G*(1,j+1)`2);
-                set rl1=G*(i+1,1)`1 - G*(i,1)`1;
-                set rm1=min(r,rl1);
-A328:           rm1<=r & rm1<=rl1 by XXREAL_0:17;
-A329:           i<i+1 by NAT_1:13;
-A330:           i+1<=len G by A293,NAT_1:13;
-                1<=width G by Th34;
-                then G*(i,1)`1<G*(i+1,1)`1 by A293,A329,A330,GOBOARD5:4;
-                then
-A331:           rl1>0 by XREAL_1:52;
-                then rm1>0 by A7,XXREAL_0:21;
-                then
-A332:           rm1/2>0 by XREAL_1:141;
-A333:           rl1/2>0 by A331,XREAL_1:141;
-A334:           rm1/2<=rl1/2 by A328,XREAL_1:74;
-                rm1/2<=r/2 by A328,XREAL_1:74;
-                then
-A335:           (rm1/2)^2+0^2<=(r/2)^2+0^2 by A332,SQUARE_1:77;
-                0<=(rm1/2)^2 & 0<=0^2 by XREAL_1:65;
-                then
-A336:           sqrt((rm1/2)^2+0^2)<=sqrt((r/2)^2+0^2) by A335,SQUARE_1:94;
-                set r3=r2+rm1/2;
-                set s3=s2;
-                reconsider q0=|[r3,s3]| as Point of TOP-REAL 2;
-A337:           p`1=r2 & p`2=s2 by A294,EUCLID:56;
-A338:           q0`1=r3 & q0`2=s3 by EUCLID:56;
-                reconsider u0=q0 as Point of Euclid 2 by EUCLID:25;
-                reconsider v0=u0 as Element of REAL 2;
-A339:           r*2">0 by A7,XREAL_1:131;
-A340:           r3>r2 by A332,XREAL_1:31;
-A341:           G*(i,1)`1+rm1/2<=G*(i,1)`1+rl1/2 by A334,XREAL_1:8;
-                G*(i,1)`1+(G*(i+1,1)`1-G*(i,1)`1)/2
-                <G*(i,1)`1+(G*(i+1,1)`1-G*(i,1)`1)/2
-                +(G*(i+1,1)`1-G*(i,1)`1)/2 by A333,XREAL_1:31;
-                then
-A342:           r3<G*(i+1,1)`1 by A327,A341,XXREAL_0:2;
-A343:           (r/2)^2 >=0 by XREAL_1:65;
-A344:           r/2*sqrt 2>=0 by A339,Lm1;
-A345:           (r/2)^2 + (r/2)^2= 2*((r/2)^2)
+A227:           r*(sqrt 2/2)<r*1 by A8,XREAL_1:70;
+                (r/2)^2 + (r/2)^2= 2*((r/2)^2)
                   .=(sqrt 2)^2*((r/2)^2) by SQUARE_1:def 4
                   .=(r/2*sqrt 2)^2;
-A346:           dist(u,u0) = (Pitag_dist 2).(v,v0) by METRIC_1:def 1;
-                sqrt 2/2<1 by Lm1,SQUARE_1:86,XREAL_1:191;
                 then
-A347:           r*(sqrt 2/2)<r*1 by A7,XREAL_1:70;
-A348:           sqrt ((r/2)^2 + (r/2)^2)
-                =r*((sqrt 2)/2) by A344,A345,SQUARE_1:89;
-                (r/2)^2 + 0^2 <=(r/2)^2 + (r/2)^2 by A343,XREAL_1:8;
-                then sqrt((r/2)^2 + 0^2)<=sqrt((r/2)^2 + (r/2)^2)
-                by A343,SQUARE_1:94;
-                then sqrt((r/2)^2 + 0^2)<r by A347,A348,XXREAL_0:2;
-                then sqrt((r2 - r3)^2 + (s2 - s3)^2)<r by A336,XXREAL_0:2;
-                then dist(u,u0) < r by A337,A338,A346,TOPREAL3:12;
-                then
-A349:           u0 in Ball(u,r) by METRIC_1:12;
-                u0 in { |[r1,s1]| : G*(i,1)`1 < r1 & r1 < G*(i+1,1)`1 &
-                G*(1,j)`2 < s1 & s1 < G*(1,j+1)`2 } by A327,A340,A342;
-                then u0 in Y by A293,GOBOARD6:29;
-                hence Y /\ G0 <> {}(TOP-REAL 2) by A7,A349,XBOOLE_0:def 4;
-              end;
-              case
-A350:           r2=G*(i,1)`1 & s2=G*(1,j+1)`2;
-                set rl=G*(1,j+1)`2 - G*(1,j)`2;
-                set rl1=G*(i+1,1)`1 - G*(i,1)`1;
-                set rm=min(r,rl);
-                set rm1=min(r,rl1);
-A351:           rm<=r & rm<=rl by XXREAL_0:17;
-A352:           rm1<=r & rm1<=rl1 by XXREAL_0:17;
-A353:           j<j+1 by NAT_1:13;
-A354:           j+1<=width G by A293,NAT_1:13;
-A355:           i<i+1 by NAT_1:13;
-A356:           i+1<=len G by A293,NAT_1:13;
-                1<=len G by Th34;
-                then G*(1,j)`2<G*(1,j+1)`2 by A293,A353,A354,GOBOARD5:5;
-                then
-A357:           rl>0 by XREAL_1:52;
-                then rm>0 by A7,XXREAL_0:21;
-                then
-A358:           rm/2>0 by XREAL_1:141;
-A359:           rl/2>0 by A357,XREAL_1:141;
-A360:           rm/2<=rl/2 by A351,XREAL_1:74;
-                rm/2<=r/2 by A351,XREAL_1:74;
-                then
-A361:           (rm/2)^2<=(r/2)^2 by A358,SQUARE_1:77;
-                1<=width G by Th34;
-                then G*(i,1)`1<G*(i+1,1)`1 by A293,A355,A356,GOBOARD5:4;
-                then
-A362:           rl1>0 by XREAL_1:52;
-                then rm1>0 by A7,XXREAL_0:21;
-                then
-A363:           rm1/2>0 by XREAL_1:141;
-A364:           rl1/2>0 by A362,XREAL_1:141;
-A365:           rm1/2<=rl1/2 by A352,XREAL_1:74;
-                rm1/2<=r/2 by A352,XREAL_1:74;
-                then (rm1/2)^2<=(r/2)^2 by A363,SQUARE_1:77;
-                then
-A366:           (rm1/2)^2+(rm/2)^2<=(r/2)^2+(r/2)^2 by A361,XREAL_1:9;
+A228:           sqrt ((r/2)^2 + (r/2)^2) =r*((sqrt 2)/2) by A8,Lm1
+                ,SQUARE_1:89;
+A229:           p`1=r2 & p`2=s2 by A207,EUCLID:56;
                 0<=(rm/2)^2 & 0<=(rm1/2)^2 by XREAL_1:65;
-                then 0+0<=(rm1/2)^2+(rm/2)^2;
+                then sqrt((rm1/2)^2+(rm/2)^2)<=sqrt((r/2)^2+(r/ 2)^2 ) by
+                A226,SQUARE_1:94;
+                then dist(u,u0) = (Pitag_dist 2).(v,v0) & sqrt ((r2 - r3)^2 +
+                (s2 - s3)^2)<r by A227,A228,METRIC_1:def 1,XXREAL_0:2;
+                then dist(u,u0) < r by A229,A220,TOPREAL3:12;
                 then
-A367:           sqrt((rm1/2)^2+(rm/2)^2)<=sqrt((r/2)^2+(r/ 2)^2
-                ) by A366,SQUARE_1:94;
-                set r3=r2+rm1/2,s3=s2-rm/2;
-                reconsider q0=|[r3,s3]| as Point of TOP-REAL 2;
-A368:           p`1=r2 & p`2=s2 by A294,EUCLID:56;
-A369:           q0`1=r3 & q0`2=s3 by EUCLID:56;
-                reconsider u0=q0 as Point of Euclid 2 by EUCLID:25;
-                reconsider v0=u0 as Element of REAL 2;
-A370:           r*2">0 by A7,XREAL_1:131;
-                s3<s2 by A358,XREAL_1:46;
-                then
-A371:           s3<G*(1,j+1)`2 by A294,XXREAL_0:2;
-A372:           G*(1,j+1)`2-rm/2>=G*(1,j+1)`2-rl/2 by A360,XREAL_1:15;
-                G*(1,j+1)`2-(G*(1,j+1)`2-G*(1,j)`2)/2
-                >G*(1,j+1)`2-(G*(1,j+1)`2-G*(1,j)`2)/2
-                -(G*(1,j+1)`2-G*(1,j)`2)/2 by A359,XREAL_1:46;
-                then
-A373:           s3>G*(1,j)`2 by A350,A372,XXREAL_0:2;
-                r3>r2 by A363,XREAL_1:31;
-                then
-A374:           r3>G*(i,1)`1 by A294,XXREAL_0:2;
-A375:           G*(i,1)`1+rm1/2<=G*(i,1)`1+rl1/2 by A365,XREAL_1:8;
-                G*(i,1)`1+(G*(i+1,1)`1-G*(i,1)`1)/2
-                <G*(i,1)`1+(G*(i+1,1)`1-G*(i,1)`1)/2
-                +(G*(i+1,1)`1-G*(i,1)`1)/2 by A364,XREAL_1:31;
-                then
-A376:           r3<G*(i+1,1)`1 by A350,A375,XXREAL_0:2;
-A377:           r/2*sqrt 2>=0 by A370,Lm1;
-A378:           (r/2)^2 + (r/2)^2= 2*((r/2)^2)
-                  .=(sqrt 2)^2*((r/2)^2) by SQUARE_1:def 4
-                  .=(r/2*sqrt 2)^2;
-A379:           dist(u,u0) = (Pitag_dist 2).(v,v0) by METRIC_1:def 1;
-                sqrt 2/2<1 by Lm1,SQUARE_1:86,XREAL_1:191;
-                then
-A380:           r*(sqrt 2/2)<r*1 by A7,XREAL_1:70;
-                sqrt ((r/2)^2 + (r/2)^2)
-                =r*((sqrt 2)/2) by A377,A378,SQUARE_1:89;
-                then sqrt ((r2 - r3)^2 + (s2 - s3)^2)<r
-                by A367,A380,XXREAL_0:2;
-                then dist(u,u0) < r by A368,A369,A379,TOPREAL3:12;
-                then
-A381:           u0 in Ball(u,r) by METRIC_1:12;
-                u0 in { |[r1,s1]| : G*(i,1)`1 < r1 & r1 < G*(i+1,1)`1 &
-                G*(1,j)`2 < s1 & s1 < G*(1,j+1)`2 } by A371,A373,A374,A376;
-                then u0 in Y by A293,GOBOARD6:29;
-                hence Y /\ G0 <> {}(TOP-REAL 2) by A7,A381,XBOOLE_0:def 4;
+A230:           u0 in Ball(u,r) by METRIC_1:12;
+                G*(1,j)`2+(G*(1,j+1)`2-G*(1,j)`2)/2 <G*(1,j)`2+(G*(1,j+1
+)`2-G*(1,j)`2)/2 +(G*(1,j+1)`2-G*(1,j)`2)/2 by A222,XREAL_1:31,141;
+                then s3<G*(1,j+1)`2 by A212,A219,XXREAL_0:2;
+                then u0 in { |[r1,s1]| : G*(i,1)`1 < r1 & r1 < G*(i+1,1)`1 &
+                G*(1,j)`2 < s1 & s1 < G*(1,j+1)`2 } by A224,A216,A218;
+                then u0 in Y by A206,GOBOARD6:29;
+                hence Y /\ G0 <> {}(TOP-REAL 2) by A9,A230,XBOOLE_0:def 4;
               end;
               case
-A382:           (G*(i,1)`1 <r2 & r2<G*(i+1,1)`1)& s2=G*(1,j)`2;
+A231:           r2=G*(i,1)`1 & G*(1,j)`2 <s2 & s2<G*(1,j+1)`2;
+                set s3=s2;
+                set rl1=G*(i+1,1)`1 - G*(i,1)`1;
+                set rm1=min(r,rl1);
+                set r3=r2+rm1/2;
+                reconsider q0=|[r3,s3]| as Point of TOP-REAL 2;
+                reconsider u0=q0 as Point of Euclid 2 by EUCLID:25;
+A232:           1<=width G by Th34;
+                i<i+1 & i+1<=len G by A206,NAT_1:13;
+                then G*(i,1)`1<G*(i+1,1)`1 by A206,A232,GOBOARD5:4;
+                then
+A233:           rl1>0 by XREAL_1:52;
+                then
+A234:           rm1>0 by A8,XXREAL_0:21;
+                then
+A235:           r3>r2 by XREAL_1:31,141;
+                rm1/2<=rl1/2 by XREAL_1:74,XXREAL_0:17;
+                then
+A236:           G*(i,1)`1+rm1/2<=G*(i,1)`1+rl1/2 by XREAL_1:8;
+                G*(i,1)`1+(G*(i+1,1)`1-G*(i,1)`1)/2 <G*(i,1)`1+(G*(i+1,1
+)`1-G*(i,1)`1)/2 +(G*(i+1,1)`1-G*(i,1)`1)/2 by A233,XREAL_1:31,141;
+                then r3<G*(i+1,1)`1 by A231,A236,XXREAL_0:2;
+                then u0 in { |[r1,s1]| : G*(i,1)`1 < r1 & r1 < G*(i+1,1)`1 &
+                G*(1,j)`2 < s1 & s1 < G*(1,j+1)`2 } by A231,A235;
+                then
+A237:           u0 in Y by A206,GOBOARD6:29;
+                sqrt 2/2<1 by Lm1,SQUARE_1:86,XREAL_1:191;
+                then
+A238:           r*(sqrt 2/2)<r*1 by A8,XREAL_1:70;
+                reconsider v0=u0 as Element of REAL 2;
+A239:           0<=(rm1/2)^2 by XREAL_1:65;
+                rm1/2<=r/2 by XREAL_1:74,XXREAL_0:17;
+                then (rm1/2)^2+0^2<=(r/2)^2+0^2 by A234, SQUARE_1:77;
+                then
+A240:           sqrt((rm1/2)^2+0^2)<=sqrt((r/2)^2+0^2) by A239,
+                SQUARE_1:94;
+A241:           q0`1=r3 & q0`2=s3 by EUCLID:56;
+A242:           (r/2)^2 >=0 by XREAL_1:65;
+                then (r/2)^2 + 0^2 <=(r/2)^2 + (r/2)^2 by XREAL_1:8;
+                then
+A243:           sqrt((r/2)^2 + 0^2)<=sqrt((r/2)^2 + (r/2)^2) by A242,
+                SQUARE_1:94;
+                (r/2)^2 + (r/2)^2= 2*((r/2)^2)
+                  .=(sqrt 2)^2*((r/2)^2) by SQUARE_1:def 4
+                  .=(r/2*sqrt 2)^2;
+                then sqrt ((r/2)^2 + (r/2)^2) =r*((sqrt 2)/2) by A8,Lm1
+                ,SQUARE_1:89;
+                then sqrt((r/2)^2 + 0^2)<r by A238,A243,XXREAL_0:2;
+                then
+A244:           dist(u,u0) = (Pitag_dist 2).(v,v0) & sqrt((r2 - r3)^2 +
+                (s2 - s3)^2)<r by A240,METRIC_1:def 1,XXREAL_0:2;
+                p`1=r2 & p`2=s2 by A207,EUCLID:56;
+                then dist(u,u0) < r by A241,A244,TOPREAL3:12;
+                then u0 in Ball(u,r) by METRIC_1:12;
+                hence Y /\ G0 <> {}(TOP-REAL 2) by A9,A237,XBOOLE_0:def 4;
+              end;
+              case
+A245:           r2=G*(i,1)`1 & s2=G*(1,j+1)`2;
+                set rl1=G*(i+1,1)`1 - G*(i,1)`1;
                 set rl=G*(1,j+1)`2 - G*(1,j)`2;
                 set rm=min(r,rl);
-A383:           rm<=r & rm<=rl by XXREAL_0:17;
-A384:           j<j+1 by NAT_1:13;
-A385:           j+1<=width G by A293,NAT_1:13;
-                1<=len G by Th34;
-                then G*(1,j)`2<G*(1,j+1)`2 by A293,A384,A385,GOBOARD5:5;
+                set rm1=min(r,rl1);
+                set r3=r2+rm1/2,s3=s2-rm/2;
+A246:           1<=width G by Th34;
+                i<i+1 & i+1<=len G by A206,NAT_1:13;
+                then G*(i,1)`1<G*(i+1,1)`1 by A206,A246,GOBOARD5:4;
                 then
-A386:           rl>0 by XREAL_1:52;
-                then rm>0 by A7,XXREAL_0:21;
+A247:           rl1>0 by XREAL_1:52;
                 then
-A387:           rm/2>0 by XREAL_1:141;
-A388:           rl/2>0 by A386,XREAL_1:141;
-A389:           rm/2<=rl/2 by A383,XREAL_1:74;
-                rm/2<=r/2 by A383,XREAL_1:74;
+A248:           rm1>0 by A8,XXREAL_0:21;
+                then r3>r2 by XREAL_1:31,141;
                 then
-A390:           (rm/2)^2+0^2<=(r/2)^2+0^2 by A387,SQUARE_1:77;
-                0<=(rm/2)^2 & 0<=0^2 by XREAL_1:65;
+A249:           r3>G*(i,1)`1 by A208,XXREAL_0:2;
+                rm1/2<=rl1/2 by XREAL_1:74,XXREAL_0:17;
                 then
-A391:           sqrt(0^2+(rm/2)^2)<=sqrt(0^2+(r/2)^2) by A390,SQUARE_1:94;
-                set s3=s2+rm/2;
-                set r3=r2;
+A250:           G*(i,1)`1+rm1/2<=G*(i,1)`1+rl1/2 by XREAL_1:8;
+                G*(i,1)`1+(G*(i+1,1)`1-G*(i,1)`1)/2 <G*(i,1)`1+(G*(i+1,1
+)`1-G*(i,1)`1)/2 +(G*(i+1,1)`1-G*(i,1)`1)/2 by A247,XREAL_1:31,141;
+                then
+A251:           r3<G*(i+1,1)`1 by A245,A250,XXREAL_0:2;
+                rm/2<=rl/2 by XREAL_1:74,XXREAL_0:17;
+                then
+A252:           G*(1,j+1)`2-rm/2>=G*(1,j+1)`2-rl/2 by XREAL_1:15;
                 reconsider q0=|[r3,s3]| as Point of TOP-REAL 2;
-A392:           p`1=r2 & p`2=s2 by A294,EUCLID:56;
-A393:           q0`1=r3 & q0`2=s3 by EUCLID:56;
+A253:           q0`1=r3 & q0`2=s3 by EUCLID:56;
                 reconsider u0=q0 as Point of Euclid 2 by EUCLID:25;
                 reconsider v0=u0 as Element of REAL 2;
-A394:           r*2">0 by A7,XREAL_1:131;
-A395:           s3>s2 by A387,XREAL_1:31;
-A396:           G*(1,j)`2+rm/2<=G*(1,j)`2+rl/2 by A389,XREAL_1:8;
-                G*(1,j)`2+(G*(1,j+1)`2-G*(1,j)`2)/2
-                <G*(1,j)`2+(G*(1,j+1)`2-G*(1,j)`2)/2
-                +(G*(1,j+1)`2-G*(1,j)`2)/2 by A388,XREAL_1:31;
+A254:           1<=len G by Th34;
+                j<j+1 & j+1<=width G by A206,NAT_1:13;
+                then G*(1,j)`2<G*(1,j+1)`2 by A206,A254,GOBOARD5:5;
                 then
-A397:           s3<G*(1,j+1)`2 by A382,A396,XXREAL_0:2;
-A398:           (r/2)^2 >=0 by XREAL_1:65;
-A399:           r/2*sqrt 2>=0 by A394,Lm1;
-A400:           (r/2)^2 + (r/2)^2= 2*((r/2)^2)
-                  .=(sqrt 2)^2*((r/2)^2) by SQUARE_1:def 4
-                  .=(r/2*sqrt 2)^2;
-A401:           dist(u,u0) = (Pitag_dist 2).(v,v0) by METRIC_1:def 1;
+A255:           rl>0 by XREAL_1:52;
+                then
+A256:           rm>0 by A8,XXREAL_0:21;
+                then s3<s2 by XREAL_1:46,141;
+                then
+A257:           s3<G*(1,j+1)`2 by A211,XXREAL_0:2;
+                rm1/2<=r/2 by XREAL_1:74,XXREAL_0:17;
+                then
+A258:           (rm1/2)^2<=(r/2)^2 by A248,SQUARE_1:77;
+                rm/2<=r/2 by XREAL_1:74,XXREAL_0:17;
+                then (rm/2)^2<=(r/2)^2 by A256,SQUARE_1:77;
+                then
+A259:           (rm1/2)^2+(rm/2)^2<=(r/2)^2+(r/2)^2 by A258,
+                XREAL_1:9;
                 sqrt 2/2<1 by Lm1,SQUARE_1:86,XREAL_1:191;
                 then
-A402:           r*(sqrt 2/2)<r*1 by A7,XREAL_1:70;
-A403:           sqrt ((r/2)^2 + (r/2)^2)
-                =r*((sqrt 2)/2) by A399,A400,SQUARE_1:89;
-                0^2+(r/2)^2 <=(r/2)^2 + (r/2)^2 by A398,XREAL_1:8;
-                then sqrt(0^2+(r/2)^2 )<=sqrt((r/2)^2 + (r/2)^2)
-                by A398,SQUARE_1:94;
-                then sqrt(0^2+(r/2)^2)<r by A402,A403,XXREAL_0:2;
-                then sqrt((r2 - r3)^2 + (s2 - s3)^2)<r by A391,XXREAL_0:2;
-                then dist(u,u0) < r by A392,A393,A401,TOPREAL3:12;
+A260:           r*(sqrt 2/2)<r*1 by A8,XREAL_1:70;
+                (r/2)^2 + (r/2)^2= 2*((r/2)^2)
+                  .=(sqrt 2)^2*((r/2)^2) by SQUARE_1:def 4
+                  .=(r/2*sqrt 2)^2;
                 then
-A404:           u0 in Ball(u,r) by METRIC_1:12;
-                u0 in { |[r1,s1]| : G*(i,1)`1 < r1 & r1 < G*(i+1,1)`1 &
-                G*(1,j)`2 < s1 & s1 < G*(1,j+1)`2 } by A382,A395,A397;
-                then u0 in Y by A293,GOBOARD6:29;
-                hence Y /\ G0 <> {}(TOP-REAL 2) by A7,A404,XBOOLE_0:def 4;
+A261:           sqrt ((r/2)^2 + (r/2)^2) =r*((sqrt 2)/2) by A8,Lm1
+                ,SQUARE_1:89;
+A262:           p`1=r2 & p`2=s2 by A207,EUCLID:56;
+                0<=(rm/2)^2 & 0<=(rm1/2)^2 by XREAL_1:65;
+                then sqrt((rm1/2)^2+(rm/2)^2)<=sqrt((r/2)^2+(r/ 2)^2 ) by
+                A259,SQUARE_1:94;
+                then dist(u,u0) = (Pitag_dist 2).(v,v0) & sqrt ((r2 - r3)^2 +
+                (s2 - s3)^2)<r by A260,A261,METRIC_1:def 1,XXREAL_0:2;
+                then dist(u,u0) < r by A262,A253,TOPREAL3:12;
+                then
+A263:           u0 in Ball(u,r) by METRIC_1:12;
+                G*(1,j+1)`2-(G*(1,j+1)`2-G*(1,j)`2)/2 >G*(1,j+1)`2-(G*(1
+,j+1)`2-G*(1,j)`2)/2 -(G*(1,j+1)`2-G*(1,j)`2)/2 by A255,XREAL_1:46,141;
+                then s3>G*(1,j)`2 by A245,A252,XXREAL_0:2;
+                then u0 in { |[r1,s1]| : G*(i,1)`1 < r1 & r1 < G*(i+1,1)`1 &
+                G*(1,j)`2 < s1 & s1 < G*(1,j+1)`2 } by A257,A249,A251;
+                then u0 in Y by A206,GOBOARD6:29;
+                hence Y /\ G0 <> {}(TOP-REAL 2) by A9,A263,XBOOLE_0:def 4;
               end;
               case
-A405:           (G*(i,1)`1 <r2 & r2<G*(i+1,1)`1)
-                &(G*(1,j)`2 <s2 & s2<G*(1,j+1)`2);
+A264:           G*(i,1)`1 <r2 & r2<G*(i+1,1)`1 & s2=G*(1,j)`2;
+                set r3=r2;
+                set rl=G*(1,j+1)`2 - G*(1,j)`2;
+                set rm=min(r,rl);
+                set s3=s2+rm/2;
+                reconsider q0=|[r3,s3]| as Point of TOP-REAL 2;
+                reconsider u0=q0 as Point of Euclid 2 by EUCLID:25;
+A265:           1<=len G by Th34;
+                j<j+1 & j+1<=width G by A206,NAT_1:13;
+                then G*(1,j)`2<G*(1,j+1)`2 by A206,A265,GOBOARD5:5;
+                then
+A266:           rl>0 by XREAL_1:52;
+                then
+A267:           rm>0 by A8,XXREAL_0:21;
+                then
+A268:           s3>s2 by XREAL_1:31,141;
+                rm/2<=rl/2 by XREAL_1:74,XXREAL_0:17;
+                then
+A269:           G*(1,j)`2+rm/2<=G*(1,j)`2+rl/2 by XREAL_1:8;
+                G*(1,j)`2+(G*(1,j+1)`2-G*(1,j)`2)/2 <G*(1,j)`2+(G*(1,j+1
+)`2-G*(1,j)`2)/2 +(G*(1,j+1)`2-G*(1,j)`2)/2 by A266,XREAL_1:31,141;
+                then s3<G*(1,j+1)`2 by A264,A269,XXREAL_0:2;
+                then u0 in { |[r1,s1]| : G*(i,1)`1 < r1 & r1 < G*(i+1,1)`1 &
+                G*(1,j)`2 < s1 & s1 < G*(1,j+1)`2 } by A264,A268;
+                then
+A270:           u0 in Y by A206,GOBOARD6:29;
+                sqrt 2/2<1 by Lm1,SQUARE_1:86,XREAL_1:191;
+                then
+A271:           r*(sqrt 2/2)<r*1 by A8,XREAL_1:70;
+                reconsider v0=u0 as Element of REAL 2;
+A272:           0<=(rm/2)^2 by XREAL_1:65;
+                rm/2<=r/2 by XREAL_1:74,XXREAL_0:17;
+                then (rm/2)^2+0^2<=(r/2)^2+0^2 by A267, SQUARE_1:77;
+                then
+A273:           sqrt(0^2+(rm/2)^2)<=sqrt(0^2+(r/2)^2) by A272,
+                SQUARE_1:94;
+A274:           q0`1=r3 & q0`2=s3 by EUCLID:56;
+A275:           (r/2)^2 >=0 by XREAL_1:65;
+                then 0^2+(r/2)^2 <=(r/2)^2 + (r/2)^2 by XREAL_1:8;
+                then
+A276:           sqrt
+(0^2+(r/2)^2 )<=sqrt((r/2)^2 + (r/2)^2) by A275,SQUARE_1:94;
+                (r/2)^2 + (r/2)^2= 2*((r/2)^2)
+                  .=(sqrt 2)^2*((r/2)^2) by SQUARE_1:def 4
+                  .=(r/2*sqrt 2)^2;
+                then sqrt ((r/2)^2 + (r/2)^2) =r*((sqrt 2)/2) by A8,Lm1
+                ,SQUARE_1:89;
+                then sqrt(0^2+(r/2)^2)<r by A271,A276,XXREAL_0:2;
+                then
+A277:           dist(u,u0) = (Pitag_dist 2).(v,v0) & sqrt((r2 - r3)^2 +
+                (s2 - s3)^2)<r by A273,METRIC_1:def 1,XXREAL_0:2;
+                p`1=r2 & p`2=s2 by A207,EUCLID:56;
+                then dist(u,u0) < r by A274,A277,TOPREAL3:12;
+                then u0 in Ball(u,r) by METRIC_1:12;
+                hence Y /\ G0 <> {}(TOP-REAL 2) by A9,A270,XBOOLE_0:def 4;
+              end;
+              case
+A278:           G*(i,1)`1 <r2 & r2<G*(i+1,1)`1 & G*(1,j)`2 <s2 & s2<
+                G*(1,j+1)`2;
                 set s3=s2,r3=r2;
                 reconsider q0=|[r3,s3]| as Point of TOP-REAL 2;
-A406:           q0`1=r3 & q0`2=s3 by EUCLID:56;
+A279:           q0`1=r3 & q0`2=s3 by EUCLID:56;
                 reconsider u0=q0 as Point of Euclid 2 by EUCLID:25;
                 reconsider v0=u0 as Element of REAL 2;
-A407:           r*2">0 by A7,XREAL_1:131;
-A408:           (r/2)^2 >=0 by XREAL_1:65;
-A409:           r/2*sqrt 2>=0 by A407,Lm1;
-A410:           (r/2)^2 + (r/2)^2= 2*((r/2)^2)
-                  .=(sqrt 2)^2*((r/2)^2) by SQUARE_1:def 4
-                  .=(r/2*sqrt 2)^2;
-A411:           dist(u,u0) = (Pitag_dist 2).(v,v0) by METRIC_1:def 1;
-                sqrt 2/2<1 by Lm1,SQUARE_1:86,XREAL_1:191;
+                dist(u,u0) = (Pitag_dist 2).(v,v0) & sqrt((r2 - r3)^2 +
+                (s2 - s3)^2 )<r by A8,METRIC_1:def 1,SQUARE_1:89;
+                then dist(u,u0) < r by A207,A279,TOPREAL3:12;
                 then
-A412:           r*(sqrt 2/2)<r*1 by A7,XREAL_1:70;
-A413:           sqrt ((r/2)^2 + (r/2)^2)
-                =r*((sqrt 2)/2) by A409,A410,SQUARE_1:89;
-                0^2 + 0^2 <=(r/2)^2 + (r/2)^2 by A408;
-                then sqrt(0^2 + 0^2)<=sqrt((r/2)^2 + (r/2)^2 ) by SQUARE_1:94;
-                then sqrt((r2 - r3)^2 + (s2 - s3)^2
-                )<r by A412,A413,XXREAL_0:2;
-                then dist(u,u0) < r by A294,A406,A411,TOPREAL3:12;
-                then
-A414:           u0 in Ball(u,r) by METRIC_1:12;
-                u0 in { |[r1,s1]| : G*(i,1)`1<r1 & r1<G*(i+1,1)`1 &
-                G*(1,j)`2<s1 & s1<G*(1,j+1)`2} by A405;
-                then u0 in Y by A293,GOBOARD6:29;
-                hence Y /\ G0 <> {}(TOP-REAL 2) by A7,A414,XBOOLE_0:def 4;
+A280:           u0 in Ball(u,r) by METRIC_1:12;
+                u0 in { |[r1,s1]| : G*(i,1)`1<r1 & r1<G*(i+1,1)`1 & G*(1
+                ,j)`2<s1 & s1<G*(1,j+1)`2} by A278;
+                then u0 in Y by A206,GOBOARD6:29;
+                hence Y /\ G0 <> {}(TOP-REAL 2) by A9,A280,XBOOLE_0:def 4;
               end;
               case
-A415:           (G*(i,1)`1 <r2 & r2<G*(i+1,1)`1) & s2=G*(1,j+1)`2;
-                set rl=G*(1,j+1)`2 - G*(1,j)`2;
-                set rm=min(r,rl);
-A416:           rm<=r & rm<=rl by XXREAL_0:17;
-A417:           j<j+1 by NAT_1:13;
-A418:           j+1<=width G by A293,NAT_1:13;
-                1<=len G by Th34;
-                then G*(1,j)`2<G*(1,j+1)`2 by A293,A417,A418,GOBOARD5:5;
-                then
-A419:           rl>0 by XREAL_1:52;
-                then rm>0 by A7,XXREAL_0:21;
-                then
-A420:           rm/2>0 by XREAL_1:141;
-A421:           rl/2>0 by A419,XREAL_1:141;
-A422:           rm/2<=rl/2 by A416,XREAL_1:74;
-                rm/2<=r/2 by A416,XREAL_1:74;
-                then
-A423:           (rm/2)^2+0^2<=(r/2)^2+0^2 by A420,SQUARE_1:77;
-                0<=(rm/2)^2 & 0<=0^2 by XREAL_1:65;
-                then
-A424:           sqrt(0^2+(rm/2)^2)<=sqrt(0^2+(r/2)^2) by A423,SQUARE_1:94;
-                set s3=s2-rm/2;
+A281:           G*(i,1)`1 <r2 & r2<G*(i+1,1)`1 & s2=G*(1,j+1)`2;
                 set r3=r2;
+                set rl=G*(1,j+1)`2 - G*(1,j)`2;
+                set rm=min(r,rl);
+                set s3=s2-rm/2;
                 reconsider q0=|[r3,s3]| as Point of TOP-REAL 2;
-A425:           p`1=r2 & p`2=s2 by A294,EUCLID:56;
-A426:           q0`1=r3 & q0`2=s3 by EUCLID:56;
                 reconsider u0=q0 as Point of Euclid 2 by EUCLID:25;
-                reconsider v0=u0 as Element of REAL 2;
-A427:           r*2">0 by A7,XREAL_1:131;
-A428:           s3<s2 by A420,XREAL_1:46;
-A429:           G*(1,j+1)`2-rm/2>=G*(1,j+1)`2-rl/2 by A422,XREAL_1:15;
-                G*(1,j+1)`2-(G*(1,j+1)`2-G*(1,j)`2)/2
-                >G*(1,j+1)`2-(G*(1,j+1)`2-G*(1,j)`2)/2
-                -(G*(1,j+1)`2-G*(1,j)`2)/2 by A421,XREAL_1:46;
+A282:           1<=len G by Th34;
+                j<j+1 & j+1<=width G by A206,NAT_1:13;
+                then G*(1,j)`2<G*(1,j+1)`2 by A206,A282,GOBOARD5:5;
                 then
-A430:           s3>G*(1,j)`2 by A415,A429,XXREAL_0:2;
-A431:           (r/2)^2 >=0 by XREAL_1:65;
-A432:           r/2*sqrt 2>=0 by A427,Lm1;
-A433:           (r/2)^2 + (r/2)^2= 2*((r/2)^2)
-                  .=(sqrt 2)^2*((r/2)^2) by SQUARE_1:def 4
-                  .=(r/2*sqrt 2)^2;
-A434:           dist(u,u0) = (Pitag_dist 2).(v,v0) by METRIC_1:def 1;
+A283:           rl>0 by XREAL_1:52;
+                then
+A284:           rm>0 by A8,XXREAL_0:21;
+                then
+A285:           s3<s2 by XREAL_1:46,141;
+                rm/2<=rl/2 by XREAL_1:74,XXREAL_0:17;
+                then
+A286:           G*(1,j+1)`2-rm/2>=G*(1,j+1)`2-rl/2 by XREAL_1:15;
+                G*(1,j+1)`2-(G*(1,j+1)`2-G*(1,j)`2)/2 >G*(1,j+1)`2-(G*(1
+,j+1)`2-G*(1,j)`2)/2 -(G*(1,j+1)`2-G*(1,j)`2)/2 by A283,XREAL_1:46,141;
+                then s3>G*(1,j)`2 by A281,A286,XXREAL_0:2;
+                then u0 in { |[r1,s1]| : G*(i,1)`1 < r1 & r1 < G*(i+1,1)`1 &
+                G*(1,j)`2 < s1 & s1 < G* (1,j+1)`2 } by A281,A285;
+                then
+A287:           u0 in Y by A206,GOBOARD6:29;
                 sqrt 2/2<1 by Lm1,SQUARE_1:86,XREAL_1:191;
                 then
-A435:           r*(sqrt 2/2)<r*1 by A7,XREAL_1:70;
-A436:           sqrt ((r/2)^2 + (r/2)^2)
-                =r*((sqrt 2)/2) by A432,A433,SQUARE_1:89;
-                0+(r/2)^2 <=(r/2)^2 + (r/2)^2 by A431,XREAL_1:8;
-                then sqrt(0^2+(r/2)^2 )<=sqrt((r/2)^2 + (r/2)^2)
-                by A431,SQUARE_1:94;
-                then sqrt(0^2+(r/2)^2)<r by A435,A436,XXREAL_0:2;
-                then sqrt((r2 - r3)^2 + (s2 - s3)^2 )<r by A424,XXREAL_0:2;
-                then dist(u,u0) < r by A425,A426,A434,TOPREAL3:12;
+A288:           r*(sqrt 2/2)<r*1 by A8,XREAL_1:70;
+                reconsider v0=u0 as Element of REAL 2;
+A289:           0<=(rm/2)^2 by XREAL_1:65;
+                rm/2<=r/2 by XREAL_1:74,XXREAL_0:17;
+                then (rm/2)^2+0^2<=(r/2)^2+0^2 by A284, SQUARE_1:77;
                 then
-A437:           u0 in Ball(u,r) by METRIC_1:12;
-                u0 in { |[r1,s1]| : G*(i,1)`1 < r1 & r1 < G*(i+1,1)`1 &
-                G*(1,j)`2 < s1 & s1 < G* (1,j+1)`2 } by A415,A428,A430;
-                then u0 in Y by A293,GOBOARD6:29;
-                hence Y /\ G0 <> {}(TOP-REAL 2) by A7,A437,XBOOLE_0:def 4;
+A290:           sqrt(0^2+(rm/2)^2)<=sqrt(0^2+(r/2)^2) by A289,
+                SQUARE_1:94;
+A291:           q0`1=r3 & q0`2=s3 by EUCLID:56;
+A292:           (r/2)^2 >=0 by XREAL_1:65;
+                then 0+(r/2)^2 <=(r/2)^2 + (r/2)^2 by XREAL_1:8;
+                then
+A293:           sqrt
+(0^2+(r/2)^2 )<=sqrt((r/2)^2 + (r/2)^2) by A292,SQUARE_1:94;
+                (r/2)^2 + (r/2)^2= 2*((r/2)^2)
+                  .=(sqrt 2)^2*((r/2)^2) by SQUARE_1:def 4
+                  .=(r/2*sqrt 2)^2;
+                then sqrt ((r/2)^2 + (r/2)^2) =r*((sqrt 2)/2) by A8,Lm1
+                ,SQUARE_1:89;
+                then sqrt(0^2+(r/2)^2)<r by A288,A293,XXREAL_0:2;
+                then
+A294:           dist(u,u0) = (Pitag_dist 2).(v,v0) & sqrt((r2 - r3)^2 +
+                (s2 - s3)^2 )<r by A290,METRIC_1:def 1,XXREAL_0:2;
+                p`1=r2 & p`2=s2 by A207,EUCLID:56;
+                then dist(u,u0) < r by A291,A294,TOPREAL3:12;
+                then u0 in Ball(u,r) by METRIC_1:12;
+                hence Y /\ G0 <> {}(TOP-REAL 2) by A9,A287,XBOOLE_0:def 4;
               end;
               case
-A438:           r2=G*(i+1,1)`1 & s2=G*(1,j)`2;
-                set rl=G*(1,j+1)`2 - G*(1,j)`2;
+A295:           r2=G*(i+1,1)`1 & s2=G*(1,j)`2;
                 set rl1=G*(i+1,1)`1 - G*(i,1)`1;
+                set rl=G*(1,j+1)`2 - G*(1,j)`2;
                 set rm=min(r,rl);
                 set rm1=min(r,rl1);
-A439:           rm<=r & rm<=rl by XXREAL_0:17;
-A440:           rm1<=r & rm1<=rl1 by XXREAL_0:17;
-A441:           j<j+1 by NAT_1:13;
-A442:           j+1<=width G by A293,NAT_1:13;
-A443:           i<i+1 by NAT_1:13;
-A444:           i+1<=len G by A293,NAT_1:13;
-                1<=len G by Th34;
-                then G*(1,j)`2<G*(1,j+1)`2 by A293,A441,A442,GOBOARD5:5;
-                then
-A445:           rl>0 by XREAL_1:52;
-                then rm>0 by A7,XXREAL_0:21;
-                then
-A446:           rm/2>0 by XREAL_1:141;
-A447:           rl/2>0 by A445,XREAL_1:141;
-A448:           rm/2<=rl/2 by A439,XREAL_1:74;
-                rm/2<=r/2 by A439,XREAL_1:74;
-                then
-A449:           (rm/2)^2<=(r/2)^2 by A446,SQUARE_1:77;
-                1<=width G by Th34;
-                then G*(i,1)`1<G*(i+1,1)`1 by A293,A443,A444,GOBOARD5:4;
-                then
-A450:           rl1>0 by XREAL_1:52;
-                then rm1>0 by A7,XXREAL_0:21;
-                then
-A451:           rm1/2>0 by XREAL_1:141;
-A452:           rl1/2>0 by A450,XREAL_1:141;
-A453:           rm1/2<=rl1/2 by A440,XREAL_1:74;
-                rm1/2<=r/2 by A440,XREAL_1:74;
-                then (rm1/2)^2<=(r/2)^2 by A451,SQUARE_1:77;
-                then
-A454:           (rm1/2)^2+(rm/2)^2<=(r/2)^2+(r/2)^2 by A449,XREAL_1:9;
-                0<=(rm/2)^2 & 0<=(rm1/2)^2 by XREAL_1:65;
-                then 0+0<=(rm1/2)^2+(rm/2)^2;
-                then
-A455:           sqrt((rm1/2)^2+(rm/2)^2)<=sqrt((r/2)^2+(r/ 2)^2
-                ) by A454,SQUARE_1:94;
                 set r3=r2-rm1/2,s3=s2+rm/2;
+A296:           1<=width G by Th34;
+                i<i+1 & i+1<=len G by A206,NAT_1:13;
+                then G*(i,1)`1<G*(i+1,1)`1 by A206,A296,GOBOARD5:4;
+                then
+A297:           rl1>0 by XREAL_1:52;
+                then
+A298:           rm1>0 by A8,XXREAL_0:21;
+                then r3<r2 by XREAL_1:46,141;
+                then
+A299:           r3<G*(i+1,1)`1 by A209,XXREAL_0:2;
+                rm1/2<=rl1/2 by XREAL_1:74,XXREAL_0:17;
+                then
+A300:           G*(i+1,1)`1-rm1/2>=G*(i+1,1)`1-rl1/2 by XREAL_1:15;
+                G*(i+1,1)`1-(G*(i+1,1)`1-G*(i,1)`1)/2 >G*(i+1,1)`1-(G*(i
++1,1)`1-G*(i,1)`1)/2 -(G*(i+1,1)`1-G*(i,1)`1)/2 by A297,XREAL_1:46,141;
+                then
+A301:           r3>G*(i,1)`1 by A295,A300,XXREAL_0:2;
+                rm/2<=rl/2 by XREAL_1:74,XXREAL_0:17;
+                then
+A302:           G*(1,j)`2+rm/2<=G*(1,j)`2+rl/2 by XREAL_1:8;
                 reconsider q0=|[r3,s3]| as Point of TOP-REAL 2;
-A456:           p`1=r2 & p`2=s2 by A294,EUCLID:56;
-A457:           q0`1=r3 & q0`2=s3 by EUCLID:56;
+A303:           q0`1=r3 & q0`2=s3 by EUCLID:56;
                 reconsider u0=q0 as Point of Euclid 2 by EUCLID:25;
                 reconsider v0=u0 as Element of REAL 2;
-A458:           r*2">0 by A7,XREAL_1:131;
-                s3>s2 by A446,XREAL_1:31;
+A304:           1<=len G by Th34;
+                j<j+1 & j+1<=width G by A206,NAT_1:13;
+                then G*(1,j)`2<G*(1,j+1)`2 by A206,A304,GOBOARD5:5;
                 then
-A459:           s3>G*(1,j)`2 by A294,XXREAL_0:2;
-A460:           G*(1,j)`2+rm/2<=G*(1,j)`2+rl/2 by A448,XREAL_1:8;
-                G*(1,j)`2+(G*(1,j+1)`2-G*(1,j)`2)/2
-                <G*(1,j)`2+(G*(1,j+1)`2-G*(1,j)`2)/2
-                +(G*(1,j+1)`2-G*(1,j)`2)/2 by A447,XREAL_1:31;
+A305:           rl>0 by XREAL_1:52;
                 then
-A461:           s3<G*(1,j+1)`2 by A438,A460,XXREAL_0:2;
-                r3<r2 by A451,XREAL_1:46;
+A306:           rm>0 by A8,XXREAL_0:21;
+                then s3>s2 by XREAL_1:31,141;
                 then
-A462:           r3<G*(i+1,1)`1 by A294,XXREAL_0:2;
-A463:           G*(i+1,1)`1-rm1/2>=G*(i+1,1)`1-rl1/2 by A453,XREAL_1:15;
-                G*(i+1,1)`1-(G*(i+1,1)`1-G*(i,1)`1)/2
-                >G*(i+1,1)`1-(G*(i+1,1)`1-G*(i,1)`1)/2
-                -(G*(i+1,1)`1-G*(i,1)`1)/2 by A452,XREAL_1:46;
+A307:           s3>G*(1,j)`2 by A210,XXREAL_0:2;
+                rm1/2<=r/2 by XREAL_1:74,XXREAL_0:17;
                 then
-A464:           r3>G*(i,1)`1 by A438,A463,XXREAL_0:2;
-A465:           r/2*sqrt 2>=0 by A458,Lm1;
-A466:           (r/2)^2 + (r/2)^2= 2*((r/2)^2)
-                  .=(sqrt 2)^2*((r/2)^2) by SQUARE_1:def 4
-                  .=(r/2*sqrt 2)^2;
-A467:           dist(u,u0) = (Pitag_dist 2).(v,v0) by METRIC_1:def 1;
+A308:           (rm1/2)^2<=(r/2)^2 by A298,SQUARE_1:77;
+                rm/2<=r/2 by XREAL_1:74,XXREAL_0:17;
+                then (rm/2)^2<=(r/2)^2 by A306,SQUARE_1:77;
+                then
+A309:           (rm1/2)^2+(rm/2)^2<=(r/2)^2+(r/2)^2 by A308,
+                XREAL_1:9;
                 sqrt 2/2<1 by Lm1,SQUARE_1:86,XREAL_1:191;
                 then
-A468:           r*(sqrt 2/2)<r*1 by A7,XREAL_1:70;
-                sqrt ((r/2)^2 + (r/2)^2)
-                =r*((sqrt 2)/2) by A465,A466,SQUARE_1:89;
-
-then sqrt ((r2 - r3)^2 + (s2 - s3)^2)<r by A455,A468,XXREAL_0:2;
-                then dist(u,u0) < r by A456,A457,A467,TOPREAL3:12;
+A310:           r*(sqrt 2/2)<r*1 by A8,XREAL_1:70;
+                (r/2)^2 + (r/2)^2= 2*((r/2)^2)
+                  .=(sqrt 2)^2*((r/2)^2) by SQUARE_1:def 4
+                  .=(r/2*sqrt 2)^2;
                 then
-A469:           u0 in Ball(u,r) by METRIC_1:12;
-                u0 in { |[r1,s1]| : G*(i,1)`1 < r1 & r1 < G*(i+1,1)`1 &
-                G*(1,j)`2 < s1 & s1 < G*(1,j+1)`2 } by A459,A461,A462,A464;
-                then u0 in Y by A293,GOBOARD6:29;
-                hence Y /\ G0 <> {}(TOP-REAL 2) by A7,A469,XBOOLE_0:def 4;
+A311:           sqrt ((r/2)^2 + (r/2)^2) =r*((sqrt 2)/2) by A8,Lm1
+                ,SQUARE_1:89;
+A312:           p`1=r2 & p`2=s2 by A207,EUCLID:56;
+                0<=(rm/2)^2 & 0<=(rm1/2)^2 by XREAL_1:65;
+                then sqrt((rm1/2)^2+(rm/2)^2)<=sqrt((r/2)^2+(r/ 2)^2 ) by
+                A309,SQUARE_1:94;
+                then dist(u,u0) = (Pitag_dist 2).(v,v0) & sqrt ((r2 - r3)^2 +
+                (s2 - s3)^2)<r by A310,A311,METRIC_1:def 1,XXREAL_0:2;
+                then dist(u,u0) < r by A312,A303,TOPREAL3:12;
+                then
+A313:           u0 in Ball(u,r) by METRIC_1:12;
+                G*(1,j)`2+(G*(1,j+1)`2-G*(1,j)`2)/2 <G*(1,j)`2+(G*(1,j+1
+)`2-G*(1,j)`2)/2 +(G*(1,j+1)`2-G*(1,j)`2)/2 by A305,XREAL_1:31,141;
+                then s3<G*(1,j+1)`2 by A295,A302,XXREAL_0:2;
+                then u0 in { |[r1,s1]| : G*(i,1)`1 < r1 & r1 < G*(i+1,1)`1 &
+                G*(1,j)`2 < s1 & s1 < G*(1,j+1)`2 } by A307,A299,A301;
+                then u0 in Y by A206,GOBOARD6:29;
+                hence Y /\ G0 <> {}(TOP-REAL 2) by A9,A313,XBOOLE_0:def 4;
               end;
               case
-A470:           r2=G*(i+1,1)`1 &(G*(1,j)`2 <s2 & s2<G*(1,j+1)`2);
+A314:           r2=G*(i+1,1)`1 & G*(1,j)`2 <s2 & s2<G*(1,j+1)`2;
+                set s3=s2;
                 set rl1=G*(i+1,1)`1 - G*(i,1)`1;
                 set rm1=min(r,rl1);
-A471:           rm1<=r & rm1<=rl1 by XXREAL_0:17;
-A472:           i<i+1 by NAT_1:13;
-A473:           i+1<=len G by A293,NAT_1:13;
-                1<=width G by Th34;
-                then G*(i,1)`1<G*(i+1,1)`1 by A293,A472,A473,GOBOARD5:4;
-                then
-A474:           rl1>0 by XREAL_1:52;
-                then rm1>0 by A7,XXREAL_0:21;
-                then
-A475:           rm1/2>0 by XREAL_1:141;
-A476:           rl1/2>0 by A474,XREAL_1:141;
-A477:           rm1/2<=rl1/2 by A471,XREAL_1:74;
-                rm1/2<=r/2 by A471,XREAL_1:74;
-                then
-A478:           0^2+(rm1/2)^2<=0^2+(r/2)^2 by A475,SQUARE_1:77;
-                0<=(rm1/2)^2 & 0<=0^2 by XREAL_1:65;
-                then
-A479:           sqrt((rm1/2)^2+0^2)<=sqrt((r/2)^2+0^2) by A478,SQUARE_1:94;
                 set r3=r2-rm1/2;
-                set s3=s2;
                 reconsider q0=|[r3,s3]| as Point of TOP-REAL 2;
-A480:           p`1=r2 & p`2=s2 by A294,EUCLID:56;
-A481:           q0`1=r3 & q0`2=s3 by EUCLID:56;
                 reconsider u0=q0 as Point of Euclid 2 by EUCLID:25;
-                reconsider v0=u0 as Element of REAL 2;
-A482:           r*2">0 by A7,XREAL_1:131;
-A483:           r3<r2 by A475,XREAL_1:46;
-A484:           G*(i+1,1)`1-rm1/2>=G*(i+1,1)`1-rl1/2 by A477,XREAL_1:15;
-                G*(i+1,1)`1-(G*(i+1,1)`1-G*(i,1)`1)/2
-                >G*(i+1,1)`1-(G*(i+1,1)`1-G*(i,1)`1)/2
-                -(G*(i+1,1)`1-G*(i,1)`1)/2 by A476,XREAL_1:46;
+A315:           1<=width G by Th34;
+                i<i+1 & i+1<=len G by A206,NAT_1:13;
+                then G*(i,1)`1<G*(i+1,1)`1 by A206,A315,GOBOARD5:4;
                 then
-A485:           r3>G*(i,1)`1 by A470,A484,XXREAL_0:2;
-A486:           (r/2)^2 >=0 by XREAL_1:65;
-A487:           r/2*sqrt 2>=0 by A482,Lm1;
-A488:           (r/2)^2 + (r/2)^2= 2*((r/2)^2)
-                  .=(sqrt 2)^2*((r/2)^2) by SQUARE_1:def 4
-                  .=(r/2*sqrt 2)^2;
-A489:           dist(u,u0) = (Pitag_dist 2).(v,v0) by METRIC_1:def 1;
+A316:           rl1>0 by XREAL_1:52;
+                then
+A317:           rm1>0 by A8,XXREAL_0:21;
+                then
+A318:           r3<r2 by XREAL_1:46,141;
+                rm1/2<=rl1/2 by XREAL_1:74,XXREAL_0:17;
+                then
+A319:           G*(i+1,1)`1-rm1/2>=G*(i+1,1)`1-rl1/2 by XREAL_1:15;
+                G*(i+1,1)`1-(G*(i+1,1)`1-G*(i,1)`1)/2 >G*(i+1,1)`1-(G*(i
++1,1)`1-G*(i,1)`1)/2 -(G*(i+1,1)`1-G*(i,1)`1)/2 by A316,XREAL_1:46,141;
+                then r3>G*(i,1)`1 by A314,A319,XXREAL_0:2;
+                then u0 in { |[r1,s1]| : G*(i,1)`1 < r1 & r1 < G*(i+1,1)`1 &
+                G*(1,j)`2 < s1 & s1 < G* (1,j+1)`2 } by A314,A318;
+                then
+A320:           u0 in Y by A206,GOBOARD6:29;
                 sqrt 2/2<1 by Lm1,SQUARE_1:86,XREAL_1:191;
                 then
-A490:           r*(sqrt 2/2)<r*1 by A7,XREAL_1:70;
-A491:           sqrt ((r/2)^2 + (r/2)^2)
-                =r*((sqrt 2)/2) by A487,A488,SQUARE_1:89;
-                (r/2)^2+0 <=(r/2)^2 + (r/2)^2 by A486,XREAL_1:8;
-                then sqrt((r/2)^2+0^2 )<=sqrt((r/2)^2 + (r/2)^2)
-                by A486,SQUARE_1:94;
-                then sqrt((r/2)^2+0^2)<r by A490,A491,XXREAL_0:2;
-                then sqrt((r2 - r3)^2 + (s2 - s3)^2 )<r by A479,XXREAL_0:2;
-                then dist(u,u0) < r by A480,A481,A489,TOPREAL3:12;
+A321:           r*(sqrt 2/2)<r*1 by A8,XREAL_1:70;
+                reconsider v0=u0 as Element of REAL 2;
+A322:           0<=(rm1/2)^2 by XREAL_1:65;
+                rm1/2<=r/2 by XREAL_1:74,XXREAL_0:17;
+                then 0^2+(rm1/2)^2<=0^2+(r/2)^2 by A317, SQUARE_1:77;
                 then
-A492:           u0 in Ball(u,r) by METRIC_1:12;
-                u0 in { |[r1,s1]| : G*(i,1)`1 < r1 & r1 < G*(i+1,1)`1 &
-                G*(1,j)`2 < s1 & s1 < G* (1,j+1)`2 } by A470,A483,A485;
-                then u0 in Y by A293,GOBOARD6:29;
-                hence Y /\ G0 <> {}(TOP-REAL 2) by A7,A492,XBOOLE_0:def 4;
+A323:           sqrt((rm1/2)^2+0^2)<=sqrt((r/2)^2+0^2) by A322,
+                SQUARE_1:94;
+A324:           q0`1=r3 & q0`2=s3 by EUCLID:56;
+A325:           (r/2)^2 >=0 by XREAL_1:65;
+                then (r/2)^2+0 <=(r/2)^2 + (r/2)^2 by XREAL_1:8;
+                then
+A326:           sqrt
+((r/2)^2+0^2 )<=sqrt((r/2)^2 + (r/2)^2) by A325,SQUARE_1:94;
+                (r/2)^2 + (r/2)^2= 2*((r/2)^2)
+                  .=(sqrt 2)^2*((r/2)^2) by SQUARE_1:def 4
+                  .=(r/2*sqrt 2)^2;
+                then sqrt ((r/2)^2 + (r/2)^2) =r*((sqrt 2)/2) by A8,Lm1
+                ,SQUARE_1:89;
+                then sqrt((r/2)^2+0^2)<r by A321,A326,XXREAL_0:2;
+                then
+A327:           dist(u,u0) = (Pitag_dist 2).(v,v0) & sqrt((r2 - r3)^2 +
+                (s2 - s3)^2 )<r by A323,METRIC_1:def 1,XXREAL_0:2;
+                p`1=r2 & p`2=s2 by A207,EUCLID:56;
+                then dist(u,u0) < r by A324,A327,TOPREAL3:12;
+                then u0 in Ball(u,r) by METRIC_1:12;
+                hence Y /\ G0 <> {}(TOP-REAL 2) by A9,A320,XBOOLE_0:def 4;
               end;
               case
-A493:           r2=G*(i+1,1)`1 & s2=G*(1,j+1)`2;
-                set rl=G*(1,j+1)`2 - G*(1,j)`2;
+A328:           r2=G*(i+1,1)`1 & s2=G*(1,j+1)`2;
                 set rl1=G*(i+1,1)`1 - G*(i,1)`1;
+                set rl=G*(1,j+1)`2 - G*(1,j)`2;
                 set rm=min(r,rl);
                 set rm1=min(r,rl1);
-A494:           rm<=r & rm<=rl by XXREAL_0:17;
-A495:           rm1<=r & rm1<=rl1 by XXREAL_0:17;
-A496:           j<j+1 by NAT_1:13;
-A497:           j+1<=width G by A293,NAT_1:13;
-A498:           i<i+1 by NAT_1:13;
-A499:           i+1<=len G by A293,NAT_1:13;
-                1<=len G by Th34;
-                then G*(1,j)`2<G*(1,j+1)`2 by A293,A496,A497,GOBOARD5:5;
-                then
-A500:           rl>0 by XREAL_1:52;
-                then rm>0 by A7,XXREAL_0:21;
-                then
-A501:           rm/2>0 by XREAL_1:141;
-A502:           rl/2>0 by A500,XREAL_1:141;
-A503:           rm/2<=rl/2 by A494,XREAL_1:74;
-                rm/2<=r/2 by A494,XREAL_1:74;
-                then
-A504:           (rm/2)^2<=(r/2)^2 by A501,SQUARE_1:77;
-                1<=width G by Th34;
-                then G*(i,1)`1<G*(i+1,1)`1 by A293,A498,A499,GOBOARD5:4;
-                then
-A505:           rl1>0 by XREAL_1:52;
-                then rm1>0 by A7,XXREAL_0:21;
-                then
-A506:           rm1/2>0 by XREAL_1:141;
-A507:           rl1/2>0 by A505,XREAL_1:141;
-A508:           rm1/2<=rl1/2 by A495,XREAL_1:74;
-                rm1/2<=r/2 by A495,XREAL_1:74;
-                then (rm1/2)^2<=(r/2)^2 by A506,SQUARE_1:77;
-                then
-A509:           (rm1/2)^2+(rm/2)^2<=(r/2)^2+(r/2)^2 by A504,XREAL_1:9;
-                0<=(rm/2)^2 & 0<=(rm1/2)^2 by XREAL_1:65;
-                then 0+0<=(rm1/2)^2+(rm/2)^2;
-                then
-A510:           sqrt((rm1/2)^2+(rm/2)^2)<=sqrt((r/2)^2+(r/ 2)^2
-                ) by A509,SQUARE_1:94;
                 set r3=r2-rm1/2,s3=s2-rm/2;
-                reconsider q0=|[r3,s3]| as Point of TOP-REAL 2;
-A511:           p`1=r2 & p`2=s2 by A294,EUCLID:56;
-A512:           q0`1=r3 & q0`2=s3 by EUCLID:56;
-                reconsider u0=q0 as Point of Euclid 2 by EUCLID:25;
-                reconsider v0=u0 as Element of REAL 2;
-A513:           r*2">0 by A7,XREAL_1:131;
-                s3<s2 by A501,XREAL_1:46;
+A329:           1<=width G by Th34;
+                i<i+1 & i+1<=len G by A206,NAT_1:13;
+                then G*(i,1)`1<G*(i+1,1)`1 by A206,A329,GOBOARD5:4;
                 then
-A514:           s3<G*(1,j+1)`2 by A294,XXREAL_0:2;
-A515:           G*(1,j+1)`2-rm/2>=G*(1,j+1)`2-rl/2 by A503,XREAL_1:15;
-                G*(1,j+1)`2-(G*(1,j+1)`2-G*(1,j)`2)/2
-                >G*(1,j+1)`2-(G*(1,j+1)`2-G*(1,j)`2)/2
-                -(G*(1,j+1)`2-G*(1,j)`2)/2 by A502,XREAL_1:46;
+A330:           rl1>0 by XREAL_1:52;
                 then
-A516:           s3>G*(1,j)`2 by A493,A515,XXREAL_0:2;
-                r3<r2 by A506,XREAL_1:46;
+A331:           rm1>0 by A8,XXREAL_0:21;
+                then r3<r2 by XREAL_1:46,141;
                 then
-A517:           r3<G*(i+1,1)`1 by A294,XXREAL_0:2;
-A518:           G*(i+1,1)`1-rm1/2>=G*(i+1,1)`1-rl1/2 by A508,XREAL_1:15;
-                G*(i+1,1)`1-(G*(i+1,1)`1-G*(i,1)`1)/2
-                >G*(i+1,1)`1-(G*(i+1,1)`1-G*(i,1)`1)/2
-                -(G*(i+1,1)`1-G*(i,1)`1)/2 by A507,XREAL_1:46;
+A332:           r3<G*(i+1,1)`1 by A209,XXREAL_0:2;
+                rm1/2<=rl1/2 by XREAL_1:74,XXREAL_0:17;
                 then
-A519:           r3>G*(i,1)`1 by A493,A518,XXREAL_0:2;
-A520:           r2-r3=rm1/2;
-A521:           s2-s3=rm/2;
-A522:           r/2*sqrt 2>=0 by A513,Lm1;
-A523:           (r/2)^2 + (r/2)^2= 2*((r/2)^2)
-                  .=(sqrt 2)^2*((r/2)^2) by SQUARE_1:def 4
-                  .=(r/2*sqrt 2)^2;
-A524:           dist(u,u0) = (Pitag_dist 2).(v,v0) by METRIC_1:def 1;
+A333:           G*(i+1,1)`1-rm1/2>=G*(i+1,1)`1-rl1/2 by XREAL_1:15;
+                G*(i+1,1)`1-(G*(i+1,1)`1-G*(i,1)`1)/2 >G*(i+1,1)`1-(G*(i
++1,1)`1-G*(i,1)`1)/2 -(G*(i+1,1)`1-G*(i,1)`1)/2 by A330,XREAL_1:46,141;
+                then
+A334:           r3>G*(i,1)`1 by A328,A333,XXREAL_0:2;
+                rm/2<=rl/2 by XREAL_1:74,XXREAL_0:17;
+                then
+A335:           G*(1,j+1)`2-rm/2>=G*(1,j+1)`2-rl/2 by XREAL_1:15;
                 sqrt 2/2<1 by Lm1,SQUARE_1:86,XREAL_1:191;
                 then
-A525:           r*(sqrt 2/2)<r*1 by A7,XREAL_1:70;
-                sqrt ((r/2)^2 + (r/2)^2)
-                =r*((sqrt 2)/2) by A522,A523,SQUARE_1:89;
-                then sqrt ((rm1/2)^2 + (rm/2)^2)<r by A510,A525,XXREAL_0:2;
-                then dist(u,u0) < r by A511,A512,A520,A521,A524,TOPREAL3:12;
+A336:           r*(sqrt 2/2)<r*1 by A8,XREAL_1:70;
+A337:           p`1=r2 & p`2=s2 by A207,EUCLID:56;
+                (r/2)^2 + (r/2)^2= 2*((r/2)^2)
+                  .=(sqrt 2)^2*((r/2)^2) by SQUARE_1:def 4
+                  .=(r/2*sqrt 2)^2;
                 then
-A526:           u0 in Ball(u,r) by METRIC_1:12;
-                u0 in { |[r1,s1]| : G*(i,1)`1 < r1 & r1 < G*(i+1,1)`1 &
-                G*(1,j)`2 < s1 & s1 < G*(1,j+1)`2 } by A514,A516,A517,A519;
-                then u0 in Y by A293,GOBOARD6:29;
-                hence Y /\ G0 <> {}(TOP-REAL 2) by A7,A526,XBOOLE_0:def 4;
+A338:           sqrt ((r/2)^2 + (r/2)^2) =r*((sqrt 2)/2) by A8,Lm1
+                ,SQUARE_1:89;
+A339:           1<=len G by Th34;
+                rm1/2<=r/2 by XREAL_1:74,XXREAL_0:17;
+                then
+A340:           (rm1/2)^2<=(r/2)^2 by A331,SQUARE_1:77;
+                reconsider q0=|[r3,s3]| as Point of TOP-REAL 2;
+A341:           q0`1=r3 & q0`2=s3 by EUCLID:56;
+                reconsider u0=q0 as Point of Euclid 2 by EUCLID:25;
+                reconsider v0=u0 as Element of REAL 2;
+A342:           r2-r3=rm1/2 & s2-s3=rm/2;
+                j<j+1 & j+1<=width G by A206,NAT_1:13;
+                then G*(1,j)`2<G*(1,j+1)`2 by A206,A339,GOBOARD5:5;
+                then
+A343:           rl>0 by XREAL_1:52;
+                then
+A344:           rm>0 by A8,XXREAL_0:21;
+                then s3<s2 by XREAL_1:46,141;
+                then
+A345:           s3<G*(1,j+1)`2 by A211,XXREAL_0:2;
+                rm/2<=r/2 by XREAL_1:74,XXREAL_0:17;
+                then (rm/2)^2<=(r/2)^2 by A344,SQUARE_1:77;
+                then
+A346:           (rm1/2)^2+(rm/2)^2<=(r/2)^2+(r/2)^2 by A340,
+                XREAL_1:9;
+                0<=(rm/2)^2 & 0<=(rm1/2)^2 by XREAL_1:65;
+                then sqrt((rm1/2)^2+(rm/2)^2)<=sqrt((r/2)^2+(r/ 2)^2 ) by
+                A346,SQUARE_1:94;
+                then dist(u,u0) = (Pitag_dist 2).(v,v0) & sqrt ((rm1/2)^2 + (
+                rm/2)^2)<r by A336,A338,METRIC_1:def 1,XXREAL_0:2;
+                then dist(u,u0) < r by A337,A341,A342,TOPREAL3:12;
+                then
+A347:           u0 in Ball(u,r) by METRIC_1:12;
+                G*(1,j+1)`2-(G*(1,j+1)`2-G*(1,j)`2)/2 >G*(1,j+1)`2-(G*(1
+,j+1)`2-G*(1,j)`2)/2 -(G*(1,j+1)`2-G*(1,j)`2)/2 by A343,XREAL_1:46,141;
+                then s3>G*(1,j)`2 by A328,A335,XXREAL_0:2;
+                then u0 in { |[r1,s1]| : G*(i,1)`1 < r1 & r1 < G*(i+1,1)`1 &
+                G*(1,j)`2 < s1 & s1 < G*(1,j+1)`2 } by A345,A332,A334;
+                then u0 in Y by A206,GOBOARD6:29;
+                hence Y /\ G0 <> {}(TOP-REAL 2) by A9,A347,XBOOLE_0:def 4;
               end;
             end;
             hence Y /\ G0 <> {}(TOP-REAL 2);
@@ -2735,6 +2700,9 @@ A526:           u0 in Ball(u,r) by METRIC_1:12;
     end;
     hence thesis by PRE_TOPC:def 13;
   end;
-  hence thesis by A3,XBOOLE_0:def 10;
+  Cl Y c= Cl cell(G,i,j) & cell(G,i,j) is closed by Th33,PRE_TOPC:49 ,
+  TOPS_1:44;
+  then Cl Y c= cell(G,i,j) by PRE_TOPC:52;
+  hence thesis by A2,XBOOLE_0:def 10;
 end;
 

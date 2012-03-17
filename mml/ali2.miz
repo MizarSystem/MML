@@ -14,9 +14,8 @@ environ
       PCOMPS_1, TOPS_2, VALUED_1, SEQ_1, SEQ_2, XXREAL_0, REAL_1, NAT_1;
  constructors SETFAM_1, FUNCOP_1, FINSET_1, XXREAL_0, REAL_1, NAT_1, SEQ_2,
       POWER, TOPS_2, COMPTS_1, PCOMPS_1, SEQ_1, VALUED_1, PARTFUN1;
- registrations XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XXREAL_0, MEMBERED,
-      SEQM_3, STRUCT_0, METRIC_1, PCOMPS_1, VALUED_1, FUNCT_2, FUNCOP_1, SEQ_4,
-      XREAL_0;
+ registrations SUBSET_1, ORDINAL1, NUMBERS, XXREAL_0, MEMBERED, STRUCT_0,
+      METRIC_1, PCOMPS_1, VALUED_1, FUNCT_2, FUNCOP_1, SEQ_4, XREAL_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions COMPTS_1, TARSKI, TOPS_2, ORDINAL1, XBOOLE_0, SUBSET_1, FINSET_1;
  theorems METRIC_1, SUBSET_1, PCOMPS_1, COMPTS_1, POWER, SEQ_2, SEQ_4,
@@ -32,8 +31,8 @@ definition
   let M be non empty MetrSpace;
   mode contraction of M -> Function of M, M means
     :Def1:
-    ex L being Real st 0 < L & L < 1 &
-    for x,y being Point of M holds dist(it.x,it.y) <= L*dist(x,y);
+    ex L being Real st 0
+< L & L < 1 & for x,y being Point of M holds dist(it.x,it.y) <= L*dist(x,y);
   existence
   proof
     consider x being Point of M;
@@ -43,244 +42,267 @@ definition
     let z,y be Point of M;
     f.z=x & f.y=x by FUNCOP_1:13;
     then
-A2: dist(f.z,f.y) = 0 by METRIC_1:1;
+A1: dist(f.z,f.y) = 0 by METRIC_1:1;
     dist(z,y)>=0 by METRIC_1:5;
-    hence thesis by A2;
+    hence thesis by A1;
   end;
 end;
 
 canceled;
 
 theorem
-  for f being contraction of M st TopSpaceMetr(M) is compact
-  ex c being Point of M st f.c =c &            :: exists a fix point
-  for x being Point of M st f.x=x holds x=c    :: exactly 1 fix point
+  for f being contraction of M st TopSpaceMetr(M) is compact ex c being
+  Point of M st f.c =c & for x being Point of M st f.x=x holds x=c
 proof
   let f be contraction of M;
-  consider L being Real such that
-A1: 0<L & L<1 and
-A2: for x,y being Point of M holds dist(f.x,f.y)<=L*dist(x,y) by Def1;
-  assume
-A3: TopSpaceMetr(M) is compact;
   consider x0 being Point of M;
   set a=dist(x0,f.x0);
+  consider L being Real such that
+A1: 0<L and
+A2: L<1 and
+A3: for x,y being Point of M holds dist(f.x,f.y)<=L*dist(x,y) by Def1;
+  assume
+A4: TopSpaceMetr(M) is compact;
   now
-    assume a <> 0;
-    defpred P[set] means
-    ex n being Element of NAT st $1 = { x where x is Point of M :
-    dist(x,f.x) <= a*L to_power n};
+    deffunc F(Element of NAT) = L to_power ($1+1);
+    defpred P[set] means ex n being Element of NAT st $1 = { x where x is
+    Point of M : dist(x,f.x) <= a*L to_power n};
+    assume
+    a <> 0;
     consider F being Subset-Family of TopSpaceMetr(M) such that
-A4: for B being Subset of TopSpaceMetr(M) holds
-    B in F iff P[B] from SUBSET_1:sch 3;
-A5: TopSpaceMetr(M)=TopStruct (#the carrier of M,Family_open_set(M)#)
-    by PCOMPS_1:def 6;
+A5: for B being Subset of TopSpaceMetr(M) holds B in F iff P[B] from
+    SUBSET_1:sch 3;
     defpred P[Point of M] means dist($1,f.($1)) <= a*L to_power (0+1);
-A6: {x where x is Point of M:P[x]}is Subset of M from DOMAIN_1:sch 7;
-A7: F is centered
+A6: F is closed
     proof
-      thus F <> {} by A4,A5,A6;
+      let B be Subset of TopSpaceMetr(M);
+A7:   TopSpaceMetr(M)=TopStruct (#the carrier of M,Family_open_set(M)#)
+      by PCOMPS_1:def 6;
+      then reconsider V = B` as Subset of M;
+      assume
+      B in F;
+      then consider n being Element of NAT such that
+A8:   B= { x where x is Point of M : dist(x,f.x) <= a*L to_power n}
+      by A5;
+      for x being Point of M st x in V ex r being Real st r>0 & Ball(x,r)
+      c= V
+      proof
+        let x be Point of M;
+        assume
+        x in V;
+        then not x in B by XBOOLE_0:def 5;
+        then dist(x,f.x)>a*L to_power n by A8;
+        then
+A9:     dist(x,f.x)-a*L to_power n>0 by XREAL_1:52;
+        take r = (dist(x,f.x)-a*L to_power n)/2;
+        thus r>0 by A9,XREAL_1:217;
+        let z be set;
+        assume
+A10:    z in Ball(x,r);
+        then reconsider y=z as Point of M;
+        dist(x,y)<r by A10,METRIC_1:12;
+        then 2*dist(x,y)<2*r by XREAL_1:70;
+        then
+A11:    dist(y,f.y) + 2*dist(x,y)< dist(y,f.y) + 2*r by XREAL_1:8;
+        dist(x,y) + dist(y,f.y) >= dist(x,f.y) by METRIC_1:4;
+        then
+A12:    (dist(x,y) + dist(y,f.y)) + dist(f.y,f.x) >= dist(x,f.y) + dist(f
+        .y,f.x) by XREAL_1:8;
+        dist(f.y,f.x)<=L*dist(y,x) & L*dist(y,x)<=dist(y,x) by A2,A3,
+        METRIC_1:5 ,XREAL_1:155;
+        then dist(f.y,f.x)<=dist(y,x) by XXREAL_0:2;
+        then dist(f.y,f.x)+dist(y,x) <= dist(y,x)+dist(y,x) by
+        XREAL_1:8;
+        then
+A13:    dist(y,f.y) + (dist(y,x) + dist(f.y,f.x)) <= dist(y,f.y) + 2*dist
+        (y,x) by XREAL_1:9;
+        dist(x,f.y) + dist(f.y,f.x) >= dist(x,f.x) by METRIC_1:4;
+        then dist(y,f.y)+dist(x,y)+dist(f.y,f.x)>=dist(x,f.x) by A12,
+        XXREAL_0:2;
+        then dist(y,f.y)+2*dist(x,y)>=dist(x,f.x) by A13,XXREAL_0:2;
+        then
+        dist(x,f.x)-2*r = a*L to_power n & dist(y,f.y)+2*r>dist(x,f.x) by
+        A11, XXREAL_0:2;
+        then
+        not ex x being Point of M st y = x & dist(x,f.x)<= a*L to_power n
+        by XREAL_1:21;
+        then not y in B by A8;
+        hence thesis by A7,SUBSET_1:50;
+      end;
+      then B` in Family_open_set(M) by PCOMPS_1:def 5;
+      then B` is open by A7,PRE_TOPC:def 5;
+      hence thesis by TOPS_1:29;
+    end;
+A14: TopSpaceMetr(M)=TopStruct (#the carrier of M,Family_open_set(M)#) by
+    PCOMPS_1:def 6;
+A15: {x where x is Point of M:P[x]}is Subset of M from DOMAIN_1:sch 7;
+    F is centered
+    proof
+      thus F <> {} by A5,A14,A15;
+      defpred P[Element of NAT] means { x where x is Point of M : dist(x,f.x)
+      <= a*L to_power $1}<>{};
       let G be set such that
-A8:   G <> {} and
-A9:   G c= F and
-A10:  G is finite;
+A16:  G <> {} and
+A17:  G c= F and
+A18:  G is finite;
       G is c=-linear
       proof
         let B,C be set;
-        assume B in G & C in G;
-        then
-A11:    B in F & C in F by A9;
+        assume that
+A19:    B in G and
+A20:    C in G;
+        B in F by A17,A19;
         then consider n being Element of NAT such that
-A12:    B= { x where x is Point of M : dist(x,f.x) <= a*L to_power n} by A4;
-        consider m being Element of NAT such that
-A13:    C= { x where x is Point of M :
-        dist(x,f.x) <= a*L to_power m} by A4,A11;
-A14:    for n,m being Element of NAT st n<=m holds L to_power m <= L to_power n
+A21:    B= { x where x is Point of M : dist(x,f.x) <= a*L to_power n}
+        by A5;
+        C in F by A17,A20;
+        then consider m being Element of NAT such that
+A22:    C= { x where x is Point of M : dist(x,f.x) <= a*L to_power m}
+        by A5;
+A23:    for n,m being Element of NAT st n<=m holds L to_power m <= L
+        to_power n
         proof
           let n,m be Element of NAT such that
-A15:      n<=m;
-          per cases by A15,XXREAL_0:1;
-          suppose n<m;
-            hence thesis by A1,POWER:45;
+A24:      n<=m;
+          per cases by A24,XXREAL_0:1;
+          suppose
+            n<m;
+            hence thesis by A1,A2,POWER:45;
           end;
-          suppose n=m;
+          suppose
+            n=m;
             hence thesis;
           end;
         end;
-A16:    for n,m being Element of NAT st n<=m
-        holds a*L to_power m <= a*L to_power n
+A25:    for n,m being Element of NAT st n<=m holds a*L to_power m <= a*L
+        to_power n
         proof
-          let n,m be Element of NAT such that
-A17:      n<=m;
-          a>=0 by METRIC_1:5;
-          hence thesis by A14,A17,XREAL_1:66;
+A26:      a>=0 by METRIC_1:5;
+          let n,m be Element of NAT;
+          assume
+          n<=m;
+          hence thesis by A23,A26,XREAL_1:66;
         end;
-        now per cases;
+        now
+          per cases;
           case
-A18:        n<=m;
+A27:        n<=m;
             thus C c= B
             proof
               let y be set;
-              assume y in C;
+              assume
+              y in C;
               then consider x being Point of M such that
-A19:          y = x and
-A20:          dist(x,f.x) <= a*L to_power m by A13;
-              a*L to_power m <= a*L to_power n by A16,A18;
-              then dist(x,f.x) <= a*L to_power n by A20,XXREAL_0:2;
-              hence thesis by A12,A19;
+A28:          y = x and
+A29:          dist(x,f.x) <= a*L to_power m by A22;
+              a*L to_power m <= a*L to_power n by A25,A27;
+              then dist(x,f.x) <= a*L to_power n by A29,XXREAL_0:2;
+              hence thesis by A21,A28;
             end;
           end;
           case
-A21:        m<=n;
+A30:        m<=n;
             thus B c= C
             proof
               let y be set;
-              assume y in B;
+              assume
+              y in B;
               then consider x being Point of M such that
-A22:          y = x and
-A23:          dist(x,f.x) <= a*L to_power n by A12;
-              a*L to_power n <= a*L to_power m by A16,A21;
-              then dist(x,f.x) <= a*L to_power m by A23,XXREAL_0:2;
-              hence thesis by A13,A22;
+A31:          y = x and
+A32:          dist(x,f.x) <= a*L to_power n by A21;
+              a*L to_power n <= a*L to_power m by A25,A30;
+              then dist(x,f.x) <= a*L to_power m by A32,XXREAL_0:2;
+              hence thesis by A22,A31;
             end;
           end;
         end;
         hence B c= C or C c= B;
       end;
       then consider m being set such that
-A24:  m in G and
-A25:  for C being set st C in G holds m c= C by A8,A10,FINSET_1:30;
-A26:  m c= meet G by A8,A25,SETFAM_1:6;
-A27:  m in F by A9,A24;
-      defpred P[Element of NAT] means
-      { x where x is Point of M : dist(x,f.x) <= a*L to_power $1}<>{};
+A33:  m in G and
+A34:  for C being set st C in G holds m c= C by A16,A18,FINSET_1:
+      30;
+A35:  m c= meet G by A16,A34,SETFAM_1:6;
+A36:  for k being Element of NAT st P[k] holds P[k+1]
+      proof
+        let k be Element of NAT;
+        consider z being Element of { x where x is Point of M : dist(x,f.x) <=
+        a*L to_power k};
+A37:    L*(a*L to_power k)=a*(L*L to_power k)
+          .=a*(L to_power k*L to_power 1) by POWER:30
+          .= a*L to_power (k+1) by A1,POWER:32;
+        assume
+        { x where x is Point of M : dist(x,f.x) <= a*L to_power k}<>
+        {};
+        then z in { x where x is Point of M : dist(x,f.x) <= a*L to_power k};
+        then consider y being Point of M such that
+        y=z and
+A38:    dist(y,f.y)<= a*L to_power k;
+A39:    dist(f.y,f.(f.y)) <= L*dist(y,f.y) by A3;
+        L*dist(y,f.y) <= L*(a*L to_power k) by A1,A38,XREAL_1:66;
+        then dist(f.y,f.(f.y)) <= a*L to_power (k+1) by
+        A37,A39,XXREAL_0:2;
+        then
+        f.y in { x where x is Point of M : dist(x,f.x) <= a*L to_power (k
+        +1)};
+        hence thesis;
+      end;
       dist(x0,f.x0) = a*1
         .= a*L to_power 0 by POWER:29;
       then x0 in { x where x is Point of M : dist(x,f.x) <= a*L to_power 0};
       then
-A28:  P[0];
-A29:  for k being Element of NAT st P[k] holds P[k+1]
-      proof
-        let k be Element of NAT;
-        consider z being Element of
-        { x where x is Point of M : dist(x,f.x) <= a*L to_power k};
-        assume { x where x is Point of M : dist(x,f.x) <= a*L to_power k}<>{};
-        then z in { x where x is Point of M : dist(x,f.x) <= a*L to_power k};
-        then consider y being Point of M such that y=z and
-A30:    dist(y,f.y)<= a*L to_power k;
-A31:    L*dist(y,f.y) <= L*(a*L to_power k) by A1,A30,XREAL_1:66;
-A32:    L*(a*L to_power k)=a*(L*L to_power k)
-          .=a*(L to_power k*L to_power 1) by POWER:30
-          .= a*L to_power (k+1) by A1,POWER:32;
-        dist(f.y,f.(f.y)) <= L*dist(y,f.y) by A2;
-        then dist(f.y,f.(f.y)) <= a*L to_power (k+1) by A31,A32,XXREAL_0:2;
-
-then f.y in { x where x is Point of M : dist(x,f.x) <= a*L to_power (k+1)};
-
-hence thesis;
-      end;
-      for k being Element of NAT holds P[k] from NAT_1:sch 1(A28,A29);
-      then m <> {} by A4,A27;
-      hence thesis by A26;
+A40:  P[0];
+A41:  for k being Element of NAT holds P[k] from NAT_1:sch 1(A40,A36);
+      m in F by A17,A33;
+      then m <> {} by A5,A41;
+      hence thesis by A35;
     end;
-    F is closed
-    proof
-      let B be Subset of TopSpaceMetr(M);
-      assume B in F;
-      then consider n being Element of NAT such that
-A33:  B= { x where x is Point of M : dist(x,f.x) <= a*L to_power n} by A4;
-A34:  TopSpaceMetr(M)=TopStruct (#the carrier of M,Family_open_set(M)#)
-      by PCOMPS_1:def 6;
-      then reconsider V = B` as Subset of M;
-      for x being Point of M st x in V ex r being Real st r>0 & Ball(x,r) c= V
-      proof
-        let x be Point of M such that
-A35:    x in V;
-        take r = (dist(x,f.x)-a*L to_power n)/2;
-A36:    dist(x,f.x)-2*r = a*L to_power n;
-        not x in B by A35,XBOOLE_0:def 5;
-        then dist(x,f.x)>a*L to_power n by A33;
-        then dist(x,f.x)-a*L to_power n>0 by XREAL_1:52;
-        hence r>0 by XREAL_1:217;
-        let z be set;
-        assume
-A37:    z in Ball(x,r);
-        then reconsider y=z as Point of M;
-A38:    dist(x,y)<r by A37,METRIC_1:12;
-        dist(x,y) + dist(y,f.y) >= dist(x,f.y) by METRIC_1:4;
-        then
-A39:    (dist(x,y) + dist(y,f.y)) + dist(f.y,f.x) >=
-        dist(x,f.y) + dist(f.y,f.x) by XREAL_1:8;
-        dist(x,f.y) + dist(f.y,f.x) >= dist(x,f.x) by METRIC_1:4;
-        then
-A40:    dist(y,f.y)+dist(x,y)+dist(f.y,f.x)>=dist(x,f.x) by A39,XXREAL_0:2;
-A41:    dist(f.y,f.x)<=L*dist(y,x) by A2;
-        L*dist(y,x)<=dist(y,x) by A1,METRIC_1:5,XREAL_1:155;
-        then dist(f.y,f.x)<=dist(y,x) by A41,XXREAL_0:2;
-        then
-A42:    dist(f.y,f.x)+dist(y,x) <= dist(y,x)+dist(y,x) by XREAL_1:8;
-        2*dist(x,y)<2*r by A38,XREAL_1:70;
-        then
-A43:    dist(y,f.y) + 2*dist(x,y)< dist(y,f.y) + 2*r by XREAL_1:8;
-        dist(y,f.y) + (dist(y,x) + dist(f.y,f.x)) <=
-        dist(y,f.y) + 2*dist(y,x) by A42,XREAL_1:9;
-        then dist(y,f.y)+2*dist(x,y)>=dist(x,f.x) by A40,XXREAL_0:2;
-        then dist(y,f.y)+2*r>dist(x,f.x) by A43,XXREAL_0:2;
-
-then not ex x being Point of M st y = x & dist(x,f.x)<= a*L to_power n by A36,
-XREAL_1:21;
-        then not y in B by A33;
-        hence thesis by A34,SUBSET_1:50;
-      end;
-      then B` in Family_open_set(M) by PCOMPS_1:def 5;
-      then B` is open by A34,PRE_TOPC:def 5;
-      hence thesis by TOPS_1:29;
-    end;
-    then meet F <> {} by A3,A7,COMPTS_1:13;
+    then meet F <> {} by A4,A6,COMPTS_1:13;
     then consider c' being Point of TopSpaceMetr(M) such that
-A44: c' in meet F by SUBSET_1:10;
-    reconsider c = c' as Point of M by A5;
-    deffunc F(Element of NAT) = L to_power ($1+1);
-    consider s' being Real_Sequence such that
-A45: for n being Element of NAT holds s'.n= F(n) from SEQ_1:sch 1;
-    set s = a (#) s';
-A46: s' is convergent & lim s'=0 by A1,A45,SERIES_1:1;
-
-A47: s is convergent by A1,A45,SEQ_2:21,SERIES_1:1;
-A48: lim s = a*0 by A46,SEQ_2:22
-      .= 0;
+A42: c' in meet F by SUBSET_1:10;
+    reconsider c = c' as Point of M by A14;
     reconsider r = NAT --> dist(c,f.c) as Real_Sequence;
-    now
+    consider s' being Real_Sequence such that
+A43: for n being Element of NAT holds s'.n= F(n) from SEQ_1:sch 1;
+    set s = a (#) s';
+    lim s'=0 by A1,A2,A43,SERIES_1:1;
+    then
+A44: lim s = a*0 by A1,A2,A43,SEQ_2:22,SERIES_1:1
+      .= 0;
+A45: now
       let n be Element of NAT;
       defpred P[Point of M] means dist($1,f.$1) <= a*L to_power (n+1);
       set B = { x where x is Point of M : P[x]};
       B is Subset of M from DOMAIN_1:sch 7;
-      then B in F by A4,A5;
-      then c in B by A44,SETFAM_1:def 1;
+      then B in F by A5,A14;
+      then c in B by A42,SETFAM_1:def 1;
       then
-A50:  ex x being Point of M st c = x & dist(x,f.x) <= a*L to_power ( n+1 );
+A46:  ex x being Point of M st c = x & dist(x,f.x) <= a*L to_power ( n+1
+      );
       s.n = a*s'.n by SEQ_1:13
-        .= a*L to_power (n+1) by A45;
-      hence r.n <= s.n by A50,FUNCOP_1:13;
+        .= a*L to_power (n+1) by A43;
+      hence r.n <= s.n by A46,FUNCOP_1:13;
     end;
+    s is convergent by A1,A2,A43,SEQ_2:21,SERIES_1:1;
     then
-A51: lim r <= lim s by A47,SEQ_2:32;
+A47: lim r <= lim s by A45,SEQ_2:32;
     r.0=dist(c,f.c) by FUNCOP_1:13;
-    then dist(c,f.c)<=0 & dist(c,f.c)>=0 by A48,A51,METRIC_1:5,SEQ_4:40;
-    then dist(c,f.c)=0;
+    then dist(c,f.c)<=0 by A44,A47,SEQ_4:40;
+    then dist(c,f.c)=0 by METRIC_1:5;
     hence ex c being Point of M st dist(c,f.c) = 0;
   end;
   then consider c being Point of M such that
-A52: dist(c,f.c) = 0;
-  take c; thus
-A53: f.c =c by A52,METRIC_1:2;
+A48: dist(c,f.c) = 0;
+  take c;
+  thus
+A49: f.c =c by A48,METRIC_1:2;
   let x be Point of M;
   assume
-A54: f.x=x;
-  assume x<>c;
-  then
-A55: dist(x,c)<>0 by METRIC_1:2;
-  dist(x,c)>=0 by METRIC_1:5;
-  then L*dist(x,c)<dist(x,c) by A1,A55,XREAL_1:159;
-  hence contradiction by A2,A53,A54;
+A50: f.x=x;
+A51: dist(x,c)>=0 by METRIC_1:5;
+  assume
+  x<>c;
+  then dist(x,c)<>0 by METRIC_1:2;
+  then L*dist(x,c)<dist(x,c) by A2,A51,XREAL_1:159;
+  hence contradiction by A3,A49,A50;
 end;
-

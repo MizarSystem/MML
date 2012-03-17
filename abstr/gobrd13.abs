@@ -7,19 +7,20 @@
 environ
 
  vocabularies FINSEQ_1, FINSEQ_2, EUCLID, FUNCT_1, PROB_1, FUNCT_6, RELAT_1,
-      MATRLIN, PRALG_1, TARSKI, FINSET_1, MATRIX_1, TREES_1, CARD_1, CARD_2,
-      GOBOARD1, MCART_1, ARYTM_1, GOBOARD5, GOBOARD2, PRE_TOPC, BOOLE,
-      TOPREAL1, ABSVALUE, RFINSEQ, GOBRD13, FINSEQ_4, ARYTM;
+      TARSKI, FINSET_1, MATRIX_1, TREES_1, CARD_1, CARD_2, GOBOARD1, MCART_1,
+      ARYTM_1, GOBOARD5, GOBOARD2, PRE_TOPC, BOOLE, TOPREAL1, ABSVALUE,
+      RFINSEQ, GOBRD13, FINSEQ_4, ARYTM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, REAL_1,
       NAT_1, COMPLEX1, NAT_D, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, CARD_1,
-      CARD_2, FINSEQ_1, FINSEQ_2, MATRLIN, FINSET_1, CARD_3, FUNCT_6, RFINSEQ,
-      XXREAL_0, STRUCT_0, MATRIX_1, FUNCOP_1, PRE_TOPC, RLTOPSP1, EUCLID,
-      TOPREAL1, GOBOARD1, GOBOARD2, GOBOARD5;
+      CARD_2, FINSEQ_1, FINSEQ_2, FINSET_1, CARD_3, FUNCT_6, RFINSEQ, XXREAL_0,
+      STRUCT_0, MATRIX_1, PRE_TOPC, RLTOPSP1, EUCLID, TOPREAL1, GOBOARD1,
+      GOBOARD2, GOBOARD5;
  constructors XXREAL_0, NAT_1, COMPLEX1, CARD_2, CARD_3, FUNCT_6, RFINSEQ,
       NAT_D, GOBOARD2, GOBOARD5, MATRLIN, SEQ_1, WELLORD2, REAL_1, GOBOARD1,
       RELSET_1;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, XREAL_0, CARD_1, MEMBERED,
-      FINSEQ_1, STRUCT_0, EUCLID, GOBOARD2, GOBOARD5, VALUED_0, FINSET_1;
+      FINSEQ_1, STRUCT_0, EUCLID, GOBOARD2, GOBOARD5, VALUED_0, FINSET_1,
+      PRE_POLY;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
 
 
@@ -42,27 +43,17 @@ definition
   let F be Function;
   func Values F -> set equals
 :: GOBRD13:def 1
-
   Union rngs F;
 end;
 
 theorem :: GOBRD13:1
   for M being FinSequence of D* holds M.i is FinSequence of D;
 
-registration
-  let D be set;
-  cluster -> FinSequence-yielding FinSequence of D*;
-end;
-
-registration
-  cluster FinSequence-yielding -> Function-yielding Function;
-end;
-
 canceled;
 
 theorem :: GOBRD13:3
-  for M being FinSequence of D*
-  holds Values M = union {rng f where f is Element of D*: f in rng M};
+  for M being FinSequence of D* holds Values M = union {rng f where
+  f is Element of D*: f in rng M};
 
 registration
   let D be non empty set, M be FinSequence of D*;
@@ -70,268 +61,241 @@ registration
 end;
 
 theorem :: GOBRD13:4
-  for M being Matrix of D st i in dom M & M.i = f holds len f = width M;
+  for M being Matrix of D st i in dom M & M.i = f holds len f =
+  width M;
 
 theorem :: GOBRD13:5
   for M being Matrix of D st i in dom M & M.i = f & j in dom f
   holds [i,j] in Indices M;
 
 theorem :: GOBRD13:6
-  for M being Matrix of D st [i,j] in Indices M & M.i = f
-  holds len f = width M & j in dom f;
+  for M being Matrix of D st [i,j] in Indices M & M.i = f holds len
+  f = width M & j in dom f;
 
 theorem :: GOBRD13:7
-  for M being Matrix of D holds Values M = { M*(i,j): [i,j] in Indices M };
+  for M being Matrix of D holds Values M = { M*(i,j): [i,j] in
+  Indices M };
 
 theorem :: GOBRD13:8
-  for D being non empty set, M being Matrix of D holds
-  card Values M <= (len M)*(width M);
+  for D being non empty set, M being Matrix of D holds card Values M <=
+  (len M)*(width M);
 
 reserve f for FinSequence of TOP-REAL 2,
   G for Go-board;
 
 theorem :: GOBRD13:9
-  for G being Matrix of TOP-REAL 2 holds
-  f is_sequence_on G implies rng f c= Values G;
+  for G being Matrix of TOP-REAL 2 holds f is_sequence_on G implies rng
+  f c= Values G;
 
 theorem :: GOBRD13:10
-  for G1,G2 being Go-board st Values G1 c= Values G2 &
-  [i1,j1] in Indices G1 & 1 <= j2 & j2 <= width G2 & G1*(i1,j1) = G2*(1,j2)
-  holds i1 = 1;
+  for G1,G2 being Go-board st Values G1 c= Values G2 & [i1,j1] in
+  Indices G1 & 1 <= j2 & j2 <= width G2 & G1*(i1,j1) = G2*(1,j2) holds i1 = 1;
 
 theorem :: GOBRD13:11
-  for G1,G2 being Go-board st Values G1 c= Values G2 &
-  [i1,j1] in Indices G1 & 1 <= j2 & j2 <= width G2 &
-  G1*(i1,j1) = G2*(len G2,j2) holds i1 = len G1;
+  for G1,G2 being Go-board st Values G1 c= Values G2 & [i1,j1] in
+Indices G1 & 1 <= j2 & j2 <= width G2 & G1*(i1,j1) = G2*(len G2,j2) holds i1 =
+  len G1;
 
 theorem :: GOBRD13:12
-  for G1,G2 being Go-board st Values G1 c= Values G2 &
-  [i1,j1] in Indices G1 & 1 <= i2 & i2 <= len G2 & G1*(i1,j1) = G2*(i2,1)
-  holds j1 = 1;
+  for G1,G2 being Go-board st Values G1 c= Values G2 & [i1,j1] in
+  Indices G1 & 1 <= i2 & i2 <= len G2 & G1*(i1,j1) = G2*(i2,1) holds j1 = 1;
 
 theorem :: GOBRD13:13
-  for G1,G2 being Go-board st Values G1 c= Values G2 &
-  [i1,j1] in Indices G1 & 1 <= i2 & i2 <= len G2 &
-  G1*(i1,j1) = G2*(i2,width G2) holds j1 = width G1;
+  for G1,G2 being Go-board st Values G1 c= Values G2 & [i1,j1] in
+Indices G1 & 1 <= i2 & i2 <= len G2 & G1*(i1,j1) = G2*(i2,width G2) holds j1 =
+  width G1;
 
 theorem :: GOBRD13:14
-  for G1,G2 being Go-board st Values G1 c= Values G2 &
-  1 <= i1 & i1 < len G1 & 1 <= j1 & j1 <= width G1 &
-  1 <= i2 & i2 < len G2 & 1 <= j2 & j2 <= width G2 & G1*(i1,j1) = G2*(i2,j2)
-  holds G2*(i2+1,j2)`1 <= G1*(i1+1,j1)`1;
+  for G1,G2 being Go-board st Values G1 c= Values G2 & 1 <= i1 &
+  i1 < len G1 & 1 <= j1 & j1 <= width G1 & 1 <= i2 & i2 < len G2 & 1 <= j2 & j2
+  <= width G2 & G1*(i1,j1) = G2*(i2,j2) holds G2*(i2+1,j2)`1 <= G1*(i1+1,j1)`1;
 
 theorem :: GOBRD13:15
-  for G1,G2 being Go-board st G1*(i1-'1,j1) in Values G2 &
-  1 < i1 & i1 <= len G1 & 1 <= j1 & j1 <= width G1 &
-  1 < i2 & i2 <= len G2 & 1 <= j2 & j2 <= width G2 & G1*(i1,j1) = G2*(i2,j2)
-  holds G1*(i1-'1,j1)`1 <= G2*(i2-'1,j2)`1;
+  for G1,G2 being Go-board st G1*(i1-'1,j1) in Values G2 & 1 < i1
+  & i1 <= len G1 & 1 <= j1 & j1 <= width G1 & 1 < i2 & i2 <= len G2 & 1 <= j2 &
+j2 <= width G2 & G1*(i1,j1) = G2*(i2,j2) holds G1*(i1-'1,j1)`1 <= G2*(i2-'1,j2)
+  `1;
 
 theorem :: GOBRD13:16
-  for G1,G2 being Go-board st G1*(i1,j1+1) in Values G2 &
-  1 <= i1 & i1 <= len G1 & 1 <= j1 & j1 < width G1 &
-  1 <= i2 & i2 <= len G2 & 1 <= j2 & j2 < width G2 & G1*(i1,j1) = G2*(i2,j2)
-  holds G2*(i2,j2+1)`2 <= G1*(i1,j1+1)`2;
+  for G1,G2 being Go-board st G1*(i1,j1+1) in Values G2 & 1 <= i1
+  & i1 <= len G1 & 1 <= j1 & j1 < width G1 & 1 <= i2 & i2 <= len G2 & 1 <= j2 &
+j2 < width G2 & G1*(i1,j1) = G2*(i2,j2) holds G2*(i2,j2+1)`2 <= G1*(i1,j1+1)`2;
 
 theorem :: GOBRD13:17
-  for G1,G2 being Go-board st Values G1 c= Values G2 &
-  1 <= i1 & i1 <= len G1 & 1 < j1 & j1 <= width G1 &
-  1 <= i2 & i2 <= len G2 & 1 < j2 & j2 <= width G2 & G1*(i1,j1) = G2*(i2,j2)
-  holds G1*(i1,j1-'1)`2 <= G2*(i2,j2-'1)`2;
+  for G1,G2 being Go-board st Values G1 c= Values G2 & 1 <= i1 &
+  i1 <= len G1 & 1 < j1 & j1 <= width G1 & 1 <= i2 & i2 <= len G2 & 1 < j2 & j2
+<= width G2 & G1*(i1,j1) = G2*(i2,j2) holds G1*(i1,j1-'1)`2 <= G2*(i2,j2-'1)`2;
 
 theorem :: GOBRD13:18
-  for G1,G2 being Go-board st Values G1 c= Values G2 &
-  [i1,j1] in Indices G1 & [i2,j2] in Indices G2 & G1*(i1,j1) = G2*(i2,j2)
-  holds cell(G2,i2,j2) c= cell(G1,i1,j1);
+  for G1,G2 being Go-board st Values G1 c= Values G2 & [i1,j1] in
+Indices G1 & [i2,j2] in Indices G2 & G1*(i1,j1) = G2*(i2,j2) holds cell(G2,i2,
+  j2) c= cell(G1,i1,j1);
 
 theorem :: GOBRD13:19
-  for G1,G2 being Go-board st Values G1 c= Values G2 &
-  [i1,j1] in Indices G1 & [i2,j2] in Indices G2 & G1*(i1,j1) = G2*(i2,j2)
-  holds cell(G2,i2-'1,j2) c= cell(G1,i1-'1,j1);
+  for G1,G2 being Go-board st Values G1 c= Values G2 & [i1,j1] in
+Indices G1 & [i2,j2] in Indices G2 & G1*(i1,j1) = G2*(i2,j2) holds cell(G2,i2-'
+  1,j2) c= cell(G1,i1-'1,j1);
 
 theorem :: GOBRD13:20
-  for G1,G2 being Go-board st Values G1 c= Values G2 &
-  [i1,j1] in Indices G1 & [i2,j2] in Indices G2 & G1*(i1,j1) = G2*(i2,j2)
-  holds cell(G2,i2,j2-'1) c= cell(G1,i1,j1-'1);
+  for G1,G2 being Go-board st Values G1 c= Values G2 & [i1,j1] in
+Indices G1 & [i2,j2] in Indices G2 & G1*(i1,j1) = G2*(i2,j2) holds cell(G2,i2,
+  j2-'1) c= cell(G1,i1,j1-'1);
 
 theorem :: GOBRD13:21
-  for f being standard special_circular_sequence st f is_sequence_on G
-  holds Values GoB f c= Values G;
+  for f being standard special_circular_sequence st f
+  is_sequence_on G holds Values GoB f c= Values G;
 
 definition
   let f, G, k;
-  assume that
- 1 <= k & k+1 <= len f and
- f is_sequence_on G;
+  assume
+  1 <= k & k+1 <= len f & f is_sequence_on G;
   func right_cell(f,k,G) -> Subset of TOP-REAL 2 means
 :: GOBRD13:def 2
 
-  for i1,j1,i2,j2 being Element of NAT
-  st [i1,j1] in Indices G & [i2,j2] in Indices G &
-  f/.k = G*(i1,j1) & f/.(k+1) = G*(i2,j2) holds
-  i1 = i2 & j1+1 = j2 & it = cell(G,i1,j1) or
-  i1+1 = i2 & j1 = j2 & it = cell(G,i1,j1-'1) or
-  i1 = i2+1 & j1 = j2 & it = cell(G,i2,j2) or
-  i1 = i2 & j1 = j2+1 & it = cell(G,i1-'1,j2);
+  for i1,j1,i2,j2
+being Element of NAT st [i1,j1] in Indices G & [i2,j2] in Indices G & f/.k = G*
+  (i1,j1) & f/.(k+1) = G*(i2,j2) holds i1 = i2 & j1+1 = j2 & it = cell(G,i1,j1)
+  or i1+1 = i2 & j1 = j2 & it = cell(G,i1,j1-'1) or i1 = i2+1 & j1 = j2 & it =
+  cell(G,i2,j2) or i1 = i2 & j1 = j2+1 & it = cell(G,i1-'1,j2);
   func left_cell(f,k,G) -> Subset of TOP-REAL 2 means
 :: GOBRD13:def 3
 
-  for i1,j1,i2,j2 being Element of NAT
-  st [i1,j1] in Indices G & [i2,j2] in Indices G &
-  f/.k = G*(i1,j1) & f/.(k+1) = G*(i2,j2) holds
-  i1 = i2 & j1+1 = j2 & it = cell(G,i1-'1,j1) or
-  i1+1 = i2 & j1 = j2 & it = cell(G,i1,j1) or
-  i1 = i2+1 & j1 = j2 & it = cell(G,i2,j2-'1) or
-  i1 = i2 & j1 = j2+1 & it = cell(G,i1,j2);
+  for i1,j1,i2,j2
+being Element of NAT st [i1,j1] in Indices G & [i2,j2] in Indices G & f/.k = G*
+(i1,j1) & f/.(k+1) = G*(i2,j2) holds i1 = i2 & j1+1 = j2 & it = cell(G,i1-'1,j1
+  ) or i1+1 = i2 & j1 = j2 & it = cell(G,i1,j1) or i1 = i2+1 & j1 = j2 & it =
+  cell(G,i2,j2-'1) or i1 = i2 & j1 = j2+1 & it = cell(G,i1,j2);
 end;
 
 theorem :: GOBRD13:22
-  1 <= k & k+1 <= len f & f is_sequence_on G &
-  [i,j] in Indices G & [i,j+1] in Indices G &
-  f/.k = G*(i,j) & f/.(k+1) = G*(i,j+1)
-  implies left_cell(f,k,G) = cell(G,i-'1,j);
+  1 <= k & k+1 <= len f & f is_sequence_on G & [i,j] in Indices G
+  & [i,j+1] in Indices G & f/.k = G*(i,j) & f/.(k+1) = G*(i,j+1) implies
+  left_cell(f,k,G) = cell(G,i-'1,j);
 
 theorem :: GOBRD13:23
-  1 <= k & k+1 <= len f & f is_sequence_on G &
-  [i,j] in Indices G & [i,j+1] in Indices G &
-  f/.k = G*(i,j) & f/.(k+1) = G*(i,j+1)
-  implies right_cell(f,k,G) = cell(G,i,j);
+  1 <= k & k+1 <= len f & f is_sequence_on G & [i,j] in Indices G
+  & [i,j+1] in Indices G & f/.k = G*(i,j) & f/.(k+1) = G*(i,j+1) implies
+  right_cell(f,k,G) = cell(G,i,j);
 
 theorem :: GOBRD13:24
-  1 <= k & k+1 <= len f & f is_sequence_on G &
-  [i,j] in Indices G & [i+1,j] in Indices G &
-  f/.k = G*(i,j) & f/.(k+1) = G*(i+1,j) implies left_cell(f,k,G) = cell(G,i,j);
+  1 <= k & k+1 <= len f & f is_sequence_on G & [i,j] in Indices G
+  & [i+1,j] in Indices G & f/.k = G*(i,j) & f/.(k+1) = G*(i+1,j) implies
+  left_cell(f,k,G) = cell(G,i,j);
 
 theorem :: GOBRD13:25
-  1 <= k & k+1 <= len f & f is_sequence_on G &
-  [i,j] in Indices G & [i+1,j] in Indices G &
-  f/.k = G*(i,j) & f/.(k+1) = G*(i+1,j)
-  implies right_cell(f,k,G) = cell(G,i,j-'1);
+  1 <= k & k+1 <= len f & f is_sequence_on G & [i,j] in Indices G
+  & [i+1,j] in Indices G & f/.k = G*(i,j) & f/.(k+1) = G*(i+1,j) implies
+  right_cell(f,k,G) = cell(G,i,j-'1);
 
 theorem :: GOBRD13:26
-  1 <= k & k+1 <= len f & f is_sequence_on G &
-  [i,j] in Indices G & [i+1,j] in Indices G &
-  f/.k = G*(i+1,j) & f/.(k+1) = G*(i,j)
-  implies left_cell(f,k,G) = cell(G,i,j-'1);
+  1 <= k & k+1 <= len f & f is_sequence_on G & [i,j] in Indices G
+  & [i+1,j] in Indices G & f/.k = G*(i+1,j) & f/.(k+1) = G*(i,j) implies
+  left_cell(f,k,G) = cell(G,i,j-'1);
 
 theorem :: GOBRD13:27
-  1 <= k & k+1 <= len f & f is_sequence_on G &
-  [i,j] in Indices G & [i+1,j] in Indices G &
-  f/.k = G*(i+1,j) & f/.(k+1) = G*(i,j)
-  implies right_cell(f,k,G) = cell(G,i,j);
+  1 <= k & k+1 <= len f & f is_sequence_on G & [i,j] in Indices G
+  & [i+1,j] in Indices G & f/.k = G*(i+1,j) & f/.(k+1) = G*(i,j) implies
+  right_cell(f,k,G) = cell(G,i,j);
 
 theorem :: GOBRD13:28
-  1 <= k & k+1 <= len f & f is_sequence_on G &
-  [i,j+1] in Indices G & [i,j] in Indices G &
-  f/.k = G*(i,j+1) & f/.(k+1) = G*(i,j) implies left_cell(f,k,G) = cell(G,i,j);
+  1 <= k & k+1 <= len f & f is_sequence_on G & [i,j+1] in Indices
+  G & [i,j] in Indices G & f/.k = G*(i,j+1) & f/.(k+1) = G*(i,j) implies
+  left_cell(f,k,G) = cell(G,i,j);
 
 theorem :: GOBRD13:29
-  1 <= k & k+1 <= len f & f is_sequence_on G &
-  [i,j+1] in Indices G & [i,j] in Indices G &
-  f/.k = G*(i,j+1) & f/.(k+1) = G*(i,j)
-  implies right_cell(f,k,G) = cell(G,i-'1,j);
+  1 <= k & k+1 <= len f & f is_sequence_on G & [i,j+1] in Indices
+  G & [i,j] in Indices G & f/.k = G*(i,j+1) & f/.(k+1) = G*(i,j) implies
+  right_cell(f,k,G) = cell(G,i-'1,j);
 
 theorem :: GOBRD13:30
-  1 <= k & k+1 <= len f & f is_sequence_on G
-  implies left_cell(f,k,G) /\ right_cell(f,k,G) = LSeg(f,k);
+  1 <= k & k+1 <= len f & f is_sequence_on G implies left_cell(f,k,G) /\
+  right_cell(f,k,G) = LSeg(f,k);
 
 theorem :: GOBRD13:31
-  1 <= k & k+1 <= len f & f is_sequence_on G
-  implies right_cell(f,k,G) is closed;
+  1 <= k & k+1 <= len f & f is_sequence_on G implies right_cell(f,k,G)
+  is closed;
 
 theorem :: GOBRD13:32
-  1 <= k & k+1 <= len f & f is_sequence_on G & k+1 <= n
-  implies left_cell(f,k,G) = left_cell(f|n,k,G) &
-  right_cell(f,k,G) = right_cell(f|n,k,G);
+  1 <= k & k+1 <= len f & f is_sequence_on G & k+1 <= n implies
+left_cell(f,k,G) = left_cell(f|n,k,G) & right_cell(f,k,G) = right_cell(f|n,k,G)
+;
 
 theorem :: GOBRD13:33
-  1 <= k & k+1 <= len(f/^n) & n <= len f & f is_sequence_on G
-  implies left_cell(f,k+n,G) = left_cell(f/^n,k,G) &
-  right_cell(f,k+n,G) = right_cell(f/^n,k,G);
+  1 <= k & k+1 <= len(f/^n) & n <= len f & f is_sequence_on G implies
+left_cell(f,k+n,G) = left_cell(f/^n,k,G) & right_cell(f,k+n,G) = right_cell(f/^
+  n,k,G);
 
 theorem :: GOBRD13:34
-  for G being Go-board, f being standard special_circular_sequence
-  st 1 <= n & n+1 <= len f & f is_sequence_on G holds
-  left_cell(f,n,G) c= left_cell(f,n) & right_cell(f,n,G) c= right_cell(f,n);
+  for G being Go-board, f being standard special_circular_sequence st 1
+<= n & n+1 <= len f & f is_sequence_on G holds left_cell(f,n,G) c= left_cell(f,
+  n) & right_cell(f,n,G) c= right_cell(f,n);
 
 definition
   let f,G,k;
-  assume that
- 1 <= k & k+1 <= len f and
- f is_sequence_on G;
+  assume
+  1 <= k & k+1 <= len f & f is_sequence_on G;
   func front_right_cell(f,k,G) -> Subset of TOP-REAL 2 means
 :: GOBRD13:def 4
 
-  for i1,j1,i2,j2 being Element of NAT
-  st [i1,j1] in Indices G & [i2,j2] in Indices G &
-  f/.k = G*(i1,j1) & f/.(k+1) = G*(i2,j2) holds
-  i1 = i2 & j1+1 = j2 & it = cell(G,i2,j2) or
-  i1+1 = i2 & j1 = j2 & it = cell(G,i2,j2-'1) or
-  i1 = i2+1 & j1 = j2 & it = cell(G,i2-'1,j2) or
-  i1 = i2 & j1 = j2+1 & it = cell(G,i2-'1,j2-'1);
+  for i1,j1,
+i2,j2 being Element of NAT st [i1,j1] in Indices G & [i2,j2] in Indices G & f/.
+k = G*(i1,j1) & f/.(k+1) = G*(i2,j2) holds i1 = i2 & j1+1 = j2 & it = cell(G,i2
+,j2) or i1+1 = i2 & j1 = j2 & it = cell(G,i2,j2-'1) or i1 = i2+1 & j1 = j2 & it
+  = cell(G,i2-'1,j2) or i1 = i2 & j1 = j2+1 & it = cell(G,i2-'1,j2-'1);
   func front_left_cell(f,k,G) -> Subset of TOP-REAL 2 means
 :: GOBRD13:def 5
 
-  for i1,j1,i2,j2 being Element of NAT
-  st [i1,j1] in Indices G & [i2,j2] in Indices G &
-  f/.k = G*(i1,j1) & f/.(k+1) = G*(i2,j2) holds
-  i1 = i2 & j1+1 = j2 & it = cell(G,i2-'1,j2) or
-  i1+1 = i2 & j1 = j2 & it = cell(G,i2,j2) or
-  i1 = i2+1 & j1 = j2 & it = cell(G,i2-'1,j2-'1) or
-  i1 = i2 & j1 = j2+1 & it = cell(G,i2,j2-'1);
+  for i1,j1,
+i2,j2 being Element of NAT st [i1,j1] in Indices G & [i2,j2] in Indices G & f/.
+k = G*(i1,j1) & f/.(k+1) = G*(i2,j2) holds i1 = i2 & j1+1 = j2 & it = cell(G,i2
+-'1,j2) or i1+1 = i2 & j1 = j2 & it = cell(G,i2,j2) or i1 = i2+1 & j1 = j2 & it
+  = cell(G,i2-'1,j2-'1) or i1 = i2 & j1 = j2+1 & it = cell(G,i2,j2-'1);
 end;
 
 theorem :: GOBRD13:35
-  1 <= k & k+1 <= len f & f is_sequence_on G &
-  [i,j] in Indices G & [i,j+1] in Indices G &
-  f/.k = G*(i,j) & f/.(k+1) = G*(i,j+1)
-  implies front_left_cell(f,k,G) = cell(G,i-'1,j+1);
+  1 <= k & k+1 <= len f & f is_sequence_on G & [i,j] in Indices G & [i,j
+  +1] in Indices G & f/.k = G*(i,j) & f/.(k+1) = G*(i,j+1) implies
+  front_left_cell(f,k,G) = cell(G,i-'1,j+1);
 
 theorem :: GOBRD13:36
-  1 <= k & k+1 <= len f & f is_sequence_on G &
-  [i,j] in Indices G & [i,j+1] in Indices G &
-  f/.k = G*(i,j) & f/.(k+1) = G*(i,j+1)
-  implies front_right_cell(f,k,G) = cell(G,i,j+1);
+  1 <= k & k+1 <= len f & f is_sequence_on G & [i,j] in Indices G & [i,j
+  +1] in Indices G & f/.k = G*(i,j) & f/.(k+1) = G*(i,j+1) implies
+  front_right_cell(f,k,G) = cell(G,i,j+1);
 
 theorem :: GOBRD13:37
-  1 <= k & k+1 <= len f & f is_sequence_on G &
-  [i,j] in Indices G & [i+1,j] in Indices G &
-  f/.k = G*(i,j) & f/.(k+1) = G*(i+1,j)
-  implies front_left_cell(f,k,G) = cell(G,i+1,j);
+  1 <= k & k+1 <= len f & f is_sequence_on G & [i,j] in Indices G & [i+1
+  ,j] in Indices G & f/.k = G*(i,j) & f/.(k+1) = G*(i+1,j) implies
+  front_left_cell(f,k,G) = cell(G,i+1,j);
 
 theorem :: GOBRD13:38
-  1 <= k & k+1 <= len f & f is_sequence_on G &
-  [i,j] in Indices G & [i+1,j] in Indices G &
-  f/.k = G*(i,j) & f/.(k+1) = G*(i+1,j)
-  implies front_right_cell(f,k,G) = cell(G,i+1,j-'1);
+  1 <= k & k+1 <= len f & f is_sequence_on G & [i,j] in Indices G & [i+1
+  ,j] in Indices G & f/.k = G*(i,j) & f/.(k+1) = G*(i+1,j) implies
+  front_right_cell(f,k,G) = cell(G,i+1,j-'1);
 
 theorem :: GOBRD13:39
-  1 <= k & k+1 <= len f & f is_sequence_on G &
-  [i,j] in Indices G & [i+1,j] in Indices G &
-  f/.k = G*(i+1,j) & f/.(k+1) = G*(i,j)
-  implies front_left_cell(f,k,G) = cell(G,i-'1,j-'1);
+  1 <= k & k+1 <= len f & f is_sequence_on G & [i,j] in Indices G & [i+1
+  ,j] in Indices G & f/.k = G*(i+1,j) & f/.(k+1) = G*(i,j) implies
+  front_left_cell(f,k,G) = cell(G,i-'1,j-'1);
 
 theorem :: GOBRD13:40
-  1 <= k & k+1 <= len f & f is_sequence_on G &
-  [i,j] in Indices G & [i+1,j] in Indices G &
-  f/.k = G*(i+1,j) & f/.(k+1) = G*(i,j)
-  implies front_right_cell(f,k,G) = cell(G,i-'1,j);
+  1 <= k & k+1 <= len f & f is_sequence_on G & [i,j] in Indices G & [i+1
+  ,j] in Indices G & f/.k = G*(i+1,j) & f/.(k+1) = G*(i,j) implies
+  front_right_cell(f,k,G) = cell(G,i-'1,j);
 
 theorem :: GOBRD13:41
-  1 <= k & k+1 <= len f & f is_sequence_on G &
-  [i,j+1] in Indices G & [i,j] in Indices G &
-  f/.k = G*(i,j+1) & f/.(k+1) = G*(i,j)
-  implies front_left_cell(f,k,G) = cell(G,i,j-'1);
+  1 <= k & k+1 <= len f & f is_sequence_on G & [i,j+1] in Indices G & [i
+  ,j] in Indices G & f/.k = G*(i,j+1) & f/.(k+1) = G*(i,j) implies
+  front_left_cell(f,k,G) = cell(G,i,j-'1);
 
 theorem :: GOBRD13:42
-  1 <= k & k+1 <= len f & f is_sequence_on G &
-  [i,j+1] in Indices G & [i,j] in Indices G &
-  f/.k = G*(i,j+1) & f/.(k+1) = G*(i,j)
-  implies front_right_cell(f,k,G) = cell(G,i-'1,j-'1);
+  1 <= k & k+1 <= len f & f is_sequence_on G & [i,j+1] in Indices G & [i
+  ,j] in Indices G & f/.k = G*(i,j+1) & f/.(k+1) = G*(i,j) implies
+  front_right_cell(f,k,G) = cell(G,i-'1,j-'1);
 
 theorem :: GOBRD13:43
-  1 <= k & k+1 <= len f & f is_sequence_on G & k+1 <= n
-  implies front_left_cell(f,k,G) = front_left_cell(f|n,k,G) &
-  front_right_cell(f,k,G) = front_right_cell(f|n,k,G);
+  1 <= k & k+1 <= len f & f is_sequence_on G & k+1 <= n implies
+  front_left_cell(f,k,G) = front_left_cell(f|n,k,G) & front_right_cell(f,k,G) =
+  front_right_cell(f|n,k,G);
 
 definition
   let D be set;
@@ -339,32 +303,29 @@ definition
   pred f turns_right k,G means
 :: GOBRD13:def 6
 
-  for i1,j1,i2,j2 being Element of NAT
-  st [i1,j1] in Indices G & [i2,j2] in Indices G &
-  f/.k = G*(i1,j1) & f/.(k+1) = G*(i2,j2) holds
-  i1 = i2 & j1+1 = j2 & [i2+1,j2] in Indices G & f/.(k+2) = G*(i2+1,j2) or
-  i1+1 = i2 & j1 = j2 & [i2,j2-'1] in Indices G & f/.(k+2) = G* (i2,j2-'1) or
-  i1 = i2+1 & j1 = j2 & [i2,j2+1] in Indices G & f/.(k+2) = G*(i2,j2+1) or
-  i1 = i2 & j1 = j2+1 & [i2-'1,j2] in Indices G & f/.(k+2) = G*(i2-'1,j2);
+  for i1,j1,i2,j2 being Element of NAT st
+[i1,j1] in Indices G & [i2,j2] in Indices G & f/.k = G*(i1,j1) & f/.(k+1) = G*(
+i2,j2) holds i1 = i2 & j1+1 = j2 & [i2+1,j2] in Indices G & f/.(k+2) = G*(i2+1,
+j2) or i1+1 = i2 & j1 = j2 & [i2,j2-'1] in Indices G & f/.(k+2) = G* (i2,j2-'1)
+or i1 = i2+1 & j1 = j2 & [i2,j2+1] in Indices G & f/.(k+2) = G*(i2,j2+1) or i1
+  = i2 & j1 = j2+1 & [i2-'1,j2] in Indices G & f/.(k+2) = G*(i2-'1,j2);
   pred f turns_left k,G means
 :: GOBRD13:def 7
 
-  for i1,j1,i2,j2 being Element of NAT
-  st [i1,j1] in Indices G & [i2,j2] in Indices G &
-  f/.k = G*(i1,j1) & f/.(k+1) = G*(i2,j2) holds
-  i1 = i2 & j1+1 = j2 & [i2-'1,j2] in Indices G & f/.(k+2) = G* (i2-'1,j2) or
-  i1+1 = i2 & j1 = j2 & [i2,j2+1] in Indices G & f/.(k+2) = G*(i2,j2+1) or
-  i1 = i2+1 & j1 = j2 & [i2,j2-'1] in Indices G & f/.(k+2) = G* (i2,j2-'1) or
-  i1 = i2 & j1 = j2+1 & [i2+1,j2] in Indices G & f/.(k+2) = G*(i2+1,j2);
+  for i1,j1,i2,j2 being Element of NAT st [
+i1,j1] in Indices G & [i2,j2] in Indices G & f/.k = G*(i1,j1) & f/.(k+1) = G*(
+i2,j2) holds i1 = i2 & j1+1 = j2 & [i2-'1,j2] in Indices G & f/.(k+2) = G* (i2
+-'1,j2) or i1+1 = i2 & j1 = j2 & [i2,j2+1] in Indices G & f/.(k+2) = G*(i2,j2+1
+  ) or i1 = i2+1 & j1 = j2 & [i2,j2-'1] in Indices G & f/.(k+2) = G* (i2,j2-'1)
+  or i1 = i2 & j1 = j2+1 & [i2+1,j2] in Indices G & f/.(k+2) = G*(i2+1,j2);
   pred f goes_straight k,G means
 :: GOBRD13:def 8
 
   for i1,j1,i2,j2 being Element of NAT
-  st [i1,j1] in Indices G & [i2,j2] in Indices G &
-  f/.k = G*(i1,j1) & f/.(k+1) = G*(i2,j2) holds
-  i1 = i2 & j1+1 = j2 & [i2,j2+1] in Indices G & f/.(k+2) = G*(i2,j2+1) or
-  i1+1 = i2 & j1 = j2 & [i2+1,j2] in Indices G & f/.(k+2) = G*(i2+1,j2) or
-  i1 = i2+1 & j1 = j2 & [i2-'1,j2] in Indices G & f/.(k+2) = G* (i2-'1,j2) or
+st [i1,j1] in Indices G & [i2,j2] in Indices G & f/.k = G*(i1,j1) & f/.(k+1) =
+G*(i2,j2) holds i1 = i2 & j1+1 = j2 & [i2,j2+1] in Indices G & f/.(k+2) = G*(i2
+,j2+1) or i1+1 = i2 & j1 = j2 & [i2+1,j2] in Indices G & f/.(k+2) = G*(i2+1,j2)
+or i1 = i2+1 & j1 = j2 & [i2-'1,j2] in Indices G & f/.(k+2) = G* (i2-'1,j2) or
   i1 = i2 & j1 = j2+1 & [i2,j2-'1] in Indices G & f/.(k+2) = G*(i2,j2-'1);
 end;
 
@@ -373,34 +334,29 @@ reserve D for set,
   G for Matrix of D;
 
 theorem :: GOBRD13:44
-  1 <= k & k+2 <= len f & k+2 <= n
-  & f|n turns_right k,G implies f turns_right k,G;
+  1 <= k & k+2 <= n & f|n turns_right k,G implies f turns_right k,G;
 
 theorem :: GOBRD13:45
-  1 <= k & k+2 <= len f & k+2 <= n
-  & f|n turns_left k,G implies f turns_left k,G;
+  1 <= k & k+2 <= n & f|n turns_left k,G implies f turns_left k,G;
 
 theorem :: GOBRD13:46
-  1 <= k & k+2 <= len f & k+2 <= n
-  & f|n goes_straight k,G implies f goes_straight k,G;
+  1 <= k & k+2 <= n & f|n goes_straight k,G implies f goes_straight k,G;
 
 theorem :: GOBRD13:47
-  1 < k & k+1 <= len f1 & k+1 <= len f2 & f1 is_sequence_on G &
-  f1|k = f2|k & f1 turns_right k-'1,G & f2 turns_right k-'1,G
-  implies f1|(k+1) = f2|(k+1);
+  1 < k & k+1 <= len f1 & k+1 <= len f2 & f1 is_sequence_on G & f1|k =
+f2|k & f1 turns_right k-'1,G & f2 turns_right k-'1,G implies f1|(k+1) = f2|(k+1
+  );
 
 theorem :: GOBRD13:48
-  1 < k & k+1 <= len f1 & k+1 <= len f2 & f1 is_sequence_on G &
-  f1|k = f2|k & f1 turns_left k-'1,G & f2 turns_left k-'1,G
-  implies f1|(k+1) = f2|(k+1);
+  1 < k & k+1 <= len f1 & k+1 <= len f2 & f1 is_sequence_on G & f1|k =
+f2|k & f1 turns_left k-'1,G & f2 turns_left k-'1,G implies f1|(k+1) = f2|(k+1);
 
 theorem :: GOBRD13:49
-  1 < k & k+1 <= len f1 & k+1 <= len f2 & f1 is_sequence_on G &
-  f1|k = f2|k & f1 goes_straight k-'1,G & f2 goes_straight k-'1,G
-  implies f1|(k+1) = f2|(k+1);
+  1 < k & k+1 <= len f1 & k+1 <= len f2 & f1 is_sequence_on G & f1|k =
+f2|k & f1 goes_straight k-'1,G & f2 goes_straight k-'1,G implies f1|(k+1) = f2|
+  (k+1);
 
 theorem :: GOBRD13:50
-  for D being non empty set, M being Matrix of D st
-  1 <= i & i <= len M & 1 <= j & j <= width M holds
-  M*(i,j) in Values M;
+  for D being non empty set, M being Matrix of D st 1 <= i & i <= len M
+  & 1 <= j & j <= width M holds M*(i,j) in Values M;
 

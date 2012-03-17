@@ -18,14 +18,14 @@ environ
       STRUCT_0, ALGSTR_1, VECTSP_2, POLYNOM7, PBOOLE, ORDERS_2, POLYNOM1,
       IDEAL_1, REWRITE1, BAGORDER, ALGSTR_0, RLVECT_1, VECTSP_1, TERMORD,
       POLYRED, GROUP_1, NAT_D, NUMBERS, NAT_1, GROEB_1, RFINSEQ, FINSEQ_7,
-      WAYBEL_4, RECDEF_1;
+      WAYBEL_4, RECDEF_1, PRE_POLY;
  constructors RFINSEQ, REWRITE1, FINSEQ_7, VECTSP_2, WAYBEL_4, WELLFND1,
       IDEAL_1, BAGORDER, TERMORD, POLYRED, GROEB_1, RECDEF_1, REAL_1, RELSET_1,
-      PBOOLE;
+      PBOOLE, PRE_POLY, BINOP_2;
  registrations XBOOLE_0, RELAT_1, ORDINAL1, FINSET_1, XXREAL_0, XREAL_0, NAT_1,
       INT_1, FINSEQ_1, REWRITE1, STRUCT_0, VECTSP_1, ORDERS_2, ALGSTR_1, GCD_1,
       POLYNOM1, POLYNOM2, POLYNOM4, IDEAL_1, POLYNOM7, TERMORD, POLYRED,
-      VALUED_0, ALGSTR_0;
+      VALUED_0, ALGSTR_0, PRE_POLY, CARD_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
 
 
@@ -34,16 +34,15 @@ begin :: Preliminaries
 canceled 2;
 
 theorem :: GROEB_2:3
-  for L being add-associative right_zeroed
-  right_complementable (non empty addLoopStr), p being FinSequence of L,
-  n being Element of NAT
-  st for k being Element of NAT st k in dom p & k > n holds p.k = 0.L
-  holds Sum p = Sum(p|n);
+  for L being add-associative right_zeroed right_complementable (non
+  empty addLoopStr), p being FinSequence of L, n being Element of NAT st for k
+being Element of NAT st k in dom p & k > n holds p.k = 0.L holds Sum p = Sum(p|
+  n);
 
 theorem :: GROEB_2:4
-  for L being add-associative right_zeroed Abelian (non empty addLoopStr),
-  f being FinSequence of L, i,j being Element of NAT
-  holds Sum Swap(f,i,j) = Sum f;
+  for L being add-associative right_zeroed Abelian (non empty addLoopStr
+  ), f being FinSequence of L, i,j being Element of NAT holds Sum Swap(f,i,j) =
+  Sum f;
 
 definition
   let X be set, b1,b2 be bag of X;
@@ -56,28 +55,29 @@ definition
 end;
 
 definition
-:: exercise 5.45, p. 211
   let X be set, b1,b2 be bag of X;
   func lcm(b1,b2) -> bag of X means
 :: GROEB_2:def 2
 
-  for k being set holds it.k = max(b1.k,b2.k);
+  for k being set holds it.k = max(b1
+  .k,b2.k);
   commutativity;
   idempotence;
 end;
 
 notation
-:: exercise 5.45, p. 211
   let X be set, b1,b2 be bag of X;
   synonym b1 lcm b2 for lcm(b1,b2);
 end;
+:: exercise 5.45, p. 211
 
 definition
   let X be set, b1,b2 be bag of X;
   pred b1,b2 are_disjoint means
 :: GROEB_2:def 3
 
-  for i being set holds b1.i = 0 or b2.i = 0;
+  for i being set holds b1.i = 0 or b2.i
+  = 0;
 end;
 
 notation
@@ -88,425 +88,389 @@ end;
 canceled 2;
 
 theorem :: GROEB_2:7
+  for X being set, b1,b2 being bag of X holds b1 divides lcm(b1,b2)
+  & b2 divides lcm(b1,b2);
 :: exercise 5.45, p. 211
-  for X being set, b1,b2 being bag of X
-  holds b1 divides lcm(b1,b2) & b2 divides lcm(b1,b2);
 
 theorem :: GROEB_2:8
+  for X being set, b1,b2,b3 be bag of X holds b1 divides b3 & b2
+  divides b3 implies lcm(b1,b2) divides b3;
 :: exercise 5.45, p. 211
-  for X being set, b1,b2,b3 be bag of X
-  holds (b1 divides b3 & b2 divides b3) implies lcm(b1,b2) divides b3;
 
 theorem :: GROEB_2:9
-  for X being set, b1,b2 being bag of X
-  holds b1,b2 are_disjoint iff lcm(b1,b2) = b1 + b2;
+  for X being set, b1,b2 being bag of X holds b1,b2 are_disjoint iff lcm
+  (b1,b2) = b1 + b2;
 
 theorem :: GROEB_2:10
   for X being set, b being bag of X holds b/b = EmptyBag X;
 
 theorem :: GROEB_2:11
-  for X being set, b1,b2 be bag of X holds b2 divides b1 iff lcm(b1,b2) = b1;
+  for X being set, b1,b2 be bag of X holds b2 divides b1 iff lcm(
+  b1,b2) = b1;
 
 theorem :: GROEB_2:12
+  for X being set, b1,b2,b3 being bag of X holds b1 divides lcm(b2,b3)
+  implies lcm(b2,b1) divides lcm(b2,b3);
 :: exercise 5.69 (i) ==> (ii), p. 223
-  for X being set, b1,b2,b3 being bag of X
-  holds b1 divides lcm(b2,b3) implies lcm(b2,b1) divides lcm(b2,b3);
 
 theorem :: GROEB_2:13
+  for X being set, b1,b2,b3 being bag of X holds lcm(b2,b1) divides lcm(
+  b2,b3) implies lcm(b1,b3) divides lcm(b2,b3);
 :: exercise 5.69 (ii) ==> (iii), p. 223
-  for X being set, b1,b2,b3 being bag of X
-  holds lcm(b2,b1) divides lcm(b2,b3) implies lcm(b1,b3) divides lcm(b2,b3);
 
 theorem :: GROEB_2:14
+  for n being set, b1,b2,b3 being bag of n holds lcm(b1,b3) divides lcm(
+  b2,b3) implies b1 divides lcm(b2,b3);
 :: exercise 5.69 (iii) ==> (i), p. 223
-  for n being set, b1,b2,b3 being bag of n
-  holds lcm(b1,b3) divides lcm(b2,b3) implies b1 divides lcm(b2,b3);
 
 theorem :: GROEB_2:15
-  for n being Element of NAT, T being connected admissible TermOrder of n,
-  P being non empty Subset of Bags n ex b being bag of n st b in P &
-  for b' being bag of n st b' in P holds b <= b',T;
+  for n being Element of NAT, T being connected admissible TermOrder of
+  n, P being non empty Subset of Bags n ex b being bag of n st b in P & for b'
+  being bag of n st b' in P holds b <= b',T;
 
 registration
-  let L be add-associative right_zeroed right_complementable
-  (non trivial addLoopStr), a be non zero Element of L;
+  let L be add-associative right_zeroed right_complementable (non trivial
+  addLoopStr), a be non zero Element of L;
   cluster -a -> non zero;
 end;
 
 registration
-  let X be set, L be left_zeroed right_zeroed add-cancelable
-  distributive (non empty doubleLoopStr), m be Monomial of X,L,
-  a be Element of L;
+  let X be set, L be left_zeroed right_zeroed add-cancelable distributive (non
+  empty doubleLoopStr), m be Monomial of X,L, a be Element of L;
   cluster a * m -> monomial-like;
 end;
 
 registration
-  let n be Ordinal, L be left_zeroed right_zeroed add-cancelable
-  distributive domRing-like (non trivial doubleLoopStr),
-  p be non-zero Polynomial of n,L, a be non zero Element of L;
+  let n be Ordinal, L be left_zeroed right_zeroed add-cancelable distributive
+domRing-like (non trivial doubleLoopStr), p be non-zero Polynomial of n,L, a be
+  non zero Element of L;
   cluster a * p -> non-zero;
 end;
 
 theorem :: GROEB_2:16
-  for n being Ordinal,
-  L being right_zeroed right-distributive (non empty doubleLoopStr),
-  p,q being Series of n,L, b being bag of n
-  holds b *' (p + q) = b *' p + b *' q;
+  for n being Ordinal, L being right_zeroed right-distributive (
+non empty doubleLoopStr), p,q being Series of n,L, b being bag of n holds b *'
+  (p + q) = b *' p + b *' q;
 
 theorem :: GROEB_2:17
-  for n being Ordinal,
-  L being add-associative right_zeroed right_complementable
-  (non empty addLoopStr), p being Series of n,L, b being bag of n
-  holds b *' (-p) = -(b *' p);
+  for n being Ordinal, L being add-associative right_zeroed
+right_complementable (non empty addLoopStr), p being Series of n,L, b being bag
+  of n holds b *' (-p) = -(b *' p);
 
 theorem :: GROEB_2:18
   for n being Ordinal, L being left_zeroed right_add-cancelable
-  right-distributive (non empty doubleLoopStr), p being Series of n,L,
-  b being bag of n, a being Element of L holds b *' (a * p) = a * (b *' p);
+  right-distributive (non empty doubleLoopStr), p being Series of n,L, b being
+  bag of n, a being Element of L holds b *' (a * p) = a * (b *' p);
 
 theorem :: GROEB_2:19
-  for n being Ordinal, L being right-distributive (non empty doubleLoopStr),
-  p,q being Series of n,L, a being Element of L
-  holds a * (p + q) = a * p + a * q;
+  for n being Ordinal, L being right-distributive (non empty
+doubleLoopStr), p,q being Series of n,L, a being Element of L holds a * (p + q)
+  = a * p + a * q;
 
 theorem :: GROEB_2:20
-  for X being set, L being add-associative right_zeroed right_complementable
-  (non empty doubleLoopStr), a being Element of L
-  holds -(a |(X,L)) = (-a) |(X,L);
+  for X being set, L being add-associative right_zeroed
+right_complementable (non empty doubleLoopStr), a being Element of L holds -(a
+  |(X,L)) = (-a) |(X,L);
 
 begin :: S-Polynomials
 
 theorem :: GROEB_2:21
-:: theorem 5.44, p. 210
-  for n being Element of NAT, T being connected admissible TermOrder of n,
-  L being add-associative right_complementable right_zeroed
-  commutative associative well-unital distributive
-  Abelian almost_left_invertible non degenerated (non empty doubleLoopStr),
-  P being Subset of Polynom-Ring(n,L) st not(0_(n,L) in P)
-  holds (for p1,p2 being Polynomial of n,L st p1 <> p2 & p1 in P & p2 in P
-  for m1,m2 being Monomial of n,L st HM(m1 *'p1,T) = HM(m2 *'p2,T)
-  holds PolyRedRel(P,T) reduces m1 *' p1 - m2 *' p2, 0_(n,L))
-  implies P is_Groebner_basis_wrt T;
+  for n being Element of NAT, T being connected admissible
+  TermOrder of n, L being add-associative right_complementable right_zeroed
+commutative associative well-unital distributive Abelian almost_left_invertible
+non degenerated (non empty doubleLoopStr), P being Subset of Polynom-Ring(n,L)
+holds (for p1,p2 being Polynomial of n,L st p1 <> p2 & p1 in P & p2 in P for m1
+,m2 being Monomial of n,L st HM(m1 *'p1,T) = HM(m2 *'p2,T) holds PolyRedRel(P,T
+  ) reduces m1 *' p1 - m2 *' p2, 0_(n,L)) implies P is_Groebner_basis_wrt T;
 
 definition
-:: definition 5.46, p. 211
-  let n be Ordinal, T be connected TermOrder of n,
-  L be add-associative right_complementable right_zeroed
-  commutative associative well-unital distributive
-  almost_left_invertible (non trivial doubleLoopStr),
-  p1,p2 be Polynomial of n,L;
+  let n be Ordinal, T be connected TermOrder of n, L be add-associative
+  right_complementable right_zeroed commutative associative well-unital
+  distributive almost_left_invertible (non trivial doubleLoopStr), p1,p2 be
+  Polynomial of n,L;
   func S-Poly(p1,p2,T) -> Polynomial of n,L equals
 :: GROEB_2:def 4
-  HC(p2,T) * (lcm(HT(p1,T),HT(p2,T))/HT(p1,T)) *' p1 -
-  HC(p1,T) * (lcm(HT(p1,T),HT(p2,T))/HT(p2,T)) *' p2;
+  HC(p2,T) * (lcm(HT(p1,T),HT
+  (p2,T))/HT(p1,T)) *' p1 - HC(p1,T) * (lcm(HT(p1,T),HT(p2,T))/HT(p2,T)) *' p2;
 end;
 
 theorem :: GROEB_2:22
-  for n being Ordinal, T being connected TermOrder of n,
-  L being add-associative right_complementable right_zeroed
-  commutative associative well-unital distributive
-  almost_left_invertible Abelian (non trivial doubleLoopStr),
-  P being Subset of Polynom-Ring(n,L),
-  p1,p2 being Polynomial of n,L st p1 in P & p2 in P
-  holds S-Poly(p1,p2,T) in P-Ideal;
+  for n being Ordinal, T being connected TermOrder of n, L being
+  add-associative right_complementable right_zeroed commutative associative
+  well-unital distributive almost_left_invertible Abelian (non trivial
+doubleLoopStr), P being Subset of Polynom-Ring(n,L), p1,p2 being Polynomial of
+  n,L st p1 in P & p2 in P holds S-Poly(p1,p2,T) in P-Ideal;
 
 canceled;
 
 theorem :: GROEB_2:24
+  for n being Ordinal, T being connected TermOrder of n, L being
+  add-associative right_complementable right_zeroed commutative associative
+well-unital distributive almost_left_invertible (non trivial doubleLoopStr), m1
+  ,m2 being Monomial of n,L holds S-Poly(m1,m2,T) = 0_(n,L);
 :: exercise 5.47 (i), p. 211
-  for n being Ordinal, T being connected TermOrder of n,
-  L being add-associative right_complementable right_zeroed
-  commutative associative well-unital distributive
-  almost_left_invertible (non trivial doubleLoopStr),
-  m1,m2 being Monomial of n,L holds S-Poly(m1,m2,T) = 0_(n,L);
 
 theorem :: GROEB_2:25
-  for n being Ordinal, T being connected TermOrder of n,
-  L being add-associative right_complementable right_zeroed
-  commutative associative well-unital distributive
-  almost_left_invertible (non trivial doubleLoopStr),
-  p being Polynomial of n,L
-  holds S-Poly(p,0_(n,L),T) = 0_(n,L) & S-Poly(0_(n,L),p,T) = 0_(n,L);
+  for n being Ordinal, T being connected TermOrder of n, L being
+  add-associative right_complementable right_zeroed commutative associative
+well-unital distributive almost_left_invertible (non trivial doubleLoopStr), p
+being Polynomial of n,L holds S-Poly(p,0_(n,L),T) = 0_(n,L) & S-Poly(0_(n,L),p,
+  T) = 0_(n,L);
 
 theorem :: GROEB_2:26
+  for n being Ordinal, T being admissible connected TermOrder of n, L
+being add-associative right_complementable right_zeroed commutative associative
+well-unital distributive almost_left_invertible (non trivial doubleLoopStr), p1
+,p2 being Polynomial of n,L holds S-Poly(p1,p2,T) = 0_(n,L) or HT(S-Poly(p1,p2,
+  T),T) < lcm(HT(p1,T),HT(p2,T)),T;
 :: exercise 5.47 (ii), p. 211
-  for n being Ordinal, T being admissible connected TermOrder of n,
-  L being add-associative right_complementable right_zeroed
-  commutative associative well-unital distributive
-  almost_left_invertible (non trivial doubleLoopStr),
-  p1,p2 being Polynomial of n,L holds S-Poly(p1,p2,T) = 0_(n,L) or
-  HT(S-Poly(p1,p2,T),T) < lcm(HT(p1,T),HT(p2,T)),T;
 
 theorem :: GROEB_2:27
+  for n being Ordinal, T being connected TermOrder of n, L being
+  add-associative right_complementable right_zeroed commutative associative
+well-unital distributive almost_left_invertible (non trivial doubleLoopStr), p1
+,p2 being non-zero Polynomial of n,L holds HT(p2,T) divides HT(p1,T) implies HC
+  (p2,T) * p1 top_reduces_to S-Poly(p1,p2,T),p2,T;
 :: exercise 5.47 (iii), p. 211
-  for n being Ordinal, T being connected TermOrder of n,
-  L being add-associative right_complementable right_zeroed
-  commutative associative well-unital distributive
-  almost_left_invertible (non trivial doubleLoopStr),
-  p1,p2 being non-zero Polynomial of n,L
-  holds HT(p2,T) divides HT(p1,T) implies
-  HC(p2,T) * p1 top_reduces_to S-Poly(p1,p2,T),p2,T;
 
 theorem :: GROEB_2:28
+  for n being Element of NAT, T being connected admissible TermOrder of
+  n, L being add-associative right_complementable right_zeroed commutative
+  associative well-unital distributive Abelian almost_left_invertible non
+  degenerated (non empty doubleLoopStr), G being Subset of Polynom-Ring(n,L)
+holds G is_Groebner_basis_wrt T implies (for g1,g2,h being Polynomial of n,L st
+g1 in G & g2 in G & h is_a_normal_form_of S-Poly(g1,g2,T),PolyRedRel(G,T) holds
+  h = 0_(n,L));
 :: theorem 5.48 (i) ==> (ii), p. 211
-  for n being Element of NAT, T being connected admissible TermOrder of n,
-  L being add-associative right_complementable right_zeroed
-  commutative associative well-unital distributive Abelian
-  almost_left_invertible non degenerated (non empty doubleLoopStr),
-  G being Subset of Polynom-Ring(n,L) holds G is_Groebner_basis_wrt T
-  implies (for g1,g2,h being Polynomial of n,L st g1 in G & g2 in G &
-  h is_a_normal_form_of S-Poly(g1,g2,T),PolyRedRel(G,T) holds h = 0_(n,L));
 
 theorem :: GROEB_2:29
+  for n being Element of NAT, T being connected admissible TermOrder of
+  n, L being Abelian add-associative right_complementable right_zeroed
+  commutative associative well-unital distributive almost_left_invertible non
+  degenerated (non empty doubleLoopStr), G being Subset of Polynom-Ring(n,L)
+  holds (for g1,g2,h being Polynomial of n,L st g1 in G & g2 in G & h
+is_a_normal_form_of S-Poly(g1,g2,T),PolyRedRel(G,T) holds h = 0_(n,L)) implies
+  (for g1,g2 being Polynomial of n,L st g1 in G & g2 in G holds PolyRedRel(G,T)
+  reduces S-Poly(g1,g2,T),0_(n,L));
 :: theorem 5.48 (ii) ==> (iii), p. 211
-  for n being Element of NAT, T being connected admissible TermOrder of n,
-  L being Abelian add-associative right_complementable right_zeroed
-  commutative associative well-unital distributive
-  almost_left_invertible non degenerated (non empty doubleLoopStr),
-  G being Subset of Polynom-Ring(n,L)
-  holds (for g1,g2,h being Polynomial of n,L st g1 in G & g2 in G &
-  h is_a_normal_form_of S-Poly(g1,g2,T),PolyRedRel(G,T) holds h = 0_(n,L))
-  implies (for g1,g2 being Polynomial of n,L st g1 in G & g2 in G
-  holds PolyRedRel(G,T) reduces S-Poly(g1,g2,T),0_(n,L));
 
 theorem :: GROEB_2:30
+  for n being Element of NAT, T being admissible connected
+  TermOrder of n, L being add-associative right_complementable right_zeroed
+commutative associative well-unital distributive Abelian almost_left_invertible
+non degenerated (non empty doubleLoopStr), G being Subset of Polynom-Ring(n,L)
+  st not(0_(n,L) in G) holds (for g1,g2 being Polynomial of n,L st g1 in G & g2
+  in G holds PolyRedRel(G,T) reduces S-Poly(g1,g2,T),0_(n,L)) implies G
+  is_Groebner_basis_wrt T;
 :: theorem 5.48 (iii) ==> (i), p. 211
-  for n being Element of NAT, T being admissible connected TermOrder of n,
-  L being add-associative right_complementable right_zeroed
-  commutative associative well-unital distributive
-  Abelian almost_left_invertible non degenerated (non empty doubleLoopStr),
-  G being Subset of Polynom-Ring(n,L) st not(0_(n,L) in G)
-  holds (for g1,g2 being Polynomial of n,L st g1 in G & g2 in G
-  holds PolyRedRel(G,T) reduces S-Poly(g1,g2,T),0_(n,L))
-  implies G is_Groebner_basis_wrt T;
 
 definition
-  let n be Ordinal, T be connected TermOrder of n,
-  L be add-associative right_complementable right_zeroed
-  commutative associative well-unital distributive
-  almost_left_invertible (non trivial doubleLoopStr),
-  P be Subset of Polynom-Ring(n,L);
+  let n be Ordinal, T be connected TermOrder of n, L be add-associative
+  right_complementable right_zeroed commutative associative well-unital
+distributive almost_left_invertible (non trivial doubleLoopStr), P be Subset of
+  Polynom-Ring(n,L);
   func S-Poly(P,T) -> Subset of Polynom-Ring(n,L) equals
 :: GROEB_2:def 5
-  { S-Poly(p1,p2,T) where p1,p2 is Polynomial of n,L : p1 in P & p2 in P };
+  { S-Poly(p1,p2,T)
+  where p1,p2 is Polynomial of n,L : p1 in P & p2 in P };
 end;
 
 registration
-  let n be Ordinal, T be connected TermOrder of n,
-  L be add-associative right_complementable right_zeroed
-  commutative associative well-unital distributive
-  almost_left_invertible (non trivial doubleLoopStr),
-  P be finite Subset of Polynom-Ring(n,L);
+  let n be Ordinal, T be connected TermOrder of n, L be add-associative
+  right_complementable right_zeroed commutative associative well-unital
+  distributive almost_left_invertible (non trivial doubleLoopStr), P be finite
+  Subset of Polynom-Ring(n,L);
   cluster S-Poly(P,T) -> finite;
 end;
 
 theorem :: GROEB_2:31
+  for n being Element of NAT, T being admissible connected TermOrder of
+  n, L being add-associative right_complementable right_zeroed commutative
+  associative well-unital distributive Abelian almost_left_invertible non
+  degenerated (non empty doubleLoopStr), G being Subset of Polynom-Ring(n,L) st
+not(0_(n,L) in G) & for g being Polynomial of n,L st g in G holds g is Monomial
+  of n,L holds G is_Groebner_basis_wrt T;
 :: corollary 5.49, p. 212
-  for n being Element of NAT, T being admissible connected TermOrder of n,
-  L being add-associative right_complementable right_zeroed
-  commutative associative well-unital distributive
-  Abelian almost_left_invertible non degenerated (non empty doubleLoopStr),
-  G being Subset of Polynom-Ring(n,L) st not(0_(n,L) in G) &
-  for g being Polynomial of n,L st g in G holds g is Monomial of n,L
-  holds G is_Groebner_basis_wrt T;
 
 begin :: Standard Representations
 
 theorem :: GROEB_2:32
-  for L being non empty multLoopStr, P being non empty Subset of L,
-  A being LeftLinearCombination of P, i being Element of NAT
-  holds A|i is LeftLinearCombination of P;
+  for L being non empty multLoopStr, P being non empty Subset of L, A
+  being LeftLinearCombination of P, i being Element of NAT holds A|i is
+  LeftLinearCombination of P;
 
 theorem :: GROEB_2:33
-  for L being non empty multLoopStr, P being non empty Subset of L,
-  A being LeftLinearCombination of P, i being Element of NAT
-  holds A/^i is LeftLinearCombination of P;
+  for L being non empty multLoopStr, P being non empty Subset of L, A
+  being LeftLinearCombination of P, i being Element of NAT holds A/^i is
+  LeftLinearCombination of P;
 
 theorem :: GROEB_2:34
-  for L being non empty multLoopStr, P,Q being non empty Subset of L,
-  A being LeftLinearCombination of P
-  holds P c= Q implies A is LeftLinearCombination of Q;
+  for L being non empty multLoopStr, P,Q being non empty Subset of L, A
+  being LeftLinearCombination of P holds P c= Q implies A is
+  LeftLinearCombination of Q;
 
 definition
   let n be Ordinal, L be right_zeroed add-associative right_complementable
-  well-unital distributive non trivial (non empty doubleLoopStr),
-  P be non empty Subset of Polynom-Ring(n,L),
-  A,B be LeftLinearCombination of P;
+well-unital distributive non trivial (non empty doubleLoopStr), P be non empty
+  Subset of Polynom-Ring(n,L), A,B be LeftLinearCombination of P;
   redefine func A^B -> LeftLinearCombination of P;
 end;
 
 definition
   let n be Ordinal, L be right_zeroed add-associative right_complementable
-  well-unital distributive non trivial (non empty doubleLoopStr),
-  f be Polynomial of n,L, P be non empty Subset of Polynom-Ring(n,L),
-  A be LeftLinearCombination of P;
+well-unital distributive non trivial (non empty doubleLoopStr), f be Polynomial
+of n,L, P be non empty Subset of Polynom-Ring(n,L), A be LeftLinearCombination
+  of P;
   pred A is_MonomialRepresentation_of f means
 :: GROEB_2:def 6
 
-  Sum A = f &
-  for i being Element of NAT st i in dom A ex m being Monomial of n,L,
-  p being Polynomial of n,L st p in P & A/.i = m *' p;
+  Sum A = f & for i being
+Element of NAT st i in dom A ex m being Monomial of n,L, p being Polynomial of
+  n,L st p in P & A/.i = m *' p;
 end;
 
 theorem :: GROEB_2:35
-  for n being Ordinal,
-  L being right_zeroed add-associative right_complementable
-  well-unital distributive non trivial (non empty doubleLoopStr),
-  f being Polynomial of n,L, P being non empty Subset of Polynom-Ring(n,L),
-  A being LeftLinearCombination of P st A is_MonomialRepresentation_of f
-  holds Support f c= union { Support(m*'p) where m is Monomial of n,L,
-  p is Polynomial of n,L :
-  ex i being Element of NAT st i in dom A & A/.i = m*'p };
+  for n being Ordinal, L being right_zeroed add-associative
+  right_complementable well-unital distributive non trivial (non empty
+  doubleLoopStr), f being Polynomial of n,L, P being non empty Subset of
+  Polynom-Ring(n,L), A being LeftLinearCombination of P st A
+is_MonomialRepresentation_of f holds Support f c= union { Support(m*'p) where m
+is Monomial of n,L, p is Polynomial of n,L : ex i being Element of NAT st i in
+  dom A & A/.i = m*'p };
 
 theorem :: GROEB_2:36
-  for n being Ordinal,
-  L being right_zeroed add-associative right_complementable
-  well-unital distributive non trivial (non empty doubleLoopStr),
-  f,g being Polynomial of n,L, P being non empty Subset of Polynom-Ring(n,L),
-  A,B being LeftLinearCombination of P
-  st A is_MonomialRepresentation_of f & B is_MonomialRepresentation_of g
-  holds (A^B) is_MonomialRepresentation_of f+g;
+  for n being Ordinal, L being right_zeroed add-associative
+  right_complementable well-unital distributive non trivial (non empty
+  doubleLoopStr), f,g being Polynomial of n,L, P being non empty Subset of
+  Polynom-Ring(n,L), A,B being LeftLinearCombination of P st A
+  is_MonomialRepresentation_of f & B is_MonomialRepresentation_of g holds (A^B)
+  is_MonomialRepresentation_of f+g;
 
 definition
-  let n be Ordinal, T be connected TermOrder of n,
-  L be right_zeroed add-associative right_complementable
-  well-unital distributive non trivial (non empty doubleLoopStr),
-  f be Polynomial of n,L, P be non empty Subset of Polynom-Ring(n,L),
-  A be LeftLinearCombination of P, b be bag of n;
+  let n be Ordinal, T be connected TermOrder of n, L be right_zeroed
+add-associative right_complementable well-unital distributive non trivial (non
+  empty doubleLoopStr), f be Polynomial of n,L, P be non empty Subset of
+  Polynom-Ring(n,L), A be LeftLinearCombination of P, b be bag of n;
   pred A is_Standard_Representation_of f,P,b,T means
 :: GROEB_2:def 7
 
-  Sum A = f &
-  for i being Element of NAT st i in dom A
-  ex m being non-zero Monomial of n,L, p being non-zero Polynomial of n,L
-  st p in P & A/.i = m *' p & HT(m*'p,T) <= b,T;
+  Sum A = f & for i
+being Element of NAT st i in dom A ex m being non-zero Monomial of n,L, p being
+  non-zero Polynomial of n,L st p in P & A/.i = m *' p & HT(m*'p,T) <= b,T;
 end;
 
 definition
-  let n be Ordinal, T be connected TermOrder of n,
-  L be right_zeroed add-associative right_complementable
-  well-unital distributive non trivial (non empty doubleLoopStr),
-  f be Polynomial of n,L, P be non empty Subset of Polynom-Ring(n,L),
-  A be LeftLinearCombination of P;
+  let n be Ordinal, T be connected TermOrder of n, L be right_zeroed
+add-associative right_complementable well-unital distributive non trivial (non
+  empty doubleLoopStr), f be Polynomial of n,L, P be non empty Subset of
+  Polynom-Ring(n,L), A be LeftLinearCombination of P;
   pred A is_Standard_Representation_of f,P,T means
 :: GROEB_2:def 8
 
-  A is_Standard_Representation_of f,P,HT(f,T),T;
+  A
+  is_Standard_Representation_of f,P,HT(f,T),T;
 end;
 
 definition
-  let n be Ordinal, T be connected TermOrder of n,
-  L be right_zeroed add-associative right_complementable
-  well-unital distributive non trivial (non empty doubleLoopStr),
-  f be Polynomial of n,L, P be non empty Subset of Polynom-Ring(n,L),
-  b be bag of n;
+  let n be Ordinal, T be connected TermOrder of n, L be right_zeroed
+add-associative right_complementable well-unital distributive non trivial (non
+  empty doubleLoopStr), f be Polynomial of n,L, P be non empty Subset of
+  Polynom-Ring(n,L), b be bag of n;
   pred f has_a_Standard_Representation_of P,b,T means
 :: GROEB_2:def 9
-  ex A being LeftLinearCombination of P
-  st A is_Standard_Representation_of f,P,b,T;
+  ex A being
+  LeftLinearCombination of P st A is_Standard_Representation_of f,P,b,T;
 end;
 
 definition
-  let n be Ordinal, T be connected TermOrder of n,
-  L be right_zeroed add-associative right_complementable
-  well-unital distributive non trivial (non empty doubleLoopStr),
-  f be Polynomial of n,L, P be non empty Subset of Polynom-Ring(n,L);
+  let n be Ordinal, T be connected TermOrder of n, L be right_zeroed
+add-associative right_complementable well-unital distributive non trivial (non
+  empty doubleLoopStr), f be Polynomial of n,L, P be non empty Subset of
+  Polynom-Ring(n,L);
   pred f has_a_Standard_Representation_of P,T means
 :: GROEB_2:def 10
 
-  ex A being LeftLinearCombination of P
-  st A is_Standard_Representation_of f,P,T;
+  ex A being
+  LeftLinearCombination of P st A is_Standard_Representation_of f,P,T;
 end;
 
 theorem :: GROEB_2:37
-  for n being Ordinal, T being connected TermOrder of n,
-  L being right_zeroed add-associative right_complementable
-  well-unital distributive non trivial (non empty doubleLoopStr),
-  f being Polynomial of n,L, P being non empty Subset of Polynom-Ring(n,L),
-  A being LeftLinearCombination of P, b being bag of n
-  holds A is_Standard_Representation_of f,P,b,T
-  implies A is_MonomialRepresentation_of f;
+  for n being Ordinal, T being connected TermOrder of n, L being
+right_zeroed add-associative right_complementable well-unital distributive non
+trivial (non empty doubleLoopStr), f being Polynomial of n,L, P being non empty
+Subset of Polynom-Ring(n,L), A being LeftLinearCombination of P, b being bag of
+  n holds A is_Standard_Representation_of f,P,b,T implies A
+  is_MonomialRepresentation_of f;
 
 theorem :: GROEB_2:38
-  for n being Ordinal, T being connected TermOrder of n,
-  L being right_zeroed add-associative right_complementable
-  well-unital distributive non trivial (non empty doubleLoopStr),
-  f,g being Polynomial of n,L, P being non empty Subset of Polynom-Ring(n,L),
-  A,B being LeftLinearCombination of P, b being bag of n
-  st A is_Standard_Representation_of f,P,b,T &
-  B is_Standard_Representation_of g,P,b,T
-  holds A^B is_Standard_Representation_of f+g,P,b,T;
+  for n being Ordinal, T being connected TermOrder of n, L being
+right_zeroed add-associative right_complementable well-unital distributive non
+  trivial (non empty doubleLoopStr), f,g being Polynomial of n,L, P being non
+  empty Subset of Polynom-Ring(n,L), A,B being LeftLinearCombination of P, b
+  being bag of n st A is_Standard_Representation_of f,P,b,T & B
+is_Standard_Representation_of g,P,b,T holds A^B is_Standard_Representation_of f
+  +g,P,b,T;
 
 theorem :: GROEB_2:39
-  for n being Ordinal, T being connected TermOrder of n,
-  L being right_zeroed add-associative right_complementable
-  well-unital distributive non trivial (non empty doubleLoopStr),
-  f,g being Polynomial of n,L, P being non empty Subset of Polynom-Ring(n,L),
-  A,B being LeftLinearCombination of P, b being bag of n,
-  i being Element of NAT st A is_Standard_Representation_of f,P,b,T &
-  B = A|i & g = Sum(A/^i) holds B is_Standard_Representation_of f-g,P,b,T;
+  for n being Ordinal, T being connected TermOrder of n, L being
+right_zeroed add-associative right_complementable well-unital distributive non
+  trivial (non empty doubleLoopStr), f,g being Polynomial of n,L, P being non
+  empty Subset of Polynom-Ring(n,L), A,B being LeftLinearCombination of P, b
+being bag of n, i being Element of NAT st A is_Standard_Representation_of f,P,b
+  ,T & B = A|i & g = Sum(A/^i) holds B is_Standard_Representation_of f-g,P,b,T;
 
 theorem :: GROEB_2:40
-  for n being Ordinal, T being connected TermOrder of n,
-  L being Abelian right_zeroed add-associative right_complementable
-  well-unital distributive non trivial (non empty doubleLoopStr),
-  f,g being Polynomial of n,L, P being non empty Subset of Polynom-Ring(n,L),
-  A,B being LeftLinearCombination of P, b being bag of n,
-  i being Element of NAT st A is_Standard_Representation_of f,P,b,T &
-  B = A/^i & g = Sum(A|i) & i <= len A
-  holds B is_Standard_Representation_of f-g,P,b,T;
+  for n being Ordinal, T being connected TermOrder of n, L being Abelian
+right_zeroed add-associative right_complementable well-unital distributive non
+  trivial (non empty doubleLoopStr), f,g being Polynomial of n,L, P being non
+  empty Subset of Polynom-Ring(n,L), A,B being LeftLinearCombination of P, b
+being bag of n, i being Element of NAT st A is_Standard_Representation_of f,P,b
+,T & B = A/^i & g = Sum(A|i) & i <= len A holds B is_Standard_Representation_of
+  f-g,P,b,T;
 
 theorem :: GROEB_2:41
-  for n being Ordinal, T being connected TermOrder of n,
-  L being right_zeroed add-associative right_complementable
-  well-unital distributive non trivial (non empty doubleLoopStr),
-  f being non-zero Polynomial of n,L,
-  P being non empty Subset of Polynom-Ring(n,L),
-  A being LeftLinearCombination of P st A is_MonomialRepresentation_of f
-  ex i being Element of NAT,
-  m being non-zero Monomial of n,L, p being non-zero Polynomial of n,L
-  st i in dom A & p in P & A.i = m *' p & HT(f,T) <= HT(m*'p,T),T;
+  for n being Ordinal, T being connected TermOrder of n, L being
+right_zeroed add-associative right_complementable well-unital distributive non
+trivial (non empty doubleLoopStr), f being non-zero Polynomial of n,L, P being
+non empty Subset of Polynom-Ring(n,L), A being LeftLinearCombination of P st A
+  is_MonomialRepresentation_of f ex i being Element of NAT, m being non-zero
+Monomial of n,L, p being non-zero Polynomial of n,L st i in dom A & p in P & A.
+  i = m *' p & HT(f,T) <= HT(m*'p,T),T;
 
 theorem :: GROEB_2:42
-  for n being Ordinal, T being connected TermOrder of n,
-  L being right_zeroed add-associative right_complementable
-  well-unital distributive non trivial (non empty doubleLoopStr),
-  f being non-zero Polynomial of n,L,
-  P being non empty Subset of Polynom-Ring(n,L),
-  A being LeftLinearCombination of P st A is_Standard_Representation_of f,P,T
-  ex i being Element of NAT,
-  m being non-zero Monomial of n,L, p being non-zero Polynomial of n,L
-  st p in P & i in dom A & A/.i = m *' p & HT(f,T) = HT(m*'p,T);
+  for n being Ordinal, T being connected TermOrder of n, L being
+right_zeroed add-associative right_complementable well-unital distributive non
+trivial (non empty doubleLoopStr), f being non-zero Polynomial of n,L, P being
+non empty Subset of Polynom-Ring(n,L), A being LeftLinearCombination of P st A
+is_Standard_Representation_of f,P,T ex i being Element of NAT, m being non-zero
+Monomial of n,L, p being non-zero Polynomial of n,L st p in P & i in dom A & A
+  /.i = m *' p & HT(f,T) = HT(m*'p,T);
 
 theorem :: GROEB_2:43
+  for n being Ordinal, T being admissible connected TermOrder of n
+  , L being add-associative right_complementable right_zeroed commutative
+  associative well-unital distributive Abelian almost_left_invertible non
+  degenerated (non empty doubleLoopStr), f being Polynomial of n,L, P being non
+  empty Subset of Polynom-Ring(n,L) holds PolyRedRel(P,T) reduces f,0_(n,L)
+  implies f has_a_Standard_Representation_of P,T;
 :: lemma 5.60, p. 218
-  for n being Ordinal, T being admissible connected TermOrder of n,
-  L being add-associative right_complementable right_zeroed
-  commutative associative well-unital distributive
-  Abelian almost_left_invertible non degenerated (non empty doubleLoopStr),
-  f being Polynomial of n,L, P being non empty Subset of Polynom-Ring(n,L)
-  holds PolyRedRel(P,T) reduces f,0_(n,L) implies
-  f has_a_Standard_Representation_of P,T;
 
 theorem :: GROEB_2:44
+  for n being Ordinal, T being admissible connected TermOrder of n
+  , L being add-associative right_complementable right_zeroed commutative
+  associative well-unital distributive almost_left_invertible (non trivial
+doubleLoopStr), f being non-zero Polynomial of n,L, P being non empty Subset of
+  Polynom-Ring(n,L) holds f has_a_Standard_Representation_of P,T implies f
+  is_top_reducible_wrt P,T;
 :: lemma 5.61, p. 218
-  for n being Ordinal, T being admissible connected TermOrder of n,
-  L being add-associative right_complementable right_zeroed
-  commutative associative well-unital distributive
-  almost_left_invertible (non trivial doubleLoopStr),
-  f being non-zero Polynomial of n,L,
-  P being non empty Subset of Polynom-Ring(n,L)
-  holds f has_a_Standard_Representation_of P,T implies
-  f is_top_reducible_wrt P,T;
 
 theorem :: GROEB_2:45
+  for n being Element of NAT, T being connected admissible TermOrder of
+  n, L being add-associative right_complementable right_zeroed commutative
+  associative well-unital distributive Abelian almost_left_invertible non
+degenerated (non empty doubleLoopStr), G being non empty Subset of Polynom-Ring
+(n,L) holds G is_Groebner_basis_wrt T iff for f being non-zero Polynomial of n,
+  L st f in G-Ideal holds f has_a_Standard_Representation_of G,T;
 :: theorem 5.62, p. 219
-  for n being Element of NAT, T being connected admissible TermOrder of n,
-  L being add-associative right_complementable right_zeroed
-  commutative associative well-unital distributive Abelian
-  almost_left_invertible non degenerated (non empty doubleLoopStr),
-  G being non empty Subset of Polynom-Ring(n,L)
-  holds G is_Groebner_basis_wrt T
-  iff for f being non-zero Polynomial of n,L st f in G-Ideal
-  holds f has_a_Standard_Representation_of G,T;
+
 

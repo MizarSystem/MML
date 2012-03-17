@@ -16,7 +16,7 @@ environ
  constructors SETFAM_1, REAL_1, SQUARE_1, MEMBERED, COMPLEX1, REALSET1,
       PRE_TOPC, RLVECT_3, BHSP_2, RUSUB_3, RUSUB_4;
  registrations XBOOLE_0, SUBSET_1, XXREAL_0, XREAL_0, MEMBERED, STRUCT_0,
-      PRE_TOPC, TOPS_1, RLVECT_1, COMPLSP1, RUSUB_4;
+      PRE_TOPC, TOPS_1, RLVECT_1, RUSUB_4;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions XBOOLE_0, TARSKI, PRE_TOPC, RLVECT_1, SQUARE_1, SUBSET_1,
       STRUCT_0;
@@ -36,49 +36,51 @@ definition
 end;
 
 theorem
-  for V being right_zeroed (non empty RLSStruct), M be Affine Subset of V
-  holds M is_parallel_to M
+  for V being right_zeroed (non empty RLSStruct), M be Affine Subset of
+  V holds M is_parallel_to M
 proof
   let V be right_zeroed (non empty RLSStruct);
   let M be Affine Subset of V;
+  take 0.V;
+  for x being set st x in M + {0.V} holds x in M
+  proof
+    let x be set;
+    assume
+    x in M + {0.V};
+    then x in {u + v where u,v is Element of V: u in M & v in {0.V}} by
+    RUSUB_4:def 10;
+    then consider u,v being Element of V such that
+A1: x = u + v & u in M and
+A2: v in {0.V};
+    v = 0.V by A2,TARSKI:def 1;
+    hence thesis by A1,RLVECT_1:def 7;
+  end;
+  then
+A3: M + {0.V} c= M by TARSKI:def 3;
   for x being set st x in M holds x in M + {0.V}
   proof
     let x be set;
     assume
-A1: x in M;
+A4: x in M;
     then reconsider x as Element of V;
     x = x + 0.V & 0.V in {0.V} by RLVECT_1:def 7,TARSKI:def 1;
-    then x in {u + v where u,v is Element of V: u in M & v in {0.V}} by A1;
+    then x in {u + v where u,v is Element of V: u in M & v in {0.V}} by A4;
     hence thesis by RUSUB_4:def 10;
   end;
-  then
-A2: M c= M + {0.V} by TARSKI:def 3;
-  for x being set st x in M + {0.V} holds x in M
-  proof
-    let x be set;
-    assume x in M + {0.V};
-    then x in {u + v where u,v is Element of V: u in M & v in {0.V}}
-    by RUSUB_4:def 10;
-    then consider u,v being Element of V such that
-A3: x = u + v & u in M & v in {0.V};
-    v = 0.V by A3,TARSKI:def 1;
-    hence thesis by A3,RLVECT_1:def 7;
-  end;
-  then
-A4: M + {0.V} c= M by TARSKI:def 3;
-  take 0.V;
-  thus thesis by A2,A4,XBOOLE_0:def 10;
+  then M c= M + {0.V} by TARSKI:def 3;
+  hence thesis by A3,XBOOLE_0:def 10;
 end;
 
 theorem Th2:
-  for V being add-associative right_zeroed
-  right_complementable(non empty RLSStruct),
-  M,N be Affine Subset of V st M is_parallel_to N holds N is_parallel_to M
+  for V being add-associative right_zeroed right_complementable(non
+  empty RLSStruct), M,N be Affine Subset of V st M is_parallel_to N holds N
+  is_parallel_to M
 proof
-  let V be add-associative right_zeroed
-  right_complementable (non empty RLSStruct);
+  let V be add-associative right_zeroed right_complementable (non empty
+  RLSStruct);
   let M,N be Affine Subset of V;
-  assume M is_parallel_to N;
+  assume
+  M is_parallel_to N;
   then consider w1 being VECTOR of V such that
 A1: M = N + {w1} by Def1;
   set w2 = - w1;
@@ -88,56 +90,57 @@ A1: M = N + {w1} by Def1;
     assume
 A2: x in N;
     then reconsider x as Element of V;
-A3: w1 in {w1} by TARSKI:def 1;
     set y = x + w1;
-    y in {u + v where u,v is Element of V: u in N & v in {w1} } by A2,A3;
+    w1 in {w1} by TARSKI:def 1;
+    then y in {u + v where u,v is Element of V: u in N & v in {w1} } by A2;
     then
-A4: y in M by A1,RUSUB_4:def 10;
+A3: y in M by A1,RUSUB_4:def 10;
     x + (w1 + w2) = y + w2 by RLVECT_1:def 6;
     then x + 0.V = y + w2 by RLVECT_1:16;
     then
-A5: x = y + w2 by RLVECT_1:10;
+A4: x = y + w2 by RLVECT_1:10;
     w2 in {w2} by TARSKI:def 1;
-    then x in {u + v where u,v is Element of V: u in M & v in {w2}} by A4,A5;
+    then x in {u + v where u,v is Element of V: u in M & v in {w2}} by A3,A4;
     hence thesis by RUSUB_4:def 10;
   end;
   then
-A6: N c= M + {w2} by TARSKI:def 3;
+A5: N c= M + {w2} by TARSKI:def 3;
+  take w2;
   for x being set st x in M + {w2} holds x in N
   proof
     let x be set;
     assume
-A7: x in M + {w2};
-    then x in {u + v where u,v is Element of V: u in M & v in {w2}}
-    by RUSUB_4:def 10;
+A6: x in M + {w2};
+    then x in {u + v where u,v is Element of V: u in M & v in {w2}} by
+    RUSUB_4:def 10;
     then consider u',v' being Element of V such that
-A8: x = u' + v' & u' in M & v' in {w2};
-    reconsider x as Element of V by A7;
-    x = u' + w2 by A8,TARSKI:def 1;
+A7: x = u' + v' and
+A8: u' in M and
+A9: v' in {w2};
+    reconsider x as Element of V by A6;
+    x = u' + w2 by A7,A9,TARSKI:def 1;
     then x + w1 = u' + (w2 + w1) by RLVECT_1:def 6;
-    then x + w1 = u' + 0.V by RLVECT_1:16;
     then
-A9: x + w1 = u' by RLVECT_1:10;
-    u' in {u + v where u,v is Element of V: u in N & v in {w1 } }
-    by A1,A8,RUSUB_4:def 10;
+A10: x + w1 = u' + 0.V by RLVECT_1:16;
+    u' in {u + v where u,v is Element of V: u in N & v in {w1 } } by A1,
+    A8,RUSUB_4:def 10;
     then consider u1,v1 being Element of V such that
-A10: u' = u1 + v1 & u1 in N & v1 in {w1};
-    w1 =v1 by A10,TARSKI:def 1;
-    hence thesis by A9,A10,RLVECT_1:21;
+A11: u' = u1 + v1 & u1 in N and
+A12: v1 in {w1};
+    w1 =v1 by A12,TARSKI:def 1;
+    hence thesis by A10,A11,RLVECT_1:10,21;
   end;
-  then
-A11: M + {w2} c= N by TARSKI:def 3;
-  take w2;
-  thus thesis by A6,A11,XBOOLE_0:def 10;
+  then M + {w2} c= N by TARSKI:def 3;
+  hence thesis by A5,XBOOLE_0:def 10;
 end;
 
 theorem Th3:
   for V being Abelian add-associative right_zeroed
-  right_complementable (non empty RLSStruct), M,L,N be Affine Subset of V st
-  M is_parallel_to L & L is_parallel_to N holds M is_parallel_to N
+  right_complementable (non empty RLSStruct), M,L,N be Affine Subset of V st M
+  is_parallel_to L & L is_parallel_to N holds M is_parallel_to N
 proof
-  let V be Abelian add-associative right_zeroed
-  right_complementable (non empty RLSStruct);
+  let V be Abelian add-associative right_zeroed right_complementable (non
+  empty RLSStruct);
   let M,L,N be Affine Subset of V;
   assume that
 A1: M is_parallel_to L and
@@ -147,86 +150,93 @@ A3: M = L + {v1} by A1,Def1;
   consider u1 being Element of V such that
 A4: L = N + {u1} by A2,Def1;
   set w = u1 + v1;
-  for x being set st x in M holds x in N + {w}
-  proof
-    let x be set;
-    assume
-A5: x in M;
-    then reconsider x as Element of V;
-    x in {u + v where u,v is Element of V: u in L & v in {v1} }
-    by A3,A5,RUSUB_4:def 10;
-    then consider u2,v2 being Element of V such that
-A6: x = u2 + v2 & u2 in L & v2 in {v1};
-    u2 in {u + v where u,v is Element of V: u in N & v in {u1 } }
-    by A4,A6,RUSUB_4:def 10;
-    then consider u3,v3 being Element of V such that
-A7: u2 = u3 + v3 & u3 in N & v3 in {u1};
-    v2 = v1 & v3 = u1 by A6,A7,TARSKI:def 1;
-    then
-A8: x = u3 + w by A6,A7,RLVECT_1:def 6;
-    w in {w} by TARSKI:def 1;
-    then x in {u + v where u,v is Element of V: u in N & v in {w}} by A7,A8;
-    hence thesis by RUSUB_4:def 10;
-  end;
-  then
-A9: M c= N + {w} by TARSKI:def 3;
   for x being set st x in N + {w} holds x in M
   proof
     let x be set;
+A5: u1 in {u1} by TARSKI:def 1;
     assume
-A10: x in N + {w};
+A6: x in N + {w};
     then reconsider x as Element of V;
-    x in {u + v where u,v is Element of V: u in N & v in {w}}
-    by A10,RUSUB_4:def 10;
+    x in {u + v where u,v is Element of V: u in N & v in {w}} by A6,
+    RUSUB_4:def 10;
     then consider u2,v2 being Element of V such that
-A11: x = u2 + v2 & u2 in N & v2 in {w};
-    x = u2 + (u1 + v1) by A11,TARSKI:def 1
+A7: x = u2 + v2 and
+A8: u2 in N and
+A9: v2 in {w};
+    x = u2 + (u1 + v1) by A7,A9,TARSKI:def 1
       .= u2 + u1 + v1 by RLVECT_1:def 6;
-    then
-A12: x - v1 = u2 + u1 + (v1 - v1) by RLVECT_1:def 6
+    then x - v1 = u2 + u1 + (v1 - v1) by RLVECT_1:def 6
       .= u2 + u1 + 0.V by RLVECT_1:28
       .= u2 + u1 by RLVECT_1:10;
-    u1 in {u1} by TARSKI:def 1;
-    then x - v1 in {u + v where u,v is Element of V
-    : u in N & v in {u1}} by A11,A12;
+    then x - v1 in {u + v where u,v is Element of V : u in N & v in {u1}} by
+    A8,A5;
     then
-A13: x - v1 in L by A4,RUSUB_4:def 10;
+A10: x - v1 in L by A4,RUSUB_4:def 10;
     set y = x - v1;
-A14: y + v1 = x - (v1 - v1) by RLVECT_1:43
+A11: v1 in {v1} by TARSKI:def 1;
+    y + v1 = x - (v1 - v1) by RLVECT_1:43
       .= x - 0.V by RLVECT_1:28
       .= x by RLVECT_1:26;
-    v1 in {v1} by TARSKI:def 1;
-    then x in {u + v where u,v is Element of V: u in L & v in {v1}}
-    by A13,A14;
+    then
+    x in {u + v where u,v is Element of V: u in L & v in {v1}} by A10,A11;
     hence thesis by A3,RUSUB_4:def 10;
   end;
-  then N + {w} c= M by TARSKI:def 3;
-  then M = N + {w} by A9,XBOOLE_0:def 10;
+  then
+A12: N + {w} c= M by TARSKI:def 3;
+  for x being set st x in M holds x in N + {w}
+  proof
+    let x be set;
+A13: w in {w} by TARSKI:def 1;
+    assume
+A14: x in M;
+    then reconsider x as Element of V;
+    x in {u + v where u,v is Element of V: u in L & v in {v1} } by A3,A14,
+    RUSUB_4:def 10;
+    then consider u2,v2 being Element of V such that
+A15: x = u2 + v2 and
+A16: u2 in L and
+A17: v2 in {v1};
+A18: v2 = v1 by A17,TARSKI:def 1;
+    u2 in {u + v where u,v is Element of V: u in N & v in {u1 } } by A4,
+    A16,RUSUB_4:def 10;
+    then consider u3,v3 being Element of V such that
+A19: u2 = u3 + v3 and
+A20: u3 in N and
+A21: v3 in {u1};
+    v3 = u1 by A21,TARSKI:def 1;
+    then x = u3 + w by A15,A19,A18,RLVECT_1:def 6;
+    then
+    x in {u + v where u,v is Element of V: u in N & v in {w}} by A20,A13;
+    hence thesis by RUSUB_4:def 10;
+  end;
+  then M c= N + {w} by TARSKI:def 3;
+  then M = N + {w} by A12,XBOOLE_0:def 10;
   hence thesis by Def1;
 end;
 
 definition
   let V be non empty addLoopStr, M,N be Subset of V;
   func M - N -> Subset of V equals
-  {u - v where u,v is Element of V: u in M & v in N};
+  {u - v where u,v is Element of V: u in M &
+  v in N};
   coherence
   proof
-    deffunc F(Element of V,Element of V) = $1 - $2;
     defpred P[set,set] means $1 in M & $2 in N;
-    {F(u,v) where u,v is Element of V : P[u,v]}
-    is Subset of V from DOMAIN_1:sch 9;
+    deffunc F(Element of V,Element of V) = $1 - $2;
+    {F(u,v) where u,v is Element of V : P[u,v]} is Subset of V from
+    DOMAIN_1:sch 9;
     hence thesis;
   end;
 end;
 
 theorem Th4:
-  for V being RealLinearSpace, M,N being Affine Subset of V holds
-  M - N is Affine
+  for V being RealLinearSpace, M,N being Affine Subset of V holds M
+  - N is Affine
 proof
   let V be RealLinearSpace;
   let M,N be Affine Subset of V;
-  for x,y being VECTOR of V, a being Real st
-  x in M - N & y in M - N holds (1 - a) * x + a * y in M - N
+  for x,y being VECTOR of V, a being Real st x in M - N & y in M - N holds
+  (1 - a) * x + a * y in M - N
   proof
     let x,y be VECTOR of V;
     let a be Real;
@@ -234,43 +244,45 @@ proof
 A1: x in M - N and
 A2: y in M - N;
     consider u1,v1 being Element of V such that
-A3: x = u1 - v1 & u1 in M & v1 in N by A1;
+A3: x = u1 - v1 and
+A4: u1 in M & v1 in N by A1;
     consider u2,v2 being Element of V such that
-A4: y = u2 - v2 & u2 in M & v2 in N by A2;
-A5: (1-a)*u1 + a*u2 in M & (1-a)*v1 + a*v2 in N by A3,A4,RUSUB_4:def 5;
-    (1 - a) * x + a * y
-    = (1-a)*u1 - (1-a)*v1 + a * (u2 - v2) by A3,A4,RLVECT_1:48
+A5: y = u2 - v2 and
+A6: u2 in M & v2 in N by A2;
+A7: (1 - a) * x + a * y = (1-a)*u1 - (1-a)*v1 + a * (u2 - v2) by A3,A5,
+    RLVECT_1:48
       .= (1-a)*u1 - (1-a)*v1 + (a*u2 - a*v2) by RLVECT_1:48
       .= (1-a)*u1 + (-(1-a)*v1) + a*u2 - a*v2 by RLVECT_1:def 6
       .= (1-a)*u1 + a*u2 + (-(1-a)*v1) + (-a*v2) by RLVECT_1:def 6
       .= (1-a)*u1 + a*u2 + ((-(1-a)*v1) + (-a*v2)) by RLVECT_1:def 6
       .= (1-a)*u1 + a*u2 - ((1-a)*v1 + a*v2) by RLVECT_1:45;
-    hence thesis by A5;
+    (1-a)*u1 + a*u2 in M & (1-a)*v1 + a*v2 in N by A4,A6,RUSUB_4:def 5;
+    hence thesis by A7;
   end;
   hence thesis by RUSUB_4:def 5;
 end;
 
 theorem
-  for V being non empty addLoopStr, M,N being Subset of V st
-  M is empty or N is empty holds M + N is empty
+  for V being non empty addLoopStr, M,N being Subset of V st M is empty
+  or N is empty holds M + N is empty
 proof
   let V be non empty addLoopStr;
   let M,N be Subset of V;
   assume
 A1: M is empty or N is empty;
-  assume not M + N is empty;
+  assume
+  not M + N is empty;
   then consider x being set such that
 A2: x in M + N by XBOOLE_0:def 1;
-  x in {u + v where u,v is Element of V: u in M & v in N}
-  by A2,RUSUB_4:def 10;
-  then consider u,v being Element of V such that
-A3: x = u + v & u in M & v in N;
-  thus contradiction by A1,A3;
+  x in {u + v where u,v is Element of V: u in M & v in N} by A2,RUSUB_4:
+  def 10;
+  then ex u,v being Element of V st x = u + v & u in M & v in N;
+  hence contradiction by A1;
 end;
 
 theorem
-  for V being non empty addLoopStr, M,N being non empty Subset of V holds
-  M + N is non empty
+  for V being non empty addLoopStr, M,N being non empty Subset of V
+  holds M + N is non empty
 proof
   let V be non empty addLoopStr;
   let M,N be non empty Subset of V;
@@ -284,24 +296,24 @@ A2: y in N by XBOOLE_0:def 1;
 end;
 
 theorem
-  for V being non empty addLoopStr, M,N being Subset of V st
-  M is empty or N is empty holds M - N is empty
+  for V being non empty addLoopStr, M,N being Subset of V st M is empty
+  or N is empty holds M - N is empty
 proof
   let V be non empty addLoopStr;
   let M,N be Subset of V;
   assume
 A1: M is empty or N is empty;
-  assume not M - N is empty;
+  assume
+  not M - N is empty;
   then consider x being set such that
 A2: x in M - N by XBOOLE_0:def 1;
-  consider u,v being Element of V such that
-A3: x = u - v & u in M & v in N by A2;
-  thus contradiction by A1,A3;
+  ex u,v being Element of V st x = u - v & u in M & v in N by A2;
+  hence contradiction by A1;
 end;
 
 theorem Th8:
-  for V being non empty addLoopStr, M,N being non empty Subset of V holds
-  M - N is non empty
+  for V being non empty addLoopStr, M,N being non empty Subset of V
+  holds M - N is non empty
 proof
   let V be non empty addLoopStr;
   let M,N be non empty Subset of V;
@@ -316,119 +328,132 @@ end;
 
 theorem Th9:
   for V being Abelian add-associative right_zeroed
-  right_complementable (non empty addLoopStr), M,N being Subset of V,
-  v being Element of V holds M = N + {v} iff M - {v} = N
+  right_complementable (non empty addLoopStr), M,N being Subset of V, v being
+  Element of V holds M = N + {v} iff M - {v} = N
 proof
-  let V be Abelian add-associative right_zeroed
-  right_complementable (non empty addLoopStr);
+  let V be Abelian add-associative right_zeroed right_complementable (non
+  empty addLoopStr);
   let M,N be Subset of V;
   let v be Element of V;
-A1: M = N + {v} implies M - {v} = N
+A1: M - {v} = N implies M = N + {v}
   proof
     assume
-A2: M = N + {v};
-    for x being set st x in M - {v} holds x in N
-    proof
-      let x be set;
-      assume
-A3:   x in M - {v};
-      then reconsider x as Element of V;
-      consider u1,v1 being Element of V such that
-A4:   x = u1 - v1 & u1 in M & v1 in {v} by A3;
-A5:   v1 = v by A4,TARSKI:def 1;
-      x + v1 = u1 - (v1 - v1) by A4,RLVECT_1:43
-        .= u1 - 0.V by RLVECT_1:28
-        .= u1 by RLVECT_1:26;
-      then x + v in {u2 + v2 where u2,v2 is Element of V
-      : u2 in N & v2 in {v}} by A2,A4,A5,RUSUB_4:def 10;
-      then consider u2,v2 being Element of V such that
-A6:   x + v = u2 + v2 & u2 in N & v2 in {v};
-      v2 = v by A6,TARSKI:def 1;
-      hence thesis by A6,RLVECT_1:21;
-    end;
-    then
-A7: M - {v} c= N by TARSKI:def 3;
-    for x being set st x in N holds x in M - {v}
-    proof
-      let x be set;
-      assume
-A8:   x in N;
-      then reconsider x as Element of V;
-A9:   v in {v} by TARSKI:def 1;
-      then x + v in {u2 + v2 where u2,v2 is Element of V
-      : u2 in N & v2 in {v}} by A8;
-      then x + v in M by A2,RUSUB_4:def 10;
-      then consider u2 being Element of V such that
-A10:  x + v = u2 & u2 in M;
-      u2 - v = x + (v - v) by A10,RLVECT_1:def 6
-        .= x + 0.V by RLVECT_1:28
-        .= x by RLVECT_1:10;
-      hence thesis by A9,A10;
-    end;
-    then N c= M - {v} by TARSKI:def 3;
-    hence thesis by A7,XBOOLE_0:def 10;
-  end;
-  M - {v} = N implies M = N + {v}
-  proof
-    assume
-A11: M - {v} = N;
+A2: M - {v} = N;
     for x being set st x in N + {v} holds x in M
     proof
       let x be set;
       assume
-A12:  x in N + {v};
+A3:   x in N + {v};
       then reconsider x as Element of V;
-      x in {u1 + v1 where u1,v1 is Element of V : u1 in N & v1 in {v}}
-      by A12,RUSUB_4:def 10;
+      x in {u1 + v1 where u1,v1 is Element of V : u1 in N & v1 in {v}} by
+      A3,RUSUB_4:def 10;
       then consider u1,v1 being Element of V such that
-A13:  x = u1 + v1 & u1 in N & v1 in {v};
-A14:  v1 = v by A13,TARSKI:def 1;
-      x - v1 = u1 + (v1 - v1) by A13,RLVECT_1:def 6
+A4:   x = u1 + v1 and
+A5:   u1 in N and
+A6:   v1 in {v};
+A7:   x - v1 = u1 + (v1 - v1) by A4,RLVECT_1:def 6
         .= u1 + 0.V by RLVECT_1:28
         .= u1 by RLVECT_1:10;
+      v1 = v by A6,TARSKI:def 1;
       then consider u2,v2 being Element of V such that
-A15:  x - v = u2 - v2 & u2 in M & v2 in {v} by A11,A13,A14;
-      v2 = v by A15,TARSKI:def 1;
-      then x - v + v = u2 - (v - v) by A15,RLVECT_1:43
+A8:   x - v = u2 - v2 and
+A9:   u2 in M and
+A10:  v2 in {v} by A2,A5,A7;
+      v2 = v by A10,TARSKI:def 1;
+      then x - v + v = u2 - (v - v) by A8,RLVECT_1:43
         .= u2 - 0.V by RLVECT_1:28
         .= u2 by RLVECT_1:26;
       then u2 = x - (v - v) by RLVECT_1:43
         .= x - 0.V by RLVECT_1:28;
-      hence thesis by A15,RLVECT_1:26;
+      hence thesis by A9,RLVECT_1:26;
     end;
     then
-A16: N + {v} c= M by TARSKI:def 3;
+A11: N + {v} c= M by TARSKI:def 3;
     for x being set st x in M holds x in N + {v}
     proof
       let x be set;
       assume
-A17:  x in M;
+A12:  x in M;
       then reconsider x as Element of V;
-A18:  v in {v} by TARSKI:def 1;
-      then x - v in {u2 - v2 where u2,v2 is Element of V
-      : u2 in M & v2 in {v}} by A17;
+A13:  v in {v} by TARSKI:def 1;
+      then
+      x - v in {u2 - v2 where u2,v2 is Element of V : u2 in M & v2 in {v}
+      } by A12;
       then consider u2 being Element of V such that
-A19:  x - v = u2 & u2 in N by A11;
-      u2 + v = x - (v - v) by A19,RLVECT_1:43
+A14:  x - v = u2 and
+A15:  u2 in N by A2;
+      u2 + v = x - (v - v) by A14,RLVECT_1:43
         .= x - 0.V by RLVECT_1:28
         .= x by RLVECT_1:26;
-      then x in {u1 + v1 where u1,v1 is Element of V
-      : u1 in N & v1 in {v}} by A18,A19;
+      then
+      x in {u1 + v1 where u1,v1 is Element of V : u1 in N & v1 in {v}} by
+      A13,A15;
       hence thesis by RUSUB_4:def 10;
     end;
     then M c= N + {v} by TARSKI:def 3;
-    hence thesis by A16,XBOOLE_0:def 10;
+    hence thesis by A11,XBOOLE_0:def 10;
+  end;
+  M = N + {v} implies M - {v} = N
+  proof
+    assume
+A16: M = N + {v};
+    for x being set st x in M - {v} holds x in N
+    proof
+      let x be set;
+      assume
+A17:  x in M - {v};
+      then reconsider x as Element of V;
+      consider u1,v1 being Element of V such that
+A18:  x = u1 - v1 and
+A19:  u1 in M and
+A20:  v1 in {v} by A17;
+A21:  x + v1 = u1 - (v1 - v1) by A18,RLVECT_1:43
+        .= u1 - 0.V by RLVECT_1:28
+        .= u1 by RLVECT_1:26;
+      v1 = v by A20,TARSKI:def 1;
+      then
+      x + v in {u2 + v2 where u2,v2 is Element of V : u2 in N & v2 in {v}
+      } by A16,A19,A21,RUSUB_4:def 10;
+      then consider u2,v2 being Element of V such that
+A22:  x + v = u2 + v2 & u2 in N and
+A23:  v2 in {v};
+      v2 = v by A23,TARSKI:def 1;
+      hence thesis by A22,RLVECT_1:21;
+    end;
+    then
+A24: M - {v} c= N by TARSKI:def 3;
+    for x being set st x in N holds x in M - {v}
+    proof
+      let x be set;
+      assume
+A25:  x in N;
+      then reconsider x as Element of V;
+A26:  v in {v} by TARSKI:def 1;
+      then
+      x + v in {u2 + v2 where u2,v2 is Element of V : u2 in N & v2 in {v}
+      } by A25;
+      then x + v in M by A16,RUSUB_4:def 10;
+      then consider u2 being Element of V such that
+A27:  x + v = u2 and
+A28:  u2 in M;
+      u2 - v = x + (v - v) by A27,RLVECT_1:def 6
+        .= x + 0.V by RLVECT_1:28
+        .= x by RLVECT_1:10;
+      hence thesis by A26,A28;
+    end;
+    then N c= M - {v} by TARSKI:def 3;
+    hence thesis by A24,XBOOLE_0:def 10;
   end;
   hence thesis by A1;
 end;
 
 theorem
-  for V being Abelian add-associative right_zeroed
-  right_complementable (non empty addLoopStr), M,N being Subset of V,
-  v being Element of V st v in N holds M + {v} c= M + N
+  for V being Abelian add-associative right_zeroed right_complementable
+  (non empty addLoopStr), M,N being Subset of V, v being Element of V st v in N
+  holds M + {v} c= M + N
 proof
-  let V be Abelian add-associative right_zeroed
-  right_complementable (non empty addLoopStr);
+  let V be Abelian add-associative right_zeroed right_complementable (non
+  empty addLoopStr);
   let M,N be Subset of V;
   let v be Element of V;
   assume
@@ -439,25 +464,28 @@ A1: v in N;
     assume
 A2: x in M + {v};
     then reconsider x as Element of V;
-    x in {u1 + v1 where u1,v1 is Element of V
-    : u1 in M & v1 in {v}} by A2,RUSUB_4:def 10;
+    x in {u1 + v1 where u1,v1 is Element of V : u1 in M & v1 in {v}} by A2
+    ,RUSUB_4:def 10;
     then consider u2,v2 being Element of V such that
-A3: x = u2 + v2 & u2 in M & v2 in {v};
-    x = u2 + v by A3,TARSKI:def 1;
-    then x in {u1 + v1 where u1,v1 is Element of V
-    : u1 in M & v1 in N} by A1,A3;
+A3: x = u2 + v2 and
+A4: u2 in M and
+A5: v2 in {v};
+    x = u2 + v by A3,A5,TARSKI:def 1;
+    then
+    x in {u1 + v1 where u1,v1 is Element of V : u1 in M & v1 in N} by A1,
+    A4;
     hence thesis by RUSUB_4:def 10;
   end;
   hence thesis by TARSKI:def 3;
 end;
 
 theorem
-  for V being Abelian add-associative right_zeroed
-  right_complementable (non empty addLoopStr), M,N being Subset of V,
-  v being Element of V st v in N holds M - {v} c= M - N
+  for V being Abelian add-associative right_zeroed right_complementable
+  (non empty addLoopStr), M,N being Subset of V, v being Element of V st v in N
+  holds M - {v} c= M - N
 proof
-  let V be Abelian add-associative right_zeroed
-  right_complementable (non empty addLoopStr);
+  let V be Abelian add-associative right_zeroed right_complementable (non
+  empty addLoopStr);
   let M,N be Subset of V;
   let v be Element of V;
   assume
@@ -469,9 +497,11 @@ A1: v in N;
 A2: x in M - {v};
     then reconsider x as Element of V;
     consider u2,v2 being Element of V such that
-A3: x = u2 - v2 & u2 in M & v2 in {v} by A2;
-    x = u2 - v by A3,TARSKI:def 1;
-    hence thesis by A1,A3;
+A3: x = u2 - v2 and
+A4: u2 in M and
+A5: v2 in {v} by A2;
+    x = u2 - v by A3,A5,TARSKI:def 1;
+    hence thesis by A1,A4;
   end;
   hence thesis by TARSKI:def 3;
 end;
@@ -490,36 +520,35 @@ A1: v in M by XBOOLE_0:def 1;
 end;
 
 theorem Th13:
-  for V being RealLinearSpace, M being non empty Affine Subset of V,
-  v being VECTOR of V st M is Subspace-like & v in M holds M + {v} c= M
+  for V being RealLinearSpace, M being non empty Affine Subset of
+  V, v being VECTOR of V st M is Subspace-like & v in M holds M + {v} c= M
 proof
   let V be RealLinearSpace;
   let M be non empty Affine Subset of V;
   let v be VECTOR of V;
-  assume that
-A1: M is Subspace-like and
-A2: v in M;
+  assume
+A1: M is Subspace-like & v in M;
   for x being set st x in M + {v} holds x in M
   proof
     let x be set;
     assume
-A3: x in M + {v};
+A2: x in M + {v};
     then reconsider x as Element of V;
-    x in {u1 + v1 where u1,v1 is Element of V
-    : u1 in M & v1 in {v}} by A3,RUSUB_4:def 10;
+    x in {u1 + v1 where u1,v1 is Element of V : u1 in M & v1 in {v}} by A2
+    ,RUSUB_4:def 10;
     then consider u1,v1 being Element of V such that
-A4: x = u1 + v1 & u1 in M & v1 in {v};
+A3: x = u1 + v1 & u1 in M and
+A4: v1 in {v};
     v1 = v by A4,TARSKI:def 1;
-    hence thesis by A1,A2,A4,RUSUB_4:def 8;
+    hence thesis by A1,A3,RUSUB_4:def 8;
   end;
   hence thesis by TARSKI:def 3;
 end;
 
 theorem Th14:
-  for V being RealLinearSpace, M being non empty Affine Subset of V,
-  N1,N2 being non empty Affine Subset of V st
-  N1 is Subspace-like & N2 is Subspace-like &
-  M is_parallel_to N1 & M is_parallel_to N2 holds N1 = N2
+  for V being RealLinearSpace, M being non empty Affine Subset of
+  V, N1,N2 being non empty Affine Subset of V st N1 is Subspace-like & N2 is
+  Subspace-like & M is_parallel_to N1 & M is_parallel_to N2 holds N1 = N2
 proof
   let V be RealLinearSpace;
   let M,N1,N2 be non empty Affine Subset of V;
@@ -528,202 +557,211 @@ A1: N1 is Subspace-like and
 A2: N2 is Subspace-like and
 A3: M is_parallel_to N1 and
 A4: M is_parallel_to N2;
-  N1 is_parallel_to M by A3,Th2;
-  then N1 is_parallel_to N2 by A4,Th3;
-  then consider v1 being VECTOR of V such that
-A5: N1 = N2 + {v1} by Def1;
-  0.V in N1 by A1,RUSUB_4:def 8;
-  then 0.V in {p + q where p,q is Element of V
-  : p in N2 & q in {v1}} by A5,RUSUB_4:def 10;
-  then consider p1,q1 being Element of V such that
-A6: 0.V = p1 + q1 & p1 in N2 & q1 in {v1};
-  0.V = p1 + v1 by A6,TARSKI:def 1;
-  then
-A7: -v1 in N2 by A6,RLVECT_1:19;
-  v1 = -(-v1) by RLVECT_1:30
-    .= (-1) * (-v1) by RLVECT_1:29;
-  then v1 in N2 by A2,A7,RUSUB_4:def 8;
-  then
-A8: N1 c= N2 by A2,A5,Th13;
   N2 is_parallel_to M by A4,Th2;
   then N2 is_parallel_to N1 by A3,Th3;
   then consider v2 being VECTOR of V such that
-A9: N2 = N1 + {v2} by Def1;
+A5: N2 = N1 + {v2} by Def1;
+  N1 is_parallel_to M by A3,Th2;
+  then N1 is_parallel_to N2 by A4,Th3;
+  then consider v1 being VECTOR of V such that
+A6: N1 = N2 + {v1} by Def1;
   0.V in N2 by A2,RUSUB_4:def 8;
-  then 0.V in {p + q where p,q is Element of V
-  : p in N1 & q in {v2}} by A9,RUSUB_4:def 10;
+  then 0.V in {p + q where p,q is Element of V : p in N1 & q in {v2}} by A5,
+  RUSUB_4:def 10;
   then consider p2,q2 being Element of V such that
-A10: 0.V = p2 + q2 & p2 in N1 & q2 in {v2};
-  0.V = p2 + v2 by A10,TARSKI:def 1;
+A7: 0.V = p2 + q2 and
+A8: p2 in N1 and
+A9: q2 in {v2};
+  0.V = p2 + v2 by A7,A9,TARSKI:def 1;
   then
-A11: -v2 in N1 by A10,RLVECT_1:19;
+A10: -v2 in N1 by A8,RLVECT_1:19;
   v2 = -(-v2) by RLVECT_1:30
     .= (-1) * (-v2) by RLVECT_1:29;
-  then v2 in N1 by A1,A11,RUSUB_4:def 8;
-  then N2 c= N1 by A1,A9,Th13;
-  hence thesis by A8,XBOOLE_0:def 10;
+  then v2 in N1 by A1,A10,RUSUB_4:def 8;
+  then
+A11: N2 c= N1 by A1,A5,Th13;
+  0.V in N1 by A1,RUSUB_4:def 8;
+  then 0.V in {p + q where p,q is Element of V : p in N2 & q in {v1}} by A6,
+  RUSUB_4:def 10;
+  then consider p1,q1 being Element of V such that
+A12: 0.V = p1 + q1 and
+A13: p1 in N2 and
+A14: q1 in {v1};
+  0.V = p1 + v1 by A12,A14,TARSKI:def 1;
+  then
+A15: -v1 in N2 by A13,RLVECT_1:19;
+  v1 = -(-v1) by RLVECT_1:30
+    .= (-1) * (-v1) by RLVECT_1:29;
+  then v1 in N2 by A2,A15,RUSUB_4:def 8;
+  then N1 c= N2 by A2,A6,Th13;
+  hence thesis by A11,XBOOLE_0:def 10;
 end;
 
 theorem Th15:
-  for V being RealLinearSpace, M being non empty Affine Subset of V,
-  v being VECTOR of V st v in M holds 0.V in M - {v}
+  for V being RealLinearSpace, M being non empty Affine Subset of
+  V, v being VECTOR of V st v in M holds 0.V in M - {v}
 proof
   let V be RealLinearSpace;
   let M be non empty Affine Subset of V;
   let v being VECTOR of V;
+A1: v in {v} & 0.V = v - v by RLVECT_1:28,TARSKI:def 1;
   assume
-A1: v in M;
-A2: v in {v} by TARSKI:def 1;
-  0.V = v - v by RLVECT_1:28;
-  hence thesis by A1,A2;
+  v in M;
+  hence thesis by A1;
 end;
 
 theorem Th16:
-  for V being RealLinearSpace, M being non empty Affine Subset of V,
-  v being VECTOR of V st v in M holds
-  ex N being non empty Affine Subset of V st
-  N = M - {v} & M is_parallel_to N & N is Subspace-like
+  for V being RealLinearSpace, M being non empty Affine Subset of
+V, v being VECTOR of V st v in M holds ex N being non empty Affine Subset of V
+  st N = M - {v} & M is_parallel_to N & N is Subspace-like
 proof
   let V be RealLinearSpace;
   let M be non empty Affine Subset of V;
   let v be VECTOR of V;
-  assume
-A1: v in M;
   {v} is non empty Affine by RUSUB_4:23;
   then reconsider N = M - {v} as non empty Affine Subset of V by Th4,Th8;
-A2: 0.V in N by A1,Th15;
-A3: M is_parallel_to N
+  assume
+  v in M;
+  then
+A1: 0.V in N by Th15;
+  take N;
+  M is_parallel_to N
   proof
     take v;
     thus thesis by Th9;
   end;
-  take N;
-  thus thesis by A2,A3,RUSUB_4:26;
+  hence thesis by A1,RUSUB_4:26;
 end;
 
 theorem Th17:
-  for V being RealLinearSpace, M being non empty Affine Subset of V,
-  u,v being VECTOR of V st u in M & v in M holds M - {v} = M - {u}
+  for V being RealLinearSpace, M being non empty Affine Subset of
+  V, u,v being VECTOR of V st u in M & v in M holds M - {v} = M - {u}
 proof
   let V be RealLinearSpace;
   let M be non empty Affine Subset of V;
   let u,v be VECTOR of V;
-  assume that
-A1: u in M and
-A2: v in M;
-  consider N1 being non empty Affine Subset of V such that
-A3: N1 = M - {u} & M is_parallel_to N1 & N1 is Subspace-like by A1,Th16;
-  consider N2 being non empty Affine Subset of V such that
-A4: N2 = M - {v} & M is_parallel_to N2 & N2 is Subspace-like by A2,Th16;
-  thus thesis by A3,A4,Th14;
+  assume
+  u in M & v in M;
+  then (ex N1 being non empty Affine Subset of V st N1 = M - {u} & M
+is_parallel_to N1 & N1 is Subspace-like )& ex N2 being non empty Affine Subset
+  of V st N2 = M - {v} & M is_parallel_to N2 & N2 is Subspace-like by Th16;
+  hence thesis by Th14;
 end;
 
 theorem Th18:
-  for V being RealLinearSpace, M being non empty Affine Subset of V holds
-  M - M = union {M - {v} where v is VECTOR of V : v in M}
+  for V being RealLinearSpace, M being non empty Affine Subset of
+  V holds M - M = union {M - {v} where v is VECTOR of V : v in M}
 proof
   let V be RealLinearSpace;
   let M be non empty Affine Subset of V;
-  for x being set st x in M - M holds
-  x in union {M - {v} where v is VECTOR of V : v in M}
+  for x being set st x in M - M holds x in union {M - {v} where v is
+  VECTOR of V : v in M}
   proof
     let x be set;
     assume
 A1: x in M - M;
     then reconsider x as Element of V;
     consider u1,v1 being Element of V such that
-A2: x = u1 - v1 & u1 in M & v1 in M by A1;
+A2: x = u1 - v1 & u1 in M and
+A3: v1 in M by A1;
     v1 in {v1} by TARSKI:def 1;
     then
-A3: x in {p - q where p,q is Element of V : p in M & q in {v1}} by A2;
-    M - {v1} in {M - {v} where v is VECTOR of V : v in M} by A2;
-    hence thesis by A3,TARSKI:def 4;
+A4: x in {p - q where p,q is Element of V : p in M & q in {v1}} by A2;
+    M - {v1} in {M - {v} where v is VECTOR of V : v in M} by A3;
+    hence thesis by A4,TARSKI:def 4;
   end;
   then
-A4: M - M c= union {M - {v} where v is VECTOR of V : v in M} by TARSKI:def 3;
-  for x being set st
-  x in union {M - {v} where v is VECTOR of V : v in M} holds x in M - M
+A5: M - M c= union {M - {v} where v is VECTOR of V : v in M} by
+  TARSKI:
+  def 3;
+  for x being set st x in union {M - {v} where v is VECTOR of V : v in M}
+  holds x in M - M
   proof
     let x be set;
-    assume x in union {M - {v} where v is VECTOR of V : v in M};
+    assume
+    x in union {M - {v} where v is VECTOR of V : v in M};
     then consider N being set such that
-A5: x in N & N in {M - {v} where v is VECTOR of V : v in M} by TARSKI:def 4;
+A6: x in N and
+A7: N in {M - {v} where v is VECTOR of V : v in M} by TARSKI:def
+    4;
     consider v1 being VECTOR of V such that
-A6: N = M - {v1} & v1 in M by A5;
+A8: N = M - {v1} and
+A9: v1 in M by A7;
     consider p1,q1 being Element of V such that
-A7: x = p1 - q1 & p1 in M & q1 in {v1} by A5,A6;
-    q1 = v1 by A7,TARSKI:def 1;
-    hence thesis by A6,A7;
+A10: x = p1 - q1 & p1 in M and
+A11: q1 in {v1} by A6,A8;
+    q1 = v1 by A11,TARSKI:def 1;
+    hence thesis by A9,A10;
   end;
-
-then union {M - {v} where v is VECTOR of V : v in M} c= M - M by TARSKI:def 3;
-  hence thesis by A4,XBOOLE_0:def 10;
+  then union {M - {v} where v is VECTOR of V : v in M} c= M - M by
+  TARSKI
+  :def 3;
+  hence thesis by A5,XBOOLE_0:def 10;
 end;
 
 theorem Th19:
-  for V being RealLinearSpace, M being non empty Affine Subset of V,
-  v being VECTOR of V st v in M holds
-  M - {v} = union {M - {u} where u is VECTOR of V : u in M}
+  for V being RealLinearSpace, M being non empty Affine Subset of
+  V, v being VECTOR of V st v in M holds M - {v} = union {M - {u} where u is
+  VECTOR of V : u in M}
 proof
   let V be RealLinearSpace;
   let M be non empty Affine Subset of V;
   let v be VECTOR of V;
   assume
 A1: v in M;
-  for x being set st x in M - {v} holds
-  x in union {M - {u} where u is VECTOR of V : u in M}
-  proof
-    let x be set;
-    assume
-A2: x in M - {v};
-    M - {v} in {M - {u} where u is VECTOR of V : u in M} by A1;
-    hence thesis by A2,TARSKI:def 4;
-  end;
-  then
-A3: M - {v} c= union {M - {u} where u is VECTOR of V : u in M} by TARSKI:def 3;
   for x being set st x in union {M - {u} where u is VECTOR of V : u in M }
   holds x in M - {v}
   proof
     let x be set;
-    assume x in union {M - {u} where u is VECTOR of V : u in M};
+    assume
+    x in union {M - {u} where u is VECTOR of V : u in M};
     then consider N being set such that
-A4: x in N & N in {M - {u} where u is VECTOR of V : u in M} by TARSKI:def 4;
-    consider v1 being VECTOR of V such that
-A5: N = M - {v1} & v1 in M by A4;
-    thus thesis by A1,A4,A5,Th17;
+A2: x in N and
+A3: N in {M - {u} where u is VECTOR of V : u in M} by TARSKI:def 4;
+    ex v1 being VECTOR of V st N = M - {v1} & v1 in M by A3;
+    hence thesis by A1,A2,Th17;
   end;
-  then union {M - {u} where u is VECTOR of V : u in M} c= M - {v} by
-TARSKI:def 3;
-  hence thesis by A3,XBOOLE_0:def 10;
+  then
+A4: union {M - {u} where u is VECTOR of V : u in M} c= M - {v} by
+  TARSKI:def 3;
+  for x being set st x in M - {v} holds x in union {M - {u} where u is
+  VECTOR of V : u in M}
+  proof
+    let x be set;
+    assume
+A5: x in M - {v};
+    M - {v} in {M - {u} where u is VECTOR of V : u in M} by A1;
+    hence thesis by A5,TARSKI:def 4;
+  end;
+  then M - {v} c= union {M - {u} where u is VECTOR of V : u in M} by
+  TARSKI
+  :def 3;
+  hence thesis by A4,XBOOLE_0:def 10;
 end;
 
 theorem
   for V being RealLinearSpace, M be non empty Affine Subset of V holds
-  ex L being non empty Affine Subset of V st
-  L = M - M & L is Subspace-like & M is_parallel_to L
+  ex L being non empty Affine Subset of V st L = M - M & L is Subspace-like & M
+  is_parallel_to L
 proof
   let V be RealLinearSpace;
   let M be non empty Affine Subset of V;
+  reconsider L = M - M as non empty Affine Subset of V by Th4,Th8;
   consider v being set such that
 A1: v in M by XBOOLE_0:def 1;
   reconsider v as VECTOR of V by A1;
+  take L;
+A2: 0.V in L by Th12;
   {v} is non empty Affine by RUSUB_4:23;
   then reconsider N = M - {v} as non empty Affine Subset of V by Th4,Th8;
-A2: M is_parallel_to N
+A3: M is_parallel_to N
   proof
     take v;
     thus thesis by Th9;
   end;
-  reconsider L = M - M as non empty Affine Subset of V by Th4,Th8;
-  take L;
-A3: L is Subspace-like
-  proof
-    0.V in L by Th12;
-    hence thesis by RUSUB_4:26;
-  end;
   N = union {M - {u} where u is VECTOR of V : u in M} by A1,Th19
     .= L by Th18;
-  hence thesis by A2,A3;
+  hence thesis by A3,A2,RUSUB_4:26;
 end;
 
 begin :: Orthogonality
@@ -732,57 +770,64 @@ definition
   let V be RealUnitarySpace, W be Subspace of V;
   func Ort_Comp W -> strict Subspace of V means
   :Def3:
-  the carrier of it = {v where v is VECTOR of V :
-  for w being VECTOR of V st w in W holds w, v are_orthogonal};
+  the carrier of it = {v
+  where v is VECTOR of V : for w being VECTOR of V st w in W holds w, v
+  are_orthogonal};
   existence
   proof
-    defpred P[VECTOR of V] means
-    for w being VECTOR of V st w in W holds w,$1 are_orthogonal;
-    reconsider A = {v where v is VECTOR of V : P[v]}
-    as Subset of V from DOMAIN_1:sch 7;
-    for w being VECTOR of V st w in W holds w,0.V are_orthogonal
-    proof
-      let w be VECTOR of V;
-      assume w in W;
-      w .|. 0.V = 0 by BHSP_1:20;
-      hence thesis by BHSP_1:def 3;
-    end;
-    then
-A1: 0.V in A;
-A2: for v,u being VECTOR of V st v in A & u in A holds v + u in A
+    defpred P[VECTOR of V] means for w being VECTOR of V st w in W holds w,$1
+    are_orthogonal;
+    reconsider A = {v where v is VECTOR of V : P[v]} as Subset of V from
+    DOMAIN_1:sch 7;
+A1: for v,u being VECTOR of V st v in A & u in A holds v + u in A
     proof
       let v,u be VECTOR of V;
-      assume
-A3:   v in A & u in A;
+      assume that
+A2:   v in A and
+A3:   u in A;
       for w being VECTOR of V st w in W holds w,(v + u) are_orthogonal
       proof
         let w be VECTOR of V;
         assume
 A4:     w in W;
-        consider v' being VECTOR of V such that
-A5:     v = v' &
-        for w being VECTOR of V st w in W holds w,v' are_orthogonal by A3;
-        consider u' being VECTOR of V such that
-A6:     u = u' &
-        for w being VECTOR of V st w in W holds w,u' are_orthogonal by A3;
-        w,v are_orthogonal & w,u are_orthogonal by A4,A5,A6;
-        then w .|. v = 0 & w .|. u = 0 by BHSP_1:def 3;
-        then w .|. (v+u) = 0 + 0 by BHSP_1:7;
+        ex u' being VECTOR of V st u = u' & for w being VECTOR of V st w
+        in W holds w,u' are_orthogonal by A3;
+        then w,u are_orthogonal by A4;
+        then
+A5:     w .|. u = 0 by BHSP_1:def 3;
+        ex v' being VECTOR of V st v = v' & for w being VECTOR of V st w in
+        W holds w,v' are_orthogonal by A2;
+        then w,v are_orthogonal by A4;
+        then w .|. v = 0 by BHSP_1:def 3;
+        then w .|. (v+u) = 0 + 0 by A5,BHSP_1:7;
         hence thesis by BHSP_1:def 3;
       end;
       hence thesis;
     end;
+    for w being VECTOR of V st w in W holds w,0.V are_orthogonal
+    proof
+      let w be VECTOR of V;
+      assume
+      w in W;
+      w .|. 0.V = 0 by BHSP_1:20;
+      hence thesis by BHSP_1:def 3;
+    end;
+    then
+A6: 0.V in A;
     for a being Real, v being VECTOR of V st v in A holds a * v in A
     proof
       let a be Real;
       let v be VECTOR of V;
-      assume v in A;
-      then consider v' being VECTOR of V such that
-A7:   v = v' & for w being VECTOR of V st w in W holds w,v' are_orthogonal;
+      assume
+      v in A;
+      then
+A7:   ex v' being VECTOR of V st v = v' & for w being VECTOR of V st w in
+      W holds w,v' are_orthogonal;
       for w being VECTOR of V st w in W holds w,(a*v) are_orthogonal
       proof
         let w be VECTOR of V;
-        assume w in W;
+        assume
+        w in W;
         then
 A8:     w,v are_orthogonal by A7;
         w .|. (a*v) = a * w .|. v by BHSP_1:8
@@ -791,8 +836,8 @@ A8:     w,v are_orthogonal by A7;
       end;
       hence thesis;
     end;
-    then A is linearly-closed by A2,RLSUB_1:def 1;
-    hence thesis by A1,RUSUB_1:29;
+    then A is linearly-closed by A1,RLSUB_1:def 1;
+    hence thesis by A6,RUSUB_1:29;
   end;
   uniqueness by RUSUB_1:24;
 end;
@@ -801,57 +846,64 @@ definition
   let V be RealUnitarySpace, M be non empty Subset of V;
   func Ort_Comp M -> strict Subspace of V means
   :Def4:
-  the carrier of it = {v where v is VECTOR of V :
-  for w being VECTOR of V st w in M holds w, v are_orthogonal};
+  the carrier of it = {v
+  where v is VECTOR of V : for w being VECTOR of V st w in M holds w, v
+  are_orthogonal};
   existence
   proof
-    defpred P[VECTOR of V] means
-    for w being VECTOR of V st w in M holds w,$1 are_orthogonal;
-    reconsider A = {v where v is VECTOR of V : P[v]}
-    as Subset of V from DOMAIN_1:sch 7;
-    for w being VECTOR of V st w in M holds w,0.V are_orthogonal
-    proof
-      let w be VECTOR of V;
-      assume w in M;
-      w .|. 0.V = 0 by BHSP_1:20;
-      hence thesis by BHSP_1:def 3;
-    end;
-    then
-A1: 0.V in A;
-A2: for v,u being VECTOR of V st v in A & u in A holds v + u in A
+    defpred P[VECTOR of V] means for w being VECTOR of V st w in M holds w,$1
+    are_orthogonal;
+    reconsider A = {v where v is VECTOR of V : P[v]} as Subset of V from
+    DOMAIN_1:sch 7;
+A1: for v,u being VECTOR of V st v in A & u in A holds v + u in A
     proof
       let v,u be VECTOR of V;
-      assume
-A3:   v in A & u in A;
+      assume that
+A2:   v in A and
+A3:   u in A;
       for w being VECTOR of V st w in M holds w,(v + u) are_orthogonal
       proof
         let w be VECTOR of V;
         assume
 A4:     w in M;
-        consider v' being VECTOR of V such that
-A5:     v = v' &
-        for w being VECTOR of V st w in M holds w,v' are_orthogonal by A3;
-        consider u' being VECTOR of V such that
-A6:     u = u' &
-        for w being VECTOR of V st w in M holds w,u' are_orthogonal by A3;
-        w,v are_orthogonal & w,u are_orthogonal by A4,A5,A6;
-        then w .|. v = 0 & w .|. u = 0 by BHSP_1:def 3;
-        then w .|. (v+u) = 0 + 0 by BHSP_1:7;
+        ex u' being VECTOR of V st u = u' & for w being VECTOR of V st w
+        in M holds w,u' are_orthogonal by A3;
+        then w,u are_orthogonal by A4;
+        then
+A5:     w .|. u = 0 by BHSP_1:def 3;
+        ex v' being VECTOR of V st v = v' & for w being VECTOR of V st w in
+        M holds w,v' are_orthogonal by A2;
+        then w,v are_orthogonal by A4;
+        then w .|. v = 0 by BHSP_1:def 3;
+        then w .|. (v+u) = 0 + 0 by A5,BHSP_1:7;
         hence thesis by BHSP_1:def 3;
       end;
       hence thesis;
     end;
+    for w being VECTOR of V st w in M holds w,0.V are_orthogonal
+    proof
+      let w be VECTOR of V;
+      assume
+      w in M;
+      w .|. 0.V = 0 by BHSP_1:20;
+      hence thesis by BHSP_1:def 3;
+    end;
+    then
+A6: 0.V in A;
     for a being Real, v being VECTOR of V st v in A holds a * v in A
     proof
       let a be Real;
       let v be VECTOR of V;
-      assume v in A;
-      then consider v' being VECTOR of V such that
-A7:   v = v' & for w being VECTOR of V st w in M holds w,v' are_orthogonal;
+      assume
+      v in A;
+      then
+A7:   ex v' being VECTOR of V st v = v' & for w being VECTOR of V st w in
+      M holds w,v' are_orthogonal;
       for w being VECTOR of V st w in M holds w,(a*v) are_orthogonal
       proof
         let w be VECTOR of V;
-        assume w in M;
+        assume
+        w in M;
         then
 A8:     w,v are_orthogonal by A7;
         w .|. (a*v) = a * w .|. v by BHSP_1:8
@@ -860,26 +912,28 @@ A8:     w,v are_orthogonal by A7;
       end;
       hence thesis;
     end;
-    then A is linearly-closed by A2,RLSUB_1:def 1;
-    hence thesis by A1,RUSUB_1:29;
+    then A is linearly-closed by A1,RLSUB_1:def 1;
+    hence thesis by A6,RUSUB_1:29;
   end;
   uniqueness by RUSUB_1:24;
 end;
 
 theorem
-  for V being RealUnitarySpace, W being Subspace of V holds 0.V in Ort_Comp W
+  for V being RealUnitarySpace, W being Subspace of V holds 0.V in
+  Ort_Comp W
 proof
   let V be RealUnitarySpace;
   let W be Subspace of V;
   for w being VECTOR of V st w in W holds w,0.V are_orthogonal
   proof
     let w be VECTOR of V;
-    assume w in W;
+    assume
+    w in W;
     w .|. 0.V = 0 by BHSP_1:20;
     hence thesis by BHSP_1:def 3;
   end;
-  then 0.V in {v where v is VECTOR of V :
-  for w being VECTOR of V st w in W holds w,v are_orthogonal};
+  then 0.V in {v where v is VECTOR of V : for w being VECTOR of V st w in W
+  holds w,v are_orthogonal};
   then 0.V in the carrier of Ort_Comp W by Def3;
   hence thesis by STRUCT_0:def 5;
 end;
@@ -888,11 +942,41 @@ theorem
   for V being RealUnitarySpace holds Ort_Comp (0).V = (Omega).V
 proof
   let V be RealUnitarySpace;
-  for x being set st x in the carrier of Ort_Comp (0).V holds
-  x in the carrier of (Omega).V
+  for x being set st x in the carrier of (Omega).V holds x in the carrier
+  of Ort_Comp (0).V
   proof
     let x be set;
-    assume x in the carrier of Ort_Comp (0).V;
+    assume
+    x in the carrier of (Omega).V;
+    then x in (Omega).V by STRUCT_0:def 5;
+    then x in the UNITSTR of V by RUSUB_1:def 3;
+    then reconsider x as Element of V by STRUCT_0:def 5;
+    for w being VECTOR of V st w in (0).V holds w,x are_orthogonal
+    proof
+      let w be VECTOR of V;
+      assume
+      w in (0).V;
+      then w in the carrier of (0).V by STRUCT_0:def 5;
+      then w in {0.V} by RUSUB_1:def 2;
+      then w .|. x = 0.V .|. x by TARSKI:def 1
+        .= 0 by BHSP_1:19;
+      hence thesis by BHSP_1:def 3;
+    end;
+    then
+    x in {v where v is VECTOR of V : for w being VECTOR of V st w in (0).
+    V holds w,v are_orthogonal};
+    hence thesis by Def3;
+  end;
+  then
+A1: the carrier of (Omega).V c= the carrier of Ort_Comp (0).V by
+  TARSKI:
+  def 3;
+  for x being set st x in the carrier of Ort_Comp (0).V holds x in the
+  carrier of (Omega).V
+  proof
+    let x be set;
+    assume
+    x in the carrier of Ort_Comp (0).V;
     then x in Ort_Comp (0).V by STRUCT_0:def 5;
     then x in V by RUSUB_1:2;
     then x in the carrier of V by STRUCT_0:def 5;
@@ -900,34 +984,11 @@ proof
     then x in (Omega).V by RUSUB_1:def 3;
     hence thesis by STRUCT_0:def 5;
   end;
-  then
-A1: the carrier of Ort_Comp (0).V c= the carrier of (Omega).V by TARSKI:def 3;
-  for x being set st x in the carrier of (Omega).V holds
-  x in the carrier of Ort_Comp (0).V
-  proof
-    let x be set;
-    assume x in the carrier of (Omega).V;
-    then x in (Omega).V by STRUCT_0:def 5;
-    then x in the UNITSTR of V by RUSUB_1:def 3;
-    then reconsider x as Element of V by STRUCT_0:def 5;
-    for w being VECTOR of V st w in (0).V holds w,x are_orthogonal
-    proof
-      let w be VECTOR of V;
-      assume w in (0).V;
-      then w in the carrier of (0).V by STRUCT_0:def 5;
-      then w in {0.V} by RUSUB_1:def 2;
-      then w .|. x = 0.V .|. x by TARSKI:def 1
-        .= 0 by BHSP_1:19;
-      hence thesis by BHSP_1:def 3;
-    end;
-    then x in {v where v is VECTOR of V :
-    for w being VECTOR of V st w in (0).V holds w,v are_orthogonal};
-    hence thesis by Def3;
-  end;
-  then the carrier of (Omega).V c= the carrier of Ort_Comp (0).V
-  by TARSKI:def 3;
-  then the carrier of (Omega).V = the carrier of Ort_Comp (0).V
-  by A1,XBOOLE_0:def 10;
+  then the carrier of Ort_Comp (0).V c= the carrier of (Omega).V by
+  TARSKI:
+  def 3;
+  then the carrier of (Omega).V = the carrier of Ort_Comp (0).V by A1,
+  XBOOLE_0:def 10;
   hence thesis by RUSUB_1:24;
 end;
 
@@ -935,17 +996,18 @@ theorem
   for V being RealUnitarySpace holds Ort_Comp (Omega).V = (0).V
 proof
   let V be RealUnitarySpace;
-  for x being set st x in the carrier of Ort_Comp (Omega).V holds
-  x in the carrier of (0).V
+  for x being set st x in the carrier of Ort_Comp (Omega).V holds x in the
+  carrier of (0).V
   proof
     let x be set;
-    assume x in the carrier of Ort_Comp (Omega).V;
-    then x in {v where v is VECTOR of V : for w being VECTOR of V st
-    w in (Omega).V holds w,v are_orthogonal} by Def3;
-    then consider v being VECTOR of V such that
-A1: x = v & for w being VECTOR of V st w in (Omega).V holds
-    w,v are_orthogonal;
-    reconsider x as VECTOR of V by A1;
+    assume
+    x in the carrier of Ort_Comp (Omega).V;
+    then x in {v where v is VECTOR of V : for w being VECTOR of V st w in
+    (Omega).V holds w,v are_orthogonal} by Def3;
+    then
+A1: ex v being VECTOR of V st x = v & for w being VECTOR of V st w in
+    (Omega).V holds w,v are_orthogonal;
+    then reconsider x as VECTOR of V;
     x in the UNITSTR of V by STRUCT_0:def 5;
     then x in (Omega).V by RUSUB_1:def 3;
     then x,x are_orthogonal by A1;
@@ -955,37 +1017,42 @@ A1: x = v & for w being VECTOR of V st w in (Omega).V holds
     hence thesis by RUSUB_1:def 2;
   end;
   then
-A2: the carrier of Ort_Comp (Omega).V c= the carrier of (0).V by TARSKI:def 3;
-  for x being set st x in the carrier of (0).V holds
-  x in the carrier of Ort_Comp (Omega).V
+A2: the carrier of Ort_Comp (Omega).V c= the carrier of (0).V by
+  TARSKI
+  :def 3;
+  for x being set st x in the carrier of (0).V holds x in the carrier of
+  Ort_Comp (Omega).V
   proof
     let x be set;
-    assume x in the carrier of (0).V;
+    assume
+    x in the carrier of (0).V;
     then
 A3: x in {0.V} by RUSUB_1:def 2;
     then reconsider x as VECTOR of V;
     for w being VECTOR of V st w in (Omega).V holds w,x are_orthogonal
     proof
       let w be VECTOR of V;
-      assume w in (Omega).V;
+      assume
+      w in (Omega).V;
       w .|. x = w .|. 0.V by A3,TARSKI:def 1
         .= 0 by BHSP_1:20;
       hence thesis by BHSP_1:def 3;
     end;
-    then x in {v where v is VECTOR of V :
-    for w being VECTOR of V st w in (Omega).V holds w,v are_orthogonal};
+    then x in {v where v is VECTOR of V : for w being VECTOR of V st w in
+    (Omega).V holds w,v are_orthogonal};
     hence thesis by Def3;
   end;
-  then the carrier of (0).V c= the carrier of Ort_Comp (Omega).V
-  by TARSKI:def 3;
-  then the carrier of Ort_Comp (Omega).V = the carrier of (0).V
-  by A2,XBOOLE_0:def 10;
+  then the carrier of (0).V c= the carrier of Ort_Comp (Omega).V by
+  TARSKI
+  :def 3;
+  then the carrier of Ort_Comp (Omega).V = the carrier of (0).V by A2,
+  XBOOLE_0:def 10;
   hence thesis by RUSUB_1:24;
 end;
 
 theorem
-  for V being RealUnitarySpace, W being Subspace of V,
-  v being VECTOR of V st v <> 0.V holds v in W implies not v in Ort_Comp W
+  for V being RealUnitarySpace, W being Subspace of V, v being VECTOR of
+  V st v <> 0.V holds v in W implies not v in Ort_Comp W
 proof
   let V be RealUnitarySpace;
   let W be Subspace of V;
@@ -996,13 +1063,14 @@ A1: v <> 0.V;
   proof
     assume
 A2: v in W;
-    assume v in Ort_Comp W;
+    assume
+    v in Ort_Comp W;
     then v in the carrier of Ort_Comp W by STRUCT_0:def 5;
-    then v in {v1 where v1 is VECTOR of V : for w being VECTOR of V st
-    w in W holds w,v1 are_orthogonal} by Def3;
-    then consider v1 being VECTOR of V such that
-A3: v = v1 & for w being VECTOR of V st w in W holds w,v1 are_orthogonal;
-    v,v are_orthogonal by A2,A3;
+    then v in {v1 where v1 is VECTOR of V : for w being VECTOR of V st w in W
+    holds w,v1 are_orthogonal} by Def3;
+    then ex v1 being VECTOR of V st v = v1 & for w being VECTOR of V st w in W
+    holds w,v1 are_orthogonal;
+    then v,v are_orthogonal by A2;
     then 0 = v .|. v by BHSP_1:def 3;
     hence contradiction by A1,BHSP_1:def 2;
   end;
@@ -1010,12 +1078,13 @@ A3: v = v1 & for w being VECTOR of V st w in W holds w,v1 are_orthogonal;
 end;
 
 theorem Th25:
-  for V being RealUnitarySpace, M being non empty Subset of V holds
-  M c= the carrier of Ort_Comp (Ort_Comp M)
+  for V being RealUnitarySpace, M being non empty Subset of V
+  holds M c= the carrier of Ort_Comp (Ort_Comp M)
 proof
   let V be RealUnitarySpace;
   let M be non empty Subset of V;
-  for x being set st x in M holds x in the carrier of Ort_Comp (Ort_Comp M)
+  for x being set st x in M holds x in the carrier of Ort_Comp (Ort_Comp M
+  )
   proof
     let x be set;
     assume
@@ -1024,16 +1093,17 @@ A1: x in M;
     for y being VECTOR of V st y in Ort_Comp M holds x,y are_orthogonal
     proof
       let y be VECTOR of V;
-      assume y in Ort_Comp M;
+      assume
+      y in Ort_Comp M;
       then y in the carrier of Ort_Comp M by STRUCT_0:def 5;
-      then y in {v where v is VECTOR of V : for w being VECTOR of V st
-      w in M holds w, v are_orthogonal} by Def4;
-      then consider v being VECTOR of V such that
-A2:   y = v & for w being VECTOR of V st w in M holds w, v are_orthogonal;
-      thus thesis by A1,A2;
+      then y in {v where v is VECTOR of V : for w being VECTOR of V st w in M
+      holds w, v are_orthogonal} by Def4;
+      then ex v being VECTOR of V st y = v & for w being VECTOR of V st w in M
+      holds w, v are_orthogonal;
+      hence thesis by A1;
     end;
-    then x in {v where v is VECTOR of V : for w being VECTOR of V st
-    w in Ort_Comp M holds w, v are_orthogonal};
+    then x in {v where v is VECTOR of V : for w being VECTOR of V st w in
+    Ort_Comp M holds w, v are_orthogonal};
     hence thesis by Def3;
   end;
   hence thesis by TARSKI:def 3;
@@ -1047,79 +1117,88 @@ proof
   let M,N be non empty Subset of V;
   assume
 A1: M c= N;
-  for x being set st x in the carrier of Ort_Comp N holds
-  x in the carrier of Ort_Comp M
+  for x being set st x in the carrier of Ort_Comp N holds x in the carrier
+  of Ort_Comp M
   proof
     let x be set;
-    assume x in the carrier of Ort_Comp N;
-    then x in {v where v is VECTOR of V : for w being VECTOR of V st
-    w in N holds w, v are_orthogonal} by Def4;
-    then consider v1 being VECTOR of V such that
-A2: x = v1 & for w being VECTOR of V st w in N holds w,v1 are_orthogonal;
-    reconsider x as VECTOR of V by A2;
+    assume
+    x in the carrier of Ort_Comp N;
+    then x in {v where v is VECTOR of V : for w being VECTOR of V st w in N
+    holds w, v are_orthogonal} by Def4;
+    then
+A2: ex v1 being VECTOR of V st x = v1 & for w being VECTOR of V st w in N
+    holds w,v1 are_orthogonal;
+    then reconsider x as VECTOR of V;
     for y being VECTOR of V st y in M holds y,x are_orthogonal by A1,A2;
-    then x in {v where v is VECTOR of V : for w being VECTOR of V st
-    w in M holds w,v are_orthogonal};
+    then x in {v where v is VECTOR of V : for w being VECTOR of V st w in M
+    holds w,v are_orthogonal};
     hence thesis by Def4;
   end;
   hence thesis by TARSKI:def 3;
 end;
 
 theorem Th27:
-  for V being RealUnitarySpace, W being Subspace of V,
-  M being non empty Subset of V st M = the carrier of W holds
-  Ort_Comp M = Ort_Comp W
+  for V being RealUnitarySpace, W being Subspace of V, M being non
+  empty Subset of V st M = the carrier of W holds Ort_Comp M = Ort_Comp W
 proof
   let V be RealUnitarySpace;
   let W be Subspace of V;
   let M be non empty Subset of V;
   assume
 A1: M = the carrier of W;
-  for x being set st x in the carrier of Ort_Comp M holds
-  x in the carrier of Ort_Comp W
+  for x being set st x in the carrier of Ort_Comp W holds x in the
+  carrier of Ort_Comp M
   proof
     let x be set;
-    assume x in the carrier of Ort_Comp M;
-    then x in {v where v is VECTOR of V : for w being VECTOR of V st
-    w in M holds w, v are_orthogonal} by Def4;
+    assume
+    x in the carrier of Ort_Comp W;
+    then x in {v where v is VECTOR of V : for w being VECTOR of V st w in W
+    holds w, v are_orthogonal} by Def3;
     then consider v being VECTOR of V such that
-A2: x = v & for w being VECTOR of V st w in M holds w,v are_orthogonal;
-    for w being VECTOR of V st w in W holds w,v are_orthogonal
-    proof
-      let w be VECTOR of V;
-      assume w in W;
-      then w in M by A1,STRUCT_0:def 5;
-      hence thesis by A2;
-    end;
-    then x in {v1 where v1 is VECTOR of V : for w being VECTOR of V st
-    w in W holds w, v1 are_orthogonal} by A2;
-    hence thesis by Def3;
-  end;
-  then
-A3: the carrier of Ort_Comp M c= the carrier of Ort_Comp W by TARSKI:def 3;
-  for x being set st x in the carrier of Ort_Comp W holds
-  x in the carrier of Ort_Comp M
-  proof
-    let x be set;
-    assume x in the carrier of Ort_Comp W;
-    then x in {v where v is VECTOR of V : for w being VECTOR of V st
-    w in W holds w, v are_orthogonal} by Def3;
-    then consider v being VECTOR of V such that
-A4: x = v & for w being VECTOR of V st w in W holds w,v are_orthogonal;
+A2: x = v and
+A3: for w being VECTOR of V st w in W holds w,v are_orthogonal;
     for w being VECTOR of V st w in M holds w,v are_orthogonal
     proof
       let w be VECTOR of V;
-      assume w in M;
+      assume
+      w in M;
       then w in W by A1,STRUCT_0:def 5;
-      hence thesis by A4;
+      hence thesis by A3;
     end;
-    then x in {v1 where v1 is VECTOR of V : for w being VECTOR of V st
-    w in M holds w, v1 are_orthogonal} by A4;
+    then x in {v1 where v1 is VECTOR of V : for w being VECTOR of V st w in M
+    holds w, v1 are_orthogonal} by A2;
     hence thesis by Def4;
   end;
-  then the carrier of Ort_Comp W c= the carrier of Ort_Comp M by TARSKI:def 3;
-  then the carrier of Ort_Comp W = the carrier of Ort_Comp M by A3,
-XBOOLE_0:def 10;
+  then
+A4: the carrier of Ort_Comp W c= the carrier of Ort_Comp M by TARSKI:
+  def 3;
+  for x being set st x in the carrier of Ort_Comp M holds x in the carrier
+  of Ort_Comp W
+  proof
+    let x be set;
+    assume
+    x in the carrier of Ort_Comp M;
+    then x in {v where v is VECTOR of V : for w being VECTOR of V st w in M
+    holds w, v are_orthogonal} by Def4;
+    then consider v being VECTOR of V such that
+A5: x = v and
+A6: for w being VECTOR of V st w in M holds w,v are_orthogonal;
+    for w being VECTOR of V st w in W holds w,v are_orthogonal
+    proof
+      let w be VECTOR of V;
+      assume
+      w in W;
+      then w in M by A1,STRUCT_0:def 5;
+      hence thesis by A6;
+    end;
+    then x in {v1 where v1 is VECTOR of V : for w being VECTOR of V st w in W
+    holds w, v1 are_orthogonal} by A5;
+    hence thesis by Def3;
+  end;
+  then the carrier of Ort_Comp M c= the carrier of Ort_Comp W by TARSKI:
+  def 3;
+  then the carrier of Ort_Comp W = the carrier of Ort_Comp M by A4,
+  XBOOLE_0:def 10;
   hence thesis by RUSUB_1:24;
 end;
 
@@ -1132,58 +1211,62 @@ proof
   set N = the carrier of Ort_Comp M;
   reconsider N as Subset of V by RUSUB_1:def 1;
   reconsider N as non empty Subset of V;
-  N c= the carrier of Ort_Comp (Ort_Comp N) by Th25;
-  then
-A1: N c= the carrier of Ort_Comp (Ort_Comp (Ort_Comp M)) by Th27;
   set L = the carrier of Ort_Comp (Ort_Comp M);
   reconsider L as Subset of V by RUSUB_1:def 1;
   reconsider L as non empty Subset of V;
+  N c= the carrier of Ort_Comp (Ort_Comp N) by Th25;
+  then
+A1: N c= the carrier of Ort_Comp (Ort_Comp (Ort_Comp M)) by Th27;
   the carrier of Ort_Comp L c= the carrier of Ort_Comp M by Th25,Th26;
-  then the carrier of Ort_Comp (Ort_Comp (Ort_Comp M))
-  c= the carrier of Ort_Comp M by Th27;
-  then the carrier of Ort_Comp (Ort_Comp (Ort_Comp M))
-  = the carrier of Ort_Comp M by A1,XBOOLE_0:def 10;
+  then the carrier of Ort_Comp (Ort_Comp (Ort_Comp M)) c= the carrier of
+  Ort_Comp M by Th27;
+  then the carrier of Ort_Comp (Ort_Comp (Ort_Comp M)) = the carrier of
+  Ort_Comp M by A1,XBOOLE_0:def 10;
   hence thesis by RUSUB_1:24;
 end;
 
 theorem Th29:
-  for V being RealUnitarySpace, x,y being VECTOR of V holds
-  ||.x + y.||^2 = ||.x.||^2 + 2 * x .|. y + ||.y.||^2 &
-  ||.x - y.||^2 = ||.x.||^2 - 2 * x .|. y + ||.y.||^2
+  for V being RealUnitarySpace, x,y being VECTOR of V holds ||.x +
+y.||^2 = ||.x.||^2 + 2 * x .|. y + ||.y.||^2 & ||.x - y.||^2 = ||.x.||^2 - 2 *
+  x .|. y + ||.y.||^2
 proof
   let V be RealUnitarySpace;
   let x,y be VECTOR of V;
-A1: ||.x + y.|| = sqrt ((x + y) .|. (x + y)) by BHSP_1:def 4;
-A2: (x + y) .|. (x + y) >= 0 by BHSP_1:def 2;
-A3: ||.x + y.||^2 >= 0 by XREAL_1:65;
-A4: x .|. x >= 0 by BHSP_1:def 2;
-A5: y .|. y >= 0 by BHSP_1:def 2;
-  sqrt ||.x + y.||^2 = sqrt ((x + y) .|. (x + y)) by A1,BHSP_1:34,SQUARE_1:89;
-  then ||.x + y.||^2 = (x + y) .|. (x + y) by A2,A3,SQUARE_1:96
+A1: x .|. x >= 0 by BHSP_1:def 2;
+  ||.x + y.|| = sqrt ((x + y) .|. (x + y)) by BHSP_1:def 4;
+  then
+A2: sqrt ||.x + y.||^2 = sqrt ((x + y) .|. (x + y)) by BHSP_1:34 ,
+  SQUARE_1:89;
+A3: y .|. y >= 0 by BHSP_1:def 2;
+  (x + y) .|. (x + y) >= 0 & ||.x + y.||^2 >= 0 by BHSP_1:def 2,XREAL_1:65;
+  then ||.x + y.||^2 = (x + y) .|. (x + y) by A2,SQUARE_1:96
     .= x .|. x + 2 * x .|. y + y .|. y by BHSP_1:21
-    .= (sqrt (x .|. x))^2 + 2 * x .|. y + y .|. y by A4,SQUARE_1:def 4
+    .= (sqrt (x .|. x))^2 + 2 * x .|. y + y .|. y by A1,SQUARE_1:def 4
     .= ||.x.||^2 + 2 * x .|. y + y .|. y by BHSP_1:def 4
-    .= ||.x.||^2 + 2 * x .|. y + (sqrt (y .|. y))^2 by A5,SQUARE_1:def 4;
+    .= ||.x.||^2 + 2 * x .|. y + (sqrt (y .|. y))^2 by A3,SQUARE_1:def 4;
   hence ||.x + y.||^2 = ||.x.||^2 + 2 * x .|. y + ||.y.||^2 by BHSP_1:def 4;
-A6: ||.x - y.|| = sqrt ((x - y) .|. (x - y)) by BHSP_1:def 4;
-A7: (x - y) .|. (x - y) >= 0 by BHSP_1:def 2;
-A8: ||.x - y.||^2 >= 0 by XREAL_1:65;
-  sqrt ||.x - y.||^2 = sqrt ((x - y) .|. (x - y)) by A6,BHSP_1:34,SQUARE_1:89;
-  then ||.x - y.||^2 = (x - y) .|. (x - y) by A7,A8,SQUARE_1:96
+  ||.x - y.|| = sqrt ((x - y) .|. (x - y)) by BHSP_1:def 4;
+  then
+A4: sqrt ||.x - y.||^2 = sqrt ((x - y) .|. (x - y)) by BHSP_1:34 ,
+  SQUARE_1:89;
+  (x - y) .|. (x - y) >= 0 & ||.x - y.||^2 >= 0 by BHSP_1:def 2,XREAL_1:
+  65;
+  then ||.x - y.||^2 = (x - y) .|. (x - y) by A4,SQUARE_1:96
     .= x .|. x - 2 * x .|. y + y .|. y by BHSP_1:23
-    .= (sqrt (x .|. x))^2 - 2 * x .|. y + y .|. y by A4,SQUARE_1:def 4
+    .= (sqrt (x .|. x))^2 - 2 * x .|. y + y .|. y by A1,SQUARE_1:def 4
     .= ||.x.||^2 - 2 * x .|. y + y .|. y by BHSP_1:def 4
-    .= ||.x.||^2 - 2 * x .|. y + (sqrt (y .|. y))^2 by A5,SQUARE_1:def 4;
+    .= ||.x.||^2 - 2 * x .|. y + (sqrt (y .|. y))^2 by A3,SQUARE_1:def 4;
   hence thesis by BHSP_1:def 4;
 end;
 
 theorem
-  for V being RealUnitarySpace, x,y being VECTOR of V st
-  x,y are_orthogonal holds ||.x+y.||^2 = ||.x.||^2 + ||.y.||^2
+  for V being RealUnitarySpace, x,y being VECTOR of V st x,y
+  are_orthogonal holds ||.x+y.||^2 = ||.x.||^2 + ||.y.||^2
 proof
   let V be RealUnitarySpace;
   let x,y be VECTOR of V;
-  assume x,y are_orthogonal;
+  assume
+  x,y are_orthogonal;
   then
 A1: x .|. y = 0 by BHSP_1:def 3;
   ||.x + y.||^2 = ||.x.||^2 + 2 * x .|. y + ||.y.||^2 by Th29;
@@ -1193,23 +1276,22 @@ end;
 :: Parallelogram Law
 
 theorem
-  for V being RealUnitarySpace, x,y being VECTOR of V holds
-  ||.x+y.||^2 + ||.x-y.||^2 = 2*||.x.||^2 + 2*||.y.||^2
+  for V being RealUnitarySpace, x,y being VECTOR of V holds ||.x+y.||^2
+  + ||.x-y.||^2 = 2*||.x.||^2 + 2*||.y.||^2
 proof
   let V be RealUnitarySpace;
   let x,y being VECTOR of V;
-  ||.x+y.||^2 + ||.x-y.||^2
-  = ||.x.||^2 + 2 * x .|. y + ||.y.||^2 + ||.x-y.||^2 by Th29
-    .= ||.x.||^2 + 2 * x .|. y + ||.y.||^2
-  + (||.x.||^2 - 2 * x .|. y + ||.y.||^2) by Th29
+  ||.x+y.||^2 + ||.x-y.||^2 = ||.x.||^2 + 2 * x .|. y + ||.y.||^2 + ||.x-y
+  .||^2 by Th29
+    .= ||.x.||^2 + 2 * x .|. y + ||.y.||^2 + (||.x.||^2 - 2 * x .|. y + ||.y
+  .||^2) by Th29
     .= ||.x.||^2 + ||.x.||^2 + 2*||.y.||^2;
   hence thesis;
 end;
 
 theorem
-  for V being RealUnitarySpace, v being VECTOR of V
-  ex W being Subspace of V st
-  the carrier of W = {u where u is VECTOR of V : u .|. v = 0}
+  for V being RealUnitarySpace, v being VECTOR of V ex W being Subspace
+  of V st the carrier of W = {u where u is VECTOR of V : u .|. v = 0}
 proof
   let V be RealUnitarySpace;
   let v be VECTOR of V;
@@ -1217,35 +1299,39 @@ proof
   for x being set st x in M holds x in the carrier of V
   proof
     let x be set;
-    assume x in M;
-    then consider u being VECTOR of V such that
-A1: x = u & u.|.v = 0;
-    thus thesis by A1;
+    assume
+    x in M;
+    then ex u being VECTOR of V st x = u & u.|.v = 0;
+    hence thesis;
   end;
   then reconsider M as Subset of V by TARSKI:def 3;
   0.V .|. v = 0 by BHSP_1:19;
   then
-A2: 0.V in M;
+A1: 0.V in M;
   then reconsider M as non empty Subset of V;
-  for x,y being VECTOR of V, a being Real st
-  x in M & y in M holds (1-a)*x + a*y in M
+  for x,y being VECTOR of V, a being Real st x in M & y in M holds (1-a)*x
+  + a*y in M
   proof
     let x,y be VECTOR of V;
     let a be Real;
-    assume
-A3: x in M & y in M;
-    then consider u1 being VECTOR of V such that
-A4: x = u1 & u1 .|. v = 0;
+    assume that
+A2: x in M and
+A3: y in M;
     consider u2 being VECTOR of V such that
-A5: y = u2 & u2 .|. v = 0 by A3;
-    ((1-a)*u1 + a*u2) .|. v = ((1-a)*u1) .|. v + (a*u2).|. v by BHSP_1:def 2
+A4: y = u2 and
+A5: u2 .|. v = 0 by A3;
+    consider u1 being VECTOR of V such that
+A6: x = u1 and
+A7: u1 .|. v = 0 by A2;
+    ((1-a)*u1 + a*u2) .|. v = ((1-a)*u1) .|. v + (a*u2).|. v by BHSP_1:
+    def 2
       .= (1-a)*(u1.|.v) + (a*u2).|.v by BHSP_1:def 2
-      .= a*0 by A4,A5,BHSP_1:def 2;
-    hence thesis by A4,A5;
+      .= a*0 by A7,A5,BHSP_1:def 2;
+    hence thesis by A6,A4;
   end;
   then reconsider M as non empty Affine Subset of V by RUSUB_4:def 5;
   take Lin(M);
-  thus thesis by A2,RUSUB_4:29;
+  thus thesis by A1,RUSUB_4:29;
 end;
 
 begin  :: Topology of Real Unitary Space
@@ -1254,52 +1340,52 @@ definition
   let V be RealUnitarySpace;
   func Family_open_set(V) -> Subset-Family of V means
   :Def5:
-  for M being Subset of V holds M in it iff
-  for x being Point of V st x in M holds
-  ex r being Real st r>0 & Ball(x,r) c= M;
+  for M being
+Subset of V holds M in it iff for x being Point of V st x in M holds ex r being
+  Real st r>0 & Ball(x,r) c= M;
   existence
   proof
-    defpred P[Subset of V] means for x being Point of V st x in $1 holds
-    ex r being Real st r>0 & Ball(x,r) c= $1;
-    consider F being Subset-Family of V such that
-A1: for M being Subset of V holds M in F iff P[M] from SUBSET_1:sch 3;
-    thus thesis by A1;
+    defpred P[Subset of V] means for x being Point of V st x in $1 holds ex r
+    being Real st r>0 & Ball(x,r) c= $1;
+    ex F being Subset-Family of V st for M being Subset of V holds M in F
+    iff P[M] from SUBSET_1:sch 3;
+    hence thesis;
   end;
   uniqueness
   proof
     let FX,GX be Subset-Family of V;
     assume
-A2: for M being Subset of V holds M in FX iff
-    for x being Point of V st x in M holds
-    ex r being Real st r>0 & Ball(x,r) c= M;
+A1: for M being Subset of V holds M in FX iff for x being Point of V
+    st x in M holds ex r being Real st r>0 & Ball(x,r) c= M;
     assume
-A3: for N being Subset of V holds N in GX iff
-    for y being Point of V st y in N holds
-    ex p being Real st p>0 & Ball(y,p) c= N;
+A2: for N being Subset of V holds N in GX iff for y being Point of V
+    st y in N holds ex p being Real st p>0 & Ball(y,p) c= N;
     for Y being Subset of V holds Y in FX iff Y in GX
     proof
       let Y be Subset of V;
-A4:   now
-        assume Y in FX;
-        then for x being Point of V st x in Y holds
-        ex r being Real st r>0 & Ball(x,r) c= Y by A2;
-        hence Y in GX by A3;
+A3:   now
+        assume
+        Y in GX;
+        then for x being Point of V st x in Y holds ex r being Real st r>0 &
+        Ball(x,r) c= Y by A2;
+        hence Y in FX by A1;
       end;
       now
-        assume Y in GX;
-        then for x being Point of V st x in Y holds
-        ex r being Real st r>0 & Ball(x,r) c= Y by A3;
-        hence Y in FX by A2;
+        assume
+        Y in FX;
+        then for x being Point of V st x in Y holds ex r being Real st r>0 &
+        Ball(x,r) c= Y by A1;
+        hence Y in GX by A2;
       end;
-      hence thesis by A4;
+      hence thesis by A3;
     end;
     hence thesis by SETFAM_1:44;
   end;
 end;
 
 theorem Th33:
-  for V being RealUnitarySpace, v being Point of V, r,p being Real st
-  r <= p holds Ball(v,r) c= Ball(v,p)
+  for V being RealUnitarySpace, v being Point of V, r,p being Real
+  st r <= p holds Ball(v,r) c= Ball(v,p)
 proof
   let V be RealUnitarySpace;
   let v be Point of V;
@@ -1309,7 +1395,8 @@ A1: r <= p;
   for u being Point of V st u in Ball(v,r) holds u in Ball(v,p)
   proof
     let u be Point of V;
-    assume u in Ball(v,r);
+    assume
+    u in Ball(v,r);
     then dist(v,u) < r by BHSP_2:41;
     then dist(v,u) + r < r + p by A1,XREAL_1:10;
     then dist(v,u) < r + p - r by XREAL_1:22;
@@ -1319,8 +1406,8 @@ A1: r <= p;
 end;
 
 theorem Th34:
-  for V being RealUnitarySpace, v being Point of V
-  ex r being Real st r>0 & Ball(v,r) c= the carrier of V
+  for V being RealUnitarySpace, v being Point of V ex r being Real
+  st r>0 & Ball(v,r) c= the carrier of V
 proof
   let V be RealUnitarySpace;
   let v be Point of V;
@@ -1332,161 +1419,167 @@ A1: r = 1;
 end;
 
 theorem Th35:
-  for V being RealUnitarySpace, v,u being Point of V, r being Real st
-  u in Ball(v,r) holds ex p being Real st p>0 & Ball(u,p) c= Ball(v,r)
+  for V being RealUnitarySpace, v,u being Point of V, r being Real
+  st u in Ball(v,r) holds ex p being Real st p>0 & Ball(u,p) c= Ball(v,r)
 proof
   let V be RealUnitarySpace;
   let v,u be Point of V;
   let r be Real;
-  assume u in Ball(v,r);
+  assume
+  u in Ball(v,r);
   then
 A1: dist(v,u) < r by BHSP_2:41;
   thus thesis
   proof
     set p = r - dist(v,u);
-A2: for w being Point of V holds w in Ball(u,p) implies w in Ball(v,r)
-    proof
-      let w be Point of V;
-      assume w in Ball(u,p);
-      then dist(u,w) < r - dist(v,u) by BHSP_2:41;
-      then
-A3:   dist(v,u) + dist(u,w) < r by XREAL_1:22;
-      dist(v,u) + dist(u,w) >= dist(v,w) by BHSP_1:42;
-      then dist(v,w) < r by A3,XXREAL_0:2;
-      hence thesis by BHSP_2:41;
-    end;
     take p;
     thus p > 0 by A1,XREAL_1:52;
-    thus thesis by A2,SUBSET_1:7;
+    for w being Point of V holds w in Ball(u,p) implies w in Ball(v,r)
+    proof
+      let w be Point of V;
+      assume
+      w in Ball(u,p);
+      then dist(u,w) < r - dist(v,u) by BHSP_2:41;
+      then
+A2:   dist(v,u) + dist(u,w) < r by XREAL_1:22;
+      dist(v,u) + dist(u,w) >= dist(v,w) by BHSP_1:42;
+      then dist(v,w) < r by A2,XXREAL_0:2;
+      hence thesis by BHSP_2:41;
+    end;
+    hence thesis by SUBSET_1:7;
   end;
 end;
 
 theorem
-  for V being RealUnitarySpace, u,v,w being Point of V, r,p being Real st
-  v in Ball(u,r) /\ Ball(w,p) holds
-  ex q being Real st Ball(v,q) c= Ball(u,r) & Ball(v,q) c= Ball(w,p)
+  for V being RealUnitarySpace, u,v,w being Point of V, r,p being Real
+st v in Ball(u,r) /\ Ball(w,p) holds ex q being Real st Ball(v,q) c= Ball(u,r)
+  & Ball(v,q) c= Ball(w,p)
 proof
   let V be RealUnitarySpace;
   let u,v,w be Point of V;
   let r,p being Real;
-  assume v in Ball(u,r) /\ Ball(w,p);
-  then
-A1: v in Ball(u,r) & v in Ball(w,p) by XBOOLE_0:def 4;
+  assume
+A1: v in Ball(u,r) /\ Ball(w,p);
+  then v in Ball(u,r) by XBOOLE_0:def 4;
   then consider s being Real such that
-A2: s > 0 & Ball(v,s) c= Ball(u,r) by Th35;
-  consider t being Real such that
-A3: t > 0 & Ball(v,t) c= Ball(w,p) by A1,Th35;
+  s > 0 and
+A2: Ball(v,s) c= Ball(u,r) by Th35;
+  v in Ball(w,p) by A1,XBOOLE_0:def 4;
+  then consider t being Real such that
+  t > 0 and
+A3: Ball(v,t) c= Ball(w,p) by Th35;
   take q = min(s,t);
-  q <= s & q > 0 by A2,A3,XXREAL_0:15,17;
-  then Ball(v,q) c= Ball(v,s) by Th33;
+  Ball(v,q) c= Ball(v,s) by Th33,XXREAL_0:17;
   hence Ball(v,q) c= Ball(u,r) by A2,XBOOLE_1:1;
-  q <= t & q > 0 by A2,A3,XXREAL_0:15,17;
-  then Ball(v,q) c= Ball(v,t) by Th33;
+  Ball(v,q) c= Ball(v,t) by Th33,XXREAL_0:17;
   hence thesis by A3,XBOOLE_1:1;
 end;
 
 theorem Th37:
-  for V being RealUnitarySpace, v being Point of V, r being Real holds
-  Ball(v,r) in Family_open_set(V)
+  for V being RealUnitarySpace, v being Point of V, r being Real
+  holds Ball(v,r) in Family_open_set(V)
 proof
   let V be RealUnitarySpace;
   let v be Point of V;
   let r be Real;
-  for u being Point of V st u in Ball(v,r) holds
-  ex p being Real st p>0 & Ball(u,p) c= Ball(v,r) by Th35;
+  for u being Point of V st u in Ball(v,r) holds ex p being Real st p>0 &
+  Ball(u,p) c= Ball(v,r) by Th35;
   hence thesis by Def5;
 end;
 
 theorem Th38:
-  for V being RealUnitarySpace holds the carrier of V in Family_open_set(V)
+  for V being RealUnitarySpace holds the carrier of V in
+  Family_open_set(V)
 proof
   let V be RealUnitarySpace;
-A1: the carrier of V c= the carrier of V;
-  for v being Point of V st v in the carrier of V holds
-  ex p being Real st p>0 & Ball(v,p) c= the carrier of V by Th34;
-  hence thesis by A1,Def5;
+  the carrier of V c= the carrier of V & for v being Point of V st v in
+  the carrier of V holds ex p being Real st p>0 & Ball(v,p) c= the carrier of V
+  by Th34;
+  hence thesis by Def5;
 end;
 
 theorem Th39:
-  for V being RealUnitarySpace, M,N being Subset of V st
-  M in Family_open_set(V) & N in Family_open_set(V) holds
-  M /\ N in Family_open_set(V)
+  for V being RealUnitarySpace, M,N being Subset of V st M in
+Family_open_set(V) & N in Family_open_set(V) holds M /\ N in Family_open_set(V)
 proof
   let V be RealUnitarySpace;
   let M,N be Subset of V;
   assume that
 A1: M in Family_open_set(V) and
 A2: N in Family_open_set(V);
-  for v being Point of V st v in M /\ N
-  ex q being Real st q>0 & Ball(v,q) c= M /\ N
+  for v being Point of V st v in M /\ N ex q being Real st q>0 & Ball(v,q)
+  c= M /\ N
   proof
     let v be Point of V;
-    assume v in M /\ N;
-    then
-A3: v in M & v in N by XBOOLE_0:def 4;
+    assume
+A3: v in M /\ N;
+    then v in M by XBOOLE_0:def 4;
     then consider p being Real such that
-A4: p > 0 & Ball(v,p) c= M by A1,Def5;
-    consider r being Real such that
-A5: r > 0 & Ball(v,r) c= N by A2,A3,Def5;
+A4: p > 0 and
+A5: Ball(v,p) c= M by A1,Def5;
+    v in N by A3,XBOOLE_0:def 4;
+    then consider r being Real such that
+A6: r > 0 and
+A7: Ball(v,r) c= N by A2,Def5;
     take q = min(p,r);
-A6: q <= p & q > 0 by A4,A5,XXREAL_0:15,17;
-    thus q > 0 by A4,A5,XXREAL_0:15;
-    Ball(v,q) c= Ball(v,p) by A6,Th33;
+    thus q > 0 by A4,A6,XXREAL_0:15;
+    Ball(v,q) c= Ball(v,r) by Th33,XXREAL_0:17;
     then
-A7: Ball(v,q) c= M by A4,XBOOLE_1:1;
-    q <= r & q > 0 by A4,A5,XXREAL_0:15,17;
-    then Ball(v,q) c= Ball(v,r) by Th33;
-    then Ball(v,q) c= N by A5,XBOOLE_1:1;
-    hence thesis by A7,XBOOLE_1:19;
+A8: Ball(v,q) c= N by A7,XBOOLE_1:1;
+    Ball(v,q) c= Ball(v,p) by Th33,XXREAL_0:17;
+    then Ball(v,q) c= M by A5,XBOOLE_1:1;
+    hence thesis by A8,XBOOLE_1:19;
   end;
   hence thesis by Def5;
 end;
 
 theorem Th40:
-  for V being RealUnitarySpace, A being Subset-Family of V st
-  A c= Family_open_set(V) holds union A in Family_open_set(V)
+  for V being RealUnitarySpace, A being Subset-Family of V st A c=
+  Family_open_set(V) holds union A in Family_open_set(V)
 proof
   let V be RealUnitarySpace;
   let A be Subset-Family of V;
   assume
 A1: A c= Family_open_set(V);
-  for x being Point of V st x in union A
-  ex r being Real st r>0 & Ball(x,r) c= union A
+  for x being Point of V st x in union A ex r being Real st r>0 & Ball(x,r
+  ) c= union A
   proof
     let x be Point of V;
-    assume x in union A;
+    assume
+    x in union A;
     then consider W being set such that
 A2: x in W and
 A3: W in A by TARSKI:def 4;
     reconsider W as Subset of V by A3;
-A4: W c= union A by A3,ZFMISC_1:92;
     consider r being Real such that
-A5: r>0 & Ball(x,r) c= W by A1,A2,A3,Def5;
+A4: r>0 and
+A5: Ball(x,r) c= W by A1,A2,A3,Def5;
     take r;
-    thus r > 0 by A5;
-    thus thesis by A4,A5,XBOOLE_1:1;
+    thus r > 0 by A4;
+    W c= union A by A3,ZFMISC_1:92;
+    hence thesis by A5,XBOOLE_1:1;
   end;
   hence thesis by Def5;
 end;
 
 theorem Th41:
-  for V being RealUnitarySpace holds
-  TopStruct (#the carrier of V,Family_open_set(V)#) is TopSpace
+  for V being RealUnitarySpace holds TopStruct (#the carrier of V,
+    Family_open_set(V)#) is TopSpace
 proof
   let V be RealUnitarySpace;
   set T = TopStruct (#the carrier of V,Family_open_set(V)#);
-A1: the carrier of T in the topology of T by Th38;
-A2: for a being Subset-Family of T st
-  a c= the topology of T holds union a in the topology of T by Th40;
-  for p,q being Subset of T st p in the topology of T & q in the topology of T
-  holds p /\ q in the topology of T by Th39;
-  hence thesis by A1,A2,PRE_TOPC:def 1;
+A1: for p,q being Subset of T st p in the topology of T & q in the topology
+  of T holds p /\ q in the topology of T by Th39;
+  the carrier of T in the topology of T & for a being Subset-Family of T
+  st a c= the topology of T holds union a in the topology of T by Th38,Th40;
+  hence thesis by A1,PRE_TOPC:def 1;
 end;
 
 definition
   let V be RealUnitarySpace;
   func TopUnitSpace V -> TopStruct equals
-  TopStruct (#the carrier of V,Family_open_set(V)#);
+  TopStruct (#the carrier of V,
+    Family_open_set(V)#);
   coherence;
 end;
 
@@ -1503,25 +1596,25 @@ registration
 end;
 
 theorem
-  for V being RealUnitarySpace, M being Subset of TopUnitSpace V st
-  M = [#]V holds M is open & M is closed
+  for V being RealUnitarySpace, M being Subset of TopUnitSpace V st M =
+  [#]V holds M is open & M is closed
 proof
   let V be RealUnitarySpace;
   let M be Subset of TopUnitSpace V;
+A1: [#](TopUnitSpace V) = the carrier of (TopStruct(#the carrier of V,
+    Family_open_set(V)#));
   assume
-A1: M = [#]V;
-  [#](TopUnitSpace V) =
-  the carrier of (TopStruct(#the carrier of V,Family_open_set(V)#));
+  M = [#]V;
   hence thesis by A1;
 end;
 
 theorem
-  for V being RealUnitarySpace, M being Subset of TopUnitSpace V st
-  M = {}V holds M is open & M is closed;
+  for V being RealUnitarySpace, M being Subset of TopUnitSpace V st M =
+  {}V holds M is open & M is closed;
 
 theorem
-  for V being RealUnitarySpace, v being VECTOR of V, r being Real st
-  the carrier of V = {0.V} & r <> 0 holds Sphere(v,r) is empty
+  for V being RealUnitarySpace, v being VECTOR of V, r being Real st the
+  carrier of V = {0.V} & r <> 0 holds Sphere(v,r) is empty
 proof
   let V be RealUnitarySpace;
   let v be VECTOR of V;
@@ -1529,19 +1622,22 @@ proof
   assume that
 A1: the carrier of V = {0.V} and
 A2: r <> 0;
-  assume Sphere(v,r) is non empty;
+  assume
+  Sphere(v,r) is non empty;
   then consider x being set such that
 A3: x in Sphere(v,r) by XBOOLE_0:def 1;
-  Sphere(v,r) = {y where y is Point of V : ||.v - y.|| = r} by BHSP_2:def 7;
+  Sphere(v,r) = {y where y is Point of V : ||.v - y.|| = r} by BHSP_2:def
+  7;
   then consider w being Point of V such that
-A4: x = w & ||.v-w.|| = r by A3;
+  x = w and
+A4: ||.v-w.|| = r by A3;
   v-w <> 0.V by A2,A4,BHSP_1:32;
   hence contradiction by A1,TARSKI:def 1;
 end;
 
 theorem
-  for V being RealUnitarySpace, v being VECTOR of V, r being Real st
-  the carrier of V <> {0.V} & r > 0 holds Sphere(v,r) is non empty
+  for V being RealUnitarySpace, v being VECTOR of V, r being Real st the
+  carrier of V <> {0.V} & r > 0 holds Sphere(v,r) is non empty
 proof
   let V be RealUnitarySpace;
   let v be VECTOR of V;
@@ -1549,12 +1645,13 @@ proof
   assume that
 A1: the carrier of V <> {0.V} and
 A2: r > 0;
-  now per cases;
+  now
+    per cases;
     suppose
 A3:   v = 0.V;
       ex u being VECTOR of V st u <> 0.V
       proof
-        not (the carrier of V c= {0.V}) by A1,XBOOLE_0:def 10;
+        not the carrier of V c= {0.V} by A1,XBOOLE_0:def 10;
         then NonZero V <> {} by XBOOLE_1:37;
         then consider u being set such that
 A4:     u in NonZero V by XBOOLE_0:def 1;
@@ -1566,28 +1663,27 @@ A5:     not u in {0.V} by A4,XBOOLE_0:def 5;
       then consider u being VECTOR of V such that
 A6:   u <> 0.V;
       set a = ||.u.||;
+A7:   a <> 0 by A6,BHSP_1:32;
       set u' = r*(1/a)*u;
-A7:   ||.v-u'.|| = ||. -r*(1/a)*u .|| by A3,RLVECT_1:27
+A8:   a >= 0 by BHSP_1:34;
+      ||.v-u'.|| = ||. -r*(1/a)*u .|| by A3,RLVECT_1:27
         .= ||. r*(1/a)*u .|| by BHSP_1:37
         .= abs(r*(1/a))*||.u.|| by BHSP_1:33;
-A8:   a <> 0 & a >= 0 by A6,BHSP_1:32,34;
-      then (1/a) > 0 by XREAL_1:141;
-      then r*(1/a) > 0 by A2,XREAL_1:131;
-      then ||.v-u'.|| = r*(1/a)*||.u.|| by A7,ABSVALUE:def 1
-        .= r by A8,XCMPLX_1:110;
+      then ||.v-u'.|| = r*(1/a)*||.u.|| by A2,A8,ABSVALUE:def 1
+        .= r by A7,XCMPLX_1:110;
       then u' in {y where y is Point of V : ||.v - y.|| = r};
       hence thesis by BHSP_2:def 7;
     end;
     suppose
 A9:   v <> 0.V;
       set a = ||.v.||;
-A10:  a >= 0 & a <> 0 by A9,BHSP_1:32,34;
+A10:  a <> 0 by A9,BHSP_1:32;
       set u' = (1-r/a)*v;
 A11:  ||.v-u'.|| = ||. 1*v - (1-r/a)*v .|| by RLVECT_1:def 9
         .= ||. (1-(1-r/a))*v .|| by RLVECT_1:49
         .= abs(r/a)*||.v.|| by BHSP_1:33;
-      r/a > 0 by A2,A10,XREAL_1:141;
-      then ||.v-u'.|| = r/a*a by A11,ABSVALUE:def 1
+      a >= 0 by BHSP_1:34;
+      then ||.v-u'.|| = r/a*a by A2,A11,ABSVALUE:def 1
         .= r/(a/a) by XCMPLX_1:82
         .= r by A10,XCMPLX_1:51;
       then u' in {y where y is Point of V : ||.v - y.|| = r};
@@ -1598,26 +1694,26 @@ A11:  ||.v-u'.|| = ||. 1*v - (1-r/a)*v .|| by RLVECT_1:def 9
 end;
 
 theorem
-  for V being RealUnitarySpace, v being VECTOR of V, r being Real st
-  r = 0 holds Ball(v,r) is empty
+  for V being RealUnitarySpace, v being VECTOR of V, r being Real st r =
+  0 holds Ball(v,r) is empty
 proof
   let V be RealUnitarySpace;
   let v be VECTOR of V;
   let r be Real;
   assume
 A1: r = 0;
-  assume Ball(v,r) is non empty;
+  assume
+  Ball(v,r) is non empty;
   then consider u being set such that
 A2: u in Ball(v,r) by XBOOLE_0:def 1;
   u in {y where y is Point of V : ||.v - y.|| < r} by A2,BHSP_2:def 5;
-  then consider w being Point of V such that
-A3: u = w & ||.v - w.|| < r;
-  thus contradiction by A1,A3,BHSP_1:34;
+  then ex w being Point of V st u = w & ||.v - w.|| < r;
+  hence contradiction by A1,BHSP_1:34;
 end;
 
 theorem
-  for V being RealUnitarySpace, v being VECTOR of V, r being Real st
-  the carrier of V = {0.V} & r > 0 holds Ball(v,r) = {0.V}
+  for V being RealUnitarySpace, v being VECTOR of V, r being Real st the
+  carrier of V = {0.V} & r > 0 holds Ball(v,r) = {0.V}
 proof
   let V be RealUnitarySpace;
   let v be VECTOR of V;
@@ -1642,9 +1738,8 @@ A3: w in {0.V};
 end;
 
 theorem
-  for V being RealUnitarySpace, v being VECTOR of V, r being Real st
-  the carrier of V <> {0.V} & r > 0
-  ex w being VECTOR of V st w <> v & w in Ball(v,r)
+  for V being RealUnitarySpace, v being VECTOR of V, r being Real st the
+carrier of V <> {0.V} & r > 0 ex w being VECTOR of V st w <> v & w in Ball(v,r)
 proof
   let V be RealUnitarySpace;
   let v be VECTOR of V;
@@ -1653,67 +1748,70 @@ proof
 A1: the carrier of V <> {0.V} and
 A2: r > 0;
   consider r' being real number such that
-A3: 0 < r' & r' < r by A2,XREAL_1:7;
+A3: 0 < r' and
+A4: r' < r by A2,XREAL_1:7;
   reconsider r' as Real by XREAL_0:def 1;
-  now per cases;
+  now
+    per cases;
     suppose
-A4:   v = 0.V;
+A5:   v = 0.V;
       ex w being VECTOR of V st w <> 0.V & ||.w.|| < r
       proof
-        not (the carrier of V c= {0.V}) by A1,XBOOLE_0:def 10;
+        not the carrier of V c= {0.V} by A1,XBOOLE_0:def 10;
         then NonZero V <> {} by XBOOLE_1:37;
         then consider u being set such that
-A5:     u in NonZero V by XBOOLE_0:def 1;
-A6:     u in the carrier of V & not u in {0.V} by A5,XBOOLE_0:def 5;
-        reconsider u as VECTOR of V by A5;
-A7:     u <> 0.V by A6,TARSKI:def 1;
+A6:     u in NonZero V by XBOOLE_0:def 1;
+A7:     not u in {0.V} by A6,XBOOLE_0:def 5;
+        reconsider u as VECTOR of V by A6;
+A8:     u <> 0.V by A7,TARSKI:def 1;
         then
-A8:     ||.u.|| <> 0 & ||.u.|| >= 0 by BHSP_1:32,34;
+A9:     ||.u.|| <> 0 by BHSP_1:32;
         set a = ||.u.||;
+A10:    ||.u.|| >= 0 by BHSP_1:34;
         take w = (r'/a)*u;
-A9:     r'/a > 0 by A3,A8,XREAL_1:141;
-        ||.w.|| = abs(r'/a)*||.u.|| by BHSP_1:33
-          .= (r'/a)*||.u.|| by A9,ABSVALUE:def 1
+A11:    ||.w.|| = abs(r'/a)*||.u.|| by BHSP_1:33
+          .= (r'/a)*||.u.|| by A3,A10,ABSVALUE:def 1
           .= r'/(a/a) by XCMPLX_1:82
-          .= r' by A8,XCMPLX_1:51;
-        hence thesis by A3,A7,A9,RLVECT_1:24;
+          .= r' by A9,XCMPLX_1:51;
+        r'/a > 0 by A3,A9,A10,XREAL_1:141;
+        hence thesis by A4,A8,A11,RLVECT_1:24;
       end;
       then consider u being VECTOR of V such that
-A10:  u <> 0.V & ||.u.|| < r;
-      ||.v-u.|| = ||. -u .|| by A4,RLVECT_1:27
+A12:  u <> 0.V and
+A13:  ||.u.|| < r;
+      ||.v-u.|| = ||. -u .|| by A5,RLVECT_1:27
         .= ||. u .|| by BHSP_1:37;
-      then u in {y where y is Point of V : ||.v - y.|| < r} by A10;
+      then u in {y where y is Point of V : ||.v - y.|| < r} by A13;
       then u in Ball(v,r) by BHSP_2:def 5;
-      hence thesis by A4,A10;
+      hence thesis by A5,A12;
     end;
     suppose
-A11:  v <> 0.V;
+A14:  v <> 0.V;
       set a = ||.v.||;
-A12:  a >= 0 & a <> 0 by A11,BHSP_1:32,34;
+A15:  a <> 0 by A14,BHSP_1:32;
       set u' = (1-r'/a)*v;
-A13:  ||.v-u'.|| = ||. 1*v - (1-r'/a)*v .|| by RLVECT_1:def 9
+A16:  ||.v-u'.|| = ||. 1*v - (1-r'/a)*v .|| by RLVECT_1:def 9
         .= ||. (1-(1-r'/a))*v .|| by RLVECT_1:49
         .= abs(r'/a)*||.v.|| by BHSP_1:33;
-      r'/a > 0 by A3,A12,XREAL_1:141;
+      a >= 0 by BHSP_1:34;
       then
-A14:  ||.v-u'.|| = r'/a*a by A13,ABSVALUE:def 1
+A17:  ||.v-u'.|| = r'/a*a by A3,A16,ABSVALUE:def 1
         .= r'/(a/a) by XCMPLX_1:82
-        .= r' by A12,XCMPLX_1:51;
-      then u' in {y where y is Point of V : ||.v - y.|| < r} by A3;
+        .= r' by A15,XCMPLX_1:51;
+      then v - u' <> 0.V by A3,BHSP_1:32;
       then
-A15:  u' in Ball(v,r) by BHSP_2:def 5;
-      v - u' <> 0.V by A3,A14,BHSP_1:32;
-      then v <> u' by RLVECT_1:28;
-      hence thesis by A15;
+A18:  v <> u' by RLVECT_1:28;
+      u' in {y where y is Point of V : ||.v - y.|| < r} by A4,A17;
+      then u' in Ball(v,r) by BHSP_2:def 5;
+      hence thesis by A18;
     end;
   end;
   hence thesis;
 end;
 
 theorem
-  for V being RealUnitarySpace holds
-  the carrier of V = the carrier of TopUnitSpace V &
-  the topology of TopUnitSpace V = Family_open_set V;
+  for V being RealUnitarySpace holds the carrier of V = the carrier of
+  TopUnitSpace V & the topology of TopUnitSpace V = Family_open_set V;
 
 theorem Th50:
   for V being RealUnitarySpace, M being Subset of TopUnitSpace(V),
@@ -1723,86 +1821,88 @@ proof
   let M be Subset of TopUnitSpace(V);
   let r be Real;
   let v be Point of V;
-  assume M = Ball(v,r);
+  assume
+  M = Ball(v,r);
   then M in Family_open_set(V) by Th37;
   hence thesis by PRE_TOPC:def 5;
 end;
 
 theorem
   for V being RealUnitarySpace, M being Subset of TopUnitSpace(V) holds
-  M is open iff for v being Point of V st v in M
-  ex r being Real st r>0 & Ball(v,r) c= M
+M is open iff for v being Point of V st v in M ex r being Real st r>0 & Ball(v,
+  r) c= M
 proof
   let V be RealUnitarySpace;
   let M be Subset of TopUnitSpace(V);
-  thus M is open implies for v being Point of V st v in M
-  ex r being Real st r>0 & Ball(v,r) c= M
+  thus M is open implies for v being Point of V st v in M ex r being Real st r
+  >0 & Ball(v,r) c= M
   proof
     assume
-A1: M is open;
-    let v be Point of V such that
-A2: v in M;
-    M in the topology of TopUnitSpace V by A1,PRE_TOPC:def 5;
-    hence thesis by A2,Def5;
+    M is open;
+    then
+A1: M in the topology of TopUnitSpace V by PRE_TOPC:def 5;
+    let v be Point of V;
+    assume
+    v in M;
+    hence thesis by A1,Def5;
   end;
-  assume for v being Point of V st v in M
-  ex r being Real st r>0 & Ball(v,r) c= M;
+  assume
+  for v being Point of V st v in M ex r being Real st r>0 & Ball(v,r)
+  c= M;
   hence M in the topology of TopUnitSpace V by Def5;
 end;
 
 theorem
   for V being RealUnitarySpace, v1,v2 being Point of V, r1,r2 being Real
-  ex u being Point of V, r being Real st
-  Ball(v1,r1) \/ Ball(v2,r2) c= Ball(u,r)
+ex u being Point of V, r being Real st Ball(v1,r1) \/ Ball(v2,r2) c= Ball(u,r)
 proof
   let V be RealUnitarySpace;
   let v1,v2 be Point of V;
   let r1,r2 be Real;
   reconsider u = v1 as Point of V;
   reconsider r = abs(r1) + abs(r2) + dist(v1,v2) as Real;
-A1: for a being set holds
-  a in Ball(v1,r1) \/ Ball(v2,r2) implies a in Ball(u,r)
+  take u;
+  take r;
+  for a being set holds a in Ball(v1,r1) \/ Ball(v2,r2) implies a in Ball(
+  u,r)
   proof
     let a be set;
     assume
-A2: a in (Ball(v1,r1) \/ Ball(v2,r2));
+A1: a in (Ball(v1,r1) \/ Ball(v2,r2));
     then reconsider a as Point of V;
-    now per cases by A2,XBOOLE_0:def 3;
-      case a in Ball(v1,r1);
+    now
+      per cases by A1,XBOOLE_0:def 3;
+      case
+        a in Ball(v1,r1);
         then
-A3:     dist(u,a) < r1 by BHSP_2:41;
+A2:     dist(u,a) < r1 by BHSP_2:41;
         r1 <= abs(r1) & 0 <= abs(r2) by ABSVALUE:11,COMPLEX1:132;
         then
-A4:     r1 + 0 <= abs(r1) + abs(r2) by XREAL_1:9;
+A3:     r1 + 0 <= abs(r1) + abs(r2) by XREAL_1:9;
         0 <= dist(v1,v2) by BHSP_1:44;
-        then r1 + 0 <= abs(r1) + abs(r2) + dist(v1,v2) by A4,XREAL_1:9;
-        then dist(u,a) - r < r1 - r1 by A3,XREAL_1:16;
+        then r1 + 0 <= abs(r1) + abs(r2) + dist(v1,v2) by A3,XREAL_1:9;
+        then dist(u,a) - r < r1 - r1 by A2,XREAL_1:16;
         then dist(u,a) - r + r < 0 + r by XREAL_1:10;
         hence thesis by BHSP_2:41;
       end;
       case
-A5:     a in Ball(v2,r2);
-A6:     dist(u,a) <= dist(v1,v2) + dist(v2,a) by BHSP_1:42;
-A7:     dist(v2,a) < r2 by A5,BHSP_2:41;
-        r2 <= abs(r2) by ABSVALUE:11;
-        then dist(v2,a) - abs(r2) < r2 - r2 by A7,XREAL_1:16;
+        a in Ball(v2,r2);
+        then dist(v2,a) < r2 by BHSP_2:41;
+        then dist(v2,a) - abs(r2) < r2 - r2 by ABSVALUE:11,XREAL_1:16;
         then dist(v2,a) - abs(r2) + abs(r2) < 0 + abs(r2) by XREAL_1:10;
+        then dist(u,a) - abs(r2) < dist(v1,v2) + dist(v2,a) - dist(v2,a ) by
+        BHSP_1:42,XREAL_1:17;
+        then dist(u,a) - abs(r2) - abs(r1) < dist(v1,v2) - 0 by COMPLEX1:
+        132,XREAL_1:16;
         then
-A8:     dist(u,a) - abs(r2) < dist(v1,v2) + dist(v2,a) - dist(v2,a )
-        by A6,XREAL_1:17;
-        0 <= abs(r1) by COMPLEX1:132;
-        then dist(u,a) - abs(r2) - abs(r1) < dist(v1,v2) - 0
-         by A8,XREAL_1:16;
-        then dist(u,a) - (abs(r1) + abs(r2)) + (abs(r1) + abs(r2)) <
-        abs(r1) + abs(r2) + dist(v1,v2) by XREAL_1:10;
+        dist(u,a) - (abs(r1) + abs(r2)) + (abs(r1) + abs(r2)) < abs(r1) +
+        abs(r2) + dist(v1,v2) by XREAL_1:10;
         hence thesis by BHSP_2:41;
       end;
     end;
     hence thesis;
   end;
-  take u;
-  take r;
-  thus thesis by A1,TARSKI:def 3;
+  hence thesis by TARSKI:def 3;
 end;
 
 theorem Th53: :: TOPREAL6:65
@@ -1815,12 +1915,12 @@ proof
   let r be Real;
   assume
 A1: M = cl_Ball(v,r);
-  for x being set holds x in M` iff
-  ex Q being Subset of TopUnitSpace V st Q is open & Q c= M` & x in Q
+  for x being set holds x in M` iff ex Q being Subset of TopUnitSpace V st
+  Q is open & Q c= M` & x in Q
   proof
     let x be set;
-    thus x in M` implies ex Q being Subset of TopUnitSpace V st
-    Q is open & Q c= M` & x in Q
+    thus x in M` implies ex Q being Subset of TopUnitSpace V st Q is open & Q
+    c= M` & x in Q
     proof
       assume
 A2:   x in M`;
@@ -1834,12 +1934,13 @@ A2:   x in M`;
         assume
 A3:     q in Q;
         then reconsider f = q as Point of V;
-A4:     dist(e,f) < dist(e,v)-r by A3,BHSP_2:41;
         dist(e,v) <= dist(e,f) + dist(f,v) by BHSP_1:42;
-        then dist(e,v) - r <= dist(e,f) + dist(f,v) - r by XREAL_1:11;
+        then
+A4:     dist(e,v) - r <= dist(e,f) + dist(f,v) - r by XREAL_1:11;
+        dist(e,f) < dist(e,v)-r by A3,BHSP_2:41;
         then dist(e,f) < dist(e,f) + dist(f,v) - r by A4,XXREAL_0:2;
-        then dist(e,f) - dist(e,f) < dist(e,f) + dist(f,v) - r - dist(e,f)
-        by XREAL_1:11;
+        then dist(e,f) - dist(e,f) < dist(e,f) + dist(f,v) - r - dist(e,f) by
+        XREAL_1:11;
         then 0 < dist(e,f) - dist(e,f) + dist(f,v) - r;
         then dist(f,v) > r by XREAL_1:49;
         then not q in M by A1,BHSP_2:48;
@@ -1857,16 +1958,16 @@ A4:     dist(e,f) < dist(e,v)-r by A3,BHSP_2:41;
 end;
 
 theorem
-  for V being RealUnitarySpace, M being Subset of TopUnitSpace V,
-  v being VECTOR of V, r being Real st M = Sphere(v,r) holds M is closed
+  for V being RealUnitarySpace, M being Subset of TopUnitSpace V, v
+  being VECTOR of V, r being Real st M = Sphere(v,r) holds M is closed
 proof
   let V be RealUnitarySpace;
   let M be Subset of TopUnitSpace V;
   let v be VECTOR of V;
   let r be Real;
+  reconsider B = cl_Ball(v,r), C = Ball(v,r) as Subset of TopUnitSpace V;
   assume
 A1: M = Sphere(v,r);
-  reconsider B = cl_Ball(v,r), C = Ball(v,r) as Subset of TopUnitSpace V;
 A2: M` = B` \/ C
   proof
     hereby
@@ -1892,8 +1993,6 @@ A4: a in B` \/ C;
     hence thesis by A4,SUBSET_1:50;
   end;
   B is closed & C is open by Th50,Th53;
-  then B` is open & C is open;
-  then M` is open by A2,TOPS_1:37;
-  hence thesis by TOPS_1:29;
+  hence thesis by A2,TOPS_1:29;
 end;
 

@@ -13,14 +13,12 @@ environ
       PUA2MSS1, PARTFUN1, MSALIMIT, ORDERS_1, STRUCT_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NAT_1, MCART_1, RELAT_1,
       FUNCT_1, STRUCT_0, RELAT_2, FUNCT_2, FINSEQ_1, ORDERS_2, FUNCOP_1,
-      RELSET_1, PARTFUN1, CARD_3, BINOP_1, FUNCT_5, FUNCT_6, PBOOLE,
-      PRALG_1, MSUALG_1, MSUALG_2, MSUALG_3, PRALG_2, PUA2MSS1,
-      ORDERS_3;
- constructors PRALG_1, PRALG_2, MSUALG_3, PUA2MSS1, ORDERS_3,
-      RELSET_1;
- registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2, FUNCOP_1,
-      FRAENKEL, PBOOLE, STRUCT_0, ORDERS_2, MSUALG_1, MSUALG_2, PRALG_2,
-      MSUALG_3, ORDERS_3, PRALG_3, ORDINAL1, CARD_3, PRE_CIRC, RELSET_1;
+      RELSET_1, PARTFUN1, CARD_3, BINOP_1, FUNCT_5, FUNCT_6, PBOOLE, PRALG_1,
+      MSUALG_1, MSUALG_2, MSUALG_3, PRALG_2, PUA2MSS1, ORDERS_3;
+ constructors PRALG_1, PRALG_2, MSUALG_3, PUA2MSS1, ORDERS_3, RELSET_1;
+ registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2, FUNCOP_1, PBOOLE,
+      STRUCT_0, ORDERS_2, MSUALG_1, MSUALG_2, PRALG_2, MSUALG_3, ORDERS_3,
+      PRALG_3, ORDINAL1, CARD_3, RELSET_1;
  requirements SUBSET, BOOLE;
  definitions TARSKI, XBOOLE_0, BINOP_1;
  theorems ALTCAT_1, CARD_3, FUNCOP_1, FINSEQ_1, FUNCT_1, FUNCT_2, FUNCT_5,
@@ -44,9 +42,9 @@ registration
   cluster ((OPER AF).i).o -> Function-like Relation-like;
   coherence
   proof
-    consider U0 being MSAlgebra over S such that
-A2: U0 = AF.i & (OPER AF).i = the Charact of U0 by PRALG_2:def 18;
-    thus thesis by A2;
+    ex U0 being MSAlgebra over S st U0 = AF.i & (OPER AF).i = the Charact
+    of U0 by PRALG_2:def 18;
+    hence thesis;
   end;
 end;
 
@@ -65,42 +63,48 @@ end;
 definition
   let P, S;
   mode OrderedAlgFam of P,S -> MSAlgebra-Family of the carrier of P,S means
-    :Def1:
-    ex F be ManySortedFunction of the InternalRel of P st
-    for i,j,k st i >= j & j >= k ex f1 be ManySortedFunction of it.i, it.j,
-    f2 be ManySortedFunction of it.j, it.k st f1 = F.(j,i) & f2 = F.(k,j) &
-    F.(k,i) = f2 ** f1 & f1 is_homomorphism it.i, it.j;
+    :
+    Def1: ex
+ F be ManySortedFunction of the InternalRel of P st for i,j,k st i >= j
+& j >= k ex f1 be ManySortedFunction of it.i, it.j, f2 be ManySortedFunction of
+    it.j, it.k st f1 = F.(j,i) & f2 = F.(k,j) & F.(k,i) = f2 ** f1 & f1
+    is_homomorphism it.i, it.j;
   existence
   proof
+    reconsider T1 = the InternalRel of P as Relation of the carrier of P;
     consider A be non-empty MSAlgebra over S;
-    reconsider Z = (the carrier of P) --> A as
-    ManySortedSet of the carrier of P;
-    for i be set st i in the carrier of P holds
-    Z.i is non-empty MSAlgebra over S by FUNCOP_1:13;
+    reconsider Z = (the carrier of P) --> A as ManySortedSet of the carrier of
+    P;
+    for i be set st i in the carrier of P holds Z.i is non-empty MSAlgebra
+    over S by FUNCOP_1:13;
     then reconsider Z as MSAlgebra-Family of the carrier of P, S by
-PRALG_2:def 12;
+    PRALG_2:def
+    12;
     take Z;
     set G = (the InternalRel of P) --> id (the Sorts of A);
     reconsider G as ManySortedFunction of the InternalRel of P;
     take G;
     let i, j, k;
-    assume i >= j & j >= k;
+A1: Z.j = A by FUNCOP_1:13;
+    Z.k = A by FUNCOP_1:13;
+    then consider F2 be ManySortedFunction of Z.j, Z.k such that
+A2: F2 = id (the Sorts of A) by A1;
+    assume
+    i >= j & j >= k;
     then
-A1: [j,i] in the InternalRel of P & [k,j] in the InternalRel of P
-    by ORDERS_2:def 9;
-A2: Z.i = A & Z.j = A & Z.k = A by FUNCOP_1:13;
-    then consider F1 be ManySortedFunction of Z.i, Z.j such that
-A3: F1 = id (the Sorts of A);
-    take F1;
-    consider F2 be ManySortedFunction of Z.j, Z.k such that
-A4: F2 = id (the Sorts of A) by A2;
-    take F2;
-A5: F2 ** F1 = id (the Sorts of A) by A3,A4,MSUALG_3:3;
-    reconsider T1 = the InternalRel of P as Relation of the carrier of P;
+A3: [j,i] in the InternalRel of P & [k,j] in the InternalRel of P by
+    ORDERS_2:def 9;
     field T1 = the carrier of P by ORDERS_1:97;
     then T1 is_transitive_in the carrier of P by RELAT_2:def 16;
-    then [k,i] in T1 by A1,RELAT_2:def 8;
-    hence thesis by A1,A2,A3,A4,A5,FUNCOP_1:13,MSUALG_3:9;
+    then
+A4: [k,i] in T1 by A3,RELAT_2:def 8;
+A5: Z.i = A by FUNCOP_1:13;
+    then consider F1 be ManySortedFunction of Z.i, Z.j such that
+A6: F1 = id (the Sorts of A) by A1;
+    take F1;
+    take F2;
+    F2 ** F1 = id (the Sorts of A) by A6,A2,MSUALG_3:3;
+    hence thesis by A3,A5,A1,A6,A2,A4,FUNCOP_1:13,MSUALG_3:9;
   end;
 end;
 
@@ -109,12 +113,11 @@ reserve OAF for OrderedAlgFam of P, S;
 definition
   let P, S, OAF;
   mode Binding of OAF -> ManySortedFunction of the InternalRel of P means
-    :Def2:
-    for i,j,k st i >= j & j >= k
-    ex f1 be ManySortedFunction of OAF.i, OAF.j,
-    f2 be ManySortedFunction of OAF.j, OAF.k st
-    f1 = it.(j,i) & f2 = it.(k,j) &
-    it.(k,i) = f2 ** f1 & f1 is_homomorphism OAF.i, OAF.j;
+    :
+    Def2: for
+ i,j,k st i >= j & j >= k ex f1 be ManySortedFunction of OAF.i, OAF.j,
+f2 be ManySortedFunction of OAF.j, OAF.k st f1 = it.(j,i) & f2 = it.(k,j) & it.
+    (k,i) = f2 ** f1 & f1 is_homomorphism OAF.i, OAF.j;
   existence by Def1;
 end;
 
@@ -125,33 +128,32 @@ definition
 A1: i >= j;
   func bind (B,i,j) -> ManySortedFunction of OAF.i, OAF.j equals
   :Def3:
-  B.(j,i);
+  B.(j,i
+  );
   coherence
   proof
     j >= j by ORDERS_2:24;
-    then consider f1 be ManySortedFunction of OAF.i, OAF.j,
-    f2 be ManySortedFunction of OAF.j, OAF.j such that
-A2: f1 = B.(j,i) & f2 = B.(j,j) & B.(j,i) = f2 ** f1 &
-    f1 is_homomorphism OAF.i, OAF.j by A1,Def2;
-    thus thesis by A2;
+    then ex f1 be ManySortedFunction of OAF.i, OAF.j, f2 be ManySortedFunction
+    of OAF.j, OAF.j st f1 = B.(j,i) & f2 = B.(j,j) & B.(j,i) = f2 ** f1 & f1
+    is_homomorphism OAF.i, OAF.j by A1,Def2;
+    hence thesis;
   end;
 end;
 
 reserve B for Binding of OAF;
 
 theorem Th1:
-  i >= j & j >= k implies bind (B,j,k) ** bind (B,i,j) = bind (B,i,k)
+  i >= j & j >= k implies bind (B,j,k) ** bind (B,i,j) = bind (B,i,
+  k)
 proof
   assume
 A1: i >= j & j >= k;
   then
-A2: bind (B,j,k) = B.(k,j) & bind (B,i,j) = B.(j,i) &
-  bind (B,i,k) = B.(k,i) by Def3,ORDERS_2:26;
-  consider f1 be ManySortedFunction of OAF.i, OAF.j,
-  f2 be ManySortedFunction of OAF.j, OAF.k such that
-A3: f1 = B.(j,i) & f2 = B.(k,j) & B.(k,i) = f2 ** f1 &
-  f1 is_homomorphism OAF.i, OAF.j by A1,Def2;
-  thus thesis by A2,A3;
+A2: ex f1 be ManySortedFunction of OAF.i, OAF.j, f2 be ManySortedFunction of
+  OAF.j, OAF.k st f1 = B.(j,i) & f2 = B.(k,j) & B.(k,i) = f2 ** f1 & f1
+  is_homomorphism OAF.i, OAF.j by Def2;
+  bind (B,j,k) = B.(k,j) & bind (B,i,j) = B.(j,i) by A1,Def3;
+  hence thesis by A1,A2,Def3,ORDERS_2:26;
 end;
 
 definition
@@ -159,13 +161,13 @@ definition
   let IT be Binding of OAF;
   attr IT is normalized means
   :Def4:
-  for i holds IT.(i,i) = id (the Sorts of OAF.i);
+  for i holds IT.(i,i) = id (the Sorts of
+  OAF.i);
 end;
 
 theorem Th2:
-  for P,S,OAF,B,i,j st i >= j
-  for f be ManySortedFunction of OAF.i,OAF.j st f = bind (B,i,j) holds
-  f is_homomorphism OAF.i,OAF.j
+  for P,S,OAF,B,i,j st i >= j for f be ManySortedFunction of OAF.i,
+  OAF.j st f = bind (B,i,j) holds f is_homomorphism OAF.i,OAF.j
 proof
   let P,S,OAF,B,i,j;
   assume
@@ -174,39 +176,39 @@ A1: i >= j;
   assume
 A2: f = bind (B,i,j);
   j >= j by ORDERS_2:24;
-  then consider f1 be ManySortedFunction of OAF.i, OAF.j,
-  f2 be ManySortedFunction of OAF.j, OAF.j such that
-A3: f1 = B.(j,i) & f2 = B.(j,j) & B.(j,i) = f2 ** f1 &
-  f1 is_homomorphism OAF.i, OAF.j by A1,Def2;
-  thus thesis by A1,A2,A3,Def3;
+  then
+  ex f1 be ManySortedFunction of OAF.i, OAF.j, f2 be ManySortedFunction of
+  OAF.j, OAF.j st f1 = B.(j,i) & f2 = B.(j,j) & B.(j,i) = f2 ** f1 & f1
+  is_homomorphism OAF.i, OAF.j by A1,Def2;
+  hence thesis by A1,A2,Def3;
 end;
 
 definition
   let P, S, OAF, B;
   func Normalized B -> Binding of OAF means
   :Def5:
-  for i, j st i >= j holds it.(j,i) = IFEQ (j, i, id (the Sorts of OAF.i),
-  bind (B,i,j) ** id (the Sorts of OAF.i) );
+  for i, j st i >= j holds it
+.(j,i) = IFEQ (j, i, id (the Sorts of OAF.i), bind (B,i,j) ** id (the Sorts of
+  OAF.i) );
   existence
   proof
-    defpred P[set,set] means
-    ex i,j st $1 = [j,i] & $2 = IFEQ (j, i, id (the Sorts of OAF.i),
-    bind (B,i,j) ** id (the Sorts of OAF.i) );
+    defpred P[set,set] means ex i,j st $1 = [j,i] & $2 = IFEQ (j, i, id (the
+    Sorts of OAF.i), bind (B,i,j) ** id (the Sorts of OAF.i) );
     now
       let ij be set;
       assume
 A1:   ij in the InternalRel of P;
       then reconsider i2 = ij`1, i1 = ij`2 as Element of P by MCART_1:10;
       reconsider i1, i2 as Element of P;
-      deffunc Z(set)= IFEQ (i2, i1, id (the Sorts of OAF.i1),
-      bind (B,i1,i2) ** id (the Sorts of OAF.i1) );
+      deffunc Z(set)= IFEQ (i2, i1, id (the Sorts of OAF.i1), bind (B,i1,i2)
+      ** id (the Sorts of OAF.i1) );
       consider A be ManySortedSet of the InternalRel of P such that
-A2:   for ij be set st ij in the InternalRel of P holds
-      A.ij = Z(ij) from PBOOLE:sch 4;
+A2:   for ij be set st ij in the InternalRel of P holds A.ij = Z(ij)
+      from PBOOLE:sch 4;
       take x = A.ij;
       take i1,i2;
-      thus ij = [i2,i1] & x = IFEQ (i2, i1, id (the Sorts of OAF.i1),
-      bind (B,i1,i2) ** id (the Sorts of OAF.i1) ) by A1,A2,MCART_1:23;
+      thus ij = [i2,i1] & x = IFEQ (i2, i1, id (the Sorts of OAF.i1), bind (B,
+      i1,i2) ** id (the Sorts of OAF.i1) ) by A1,A2,MCART_1:23;
     end;
     then
 A3: for z being set st z in the InternalRel of P ex y being set st P[z,y];
@@ -216,91 +218,90 @@ A4: for ij being set st ij in the InternalRel of P holds P[ij,A.ij]
     for z be set st z in dom A holds A.z is Function
     proof
       let z be set;
-      assume z in dom A;
+      assume
+      z in dom A;
       then z in the InternalRel of P by PARTFUN1:def 4;
       then consider i1,i2 be Element of P such that
-A5:   z = [i2,i1] & A.z = IFEQ (i2, i1, id (the Sorts of OAF.i1),
-      bind (B,i1,i2) ** id (the Sorts of OAF.i1) ) by A4;
+      z = [i2,i1] and
+A5:   A.z = IFEQ (i2, i1, id (the Sorts of OAF.i1), bind (B,i1,i2) **
+      id (the Sorts of OAF.i1) ) by A4;
       per cases;
-      suppose i1 = i2;
+      suppose
+        i1 = i2;
         hence thesis by A5,FUNCOP_1:def 8;
       end;
-      suppose i1 <> i2;
+      suppose
+        i1 <> i2;
         hence thesis by A5,FUNCOP_1:def 8;
       end;
     end;
-    then reconsider A as ManySortedFunction of the InternalRel of P
-    by FUNCOP_1:def 6;
+    then reconsider A as ManySortedFunction of the InternalRel of P by
+    FUNCOP_1:
+    def 6;
     now
       let i,j,k;
-      assume
-A6:   i >= j & j >= k;
+      assume that
+A6:   i >= j and
+A7:   j >= k;
       consider kl be set such that
-A7:   kl = [j,i];
-      kl in the InternalRel of P by A6,A7,ORDERS_2:def 9;
+A8:   kl = [j,i];
+      kl in the InternalRel of P by A6,A8,ORDERS_2:def 9;
       then consider i1,j1 be Element of P such that
-A8:   [j1,i1] = kl & A.kl = IFEQ (j1, i1, id (the Sorts of OAF.i1),
-      bind (B,i1,j1) ** id (the Sorts of OAF.i1) ) by A4;
-A9:   i1 = i & j1 = j by A7,A8,ZFMISC_1:33;
+A9:   [j1,i1] = kl and
+A10:  A.kl = IFEQ (j1, i1, id (the Sorts of OAF.i1), bind (B,i1,j1)
+      ** id (the Sorts of OAF.i1) ) by A4;
+A11:  i1 = i & j1 = j by A8,A9,ZFMISC_1:33;
       A.(j,i) is ManySortedFunction of OAF.i,OAF.j
       proof
         per cases;
-        suppose i = j;
-          hence thesis by A8,A9,FUNCOP_1:def 8;
+        suppose
+          i = j;
+          hence thesis by A9,A10,A11,FUNCOP_1:def 8;
         end;
-        suppose i <> j;
-          hence thesis by A8,A9,FUNCOP_1:def 8;
+        suppose
+          i <> j;
+          hence thesis by A9,A10,A11,FUNCOP_1:def 8;
         end;
       end;
       then reconsider f1 = A.(j,i) as ManySortedFunction of OAF.i,OAF.j;
       consider lm be set such that
-A10:  lm = [k,j];
-      lm in the InternalRel of P by A6,A10,ORDERS_2:def 9;
+A12:  lm = [k,j];
+      lm in the InternalRel of P by A7,A12,ORDERS_2:def 9;
       then consider i2,j2 be Element of P such that
-A11:  [j2,i2] = lm & A.lm = IFEQ (j2, i2, id (the Sorts of OAF.i2),
-      bind (B,i2,j2) ** id (the Sorts of OAF.i2) ) by A4;
-A12:  j2 = k & i2 = j by A10,A11,ZFMISC_1:33;
+A13:  [j2,i2] = lm and
+A14:  A.lm = IFEQ (j2, i2, id (the Sorts of OAF.i2), bind (B,i2,j2)
+      ** id (the Sorts of OAF.i2) ) by A4;
+A15:  j2 = k & i2 = j by A12,A13,ZFMISC_1:33;
       A.(k,j) is ManySortedFunction of OAF.j,OAF.k
       proof
         per cases;
-        suppose j = k;
-          hence thesis by A11,A12,FUNCOP_1:def 8;
+        suppose
+          j = k;
+          hence thesis by A13,A14,A15,FUNCOP_1:def 8;
         end;
-        suppose j <> k;
-          hence thesis by A11,A12,FUNCOP_1:def 8;
+        suppose
+          j <> k;
+          hence thesis by A13,A14,A15,FUNCOP_1:def 8;
         end;
       end;
       then reconsider f2 = A.(k,j) as ManySortedFunction of OAF.j,OAF.k;
-A13:  for i,j st i = j holds A.(j,i) = id (the Sorts of OAF.i)
+A16:  for i,j st i >= j & i <> j holds A.(j,i) = bind (B,i,j)
       proof
         let i,j;
-        assume
-A14:    i = j;
+        assume that
+A17:    i >= j and
+A18:    i <> j;
+        consider lm be set such that
+A19:    lm = [j,i];
+        lm in the InternalRel of P by A17,A19,ORDERS_2:def 9;
+        then consider i2,j2 be Element of P such that
+A20:    [j2,i2] = lm and
+A21:    A.lm = IFEQ (j2, i2, id (the Sorts of OAF.i2), bind (B,i2,j2)
+        ** id (the Sorts of OAF.i2) ) by A4;
+        i2 = i & j2 = j by A19,A20,ZFMISC_1:33;
         then
-A15:    i >= j by ORDERS_2:24;
-        consider lm be set such that
-A16:    lm = [j,i];
-        lm in the InternalRel of P by A15,A16,ORDERS_2:def 9;
-        then consider i2,j2 be Element of P such that
-A17:    [j2,i2] = lm & A.lm = IFEQ (j2, i2, id (the Sorts of OAF.i2),
-        bind (B,i2,j2) ** id (the Sorts of OAF.i2) ) by A4;
-        i2 = i & j2 = j by A16,A17,ZFMISC_1:33;
-        hence thesis by A14,A17,FUNCOP_1:def 8;
-      end;
-A18:  for i,j st i >= j & i <> j holds A.(j,i) = bind (B,i,j)
-      proof
-        let i,j;
-        assume
-A19:    i >= j & i <> j;
-        consider lm be set such that
-A20:    lm = [j,i];
-        lm in the InternalRel of P by A19,A20,ORDERS_2:def 9;
-        then consider i2,j2 be Element of P such that
-A21:    [j2,i2] = lm & A.lm = IFEQ (j2, i2, id (the Sorts of OAF.i2),
-        bind (B,i2,j2) ** id (the Sorts of OAF.i2) ) by A4;
-        i2 = i & j2 = j by A20,A21,ZFMISC_1:33;
-        then A.(j,i) = bind (B,i,j) ** id (the Sorts of OAF.i)
-        by A19,A21,FUNCOP_1:def 8;
+        A.(j,i) = bind (B,i,j) ** id (the Sorts of OAF.i) by A18,A20,A21,
+        FUNCOP_1:def 8;
         hence thesis by MSUALG_3:3;
       end;
 A22:  A.(k,i) = f2 ** f1
@@ -308,89 +309,108 @@ A22:  A.(k,i) = f2 ** f1
         per cases;
         suppose
 A23:      i = j & j = k;
-          then f2 = id (the Sorts of OAF.j) by A11,A12,FUNCOP_1:def 8;
+          then f2 = id (the Sorts of OAF.j) by A13,A14,A15,
+          FUNCOP_1:def 8;
           hence thesis by A23,MSUALG_3:3;
         end;
         suppose
 A24:      i = j & j <> k;
-          then f1 = id (the Sorts of OAF.i) by A8,A9,FUNCOP_1:def 8;
+          then f1 = id (the Sorts of OAF.i) by A9,A10,A11,
+          FUNCOP_1:def 8;
           hence thesis by A24,MSUALG_3:3;
         end;
         suppose
 A25:      i <> j & j = k;
-          then f2 = id (the Sorts of OAF.j) by A11,A12,FUNCOP_1:def 8;
+          then f2 = id (the Sorts of OAF.j) by A13,A14,A15,
+          FUNCOP_1:def 8;
           hence thesis by A25,MSUALG_3:4;
         end;
         suppose
 A26:      i <> j & j <> k;
-          then i > j & j > k by A6,ORDERS_2:def 10;
+          then i > j & j > k by A6,A7,ORDERS_2:def 10;
           then
 A27:      i <> k by ORDERS_2:29;
-          f1 = bind (B,i,j) ** id (the Sorts of OAF.i) by A8,A9,A26,
-FUNCOP_1:def 8;
+          f2 = bind (B,j,k) ** id (the Sorts of OAF.j) by A13,A14,A15,A26
+          , FUNCOP_1:def 8;
           then
-A28:      f1 = bind (B,i,j) by MSUALG_3:3;
-          f2 = bind (B,j,k) ** id (the Sorts of OAF.j) by A11,A12,A26,
-FUNCOP_1:def 8;
-          then f2 = bind (B,j,k) by MSUALG_3:3;
-          then f2 ** f1 = bind (B,i,k) by A6,A28,Th1;
-          hence thesis by A6,A18,A27,ORDERS_2:26;
+A28:      f2 = bind (B,j,k) by MSUALG_3:3;
+          f1 = bind (B,i,j) ** id (the Sorts of OAF.i) by A9,A10,A11,A26
+          , FUNCOP_1:def 8;
+          then f1 = bind (B,i,j) by MSUALG_3:3;
+          then f2 ** f1 = bind (B,i,k) by A6,A7,A28,Th1;
+          hence thesis by A6,A7,A16,A27,ORDERS_2:26;
         end;
+      end;
+A29:  for i,j st i = j holds A.(j,i) = id (the Sorts of OAF.i)
+      proof
+        let i,j;
+        consider lm be set such that
+A30:    lm = [j,i];
+        assume
+A31:    i = j;
+        then i >= j by ORDERS_2:24;
+        then lm in the InternalRel of P by A30,ORDERS_2:def 9;
+        then consider i2,j2 be Element of P such that
+A32:    [j2,i2] = lm and
+A33:    A.lm = IFEQ (j2, i2, id (the Sorts of OAF.i2), bind (B,i2,j2)
+        ** id (the Sorts of OAF.i2) ) by A4;
+        i2 = i & j2 = j by A30,A32,ZFMISC_1:33;
+        hence thesis by A31,A32,A33,FUNCOP_1:def 8;
       end;
       f1 is_homomorphism OAF.i, OAF.j
       proof
         per cases;
         suppose
-A29:      i = j;
-          then A.(i,j) = id (the Sorts of OAF.i) by A13;
-          hence thesis by A29,MSUALG_3:9;
+A34:      i = j;
+          then A.(i,j) = id (the Sorts of OAF.i) by A29;
+          hence thesis by A34,MSUALG_3:9;
         end;
-        suppose i <> j;
-          then A.(j,i) = bind (B,i,j) by A6,A18;
+        suppose
+          i <> j;
+          then A.(j,i) = bind (B,i,j) by A6,A16;
           hence thesis by A6,Th2;
         end;
       end;
-      hence ex f1 be ManySortedFunction of OAF.i, OAF.j,
-      f2 be ManySortedFunction of OAF.j, OAF.k st
-      f1 = A.(j,i) & f2 = A.(k,j) &
-      A.(k,i) = f2 ** f1 & f1 is_homomorphism OAF.i, OAF.j by A22;
+      hence ex f1 be ManySortedFunction of OAF.i, OAF.j, f2 be
+ManySortedFunction of OAF.j, OAF.k st f1 = A.(j,i) & f2 = A.(k,j) & A.(k,i) =
+      f2 ** f1 & f1 is_homomorphism OAF.i, OAF.j by A22;
     end;
     then reconsider A as Binding of OAF by Def2;
     take A;
     let i, j;
-    assume
-A30: i >= j;
     consider kl be set such that
-A31: kl = [j,i];
-    kl in the InternalRel of P by A30,A31,ORDERS_2:def 9;
+A35: kl = [j,i];
+    assume
+    i >= j;
+    then kl in the InternalRel of P by A35,ORDERS_2:def 9;
     then consider i1,j1 be Element of P such that
-A32: [j1,i1] = kl & A.kl = IFEQ (j1, i1, id (the Sorts of OAF.i1),
-    bind (B,i1,j1) ** id (the Sorts of OAF.i1) ) by A4;
-    i1 = i & j1 = j by A31,A32,ZFMISC_1:33;
-    hence thesis by A32;
+A36: [j1,i1] = kl and
+A37: A.kl = IFEQ (j1, i1, id (the Sorts of OAF.i1), bind (B,i1,j1) **
+    id (the Sorts of OAF.i1) ) by A4;
+    i1 = i & j1 = j by A35,A36,ZFMISC_1:33;
+    hence thesis by A36,A37;
   end;
   uniqueness
   proof
     let N1, N2 be Binding of OAF such that
-A33: for i,j st i >= j holds N1.(j,i) = IFEQ (j, i, id (the Sorts of OAF.i),
-    bind (B,i,j) ** id (the Sorts of OAF.i) ) and
-A34: for i,j st i >= j holds N2.(j,i) = IFEQ (j, i, id (the Sorts of OAF.i),
-    bind (B,i,j) ** id (the Sorts of OAF.i) );
+A38: for i,j st i >= j holds N1.(j,i) = IFEQ (j, i, id (the Sorts of
+    OAF.i), bind (B,i,j) ** id (the Sorts of OAF.i) ) and
+A39: for i,j st i >= j holds N2.(j,i) = IFEQ (j, i, id (the Sorts of
+    OAF.i), bind (B,i,j) ** id (the Sorts of OAF.i) );
     now
       let ij be set;
       assume
-A35:  ij in the InternalRel of P;
+A40:  ij in the InternalRel of P;
       then reconsider i2 = ij`1 , i1 = ij`2 as Element of P by MCART_1:10;
       reconsider i1, i2 as Element of P;
-      ij = [ij`1,ij`2] by A35,MCART_1:23;
+A41:  N2.ij = N2.(i2,i1) by A40,MCART_1:23;
+      ij = [ij`1,ij`2] by A40,MCART_1:23;
       then
-A36:  i2 <= i1 by A35,ORDERS_2:def 9;
-      N1.ij = N1.(i2,i1) by A35,MCART_1:23;
-      then
-A37:  N1.ij = IFEQ (i2, i1, id (the Sorts of OAF.i1),
-      bind (B,i1,i2) ** id (the Sorts of OAF.i1) ) by A33,A36;
-      N2.ij = N2.(i2,i1) by A35,MCART_1:23;
-      hence N1.ij = N2.ij by A34,A36,A37;
+A42:  i2 <= i1 by A40,ORDERS_2:def 9;
+      N1.ij = N1.(i2,i1) by A40,MCART_1:23;
+      then N1.ij = IFEQ (i2, i1, id (the Sorts of OAF.i1), bind (B,i1,i2) **
+      id (the Sorts of OAF.i1) ) by A38,A42;
+      hence N1.ij = N2.ij by A39,A42,A41;
     end;
     hence N1 = N2 by PBOOLE:3;
   end;
@@ -400,15 +420,14 @@ theorem Th3:
   for i, j st i >= j & i <> j holds B.(j,i) = (Normalized B).(j,i)
 proof
   let i, j;
-  assume
-A1: i >= j & i <> j;
-  then
-A2: (Normalized B).(j,i) = IFEQ (j, i, id (the Sorts of OAF.i),
-  bind (B,i,j) ** id (the Sorts of OAF.i) ) by Def5;
-  IFEQ (j, i, id (the Sorts of OAF.i),
-  bind (B,i,j) ** id (the Sorts of OAF.i) ) =
-  bind (B,i,j) ** id (the Sorts of OAF.i) by A1,FUNCOP_1:def 8;
-  then (Normalized B).(j,i) = bind (B,i,j) by A2,MSUALG_3:3;
+  assume that
+A1: i >= j and
+A2: i <> j;
+  (Normalized B).(j,i) = IFEQ (j, i, id (the Sorts of OAF.i), bind (B,i,j)
+** id (the Sorts of OAF.i) ) & IFEQ (j, i, id (the Sorts of OAF.i), bind (B,i,j
+) ** id (the Sorts of OAF.i) ) = bind (B,i,j) ** id (the Sorts of OAF.i) by A1
+  ,A2,Def5,FUNCOP_1:def 8;
+  then (Normalized B).(j,i) = bind (B,i,j) by MSUALG_3:3;
   hence thesis by A1,Def3;
 end;
 
@@ -419,8 +438,9 @@ registration
   proof
     let i be Element of P;
     i >= i by ORDERS_2:24;
-    then (Normalized B).(i,i) = IFEQ (i, i, id (the Sorts of OAF.i),
-    bind (B,i,i) ** id (the Sorts of OAF.i) ) by Def5;
+    then
+    (Normalized B).(i,i) = IFEQ (i, i, id (the Sorts of OAF.i), bind (B,i,
+    i) ** id (the Sorts of OAF.i) ) by Def5;
     hence thesis by FUNCOP_1:def 8;
   end;
 end;
@@ -437,22 +457,25 @@ registration
 end;
 
 theorem
-  for NB be normalized Binding of OAF
-  for i, j st i >= j holds (Normalized NB).(j,i) = NB.(j,i)
+  for NB be normalized Binding of OAF for i, j st i >= j holds (
+  Normalized NB).(j,i) = NB.(j,i)
 proof
   let NB be normalized Binding of OAF;
   let i, j;
   assume
 A1: i >= j;
   per cases;
-  suppose i <> j;
+  suppose
+    i <> j;
     hence thesis by A1,Th3;
   end;
   suppose
 A2: i = j;
-    (Normalized NB).(j,i) = IFEQ (j, i, id (the Sorts of OAF.i),
-    bind (NB,i,j) ** id (the Sorts of OAF.i) ) by A1,Def5;
-    then (Normalized NB).(j,i) = id (the Sorts of OAF.i) by A2,FUNCOP_1:def 8;
+    (Normalized NB).(j,i) = IFEQ (j, i, id (the Sorts of OAF.i), bind (NB,
+    i,j) ** id (the Sorts of OAF.i) ) by A1,Def5;
+    then (Normalized NB).(j,i) = id (the Sorts of OAF.i) by A2,
+    FUNCOP_1:def
+    8;
     hence thesis by A2,Def4;
   end;
 end;
@@ -462,26 +485,27 @@ definition
   let B be Binding of OAF;
   func InvLim B -> strict MSSubAlgebra of product OAF means
   :Def6:
-  for s be SortSymbol of S for f be Element of (SORTS OAF).s holds
-  f in (the Sorts of it).s iff
-  for i,j st i >= j holds (bind (B,i,j).s).(f.i) = f.j;
+  for s be
+SortSymbol of S for f be Element of (SORTS OAF).s holds f in (the Sorts of it).
+  s iff for i,j st i >= j holds (bind (B,i,j).s).(f.i) = f.j;
   existence
   proof
-    deffunc F(SortSymbol of S) =
-    { f where f is Element of product Carrier (OAF,$1) :
-    for i,j st i >= j holds (bind (B,i,j).$1).(f.i) = f.j };
+    reconsider L = product OAF as non-empty MSAlgebra over S;
+    deffunc F(SortSymbol of S) = { f where f is Element of product Carrier (
+    OAF,$1) : for i,j st i >= j holds (bind (B,i,j).$1).(f.i) = f.j };
     consider C be ManySortedSet of the carrier of S such that
 A1: for s be SortSymbol of S holds C.s = F(s) from PBOOLE:sch 5;
     for i be set st i in the carrier of S holds C.i c= (SORTS OAF).i
     proof
       let i be set;
-      assume i in the carrier of S;
+      assume
+      i in the carrier of S;
       then reconsider s = i as SortSymbol of S;
-      defpred P[Element of product Carrier (OAF,s)] means
-      for i,j st i >= j holds (bind (B,i,j).s).($1.i) = $1.j;
-A2:   (SORTS OAF).s = product Carrier (OAF,s) by PRALG_2:def 17;
-      { f where f is Element of product Carrier (OAF,s) : P[f] } c=
+      defpred P[Element of product Carrier (OAF,s)] means for i,j st i >= j
+      holds (bind (B,i,j).s).($1.i) = $1.j;
+A2:   { f where f is Element of product Carrier (OAF,s) : P[f] } c=
       product Carrier (OAF,s) from FRAENKEL:sch 10;
+      (SORTS OAF).s = product Carrier (OAF,s) by PRALG_2:def 17;
       hence thesis by A1,A2;
     end;
     then C c= SORTS OAF by PBOOLE:def 5;
@@ -490,466 +514,438 @@ A2:   (SORTS OAF).s = product Carrier (OAF,s) by PRALG_2:def 17;
     for o be OperSymbol of S holds C is_closed_on o
     proof
       let o be OperSymbol of S;
-      rng ( (Den(o,product OAF)) | ((C# * the Arity of S).o) ) c=
-      (C * the ResultSort of S).o
+      rng ( (Den(o,product OAF)) | ((C# * the Arity of S).o) ) c= (C * the
+      ResultSort of S).o
       proof
-        let x be set;
-        assume
-A3:     x in rng ( (Den(o,product OAF)) | ((C# * the Arity of S).o) );
-        reconsider K = ( (Den(o,product OAF)) | ((C# * the Arity of S).o) )
-        as Function;
-        consider y be set such that
-A4:     y in dom K & x = K.y by A3,FUNCT_1:def 5;
-        dom K = (dom (Den (o,product OAF))) /\ ((C# * the Arity of S).o)
-        by RELAT_1:90;
-        then
-A5:     y in (dom (Den (o,product OAF))) & y in ((C# * the Arity of S).o)
-        by A4,XBOOLE_0:def 4;
         reconsider MS = C as ManySortedSet of (the carrier of S);
-        dom (the Arity of S) = the carrier' of S by FUNCT_2:def 1;
-        then y in C# . ((the Arity of S).o) by A5,FUNCT_1:23;
+        reconsider K = ( (Den(o,product OAF)) | ((C# * the Arity of S).o) ) as
+        Function;
+        let x be set;
+A3:     dom (the Arity of S) = the carrier' of S by FUNCT_2:def 1;
+        assume
+A4:     x in rng ( (Den(o,product OAF)) | ((C# * the Arity of S).o) );
+        then consider y be set such that
+A5:     y in dom K and
+A6:     x = K.y by FUNCT_1:def 5;
+A7:     dom K = (dom (Den (o,product OAF))) /\ ((C# * the Arity of S).o)
+        by RELAT_1:90;
+        then y in ((C# * the Arity of S).o) by A5,XBOOLE_0:def 4;
+        then y in C# . ((the Arity of S).o) by A3,FUNCT_1:23;
         then y in C# . the_arity_of o by MSUALG_1:def 6;
         then
-A7:     y in product (MS * the_arity_of o) by PBOOLE:def 19;
-A8:     dom (the ResultSort of S) = the carrier' of S by FUNCT_2:def 1;
-        x in Result (o,product OAF) by A3;
-        then x in ((the Sorts of product OAF) * the ResultSort of S).o
-        by MSUALG_1:def 10;
-        then x in (the Sorts of product OAF).((the ResultSort of S).o)
-        by A8,FUNCT_1:23;
-        then x in (SORTS OAF).((the ResultSort of S).o) by PRALG_2:20;
-        then x in (SORTS OAF).(the_result_sort_of o) by MSUALG_1:def 7;
+A8:     y in product (MS * the_arity_of o) by PBOOLE:def 19;
+        x in Result (o,product OAF) by A4;
+        then dom (the ResultSort of S) = the carrier' of S & x in ((the Sorts
+of product OAF) * the ResultSort of S).o by FUNCT_2:def 1,MSUALG_1:def 10;
+        then x in (the Sorts of product OAF).((the ResultSort of S).o) by
+        FUNCT_1:23;
         then
-A9:     x is Element of product Carrier (OAF,the_result_sort_of o)
-        by PRALG_2:def 17;
+A9:     x in (SORTS OAF).((the ResultSort of S).o) by PRALG_2:20;
         then reconsider x1 = x as Function;
+        x in (SORTS OAF).(the_result_sort_of o) by A9,MSUALG_1:def 7;
+        then
+A10:    x
+ is Element of product Carrier (OAF,the_result_sort_of o) by PRALG_2:def 17;
+A11:    y in (dom (Den (o,product OAF))) by A5,A7,XBOOLE_0:def 4;
         now
           let s be SortSymbol of S;
-          for i,j st i >= j holds (bind (B,i,j).the_result_sort_of o).
-          (x1.i) = x1.j
+          for i,j st i >= j holds (bind (B,i,j).the_result_sort_of o). (
+          x1.i) = x1.j
           proof
+            reconsider OPE = (OPS OAF).o as Function;
+A12:        Den (o,product OAF) = (the Charact of product OAF).o by
+            MSUALG_1:def 11
+              .= (OPS OAF).o by PRALG_2:20;
+            reconsider y as Function by A8;
             let i,j;
             assume
-A10:        i >= j;
-A11:        Den (o,product OAF) = (the Charact of product OAF).o
-            by MSUALG_1:def 11
-              .= (OPS OAF).o by PRALG_2:20;
-            reconsider OPE = (OPS OAF).o as Function;
-            consider g be Function such that
-A12:        y = g & dom g = dom (MS * the_arity_of o)
-            & for t be set st t in dom (MS * the_arity_of o) holds
-            g.t in (MS * the_arity_of o).t by A7,CARD_3:def 5;
-            reconsider y as Function by A12;
-A13:        dom y = dom (MS*the_arity_of o) by A7,CARD_3:18;
-A14:        rng (the_arity_of o) c= dom MS
+A13:        i >= j;
+            reconsider Co = commute y as Function;
+            set y1 = (commute y).i;
+A14:        dom y = dom (MS*the_arity_of o) by A8,CARD_3:18;
+A15:        rng (the_arity_of o) c= dom MS
             proof
               let i be set;
-              assume i in rng (the_arity_of o);
+              assume
+              i in rng (the_arity_of o);
               then i in the carrier of S;
               hence thesis by PARTFUN1:def 4;
             end;
             then
-A15:        dom y = dom (the_arity_of o) by A13,RELAT_1:46;
-            set y1 = (commute y).i;
-            reconsider Co = commute y as Function;
-A16:        y
-            in Funcs(Seg len (the_arity_of o),Funcs(the carrier of P,|.OAF.|))
+A16:        dom y = dom (the_arity_of o) by A14,RELAT_1:46;
+            then
+A17:        dom y = Seg len (the_arity_of o) by FINSEQ_1:def 3;
+            rng y c= Funcs(the carrier of P,|.OAF.|)
             proof
-A17:          dom y = Seg len (the_arity_of o) by A15,FINSEQ_1:def 3;
-              rng y c= Funcs(the carrier of P,|.OAF.|)
+              let z be set;
+              assume
+              z in rng y;
+              then consider n be set such that
+A18:          n in dom y and
+A19:          z = y.n by FUNCT_1:def 5;
+A20:          n in dom (MS*the_arity_of o) by A8,A18,CARD_3:18;
+              then n in dom (the_arity_of o) by A15,RELAT_1:46;
+              then (the_arity_of o).n = (the_arity_of o)/.n by PARTFUN1:
+              def 8;
+              then reconsider Pa = ((the_arity_of o).n) as SortSymbol of S;
+              z in (MS*the_arity_of o).n by A8,A19,A20,CARD_3:18;
+              then z in MS.((the_arity_of o).n) by A20, FUNCT_1:22;
+              then z in { f where f is Element of product Carrier (OAF,Pa) :
+              for i,j st i >= j holds (bind (B,i,j).Pa).(f.i) = f.j } by A1;
+              then
+A21:          ex z' be Element of product Carrier(OAF,Pa) st z' = z & for
+              i,j st i >= j holds (bind (B,i,j).Pa).(z'.i) = z'.j;
+              then reconsider z as Function;
+A22:          dom z = dom Carrier (OAF,Pa) by A21,CARD_3:18
+                .= the carrier of P by PARTFUN1:def 4;
+              rng z c= |.OAF.|
               proof
-                let z be set;
-                assume z in rng y;
-                then consider n be set such that
-A18:            n in dom y & z = y.n by FUNCT_1:def 5;
-A19:            n in dom (MS*the_arity_of o) by A7,A18,CARD_3:18;
-                then z in (MS*the_arity_of o).n by A7,A18,CARD_3:18;
+                let p be set;
+                assume
+                p in rng z;
+                then consider r be set such that
+A23:            r in dom z and
+A24:            z.r = p by FUNCT_1:def 5;
+                reconsider r' = r as Element of P by A22,A23;
+                reconsider r' as Element of P;
+                r' in the carrier of P;
                 then
-A20:            z in MS.((the_arity_of o).n) by A19,FUNCT_1:22;
-                n in dom (the_arity_of o) by A14,A19,RELAT_1:46;
-                then (the_arity_of o).n = (the_arity_of o)/.n
-                by PARTFUN1:def 8;
-                then reconsider Pa = ((the_arity_of o).n) as SortSymbol of S;
-                z in { f where f is Element of product Carrier (OAF,Pa) :
-                for i,j st i >=
-                j holds (bind (B,i,j).Pa).(f.i) = f.j } by A1,A20;
-
-then consider z' be Element of product Carrier(OAF,Pa) such that
-A21:            z'
-                = z & for i,j st i >= j holds (bind (B,i,j).Pa).(z'.i) = z'.j;
-                reconsider z as Function by A21;
-A22:            dom z = dom Carrier (OAF,Pa) by A21,CARD_3:18
-                  .= the carrier of P by PARTFUN1:def 4;
-                rng z c= |.OAF.|
-                proof
-                  let p be set;
-                  assume p in rng z;
-                  then consider r be set such that
-A23:              r in dom z & z.r = p by FUNCT_1:def 5;
-                  dom z = dom Carrier (OAF,Pa) by A21,CARD_3:18;
-                  then
-A24:              p in (Carrier (OAF,Pa)).r by A21,A23,CARD_3:18;
-                  reconsider r' = r as Element of P by A22,A23;
-                  reconsider r' as Element of P;
-                  r' in the carrier of P;
-                  then consider U0 be MSAlgebra over S such that
-A25:              U0 = OAF.r & (Carrier (OAF,Pa)).r = (the Sorts of U0).Pa
-                  by PRALG_2:def 16;
-
-dom (the Sorts of (OAF.r')) = the carrier of S by PARTFUN1:def 4;
-
-then (the Sorts of (OAF.r')).Pa in rng (the Sorts of (OAF.r'))
-                  by FUNCT_1:def 5;
-
-then p in union (rng the Sorts of OAF.r') by A24,A25,TARSKI:def 4;
-                  then
-A26:              p in |.OAF.r'.| by PRALG_2:def 13;
-                  |.OAF.r'.| in
-                  {|.OAF.k.| where k is Element of P:not contradiction};
-                  then |.OAF.r'.| c= union {|.OAF.k.| where k is Element of
-                  the carrier of P: not contradiction} by ZFMISC_1:92;
-                  then |.OAF.r'.| c= |.OAF.| by PRALG_2:def 14;
-                  hence thesis by A26;
-                end;
-                hence thesis by A22,FUNCT_2:def 2;
+A25:            ex U0 be MSAlgebra over S st U0 = OAF.r & (Carrier (OAF,
+                Pa)).r = (the Sorts of U0).Pa by PRALG_2:def 16;
+                |.OAF.r'.| in {|.OAF.k.| where k is Element of P:not
+                contradiction};
+                then |.OAF.r'.| c= union {|.OAF.k.| where k is Element
+ of P: not contradiction} by ZFMISC_1:92;
+                then
+A26:            |.OAF.r'.| c= |.OAF.| by PRALG_2:def 14;
+                dom (the Sorts of (OAF.r')) = the carrier of S by
+                PARTFUN1:def 4;
+                then
+A27:            (the Sorts of (OAF.r')).Pa in rng (the Sorts of (OAF.r'))
+                by FUNCT_1:def 5;
+                dom z = dom Carrier (OAF,Pa) by A21,CARD_3:18;
+                then p in (Carrier (OAF,Pa)).r by A21,A23,A24,CARD_3:18;
+                then p in union (rng the Sorts of OAF.r') by A25,A27,
+                TARSKI:def 4;
+                then p in |.OAF.r'.| by PRALG_2:def 13;
+                hence thesis by A26;
               end;
-              hence thesis by A17,FUNCT_2:def 2;
+              hence thesis by A22,FUNCT_2:def 2;
             end;
+            then
+A28:        y in Funcs(Seg len (the_arity_of o),Funcs(the carrier of P,|.
+            OAF.|)) by A17,FUNCT_2:def 2;
             per cases;
             suppose
-A27:          the_arity_of o <> {};
-              then dom (the_arity_of o) <> {};
-              then Seg len (the_arity_of o) <> {} by FINSEQ_1:def 3;
-              then Co in Funcs(the carrier of P,Funcs (Seg len(the_arity_of o)
-              , |.OAF.|)) by A16,FUNCT_6:85;
-              then consider ss be Function such that
-A28:          ss = Co & dom ss = the carrier of P &
-
-rng ss c= Funcs (Seg len(the_arity_of o),|.OAF.|) by FUNCT_2:def 2;
-              reconsider y1 as Function;
-A29:          y1 in product ((the Sorts of OAF.i)*(the_arity_of o))
-              proof
-A30:            dom ((the Sorts of OAF.i)*(the_arity_of o)) =
-                dom (the_arity_of o) by PRALG_2:10
-                  .= Seg len (the_arity_of o) by FINSEQ_1:def 3;
-                Co.i in rng Co by A28,FUNCT_1:def 5;
-                then consider ts be Function such that
-A31:            ts = Co.i &
-                dom ts = Seg len (the_arity_of o) & rng ts c= |.OAF.|
-                by A28,FUNCT_2:def 2;
-                for w be set st
-                w in dom ((the Sorts of OAF.i)*(the_arity_of o)) holds
-                y1.w in ((the Sorts of OAF.i)*(the_arity_of o)).w
-                proof
-                  let w be set;
-                  assume
-A32:              w in dom ((the Sorts of OAF.i)*(the_arity_of o));
-                  then
-A33:              w in dom y by A15,A30,FINSEQ_1:def 3;
-A34:              w in dom (the_arity_of o) by A30,A32,FINSEQ_1:def 3;
-                  y.w in (MS*the_arity_of o).w by A7,A13,A33,CARD_3:18;
-                  then
-A35:              y.w in MS.((the_arity_of o).w) by A34,FUNCT_1:23;
-                  dom (the_arity_of o) <> {} by A27;
-                  then Seg len (the_arity_of o) <> {} by FINSEQ_1:def 3;
-                  then y = commute commute y by A16,FUNCT_6:87;
-                  then reconsider y as Function-yielding Function;
-A36:              y.w in MS.((the_arity_of o)/.w) by A34,A35,PARTFUN1:def 8;
-                  reconsider yw = y.w as Function;
-                  reconsider Pi = (the_arity_of o)/.w as SortSymbol of S;
-                  yw in { ff where ff is Element of product Carrier (OAF,Pi) :
-
-for i,j st i >= j holds (bind (B,i,j).Pi).(ff.i) = ff.j } by A1,A36;
-
-then consider jg be Element of product Carrier(OAF,Pi) such that
-A37:              jg = yw & for i,j st i >= j holds
-                  (bind (B,i,j).Pi).(jg.i) = jg.j;
-                  dom (Carrier (OAF,(the_arity_of o)/.w)) = the carrier of P
-                  by PARTFUN1:def 4;
-                  then
-A38:              yw
-                  .i in (Carrier (OAF,(the_arity_of o)/.w)).i by A37,CARD_3:18;
-                  consider U0 be MSAlgebra over S such that
-A39:              U0 = OAF.i & (Carrier (OAF,(the_arity_of o)/.w)).i =
-                  (the Sorts of U0).((the_arity_of o)/.w) by PRALG_2:def 16;
-                  (Carrier (OAF,(the_arity_of o)/.w)).i =
-
-(the Sorts of (OAF.i)) . ((the_arity_of o).w) by A34,A39,PARTFUN1:def 8
-
-.= ((the Sorts of (OAF.i)) * (the_arity_of o)).w by A34,FUNCT_1:23;
-                  hence thesis by A16,A30,A32,A38,FUNCT_6:86;
-                end;
-                hence thesis by A30,A31,CARD_3:18;
-              end;
-A40:          for
-              t be set st t in dom doms(OAF?.o) holds Co.t in (doms(OAF?.o)).t
+A29:          the_arity_of o <> {};
+A30:          for t be set st t in dom doms(OAF?.o) holds Co.t in (doms(
+              OAF?.o)).t
               proof
                 let t be set;
-                assume t in dom doms(OAF?.o);
+                assume
+                t in dom doms(OAF?.o);
                 then reconsider t as Element of P by PRALG_2:18;
-A41:            (doms(OAF?.o)).t = Args (o,OAF.t) by PRALG_2:18;
-                dom (the_arity_of o) <> {} by A27;
-                then Seg len (the_arity_of o) <> {} by FINSEQ_1:def 3;
-
-then Co in Funcs(the carrier of P,Funcs (Seg len(the_arity_of o),
-                |.OAF.|)) by A16,FUNCT_6:85;
-                then consider ss be Function such that
-A42:            ss = Co & dom ss = the carrier of P &
-
-rng ss c= Funcs (Seg len(the_arity_of o),|.OAF.|) by FUNCT_2:def 2;
                 reconsider yt = Co.t as Function;
-                Co.t in product ((the Sorts of OAF.t)*(the_arity_of o))
-                proof
-A43:              dom ((the Sorts of OAF.t)*(the_arity_of o)) =
-                  dom (the_arity_of o) by PRALG_2:10
-                    .= Seg len (the_arity_of o) by FINSEQ_1:def 3;
-                  Co.t in rng Co by A42,FUNCT_1:def 5;
-                  then consider ts be Function such that
-A44:              ts
-
-= Co.t & dom ts = Seg len (the_arity_of o) & rng ts c= |.OAF.|
-                  by A42,FUNCT_2:def 2;
-A45:              dom y = Seg len (the_arity_of o) by A15,FINSEQ_1:def 3;
-                  for w be set st
-                  w in dom ((the Sorts of OAF.t)*(the_arity_of o)) holds
-                  yt.w in ((the Sorts of OAF.t)*(the_arity_of o)).w
-                  proof
-                    let w be set;
-                    assume
-A46:                w in dom ((the Sorts of OAF.t)*(the_arity_of o));
-                    then
-A47:                w in dom (the_arity_of o) by A43,FINSEQ_1:def 3;
-
-y.w in (MS*the_arity_of o).w by A7,A13,A43,A45,A46,CARD_3:18;
-                    then
-A48:                y.w in MS.((the_arity_of o).w) by A47,FUNCT_1:23;
-                    dom (the_arity_of o) <> {} by A27;
-                    then Seg len (the_arity_of o) <> {} by FINSEQ_1:def 3;
-                    then y = commute commute y by A16,FUNCT_6:87;
-                    then reconsider y as Function-yielding Function;
-A49:                y.w in MS.((the_arity_of o)/.w) by A47,A48,PARTFUN1:def 8;
-                    reconsider yw = y.w as Function;
-                    reconsider Pi = (the_arity_of o)/.w as SortSymbol of S;
-
-yw in { ff where ff is Element of product Carrier (OAF,Pi) :
-
-for i,j st i >= j holds (bind (B,i,j).Pi).(ff.i) = ff.j } by A1,A49;
-
-then consider jg be Element of product Carrier(OAF,Pi) such that
-A50:                jg = yw & for i,j st i >= j holds
-                    (bind (B,i,j).Pi).(jg.i) = jg.j;
-                    dom (Carrier (OAF,(the_arity_of o)/.w)) = the carrier of P
-                    by PARTFUN1:def 4;
-                    then
-A51:                yw
-
-.t in (Carrier (OAF,(the_arity_of o)/.w)).t by A50,CARD_3:18;
-                    consider U0 be MSAlgebra over S such that
-A52:                U0 = OAF.t & (Carrier (OAF,(the_arity_of o)/.w)).t =
-                    (the Sorts of U0).((the_arity_of o)/.w) by PRALG_2:def 16;
-                    (Carrier (OAF,(the_arity_of o)/.w)).t =
-
-(the Sorts of (OAF.t)) . ((the_arity_of o).w) by A47,A52,PARTFUN1:def 8
-
-.= ((the Sorts of (OAF.t)) * (the_arity_of o)).w by A47,FUNCT_1:23;
-                    hence thesis by A16,A43,A46,A51,FUNCT_6:86;
-                  end;
-                  hence thesis by A43,A44,CARD_3:18;
-                end;
-                hence thesis by A41,PRALG_2:10;
-              end;
-A53:          Co in product doms (OAF?.o)
-              proof
-                dom (the_arity_of o) <> {} by A27;
+                dom (the_arity_of o) <> {} by A29;
                 then Seg len (the_arity_of o) <> {} by FINSEQ_1:def 3;
-
-then Co in Funcs (the carrier of P,Funcs(Seg len (the_arity_of o),|. OAF.|))
-                by A16,FUNCT_6:85;
-                then consider Co' be Function such that
-A54:            Co' = Co & dom Co' = the carrier of P &
-
-rng Co' c= Funcs(Seg len (the_arity_of o),|.OAF.|) by FUNCT_2:def 2;
-                dom Co = dom doms (OAF?.o) by A54,PRALG_2:18;
-                hence thesis by A40,CARD_3:18;
+                then Co in Funcs(the carrier of P,Funcs (Seg len(the_arity_of
+                o), |.OAF.|)) by A28,FUNCT_6:85;
+                then
+A31:            ex ss be Function st ss = Co & dom ss = the carrier of P &
+rng ss c= Funcs (Seg len(the_arity_of o),|.OAF.|) by FUNCT_2:def 2;
+A32:            Co.t in product ((the Sorts of OAF.t)*(the_arity_of o))
+                proof
+A33:              dom ((the Sorts of OAF.t)*(the_arity_of o)) = dom (
+                  the_arity_of o) by PRALG_2:10
+                    .= Seg len (the_arity_of o) by FINSEQ_1:def 3;
+A34:              dom y = Seg len (the_arity_of o) by A16,FINSEQ_1:def 3;
+A35:              for w be set st w in dom ((the Sorts of OAF.t)*(
+the_arity_of o)) holds yt.w in ((the Sorts of OAF.t)*(the_arity_of o)).w
+                  proof
+                    dom (the_arity_of o) <> {} by A29;
+                    then Seg len (the_arity_of o) <> {} by FINSEQ_1:def
+                    3;
+                    then
+A36:                y = commute commute y by A28,FUNCT_6:87;
+                    let w be set;
+                    reconsider Pi = (the_arity_of o)/.w as SortSymbol of S;
+A37:                dom (Carrier (OAF,(the_arity_of o)/.w)) = the
+                    carrier of P by PARTFUN1:def 4;
+                    assume
+A38:                w in dom ((the Sorts of OAF.t)*(the_arity_of o));
+                    then
+A39:                w in dom (the_arity_of o) by A33, FINSEQ_1:def
+                    3;
+                    y.w in (MS*the_arity_of o).w by A8,A14,A33,A34,A38
+                    ,CARD_3:18;
+                    then
+A40:                y.w in MS.((the_arity_of o).w) by A39,FUNCT_1
+                    :23;
+                    reconsider y as Function-yielding Function by A36;
+                    reconsider yw = y.w as Function;
+                    y.w in MS.((the_arity_of o)/.w) by A39,A40,
+                    PARTFUN1:def 8;
+                    then yw in { ff where ff is Element of product Carrier (
+OAF,Pi) : for i,j st i >= j holds (bind (B,i,j).Pi).(ff.i) = ff.j } by A1;
+                    then ex jg be Element of product Carrier(OAF,Pi) st jg =
+yw & for i,j st i >= j holds (bind (B,i,j).Pi).(jg.i) = jg.j;
+                    then
+A41:                yw .t in (Carrier (OAF,(the_arity_of o)/.w)).t by
+                    A37,CARD_3:18;
+                    ex U0 be MSAlgebra over S st U0 = OAF.t & (Carrier (
+OAF,( the_arity_of o)/.w)).t = (the Sorts of U0).(( the_arity_of o)/.w) by
+                    PRALG_2:def 16;
+                    then (Carrier (OAF,(the_arity_of o)/.w)).t = (the Sorts
+                    of (OAF.t)) . ((the_arity_of o).w) by A39,PARTFUN1:def 8
+                      .= ((the Sorts of (OAF.t)) * (the_arity_of o)).w by
+                    A39,FUNCT_1:23;
+                    hence thesis by A28,A33,A38,A41,FUNCT_6:86;
+                  end;
+                  Co.t in rng Co by A31,FUNCT_1:def 5;
+                  then ex ts be Function st ts = Co.t & dom ts = Seg len (
+                  the_arity_of o) & rng ts c= |.OAF.| by A31,FUNCT_2:def 2;
+                  hence thesis by A33,A35,CARD_3:18;
+                end;
+                (doms(OAF?.o)).t = Args (o,OAF.t) by PRALG_2:18;
+                hence thesis by A32,PRALG_2:10;
               end;
-
-reconsider y1' = y1 as Element of Args(o,OAF.i) by A29,PRALG_2:10;
-A55:          dom (OAF?.o) = the carrier of P by PARTFUN1:def 4;
-A56:          bind (B,i,j) is_homomorphism OAF.i,OAF.j by A10,Th2;
-A57:          OPE
-              = IFEQ(the_arity_of o,{},commute(OAF?.o),Commute Frege(OAF?.o))
-              by PRALG_2:def 20;
+A42:          Co in product doms (OAF?.o)
+              proof
+                dom (the_arity_of o) <> {} by A29;
+                then Seg len (the_arity_of o) <> {} by FINSEQ_1:def 3;
+                then Co in Funcs (the carrier of P,Funcs(Seg len (
+                the_arity_of o),|. OAF.|)) by A28,FUNCT_6:85;
+                then ex Co' be Function st Co' = Co & dom Co' = the carrier of
+P & rng Co' c= Funcs(Seg len (the_arity_of o),|.OAF.|) by FUNCT_2:def 2;
+                then dom Co = dom doms (OAF?.o) by PRALG_2:18;
+                hence thesis by A30,CARD_3:18;
+              end;
+A43:          OPE = IFEQ(the_arity_of o,{},commute(OAF?.o),Commute Frege
+              (OAF?.o)) by PRALG_2:def 20;
               then
-A58:          y in dom Commute Frege(OAF?.o) by A5,A11,A27,FUNCOP_1:def 8;
-A59:          x1 = OPE.y by A4,A11,FUNCT_1:70
-                .= (Commute Frege(OAF?.o)).y by A27,A57,FUNCOP_1:def 8
-                .= ((Frege (OAF?.o)).commute y) by A58,PRALG_2:def 6
-                .= ((OAF?.o)..commute y) by A53,PRALG_2:def 8;
+A44:          y in dom Commute Frege(OAF?.o) by A11,A12,A29,
+              FUNCOP_1:def 8;
+              reconsider y1 as Function;
+A45:          dom (OAF?.o) = the carrier of P by PARTFUN1:def 4;
+A46:          x1 = OPE.y by A5,A6,A12,FUNCT_1:70
+                .= (Commute Frege(OAF?.o)).y by A29,A43,FUNCOP_1:def 8
+                .= ((Frege (OAF?.o)).commute y) by A44,PRALG_2:def 6
+                .= ((OAF?.o)..commute y) by A42,PRALG_2:def 8;
               then
-A60:          x1.i = ((OAF?.o).i).((commute y).i) by A55,PRALG_1:def 17
+A47:          x1.i = ((OAF?.o).i).((commute y).i) by A45, PRALG_1:
+              def 17
                 .= (Den(o,OAF.i)).y1 by PRALG_2:14;
+              dom (the_arity_of o) <> {} by A29;
+              then Seg len (the_arity_of o) <> {} by FINSEQ_1:def 3;
+              then
+              Co in Funcs(the carrier of P,Funcs (Seg len(the_arity_of o)
+              , |.OAF.|)) by A28,FUNCT_6:85;
+              then
+A48:          ex ss be Function st ss = Co & dom ss = the carrier of P &
+rng ss c= Funcs (Seg len(the_arity_of o),|.OAF.|) by FUNCT_2:def 2;
+              y1 in product ((the Sorts of OAF.i)*(the_arity_of o))
+              proof
+A49:            dom ((the Sorts of OAF.i)*(the_arity_of o)) = dom (
+                the_arity_of o) by PRALG_2:10
+                  .= Seg len (the_arity_of o) by FINSEQ_1:def 3;
+A50:            for w be set st w in dom ((the Sorts of OAF.i)*(
+the_arity_of o)) holds y1.w in ((the Sorts of OAF.i)*(the_arity_of o)).w
+                proof
+                  dom (the_arity_of o) <> {} by A29;
+                  then Seg len (the_arity_of o) <> {} by FINSEQ_1:def 3;
+                  then
+A51:              y = commute commute y by A28,FUNCT_6:87;
+                  let w be set;
+                  reconsider Pi = (the_arity_of o)/.w as SortSymbol of S;
+A52:              dom (Carrier (OAF,(the_arity_of o)/.w)) = the carrier
+                  of P by PARTFUN1:def 4;
+                  assume
+A53:              w in dom ((the Sorts of OAF.i)*(the_arity_of o));
+                  then
+A54:              w in dom (the_arity_of o) by A49,FINSEQ_1:def 3;
+                  w in dom y by A16,A49,A53,FINSEQ_1:def 3;
+                  then y.w in (MS*the_arity_of o).w by A8,A14,CARD_3:18;
+                  then
+A55:              y.w in MS.((the_arity_of o).w) by A54, FUNCT_1:23;
+                  reconsider y as Function-yielding Function by A51;
+                  reconsider yw = y.w as Function;
+                  y.w in MS.((the_arity_of o)/.w) by A54,A55,PARTFUN1:def
+                  8;
+                  then
+                  yw in { ff where ff is Element of product Carrier (OAF,
+Pi) : for i,j st i >= j holds (bind (B,i,j).Pi).(ff.i) = ff.j } by A1;
+                  then
+                  ex jg be Element of product Carrier(OAF,Pi) st jg = yw &
+                  for i,j st i >= j holds (bind (B,i,j).Pi).(jg.i) = jg.j;
+                  then
+A56:              yw .i in (Carrier (OAF,(the_arity_of o)/.w)).i by
+                  A52, CARD_3:18;
+                  ex U0 be MSAlgebra over S st U0 = OAF.i & (Carrier (OAF,
+( the_arity_of o)/.w)).i = (the Sorts of U0).(( the_arity_of o)/.w) by PRALG_2:
+                  def 16;
+                  then
+                  (Carrier (OAF,(the_arity_of o)/.w)).i = (the Sorts of (
+                  OAF.i)) . ((the_arity_of o).w) by A54,PARTFUN1:def 8
+                    .= ((the Sorts of (OAF.i)) * (the_arity_of o)).w by A54,
+                  FUNCT_1:23;
+                  hence thesis by A28,A49,A53,A56,FUNCT_6:86;
+                end;
+                Co.i in rng Co by A48,FUNCT_1:def 5;
+                then ex ts be Function st ts = Co.i & dom ts = Seg len (
+                the_arity_of o) & rng ts c= |.OAF.| by A48,FUNCT_2:def 2;
+                hence thesis by A49,A50,CARD_3:18;
+              end;
+              then reconsider y1' = y1 as Element of Args(o,OAF.i) by PRALG_2:
+              10;
+A57:          bind (B,i,j) is_homomorphism OAF.i,OAF.j by A13,Th2;
               (bind (B,i,j))#y1' = (commute y).j
               proof
-                dom (the_arity_of o) <> {} by A27;
-                then
-A61:            Seg len (the_arity_of o) <> {} by FINSEQ_1:def 3;
-                then y = commute commute y by A16,FUNCT_6:87;
-                then reconsider y as Function-yielding Function;
-                Co in Funcs(the carrier of P,Funcs (Seg len(the_arity_of o),
-                |.OAF.|)) by A16,A61,FUNCT_6:85;
-                then consider ss be Function such that
-A62:            ss = Co & dom ss = the carrier of P &
-
-rng ss c= Funcs (Seg len(the_arity_of o),|.OAF.|) by FUNCT_2:def 2;
-                reconsider y2 = ((commute y).j) as Function;
-A63:            Co.j in rng Co by A62,FUNCT_1:def 5;
-A64:            Co.i in rng Co by A62,FUNCT_1:def 5;
-                consider ts be Function such that
-A65:            ts
-                = Co.j & dom ts = Seg len (the_arity_of o) & rng ts c= |.OAF.|
-                by A62,A63,FUNCT_2:def 2;
-                reconsider Two = y2 as FinSequence by A65,FINSEQ_1:def 2;
-A66:            now
-                  let n be Nat;
-                  assume
-A67:              n in dom y2;
-                  then
-A68:              n in dom (the_arity_of o) by A65,FINSEQ_1:def 3;
-                  consider ts' be Function such that
-A69:              ts' = Co.i &
-                  dom ts' = Seg len (the_arity_of o) & rng ts' c= |.OAF.|
-                  by A62,A64,FUNCT_2:def 2;
-                  consider sT be Function such that
-A70:              sT = y & dom sT = Seg len (the_arity_of o) &
-
-rng sT c= Funcs(the carrier of P,|.OAF.|) by A16,FUNCT_2:def 2;
-                  reconsider yn = y.n as Function;
-A71:              (y1'.n) = yn.i by A16,A65,A67,FUNCT_6:86;
-                  reconsider Pi = (the_arity_of o)/.n as SortSymbol of S;
-A72:              (
-
-the_arity_of o)/.n = (the_arity_of o).n by A68,PARTFUN1:def 8;
-                  y.n in (MS*the_arity_of o).n by A7,A13,A65,A67,A70,CARD_3:18;
-                  then yn in MS.Pi by A68,A72,FUNCT_1:23;
-
-then yn in { f where f is Element of product Carrier (OAF,Pi) :
-
-for i,j st i >= j holds (bind (B,i,j).Pi).(f.i) = f.j } by A1;
-
-then consider yn' be Element of product Carrier(OAF,Pi) such that
-A73:              yn' = yn & for i,j st i >=
-                  j holds (bind (B,i,j).Pi).(yn'.i) = yn'.j;
-                  now
-                    thus ((bind (B,i,j))#y1').n =
-                    ((bind (B,i,j)).((the_arity_of o)/.n)).(yn.i)
-                    by A65,A67,A69,A71,MSUALG_3:def 8
-                      .= yn.j by A10,A73;
-                  end;
-
-hence ((bind (B,i,j))#y1').n = y2.n by A16,A65,A67,FUNCT_6:86;
-                end;
-A74:            dom ((bind (B,i,j))#y1') = dom (the_arity_of o) by MSUALG_3:6
+A58:            dom ((bind (B,i,j))#y1') = dom (the_arity_of o) by
+                MSUALG_3:6
                   .= Seg len (the_arity_of o) by FINSEQ_1:def 3;
-                then reconsider One = ((bind (B,i,j))#y1') as FinSequence
-                by FINSEQ_1:def 2;
-                for n be Nat st n in Seg len (the_arity_of o) holds
-                One.n = Two.n by A65,A66;
-                hence thesis by A65,A74,FINSEQ_1:17;
+                then reconsider One = ((bind (B,i,j))#y1') as FinSequence by
+                FINSEQ_1:def 2;
+                dom (the_arity_of o) <> {} by A29;
+                then
+A59:            Seg len (the_arity_of o) <> {} by FINSEQ_1:def 3;
+                then y = commute commute y by A28,FUNCT_6:87;
+                then reconsider y as Function-yielding Function;
+                reconsider y2 = ((commute y).j) as Function;
+                Co in Funcs(the carrier of P,Funcs (Seg len(the_arity_of
+                o), |.OAF.|)) by A28,A59,FUNCT_6:85;
+                then
+A60:            ex ss be Function st ss = Co & dom ss = the carrier of P
+& rng ss c= Funcs (Seg len(the_arity_of o),|.OAF.|) by FUNCT_2:def 2;
+                then Co.j in rng Co by FUNCT_1:def 5;
+                then
+A61:            ex ts be Function st ts = Co.j & dom ts = Seg len (
+                the_arity_of o) & rng ts c= |.OAF.| by A60,FUNCT_2:def 2;
+                then reconsider Two = y2 as FinSequence by FINSEQ_1:def 2;
+A62:            Co.i in rng Co by A60,FUNCT_1:def 5;
+                now
+                  let n be Nat;
+                  reconsider yn = y.n as Function;
+                  reconsider Pi = (the_arity_of o)/.n as SortSymbol of S;
+A63:              ex ts' be Function st ts' = Co.i & dom ts' = Seg len (
+the_arity_of o) & rng ts' c= |.OAF.| by A60,A62,FUNCT_2:def 2;
+                  assume
+A64:              n in dom y2;
+                  then
+A65:              y.n in (MS*the_arity_of o).n by A8,A14,A17,A61,
+                  CARD_3:18;
+A66:              n in dom (the_arity_of o) by A61,A64, FINSEQ_1:def 3;
+                  then ( the_arity_of o)/.n = (the_arity_of o).n by
+                  PARTFUN1:def 8;
+                  then yn in MS.Pi by A66,A65,FUNCT_1:23;
+                  then yn in { f where f is Element of product Carrier (OAF,
+Pi) : for i,j st i >= j holds (bind (B,i,j).Pi).(f.i) = f.j } by A1;
+                  then
+A67:              ex yn' be Element of product Carrier(OAF,Pi) st yn' =
+yn & for i,j st i >= j holds (bind (B,i,j).Pi).(yn'.i) = yn'.j;
+                  (y1'.n) = yn.i by A28,A61,A64,FUNCT_6:86;
+                  then ((bind (B,i,j))#y1').n = ((bind (B,i,j)).((
+                  the_arity_of o)/.n)).(yn.i) by A61,A64,A63,MSUALG_3:def 8
+                    .= yn.j by A13,A67;
+                  hence ((bind (B,i,j))#y1').n = y2.n by A28,A61,A64,
+                  FUNCT_6:86;
+                end;
+                then for n be Nat st n in Seg len (the_arity_of o) holds One.
+                n = Two.n by A61;
+                hence thesis by A61,A58,FINSEQ_1:17;
               end;
-              then (Den(o,OAF.j)).((bind (B,i,j))#y1') =
-              ((OAF?.o).j).((commute y).j) by PRALG_2:14
-                .= x1.j by A55,A59,PRALG_1:def 17;
-
-hence thesis by A56,A60,MSUALG_3:def 9;
+              then (Den(o,OAF.j)).((bind (B,i,j))#y1') = ((OAF?.o).j).((
+              commute y).j) by PRALG_2:14
+                .= x1.j by A45,A46,PRALG_1:def 17;
+              hence thesis by A57,A47,MSUALG_3:def 9;
             end;
             suppose
-A75:          the_arity_of o = {};
-A76:          (Den (o,product OAF)) = (the Charact of product OAF).o
-              by MSUALG_1:def 11
-                .= (OPS OAF).o by PRALG_2:20
-
-.= IFEQ(the_arity_of o,{},commute(OAF?.o),Commute Frege(OAF?.o))
-              by PRALG_2:def 20
-                .= (commute (OAF?.o)) by A75,FUNCOP_1:def 8;
-A77:          MS * {} = {};
+A68:          the_arity_of o = {};
               reconsider co = ((commute (OAF?.o)).y) as Function;
-A78:          co = ((curry' uncurry (OAF?.o)).y) by FUNCT_6:def 12;
-A79:          dom (OAF?.o) = the carrier of P by PARTFUN1:def 4;
-A80:          for d be Element of P holds x1.d = (Den (o,OAF.d)).{}
+A69:          MS * {} = {};
+A70:          co = ((curry' uncurry (OAF?.o)).y) by FUNCT_6:def 12;
+A71:          dom (OAF?.o) = the carrier of P by PARTFUN1:def 4;
+A72:          (Den (o,product OAF)) = (the Charact of product OAF).o by
+              MSUALG_1:def 11
+                .= (OPS OAF).o by PRALG_2:20
+                .= IFEQ(the_arity_of o,{},commute(OAF?.o),Commute Frege(OAF
+              ?.o)) by PRALG_2:def 20
+                .= (commute (OAF?.o)) by A68,FUNCOP_1:def 8;
+A73:          for d be Element of P holds x1.d = (Den (o,OAF.d)).{}
               proof
+                reconsider co' = ((curry' uncurry (OAF?.o)).y) as Function by
+                A70;
                 let d be Element of P;
                 reconsider g = (OAF?.o).d as Function;
+A74:            x1 = (commute (OAF?.o)).y by A5,A6,A72,FUNCT_1:70;
                 g = Den(o,OAF.d) by PRALG_2:14;
                 then dom g = Args (o,OAF.d) by FUNCT_2:def 1
-                  .= {{}} by A75,PRALG_2:11;
+                  .= {{}} by A68,PRALG_2:11;
                 then
-A81:            y in dom g by A7,A75,CARD_3:19;
+A75:            y in dom g by A8,A68,CARD_3:19;
                 then
-A82:            [d,y] in dom (uncurry (OAF?.o)) by A79,FUNCT_5:45;
-
-reconsider co' = ((curry' uncurry (OAF?.o)).y) as Function by A78;
-A83:            co.d = co'.d by FUNCT_6:def 12
-                  .= (uncurry (OAF?.o)).(d,y) by A82,FUNCT_5:29
-                  .= g.y by A79,A81,FUNCT_5:45;
-                x1 = (commute (OAF?.o)).y by A4,A76,FUNCT_1:70;
-                then x1.d = (Den (o,OAF.d)).y by A83,PRALG_2:14
-                  .= (Den (o,OAF.d)).{} by A7,A75,A77,CARD_3:19,TARSKI:def 1;
+A76:            [d,y] in dom (uncurry (OAF?.o)) by A71, FUNCT_5:45;
+                co.d = co'.d by FUNCT_6:def 12
+                  .= (uncurry (OAF?.o)).(d,y) by A76,FUNCT_5:29
+                  .= g.y by A71,A75,FUNCT_5:45;
+                then x1.d = (Den (o,OAF.d)).y by A74,PRALG_2:14
+                  .= (Den (o,OAF.d)).{} by A8,A68,A69,CARD_3:19,TARSKI:
+                def 1;
                 hence thesis;
               end;
-A84:          bind (B,i,j) is_homomorphism OAF.i,OAF.j by A10,Th2;
+              then
+A77:          x1.i = Den (o,OAF.i).{};
+              Args(o,OAF.i) = {{}} by A68,PRALG_2:11;
+              then reconsider E = {} as Element of Args(o,OAF.i) by TARSKI:def
+              1;
               set F = bind (B,i,j);
-A85:          x1.i = Den (o,OAF.i).{} by A80;
-A86:          x1.j = Den (o,OAF.j).{} by A80;
-              Args(o,OAF.i) = {{}} by A75,PRALG_2:11;
-
-then reconsider E = {} as Element of Args(o,OAF.i) by TARSKI:def 1;
-A87:          (F.the_result_sort_of o).(x1.i) = Den (o,OAF.j).(F#E) by A84,A85,
-MSUALG_3:def 9;
-              Args(o,OAF.j) = {{}} by A75,PRALG_2:11;
-
-hence thesis by A86,A87,TARSKI:def 1;
+A78:          Args(o,OAF.j) = {{}} by A68,PRALG_2:11;
+              bind (B,i,j) is_homomorphism OAF.i,OAF.j by A13,Th2;
+              then
+A79:          (F.the_result_sort_of o).(x1.i) = Den (o,OAF.j).(F#E) by
+              A77,MSUALG_3:def 9;
+              x1.j = Den (o,OAF.j).{} by A73;
+              hence thesis by A79,A78,TARSKI:def 1;
             end;
           end;
-          then x in { f where f is Element of product
-          Carrier (OAF,the_result_sort_of o) :
-          for i,j st i >= j holds (bind (B,i,j).(the_result_sort_of o)).
-          (f.i) = f.j } by A9;
+          then x in { f where f is Element of product Carrier (OAF,
+          the_result_sort_of o) : for i,j st i >= j holds (bind (B,i,j).(
+          the_result_sort_of o)). (f.i) = f.j } by A10;
           hence x in C.the_result_sort_of o by A1;
         end;
         then x in C.the_result_sort_of o;
         then
-A88:    x in C.((the ResultSort of S).o) by MSUALG_1:def 7;
+A80:    x in C.((the ResultSort of S).o) by MSUALG_1:def 7;
         dom (the ResultSort of S) = the carrier' of S by FUNCT_2:def 1;
-        hence thesis by A88,FUNCT_1:23;
+        hence thesis by A80,FUNCT_1:23;
       end;
       hence thesis by MSUALG_2:def 6;
     end;
     then
-A89: C is opers_closed by MSUALG_2:def 7;
-    reconsider L = product OAF as non-empty MSAlgebra over S;
+A81: C is opers_closed by MSUALG_2:def 7;
     reconsider C as MSSubset of L;
     set MSA = L|C;
-A90: MSA = MSAlgebra (#C, Opers(L,C)#) by A89,MSUALG_2:def 16;
+A82: MSA = MSAlgebra (#C, Opers(L,C)#) by A81,MSUALG_2:def 16;
     now
       let s be SortSymbol of S;
       let f be Element of (SORTS OAF).s;
-A91:  f is Element of product Carrier(OAF,s) by PRALG_2:def 17;
-      thus f in (the Sorts of MSA).s iff
-      for i,j st i >= j holds (bind (B,i,j).s).(f.i) = f.j
+A83:  f is Element of product Carrier(OAF,s) by PRALG_2:def 17;
+      thus f in (the Sorts of MSA).s iff for i,j st i >= j holds (bind (B,i,j)
+      .s).(f.i) = f.j
       proof
         hereby
-          assume f in (the Sorts of MSA).s;
-          then f in { g where g is Element of product Carrier (OAF,s) :
-          for i,j st i >= j holds (bind (B,i,j).s).(g.i) = g.j } by A1,A90;
-          then consider k be Element of product Carrier (OAF,s) such that
-A92:      k = f and
-A93:      for i,j st i >= j holds (bind (B,i,j).s).(k.i) = k.j;
-          thus for i,j st i >= j holds (bind (B,i,j).s).(f.i) = f.j by A92,A93;
+          assume
+          f in (the Sorts of MSA).s;
+          then f in { g where g is Element of product Carrier (OAF,s) : for i
+          ,j st i >= j holds (bind (B,i,j).s).(g.i) = g.j } by A1,A82;
+          then ex k be Element of product Carrier (OAF,s) st k = f & for i,j
+          st i >= j holds (bind (B,i,j).s).(k.i) = k.j;
+          hence for i,j st i >= j holds (bind (B,i,j).s).(f.i) = f.j;
         end;
-        assume for i,j st i >= j holds (bind (B,i,j).s).(f.i) = f.j;
-        then f in { h where h is Element of product Carrier (OAF,s) :
-        for i,j st i >= j holds (bind (B,i,j).s).(h.i) = h.j } by A91;
-        hence thesis by A1,A90;
+        assume
+        for i,j st i >= j holds (bind (B,i,j).s).(f.i) = f.j;
+        then f in { h where h is Element of product Carrier (OAF,s) : for i,j
+        st i >= j holds (bind (B,i,j).s).(h.i) = h.j } by A83;
+        hence thesis by A1,A82;
       end;
     end;
     hence thesis;
@@ -957,44 +953,47 @@ A93:      for i,j st i >= j holds (bind (B,i,j).s).(k.i) = k.j;
   uniqueness
   proof
     let A1,A2 be strict MSSubAlgebra of product OAF such that
-A94: for s be SortSymbol of S for f be Element of (SORTS OAF).s holds
-    f in (the Sorts of A1).s iff
-    for i,j st i >= j holds (bind (B,i,j).s).(f.i) = f.j and
-A95: for s be SortSymbol of S for f be Element of (SORTS OAF).s holds
-    f in (the Sorts of A2).s iff
-    for i,j st i >= j holds (bind (B,i,j).s).(f.i) = f.j;
-    for s be set st s in the carrier of S holds (the Sorts of A1).s =
-    (the Sorts of A2).s
+A84: for s be SortSymbol of S for f be Element of (SORTS OAF).s holds
+f in (the Sorts of A1).s iff for i,j st i >= j holds (bind (B,i,j).s).(f.i) = f
+    .j and
+A85: for s be SortSymbol of S for f be Element of (SORTS OAF).s holds
+f in (the Sorts of A2).s iff for i,j st i >= j holds (bind (B,i,j).s).(f.i) = f
+    .j;
+    for s be set st s in the carrier of S holds (the Sorts of A1).s = (
+    the Sorts of A2).s
     proof
       let a be set;
-      assume a in the carrier of S;
+      assume
+      a in the carrier of S;
       then reconsider s = a as SortSymbol of S;
       thus (the Sorts of A1).a c= (the Sorts of A2).a
       proof
         let e be set;
         assume
-A96:    e in (the Sorts of A1).a;
+A86:    e in (the Sorts of A1).a;
         (the Sorts of A1) is MSSubset of product OAF by MSUALG_2:def 10;
-        then (the Sorts of A1) c= the Sorts of product OAF by PBOOLE:def 23;
+        then (the Sorts of A1) c= the Sorts of product OAF by PBOOLE:
+        def 23;
         then (the Sorts of A1) c= SORTS OAF by PRALG_2:20;
         then (the Sorts of A1).s c= (SORTS OAF).s by PBOOLE:def 5;
-        then reconsider f = e as Element of (SORTS OAF).s by A96;
-        for i,j st i >= j holds (bind (B,i,j).s).(f.i) = f.j by A94,A96;
-        hence thesis by A95;
+        then reconsider f = e as Element of (SORTS OAF).s by A86;
+        for i,j st i >= j holds (bind (B,i,j).s).(f.i) = f.j by A84,
+        A86;
+        hence thesis by A85;
       end;
       let e be set;
       assume
-A97:  e in (the Sorts of A2).a;
+A87:  e in (the Sorts of A2).a;
       (the Sorts of A2) is MSSubset of product OAF by MSUALG_2:def 10;
-      then (the Sorts of A2) c= the Sorts of product OAF by PBOOLE:def 23;
+      then (the Sorts of A2) c= the Sorts of product OAF by PBOOLE:def
+      23;
       then (the Sorts of A2) c= SORTS OAF by PRALG_2:20;
       then (the Sorts of A2).s c= (SORTS OAF).s by PBOOLE:def 5;
-      then reconsider f = e as Element of (SORTS OAF).s by A97;
-      for i,j st i >= j holds (bind (B,i,j).s).(f.i) = f.j by A95,A97;
-      hence thesis by A94;
+      then reconsider f = e as Element of (SORTS OAF).s by A87;
+      for i,j st i >= j holds (bind (B,i,j).s).(f.i) = f.j by A85,A87;
+      hence thesis by A84;
     end;
-    then the Sorts of A1 = the Sorts of A2 by PBOOLE:3;
-    hence thesis by MSUALG_2:10;
+    hence thesis by MSUALG_2:10,PBOOLE:3;
   end;
 end;
 
@@ -1005,54 +1004,58 @@ proof
   let DP be discrete non empty Poset, S;
   let OAF be OrderedAlgFam of DP,S;
   let B be normalized Binding of OAF;
-  for s be set st s in the carrier of S holds
-  (the Sorts of InvLim B).s = (the Sorts of product OAF).s
+A1: for s be set st s in the carrier of S holds (the Sorts of InvLim B).s =
+  (the Sorts of product OAF).s
   proof
     let a be set;
-    assume a in the carrier of S;
+    assume
+    a in the carrier of S;
     then reconsider s = a as SortSymbol of S;
     thus (the Sorts of InvLim B).a c= (the Sorts of product OAF).a
     proof
       let e be set;
+      (the Sorts of InvLim B) is MSSubset of product OAF by MSUALG_2:def
+      10;
+      then (the Sorts of InvLim B) c= the Sorts of product OAF by
+      PBOOLE:def
+      23;
+      then
+A2:   (the Sorts of InvLim B).s c= (the Sorts of product OAF).s by
+      PBOOLE:def 5;
       assume
-A1:   e in (the Sorts of InvLim B).a;
-      (the Sorts of InvLim B) is MSSubset of product OAF by MSUALG_2:def 10;
-
-then (the Sorts of InvLim B) c= the Sorts of product OAF by PBOOLE:def 23;
-      then (the Sorts of InvLim B).s c= (the Sorts of product OAF).s by
-PBOOLE:def 5;
-      hence thesis by A1;
+      e in (the Sorts of InvLim B).a;
+      hence thesis by A2;
     end;
     let e be set;
-    assume e in (the Sorts of product OAF).a;
+    assume
+    e in (the Sorts of product OAF).a;
     then reconsider f = e as Element of (SORTS OAF).s by PRALG_2:20;
     for i,j be Element of DP st i >= j holds (bind (B,i,j).s).(f.i) = f.j
     proof
       let i,j be Element of DP;
-      assume i >= j;
+      assume
+      i >= j;
       then
-A2:   i = j by ORDERS_3:1;
+A3:   i = j by ORDERS_3:1;
+      f in (SORTS OAF).s;
+      then dom (Carrier (OAF,s)) = the carrier of DP & f in product Carrier (
+      OAF,s) by PARTFUN1:def 4,PRALG_2:def 17;
+      then
+A4:   f.i in (Carrier (OAF,s)).i by CARD_3:18;
       bind (B,i,i) = B.(i,i) by Def3,ORDERS_2:24
         .= id (the Sorts of OAF.i) by Def4;
       then
-A3:   (bind (B,i,i).s) = id ((the Sorts of OAF.i).s) by MSUALG_3:def 1;
-A4:   dom (Carrier (OAF,s)) = the carrier of DP by PARTFUN1:def 4
-;
-      f in (SORTS OAF).s;
-      then f in product Carrier (OAF,s) by PRALG_2:def 17;
-      then
-A5:   f.i in (Carrier (OAF,s)).i by A4,CARD_3:18;
-      consider U0 being MSAlgebra over S such that
-A6:   U0 = OAF.i & (Carrier (OAF,s)).i = ((the Sorts of U0).s)
-      by PRALG_2:def 16;
-      thus thesis by A2,A3,A5,A6,FUNCT_1:35;
+A5:   (bind (B,i,i).s) = id ((the Sorts of OAF.i).s) by
+      MSUALG_3:def
+      1;
+      ex U0 being MSAlgebra over S st U0 = OAF.i & (Carrier ( OAF,s)).i =
+      ((the Sorts of U0).s) by PRALG_2:def 16;
+      hence thesis by A3,A5,A4,FUNCT_1:35;
     end;
     hence thesis by Def6;
   end;
-  then
-A7: the Sorts of InvLim B = the Sorts of product OAF by PBOOLE:3;
   product OAF is MSSubAlgebra of product OAF by MSUALG_2:6;
-  hence thesis by A7,MSUALG_2:10;
+  hence thesis by A1,MSUALG_2:10,PBOOLE:3;
 end;
 
 begin  :: Sets and Morphisms of Many Sorted Signatures
@@ -1064,7 +1067,8 @@ definition
   let X be set;
   attr X is MSS-membered means
   :Def7:
-  x in X implies x is strict non empty non void ManySortedSign;
+  x in X implies x is strict non empty non
+  void ManySortedSign;
 end;
 
 registration
@@ -1073,8 +1077,8 @@ registration
   proof
     consider S be strict non empty non void ManySortedSign;
     set A = {S};
-    for x be set st x in A holds
-    x is strict non empty non void ManySortedSign by TARSKI:def 1;
+    for x be set st x in A holds x is strict non empty non void
+    ManySortedSign by TARSKI:def 1;
     then A is MSS-membered by Def7;
     hence thesis;
   end;
@@ -1086,10 +1090,10 @@ definition
   it is empty void;
   existence
   proof
-    {} in {}* by FINSEQ_1:66;
-    then reconsider f = {}-->{} as Function of {},{}* by FUNCOP_1:58;
     dom ({} --> {}) = {} & rng ({} --> {}) = {};
     then reconsider g = {} --> {} as Function of {},{} by RELSET_1:11;
+    {} in {}* by FINSEQ_1:66;
+    then reconsider f = {}-->{} as Function of {},{}* by FUNCOP_1:58;
     take ManySortedSign(#{},{},f,g#);
     thus thesis;
   end;
@@ -1101,18 +1105,17 @@ A1: C1 is empty void and
 A2: C2 is empty void;
     C1 = C2
     proof
-A3:   the carrier of C1 = {} & the carrier of C2 = {} by A1,A2;
-A4:   the carrier' of C1 = {} & the carrier' of C2 = {}
-      by A1,A2;
-      then reconsider RS = the ResultSort of C1, RT = the ResultSort of C2
-      as Function of {},{} by A3;
-A5:   RS in { id {} } & RT in { id {} } by ALTCAT_1:3,FUNCT_2:12;
-      reconsider A = the Arity of C1, B = the Arity of C2 as
-      Function of {}, {{}} by A3,A4,FUNCT_7:19;
-A6:   A = B by FUNCT_2:66;
-      the ResultSort of C1 = id {} by A5,TARSKI:def 1
-        .= the ResultSort of C2 by A5,TARSKI:def 1;
-      hence thesis by A3,A4,A6;
+A3:   the carrier of C1 = {} & the carrier' of C1 = {} by A1;
+      then reconsider RS = the ResultSort of C1, RT = the ResultSort of C2 as
+      Function of {},{} by A2;
+      reconsider A = the Arity of C1, B = the Arity of C2 as Function of {}, {
+      {}} by A2,A3,FUNCT_7:19;
+A4:   the carrier of C2 = {} & the carrier' of C2 = {} by A2;
+A5:   RT in { id {} } by ALTCAT_1:3,FUNCT_2:12;
+      RS in { id {} } by ALTCAT_1:3,FUNCT_2:12;
+      then the ResultSort of C1 = id {}
+        .= the ResultSort of C2 by A5;
+      hence thesis by A3,A4;
     end;
     hence thesis;
   end;
@@ -1132,45 +1135,48 @@ registration
   end;
 end;
 
-Lm1: for S be empty void ManySortedSign holds id the carrier of S,
-id the carrier' of S form_morphism_between S,S
+Lm1: for S be empty void ManySortedSign holds id the carrier of S, id the
+carrier' of S form_morphism_between S,S
+
 proof
   let S be empty void ManySortedSign;
   set f = id the carrier of S;
-A2: {}*the ResultSort of S = (the ResultSort of S)*{};
-  for o be set, p be Function st
-  o in the carrier' of S & p = (the Arity of S).o holds
-  f*p = (the Arity of S).(f.o);
-  hence thesis by A2,PUA2MSS1:def 13,RELAT_1:60,81;
+
+  {}*the ResultSort of S = (the ResultSort of S)*{} & for o be set, p be
+  Function st o in the carrier' of S & p = (the Arity of S).o holds f*p = (the
+  Arity of S).(f.o);
+
+  hence thesis by PUA2MSS1:def 13,RELAT_1:60;
 end;
 
-Lm2: for S be non empty void ManySortedSign
-holds id the carrier of S, id the carrier' of S form_morphism_between S,S
+Lm2: for S be non empty void ManySortedSign holds id the carrier of S, id the
+carrier' of S form_morphism_between S,S
+
 proof
   let S be non empty void ManySortedSign;
   set f = id the carrier of S, g = id the carrier' of S;
-A2: dom f = the carrier of S & dom g = the carrier' of S &
-  rng f c= the carrier of S & rng g c= the carrier' of S by FUNCT_2:def 1;
-  dom (the ResultSort of S) = {};
-  then the ResultSort of S = {};
-  then
-A3: f*the ResultSort of S = {} & (the ResultSort of S)*g = {};
-  for o be set, p be Function st
-  o in the carrier' of S & p = (the Arity of S).o holds
-  f*p = (the Arity of S).(g.o);
-  hence thesis by A2,A3,PUA2MSS1:def 13;
+A1: rng f c= the carrier of S & rng g c= the carrier' of S;
+A2: f*the ResultSort of S = {} & (the ResultSort of S)*g = {};
+
+A3: for o be set, p be Function st o in the carrier' of S & p = (the Arity
+  of S).o holds f*p = (the Arity of S).(g.o);
+
+  dom f = the carrier of S & dom g = the carrier' of S by FUNCT_2:def 1;
+  hence thesis by A1,A2,A3,PUA2MSS1:def 13;
 end;
 
 theorem
-  for S be void ManySortedSign
-  holds id the carrier of S, id the carrier' of S form_morphism_between S,S
+  for S be void ManySortedSign holds id the carrier of S, id the
+  carrier' of S form_morphism_between S,S
 proof
   let S be void ManySortedSign;
   per cases;
-  suppose S is empty;
+  suppose
+    S is empty;
     hence thesis by Lm1;
   end;
-  suppose S is non empty;
+  suppose
+    S is non empty;
     hence thesis by Lm2;
   end;
 end;
@@ -1179,99 +1185,103 @@ definition
   let A;
   func MSS_set A means
   :Def9:
-  x in it iff
-  ex S be strict non empty non void ManySortedSign st x = S &
-  ( the carrier of S c= A & the carrier' of S c= A );
+  x in it iff ex S be strict non empty non void
+  ManySortedSign st x = S & the carrier of S c= A & the carrier' of S c= A;
   existence
   proof
-    defpred P[set,set] means
-    ex S be strict non empty non void ManySortedSign st S = $2 &
-    $1 = [the carrier of S, the carrier' of S,
-    the Arity of S, the ResultSort of S];
+    defpred P[set,set] means ex S be strict non empty non void ManySortedSign
+    st S = $2 & $1 = [the carrier of S, the carrier' of S, the Arity of S, the
+    ResultSort of S];
 A1: for x,y,z be set st P[x,y] & P[x,z] holds y = z
     proof
       let x,y,z be set;
-      assume P[x,y] & P[x,z];
-
-then consider S1, S2 be strict non empty non void ManySortedSign such that
-A2:   S1 = y & x = [the carrier of S1, the carrier' of S1,
-      the Arity of S1, the ResultSort of S1] & S2 = z &
-      x = [the carrier of S2, the carrier' of S2,
-      the Arity of S2, the ResultSort of S2] &
-      (S2 is empty implies S2 is void);
-      the carrier of S1 = the carrier of S2 &
-      the carrier' of S1 = the carrier' of S2 &
-      the Arity of S1 = the Arity of S2 &
-      the ResultSort of S1 = the ResultSort of S2 by A2,MCART_1:33;
-      hence thesis by A2;
+      assume
+      ( P[x,y])& P[x,z];
+      then consider
+      S1, S2 be strict non empty non void ManySortedSign such that
+A2:   S1 = y and
+A3:   x = [the carrier of S1, the carrier' of S1, the Arity of S1, the
+      ResultSort of S1] and
+A4:   S2 = z and
+A5:   x = [the carrier of S2, the carrier' of S2, the Arity of S2, the
+      ResultSort of S2] and
+      S2 is empty implies S2 is void;
+A6:   the Arity of S1 = the Arity of S2 by A3,A5,MCART_1:33;
+      the carrier of S1 = the carrier of S2 & the carrier' of S1 = the
+      carrier' of S2 by A3,A5,MCART_1:33;
+      hence thesis by A2,A3,A4,A5,A6,MCART_1:33;
     end;
     consider X be set such that
-A3: for x holds x in X iff
-    ex y be set st y in [:bool A, bool A, PFuncs(A,A*), PFuncs(A,A):]
-    & P[y,x] from TARSKI:sch 1 (A1);
+A7: for x holds x in X iff ex y be set st y in [:bool A, bool A,
+    PFuncs(A,A*), PFuncs(A,A):] & P[y,x] from TARSKI:sch 1 (A1);
     take X;
     let x be set;
-    thus x in X iff
-    ex S be strict non empty non void ManySortedSign st x = S &
-    ( the carrier of S c= A & the carrier' of S c= A )
+    thus x in X iff ex S be strict non empty non void ManySortedSign st x = S
+    & the carrier of S c= A & the carrier' of S c= A
     proof
-      thus x in X implies
-      ex S be strict non empty non void ManySortedSign st x = S &
-      ( the carrier of S c= A & the carrier' of S c= A )
+      thus x in X implies ex S be strict non empty non void ManySortedSign st
+      x = S & the carrier of S c= A & the carrier' of S c= A
       proof
-        assume x in X;
+        assume
+        x in X;
         then consider y be set such that
-A4:     y in [:bool A, bool A, PFuncs(A,A*), PFuncs(A,A):] & P[y,x] by A3;
+A8:     y in [:bool A, bool A, PFuncs(A,A*), PFuncs(A,A):] and
+A9:     P[y,x] by A7;
         consider S be strict non empty non void ManySortedSign such that
-A5:     S = x & y = [the carrier of S, the carrier' of S,
-        the Arity of S, the ResultSort of S] by A4;
+A10:    S = x and
+        y = [the carrier of S, the carrier' of S, the Arity of S, the
+        ResultSort of S] by A9;
         take S;
-        the carrier of S in bool A & the carrier' of S in bool A
-        by A4,A5,MCART_1:84;
-        hence thesis by A5;
+        the carrier of S in bool A & the carrier' of S in bool A by A8,
+        A9,A10, MCART_1:84;
+        hence thesis by A10;
       end;
       given S be strict non empty non void ManySortedSign such that
-A6:   x = S & ( the carrier of S c= A & the carrier' of S c= A );
-      consider y be set such that
-A7:   y = [the carrier of S,the carrier' of S,the Arity of S,
-      the ResultSort of S];
-      reconsider C = the carrier of S as Subset of A by A6;
-A8:   C* c= A* by MSUHOM_1:2;
-A9:   dom the Arity of S c= A & rng the Arity of S c= (the carrier of S)*
-      by A6,FUNCT_2:def 1;
-      rng the Arity of S c= A* by A8,XBOOLE_1:1;
+A11:  x = S and
+A12:  the carrier of S c= A and
+A13:  the carrier' of S c= A;
+      dom the ResultSort of S = the carrier' of S & rng the ResultSort of
+      S c= A by A12,FUNCT_2:def 1,XBOOLE_1:1;
       then
-A10:  the Arity of S in PFuncs (A,A*) by A9,PARTFUN1:def 5;
-A11:  dom the ResultSort of S = the carrier' of S by FUNCT_2:def 1;
-      rng the ResultSort of S c= A by A6,XBOOLE_1:1;
-      then the ResultSort of S in PFuncs (A,A) by A6,A11,PARTFUN1:def 5;
-      then y in [:bool A, bool A, PFuncs(A,A*), PFuncs(A,A):]
-      by A6,A7,A10,MCART_1:84;
-      hence thesis by A3,A6,A7;
+A14:  the ResultSort of S in PFuncs (A,A) by A13,PARTFUN1:def 5;
+      reconsider C = the carrier of S as Subset of A by A12;
+      consider y be set such that
+A15:  y = [the carrier of S,the carrier' of S,the Arity of S, the
+      ResultSort of S];
+      C* c= A* by MSUHOM_1:2;
+      then
+A16:  rng the Arity of S c= A* by XBOOLE_1:1;
+      dom the Arity of S c= A by A13,FUNCT_2:def 1;
+      then the Arity of S in PFuncs (A,A*) by A16,PARTFUN1:def 5;
+      then y in [:bool A, bool A, PFuncs(A,A*), PFuncs(A,A):] by A12,A13,A15,
+      A14,MCART_1:84;
+      hence thesis by A7,A11,A15;
     end;
   end;
   uniqueness
   proof
     let A1, A2 be set such that
-A12: x in A1 iff ex S be strict non empty non void ManySortedSign st x = S &
-    ( the carrier of S c= A & the carrier' of S c= A ) and
-A13: x in A2 iff ex S be strict non empty non void ManySortedSign st x = S &
-    ( the carrier of S c= A & the carrier' of S c= A );
+A17: x in A1 iff ex S be strict non empty non void ManySortedSign st x
+    = S & the carrier of S c= A & the carrier' of S c= A and
+A18: x in A2 iff ex S be strict non empty non void ManySortedSign st x
+    = S & the carrier of S c= A & the carrier' of S c= A;
     thus A1 c= A2
     proof
       let x be set;
-      assume x in A1;
-      then ex S be strict non empty non void ManySortedSign st x = S &
-      ( the carrier of S c= A & the carrier' of S c= A ) by A12;
-      hence thesis by A13;
+      assume
+      x in A1;
+      then ex S be strict non empty non void ManySortedSign st x = S & the
+      carrier of S c= A & the carrier' of S c= A by A17;
+      hence thesis by A18;
     end;
     thus A2 c= A1
     proof
       let x be set;
-      assume x in A2;
-      then ex S be strict non empty non void ManySortedSign st x = S &
-      ( the carrier of S c= A & the carrier' of S c= A ) by A13;
-      hence thesis by A12;
+      assume
+      x in A2;
+      then ex S be strict non empty non void ManySortedSign st x = S & the
+      carrier of S c= A & the carrier' of S c= A by A18;
+      hence thesis by A17;
     end;
   end;
 end;
@@ -1281,14 +1291,14 @@ registration
   cluster MSS_set A -> non empty MSS-membered;
   coherence
   proof
-    consider a be Element of A;
     set X = MSS_set A;
-A1: {a} c= A by ZFMISC_1:37;
+    consider a be Element of A;
+    dom ({a} --> a) = {a} & rng ({a} --> a) c= {a} by FUNCOP_1:19;
+    then reconsider g = {a} --> a as Function of {a},{a} by FUNCT_2:4;
     a in {a} by TARSKI:def 1;
     then <*a*> in {a}* by FUNCT_7:20;
     then reconsider f = {a}--><*a*> as Function of {a},{a}* by FUNCOP_1:58;
-    dom ({a} --> a) = {a} & rng ({a} --> a) c= {a} by FUNCOP_1:19;
-    then reconsider g = {a} --> a as Function of {a},{a} by FUNCT_2:4;
+A1: {a} c= A by ZFMISC_1:37;
     ManySortedSign(#{a},{a},f,g#) in X
     proof
       set SI = ManySortedSign(#{a},{a},f,g#);
@@ -1299,10 +1309,11 @@ A1: {a} c= A by ZFMISC_1:37;
     thus X is MSS-membered
     proof
       let x be set;
-      assume x in X;
-      then consider S be strict non empty non void ManySortedSign such that
-A2:   x = S & the carrier of S c= A & the carrier' of S c= A by Def9;
-      thus thesis by A2;
+      assume
+      x in X;
+      then ex S be strict non empty non void ManySortedSign st x = S & the
+      carrier of S c= A & the carrier' of S c= A by Def9;
+      hence thesis;
     end;
   end;
 end;
@@ -1316,64 +1327,66 @@ end;
 definition
   let S1,S2 be ManySortedSign;
   func MSS_morph (S1,S2) means
-
-  x in it iff
-  ex f,g be Function st x = [f,g] & f,g form_morphism_between S1,S2;
+  x in it iff ex f,g be Function st x = [f,g] & f
+  ,g form_morphism_between S1,S2;
   existence
   proof
-    defpred P[set] means
-    ex f,g be Function st $1 = [f,g] & f,g form_morphism_between S1,S2;
+    defpred P[set] means ex f,g be Function st $1 = [f,g] & f,g
+    form_morphism_between S1,S2;
     consider X be set such that
 A1: x in X iff x in [:PFuncs (the carrier of S1, the carrier of S2),
-    PFuncs (the carrier' of S1, the carrier' of S2):] &
-    P[x] from XBOOLE_0:sch 1;
+PFuncs (the carrier' of S1, the carrier' of S2):] & P[x] from XBOOLE_0:sch 1;
     take X;
-    thus x in X iff
-    ex f,g be Function st x = [f,g] & f,g form_morphism_between S1,S2
+    thus x in X iff ex f,g be Function st x = [f,g] & f,g
+    form_morphism_between S1,S2
     proof
-      thus x in X implies
-      ex f,g be Function st x = [f,g] & f,g form_morphism_between S1,S2 by A1;
+      thus x in X implies ex f,g be Function st x = [f,g] & f,g
+      form_morphism_between S1,S2 by A1;
       given f,g be Function such that
-A2:   x = [f,g] & f,g form_morphism_between S1,S2;
-      dom f = the carrier of S1 & dom g = the carrier' of S1 &
-      rng f c= the carrier of S2 & rng g c= the carrier' of S2
-      by A2,PUA2MSS1:def 13;
-      then f in PFuncs (the carrier of S1, the carrier of S2) &
-      g in PFuncs (the carrier' of S1, the carrier' of S2)
-      by PARTFUN1:def 5;
-      then x in [:PFuncs (the carrier of S1, the carrier of S2),
-      PFuncs (the carrier' of S1, the carrier' of S2):]
-      by A2,ZFMISC_1:106;
-      hence thesis by A1,A2;
+A2:   x = [f,g] and
+A3:   f,g form_morphism_between S1,S2;
+      dom g = the carrier' of S1 & rng g c= the carrier' of S2 by A3,
+      PUA2MSS1:def 13;
+      then
+A4:   g in PFuncs (the carrier' of S1, the carrier' of S2) by
+      PARTFUN1:
+      def 5;
+      dom f = the carrier of S1 & rng f c= the carrier of S2 by A3,
+      PUA2MSS1:def 13;
+      then f in PFuncs (the carrier of S1, the carrier of S2) by PARTFUN1:
+      def 5;
+      then x in [:PFuncs (the carrier of S1, the carrier of S2), PFuncs (the
+      carrier' of S1, the carrier' of S2):] by A2,A4,ZFMISC_1:106;
+      hence thesis by A1,A2,A3;
     end;
   end;
   uniqueness
   proof
     let A1,A2 be set;
     assume that
-A3: x in A1 iff
-    ex f,g be Function st x = [f,g] & f,g form_morphism_between S1,S2 and
-A4: x in A2 iff
-    ex f,g be Function st x = [f,g] & f,g form_morphism_between S1,S2;
-    thus A1 = A2
+A5: x in A1 iff ex f,g be Function st x = [f,g] & f,g
+    form_morphism_between S1,S2 and
+A6: x in A2 iff ex f,g be Function st x = [f,g] & f,g
+    form_morphism_between S1,S2;
+A7: A2 c= A1
     proof
-      thus A1 c= A2
-      proof
-        let x;
-        assume x in A1;
-        then ex f,g be Function st x = [f,g] & f,g form_morphism_between S1,S2
-        by A3;
-        hence thesis by A4;
-      end;
-      thus A2 c= A1
-      proof
-        let x;
-        assume x in A2;
-        then ex f,g be Function st x = [f,g] & f,g form_morphism_between S1,S2
-        by A4;
-        hence thesis by A3;
-      end;
+      let x;
+      assume
+      x in A2;
+      then ex f,g be Function st x = [f,g] & f,g form_morphism_between S1,S2
+      by A6;
+      hence thesis by A5;
     end;
+    A1 c= A2
+    proof
+      let x;
+      assume
+      x in A1;
+      then ex f,g be Function st x = [f,g] & f,g form_morphism_between S1,S2
+      by A5;
+      hence thesis by A6;
+    end;
+    hence A1 = A2 by A7,XBOOLE_0:def 10;
   end;
 end;
 

@@ -11,12 +11,12 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="NAT_1"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="VALUED_0"/>
-<ArticleID name="PARTFUN1"/>
 <ArticleID name="MESFUNC8"/>
 <ArticleID name="MESFUNC9"/>
 </Signature>
@@ -33,7 +33,7 @@
 <Func kind="K" nr="21">
 <Func kind="K" nr="22">
 <Func kind="K" nr="48"/>
-<Func kind="K" nr="103">
+<Func kind="K" nr="61">
 <LocusVar nr="1"/>
 <Func kind="K" nr="50"/>
 </Func>
@@ -46,7 +46,7 @@
 <Func kind="K" nr="48"/>
 </Adjective>
 <Adjective nr="5">
-<Func kind="K" nr="103">
+<Func kind="K" nr="61">
 <LocusVar nr="1"/>
 <Func kind="K" nr="50"/>
 </Func>
@@ -55,13 +55,13 @@
 <Adjective nr="10" value="false"/>
 <Adjective nr="21">
 <Func kind="K" nr="48"/>
-<Func kind="K" nr="103">
+</Adjective>
+<Adjective nr="22">
+<Func kind="K" nr="48"/>
+<Func kind="K" nr="61">
 <LocusVar nr="1"/>
 <Func kind="K" nr="50"/>
 </Func>
-</Adjective>
-<Adjective nr="39">
-<Func kind="K" nr="48"/>
 </Adjective>
 <Adjective nr="40">
 <LocusVar nr="1"/>

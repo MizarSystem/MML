@@ -10,22 +10,21 @@ environ
       SCMFSA_2, CARD_1, FUNCOP_1, FINSET_1, TARSKI, AMI_5, RELOC, INT_1, AMI_2,
       ARYTM_1, NAT_1, ABSVALUE, FINSEQ_1, FINSEQ_2, SCMFSA6A, FINSEQ_4, ARYTM,
       SCMFSA7B, SCMNORM;
- notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1,
-      CARD_3, NUMBERS, XCMPLX_0, COMPLEX1,
+ notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0, COMPLEX1,
       NAT_1, INT_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FINSEQ_1, FINSEQ_2,
       FUNCOP_1, FINSET_1, FUNCT_4, DOMAIN_1, STRUCT_0, AMI_1, SCMNORM, FUNCT_7,
       SCMFSA_2, SCMFSA_4, SCMFSA_5, XXREAL_0;
  constructors PARTFUN1, WELLORD2, DOMAIN_1, XXREAL_0, NAT_1, INT_2, RELOC,
       SCMFSA_4, SCMFSA_5, SCMNORM, RELSET_1;
  registrations XBOOLE_0, SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1, FUNCOP_1,
-      FINSET_1, FRAENKEL, NUMBERS, XREAL_0, INT_1, CARD_3, FUNCT_7, STRUCT_0,
-      AMI_1, SCMFSA_2, SCMNORM, FUNCT_4, FINSEQ_1, RELAT_1, CARD_1;
+      FINSET_1, NUMBERS, XREAL_0, INT_1, CARD_3, STRUCT_0, AMI_1, SCMFSA_2,
+      SCMNORM, FUNCT_4, RELAT_1, CARD_1, VALUED_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  definitions FUNCOP_1, SCMFSA_2, SCMFSA_4, FUNCT_7, XBOOLE_0, TARSKI, AMI_1,
       SCMNORM, FUNCT_4, SCMFSA_5, RELAT_1;
  theorems FUNCT_2, RELAT_1, FUNCT_7, FUNCT_4, FUNCT_1, ZFMISC_1, FUNCOP_1,
-      TARSKI, NAT_1, SCMFSA_4, AMI_1, SCMFSA_2, CARD_1, PRE_CIRC, WELLORD2,
-      CARD_2, ENUMSET1, INT_1, SCMFSA_5, GRFUNC_1, CARD_3, FINSEQ_1, RELSET_1,
+      TARSKI, NAT_1, SCMFSA_4, AMI_1, SCMFSA_2, CARD_1, WELLORD2, CARD_2,
+      ENUMSET1, INT_1, SCMFSA_5, GRFUNC_1, CARD_3, FINSEQ_1, RELSET_1,
       XBOOLE_0, XBOOLE_1, XREAL_1, ORDINAL1, AMI_3, VALUED_1, SCMNORM;
  schemes DOMAIN_1, FRAENKEL, FUNCT_7, CLASSES1;
 
@@ -33,56 +32,60 @@ begin
 
 reserve l, m, n for Element of NAT,
   i,j,k for Instruction of SCM+FSA,
-  I,J,K for Program of SCM+FSA;
+  I,J,K
+  for Program of SCM+FSA;
 
 definition
   let P be preProgram of SCM+FSA;
   let l be Instruction-Location of SCM+FSA;
   func Directed(P,l) -> preProgram of SCM+FSA equals
-  P +~ (halt SCM+FSA,goto l);
+  P +~ (halt SCM+FSA,goto l
+  );
   coherence
   proof
     set Q = P +~ (halt SCM+FSA,goto l), PP = (halt SCM+FSA .--> goto l)*P;
-B:  dom P c= dom the Object-Kind of SCM+FSA by CARD_3:65;
-A:  dom Q = dom P by FUNCT_4:105;
-    for x being set st x in dom Q holds Q.x in (the Object-Kind of SCM+FSA).x
-     proof let x being set such that
-Z:     x in dom Q;
+A1: dom Q = dom P by FUNCT_4:105;
+A2: for x being set st x in dom Q holds Q.x in (the Object-Kind of SCM+FSA
+    ).x
+    proof
+      let x being set such that
+A3:   x in dom Q;
       per cases;
       suppose
-S:      x in dom PP;
+A4:     x in dom PP;
         then P.x in dom(halt SCM+FSA .--> goto l) by FUNCT_1:21;
         then
-D:       P.x = halt SCM+FSA by FUNCOP_1:90;
-B:      Q.x = PP.x by S,FUNCT_4:14;
-        PP.x = (halt SCM+FSA .--> goto l).(P.x) by S,FUNCT_1:22;
+A5:     P.x = halt SCM+FSA by FUNCOP_1:90;
+        PP.x = (halt SCM+FSA .--> goto l).(P.x) by A4,FUNCT_1:22;
         then
-C:       PP.x = goto l by D,FUNCOP_1:87;
+A6:     PP.x = goto l by A5,FUNCOP_1:87;
+A7:     Q.x = PP.x by A4,FUNCT_4:14;
         dom P c= NAT by RELAT_1:def 18;
-        then reconsider l=x as Instruction-Location of SCM+FSA
-         by Z,A,AMI_1:def 4;
+        then reconsider l=x as Instruction-Location of SCM+FSA by A1,A3,
+AMI_1:def 4;
         ObjectKind l = the Instructions of SCM+FSA by AMI_1:def 14;
-       hence thesis by B,C;
+        hence thesis by A7,A6;
       end;
       suppose
-S:      not x in dom PP;
+A8:     not x in dom PP;
         dom Q = dom P \/ dom PP by FUNCT_4:def 1;
         then
-A:      x in dom P by S,Z,XBOOLE_0:def 3;
-        Q.x = P.x by S,FUNCT_4:12;
-       hence thesis by A,CARD_3:65;
+A9:     x in dom P by A3,A8,XBOOLE_0:def 3;
+        Q.x = P.x by A8,FUNCT_4:12;
+        hence thesis by A9,CARD_3:65;
       end;
-     end;
-    then reconsider Q as FinPartState of SCM+FSA by A,B,CARD_3:def 9;
-    dom Q c= NAT by A,RELAT_1:def 18;
-   hence thesis by RELAT_1:def 18;
+    end;
+    dom P c= dom the Object-Kind of SCM+FSA by CARD_3:65;
+    then reconsider Q as FinPartState of SCM+FSA by A1,A2,CARD_3:def 9;
+    dom Q c= NAT by A1,RELAT_1:def 18;
+    hence thesis by RELAT_1:def 18;
   end;
 end;
 
 definition
   let P be preProgram of SCM+FSA;
   func Directed P -> preProgram of SCM+FSA equals
-   Directed(P,insloc card P);
+  Directed(P,insloc card P);
   coherence;
 end;
 
@@ -94,55 +97,54 @@ registration
   coherence
   proof
     let m,n be Nat such that
-A1:  n in dom Directed I and
+A1: n in dom Directed I and
 A2: m < n;
     insloc n in dom I by A1,FUNCT_4:105;
     then insloc m in dom I by A2,SCMNORM:def 1;
-    hence  thesis by FUNCT_4:105;
+    hence thesis by FUNCT_4:105;
   end;
 end;
 
 definition
   let i;
   func Macro i -> Program of SCM+FSA equals
-  (insloc 0,insloc 1) --> (i,halt SCM+FSA);
+  (insloc 0,insloc 1) --> (i,halt
+  SCM+FSA);
   coherence
   proof
     set I = (insloc 0,insloc 1) --> (i,halt SCM+FSA);
 A1: dom I = {insloc 0,insloc 1} by FUNCT_4:65;
     reconsider I as finite Function;
-A2: dom the Object-Kind of SCM+FSA = the carrier of SCM+FSA by FUNCT_2:def 1;
-    now
+A2: now
+      rng I c= {i,halt SCM+FSA} by FUNCT_4:65;
+      then
+A3:   rng I c= the Instructions of SCM+FSA by XBOOLE_1:1;
       let x be set;
       assume
-A3:   x in dom I;
+A4:   x in dom I;
       dom I c= NAT by A1,ZFMISC_1:38;
-      then reconsider l = x as Instruction-Location of SCM+FSA
-      by A3,AMI_1:def 4;
-A4:   (the Object-Kind of SCM+FSA).l = ObjectKind l
+      then reconsider l = x as Instruction-Location of SCM+FSA by A4,
+AMI_1:def 4;
+A5:   (the Object-Kind of SCM+FSA).l = ObjectKind l
         .= the Instructions of SCM+FSA by AMI_1:def 14;
-A5:   I.x in rng I by A3,FUNCT_1:def 5;
-      rng I c= {i,halt SCM+FSA} by FUNCT_4:65;
-      then rng I c= the Instructions of SCM+FSA by XBOOLE_1:1;
-      hence I.x in (the Object-Kind of SCM+FSA).x by A4,A5;
+      I.x in rng I by A4,FUNCT_1:def 5;
+      hence I.x in (the Object-Kind of SCM+FSA).x by A5,A3;
     end;
+    dom the Object-Kind of SCM+FSA = the carrier of SCM+FSA by FUNCT_2:def 1;
     then reconsider I as FinPartState of SCM+FSA by A1,A2,CARD_3:def 9;
-    I is initial NAT-defined
+A6: I is initial
     proof
-      thus I is initial
-      proof
-        let m,n be Nat such that
-A6:      n in dom I and
-A7:     m < n;
-        insloc n = insloc 0 or insloc n = insloc 1 by A1,A6,TARSKI:def 2;
-        then n = 0+1 by A7,NAT_1:2;
-        then m <= 0 by A7,NAT_1:13;
-        then m = 0 by NAT_1:3;
-        hence  thesis by A1,TARSKI:def 2;
-      end;
-      thus dom I c= NAT by A1,ZFMISC_1:38;
+      let m,n be Nat such that
+A7:   n in dom I and
+A8:   m < n;
+      insloc n = insloc 0 or insloc n = insloc 1 by A1,A7,TARSKI:def 2;
+      then n = 0+1 by A8,NAT_1:2;
+      then m <= 0 by A8,NAT_1:13;
+      then m = 0 by NAT_1:3;
+      hence thesis by A1,TARSKI:def 2;
     end;
-    hence thesis;
+    dom I c= NAT by A1,ZFMISC_1:38;
+    hence thesis by A6,RELAT_1:def 18;
   end;
   correctness;
 end;
@@ -154,23 +156,25 @@ registration
 end;
 
 theorem Th15:
-  for P being Program of SCM+FSA, n being Nat holds n < card P iff n in dom P
+  for P being Program of SCM+FSA, n being Nat holds n < card P iff
+  n in dom P
 proof
-  let P be Program of SCM+FSA, n be Nat;
   deffunc U(Element of NAT) = $1;
+  let P be Program of SCM+FSA, n be Nat;
   set A = { m : U(m) in dom P};
 A1: now
     let x be set;
+A2: dom P c= NAT by RELAT_1:def 18;
     assume
-A2: x in dom P;
-    dom P c= NAT by RELAT_1:def 18;
+    x in dom P;
     then reconsider l = x as Element of NAT by A2;
     take l;
     thus x = U(l);
   end;
-A4: for n,m st U(n) = U(m) holds n = m;
-A5: dom P,A are_equipotent from FUNCT_7:sch 3(A1,A4);
+A3: for n,m st U(n) = U(m) holds n = m;
+A4: dom P,A are_equipotent from FUNCT_7:sch 3(A1,A3);
   defpred X[Element of NAT] means U($1) in dom P;
+A5: card n = n by CARD_1:def 5;
   set A = { m : X[m]};
 A6: A is Subset of NAT from DOMAIN_1:sch 7;
   now
@@ -182,86 +186,90 @@ A8: m < n;
     hence m in A;
   end;
   then reconsider A as Cardinal by A6,FUNCT_7:22;
-A9: card n = n & card card P = card P by CARD_1:def 5;
-A10: card A = A by CARD_1:def 5;
+A9: card A = A by CARD_1:def 5;
   hereby
-    assume n < card P;
+    assume
+    n < card P;
     then card n in card card P by NAT_1:42;
-    then n in card dom P by A9,CARD_1:104;
-    then n in card A by A5,CARD_1:21;
-    then ex m st m = n & m in dom P by A10;
+    then n in card dom P by A5,CARD_1:104;
+    then n in card A by A4,CARD_1:21;
+    then ex m st m = n & m in dom P by A9;
     hence n in dom P;
   end;
-X: n in NAT by ORDINAL1:def 13;
-  assume n in dom P;
-  then n in card A by A10,X;
-  then n in card dom P by A5,CARD_1:21;
-  then card n in card card P by A9,CARD_1:104;
+A10: n in NAT by ORDINAL1:def 13;
+  assume
+  n in dom P;
+  then n in card A by A9,A10;
+  then n in card dom P by A4,CARD_1:21;
+  then card n in card card P by A5,CARD_1:104;
   hence thesis by NAT_1:42;
 end;
 
 theorem Th16:
   dom I misses dom ProgramPart Relocated(J, card I)
 proof
-A1: dom ProgramPart Relocated(J, card I)
-  = dom IncAddr([Shift(ProgramPart J,card I)],card I) by SCMFSA_5:2
+  assume
+A1: dom I meets dom ProgramPart Relocated(J, card I);
+  dom ProgramPart Relocated(J, card I) = dom IncAddr([Shift(ProgramPart J,
+  card I)],card I) by SCMFSA_5:2
     .= dom IncAddr(Shift(J,card I),card I) by AMI_1:105
     .= dom Shift(J,card I) by SCMFSA_4:def 6
     .= { l+card I: l in dom J } by VALUED_1:def 12;
-  assume dom I meets dom ProgramPart Relocated(J, card I);
   then consider x being set such that
 A2: x in dom I and
 A3: x in { l+card I: l in dom J } by A1,XBOOLE_0:3;
   consider l such that
-A4: x = l+card I and l in dom J by A3;
+A4: x = l+card I and
+  l in dom J by A3;
   l+card I < card I by A2,A4,Th15;
   hence contradiction by NAT_1:11;
 end;
 
 theorem Th17:
-  for I being preProgram of SCM+FSA
-  holds card ProgramPart Relocated(I, m) = card I
+  for I being preProgram of SCM+FSA holds card ProgramPart
+  Relocated(I, m) = card I
 proof
-  let I be preProgram of SCM+FSA;
   deffunc U(Element of NAT) = $1;
+  let I be preProgram of SCM+FSA;
   set B = { l : U(l) in dom I};
 A1: for x being set st x in dom I ex d being Element of NAT st x = U(d)
   proof
     let x be set;
-A2: dom I c= NAT by RELAT_1:def 18;
-    assume x in dom I;
-    then reconsider l = x as Instruction-Location of SCM+FSA
-    by A2,AMI_1:def 4;
-  reconsider d = l as Element of NAT by ORDINAL1:def 13;
+    assume
+A2: x in dom I;
+    dom I c= NAT by RELAT_1:def 18;
+    then reconsider l = x as Instruction-Location of SCM+FSA by A2,AMI_1:def 4;
+    reconsider d = l as Element of NAT by ORDINAL1:def 13;
     l = U(d);
     hence thesis;
   end;
 A3: for d1,d2 being Element of NAT st U(d1) = U(d2) holds d1 = d2;
 A4: dom I,B are_equipotent from FUNCT_7:sch 3(A1,A3);
+  defpred Z[Element of NAT] means $1 in dom I;
+  deffunc V(Element of NAT) = $1+m;
   defpred X[Element of NAT] means U($1) in dom I;
   set D = { l : X[l]};
+  set C = { V(l): l in B };
+  defpred X[set] means not contradiction;
   D is Subset of NAT from DOMAIN_1:sch 7;
   then
 A5: B c= NAT;
-  deffunc V(Element of NAT) = $1+m;
-  set C = { V(l): l in B };
 A6: for d1,d2 be Element of NAT st V(d1) = V(d2) holds d1 = d2;
 A7: B,C are_equipotent from FUNCT_7:sch 4(A5,A6);
-  defpred X[set] means not contradiction;
-  defpred Z[Element of NAT] means $1 in dom I;
   set C = { V(l): l in { n : Z[n]} & X[l] }, A = { V(l): Z[l] & X[l] };
-A8: C = A from FRAENKEL:sch 14; :: brak symetrii dla rownosci w tym schemacie
-A9: C = { l+m: l in B }
+A8: C = { l+m: l in B }
   proof
     thus C c= { l+m: l in B }
     proof
       let e be set;
-      assume e in C;
+      assume
+      e in C;
       then ex l st e = V(l) & l in B;
       hence thesis;
     end;
     let e be set;
-    assume e in { l+m: l in B };
+    assume
+    e in { l+m: l in B };
     then ex l st e = l+m & l in B;
     hence thesis;
   end;
@@ -270,20 +278,24 @@ A9: C = { l+m: l in B }
     thus A c= { l+m: l in dom I }
     proof
       let e be set;
-      assume e in A;
+      assume
+      e in A;
       then ex l st e = V(l) & l in dom I;
       hence thesis;
     end;
     let e be set;
-    assume e in { l+m: l in dom I };
+    assume
+    e in { l+m: l in dom I };
     then ex l st e = l+m & l in dom I;
     hence thesis;
   end;
-  then dom Shift(I,m) = A by VALUED_1:def 12;
+  then
+A9: dom Shift(I,m) = A by VALUED_1:def 12;
+  C = A from FRAENKEL:sch 14;
   then
 A10: dom Shift(I,m),dom I are_equipotent by A4,A7,A8,A9,WELLORD2:22;
-  thus card ProgramPart Relocated(I, m)
-  = card IncAddr([Shift(ProgramPart I,m)],m) by SCMFSA_5:2
+  thus card ProgramPart Relocated(I, m) = card IncAddr([Shift(ProgramPart I,m)
+  ],m) by SCMFSA_5:2
     .= card IncAddr(Shift(I,m),m) by AMI_1:105
     .= card dom IncAddr(Shift(I,m),m) by CARD_1:104
     .= card dom Shift(I,m) by SCMFSA_4:def 6
@@ -294,84 +306,81 @@ end;
 theorem
   not halt SCM+FSA in rng Directed I
 proof
-    halt SCM+FSA <> goto insloc card I by SCMFSA_2:47,124;
+  halt SCM+FSA <> goto insloc card I by SCMFSA_2:47,124;
   hence thesis by FUNCT_4:106;
 end;
 
 theorem
-  ProgramPart Relocated(Directed I, m) = ((id the Instructions of SCM+FSA) +*
-  (halt SCM+FSA .--> goto insloc(m + card I)))* ProgramPart Relocated(I, m)
+  ProgramPart Relocated(Directed I, m) = ((id the Instructions of
+SCM+FSA) +* (halt SCM+FSA .--> goto insloc(m + card I)))* ProgramPart Relocated
+  (I, m)
 proof
-A1: dom(halt SCM+FSA .--> goto insloc(card I)) = {halt SCM+FSA}
-  by FUNCOP_1:19;
-A2: rng(halt SCM+FSA .--> goto insloc(card I)) = {goto insloc(card I)}
-  by FUNCOP_1:14;
-A3: dom(id the Instructions of SCM+FSA) = the Instructions of SCM+FSA
-  by RELAT_1:71;
-A4: dom((id the Instructions of SCM+FSA) +*
-  (halt SCM+FSA .--> goto insloc(card I)))
-  = dom(id the Instructions of SCM+FSA) \/ {halt SCM+FSA} by A1,FUNCT_4:def 1
-    .= the Instructions of SCM+FSA by A3,ZFMISC_1:46;
-A5: rng(id the Instructions of SCM+FSA) = the Instructions of SCM+FSA
-  by RELAT_1:71;
-A6: rng((id the Instructions of SCM+FSA) +*
-  (halt SCM+FSA .--> goto insloc(card I)))
-  c= rng(id the Instructions of SCM+FSA) \/ {goto insloc(card I)}
-  by A2,FUNCT_4:18;
-  rng(id the Instructions of SCM+FSA) \/ {goto insloc(card I)}
-  = the Instructions of SCM+FSA by A5,ZFMISC_1:46;
-  then reconsider f = (id the Instructions of SCM+FSA) +*
-  (halt SCM+FSA .--> goto insloc card I)
-  as Function of the Instructions of SCM+FSA,
-  the Instructions of SCM+FSA by A4,A6,FUNCT_2:def 1,RELSET_1:11;
-   dom id the Instructions of SCM+FSA = the Instructions of SCM+FSA
-               by RELAT_1:71;
+A1: dom(id the Instructions of SCM+FSA) = the Instructions of SCM+FSA by
+RELAT_1:71;
+  rng(halt SCM+FSA .--> goto insloc(card I)) = {goto insloc(card I)} by
+FUNCOP_1:14;
   then
-U: f = (id the Instructions of SCM+FSA) +*
-        (halt SCM+FSA, goto insloc card I) by FUNCT_7:def 3;
-A7: IncAddr(goto insloc card I,m)
-    = goto insloc(m + card I) by SCMFSA_4:14;
-Y: rng I c= the Instructions of SCM+FSA by AMI_1:118;
-X:ProgramPart I = I by AMI_1:105;
+A2: rng((id the Instructions of SCM+FSA) +* (halt SCM+FSA .--> goto insloc(
+  card I))) c= rng(id the Instructions of SCM+FSA) \/ {goto insloc(card I)} by
+FUNCT_4:18;
+  rng(id the Instructions of SCM+FSA) = the Instructions of SCM+FSA by
+RELAT_1:71;
+  then
+A3: rng(id the Instructions of SCM+FSA) \/ {goto insloc(card I)} = the
+  Instructions of SCM+FSA by ZFMISC_1:46;
+  dom(halt SCM+FSA .--> goto insloc(card I)) = {halt SCM+FSA} by FUNCOP_1:19;
+  then
+  dom((id the Instructions of SCM+FSA) +* (halt SCM+FSA .--> goto insloc(
+  card I))) = dom(id the Instructions of SCM+FSA) \/ {halt SCM+FSA} by
+FUNCT_4:def 1
+    .= the Instructions of SCM+FSA by A1,ZFMISC_1:46;
+  then reconsider
+  f = (id the Instructions of SCM+FSA) +* (halt SCM+FSA .--> goto
+insloc card I) as Function of the Instructions of SCM+FSA, the Instructions of
+  SCM+FSA by A2,A3,FUNCT_2:def 1,RELSET_1:11;
+A4: IncAddr(goto insloc card I,m) = goto insloc(m + card I) by SCMFSA_4:14;
+  dom id the Instructions of SCM+FSA = the Instructions of SCM+FSA by
+RELAT_1:71;
+  then
+A5: f = (id the Instructions of SCM+FSA) +* (halt SCM+FSA, goto insloc card
+  I) by FUNCT_7:def 3;
+A6: ProgramPart I = I by AMI_1:105;
+A7: rng I c= the Instructions of SCM+FSA by AMI_1:118;
   ProgramPart Directed I = Directed I by AMI_1:105
-      .= f*I by Y,U,FUNCT_7:118;
-  hence ProgramPart Relocated(Directed I, m)
-  = IncAddr(Shift(f*I,m),m) by SCMFSA_5:2
+    .= f*I by A5,A7,FUNCT_7:118;
+  hence ProgramPart Relocated(Directed I, m) = IncAddr(Shift(f*I,m),m) by
+SCMFSA_5:2
     .= IncAddr(f*Shift(I,m),m) by VALUED_1:23
-    .= ((id the Instructions of SCM+FSA) +*
-  (halt SCM+FSA .--> goto insloc(m + card I)))*
-  IncAddr(Shift(I,m),m) by A7,SCMFSA_4:26
-    .= ((id the Instructions of SCM+FSA) +*
-  (halt SCM+FSA .--> goto insloc(m + card I)))*
-  ProgramPart Relocated(I, m) by X,SCMFSA_5:2;
+    .= ((id the Instructions of SCM+FSA) +* (halt SCM+FSA .--> goto insloc(m
+  + card I)))* IncAddr(Shift(I,m),m) by A4,SCMFSA_4:26
+    .= ((id the Instructions of SCM+FSA) +* (halt SCM+FSA .--> goto insloc(m
+  + card I)))* ProgramPart Relocated(I, m) by A6,SCMFSA_5:2;
 end;
 
 canceled;
 
 theorem Th21:
-  for I,J being FinPartState of SCM+FSA holds
-  ProgramPart Relocated(I +* J, n) =
-  ProgramPart Relocated(I,n) +* ProgramPart Relocated(J,n)
+  for I,J being FinPartState of SCM+FSA holds ProgramPart
+Relocated(I +* J, n) = ProgramPart Relocated(I,n) +* ProgramPart Relocated(J,n)
 proof
   let I,J be FinPartState of SCM+FSA;
 A1: ProgramPart Relocated(I,n) = IncAddr([Shift(ProgramPart I,n)],n) &
-  ProgramPart Relocated(J,n) = IncAddr([Shift(ProgramPart J,n)],n)
-  by SCMFSA_5:2;
-  thus ProgramPart Relocated(I +* J, n)
-  = IncAddr([Shift(ProgramPart(I +* J),n)],n) by SCMFSA_5:2
+ProgramPart Relocated(J,n) = IncAddr([Shift(ProgramPart J,n)],n) by SCMFSA_5:2;
+  thus ProgramPart Relocated(I +* J, n) = IncAddr([Shift(ProgramPart(I +* J),n
+  )],n) by SCMFSA_5:2
     .= IncAddr(Shift([ProgramPart I] +* [ProgramPart J],n),n) by FUNCT_4:75
-    .= IncAddr([Shift(ProgramPart I,n)] +* [Shift(ProgramPart J,n)],n)
-  by VALUED_1:24
+    .= IncAddr([Shift(ProgramPart I,n)] +* [Shift(ProgramPart J,n)],n) by
+VALUED_1:24
     .= ProgramPart Relocated(I,n) +* ProgramPart Relocated(J,n) by A1,
 SCMFSA_4:25;
 end;
 
 theorem Th22:
-  ProgramPart Relocated([ProgramPart Relocated(I,m)], n)
-  = ProgramPart Relocated(I, m + n)
+  ProgramPart Relocated([ProgramPart Relocated(I,m)], n) =
+  ProgramPart Relocated(I, m + n)
 proof
-  thus ProgramPart Relocated([ProgramPart Relocated(I,m)], n)
-  = IncAddr([Shift(ProgramPart[ProgramPart Relocated(I,m)],n)],n) by SCMFSA_5:2
+  thus ProgramPart Relocated([ProgramPart Relocated(I,m)], n) = IncAddr([Shift
+  (ProgramPart[ProgramPart Relocated(I,m)],n)],n) by SCMFSA_5:2
     .= IncAddr(Shift([ProgramPart Relocated(I,m)],n),n) by AMI_1:105
     .= IncAddr(Shift(IncAddr([Shift(ProgramPart I,m)],m),n),n) by SCMFSA_5:2
     .= IncAddr(IncAddr([Shift(Shift(ProgramPart I,m),n)],m),n) by SCMFSA_4:35
@@ -382,34 +391,35 @@ end;
 
 reserve a,b for Int-Location,
   f for FinSeq-Location,
-  s,s1,s2 for State of SCM+FSA;
+  s,s1,s2 for State of
+  SCM+FSA;
 
 definition
   let I be FinPartState of SCM+FSA;
   func Initialized I -> FinPartState of SCM+FSA equals
-  I +* ((intloc 0) .--> 1) +* Start-At(insloc 0);
+  I +* ((intloc 0) .--> 1
+  ) +* Start-At(insloc 0);
   coherence
   proof
     set J = (intloc 0) .--> 1;
 A1: dom J = {intloc 0} by FUNCOP_1:19;
     reconsider J as finite Function;
-A2: dom the Object-Kind of SCM+FSA = the carrier of SCM+FSA by FUNCT_2:def 1;
-    now
-      let x be set;
-      intloc 0 in Int-Locations by SCMFSA_2:9;
+A2: now
+      1 in INT by INT_1:def 2;
       then
-A3:   dom J c= Int-Locations by A1,ZFMISC_1:37;
+A3:   rng J = {1} & {1} c= INT by FUNCOP_1:14,ZFMISC_1:37;
+      let x be set;
       assume
 A4:   x in dom J;
-      then reconsider l = x as Int-Location by A3,SCMFSA_2:11;
+      intloc 0 in Int-Locations by SCMFSA_2:9;
+      then dom J c= Int-Locations by A1,ZFMISC_1:37;
+      then reconsider l = x as Int-Location by A4,SCMFSA_2:11;
 A5:   (the Object-Kind of SCM+FSA).l = ObjectKind l
         .= INT by SCMFSA_2:26;
-A6:   J.x in rng J by A4,FUNCT_1:def 5;
-A7:   1 in INT by INT_1:def 2;
-A8:   rng J = {1} by FUNCOP_1:14;
-      {1} c= INT by A7,ZFMISC_1:37;
-      hence J.x in (the Object-Kind of SCM+FSA).x by A5,A6,A8;
+      J.x in rng J by A4,FUNCT_1:def 5;
+      hence J.x in (the Object-Kind of SCM+FSA).x by A5,A3;
     end;
+    dom the Object-Kind of SCM+FSA = the carrier of SCM+FSA by FUNCT_2:def 1;
     then reconsider J as FinPartState of SCM+FSA by A1,A2,CARD_3:def 9;
     I +* J +* Start-At(insloc 0) is FinPartState of SCM+FSA;
     hence thesis;
@@ -420,48 +430,57 @@ end;
 theorem Th23:
   InsCode i in {0,6,7,8} or Exec(i,s).IC SCM+FSA = Next IC s
 proof
-  assume not InsCode i in {0,6,7,8};
+A1: InsCode i <= 11+1 by SCMFSA_2:35;
+A2: InsCode i <= 10+1 implies InsCode i <= 10 or InsCode i = 11 by NAT_1:8;
+A3: InsCode i <= 9+1 implies InsCode i <= 8+1 or InsCode i = 10 by NAT_1:8;
+  assume
+A4: not InsCode i in {0,6,7,8};
   then
-A1: InsCode i <> 0 & InsCode i <> 6 & InsCode i <> 7 & InsCode i <> 8
-  by ENUMSET1:def 2;
-A2: InsCode i <= 11+1 by SCMFSA_2:35;
-A3: InsCode i <= 10+1 implies InsCode i <= 10 or InsCode i = 11 by NAT_1:8;
-A4: InsCode i <= 9+1 implies InsCode i <= 8+1 or InsCode i = 10 by NAT_1:8;
-  per cases by A1,A2,A3,A4,NAT_1:8,33;
-  suppose InsCode i = 1;
+A5: InsCode i <> 0 & InsCode i <> 6 by ENUMSET1:def 2;
+A6: InsCode i <> 7 & InsCode i <> 8 by A4,ENUMSET1:def 2;
+  per cases by A5,A6,A1,A2,A3,NAT_1:8,33;
+  suppose
+    InsCode i = 1;
     then ex a,b st i = a:=b by SCMFSA_2:54;
     hence thesis by SCMFSA_2:89;
   end;
-  suppose InsCode i = 2;
+  suppose
+    InsCode i = 2;
     then ex a,b st i = AddTo(a,b) by SCMFSA_2:55;
     hence thesis by SCMFSA_2:90;
   end;
-  suppose InsCode i = 3;
+  suppose
+    InsCode i = 3;
     then ex a,b st i = SubFrom(a,b) by SCMFSA_2:56;
     hence thesis by SCMFSA_2:91;
   end;
-  suppose InsCode i = 4;
+  suppose
+    InsCode i = 4;
     then ex a,b st i = MultBy(a,b) by SCMFSA_2:57;
     hence thesis by SCMFSA_2:92;
   end;
-  suppose InsCode i = 5;
-    then consider a,b such that
-A5: i = Divide(a,b) by SCMFSA_2:58;
-    thus thesis by A5,SCMFSA_2:93;
+  suppose
+    InsCode i = 5;
+    then ex a,b st i = Divide(a,b) by SCMFSA_2:58;
+    hence thesis by SCMFSA_2:93;
   end;
-  suppose InsCode i = 9;
+  suppose
+    InsCode i = 9;
     then ex a,b,f st i = b:=(f,a) by SCMFSA_2:62;
     hence thesis by SCMFSA_2:98;
   end;
-  suppose InsCode i = 10;
+  suppose
+    InsCode i = 10;
     then ex a,b,f st i = (f,a):=b by SCMFSA_2:63;
     hence thesis by SCMFSA_2:99;
   end;
-  suppose InsCode i = 11;
+  suppose
+    InsCode i = 11;
     then ex a,f st i = a:=len f by SCMFSA_2:64;
     hence thesis by SCMFSA_2:100;
   end;
-  suppose InsCode i = 12;
+  suppose
+    InsCode i = 12;
     then ex a,f st i = f:=<0,...,0>a by SCMFSA_2:65;
     hence thesis by SCMFSA_2:101;
   end;
@@ -470,11 +489,11 @@ end;
 theorem Th24:
   IC SCM+FSA in dom Initialized I
 proof
-A1: dom Initialized I
-  = dom(I +* ((intloc 0) .--> 1)) \/ dom Start-At(insloc 0) by FUNCT_4:def 1;
   dom Start-At(insloc 0) = { IC SCM+FSA } by FUNCOP_1:19;
-  then IC SCM+FSA in dom Start-At(insloc 0) by TARSKI:def 1;
-  hence thesis by A1,XBOOLE_0:def 3;
+  then
+  dom Initialized I = dom(I +* ((intloc 0) .--> 1)) \/ dom Start-At(insloc
+  0) & IC SCM+FSA in dom Start-At(insloc 0) by FUNCT_4:def 1,TARSKI:def 1;
+  hence thesis by XBOOLE_0:def 3;
 end;
 
 theorem
@@ -484,24 +503,30 @@ proof
   then
 A1: IC SCM+FSA in dom Start-At(insloc 0) by TARSKI:def 1;
   IC SCM+FSA in dom Initialized I by Th24;
-  hence IC Initialized I =
-  (I +* ((intloc 0) .--> 1) +* Start-At(insloc 0)).IC SCM+FSA by AMI_1:def 43
+  hence IC Initialized I = (I +* ((intloc 0) .--> 1) +* Start-At(insloc 0)).IC
+  SCM+FSA by AMI_1:def 43
     .= (Start-At insloc 0).IC SCM+FSA by A1,FUNCT_4:14
     .= insloc 0 by FUNCOP_1:87;
 end;
 
 Lm1: now
-  assume intloc 0 in NAT;
-  then reconsider l = intloc 0 as Instruction-Location of SCM+FSA
-  by AMI_1:def 4;
+  assume
+  intloc 0 in NAT;
+
+  then reconsider l = intloc 0 as Instruction-Location of SCM+FSA by
+AMI_1:def 4;
+
   l = intloc 0;
   hence contradiction by SCMFSA_2:84;
 end;
 
 Lm2: now
-  assume IC SCM+FSA in NAT;
-  then reconsider l = IC SCM+FSA as Instruction-Location of SCM+FSA
-  by AMI_1:def 4;
+  assume
+  IC SCM+FSA in NAT;
+
+  then reconsider l = IC SCM+FSA as Instruction-Location of SCM+FSA by
+AMI_1:def 4;
+
   l = IC SCM+FSA;
   hence contradiction by AMI_1:48;
 end;
@@ -510,597 +535,620 @@ theorem Th26:
   I c= Initialized I
 proof
   set A = NAT;
-A1: Initialized I =
-  I +* (((intloc 0) .--> 1) +* Start-At(insloc 0)) by FUNCT_4:15;
-A2: dom I c= A by RELAT_1:def 18;
-A3: now
-    assume IC SCM+FSA in dom I;
-    then reconsider l = IC SCM+FSA as Instruction-Location of SCM+FSA
-    by A2,AMI_1:def 4;
+A1: dom I c= A by RELAT_1:def 18;
+A2: now
+    assume
+    IC SCM+FSA in dom I;
+    then reconsider l = IC SCM+FSA as Instruction-Location of SCM+FSA by A1,
+AMI_1:def 4;
     l = IC SCM+FSA;
     hence contradiction by AMI_1:48;
   end;
-A4: now
-    assume intloc 0 in dom I;
-    then reconsider l = intloc 0 as Instruction-Location of SCM+FSA
-    by A2,AMI_1:def 4;
+A3: now
+    assume
+    intloc 0 in dom I;
+    then reconsider l = intloc 0 as Instruction-Location of SCM+FSA by A1,
+AMI_1:def 4;
     l = intloc 0;
     hence contradiction by SCMFSA_2:84;
   end;
-  dom(((intloc 0) .--> 1) +* Start-At(insloc 0))
-  = dom((intloc 0) .--> 1) \/ dom Start-At(insloc 0) by FUNCT_4:def 1
+  dom(((intloc 0) .--> 1) +* Start-At(insloc 0)) = dom((intloc 0) .--> 1)
+  \/ dom Start-At(insloc 0) by FUNCT_4:def 1
     .= { intloc 0 } \/ dom Start-At(insloc 0) by FUNCOP_1:19
     .= { intloc 0 } \/ { IC SCM+FSA } by FUNCOP_1:19
     .= { IC SCM+FSA, intloc 0} by ENUMSET1:41;
-  then dom I misses dom(((intloc 0) .--> 1) +* Start-At(insloc 0))
-  by A3,A4,ZFMISC_1:57;
-  hence thesis by A1,FUNCT_4:33;
+  then
+  Initialized I = I +* (((intloc 0) .--> 1) +* Start-At(insloc 0)) & dom I
+  misses dom(((intloc 0) .--> 1) +* Start-At(insloc 0)) by A2,A3,FUNCT_4:15
+,ZFMISC_1:57;
+  hence thesis by FUNCT_4:33;
 end;
 
 canceled;
 
 theorem Th28:
-  for s1,s2 being State of SCM+FSA st IC s1 = IC s2 &
-  (for a being Int-Location holds s1.a = s2.a) &
-  for f being FinSeq-Location holds s1.f = s2.f holds s1,s2 equal_outside NAT
+  for s1,s2 being State of SCM+FSA st IC s1 = IC s2 & (for a being
+Int-Location holds s1.a = s2.a) & for f being FinSeq-Location holds s1.f = s2.f
+  holds s1,s2 equal_outside NAT
 proof
   set A = NAT;
   let s1,s2 be State of SCM+FSA such that
 A1: IC s1 = IC s2 and
 A2: for a being Int-Location holds s1.a = s2.a and
 A3: for f being FinSeq-Location holds s1.f = s2.f;
-A4: Int-Locations \/ FinSeq-Locations misses A by SCMFSA_2:13,14,XBOOLE_1:70;
   now
-    assume IC SCM+FSA in A;
-    then reconsider l = IC SCM+FSA as Instruction-Location of SCM+FSA
-    by AMI_1:def 4;
+    assume
+    IC SCM+FSA in A;
+    then reconsider l = IC SCM+FSA as Instruction-Location of SCM+FSA by
+AMI_1:def 4;
     l = IC SCM+FSA;
     hence contradiction by AMI_1:48;
   end;
-  then {IC SCM+FSA} misses A by ZFMISC_1:56;
+  then Int-Locations \/ FinSeq-Locations misses A & {IC SCM+FSA} misses A by
+SCMFSA_2:13,14,XBOOLE_1:70,ZFMISC_1:56;
   then
-A5: Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA} misses A
-  by A4,XBOOLE_1:70;
-A6: (the carrier of SCM+FSA) \ A
-  = Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA} \ A by SCMFSA_2:8
-,XBOOLE_1:40
-    .= Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA} by A5,XBOOLE_1:83;
+A4: Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA} misses A by XBOOLE_1:70;
+A5: (the carrier of SCM+FSA) \ A = Int-Locations \/ FinSeq-Locations \/ {IC
+  SCM+FSA} \ A by SCMFSA_2:8,XBOOLE_1:40
+    .= Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA} by A4,XBOOLE_1:83;
+A6: dom(s2|(dom s2 \ A)) = dom s2 /\ (dom s2 \ A) by RELAT_1:90
+    .= dom s2 \ A by XBOOLE_1:28
+    .= Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA} by A5,AMI_1:79;
 A7: dom(s1|(dom s1 \ A)) = dom s1 /\ (dom s1 \ A) by RELAT_1:90
     .= dom s1 \ A by XBOOLE_1:28
-    .= Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA} by A6,AMI_1:79;
-A8: dom(s2|(dom s2 \ A)) = dom s2 /\ (dom s2 \ A) by RELAT_1:90
-    .= dom s2 \ A by XBOOLE_1:28
-    .= Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA} by A6,AMI_1:79;
+    .= Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA} by A5,AMI_1:79;
   now
     let x be set;
     assume
-A9: x in Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA};
+A8: x in Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA};
     then
-A10: x in Int-Locations \/
-    FinSeq-Locations or x in {IC SCM+FSA} by XBOOLE_0:def 3;
-    per cases by A10,XBOOLE_0:def 3;
-    suppose x in Int-Locations;
+A9: x in Int-Locations \/ FinSeq-Locations or x in {IC SCM+FSA} by
+XBOOLE_0:def 3;
+    per cases by A9,XBOOLE_0:def 3;
+    suppose
+      x in Int-Locations;
       then
-A11:  x is Int-Location by SCMFSA_2:11;
-      thus (s1|(dom s1 \ A)).x = s1.x by A7,A9,FUNCT_1:70
-        .= s2.x by A2,A11
-        .= (s2|(dom s2 \ A)).x by A8,A9,FUNCT_1:70;
-    end;
-    suppose x in FinSeq-Locations;
-      then
-A12:  x is FinSeq-Location by SCMFSA_2:12;
-      thus (s1|(dom s1 \ A)).x = s1.x by A7,A9,FUNCT_1:70
-        .= s2.x by A3,A12
-        .= (s2|(dom s2 \ A)).x by A8,A9,FUNCT_1:70;
+A10:  x is Int-Location by SCMFSA_2:11;
+      thus (s1|(dom s1 \ A)).x = s1.x by A7,A8,FUNCT_1:70
+        .= s2.x by A2,A10
+        .= (s2|(dom s2 \ A)).x by A6,A8,FUNCT_1:70;
     end;
     suppose
-A13:  x in {IC SCM+FSA};
-      thus (s1|(dom s1 \ A)).x = s1.x by A7,A9,FUNCT_1:70
-        .= IC s1 by A13,TARSKI:def 1
-        .= s2.x by A1,A13,TARSKI:def 1
-        .= (s2|(dom s2 \ A)).x by A8,A9,FUNCT_1:70;
+      x in FinSeq-Locations;
+      then
+A11:  x is FinSeq-Location by SCMFSA_2:12;
+      thus (s1|(dom s1 \ A)).x = s1.x by A7,A8,FUNCT_1:70
+        .= s2.x by A3,A11
+        .= (s2|(dom s2 \ A)).x by A6,A8,FUNCT_1:70;
+    end;
+    suppose
+A12:  x in {IC SCM+FSA};
+      thus (s1|(dom s1 \ A)).x = s1.x by A7,A8,FUNCT_1:70
+        .= IC s1 by A12,TARSKI:def 1
+        .= s2.x by A1,A12,TARSKI:def 1
+        .= (s2|(dom s2 \ A)).x by A6,A8,FUNCT_1:70;
     end;
   end;
-  hence s1|(dom s1 \ A) = s2|(dom s2 \ A) by A7,A8,FUNCT_1:9;
+  hence s1|(dom s1 \ A) = s2|(dom s2 \ A) by A7,A6,FUNCT_1:9;
 end;
 
 canceled;
 
 theorem Th30:
-  s1,s2 equal_outside NAT implies for a being Int-Location holds s1.a = s2.a
+  s1,s2 equal_outside NAT implies for a being Int-Location holds
+  s1.a = s2.a
 proof
   set IL = NAT;
   assume
 A1: s1,s2 equal_outside IL;
   let a be Int-Location;
-A2: a in dom s1 by SCMFSA_2:66;
-A3: a in dom s2 by SCMFSA_2:66;
   a in Int-Locations by SCMFSA_2:9;
   then
-A4: not a in IL by SCMFSA_2:13,XBOOLE_0:3;
+A2: not a in IL by SCMFSA_2:13,XBOOLE_0:3;
+  a in dom s2 by SCMFSA_2:66;
+  then a in dom s2 \ IL by A2,XBOOLE_0:def 5;
+  then
+A3: a in dom s2 /\ (dom s2 \ IL) by XBOOLE_0:def 4;
+  a in dom s1 by SCMFSA_2:66;
   then a in dom s1 \ IL by A2,XBOOLE_0:def 5;
-  then
-A5: a in dom s1 /\ (dom s1 \ IL) by XBOOLE_0:def 4;
-  a in dom s2 \ IL by A3,A4,XBOOLE_0:def 5;
-  then
-A6: a in dom s2 /\ (dom s2 \ IL) by XBOOLE_0:def 4;
-  thus s1.a = (s1|(dom s1 \ IL)).a by A5,FUNCT_1:71
+  then a in dom s1 /\ (dom s1 \ IL) by XBOOLE_0:def 4;
+  hence s1.a = (s1|(dom s1 \ IL)).a by FUNCT_1:71
     .= (s2|(dom s2 \ IL)).a by A1,FUNCT_7:def 2
-    .= s2.a by A6,FUNCT_1:71;
+    .= s2.a by A3,FUNCT_1:71;
 end;
 
 theorem Th31:
-  s1,s2 equal_outside NAT implies
-  for f being FinSeq-Location holds s1.f = s2.f
+  s1,s2 equal_outside NAT implies for f being FinSeq-Location
+  holds s1.f = s2.f
 proof
   set IL = NAT;
   assume
 A1: s1,s2 equal_outside IL;
   let a be FinSeq-Location;
-A2: a in dom s1 by SCMFSA_2:67;
-A3: a in dom s2 by SCMFSA_2:67;
   a in FinSeq-Locations by SCMFSA_2:10;
   then
-A4: not a in IL by SCMFSA_2:14,XBOOLE_0:3;
+A2: not a in IL by SCMFSA_2:14,XBOOLE_0:3;
+  a in dom s2 by SCMFSA_2:67;
+  then a in dom s2 \ IL by A2,XBOOLE_0:def 5;
+  then
+A3: a in dom s2 /\ (dom s2 \ IL) by XBOOLE_0:def 4;
+  a in dom s1 by SCMFSA_2:67;
   then a in dom s1 \ IL by A2,XBOOLE_0:def 5;
-  then
-A5: a in dom s1 /\ (dom s1 \ IL) by XBOOLE_0:def 4;
-  a in dom s2 \ IL by A3,A4,XBOOLE_0:def 5;
-  then
-A6: a in dom s2 /\ (dom s2 \ IL) by XBOOLE_0:def 4;
-  thus s1.a = (s1|(dom s1 \ IL)).a by A5,FUNCT_1:71
+  then a in dom s1 /\ (dom s1 \ IL) by XBOOLE_0:def 4;
+  hence s1.a = (s1|(dom s1 \ IL)).a by FUNCT_1:71
     .= (s2|(dom s2 \ IL)).a by A1,FUNCT_7:def 2
-    .= s2.a by A6,FUNCT_1:71;
+    .= s2.a by A3,FUNCT_1:71;
 end;
 
 theorem
-  s1,s2 equal_outside NAT implies Exec(i,s1),Exec(i,s2) equal_outside NAT
+  s1,s2 equal_outside NAT implies Exec(i,s1),Exec(i,s2) equal_outside
+  NAT
 proof
   assume
 A1: s1,s2 equal_outside NAT;
-A2: InsCode i <= 11+1 by SCMFSA_2:35;
+A2: InsCode i <= 9+1 implies InsCode i <= 8+1 or InsCode i = 10 by NAT_1:8;
 A3: InsCode i <= 10+1 implies InsCode i <= 10 or InsCode i = 11 by NAT_1:8;
-A4: InsCode i <= 9+1 implies InsCode i <= 8+1 or InsCode i = 10 by NAT_1:8;
-  per cases by A2,A3,A4,NAT_1:8,33;
-  suppose InsCode i = 0;
-    then i = halt SCM+FSA by SCMFSA_2:122;
-    then Exec(i,s1) = s1 & Exec(i,s2) = s2 by AMI_1:def 8;
-    hence thesis by A1;
+A4: InsCode i <= 11+1 by SCMFSA_2:35;
+  per cases by A4,A3,A2,NAT_1:8,33;
+  suppose
+    InsCode i = 0;
+    then
+A5: i = halt SCM+FSA by SCMFSA_2:122;
+    then Exec(i,s1) = s1 by AMI_1:def 8;
+    hence thesis by A1,A5,AMI_1:def 8;
   end;
-  suppose InsCode i = 1;
+  suppose
+    InsCode i = 1;
     then consider da, db being Int-Location such that
-A5: i = da := db by SCMFSA_2:54;
-A6: now
+A6: i = da := db by SCMFSA_2:54;
+A7: now
       let c be Int-Location;
       per cases;
       suppose
-A7:     c = da;
-        hence Exec(i,s1).c = s1.db by A5,SCMFSA_2:89
+A8:     c = da;
+        hence Exec(i,s1).c = s1.db by A6,SCMFSA_2:89
           .= s2.db by A1,Th30
-          .= Exec(i,s2).c by A5,A7,SCMFSA_2:89;
+          .= Exec(i,s2).c by A6,A8,SCMFSA_2:89;
       end;
       suppose
-A8:     c <> da;
-        hence Exec(i,s1).c = s1.c by A5,SCMFSA_2:89
+A9:     c <> da;
+        hence Exec(i,s1).c = s1.c by A6,SCMFSA_2:89
           .= s2.c by A1,Th30
-          .= Exec(i,s2).c by A5,A8,SCMFSA_2:89;
+          .= Exec(i,s2).c by A6,A9,SCMFSA_2:89;
       end;
     end;
-A9: now
+A10: now
       let f be FinSeq-Location;
-      thus Exec(i,s1).f = s1.f by A5,SCMFSA_2:89
+      thus Exec(i,s1).f = s1.f by A6,SCMFSA_2:89
         .= s2.f by A1,Th31
-        .= Exec(i,s2).f by A5,SCMFSA_2:89;
+        .= Exec(i,s2).f by A6,SCMFSA_2:89;
     end;
-    IC Exec(i,s1) = Next IC s1 by A5,SCMFSA_2:89
+    IC Exec(i,s1) = Next IC s1 by A6,SCMFSA_2:89
       .= Next IC s2 by A1,AMI_1:121
-      .= IC Exec(i,s2) by A5,SCMFSA_2:89;
-    hence thesis by A6,A9,Th28;
+      .= IC Exec(i,s2) by A6,SCMFSA_2:89;
+    hence thesis by A7,A10,Th28;
   end;
-  suppose InsCode i = 2;
+  suppose
+    InsCode i = 2;
     then consider da, db being Int-Location such that
-A10: i = AddTo(da, db) by SCMFSA_2:55;
-A11: now
+A11: i = AddTo(da, db) by SCMFSA_2:55;
+A12: now
       let c be Int-Location;
       per cases;
       suppose
-A12:    c = da;
+A13:    c = da;
         s1.da = s2.da & s1.db = s2.db by A1,Th30;
-        hence Exec(i,s1).c = s2.da + s2.db by A10,A12,SCMFSA_2:90
-          .= Exec(i,s2).c by A10,A12,SCMFSA_2:90;
+        hence Exec(i,s1).c = s2.da + s2.db by A11,A13,SCMFSA_2:90
+          .= Exec(i,s2).c by A11,A13,SCMFSA_2:90;
       end;
       suppose
-A13:    c <> da;
-        hence Exec(i,s1).c = s1.c by A10,SCMFSA_2:90
+A14:    c <> da;
+        hence Exec(i,s1).c = s1.c by A11,SCMFSA_2:90
           .= s2.c by A1,Th30
-          .= Exec(i,s2).c by A10,A13,SCMFSA_2:90;
+          .= Exec(i,s2).c by A11,A14,SCMFSA_2:90;
       end;
     end;
-A14: now
+A15: now
       let f be FinSeq-Location;
-      thus Exec(i,s1).f = s1.f by A10,SCMFSA_2:90
+      thus Exec(i,s1).f = s1.f by A11,SCMFSA_2:90
         .= s2.f by A1,Th31
-        .= Exec(i,s2).f by A10,SCMFSA_2:90;
+        .= Exec(i,s2).f by A11,SCMFSA_2:90;
     end;
-    IC Exec(i,s1) = Next IC s1 by A10,SCMFSA_2:90
+    IC Exec(i,s1) = Next IC s1 by A11,SCMFSA_2:90
       .= Next IC s2 by A1,AMI_1:121
-      .= IC Exec(i,s2) by A10,SCMFSA_2:90;
-    hence thesis by A11,A14,Th28;
+      .= IC Exec(i,s2) by A11,SCMFSA_2:90;
+    hence thesis by A12,A15,Th28;
   end;
-  suppose InsCode i = 3;
+  suppose
+    InsCode i = 3;
     then consider da, db being Int-Location such that
-A15: i = SubFrom(da, db) by SCMFSA_2:56;
-A16: now
+A16: i = SubFrom(da, db) by SCMFSA_2:56;
+A17: now
       let c be Int-Location;
       per cases;
       suppose
-A17:    c = da;
+A18:    c = da;
         s1.da = s2.da & s1.db = s2.db by A1,Th30;
-        hence Exec(i,s1).c = s2.da - s2.db by A15,A17,SCMFSA_2:91
-          .= Exec(i,s2).c by A15,A17,SCMFSA_2:91;
+        hence Exec(i,s1).c = s2.da - s2.db by A16,A18,SCMFSA_2:91
+          .= Exec(i,s2).c by A16,A18,SCMFSA_2:91;
       end;
       suppose
-A18:    c <> da;
-        hence Exec(i,s1).c = s1.c by A15,SCMFSA_2:91
+A19:    c <> da;
+        hence Exec(i,s1).c = s1.c by A16,SCMFSA_2:91
           .= s2.c by A1,Th30
-          .= Exec(i,s2).c by A15,A18,SCMFSA_2:91;
+          .= Exec(i,s2).c by A16,A19,SCMFSA_2:91;
       end;
     end;
-A19: now
+A20: now
       let f be FinSeq-Location;
-      thus Exec(i,s1).f = s1.f by A15,SCMFSA_2:91
+      thus Exec(i,s1).f = s1.f by A16,SCMFSA_2:91
         .= s2.f by A1,Th31
-        .= Exec(i,s2).f by A15,SCMFSA_2:91;
+        .= Exec(i,s2).f by A16,SCMFSA_2:91;
     end;
-    IC Exec(i,s1) = Next IC s1 by A15,SCMFSA_2:91
+    IC Exec(i,s1) = Next IC s1 by A16,SCMFSA_2:91
       .= Next IC s2 by A1,AMI_1:121
-      .= IC Exec(i,s2) by A15,SCMFSA_2:91;
-    hence thesis by A16,A19,Th28;
+      .= IC Exec(i,s2) by A16,SCMFSA_2:91;
+    hence thesis by A17,A20,Th28;
   end;
-  suppose InsCode i = 4;
+  suppose
+    InsCode i = 4;
     then consider da, db being Int-Location such that
-A20: i = MultBy(da, db) by SCMFSA_2:57;
-A21: now
+A21: i = MultBy(da, db) by SCMFSA_2:57;
+A22: now
       let c be Int-Location;
       per cases;
       suppose
-A22:    c = da;
+A23:    c = da;
         s1.da = s2.da & s1.db = s2.db by A1,Th30;
-        hence Exec(i,s1).c = s2.da * s2.db by A20,A22,SCMFSA_2:92
-          .= Exec(i,s2).c by A20,A22,SCMFSA_2:92;
+        hence Exec(i,s1).c = s2.da * s2.db by A21,A23,SCMFSA_2:92
+          .= Exec(i,s2).c by A21,A23,SCMFSA_2:92;
       end;
       suppose
-A23:    c <> da;
-        hence Exec(i,s1).c = s1.c by A20,SCMFSA_2:92
+A24:    c <> da;
+        hence Exec(i,s1).c = s1.c by A21,SCMFSA_2:92
           .= s2.c by A1,Th30
-          .= Exec(i,s2).c by A20,A23,SCMFSA_2:92;
+          .= Exec(i,s2).c by A21,A24,SCMFSA_2:92;
       end;
     end;
-A24: now
+A25: now
       let f be FinSeq-Location;
-      thus Exec(i,s1).f = s1.f by A20,SCMFSA_2:92
+      thus Exec(i,s1).f = s1.f by A21,SCMFSA_2:92
         .= s2.f by A1,Th31
-        .= Exec(i,s2).f by A20,SCMFSA_2:92;
+        .= Exec(i,s2).f by A21,SCMFSA_2:92;
     end;
-    IC Exec(i,s1) = Next IC s1 by A20,SCMFSA_2:92
+    IC Exec(i,s1) = Next IC s1 by A21,SCMFSA_2:92
       .= Next IC s2 by A1,AMI_1:121
-      .= IC Exec(i,s2) by A20,SCMFSA_2:92;
-    hence thesis by A21,A24,Th28;
+      .= IC Exec(i,s2) by A21,SCMFSA_2:92;
+    hence thesis by A22,A25,Th28;
   end;
-  suppose InsCode i = 5;
+  suppose
+    InsCode i = 5;
     then consider da, db being Int-Location such that
-A25: i = Divide(da, db) by SCMFSA_2:58;
-A26: now
+A26: i = Divide(da, db) by SCMFSA_2:58;
+A27: now
       let c be Int-Location;
       per cases;
       suppose
-A27:    c = db;
+A28:    c = db;
         s1.da = s2.da & s1.db = s2.db by A1,Th30;
-        hence Exec(i,s1).c = s2.da mod s2.db by A25,A27,SCMFSA_2:93
-          .= Exec(i,s2).c by A25,A27,SCMFSA_2:93;
+        hence Exec(i,s1).c = s2.da mod s2.db by A26,A28,SCMFSA_2:93
+          .= Exec(i,s2).c by A26,A28,SCMFSA_2:93;
       end;
       suppose
-A28:    c = da & c <> db;
+A29:    c = da & c <> db;
         s1.da = s2.da & s1.db = s2.db by A1,Th30;
-        hence Exec(i,s1).c = s2.da div s2.db by A25,A28,SCMFSA_2:93
-          .= Exec(i,s2).c by A25,A28,SCMFSA_2:93;
+        hence Exec(i,s1).c = s2.da div s2.db by A26,A29,SCMFSA_2:93
+          .= Exec(i,s2).c by A26,A29,SCMFSA_2:93;
       end;
       suppose
-A29:    c <> da & c <> db;
-        hence Exec(i,s1).c = s1.c by A25,SCMFSA_2:93
+A30:    c <> da & c <> db;
+        hence Exec(i,s1).c = s1.c by A26,SCMFSA_2:93
           .= s2.c by A1,Th30
-          .= Exec(i,s2).c by A25,A29,SCMFSA_2:93;
+          .= Exec(i,s2).c by A26,A30,SCMFSA_2:93;
       end;
     end;
-A30: now
+A31: now
       let f be FinSeq-Location;
-      thus Exec(i,s1).f = s1.f by A25,SCMFSA_2:93
+      thus Exec(i,s1).f = s1.f by A26,SCMFSA_2:93
         .= s2.f by A1,Th31
-        .= Exec(i,s2).f by A25,SCMFSA_2:93;
+        .= Exec(i,s2).f by A26,SCMFSA_2:93;
     end;
-    IC Exec(i,s1) = Next IC s1 by A25,SCMFSA_2:93
+    IC Exec(i,s1) = Next IC s1 by A26,SCMFSA_2:93
       .= Next IC s2 by A1,AMI_1:121
-      .= IC Exec(i,s2) by A25,SCMFSA_2:93;
-    hence thesis by A26,A30,Th28;
+      .= IC Exec(i,s2) by A26,SCMFSA_2:93;
+    hence thesis by A27,A31,Th28;
   end;
-  suppose InsCode i = 6;
+  suppose
+    InsCode i = 6;
     then consider loc being Instruction-Location of SCM+FSA such that
-A31: i = goto loc by SCMFSA_2:59;
-A32: now
-      let c be Int-Location;
-      thus Exec(i,s1).c = s1.c by A31,SCMFSA_2:95
-        .= s2.c by A1,Th30
-        .= Exec(i,s2).c by A31,SCMFSA_2:95;
-    end;
+A32: i = goto loc by SCMFSA_2:59;
 A33: now
       let f be FinSeq-Location;
-      thus Exec(i,s1).f = s1.f by A31,SCMFSA_2:95
+      thus Exec(i,s1).f = s1.f by A32,SCMFSA_2:95
         .= s2.f by A1,Th31
-        .= Exec(i,s2).f by A31,SCMFSA_2:95;
+        .= Exec(i,s2).f by A32,SCMFSA_2:95;
     end;
-    IC Exec(i,s1) = loc by A31,SCMFSA_2:95
-      .= IC Exec(i,s2) by A31,SCMFSA_2:95;
-    hence thesis by A32,A33,Th28;
-  end;
-  suppose InsCode i = 7;
-    then consider loc being Instruction-Location of SCM+FSA,
-    da being Int-Location such that
-A34: i = da=0_goto loc by SCMFSA_2:60;
-A35: now
+A34: now
       let c be Int-Location;
-      thus Exec(i,s1).c = s1.c by A34,SCMFSA_2:96
+      thus Exec(i,s1).c = s1.c by A32,SCMFSA_2:95
         .= s2.c by A1,Th30
-        .= Exec(i,s2).c by A34,SCMFSA_2:96;
+        .= Exec(i,s2).c by A32,SCMFSA_2:95;
     end;
+    IC Exec(i,s1) = loc by A32,SCMFSA_2:95
+      .= IC Exec(i,s2) by A32,SCMFSA_2:95;
+    hence thesis by A34,A33,Th28;
+  end;
+  suppose
+    InsCode i = 7;
+    then consider
+    loc being Instruction-Location of SCM+FSA, da being Int-Location
+    such that
+A35: i = da=0_goto loc by SCMFSA_2:60;
 A36: now
-      let f be FinSeq-Location;
-      thus Exec(i,s1).f = s1.f by A34,SCMFSA_2:96
-        .= s2.f by A1,Th31
-        .= Exec(i,s2).f by A34,SCMFSA_2:96;
-    end;
-    now per cases;
+      per cases;
       suppose
 A37:    s1.da = 0;
         then
 A38:    s2.da = 0 by A1,Th30;
-        thus IC Exec(i,s1) = loc by A34,A37,SCMFSA_2:96
-          .= IC Exec(i,s2) by A34,A38,SCMFSA_2:96;
+        thus IC Exec(i,s1) = loc by A35,A37,SCMFSA_2:96
+          .= IC Exec(i,s2) by A35,A38,SCMFSA_2:96;
       end;
       suppose
 A39:    s1.da <> 0;
         then
 A40:    s2.da <> 0 by A1,Th30;
-        thus IC Exec(i,s1) = Next IC s1 by A34,A39,SCMFSA_2:96
+        thus IC Exec(i,s1) = Next IC s1 by A35,A39,SCMFSA_2:96
           .= Next IC s2 by A1,AMI_1:121
-          .= IC Exec(i,s2) by A34,A40,SCMFSA_2:96;
+          .= IC Exec(i,s2) by A35,A40,SCMFSA_2:96;
       end;
     end;
-    hence thesis by A35,A36,Th28;
-  end;
-  suppose InsCode i = 8;
-    then consider loc being Instruction-Location of SCM+FSA,
-    da being Int-Location such that
-A41: i = da>0_goto loc by SCMFSA_2:61;
-A42: now
-      let c be Int-Location;
-      thus Exec(i,s1).c = s1.c by A41,SCMFSA_2:97
-        .= s2.c by A1,Th30
-        .= Exec(i,s2).c by A41,SCMFSA_2:97;
-    end;
-A43: now
+A41: now
       let f be FinSeq-Location;
-      thus Exec(i,s1).f = s1.f by A41,SCMFSA_2:97
+      thus Exec(i,s1).f = s1.f by A35,SCMFSA_2:96
         .= s2.f by A1,Th31
-        .= Exec(i,s2).f by A41,SCMFSA_2:97;
+        .= Exec(i,s2).f by A35,SCMFSA_2:96;
     end;
-    now per cases;
+    now
+      let c be Int-Location;
+      thus Exec(i,s1).c = s1.c by A35,SCMFSA_2:96
+        .= s2.c by A1,Th30
+        .= Exec(i,s2).c by A35,SCMFSA_2:96;
+    end;
+    hence thesis by A41,A36,Th28;
+  end;
+  suppose
+    InsCode i = 8;
+    then consider
+    loc being Instruction-Location of SCM+FSA, da being Int-Location
+    such that
+A42: i = da>0_goto loc by SCMFSA_2:61;
+A43: now
+      per cases;
       suppose
 A44:    s1.da > 0;
         then
 A45:    s2.da > 0 by A1,Th30;
-        thus IC Exec(i,s1) = loc by A41,A44,SCMFSA_2:97
-          .= IC Exec(i,s2) by A41,A45,SCMFSA_2:97;
+        thus IC Exec(i,s1) = loc by A42,A44,SCMFSA_2:97
+          .= IC Exec(i,s2) by A42,A45,SCMFSA_2:97;
       end;
       suppose
 A46:    s1.da <= 0;
         then
 A47:    s2.da <= 0 by A1,Th30;
-        thus IC Exec(i,s1) = Next IC s1 by A41,A46,SCMFSA_2:97
+        thus IC Exec(i,s1) = Next IC s1 by A42,A46,SCMFSA_2:97
           .= Next IC s2 by A1,AMI_1:121
-          .= IC Exec(i,s2) by A41,A47,SCMFSA_2:97;
+          .= IC Exec(i,s2) by A42,A47,SCMFSA_2:97;
       end;
     end;
-    hence thesis by A42,A43,Th28;
+A48: now
+      let f be FinSeq-Location;
+      thus Exec(i,s1).f = s1.f by A42,SCMFSA_2:97
+        .= s2.f by A1,Th31
+        .= Exec(i,s2).f by A42,SCMFSA_2:97;
+    end;
+    now
+      let c be Int-Location;
+      thus Exec(i,s1).c = s1.c by A42,SCMFSA_2:97
+        .= s2.c by A1,Th30
+        .= Exec(i,s2).c by A42,SCMFSA_2:97;
+    end;
+    hence thesis by A48,A43,Th28;
   end;
-  suppose InsCode i = 9;
+  suppose
+    InsCode i = 9;
     then consider db, da being Int-Location, f being FinSeq-Location such that
-A48: i = da := (f,db) by SCMFSA_2:62;
-A49: now
+A49: i = da := (f,db) by SCMFSA_2:62;
+A50: now
       let c be Int-Location;
       per cases;
       suppose
-A50:    c = da;
-        then consider m such that
-A51:    m = abs(s1.db) and
-A52:    Exec(da:=(f,db), s1).c = (s1.f)/.m by SCMFSA_2:98;
-        consider n such that
-A53:    n = abs(s2.db) and
-A54:    Exec(da:=(f,db), s2).c = (s2.f)/.n by A50,SCMFSA_2:98;
-        m = n & s1.f = s2.f by A1,A51,A53,Th30,Th31;
-        hence Exec(i,s1).c = Exec(i,s2).c by A48,A52,A54;
+A51:    c = da;
+        then consider n such that
+A52:    n = abs(s2.db) and
+A53:    Exec(da:=(f,db), s2).c = (s2.f)/.n by SCMFSA_2:98;
+        consider m such that
+A54:    m = abs(s1.db) and
+A55:    Exec(da:=(f,db), s1).c = (s1.f)/.m by A51,SCMFSA_2:98;
+        m = n by A1,A54,A52,Th30;
+        hence Exec(i,s1).c = Exec(i,s2).c by A1,A49,A55,A53,Th31;
       end;
       suppose
-A55:    c <> da;
-        hence Exec(i,s1).c = s1.c by A48,SCMFSA_2:98
+A56:    c <> da;
+        hence Exec(i,s1).c = s1.c by A49,SCMFSA_2:98
           .= s2.c by A1,Th30
-          .= Exec(i,s2).c by A48,A55,SCMFSA_2:98;
+          .= Exec(i,s2).c by A49,A56,SCMFSA_2:98;
       end;
     end;
-A56: now
+A57: now
       let f be FinSeq-Location;
-      thus Exec(i,s1).f = s1.f by A48,SCMFSA_2:98
+      thus Exec(i,s1).f = s1.f by A49,SCMFSA_2:98
         .= s2.f by A1,Th31
-        .= Exec(i,s2).f by A48,SCMFSA_2:98;
+        .= Exec(i,s2).f by A49,SCMFSA_2:98;
     end;
-    IC Exec(i,s1) = Next IC s1 by A48,SCMFSA_2:98
+    IC Exec(i,s1) = Next IC s1 by A49,SCMFSA_2:98
       .= Next IC s2 by A1,AMI_1:121
-      .= IC Exec(i,s2) by A48,SCMFSA_2:98;
-    hence thesis by A49,A56,Th28;
+      .= IC Exec(i,s2) by A49,SCMFSA_2:98;
+    hence thesis by A50,A57,Th28;
   end;
-  suppose InsCode i = 10;
+  suppose
+    InsCode i = 10;
     then consider db, da being Int-Location, f being FinSeq-Location such that
-A57: i = (f,db):=da by SCMFSA_2:63;
-A58: now
-      let c be Int-Location;
-      thus Exec(i,s1).c = s1.c by A57,SCMFSA_2:99
-        .= s2.c by A1,Th30
-        .= Exec(i,s2).c by A57,SCMFSA_2:99;
-    end;
+A58: i = (f,db):=da by SCMFSA_2:63;
 A59: now
       let g be FinSeq-Location;
       per cases;
       suppose
 A60:    g=f;
-        consider m such that
-A61:    m = abs(s1.db) and
-A62:    Exec((f,db):=da, s1).f = s1.f+*(m,s1.da) by SCMFSA_2:99;
+A61:    s1.da = s2.da by A1,Th30;
         consider n such that
-A63:    n = abs(s2.db) and
-A64:    Exec((f,db):=da, s2).f = s2.f+*(n,s2.da) by SCMFSA_2:99;
-        m = n & s1.da = s2.da & s1.f = s2.f by A1,A61,A63,Th30,Th31;
-        hence Exec(i,s1).g = Exec(i,s2).g by A57,A60,A62,A64;
+A62:    n = abs(s2.db) and
+A63:    Exec((f,db):=da, s2).f = s2.f+*(n,s2.da) by SCMFSA_2:99;
+        consider m such that
+A64:    m = abs(s1.db) and
+A65:    Exec((f,db):=da, s1).f = s1.f+*(m,s1.da) by SCMFSA_2:99;
+        m = n by A1,A64,A62,Th30;
+        hence Exec(i,s1).g = Exec(i,s2).g by A1,A58,A60,A65,A63,A61,Th31;
       end;
       suppose
-A65:    g<>f;
-        hence Exec(i,s1).g = s1.g by A57,SCMFSA_2:99
+A66:    g<>f;
+        hence Exec(i,s1).g = s1.g by A58,SCMFSA_2:99
           .= s2.g by A1,Th31
-          .= Exec(i,s2).g by A57,A65,SCMFSA_2:99;
+          .= Exec(i,s2).g by A58,A66,SCMFSA_2:99;
       end;
     end;
-    IC Exec(i,s1) = Next IC s1 by A57,SCMFSA_2:99
-      .= Next IC s2 by A1,AMI_1:121
-      .= IC Exec(i,s2) by A57,SCMFSA_2:99;
-    hence thesis by A58,A59,Th28;
-  end;
-  suppose InsCode i = 11;
-    then consider da being Int-Location, f being FinSeq-Location such that
-A66: i = da :=len f by SCMFSA_2:64;
 A67: now
+      let c be Int-Location;
+      thus Exec(i,s1).c = s1.c by A58,SCMFSA_2:99
+        .= s2.c by A1,Th30
+        .= Exec(i,s2).c by A58,SCMFSA_2:99;
+    end;
+    IC Exec(i,s1) = Next IC s1 by A58,SCMFSA_2:99
+      .= Next IC s2 by A1,AMI_1:121
+      .= IC Exec(i,s2) by A58,SCMFSA_2:99;
+    hence thesis by A67,A59,Th28;
+  end;
+  suppose
+    InsCode i = 11;
+    then consider da being Int-Location, f being FinSeq-Location such that
+A68: i = da :=len f by SCMFSA_2:64;
+A69: now
       let c be Int-Location;
       per cases;
       suppose
-A68:    c = da;
-        hence Exec(i,s1).c = len(s1.f) by A66,SCMFSA_2:100
+A70:    c = da;
+        hence Exec(i,s1).c = len(s1.f) by A68,SCMFSA_2:100
           .= len(s2.f) by A1,Th31
-          .= Exec(i,s2).c by A66,A68,SCMFSA_2:100;
+          .= Exec(i,s2).c by A68,A70,SCMFSA_2:100;
       end;
       suppose
-A69:    c <> da;
-        hence Exec(i,s1).c = s1.c by A66,SCMFSA_2:100
+A71:    c <> da;
+        hence Exec(i,s1).c = s1.c by A68,SCMFSA_2:100
           .= s2.c by A1,Th30
-          .= Exec(i,s2).c by A66,A69,SCMFSA_2:100;
+          .= Exec(i,s2).c by A68,A71,SCMFSA_2:100;
       end;
     end;
-A70: now
-      let f be FinSeq-Location;
-      thus Exec(i,s1).f = s1.f by A66,SCMFSA_2:100
-        .= s2.f by A1,Th31
-        .= Exec(i,s2).f by A66,SCMFSA_2:100;
-    end;
-    IC Exec(i,s1) = Next IC s1 by A66,SCMFSA_2:100
-      .= Next IC s2 by A1,AMI_1:121
-      .= IC Exec(i,s2) by A66,SCMFSA_2:100;
-    hence thesis by A67,A70,Th28;
-  end;
-  suppose InsCode i = 12;
-    then consider da being Int-Location, f being FinSeq-Location such that
-A71: i = f:=<0,...,0>da by SCMFSA_2:65;
 A72: now
-      let c be Int-Location;
-      thus Exec(i,s1).c = s1.c by A71,SCMFSA_2:101
-        .= s2.c by A1,Th30
-        .= Exec(i,s2).c by A71,SCMFSA_2:101;
+      let f be FinSeq-Location;
+      thus Exec(i,s1).f = s1.f by A68,SCMFSA_2:100
+        .= s2.f by A1,Th31
+        .= Exec(i,s2).f by A68,SCMFSA_2:100;
     end;
-A73: now
+    IC Exec(i,s1) = Next IC s1 by A68,SCMFSA_2:100
+      .= Next IC s2 by A1,AMI_1:121
+      .= IC Exec(i,s2) by A68,SCMFSA_2:100;
+    hence thesis by A69,A72,Th28;
+  end;
+  suppose
+    InsCode i = 12;
+    then consider da being Int-Location, f being FinSeq-Location such that
+A73: i = f:=<0,...,0>da by SCMFSA_2:65;
+A74: now
       let g be FinSeq-Location;
       per cases;
       suppose
-A74:    g = f;
-        consider m such that
-A75:    m = abs(s1.da) and
-A76:    Exec(f:=<0,...,0>da, s1).f = m |-> 0 by SCMFSA_2:101;
-        consider n such that
-A77:    n = abs(s2.da) and
-A78:    Exec(f:=<0,...,0>da, s2).f = n |-> 0 by SCMFSA_2:101;
-        thus Exec(i,s1).g = Exec(i,s2).g by A1,A71,A74,A75,A76,A77,A78,Th30;
+A75:    g = f;
+        (ex m st m = abs(s1.da) & Exec(f:=<0,...,0>da, s1).f = m |-> 0 )
+& ex n st n = abs(s2.da) & Exec(f:=<0,...,0>da, s2).f = n |-> 0 by SCMFSA_2:101
+        ;
+        hence Exec(i,s1).g = Exec(i,s2).g by A1,A73,A75,Th30;
       end;
       suppose
-A79:    g <> f;
-        hence Exec(i,s1).g = s1.g by A71,SCMFSA_2:101
+A76:    g <> f;
+        hence Exec(i,s1).g = s1.g by A73,SCMFSA_2:101
           .= s2.g by A1,Th31
-          .= Exec(i,s2).g by A71,A79,SCMFSA_2:101;
+          .= Exec(i,s2).g by A73,A76,SCMFSA_2:101;
       end;
     end;
-    IC Exec(i,s1) = Next IC s1 by A71,SCMFSA_2:101
+A77: now
+      let c be Int-Location;
+      thus Exec(i,s1).c = s1.c by A73,SCMFSA_2:101
+        .= s2.c by A1,Th30
+        .= Exec(i,s2).c by A73,SCMFSA_2:101;
+    end;
+    IC Exec(i,s1) = Next IC s1 by A73,SCMFSA_2:101
       .= Next IC s2 by A1,AMI_1:121
-      .= IC Exec(i,s2) by A71,SCMFSA_2:101;
-    hence thesis by A72,A73,Th28;
+      .= IC Exec(i,s2) by A73,SCMFSA_2:101;
+    hence thesis by A77,A74,Th28;
   end;
 end;
 
 theorem
   (Initialized I)|NAT = I
 proof
-A1: Initialized I =
-  I +* (((intloc 0) .--> 1) +* Start-At(insloc 0)) by FUNCT_4:15;
-A2: dom I c= NAT by RELAT_1:def 18;
+  dom Start-At(insloc 0) = { IC SCM+FSA } by FUNCOP_1:19;
+  then
+A1: dom Start-At(insloc 0) misses NAT by Lm2,ZFMISC_1:56;
+A2: Initialized I = I +* (((intloc 0) .--> 1) +* Start-At(insloc 0)) & dom I
+  c= NAT by FUNCT_4:15,RELAT_1:def 18;
   dom((intloc 0) .--> 1) = { intloc 0 } by FUNCOP_1:19;
   then
 A3: dom((intloc 0) .--> 1) misses NAT by Lm1,ZFMISC_1:56;
-  dom Start-At(insloc 0) = { IC SCM+FSA } by FUNCOP_1:19;
-  then
-A4: dom Start-At(insloc 0) misses NAT by Lm2,ZFMISC_1:56;
-  dom (((intloc 0) .--> 1) +* Start-At(insloc 0)) =
-  dom((intloc 0) .--> 1) \/ dom Start-At(insloc 0) by FUNCT_4:def 1;
-  then dom (((intloc 0) .--> 1) +* Start-At(insloc 0)) misses
-  NAT by A3,A4,XBOOLE_1:70;
-  hence thesis by A1,A2,FUNCT_4:82;
+  dom (((intloc 0) .--> 1) +* Start-At(insloc 0)) = dom((intloc 0) .--> 1)
+  \/ dom Start-At(insloc 0) by FUNCT_4:def 1;
+  then dom (((intloc 0) .--> 1) +* Start-At(insloc 0)) misses NAT by A3,A1,
+XBOOLE_1:70;
+  hence thesis by A2,FUNCT_4:82;
 end;
 
-scheme SCMFSAEx{ F(set) -> Element of the Instructions of SCM+FSA,
-  G(set) -> Integer, H(set) -> FinSequence of INT,
-  I() -> Instruction-Location of SCM+FSA }:
-  ex S being State of SCM+FSA st IC S = I() & for i being Element of NAT holds
-  S.insloc i = F(i) & S.intloc i = G(i) & S.fsloc i = H(i)
-proof
-  defpred P[set,set] means ex m st $1 = IC SCM+FSA & $2 = I() or
-  $1 = insloc m & $2 = F(m) or $1 = intloc m & $2 = G(m) or
-  $1 = fsloc m & $2 = H(m);
+scheme
+  SCMFSAEx{ F(set) -> Element of the Instructions of SCM+FSA, G(set) ->
+Integer, H(set) -> FinSequence of INT, I() -> Instruction-Location of SCM+FSA }
+: ex S being State of SCM+FSA st IC S = I() & for i being Element of NAT holds
+  S.insloc i = F(i) & S.intloc i = G(i) & S.fsloc i = H(i) proof
+  defpred P[set,set] means ex m st $1 = IC SCM+FSA & $2 = I() or $1 = insloc m
+  & $2 = F(m) or $1 = intloc m & $2 = G(m) or $1 = fsloc m & $2 = H(m);
 A1: for e being set st e in the carrier of SCM+FSA ex u being set st P[e,u]
   proof
     let e be set;
-    assume e in the carrier of SCM+FSA;
-    then e in Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA} or
-    e in NAT by SCMFSA_2:8,XBOOLE_0:def 3;
+    assume
+    e in the carrier of SCM+FSA;
     then
-A2: e in Int-Locations \/ FinSeq-Locations or e in {IC SCM+FSA} or
-    e in NAT by XBOOLE_0:def 3;
-    now per cases by A2,XBOOLE_0:def 3;
-      case e in {IC SCM+FSA};
+    e in Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA} or e in NAT by
+SCMFSA_2:8,XBOOLE_0:def 3;
+    then
+A2: e in Int-Locations \/ FinSeq-Locations or e in {IC SCM+FSA} or e in
+    NAT by XBOOLE_0:def 3;
+    now
+      per cases by A2,XBOOLE_0:def 3;
+      case
+        e in {IC SCM+FSA};
         hence e = IC SCM+FSA by TARSKI:def 1;
       end;
-      case e in Int-Locations;
+      case
+        e in Int-Locations;
         then e is Int-Location by SCMFSA_2:11;
         hence ex m being Element of NAT st e = intloc m by SCMFSA_2:19;
       end;
-      case e in FinSeq-Locations;
+      case
+        e in FinSeq-Locations;
         then e is FinSeq-Location by SCMFSA_2:12;
         hence ex m being Element of NAT st e = fsloc m by SCMFSA_2:20;
       end;
-      case e in NAT;
-        then reconsider l = e as Instruction-Location of SCM+FSA
-        by AMI_1:def 4;
-  reconsider m = l as Element of NAT by ORDINAL1:def 13;
+      case
+        e in NAT;
+        then reconsider l = e as Instruction-Location of SCM+FSA by AMI_1:def 4
+        ;
+        reconsider m = l as Element of NAT by ORDINAL1:def 13;
         take m;
         thus e = insloc m;
       end;
@@ -1110,226 +1158,217 @@ A3: e = IC SCM+FSA or e = insloc m or e = intloc m or e = fsloc m;
     per cases by A3;
     suppose
 A4:   e = IC SCM+FSA;
-      take u = I(); thus thesis by A4;
+      take u = I();
+      thus thesis by A4;
     end;
     suppose
 A5:   e = insloc m;
-      take u = F(m); thus thesis by A5;
+      take u = F(m);
+      thus thesis by A5;
     end;
     suppose
 A6:   e = intloc m;
-      take u = G(m); thus thesis by A6;
+      take u = G(m);
+      thus thesis by A6;
     end;
     suppose
 A7:   e = fsloc m;
-      take u = H(m); thus thesis by A7;
+      take u = H(m);
+      thus thesis by A7;
     end;
   end;
   consider f being Function such that
 A8: dom f = the carrier of SCM+FSA and
-A9: for e being set st e in the carrier of SCM+FSA holds P[e,f.e]
-  from CLASSES1:sch 1(A1);
+A9: for e being set st e in the carrier of SCM+FSA holds P[e,f.e] from
+  CLASSES1:sch 1(A1);
 A10: dom the Object-Kind of SCM+FSA = the carrier of SCM+FSA by FUNCT_2:def 1;
   now
     let x be set;
     assume
 A11: x in dom the Object-Kind of SCM+FSA;
-    then x in Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA} or
-    x in NAT by A10,SCMFSA_2:8,XBOOLE_0:def 3;
+    then consider m such that
+A12: x = IC SCM+FSA & f.x = I() or x = insloc m & f.x = F(m) or x =
+    intloc m & f.x = G(m) or x = fsloc m & f.x = H(m) by A9,A10;
+    x in Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA} or x in NAT by A10
+,A11,SCMFSA_2:8,XBOOLE_0:def 3;
     then
-A12: x in Int-Locations \/ FinSeq-Locations or x in {IC SCM+FSA} or
-    x in NAT by XBOOLE_0:def 3;
-    consider m such that
-A13: x = IC SCM+FSA & f.x = I() or x = insloc m & f.x = F(m) or
-    x = intloc m & f.x = G(m) or x = fsloc m & f.x = H(m) by A9,A10,A11;
-    per cases by A12,XBOOLE_0:def 3;
-    suppose x in Int-Locations;
+A13: x in Int-Locations \/ FinSeq-Locations or x in {IC SCM+FSA} or x in
+    NAT by XBOOLE_0:def 3;
+    per cases by A13,XBOOLE_0:def 3;
+    suppose
+      x in Int-Locations;
       then
 A14:  x is Int-Location by SCMFSA_2:11;
-      then (the Object-Kind of SCM+FSA).x = ObjectKind intloc m by A13,
+      then (the Object-Kind of SCM+FSA).x = ObjectKind intloc m by A12,
 SCMFSA_2:81,83,84
         .= INT by SCMFSA_2:26;
-      hence f.x in (the Object-Kind of SCM+FSA).x
-      by A13,A14,INT_1:def 2,SCMFSA_2:83,84;
+      hence f.x in (the Object-Kind of SCM+FSA).x by A12,A14,INT_1:def 2
+,SCMFSA_2:83,84;
     end;
-    suppose x in FinSeq-Locations;
+    suppose
+      x in FinSeq-Locations;
       then
 A15:  x is FinSeq-Location by SCMFSA_2:12;
-      then (the Object-Kind of SCM+FSA).x = ObjectKind fsloc m by A13,
+      then (the Object-Kind of SCM+FSA).x = ObjectKind fsloc m by A12,
 SCMFSA_2:82,83,85
         .= INT* by SCMFSA_2:27;
-      hence f.x in (the Object-Kind of SCM+FSA).x by A13,A15,FINSEQ_1:def 11
+      hence f.x in (the Object-Kind of SCM+FSA).x by A12,A15,FINSEQ_1:def 11
 ,SCMFSA_2:82,83,85;
     end;
     suppose
 A16:  x in {IC SCM+FSA};
       then
-A17:  x = IC SCM+FSA by TARSKI:def 1;
-      (the Object-Kind of SCM+FSA).x = ObjectKind IC SCM+FSA by A16,
-TARSKI:def 1
+A17:  (the Object-Kind of SCM+FSA).x = ObjectKind IC SCM+FSA by TARSKI:def 1
         .= NAT by AMI_1:def 11;
-      hence f.x in (the Object-Kind of SCM+FSA).x
-      by A13,A17,AMI_1:48,def 4,SCMFSA_2:81,82;
+      x = IC SCM+FSA by A16,TARSKI:def 1;
+      hence f.x in (the Object-Kind of SCM+FSA).x by A12,A17,AMI_1:48,def 4
+,SCMFSA_2:81,82;
     end;
-    suppose x in NAT;
+    suppose
+      x in NAT;
       then reconsider l = x as Instruction-Location of SCM+FSA by AMI_1:def 4;
-      (the Object-Kind of SCM+FSA).l = ObjectKind insloc m
-      by A13,AMI_1:48,SCMFSA_2:84,85
+      (the Object-Kind of SCM+FSA).l = ObjectKind insloc m by A12,AMI_1:48
+,SCMFSA_2:84,85
         .= the Instructions of SCM+FSA by AMI_1:def 14;
-
-hence f.x in (the Object-Kind of SCM+FSA).x by A13,AMI_1:48,SCMFSA_2:84,85;
+      hence f.x in (the Object-Kind of SCM+FSA).x by A12,AMI_1:48,SCMFSA_2:84
+,85;
     end;
   end;
   then reconsider f as State of SCM+FSA by A8,A10,CARD_3:18;
   take f;
-  consider m such that
-A18: IC SCM+FSA = IC SCM+FSA & f.IC SCM+FSA = I() or
-  IC SCM+FSA = insloc m & f.IC SCM+FSA = F(m) or
-  IC SCM+FSA = intloc m & f.IC SCM+FSA = G(m) or
-  IC SCM+FSA = fsloc m & f.IC SCM+FSA = H(m) by A9;
-  thus IC f = I() by A18,AMI_1:48,SCMFSA_2:81,82;
+  ex m st ( IC SCM+FSA = IC SCM+FSA & f.IC SCM+FSA = I() or IC SCM+FSA =
+  insloc m & f.IC SCM+FSA = F(m) or IC SCM+FSA = intloc m & f.IC SCM+FSA = G(m)
+  or IC SCM+FSA = fsloc m & f.IC SCM+FSA = H(m)) by A9;
+  hence IC f = I() by AMI_1:48,SCMFSA_2:81,82;
   let i be Element of NAT;
-  consider m such that
-A19: insloc i = IC SCM+FSA & f.insloc i = I() or
-  insloc i = insloc m & f.insloc i = F(m) or
-  insloc i = intloc m & f.insloc i = G(m) or
-  insloc i = fsloc m & f.insloc i = H(m) by A9;
-  thus f.insloc i = F(i) by A19,AMI_1:48,SCMFSA_2:84,85;
-  consider m such that
-A20: intloc i = IC SCM+FSA & f.intloc i = I() or
-  intloc i = insloc m & f.intloc i = F(m) or
-  intloc i = intloc m & f.intloc i = G(m) or
-  intloc i = fsloc m & f.intloc i = H(m) by A9;
-  thus f.intloc i = G(i) by A20,AMI_3:52,SCMFSA_2:81,83,84;
-  consider m such that
-A21: fsloc i = IC SCM+FSA & f.fsloc i = I() or
-  fsloc i = insloc m & f.fsloc i = F(m) or
-  fsloc i = intloc m & f.fsloc i = G(m) or
-  fsloc i = fsloc m & f.fsloc i = H(m) by A9;
-  thus thesis by A21,SCMFSA_2:82,83,85;
+  ex m st ( insloc i = IC SCM+FSA & f.insloc i = I() or insloc i = insloc
+m & f.insloc i = F(m) or insloc i = intloc m & f.insloc i = G (m) or insloc i =
+  fsloc m & f.insloc i = H(m)) by A9;
+  hence f.insloc i = F(i) by AMI_1:48,SCMFSA_2:84,85;
+  ex m st ( intloc i = IC SCM+FSA & f.intloc i = I() or intloc i = insloc
+m & f.intloc i = F(m) or intloc i = intloc m & f.intloc i = G (m) or intloc i =
+  fsloc m & f.intloc i = H(m)) by A9;
+  hence f.intloc i = G(i) by AMI_3:52,SCMFSA_2:81,83,84;
+  ex m st ( fsloc i = IC SCM+FSA & f.fsloc i = I() or fsloc i = insloc m &
+f.fsloc i = F(m) or fsloc i = intloc m & f.fsloc i = G(m) or fsloc i = fsloc m
+  & f.fsloc i = H(m)) by A9;
+  hence thesis by SCMFSA_2:82,83,85;
 end;
 
 theorem
-  for s being State of SCM+FSA holds
-  dom s = Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA} \/
-  NAT by AMI_1:79,SCMFSA_2:8;
+  for s being State of SCM+FSA holds dom s = Int-Locations \/
+  FinSeq-Locations \/ {IC SCM+FSA} \/ NAT by AMI_1:79,SCMFSA_2:8;
 
 theorem
-  for s being State of SCM+FSA, x being set st x in dom s holds
-  x is Int-Location or x is FinSeq-Location or
-  x = IC SCM+FSA or x is Instruction-Location of SCM+FSA
+  for s being State of SCM+FSA, x being set st x in dom s holds x is
+  Int-Location or x is FinSeq-Location or x = IC SCM+FSA or x is
+  Instruction-Location of SCM+FSA
 proof
   let s be State of SCM+FSA;
   let x be set;
-A1: dom s = Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA} \/
-  NAT by AMI_1:79,SCMFSA_2:8;
-  assume x in dom s;
-  then x in Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA} or
-  x in NAT by A1,XBOOLE_0:def 3;
-  then x in Int-Locations \/ FinSeq-Locations or x in {IC SCM+FSA} or
-  x in NAT by XBOOLE_0:def 3;
-  then x in Int-Locations or x in FinSeq-Locations or x = IC SCM+FSA or
-  x is Element of NAT by TARSKI:def 1,XBOOLE_0:def 3;
+  assume
+A1: x in dom s;
+  dom s = Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA} \/ NAT by AMI_1:79
+,SCMFSA_2:8;
+  then x in Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA} or x in NAT by A1
+,XBOOLE_0:def 3;
+  then
+  x in Int-Locations \/ FinSeq-Locations or x in {IC SCM+FSA} or x in NAT
+  by XBOOLE_0:def 3;
+  then x in Int-Locations or x in FinSeq-Locations or x = IC SCM+FSA or x is
+  Element of NAT by TARSKI:def 1,XBOOLE_0:def 3;
   hence thesis by AMI_1:def 4,SCMFSA_2:11,12;
 end;
 
 theorem
-  for s1,s2 being State of SCM+FSA holds
-  (for l being Instruction-Location of SCM+FSA holds s1.l = s2.l)
-  iff s1 | NAT = s2 | NAT
+  for s1,s2 being State of SCM+FSA holds (for l being
+  Instruction-Location of SCM+FSA holds s1.l = s2.l) iff s1 | NAT = s2 | NAT
 proof
   let s1,s2 be State of SCM+FSA;
-A1: NAT c= dom s1 by AMI_1:114;
-A2: NAT c= dom s2 by AMI_1:114;
-A3: (for l being Instruction-Location of SCM+FSA holds s1.l = s2.l) implies
-  (for l being set st l in NAT holds s1.l = s2.l)
+A1: (for l being Instruction-Location of SCM+FSA holds s1.l = s2.l) implies
+  for l being set st l in NAT holds s1.l = s2.l
   proof
     assume
-A4: for l being Instruction-Location of SCM+FSA holds s1.l = s2.l;
+A2: for l being Instruction-Location of SCM+FSA holds s1.l = s2.l;
     let l being set;
-    assume l in NAT;
+    assume
+    l in NAT;
     then reconsider l as Instruction-Location of SCM+FSA by AMI_1:def 4;
-    s1.l = s2.l by A4;
+    s1.l = s2.l by A2;
     hence thesis;
   end;
-  (for l being set st l in NAT holds s1.l = s2.l) implies
-  (for l being Instruction-Location of SCM+FSA holds s1.l = s2.l)
+A3: (for l being set st l in NAT holds s1.l = s2.l) implies for l being
+  Instruction-Location of SCM+FSA holds s1.l = s2.l
   proof
     assume
-A5: for l being set st l in NAT holds s1.l = s2.l;
+A4: for l being set st l in NAT holds s1.l = s2.l;
     let l be Instruction-Location of SCM+FSA;
     l in NAT by AMI_1:def 4;
-    hence thesis by A5;
+    hence thesis by A4;
   end;
-  hence thesis by A1,A2,A3,FUNCT_1:165;
+  NAT c= dom s1 & NAT c= dom s2 by AMI_1:114;
+  hence thesis by A1,A3,FUNCT_1:165;
 end;
 
 theorem
-  for i being Instruction-Location of SCM+FSA holds
-  not i in Int-Locations \/ FinSeq-Locations &
-  not IC SCM+FSA in Int-Locations \/ FinSeq-Locations
+  for i being Instruction-Location of SCM+FSA holds not i in
+  Int-Locations \/ FinSeq-Locations & not IC SCM+FSA in Int-Locations \/
+  FinSeq-Locations
 proof
   let i be Instruction-Location of SCM+FSA;
-A1: i in NAT by AMI_1:def 4;
-  then
-A2: not i in Int-Locations by SCMFSA_2:13,XBOOLE_0:3;
-  not i in FinSeq-Locations by A1,SCMFSA_2:14,XBOOLE_0:3;
-  hence not i in Int-Locations \/ FinSeq-Locations by A2,XBOOLE_0:def 3;
-A3: now
-    assume IC SCM+FSA in Int-Locations;
-    then IC SCM+FSA is Int-Location by SCMFSA_2:11;
-    hence contradiction by SCMFSA_2:81;
-  end;
-  now
-    assume IC SCM+FSA in FinSeq-Locations;
+A1: now
+    assume
+    IC SCM+FSA in FinSeq-Locations;
     then IC SCM+FSA is FinSeq-Location by SCMFSA_2:12;
     hence contradiction by SCMFSA_2:82;
   end;
-  hence thesis by A3,XBOOLE_0:def 3;
+  i in NAT by AMI_1:def 4;
+  then ( not i in Int-Locations)& not i in FinSeq-Locations by SCMFSA_2:13,14
+,XBOOLE_0:3;
+  hence not i in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 3;
+  now
+    assume
+    IC SCM+FSA in Int-Locations;
+    then IC SCM+FSA is Int-Location by SCMFSA_2:11;
+    hence contradiction by SCMFSA_2:81;
+  end;
+  hence thesis by A1,XBOOLE_0:def 3;
 end;
 
 theorem Th38:
-  for s1,s2 being State of SCM+FSA holds
-  ((for a being Int-Location holds s1.a = s2.a) &
-  for f being FinSeq-Location holds s1.f = s2.f)
-  iff DataPart s1 = DataPart s2
+  for s1,s2 being State of SCM+FSA holds ((for a being
+Int-Location holds s1.a = s2.a) & for f being FinSeq-Location holds s1.f = s2.f
+  ) iff DataPart s1 = DataPart s2
 proof
   let s1,s2 be State of SCM+FSA;
-A1: Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA} \/ NAT
-  = (Int-Locations \/ FinSeq-Locations) \/ ({IC SCM+FSA} \/
-  NAT) by XBOOLE_1:4;
-  dom s1 = (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA} \/
-  NAT) by AMI_1:79,SCMFSA_2:8;
-  then
-A2: Int-Locations \/ FinSeq-Locations c= dom s1 by A1,XBOOLE_1:7;
-  dom s2 = (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA} \/
-  NAT) by AMI_1:79,SCMFSA_2:8;
-  then
-A3: Int-Locations \/ FinSeq-Locations c= dom s2 by A1,XBOOLE_1:7;
-A4: now
-    assume
-A5: (for a being Int-Location holds s1.a = s2.a) &
-    for f being FinSeq-Location holds s1.f = s2.f;
+A1: Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA} \/ NAT = (
+  Int-Locations \/ FinSeq-Locations) \/ ({IC SCM+FSA} \/ NAT) by XBOOLE_1:4;
+A2: now
+    assume that
+A3: for a being Int-Location holds s1.a = s2.a and
+A4: for f being FinSeq-Location holds s1.f = s2.f;
     hereby
       let x be set;
       assume
-A6:   x in Int-Locations \/ FinSeq-Locations;
+A5:   x in Int-Locations \/ FinSeq-Locations;
       per cases;
-      suppose x in Int-Locations;
+      suppose
+        x in Int-Locations;
         then x is Int-Location by SCMFSA_2:11;
-        hence s1.x = s2.x by A5;
+        hence s1.x = s2.x by A3;
       end;
-      suppose not x in Int-Locations;
-        then x in FinSeq-Locations by A6,XBOOLE_0:def 3;
+      suppose
+        not x in Int-Locations;
+        then x in FinSeq-Locations by A5,XBOOLE_0:def 3;
         then x is FinSeq-Location by SCMFSA_2:12;
-        hence s1.x = s2.x by A5;
+        hence s1.x = s2.x by A4;
       end;
     end;
   end;
-  now
+A6: now
     assume
-A7: for x being set st x in Int-Locations \/ FinSeq-Locations
-    holds s1.x = s2.x;
+A7: for x being set st x in Int-Locations \/ FinSeq-Locations holds
+    s1.x = s2.x;
     hereby
       let a be Int-Location;
       a in Int-Locations by SCMFSA_2:9;
@@ -1343,7 +1382,14 @@ A7: for x being set st x in Int-Locations \/ FinSeq-Locations
       hence s1.f = s2.f by A7;
     end;
   end;
-  hence thesis by A2,A3,A4,FUNCT_1:165,SCMFSA_2:127;
+  dom s2 = (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA} \/ NAT) by
+AMI_1:79,SCMFSA_2:8;
+  then
+A8: Int-Locations \/ FinSeq-Locations c= dom s2 by A1,XBOOLE_1:7;
+  dom s1 = (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA} \/ NAT) by
+AMI_1:79,SCMFSA_2:8;
+  then Int-Locations \/ FinSeq-Locations c= dom s1 by A1,XBOOLE_1:7;
+  hence thesis by A8,A2,A6,FUNCT_1:165,SCMFSA_2:127;
 end;
 
 theorem
@@ -1352,475 +1398,475 @@ theorem
 proof
   let s1,s2 be State of SCM+FSA;
   assume
-A1: s1,s2 equal_outside NAT;
-  then
-A2: for a being Int-Location holds s1.a = s2.a by Th30;
-  for f being FinSeq-Location holds s1.f = s2.f by A1,Th31;
-  hence thesis by A2,Th38;
+  s1,s2 equal_outside NAT;
+  then ( for a being Int-Location holds s1.a = s2.a)& for f being
+  FinSeq-Location holds s1.f = s2.f by Th30,Th31;
+  hence thesis by Th38;
 end;
 
 canceled;
 
 theorem
-  for s1,s2 being State of SCM+FSA, n being Element of NAT,
-  i being Instruction of SCM+FSA holds IC s1 + n = IC s2 &
-  DataPart s1 = DataPart s2 implies
-  IC Exec(i,s1) + n = IC Exec(IncAddr(i,n),s2) &
-  DataPart Exec(i,s1) = DataPart Exec(IncAddr(i,n),s2)
+  for s1,s2 being State of SCM+FSA, n being Element of NAT, i being
+  Instruction of SCM+FSA holds IC s1 + n = IC s2 & DataPart s1 = DataPart s2
+  implies IC Exec(i,s1) + n = IC Exec(IncAddr(i,n),s2) & DataPart Exec(i,s1) =
+  DataPart Exec(IncAddr(i,n),s2)
 proof
+  set D = Int-Locations \/ FinSeq-Locations;
   let s1,s2 be State of SCM+FSA;
   let n be Element of NAT;
   let i be Instruction of SCM+FSA;
   assume that
 A1: IC s1 + n = IC s2 and
 A2: DataPart s1 = DataPart s2;
-  set D = Int-Locations \/ FinSeq-Locations;
   reconsider k1 = IC s1 as Element of NAT by ORDINAL1:def 13;
-A4: Next IC s1 + n = Next IC s2
-  proof
-    thus Next IC s1 + n = insloc (k1 + 1) + n by NAT_1:39
-      .= insloc (k1 + n + 1)
-      .= Next (IC s2) by A1,NAT_1:39;
-  end;
-A5: now
-    assume that
-A6: (InsCode i < 6 or 8 < InsCode i) and
-A7: InsCode i <> 0;
+A3: Next IC s1 + n = insloc (k1 + 1) + n by NAT_1:39
+    .= insloc (k1 + n + 1)
+    .= Next (IC s2) by A1,NAT_1:39;
+A4: now
     set I = InsCode i;
-A8: not InsCode i in {0,6,7,8}
-    proof
-      assume
-A9:   InsCode i in {0,6,7,8};
-      per cases by A9,ENUMSET1:def 2;
-      suppose I = 0;
-        hence contradiction by A7;
-      end;
-      suppose I = 6;
-        hence contradiction by A6;
-      end;
-      suppose I = 7;
-        hence contradiction by A6;
-      end;
-      suppose I = 8;
-        hence contradiction by A6;
-      end;
-    end;
+    assume that
+A5: InsCode i < 6 or 8 < InsCode i and
+A6: InsCode i <> 0;
     not InsCode i in {6,7,8}
     proof
       assume
-A10:  InsCode i in {6,7,8};
-      per cases by A10,ENUMSET1:def 1;
-      suppose I = 6;
-        hence contradiction by A6;
+A7:   InsCode i in {6,7,8};
+      per cases by A7,ENUMSET1:def 1;
+      suppose
+        I = 6;
+        hence contradiction by A5;
       end;
-      suppose I = 7;
-        hence contradiction by A6;
+      suppose
+        I = 7;
+        hence contradiction by A5;
       end;
-      suppose I = 8;
-        hence contradiction by A6;
+      suppose
+        I = 8;
+        hence contradiction by A5;
       end;
     end;
     then
-A11: IncAddr(i,n) = i by SCMFSA_4:def 3;
-    IC Exec(i,s1) = Next IC s1 by A8,Th23;
-    hence IC Exec(i,s1) + n = IC Exec(IncAddr(i,n),s2) by A4,A8,A11,Th23;
+A8: IncAddr(i,n) = i by SCMFSA_4:def 3;
+A9: not InsCode i in {0,6,7,8}
+    proof
+      assume
+A10:  InsCode i in {0,6,7,8};
+      per cases by A10,ENUMSET1:def 2;
+      suppose
+        I = 0;
+        hence contradiction by A6;
+      end;
+      suppose
+        I = 6;
+        hence contradiction by A5;
+      end;
+      suppose
+        I = 7;
+        hence contradiction by A5;
+      end;
+      suppose
+        I = 8;
+        hence contradiction by A5;
+      end;
+    end;
+    then IC Exec(i,s1) = Next IC s1 by Th23;
+    hence IC Exec(i,s1) + n = IC Exec(IncAddr(i,n),s2) by A3,A9,A8,Th23;
   end;
-A12: InsCode i <= 11+1 by SCMFSA_2:35;
-A13: InsCode i <= 10+1 implies InsCode i <= 10 or InsCode i = 11 by NAT_1:8;
-A14: InsCode i <= 9+1 implies InsCode i <= 8+1 or InsCode i = 10 by NAT_1:8;
-  per cases by A12,A13,A14,NAT_1:8,33;
-  suppose InsCode i = 0;
+A11: InsCode i <= 9+1 implies InsCode i <= 8+1 or InsCode i = 10 by NAT_1:8;
+A12: InsCode i <= 10+1 implies InsCode i <= 10 or InsCode i = 11 by NAT_1:8;
+A13: InsCode i <= 11+1 by SCMFSA_2:35;
+  per cases by A13,A12,A11,NAT_1:8,33;
+  suppose
+    InsCode i = 0;
     then
-A15: i = halt SCM+FSA by SCMFSA_2:122;
+A14: i = halt SCM+FSA by SCMFSA_2:122;
     then Exec(i,s1) = s1 & Exec(i,s2) = s2 by AMI_1:def 8;
-    hence thesis by A1,A2,A15,SCMFSA_4:8;
+    hence thesis by A1,A2,A14,SCMFSA_4:8;
   end;
   suppose
-A16: InsCode i = 1;
-    then consider da, db being Int-Location such that
-A17: i = da := db by SCMFSA_2:54;
-A18: IncAddr(i,n) = i by A17,SCMFSA_4:9;
-    thus IC Exec(i,s1) + n = IC Exec(IncAddr(i,n),s2) by A5,A16;
-A19: now
+A15: InsCode i = 1;
+    hence IC Exec(i,s1) + n = IC Exec(IncAddr(i,n),s2) by A4;
+    consider da, db being Int-Location such that
+A16: i = da := db by A15,SCMFSA_2:54;
+A17: IncAddr(i,n) = i by A16,SCMFSA_4:9;
+A18: now
       let c be Int-Location;
       per cases;
       suppose
-A20:    c = da;
-        hence Exec(i,s1).c = s1.db by A17,SCMFSA_2:89
+A19:    c = da;
+        hence Exec(i,s1).c = s1.db by A16,SCMFSA_2:89
           .= s2.db by A2,Th38
-          .= Exec(IncAddr(i,n),s2).c by A17,A18,A20,SCMFSA_2:89;
+          .= Exec(IncAddr(i,n),s2).c by A16,A17,A19,SCMFSA_2:89;
       end;
       suppose
-A21:    c <> da;
-        hence Exec(i,s1).c = s1.c by A17,SCMFSA_2:89
+A20:    c <> da;
+        hence Exec(i,s1).c = s1.c by A16,SCMFSA_2:89
           .= s2.c by A2,Th38
-          .= Exec(IncAddr(i,n),s2).c by A17,A18,A21,SCMFSA_2:89;
+          .= Exec(IncAddr(i,n),s2).c by A16,A17,A20,SCMFSA_2:89;
       end;
     end;
     now
       let f be FinSeq-Location;
-      thus Exec(i,s1).f = s1.f by A17,SCMFSA_2:89
+      thus Exec(i,s1).f = s1.f by A16,SCMFSA_2:89
         .= s2.f by A2,Th38
-        .= Exec(IncAddr(i,n),s2).f by A17,A18,SCMFSA_2:89;
+        .= Exec(IncAddr(i,n),s2).f by A16,A17,SCMFSA_2:89;
     end;
-    hence thesis by A19,Th38;
+    hence thesis by A18,Th38;
   end;
   suppose
-A22: InsCode i = 2;
-    then consider da, db being Int-Location such that
-A23: i = AddTo(da, db) by SCMFSA_2:55;
-A24: IncAddr(i,n) = i by A23,SCMFSA_4:10;
-    thus IC Exec(i,s1) + n = IC Exec(IncAddr(i,n),s2) by A5,A22;
-A25: now
+A21: InsCode i = 2;
+    hence IC Exec(i,s1) + n = IC Exec(IncAddr(i,n),s2) by A4;
+    consider da, db being Int-Location such that
+A22: i = AddTo(da, db) by A21,SCMFSA_2:55;
+A23: IncAddr(i,n) = i by A22,SCMFSA_4:10;
+A24: now
       let c be Int-Location;
       per cases;
       suppose
-A26:    c = da;
+A25:    c = da;
         s1.da = s2.da & s1.db = s2.db by A2,Th38;
-        hence Exec(i,s1).c = s2.da + s2.db by A23,A26,SCMFSA_2:90
-          .= Exec(IncAddr(i,n),s2).c by A23,A24,A26,SCMFSA_2:90;
+        hence Exec(i,s1).c = s2.da + s2.db by A22,A25,SCMFSA_2:90
+          .= Exec(IncAddr(i,n),s2).c by A22,A23,A25,SCMFSA_2:90;
       end;
       suppose
-A27:    c <> da;
-        hence Exec(i,s1).c = s1.c by A23,SCMFSA_2:90
+A26:    c <> da;
+        hence Exec(i,s1).c = s1.c by A22,SCMFSA_2:90
           .= s2.c by A2,Th38
-          .= Exec(IncAddr(i,n),s2).c by A23,A24,A27,SCMFSA_2:90;
+          .= Exec(IncAddr(i,n),s2).c by A22,A23,A26,SCMFSA_2:90;
       end;
     end;
     now
       let f be FinSeq-Location;
-      thus Exec(i,s1).f = s1.f by A23,SCMFSA_2:90
+      thus Exec(i,s1).f = s1.f by A22,SCMFSA_2:90
         .= s2.f by A2,Th38
-        .= Exec(IncAddr(i,n),s2).f by A23,A24,SCMFSA_2:90;
+        .= Exec(IncAddr(i,n),s2).f by A22,A23,SCMFSA_2:90;
     end;
-    hence thesis by A25,Th38;
+    hence thesis by A24,Th38;
   end;
   suppose
-A28: InsCode i = 3;
-    then consider da, db being Int-Location such that
-A29: i = SubFrom(da, db) by SCMFSA_2:56;
-A30: IncAddr(i,n) = i by A29,SCMFSA_4:11;
-    thus IC Exec(i,s1) + n = IC Exec(IncAddr(i,n),s2) by A5,A28;
-A31: now
+A27: InsCode i = 3;
+    hence IC Exec(i,s1) + n = IC Exec(IncAddr(i,n),s2) by A4;
+    consider da, db being Int-Location such that
+A28: i = SubFrom(da, db) by A27,SCMFSA_2:56;
+A29: IncAddr(i,n) = i by A28,SCMFSA_4:11;
+A30: now
       let c be Int-Location;
       per cases;
       suppose
-A32:    c = da;
+A31:    c = da;
         s1.da = s2.da & s1.db = s2.db by A2,Th38;
-        hence Exec(i,s1).c = s2.da - s2.db by A29,A32,SCMFSA_2:91
-          .= Exec(IncAddr(i,n),s2).c by A29,A30,A32,SCMFSA_2:91;
+        hence Exec(i,s1).c = s2.da - s2.db by A28,A31,SCMFSA_2:91
+          .= Exec(IncAddr(i,n),s2).c by A28,A29,A31,SCMFSA_2:91;
       end;
       suppose
-A33:    c <> da;
-        hence Exec(i,s1).c = s1.c by A29,SCMFSA_2:91
+A32:    c <> da;
+        hence Exec(i,s1).c = s1.c by A28,SCMFSA_2:91
           .= s2.c by A2,Th38
-          .= Exec(IncAddr(i,n),s2).c by A29,A30,A33,SCMFSA_2:91;
+          .= Exec(IncAddr(i,n),s2).c by A28,A29,A32,SCMFSA_2:91;
       end;
     end;
     now
       let f be FinSeq-Location;
-      thus Exec(i,s1).f = s1.f by A29,SCMFSA_2:91
+      thus Exec(i,s1).f = s1.f by A28,SCMFSA_2:91
         .= s2.f by A2,Th38
-        .= Exec(IncAddr(i,n),s2).f by A29,A30,SCMFSA_2:91;
+        .= Exec(IncAddr(i,n),s2).f by A28,A29,SCMFSA_2:91;
     end;
-    hence thesis by A31,Th38;
+    hence thesis by A30,Th38;
   end;
   suppose
-A34: InsCode i = 4;
-    then consider da, db being Int-Location such that
-A35: i = MultBy(da, db) by SCMFSA_2:57;
-    thus IC Exec(i,s1) + n = IC Exec(IncAddr(i,n),s2) by A5,A34;
-A36: IncAddr(i,n) = i by A35,SCMFSA_4:12;
-A37: now
+A33: InsCode i = 4;
+    hence IC Exec(i,s1) + n = IC Exec(IncAddr(i,n),s2) by A4;
+    consider da, db being Int-Location such that
+A34: i = MultBy(da, db) by A33,SCMFSA_2:57;
+A35: IncAddr(i,n) = i by A34,SCMFSA_4:12;
+A36: now
       let c be Int-Location;
       per cases;
       suppose
-A38:    c = da;
+A37:    c = da;
         s1.da = s2.da & s1.db = s2.db by A2,Th38;
-        hence Exec(i,s1).c = s2.da * s2.db by A35,A38,SCMFSA_2:92
-          .= Exec(IncAddr(i,n),s2).c by A35,A36,A38,SCMFSA_2:92;
+        hence Exec(i,s1).c = s2.da * s2.db by A34,A37,SCMFSA_2:92
+          .= Exec(IncAddr(i,n),s2).c by A34,A35,A37,SCMFSA_2:92;
       end;
       suppose
-A39:    c <> da;
-        hence Exec(i,s1).c = s1.c by A35,SCMFSA_2:92
+A38:    c <> da;
+        hence Exec(i,s1).c = s1.c by A34,SCMFSA_2:92
           .= s2.c by A2,Th38
-          .= Exec(IncAddr(i,n),s2).c by A35,A36,A39,SCMFSA_2:92;
+          .= Exec(IncAddr(i,n),s2).c by A34,A35,A38,SCMFSA_2:92;
       end;
     end;
     now
       let f be FinSeq-Location;
-      thus Exec(i,s1).f = s1.f by A35,SCMFSA_2:92
+      thus Exec(i,s1).f = s1.f by A34,SCMFSA_2:92
         .= s2.f by A2,Th38
-        .= Exec(IncAddr(i,n),s2).f by A35,A36,SCMFSA_2:92;
+        .= Exec(IncAddr(i,n),s2).f by A34,A35,SCMFSA_2:92;
     end;
-    hence thesis by A37,Th38;
+    hence thesis by A36,Th38;
   end;
   suppose
-A40: InsCode i = 5;
-    then consider da, db being Int-Location such that
-A41: i = Divide(da, db) by SCMFSA_2:58;
-A42: IncAddr(i,n) = i by A41,SCMFSA_4:13;
-    thus IC Exec(i,s1) + n = IC Exec(IncAddr(i,n),s2) by A5,A40;
-A43: now
+A39: InsCode i = 5;
+    hence IC Exec(i,s1) + n = IC Exec(IncAddr(i,n),s2) by A4;
+    consider da, db being Int-Location such that
+A40: i = Divide(da, db) by A39,SCMFSA_2:58;
+A41: IncAddr(i,n) = i by A40,SCMFSA_4:13;
+A42: now
       let c be Int-Location;
       per cases;
       suppose
-A44:    c = db;
+A43:    c = db;
         s1.da = s2.da & s1.db = s2.db by A2,Th38;
-        hence Exec(i,s1).c = s2.da mod s2.db by A41,A44,SCMFSA_2:93
-          .= Exec(IncAddr(i,n),s2).c by A41,A42,A44,SCMFSA_2:93;
+        hence Exec(i,s1).c = s2.da mod s2.db by A40,A43,SCMFSA_2:93
+          .= Exec(IncAddr(i,n),s2).c by A40,A41,A43,SCMFSA_2:93;
       end;
       suppose
-A45:    c = da & c <> db;
+A44:    c = da & c <> db;
         s1.da = s2.da & s1.db = s2.db by A2,Th38;
-        hence Exec(i,s1).c = s2.da div s2.db by A41,A45,SCMFSA_2:93
-          .= Exec(IncAddr(i,n),s2).c by A41,A42,A45,SCMFSA_2:93;
+        hence Exec(i,s1).c = s2.da div s2.db by A40,A44,SCMFSA_2:93
+          .= Exec(IncAddr(i,n),s2).c by A40,A41,A44,SCMFSA_2:93;
       end;
       suppose
-A46:    c <> da & c <> db;
-        hence Exec(i,s1).c = s1.c by A41,SCMFSA_2:93
+A45:    c <> da & c <> db;
+        hence Exec(i,s1).c = s1.c by A40,SCMFSA_2:93
           .= s2.c by A2,Th38
-          .= Exec(IncAddr(i,n),s2).c by A41,A42,A46,SCMFSA_2:93;
+          .= Exec(IncAddr(i,n),s2).c by A40,A41,A45,SCMFSA_2:93;
       end;
     end;
     now
       let f be FinSeq-Location;
-      thus Exec(i,s1).f = s1.f by A41,SCMFSA_2:93
+      thus Exec(i,s1).f = s1.f by A40,SCMFSA_2:93
         .= s2.f by A2,Th38
-        .= Exec(IncAddr(i,n),s2).f by A41,A42,SCMFSA_2:93;
+        .= Exec(IncAddr(i,n),s2).f by A40,A41,SCMFSA_2:93;
     end;
-    hence thesis by A43,Th38;
+    hence thesis by A42,Th38;
   end;
-  suppose InsCode i = 6;
+  suppose
+    InsCode i = 6;
     then consider loc being Instruction-Location of SCM+FSA such that
-A47: i = goto loc by SCMFSA_2:59;
-A48: IncAddr(i,n) = goto (loc + n) by A47,SCMFSA_4:14;
-    IC Exec(i,s1) = loc by A47,SCMFSA_2:95;
-    hence IC Exec(i,s1) + n = IC Exec(IncAddr(i,n),s2) by A48,SCMFSA_2:95;
-A49: now
-      let c be Int-Location;
-      thus Exec(i,s1).c = s1.c by A47,SCMFSA_2:95
-        .= s2.c by A2,Th38
-        .= Exec(IncAddr(i,n),s2).c by A48,SCMFSA_2:95;
+A46: i = goto loc by SCMFSA_2:59;
+A47: IncAddr(i,n) = goto (loc + n) by A46,SCMFSA_4:14;
+A48: now
+      let f be FinSeq-Location;
+      thus Exec(i,s1).f = s1.f by A46,SCMFSA_2:95
+        .= s2.f by A2,Th38
+        .= Exec(IncAddr(i,n),s2).f by A47,SCMFSA_2:95;
     end;
+    IC Exec(i,s1) = loc by A46,SCMFSA_2:95;
+    hence IC Exec(i,s1) + n = IC Exec(IncAddr(i,n),s2) by A47,SCMFSA_2:95;
     now
-      let f be FinSeq-Location;
-      thus Exec(i,s1).f = s1.f by A47,SCMFSA_2:95
-        .= s2.f by A2,Th38
-        .= Exec(IncAddr(i,n),s2).f by A48,SCMFSA_2:95;
-    end;
-    hence thesis by A49,Th38;
-  end;
-  suppose InsCode i = 7;
-    then consider loc being Instruction-Location of SCM+FSA,
-    da being Int-Location such that
-A50: i = da=0_goto loc by SCMFSA_2:60;
-A51: IncAddr(i,n) = da=0_goto (loc + n) by A50,SCMFSA_4:15;
-A52: now
       let c be Int-Location;
-      thus Exec(i,s1).c = s1.c by A50,SCMFSA_2:96
+      thus Exec(i,s1).c = s1.c by A46,SCMFSA_2:95
         .= s2.c by A2,Th38
-        .= Exec(IncAddr(i,n),s2).c by A51,SCMFSA_2:96;
+        .= Exec(IncAddr(i,n),s2).c by A47,SCMFSA_2:95;
     end;
-A53: now
-      let f be FinSeq-Location;
-      thus Exec(i,s1).f = s1.f by A50,SCMFSA_2:96
-        .= s2.f by A2,Th38
-        .= Exec(IncAddr(i,n),s2).f by A51,SCMFSA_2:96;
-    end;
-    hereby per cases;
-      suppose
-A54:    s1.da = 0;
-        then
-A55:    s2.da = 0 by A2,Th38;
-        IC Exec(i,s1) = loc by A50,A54,SCMFSA_2:96;
-
-hence IC Exec(i,s1) + n = IC Exec(IncAddr(i,n),s2) by A51,A55,SCMFSA_2:96;
-      end;
-      suppose
-A56:    s1.da <> 0;
-        then
-A57:    s2.da <> 0 by A2,Th38;
-        IC Exec(i,s1) = Next IC s1 by A50,A56,SCMFSA_2:96;
-
-hence IC Exec(i,s1) + n = IC Exec(IncAddr(i,n),s2) by A4,A51,A57,SCMFSA_2:96;
-      end;
-    end;
-    thus thesis by A52,A53,Th38;
-  end;
-  suppose InsCode i = 8;
-    then consider loc being Instruction-Location of SCM+FSA,
-    da being Int-Location such that
-A58: i = da>0_goto loc by SCMFSA_2:61;
-A59: IncAddr(i,n) = da>0_goto (loc + n) by A58,SCMFSA_4:16;
-A60: now
-      let c be Int-Location;
-      thus Exec(i,s1).c = s1.c by A58,SCMFSA_2:97
-        .= s2.c by A2,Th38
-        .= Exec(IncAddr(i,n),s2).c by A59,SCMFSA_2:97;
-    end;
-A61: now
-      let f be FinSeq-Location;
-      thus Exec(i,s1).f = s1.f by A58,SCMFSA_2:97
-        .= s2.f by A2,Th38
-        .= Exec(IncAddr(i,n),s2).f by A59,SCMFSA_2:97;
-    end;
-    hereby per cases;
-      suppose
-A62:    s1.da > 0;
-        then
-A63:    s2.da > 0 by A2,Th38;
-        IC Exec(i,s1) = loc by A58,A62,SCMFSA_2:97;
-        hence IC Exec(i,s1) + n
-        = IC Exec(IncAddr(i,n),s2) by A59,A63,SCMFSA_2:97;
-      end;
-      suppose
-A64:    s1.da <= 0;
-        then
-A65:    s2.da <= 0 by A2,Th38;
-        IC Exec(i,s1) = Next IC s1 by A58,A64,SCMFSA_2:97;
-
-hence IC Exec(i,s1) + n = IC Exec(IncAddr(i,n),s2) by A4,A59,A65,SCMFSA_2:97;
-      end;
-    end;
-    thus thesis by A60,A61,Th38;
+    hence thesis by A48,Th38;
   end;
   suppose
-A66: InsCode i = 9;
-    then consider db, da being Int-Location, f being FinSeq-Location such that
-A67: i = da := (f,db) by SCMFSA_2:62;
-A68: IncAddr(i,n) = i by A67,SCMFSA_4:17;
-    thus IC Exec(i,s1) + n = IC Exec(IncAddr(i,n),s2) by A5,A66;
-A69: now
+    InsCode i = 7;
+    then consider
+    loc being Instruction-Location of SCM+FSA, da being Int-Location
+    such that
+A49: i = da=0_goto loc by SCMFSA_2:60;
+A50: IncAddr(i,n) = da=0_goto (loc + n) by A49,SCMFSA_4:15;
+A51: now
+      let f be FinSeq-Location;
+      thus Exec(i,s1).f = s1.f by A49,SCMFSA_2:96
+        .= s2.f by A2,Th38
+        .= Exec(IncAddr(i,n),s2).f by A50,SCMFSA_2:96;
+    end;
+    hereby
+      per cases;
+      suppose
+        s1.da = 0;
+        then s2.da = 0 & IC Exec(i,s1) = loc by A2,A49,Th38,SCMFSA_2:96;
+        hence IC Exec(i,s1) + n = IC Exec(IncAddr(i,n),s2) by A50,SCMFSA_2:96;
+      end;
+      suppose
+        s1.da <> 0;
+        then s2.da <> 0 & IC Exec(i,s1) = Next IC s1 by A2,A49,Th38,SCMFSA_2:96
+;
+        hence IC Exec(i,s1) + n = IC Exec(IncAddr(i,n),s2) by A3,A50,
+SCMFSA_2:96;
+      end;
+    end;
+    now
+      let c be Int-Location;
+      thus Exec(i,s1).c = s1.c by A49,SCMFSA_2:96
+        .= s2.c by A2,Th38
+        .= Exec(IncAddr(i,n),s2).c by A50,SCMFSA_2:96;
+    end;
+    hence thesis by A51,Th38;
+  end;
+  suppose
+    InsCode i = 8;
+    then consider
+    loc being Instruction-Location of SCM+FSA, da being Int-Location
+    such that
+A52: i = da>0_goto loc by SCMFSA_2:61;
+A53: IncAddr(i,n) = da>0_goto (loc + n) by A52,SCMFSA_4:16;
+A54: now
+      let f be FinSeq-Location;
+      thus Exec(i,s1).f = s1.f by A52,SCMFSA_2:97
+        .= s2.f by A2,Th38
+        .= Exec(IncAddr(i,n),s2).f by A53,SCMFSA_2:97;
+    end;
+    hereby
+      per cases;
+      suppose
+        s1.da > 0;
+        then s2.da > 0 & IC Exec(i,s1) = loc by A2,A52,Th38,SCMFSA_2:97;
+        hence IC Exec(i,s1) + n = IC Exec(IncAddr(i,n),s2) by A53,SCMFSA_2:97;
+      end;
+      suppose
+        s1.da <= 0;
+        then s2.da <= 0 & IC Exec(i,s1) = Next IC s1 by A2,A52,Th38,SCMFSA_2:97
+;
+        hence IC Exec(i,s1) + n = IC Exec(IncAddr(i,n),s2) by A3,A53,
+SCMFSA_2:97;
+      end;
+    end;
+    now
+      let c be Int-Location;
+      thus Exec(i,s1).c = s1.c by A52,SCMFSA_2:97
+        .= s2.c by A2,Th38
+        .= Exec(IncAddr(i,n),s2).c by A53,SCMFSA_2:97;
+    end;
+    hence thesis by A54,Th38;
+  end;
+  suppose
+A55: InsCode i = 9;
+    hence IC Exec(i,s1) + n = IC Exec(IncAddr(i,n),s2) by A4;
+    consider db, da being Int-Location, f being FinSeq-Location such that
+A56: i = da := (f,db) by A55,SCMFSA_2:62;
+A57: IncAddr(i,n) = i by A56,SCMFSA_4:17;
+A58: now
       let c be Int-Location;
       per cases;
       suppose
-A70:    c = da;
+A59:    c = da;
         then consider m being Element of NAT such that
-A71:    m = abs(s1.db) and
-A72:    Exec(da:=(f,db), s1).c = (s1.f)/.m by SCMFSA_2:98;
+A60:    m = abs(s1.db) and
+A61:    Exec(da:=(f,db), s1).c = (s1.f)/.m by SCMFSA_2:98;
+A62:    s1.f = s2.f by A2,Th38;
         consider m2 being Element of NAT such that
-A73:    m2 = abs(s2.db) and
-A74:    Exec(da:=(f,db), s2).c = (s2.f)/.m2 by A70,SCMFSA_2:98;
-        m = m2 & s1.f = s2.f by A2,A71,A73,Th38;
-
-hence Exec(i,s1).c = Exec(IncAddr(i,n),s2).c by A67,A72,A74,SCMFSA_4:17;
+A63:    m2 = abs(s2.db) and
+A64:    Exec(da:=(f,db), s2).c = (s2.f)/.m2 by A59,SCMFSA_2:98;
+        m = m2 by A2,A60,A63,Th38;
+        hence Exec(i,s1).c = Exec(IncAddr(i,n),s2).c by A56,A61,A64,A62,
+SCMFSA_4:17;
       end;
       suppose
-A75:    c <> da;
-        hence Exec(i,s1).c = s1.c by A67,SCMFSA_2:98
+A65:    c <> da;
+        hence Exec(i,s1).c = s1.c by A56,SCMFSA_2:98
           .= s2.c by A2,Th38
-          .= Exec(IncAddr(i,n),s2).c by A67,A68,A75,SCMFSA_2:98;
+          .= Exec(IncAddr(i,n),s2).c by A56,A57,A65,SCMFSA_2:98;
       end;
     end;
     now
       let f be FinSeq-Location;
-      thus Exec(i,s1).f = s1.f by A67,SCMFSA_2:98
+      thus Exec(i,s1).f = s1.f by A56,SCMFSA_2:98
         .= s2.f by A2,Th38
-        .= Exec(IncAddr(i,n),s2).f by A67,A68,SCMFSA_2:98;
+        .= Exec(IncAddr(i,n),s2).f by A56,A57,SCMFSA_2:98;
+    end;
+    hence thesis by A58,Th38;
+  end;
+  suppose
+A66: InsCode i = 10;
+    hence IC Exec(i,s1) + n = IC Exec(IncAddr(i,n),s2) by A4;
+    consider db, da being Int-Location, f being FinSeq-Location such that
+A67: i = (f,db):=da by A66,SCMFSA_2:63;
+A68: IncAddr(i,n) = i by A67,SCMFSA_4:18;
+A69: now
+      let g be FinSeq-Location;
+      per cases;
+      suppose
+A70:    g = f;
+A71:    s1.da = s2.da & s1.f = s2.f by A2,Th38;
+        consider m2 being Element of NAT such that
+A72:    m2 = abs(s2.db) and
+A73:    Exec((f,db):=da, s2).f = s2.f+*(m2,s2.da) by SCMFSA_2:99;
+        consider m1 being Element of NAT such that
+A74:    m1 = abs(s1.db) and
+A75:    Exec((f,db):=da, s1).f = s1.f+*(m1,s1.da) by SCMFSA_2:99;
+        m1 = m2 by A2,A74,A72,Th38;
+        hence Exec(i,s1).g = Exec(IncAddr(i,n),s2).g by A67,A70,A75,A73,A71,
+SCMFSA_4:18;
+      end;
+      suppose
+A76:    g <> f;
+        hence Exec(i,s1).g = s1.g by A67,SCMFSA_2:99
+          .= s2.g by A2,Th38
+          .= Exec(IncAddr(i,n),s2).g by A67,A68,A76,SCMFSA_2:99;
+      end;
+    end;
+    now
+      let c be Int-Location;
+      thus Exec(i,s1).c = s1.c by A67,SCMFSA_2:99
+        .= s2.c by A2,Th38
+        .= Exec(IncAddr(i,n),s2).c by A67,A68,SCMFSA_2:99;
     end;
     hence thesis by A69,Th38;
   end;
   suppose
-A76: InsCode i = 10;
-    then consider db, da being Int-Location, f being FinSeq-Location such that
-A77: i = (f,db):=da by SCMFSA_2:63;
-A78: IncAddr(i,n) = i by A77,SCMFSA_4:18;
-    thus IC Exec(i,s1) + n = IC Exec(IncAddr(i,n),s2) by A5,A76;
-A79: now
-      let c be Int-Location;
-      thus Exec(i,s1).c = s1.c by A77,SCMFSA_2:99
-        .= s2.c by A2,Th38
-        .= Exec(IncAddr(i,n),s2).c by A77,A78,SCMFSA_2:99;
-    end;
-    now
-      let g be FinSeq-Location;
-      per cases;
-      suppose
-A80:    g = f;
-        consider m1 being Element of NAT such that
-A81:    m1 = abs(s1.db) and
-A82:    Exec((f,db):=da, s1).f = s1.f+*(m1,s1.da) by SCMFSA_2:99;
-        consider m2 being Element of NAT such that
-A83:    m2 = abs(s2.db) and
-A84:    Exec((f,db):=da, s2).f = s2.f+*(m2,s2.da) by SCMFSA_2:99;
-        m1 = m2 & s1.da = s2.da & s1.f = s2.f by A2,A81,A83,Th38;
-        hence Exec(i,s1).g = Exec(IncAddr(i,n),s2).g by A77,A80,A82,A84,
-SCMFSA_4:18;
-      end;
-      suppose
-A85:    g <> f;
-        hence Exec(i,s1).g = s1.g by A77,SCMFSA_2:99
-          .= s2.g by A2,Th38
-          .= Exec(IncAddr(i,n),s2).g by A77,A78,A85,SCMFSA_2:99;
-      end;
-    end;
-    hence thesis by A79,Th38;
-  end;
-  suppose
-A86: InsCode i = 11;
-    then consider da being Int-Location, f being FinSeq-Location such that
-A87: i = da :=len f by SCMFSA_2:64;
-A88: IncAddr(i,n) = i by A87,SCMFSA_4:19;
-    thus IC Exec(i,s1) + n = IC Exec(IncAddr(i,n),s2) by A5,A86;
-A89: now
+A77: InsCode i = 11;
+    hence IC Exec(i,s1) + n = IC Exec(IncAddr(i,n),s2) by A4;
+    consider da being Int-Location, f being FinSeq-Location such that
+A78: i = da :=len f by A77,SCMFSA_2:64;
+A79: IncAddr(i,n) = i by A78,SCMFSA_4:19;
+A80: now
       let c be Int-Location;
       per cases;
       suppose
-A90:    c = da;
-        hence Exec(i,s1).c = len(s1.f) by A87,SCMFSA_2:100
+A81:    c = da;
+        hence Exec(i,s1).c = len(s1.f) by A78,SCMFSA_2:100
           .= len(s2.f) by A2,Th38
-          .= Exec(IncAddr(i,n),s2).c by A87,A88,A90,SCMFSA_2:100;
+          .= Exec(IncAddr(i,n),s2).c by A78,A79,A81,SCMFSA_2:100;
       end;
       suppose
-A91:    c <> da;
-        hence Exec(i,s1).c = s1.c by A87,SCMFSA_2:100
+A82:    c <> da;
+        hence Exec(i,s1).c = s1.c by A78,SCMFSA_2:100
           .= s2.c by A2,Th38
-          .= Exec(IncAddr(i,n),s2).c by A87,A88,A91,SCMFSA_2:100;
+          .= Exec(IncAddr(i,n),s2).c by A78,A79,A82,SCMFSA_2:100;
       end;
     end;
     now
       let f be FinSeq-Location;
-      thus Exec(i,s1).f = s1.f by A87,SCMFSA_2:100
+      thus Exec(i,s1).f = s1.f by A78,SCMFSA_2:100
         .= s2.f by A2,Th38
-        .= Exec(IncAddr(i,n),s2).f by A87,A88,SCMFSA_2:100;
+        .= Exec(IncAddr(i,n),s2).f by A78,A79,SCMFSA_2:100;
     end;
-    hence thesis by A89,Th38;
+    hence thesis by A80,Th38;
   end;
   suppose
-A92: InsCode i = 12;
-    then consider da being Int-Location, f being FinSeq-Location such that
-A93: i = f:=<0,...,0>da by SCMFSA_2:65;
-A94: IncAddr(i,n) = i by A93,SCMFSA_4:20;
-    thus IC Exec(i,s1) + n = IC Exec(IncAddr(i,n),s2) by A5,A92;
-A95: now
-      let c be Int-Location;
-      thus Exec(i,s1).c = s1.c by A93,SCMFSA_2:101
-        .= s2.c by A2,Th38
-        .= Exec(IncAddr(i,n),s2).c by A93,A94,SCMFSA_2:101;
-    end;
-    now
+A83: InsCode i = 12;
+    hence IC Exec(i,s1) + n = IC Exec(IncAddr(i,n),s2) by A4;
+    consider da being Int-Location, f being FinSeq-Location such that
+A84: i = f:=<0,...,0>da by A83,SCMFSA_2:65;
+A85: IncAddr(i,n) = i by A84,SCMFSA_4:20;
+A86: now
       let g be FinSeq-Location;
       per cases;
       suppose
-A96:    g = f;
-        consider m1 being Element of NAT such that
-A97:    m1 = abs(s1.da) and
-A98:    Exec(f:=<0,...,0>da, s1).f = m1 |-> 0 by SCMFSA_2:101;
-        consider m2 being Element of NAT such that
-A99:    m2 = abs(s2.da) and
-A100:   Exec(f:=<0,...,0>da, s2).f = m2 |-> 0 by SCMFSA_2:101;
-        thus Exec(i,s1).g = Exec(IncAddr(i,n),s2).g by A2,A93,A94,A96,A97,A98
-,A99,A100,Th38;
+A87:    g = f;
+        (ex m1 being Element of NAT st m1 = abs(s1.da) & Exec(f
+:=<0,...,0>da, s1).f = m1 |-> 0 )& ex m2 being Element of NAT st m2 = abs(s2.da
+        ) & Exec(f :=<0,...,0>da, s2).f = m2 |-> 0 by SCMFSA_2:101;
+        hence Exec(i,s1).g = Exec(IncAddr(i,n),s2).g by A2,A84,A85,A87,Th38;
       end;
       suppose
-A101:   g <> f;
-        hence Exec(i,s1).g = s1.g by A93,SCMFSA_2:101
+A88:    g <> f;
+        hence Exec(i,s1).g = s1.g by A84,SCMFSA_2:101
           .= s2.g by A2,Th38
-          .= Exec(IncAddr(i,n),s2).g by A93,A94,A101,SCMFSA_2:101;
+          .= Exec(IncAddr(i,n),s2).g by A84,A85,A88,SCMFSA_2:101;
       end;
     end;
-    hence thesis by A95,Th38;
+    now
+      let c be Int-Location;
+      thus Exec(i,s1).c = s1.c by A84,SCMFSA_2:101
+        .= s2.c by A2,Th38
+        .= Exec(IncAddr(i,n),s2).c by A84,A85,SCMFSA_2:101;
+    end;
+    hence thesis by A86,Th38;
   end;
 end;
 
@@ -1836,80 +1882,83 @@ A1: dom (I | (dom I \ NAT)) = {};
   then dom J \ NAT = {} by XBOOLE_1:37;
   then
 A2: dom (J | (dom J \ NAT)) = {};
-  for x be set st x in {} holds (I | (dom I \ NAT)).x = (J | (dom J \ NAT)).x;
+  for x be set st x in {} holds (I | (dom I \ NAT)).x = (J | (dom J \ NAT)
+  ).x;
   then I | (dom I \ NAT) = J | (dom J \ NAT) by A1,A2,FUNCT_1:9;
   hence thesis by FUNCT_7:def 2;
 end;
 
 theorem Th43:
-  for I being Program of SCM+FSA holds
-  dom Initialized I = dom I \/ {intloc 0} \/ {IC SCM+FSA}
+  for I being Program of SCM+FSA holds dom Initialized I = dom I
+  \/ {intloc 0} \/ {IC SCM+FSA}
 proof
   let I be Program of SCM+FSA;
-A1: dom ((intloc 0) .--> 1) = {intloc 0} by FUNCOP_1:19;
-A2: dom Start-At insloc 0 = {IC SCM+FSA} by FUNCOP_1:19;
-  thus dom Initialized I
-  = dom (I +* ((intloc 0) .--> 1)) \/ dom Start-At(insloc 0) by FUNCT_4:def 1
-    .= dom I \/ {intloc 0} \/ {IC SCM+FSA} by A1,A2,FUNCT_4:def 1;
+A1: dom ((intloc 0) .--> 1) = {intloc 0} & dom Start-At insloc 0 = {IC
+  SCM+FSA} by FUNCOP_1:19;
+  thus dom Initialized I = dom (I +* ((intloc 0) .--> 1)) \/ dom Start-At(
+  insloc 0) by FUNCT_4:def 1
+    .= dom I \/ {intloc 0} \/ {IC SCM+FSA} by A1,FUNCT_4:def 1;
 end;
 
 theorem Th44:
-  for I being Program of SCM+FSA, x being set st x in dom Initialized I holds
-  x in dom I or x = intloc 0 or x = IC SCM+FSA
+  for I being Program of SCM+FSA, x being set st x in dom
+  Initialized I holds x in dom I or x = intloc 0 or x = IC SCM+FSA
 proof
   let I be Program of SCM+FSA;
   let x be set;
-A1: dom ((intloc 0) .--> 1) = {intloc 0} by FUNCOP_1:19;
-A2: dom Start-At insloc 0 = {IC SCM+FSA} by FUNCOP_1:19;
-A3: dom Initialized I
-  = dom (I +* ((intloc 0) .--> 1)) \/ dom Start-At(insloc 0) by FUNCT_4:def 1
-    .= dom I \/ {intloc 0} \/ {IC SCM+FSA} by A1,A2,FUNCT_4:def 1;
-  assume x in dom Initialized I;
-  then x in dom I \/ {intloc 0} or x in {IC SCM+FSA} by A3,XBOOLE_0:def 3;
+A1: dom ((intloc 0) .--> 1) = {intloc 0} & dom Start-At insloc 0 = {IC
+  SCM+FSA} by FUNCOP_1:19;
+  assume
+A2: x in dom Initialized I;
+  dom Initialized I = dom (I +* ((intloc 0) .--> 1)) \/ dom Start-At(
+  insloc 0) by FUNCT_4:def 1
+    .= dom I \/ {intloc 0} \/ {IC SCM+FSA} by A1,FUNCT_4:def 1;
+  then x in dom I \/ {intloc 0} or x in {IC SCM+FSA} by A2,XBOOLE_0:def 3;
   then x in dom I or x in {intloc 0} or x in {IC SCM+FSA} by XBOOLE_0:def 3;
   hence thesis by TARSKI:def 1;
 end;
 
 theorem Th45:
-  for I being Program of SCM+FSA holds intloc 0 in dom Initialized I
+  for I being Program of SCM+FSA holds intloc 0 in dom Initialized
+  I
 proof
   let I be Program of SCM+FSA;
-A1: dom ((intloc 0) .--> 1) = {intloc 0} by FUNCOP_1:19;
-A2: dom Start-At insloc 0 = {IC SCM+FSA} by FUNCOP_1:19;
-A3: dom Initialized I
-  = dom (I +* ((intloc 0) .--> 1)) \/ dom Start-At(insloc 0) by FUNCT_4:def 1
-    .= dom I \/ {intloc 0} \/ {IC SCM+FSA} by A1,A2,FUNCT_4:def 1;
+A1: dom ((intloc 0) .--> 1) = {intloc 0} & dom Start-At insloc 0 = {IC
+  SCM+FSA} by FUNCOP_1:19;
   intloc 0 in {intloc 0} by TARSKI:def 1;
-  then intloc 0 in dom I \/ {intloc 0} by XBOOLE_0:def 3;
-  hence thesis by A3,XBOOLE_0:def 3;
+  then
+A2: intloc 0 in dom I \/ {intloc 0} by XBOOLE_0:def 3;
+  dom Initialized I = dom (I +* ((intloc 0) .--> 1)) \/ dom Start-At(
+  insloc 0) by FUNCT_4:def 1
+    .= dom I \/ {intloc 0} \/ {IC SCM+FSA} by A1,FUNCT_4:def 1;
+  hence thesis by A2,XBOOLE_0:def 3;
 end;
 
 theorem Th46:
-  for I being Program of SCM+FSA holds
-  (Initialized I).intloc 0 = 1 & (Initialized I).IC SCM+FSA = insloc 0
+  for I being Program of SCM+FSA holds (Initialized I).intloc 0 =
+  1 & (Initialized I).IC SCM+FSA = insloc 0
 proof
   let I be Program of SCM+FSA;
-  intloc 0 <> IC SCM+FSA by SCMFSA_2:81;
-  then not intloc 0 in {IC SCM+FSA} by TARSKI:def 1;
-  then
-A1: not intloc 0 in dom Start-At insloc 0 by FUNCOP_1:19;
   intloc 0 in {intloc 0} by TARSKI:def 1;
   then
-A2: intloc 0 in dom ((intloc 0) .--> 1) by FUNCOP_1:19;
-  thus (Initialized I).intloc 0
-  = (I +* ((intloc 0) .--> 1)).intloc 0 by A1,FUNCT_4:12
-    .= ((intloc 0) .--> 1).intloc 0 by A2,FUNCT_4:14
+A1: intloc 0 in dom ((intloc 0) .--> 1) by FUNCOP_1:19;
+  intloc 0 <> IC SCM+FSA by SCMFSA_2:81;
+  then not intloc 0 in {IC SCM+FSA} by TARSKI:def 1;
+  then not intloc 0 in dom Start-At insloc 0 by FUNCOP_1:19;
+  hence (Initialized I).intloc 0 = (I +* ((intloc 0) .--> 1)).intloc 0 by
+FUNCT_4:12
+    .= ((intloc 0) .--> 1).intloc 0 by A1,FUNCT_4:14
     .= 1 by FUNCOP_1:87;
   IC SCM+FSA in {IC SCM+FSA} by TARSKI:def 1;
   then IC SCM+FSA in dom Start-At insloc 0 by FUNCOP_1:19;
-  hence (Initialized I).IC SCM+FSA
-  = (Start-At (insloc 0)).IC SCM+FSA by FUNCT_4:14
+  hence (Initialized I).IC SCM+FSA = (Start-At (insloc 0)).IC SCM+FSA by
+FUNCT_4:14
     .= insloc 0 by FUNCOP_1:87;
 end;
 
 theorem Th47:
-  for I being Program of SCM+FSA holds
-  not intloc 0 in dom I & not IC SCM+FSA in dom I
+  for I being Program of SCM+FSA holds not intloc 0 in dom I & not
+  IC SCM+FSA in dom I
 proof
   let I be Program of SCM+FSA;
 A1: dom I c= NAT by RELAT_1:def 18;
@@ -1918,14 +1967,15 @@ A1: dom I c= NAT by RELAT_1:def 18;
 end;
 
 theorem Th48:
-  for I being Program of SCM+FSA, a being Int-Location st a <> intloc 0 holds
-  not a in dom Initialized I
+  for I being Program of SCM+FSA, a being Int-Location st a <>
+  intloc 0 holds not a in dom Initialized I
 proof
   let I be Program of SCM+FSA;
   let a be Int-Location;
   assume
 A1: a <> intloc 0;
-  assume a in dom Initialized I;
+  assume
+  a in dom Initialized I;
   then a in dom I \/ {intloc 0} \/ {IC SCM+FSA} by Th43;
   then
 A2: a in (dom I \/ {intloc 0}) or a in {IC SCM+FSA} by XBOOLE_0:def 3;
@@ -1937,10 +1987,12 @@ A3: a in dom I;
     a in dom I by A3;
     hence contradiction by SCMFSA_2:84;
   end;
-  suppose a in {intloc 0};
+  suppose
+    a in {intloc 0};
     hence contradiction by A1,TARSKI:def 1;
   end;
-  suppose a in {IC SCM+FSA};
+  suppose
+    a in {IC SCM+FSA};
     then a = IC SCM+FSA by TARSKI:def 1;
     hence contradiction by SCMFSA_2:81;
   end;
@@ -1952,7 +2004,8 @@ theorem Th49:
 proof
   let I be Program of SCM+FSA;
   let f be FinSeq-Location;
-  assume f in dom Initialized I;
+  assume
+  f in dom Initialized I;
   then f in dom I \/ {intloc 0} \/ {IC SCM+FSA} by Th43;
   then
 A1: f in (dom I \/ {intloc 0}) or f in {IC SCM+FSA} by XBOOLE_0:def 3;
@@ -1964,11 +2017,13 @@ A2: f in dom I;
     f in dom I by A2;
     hence contradiction by SCMFSA_2:85;
   end;
-  suppose f in {intloc 0};
+  suppose
+    f in {intloc 0};
     then f = intloc 0 by TARSKI:def 1;
     hence contradiction by SCMFSA_2:83;
   end;
-  suppose f in {IC SCM+FSA};
+  suppose
+    f in {IC SCM+FSA};
     then f = IC SCM+FSA by TARSKI:def 1;
     hence contradiction by SCMFSA_2:82;
   end;
@@ -1981,155 +2036,153 @@ proof
   let I be Program of SCM+FSA, x be set;
   assume
 A1: x in dom I;
-A2: dom ((intloc 0) .--> 1) = {intloc 0} by FUNCOP_1:19;
-  x <> intloc 0 by A1,Th47;
+  then dom ((intloc 0) .--> 1) = {intloc 0} & x <> intloc 0 by Th47,FUNCOP_1:19
+;
   then
-A3: not x in dom ((intloc 0) .--> 1) by A2,TARSKI:def 1;
-A4: dom Start-At insloc 0 = {IC SCM+FSA} by FUNCOP_1:19;
-  x <> IC SCM+FSA by A1,Th47;
-  then not x in dom Start-At insloc 0 by A4,TARSKI:def 1;
+A2: not x in dom ((intloc 0) .--> 1) by TARSKI:def 1;
+  dom Start-At insloc 0 = {IC SCM+FSA} & x <> IC SCM+FSA by A1,Th47,FUNCOP_1:19
+;
+  then not x in dom Start-At insloc 0 by TARSKI:def 1;
   hence (Initialized I).x = (I +* ((intloc 0) .--> 1)).x by FUNCT_4:12
-    .= I.x by A3,FUNCT_4:12;
+    .= I.x by A2,FUNCT_4:12;
 end;
 
 theorem Th51:
-  for I,J being Program of SCM+FSA
-  for s being State of SCM+FSA st Initialized J c= s holds
-  s +* Initialized I = s +* I
+  for I,J being Program of SCM+FSA for s being State of SCM+FSA st
+  Initialized J c= s holds s +* Initialized I = s +* I
 proof
   let I,J be Program of SCM+FSA;
   let s be State of SCM+FSA;
   set s1 = s +* I;
+A1: dom (s +* I) = dom s \/ dom I by FUNCT_4:def 1;
   assume
-A1: Initialized J c= s;
+A2: Initialized J c= s;
   then
-A2: dom Initialized J c= dom s by GRFUNC_1:8;
-  dom J \/ dom Initialized I
-  = dom J \/ ({intloc 0} \/ dom I \/ {IC SCM+FSA}) by Th43
+A3: dom Initialized J c= dom s by GRFUNC_1:8;
+A4: dom (s +* Initialized I) = dom s \/ dom Initialized I by FUNCT_4:def 1;
+  dom J \/ dom Initialized I = dom J \/ ({intloc 0} \/ dom I \/ {IC
+  SCM+FSA}) by Th43
     .= dom J \/ ({intloc 0} \/ {IC SCM+FSA} \/ dom I) by XBOOLE_1:4
     .= dom J \/ ({intloc 0} \/ {IC SCM+FSA}) \/ dom I by XBOOLE_1:4
     .= dom J \/ {intloc 0} \/ {IC SCM+FSA} \/ dom I by XBOOLE_1:4
     .= dom Initialized J \/ dom I by Th43;
-  then dom J \/ dom Initialized I c= dom s \/ dom I by A2,XBOOLE_1:13;
+  then dom J \/ dom Initialized I c= dom s \/ dom I by A3,XBOOLE_1:13;
   then dom J \/ dom Initialized I c= dom s1 by FUNCT_4:def 1;
+  then dom Initialized I c= dom s1 by XBOOLE_1:11;
+  then dom (s +* Initialized I) c= dom s \/ (dom s \/ dom I) by A1,A4,
+XBOOLE_1:9;
   then
-A3: dom Initialized I c= dom s1 by XBOOLE_1:11;
-A4: now
-    let x be set;
-    assume
-A5: x in dom Initialized I;
-    per cases by A5,Th44;
-    suppose
-A6:   x in dom I;
-      hence (Initialized I).x = I.x by Th50
-        .= s1.x by A6,FUNCT_4:14;
-    end;
-    suppose
-A7:   x = intloc 0;
-      then
-A8:   not x in dom I by Th47;
-A9:   x in dom Initialized J by A7,Th45;
-      thus (Initialized I).x = 1 by A7,Th46
-        .= (Initialized J).x by A7,Th46
-        .= s.x by A1,A9,GRFUNC_1:8
-        .= s1.x by A8,FUNCT_4:12;
-    end;
-    suppose
-A10:  x = IC SCM+FSA;
-      then
-A11:  not x in dom I by Th47;
-A12:  x in dom Initialized J by A10,Th24;
-      thus (Initialized I).x = insloc 0 by A10,Th46
-        .= (Initialized J).x by A10,Th46
-        .= s.x by A1,A12,GRFUNC_1:8
-        .= s1.x by A11,FUNCT_4:12;
-    end;
-  end;
-A13: dom (s +* I) = dom s \/ dom I by FUNCT_4:def 1;
-A14: dom (s +* Initialized I) = dom s \/ dom Initialized I by FUNCT_4:def 1;
+A5: dom (s +* Initialized I) c= dom s \/ dom s \/ dom I by XBOOLE_1:4;
   I c= Initialized I by Th26;
   then
-A15: dom I c= dom Initialized I by GRFUNC_1:8;
-  then
-A16: dom (s +* I) c= dom (s +* Initialized I) by A13,A14,XBOOLE_1:9;
-  dom (s +* Initialized I) c= dom s \/ (dom s \/ dom I)
-  by A3,A13,A14,XBOOLE_1:9;
-  then dom (s +* Initialized I) c= dom s \/ dom s \/ dom I by XBOOLE_1:4;
-  then
-A17: dom (s +* Initialized I) = dom (s +* I) by A13,A16,XBOOLE_0:def 10;
-  now
+A6: dom I c= dom Initialized I by GRFUNC_1:8;
+A7: now
     let x be set;
-    assume x in dom (s +* Initialized I);
-    per cases;
+    assume
+A8: x in dom Initialized I;
+    per cases by A8,Th44;
     suppose
-A18:  x in dom Initialized I;
-      hence (s +* Initialized I).x = (Initialized I).x by FUNCT_4:14
-        .= (s +* I).x by A4,A18;
+A9:   x in dom I;
+      hence (Initialized I).x = I.x by Th50
+        .= s1.x by A9,FUNCT_4:14;
     end;
     suppose
-A19:  not x in dom Initialized I;
+A10:  x = intloc 0;
       then
-A20:  not x in dom I by A15;
-      thus (s +* Initialized I).x = s.x by A19,FUNCT_4:12
-        .= (s +* I).x by A20,FUNCT_4:12;
+A11:  x in dom Initialized J by Th45;
+A12:  not x in dom I by A10,Th47;
+      thus (Initialized I).x = 1 by A10,Th46
+        .= (Initialized J).x by A10,Th46
+        .= s.x by A2,A11,GRFUNC_1:8
+        .= s1.x by A12,FUNCT_4:12;
+    end;
+    suppose
+A13:  x = IC SCM+FSA;
+      then
+A14:  x in dom Initialized J by Th24;
+A15:  not x in dom I by A13,Th47;
+      thus (Initialized I).x = insloc 0 by A13,Th46
+        .= (Initialized J).x by A13,Th46
+        .= s.x by A2,A14,GRFUNC_1:8
+        .= s1.x by A15,FUNCT_4:12;
     end;
   end;
-  hence thesis by A17,FUNCT_1:9;
+A16: now
+    let x be set;
+    assume
+    x in dom (s +* Initialized I);
+    per cases;
+    suppose
+A17:  x in dom Initialized I;
+      hence (s +* Initialized I).x = (Initialized I).x by FUNCT_4:14
+        .= (s +* I).x by A7,A17;
+    end;
+    suppose
+A18:  not x in dom Initialized I;
+      then
+A19:  not x in dom I by A6;
+      thus (s +* Initialized I).x = s.x by A18,FUNCT_4:12
+        .= (s +* I).x by A19,FUNCT_4:12;
+    end;
+  end;
+  dom (s +* I) c= dom (s +* Initialized I) by A1,A4,A6,XBOOLE_1:9;
+  then dom (s +* Initialized I) = dom (s +* I) by A1,A5,XBOOLE_0:def 10;
+  hence thesis by A16,FUNCT_1:9;
 end;
 
 theorem
-  for I,J being Program of SCM+FSA
-  for s being State of SCM+FSA st Initialized J c= s holds
-  Initialized I c= s +* I
+  for I,J being Program of SCM+FSA for s being State of SCM+FSA st
+  Initialized J c= s holds Initialized I c= s +* I
 proof
   let I,J be Program of SCM+FSA;
   let s be State of SCM+FSA;
-  assume Initialized J c= s;
+  assume
+  Initialized J c= s;
   then s +* Initialized I = s +* I by Th51;
   hence thesis by FUNCT_4:26;
 end;
 
 theorem
-  for I,J being Program of SCM+FSA for s being State of SCM+FSA holds
-  s +* Initialized I, s +* Initialized J equal_outside NAT
+  for I,J being Program of SCM+FSA for s being State of SCM+FSA holds s
+  +* Initialized I, s +* Initialized J equal_outside NAT
 proof
   let I,J be Program of SCM+FSA;
   let s be State of SCM+FSA;
-A1: intloc 0 in dom Initialized I & IC SCM+FSA in dom Initialized I &
-  intloc 0 in dom Initialized J & IC SCM+FSA in dom Initialized J
-  by Th24,Th45;
-  then
-A2: IC (s +* Initialized J) = (Initialized J).IC SCM+FSA by FUNCT_4:14
-    .= insloc 0 by Th46
-    .= (Initialized I).IC SCM+FSA by Th46
-    .= IC (s +* Initialized I) by A1,FUNCT_4:14;
-A3: now
+A1: IC SCM+FSA in dom Initialized I by Th24;
+A2: intloc 0 in dom Initialized J by Th45;
+A3: intloc 0 in dom Initialized I by Th45;
+A4: now
     let a be Int-Location;
     per cases;
     suppose
-A4:   a = intloc 0;
-      hence (s +* Initialized J).a = (Initialized J).a by A1,FUNCT_4:14
-        .= 1 by A4,Th46
-        .= (Initialized I).a by A4,Th46
-        .= (s +* Initialized I).a by A1,A4,FUNCT_4:14;
+A5:   a = intloc 0;
+      hence (s +* Initialized J).a = (Initialized J).a by A2,FUNCT_4:14
+        .= 1 by A5,Th46
+        .= (Initialized I).a by A5,Th46
+        .= (s +* Initialized I).a by A3,A5,FUNCT_4:14;
     end;
     suppose
-A5:   a <> intloc 0;
+A6:   a <> intloc 0;
       then
-A6:   not a in dom Initialized I by Th48;
-      not a in dom Initialized J by A5,Th48;
+A7:   not a in dom Initialized I by Th48;
+      not a in dom Initialized J by A6,Th48;
       hence (s +* Initialized J).a = s.a by FUNCT_4:12
-        .= (s +* Initialized I).a by A6,FUNCT_4:12;
+        .= (s +* Initialized I).a by A7,FUNCT_4:12;
     end;
   end;
-  now
+A8: now
     let f be FinSeq-Location;
-A7: not f in dom Initialized I by Th49;
+A9: not f in dom Initialized I by Th49;
     not f in dom Initialized J by Th49;
     hence (s +* Initialized J).f = s.f by FUNCT_4:12
-      .= (s +* Initialized I).f by A7,FUNCT_4:12;
+      .= (s +* Initialized I).f by A9,FUNCT_4:12;
   end;
-  hence thesis by A2,A3,Th28;
+  IC SCM+FSA in dom Initialized J by Th24;
+  then IC (s +* Initialized J) = (Initialized J).IC SCM+FSA by FUNCT_4:14
+    .= insloc 0 by Th46
+    .= (Initialized I).IC SCM+FSA by Th46
+    .= IC (s +* Initialized I) by A1,FUNCT_4:14;
+  hence thesis by A4,A8,Th28;
 end;
 
 begin :: The composition of macroinstructions
@@ -2137,44 +2190,50 @@ begin :: The composition of macroinstructions
 definition
   let I,J be Program of SCM+FSA;
   func I ';' J -> Program of SCM+FSA equals
-  Directed I +* ProgramPart Relocated(J, card I);
+  Directed I +* ProgramPart
+  Relocated(J, card I);
   coherence
   proof
     set P = Directed I +* [ProgramPart Relocated(J, card I)];
     P is initial
     proof
-      let m,n be Nat such that
-A1:    n in dom(P) and
-A2:   m < n;
       set D = {l+card I: l in dom ProgramPart J};
-A3:   dom Directed I = dom I by FUNCT_4:105;
-      dom ProgramPart Relocated(J,card I) = D by SCMFSA_5:3;
+      let m,n be Nat such that
+A1:   n in dom(P) and
+A2:   m < n;
+      dom Directed I = dom I & dom ProgramPart Relocated(J,card I) = D by
+FUNCT_4:105,SCMFSA_5:3;
       then
-A4:   dom(P) = dom I \/ D by A3,FUNCT_4:def 1;
-      per cases by A1,A4,XBOOLE_0:def 3;
-      suppose insloc n in dom I;
+A3:   dom(P) = dom I \/ D by FUNCT_4:def 1;
+      per cases by A1,A3,XBOOLE_0:def 3;
+      suppose
+        insloc n in dom I;
         then insloc m in dom I by A2,SCMNORM:def 1;
-        hence  thesis by A4,XBOOLE_0:def 3;
+        hence thesis by A3,XBOOLE_0:def 3;
       end;
-      suppose insloc n in D;
+      suppose
+        insloc n in D;
         then consider l such that
-A5:     insloc n = l+card I and
-A6:      l in dom ProgramPart J;
-        now per cases;
-          case m < card I;
+A4:     insloc n = l+card I and
+A5:     l in dom ProgramPart J;
+        now
+          per cases;
+          case
+            m < card I;
             then insloc m in dom I by Th15;
-            hence insloc m in dom(P) by A4,XBOOLE_0:def 3;
+            hence insloc m in dom(P) by A3,XBOOLE_0:def 3;
           end;
-          case m >= card I;
+          case
+            m >= card I;
             then consider l1 being Nat such that
-A7:         m = card I + l1 by NAT_1:10;
+A6:         m = card I + l1 by NAT_1:10;
             reconsider l1 as Element of NAT by ORDINAL1:def 13;
-            l1 < l by A2,A5,A7,XREAL_1:8;
-            then l1 in dom ProgramPart J by A6,SCMNORM:def 1;
-            hence insloc m in D by A7;
+            l1 < l by A2,A4,A6,XREAL_1:8;
+            then l1 in dom ProgramPart J by A5,SCMNORM:def 1;
+            hence insloc m in D by A6;
           end;
         end;
-        hence  thesis by A4,XBOOLE_0:def 3;
+        hence thesis by A3,XBOOLE_0:def 3;
       end;
     end;
     hence thesis;
@@ -2183,27 +2242,29 @@ A7:         m = card I + l1 by NAT_1:10;
 end;
 
 theorem
-  for I,J being Program of SCM+FSA, l being Instruction-Location of SCM+FSA
-  st l in dom I & I.l <> halt SCM+FSA holds (I ';' J).l = I.l
+  for I,J being Program of SCM+FSA, l being Instruction-Location of
+  SCM+FSA st l in dom I & I.l <> halt SCM+FSA holds (I ';' J).l = I.l
 proof
-  let I,J be Program of SCM+FSA, l be Instruction-Location of SCM+FSA such that
+  let I,J be Program of SCM+FSA, l be Instruction-Location of SCM+FSA such
+  that
 A1: l in dom I and
 A2: I.l <> halt SCM+FSA;
-  ProgramPart Relocated(J, card I)
-  = IncAddr([Shift(ProgramPart J,card I)],card I) by SCMFSA_5:2;
+  ProgramPart Relocated(J, card I) = IncAddr([Shift(ProgramPart J,card I)]
+  ,card I) by SCMFSA_5:2;
   then
-A3: dom ProgramPart Relocated(J, card I)
-  = dom Shift(ProgramPart J,card I) by SCMFSA_4:def 6;
-A4: now
-    assume l in dom(ProgramPart Relocated(J, card I));
-    then l in { m+card I: m in dom ProgramPart J }
-    by A3,VALUED_1:def 12;
+A3: dom ProgramPart Relocated(J, card I) = dom Shift(ProgramPart J,card I)
+  by SCMFSA_4:def 6;
+  now
+    assume
+    l in dom(ProgramPart Relocated(J, card I));
+    then l in { m+card I: m in dom ProgramPart J } by A3,VALUED_1:def 12;
     then consider m such that
-A5: l = m+card I and m in dom ProgramPart J;
-    m + card I < card I by A1,A5,Th15;
+A4: l = m+card I and
+    m in dom ProgramPart J;
+    m + card I < card I by A1,A4,Th15;
     hence contradiction by NAT_1:11;
   end;
-  thus (I ';' J).l = (Directed I).l by A4,FUNCT_4:12
+  hence (I ';' J).l = (Directed I).l by FUNCT_4:12
     .= I.l by A2,FUNCT_4:111;
 end;
 
@@ -2211,19 +2272,19 @@ theorem
   for I,J being Program of SCM+FSA holds Directed I c= I ';' J
 proof
   let I,J be Program of SCM+FSA;
-  dom (I ';' J) = dom Directed I \/ dom ProgramPart Relocated(J,card I)
-  by FUNCT_4:def 1;
-  then
-A1: dom Directed I c= dom (I ';' J) by XBOOLE_1:7;
-  now
+A1: now
     let x be set;
-    assume x in dom Directed I;
+    assume
+    x in dom Directed I;
     then
 A2: x in dom I by FUNCT_4:105;
     dom I misses dom ProgramPart Relocated(J,card I) by Th16;
     then not x in dom ProgramPart Relocated(J,card I) by A2,XBOOLE_0:3;
     hence (Directed I).x = (I ';' J).x by FUNCT_4:12;
   end;
+  dom (I ';' J) = dom Directed I \/ dom ProgramPart Relocated(J,card I) by
+FUNCT_4:def 1;
+  then dom Directed I c= dom (I ';' J) by XBOOLE_1:7;
   hence thesis by A1,GRFUNC_1:8;
 end;
 
@@ -2231,8 +2292,8 @@ theorem Th56:
   for I,J being Program of SCM+FSA holds dom I c= dom (I ';' J)
 proof
   let I,J be Program of SCM+FSA;
-  dom (I ';' J)
-  = dom Directed I \/ dom ProgramPart Relocated(J,card I) by FUNCT_4:def 1
+  dom (I ';' J) = dom Directed I \/ dom ProgramPart Relocated(J,card I) by
+FUNCT_4:def 1
     .= dom I \/ dom ProgramPart Relocated(J,card I) by FUNCT_4:105;
   hence thesis by XBOOLE_1:7;
 end;
@@ -2241,46 +2302,37 @@ theorem
   for I,J being Program of SCM+FSA holds I +* (I ';' J) = (I ';' J)
 proof
   let I,J be Program of SCM+FSA;
-A1: dom (I +* (I ';' J)) = dom I \/ dom (I ';' J) by FUNCT_4:def 1
+A1: for x be set st x in dom (I ';' J) holds (I +* (I ';' J)).x = (I ';' J).
+  x by FUNCT_4:14;
+  dom (I +* (I ';' J)) = dom I \/ dom (I ';' J) by FUNCT_4:def 1
     .= dom (I ';' J) by Th56,XBOOLE_1:12;
-  for x be set st x in dom (I ';' J) holds
-  (I +* (I ';' J)).x = (I ';' J).x by FUNCT_4:14;
   hence thesis by A1,FUNCT_1:9;
 end;
 
 theorem
-  for I,J being Program of SCM+FSA holds
-  Initialized I +* (I ';' J) = Initialized (I ';' J)
+  for I,J being Program of SCM+FSA holds Initialized I +* (I ';' J) =
+  Initialized (I ';' J)
 proof
   let I,J be Program of SCM+FSA;
 A1: dom I \/ dom (I ';' J) = dom (I ';' J) by Th56,XBOOLE_1:12;
-A2: dom (Initialized I+*(I ';' J))
-  = dom Initialized I \/ dom (I ';' J) by FUNCT_4:def 1
-    .= dom I \/ {intloc 0} \/ {IC SCM+FSA} \/ dom (I ';' J) by Th43
-    .= dom I \/ {intloc 0} \/ ({IC SCM+FSA} \/ dom (I ';' J)) by XBOOLE_1:4
-    .= dom I \/ ({intloc 0} \/ (dom (I ';' J) \/ {IC SCM+FSA})) by XBOOLE_1:4
-    .= dom I \/ ({intloc 0} \/ dom (I ';' J) \/ {IC SCM+FSA}) by XBOOLE_1:4
-    .= dom I \/ (dom (I ';' J) \/ {intloc 0}) \/ {IC SCM+FSA} by XBOOLE_1:4
-    .= dom (I ';' J) \/ {intloc 0} \/ {IC SCM+FSA} by A1,XBOOLE_1:4
-    .= dom Initialized (I ';' J) by Th43;
-  now
+A2: now
     let x be set;
     assume
 A3: x in dom Initialized (I ';' J);
     per cases by A3,Th44;
     suppose
 A4:   x in dom (I ';' J);
-      then x <> intloc 0 by Th47;
-      then not x in {intloc 0} by TARSKI:def 1;
-      then
-A5:   not x in dom ((intloc 0) .--> 1) by FUNCOP_1:19;
-      x <> IC SCM+FSA by A4,Th47;
+      then x <> IC SCM+FSA by Th47;
       then not x in {IC SCM+FSA} by TARSKI:def 1;
       then
-A6:   not x in dom Start-At insloc 0 by FUNCOP_1:19;
+A5:   not x in dom Start-At insloc 0 by FUNCOP_1:19;
+      x <> intloc 0 by A4,Th47;
+      then not x in {intloc 0} by TARSKI:def 1;
+      then
+A6:   not x in dom ((intloc 0) .--> 1) by FUNCOP_1:19;
       thus (Initialized I+*(I ';' J)).x = (I ';' J).x by A4,FUNCT_4:14
-        .= ((I ';' J) +* ((intloc 0) .--> 1)).x by A5,FUNCT_4:12
-        .= (Initialized (I ';' J)).x by A6,FUNCT_4:12;
+        .= ((I ';' J) +* ((intloc 0) .--> 1)).x by A6,FUNCT_4:12
+        .= (Initialized (I ';' J)).x by A5,FUNCT_4:12;
     end;
     suppose
 A7:   x = intloc 0;
@@ -2297,6 +2349,15 @@ A8:   x = IC SCM+FSA;
         .= (Initialized (I ';' J)).x by A8,Th46;
     end;
   end;
+  dom (Initialized I+*(I ';' J)) = dom Initialized I \/ dom (I ';' J) by
+FUNCT_4:def 1
+    .= dom I \/ {intloc 0} \/ {IC SCM+FSA} \/ dom (I ';' J) by Th43
+    .= dom I \/ {intloc 0} \/ ({IC SCM+FSA} \/ dom (I ';' J)) by XBOOLE_1:4
+    .= dom I \/ ({intloc 0} \/ (dom (I ';' J) \/ {IC SCM+FSA})) by XBOOLE_1:4
+    .= dom I \/ ({intloc 0} \/ dom (I ';' J) \/ {IC SCM+FSA}) by XBOOLE_1:4
+    .= dom I \/ (dom (I ';' J) \/ {intloc 0}) \/ {IC SCM+FSA} by XBOOLE_1:4
+    .= dom (I ';' J) \/ {intloc 0} \/ {IC SCM+FSA} by A1,XBOOLE_1:4
+    .= dom Initialized (I ';' J) by Th43;
   hence thesis by A2,FUNCT_1:9;
 end;
 
@@ -2305,7 +2366,6 @@ begin :: The compostion of instruction and macroinstructions
 definition
   let i, J;
   func i ';' J -> Program of SCM+FSA equals
-
   Macro i ';' J;
   correctness;
 end;
@@ -2313,7 +2373,6 @@ end;
 definition
   let I, j;
   func I ';' j -> Program of SCM+FSA equals
-
   I ';' Macro j;
   correctness;
 end;
@@ -2321,7 +2380,6 @@ end;
 definition
   let i,j;
   func i ';' j -> Program of SCM+FSA equals
-
   Macro i ';' Macro j;
   correctness;
 end;
@@ -2335,34 +2393,33 @@ theorem
 theorem Th61:
   card(I ';' J) = card I + card J
 proof
-A1: card dom(I ';' J) = card(I ';' J) &
-  card dom I = card I & card dom J = card J by CARD_1:104;
-A2: card dom ProgramPart Relocated(J, card I)
-  = card ProgramPart Relocated(J, card I) by CARD_1:104
+A1: card dom(I ';' J) = card(I ';' J) & card dom I = card I by CARD_1:104;
+A2: card dom J = card J by CARD_1:104;
+A3: dom(I ';' J) = dom Directed I \/ dom ProgramPart Relocated(J, card I) by
+FUNCT_4:def 1
+    .= dom I \/ dom ProgramPart Relocated(J, card I) by FUNCT_4:105;
+  card dom ProgramPart Relocated(J, card I) = card ProgramPart Relocated(J
+  , card I) by CARD_1:104
     .= card J by Th17
     .= card dom J by CARD_1:104;
-  dom(I ';' J)
-  = dom Directed I \/ dom ProgramPart Relocated(J, card I) by FUNCT_4:def 1
-    .= dom I \/ dom ProgramPart Relocated(J, card I) by FUNCT_4:105;
-  hence thesis by A1,A2,Th16,CARD_2:53;
+  hence thesis by A1,A2,A3,Th16,CARD_2:53;
 end;
 
 theorem
- ProgramPart Relocated(I,l) = IncAddr(Shift(I,l),l)
+  ProgramPart Relocated(I,l) = IncAddr(Shift(I,l),l)
 proof
-   ProgramPart I = I by AMI_1:105;
- hence ProgramPart Relocated(I,l)
-      = ProgramPart(Start-At ((IC I)+l)+*
-         IncAddr(Shift(I,l),l))+*ProgramPart(DataPart I) by FUNCT_4:75
-     .= ProgramPart(Start-At ((IC I)+l)+*
-            IncAddr(Shift(I,l),l))+*{} by AMI_1:136
-     .= ProgramPart(Start-At ((IC I)+l)+*
-            IncAddr(Shift(I,l),l)) by FUNCT_4:22
-     .= ProgramPart(Start-At ((IC I)+l))+*
-            ProgramPart(IncAddr(Shift(I,l),l)) by FUNCT_4:75
-     .= {}+*ProgramPart(IncAddr(Shift(I,l),l)) by AMI_1:135
-     .= ProgramPart(IncAddr(Shift(I,l),l)) by FUNCT_4:21
-     .= IncAddr(Shift(I,l),l) by AMI_1:105;
+  ProgramPart I = I by AMI_1:105;
+  hence
+  ProgramPart Relocated(I,l) = ProgramPart(Start-At ((IC I)+l)+* IncAddr(
+  Shift(I,l),l))+*ProgramPart(DataPart I) by FUNCT_4:75
+    .= ProgramPart(Start-At ((IC I)+l)+* IncAddr(Shift(I,l),l))+*{} by
+AMI_1:136
+    .= ProgramPart(Start-At ((IC I)+l)+* IncAddr(Shift(I,l),l)) by FUNCT_4:22
+    .= ProgramPart(Start-At ((IC I)+l))+* ProgramPart(IncAddr(Shift(I,l),l))
+  by FUNCT_4:75
+    .= {}+*ProgramPart(IncAddr(Shift(I,l),l)) by AMI_1:135
+    .= ProgramPart(IncAddr(Shift(I,l),l)) by FUNCT_4:21
+    .= IncAddr(Shift(I,l),l) by AMI_1:105;
 end;
 
 registration
@@ -2372,8 +2429,8 @@ registration
   correctness
   proof
     halt SCM+FSA <> goto l by SCMFSA_2:47,124;
-     then not halt SCM+FSA in rng Directed(P,l) by FUNCT_4:106;
-    hence thesis by AMI_1:def 52;
+    then not halt SCM+FSA in rng Directed(P,l) by FUNCT_4:106;
+    hence thesis by AMI_1:def 53;
   end;
 end;
 
@@ -2383,51 +2440,48 @@ registration
   correctness;
 end;
 
-theorem Th39:
-  for I being preProgram of SCM+FSA,
-  l being Instruction-Location of SCM+FSA holds
-  I is halt-free implies Directed(I,l) = I
+theorem Th63:
+  for I being preProgram of SCM+FSA, l being Instruction-Location
+  of SCM+FSA holds I is halt-free implies Directed(I,l) = I
 proof
   let I be preProgram of SCM+FSA;
   let l be Instruction-Location of SCM+FSA;
-  assume I is halt-free;
-  then not halt SCM+FSA in rng I by AMI_1:def 52;
+  assume
+  I is halt-free;
+  then not halt SCM+FSA in rng I by AMI_1:def 53;
   hence thesis by FUNCT_4:109;
 end;
 
-theorem Th49:
-  for I being preProgram of SCM+FSA, x being set,
-  k being Element of NAT holds x in dom ProgramPart Relocated(I,k) implies
-  (ProgramPart Relocated(I,k)).x = Relocated(I,k).x
+theorem Th64:
+  for I being preProgram of SCM+FSA, x being set, k being Element
+of NAT holds x in dom ProgramPart Relocated(I,k) implies (ProgramPart Relocated
+  (I,k)).x = Relocated(I,k).x
 proof
   let I be preProgram of SCM+FSA;
   let x be set;
   let k be Element of NAT;
+A1: ProgramPart Relocated(I,k) c= Relocated(I,k) by RELAT_1:88;
   assume
-A1: x in dom ProgramPart Relocated(I,k);
-  ProgramPart Relocated(I,k) c= Relocated(I,k) by RELAT_1:88;
+  x in dom ProgramPart Relocated(I,k);
   hence thesis by A1,GRFUNC_1:8;
 end;
 
-theorem Th50:
+theorem Th65:
   for I being preProgram of SCM+FSA, k being Element of NAT holds
-  ProgramPart Relocated(Directed I,k) =
-  Directed([ProgramPart Relocated(I,k)],insloc (card I + k))
+  ProgramPart Relocated(Directed I,k) = Directed([ProgramPart Relocated(I,k)],
+  insloc (card I + k))
 proof
   let I be preProgram of SCM+FSA;
   let k be Element of NAT;
 A1: dom ProgramPart I = dom I by AMI_1:105;
-A2: dom ProgramPart Directed I = dom Directed I by AMI_1:105
+  then
+A2: dom ProgramPart Relocated(I,k) = {m + k: m in dom I} by SCMFSA_5:3;
+A3: dom ProgramPart Directed I = dom Directed I by AMI_1:105
     .= dom I by FUNCT_4:105;
   then
-A3: dom ProgramPart Relocated(Directed I,k) =
-  {m + k: m in dom I} by SCMFSA_5:3;
-A4: dom ProgramPart Relocated(I,k)
-  = {m + k: m in dom I} by A1,SCMFSA_5:3;
-  then
-A5: dom Directed([ProgramPart Relocated(I,k)],insloc (card I + k))
-  = {m + k: m in dom I} by FUNCT_4:105;
-  now
+A4: dom ProgramPart Relocated(Directed I,k) = {m + k: m in dom I} by SCMFSA_5:3
+;
+A5: now
     let x be set;
     assume
 A6: x in {m + k: m in dom I};
@@ -2438,107 +2492,104 @@ A8: n in dom I;
     then reconsider i = (Directed I).insloc n as Instruction of SCM+FSA by A8,
 AMI_1:126;
     reconsider i0 = I.insloc n as Instruction of SCM+FSA by A8,AMI_1:126;
-A10: (ProgramPart Relocated(Directed I,k)).x
-    = Relocated(Directed I,k).x by A3,A6,Th49
-      .= IncAddr(i,k) by A2,A8,A7,SCMFSA_5:7;
-    now per cases;
+A9: now
+      per cases;
       suppose
-A11:    i0 = halt SCM+FSA;
+A10:    i0 = halt SCM+FSA;
         then
-A12:    i = goto insloc card I by A8,FUNCT_4:112;
-A13:    (ProgramPart Relocated(I,k)).x = Relocated(I,k).x by A4,A6,Th49
-          .= IncAddr(i0,k) by A1,A8,A7,SCMFSA_5:7
-          .= halt SCM+FSA by A11,SCMFSA_4:8;
+A11:    i = goto insloc card I by A8,FUNCT_4:112;
+A12:    (ProgramPart Relocated(I,k)).x = Relocated(I,k).x by A2,A6,Th64
+          .= IncAddr(i0,k) by A1,A7,A8,SCMFSA_5:7
+          .= halt SCM+FSA by A10,SCMFSA_4:8;
         then (ProgramPart Relocated(I,k)).x in {halt SCM+FSA} by TARSKI:def 1;
-        then (ProgramPart Relocated(I,k)).x in dom (halt SCM+FSA .-->
-        goto insloc (card I + k)) by FUNCOP_1:19;
-        then
-A14:    x in dom ((halt SCM+FSA .--> goto insloc (card I + k))*
-        ProgramPart Relocated(I,k)) by A4,A6,FUNCT_1:21;
-        thus (Directed([ProgramPart Relocated(I,k)],insloc (card I + k))).x
-          = ((halt SCM+FSA .--> goto insloc (card I + k))*
-        ProgramPart Relocated(I,k)).x by A14,FUNCT_4:14
-          .= (halt SCM+FSA .--> goto insloc (card I + k)).
-        ((ProgramPart Relocated(I,k)).x) by A4,A6,FUNCT_1:23
-          .= goto insloc (card I + k) by A13,FUNCOP_1:87
-          .= IncAddr(i,k) by A12,SCMFSA_4:14;
+        then (ProgramPart Relocated(I,k)).x in dom (halt SCM+FSA .--> goto
+        insloc (card I + k)) by FUNCOP_1:19;
+        then x in dom ((halt SCM+FSA .--> goto insloc (card I + k))*
+        ProgramPart Relocated(I,k)) by A2,A6,FUNCT_1:21;
+        hence (Directed([ProgramPart Relocated(I,k)],insloc (card I + k))).x =
+((halt SCM+FSA .--> goto insloc (card I + k))* ProgramPart Relocated(I,k)).x
+by FUNCT_4:14
+          .= (halt SCM+FSA .--> goto insloc (card I + k)). ((ProgramPart
+        Relocated(I,k)).x) by A2,A6,FUNCT_1:23
+          .= goto insloc (card I + k) by A12,FUNCOP_1:87
+          .= IncAddr(i,k) by A11,SCMFSA_4:14;
       end;
       suppose
-A15:    i0 <> halt SCM+FSA;
-        then InsCode i0 <> 0 by SCMFSA_2:122;
+A13:    i0 <> halt SCM+FSA;
+A14:    (ProgramPart Relocated(I,k)).x = Relocated(I,k).x by A2,A6,Th64
+          .= IncAddr(i0,k) by A1,A7,A8,SCMFSA_5:7;
+        InsCode i0 <> 0 by A13,SCMFSA_2:122;
+        then IncAddr(i0,k) <> halt SCM+FSA by SCMFSA_2:124,SCMFSA_4:22;
+        then not (ProgramPart Relocated(I,k)).x in {halt SCM+FSA} by A14,
+TARSKI:def 1;
         then
-A16:    IncAddr(i0,k) <> halt SCM+FSA by SCMFSA_2:124,SCMFSA_4:22;
-A17:    (ProgramPart Relocated(I,k)).x = Relocated(I,k).x by A4,A6,Th49
-          .= IncAddr(i0,k) by A1,A8,A7,SCMFSA_5:7;
-        then not (ProgramPart Relocated(I,k)).x in {halt SCM+FSA}
-        by A16,TARSKI:def 1;
-        then not (ProgramPart Relocated(I,k)).x in dom (halt SCM+FSA .-->
-        goto insloc (card I + k)) by FUNCOP_1:19;
-        then
-A18:    not x in dom ((halt SCM+FSA .--> goto insloc (card I + k)) *
+        not (ProgramPart Relocated(I,k)).x in dom (halt SCM+FSA .--> goto
+        insloc (card I + k)) by FUNCOP_1:19;
+        then not x in dom ((halt SCM+FSA .--> goto insloc (card I + k)) *
         ProgramPart Relocated(I,k)) by FUNCT_1:21;
-        thus (Directed([ProgramPart Relocated(I,k)],insloc (card I + k))).x
-          = ([ProgramPart Relocated(I,k)]).x by A18,FUNCT_4:12
-          .= IncAddr(i,k) by A15,A17,FUNCT_4:111;
+        hence (Directed([ProgramPart Relocated(I,k)],insloc (card I + k))).x =
+        ([ProgramPart Relocated(I,k)]).x by FUNCT_4:12
+          .= IncAddr(i,k) by A13,A14,FUNCT_4:111;
       end;
     end;
-    hence (ProgramPart Relocated(Directed I,k)).x =
-    (Directed([ProgramPart Relocated(I,k)],insloc (card I + k))).x by A10;
+    (ProgramPart Relocated(Directed I,k)).x = Relocated(Directed I,k).x
+    by A4,A6,Th64
+      .= IncAddr(i,k) by A3,A7,A8,SCMFSA_5:7;
+    hence (ProgramPart Relocated(Directed I,k)).x = (Directed([ProgramPart
+    Relocated(I,k)],insloc (card I + k))).x by A9;
   end;
-  hence thesis
-   by A3,A5,FUNCT_1:9;
+  dom Directed([ProgramPart Relocated(I,k)],insloc (card I + k)) = {m + k:
+  m in dom I} by A2,FUNCT_4:105;
+  hence thesis by A4,A5,FUNCT_1:9;
 end;
 
-theorem Th52:
-  for I,J being Program of SCM+FSA holds Directed (I ';' J) = I ';' Directed J
+theorem Th66:
+  for I,J being Program of SCM+FSA holds Directed (I ';' J) = I
+  ';' Directed J
 proof
   let I,J be Program of SCM+FSA;
-  thus I ';' Directed J
-    = Directed I +* Directed([ProgramPart Relocated(J,card I)],
-  insloc (card I + card J)) by Th50
-    .= Directed I +*
-  Directed([ProgramPart Relocated(J,card I)],insloc card (I ';' J))
-  by Th61
-    .= Directed(Directed I,insloc card (I ';' J)) +*
-  Directed([ProgramPart Relocated(J,card I)],insloc card (I ';' J)) by Th39
+  thus I ';' Directed J = Directed I +* Directed([ProgramPart Relocated(J,card
+  I)], insloc (card I + card J)) by Th65
+    .= Directed I +* Directed([ProgramPart Relocated(J,card I)],insloc card
+  (I ';' J)) by Th61
+    .= Directed(Directed I,insloc card (I ';' J)) +* Directed([ProgramPart
+  Relocated(J,card I)],insloc card (I ';' J)) by Th63
     .= Directed (I ';' J) by FUNCT_7:119;
 end;
 
-theorem Th62:
+theorem Th67:
   I ';' J ';' K = I ';' (J ';' K)
 proof
-XX:   ProgramPart Relocated(J ';' K, card I)
-   = ProgramPart Relocated(Directed J, card I)
-         +* ProgramPart Relocated([ProgramPart Relocated(K, card J)], card I)
-            by Th21
-   .= ProgramPart Relocated(Directed J, card I)
-         +* ProgramPart Relocated(K,card J + card I) by Th22;
- thus I ';' J ';' K
-       = (I ';' Directed J) +* ProgramPart Relocated(K, card (I ';' J))
-                         by Th52
-      .= Directed I +* (ProgramPart Relocated(Directed J, card I)
-          +* ProgramPart Relocated(K, card (I ';' J))) by FUNCT_4:15
-      .= I ';' (J ';' K) by XX,Th61;
+A1: ProgramPart Relocated(J ';' K, card I) = ProgramPart Relocated(Directed
+J, card I) +* ProgramPart Relocated([ProgramPart Relocated(K, card J)], card I)
+  by Th21
+    .= ProgramPart Relocated(Directed J, card I) +* ProgramPart Relocated(K,
+  card J + card I) by Th22;
+  thus I ';' J ';' K = (I ';' Directed J) +* ProgramPart Relocated(K, card (I
+  ';' J)) by Th66
+    .= Directed I +* (ProgramPart Relocated(Directed J, card I) +*
+  ProgramPart Relocated(K, card (I ';' J))) by FUNCT_4:15
+    .= I ';' (J ';' K) by A1,Th61;
 end;
 
 theorem
-  I ';' J ';' k = I ';' (J ';' k) by Th62;
+  I ';' J ';' k = I ';' (J ';' k) by Th67;
 
 theorem
-  I ';' j ';' K = I ';' (j ';' K) by Th62;
+  I ';' j ';' K = I ';' (j ';' K) by Th67;
 
 theorem
-  I ';' j ';' k = I ';' (j ';' k) by Th62;
+  I ';' j ';' k = I ';' (j ';' k) by Th67;
 
 theorem
-  i ';' J ';' K = i ';' (J ';' K) by Th62;
+  i ';' J ';' K = i ';' (J ';' K) by Th67;
 
 theorem
-  i ';' J ';' k = i ';' (J ';' k) by Th62;
+  i ';' J ';' k = i ';' (J ';' k) by Th67;
 
 theorem
-  i ';' j ';' K = i ';' (j ';' K) by Th62;
+  i ';' j ';' K = i ';' (j ';' K) by Th67;
 
 theorem
-  i ';' j ';' k = i ';' (j ';' k) by Th62;
+  i ';' j ';' k = i ';' (j ';' k) by Th67;
 

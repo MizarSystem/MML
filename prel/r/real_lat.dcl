@@ -11,6 +11,7 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
@@ -21,15 +22,15 @@
 </Signature>
 <FCluster aid="REAL_LAT" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="105"/>
+<Func kind="K" nr="113"/>
 <Cluster>
-<Adjective nr="31" value="false"/>
+<Adjective nr="32" value="false"/>
 <Adjective nr="45"/>
 </Cluster>
 </FCluster>
 <FCluster aid="REAL_LAT" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="105"/>
+<Func kind="K" nr="113"/>
 <Cluster>
 <Adjective nr="45"/>
 <Adjective nr="52"/>
@@ -37,7 +38,7 @@
 </FCluster>
 <FCluster aid="REAL_LAT" nr="3">
 <ArgTypes/>
-<Func kind="K" nr="105"/>
+<Func kind="K" nr="113"/>
 <Cluster>
 <Adjective nr="45"/>
 <Adjective nr="53"/>
@@ -49,7 +50,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="105"/>
+<Func kind="K" nr="113"/>
 </Func>
 </Typ>
 <Cluster>

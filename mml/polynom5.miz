@@ -14,20 +14,18 @@ environ
       COMPTRIG, RFINSEQ, ABSVALUE, POLYNOM5, XCMPLX_0, FRECHET2, ALGSTR_0;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
       COMPLEX1, REAL_1, NAT_1, POWER, BINOP_1, RELAT_1, FUNCT_1, FUNCT_2,
-      PARTFUN1, FUNCOP_1, FINSEQ_1,
-      POLYNOM1, RVSUM_1, STRUCT_0,
-      ALGSTR_0, RLVECT_1, VECTSP_2, VECTSP_1, RFINSEQ, FUNCSDOM, CFCONT_1,
-      VALUED_0, VALUED_1, SEQ_1, SEQ_2, SEQM_3, SEQ_4, XXREAL_0, COMSEQ_1,
-      COMSEQ_2, COMSEQ_3, NAT_D, COMPLFLD, HAHNBAN1, ALGSEQ_1, POLYNOM3,
-      POLYNOM4, GROUP_1, FUNCT_7, RECDEF_1;
+      PARTFUN1, FUNCOP_1, FINSEQ_1, POLYNOM1, RVSUM_1, STRUCT_0, ALGSTR_0,
+      RLVECT_1, VECTSP_2, VECTSP_1, RFINSEQ, CFCONT_1, VALUED_0, VALUED_1,
+      SEQ_1, SEQ_2, SEQ_4, XXREAL_0, COMSEQ_1, COMSEQ_2, NAT_D, COMPLFLD,
+      HAHNBAN1, ALGSEQ_1, POLYNOM3, POLYNOM4, GROUP_1, FUNCT_7, RECDEF_1;
  constructors FINSEQ_4, ENUMSET1, REAL_1, SEQ_4, FINSOP_1, COMSEQ_2, RVSUM_1,
       COMSEQ_3, CFCONT_1, RFINSEQ, NAT_D, FUNCSDOM, VECTSP_2, ALGSTR_1,
       MATRIX_2, HAHNBAN1, POLYNOM1, POLYNOM4, SEQ_1, RECDEF_1, BINOP_2,
       SUPINF_1, XXREAL_2, POWER, SEQ_2, RELSET_1, FUNCT_7;
- registrations XBOOLE_0, FUNCT_1, ORDINAL1, RELSET_1, FUNCT_2, NUMBERS,
-      XCMPLX_0, XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, FINSEQ_1, SEQM_3,
-      COMSEQ_2, STRUCT_0, GROUP_1, VECTSP_1, COMPLFLD, ALGSTR_1, POLYNOM3,
-      POLYNOM4, VALUED_0, ALGSTR_0, VALUED_1, FUNCOP_1, SEQ_4;
+ registrations FUNCT_1, ORDINAL1, RELSET_1, FUNCT_2, NUMBERS, XCMPLX_0,
+      XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, FINSEQ_1, COMSEQ_2, STRUCT_0,
+      GROUP_1, VECTSP_1, COMPLFLD, ALGSTR_1, POLYNOM3, POLYNOM4, VALUED_0,
+      VALUED_1, FUNCOP_1, SEQ_4, CARD_1;
  requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
  definitions TARSKI, ALGSEQ_1, SEQ_4, XBOOLE_0, RVSUM_1, POLYNOM3, HAHNBAN1,
       STRUCT_0, ALGSTR_0, XCMPLX_0;
@@ -45,16 +43,19 @@ environ
 begin :: Preliminaries
 
 theorem Th1:
-  for n,m be Element of NAT st n <> 0 & m <> 0 holds n*m - n - m + 1 >= 0
+  for n,m be Element of NAT st n <> 0 & m <> 0 holds n*m - n - m +
+  1 >= 0
 proof
   let n,m be Element of NAT;
   assume that
 A1: n <> 0 and
 A2: m <> 0;
-  n > 0 & m > 0 by A1,A2;
-  then n >= 0+1 & m >= 0+1 by NAT_1:13;
-  then n-1 >= 0+1-1 & m-1 >= 0+1-1 by XREAL_1:11;
-  then (n-1)*(m-1) >= 0;
+  m >= 0+1 by A2,NAT_1:13;
+  then
+A3: m-1 >= 0+1-1 by XREAL_1:11;
+  n >= 0+1 by A1,NAT_1:13;
+  then n-1 >= 0+1-1 by XREAL_1:11;
+  then (n-1)*(m-1) >= 0 by A3;
   hence thesis;
 end;
 
@@ -62,12 +63,13 @@ theorem Th2:
   for x,y be real number st y > 0 holds min(x,y)/max(x,y) <= 1
 proof
   let x,y be real number;
-  assume that
+  assume
 A1: y > 0;
   per cases;
   suppose
 A2: x > 0;
-    now per cases;
+    now
+      per cases;
       suppose
 A3:     x >= y;
         then max(x,y) = x & min(x,y) = y by XXREAL_0:def 9,def 10;
@@ -89,61 +91,64 @@ A5: x <= 0;
 end;
 
 theorem Th3:
-  for x,y be real number st
-  for c be real number st c > 0 & c < 1 holds c*x >= y holds y <= 0
+  for x,y be real number st for c be real number st c > 0 & c < 1
+  holds c*x >= y holds y <= 0
 proof
   let x,y be real number;
-  assume that
+  assume
 A1: for c be real number st c > 0 & c < 1 holds c*x >= y;
+  set ma = max(x,y);
+  set mi = min(x,y);
+  set c = mi/(2*ma);
   assume
 A2: y > 0;
-  set mi = min(x,y);
-  set ma = max(x,y);
-  set c = mi/(2*ma);
-A3: y*2 > y by A2,XREAL_1:157;
+  then
+A3: y*2 > y by XREAL_1:157;
   per cases;
   suppose
 A4: x > 0;
     then
 A5: mi > 0 & ma > 0 by A2,XXREAL_0:15,16;
-A6: c > 0 by A5;
-A7: mi/ma <= 1 by A4,Th2;
-    mi/ma*2 > mi/ma by A5,XREAL_1:157;
+    then mi/ma*2 > mi/ma by XREAL_1:157;
     then mi/ma > mi/ma/2 by XREAL_1:85;
-    then mi/ma > mi/(ma*2) by XCMPLX_1:79;
-    then c < 1 by A7,XXREAL_0:2;
     then
-A8: c*x >= y by A1,A6;
-    now per cases;
-      suppose x >= y;
+A6: mi/ma > mi/(ma*2) by XCMPLX_1:79;
+    mi/ma <= 1 by A4,Th2;
+    then c < 1 by A6,XXREAL_0:2;
+    then
+A7: c*x >= y by A1,A5;
+    now
+      per cases;
+      suppose
+        x >= y;
         then ma = x & mi = y by XXREAL_0:def 9,def 10;
         then c*x = y/2 by A4,XCMPLX_1:93;
-        hence contradiction by A3,A8,XREAL_1:85;
+        hence contradiction by A3,A7,XREAL_1:85;
       end;
       suppose
-A9:     x < y;
+A8:     x < y;
+        then ma = y & mi = x by XXREAL_0:def 9,def 10;
+        then c*x < x/(2*y)*y by A4,A8,XREAL_1:100;
         then
-A10:    ma = y & mi = x by XXREAL_0:def 9,def 10;
-        c*x < x/(2*y)*y by A4,A9,A10,XREAL_1:100;
-        then
-A11:    c*x < x/2 by A2,XCMPLX_1:93;
-        x/2 < y/2 by A9,XREAL_1:76;
-        then
-A12:    c*x < y/2 by A11,XXREAL_0:2;
-        y > y/2 by A3,XREAL_1:85;
-        hence contradiction by A8,A12,XXREAL_0:2;
+A9:     c*x < x/2 by A2,XCMPLX_1:93;
+A10:    y > y/2 by A3,XREAL_1:85;
+        x/2 < y/2 by A8,XREAL_1:76;
+        then c*x < y/2 by A9,XXREAL_0:2;
+        hence contradiction by A7,A10,XXREAL_0:2;
       end;
     end;
     hence contradiction;
   end;
-  suppose x <= 0;
+  suppose
+    x <= 0;
     then 1/2*x <= 0;
     hence contradiction by A1,A2;
   end;
 end;
 
-Lm1: for x,y be Real st for c be Real st c > 0 & c < 1 holds c*x >= y holds
-y <= 0
+Lm1: for x,y be Real st for c be Real st c > 0 & c < 1 holds c*x >= y holds y
+<= 0
+
 proof
   let x,y be Real;
   assume
@@ -151,104 +156,106 @@ A1: for c be Real st c > 0 & c < 1 holds c*x >= y;
   for c be real number st c > 0 & c < 1 holds c*x >= y
   proof
     let c be real number;
-A2: c is Real by XREAL_0:def 1;
-    assume c > 0 & c < 1;
+    assume
+A2: c > 0 & c < 1;
+    c is Real by XREAL_0:def 1;
     hence thesis by A1,A2;
   end;
   hence thesis by Th3;
 end;
 
 theorem Th4:
-  for p be FinSequence of REAL st for n be Element of NAT st n in dom p
-  holds p.n >= 0 for i be Element of NAT st i in dom p holds Sum p >= p.i
+  for p be FinSequence of REAL st for n be Element of NAT st n in
+  dom p holds p.n >= 0 for i be Element of NAT st i in dom p holds Sum p >= p.i
 proof
-  defpred Q[FinSequence of REAL] means
-  (for n be Element of NAT st n in dom $1 holds $1.n >= 0) implies
-  for i be Element of NAT st i in dom $1 holds Sum $1 >= $1.i;
-A1: Q[<*>(REAL)] by RELAT_1:60;
-A2: for p be FinSequence of REAL for x be Element of REAL st Q[p] holds
-  Q[p^<*x*>]
+  defpred Q[FinSequence of REAL] means (for n be Element of NAT st n in dom $1
+holds $1.n >= 0) implies for i be Element of NAT st i in dom $1 holds Sum $1 >=
+  $1.i;
+A1: for p be FinSequence of REAL for x be Element of REAL st Q[p] holds Q[p^
+  <*x*>]
   proof
     let p be FinSequence of REAL;
     let x be Element of REAL;
     assume
-A3: (for n be Element of NAT st n in dom p holds p.n >= 0) implies
-    for i be Element of NAT st i in dom p holds Sum p >= p.i;
+A2: (for n be Element of NAT st n in dom p holds p.n >= 0) implies for
+    i be Element of NAT st i in dom p holds Sum p >= p.i;
+    defpred P[Element of NAT] means Sum (p|$1) >= 0;
     assume
-A4: for n be Element of NAT st n in dom (p^<*x*>) holds (p^<*x*>).n >= 0;
-    let i be Element of NAT;
-    assume
-A5: i in dom (p^<*x*>);
-A6: dom p c= dom (p^<*x*>) by FINSEQ_1:39;
-A7: now
+A3: for n be Element of NAT st n in dom (p^<*x*>) holds (p^<*x*>).n >=
+    0;
+A4: dom p c= dom (p^<*x*>) by FINSEQ_1:39;
+A5: now
       let n be Element of NAT;
       assume
-A8:   n in dom p;
-      then (p^<*x*>).n >= 0 by A4,A6;
-      hence p.n >= 0 by A8,FINSEQ_1:def 7;
+A6:   n in dom p;
+      then (p^<*x*>).n >= 0 by A3,A4;
+      hence p.n >= 0 by A6,FINSEQ_1:def 7;
     end;
-    len (p^<*x*>) = len p+1 by FINSEQ_2:19;
-    then
-A9: dom (p^<*x*>) = Seg (len p+1) by FINSEQ_1:def 3
-      .= Seg len p \/ {len p+1} by FINSEQ_1:11
-      .= dom p \/ {len p+1} by FINSEQ_1:def 3;
-    len p+1 >= 0+1 by XREAL_1:8;
-    then len (p^<*x*>) >= 1 by FINSEQ_2:19;
-    then len (p^<*x*>) in dom (p^<*x*>) by FINSEQ_3:27;
-    then (p^<*x*>).len (p^<*x*>) >= 0 by A4;
-    then (p^<*x*>).(len p+1) >= 0 by FINSEQ_2:19;
-    then x >= 0 by FINSEQ_1:59;
-    then
-A10: p.i + x >= p.i + 0 by XREAL_1:8;
-    defpred P[Element of NAT] means Sum (p|$1) >= 0;
-A11: P[0] by RVSUM_1:102;
-A12: for j be Element of NAT st P[j] holds P[j+1]
+A7: for j be Element of NAT st P[j] holds P[j+1]
     proof
       let j be Element of NAT;
       assume
-A13:  Sum (p|j) >= 0;
+A8:   Sum (p|j) >= 0;
       per cases;
       suppose
-A14:    j+1 <= len p;
+A9:     j+1 <= len p;
+        then p|(j+1) = p|j ^ <*p/.(j+1)*> by FINSEQ_5:85;
+        then
+A10:    Sum (p|(j+1)) = Sum(p|j) + p/.(j+1) by RVSUM_1:104;
         j+1 >= 1 by NAT_1:11;
         then
-A15:    j+1 in dom p by A14,FINSEQ_3:27;
-        then p.(j+1) >= 0 by A7;
-        then
-A16:    p/.(j+1) >= 0 by A15,PARTFUN1:def 8;
-        p|(j+1) = p|j ^ <*p/.(j+1)*> by A14,JORDAN8:2;
-        then Sum (p|(j+1)) = Sum(p|j) + p/.(j+1) by RVSUM_1:104;
-        hence thesis by A13,A16;
+A11:    j+1 in dom p by A9,FINSEQ_3:27;
+        then p.(j+1) >= 0 by A5;
+        then p/.(j+1) >= 0 by A11,PARTFUN1:def 8;
+        hence thesis by A8,A10;
       end;
       suppose
-A17:    j+1 > len p;
+A12:    j+1 > len p;
         then j >= len p by NAT_1:13;
-        then p|j = p & p|(j+1) = p by A17,FINSEQ_1:79;
-        hence thesis by A13;
+        then p|j = p by FINSEQ_1:79;
+        hence thesis by A8,A12,FINSEQ_1:79;
       end;
     end;
-A18: for j be Element of NAT holds P[j] from NAT_1:sch 1(A11,A12);
-    p|(len p) = p by FINSEQ_1:79;
+    let i be Element of NAT;
+    len p+1 >= 0+1 by XREAL_1:8;
+    then len (p^<*x*>) >= 1 by FINSEQ_2:19;
+    then len (p^<*x*>) in dom (p^<*x*>) by FINSEQ_3:27;
+    then (p^<*x*>).len (p^<*x*>) >= 0 by A3;
+    then (p^<*x*>).(len p+1) >= 0 by FINSEQ_2:19;
+    then x >= 0 by FINSEQ_1:59;
     then
-A19: Sum p >= 0 by A18;
-    per cases by A5,A9,XBOOLE_0:def 3;
+A13: p.i + x >= p.i + 0 by XREAL_1:8;
+A14: p|(len p) = p by FINSEQ_1:79;
+    len (p^<*x*>) = len p+1 by FINSEQ_2:19;
+    then
+A15: dom (p^<*x*>) = Seg (len p+1) by FINSEQ_1:def 3
+      .= Seg len p \/ {len p+1} by FINSEQ_1:11
+      .= dom p \/ {len p+1} by FINSEQ_1:def 3;
+A16: P[0] by RVSUM_1:102;
+    for j be Element of NAT holds P[j] from NAT_1:sch 1(A16,A7);
+    then
+A17: Sum p >= 0 by A14;
+    assume
+A18: i in dom (p^<*x*>);
+    per cases by A18,A15,XBOOLE_0:def 3;
     suppose
-A20:  i in dom p;
-      then
-A21:  Sum p >= p.i by A3,A7;
-      Sum (p^<*x*>) = Sum p + x by RVSUM_1:104;
-      then Sum (p^<*x*>) >= p.i + x by A21,XREAL_1:8;
-      then Sum (p^<*x*>) >= p.i by A10,XXREAL_0:2;
-      hence thesis by A20,FINSEQ_1:def 7;
+A19:  i in dom p;
+A20:  Sum (p^<*x*>) = Sum p + x by RVSUM_1:104;
+      Sum p >= p.i by A2,A5,A19;
+      then Sum (p^<*x*>) >= p.i + x by A20,XREAL_1:8;
+      then Sum (p^<*x*>) >= p.i by A13,XXREAL_0:2;
+      hence thesis by A19,FINSEQ_1:def 7;
     end;
-    suppose i in {len p+1};
+    suppose
+      i in {len p+1};
       then i = len p+1 by TARSKI:def 1;
       then (p^<*x*>).i = x by FINSEQ_1:59;
-      then Sum p + x >= 0+(p^<*x*>).i by A19,XREAL_1:8;
+      then Sum p + x >= 0+(p^<*x*>).i by A17,XREAL_1:8;
       hence thesis by RVSUM_1:104;
     end;
   end;
-  thus for p be FinSequence of REAL holds Q[p] from FINSEQ_2:sch 2(A1,A2);
+A21: Q[<*>(REAL)] by RELAT_1:60;
+  thus for p be FinSequence of REAL holds Q[p] from FINSEQ_2:sch 2(A21, A1);
 end;
 
 theorem Th5:
@@ -260,8 +267,8 @@ proof
 end;
 
 theorem Th6:
-  for x1,y1,x2,y2 be Real holds
-  [**x1,y1**] - [**x2,y2**] = [**x1 - x2,y1 - y2**]
+  for x1,y1,x2,y2 be Real holds [**x1,y1**] - [**x2,y2**] = [**x1 -
+  x2,y1 - y2**]
 proof
   let x1,y1,x2,y2 be Real;
   thus [**x1,y1**]-[**x2,y2**] = [**x1,y1**]+[**-x2,-y2**] by Th5
@@ -271,47 +278,47 @@ end;
 canceled;
 
 theorem Th8:
-  for z be Element of F_Complex st z <> 0.F_Complex
-  for n be Element of NAT holds |.(power F_Complex).(z,n).| = |.z.| to_power n
+  for z be Element of F_Complex st z <> 0.F_Complex for n be
+  Element of NAT holds |.(power F_Complex).(z,n).| = |.z.| to_power n
 proof
   let z be Element of F_Complex;
-  assume z <> 0.F_Complex;
+  defpred P[Element of NAT] means |.(power F_Complex).(z,$1).| = |.z.|
+  to_power $1;
+  assume
+  z <> 0.F_Complex;
   then
 A1: |.z.| <> 0 by COMPLFLD:94;
 A2: |.z.| >= 0 by COMPLEX1:132;
-  defpred P[Element of NAT] means |.(power F_Complex).(z,$1).|
-  = |.z.| to_power $1;
-  |.(power F_Complex).(z,0).| = 1 by COMPLEX1:134,COMPLFLD:10,GROUP_1:def 8
-    .= |.z.| to_power 0 by POWER:29;
-  then
-A3: P[0];
-A4: for n be Element of NAT st P[n] holds P[n+1]
+A3: for n be Element of NAT st P[n] holds P[n+1]
   proof
     let n be Element of NAT;
     assume
-A5: |.(power F_Complex).(z,n).| = |.z.| to_power n;
-    thus |.(power F_Complex).(z,n+1).| = |.(power F_Complex).(z,n)*z.|
-    by GROUP_1:def 8
-      .= (|.z.| to_power n)*|.z.| by A5,COMPLFLD:109
+A4: |.(power F_Complex).(z,n).| = |.z.| to_power n;
+    thus |.(power F_Complex).(z,n+1).| = |.(power F_Complex).(z,n)*z.| by
+GROUP_1:def 8
+      .= (|.z.| to_power n)*|.z.| by A4,COMPLFLD:109
       .= (|.z.| to_power n)*(|.z.| to_power 1) by POWER:30
       .= |.z.| to_power (n+1) by A1,A2,POWER:32;
   end;
-  thus for n be Element of NAT holds P[n] from NAT_1:sch 1(A3,A4);
+  |.(power F_Complex).(z,0).| = 1 by COMPLEX1:134,COMPLFLD:10,GROUP_1:def 8
+    .= |.z.| to_power 0 by POWER:29;
+  then
+A5: P[0];
+  thus for n be Element of NAT holds P[n] from NAT_1:sch 1(A5,A3);
 end;
 
 definition
   let p be FinSequence of the carrier of F_Complex;
   func |.p.| -> FinSequence of REAL means
   :Def1:
-  len it = len p &
-  for n be Element of NAT st n in dom p holds it/.n = |.p/.n.|;
+  len it = len p & for n be
+  Element of NAT st n in dom p holds it/.n = |.p/.n.|;
   existence
   proof
     deffunc F(Nat) = |.p/.$1.|;
     consider q be FinSequence of REAL such that
 A1: len q = len p and
-A2: for n be Nat st n in dom q holds q/.n = F(n)
-    from FINSEQ_4:sch 2;
+A2: for n be Nat st n in dom q holds q/.n = F(n) from FINSEQ_4:sch 2;
     take q;
     dom p = dom q by A1,FINSEQ_3:31;
     hence thesis by A1,A2;
@@ -323,14 +330,14 @@ A3: len q1 = len p and
 A4: for n be Element of NAT st n in dom p holds q1/.n = |.p/.n.| and
 A5: len q2 = len p and
 A6: for n be Element of NAT st n in dom p holds q2/.n = |.p/.n.|;
-A7: dom q1 = dom p & dom q2 = dom p by A3,A5,FINSEQ_3:31;
-    now
+A7: now
       let n be Nat;
       assume
 A8:   n in dom p;
       hence q1/.n = |.p/.n.| by A4
         .= q2/.n by A6,A8;
     end;
+    dom q1 = dom p & dom q2 = dom p by A3,A5,FINSEQ_3:31;
     hence thesis by A7,FINSEQ_5:13;
   end;
 end;
@@ -338,37 +345,38 @@ end;
 theorem Th9:
   |.<*>the carrier of F_Complex.| = <*>REAL
 proof
-  len |.<*>the carrier of F_Complex.| = len <*>the carrier of F_Complex
-  by Def1
-    .= 0 by FINSEQ_1:32;
-  hence thesis by FINSEQ_1:32;
+  len |.<*>the carrier of F_Complex.| = len <*>the carrier of F_Complex by Def1
+    .= 0;
+  hence thesis;
 end;
 
 theorem Th10:
   for x be Element of F_Complex holds |.<*x*>.| = <*|.x.|*>
 proof
   let x be Element of F_Complex;
-A1: len |.<*x*>.| = len <*x*> by Def1
-    .= 1 by FINSEQ_1:56;
-A2: len <*|.x.|*> = 1 by FINSEQ_1:56;
   0+1 in Seg (0+1) by FINSEQ_1:6;
   then
-A3: 1 in dom <*x*> by FINSEQ_1:55;
-    len |.<*x*>.| = len <*x*> by Def1;
+A1: 1 in dom <*x*> by FINSEQ_1:55;
+A2: len |.<*x*>.| = len <*x*> by Def1
+    .= 1 by FINSEQ_1:56;
   then
-A4: 1 in dom |.<*x*>.| by A3,FINSEQ_3:31;
-X: dom |.<*x*>.| = Seg 1 by A1,FINSEQ_1:def 3;
-  now
+A3: dom |.<*x*>.| = Seg 1 by FINSEQ_1:def 3;
+  len |.<*x*>.| = len <*x*> by Def1;
+  then
+A4: 1 in dom |.<*x*>.| by A1,FINSEQ_3:31;
+A5: now
     let n be Nat;
-    assume n in dom |.<*x*>.|;
+    assume
+    n in dom |.<*x*>.|;
     then
-A5: n = 1 by X,FINSEQ_1:4,TARSKI:def 1;
+A6: n = 1 by A3,FINSEQ_1:4,TARSKI:def 1;
     hence |.<*x*>.|.n = |.<*x*>.|/.1 by A4,PARTFUN1:def 8
-      .= |.<*x*>/.1 .| by A3,Def1
+      .= |.<*x*>/.1 .| by A1,Def1
       .= |.x.| by FINSEQ_4:25
-      .= <*|.x.|*>.n by A5,FINSEQ_1:57;
+      .= <*|.x.|*>.n by A6,FINSEQ_1:57;
   end;
-  hence thesis by A1,A2,FINSEQ_2:10;
+  len <*|.x.|*> = 1 by FINSEQ_1:56;
+  hence thesis by A2,A5,FINSEQ_2:10;
 end;
 
 theorem
@@ -377,159 +385,158 @@ proof
   let x,y be Element of F_Complex;
 A1: len |.<*x,y*>.| = len <*x,y*> by Def1
     .= 2 by FINSEQ_1:61;
-A2: len <*|.x.|,|.y.|*> = 2 by FINSEQ_1:61;
-X: dom |.<*x,y*>.| = Seg 2 by A1,FINSEQ_1:def 3;
-  now
+  then
+A2: dom |.<*x,y*>.| = Seg 2 by FINSEQ_1:def 3;
+A3: now
     let n be Nat;
     assume
-A3: n in dom |.<*x,y*>.|;
-    per cases by A3,X,FINSEQ_1:4,TARSKI:def 2;
+A4: n in dom |.<*x,y*>.|;
+    per cases by A2,A4,FINSEQ_1:4,TARSKI:def 2;
     suppose
-A4:   n = 1;
+A5:   n = 1;
       then
-A5:   1 in dom <*x,y*> by A3,X,FINSEQ_3:29;
-      len |.<*x,y*>.| = len <*x,y*> by Def1;
-      then 1 in dom |.<*x,y*>.| by A5,FINSEQ_3:31;
-      then |.<*x,y*>.|.1 = |.<*x,y*>.|/.1 by PARTFUN1:def 8
-        .= |.<*x,y*>/.1 .| by A5,Def1;
+A6:   1 in dom <*x,y*> by A2,A4,FINSEQ_3:29;
+      |.<*x,y*>.|.1 = |.<*x,y*>.|/.1 by A4,A5,PARTFUN1:def 8
+        .= |.<*x,y*>/.1 .| by A6,Def1;
       then |.<*x,y*>.|.1 = |.x.| by FINSEQ_4:26;
-      hence |.<*x,y*>.|.n = <*|.x.|,|.y.|*>.n by A4,FINSEQ_1:61;
+      hence |.<*x,y*>.|.n = <*|.x.|,|.y.|*>.n by A5,FINSEQ_1:61;
     end;
     suppose
-A6:   n = 2;
+A7:   n = 2;
       then
-A7:   2 in dom <*x,y*> by A3,X,FINSEQ_3:29;
-      len |.<*x,y*>.| = len <*x,y*> by Def1;
-      then 2 in dom |.<*x,y*>.| by A7,FINSEQ_3:31;
-      then |.<*x,y*>.|.2 = |.<*x,y*>.|/.2 by PARTFUN1:def 8
-        .= |.<*x,y*>/.2 .| by A7,Def1;
+A8:   2 in dom <*x,y*> by A2,A4,FINSEQ_3:29;
+      |.<*x,y*>.|.2 = |.<*x,y*>.|/.2 by A4,A7,PARTFUN1:def 8
+        .= |.<*x,y*>/.2 .| by A8,Def1;
       then |.<*x,y*>.|.2 = |.y.| by FINSEQ_4:26;
-      hence |.<*x,y*>.|.n = <*|.x.|,|.y.|*>.n by A6,FINSEQ_1:61;
+      hence |.<*x,y*>.|.n = <*|.x.|,|.y.|*>.n by A7,FINSEQ_1:61;
     end;
   end;
-  hence thesis by A1,A2,FINSEQ_2:10;
+  len <*|.x.|,|.y.|*> = 2 by FINSEQ_1:61;
+  hence thesis by A1,A3,FINSEQ_2:10;
 end;
 
 theorem
-  for x,y,z be Element of F_Complex holds
-  |.<*x,y,z*>.| = <*|.x.|,|.y.|,|.z.|*>
+  for x,y,z be Element of F_Complex holds |.<*x,y,z*>.| = <*|.x.|,|.y.|,
+  |.z.|*>
 proof
   let x,y,z be Element of F_Complex;
 A1: len |.<*x,y,z*>.| = len <*x,y,z*> by Def1
     .= 3 by FINSEQ_1:62;
-A2: len <*|.x.|,|.y.|,|.z.|*> = 3 by FINSEQ_1:62;
-X: dom |.<*x,y,z*>.| = Seg 3 by A1,FINSEQ_1:def 3;
-  now
+  then
+A2: dom |.<*x,y,z*>.| = Seg 3 by FINSEQ_1:def 3;
+A3: now
     let n be Nat;
     assume
-A3: n in dom |.<*x,y,z*>.|;
-    per cases by A3,X,ENUMSET1:def 1,FINSEQ_3:1;
+A4: n in dom |.<*x,y,z*>.|;
+    per cases by A2,A4,ENUMSET1:def 1,FINSEQ_3:1;
     suppose
-A4:   n = 1;
-A5:   1 in dom <*x,y,z*> by TOPREAL3:6;
+A5:   n = 1;
+A6:   1 in dom <*x,y,z*> by TOPREAL3:6;
       len |.<*x,y,z*>.| = len <*x,y,z*> by Def1;
-      then 1 in dom |.<*x,y,z*>.| by A5,FINSEQ_3:31;
+      then 1 in dom |.<*x,y,z*>.| by A6,FINSEQ_3:31;
       then |.<*x,y,z*>.|.1 = |.<*x,y,z*>.|/.1 by PARTFUN1:def 8
-        .= |.<*x,y,z*>/.1 .| by A5,Def1;
+        .= |.<*x,y,z*>/.1 .| by A6,Def1;
       then |.<*x,y,z*>.|.1 = |.x.| by FINSEQ_4:27;
-      hence |.<*x,y,z*>.|.n = <*|.x.|,|.y.|,|.z.|*>.n by A4,FINSEQ_1:62;
+      hence |.<*x,y,z*>.|.n = <*|.x.|,|.y.|,|.z.|*>.n by A5,FINSEQ_1:62;
     end;
     suppose
-A6:   n = 2;
-A7:   2 in dom <*x,y,z*> by TOPREAL3:6;
+A7:   n = 2;
+A8:   2 in dom <*x,y,z*> by TOPREAL3:6;
       len |.<*x,y,z*>.| = len <*x,y,z*> by Def1;
-      then 2 in dom |.<*x,y,z*>.| by A7,FINSEQ_3:31;
+      then 2 in dom |.<*x,y,z*>.| by A8,FINSEQ_3:31;
       then |.<*x,y,z*>.|.2 = |.<*x,y,z*>.|/.2 by PARTFUN1:def 8
-        .= |.<*x,y,z*>/.2 .| by A7,Def1;
+        .= |.<*x,y,z*>/.2 .| by A8,Def1;
       then |.<*x,y,z*>.|.2 = |.y.| by FINSEQ_4:27;
-      hence |.<*x,y,z*>.|.n = <*|.x.|,|.y.|,|.z.|*>.n by A6,FINSEQ_1:62;
+      hence |.<*x,y,z*>.|.n = <*|.x.|,|.y.|,|.z.|*>.n by A7,FINSEQ_1:62;
     end;
     suppose
-A8:   n = 3;
-A9:   3 in dom <*x,y,z*> by TOPREAL3:6;
+A9:   n = 3;
+A10:  3 in dom <*x,y,z*> by TOPREAL3:6;
       len |.<*x,y,z*>.| = len <*x,y,z*> by Def1;
-      then 3 in dom |.<*x,y,z*>.| by A9,FINSEQ_3:31;
+      then 3 in dom |.<*x,y,z*>.| by A10,FINSEQ_3:31;
       then |.<*x,y,z*>.|.3 = |.<*x,y,z*>.|/.3 by PARTFUN1:def 8
-        .= |.<*x,y,z*>/.3 .| by A9,Def1;
+        .= |.<*x,y,z*>/.3 .| by A10,Def1;
       then |.<*x,y,z*>.|.3 = |.z.| by FINSEQ_4:27;
-      hence |.<*x,y,z*>.|.n = <*|.x.|,|.y.|,|.z.|*>.n by A8,FINSEQ_1:62;
+      hence |.<*x,y,z*>.|.n = <*|.x.|,|.y.|,|.z.|*>.n by A9,FINSEQ_1:62;
     end;
   end;
-  hence thesis by A1,A2,FINSEQ_2:10;
+  len <*|.x.|,|.y.|,|.z.|*> = 3 by FINSEQ_1:62;
+  hence thesis by A1,A3,FINSEQ_2:10;
 end;
 
 theorem Th13:
-  for p,q be FinSequence of the carrier of F_Complex holds
-  |.p^q.| = |.p.|^|.q.|
+  for p,q be FinSequence of the carrier of F_Complex holds |.p^q.|
+  = |.p.|^|.q.|
 proof
   let p,q be FinSequence of the carrier of F_Complex;
-A1: len |.p^q.| = len (p^q) by Def1
-    .= len p + len q by FINSEQ_1:35
-    .= len p + len |.q.| by Def1
-    .= len |.p.| + len |.q.| by Def1
-    .= len (|.p.|^|.q.|) by FINSEQ_1:35;
-X: dom |.p^q.| = Seg len |.p^q.| by FINSEQ_1:def 3;
-  now
+A1: dom |.p^q.| = Seg len |.p^q.| by FINSEQ_1:def 3;
+A2: now
     let n be Nat;
+A3: len |.p.| = len p by Def1;
     assume
-A2: n in dom |.p^q.|;
+A4: n in dom |.p^q.|;
     then
-A3: n >= 1 & n <= len |.p^q.| by X,FINSEQ_1:3;
-A4: n in dom |.p^q.| by A2;
-A5: len |.p^q.| = len (p^q) by Def1;
+A5: n >= 1 by A1,FINSEQ_1:3;
+A6: len |.p^q.| = len (p^q) by Def1;
     then
-A6: n in dom (p^q) by A2,X,FINSEQ_1:def 3;
-A7: len |.p.| = len p by Def1;
+A7: n in dom (p^q) by A1,A4,FINSEQ_1:def 3;
     per cases;
     suppose
 A8:   n in dom p;
-      then
-A9:   n in dom |.p.| by A7,FINSEQ_3:31;
-A10:  (p^q)/.n = (p^q).n by A6,PARTFUN1:def 8
+A9:   (p^q)/.n = (p^q).n by A7,PARTFUN1:def 8
         .= p.n by A8,FINSEQ_1:def 7
         .= p/.n by A8,PARTFUN1:def 8;
+A10:  n in dom |.p.| by A3,A8,FINSEQ_3:31;
       thus |.p^q.|.n = |.p^q.|/.n by A4,PARTFUN1:def 8
-        .= |.(p^q)/.n.| by A6,Def1
-        .= |.p.|/.n by A8,A10,Def1
-        .= |.p.|.n by A9,PARTFUN1:def 8
-        .= (|.p.|^|.q.|).n by A9,FINSEQ_1:def 7;
+        .= |.(p^q)/.n.| by A7,Def1
+        .= |.p.|/.n by A8,A9,Def1
+        .= |.p.|.n by A10,PARTFUN1:def 8
+        .= (|.p.|^|.q.|).n by A10,FINSEQ_1:def 7;
     end;
-    suppose not n in dom p;
+    suppose
+      not n in dom p;
       then
-A11:  n > 0 + len p by A3,FINSEQ_3:27;
+A11:  n > 0 + len p by A5,FINSEQ_3:27;
       then
 A12:  n - len p > 0 by XREAL_1:22;
 A13:  n = len p + (n-len p)
         .= len p + (n-'len p) by A12,XREAL_0:def 2;
-A14:  1 + len p <= n by A11,NAT_1:13;
-      n <= len (p^q) by A2,A5,X,FINSEQ_1:3;
+      n <= len (p^q) by A1,A4,A6,FINSEQ_1:3;
       then n <= len q + len p by FINSEQ_1:35;
-      then 1 <= n-len p & n-len p <= len q by A14,XREAL_1:21,22;
-      then 1 <= n-'len p & n-'len p <= len q by XREAL_0:def 2;
+      then n-len p <= len q by XREAL_1:22;
       then
-A15:  (n-'len p) in Seg len q by FINSEQ_1:3;
+A14:  n-'len p <= len q by XREAL_0:def 2;
+      1 + len p <= n by A11,NAT_1:13;
+      then 1 <= n-len p by XREAL_1:21;
+      then 1 <= n-'len p by XREAL_0:def 2;
+      then
+A15:  (n-'len p) in Seg len q by A14,FINSEQ_1:3;
       then
 A16:  (n-'len p) in dom q by FINSEQ_1:def 3;
       len |.q.| = len q by Def1;
       then
 A17:  (n-'len p) in dom |.q.| by A15,FINSEQ_1:def 3;
-A18:  (p^q)/.n = (p^q).n by A6,PARTFUN1:def 8
+A18:  (p^q)/.n = (p^q).n by A7,PARTFUN1:def 8
         .= q.(n-'len p) by A13,A16,FINSEQ_1:def 7
         .= q/.(n-'len p) by A16,PARTFUN1:def 8;
       thus |.p^q.|.n = |.p^q.|/.n by A4,PARTFUN1:def 8
-        .= |.(p^q)/.n.| by A6,Def1
+        .= |.(p^q)/.n.| by A7,Def1
         .= |.q.|/.(n-'len p) by A16,A18,Def1
         .= |.q.|.(n-'len p) by A17,PARTFUN1:def 8
-        .= (|.p.|^|.q.|).n by A7,A13,A17,FINSEQ_1:def 7;
+        .= (|.p.|^|.q.|).n by A3,A13,A17,FINSEQ_1:def 7;
     end;
   end;
-  hence thesis by A1,FINSEQ_2:10;
+  len |.p^q.| = len (p^q) by Def1
+    .= len p + len q by FINSEQ_1:35
+    .= len p + len |.q.| by Def1
+    .= len |.p.| + len |.q.| by Def1
+    .= len (|.p.|^|.q.|) by FINSEQ_1:35;
+  hence thesis by A2,FINSEQ_2:10;
 end;
 
 theorem
-  for p be FinSequence of the carrier of F_Complex
-  for x be Element of F_Complex holds |.p^<*x*>.| = |.p.|^<*|.x.|*> &
-  |.<*x*>^p.| = <*|.x.|*>^|.p.|
+  for p be FinSequence of the carrier of F_Complex for x be Element of
+  F_Complex holds |.p^<*x*>.| = |.p.|^<*|.x.|*> & |.<*x*>^p.| = <*|.x.|*>^|.p.|
 proof
   let p be FinSequence of the carrier of F_Complex;
   let x be Element of F_Complex;
@@ -540,27 +547,29 @@ proof
 end;
 
 theorem Th15:
-  for p be FinSequence of the carrier of F_Complex holds |.Sum p.| <= Sum|.p.|
+  for p be FinSequence of the carrier of F_Complex holds |.Sum p.|
+  <= Sum|.p.|
 proof
   set D = the carrier of F_Complex;
   defpred P[FinSequence of D] means |.Sum $1.| <= Sum|.$1.|;
-A1: P[<*>D] by Th9,COMPLFLD:93,RLVECT_1:60,RVSUM_1:102;
-A2: now
+A1: now
     let p be FinSequence of D;
     let x be Element of D;
-    assume P[p];
+    assume
+    P[p];
     then
-A3: |.Sum p.| + |.x.| <= Sum|.p.| + |.x.| by XREAL_1:8;
+A2: |.Sum p.| + |.x.| <= Sum|.p.| + |.x.| by XREAL_1:8;
     Sum (p^<*x*>) = Sum p + x by FVSUM_1:87;
     then
-A4: |.Sum (p^<*x*>).| <= |.Sum p.| + |.x.| by COMPLFLD:100;
+A3: |.Sum (p^<*x*>).| <= |.Sum p.| + |.x.| by COMPLFLD:100;
     Sum|.p.| + |.x.| = Sum|.p.| + Sum <*|.x.|*> by FINSOP_1:12
       .= Sum|.p.| + Sum |.<*x*>.| by Th10
       .= Sum(|.p.|^|.<*x*>.|) by RVSUM_1:105
       .= Sum|.p^<*x*>.| by Th13;
-    hence P[p^<*x*>] by A3,A4,XXREAL_0:2;
+    hence P[p^<*x*>] by A2,A3,XXREAL_0:2;
   end;
-  thus for p be FinSequence of D holds P[p] from FINSEQ_2:sch 2(A1,A2);
+A4: P[<*>D] by Th9,COMPLFLD:93,RLVECT_1:60,RVSUM_1:102;
+  thus for p be FinSequence of D holds P[p] from FINSEQ_2:sch 2(A4,A1 );
 end;
 
 begin  :: Operations on Polynomials
@@ -571,7 +580,6 @@ definition
   let p be Polynomial of L;
   let n be Element of NAT;
   func p`^n -> sequence of L equals
-
   (power Polynom-Ring L).(p,n);
   coherence
   proof
@@ -596,9 +604,9 @@ registration
 end;
 
 theorem Th16:
-  for L be Abelian add-associative right_zeroed right_complementable
-  well-unital commutative distributive (non empty doubleLoopStr)
-  for p be Polynomial of L holds p`^0 = 1_.(L)
+  for L be Abelian add-associative right_zeroed
+  right_complementable well-unital commutative distributive (non empty
+  doubleLoopStr) for p be Polynomial of L holds p`^0 = 1_.(L)
 proof
   let L be Abelian add-associative right_zeroed right_complementable
   well-unital commutative distributive (non empty doubleLoopStr);
@@ -611,8 +619,8 @@ end;
 
 theorem
   for L be Abelian add-associative right_zeroed right_complementable
-  well-unital commutative distributive (non empty doubleLoopStr)
-  for p be Polynomial of L holds p`^1 = p
+  well-unital commutative distributive (non empty doubleLoopStr) for p be
+  Polynomial of L holds p`^1 = p
 proof
   let L be Abelian add-associative right_zeroed right_complementable
   well-unital commutative distributive (non empty doubleLoopStr);
@@ -626,8 +634,8 @@ end;
 
 theorem
   for L be Abelian add-associative right_zeroed right_complementable
-  well-unital commutative distributive (non empty doubleLoopStr)
-  for p be Polynomial of L holds p`^2 = p*'p
+  well-unital commutative distributive (non empty doubleLoopStr) for p be
+  Polynomial of L holds p`^2 = p*'p
 proof
   let L be Abelian add-associative right_zeroed right_complementable
   well-unital commutative distributive (non empty doubleLoopStr);
@@ -643,8 +651,8 @@ end;
 
 theorem
   for L be Abelian add-associative right_zeroed right_complementable
-  well-unital commutative distributive (non empty doubleLoopStr)
-  for p be Polynomial of L holds p`^3 = p*'p*'p
+  well-unital commutative distributive (non empty doubleLoopStr) for p be
+  Polynomial of L holds p`^3 = p*'p*'p
 proof
   let L be Abelian add-associative right_zeroed right_complementable
   well-unital commutative distributive (non empty doubleLoopStr);
@@ -662,9 +670,10 @@ proof
 end;
 
 theorem Th20:
-  for L be Abelian add-associative right_zeroed right_complementable
-  well-unital commutative distributive (non empty doubleLoopStr)
-  for p be Polynomial of L for n be Element of NAT holds p`^(n+1) = (p`^n)*'p
+  for L be Abelian add-associative right_zeroed
+  right_complementable well-unital commutative distributive (non empty
+doubleLoopStr) for p be Polynomial of L for n be Element of NAT holds p`^(n+1)
+  = (p`^n)*'p
 proof
   let L be Abelian add-associative right_zeroed right_complementable
   well-unital commutative distributive (non empty doubleLoopStr);
@@ -676,9 +685,9 @@ proof
 end;
 
 theorem Th21:
-  for L be Abelian add-associative right_zeroed right_complementable
-  well-unital commutative distributive (non empty doubleLoopStr)
-  for n be Element of NAT holds 0_.(L)`^(n+1) = 0_.(L)
+  for L be Abelian add-associative right_zeroed
+  right_complementable well-unital commutative distributive (non empty
+  doubleLoopStr) for n be Element of NAT holds 0_.(L)`^(n+1) = 0_.(L)
 proof
   let L be Abelian add-associative right_zeroed right_complementable
   well-unital commutative distributive (non empty doubleLoopStr);
@@ -689,21 +698,22 @@ end;
 
 theorem
   for L be Abelian add-associative right_zeroed right_complementable
-  well-unital commutative distributive (non empty doubleLoopStr)
-  for n be Element of NAT holds 1_.(L)`^n = 1_.(L)
+well-unital commutative distributive (non empty doubleLoopStr) for n be Element
+  of NAT holds 1_.(L)`^n = 1_.(L)
 proof
   let L be Abelian add-associative right_zeroed right_complementable
   well-unital commutative distributive (non empty doubleLoopStr);
   defpred P[Element of NAT] means 1_.(L)`^$1 = 1_.(L);
-A1: P[0] by Th16;
-A2: now
+A1: now
     let n be Element of NAT;
-    assume P[n];
+    assume
+    P[n];
     then 1_.(L)`^(n+1) = (1_.(L))*'1_.(L) by Th20
       .= 1_.(L) by POLYNOM3:36;
     hence P[n+1];
   end;
-  thus for n be Element of NAT holds P[n] from NAT_1:sch 1(A1,A2);
+A2: P[0] by Th16;
+  thus for n be Element of NAT holds P[n] from NAT_1:sch 1(A2,A1);
 end;
 
 theorem Th23:
@@ -714,66 +724,67 @@ proof
   let p be Polynomial of L;
   let x be Element of L;
   defpred P[Element of NAT] means eval(p`^$1,x) = (power L).(eval(p,x),$1);
+A1: now
+    let n be Element of NAT;
+    assume
+A2: P[n];
+    eval(p`^(n+1),x) = eval((p`^n)*'p,x) by Th20
+      .= (power L).(eval(p,x),n)*eval(p,x) by A2,POLYNOM4:27
+      .= (power L).(eval(p,x),n+1) by GROUP_1:def 8;
+    hence P[n+1];
+  end;
   eval(p`^0,x) = eval(1_.(L),x) by Th16
     .= 1_(L) by POLYNOM4:21
     .= (power L).(eval(p,x),0) by GROUP_1:def 8;
   then
-A1: P[0];
-A2: now
-    let n be Element of NAT;
-    assume
-A3: P[n];
-    eval(p`^(n+1),x) = eval((p`^n)*'p,x) by Th20
-      .= (power L).(eval(p,x),n)*eval(p,x) by A3,POLYNOM4:27
-      .= (power L).(eval(p,x),n+1) by GROUP_1:def 8;
-    hence P[n+1];
-  end;
-  thus for n be Element of NAT holds P[n] from NAT_1:sch 1(A1,A2);
+A3: P[0];
+  thus for n be Element of NAT holds P[n] from NAT_1:sch 1(A3,A1);
 end;
 
-Lm2: for L being non empty ZeroStr, p being AlgSequence of L
-st len p > 0 holds p.(len p -'1) <> 0.L
+Lm2: for L being non empty ZeroStr, p being AlgSequence of L st len p > 0
+holds p.(len p -'1) <> 0.L
+
 proof
   let L be non empty ZeroStr, p be AlgSequence of L;
-  assume len p > 0;
-  then consider k being Nat such that
-A1: len p = k+1 by NAT_1:6;
-  len p = (len p -'1)+1 by A1,NAT_D:34;
+  assume
+  len p > 0;
+  then ex k being Nat st len p = k+1 by NAT_1:6;
+  then len p = (len p -'1)+1 by NAT_D:34;
   hence thesis by ALGSEQ_1:25;
 end;
 
 theorem Th24:
-  for L be domRing for p be Polynomial of L st len p <> 0
-  for n be Element of NAT holds len(p`^n) = n*len p-n+1
+  for L be domRing for p be Polynomial of L st len p <> 0 for n be
+  Element of NAT holds len(p`^n) = n*len p-n+1
 proof
   let L be domRing;
   let p be Polynomial of L;
+  defpred P[Element of NAT] means len(p`^$1) = $1*len p-$1+1;
   assume
 A1: len p <> 0;
-  defpred P[Element of NAT] means len(p`^$1) = $1*len p-$1+1;
-  len(p`^0) = len(1_.(L)) by Th16
-    .= 0*len p-0+1 by POLYNOM4:7;
-  then
-A2: P[0];
-A3: now
-    let n be Element of NAT;
-    assume
-A4: P[n];
-A5: len p > 0 by A1;
-    then len p >= 0+1 by NAT_1:13;
+A2: now
+    len p >= 0+1 by A1,NAT_1:13;
     then len p-1 >= 0+1-1 by XREAL_1:11;
     then
-A6: len p-'1 = len p-1 by XREAL_0:def 2;
+A3: len p-'1 = len p-1 by XREAL_0:def 2;
+A4: p.(len p -'1) <> 0.L by A1,Lm2;
+    let n be Element of NAT;
+    assume
+A5: P[n];
     n*(len p-'1)+1 >= 0+1 by XREAL_1:8;
-    then (p`^n).(len (p`^n)-'1) <> 0.L & p.(len p -'1) <> 0.L by A4,A5,A6,Lm2;
+    then (p`^n).(len (p`^n)-'1) <> 0.L by A5,A3,Lm2;
     then
-A7: (p`^n).(len (p`^n)-'1) * p.(len p -'1) <> 0.L by VECTSP_2:def 5;
+A6: (p`^n).(len (p`^n)-'1) * p.(len p -'1) <> 0.L by A4,VECTSP_2:def 5;
     len(p`^(n+1)) = len((p`^n)*'p) by Th20
-      .= n*len p - n + 1 + len p - 1 by A4,A7,POLYNOM4:13
+      .= n*len p - n + 1 + len p - 1 by A5,A6,POLYNOM4:13
       .= (n+1)*len p - (n+1) + 1;
     hence P[n+1];
   end;
-  thus for n be Element of NAT holds P[n] from NAT_1:sch 1(A2,A3);
+  len(p`^0) = len(1_.(L)) by Th16
+    .= 0*len p-0+1 by POLYNOM4:7;
+  then
+A7: P[0];
+  thus for n be Element of NAT holds P[n] from NAT_1:sch 1(A7,A2);
 end;
 
 definition
@@ -782,7 +793,8 @@ definition
   let v be Element of L;
   func v*p -> sequence of L means
   :Def3:
-  for n be Element of NAT holds it.n = v*p.n;
+  for n be Element of NAT holds it.n =
+  v*p.n;
   existence
   proof
     deffunc F(Element of NAT) = v*p.$1;
@@ -825,71 +837,74 @@ A1: i >= s;
 end;
 
 theorem Th25:
-  for L be add-associative right_zeroed right_complementable distributive
-  (non empty doubleLoopStr) for p be Polynomial of L holds len (0.L*p) = 0
+  for L be add-associative right_zeroed right_complementable
+distributive (non empty doubleLoopStr) for p be Polynomial of L holds len (0.L*
+  p) = 0
 proof
-  let L be add-associative right_zeroed right_complementable distributive
-  (non empty doubleLoopStr);
+  let L be add-associative right_zeroed right_complementable distributive (non
+  empty doubleLoopStr);
   let p be Polynomial of L;
-A1: 0 is_at_least_length_of (0.L*p)
+  0 is_at_least_length_of (0.L*p)
   proof
     let i be Nat;
-    assume i>=0;
+    assume
+    i>=0;
     reconsider ii=i as Element of NAT by ORDINAL1:def 13;
     thus (0.L*p).i = 0.L*p.ii by Def3
       .= 0.L by VECTSP_1:39;
   end;
-  thus thesis by A1,ALGSEQ_1:def 4;
+  hence thesis by ALGSEQ_1:def 4;
 end;
 
 theorem Th26:
-  for L be add-associative right_zeroed right_complementable well-unital
-  commutative associative distributive almost_left_invertible
-  (non empty doubleLoopStr) for p be Polynomial of L
-  for v be Element of L st v <> 0.L holds len (v*p) = len p
+  for L be add-associative right_zeroed right_complementable
+  well-unital commutative associative distributive almost_left_invertible (non
+empty doubleLoopStr) for p be Polynomial of L for v be Element of L st v <> 0.L
+  holds len (v*p) = len p
 proof
   let L be add-associative right_zeroed right_complementable well-unital
-  commutative associative distributive almost_left_invertible
-  (non empty doubleLoopStr);
+  commutative associative distributive almost_left_invertible (non empty
+  doubleLoopStr);
   let p be Polynomial of L;
   let v be Element of L;
   assume
 A1: v <> 0.L;
-A2: len p is_at_least_length_of (v*p)
-  proof
-    let i be Nat;
-    assume
-A3: i >= len p;
-    reconsider ii=i as Element of NAT by ORDINAL1:def 13;
-    thus (v*p).i = v*p.ii by Def3
-      .= v*0.L by A3,ALGSEQ_1:22
-      .= 0.L by VECTSP_1:36;
-  end;
-  now
+A2: now
     let n be Nat;
     assume
-A4: n is_at_least_length_of v*p;
+A3: n is_at_least_length_of v*p;
     n is_at_least_length_of p
     proof
       let i be Nat;
       reconsider i1=i as Element of NAT by ORDINAL1:def 13;
-      assume i >= n;
-      then (v*p).i = 0.L by A4,ALGSEQ_1:def 3;
+      assume
+      i >= n;
+      then (v*p).i = 0.L by A3,ALGSEQ_1:def 3;
       then v*p.i1 = 0.L by Def3;
       hence thesis by A1,VECTSP_1:44;
     end;
     hence len p <= n by ALGSEQ_1:def 4;
+  end;
+  len p is_at_least_length_of (v*p)
+  proof
+    let i be Nat;
+    assume
+A4: i >= len p;
+    reconsider ii=i as Element of NAT by ORDINAL1:def 13;
+    thus (v*p).i = v*p.ii by Def3
+      .= v*0.L by A4,ALGSEQ_1:22
+      .= 0.L by VECTSP_1:36;
   end;
   hence thesis by A2,ALGSEQ_1:def 4;
 end;
 
 theorem Th27:
   for L be add-associative right_zeroed right_complementable
-  left-distributive (non empty doubleLoopStr) for p be sequence of L holds
-  0.L*p = 0_.(L)
+left-distributive (non empty doubleLoopStr) for p be sequence of L holds 0.L*p
+  = 0_.(L)
 proof
-  let L be add-associative right_zeroed right_complementable
-  left-distributive (non empty doubleLoopStr);
+  let L be add-associative right_zeroed right_complementable left-distributive
+  (non empty doubleLoopStr);
   let p be sequence of L;
   now
     let n be Element of NAT;
@@ -900,8 +915,8 @@ proof
 end;
 
 theorem Th28:
-  for L be well-unital (non empty multLoopStr) for p be sequence of L holds
-  1.L*p = p
+  for L be well-unital (non empty multLoopStr) for p be sequence
+  of L holds 1.L*p = p
 proof
   let L be well-unital (non empty multLoopStr);
   let p be sequence of L;
@@ -911,8 +926,8 @@ end;
 
 theorem Th29:
   for L be add-associative right_zeroed right_complementable
-  right-distributive (non empty doubleLoopStr) for v be Element of L holds
-  v*0_.(L) = 0_.(L)
+right-distributive (non empty doubleLoopStr) for v be Element of L holds v*0_.(
+  L) = 0_.(L)
 proof
   let L be add-associative right_zeroed right_complementable
   right-distributive (non empty doubleLoopStr);
@@ -927,9 +942,9 @@ proof
 end;
 
 theorem Th30:
-  for L be add-associative right_zeroed right_complementable well-unital
-  right-distributive (non empty doubleLoopStr) for v be Element of L holds
-  v*1_.(L) = <%v%>
+  for L be add-associative right_zeroed right_complementable
+well-unital right-distributive (non empty doubleLoopStr) for v be Element of L
+  holds v*1_.(L) = <%v%>
 proof
   let L be add-associative right_zeroed right_complementable well-unital
   right-distributive (non empty doubleLoopStr);
@@ -945,9 +960,8 @@ A1:   n=0;
     end;
     suppose
 A2:   n<>0;
-      then
-A3:   n >= 0+1 by NAT_1:13;
-      len <%v%> <= 1 by ALGSEQ_1:def 6;
+A3:   len <%v%> <= 1 by ALGSEQ_1:def 6;
+      n >= 0+1 by A2,NAT_1:13;
       hence <%v%>.n = 0.L by A3,ALGSEQ_1:22,XXREAL_0:2
         .= v*0.L by VECTSP_1:36
         .= v*(1_.(L)).n by A2,POLYNOM3:31;
@@ -957,28 +971,29 @@ A3:   n >= 0+1 by NAT_1:13;
 end;
 
 theorem Th31:
-  for L be add-associative right_zeroed right_complementable well-unital
-  distributive commutative associative almost_left_invertible
-  (non empty doubleLoopStr) for p be Polynomial of L
-  for v,x be Element of L holds eval(v*p,x) = v*eval(p,x)
+  for L be add-associative right_zeroed right_complementable
+  well-unital distributive commutative associative almost_left_invertible (non
+  empty doubleLoopStr) for p be Polynomial of L for v,x be Element of L holds
+  eval(v*p,x) = v*eval(p,x)
 proof
   let L be add-associative right_zeroed right_complementable well-unital
-  distributive commutative associative almost_left_invertible
-  (non empty doubleLoopStr);
+  distributive commutative associative almost_left_invertible (non empty
+  doubleLoopStr);
   let p be Polynomial of L;
   let v,x be Element of L;
   consider F1 be FinSequence of the carrier of L such that
 A1: eval(p,x) = Sum F1 and
 A2: len F1 = len p and
-A3: for n be Element of NAT st n in dom F1 holds
-  F1.n = p.(n-'1) * (power L).(x,n-'1) by POLYNOM4:def 2;
+A3: for n be Element of NAT st n in dom F1 holds F1.n = p.(n-'1) * (
+  power L).(x,n-'1) by POLYNOM4:def 2;
   consider F2 be FinSequence of the carrier of L such that
 A4: eval(v*p,x) = Sum F2 and
 A5: len F2 = len (v*p) and
-A6: for n be Element of NAT st n in dom F2 holds
-  F2.n = (v*p).(n-'1) * (power L).(x,n-'1) by POLYNOM4:def 2;
+A6: for n be Element of NAT st n in dom F2 holds F2.n = (v*p).(n-'1) * (
+  power L).(x,n-'1) by POLYNOM4:def 2;
   per cases;
-  suppose v <> 0.L;
+  suppose
+    v <> 0.L;
     then len F1 = len F2 by A2,A5,Th26;
     then
 A7: dom F1 = dom F2 by FINSEQ_3:31;
@@ -1007,8 +1022,8 @@ end;
 
 theorem Th32:
   for L be add-associative right_zeroed right_complementable
-  right-distributive unital (non empty doubleLoopStr)
-  for p be Polynomial of L holds eval(p,0.L) = p.0
+  right-distributive unital (non empty doubleLoopStr) for p be Polynomial of L
+  holds eval(p,0.L) = p.0
 proof
   let L be add-associative right_zeroed right_complementable
   right-distributive unital (non empty doubleLoopStr);
@@ -1016,10 +1031,11 @@ proof
   consider F be FinSequence of the carrier of L such that
 A1: eval(p,0.L) = Sum F and
 A2: len F = len p and
-A3: for n be Element of NAT st n in dom F
-  holds F.n = p.(n-'1) * (power L).(0.L,n-'1) by POLYNOM4:def 2;
+A3: for n be Element of NAT st n in dom F holds F.n = p.(n-'1) * (power
+  L).(0.L,n-'1) by POLYNOM4:def 2;
   per cases;
-  suppose len F > 0;
+  suppose
+    len F > 0;
     then 0+1 <= len F by NAT_1:13;
     then
 A4: 1 in dom F by FINSEQ_3:27;
@@ -1046,7 +1062,8 @@ A7:   i-'1 > 0 by XREAL_0:def 2;
       .= p.(1-'1) by GROUP_1:def 5
       .= p.0 by XREAL_1:234;
   end;
-  suppose len F = 0;
+  suppose
+    len F = 0;
     then
 A8: p = 0_.(L) by A2,POLYNOM4:8;
     hence eval(p,0.L) = 0.L by POLYNOM4:20
@@ -1058,38 +1075,39 @@ definition
   let L be non empty ZeroStr;
   let z0,z1 be Element of L;
   func <%z0,z1%> -> sequence of L equals
-
   0_.(L)+*(0,z0)+*(1,z1);
   coherence;
 end;
 
 theorem Th33:
-  for L be non empty ZeroStr for z0 be Element of L holds <%z0%>.0 = z0 &
-  for n be Element of NAT st n >= 1 holds <%z0%>.n = 0.L
+  for L be non empty ZeroStr for z0 be Element of L holds <%z0%>.0
+  = z0 & for n be Element of NAT st n >= 1 holds <%z0%>.n = 0.L
 proof
   let L be non empty ZeroStr;
   let z0 be Element of L;
   thus <%z0%>.0 = z0 by ALGSEQ_1:def 6;
   let n be Element of NAT;
+A1: len <%z0%> <= 1 by ALGSEQ_1:def 6;
   assume
-A1: n >= 1;
-  len <%z0%> <= 1 by ALGSEQ_1:def 6;
+  n >= 1;
   hence thesis by A1,ALGSEQ_1:22,XXREAL_0:2;
 end;
 
 theorem Th34:
-  for L be non empty ZeroStr for z0 be Element of L st z0 <> 0.L holds
-  len <%z0%> = 1
+  for L be non empty ZeroStr for z0 be Element of L st z0 <> 0.L
+  holds len <%z0%> = 1
 proof
   let L be non empty ZeroStr;
   let z0 be Element of L;
-  assume z0 <> 0.L;
+  assume
+  z0 <> 0.L;
   then <%z0%>.0 <> 0.L by ALGSEQ_1:def 6;
   then <%z0%> <> <%0.L%> by ALGSEQ_1:def 6;
   then len <%z0%> <> 0 by ALGSEQ_1:31;
   then
 A1: len <%z0%> >= 0+1 by NAT_1:13;
-  assume len <%z0%> <> 1;
+  assume
+  len <%z0%> <> 1;
   then len <%z0%> > 1 by A1,XXREAL_0:1;
   hence contradiction by ALGSEQ_1:def 6;
 end;
@@ -1103,119 +1121,127 @@ proof
 end;
 
 theorem Th36:
-  for L be add-associative right_zeroed right_complementable distributive
-  commutative associative well-unital domRing-like (non empty doubleLoopStr)
-  for x,y be Element of L holds <%x%>*'<%y%> = <%x*y%>
+  for L be add-associative right_zeroed right_complementable
+  distributive commutative associative well-unital domRing-like (non empty
+  doubleLoopStr) for x,y be Element of L holds <%x%>*'<%y%> = <%x*y%>
 proof
   let L be add-associative right_zeroed right_complementable distributive
   commutative associative well-unital domRing-like (non empty doubleLoopStr);
   let x,y be Element of L;
-A1: len <%x%> <= 1 & len <%y%> <= 1 by ALGSEQ_1:def 6;
+A1: len <%x%> <= 1 by ALGSEQ_1:def 6;
+A2: len <%y%> <= 1 by ALGSEQ_1:def 6;
   per cases;
   suppose
-A2: len <%x%> <> 0 & len <%y%> <> 0;
-    then len <%x%> >= 0+1 & len <%y%> >= 0+1 by NAT_1:13;
+A3: len <%x%> <> 0 & len <%y%> <> 0;
+    x <> 0.L & y <> 0.L
+    proof
+      assume
+      x = 0.L or y = 0.L;
+      then <%x%> = 0_.(L) or <%y%> = 0_.(L) by Th35;
+      hence contradiction by A3,POLYNOM4:6;
+    end;
+    then x*y <> 0.L by VECTSP_2:def 5;
     then
-A4: len <%x%> = 1 & len <%y%> = 1 by A1,XXREAL_0:1;
-    <%x%>.(len <%x%> -'1) <> 0.L & <%y%>.(len <%y%> -'1) <> 0.L by A2,Lm2;
-    then <%x%>.(len <%x%> -'1)*<%y%>.(len <%y%> -'1)<>0.L by VECTSP_2:def 5;
-    then
-A5: len (<%x%>*'<%y%>) = 1+1-1 by A4,POLYNOM4:13;
+A4: len <%x*y%> = 1 by Th34;
     consider r be FinSequence of the carrier of L such that
-A6: len r = 0+1 and
-A7: (<%x%>*'<%y%>).0 = Sum r and
-A8: for k be Element of NAT st k in dom r
-    holds r.k = <%x%>.(k-'1) * <%y%>.(0+1-'k) by POLYNOM3:def 11;
-    1 in dom r by A6,FINSEQ_3:27;
-    then r.1 = <%x%>.(1-'1) * <%y%>.(0+1-'1) by A8
+A5: len r = 0+1 and
+A6: (<%x%>*'<%y%>).0 = Sum r and
+A7: for k be Element of NAT st k in dom r holds r.k = <%x%>.(k-'1) *
+    <%y%>.(0+1-'k) by POLYNOM3:def 11;
+    1 in dom r by A5,FINSEQ_3:27;
+    then r.1 = <%x%>.(1-'1) * <%y%>.(0+1-'1) by A7
       .= <%x%>.0 * <%y%>.(1-'1) by XREAL_1:234
       .= <%x%>.0 * <%y%>.0 by XREAL_1:234
       .= <%x%>.0 * y by ALGSEQ_1:def 6
       .= x*y by ALGSEQ_1:def 6;
     then
-A9: r = <*x*y*> by A6,FINSEQ_1:57;
-A10: now
+A8: r = <*x*y*> by A5,FINSEQ_1:57;
+A9: now
       let n be Nat;
-      assume n < 1;
+      assume
+      n < 1;
       then n < 0+1;
       then
-A11:  n = 0 by NAT_1:13;
-      hence (<%x%>*'<%y%>).n = x*y by A7,A9,RLVECT_1:61
-        .= <%x*y%>.n by A11,ALGSEQ_1:def 6;
+A10:  n = 0 by NAT_1:13;
+      hence (<%x%>*'<%y%>).n = x*y by A6,A8,RLVECT_1:61
+        .= <%x*y%>.n by A10,ALGSEQ_1:def 6;
     end;
-    x <> 0.L & y <> 0.L
-    proof
-      assume x = 0.L or y = 0.L;
-      then <%x%> = 0_.(L) or <%y%> = 0_.(L) by Th35;
-      hence contradiction by A2,POLYNOM4:6;
-    end;
-    then x*y <> 0.L by VECTSP_2:def 5;
-    then len <%x*y%> = 1 by Th34;
-    hence thesis by A5,A10,ALGSEQ_1:28;
+    <%x%>.(len <%x%> -'1) <> 0.L & <%y%>.(len <%y%> -'1) <> 0.L by A3,Lm2;
+    then
+A11: <%x%>.(len <%x%> -'1)*<%y%>.(len <%y%> -'1)<>0.L by VECTSP_2:def 5;
+    len <%y%> >= 0+1 by A3,NAT_1:13;
+    then
+A12: len <%y%> = 1 by A2,XXREAL_0:1;
+    len <%x%> >= 0+1 by A3,NAT_1:13;
+    then len <%x%> = 1 by A1,XXREAL_0:1;
+    then len (<%x%>*'<%y%>) = 1+1-1 by A12,A11,POLYNOM4:13;
+    hence thesis by A9,A4,ALGSEQ_1:28;
   end;
   suppose
-A12: len <%x%> = 0;
+A13: len <%x%> = 0;
     then
-A13: <%x%> = 0_.(L) by POLYNOM4:8;
-A14: x=0.L by A12,Th34;
-    thus <%x%>*'<%y%> = 0_.(L) by A13,POLYNOM4:5
+A14: x=0.L by Th34;
+    <%x%> = 0_.(L) by A13,POLYNOM4:8;
+    hence <%x%>*'<%y%> = 0_.(L) by POLYNOM4:5
       .= <%0.L%> by Th35
       .= <%x*y%> by A14,VECTSP_1:39;
   end;
   suppose
 A15: len <%y%> = 0;
     then
-A16: <%y%> = 0_.(L) by POLYNOM4:8;
-A17: y=0.L by A15,Th34;
-    thus <%x%>*'<%y%> = 0_.(L) by A16,POLYNOM3:35
+A16: y=0.L by Th34;
+    <%y%> = 0_.(L) by A15,POLYNOM4:8;
+    hence <%x%>*'<%y%> = 0_.(L) by POLYNOM3:35
       .= <%0.L%> by Th35
-      .= <%x*y%> by A17,VECTSP_1:39;
+      .= <%x*y%> by A16,VECTSP_1:39;
   end;
 end;
 
 theorem Th37:
-  for L be Abelian add-associative right_zeroed right_complementable
-  well-unital associative commutative distributive almost_left_invertible
-  (non empty doubleLoopStr) for x be Element of L
-  for n be Element of NAT holds <%x%>`^n = <%(power L).(x,n)%>
+  for L be Abelian add-associative right_zeroed
+  right_complementable well-unital associative commutative distributive
+almost_left_invertible (non empty doubleLoopStr) for x be Element of L for n be
+  Element of NAT holds <%x%>`^n = <%(power L).(x,n)%>
 proof
   let L be Abelian add-associative right_zeroed right_complementable
-  well-unital associative commutative distributive almost_left_invertible
-  (non empty doubleLoopStr);
+  well-unital associative commutative distributive almost_left_invertible (non
+  empty doubleLoopStr);
   let x be Element of L;
   defpred P[Element of NAT] means <%x%>`^$1 = <%(power L).(x,$1)%>;
+A1: for n be Element of NAT st P[n] holds P[n+1]
+  proof
+    let n be Element of NAT;
+    assume
+    <%x%>`^n = <%(power L).(x,n)%>;
+    hence <%x%>`^(n+1) = <%(power L).(x,n)%>*'<%x%> by Th20
+      .= <%(power L).(x,n)*x%> by Th36
+      .= <%(power L).(x,n+1)%> by GROUP_1:def 8;
+  end;
   <%x%>`^0 = 1_.(L) by Th16
     .= 1.L*1_.(L) by Th28
     .= <%1_L%> by Th30
     .= <%(power L).(x,0)%> by GROUP_1:def 8;
   then
-A1: P[0];
-A2: for n be Element of NAT st P[n] holds P[n+1]
-  proof
-    let n be Element of NAT;
-    assume <%x%>`^n = <%(power L).(x,n)%>;
-    hence <%x%>`^(n+1) = <%(power L).(x,n)%>*'<%x%> by Th20
-      .= <%(power L).(x,n)*x%> by Th36
-      .= <%(power L).(x,n+1)%> by GROUP_1:def 8;
-  end;
-  thus for n be Element of NAT holds P[n] from NAT_1:sch 1(A1,A2);
+A2: P[0];
+  thus for n be Element of NAT holds P[n] from NAT_1:sch 1(A2,A1);
 end;
 
 theorem
-  for L be add-associative right_zeroed right_complementable unital
-  (non empty doubleLoopStr) for z0,x be Element of L holds eval(<%z0%>,x) = z0
+  for L be add-associative right_zeroed right_complementable unital (non
+  empty doubleLoopStr) for z0,x be Element of L holds eval(<%z0%>,x) = z0
 proof
-  let L be add-associative right_zeroed right_complementable unital
-  (non empty doubleLoopStr);
+  let L be add-associative right_zeroed right_complementable unital (non empty
+  doubleLoopStr);
   let z0,x be Element of L;
   consider F be FinSequence of the carrier of L such that
 A1: eval(<%z0%>,x) = Sum F and
 A2: len F = len <%z0%> and
-A3: for n be Element of NAT st n in dom F holds
-  F.n = <%z0%>.(n-'1) * (power L).(x,n-'1) by POLYNOM4:def 2;
+A3: for n be Element of NAT st n in dom F holds F.n = <%z0%>.(n-'1) * (
+  power L).(x,n-'1) by POLYNOM4:def 2;
 A4: len F <= 1 by A2,ALGSEQ_1:def 6;
   per cases by A4,NAT_1:26;
-  suppose len F = 0;
+  suppose
+    len F = 0;
     then
 A5: <%z0%> = 0_.(L) by A2,POLYNOM4:8;
     hence eval(<%z0%>,x) = 0.L by POLYNOM4:20
@@ -1238,30 +1264,28 @@ A6: len F = 1;
 end;
 
 theorem Th39:
-  for L be non empty ZeroStr for z0,z1 be Element of L holds
-  <%z0,z1%>.0 = z0 & <%z0,z1%>.1 = z1 &
-  for n be Nat st n >= 2 holds <%z0,z1%>.n = 0.L
+  for L be non empty ZeroStr for z0,z1 be Element of L holds <%z0,
+z1%>.0 = z0 & <%z0,z1%>.1 = z1 & for n be Nat st n >= 2 holds <%z0,z1%>.n = 0.L
 proof
   let L be non empty ZeroStr;
   let z0,z1 be Element of L;
-  the carrier of L is non empty & 0 in NAT;
+  0 in NAT;
   then
 A1: 0 in dom 0_.(L) by FUNCT_2:def 1;
-  the carrier of L is non empty & 1 in NAT;
-  then
-A2: 1 in dom (0_.(L)+*(0,z0)) by FUNCT_2:def 1;
   thus <%z0,z1%>.0 = (0_.(L)+*(0,z0)).0 by FUNCT_7:34
     .= z0 by A1,FUNCT_7:33;
-  thus <%z0,z1%>.1 = z1 by A2,FUNCT_7:33;
+  1 in NAT;
+  then 1 in dom (0_.(L)+*(0,z0)) by FUNCT_2:def 1;
+  hence <%z0,z1%>.1 = z1 by FUNCT_7:33;
   let n be Nat;
-A3: n in NAT by ORDINAL1:def 13;
+A2: n in NAT by ORDINAL1:def 13;
   assume
-A4: n >= 2;
+A3: n >= 2;
   then n >= 1+1;
   then n > 0+1 by NAT_1:13;
   hence <%z0,z1%>.n = (0_.(L)+*(0,z0)).n by FUNCT_7:34
-    .= (0_.(L)).n by A4,FUNCT_7:34
-    .= 0.L by A3,FUNCOP_1:13;
+    .= (0_.(L)).n by A3,FUNCT_7:34
+    .= 0.L by A2,FUNCOP_1:13;
 end;
 
 registration
@@ -1277,8 +1301,8 @@ registration
 end;
 
 theorem Th40:
-  for L be non empty ZeroStr for z0,z1 be Element of L holds
-  len <%z0,z1%> <= 2
+  for L be non empty ZeroStr for z0,z1 be Element of L holds len
+  <%z0,z1%> <= 2
 proof
   let L be non empty ZeroStr;
   let z0,z1 be Element of L;
@@ -1291,80 +1315,92 @@ proof
 end;
 
 theorem Th41:
-  for L be non empty ZeroStr for z0,z1 be Element of L st z1 <> 0.L holds
-  len <%z0,z1%> = 2
+  for L be non empty ZeroStr for z0,z1 be Element of L st z1 <> 0.
+  L holds len <%z0,z1%> = 2
 proof
   let L be non empty ZeroStr;
   let z0,z1 be Element of L;
-  assume z1 <> 0.L;
+  assume
+  z1 <> 0.L;
   then
 A1: <%z0,z1%>.1 <> 0.L by Th39;
-A2: 2 is_at_least_length_of <%z0,z1%>
+A2: now
+    let n be Nat;
+    assume
+    n is_at_least_length_of <%z0,z1%>;
+    then 1 < n by A1,ALGSEQ_1:def 3;
+    hence 1+1 <= n by NAT_1:13;
+  end;
+  2 is_at_least_length_of <%z0,z1%>
   proof
     let n be Nat;
     thus thesis by Th39;
-  end;
-  now
-    let n be Nat;
-    assume n is_at_least_length_of <%z0,z1%>;
-    then 1 < n by A1,ALGSEQ_1:def 3;
-    hence 1+1 <= n by NAT_1:13;
   end;
   hence thesis by A2,ALGSEQ_1:def 4;
 end;
 
 theorem Th42:
-  for L be non empty ZeroStr for z0 be Element of L st z0 <> 0.L holds
-  len <%z0,0.L%> = 1
+  for L be non empty ZeroStr for z0 be Element of L st z0 <> 0.L
+  holds len <%z0,0.L%> = 1
 proof
   let L be non empty ZeroStr;
   let z0 be Element of L;
-  assume z0 <> 0.L;
-  then
-A1: <%z0,0.L%>.0 <> 0.L by Th39;
-A2: 1 is_at_least_length_of <%z0,0.L%>
+A1: 1 is_at_least_length_of <%z0,0.L%>
   proof
     let n be Nat;
     assume
-A3: n >= 1;
-    per cases by A3,XXREAL_0:1;
-    suppose n = 1;
+A2: n >= 1;
+    per cases by A2,XXREAL_0:1;
+    suppose
+      n = 1;
       hence thesis by Th39;
     end;
-    suppose n > 1;
+    suppose
+      n > 1;
       then n >= 1+1 by NAT_1:13;
       hence thesis by Th39;
     end;
   end;
+  assume
+  z0 <> 0.L;
+  then
+A3: <%z0,0.L%>.0 <> 0.L by Th39;
   now
     let n be Nat;
-    assume n is_at_least_length_of <%z0,0.L%>;
-    then 0 < n by A1,ALGSEQ_1:def 3;
+    assume
+    n is_at_least_length_of <%z0,0.L%>;
+    then 0 < n by A3,ALGSEQ_1:def 3;
     hence 0+1 <= n by NAT_1:13;
   end;
-  hence thesis by A2,ALGSEQ_1:def 4;
+  hence thesis by A1,ALGSEQ_1:def 4;
 end;
 
 theorem Th43:
   for L be non empty ZeroStr holds <%0.L,0.L%> = 0_.(L)
 proof
   let L be non empty ZeroStr;
-A1: 0 is_at_least_length_of <%0.L,0.L%>
+  0 is_at_least_length_of <%0.L,0.L%>
   proof
     let n be Nat;
-    assume n >= 0;
+    assume
+    n >= 0;
     per cases;
-    suppose n = 0;
+    suppose
+      n = 0;
       hence thesis by Th39;
     end;
-    suppose n > 0;
+    suppose
+      n > 0;
       then
-A2:   n >= 0+1 by NAT_1:13;
-      now per cases by A2,XXREAL_0:1;
-        suppose n = 1;
+A1:   n >= 0+1 by NAT_1:13;
+      now
+        per cases by A1,XXREAL_0:1;
+        suppose
+          n = 1;
           hence thesis by Th39;
         end;
-        suppose n > 1;
+        suppose
+          n > 1;
           then n >= 1+1 by NAT_1:13;
           hence thesis by Th39;
         end;
@@ -1372,12 +1408,13 @@ A2:   n >= 0+1 by NAT_1:13;
       hence thesis;
     end;
   end;
-  len <%0.L,0.L%> = 0 by A1,ALGSEQ_1:def 4;
+  then len <%0.L,0.L%> = 0 by ALGSEQ_1:def 4;
   hence thesis by POLYNOM4:8;
 end;
 
 theorem
-  for L be non empty ZeroStr for z0 be Element of L holds <%z0,0.L%> = <%z0%>
+  for L be non empty ZeroStr for z0 be Element of L holds <%z0,0.L%> =
+  <%z0%>
 proof
   let L be non empty ZeroStr;
   let z0 be Element of L;
@@ -1391,35 +1428,36 @@ A1: z0 = 0.L;
 A2: z0 <> 0.L;
     then
 A3: len <%z0%> = 0+1 by Th34;
-A4: len <%z0,0.L%> = 1 by A2,Th42;
-    now
+A4: now
       let n be Nat;
-      assume n < len <%z0%>;
-      then n <= 0 by A3,NAT_1:13;
+      assume
+      n < len <%z0%>;
       then
-A5:   n = 0;
+A5:   n = 0 by A3,NAT_1:13;
       hence <%z0,0.L%>.n = z0 by Th39
         .= <%z0%>.n by A5,ALGSEQ_1:def 6;
     end;
-    hence thesis by A3,A4,ALGSEQ_1:28;
+    len <%z0,0.L%> = 1 by A2,Th42;
+    hence thesis by A2,A4,Th34,ALGSEQ_1:28;
   end;
 end;
 
 theorem Th45:
   for L be add-associative right_zeroed right_complementable
-  left-distributive unital (non empty doubleLoopStr)
-  for z0,z1,x be Element of L holds eval(<%z0,z1%>,x) = z0+z1*x
+left-distributive unital (non empty doubleLoopStr) for z0,z1,x be Element of L
+  holds eval(<%z0,z1%>,x) = z0+z1*x
 proof
-  let L be add-associative right_zeroed right_complementable
-  left-distributive unital (non empty doubleLoopStr);
+  let L be add-associative right_zeroed right_complementable left-distributive
+  unital (non empty doubleLoopStr);
   let z0,z1,x be Element of L;
   consider F be FinSequence of the carrier of L such that
 A1: eval(<%z0,z1%>,x) = Sum F and
 A2: len F = len <%z0,z1%> and
-A3: for n be Element of NAT st n in dom F holds
-  F.n = <%z0,z1%>.(n-'1) * (power L).(x,n-'1) by POLYNOM4:def 2;
+A3: for n be Element of NAT st n in dom F holds F.n = <%z0,z1%>.(n-'1) *
+  (power L).(x,n-'1) by POLYNOM4:def 2;
   per cases by A2,Th40,NAT_1:27;
-  suppose len F = 0;
+  suppose
+    len F = 0;
     then
 A4: <%z0,z1%> = 0_.(L) by A2,POLYNOM4:8;
     hence eval(<%z0,z1%>,x) = 0.L by POLYNOM4:20
@@ -1449,31 +1487,31 @@ A5: len F = 1;
   end;
   suppose
 A6: len F = 2;
+    then 1 in dom F by FINSEQ_3:27;
     then
-A7: 1 in dom F & 2 in dom F by FINSEQ_3:27;
-    then
-A8: F.1 = <%z0,z1%>.(1-'1) * (power L).(x,1-'1) by A3
+A7: F.1 = <%z0,z1%>.(1-'1) * (power L).(x,1-'1) by A3
       .= <%z0,z1%>.0 * (power L).(x,1-'1) by XREAL_1:234
       .= <%z0,z1%>.0 * (power L).(x,0) by XREAL_1:234
       .= z0 * (power L).(x,0) by Th39
       .= z0 * 1_L by GROUP_1:def 8
       .= z0 by GROUP_1:def 5;
-A9: 2-'1 = 2-1 by XREAL_0:def 2;
-    F.2 = <%z0,z1%>.(2-'1) * (power L).(x,2-'1) by A3,A7
-      .= z1 * (power L).(x,1) by A9,Th39
+A8: 2-'1 = 2-1 by XREAL_0:def 2;
+    2 in dom F by A6,FINSEQ_3:27;
+    then F.2 = <%z0,z1%>.(2-'1) * (power L).(x,2-'1) by A3
+      .= z1 * (power L).(x,1) by A8,Th39
       .= z1 * x by GROUP_1:98;
-    then F = <*z0,z1*x*> by A6,A8,FINSEQ_1:61;
+    then F = <*z0,z1*x*> by A6,A7,FINSEQ_1:61;
     hence thesis by A1,RLVECT_1:62;
   end;
 end;
 
 theorem
   for L be add-associative right_zeroed right_complementable
-  left-distributive well-unital (non empty doubleLoopStr)
-  for z0,z1,x be Element of L holds eval(<%z0,0.L%>,x) = z0
+left-distributive well-unital (non empty doubleLoopStr) for z0,z1,x be Element
+  of L holds eval(<%z0,0.L%>,x) = z0
 proof
-  let L be add-associative right_zeroed right_complementable
-  left-distributive well-unital (non empty doubleLoopStr);
+  let L be add-associative right_zeroed right_complementable left-distributive
+  well-unital (non empty doubleLoopStr);
   let z0,z1,x be Element of L;
   thus eval(<%z0,0.L%>,x) = z0+0.L*x by Th45
     .= z0+0.L by VECTSP_1:39
@@ -1482,11 +1520,11 @@ end;
 
 theorem
   for L be add-associative right_zeroed right_complementable
-  left-distributive unital (non empty doubleLoopStr)
-  for z0,z1,x be Element of L holds eval(<%0.L,z1%>,x) = z1*x
+left-distributive unital (non empty doubleLoopStr) for z0,z1,x be Element of L
+  holds eval(<%0.L,z1%>,x) = z1*x
 proof
-  let L be add-associative right_zeroed right_complementable
-  left-distributive unital (non empty doubleLoopStr);
+  let L be add-associative right_zeroed right_complementable left-distributive
+  unital (non empty doubleLoopStr);
   let z0,z1,x be Element of L;
   thus eval(<%0.L,z1%>,x) = 0.L+z1*x by Th45
     .= z1*x by RLVECT_1:10;
@@ -1494,11 +1532,11 @@ end;
 
 theorem Th48:
   for L be add-associative right_zeroed right_complementable
-  left-distributive well-unital (non empty doubleLoopStr)
-  for z0,z1,x be Element of L holds eval(<%z0,1.L%>,x) = z0+x
+left-distributive well-unital (non empty doubleLoopStr) for z0,z1,x be Element
+  of L holds eval(<%z0,1.L%>,x) = z0+x
 proof
-  let L be add-associative right_zeroed right_complementable
-  left-distributive well-unital (non empty doubleLoopStr);
+  let L be add-associative right_zeroed right_complementable left-distributive
+  well-unital (non empty doubleLoopStr);
   let z0,z1,x be Element of L;
   thus eval(<%z0,1.L%>,x) = z0+1.L*x by Th45
     .= z0+x by VECTSP_1:def 16;
@@ -1506,11 +1544,11 @@ end;
 
 theorem
   for L be add-associative right_zeroed right_complementable
-  left-distributive well-unital (non empty doubleLoopStr)
-  for z0,z1,x be Element of L holds eval(<%0.L,1.L%>,x) = x
+left-distributive well-unital (non empty doubleLoopStr) for z0,z1,x be Element
+  of L holds eval(<%0.L,1.L%>,x) = x
 proof
-  let L be add-associative right_zeroed right_complementable
-  left-distributive well-unital (non empty doubleLoopStr);
+  let L be add-associative right_zeroed right_complementable left-distributive
+  well-unital (non empty doubleLoopStr);
   let z0,z1,x be Element of L;
   thus eval(<%0.L,1.L%>,x) = 0.L+1.L*x by Th45
     .= 0.L+x by VECTSP_1:def 19
@@ -1525,67 +1563,73 @@ definition
   let p,q be Polynomial of L;
   func Subst(p,q) -> Polynomial of L means
   :Def5:
-  ex F be FinSequence of the carrier of Polynom-Ring L st it = Sum F &
-  len F = len p &
-  for n be Element of NAT st n in dom F holds F.n = p.(n-'1)*(q`^(n-'1));
+  ex F be FinSequence of the
+  carrier of Polynom-Ring L st it = Sum F & len F = len p & for n be Element of
+  NAT st n in dom F holds F.n = p.(n-'1)*(q`^(n-'1));
   existence
   proof
-    set k = len p;
     defpred P[Nat,set] means $2 = p.($1-'1)*(q`^($1-'1));
+    set k = len p;
 A1: now
       let n be Nat;
-      assume n in Seg k;
-      reconsider x = p.(n-'1)*(q`^(n-'1)) as
-      Element of Polynom-Ring L by POLYNOM3:def 12;
+      assume
+      n in Seg k;
+      reconsider x = p.(n-'1)*(q`^(n-'1)) as Element of Polynom-Ring L by
+POLYNOM3:def 12;
       take x;
       thus P[n,x];
     end;
     consider F being FinSequence of the carrier of Polynom-Ring L such that
-A2: dom F = Seg k and
-A3: for n be Nat st n in Seg k holds P[n,F.n] from FINSEQ_1:sch 5(A1);
+A2: dom F = Seg k & for n be Nat st n in Seg k holds P[n,F.n] from
+    FINSEQ_1:sch 5(A1);
     reconsider r=Sum F as Polynomial of L by POLYNOM3:def 12;
     take r,F;
-    thus thesis by A2,A3,FINSEQ_1:def 3;
+    thus thesis by A2,FINSEQ_1:def 3;
   end;
   uniqueness
   proof
     let y1,y2 be Polynomial of L;
     given F1 be FinSequence of the carrier of Polynom-Ring L such that
-A4: y1 = Sum F1 and
-A5: len F1 = len p and
-A6: for n be Element of NAT st n in dom F1 holds F1.n = p.(n-'1)*(q`^(n-'1));
+A3: y1 = Sum F1 and
+A4: len F1 = len p and
+A5: for n be Element of NAT st n in dom F1 holds F1.n = p.(n-'1)*(q`^(
+    n-'1));
     given F2 be FinSequence of the carrier of Polynom-Ring L such that
-A7: y2 = Sum F2 and
-A8: len F2 = len p and
-A9: for n be Element of NAT st n in dom F2 holds F2.n = p.(n-'1)*(q`^(n-'1));
-X: dom F1 = Seg len F1 by FINSEQ_1:def 3;
+A6: y2 = Sum F2 and
+A7: len F2 = len p and
+A8: for n be Element of NAT st n in dom F2 holds F2.n = p.(n-'1)*(q`^(
+    n-'1));
+A9: dom F1 = Seg len F1 by FINSEQ_1:def 3;
     now
       let n be Nat;
-      assume n in dom F1;
+      assume
+A10:  n in dom F1;
       then
-A10:  n in dom F1 & n in dom F2 by A5,A8,X,FINSEQ_1:def 3;
-      hence F1.n = p.(n-'1)*(q`^(n-'1)) by A6
-        .= F2.n by A9,A10;
+A11:  n in dom F2 by A4,A7,A9,FINSEQ_1:def 3;
+      thus F1.n = p.(n-'1)*(q`^(n-'1)) by A5,A10
+        .= F2.n by A8,A11;
     end;
-    hence y1 = y2 by A4,A5,A7,A8,FINSEQ_2:10;
+    hence y1 = y2 by A3,A4,A6,A7,FINSEQ_2:10;
   end;
 end;
 
 theorem Th50:
-  for L be Abelian add-associative right_zeroed right_complementable
-  well-unital commutative distributive (non empty doubleLoopStr)
-  for p be Polynomial of L holds Subst(0_.(L),p) = 0_.(L)
+  for L be Abelian add-associative right_zeroed
+  right_complementable well-unital commutative distributive (non empty
+  doubleLoopStr) for p be Polynomial of L holds Subst(0_.(L),p) = 0_.(L)
 proof
   let L be Abelian add-associative right_zeroed right_complementable
   well-unital commutative distributive (non empty doubleLoopStr);
   let p be Polynomial of L;
   consider F be FinSequence of the carrier of Polynom-Ring L such that
-A1: Subst(0_.(L),p) = Sum F and len F = len (0_.(L)) and
-A2: for n be Element of NAT st n in dom F
-  holds F.n = (0_.(L)).(n-'1)*(p`^(n-'1)) by Def5;
+A1: Subst(0_.(L),p) = Sum F and
+  len F = len (0_.(L)) and
+A2: for n be Element of NAT st n in dom F holds F.n = (0_.(L)).(n-'1)*(p
+  `^(n-'1)) by Def5;
   now
     let n be Element of NAT;
-    assume n in dom F;
+    assume
+    n in dom F;
     hence F.n = (0_.(L)).(n-'1)*(p`^(n-'1)) by A2
       .= 0.L*(p`^(n-'1)) by FUNCOP_1:13
       .= 0_.(L) by Th27
@@ -1597,8 +1641,8 @@ end;
 
 theorem
   for L be Abelian add-associative right_zeroed right_complementable
-  well-unital commutative distributive (non empty doubleLoopStr)
-  for p be Polynomial of L holds Subst(p,0_.(L)) = <%p.0%>
+  well-unital commutative distributive (non empty doubleLoopStr) for p be
+  Polynomial of L holds Subst(p,0_.(L)) = <%p.0%>
 proof
   let L be Abelian add-associative right_zeroed right_complementable
   well-unital commutative distributive (non empty doubleLoopStr);
@@ -1606,11 +1650,11 @@ proof
   consider F be FinSequence of the carrier of Polynom-Ring L such that
 A1: Subst(p,0_.(L)) = Sum F and
 A2: len F = len p and
-A3: for n be Element of NAT st n in dom F
-  holds F.n = p.(n-'1)*((0_.(L))`^(n-'1)) by Def5;
+A3: for n be Element of NAT st n in dom F holds F.n = p.(n-'1)*((0_.(L))
+  `^(n-'1)) by Def5;
   per cases;
-  suppose len F <> 0;
-    then len F > 0;
+  suppose
+    len F <> 0;
     then 0+1 <= len F by NAT_1:13;
     then
 A4: 1 in dom F by FINSEQ_3:27;
@@ -1643,7 +1687,8 @@ A9:   n-'1 = n-(1+1)+1 by XREAL_0:def 2
       .= p.0*(1_.(L)) by Th16
       .= <%p.0%> by Th30;
   end;
-  suppose len F = 0;
+  suppose
+    len F = 0;
     then
 A10: p = 0_.(L) by A2,POLYNOM4:8;
     hence Subst(p,0_.(L)) = 0_.(L) by Th50
@@ -1654,89 +1699,95 @@ end;
 
 theorem
   for L be Abelian add-associative right_zeroed right_complementable
-  well-unital associative commutative distributive almost_left_invertible
-  (non empty doubleLoopStr) for p be Polynomial of L
-  for x be Element of L holds len Subst(p,<%x%>) <= 1
+  well-unital associative commutative distributive almost_left_invertible (non
+  empty doubleLoopStr) for p be Polynomial of L for x be Element of L holds len
+  Subst(p,<%x%>) <= 1
 proof
   let L be Abelian add-associative right_zeroed right_complementable
-  well-unital associative commutative distributive almost_left_invertible
-  (non empty doubleLoopStr);
+  well-unital associative commutative distributive almost_left_invertible (non
+  empty doubleLoopStr);
   let p be Polynomial of L;
   let x be Element of L;
   now
     now
       consider F be FinSequence of the carrier of Polynom-Ring L such that
-A1:   Subst(p,<%x%>) = Sum F and len F = len p and
-A2:   for n be Element of NAT st n in dom F
-      holds F.n = p.(n-'1)*(<%x%>`^(n-'1)) by Def5;
-      defpred P[Nat] means for p be Polynomial of L st p = Sum(F|$1) holds
-      len p <= 1;
-A3:   P[0]
-      proof
-        let p be Polynomial of L;
-        assume
-A4:     p = Sum(F|0);
-        F|0 = <*>the carrier of Polynom-Ring L;
-        then p = 0.(Polynom-Ring L) by A4,RLVECT_1:60
-          .= 0_.(L) by POLYNOM3:def 12;
-        hence thesis by POLYNOM4:6;
-      end;
-A5:   for n be Element of NAT st P[n] holds P[n+1]
+A1:   Subst(p,<%x%>) = Sum F and
+      len F = len p and
+A2:   for n be Element of NAT st n in dom F holds F.n = p.(n-'1)*(<%x
+      %>`^(n-'1)) by Def5;
+      defpred P[Nat] means for p be Polynomial of L st p = Sum(F|$1) holds len
+      p <= 1;
+A3:   for n be Element of NAT st P[n] holds P[n+1]
       proof
         let n be Element of NAT;
-        assume
-A6:     for q be Polynomial of L st q = Sum(F|n) holds len q <= 1;
-        let q be Polynomial of L;
-        assume
-A7:     q = Sum(F|(n+1));
         reconsider F1 = Sum(F|n) as Polynomial of L by POLYNOM3:def 12;
         reconsider maxFq = max(len F1,len (p.n*(<%x%>`^n))) as Element of NAT
         by FINSEQ_2:1;
-A8:     len F1 <= 1 by A6;
-        len (p.n*(<%x%>`^n)) <= 1
+A4:     len (p.n*(<%x%>`^n)) <= 1
         proof
           per cases;
-          suppose p.n <> 0.L;
+          suppose
+            p.n <> 0.L;
             then len (p.n*(<%x%>`^n)) = len (<%x%>`^n) by Th26
               .= len <%(power L).(x,n)%> by Th37;
             hence thesis by ALGSEQ_1:def 6;
           end;
-          suppose p.n = 0.L;
+          suppose
+            p.n = 0.L;
             hence thesis by Th25;
           end;
         end;
+        assume
+A5:     for q be Polynomial of L st q = Sum(F|n) holds len q <= 1;
+        then len F1 <= 1;
         then
-A9:     maxFq <= 1 by A8,XXREAL_0:28;
-A10:    maxFq >= len F1 & maxFq >= len (p.n*(<%x%>`^n)) by XXREAL_0:25;
-        now per cases;
+A6:     maxFq <= 1 by A4,XXREAL_0:28;
+        let q be Polynomial of L;
+        assume
+A7:     q = Sum(F|(n+1));
+A8:     maxFq >= len F1 & maxFq >= len (p.n*(<%x%>`^n)) by XXREAL_0:25;
+        now
+          per cases;
           suppose
-A11:        n+1 <= len F;
+A9:         n+1 <= len F;
             n+1 >= 1 by NAT_1:11;
             then
-A12:        n+1 in dom F by A11,FINSEQ_3:27;
+A10:        n+1 in dom F by A9,FINSEQ_3:27;
             then
-A13:        F/.(n+1) = F.(n+1) by PARTFUN1:def 8
-              .= p.(n+1-'1)*(<%x%>`^(n+1-'1)) by A2,A12
+A11:        F/.(n+1) = F.(n+1) by PARTFUN1:def 8
+              .= p.(n+1-'1)*(<%x%>`^(n+1-'1)) by A2,A10
               .= p.n*(<%x%>`^(n+1-'1)) by NAT_D:34
               .= p.n*(<%x%>`^n) by NAT_D:34;
-            F|(n+1) = F|n ^ <*F/.(n+1)*> by A11,JORDAN8:2;
+            F|(n+1) = F|n ^ <*F/.(n+1)*> by A9,FINSEQ_5:85;
             then q = Sum(F|n) + F/.(n+1) by A7,FVSUM_1:87
-              .= F1 + p.n*(<%x%>`^n) by A13,POLYNOM3:def 12;
-            then len q <= maxFq by A10,POLYNOM4:9;
-            hence thesis by A9,XXREAL_0:2;
+              .= F1 + p.n*(<%x%>`^n) by A11,POLYNOM3:def 12;
+            then len q <= maxFq by A8,POLYNOM4:9;
+            hence thesis by A6,XXREAL_0:2;
           end;
           suppose
-A14:        n+1 > len F;
+A12:        n+1 > len F;
             then n >= len F by NAT_1:13;
-            then F|n = F & F|(n+1) = F by A14,FINSEQ_1:79;
-            hence thesis by A6,A7;
+            then
+A13:        F|n = F by FINSEQ_1:79;
+            F|(n+1) = F by A12,FINSEQ_1:79;
+            hence thesis by A5,A7,A13;
           end;
         end;
         hence thesis;
       end;
-A15:  for n be Element of NAT holds P[n] from NAT_1:sch 1(A3,A5);
-      F|(len F) = F by FINSEQ_1:79;
-      hence thesis by A1,A15;
+A14:  F|(len F) = F by FINSEQ_1:79;
+A15:  P[0]
+      proof
+        let p be Polynomial of L;
+A16:    F|0 = <*>the carrier of Polynom-Ring L;
+        assume
+        p = Sum(F|0);
+        then p = 0.(Polynom-Ring L) by A16,RLVECT_1:60
+          .= 0_.(L) by POLYNOM3:def 12;
+        hence thesis by POLYNOM4:6;
+      end;
+      for n be Element of NAT holds P[n] from NAT_1:sch 1(A15,A3);
+      hence thesis by A1,A14;
     end;
     hence thesis;
   end;
@@ -1744,8 +1795,8 @@ A15:  for n be Element of NAT holds P[n] from NAT_1:sch 1(A3,A5);
 end;
 
 theorem Th53:
-  for L be Field for p,q be Polynomial of L st len p <> 0 & len q > 1 holds
-  len Subst(p,q) = (len p)*(len q)-len p-len q+2
+  for L be Field for p,q be Polynomial of L st len p <> 0 & len q
+  > 1 holds len Subst(p,q) = (len p)*(len q)-len p-len q+2
 proof
   let L be Field;
   let p,q be Polynomial of L;
@@ -1755,365 +1806,377 @@ A2: len q > 1;
   consider F be FinSequence of the carrier of Polynom-Ring L such that
 A3: Subst(p,q) = Sum F and
 A4: len F = len p and
-A5: for n be Element of NAT st n in dom F holds F.n = p.(n-'1)*(q`^(n-'1))
-  by Def5;
-  reconsider k = len p * len q - len p - len q + 1 as Element of NAT
-  by A1,A2,Th1,INT_1:16;
-  len F > 0 by A1,A4;
-  then
-A6: 0+1 <= len F by NAT_1:13;
+A5: for n be Element of NAT st n in dom F holds F.n = p.(n-'1)*(q`^(n-'1
+  )) by Def5;
+A6: 0+1 <= len F by A1,A4,NAT_1:13;
   then
 A7: 1 in dom F by FINSEQ_3:27;
-  defpred P[Nat] means for F1 be Polynomial of L
-  st F1 = Sum(F|$1) holds len F1 <= len (q`^($1-'1));
-A8: P[1]
+  reconsider k = len p * len q - len p - len q + 1 as Element of NAT by A1,A2
+,Th1,INT_1:16;
+  len p >= 0+1 by A1,NAT_1:13;
+  then
+A8: len p-1 >=0 by XREAL_1:21;
+A9: len (q`^(len F-'1)) = (len p-'1)*len q - (len p-'1) + 1 by A2,A4,Th24
+    .= (len p-'1)*len q-(len p-1)+1 by A8,XREAL_0:def 2
+    .= (len p-1)*len q-(len p-1)+1 by A8,XREAL_0:def 2
+    .= (len p)*(len q)-len p-len q+(1+1);
+A10: len Subst(p,q) >= (len p)*(len q)-len p-len q+(1+1)
   proof
+    set lF1 = len F-'1;
+    set F1 = F|lF1;
+    reconsider sF1 = Sum F1 as Polynomial of L by POLYNOM3:def 12;
+A11: len F = lF1+1 by A6,XREAL_1:237;
+    then
+A12: F = F1^<*F/.len F*> by FINSEQ_5:24;
+    then
+A13: Sum F = Sum F1 + F/.len F by FVSUM_1:87;
+A14: len F = len F1 + 1 by A12,FINSEQ_2:19;
+    assume
+A15: len Subst(p,q) < (len p)*(len q)-len p-len q+(1+1);
+    then len Subst(p,q) < k+1;
+    then len Subst(p,q) <= k by NAT_1:13;
+    then
+A16: Subst(p,q).k = 0.L by ALGSEQ_1:22;
+    now
+      per cases;
+      suppose
+A17:    len F1 <> {};
+        defpred P[Nat] means for F2 be Polynomial of L st F2 = Sum(F1|$1)
+        holds len F2 <= $1*len q-len q-$1+2;
+A18:    F1|(len F1) = F1 by FINSEQ_1:79;
+A19:    for n be non empty Nat st P[n] holds P[n+1]
+        proof
+          let n be non empty Nat;
+          assume
+A20:      for F2 be Polynomial of L st F2 = Sum(F1|n) holds len F2 <=
+          n*len q-len q-n+2;
+          len q >= 0+(1+1) by A2,NAT_1:13;
+          then len q-2 >= 0 by XREAL_1:21;
+          then n*len q-n+1+0 <= n*len q-n+1+(len q-2) by XREAL_1:9;
+          then
+          n*len q-len q-n+2+0 <= n*len q-len q-n+2+1 & n*len q-n+1-(len q
+          -2) <= n*len q-n+1 by XREAL_1:8,22;
+          then
+A21:      n*len q-len q-n+2 <= n*len q-n+1 by XXREAL_0:2;
+          reconsider F3 = Sum(F1|n) as Polynomial of L by POLYNOM3:def 12;
+          let F2 be Polynomial of L;
+          assume
+A22:      F2 = Sum(F1|(n+1));
+          len F3 <= n*len q-len q-n+2 by A20;
+          then
+A23:      len F3 <= n*len q-n+1 by A21,XXREAL_0:2;
+          now
+            per cases;
+            suppose
+A24:          n+1 <= len F1;
+              reconsider nn = n as Element of NAT by ORDINAL1:def 13;
+A25:          n+1 >= 1 by NAT_1:11;
+              reconsider maxFq = max(len F3,len (p.nn*(q`^nn))) as Element of
+              NAT by FINSEQ_2:1;
+A26:          maxFq >= len F3 & maxFq >= len (p.nn*(q`^nn)) by XXREAL_0:25;
+              len (p.nn*(q`^nn)) <= n*len q-n+1
+              proof
+                per cases;
+                suppose
+                  p.n <> 0.L;
+                  then len (p.nn*(q`^nn)) = len (q`^nn) by Th26;
+                  hence thesis by A2,Th24;
+                end;
+                suppose
+A27:              p.n = 0.L;
+                  len q >= 0+1 by A2;
+                  then len q-1 >= 0 by XREAL_1:21;
+                  then
+A28:              n*(len q-1) >= 0;
+                  n*len q <= n*len q+1 by NAT_1:11;
+                  then n*len q-n <= n*len q+1-n by XREAL_1:11;
+                  hence thesis by A27,A28,Th25;
+                end;
+              end;
+              then
+A29:          maxFq <= n*len q-n+1 by A23,XXREAL_0:28;
+              len F1 <= len F by A14,NAT_1:11;
+              then n+1 <= len F by A24,XXREAL_0:2;
+              then
+A30:          n+1 in dom F by A25,FINSEQ_3:27;
+A31:          n+1 in dom F1 by A24,A25,FINSEQ_3:27;
+              then
+A32:          F1/.(n+1) = F1.(n+1) by PARTFUN1:def 8
+                .= F.(n+1) by A12,A31,FINSEQ_1:def 7
+                .= p.(n+1-'1)*(q`^(n+1-'1)) by A5,A30
+                .= p.nn*(q`^(n+1-'1)) by NAT_D:34
+                .= p.nn*(q`^nn) by NAT_D:34;
+              F1|(nn+1) = F1|nn ^ <*F1/.(nn+1)*> by A24,FINSEQ_5:85;
+              then F2 = Sum(F1|n) + F1/.(n+1) by A22,FVSUM_1:87
+                .= F3 + p.nn*(q`^nn) by A32,POLYNOM3:def 12;
+              then len F2 <= maxFq by A26,POLYNOM4:9;
+              hence len F2 <= (n+1)*len q-len q-(n+1)+2 by A29,XXREAL_0:2;
+            end;
+            suppose
+A33:          n+1 > len F1;
+              -len q <= -1 by A2,XREAL_1:26;
+              then n*len q-n+-len q <= n*len q-n+-1 by XREAL_1:8;
+              then
+A34:          n*len q-len q-n+2 <= (n+1)*len q-len q-(n+1)+2 by XREAL_1:8;
+              n >= len F1 by A33,NAT_1:13;
+              then
+A35:          F1|n = F1 by FINSEQ_1:79;
+              F1|(n+1) = F1 by A33,FINSEQ_1:79;
+              then len F2 <= n*len q-len q-n+2 by A20,A22,A35;
+              hence len F2 <= (n+1)*len q-len q-(n+1)+2 by A34,XXREAL_0:2;
+            end;
+          end;
+          hence len F2 <= (n+1)*len q-len q-(n+1)+2;
+        end;
+        0+len q >= 1+1 by A2,NAT_1:13;
+        then 2-len q <= 0 by XREAL_1:22;
+        then
+A36:    2-len q+k <= 0+k by XREAL_1:8;
+        0+1 <= len F1 by A17,NAT_1:13;
+        then
+A37:    1 in dom F1 by FINSEQ_3:27;
+A38:    P[1]
+        proof
+          let F2 be Polynomial of L;
+          F1|1 = <*F1/.1*> by A17,CARD_1:47,FINSEQ_5:23;
+          then
+A39:      Sum(F1|1) = F1/.1 by RLVECT_1:61
+            .= F1.1 by A37,PARTFUN1:def 8
+            .= F.1 by A12,A37,FINSEQ_1:def 7
+            .= p.(1-'1)*(q`^(1-'1)) by A5,A7
+            .= p.0*(q`^(1-'1)) by XREAL_1:234
+            .= p.0*(q`^0) by XREAL_1:234
+            .= p.0*(1_.(L)) by Th16
+            .= <%p.0%> by Th30;
+          assume
+          F2 = Sum(F1|1);
+          hence len F2 <= 1*len q-len q-1+2 by A39,ALGSEQ_1:def 6;
+        end;
+        for n be non empty Nat holds P[n] from NAT_1:sch 10(A38,A19);
+        then len sF1 <= (len F1)*(len q)-len q-len F1+2 by A17,A18;
+        then
+A40:    sF1.k = 0.L by A4,A14,A36,ALGSEQ_1:22,XXREAL_0:2;
+A41:    len F in dom F by A6,FINSEQ_3:27;
+        then F/.len F = F.len F by PARTFUN1:def 8
+          .= p.lF1*(q`^lF1) by A5,A41;
+        then Subst(p,q) = sF1 + p.lF1*(q`^lF1) by A3,A13,POLYNOM3:def 12;
+        then
+A42:    Subst(p,q).k = sF1.k + (p.lF1*(q`^lF1)).k by NORMSP_1:def 5
+          .= (p.lF1*(q`^lF1)).k by A40,RLVECT_1:def 7
+          .= p.lF1*((q`^lF1).k) by Def3;
+        len (q`^lF1) = k+1 by A9;
+        then
+A43:    (q`^lF1).k <> 0.L by ALGSEQ_1:25;
+        p.lF1 <> 0.L by A4,A11,ALGSEQ_1:25;
+        hence contradiction by A16,A42,A43,VECTSP_1:44;
+      end;
+      suppose
+A44:    len F1 = {};
+A45:    F/.1 = F.1 by A7,PARTFUN1:def 8
+          .= p.(1-'1)*(q`^(1-'1)) by A5,A7
+          .= p.0*(q`^(1-'1)) by XREAL_1:234
+          .= p.0*(q`^0) by XREAL_1:234
+          .= p.0*(1_.(L)) by Th16
+          .= <%p.0%> by Th30;
+A46:    0.(Polynom-Ring L) = 0_.(L) by POLYNOM3:def 12;
+A47:    len F = 0+1 by A12,A44,FINSEQ_2:19;
+        then
+A48:    p.0 <> 0.L by A4,ALGSEQ_1:25;
+        F1 = <*>(the carrier of Polynom-Ring L) by A44;
+        then Sum F = 0.(Polynom-Ring L) + F/.1 by A13,A47,RLVECT_1:60
+          .= 0_.(L) + <%p.0%> by A45,A46,POLYNOM3:def 12
+          .= <%p.0%> by POLYNOM3:29;
+        hence contradiction by A3,A4,A15,A47,A48,Th34;
+      end;
+    end;
+    hence contradiction;
+  end;
+  defpred P[Nat] means for F1 be Polynomial of L st F1 = Sum(F|$1) holds len
+  F1 <= len (q`^($1-'1));
+A49: for n be non empty Nat st P[n] holds P[n+1]
+  proof
+    let n be non empty Nat;
+    assume
+A50: for F1 be Polynomial of L st F1 = Sum(F|n) holds len F1 <= len (q
+    `^(n-'1));
+    reconsider nn = n as Element of NAT by ORDINAL1:def 13;
+    reconsider F2 = Sum(F|n) as Polynomial of L by POLYNOM3:def 12;
     let F1 be Polynomial of L;
     assume
-A9: F1 = Sum(F|1);
-    F is non empty by A1,A4,CARD_1:47;
-    then F|1 = <*F/.1*> by FINSEQ_5:23;
-    then Sum(F|1) = F/.1 by RLVECT_1:61
+A51: F1 = Sum(F|(n+1));
+    n*len q+(len q-'1) >= n*len q by NAT_1:11;
+    then
+A52: n*len q-(len q-'1) <= n*len q by XREAL_1:22;
+    len q >= 0+1 by A2;
+    then len q-1 >=0 by XREAL_1:21;
+    then n*len q-(len q-1) <= n*len q by A52,XREAL_0:def 2;
+    then n*len q-len q+1-n <= n*len q-n by XREAL_1:11;
+    then
+A53: n*len q-len q-n+1+1 <= n*len q-n+1 by XREAL_1:8;
+    n >= 0+1 by NAT_1:13;
+    then
+A54: n-1 >=0 by XREAL_1:21;
+    len(q`^(n-'1)) = (n-'1)*len q-(n-'1)+1 by A2,Th24
+      .= (n-1)*len q-(n-'1)+1 by A54,XREAL_0:def 2
+      .= n*len q-1*len q-(n-1)+1 by A54,XREAL_0:def 2
+      .= n*len q-len q-n+1+1;
+    then
+A55: len (q`^(n-'1)) <= len (q`^nn) by A2,A53,Th24;
+    per cases;
+    suppose
+A56:  n+1 <= len F;
+      reconsider maxFq = max(len F2,len (p.nn*(q`^nn))) as Element of NAT by
+FINSEQ_2:1;
+A57:  len (p.nn*(q`^nn)) <= len (q`^nn)
+      proof
+        per cases;
+        suppose
+          p.n <> 0.L;
+          hence thesis by Th26;
+        end;
+        suppose
+          p.n = 0.L;
+          hence thesis by Th25;
+        end;
+      end;
+      len F2 <= len (q`^(n-'1)) by A50;
+      then len F2 <= len (q`^nn) by A55,XXREAL_0:2;
+      then
+A58:  maxFq <= len (q`^nn) by A57,XXREAL_0:28;
+      F|(n+1) = F|n ^ <*F/.(nn+1)*> by A56,FINSEQ_5:85;
+      then
+A59:  F1 = Sum(F|n) + F/.(n+1) by A51,FVSUM_1:87;
+      n+1 >= 1 by NAT_1:11;
+      then
+A60:  n+1 in dom F by A56,FINSEQ_3:27;
+      then F/.(n+1) = F.(n+1) by PARTFUN1:def 8
+        .= p.(n+1-'1)*(q`^(n+1-'1)) by A5,A60
+        .= p.nn*(q`^(n+1-'1)) by NAT_D:34
+        .= p.nn*(q`^nn) by NAT_D:34;
+      then
+A61:  F1 = F2 + p.nn*(q`^nn) by A59,POLYNOM3:def 12;
+      maxFq >= len F2 & maxFq >= len (p.nn*(q`^nn)) by XXREAL_0:25;
+      then len F1 <= maxFq by A61,POLYNOM4:9;
+      then len F1 <= len (q`^nn) by A58,XXREAL_0:2;
+      hence thesis by NAT_D:34;
+    end;
+    suppose
+A62:  n+1 > len F;
+      then n >= len F by NAT_1:13;
+      then
+A63:  F|n = F by FINSEQ_1:79;
+      F|(n+1) = F by A62,FINSEQ_1:79;
+      then len F1 <= len (q`^(n-'1)) by A50,A51,A63;
+      then len F1 <= len (q`^nn) by A55,XXREAL_0:2;
+      hence thesis by NAT_D:34;
+    end;
+  end;
+A64: F|len F = F by FINSEQ_1:79;
+A65: P[1]
+  proof
+    let F1 be Polynomial of L;
+    F|1 = <*F/.1*> by A1,A4,CARD_1:47,FINSEQ_5:23;
+    then
+A66: Sum(F|1) = F/.1 by RLVECT_1:61
       .= F.1 by A7,PARTFUN1:def 8
       .= p.(1-'1)*(q`^(1-'1)) by A5,A7
       .= p.0*(q`^(1-'1)) by XREAL_1:234
       .= p.0*(q`^0) by XREAL_1:234
       .= p.0*(1_.(L)) by Th16
       .= <%p.0%> by Th30;
-    then len F1 <= 1 by A9,ALGSEQ_1:def 6;
+    assume
+    F1 = Sum(F|1);
+    then len F1 <= 1 by A66,ALGSEQ_1:def 6;
     then len F1 <= len (1_.(L)) by POLYNOM4:7;
     then len F1 <= len (q`^0) by Th16;
     hence thesis by XREAL_1:234;
   end;
-A10: for n be non empty Nat st P[n] holds P[n+1]
-  proof
-    let n be non empty Nat;
-    assume
-A11: for F1 be Polynomial of L st F1 = Sum(F|n) holds
-    len F1 <= len (q`^(n-'1));
-    let F1 be Polynomial of L;
-    assume
-A12: F1 = Sum(F|(n+1));
-    reconsider F2 = Sum(F|n) as Polynomial of L by POLYNOM3:def 12;
-    n >= 0+1 by NAT_1:13;
-    then
-A13: n-1 >=0 by XREAL_1:21;
-    len q >= 0+1 by A2;
-    then
-A14: len q-1 >=0 by XREAL_1:21;
-A15: len(q`^(n-'1)) = (n-'1)*len q-(n-'1)+1 by A2,Th24
-      .= (n-1)*len q-(n-'1)+1 by A13,XREAL_0:def 2
-      .= n*len q-1*len q-(n-1)+1 by A13,XREAL_0:def 2
-      .= n*len q-len q-n+1+1;
-    reconsider nn = n as Element of NAT by ORDINAL1:def 13;
-    n*len q+(len q-'1) >= n*len q by NAT_1:11;
-    then n*len q-(len q-'1) <= n*len q by XREAL_1:22;
-    then n*len q-(len q-1) <= n*len q by A14,XREAL_0:def 2;
-    then n*len q-len q+1-n <= n*len q-n by XREAL_1:11;
-    then n*len q-len q-n+1+1 <= n*len q-n+1 by XREAL_1:8;
-    then
-A16: len (q`^(n-'1)) <= len (q`^nn) by A2,A15,Th24;
-    per cases;
-    suppose
-A17:  n+1 <= len F;
-      n+1 >= 1 by NAT_1:11;
-      then
-A18:  n+1 in dom F by A17,FINSEQ_3:27;
-      F|(n+1) = F|n ^ <*F/.(nn+1)*> by A17,JORDAN8:2;
-      then
-A19:  F1 = Sum(F|n) + F/.(n+1) by A12,FVSUM_1:87;
-      reconsider maxFq = max(len F2,len (p.nn*(q`^nn))) as Element of NAT
-      by FINSEQ_2:1;
-A20:  maxFq >= len F2 & maxFq >= len (p.nn*(q`^nn)) by XXREAL_0:25;
-      F/.(n+1) = F.(n+1) by A18,PARTFUN1:def 8
-        .= p.(n+1-'1)*(q`^(n+1-'1)) by A5,A18
-        .= p.nn*(q`^(n+1-'1)) by NAT_D:34
-        .= p.nn*(q`^nn) by NAT_D:34;
-      then F1 = F2 + p.nn*(q`^nn) by A19,POLYNOM3:def 12;
-      then
-A21:  len F1 <= maxFq by A20,POLYNOM4:9;
-      len F2 <= len (q`^(n-'1)) by A11;
-      then
-A22:  len F2 <= len (q`^nn) by A16,XXREAL_0:2;
-      len (p.nn*(q`^nn)) <= len (q`^nn)
-      proof
-        per cases;
-        suppose p.n <> 0.L;
-          hence thesis by Th26;
-        end;
-        suppose p.n = 0.L;
-          hence thesis by Th25;
-        end;
-      end;
-      then maxFq <= len (q`^nn) by A22,XXREAL_0:28;
-      then len F1 <= len (q`^nn) by A21,XXREAL_0:2;
-      hence thesis by NAT_D:34;
-    end;
-    suppose
-A23:  n+1 > len F;
-      then n >= len F by NAT_1:13;
-      then F|n = F & F|(n+1) = F by A23,FINSEQ_1:79;
-      then len F1 <= len (q`^(n-'1)) by A11,A12;
-      then len F1 <= len (q`^nn) by A16,XXREAL_0:2;
-      hence thesis by NAT_D:34;
-    end;
-  end;
-A24: for n be non empty Nat holds P[n] from NAT_1:sch 10(A8,A10);
-  len p > 0 by A1;
-  then len p >= 0+1 by NAT_1:13;
-  then
-A25: len p-1 >=0 by XREAL_1:21;
-  F|len F = F by FINSEQ_1:79;
-  then
-A26: len Subst(p,q) <= len (q`^(len F-'1)) by A1,A3,A4,A24;
-A27: len (q`^(len F-'1)) = (len p-'1)*len q - (len p-'1) + 1 by A2,A4,Th24
-    .= (len p-'1)*len q-(len p-1)+1 by A25,XREAL_0:def 2
-    .= (len p-1)*len q-(len p-1)+1 by A25,XREAL_0:def 2
-    .= (len p)*(len q)-len p-len q+(1+1);
-  len Subst(p,q) >= (len p)*(len q)-len p-len q+(1+1)
-  proof
-    assume
-A28: len Subst(p,q) < (len p)*(len q)-len p-len q+(1+1);
-    then len Subst(p,q) < k+1;
-    then len Subst(p,q) <= k by NAT_1:13;
-    then
-A29: Subst(p,q).k = 0.L by ALGSEQ_1:22;
-    set lF1 = len F-'1;
-    set F1 = F|lF1;
-    reconsider sF1 = Sum F1 as Polynomial of L by POLYNOM3:def 12;
-A30: len F = lF1+1 by A6,XREAL_1:237;
-    then
-A31: F = F1^<*F/.len F*> by FINSEQ_5:24;
-    then
-A32: Sum F = Sum F1 + F/.len F by FVSUM_1:87;
-A33: len F = len F1 + 1 by A31,FINSEQ_2:19;
-    now per cases;
-      suppose
-A34:    len F1 <> {};
-        then len F1 > 0;
-        then 0+1 <= len F1 by NAT_1:13;
-        then
-A35:    1 in dom F1 by FINSEQ_3:27;
-        defpred P[Nat] means for F2 be Polynomial of L
-        st F2 = Sum(F1|$1) holds len F2 <= $1*len q-len q-$1+2;
-A36:    P[1]
-        proof
-          let F2 be Polynomial of L;
-          assume
-A37:      F2 = Sum(F1|1);
-          F1 is non empty by A34,CARD_1:47;
-          then F1|1 = <*F1/.1*> by FINSEQ_5:23;
-          then Sum(F1|1) = F1/.1 by RLVECT_1:61
-            .= F1.1 by A35,PARTFUN1:def 8
-            .= F.1 by A31,A35,FINSEQ_1:def 7
-            .= p.(1-'1)*(q`^(1-'1)) by A5,A7
-            .= p.0*(q`^(1-'1)) by XREAL_1:234
-            .= p.0*(q`^0) by XREAL_1:234
-            .= p.0*(1_.(L)) by Th16
-            .= <%p.0%> by Th30;
-          hence len F2 <= 1*len q-len q-1+2 by A37,ALGSEQ_1:def 6;
-        end;
-A38:    for n be non empty Nat st P[n] holds P[n+1]
-        proof
-          let n be non empty Nat;
-          assume
-A39:      for F2 be Polynomial of L st F2 = Sum(F1|n) holds
-          len F2 <= n*len q-len q-n+2;
-          let F2 be Polynomial of L;
-          assume
-A40:      F2 = Sum(F1|(n+1));
-          reconsider F3 = Sum(F1|n) as Polynomial of L by POLYNOM3:def 12;
-A41:      len F3 <= n*len q-len q-n+2 by A39;
-A42:      n*len q-len q-n+2+0 <= n*len q-len q-n+2+1 by XREAL_1:8;
-          len q >= 0+(1+1) by A2,NAT_1:13;
-          then len q-2 >= 0 by XREAL_1:21;
-          then n*len q-n+1+0 <= n*len q-n+1+(len q-2) by XREAL_1:9;
-          then n*len q-n+1-(len q-2) <= n*len q-n+1 by XREAL_1:22;
-          then n*len q-len q-n+2 <= n*len q-n+1 by A42,XXREAL_0:2;
-          then
-A43:      len F3 <= n*len q-n+1 by A41,XXREAL_0:2;
-          now per cases;
-            suppose
-A44:          n+1 <= len F1;
-A45:          n+1 >= 1 by NAT_1:11;
-              then
-A46:          n+1 in dom F1 by A44,FINSEQ_3:27;
-              len F1 <= len F by A33,NAT_1:11;
-              then n+1 <= len F by A44,XXREAL_0:2;
-              then
-A47:          n+1 in dom F by A45,FINSEQ_3:27;
-    reconsider nn = n as Element of NAT by ORDINAL1:def 13;
-A48:          F1/.(n+1) = F1.(n+1) by A46,PARTFUN1:def 8
-                .= F.(n+1) by A31,A46,FINSEQ_1:def 7
-                .= p.(n+1-'1)*(q`^(n+1-'1)) by A5,A47
-                .= p.nn*(q`^(n+1-'1)) by NAT_D:34
-                .= p.nn*(q`^nn) by NAT_D:34;
-              reconsider maxFq = max(len F3,len (p.nn*(q`^nn)))
-               as Element of NAT
-              by FINSEQ_2:1;
-A49:          maxFq >= len F3 & maxFq >= len (p.nn*(q`^nn)) by XXREAL_0:25;
-              F1|(nn+1) = F1|nn ^ <*F1/.(nn+1)*> by A44,JORDAN8:2;
-              then F2 = Sum(F1|n) + F1/.(n+1) by A40,FVSUM_1:87
-                .= F3 + p.nn*(q`^nn) by A48,POLYNOM3:def 12;
-              then
-A50:          len F2 <= maxFq by A49,POLYNOM4:9;
-              len (p.nn*(q`^nn)) <= n*len q-n+1
-              proof
-                per cases;
-                suppose p.n <> 0.L;
-                  then len (p.nn*(q`^nn)) = len (q`^nn) by Th26;
-                  hence thesis by A2,Th24;
-                end;
-                suppose
-A51:              p.n = 0.L;
-                  len q >= 0+1 by A2;
-                  then len q-1 >= 0 by XREAL_1:21;
-                  then
-A52:              n*(len q-1) >= 0;
-                  n*len q <= n*len q+1 by NAT_1:11;
-                  then n*len q-n <= n*len q+1-n by XREAL_1:11;
-                  hence thesis by A51,A52,Th25;
-                end;
-              end;
-              then maxFq <= n*len q-n+1 by A43,XXREAL_0:28;
-              hence len F2 <= (n+1)*len q-len q-(n+1)+2 by A50,XXREAL_0:2;
-            end;
-            suppose
-A53:          n+1 > len F1;
-              then n >= len F1 by NAT_1:13;
-              then F1|n = F1 & F1|(n+1) = F1 by A53,FINSEQ_1:79;
-              then
-A54:          len F2 <= n*len q-len q-n+2 by A39,A40;
-              -len q <= -1 by A2,XREAL_1:26;
-              then n*len q-n+-len q <= n*len q-n+-1 by XREAL_1:8;
-              then n*len q-len q-n+2 <= (n+1)*len q-len q-(n+1)+2 by XREAL_1:8;
-              hence len F2 <= (n+1)*len q-len q-(n+1)+2 by A54,XXREAL_0:2;
-            end;
-          end;
-          hence len F2 <= (n+1)*len q-len q-(n+1)+2;
-        end;
-A55:    for n be non empty Nat holds P[n] from NAT_1:sch 10(A36,A38);
-        F1|(len F1) = F1 by FINSEQ_1:79;
-        then
-A56:    len sF1 <= (len F1)*(len q)-len q-len F1+2 by A34,A55;
-        0+len q >= 1+1 by A2,NAT_1:13;
-        then 2-len q <= 0 by XREAL_1:22;
-        then 2-len q+k <= 0+k by XREAL_1:8;
-        then
-A57:    sF1.k = 0.L by A4,A33,A56,ALGSEQ_1:22,XXREAL_0:2;
-A58:    len F in dom F by A6,FINSEQ_3:27;
-        then F/.len F = F.len F by PARTFUN1:def 8
-          .= p.lF1*(q`^lF1) by A5,A58;
-        then Subst(p,q) = sF1 + p.lF1*(q`^lF1) by A3,A32,POLYNOM3:def 12;
-        then
-A59:    Subst(p,q).k = sF1.k + (p.lF1*(q`^lF1)).k by NORMSP_1:def 5
-          .= (p.lF1*(q`^lF1)).k by A57,RLVECT_1:def 7
-          .= p.lF1*((q`^lF1).k) by Def3;
-A60:    p.lF1 <> 0.L by A4,A30,ALGSEQ_1:25;
-        len (q`^lF1) = k+1 by A27;
-        then (q`^lF1).k <> 0.L by ALGSEQ_1:25;
-        hence contradiction by A29,A59,A60,VECTSP_1:44;
-      end;
-      suppose
-A61:    len F1 = {};
-        then
-A62:    F1 = <*>(the carrier of Polynom-Ring L) by FINSEQ_1:32;
-A63:    len F = 0+1 by A31,A61,FINSEQ_2:19;
-A64:    F/.1 = F.1 by A7,PARTFUN1:def 8
-          .= p.(1-'1)*(q`^(1-'1)) by A5,A7
-          .= p.0*(q`^(1-'1)) by XREAL_1:234
-          .= p.0*(q`^0) by XREAL_1:234
-          .= p.0*(1_.(L)) by Th16
-          .= <%p.0%> by Th30;
-A65:    0.(Polynom-Ring L) = 0_.(L) by POLYNOM3:def 12;
-A66:    Sum F = 0.(Polynom-Ring L) + F/.1 by A32,A62,A63,RLVECT_1:60
-          .= 0_.(L) + <%p.0%> by A64,A65,POLYNOM3:def 12
-          .= <%p.0%> by POLYNOM3:29;
-        p.0 <> 0.L by A4,A63,ALGSEQ_1:25;
-        hence contradiction by A3,A4,A28,A63,A66,Th34;
-      end;
-    end;
-    hence contradiction;
-  end;
-  hence thesis by A26,A27,XXREAL_0:1;
+  for n be non empty Nat holds P[n] from NAT_1:sch 10(A65,A49);
+  then len Subst(p,q) <= len (q`^(len F-'1)) by A1,A3,A4,A64;
+  hence thesis by A9,A10,XXREAL_0:1;
 end;
 
 theorem Th54:
-  for L be Field for p,q be Polynomial of L for x be Element of L holds
-  eval(Subst(p,q),x) = eval(p,eval(q,x))
+  for L be Field for p,q be Polynomial of L for x be Element of L
+  holds eval(Subst(p,q),x) = eval(p,eval(q,x))
 proof
   let L be Field;
   let p,q be Polynomial of L;
   let x be Element of L;
-  consider F be FinSequence of the carrier of Polynom-Ring L such that
-A1: Subst(p,q) = Sum F and
-A2: len F = len p and
-A3: for n be Element of NAT st n in dom F holds F.n = p.(n-'1)*(q`^(n-'1))
-  by Def5;
   consider F1 be FinSequence of the carrier of L such that
-A4: eval(p,eval(q,x)) = Sum F1 and
-A5: len F1 = len p and
-A6: for n be Element of NAT st n in dom F1 holds
-  F1.n = p.(n-'1)*(power L).(eval(q,x),n-'1) by POLYNOM4:def 2;
-  defpred P[Element of NAT] means for r be Polynomial of L
-  st r = Sum(F|$1) holds eval(r,x) = Sum(F1|$1);
-A7: P[0]
-  proof
-    let r be Polynomial of L;
-    assume
-A8: r = Sum(F|0);
-A9: F|0 = <*>the carrier of Polynom-Ring L & F1|0 = <*>the carrier of L;
-    then r = 0.(Polynom-Ring L) by A8,RLVECT_1:60
-      .= 0_.(L) by POLYNOM3:def 12;
-    hence eval(r,x) = 0.L by POLYNOM4:20
-      .= Sum(F1|0) by A9,RLVECT_1:60;
-  end;
-A10: for n be Element of NAT st P[n] holds P[n+1]
+A1: eval(p,eval(q,x)) = Sum F1 and
+A2: len F1 = len p and
+A3: for n be Element of NAT st n in dom F1 holds F1.n = p.(n-'1)*(power
+  L).(eval(q,x),n-'1) by POLYNOM4:def 2;
+  consider F be FinSequence of the carrier of Polynom-Ring L such that
+A4: Subst(p,q) = Sum F and
+A5: len F = len p and
+A6: for n be Element of NAT st n in dom F holds F.n = p.(n-'1)*(q`^(n-'1
+  )) by Def5;
+  defpred P[Element of NAT] means for r be Polynomial of L st r = Sum(F|$1)
+  holds eval(r,x) = Sum(F1|$1);
+A7: for n be Element of NAT st P[n] holds P[n+1]
   proof
     let n be Element of NAT;
     assume
-A11: for r be Polynomial of L st r = Sum(F|n) holds eval(r,x) = Sum(F1|n);
+A8: for r be Polynomial of L st r = Sum(F|n) holds eval(r,x) = Sum(F1
+    |n);
     let r be Polynomial of L;
     assume
-A12: r = Sum(F|(n+1));
+A9: r = Sum(F|(n+1));
     per cases;
     suppose
-A13:  n+1 <= len F;
+A10:  n+1 <= len F;
+      then
+A11:  F1|(n+1) = F1|n ^ <*F1/.(n+1)*> by A5,A2,FINSEQ_5:85;
+      F|(n+1) = F|n ^ <*F/.(n+1)*> by A10,FINSEQ_5:85;
+      then
+A12:  r = Sum(F|n) + F/.(n+1) by A9,FVSUM_1:87;
+      reconsider r1 = Sum(F|n) as Polynomial of L by POLYNOM3:def 12;
       n+1 >= 1 by NAT_1:11;
       then
-A14:  n+1 in dom F by A13,FINSEQ_3:27;
-A15:  dom F = dom F1 by A2,A5,FINSEQ_3:31;
-      reconsider r1 = Sum(F|n) as Polynomial of L by POLYNOM3:def 12;
-      F|(n+1) = F|n ^ <*F/.(n+1)*> by A13,JORDAN8:2;
+A13:  n+1 in dom F by A10,FINSEQ_3:27;
+A14:  dom F = dom F1 by A5,A2,FINSEQ_3:31;
       then
-A16:  r = Sum(F|n) + F/.(n+1) by A12,FVSUM_1:87;
-A17:  p.(n+1-'1)*(power L).(eval(q,x),n+1-'1) = F1.(n+1) by A6,A14,A15
-        .= F1/.(n+1) by A14,A15,PARTFUN1:def 8;
-A18:  F1|(n+1) = F1|n ^ <*F1/.(n+1)*> by A2,A5,A13,JORDAN8:2;
-      F/.(n+1) = F.(n+1) by A14,PARTFUN1:def 8
-        .= p.(n+1-'1)*(q`^(n+1-'1)) by A3,A14
+A15:  p.(n+1-'1)*(power L).(eval(q,x),n+1-'1) = F1.(n+1) by A3,A13
+        .= F1/.(n+1) by A13,A14,PARTFUN1:def 8;
+      F/.(n+1) = F.(n+1) by A13,PARTFUN1:def 8
+        .= p.(n+1-'1)*(q`^(n+1-'1)) by A6,A13
         .= p.n*(q`^(n+1-'1)) by NAT_D:34
         .= p.n*(q`^n) by NAT_D:34;
-      then r = r1 + p.n*(q`^n) by A16,POLYNOM3:def 12;
+      then r = r1 + p.n*(q`^n) by A12,POLYNOM3:def 12;
       hence eval(r,x) = eval(r1,x) + eval(p.n*(q`^n),x) by POLYNOM4:22
-        .= Sum(F1|n) + eval(p.n*(q`^n),x) by A11
+        .= Sum(F1|n) + eval(p.n*(q`^n),x) by A8
         .= Sum(F1|n) + p.n*eval(q`^n,x) by Th31
         .= Sum(F1|n) + p.n*(power L).(eval(q,x),n) by Th23
         .= Sum(F1|n) + p.(n+1-'1)*(power L).(eval(q,x),n) by NAT_D:34
-        .= Sum(F1|n) + F1/.(n+1) by A17,NAT_D:34
-        .= Sum(F1|(n+1)) by A18,FVSUM_1:87;
+        .= Sum(F1|n) + F1/.(n+1) by A15,NAT_D:34
+        .= Sum(F1|(n+1)) by A11,FVSUM_1:87;
     end;
     suppose
-A19:  n+1 > len F;
+A16:  n+1 > len F;
       then n >= len F by NAT_1:13;
-      then F|n = F & F|(n+1) = F & F1|n = F1 & F1|(n+1) = F1
-      by A2,A5,A19,FINSEQ_1:79;
-      hence thesis by A11,A12;
+      then
+A17:  F|n = F & F1|n = F1 by A5,A2,FINSEQ_1:79;
+      F|(n+1) = F & F1|(n+1) = F1 by A5,A2,A16,FINSEQ_1:79;
+      hence thesis by A8,A9,A17;
     end;
   end;
-A20: for n be Element of NAT holds P[n] from NAT_1:sch 1(A7,A10);
-  F|(len F) = F & F1|(len F1) = F1 by FINSEQ_1:79;
-  hence thesis by A1,A2,A4,A5,A20;
+A18: F|(len F) = F & F1|(len F1) = F1 by FINSEQ_1:79;
+A19: P[0]
+  proof
+    let r be Polynomial of L;
+A20: F|0 = <*>the carrier of Polynom-Ring L;
+A21: F1|0 = <*>the carrier of L;
+    assume
+    r = Sum(F|0);
+    then r = 0.(Polynom-Ring L) by A20,RLVECT_1:60
+      .= 0_.(L) by POLYNOM3:def 12;
+    hence eval(r,x) = 0.L by POLYNOM4:20
+      .= Sum(F1|0) by A21,RLVECT_1:60;
+  end;
+  for n be Element of NAT holds P[n] from NAT_1:sch 1(A19,A7);
+  hence thesis by A4,A5,A1,A2,A18;
 end;
 
 begin  :: Fundamental Theorem of Algebra
@@ -2136,7 +2199,8 @@ definition
 end;
 
 theorem Th55:
-  for L be unital (non empty doubleLoopStr) holds 0_.(L) is with_roots
+  for L be unital (non empty doubleLoopStr) holds 0_.(L) is
+  with_roots
 proof
   let L be unital (non empty doubleLoopStr);
   consider x be Element of L;
@@ -2173,7 +2237,8 @@ definition
   let L be unital (non empty doubleLoopStr);
   attr L is algebraic-closed means
   :Def8:
-  for p be Polynomial of L st len p > 1 holds p is with_roots;
+  for p be Polynomial of L st len p >
+  1 holds p is with_roots;
 end;
 
 definition
@@ -2181,53 +2246,54 @@ definition
   let p be Polynomial of L;
   func Roots(p) -> Subset of L means
   :Def9:
-  for x be Element of L holds
-  x in it iff x is_a_root_of p;
+  for x be Element of L holds x in
+  it iff x is_a_root_of p;
   existence
   proof
     { x where x is Element of L : x is_a_root_of p } c= the carrier of L
     proof
       let y be set;
-      assume y in {x where x is Element of L : x is_a_root_of p};
-      then consider x be Element of L such that
-A1:   x = y and x is_a_root_of p;
-      thus thesis by A1;
+      assume
+      y in {x where x is Element of L : x is_a_root_of p};
+      then ex x be Element of L st x = y & x is_a_root_of p;
+      hence thesis;
     end;
-    then reconsider X = { x where x is Element of L :
-    x is_a_root_of p } as Subset of L;
+    then reconsider
+    X = { x where x is Element of L : x is_a_root_of p } as Subset
+    of L;
     take X;
     let x be Element of L;
     thus x in X implies x is_a_root_of p
     proof
-      assume x in X;
-      then consider y be Element of L such that
-A2:   x = y and
-A3:   y is_a_root_of p;
-      thus thesis by A2,A3;
+      assume
+      x in X;
+      then ex y be Element of L st x = y & y is_a_root_of p;
+      hence thesis;
     end;
-    assume x is_a_root_of p;
+    assume
+    x is_a_root_of p;
     hence thesis;
   end;
   uniqueness
   proof
     let X1,X2 be Subset of L such that
-A4: for x be Element of L holds x in X1 iff x is_a_root_of p and
-A5: for x be Element of L holds x in X2 iff x is_a_root_of p;
+A1: for x be Element of L holds x in X1 iff x is_a_root_of p and
+A2: for x be Element of L holds x in X2 iff x is_a_root_of p;
     thus X1 c= X2
     proof
       let x be set;
       assume
-A6:   x in X1;
+A3:   x in X1;
       then reconsider y=x as Element of L;
-      y is_a_root_of p by A4,A6;
-      hence thesis by A5;
+      y is_a_root_of p by A1,A3;
+      hence thesis by A2;
     end;
     let x be set;
     assume
-A7: x in X2;
+A4: x in X2;
     then reconsider y=x as Element of L;
-    y is_a_root_of p by A5,A7;
-    hence thesis by A4;
+    y is_a_root_of p by A2,A4;
+    hence thesis by A1;
   end;
 end;
 
@@ -2237,7 +2303,8 @@ definition
   let p be Polynomial of L;
   func NormPolynomial(p) -> sequence of L means
   :Def10:
-  for n be Element of NAT holds it.n = p.n / p.(len p-'1);
+  for n be Element of
+  NAT holds it.n = p.n / p.(len p-'1);
   existence
   proof
     deffunc F(Element of NAT) = p.$1 / p.(len p-'1);
@@ -2262,8 +2329,8 @@ end;
 
 registration
   let L be add-associative right_zeroed right_complementable commutative
-  associative well-unital distributive almost_left_invertible
-  (non empty doubleLoopStr);
+  associative well-unital distributive almost_left_invertible (non empty
+  doubleLoopStr);
   let p be Polynomial of L;
   cluster NormPolynomial(p) -> finite-Support;
   coherence
@@ -2272,7 +2339,7 @@ registration
       let n be Nat;
       assume
 A1:   n >= len p;
-    reconsider nn = n as Element of NAT by ORDINAL1:def 13;
+      reconsider nn = n as Element of NAT by ORDINAL1:def 13;
       thus (NormPolynomial(p)).n = p.nn / p.(len p-'1) by Def10
         .= 0.L / p.(len p-'1) by A1,ALGSEQ_1:22
         .= 0.L * (p.(len p-'1))" by VECTSP_1:def 23
@@ -2284,15 +2351,14 @@ end;
 
 theorem Th57:
   for L be commutative associative well-unital distributive
-  almost_left_invertible (non empty doubleLoopStr)
-  for p be Polynomial of L st len p <> 0 holds
-  (NormPolynomial p).(len p-'1) = 1.L
+  almost_left_invertible (non empty doubleLoopStr) for p be Polynomial of L st
+  len p <> 0 holds (NormPolynomial p).(len p-'1) = 1.L
 proof
   let L be commutative associative well-unital distributive
   almost_left_invertible (non empty doubleLoopStr);
   let p be Polynomial of L;
-  assume len p <> 0;
-  then len p > 0;
+  assume
+  len p <> 0;
   then len p >= 0+1 by NAT_1:13;
   then len p = len p-'1+1 by XREAL_1:237;
   then
@@ -2303,70 +2369,69 @@ A1: p.(len p-'1) <> 0.L by ALGSEQ_1:25;
 end;
 
 theorem Th58:
-  for L be Field for p be Polynomial of L st len p <> 0 holds
-  len NormPolynomial(p) = len p
+  for L be Field for p be Polynomial of L st len p <> 0 holds len
+  NormPolynomial(p) = len p
 proof
   let L be Field;
   let p be Polynomial of L;
-  assume len p <> 0;
-  then len p > 0;
+  assume
+  len p <> 0;
   then len p >= 0+1 by NAT_1:13;
   then len p = len p-'1+1 by XREAL_1:237;
   then p.(len p-'1) <> 0.L by ALGSEQ_1:25;
   then
 A1: (p.(len p-'1))" <> 0.L by VECTSP_1:74;
-A2: len p is_at_least_length_of NormPolynomial(p)
-  proof
+A2: now
     let n be Nat;
     assume
-A3: n >= len p;
-    reconsider nn = n as Element of NAT by ORDINAL1:def 13;
-    thus (NormPolynomial(p)).n = p.nn / p.(len p-'1) by Def10
-      .= 0.L / p.(len p-'1) by A3,ALGSEQ_1:22
-      .= 0.L * (p.(len p-'1))" by VECTSP_1:def 23
-      .= 0.L by VECTSP_1:39;
-  end;
-  now
-    let n be Nat;
-    assume
-A4: n is_at_least_length_of NormPolynomial(p);
+A3: n is_at_least_length_of NormPolynomial(p);
     n is_at_least_length_of p
     proof
       let i be Nat;
+      reconsider ii = i as Element of NAT by ORDINAL1:def 13;
       assume
-Z:       i >= n;
-    reconsider ii = i as Element of NAT by ORDINAL1:def 13;
-      (NormPolynomial(p)).i = 0.L by A4,Z,ALGSEQ_1:def 3;
+      i >= n;
+      then (NormPolynomial(p)).i = 0.L by A3,ALGSEQ_1:def 3;
       then p.ii / p.(len p-'1) = 0.L by Def10;
       then p.ii * (p.(len p-'1))" = 0.L by VECTSP_1:def 23;
       hence thesis by A1,VECTSP_1:44;
     end;
     hence len p <= n by ALGSEQ_1:def 4;
   end;
+  len p is_at_least_length_of NormPolynomial(p)
+  proof
+    let n be Nat;
+    assume
+A4: n >= len p;
+    reconsider nn = n as Element of NAT by ORDINAL1:def 13;
+    thus (NormPolynomial(p)).n = p.nn / p.(len p-'1) by Def10
+      .= 0.L / p.(len p-'1) by A4,ALGSEQ_1:22
+      .= 0.L * (p.(len p-'1))" by VECTSP_1:def 23
+      .= 0.L by VECTSP_1:39;
+  end;
   hence thesis by A2,ALGSEQ_1:def 4;
 end;
 
 theorem Th59:
-  for L be Field for p be Polynomial of L st len p <> 0
-  for x be Element of L holds
-  eval(NormPolynomial(p),x) = eval(p,x)/p.(len p-'1)
+  for L be Field for p be Polynomial of L st len p <> 0 for x be
+  Element of L holds eval(NormPolynomial(p),x) = eval(p,x)/p.(len p-'1)
 proof
   let L be Field;
   let p be Polynomial of L;
   assume
 A1: len p <> 0;
-  let x be Element of L;
   set NPp = NormPolynomial(p);
+  let x be Element of L;
   consider F1 be FinSequence of the carrier of L such that
 A2: eval(p,x) = Sum F1 and
 A3: len F1 = len p and
-A4: for n be Element of NAT st n in dom F1 holds
-  F1.n = p.(n-'1) * (power L).(x,n-'1) by POLYNOM4:def 2;
+A4: for n be Element of NAT st n in dom F1 holds F1.n = p.(n-'1) * (
+  power L).(x,n-'1) by POLYNOM4:def 2;
   consider F2 be FinSequence of the carrier of L such that
 A5: eval(NPp,x) = Sum F2 and
 A6: len F2 = len NPp and
-A7: for n be Element of NAT st n in dom F2 holds
-  F2.n = NPp.(n-'1) * (power L).(x,n-'1) by POLYNOM4:def 2;
+A7: for n be Element of NAT st n in dom F2 holds F2.n = NPp.(n-'1) * (
+  power L).(x,n-'1) by POLYNOM4:def 2;
   len F1 = len F2 by A1,A3,A6,Th58;
   then
 A8: dom F1 = dom F2 by FINSEQ_3:31;
@@ -2384,21 +2449,19 @@ A10: p.(i1-'1) * (power L).(x,i1-'1) = F1.i by A4,A9
       .= (F1/.i)*(p.(len p-'1))" by A10,GROUP_1:def 4;
   end;
   then F2 = F1*(p.(len p-'1))" by A8,POLYNOM1:def 3;
-  then eval(NormPolynomial(p),x) = eval(p,x) * (p.(len p-'1))"
-  by A2,A5,POLYNOM1:29;
+  then eval(NormPolynomial(p),x) = eval(p,x) * (p.(len p-'1))" by A2,A5,
+POLYNOM1:29;
   hence thesis by VECTSP_1:def 23;
 end;
 
 theorem Th60:
-  for L be Field for p be Polynomial of L st len p <> 0
-  for x be Element of L holds
-  x is_a_root_of p iff x is_a_root_of NormPolynomial(p)
+  for L be Field for p be Polynomial of L st len p <> 0 for x be
+  Element of L holds x is_a_root_of p iff x is_a_root_of NormPolynomial(p)
 proof
   let L be Field;
   let p be Polynomial of L;
   assume
 A1: len p <> 0;
-  then len p > 0;
   then len p >= 0+1 by NAT_1:13;
   then len p = len p-'1+1 by XREAL_1:237;
   then p.(len p-'1) <> 0.L by ALGSEQ_1:25;
@@ -2407,14 +2470,16 @@ A2: (p.(len p-'1))" <> 0.L by VECTSP_1:74;
   let x be Element of L;
   thus x is_a_root_of p implies x is_a_root_of NormPolynomial(p)
   proof
-    assume x is_a_root_of p;
+    assume
+    x is_a_root_of p;
     then eval(p,x) = 0.L by Def6;
     then eval(NormPolynomial(p),x) = 0.L/p.(len p-'1) by A1,Th59
       .= 0.L * (p.(len p-'1))" by VECTSP_1:def 23
       .= 0.L by VECTSP_1:39;
     hence thesis by Def6;
   end;
-  assume x is_a_root_of NormPolynomial(p);
+  assume
+  x is_a_root_of NormPolynomial(p);
   then 0.L = eval(NormPolynomial(p),x) by Def6
     .= eval(p,x)/p.(len p-'1) by A1,Th59
     .= eval(p,x) * (p.(len p-'1))" by VECTSP_1:def 23;
@@ -2423,8 +2488,8 @@ A2: (p.(len p-'1))" <> 0.L by VECTSP_1:74;
 end;
 
 theorem Th61:
-  for L be Field for p be Polynomial of L st len p <> 0 holds
-  p is with_roots iff NormPolynomial(p) is with_roots
+  for L be Field for p be Polynomial of L st len p <> 0 holds p is
+  with_roots iff NormPolynomial(p) is with_roots
 proof
   let L be Field;
   let p be Polynomial of L;
@@ -2432,13 +2497,15 @@ proof
 A1: len p <> 0;
   thus p is with_roots implies NormPolynomial(p) is with_roots
   proof
-    assume p is with_roots;
+    assume
+    p is with_roots;
     then consider x be Element of L such that
 A2: x is_a_root_of p by Def7;
     x is_a_root_of NormPolynomial(p) by A1,A2,Th60;
     hence thesis by Def7;
   end;
-  assume NormPolynomial(p) is with_roots;
+  assume
+  NormPolynomial(p) is with_roots;
   then consider x be Element of L such that
 A3: x is_a_root_of NormPolynomial(p) by Def7;
   x is_a_root_of p by A1,A3,Th60;
@@ -2446,8 +2513,8 @@ A3: x is_a_root_of NormPolynomial(p) by Def7;
 end;
 
 theorem
-  for L be Field for p be Polynomial of L st len p <> 0 holds
-  Roots(p) = Roots(NormPolynomial p)
+  for L be Field for p be Polynomial of L st len p <> 0 holds Roots(p) =
+  Roots(NormPolynomial p)
 proof
   let L be Field;
   let p be Polynomial of L;
@@ -2478,42 +2545,47 @@ end;
 theorem Th63:
   id(COMPLEX) is_continuous_on COMPLEX
 proof
-A1: dom id(COMPLEX) = COMPLEX by FUNCT_2:def 1;
-  now
+A1: now
     let x be Element of COMPLEX;
     let r be Real;
-    assume that x in COMPLEX and
+    assume that
+    x in COMPLEX and
 A2: 0 < r;
     take s=r;
     thus 0 < s by A2;
     let y be Element of COMPLEX;
-    assume that y in COMPLEX and
+    assume that
+    y in COMPLEX and
 A3: |.y-x.| < s;
     id(COMPLEX)/.x = x by FUNCT_1:35;
     hence |.id(COMPLEX)/.y - id(COMPLEX)/.x.| < r by A3,FUNCT_1:35;
   end;
+  dom id(COMPLEX) = COMPLEX by FUNCT_2:def 1;
   hence thesis by A1,CFCONT_1:61;
 end;
 
 theorem Th64:
-  for x be Element of COMPLEX holds COMPLEX --> x is_continuous_on COMPLEX
+  for x be Element of COMPLEX holds COMPLEX --> x is_continuous_on
+  COMPLEX
 proof
   let x be Element of COMPLEX;
-A1: dom (COMPLEX --> x) = COMPLEX by FUNCOP_1:19;
-  now
+A1: now
     let x1 be Element of COMPLEX;
     let r be Real;
-    assume that x1 in COMPLEX and
+    assume that
+    x1 in COMPLEX and
 A2: 0 < r;
     take s=r;
     thus 0 < s by A2;
     let x2 be Element of COMPLEX;
-    assume that x2 in COMPLEX and |.x2-x1.| < s;
-A3: (COMPLEX --> x)/.x1 = x by FUNCOP_1:13;
-    (COMPLEX --> x)/.x2 = x by FUNCOP_1:13;
-    hence |.(COMPLEX --> x)/.x2 - (COMPLEX --> x)/.x1 .| < r
-    by A2,A3,COMPLEX1:130;
+    assume that
+    x2 in COMPLEX and
+    |.x2-x1.| < s;
+    (COMPLEX --> x)/.x1 = x & (COMPLEX --> x)/.x2 = x by FUNCOP_1:13;
+    hence |.(COMPLEX --> x)/.x2 - (COMPLEX --> x)/.x1 .| < r by A2,COMPLEX1:130
+;
   end;
+  dom (COMPLEX --> x) = COMPLEX by FUNCOP_1:19;
   hence thesis by A1,CFCONT_1:61;
 end;
 
@@ -2523,7 +2595,8 @@ definition
   let n be Element of NAT;
   func FPower(x,n) -> Function of L,L means
   :Def11:
-  for y be Element of L holds it.y = x*(power L).(y,n);
+  for y be Element of L
+  holds it.y = x*(power L).(y,n);
   existence
   proof
     deffunc F(Element of L) = x*(power L).($1,n);
@@ -2548,19 +2621,20 @@ A3: for y be Element of L holds f2.y=x*(power L).(y,n);
 end;
 
 theorem
-  for L be unital (non empty multMagma) holds
-  FPower(1_L,1) = id(the carrier of L)
+  for L be unital (non empty multMagma) holds FPower(1_L,1) = id(the
+  carrier of L)
 proof
   let L be unital (non empty multMagma);
-A1: dom FPower(1_L,1) = the carrier of L by FUNCT_2:def 1;
-  now
+A1: now
     let x be set;
-    assume x in the carrier of L;
+    assume
+    x in the carrier of L;
     then reconsider x1=x as Element of L;
     FPower(1_L,1).x1 = 1_L*(power L).(x1,1) by Def11
       .= (power L).(x1,1) by GROUP_1:def 5;
     hence FPower(1_L,1).x = x by GROUP_1:98;
   end;
+  dom FPower(1_L,1) = the carrier of L by FUNCT_2:def 1;
   hence thesis by A1,FUNCT_1:34;
 end;
 
@@ -2568,14 +2642,14 @@ theorem
   FPower(1_F_Complex,2) = id(COMPLEX)(#)id(COMPLEX)
 proof
   the carrier of F_Complex = COMPLEX by COMPLFLD:def 1;
-  then reconsider f=id(COMPLEX)(#)id(COMPLEX) as Function
-  of F_Complex,F_Complex;
+  then reconsider
+  f=id(COMPLEX)(#)id(COMPLEX) as Function of F_Complex,F_Complex;
   now
     let x be Element of F_Complex;
     reconsider x1=x as Element of COMPLEX by COMPLFLD:def 1;
-A1: id(COMPLEX)/.x1 = x1 by FUNCT_1:35;
-    dom (id(COMPLEX)(#)id(COMPLEX)) = COMPLEX by FUNCT_2:def 1;
-    hence f.x = x*x by A1,VALUED_1:def 4
+    id(COMPLEX)/.x1 = x1 & dom (id(COMPLEX)(#)id(COMPLEX)) = COMPLEX by
+FUNCT_1:35,FUNCT_2:def 1;
+    hence f.x = x*x by VALUED_1:def 4
       .= (power F_Complex).(x,2) by GROUP_1:99
       .= 1_F_Complex*(power F_Complex).(x,2) by VECTSP_1:def 19;
   end;
@@ -2583,8 +2657,8 @@ A1: id(COMPLEX)/.x1 = x1 by FUNCT_1:35;
 end;
 
 theorem Th67:
-  for L be unital (non empty multMagma) for x be Element of L holds
-  FPower(x,0) = (the carrier of L) --> x
+  for L be unital (non empty multMagma) for x be Element of L
+  holds FPower(x,0) = (the carrier of L) --> x
 proof
   let L be unital (non empty multMagma);
   let x be Element of L;
@@ -2599,8 +2673,8 @@ proof
 end;
 
 theorem
-  for x be Element of F_Complex ex x1 be Element of COMPLEX st
-  x = x1 & FPower(x,1) = x1(#)id(COMPLEX)
+  for x be Element of F_Complex ex x1 be Element of COMPLEX st x = x1 &
+  FPower(x,1) = x1(#)id(COMPLEX)
 proof
   let x be Element of F_Complex;
   reconsider x1=x as Element of COMPLEX by COMPLFLD:def 1;
@@ -2619,16 +2693,16 @@ proof
 end;
 
 theorem
-  for x be Element of F_Complex ex x1 be Element of COMPLEX st
-  x = x1 & FPower(x,2) = x1(#)(id(COMPLEX)(#)id(COMPLEX))
+  for x be Element of F_Complex ex x1 be Element of COMPLEX st x = x1 &
+  FPower(x,2) = x1(#)(id(COMPLEX)(#)id(COMPLEX))
 proof
   let x be Element of F_Complex;
   reconsider x1=x as Element of COMPLEX by COMPLFLD:def 1;
   take x1;
   thus x = x1;
   the carrier of F_Complex = COMPLEX by COMPLFLD:def 1;
-  then reconsider f=x1(#)(id(COMPLEX)(#)id(COMPLEX)) as
-  Function of F_Complex,F_Complex;
+  then reconsider f=x1(#)(id(COMPLEX)(#)id(COMPLEX)) as Function of F_Complex,
+  F_Complex;
   now
     let y be Element of F_Complex;
     reconsider y1=y as Element of COMPLEX by COMPLFLD:def 1;
@@ -2642,17 +2716,17 @@ proof
 end;
 
 theorem Th70:
-  for x be Element of F_Complex for n be Element of NAT
-  ex f be Function of COMPLEX,COMPLEX st
-  f = FPower(x,n) & FPower(x,n+1) = f(#)id(COMPLEX)
+  for x be Element of F_Complex for n be Element of NAT ex f be
+Function of COMPLEX,COMPLEX st f = FPower(x,n) & FPower(x,n+1) = f(#)id(COMPLEX
+  )
 proof
   let x be Element of F_Complex;
   let n be Element of NAT;
 A1: the carrier of F_Complex = COMPLEX by COMPLFLD:def 1;
   then reconsider f=FPower(x,n) as Function of COMPLEX,COMPLEX;
+  reconsider g=f(#)id(COMPLEX) as Function of F_Complex,F_Complex by A1;
   take f;
   thus f = FPower(x,n);
-  reconsider g=f(#)id(COMPLEX) as Function of F_Complex,F_Complex by A1;
   now
     let y be Element of F_Complex;
     reconsider y1=y as Element of COMPLEX by COMPLFLD:def 1;
@@ -2666,15 +2740,26 @@ A1: the carrier of F_Complex = COMPLEX by COMPLFLD:def 1;
 end;
 
 theorem Th71:
-  for x be Element of F_Complex for n be Element of NAT
-  ex f be Function of COMPLEX,COMPLEX st
-  f = FPower(x,n) & f is_continuous_on COMPLEX
+  for x be Element of F_Complex for n be Element of NAT ex f be
+  Function of COMPLEX,COMPLEX st f = FPower(x,n) & f is_continuous_on COMPLEX
 proof
   let x be Element of F_Complex;
+  defpred P[Element of NAT] means ex f be Function of COMPLEX,COMPLEX st f =
+  FPower(x,$1) & f is_continuous_on COMPLEX;
 A1: the carrier of F_Complex = COMPLEX by COMPLFLD:def 1;
-  defpred P[Element of NAT] means ex f be Function of COMPLEX,COMPLEX st
-  f = FPower(x,$1) & f is_continuous_on COMPLEX;
-A2: P[0]
+A2: for n be Element of NAT st P[n] holds P[n+1]
+  proof
+    let n be Element of NAT;
+    reconsider g=FPower(x,n+1) as Function of COMPLEX,COMPLEX by A1;
+    given f be Function of COMPLEX,COMPLEX such that
+A3: f = FPower(x,n) & f is_continuous_on COMPLEX;
+    take g;
+    thus g = FPower(x,n+1);
+    ex f1 be Function of COMPLEX,COMPLEX st f1 = FPower(x,n) & FPower(x,n+1
+    ) = f1(#)id(COMPLEX) by Th70;
+    hence thesis by A3,Th63,CFCONT_1:65;
+  end;
+A4: P[0]
   proof
     reconsider f=FPower(x,0) as Function of COMPLEX,COMPLEX by A1;
     take f;
@@ -2682,21 +2767,7 @@ A2: P[0]
     f = (the carrier of F_Complex) --> x by Th67;
     hence thesis by A1,Th64;
   end;
-A3: for n be Element of NAT st P[n] holds P[n+1]
-  proof
-    let n be Element of NAT;
-    given f be Function of COMPLEX,COMPLEX such that
-A4: f = FPower(x,n) and
-A5: f is_continuous_on COMPLEX;
-    reconsider g=FPower(x,n+1) as Function of COMPLEX,COMPLEX by A1;
-    take g;
-    thus g = FPower(x,n+1);
-    consider f1 be Function of COMPLEX,COMPLEX such that
-A6: f1 = FPower(x,n) and
-A7: FPower(x,n+1) = f1(#)id(COMPLEX) by Th70;
-    thus thesis by A4,A5,A6,A7,Th63,CFCONT_1:65;
-  end;
-  thus for n be Element of NAT holds P[n] from NAT_1:sch 1(A2,A3);
+  thus for n be Element of NAT holds P[n] from NAT_1:sch 1(A4,A2);
 end;
 
 definition
@@ -2704,7 +2775,8 @@ definition
   let p be Polynomial of L;
   func Polynomial-Function(L,p) -> Function of L,L means
   :Def12:
-  for x be Element of L holds it.x = eval(p,x);
+  for x be
+  Element of L holds it.x = eval(p,x);
   existence
   proof
     deffunc F(Element of L) = eval(p,$1);
@@ -2729,45 +2801,46 @@ A3: for x be Element of L holds f2.x = eval(p,x);
 end;
 
 theorem Th72:
-  for p be Polynomial of F_Complex ex f be Function of COMPLEX,COMPLEX st
-  f = Polynomial-Function(F_Complex,p) & f is_continuous_on COMPLEX
+  for p be Polynomial of F_Complex ex f be Function of COMPLEX,
+  COMPLEX st f = Polynomial-Function(F_Complex,p) & f is_continuous_on COMPLEX
 proof
+  set FuFF=Funcs(COMPLEX,COMPLEX);
   let p be Polynomial of F_Complex;
+  reconsider fzero = COMPLEX --> 0c as Element of FuFF by FUNCT_2:12;
+  defpred P[Nat,set] means $2 = FPower(p.($1-'1),$1-'1);
 A1: the carrier of F_Complex = COMPLEX by COMPLFLD:def 1;
-  then reconsider f = Polynomial-Function(F_Complex,p) as
-  Function of COMPLEX,COMPLEX;
+  then reconsider f = Polynomial-Function(F_Complex,p) as Function of COMPLEX,
+  COMPLEX;
+  deffunc F(Element of FuFF,Element of FuFF) = $1+$2;
   take f;
   thus f = Polynomial-Function(F_Complex,p);
-  set FuFF=Funcs(COMPLEX,COMPLEX);
-  deffunc F(Element of FuFF,Element of FuFF) = $1+$2;
-A: for x,y being Element of FuFF holds F(x,y) in FuFF by FUNCT_2:11;
+A2: for x,y being Element of FuFF holds F(x,y) in FuFF by FUNCT_2:11;
   consider fadd be BinOp of FuFF such that
-A2: for x,y be Element of FuFF holds fadd.(x,y) = F(x,y)
-    from FUNCT_7:sch 1(A);
-  reconsider fzero = COMPLEX --> 0c as Element of FuFF by FUNCT_2:12;
+A3: for x,y be Element of FuFF holds fadd.(x,y) = F(x,y) from FUNCT_7:
+  sch 1(A2);
   reconsider L=addLoopStr(#FuFF,fadd,fzero#) as non empty addLoopStr;
-A3: now
+A4: now
     let u,v,w be Element of L;
     reconsider u1=u, v1=v, w1=w as Function of COMPLEX,COMPLEX by FUNCT_2:121;
-A4: u1+v1 in Funcs(COMPLEX,COMPLEX) & v1+w1 in Funcs(COMPLEX,COMPLEX)
-    by FUNCT_2:12;
-    thus (u+v)+w = fadd.(u1+v1,w) by A2
-      .= u1+v1+w1 by A2,A4
+A5: u1+v1 in Funcs(COMPLEX,COMPLEX) by FUNCT_2:12;
+A6: v1+w1 in Funcs(COMPLEX,COMPLEX) by FUNCT_2:12;
+    thus (u+v)+w = fadd.(u1+v1,w) by A3
+      .= u1+v1+w1 by A3,A5
       .= u1+(v1+w1) by CFUNCT_1:22
-      .= fadd.(u,v1+w1) by A2,A4
-      .= u+(v+w) by A2;
+      .= fadd.(u,v1+w1) by A3,A6
+      .= u+(v+w) by A3;
   end;
-A5: now
+A7: now
     let v be Element of L;
     reconsider v1=v as Function of COMPLEX,COMPLEX by FUNCT_2:121;
-A6: now
+A8: now
       let x be Element of COMPLEX;
       thus (v1+fzero).x = v1.x+fzero.x by VALUED_1:1
         .= v1.x+0c by FUNCOP_1:13
         .= v1.x;
     end;
-    thus v + 0.L = v1+fzero by A2
-      .= v by A6,FUNCT_2:113;
+    thus v + 0.L = v1+fzero by A3
+      .= v by A8,FUNCT_2:113;
   end;
   L is right_complementable
   proof
@@ -2775,448 +2848,451 @@ A6: now
     reconsider v1=v as Function of COMPLEX,COMPLEX by FUNCT_2:121;
     reconsider w=-v1 as Element of L by FUNCT_2:12;
     take w;
-A7: now
+A9: now
       let x be Element of COMPLEX;
       thus (v1+-v1).x = v1.x+(-v1).x by VALUED_1:1
         .= v1.x+-v1.x by VALUED_1:8
         .= fzero.x by FUNCOP_1:13;
     end;
-    thus v + w = v1+-v1 by A2
-      .= 0.L by A7,FUNCT_2:113;
+    thus v + w = v1+-v1 by A3
+      .= 0.L by A9,FUNCT_2:113;
   end;
-  then reconsider L as add-associative right_zeroed right_complementable
-  (non empty addLoopStr) by A3,A5,RLVECT_1:def 6,def 7;
-  defpred P[Nat,set] means $2 = FPower(p.($1-'1),$1-'1);
-A8: now
+  then reconsider
+  L as add-associative right_zeroed right_complementable (non empty
+  addLoopStr) by A4,A7,RLVECT_1:def 6,def 7;
+A10: now
     let n be Nat;
-    assume n in Seg len p;
     reconsider x = FPower(p.(n-'1),n-'1) as Element of L by A1,FUNCT_2:12;
+    assume
+    n in Seg len p;
     take x;
     thus P[n,x];
   end;
   consider F be FinSequence of the carrier of L such that
-A9: dom F = Seg len p and
-A10: for n be Nat st n in Seg len p holds P[n,F.n] from FINSEQ_1:sch 5(A8);
-A11: F|len F = F by FINSEQ_1:79;
-  defpred P[Element of NAT] means for g be PartFunc of COMPLEX,COMPLEX
-  st g = Sum (F|$1) holds g is_continuous_on COMPLEX;
-A12: P[0]
-  proof
-    let g be PartFunc of COMPLEX,COMPLEX;
-    assume
-A13: g = Sum(F|0);
-    F|0 = <*>the carrier of L;
-    then g = 0.L by A13,RLVECT_1:60
-      .= COMPLEX --> 0c;
-    hence thesis by Th64;
-  end;
-A14: for k be Element of NAT st P[k] holds P[k+1]
-  proof
-    let k be Element of NAT;
-    assume
-A15: for g be PartFunc of COMPLEX,COMPLEX st g = Sum (F|k) holds
-    g is_continuous_on COMPLEX;
-    let g be PartFunc of COMPLEX,COMPLEX;
-    assume
-A16: g = Sum (F|(k+1));
-    reconsider g1 = Sum (F|k) as Function of COMPLEX,COMPLEX by FUNCT_2:121;
-A17: g1 is_continuous_on COMPLEX by A15;
-    per cases;
-    suppose
-A18:  len F > k;
-      then
-A19:  k+1 <= len F by NAT_1:13;
-      k+1 >= 1 by NAT_1:11;
-      then
-A20:  k+1 in dom F by A19,FINSEQ_3:27;
-      then
-A21:  F/.(k+1) = F.(k+1) by PARTFUN1:def 8
-        .= FPower(p.(k+1-'1),k+1-'1) by A9,A10,A20
-        .= FPower(p.k,k+1-'1) by NAT_D:34
-        .= FPower(p.k,k) by NAT_D:34;
-      consider g2 be Function of COMPLEX,COMPLEX such that
-A22:  g2 = FPower(p.k,k) and
-A23:  g2 is_continuous_on COMPLEX by Th71;
-      F|(k+1) = F|k ^ <*F.(k+1)*> by A18,POLYNOM3:19
-        .= F|k ^ <*F/.(k+1)*> by A20,PARTFUN1:def 8;
-      then g = Sum(F|k) + F/.(k+1) by A16,FVSUM_1:87
-        .= g1+g2 by A2,A21,A22;
-      hence thesis by A17,A23,CFCONT_1:65;
-    end;
-    suppose
-A24:  len F <= k;
-      k <= k+1 by NAT_1:11;
-      then F|(k+1) = F by A24,FINSEQ_1:79,XXREAL_0:2
-        .= F|k by A24,FINSEQ_1:79;
-      hence thesis by A15,A16;
-    end;
-  end;
-A25: for k be Element of NAT holds P[k] from NAT_1:sch 1(A12,A14);
+A11: dom F = Seg len p and
+A12: for n be Nat st n in Seg len p holds P[n,F.n] from FINSEQ_1:sch 5(
+  A10 );
+A13: F|len F = F by FINSEQ_1:79;
   reconsider SF = Sum F as Function of COMPLEX,COMPLEX by FUNCT_2:121;
-  now
+A14: now
     let x be Element of COMPLEX;
     reconsider x1=x as Element of F_Complex by COMPLFLD:def 1;
     consider H be FinSequence of the carrier of F_Complex such that
-A26: eval(p,x1) = Sum H and
-A27: len H = len p and
-A28: for n be Element of NAT st n in dom H holds
-    H.n = p.(n-'1)*(power F_Complex).(x1,n-'1) by POLYNOM4:def 2;
-A29: len F = len p by A9,FINSEQ_1:def 3;
+A15: eval(p,x1) = Sum H and
+A16: len H = len p and
+A17: for n be Element of NAT st n in dom H holds H.n = p.(n-'1)*(power
+    F_Complex).(x1,n-'1) by POLYNOM4:def 2;
     defpred P[Element of NAT] means for SFk be Function of COMPLEX,COMPLEX st
     SFk = Sum (F|$1) holds Sum (H|$1) = SFk.x;
-A30: P[0]
-    proof
-      let SFk be Function of COMPLEX,COMPLEX;
-      assume
-A31:  SFk = Sum (F|0);
-      F|0 = <*>the carrier of L;
-      then
-A32:  SFk = 0.L by A31,RLVECT_1:60
-        .= COMPLEX --> 0c;
-      H|0 = <*>the carrier of F_Complex;
-      hence Sum (H|0) = 0.F_Complex by RLVECT_1:60
-        .= SFk.x by A32,COMPLFLD:9,FUNCOP_1:13;
-    end;
-A33: for k be Element of NAT st P[k] holds P[k+1]
+A18: len F = len p by A11,FINSEQ_1:def 3;
+A19: for k be Element of NAT st P[k] holds P[k+1]
     proof
       let k be Element of NAT;
       assume
-A34:  for SFk be Function of COMPLEX,COMPLEX st SFk = Sum (F|k) holds
+A20:  for SFk be Function of COMPLEX,COMPLEX st SFk = Sum (F|k) holds
       Sum (H|k) = SFk.x;
+      reconsider SFk1 = Sum (F|k) as Function of COMPLEX,COMPLEX by FUNCT_2:121
+;
       let SFk be Function of COMPLEX,COMPLEX;
       assume
-A35:  SFk = Sum (F|(k+1));
-      reconsider SFk1 = Sum
-      (F|k) as Function of COMPLEX,COMPLEX by FUNCT_2:121;
+A21:  SFk = Sum (F|(k+1));
       per cases;
       suppose
-A36:    len F > k;
+A22:    len F > k;
+        reconsider g2 = FPower(p.k,k) as Function of COMPLEX,COMPLEX by A1;
+A23:    k+1 >= 1 by NAT_1:11;
+        k+1 <= len F by A22,NAT_1:13;
         then
-A37:    k+1 <= len F by NAT_1:13;
-A38:    dom F = dom H by A9,A27,FINSEQ_1:def 3;
-        k+1 >= 1 by NAT_1:11;
+A24:    k+1 in dom F by A23,FINSEQ_3:27;
         then
-A39:    k+1 in dom F by A37,FINSEQ_3:27;
+A25:    F/.(k+1) = F.(k+1) by PARTFUN1:def 8
+          .= FPower(p.(k+1-'1),k+1-'1) by A11,A12,A24
+          .= FPower(p.k,k+1-'1) by NAT_D:34
+          .= FPower(p.k,k) by NAT_D:34;
+        F|(k+1) = F|k ^ <*F.(k+1)*> by A22,POLYNOM3:19
+          .= F|k ^ <*F/.(k+1)*> by A24,PARTFUN1:def 8;
         then
-A40:    H/.(k+1) = H.(k+1) by A38,PARTFUN1:def 8
-          .= p.(k+1-'1)*(power F_Complex).(x1,k+1-'1) by A28,A38,A39
+A26:    SFk = Sum(F|k) + F/.(k+1) by A21,FVSUM_1:87
+          .= SFk1+g2 by A3,A25;
+A27:    Sum (H|k) = SFk1.x by A20;
+A28:    dom F = dom H by A11,A16,FINSEQ_1:def 3;
+        then
+A29:    H/.(k+1) = H.(k+1) by A24,PARTFUN1:def 8
+          .= p.(k+1-'1)*(power F_Complex).(x1,k+1-'1) by A17,A28,A24
           .= p.k*(power F_Complex).(x1,k+1-'1) by NAT_D:34
           .= p.k*(power F_Complex).(x1,k) by NAT_D:34
           .= FPower(p.k,k).x by Def11;
-A41:    F/.(k+1) = F.(k+1) by A39,PARTFUN1:def 8
-          .= FPower(p.(k+1-'1),k+1-'1) by A9,A10,A39
-          .= FPower(p.k,k+1-'1) by NAT_D:34
-          .= FPower(p.k,k) by NAT_D:34;
-        reconsider g2 = FPower(p.k,k) as Function of COMPLEX,COMPLEX by A1;
-        F|(k+1) = F|k ^ <*F.(k+1)*> by A36,POLYNOM3:19
-          .= F|k ^ <*F/.(k+1)*> by A39,PARTFUN1:def 8;
-        then
-A42:    SFk = Sum(F|k) + F/.(k+1) by A35,FVSUM_1:87
-          .= SFk1+g2 by A2,A41;
-A43:    Sum (H|k) = SFk1.x by A34;
-        H|(k+1) = H|k ^ <*H.(k+1)*> by A27,A29,A36,POLYNOM3:19
-          .= H|k ^ <*H/.(k+1)*> by A38,A39,PARTFUN1:def 8;
+        H|(k+1) = H|k ^ <*H.(k+1)*> by A16,A18,A22,POLYNOM3:19
+          .= H|k ^ <*H/.(k+1)*> by A28,A24,PARTFUN1:def 8;
         hence Sum (H|(k+1)) = Sum(H|k) + H/.(k+1) by FVSUM_1:87
-          .= SFk.x by A40,A42,A43,VALUED_1:1;
+          .= SFk.x by A29,A26,A27,VALUED_1:1;
       end;
       suppose
-A44:    len F <= k;
-        then
-A45:    F|k = F & H|k = H by A27,A29,FINSEQ_1:79;
+A30:    len F <= k;
         k <= k+1 by NAT_1:11;
-        then F|(k+1) = F & H|(k+1) = H by A27,A29,A44,FINSEQ_1:79,XXREAL_0:2;
-        hence thesis by A34,A35,A45;
+        then
+A31:    F|(k+1) = F & H|(k+1) = H by A16,A18,A30,FINSEQ_1:79,XXREAL_0:2;
+        F|k = F & H|k = H by A16,A18,A30,FINSEQ_1:79;
+        hence thesis by A20,A21,A31;
       end;
     end;
-A46: for k be Element of NAT holds P[k] from NAT_1:sch 1(A30,A33);
-A47: Sum(F|len F) = SF by FINSEQ_1:79;
-    thus f.x = Sum H by A26,Def12
+A32: P[0]
+    proof
+      let SFk be Function of COMPLEX,COMPLEX;
+A33:  F|0 = <*>the carrier of L;
+      assume
+      SFk = Sum (F|0);
+      then
+A34:  SFk = 0.L by A33,RLVECT_1:60
+        .= COMPLEX --> 0c;
+      H|0 = <*>the carrier of F_Complex;
+      hence Sum (H|0) = 0.F_Complex by RLVECT_1:60
+        .= SFk.x by A34,COMPLFLD:9,FUNCOP_1:13;
+    end;
+A35: for k be Element of NAT holds P[k] from NAT_1:sch 1(A32,A19);
+A36: Sum(F|len F) = SF by FINSEQ_1:79;
+    thus f.x = Sum H by A15,Def12
       .= Sum (H|len H) by FINSEQ_1:79
-      .= SF.x by A27,A29,A46,A47;
+      .= SF.x by A16,A18,A35,A36;
   end;
-  then f = SF by FUNCT_2:113;
-  hence thesis by A11,A25;
+  defpred P[Element of NAT] means for g be PartFunc of COMPLEX,COMPLEX st g =
+  Sum (F|$1) holds g is_continuous_on COMPLEX;
+A37: for k be Element of NAT st P[k] holds P[k+1]
+  proof
+    let k be Element of NAT;
+    reconsider g1 = Sum (F|k) as Function of COMPLEX,COMPLEX by FUNCT_2:121;
+    assume
+A38: for g be PartFunc of COMPLEX,COMPLEX st g = Sum (F|k) holds g
+    is_continuous_on COMPLEX;
+    then
+A39: g1 is_continuous_on COMPLEX;
+    let g be PartFunc of COMPLEX,COMPLEX;
+    assume
+A40: g = Sum (F|(k+1));
+    per cases;
+    suppose
+A41:  len F > k;
+A42:  k+1 >= 1 by NAT_1:11;
+      k+1 <= len F by A41,NAT_1:13;
+      then
+A43:  k+1 in dom F by A42,FINSEQ_3:27;
+      then
+A44:  F/.(k+1) = F.(k+1) by PARTFUN1:def 8
+        .= FPower(p.(k+1-'1),k+1-'1) by A11,A12,A43
+        .= FPower(p.k,k+1-'1) by NAT_D:34
+        .= FPower(p.k,k) by NAT_D:34;
+      consider g2 be Function of COMPLEX,COMPLEX such that
+A45:  g2 = FPower(p.k,k) and
+A46:  g2 is_continuous_on COMPLEX by Th71;
+      F|(k+1) = F|k ^ <*F.(k+1)*> by A41,POLYNOM3:19
+        .= F|k ^ <*F/.(k+1)*> by A43,PARTFUN1:def 8;
+      then g = Sum(F|k) + F/.(k+1) by A40,FVSUM_1:87
+        .= g1+g2 by A3,A44,A45;
+      hence thesis by A39,A46,CFCONT_1:65;
+    end;
+    suppose
+A47:  len F <= k;
+      k <= k+1 by NAT_1:11;
+      then F|(k+1) = F by A47,FINSEQ_1:79,XXREAL_0:2
+        .= F|k by A47,FINSEQ_1:79;
+      hence thesis by A38,A40;
+    end;
+  end;
+A48: P[0]
+  proof
+    let g be PartFunc of COMPLEX,COMPLEX;
+A49: F|0 = <*>the carrier of L;
+    assume
+    g = Sum(F|0);
+    then g = 0.L by A49,RLVECT_1:60
+      .= COMPLEX --> 0c;
+    hence thesis by Th64;
+  end;
+  for k be Element of NAT holds P[k] from NAT_1:sch 1(A48,A37);
+  hence thesis by A13,A14,FUNCT_2:113;
 end;
 
 theorem Th73:
-  for p be Polynomial of F_Complex st len p > 2 & |.p.(len p-'1).|=1
-  for F be FinSequence of REAL st len F = len p &
-  for n be Element of NAT st n in dom F holds F.n = |.p.(n-'1).|
-  for z be Element of F_Complex st |.z.| > Sum F holds
-  |.eval(p,z).| > |.p.0 .|+1
+  for p be Polynomial of F_Complex st len p > 2 & |.p.(len p-'1).|
+=1 for F be FinSequence of REAL st len F = len p & for n be Element of NAT st n
+in dom F holds F.n = |.p.(n-'1).| for z be Element of F_Complex st |.z.| > Sum
+  F holds |.eval(p,z).| > |.p.0 .|+1
 proof
   let p be Polynomial of F_Complex;
   assume that
 A1: len p > 2 and
 A2: |.p.(len p-'1).|=1;
-A3: len p > 1 by A1,XXREAL_0:2;
   let F be FinSequence of REAL;
   assume that
-A4: len F = len p and
-A5: for n be Element of NAT st n in dom F holds F.n = |.p.(n-'1).|;
-  let z be Element of F_Complex;
-  assume
-A6: |.z.| > Sum F;
+A3: len F = len p and
+A4: for n be Element of NAT st n in dom F holds F.n = |.p.(n-'1).|;
   set lF1 = len F-'1;
-  set lF2 = len F-'2;
-  consider G be FinSequence of the carrier of F_Complex such that
-A7: eval(p,z) = Sum G and
-A8: len G = len p and
-A9: for n be Element of NAT st n in dom G holds
-  G.n = p.(n-'1)*(power F_Complex).(z,n-'1) by POLYNOM4:def 2;
-A10: lF1+1 = len F by A1,A4,XREAL_1:237,XXREAL_0:2;
-A11: len F >= 1+1+0 by A1,A4;
+A5: lF1+1 = len F by A1,A3,XREAL_1:237,XXREAL_0:2;
   then
-A12: lF1 >= 1 by A10,XREAL_1:8;
-A13: 1 in dom F & len F in dom F by A3,A4,FINSEQ_3:27;
-A14: dom F = dom G by A4,A8,FINSEQ_3:31;
-A15: F/.(lF1+1) = F.(lF1+1) by A10,A13,PARTFUN1:def 8
-    .= 1 by A2,A4,A5,A10,A13;
-  F = F|(lF1+1) by A10,FINSEQ_1:79
-    .= F|lF1 ^ <*F/.(lF1+1)*> by A10,JORDAN8:2;
+A6: F = F|(lF1+1) by FINSEQ_1:79
+    .= F|lF1 ^ <*F/.(lF1+1)*> by A5,FINSEQ_5:85;
+A7: len p > 1 by A1,XXREAL_0:2;
   then
-A16: Sum F = Sum(F|lF1) + 1 by A15,RVSUM_1:104;
-  G/.(lF1+1) = G.(lF1+1) by A10,A13,A14,PARTFUN1:def 8
-    .= p.lF1*(power F_Complex).(z,lF1) by A9,A10,A13,A14;
-  then
-A17: |.G/.(lF1+1).| = 1*|.(power F_Complex).(z,lF1).| by A2,A4,COMPLFLD:109;
-  G = G|(lF1+1) by A4,A8,A10,FINSEQ_1:79
-    .= G|lF1 ^ <*G/.(lF1+1)*> by A4,A8,A10,JORDAN8:2;
-  then Sum G = Sum(G|lF1) + G/.(lF1+1) by FVSUM_1:87;
-  then
-A18: |.eval(p,z).| >= |.(power F_Complex).(z,lF1).|- |.Sum(G|lF1).|
-  by A7,A17,COMPLFLD:102;
-  len (F|lF1) = lF1 by A10,FINSEQ_1:80,NAT_1:11;
-  then
-A19: 1 in dom (F|lF1) by A12,FINSEQ_3:27;
-  defpred P[Element of NAT] means |.Sum(G|lF1|$1).| <=
-  (Sum (F|lF1|$1))*|.(power F_Complex).(z,lF2).|;
-  G|lF1|0 = <*>the carrier of F_Complex & F|lF1|0 = <*>REAL;
-  then
-A20: P[0] by COMPLFLD:93,RLVECT_1:60,RVSUM_1:102;
-A21: len (F|lF1) = lF1 by A10,FINSEQ_1:80,NAT_1:11
-    .= len (G|lF1) by A4,A8,A10,FINSEQ_1:80,NAT_1:11;
-  then
-A22: dom (F|lF1) = dom (G|lF1) by FINSEQ_3:31;
-A23: now
+A8: 1 in dom F by A3,FINSEQ_3:27;
+A9: now
     let n be Element of NAT;
+A10: dom(F|lF1) c= dom F by FINSEQ_5:20;
     assume
-A24: n in dom (F|lF1);
-A25: dom(F|lF1) c= dom F by FINSEQ_5:20;
-    (F|lF1).n = (F|lF1)/.n by A24,PARTFUN1:def 8
-      .= F/.n by A24,FINSEQ_4:85
-      .= F.n by A24,A25,PARTFUN1:def 8
-      .= |.p.(n-'1).| by A5,A24,A25;
+A11: n in dom (F|lF1);
+    then (F|lF1).n = (F|lF1)/.n by PARTFUN1:def 8
+      .= F/.n by A11,FINSEQ_4:85
+      .= F.n by A11,A10,PARTFUN1:def 8
+      .= |.p.(n-'1).| by A4,A11,A10;
     hence (F|lF1).n >= 0 by COMPLEX1:132;
   end;
-  (F|lF1).1 = (F|lF1)/.1 by A19,PARTFUN1:def 8
-    .= F/.1 by A19,FINSEQ_4:85
-    .= F.1 by A13,PARTFUN1:def 8
-    .= |.p.(1-'1).| by A5,A13
-    .= |.p.0 .| by XREAL_1:234;
-  then Sum(F|lF1) >= |.p.0 .| by A19,A23,Th4;
-  then
-A26: Sum F >= |.p.0 .|+1 by A16,XREAL_1:8;
-  then
-A27: |.z.| > |.p.0 .|+1 by A6,XXREAL_0:2;
+A12: len (F|lF1) = lF1 by A5,FINSEQ_1:80,NAT_1:11;
   |.p.0 .| >= 0 by COMPLEX1:132;
   then
-A28: |.p.0 .|+1 >= 0+1 by XREAL_1:8;
+A13: |.p.0 .|+1 >= 0+1 by XREAL_1:8;
+  let z be Element of F_Complex;
+  consider G be FinSequence of the carrier of F_Complex such that
+A14: eval(p,z) = Sum G and
+A15: len G = len p and
+A16: for n be Element of NAT st n in dom G holds G.n = p.(n-'1)*(power
+  F_Complex).(z,n-'1) by POLYNOM4:def 2;
+  set lF2 = len F-'2;
+  assume
+A17: |.z.| > Sum F;
+A18: len F in dom F by A7,A3,FINSEQ_3:27;
+  then F/.(lF1+1) = F.(lF1+1) by A5,PARTFUN1:def 8
+    .= 1 by A2,A3,A4,A5,A18;
   then
-A29: |.z.| > 1 by A27,XXREAL_0:2;
-A30: z <> 0.F_Complex by A6,A26,A28,COMPLFLD:96;
-A31: len F-2 >=0 by A11,XREAL_1:21;
+A19: Sum F = Sum(F|lF1) + 1 by A6,RVSUM_1:104;
+A20: len F >= 1+1+0 by A1,A3;
+  then lF1 >= 1 by A5,XREAL_1:8;
+  then
+A21: 1 in dom (F|lF1) by A12,FINSEQ_3:27;
+  then (F|lF1).1 = (F|lF1)/.1 by PARTFUN1:def 8
+    .= F/.1 by A21,FINSEQ_4:85
+    .= F.1 by A8,PARTFUN1:def 8
+    .= |.p.(1-'1).| by A4,A8
+    .= |.p.0 .| by XREAL_1:234;
+  then Sum(F|lF1) >= |.p.0 .| by A21,A9,Th4;
+  then
+A22: Sum F >= |.p.0 .|+1 by A19,XREAL_1:8;
+  then
+A23: z <> 0.F_Complex by A17,A13,COMPLFLD:96;
+  G = G|(lF1+1) by A3,A15,A5,FINSEQ_1:79
+    .= G|lF1 ^ <*G/.(lF1+1)*> by A3,A15,A5,FINSEQ_5:85;
+  then
+A24: Sum G = Sum(G|lF1) + G/.(lF1+1) by FVSUM_1:87;
+A25: dom F = dom G by A3,A15,FINSEQ_3:31;
+  then G/.(lF1+1) = G.(lF1+1) by A5,A18,PARTFUN1:def 8
+    .= p.lF1*(power F_Complex).(z,lF1) by A16,A5,A18,A25;
+  then |.G/.(lF1+1).| = 1*|.(power F_Complex).(z,lF1).| by A2,A3,COMPLFLD:109;
+  then
+A26: |.eval(p,z).| >= |.(power F_Complex).(z,lF1).|- |.Sum(G|lF1).| by A14,A24,
+COMPLFLD:102;
   1 = 1+0;
   then
-A32: len F-1 >= 0 by A3,A4,XREAL_1:21;
-A33: lF2+1 = len F-2+1 by A31,XREAL_0:def 2
-    .= lF1 by A32,XREAL_0:def 2;
-A34: for n be Element of NAT st P[n] holds P[n+1]
+A27: len F-1 >= 0 by A7,A3,XREAL_1:21;
+A28: len (F|lF1) = lF1 by A5,FINSEQ_1:80,NAT_1:11
+    .= len (G|lF1) by A3,A15,A5,FINSEQ_1:80,NAT_1:11;
+  then
+A29: F|lF1|(len (F|lF1)) = F|lF1 & G|lF1|(len (F|lF1)) = G|lF1 by FINSEQ_1:79;
+  defpred P[Element of NAT] means |.Sum(G|lF1|$1).| <= (Sum (F|lF1|$1))*|.(
+  power F_Complex).(z,lF2).|;
+  len F-2 >=0 by A20,XREAL_1:21;
+  then
+A30: lF2+1 = len F-2+1 by XREAL_0:def 2
+    .= lF1 by A27,XREAL_0:def 2;
+  then (power F_Complex).(z,lF1) = (power F_Complex).(z,lF2)*z by GROUP_1:def 8
+;
+  then
+A31: |.(power F_Complex).(z,lF1).|- |.(power F_Complex).(z,lF2).|*Sum (F|lF1
+) = |.(power F_Complex).(z,lF2).|*|.z.|- |.(power F_Complex).(z,lF2).|*Sum (F|
+  lF1) by COMPLFLD:109
+    .= |.(power F_Complex).(z,lF2).|*(|.z.|-Sum (F|lF1));
+A32: |.z.| > |.p.0 .|+1 by A17,A22,XXREAL_0:2;
+  then
+A33: |.z.| > 1 by A13,XXREAL_0:2;
+A34: dom (F|lF1) = dom (G|lF1) by A28,FINSEQ_3:31;
+A35: for n be Element of NAT st P[n] holds P[n+1]
   proof
     let n be Element of NAT;
     assume
-A35: |.Sum(G|lF1|n).| <= (Sum (F|lF1|n))*|.(power F_Complex).(z,lF2).|;
+A36: |.Sum(G|lF1|n).| <= (Sum (F|lF1|n))*|.(power F_Complex).(z,lF2).|;
     then
-A36: |.Sum(G|lF1|n).|+|.(G|lF1)/.(n+1).| <=
-    (Sum (F|lF1|n))*|.(power F_Complex).(z,lF2).|+|.(G|lF1)/.(n+1).|
-    by XREAL_1:8;
+A37: |.Sum(G|lF1|n).|+|.(G|lF1)/.(n+1).| <= (Sum (F|lF1|n))*|.(power
+    F_Complex).(z,lF2).|+|.(G|lF1)/.(n+1).| by XREAL_1:8;
     per cases;
     suppose
-A37:  n+1 <= len (G|lF1);
+A38:  n+1 <= len (G|lF1);
+      then n+1 <= lF2+1 by A3,A15,A5,A30,FINSEQ_1:80,NAT_1:11;
+      then n <= lF2 by XREAL_1:8;
+      then |.z.| to_power n <= |.z.| to_power lF2 by A33,PRE_FF:10;
+      then |.z.| to_power n <= |.(power F_Complex).(z,lF2).| by A23,Th8;
+      then
+A39:  |.p.n.| >= 0 & |.(power F_Complex).(z,n).|<=|.(power F_Complex).(z,
+      lF2).| by A23,Th8,COMPLEX1:132;
+      (G|lF1)|(n+1) = (G|lF1)|n ^ <*(G|lF1)/.(n+1)*> by A38,FINSEQ_5:85;
+      then Sum(G|lF1|(n+1)) = Sum((G|lF1)|n) + (G|lF1)/.(n+1) by FVSUM_1:87;
+      then |.Sum(G|lF1|(n+1)).| <= |.Sum((G|lF1)|n).|+|.(G|lF1)/.(n+1).| by
+COMPLFLD:100;
+      then
+A40:  |.Sum(G|lF1|(n+1)).| <= (Sum (F|lF1|n))*|.(power F_Complex).(z,lF2)
+      .|+|.(G|lF1)/.(n+1).| by A37,XXREAL_0:2;
+A41:  dom (G|lF1) c= dom G by FINSEQ_5:20;
       n+1 >= 1 by NAT_1:11;
       then
-A38:  n+1 in dom (G|lF1) by A37,FINSEQ_3:27;
-A39:  dom (G|lF1) c= dom G by FINSEQ_5:20;
-      (G|lF1)|(n+1) = (G|lF1)|n ^ <*(G|lF1)/.(n+1)*> by A37,JORDAN8:2;
-      then Sum(G|lF1|(n+1)) = Sum((G|lF1)|n) + (G|lF1)/.(n+1) by FVSUM_1:87;
-      then |.Sum(G|lF1|(n+1)).| <= |.Sum((G|lF1)|n).|+|.(G|lF1)/.(n+1).|
-      by COMPLFLD:100;
+A42:  n+1 in dom (G|lF1) by A38,FINSEQ_3:27;
       then
-A40:  |.Sum(G|lF1|(n+1)).| <=
-      (Sum (F|lF1|n))*|.(power F_Complex).(z,lF2).|+|.(G|lF1)/.(n+1).|
-      by A36,XXREAL_0:2;
-      (F|lF1)|(n+1) = (F|lF1)|n ^ <*(F|lF1)/.(n+1)*> by A21,A37,JORDAN8:2;
-      then
-A41:  Sum(F|lF1|(n+1)) = Sum ((F|lF1)|n) + (F|lF1)/.(n+1) by RVSUM_1:104;
-A42:  (F|lF1)/.(n+1) = F/.(n+1) by A22,A38,FINSEQ_4:85
-        .= F.(n+1) by A14,A38,A39,PARTFUN1:def 8
-        .= |.p.(n+1-'1).| by A5,A14,A38,A39
+A43:  (F|lF1)/.(n+1) = F/.(n+1) by A34,FINSEQ_4:85
+        .= F.(n+1) by A25,A42,A41,PARTFUN1:def 8
+        .= |.p.(n+1-'1).| by A4,A25,A42,A41
         .= |.p.n.| by NAT_D:34;
-      (G|lF1)/.(n+1) = G/.(n+1) by A38,FINSEQ_4:85
-        .= G.(n+1) by A38,A39,PARTFUN1:def 8
-        .= p.(n+1-'1)*(power F_Complex).(z,n+1-'1) by A9,A38,A39
+      (G|lF1)/.(n+1) = G/.(n+1) by A42,FINSEQ_4:85
+        .= G.(n+1) by A42,A41,PARTFUN1:def 8
+        .= p.(n+1-'1)*(power F_Complex).(z,n+1-'1) by A16,A42,A41
         .= p.n*(power F_Complex).(z,n+1-'1) by NAT_D:34
         .= p.n*(power F_Complex).(z,n) by NAT_D:34;
-      then
-A43:  |.(G|lF1)/.(n+1).| =
-      (F|lF1)/.(n+1)*|.(power F_Complex).(z,n).| by A42,COMPLFLD:109;
-A44:  |.p.n.| >= 0 by COMPLEX1:132;
-      n+1 <= lF2+1 by A4,A8,A10,A33,A37,FINSEQ_1:80,NAT_1:11;
-      then n <= lF2 by XREAL_1:8;
-      then |.z.| to_power n <= |.z.| to_power lF2 by A29,PRE_FF:10;
-      then |.z.| to_power n <= |.(power F_Complex).(z,lF2).| by A30,Th8;
-      then |.(power F_Complex).(z,n).|<=|.(power F_Complex).(z,lF2).|
-      by A30,Th8;
+      then |.(G|lF1)/.(n+1).| = (F|lF1)/.(n+1)*|.(power F_Complex).(z,n).| by
+A43,COMPLFLD:109;
       then |.(G|lF1)/.(n+1).| <= (F|lF1)/.(n+1)*|.(power F_Complex).(z,lF2).|
-      by A42,A43,A44,XREAL_1:66;
-      then (Sum(F|lF1|n))*|.(power F_Complex).(z,lF2).|+|.(G|lF1)/.(n+1).| <=
-      (Sum((F|lF1)|n))*|.(power F_Complex).(z,lF2).|+
-      ((F|lF1)/.(n+1))*|.(power F_Complex).(z,lF2).| by XREAL_1:8;
-      hence thesis by A40,A41,XXREAL_0:2;
+      by A43,A39,XREAL_1:66;
+      then
+A44:  (Sum(F|lF1|n))*|.(power F_Complex).(z,lF2).|+|.(G|lF1)/.(n+1).| <=
+      (Sum((F|lF1)|n))*|.(power F_Complex).(z,lF2).|+ ((F|lF1)/.(n+1))*|.(power
+      F_Complex).(z,lF2).| by XREAL_1:8;
+      (F|lF1)|(n+1) = (F|lF1)|n ^ <*(F|lF1)/.(n+1)*> by A28,A38,FINSEQ_5:85;
+      then Sum(F|lF1|(n+1)) = Sum ((F|lF1)|n) + (F|lF1)/.(n+1) by RVSUM_1:104;
+      hence thesis by A40,A44,XXREAL_0:2;
     end;
     suppose
 A45:  n+1 > len (G|lF1);
       then n >= len (G|lF1) by NAT_1:13;
-      then (G|lF1)|n = (G|lF1) & (G|lF1)|(n+1) = (G|lF1) &
-      (F|lF1)|n = (F|lF1) & (F|lF1)|(n+1) = (F|lF1) by A21,A45,FINSEQ_1:79;
-      hence thesis by A35;
+      then
+A46:  (G|lF1)|n = (G|lF1) & (F|lF1)|n = (F|lF1) by A28,FINSEQ_1:79;
+      (G|lF1)|(n+1) = (G|lF1) by A45,FINSEQ_1:79;
+      hence thesis by A28,A36,A45,A46,FINSEQ_1:79;
     end;
   end;
-A46: for n be Element of NAT holds P[n] from NAT_1:sch 1(A20,A34);
-  F|lF1|(len (F|lF1)) = F|lF1 & G|lF1|(len (F|lF1)) = G|lF1
-  by A21,FINSEQ_1:79;
-  then |.Sum(G|lF1).| <= (Sum (F|lF1))*|.(power F_Complex).(z,lF2).| by A46;
-  then |.(power F_Complex).(z,lF1).|- |.Sum(G|lF1).| >=
-  |.(power F_Complex).(z,lF1).|-(Sum (F|lF1))*|.(power F_Complex).(z,lF2).|
-  by XREAL_1:15;
+  G|lF1|0 = <*>the carrier of F_Complex;
   then
-A47: |.eval(p,z).| >= |.(power F_Complex).(z,lF1).|-
-  |.(power F_Complex).(z,lF2).|*Sum (F|lF1) by A18,XXREAL_0:2;
-A48: |.(power F_Complex).(z,lF2).| >= 0 by COMPLEX1:132;
-  |.z.|-Sum (F|lF1) > 1 by A6,A16,XREAL_1:22;
+A47: P[0] by COMPLFLD:93,RLVECT_1:60,RVSUM_1:102;
+  for n be Element of NAT holds P[n] from NAT_1:sch 1(A47,A35);
+  then |.Sum(G|lF1).| <= (Sum (F|lF1))*|.(power F_Complex).(z,lF2).| by A29;
   then
-A49: |.(power F_Complex).(z,lF2).|*(|.z.|-Sum (F|lF1)) >=
-  |.(power F_Complex).(z,lF2).|*1 by A48,XREAL_1:66;
-  (power F_Complex).(z,lF1) = (power F_Complex).(z,lF2)*z
-  by A33,GROUP_1:def 8;
-  then |.(power F_Complex).(z,lF1).|- |.(power F_Complex).(z,lF2).|*Sum
-  (F|lF1) = |.(power F_Complex).(z,lF2).|*|.z.|-
-  |.(power F_Complex).(z,lF2).|*Sum (F|lF1) by COMPLFLD:109
-    .= |.(power F_Complex).(z,lF2).|*(|.z.|-Sum (F|lF1));
+  |.(power F_Complex).(z,lF1).|- |.Sum(G|lF1).| >= |.(power F_Complex).(z
+  ,lF1).|-(Sum (F|lF1))*|.(power F_Complex).(z,lF2).| by XREAL_1:15;
   then
-A50: |.eval(p,z).| >= |.(power F_Complex).(z,lF2).| by A47,A49,XXREAL_0:2;
-  len F >= 2+1 by A1,A4,NAT_1:13;
+A48: |.eval(p,z).| >= |.(power F_Complex).(z,lF1).|- |.(power F_Complex).(z,
+  lF2).|*Sum (F|lF1) by A26,XXREAL_0:2;
+  len F >= 2+1 by A1,A3,NAT_1:13;
   then len F-2 >= 1 by XREAL_1:21;
   then lF2 >= 1 by XREAL_0:def 2;
-  then |.z.| to_power lF2 >= |.z.| to_power 1 by A29,PRE_FF:10;
-  then |.(power F_Complex).(z,lF2).| >= |.z.| to_power 1 by A30,Th8;
-  then |.(power F_Complex).(z,lF2).| >= |.(power F_Complex).(z,1).|
-  by A30,Th8;
-  then |.(power F_Complex).(z,lF2).| >= |.z.| by GROUP_1:98;
-  then |.eval(p,z).| >= |.z.| by A50,XXREAL_0:2;
-  hence thesis by A27,XXREAL_0:2;
+  then |.z.| to_power lF2 >= |.z.| to_power 1 by A33,PRE_FF:10;
+  then |.(power F_Complex).(z,lF2).| >= |.z.| to_power 1 by A23,Th8;
+  then
+  |.(power F_Complex).(z,lF2).| >= |.(power F_Complex).(z,1).| by A23,Th8;
+  then
+A49: |.(power F_Complex).(z,lF2).| >= |.z.| by GROUP_1:98;
+  |.(power F_Complex).(z,lF2).| >= 0 & |.z.|-Sum (F|lF1) > 1 by A17,A19,
+COMPLEX1:132,XREAL_1:22;
+  then
+  |.(power F_Complex).(z,lF2).|*(|.z.|-Sum (F|lF1)) >= |.(power F_Complex
+  ).(z,lF2).|*1 by XREAL_1:66;
+  then |.eval(p,z).| >= |.(power F_Complex).(z,lF2).| by A48,A31,XXREAL_0:2;
+  then |.eval(p,z).| >= |.z.| by A49,XXREAL_0:2;
+  hence thesis by A32,XXREAL_0:2;
 end;
 
 theorem Th74:
-  for p be Polynomial of F_Complex st len p > 2
-  ex z0 be Element of F_Complex st for z be Element of F_Complex holds
-  |.eval(p,z).| >= |.eval(p,z0).|
+  for p be Polynomial of F_Complex st len p > 2 ex z0 be Element
+of F_Complex st for z be Element of F_Complex holds |.eval(p,z).| >= |.eval(p,
+  z0).|
 proof
+  defpred P[set] means not contradiction;
   let p be Polynomial of F_Complex;
-  assume
-A1: len p > 2;
   set np = NormPolynomial(p);
   deffunc F(Element of F_Complex) = |.eval(np,$1).|;
-  defpred P[set] means not contradiction;
-  reconsider D = { F(z) where z is Element
-  of F_Complex : P[z] } as Subset of REAL from DOMAIN_1:sch 8;
+  reconsider D = { F(z) where z is Element of F_Complex : P[z] } as Subset of
+  REAL from DOMAIN_1:sch 8;
   set q = lower_bound D;
-A2: |.eval(np,0.F_Complex).| in D;
-A3: D is bounded_below
+A1: D is bounded_below
   proof
     take 0;
     let b be real number;
-    assume b in D;
-    then consider z be Element of F_Complex such that
-A4: b = |.eval(np,z).|;
-    thus thesis by A4,COMPLEX1:132;
+    assume
+    b in D;
+    then ex z be Element of F_Complex st b = |.eval(np,z).|;
+    hence thesis by COMPLEX1:132;
   end;
-  defpred P[Element of NAT,set] means ex g1 be Element of F_Complex st
-  g1 = $2 & |.eval(np,g1).| < q+1/($1+1);
-A5: for n be Element of NAT ex g be Element of COMPLEX st P[n,g]
+  defpred P[Element of NAT,set] means ex g1 be Element of F_Complex st g1 = $2
+  & |.eval(np,g1).| < q+1/($1+1);
+A2: |.eval(np,0.F_Complex).| in D;
+A3: for n be Element of NAT ex g be Element of COMPLEX st P[n,g]
   proof
     let n be Element of NAT;
     consider r be real number such that
-A6: r in D and
-A7: r < q+1/(n+1) by A2,A3,SEQ_4:def 5;
+A4: r in D and
+A5: r < q+1/(n+1) by A2,A1,SEQ_4:def 5;
     consider g1 be Element of F_Complex such that
-A8: r = |.eval(np,g1).| by A6;
+A6: r = |.eval(np,g1).| by A4;
     reconsider g=g1 as Element of COMPLEX by COMPLFLD:def 1;
     take g,g1;
     thus g1 = g;
-    thus thesis by A7,A8;
+    thus thesis by A5,A6;
   end;
   consider G be Complex_Sequence such that
-A9: for n be Element of NAT holds P[n,G.n] from CFCONT_1:sch 1(A5);
+A7: for n be Element of NAT holds P[n,G.n] from CFCONT_1:sch 1(A3);
   deffunc G(Nat) = |.np.($1-'1).|;
   consider F be FinSequence of REAL such that
-A10: len F = len np and
-A11: for n be Nat st n in dom F holds F.n = G(n) from FINSEQ_2:sch 1;
-A12: dom F = Seg len np by A10,FINSEQ_1:def 3;
-A13: for n be Element of NAT st n in Seg len np holds F.n = G(n) by A11,A12;
-A14: Seg len np = dom F by A10,FINSEQ_1:def 3;
-A15: len p = len p-'1+1 by A1,XREAL_1:237,XXREAL_0:2;
+A8: len F = len np and
+A9: for n be Nat st n in dom F holds F.n = G(n) from FINSEQ_2:sch 1;
+  dom F = Seg len np by A8,FINSEQ_1:def 3;
+  then
+A10: for n be Element of NAT st n in Seg len np holds F.n = G(n) by A9;
+  assume
+A11: len p > 2;
+  then
+A12: len p = len p-'1+1 by XREAL_1:237,XXREAL_0:2;
   then p.(len p-'1) <> 0.F_Complex by ALGSEQ_1:25;
   then
-A16: |.p.(len p-'1).| > 0 by COMPLFLD:96;
+A13: |.p.(len p-'1).| > 0 by COMPLFLD:96;
+A14: Seg len np = dom F by A8,FINSEQ_1:def 3;
   ex r be Real st for n be Element of NAT holds |.G.n.| < r
   proof
     take r = Sum F + 1;
     let n be Element of NAT;
     consider Gn be Element of F_Complex such that
-A17: Gn = G.n and
-A18: |.eval(np,Gn).| < q+1/(n+1) by A9;
-A19: len np = len p by A1,Th58;
-    then
-A20: np.(len np-'1) = 1_F_Complex by A1,Th57;
+A15: Gn = G.n and
+A16: |.eval(np,Gn).| < q+1/(n+1) by A7;
     n+1>=0+1 by XREAL_1:8;
     then
-A21: 1/(n+1) <= 1 by XREAL_1:213;
+A17: 1/(n+1) <= 1 by XREAL_1:213;
+A18: len np = len p by A11,Th58;
+    then
+A19: np.(len np-'1) = 1_F_Complex by A11,Th57;
     |.G.n.| <= Sum F
     proof
-      assume |.G.n.| > Sum F;
-      then
-A22:  |.eval(np,Gn).| > |.np.0 .|+1
-      by A1,A10,A13,A14,A17,A19,A20,Th73,COMPLFLD:97;
       eval(np,0.F_Complex) = np.0 by Th32;
       then |.np.0 .| in D;
-      then |.np.0 .| >= q by A3,SEQ_4:def 5;
-      then |.np.0 .|+1 >= q+1/(n+1) by A21,XREAL_1:9;
-      hence contradiction by A18,A22,XXREAL_0:2;
+      then |.np.0 .| >= q by A1,SEQ_4:def 5;
+      then
+A20:  |.np.0 .|+1 >= q+1/(n+1) by A17,XREAL_1:9;
+      assume
+      |.G.n.| > Sum F;
+      then |.eval(np,Gn).| > |.np.0 .|+1 by A11,A8,A10,A14,A15,A18,A19,Th73,
+COMPLFLD:97;
+      hence contradiction by A16,A20,XXREAL_0:2;
     end;
     then |.G.n.|+0 < r by XREAL_1:10;
     hence thesis;
   end;
   then G is bounded by COMSEQ_2:def 3;
   then consider G1 be Complex_Sequence such that
-A23: G1 is subsequence of G and
-A24: G1 is convergent by COMSEQ_3:51;
+A21: G1 is subsequence of G and
+A22: G1 is convergent by COMSEQ_3:51;
+  defpred P[Element of NAT,set] means ex G1n be Element of F_Complex st G1n =
+  G1.$1 & $2 = eval(np,G1n);
   reconsider z0=lim G1 as Element of F_Complex by COMPLFLD:def 1;
-  take z0;
-  let z be Element of F_Complex;
-  defpred P[Element of NAT,set] means ex G1n be Element of F_Complex st
-  G1n = G1.$1 & $2 = eval(np,G1n);
-A25: for n be Element of NAT ex g be Element of COMPLEX st P[n,g]
+A23: for n be Element of NAT ex g be Element of COMPLEX st P[n,g]
   proof
     let n be Element of NAT;
     reconsider G1n = G1.n as Element of F_Complex by COMPLFLD:def 1;
@@ -3226,123 +3302,123 @@ A25: for n be Element of NAT ex g be Element of COMPLEX st P[n,g]
     thus thesis;
   end;
   consider H be Complex_Sequence such that
-A26: for n be Element of NAT holds P[n,H.n] from CFCONT_1:sch 1(A25);
-  deffunc F(Element of NAT) = 1/($1+1);
-  consider R be Real_Sequence such that
-A27: for n be Element of NAT holds R.n = F(n) from SEQ_1:sch 1;
-  reconsider Rcons = NAT --> |.eval(np,z).| as Real_Sequence;
-  consider Nseq be increasing sequence of NAT such that
-A29: G1 = G*Nseq by A23,VALUED_0:def 17;
-  |.eval(np,z).| in D;
-  then
-A30: |.eval(np,z).| >= q by A3,SEQ_4:def 5;
+A24: for n be Element of NAT holds P[n,H.n] from CFCONT_1:sch 1(A23);
+  reconsider enp0 = eval(np,z0) as Element of COMPLEX by COMPLFLD:def 1;
   consider g be Element of COMPLEX such that
-A31: for p be Real st 0 < p ex n be Element of NAT st
-  for m be Element of NAT st n <= m holds |.G1.m-g.| < p
-  by A24,COMSEQ_2:def 4;
+A25: for p be Real st 0 < p ex n be Element of NAT st for m be Element
+  of NAT st n <= m holds |.G1.m-g.| < p by A22,COMSEQ_2:def 4;
   reconsider g1 = g as Element of F_Complex by COMPLFLD:def 1;
   reconsider eg = eval(np,g1) as Element of COMPLEX by COMPLFLD:def 1;
   now
     let p be Real;
-    assume
-A32: 0 < p;
     consider fPF be Function of COMPLEX,COMPLEX such that
-A33: fPF = Polynomial-Function(F_Complex,np) and
-A34: fPF is_continuous_on COMPLEX by Th72;
-    consider p1 be Real such that
-A35: 0 < p1 and
-A36: for x1 be Element of COMPLEX st x1 in COMPLEX & |.x1-g.| < p1 holds
-    |.fPF/.x1 - fPF/.g.| < p by A32,A34,CFCONT_1:61;
+A26: fPF = Polynomial-Function(F_Complex,np) and
+A27: fPF is_continuous_on COMPLEX by Th72;
+    assume
+    0 < p;
+    then consider p1 be Real such that
+A28: 0 < p1 and
+A29: for x1 be Element of COMPLEX st x1 in COMPLEX & |.x1-g.| < p1
+    holds |.fPF/.x1 - fPF/.g.| < p by A27,CFCONT_1:61;
     consider n be Element of NAT such that
-A37: for m be Element of NAT st n <= m holds |.G1.m-g.| < p1 by A31,A35;
+A30: for m be Element of NAT st n <= m holds |.G1.m-g.| < p1 by A25,A28;
     take n;
     let m be Element of NAT;
-    assume n <= m;
+    assume
+    n <= m;
     then
-A38: |.G1.m-g.| < p1 by A37;
-    consider G1m be Element of F_Complex such that
-A39: G1m = G1.m and
-A40: H.m = eval(np,G1m) by A26;
-A41: H.m = fPF/.(G1.m) by A33,A39,A40,Def12;
-    eg = fPF/.g by A33,Def12;
-    hence |.H.m-eg.| < p by A36,A38,A41;
+A31: |.G1.m-g.| < p1 by A30;
+    ex G1m be Element of F_Complex st G1m = G1.m & H.m = eval(np,G1m) by A24;
+    then
+A32: H.m = fPF/.(G1.m) by A26,Def12;
+    eg = fPF/.g by A26,Def12;
+    hence |.H.m-eg.| < p by A29,A31,A32;
   end;
   then
-A42: H is convergent by COMSEQ_2:def 4;
-  then
-A43: |.H.| is convergent;
-A44: R is convergent by A27,SEQ_4:43;
-  then
-A45: |.H.|-R is convergent by A43,SEQ_2:25;
-A47: Rcons.0 = |.eval(np,z).| by FUNCOP_1:13;
+A33: H is convergent by COMSEQ_2:def 4;
+  consider PF be Function of COMPLEX,COMPLEX such that
+A34: PF = Polynomial-Function(F_Complex,np) and
+A35: PF is_continuous_on COMPLEX by Th72;
   now
-    let n be Element of NAT;
-A48: Rcons.n = |.eval(np,z).| by FUNCOP_1:13;
-    consider G1n be Element of F_Complex such that
-A49: G1n = G1.n and
-A50: H.n = eval(np,G1n) by A26;
-    dom (|.H.|-R) = NAT by FUNCT_2:def 1;
+    let a be Real;
+    assume
+    0 < a;
+    then consider s be Real such that
+A36: 0 < s and
+A37: for x1 be Element of COMPLEX st x1 in COMPLEX & |.x1-lim G1.| < s
+    holds |.PF/.x1 - PF/.lim G1.| < a by A35,CFCONT_1:61;
+    consider n be Element of NAT such that
+A38: for m be Element of NAT st n <= m holds |.G1.m-lim G1.| < s by A22,A36,
+COMSEQ_2:def 5;
+    take n;
+    let m be Element of NAT;
+    assume
+    n <= m;
     then
-A51: (|.H.|-R).n = |.H.|.n-R.n by VALUED_1:13
-      .= |.H.|.n-1/(n+1) by A27
-      .= |.eval(np,G1n).|-1/(n+1) by A50,VALUED_1:18;
+A39: |.G1.m-lim G1.| < s by A38;
+    ex G1m be Element of F_Complex st G1m = G1.m & H.m = eval(np,G1m) by A24;
+    then
+A40: PF/.(G1.m) = H.m by A34,Def12;
+    PF/.lim G1 = eval(np,z0) by A34,Def12;
+    hence |.H.m - enp0 .| < a by A37,A39,A40;
+  end;
+  then
+A41: enp0 = lim H by A33,COMSEQ_2:def 5;
+  deffunc F(Element of NAT) = 1/($1+1);
+  consider R be Real_Sequence such that
+A42: for n be Element of NAT holds R.n = F(n) from SEQ_1:sch 1;
+  take z0;
+  let z be Element of F_Complex;
+  reconsider Rcons = NAT --> |.eval(np,z).| as Real_Sequence;
+  consider Nseq be increasing sequence of NAT such that
+A43: G1 = G*Nseq by A21,VALUED_0:def 17;
+  |.eval(np,z).| in D;
+  then
+A44: |.eval(np,z).| >= q by A1,SEQ_4:def 5;
+A45: now
+    let n be Element of NAT;
+    consider G1n be Element of F_Complex such that
+A46: G1n = G1.n and
+A47: H.n = eval(np,G1n) by A24;
     consider gNn be Element of F_Complex such that
-A52: gNn = G.(Nseq.n) and
-A53: |.eval(np,gNn).| < q+1/((Nseq.n)+1) by A9;
+A48: gNn = G.(Nseq.n) and
+A49: |.eval(np,gNn).| < q+1/((Nseq.n)+1) by A7;
     Nseq.n >= n by SEQM_3:33;
     then Nseq.n+1 >= n+1 by XREAL_1:8;
     then 1/(Nseq.n+1) <= 1/(n+1) by XREAL_1:87;
     then q+1/(Nseq.n+1) <= q+1/(n+1) by XREAL_1:8;
-    then |.eval(np,gNn).| < q+1/(n+1) by A53,XXREAL_0:2;
+    then |.eval(np,gNn).| < q+1/(n+1) by A49,XXREAL_0:2;
     then q > |.eval(np,gNn).|-1/(n+1) by XREAL_1:21;
-    then |.eval(np,z).| > |.eval(np,gNn).|-1/(n+1) by A30,XXREAL_0:2;
-    hence Rcons.n >= (|.H.|-R).n by A29,A48,A49,A51,A52,FUNCT_2:21;
-  end;
-  then lim (|.H.|-R) <= lim Rcons by A45,SEQ_2:32;
-  then
-A54: lim (|.H.|-R) <= |.eval(np,z).| by A47,SEQ_4:40;
-A55: lim (|.H.|-R) = lim |.H.| - lim R by A43,A44,SEQ_2:26
-    .= |.lim H.| - lim R by A42,COMSEQ_2:11
-    .= |.lim H.| - 0 by A27,SEQ_4:44;
-  reconsider enp0 = eval(np,z0) as Element of COMPLEX by COMPLFLD:def 1;
-  consider PF be Function of COMPLEX,COMPLEX such that
-A56: PF = Polynomial-Function(F_Complex,np) and
-A57: PF is_continuous_on COMPLEX by Th72;
-  now
-    let a be Real;
-    assume 0 < a;
-    then consider s be Real such that
-A58: 0 < s and
-A59: for x1 be Element of COMPLEX st
-    x1 in COMPLEX & |.x1-lim G1.| < s holds |.PF/.x1 - PF/.lim G1.| < a
-    by A57,CFCONT_1:61;
-    consider n be Element of NAT such that
-A60: for m be Element of NAT st n <= m holds |.G1.m-lim G1.| < s
-    by A24,A58,COMSEQ_2:def 5;
-    take n;
-    let m be Element of NAT;
-    assume n <= m;
     then
-A61: |.G1.m-lim G1.| < s by A60;
-    consider G1m be Element of F_Complex such that
-A62: G1m = G1.m and
-A63: H.m = eval(np,G1m) by A26;
-A64: PF/.(G1.m) = H.m by A56,A62,A63,Def12;
-    PF/.lim G1 = eval(np,z0) by A56,Def12;
-    hence |.H.m - enp0 .| < a by A59,A61,A64;
+A50: Rcons.n = |.eval(np,z).| & |.eval(np,z).| > |.eval(np,gNn).|-1/(n+1)
+    by A44,FUNCOP_1:13,XXREAL_0:2;
+    dom (|.H.|-R) = NAT by FUNCT_2:def 1;
+    then (|.H.|-R).n = |.H.|.n-R.n by VALUED_1:13
+      .= |.H.|.n-1/(n+1) by A42
+      .= |.eval(np,G1n).|-1/(n+1) by A47,VALUED_1:18;
+    hence Rcons.n >= (|.H.|-R).n by A43,A46,A48,A50,FUNCT_2:21;
   end;
-  then enp0 = lim H by A42,COMSEQ_2:def 5;
-  then |.eval(p,z)/p.(len p-'1).| >= |.eval(np,z0).| by A1,A54,A55,Th59;
-  then |.eval(p,z)/p.(len p-'1).| >= |.eval(p,z0)/p.(len p-'1).| by A1,Th59;
-  then |.eval(p,z).|/|.p.(len p-'1).| >= |.eval(p,z0)/p.(len p-'1).|
-  by A15,ALGSEQ_1:25,COMPLFLD:111;
-  then |.eval(p,z).|/|.p.(len p-'1).| >= |.eval(p,z0).|/|.p.(len p-'1).|
-  by A15,ALGSEQ_1:25,COMPLFLD:111;
-  hence thesis by A16,XREAL_1:76;
+A51: R is convergent by A42,SEQ_4:43;
+  then |.H.|-R is convergent by A33,SEQ_2:25;
+  then Rcons.0 = |.eval(np,z).| & lim (|.H.|-R) <= lim Rcons by A45,FUNCOP_1:13
+,SEQ_2:32;
+  then
+A52: lim (|.H.|-R) <= |.eval(np,z).| by SEQ_4:40;
+  lim (|.H.|-R) = lim |.H.| - lim R by A33,A51,SEQ_2:26
+    .= |.lim H.| - lim R by A33,COMSEQ_2:11
+    .= |.lim H.| - 0 by A42,SEQ_4:44;
+  then |.eval(p,z)/p.(len p-'1).| >= |.eval(np,z0).| by A11,A52,A41,Th59;
+  then |.eval(p,z)/p.(len p-'1).| >= |.eval(p,z0)/p.(len p-'1).| by A11,Th59;
+  then |.eval(p,z).|/|.p.(len p-'1).| >= |.eval(p,z0)/p.(len p-'1).| by A12,
+ALGSEQ_1:25,COMPLFLD:111;
+  then |.eval(p,z).|/|.p.(len p-'1).| >= |.eval(p,z0).|/|.p.(len p-'1).| by A12
+,ALGSEQ_1:25,COMPLFLD:111;
+  hence thesis by A13,XREAL_1:76;
 end;
 
 theorem Th75:
-  for p be Polynomial of F_Complex st len p > 1 holds p is with_roots
+  for p be Polynomial of F_Complex st len p > 1 holds p is
+  with_roots
 proof
   let p be Polynomial of F_Complex;
   assume
@@ -3350,305 +3426,306 @@ A1: len p > 1;
   then
 A2: len p >= 1+1 by NAT_1:13;
   per cases by A2,XXREAL_0:1;
-  suppose len p > 2;
+  suppose
+    len p > 2;
     then consider z0 be Element of F_Complex such that
-A3: for z be Element of F_Complex holds
-    |.eval(p,z).| >= |.eval(p,z0).| by Th74;
+A3: for z be Element of F_Complex holds |.eval(p,z).| >= |.eval(p,z0)
+    .| by Th74;
     set q = Subst(p,<%z0,1_F_Complex%>);
-A4: eval(p,z0) = eval(p,z0+0.F_Complex) by RLVECT_1:def 7
-      .= eval(p,eval(<%z0,1_F_Complex%>,0.F_Complex)) by Th48
-      .= eval(q,0.F_Complex) by Th54;
-A5: now
-      let z be Element of F_Complex;
-      eval(q,z) = eval(p,eval(<%z0,1_F_Complex%>,z)) by Th54
-        .= eval(p,z0+z) by Th48;
-      then |.eval(q,z).| >= |.eval(p,z0).| by A3;
-      hence |.eval(q,z).| >= |.q.0 .| by A4,Th32;
-    end;
+    defpred P[Nat] means $1 >= 1 & q.$1 <> 0.F_Complex;
     len <%z0,1_F_Complex%> = 2 by Th41;
     then
-A6: len q = 2*len p - len p - 2 + 2 by A1,Th53
+A4: len q = 2*len p - len p - 2 + 2 by A1,Th53
       .= len p;
-    defpred P[Nat] means $1 >= 1 & q.$1 <> 0.F_Complex;
-A7: ex k be Nat st P[k]
+A5: ex k be Nat st P[k]
     proof
-      len q-1 >= 1-1 by A1,A6,XREAL_1:11;
+      len q-1 >= 1-1 by A1,A4,XREAL_1:11;
       then len q-1 = len q-'1 by XREAL_0:def 2;
       then reconsider k=len q-1 as Element of NAT;
       take k;
-      len q >= 1+1 by A1,A6,NAT_1:13;
+      len q >= 1+1 by A1,A4,NAT_1:13;
       hence k >= 1 by XREAL_1:21;
       len q = k+1;
       hence q.k <> 0.F_Complex by ALGSEQ_1:25;
     end;
     consider k be Nat such that
-A8: P[k] and
-A9: for n be Nat st P[n] holds k <= n from NAT_1:sch 5(A7);
-A10: k+1 > 1 by A8,NAT_1:13;
-    reconsider k1=k as non empty Element of NAT by A8,ORDINAL1:def 13;
-    k1 < len q by A8,ALGSEQ_1:22;
-    then
-A11: k+1+0 <= len q by NAT_1:13;
+A6: P[k] and
+A7: for n be Nat st P[n] holds k <= n from NAT_1:sch 5(A5);
+A8: k+1 > 1 by A6,NAT_1:13;
+    reconsider k1=k as non empty Element of NAT by A6,ORDINAL1:def 13;
     consider sq be CRoot of k1,-(q.0/q.k1);
     deffunc O(Nat) = (q.(k1+$1))*((power F_Complex).(sq,k1+$1));
     consider F2 be FinSequence of the carrier of F_Complex such that
-A12: len F2 = len q-'(k1+1) and
-A13: for n be Nat st n in dom F2 holds F2.n = O(n)
-    from FINSEQ_2:sch 1;
-    len q-(k+1) >= 0 by A11,XREAL_1:21;
+A9: len F2 = len q-'(k1+1) and
+A10: for n be Nat st n in dom F2 holds F2.n = O(n) from FINSEQ_2:sch 1;
+    k1 < len q by A6,ALGSEQ_1:22;
     then
-A15: len F2 = len q-(k+1) by A12,XREAL_0:def 2;
-A16: for n be Element of NAT st n in dom F2
-      holds F2.n = q.(k+n)*(power F_Complex).(sq,k+n) by A13;
+A11: k+1+0 <= len q by NAT_1:13;
+    then len q-(k+1) >= 0 by XREAL_1:21;
+    then
+A12: len F2 = len q-(k+1) by A9,XREAL_0:def 2;
+A13: eval(p,z0) = eval(p,z0+0.F_Complex) by RLVECT_1:def 7
+      .= eval(p,eval(<%z0,1_F_Complex%>,0.F_Complex)) by Th48
+      .= eval(q,0.F_Complex) by Th54;
+A14: now
+      let z be Element of F_Complex;
+      eval(q,z) = eval(p,eval(<%z0,1_F_Complex%>,z)) by Th54
+        .= eval(p,z0+z) by Th48;
+      then |.eval(q,z).| >= |.eval(p,z0).| by A3;
+      hence |.eval(q,z).| >= |.q.0 .| by A13,Th32;
+    end;
     now
       let c be Real;
-      assume
-A17:  0 < c & c < 1;
+      assume that
+A15:  0 < c and
+A16:  c < 1;
       set z1 = [**c,0**]*sq;
       consider F1 be FinSequence of the carrier of F_Complex such that
-A18:  eval(q,z1) = Sum F1 and
-A19:  len F1 = len q and
-A20:  for n be Element of NAT st n in dom F1 holds
-      F1.n = q.(n-'1)*(power F_Complex).(z1,n-'1) by POLYNOM4:def 2;
-      k+1 in Seg len F1 by A10,A11,A19,FINSEQ_1:3;
+A17:  eval(q,z1) = Sum F1 and
+A18:  len F1 = len q and
+A19:  for n be Element of NAT st n in dom F1 holds F1.n = q.(n-'1)*(
+      power F_Complex).(z1,n-'1) by POLYNOM4:def 2;
+A20:  dom ((F1/^(k+1))*[**c to_power (k+1),0**]") = dom (F1/^(k+1)) by
+POLYNOM1:def 3;
+A21:  k1 < len F1 by A6,A18,ALGSEQ_1:22;
+      1 in Seg k by A6,FINSEQ_1:3;
+      then 1 in Seg len (F1|k) by A21,FINSEQ_1:80;
       then
-A21:  k+1 in dom F1 by FINSEQ_1:def 3;
-      then
-A22:  F1.(k+1) = F1/.(k+1) by PARTFUN1:def 8;
-A23:  k1 < len F1 by A8,A19,ALGSEQ_1:22;
-      1 in Seg k by A8,FINSEQ_1:3;
-      then 1 in Seg len (F1|k) by A23,FINSEQ_1:80;
-      then
-A24:  1 in dom (F1|k) by FINSEQ_1:def 3;
-A25:  dom (F1|k) c= dom F1 by FINSEQ_5:20;
+A22:  1 in dom (F1|k) by FINSEQ_1:def 3;
+A23:  dom (F1|k) c= dom F1 by FINSEQ_5:20;
       now
         let i be Element of NAT;
         assume that
-A26:    i in dom (F1|k) and
-A27:    i <> 1;
-A28:    0+1 <= i & i <= len (F1|k) by A26,FINSEQ_3:27;
-        then
-A29:    i-1 >= 0 by XREAL_1:21;
-        i > 1 by A27,A28,XXREAL_0:1;
+A24:    i in dom (F1|k) and
+A25:    i <> 1;
+A26:    0+1 <= i by A24,FINSEQ_3:27;
+        then i > 1 by A25,XXREAL_0:1;
         then i >= 1+1 by NAT_1:13;
         then i-1 >= 1+1-1 by XREAL_1:11;
         then
-A30:    i-'1 >= 1 by XREAL_0:def 2;
-        i <= k by A23,A28,FINSEQ_1:80;
+A27:    i-'1 >= 1 by XREAL_0:def 2;
+        i <= len (F1|k) by A24,FINSEQ_3:27;
+        then i <= k by A21,FINSEQ_1:80;
         then i < k+1 by NAT_1:13;
-        then i-1 < k by XREAL_1:21;
         then
-A31:    i-'1 < k by A29,XREAL_0:def 2;
-        thus (F1|k1)/.i = F1/.i by A26,FINSEQ_4:85
-          .= F1.i by A25,A26,PARTFUN1:def 8
-          .= q.(i-'1)*(power F_Complex).(z1,i-'1) by A20,A25,A26
-          .= 0.F_Complex*(power F_Complex).(z1,i-'1) by A9,A30,A31
+A28:    i-1 < k by XREAL_1:21;
+        i-1 >= 0 by A26,XREAL_1:21;
+        then
+A29:    i-'1 < k by A28,XREAL_0:def 2;
+        thus (F1|k1)/.i = F1/.i by A24,FINSEQ_4:85
+          .= F1.i by A23,A24,PARTFUN1:def 8
+          .= q.(i-'1)*(power F_Complex).(z1,i-'1) by A19,A23,A24
+          .= 0.F_Complex*(power F_Complex).(z1,i-'1) by A7,A27,A29
           .= 0.F_Complex by VECTSP_1:39;
       end;
       then
-A32:  Sum (F1|k) = (F1|k1)/.1 by A24,POLYNOM2:5
-        .= F1/.1 by A24,FINSEQ_4:85
-        .= F1.1 by A24,A25,PARTFUN1:def 8
-        .= q.(1-'1)*(power F_Complex).(z1,1-'1) by A20,A24,A25
+A30:  Sum (F1|k) = (F1|k1)/.1 by A22,POLYNOM2:5
+        .= F1/.1 by A22,FINSEQ_4:85
+        .= F1.1 by A22,A23,PARTFUN1:def 8
+        .= q.(1-'1)*(power F_Complex).(z1,1-'1) by A19,A22,A23
         .= q.0*(power F_Complex).(z1,1-'1) by XREAL_1:234
         .= q.0*(power F_Complex).(z1,0) by XREAL_1:234
         .= q.0*1_F_Complex by GROUP_1:def 8
         .= q.0 by GROUP_1:def 5;
-A33:  F1/.(k+1) = F1.(k+1) by A21,PARTFUN1:def 8
-        .= q.(k+1-'1)*(power F_Complex).(z1,k+1-'1) by A20,A21
+      k+1 in Seg len F1 by A8,A11,A18,FINSEQ_1:3;
+      then
+A31:  k+1 in dom F1 by FINSEQ_1:def 3;
+      then
+A32:  F1.(k+1) = F1/.(k+1) by PARTFUN1:def 8;
+      set gc = Sum(F1/^(k+1))/[**c to_power (k+1),0**];
+A33:  c to_power (k+1) > 0 by A15,POWER:39;
+      then
+A34:  Sum(F1/^(k+1)) = [**c to_power (k+1),0**]*Sum(F1/^(k+1))/ [**c
+      to_power (k+1),0**] by COMPLFLD:9,66
+        .= [**c to_power (k+1),0**]*gc by A33,COMPLFLD:9,64;
+A35:  F1/.(k+1) = F1.(k+1) by A31,PARTFUN1:def 8
+        .= q.(k+1-'1)*(power F_Complex).(z1,k+1-'1) by A19,A31
         .= q.k1*(power F_Complex).(z1,k+1-'1) by NAT_D:34
         .= q.k1*(power F_Complex).(z1,k1) by NAT_D:34
-        .= q.k1*((power F_Complex).([**c,0**],k1)*
-      (power F_Complex).(sq,k1)) by GROUP_1:100
-        .= q.k1*((power F_Complex).([**c,0**],k1)*(-(q.0/q.k1)))
-      by COMPLFLD:def 2
+        .= q.k1*((power F_Complex).([**c,0**],k1)* (power F_Complex).(sq,k1)
+      ) by GROUP_1:100
+        .= q.k1*((power F_Complex).([**c,0**],k1)*(-(q.0/q.k1))) by
+COMPLFLD:def 2
         .= q.k1*(-(q.0/q.k1))*(power F_Complex).([**c,0**],k1)
-        .= q.k1*((-(q.0))/q.k1)*(power F_Complex).([**c,0**],k1)
-      by A8,COMPLFLD:78
-        .= (q.k1* (-q.0))/q.k1*(power F_Complex).([**c,0**],k1)
-      by A8,COMPLFLD:64
-        .= (-q.0)*(power F_Complex).([**c,0**],k1) by A8,COMPLFLD:66
-        .= (-q.0)*[**c to_power k,0**] by A17,HAHNBAN1:37;
-      set gc = Sum(F1/^(k+1))/[**c to_power (k+1),0**];
-A34:  c to_power (k+1) > 0 by A17,POWER:39;
-A35:  c to_power k > 0 by A17,POWER:39;
-      0 + (c to_power k1) <= 1 by A17,TBSP_1:2;
-      then
-A36:  1-(c to_power k) >= 0 by XREAL_1:21;
-A37:  Sum(F1/^(k+1)) = [**c to_power (k+1),0**]*Sum(F1/^(k+1))/
-      [**c to_power (k+1),0**] by A34,COMPLFLD:9,66
-        .= [**c to_power (k+1),0**]*gc by A34,COMPLFLD:9,64;
-      F1 = (F1|(k+1-'1))^<*F1.(k+1)*>^(F1/^(k+1)) by A10,A11,A19,POLYNOM4:3;
-      then Sum F1 = Sum((F1|(k+1-'1))^<*F1/.(k+1)*>) + Sum(F1/^(k+1))
-      by A22,RLVECT_1:58
-        .= Sum(F1|(k+1-'1)) + Sum<*F1/.(k+1)*> + Sum
-      (F1/^(k+1)) by RLVECT_1:58
+        .= q.k1*((-(q.0))/q.k1)*(power F_Complex).([**c,0**],k1) by A6,
+COMPLFLD:78
+        .= (q.k1* (-q.0))/q.k1*(power F_Complex).([**c,0**],k1) by A6,
+COMPLFLD:64
+        .= (-q.0)*(power F_Complex).([**c,0**],k1) by A6,COMPLFLD:66
+        .= (-q.0)*[**c to_power k,0**] by A15,HAHNBAN1:37;
+A36:  |.q.0*(1_F_Complex-[**c to_power k,0**])+[**c to_power (k+1),0**]*
+gc.| <= |.q.0*(1_F_Complex-[**c to_power k,0**]).| + |.[**c to_power (k+1),0**]
+      *gc.| by COMPLFLD:100;
+      F1 = (F1|(k+1-'1))^<*F1.(k+1)*>^(F1/^(k+1)) by A8,A11,A18,POLYNOM4:3;
+      then Sum F1 = Sum((F1|(k+1-'1))^<*F1/.(k+1)*>) + Sum(F1/^(k+1)) by A32,
+RLVECT_1:58
+        .= Sum(F1|(k+1-'1)) + Sum<*F1/.(k+1)*> + Sum (F1/^(k+1)) by RLVECT_1:58
         .= Sum(F1|k) + Sum<*F1/.(k+1)*> + Sum(F1/^(k+1)) by NAT_D:34
-        .= q.0 + (-q.0)*[**c to_power k,0**] + Sum(F1/^(k+1))
-      by A32,A33,RLVECT_1:61
+        .= q.0 + (-q.0)*[**c to_power k,0**] + Sum(F1/^(k+1)) by A30,A35,
+RLVECT_1:61
         .= q.0 + -q.0*[**c to_power k,0**] + Sum(F1/^(k+1)) by VECTSP_1:41
-        .= q.0*1_F_Complex - q.0*[**c to_power k,0**] + Sum(F1/^(k+1))
-      by VECTSP_1:def 13
-        .= q.0*(1_F_Complex-[**c to_power k,0**])+
-      [**c to_power (k+1),0**]*gc by A37,VECTSP_1:43;
+        .= q.0*1_F_Complex - q.0*[**c to_power k,0**] + Sum(F1/^(k+1)) by
+VECTSP_1:def 13
+        .= q.0*(1_F_Complex-[**c to_power k,0**])+ [**c to_power (k+1),0**]*
+      gc by A34,VECTSP_1:43;
       then
-A38:  |.q.0*(1_F_Complex-[**c to_power k,0**])+
-      [**c to_power (k+1),0**]*gc.| >= |.q.0 .| by A5,A18;
-A39:  |.1_F_Complex-[**c to_power k,0**].| =
-      |.[**1,0**]-[**c to_power k,0**].| by COMPLEX1:def 7,COMPLFLD:10
-        .= |.[**1-(c to_power k1),0-0**].| by Th6
-        .= 1-(c to_power k) by A36,ABSVALUE:def 1;
-      |.q.0*(1_F_Complex-[**c to_power k,0**])+[**c to_power (k+1),0**]*gc.|
-      <= |.q.0*(1_F_Complex-[**c to_power k,0**]).| +
-      |.[**c to_power (k+1),0**]*gc.| by COMPLFLD:100;
-      then |.q.0*(1_F_Complex-[**c to_power k,0**]).| +
-      |.[**c to_power (k+1),0**]*gc.| >= |.q.0 .| by A38,XXREAL_0:2;
-      then |.q.0 .|*|.1_F_Complex-[**c to_power k,0**].| +
-      |.[**c to_power (k+1),0**]*gc.| >= |.q.0 .| by COMPLFLD:109;
-      then |.q.0 .|*|.1_F_Complex-[**c to_power k,0**].| +
-      |.[**c to_power (k+1),0**].|*|.gc.| >= |.q.0 .| by COMPLFLD:109;
-      then |.[**c to_power (k+1),0**].|*|.gc.| >= |.q.0 .|*1 -
-      |.q.0 .|*(1-(c to_power k)) by A39,XREAL_1:22;
-      then (c to_power (k+1))*|.gc.| >= |.q.0 .|*(c to_power k)
-      by A34,ABSVALUE:def 1;
-      then (c to_power (k+1))*|.gc.|/(c to_power k) >=
-      |.q.0 .|*(c to_power k)/(c to_power k) by A35,XREAL_1:74;
-      then (c to_power (k+1))*|.gc.|/(c to_power k)>=|.q.0 .|
-      by A35,XCMPLX_1:90;
-      then (c to_power (k+1))/(c to_power k)*|.gc.| >= |.q.0 .|;
-      then (c to_power (k+1-k))*|.gc.| >= |.q.0 .| by A17,POWER:34;
+      |.q.0*(1_F_Complex-[**c to_power k,0**])+ [**c to_power (k+1),0**]*
+      gc.| >= |.q.0 .| by A14,A17;
       then
-A40:  c*|.gc.| >= |.q.0 .| by POWER:30;
-      gc = Sum(F1/^(k+1))*[**c to_power (k+1),0**]" by VECTSP_1:def 23
-        .= Sum((F1/^(k+1))*[**c to_power (k+1),0**]") by POLYNOM1:29;
+      |.q.0*(1_F_Complex-[**c to_power k,0**]).| + |.[**c to_power (k+1),
+      0**]*gc.| >= |.q.0 .| by A36,XXREAL_0:2;
       then
-A41:  |.gc.| <= Sum |.(F1/^(k+1))*[**c to_power (k+1),0**]".| by Th15;
-A42:  dom ((F1/^(k+1))*[**c to_power (k+1),0**]") = dom (F1/^(k+1))
-      by POLYNOM1:def 3;
-A43:  len |.(F1/^(k+1))*[**c to_power (k+1),0**]".| =
-      len ((F1/^(k+1))*[**c to_power (k+1),0**]") by Def1
-        .= len (F1/^(k+1)) by A42,FINSEQ_3:31
-        .= len F1-(k+1) by A11,A19,RFINSEQ:def 2
-        .= len |.F2.| by A15,A19,Def1;
+      |.q.0 .|*|.1_F_Complex-[**c to_power k,0**].| + |.[**c to_power (k+
+      1),0**]*gc.| >= |.q.0 .| by COMPLFLD:109;
+      then
+A37:  |.q.0 .|*|.1_F_Complex-[**c to_power k,0**].| + |.[**c to_power (k+
+      1),0**].|*|.gc.| >= |.q.0 .| by COMPLFLD:109;
+      0 + (c to_power k1) <= 1 by A15,A16,TBSP_1:2;
+      then
+A38:  1-(c to_power k) >= 0 by XREAL_1:21;
+A39:  c to_power k > 0 by A15,POWER:39;
+A40:  len |.(F1/^(k+1))*[**c to_power (k+1),0**]".| = len ((F1/^(k+1))*
+      [**c to_power (k+1),0**]") by Def1
+        .= len (F1/^(k+1)) by A20,FINSEQ_3:31
+        .= len F1-(k+1) by A11,A18,RFINSEQ:def 2
+        .= len |.F2.| by A12,A18,Def1;
       now
         let i be Element of NAT;
-        assume
-A44:    i in dom |.(F1/^(k+1))*[**c to_power (k+1),0**]".|;
-        then
-A45:    i in Seg len |.(F1/^(k+1))*[**c to_power (k+1),0**]".|
-        by FINSEQ_1:def 3;
-        then i in Seg len ((F1/^(k+1))*[**c to_power (k+1),0**]") by Def1;
-        then
-A46:    i in dom ((F1/^(k+1))*[**c to_power (k+1),0**]") by FINSEQ_1:def 3;
-A47:    k+1+i-'1 = k+i+1-1 by XREAL_0:def 2
+A41:    k+1+i-'1 = k+i+1-1 by XREAL_0:def 2
           .= k+i;
-A48:    len F2 = len |.F2.| by Def1;
+        assume
+A42:    i in dom |.(F1/^(k+1))*[**c to_power (k+1),0**]".|;
         then
-A49:    dom F2 = dom |.F2.| by FINSEQ_3:31;
-A50:    i in dom F2 by A43,A45,A48,FINSEQ_1:def 3;
-A51:    k+i+1 >= 0+1 by XREAL_1:8;
-        i <= len |.F2.| by A43,A45,FINSEQ_1:3;
-        then i <= len F1-(k+1) by A15,A19,Def1;
-        then k+1+i <= len F1 by XREAL_1:21;
+A43:    i in Seg len |.(F1/^(k+1))*[**c to_power (k+1),0**]".| by
+FINSEQ_1:def 3;
+        then i <= len |.F2.| by A40,FINSEQ_1:3;
+        then i <= len F1-(k+1) by A12,A18,Def1;
+        then k+i+1 >= 0+1 & k+1+i <= len F1 by XREAL_1:8,21;
         then
-A52:    k+1+i in dom F1 by A51,FINSEQ_3:27;
-        i >= 0+1 by A45,FINSEQ_1:3;
+A44:    k+1+i in dom F1 by FINSEQ_3:27;
+        i >= 0+1 by A43,FINSEQ_1:3;
         then
-A53:    i-1 >= 0 by XREAL_1:21;
-        c to_power (i-'1) <= 1 by A17,TBSP_1:2;
+A45:    i-1 >= 0 by XREAL_1:21;
+        c to_power (i-'1) <= 1 by A15,A16,TBSP_1:2;
         then
-A54:    c to_power (i-1) <= 1 by A53,XREAL_0:def 2;
-A55:    c to_power (k+i) > 0 by A17,POWER:39;
-A56:    |.q.(k+i)*(power F_Complex).(sq,k+i).| >= 0 by COMPLEX1:132;
-A57:    q.(k+i)*(power F_Complex).(sq,k+i) = F2.i by A16,A50
-          .= F2/.i by A50,PARTFUN1:def 8;
-A58:    (F1/^(k+1))/.i = (F1/^(k+1)).i by A42,A46,PARTFUN1:def 8
-          .= F1.(k+1+i) by A11,A19,A42,A46,RFINSEQ:def 2
-          .= q.(k+1+i-'1)*(power F_Complex).([**c,0**]*sq,k+1+i-'1) by A20,A52
-          .= q.(k+i)*((power F_Complex).(sq,k+i)*
-        (power F_Complex).([**c,0**],k+i)) by A47,GROUP_1:100
-          .= q.(k+i)*(power F_Complex).(sq,k+i)*
-        (power F_Complex).([**c,0**],k+i);
-A59:    k+i-(k+1) = i-1;
-        |.(F1/^(k+1))*[**c to_power (k+1),0**]".|.i =
-        |.(F1/^(k+1))*[**c to_power (k+1),0**]".|/.i by A44,PARTFUN1:def 8
-          .= |.((F1/^(k+1))*[**c to_power (k+1),0**]")/.i.| by A46,Def1
-          .= |.((F1/^(k+1))/.i)*[**c to_power (k+1),0**]".|
-        by A42,A46,POLYNOM1:def 3
+A46:    c to_power (i-1) <= 1 by A45,XREAL_0:def 2;
+A47:    c to_power (k+i) > 0 by A15,POWER:39;
+A48:    k+i-(k+1) = i-1;
+        i in Seg len ((F1/^(k+1))*[**c to_power (k+1),0**]") by A43,Def1;
+        then
+A49:    i in dom ((F1/^(k+1))*[**c to_power (k+1),0**]") by FINSEQ_1:def 3;
+        then
+A50:    (F1/^(k+1))/.i = (F1/^(k+1)).i by A20,PARTFUN1:def 8
+          .= F1.(k+1+i) by A11,A18,A20,A49,RFINSEQ:def 2
+          .= q.(k+1+i-'1)*(power F_Complex).([**c,0**]*sq,k+1+i-'1) by A19,A44
+          .= q.(k+i)*((power F_Complex).(sq,k+i)* (power F_Complex).([**c,0
+        **],k+i)) by A41,GROUP_1:100
+          .= q.(k+i)*(power F_Complex).(sq,k+i)* (power F_Complex).([**c,0
+        **],k+i);
+A51:    len F2 = len |.F2.| by Def1;
+        then
+A52:    dom F2 = dom |.F2.| by FINSEQ_3:31;
+A53:    |.(F1/^(k+1))*[**c to_power (k+1),0**]".|.i = |.(F1/^(k+1))*[**c
+        to_power (k+1),0**]".|/.i by A42,PARTFUN1:def 8
+          .= |.((F1/^(k+1))*[**c to_power (k+1),0**]")/.i.| by A49,Def1
+          .= |.((F1/^(k+1))/.i)*[**c to_power (k+1),0**]".| by A20,A49,
+POLYNOM1:def 3
           .= |.(F1/^(k+1))/.i.|*|.[**c to_power (k+1),0**]".| by COMPLFLD:109
-          .= |.q.(k+i)*(power F_Complex).(sq,k+i)*
-        (power F_Complex).([**c,0**],k+i).|*abs(c to_power (k+1))"
-        by A34,A58,COMPLFLD:9,110
-          .= |.q.(k+i)*(power F_Complex).(sq,k+i).|*
-        |.(power F_Complex).([**c,0**],k+i).|*abs(c to_power (k+1))"
-        by COMPLFLD:109
-          .= |.q.(k+i)*(power F_Complex).(sq,k+i).|*
-        |.[**c to_power (k+i),0**].|*abs(c to_power (k+1))" by A17,HAHNBAN1:37
-          .= |.q.(k+i)*(power F_Complex).(sq,k+i).|*
-        (c to_power (k+i))*abs(c to_power (k+1))" by A55,ABSVALUE:def 1
-          .= |.q.(k+i)*(power F_Complex).(sq,k+i).|*
-        (c to_power (k+i))*(c to_power (k+1))" by A34,ABSVALUE:def 1
-          .= |.q.(k+i)*(power F_Complex).(sq,k+i).|*
-        ((c to_power (k+i))*(c to_power (k+1))")
-          .= |.q.(k+i)*(power F_Complex).(sq,k+i).|*
-        ((c to_power (k+i))/(c to_power (k+1)))
-          .= |.q.(k+i)*(power F_Complex).(sq,k+i).|*(c to_power (i-1))
-        by A17,A59,POWER:34;
-        then |.(F1/^(k+1))*[**c to_power (k+1),0**]".|.i <= |.F2/.i.|
-        by A54,A56,A57,XREAL_1:155;
-        then |.(F1/^(k+1))*[**c to_power (k+1),0**]".|.i <= |.F2.|/.i
-        by A50,Def1;
-        hence |.(F1/^(k+1))*[**c to_power (k+1),0**]".|.i <= |.F2.|.i
-        by A49,A50,PARTFUN1:def 8;
+          .= |.q.(k+i)*(power F_Complex).(sq,k+i)* (power F_Complex).([**c,0
+        **],k+i).|*abs(c to_power (k+1))" by A33,A50,COMPLFLD:9,110
+          .= |.q.(k+i)*(power F_Complex).(sq,k+i).|* |.(power F_Complex).(
+        [**c,0**],k+i).|*abs(c to_power (k+1))" by COMPLFLD:109
+          .= |.q.(k+i)*(power F_Complex).(sq,k+i).|* |.[**c to_power (k+i),0
+        **].|*abs(c to_power (k+1))" by A15,HAHNBAN1:37
+          .= |.q.(k+i)*(power F_Complex).(sq,k+i).|* (c to_power (k+i))*abs(
+        c to_power (k+1))" by A47,ABSVALUE:def 1
+          .= |.q.(k+i)*(power F_Complex).(sq,k+i).|* (c to_power (k+i))*(c
+        to_power (k+1))" by A33,ABSVALUE:def 1
+          .= |.q.(k+i)*(power F_Complex).(sq,k+i).|* ((c to_power (k+i))*(c
+        to_power (k+1))")
+          .= |.q.(k+i)*(power F_Complex).(sq,k+i).|* ((c to_power (k+i))/(c
+        to_power (k+1)))
+          .= |.q.(k+i)*(power F_Complex).(sq,k+i).|*(c to_power (i-1)) by A15
+,A48,POWER:34;
+A54:    i in dom F2 by A40,A43,A51,FINSEQ_1:def 3;
+        then q.(k+i)*(power F_Complex).(sq,k+i) = F2.i by A10
+          .= F2/.i by A54,PARTFUN1:def 8;
+        then |.(F1/^(k+1))*[**c to_power (k+1),0**]".|.i <= |.F2/.i.| by A46
+,A53,COMPLEX1:132,XREAL_1:155;
+        then |.(F1/^(k+1))*[**c to_power (k+1),0**]".|.i <= |.F2.|/.i by A54
+,Def1;
+        hence |.(F1/^(k+1))*[**c to_power (k+1),0**]".|.i <= |.F2.|.i by A52
+,A54,PARTFUN1:def 8;
       end;
-      then Sum|.(F1/^(k+1))*[**c to_power (k+1),0**]".| <= Sum|.F2.|
-      by A43,INTEGRA5:3;
-      then |.gc.| <= Sum|.F2.| by A41,XXREAL_0:2;
-      then c*|.gc.| <= c*Sum|.F2.| by A17,XREAL_1:66;
-      hence c*Sum|.F2.| >= |.q.0 .| by A40,XXREAL_0:2;
+      then
+A55:  Sum|.(F1/^(k+1))*[**c to_power (k+1),0**]".| <= Sum|.F2.| by A40,
+INTEGRA5:3;
+      |.1_F_Complex-[**c to_power k,0**].| = |.[**1,0**]-[**c to_power k,
+      0**].| by COMPLEX1:def 7,COMPLFLD:10
+        .= |.[**1-(c to_power k1),0-0**].| by Th6
+        .= 1-(c to_power k) by A38,ABSVALUE:def 1;
+      then |.[**c to_power (k+1),0**].|*|.gc.| >= |.q.0 .|*1 - |.q.0 .|*(1-(c
+      to_power k)) by A37,XREAL_1:22;
+      then (c to_power (k+1))*|.gc.| >= |.q.0 .|*(c to_power k) by A33,
+ABSVALUE:def 1;
+      then
+      (c to_power (k+1))*|.gc.|/(c to_power k) >= |.q.0 .|*(c to_power k)
+      /(c to_power k) by A39,XREAL_1:74;
+      then (c to_power (k+1))/(c to_power k)*|.gc.| >= |.q.0 .| by A39,
+XCMPLX_1:90;
+      then (c to_power (k+1-k))*|.gc.| >= |.q.0 .| by A15,POWER:34;
+      then
+A56:  c*|.gc.| >= |.q.0 .| by POWER:30;
+      gc = Sum(F1/^(k+1))*[**c to_power (k+1),0**]" by VECTSP_1:def 23
+        .= Sum((F1/^(k+1))*[**c to_power (k+1),0**]") by POLYNOM1:29;
+      then |.gc.| <= Sum |.(F1/^(k+1))*[**c to_power (k+1),0**]".| by Th15;
+      then |.gc.| <= Sum|.F2.| by A55,XXREAL_0:2;
+      then c*|.gc.| <= c*Sum|.F2.| by A15,XREAL_1:66;
+      hence c*Sum|.F2.| >= |.q.0 .| by A56,XXREAL_0:2;
     end;
     then |.q.0 .| <= 0 by Lm1;
     then
-A60: q.0 = 0.F_Complex by COMPLFLD:96;
+A57: q.0 = 0.F_Complex by COMPLFLD:96;
     ex x be Element of F_Complex st x is_a_root_of p
     proof
       take z0;
-      eval(p,z0) = 0.F_Complex by A4,A60,Th32;
+      eval(p,z0) = 0.F_Complex by A13,A57,Th32;
       hence thesis by Def6;
     end;
     hence thesis by Def7;
   end;
   suppose
-A61: len p = 2;
+A58: len p = 2;
     set np=NormPolynomial(p);
-A62: len np = len p by A61,Th58;
-A63: len <%np.0,1_F_Complex%> = 2 by Th41;
-A64: len p-'1 = 2-1 by A61,XREAL_0:def 2;
-    now
+A59: len p-'1 = 2-1 by A58,XREAL_0:def 2;
+A60: len np = len p by A58,Th58;
+A61: now
       let k be Nat;
       assume
-A65:  k < len np;
-      per cases by A61,A62,A65,NAT_1:23;
-      suppose k=0;
+A62:  k < len np;
+      per cases by A58,A60,A62,NAT_1:23;
+      suppose
+        k=0;
         hence np.k = <%np.0,1_F_Complex%>.k by Th39;
       end;
       suppose
-A66:    k=1;
-        hence np.k = 1_F_Complex by A61,A64,Th57
-          .= <%np.0,1_F_Complex%>.k by A66,Th39;
+A63:    k=1;
+        hence np.k = 1_F_Complex by A58,A59,Th57
+          .= <%np.0,1_F_Complex%>.k by A63,Th39;
       end;
     end;
+    len <%np.0,1_F_Complex%> = 2 by Th41;
     then
-A67: np = <%np.0,1_F_Complex%> by A61,A62,A63,ALGSEQ_1:28;
+A64: np = <%np.0,1_F_Complex%> by A58,A61,Th58,ALGSEQ_1:28;
     ex x be Element of F_Complex st x is_a_root_of np
     proof
       take z0 = -np.0;
-      eval(np,z0) = np.0+z0 by A67,Th48
+      eval(np,z0) = np.0+z0 by A64,Th48
         .= 0.F_Complex by RLVECT_1:16;
       hence thesis by Def6;
     end;
     then np is with_roots by Def7;
-    hence thesis by A61,Th61;
+    hence thesis by A58,Th61;
   end;
 end;
 
@@ -3659,8 +3736,8 @@ end;
 
 registration
   cluster algebraic-closed add-associative right_zeroed right_complementable
-    Abelian commutative associative distributive almost_left_invertible
-    non degenerated (well-unital (non empty doubleLoopStr));
+    Abelian commutative associative distributive almost_left_invertible non
+    degenerated (well-unital (non empty doubleLoopStr));
   existence
   proof
     take F_Complex;

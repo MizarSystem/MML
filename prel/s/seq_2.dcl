@@ -12,6 +12,7 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="NAT_1"/>
@@ -23,8 +24,8 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="6"/>
-<Adjective nr="27"/>
-<Adjective nr="39"/>
+<Adjective nr="28"/>
+<Adjective nr="40"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -32,9 +33,9 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="6"/>
-<Adjective nr="27"/>
-<Adjective nr="37"/>
+<Adjective nr="28"/>
 <Adjective nr="38"/>
+<Adjective nr="39"/>
 </Cluster>
 </CCluster>
 <CCluster aid="SEQ_2" nr="2">
@@ -42,9 +43,9 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="6"/>
-<Adjective nr="27"/>
-<Adjective nr="37"/>
+<Adjective nr="28"/>
 <Adjective nr="38"/>
+<Adjective nr="39"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -52,8 +53,8 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="6"/>
-<Adjective nr="27"/>
-<Adjective nr="39"/>
+<Adjective nr="28"/>
+<Adjective nr="40"/>
 </Cluster>
 </CCluster>
 </Registrations>

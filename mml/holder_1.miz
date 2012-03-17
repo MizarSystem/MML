@@ -10,16 +10,15 @@ environ
       LATTICES, RELAT_1, ABSVALUE, ORDINAL2, PARTFUN1, LIMFUNC1, FCONT_1,
       SEQ_1, SEQ_2, SEQM_3, RCOMP_1, FDIFF_1, PREPOWER, POWER, SERIES_1,
       FINSEQ_4, SUPINF_2, OPPCAT_1, NORMSP_1, SUBSET_1;
- notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, PARTFUN1, FUNCT_2, RFUNCT_2,
-      LIMFUNC1, RCOMP_1, FCONT_1, XXREAL_0, XREAL_0, COMPLEX1, ORDINAL1,
-      NUMBERS, REAL_1, NAT_1, VALUED_0, VALUED_1, SEQ_1, SEQ_2, SEQM_3,
-      SERIES_1, FDIFF_1, PREPOWER, POWER, TAYLOR_1, RECDEF_1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, PARTFUN1, FUNCT_2, LIMFUNC1,
+      RCOMP_1, FCONT_1, XXREAL_0, XREAL_0, COMPLEX1, ORDINAL1, NUMBERS, REAL_1,
+      NAT_1, VALUED_0, VALUED_1, SEQ_1, SEQ_2, SERIES_1, FDIFF_1, PREPOWER,
+      POWER, TAYLOR_1, RECDEF_1;
  constructors PARTFUN1, REAL_1, NAT_1, INT_2, SEQ_2, SEQM_3, RCOMP_1, RFUNCT_2,
       FCONT_1, LIMFUNC1, FDIFF_1, PREPOWER, SERIES_1, TAYLOR_1, SEQ_1,
       VALUED_1, RECDEF_1, RELSET_1;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0,
-      MEMBERED, SEQM_3, RCOMP_1, VALUED_0, VALUED_1, FUNCT_2, SEQ_2, SEQ_4,
-      FCONT_3;
+      MEMBERED, RCOMP_1, VALUED_0, VALUED_1, FUNCT_2, SEQ_2, SEQ_4, FCONT_3;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
  definitions SUBSET_1, LIMFUNC1;
  theorems XBOOLE_1, ABSVALUE, TARSKI, XBOOLE_0, XREAL_0, XCMPLX_1, RCOMP_1,
@@ -44,77 +43,87 @@ registration
 end;
 
 theorem
-  for p, q be Real st 0 < p & 0 < q for a be Real st 0 <= a holds
-  (a to_power p) * (a to_power q) = a to_power (p+q)
+  for p, q be Real st 0 < p & 0 < q for a be Real st 0 <= a holds (a
+  to_power p) * (a to_power q) = a to_power (p+q)
 proof
   let p, q be Real such that
-A1: 0 < p & 0 < q;
+A1: 0 < p and
+A2: 0 < q;
   let a be Real such that
-A2: 0 <=a;
-A3: 0+ 0 < p+q by A1;
-  now per cases;
+A3: 0 <=a;
+  now
+    per cases;
     case
 A4:   a=0;
-      then (a to_power p) * (a to_power q)
-      = 0 * (0 to_power q) by A1,POWER:def 2
+      then (a to_power p) * (a to_power q) = 0 * (0 to_power q) by A1,
+      POWER:
+      def 2
         .= 0;
-      hence thesis by A3,A4,POWER:def 2;
+      hence thesis by A1,A2,A4,POWER:def 2;
     end;
-    case a <> 0;
-      hence thesis by A2,POWER:32;
+    case
+      a <> 0;
+      hence thesis by A3,POWER:32;
     end;
   end;
   hence thesis;
 end;
 
 theorem
-  for p, q be Real st 0 < p & 0 < q for a be Real st 0 <=a
-  holds (a to_power p) to_power q = a to_power (p*q)
+  for p, q be Real st 0 < p & 0 < q for a be Real st 0 <=a holds (a
+  to_power p) to_power q = a to_power (p*q)
 proof
   let p, q be Real such that
-A1: 0 < p & 0 < q;
+A1: 0 < p and
+A2: 0 < q;
+A3: 0 < p*q by A1,A2,XREAL_1:131;
   let a be Real such that
-A2: 0 <=a;
-A3: 0 < p*q by A1,XREAL_1:131;
-  now per cases;
+A4: 0 <=a;
+  now
+    per cases;
     case
-A4:   a=0;
+A5:   a=0;
       then (a to_power p) to_power q = 0 to_power q by A1,POWER:def 2
-        .= 0 by A1,POWER:def 2;
-      hence thesis by A3,A4,POWER:def 2;
+        .= 0 by A2,POWER:def 2;
+      hence thesis by A3,A5,POWER:def 2;
     end;
-    case a <> 0;
-      hence thesis by A2,POWER:38;
+    case
+      a <> 0;
+      hence thesis by A4,POWER:38;
     end;
   end;
   hence thesis;
 end;
 
 theorem Th3:
-  for p be Real st 0 < p for a,b be Real st 0 <= a & a <= b
-  holds a to_power p <= b to_power p
+  for p be Real st 0 < p for a,b be Real st 0 <= a & a <= b holds a
+  to_power p <= b to_power p
 proof
   let p be Real such that
 A1: 0 < p;
   let a, b be Real such that
-A2: 0 <= a & a<=b;
+A2: 0 <= a and
+A3: a<=b;
   per cases;
-  suppose a=b;
+  suppose
+    a=b;
     hence thesis;
   end;
   suppose
-A3: a<>b;
+A4: a<>b;
     thus a to_power p <= b to_power p
     proof
-A4:   a < b by A2,A3,XXREAL_0:1;
-      now per cases;
+A5:   a < b by A3,A4,XXREAL_0:1;
+      now
+        per cases;
         case
-A5:       a=0;
+A6:       a=0;
           then a to_power p = 0 by A1,POWER:def 2;
-          hence thesis by A2,A3,A5,POWER:39;
+          hence thesis by A3,A4,A6,POWER:39;
         end;
-        case a <> 0;
-          hence thesis by A1,A2,A4,POWER:42;
+        case
+          a <> 0;
+          hence thesis by A1,A2,A5,POWER:42;
         end;
       end;
       hence thesis;
@@ -123,495 +132,480 @@ A5:       a=0;
 end;
 
 theorem Th4:
-  1 < p & 1/p + 1/q = 1 & 0 < a & 0 < b implies
-  (a * b <= a #R p / p + b #R q / q
-  & (a * b = a #R p / p + b #R q / q iff a #R p= b #R q) )
+  1 < p & 1/p + 1/q = 1 & 0 < a & 0 < b implies a * b <= a #R p / p
+  + b #R q / q & (a * b = a #R p / p + b #R q / q iff a #R p= b #R q)
 proof
   assume that
 A1: 1 < p and
 A2: 1/p + 1/q = 1 and
 A3: 0 < a and
 A4: 0 < b;
+A5: 0 < b #R q by A4,PREPOWER:95;
   reconsider pp=1/p as Real;
   1-pp <> 0 by A1,XREAL_1:191;
   then
-A5: (q")" <> 0 by A2;
+A6: (q")" <> 0 by A2;
   then ((1*q+1*p)/(p*q))*(p*q) =1*(p*q) by A1,A2,XCMPLX_1:117;
   then
-A6: q+p=p*q by A1,A5,XCMPLX_1:6,88;
+A7: q+p=p*q by A1,A6,XCMPLX_1:6,88;
   then
-A7: (1-q)*p + q=0;
-A8: (q-1)*p =q by A6;
-A9: ex g be PartFunc of REAL,REAL st dom(g)=REAL &
-  for x be Real holds g.x=1 / q - x &
-  for x be Real holds g is_differentiable_in x & diff(g,x)=-1
-  proof
-    defpred X[set] means $1 in REAL;
-    deffunc U(Real) = 1/q - $1;
-    consider g being PartFunc of REAL,REAL such that
-A10: for d be Element of REAL holds d in dom g iff X[d] and
-A11: for d be Element of REAL
-    st d in dom g holds g/.d = U(d) from PARTFUN2:sch 2;
-    take g;
-A12: dom(g)=[#]REAL
-    proof
-A13:  dom(g) c= REAL by RELAT_1:def 18;
-      for x be set st x in REAL holds x in dom g by A10;
-      then REAL c=dom(g) by TARSKI:def 3;
-      hence thesis by A13,XBOOLE_0:def 10;
-    end;
-A14: for d be Element of REAL holds g.d = 1 / q-d
-    proof
-      let d be Element of REAL;
-      g/.d = 1 / q-d by A11,A12;
-      hence thesis by A12,PARTFUN1:def 8;
-    end;
-A15: for d be Real st d in REAL holds g.d = (-1)*d + 1 / q
-    proof
-      let d be Real such that d in REAL;
-      thus g.d=1 / q-d by A14
-        .= (-1)*d + 1 / q;
-    end;
+A8: (q-1)*p =q;
+A9: 0 < b #R (q-1) by A4,PREPOWER:95;
+A10: now
+    assume
+A11: a #R p= b #R q;
     then
-A16: g is_differentiable_on dom(g) by A12,FDIFF_1:31;
-    for x be Real holds g is_differentiable_in x & diff(g,x)=-1
-    proof
-      let d be Real;
-      thus g is_differentiable_in d by A12,A16,FDIFF_1:16;
-      thus diff(g,d)=(g`|dom(g)).d by A12,A16,FDIFF_1:def 8
-        .= -1 by A12,A15,FDIFF_1:31;
-    end;
-    hence thesis by A12,A14;
+A12: a #R p = (b #R (q-1) ) #R p by A4,A8,PREPOWER:105;
+    a=a #R 1 by A3,PREPOWER:86
+      .=a #R (p *(1/p) ) by A1,XCMPLX_1:107
+      .= (a #R p ) #R (1/p) by A3,PREPOWER:105
+      .= (b #R (q-1) ) #R (p *(1/p)) by A4,A12,PREPOWER:95,105
+      .=(b #R (q-1) ) #R 1 by A1,XCMPLX_1:107
+      .= b #R (q-1) by A4,PREPOWER:86,95;
+    then a*1 = b #R (q-1);
+    then a *( b #R ( (1-q)+ (q-1)) ) = b #R (q-1) by A4,PREPOWER:85;
+    then a *(( b #R (1-q))*( b #R (q-1))) =1*( b #R (q-1)) by A4,
+    PREPOWER:89;
+    then
+A13: a *( b #R (1-q))*( b #R (q-1)) =1*( b #R (q-1));
+    thus a #R p / p + b #R q / q =b #R q *(1/ p) + b #R q / q by A11,
+    XCMPLX_1:100
+      .=b #R q *(1/ p) + b #R q *(1/q) by XCMPLX_1:100
+      .=b #R q * (1/p + 1/q)
+      .=b #R q *(a*(b #R (1-q))) by A2,A9,A13,XCMPLX_1:5
+      .=a* ( (b #R (1-q)) *(b #R q))
+      .=a*(b #R ((1-q) + q)) by A4,PREPOWER:89
+      .=a* b by A4,PREPOWER:86;
   end;
-A17: ex h be PartFunc of REAL,REAL st dom(h)= right_open_halfline(0) &
-  for x be Real st x > 0 holds h.x=x #R p / p &
-  h is_differentiable_in x & diff(h,x)=x #R (p-1)
+A14: 0 < b #R (1-q) by A4,PREPOWER:95;
+  then
+A15: 0*(b #R (1-q)) < a * (b #R (1-q)) by A3,XREAL_1:70;
+  ex h be PartFunc of REAL,REAL st dom(h)= right_open_halfline(0) & for x
+be Real st x > 0 holds h.x=x #R p / p & h is_differentiable_in x & diff(h,x)=x
+  #R (p-1)
   proof
     set h=(1/p)(#)( #R p);
     take h;
     dom( #R p) =right_open_halfline(0) by TAYLOR_1:def 4;
     hence
-A18: dom(h)= right_open_halfline(0) by VALUED_1:def 5;
+A16: dom(h)= right_open_halfline(0) by VALUED_1:def 5;
     now
       let x be Real such that
-A19:  x > 0;
-A20:  x in right_open_halfline(0)
-      proof
-        x in {g where g is Real : 0<g} by A19;
-        hence thesis by XXREAL_1:230;
-      end;
-      hence h.x = (1/p) * ( #R p).x by A18,VALUED_1:def 5
-        .=(1/p) *(x #R p) by A20,TAYLOR_1:def 4
+A17:  x > 0;
+      x in {g where g is Real : 0<g} by A17;
+      then
+A18:  x in right_open_halfline(0) by XXREAL_1:230;
+      hence h.x = (1/p) * ( #R p).x by A16,VALUED_1:def 5
+        .=(1/p) *(x #R p) by A18,TAYLOR_1:def 4
         .=(x #R p) /p by XCMPLX_1:100;
-A21:  ( #R p) is_differentiable_in x by A19,TAYLOR_1:21;
+A19:  ( #R p) is_differentiable_in x by A17,TAYLOR_1:21;
       hence h is_differentiable_in x by FDIFF_1:23;
-      thus diff(h,x) = (1/p)*diff(( #R p),x) by A21,FDIFF_1:23
-        .= (1/p)*(p*(x #R (p-1))) by A19,TAYLOR_1:21
+      thus diff(h,x) = (1/p)*diff(( #R p),x) by A19,FDIFF_1:23
+        .= (1/p)*(p*(x #R (p-1))) by A17,TAYLOR_1:21
         .= (1/p)*p*(x #R (p-1))
         .= 1*x #R (p-1) by A1,XCMPLX_1:107
         .=x #R (p-1);
     end;
     hence thesis;
   end;
-  consider g be PartFunc of REAL,REAL such that
-A22: dom(g)=REAL and
-A23: for x be Real holds g.x=1 / q - x and
-A24: for x be Real holds g is_differentiable_in x & diff(g,x)=-1 by A9;
-  consider h be PartFunc of REAL,REAL such that
-A25: dom(h)= right_open_halfline(0) and
-A26: for x be Real st x > 0 holds h.x=x #R p / p & h is_differentiable_in x
-  & diff(h,x)=x #R (p-1) by A17;
-  set f=h+g;
-A27: dom f= right_open_halfline(0) /\ REAL by A22,A25,VALUED_1:def 1
-    .= right_open_halfline(0) by XBOOLE_1:28;
-A28: for x be Real st x in right_open_halfline(0) holds
-  f.x=x #R p / p + 1 / q - x &
-  f is_differentiable_in x & diff(f,x)=x #R (p-1) -1
+  then consider h be PartFunc of REAL,REAL such that
+A20: dom(h)= right_open_halfline(0) and
+A21: for x be Real st x > 0 holds h.x=x #R p / p & h
+  is_differentiable_in x & diff(h,x)=x #R (p-1);
+  ex g be PartFunc of REAL,REAL st dom(g)=REAL & for x be Real holds g.x=
+  1 / q - x & for x be Real holds g is_differentiable_in x & diff(g,x)=-1
   proof
-    let x be Real such that
-A29: x in right_open_halfline(0);
-    x in {y where y is Real : 0< y} by A29,XXREAL_1:230;
+    deffunc U(Real) = 1/q - $1;
+    defpred X[set] means $1 in REAL;
+    consider g being PartFunc of REAL,REAL such that
+A22: for d be Element of REAL holds d in dom g iff X[d] and
+A23: for d be Element of REAL st d in dom g holds g/.d = U(d) from
+    PARTFUN2:sch 2;
+    take g;
+    for x be set st x in REAL holds x in dom g by A22;
     then
-A30: ex y be Real st x=y & 0 < y;
-A31: g is_differentiable_in x by A24;
-A32: diff(g,x)=-1 by A24;
-A33: h is_differentiable_in x by A26,A30;
-A34: diff(h,x)=x #R (p-1) by A26,A30;
-    thus f.x=h.x + g.x by A27,A29,VALUED_1:def 1
-      .=x #R p / p + g.x by A26,A30
-      .=x #R p / p +(1 / q - x) by A23
-      .=x #R p / p +1 / q - x;
-    thus f is_differentiable_in x by A31,A33,FDIFF_1:21;
-    thus diff(f,x)=diff(h,x)+diff(g,x) by A31,A33,FDIFF_1:21
-      .=x #R (p-1) - 1 by A32,A34;
+A24: dom(g) c= REAL & REAL c=dom(g) by RELAT_1:def 18,TARSKI:def 3;
+    then
+A25: dom(g)=[#]REAL by XBOOLE_0:def 10;
+A26: for d be Element of REAL holds g.d = 1 / q-d
+    proof
+      let d be Element of REAL;
+      g/.d = 1 / q-d by A23,A25;
+      hence thesis by A25,PARTFUN1:def 8;
+    end;
+A27: for d be Real st d in REAL holds g.d = (-1)*d + 1 / q
+    proof
+      let d be Real such that
+      d in REAL;
+      thus g.d=1 / q-d by A26
+        .= (-1)*d + 1 / q;
+    end;
+    then
+A28: g is_differentiable_on dom(g) by A25,FDIFF_1:31;
+    for x be Real holds g is_differentiable_in x & diff(g,x)=-1
+    proof
+      let d be Real;
+      thus g is_differentiable_in d by A25,A28,FDIFF_1:16;
+      thus diff(g,d)=(g`|dom(g)).d by A25,A28,FDIFF_1:def 8
+        .= -1 by A25,A27,FDIFF_1:31;
+    end;
+    hence thesis by A24,A26,XBOOLE_0:def 10;
   end;
-A35: for x be Real st 0 < x & x <> 1 holds x < x #R p / p + 1 / q
+  then consider g be PartFunc of REAL,REAL such that
+A29: dom(g)=REAL and
+A30: for x be Real holds g.x=1 / q - x and
+A31: for x be Real holds g is_differentiable_in x & diff(g,x)=-1;
+  set f=h+g;
+A32: dom f= right_open_halfline(0) /\ REAL by A29,A20,VALUED_1:def 1
+    .= right_open_halfline(0) by XBOOLE_1:28;
+A33: for x be Real st x in right_open_halfline(0) holds f.x=x #R p / p + 1 /
+  q - x & f is_differentiable_in x & diff(f,x)=x #R (p-1) -1
   proof
     let x be Real such that
-A36: 0 < x & x <> 1;
-    x in {y where y is Real : 0< y} by A36;
+A34: x in right_open_halfline(0);
+    x in {y where y is Real : 0< y} by A34,XXREAL_1:230;
     then
-A37: x in right_open_halfline(0) by XXREAL_1:230;
-    for x be Real st x in right_open_halfline(0) holds
-    f is_differentiable_in x by A28;
+A35: ex y be Real st x=y & 0 < y;
     then
-A39: f is_differentiable_on right_open_halfline(0) by A27,FDIFF_1:16;
+A36: diff(h,x)=x #R (p-1) by A21;
+    thus f.x=h.x + g.x by A32,A34,VALUED_1:def 1
+      .=x #R p / p + g.x by A21,A35
+      .=x #R p / p +(1 / q - x) by A30
+      .=x #R p / p +1 / q - x;
+A37: g is_differentiable_in x by A31;
+A38: h is_differentiable_in x by A21,A35;
+    hence f is_differentiable_in x by A37,FDIFF_1:21;
+A39: diff(g,x)=-1 by A31;
+    thus diff(f,x)=diff(h,x)+diff(g,x) by A37,A38,FDIFF_1:21
+      .=x #R (p-1) - 1 by A39,A36;
+  end;
+A40: for x be Real st 0 < x & x <> 1 holds x < x #R p / p + 1 / q
+  proof
     1 in {y where y is Real : 0< y};
     then 1 in right_open_halfline(0) by XXREAL_1:230;
     then
-A40: f.1= 1 #R p / p + 1 / q - 1 by A28
+A41: f.1= 1 #R p / p + 1 / q - 1 by A33
       .=1/p + 1/q -1 by PREPOWER:87
       .=0 by A2;
-    now per cases by A36,XXREAL_0:1;
+    for x be Real st x in right_open_halfline(0) holds f
+    is_differentiable_in x by A33;
+    then
+A42: f is_differentiable_on right_open_halfline(0) by A32,FDIFF_1:16;
+    let x be Real such that
+A43: 0 < x and
+A44: x <> 1;
+    x in {y where y is Real : 0< y} by A43;
+    then
+A45: x in right_open_halfline(0) by XXREAL_1:230;
+    now
+      per cases by A44,XXREAL_0:1;
       case
-A41:    x<1;
+        x<1;
+        then
+A46:    1-1 < 1-x by XREAL_1:17;
         set t=1-x;
-A42:    1-1 < 1-x by A41,XREAL_1:17;
-A43:    [.x,x+t.] c= right_open_halfline(0)
-        proof
-          now
-            let z be set such that
-A44:        z in [.x,x+t.];
-            z in {r where r is Real: x<=r & r<=x+t } by A44,RCOMP_1:def 1;
-            then consider r be Real such that
-A45:        r=z & x<=r & r<=x+t;
-            z in {y where y is Real : 0< y} by A36,A45;
-            hence z in right_open_halfline(0) by XXREAL_1:230;
-          end;
-          hence thesis by TARSKI:def 3;
+A47:    1-1 < p-1 by A1,XREAL_1:16;
+        now
+          let z be set;
+          assume
+          z in [.x,x+t.];
+          then z in {r where r is Real: x<=r & r<=x+t } by RCOMP_1:def 1;
+          then ex r be Real st r=z & x<=r & r<=x+t;
+          then z in {y where y is Real : 0< y} by A43;
+          hence z in right_open_halfline(0) by XXREAL_1:230;
         end;
-A46:    ].x,x+t.[ c= [.x,x+t.] by XXREAL_1:25;
-X:      right_open_halfline(0) c= dom f by A27;
-        f|right_open_halfline(0) is continuous  by A39,FDIFF_1:33;
         then
-A47:    f|[.x,x+t.] is continuous  by A43,FCONT_1:17;
-Y:      [.x,x+t.] c= dom f by X,A43,XBOOLE_1:1;
-        f is_differentiable_on ].x,x+t.[ by A39,A43,A46,FDIFF_1:34,XBOOLE_1:1;
+A48:    [.x,x+t.] c= right_open_halfline(0) by TARSKI:def 3;
+        f|right_open_halfline(0) is continuous by A42,FDIFF_1:33;
+        then
+A49:    f|[.x,x+t.] is continuous by A48,FCONT_1:17;
+        ].x,x+t.[ c= [.x,x+t.] by XXREAL_1:25;
+        then f is_differentiable_on ].x,x+t.[ by A42,A48,FDIFF_1:34 ,
+        XBOOLE_1:1;
         then consider s be Real such that
-A48:    0<s and
-A49:    s<1 and
-A50:    f.(x+t) = f.x + t*diff(f,x+s*t) by A42,A47,Y,ROLLE:4;
-        0*t < s*t by A42,A48,XREAL_1:70;
+A50:    0<s and
+A51:    s<1 and
+A52:    f.(x+t) = f.x + t*diff(f,x+s*t) by A32,A46,A48,A49,ROLLE:
+        4;
+        s*t < 1*t by A46,A51,XREAL_1:70;
+        then x+s*t < x+t by XREAL_1:10;
+        then (x+s*t) to_power (p-1) < (x+s*t) to_power 0 by A43,A46,A50,
+        A47,POWER:45;
+        then (x+s*t) #R (p-1) < (x+s*t) to_power 0 by A43,A46,A50, POWER:
+        def 2;
+        then (x+s*t) #R (p-1) < (x+s*t) #R 0 by A43,A46,A50,POWER:def 2;
+        then (x+s*t) #R (p-1) < 1 by A43,A46,A50,PREPOWER:85;
         then
-A51:    0 + 0 < x+s*t by A36;
-        s*t < 1*t by A42,A49,XREAL_1:70;
-        then
-A52:    x+s*t < x+t by XREAL_1:10;
-        x+s*t in right_open_halfline(0)
-        proof
-          x+s*t in {y where y is Real : 0< y} by A51;
-          hence thesis by XXREAL_1:230;
-        end;
-        then
-A53:    diff(f,x+s*t) =(x+s*t) #R (p-1)-1 by A28;
-        1-1 < p-1 by A1,XREAL_1:16;
-        then (x+s*t) to_power (p-1) < (x+s*t) to_power 0 by A51,A52,POWER:45;
-        then (x+s*t) #R (p-1) < (x+s*t) to_power 0 by A51,POWER:def 2;
-        then (x+s*t) #R (p-1) < (x+s*t) #R 0 by A51,POWER:def 2;
-        then (x+s*t) #R (p-1) < 1 by A51,PREPOWER:85;
-        then (x+s*t) #R (p-1) -1 < 1-1 by XREAL_1:16;
-        then t*diff(f,x+s*t) < t*0 by A42,A53,XREAL_1:70;
+A53:    (x+s*t) #R (p-1) -1 < 1-1 by XREAL_1:16;
+        x+s*t in {y where y is Real : 0< y} by A43,A46,A50;
+        then x+s*t in right_open_halfline(0) by XXREAL_1:230;
+        then diff(f,x+s*t) =(x+s*t) #R (p-1)-1 by A33;
+        then t*diff(f,x+s*t) < t*0 by A46,A53,XREAL_1:70;
         then f.x + t*diff(f,x+s*t) < f.x +0 by XREAL_1:10;
-        then 0 < x #R p / p + 1 / q-x by A28,A37,A40,A50;
+        then 0 < x #R p / p + 1 / q-x by A33,A45,A41,A52;
         then 0+x < x #R p / p + 1 / q-x+x by XREAL_1:10;
         hence thesis;
       end;
       case
-A54:    x > 1;
+        x > 1;
+        then
+A54:    1-1 < x-1 by XREAL_1:16;
         set t=x-1;
-A55:    1-1 < x-1 by A54,XREAL_1:16;
-A56:    [.1,1+t.] c= right_open_halfline(0)
-        proof
-          now
-            let z be set such that
-A57:        z in [.1,1+t.];
-            z in {r where r is Real: 1<=r & r<=1+t } by A57,RCOMP_1:def 1;
-            then consider r be Real such that
-A58:        r=z & 1<=r & r<=1+t;
-            z in {y where y is Real : 0< y} by A58;
-            hence z in right_open_halfline(0) by XXREAL_1:230;
-          end;
-          hence thesis by TARSKI:def 3;
+        now
+          let z be set;
+          assume
+          z in [.1,1+t.];
+          then z in {r where r is Real: 1<=r & r<=1+t } by RCOMP_1:def 1;
+          then ex r be Real st r=z & 1<=r & r<=1+t;
+          then z in {y where y is Real : 0< y};
+          hence z in right_open_halfline(0) by XXREAL_1:230;
         end;
-A59:    ].1,1+t.[ c= [.1,1+t.] by XXREAL_1:25;
-X:      right_open_halfline(0) c= dom f by A27;
-        f|right_open_halfline(0) is continuous  by A39,FDIFF_1:33;
         then
-A60:    f|[.1,1+t.] is continuous  by A56,FCONT_1:17;
-Y:      [.1,1+t.] c= dom f by X,A56,XBOOLE_1:1;
-        f is_differentiable_on ].1,1+t.[ by A39,A56,A59,FDIFF_1:34,XBOOLE_1:1;
+A55:    [.1,1+t.] c= right_open_halfline(0) by TARSKI:def 3;
+A56:    1-1 < p-1 by A1,XREAL_1:16;
+        f|right_open_halfline(0) is continuous by A42,FDIFF_1:33;
+        then
+A57:    f|[.1,1+t.] is continuous by A55,FCONT_1:17;
+        ].1,1+t.[ c= [.1,1+t.] by XXREAL_1:25;
+        then f is_differentiable_on ].1,1+t.[ by A42,A55,FDIFF_1:34 ,
+        XBOOLE_1:1;
         then consider s be Real such that
-A61:    0<s and s<1 and
-A62:    f.(1+t) = f.1 + t*diff(f,1+s*t) by A55,A60,Y,ROLLE:4;
-A63:    0*t < s*t by A55,A61,XREAL_1:70;
+A58:    0<s and
+        s<1 and
+A59:    f.(1+t) = f.1 + t*diff(f,1+s*t) by A32,A54,A55,A57,ROLLE:
+        4;
+        0*t < s*t by A54,A58,XREAL_1:70;
+        then 1+ 0 < 1+ s*t by XREAL_1:10;
+        then 1 < (1+s*t) #R (p-1) by A56,PREPOWER:100;
         then
-A64:    0 + 0 < 1+s*t;
-A65:    1+s*t in right_open_halfline(0)
-        proof
-          1+s*t in {y where y is Real : 0< y} by A64;
-          hence thesis by XXREAL_1:230;
-        end;
-A66:    1+ 0 < 1+ s*t by A63,XREAL_1:10;
-A67:    diff(f,1+s*t) =(1+s*t) #R (p-1)-1 by A28,A65;
-        1-1 < p-1 by A1,XREAL_1:16;
-        then 1 < (1+s*t) #R (p-1) by A66,PREPOWER:100;
-        then 1-1 < (1+s*t) #R (p-1) -1 by XREAL_1:16;
-        then t*0 < t*diff(f,1+s*t) by A55,A67,XREAL_1:70;
-        then 0 < x #R p / p + 1 / q-x by A28,A37,A40,A62;
+A60:    1-1 < (1+s*t) #R (p-1) -1 by XREAL_1:16;
+        1+s*t in {y where y is Real : 0< y} by A54,A58;
+        then 1+s*t in right_open_halfline(0) by XXREAL_1:230;
+        then diff(f,1+s*t) =(1+s*t) #R (p-1)-1 by A33;
+        then t*0 < t*diff(f,1+s*t) by A54,A60,XREAL_1:70;
+        then 0 < x #R p / p + 1 / q-x by A33,A45,A41,A59;
         then 0+x < x #R p / p + 1 / q-x+x by XREAL_1:10;
         hence thesis;
       end;
     end;
     hence thesis;
   end;
-A68: 0 < b #R (1-q) by A4,PREPOWER:95;
-  then
-A69: 0*(b #R (1-q)) < a * (b #R (1-q)) by A3,XREAL_1:70;
-A70: 0 < b #R q by A4,PREPOWER:95;
+A61: (1-q)*p + q=0 by A7;
+A62: now
+    assume
+    a * b = a #R p / p + b #R q / q;
+    then a*b = a #R p /p+ (1 / q)*(b #R q) by XCMPLX_1:100;
+    then a*b = a #R p * (1/p)+ (1 / q)*(b #R q) by XCMPLX_1:100;
+    then a*b = a #R p * (b #R 0/p)+ (1 / q)*(b #R q) by A4,PREPOWER:85;
+    then a*b = a #R p * ((b #R ((1-q)*p) )*(b #R q)/p)+ (1 / q)*(b #R q) by
+    A4,A61,PREPOWER:89;
+    then a*b = a #R p * ((b #R ((1-q)*p) )/ p*(b #R q))+ (1 / q)*(b #R q) by
+    XCMPLX_1:75;
+    then a*b = (a #R p * ((b #R ((1-q)*p) )/ p )*(b #R q))+ (1 / q)*(b #R q);
+    then a*b = (a #R p * (b #R ((1-q)*p) )/ p )*(b #R q)+ (1 / q)*(b #R q) by
+    XCMPLX_1:75;
+    then a*b = (a #R p * (b #R ((1-q)*p) )/ p + 1 / q)*(b #R q);
+    then
+a*b = ((a #R p * (b #R (1-q)) #R p )/ p + 1 / q)*(b #R q) by A4,PREPOWER:105;
+    then
+    a*b = ((a * (b #R (1-q))) #R p / p + 1 / q)*(b #R q) by A3,A14,PREPOWER:92;
+    then a*(b #R ((1-q) + q)) = ((a * (b #R (1-q))) #R p / p + 1 / q)*(b #R q
+    ) by A4,PREPOWER:86;
+    then a*( (b #R (1-q)) *(b #R q)) = ((a * (b #R (1-q))) #R p / p + 1 / q)*
+    (b #R q) by A4,PREPOWER:89;
+    then a * (b #R (1-q)) *(b #R q) = ((a * (b #R (1-q))) #R p / p + 1 / q)*(
+    b #R q);
+    then
+A63: a * (b #R (1-q)) = (a * (b #R (1-q))) #R p / p + 1 / q by A5,
+    XCMPLX_1:5;
+    a *(( b #R (1-q))*( b #R (q-1))) = a *( b #R (1-q))*( b #R (q-1))
+      .= 1*( b #R (q-1)) by A40,A15,A63;
+    then a *( b #R ( (1-q)+ (q-1)) ) = b #R (q-1) by A4,PREPOWER:89;
+    then a*1 = b #R (q-1) by A4,PREPOWER:85;
+    hence a #R p = b #R q by A4,A8,PREPOWER:105;
+  end;
   a * (b #R (1-q)) <= (a * (b #R (1-q))) #R p / p + 1 / q
   proof
-    now per cases;
-      case a * (b #R (1-q)) =1;
+    now
+      per cases;
+      case
+        a * (b #R (1-q)) =1;
         hence a * (b #R (1-q)) =(a * (b #R (1-q))) #R p / p + 1 / q by A2,
-PREPOWER:87;
+        PREPOWER:87;
       end;
-      case a * (b #R (1-q)) <>1;
-        hence thesis
-        by A35,A69;
+      case
+        a * (b #R (1-q)) <>1;
+        hence thesis by A40,A15;
       end;
     end;
     hence thesis;
   end;
-  then a * (b #R (1-q)) *(b #R q)
-  <= ((a * (b #R (1-q))) #R p / p + 1 / q)*(b #R q) by A70,XREAL_1:66;
-  then a*( (b #R (1-q)) *(b #R q))
-  <= ((a * (b #R (1-q))) #R p / p + 1 / q)*(b #R q);
-  then a*(b #R ((1-q) + q))
-  <= ((a * (b #R (1-q))) #R p / p + 1 / q)*(b #R q) by A4,PREPOWER:89;
-  then a*b <= ((a * (b #R (1-q))) #R p / p + 1 / q)*(b #R q)
-  by A4,PREPOWER:86;
-  then a*b <= ((a #R p * (b #R (1-q)) #R p )/ p + 1 / q)*(b #R q)
-  by A3,A68,PREPOWER:92;
-  then a*b
-  <= (a #R p * (b #R ((1-q)*p) )/ p + 1 / q)*(b #R q) by A4,PREPOWER:105;
+  then a * (b #R (1-q)) *(b #R q) <= ((a * (b #R (1-q))) #R p / p + 1 / q)*(b
+  #R q) by A5,XREAL_1:66;
+  then a*( (b #R (1-q)) *(b #R q)) <= ((a * (b #R (1-q))) #R p / p + 1 / q)*(
+  b #R q);
+  then a*(b #R ((1-q) + q)) <= ((a * (b #R (1-q))) #R p / p + 1 / q)*(b #R q)
+  by A4,PREPOWER:89;
+  then a*b <= ((a * (b #R (1-q))) #R p / p + 1 / q)*(b #R q) by A4,
+  PREPOWER:86;
+  then a*b <= ((a #R p * (b #R (1-q)) #R p )/ p + 1 / q)*(b #R q) by A3,A14,
+  PREPOWER:92;
+  then a*b <= (a #R p * (b #R ((1-q)*p) )/ p + 1 / q)*(b #R q) by A4,
+  PREPOWER:105;
   then a*b <= (a #R p * (b #R ((1-q)*p) )/ p )*(b #R q)+ (1 / q)*(b #R q);
   then a*b <= (a #R p * ((b #R ((1-q)*p) )/ p )*(b #R q))+ (1 / q)*(b #R q)
   by XCMPLX_1:75;
   then a*b <= a #R p * ((b #R ((1-q)*p) )/ p*(b #R q))+ (1 / q)*(b #R q);
-  then a*b <= a #R p * ((b #R ((1-q)*p) )*(b #R q)/p)+ (1 / q)*(b #R q)
-  by XCMPLX_1:75;
-  then a*b <= a #R p * (b #R ((1-q)*p + q)/p)+ (1 / q)*(b #R q)
-  by A4,PREPOWER:89;
-  then a*b <= a #R p * (1/p)+ (1 / q)*(b #R q) by A4,A6,PREPOWER:85;
-  then
-A71: a*b <= a #R p /p+ (1 / q)*(b #R q) by XCMPLX_1:100;
-  a * b = a #R p / p + b #R q / q iff a #R p= b #R q
-  proof
-A72: now
-      assume a * b = a #R p / p + b #R q / q;
-      then a*b = a #R p /p+ (1 / q)*(b #R q) by XCMPLX_1:100;
-      then a*b = a #R p * (1/p)+ (1 / q)*(b #R q) by XCMPLX_1:100;
-      then a*b = a #R p * (b #R 0/p)+ (1 / q)*(b #R q) by A4,PREPOWER:85;
-      then a*b = a #R p * ((b #R ((1-q)*p) )*(b #R q)/p)+ (1 / q)*(b #R q)
-      by A4,A7,PREPOWER:89;
-      then a*b = a #R p * ((b #R ((1-q)*p) )/ p*(b #R q))+ (1 / q)*(b #R q)
-      by XCMPLX_1:75;
-      then a*b = (a #R p * ((b #R ((1-q)*p) )/ p )*(b #R q))+ (1 / q)*(b #R q);
-      then a*b = (a #R p * (b #R ((1-q)*p) )/ p )*(b #R q)+ (1 / q)*(b #R q)
-      by XCMPLX_1:75;
-      then a*b = (a #R p * (b #R ((1-q)*p) )/ p + 1 / q)*(b #R q);
-      then a*b = ((a #R p * (b #R (1-q)) #R p )/ p + 1 / q)*(b #R q)
-      by A4,PREPOWER:105;
-      then a*b = ((a * (b #R (1-q))) #R p / p + 1 / q)*(b #R q)
-      by A3,A68,PREPOWER:92;
-      then a*(b #R ((1-q) + q))
-      = ((a * (b #R (1-q))) #R p / p + 1 / q)*(b #R q) by A4,PREPOWER:86;
-      then a*( (b #R (1-q)) *(b #R q))
-      = ((a * (b #R (1-q))) #R p / p + 1 / q)*(b #R q) by A4,PREPOWER:89;
-      then a * (b #R (1-q)) *(b #R q)
-      = ((a * (b #R (1-q))) #R p / p + 1 / q)*(b #R q);
-      then
-A73:  a * (b #R (1-q)) = (a * (b #R (1-q))) #R p / p + 1 / q
-      by A70,XCMPLX_1:5;
-      a *(( b #R (1-q))*( b #R (q-1))) = a *( b #R (1-q))*( b #R (q-1))
-        .= 1*( b #R (q-1)) by A35,A69,A73;
-      then a *( b #R ( (1-q)+ (q-1)) ) = b #R (q-1) by A4,PREPOWER:89;
-      then a*1 = b #R (q-1) by A4,PREPOWER:85;
-      hence a #R p = b #R q by A4,A8,PREPOWER:105;
-    end;
-A74: 0 < b #R (q-1) by A4,PREPOWER:95;
-    now
-      assume
-A75:  a #R p= b #R q;
-      then
-A76:  a #R p = (b #R (q-1) ) #R p by A4,A8,PREPOWER:105;
-      a=a #R 1 by A3,PREPOWER:86
-        .=a #R (p *(1/p) ) by A1,XCMPLX_1:107
-        .= (a #R p ) #R (1/p) by A3,PREPOWER:105
-        .= (b #R (q-1) ) #R (p *(1/p)) by A4,A76,PREPOWER:95,105
-        .=(b #R (q-1) ) #R 1 by A1,XCMPLX_1:107
-        .= b #R (q-1) by A4,PREPOWER:86,95;
-      then a*1 = b #R (q-1);
-      then a *( b #R ( (1-q)+ (q-1)) ) = b #R (q-1) by A4,PREPOWER:85;
-      then a *(( b #R (1-q))*( b #R (q-1))) =1*( b #R (q-1)) by A4,PREPOWER:89;
-      then
-A77:  a *( b #R (1-q))*( b #R (q-1)) =1*( b #R (q-1));
-      thus a #R p / p + b #R q / q =b #R q *(1/ p) + b #R q / q by A75,
-XCMPLX_1:100
-        .=b #R q *(1/ p) + b #R q *(1/q) by XCMPLX_1:100
-        .=b #R q * (1/p + 1/q)
-        .=b #R q *(a*(b #R (1-q))) by A2,A74,A77,XCMPLX_1:5
-        .=a* ( (b #R (1-q)) *(b #R q))
-        .=a*(b #R ((1-q) + q)) by A4,PREPOWER:89
-        .=a* b by A4,PREPOWER:86;
-    end;
-    hence thesis by A72;
-  end;
-  hence thesis by A71,XCMPLX_1:100;
+  then a*b <= a #R p * ((b #R ((1-q)*p) )*(b #R q)/p)+ (1 / q)*(b #R q) by
+  XCMPLX_1:75;
+  then a*b <= a #R p * (b #R ((1-q)*p + q)/p)+ (1 / q)*(b #R q) by A4,
+  PREPOWER:89;
+  then a*b <= a #R p * (1/p)+ (1 / q)*(b #R q) by A4,A7,PREPOWER:85;
+  then a*b <= a #R p /p+ (1 / q)*(b #R q) by XCMPLX_1:100;
+  hence thesis by A62,A10,XCMPLX_1:100;
 end;
 
 theorem Th5:
-  1 < p & 1/p + 1/q = 1 & 0 <= a & 0 <= b implies
-  (a * b <= a to_power p / p + b to_power q / q
-  & (a * b = a to_power p / p + b to_power q / q
-  iff a to_power p = b to_power q))
+  1 < p & 1/p + 1/q = 1 & 0 <= a & 0 <= b implies a * b <= a
+to_power p / p + b to_power q / q & (a * b = a to_power p / p + b to_power q /
+  q iff a to_power p = b to_power q)
 proof
   assume that
 A1: 1 < p and
 A2: 1/p + 1/q = 1 and
 A3: 0 <= a and
 A4: 0 <= b;
-  reconsider pp=1/p as Real;
-  1/p < 1 by A1,XREAL_1:191;
-  then
-A5: 1-1 < 1-pp by XREAL_1:17;
-  then
-A6: 0 < q by A2;
-A7: 0 <= a to_power p / p
+A5: 0 <= a to_power p / p
   proof
-    now per cases by A3;
-      case 0 < a;
+    now
+      per cases by A3;
+      case
+        0 < a;
         then 0 < a to_power p by POWER:39;
-        then 0/p < a to_power p/p by A1,XREAL_1:76;
-        hence thesis;
+        hence thesis by A1;
       end;
-      case 0 = a;
+      case
+        0 = a;
         then 0 = a to_power p by A1,POWER:def 2;
         hence thesis;
       end;
     end;
     hence thesis;
   end;
-  0 <= b to_power q / q
+  reconsider pp=1/p as Real;
+  1/p < 1 by A1,XREAL_1:191;
+  then
+A6: 1-1 < 1-pp by XREAL_1:17;
+  then
+A7: 0 < q by A2;
+A8: 0 <= b to_power q / q
   proof
-    now per cases by A4;
-      case 0 < b;
+    now
+      per cases by A4;
+      case
+        0 < b;
         then 0 < b to_power q by POWER:39;
-        then 0/q < b to_power q/q by A6,XREAL_1:76;
-        hence thesis;
+        hence thesis by A7;
       end;
-      case 0 = b;
-        then 0 = b to_power q by A6,POWER:def 2;
+      case
+        0 = b;
+        then 0 = b to_power q by A7,POWER:def 2;
         hence thesis;
       end;
     end;
     hence thesis;
   end;
-  then
-A8: 0+0 <=a to_power p / p +b to_power q / q by A7;
-  now per cases;
+  now
+    per cases;
     case
 A9:   a*b=0;
-      a * b = a to_power p / p + b to_power q / q
-      iff a to_power p = b to_power q
-      proof
-        now per cases by A9,XCMPLX_1:6;
-          case
-A10:        a=0;
-            thus a * b = a to_power p / p + b to_power q / q
-            iff a to_power p = b to_power q
+      now
+        per cases by A9,XCMPLX_1:6;
+        case
+A10:      a=0;
+A11:      now
+            assume
+            a * b = a to_power p / p + b to_power q / q;
+            then 0 = 0/p + b to_power q / q by A1,A10,POWER:def 2;
+            then 0*q = (b to_power q /q)*q;
+            then 0 = b to_power q by A7,XCMPLX_1:88;
+            then
+A12:        0 = (b to_power q ) to_power (1/q) by A2,A6,POWER:def 2;
+A13:        0=b
             proof
-A11:          now
-                assume a * b = a to_power p / p + b to_power q / q;
-                then 0 = 0/p + b to_power q / q by A1,A10,POWER:def 2;
-                then 0*q = (b to_power q /q)*q;
-                then 0 = b to_power q by A6,XCMPLX_1:88;
-                then
-A12:            0 = (b to_power q ) to_power (1/q) by A2,A5,POWER:def 2;
-A13:            0=b
-                proof
-                  assume
-A14:              b <> 0;
-                  then 0 = b to_power (q * (1/q) ) by A4,A12,POWER:38;
-                  then 0 = b to_power 1 by A6,XCMPLX_1:107;
-                  hence contradiction by A14,POWER:30;
-                end;
-                thus a to_power p = 0 by A1,A10,POWER:def 2
-                  .= b to_power q by A6,A13,POWER:def 2;
-              end;
-              now
-                assume
-A15:            a to_power p = b to_power q;
-A16:            a to_power p /p = 0/p by A1,A10,POWER:def 2
-                  .=0;
-                b to_power q /q =0 /q by A1,A10,A15,POWER:def 2
-                  .=0;
-                hence a*b=a to_power p /p + b to_power q /q by A9,A16;
-              end;
-              hence thesis by A11;
+              assume
+A14:          b <> 0;
+              then 0 = b to_power (q * (1/q) ) by A4,A12,POWER:38;
+              then 0 = b to_power 1 by A7,XCMPLX_1:107;
+              hence contradiction by A14,POWER:30;
             end;
+            thus a to_power p = 0 by A1,A10,POWER:def 2
+              .= b to_power q by A7,A13,POWER:def 2;
           end;
-          case
-A17:        b=0;
-            thus a * b = a to_power p / p + b to_power q / q
-            iff a to_power p = b to_power q
-            proof
-A18:          1/p > 0 by A1,XREAL_1:141;
-A19:          now
-                assume a * b = a to_power p / p + b to_power q / q;
-                then 0 = 0/q + a to_power p / p by A6,A17,POWER:def 2;
-                then 0*p = (a to_power p/p)*p;
-                then 0 = a to_power p by A1,XCMPLX_1:88;
-                then
-A20:            0 = (a to_power p ) to_power (1/p) by A18,POWER:def 2;
-A21:            0=a
-                proof
-                  assume
-A22:              a <> 0;
-                  then 0 = a to_power (p * (1/p) ) by A3,A20,POWER:38;
-                  then 0 = a to_power 1 by A1,XCMPLX_1:107;
-                  hence contradiction by A22,POWER:30;
-                end;
-                thus b to_power q = 0 by A6,A17,POWER:def 2
-                  .= a to_power p by A1,A21,POWER:def 2;
-              end;
-              now
-                assume
-A23:            a to_power p = b to_power q;
-A24:            b to_power q /q = 0/q by A6,A17,POWER:def 2
-                  .= 0;
-                a to_power p /p =0 /p by A6,A17,A23,POWER:def 2
-                  .=0;
-                hence a*b=a to_power p /p + b to_power q /q by A9,A24;
-              end;
-              hence thesis by A19;
-            end;
+          now
+            assume
+            a to_power p = b to_power q;
+            then
+A15:        b to_power q /q =0 /q by A1,A10,POWER:def 2
+              .=0;
+            a to_power p /p = 0/p by A1,A10,POWER:def 2
+              .=0;
+            hence a*b=a to_power p /p + b to_power q /q by A9,A15;
           end;
+          hence a * b = a to_power p / p + b to_power q / q iff a to_power p =
+          b to_power q by A11;
         end;
-        hence thesis;
+        case
+A16:      b=0;
+A17:      1/p > 0 by A1,XREAL_1:141;
+A18:      now
+            assume
+            a * b = a to_power p / p + b to_power q / q;
+            then 0 = 0/q + a to_power p / p by A7,A16,POWER:def 2;
+            then 0*p = (a to_power p/p)*p;
+            then 0 = a to_power p by A1,XCMPLX_1:88;
+            then
+A19:        0 = (a to_power p ) to_power (1/p) by A17, POWER:def 2;
+A20:        0=a
+            proof
+              assume
+A21:          a <> 0;
+              then 0 = a to_power (p * (1/p) ) by A3,A19,POWER:38;
+              then 0 = a to_power 1 by A1,XCMPLX_1:107;
+              hence contradiction by A21,POWER:30;
+            end;
+            thus b to_power q = 0 by A7,A16,POWER:def 2
+              .= a to_power p by A1,A20,POWER:def 2;
+          end;
+          now
+            assume
+            a to_power p = b to_power q;
+            then
+A22:        a to_power p /p =0 /p by A7,A16,POWER:def 2
+              .=0;
+            b to_power q /q = 0/q by A7,A16,POWER:def 2
+              .= 0;
+            hence a*b=a to_power p /p + b to_power q /q by A9,A22;
+          end;
+          hence a * b = a to_power p / p + b to_power q / q iff a to_power p =
+          b to_power q by A18;
+        end;
       end;
-      hence thesis by A8,A9;
+      hence thesis by A5,A8;
     end;
-    case a*b<>0;
+    case
+A23:  a*b<>0;
       then
-A25:  a <> 0 & b <> 0;
-      then a * b <= a #R p / p + b #R q / q by A1,A2,A3,A4,Th4;
+A24:  a <> 0;
+A25:  b <> 0 by A23;
       then
-A26:  a * b <= a to_power p / p + b #R q / q by A3,A25,POWER:def 2;
-      a * b = a #R p / p + b #R q / q
-      iff a #R p = b #R q by A1,A2,A3,A4,A25,Th4;
-      then a * b = a to_power p / p + b #R q / q
-      iff a to_power p = b #R q by A3,A25,POWER:def 2;
+      a * b = a #R p / p + b #R q / q iff a #R p = b #R q by A1,A2,A3,A4,
+      A24,Th4;
+      then
+A26:  a * b = a to_power p / p + b #R q / q iff a to_power p = b #R q by
+      A3,A24,POWER:def 2;
+      a * b <= a #R p / p + b #R q / q by A1,A2,A3,A4,A24,A25,Th4;
+      then a * b <= a to_power p / p + b #R q / q by A3,A24,POWER:def 2;
       hence thesis by A4,A25,A26,POWER:def 2;
     end;
   end;
@@ -620,27 +614,33 @@ end;
 
 Lm1: for a be Real_Sequence st for n be Element of NAT holds 0 <= a.n holds
 for n be Element of NAT holds a.n <= Partial_Sums(a).n
+
 proof
   let a be Real_Sequence such that
 A1: for n be Element of NAT holds 0 <= a.n;
   defpred P[Element of NAT] means a.$1 <=Partial_Sums(a).$1;
-A2: P[0] by SERIES_1:def 1;
-A3: for n be Element of NAT st P[n] holds P[n+1]
+A2: for n be Element of NAT st P[n] holds P[n+1]
   proof
-    let n be Element of NAT such that
-A4: P[n];
-A5: Partial_Sums(a).(n+1) = Partial_Sums(a).n + a.(n+1) by SERIES_1:def 1;
-A6: a.n + a.(n+1) <= Partial_Sums(a).n + a.(n+1) by A4,XREAL_1:8;
+    let n be Element of NAT;
+    assume
+    P[n];
+
+    then
+A3: Partial_Sums(a).(n+1) = Partial_Sums(a).n + a.(n+1) & a.n + a.(n+1) <=
+    Partial_Sums(a).n + a.(n+1) by SERIES_1:def 1,XREAL_1:8;
+
     0 <= a.n by A1;
     then 0 + a.(n+1) <= a.n + a.(n+1) by XREAL_1:8;
-    hence thesis by A5,A6,XXREAL_0:2;
+    hence thesis by A3,XXREAL_0:2;
   end;
-  for n be Element of NAT holds P[n] from NAT_1:sch 1(A2,A3);
+A4: P[0] by SERIES_1:def 1;
+  for n be Element of NAT holds P[n] from NAT_1:sch 1(A4,A2);
   hence thesis;
 end;
 
 Lm2: for a be Real_Sequence st for n be Element of NAT holds 0 <= a.n holds
 for n be Element of NAT holds 0 <= Partial_Sums(a).n
+
 proof
   let a be Real_Sequence such that
 A1: for n be Element of NAT holds 0 <= a.n;
@@ -649,18 +649,20 @@ A1: for n be Element of NAT holds 0 <= a.n;
   hence thesis by A1;
 end;
 
-Lm3: for a be Real_Sequence st for n be Element of NAT holds 0 <= a.n
-for n be Element of NAT st Partial_Sums(a).n=0
-holds for k be Element of NAT st k <= n holds a.k=0
+Lm3: for a be Real_Sequence st for n be Element of NAT holds 0 <= a.n for n be
+Element of NAT st Partial_Sums(a).n=0 holds for k be Element of NAT st k <= n
+holds a.k=0
+
 proof
   let a be Real_Sequence such that
 A1: for n be Element of NAT holds 0 <= a.n;
   let n be Element of NAT such that
 A2: Partial_Sums(a).n=0;
   now
-    let k be Element of NAT such that
-A3: k <=n;
-    Partial_Sums(a) is non-decreasing by A1,SERIES_1:19;
+A3: Partial_Sums(a) is non-decreasing by A1,SERIES_1:19;
+    let k be Element of NAT;
+    assume
+    k <=n;
     then
 A4: Partial_Sums(a).k <= Partial_Sums(a).n by A3,SEQM_3:12;
     a.k <=Partial_Sums(a).k by A1,Lm1;
@@ -669,179 +671,201 @@ A4: Partial_Sums(a).k <= Partial_Sums(a).n by A3,SEQM_3:12;
   hence thesis;
 end;
 
-Lm4: for a be Real_Sequence
-for n be Element of NAT st (for k be Element of NAT st k <=n holds a.k=0)
-holds Partial_Sums(a).n=0
+Lm4: for a be Real_Sequence for n be Element of NAT st (for k be Element of
+NAT st k <=n holds a.k=0) holds Partial_Sums(a).n=0
+
 proof
   let a be Real_Sequence;
 
-defpred P[Element of NAT] means (for k be Element of NAT st k <=$1 holds a.k=0)
-  implies Partial_Sums(a).$1=0;
-A1: P[0]
-  proof
-    assume for k be Element of NAT st k <=0 holds a.k=0;
-    then a.0=0;
-    hence thesis by SERIES_1:def 1;
-  end;
-A2: for n be Element of NAT st P[n] holds P[n+1]
+  defpred P[Element of NAT] means (for k be Element of NAT st k <=$1 holds a.k
+  =0) implies Partial_Sums(a).$1=0;
+
+A1: for n be Element of NAT st P[n] holds P[n+1]
   proof
     let n be Element of NAT such that
-A3: P[n];
+A2: P[n];
     now
       assume
-A4:   for k be Element of NAT st k <=n+1 holds a.k=0;
-A5:   now
-        let k be Element of NAT such that
-A6:     k <= n;
-        n <= n+1 by NAT_1:11;
-        hence a.k=0 by A4,A6,XXREAL_0:2;
+A3:   for k be Element of NAT st k <=n+1 holds a.k=0;
+A4:   now
+A5:     n <= n+1 by NAT_1:11;
+        let k be Element of NAT;
+        assume
+        k <= n;
+        hence a.k=0 by A3,A5,XXREAL_0:2;
       end;
       thus Partial_Sums(a).(n+1) =Partial_Sums(a).n+a.(n+1) by SERIES_1:def 1
-        .=0 by A3,A4,A5;
+        .=0 by A2,A3,A4;
     end;
     hence thesis;
   end;
-  thus for n be Element of NAT holds P[n] from NAT_1:sch 1 (A1,A2);
+A6: P[0]
+  proof
+    assume
+    for k be Element of NAT st k <=0 holds a.k=0;
+    then a.0=0;
+    hence thesis by SERIES_1:def 1;
+  end;
+  thus for n be Element of NAT holds P[n] from NAT_1:sch 1 (A6,A1);
 end;
 
 begin  :: Minkowski's inequality
 
 theorem Th6:
-  for p, q be Real st 1 < p & 1/p + 1/q = 1
-  for a,b,ap,bq,ab be Real_Sequence st ( for n be Element of NAT holds
-  ap.n=abs(a.n) to_power p & bq.n=abs(b.n) to_power q
-  & ab.n=abs(a.n* b.n)) holds for n be Element of NAT holds
-  Partial_Sums(ab).n <= ( (Partial_Sums(ap).n) to_power (1/p) )
-  * ( (Partial_Sums(bq).n) to_power (1/q) )
+  for p, q be Real st 1 < p & 1/p + 1/q = 1 for a,b,ap,bq,ab be
+Real_Sequence st ( for n be Element of NAT holds ap.n=abs(a.n) to_power p & bq.
+n=abs(b.n) to_power q & ab.n=abs(a.n* b.n)) holds for n be Element of NAT holds
+Partial_Sums(ab).n <= ( (Partial_Sums(ap).n) to_power (1/p) ) * ( (Partial_Sums
+  (bq).n) to_power (1/q) )
 proof
   let p,q be Real such that
 A1: 1 < p and
 A2: 1/p + 1/q = 1;
   reconsider pp=1/p as Real;
+  let a,b,ap,bq,ab be Real_Sequence such that
+A3: for n be Element of NAT holds ap.n=abs(a.n) to_power p & bq.n=abs(b.
+  n) to_power q & ab.n=abs(a.n* b.n);
+  let n be Element of NAT;
+  set B=Partial_Sums(bq).n;
   1/p < 1 by A1,XREAL_1:191;
   then
-A3: 1-1 < 1-pp by XREAL_1:17;
+A4: 1-1 < 1-pp by XREAL_1:17;
   then
-A4: 0 < q by A2;
-A5: 1/p > 0 by A1,XREAL_1:141;
-  let a,b,ap,bq,ab be Real_Sequence such that
-A6: for n be Element of NAT holds ap.n=abs(a.n) to_power p
-  & bq.n=abs(b.n) to_power q & ab.n=abs(a.n* b.n);
-  let n be Element of NAT;
-  set A=Partial_Sums(ap).n;
-  set B=Partial_Sums(bq).n;
-  set Ap=A to_power (1/p);
-  set Bq=B to_power (1/q);
-A7: for n be Element of NAT holds 0 <= ap.n
+A5: 0 < q by A2;
+A6: for n be Element of NAT holds 0 <= bq.n
   proof
     let n be Element of NAT;
-A8: ap.n=abs(a.n) to_power p by A6;
-    now per cases by COMPLEX1:132;
-      case abs(a.n) = 0;
-        hence thesis by A1,A8,POWER:def 2;
+A7: bq.n=abs(b.n) to_power q by A3;
+    now
+      per cases by COMPLEX1:132;
+      case
+        abs(b.n) = 0;
+        hence thesis by A5,A7,POWER:def 2;
       end;
-      case abs(a.n) > 0;
-        hence thesis by A8,POWER:39;
+      case
+        abs(b.n) > 0;
+        hence thesis by A7,POWER:39;
       end;
     end;
     hence thesis;
   end;
-A9: for n be Element of NAT holds 0 <= bq.n
+  then
+A8: 0 <= B by Lm2;
+  set A=Partial_Sums(ap).n;
+A9: for n be Element of NAT holds 0 <= ap.n
   proof
     let n be Element of NAT;
-A10: bq.n=abs(b.n) to_power q by A6;
-    now per cases by COMPLEX1:132;
-      case abs(b.n) = 0;
-        hence thesis by A4,A10,POWER:def 2;
+A10: ap.n=abs(a.n) to_power p by A3;
+    now
+      per cases by COMPLEX1:132;
+      case
+        abs(a.n) = 0;
+        hence thesis by A1,A10,POWER:def 2;
       end;
-      case abs(b.n) > 0;
+      case
+        abs(a.n) > 0;
         hence thesis by A10,POWER:39;
       end;
     end;
     hence thesis;
   end;
-A11: 0 <= A by A7,Lm2;
-A12: 0 <= B by A9,Lm2;
-  now per cases;
+  then
+A11: 0 <= A by Lm2;
+  set Bq=B to_power (1/q);
+  set Ap=A to_power (1/p);
+A12: 1/p > 0 by A1,XREAL_1:141;
+  now
+    per cases;
     case
 A13:  A*B = 0;
 A14:  0 <= Ap
       proof
-        now per cases by A7,Lm2;
-          case 0 < A;
+        now
+          per cases by A9,Lm2;
+          case
+            0 < A;
             hence thesis by POWER:39;
           end;
-          case 0 = A;
-            hence thesis by A5,POWER:def 2;
+          case
+            0 = A;
+            hence thesis by A12,POWER:def 2;
           end;
         end;
         hence thesis;
       end;
       0 <= Bq
       proof
-        now per cases by A9,Lm2;
-          case 0 < B;
+        now
+          per cases by A6,Lm2;
+          case
+            0 < B;
             hence thesis by POWER:39;
           end;
-          case 0 = B;
-            hence thesis by A2,A3,POWER:def 2;
+          case
+            0 = B;
+            hence thesis by A2,A4,POWER:def 2;
           end;
         end;
         hence thesis;
       end;
       then
 A15:  0 <=Ap*Bq by A14;
-      now per cases by A13,XCMPLX_1:6;
+      now
+        per cases by A13,XCMPLX_1:6;
         case
 A16:      A=0;
 A17:      for k be Element of NAT st k <=n holds a.k=0
           proof
-            let k be Element of NAT such that
-A18:        k <=n;
-            ap.k=0 by A7,A16,A18,Lm3;
+            let k be Element of NAT;
+            assume
+            k <=n;
+            then ap.k=0 by A9,A16,Lm3;
             then
-A19:        abs(a.k) to_power p = 0 by A6;
+A18:        abs(a.k) to_power p = 0 by A3;
             abs(a.k) =0
             proof
-              assume abs(a.k) <> 0;
+              assume
+              abs(a.k) <> 0;
               then abs(a.k) > 0 by COMPLEX1:132;
-              hence contradiction by A19,POWER:39;
+              hence contradiction by A18,POWER:39;
             end;
             hence thesis by ABSVALUE:7;
           end;
           for k be Element of NAT st k <=n holds ab.k=0
           proof
             let k be Element of NAT such that
-A20:        k <=n;
-            thus ab.k=abs(a.k * b.k) by A6
-              .=abs(0 * b.k) by A17,A20
+A19:        k <=n;
+            thus ab.k=abs(a.k * b.k) by A3
+              .=abs(0 * b.k) by A17,A19
               .=0 by ABSVALUE:7;
           end;
           hence thesis by A15,Lm4;
         end;
         case
-A21:      B=0;
-A22:      for k be Element of NAT st k <=n holds b.k=0
+A20:      B=0;
+A21:      for k be Element of NAT st k <=n holds b.k=0
           proof
-            let k be Element of NAT such that
-A23:        k <=n;
-            bq.k=0 by A9,A21,A23,Lm3;
+            let k be Element of NAT;
+            assume
+            k <=n;
+            then bq.k=0 by A6,A20,Lm3;
             then
-A24:        abs(b.k) to_power q = 0 by A6;
+A22:        abs(b.k) to_power q = 0 by A3;
             abs(b.k) =0
             proof
-              assume abs(b.k) <> 0;
+              assume
+              abs(b.k) <> 0;
               then abs(b.k) > 0 by COMPLEX1:132;
-              hence contradiction by A24,POWER:39;
+              hence contradiction by A22,POWER:39;
             end;
             hence thesis by ABSVALUE:7;
           end;
           for k be Element of NAT st k <=n holds ab.k=0
           proof
             let k be Element of NAT such that
-A25:        k <=n;
-            thus ab.k=abs(a.k * b.k) by A6
-              .=abs(a.k * 0) by A22,A25
+A23:        k <=n;
+            thus ab.k=abs(a.k * b.k) by A3
+              .=abs(a.k * 0) by A21,A23
               .=0 by ABSVALUE:7;
           end;
           hence thesis by A15,Lm4;
@@ -849,443 +873,456 @@ A25:        k <=n;
       end;
       hence thesis;
     end;
-    case A*B <> 0;
-      then
-A26:  A <> 0 & B <> 0;
-      then
-A27:  Ap > 0 by A11,POWER:39;
-A28:  Bq > 0 by A12,A26,POWER:39;
-      deffunc F(Element of NAT) =abs(a.$1)/Ap;
-      consider x be Real_Sequence such that
-A29:  for n be Element of NAT holds x.n=F(n) from SEQ_1:sch 1;
+    case
+A24:  A*B <> 0;
       deffunc G(Element of NAT) =abs(b.$1)/Bq;
       consider y be Real_Sequence such that
-A30:  for n be Element of NAT holds y.n=G(n) from SEQ_1:sch 1;
-A31:  for n be Element of NAT holds 0 <=x.n
-      proof
-        let n be Element of NAT;
-        0 <= abs(a.n) by COMPLEX1:132;
-        then 0 <= abs(a.n)/Ap by A27;
-        hence thesis by A29;
-      end;
-A32:  for n be Element of NAT holds 0 <=y.n
+A25:  for n be Element of NAT holds y.n=G(n) from SEQ_1:sch 1;
+A26:  B <> 0 by A24;
+      then
+A27:  Bq > 0 by A8,POWER:39;
+A28:  for n be Element of NAT holds 0 <=y.n
       proof
         let n be Element of NAT;
         0 <= abs(b.n) by COMPLEX1:132;
-        then 0 <= abs(b.n)/Bq by A28;
-        hence thesis by A30;
+        then 0 <= abs(b.n)/Bq by A27;
+        hence thesis by A25;
       end;
-A33:  for n be Element of NAT holds
-      (x.n * y.n <= (x.n) to_power p / p + (y.n) to_power q / q
-      & (x.n * y.n = (x.n) to_power p / p + (y.n) to_power q / q
-      iff (x.n) to_power p = (y.n) to_power q))
+      deffunc F(Element of NAT) =abs(a.$1)/Ap;
+      consider x be Real_Sequence such that
+A29:  for n be Element of NAT holds x.n=F(n) from SEQ_1:sch 1;
+A30:  for n be Element of NAT holds ((1/(Ap*Bq)) (#) ab).n = x.n * y.n
       proof
         let n be Element of NAT;
-A34:    0 <= x.n by A31;
-        0 <= y.n by A32;
-        hence thesis by A1,A2,A34,Th5;
-      end;
-A35:  for n be Element of NAT holds ((1/(Ap*Bq)) (#) ab).n = x.n * y.n
-      proof
-        let n be Element of NAT;
-A36:    x.n= abs(a.n)/Ap by A29;
-        y.n= abs(b.n)/Bq by A30;
-        hence x.n*y.n= (abs(a.n)*abs(b.n))/(Ap*Bq) by A36,XCMPLX_1:77
+        x.n= abs(a.n)/Ap & y.n= abs(b.n)/Bq by A29,A25;
+        hence x.n*y.n= (abs(a.n)*abs(b.n))/(Ap*Bq) by XCMPLX_1:77
           .=abs(a.n*b.n)/(Ap*Bq) by COMPLEX1:151
-          .=ab.n/(Ap*Bq) by A6
+          .=ab.n/(Ap*Bq) by A3
           .=(1/(Ap*Bq))*ab.n by XCMPLX_1:100
           .=((1/(Ap*Bq)) (#) ab).n by SEQ_1:13;
       end;
-A37:  for n be Element of NAT holds
-      (((1/p)(#)((1/A)(#)ap)) + ((1/q)(#)((1/B)(#)bq))).n
-      = (x.n) to_power p / p + (y.n) to_power q / q
+A31:  Partial_Sums( (1/(Ap*Bq)) (#) ab).n = ((1/(Ap*Bq)) (#) Partial_Sums
+      (ab)).n by SERIES_1:12
+        .= (1/(Ap*Bq)) * Partial_Sums(ab).n by SEQ_1:13;
+A32:  A <> 0 by A24;
+      then
+A33:  Ap > 0 by A11,POWER:39;
+      then
+A34:  Ap*Bq > 0 by A27,XREAL_1:131;
+A35:  for n be Element of NAT holds (((1/p)(#)((1/A)(#)ap)) + ((1/q)(#)((
+      1/B)(#)bq))).n = (x.n) to_power p / p + (y.n) to_power q / q
       proof
         let n be Element of NAT;
-A38:    x.n= abs(a.n)/Ap by A29;
-A39:    y.n= abs(b.n)/Bq by A30;
-        (abs(a.n)/Ap) to_power p =abs(a.n) to_power p/Ap to_power p
+A36:    (abs(a.n)/Ap) to_power p =abs(a.n) to_power p/Ap to_power p
         proof
-          now per cases;
+          now
+            per cases;
             case
-A40:          abs(a.n) =0;
-              hence (abs(a.n)/Ap) to_power p
-              =0 /Ap to_power p by A1,POWER:def 2
-                .=abs(a.n) to_power p/Ap to_power p by A1,A40,POWER:def 2;
+A37:          abs(a.n) =0;
+              hence (abs(a.n)/Ap) to_power p =0 /Ap to_power p by A1,POWER:
+              def 2
+                .=abs(a.n) to_power p/Ap to_power p by A1,A37,POWER:def 2;
             end;
-            case abs(a.n) <> 0;
+            case
+              abs(a.n) <> 0;
               then abs(a.n) > 0 by COMPLEX1:132;
+              hence thesis by A33,POWER:36;
+            end;
+          end;
+          hence thesis;
+        end;
+A38:    (abs(b.n)/Bq) to_power q =abs(b.n) to_power q/Bq to_power q
+        proof
+          now
+            per cases;
+            case
+A39:          abs(b.n) =0;
+              hence (abs(b.n)/Bq) to_power q =0 /Bq to_power q by A5,POWER:
+              def 2
+                .=abs(b.n) to_power q/Bq to_power q by A5,A39,POWER:def 2;
+            end;
+            case
+              abs(b.n) <> 0;
+              then abs(b.n) > 0 by COMPLEX1:132;
               hence thesis by A27,POWER:36;
             end;
           end;
           hence thesis;
         end;
+        y.n= abs(b.n)/Bq by A25;
         then
-A41:    (x.n) to_power p / p =( ap.n / Ap to_power p) /p by A6,A38
-          .=( ap.n / (A to_power ((1/p)*p))) /p by A11,A26,POWER:38
+A40:    (y.n) to_power q / q =( bq.n / Bq to_power q) /q by A3,A38
+          .=( bq.n / (B to_power ((1/q)*q))) /q by A8,A26,POWER:38
+          .= ( bq.n / (B to_power 1 )) /q by A5,XCMPLX_1:88
+          .= ( bq.n / B ) /q by POWER:30
+          .= (1/q)*(bq.n / B) by XCMPLX_1:100
+          .= (1/q)*((1/B)*bq.n) by XCMPLX_1:100
+          .= (1/q)*(((1/B)(#)bq).n) by SEQ_1:13
+          .=((1/q)(#)((1/B)(#)bq)).n by SEQ_1:13;
+        x.n= abs(a.n)/Ap by A29;
+        then (x.n) to_power p / p =( ap.n / Ap to_power p) /p by A3,A36
+          .=( ap.n / (A to_power ((1/p)*p))) /p by A11,A32,POWER:38
           .= ( ap.n / (A to_power 1 )) /p by A1,XCMPLX_1:88
           .= ( ap.n / A ) /p by POWER:30
           .= (1/p)*(ap.n / A) by XCMPLX_1:100
           .= (1/p)*((1/A)*ap.n) by XCMPLX_1:100
           .= (1/p)*(((1/A)(#)ap).n) by SEQ_1:13
           .=((1/p)(#)((1/A)(#)ap)).n by SEQ_1:13;
-        (abs(b.n)/Bq) to_power q =abs(b.n) to_power q/Bq to_power q
-        proof
-          now per cases;
-            case
-A42:          abs(b.n) =0;
-              hence (abs(b.n)/Bq) to_power q
-              =0 /Bq to_power q by A4,POWER:def 2
-                .=abs(b.n) to_power q/Bq to_power q by A4,A42,POWER:def 2;
-            end;
-            case abs(b.n) <> 0;
-              then abs(b.n) > 0 by COMPLEX1:132;
-              hence thesis by A28,POWER:36;
-            end;
-          end;
-          hence thesis;
-        end;
-        then (y.n) to_power q / q =( bq.n / Bq to_power q) /q by A6,A39
-          .=( bq.n / (B to_power ((1/q)*q))) /q by A12,A26,POWER:38
-          .= ( bq.n / (B to_power 1 )) /q by A4,XCMPLX_1:88
-          .= ( bq.n / B ) /q by POWER:30
-          .= (1/q)*(bq.n / B) by XCMPLX_1:100
-          .= (1/q)*((1/B)*bq.n) by XCMPLX_1:100
-          .= (1/q)*(((1/B)(#)bq).n) by SEQ_1:13
-          .=((1/q)(#)((1/B)(#)bq)).n by SEQ_1:13;
-        hence thesis by A41,SEQ_1:11;
+        hence thesis by A40,SEQ_1:11;
       end;
-      for n be Element of NAT holds ((1/(Ap*Bq)) (#) ab).n
-      <= (((1/p)(#)((1/A)(#)ap)) + ((1/q)(#)((1/B)(#)bq))).n
+A41:  for n be Element of NAT holds 0 <=x.n
       proof
         let n be Element of NAT;
-A43:    x.n * y.n <= (x.n) to_power p / p + (y.n) to_power q / q by A33;
-        (((1/p)(#)((1/A)(#)ap)) + ((1/q)(#)((1/B)(#)bq))).n
-        = (x.n) to_power p / p + (y.n) to_power q / q by A37;
-        hence thesis by A35,A43;
+        0 <= abs(a.n) by COMPLEX1:132;
+        then 0 <= abs(a.n)/Ap by A33;
+        hence thesis by A29;
+      end;
+A42:  for n be Element of NAT holds x.n * y.n <= (x.n) to_power p / p + (
+y.n) to_power q / q & (x.n * y.n = (x.n) to_power p / p + (y.n) to_power q / q
+      iff (x.n) to_power p = (y.n) to_power q)
+      proof
+        let n be Element of NAT;
+        0 <= x.n & 0 <= y.n by A41,A28;
+        hence thesis by A1,A2,Th5;
+      end;
+      for n be Element of NAT holds ((1/(Ap*Bq)) (#) ab).n <= (((1/p)(#)(
+      (1/A)(#)ap)) + ((1/q)(#)((1/B)(#)bq))).n
+      proof
+        let n be Element of NAT;
+        x.n * y.n <= (x.n) to_power p / p + (y.n) to_power q / q & (((1/p
+)(#)((1/A) (#)ap)) + ((1/q)(#)((1/B)(#)bq))).n = (x.n) to_power p / p + (y.n)
+        to_power q / q by A42,A35;
+        hence thesis by A30;
       end;
       then
-A44:  Partial_Sums( (1/(Ap*Bq)) (#) ab).n
-      <=Partial_Sums(((1/p)(#)((1/A)(#)ap)) + ((1/q)(#)((1/B)(#)bq))).n
-      by SERIES_1:17;
-A45:  Partial_Sums( (1/(Ap*Bq)) (#) ab).n
-      = ((1/(Ap*Bq)) (#) Partial_Sums(ab)).n by SERIES_1:12
-        .= (1/(Ap*Bq)) * Partial_Sums(ab).n by SEQ_1:13;
-A46:  Partial_Sums(((1/p)(#)((1/A)(#)ap)) + ((1/q)(#)((1/B)(#)bq))).n
-      = (Partial_Sums(((1/p)(#)((1/A)(#)ap)))
-      + Partial_Sums(((1/q)(#)((1/B)(#)bq)))).n by SERIES_1:8
-        .=Partial_Sums((1/p)(#)((1/A)(#)ap)).n
-      + Partial_Sums((1/q)(#)((1/B)(#)bq)).n by SEQ_1:11
-        .=((1/p)(#)Partial_Sums((1/A)(#)ap)).n
-      + Partial_Sums((1/q)(#)((1/B)(#)bq)).n by SERIES_1:12
-        .=(1/p)*(Partial_Sums((1/A)(#)ap).n)
-      + Partial_Sums((1/q)(#)((1/B)(#)bq)).n by SEQ_1:13
-        .=(1/p)*(((1/A)(#)Partial_Sums(ap)).n)
-      + Partial_Sums((1/q)(#)((1/B)(#)bq)).n by SERIES_1:12
-        .=(1/p)*((1/A)*Partial_Sums(ap).n)
-      + Partial_Sums((1/q)(#)((1/B)(#)bq)).n by SEQ_1:13
-        .=(1/p)*((1/A)*Partial_Sums(ap).n)
-      + ((1/q)(#)Partial_Sums((1/B)(#)bq)).n by SERIES_1:12
-        .=(1/p)*((1/A)*Partial_Sums(ap).n)
-      + (1/q)*(Partial_Sums((1/B)(#)bq).n) by SEQ_1:13
-        .=(1/p)*((1/A)*Partial_Sums(ap).n)
-      + (1/q)*(((1/B)(#)Partial_Sums(bq)).n) by SERIES_1:12
-        .=(1/p)*((1/A)*Partial_Sums(ap).n)
-      +(1/q)*((1/B)*Partial_Sums(bq).n) by SEQ_1:13
-        .=(1/p)*1 +(1/q)*((1/B)*B) by A26,XCMPLX_1:88
+A43:  Partial_Sums( (1/(Ap*Bq)) (#) ab).n <=Partial_Sums(((1/p)(#)((1/A)
+      (#)ap)) + ((1/q)(#)((1/B)(#)bq))).n by SERIES_1:17;
+      Partial_Sums(((1/p)(#)((1/A)(#)ap)) + ((1/q)(#)((1/B)(#)bq))).n = (
+Partial_Sums(((1/p)(#)((1/A)(#)ap))) + Partial_Sums(((1/q)(#)((1/B)(#)bq)))).n
+      by SERIES_1:8
+        .=Partial_Sums((1/p)(#)((1/A)(#)ap)).n + Partial_Sums((1/q)(#)((1/B)
+      (#)bq)).n by SEQ_1:11
+        .=((1/p)(#)Partial_Sums((1/A)(#)ap)).n + Partial_Sums((1/q)(#)((1/B)
+      (#)bq)).n by SERIES_1:12
+        .=(1/p)*(Partial_Sums((1/A)(#)ap).n) + Partial_Sums((1/q)(#)((1/B)
+      (#)bq)).n by SEQ_1:13
+        .=(1/p)*(((1/A)(#)Partial_Sums(ap)).n) + Partial_Sums((1/q)(#)((1/B)
+      (#)bq)).n by SERIES_1:12
+        .=(1/p)*((1/A)*Partial_Sums(ap).n) + Partial_Sums((1/q)(#)((1/B)(#)
+      bq)).n by SEQ_1:13
+        .=(1/p)*((1/A)*Partial_Sums(ap).n) + ((1/q)(#)Partial_Sums((1/B)(#)
+      bq)).n by SERIES_1:12
+        .=(1/p)*((1/A)*Partial_Sums(ap).n) + (1/q)*(Partial_Sums((1/B)(#)bq)
+      .n) by SEQ_1:13
+        .=(1/p)*((1/A)*Partial_Sums(ap).n) + (1/q)*(((1/B)(#)Partial_Sums(bq
+      )).n) by SERIES_1:12
+        .=(1/p)*((1/A)*Partial_Sums(ap).n) +(1/q)*((1/B)*Partial_Sums(bq).n)
+      by SEQ_1:13
+        .=(1/p)*1 +(1/q)*((1/B)*B) by A32,XCMPLX_1:88
         .=(1/p)*1 +(1/q)*(1) by A26,XCMPLX_1:88
         .=1 by A2;
-A47:  Ap*Bq > 0 by A27,A28,XREAL_1:131;
-      Partial_Sums(ab).n/(Ap*Bq) <= 1 by A44,A45,A46,XCMPLX_1:100;
-      hence thesis by A47,XREAL_1:189;
+      then Partial_Sums(ab).n/(Ap*Bq) <= 1 by A43,A31,XCMPLX_1:100;
+      hence thesis by A34,XREAL_1:189;
     end;
   end;
   hence thesis;
 end;
 
 theorem Th7:
-  for p be Real st 1 < p for a,b,ap,bp,ab be Real_Sequence
-  st ( for n be Element of NAT holds ap.n=abs(a.n) to_power p
-  & bp.n=abs(b.n) to_power p & ab.n=abs(a.n+b.n) to_power p ) holds
-  for n be Element of NAT holds (Partial_Sums(ab).n) to_power (1/p)
-  <= ( Partial_Sums(ap).n) to_power (1/p)
-  + ( Partial_Sums(bp).n) to_power (1/p)
+  for p be Real st 1 < p for a,b,ap,bp,ab be Real_Sequence st ( for
+n be Element of NAT holds ap.n=abs(a.n) to_power p & bp.n=abs(b.n) to_power p &
+  ab.n=abs(a.n+b.n) to_power p ) holds for n be Element of NAT holds (
+Partial_Sums(ab).n) to_power (1/p) <= ( Partial_Sums(ap).n) to_power (1/p) + (
+  Partial_Sums(bp).n) to_power (1/p)
 proof
   let p be Real such that
 A1: 1 < p;
+A2: 1/p > 0 by A1,XREAL_1:141;
   let a,b,ap,bp,ab be Real_Sequence such that
-A2: for n be Element of NAT holds ap.n=abs(a.n) to_power p
-  & bp.n=abs(b.n) to_power p & ab.n=abs(a.n+ b.n) to_power p;
+A3: for n be Element of NAT holds ap.n=abs(a.n) to_power p & bp.n=abs(b.
+  n) to_power p & ab.n=abs(a.n+ b.n) to_power p;
+A4: for n be Element of NAT holds 0 <= ap.n
+  proof
+    let n be Element of NAT;
+A5: ap.n=abs(a.n) to_power p by A3;
+    now
+      per cases by COMPLEX1:132;
+      case
+        abs(a.n) = 0;
+        hence thesis by A1,A5,POWER:def 2;
+      end;
+      case
+        abs(a.n) > 0;
+        hence thesis by A5,POWER:39;
+      end;
+    end;
+    hence thesis;
+  end;
+A6: for n be Element of NAT holds 0 <= bp.n
+  proof
+    let n be Element of NAT;
+A7: bp.n=abs(b.n) to_power p by A3;
+    now
+      per cases by COMPLEX1:132;
+      case
+        abs(b.n) = 0;
+        hence thesis by A1,A7,POWER:def 2;
+      end;
+      case
+        abs(b.n) > 0;
+        hence thesis by A7,POWER:39;
+      end;
+    end;
+    hence thesis;
+  end;
+  deffunc F(Element of NAT)=abs(a.$1+ b.$1) to_power (p-1);
+  consider x be Real_Sequence such that
+A8: for n be Element of NAT holds x.n=F(n) from SEQ_1:sch 1;
+A9: 1-1 < p-1 by A1,XREAL_1:16;
+A10: for n be Element of NAT holds 0 <= x.n
+  proof
+    let n be Element of NAT;
+A11: x.n=abs(a.n+ b.n) to_power (p-1) by A8;
+    now
+      per cases by COMPLEX1:132;
+      case
+        abs(a.n+ b.n) = 0;
+        hence thesis by A9,A11,POWER:def 2;
+      end;
+      case
+        abs(a.n+ b.n) > 0;
+        hence thesis by A11,POWER:39;
+      end;
+    end;
+    hence thesis;
+  end;
+A12: for n be Element of NAT holds (x(#)abs(b)).n= abs(b.n*x.n)
+  proof
+    let n be Element of NAT;
+    0 <= x.n by A10;
+    then
+A13: abs(x.n)=x.n by ABSVALUE:def 1;
+    thus (x(#)abs(b)).n =x.n * abs(b).n by SEQ_1:12
+      .=x.n * abs(b.n) by SEQ_1:16
+      .=abs(b.n*x.n) by A13,COMPLEX1:151;
+  end;
   reconsider pp=1/p as Real;
   reconsider qq=1-pp as Real;
   reconsider q=1/qq as Real;
+A14: qq=1/q by XCMPLX_1:56;
+  then
+A15: 1/p + 1/q= 1;
   1/p < 1 by A1,XREAL_1:191;
   then
-A3: 1-1 < 1-pp by XREAL_1:17;
-A4: qq=1/q by XCMPLX_1:56;
+A16: 1-1 < 1-pp by XREAL_1:17;
   then
-A5: 0 < q by A3;
-A6: q <> 0 by A3,A4;
-A7: 1/p > 0 by A1,XREAL_1:141;
-A8: 1-1 < p-1 by A1,XREAL_1:16;
-A9: 1/p + 1/q= 1 by A4;
-  then ((1*q+1*p)/(p*q))*(p*q) =1*(p*q) by A1,A6,XCMPLX_1:117;
+A17: q <> 0 by A14;
+  then ((1*q+1*p)/(p*q))*(p*q) =1*(p*q) by A1,A15,XCMPLX_1:117;
   then
-A10: q+p=p*q by A1,A6,XCMPLX_1:6,88;
-  deffunc F(Element of NAT)=abs(a.$1+ b.$1) to_power (p-1);
-  consider x be Real_Sequence such that
-A11: for n be Element of NAT holds x.n=F(n) from SEQ_1:sch 1;
-A12: for n be Element of NAT holds 0 <= x.n
+A18: q+p=p*q by A1,A17,XCMPLX_1:6,88;
+A19: for n be Element of NAT holds ab.n=x.n*abs(a.n+b.n)
   proof
     let n be Element of NAT;
-A13: x.n=abs(a.n+ b.n) to_power (p-1) by A11;
-    now per cases by COMPLEX1:132;
-      case abs(a.n+ b.n) = 0;
-        hence thesis by A8,A13,POWER:def 2;
-      end;
-      case abs(a.n+ b.n) > 0;
-        hence thesis by A13,POWER:39;
-      end;
-    end;
-    hence thesis;
-  end;
-A14: for n be Element of NAT holds ab.n=x.n*abs(a.n+b.n)
-  proof
-    let n be Element of NAT;
-    now per cases;
+    now
+      per cases;
       case
-A15:    abs(a.n+b.n)=0;
-        thus ab.n=abs(a.n+ b.n) to_power p by A2
-          .= x.n * abs(a.n+b.n) by A1,A15,POWER:def 2;
+A20:    abs(a.n+b.n)=0;
+        thus ab.n=abs(a.n+ b.n) to_power p by A3
+          .= x.n * abs(a.n+b.n) by A1,A20,POWER:def 2;
       end;
       case
-A16:    abs(a.n+b.n) <> 0;
-A17:    0 <= abs(a.n+b.n) by COMPLEX1:132;
-        thus ab.n =abs(a.n+ b.n) to_power ((p-1)+1) by A2
-          .= abs(a.n+ b.n) to_power (p-1)
-        * abs(a.n+ b.n) to_power 1 by A16,A17,POWER:32
+A21:    abs(a.n+b.n) <> 0;
+A22:    0 <= abs(a.n+b.n) by COMPLEX1:132;
+        thus ab.n =abs(a.n+ b.n) to_power ((p-1)+1) by A3
+          .= abs(a.n+ b.n) to_power (p-1) * abs(a.n+ b.n) to_power 1 by A21,
+        A22,POWER:32
           .=(abs(a.n+ b.n) to_power (p-1)) * abs(a.n+ b.n) by POWER:30
-          .= x.n * abs(a.n+b.n) by A11;
+          .= x.n * abs(a.n+b.n) by A8;
       end;
     end;
     hence thesis;
   end;
-A18: for n be Element of NAT holds ab.n <= ( x(#)abs(a)+x(#)abs(b) ).n
+A23: for n be Element of NAT holds ab.n <= ( x(#)abs(a)+x(#)abs(b) ).n
   proof
     let n be Element of NAT;
-A19: 0 <= x.n by A12;
-A20: ab.n=x.n*abs(a.n+b.n) by A14;
-    x.n * (abs(a.n)+abs(b.n)) = x.n * (abs(a.n))+x.n * (abs(b.n))
+A24: x.n * (abs(a.n)+abs(b.n)) = x.n * (abs(a.n))+x.n * (abs(b.n))
       .= x.n * (abs(a).n)+x.n * (abs(b.n)) by SEQ_1:16
       .= x.n * (abs(a).n)+x.n * (abs(b).n) by SEQ_1:16
       .= (x(#)abs(a)).n +x.n * (abs(b).n) by SEQ_1:12
       .= (x(#)abs(a)).n +(x(#)abs(b)).n by SEQ_1:12
       .= (x(#)abs(a) +x(#)abs(b)).n by SEQ_1:11;
-    hence thesis by A19,A20,COMPLEX1:142,XREAL_1:66;
+    0 <= x.n & ab.n=x.n*abs(a.n+b.n) by A10,A19;
+    hence thesis by A24,COMPLEX1:142,XREAL_1:66;
   end;
-A21: for n be Element of NAT holds (x(#)abs(a)).n= abs(a.n*x.n)
+A25: 0 < q by A16,A14;
+A26: for n be Element of NAT holds abs(x.n) to_power q = ab.n
   proof
     let n be Element of NAT;
-    0 <= x.n by A12;
-    then
-A22: abs(x.n)=x.n by ABSVALUE:def 1;
-    thus (x(#)abs(a)).n =x.n * abs(a).n by SEQ_1:12
-      .=x.n * abs(a.n) by SEQ_1:16
-      .=abs(a.n*x.n) by A22,COMPLEX1:151;
-  end;
-A23: for n be Element of NAT holds (x(#)abs(b)).n= abs(b.n*x.n)
-  proof
-    let n be Element of NAT;
-    0 <= x.n by A12;
-    then
-A24: abs(x.n)=x.n by ABSVALUE:def 1;
-    thus (x(#)abs(b)).n =x.n * abs(b).n by SEQ_1:12
-      .=x.n * abs(b.n) by SEQ_1:16
-      .=abs(b.n*x.n) by A24,COMPLEX1:151;
-  end;
-A25: for n be Element of NAT holds abs(x.n) to_power q = ab.n
-  proof
-    let n be Element of NAT;
-    0 <= x.n by A12;
+    0 <= x.n by A10;
     then abs(x.n)=x.n by ABSVALUE:def 1;
     then
-A26: abs(x.n) to_power q = (abs(a.n+b.n) to_power (p-1)) to_power q by A11;
-    now per cases;
+A27: abs(x.n) to_power q = (abs(a.n+b.n) to_power (p-1)) to_power q by A8;
+    now
+      per cases;
       case
-A27:    abs(a.n+b.n)=0;
+A28:    abs(a.n+b.n)=0;
         then
-A28:    ab.n = 0 to_power p by A2
+A29:    ab.n = 0 to_power p by A3
           .= 0 by A1,POWER:def 2;
-        abs(x.n) to_power q =0 to_power q by A8,A26,A27,POWER:def 2
-          .=0 by A5,POWER:def 2;
-        hence thesis by A28;
+        abs(x.n) to_power q =0 to_power q by A9,A27,A28,POWER:def 2
+          .=0 by A25,POWER:def 2;
+        hence thesis by A29;
       end;
-      case abs(a.n+b.n) <> 0;
+      case
+        abs(a.n+b.n) <> 0;
         then 0 < abs(a.n+b.n) by COMPLEX1:132;
-        hence abs(x.n) to_power q
-        = abs(a.n+b.n) to_power ((p-1)*q) by A26,POWER:38
-          .=ab.n by A2,A10;
+        hence abs(x.n) to_power q = abs(a.n+b.n) to_power ((p-1)*q) by A27,
+        POWER:38
+          .=ab.n by A3,A18;
       end;
     end;
     hence thesis;
   end;
-A29: for n be Element of NAT holds
-  Partial_Sums(ab).n <= ( ((Partial_Sums(ap).n) to_power (1/p)) +
-  ((Partial_Sums(bp).n) to_power (1/p)))
-  * ( (Partial_Sums(ab).n) to_power (1/q) )
+A30: for n be Element of NAT holds (x(#)abs(a)).n= abs(a.n*x.n)
   proof
     let n be Element of NAT;
-A30: Partial_Sums(ab).n <= Partial_Sums(x(#)abs(a)+x(#)abs(b)).n
-    by A18,SERIES_1:17;
-A31: (Partial_Sums(x(#)abs(a)+x(#)abs(b))).n
-    =(Partial_Sums(x(#)abs(a))+Partial_Sums(x(#)abs(b))).n by SERIES_1:8
+    0 <= x.n by A10;
+    then
+A31: abs(x.n)=x.n by ABSVALUE:def 1;
+    thus (x(#)abs(a)).n =x.n * abs(a).n by SEQ_1:12
+      .=x.n * abs(a.n) by SEQ_1:16
+      .=abs(a.n*x.n) by A31,COMPLEX1:151;
+  end;
+A32: for n be Element of NAT holds Partial_Sums(ab).n <= ( ((Partial_Sums(ap
+).n) to_power (1/p)) + ((Partial_Sums(bp).n) to_power (1/p))) * ( (Partial_Sums
+  (ab).n) to_power (1/q) )
+  proof
+    let n be Element of NAT;
+A33: (Partial_Sums(x(#)abs(a)+x(#)abs(b))).n =(Partial_Sums(x(#)abs(a))+
+    Partial_Sums(x(#)abs(b))).n by SERIES_1:8
       .=Partial_Sums(x(#)abs(a)).n+Partial_Sums(x(#)abs(b)).n by SEQ_1:11;
-A32: Partial_Sums(x(#)abs(a)).n <= ( (Partial_Sums(ap).n) to_power (1/p) )
-    * ( (Partial_Sums(ab).n) to_power (1/q) ) by A1,A2,A9,A21,A25,Th6;
-    Partial_Sums(x(#)abs(b)).n <= ( (Partial_Sums(bp).n) to_power (1/p) )
-    * ( (Partial_Sums(ab).n) to_power (1/q) ) by A1,A2,A9,A23,A25,Th6;
-    then Partial_Sums(x(#)abs(a)).n + Partial_Sums(x(#)abs(b)).n
-    <= ( (Partial_Sums(ap).n) to_power (1/p) )
-    * ( (Partial_Sums(ab).n) to_power (1/q) )
-    + ( (Partial_Sums(bp).n) to_power (1/p) )
-    * ( (Partial_Sums(ab).n) to_power (1/q) ) by A32,XREAL_1:9;
-    hence thesis by A30,A31,XXREAL_0:2;
+    Partial_Sums(x(#)abs(a)).n <= ( (Partial_Sums(ap).n) to_power (1/p) )
+* ( ( Partial_Sums(ab).n) to_power (1/q) ) & Partial_Sums(x(#)abs(b)).n <= ( (
+Partial_Sums(bp).n) to_power (1/p) ) * ( (Partial_Sums(ab).n) to_power (1/q) )
+    by A1,A3,A15,A30,A12,A26,Th6;
+    then
+A34: Partial_Sums(x(#)abs(a)).n + Partial_Sums(x(#)abs(b)).n <= ( (
+Partial_Sums(ap).n) to_power (1/p) ) * ( (Partial_Sums(ab).n) to_power (1/q) )
++ ( (Partial_Sums(bp).n) to_power (1/p) ) * ( (Partial_Sums(ab).n) to_power (1/
+    q) ) by XREAL_1:9;
+    Partial_Sums(ab).n <= Partial_Sums(x(#)abs(a)+x(#)abs(b)).n by A23,
+    SERIES_1:17;
+    hence thesis by A33,A34,XXREAL_0:2;
   end;
-A33: for n be Element of NAT holds 0 <= ap.n
+A35: for n be Element of NAT holds 0 <= ab.n
   proof
     let n be Element of NAT;
-A34: ap.n=abs(a.n) to_power p by A2;
-    now per cases by COMPLEX1:132;
-      case abs(a.n) = 0;
-        hence thesis by A1,A34,POWER:def 2;
-      end;
-      case abs(a.n) > 0;
-        hence thesis by A34,POWER:39;
-      end;
-    end;
-    hence thesis;
-  end;
-A35: for n be Element of NAT holds 0 <= bp.n
-  proof
-    let n be Element of NAT;
-A36: bp.n=abs(b.n) to_power p by A2;
-    now per cases by COMPLEX1:132;
-      case abs(b.n) = 0;
-        hence thesis by A1,A36,POWER:def 2;
-      end;
-      case abs(b.n) > 0;
-        hence thesis by A36,POWER:39;
-      end;
-    end;
-    hence thesis;
-  end;
-A37: for n be Element of NAT holds 0 <= ab.n
-  proof
-    let n be Element of NAT;
-A38: 0 <= abs(a.n+b.n) by COMPLEX1:132;
-A39: ab.n=abs(a.n+b.n) to_power p by A2;
-    0 to_power p <= abs(a.n+b.n) to_power p by A1,A38,Th3;
-    hence thesis by A1,A39,POWER:def 2;
+    0 <= abs(a.n+b.n) by COMPLEX1:132;
+    then
+A36: 0 to_power p <= abs(a.n+b.n) to_power p by A1,Th3;
+    ab.n=abs(a.n+b.n) to_power p by A3;
+    hence thesis by A1,A36,POWER:def 2;
   end;
   now
     let n be Element of NAT;
     set A=Partial_Sums(ab).n;
-    set C= ( ((Partial_Sums(ap).n) to_power (1/p)) +
-    ((Partial_Sums(bp).n) to_power (1/p)));
+    set C= ( ((Partial_Sums(ap).n) to_power (1/p)) + ((Partial_Sums(bp).n)
+    to_power (1/p)));
     set D= ( A to_power (1/q) );
-A40: 0 <= A by A37,Lm2;
-    0 <= Partial_Sums(ap).n by A33,Lm2;
-    then 0 to_power (1/p) <= (Partial_Sums(ap).n) to_power (1/p) by A7,Th3;
+A37: 0 <= A by A35,Lm2;
+    0 <= Partial_Sums(bp).n by A6,Lm2;
+    then 0 to_power (1/p) <= (Partial_Sums(bp).n) to_power (1/p) by A2,
+    Th3;
     then
-A41: 0 <= (Partial_Sums(ap).n) to_power (1/p) by A7,POWER:def 2;
-    0 <= Partial_Sums(bp).n by A35,Lm2;
-    then 0 to_power (1/p) <= (Partial_Sums(bp).n) to_power (1/p) by A7,Th3;
-    then 0 <= (Partial_Sums(bp).n) to_power (1/p) by A7,POWER:def 2;
+A38: 0 <= (Partial_Sums(bp).n) to_power (1/p) by A2,POWER:def 2;
+    0 <= Partial_Sums(ap).n by A4,Lm2;
+    then 0 to_power (1/p) <= (Partial_Sums(ap).n) to_power (1/p) by A2,
+    Th3;
+    then 0 <= (Partial_Sums(ap).n) to_power (1/p) by A2,POWER:def 2;
     then
-A42: 0+0 <= (Partial_Sums(ap).n) to_power (1/p)
-    + (Partial_Sums(bp).n) to_power (1/p) by A41;
-    now per cases;
-      case A=0;
-        hence A to_power (1/p) <= C by A7,A42,POWER:def 2;
+A39: 0+0 <= (Partial_Sums(ap).n) to_power (1/p) + (Partial_Sums(bp).n)
+    to_power (1/p) by A38;
+    now
+      per cases;
+      case
+        A=0;
+        hence A to_power (1/p) <= C by A2,A39,POWER:def 2;
       end;
       case
-A43:    A<>0;
-        then
-A44:    0 < D by A40,POWER:39;
+A40:    A<>0;
         set B=1/D;
-A45:    0 < B by A44,XREAL_1:141;
-A46:    C*D*B = C* (D *B)
-          .= C*1 by A44,XCMPLX_1:88
+A41:    0 < D by A37,A40,POWER:39;
+        then
+A42:    0 < B by XREAL_1:141;
+A43:    C*D*B = C* (D *B)
+          .= C*1 by A41,XCMPLX_1:88
           .= C;
         A *B =A/D by XCMPLX_1:100
           .=(A to_power 1) / D by POWER:30
-          .=A to_power (1-(1/q)) by A40,A43,POWER:34
-          .= A to_power (1/p) by A4;
-        hence A to_power (1/p) <= (Partial_Sums(ap).n) to_power (1/p)
-        + (Partial_Sums(bp).n) to_power (1/p) by A29,A45,A46,XREAL_1:66;
+          .=A to_power (1-(1/q)) by A37,A40,POWER:34
+          .= A to_power (1/p) by A14;
+        hence A to_power (1/p) <= (Partial_Sums(ap).n) to_power (1/p) + (
+        Partial_Sums(bp).n) to_power (1/p) by A32,A42,A43,XREAL_1:66;
       end;
     end;
-    hence (Partial_Sums(ab).n) to_power (1/p) <=
-    (Partial_Sums(ap).n) to_power (1/p) + (Partial_Sums(bp).n) to_power (1/p);
+    hence (Partial_Sums(ab).n) to_power (1/p) <= (Partial_Sums(ap).n) to_power
+    (1/p) + (Partial_Sums(bp).n) to_power (1/p);
   end;
   hence thesis;
 end;
 
 theorem Th8:
-  for a,b be Real_Sequence st ( (for n be Element of NAT holds a.n <= b.n )
-  & b is convergent & a is non-decreasing ) holds
-  a is convergent & lim a <= lim b
+  for a,b be Real_Sequence st (for n be Element of NAT holds a.n <=
+b.n ) & b is convergent & a is non-decreasing holds a is convergent & lim a <=
+  lim b
 proof
   let a,b be Real_Sequence such that
 A1: for n be Element of NAT holds a.n <= b.n and
 A2: b is convergent and
 A3: a is non-decreasing;
-  b is bounded by A2,SEQ_2:27;
-  then
-A4: b is bounded_above;
-  a is bounded_above
+A4: b is bounded by A2,SEQ_2:27;
+A5: a is bounded_above
   proof
     consider r be real number such that
-A5: for n be Element of NAT holds b.n < r by A4,SEQ_2:def 3;
+A6: for n be Element of NAT holds b.n < r by A4,SEQ_2:def 3;
     now
       let n be Element of NAT;
       a.n <=b.n by A1;
-      then a.n <= r by A5,XXREAL_0:2;
+      then a.n <= r by A6,XXREAL_0:2;
       then a.n+0 < r+1 by XREAL_1:10;
       hence a.n < r+1;
     end;
     hence thesis by SEQ_2:def 3;
   end;
   hence a is convergent by A3;
-  hence thesis by A1,A2,SEQ_2:32;
+  thus thesis by A1,A2,A3,A5,SEQ_2:32;
 end;
 
 theorem Th9:
-  for a,b,c be Real_Sequence st
-  ( (for n be Element of NAT holds a.n <= b.n+c.n )
-  & b is convergent & c is convergent & a is non-decreasing ) holds
-  a is convergent & lim a <= lim b + lim c
+  for a,b,c be Real_Sequence st (for n be Element of NAT holds a.n
+<= b.n+c.n ) & b is convergent & c is convergent & a is non-decreasing holds a
+  is convergent & lim a <= lim b + lim c
 proof
   let a,b,c be Real_Sequence such that
 A1: for n be Element of NAT holds a.n <= b.n+c.n and
-A2: b is convergent and
-A3: c is convergent and
-A4: a is non-decreasing;
-A5: b+c is convergent by A2,A3,SEQ_2:19;
-A6: now
+A2: b is convergent & c is convergent and
+A3: a is non-decreasing;
+A4: now
     let n be Element of NAT;
     a.n <=b.n + c.n by A1;
     hence a.n <= (b+c).n by SEQ_1:11;
   end;
-A7: lim (b+c) = lim b + lim c by A2,A3,SEQ_2:20;
-  thus a is convergent by A4,A5,A6,Th8;
-  thus thesis by A4,A5,A6,A7,Th8;
+A5: b+c is convergent by A2,SEQ_2:19;
+  hence a is convergent by A3,A4,Th8;
+  lim (b+c) = lim b + lim c by A2,SEQ_2:20;
+  hence thesis by A3,A5,A4,Th8;
 end;
 
 theorem Th10:
-  for p be Real st 0 < p for a,ap be Real_Sequence st a is convergent
-  & (for n be Element of NAT holds 0 <=a.n )
-  & (for n be Element of NAT holds ap.n=(a.n) to_power p) holds
-  ap is convergent & lim ap = (lim a) to_power p
+  for p be Real st 0 < p for a,ap be Real_Sequence st a is
+  convergent & (for n be Element of NAT holds 0 <=a.n ) & (for n be Element of
+  NAT holds ap.n=(a.n) to_power p) holds ap is convergent & lim ap = (lim a)
+  to_power p
 proof
   let p be Real such that
 A1: 0 < p;
@@ -1293,12 +1330,15 @@ A1: 0 < p;
 A2: a is convergent and
 A3: for n be Element of NAT holds 0 <=a.n and
 A4: for n be Element of NAT holds ap.n=(a.n) to_power p;
-  now per cases;
+  now
+    per cases;
     case
 A5:   lim a =0;
-      now per cases;
-        case ex n be Element of NAT st for m be Element of NAT
-          st n<=m holds a.m=0;
+      now
+        per cases;
+        case
+          ex n be Element of NAT st for m be Element of NAT st n<=m
+          holds a.m=0;
           then consider N be Element of NAT such that
 A6:       for m be Element of NAT st N<=m holds a.m=0;
 A7:       for n be Element of NAT holds (a^\N).n=0
@@ -1311,167 +1351,181 @@ A8:       now
             let e be real number such that
 A9:         e>0;
             take n=0;
-            let m be Element of NAT such that n<=m;
-A10:        (ap^\N).m= ap.(m+N) by NAT_1:def 3
+            let m be Element of NAT such that
+            n<=m;
+A10:        (lim a) to_power p = 0 by A1,A5,POWER:def 2;
+            (ap^\N).m= ap.(m+N) by NAT_1:def 3
               .= (a.(m+N)) to_power p by A4
               .= ((a^\N).m) to_power p by NAT_1:def 3
               .= 0 to_power p by A7
               .= 0 by A1,POWER:def 2;
-            (lim a) to_power p = 0 by A1,A5,POWER:def 2;
-            hence abs((ap^\N).m-((lim a) to_power p)) < e by A9,A10,ABSVALUE:7;
+            hence abs((ap^\N).m-((lim a) to_power p)) < e by A9,A10,
+            ABSVALUE:7;
           end;
-          then (ap^\N) is convergent by SEQ_2:def 6;
-          then ap is convergent & ((lim a) to_power p)
-          =lim(ap^\N) by A8,SEQ_2:def 7,SEQ_4:35;
-          hence thesis by SEQ_4:33;
+          then
+A11:      (ap^\N) is convergent by SEQ_2:def 6;
+          then ((lim a) to_power p) =lim(ap^\N) by A8,SEQ_2:def 7;
+          hence thesis by A11,SEQ_4:33,35;
         end;
         case
-A11:      for n be Element of NAT ex m be Element of NAT st n<=m & a.m<>0;
-          then consider m1 be Element of NAT such that
-A12:      0<=m1 & a.m1 <>0;
+A12:      for n be Element of NAT ex m be Element of NAT st n<=m & a.
+          m<>0;
           defpred P[set] means a.$1 <> 0;
-A13:      ex m be Nat st P[m] by A12;
+          ex m1 be Element of NAT st 0<=m1 & a.m1 <>0 by A12;
+          then
+A13:      ex m be Nat st P[m];
           consider M be Nat such that
-A14:      P[M] & for n be Nat st P[n] holds M<=n from NAT_1:sch 5(A13);
+A14:      P[M] & for n be Nat st P[n] holds M<=n from NAT_1:sch 5(A13
+          );
+          defpred P[set,set,set] means for n,m be Element of NAT st $2=n & $3=
+m holds n<m & a.m <>0 & for k be Element of NAT st n<k & a.k <>0 holds m<=k;
+A15:      (lim a) to_power p =0 by A1,A5,POWER:def 2;
           reconsider M as Element of NAT by ORDINAL1:def 13;
-A15:      now
+A16:      now
             let n be Element of NAT;
             consider m be Element of NAT such that
-A16:        n+1<=m & a.m <>0 by A11;
-            take m; thus n<m & a.m <>0 by A16,NAT_1:13;
+A17:        n+1<=m & a.m <>0 by A12;
+            take m;
+            thus n<m & a.m <>0 by A17,NAT_1:13;
           end;
-          defpred P[set,set,set] means
-          for n,m be Element of NAT st $2=n & $3=m holds
-          n<m & a.m <>0 & for k be Element of NAT st n<k & a.k <>0 holds m<=k;
-A17:      for n be Element of NAT for x be Element of NAT
-          ex y be Element of NAT st P[n,x,y]
+A18:      for n be Element of NAT for x be Element of NAT ex y be Element
+          of NAT st P[n,x,y]
           proof
             let n be Element of NAT;
             let x be Element of NAT;
             defpred P[Nat] means x<$1 & a.$1 <>0;
-            ex m be Element of NAT st P[m] by A15;
+            ex m be Element of NAT st P[m] by A16;
             then
-A18:        ex m be Nat st P[m];
+A19:        ex m be Nat st P[m];
             consider l be Nat such that
-A19:        P[l] & for k be Nat st P[k] holds l<=k from NAT_1:sch 5(A18);
+A20:        P[l] & for k be Nat st P[k] holds l<=k from NAT_1:sch 5(
+            A19);
             take l;
             l in NAT by ORDINAL1:def 13;
-            hence thesis by A19;
+            hence thesis by A20;
           end;
           consider F be Function of NAT,NAT such that
-A20:      F.0=M & for n be Element of NAT holds P[n,F.n,F.(n+1)]
-          from RECDEF_1:sch 2(A17);
-A21:      dom F=NAT & rng F c= NAT by FUNCT_2:def 1,RELAT_1:def 19;
-          then rng F c= REAL by XBOOLE_1:1;
-          then reconsider F as Real_Sequence by A21,RELSET_1:11;
-A22:      now
+A21:      F.0=M & for n be Element of NAT holds P[n,F.n,F.(n+1)] from
+          RECDEF_1:sch 2(A18);
+A22:      rng F c= NAT by RELAT_1:def 19;
+          then
+A23:      rng F c= REAL by XBOOLE_1:1;
+A24:      dom F=NAT by FUNCT_2:def 1;
+          then reconsider F as Real_Sequence by A23,RELSET_1:11;
+A25:      now
             let n be Element of NAT;
-            F.n in rng F by A21,FUNCT_1:def 5;
-            hence F.n is Element of NAT by A21;
+            F.n in rng F by A24,FUNCT_1:def 5;
+            hence F.n is Element of NAT by A22;
           end;
           now
             let n be Element of NAT;
-            F.n is Element of NAT & F.(n+1) is Element of NAT by A22;
-            hence F.n<F.(n+1) by A20;
+            F.n is Element of NAT & F.(n+1) is Element of NAT by A25;
+            hence F.n<F.(n+1) by A21;
           end;
           then reconsider F as increasing sequence of NAT by SEQM_3:def 11;
-A23:      for n be Element of NAT st a.n <> 0 ex m be Element of NAT st F.m=n
+A26:      for n be Element of NAT st a.n <> 0 ex m be Element of NAT st F
+          .m=n
           proof
-            defpred P[set] means a.$1 <>0 &
-            for m be Element of NAT holds F.m<>$1;
-            assume ex n be Element of NAT st P[n];
+            defpred P[set] means a.$1 <>0 & for m be Element of NAT holds F.m
+            <>$1;
+            assume
+            ex n be Element of NAT st P[n];
             then
-A24:        ex n be Nat st P[n];
+A27:        ex n be Nat st P[n];
             consider M1 be Nat such that
-A25:        P[M1] & for n be Nat st P[n] holds M1<=n from NAT_1:sch 5(A24);
-            defpred P[Nat] means $1<M1 & a.$1 <> 0
-            & ex m be Element of NAT st F.m=$1;
-A26:        ex n be Nat st P[n]
+A28:        P[M1] & for n be Nat st P[n] holds M1<=n from NAT_1:sch 5
+            (A27);
+            defpred P[Nat] means $1<M1 & a.$1 <> 0 & ex m be Element of NAT st
+            F.m=$1;
+A29:        ex n be Nat st P[n]
             proof
               take M;
-A27:          M<=M1 by A14,A25;
-              M <> M1 by A20,A25;
-              hence M<M1 by A27,XXREAL_0:1;
+              M<=M1 & M <> M1 by A14,A21,A28;
+              hence M<M1 by XXREAL_0:1;
               thus a.M <>0 by A14;
-              take 0; thus thesis by A20;
+              take 0;
+              thus thesis by A21;
             end;
-A28:        for n be Nat st P[n] holds n<=M1;
+A30:        for n be Nat st P[n] holds n<=M1;
             consider MX be Nat such that
-A29:        P[MX] & for n be Nat st P[n] holds n<=MX
-            from NAT_1:sch 6(A28,A26);
-A30:        for k be Element of NAT st MX<k & k<M1 holds a.k=0
+A31:        P[MX] & for n be Nat st P[n] holds n<=MX from NAT_1:sch 6
+            (A30,A29);
+A32:        for k be Element of NAT st MX<k & k<M1 holds a.k=0
             proof
               given k be Element of NAT such that
-A31:          MX<k & k<M1 & a.k <> 0;
-              now per cases;
-                case ex m be Element of NAT st F.m=k;
-                  hence contradiction by A29,A31;
+A33:          MX<k and
+A34:          k<M1 & a.k <> 0;
+              now
+                per cases;
+                case
+                  ex m be Element of NAT st F.m=k;
+                  hence contradiction by A31,A33,A34;
                 end;
-                case for m be Element of NAT holds F.m<>k;
-                  hence contradiction by A25,A31;
+                case
+                  for m be Element of NAT holds F.m<>k;
+                  hence contradiction by A28,A34;
                 end;
               end;
               hence contradiction;
             end;
             consider m be Element of NAT such that
-A32:        F.m=MX by A29;
-A33:        MX<F.(m+1) & a.(F.(m+1))<>0 &
-            for k be Element of NAT st MX<k & a.k<>0 holds F.(m+1)<=k
-            by A20,A32;
+A35:        F.m=MX by A31;
+A36:        MX<F.(m+1) & a.(F.(m+1))<>0 by A21,A35;
             M1 in NAT by ORDINAL1:def 13;
             then
-A34:        F.(m+1)<=M1 by A20,A25,A29,A32;
+A37:        F.(m+1)<=M1 by A21,A28,A31,A35;
             now
-              assume F.(m+1)<>M1;
-              then F.(m+1)<M1 by A34,XXREAL_0:1;
-              hence contradiction by A30,A33;
+              assume
+              F.(m+1)<>M1;
+              then F.(m+1)<M1 by A37,XXREAL_0:1;
+              hence contradiction by A32,A36;
             end;
-            hence contradiction by A25;
+            hence contradiction by A28;
           end;
-A36:      a*F is convergent by A2,SEQ_4:29;
-A37:      lim (a*F)=0 by A2,A5,SEQ_4:30;
-A38:      (lim a) to_power p =0 by A1,A5,POWER:def 2;
+A38:      a*F is convergent & lim (a*F)=0 by A2,A5,SEQ_4:29,30;
 A39:      now
             let e be real number;
             assume
 A40:        0<e;
             then 0 < (e to_power (1/p) ) by POWER:39;
             then consider n be Element of NAT such that
-A41:        for m be Element of NAT st n<=m holds abs((a*F).m-0)
-            < (e to_power (1/p) ) by A36,A37,SEQ_2:def 7;
+A41:        for m be Element of NAT st n<=m holds abs((a*F).m-0) < (e
+            to_power (1/p) ) by A38,SEQ_2:def 7;
             take k=F.n;
             let m be Element of NAT such that
 A42:        k<=m;
-            now per cases;
-              case a.m=0;
+            now
+              per cases;
+              case
+                a.m=0;
                 then ap.m= 0 to_power p by A4
                   .= 0 by A1,POWER:def 2;
-                hence abs(ap.m-((lim a) to_power p))<e by A38,A40,ABSVALUE:7;
+                hence abs(ap.m-((lim a) to_power p))<e by A15,A40, ABSVALUE
+                :7;
               end;
               case
 A43:            a.m<>0;
-                then
-A44:            a.m > 0 by A3;
-                consider l be Element of NAT such that
-A45:            m=F.l by A23,A43;
-                n<=l by A42,A45,SEQM_3:7;
+                then consider l be Element of NAT such that
+A44:            m=F.l by A26;
+                n<=l by A42,A44,SEQM_3:7;
                 then abs((a*F).l-0)< (e to_power (1/p) ) by A41;
                 then
-A46:            abs(a.(F.l))< (e to_power (1/p) ) by FUNCT_2:21;
+A45:            abs(a.(F.l))< (e to_power (1/p) ) by FUNCT_2:21;
+A46:            (a.m) to_power p = ap.m by A4;
+A47:            a.m > 0 by A3,A43;
+                then
+A48:            0 < ap.m by A46,POWER:39;
                 abs(a.m) > 0 by A43,COMPLEX1:133;
-                then abs(a.m) to_power p < (e to_power (1/p) ) to_power p
-                by A1,A45,A46,POWER:42;
+                then abs(a.m) to_power p < (e to_power (1/p) ) to_power p by
+                A1,A44,A45,POWER:42;
                 then abs(a.m) to_power p < e to_power ( (1/p) *p ) by A40,
-POWER:38;
-                then abs(a.m) to_power p < e to_power 1 by A1,XCMPLX_1:107;
-                then
-A47:            abs(a.m) to_power p < e by POWER:30;
-A48:            (a.m) to_power p = ap.m by A4;
-                then
-A49:            0 < ap.m by A44,POWER:39;
-                ap.m < e by A44,A47,A48,ABSVALUE:def 1;
-                hence abs(ap.m -((lim a) to_power p) ) < e by A38,A49,
-ABSVALUE:def 1;
+                POWER:38;
+                then abs(a.m) to_power p < e to_power 1 by A1,
+                XCMPLX_1:107;
+                then abs(a.m) to_power p < e by POWER:30;
+                then ap.m < e by A47,A46,ABSVALUE:def 1;
+                hence abs(ap.m -((lim a) to_power p) ) < e by A15,A48,
+                ABSVALUE:def 1;
               end;
             end;
             hence abs(ap.m -((lim a) to_power p) ) < e;
@@ -1483,87 +1537,83 @@ ABSVALUE:def 1;
       hence thesis;
     end;
     case
-A50:  lim a <>0;
-A51:  0 <= lim a by A2,A3,SEQ_2:31;
-A52:  lim a > 0 by A2,A3,A50,SEQ_2:31;
+A49:  lim a <>0;
+A50:  0 <= lim a by A2,A3,SEQ_2:31;
       ex k be Element of NAT st rng (a^\k) c= dom ( #R p)
       proof
         set e0=(lim a );
-A53:    e0/2 > 0 by A50,A51,XREAL_1:217;
+A51:    e0/2 > 0 by A49,A50,XREAL_1:217;
         then consider k be Element of NAT such that
-A54:    for m be Element of NAT st k<=m holds abs(a.m-e0)<e0/2
-        by A2,SEQ_2:def 7;
+A52:    for m be Element of NAT st k<=m holds abs(a.m-e0)<e0/2 by A2,
+        SEQ_2:def 7;
         take k;
-A55:    now
+A53:    now
           let m be Element of NAT;
-          abs(a.(k+m)-e0)<e0/2 by A54,NAT_1:12;
+          abs(a.(k+m)-e0)<e0/2 by A52,NAT_1:12;
           then -(e0/2) <= a.(k+m)-e0 by ABSVALUE:12;
           then -(e0/2)+e0 <= a.(k+m)-e0+e0 by XREAL_1:9;
-          hence 0 < (a^\k).m by A53,NAT_1:def 3;
+          hence 0 < (a^\k).m by A51,NAT_1:def 3;
         end;
         now
-          let x be set such that
-A56:      x in rng (a^\k);
-          consider n be Element of NAT such that
-A57:      x = (a^\k).n by A56,FUNCT_2:190;
-          0 < (a^\k).n by A55;
+          let x be set;
+          assume
+          x in rng (a^\k);
+          then consider n be Element of NAT such that
+A54:      x = (a^\k).n by FUNCT_2:190;
+          0 < (a^\k).n by A53;
           then (a^\k).n in {g where g is Real : 0<g};
           then (a^\k).n in right_open_halfline(0) by XXREAL_1:230;
-          hence x in dom ( #R p) by A57,TAYLOR_1:def 4;
+          hence x in dom ( #R p) by A54,TAYLOR_1:def 4;
         end;
         hence thesis by TARSKI:def 3;
       end;
       then consider k be Element of NAT such that
-A58:  rng (a^\k) c= dom ( #R p);
-A59:  a^\k is convergent & lim (a^\k) = lim a by A2,SEQ_4:33;
-      then ( #R p) is_differentiable_in lim (a^\k) by A52,TAYLOR_1:21;
-      then ( #R p) is_continuous_in lim (a^\k) by FDIFF_1:32;
+A55:  rng (a^\k) c= dom ( #R p);
+      now
+        let x be set;
+        assume
+        x in NAT;
+        then reconsider n=x as Element of NAT;
+        (a^\k).n in rng (a^\k) by VALUED_0:28;
+        then (a^\k).n in dom ( #R p) by A55;
+        then
+A56:    (a^\k).n in right_open_halfline(0) by TAYLOR_1:def 4;
+        then a.(k+n) in right_open_halfline(0) by NAT_1:def 3;
+        then a.(k+n) in {g where g is Real : 0<g} by XXREAL_1:230;
+        then
+A57:    ex g be Real st a.(k+n) = g & g > 0;
+        thus (( #R p)/*(a^\k)).x = ( #R p).((a^\k).n) by A55,FUNCT_2:185
+          .=((a^\k).n) #R p by A56,TAYLOR_1:def 4
+          .=(a.(k+n)) #R p by NAT_1:def 3
+          .=(a.(k+n)) to_power p by A57,POWER:def 2
+          .=ap.(k+n) by A4
+          .=(ap^\k).x by NAT_1:def 3;
+      end;
       then
-A60:  ( #R p)/*(a^\k) is convergent & ( #R p).(lim (a^\k))
-      = lim (( #R p)/*(a^\k)) by A58,A59,FCONT_1:def 1;
-A61:  ( #R p)/*(a^\k) = ap^\k
-      proof
-        now
-          let x be set such that
-A62:      x in NAT;
-          reconsider n=x as Element of NAT by A62;
-          (a^\k).n in rng (a^\k) by VALUED_0:28;
-          then (a^\k).n in dom ( #R p) by A58;
-          then
-A63:      (a^\k).n in right_open_halfline(0) by TAYLOR_1:def 4;
-          then a.(k+n) in right_open_halfline(0) by NAT_1:def 3;
-          then a.(k+n) in {g where g is Real : 0<g} by XXREAL_1:230;
-          then consider g be Real such that
-A64:      a.(k+n) = g & g > 0;
-          thus (( #R p)/*(a^\k)).x = ( #R p).((a^\k).n) by A58,FUNCT_2:185
-            .=((a^\k).n) #R p by A63,TAYLOR_1:def 4
-            .=(a.(k+n)) #R p by NAT_1:def 3
-            .=(a.(k+n)) to_power p by A64,POWER:def 2
-            .=ap.(k+n) by A4
-            .=(ap^\k).x by NAT_1:def 3;
-        end;
-        hence thesis by FUNCT_2:18;
-      end;
-      lim a in right_open_halfline(0)
-      proof
-        lim a in {g where g is Real : 0<g} by A50,A51;
-        hence thesis by XXREAL_1:230;
-      end;
+A58:  ( #R p)/*(a^\k) = ap^\k by FUNCT_2:18;
+A59:  lim (a^\k) = lim a by A2,SEQ_4:33;
+      lim a > 0 by A2,A3,A49,SEQ_2:31;
+      then ( #R p) is_continuous_in lim (a^\k) by A59,FDIFF_1:32 ,
+      TAYLOR_1:21;
+      then
+A60:  ( #R p)/*(a^\k) is convergent & ( #R p).(lim (a^\k)) = lim (( #R p
+      )/*(a^\k)) by A2,A55,FCONT_1:def 1;
+      lim a in {g where g is Real : 0<g} by A49,A50;
+      then lim a in right_open_halfline(0) by XXREAL_1:230;
       then ( #R p).(lim (a^\k)) =(lim a) #R p by A59,TAYLOR_1:def 4
-        .=(lim a) to_power p by A50,A51,POWER:def 2;
-      hence thesis
-      by A60,A61,SEQ_4:35,36;
+        .=(lim a) to_power p by A49,A50,POWER:def 2;
+      hence thesis by A60,A58,SEQ_4:35,36;
     end;
   end;
   hence thesis;
 end;
 
 theorem
-  for p be Real st 0 < p for a,ap be Real_Sequence st a is summable
-  & (for n be Element of NAT holds 0 <=a.n )
-  & (for n be Element of NAT holds ap.n=(Partial_Sums(a).n) to_power p) holds
-  ap is convergent & lim ap = Sum(a) to_power p & ap is non-decreasing
-  & (for n be Element of NAT holds ap.n <= Sum(a) to_power p )
+  for p be Real st 0 < p for a,ap be Real_Sequence st a is summable & (
+for n be Element of NAT holds 0 <=a.n ) & (for n be Element of NAT holds ap.n=(
+  Partial_Sums(a).n) to_power p) holds ap is convergent & lim ap = Sum(a)
+to_power p & ap is non-decreasing & for n be Element of NAT holds ap.n <= Sum(a
+  ) to_power p
 proof
   let p be Real such that
 A1: 0 < p;
@@ -1571,316 +1621,352 @@ A1: 0 < p;
 A2: a is summable and
 A3: for n be Element of NAT holds 0 <=a.n and
 A4: for n be Element of NAT holds ap.n=(Partial_Sums(a).n) to_power p;
-A5: Partial_Sums(a) is convergent by A2,SERIES_1:def 2;
-  for n be Element of NAT holds 0 <= Partial_Sums(a).n by A3,Lm2;
-  then
-A6: ap is convergent & lim ap = (lim Partial_Sums(a)) to_power p
-  by A1,A4,A5,Th10;
+A5: Partial_Sums(a) is convergent & for n be Element of NAT holds 0 <=
+  Partial_Sums(a).n by A2,A3,Lm2,SERIES_1:def 2;
+  then lim ap = (lim Partial_Sums(a)) to_power p by A1,A4,Th10;
   hence
-A7: ap is convergent & lim ap = (Sum(a)) to_power p by SERIES_1:def 3;
-A8: Partial_Sums(a) is non-decreasing by A3,SERIES_1:19;
+A6: ap is convergent & lim ap = (Sum(a)) to_power p by A1,A4,A5,Th10
+  , SERIES_1:def 3;
+A7: Partial_Sums(a) is non-decreasing by A3,SERIES_1:19;
   now
-    let n, m be Element of NAT such that
-A9: n <=m;
-A10: ap.n = (Partial_Sums(a).n) to_power p by A4;
-A11: ap.m = (Partial_Sums(a).m) to_power p by A4;
-A12: Partial_Sums(a).n <= Partial_Sums(a).m by A8,A9,SEQM_3:12;
+    let n, m be Element of NAT;
+    assume
+    n <=m;
+    then
+A8: Partial_Sums(a).n <= Partial_Sums(a).m by A7,SEQM_3:12;
+A9: ap.n = (Partial_Sums(a).n) to_power p & ap.m = (Partial_Sums(a).m)
+    to_power p by A4;
     0 <= Partial_Sums(a).n by A3,Lm2;
-    hence ap.n <= ap.m by A1,A10,A11,A12,Th3;
+    hence ap.n <= ap.m by A1,A9,A8,Th3;
   end;
   hence
-A13: ap is non-decreasing by SEQM_3:12;
-  ap is bounded by A6,SEQ_2:27;
-  then ap is bounded_above;
-  hence thesis by A7,A13,SEQ_4:54;
+A10: ap is non-decreasing by SEQM_3:12;
+  ap is convergent by A1,A4,A5,Th10;
+  then ap is bounded by SEQ_2:27;
+  hence thesis by A6,A10,SEQ_4:54;
 end;
 
 theorem
-  for p, q be Real st 1 < p & 1/p + 1/q = 1 for a,b,ap,bq,ab be Real_Sequence
-  st (( for n be Element of NAT holds ap.n=abs(a.n) to_power p
-  & bq.n=abs(b.n) to_power q & ab.n=abs(a.n* b.n) )
-  & ap is summable & bq is summable ) holds ab is summable &
-  Sum ab <= ( Sum(ap) to_power (1/p) ) * ( Sum(bq) to_power (1/q) )
+  for p, q be Real st 1 < p & 1/p + 1/q = 1 for a,b,ap,bq,ab be
+Real_Sequence st ( for n be Element of NAT holds ap.n=abs(a.n) to_power p & bq.
+n=abs(b.n) to_power q & ab.n=abs(a.n* b.n) ) & ap is summable & bq is summable
+  holds ab is summable & Sum ab <= ( Sum(ap) to_power (1/p) ) * ( Sum(bq)
+  to_power (1/q) )
 proof
   let p,q be Real such that
 A1: 1 < p and
 A2: 1/p + 1/q = 1;
+  let a,b,ap,bq,ab be Real_Sequence such that
+A3: for n be Element of NAT holds ap.n=abs(a.n) to_power p & bq.n=abs(b.
+  n) to_power q & ab.n=abs(a.n* b.n) and
+A4: ap is summable and
+A5: bq is summable;
+A6: Partial_Sums(ap) is convergent by A4,SERIES_1:def 2;
   reconsider pp=1/p as Real;
   1/p < 1 by A1,XREAL_1:191;
   then
-A3: 1-1 < 1-pp by XREAL_1:17;
+A7: 1-1 < 1-pp by XREAL_1:17;
   then
-A4: 0 < q by A2;
-A5: 1/p > 0 by A1,XREAL_1:141;
-  let a,b,ap,bq,ab be Real_Sequence such that
-A6: for n be Element of NAT holds ap.n=abs(a.n) to_power p
-  & bq.n=abs(b.n) to_power q & ab.n=abs(a.n* b.n) and
-A7: ap is summable and
-A8: bq is summable;
-  deffunc F(Element of NAT)=(Partial_Sums(ap).$1) to_power (1/p);
-  consider x be Real_Sequence such that
-A9: for n be Element of NAT holds x.n=F(n) from SEQ_1:sch 1;
+A8: 0 < q by A2;
+  for n be Element of NAT holds 0 <= bq.n
+  proof
+    let n be Element of NAT;
+A9: bq.n=abs(b.n) to_power q by A3;
+    now
+      per cases by COMPLEX1:132;
+      case
+        abs(b.n) = 0;
+        hence thesis by A8,A9,POWER:def 2;
+      end;
+      case
+        abs(b.n) > 0;
+        hence thesis by A9,POWER:39;
+      end;
+    end;
+    hence thesis;
+  end;
+  then
+A10: for n be Element of NAT holds 0 <= Partial_Sums(bq).n by Lm2;
+  for n be Element of NAT holds 0 <= ab.n
+  proof
+    let n be Element of NAT;
+    ab.n= abs(a.n*b.n) by A3;
+    hence thesis by COMPLEX1:132;
+  end;
+  then
+A11: Partial_Sums(ab) is non-decreasing by SERIES_1:19;
   deffunc G(Element of NAT)=(Partial_Sums(bq).$1) to_power (1/q);
   consider y be Real_Sequence such that
-A10: for n be Element of NAT holds y.n=G(n) from SEQ_1:sch 1;
-A11: Partial_Sums(ap) is convergent by A7,SERIES_1:def 2;
-A12: Sum ap = lim Partial_Sums(ap) by SERIES_1:def 3;
+A12: for n be Element of NAT holds y.n=G(n) from SEQ_1:sch 1;
   for n be Element of NAT holds 0 <= ap.n
   proof
     let n be Element of NAT;
-A13: ap.n=abs(a.n) to_power p by A6;
-    now per cases by COMPLEX1:132;
-      case abs(a.n) = 0;
+A13: ap.n=abs(a.n) to_power p by A3;
+    now
+      per cases by COMPLEX1:132;
+      case
+        abs(a.n) = 0;
         hence thesis by A1,A13,POWER:def 2;
       end;
-      case abs(a.n) > 0;
+      case
+        abs(a.n) > 0;
         hence thesis by A13,POWER:39;
       end;
     end;
     hence thesis;
   end;
-  then for n be Element of NAT holds 0 <= Partial_Sums(ap).n by Lm2;
   then
-A14: x is convergent & lim x= Sum(ap) to_power (1/p) by A5,A9,A11,A12,Th10;
-A15: Partial_Sums(bq) is convergent by A8,SERIES_1:def 2;
-A16: Sum(bq) = lim Partial_Sums(bq) by SERIES_1:def 3;
-  for n be Element of NAT holds 0 <= bq.n
+A14: for n be Element of NAT holds 0 <= Partial_Sums(ap).n by Lm2;
+  deffunc F(Element of NAT)=(Partial_Sums(ap).$1) to_power (1/p);
+  consider x be Real_Sequence such that
+A15: for n be Element of NAT holds x.n=F(n) from SEQ_1:sch 1;
+A16: for n be Element of NAT holds Partial_Sums(ab).n <=(x(#)y).n
   proof
     let n be Element of NAT;
-A17: bq.n=abs(b.n) to_power q by A6;
-    now per cases by COMPLEX1:132;
-      case abs(b.n) = 0;
-        hence thesis by A4,A17,POWER:def 2;
-      end;
-      case abs(b.n) > 0;
-        hence thesis by A17,POWER:39;
-      end;
-    end;
-    hence thesis;
+A17: y.n = (Partial_Sums(bq).n) to_power (1/q) by A12;
+    Partial_Sums(ab).n <= ( (Partial_Sums(ap).n) to_power (1/p) ) * ( (
+Partial_Sums(bq).n) to_power (1/q) ) & x.n = (Partial_Sums(ap).n) to_power (1/
+    p) by A1,A2,A3,A15,Th6;
+    hence thesis by A17,SEQ_1:12;
   end;
-  then for n be Element of NAT holds 0 <= Partial_Sums(bq).n by Lm2;
-  then y is convergent & lim y= Sum(bq) to_power (1/q)
-  by A2,A3,A10,A15,A16,Th10;
+A18: 1/p > 0 by A1,XREAL_1:141;
   then
-A18: x(#)y is convergent
-  & lim (x(#)y) = (Sum(ap) to_power (1/p))* (Sum(bq) to_power (1/q))
-  by A14,SEQ_2:28,29;
-A19: for n be Element of NAT holds Partial_Sums(ab).n <=(x(#)y).n
-  proof
-    let n be Element of NAT;
-A20: Partial_Sums(ab).n <= ( (Partial_Sums(ap).n) to_power (1/p) )
-    * ( (Partial_Sums(bq).n) to_power (1/q) ) by A1,A2,A6,Th6;
-A21: x.n = (Partial_Sums(ap).n) to_power (1/p) by A9;
-    y.n = (Partial_Sums(bq).n) to_power (1/q) by A10;
-    hence thesis by A20,A21,SEQ_1:12;
-  end;
-  for n be Element of NAT holds 0 <= ab.n
-  proof
-    let n be Element of NAT;
-    ab.n= abs(a.n*b.n) by A6;
-    hence thesis by COMPLEX1:132;
-  end;
-  then Partial_Sums(ab) is non-decreasing by SERIES_1:19;
-  then Partial_Sums(ab) is convergent &
-  lim Partial_Sums(ab) <= lim (x(#)y) by A18,A19,Th8;
-  hence thesis by A18,SERIES_1:def 2,def 3;
+A19: x is convergent by A15,A6,A14,Th10;
+A20: Partial_Sums(bq) is convergent by A5,SERIES_1:def 2;
+  then
+A21: y is convergent by A2,A7,A12,A10,Th10;
+  then x(#)y is convergent by A19,SEQ_2:28;
+  then
+A22: Partial_Sums(ab) is convergent & lim Partial_Sums(ab) <= lim (x(#)y) by
+  A16,A11,Th8;
+  Sum ap = lim Partial_Sums(ap) by SERIES_1:def 3;
+  then
+A23: lim x= Sum(ap) to_power (1/p) by A18,A15,A6,A14,Th10;
+  Sum(bq) = lim Partial_Sums(bq) by SERIES_1:def 3;
+  then lim y= Sum(bq) to_power (1/q) by A2,A7,A12,A20,A10,Th10;
+  then
+  lim (x(#)y) = (Sum(ap) to_power (1/p))* (Sum(bq) to_power (1/q)) by A19
+  ,A23,A21,SEQ_2:29;
+  hence thesis by A22,SERIES_1:def 2,def 3;
 end;
 
 theorem
-  for p be Real st 1 < p for a,b,ap,bp,ab be Real_Sequence
-  st( ( for n be Element of NAT holds ap.n=abs(a.n) to_power p
-  & bp.n=abs(b.n) to_power p & ab.n=abs(a.n+b.n) to_power p )
-  & ap is summable & bp is summable ) holds
-  ab is summable & Sum(ab) to_power (1/p)
-  <= Sum(ap) to_power (1/p) + Sum(bp) to_power (1/p)
+  for p be Real st 1 < p for a,b,ap,bp,ab be Real_Sequence st ( for n be
+Element of NAT holds ap.n=abs(a.n) to_power p & bp.n=abs(b.n) to_power p & ab.n
+  =abs(a.n+b.n) to_power p ) & ap is summable & bp is summable holds ab is
+summable & Sum(ab) to_power (1/p) <= Sum(ap) to_power (1/p) + Sum(bp) to_power
+  (1/p)
 proof
   let p be Real such that
 A1: 1 < p;
 A2: 1/p > 0 by A1,XREAL_1:141;
   let a,b,ap,bp,ab be Real_Sequence such that
-A3: for n be Element of NAT holds ap.n=abs(a.n) to_power p
-  & bp.n=abs(b.n) to_power p & ab.n=abs(a.n+ b.n) to_power p and
+A3: for n be Element of NAT holds ap.n=abs(a.n) to_power p & bp.n=abs(b.
+  n) to_power p & ab.n=abs(a.n+ b.n) to_power p and
 A4: ap is summable and
 A5: bp is summable;
-  deffunc F(Element of NAT)=(Partial_Sums(ap).$1) to_power (1/p);
-  consider x be Real_Sequence such that
-A6: for n be Element of NAT holds x.n=F(n) from SEQ_1:sch 1;
-  deffunc G(Element of NAT)=(Partial_Sums(bp).$1) to_power (1/p);
-  consider y be Real_Sequence such that
-A7: for n be Element of NAT holds y.n=G(n) from SEQ_1:sch 1;
-A8: Partial_Sums(ap) is convergent by A4,SERIES_1:def 2;
-A9: Sum(ap) = lim Partial_Sums(ap) by SERIES_1:def 3;
+  deffunc H(Element of NAT)=(Partial_Sums(ab).$1) to_power (1/p);
+  consider z be Real_Sequence such that
+A6: for n be Element of NAT holds z.n=H(n) from SEQ_1:sch 1;
+A7: for n be Element of NAT holds 0 <= ab.n
+  proof
+    let n be Element of NAT;
+A8: ab.n=abs(a.n +b.n) to_power p by A3;
+    per cases by COMPLEX1:132;
+    suppose
+      abs(a.n+b.n) = 0;
+      hence thesis by A1,A8,POWER:def 2;
+    end;
+    suppose
+      abs(a.n+b.n) > 0;
+      hence thesis by A8,POWER:39;
+    end;
+  end;
+A9: for n be Element of NAT holds 0 <= z.n
+  proof
+    let n be Element of NAT;
+A10: z.n=(Partial_Sums(ab).n) to_power (1/p) by A6;
+    per cases by A7,Lm2;
+    suppose
+      Partial_Sums(ab).n = 0;
+      hence thesis by A2,A10,POWER:def 2;
+    end;
+    suppose
+      Partial_Sums(ab).n > 0;
+      hence thesis by A10,POWER:39;
+    end;
+  end;
+A11: Partial_Sums(ab) is non-decreasing by A7,SERIES_1:19;
+A12: now
+    let n,m be Element of NAT;
+    assume
+    n <= m;
+    then
+A13: Partial_Sums(ab).n <= Partial_Sums(ab).m by A11,SEQM_3:12;
+A14: 0 <= (Partial_Sums(ab).m) to_power (1/p)
+    proof
+      per cases by A7,Lm2;
+      suppose
+        Partial_Sums(ab).m = 0;
+        hence thesis by A2,POWER:def 2;
+      end;
+      suppose
+        Partial_Sums(ab).m > 0;
+        hence thesis by POWER:39;
+      end;
+    end;
+    now
+      per cases;
+      case
+        Partial_Sums(ab).n = Partial_Sums(ab).m;
+        hence (Partial_Sums(ab).n) to_power (1/p) <= (Partial_Sums(ab).m)
+        to_power (1/p);
+      end;
+      case
+        Partial_Sums(ab).n <> Partial_Sums(ab).m;
+        then
+A15:    Partial_Sums(ab).n < Partial_Sums(ab).m by A13, XXREAL_0:1;
+        now
+          per cases;
+          case
+            Partial_Sums(ab).n =0;
+            hence (Partial_Sums(ab).n) to_power (1/p) <= (Partial_Sums(ab).m)
+            to_power (1/p) by A2,A14,POWER:def 2;
+          end;
+          case
+A16:        Partial_Sums(ab).n <> 0;
+            0 <= Partial_Sums(ab).n by A7,Lm2;
+            hence (Partial_Sums(ab).n) to_power (1/p) <= (Partial_Sums(ab).m)
+            to_power (1/p) by A2,A15,A16,POWER:42;
+          end;
+        end;
+        hence (Partial_Sums(ab).n) to_power (1/p) <= (Partial_Sums(ab).m)
+        to_power (1/p);
+      end;
+    end;
+    hence (Partial_Sums(ab).n) to_power (1/p) <= (Partial_Sums(ab).m) to_power
+    (1/p);
+  end;
+  now
+    let n,m be Element of NAT;
+    assume
+A17: n <= m;
+    z.n =(Partial_Sums(ab).n) to_power (1/p) & z.m =(Partial_Sums(ab).m)
+    to_power (1/p) by A6;
+    hence z.n <= z.m by A12,A17;
+  end;
+  then
+A18: z is non-decreasing by SEQM_3:12;
   for n be Element of NAT holds 0 <= ap.n
   proof
     let n be Element of NAT;
-A10: ap.n=abs(a.n) to_power p by A3;
-    now per cases by COMPLEX1:132;
-      case abs(a.n) = 0;
-        hence thesis by A1,A10,POWER:def 2;
+A19: ap.n=abs(a.n) to_power p by A3;
+    now
+      per cases by COMPLEX1:132;
+      case
+        abs(a.n) = 0;
+        hence thesis by A1,A19,POWER:def 2;
       end;
-      case abs(a.n) > 0;
-        hence thesis by A10,POWER:39;
+      case
+        abs(a.n) > 0;
+        hence thesis by A19,POWER:39;
       end;
     end;
     hence thesis;
   end;
-  then for n be Element of NAT holds 0 <= Partial_Sums(ap).n by Lm2;
   then
-A11: x is convergent & lim x= Sum(ap) to_power (1/p) by A2,A6,A8,A9,Th10;
-A12: Partial_Sums(bp) is convergent by A5,SERIES_1:def 2;
-A13: Sum(bp) = lim Partial_Sums(bp) by SERIES_1:def 3;
+A20: for n be Element of NAT holds 0 <= Partial_Sums(ap).n by Lm2;
+  deffunc F(Element of NAT)=(Partial_Sums(ap).$1) to_power (1/p);
+  consider x be Real_Sequence such that
+A21: for n be Element of NAT holds x.n=F(n) from SEQ_1:sch 1;
   for n be Element of NAT holds 0 <= bp.n
   proof
     let n be Element of NAT;
-A14: bp.n=abs(b.n) to_power p by A3;
-    now per cases by COMPLEX1:132;
-      case abs(b.n) = 0;
-        hence thesis by A1,A14,POWER:def 2;
+A22: bp.n=abs(b.n) to_power p by A3;
+    now
+      per cases by COMPLEX1:132;
+      case
+        abs(b.n) = 0;
+        hence thesis by A1,A22,POWER:def 2;
       end;
-      case abs(b.n) > 0;
-        hence thesis by A14,POWER:39;
+      case
+        abs(b.n) > 0;
+        hence thesis by A22,POWER:39;
       end;
     end;
     hence thesis;
   end;
-  then for n be Element of NAT holds 0 <= Partial_Sums(bp).n by Lm2;
   then
-A15: y is convergent & lim y= Sum(bp) to_power (1/p) by A2,A7,A12,A13,Th10;
-  deffunc H(Element of NAT)=(Partial_Sums(ab).$1) to_power (1/p);
-  consider z be Real_Sequence such that
-A16: for n be Element of NAT holds z.n=H(n) from SEQ_1:sch 1;
-A17: for n be Element of NAT holds z.n <=x.n + y.n
+A23: for n be Element of NAT holds 0 <= Partial_Sums(bp).n by Lm2;
+  deffunc G(Element of NAT)=(Partial_Sums(bp).$1) to_power (1/p);
+  consider y be Real_Sequence such that
+A24: for n be Element of NAT holds y.n=G(n) from SEQ_1:sch 1;
+A25: Partial_Sums(bp) is convergent by A5,SERIES_1:def 2;
+  then
+A26: y is convergent by A2,A24,A23,Th10;
+A27: Partial_Sums(ap) is convergent by A4,SERIES_1:def 2;
+  then
+A28: x is convergent by A2,A21,A20,Th10;
+A29: for n be Element of NAT holds z.n <=x.n + y.n
   proof
     let n be Element of NAT;
-A18: (Partial_Sums(ab).n) to_power (1/p) <=
-    ( (Partial_Sums(ap).n) to_power (1/p) )
-    + ( (Partial_Sums(bp).n) to_power (1/p) ) by A1,A3,Th7;
-A19: x.n = (Partial_Sums(ap).n) to_power (1/p) by A6;
-    y.n = (Partial_Sums(bp).n) to_power (1/p) by A7;
-    hence thesis by A16,A18,A19;
+A30: y.n = (Partial_Sums(bp).n) to_power (1/p) by A24;
+    (Partial_Sums(ab).n) to_power (1/p) <= ( (Partial_Sums(ap).n)
+    to_power (1/p) ) + ( (Partial_Sums(bp).n) to_power (1/p) ) & x.n = (
+    Partial_Sums(ap).n) to_power (1/p) by A1,A3,A21,Th7;
+    hence thesis by A6,A30;
   end;
-A20: for n be Element of NAT holds 0 <= ab.n
+  then
+A31: z is convergent by A28,A26,A18,Th9;
+A32: for n be Element of NAT holds (z.n) to_power p = Partial_Sums(ab).n
   proof
     let n be Element of NAT;
-A21: ab.n=abs(a.n +b.n) to_power p by A3;
-    per cases by COMPLEX1:132;
-    suppose abs(a.n+b.n) = 0;
-      hence thesis by A1,A21,POWER:def 2;
-    end;
-    suppose abs(a.n+b.n) > 0;
-      hence thesis by A21,POWER:39;
-    end;
-  end;
-A22: for n be Element of NAT holds 0 <= z.n
-  proof
-    let n be Element of NAT;
-A23: z.n=(Partial_Sums(ab).n) to_power (1/p) by A16;
-    per cases by A20,Lm2;
-    suppose Partial_Sums(ab).n = 0;
-      hence thesis by A2,A23,POWER:def 2;
-    end;
-    suppose Partial_Sums(ab).n > 0;
-      hence thesis by A23,POWER:39;
-    end;
-  end;
-A24: z is non-decreasing
-  proof
-A25: Partial_Sums(ab) is non-decreasing by A20,SERIES_1:19;
-A26: now
-      let n,m be Element of NAT such that
-A27:  n <= m;
-A28:  Partial_Sums(ab).n <= Partial_Sums(ab).m by A25,A27,SEQM_3:12;
-A29:  0 <= (Partial_Sums(ab).m) to_power (1/p)
-      proof
-        per cases by A20,Lm2;
-        suppose Partial_Sums(ab).m = 0;
-          hence thesis by A2,POWER:def 2;
-        end;
-        suppose Partial_Sums(ab).m > 0;
-          hence thesis by POWER:39;
-        end;
-      end;
-      now per cases;
-        case Partial_Sums(ab).n = Partial_Sums(ab).m;
-          hence (Partial_Sums(ab).n) to_power (1/p)
-          <= (Partial_Sums(ab).m) to_power (1/p);
-        end;
-        case Partial_Sums(ab).n <> Partial_Sums(ab).m;
-          then
-A30:      Partial_Sums(ab).n < Partial_Sums(ab).m by A28,XXREAL_0:1;
-          now per cases;
-            case Partial_Sums(ab).n =0;
-              hence (Partial_Sums(ab).n) to_power (1/p)
-              <= (Partial_Sums(ab).m) to_power (1/p) by A2,A29,POWER:def 2;
-            end;
-            case
-A31:          Partial_Sums(ab).n <> 0;
-              0 <= Partial_Sums(ab).n by A20,Lm2;
-              hence (Partial_Sums(ab).n) to_power (1/p)
-              <= (Partial_Sums(ab).m) to_power (1/p) by A2,A30,A31,POWER:42;
-            end;
-          end;
-          hence (Partial_Sums(ab).n) to_power (1/p)
-          <= (Partial_Sums(ab).m) to_power (1/p);
-        end;
-      end;
-      hence (Partial_Sums(ab).n) to_power (1/p)
-      <= (Partial_Sums(ab).m) to_power (1/p);
-    end;
+A33: z.n = (Partial_Sums(ab).n) to_power (1/p) by A6;
     now
-      let n,m be Element of NAT;
-      assume
-A32:  n <= m;
-A33:  z.n =(Partial_Sums(ab).n) to_power (1/p) by A16;
-      z.m =(Partial_Sums(ab).m) to_power (1/p) by A16;
-      hence z.n <= z.m by A26,A32,A33;
-    end;
-    hence thesis by SEQM_3:12;
-  end;
-  then
-A34: z is convergent & lim z <= lim x + lim y by A11,A15,A17,Th9;
-  for n be Element of NAT holds (z.n) to_power p = Partial_Sums(ab).n
-  proof
-    let n be Element of NAT;
-A35: z.n = (Partial_Sums(ab).n) to_power (1/p) by A16;
-    now per cases;
+      per cases;
       case
-A36:    Partial_Sums(ab).n =0;
-        then z.n= 0 by A2,A35,POWER:def 2;
-        hence thesis by A1,A36,POWER:def 2;
+A34:    Partial_Sums(ab).n =0;
+        then z.n= 0 by A2,A33,POWER:def 2;
+        hence thesis by A1,A34,POWER:def 2;
       end;
       case
-A37:    Partial_Sums(ab).n <> 0;
-        0 <= Partial_Sums(ab).n by A20,Lm2;
-        hence (z.n) to_power p = ( Partial_Sums(ab).n) to_power ((1/p)*p)
-        by A35,A37,POWER:38
+A35:    Partial_Sums(ab).n <> 0;
+        0 <= Partial_Sums(ab).n by A7,Lm2;
+        hence (z.n) to_power p = ( Partial_Sums(ab).n) to_power ((1/p)*p) by
+        A33,A35,POWER:38
           .=( Partial_Sums(ab).n) to_power 1 by A1,XCMPLX_1:107
           .= Partial_Sums(ab).n by POWER:30;
       end;
     end;
     hence thesis;
   end;
+  then lim Partial_Sums(ab) = (lim z) to_power p by A1,A9,A31,Th10;
   then
-A38: Partial_Sums(ab) is convergent
-  & lim Partial_Sums(ab) = (lim z) to_power p by A1,A22,A34,Th10;
-  then
-A39: ab is summable & Sum(ab)= (lim z) to_power p by SERIES_1:def 2,def 3;
-  Sum(ab) to_power (1/p) = lim z
+A36: Sum(ab)= (lim z) to_power p by SERIES_1:def 3;
+A37: Sum(ab) to_power (1/p) = lim z
   proof
     per cases;
     suppose
-A40:  lim z=0;
-      hence Sum(ab) to_power (1/p) = 0 to_power (1/p) by A1,A39,POWER:def 2
-        .= lim z by A2,A40,POWER:def 2;
+A38:  lim z=0;
+      hence Sum(ab) to_power (1/p) = 0 to_power (1/p) by A1,A36,POWER:def 2
+        .= lim z by A2,A38,POWER:def 2;
     end;
-    suppose lim z <> 0;
-      then 0 < lim z by A22,A34,SEQ_2:31;
-      hence (Sum ab) to_power (1/p)
-      = (lim z) to_power ((1/p)*p) by A39,POWER:38
+    suppose
+      lim z <> 0;
+      then 0 < lim z by A9,A31,SEQ_2:31;
+      hence (Sum ab) to_power (1/p) = (lim z) to_power ((1/p)*p) by A36,
+      POWER:38
         .= (lim z) to_power 1 by A1,XCMPLX_1:107
         .= lim z by POWER:30;
     end;
   end;
-  hence thesis by A11,A15,A17,A24,A38,Th9,SERIES_1:def 2;
+  Sum(bp) = lim Partial_Sums(bp) by SERIES_1:def 3;
+  then
+A39: lim y= Sum(bp) to_power (1/p) by A2,A24,A25,A23,Th10;
+  Sum(ap) = lim Partial_Sums(ap) by SERIES_1:def 3;
+  then
+A40: lim x= Sum(ap) to_power (1/p) by A2,A21,A27,A20,Th10;
+  Partial_Sums(ab) is convergent by A1,A9,A31,A32,Th10;
+  hence thesis by A28,A40,A26,A39,A29,A18,A37,Th9,SERIES_1:def 2;
 end;
 

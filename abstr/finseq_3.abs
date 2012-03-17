@@ -8,14 +8,15 @@ environ
 
  vocabularies FINSEQ_1, BOOLE, ARYTM_1, ZFMISC_1, RELAT_1, INT_1, FUNCT_1,
       FINSET_1, CARD_1, TARSKI, FINSEQ_2, ORDINAL2, ARYTM, MATRIX_2, FUNCT_2,
-      SUBSET_1;
+      SUBSET_1, PRALG_2, AMISTD_2, CARD_3, CAT_1;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, CARD_1, NUMBERS, ORDINAL1,
-      XCMPLX_0, RELAT_1, FUNCT_1, FINSEQ_1, FUNCT_2, FINSEQ_2, FINSET_1, NAT_1,
-      INT_1, FINSEQOP, XXREAL_0;
+      XCMPLX_0, RELAT_1, FUNCT_1, FINSEQ_1, FUNCT_2, FUNCOP_1, FINSEQ_2,
+      FINSET_1, NAT_1, FINSEQOP, XXREAL_0, CARD_3;
  constructors ENUMSET1, PARTFUN1, WELLORD2, XXREAL_0, REAL_1, NAT_1, INT_1,
-      FINSEQOP, RELSET_1;
+      FINSEQOP, RELSET_1, CARD_3, DOMAIN_1, CARD_2;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1, FINSET_1, XXREAL_0,
-      XREAL_0, NAT_1, INT_1, FINSEQ_1, CARD_1, FINSEQ_2;
+      XREAL_0, NAT_1, INT_1, FINSEQ_1, CARD_1, FINSEQ_2, FUNCOP_1, CARD_3,
+      SUBSET_1, FUNCT_2, CARD_2;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
 
 
@@ -146,10 +147,9 @@ theorem :: FINSEQ_3:42
   <* u,v *> <> <* x,y,z *>;
 
 theorem :: FINSEQ_3:43
-  len r = len p + len q &
-  (for k being Element of NAT st k in dom p holds r.k = p.k) &
-  (for k being Element of NAT st k in dom q
-  holds r.(len p + k) = q.k) implies r = p ^ q;
+  len r = len p + len q & (for k being Element of NAT st k in dom
+p holds r.k = p.k) & (for k being Element of NAT st k in dom q holds r.(len p +
+  k) = q.k) implies r = p ^ q;
 
 theorem :: FINSEQ_3:44
   for A being finite set st A c= Seg k holds len(Sgm A) = card A;
@@ -158,15 +158,14 @@ theorem :: FINSEQ_3:45
   for A being finite set st A c= Seg k holds dom(Sgm A) = Seg(card A);
 
 theorem :: FINSEQ_3:46
-  X c= Seg i & k < l & 1 <= n & m <= len(Sgm X) &
-  Sgm(X).m = k & Sgm(X).n = l implies m < n;
+  X c= Seg i & k < l & 1 <= n & m <= len(Sgm X) & Sgm(X).m = k &
+  Sgm(X).n = l implies m < n;
 
 canceled;
 
 theorem :: FINSEQ_3:48
-  X c= Seg i & Y c= Seg j implies
-  ((for m,n being Element of NAT st m in X & n in Y holds m < n) iff
-  Sgm(X \/ Y) = Sgm(X) ^ Sgm(Y));
+  X c= Seg i & Y c= Seg j implies ((for m,n being Element of NAT
+  st m in X & n in Y holds m < n) iff Sgm(X \/ Y) = Sgm(X) ^ Sgm(Y));
 
 theorem :: FINSEQ_3:49
   Sgm {} = {};
@@ -210,7 +209,8 @@ theorem :: FINSEQ_3:61
   len p = k + 1 & q = p | Seg k implies p = q ^ <* p.(k + 1) *>;
 
 theorem :: FINSEQ_3:62
-  p | X is FinSequence iff ex k being Element of NAT st X /\ dom p = Seg k;
+  p | X is FinSequence iff ex k being Element of NAT st X /\ dom p = Seg
+  k;
 
 theorem :: FINSEQ_3:63
   card((p ^ q) " A) = card(p " A) + card(q " A);
@@ -222,7 +222,6 @@ definition
   let p,A;
   func p - A -> FinSequence equals
 :: FINSEQ_3:def 1
-
   p * Sgm ((dom p) \ p " A);
 end;
 
@@ -301,16 +300,17 @@ theorem :: FINSEQ_3:89
   <* x,y *> - A = <* x,y *> iff not x in A & not y in A;
 
 theorem :: FINSEQ_3:90
-  len p = k + 1 & q = p | Seg k implies (p.(k + 1) in A iff p - A = q - A);
+  len p = k + 1 & q = p | Seg k implies (p.(k + 1) in A iff p - A
+  = q - A);
 
 theorem :: FINSEQ_3:91
-  len p = k + 1 & q = p | Seg k implies
-  (not p.(k + 1) in A iff p - A = (q - A) ^ <* p.(k + 1) *>);
+  len p = k + 1 & q = p | Seg k implies (not p.(k + 1) in A iff p
+  - A = (q - A) ^ <* p.(k + 1) *>);
 
 theorem :: FINSEQ_3:92
-  n in dom p implies for B being finite set st
-  B = {k where k is Element of NAT : k in dom p & k <= n & p.k in A}
-  holds p.n in A or (p - A).(n - card B) = p.n;
+  n in dom p implies for B being finite set st B = {k where k is Element
+of NAT : k in dom p & k <= n & p.k in A} holds p.n in A or (p - A).(n - card B)
+  = p.n;
 
 theorem :: FINSEQ_3:93
   p is FinSequence of D implies p - A is FinSequence of D;
@@ -322,15 +322,15 @@ theorem :: FINSEQ_3:95
   p is one-to-one implies len(p - A) = len p - card(A /\ rng p);
 
 theorem :: FINSEQ_3:96
-  for A being finite set st p is one-to-one & A c= rng p
-  holds len(p - A) = len p - card A;
+  for A being finite set st p is one-to-one & A c= rng p holds len
+  (p - A) = len p - card A;
 
 theorem :: FINSEQ_3:97
   p is one-to-one & x in rng p implies len(p - {x}) = len p - 1;
 
 theorem :: FINSEQ_3:98
-  rng p misses rng q & p is one-to-one & q is one-to-one iff
-  p ^ q is one-to-one;
+  rng p misses rng q & p is one-to-one & q is one-to-one iff p ^ q
+  is one-to-one;
 
 theorem :: FINSEQ_3:99
   A c= Seg k implies Sgm A is one-to-one;
@@ -356,12 +356,12 @@ theorem :: FINSEQ_3:107
   p is one-to-one & rng p = {x,y} & x <> y implies len p = 2;
 
 theorem :: FINSEQ_3:108
-  p is one-to-one & rng p = {x,y} & x <> y implies
-  p = <* x,y *> or p = <* y,x *>;
+  p is one-to-one & rng p = {x,y} & x <> y implies p = <* x,y *> or p =
+  <* y,x *>;
 
 theorem :: FINSEQ_3:109
-  p is one-to-one & rng p = {x,y,z} & <* x,y,z *> is one-to-one implies
-  len p = 3;
+  p is one-to-one & rng p = {x,y,z} & <* x,y,z *> is one-to-one
+  implies len p = 3;
 
 theorem :: FINSEQ_3:110
   p is one-to-one & rng p = {x,y,z} & x <> y & y <> z & x <> z implies
@@ -372,13 +372,13 @@ begin :: Addenda
 :: from FSM_1
 
 theorem :: FINSEQ_3:111
-  for D being non empty set, df being FinSequence of D holds
-  df is non empty implies ex d being Element of D, df1 being FinSequence of D
-  st d = df.1 & df = <*d*>^df1;
+  for D being non empty set, df being FinSequence of D holds df is non
+empty implies ex d being Element of D, df1 being FinSequence of D st d = df.1 &
+  df = <*d*>^df1;
 
 theorem :: FINSEQ_3:112
-  for df being FinSequence, d being set holds
-  i in dom df implies (<*d*>^df).(i+1) = df.i;
+  for df being FinSequence, d being set holds i in dom df implies (<*d*>
+  ^df).(i+1) = df.i;
 
 :: from MATRIX_2, 2005.11.16, A.T.
 
@@ -387,18 +387,17 @@ definition
   let p be FinSequence;
   func Del(p,i) -> FinSequence equals
 :: FINSEQ_3:def 2
-
   p * Sgm ((dom p) \ {i});
 end;
 
 theorem :: FINSEQ_3:113
-  for p being FinSequence holds (i in dom p implies
-  ex m being Nat st len p = m + 1 & len Del(p,i) = m) &
-  (not i in dom p implies Del(p,i) = p);
+  for p being FinSequence holds (i in dom p implies ex m being
+Nat st len p = m + 1 & len Del(p,i) = m) & (not i in dom p implies Del(p,i) = p
+  );
 
 theorem :: FINSEQ_3:114
-  for D being non empty set
-  for p being FinSequence of D holds Del(p,i) is FinSequence of D;
+  for D being non empty set for p being FinSequence of D holds Del(p,i)
+  is FinSequence of D;
 
 :: from MATRLIN, 2005.11.16, A.T.
 
@@ -413,21 +412,21 @@ theorem :: FINSEQ_3:116
 reserve J for Element of NAT;
 
 theorem :: FINSEQ_3:117
-  for i,k,m,n being Element of NAT st n=m+1 & k in Seg n & i in Seg m
-  holds (1<=i & i<k implies Sgm(Seg n \ {k}).i = i) &
-  (k<=i & i<=m implies Sgm(Seg n \ {k}).i = i+1);
+  for i,k,m,n being Element of NAT st n=m+1 & k in Seg n & i in
+Seg m holds (1<=i & i<k implies Sgm(Seg n \ {k}).i = i) & (k<=i & i<=m implies
+  Sgm(Seg n \ {k}).i = i+1);
 
 theorem :: FINSEQ_3:118
-  for f being FinSequence, n,m st len f = m+1 & n in dom f holds len Del(f,n)=m
-;
+  for f being FinSequence, n,m st len f = m+1 & n in dom f holds
+  len Del(f,n)=m;
 
 theorem :: FINSEQ_3:119
-  for f being FinSequence,n,m,k being Element of NAT st len f = m+1 & k<n
-  holds Del(f,n).k = f.k;
+  for f being FinSequence,n,m,k being Element of NAT st len f = m+1 & k<
+  n holds Del(f,n).k = f.k;
 
 theorem :: FINSEQ_3:120
-  for f being FinSequence,n,m,k being Element of NAT
-  st len f = m+1 & n in dom f & n<=k & k<=m holds Del(f,n).k = f.(k+1);
+  for f being FinSequence,n,m,k being Element of NAT st len f = m+1 & n
+  in dom f & n<=k & k<=m holds Del(f,n).k = f.(k+1);
 
 :: from JORDAN3, 2005.11.16, A.T.
 
@@ -442,12 +441,12 @@ theorem :: FINSEQ_3:122
 :: from MATRLIN, 2006.01.06, A.T.
 
 theorem :: FINSEQ_3:123
-  for A being set, F being FinSequence
-  holds Sgm(F"A)^Sgm(F"(rng F \ A)) is Permutation of dom F;
+  for A being set, F being FinSequence holds Sgm(F"A)^Sgm(F"(rng
+  F \ A)) is Permutation of dom F;
 
 theorem :: FINSEQ_3:124
-  for F being FinSequence, A be Subset of rng F st F is one-to-one
-  ex p being Permutation of dom F st (F-A`)^(F-A) = F*p;
+  for F being FinSequence, A be Subset of rng F st F is one-to-one ex p
+  being Permutation of dom F st (F-A`)^(F-A) = F*p;
 
 :: Moved from GRAPH_2 by AK on 27.12.2006
 
@@ -463,3 +462,22 @@ theorem :: FINSEQ_3:126
 
 theorem :: FINSEQ_3:127
   len p < len q iff dom p c< dom q;
+
+:: from CATALG_1, 2009.09.08, A.T.
+
+theorem :: FINSEQ_3:128
+  for A being set, i being Nat holds i <> 0 & A = {} iff
+  i-tuples_on A = {};
+
+:: from AMISTD_2, 2009.09.08, A.T.
+
+registration
+  let i be Nat, D be set;
+  cluster i-tuples_on D -> with_common_domain;
+end;
+
+registration
+  let i be Nat, D be set;
+  cluster i-tuples_on D -> product-like;
+end;
+

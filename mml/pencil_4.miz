@@ -11,14 +11,13 @@ environ
       AMI_1, FINSET_1, VECTSP_1, RLSUB_1, RLSUB_2, MATRLIN, VECTSP_9, SETFAM_1,
       PENCIL_4, RLVECT_3, RLVECT_1, ARYTM;
  notations TARSKI, XBOOLE_0, SUBSET_1, ZFMISC_1, CARD_1, NUMBERS, XCMPLX_0,
-      XXREAL_0, NAT_1, NAT_D, SETFAM_1, REALSET1, DOMAIN_1, STRUCT_0, FINSET_1,
-      PRE_TOPC, PENCIL_1, RLVECT_1, VECTSP_1, VECTSP_4, VECTSP_5, VECTSP_7,
-      MATRLIN, VECTSP_9, BINARITH;
+      XXREAL_0, NAT_1, NAT_D, SETFAM_1, DOMAIN_1, STRUCT_0, FINSET_1, PRE_TOPC,
+      PENCIL_1, RLVECT_1, VECTSP_1, VECTSP_4, VECTSP_5, VECTSP_7, MATRLIN,
+      VECTSP_9;
  constructors XXREAL_0, NAT_1, REALSET1, BINARITH, VECTSP_5, VECTSP_7,
       VECTSP_9, PENCIL_1, MATRLIN, NAT_D;
- registrations XBOOLE_0, SUBSET_1, FINSET_1, XXREAL_0, XREAL_0, REALSET1,
-      STRUCT_0, VECTSP_7, MATRLIN, VECTSP_9, PENCIL_1, ORDINAL1, CARD_1,
-      VECTSP_1;
+ registrations SUBSET_1, FINSET_1, XXREAL_0, XREAL_0, REALSET1, STRUCT_0,
+      MATRLIN, VECTSP_9, PENCIL_1, ORDINAL1, CARD_1;
  requirements REAL, BOOLE, SUBSET, NUMERALS, ARITHM;
  definitions TARSKI, XBOOLE_0, STRUCT_0, PENCIL_1, VECTSP_4, RLVECT_1;
  theorems XBOOLE_0, ZFMISC_1, NAT_1, TARSKI, PENCIL_1, CARD_1, XBOOLE_1,
@@ -30,62 +29,65 @@ environ
 begin :: Spaces of pencils
 
 theorem Th1:
-  for k,n being Nat st 1<=k & k < n & 3 <= n holds k+1 < n or 2 <= k
+  for k,n being Nat st k < n & 3 <= n holds k+1 < n or 2 <= k
 proof
   let k,n be Nat such that
-A1: 1<=k & k < n & 3 <= n;
-  assume k+1 >= n;
-  then k+1 >= n & k+1 <= n by A1,NAT_1:13;
-  then 3 <= k+1 by A1,XXREAL_0:1;
+A1: k < n and
+A2: 3 <= n;
+  assume
+A3: k+1 >= n;
+  k+1 <= n by A1,NAT_1:13;
+  then 3 <= k+1 by A2,A3,XXREAL_0:1;
   then 3-1 <= k+1-1 by XREAL_1:11;
   hence thesis;
 end;
 
 theorem Th2:
-  for X being finite set for n being Nat st n <= card X
-  ex Y being Subset of X st card Y = n
+  for X being finite set for n being Nat st n <= card X ex Y being
+  Subset of X st card Y = n
 proof
   let X be finite set;
   let n be Nat;
   assume
 A1: n <= card X;
-  defpred P[Nat] means $1 <= card X implies
-  ex Y being Subset of X st card Y = $1;
-A2: P[0]
-  proof
-    assume 0<=card X;
-    reconsider e={} as Subset of X by XBOOLE_1:2;
-    take e;
-    thus thesis;
-  end;
-A3: now
+  defpred P[Nat] means $1 <= card X implies ex Y being Subset of X st card Y =
+  $1;
+A2: now
     let k be Nat;
     assume
-A4: P[k];
+A3: P[k];
     thus P[k+1]
     proof
       assume
-A5:   k+1 <= card X;
-      then
-A6:   k < card X by NAT_1:13;
-      consider Y being Subset of X such that
-A7:   card Y = k by A4,A5,NAT_1:13;
-      not X c= Y by A6,A7,XBOOLE_0:def 10;
+A4:   k+1 <= card X;
+      then consider Y being Subset of X such that
+A5:   card Y = k by A3,NAT_1:13;
+      k < card X by A4,NAT_1:13;
+      then not X c= Y by A5,XBOOLE_0:def 10;
       then consider x being set such that
-A8:   x in X & not x in Y by TARSKI:def 3;
-      {x} c= X by A8,ZFMISC_1:37;
+A6:   x in X and
+A7:   not x in Y by TARSKI:def 3;
+      {x} c= X by A6,ZFMISC_1:37;
       then reconsider Z=Y\/{x} as Subset of X by XBOOLE_1:8;
       take Z;
-      thus thesis by A7,A8,CARD_2:54;
+      thus thesis by A5,A7,CARD_2:54;
     end;
   end;
-  for k being Nat holds P[k] from NAT_1:sch 2(A2,A3);
+A8: P[0]
+  proof
+    reconsider e={} as Subset of X by XBOOLE_1:2;
+    assume
+    0<=card X;
+    take e;
+    thus thesis;
+  end;
+  for k being Nat holds P[k] from NAT_1:sch 2(A8,A2);
   hence thesis by A1;
 end;
 
 theorem Th3:
-  for F being Field for V being VectSp of F
-  for W being Subspace of V holds W is Subspace of (Omega).V
+  for F being Field for V being VectSp of F for W being Subspace of
+  V holds W is Subspace of (Omega).V
 proof
   let F be Field;
   let V be VectSp of F;
@@ -97,8 +99,8 @@ proof
 end;
 
 theorem Th4:
-  for F being Field for V being VectSp of F
-  for W being Subspace of (Omega).V holds W is Subspace of V
+  for F being Field for V being VectSp of F for W being Subspace of
+  (Omega).V holds W is Subspace of V
 proof
   let F be Field;
   let V be VectSp of F;
@@ -110,8 +112,8 @@ proof
 end;
 
 theorem Th5:
-  for F being Field for V being VectSp of F
-  for W being Subspace of V holds (Omega).W is Subspace of V
+  for F being Field for V being VectSp of F for W being Subspace of
+  V holds (Omega).W is Subspace of V
 proof
   let F be Field;
   let V be VectSp of F;
@@ -123,8 +125,8 @@ proof
 end;
 
 theorem Th6:
-  for F being Field for V,W being VectSp of F holds
-  (Omega).W is Subspace of V implies W is Subspace of V
+  for F being Field for V,W being VectSp of F holds (Omega).W is
+  Subspace of V implies W is Subspace of V
 proof
   let F be Field;
   let V,W be VectSp of F;
@@ -142,31 +144,35 @@ definition
   let W1,W2 be Subspace of V;
   func segment(W1,W2) -> Subset of Subspaces(V) means
   :Def1:
-  for W being strict Subspace of V holds W in it iff
-  W1 is Subspace of W & W is Subspace of W2 if W1 is Subspace of W2
-  otherwise it={};
+  for W being
+  strict Subspace of V holds W in it iff W1 is Subspace of W & W is Subspace of
+  W2 if W1 is Subspace of W2 otherwise it={};
   consistency;
   existence
   proof
     hereby
-      assume W1 is Subspace of W2;
+      defpred P[set] means for W being Subspace of V st W=$1 holds W1 is
+      Subspace of W & W is Subspace of W2;
       set A=Subspaces(V);
-      defpred P[set] means for W being Subspace of V st W=$1 holds
-      W1 is Subspace of W & W is Subspace of W2;
+      assume
+      W1 is Subspace of W2;
       consider X being Subset of A such that
-A1:   for x being set holds x in X iff x in A & P[x] from SUBSET_1:sch 1;
+A1:   for x being set holds x in X iff x in A & P[x] from SUBSET_1:sch
+      1;
       take X;
       let W be strict Subspace of V;
       thus W in X implies W1 is Subspace of W & W is Subspace of W2 by A1;
-      assume W1 is Subspace of W & W is Subspace of W2;
+      assume
+      W1 is Subspace of W & W is Subspace of W2;
       then
 A2:   P[W];
       W in Subspaces(V) by VECTSP_5:def 3;
       hence W in X by A1,A2;
     end;
     hereby
-      assume not W1 is Subspace of W2;
       reconsider W={} as Subset of Subspaces(V) by XBOOLE_1:2;
+      assume
+      not W1 is Subspace of W2;
       take W;
       thus W={};
     end;
@@ -175,12 +181,13 @@ A2:   P[W];
   proof
     let S,T be Subset of Subspaces(V);
     now
-      assume W1 is Subspace of W2;
+      assume
+      W1 is Subspace of W2;
       assume that
-A3:   for W being strict Subspace of V holds W in S iff
-      W1 is Subspace of W & W is Subspace of W2 and
-A4:   for W being strict Subspace of V holds W in T iff
-      W1 is Subspace of W & W is Subspace of W2;
+A3:   for W being strict Subspace of V holds W in S iff W1 is Subspace
+      of W & W is Subspace of W2 and
+A4:   for W being strict Subspace of V holds W in T iff W1 is Subspace
+      of W & W is Subspace of W2;
       now
         let x be set;
         thus x in S implies x in T
@@ -206,41 +213,47 @@ A8:     x1=x by VECTSP_5:def 3;
 end;
 
 theorem Th7:
-  for F being Field for V being VectSp of F
-  for W1,W2,W3,W4 being Subspace of V st
-  W1 is Subspace of W2 & W3 is Subspace of W4 &
-  (Omega).W1=(Omega).W3 & (Omega).W2=(Omega).W4
-  holds segment(W1,W2) = segment(W3,W4)
+  for F being Field for V being VectSp of F for W1,W2,W3,W4 being
+  Subspace of V st W1 is Subspace of W2 & W3 is Subspace of W4 & (Omega).W1=
+  (Omega).W3 & (Omega).W2=(Omega).W4 holds segment(W1,W2) = segment(W3,W4)
 proof
   let F be Field;
   let V be VectSp of F;
   let W1,W2,W3,W4 be Subspace of V;
-  assume
-A1: W1 is Subspace of W2 & W3 is Subspace of W4 &
-  (Omega).W1=(Omega).W3 & (Omega).W2=(Omega).W4;
+  assume that
+A1: W1 is Subspace of W2 and
+A2: W3 is Subspace of W4 and
+A3: (Omega).W1=(Omega).W3 and
+A4: (Omega).W2=(Omega).W4;
   thus segment(W1,W2) c= segment(W3,W4)
   proof
     let a be set;
     assume
-A2: a in segment(W1,W2);
-    then consider A1 being strict Subspace of V such that
-A3: A1=a by VECTSP_5:def 3;
-    reconsider A=a as strict Subspace of V by A3;
-    W1 is Subspace of A & A is Subspace of W2 by A1,A2,Def1;
-    then (Omega).W1 is Subspace of A & A is Subspace of (Omega).W2 by Th3,Th5;
-    then W3 is Subspace of A & A is Subspace of W4 by A1,Th4,Th6;
-    hence thesis by A1,Def1;
+A5: a in segment(W1,W2);
+    then ex A1 being strict Subspace of V st A1=a by VECTSP_5:def 3;
+    then reconsider A=a as strict Subspace of V;
+    A is Subspace of W2 by A1,A5,Def1;
+    then A is Subspace of (Omega).W2 by Th3;
+    then
+A6: A is Subspace of W4 by A4,Th4;
+    W1 is Subspace of A by A1,A5,Def1;
+    then (Omega).W1 is Subspace of A by Th5;
+    then W3 is Subspace of A by A3,Th6;
+    hence thesis by A2,A6,Def1;
   end;
   let a be set;
   assume
-A4: a in segment(W3,W4);
-  then consider A1 being strict Subspace of V such that
-A5: A1=a by VECTSP_5:def 3;
-  reconsider A=a as strict Subspace of V by A5;
-  W3 is Subspace of A & A is Subspace of W4 by A1,A4,Def1;
-  then (Omega).W3 is Subspace of A & A is Subspace of (Omega).W4 by Th3,Th5;
-  then W1 is Subspace of A & A is Subspace of W2 by A1,Th4,Th6;
-  hence thesis by A1,Def1;
+A7: a in segment(W3,W4);
+  then ex A1 being strict Subspace of V st A1=a by VECTSP_5:def 3;
+  then reconsider A=a as strict Subspace of V;
+  A is Subspace of W4 by A2,A7,Def1;
+  then A is Subspace of (Omega).W4 by Th3;
+  then
+A8: A is Subspace of W2 by A4,Th4;
+  W3 is Subspace of A by A2,A7,Def1;
+  then (Omega).W3 is Subspace of A by Th5;
+  then W1 is Subspace of A by A3,Th6;
+  hence thesis by A1,A8,Def1;
 end;
 
 definition
@@ -248,16 +261,15 @@ definition
   let V be VectSp of F;
   let W1,W2 be Subspace of V;
   func pencil(W1,W2) -> Subset of Subspaces(V) equals
-  segment(W1,W2) \ {(Omega).W1,(Omega).W2};
+  segment(W1,W2) \ {
+  (Omega).W1,(Omega).W2};
   coherence;
 end;
 
 theorem
-  for F being Field for V being VectSp of F
-  for W1,W2,W3,W4 being Subspace of V st
-  W1 is Subspace of W2 & W3 is Subspace of W4 &
-  (Omega).W1=(Omega).W3 & (Omega).W2=(Omega).W4
-  holds pencil(W1,W2) = pencil(W3,W4) by Th7;
+  for F being Field for V being VectSp of F for W1,W2,W3,W4 being
+  Subspace of V st W1 is Subspace of W2 & W3 is Subspace of W4 & (Omega).W1=
+(Omega).W3 & (Omega).W2=(Omega).W4 holds pencil(W1,W2) = pencil(W3,W4) by Th7;
 
 definition
   let F be Field;
@@ -265,14 +277,15 @@ definition
   let W1,W2 be Subspace of V;
   let k be Nat;
   func pencil(W1,W2,k) -> Subset of (k Subspaces_of V) equals
-  pencil (W1,W2) /\ (k Subspaces_of V);
+  pencil (W1,W2)
+  /\ (k Subspaces_of V);
   coherence by XBOOLE_1:17;
 end;
 
 theorem Th9:
-  for F being Field for V being finite-dimensional VectSp of F for k being Nat
-  for W1,W2,W being Subspace of V st W in pencil(W1,W2,k)
-  holds W1 is Subspace of W & W is Subspace of W2
+  for F being Field for V being finite-dimensional VectSp of F for
+k being Nat for W1,W2,W being Subspace of V st W in pencil(W1,W2,k) holds W1 is
+  Subspace of W & W is Subspace of W2
 proof
   let F be Field;
   let V be finite-dimensional VectSp of F;
@@ -281,20 +294,19 @@ proof
   assume
 A1: W in pencil(W1,W2,k);
   then
-A2: W in pencil(W1,W2) & W in k Subspaces_of V by XBOOLE_0:def 4;
-  consider X being strict Subspace of V such that
-A3: W=X & dim X=k by A1,VECTSP_9:def 3;
-A4: W in segment(W1,W2) by A2,XBOOLE_0:def 5;
+A2: ex X being strict Subspace of V st W=X & dim X=k by VECTSP_9:def 3;
+  W in pencil(W1,W2) by A1,XBOOLE_0:def 4;
+  then
+A3: W in segment(W1,W2) by XBOOLE_0:def 5;
   then W1 is Subspace of W2 by Def1;
-  hence thesis by A3,A4,Def1;
+  hence thesis by A2,A3,Def1;
 end;
 
 theorem
-  for F being Field for V being finite-dimensional VectSp of F for k being Nat
-  for W1,W2,W3,W4 being Subspace of V st
-  W1 is Subspace of W2 & W3 is Subspace of W4 &
-  (Omega).W1=(Omega).W3 & (Omega).W2=(Omega).W4
-  holds pencil(W1,W2,k) = pencil(W3,W4,k) by Th7;
+  for F being Field for V being finite-dimensional VectSp of F for k
+  being Nat for W1,W2,W3,W4 being Subspace of V st W1 is Subspace of W2 & W3 is
+Subspace of W4 & (Omega).W1=(Omega).W3 & (Omega).W2=(Omega).W4 holds pencil(W1,
+  W2,k) = pencil(W3,W4,k) by Th7;
 
 definition
   let F be Field;
@@ -302,26 +314,28 @@ definition
   let k be Nat;
   func k Pencils_of V -> Subset-Family of (k Subspaces_of V) means
   :Def4:
-  for X being set holds X in it iff ex W1,W2 being Subspace of V st
-  W1 is Subspace of W2 & dim W1+1=k & dim W2=k+1 & X=pencil(W1,W2,k);
+  for
+X being set holds X in it iff ex W1,W2 being Subspace of V st W1 is Subspace of
+  W2 & dim W1+1=k & dim W2=k+1 & X=pencil(W1,W2,k);
   existence
   proof
+    defpred P[set] means ex W1,W2 being Subspace of V st W1 is Subspace of W2
+    & dim W1+1=k & dim W2=k+1 & $1=pencil(W1,W2,k);
     set A = bool (k Subspaces_of V);
-    defpred P[set] means ex W1,W2 being Subspace of V st
-    W1 is Subspace of W2 & dim W1+1=k & dim W2=k+1 & $1=pencil(W1,W2,k);
     consider X being set such that
 A1: for x being set holds x in X iff x in A & P[x] from XBOOLE_0:sch 1;
     X c= A
     proof
       let a be set;
-      assume a in X;
+      assume
+      a in X;
       hence thesis by A1;
     end;
     then reconsider X as Subset-Family of (k Subspaces_of V);
     take X;
     let x be set;
-    thus x in X implies ex W1,W2 being Subspace of V st
-    W1 is Subspace of W2 & dim W1+1=k & dim W2=k+1 & x=pencil(W1,W2,k) by A1;
+    thus x in X implies ex W1,W2 being Subspace of V st W1 is Subspace of W2 &
+    dim W1+1=k & dim W2=k+1 & x=pencil(W1,W2,k) by A1;
     given W1,W2 being Subspace of V such that
 A2: W1 is Subspace of W2 & dim W1+1=k & dim W2=k+1 & x=pencil(W1,W2,k);
     thus thesis by A1,A2;
@@ -337,15 +351,18 @@ A4: for X being set holds X in T iff ex W1,W2 being Subspace of V st
       let x be set;
       thus x in S implies x in T
       proof
-        assume x in S;
-        then ex W1,W2 being Subspace of V st
-
-W1 is Subspace of W2 & dim W1+1=k & dim W2=k+1 & x=pencil(W1,W2,k) by A3;
+        assume
+        x in S;
+        then
+        ex W1,W2 being Subspace of V st W1 is Subspace of W2 & dim W1+1=k
+        & dim W2=k+1 & x=pencil(W1,W2,k) by A3;
         hence thesis by A4;
       end;
-      assume x in T;
-      then ex W1,W2 being Subspace of V st
-      W1 is Subspace of W2 & dim W1+1=k & dim W2=k+1 & x=pencil(W1,W2,k) by A4;
+      assume
+      x in T;
+      then
+      ex W1,W2 being Subspace of V st W1 is Subspace of W2 & dim W1+1=k &
+      dim W2=k+1 & x=pencil(W1,W2,k) by A4;
       hence x in S by A3;
     end;
     hence thesis by TARSKI:2;
@@ -353,125 +370,137 @@ W1 is Subspace of W2 & dim W1+1=k & dim W2=k+1 & x=pencil(W1,W2,k) by A3;
 end;
 
 theorem Th11:
-  for F being Field for V being finite-dimensional VectSp of F
-  for k being Nat st 1 <= k & k < dim V holds k Pencils_of V is non empty
+  for F being Field for V being finite-dimensional VectSp of F for
+  k being Nat st 1 <= k & k < dim V holds k Pencils_of V is non empty
 proof
   let F be Field;
   let V be finite-dimensional VectSp of F;
   let k be Nat;
-  assume
-A1: 1 <= k & k < dim V;
-  then k+1 <= dim V by NAT_1:13;
+  assume that
+A1: 1 <= k and
+A2: k < dim V;
+  k+1 <= dim V by A2,NAT_1:13;
   then consider W2 being strict Subspace of V such that
-A2: dim W2 = k+1 by VECTSP_9:39;
+A3: dim W2 = k+1 by VECTSP_9:39;
   k-'1<=k by NAT_D:35;
-  then k-'1 <= dim W2 by A2,NAT_1:13;
+  then k-'1 <= dim W2 by A3,NAT_1:13;
   then consider W1 being strict Subspace of W2 such that
-A3: dim W1 = k-'1 by VECTSP_9:39;
-A4: dim W1+1=k by A1,A3,XREAL_1:237;
+A4: dim W1 = k-'1 by VECTSP_9:39;
   reconsider W1'=W1 as Subspace of V by VECTSP_4:34;
-  pencil(W1',W2,k) in k Pencils_of V by A2,A4,Def4;
+  dim W1+1=k by A1,A4,XREAL_1:237;
+  then pencil(W1',W2,k) in k Pencils_of V by A3,Def4;
   hence thesis;
 end;
 
 theorem Th12:
-  for F being Field for V being finite-dimensional VectSp of F
-  for W1,W2,P,Q being Subspace of V
-  for k being Nat st 1 <= k & k < dim V & dim W1+1=k & dim W2=k+1 &
-  P in pencil(W1,W2,k) & Q in pencil(W1,W2,k) & P<>Q holds
-  P/\Q = (Omega).W1 & P+Q = (Omega).W2
+  for F being Field for V being finite-dimensional VectSp of F for
+W1,W2,P,Q being Subspace of V for k being Nat st dim W1+1=k & dim W2=k+1 & P in
+  pencil(W1,W2,k) & Q in pencil(W1,W2,k) & P<>Q holds P/\Q = (Omega).W1 & P+Q =
+  (Omega).W2
 proof
   let F be Field;
   let V be finite-dimensional VectSp of F;
   let W1,W2,P0,Q0 be Subspace of V;
   let k be Nat such that
-A1: 1 <= k & k < dim V & dim W1+1=k & dim W2=k+1 &
-  P0 in pencil(W1,W2,k) & Q0 in pencil(W1,W2,k) & P0<>Q0;
-  consider P being strict Subspace of V such that
-A2: P=P0 & dim P = k by A1,VECTSP_9:def 3;
+A1: dim W1+1=k and
+A2: dim W2=k+1 and
+A3: P0 in pencil(W1,W2,k) and
+A4: Q0 in pencil(W1,W2,k) and
+A5: P0<>Q0;
   consider Q being strict Subspace of V such that
-A3: Q=Q0 & dim Q = k by A1,VECTSP_9:def 3;
+A6: Q=Q0 and
+A7: dim Q = k by A4,VECTSP_9:def 3;
+A8: W1 is Subspace of Q by A4,A6,Th9;
+  consider P being strict Subspace of V such that
+A9: P=P0 and
+A10: dim P = k by A3,VECTSP_9:def 3;
+  W1 is Subspace of P by A3,A9,Th9;
+  then
+A11: W1 is Subspace of (P/\Q) by A8,VECTSP_5:24;
   P/\Q is Subspace of P by VECTSP_5:20;
   then
-A4: dim(P/\Q)<=k by A2,VECTSP_9:29;
-  W1 is Subspace of P & W1 is Subspace of Q by A1,A2,A3,Th9;
-  then
-A5: W1 is Subspace of (P/\Q) by VECTSP_5:24;
-  per cases by A1,A4,A5,NAT_1:9,VECTSP_9:29;
+A12: dim(P/\Q)<=k by A10,VECTSP_9:29;
+  per cases by A1,A12,A11,NAT_1:9,VECTSP_9:29;
   suppose
-A6: dim W1 = dim (P/\Q);
-    then (Omega).W1 = (Omega).(P/\Q) by A5,VECTSP_9:32;
-    hence P0/\Q0 = (Omega).W1 by A2,A3;
-    P is Subspace of W2 & Q is Subspace of W2 by A1,A2,A3,Th9;
+A13: dim W1 = dim (P/\Q);
+    then (Omega).W1 = (Omega).(P/\Q) by A11,VECTSP_9:32;
+    hence P0/\Q0 = (Omega).W1 by A9,A6;
+    P is Subspace of W2 & Q is Subspace of W2 by A3,A4,A9,A6,Th9;
     then
-A7: P+Q is Subspace of W2 by VECTSP_5:40;
-    dim(P+Q)+dim W1-dim W1 = dim P + dim Q - dim W1 by A6,VECTSP_9:36;
-    then (Omega).(W2) = (Omega).(P+Q) by A1,A2,A3,A7,VECTSP_9:32;
-    hence thesis by A2,A3;
+A14: P+Q is Subspace of W2 by VECTSP_5:40;
+    dim(P+Q)+dim W1-dim W1 = dim P + dim Q - dim W1 by A13,VECTSP_9:36;
+    then (Omega).(W2) = (Omega).(P+Q) by A1,A2,A10,A7,A14,VECTSP_9:32;
+    hence thesis by A9,A6;
   end;
   suppose
-A8: dim (P/\Q)=k;
-    P/\Q is Subspace of P by VECTSP_5:20;
-    then
-A9: (Omega).(P/\Q) = (Omega).P by A2,A8,VECTSP_9:32;
+A15: dim (P/\Q)=k;
     P/\Q is Subspace of Q by VECTSP_5:20;
-    then (Omega).(P/\Q) = (Omega).Q by A3,A8,VECTSP_9:32;
-    hence thesis by A1,A2,A3,A9;
+    then
+A16: (Omega).(P/\Q) = (Omega).Q by A7,A15,VECTSP_9:32;
+    P/\Q is Subspace of P by VECTSP_5:20;
+    then (Omega).(P/\Q) = (Omega).P by A10,A15,VECTSP_9:32;
+    hence thesis by A5,A9,A6,A16;
   end;
 end;
 
 theorem Th13:
-  for F being Field for V being finite-dimensional VectSp of F
-  for v being Vector of V st v <> 0.V holds dim Lin{v} = 1
+  for F being Field for V being finite-dimensional VectSp of F for
+  v being Vector of V st v <> 0.V holds dim Lin{v} = 1
 proof
   let F be Field;
   let V be finite-dimensional VectSp of F;
-  let v be Vector of V such that
-A1: v <> 0.V;
+  let v be Vector of V;
+  assume
+  v <> 0.V;
+  then
+A1: v <> 0.Lin{v} by VECTSP_4:19;
   v in {v} by TARSKI:def 1;
   then v in Lin{v} by VECTSP_7:13;
   then reconsider v0=v as Vector of Lin{v} by STRUCT_0:def 5;
-A2: Lin{v0}=Lin{v} by VECTSP_9:21;
-A3: v <> 0.Lin{v} by A1,VECTSP_4:19;
-  (Omega).Lin{v0} = Lin{v0};
-  hence thesis by A2,A3,VECTSP_9:34;
+  Lin{v0}=Lin{v} & (Omega).Lin{v0} = Lin{v0} by VECTSP_9:21;
+  hence thesis by A1,VECTSP_9:34;
 end;
 
 theorem Th14:
-  for F being Field for V being finite-dimensional VectSp of F
-  for W being Subspace of V
-  for v being Vector of V st not v in W holds dim(W+Lin{v})=dim W + 1
+  for F being Field for V being finite-dimensional VectSp of F for
+W being Subspace of V for v being Vector of V st not v in W holds dim(W+Lin{v})
+  =dim W + 1
 proof
   let F be Field;
   let V be finite-dimensional VectSp of F;
   let W be Subspace of V;
   let v be Vector of V such that
 A1: not v in W;
-A2: v <> 0.V by A1,VECTSP_4:25;
   the carrier of (Omega).(W/\Lin{v}) = {0.(W/\Lin{v})}
   proof
     thus the carrier of (Omega).(W/\Lin{v}) c= {0.(W/\Lin{v})}
     proof
       let a be set;
-      assume a in the carrier of (Omega).(W/\Lin{v});
-      then a in (the carrier of W)/\the carrier of Lin{v} by VECTSP_5:def 2;
-      then a in the carrier of W &
-      a in the carrier of Lin{v} by XBOOLE_0:def 4;
+      assume
+      a in the carrier of (Omega).(W/\Lin{v});
       then
-A3:   a in W & a in Lin{v} by STRUCT_0:def 5;
+A2:   a in (the carrier of W)/\the carrier of Lin{v} by
+      VECTSP_5:def 2;
+      then a in the carrier of Lin{v} by XBOOLE_0:def 4;
+      then a in Lin{v} by STRUCT_0:def 5;
       then consider e being Element of F such that
-A4:   a=e*v by VECTSP10:4;
+A3:   a=e*v by VECTSP10:4;
+      a in the carrier of W by A2,XBOOLE_0:def 4;
+      then
+A4:   a in W by STRUCT_0:def 5;
       now
-        assume e<>0.F;
+        assume
+        e<>0.F;
         then v=e"*(e*v) by VECTSP_1:67;
-        hence contradiction by A1,A3,A4,VECTSP_4:29;
+        hence contradiction by A1,A4,A3,VECTSP_4:29;
       end;
-      then a=0.V by A4,VECTSP_1:59;
+      then a=0.V by A3,VECTSP_1:59;
       then a = 0.(W/\Lin{v}) by VECTSP_4:19;
       hence thesis by TARSKI:def 1;
     end;
     let a be set;
-    assume a in {0.(W/\Lin{v})};
+    assume
+    a in {0.(W/\Lin{v})};
     then a=0.(W/\Lin{v}) by TARSKI:def 1;
     then a=0.V by VECTSP_4:19;
     then a in W/\Lin{v} by VECTSP_4:25;
@@ -480,146 +509,160 @@ A4:   a=e*v by VECTSP10:4;
   then (Omega).(W/\Lin{v})=(0).(W/\Lin{v}) by VECTSP_4:def 3;
   then
 A5: dim(W/\Lin{v})=0 by VECTSP_9:33;
-  dim(W+Lin{v}) + dim(W/\Lin{v}) = dim W + dim Lin{v} by VECTSP_9:36;
-  hence thesis by A2,A5,Th13;
+A6: dim(W+Lin{v}) + dim(W/\Lin{v}) = dim W + dim Lin{v} by VECTSP_9:36;
+  v <> 0.V by A1,VECTSP_4:25;
+  hence thesis by A5,A6,Th13;
 end;
 
 theorem Th15:
-  for F being Field for V being finite-dimensional VectSp of F
-  for W being Subspace of V for v,u being Vector of V st
-  not v in W & not u in W & v<>u & {v,u} is linearly-independent &
-  W/\Lin{v,u}=(0).V holds dim(W+Lin{v,u})=dim W + 2
+  for F being Field for V being finite-dimensional VectSp of F for
+  W being Subspace of V for v,u being Vector of V st v<>u & {v,u} is
+  linearly-independent & W/\Lin{v,u}=(0).V holds dim(W+Lin{v,u})=dim W + 2
 proof
   let F be Field;
   let V be finite-dimensional VectSp of F;
   let W be Subspace of V;
   let v,u be Vector of V such that
-A1: not v in W & not u in W & v<>u & {v,u} is linearly-independent &
-  W/\Lin{v,u}=(0).V;
-  v in {v,u} & u in {v,u} by TARSKI:def 2;
-  then v in Lin{v,u} & u in Lin{v,u} by VECTSP_7:13;
-  then reconsider v1=v,u1=u as Vector of Lin{v,u} by STRUCT_0:def 5;
-  reconsider L={v1,u1} as linearly-independent Subset of Lin{v,u}
-  by A1,VECTSP_9:16;
+A1: v<>u and
+A2: {v,u} is linearly-independent and
+A3: W/\Lin{v,u}=(0).V;
+  u in {v,u} by TARSKI:def 2;
+  then
+A4: u in Lin{v,u} by VECTSP_7:13;
+  v in {v,u} by TARSKI:def 2;
+  then v in Lin{v,u} by VECTSP_7:13;
+  then reconsider v1=v,u1=u as Vector of Lin{v,u} by A4,STRUCT_0:def 5;
+  reconsider L={v1,u1} as linearly-independent Subset of Lin{v,u} by A2,
+  VECTSP_9:16;
   (Omega).Lin{v,u}=Lin L by VECTSP_9:21;
   then
-A2: dim Lin{v,u}=2 by A1,VECTSP_9:35;
-  (Omega).(W/\Lin{v,u})=(0).(W/\Lin{v,u}) by A1,VECTSP_4:47;
+A5: dim Lin{v,u}=2 by A1,VECTSP_9:35;
+  (Omega).(W/\Lin{v,u})=(0).(W/\Lin{v,u}) by A3,VECTSP_4:47;
   then dim(W/\Lin{v,u}) = 0 by VECTSP_9:33;
   hence dim(W+Lin{v,u}) = dim(W+Lin{v,u}) + dim(W/\Lin{v,u})
-    .= dim W + 2 by A2,VECTSP_9:36;
+    .= dim W + 2 by A5,VECTSP_9:36;
 end;
 
 theorem Th16:
-  for F being Field for V being finite-dimensional VectSp of F
-  for W1,W2 being Subspace of V st W1 is Subspace of W2
-  for k being Nat st 1 <= k & k < dim V & dim W1+1=k & dim W2=k+1
-  for v being Vector of V st v in W2 & not v in W1
-  holds W1+Lin{v} in pencil(W1,W2,k)
+  for F being Field for V being finite-dimensional VectSp of F for
+W1,W2 being Subspace of V st W1 is Subspace of W2 for k being Nat st dim W1+1=k
+  & dim W2=k+1 for v being Vector of V st v in W2 & not v in W1 holds W1+Lin{v}
+  in pencil(W1,W2,k)
 proof
   let F be Field;
   let V be finite-dimensional VectSp of F;
   let W1,W2 be Subspace of V such that
 A1: W1 is Subspace of W2;
   let k be Nat such that
-A2: 1 <= k & k < dim V & dim W1+1=k & dim W2=k+1;
+A2: dim W1+1=k and
+A3: dim W2=k+1;
   let v be Vector of V such that
-A3: v in W2 & not v in W1;
+A4: v in W2 and
+A5: not v in W1;
   set W=W1+Lin{v};
-A4: dim W = k by A2,A3,Th14;
-A5: W1 is Subspace of W by VECTSP_5:11;
-  v in the carrier of W2 by A3,STRUCT_0:def 5;
+A6: dim W = k by A2,A5,Th14;
+  then
+A7: W in k Subspaces_of V by VECTSP_9:def 3;
+  v in the carrier of W2 by A4,STRUCT_0:def 5;
   then {v} c= the carrier of W2 by ZFMISC_1:37;
   then Lin{v} is Subspace of W2 by VECTSP_9:20;
-  then W is Subspace of W2 by A1,VECTSP_5:40;
+  then W1 is Subspace of W & W is Subspace of W2 by A1,VECTSP_5:11,40;
   then
-A6: W in segment(W1,W2) by A1,A5,Def1;
-  dim (Omega).W1 + 1 = k & dim (Omega).W2 = k+1 by A2,VECTSP_9:31;
-  then W <> (Omega).W1 & W <> (Omega).W2 by A4;
-  then not W in {(Omega).W1,(Omega).W2} by TARSKI:def 2;
+A8: W in segment(W1,W2) by A1,Def1;
+  dim (Omega).W2 = k+1 by A3,VECTSP_9:31;
   then
-A7: W in pencil(W1,W2) by A6,XBOOLE_0:def 5;
-  W in k Subspaces_of V by A4,VECTSP_9:def 3;
+A9: W <> (Omega).W2 by A6;
+  dim (Omega).W1 + 1 = k by A2,VECTSP_9:31;
+  then W <> (Omega).W1 by A6;
+  then not W in {(Omega).W1,(Omega).W2} by A9,TARSKI:def 2;
+  then W in pencil(W1,W2) by A8,XBOOLE_0:def 5;
   hence thesis by A7,XBOOLE_0:def 4;
 end;
 
 theorem Th17:
-  for F being Field for V being finite-dimensional VectSp of F
-  for W1,W2 being Subspace of V st W1 is Subspace of W2
-  for k being Nat st 1 <= k & k < dim V & dim W1+1=k & dim W2=k+1
-  holds pencil(W1,W2,k) is non trivial
+  for F being Field for V being finite-dimensional VectSp of F for
+W1,W2 being Subspace of V st W1 is Subspace of W2 for k being Nat st dim W1+1=k
+  & dim W2=k+1 holds pencil(W1,W2,k) is non trivial
 proof
   let F be Field;
   let V be finite-dimensional VectSp of F;
-  let W1,W2 be Subspace of V such that
-A1: W1 is Subspace of W2;
+  let W1,W2 be Subspace of V;
+  assume
+  W1 is Subspace of W2;
+  then reconsider U=W1 as Subspace of W2;
   let k be Nat such that
-A2: 1 <= k & k < dim V & dim W1+1=k & dim W2=k+1;
-  reconsider U=W1 as Subspace of W2 by A1;
+A1: dim W1+1=k & dim W2=k+1;
   consider W being Linear_Compl of U;
-A3: W2 is_the_direct_sum_of W,U by VECTSP_5:def 5;
-  then dim W2 = dim U + dim W by VECTSP_9:38;
+A2: W2 is_the_direct_sum_of W,U by VECTSP_5:def 5;
+  then
+A3: W /\ U = (0).W2 by VECTSP_5:def 4;
+  dim W2 = dim U + dim W by A2,VECTSP_9:38;
   then consider u,v being Vector of W such that
-A4: u <> v & {u,v} is linearly-independent &
-  (Omega).W = Lin{u,v} by A2,VECTSP_9:35;
-A5: now
-    assume v in Lin{u};
-    then consider a being Element of F such that
-A6: v = a*u by VECTSP10:4;
-    thus contradiction by A4,A6,VECTSP_7:8;
+A4: u <> v and
+A5: {u,v} is linearly-independent and
+  (Omega).W = Lin{u,v} by A1,VECTSP_9:35;
+A6: now
+    assume
+    v in Lin{u};
+    then ex a being Element of F st v = a*u by VECTSP10:4;
+    hence contradiction by A4,A5,VECTSP_7:8;
   end;
-A7: the VectSpStr of W2 = W+U & W /\ U = (0).W2 by A3,VECTSP_5:def 4;
   reconsider u,v as Vector of W2 by VECTSP_4:18;
-A8: u in W by STRUCT_0:def 5;
-A9: u in W2 by STRUCT_0:def 5;
-A10: now
-    assume u in W1;
-    then u in (0).W2 by A7,A8,VECTSP_5:7;
-    then u=0.W2 by VECTSP_4:46;
-    then u=0.W by VECTSP_4:19;
-    hence contradiction by A4,VECTSP_7:6;
-  end;
-A11: v in W by STRUCT_0:def 5;
-A12: v in W2 by STRUCT_0:def 5;
-A13: now
-    assume v in W1;
-    then v in (0).W2 by A7,A11,VECTSP_5:7;
+  reconsider u1=u,v1=v as Vector of V by VECTSP_4:18;
+A7: v in W by STRUCT_0:def 5;
+A8: now
+    assume
+    v in W1;
+    then v in (0).W2 by A3,A7,VECTSP_5:7;
     then v=0.W2 by VECTSP_4:46;
     then v=0.W by VECTSP_4:19;
-    hence contradiction by A4,VECTSP_7:6;
+    hence contradiction by A5,VECTSP_7:6;
   end;
-  reconsider u1=u,v1=v as Vector of V by VECTSP_4:18;
+A9: u in W by STRUCT_0:def 5;
+A10: now
+    assume
+    u in W1;
+    then u in (0).W2 by A3,A9,VECTSP_5:7;
+    then u=0.W2 by VECTSP_4:46;
+    then u=0.W by VECTSP_4:19;
+    hence contradiction by A5,VECTSP_7:6;
+  end;
   v in {v1} by TARSKI:def 1;
   then v in Lin{v1} by VECTSP_7:13;
   then
-A14: v in W1+Lin{v1} by VECTSP_5:6;
-A15: not v in Lin{u} by A5,VECTSP10:14;
-A16: now
-    assume W1+Lin{v1} = W1+Lin{u1};
+A11: v in W1+Lin{v1} by VECTSP_5:6;
+A12: not v in Lin{u} by A6,VECTSP10:14;
+A13: now
+    reconsider Wx=W as Subspace of V by VECTSP_4:34;
+    assume
+    W1+Lin{v1} = W1+Lin{u1};
     then consider h,j being Vector of V such that
-A17: h in W1 & j in Lin{u1} & v1 = h+j by A14,VECTSP_5:5;
+A14: h in W1 and
+A15: j in Lin{u1} and
+A16: v1 = h+j by A11,VECTSP_5:5;
     consider a being Element of F such that
-A18: j=a*u1 by A17,VECTSP10:4;
-    v1-a*u1=h+(a*u1-a*u1) by A17,A18,RLVECT_1:def 6;
+A17: j=a*u1 by A15,VECTSP10:4;
+    v1-a*u1=h+(a*u1-a*u1) by A16,A17,RLVECT_1:def 6;
     then v1-a*u1=h+0.V by RLVECT_1:28;
     then
-A19: v1-a*u1=h by RLVECT_1:10;
-    reconsider Wx=W as Subspace of V by VECTSP_4:34;
-    a*u in Wx by A8,VECTSP_4:29;
-    then
-A20: v-a*u in Wx by A11,VECTSP_4:31;
+A18: v1-a*u1=h by RLVECT_1:10;
     a*u = a*u1 by VECTSP_4:22;
     then
-A21: v1-a*u1 = v-a*u by VECTSP_4:24;
-    then v-a*u in W/\U by A17,A19,A20,VECTSP_5:7;
-    then v-a*u = 0.W2 by A7,VECTSP_4:46;
-    then h = 0.V by A19,A21,VECTSP_4:19;
-    then v1 = j by A17,RLVECT_1:10;
-    hence contradiction by A15,A17,VECTSP10:14;
+A19: v1-a*u1 = v-a*u by VECTSP_4:24;
+    a*u in Wx by A9,VECTSP_4:29;
+    then v-a*u in Wx by A7,VECTSP_4:31;
+    then v-a*u in W/\U by A14,A18,A19,VECTSP_5:7;
+    then v-a*u = 0.W2 by A3,VECTSP_4:46;
+    then h = 0.V by A18,A19,VECTSP_4:19;
+    then v1 = j by A16,RLVECT_1:10;
+    hence contradiction by A12,A15,VECTSP10:14;
   end;
-  W1+Lin{u1} in pencil(W1,W2,k) &
-  W1+Lin{v1} in pencil(W1,W2,k) by A2,A9,A10,A12,A13,Th16;
-  then 2 c= card pencil(W1,W2,k) by A16,PENCIL_1:2;
+  v in W2 by STRUCT_0:def 5;
+  then
+A20: W1+Lin{v1} in pencil(W1,W2,k) by A1,A8,Th16;
+  u in W2 by STRUCT_0:def 5;
+  then W1+Lin{u1} in pencil(W1,W2,k) by A1,A10,Th16;
+  then 2 c= card pencil(W1,W2,k) by A13,A20,PENCIL_1:2;
   hence thesis by PENCIL_1:4;
 end;
 
@@ -628,15 +671,16 @@ definition
   let V be finite-dimensional VectSp of F;
   let k be Nat;
   func PencilSpace(V,k) -> strict TopStruct equals
-  TopStruct(#k Subspaces_of V, k Pencils_of V#);
+  TopStruct(#k Subspaces_of V
+    , k Pencils_of V#);
   coherence;
 end;
 
 canceled;
 
 theorem Th19:
-  for F being Field for V being finite-dimensional VectSp of F
-  for k being Nat st 1 <= k & k < dim V holds PencilSpace(V,k) is non void
+  for F being Field for V being finite-dimensional VectSp of F for
+  k being Nat st 1 <= k & k < dim V holds PencilSpace(V,k) is non void
 proof
   let F be Field;
   let V be finite-dimensional VectSp of F;
@@ -648,223 +692,219 @@ A1: 1 <= k & k < dim V;
 end;
 
 theorem Th20:
-  for F being Field for V being finite-dimensional VectSp of F
-  for k being Nat st 1 <= k & k < dim V & 3 <= dim V
-  holds PencilSpace(V,k) is non degenerated
+  for F being Field for V being finite-dimensional VectSp of F for
+  k being Nat st 1 <= k & k < dim V & 3 <= dim V holds PencilSpace(V,k) is non
+  degenerated
 proof
   let F be Field;
   let V be finite-dimensional VectSp of F;
   let k be Nat such that
-A1: 1 <= k & k < dim V & 3 <= dim V;
+A1: 1 <= k and
+A2: k < dim V and
+A3: 3 <= dim V;
   set S=PencilSpace(V,k);
-  thus S is non degenerated
-  proof
-    now
-      let B be Block of S;
-      the topology of S is non empty by A1,Th11;
-      then consider W1,W2 being Subspace of V such that
-A2:   W1 is Subspace of W2 &
-      dim W1+1=k & dim W2=k+1 & B=pencil(W1,W2,k) by Def4;
-A3:   the carrier of W1 c= the carrier of V by VECTSP_4:def 2;
-      per cases by A1,Th1;
-      suppose k+1 < dim V;
-        then
-A4:     (Omega).W2 <> (Omega).V by A2,VECTSP_9:32;
-A5:     the carrier of W2 c= the carrier of V by VECTSP_4:def 2;
-        now
-          assume
-A6:       the carrier of V = the carrier of W2;
-          (Omega).W2 is Subspace of V by Th5;
-          hence contradiction by A4,A6,VECTSP_4:37;
-        end;
-        then not the carrier of V c= the carrier of W2 by A5,XBOOLE_0:def 10;
-        then consider v being set such that
-A7:     v in the carrier of V & not v in the carrier of W2 by TARSKI:def 3;
-        reconsider v as Vector of V by A7;
-        set X=W1+Lin{v};
-        not v in W2 by A7,STRUCT_0:def 5;
-        then
-A8:     dim X = k by A2,Th14,VECTSP_4:16;
-        now
-          assume X in B;
-          then X is Subspace of W2 by A2,Th9;
-          then
-A9:       the carrier of X c= the carrier of W2 by VECTSP_4:def 2;
-          v in {v} by TARSKI:def 1;
-          then v in Lin{v} by VECTSP_7:13;
-          then v in X by VECTSP_5:6;
-          then v in the carrier of X by STRUCT_0:def 5;
-          hence contradiction by A7,A9;
-        end;
-        hence the carrier of S <> B by A8,VECTSP_9:def 3;
+  now
+    let B be Block of S;
+    the topology of S is non empty by A1,A2,Th11;
+    then consider W1,W2 being Subspace of V such that
+A4: W1 is Subspace of W2 and
+A5: dim W1+1=k and
+A6: dim W2=k+1 and
+A7: B=pencil(W1,W2,k) by Def4;
+A8: the carrier of W1 c= the carrier of V by VECTSP_4:def 2;
+    per cases by A2,A3,Th1;
+    suppose
+      k+1 < dim V;
+      then
+A9:   (Omega).W2 <> (Omega).V by A6,VECTSP_9:32;
+A10:  now
+        assume
+A11:    the carrier of V = the carrier of W2;
+        (Omega).W2 is Subspace of V by Th5;
+        hence contradiction by A9,A11,VECTSP_4:37;
       end;
-      suppose
-A10:    2 <= k & k+1>=dim V;
-        then k+1 <= dim V & dim V <= k+1 by A1,NAT_1:13;
+      the carrier of W2 c= the carrier of V by VECTSP_4:def 2;
+      then not the carrier of V c= the carrier of W2 by A10, XBOOLE_0:def
+      10;
+      then consider v being set such that
+A12:  v in the carrier of V and
+A13:  not v in the carrier of W2 by TARSKI:def 3;
+      reconsider v as Vector of V by A12;
+      set X=W1+Lin{v};
+A14:  now
+        v in {v} by TARSKI:def 1;
+        then v in Lin{v} by VECTSP_7:13;
+        then v in X by VECTSP_5:6;
         then
-A11:    dim V = k+1 by XXREAL_0:1;
-        consider T being Linear_Compl of W1;
-A12:    the carrier of T c= the carrier of V by VECTSP_4:def 2;
-A13:    V is_the_direct_sum_of W1,T by VECTSP_5:48;
-        then k+1 - (dim W1 + 1) = dim W1 + dim T - (dim W1 + 1)
-        by A11,VECTSP_9:38;
-        then consider u,v being Vector of T such that
-A14:    u<>v & {u,v} is linearly-independent & (Omega).T=Lin{u,v}
-        by A2,VECTSP_9:35;
-A15:    u <> 0.T & v <> 0.T by A14,VECTSP_7:6;
-        u in the carrier of T & v in the carrier of T;
-        then reconsider u1=u,v1=v as Vector of V by A12;
-        consider I being Basis of W1;
-        reconsider I1=I as finite Subset of W1 by VECTSP_9:24;
-        2-1 <= dim W1+1-1 by A2,A10,XREAL_1:11;
-        then 1 <= card I1 by VECTSP_9:def 2;
-        then I1 is non empty;
-        then consider i being set such that
-A16:    i in I by XBOOLE_0:def 1;
-        reconsider i as Vector of W1 by A16;
-        reconsider J=I1\{i} as finite Subset of V by A3,XBOOLE_1:1;
-A17:    card I = dim W1 by VECTSP_9:def 2;
-A18:    card J = card I1 - card{i} by A16,EULER_1:5
-          .= dim W1 - 1 by A17,CARD_1:50;
-A19:    J c= the carrier of Lin J
-        proof
-          let a be set;
-          assume a in J;
-          then a in Lin J by VECTSP_7:13;
-          hence thesis by STRUCT_0:def 5;
-        end;
-        I is linearly-independent by VECTSP_7:def 3;
-        then I\{i} is linearly-independent by VECTSP_7:2,XBOOLE_1:36;
-        then reconsider JJ=I\{i} as linearly-independent Subset of V
-        by VECTSP_9:15;
-        reconsider JJJ=JJ as linearly-independent Subset of Lin J
-        by A19,VECTSP_9:16;
-        Lin JJJ = Lin J by VECTSP_9:21;
-        then J is Basis of Lin J by VECTSP_7:def 3;
-        then
-A20:    dim Lin J = dim W1 - 1 by A18,VECTSP_9:def 2;
-A21:    W1/\T=(0).V by A13,VECTSP_5:def 4;
-A22:    now
-          assume u1 in W1;
-          then u1 in W1 & u1 in T by STRUCT_0:def 5;
-          then u1 in (0).V by A21,VECTSP_5:7;
-          then u1 in the carrier of (0).V by STRUCT_0:def 5;
-          then u1 in {0.V} by VECTSP_4:def 3;
-          then u1 = 0.V by TARSKI:def 1;
-          hence contradiction by A15,VECTSP_4:19;
-        end;
-A23:    now
-          assume v1 in W1;
-          then v1 in W1 & v1 in T by STRUCT_0:def 5;
-          then v1 in (0).V by A21,VECTSP_5:7;
-          then v1 in the carrier of (0).V by STRUCT_0:def 5;
-          then v1 in {0.V} by VECTSP_4:def 3;
-          then v1 = 0.V by TARSKI:def 1;
-          hence contradiction by A15,VECTSP_4:19;
-        end;
-A24:    Lin I = (Omega).W1 by VECTSP_7:def 3;
-        Lin (I\{i}) is Subspace of Lin I by VECTSP_7:18,XBOOLE_1:36;
-        then
-A25:    Lin J is Subspace of W1 by VECTSP_9:21;
-        then
-A26:    not u1 in Lin J by A22,VECTSP_4:16;
-A27:    not v1 in Lin J by A23,A25,VECTSP_4:16;
-        reconsider Y={u,v} as linearly-independent Subset of V
-        by A14,VECTSP_9:15;
-A28:    Y={u,v};
-A29:    (0).V is Subspace of (Lin J)/\Lin{u1,v1} by VECTSP_4:50;
-        the carrier of ((Lin J)/\Lin{u1,v1}) c= the carrier of (0).V
-        proof
-          let a be set;
-          assume a in the carrier of ((Lin J)/\Lin{u1,v1});
-          then a in (Lin J)/\Lin{u1,v1} by STRUCT_0:def 5;
-          then a in Lin J & a in Lin {u1,v1} by VECTSP_5:7;
-          then a in W1 & a in Lin{u,v} by A25,VECTSP_4:16,VECTSP_9:21;
-          then a in W1 & a in the carrier of the VectSpStr of T
-          by A14,STRUCT_0:def 5;
-          then a in W1 & a in T by STRUCT_0:def 5;
-          then a in W1 /\ T by VECTSP_5:7;
-          hence thesis by A21,STRUCT_0:def 5;
-        end;
-        then (Lin J)/\Lin{u1,v1} is Subspace of (0).V by VECTSP_4:35;
-        then
-A30:    dim ((Lin J)+Lin{u1,v1}) = dim W1 - 1 + 2
-        by A14,A20,A26,A27,A28,A29,Th15,VECTSP_4:33;
-A31:    i in W1 by STRUCT_0:def 5;
-        now
-          assume (Lin J)+Lin{u1,v1} in B;
-          then
-A32:      W1 is Subspace of (Lin J)+Lin{u1,v1} by A2,Th9;
-          now
-            assume
-A33:        i in (Lin J)+Lin{u1,v1};
-            reconsider IV=I as Subset of V by A3,XBOOLE_1:1;
-            IV c= the carrier of (Lin J)+Lin{u1,v1}
-            proof
-              let a be set;
-              assume
-A34:          a in IV;
-              {i} c= I by A16,ZFMISC_1:37;
-              then
-A35:          I\{i}\/{i}=I by XBOOLE_1:45;
-              per cases by A34,A35,XBOOLE_0:def 3;
-              suppose a in J;
-                then
-A36:            a in Lin J by VECTSP_7:13;
-                then a in V by VECTSP_4:17;
-                then reconsider o=a as Vector of V by STRUCT_0:def 5;
-                o in (Lin J)+Lin{u1,v1} by A36,VECTSP_5:6;
-                hence thesis
-                by STRUCT_0:def 5;
-              end;
-              suppose a in {i};
-                then a=i by TARSKI:def 1;
-                hence thesis
-                by A33,STRUCT_0:def 5;
-              end;
-            end;
-            then Lin IV is Subspace of (Lin J)+Lin{u1,v1} by VECTSP_9:20;
-            then Lin I is Subspace of (Lin J)+Lin{u1,v1} by VECTSP_9:21;
-            then
-A37:        W1 is Subspace of (Lin J)+Lin{u1,v1} by A24,Th6;
-            Lin{u1,v1} is Subspace of (Lin J)+Lin{u1,v1} by VECTSP_5:11;
-            then
-A38:        W1+Lin{u1,v1} is Subspace of (Lin J)+Lin{u1,v1}
-            by A37,VECTSP_5:40;
-A39:        (0).V is Subspace of W1/\Lin{u1,v1} by VECTSP_4:50;
-            the carrier of (W1/\Lin{u1,v1}) c= the carrier of (0).V
-            proof
-              let a be set;
-              assume a in the carrier of (W1/\Lin{u1,v1});
-              then a in W1/\Lin{u1,v1} by STRUCT_0:def 5;
-              then a in W1 & a in Lin {u1,v1} by VECTSP_5:7;
-              then a in W1 & a in Lin {u,v} by VECTSP_9:21;
-              then a in W1 & a in the carrier of the VectSpStr of T
-              by A14,STRUCT_0:def 5;
-              then a in W1 & a in T by STRUCT_0:def 5;
-              then a in W1 /\ T by VECTSP_5:7;
-              hence thesis by A21,STRUCT_0:def 5;
-            end;
-            then W1/\Lin{u1,v1} is Subspace of (0).V by VECTSP_4:35;
-            then dim (W1+Lin{u1,v1}) = dim W1 + 2 by A14,A22,A23,A28,A39,Th15,
-VECTSP_4:33;
-            then dim W1 + 1+1 <= dim W1 + 1 by A30,A38,VECTSP_9:29;
-            hence contradiction by NAT_1:13;
-          end;
-          hence contradiction by A31,A32,VECTSP_4:16;
-        end;
-        hence the carrier of S <> B by A2,A30,VECTSP_9:def 3;
+A15:    v in the carrier of X by STRUCT_0:def 5;
+        assume
+        X in B;
+        then X is Subspace of W2 by A7,Th9;
+        then the carrier of X c= the carrier of W2 by VECTSP_4:def 2;
+        hence contradiction by A13,A15;
       end;
+      not v in W2 by A13,STRUCT_0:def 5;
+      then dim X = k by A4,A5,Th14,VECTSP_4:16;
+      hence the carrier of S <> B by A14,VECTSP_9:def 3;
     end;
-    then not the carrier of S is Block of S;
-    hence thesis by PENCIL_1:def 5;
+    suppose
+A16:  2 <= k & k+1>=dim V;
+      consider I being Basis of W1;
+      reconsider I1=I as finite Subset of W1 by VECTSP_9:24;
+      2-1 <= dim W1+1-1 by A5,A16,XREAL_1:11;
+      then 1 <= card I1 by VECTSP_9:def 2;
+      then I1 is non empty;
+      then consider i being set such that
+A17:  i in I by XBOOLE_0:def 1;
+      reconsider i as Vector of W1 by A17;
+      reconsider J=I1\{i} as finite Subset of V by A8,XBOOLE_1:1;
+      I is linearly-independent by VECTSP_7:def 3;
+      then I\{i} is linearly-independent by VECTSP_7:2,XBOOLE_1:36;
+      then reconsider JJ=I\{i} as linearly-independent Subset of V by
+      VECTSP_9:
+      15;
+      J c= the carrier of Lin J
+      proof
+        let a be set;
+        assume
+        a in J;
+        then a in Lin J by VECTSP_7:13;
+        hence thesis by STRUCT_0:def 5;
+      end;
+      then reconsider JJJ=JJ as linearly-independent Subset of Lin J by
+      VECTSP_9:16;
+      Lin JJJ = Lin J by VECTSP_9:21;
+      then
+A18:  J is Basis of Lin J by VECTSP_7:def 3;
+A19:  card I = dim W1 by VECTSP_9:def 2;
+      consider T being Linear_Compl of W1;
+A20:  V is_the_direct_sum_of W1,T by VECTSP_5:48;
+      then
+A21:  W1/\T=(0).V by VECTSP_5:def 4;
+      k+1 <= dim V by A2,NAT_1:13;
+      then dim V = k+1 by A16,XXREAL_0:1;
+      then k+1 - (dim W1 + 1) = dim W1 + dim T - (dim W1 + 1) by A20,
+      VECTSP_9:38;
+      then consider u,v being Vector of T such that
+A22:  u<>v and
+A23:  {u,v} is linearly-independent and
+A24:  (Omega).T=Lin{u,v} by A5,VECTSP_9:35;
+A25:  v in the carrier of T;
+      the carrier of T c= the carrier of V & u in the carrier of T by
+      VECTSP_4:def 2;
+      then reconsider u1=u,v1=v as Vector of V by A25;
+      reconsider Y={u,v} as linearly-independent Subset of V by A23,VECTSP_9:
+      15;
+A26:  Y={u,v};
+      Lin (I\{i}) is Subspace of Lin I by VECTSP_7:18,XBOOLE_1:36;
+      then
+A27:  Lin J is Subspace of W1 by VECTSP_9:21;
+      the carrier of ((Lin J)/\Lin{u1,v1}) c= the carrier of (0).V
+      proof
+        let a be set;
+        assume
+        a in the carrier of ((Lin J)/\Lin{u1,v1});
+        then
+A28:    a in (Lin J)/\Lin{u1,v1} by STRUCT_0:def 5;
+        then a in Lin {u1,v1} by VECTSP_5:7;
+        then a in Lin{u,v} by VECTSP_9:21;
+        then a in the carrier of the VectSpStr of T by A24,
+        STRUCT_0:def 5;
+        then
+A29:    a in T by STRUCT_0:def 5;
+        a in Lin J by A28,VECTSP_5:7;
+        then a in W1 by A27,VECTSP_4:16;
+        then a in W1 /\ T by A29,VECTSP_5:7;
+        hence thesis by A21,STRUCT_0:def 5;
+      end;
+      then
+A30:  (0).V is Subspace of (Lin J)/\Lin{u1,v1} & (Lin J)/\Lin{u1,v1} is
+      Subspace of (0).V by VECTSP_4:35,50;
+      card J = card I1 - card{i} by A17,EULER_1:5
+        .= dim W1 - 1 by A19,CARD_1:50;
+      then dim Lin J = dim W1 - 1 by A18,VECTSP_9:def 2;
+      then
+A31:  dim ((Lin J)+Lin{u1,v1}) = dim W1 - 1 + 2 by A22,A26,A30,Th15,
+      VECTSP_4:33;
+A32:  Lin I = (Omega).W1 by VECTSP_7:def 3;
+A33:  i in W1 by STRUCT_0:def 5;
+      now
+A34:    now
+          reconsider IV=I as Subset of V by A8,XBOOLE_1:1;
+          assume
+A35:      i in (Lin J)+Lin{u1,v1};
+          IV c= the carrier of (Lin J)+Lin{u1,v1}
+          proof
+            let a be set;
+            {i} c= I by A17,ZFMISC_1:37;
+            then
+A36:        I\{i}\/{i}=I by XBOOLE_1:45;
+            assume
+A37:        a in IV;
+            per cases by A37,A36,XBOOLE_0:def 3;
+            suppose
+              a in J;
+              then
+A38:          a in Lin J by VECTSP_7:13;
+              then a in V by VECTSP_4:17;
+              then reconsider o=a as Vector of V by STRUCT_0:def 5;
+              o in (Lin J)+Lin{u1,v1} by A38,VECTSP_5:6;
+              hence thesis by STRUCT_0:def 5;
+            end;
+            suppose
+              a in {i};
+              then a=i by TARSKI:def 1;
+              hence thesis by A35,STRUCT_0:def 5;
+            end;
+          end;
+          then Lin IV is Subspace of (Lin J)+Lin{u1,v1} by VECTSP_9:20;
+          then Lin I is Subspace of (Lin J)+Lin{u1,v1} by VECTSP_9:21;
+          then
+A39:      W1 is Subspace of (Lin J)+Lin{u1,v1} by A32,Th6;
+          the carrier of (W1/\Lin{u1,v1}) c= the carrier of (0).V
+          proof
+            let a be set;
+            assume
+            a in the carrier of (W1/\Lin{u1,v1});
+            then
+A40:        a in W1/\Lin{u1,v1} by STRUCT_0:def 5;
+            then a in Lin {u1,v1} by VECTSP_5:7;
+            then a in Lin {u,v} by VECTSP_9:21;
+            then a in the carrier of the VectSpStr of T by A24,STRUCT_0:
+            def 5;
+            then
+A41:        a in T by STRUCT_0:def 5;
+            a in W1 by A40,VECTSP_5:7;
+            then a in W1 /\ T by A41,VECTSP_5:7;
+            hence thesis by A21,STRUCT_0:def 5;
+          end;
+          then (0).V is Subspace of W1/\Lin{u1,v1} & W1/\Lin{u1,v1} is
+          Subspace of (0).V by VECTSP_4:35,50;
+          then
+A42:      dim (W1+Lin{u1,v1}) = dim W1 + 2 by A22,A26,Th15,
+          VECTSP_4:33;
+          Lin{u1,v1} is Subspace of (Lin J)+Lin{u1,v1} by VECTSP_5:11;
+          then W1+Lin{u1,v1} is Subspace of (Lin J)+Lin{u1,v1} by A39,
+          VECTSP_5:40;
+          then dim W1 + 1+1 <= dim W1 + 1 by A31,A42,VECTSP_9:29;
+          hence contradiction by NAT_1:13;
+        end;
+        assume
+        (Lin J)+Lin{u1,v1} in B;
+        then W1 is Subspace of (Lin J)+Lin{u1,v1} by A7,Th9;
+        hence contradiction by A33,A34,VECTSP_4:16;
+      end;
+      hence the carrier of S <> B by A5,A31,VECTSP_9:def 3;
+    end;
   end;
+  then not the carrier of S is Block of S;
+  hence S is non degenerated by PENCIL_1:def 5;
 end;
 
 theorem Th21:
-  for F being Field for V being finite-dimensional VectSp of F
-  for k being Nat st 1 <= k & k < dim V
-  holds PencilSpace(V,k) is with_non_trivial_blocks
+  for F being Field for V being finite-dimensional VectSp of F for
+  k being Nat st 1 <= k & k < dim V holds PencilSpace(V,k) is
+  with_non_trivial_blocks
 proof
   let F be Field;
   let V be finite-dimensional VectSp of F;
@@ -875,61 +915,67 @@ A1: 1 <= k & k < dim V;
   proof
     let X be Block of S;
     S is non void by A1,Th19;
-    then consider W1,W2 being Subspace of V such that
-A2: W1 is Subspace of W2 &
-    dim W1+1=k & dim W2=k+1 & X=pencil(W1,W2,k) by Def4;
-    X is non trivial by A1,A2,Th17;
+    then
+    ex W1,W2 being Subspace of V st W1 is Subspace of W2 & dim W1+1=k & dim
+    W2=k+1 & X=pencil(W1,W2,k) by Def4;
+    then X is non trivial by Th17;
     hence thesis by PENCIL_1:4;
   end;
 end;
 
 theorem Th22:
-  for F being Field for V being finite-dimensional VectSp of F
-  for k being Nat st 1 <= k & k < dim V
-  holds PencilSpace(V,k) is identifying_close_blocks
+  for F being Field for V being finite-dimensional VectSp of F for
+  k being Nat st 1 <= k & k < dim V holds PencilSpace(V,k) is
+  identifying_close_blocks
 proof
   let F be Field;
   let V be finite-dimensional VectSp of F;
   let k be Nat such that
-A1: 1 <= k & k < dim V;
+A1: 1 <= k and
+A2: k < dim V;
   set S=PencilSpace(V,k);
   thus S is identifying_close_blocks
   proof
     let X,Y be Block of S;
-    assume 2 c= card(X/\Y);
+    assume
+    2 c= card(X/\Y);
     then consider P,Q being set such that
-A2: P in X/\Y & Q in X/\Y & P<>Q by PENCIL_1:2;
-A3: P in X & P in Y & Q in X & Q in Y by A2,XBOOLE_0:def 4;
-A4: S is non empty by A1,VECTSP_9:40;
-B5: S is non void by A1,Th19;
-    then
- the topology of S is non empty;
-    then X in the topology of S & Y in the topology of S;
-    then reconsider P,Q as Point of S by A3;
-    consider P1 being strict Subspace of V such that
-A6: P1=P & dim P1 = k by A4,VECTSP_9:def 3;
-    reconsider P as strict Subspace of V by A6;
-    consider Q1 being strict Subspace of V such that
-A7: Q1=Q & dim Q1 = k by A4,VECTSP_9:def 3;
-    reconsider Q as strict Subspace of V by A7;
-    consider W1,W2 being Subspace of V such that
-A8: W1 is Subspace of W2 &
-    dim W1+1=k & dim W2=k+1 & X=pencil(W1,W2,k) by B5,Def4;
+A3: P in X/\Y & Q in X/\Y and
+A4: P<>Q by PENCIL_1:2;
+A5: P in X & Q in X by A3,XBOOLE_0:def 4;
+A6: P in Y & Q in Y by A3,XBOOLE_0:def 4;
+A7: S is non void by A1,A2,Th19;
+    then consider W1,W2 being Subspace of V such that
+A8: W1 is Subspace of W2 and
+A9: dim W1+1=k & dim W2=k+1 and
+A10: X=pencil(W1,W2,k) by Def4;
+    the topology of S is non empty by A7;
+    then X in the topology of S;
+    then reconsider P,Q as Point of S by A5;
+A11: S is non empty by A2,VECTSP_9:40;
+    then ex P1 being strict Subspace of V st P1=P & dim P1 = k by
+    VECTSP_9:
+    def 3;
+    then reconsider P as strict Subspace of V;
+    ex Q1 being strict Subspace of V st Q1=Q & dim Q1 = k by A11,VECTSP_9:
+    def 3;
+    then reconsider Q as strict Subspace of V;
     consider U1,U2 being Subspace of V such that
-A9: U1 is Subspace of U2 &
-    dim U1+1=k & dim U2=k+1 & Y=pencil(U1,U2,k) by B5,Def4;
-A10: (Omega).W1=P/\Q by A1,A2,A3,A8,Th12
-      .= (Omega).U1 by A1,A2,A3,A9,Th12;
-    (Omega).W2=P+Q by A1,A2,A3,A8,Th12
-      .= (Omega).U2 by A1,A2,A3,A9,Th12;
-    hence thesis by A8,A9,A10,Th7;
+A12: U1 is Subspace of U2 and
+A13: dim U1+1=k & dim U2=k+1 and
+A14: Y=pencil(U1,U2,k) by A7,Def4;
+A15: (Omega).W2=P+Q by A4,A5,A9,A10,Th12
+      .= (Omega).U2 by A4,A6,A13,A14,Th12;
+    (Omega).W1=P/\Q by A4,A5,A9,A10,Th12
+      .= (Omega).U1 by A4,A6,A13,A14,Th12;
+    hence thesis by A8,A10,A12,A14,A15,Th7;
   end;
 end;
 
 theorem
-  for F being Field for V being finite-dimensional VectSp of F
-  for k being Nat st 1 <= k & k < dim V & 3 <= dim V
-  holds PencilSpace(V,k) is PLS by Th19,Th20,Th21,Th22,VECTSP_9:40;
+  for F being Field for V being finite-dimensional VectSp of F for k
+  being Nat st 1 <= k & k < dim V & 3 <= dim V holds PencilSpace(V,k) is PLS by
+  Th19,Th20,Th21,Th22,VECTSP_9:40;
 
 begin :: Grassmann spaces
 
@@ -939,63 +985,68 @@ definition
   let m,n be Nat;
   func SubspaceSet(V,m,n) -> Subset-Family of m Subspaces_of V means
   :Def6:
-  for X being set holds X in it iff
-  ex W being Subspace of V st dim W = n & X = m Subspaces_of W;
+for X being set holds X in it iff ex W being Subspace of V st dim W = n & X = m
+  Subspaces_of W;
   existence
   proof
+    defpred P[set] means ex W being Subspace of V st dim W = n & $1 = m
+    Subspaces_of W;
     set A=bool (m Subspaces_of V);
-    defpred P[set] means
-    ex W being Subspace of V st dim W = n & $1 = m Subspaces_of W;
     consider X being set such that
 A1: for x being set holds x in X iff x in A & P[x] from XBOOLE_0:sch 1;
     X c= A
     proof
       let a be set;
-      assume a in X;
+      assume
+      a in X;
       hence thesis by A1;
     end;
     then reconsider X as Subset-Family of m Subspaces_of V;
     take X;
     let x be set;
-    thus x in X implies ex W being Subspace of V st
-    dim W=n & x = m Subspaces_of W by A1;
+    thus x in X implies ex W being Subspace of V st dim W=n & x = m
+    Subspaces_of W by A1;
     given W being Subspace of V such that
-A2: dim W=n & x = m Subspaces_of W;
-    x c= m Subspaces_of V by A2,VECTSP_9:42;
-    hence thesis by A1,A2;
+A2: dim W=n and
+A3: x = m Subspaces_of W;
+    x c= m Subspaces_of V by A3,VECTSP_9:42;
+    hence thesis by A1,A2,A3;
   end;
   uniqueness
   proof
     let S,T be Subset-Family of m Subspaces_of V such that
-A3: for X being set holds X in S iff
-    ex W being Subspace of V st dim W = n & X = m Subspaces_of W and
-A4: for X being set holds X in T iff
-    ex W being Subspace of V st dim W = n & X = m Subspaces_of W;
+A4: for X being set holds X in S iff ex W being Subspace of V st dim W
+    = n & X = m Subspaces_of W and
+A5: for X being set holds X in T iff ex W being Subspace of V st dim W
+    = n & X = m Subspaces_of W;
     now
       let X be set;
       thus X in S implies X in T
       proof
-        assume X in S;
-
-then ex W being Subspace of V st dim W = n & X = m Subspaces_of W by A3;
-        hence thesis by A4;
+        assume
+        X in S;
+        then ex W being Subspace of V st dim W = n & X = m Subspaces_of W by
+        A4;
+        hence thesis by A5;
       end;
-      assume X in T;
-      then ex W being Subspace of V st dim W = n & X = m Subspaces_of W by A4;
-      hence X in S by A3;
+      assume
+      X in T;
+      then ex W being Subspace of V st dim W = n & X = m Subspaces_of W by A5;
+      hence X in S by A4;
     end;
     hence thesis by TARSKI:2;
   end;
 end;
 
 theorem Th24:
-  for F being Field for V being finite-dimensional VectSp of F
-  for m,n be Nat st n <= dim V holds SubspaceSet(V,m,n) is non empty
+  for F being Field for V being finite-dimensional VectSp of F for
+  m,n be Nat st n <= dim V holds SubspaceSet(V,m,n) is non empty
 proof
   let F be Field;
   let V be finite-dimensional VectSp of F;
   let m,n be Nat;
-  assume n <= dim V;
+  assume
+  n <= dim V;
   then consider W being strict Subspace of V such that
 A1: dim W = n by VECTSP_9:39;
   m Subspaces_of W in SubspaceSet(V,m,n) by A1,Def6;
@@ -1003,9 +1054,9 @@ A1: dim W = n by VECTSP_9:39;
 end;
 
 theorem Th25:
-  for F being Field
-  for W1,W2 being finite-dimensional VectSp of F st (Omega).W1 = (Omega).W2
-  for m being Nat holds m Subspaces_of W1 = m Subspaces_of W2
+  for F being Field for W1,W2 being finite-dimensional VectSp of F
+  st (Omega).W1 = (Omega).W2 for m being Nat holds m Subspaces_of W1 = m
+  Subspaces_of W2
 proof
   let F be Field;
   let W1,W2 be finite-dimensional VectSp of F such that
@@ -1022,126 +1073,130 @@ A1: (Omega).W1 = (Omega).W2;
 end;
 
 theorem Th26:
-  for F being Field for V being finite-dimensional VectSp of F
-  for W being Subspace of V
-  for m being Nat st 1<=m & m <= dim V & m Subspaces_of V c= m Subspaces_of W
-  holds (Omega).V = (Omega).W
+  for F being Field for V being finite-dimensional VectSp of F for
+  W being Subspace of V for m being Nat st 1<=m & m <= dim V & m Subspaces_of V
+  c= m Subspaces_of W holds (Omega).V = (Omega).W
 proof
   let F be Field;
   let V be finite-dimensional VectSp of F;
   let W be Subspace of V;
   let m be Nat such that
-A1: 1<=m & m <= dim V & m Subspaces_of V c= m Subspaces_of W;
+A1: 1<=m and
+A2: m <= dim V and
+A3: m Subspaces_of V c= m Subspaces_of W;
   hereby
+A4: dim W <= dim V by VECTSP_9:29;
     assume
-A2: (Omega).V <> (Omega).W;
+A5: (Omega).V <> (Omega).W;
+    then dim W <> dim V by VECTSP_9:32;
     then
-A3: dim W <> dim V by VECTSP_9:32;
-    dim W <= dim V by VECTSP_9:29;
-    then
-A4: dim W < dim V by A3,XXREAL_0:1;
-    per cases by A1,XXREAL_0:1;
+A6: dim W < dim V by A4,XXREAL_0:1;
+    per cases by A2,XXREAL_0:1;
     suppose
-   m=dim V;
-      then m Subspaces_of W = {} by A4,VECTSP_9:41;
-      hence contradiction by A1,VECTSP_9:40;
+      m=dim V;
+      then m Subspaces_of W = {} by A6,VECTSP_9:41;
+      hence contradiction by A2,A3,VECTSP_9:40;
     end;
     suppose
 A7:   m < dim V;
-A8:   the carrier of W c= the carrier of V by VECTSP_4:def 2;
-      now
+A8:   now
         assume
 A9:     the carrier of V = the carrier of W;
         (Omega).W is strict Subspace of V by Th5;
-        hence contradiction by A2,A9,VECTSP_4:37;
+        hence contradiction by A5,A9,VECTSP_4:37;
       end;
-      then not the carrier of V c= the carrier of W by A8,XBOOLE_0:def 10;
+      the carrier of W c= the carrier of V by VECTSP_4:def 2;
+      then not the carrier of V c= the carrier of W by
+      A8,XBOOLE_0:def 10;
       then consider x being set such that
-A10:  x in the carrier of V & not x in the carrier of W by TARSKI:def 3;
+A10:  x in the carrier of V and
+A11:  not x in the carrier of W by TARSKI:def 3;
       reconsider x as Vector of V by A10;
       0.V in W by VECTSP_4:25;
-      then x <> 0.V by A10,STRUCT_0:def 5;
+      then x <> 0.V by A11,STRUCT_0:def 5;
       then {x} is linearly-independent by VECTSP_7:5;
       then consider I being Basis of V such that
-A11:  {x} c= I by VECTSP_7:27;
-A12:  I is linearly-independent & Lin I = the VectSpStr of V
-      by VECTSP_7:def 3;
+A12:  {x} c= I by VECTSP_7:27;
       reconsider J=I as finite Subset of V by VECTSP_9:24;
       card J = dim V by VECTSP_9:def 2;
       then consider K being Subset of J such that
 A13:  card K = m by A7,Th2;
+A14:  I is linearly-independent by VECTSP_7:def 3;
       per cases;
       suppose
-A14:    x in K;
+A15:    x in K;
         reconsider L=K as finite Subset of V by XBOOLE_1:1;
-A15:    L is linearly-independent by A12,VECTSP_7:2;
         L c= the carrier of Lin L
         proof
           let a be set;
-          assume a in L;
+          assume
+          a in L;
           then a in Lin L by VECTSP_7:13;
           hence thesis by STRUCT_0:def 5;
         end;
         then reconsider L'=L as Subset of Lin L;
-        reconsider LL1 = L' as linearly-independent Subset of Lin L
-        by A15,VECTSP_9:16;
+        L is linearly-independent by A14,VECTSP_7:2;
+        then reconsider LL1 = L' as linearly-independent Subset of Lin L by
+        VECTSP_9:16;
         Lin LL1 = the VectSpStr of Lin L by VECTSP_9:21;
         then L is Basis of Lin L by VECTSP_7:def 3;
         then dim Lin L = m by A13,VECTSP_9:def 2;
         then Lin L in m Subspaces_of V by VECTSP_9:def 3;
-        then consider M being strict Subspace of W such that
-A16:    M=Lin L & dim M = m by A1,VECTSP_9:def 3;
-        x in W by A14,A16,VECTSP_4:17,VECTSP_7:13;
-        hence contradiction by A10,STRUCT_0:def 5;
+        then ex M being strict Subspace of W st M=Lin L & dim M = m by A3,
+        VECTSP_9:def 3;
+        then x in W by A15,VECTSP_4:17,VECTSP_7:13;
+        hence contradiction by A11,STRUCT_0:def 5;
       end;
       suppose
-A17:    not x in K;
+A16:    not x in K;
         consider y being set such that
-A18:    y in K by A1,A13,CARD_1:47,XBOOLE_0:def 1;
+A17:    y in K by A1,A13,CARD_1:47,XBOOLE_0:def 1;
         (K\{y})\/{x} c= the carrier of V
         proof
           let a be set;
-          assume a in (K\{y})\/{x};
+          assume
+          a in (K\{y})\/{x};
           then a in (K\{y}) or a in {x} by XBOOLE_0:def 3;
           hence thesis by TARSKI:def 3;
         end;
         then reconsider L=(K\{y})\/{x} as finite Subset of V;
-        x in {x} by TARSKI:def 1;
-        then
-A19:    x in L by XBOOLE_0:def 3;
-        not x in K\{y} by A17,XBOOLE_0:def 5;
-        then
-A20:    card L = card(K\{y})+1 by CARD_2:54
-          .= card K - card{y} + 1 by A18,EULER_1:5
-          .= card K - 1 + 1 by CARD_1:50
-          .= m by A13;
-        L c= I
-        proof
-          let a be set;
-          assume a in L;
-          then a in K\{y} or a in {x} by XBOOLE_0:def 3;
-          hence thesis by A11;
-        end;
-        then
-A21:    L is linearly-independent by A12,VECTSP_7:2;
         L c= the carrier of Lin L
         proof
           let a be set;
-          assume a in L;
+          assume
+          a in L;
           then a in Lin L by VECTSP_7:13;
           hence thesis by STRUCT_0:def 5;
         end;
         then reconsider L'=L as Subset of Lin L;
-        reconsider LL1 = L' as linearly-independent Subset of Lin L
-        by A21,VECTSP_9:16;
+        L c= I
+        proof
+          let a be set;
+          assume
+          a in L;
+          then a in K\{y} or a in {x} by XBOOLE_0:def 3;
+          hence thesis by A12;
+        end;
+        then L is linearly-independent by A14,VECTSP_7:2;
+        then reconsider LL1 = L' as linearly-independent Subset of Lin L by
+        VECTSP_9:16;
         Lin LL1 = the VectSpStr of Lin L by VECTSP_9:21;
-        then L is Basis of Lin L by VECTSP_7:def 3;
-        then dim Lin L = m by A20,VECTSP_9:def 2;
+        then
+A18:    L is Basis of Lin L by VECTSP_7:def 3;
+        not x in K\{y} by A16,XBOOLE_0:def 5;
+        then card L = card(K\{y})+1 by CARD_2:54
+          .= card K - card{y} + 1 by A17,EULER_1:5
+          .= card K - 1 + 1 by CARD_1:50
+          .= m by A13;
+        then dim Lin L = m by A18,VECTSP_9:def 2;
         then Lin L in m Subspaces_of V by VECTSP_9:def 3;
-        then consider M being strict Subspace of W such that
-A22:    M=Lin L & dim M = m by A1,VECTSP_9:def 3;
-        x in W by A19,A22,VECTSP_4:17,VECTSP_7:13;
-        hence contradiction by A10,STRUCT_0:def 5;
+        then
+A19:    ex M being strict Subspace of W st M=Lin L & dim M = m by A3,
+        VECTSP_9:def 3;
+        x in {x} by TARSKI:def 1;
+        then x in L by XBOOLE_0:def 3;
+        then x in W by A19,VECTSP_4:17,VECTSP_7:13;
+        hence contradiction by A11,STRUCT_0:def 5;
       end;
     end;
   end;
@@ -1152,201 +1207,221 @@ definition
   let V be finite-dimensional VectSp of F;
   let m,n be Nat;
   func GrassmannSpace(V,m,n) -> strict TopStruct equals
-  TopStruct(#m Subspaces_of V, SubspaceSet(V,m,n)#);
+  TopStruct(#m
+    Subspaces_of V, SubspaceSet(V,m,n)#);
   coherence;
 end;
 
 canceled;
 
 theorem Th28:
-  for F being Field for V being finite-dimensional VectSp of F
-  for m,n being Nat st n <= dim V holds GrassmannSpace(V,m,n) is non void
+  for F being Field for V being finite-dimensional VectSp of F for
+  m,n being Nat st n <= dim V holds GrassmannSpace(V,m,n) is non void
 proof
   let F be Field;
   let V be finite-dimensional VectSp of F;
-  let m,n be Nat such that
-A1: n <= dim V;
-  the topology of GrassmannSpace(V,m,n) is non empty by A1,Th24;
+  let m,n be Nat;
+  assume
+  n <= dim V;
+  then the topology of GrassmannSpace(V,m,n) is non empty by Th24;
   hence thesis by PENCIL_1:def 4;
 end;
 
 theorem Th29:
-  for F being Field for V being finite-dimensional VectSp of F
-  for m,n being Nat st 1 <= m & m < n & n < dim V holds
-  GrassmannSpace(V,m,n) is non degenerated
+  for F being Field for V being finite-dimensional VectSp of F for
+m,n being Nat st 1 <= m & m < n & n < dim V holds GrassmannSpace(V,m,n) is non
+  degenerated
 proof
   let F be Field;
   let V be finite-dimensional VectSp of F;
   let m,n be Nat such that
-A1: 1 <= m & m < n & n < dim V;
-A2: m < dim V by A1,XXREAL_0:2;
+A1: 1 <= m and
+A2: m < n and
+A3: n < dim V;
   set S=GrassmannSpace(V,m,n);
+A4: m < dim V by A2,A3,XXREAL_0:2;
   hereby
     assume
-A3: the carrier of S is Block of S;
-    the topology of S is non empty by A1,Th24;
+A5: the carrier of S is Block of S;
+    the topology of S is non empty by A3,Th24;
     then consider W being Subspace of V such that
-A4: dim W = n & m Subspaces_of V = m Subspaces_of W by A3,Def6;
-    (Omega).V = (Omega).W by A1,A2,A4,Th26;
+A6: dim W = n and
+A7: m Subspaces_of V = m Subspaces_of W by A5,Def6;
+    (Omega).V = (Omega).W by A1,A4,A7,Th26;
     then dim W = dim (Omega).V by VECTSP_9:31;
-    hence contradiction by A1,A4,VECTSP_9:31;
+    hence contradiction by A3,A6,VECTSP_9:31;
   end;
 end;
 
 theorem Th30:
-  for F being Field for V being finite-dimensional VectSp of F
-  for m,n being Nat st 1 <= m & m < n & n <= dim V holds
-  GrassmannSpace(V,m,n) is with_non_trivial_blocks
+  for F being Field for V being finite-dimensional VectSp of F for
+  m,n being Nat st 1 <= m & m < n & n <= dim V holds GrassmannSpace(V,m,n) is
+  with_non_trivial_blocks
 proof
   let F be Field;
   let V be finite-dimensional VectSp of F;
   let m,n be Nat such that
-A1: 1 <= m & m < n & n <= dim V;
+A1: 1 <= m and
+A2: m < n and
+A3: n <= dim V;
   set S=GrassmannSpace(V,m,n);
   let B be Block of S;
-  the topology of S is non empty by A1,Th24;
+  the topology of S is non empty by A3,Th24;
   then consider W being Subspace of V such that
-A2: dim W = n & B = m Subspaces_of W by Def6;
-  m+1 <= n by A1,NAT_1:13;
+A4: dim W = n and
+A5: B = m Subspaces_of W by Def6;
+  m+1 <= n by A2,NAT_1:13;
   then consider U being strict Subspace of W such that
-A3: dim U = m+1 by A2,VECTSP_9:39;
+A6: dim U = m+1 by A4,VECTSP_9:39;
   consider I being Basis of U;
+A7: card I = m+1 by A6,VECTSP_9:def 2;
   reconsider I'=I as finite Subset of U by VECTSP_9:24;
-A4: I is linearly-independent & Lin I=the VectSpStr of U by VECTSP_7:def 3;
-A5: card I = m+1 by A3,VECTSP_9:def 2;
   reconsider m as Element of NAT by ORDINAL1:def 13;
   1+1 <= m+1 by A1,XREAL_1:9;
-  then 2 c= card I by A5,NAT_1:40;
+  then 2 c= card I by A7,NAT_1:40;
   then consider i,j being set such that
-A6: i in I & j in I & i<>j by PENCIL_1:2;
+A8: i in I and
+A9: j in I and
+A10: i<>j by PENCIL_1:2;
   reconsider I1=I'\{i} as finite Subset of U;
-  reconsider I2=I'\{j} as finite Subset of U;
-A7: I1 is linearly-independent by A4,VECTSP_7:2,XBOOLE_1:36;
   I1 c= the carrier of Lin I1
   proof
     let a be set;
-    assume a in I1;
+    assume
+    a in I1;
     then a in Lin I1 by VECTSP_7:13;
     hence thesis by STRUCT_0:def 5;
   end;
   then reconsider I1'=I1 as Subset of Lin I1;
-  reconsider II1=I1' as linearly-independent Subset of Lin I1
-  by A7,VECTSP_9:16;
+A11: I is linearly-independent by VECTSP_7:def 3;
+  then I1 is linearly-independent by VECTSP_7:2,XBOOLE_1:36;
+  then reconsider II1=I1' as linearly-independent Subset of Lin I1 by
+  VECTSP_9:
+  16;
   Lin II1 = the VectSpStr of Lin I1 by VECTSP_9:21;
   then
-A8: I1 is Basis of Lin I1 by VECTSP_7:def 3;
-  card I1 = card I' - card{i} by A6,EULER_1:5
-    .= m+1 - 1 by A5,CARD_1:50;
-  then
-A9: dim Lin I1 = m by A8,VECTSP_9:def 2;
-  Lin I1 is strict Subspace of W by VECTSP_4:34;
-  then
-A10: Lin I1 in B by A2,A9,VECTSP_9:def 3;
-A11: I2 is linearly-independent by A4,VECTSP_7:2,XBOOLE_1:36;
+A12: I1 is Basis of Lin I1 by VECTSP_7:def 3;
+  reconsider I2=I'\{j} as finite Subset of U;
   I2 c= the carrier of Lin I2
   proof
     let a be set;
-    assume a in I2;
+    assume
+    a in I2;
     then a in Lin I2 by VECTSP_7:13;
     hence thesis by STRUCT_0:def 5;
   end;
   then reconsider I2'=I2 as Subset of Lin I2;
-  reconsider II2=I2' as linearly-independent Subset of Lin I2
-  by A11,VECTSP_9:16;
+  I2 is linearly-independent by A11,VECTSP_7:2,XBOOLE_1:36;
+  then reconsider II2=I2' as linearly-independent Subset of Lin I2 by
+  VECTSP_9:
+  16;
   Lin II2 = the VectSpStr of Lin I2 by VECTSP_9:21;
   then
-A12: I2 is Basis of Lin I2 by VECTSP_7:def 3;
-  card I2 = card I' - card{j} by A6,EULER_1:5
-    .= m+1 - 1 by A5,CARD_1:50;
+A13: I2 is Basis of Lin I2 by VECTSP_7:def 3;
+  card I2 = card I' - card{j} by A9,EULER_1:5
+    .= m+1 - 1 by A7,CARD_1:50;
   then
-A13: dim Lin I2 = m by A12,VECTSP_9:def 2;
+A14: dim Lin I2 = m by A13,VECTSP_9:def 2;
   Lin I2 is strict Subspace of W by VECTSP_4:34;
   then
-A14: Lin I2 in B by A2,A13,VECTSP_9:def 3;
-  not j in {i} by A6,TARSKI:def 1;
-  then j in I1 by A6,XBOOLE_0:def 5;
+A15: Lin I2 in B by A5,A14,VECTSP_9:def 3;
+  card I1 = card I' - card{i} by A8,EULER_1:5
+    .= m+1 - 1 by A7,CARD_1:50;
   then
-A15: j in Lin I1 by VECTSP_7:13;
-  not j in Lin I2 by A4,A6,VECTSP_9:18;
-  hence thesis by A10,A14,A15,PENCIL_1:2;
+A16: dim Lin I1 = m by A12,VECTSP_9:def 2;
+  Lin I1 is strict Subspace of W by VECTSP_4:34;
+  then
+A17: Lin I1 in B by A5,A16,VECTSP_9:def 3;
+  not j in {i} by A10,TARSKI:def 1;
+  then j in I1 by A9,XBOOLE_0:def 5;
+  then
+A18: j in Lin I1 by VECTSP_7:13;
+  not j in Lin I2 by A11,A9,VECTSP_9:18;
+  hence thesis by A17,A15,A18,PENCIL_1:2;
 end;
 
 theorem Th31:
-  for F being Field for V being finite-dimensional VectSp of F
-  for m being Nat st 1 <= m & m+1 <= dim V holds
-  GrassmannSpace(V,m,m+1) is identifying_close_blocks
+  for F being Field for V being finite-dimensional VectSp of F for
+  m being Nat st m+1 <= dim V holds GrassmannSpace(V,m,m+1) is
+  identifying_close_blocks
 proof
   let F be Field;
   let V be finite-dimensional VectSp of F;
   let m be Nat such that
-A1: 1 <= m & m+1 <= dim V;
+A1: m+1 <= dim V;
   set S = GrassmannSpace(V,m,m+1);
   let K,L be Block of S;
 A2: the topology of S is non empty by A1,Th24;
   then consider W1 being Subspace of V such that
-A3: dim W1 = m+1 & K = m Subspaces_of W1 by Def6;
-  consider W2 being Subspace of V such that
-A4: dim W2 = m+1 & L = m Subspaces_of W2 by A2,Def6;
-  assume 2 c= card(K/\L);
+A3: dim W1 = m+1 and
+A4: K = m Subspaces_of W1 by Def6;
+  assume
+  2 c= card(K/\L);
   then consider x,y being set such that
-A5: x in K/\L & y in K/\L & x <> y by PENCIL_1:2;
-A6: x in K & x in L & y in K & y in L by A5,XBOOLE_0:def 4;
+A5: x in K/\L and
+A6: y in K/\L and
+A7: x <> y by PENCIL_1:2;
+  y in K by A6,XBOOLE_0:def 4;
+  then consider Y being strict Subspace of W1 such that
+A8: y=Y and
+A9: dim Y = m by A4,VECTSP_9:def 3;
+  consider W2 being Subspace of V such that
+A10: dim W2 = m+1 and
+A11: L = m Subspaces_of W2 by A2,Def6;
+  y in L by A6,XBOOLE_0:def 4;
+  then consider Y' being strict Subspace of W2 such that
+A12: y=Y' and
+  dim Y' = m by A11,VECTSP_9:def 3;
+  x in L by A5,XBOOLE_0:def 4;
+  then consider X' being strict Subspace of W2 such that
+A13: x=X' and
+  dim X' = m by A11,VECTSP_9:def 3;
+  x in K by A5,XBOOLE_0:def 4;
   then consider X being strict Subspace of W1 such that
-A7: x=X & dim X = m by A3,VECTSP_9:def 3;
-  consider X' being strict Subspace of W2 such that
-A8: x=X' & dim X' = m by A4,A6,VECTSP_9:def 3;
-  consider Y being strict Subspace of W1 such that
-A9: y=Y & dim Y = m by A3,A6,VECTSP_9:def 3;
-  consider Y' being strict Subspace of W2 such that
-A10: y=Y' & dim Y' = m by A4,A6,VECTSP_9:def 3;
-  reconsider x,y as strict Subspace of V by A7,A9,VECTSP_4:34;
-A11: x is Subspace of x+y by VECTSP_5:11;
-A12: now
-    assume
-A13: dim(x+y)=m;
+A14: x=X and
+A15: dim X = m by A4,VECTSP_9:def 3;
+  reconsider x,y as strict Subspace of V by A14,A8,VECTSP_4:34;
+A16: now
+    reconsider y'=y as strict Subspace of x+y by VECTSP_5:11;
     reconsider x'=x as strict Subspace of x+y by VECTSP_5:11;
-    (Omega).x' = (Omega).(x+y) by A7,A13,VECTSP_9:32;
+    assume
+A17: dim(x+y)=m;
+    then (Omega).x' = (Omega).(x+y) by A14,A15,VECTSP_9:32;
     then x = y+x by VECTSP_5:9;
     then
-A14: y is Subspace of x by VECTSP_5:12;
-    reconsider y'=y as strict Subspace of x+y by VECTSP_5:11;
-    (Omega).y' = (Omega).(x+y) by A9,A13,VECTSP_9:32;
+A18: y is Subspace of x by VECTSP_5:12;
+    (Omega).y' = (Omega).(x+y) by A8,A9,A17,VECTSP_9:32;
     then x is Subspace of y by VECTSP_5:12;
-    hence contradiction by A5,A14,VECTSP_4:33;
+    hence contradiction by A7,A18,VECTSP_4:33;
   end;
-  x+y is Subspace of W1 by A7,A9,VECTSP_5:40;
-  then dim (x+y) <= m+1 by A3,VECTSP_9:29;
+  x+y is Subspace of W1 by A14,A8,VECTSP_5:40;
+  then x is Subspace of x+y & dim (x+y) <= m+1 by A3,
+  VECTSP_5:11,VECTSP_9:
+  29;
   then
-A15: dim (x+y) = m+1 by A7,A11,A12,NAT_1:9,VECTSP_9:29;
-A16: X+Y=x+y by A7,A9,VECTSP10:13;
-A17: X'+Y'=x+y by A8,A10,VECTSP10:13;
-A18: (Omega).(X+Y) = (Omega).W1 by A3,A15,A16,VECTSP_9:32;
-  (Omega).(X'+Y') = (Omega).W2 by A4,A15,A17,VECTSP_9:32;
-  hence thesis by A3,A4,A8,A10,A16,A18,Th25,VECTSP10:13;
+A19: dim (x+y) = m+1 by A14,A15,A16,NAT_1:9,VECTSP_9:29;
+  X'+Y'=x+y by A13,A12,VECTSP10:13;
+  then
+A20: (Omega).(X'+Y') = (Omega).W2 by A10,A19,VECTSP_9:32;
+A21: X+Y=x+y by A14,A8,VECTSP10:13;
+  then (Omega).(X+Y) = (Omega).W1 by A3,A19,VECTSP_9:32;
+  hence thesis by A4,A11,A13,A12,A21,A20,Th25,VECTSP10:13;
 end;
 
 theorem
-  for F being Field for V being finite-dimensional VectSp of F
-  for m being Nat st 1 <= m & m+1 < dim V holds GrassmannSpace(V,m,m+1) is PLS
+  for F being Field for V being finite-dimensional VectSp of F for m
+  being Nat st 1 <= m & m+1 < dim V holds GrassmannSpace(V,m,m+1) is PLS
 proof
   let F be Field;
   let V be finite-dimensional VectSp of F;
   let m be Nat;
-  assume
-A1: 1 <= m & m+1 < dim V;
-  then
-A2: m <= dim V by NAT_1:13;
+  assume that
+A1: 1 <= m and
+A2: m+1 < dim V;
+A3: m < m+1 by NAT_1:13;
+  m <= dim V by A2,NAT_1:13;
+  hence thesis by A1,A2,A3,Th28,Th29,Th30,Th31,VECTSP_9:40;
   set S=GrassmannSpace(V,m,m+1);
-  now
-    thus S is non empty by A2,VECTSP_9:40;
-    thus S is non void by A1,Th28;
-    m < m+1 by NAT_1:13;
-    hence S is non degenerated by A1,Th29;
-    m < m+1 by NAT_1:13;
-    hence S is with_non_trivial_blocks by A1,Th30;
-    thus S is identifying_close_blocks by A1,Th31;
-  end;
-  hence thesis;
 end;
 
 begin :: Veronese spaces
@@ -1355,34 +1430,33 @@ definition
   let X be set;
   func PairSet(X) means
   :Def8:
-  for z being set holds z in it iff
-  ex x,y being set st x in X & y in X & z={x,y};
+  for z being set holds z in it iff ex x,y being
+  set st x in X & y in X & z={x,y};
   existence
   proof
     defpred P[set] means ex x,y being set st x in X & y in X & $1={x,y};
     consider S being set such that
-A1: for z being set holds z in S iff z in bool X & P[z] from XBOOLE_0:sch 1;
+A1: for z being set holds z in S iff z in bool X & P[z] from XBOOLE_0:
+    sch 1;
     take S;
     let z be set;
     thus z in S implies P[z] by A1;
     assume
 A2: P[z];
-    then consider x,y being set such that
-A3: x in X & y in X & z={x,y};
-    z c= X by A3,ZFMISC_1:38;
+    then z c= X by ZFMISC_1:38;
     hence thesis by A1,A2;
   end;
   uniqueness
   proof
     let p1,p2 be set such that
-A4: for z being set holds z in p1 iff
-    ex x,y being set st x in X & y in X & z={x,y} and
-A5: for z being set holds z in p2 iff
-    ex x,y being set st x in X & y in X & z={x,y};
+A3: for z being set holds z in p1 iff ex x,y being set st x in X & y
+    in X & z={x,y} and
+A4: for z being set holds z in p2 iff ex x,y being set st x in X & y
+    in X & z={x,y};
     now
       let z be set;
-      z in p1 iff ex x,y being set st x in X & y in X & z={x,y} by A4;
-      hence z in p1 iff z in p2 by A5;
+      z in p1 iff ex x,y being set st x in X & y in X & z={x,y} by A3;
+      hence z in p1 iff z in p2 by A4;
     end;
     hence thesis by TARSKI:2;
   end;
@@ -1404,37 +1478,40 @@ definition
   let t,X be set;
   func PairSet(t,X) means
   :Def9:
-  for z being set holds z in it iff
-  ex y being set st y in X & z={t,y};
+  for z being set holds z in it iff ex y being
+  set st y in X & z={t,y};
   existence
   proof
-    defpred P[set] means ex y being set st y in X & $1={t,y};
-    consider S being set such that
-A1: for z being set holds
-    z in S iff z in bool (X\/{t}) & P[z] from XBOOLE_0:sch 1;
-    take S;
-    let z be set;
-    thus z in S implies P[z] by A1;
-    assume
-A2: P[z];
-    then consider y being set such that
-A3: y in X & z={t,y};
     t in {t} by TARSKI:def 1;
     then
-A4: t in X\/{t} by XBOOLE_0:def 3;
-    y in X\/{t} by A3,XBOOLE_0:def 3;
-    then z c= X\/{t} by A3,A4,ZFMISC_1:38;
-    hence thesis by A1,A2;
+A1: t in X\/{t} by XBOOLE_0:def 3;
+    defpred P[set] means ex y being set st y in X & $1={t,y};
+    consider S being set such that
+A2: for z being set holds z in S iff z in bool (X\/{t}) & P[z] from
+    XBOOLE_0:sch 1;
+    take S;
+    let z be set;
+    thus z in S implies P[z] by A2;
+    assume
+A3: P[z];
+    then consider y being set such that
+A4: y in X and
+A5: z={t,y};
+    y in X\/{t} by A4,XBOOLE_0:def 3;
+    then z c= X\/{t} by A5,A1,ZFMISC_1:38;
+    hence thesis by A2,A3;
   end;
   uniqueness
   proof
     let p1,p2 be set such that
-A5: for z being set holds z in p1 iff ex y being set st y in X & z={t,y} and
-A6: for z being set holds z in p2 iff ex y being set st y in X & z={t,y};
+A6: for z being set holds z in p1 iff ex y being set st y in X & z={t,
+    y} and
+A7: for z being set holds z in p2 iff ex y being set st y in X & z={t
+    ,y};
     now
       let z be set;
-      z in p1 iff ex y being set st y in X & z={t,y} by A5;
-      hence z in p1 iff z in p2 by A6;
+      z in p1 iff ex y being set st y in X & z={t,y} by A6;
+      hence z in p1 iff z in p2 by A7;
     end;
     hence thesis by TARSKI:2;
   end;
@@ -1461,15 +1538,16 @@ registration
   proof
     2 c= card X by PENCIL_1:4;
     then consider x,y being set such that
-A1: x in X & y in X & x<>y by PENCIL_1:2;
-A2: {t,x} in PairSet(t,X) & {t,y} in PairSet(t,X) by A1,Def9;
-    now
+A1: x in X & y in X and
+A2: x<>y by PENCIL_1:2;
+A3: now
       assume
-A3:   {t,x}={t,y};
-      then y=t by A1,ZFMISC_1:10;
-      hence contradiction by A1,A3,ZFMISC_1:10;
+A4:   {t,x}={t,y};
+      then y=t by A2,ZFMISC_1:10;
+      hence contradiction by A2,A4,ZFMISC_1:10;
     end;
-    then 2 c= card PairSet(t,X) by A2,PENCIL_1:2;
+    {t,x} in PairSet(t,X) & {t,y} in PairSet(t,X) by A1,Def9;
+    then 2 c= card PairSet(t,X) by A3,PENCIL_1:2;
     hence thesis by PENCIL_1:4;
   end;
 end;
@@ -1479,43 +1557,46 @@ definition
   let L be Subset-Family of X;
   func PairSetFamily(L) -> Subset-Family of PairSet(X) means
   :Def10:
-  for S being set holds S in it iff
-  ex t being set, l being Subset of X st t in X & l in L & S=PairSet(t,l);
+  for S
+  being set holds S in it iff ex t being set, l being Subset of X st t in X & l
+  in L & S=PairSet(t,l);
   existence
   proof
     set A=PairSet(X);
-    defpred P[Subset of A] means
-    ex t being set, l being Subset of X st t in X & l in L & $1=PairSet(t,l);
+    defpred P[Subset of A] means ex t being set, l being Subset of X st t in X
+    & l in L & $1=PairSet(t,l);
     consider F being Subset-Family of A such that
 A1: for B being Subset of A holds B in F iff P[B] from SUBSET_1:sch 3;
     take F;
     let S be set;
-    thus S in F implies ex t being set, l being Subset of X st
-    t in X & l in L & S=PairSet(t,l) by A1;
+    thus S in F implies ex t being set, l being Subset of X st t in X & l in L
+    & S=PairSet(t,l) by A1;
     given t being set, l being Subset of X such that
-A2: t in X & l in L & S=PairSet(t,l);
+A2: t in X and
+A3: l in L and
+A4: S=PairSet(t,l);
     S c= PairSet(X)
     proof
       let a be set;
-      assume a in S;
-      then consider y being set such that
-A3:   y in l & a={t,y} by A2,Def9;
-      thus thesis by A2,A3,Def8;
+      assume
+      a in S;
+      then ex y being set st y in l & a={t,y} by A4,Def9;
+      hence thesis by A2,Def8;
     end;
-    hence thesis by A1,A2;
+    hence thesis by A1,A2,A3,A4;
   end;
   uniqueness
   proof
     let p1,p2 be Subset-Family of PairSet(X) such that
-A4: for z being set holds z in p1 iff
-    ex t being set, l being Subset of X st t in X & l in L & z=PairSet(t,l) and
-A5: for z being set holds z in p2 iff
-    ex t being set, l being Subset of X st t in X & l in L & z=PairSet(t,l);
+A5: for z being set holds z in p1 iff ex t being set, l being Subset
+    of X st t in X & l in L & z=PairSet(t,l) and
+A6: for z being set holds z in p2 iff ex t being set, l being Subset
+    of X st t in X & l in L & z=PairSet(t,l);
     now
       let z be set;
-      z in p1 iff ex t being set, l being Subset of X st
-      t in X & l in L & z=PairSet(t,l) by A4;
-      hence z in p1 iff z in p2 by A5;
+      z in p1 iff ex t being set, l being Subset of X st t in X & l in L
+      & z=PairSet(t,l) by A5;
+      hence z in p1 iff z in p2 by A6;
     end;
     hence thesis by TARSKI:2;
   end;
@@ -1527,11 +1608,11 @@ registration
   cluster PairSetFamily(L) -> non empty;
   coherence
   proof
-    consider t being set such that
-A1: t in X by XBOOLE_0:def 1;
     consider l being set such that
-A2: l in L by XBOOLE_0:def 1;
-    PairSet(t,l) in PairSetFamily(L) by A1,A2,Def10;
+A1: l in L by XBOOLE_0:def 1;
+    consider t being set such that
+A2: t in X by XBOOLE_0:def 1;
+    PairSet(t,l) in PairSetFamily(L) by A2,A1,Def10;
     hence thesis;
   end;
 end;
@@ -1539,7 +1620,8 @@ end;
 definition
   let S be TopStruct;
   func VeroneseSpace(S) -> strict TopStruct equals
-  TopStruct(#PairSet(the carrier of S), PairSetFamily(the topology of S)#);
+  TopStruct(#PairSet(the
+    carrier of S), PairSetFamily(the topology of S)#);
   coherence;
 end;
 
@@ -1563,22 +1645,26 @@ registration
   cluster VeroneseSpace(S) -> non degenerated;
   coherence
   proof
-A1: not the carrier of S in the topology of S by PENCIL_1:def 5;
-    assume the carrier of VeroneseSpace(S) is Block of VeroneseSpace(S);
+    assume
+    the carrier of VeroneseSpace(S) is Block of VeroneseSpace(S);
     then consider t being set, l being Subset of S such that
-A2: t in the carrier of S & l in the topology of S &
-    PairSet(the carrier of S)=PairSet(t,l) by Def10;
-    not the carrier of S c= l by A1,A2,XBOOLE_0:def 10;
+A1: t in the carrier of S and
+A2: l in the topology of S and
+A3: PairSet(the carrier of S)=PairSet(t,l) by Def10;
+    not the carrier of S in the topology of S by PENCIL_1:def 5;
+    then not the carrier of S c= l by A2,XBOOLE_0:def 10;
     then consider s being set such that
-A3: s in the carrier of S & not s in l by TARSKI:def 3;
+A4: s in the carrier of S and
+A5: not s in l by TARSKI:def 3;
     now
-      assume {t,s} in PairSet(t,l);
-      then consider z being set such that
-A4:   z in l & {t,s}={t,z} by Def9;
-      s = t by A3,A4,ZFMISC_1:10;
-      hence contradiction by A3,A4,ZFMISC_1:10;
+      assume
+      {t,s} in PairSet(t,l);
+      then
+A6:   ex z being set st z in l & {t,s}={t,z} by Def9;
+      then s = t by A5,ZFMISC_1:10;
+      hence contradiction by A5,A6,ZFMISC_1:10;
     end;
-    hence contradiction by A2,A3,Def8;
+    hence contradiction by A1,A3,A4,Def8;
   end;
 end;
 
@@ -1589,11 +1675,13 @@ registration
   proof
     let L be Block of VeroneseSpace(S);
     consider t being set, l being Subset of S such that
-A1: t in the carrier of S & l in the topology of S & L=PairSet(t,l) by Def10;
+    t in the carrier of S and
+A1: l in the topology of S and
+A2: L=PairSet(t,l) by Def10;
     2 c= card l by A1,PENCIL_1:def 6;
     then reconsider l as non trivial set by PENCIL_1:4;
     PairSet(t,l) is non trivial;
-    hence thesis by A1,PENCIL_1:4;
+    hence thesis by A2,PENCIL_1:4;
   end;
 end;
 
@@ -1603,41 +1691,57 @@ registration
   coherence
   proof
     let K,L be Block of VeroneseSpace(S);
-    assume 2 c= card (K/\L);
+    assume
+    2 c= card (K/\L);
     then consider a,b being set such that
-A1: a in K/\L & b in K/\L & a <> b by PENCIL_1:2;
-A2: a in K & a in L & b in K & b in L by A1,XBOOLE_0:def 4;
+A1: a in K/\L and
+A2: b in K/\L and
+A3: a <> b by PENCIL_1:2;
+A4: a in K by A1,XBOOLE_0:def 4;
     then
-A3: the topology of VeroneseSpace(S) is non empty by SUBSET_1:def 2;
+A5: the topology of VeroneseSpace(S) is non empty by SUBSET_1:def 2;
     then consider t being set, k being Subset of S such that
-A4: t in the carrier of S & k in the topology of S & K=PairSet(t,k) by Def10;
-    consider s being set, l being Subset of S such that
-A5: s in the carrier of S & l in the topology of S & L=PairSet(s,l)
-    by A3,Def10;
+    t in the carrier of S and
+A6: k in the topology of S and
+A7: K=PairSet(t,k) by Def10;
+    b in K by A2,XBOOLE_0:def 4;
+    then consider y being set such that
+A8: y in k and
+A9: b={t,y} by A7,Def9;
     consider x being set such that
-A6: x in k & a={t,x} by A2,A4,Def9;
-    consider y being set such that
-A7: y in k & b={t,y} by A2,A4,Def9;
-    consider z being set such that
-A8: z in l & a={s,z} by A2,A5,Def9;
-    consider w being set such that
-A9: w in l & b={s,w} by A2,A5,Def9;
-A10: (t=s or t=z) & (t=s or t=w) by A6,A7,A8,A9,ZFMISC_1:10;
-A11: now
-      assume
-A12:  x<>z;
-      then x=t by A1,A6,A8,A9,A10,ZFMISC_1:10;
-      hence contradiction by A6,A8,A12,ZFMISC_1:10;
-    end;
+A10: x in k and
+A11: a={t,x} by A4,A7,Def9;
+    consider s being set, l being Subset of S such that
+    s in the carrier of S and
+A12: l in the topology of S and
+A13: L=PairSet(s,l) by A5,Def10;
+    a in L by A1,XBOOLE_0:def 4;
+    then consider z being set such that
+A14: z in l and
+A15: a={s,z} by A13,Def9;
+    b in L by A2,XBOOLE_0:def 4;
+    then consider w being set such that
+A16: w in l and
+A17: b={s,w} by A13,Def9;
+A18: t=s or t=z by A11,A15,ZFMISC_1:10;
     now
       assume
-A13:  y<>w;
-      then y=t by A1,A7,A8,A9,A10,ZFMISC_1:10;
-      hence contradiction by A7,A9,A13,ZFMISC_1:10;
+A19:  y<>w;
+      then y=t by A3,A9,A15,A17,A18,ZFMISC_1:10;
+      hence contradiction by A9,A17,A19,ZFMISC_1:10;
     end;
-    then x in k/\l & y in k/\l by A6,A7,A8,A9,A11,XBOOLE_0:def 4;
-    then 2 c= card (k/\l) by A1,A6,A7,PENCIL_1:2;
-    hence thesis by A1,A4,A5,A8,A9,A10,PENCIL_1:def 7;
+    then
+A20: y in k/\l by A8,A16,XBOOLE_0:def 4;
+A21: t=s or t=w by A9,A17,ZFMISC_1:10;
+    now
+      assume
+A22:  x<>z;
+      then x=t by A3,A11,A15,A17,A21,ZFMISC_1:10;
+      hence contradiction by A11,A15,A22,ZFMISC_1:10;
+    end;
+    then x in k/\l by A10,A14,XBOOLE_0:def 4;
+    then 2 c= card (k/\l) by A3,A11,A9,A20,PENCIL_1:2;
+    hence thesis by A3,A6,A7,A12,A13,A15,A17,A18,A21,PENCIL_1:def 7;
   end;
 end;
 

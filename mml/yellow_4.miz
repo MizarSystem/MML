@@ -11,8 +11,7 @@ environ
  notations TARSKI, XBOOLE_0, SUBSET_1, LATTICE3, YELLOW_0, DOMAIN_1, STRUCT_0,
       ORDERS_2, YELLOW_1, WAYBEL_0, YELLOW_3;
  constructors DOMAIN_1, LATTICE3, YELLOW_1, YELLOW_3;
- registrations XBOOLE_0, STRUCT_0, LATTICE3, YELLOW_0, WAYBEL_0, YELLOW_1,
-      YELLOW_2;
+ registrations STRUCT_0, LATTICE3, YELLOW_0, WAYBEL_0, YELLOW_1, YELLOW_2;
  requirements SUBSET, BOOLE;
  definitions LATTICE3, TARSKI, WAYBEL_0, XBOOLE_0;
  theorems LATTICE3, ORDERS_2, TARSKI, WAYBEL_0, YELLOW_0, YELLOW_1, YELLOW_2,
@@ -21,8 +20,8 @@ environ
 begin :: Preliminaries
 
 theorem Th1:
-  for L being RelStr, X being set, a being Element of L
-  st a in X & ex_sup_of X,L holds a <= "\/"(X,L)
+  for L being RelStr, X being set, a being Element of L st a in X &
+  ex_sup_of X,L holds a <= "\/"(X,L)
 proof
   let L be RelStr, X be set, a be Element of L such that
 A1: a in X and
@@ -32,8 +31,8 @@ A2: ex_sup_of X,L;
 end;
 
 theorem Th2:
-  for L being RelStr, X being set, a being Element of L
-  st a in X & ex_inf_of X,L holds "/\"(X,L) <= a
+  for L being RelStr, X being set, a being Element of L st a in X &
+  ex_inf_of X,L holds "/\"(X,L) <= a
 proof
   let L be RelStr, X be set, a be Element of L such that
 A1: a in X and
@@ -46,12 +45,12 @@ definition
   let L be RelStr, A, B be Subset of L;
   pred A is_finer_than B means
   :Def1:
-  for a being Element of L st a in A ex b being Element of L st b in
-  B & a <= b;
+  for a being Element of L st a in A ex b
+  being Element of L st b in B & a <= b;
   pred B is_coarser_than A means
   :Def2:
-  for b being Element of L st b in B ex a being Element of L st a in
-  A & a <= b;
+  for b being Element of L st b in B ex
+  a being Element of L st a in A & a <= b;
 end;
 
 definition
@@ -81,29 +80,33 @@ theorem
 proof
   let L be RelStr, B be Subset of L;
   let a be Element of L;
-  assume a in {}L;
+  assume
+  a in {}L;
   hence thesis;
 end;
 
 theorem
-  for L being transitive RelStr, A, B, C being Subset of L
-  st A is_finer_than B & B is_finer_than C holds A is_finer_than C
+  for L being transitive RelStr, A, B, C being Subset of L st A
+  is_finer_than B & B is_finer_than C holds A is_finer_than C
 proof
   let L be transitive RelStr, A, B, C be Subset of L such that
-A1: A is_finer_than B & B is_finer_than C;
+A1: A is_finer_than B and
+A2: B is_finer_than C;
   let a be Element of L;
-  assume a in A;
+  assume
+  a in A;
   then consider b being Element of L such that
-A2: b in B & a <= b by A1,Def1;
+A3: b in B and
+A4: a <= b by A1,Def1;
   consider c being Element of L such that
-A3: c in C & b <= c by A1,A2,Def1;
+A5: c in C & b <= c by A2,A3,Def1;
   take c;
-  thus thesis by A2,A3,ORDERS_2:26;
+  thus thesis by A4,A5,ORDERS_2:26;
 end;
 
 theorem
-  for L being RelStr, A, B being Subset of L st B is_finer_than A & A is lower
-  holds B c= A
+  for L being RelStr, A, B being Subset of L st B is_finer_than A & A is
+  lower holds B c= A
 proof
   let L be RelStr, A, B be Subset of L such that
 A1: B is_finer_than A and
@@ -112,9 +115,8 @@ A2: A is lower;
   assume
 A3: a in B;
   then reconsider a1 = a as Element of L;
-  consider b being Element of L such that
-A4: b in A & a1 <= b by A1,A3,Def1;
-  thus thesis by A2,A4,WAYBEL_0:def 19;
+  ex b being Element of L st b in A & a1 <= b by A1,A3,Def1;
+  hence thesis by A2,WAYBEL_0:def 19;
 end;
 
 theorem
@@ -122,29 +124,33 @@ theorem
 proof
   let L be RelStr, A be Subset of L;
   let b be Element of L;
-  assume b in {}L;
+  assume
+  b in {}L;
   hence thesis;
 end;
 
 theorem
-  for L being transitive RelStr, A, B, C being Subset of L
-  st C is_coarser_than B & B is_coarser_than A holds C is_coarser_than A
+  for L being transitive RelStr, A, B, C being Subset of L st C
+  is_coarser_than B & B is_coarser_than A holds C is_coarser_than A
 proof
   let L be transitive RelStr, A, B, C be Subset of L such that
-A1: C is_coarser_than B & B is_coarser_than A;
+A1: C is_coarser_than B and
+A2: B is_coarser_than A;
   let c be Element of L;
-  assume c in C;
+  assume
+  c in C;
   then consider b being Element of L such that
-A2: b in B & b <= c by A1,Def2;
+A3: b in B and
+A4: b <= c by A1,Def2;
   consider a being Element of L such that
-A3: a in A & a <= b by A1,A2,Def2;
+A5: a in A & a <= b by A2,A3,Def2;
   take a;
-  thus thesis by A2,A3,ORDERS_2:26;
+  thus thesis by A4,A5,ORDERS_2:26;
 end;
 
 theorem
-  for L being RelStr, A, B being Subset of L st A is_coarser_than B & B is
-  upper holds A c= B
+  for L being RelStr, A, B being Subset of L st A is_coarser_than B & B
+  is upper holds A c= B
 proof
   let L be RelStr, A, B be Subset of L such that
 A1: A is_coarser_than B and
@@ -153,9 +159,8 @@ A2: B is upper;
   assume
 A3: a in A;
   then reconsider a1 = a as Element of L;
-  consider b being Element of L such that
-A4: b in B & b <= a1 by A1,A3,Def2;
-  thus thesis by A2,A4,WAYBEL_0:def 20;
+  ex b being Element of L st b in B & b <= a1 by A1,A3,Def2;
+  hence thesis by A2,WAYBEL_0:def 20;
 end;
 
 begin :: The Join of Subsets
@@ -163,17 +168,18 @@ begin :: The Join of Subsets
 definition
   let L be non empty RelStr, D1, D2 be Subset of L;
   func D1 "\/" D2 -> Subset of L equals
-  { x "\/" y where x, y is Element of L : x in D1 & y in D2 };
+  { x "\/" y where x, y is Element of L
+  : x in D1 & y in D2 };
   coherence
   proof
-    { x "\/" y where x, y is Element of L : x in D1 & y in D2 } c=
-    the carrier of L
+    { x "\/" y where x, y is Element of L : x in D1 & y in D2 } c= the
+    carrier of L
     proof
       let q be set;
-      assume q in { x "\/" y where x, y is Element of L : x in D1 & y in D2 };
-      then consider a, b being Element of L such that
-A1:   q = a "\/" b & a in D1 & b in D2;
-      thus thesis by A1;
+      assume
+      q in { x "\/" y where x, y is Element of L : x in D1 & y in D2 };
+      then ex a, b being Element of L st q = a "\/" b & a in D1 & b in D2;
+      hence thesis;
     end;
     hence thesis;
   end;
@@ -188,45 +194,45 @@ definition
     thus D1 "\/" D2 c= D2 "\/" D1
     proof
       let q be set;
-      assume q in D1 "\/" D2;
-      then consider x, y being Element of L such that
-A1:   q = x "\/" y & x in D1 & y in D2;
-      thus thesis by A1;
+      assume
+      q in D1 "\/" D2;
+      then ex x, y being Element of L st q = x "\/" y & x in D1 & y in D2;
+      hence thesis;
     end;
     let q be set;
-    assume q in D2 "\/" D1;
-    then consider x, y being Element of L such that
-A2: q = x "\/" y & x in D2 & y in D1;
-    thus thesis by A2;
+    assume
+    q in D2 "\/" D1;
+    then ex x, y being Element of L st q = x "\/" y & x in D2 & y in D1;
+    hence thesis;
   end;
 end;
 
 theorem
-  for L being non empty RelStr, X being Subset of L holds X "\/" {}L = {}
+  for L being non empty RelStr, X being Subset of L holds X "\/" {}L =
+  {}
 proof
   let L be non empty RelStr, X be Subset of L;
   thus X "\/" {}L c= {}
   proof
     let a be set;
-    assume a in X "\/" {}L;
-    then consider s,t be Element of L such that
-A1: a = s "\/" t & s in X & t in {}L;
-    thus thesis by A1;
+    assume
+    a in X "\/" {}L;
+    then ex s,t be Element of L st a = s "\/" t & s in X & t in {}L;
+    hence thesis;
   end;
   thus thesis by XBOOLE_1:2;
 end;
 
 theorem
-  for L being non empty RelStr, X, Y being Subset of L, x, y being Element of
-  L st x in X & y in Y holds x "\/" y in X "\/" Y;
+  for L being non empty RelStr, X, Y being Subset of L, x, y being
+  Element of L st x in X & y in Y holds x "\/" y in X "\/" Y;
 
 theorem
-  for L being antisymmetric with_suprema RelStr
-  for A being Subset of L, B being non empty Subset of L
-  holds A is_finer_than A "\/" B
+  for L being antisymmetric with_suprema RelStr for A being Subset of L,
+  B being non empty Subset of L holds A is_finer_than A "\/" B
 proof
-  let L be antisymmetric with_suprema RelStr, A be Subset of L,
-  B be non empty Subset of L;
+  let L be antisymmetric with_suprema RelStr, A be Subset of L, B be non empty
+  Subset of L;
   let q be Element of L such that
 A1: q in A;
   consider b being Element of B;
@@ -240,18 +246,21 @@ theorem
   holds A "\/" B is_coarser_than A
 proof
   let L be antisymmetric with_suprema RelStr, A, B be Subset of L;
-  let q be Element of L such that
-A1: q in A "\/" B;
-  consider x, y being Element of L such that
-A2: q = x "\/" y & x in A & y in B by A1;
+  let q be Element of L;
+  assume
+  q in A "\/" B;
+  then consider x, y being Element of L such that
+A1: q = x "\/" y and
+A2: x in A and
+  y in B;
   take x;
   thus x in A by A2;
-  thus thesis by A2,YELLOW_0:22;
+  thus thesis by A1,YELLOW_0:22;
 end;
 
 theorem
-  for L being antisymmetric reflexive with_suprema RelStr
-  for A being Subset of L holds A c= A "\/" A
+  for L being antisymmetric reflexive with_suprema RelStr for A being
+  Subset of L holds A c= A "\/" A
 proof
   let L be antisymmetric reflexive with_suprema RelStr, A be Subset of L;
   let q be set;
@@ -265,38 +274,40 @@ A1: q in A;
 end;
 
 theorem
-  for L being with_suprema antisymmetric transitive RelStr
-
-for D1, D2, D3 being Subset of L holds (D1 "\/" D2) "\/" D3 = D1 "\/" (D2 "\/"
-  D3)
+  for L being with_suprema antisymmetric transitive RelStr for D1, D2,
+  D3 being Subset of L holds (D1 "\/" D2) "\/" D3 = D1 "\/" (D2 "\/" D3)
 proof
-  let L be with_suprema antisymmetric transitive RelStr,
-  D1, D2, D3 be Subset of L;
+  let L be with_suprema antisymmetric transitive RelStr, D1, D2, D3 be Subset
+  of L;
   thus (D1 "\/" D2) "\/" D3 c= D1 "\/" (D2 "\/" D3)
   proof
     let q be set;
-    assume q in (D1 "\/" D2) "\/" D3;
+    assume
+    q in (D1 "\/" D2) "\/" D3;
     then consider a1, b1 being Element of L such that
 A1: q = a1 "\/" b1 and
-A2: a1 in D1 "\/" D2 & b1 in D3;
+A2: a1 in D1 "\/" D2 and
+A3: b1 in D3;
     consider a11, b11 being Element of L such that
-A3: a1 = a11 "\/" b11 and
-A4: a11 in D1 & b11 in D2 by A2;
-A5: b11 "\/" b1 in D2 "\/" D3 by A2,A4;
-    q = a11 "\/" (b11 "\/" b1) by A1,A3,LATTICE3:14;
-    hence thesis by A4,A5;
+A4: a1 = a11 "\/" b11 and
+A5: a11 in D1 and
+A6: b11 in D2 by A2;
+    b11 "\/" b1 in D2 "\/" D3 & q = a11 "\/" (b11 "\/" b1) by A1,A3,A4,A6,
+    LATTICE3:14;
+    hence thesis by A5;
   end;
   let q be set;
-  assume q in D1 "\/" (D2 "\/" D3);
+  assume
+  q in D1 "\/" (D2 "\/" D3);
   then consider a1, b1 being Element of L such that
-A6: q = a1 "\/" b1 and
-A7: a1 in D1 & b1 in D2 "\/" D3;
+A7: q = a1 "\/" b1 & a1 in D1 and
+A8: b1 in D2 "\/" D3;
   consider a11, b11 being Element of L such that
-A8: b1 = a11 "\/" b11 and
-A9: a11 in D2 & b11 in D3 by A7;
-A10: a1 "\/" a11 in D1 "\/" D2 by A7,A9;
-  q = a1 "\/" a11 "\/" b11 by A6,A8,LATTICE3:14;
-  hence thesis by A9,A10;
+A9: b1 = a11 "\/" b11 & a11 in D2 and
+A10: b11 in D3 by A8;
+  a1 "\/" a11 in D1 "\/" D2 & q = a1 "\/" a11 "\/" b11 by A7,A9,
+  LATTICE3:14;
+  hence thesis by A10;
 end;
 
 registration
@@ -304,62 +315,77 @@ registration
   cluster D1 "\/" D2 -> non empty;
   coherence
   proof
-    consider a being set such that
-A1: a in D1 by XBOOLE_0:def 1;
     consider b being set such that
-A2: b in D2 by XBOOLE_0:def 1;
-    reconsider a as Element of D1 by A1;
-    reconsider b as Element of D2 by A2;
-    a "\/" b in { x "\/" y where x, y is Element of L : x in D1 & y in D2 };
+A1: b in D2 by XBOOLE_0:def 1;
+    reconsider b as Element of D2 by A1;
+    consider a being set such that
+A2: a in D1 by XBOOLE_0:def 1;
+    reconsider a as Element of D1 by A2;
+    a "\/" b in { x "\/" y where x, y is Element of L : x in D1 & y in D2
+    };
     hence thesis;
   end;
 end;
 
 registration
-  let L be with_suprema transitive antisymmetric RelStr,
-  D1, D2 be directed Subset of L;
+  let L be with_suprema transitive antisymmetric RelStr, D1, D2 be directed
+  Subset of L;
   cluster D1 "\/" D2 -> directed;
   coherence
   proof
-    set X = D1 "\/" D2;
     let a, b be Element of L;
-    assume
-A1: a in X & b in X;
-    then consider x, y being Element of L such that
-A2: a = x "\/" y & x in D1 & y in D2;
+    set X = D1 "\/" D2;
+    assume that
+A1: a in X and
+A2: b in X;
+    consider x, y being Element of L such that
+A3: a = x "\/" y and
+A4: x in D1 and
+A5: y in D2 by A1;
     consider s, t being Element of L such that
-A3: b = s "\/" t & s in D1 & t in D2 by A1;
-    consider z1 being Element of L such that
-A4: z1 in D1 & x <= z1 & s <= z1 by A2,A3,WAYBEL_0:def 1;
+A6: b = s "\/" t and
+A7: s in D1 and
+A8: t in D2 by A2;
     consider z2 being Element of L such that
-A5: z2 in D2 & y <= z2 & t <= z2 by A2,A3,WAYBEL_0:def 1;
+A9: z2 in D2 and
+A10: y <= z2 & t <= z2 by A5,A8,WAYBEL_0:def 1;
+    consider z1 being Element of L such that
+A11: z1 in D1 and
+A12: x <= z1 & s <= z1 by A4,A7,WAYBEL_0:def 1;
     take z = z1 "\/" z2;
-    thus z in X by A4,A5;
-    thus thesis by A2,A3,A4,A5,YELLOW_3:3;
+    thus z in X by A11,A9;
+    thus thesis by A3,A6,A12,A10,YELLOW_3:3;
   end;
 end;
 
 registration
-  let L be with_suprema transitive antisymmetric RelStr,
-  D1, D2 be filtered Subset of L;
+  let L be with_suprema transitive antisymmetric RelStr, D1, D2 be filtered
+  Subset of L;
   cluster D1 "\/" D2 -> filtered;
   coherence
   proof
-    set X = D1 "\/" D2;
     let a, b be Element of L;
-    assume
-A1: a in X & b in X;
-    then consider x, y being Element of L such that
-A2: a = x "\/" y & x in D1 & y in D2;
+    set X = D1 "\/" D2;
+    assume that
+A1: a in X and
+A2: b in X;
+    consider x, y being Element of L such that
+A3: a = x "\/" y and
+A4: x in D1 and
+A5: y in D2 by A1;
     consider s, t being Element of L such that
-A3: b = s "\/" t & s in D1 & t in D2 by A1;
-    consider z1 being Element of L such that
-A4: z1 in D1 & x >= z1 & s >= z1 by A2,A3,WAYBEL_0:def 2;
+A6: b = s "\/" t and
+A7: s in D1 and
+A8: t in D2 by A2;
     consider z2 being Element of L such that
-A5: z2 in D2 & y >= z2 & t >= z2 by A2,A3,WAYBEL_0:def 2;
+A9: z2 in D2 and
+A10: y >= z2 & t >= z2 by A5,A8,WAYBEL_0:def 2;
+    consider z1 being Element of L such that
+A11: z1 in D1 and
+A12: x >= z1 & s >= z1 by A4,A7,WAYBEL_0:def 2;
     take z = z1 "\/" z2;
-    thus z in X by A4,A5;
-    thus thesis by A2,A3,A4,A5,YELLOW_3:3;
+    thus z in X by A11,A9;
+    thus thesis by A3,A6,A12,A10,YELLOW_3:3;
   end;
 end;
 
@@ -370,82 +396,97 @@ registration
   proof
     set X = D1 "\/" D2;
     let a, b be Element of L such that
-A1: a in X & a <= b;
+A1: a in X and
+A2: a <= b;
     consider x, y being Element of L such that
-A2: a = x "\/" y & x in D1 & y in D2 by A1;
-    ex xx being Element of L st x <= xx & y <= xx &
-    for c being Element of L st x <= c & y <= c holds xx <= c
-    by LATTICE3:def 10;
-    then x <= x "\/" y & y <= x "\/" y by LATTICE3:def 13;
-    then x <= b & y <= b by A1,A2,YELLOW_0:def 2;
+A3: a = x "\/" y and
+A4: x in D1 and
+A5: y in D2 by A1;
+A6: ex xx being Element of L st x <= xx & y <= xx & for c being Element of
+    L st x <= c & y <= c holds xx <= c by LATTICE3:def 10;
+    then x <= x "\/" y by LATTICE3:def 13;
+    then x <= b by A2,A3,YELLOW_0:def 2;
     then
-A3: b in D1 & b in D2 by A2,WAYBEL_0:def 20;
+A7: b in D1 by A4,WAYBEL_0:def 20;
+    y <= x "\/" y by A6,LATTICE3:def 13;
+    then y <= b by A2,A3,YELLOW_0:def 2;
+    then
+A8: b in D2 by A5,WAYBEL_0:def 20;
     b <= b;
     then b = b "\/" b by YELLOW_0:24;
-    hence thesis by A3;
+    hence thesis by A7,A8;
   end;
 end;
 
 theorem Th15:
-  for L being non empty RelStr, Y being Subset of L, x being Element of L
-  holds {x} "\/" Y = {x "\/" y where y is Element of L: y in Y}
+  for L being non empty RelStr, Y being Subset of L, x being
+  Element of L holds {x} "\/" Y = {x "\/" y where y is Element of L: y in Y}
 proof
   let L be non empty RelStr, Y be Subset of L, x be Element of L;
   thus {x} "\/" Y c= {x "\/" y where y is Element of L: y in Y}
   proof
     let q be set;
-    assume q in {x} "\/" Y;
+    assume
+    q in {x} "\/" Y;
     then consider s, t being Element of L such that
-A1: q = s "\/" t & s in {x} & t in Y;
-    s = x by A1,TARSKI:def 1;
-    hence thesis by A1;
+A1: q = s "\/" t and
+A2: s in {x} and
+A3: t in Y;
+    s = x by A2,TARSKI:def 1;
+    hence thesis by A1,A3;
   end;
   let q be set;
-  assume q in {x "\/" y where y is Element of L: y in Y};
-  then consider y being Element of L such that
-A2: q = x "\/" y & y in Y;
+  assume
+  q in {x "\/" y where y is Element of L: y in Y};
+  then
+A4: ex y being Element of L st q = x "\/" y & y in Y;
   x in {x} by TARSKI:def 1;
-  hence thesis by A2;
+  hence thesis by A4;
 end;
 
 theorem
-  for L being non empty RelStr, A, B, C being Subset of L
-  holds A "\/" (B \/ C) = (A "\/" B) \/ (A "\/" C)
+  for L being non empty RelStr, A, B, C being Subset of L holds A "\/" (
+  B \/ C) = (A "\/" B) \/ (A "\/" C)
 proof
   let L be non empty RelStr, A, B, C be Subset of L;
   thus A "\/" (B \/ C) c= (A "\/" B) \/ (A "\/" C)
   proof
     let q be set;
-    assume q in A "\/" (B \/ C);
+    assume
+    q in A "\/" (B \/ C);
     then consider a, y being Element of L such that
-A1: q = a "\/" y & a in A & y in B \/ C;
-    y in B or y in C by A1,XBOOLE_0:def 3;
+A1: q = a "\/" y & a in A and
+A2: y in B \/ C;
+    y in B or y in C by A2,XBOOLE_0:def 3;
     then q in A "\/" B or q in A "\/" C by A1;
     hence thesis by XBOOLE_0:def 3;
   end;
   let q be set such that
-A2: q in (A "\/" B) \/ (A "\/" C);
-  per cases by A2,XBOOLE_0:def 3;
-  suppose q in A "\/" B;
+A3: q in (A "\/" B) \/ (A "\/" C);
+  per cases by A3,XBOOLE_0:def 3;
+  suppose
+    q in A "\/" B;
     then consider a, b being Element of L such that
-A3: q = a "\/" b & a in A & b in B;
-    b in B \/ C by A3,XBOOLE_0:def 3;
-    hence thesis by A3;
-  end;
-  suppose q in A "\/" C;
-    then consider a, b being Element of L such that
-A4: q = a "\/" b & a in A & b in C;
-    b in B \/ C by A4,XBOOLE_0:def 3;
+A4: q = a "\/" b & a in A and
+A5: b in B;
+    b in B \/ C by A5,XBOOLE_0:def 3;
     hence thesis by A4;
+  end;
+  suppose
+    q in A "\/" C;
+    then consider a, b being Element of L such that
+A6: q = a "\/" b & a in A and
+A7: b in C;
+    b in B \/ C by A7,XBOOLE_0:def 3;
+    hence thesis by A6;
   end;
 end;
 
 theorem
-  for L being antisymmetric reflexive with_suprema RelStr
-  for A, B, C being Subset of L holds A \/ (B "\/" C) c= (A \/ B) "\/" (A \/ C)
+  for L being antisymmetric reflexive with_suprema RelStr for A, B, C
+  being Subset of L holds A \/ (B "\/" C) c= (A \/ B) "\/" (A \/ C)
 proof
-  let L be antisymmetric reflexive with_suprema RelStr,
-  A, B, C be Subset of L;
+  let L be antisymmetric reflexive with_suprema RelStr, A, B, C be Subset of L;
   let q be set such that
 A1: q in A \/ (B "\/" C);
   per cases by A1,XBOOLE_0:def 3;
@@ -458,39 +499,48 @@ A3: q1 = q1 "\/" q1 by YELLOW_0:24;
     q1 in A \/ B & q1 in A \/ C by A2,XBOOLE_0:def 3;
     hence thesis by A3;
   end;
-  suppose q in B "\/" C;
+  suppose
+    q in B "\/" C;
     then consider b, c being Element of L such that
-A4: q = b "\/" c & b in B & c in C;
-    b in A \/ B & c in A \/ C by A4,XBOOLE_0:def 3;
+A4: q = b "\/" c and
+A5: b in B & c in C;
+    b in A \/ B & c in A \/ C by A5,XBOOLE_0:def 3;
     hence thesis by A4;
   end;
 end;
 
 theorem
-  for L being antisymmetric with_suprema RelStr, A being upper Subset of L
-  for B, C being Subset of L holds (A \/ B) "\/" (A \/ C) c= A \/ (B "\/" C)
+  for L being antisymmetric with_suprema RelStr, A being upper Subset of
+  L for B, C being Subset of L holds (A \/ B) "\/" (A \/ C) c= A \/ (B "\/" C)
 proof
-  let L be antisymmetric with_suprema RelStr, A be upper Subset of L,
-  B, C be Subset of L;
+  let L be antisymmetric with_suprema RelStr, A be upper Subset of L, B, C be
+  Subset of L;
   let q be set;
-  assume q in (A \/ B) "\/" (A \/ C);
+  assume
+  q in (A \/ B) "\/" (A \/ C);
   then consider x, y being Element of L such that
-A1: q = x "\/" y & x in A \/ B & y in A \/ C;
-A2: x <= x "\/" y & y <= x "\/" y by YELLOW_0:22;
-  per cases by A1,XBOOLE_0:def 3;
-  suppose x in A & y in A;
-    then q in A by A1,A2,WAYBEL_0:def 20;
+A1: q = x "\/" y and
+A2: x in A \/ B & y in A \/ C;
+A3: x <= x "\/" y by YELLOW_0:22;
+A4: y <= x "\/" y by YELLOW_0:22;
+  per cases by A2,XBOOLE_0:def 3;
+  suppose
+    x in A & y in A;
+    then q in A by A1,A3,WAYBEL_0:def 20;
     hence thesis by XBOOLE_0:def 3;
   end;
-  suppose x in A & y in C;
-    then q in A by A1,A2,WAYBEL_0:def 20;
+  suppose
+    x in A & y in C;
+    then q in A by A1,A3,WAYBEL_0:def 20;
     hence thesis by XBOOLE_0:def 3;
   end;
-  suppose x in B & y in A;
-    then q in A by A1,A2,WAYBEL_0:def 20;
+  suppose
+    x in B & y in A;
+    then q in A by A1,A4,WAYBEL_0:def 20;
     hence thesis by XBOOLE_0:def 3;
   end;
-  suppose x in B & y in C;
+  suppose
+    x in B & y in C;
     then x "\/" y in B "\/" C;
     hence thesis by A1,XBOOLE_0:def 3;
   end;
@@ -498,14 +548,21 @@ end;
 
 Lm1: now
   let L be non empty RelStr, x, y be Element of L;
-  thus {a "\/" b where a, b is Element of L : a in {x} & b in {y}} = {x "\/"
-  y}
+
+  thus {a "\/" b where a, b is Element of L : a in {x} & b in {y}} = {x "\/" y
+  }
+
   proof
-    thus {a "\/" b where a, b is Element of L : a in {x} & b in
-    {y}} c= {x "\/" y}
+
+    thus {a "\/" b where a, b is Element of L : a in {x} & b in {y}} c= {x
+    "\/" y}
+
     proof
       let q be set;
-      assume q in {a "\/" b where a, b is Element of L : a in {x} & b in {y}};
+      assume
+
+      q in {a "\/" b where a, b is Element of L : a in {x} & b in {y}};
+
       then consider u,v being Element of L such that
 A1:   q = u "\/" v and
 A2:   u in {x} & v in {y};
@@ -513,108 +570,124 @@ A2:   u in {x} & v in {y};
       hence thesis by A1,TARSKI:def 1;
     end;
     let q be set;
-    assume q in {x "\/" y};
-    then q = x "\/" y & x in {x} & y in {y} by TARSKI:def 1;
-    hence thesis;
+    assume
+    q in {x "\/" y};
+    then
+A3: q = x "\/" y by TARSKI:def 1;
+    x in {x} & y in {y} by TARSKI:def 1;
+    hence thesis by A3;
   end;
 end;
 
 Lm2: now
   let L be non empty RelStr, x, y, z be Element of L;
-  thus {a "\/" b where a, b is Element of L : a in {x} & b in {y,z}} =
-  {x "\/" y, x "\/" z}
+
+  thus {a "\/" b where a, b is Element of L : a in {x} & b in {y,z}} = {x "\/"
+  y, x "\/" z}
+
   proof
-    thus {a "\/" b where a, b is Element of L : a in {x} & b in {y,z}} c=
-    {x "\/" y, x "\/" z}
+
+    thus {a "\/" b where a, b is Element of L : a in {x} & b in {y,z}} c= {x
+    "\/" y, x "\/" z}
+
     proof
       let q be set;
-      assume q in {a "\/" b where a, b is Element of L : a in {x} & b in
-      {y,z}};
+      assume
+
+      q in {a "\/" b where a, b is Element of L : a in {x} & b in {y,z
+      }};
+
       then consider u,v being Element of L such that
 A1:   q = u "\/" v and
-A2:   u in {x} & v in {y,z};
-      u = x & (v = y or v = z) by A2,TARSKI:def 1,def 2;
-      hence thesis by A1,TARSKI:def 2;
+A2:   u in {x} and
+A3:   v in {y,z};
+A4:   v = y or v = z by A3,TARSKI:def 2;
+      u = x by A2,TARSKI:def 1;
+      hence thesis by A1,A4,TARSKI:def 2;
     end;
     let q be set;
-    assume q in {x "\/" y, x "\/" z};
+A5: z in {y,z} by TARSKI:def 2;
+    assume
+    q in {x "\/" y, x "\/" z};
     then
-A3: q = x "\/" y or q = x "\/" z by TARSKI:def 2;
-    x in {x} & y in {y,z} & z in {y,z} by TARSKI:def 1,def 2;
-    hence thesis
-    by A3;
+A6: q = x "\/" y or q = x "\/" z by TARSKI:def 2;
+    x in {x} & y in {y,z} by TARSKI:def 1,def 2;
+    hence thesis by A6,A5;
   end;
 end;
 
 theorem
-  for L being non empty RelStr, x, y being Element of L
-  holds {x} "\/" {y} = {x "\/" y} by Lm1;
+  for L being non empty RelStr, x, y being Element of L holds {x} "\/" {
+  y} = {x "\/" y} by Lm1;
 
 theorem
-  for L being non empty RelStr, x, y, z being Element of L
-  holds {x} "\/" {y,z} = {x "\/" y, x "\/" z} by Lm2;
+  for L being non empty RelStr, x, y, z being Element of L holds {x}
+  "\/" {y,z} = {x "\/" y, x "\/" z} by Lm2;
 
 theorem
-  for L being non empty RelStr, X1, X2, Y1, Y2 being Subset of L st
-  X1 c= Y1 & X2 c= Y2 holds X1 "\/" X2 c= Y1 "\/" Y2
+  for L being non empty RelStr, X1, X2, Y1, Y2 being Subset of L st X1
+  c= Y1 & X2 c= Y2 holds X1 "\/" X2 c= Y1 "\/" Y2
 proof
   let L be non empty RelStr, X1, X2, Y1, Y2 be Subset of L such that
 A1: X1 c= Y1 & X2 c= Y2;
   let q be set;
-  assume q in X1 "\/" X2;
-  then consider x, y being Element of L such that
-A2: q = x "\/" y & x in X1 & y in X2;
-  thus thesis by A1,A2;
+  assume
+  q in X1 "\/" X2;
+  then ex x, y being Element of L st q = x "\/" y & x in X1 & y in X2;
+  hence thesis by A1;
 end;
 
 theorem
-  for L being with_suprema reflexive antisymmetric RelStr
-  for D being Subset of L, x being Element of L st x is_<=_than D
-  holds {x} "\/" D = D
+  for L being with_suprema reflexive antisymmetric RelStr for D being
+  Subset of L, x being Element of L st x is_<=_than D holds {x} "\/" D = D
 proof
-  let L be with_suprema reflexive antisymmetric RelStr, D be Subset of L,
-  x be Element of L such that
+  let L be with_suprema reflexive antisymmetric RelStr, D be Subset of L, x be
+  Element of L such that
 A1: x is_<=_than D;
 A2: {x} "\/" D = { x "\/" y where y is Element of L : y in D } by Th15;
   thus {x} "\/" D c= D
   proof
     let q be set;
-    assume q in {x} "\/" D;
+    assume
+    q in {x} "\/" D;
     then consider y being Element of L such that
-A3: q = x "\/" y & y in D by A2;
-    x <= y by A1,A3,LATTICE3:def 8;
-    hence thesis by A3,YELLOW_0:24;
+A3: q = x "\/" y and
+A4: y in D by A2;
+    x <= y by A1,A4,LATTICE3:def 8;
+    hence thesis by A3,A4,YELLOW_0:24;
   end;
   let q be set;
   assume
-A4: q in D;
+A5: q in D;
   then reconsider D1 = D as non empty Subset of L;
-  reconsider y = q as Element of D1 by A4;
+  reconsider y = q as Element of D1 by A5;
   x <= y by A1,LATTICE3:def 8;
   then q = x "\/" y by YELLOW_0:24;
   hence thesis by A2;
 end;
 
 theorem
-  for L being with_suprema antisymmetric RelStr
-  for D being Subset of L, x being Element of L holds x is_<=_than {x} "\/" D
+  for L being with_suprema antisymmetric RelStr for D being Subset of L,
+  x being Element of L holds x is_<=_than {x} "\/" D
 proof
-  let L be with_suprema antisymmetric RelStr, D be Subset of L,
-  x be Element of L;
-A1: {x} "\/" D = { x "\/" h where h is Element of L : h in D } by Th15;
+  let L be with_suprema antisymmetric RelStr, D be Subset of L, x be Element
+  of L;
   let b be Element of L;
-  assume b in {x} "\/" D;
+A1: {x} "\/" D = { x "\/" h where h is Element of L : h in D } by Th15;
+  assume
+  b in {x} "\/" D;
   then consider h being Element of L such that
-A2: b = x "\/" h & h in D by A1;
-  ex w being Element of L st x <= w & h <= w &
-  for c being Element of L st x <= c & h <= c holds w <= c by LATTICE3:def 10;
+A2: b = x "\/" h and
+  h in D by A1;
+  ex w being Element of L st x <= w & h <= w & for c being Element of L st
+  x <= c & h <= c holds w <= c by LATTICE3:def 10;
   hence thesis by A2,LATTICE3:def 13;
 end;
 
 theorem
-  for L being with_suprema Poset, X being Subset of L, x being Element of L
-  st ex_inf_of {x} "\/" X,L & ex_inf_of X,L holds x "\/" inf X <= inf ({x} "\/"
-  X)
+  for L being with_suprema Poset, X being Subset of L, x being Element
+  of L st ex_inf_of {x} "\/" X,L & ex_inf_of X,L holds x "\/" inf X <= inf ({x}
+  "\/" X)
 proof
   let L be with_suprema Poset, X be Subset of L, x be Element of L such that
 A1: ex_inf_of {x} "\/" X,L and
@@ -623,10 +696,12 @@ A3: {x} "\/" X = {x "\/" y where y is Element of L : y in X} by Th15;
   {x} "\/" X is_>=_than x "\/" inf X
   proof
     let q be Element of L;
-    assume q in {x} "\/" X;
+    assume
+    q in {x} "\/" X;
     then consider y being Element of L such that
-A4: q = x "\/" y & y in X by A3;
-    x <= x & y >= inf X by A2,A4,Th2;
+A4: q = x "\/" y and
+A5: y in X by A3;
+    x <= x & y >= inf X by A2,A5,Th2;
     hence thesis by A4,YELLOW_3:3;
   end;
   hence thesis by A1,YELLOW_0:def 10;
@@ -634,213 +709,235 @@ end;
 
 theorem Th25:
   for L being complete transitive antisymmetric (non empty RelStr)
-  for A being Subset of L, B being non empty Subset of L
-  holds A is_<=_than sup (A "\/" B)
+for A being Subset of L, B being non empty Subset of L holds A is_<=_than sup (
+  A "\/" B)
 proof
-  let L be complete transitive antisymmetric (non empty RelStr),
-  A be Subset of L, B be non empty Subset of L;
-  ex_sup_of A "\/" B,L by YELLOW_0:17;
-  then
-A1: A "\/" B is_<=_than sup (A "\/" B) by YELLOW_0:def 9;
-  let x be Element of L such that
-A2: x in A;
+  let L be complete transitive antisymmetric (non empty RelStr), A be Subset
+  of L, B be non empty Subset of L;
   consider b being Element of B;
-  x "\/" b in A "\/" B by A2;
+  let x be Element of L;
+  assume
+  x in A;
   then
-A3: x "\/" b <= sup (A "\/" B) by A1,LATTICE3:def 9;
-  ex xx being Element of L st x <= xx & b <= xx &
-  for c being Element of L st x <= c & b <= c holds xx <= c
-  by LATTICE3:def 10;
-  then x <= x "\/" b by LATTICE3:def 13;
-  hence thesis by A3,YELLOW_0:def 2;
+A1: x "\/" b in A "\/" B;
+  ex xx being Element of L st x <= xx & b <= xx & for c being Element of L
+  st x <= c & b <= c holds xx <= c by LATTICE3:def 10;
+  then
+A2: x <= x "\/" b by LATTICE3:def 13;
+  ex_sup_of A "\/" B,L by YELLOW_0:17;
+  then A "\/" B is_<=_than sup (A "\/" B) by YELLOW_0:def 9;
+  then x "\/" b <= sup (A "\/" B) by A1,LATTICE3:def 9;
+  hence thesis by A2,YELLOW_0:def 2;
 end;
 
 theorem
-  for L being with_suprema transitive antisymmetric RelStr
-  for a, b being Element of L, A, B being Subset of L
-  st a is_<=_than A & b is_<=_than B holds a "\/" b is_<=_than A "\/" B
+  for L being with_suprema transitive antisymmetric RelStr for a, b
+  being Element of L, A, B being Subset of L st a is_<=_than A & b is_<=_than B
+  holds a "\/" b is_<=_than A "\/" B
 proof
   let L be with_suprema transitive antisymmetric RelStr, a, b be Element of L,
   A, B be Subset of L such that
 A1: a is_<=_than A & b is_<=_than B;
-  let q be Element of L such that
-A2: q in A "\/" B;
-  consider x, y being Element of L such that
-A3: q = x "\/" y & x in A & y in B by A2;
+  let q be Element of L;
+  assume
+  q in A "\/" B;
+  then consider x, y being Element of L such that
+A2: q = x "\/" y and
+A3: x in A & y in B;
   a <= x & b <= y by A1,A3,LATTICE3:def 8;
-  hence thesis by A3,YELLOW_3:3;
+  hence thesis by A2,YELLOW_3:3;
 end;
 
 theorem Th27:
-  for L being with_suprema transitive antisymmetric RelStr
-  for a, b being Element of L, A, B being Subset of L
-  st a is_>=_than A & b is_>=_than B holds a "\/" b is_>=_than A "\/" B
+  for L being with_suprema transitive antisymmetric RelStr for a,
+b being Element of L, A, B being Subset of L st a is_>=_than A & b is_>=_than B
+  holds a "\/" b is_>=_than A "\/" B
 proof
   let L be with_suprema transitive antisymmetric RelStr, a, b be Element of L,
   A, B be Subset of L such that
 A1: a is_>=_than A & b is_>=_than B;
-  let q be Element of L such that
-A2: q in A "\/" B;
-  consider x, y being Element of L such that
-A3: q = x "\/" y & x in A & y in B by A2;
+  let q be Element of L;
+  assume
+  q in A "\/" B;
+  then consider x, y being Element of L such that
+A2: q = x "\/" y and
+A3: x in A & y in B;
   a >= x & b >= y by A1,A3,LATTICE3:def 9;
-  hence thesis by A3,YELLOW_3:3;
+  hence thesis by A2,YELLOW_3:3;
 end;
 
 theorem
-  for L being complete (non empty Poset)
-  for A, B being non empty Subset of L holds sup (A "\/" B) = sup A "\/" sup B
+  for L being complete (non empty Poset) for A, B being non empty Subset
+  of L holds sup (A "\/" B) = sup A "\/" sup B
 proof
   let L be complete (non empty Poset), A, B be non empty Subset of L;
-A1: ex_sup_of A "\/" B,L by YELLOW_0:17;
+  B is_<=_than sup (A "\/" B) by Th25;
+  then
+A1: sup B <= sup (A "\/" B) by YELLOW_0:32;
+  A is_<=_than sup (A "\/" B) by Th25;
+  then sup A <= sup (A "\/" B) by YELLOW_0:32;
+  then
+A2: sup A "\/" sup B <= sup (A "\/" B) "\/" sup (A "\/" B) by A1,
+  YELLOW_3:3;
   A is_<=_than sup A & B is_<=_than sup B by YELLOW_0:32;
-  then A "\/" B is_<=_than sup A "\/" sup B by Th27;
+  then ex_sup_of A "\/" B,L & A "\/" B is_<=_than sup A "\/" sup B by
+  Th27,
+  YELLOW_0:17;
   then
-A2: sup (A "\/" B) <= sup A "\/" sup B by A1,YELLOW_0:def 9;
-  A is_<=_than sup (A "\/" B) & B is_<=_than sup (A "\/" B) by Th25;
-  then sup A <= sup (A "\/" B) & sup B <= sup (A "\/" B) by YELLOW_0:32;
-  then
-A3: sup A "\/" sup B <= sup (A "\/" B) "\/" sup (A "\/" B) by YELLOW_3:3;
+A3: sup (A "\/" B) <= sup A "\/" sup B by YELLOW_0:def 9;
   sup (A "\/" B) <= sup (A "\/" B);
-  then sup (A "\/" B) "\/" sup (A "\/" B) = sup (A "\/" B) by YELLOW_0:24;
-  hence thesis by A2,A3,ORDERS_2:25;
+  then sup (A "\/" B) "\/" sup (A "\/" B) = sup (A "\/" B) by
+  YELLOW_0:24;
+  hence thesis by A3,A2,ORDERS_2:25;
 end;
 
 theorem Th29:
-  for L being with_suprema antisymmetric RelStr
-  for X being Subset of L, Y being non empty Subset of L holds
-  X c= downarrow (X "\/" Y)
+  for L being with_suprema antisymmetric RelStr for X being Subset
+  of L, Y being non empty Subset of L holds X c= downarrow (X "\/" Y)
 proof
-  let L be with_suprema antisymmetric RelStr, X be Subset of L,
-  Y be non empty Subset of L;
+  let L be with_suprema antisymmetric RelStr, X be Subset of L, Y be non empty
+  Subset of L;
+  consider y being set such that
+A1: y in Y by XBOOLE_0:def 1;
+  reconsider y as Element of Y by A1;
   let q be set;
   assume
-A1: q in X;
+A2: q in X;
   then reconsider X1 = X as non empty Subset of L;
-  reconsider x = q as Element of X1 by A1;
-  consider y being set such that
-A2: y in Y by XBOOLE_0:def 1;
-  reconsider y as Element of Y by A2;
-A3: downarrow (X "\/" Y) = {s where s is Element of L:
-  ex y being Element of L st s <= y & y in X "\/" Y} by WAYBEL_0:14;
-  ex s being Element of L st x <= s & y <= s &
-  for c being Element of L st x <= c & y <= c holds s <= c by LATTICE3:def 10;
-  then x <= x "\/" y & x "\/" y in X1 "\/" Y by LATTICE3:def 13;
+  reconsider x = q as Element of X1 by A2;
+  ex s being Element of L st x <= s & y <= s & for c being Element of L st
+  x <= c & y <= c holds s <= c by LATTICE3:def 10;
+  then
+A3: x <= x "\/" y by LATTICE3:def 13;
+  downarrow (X "\/" Y) = {s where s is Element of L: ex y being Element of
+  L st s <= y & y in X "\/" Y} & x "\/" y in X1 "\/" Y by WAYBEL_0:14;
   hence thesis by A3;
 end;
 
 theorem
-  for L being with_suprema Poset for x, y being Element of InclPoset Ids L
-  for X, Y being Subset of L st x = X & y = Y
-  holds x "\/" y = downarrow (X "\/" Y)
+  for L being with_suprema Poset for x, y being Element of InclPoset Ids
+  L for X, Y being Subset of L st x = X & y = Y holds x "\/" y = downarrow (X
+  "\/" Y)
 proof
-  let L be with_suprema Poset, x, y be Element of InclPoset Ids L,
-  X, Y be Subset of L such that
-A1: x = X & y = Y;
-  consider Z being Subset of L such that
-A2: Z = {z where z is Element of L: z in x or z in y or
-  ex a, b being Element of L st a in x & b in y & z = a "\/" b} and
-  ex_sup_of {x,y},InclPoset(Ids L) and
-A3: x "\/" y = downarrow Z by YELLOW_2:46;
-  reconsider X1 = X, Y1 = Y as non empty directed Subset of L
-  by A1,YELLOW_2:43;
-  reconsider d = downarrow (X1 "\/" Y1) as Element of InclPoset Ids L
-  by YELLOW_2:43;
-A4: d <= d;
-  X c= d & Y c= d by Th29;
-  then x <= d & y <= d by A1,YELLOW_1:3;
-  then x "\/" y <= d "\/" d by YELLOW_3:3;
-  then x "\/" y <= d by A4,YELLOW_0:24;
+  let L be with_suprema Poset, x, y be Element of InclPoset Ids L, X, Y be
+  Subset of L such that
+A1: x = X and
+A2: y = Y;
+  reconsider X1 = X, Y1 = Y as non empty directed Subset of L by A1,A2,
+  YELLOW_2:43;
+  reconsider d = downarrow (X1 "\/" Y1) as Element of InclPoset Ids L by
+  YELLOW_2:43;
+  Y c= d by Th29;
+  then
+A3: y <= d by A2,YELLOW_1:3;
+  X c= d by Th29;
+  then x <= d by A1,YELLOW_1:3;
+  then d <= d & x "\/" y <= d "\/" d by A3,YELLOW_3:3;
+  then x "\/" y <= d by YELLOW_0:24;
   hence x "\/" y c= downarrow (X "\/" Y) by YELLOW_1:3;
+  consider Z being Subset of L such that
+A4: Z = {z where z is Element of L: z in x or z in y or ex a, b being
+  Element of L st a in x & b in y & z = a "\/" b} and
+  ex_sup_of {x,y},InclPoset(Ids L) and
+A5: x "\/" y = downarrow Z by YELLOW_2:46;
   X "\/" Y c= Z
   proof
     let q be set;
-    assume q in X "\/" Y;
-    then consider s, t being Element of L such that
-A5: q = s "\/" t & s in X & t in Y;
-    thus thesis by A1,A2,A5;
+    assume
+    q in X "\/" Y;
+    then ex s, t being Element of L st q = s "\/" t & s in X & t in Y;
+    hence thesis by A1,A2,A4;
   end;
-  hence thesis by A3,YELLOW_3:6;
+  hence thesis by A5,YELLOW_3:6;
 end;
 
 theorem
-  for L being non empty RelStr, D being Subset of [:L,L:] holds
-  union {X where X is Subset of L: ex x being Element of L st X = {x} "\/"
-  proj2 D & x in proj1 D} = proj1 D "\/" proj2 D
+  for L being non empty RelStr, D being Subset of [:L,L:] holds union {X
+where X is Subset of L: ex x being Element of L st X = {x} "\/" proj2 D & x in
+  proj1 D} = proj1 D "\/" proj2 D
 proof
   let L be non empty RelStr, D be Subset of [:L,L:];
   set D1 = proj1 D, D2 = proj2 D;
-  defpred P[set] means
-  ex x being Element of L st $1 = {x} "\/" proj2 D & x in proj1 D;
+  defpred P[set] means ex x being Element of L st $1 = {x} "\/" proj2 D & x in
+  proj1 D;
   thus union {X where X is Subset of L: P[X]} c= D1 "\/" D2
   proof
     let q be set;
-    assume q in union {X where X is Subset of L: P[X]};
+    assume
+    q in union {X where X is Subset of L: P[X]};
     then consider w being set such that
-A1: q in w & w in {X where X is Subset of L: P[X]} by TARSKI:def 4;
+A1: q in w and
+A2: w in {X where X is Subset of L: P[X]} by TARSKI:def 4;
     consider e being Subset of L such that
-A2: w = e & P[e] by A1;
+A3: w = e and
+A4: P[e] by A2;
     consider p being Element of L such that
-A3: e = {p} "\/" D2 & p in D1 by A2;
+A5: e = {p} "\/" D2 and
+A6: p in D1 by A4;
     {p} "\/" D2 = { p "\/" y where y is Element of L : y in D2 } by Th15;
-    then consider y being Element of L such that
-A4: q = p "\/" y & y in D2 by A1,A2,A3;
-    thus thesis by A3,A4;
+    then ex y being Element of L st q = p "\/" y & y in D2 by A1,A3,A5;
+    hence thesis by A6;
   end;
   let q be set;
-  assume q in D1 "\/" D2;
+  assume
+  q in D1 "\/" D2;
   then consider x, y being Element of L such that
-A5: q = x "\/" y & x in D1 & y in D2;
+A7: q = x "\/" y and
+A8: x in D1 and
+A9: y in D2;
   {x} "\/" D2 = { x "\/" d where d is Element of L : d in D2 } by Th15;
   then
-A6: q in {x} "\/" D2 by A5;
-  {x} "\/" D2 in {X where X is Subset of L: P[X]} by A5;
-  hence thesis by A6,TARSKI:def 4;
+A10: q in {x} "\/" D2 by A7,A9;
+  {x} "\/" D2 in {X where X is Subset of L: P[X]} by A8;
+  hence thesis by A10,TARSKI:def 4;
 end;
 
 theorem Th32:
-  for L being transitive antisymmetric with_suprema RelStr
-  for D1, D2 being Subset of L holds
-  downarrow ((downarrow D1) "\/" (downarrow D2)) c= downarrow (D1 "\/" D2)
+  for L being transitive antisymmetric with_suprema RelStr for D1,
+  D2 being Subset of L holds downarrow ((downarrow D1) "\/" (downarrow D2)) c=
+  downarrow (D1 "\/" D2)
 proof
-  let L be transitive antisymmetric with_suprema RelStr,
-  D1, D2 be Subset of L;
-A1: downarrow (D1 "\/" D2) = {s where s is Element of L:
-  ex z being Element of L st s <= z & z in D1 "\/" D2} by WAYBEL_0:14;
-A2: downarrow ((downarrow D1) "\/" (downarrow D2)) =
-  {x where x is Element of L: ex t being Element of L st
-  x <= t & t in (downarrow D1) "\/" (downarrow D2)} by WAYBEL_0:14;
-A3: downarrow D1 = {s1 where s1 is Element of L:
-  ex z being Element of L st s1 <= z & z in D1} by WAYBEL_0:14;
-A4: downarrow D2 = {s2 where s2 is Element of L:
-  ex z being Element of L st s2 <= z & z in D2} by WAYBEL_0:14;
+  let L be transitive antisymmetric with_suprema RelStr, D1, D2 be Subset of L;
+A1: downarrow ((downarrow D1) "\/" (downarrow D2)) = {x where x is Element
+  of L: ex t being Element of L st x <= t & t in (downarrow D1) "\/" (downarrow
+  D2)} by WAYBEL_0:14;
   let y be set;
-  assume y in downarrow ((downarrow D1) "\/" (downarrow D2));
+  assume
+  y in downarrow ((downarrow D1) "\/" (downarrow D2));
   then consider x being Element of L such that
-A5: y = x and
-A6: ex t being Element of L st
-  x <= t & t in (downarrow D1) "\/" (downarrow D2) by A2;
+A2: y = x and
+A3: ex t being Element of L st x <= t & t in (downarrow D1) "\/" (
+  downarrow D2) by A1;
   consider x1 being Element of L such that
-A7: x <= x1 and
-A8: x1 in (downarrow D1) "\/" (downarrow D2) by A6;
+A4: x <= x1 and
+A5: x1 in (downarrow D1) "\/" (downarrow D2) by A3;
   consider a, b being Element of L such that
-A9: x1 = a "\/" b and
-A10: a in downarrow D1 & b in downarrow D2 by A8;
-  consider A1 being Element of L such that
-A11: a = A1 and
-A12: ex z being Element of L st A1 <= z & z in D1 by A3,A10;
-  consider B1 being Element of L such that
-A13: b = B1 and
-A14: ex z being Element of L st B1 <= z & z in D2 by A4,A10;
-  consider a1 being Element of L such that
-A15: A1 <= a1 & a1 in D1 by A12;
+A6: x1 = a "\/" b and
+A7: a in downarrow D1 and
+A8: b in downarrow D2 by A5;
+  downarrow D2 = {s2 where s2 is Element of L: ex z being Element of L st
+  s2 <= z & z in D2} by WAYBEL_0:14;
+  then consider B1 being Element of L such that
+A9: b = B1 and
+A10: ex z being Element of L st B1 <= z & z in D2 by A8;
   consider b1 being Element of L such that
-A16: B1 <= b1 & b1 in D2 by A14;
-  x1 <= a1 "\/" b1 by A9,A11,A13,A15,A16,YELLOW_3:3;
+A11: B1 <= b1 and
+A12: b1 in D2 by A10;
+  downarrow D1 = {s1 where s1 is Element of L: ex z being Element of L st
+  s1 <= z & z in D1} by WAYBEL_0:14;
+  then consider A1 being Element of L such that
+A13: a = A1 and
+A14: ex z being Element of L st A1 <= z & z in D1 by A7;
+  consider a1 being Element of L such that
+A15: A1 <= a1 and
+A16: a1 in D1 by A14;
+  x1 <= a1 "\/" b1 by A6,A13,A9,A15,A11,YELLOW_3:3;
   then
-A17: x <= a1 "\/" b1 by A7,ORDERS_2:26;
-  a1 "\/" b1 in D1 "\/" D2 by A15,A16;
-  hence thesis by A1,A5,A17;
+A17: downarrow (D1 "\/" D2) = {s where s is Element of L: ex z being Element
+  of L st s <= z & z in D1 "\/" D2} & x <= a1 "\/" b1 by A4,ORDERS_2:26 ,
+  WAYBEL_0:14;
+  a1 "\/" b1 in D1 "\/" D2 by A16,A12;
+  hence thesis by A2,A17;
 end;
 
 theorem
@@ -848,96 +945,102 @@ theorem
   downarrow ((downarrow D1) "\/" (downarrow D2)) = downarrow (D1 "\/" D2)
 proof
   let L be with_suprema Poset, D1, D2 be Subset of L;
-A1: downarrow (D1 "\/" D2) = {s where s is Element of L:
-  ex z being Element of L st s <= z & z in D1 "\/" D2} by WAYBEL_0:14;
-A2: downarrow ((downarrow D1) "\/" (downarrow D2)) =
-  {x where x is Element of L: ex t being Element of L st
-  x <= t & t in (downarrow D1) "\/" (downarrow D2)} by WAYBEL_0:14;
-  thus downarrow ((downarrow D1) "\/" (downarrow D2)) c= downarrow (D1 "\/"
-  D2) by Th32;
+A1: downarrow (D1 "\/" D2) = {s where s is Element of L: ex z being Element
+  of L st s <= z & z in D1 "\/" D2} by WAYBEL_0:14;
+  thus downarrow ((downarrow D1) "\/" (downarrow D2)) c= downarrow (D1 "\/" D2
+  ) by Th32;
   let q be set;
-  assume q in downarrow (D1 "\/" D2);
+  assume
+  q in downarrow (D1 "\/" D2);
   then consider s being Element of L such that
-A3: q = s and
-A4: ex z being Element of L st s <= z & z in D1 "\/" D2 by A1;
+A2: q = s and
+A3: ex z being Element of L st s <= z & z in D1 "\/" D2 by A1;
+A4: downarrow ((downarrow D1) "\/" (downarrow D2)) = {x where x is Element
+  of L: ex t being Element of L st x <= t & t in (downarrow D1) "\/" (downarrow
+  D2)} by WAYBEL_0:14;
+A5: D1 is Subset of downarrow D1 & D2 is Subset of downarrow D2 by WAYBEL_0:
+  16;
   consider x being Element of L such that
-A5: s <= x & x in D1 "\/" D2 by A4;
-  consider a, b being Element of L such that
-A6: x = a "\/" b & a in D1 & b in D2 by A5;
-  D1 is Subset of downarrow D1 & D2 is Subset of downarrow D2 by WAYBEL_0:16;
-  then x in (downarrow D1) "\/" (downarrow D2) by A6;
-  hence thesis by A2,A3,A5;
+A6: s <= x and
+A7: x in D1 "\/" D2 by A3;
+  ex a, b being Element of L st x = a "\/" b & a in D1 & b in D2 by A7;
+  then x in (downarrow D1) "\/" (downarrow D2) by A5;
+  hence thesis by A4,A2,A6;
 end;
 
 theorem Th34:
-  for L being transitive antisymmetric with_suprema RelStr
-  for D1, D2 being Subset of L holds
-  uparrow ((uparrow D1) "\/" (uparrow D2)) c= uparrow (D1 "\/" D2)
+  for L being transitive antisymmetric with_suprema RelStr for D1,
+D2 being Subset of L holds uparrow ((uparrow D1) "\/" (uparrow D2)) c= uparrow
+  (D1 "\/" D2)
 proof
-  let L be transitive antisymmetric with_suprema RelStr,
-  D1, D2 be Subset of L;
-A1: uparrow (D1 "\/" D2) = {s where s is Element of L:
-  ex z being Element of L st s >= z & z in D1 "\/" D2} by WAYBEL_0:15;
-A2: uparrow ((uparrow D1) "\/" (uparrow D2)) =
-  {x where x is Element of L: ex t being Element of L st
-  x >= t & t in (uparrow D1) "\/" (uparrow D2)} by WAYBEL_0:15;
-A3: uparrow D1 = {s1 where s1 is Element of L:
-  ex z being Element of L st s1 >= z & z in D1} by WAYBEL_0:15;
-A4: uparrow D2 = {s2 where s2 is Element of L:
-  ex z being Element of L st s2 >= z & z in D2} by WAYBEL_0:15;
+  let L be transitive antisymmetric with_suprema RelStr, D1, D2 be Subset of L;
+A1: uparrow ((uparrow D1) "\/" (uparrow D2)) = {x where x is Element of L:
+  ex t being Element of L st x >= t & t in (uparrow D1) "\/" (uparrow D2)} by
+  WAYBEL_0:15;
   let y be set;
-  assume y in uparrow ((uparrow D1) "\/" (uparrow D2));
+  assume
+  y in uparrow ((uparrow D1) "\/" (uparrow D2));
   then consider x being Element of L such that
-A5: y = x and
-A6: ex t being Element of L st
-  x >= t & t in (uparrow D1) "\/" (uparrow D2) by A2;
+A2: y = x and
+A3: ex t being Element of L st x >= t & t in (uparrow D1) "\/" (uparrow
+  D2) by A1;
   consider x1 being Element of L such that
-A7: x >= x1 and
-A8: x1 in (uparrow D1) "\/" (uparrow D2) by A6;
+A4: x >= x1 and
+A5: x1 in (uparrow D1) "\/" (uparrow D2) by A3;
   consider a, b being Element of L such that
-A9: x1 = a "\/" b and
-A10: a in uparrow D1 & b in uparrow D2 by A8;
-  consider A1 being Element of L such that
-A11: a = A1 and
-A12: ex z being Element of L st A1 >= z & z in D1 by A3,A10;
-  consider B1 being Element of L such that
-A13: b = B1 and
-A14: ex z being Element of L st B1 >= z & z in D2 by A4,A10;
-  consider a1 being Element of L such that
-A15: A1 >= a1 & a1 in D1 by A12;
+A6: x1 = a "\/" b and
+A7: a in uparrow D1 and
+A8: b in uparrow D2 by A5;
+  uparrow D2 = {s2 where s2 is Element of L: ex z being Element of L st s2
+  >= z & z in D2} by WAYBEL_0:15;
+  then consider B1 being Element of L such that
+A9: b = B1 and
+A10: ex z being Element of L st B1 >= z & z in D2 by A8;
   consider b1 being Element of L such that
-A16: B1 >= b1 & b1 in D2 by A14;
-  x1 >= a1 "\/" b1 by A9,A11,A13,A15,A16,YELLOW_3:3;
+A11: B1 >= b1 and
+A12: b1 in D2 by A10;
+  uparrow D1 = {s1 where s1 is Element of L: ex z being Element of L st s1
+  >= z & z in D1} by WAYBEL_0:15;
+  then consider A1 being Element of L such that
+A13: a = A1 and
+A14: ex z being Element of L st A1 >= z & z in D1 by A7;
+  consider a1 being Element of L such that
+A15: A1 >= a1 and
+A16: a1 in D1 by A14;
+  x1 >= a1 "\/" b1 by A6,A13,A9,A15,A11,YELLOW_3:3;
   then
-A17: x >= a1 "\/" b1 by A7,ORDERS_2:26;
-  a1 "\/" b1 in D1 "\/" D2 by A15,A16;
-  hence thesis by A1,A5,A17;
+A17: uparrow (D1 "\/" D2) = {s where s is Element of L: ex z being Element
+  of L st s >= z & z in D1 "\/" D2} & x >= a1 "\/" b1 by A4,ORDERS_2:26,
+  WAYBEL_0:15;
+  a1 "\/" b1 in D1 "\/" D2 by A16,A12;
+  hence thesis by A2,A17;
 end;
 
 theorem
-  for L being with_suprema Poset, D1, D2 being Subset of L holds
-  uparrow ((uparrow D1) "\/" (uparrow D2)) = uparrow (D1 "\/" D2)
+  for L being with_suprema Poset, D1, D2 being Subset of L holds uparrow
+  ((uparrow D1) "\/" (uparrow D2)) = uparrow (D1 "\/" D2)
 proof
   let L be with_suprema Poset, D1, D2 be Subset of L;
-A1: uparrow (D1 "\/" D2) = {s where s is Element of L:
-  ex z being Element of L st s >= z & z in D1 "\/" D2} by WAYBEL_0:15;
-A2: uparrow ((uparrow D1) "\/" (uparrow D2)) =
-  {x where x is Element of L: ex t being Element of L st
-  x >= t & t in (uparrow D1) "\/" (uparrow D2)} by WAYBEL_0:15;
-  thus uparrow ((uparrow D1) "\/" (uparrow D2)) c= uparrow (D1 "\/" D2)
-  by Th34;
+A1: uparrow (D1 "\/" D2) = {s where s is Element of L: ex z being Element of
+  L st s >= z & z in D1 "\/" D2} by WAYBEL_0:15;
+  thus uparrow ((uparrow D1) "\/" (uparrow D2)) c= uparrow (D1 "\/" D2) by
+  Th34;
   let q be set;
-  assume q in uparrow (D1 "\/" D2);
+  assume
+  q in uparrow (D1 "\/" D2);
   then consider s being Element of L such that
-A3: q = s and
-A4: ex z being Element of L st s >= z & z in D1 "\/" D2 by A1;
+A2: q = s and
+A3: ex z being Element of L st s >= z & z in D1 "\/" D2 by A1;
+A4: uparrow ((uparrow D1) "\/" (uparrow D2)) = {x where x is Element of L:
+  ex t being Element of L st x >= t & t in (uparrow D1) "\/" (uparrow D2)} by
+  WAYBEL_0:15;
+A5: D1 is Subset of uparrow D1 & D2 is Subset of uparrow D2 by WAYBEL_0:16;
   consider x being Element of L such that
-A5: s >= x & x in D1 "\/" D2 by A4;
-  consider a, b being Element of L such that
-A6: x = a "\/" b & a in D1 & b in D2 by A5;
-  D1 is Subset of uparrow D1 & D2 is Subset of uparrow D2 by WAYBEL_0:16;
-  then x in (uparrow D1) "\/" (uparrow D2) by A6;
-  hence thesis by A2,A3,A5;
+A6: s >= x and
+A7: x in D1 "\/" D2 by A3;
+  ex a, b being Element of L st x = a "\/" b & a in D1 & b in D2 by A7;
+  then x in (uparrow D1) "\/" (uparrow D2) by A5;
+  hence thesis by A4,A2,A6;
 end;
 
 begin :: The Meet of Subsets
@@ -945,17 +1048,18 @@ begin :: The Meet of Subsets
 definition
   let L be non empty RelStr, D1, D2 be Subset of L;
   func D1 "/\" D2 -> Subset of L equals
-  { x "/\" y where x, y is Element of L : x in D1 & y in D2 };
+  { x "/\" y where x, y is Element of L
+  : x in D1 & y in D2 };
   coherence
   proof
-    { x "/\" y where x, y is Element of L : x in D1 & y in D2 } c=
-    the carrier of L
+    { x "/\" y where x, y is Element of L : x in D1 & y in D2 } c= the
+    carrier of L
     proof
       let q be set;
-      assume q in { x "/\" y where x, y is Element of L : x in D1 & y in D2 };
-      then consider a, b being Element of L such that
-A1:   q = a "/\" b & a in D1 & b in D2;
-      thus thesis by A1;
+      assume
+      q in { x "/\" y where x, y is Element of L : x in D1 & y in D2 };
+      then ex a, b being Element of L st q = a "/\" b & a in D1 & b in D2;
+      hence thesis;
     end;
     hence thesis;
   end;
@@ -970,72 +1074,75 @@ definition
     thus D1 "/\" D2 c= D2 "/\" D1
     proof
       let q be set;
-      assume q in D1 "/\" D2;
-      then consider x, y being Element of L such that
-A1:   q = x "/\" y & x in D1 & y in D2;
-      thus thesis by A1;
+      assume
+      q in D1 "/\" D2;
+      then ex x, y being Element of L st q = x "/\" y & x in D1 & y in D2;
+      hence thesis;
     end;
     let q be set;
-    assume q in D2 "/\" D1;
-    then consider x, y being Element of L such that
-A2: q = x "/\" y & x in D2 & y in D1;
-    thus thesis by A2;
+    assume
+    q in D2 "/\" D1;
+    then ex x, y being Element of L st q = x "/\" y & x in D2 & y in D1;
+    hence thesis;
   end;
 end;
 
 theorem
-  for L being non empty RelStr, X being Subset of L holds X "/\" {}L = {}
+  for L being non empty RelStr, X being Subset of L holds X "/\" {}L =
+  {}
 proof
   let L be non empty RelStr, X be Subset of L;
   thus X "/\" {}L c= {}
   proof
     let a be set;
-    assume a in X "/\" {}L;
-    then consider s,t be Element of L such that
-A1: a = s "/\" t & s in X & t in {}L;
-    thus thesis by A1;
+    assume
+    a in X "/\" {}L;
+    then ex s,t be Element of L st a = s "/\" t & s in X & t in {}L;
+    hence thesis;
   end;
   thus thesis by XBOOLE_1:2;
 end;
 
 theorem
-  for L being non empty RelStr, X, Y being Subset of L, x, y being Element of
-  L st x in X & y in Y holds x "/\" y in X "/\" Y;
+  for L being non empty RelStr, X, Y being Subset of L, x, y being
+  Element of L st x in X & y in Y holds x "/\" y in X "/\" Y;
 
 theorem
-  for L being antisymmetric with_infima RelStr
-  for A being Subset of L, B being non empty Subset of L
-  holds A is_coarser_than A "/\" B
+  for L being antisymmetric with_infima RelStr for A being Subset of L,
+  B being non empty Subset of L holds A is_coarser_than A "/\" B
 proof
-  let L be antisymmetric with_infima RelStr, A be Subset of L,
-  B be non empty Subset of L;
-  let q be Element of L such that
-A1: q in A;
+  let L be antisymmetric with_infima RelStr, A be Subset of L, B be non empty
+  Subset of L;
   consider b being set such that
-A2: b in B by XBOOLE_0:def 1;
-  reconsider b as Element of B by A2;
+A1: b in B by XBOOLE_0:def 1;
+  reconsider b as Element of B by A1;
+  let q be Element of L such that
+A2: q in A;
   take q "/\" b;
-  thus q "/\" b in A "/\" B by A1;
+  thus q "/\" b in A "/\" B by A2;
   thus thesis by YELLOW_0:23;
 end;
 
 theorem
-  for L being antisymmetric with_infima RelStr
-  for A, B being Subset of L holds A "/\" B is_finer_than A
+  for L being antisymmetric with_infima RelStr for A, B being Subset of
+  L holds A "/\" B is_finer_than A
 proof
   let L be antisymmetric with_infima RelStr, A, B be Subset of L;
-  let q be Element of L such that
-A1: q in A "/\" B;
-  consider x, y being Element of L such that
-A2: q = x "/\" y & x in A & y in B by A1;
+  let q be Element of L;
+  assume
+  q in A "/\" B;
+  then consider x, y being Element of L such that
+A1: q = x "/\" y and
+A2: x in A and
+  y in B;
   take x;
   thus x in A by A2;
-  thus thesis by A2,YELLOW_0:23;
+  thus thesis by A1,YELLOW_0:23;
 end;
 
 theorem
-  for L being antisymmetric reflexive with_infima RelStr
-  for A being Subset of L holds A c= A "/\" A
+  for L being antisymmetric reflexive with_infima RelStr for A being
+  Subset of L holds A c= A "/\" A
 proof
   let L be antisymmetric reflexive with_infima RelStr, A be Subset of L;
   let q be set;
@@ -1048,38 +1155,40 @@ A1: q in A;
 end;
 
 theorem
-  for L being with_infima antisymmetric transitive RelStr
-
-for D1, D2, D3 being Subset of L holds (D1 "/\" D2) "/\" D3 = D1 "/\" (D2 "/\"
-  D3)
+  for L being with_infima antisymmetric transitive RelStr for D1, D2, D3
+  being Subset of L holds (D1 "/\" D2) "/\" D3 = D1 "/\" (D2 "/\" D3)
 proof
-  let L be with_infima antisymmetric transitive RelStr,
-  D1, D2, D3 be Subset of L;
+  let L be with_infima antisymmetric transitive RelStr, D1, D2, D3 be Subset
+  of L;
   thus (D1 "/\" D2) "/\" D3 c= D1 "/\" (D2 "/\" D3)
   proof
     let q be set;
-    assume q in (D1 "/\" D2) "/\" D3;
+    assume
+    q in (D1 "/\" D2) "/\" D3;
     then consider a1, b1 being Element of L such that
 A1: q = a1 "/\" b1 and
-A2: a1 in D1 "/\" D2 & b1 in D3;
+A2: a1 in D1 "/\" D2 and
+A3: b1 in D3;
     consider a11, b11 being Element of L such that
-A3: a1 = a11 "/\" b11 and
-A4: a11 in D1 & b11 in D2 by A2;
-A5: b11 "/\" b1 in D2 "/\" D3 by A2,A4;
-    q = a11 "/\" (b11 "/\" b1) by A1,A3,LATTICE3:16;
-    hence thesis by A4,A5;
+A4: a1 = a11 "/\" b11 and
+A5: a11 in D1 and
+A6: b11 in D2 by A2;
+    b11 "/\" b1 in D2 "/\" D3 & q = a11 "/\" (b11 "/\" b1) by A1,A3,A4,A6,
+    LATTICE3:16;
+    hence thesis by A5;
   end;
   let q be set;
-  assume q in D1 "/\" (D2 "/\" D3);
+  assume
+  q in D1 "/\" (D2 "/\" D3);
   then consider a1, b1 being Element of L such that
-A6: q = a1 "/\" b1 and
-A7: a1 in D1 & b1 in D2 "/\" D3;
+A7: q = a1 "/\" b1 & a1 in D1 and
+A8: b1 in D2 "/\" D3;
   consider a11, b11 being Element of L such that
-A8: b1 = a11 "/\" b11 and
-A9: a11 in D2 & b11 in D3 by A7;
-A10: a1 "/\" a11 in D1 "/\" D2 by A7,A9;
-  q = a1 "/\" a11 "/\" b11 by A6,A8,LATTICE3:16;
-  hence thesis by A9,A10;
+A9: b1 = a11 "/\" b11 & a11 in D2 and
+A10: b11 in D3 by A8;
+  a1 "/\" a11 in D1 "/\" D2 & q = a1 "/\" a11 "/\" b11 by A7,A9,
+  LATTICE3:16;
+  hence thesis by A10;
 end;
 
 registration
@@ -1087,62 +1196,77 @@ registration
   cluster D1 "/\" D2 -> non empty;
   coherence
   proof
-    consider a being set such that
-A1: a in D1 by XBOOLE_0:def 1;
     consider b being set such that
-A2: b in D2 by XBOOLE_0:def 1;
-    reconsider a as Element of D1 by A1;
-    reconsider b as Element of D2 by A2;
-    a "/\" b in { x "/\" y where x, y is Element of L : x in D1 & y in D2 };
+A1: b in D2 by XBOOLE_0:def 1;
+    reconsider b as Element of D2 by A1;
+    consider a being set such that
+A2: a in D1 by XBOOLE_0:def 1;
+    reconsider a as Element of D1 by A2;
+    a "/\" b in { x "/\" y where x, y is Element of L : x in D1 & y in D2
+    };
     hence thesis;
   end;
 end;
 
 registration
-  let L be with_infima transitive antisymmetric RelStr,
-  D1, D2 be directed Subset of L;
+  let L be with_infima transitive antisymmetric RelStr, D1, D2 be directed
+  Subset of L;
   cluster D1 "/\" D2 -> directed;
   coherence
   proof
-    set X = D1 "/\" D2;
     let a, b be Element of L;
-    assume
-A1: a in X & b in X;
-    then consider x, y being Element of L such that
-A2: a = x "/\" y & x in D1 & y in D2;
+    set X = D1 "/\" D2;
+    assume that
+A1: a in X and
+A2: b in X;
+    consider x, y being Element of L such that
+A3: a = x "/\" y and
+A4: x in D1 and
+A5: y in D2 by A1;
     consider s, t being Element of L such that
-A3: b = s "/\" t & s in D1 & t in D2 by A1;
-    consider z1 being Element of L such that
-A4: z1 in D1 & x <= z1 & s <= z1 by A2,A3,WAYBEL_0:def 1;
+A6: b = s "/\" t and
+A7: s in D1 and
+A8: t in D2 by A2;
     consider z2 being Element of L such that
-A5: z2 in D2 & y <= z2 & t <= z2 by A2,A3,WAYBEL_0:def 1;
+A9: z2 in D2 and
+A10: y <= z2 & t <= z2 by A5,A8,WAYBEL_0:def 1;
+    consider z1 being Element of L such that
+A11: z1 in D1 and
+A12: x <= z1 & s <= z1 by A4,A7,WAYBEL_0:def 1;
     take z = z1 "/\" z2;
-    thus z in X by A4,A5;
-    thus thesis by A2,A3,A4,A5,YELLOW_3:2;
+    thus z in X by A11,A9;
+    thus thesis by A3,A6,A12,A10,YELLOW_3:2;
   end;
 end;
 
 registration
-  let L be with_infima transitive antisymmetric RelStr,
-  D1, D2 be filtered Subset of L;
+  let L be with_infima transitive antisymmetric RelStr, D1, D2 be filtered
+  Subset of L;
   cluster D1 "/\" D2 -> filtered;
   coherence
   proof
-    set X = D1 "/\" D2;
     let a, b be Element of L;
-    assume
-A1: a in X & b in X;
-    then consider x, y being Element of L such that
-A2: a = x "/\" y & x in D1 & y in D2;
+    set X = D1 "/\" D2;
+    assume that
+A1: a in X and
+A2: b in X;
+    consider x, y being Element of L such that
+A3: a = x "/\" y and
+A4: x in D1 and
+A5: y in D2 by A1;
     consider s, t being Element of L such that
-A3: b = s "/\" t & s in D1 & t in D2 by A1;
-    consider z1 being Element of L such that
-A4: z1 in D1 & x >= z1 & s >= z1 by A2,A3,WAYBEL_0:def 2;
+A6: b = s "/\" t and
+A7: s in D1 and
+A8: t in D2 by A2;
     consider z2 being Element of L such that
-A5: z2 in D2 & y >= z2 & t >= z2 by A2,A3,WAYBEL_0:def 2;
+A9: z2 in D2 and
+A10: y >= z2 & t >= z2 by A5,A8,WAYBEL_0:def 2;
+    consider z1 being Element of L such that
+A11: z1 in D1 and
+A12: x >= z1 & s >= z1 by A4,A7,WAYBEL_0:def 2;
     take z = z1 "/\" z2;
-    thus z in X by A4,A5;
-    thus thesis by A2,A3,A4,A5,YELLOW_3:2;
+    thus z in X by A11,A9;
+    thus thesis by A3,A6,A12,A10,YELLOW_3:2;
   end;
 end;
 
@@ -1153,78 +1277,94 @@ registration
   proof
     set X = D1 "/\" D2;
     let a, b be Element of L such that
-A1: a in X & b <= a;
+A1: a in X and
+A2: b <= a;
     consider x, y being Element of L such that
-A2: a = x "/\" y & x in D1 & y in D2 by A1;
-    ex xx being Element of L st x >= xx & y >= xx &
-    for c being Element of L st x >= c & y >= c holds xx >= c
-    by LATTICE3:def 11;
-    then x "/\" y <= x & x "/\" y <= y by LATTICE3:def 14;
-    then b <= x & b <= y by A1,A2,YELLOW_0:def 2;
+A3: a = x "/\" y and
+A4: x in D1 and
+A5: y in D2 by A1;
+A6: ex xx being Element of L st x >= xx & y >= xx & for c being Element of
+    L st x >= c & y >= c holds xx >= c by LATTICE3:def 11;
+    then x "/\" y <= x by LATTICE3:def 14;
+    then b <= x by A2,A3,YELLOW_0:def 2;
     then
-A3: b in D1 & b in D2 by A2,WAYBEL_0:def 19;
+A7: b in D1 by A4,WAYBEL_0:def 19;
+    x "/\" y <= y by A6,LATTICE3:def 14;
+    then b <= y by A2,A3,YELLOW_0:def 2;
+    then
+A8: b in D2 by A5,WAYBEL_0:def 19;
     b = b "/\" b by YELLOW_0:25;
-    hence thesis by A3;
+    hence thesis by A7,A8;
   end;
 end;
 
 theorem Th42:
-  for L being non empty RelStr, Y being Subset of L, x being Element of L
-  holds {x} "/\" Y = {x "/\" y where y is Element of L: y in Y}
+  for L being non empty RelStr, Y being Subset of L, x being
+  Element of L holds {x} "/\" Y = {x "/\" y where y is Element of L: y in Y}
 proof
   let L be non empty RelStr, Y be Subset of L, x be Element of L;
   thus {x} "/\" Y c= {x "/\" y where y is Element of L: y in Y}
   proof
     let q be set;
-    assume q in {x} "/\" Y;
+    assume
+    q in {x} "/\" Y;
     then consider s, t being Element of L such that
-A1: q = s "/\" t & s in {x} & t in Y;
-    s = x by A1,TARSKI:def 1;
-    hence thesis by A1;
+A1: q = s "/\" t and
+A2: s in {x} and
+A3: t in Y;
+    s = x by A2,TARSKI:def 1;
+    hence thesis by A1,A3;
   end;
   let q be set;
-  assume q in {x "/\" y where y is Element of L: y in Y};
-  then consider y being Element of L such that
-A2: q = x "/\" y & y in Y;
+  assume
+  q in {x "/\" y where y is Element of L: y in Y};
+  then
+A4: ex y being Element of L st q = x "/\" y & y in Y;
   x in {x} by TARSKI:def 1;
-  hence thesis by A2;
+  hence thesis by A4;
 end;
 
 theorem
-  for L being non empty RelStr, A, B, C being Subset of L
-  holds A "/\" (B \/ C) = (A "/\" B) \/ (A "/\" C)
+  for L being non empty RelStr, A, B, C being Subset of L holds A "/\" (
+  B \/ C) = (A "/\" B) \/ (A "/\" C)
 proof
   let L be non empty RelStr, A, B, C be Subset of L;
   thus A "/\" (B \/ C) c= (A "/\" B) \/ (A "/\" C)
   proof
     let q be set;
-    assume q in A "/\" (B \/ C);
+    assume
+    q in A "/\" (B \/ C);
     then consider a, y being Element of L such that
-A1: q = a "/\" y & a in A & y in B \/ C;
-    y in B or y in C by A1,XBOOLE_0:def 3;
+A1: q = a "/\" y & a in A and
+A2: y in B \/ C;
+    y in B or y in C by A2,XBOOLE_0:def 3;
     then q in A "/\" B or q in A "/\" C by A1;
     hence thesis by XBOOLE_0:def 3;
   end;
   let q be set such that
-A2: q in (A "/\" B) \/ (A "/\" C);
-  per cases by A2,XBOOLE_0:def 3;
-  suppose q in A "/\" B;
+A3: q in (A "/\" B) \/ (A "/\" C);
+  per cases by A3,XBOOLE_0:def 3;
+  suppose
+    q in A "/\" B;
     then consider a, b being Element of L such that
-A3: q = a "/\" b & a in A & b in B;
-    b in B \/ C by A3,XBOOLE_0:def 3;
-    hence thesis by A3;
-  end;
-  suppose q in A "/\" C;
-    then consider a, b being Element of L such that
-A4: q = a "/\" b & a in A & b in C;
-    b in B \/ C by A4,XBOOLE_0:def 3;
+A4: q = a "/\" b & a in A and
+A5: b in B;
+    b in B \/ C by A5,XBOOLE_0:def 3;
     hence thesis by A4;
+  end;
+  suppose
+    q in A "/\" C;
+    then consider a, b being Element of L such that
+A6: q = a "/\" b & a in A and
+A7: b in C;
+    b in B \/ C by A7,XBOOLE_0:def 3;
+    hence thesis by A6;
   end;
 end;
 
 theorem
-  for L being antisymmetric reflexive with_infima RelStr
-  for A, B, C being Subset of L holds A \/ (B "/\" C) c= (A \/ B) "/\" (A \/ C)
+  for L being antisymmetric reflexive with_infima RelStr for A, B, C
+  being Subset of L holds A \/ (B "/\" C) c= (A \/ B) "/\" (A \/ C)
 proof
   let L be antisymmetric reflexive with_infima RelStr, A, B, C be Subset of L;
   let q be set such that
@@ -1237,39 +1377,48 @@ A3: q1 = q1 "/\" q1 by YELLOW_0:25;
     q1 in A \/ B & q1 in A \/ C by A2,XBOOLE_0:def 3;
     hence thesis by A3;
   end;
-  suppose q in B "/\" C;
+  suppose
+    q in B "/\" C;
     then consider b, c being Element of L such that
-A4: q = b "/\" c & b in B & c in C;
-    b in A \/ B & c in A \/ C by A4,XBOOLE_0:def 3;
+A4: q = b "/\" c and
+A5: b in B & c in C;
+    b in A \/ B & c in A \/ C by A5,XBOOLE_0:def 3;
     hence thesis by A4;
   end;
 end;
 
 theorem
-  for L being antisymmetric with_infima RelStr, A being lower Subset of L
-  for B, C being Subset of L holds (A \/ B) "/\" (A \/ C) c= A \/ (B "/\" C)
+  for L being antisymmetric with_infima RelStr, A being lower Subset of
+  L for B, C being Subset of L holds (A \/ B) "/\" (A \/ C) c= A \/ (B "/\" C)
 proof
-  let L be antisymmetric with_infima RelStr, A be lower Subset of L,
-  B, C be Subset of L;
+  let L be antisymmetric with_infima RelStr, A be lower Subset of L, B, C be
+  Subset of L;
   let q be set;
-  assume q in (A \/ B) "/\" (A \/ C);
+  assume
+  q in (A \/ B) "/\" (A \/ C);
   then consider x, y being Element of L such that
-A1: q = x "/\" y & x in A \/ B & y in A \/ C;
-A2: x "/\" y <= x & x "/\" y <= y by YELLOW_0:23;
-  per cases by A1,XBOOLE_0:def 3;
-  suppose x in A & y in A;
-    then q in A by A1,A2,WAYBEL_0:def 19;
+A1: q = x "/\" y and
+A2: x in A \/ B & y in A \/ C;
+A3: x "/\" y <= x by YELLOW_0:23;
+A4: x "/\" y <= y by YELLOW_0:23;
+  per cases by A2,XBOOLE_0:def 3;
+  suppose
+    x in A & y in A;
+    then q in A by A1,A3,WAYBEL_0:def 19;
     hence thesis by XBOOLE_0:def 3;
   end;
-  suppose x in A & y in C;
-    then q in A by A1,A2,WAYBEL_0:def 19;
+  suppose
+    x in A & y in C;
+    then q in A by A1,A3,WAYBEL_0:def 19;
     hence thesis by XBOOLE_0:def 3;
   end;
-  suppose x in B & y in A;
-    then q in A by A1,A2,WAYBEL_0:def 19;
+  suppose
+    x in B & y in A;
+    then q in A by A1,A4,WAYBEL_0:def 19;
     hence thesis by XBOOLE_0:def 3;
   end;
-  suppose x in B & y in C;
+  suppose
+    x in B & y in C;
     then x "/\" y in B "/\" C;
     hence thesis by A1,XBOOLE_0:def 3;
   end;
@@ -1277,14 +1426,21 @@ end;
 
 Lm3: now
   let L be non empty RelStr, x, y be Element of L;
-  thus {a "/\" b where a, b is Element of L : a in {x} & b in {y}} = {x "/\"
-  y}
+
+  thus {a "/\" b where a, b is Element of L : a in {x} & b in {y}} = {x "/\" y
+  }
+
   proof
-    thus {a "/\" b where a, b is Element of L : a in {x} & b in
-    {y}} c= {x "/\" y}
+
+    thus {a "/\" b where a, b is Element of L : a in {x} & b in {y}} c= {x
+    "/\" y}
+
     proof
       let q be set;
-      assume q in {a "/\" b where a, b is Element of L : a in {x} & b in {y}};
+      assume
+
+      q in {a "/\" b where a, b is Element of L : a in {x} & b in {y}};
+
       then consider u,v being Element of L such that
 A1:   q = u "/\" v and
 A2:   u in {x} & v in {y};
@@ -1292,139 +1448,159 @@ A2:   u in {x} & v in {y};
       hence thesis by A1,TARSKI:def 1;
     end;
     let q be set;
-    assume q in {x "/\" y};
-    then q = x "/\" y & x in {x} & y in {y} by TARSKI:def 1;
-    hence thesis;
+    assume
+    q in {x "/\" y};
+    then
+A3: q = x "/\" y by TARSKI:def 1;
+    x in {x} & y in {y} by TARSKI:def 1;
+    hence thesis by A3;
   end;
 end;
 
 Lm4: now
   let L be non empty RelStr, x, y, z be Element of L;
-  thus {a "/\" b where a, b is Element of L : a in {x} & b in {y,z}} =
-  {x "/\" y, x "/\" z}
+
+  thus {a "/\" b where a, b is Element of L : a in {x} & b in {y,z}} = {x "/\"
+  y, x "/\" z}
+
   proof
-    thus {a "/\" b where a, b is Element of L : a in {x} & b in {y,z}} c=
-    {x "/\" y, x "/\" z}
+
+    thus {a "/\" b where a, b is Element of L : a in {x} & b in {y,z}} c= {x
+    "/\" y, x "/\" z}
+
     proof
       let q be set;
-      assume q in {a "/\" b where a, b is Element of L : a in {x} & b in
-      {y,z}};
+      assume
+
+      q in {a "/\" b where a, b is Element of L : a in {x} & b in {y,z
+      }};
+
       then consider u,v being Element of L such that
 A1:   q = u "/\" v and
-A2:   u in {x} & v in {y,z};
-      u = x & (v = y or v = z) by A2,TARSKI:def 1,def 2;
-      hence thesis by A1,TARSKI:def 2;
+A2:   u in {x} and
+A3:   v in {y,z};
+A4:   v = y or v = z by A3,TARSKI:def 2;
+      u = x by A2,TARSKI:def 1;
+      hence thesis by A1,A4,TARSKI:def 2;
     end;
     let q be set;
-    assume q in {x "/\" y, x "/\" z};
+A5: z in {y,z} by TARSKI:def 2;
+    assume
+    q in {x "/\" y, x "/\" z};
     then
-A3: q = x "/\" y or q = x "/\" z by TARSKI:def 2;
-    x in {x} & y in {y,z} & z in {y,z} by TARSKI:def 1,def 2;
-    hence thesis
-    by A3;
+A6: q = x "/\" y or q = x "/\" z by TARSKI:def 2;
+    x in {x} & y in {y,z} by TARSKI:def 1,def 2;
+    hence thesis by A6,A5;
   end;
 end;
 
 theorem
-  for L being non empty RelStr, x, y being Element of L
-  holds {x} "/\" {y} = {x "/\" y} by Lm3;
+  for L being non empty RelStr, x, y being Element of L holds {x} "/\" {
+  y} = {x "/\" y} by Lm3;
 
 theorem
-  for L being non empty RelStr, x, y, z being Element of L
-  holds {x} "/\" {y,z} = {x "/\" y, x "/\" z} by Lm4;
+  for L being non empty RelStr, x, y, z being Element of L holds {x}
+  "/\" {y,z} = {x "/\" y, x "/\" z} by Lm4;
 
 theorem
-  for L being non empty RelStr, X1, X2, Y1, Y2 being Subset of L st
-  X1 c= Y1 & X2 c= Y2 holds X1 "/\" X2 c= Y1 "/\" Y2
+  for L being non empty RelStr, X1, X2, Y1, Y2 being Subset of L st X1
+  c= Y1 & X2 c= Y2 holds X1 "/\" X2 c= Y1 "/\" Y2
 proof
   let L be non empty RelStr, X1, X2, Y1, Y2 be Subset of L such that
 A1: X1 c= Y1 & X2 c= Y2;
   let q be set;
-  assume q in X1 "/\" X2;
-  then consider x, y being Element of L such that
-A2: q = x "/\" y & x in X1 & y in X2;
-  thus thesis by A1,A2;
+  assume
+  q in X1 "/\" X2;
+  then ex x, y being Element of L st q = x "/\" y & x in X1 & y in X2;
+  hence thesis by A1;
 end;
 
 theorem Th49:
-  for L being antisymmetric reflexive with_infima RelStr
-  for A, B being Subset of L holds A /\ B c= A "/\" B
+  for L being antisymmetric reflexive with_infima RelStr for A, B
+  being Subset of L holds A /\ B c= A "/\" B
 proof
   let L be antisymmetric reflexive with_infima RelStr, A, B be Subset of L;
   let q be set;
   assume
 A1: q in A /\ B;
-  then
-A2: q in A & q in B by XBOOLE_0:def 4;
-  reconsider A1 = A as non empty Subset of L by A1;
+  then reconsider A1 = A as non empty Subset of L;
   reconsider q1 = q as Element of A1 by A1,XBOOLE_0:def 4;
-  q1 = q1 "/\" q1 by YELLOW_0:25;
+A2: q1 = q1 "/\" q1 by YELLOW_0:25;
+  q in B by A1,XBOOLE_0:def 4;
   hence thesis by A2;
 end;
 
 theorem Th50:
-  for L being antisymmetric reflexive with_infima RelStr
-  for A, B being lower Subset of L holds A "/\" B = A /\ B
+  for L being antisymmetric reflexive with_infima RelStr for A, B
+  being lower Subset of L holds A "/\" B = A /\ B
 proof
-  let L be antisymmetric reflexive with_infima RelStr,
-  A, B be lower Subset of L;
+  let L be antisymmetric reflexive with_infima RelStr, A, B be lower Subset of
+  L;
   thus A "/\" B c= A /\ B
   proof
     let q be set;
-    assume q in A "/\" B;
+    assume
+    q in A "/\" B;
     then consider x, y being Element of L such that
-A1: q = x "/\" y & x in A & y in B;
-    ex z being Element of L st x >= z & y >= z &
-    for c being Element of L st x >= c & y >= c holds z >= c
-    by LATTICE3:def 11;
-    then x "/\" y <= x & x "/\" y <= y by LATTICE3:def 14;
-    then q in A & q in B by A1,WAYBEL_0:def 19;
-    hence thesis by XBOOLE_0:def 4;
+A1: q = x "/\" y and
+A2: x in A and
+A3: y in B;
+A4: ex z being Element of L st x >= z & y >= z & for c being Element of L
+    st x >= c & y >= c holds z >= c by LATTICE3:def 11;
+    then x "/\" y <= y by LATTICE3:def 14;
+    then
+A5: q in B by A1,A3,WAYBEL_0:def 19;
+    x "/\" y <= x by A4,LATTICE3:def 14;
+    then q in A by A1,A2,WAYBEL_0:def 19;
+    hence thesis by A5,XBOOLE_0:def 4;
   end;
   thus thesis by Th49;
 end;
 
 theorem
-  for L being with_infima reflexive antisymmetric RelStr
-  for D being Subset of L, x being Element of L st x is_>=_than D
-  holds {x} "/\" D = D
+  for L being with_infima reflexive antisymmetric RelStr for D being
+  Subset of L, x being Element of L st x is_>=_than D holds {x} "/\" D = D
 proof
-  let L be with_infima reflexive antisymmetric RelStr, D be Subset of L,
-  x be Element of L such that
+  let L be with_infima reflexive antisymmetric RelStr, D be Subset of L, x be
+  Element of L such that
 A1: x is_>=_than D;
 A2: {x} "/\" D = { x "/\" y where y is Element of L : y in D } by Th42;
   thus {x} "/\" D c= D
   proof
     let q be set;
-    assume q in {x} "/\" D;
+    assume
+    q in {x} "/\" D;
     then consider y being Element of L such that
-A3: q = x "/\" y & y in D by A2;
-    x >= y by A1,A3,LATTICE3:def 9;
-    hence thesis by A3,YELLOW_0:25;
+A3: q = x "/\" y and
+A4: y in D by A2;
+    x >= y by A1,A4,LATTICE3:def 9;
+    hence thesis by A3,A4,YELLOW_0:25;
   end;
   let q be set;
   assume
-A4: q in D;
+A5: q in D;
   then reconsider D1 = D as non empty Subset of L;
-  reconsider y = q as Element of D1 by A4;
+  reconsider y = q as Element of D1 by A5;
   x >= y by A1,LATTICE3:def 9;
   then q = x "/\" y by YELLOW_0:25;
   hence thesis by A2;
 end;
 
 theorem
-  for L being with_infima antisymmetric RelStr
-  for D being Subset of L, x being Element of L holds {x} "/\" D is_<=_than x
+  for L being with_infima antisymmetric RelStr for D being Subset of L,
+  x being Element of L holds {x} "/\" D is_<=_than x
 proof
-  let L be with_infima antisymmetric RelStr, D be Subset of L,
-  x be Element of L;
-A1: {x} "/\" D = { x "/\" h where h is Element of L : h in D } by Th42;
+  let L be with_infima antisymmetric RelStr, D be Subset of L, x be Element of
+  L;
   let b be Element of L;
-  assume b in {x} "/\" D;
+A1: {x} "/\" D = { x "/\" h where h is Element of L : h in D } by Th42;
+  assume
+  b in {x} "/\" D;
   then consider h being Element of L such that
-A2: b = x "/\" h & h in D by A1;
-  ex w being Element of L st x >= w & h >= w &
-  for c being Element of L st x >= c & h >= c holds w >= c by LATTICE3:def 11;
+A2: b = x "/\" h and
+  h in D by A1;
+  ex w being Element of L st x >= w & h >= w & for c being Element of L st
+  x >= c & h >= c holds w >= c by LATTICE3:def 11;
   hence thesis by A2,LATTICE3:def 14;
 end;
 
@@ -1439,10 +1615,12 @@ A3: {x} "/\" X = {x "/\" y where y is Element of L : y in X} by Th42;
   {x} "/\" X is_<=_than x "/\" sup X
   proof
     let q be Element of L;
-    assume q in {x} "/\" X;
+    assume
+    q in {x} "/\" X;
     then consider y being Element of L such that
-A4: q = x "/\" y & y in X by A3;
-    x <= x & y <= sup X by A2,A4,Th1;
+A4: q = x "/\" y and
+A5: y in X by A3;
+    x <= x & y <= sup X by A2,A5,Th1;
     hence q <= x "/\" sup X by A4,YELLOW_3:2;
   end;
   hence thesis by A1,YELLOW_0:def 9;
@@ -1450,83 +1628,92 @@ end;
 
 theorem Th54:
   for L being complete transitive antisymmetric (non empty RelStr)
-  for A being Subset of L, B being non empty Subset of L
-  holds A is_>=_than inf (A "/\" B)
+for A being Subset of L, B being non empty Subset of L holds A is_>=_than inf (
+  A "/\" B)
 proof
-  let L be complete transitive antisymmetric (non empty RelStr),
-  A be Subset of L, B be non empty Subset of L;
-  ex_inf_of A "/\" B,L by YELLOW_0:17;
-  then
-A1: A "/\" B is_>=_than inf (A "/\" B) by YELLOW_0:def 10;
-  let x be Element of L such that
-A2: x in A;
+  let L be complete transitive antisymmetric (non empty RelStr), A be Subset
+  of L, B be non empty Subset of L;
   consider b being Element of B;
-  x "/\" b in A "/\" B by A2;
+  let x be Element of L;
+  assume
+  x in A;
   then
-A3: x "/\" b >= inf (A "/\" B) by A1,LATTICE3:def 8;
-  ex xx being Element of L st x >= xx & b >= xx &
-  for c being Element of L st x >= c & b >= c holds xx >= c
-  by LATTICE3:def 11;
-  then x >= x "/\" b by LATTICE3:def 14;
-  hence thesis by A3,YELLOW_0:def 2;
+A1: x "/\" b in A "/\" B;
+  ex xx being Element of L st x >= xx & b >= xx & for c being Element of L
+  st x >= c & b >= c holds xx >= c by LATTICE3:def 11;
+  then
+A2: x >= x "/\" b by LATTICE3:def 14;
+  ex_inf_of A "/\" B,L by YELLOW_0:17;
+  then A "/\" B is_>=_than inf (A "/\" B) by YELLOW_0:def 10;
+  then x "/\" b >= inf (A "/\" B) by A1,LATTICE3:def 8;
+  hence thesis by A2,YELLOW_0:def 2;
 end;
 
 theorem Th55:
-  for L being with_infima transitive antisymmetric RelStr
-  for a, b being Element of L, A, B being Subset of L
-  st a is_<=_than A & b is_<=_than B holds a "/\" b is_<=_than A "/\" B
+  for L being with_infima transitive antisymmetric RelStr for a, b
+  being Element of L, A, B being Subset of L st a is_<=_than A & b is_<=_than B
+  holds a "/\" b is_<=_than A "/\" B
 proof
   let L be with_infima transitive antisymmetric RelStr, a, b be Element of L,
   A, B be Subset of L such that
 A1: a is_<=_than A & b is_<=_than B;
-  let q be Element of L such that
-A2: q in A "/\" B;
-  consider x, y being Element of L such that
-A3: q = x "/\" y & x in A & y in B by A2;
+  let q be Element of L;
+  assume
+  q in A "/\" B;
+  then consider x, y being Element of L such that
+A2: q = x "/\" y and
+A3: x in A & y in B;
   a <= x & b <= y by A1,A3,LATTICE3:def 8;
-  hence thesis by A3,YELLOW_3:2;
+  hence thesis by A2,YELLOW_3:2;
 end;
 
 theorem
-  for L being with_infima transitive antisymmetric RelStr
-  for a, b being Element of L, A, B being Subset of L
-  st a is_>=_than A & b is_>=_than B holds a "/\" b is_>=_than A "/\" B
+  for L being with_infima transitive antisymmetric RelStr for a, b being
+Element of L, A, B being Subset of L st a is_>=_than A & b is_>=_than B holds a
+  "/\" b is_>=_than A "/\" B
 proof
   let L be with_infima transitive antisymmetric RelStr, a, b be Element of L,
   A, B be Subset of L such that
 A1: a is_>=_than A & b is_>=_than B;
-  let q be Element of L such that
-A2: q in A "/\" B;
-  consider x, y being Element of L such that
-A3: q = x "/\" y & x in A & y in B by A2;
+  let q be Element of L;
+  assume
+  q in A "/\" B;
+  then consider x, y being Element of L such that
+A2: q = x "/\" y and
+A3: x in A & y in B;
   a >= x & b >= y by A1,A3,LATTICE3:def 9;
-  hence thesis by A3,YELLOW_3:2;
+  hence thesis by A2,YELLOW_3:2;
 end;
 
 theorem
-  for L being complete (non empty Poset)
-  for A, B being non empty Subset of L holds inf (A "/\" B) = inf A "/\" inf B
+  for L being complete (non empty Poset) for A, B being non empty Subset
+  of L holds inf (A "/\" B) = inf A "/\" inf B
 proof
   let L be complete (non empty Poset), A, B be non empty Subset of L;
-A1: ex_inf_of A "/\" B,L by YELLOW_0:17;
+  B is_>=_than inf (A "/\" B) by Th54;
+  then
+A1: inf B >= inf (A "/\" B) by YELLOW_0:33;
+  A is_>=_than inf (A "/\" B) by Th54;
+  then inf A >= inf (A "/\" B) by YELLOW_0:33;
+  then
+A2: inf A "/\" inf B >= inf (A "/\" B) "/\" inf (A "/\" B) by A1,
+  YELLOW_3:2;
   A is_>=_than inf A & B is_>=_than inf B by YELLOW_0:33;
-  then A "/\" B is_>=_than inf A "/\" inf B by Th55;
+  then ex_inf_of A "/\" B,L & A "/\" B is_>=_than inf A "/\" inf B by
+  Th55,
+  YELLOW_0:17;
   then
-A2: inf (A "/\" B) >= inf A "/\" inf B by A1,YELLOW_0:def 10;
-  A is_>=_than inf (A "/\" B) & B is_>=_than inf (A "/\" B) by Th54;
-  then inf A >= inf (A "/\" B) & inf B >= inf (A "/\" B) by YELLOW_0:33;
-  then
-A3: inf A "/\" inf B >= inf (A "/\" B) "/\" inf (A "/\" B) by YELLOW_3:2;
+A3: inf (A "/\" B) >= inf A "/\" inf B by YELLOW_0:def 10;
   inf (A "/\" B) "/\" inf (A "/\" B) = inf (A "/\" B) by YELLOW_0:25;
-  hence thesis by A2,A3,ORDERS_2:25;
+  hence thesis by A3,A2,ORDERS_2:25;
 end;
 
 theorem
-  for L being Semilattice, x, y being Element of InclPoset Ids L
-  for x1, y1 being Subset of L st x = x1 & y = y1 holds x "/\" y = x1 "/\" y1
+  for L being Semilattice, x, y being Element of InclPoset Ids L for x1,
+  y1 being Subset of L st x = x1 & y = y1 holds x "/\" y = x1 "/\" y1
 proof
-  let L be Semilattice, x, y be Element of InclPoset Ids L,
-  x1, y1 be Subset of L;
+  let L be Semilattice, x, y be Element of InclPoset Ids L, x1, y1 be Subset
+  of L;
   assume
 A1: x = x1 & y = y1;
   then
@@ -1536,200 +1723,217 @@ A2: x1 is lower & y1 is lower by YELLOW_2:43;
 end;
 
 theorem
-  for L being with_infima antisymmetric RelStr
-  for X being Subset of L, Y being non empty Subset of L holds
-  X c= uparrow (X "/\" Y)
+  for L being with_infima antisymmetric RelStr for X being Subset of L,
+  Y being non empty Subset of L holds X c= uparrow (X "/\" Y)
 proof
-  let L be with_infima antisymmetric RelStr, X be Subset of L,
-  Y be non empty Subset of L;
+  let L be with_infima antisymmetric RelStr, X be Subset of L, Y be non empty
+  Subset of L;
+  consider y being set such that
+A1: y in Y by XBOOLE_0:def 1;
+  reconsider y as Element of Y by A1;
   let q be set;
   assume
-A1: q in X;
+A2: q in X;
   then reconsider X1 = X as non empty Subset of L;
-  reconsider x = q as Element of X1 by A1;
-  consider y being set such that
-A2: y in Y by XBOOLE_0:def 1;
-  reconsider y as Element of Y by A2;
-A3: uparrow (X "/\" Y) = {s where s is Element of L:
-  ex y being Element of L st s >= y & y in X "/\" Y} by WAYBEL_0:15;
-  ex s being Element of L st x >= s & y >= s &
-  for c being Element of L st x >= c & y >= c holds s >= c by LATTICE3:def 11;
-  then x "/\" y <= x & x "/\" y in X1 "/\" Y by LATTICE3:def 14;
+  reconsider x = q as Element of X1 by A2;
+  ex s being Element of L st x >= s & y >= s & for c being Element of L st
+  x >= c & y >= c holds s >= c by LATTICE3:def 11;
+  then
+A3: x "/\" y <= x by LATTICE3:def 14;
+  uparrow (X "/\" Y) = {s where s is Element of L: ex y being Element of L
+  st s >= y & y in X "/\" Y} & x "/\" y in X1 "/\" Y by WAYBEL_0:15;
   hence thesis by A3;
 end;
 
 theorem
-  for L being non empty RelStr, D being Subset of [:L,L:] holds
-  union {X where X is Subset of L: ex x being Element of L st X = {x} "/\"
-  proj2 D & x in proj1 D} = proj1 D "/\" proj2 D
+  for L being non empty RelStr, D being Subset of [:L,L:] holds union {X
+where X is Subset of L: ex x being Element of L st X = {x} "/\" proj2 D & x in
+  proj1 D} = proj1 D "/\" proj2 D
 proof
   let L be non empty RelStr, D be Subset of [:L,L:];
   set D1 = proj1 D, D2 = proj2 D;
-  defpred P[set] means
-  ex x being Element of L st $1 = {x} "/\" proj2 D & x in proj1 D;
+  defpred P[set] means ex x being Element of L st $1 = {x} "/\" proj2 D & x in
+  proj1 D;
   thus union {X where X is Subset of L: P[X]} c= D1 "/\" D2
   proof
     let q be set;
-    assume q in union {X where X is Subset of L: P[X]};
+    assume
+    q in union {X where X is Subset of L: P[X]};
     then consider w being set such that
-A1: q in w & w in {X where X is Subset of L: P[X]} by TARSKI:def 4;
+A1: q in w and
+A2: w in {X where X is Subset of L: P[X]} by TARSKI:def 4;
     consider e being Subset of L such that
-A2: w = e & P[e] by A1;
+A3: w = e and
+A4: P[e] by A2;
     consider p being Element of L such that
-A3: e = {p} "/\" D2 & p in D1 by A2;
+A5: e = {p} "/\" D2 and
+A6: p in D1 by A4;
     {p} "/\" D2 = { p "/\" y where y is Element of L : y in D2 } by Th42;
-    then consider y being Element of L such that
-A4: q = p "/\" y & y in D2 by A1,A2,A3;
-    thus thesis by A3,A4;
+    then ex y being Element of L st q = p "/\" y & y in D2 by A1,A3,A5;
+    hence thesis by A6;
   end;
   let q be set;
-  assume q in D1 "/\" D2;
+  assume
+  q in D1 "/\" D2;
   then consider x, y being Element of L such that
-A5: q = x "/\" y & x in D1 & y in D2;
+A7: q = x "/\" y and
+A8: x in D1 and
+A9: y in D2;
   {x} "/\" D2 = { x "/\" d where d is Element of L : d in D2 } by Th42;
   then
-A6: q in {x} "/\" D2 by A5;
-  {x} "/\" D2 in {X where X is Subset of L: P[X]} by A5;
-  hence thesis by A6,TARSKI:def 4;
+A10: q in {x} "/\" D2 by A7,A9;
+  {x} "/\" D2 in {X where X is Subset of L: P[X]} by A8;
+  hence thesis by A10,TARSKI:def 4;
 end;
 
 theorem Th61:
-  for L being transitive antisymmetric with_infima RelStr
-  for D1, D2 being Subset of L holds
-  downarrow ((downarrow D1) "/\" (downarrow D2)) c= downarrow (D1 "/\" D2)
+  for L being transitive antisymmetric with_infima RelStr for D1,
+  D2 being Subset of L holds downarrow ((downarrow D1) "/\" (downarrow D2)) c=
+  downarrow (D1 "/\" D2)
 proof
   let L be transitive antisymmetric with_infima RelStr, D1, D2 be Subset of L;
-A1: downarrow (D1 "/\" D2) = {s where s is Element of L:
-  ex z being Element of L st s <= z & z in D1 "/\" D2} by WAYBEL_0:14;
-A2: downarrow ((downarrow D1) "/\" (downarrow D2)) =
-  {x where x is Element of L: ex t being Element of L st
-  x <= t & t in (downarrow D1) "/\" (downarrow D2)} by WAYBEL_0:14;
-A3: downarrow D1 = {s1 where s1 is Element of L:
-  ex z being Element of L st s1 <= z & z in D1} by WAYBEL_0:14;
-A4: downarrow D2 = {s2 where s2 is Element of L:
-  ex z being Element of L st s2 <= z & z in D2} by WAYBEL_0:14;
+A1: downarrow ((downarrow D1) "/\" (downarrow D2)) = {x where x is Element
+  of L: ex t being Element of L st x <= t & t in (downarrow D1) "/\" (downarrow
+  D2)} by WAYBEL_0:14;
   let y be set;
-  assume y in downarrow ((downarrow D1) "/\" (downarrow D2));
+  assume
+  y in downarrow ((downarrow D1) "/\" (downarrow D2));
   then consider x being Element of L such that
-A5: y = x and
-A6: ex t being Element of L st
-  x <= t & t in (downarrow D1) "/\" (downarrow D2) by A2;
+A2: y = x and
+A3: ex t being Element of L st x <= t & t in (downarrow D1) "/\" (
+  downarrow D2) by A1;
   consider x1 being Element of L such that
-A7: x <= x1 and
-A8: x1 in (downarrow D1) "/\" (downarrow D2) by A6;
+A4: x <= x1 and
+A5: x1 in (downarrow D1) "/\" (downarrow D2) by A3;
   consider a, b being Element of L such that
-A9: x1 = a "/\" b and
-A10: a in downarrow D1 & b in downarrow D2 by A8;
-  consider A1 being Element of L such that
-A11: a = A1 and
-A12: ex z being Element of L st A1 <= z & z in D1 by A3,A10;
-  consider B1 being Element of L such that
-A13: b = B1 and
-A14: ex z being Element of L st B1 <= z & z in D2 by A4,A10;
-  consider a1 being Element of L such that
-A15: A1 <= a1 & a1 in D1 by A12;
+A6: x1 = a "/\" b and
+A7: a in downarrow D1 and
+A8: b in downarrow D2 by A5;
+  downarrow D2 = {s2 where s2 is Element of L: ex z being Element of L st
+  s2 <= z & z in D2} by WAYBEL_0:14;
+  then consider B1 being Element of L such that
+A9: b = B1 and
+A10: ex z being Element of L st B1 <= z & z in D2 by A8;
   consider b1 being Element of L such that
-A16: B1 <= b1 & b1 in D2 by A14;
-  x1 <= a1 "/\" b1 by A9,A11,A13,A15,A16,YELLOW_3:2;
+A11: B1 <= b1 and
+A12: b1 in D2 by A10;
+  downarrow D1 = {s1 where s1 is Element of L: ex z being Element of L st
+  s1 <= z & z in D1} by WAYBEL_0:14;
+  then consider A1 being Element of L such that
+A13: a = A1 and
+A14: ex z being Element of L st A1 <= z & z in D1 by A7;
+  consider a1 being Element of L such that
+A15: A1 <= a1 and
+A16: a1 in D1 by A14;
+  x1 <= a1 "/\" b1 by A6,A13,A9,A15,A11,YELLOW_3:2;
   then
-A17: x <= a1 "/\" b1 by A7,ORDERS_2:26;
-  a1 "/\" b1 in D1 "/\" D2 by A15,A16;
-  hence thesis by A1,A5,A17;
+A17: downarrow (D1 "/\" D2) = {s where s is Element of L: ex z being Element
+  of L st s <= z & z in D1 "/\" D2} & x <= a1 "/\" b1 by A4,ORDERS_2:26 ,
+  WAYBEL_0:14;
+  a1 "/\" b1 in D1 "/\" D2 by A16,A12;
+  hence thesis by A2,A17;
 end;
 
 theorem
-  for L being Semilattice, D1, D2 being Subset of L holds
-  downarrow ((downarrow D1) "/\" (downarrow D2)) = downarrow (D1 "/\" D2)
+  for L being Semilattice, D1, D2 being Subset of L holds downarrow ((
+  downarrow D1) "/\" (downarrow D2)) = downarrow (D1 "/\" D2)
 proof
   let L be Semilattice, D1, D2 be Subset of L;
-A1: downarrow (D1 "/\" D2) = {s where s is Element of L:
-  ex z being Element of L st s <= z & z in D1 "/\" D2} by WAYBEL_0:14;
-A2: downarrow ((downarrow D1) "/\" (downarrow D2)) =
-  {x where x is Element of L: ex t being Element of L st
-  x <= t & t in (downarrow D1) "/\" (downarrow D2)} by WAYBEL_0:14;
-  thus downarrow ((downarrow D1) "/\" (downarrow D2)) c= downarrow (D1 "/\"
-  D2) by Th61;
+A1: downarrow (D1 "/\" D2) = {s where s is Element of L: ex z being Element
+  of L st s <= z & z in D1 "/\" D2} by WAYBEL_0:14;
+  thus downarrow ((downarrow D1) "/\" (downarrow D2)) c= downarrow (D1 "/\" D2
+  ) by Th61;
   let q be set;
-  assume q in downarrow (D1 "/\" D2);
+  assume
+  q in downarrow (D1 "/\" D2);
   then consider s being Element of L such that
-A3: q = s and
-A4: ex z being Element of L st s <= z & z in D1 "/\" D2 by A1;
+A2: q = s and
+A3: ex z being Element of L st s <= z & z in D1 "/\" D2 by A1;
+A4: downarrow ((downarrow D1) "/\" (downarrow D2)) = {x where x is Element
+  of L: ex t being Element of L st x <= t & t in (downarrow D1) "/\" (downarrow
+  D2)} by WAYBEL_0:14;
+A5: D1 is Subset of downarrow D1 & D2 is Subset of downarrow D2 by WAYBEL_0:
+  16;
   consider x being Element of L such that
-A5: s <= x & x in D1 "/\" D2 by A4;
-  consider a, b being Element of L such that
-A6: x = a "/\" b & a in D1 & b in D2 by A5;
-  D1 is Subset of downarrow D1 & D2 is Subset of downarrow D2 by WAYBEL_0:16;
-  then x in (downarrow D1) "/\" (downarrow D2) by A6;
-  hence thesis by A2,A3,A5;
+A6: s <= x and
+A7: x in D1 "/\" D2 by A3;
+  ex a, b being Element of L st x = a "/\" b & a in D1 & b in D2 by A7;
+  then x in (downarrow D1) "/\" (downarrow D2) by A5;
+  hence thesis by A4,A2,A6;
 end;
 
 theorem Th63:
-  for L being transitive antisymmetric with_infima RelStr
-  for D1, D2 being Subset of L holds
-  uparrow ((uparrow D1) "/\" (uparrow D2)) c= uparrow (D1 "/\" D2)
+  for L being transitive antisymmetric with_infima RelStr for D1,
+D2 being Subset of L holds uparrow ((uparrow D1) "/\" (uparrow D2)) c= uparrow
+  (D1 "/\" D2)
 proof
   let L be transitive antisymmetric with_infima RelStr, D1, D2 be Subset of L;
-A1: uparrow (D1 "/\" D2) = {s where s is Element of L:
-  ex z being Element of L st s >= z & z in D1 "/\" D2} by WAYBEL_0:15;
-A2: uparrow ((uparrow D1) "/\" (uparrow D2)) =
-  {x where x is Element of L: ex t being Element of L st
-  x >= t & t in (uparrow D1) "/\" (uparrow D2)} by WAYBEL_0:15;
-A3: uparrow D1 = {s1 where s1 is Element of L:
-  ex z being Element of L st s1 >= z & z in D1} by WAYBEL_0:15;
-A4: uparrow D2 = {s2 where s2 is Element of L:
-  ex z being Element of L st s2 >= z & z in D2} by WAYBEL_0:15;
+A1: uparrow ((uparrow D1) "/\" (uparrow D2)) = {x where x is Element of L:
+  ex t being Element of L st x >= t & t in (uparrow D1) "/\" (uparrow D2)} by
+  WAYBEL_0:15;
   let y be set;
-  assume y in uparrow ((uparrow D1) "/\" (uparrow D2));
+  assume
+  y in uparrow ((uparrow D1) "/\" (uparrow D2));
   then consider x being Element of L such that
-A5: y = x and
-A6: ex t being Element of L st
-  x >= t & t in (uparrow D1) "/\" (uparrow D2) by A2;
+A2: y = x and
+A3: ex t being Element of L st x >= t & t in (uparrow D1) "/\" (uparrow
+  D2) by A1;
   consider x1 being Element of L such that
-A7: x >= x1 and
-A8: x1 in (uparrow D1) "/\" (uparrow D2) by A6;
+A4: x >= x1 and
+A5: x1 in (uparrow D1) "/\" (uparrow D2) by A3;
   consider a, b being Element of L such that
-A9: x1 = a "/\" b and
-A10: a in uparrow D1 & b in uparrow D2 by A8;
-  consider A1 being Element of L such that
-A11: a = A1 and
-A12: ex z being Element of L st A1 >= z & z in D1 by A3,A10;
-  consider B1 being Element of L such that
-A13: b = B1 and
-A14: ex z being Element of L st B1 >= z & z in D2 by A4,A10;
-  consider a1 being Element of L such that
-A15: A1 >= a1 & a1 in D1 by A12;
+A6: x1 = a "/\" b and
+A7: a in uparrow D1 and
+A8: b in uparrow D2 by A5;
+  uparrow D2 = {s2 where s2 is Element of L: ex z being Element of L st s2
+  >= z & z in D2} by WAYBEL_0:15;
+  then consider B1 being Element of L such that
+A9: b = B1 and
+A10: ex z being Element of L st B1 >= z & z in D2 by A8;
   consider b1 being Element of L such that
-A16: B1 >= b1 & b1 in D2 by A14;
-  x1 >= a1 "/\" b1 by A9,A11,A13,A15,A16,YELLOW_3:2;
+A11: B1 >= b1 and
+A12: b1 in D2 by A10;
+  uparrow D1 = {s1 where s1 is Element of L: ex z being Element of L st s1
+  >= z & z in D1} by WAYBEL_0:15;
+  then consider A1 being Element of L such that
+A13: a = A1 and
+A14: ex z being Element of L st A1 >= z & z in D1 by A7;
+  consider a1 being Element of L such that
+A15: A1 >= a1 and
+A16: a1 in D1 by A14;
+  x1 >= a1 "/\" b1 by A6,A13,A9,A15,A11,YELLOW_3:2;
   then
-A17: x >= a1 "/\" b1 by A7,ORDERS_2:26;
-  a1 "/\" b1 in D1 "/\" D2 by A15,A16;
-  hence thesis by A1,A5,A17;
+A17: uparrow (D1 "/\" D2) = {s where s is Element of L: ex z being Element
+  of L st s >= z & z in D1 "/\" D2} & x >= a1 "/\" b1 by A4,ORDERS_2:26,
+  WAYBEL_0:15;
+  a1 "/\" b1 in D1 "/\" D2 by A16,A12;
+  hence thesis by A2,A17;
 end;
 
 theorem
-  for L being Semilattice, D1, D2 being Subset of L holds
-  uparrow ((uparrow D1) "/\" (uparrow D2)) = uparrow (D1 "/\" D2)
+  for L being Semilattice, D1, D2 being Subset of L holds uparrow ((
+  uparrow D1) "/\" (uparrow D2)) = uparrow (D1 "/\" D2)
 proof
   let L be Semilattice, D1, D2 be Subset of L;
-A1: uparrow (D1 "/\" D2) = {s where s is Element of L:
-  ex z being Element of L st s >= z & z in D1 "/\" D2} by WAYBEL_0:15;
-A2: uparrow ((uparrow D1) "/\" (uparrow D2)) =
-  {x where x is Element of L: ex t being Element of L st
-  x >= t & t in (uparrow D1) "/\" (uparrow D2)} by WAYBEL_0:15;
-  thus uparrow ((uparrow D1) "/\" (uparrow D2)) c= uparrow (D1 "/\" D2)
-  by Th63;
+A1: uparrow (D1 "/\" D2) = {s where s is Element of L: ex z being Element of
+  L st s >= z & z in D1 "/\" D2} by WAYBEL_0:15;
+  thus uparrow ((uparrow D1) "/\" (uparrow D2)) c= uparrow (D1 "/\" D2) by
+  Th63;
   let q be set;
-  assume q in uparrow (D1 "/\" D2);
+  assume
+  q in uparrow (D1 "/\" D2);
   then consider s being Element of L such that
-A3: q = s and
-A4: ex z being Element of L st s >= z & z in D1 "/\" D2 by A1;
+A2: q = s and
+A3: ex z being Element of L st s >= z & z in D1 "/\" D2 by A1;
+A4: uparrow ((uparrow D1) "/\" (uparrow D2)) = {x where x is Element of L:
+  ex t being Element of L st x >= t & t in (uparrow D1) "/\" (uparrow D2)} by
+  WAYBEL_0:15;
+A5: D1 is Subset of uparrow D1 & D2 is Subset of uparrow D2 by WAYBEL_0:16;
   consider x being Element of L such that
-A5: s >= x & x in D1 "/\" D2 by A4;
-  consider a, b being Element of L such that
-A6: x = a "/\" b & a in D1 & b in D2 by A5;
-  D1 is Subset of uparrow D1 & D2 is Subset of uparrow D2 by WAYBEL_0:16;
-  then x in (uparrow D1) "/\" (uparrow D2) by A6;
-  hence thesis by A2,A3,A5;
+A6: s >= x and
+A7: x in D1 "/\" D2 by A3;
+  ex a, b being Element of L st x = a "/\" b & a in D1 & b in D2 by A7;
+  then x in (uparrow D1) "/\" (uparrow D2) by A5;
+  hence thesis by A4,A2,A6;
 end;
 

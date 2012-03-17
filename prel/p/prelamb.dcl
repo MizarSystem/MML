@@ -7,6 +7,7 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="TARSKI"/>
@@ -28,7 +29,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="51"/>
+<Adjective nr="52"/>
 </Cluster>
 </RCluster>
 <RCluster aid="PRELAMB" nr="2">
@@ -37,8 +38,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="39" value="false"/>
-<Adjective nr="51"/>
+<Adjective nr="41" value="false"/>
+<Adjective nr="52"/>
 </Cluster>
 </RCluster>
 <RCluster aid="PRELAMB" nr="3">
@@ -47,7 +48,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="59"/>
+<Adjective nr="60"/>
 </Cluster>
 </RCluster>
 <RCluster aid="PRELAMB" nr="4">
@@ -56,8 +57,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="39" value="false"/>
-<Adjective nr="59"/>
+<Adjective nr="41" value="false"/>
+<Adjective nr="60"/>
 </Cluster>
 </RCluster>
 <RCluster aid="PRELAMB" nr="5">
@@ -66,8 +67,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="39" value="false"/>
-<Adjective nr="60"/>
+<Adjective nr="41" value="false"/>
+<Adjective nr="61"/>
 </Cluster>
 </RCluster>
 </Registrations>

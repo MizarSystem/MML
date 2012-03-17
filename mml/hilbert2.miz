@@ -11,13 +11,12 @@ environ
       ZF_LANG, GRAPH_1, ZFMISC_1, FRAENKEL, PARTFUN1, FUNCT_4, CAT_1, HILBERT2,
       HAHNBAN, ARYTM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, CARD_3, RELAT_1,
-      ORDINAL1, FUNCT_1, PARTFUN1, NAT_1, FINSEQ_1, FUNCOP_1,
-      FUNCT_4, FUNCT_6, PBOOLE, TREES_1, TREES_2, TREES_3, TREES_4, TREES_9,
-      HILBERT1, XXREAL_0;
+      ORDINAL1, FUNCT_1, PARTFUN1, NAT_1, FINSEQ_1, FUNCOP_1, FUNCT_4, FUNCT_6,
+      PBOOLE, TREES_1, TREES_2, TREES_3, TREES_4, TREES_9, HILBERT1, XXREAL_0;
  constructors PARTFUN1, FUNCT_4, XXREAL_0, XREAL_0, NAT_1, CARD_3, PBOOLE,
       TREES_4, TREES_9, HILBERT1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
-      FRAENKEL, XREAL_0, NAT_1, FINSEQ_1, TREES_2, TREES_3, HILBERT1;
+      XREAL_0, NAT_1, FINSEQ_1, TREES_2, TREES_3, HILBERT1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, FUNCT_1, HILBERT1, PARTFUN1, FUNCOP_1;
  theorems PBOOLE, ZFMISC_1, FUNCT_1, HILBERT1, ORDERS_1, SUBSET_1, TARSKI,
@@ -31,14 +30,15 @@ begin :: Preliminaries
 reserve X,x for set;
 
 theorem Th1:
-  for Z being set, M being ManySortedSet of Z st
-  for x being set st x in Z holds M.x is ManySortedSet of x
-  for f being Function st f = Union M holds dom f = union Z
+  for Z being set, M being ManySortedSet of Z st for x being set st
+  x in Z holds M.x is ManySortedSet of x for f being Function st f = Union M
+  holds dom f = union Z
 proof
   let Z be set, M be ManySortedSet of Z such that
 A1: for x being set st x in Z holds M.x is ManySortedSet of x;
   let f be Function;
-  assume f = Union M;
+  assume
+  f = Union M;
   then
 A2: f = union rng M by CARD_3:def 4;
   for x being set holds x in dom f iff ex Y being set st x in Y & Y in Z
@@ -46,7 +46,8 @@ A2: f = union rng M by CARD_3:def 4;
     let x be set;
     thus x in dom f implies ex Y being set st x in Y & Y in Z
     proof
-      assume x in dom f;
+      assume
+      x in dom f;
       then [x,f.x] in f by FUNCT_1:def 4;
       then consider g being set such that
 A3:   [x,f.x] in g and
@@ -76,7 +77,8 @@ A10: [x,g.x] in g by A8,FUNCT_1:8;
 end;
 
 theorem Th2:
-  for x,y being set, f,g being FinSequence st <*x*>^f = <*y*>^g holds f = g
+  for x,y being set, f,g being FinSequence st <*x*>^f = <*y*>^g
+  holds f = g
 proof
   let x,y be set, f,g be FinSequence;
   assume
@@ -89,19 +91,20 @@ end;
 theorem Th3:
   <*x*> is FinSequence of X implies x in X
 proof
+A1: rng<*x*> = {x} by FINSEQ_1:55;
   assume
-A1: <*x*> is FinSequence of X;
-  rng<*x*> = {x} by FINSEQ_1:55;
+  <*x*> is FinSequence of X;
   then {x} c= X by A1,FINSEQ_1:def 4;
   hence thesis by ZFMISC_1:37;
 end;
 
 theorem Th4:
-  for X for f being FinSequence of X st f <> {}
-  ex g being FinSequence of X, d being Element of X st f = g^<*d*>
+  for X for f being FinSequence of X st f <> {} ex g being
+  FinSequence of X, d being Element of X st f = g^<*d*>
 proof
   let X be set, f be FinSequence of X;
-  assume f <> {};
+  assume
+  f <> {};
   then consider q being FinSequence, x being set such that
 A1: f = q^<*x*> by FINSEQ_1:63;
   reconsider q as FinSequence of X by A1,FINSEQ_1:50;
@@ -114,57 +117,60 @@ end;
 
 reserve k,m,n for Element of NAT,
   p,q,r,s,r',s' for Element of HP-WFF,
-  T1,T2 for Tree;
+  T1,T2
+  for Tree;
 
 theorem Th5:
   <*x*> in tree(T1,T2) iff x=0 or x=1
 proof
-A1: len<*T1,T2*> = 2 by FINSEQ_1:61;
-A2: tree(T1,T2) = tree<*T1,T2*> by TREES_3:def 17;
+A1: len<*T1,T2*> = 2 & tree(T1,T2) = tree<*T1,T2*> by FINSEQ_1:61
+,TREES_3:def 17;
   thus <*x*> in tree(T1,T2) implies x=0 or x=1
   proof
-    assume <*x*> in tree(T1,T2);
+    assume
+    <*x*> in tree(T1,T2);
     then consider n being Element of NAT, q being FinSequence such that
-A3: n < 2 and q in <*T1,T2*>.(n+1) and
-A4: <*x*> = <*n*>^q by A1,A2,TREES_3:def 15;
+A2: n < 2 and
+    q in <*T1,T2*>.(n+1) and
+A3: <*x*> = <*n*>^q by A1,TREES_3:def 15;
     x = <*x*>.1 by FINSEQ_1:57
-      .= n by A4,FINSEQ_1:58;
-    hence thesis by A3,NAT_1:23;
+      .= n by A3,FINSEQ_1:58;
+    hence thesis by A2,NAT_1:23;
   end;
   assume
-A5: x=0 or x=1;
+A4: x=0 or x=1;
   then reconsider n = x as Element of NAT;
-  <*T1,T2*>.(n+1) = T1 or <*T1,T2*>.(n+1) = T2 by A5,FINSEQ_1:61;
+  <*T1,T2*>.(n+1) = T1 or <*T1,T2*>.(n+1) = T2 by A4,FINSEQ_1:61;
   then
-A6: {} in <*T1,T2*>.(n+1) by TREES_1:47;
+A5: {} in <*T1,T2*>.(n+1) by TREES_1:47;
   <*n*> = <*n*>^{} by FINSEQ_1:47;
-  hence thesis by A1,A2,A5,A6,TREES_3:def 15;
+  hence thesis by A1,A4,A5,TREES_3:def 15;
 end;
 
-scheme InTreeInd{T() -> Tree, P[set] }: for f being Element of T() holds P[f]
+scheme
+  InTreeInd{T() -> Tree, P[set] }: for f being Element of T() holds P[f]
 provided
-A1: P[<*>NAT]
-and
-A2: for f being Element of T() st P[f]
-for n st f^<*n*> in T() holds P[f^<*n*>]
+A1: P[<*>NAT] and
+A2: for f being Element of T() st P[f] for n st f^<*n*> in T() holds P[f
+^<*n*>]
 proof
   defpred Q[FinSequence] means $1 in T() implies P[$1];
-A3: Q[ {} ] by A1;
-A4: for p being FinSequence, x being set st Q[p] holds Q[p^<*x*>]
+A3: for p being FinSequence, x being set st Q[p] holds Q[p^<*x*>]
   proof
     let p be FinSequence, x be set such that
-A5: Q[p];
+A4: Q[p];
     assume
-A6: p^<*x*> in T();
+A5: p^<*x*> in T();
     then reconsider h = p^<*x*> as FinSequence of NAT by TREES_1:44;
     consider g being FinSequence of NAT, n such that
-A7: h = g^<*n*> by Th4;
-A8: g = p by A7,FINSEQ_2:20;
-    reconsider g as Element of T() by A6,A7,TREES_1:46;
-    P[g] by A5,A8;
-    hence thesis by A2,A6,A7;
+A6: h = g^<*n*> by Th4;
+A7: g = p by A6,FINSEQ_2:20;
+    reconsider g as Element of T() by A5,A6,TREES_1:46;
+    P[g] by A4,A7;
+    hence thesis by A2,A5,A6;
   end;
-  for p being FinSequence holds Q[p] from FINSEQ_1:sch 3(A3,A4);
+A8: Q[ {} ] by A1;
+  for p being FinSequence holds Q[p] from FINSEQ_1:sch 3(A8,A3);
   hence thesis;
 end;
 
@@ -182,13 +188,13 @@ theorem Th7:
   x-tree(T1,T2).<*0*> = T1.{} & x-tree(T1,T2).<*1*> = T2.{}
 proof
 A1: len<*T1,T2*> = 2 by FINSEQ_1:61;
-A2: <*T1,T2*>.(0+1) = T1 by FINSEQ_1:61;
   reconsider w = {} as Node of T1 by TREES_1:47;
+A2: <*T1,T2*>.(0+1) = T1 by FINSEQ_1:61;
   thus x-tree(T1,T2).<*0*> = (x-tree<*T1,T2*>).<*0*> by TREES_4:def 6
     .= (x-tree<*T1,T2*>).(<*0*>^w) by FINSEQ_1:47
     .= T1.{} by A1,A2,TREES_4:12;
-A3: <*T1,T2*>.(1+1) = T2 by FINSEQ_1:61;
   reconsider w = {} as Node of T2 by TREES_1:47;
+A3: <*T1,T2*>.(1+1) = T2 by FINSEQ_1:61;
   thus x-tree(T1,T2).<*1*> = (x-tree<*T1,T2*>).<*1*> by TREES_4:def 6
     .= (x-tree<*T1,T2*>).(<*1*>^w) by FINSEQ_1:47
     .= T2.{} by A1,A3,TREES_4:12;
@@ -212,14 +218,14 @@ registration
   cluster x-tree p -> non root;
   coherence
   proof
-A1: dom p <> {};
-    assume x-tree p is root;
+    assume
+    x-tree p is root;
     then
-A2: dom(x-tree p) = tree{} by TREES_3:55,TREES_9:def 1;
-    ex q being DTree-yielding FinSequence st p = q &
-    dom(x-tree p) = tree doms q by TREES_4:def 4;
-    then doms p = {} by A2,TREES_3:53;
-    hence contradiction by A1,RELAT_1:60,TREES_3:39;
+A1: dom(x-tree p) = tree{} by TREES_3:55,TREES_9:def 1;
+    ex q being DTree-yielding FinSequence st p = q & dom(x-tree p) = tree
+    doms q by TREES_4:def 4;
+    then dom p <> {} & doms p = {} by A1,TREES_3:53;
+    hence contradiction by RELAT_1:60,TREES_3:39;
   end;
 end;
 
@@ -228,13 +234,15 @@ registration
   let T1 be DecoratedTree;
   cluster x-tree T1 -> non root;
   coherence
-  proof x-tree T1 = x-tree <*T1*> by TREES_4:def 5;
+  proof
+    x-tree T1 = x-tree <*T1*> by TREES_4:def 5;
     hence thesis;
   end;
   let T2 be DecoratedTree;
   cluster x-tree (T1,T2) -> non root;
   coherence
-  proof x-tree (T1,T2) = x-tree <*T1,T2*> by TREES_4:def 6;
+  proof
+    x-tree (T1,T2) = x-tree <*T1,T2*> by TREES_4:def 6;
     hence thesis;
   end;
 end;
@@ -244,7 +252,6 @@ begin :: About the language
 definition
   let n;
   func prop n -> Element of HP-WFF equals
-
   <*3+n*>;
   coherence by HILBERT1:def 4;
 end;
@@ -252,16 +259,15 @@ end;
 definition
   let D be set;
   redefine attr D is with_VERUM means
-
+  :Def2:
   VERUM in D;
   compatibility by HILBERT1:def 1;
   attr D is with_propositional_variables means
-
   for n holds prop n in D;
   compatibility
   proof
-    thus D is with_propositional_variables implies for n holds prop n in D
-    by HILBERT1:def 4;
+    thus D is with_propositional_variables implies for n holds prop n in D by
+HILBERT1:def 4;
     assume
 A1: for n holds prop n in D;
     let n;
@@ -273,11 +279,12 @@ end;
 definition
   let D be Subset of HP-WFF;
   redefine attr D is with_implication means
-  for p, q st p in D & q in D holds p => q in D;
+  for p, q st p in D & q in D holds
+  p => q in D;
   compatibility
   proof
-    thus D is with_implication implies
-    for p, q st p in D & q in D holds p => q in D by HILBERT1:def 2;
+    thus D is with_implication implies for p, q st p in D & q in D holds p =>
+    q in D by HILBERT1:def 2;
     assume
 A1: for p, q st p in D & q in D holds p => q in D;
     let p, q be FinSequence;
@@ -288,11 +295,12 @@ A2: p in D & q in D;
     hence thesis;
   end;
   attr D is with_conjunction means
-  for p, q st p in D & q in D holds p '&' q in D;
+  for p, q st p in D & q in D holds p '&' q
+  in D;
   compatibility
   proof
-    thus D is with_conjunction implies
-    for p, q st p in D & q in D holds p '&' q in D by HILBERT1:def 3;
+    thus D is with_conjunction implies for p, q st p in D & q in D holds p '&'
+    q in D by HILBERT1:def 3;
     assume
 A3: for p, q st p in D & q in D holds p '&' q in D;
     let p, q be FinSequence;
@@ -319,68 +327,70 @@ definition
   ex n st p = prop n;
 end;
 
-scheme HPInd { P[set] }: for r holds P[r]
+scheme
+  HPInd { P[set] }: for r holds P[r]
 provided
-A1: P[VERUM]
-and
-A2: for n holds P[prop n]
-and
+A1: P[VERUM] and
+A2: for n holds P[prop n] and
 A3: for r,s st P[r] & P[s] holds P[r '&' s] & P[r => s]
 proof
   set X = { p where p is Element of HP-WFF: P[p]};
   X c= HP-WFF
   proof
     let x be set;
-    assume x in X;
+    assume
+    x in X;
     then ex p being Element of HP-WFF st x = p & P[p];
     hence thesis;
   end;
   then reconsider X as Subset of HP-WFF;
-A4: HP-WFF c= NAT* by HILBERT1:def 5;
-A5: X c= NAT*
-  proof
-    let x be set;
-    assume x in X;
-    then x in HP-WFF;
-    hence thesis by A4;
-  end;
-A6: X is with_VERUM
-  proof thus VERUM in X by A1;
-  end;
-A7: X is with_implication
-  proof
-    let p, q;
-    assume p in X;
-    then
-A8: ex x being Element of HP-WFF st p = x & P[x];
-    assume q in X;
-    then ex x being Element of HP-WFF st q = x & P[x];
-    then P[p => q] by A3,A8;
-    hence thesis;
-  end;
-A9: X is with_conjunction
-  proof
-    let p, q;
-    assume p in X;
-    then
-A10: ex x being Element of HP-WFF st p = x & P[x];
-    assume q in X;
-    then ex x being Element of HP-WFF st q = x & P[x];
-    then P[p '&' q] by A3,A10;
-    hence thesis;
-  end;
-  X is with_propositional_variables
+  let r;
+A4: r in HP-WFF;
+A5: X is with_propositional_variables
   proof
     let n;
     P[prop n] by A2;
     hence thesis;
   end;
-  then X is HP-closed by A5,A6,A7,A9;
-  then
-A11: HP-WFF c= X by HILBERT1:def 6;
-  let r;
-  r in HP-WFF;
-  then r in X by A11;
+A6: X is with_implication
+  proof
+    let p, q;
+    assume
+    p in X;
+    then
+A7: ex x being Element of HP-WFF st p = x & P[x];
+    assume
+    q in X;
+    then ex x being Element of HP-WFF st q = x & P[x];
+    then P[p => q] by A3,A7;
+    hence thesis;
+  end;
+A8: HP-WFF c= NAT* by HILBERT1:def 5;
+A9: X c= NAT*
+  proof
+    let x be set;
+    assume
+    x in X;
+    then x in HP-WFF;
+    hence thesis by A8;
+  end;
+A10: X is with_conjunction
+  proof
+    let p, q;
+    assume
+    p in X;
+    then
+A11: ex x being Element of HP-WFF st p = x & P[x];
+    assume
+    q in X;
+    then ex x being Element of HP-WFF st q = x & P[x];
+    then P[p '&' q] by A3,A11;
+    hence thesis;
+  end;
+  VERUM in X by A1;
+  then X is with_VERUM by Def2;
+  then HP-WFF c= X by A9,A6,A10,A5,HILBERT1:def 6;
+  then r in X by A4;
   then ex p being Element of HP-WFF st r = p & P[p];
   hence thesis;
 end;
@@ -388,8 +398,8 @@ end;
 theorem Th9:
   p is conjunctive or p is conditional or p is simple or p = VERUM
 proof
-  defpred P[Element of HP-WFF] means
-  $1 is conjunctive or $1 is conditional or $1 is simple or $1 = VERUM;
+  defpred P[Element of HP-WFF] means $1 is conjunctive or $1 is conditional or
+  $1 is simple or $1 = VERUM;
 A1: P[VERUM];
 A2: for n holds P[prop n] by Def8;
 A3: for r,s st P[r] & P[s] holds P[r '&' s] & P[r => s] by Def6,Def7;
@@ -401,7 +411,8 @@ theorem Th10:
   len p >= 1
 proof
   per cases by Th9;
-  suppose p is conjunctive;
+  suppose
+    p is conjunctive;
     then consider r,s such that
 A1: p = r '&' s by Def6;
     len p = len(<*2*>^(r^s)) by A1,FINSEQ_1:45
@@ -409,7 +420,8 @@ A1: p = r '&' s by Def6;
       .= 1 + len(r^s) by FINSEQ_1:56;
     hence thesis by NAT_1:11;
   end;
-  suppose p is conditional;
+  suppose
+    p is conditional;
     then consider r,s such that
 A2: p = r => s by Def7;
     len p = len(<*1*>^(r^s)) by A2,FINSEQ_1:45
@@ -417,12 +429,13 @@ A2: p = r => s by Def7;
       .= 1 + len(r^s) by FINSEQ_1:56;
     hence thesis by NAT_1:11;
   end;
-  suppose p is simple;
-    then consider n such that
-A3: p = prop n by Def8;
-    thus thesis by A3,FINSEQ_1:56;
+  suppose
+    p is simple;
+    then ex n st p = prop n by Def8;
+    hence thesis by FINSEQ_1:56;
   end;
-  suppose p = VERUM;
+  suppose
+    p = VERUM;
     hence thesis by FINSEQ_1:56;
   end;
 end;
@@ -433,22 +446,26 @@ proof
   assume
 A1: p.1 = 1;
   per cases by Th9;
-  suppose p is conjunctive;
+  suppose
+    p is conjunctive;
     then consider r,s such that
 A2: p = r '&' s by Def6;
     p = <*2*>^(r^s) by A2,FINSEQ_1:45;
     hence thesis by A1,FINSEQ_1:58;
   end;
-  suppose p is conditional;
+  suppose
+    p is conditional;
     hence thesis;
   end;
-  suppose p is simple;
+  suppose
+    p is simple;
     then consider n such that
 A3: p = prop n by Def8;
     1+0 = 1+(2+n) by A1,A3,FINSEQ_1:57;
     hence thesis;
   end;
-  suppose p = VERUM;
+  suppose
+    p = VERUM;
     hence thesis by A1,FINSEQ_1:57;
   end;
 end;
@@ -459,22 +476,26 @@ proof
   assume
 A1: p.1 = 2;
   per cases by Th9;
-  suppose p is conjunctive;
+  suppose
+    p is conjunctive;
     hence thesis;
   end;
-  suppose p is conditional;
+  suppose
+    p is conditional;
     then consider r,s such that
 A2: p = r => s by Def7;
     p = <*1*>^(r^s) by A2,FINSEQ_1:45;
     hence thesis by A1,FINSEQ_1:58;
   end;
-  suppose p is simple;
+  suppose
+    p is simple;
     then consider n such that
 A3: p = prop n by Def8;
     2+0 = 2+(1+n) by A1,A3,FINSEQ_1:57;
     hence thesis;
   end;
-  suppose p = VERUM;
+  suppose
+    p = VERUM;
     hence thesis by A1,FINSEQ_1:57;
   end;
 end;
@@ -485,24 +506,28 @@ proof
   assume
 A1: p.1 = 3+n;
   per cases by Th9;
-  suppose p is conjunctive;
+  suppose
+    p is conjunctive;
     then consider r,s such that
 A2: p = r '&' s by Def6;
     p = <*2*>^(r^s) by A2,FINSEQ_1:45;
     then 2+0 = 2+(1+n) by A1,FINSEQ_1:58;
     hence thesis;
   end;
-  suppose p is conditional;
+  suppose
+    p is conditional;
     then consider r,s such that
 A3: p = r => s by Def7;
     p = <*1*>^(r^s) by A3,FINSEQ_1:45;
     then 1+0 = 1+(2+n) by A1,FINSEQ_1:58;
     hence thesis;
   end;
-  suppose p is simple;
+  suppose
+    p is simple;
     hence thesis;
   end;
-  suppose p = VERUM;
+  suppose
+    p = VERUM;
     hence thesis by A1,FINSEQ_1:57;
   end;
 end;
@@ -513,24 +538,27 @@ proof
   assume
 A1: p.1 = 0;
   per cases by Th9;
-  suppose p is conjunctive;
+  suppose
+    p is conjunctive;
     then consider r,s such that
 A2: p = r '&' s by Def6;
     p = <*2*>^(r^s) by A2,FINSEQ_1:45;
     hence thesis by A1,FINSEQ_1:58;
   end;
-  suppose p is conditional;
+  suppose
+    p is conditional;
     then consider r,s such that
 A3: p = r => s by Def7;
     p = <*1*>^(r^s) by A3,FINSEQ_1:45;
     hence thesis by A1,FINSEQ_1:58;
   end;
-  suppose p is simple;
-    then consider n such that
-A4: p = prop n by Def8;
-    thus thesis by A1,A4,FINSEQ_1:57;
+  suppose
+    p is simple;
+    then ex n st p = prop n by Def8;
+    hence thesis by A1,FINSEQ_1:57;
   end;
-  suppose p = VERUM;
+  suppose
+    p = VERUM;
     hence thesis;
   end;
 end;
@@ -568,8 +596,8 @@ proof
 A1: for n be Nat st for k being Nat st k < n holds P[k] holds P[n]
   proof
     let n be Nat such that
-A2: for k being Nat st k < n holds for p,q,t st len p = k & p = q^t holds
-    p = q;
+A2: for k being Nat st k < n holds for p,q,t st len p = k & p = q^t
+    holds p = q;
     let p,q,t such that
 A3: len p = n and
 A4: p = q^t;
@@ -577,7 +605,8 @@ A4: p = q^t;
     then
 A5: p.1 = q.1 by A4,FINSEQ_1:85;
     per cases by Th9;
-    suppose p is conjunctive;
+    suppose
+      p is conjunctive;
       then consider r,s such that
 A6:   p = r '&' s by Def6;
       q.1 = (<*2*>^(r^s)).1 by A5,A6,FINSEQ_1:45
@@ -591,38 +620,41 @@ A7:   q = r' '&' s' by Def6;
       then r'^s'^t = r^s by Th2;
       then
 A8:   r'^(s'^t) = r^s by FINSEQ_1:45;
-      now per cases;
-        suppose len r <= len r';
-          then consider t1 such that
-A9:       r^t1 = r' by A8,FINSEQ_1:64;
-A10:      len r' < len q by A7,Th15;
+      now
+        per cases;
+        suppose
+A9:       len r <= len r';
           n = len q + len t by A3,A4,FINSEQ_1:35;
           then len q <= n by NAT_1:11;
-          then len r' < n by A10,XXREAL_0:2;
-          then r = r' by A2,A9;
+          then
+A10:      len r' < n by A7,Th15,XXREAL_0:2;
+          ex t1 st r^t1 = r' by A8,A9,FINSEQ_1:64;
+          then r = r' by A2,A10;
           then
 A11:      s'^t = s by A8,FINSEQ_1:46;
           len s < n by A3,A6,Th15;
           then s' = s by A2,A11;
-          then t = {} by A11,TREES_1:5;
+          then t = {} by A11,FINSEQ_1:108;
           hence thesis by A4,FINSEQ_1:47;
         end;
-        suppose len r >= len r';
-          then consider t1 such that
-A12:      r'^t1 = r by A8,FINSEQ_1:64;
+        suppose
+          len r >= len r';
+          then
+A12:      ex t1 st r'^t1 = r by A8,FINSEQ_1:64;
           len r < n by A3,A6,Th15;
           then r = r' by A2,A12;
           then
 A13:      s'^t = s by A8,FINSEQ_1:46;
           len s < n by A3,A6,Th15;
           then s' = s by A2,A13;
-          then t = {} by A13,TREES_1:5;
+          then t = {} by A13,FINSEQ_1:108;
           hence thesis by A4,FINSEQ_1:47;
         end;
       end;
       hence thesis;
     end;
-    suppose p is conditional;
+    suppose
+      p is conditional;
       then consider r,s such that
 A14:  p = r => s by Def7;
       q.1 = (<*1*>^(r^s)).1 by A5,A14,FINSEQ_1:45
@@ -636,54 +668,54 @@ A15:  q = r' => s' by Def7;
       then r'^s'^t = r^s by Th2;
       then
 A16:  r'^(s'^t) = r^s by FINSEQ_1:45;
-      now per cases;
-        suppose len r <= len r';
-          then consider t1 such that
-A17:      r^t1 = r' by A16,FINSEQ_1:64;
-A18:      len r' < len q by A15,Th16;
+      now
+        per cases;
+        suppose
+A17:      len r <= len r';
           n = len q + len t by A3,A4,FINSEQ_1:35;
           then len q <= n by NAT_1:11;
-          then len r' < n by A18,XXREAL_0:2;
-          then r = r' by A2,A17;
+          then
+A18:      len r' < n by A15,Th16,XXREAL_0:2;
+          ex t1 st r^t1 = r' by A16,A17,FINSEQ_1:64;
+          then r = r' by A2,A18;
           then
 A19:      s'^t = s by A16,FINSEQ_1:46;
           len s < n by A3,A14,Th16;
           then s' = s by A2,A19;
-          then t = {} by A19,TREES_1:5;
+          then t = {} by A19,FINSEQ_1:108;
           hence thesis by A4,FINSEQ_1:47;
         end;
-        suppose len r >= len r';
-          then consider t1 such that
-A20:      r'^t1 = r by A16,FINSEQ_1:64;
+        suppose
+          len r >= len r';
+          then
+A20:      ex t1 st r'^t1 = r by A16,FINSEQ_1:64;
           len r < n by A3,A14,Th16;
           then r = r' by A2,A20;
           then
 A21:      s'^t = s by A16,FINSEQ_1:46;
           len s < n by A3,A14,Th16;
           then s' = s by A2,A21;
-          then t = {} by A21,TREES_1:5;
+          then t = {} by A21,FINSEQ_1:108;
           hence thesis by A4,FINSEQ_1:47;
         end;
       end;
       hence thesis;
     end;
-    suppose p is simple;
-      then consider n such that
-A22:  p = prop n by Def8;
-      len q >= 1 & len{} = 0 by Th10,CARD_1:47;
-      then q <> {};
-      hence thesis by A4,A22,TREES_1:6;
+    suppose
+A22:  p is simple;
+A23:  q <> {} by Th10,CARD_1:47;
+      ex n st p = prop n by A22,Def8;
+      hence thesis by A4,A23,FINSEQ_1:109;
     end;
     suppose
-A23:  p = VERUM;
-      len q >= 1 & len{} = 0 by Th10,CARD_1:47;
-      then q <> {};
-      hence thesis by A4,A23,TREES_1:6;
+A24:  p = VERUM;
+      q <> {} by Th10,CARD_1:47;
+      hence thesis by A4,A24,FINSEQ_1:109;
     end;
   end;
-A24: for n being Nat holds P[n] from NAT_1:sch 4(A1);
+A25: for n being Nat holds P[n] from NAT_1:sch 4(A1);
   len p = len p;
-  hence thesis by A24;
+  hence thesis by A25;
 end;
 
 theorem Th18:
@@ -692,12 +724,14 @@ proof
   assume
 A1: p^q = r^s;
   per cases;
-  suppose len p <= len r;
+  suppose
+    len p <= len r;
     then ex t st p^t = r by A1,FINSEQ_1:64;
     hence p = r by Th17;
     hence thesis by A1,FINSEQ_1:46;
   end;
-  suppose len p >= len r;
+  suppose
+    len p >= len r;
     then ex t st r^t = p by A1,FINSEQ_1:64;
     hence p = r by Th17;
     hence thesis by A1,FINSEQ_1:46;
@@ -707,7 +741,8 @@ end;
 theorem Th19:
   p '&' q = r '&' s implies p = r & s = q
 proof
-  assume p '&' q = r '&' s;
+  assume
+  p '&' q = r '&' s;
   then <*2*>^(p^q) = r '&' s by FINSEQ_1:45
     .= <*2*>^(r^s) by FINSEQ_1:45;
   then p^q = r^s by Th2;
@@ -717,7 +752,8 @@ end;
 theorem Th20:
   p => q = r => s implies p = r & s = q
 proof
-  assume p => q = r => s;
+  assume
+  p => q = r => s;
   then <*1*>^(p^q) = r => s by FINSEQ_1:45
     .= <*1*>^(r^s) by FINSEQ_1:45;
   then p^q = r^s by Th2;
@@ -727,855 +763,882 @@ end;
 theorem Th21:
   prop n = prop m implies n = m
 proof
-  assume prop n = prop m;
-  then 3+n = 3+m by GROUP_7:1;
+  assume
+  prop n = prop m;
+  then 3+n = 3+m by FINSEQ_1:97;
   hence thesis;
 end;
 
 theorem Th22:
   p '&' q <> r => s
 proof
-A1: p '&' q = <*2*>^(p^q) by FINSEQ_1:45;
-  r => s = <*1*>^(r^s) by FINSEQ_1:45;
-  then (p '&' q).1 = 2 & (r => s).1 = 1 by A1,FINSEQ_1:58;
-  hence thesis;
+  p '&' q = <*2*>^(p^q) by FINSEQ_1:45;
+  then r => s = <*1*>^(r^s) & (p '&' q).1 = 2 by FINSEQ_1:45,58;
+  hence thesis by FINSEQ_1:58;
 end;
 
 theorem Th23:
   p '&' q <> VERUM
 proof
   p '&' q = <*2*>^(p^q) by FINSEQ_1:45;
-  then (p '&' q).1 = 2 & VERUM.1 = 0 by FINSEQ_1:57,58;
-  hence thesis;
+  then (p '&' q).1 = 2 by FINSEQ_1:58;
+  hence thesis by FINSEQ_1:57;
 end;
 
 theorem Th24:
   p '&' q <> prop n
 proof
-  p '&' q = <*2*>^(p^q) by FINSEQ_1:45;
-  then
-A1: (p '&' q).1 = 2 & (prop n).1 = 3+n by FINSEQ_1:57,58;
-  now
-    assume 2 = 2+1+n;
+A1: now
+    assume
+    2 = 2+1+n;
     then 2+0 = 2+(1+n);
     hence contradiction;
   end;
-  hence thesis by A1;
+  p '&' q = <*2*>^(p^q) by FINSEQ_1:45;
+  then (p '&' q).1 = 2 by FINSEQ_1:58;
+  hence thesis by A1,FINSEQ_1:57;
 end;
 
 theorem Th25:
   p => q <> VERUM
 proof
   p => q = <*1*>^(p^q) by FINSEQ_1:45;
-  then (p => q).1 = 1 & VERUM.1 = 0 by FINSEQ_1:57,58;
-  hence thesis;
+  then (p => q).1 = 1 by FINSEQ_1:58;
+  hence thesis by FINSEQ_1:57;
 end;
 
 theorem Th26:
   p => q <> prop n
 proof
-  p => q = <*1*>^(p^q) by FINSEQ_1:45;
-  then
-A1: (p => q).1 = 1 & (prop n).1 = 3+n by FINSEQ_1:57,58;
-  now
-    assume 1 = 1+2+n;
+A1: now
+    assume
+    1 = 1+2+n;
     then 1+0 = 1+(2+n);
     hence contradiction;
   end;
-  hence thesis by A1;
+  p => q = <*1*>^(p^q) by FINSEQ_1:45;
+  then (p => q).1 = 1 by FINSEQ_1:58;
+  hence thesis by A1,FINSEQ_1:57;
 end;
 
 theorem Th27:
   p '&' q <> p & p '&' q <> q
 proof
-  len p < len(p '&' q) & len q < len(p '&' q) by Th15;
-  hence thesis;
+  len p < len(p '&' q) by Th15;
+  hence thesis by Th15;
 end;
 
 theorem Th28:
   p => q <> p & p => q <> q
 proof
-  len p < len(p => q) & len q < len(p => q) by Th16;
-  hence thesis;
+  len p < len(p => q) by Th16;
+  hence thesis by Th16;
 end;
 
 theorem Th29:
   VERUM <> prop n
 proof
-A1: VERUM.1 = 0 & (prop n).1 = 3+n by FINSEQ_1:57;
-  assume not thesis;
-  hence contradiction by A1;
+  assume
+A1: not thesis;
+  VERUM.1 = 0 by FINSEQ_1:57;
+  hence contradiction by A1,FINSEQ_1:57;
 end;
 
 begin :: Defining by structural induction
 
-scheme HPMSSExL{V()->set,P(Element of NAT)->set,
-  C,I[Element of HP-WFF,Element of HP-WFF,set,set,set]}:
-  ex M being ManySortedSet of HP-WFF st M.VERUM = V() &
-  (for n holds M.prop n = P(n)) &
-  for p,q holds C[p,q,M.p,M.q,M.(p '&' q)] & I[p,q,M.p,M.q,M.(p => q)]
+scheme
+  HPMSSExL{V()->set,P(Element of NAT)->set, C,I[Element of HP-WFF,Element of
+  HP-WFF,set,set,set]}: ex M being ManySortedSet of HP-WFF st M.VERUM = V() & (
+for n holds M.prop n = P(n)) & for p,q holds C[p,q,M.p,M.q,M.(p '&' q)] & I[p,q
+  ,M.p,M.q,M.(p => q)]
 provided
-A1: for p,q for a,b being set ex c being set st C[p,q,a,b,c]
-and
-A2: for p,q for a,b being set ex d being set st I[p,q,a,b,d]
-and
-A3: for p,q for a,b,c,d being set st C[p,q,a,b,c] & C[p,q,a,b,d] holds c = d
-and
-A4: for p,q for a,b,c,d being set st I[p,q,a,b,c] & I[p,q,a,b,d] holds c = d
+A1: for p,q for a,b being set ex c being set st C[p,q,a,b,c] and
+A2: for p,q for a,b being set ex d being set st I[p,q,a,b,d] and
+A3: for p,q for a,b,c,d being set st C[p,q,a,b,c] & C[p,q,a,b,d] holds c
+= d and
+A4: for p,q for a,b,c,d being set st I[p,q,a,b,c] & I[p,q,a,b,d] holds c
+= d
 proof
-  set X = { Y where Y is Subset of HP-WFF:
-  VERUM in Y & (for n holds prop n in Y) &
-  (for p,q st p '&' q in Y or p => q in Y holds p in Y & q in Y) &
-  ex M being ManySortedSet of Y st M.VERUM = V() &
-  (for n holds M.prop n = P(n)) & (for p,q st p '&' q in Y
-  for a,b,c being set st a = M.p & b = M.q & c = M.(p '&' q)
-  holds C[p,q,a,b,c] ) & for p,q st p => q in Y
-  for a,b,c being set st a = M.p & b = M.q & c = M.(p => q)
-  holds I[p,q,a,b,c] };
+  defpred P[set,set] means ($1 = VERUM implies $2 = V()) & for n st $1 = prop
+  n holds $2 = P(n);
   set Pn = { prop n: not contradiction};
+  set X = { Y where Y is Subset of HP-WFF: VERUM in Y & (for n holds prop n in
+  Y) & (for p,q st p '&' q in Y or p => q in Y holds p in Y & q in Y) & ex M
+  being ManySortedSet of Y st M.VERUM = V() & (for n holds M.prop n = P(n)) & (
+for p,q st p '&' q in Y for a,b,c being set st a = M.p & b = M.q & c = M.(p '&'
+q) holds C[p,q,a,b,c] ) & for p,q st p => q in Y for a,b,c being set st a = M.p
+  & b = M.q & c = M.(p => q) holds I[p,q,a,b,c] };
 A5: Pn c= HP-WFF
   proof
     let x be set;
-    assume x in Pn;
+    assume
+    x in Pn;
     then ex n st x = prop n;
     hence thesis;
   end;
   {VERUM} c= HP-WFF by ZFMISC_1:37;
   then reconsider Y0 = Pn \/ {VERUM} as Subset of HP-WFF by A5,XBOOLE_1:8;
-  defpred P[set,set] means ($1 = VERUM implies $2 = V()) &
-  for n st $1 = prop n holds $2 = P(n);
 A6: for x being set st x in Y0 ex y being set st P[x,y]
   proof
     let x be set;
     assume
 A7: x in Y0;
     per cases by A7,XBOOLE_0:def 3;
-    suppose x in Pn;
+    suppose
+      x in Pn;
       then consider n such that
 A8:   x = prop n;
       take P(n);
       thus x = VERUM implies P(n) = V() by A8,Th29;
       let k;
-      assume x = prop k;
+      assume
+      x = prop k;
       hence thesis by A8,Th21;
     end;
-    suppose x in { VERUM };
-      then
-A9:   x = VERUM by TARSKI:def 1;
+    suppose
+A9:   x in { VERUM };
       take V();
-      thus thesis by A9,Th29;
+      x = VERUM by A9,TARSKI:def 1;
+      hence thesis by Th29;
     end;
   end;
   consider M0 being ManySortedSet of Y0 such that
 A10: for x being set st x in Y0 holds P[x,M0.x] from PBOOLE:sch 3(A6);
-  VERUM in {VERUM} by TARSKI:def 1;
-  then
-A11: VERUM in Y0 by XBOOLE_0:def 3;
-  then
-A12: M0.VERUM = V() by A10;
-A13: for n holds prop n in Y0
-  proof
-    let k;
-    prop k in Pn;
-    hence thesis by XBOOLE_0:def 3;
-  end;
-A14: for n holds M0.prop n = P(n)
-  proof
-    let n;
-    prop n in Y0 by A13;
-    hence thesis by A10;
-  end;
-A15: for p,q holds not p '&' q in Y0 & not p => q in Y0
+A11: for p,q holds not p '&' q in Y0 & not p => q in Y0
   proof
     let p,q;
     assume
-A16: not thesis;
-    per cases by A16,XBOOLE_0:def 3;
-    suppose p '&' q in {VERUM} or p => q in {VERUM};
+A12: not thesis;
+    per cases by A12,XBOOLE_0:def 3;
+    suppose
+      p '&' q in {VERUM} or p => q in {VERUM};
       then p '&' q = VERUM or p => q = VERUM by TARSKI:def 1;
       hence contradiction by Th23,Th25;
     end;
-    suppose p '&' q in Pn;
+    suppose
+      p '&' q in Pn;
       then ex n st p '&' q = prop n;
       hence contradiction by Th24;
     end;
-    suppose p => q in Pn;
+    suppose
+      p => q in Pn;
       then ex n st p => q = prop n;
       hence contradiction by Th26;
     end;
   end;
   then
-A17: for p,q st p '&' q in Y0 or p => q in Y0 holds p in Y0 & q in Y0;
-  (for p,q st p '&' q in Y0
-  for x,y,z being set st x = M0.p & y = M0.q & z = M0.(p '&' q)
-  holds C[p,q,x,y,z]) & for p,q st p => q in Y0
-  for x,y,z being set st x = M0.p & y = M0.q & z = M0.(p => q)
-  holds I[p,q,x,y,z] by A15;
-  then
-A18: Y0 in X by A11,A12,A13,A14,A17;
-  for Z being set st Z <> {} & Z c= X & Z is c=-linear holds union Z in X
+A13: ( for p,q st p '&' q in Y0 or p => q in Y0 holds p in Y0 & q in Y0)&
+for p,q st p '&' q in Y0 for x,y,z being set st x = M0.p & y = M0.q & z = M0.(p
+  '&' q) holds C[p,q,x,y,z];
+A14: for n holds prop n in Y0
   proof
+    let k;
+    prop k in Pn;
+    hence thesis by XBOOLE_0:def 3;
+  end;
+A15: for n holds M0.prop n = P(n)
+  proof
+    let n;
+    prop n in Y0 by A14;
+    hence thesis by A10;
+  end;
+  VERUM in {VERUM} by TARSKI:def 1;
+  then
+A16: VERUM in Y0 by XBOOLE_0:def 3;
+A17: for Z being set st Z <> {} & Z c= X & Z is c=-linear holds union Z in X
+  proof
+    defpred P[set,set] means ex M being ManySortedSet of $1 st M = $2 & M.
+VERUM = V() & (for n holds M.prop n = P(n)) & (for p,q st p '&' q in $1 for x,y
+,z being set st x = M.p & y = M.q & z = M.(p '&' q) holds C[p,q,x,y,z]) & for p
+,q st p => q in $1 for x,y,z being set st x = M.p & y = M.q & z = M.(p => q)
+    holds I[p,q,x,y,z];
     let Z be set such that
-A19: Z <> {} and
-A20: Z c= X and
-A21: Z is c=-linear;
-A22: X c= bool HP-WFF
+A18: Z <> {} and
+A19: Z c= X and
+A20: Z is c=-linear;
+A21: X c= bool HP-WFF
     proof
       let x be set;
-      assume x in X;
-      then ex Y being Subset of HP-WFF st x = Y &
-      VERUM in Y & (for n holds prop n in Y) &
-      (for p,q st p '&' q in Y or p => q in Y holds p in Y & q in Y) &
-      ex M being ManySortedSet of Y st M.VERUM = V() &
-      (for n holds M.prop n = P(n)) & (for p,q st p '&' q in Y
-      for x,y,z being set st x = M.p & y = M.q & z = M.(p '&' q)
-      holds C[p,q,x,y,z]) & for p,q st p => q in Y
-      for x,y,z being set st x = M.p & y = M.q & z = M.(p => q)
-      holds I[p,q,x,y,z];
+      assume
+      x in X;
+      then ex Y being Subset of HP-WFF st x = Y & VERUM in Y & (for n holds
+prop n in Y) & (for p,q st p '&' q in Y or p => q in Y holds p in Y & q in Y) &
+ex M being ManySortedSet of Y st M.VERUM = V() & (for n holds M.prop n = P(n))
+& (for p,q st p '&' q in Y for x,y,z being set st x = M.p & y = M.q & z = M.(p
+'&' q) holds C[p,q,x,y,z]) & for p,q st p => q in Y for x,y,z being set st x =
+      M.p & y = M.q & z = M.(p => q) holds I[p,q,x,y,z];
       hence thesis;
     end;
-    then reconsider uZ = union Z as Subset of HP-WFF by A20,BORSUK_1:25;
+    then reconsider uZ = union Z as Subset of HP-WFF by A19,BORSUK_1:25;
     consider Z0 being set such that
-A23: Z0 in Z by A19,XBOOLE_0:def 1;
-A24: Z0 c= uZ by A23,ZFMISC_1:92;
-A25: Y0 c= Z0
+A22: Z0 in Z by A18,XBOOLE_0:def 1;
+A23: for x being set st x in Z ex y being set st P[x,y]
     proof
       let x be set;
-      Z0 in X by A20,A23;
-      then consider Y being Subset of HP-WFF such that
-A26:  Y = Z0 and
-A27:  VERUM in Y and
-A28:  for n holds prop n in Y and
-      (for p,q st p '&' q in Y or p => q in Y holds p in Y & q in Y) &
-      ex M being ManySortedSet of Y st M.VERUM = V() &
-      (for n holds M.prop n = P(n)) & (for p,q st p '&' q in Y
-      for x,y,z being set st x = M.p & y = M.q & z = M.(p '&' q)
-      holds C[p,q,x,y,z]) & for p,q st p => q in Y
-      for x,y,z being set st x = M.p & y = M.q & z = M.(p => q)
-      holds I[p,q,x,y,z];
       assume
-A29:  x in Y0;
-      per cases by A29,XBOOLE_0:def 3;
-      suppose x in {VERUM};
-        hence thesis by A26,A27,TARSKI:def 1;
-      end;
-      suppose x in Pn;
-        then ex n st x = prop n;
-        hence thesis by A26,A28;
-      end;
-    end;
-    then
-A30: Y0 c= uZ by A24,XBOOLE_1:1;
-A31: for n holds prop n in uZ
-    proof
-      let n;
-      prop n in Y0 by A13;
-      hence thesis by A30;
-    end;
-A32: for p,q st p '&' q in uZ or p => q in uZ holds p in uZ & q in uZ
-    proof
-      let p,q;
-      assume
-A33:  p '&' q in uZ or p => q in uZ;
-      per cases by A33;
-      suppose p '&' q in uZ;
-        then consider Z0 being set such that
-A34:    p '&' q in Z0 and
-A35:    Z0 in Z by TARSKI:def 4;
-        Z0 in X by A20,A35;
-        then ex Y being Subset of HP-WFF st
-        Z0 = Y & VERUM in Y & (for n holds prop n in Y) &
-        (for p,q st p '&' q in Y or p => q in Y holds p in Y & q in Y) &
-        ex M being ManySortedSet of Y st M.VERUM = V() &
-        (for n holds M.prop n = P(n)) & (for p,q st p '&' q in Y
-        for x,y,z being set st x = M.p & y = M.q & z = M.(p '&' q)
-        holds C[p,q,x,y,z]) & for p,q st p => q in Y
-        for x,y,z being set st x = M.p & y = M.q & z = M.(p => q)
-        holds I[p,q,x,y,z];
-        then p in Z0 & q in Z0 by A34;
-        hence thesis by A35,TARSKI:def 4;
-      end;
-      suppose p => q in uZ;
-        then consider Z0 being set such that
-A36:    p => q in Z0 and
-A37:    Z0 in Z by TARSKI:def 4;
-        Z0 in X by A20,A37;
-        then ex Y being Subset of HP-WFF st
-        Z0 = Y & VERUM in Y & (for n holds prop n in Y) &
-        (for p,q st p '&' q in Y or p => q in Y holds p in Y & q in Y) &
-        ex M being ManySortedSet of Y st M.VERUM = V() &
-        (for n holds M.prop n = P(n)) & (for p,q st p '&' q in Y
-        for x,y,z being set st x = M.p & y = M.q & z = M.(p '&' q)
-        holds C[p,q,x,y,z]) & for p,q st p => q in Y
-        for x,y,z being set st x = M.p & y = M.q & z = M.(p => q)
-        holds I[p,q,x,y,z];
-        then p in Z0 & q in Z0 by A36;
-        hence thesis by A37,TARSKI:def 4;
-      end;
-    end;
-    defpred P[set,set] means ex M being ManySortedSet of $1 st M = $2 &
-    M.VERUM = V() & (for n holds M.prop n = P(n)) & (for p,q st p '&' q in $1
-    for x,y,z being set st x = M.p & y = M.q & z = M.(p '&' q)
-    holds C[p,q,x,y,z]) & for p,q st p => q in $1
-    for x,y,z being set st x = M.p & y = M.q & z = M.(p => q)
-    holds I[p,q,x,y,z];
-A38: for x being set st x in Z ex y being set st P[x,y]
-    proof
-      let x be set;
-      assume x in Z;
-      then x in X by A20;
+      x in Z;
+      then x in X by A19;
       then consider Y being Subset of HP-WFF such that
-A39:  Y = x and VERUM in Y & (for n holds prop n in Y) &
-      (for p,q st p '&' q in Y or p => q in Y holds p in Y & q in Y) and
-A40:  ex M being ManySortedSet of Y st M.VERUM = V() &
-      (for n holds M.prop n = P(n)) & (for p,q st p '&' q in Y
-      for x,y,z being set st x = M.p & y = M.q & z = M.(p '&' q)
-      holds C[p,q,x,y,z]) & for p,q st p => q in Y
-      for x,y,z being set st x = M.p & y = M.q & z = M.(p => q)
-      holds I[p,q,x,y,z];
+A24:  Y = x and
+      VERUM in Y and
+      for n holds prop n in Y and
+      for p,q st p '&' q in Y or p => q in Y holds p in Y & q in Y and
+A25:  ex M being ManySortedSet of Y st M.VERUM = V() & (for n holds M
+.prop n = P(n)) & (for p,q st p '&' q in Y for x,y,z being set st x = M.p & y =
+M.q & z = M.(p '&' q) holds C[p,q,x,y,z]) & for p,q st p => q in Y for x,y,z
+      being set st x = M.p & y = M.q & z = M.(p => q) holds I[p,q,x,y,z];
       consider M being ManySortedSet of Y such that
-A41:  M.VERUM = V() & (for n holds M.prop n = P(n)) & (for p,q st p '&' q in Y
-      for x,y,z being set st x = M.p & y = M.q & z = M.(p '&' q)
-      holds C[p,q,x,y,z]) & for p,q st p => q in Y
-      for x,y,z being set st x = M.p & y = M.q & z = M.(p => q)
-      holds I[p,q,x,y,z] by A40;
+A26:  ( M.VERUM = V() & for n holds M.prop n = P(n) )&( ( for p,q st
+p '&' q in Y for x,y,z being set st x = M.p & y = M.q & z = M.(p '&' q) holds C
+[p,q,x,y,z])& for p,q st p => q in Y for x,y,z being set st x = M.p & y = M.q &
+      z = M.(p => q ) holds I[p,q,x,y,z] ) by A25;
       take M;
-      thus thesis by A39,A41;
+      thus thesis by A24,A26;
     end;
     consider MM being ManySortedSet of Z such that
-A42: for x being set st x in Z holds P[x,MM.x] from PBOOLE:sch 3(A38);
+A27: for x being set st x in Z holds P[x,MM.x] from PBOOLE:sch 3(A23);
     rng MM is functional
     proof
       let y be set;
-      assume y in rng MM;
+      assume
+      y in rng MM;
       then consider x being set such that
-A43:  x in dom MM and
-A44:  y = MM.x by FUNCT_1:def 5;
-      x in Z by A43,PARTFUN1:def 4;
-      then P[x,y] by A42,A44;
+A28:  x in dom MM and
+A29:  y = MM.x by FUNCT_1:def 5;
+      x in Z by A28,PARTFUN1:def 4;
+      then P[x,y] by A27,A29;
       hence thesis;
     end;
     then reconsider rr = rng MM as functional set;
-A45: for f, g being Function st f in rr & g in rr & dom f c= dom g holds
-    f tolerates g
+A30: for f, g being Function st f in rr & g in rr & dom f c= dom g holds f
+    tolerates g
     proof
       let f, g be Function;
-      assume f in rr;
+      assume
+      f in rr;
       then consider x1 being set such that
-A46:  x1 in dom MM and
-A47:  f = MM.x1 by FUNCT_1:def 5;
-A48:  x1 in Z by A46,PARTFUN1:def 4;
+A31:  x1 in dom MM and
+A32:  f = MM.x1 by FUNCT_1:def 5;
+A33:  x1 in Z by A31,PARTFUN1:def 4;
       then
-A49:  ex M being ManySortedSet of x1 st M = f & M.VERUM = V() &
-      (for n holds M.prop n = P(n)) & (for p,q st p '&' q in x1
-      for x,y,z being set st x = M.p & y = M.q & z = M.(p '&' q)
-      holds C[p,q,x,y,z]) & for p,q st p => q in x1
-      for x,y,z being set st x = M.p & y = M.q & z = M.(p => q)
-      holds I[p,q,x,y,z] by A42,A47;
-      assume g in rr;
+A34:  ex M being ManySortedSet of x1 st M = f & M.VERUM = V() & (for n
+holds M.prop n = P(n)) & (for p,q st p '&' q in x1 for x,y,z being set st x = M
+.p & y = M.q & z = M.(p '&' q) holds C[p,q,x,y,z]) & for p,q st p => q in x1
+for x,y,z being set st x = M.p & y = M.q & z = M.(p => q) holds I[p,q,x,y,z]
+by A27,A32;
+      then
+A35:  x1 = dom f by PARTFUN1:def 4;
+      assume
+      g in rr;
       then consider x2 being set such that
-A50:  x2 in dom MM and
-A51:  g = MM.x2 by FUNCT_1:def 5;
-      x2 in Z by A50,PARTFUN1:def 4;
-      then
-A52:  ex M being ManySortedSet of x2 st M = g & M.VERUM = V() &
-      (for n holds M.prop n = P(n)) & (for p,q st p '&' q in x2
-      for x,y,z being set st x = M.p & y = M.q & z = M.(p '&' q)
-      holds C[p,q,x,y,z]) & for p,q st p => q in x2
-      for x,y,z being set st x = M.p & y = M.q & z = M.(p => q)
-      holds I[p,q,x,y,z] by A42,A51;
-      assume
-A53:  dom f c= dom g;
-      let x be set;
-      assume
-A54:  x in dom f /\ dom g;
-A55:  x1 = dom f by A49,PARTFUN1:def 4;
-      then
-A56:  x in x1 by A53,A54,XBOOLE_1:28;
-A57:  x1 in X by A20,A48;
+A36:  x2 in dom MM and
+A37:  g = MM.x2 by FUNCT_1:def 5;
       defpred P[Element of HP-WFF] means $1 in x1 implies f.$1 = g.$1;
-A58:  P[VERUM] by A49,A52;
-A59:  for n holds P[prop n]
+      assume
+A38:  dom f c= dom g;
+      x2 in Z by A36,PARTFUN1:def 4;
+      then
+A39:  ex M being ManySortedSet of x2 st M = g & M.VERUM = V() & (for n
+holds M.prop n = P(n)) & (for p,q st p '&' q in x2 for x,y,z being set st x = M
+.p & y = M.q & z = M.(p '&' q) holds C[p,q,x,y,z]) & for p,q st p => q in x2
+for x,y,z being set st x = M.p & y = M.q & z = M.(p => q) holds I[p,q,x,y,z]
+by A27,A37;
+A40:  for n holds P[prop n]
       proof
-        let n such that prop n in x1;
-        thus f.prop n = P(n) by A49
-          .= g.prop n by A52;
+        let n such that
+        prop n in x1;
+        thus f.prop n = P(n) by A34
+          .= g.prop n by A39;
       end;
-A60:  for r,s st P[r] & P[s] holds P[r '&' s] & P[r => s]
+A41:  x1 in X by A19,A33;
+A42:  for r,s st P[r] & P[s] holds P[r '&' s] & P[r => s]
       proof
+A43:    (ex Y being Subset of HP-WFF st Y = x1 & VERUM in Y &( for n
+holds prop n in Y) &( for p,q st p '&' q in Y or p => q in Y holds p in Y & q
+in Y)& ex M being ManySortedSet of Y st M.VERUM = V() & (for n holds M. prop n
+= P(n)) & (for p,q st p '&' q in Y for x,y,z being set st x = M.p & y = M.q & z
+= M.(p '&' q) holds C[p,q,x,y,z]) & for p,q st p => q in Y for x,y,z being set
+st x = M.p & y = M.q & z = M.(p => q) holds I[p,q,x,y,z])& x1 c= x2 by A39,A38
+,A35,A41,PARTFUN1:def 4;
         let r,s such that
-A61:    r in x1 implies f.r = g.r and
-A62:    s in x1 implies f.s = g.s;
-        consider Y being Subset of HP-WFF such that
-A63:    Y = x1 and VERUM in Y & (for n holds prop n in Y) and
-A64:    for p,q st p '&' q in Y or p => q in Y holds p in Y & q in Y and
-        ex M being ManySortedSet of Y st M.VERUM = V() &
-        (for n holds M.prop n = P(n)) & (for p,q st p '&' q in Y
-        for x,y,z being set st x = M.p & y = M.q & z = M.(p '&' q)
-        holds C[p,q,x,y,z]) & for p,q st p => q in Y
-        for x,y,z being set st x = M.p & y = M.q & z = M.(p => q)
-        holds I[p,q,x,y,z] by A57;
-A65:    x1 c= x2 by A52,A53,A55,PARTFUN1:def 4;
+A44:    ( r in x1 implies f.r = g.r)&( s in x1 implies f.s = g.s);
         thus r '&' s in x1 implies f.(r '&' s) = g.(r '&' s)
         proof
-          assume r '&' s in x1;
-          then C[r,s,g.r,g.s,f.(r '&' s)] & C[r,s,g.r,g.s,g.(r '&' s)]
-          by A49,A52,A61,A62,A63,A64,A65;
+          assume
+          r '&' s in x1;
+          then ( C[r,s,g.r,g.s,f.(r '&' s)])& C[r,s,g.r,g.s,g.(r '&' s)] by A34
+,A39,A44,A43;
           hence thesis by A3;
         end;
         thus r => s in x1 implies f.(r => s) = g.(r => s)
         proof
-          assume r => s in x1;
-          then I[r,s,g.r,g.s,f.(r => s)] & I[r,s,g.r,g.s,g.(r => s)]
-          by A49,A52,A61,A62,A63,A64,A65;
+          assume
+          r => s in x1;
+          then ( I[r,s,g.r,g.s,f.(r => s)])& I[r,s,g.r,g.s,g.(r => s)] by A34
+,A39,A44,A43;
           hence thesis by A4;
         end;
       end;
-      for p holds P[p] from HPInd(A58,A59,A60);
-      hence thesis by A22,A56,A57;
+      let x be set;
+      assume
+      x in dom f /\ dom g;
+      then
+A45:  x in x1 by A38,A35,XBOOLE_1:28;
+A46:  P[VERUM] by A34,A39;
+      for p holds P[p] from HPInd(A46,A40,A42);
+      hence thesis by A21,A45,A41;
     end;
     for f, g being Function st f in rr & g in rr holds f tolerates g
     proof
       let f, g be Function;
       assume
-A66:  f in rr;
+A47:  f in rr;
       then consider x1 being set such that
-A67:  x1 in dom MM and
-A68:  f = MM.x1 by FUNCT_1:def 5;
-A69:  x1 in Z by A67,PARTFUN1:def 4;
+A48:  x1 in dom MM and
+A49:  f = MM.x1 by FUNCT_1:def 5;
+A50:  x1 in Z by A48,PARTFUN1:def 4;
+      then ex M being ManySortedSet of x1 st M = f & M.VERUM = V() & (for n
+holds M.prop n = P(n)) & (for p,q st p '&' q in x1 for x,y,z being set st x = M
+.p & y = M.q & z = M.(p '&' q) holds C[p,q,x,y,z]) & for p,q st p => q in x1
+for x,y,z being set st x = M.p & y = M.q & z = M.(p => q) holds I[p,q,x,y,z]
+by A27,A49;
       then
-A70:  ex M being ManySortedSet of x1 st M = f & M.VERUM = V() &
-      (for n holds M.prop n = P(n)) & (for p,q st p '&' q in x1
-      for x,y,z being set st x = M.p & y = M.q & z = M.(p '&' q)
-      holds C[p,q,x,y,z]) & for p,q st p => q in x1
-      for x,y,z being set st x = M.p & y = M.q & z = M.(p => q)
-      holds I[p,q,x,y,z] by A42,A68;
+A51:  x1 = dom f by PARTFUN1:def 4;
       assume
-A71:  g in rr;
+A52:  g in rr;
       then consider x2 being set such that
-A72:  x2 in dom MM and
-A73:  g = MM.x2 by FUNCT_1:def 5;
-A74:  x2 in Z by A72,PARTFUN1:def 4;
-      then ex M being ManySortedSet of x2 st M = g & M.VERUM = V() &
-      (for n holds M.prop n = P(n)) & (for p,q st p '&' q in x2
-      for x,y,z being set st x = M.p & y = M.q & z = M.(p '&' q)
-      holds C[p,q,x,y,z]) & for p,q st p => q in x2
-      for x,y,z being set st x = M.p & y = M.q & z = M.(p => q)
-      holds I[p,q,x,y,z] by A42,A73;
+A53:  x2 in dom MM and
+A54:  g = MM.x2 by FUNCT_1:def 5;
+A55:  x2 in Z by A53,PARTFUN1:def 4;
+      then x1,x2 are_c=-comparable by A20,A50,ORDINAL1:def 9;
       then
-A75:  x1 = dom f & x2 = dom g by A70,PARTFUN1:def 4;
-      x1,x2 are_c=-comparable by A21,A69,A74,ORDINAL1:def 9;
-      then x1 c= x2 or x2 c= x1 by XBOOLE_0:def 9;
-      hence thesis by A45,A66,A71,A75;
+A56:  x1 c= x2 or x2 c= x1 by XBOOLE_0:def 9;
+      ex M being ManySortedSet of x2 st M = g & M.VERUM = V() & (for n
+holds M.prop n = P(n)) & (for p,q st p '&' q in x2 for x,y,z being set st x = M
+.p & y = M.q & z = M.(p '&' q) holds C[p,q,x,y,z]) & for p,q st p => q in x2
+for x,y,z being set st x = M.p & y = M.q & z = M.(p => q) holds I[p,q,x,y,z]
+by A27,A54,A55;
+      then x2 = dom g by PARTFUN1:def 4;
+      hence thesis by A30,A47,A52,A51,A56;
     end;
     then union rr is Function by WELLFND1:2;
     then reconsider M = Union MM as Function by CARD_3:def 4;
     for x being set st x in Z holds MM.x is ManySortedSet of x
     proof
       let x be set;
-      assume x in Z;
-      then P[x,MM.x] by A42;
+      assume
+      x in Z;
+      then P[x,MM.x] by A27;
       hence thesis;
     end;
     then dom M = uZ by Th1;
     then reconsider M as ManySortedSet of uZ by PARTFUN1:def 4,RELAT_1:def 18;
-A76: M = union rr by CARD_3:def 4;
-    Z0 in dom MM by A23,PARTFUN1:def 4;
+A57: M = union rr by CARD_3:def 4;
+A58: for p,q st p '&' q in uZ for x,y,z being set st x = M.p & y = M.q &
+    z = M.(p '&' q) holds C[p,q,x,y,z]
+    proof
+      let p,q;
+      assume
+      p '&' q in uZ;
+      then consider Z1 being set such that
+A59:  p '&' q in Z1 and
+A60:  Z1 in Z by TARSKI:def 4;
+      Z1 in dom MM by A60,PARTFUN1:def 4;
+      then MM.Z1 in rr by FUNCT_1:def 5;
+      then
+A61:  MM.Z1 c= M by A57,ZFMISC_1:92;
+      let x,y,z be set;
+      assume that
+A62:  x = M.p and
+A63:  y = M.q and
+A64:  z = M.(p '&' q);
+      consider MZ1 being ManySortedSet of Z1 such that
+A65:  MZ1 = MM.Z1 and
+      MZ1.VERUM = V() and
+      for n holds MZ1.prop n = P(n) and
+A66:  for p,q st p '&' q in Z1 for x,y,z being set st x = MZ1.p & y
+      = MZ1.q & z = MZ1.(p '&' q) holds C[p,q,x,y,z] and
+      for p,q st p => q in Z1 for x,y,z being set st x = MZ1.p & y = MZ1.q
+      & z = MZ1.(p => q) holds I[p,q,x,y,z] by A27,A60;
+      p '&' q in dom MZ1 by A59,PARTFUN1:def 4;
+      then
+A67:  z = MZ1.(p '&' q) by A65,A61,A64,GRFUNC_1:8;
+      Z1 in X by A19,A60;
+      then
+A68:  ex Y being Subset of HP-WFF st Z1 = Y & VERUM in Y & (for n holds
+prop n in Y) & (for p,q st p '&' q in Y or p => q in Y holds p in Y & q in Y) &
+ex M being ManySortedSet of Y st M.VERUM = V() & (for n holds M.prop n = P(n))
+& (for p,q st p '&' q in Y for x,y,z being set st x = M.p & y = M.q & z = M.(p
+'&' q) holds C[p,q,x,y,z]) & for p,q st p => q in Y for x,y,z being set st x =
+      M.p & y = M.q & z = M.(p => q) holds I[p,q,x,y,z];
+      then q in Z1 by A59;
+      then q in dom MZ1 by PARTFUN1:def 4;
+      then
+A69:  y = MZ1.q by A65,A61,A63,GRFUNC_1:8;
+      p in Z1 by A59,A68;
+      then p in dom MZ1 by PARTFUN1:def 4;
+      then x = MZ1.p by A65,A61,A62,GRFUNC_1:8;
+      hence thesis by A59,A66,A69,A67;
+    end;
+    Z0 in dom MM by A22,PARTFUN1:def 4;
     then MM.Z0 in rr by FUNCT_1:def 5;
     then
-A77: MM.Z0 c= M by A76,ZFMISC_1:92;
+A70: MM.Z0 c= M by A57,ZFMISC_1:92;
     consider MZ0 being ManySortedSet of Z0 such that
-A78: MZ0 = MM.Z0 and
-A79: MZ0.VERUM = V() and
-A80: for n holds MZ0.prop n = P(n) and (for p,q st p '&' q in Z0
-    for x,y,z being set st x = MZ0.p & y = MZ0.q & z = MZ0.(p '&' q)
-    holds C[p,q,x,y,z]) & for p,q st p => q in Z0
-    for x,y,z being set st x = MZ0.p & y = MZ0.q & z = MZ0.(p => q)
-    holds I[p,q,x,y,z] by A23,A42;
-A81: Y0 c= dom MZ0 by A25,PARTFUN1:def 4;
+A71: MZ0 = MM.Z0 and
+A72: MZ0.VERUM = V() and
+A73: for n holds MZ0.prop n = P(n) and
+    for p,q st p '&' q in Z0 for x,y,z being set st x = MZ0.p & y = MZ0.q
+    & z = MZ0.(p '&' q) holds C[p,q,x,y,z] and
+    for p,q st p => q in Z0 for x,y,z being set st x = MZ0.p & y = MZ0 .q
+    & z = MZ0.(p => q) holds I[p,q,x,y,z] by A22,A27;
+A74: Y0 c= Z0
+    proof
+      let x be set;
+      Z0 in X by A19,A22;
+      then
+A75:  ex Y being Subset of HP-WFF st Y = Z0 & VERUM in Y &( for n holds
+prop n in Y)&( for p,q st p '&' q in Y or p => q in Y holds p in Y & q in Y)&
+ex M being ManySortedSet of Y st M.VERUM = V() & (for n holds M. prop n = P(n))
+& (for p,q st p '&' q in Y for x,y,z being set st x = M.p & y = M.q & z = M.(p
+'&' q) holds C[p,q,x,y,z]) & for p,q st p => q in Y for x,y,z being set st x =
+      M.p & y = M.q & z = M.(p => q) holds I[p,q,x,y,z];
+      assume
+A76:  x in Y0;
+      per cases by A76,XBOOLE_0:def 3;
+      suppose
+        x in {VERUM};
+        hence thesis by A75,TARSKI:def 1;
+      end;
+      suppose
+        x in Pn;
+        then ex n st x = prop n;
+        hence thesis by A75;
+      end;
+    end;
     then
-A82: M.VERUM = V() by A11,A77,A78,A79,GRFUNC_1:8;
-A83: for n holds M.prop n = P(n)
+A77: Y0 c= dom MZ0 by PARTFUN1:def 4;
+A78: for n holds M.prop n = P(n)
     proof
       let n;
-      prop n in Y0 by A13;
-      hence M.prop n = MZ0.prop n by A77,A78,A81,GRFUNC_1:8
-        .= P(n) by A80;
+      prop n in Y0 by A14;
+      hence M.prop n = MZ0.prop n by A70,A71,A77,GRFUNC_1:8
+        .= P(n) by A73;
     end;
-A84: for p,q st p '&' q in uZ
-    for x,y,z being set st x = M.p & y = M.q & z = M.(p '&' q)
-    holds C[p,q,x,y,z]
+A79: for p,q st p => q in uZ for x,y,z being set st x = M.p & y = M.q & z
+    = M.(p => q) holds I[p,q,x,y,z]
     proof
       let p,q;
-      assume p '&' q in uZ;
+      assume
+      p => q in uZ;
       then consider Z1 being set such that
-A85:  p '&' q in Z1 and
-A86:  Z1 in Z by TARSKI:def 4;
-      consider MZ1 being ManySortedSet of Z1 such that
-A87:  MZ1 = MM.Z1 and MZ1.VERUM = V() & (for n holds MZ1.prop n = P(n)) and
-A88:  for p,q st p '&' q in Z1
-      for x,y,z being set st x = MZ1.p & y = MZ1.q & z = MZ1.(p '&' q)
-      holds C[p,q,x,y,z] and for p,q st p => q in Z1
-      for x,y,z being set st x = MZ1.p & y = MZ1.q & z = MZ1.(p => q)
-      holds I[p,q,x,y,z] by A42,A86;
-      Z1 in dom MM by A86,PARTFUN1:def 4;
+A80:  p => q in Z1 and
+A81:  Z1 in Z by TARSKI:def 4;
+      Z1 in dom MM by A81,PARTFUN1:def 4;
       then MM.Z1 in rr by FUNCT_1:def 5;
       then
-A89:  MM.Z1 c= M by A76,ZFMISC_1:92;
+A82:  MM.Z1 c= M by A57,ZFMISC_1:92;
       let x,y,z be set;
-      assume
-A90:  x = M.p & y = M.q & z = M.(p '&' q);
-      Z1 in X by A20,A86;
-      then ex Y being Subset of HP-WFF st Z1 = Y &
-      VERUM in Y & (for n holds prop n in Y) &
-      (for p,q st p '&' q in Y or p => q in Y holds p in Y & q in Y) &
-      ex M being ManySortedSet of Y st M.VERUM = V() &
-      (for n holds M.prop n = P(n)) & (for p,q st p '&' q in Y
-      for x,y,z being set st x = M.p & y = M.q & z = M.(p '&' q)
-      holds C[p,q,x,y,z]) & for p,q st p => q in Y
-      for x,y,z being set st x = M.p & y = M.q & z = M.(p => q)
-      holds I[p,q,x,y,z];
-      then p in Z1 & q in Z1 by A85;
-      then p in dom MZ1 & q in dom MZ1 & p '&' q in
-      dom MZ1 by A85,PARTFUN1:def 4;
-      then x = MZ1.p & y = MZ1.q & z = MZ1.(p '&' q) by A87,A89,A90,GRFUNC_1:8;
-      hence thesis by A85,A88;
+      assume that
+A83:  x = M.p and
+A84:  y = M.q and
+A85:  z = M.(p => q);
+      consider MZ1 being ManySortedSet of Z1 such that
+A86:  MZ1 = MM.Z1 and
+      MZ1.VERUM = V() and
+      for n holds MZ1.prop n = P(n) and
+      for p,q st p '&' q in Z1 for x,y,z being set st x = MZ1.p & y = MZ1.
+      q & z = MZ1.(p '&' q) holds C[p,q,x,y,z] and
+A87:  for p,q st p => q in Z1 for x,y,z being set st x = MZ1.p & y =
+      MZ1.q & z = MZ1.(p => q) holds I[p,q,x,y,z] by A27,A81;
+      p => q in dom MZ1 by A80,PARTFUN1:def 4;
+      then
+A88:  z = MZ1.(p => q) by A86,A82,A85,GRFUNC_1:8;
+      Z1 in X by A19,A81;
+      then
+A89:  ex Y being Subset of HP-WFF st Z1 = Y & VERUM in Y & (for n holds
+prop n in Y) & (for p,q st p '&' q in Y or p => q in Y holds p in Y & q in Y) &
+ex M being ManySortedSet of Y st M.VERUM = V() & (for n holds M.prop n = P(n))
+& (for p,q st p '&' q in Y for x,y,z being set st x = M.p & y = M.q & z = M.(p
+'&' q) holds C[p,q,x,y,z]) & for p,q st p => q in Y for x,y,z being set st x =
+      M.p & y = M.q & z = M.(p => q) holds I[p,q,x,y,z];
+      then q in Z1 by A80;
+      then q in dom MZ1 by PARTFUN1:def 4;
+      then
+A90:  y = MZ1.q by A86,A82,A84,GRFUNC_1:8;
+      p in Z1 by A80,A89;
+      then p in dom MZ1 by PARTFUN1:def 4;
+      then x = MZ1.p by A86,A82,A83,GRFUNC_1:8;
+      hence thesis by A80,A87,A90,A88;
     end;
-    for p,q st p => q in uZ
-    for x,y,z being set st x = M.p & y = M.q & z = M.(p => q)
-    holds I[p,q,x,y,z]
+A91: for p,q st p '&' q in uZ or p => q in uZ holds p in uZ & q in uZ
     proof
       let p,q;
-      assume p => q in uZ;
-      then consider Z1 being set such that
-A91:  p => q in Z1 and
-A92:  Z1 in Z by TARSKI:def 4;
-      consider MZ1 being ManySortedSet of Z1 such that
-A93:  MZ1 = MM.Z1 and MZ1.VERUM = V() & (for n holds MZ1.prop n = P(n)) and
-      for p,q st p '&' q in Z1
-      for x,y,z being set st x = MZ1.p & y = MZ1.q & z = MZ1.(p '&' q)
-      holds C[p,q,x,y,z] and
-A94:  for p,q st p => q in Z1
-      for x,y,z being set st x = MZ1.p & y = MZ1.q & z = MZ1.(p => q)
-      holds I[p,q,x,y,z] by A42,A92;
-      Z1 in dom MM by A92,PARTFUN1:def 4;
-      then MM.Z1 in rr by FUNCT_1:def 5;
-      then
-A95:  MM.Z1 c= M by A76,ZFMISC_1:92;
-      let x,y,z be set;
       assume
-A96:  x = M.p & y = M.q & z = M.(p => q);
-      Z1 in X by A20,A92;
-      then ex Y being Subset of HP-WFF st Z1 = Y &
-      VERUM in Y & (for n holds prop n in Y) &
-      (for p,q st p '&' q in Y or p => q in Y holds p in Y & q in Y) &
-      ex M being ManySortedSet of Y st M.VERUM = V() &
-      (for n holds M.prop n = P(n)) & (for p,q st p '&' q in Y
-      for x,y,z being set st x = M.p & y = M.q & z = M.(p '&' q)
-      holds C[p,q,x,y,z]) & for p,q st p => q in Y
-      for x,y,z being set st x = M.p & y = M.q & z = M.(p => q)
-      holds I[p,q,x,y,z];
-      then p in Z1 & q in Z1 by A91;
-      then p in dom MZ1 & q in dom MZ1 & p => q in
-      dom MZ1 by A91,PARTFUN1:def 4;
-      then x = MZ1.p & y = MZ1.q & z = MZ1.(p => q) by A93,A95,A96,GRFUNC_1:8;
-      hence thesis by A91,A94;
+A92:  p '&' q in uZ or p => q in uZ;
+      per cases by A92;
+      suppose
+        p '&' q in uZ;
+        then consider Z0 being set such that
+A93:    p '&' q in Z0 and
+A94:    Z0 in Z by TARSKI:def 4;
+        Z0 in X by A19,A94;
+        then
+        ex Y being Subset of HP-WFF st Z0 = Y & VERUM in Y & (for n holds
+prop n in Y) & (for p,q st p '&' q in Y or p => q in Y holds p in Y & q in Y) &
+ex M being ManySortedSet of Y st M.VERUM = V() & (for n holds M.prop n = P(n))
+& (for p,q st p '&' q in Y for x,y,z being set st x = M.p & y = M.q & z = M.(p
+'&' q) holds C[p,q,x,y,z]) & for p,q st p => q in Y for x,y,z being set st x =
+        M.p & y = M.q & z = M.(p => q) holds I[p,q,x,y,z];
+        then p in Z0 & q in Z0 by A93;
+        hence thesis by A94,TARSKI:def 4;
+      end;
+      suppose
+        p => q in uZ;
+        then consider Z0 being set such that
+A95:    p => q in Z0 and
+A96:    Z0 in Z by TARSKI:def 4;
+        Z0 in X by A19,A96;
+        then
+        ex Y being Subset of HP-WFF st Z0 = Y & VERUM in Y & (for n holds
+prop n in Y) & (for p,q st p '&' q in Y or p => q in Y holds p in Y & q in Y) &
+ex M being ManySortedSet of Y st M.VERUM = V() & (for n holds M.prop n = P(n))
+& (for p,q st p '&' q in Y for x,y,z being set st x = M.p & y = M.q & z = M.(p
+'&' q) holds C[p,q,x,y,z]) & for p,q st p => q in Y for x,y,z being set st x =
+        M.p & y = M.q & z = M.(p => q) holds I[p,q,x,y,z];
+        then p in Z0 & q in Z0 by A95;
+        hence thesis by A96,TARSKI:def 4;
+      end;
     end;
-    hence thesis by A11,A30,A31,A32,A82,A83,A84;
+    Z0 c= uZ by A22,ZFMISC_1:92;
+    then
+A97: Y0 c= uZ by A74,XBOOLE_1:1;
+A98: for n holds prop n in uZ
+    proof
+      let n;
+      prop n in Y0 by A14;
+      hence thesis by A97;
+    end;
+    M.VERUM = V() by A16,A70,A71,A72,A77,GRFUNC_1:8;
+    hence thesis by A16,A97,A98,A91,A78,A58,A79;
   end;
+A99: for p,q st p => q in Y0 for x,y,z being set st x = M0.p & y = M0.q & z
+  = M0.(p => q) holds I[p,q,x,y,z] by A11;
+  M0.VERUM = V() by A10,A16;
+  then Y0 in X by A16,A14,A15,A13,A99;
   then consider H being set such that
-A97: H in X and
-A98: for Z being set st Z in X & Z <> H holds not H c= Z by A18,ORDERS_1:177;
+A100: H in X and
+A101: for Z being set st Z in X & Z <> H holds not H c= Z by A17,ORDERS_1:177;
   consider Y being Subset of HP-WFF such that
-A99: Y = H and
-A100: VERUM in Y & (for n holds prop n in Y) and
-A101: for p,q st p '&' q in Y or p => q in Y holds p in Y & q in Y and
-A102: ex M being ManySortedSet of Y st M.VERUM = V() &
-  (for n holds M.prop n = P(n)) & (for p,q st p '&' q in Y
-  for x,y,z being set st x = M.p & y = M.q & z = M.(p '&' q)
-  holds C[p,q,x,y,z]) & for p,q st p => q in Y
-  for x,y,z being set st x = M.p & y = M.q & z = M.(p => q)
-  holds I[p,q,x,y,z] by A97;
+A102: Y = H and
+A103: VERUM in Y and
+A104: for n holds prop n in Y and
+A105: for p,q st p '&' q in Y or p => q in Y holds p in Y & q in Y and
+A106: ex M being ManySortedSet of Y st M.VERUM = V() & (for n holds M.
+prop n = P(n)) & (for p,q st p '&' q in Y for x,y,z being set st x = M.p & y =
+  M.q & z = M.(p '&' q) holds C[p,q,x,y,z]) & for p,q st p => q in Y for x,y,z
+  being set st x = M.p & y = M.q & z = M.(p => q) holds I[p,q,x,y,z] by A100;
   consider M being ManySortedSet of Y such that
-A103: M.VERUM = V() & (for n holds M.prop n = P(n)) and
-A104: for p,q st p '&' q in Y
-  for x,y,z being set st x = M.p & y = M.q & z = M.(p '&' q)
-  holds C[p,q,x,y,z] and
-A105: for p,q st p => q in Y
-  for x,y,z being set st x = M.p & y = M.q & z = M.(p => q)
-  holds I[p,q,x,y,z] by A102;
-A106: Y = HP-WFF
+A107: M.VERUM = V() and
+A108: for n holds M.prop n = P(n) and
+A109: for p,q st p '&' q in Y for x,y,z being set st x = M.p & y = M.q &
+  z = M.(p '&' q) holds C[p,q,x,y,z] and
+A110: for p,q st p => q in Y for x,y,z being set st x = M.p & y = M.q &
+  z = M.(p => q) holds I[p,q,x,y,z] by A106;
+A111: Y = HP-WFF
   proof
     defpred P[Element of HP-WFF] means $1 in Y;
-A107: P[VERUM] by A100;
-A108: for n holds P[prop n] by A100;
-A109: for r,s st P[r] & P[s] holds P[r '&' s] & P[r => s]
+A112: for n holds P[prop n] by A104;
+A113: for r,s st P[r] & P[s] holds P[r '&' s] & P[r => s]
     proof
       let r,s such that
-A110: r in Y & s in Y;
+A114: r in Y & s in Y;
       assume
-A111: not thesis;
-      per cases by A111;
+A115: not thesis;
+      per cases by A115;
       suppose
-A112:   not r '&' s in Y;
+A116:   not r '&' s in Y;
         {r '&' s} c= HP-WFF by ZFMISC_1:37;
         then reconsider Y' = Y \/ {r '&' s} as Subset of HP-WFF by XBOOLE_1:8;
-        r '&' s in {r '&' s} by TARSKI:def 1;
-        then
-A113:   r '&' s in Y' by XBOOLE_0:def 3;
-A114:   Y c= Y' by XBOOLE_1:7;
-A115:   now
-          let n;
-          prop n in Y by A100;
-          hence prop n in Y' by A114;
-        end;
-A116:   for p,q st p '&' q in Y' or p => q in Y' holds p in Y' & q in Y'
-        proof
-          let p,q such that
-A117:     p '&' q in Y' or p => q in Y';
-          per cases by A117;
-          suppose p '&' q = r '&' s;
-            then p = r & q = s by Th19;
-            hence thesis by A110,A114;
-          end;
-          suppose that
-A118:       p '&' q in Y' and
-A119:       p '&' q <> r '&' s;
-            not p '&' q in {r '&' s} by A119,TARSKI:def 1;
-            then p '&' q in Y by A118,XBOOLE_0:def 3;
-            then p in Y & q in Y by A101;
-            hence thesis by A114;
-          end;
-          suppose
-A120:       p => q in Y';
-            p => q <> r '&' s by Th22;
-            then not p => q in {r '&' s} by TARSKI:def 1;
-            then p => q in Y by A120,XBOOLE_0:def 3;
-            then p in Y & q in Y by A101;
-            hence thesis by A114;
-          end;
-        end;
         consider CMrMs being set such that
-A121:   C[r,s,M.r,M.s,CMrMs] by A1;
+A117:   C[r,s,M.r,M.s,CMrMs] by A1;
         set N = M +* (r '&' s .--> CMrMs);
-A122:   dom(r '&' s .--> CMrMs) = {r '&' s} by FUNCOP_1:19;
+A118:   dom(r '&' s .--> CMrMs) = {r '&' s} by FUNCOP_1:19;
         dom M = Y by PARTFUN1:def 4;
-        then dom N = Y' by A122,FUNCT_4:def 1;
+        then dom N = Y' by A118,FUNCT_4:def 1;
         then reconsider N as ManySortedSet of Y' by PARTFUN1:def 4
 ,RELAT_1:def 18;
-        VERUM <> r '&' s by Th23;
-        then not VERUM in {r '&' s} by TARSKI:def 1;
+        r '&' s in {r '&' s} by TARSKI:def 1;
         then
-A123:   N.VERUM = V() by A103,A122,FUNCT_4:12;
-A124:   for n holds N.prop n = P(n)
+A119:   r '&' s in Y' by XBOOLE_0:def 3;
+A120:   for p,q st p => q in Y' for x,y,z being set st x = N.p & y = N.q
+        & z = N.(p => q) holds I[p,q,x,y,z]
+        proof
+          let p,q such that
+A121:     p => q in Y';
+          p => q <> r '&' s by Th22;
+          then
+A122:     not p => q in {r '&' s} by TARSKI:def 1;
+          then
+A123:     p => q in Y by A121,XBOOLE_0:def 3;
+          then p in Y by A105;
+          then not p in {r '&' s} by A116,TARSKI:def 1;
+          then
+A124:     N.p = M.p by A118,FUNCT_4:12;
+          q in Y by A105,A123;
+          then not q in {r '&' s} by A116,TARSKI:def 1;
+          then
+A125:     N.q = M.q by A118,FUNCT_4:12;
+A126:     N.(p => q) = M.(p => q) by A118,A122,FUNCT_4:12;
+          let x,y,z be set;
+          assume
+          x = N.p & y = N.q & z = N.(p => q);
+          hence thesis by A110,A123,A124,A125,A126;
+        end;
+A127:   for n holds N.prop n = P(n)
         proof
           let n;
           prop n <> r '&' s by Th24;
           then not prop n in {r '&' s} by TARSKI:def 1;
-          hence N.prop n = M.prop n by A122,FUNCT_4:12
-            .= P(n) by A103;
+          hence N.prop n = M.prop n by A118,FUNCT_4:12
+            .= P(n) by A108;
         end;
-A125:   for p,q st p '&' q in Y'
-        for x,y,z being set st x = N.p & y = N.q & z = N.(p '&' q)
-        holds C[p,q,x,y,z]
+A128:   for p,q st p '&' q in Y' for x,y,z being set st x = N.p & y = N.
+        q & z = N.(p '&' q) holds C[p,q,x,y,z]
         proof
           let p,q such that
-A126:     p '&' q in Y';
+A129:     p '&' q in Y';
           let x,y,z be set such that
-A127:     x = N.p & y = N.q & z = N.(p '&' q);
+A130:     x = N.p & y = N.q & z = N.(p '&' q);
           per cases;
           suppose
-A128:       p '&' q = r '&' s;
+A131:       p '&' q = r '&' s;
+            q <> p '&' q by Th27;
+            then not q in {r '&' s} by A131,TARSKI:def 1;
             then
-A129:       p = r & q = s by Th19;
-            p <> p '&' q & q <> p '&' q by Th27;
-            then not p in {r '&' s} & not q in {r '&' s} by A128,TARSKI:def 1;
+A132:       N.q = M.q by A118,FUNCT_4:12;
+            p <> p '&' q by Th27;
+            then not p in {r '&' s} by A131,TARSKI:def 1;
             then
-A130:       N.p = M.p & N.q = M.q by A122,FUNCT_4:12;
-            p '&' q in {r '&' s} by A128,TARSKI:def 1;
-
-then N.(p '&' q) = (r '&' s .--> CMrMs).(p '&' q) by A122,FUNCT_4:14;
-            hence thesis by A121,A127,A129,A130,FUNCOP_1:87;
-          end;
-          suppose p '&' q <> r '&' s;
+A133:       N.p = M.p by A118,FUNCT_4:12;
+            p '&' q in {r '&' s} by A131,TARSKI:def 1;
             then
-A131:       not p '&' q in {r '&' s} by TARSKI:def 1;
-            then
-A132:       p '&' q in Y by A126,XBOOLE_0:def 3;
-            then p in Y & q in Y by A101;
-            then not p in {r '&' s} & not q in {r '&' s} by A112,TARSKI:def 1;
-            then
-A133:       N.p = M.p & N.q = M.q by A122,FUNCT_4:12;
-            N.(p '&' q) = M.(p '&' q) by A122,A131,FUNCT_4:12;
-            hence thesis by A104,A127,A132,A133;
-          end;
-        end;
-        for p,q st p => q in Y'
-        for x,y,z being set st x = N.p & y = N.q & z = N.(p => q)
-        holds I[p,q,x,y,z]
-        proof
-          let p,q such that
-A134:     p => q in Y';
-          let x,y,z be set such that
-A135:     x = N.p & y = N.q & z = N.(p => q);
-          p => q <> r '&' s by Th22;
-          then
-A136:     not p => q in {r '&' s} by TARSKI:def 1;
-          then
-A137:     p => q in Y by A134,XBOOLE_0:def 3;
-          then p in Y & q in Y by A101;
-          then not p in {r '&' s} & not q in {r '&' s} by A112,TARSKI:def 1;
-          then
-A138:     N.p = M.p & N.q = M.q by A122,FUNCT_4:12;
-          N.(p => q) = M.(p => q) by A122,A136,FUNCT_4:12;
-          hence thesis by A105,A135,A137,A138;
-        end;
-        then Y' in X by A100,A114,A115,A116,A123,A124,A125;
-        hence contradiction by A98,A99,A112,A113,XBOOLE_1:7;
-      end;
-      suppose
-A139:   not r => s in Y;
-        {r => s} c= HP-WFF by ZFMISC_1:37;
-        then reconsider Y' = Y \/ {r => s} as Subset of HP-WFF by XBOOLE_1:8;
-        r => s in {r => s} by TARSKI:def 1;
-        then
-A140:   r => s in Y' by XBOOLE_0:def 3;
-A141:   Y c= Y' by XBOOLE_1:7;
-A142:   now
-          let n;
-          prop n in Y by A100;
-          hence prop n in Y' by A141;
-        end;
-A143:   for p,q st p '&' q in Y' or p => q in Y' holds p in Y' & q in Y'
-        proof
-          let p,q such that
-A144:     p '&' q in Y' or p => q in Y';
-          per cases by A144;
-          suppose p => q = r => s;
-            then p = r & q = s by Th20;
-            hence thesis by A110,A141;
-          end;
-          suppose that
-A145:       p => q in Y' and
-A146:       p => q <> r => s;
-            not p => q in {r => s} by A146,TARSKI:def 1;
-            then p => q in Y by A145,XBOOLE_0:def 3;
-            then p in Y & q in Y by A101;
-            hence thesis by A141;
+A134:       N.(p '&' q) = (r '&' s .--> CMrMs).(p '&' q) by A118,FUNCT_4:14;
+            p = r & q = s by A131,Th19;
+            hence thesis by A117,A130,A133,A132,A134,FUNCOP_1:87;
           end;
           suppose
-A147:       p '&' q in Y';
-            p '&' q <> r => s by Th22;
-            then not p '&' q in {r => s} by TARSKI:def 1;
-            then p '&' q in Y by A147,XBOOLE_0:def 3;
-            then p in Y & q in Y by A101;
-            hence thesis by A141;
+            p '&' q <> r '&' s;
+            then
+A135:       not p '&' q in {r '&' s} by TARSKI:def 1;
+            then
+A136:       p '&' q in Y by A129,XBOOLE_0:def 3;
+            then p in Y by A105;
+            then not p in {r '&' s} by A116,TARSKI:def 1;
+            then
+A137:       N.p = M.p by A118,FUNCT_4:12;
+            q in Y by A105,A136;
+            then not q in {r '&' s} by A116,TARSKI:def 1;
+            then
+A138:       N.q = M.q by A118,FUNCT_4:12;
+            N.(p '&' q) = M.(p '&' q) by A118,A135,FUNCT_4:12;
+            hence thesis by A109,A130,A136,A137,A138;
           end;
         end;
+A139:   Y c= Y' by XBOOLE_1:7;
+A140:   now
+          let n;
+          prop n in Y by A104;
+          hence prop n in Y' by A139;
+        end;
+A141:   for p,q st p '&' q in Y' or p => q in Y' holds p in Y' & q in Y'
+        proof
+          let p,q such that
+A142:     p '&' q in Y' or p => q in Y';
+          per cases by A142;
+          suppose
+            p '&' q = r '&' s;
+            then p = r & q = s by Th19;
+            hence thesis by A114,A139;
+          end;
+          suppose that
+A143:       p '&' q in Y' and
+A144:       p '&' q <> r '&' s;
+            not p '&' q in {r '&' s} by A144,TARSKI:def 1;
+            then p '&' q in Y by A143,XBOOLE_0:def 3;
+            then p in Y & q in Y by A105;
+            hence thesis by A139;
+          end;
+          suppose
+A145:       p => q in Y';
+            p => q <> r '&' s by Th22;
+            then not p => q in {r '&' s} by TARSKI:def 1;
+            then p => q in Y by A145,XBOOLE_0:def 3;
+            then p in Y & q in Y by A105;
+            hence thesis by A139;
+          end;
+        end;
+        VERUM <> r '&' s by Th23;
+        then not VERUM in {r '&' s} by TARSKI:def 1;
+        then N.VERUM = V() by A107,A118,FUNCT_4:12;
+        then Y' in X by A103,A139,A140,A141,A127,A128,A120;
+        hence contradiction by A101,A102,A116,A119,XBOOLE_1:7;
+      end;
+      suppose
+A146:   not r => s in Y;
+        {r => s} c= HP-WFF by ZFMISC_1:37;
+        then reconsider Y' = Y \/ {r => s} as Subset of HP-WFF by XBOOLE_1:8;
         consider IMrMs being set such that
-A148:   I[r,s,M.r,M.s,IMrMs] by A2;
+A147:   I[r,s,M.r,M.s,IMrMs] by A2;
         set N = M +* (r => s .--> IMrMs);
-A149:   dom(r => s .--> IMrMs) = {r => s} by FUNCOP_1:19;
+A148:   dom(r => s .--> IMrMs) = {r => s} by FUNCOP_1:19;
         dom M = Y by PARTFUN1:def 4;
-        then dom N = Y' by A149,FUNCT_4:def 1;
+        then dom N = Y' by A148,FUNCT_4:def 1;
         then reconsider N as ManySortedSet of Y' by PARTFUN1:def 4
 ,RELAT_1:def 18;
-        VERUM <> r => s by Th25;
-        then not VERUM in {r => s} by TARSKI:def 1;
+        r => s in {r => s} by TARSKI:def 1;
         then
-A150:   N.VERUM = V() by A103,A149,FUNCT_4:12;
-A151:   for n holds N.prop n = P(n)
+A149:   r => s in Y' by XBOOLE_0:def 3;
+A150:   for p,q st p '&' q in Y' for x,y,z being set st x = N.p & y = N.
+        q & z = N.(p '&' q) holds C[p,q,x,y,z]
+        proof
+          let p,q such that
+A151:     p '&' q in Y';
+          p '&' q <> r => s by Th22;
+          then
+A152:     not p '&' q in {r => s} by TARSKI:def 1;
+          then
+A153:     p '&' q in Y by A151,XBOOLE_0:def 3;
+          then p in Y by A105;
+          then not p in {r => s} by A146,TARSKI:def 1;
+          then
+A154:     N.p = M.p by A148,FUNCT_4:12;
+          q in Y by A105,A153;
+          then not q in {r => s} by A146,TARSKI:def 1;
+          then
+A155:     N.q = M.q by A148,FUNCT_4:12;
+A156:     N.(p '&' q) = M.(p '&' q) by A148,A152,FUNCT_4:12;
+          let x,y,z be set;
+          assume
+          x = N.p & y = N.q & z = N.(p '&' q);
+          hence thesis by A109,A153,A154,A155,A156;
+        end;
+A157:   for n holds N.prop n = P(n)
         proof
           let n;
           prop n <> r => s by Th26;
           then not prop n in {r => s} by TARSKI:def 1;
-          hence N.prop n = M.prop n by A149,FUNCT_4:12
-            .= P(n) by A103;
+          hence N.prop n = M.prop n by A148,FUNCT_4:12
+            .= P(n) by A108;
         end;
-A152:   for p,q st p => q in Y'
-        for x,y,z being set st x = N.p & y = N.q & z = N.(p => q)
-        holds I[p,q,x,y,z]
+A158:   for p,q st p => q in Y' for x,y,z being set st x = N.p & y = N.q
+        & z = N.(p => q) holds I[p,q,x,y,z]
         proof
           let p,q such that
-A153:     p => q in Y';
+A159:     p => q in Y';
           let x,y,z be set such that
-A154:     x = N.p & y = N.q & z = N.(p => q);
+A160:     x = N.p & y = N.q & z = N.(p => q);
           per cases;
           suppose
-A155:       p => q = r => s;
+A161:       p => q = r => s;
+            q <> p => q by Th28;
+            then not q in {r => s} by A161,TARSKI:def 1;
             then
-A156:       p = r & q = s by Th20;
-            p <> p => q & q <> p => q by Th28;
-            then not p in {r => s} & not q in {r => s} by A155,TARSKI:def 1;
+A162:       N.q = M.q by A148,FUNCT_4:12;
+            p <> p => q by Th28;
+            then not p in {r => s} by A161,TARSKI:def 1;
             then
-A157:       N.p = M.p & N.q = M.q by A149,FUNCT_4:12;
-            p => q in {r => s} by A155,TARSKI:def 1;
-            then N.(p => q) = (r => s .--> IMrMs).(p => q) by A149,FUNCT_4:14;
-            hence thesis by A148,A154,A156,A157,FUNCOP_1:87;
+A163:       N.p = M.p by A148,FUNCT_4:12;
+            p => q in {r => s} by A161,TARSKI:def 1;
+            then
+A164:       N.(p => q) = (r => s .--> IMrMs).(p => q) by A148,FUNCT_4:14;
+            p = r & q = s by A161,Th20;
+            hence thesis by A147,A160,A163,A162,A164,FUNCOP_1:87;
           end;
-          suppose p => q <> r => s;
+          suppose
+            p => q <> r => s;
             then
-A158:       not p => q in {r => s} by TARSKI:def 1;
+A165:       not p => q in {r => s} by TARSKI:def 1;
             then
-A159:       p => q in Y by A153,XBOOLE_0:def 3;
-            then p in Y & q in Y by A101;
-            then not p in {r => s} & not q in {r => s} by A139,TARSKI:def 1;
+A166:       p => q in Y by A159,XBOOLE_0:def 3;
+            then p in Y by A105;
+            then not p in {r => s} by A146,TARSKI:def 1;
             then
-A160:       N.p = M.p & N.q = M.q by A149,FUNCT_4:12;
-            N.(p => q) = M.(p => q) by A149,A158,FUNCT_4:12;
-            hence thesis by A105,A154,A159,A160;
+A167:       N.p = M.p by A148,FUNCT_4:12;
+            q in Y by A105,A166;
+            then not q in {r => s} by A146,TARSKI:def 1;
+            then
+A168:       N.q = M.q by A148,FUNCT_4:12;
+            N.(p => q) = M.(p => q) by A148,A165,FUNCT_4:12;
+            hence thesis by A110,A160,A166,A167,A168;
           end;
         end;
-        for p,q st p '&' q in Y'
-        for x,y,z being set st x = N.p & y = N.q & z = N.(p '&' q)
-        holds C[p,q,x,y,z]
+A169:   Y c= Y' by XBOOLE_1:7;
+A170:   now
+          let n;
+          prop n in Y by A104;
+          hence prop n in Y' by A169;
+        end;
+A171:   for p,q st p '&' q in Y' or p => q in Y' holds p in Y' & q in Y'
         proof
           let p,q such that
-A161:     p '&' q in Y';
-          let x,y,z be set such that
-A162:     x = N.p & y = N.q & z = N.(p '&' q);
-          p '&' q <> r => s by Th22;
-          then
-A163:     not p '&' q in {r => s} by TARSKI:def 1;
-          then
-A164:     p '&' q in Y by A161,XBOOLE_0:def 3;
-          then p in Y & q in Y by A101;
-          then not p in {r => s} & not q in {r => s} by A139,TARSKI:def 1;
-          then
-A165:     N.p = M.p & N.q = M.q by A149,FUNCT_4:12;
-          N.(p '&' q) = M.(p '&' q) by A149,A163,FUNCT_4:12;
-          hence thesis by A104,A162,A164,A165;
+A172:     p '&' q in Y' or p => q in Y';
+          per cases by A172;
+          suppose
+            p => q = r => s;
+            then p = r & q = s by Th20;
+            hence thesis by A114,A169;
+          end;
+          suppose that
+A173:       p => q in Y' and
+A174:       p => q <> r => s;
+            not p => q in {r => s} by A174,TARSKI:def 1;
+            then p => q in Y by A173,XBOOLE_0:def 3;
+            then p in Y & q in Y by A105;
+            hence thesis by A169;
+          end;
+          suppose
+A175:       p '&' q in Y';
+            p '&' q <> r => s by Th22;
+            then not p '&' q in {r => s} by TARSKI:def 1;
+            then p '&' q in Y by A175,XBOOLE_0:def 3;
+            then p in Y & q in Y by A105;
+            hence thesis by A169;
+          end;
         end;
-        then Y' in X by A100,A141,A142,A143,A150,A151,A152;
-        hence contradiction by A98,A99,A139,A140,XBOOLE_1:7;
+        VERUM <> r => s by Th25;
+        then not VERUM in {r => s} by TARSKI:def 1;
+        then N.VERUM = V() by A107,A148,FUNCT_4:12;
+        then Y' in X by A103,A169,A170,A171,A157,A158,A150;
+        hence contradiction by A101,A102,A146,A149,XBOOLE_1:7;
       end;
     end;
-    for s holds P[s] from HPInd(A107,A108,A109);
+A176: P[VERUM] by A103;
+    for s holds P[s] from HPInd(A176,A112,A113);
     hence thesis by SUBSET_1:49;
   end;
   then reconsider M as ManySortedSet of HP-WFF;
   take M;
-  thus thesis by A103,A104,A105,A106;
+  thus thesis by A107,A108,A109,A110,A111;
 end;
 
-scheme HPMSSLambda{V()->set,P(Element of NAT)->set,C,I(set,set)->set}:
-  ex M being ManySortedSet of HP-WFF st M.VERUM = V() &
-  (for n holds M.prop n = P(n)) &
-  for p,q holds M.(p '&' q) = C(M.p,M.q) & M.(p => q) = I(M.p,M.q)
-proof
-  defpred C[Element of HP-WFF,Element of HP-WFF,set,set,set] means
-  $5 = C($3,$4);
-  defpred I[Element of HP-WFF,Element of HP-WFF,set,set,set] means
-  $5 = I($3,$4);
-A1: for p,q for a,b being set ex c being set st C[p,q,a,b,c];
-A2: for p,q for a,b being set ex d being set st I[p,q,a,b,d];
-A3: for p,q for a,b,c,d being set st C[p,q,a,b,c] & C[p,q,a,b,d] holds c = d;
-A4: for p,q for a,b,c,d being set st I[p,q,a,b,c] & I[p,q,a,b,d] holds c = d;
+scheme
+  HPMSSLambda{V()->set,P(Element of NAT)->set,C,I(set,set)->set}: ex M being
+ManySortedSet of HP-WFF st M.VERUM = V() & (for n holds M.prop n = P(n)) & for
+  p,q holds M.(p '&' q) = C(M.p,M.q) & M.(p => q) = I(M.p,M.q) proof
+  defpred I[Element of HP-WFF,Element of HP-WFF,set,set,set] means $5 = I($3,
+  $4);
+  defpred C[Element of HP-WFF,Element of HP-WFF,set,set,set] means $5 = C($3,
+  $4);
+A1: for p,q for a,b being set ex d being set st I[p,q,a,b,d];
+A2: for p,q for a,b,c,d being set st C[p,q,a,b,c] & C[p,q,a,b,d] holds c = d;
+A3: for p,q for a,b,c,d being set st I[p,q,a,b,c] & I[p,q,a,b,d] holds c = d;
+A4: for p,q for a,b being set ex c being set st C[p,q,a,b,c];
   consider M being ManySortedSet of HP-WFF such that
 A5: M.VERUM = V() and
 A6: for n holds M.prop n = P(n) and
 A7: for p,q holds C[p,q,M.p,M.q,M.(p '&' q)] & I[p,q,M.p,M.q,M.(p => q)]
-  from HPMSSExL(A1,A2,A3,A4);
+  from HPMSSExL(A4,A1,A2,A3);
   take M;
   thus M.VERUM = V() by A5;
   thus for n holds M.prop n = P(n) by A6;
@@ -1590,23 +1653,23 @@ begin :: The tree of the subformulae
 definition
   func HP-Subformulae -> ManySortedSet of HP-WFF means
   :Def9:
-  it.VERUM = root-tree VERUM & (for n holds it.prop n = root-tree prop n) &
-  for p,q ex p',q' being DecoratedTree of HP-WFF st p' = it.p & q' = it.q &
-  it.(p '&' q) = (p '&' q)-tree(p',q') & it.(p => q) = (p => q)-tree(p',q');
+  it.VERUM =
+root-tree VERUM & (for n holds it.prop n = root-tree prop n) & for p,q ex p',q'
+being DecoratedTree of HP-WFF st p' = it.p & q' = it.q & it.(p '&' q) = (p '&'
+  q)-tree(p',q') & it.(p => q) = (p => q)-tree(p',q');
   existence
   proof
-    defpred C[Element of HP-WFF,Element of HP-WFF,set,set,set] means
-    ($3 is DecoratedTree of HP-WFF & $4 is DecoratedTree of HP-WFF implies
-    ex p',q' being DecoratedTree of HP-WFF st
-    p' = $3 & q' = $4 & $5 = ($1 '&' $2)-tree(p',q')) &
-    ($3 is not DecoratedTree of HP-WFF or
-    $4 is not DecoratedTree of HP-WFF implies $5 = {});
-    defpred I[Element of HP-WFF,Element of HP-WFF,set,set,set] means
-    ($3 is DecoratedTree of HP-WFF & $4 is DecoratedTree of HP-WFF implies
-    ex p',q' being DecoratedTree of HP-WFF st
-    p' = $3 & q' = $4 & $5 = ($1 => $2)-tree(p',q')) &
-    ($3 is not DecoratedTree of HP-WFF or
-    $4 is not DecoratedTree of HP-WFF implies $5 = {});
+    deffunc P(Element of NAT)=root-tree prop $1;
+    defpred I[Element of HP-WFF,Element of HP-WFF,set,set,set] means ($3 is
+DecoratedTree of HP-WFF & $4 is DecoratedTree of HP-WFF implies ex p',q' being
+DecoratedTree of HP-WFF st p' = $3 & q' = $4 & $5 = ($1 => $2)-tree(p',q')) & (
+$3 is not DecoratedTree of HP-WFF or $4 is not DecoratedTree of HP-WFF implies
+    $5 = {});
+    defpred C[Element of HP-WFF,Element of HP-WFF,set,set,set] means ($3 is
+DecoratedTree of HP-WFF & $4 is DecoratedTree of HP-WFF implies ex p',q' being
+DecoratedTree of HP-WFF st p' = $3 & q' = $4 & $5 = ($1 '&' $2)-tree(p',q')) &
+($3 is not DecoratedTree of HP-WFF or $4 is not DecoratedTree of HP-WFF implies
+    $5 = {});
 A1: for p,q for a,b being set ex c being set st C[p,q,a,b,c]
     proof
       let p,q;
@@ -1615,13 +1678,14 @@ A1: for p,q for a,b being set ex c being set st C[p,q,a,b,c]
       suppose that
 A2:     a is DecoratedTree of HP-WFF and
 A3:     b is DecoratedTree of HP-WFF;
-        reconsider p' = a as DecoratedTree of HP-WFF by A2;
         reconsider q' = b as DecoratedTree of HP-WFF by A3;
+        reconsider p' = a as DecoratedTree of HP-WFF by A2;
         take (p '&' q)-tree(p',q');
         thus thesis;
       end;
-      suppose a is not DecoratedTree of HP-WFF or
-        b is not DecoratedTree of HP-WFF;
+      suppose
+        a is not DecoratedTree of HP-WFF or b is not DecoratedTree of
+        HP-WFF;
         hence thesis;
       end;
     end;
@@ -1633,86 +1697,84 @@ A4: for p,q for a,b being set ex d being set st I[p,q,a,b,d]
       suppose that
 A5:     a is DecoratedTree of HP-WFF and
 A6:     b is DecoratedTree of HP-WFF;
-        reconsider p' = a as DecoratedTree of HP-WFF by A5;
         reconsider q' = b as DecoratedTree of HP-WFF by A6;
+        reconsider p' = a as DecoratedTree of HP-WFF by A5;
         take (p => q)-tree(p',q');
         thus thesis;
       end;
-      suppose a is not DecoratedTree of HP-WFF or
-        b is not DecoratedTree of HP-WFF;
+      suppose
+        a is not DecoratedTree of HP-WFF or b is not DecoratedTree of
+        HP-WFF;
         hence thesis;
       end;
     end;
-A7: for p,q for a,b,c,d being set st C[p,q,a,b,c] & C[p,q,a,b,d] holds c = d;
-A8: for p,q for a,b,c,d being set st I[p,q,a,b,c] & I[p,q,a,b,d] holds c = d;
-    deffunc P(Element of NAT)=root-tree prop $1;
+A7: for p,q for a,b,c,d being set st I[p,q,a,b,c] & I[p,q,a,b,d] holds c
+    = d;
+A8: for p,q for a,b,c,d being set st C[p,q,a,b,c] & C[p,q,a,b,d] holds c =
+    d;
     consider M being ManySortedSet of HP-WFF such that
 A9: M.VERUM = root-tree VERUM and
 A10: for n holds M.prop n = P(n) and
-A11: for p,q holds C[p,q,M.p,M.q,M.(p '&' q)] & I[p,q,M.p,M.q,M.(p => q)]
-    from HPMSSExL(A1,A4,A7,A8);
+A11: for p,q holds C[p,q,M.p,M.q,M.(p '&' q)] & I[p,q,M.p,M.q,M.(p =>
+    q)] from HPMSSExL(A1,A4,A8,A7);
     take M;
     thus M.VERUM = root-tree VERUM by A9;
     thus for n holds M.prop n = root-tree prop n by A10;
     let p,q;
+A12: ( C[p,q,M.p,M.q,M.(p '&' q)])& I[p,q,M.p,M.q,M.(p => q)] by A11;
     defpred P[Element of HP-WFF] means M.$1 is DecoratedTree of HP-WFF;
-A12: P[VERUM] by A9;
-A13: for n holds P[prop n]
+A13: for r,s st P[r] & P[s] holds P[r '&' s] & P[r => s]
+    proof
+      let r,s such that
+A14:  M.r is DecoratedTree of HP-WFF & M.s is DecoratedTree of HP-WFF;
+      C[r,s,M.r,M.s,M.(r '&' s)] by A11;
+      hence M.(r '&' s) is DecoratedTree of HP-WFF by A14;
+      I[r,s,M.r,M.s,M.(r => s)] by A11;
+      hence thesis by A14;
+    end;
+A15: for n holds P[prop n]
     proof
       let n;
       M.prop n = root-tree prop n by A10;
       hence thesis;
     end;
-A14: for r,s st P[r] & P[s] holds P[r '&' s] & P[r => s]
-    proof
-      let r,s such that
-A15:  M.r is DecoratedTree of HP-WFF and
-A16:  M.s is DecoratedTree of HP-WFF;
-      C[r,s,M.r,M.s,M.(r '&' s)] by A11;
-      hence M.(r '&' s) is DecoratedTree of HP-WFF by A15,A16;
-      I[r,s,M.r,M.s,M.(r => s)] by A11;
-      hence thesis by A15,A16;
-    end;
-A17: for p holds P[p] from HPInd(A12,A13,A14);
-    C[p,q,M.p,M.q,M.(p '&' q)] & I[p,q,M.p,M.q,M.(p => q)] by A11;
-    hence thesis by A17;
+A16: P[VERUM] by A9;
+    for p holds P[p] from HPInd(A16,A15,A13);
+    hence thesis by A12;
   end;
   uniqueness
   proof
     let M1,M2 be ManySortedSet of HP-WFF such that
-A18: M1.VERUM = root-tree VERUM and
-A19: for n holds M1.prop n = root-tree prop n and
-A20: for p,q ex p',q' being DecoratedTree of HP-WFF st p' = M1.p & q' = M1.q &
-    M1.(p '&' q) = (p '&' q)-tree(p',q') &
-    M1.(p => q) = (p => q)-tree(p',q') and
-A21: M2.VERUM = root-tree VERUM and
-A22: for n holds M2.prop n = root-tree prop n and
-A23: for p,q ex p',q' being DecoratedTree of HP-WFF st p' = M2.p & q' = M2.q &
-    M2.(p '&' q) = (p '&' q)-tree(p',q') & M2.(p => q) = (p => q)-tree(p',q');
+A17: M1.VERUM = root-tree VERUM and
+A18: for n holds M1.prop n = root-tree prop n and
+A19: for p,q ex p',q' being DecoratedTree of HP-WFF st p' = M1.p & q'
+= M1.q & M1.(p '&' q) = (p '&' q)-tree(p',q') & M1.(p => q) = (p => q)-tree(p',
+    q') and
+A20: M2.VERUM = root-tree VERUM and
+A21: for n holds M2.prop n = root-tree prop n and
+A22: for p,q ex p',q' being DecoratedTree of HP-WFF st p' = M2.p & q'
+= M2.q & M2.(p '&' q) = (p '&' q)-tree(p',q') & M2.(p => q) = (p => q)-tree(p',
+    q');
     defpred P[Element of HP-WFF] means M1.$1=M2.$1;
-A24: P[VERUM] by A18,A21;
-A25: for n holds P[prop n]
+A23: for n holds P[prop n]
     proof
       let n;
-      thus M1.prop n = root-tree prop n by A19
-        .= M2.prop n by A22;
+      thus M1.prop n = root-tree prop n by A18
+        .= M2.prop n by A21;
     end;
-A26: for r,s st P[r] & P[s] holds P[r '&' s] & P[r => s]
+A24: for r,s st P[r] & P[s] holds P[r '&' s] & P[r => s]
     proof
       let r,s such that
-A27:  M1.r=M2.r & M1.s=M2.s;
-      consider p',q' being DecoratedTree of HP-WFF such that
-A28:  p' = M1.r & q' = M1.s and
-A29:  M1.(r '&' s) = (r '&' s)-tree(p',q') and
-A30:  M1.(r => s) = (r => s)-tree(p',q') by A20;
-      consider p',q' being DecoratedTree of HP-WFF such that
-A31:  p' = M2.r & q' = M2.s and
-A32:  M2.(r '&' s) = (r '&' s)-tree(p',q') and
-A33:  M2.(r => s) = (r => s)-tree(p',q') by A23;
-      thus M1.(r '&' s) = M2.(r '&' s) by A27,A28,A29,A31,A32;
-      thus thesis by A27,A28,A30,A31,A33;
+A25:  M1.r=M2.r & M1.s=M2.s;
+A26:  (ex p',q' being DecoratedTree of HP-WFF st p' = M1.r & q' = M1.s &
+M1.(r '&' s) = (r '&' s)-tree(p',q') & M1.(r => s) = (r => s)-tree( p',q') )&
+ex p', q' being DecoratedTree of HP-WFF st p' = M2.r & q' = M2.s & M2.(r '&' s)
+      = (r '&' s)-tree(p',q') & M2.(r => s) = (r => s)-tree( p',q') by A19,A22;
+      hence M1.(r '&' s) = M2.(r '&' s) by A25;
+      thus thesis by A25,A26;
     end;
-    for r holds P[r] from HPInd(A24,A25,A26);
+A27: P[VERUM] by A17,A20;
+    for r holds P[r] from HPInd(A27,A23,A24);
     then for r being set st r in HP-WFF holds M1.r=M2.r;
     hence M1 = M2 by PBOOLE:3;
   end;
@@ -1721,29 +1783,27 @@ end;
 definition
   let p;
   func Subformulae p -> DecoratedTree of HP-WFF equals
-
   HP-Subformulae.p;
   correctness
   proof
-    defpred P[Element of HP-WFF] means
-    HP-Subformulae.$1 is DecoratedTree of HP-WFF;
-A1: P[VERUM] by Def9;
-A2: for n holds P[prop n]
+    defpred P[Element of HP-WFF] means HP-Subformulae.$1 is DecoratedTree of
+    HP-WFF;
+A1: for n holds P[prop n]
     proof
       let n;
       HP-Subformulae.prop n = root-tree prop n by Def9;
       hence thesis;
     end;
-A3: for r,s st P[r] & P[s] holds P[r '&' s] & P[r => s]
+A2: for r,s st P[r] & P[s] holds P[r '&' s] & P[r => s]
     proof
       let r,s;
-      ex p',q' being DecoratedTree of HP-WFF st
-      p' = HP-Subformulae.r & q' = HP-Subformulae.s &
-      HP-Subformulae.(r '&' s) = (r '&' s)-tree(p',q') &
+      ex p',q' being DecoratedTree of HP-WFF st p' = HP-Subformulae.r & q'
+      = HP-Subformulae.s & HP-Subformulae.(r '&' s) = (r '&' s)-tree(p',q') &
       HP-Subformulae.(r => s) = (r => s)-tree(p',q') by Def9;
       hence thesis;
     end;
-    for p holds P[p] from HPInd(A1,A2,A3);
+A3: P[VERUM] by Def9;
+    for p holds P[p] from HPInd(A3,A1,A2);
     hence thesis;
   end;
 end;
@@ -1755,144 +1815,150 @@ theorem
   Subformulae prop n = root-tree prop n by Def9;
 
 theorem Th32:
-  Subformulae(p '&' q) = (p '&' q)-tree(Subformulae p,Subformulae q)
+  Subformulae(p '&' q) = (p '&' q)-tree(Subformulae p,Subformulae
+  q)
 proof
-  consider p',q' being DecoratedTree of HP-WFF such that
-A1: p' = HP-Subformulae.p & q' = HP-Subformulae.q &
-  HP-Subformulae.(p '&' q) = (p '&' q)-tree(p',q') and
+  ex p',q' being DecoratedTree of HP-WFF st p' = HP-Subformulae.p & q' =
+  HP-Subformulae.q & HP-Subformulae.(p '&' q) = (p '&' q)-tree(p',q') &
   HP-Subformulae.(p => q) = (p => q)-tree(p',q') by Def9;
-
-thus thesis by A1;
+  hence thesis;
 end;
 
 theorem Th33:
   Subformulae(p => q) = (p => q)-tree(Subformulae p,Subformulae q)
 proof
-  consider p',q' being DecoratedTree of HP-WFF such that
-A1: p' = HP-Subformulae.p & q' = HP-Subformulae.q and
-  HP-Subformulae.(p '&' q) = (p '&' q)-tree(p',q') and
-A2: HP-Subformulae.(p => q) = (p => q)-tree(p',q') by Def9;
-  thus thesis by A1,A2;
+  ex p',q' being DecoratedTree of HP-WFF st p' = HP-Subformulae.p & q' =
+  HP-Subformulae.q & HP-Subformulae.(p '&' q) = (p '&' q)-tree(p',q') &
+  HP-Subformulae.(p => q) = (p => q)-tree(p',q') by Def9;
+  hence thesis;
 end;
 
 theorem Th34:
   (Subformulae p).{} = p
 proof
   per cases by Th9;
-  suppose p is conjunctive;
+  suppose
+    p is conjunctive;
     then consider r,s such that
 A1: p = r '&' s by Def6;
     Subformulae p = p-tree(Subformulae r,Subformulae s) by A1,Th32;
     hence thesis by Th6;
   end;
-  suppose p is conditional;
+  suppose
+    p is conditional;
     then consider r,s such that
 A2: p = r => s by Def7;
     Subformulae p = p-tree(Subformulae r,Subformulae s) by A2,Th33;
     hence thesis by Th6;
   end;
-  suppose p is simple;
-    then consider n such that
-A3: p = prop n by Def8;
-    Subformulae p = root-tree p by A3,Def9;
+  suppose
+    p is simple;
+    then ex n st p = prop n by Def8;
+    then Subformulae p = root-tree p by Def9;
     hence thesis by TREES_4:3;
   end;
-  suppose p = VERUM;
+  suppose
+    p = VERUM;
     hence thesis by Th30,TREES_4:3;
   end;
 end;
 
 theorem Th35:
-  for f being Element of dom Subformulae p
-  holds (Subformulae p)|f = Subformulae((Subformulae p).f)
+  for f being Element of dom Subformulae p holds (Subformulae p)|f
+  = Subformulae((Subformulae p).f)
 proof
   let f be Element of dom Subformulae p;
-  defpred P[FinSequence of NAT] means
-  ex q being Element of HP-WFF st q = (Subformulae p).$1
-  & (Subformulae p)|$1 = Subformulae q;
-  (Subformulae p).{} = p & (Subformulae p)|<*>NAT = Subformulae p
-  by Th34,TREES_9:1;
-  then
-A1: P[(<*>NAT) qua FinSequence of NAT];
-A2: for f being Element of dom Subformulae p st P[f qua FinSequence of NAT]
+  defpred P[FinSequence of NAT] means ex q being Element of HP-WFF st q = (
+  Subformulae p).$1 & (Subformulae p)|$1 = Subformulae q;
+A1: for f being Element of dom Subformulae p st P[f qua FinSequence of NAT]
   for n st f^<*n*> in dom Subformulae p holds P[f^<*n*>qua FinSequence of NAT]
   proof
     let f be Element of dom Subformulae p;
-    given q being Element of HP-WFF such that q = (Subformulae p).f and
-A3: (Subformulae p)|f = Subformulae q;
+    given q being Element of HP-WFF such that
+    q = (Subformulae p).f and
+A2: (Subformulae p)|f = Subformulae q;
     let n such that
-A4: f^<*n*> in dom Subformulae p;
-A5: (dom Subformulae p)|f = dom Subformulae q by A3,TREES_2:def 11;
+A3: f^<*n*> in dom Subformulae p;
+A4: (Subformulae p)|(f^<*n*>) = (Subformulae q)|<*n*> by A2,A3,TREES_9:3;
+A5: (dom Subformulae p)|f = dom Subformulae q by A2,TREES_2:def 11;
     then
-A6: <*n*> in dom Subformulae q by A4,TREES_1:def 9;
-A7: (Subformulae p)|(f^<*n*>) = (Subformulae q)|<*n*> by A3,A4,TREES_9:3;
-A8: (Subformulae p).(f^<*n*>) = (Subformulae q).<*n*>
-    by A3,A5,A6,TREES_2:def 11;
+A6: <*n*> in dom Subformulae q by A3,TREES_1:def 9;
+    then
+A7: (Subformulae p).(f^<*n*>) = (Subformulae q).<*n*> by A2,A5,TREES_2:def 11;
     per cases by Th9;
-    suppose q is conjunctive;
+    suppose
+      q is conjunctive;
       then consider r,s such that
-A9:   q = r '&' s by Def6;
-A10:  Subformulae q = (r '&' s)-tree(Subformulae r,Subformulae s) by A9,Th32;
+A8:   q = r '&' s by Def6;
+A9:   Subformulae q = (r '&' s)-tree(Subformulae r,Subformulae s) by A8,Th32;
       then
-A11:  dom Subformulae q = tree(dom Subformulae r, dom Subformulae s)
-      by TREES_4:14;
-      now per cases by A6,A11,Th5;
+A10:  dom Subformulae q = tree(dom Subformulae r, dom Subformulae s) by
+TREES_4:14;
+      now
+        per cases by A6,A10,Th5;
         suppose
-A12:      n= 0;
+A11:      n= 0;
           take r;
           thus r = (Subformulae r).{} by Th34
-            .= (Subformulae p).(f^<*n*>) by A8,A10,A12,Th7;
-          thus (Subformulae p)|(f^<*n*>) = Subformulae r by A7,A10,A12,Th8;
+            .= (Subformulae p).(f^<*n*>) by A7,A9,A11,Th7;
+          thus (Subformulae p)|(f^<*n*>) = Subformulae r by A4,A9,A11,Th8;
         end;
         suppose
-A13:      n= 1;
+A12:      n= 1;
           take s;
           thus s = (Subformulae s).{} by Th34
-            .= (Subformulae p).(f^<*n*>) by A8,A10,A13,Th7;
-          thus (Subformulae p)|(f^<*n*>) = Subformulae s by A7,A10,A13,Th8;
+            .= (Subformulae p).(f^<*n*>) by A7,A9,A12,Th7;
+          thus (Subformulae p)|(f^<*n*>) = Subformulae s by A4,A9,A12,Th8;
         end;
       end;
       hence thesis;
     end;
-    suppose q is conditional;
+    suppose
+      q is conditional;
       then consider r,s such that
-A14:  q = r => s by Def7;
-A15:  Subformulae q = (r => s)-tree(Subformulae r,Subformulae s) by A14,Th33;
+A13:  q = r => s by Def7;
+A14:  Subformulae q = (r => s)-tree(Subformulae r,Subformulae s) by A13,Th33;
       then
-A16:  dom Subformulae q = tree(dom Subformulae r, dom Subformulae s)
-      by TREES_4:14;
-      now per cases by A6,A16,Th5;
+A15:  dom Subformulae q = tree(dom Subformulae r, dom Subformulae s) by
+TREES_4:14;
+      now
+        per cases by A6,A15,Th5;
         suppose
-A17:      n= 0;
+A16:      n= 0;
           take r;
           thus r = (Subformulae r).{} by Th34
-            .= (Subformulae p).(f^<*n*>) by A8,A15,A17,Th7;
-          thus (Subformulae p)|(f^<*n*>) = Subformulae r by A7,A15,A17,Th8;
+            .= (Subformulae p).(f^<*n*>) by A7,A14,A16,Th7;
+          thus (Subformulae p)|(f^<*n*>) = Subformulae r by A4,A14,A16,Th8;
         end;
         suppose
-A18:      n= 1;
+A17:      n= 1;
           take s;
           thus s = (Subformulae s).{} by Th34
-            .= (Subformulae p).(f^<*n*>) by A8,A15,A18,Th7;
-          thus (Subformulae p)|(f^<*n*>) = Subformulae s by A7,A15,A18,Th8;
+            .= (Subformulae p).(f^<*n*>) by A7,A14,A17,Th7;
+          thus (Subformulae p)|(f^<*n*>) = Subformulae s by A4,A14,A17,Th8;
         end;
       end;
       hence thesis;
     end;
-    suppose q is simple;
+    suppose
+      q is simple;
       then consider k such that
-A19:  q = prop k by Def8;
-      Subformulae q = root-tree prop k by A19,Def9;
+A18:  q = prop k by Def8;
+      Subformulae q = root-tree prop k by A18,Def9;
       then dom Subformulae q = { {} } by TREES_1:56,TREES_4:3;
       hence thesis by A6,TARSKI:def 1;
     end;
-    suppose q = VERUM;
+    suppose
+      q = VERUM;
       then dom Subformulae q = { {} } by Th30,TREES_1:56,TREES_4:3;
       hence thesis by A6,TARSKI:def 1;
     end;
   end;
-  for f being Element of dom Subformulae p holds
-  P[f qua FinSequence of NAT] from InTreeInd(A1,A2);
+  (Subformulae p).{} = p by Th34;
+  then
+A19: P[(<*>NAT) qua FinSequence of NAT] by TREES_9:1;
+  for f being Element of dom Subformulae p holds P[f qua FinSequence of
+  NAT] from InTreeInd(A19,A1);
   then P[f qua FinSequence of NAT];
   hence thesis;
 end;
@@ -1900,7 +1966,8 @@ end;
 theorem
   p in Leaves Subformulae q implies p = VERUM or p is simple
 proof
-  assume p in Leaves Subformulae q;
+  assume
+  p in Leaves Subformulae q;
   then p in (Subformulae q).:Leaves dom Subformulae q by TREES_2:def 10;
   then consider x being set such that
 A1: x in dom Subformulae q and
@@ -1908,20 +1975,22 @@ A2: x in Leaves dom Subformulae q and
 A3: p = (Subformulae q).x by FUNCT_1:def 12;
   reconsider f = x as Element of dom Subformulae q by A1;
 A4: (Subformulae q)|f = Subformulae p by A3,Th35;
-A5: p is not conjunctive
+A5: p is not conditional
   proof
-    assume not thesis;
+    assume
+    not thesis;
     then consider r,s such that
-A6: p = r '&' s by Def6;
-    Subformulae p = p-tree(Subformulae r,Subformulae s) by A6,Th32;
+A6: p = r => s by Def7;
+    Subformulae p = p-tree(Subformulae r,Subformulae s) by A6,Th33;
     hence contradiction by A2,A4,TREES_9:6;
   end;
-  p is not conditional
+  p is not conjunctive
   proof
-    assume not thesis;
+    assume
+    not thesis;
     then consider r,s such that
-A7: p = r => s by Def7;
-    Subformulae p = p-tree(Subformulae r,Subformulae s) by A7,Th33;
+A7: p = r '&' s by Def6;
+    Subformulae p = p-tree(Subformulae r,Subformulae s) by A7,Th32;
     hence contradiction by A2,A4,TREES_9:6;
   end;
   hence thesis by A5,Th9;

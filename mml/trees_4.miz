@@ -7,11 +7,11 @@
 environ
 
  vocabularies TREES_2, RELAT_1, FINSEQ_1, FUNCT_1, TREES_1, BOOLE, FUNCOP_1,
-      TREES_3, FINSEQ_2, FUNCT_6, FINSEQ_4, FINSET_1, MCART_1, FUNCT_3,
-      PARTFUN1, TREES_4, ARYTM;
+      TREES_3, FINSEQ_2, FUNCT_6, FINSEQ_4, MCART_1, FUNCT_3, PARTFUN1,
+      TREES_4, ARYTM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, NAT_1, RELAT_1,
-      FUNCT_1, FINSET_1, DOMAIN_1, FUNCOP_1, FUNCT_3, FINSEQ_1, FINSEQ_2,
-      TREES_1, TREES_2, FUNCT_6, TREES_3, XXREAL_0;
+      FUNCT_1, DOMAIN_1, FUNCOP_1, FUNCT_3, FINSEQ_1, FINSEQ_2, TREES_1,
+      TREES_2, FUNCT_6, TREES_3, XXREAL_0;
  constructors BINOP_1, DOMAIN_1, XXREAL_0, XREAL_0, NAT_1, FUNCT_5, FINSEQ_2,
       FUNCT_6, TREES_3, RELSET_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, XREAL_0,
@@ -38,9 +38,11 @@ reserve x, y, z for set,
 Lm1: now
   let x,y;
   let p be FinSequence of x;
-  assume y in dom p or y in dom p;
-  then p.y in rng p & rng p c= x by FINSEQ_1:def 4,FUNCT_1:def 5;
-  hence p.y in x;
+  assume
+A1: y in dom p or y in dom p;
+A2: p.y in rng p by A1,FUNCT_1:def 5;
+A3: rng p c= x by FINSEQ_1:def 4;
+  thus p.y in x by A2,A3;
 end;
 
 definition
@@ -49,9 +51,9 @@ definition
   dom T1 = dom T2 & for p being Node of T1 holds T1.p = T2.p;
   compatibility
   proof
-    (for p being Node of T1 holds T1.p = T2.p) & dom T1 = dom T2 implies
+A1: (for p being Node of T1 holds T1.p = T2.p) & dom T1 = dom T2 implies
     for x st x in dom T1 holds T1.x = T2.x;
-    hence thesis by FUNCT_1:9;
+    thus thesis by A1,FUNCT_1:9;
   end;
 end;
 
@@ -60,13 +62,13 @@ theorem Th1:
   st elementary_tree i c= elementary_tree j holds i <= j
 proof
   let i,j be Element of NAT;
-  assume
-A1: elementary_tree i c= elementary_tree j & i > j;
-  then <*j*> in elementary_tree i by TREES_1:55;
-  then consider n such that
-A2: n < j & <*j*> = <*n*> by A1,TREES_1:57;
-  <*j*>.1 = j & <*n*>.1 = n by FINSEQ_1:57;
-  hence thesis by A2;
+  assume that
+A1: elementary_tree i c= elementary_tree j and
+A2: i > j;
+A3: <*j*> in elementary_tree i by A2,TREES_1:55;
+A4: ex n st n < j & <*j*> = <*n*> by A1,A3,TREES_1:57;
+A5: <*j*>.1 = j by FINSEQ_1:57;
+  thus thesis by A4,A5,FINSEQ_1:57;
 end;
 
 theorem Th2:
@@ -74,33 +76,36 @@ theorem Th2:
   st elementary_tree i = elementary_tree j holds i = j
 proof
   let i,j be Element of NAT;
-  assume elementary_tree i = elementary_tree j;
-  then i <= j & i >= j by Th1;
-  hence thesis by XXREAL_0:1;
+  assume
+A1: elementary_tree i = elementary_tree j;
+A2: i <= j & i >= j by A1,Th1;
+  thus thesis by A2,XXREAL_0:1;
 end;
 
 Lm2: n < len p implies n+1 in dom p & p.(n+1) in rng p
 proof
   assume
 A1: n < len p;
-  n >= 0 by NAT_1:2;
-  then n+1 >= 0+1 & n+1 <= len p by A1,NAT_1:13,XREAL_1:9;
-  then n+1 in dom p by FINSEQ_3:27;
-  hence thesis by FUNCT_1:def 5;
+A2: n >= 0 by NAT_1:2;
+A3: n+1 >= 0+1 by A2,XREAL_1:9;
+A4: n+1 <= len p by A1,NAT_1:13;
+A5: n+1 in dom p by A3,A4,FINSEQ_3:27;
+  thus thesis by A5,FUNCT_1:def 5;
 end;
 
 Lm3: now
   let n,x;
   let p be FinSequence of x;
-  assume n < len p;
-  then p.(n+1) in rng p & rng p c= x by Lm2,FINSEQ_1:def 4;
-  hence p.(n+1) in x;
+  assume
+A1: n < len p;
+A2: p.(n+1) in rng p by A1,Lm2;
+A3: rng p c= x by FINSEQ_1:def 4;
+  thus p.(n+1) in x by A2,A3;
 end;
 
 definition
   let x;
   func root-tree x -> DecoratedTree equals
-
   (elementary_tree 0) --> x;
   correctness;
 end;
@@ -110,23 +115,23 @@ definition
   redefine func root-tree d -> Element of FinTrees D;
   coherence
   proof
-    root-tree d = (elementary_tree 0) --> d &
-    dom ((elementary_tree 0) --> d) = elementary_tree 0 by FUNCOP_1:19;
-    hence thesis by TREES_3:def 8;
+A1: dom ((elementary_tree 0) --> d) = elementary_tree 0 by FUNCOP_1:19;
+    thus thesis by A1,TREES_3:def 8;
   end;
 end;
 
 theorem Th3:
   dom root-tree x = elementary_tree 0 & (root-tree x).{} = x
-proof root-tree x = (elementary_tree 0) --> x & {} in elementary_tree 0
-  by TARSKI:def 1,TREES_1:56;
-  hence thesis by FUNCOP_1:13,19;
+proof
+A1: {} in elementary_tree 0 by TARSKI:def 1,TREES_1:56;
+  thus thesis by A1,FUNCOP_1:13,19;
 end;
 
 theorem
   root-tree x = root-tree y implies x = y
-proof (root-tree x).{} = x by Th3;
-  hence thesis by Th3;
+proof
+A1: (root-tree x).{} = x by Th3;
+  thus thesis by A1,Th3;
 end;
 
 theorem Th5:
@@ -136,8 +141,8 @@ proof
   let T be DecoratedTree;
   assume
 A1: dom T = elementary_tree 0;
-  then for x st x in dom T holds T.x = T.{} by TARSKI:def 1,TREES_1:56;
-  hence thesis by A1,FUNCOP_1:17;
+A2: for x st x in dom T holds T.x = T.{} by A1,TARSKI:def 1,TREES_1:56;
+  thus thesis by A1,A2,FUNCOP_1:17;
 end;
 
 theorem
@@ -158,57 +163,66 @@ definition
   proof
     defpred X[set,set] means
     $1 = {} & $2 = x or ex n st $1 = <*n*> & $2 = p.(n+1);
-A8: for z st z in elementary_tree len p ex y st X[z,y]
+A1: for z st z in elementary_tree len p ex y st X[z,y]
     proof
       let z;
-      assume z in elementary_tree len p;
-      then reconsider z as Element of elementary_tree len p;
+      assume
+A2:   z in elementary_tree len p;
+      reconsider z as Element of elementary_tree len p by A2;
       reconsider z as FinSequence of NAT;
-A9:   z = {} or ex n st n < len p & z = <*n*> by TREES_1:57;
-      now
+A3:   z = {} or ex n st n < len p & z = <*n*> by TREES_1:57;
+A4:   now
         given n such that
-A10:    z = <*n*> & n < len p;
-        take y = p.(n+1),n; thus z = <*n*> & y = p.(n+1) by A10;
+A5:     z = <*n*>
+        and n < len p;
+        take y = p.(n+1),n;
+        thus z = <*n*> & y = p.(n+1) by A5;
       end;
-      hence thesis by A9;
+      thus thesis by A3,A4;
     end;
     consider f being Function such that
-A11: dom f = elementary_tree len p & for y st y in
-    elementary_tree len p holds X[y,f.y] from CLASSES1:sch 1(A8);
-    reconsider f as DecoratedTree by A11,TREES_2:def 8;
-    take f; thus dom f = elementary_tree len p by A11;
-    {} in dom f & for n st {} = <*n*> holds f.{} <> p.(n+1) by TREES_1:47;
-    hence f.{} = x by A11;
+A6: dom f = elementary_tree len p & for y st y in
+    elementary_tree len p holds X[y,f.y] from CLASSES1:sch 1(A1);
+    reconsider f as DecoratedTree by A6,TREES_2:def 8;
+    take f;
+    thus dom f = elementary_tree len p by A6;
+A7: {} in dom f & for n st {} = <*n*> holds f.{} <> p.(n+1) by TREES_1:47;
+    thus f.{} = x by A6,A7;
     let n;
-    assume n < len p;
-    then <*n*> in dom f & <*n*> <> {} by A11,TREES_1:55;
-    then consider k being Element of NAT such that
-A12: <*n*> = <*k*> & f.<*n*> = p.(k+1) by A11;
-    k = <*n*>.1 by A12,FINSEQ_1:57
+    assume
+A8: n < len p;
+A9: <*n*> in dom f by A6,A8,TREES_1:55;
+    consider k being Element of NAT such that
+A10: <*n*> = <*k*> and
+A11: f.<*n*> = p.(k+1) by A6,A9;
+A12: k = <*n*>.1 by A10,FINSEQ_1:57
       .= n by FINSEQ_1:57;
-    hence thesis by A12;
+    thus thesis by A11,A12;
   end;
   uniqueness
   proof
     let T1, T2 be DecoratedTree such that
-A13: dom T1 = elementary_tree len p & T1.{} = x &
-    for n st n < len p holds T1.<*n*> = p.(n+1) and
-A14: dom T2 = elementary_tree len p & T2.{} = x &
-    for n st n < len p holds T2.<*n*> = p.(n+1);
-    now
+A13: dom T1 = elementary_tree len p and
+A14: T1.{} = x and
+A15: for n st n < len p holds T1.<*n*> = p.(n+1) and
+A16: dom T2 = elementary_tree len p and
+A17: T2.{} = x and
+A18: for n st n < len p holds T2.<*n*> = p.(n+1);
+A19: now
       let x;
-      assume x in elementary_tree len p;
-      then reconsider x' = x as Element of elementary_tree len p;
-A15:  x' = {} or ex n st n < len p & x' = <*n*> by TREES_1:57;
-      now
+      assume
+A20:  x in elementary_tree len p;
+      reconsider x' = x as Element of elementary_tree len p by A20;
+A21:  x' = {} or ex n st n < len p & x' = <*n*> by TREES_1:57;
+A22:  now
         given n such that
-A16:    n < len p & x = <*n*>;
-        thus T1.x = p.(n+1) by A13,A16
-          .= T2.x by A14,A16;
+A23:    n < len p & x = <*n*>;
+        thus T1.x = p.(n+1) by A15,A23
+          .= T2.x by A18,A23;
       end;
-      hence T1.x = T2.x by A13,A14,A15;
+      thus T1.x = T2.x by A14,A17,A21,A22;
     end;
-    hence thesis by A13,A14,FUNCT_1:9;
+    thus thesis by A13,A16,A19,FUNCT_1:9;
   end;
 end;
 
@@ -217,25 +231,23 @@ theorem
 proof
   assume
 A1: x-flat_tree p = y-flat_tree q;
-  (x-flat_tree p).{} = x by Def3;
-  hence x = y by A1,Def3;
-  dom (x-flat_tree p) = elementary_tree len p &
-  dom (y-flat_tree q) = elementary_tree len q by Def3;
-  then
-A2: len p = len q by A1,Th2;
-  now
+A2: (x-flat_tree p).{} = x by Def3;
+  thus x = y by A1,A2,Def3;
+  A3: dom (x-flat_tree p) = elementary_tree len p & dom (y-flat_tree q) =
+  elementary_tree len q by Def3;
+A4: len p = len q by A1,A3,Th2;
+A5: now
     let i be Nat;
-    assume
-A3: i >= 1 & i <= len p;
-    then consider n be Nat such that
-A4: i = 1+n by NAT_1:10;
-A5: n in NAT by ORDINAL1:def 13;
-    n < len p by A3,A4,NAT_1:13;
-    then p.i = (x-flat_tree p).<*n*> & q.i = (y-flat_tree q).<*n*> by A2,A4,A5,
-    Def3;
-    hence p.i = q.i by A1;
+    assume that
+A6: i >= 1 and
+A7: i <= len p;
+    consider n be Nat such that
+A8: i = 1+n by A6,NAT_1:10;
+A9: n in NAT & n < len p by A7,A8,NAT_1:13,ORDINAL1:def 13;
+A10: p.i = (x-flat_tree p).<*n*> by A8,A9,Def3;
+    thus p.i = q.i by A1,A4,A8,A9,A10,Def3;
   end;
-  hence thesis by A2,FINSEQ_1:18;
+  thus thesis by A1,A3,A5,Th2,FINSEQ_1:18;
 end;
 
 theorem Th8:
@@ -244,26 +256,27 @@ proof
   set p = i |-> elementary_tree 0, T = tree(p);
   assume
 A1: j < i;
-  then j+1 = 1+j & 1+j >= 1 & j+1 <= i & len p = i
-   by FINSEQ_1:def 18,NAT_1:11,13;
-  then elementary_tree i = T & T|<*j*> = p.(j+1) & j+1 in Seg i
-  by A1,TREES_3:52,57;
-  hence thesis by FUNCOP_1:13;
+A2: 1+j >= 1 & j+1 <= i by A1,NAT_1:11,13;
+A3: len p = i by FINSEQ_1:def 18;
+  A4: elementary_tree i = T & T|<*j*> = p.(j+1) by A1,A3,TREES_3:52,57;
+A5: j+1 in Seg i by A2;
+  thus thesis by A4,A5,FUNCOP_1:13;
 end;
 
 theorem Th9:
   i < len p implies (x-flat_tree p)|<*i*> = root-tree (p.(i+1))
 proof
   reconsider t = {} as Element of (dom (x-flat_tree p))|<*i*> by TREES_1:47;
-  assume i < len p;
-  then
-A1: (x-flat_tree p).<*i*> = p.(i+1) & <*i*> in elementary_tree len p &
-  dom (x-flat_tree p) = elementary_tree len p &
-  (elementary_tree len p)|<*i*> = elementary_tree 0 by Def3,Th8,TREES_1:55;
-  then dom ((x-flat_tree p)|<*i*>) = elementary_tree 0 & <*i*>^t = <*i*> &
-  ((x-flat_tree p)|<*i*>).t = (x-flat_tree p).(<*i*>^t)
-  by FINSEQ_1:47,TREES_2:def 11;
-  hence thesis by A1,Th5;
+  assume
+A1: i < len p;
+A2: (x-flat_tree p).<*i*> = p.(i+1) by A1,Def3;
+A3: dom (x-flat_tree p) = elementary_tree len p by Def3;
+A4: (elementary_tree len p)|<*i*> = elementary_tree 0 by A1,Th8;
+A5: dom ((x-flat_tree p)|<*i*>) = elementary_tree 0 by A3,A4,TREES_2:def 11;
+  A6: <*
+i*>^t = <*i*> & ((x-flat_tree p)|<*i*>).t = (x-flat_tree p).(<*i*>^t) by
+  FINSEQ_1:47,TREES_2:def 11;
+  thus thesis by A2,A5,A6,Th5;
 end;
 
 definition
@@ -276,95 +289,99 @@ A1: p is DTree-yielding;
   it.{} = x & for n st n < len p holds it|<*n*> = p.(n+1);
   existence
   proof
-A2: dom doms p = dom p & doms p is Tree-yielding & Seg len p = dom p
-    by A1,FINSEQ_1:def 3,TREES_3:39;
-    then reconsider q = doms p as Tree-yielding FinSequence by FINSEQ_1:def 2;
+A2: dom doms p = dom p by A1,TREES_3:39;
+    reconsider q = doms p as Tree-yielding FinSequence by A1;
     defpred X[set,set] means $1 = {} & $2 = x or $1 <> {} &
     ex n,r st $1 = <*n*>^r & $2 = p..(n+1,r);
 A3: for y st y in tree(q) ex z st X[y,z]
     proof
       let y;
-      assume y in tree(q);
-      then reconsider s = y as Element of tree(q);
-      now
-        assume y <> {};
-        then consider w being (FinSequence of NAT), n being Nat such that
-A4:     s = <*n*>^w by FINSEQ_2:150;
+      assume
+A4:   y in tree(q);
+      reconsider s = y as Element of tree(q) by A4;
+A5:   now
+        assume
+A6:     y <> {};
+        consider w being (FinSequence of NAT), n being Nat such that
+A7:     s = <*n*>^w by A6,FINSEQ_2:150;
         reconsider n as Element of NAT by ORDINAL1:def 13;
         reconsider w as FinSequence;
         take z = p..(n+1,w);
         thus y = {} & z = x or y <> {} &
-        ex n,r st y = <*n*>^r & z = p..(n+1,r) by A4;
+        ex n,r st y = <*n*>^r & z = p..(n+1,r) by A7;
       end;
-      hence thesis;
+      thus thesis by A5;
     end;
     consider T being Function such that
-A5: dom T = tree(q) & for y st y in tree(q) holds X[y,T.y]
+A8: dom T = tree(q) & for y st y in tree(q) holds X[y,T.y]
     from CLASSES1:sch 1(A3);
-    reconsider T as DecoratedTree by A5,TREES_2:def 8;
+    reconsider T as DecoratedTree by A8,TREES_2:def 8;
     take T;
-    thus ex q being DTree-yielding FinSequence st p = q & dom T = tree(doms q)
-    by A1,A5;
-    {} in tree(q) by TREES_1:47;
-    hence T.{} = x by A5;
-A6: len p = len q by A2,FINSEQ_3:31;
+    thus
+    ex q being DTree-yielding FinSequence st p = q & dom T = tree(doms q)
+    by A1,A8;
+A9: {} in tree(q) by TREES_1:47;
+    thus T.{} = x by A8,A9;
+A10: len p = len q by A2,FINSEQ_3:31;
     let n;
     assume
-A7: n < len p;
-    then
-A8: n+1 in dom p by Lm2;
-    then reconsider t = p.(n+1) as DecoratedTree by A1,TREES_3:26;
-A9: {} in dom t & dom t = q.(n+1) & <*n*>^{} = <*n*>
-    by A8,FINSEQ_1:47,FUNCT_6:31,TREES_1:47;
-A10: dom t = q.(n+1) by A8,FUNCT_6:31
-      .= (dom T)|<*n*> by A5,A6,A7,TREES_3:52;
-A11: (dom T)|<*n*> = dom (T|<*n*>) by TREES_2:def 11;
-    now
+A11: n < len p;
+A12: n+1 in dom p by A11,Lm2;
+    reconsider t = p.(n+1) as DecoratedTree by A1,A12,TREES_3:26;
+A13: dom t = q.(n+1) by A12,FUNCT_6:31;
+A14: dom t = q.(n+1) by A12,FUNCT_6:31
+      .= (dom T)|<*n*> by A8,A10,A11,TREES_3:52;
+A15: (dom T)|<*n*> = dom (T|<*n*>) by TREES_2:def 11;
+A16: now
       let r be FinSequence of NAT;
       assume
-A12:  r in dom t;
-      then <*n*>^r in dom T & <*n*>^r <> {} by A5,A6,A7,A9,TREES_3:def 15;
-      then consider m being Element of NAT, s being FinSequence such that
-A13:  <*n*>^r = <*m*>^s & T.(<*n*>^r) = p..(m+1,s) by A5;
-      (<*n*>^r).1 = n & (<*m*>^s).1 = m by FINSEQ_1:58;
-      then m+1 in dom p & n = m & r = s by A7,A13,Lm2,FINSEQ_1:46;
-      then p..(m+1,s) = t.r by A12,FUNCT_5:45;
-      hence (T|<*n*>).r = t.r by A10,A12,A13,TREES_2:def 11;
+A17:  r in dom t;
+A18:  <*n*>^r in dom T by A8,A10,A11,A13,A17,TREES_3:def 15;
+      consider m being Element of NAT, s being FinSequence such that
+A19:  <*n*>^r = <*m*>^s and
+A20:  T.(<*n*>^r) = p..(m+1,s) by A8,A18;
+A21:  (<*n*>^r).1 = n & (<*m*>^s).1 = m by FINSEQ_1:58;
+A22:  m+1 in dom p & r = s by A11,A19,A21,Lm2,FINSEQ_1:46;
+A23:  p..(m+1,s) = t.r by A17,A19,A21,A22,FUNCT_5:45;
+      thus (T|<*n*>).r = t.r by A14,A17,A20,A23,TREES_2:def 11;
     end;
-    hence thesis by A10,A11,TREES_2:33;
+    thus thesis by A14,A15,A16,TREES_2:33;
   end;
   uniqueness
   proof
     let T1, T2 be DecoratedTree;
     given q1 being DTree-yielding FinSequence such that
-A14: p = q1 & dom T1 = tree(doms q1);
-    assume
-A15: T1.{} = x & for n st n < len p holds T1|<*n*> = p.(n+1);
+A24: p = q1 and
+A25: dom T1 = tree(doms q1);
+    assume that
+A26: T1.{} = x and
+A27: for n st n < len p holds T1|<*n*> = p.(n+1);
     given q2 being DTree-yielding FinSequence such that
-A16: p = q2 & dom T2 = tree(doms q2);
-    assume
-A17: T2.{} = x & for n st n < len p holds T2|<*n*> = p.(n+1);
-    now
+A28: p = q2 & dom T2 = tree(doms q2);
+    assume that
+A29: T2.{} = x and
+A30: for n st n < len p holds T2|<*n*> = p.(n+1);
+A31: now
       let q be FinSequence of NAT;
       assume
-A18:  q in dom T1;
-      now
-        assume q <> {};
-        then consider s being FinSequence of NAT, n being Nat such that
-A19:    q = <*n*>^s by FINSEQ_2:150;
+A32:  q in dom T1;
+A33:  now
+        assume
+A34:    q <> {};
+        consider s being FinSequence of NAT, n being Nat such that
+A35:    q = <*n*>^s by A34,FINSEQ_2:150;
         reconsider n as Element of NAT by ORDINAL1:def 13;
-A20:    <*n*> in dom T1 & n < len doms q1 & len doms q1 = len p
-        by A14,A18,A19,TREES_1:46,TREES_3:40,51;
-        then
-A21:    T1|<*n*> = p.(n+1) & T2|<*n*> = p.(n+1) by A15,A17;
-        s in (dom T1)|<*n*> by A18,A19,A20,TREES_1:def 9;
-        then T1.q = (T1|<*n*>).s & T2.q = (T2|<*n*>).s
-        by A14,A16,A19,TREES_2:def 11;
-        hence T1.q = T2.q by A21;
+A36:    <*n*> in dom T1 by A32,A35,TREES_1:46;
+A37:    n < len doms q1 by A25,A32,A35,TREES_3:51;
+A38:    len doms q1 = len p by A24,TREES_3:40;
+A39:    T1|<*n*> = p.(n+1) & T2|<*n*> = p.(n+1) by A27,A30,A37,A38;
+A40:    s in (dom T1)|<*n*> by A32,A35,A36,TREES_1:def 9;
+A41:    T1.q = (T1|<*n*>).s by A35,A40,TREES_2:def 11;
+        thus T1.q = T2.q by A24,A25,A28,A35,A39,A40,A41,TREES_2:def 11;
       end;
-      hence T1.q = T2.q by A15,A17;
+      thus T1.q = T2.q by A26,A29,A33;
     end;
-    hence thesis by A14,A16,TREES_2:33;
+    thus thesis by A24,A25,A28,A31,TREES_2:33;
   end;
 end;
 
@@ -372,7 +389,6 @@ definition
   let x;
   let T be DecoratedTree;
   func x-tree T -> DecoratedTree equals
-
   x-tree <*T*>;
   correctness;
 end;
@@ -381,7 +397,6 @@ definition
   let x;
   let T1, T2 be DecoratedTree;
   func x-tree (T1,T2) -> DecoratedTree equals
-
   x-tree <*T1,T2*>;
   correctness;
 end;
@@ -390,9 +405,9 @@ theorem Th10:
   for p being DTree-yielding FinSequence holds dom (x-tree(p)) = tree(doms p)
 proof
   let p be DTree-yielding FinSequence;
-  ex q being DTree-yielding FinSequence st
+A1: ex q being DTree-yielding FinSequence st
   p = q & dom (x-tree(p)) = tree(doms q) by Def4;
-  hence thesis;
+  thus thesis by A1;
 end;
 
 theorem Th11:
@@ -405,27 +420,31 @@ proof
 A1: dom (x-tree p) = tree(doms p) by Th10;
 A2: now
     given i,q such that
-A3: i < len doms p & q in (doms p).(i+1) & y = <*i*>^q;
-    len doms p = len p by TREES_3:40;
-    then
-A4: i+1 in dom p by A3,Lm2;
-    then reconsider T = p.(i+1) as DecoratedTree by TREES_3:26;
+A3: i < len doms p and
+A4: q in (doms p).(i+1) and
+A5: y = <*i*>^q;
+A6: len doms p = len p by TREES_3:40;
+A7: i+1 in dom p by A3,A6,Lm2;
+    reconsider T = p.(i+1) as DecoratedTree by A7,TREES_3:26;
     take i, T;
-    reconsider q as Node of T by A3,A4,FUNCT_6:31;
+    reconsider q as Node of T by A4,A7,FUNCT_6:31;
     take q;
-    thus i < len p & T = p.(i+1) & y = <*i*>^q by A3,TREES_3:40;
+    thus i < len p & T = p.(i+1) & y = <*i*>^q by A3,A5,TREES_3:40;
   end;
-  now
+A8: now
     given i being Element of NAT, T being DecoratedTree, q being Node of T
     such that
-A5: i < len p & T = p.(i+1) & y = <*i*>^q;
+A9: i < len p and
+A10: T = p.(i+1) and
+A11: y = <*i*>^q;
     reconsider q as FinSequence;
     take i, q;
-    i+1 in dom p by A5,Lm2;
-    then (doms p).(i+1) = dom T by A5,FUNCT_6:31;
-    hence i < len doms p & q in (doms p).(i+1) & y = <*i*>^q by A5,TREES_3:40;
+A12: i+1 in dom p by A9,Lm2;
+A13: (doms p).(i+1) = dom T by A10,A12,FUNCT_6:31;
+    thus i < len doms p & q in (doms p).(i+1) & y = <*i*>^q by A9,A11,A13,
+    TREES_3:40;
   end;
-  hence thesis by A1,A2,TREES_3:def 15;
+  thus thesis by A1,A2,A8,TREES_3:def 15;
 end;
 
 theorem Th12:
@@ -438,22 +457,20 @@ proof
   let q be Node of T;
   assume
 A1: n < len p & T = p.(n+1);
-  then
-A2: <*n*>^q in dom (x-tree(p)) by Th11;
-  then <*n*> in dom (x-tree(p)) & <*n*>^q in tree(doms p) by Th10,TREES_1:46;
-  then q in (dom (x-tree p))|<*n*> by A2,TREES_1:def 9;
-  then ((x-tree(p))|<*n*>).q = (x-tree(p)).(<*n*>^q) &
-  T = (x-tree(p))|<*n*> by A1,Def4,TREES_2:def 11;
-  hence thesis;
+A2: <*n*>^q in dom (x-tree(p)) by A1,Th11;
+A3: <*n*> in dom (x-tree(p)) by A2,TREES_1:46;
+A4: q in (dom (x-tree p))|<*n*> by A2,A3,TREES_1:def 9;
+A5: ((x-tree(p))|<*n*>).q = (x-tree(p)).(<*n*>^q) by A4,TREES_2:def 11;
+  thus thesis by A1,A5,Def4;
 end;
 
 theorem
   for T being DecoratedTree holds dom (x-tree T) = ^dom T
 proof
   let T be DecoratedTree;
-  x-tree T = x-tree <*T*> & dom (x-tree <*T*>) = tree(doms <*T*>) &
-  doms <*T*> = <*dom T*> by Th10,FUNCT_6:33;
-  hence thesis by TREES_3:def 16;
+  A1: dom (x-tree <*T*>) = tree(doms <*T*>) & doms <*T*> = <*dom T*> by Th10,
+  FUNCT_6:33;
+  thus thesis by A1,TREES_3:def 16;
 end;
 
 theorem
@@ -461,10 +478,10 @@ theorem
   dom (x-tree (T1,T2)) = tree(dom T1, dom T2)
 proof
   let T1, T2 be DecoratedTree;
-  x-tree(T1,T2) = x-tree <*T1,T2*> &
-  dom (x-tree <*T1,T2*>) = tree(doms <*T1,T2*>) &
-  doms <*T1,T2*> = <*dom T1,dom T2*> by Th10,FUNCT_6:34;
-  hence thesis by TREES_3:def 17;
+  A1: dom
+ (x-tree <*T1,T2*>) = tree(doms <*T1,T2*>) & doms <*T1,T2*> = <*dom T1,
+  dom T2*> by Th10,FUNCT_6:34;
+  thus thesis by A1,TREES_3:def 17;
 end;
 
 theorem
@@ -474,25 +491,25 @@ proof
   let p,q be DTree-yielding FinSequence;
   assume
 A1: x-tree p = y-tree q;
-  (x-tree p).{} = x by Def4;
-  hence x = y by A1,Def4;
-  dom (x-tree p) = tree(doms p) & dom (y-tree q) = tree(doms q) by Th10;
-  then doms p = doms q & dom p = dom doms p & dom doms q = dom q
-  by A1,TREES_3:39,53;
-  then
-A2: len p = len q by FINSEQ_3:31;
-  now
+A2: (x-tree p).{} = x by Def4;
+  thus x = y by A1,A2,Def4;
+  A3: dom (x-tree p) = tree(doms p) & dom (y-tree q) = tree(doms q) by Th10;
+A4: doms p = doms q by A1,A3,TREES_3:53;
+A5: dom p = dom doms p & dom doms q = dom q by TREES_3:39;
+A6: len p = len q by A4,A5,FINSEQ_3:31;
+A7: now
     let i be Nat;
-    assume
-A3: i >= 1 & i <= len p;
-    then consider n be Nat such that
-A4: i = 1+n by NAT_1:10;
+    assume that
+A8: i >= 1 and
+A9: i <= len p;
+    consider n be Nat such that
+A10: i = 1+n by A8,NAT_1:10;
     reconsider n as Element of NAT by ORDINAL1:def 13;
-    n < len p by A3,A4,NAT_1:13;
-    then p.i = (x-tree p)|<*n*> & q.i = (y-tree q)|<*n*> by A2,A4,Def4;
-    hence p.i = q.i by A1;
+A11: n < len p by A9,A10,NAT_1:13;
+A12: p.i = (x-tree p)|<*n*> by A10,A11,Def4;
+    thus p.i = q.i by A1,A6,A10,A11,A12,Def4;
   end;
-  hence thesis by A2,FINSEQ_1:18;
+  thus thesis by A6,A7,FINSEQ_1:18;
 end;
 
 theorem
@@ -502,54 +519,53 @@ proof
 A1: root-tree x = y-flat_tree p;
   thus x = (root-tree x).{} by Th3
     .= y by A1,Def3;
-  dom (y-flat_tree p) = elementary_tree len p &
-  dom root-tree x = elementary_tree 0 by Def3,Th3;
-  then len p = 0 by A1,Th2;
-  hence thesis;
+A2: dom (y-flat_tree p) = elementary_tree len p by Def3;
+  thus thesis by A1,A2,Th2,Th3;
 end;
 
 theorem
   root-tree x = y-tree p & p is DTree-yielding implies x = y & p = {}
 proof
-  assume
-A1: root-tree x = y-tree p & p is DTree-yielding;
-  then reconsider p' = p as DTree-yielding FinSequence;
+  assume that
+A1: root-tree x = y-tree p and
+A2: p is DTree-yielding;
+  reconsider p' = p as DTree-yielding FinSequence by A2;
   thus x = (root-tree x).{} by Th3
-    .= y by A1,Def4;
-  dom (y-tree p) = tree(doms p') &
-  dom root-tree x = elementary_tree 0 by Th3,Th10;
-  then doms p = {} & dom doms p = dom p & dom {} = {}
-  by A1,TREES_3:39,53,55;
-  hence thesis;
+    .= y by A1,A2,Def4;
+A3: dom (y-tree p) = tree(doms p') by Th10;
+A4: doms p = {} by A1,A3,Th3,TREES_3:53,55;
+A5: dom doms p = dom p by A3,TREES_3:39;
+  thus thesis by A4,A5;
 end;
 
 theorem
   x-flat_tree p = y-tree q & q is DTree-yielding implies x = y &
   len p = len q & for i st i in dom p holds q.i = root-tree (p.i)
 proof
-  assume
-A1: x-flat_tree p = y-tree q & q is DTree-yielding;
-  then reconsider q' = q as DTree-yielding FinSequence;
+  assume that
+A1: x-flat_tree p = y-tree q and
+A2: q is DTree-yielding;
+  reconsider q' = q as DTree-yielding FinSequence by A2;
   thus x = (x-flat_tree p).{} by Def3
-    .= y by A1,Def4;
-  tree((len p)|->elementary_tree 0) = elementary_tree len p by TREES_3:57
+    .= y by A1,A2,Def4;
+A3: tree((len p)|->elementary_tree 0) = elementary_tree len p by TREES_3:57
     .= dom (x-flat_tree p) by Def3
     .= tree(doms q') by A1,Th10;
-  then (len p)|->elementary_tree 0 = doms q' & len doms q' = len q
-  by TREES_3:40,53;
-  hence
-A2: len p = len q by FINSEQ_1:def 18;
+A4: (len p)|->elementary_tree 0 = doms q' by A3,TREES_3:53;
+A5: len doms q' = len q by TREES_3:40;
+  thus
+A6: len p = len q by A4,A5,FINSEQ_1:def 18;
   let i;
-  assume i in dom p;
-  then
-A3: i >= 1 & i <= len p by FINSEQ_3:27;
-  then consider n being Nat such that
-A4: i = 1+n by NAT_1:10;
+  assume
+A7: i in dom p;
+A8: i >= 1 by A7,FINSEQ_3:27;
+A9: i <= len p by A7,FINSEQ_3:27;
+  consider n being Nat such that
+A10: i = 1+n by A8,NAT_1:10;
   reconsider n as Element of NAT by ORDINAL1:def 13;
-  n < len p by A3,A4,NAT_1:13;
-  then (x-flat_tree p)|<*n*> = root-tree (p.i) & (y-tree q)|<*n*> = q.i
-  by A1,A2,A4,Def4,Th9;
-  hence thesis by A1;
+A11: n < len p by A9,A10,NAT_1:13;
+A12: (x-flat_tree p)|<*n*> = root-tree (p.i) by A10,A11,Th9;
+  thus thesis by A1,A2,A6,A10,A11,A12,Def4;
 end;
 
 theorem
@@ -560,40 +576,44 @@ proof
   let p be DTree-yielding FinSequence, n be Element of NAT, q be FinSequence;
   assume
 A1: <*n*>^q in dom (x-tree(p));
-  then <*n*>^q is Node of (x-tree(p));
-  then reconsider q' = q as FinSequence of NAT by FINSEQ_1:50;
-  <*n*> in dom (x-tree p) & <*n*>^q in tree(doms p) & len doms p = len p
-  by A1,Th10,TREES_1:46,TREES_3:40;
-  then
-A2: q' in (dom (x-tree p))|<*n*> & n < len p by A1,TREES_1:def 9,TREES_3:51;
-  then dom ((x-tree p)|<*n*>) = (dom (x-tree p))|<*n*> & n+1 in dom p &
-  ((x-tree(p))|<*n*>).q' = (x-tree(p)).(<*n*>^q) &
-  p.(n+1) = (x-tree(p))|<*n*> by Def4,Lm2,TREES_2:def 11;
-  hence thesis by A2,FUNCT_5:45;
+A2: <*n*>^q is Node of (x-tree(p)) by A1;
+  reconsider q' = q as FinSequence of NAT by A2,FINSEQ_1:50;
+A3: <*n*> in dom (x-tree p) by A1,TREES_1:46;
+A4: <*n*>^q in tree(doms p) by A1,Th10;
+A5: len doms p = len p by TREES_3:40;
+A6: q' in (dom (x-tree p))|<*n*> by A1,A3,TREES_1:def 9;
+A7: n < len p by A4,A5,TREES_3:51;
+  A8: dom
+ ((x-tree p)|<*n*>) = (dom (x-tree p))|<*n*> & ((x-tree(p))|<*n*>).q' = (
+  x-tree(p)).(<*n*>^q) by A6,TREES_2:def 11;
+A9: n+1 in dom p & p.(n+1) = (x-tree(p))|<*n*> by A7,Def4,Lm2;
+  thus thesis by A6,A8,A9,FUNCT_5:45;
 end;
 
 theorem
   x-flat_tree({}) = root-tree x & x-tree({}) = root-tree x
-proof len {} = 0;
-  then
-A1: dom (x-flat_tree {}) = elementary_tree 0 by Def3;
-  now
+proof
+A1: len {} = 0;
+A2: dom (x-flat_tree {}) = elementary_tree 0 by A1,Def3;
+A3: now
     let y;
-    assume y in elementary_tree 0;
-    then y = {} by TARSKI:def 1,TREES_1:56;
-    hence (x-flat_tree {}).y = x by Def3;
+    assume
+A4: y in elementary_tree 0;
+A5: y = {} by A4,TARSKI:def 1,TREES_1:56;
+    thus (x-flat_tree {}).y = x by A5,Def3;
   end;
-  hence x-flat_tree({}) = root-tree x by A1,FUNCOP_1:17;
+  thus x-flat_tree({}) = root-tree x by A2,A3,FUNCOP_1:17;
   reconsider e = {} as DTree-yielding FinSequence;
-A2: dom (x-tree {}) = tree(doms e) by Th10
+A6: dom (x-tree {}) = tree(doms e) by Th10
     .= elementary_tree 0 by FUNCT_6:32,TREES_3:55;
-  now
+A7: now
     let y;
-    assume y in elementary_tree 0;
-    then y = {} by TARSKI:def 1,TREES_1:56;
-    hence (x-tree e).y = x by Def4;
+    assume
+A8: y in elementary_tree 0;
+A9: y = {} by A8,TARSKI:def 1,TREES_1:56;
+    thus (x-tree e).y = x by A9,Def4;
   end;
-  hence thesis by A2,FUNCOP_1:17;
+  thus thesis by A6,A7,FUNCOP_1:17;
 end;
 
 theorem
@@ -603,28 +623,27 @@ proof
   set T = ((elementary_tree 1) --> x) with-replacement (<*0*>, root-tree y);
 A1: dom (x-flat_tree <*y*>) = elementary_tree len <*y*> by Def3
     .= elementary_tree 1 by FINSEQ_1:57;
-A2: dom ((elementary_tree 1) --> x) = elementary_tree 1 &
-  dom root-tree y = elementary_tree 0 & <*0*> in elementary_tree 1
-  by FUNCOP_1:19,TARSKI:def 2,TREES_1:88;
-  then
-A3: dom T = elementary_tree 1 with-replacement (<*0*>, elementary_tree 0 )
-  by TREES_2:def 12
+A2: dom root-tree y = elementary_tree 0 by FUNCOP_1:19;
+  A3: dom ((elementary_tree 1) --> x) = elementary_tree 1 & <*0*> in
+  elementary_tree 1 by FUNCOP_1:19,TARSKI:def 2,TREES_1:88;
+A4: dom T = elementary_tree 1 with-replacement (<*0*>, elementary_tree 0 )
+  by A2,A3,TREES_2:def 12
     .= elementary_tree 1 by TREES_3:61,70;
-  now
+A5: now
     let z;
-    assume z in elementary_tree 1;
-    then
-A4: (z = {} or z = <*0*>) & {} in elementary_tree 1 &
-    <*0*> in elementary_tree 1 by TARSKI:def 2,TREES_1:88;
-A5: not <*0*> is_a_prefix_of {} & len <*y*> = 1 & 0 < 1 & <*y*>.1 = y
-    by FINSEQ_1:57;
-    then (x-flat_tree <*y*>).{} = x & T.{} = ((elementary_tree 1) --> x).{} &
-    ((elementary_tree 1) --> x).{} = x &
-    (x-flat_tree <*y*>).<*0*> = <*y*>.(0+1) & T.<*0*> = (root-tree y).{}
-    by A2,A4,Def3,FUNCOP_1:13,TREES_3:47,48;
-    hence T.z = (x-flat_tree <*y*>).z by A4,A5,Th3;
+    assume
+A6: z in elementary_tree 1;
+A7: z = {} or z = <*0*> by A6,TARSKI:def 2,TREES_1:88;
+A8: {} in elementary_tree 1 by TARSKI:def 2,TREES_1:88;
+A9: not <*0*> is_a_prefix_of {};
+A10: len <*y*> = 1 by FINSEQ_1:57;
+A11: <*y*>.1 = y & (x-flat_tree <*y*>).{} = x by Def3,FINSEQ_1:57;
+A12: T.{} = ((elementary_tree 1) --> x).{} by A3,A8,A9,TREES_3:48;
+A13: (x-flat_tree <*y*>).<*0*> = <*y*>.(0+1) by A10,Def3;
+A14: T.<*0*> = (root-tree y).{} by A3,TREES_3:47;
+    thus T.z = (x-flat_tree <*y*>).z by A7,A8,A11,A12,A13,A14,Th3,FUNCOP_1:13;
   end;
-  hence thesis by A1,A3,FUNCT_1:9;
+  thus thesis by A1,A4,A5,FUNCT_1:9;
 end;
 
 theorem
@@ -641,38 +660,37 @@ A1: dom (x-tree <*T*>) = tree(doms <*T*>) by Th10
 A2: dom ((elementary_tree 1) --> x) = elementary_tree 1 by FUNCOP_1:19;
   reconsider t1 = {}, t2 = <*0*> as Element of elementary_tree 1
   by TARSKI:def 2,TREES_1:88;
-  t2 = t2;
-  then
-A3: dom D = W by A2,TREES_2:def 12;
-A4: {} in dom T & <*0*>^{} = <*0*> & not <*0*> is_a_proper_prefix_of {} &
-  {} NAT = {} by FINSEQ_1:47,TREES_1:47,XBOOLE_1:115;
-  now
+A3: t2 = t2;
+A4: dom D = W by A2,A3,TREES_2:def 12;
+A5: {} in dom T by TREES_1:47;
+A6: now
     let y;
-    assume y in W;
-    then reconsider q = y as Element of W;
-    q in elementary_tree 1 or ex v st v in dom T & q = t2^v by TREES_1:def 12;
-    then
-A5: q = {} or q = t2 & t2 = t2^t1 or
-    ex v st v in dom T & q = <*0*>^v by FINSEQ_1:47,TARSKI:def 2,TREES_1:88;
-    not t2 is_a_prefix_of t1;
-    then
-A6: D.{} = ((elementary_tree 1)-->x).t1 by A2,TREES_3:48
+    assume
+A7: y in W;
+    reconsider q = y as Element of W by A7;
+    A8: q
+ in elementary_tree 1 or ex v st v in dom T & q = t2^v by TREES_1:def 12;
+A9: q = {} or q = t2 & t2 = t2^t1 or
+    ex v st v in dom T & q = <*0*>^v by A8,FINSEQ_1:47,TARSKI:def 2,TREES_1:88;
+A10: not t2 is_a_prefix_of t1;
+A11: D.{} = ((elementary_tree 1)-->x).t1 by A2,A10,TREES_3:48
       .= x by FUNCOP_1:13
       .= (x-tree <*T*>).{} by Def4;
-    now
+A12: now
       given r being FinSequence of NAT such that
-A7:   r in dom T & q = <*0*>^r;
-      reconsider r as Node of T by A7;
-      q = t2^r by A7;
-      then
-A8:   D.q = T.r by A2,TREES_3:49;
-      len <*T*> = 1 & <*T*>.(0+1) = T & 0 < 1 by FINSEQ_1:57;
-      then (x-tree <*T*>)|t2 = T & W|t2 = dom T by Def4,TREES_1:66;
-      hence D.q = (x-tree <*T*>).q by A1,A7,A8,TREES_2:def 11;
+A13:  r in dom T and
+A14:  q = <*0*>^r;
+      reconsider r as Node of T by A13;
+A15:  q = t2^r by A14;
+A16:  D.q = T.r by A2,A15,TREES_3:49;
+A17:  len <*T*> = 1 & <*T*>.(0+1) = T by FINSEQ_1:57;
+A18:  (x-tree <*T*>)|t2 = T by A17,Def4;
+A19:  W|t2 = dom T by TREES_1:66;
+      thus D.q = (x-tree <*T*>).q by A1,A14,A16,A18,A19,TREES_2:def 11;
     end;
-    hence D.y = (x-tree <*T*>).y by A4,A5,A6;
+    thus D.y = (x-tree <*T*>).y by A5,A9,A11,A12;
   end;
-  hence thesis by A1,A3,FUNCT_1:9;
+  thus thesis by A1,A4,A6,FUNCT_1:9;
 end;
 
 definition
@@ -681,26 +699,29 @@ definition
   coherence
   proof
     set T = d-flat_tree(p);
-    rng T c= D
+A1: rng T c= D
     proof
       let x;
-      assume x in rng T;
-      then consider y such that
-A1:   y in dom T & x = T.y by FUNCT_1:def 5;
-      reconsider y as Node of T by A1;
-A2:   dom T = elementary_tree len p & T.{} = d &
-      for n st n < len p holds T.<*n*> = p.(n+1) by Def3;
-      now
-        assume y <> {};
-        then consider n such that
-A3:     n < len p & y = <*n*> by A2,TREES_1:57;
-        T.y = p.(n+1) & p.(n+1) in rng p & rng p c= D
-        by A3,Def3,Lm2,FINSEQ_1:def 4;
-        hence thesis by A1;
+      assume
+A2:   x in rng T;
+      consider y such that
+A3:   y in dom T and
+A4:   x = T.y by A2,FUNCT_1:def 5;
+      reconsider y as Node of T by A3;
+A5:   dom T = elementary_tree len p by Def3;
+A6:   T.{} = d by Def3;
+A7:   now
+        assume
+A8:     y <> {};
+        consider n such that
+A9:     n < len p & y = <*n*> by A5,A8,TREES_1:57;
+A10:    T.y = p.(n+1) & p.(n+1) in rng p by A9,Def3,Lm2;
+A11:    rng p c= D by FINSEQ_1:def 4;
+        thus thesis by A4,A10,A11;
       end;
-      hence thesis by A1,A2;
+      thus thesis by A4,A6,A7;
     end;
-    hence thesis by RELAT_1:def 19;
+    thus thesis by A1,RELAT_1:def 19;
   end;
 end;
 
@@ -711,39 +732,44 @@ definition
   coherence
   proof
     set T = d-tree(p);
-    rng T c= D
+A1: rng T c= D
     proof
       let x;
-      assume x in rng T;
-      then consider y such that
-A1:   y in dom T & x = T.y by FUNCT_1:def 5;
-      reconsider y as Node of T by A1;
-A2:   tree(doms p) = dom T & tree(doms p)-level 1 = {<*n*>: n < len doms p} &
-      T.{} = d & len doms p = len p &
-      for n st n < len p holds T|<*n*> = p.(n+1) by Def4,Th10,TREES_3:40,52;
-      now
-        assume y <> {};
-        then consider q being FinSequence of NAT, n being Nat such that
-A3:     y = <*n*>^q by FINSEQ_2:150;
+      assume
+A2:   x in rng T;
+      consider y such that
+A3:   y in dom T and
+A4:   x = T.y by A2,FUNCT_1:def 5;
+      reconsider y as Node of T by A3;
+A5:   tree(doms p)-level 1 = {<*n*>: n < len doms p} by TREES_3:52;
+A6:   T.{} = d by Def4;
+A7:   tree(doms p) = dom T & len doms p = len p by Th10,TREES_3:40;
+A8:   now
+        assume
+A9:     y <> {};
+        consider q being FinSequence of NAT, n being Nat such that
+A10:    y = <*n*>^q by A9,FINSEQ_2:150;
         reconsider n as Element of NAT by ORDINAL1:def 13;
-        <*n*> in dom T & len <*n*> = 1 by A3,FINSEQ_1:57,TREES_1:46;
-        then
-A4:     q in (dom T)|<*n*> & <*n*> in (dom T)-level 1 &
-        dom (T|<*n*>) = (dom T)|<*n*> by A3,TREES_1:def 9,TREES_2:def 11;
-        then consider i such that
-A5:     <*n*> = <*i*> & i < len p by A2;
-        <*n*>.1 = n & <*i*>.1 = i by FINSEQ_1:57;
-        then
-A6:     T|<*n*> = p.(n+1) & p.(n+1) in rng p & rng p c= F
-        by A5,Def4,Lm2,FINSEQ_1:def 4;
-        then reconsider t = p.(n+1) as Element of F;
-        t.q = x & t.q in rng t & rng t c= D
-        by A1,A3,A4,A6,FUNCT_1:def 5,RELAT_1:def 19,TREES_2:def 11;
-        hence thesis;
+A11:    <*n*> in dom T by A10,TREES_1:46;
+A12:    len <*n*> = 1 by FINSEQ_1:57;
+A13:    q in (dom T)|<*n*> by A10,A11,TREES_1:def 9;
+A14:    <*n*> in (dom T)-level 1 by A11,A12;
+A15:    dom (T|<*n*>) = (dom T)|<*n*> by TREES_2:def 11;
+        consider i such that
+A16:    <*n*> = <*i*> & i < len p by A5,A7,A14;
+A17:    <*n*>.1 = n & <*i*>.1 = i by FINSEQ_1:57;
+A18:    T|<*n*> = p.(n+1) by A16,A17,Def4;
+A19:    p.(n+1) in rng p by A16,A17,Lm2;
+A20:    rng p c= F by FINSEQ_1:def 4;
+        reconsider t = p.(n+1) as Element of F by A19,A20;
+A21:    t.q = x by A4,A10,A13,A18,TREES_2:def 11;
+A22:    t.q in rng t by A13,A15,A18,FUNCT_1:def 5;
+A23:    rng t c= D by RELAT_1:def 19;
+        thus thesis by A21,A22,A23;
       end;
-      hence thesis by A1,A2;
+      thus thesis by A4,A6,A8;
     end;
-    hence thesis by RELAT_1:def 19;
+    thus thesis by A1,RELAT_1:def 19;
   end;
 end;
 
@@ -754,8 +780,8 @@ definition
   proof
     reconsider T as Element of Trees D by TREES_3:def 7;
     reconsider t = <*T*> as Element of (Trees D)* by FINSEQ_1:def 11;
-    d-tree T = d-tree t;
-    hence thesis;
+A1: d-tree T = d-tree t;
+    thus thesis by A1;
   end;
 end;
 
@@ -765,11 +791,11 @@ definition
   coherence
   proof
     reconsider T1, T2 as Element of Trees D by TREES_3:def 7;
-    <*T1,T2*> = <*T1 qua Element of Trees D qua non empty set*>^
+A1: <*T1,T2*> = <*T1 qua Element of Trees D qua non empty set*>^
     <*T2 qua Element of Trees D qua non empty set*>;
-    then reconsider t = <*T1,T2*> as Element of (Trees D)* by FINSEQ_1:def 11;
-    d-tree(T1, T2) = d-tree t;
-    hence thesis;
+    reconsider t = <*T1,T2*> as Element of (Trees D)* by A1,FINSEQ_1:def 11;
+A2: d-tree(T1, T2) = d-tree t;
+    thus thesis by A2;
   end;
 end;
 
@@ -779,19 +805,20 @@ definition
   redefine func doms p -> FinSequence of FinTrees;
   coherence
   proof
-A1: dom doms p = dom p & rng p c= FinTrees D by FINSEQ_1:def 4,TREES_3:39;
+A1: dom doms p = dom p by TREES_3:39;
+A2: rng p c= FinTrees D by FINSEQ_1:def 4;
     thus doms p is FinSequence of FinTrees
     proof
       let x;
-      assume x in rng doms p;
-      then consider y such that
-A2:   y in dom p & x = (doms p).y by A1,FUNCT_1:def 5;
-      reconsider T = p.y as DecoratedTree by A2,TREES_3:26;
-      T in rng p by A2,FUNCT_1:def 5;
-      then T is Element of FinTrees D by A1;
-      then dom T is finite;
-      then dom T in FinTrees by TREES_3:def 2;
-      hence thesis by A2,FUNCT_6:31;
+      assume
+A3:   x in rng doms p;
+      consider y such that
+A4:   y in dom p and
+A5:   x = (doms p).y by A1,A3,FUNCT_1:def 5;
+      reconsider T = p.y as DecoratedTree by A4,TREES_3:26;
+A6:   T in rng p by A4,FUNCT_1:def 5;
+A7:   dom T in FinTrees by A2,A6,TREES_3:def 2;
+      thus thesis by A4,A5,A7,FUNCT_6:31;
     end;
   end;
 end;
@@ -801,8 +828,9 @@ definition
   let d be Element of D, p be FinSequence of FinTrees D;
   redefine func d-tree p -> Element of FinTrees D;
   coherence
-  proof dom (d-tree p) = tree(doms p) by Th10;
-    hence thesis by TREES_3:def 8;
+  proof
+A1: dom (d-tree p) = tree(doms p) by Th10;
+    thus thesis by A1,TREES_3:def 8;
   end;
 end;
 
@@ -812,8 +840,8 @@ definition
   coherence
   proof
     let p be FinSequence of x;
-    rng p c= x & x c= D by FINSEQ_1:def 4;
-    hence rng p c= D by XBOOLE_1:1;
+A1: rng p c= x by FINSEQ_1:def 4;
+    thus rng p c= D by A1,XBOOLE_1:1;
   end;
 end;
 
@@ -835,86 +863,99 @@ proof
   consider T being set such that
 A1: x in T iff x in NAT* & X[x] from XBOOLE_0:sch 1;
   consider t being Element of T1();
-  t in NAT* by FINSEQ_1:def 11;
-  then reconsider T as non empty set by A1;
-  T is Tree-like
+A2: t in NAT* by FINSEQ_1:def 11;
+  reconsider T as non empty set by A1,A2;
+A3: T is Tree-like
   proof
     thus T c= NAT*
     proof
-      let x; thus thesis by A1;
+      let x;
+      thus thesis by A1;
     end;
-    thus for p being FinSequence of NAT st p in T holds ProperPrefixes p c= T
+    thus
+    for p being FinSequence of NAT st p in T holds ProperPrefixes p c= T
     proof
       let p be FinSequence of NAT such that
-A2:   p in T;
+A4:   p in T;
       let x;
-      assume x in ProperPrefixes p;
-      then consider q such that
-A3:   x = q & q is_a_proper_prefix_of p by TREES_1:def 4;
       assume
-A4:   not thesis;
-      q is_a_prefix_of p & q <> p by A3,XBOOLE_0:def 8;
-      then consider r such that
-A5:   p = q^r by TREES_1:8;
-      reconsider q,r as FinSequence of NAT by A5,FINSEQ_1:50;
-      q^r in T1() & q in NAT* & (q^r in T1() implies q in T1()) or
+A5:   x in ProperPrefixes p;
+      consider q such that
+A6:   x = q and
+A7:   q is_a_proper_prefix_of p by A5,TREES_1:def 4;
+      assume
+A8:   not thesis;
+A9:   q is_a_prefix_of p by A7,XBOOLE_0:def 8;
+      consider r such that
+A10:  p = q^r by A9,TREES_1:8;
+      reconsider q,r as FinSequence of NAT by A10,FINSEQ_1:50;
+A11:  q^r in T1() & q in NAT* & (q^r in T1() implies q in T1()) or
       ex q being Element of T1(), r being Element of T2() st P[q] & p = q^r
-      by A1,A2,A5,FINSEQ_1:def 11,TREES_1:46;
-      then consider q' being Element of T1(), r' being Element of T2() such
+      by A1,A4,A10,FINSEQ_1:def 11,TREES_1:46;
+      consider q' being Element of T1(), r' being Element of T2() such
       that
-A6:   P[q'] & q^r = q'^r' by A1,A3,A4,A5;
-      now
-        assume len q <= len q';
-        then consider s being FinSequence such that
-A7:     q^s = q' by A6,FINSEQ_1:64;
-        q in T1() & q in NAT* by A7,FINSEQ_1:def 11,TREES_1:46;
-        hence contradiction by A1,A3,A4;
+A12:  P[q'] and
+A13:  q^r = q'^r' by A1,A6,A8,A10,A11;
+A14:  now
+        assume
+A15:    len q <= len q';
+A16:    ex s being FinSequence st q^s = q' by A13,A15,FINSEQ_1:64;
+A17:    q in T1() by A16,TREES_1:46;
+A18:    q in NAT* by FINSEQ_1:def 11;
+        thus contradiction by A1,A6,A8,A17,A18;
       end;
-      then consider s being FinSequence such that
-A8:   q'^s = q by A6,FINSEQ_1:64;
-      reconsider s as FinSequence of NAT by A8,FINSEQ_1:50;
-      q'^r' = q'^(s^r) by A6,A8,FINSEQ_1:45;
-      then s^r = r' by FINSEQ_1:46;
-      then q in NAT* & s is Element of T2() by FINSEQ_1:def 11,TREES_1:46;
-      hence thesis by A1,A3,A4,A6,A8;
+      consider s being FinSequence such that
+A19:  q'^s = q by A13,A14,FINSEQ_1:64;
+      reconsider s as FinSequence of NAT by A19,FINSEQ_1:50;
+A20:  q'^r' = q'^(s^r) by A13,A19,FINSEQ_1:45;
+A21:  s^r = r' by A20,FINSEQ_1:46;
+A22:  q in NAT* & s is Element of T2() by A21,FINSEQ_1:def 11,TREES_1:46;
+      thus thesis by A1,A6,A8,A12,A19,A22;
     end;
     let p be FinSequence of NAT, k,n be Element of NAT;
-    assume
-A9: p^<*k*> in T & n <= k;
-A10: now
-      assume p^<*k*> in T1();
-      then p^<*n*> in T1() & p^<*n*> in NAT*
-      by A9,FINSEQ_1:def 11,TREES_1:def 5;
-      hence thesis by A1;
-    end;
-    now
+    assume that
+A23: p^<*k*> in T and
+A24: n <= k;
+A25: now
       assume
-A11:  not p^<*k*> in T1();
-      then consider q being Element of T1(), r being Element of T2() such that
-A12:  P[q] & p^<*k*> = q^r by A1,A9;
-      q^{} = q by FINSEQ_1:47;
-      then r <> {} by A11,A12;
-      then consider w being FinSequence, z such that
-A13:  r = w^<*z*> by FINSEQ_1:63;
-      reconsider w as FinSequence of NAT by A13,FINSEQ_1:50;
-A14:  p^<*k*> = q^w^<*z*> by A12,A13,FINSEQ_1:45;
-      (p^<*k*>).(len p+1) = k & (q^w^<*z*>).(len(q^w)+1) = z &
-      len <*k*> = 1 & len <*z*> = 1 & len (p^<*k*>) = len p+len <*k*> &
-      len (q^w^<*z*>) = len (q^w)+len <*z*> by FINSEQ_1:35,57,59;
-      then p = q^w & k = z by A14,FINSEQ_1:46;
-      then w^<*n*> in T2() & p^<*n*> = q^(w^<*n*>) & p^<*n*> in NAT*
-      by A9,A13,FINSEQ_1:45,def 11,TREES_1:def 5;
-      hence thesis by A1,A12;
+A26:  p^<*k*> in T1();
+A27:  p^<*n*> in T1() by A24,A26,TREES_1:def 5;
+A28:  p^<*n*> in NAT* by FINSEQ_1:def 11;
+      thus thesis by A1,A27,A28;
     end;
-    hence thesis by A10;
+A29: now
+      assume
+A30:  not p^<*k*> in T1();
+      consider q being Element of T1(), r being Element of T2() such that
+A31:  P[q] and
+A32:  p^<*k*> = q^r by A1,A23,A30;
+A33:  q^{} = q by FINSEQ_1:47;
+A34:  r <> {} by A30,A32,A33;
+      consider w being FinSequence, z such that
+A35:  r = w^<*z*> by A34,FINSEQ_1:63;
+      reconsider w as FinSequence of NAT by A35,FINSEQ_1:50;
+A36:  p^<*k*> = q^w^<*z*> by A32,A35,FINSEQ_1:45;
+      A37:  (
+p^<*k*>).(len p+1) = k & (q^w^<*z*>).(len(q^w)+1) = z by FINSEQ_1:59;
+A38:  len <*k*> = 1 & len <*z*> = 1 by FINSEQ_1:57;
+      A39:  len
+ (p^<*k*>) = len p+len <*k*> & len (q^w^<*z*>) = len (q^w)+len <*z*> by
+      FINSEQ_1:35;
+A40:  p = q^w by A36,A37,A38,A39,FINSEQ_1:46;
+A41:  w^<*n*> in T2() by A24,A35,A36,A37,A38,A39,TREES_1:def 5;
+A42:  p^<*n*> = q^(w^<*n*>) by A40,FINSEQ_1:45;
+A43:  p^<*n*> in NAT* by FINSEQ_1:def 11;
+      thus thesis by A1,A31,A41,A42,A43;
+    end;
+    thus thesis by A25,A29;
   end;
-  then reconsider T as Tree;
+  reconsider T as Tree by A3;
   take T;
   let p;
-  p is Element of T1() or
+A44: p is Element of T1() or
   (ex q being Element of T1(), r being Element of T2() st P[q] & p = q^r)
   implies p in NAT* by FINSEQ_1:def 11;
-  hence thesis by A1;
+  thus thesis by A1,A44;
 end;
 
 definition
@@ -926,8 +967,8 @@ definition
   ex q being Node of T, r being Node of T' st
   q in Leaves dom T & T.q = x & p = q^r) & (for p being Node of T st
   not p in Leaves dom T or T.p <> x holds it.p = T.p) &
-  (for p being Node of T, q being Node of T' st
-  p in Leaves dom T & T.p = x holds it.(p^q) = T'.q);
+  for p being Node of T, q being Node of T' st
+  p in Leaves dom T & T.p = x holds it.(p^q) = T'.q;
   existence
   proof
     defpred X[set] means $1 in Leaves dom T & T.$1 = x;
@@ -941,140 +982,150 @@ A1: p in W iff p in dom T or ex q being Node of T, r being Node of T' st
 A2: for z st z in W ex y st X[z,y]
     proof
       let z;
-      assume z in W;
-      then reconsider w = z as Element of W;
-A3:   now
+      assume
+A3:   z in W;
+      reconsider w = z as Element of W by A3;
+A4:   now
         given q being Node of T, r being Node of T' such that
-A4:     q in Leaves dom T & T.q = x & w = q^r;
+A5:     q in Leaves dom T & T.q = x & w = q^r;
         take y = T'.r, q, r;
-        thus z = q^r & q in Leaves dom T & T.q = x & y = T'.r by A4;
+        thus z = q^r & q in Leaves dom T & T.q = x & y = T'.r by A5;
       end;
-      now
+A6:   now
         assume
-A5:     not ex q being Node of T, r being Node of T' st
+A7:     not ex q being Node of T, r being Node of T' st
         q in Leaves dom T & T.q = x & w = q^r;
         take y = T.z;
-        thus z is Node of T by A1,A5;
-        reconsider w as Node of T by A1,A5;
+        thus z is Node of T by A1,A7;
+        reconsider w as Node of T by A1,A7;
         reconsider e = {} as Node of T' by TREES_1:47;
-        w^e = w by FINSEQ_1:47;
-        hence (not z in Leaves dom T or T.z <> x) & y = T.z by A5;
+A8:     w^e = w by FINSEQ_1:47;
+        thus (not z in Leaves dom T or T.z <> x) & y = T.z by A7,A8;
       end;
-      hence thesis by A3;
+      thus thesis by A4,A6;
     end;
     consider f being Function such that
-A6: dom f = W & for z st z in W holds X[z,f.z] from CLASSES1:sch 1(A2);
-    reconsider f as DecoratedTree by A6,TREES_2:def 8;
+A9: dom f = W & for z st z in W holds X[z,f.z] from CLASSES1:sch 1(A2);
+    reconsider f as DecoratedTree by A9,TREES_2:def 8;
     take f;
     thus p in dom f iff p in dom T or
     ex q being Node of T, r being Node of T' st
-    q in Leaves dom T & T.q = x & p = q^r by A1,A6;
+    q in Leaves dom T & T.q = x & p = q^r by A1,A9;
     thus for p being Node of T st not p in Leaves dom T or T.p <> x holds
     f.p = T.p
     proof
       let p be Node of T;
       assume
-A7:   not p in Leaves dom T or T.p <> x;
-A8:   p in W by A1;
-      now
+A10:  not p in Leaves dom T or T.p <> x;
+A11:  p in W by A1;
+A12:  now
         given p' being Node of T, q being Node of T' such that
-A9:     p = p'^q & p' in Leaves dom T & T.p' = x & f.p = T'.q;
-        p' is_a_prefix_of p & not p' is_a_proper_prefix_of p
-        by A9,TREES_1:8,def 8;
-        hence contradiction by A7,A9,XBOOLE_0:def 8;
+A13:    p = p'^q and
+A14:    p' in Leaves dom T and
+A15:    T.p' = x
+        and f.p = T'.q;
+        A16:    p'
+ is_a_prefix_of p & not p' is_a_proper_prefix_of p by A13,A14,TREES_1:8
+        ,def 8;
+        thus contradiction by A10,A14,A15,A16,XBOOLE_0:def 8;
       end;
-      hence thesis by A6,A8;
+      thus thesis by A9,A11,A12;
     end;
     let p be Node of T, q be Node of T';
-    assume
-A10: p in Leaves dom T & T.p = x;
-    then
-A11: p^q in W by A1;
-    now
-      assume p^q is Node of T;
-      then not p is_a_proper_prefix_of p^q & p is_a_prefix_of p^q
-      by A10,TREES_1:8,def 8;
-      hence p = p^q by XBOOLE_0:def 8;
-    end;
-    then consider p' being Node of T, q' being Node of T' such that
-A12: p^q = p'^q' & p' in Leaves dom T & T.p' = x & f.(p^q) = T'.q' by A6,A10
-    ,A11;
-    now
-      let p,p',q,q' be FinSequence of NAT, T be Tree;
+    assume that
+A17: p in Leaves dom T and
+A18: T.p = x;
+A19: p^q in W by A1,A17,A18;
+A20: now
       assume
-A13:  p^q = p'^q' & p in Leaves T & p' in Leaves T & p <> p';
-      now
-        assume len p <= len p';
-        then consider r such that
-A14:    p^r = p' by A13,FINSEQ_1:64;
-        p is_a_prefix_of p' by A14,TREES_1:8;
-        then p is_a_proper_prefix_of p' by A13,XBOOLE_0:def 8;
-        hence contradiction by A13,TREES_1:def 8;
-      end;
-      then consider r such that
-A15:  p'^r = p by A13,FINSEQ_1:64;
-      p' is_a_prefix_of p by A15,TREES_1:8;
-      then p' is_a_proper_prefix_of p by A13,XBOOLE_0:def 8;
-      hence contradiction by A13,TREES_1:def 8;
+A21:  p^q is Node of T;
+A22:  not p is_a_proper_prefix_of p^q by A17,A21,TREES_1:def 8;
+A23:  p is_a_prefix_of p^q by TREES_1:8;
+      thus p = p^q by A22,A23,XBOOLE_0:def 8;
     end;
-    then p = p' by A10,A12;
-    hence thesis by A12,FINSEQ_1:46;
+    consider p' being Node of T, q' being Node of T' such that
+A24: p^q = p'^q' and
+A25: p' in Leaves dom T
+    and T.p' = x and
+A26: f.(p^q) = T'.q' by A9,A17,A18,A19,A20;
+A27: now
+      let p,p',q,q' be FinSequence of NAT, T be Tree;
+      assume that
+A28:  p^q = p'^q' and
+A29:  p in Leaves T & p' in Leaves T and
+A30:  p <> p';
+A31:  now
+        assume
+A32:    len p <= len p';
+A33:    ex r st p^r = p' by A28,A32,FINSEQ_1:64;
+A34:    p is_a_prefix_of p' by A33,TREES_1:8;
+A35:    p is_a_proper_prefix_of p' by A30,A34,XBOOLE_0:def 8;
+        thus contradiction by A29,A35,TREES_1:def 8;
+      end;
+A36:  ex r st p'^r = p by A28,A31,FINSEQ_1:64;
+A37:  p' is_a_prefix_of p by A36,TREES_1:8;
+A38:  p' is_a_proper_prefix_of p by A30,A37,XBOOLE_0:def 8;
+      thus contradiction by A29,A38,TREES_1:def 8;
+    end;
+A39: p = p' by A17,A24,A25,A27;
+    thus thesis by A24,A26,A39,FINSEQ_1:46;
   end;
   uniqueness
   proof
     let T1, T2 be DecoratedTree such that
-A16: p in dom T1 iff p in dom T or ex q being Node of T, r being Node of T' st
+A40: p in dom T1 iff p in dom T or ex q being Node of T, r being Node of T' st
     q in Leaves dom T & T.q = x & p = q^r and
-A17: for p being Node of T st
+A41: for p being Node of T st
     not p in Leaves dom T or T.p <> x holds T1.p = T.p and
-A18: for p being Node of T, q being Node of T' st
+A42: for p being Node of T, q being Node of T' st
     p in Leaves dom T & T.p = x holds T1.(p^q) = T'.q and
-A19: p in dom T2 iff p in dom T or ex q being Node of T, r being Node of T' st
+A43: p in dom T2 iff p in dom T or ex q being Node of T, r being Node of T' st
     q in Leaves dom T & T.q = x & p = q^r and
-A20: for p being Node of T st
+A44: for p being Node of T st
     not p in Leaves dom T or T.p <> x holds T2.p = T.p and
-A21: for p being Node of T, q being Node of T' st
+A45: for p being Node of T, q being Node of T' st
     p in Leaves dom T & T.p = x holds T2.(p^q) = T'.q;
-A22: dom T1 = dom T2
+A46: dom T1 = dom T2
     proof
       let p be FinSequence of NAT;
-      (p in dom T1 iff p in dom T or
-      ex q being Node of T, r being Node of T' st q in Leaves dom T &
-      T.q = x & p = q^r) & (p in dom T2 iff p in dom T or
-      ex q being Node of T, r being Node of T' st q in Leaves dom T &
-      T.q = x & p = q^r) by A16,A19;
-      hence thesis;
+A47:  p in dom T1 iff p in dom T or ex q being Node of T, r being Node of T'
+      st q in Leaves dom T & T.q = x & p = q^r by A40;
+      thus thesis by A43,A47;
     end;
     reconsider p' = {} as Node of T' by TREES_1:47;
-    now
+A48: now
       let y;
-      assume y in dom T1;
-      then reconsider p = y as Node of T1;
-      per cases by A16;
-      suppose p in dom T;
-        then reconsider p as Node of T;
+      assume
+A49:  y in dom T1;
+      reconsider p = y as Node of T1 by A49;
+      per cases by A40;
+      suppose
+A50:    p in dom T;
+        reconsider p as Node of T by A50;
         hereby per cases;
           suppose
-A23:        p in Leaves dom T & T.p = x;
-            then T1.(p^p') = T'.p' & p^p' = p by A18,FINSEQ_1:47;
-            hence T1.y = T2.y by A21,A23;
+A51:        p in Leaves dom T & T.p = x;
+A52:        T1.(p^p') = T'.p' by A42,A51;
+A53:        p^p' = p by FINSEQ_1:47;
+            thus T1.y = T2.y by A45,A51,A52,A53;
           end;
           suppose
-A24:        not p in Leaves dom T or T.p <> x;
-            then T1.p = T.p by A17;
-            hence T1.y = T2.y by A20,A24;
+A54:        not p in Leaves dom T or T.p <> x;
+A55:        T1.p = T.p by A41,A54;
+            thus T1.y = T2.y by A44,A54,A55;
           end;
         end;
       end;
-      suppose ex q being Node of T, r being Node of T' st q in Leaves dom T &
+      suppose
+        A56:    ex q being Node of T, r being Node of T' st q in Leaves dom T &
         T.q = x & p = q^r;
-        then consider q being Node of T, r being Node of T' such that
-A25:    q in Leaves dom T & T.q = x & p = q^r;
-        thus T1.y = T'.r by A18,A25
-          .= T2.y by A21,A25;
+        consider q being Node of T, r being Node of T' such that
+A57:    q in Leaves dom T & T.q = x & p = q^r by A56;
+        thus T1.y = T'.r by A42,A57
+          .= T2.y by A45,A57;
       end;
     end;
-    hence thesis by A22,FUNCT_1:9;
+    thus thesis by A46,A48,FUNCT_1:9;
   end;
 end;
 
@@ -1085,37 +1136,44 @@ definition
   redefine func (T,x) <- T' -> DecoratedTree of D;
   coherence
   proof
-    rng ((T,x)<-T') c= D
+A1: rng ((T,x)<-T') c= D
     proof
       let y be set;
-      assume y in rng ((T,x)<-T');
-      then consider z being set such that
-A1:   z in dom ((T,x)<-T') & y = ((T,x)<-T').z by FUNCT_1:def 5;
-      reconsider z as Node of (T,x)<-T' by A1;
+      assume
+A2:   y in rng ((T,x)<-T');
+      consider z being set such that
+A3:   z in dom ((T,x)<-T') and
+A4:   y = ((T,x)<-T').z by A2,FUNCT_1:def 5;
+      reconsider z as Node of (T,x)<-T' by A3;
       reconsider p' = {} as Node of T' by TREES_1:47;
       per cases by Def7;
-      suppose z in dom T;
-        then reconsider p = z as Node of T;
+      suppose
+A5:     z in dom T;
+        reconsider p = z as Node of T by A5;
         hereby per cases;
-          suppose p in Leaves dom T & T.p = x;
-            then ((T,x)<-T').(p^p') = T'.p' & p^p' = p by Def7,FINSEQ_1:47;
-            hence thesis by A1;
+          suppose
+A6:         p in Leaves dom T & T.p = x;
+A7:         ((T,x)<-T').(p^p') = T'.p' by A6,Def7;
+A8:         p^p' = p by FINSEQ_1:47;
+            thus thesis by A4,A7,A8;
           end;
-          suppose not p in Leaves dom T or T.p <> x;
-            then ((T,x)<-T').p = T.p by Def7;
-            hence thesis by A1;
+          suppose
+A9:         not p in Leaves dom T or T.p <> x;
+A10:        ((T,x)<-T').p = T.p by A9,Def7;
+            thus thesis by A4,A10;
           end;
         end;
       end;
-      suppose ex q being Node of T, r being Node of T' st q in Leaves dom T &
+      suppose
+        A11:    ex q being Node of T, r being Node of T' st q in Leaves dom T &
         T.q = x & z = q^r;
-        then consider q being Node of T, r being Node of T' such that
-A2:     q in Leaves dom T & T.q = x & z = q^r;
-        ((T,x)<-T').z = T'.r by A2,Def7;
-        hence thesis by A1;
+        consider q being Node of T, r being Node of T' such that
+A12:    q in Leaves dom T & T.q = x & z = q^r by A11;
+A13:    ((T,x)<-T').z = T'.r by A12,Def7;
+        thus thesis by A4,A13;
       end;
     end;
-    hence thesis by RELAT_1:def 19;
+    thus thesis by A1,RELAT_1:def 19;
   end;
 end;
 
@@ -1126,21 +1184,22 @@ theorem
   not x in rng T or not x in Leaves T implies (T,x) <- T' = T
 proof
 A1: Leaves T c= rng T by RELAT_1:144;
-  assume not x in rng T or not x in Leaves T;
-  then
-A2: not x in Leaves T by A1; thus
-A3: dom ((T,x) <- T') = dom T
+  assume
+A2: not x in rng T or not x in Leaves T;
+A3: not x in Leaves T by A1,A2;
+  thus
+A4: dom ((T,x) <- T') = dom T
   proof
     let p be FinSequence of NAT;
-    p in dom (T,x) <- T' iff p in dom T or
+A5: p in dom (T,x) <- T' iff p in dom T or
     ex q being Node of T, r being Node of T' st
     q in Leaves dom T & T.q = x & p = q^r by Def7;
-    hence thesis by A2,FUNCT_1:def 12;
+    thus thesis by A3,A5,FUNCT_1:def 12;
   end;
   let p be Node of (T,x) <- T';
-  reconsider p' = p as Node of T by A3;
-  p' in Leaves dom T implies T.p' in Leaves T by FUNCT_1:def 12;
-  hence thesis by A2,Def7;
+  reconsider p' = p as Node of T by A4;
+A6: p' in Leaves dom T implies T.p' in Leaves T by FUNCT_1:def 12;
+  thus thesis by A3,A6,Def7;
 end;
 
 begin :: Double decoreted trees
@@ -1157,32 +1216,36 @@ theorem Th24:
   for D1, D2, T holds dom T`1 = dom T & dom T`2 = dom T
 proof
   let D1, D2, T;
-  T`1 = pr1(D1,D2)*T & T`2 = pr2(D1,D2)*T & rng T c= [:D1,D2:] &
-  dom pr1(D1,D2) = [:D1,D2:] & dom pr2(D1,D2) = [:D1,D2:]
-  by FUNCT_2:def 1,RELAT_1:def 19,TREES_3:def 12,def 13;
-  hence thesis by RELAT_1:46;
+  A1: T`1 = pr1(D1,D2)*T & T`2 = pr2(D1,D2)*T by TREES_3:def 12,def 13;
+  A2: rng T c= [:D1,D2:] & dom pr1(D1,D2) = [:D1,D2:] by FUNCT_2:def 1
+  ,RELAT_1:def 19;
+A3: dom pr2(D1,D2) = [:D1,D2:] by FUNCT_2:def 1;
+  thus thesis by A1,A2,A3,RELAT_1:46;
 end;
 
 theorem Th25:
   (root-tree [d1,d2])`1 = root-tree d1 & (root-tree [d1,d2])`2 = root-tree d2
 proof reconsider r = {} as Node of root-tree [d1,d2] by TREES_1:47;
-A1: dom (root-tree [d1,d2])`1 = dom root-tree [d1,d2] &
-  dom (root-tree [d1,d2])`2 = dom root-tree [d1,d2] &
-  (root-tree [d1,d2]).r = [d1,d2] & [d1,d2]`1 = d1 & [d1,d2]`2 = d2 &
-  dom root-tree [d1,d2] = elementary_tree 0 by Th3,Th24,MCART_1:7;
-  hence (root-tree [d1,d2])`1 = root-tree ((root-tree [d1,d2])`1.r) by Th5
-    .= root-tree d1 by A1,TREES_3:41;
-  thus (root-tree [d1,d2])`2 = root-tree ((root-tree [d1,d2])`2.r) by A1,Th5
-    .= root-tree d2 by A1,TREES_3:41;
+A1: dom (root-tree [d1,d2])`1 = dom root-tree [d1,d2] by Th24;
+A2: dom (root-tree [d1,d2])`2 = dom root-tree [d1,d2] by Th24;
+A3: (root-tree [d1,d2]).r = [d1,d2] by Th3;
+A4: [d1,d2]`1 = d1 by MCART_1:7;
+A5: [d1,d2]`2 = d2 by MCART_1:7;
+  thus (root-tree [d1,d2])`1 = root-tree ((root-tree [d1,d2])`1.r) by A1,Th3
+  ,Th5
+    .= root-tree d1 by A3,A4,TREES_3:41;
+  thus (root-tree [d1,d2])`2 = root-tree ((root-tree [d1,d2])`2.r) by A2,Th3
+  ,Th5
+    .= root-tree d2 by A3,A5,TREES_3:41;
 end;
 
 theorem
   <:root-tree x, root-tree y:> = root-tree [x,y]
 proof reconsider x' = x as Element of {x} by TARSKI:def 1;
   reconsider y' = y as Element of {y} by TARSKI:def 1;
-  (root-tree [x',y'])`1 = root-tree x & (root-tree [x',y'])`2 = root-tree y
+  A1: (root-tree [x',y'])`1 = root-tree x & (root-tree [x',y'])`2 = root-tree y
   by Th25;
-  hence thesis by TREES_3:42;
+  thus thesis by A1,TREES_3:42;
 end;
 
 theorem Th27:
@@ -1196,42 +1259,47 @@ proof
 A1: dom p1 = dom p and
 A2: for i st i in dom p for T st T = p.i holds p1.i = T`1;
   set W = [d1,d2]-tree p, W1 = d1-tree p1;
-A3: len doms p = len p & len doms p1 = len p1 & len p = len p1
-  by A1,FINSEQ_3:31,TREES_3:40;
-  then
-A4: dom doms p = dom doms p1 & dom doms p = dom p by FINSEQ_3:31;
-  now
+A3: len doms p = len p by TREES_3:40;
+A4: len doms p1 = len p1 by TREES_3:40;
+A5: len p = len p1 by A1,FINSEQ_3:31;
+A6: dom doms p = dom doms p1 by A3,A4,A5,FINSEQ_3:31;
+A7: dom doms p = dom p by A3,FINSEQ_3:31;
+A8: now
     let i be Nat;
     assume
-A5: i in dom p;
-    then reconsider T = p.i as Element of F by Lm1;
-    p1.i = T`1 by A2,A5;
-    then (doms p).i = dom T & (doms p1).i = dom T`1 by A1,A5,FUNCT_6:31;
-    hence (doms p).i = (doms p1).i by Th24;
+A9: i in dom p;
+    reconsider T = p.i as Element of F by A9,Lm1;
+A10: p1.i = T`1 by A2,A9;
+A11: (doms p).i = dom T by A9,FUNCT_6:31;
+A12: (doms p1).i = dom T`1 by A1,A9,A10,FUNCT_6:31;
+    thus (doms p).i = (doms p1).i by A11,A12,Th24;
   end;
-  then
-A6: doms p = doms p1 by A4,FINSEQ_1:17;
-  dom W`1 = dom W by Th24
+A13: doms p = doms p1 by A6,A7,A8,FINSEQ_1:17;
+A14: dom W`1 = dom W by Th24
     .= tree(doms p) by Th10;
-  hence dom W`1 = dom W1 by A6,Th10;
+  thus dom W`1 = dom W1 by A13,A14,Th10;
   let x be Node of W`1;
   reconsider a = x as Node of W by Th24;
-A7: W`1.x = (W.a)`1 by TREES_3:41;
+A15: W`1.x = (W.a)`1 by TREES_3:41;
   per cases;
-  suppose x = {};
-    then W.x = [d1,d2] & W1.x = d1 by Def4;
-    hence thesis by A7,MCART_1:7;
+  suppose
+A16: x = {};
+A17: W.x = [d1,d2] & W1.x = d1 by A16,Def4;
+    thus thesis by A15,A17,MCART_1:7;
   end;
-  suppose x <> {};
-    then consider n being Element of NAT, T being DecoratedTree,
+  suppose
+A18: x <> {};
+    consider n being Element of NAT, T being DecoratedTree,
     q being Node of T such that
-A8: n < len p & T = p.(n+1) & a = <*n*>^q by Th11;
-    reconsider T as Element of F by A8,Lm3;
+A19: n < len p and
+A20: T = p.(n+1) and
+A21: a = <*n*>^q by A18,Th11;
+    reconsider T as Element of F by A19,A20,Lm3;
     reconsider q as Node of T`1 by Th24;
-    n+1 in dom p by A8,Lm2;
-    then p1.(n+1) = T`1 by A2,A8;
-    then W.a = T.q & W1.a = T`1.q by A3,A8,Th12;
-    hence thesis by A7,TREES_3:41;
+A22: p1.(n+1) = T`1 by A2,A19,A20,Lm2;
+A23: W.a = T.q by A19,A20,A21,Th12;
+A24: W1.a = T`1.q by A5,A19,A21,A22,Th12;
+    thus thesis by A15,A23,A24,TREES_3:41;
   end;
 end;
 
@@ -1246,42 +1314,47 @@ proof
 A1: dom p2 = dom p and
 A2: for i st i in dom p for T st T = p.i holds p2.i = T`2;
   set W = [d1,d2]-tree p, W2 = d2-tree p2;
-A3: len doms p = len p & len doms p2 = len p2 & len p = len p2
-  by A1,FINSEQ_3:31,TREES_3:40;
-  then
-A4: dom doms p = dom doms p2 & dom doms p = dom p by FINSEQ_3:31;
-  now
+A3: len doms p = len p by TREES_3:40;
+A4: len doms p2 = len p2 by TREES_3:40;
+A5: len p = len p2 by A1,FINSEQ_3:31;
+A6: dom doms p = dom doms p2 by A3,A4,A5,FINSEQ_3:31;
+A7: dom doms p = dom p by A3,FINSEQ_3:31;
+A8: now
     let i be Nat;
     assume
-A5: i in dom p;
-    then reconsider T = p.i as Element of F by Lm1;
-    p2.i = T`2 by A2,A5;
-    then (doms p).i = dom T & (doms p2).i = dom T`2 by A1,A5,FUNCT_6:31;
-    hence (doms p).i = (doms p2).i by Th24;
+A9: i in dom p;
+    reconsider T = p.i as Element of F by A9,Lm1;
+A10: p2.i = T`2 by A2,A9;
+A11: (doms p).i = dom T by A9,FUNCT_6:31;
+A12: (doms p2).i = dom T`2 by A1,A9,A10,FUNCT_6:31;
+    thus (doms p).i = (doms p2).i by A11,A12,Th24;
   end;
-  then
-A6: doms p = doms p2 by A4,FINSEQ_1:17;
-  dom W`2 = dom W by Th24
+A13: doms p = doms p2 by A6,A7,A8,FINSEQ_1:17;
+A14: dom W`2 = dom W by Th24
     .= tree(doms p) by Th10;
-  hence dom W`2 = dom W2 by A6,Th10;
+  thus dom W`2 = dom W2 by A13,A14,Th10;
   let x be Node of W`2;
   reconsider a = x as Node of W by Th24;
-A7: W`2.x = (W.a)`2 by TREES_3:41;
+A15: W`2.x = (W.a)`2 by TREES_3:41;
   per cases;
-  suppose x = {};
-    then W.x = [d1,d2] & W2.x = d2 by Def4;
-    hence thesis by A7,MCART_1:7;
+  suppose
+A16: x = {};
+A17: W.x = [d1,d2] & W2.x = d2 by A16,Def4;
+    thus thesis by A15,A17,MCART_1:7;
   end;
-  suppose x <> {};
-    then consider n being Element of NAT, T being DecoratedTree,
+  suppose
+A18: x <> {};
+    consider n being Element of NAT, T being DecoratedTree,
     q being Node of T such that
-A8: n < len p & T = p.(n+1) & a = <*n*>^q by Th11;
-    reconsider T as Element of F by A8,Lm3;
+A19: n < len p and
+A20: T = p.(n+1) and
+A21: a = <*n*>^q by A18,Th11;
+    reconsider T as Element of F by A19,A20,Lm3;
     reconsider q as Node of T`2 by Th24;
-    n+1 in dom p by A8,Lm2;
-    then p2.(n+1) = T`2 by A2,A8;
-    then W.a = T.q & W2.a = T`2.q by A3,A8,Th12;
-    hence thesis by A7,TREES_3:41;
+A22: p2.(n+1) = T`2 by A2,A19,A20,Lm2;
+A23: W.a = T.q by A19,A20,A21,Th12;
+A24: W2.a = T`2.q by A5,A19,A21,A22,Th12;
+    thus thesis by A15,A23,A24,TREES_3:41;
   end;
 end;
 
@@ -1298,25 +1371,29 @@ A1: Seg len p = dom p by FINSEQ_1:def 3;
 A2: for i be Nat st i in Seg len p ex x being Element of Trees D1 st X[i,x]
   proof
     let i be Nat;
-    assume i in Seg len p;
-    then reconsider T = p.i as Element of F by A1,Lm1;
+    assume
+A3: i in Seg len p;
+    reconsider T = p.i as Element of F by A1,A3,Lm1;
     reconsider y = T`1 as Element of Trees D1 by TREES_3:def 7;
-    take y, T; thus thesis;
+    take y, T;
+    thus thesis;
   end;
   consider p1 being FinSequence of Trees D1 such that
-A3: dom p1 = Seg len p & for i be Nat st i in Seg len p holds X[i,p1.i]
+A4: dom p1 = Seg len p & for i be Nat st i in Seg len p holds X[i,p1.i]
   from FINSEQ_1:sch 5(A2);
-  take p1; thus
-A4: dom p1 = dom p by A3,FINSEQ_1:def 3;
-  hence for i st i in dom p
-  ex T being Element of F st T = p.i & p1.i = T`1 by A3;
-  now
+  take p1;
+  thus
+A5: dom p1 = dom p by A4,FINSEQ_1:def 3;
+  thus for i st i in dom p
+  ex T being Element of F st T = p.i & p1.i = T`1 by A4,A5;
+A6: now
     let i;
-    assume i in dom p;
-    then ex T being Element of F st T = p.i & p1.i = T`1 by A3,A4;
-    hence for T st T = p.i holds p1.i = T`1;
+    assume
+A7: i in dom p;
+A8: ex T being Element of F st T = p.i & p1.i = T`1 by A4,A5,A7;
+    thus for T st T = p.i holds p1.i = T`1 by A8;
   end;
-  hence thesis by A4,Th27;
+  thus thesis by A5,A6,Th27;
 end;
 
 theorem Th30:
@@ -1332,25 +1409,29 @@ A1: Seg len p = dom p by FINSEQ_1:def 3;
 A2: for i be Nat st i in Seg len p ex x being Element of Trees D2 st X[i,x]
   proof
     let i be Nat;
-    assume i in Seg len p;
-    then reconsider T = p.i as Element of F by A1,Lm1;
+    assume
+A3: i in Seg len p;
+    reconsider T = p.i as Element of F by A1,A3,Lm1;
     reconsider y = T`2 as Element of Trees D2 by TREES_3:def 7;
-    take y, T; thus thesis;
+    take y, T;
+    thus thesis;
   end;
   consider p2 being FinSequence of Trees D2 such that
-A3: dom p2 = Seg len p & for i be Nat st i in Seg len p holds X[i,p2.i]
+A4: dom p2 = Seg len p & for i be Nat st i in Seg len p holds X[i,p2.i]
   from FINSEQ_1:sch 5(A2);
-  take p2; thus
-A4: dom p2 = dom p by A3,FINSEQ_1:def 3;
-  hence for i st i in dom p
-  ex T being Element of F st T = p.i & p2.i = T`2 by A3;
-  now
+  take p2;
+  thus
+A5: dom p2 = dom p by A4,FINSEQ_1:def 3;
+  thus for i st i in dom p
+  ex T being Element of F st T = p.i & p2.i = T`2 by A4,A5;
+A6: now
     let i;
-    assume i in dom p;
-    then ex T being Element of F st T = p.i & p2.i = T`2 by A3,A4;
-    hence for T st T = p.i holds p2.i = T`2;
+    assume
+A7: i in dom p;
+A8: ex T being Element of F st T = p.i & p2.i = T`2 by A4,A5,A7;
+    thus for T st T = p.i holds p2.i = T`2 by A8;
   end;
-  hence thesis by A4,Th28;
+  thus thesis by A5,A6,Th28;
 end;
 
 theorem
@@ -1362,24 +1443,27 @@ proof
   let D1,D2, d1,d2;
   let p be FinSequence of FinTrees [:D1,D2:];
   consider p1 being FinSequence of Trees D1 such that
-A1: dom p1 = dom p and
-A2: for i st i in dom p
-  ex T being Element of FinTrees [:D1,D2:] st T = p.i & p1.i = T`1 and
-A3: ([d1,d2]-tree p)`1 = d1-tree p1 by Th29;
-  rng p1 c= FinTrees D1
+  A1: dom
+ p1 = dom p & for i st i in dom p ex T being Element of FinTrees [:D1,D2
+  :] st T = p.i & p1.i = T`1 and
+A2: ([d1,d2]-tree p)`1 = d1-tree p1 by Th29;
+A3: rng p1 c= FinTrees D1
   proof
     let x;
-    assume x in rng p1;
-    then consider y such that
-A4: y in dom p1 & x = p1.y by FUNCT_1:def 5;
-    reconsider y as Element of NAT by A4;
+    assume
+A4: x in rng p1;
+    consider y such that
+A5: y in dom p1 and
+A6: x = p1.y by A4,FUNCT_1:def 5;
+    reconsider y as Element of NAT by A5;
     consider T being Element of FinTrees [:D1,D2:] such that
-A5: T = p.y & p1.y = T`1 by A1,A2,A4;
-    dom T is finite & dom T`1 = dom T by Th24;
-    hence thesis by A4,A5,TREES_3:def 8;
+    T = p.y and
+A7: p1.y = T`1 by A1,A5;
+A8: dom T`1 = dom T by Th24;
+    thus thesis by A6,A7,A8,TREES_3:def 8;
   end;
-  then p1 is FinSequence of FinTrees D1 by FINSEQ_1:def 4;
-  hence thesis by A1,A2,A3;
+A9: p1 is FinSequence of FinTrees D1 by A3,FINSEQ_1:def 4;
+  thus thesis by A1,A2,A9;
 end;
 
 theorem
@@ -1391,23 +1475,26 @@ proof
   let D1,D2, d1,d2;
   let p be FinSequence of FinTrees [:D1,D2:];
   consider p2 being FinSequence of Trees D2 such that
-A1: dom p2 = dom p and
-A2: for i st i in dom p
-  ex T being Element of FinTrees [:D1,D2:] st T = p.i & p2.i = T`2 and
-A3: ([d1,d2]-tree p)`2 = d2-tree p2 by Th30;
-  rng p2 c= FinTrees D2
+  A1: dom
+ p2 = dom p & for i st i in dom p ex T being Element of FinTrees [:D1,D2
+  :] st T = p.i & p2.i = T`2 and
+A2: ([d1,d2]-tree p)`2 = d2-tree p2 by Th30;
+A3: rng p2 c= FinTrees D2
   proof
     let x;
-    assume x in rng p2;
-    then consider y such that
-A4: y in dom p2 & x = p2.y by FUNCT_1:def 5;
-    reconsider y as Element of NAT by A4;
+    assume
+A4: x in rng p2;
+    consider y such that
+A5: y in dom p2 and
+A6: x = p2.y by A4,FUNCT_1:def 5;
+    reconsider y as Element of NAT by A5;
     consider T being Element of FinTrees [:D1,D2:] such that
-A5: T = p.y & p2.y = T`2 by A1,A2,A4;
-    dom T is finite & dom T`2 = dom T by Th24;
-    hence thesis by A4,A5,TREES_3:def 8;
+    T = p.y and
+A7: p2.y = T`2 by A1,A5;
+A8: dom T`2 = dom T by Th24;
+    thus thesis by A6,A7,A8,TREES_3:def 8;
   end;
-  then p2 is FinSequence of FinTrees D2 by FINSEQ_1:def 4;
-  hence thesis by A1,A2,A3;
+A9: p2 is FinSequence of FinTrees D2 by A3,FINSEQ_1:def 4;
+  thus thesis by A1,A2,A9;
 end;
 

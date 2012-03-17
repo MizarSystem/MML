@@ -9,8 +9,8 @@ environ
  vocabularies RANKNULL, VECTSP_1, MATRLIN, VECTSP10, VECTSP_9, RLVECT_3,
       RLSUB_1, FUNCT_1, FINSET_1, SUBSET_1, BOOLE, CARD_1, RELAT_1, RLVECT_1,
       RLVECT_2, INCSP_1, RLSUB_2, FINSEQ_1, QC_LANG1, FUNCT_2, TARSKI, ARYTM_1,
-      FUNCOP_1, LOPBAN_1, SEQ_1, FINSEQ_4, FUNCT_4, CAT_1, COMPLEX1, TDGROUP,
-      ARYTM, GROUP_1;
+      FUNCOP_1, LOPBAN_1, SEQ_1, FINSEQ_4, FUNCT_4, COMPLEX1, TDGROUP, ARYTM,
+      GROUP_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, DOMAIN_1, RELAT_1, RELSET_1, FUNCT_1,
       NAT_1, NUMBERS, FUNCOP_1, PARTFUN1, FUNCT_2, FUNCT_4, XCMPLX_0, XXREAL_0,
       CARD_1, FINSET_1, FINSEQ_1, FINSEQOP, STRUCT_0, RLVECT_1, RLVECT_2,
@@ -19,9 +19,8 @@ environ
  constructors NAT_1, FINSEQOP, HAHNBAN, VECTSP_6, VECTSP_7, MOD_2, VECTSP_9,
       REALSET1, RLVECT_2, WELLORD2, LOPBAN_1, VECTSP_5, FUNCT_7, FUNCT_4,
       XXREAL_0, MATRLIN, RELSET_1;
- registrations RELAT_1, FUNCT_1, FUNCT_2, STRUCT_0, CARD_1, FINSET_1, FRAENKEL,
-      VECTSP_9, XBOOLE_0, VECTSP_7, MATRLIN, FUNCOP_1, ORDINAL1, XREAL_0,
-      SUBSET_1, VECTSP_1, FINSEQ_1;
+ registrations RELAT_1, FUNCT_1, STRUCT_0, CARD_1, FINSET_1, VECTSP_9,
+      XBOOLE_0, MATRLIN, FUNCOP_1, ORDINAL1, XREAL_0, SUBSET_1, FINSEQ_1;
  requirements BOOLE, SUBSET, NUMERALS, ARITHM;
  definitions TARSKI, RELAT_1, FUNCT_1, FINSEQ_1, VECTSP_4, VECTSP_6, XBOOLE_0,
       RLVECT_1, STRUCT_0, MOD_2, MATRLIN, FUNCOP_1, LOPBAN_1, FUNCT_2;
@@ -35,47 +34,47 @@ environ
 begin
 
 theorem Th1:
-  for f,g being Function
-  st g is one-to-one & f|(rng g) is one-to-one & rng g c= dom f
-  holds f*g is one-to-one
+  for f,g being Function st g is one-to-one & f|(rng g) is
+  one-to-one & rng g c= dom f holds f*g is one-to-one
 proof
   let f,g be Function such that
 A1: g is one-to-one and
 A2: f|(rng g) is one-to-one and
 A3: rng g c= dom f;
   set h = f*g;
-A4: dom h = dom g
+A4: dom h c= dom g
   proof
-    thus dom h c= dom g
-    proof
-      let x be set such that
-A5:   x in dom h;
-      thus thesis by A5,FUNCT_1:21;
-    end;
-    thus dom g c= dom h
-    proof
-      let x be set such that
-A6:   x in dom g;
-      g.x in rng g by A6,FUNCT_1:12;
-      hence thesis by A3,A6,FUNCT_1:21;
-    end;
+    let x be set;
+    assume
+    x in dom h;
+    hence thesis by FUNCT_1:21;
   end;
-  for x1,x2 being set st x1 in dom h & x2 in dom h & h.x1 = h.x2 holds x1 = x2
+  dom g c= dom h
+  proof
+    let x be set such that
+A5: x in dom g;
+    g.x in rng g by A5,FUNCT_1:12;
+    hence thesis by A3,A5,FUNCT_1:21;
+  end;
+  then
+A6: dom h = dom g by A4,XBOOLE_0:def 10;
+  for x1,x2 being set st x1 in dom h & x2 in dom h & h.x1 = h.x2 holds x1
+  = x2
   proof
     let x1,x2 be set such that
 A7: x1 in dom h and
 A8: x2 in dom h and
 A9: h.x1 = h.x2;
-A10: h.x1 = f.(g.x1) by A7,FUNCT_1:22;
-A11: h.x2 = f.(g.x2) by A8,FUNCT_1:22;
-A12: g.x2 in rng g by A4,A8,FUNCT_1:12;
-A13: f.(g.x1) = (f|(rng g)).(g.x1) by A4,A7,FUNCT_1:12,72;
-A14: f.(g.x2) = (f|(rng g)).(g.x2) by A4,A8,FUNCT_1:12,72;
+A10: h.x1 = f.(g.x1) & h.x2 = f.(g.x2) by A7,A8,FUNCT_1:22;
     dom (f|(rng g)) = rng g by A3,RELAT_1:91;
     then
-A15: g.x1 in dom (f|(rng g)) by A4,A7,FUNCT_1:12;
-    g.x2 in dom (f|(rng g)) by A3,A12,RELAT_1:91;
-    then g.x1 = g.x2 by A2,A9,A10,A11,A13,A14,A15,FUNCT_1:def 8;
+A11: g.x1 in dom (f|(rng g)) by A4,A7,FUNCT_1:12;
+    g.x2 in rng g by A4,A8,FUNCT_1:12;
+    then
+A12: g.x2 in dom (f|(rng g)) by A3,RELAT_1:91;
+    f.(g.x1) = (f|(rng g)).(g.x1) & f.(g.x2) = (f|(rng g)).(g.x2) by A6,
+    A7,A8,FUNCT_1:12,72;
+    then g.x1 = g.x2 by A2,A9,A10,A11,A12,FUNCT_1:def 8;
     hence thesis by A1,A4,A7,A8,FUNCT_1:def 8;
   end;
   hence thesis by FUNCT_1:def 8;
@@ -96,13 +95,14 @@ A2: f|Y is one-to-one;
 end;
 
 theorem Th3:
-  for V being 1-sorted, X,Y being Subset of V
-  holds X meets Y iff ex v being Element of V st v in X & v in Y
+  for V being 1-sorted, X,Y being Subset of V holds X meets Y iff
+  ex v being Element of V st v in X & v in Y
 proof
   let V be 1-sorted, X,Y be Subset of V;
   X meets Y implies ex v being Element of V st v in X & v in Y
   proof
-    assume X meets Y;
+    assume
+    X meets Y;
     then consider z being set such that
 A1: z in X and
 A2: z in Y by XBOOLE_0:3;
@@ -136,52 +136,45 @@ registration
   proof
     set f = FuncZero ([#]V,W);
     reconsider f as Function of V,W;
-A1: f is linear
+A1: for x,y being Vector of V holds f.(x+y) = (f.x)+(f.y)
     proof
-      thus for x,y being Vector of V holds f.(x+y) = (f.x)+(f.y)
-      proof
-        let x,y be Vector of V;
-A2:     f.(x+y) = 0.W by FUNCOP_1:13;
-A3:     f.x = 0.W by FUNCOP_1:13;
-        f.y = 0.W by FUNCOP_1:13;
-        hence thesis by A2,A3,RLVECT_1:def 7;
-      end;
-      thus for a being Element of F, x being Element of V
-      holds f.(a*x) = a*(f.x)
-      proof
-        let a be Element of F, x be Element of V;
-A4:     f.(a*x) = 0.W by FUNCOP_1:13;
-        f.x = 0.W by FUNCOP_1:13;
-        hence thesis by A4,VECTSP_1:59;
-      end;
+      let x,y be Vector of V;
+A2:   f.y = 0.W by FUNCOP_1:13;
+      f.(x+y) = 0.W & f.x = 0.W by FUNCOP_1:13;
+      hence thesis by A2,RLVECT_1:def 7;
     end;
     take f;
-    thus thesis by A1;
+    for a being Element of F, x being Element of V holds f.(a*x) = a*(f.x)
+    proof
+      let a be Element of F, x be Element of V;
+      f.(a*x) = 0.W & f.x = 0.W by FUNCOP_1:13;
+      hence thesis by VECTSP_1:59;
+    end;
+    hence thesis by A1,MOD_2:def 5;
   end;
 end;
 
 theorem Th4:
   [#]V is finite implies V is finite-dimensional
 proof
-  assume
-A1: [#]V is finite;
   consider B being Basis of V;
-  reconsider B as finite Subset of V by A1;
+  assume
+  [#]V is finite;
+  then reconsider B as finite Subset of V;
   take B;
   thus thesis;
 end;
 
 theorem
-  for V being finite-dimensional VectSp of F st card ([#]V) = 1
-  holds dim V = 0
+  for V being finite-dimensional VectSp of F st card ([#]V) = 1 holds
+  dim V = 0
 proof
   let V be finite-dimensional VectSp of F such that
 A1: card ([#]V) = 1;
   [#]V = {0.V}
   proof
-    consider y being set such that
-A2: [#]V = {y} by A1,CARD_2:60;
-    thus thesis by A2,TARSKI:def 1;
+    ex y being set st [#]V = {y} by A1,CARD_2:60;
+    hence thesis by TARSKI:def 1;
   end;
   then (Omega).V = (0).V by VECTSP_4:def 3;
   hence thesis by VECTSP_9:33;
@@ -192,67 +185,74 @@ theorem
 proof
   assume
 A1: card ([#]V) = 2;
-A3: [#]V is finite by A1;
+  then
+A2: [#]V is finite;
   reconsider C = [#]V as finite set by A1;
-A4: card ([#]V) = card (C);
-  reconsider V as finite-dimensional VectSp of F by A3,Th4;
+A3: card ([#]V) = card (C);
+  reconsider V as finite-dimensional VectSp of F by A2,Th4;
   ex v being Vector of V st v <> 0.V & (Omega).V = Lin ({v})
   proof
     consider x,y being set such that
-A5: x <> y and
-A6: [#]V = {x,y} by A1,A4,CARD_2:79;
-    per cases by A6,TARSKI:def 2;
+A4: x <> y and
+A5: [#]V = {x,y} by A1,A3,CARD_2:79;
+    per cases by A5,TARSKI:def 2;
     suppose
-A7:   x = 0.V;
-      reconsider y as Element of V by A6,TARSKI:def 2;
-      reconsider x as Element of V by A7;
+A6:   x = 0.V;
+      then reconsider x as Element of V;
+      reconsider y as Element of V by A5,TARSKI:def 2;
       set L = Lin ({y});
-A8:   for v being Element of V holds v in (Omega).V iff v in L
+      take y;
+      for v being Element of V holds v in (Omega).V iff v in L
       proof
         let v be Element of V;
         v in (Omega).V implies v in L
         proof
-          assume v in (Omega).V;
-A9:       y in {y} by TARSKI:def 1;
-A10:      0.L in L by STRUCT_0:def 5;
-          per cases by A6,TARSKI:def 2;
-          suppose v = x;
-            hence thesis by A7,A10,VECTSP_4:def 2;
+          assume
+          v in (Omega).V;
+A7:       y in {y} by TARSKI:def 1;
+A8:       0.L in L by STRUCT_0:def 5;
+          per cases by A5,TARSKI:def 2;
+          suppose
+            v = x;
+            hence thesis by A6,A8,VECTSP_4:def 2;
           end;
-          suppose v = y;
-            hence thesis by A9,VECTSP_7:13;
+          suppose
+            v = y;
+            hence thesis by A7,VECTSP_7:13;
           end;
         end;
         hence thesis by STRUCT_0:def 5;
       end;
-      take y;
-      thus thesis by A5,A7,A8,VECTSP_4:38;
+      hence thesis by A4,A6,VECTSP_4:38;
     end;
     suppose
-A11:  y = 0.V;
-      then reconsider y as Element of V;
-      reconsider x as Element of V by A6,TARSKI:def 2;
+A9:   y = 0.V;
+      reconsider x as Element of V by A5,TARSKI:def 2;
+      reconsider y as Element of V by A9;
       set L = Lin ({x});
-A12:  for v being Element of V holds v in (Omega).V iff v in L
+      take x;
+      for v being Element of V holds v in (Omega).V iff v in L
       proof
         let v be Element of V;
         v in (Omega).V implies v in L
         proof
-          assume v in (Omega).V;
-A13:      x in {x} by TARSKI:def 1;
-A14:      0.L in L by STRUCT_0:def 5;
-          per cases by A6,TARSKI:def 2;
-          suppose v = y;
-            hence thesis by A11,A14,VECTSP_4:def 2;
+          assume
+          v in (Omega).V;
+A10:      x in {x} by TARSKI:def 1;
+A11:      0.L in L by STRUCT_0:def 5;
+          per cases by A5,TARSKI:def 2;
+          suppose
+            v = y;
+            hence thesis by A9,A11,VECTSP_4:def 2;
           end;
-          suppose v = x;
-            hence thesis by A13,VECTSP_7:13;
+          suppose
+            v = x;
+            hence thesis by A10,VECTSP_7:13;
           end;
         end;
         hence thesis by STRUCT_0:def 5;
       end;
-      take x;
-      thus thesis by A5,A11,A12,VECTSP_4:38;
+      hence thesis by A4,A9,VECTSP_4:38;
     end;
   end;
   hence thesis by VECTSP_9:34;
@@ -280,10 +280,9 @@ theorem Th8:
   for x,y being Element of V holds T.x - T.y = T.(x - y)
 proof
   let x,y be Element of V;
-A1: T.(x - y) = T.x + T.(-y) by MOD_2:def 5;
-A2: -y = (-1.F)*y by VECTSP_1:59;
-  T.((-1.F)*y) = (-1.F)*(T.y) by MOD_2:def 5;
-  hence thesis by A1,A2,VECTSP_1:59;
+A1: T.((-1.F)*y) = (-1.F)*(T.y) by MOD_2:def 5;
+  T.(x - y) = T.x + T.(-y) & -y = (-1.F)*y by MOD_2:def 5,VECTSP_1:59;
+  hence thesis by A1,VECTSP_1:59;
 end;
 
 theorem Th9:
@@ -299,62 +298,57 @@ definition
   let F be Field, V,W be VectSp of F, T be linear-transformation of V,W;
   func ker T -> strict Subspace of V means
   :Def1:
-  [#]it = { u where u is Element of V : T.u = 0.W };
+  [#]it = { u where u is
+  Element of V : T.u = 0.W };
   existence
   proof
     set K = { u where u is Element of V : T.u = 0.W };
     K c= [#]V
     proof
-      let x be set such that
-A1:   x in K;
-      consider u being Element of V such that
-A2:   u = x and T.u = 0.W by A1;
-      thus thesis by A2;
+      let x be set;
+      assume
+      x in K;
+      then ex u being Element of V st u = x & T.u = 0.W;
+      hence thesis;
     end;
     then reconsider K as Subset of V;
-A3: for v being Element of V st v in K holds T.v = 0.W
+A1: for v being Element of V st v in K holds T.v = 0.W
     proof
-      let v be Element of V such that
-A4:   v in K;
-      consider u being Element of V such that
-A5:   u = v and
-A6:   T.u = 0.W by A4;
-      thus thesis by A5,A6;
+      let v be Element of V;
+      assume
+      v in K;
+      then ex u being Element of V st u = v & T.u = 0.W;
+      hence thesis;
     end;
-    K <> {} & K is linearly-closed
-    proof
-      T.(0.V) = 0.W by Th9;
-      then 0.V in K;
-      hence K <> {};
-      thus K is linearly-closed
-      proof
-A7:     now
-          let u,v be Element of V such that
-A8:       u in K and
-A9:       v in K;
-A10:      T.u = 0.W by A3,A8;
-          T.v = 0.W by A3,A9;
-          then T.(u+v) = 0.W + 0.W by A10,MOD_2:def 5
-            .= 0.W by RLVECT_1:def 7;
-          hence u+v in K;
-        end;
-        now
-          let u be Element of V, a be Element of F such that
-A11:      u in K;
-          T.u = 0.W by A3,A11;
-          then T.(a*u) = a*(0.W) by MOD_2:def 5
-            .= 0.W by VECTSP_1:59;
-          hence a*u in K;
-        end;
-        then for a being Element of F, u being Element of V st u in K
-        holds a*u in K;
-        hence thesis by A7,VECTSP_4:def 1;
-      end;
+    now
+      let u be Element of V, a be Element of F;
+      assume
+      u in K;
+      then T.u = 0.W by A1;
+      then T.(a*u) = a*(0.W) by MOD_2:def 5
+        .= 0.W by VECTSP_1:59;
+      hence a*u in K;
     end;
+    then
+A2: for a being Element of F, u being Element of V st u in K holds a*u in
+    K;
+    T.(0.V) = 0.W by Th9;
+    then
+A3: 0.V in K;
+    now
+      let u,v be Element of V;
+      assume
+      u in K & v in K;
+      then T.u = 0.W & T.v = 0.W by A1;
+      then T.(u+v) = 0.W + 0.W by MOD_2:def 5
+        .= 0.W by RLVECT_1:def 7;
+      hence u+v in K;
+    end;
+    then K is linearly-closed by A2,VECTSP_4:def 1;
     then consider W being strict Subspace of V such that
-A12: K = the carrier of W by VECTSP_4:42;
+A4: K = the carrier of W by A3,VECTSP_4:42;
     take W;
-    thus thesis by A12;
+    thus thesis by A4;
   end;
   uniqueness by VECTSP_4:37;
 end;
@@ -365,16 +359,16 @@ proof
   let x be Element of V;
   thus x in ker T implies T.x = 0.W
   proof
-    assume x in ker T;
+    assume
+    x in ker T;
     then
 A1: x in [#]ker T by STRUCT_0:def 5;
     [#]ker T = { u where u is Element of V : T.u = 0.W } by Def1;
-    then consider u being Element of V such that
-A2: u = x and
-A3: T.u = 0.W by A1;
-    thus thesis by A2,A3;
+    then ex u being Element of V st u = x & T.u = 0.W by A1;
+    hence thesis;
   end;
-  assume T.x = 0.W;
+  assume
+  T.x = 0.W;
   then x in { u where u is Element of V : T.u = 0.W };
   then x in [#]ker T by Def1;
   hence thesis by STRUCT_0:def 5;
@@ -385,9 +379,8 @@ definition
   redefine func T .: X -> Subset of W;
   coherence
   proof
-A1: rng T c= [#]W by Th7;
-    T .: X c= rng T by RELAT_1:144;
-    hence thesis by A1,XBOOLE_1:1;
+    rng T c= [#]W & T .: X c= rng T by Th7,RELAT_1:144;
+    hence thesis by XBOOLE_1:1;
   end;
 end;
 
@@ -399,14 +392,16 @@ definition
   existence
   proof
     reconsider U = T .: [#]V as Subset of W;
-A1: for u being Element of W holds
-    u in U iff ex v being Element of V st T.v = u
+A1: for u being Element of W holds u in U iff ex v being Element of V st T
+    .v = u
     proof
       let u be Element of W;
       thus u in U implies ex v being Element of V st T.v = u
       proof
-        assume u in U;
-        then consider x being set such that x in dom T and
+        assume
+        u in U;
+        then consider x being set such that
+        x in dom T and
 A2:     x in [#]V and
 A3:     u = T.x by FUNCT_1:def 12;
         reconsider x as Element of V by A2;
@@ -422,39 +417,32 @@ A4:     T.v = u;
         hence thesis by A4,FUNCT_1:def 12;
       end;
     end;
-    U <> {} & U is linearly-closed
-    proof
-      thus U <> {}
-      proof
-        T.(0.V) = 0.W by Th9;
-        hence thesis by A1;
-      end;
-      thus U is linearly-closed
-      proof
-A5:     now
-          let u,v be Element of W such that
-A6:       u in U and
-A7:       v in U;
-          consider x being Element of V such that
-A8:       T.x = u by A1,A6;
-          consider y being Element of V such that
-A9:       T.y = v by A1,A7;
-          u+v = T.(x+y) by A8,A9,MOD_2:def 5;
-          hence u+v in U by A1;
-        end;
-        now
-          let a be Element of F, w be Element of W such that
-A10:      w in U;
-          consider v being Element of V such that
-A11:      T.v = w by A1,A10;
-          T.(a*v) = a*w by A11,MOD_2:def 5;
-          hence a*w in U by A1;
-        end;
-        hence thesis by A5,VECTSP_4:def 1;
-      end;
+A5: now
+      let u,v be Element of W such that
+A6:   u in U and
+A7:   v in U;
+      consider x being Element of V such that
+A8:   T.x = u by A1,A6;
+      consider y being Element of V such that
+A9:   T.y = v by A1,A7;
+      u+v = T.(x+y) by A8,A9,MOD_2:def 5;
+      hence u+v in U by A1;
     end;
+    now
+      let a be Element of F, w be Element of W;
+      assume
+      w in U;
+      then consider v being Element of V such that
+A10:  T.v = w by A1;
+      T.(a*v) = a*w by A10,MOD_2:def 5;
+      hence a*w in U by A1;
+    end;
+    then
+A11: U is linearly-closed by A5,VECTSP_4:def 1;
+    T.(0.V) = 0.W by Th9;
+    then U <> {} by A1;
     then consider A being strict Subspace of W such that
-A12: U = the carrier of A by VECTSP_4:42;
+A12: U = the carrier of A by A11,VECTSP_4:42;
     take A;
     thus thesis by A12;
   end;
@@ -464,13 +452,9 @@ end;
 theorem
   0.V in ker T
 proof
-  T.(0.V) = 0.W
-  proof
-    0.V = (0.F)*(0.V) by VECTSP_1:59;
-    then T.(0.V) = (0.F)*T.(0.V) by MOD_2:def 5
-      .= 0.W by VECTSP_1:59;
-    hence thesis;
-  end;
+  0.V = (0.F)*(0.V) by VECTSP_1:59;
+  then T.(0.V) = (0.F)*T.(0.V) by MOD_2:def 5
+    .= 0.W by VECTSP_1:59;
   hence thesis by Th10;
 end;
 
@@ -483,16 +467,18 @@ proof
 end;
 
 theorem Th13:
-  for y being Element of W
-  holds y in im T iff ex x being Element of V st y = T.x
+  for y being Element of W holds y in im T iff ex x being Element
+  of V st y = T.x
 proof
   let y be Element of W;
 A1: y in im T implies ex x being Element of V st y = T.x
   proof
-    assume y in im T;
+    assume
+    y in im T;
     then reconsider y as Element of im T by STRUCT_0:def 5;
     [#](im T) = T .: [#]V by Def2;
-    then consider x being set such that x in dom T and
+    then consider x being set such that
+    x in dom T and
 A2: x in [#]V and
 A3: y = T.x by FUNCT_1:def 12;
     reconsider x as Element of V by A2;
@@ -501,9 +487,8 @@ A3: y = T.x by FUNCT_1:def 12;
   end;
   (ex x being Element of V st y = T.x) implies y in im T
   proof
-    assume ex x being Element of V st y = T.x;
-    then consider x being Element of V such that
-A4: y = T.x;
+    assume
+A4: ex x being Element of V st y = T.x;
     dom T = [#]V by Th7;
     then y in T .: [#]V by A4,FUNCT_1:def 12;
     then y in [#](im T) by Def2;
@@ -524,21 +509,21 @@ end;
 theorem Th15:
   T is one-to-one implies ker T = (0).V
 proof
+  reconsider Z = (0).V as Subspace of ker T by VECTSP_4:50;
   assume
 A1: T is one-to-one;
-  reconsider Z = (0).V as Subspace of ker T by VECTSP_4:50;
   for v being Element of ker T holds v in Z
   proof
     let v be Element of ker T;
+A2: v in ker T by STRUCT_0:def 5;
     assume
-A2: not v in Z;
-A3: T.(0.V) = 0.W by Th9;
-A4: not v = 0.V by A2,VECTSP_4:46;
-A5: v in ker T by STRUCT_0:def 5;
+    not v in Z;
+    then
+A3: not v = 0.V by VECTSP_4:46;
+A4: T.(0.V) = 0.W & dom T = [#]V by Th7,Th9;
     reconsider v as Element of V by VECTSP_4:18;
-A6: T.v = 0.W by A5,Th10;
-    dom T = [#]V by Th7;
-    hence thesis by A1,A3,A4,A6,FUNCT_1:def 8;
+    T.v = 0.W by A2,Th10;
+    hence thesis by A1,A3,A4,FUNCT_1:def 8;
   end;
   hence thesis by VECTSP_4:40;
 end;
@@ -562,36 +547,39 @@ A1: T.x = T.y;
 end;
 
 theorem Th18:
-  for A being Subset of V, x,y being Element of V st x - y in Lin A
-  holds x in Lin (A \/ {y})
+  for A being Subset of V, x,y being Element of V st x - y in Lin
+  A holds x in Lin (A \/ {y})
 proof
   let A be Subset of V, x,y be Element of V such that
 A1: x - y in Lin A;
+A2: Lin (A \/ {y}) = (Lin A) + (Lin {y}) by VECTSP_7:20;
   y in {y} by TARSKI:def 1;
   then
-A2: y in Lin ({y}) by VECTSP_7:13;
-A3: (x - y) + y = x - (y - y) by RLVECT_1:43
+A3: y in Lin ({y}) by VECTSP_7:13;
+  (x - y) + y = x - (y - y) by RLVECT_1:43
     .= x - 0.V by VECTSP_1:66
     .= x by RLVECT_1:26;
-  Lin (A \/ {y}) = (Lin A) + (Lin {y}) by VECTSP_7:20;
-  hence thesis by A1,A2,A3,VECTSP_5:5;
+  hence thesis by A1,A3,A2,VECTSP_5:5;
 end;
 
 begin :: Some basic facts about linearly independent subsets and linear
-      :: combinations
+:: combinations
 
 theorem Th19:
-  for X being Subset of V st V is Subspace of W holds X is Subset of W
+  for X being Subset of V st V is Subspace of W holds X is Subset
+  of W
 proof
   let X be Subset of V;
-  assume V is Subspace of W;
+  assume
+  V is Subspace of W;
   then
 A1: [#]V c= [#]W by VECTSP_4:def 2;
   X c= [#]W
   proof
-    let x be set such that
-A2: x in X;
-    x in [#]V by A2;
+    let x be set;
+    assume
+    x in X;
+    then x in [#]V;
     hence thesis by A1;
   end;
   hence thesis;
@@ -600,8 +588,8 @@ end;
 :: A linearly independent set is a basis of its linear span.
 
 theorem Th20:
-  for A being Subset of V st A is linearly-independent
-  holds A is Basis of Lin A
+  for A being Subset of V st A is linearly-independent holds A is
+  Basis of Lin A
 proof
   let A be Subset of V such that
 A1: A is linearly-independent;
@@ -614,8 +602,8 @@ A2: x in A;
     hence thesis by STRUCT_0:def 5;
   end;
   then reconsider B = A as Subset of Lin A;
-A3: B is linearly-independent by A1,VECTSP_9:16;
-  Lin B = Lin A by VECTSP_9:21;
+A3: Lin B = Lin A by VECTSP_9:21;
+  B is linearly-independent by A1,VECTSP_9:16;
   hence thesis by A3,VECTSP_7:def 3;
 end;
 
@@ -623,197 +611,185 @@ end;
 :: results in a linearly dependent set.
 
 theorem Th21:
-  for A being Subset of V, x being Element of V st x in Lin A & not x in A
-  holds A \/ {x} is linearly-dependent
+  for A being Subset of V, x being Element of V st x in Lin A &
+  not x in A holds A \/ {x} is linearly-dependent
 proof
   let A be Subset of V, x be Element of V such that
 A1: x in Lin A and
 A2: not x in A;
   per cases;
-  suppose A is linearly-independent;
-    then reconsider A' = A as Basis of Lin A by Th20;
+  suppose
+A3: A is linearly-independent;
     x in [#](Lin A) by A1,STRUCT_0:def 5;
     then reconsider X = {x} as Subset of Lin A by SUBSET_1:63;
-A3: X misses A'
-    proof
-      assume X meets A';
-      then consider y being set such that
-A4:   y in X and
-A5:   y in A' by XBOOLE_0:3;
-      thus contradiction by A2,A4,A5,TARSKI:def 1;
-    end;
+    reconsider A' = A as Basis of Lin A by A3,Th20;
     reconsider B = A' \/ X as Subset of Lin A;
-A6: B is linearly-dependent by A3,VECTSP_9:19;
-    thus thesis by A6,VECTSP_9:16;
+    X misses A'
+    proof
+      assume
+      X meets A';
+      then ex y being set st y in X & y in A' by XBOOLE_0:3;
+      hence contradiction by A2,TARSKI:def 1;
+    end;
+    then B is linearly-dependent by VECTSP_9:19;
+    hence thesis by VECTSP_9:16;
   end;
   suppose
-A7: A is linearly-dependent;
-    thus thesis by A7,VECTSP_7:2,XBOOLE_1:7;
+    A is linearly-dependent;
+    hence thesis by VECTSP_7:2,XBOOLE_1:7;
   end;
 end;
 
 theorem Th22:
-  for A being Subset of V, B being Basis of V st A is Basis of ker T & A c= B
-  holds T|(B \ A) is one-to-one
+  for A being Subset of V, B being Basis of V st A is Basis of ker
+  T & A c= B holds T|(B \ A) is one-to-one
 proof
   let A be Subset of V, B be Basis of V such that
 A1: A is Basis of ker T and
 A2: A c= B;
+  reconsider A' = A as Subset of V;
   set f = T|(B \ A);
   let x1,x2 be set such that
 A3: x1 in dom f and
 A4: x2 in dom f and
 A5: f.x1 = f.x2 and
 A6: x1 <> x2;
-A7: dom T = [#]V by Th7;
-  reconsider x1 as Element of V by A3;
   reconsider x2 as Element of V by A4;
-  reconsider A' = A as Subset of V;
-A8: x1 in B \ A by A3,A7,RELAT_1:91;
-A9: x2 in B \ A by A4,A7,RELAT_1:91;
-A10: f.x1 = T.x1 by A8,FUNCT_1:72;
-  f.x2 = T.x2 by A9,FUNCT_1:72;
+  reconsider x1 as Element of V by A3;
+A7: dom T = [#]V by Th7;
   then
-A11: x1 - x2 in ker T by A5,A10,Th17;
-  reconsider A as Basis of ker T by A1;
-  ker T = Lin A by VECTSP_7:def 3;
-  then x1 - x2 in Lin A' by A11,VECTSP_9:21;
-  then
-A12: x1 in Lin (A' \/ {x2}) by Th18;
-A13: (A' \/ {x2}) \/ {x1} = A' \/ {x1,x2}
-  proof
-    {x2} \/ {x1} = {x1,x2} by ENUMSET1:41;
-    hence thesis by XBOOLE_1:4;
-  end;
-A14: not x1 in (A' \/ {x2})
+A8: x1 in B \ A by A3,RELAT_1:91;
+A9: not x1 in (A' \/ {x2})
   proof
     assume
-A15: x1 in A' \/ {x2};
-    per cases by A15,XBOOLE_0:def 3;
-    suppose x1 in A';
+A10: x1 in A' \/ {x2};
+    per cases by A10,XBOOLE_0:def 3;
+    suppose
+      x1 in A';
       hence contradiction by A8,XBOOLE_0:def 5;
     end;
-    suppose x1 in {x2};
+    suppose
+      x1 in {x2};
       hence contradiction by A6,TARSKI:def 1;
     end;
   end;
-A16: A' \/ {x1,x2} c= B
+A11: x2 in B \ A by A4,A7,RELAT_1:91;
+  then
+A12: f.x2 = T.x2 by FUNCT_1:72;
+  reconsider A as Basis of ker T by A1;
+A13: ker T = Lin A by VECTSP_7:def 3;
+  f.x1 = T.x1 by A8,FUNCT_1:72;
+  then x1 - x2 in ker T by A5,A12,Th17;
+  then x1 - x2 in Lin A' by A13,VECTSP_9:21;
+  then
+A14: x1 in Lin (A' \/ {x2}) by Th18;
+  {x2} \/ {x1} = {x1,x2} by ENUMSET1:41;
+  then
+A15: (A' \/ {x2}) \/ {x1} = A' \/ {x1,x2} by XBOOLE_1:4;
+  {x1,x2} c= B
   proof
-    {x1,x2} c= B
-    proof
-      let z be set such that
-A17:  z in {x1,x2};
-      per cases by A17,TARSKI:def 2;
-      suppose z = x1;
-        hence thesis by A8,XBOOLE_0:def 5;
-      end;
-      suppose z = x2;
-        hence thesis by A9,XBOOLE_0:def 5;
-      end;
+    let z be set such that
+A16: z in {x1,x2};
+    per cases by A16,TARSKI:def 2;
+    suppose
+      z = x1;
+      hence thesis by A8,XBOOLE_0:def 5;
     end;
-    hence thesis by A2,XBOOLE_1:8;
+    suppose
+      z = x2;
+      hence thesis by A11,XBOOLE_0:def 5;
+    end;
   end;
+  then
+A17: A' \/ {x1,x2} c= B by A2,XBOOLE_1:8;
   B is linearly-independent by VECTSP_7:def 3;
-  hence thesis by A12,A13,A14,A16,Th21,VECTSP_7:2;
+  hence thesis by A14,A15,A9,A17,Th21,VECTSP_7:2;
 end;
 
 theorem
-  for A being Subset of V, l being Linear_Combination of A,
-  x being Element of V, a being Element of F
-  holds l +* (x,a) is Linear_Combination of A \/ {x}
+  for A being Subset of V, l being Linear_Combination of A, x being
+Element of V, a being Element of F holds l +* (x,a) is Linear_Combination of A
+  \/ {x}
 proof
-  let A be Subset of V, l be Linear_Combination of A, x be Element of V,
-  a be Element of F;
+  let A be Subset of V, l be Linear_Combination of A, x be Element of V, a be
+  Element of F;
   set m = l +* (x,a);
-  m is Element of Funcs ([#]V,[#]F)
+A1: dom m = [#]V by FUNCT_2:def 1;
+  rng m c= [#]F
   proof
-A1: dom m = [#]V
-    proof
-A2:   dom l = [#]V by FUNCT_2:169;
-      then
-A3:   m = l +* (x .--> a) by FUNCT_7:def 3;
-A4:   dom (x .--> a) = {x} by FUNCOP_1:19;
-      dom m = (dom l) \/ (dom (x .--> a)) by A3,FUNCT_4:def 1;
-      hence thesis by A2,A4,XBOOLE_1:12;
+    let y be set;
+    assume
+    y in rng m;
+    then consider x' being set such that
+A2: x' in dom m and
+A3: m.x' = y by FUNCT_1:def 5;
+A4: x' in dom l by A1,A2,FUNCT_2:169;
+    per cases;
+    suppose
+      x' = x;
+      then m.x' = a by A4,FUNCT_7:33;
+      hence thesis by A3;
     end;
-    rng m c= [#]F
-    proof
-      let y be set such that
-A5:   y in rng m;
-      consider x' being set such that
-A6:   x' in dom m and
-A7:   m.x' = y by A5,FUNCT_1:def 5;
-A8:   x' in dom l by A1,A6,FUNCT_2:169;
-      per cases;
-      suppose x' = x;
-        then m.x' = a by A8,FUNCT_7:33;
-        hence thesis by A7;
-      end;
-      suppose x' <> x;
-        then
-A9:     m.x' = l.x' by FUNCT_7:34;
-A10:    l.x' in rng l by A8,FUNCT_1:12;
-        rng l c= [#]F by FUNCT_2:169;
-        hence thesis by A7,A9,A10;
-      end;
+    suppose
+A5:   x' <> x;
+A6:   l.x' in rng l & rng l c= [#]F by A4,FUNCT_1:12,FUNCT_2:169;
+      m.x' = l.x' by A5,FUNCT_7:34;
+      hence thesis by A3,A6;
     end;
-    hence thesis by A1,FUNCT_2:def 2;
   end;
-  then reconsider m as Element of Funcs ([#]V,[#]F);
+  then reconsider m as Element of Funcs ([#]V,[#]F) by A1,FUNCT_2:def 2;
   set T = Carrier l \/ {x};
   for v being Element of V st not v in T holds m.v = 0.F
   proof
     let v be Element of V such that
-A11: not v in T;
-A12: not v in Carrier l by A11,XBOOLE_0:def 3;
-    not v in {x} by A11,XBOOLE_0:def 3;
+A7: not v in T;
+    not v in {x} by A7,XBOOLE_0:def 3;
     then v <> x by TARSKI:def 1;
-    then m.v = l.v by FUNCT_7:34;
-    hence thesis by A12;
+    then
+A8: m.v = l.v by FUNCT_7:34;
+    not v in Carrier l by A7,XBOOLE_0:def 3;
+    hence thesis by A8;
   end;
   then reconsider m as Linear_Combination of V by VECTSP_6:def 4;
-A13: Carrier m c= T
+A9: Carrier m c= T
   proof
-    let y be set such that
-A14: y in Carrier m;
-    consider z being Element of V such that
-A15: y = z and
-A16: m.z <> 0.F by A14;
+    let y be set;
+    assume
+    y in Carrier m;
+    then consider z being Element of V such that
+A10: y = z and
+A11: m.z <> 0.F;
     per cases;
     suppose
-A17:  z = x;
-A18:  x in {x} by TARSKI:def 1;
-      {x} c= T by XBOOLE_1:7;
-      hence thesis by A15,A17,A18;
+A12:  z = x;
+      x in {x} & {x} c= T by TARSKI:def 1,XBOOLE_1:7;
+      hence thesis by A10,A12;
     end;
-    suppose z <> x;
+    suppose
+      z <> x;
       then m.z = l.z by FUNCT_7:34;
       then
-A19:  z in Carrier l by A16;
+A13:  z in Carrier l by A11;
       Carrier l c= T by XBOOLE_1:7;
-      hence thesis by A15,A19;
+      hence thesis by A10,A13;
     end;
   end;
-  T c= A \/ {x}
-  proof
-    Carrier l c= A by VECTSP_6:def 7;
-    hence thesis by XBOOLE_1:9;
-  end;
-  then Carrier m c= A \/ {x} by A13,XBOOLE_1:1;
+  Carrier l c= A by VECTSP_6:def 7;
+  then T c= A \/ {x} by XBOOLE_1:9;
+  then Carrier m c= A \/ {x} by A9,XBOOLE_1:1;
   hence thesis by VECTSP_6:def 7;
 end;
 
 definition
   let V be 1-sorted, X be Subset of V;
   func V \ X -> Subset of V equals
-
   [#]V \ X;
   coherence;
 end;
 
 definition
-  let F be Field, V be VectSp of F, l be Linear_Combination of V,
-  X be Subset of V;
+  let F be Field, V be VectSp of F, l be Linear_Combination of V, X be Subset
+  of V;
   redefine func l .: X -> Subset of F;
   coherence
   proof
@@ -830,95 +806,93 @@ registration
   existence
   proof
     reconsider S = {0.V} as Subset of V;
-A1: 0.V in S by TARSKI:def 1;
     take S;
-    thus thesis by A1,VECTSP_7:3;
+    0.V in S by TARSKI:def 1;
+    hence thesis by VECTSP_7:3;
   end;
 end;
 
 :: Restricting a linear combination to a given set
 
 definition
-  let F be Field, V be VectSp of F, l be Linear_Combination of V,
-  A be Subset of V;
+  let F be Field, V be VectSp of F, l be Linear_Combination of V, A be Subset
+  of V;
   func l!A -> Linear_Combination of A equals
-
   (l|A) +* ((V \ A) --> 0.F);
   coherence
   proof
     set f = (l|A) +* ((V \ A) --> 0.F);
 A1: dom f = dom (l|A) \/ dom ((V \ A) --> 0.F) by FUNCT_4:def 1;
+A2: dom ((V \ A) --> 0.F) = V \ A by FUNCOP_1:19;
     dom l = [#]V by FUNCT_2:169;
     then
-A2: dom (l|A) = A by RELAT_1:91;
-A3: dom ((V \ A) --> 0.F) = V \ A by FUNCOP_1:19;
-A4: A \/ ([#]V \ A) = [#]V by XBOOLE_1:45;
-A5: dom f = [#]V by A1,A2,A3,XBOOLE_1:45;
+A3: dom (l|A) = A by RELAT_1:91;
+    then
+A4: dom f = [#]V by A1,A2,XBOOLE_1:45;
+A5: A \/ ([#]V \ A) = [#]V by XBOOLE_1:45;
     rng f c= [#]F
     proof
-      let y be set such that
-A6:   y in rng f;
-      consider x being set such that
-A7:   x in dom f and
-A8:   y = f.x by A6,FUNCT_1:def 5;
-      reconsider x as Element of V by A1,A2,A3,A7,XBOOLE_1:45;
-      per cases by A4,XBOOLE_0:def 3;
+      let y be set;
+      assume
+      y in rng f;
+      then consider x being set such that
+A6:   x in dom f and
+A7:   y = f.x by FUNCT_1:def 5;
+      reconsider x as Element of V by A1,A3,A2,A6,XBOOLE_1:45;
+      per cases by A5,XBOOLE_0:def 3;
       suppose
-A9:     x in A;
+A8:     x in A;
         then not x in dom ((V \ A) --> 0.F) by XBOOLE_0:def 5;
         then
-A10:    f.x = (l|A).x by FUNCT_4:12;
-        (l|A).x = l.x by A9,FUNCT_1:72;
-        hence thesis by A8,A10;
+A9:     f.x = (l|A).x by FUNCT_4:12;
+        (l|A).x = l.x by A8,FUNCT_1:72;
+        hence thesis by A7,A9;
       end;
       suppose
-A11:    x in V \ A;
+A10:    x in V \ A;
         then x in dom ((V \ A) --> 0.F) by FUNCOP_1:19;
         then f.x = ((V \ A) --> 0.F).x by FUNCT_4:14
-          .= 0.F by A11,FUNCOP_1:13;
-        hence thesis by A8;
+          .= 0.F by A10,FUNCOP_1:13;
+        hence thesis by A7;
       end;
     end;
-    then reconsider f as Element of Funcs([#]V,[#]F) by A5,FUNCT_2:def 2;
-    ex T being finite Subset of V st
-    for v being Element of V st not v in T holds f.v = 0.F
+    then reconsider f as Element of Funcs([#]V,[#]F) by A4,FUNCT_2:def 2;
+    ex T being finite Subset of V st for v being Element of V st not v in
+    T holds f.v = 0.F
     proof
-      set C = Carrier l;
       set D = { v where v is Element of V : f.v <> 0.F };
-      D is Subset of V
+      D c= [#]V
       proof
-        D c= [#]V
-        proof
-          let x be set such that
-A12:      x in D;
-          consider v being Element of V such that
-A13:      x = v and f.v <> 0.F by A12;
-          thus thesis by A13;
-        end;
+        let x be set;
+        assume
+        x in D;
+        then ex v being Element of V st x = v & f.v <> 0.F;
         hence thesis;
       end;
       then reconsider D as Subset of V;
+      set C = Carrier l;
       D c= C
       proof
-        let x be set such that
-A14:    x in D;
-        consider v being Element of V such that
-A15:    x = v and
-A16:    f.v <> 0.F by A14;
-A17:    dom ((V \ A) --> 0.F) = V \ A by FUNCOP_1:19;
-A18:    now
+        let x be set;
+        assume
+        x in D;
+        then consider v being Element of V such that
+A11:    x = v and
+A12:    f.v <> 0.F;
+A13:    dom ((V \ A) --> 0.F) = V \ A by FUNCOP_1:19;
+A14:    now
           assume
-A19:      v in V \ A;
-          then f.v = ((V \ A) --> 0.F).v by A1,A5,A17,FUNCT_4:def 1
-            .= 0.F by A19,FUNCOP_1:13;
-          hence contradiction by A16;
+A15:      v in V \ A;
+          then f.v = ((V \ A) --> 0.F).v by A1,A4,A13,FUNCT_4:def 1
+            .= 0.F by A15,FUNCOP_1:13;
+          hence contradiction by A12;
         end;
-        then not v in dom ((V \ A) --> 0.F);
+        then v in A by XBOOLE_0:def 5;
         then
-A20:    f.v = (l|A).v by FUNCT_4:12;
-        v in A by A18,XBOOLE_0:def 5;
-        then (l|A).v = l.v by FUNCT_1:72;
-        hence thesis by A15,A16,A20;
+A16:    (l|A).v = l.v by FUNCT_1:72;
+        not v in dom ((V \ A) --> 0.F) by A14;
+        then f.v = (l|A).v by FUNCT_4:12;
+        hence thesis by A11,A12,A16;
       end;
       then reconsider D as finite Subset of V;
       take D;
@@ -928,16 +902,18 @@ A20:    f.v = (l|A).v by FUNCT_4:12;
     Carrier f c= A
     proof
       let x be set such that
-A21:  x in Carrier f;
-      reconsider x as Element of V by A21;
-A22:  f.x <> 0.F by A21,VECTSP_6:20;
+A17:  x in Carrier f;
+      reconsider x as Element of V by A17;
+A18:  f.x <> 0.F by A17,VECTSP_6:20;
       now
-        assume not x in A;
+        assume
+        not x in A;
         then
-A23:    x in V \ A by XBOOLE_0:def 5;
-        then x in dom (l|A) \/ (dom ((V \ A) --> 0.F)) by A3,XBOOLE_0:def 3;
-        then f.x = ((V \ A) --> 0.F).x by A3,A23,FUNCT_4:def 1;
-        hence contradiction by A22,A23,FUNCOP_1:13;
+A19:    x in V \ A by XBOOLE_0:def 5;
+        then x in dom (l|A) \/ (dom ((V \ A) --> 0.F)) by A2,XBOOLE_0:def
+        3;
+        then f.x = ((V \ A) --> 0.F).x by A2,A19,FUNCT_4:def 1;
+        hence contradiction by A18,A19,FUNCOP_1:13;
       end;
       hence thesis;
     end;
@@ -951,77 +927,72 @@ proof
   set f = l|(Carrier l);
   set g = (V \ Carrier l) --> 0.F;
   set m = f +* g;
-A1: dom l = [#]V by FUNCT_2:169;
+A1: dom g = V \ (Carrier l) by FUNCOP_1:19;
+A2: dom l = [#]V by FUNCT_2:169;
+  then dom f = Carrier l by RELAT_1:91;
   then
-A2: dom f = Carrier l by RELAT_1:91;
-A3: dom g = V \ (Carrier l) by FUNCOP_1:19;
-  then
-A4: (dom f) \/ (dom g) = [#]V by A2,XBOOLE_1:45;
-  then
-A5: dom l = dom m by A1,FUNCT_4:def 1;
-  for x being set st x in dom l holds l.x = m.x
+A3: (dom f) \/ (dom g) = [#]V by A1,XBOOLE_1:45;
+A4: for x being set st x in dom l holds l.x = m.x
   proof
-    let x be set such that
-A6: x in dom l;
-    reconsider x as Element of V by A6;
+    let x be set;
+    assume
+    x in dom l;
+    then reconsider x as Element of V;
     per cases;
     suppose
-A7:   x in Carrier l;
+A5:   x in Carrier l;
       then not x in dom g by XBOOLE_0:def 5;
-      then m.x = f.x by A4,FUNCT_4:def 1;
-      hence thesis by A7,FUNCT_1:72;
+      then m.x = f.x by A3,FUNCT_4:def 1;
+      hence thesis by A5,FUNCT_1:72;
     end;
     suppose
-A8:   not x in Carrier l;
-      then
-A9:   x in V \ (Carrier l) by XBOOLE_0:def 5;
-      then
-A10:  m.x = g.x by A3,A4,FUNCT_4:def 1;
-      g.x = 0.F by A9,FUNCOP_1:13;
-      hence thesis by A8,A10;
+A6:   not x in Carrier l;
+      then x in V \ (Carrier l) by XBOOLE_0:def 5;
+      then m.x = g.x & g.x = 0.F by A1,A3,FUNCOP_1:13,FUNCT_4:def 1;
+      hence thesis by A6;
     end;
   end;
-  hence thesis by A5,FUNCT_1:def 17;
+  dom l = dom m by A2,A3,FUNCT_4:def 1;
+  hence thesis by A4,FUNCT_1:def 17;
 end;
 
 Lm1: for X being Subset of V holds l .: X is finite
 proof
   let X be Subset of V;
-A1: l = l!(Carrier l) by Th24;
-A2: rng (l|Carrier l) is finite
-  proof
-    rng (l|Carrier l) = l .: Carrier l by RELAT_1:148;
-    hence thesis;
-  end;
-  rng ((V \ (Carrier l)) --> 0.F) c= {0.F}
+A1: rng ((V \ (Carrier l)) --> 0.F) c= {0.F}
   proof
     set f = ((V \ (Carrier l)) --> 0.F);
     per cases;
-    suppose V \ (Carrier l) = {};
+    suppose
+      V \ (Carrier l) = {};
       then f = {};
       hence thesis by RELAT_1:60,XBOOLE_1:2;
     end;
-    suppose V \ (Carrier l) <> {};
+    suppose
+      V \ (Carrier l) <> {};
       hence thesis by FUNCOP_1:14;
     end;
   end;
-  then rng ((V \ (Carrier l)) --> 0.F) is finite;
-  then (rng (l|Carrier l)) \/ rng ((V \ (Carrier l)) --> 0.F) is finite
-  by A2;
-  then rng l is finite by A1,FINSET_1:13,FUNCT_4:18;
+A2: l = l!(Carrier l) by Th24;
+  rng (l|Carrier l) = l .: Carrier l by RELAT_1:148;
+
+  then (rng (l|Carrier l)) \/ rng ((V \ (Carrier l)) --> 0.F) is finite by
+  A1;
+
+  then rng l is finite by A2,FINSET_1:13,FUNCT_4:18;
   hence thesis by FINSET_1:13,RELAT_1:144;
 end;
 
 theorem Th25:
-  for A being Subset of V, v being Element of V st v in A holds (l!A).v = l.v
+  for A being Subset of V, v being Element of V st v in A holds (l
+  !A).v = l.v
 proof
   let A be Subset of V, v be Element of V such that
 A1: v in A;
-  not v in V \ A by A1,XBOOLE_0:def 5;
-  then
-A2: not v in dom ((V \ A) --> 0.F);
   dom (l!A) = [#]V by FUNCT_2:169;
-  then (dom (l|A)) \/ (dom ((V \ A) --> 0.F)) = [#]V by FUNCT_4:def 1;
+  then
+A2: (dom (l|A)) \/ (dom ((V \ A) --> 0.F)) = [#]V by FUNCT_4:def 1;
+  not v in dom ((V \ A) --> 0.F) by A1,XBOOLE_0:def 5;
   then (l!A).v = (l|A).v by A2,FUNCT_4:def 1
     .= l.v by A1,FUNCT_1:72;
   hence thesis;
@@ -1031,26 +1002,28 @@ theorem Th26:
   for A being Subset of V, v being Element of V st not v in A
   holds (l!A).v = 0.F
 proof
-  let A be Subset of V, v be Element of V such that
-A1: not v in A;
-A2: dom ((V \ A) --> 0.F) = V \ A by FUNCOP_1:19;
-A3: dom (l!A) = (dom (l|A)) \/ (dom ((V \ A) --> 0.F)) by FUNCT_4:def 1;
-A4: dom (l!A) = [#]V by FUNCT_2:169;
-A5: v in V \ A by A1,XBOOLE_0:def 5;
-  then (l!A).v = ((V \ A) --> 0.F).v by A2,A3,A4,FUNCT_4:def 1
-    .= 0.F by A5,FUNCOP_1:13;
+  let A be Subset of V, v be Element of V;
+  assume
+  not v in A;
+  then
+A1: v in V \ A by XBOOLE_0:def 5;
+A2: dom (l!A) = [#]V by FUNCT_2:169;
+  dom ((V \ A) --> 0.F) = V \ A & dom (l!A) = (dom (l|A)) \/ (dom ((V \ A)
+  --> 0.F)) by FUNCOP_1:19,FUNCT_4:def 1;
+  then (l!A).v = ((V \ A) --> 0.F).v by A2,A1,FUNCT_4:def 1
+    .= 0.F by A1,FUNCOP_1:13;
   hence thesis;
 end;
 
 theorem Th27:
-  for A,B being Subset of V, l being Linear_Combination of B st A c= B
-  holds l = (l!A) + (l!(B\A))
+  for A,B being Subset of V, l being Linear_Combination of B st A
+  c= B holds l = (l!A) + (l!(B\A))
 proof
   let A,B be Subset of V, l be Linear_Combination of B such that
 A1: A c= B;
   set r = (l!A) + (l!(B\A));
   let v be Element of V;
-A2: (v in B) implies (v in A or v in B \ A)
+A2: v in B implies (v in A or v in B \ A)
   proof
     assume
 A3: v in B;
@@ -1080,24 +1053,23 @@ A7: (l!A).v = 0.F by Th26;
   end;
   suppose
 A8: not v in B;
-    then
-A9: not v in B\A by XBOOLE_0:def 5;
-    not v in A by A1,A8;
-    then
-A10: (l!A).v = 0.F by Th26;
-A11: (l!(B\A)).v = 0.F by A9,Th26;
     Carrier l c= B by VECTSP_6:def 7;
     then
-A12: not v in Carrier l by A8;
-    r.v = 0.F + 0.F by A10,A11,VECTSP_6:def 11
+A9: not v in Carrier l by A8;
+    not v in B\A by A8,XBOOLE_0:def 5;
+    then
+A10: (l!(B\A)).v = 0.F by Th26;
+    not v in A by A1,A8;
+    then (l!A).v = 0.F by Th26;
+    then r.v = 0.F + 0.F by A10,VECTSP_6:def 11
       .= 0.F by RLVECT_1:10;
-    hence l.v = r.v by A12;
+    hence l.v = r.v by A9;
   end;
 end;
 
 registration
-  let F be Field, V be VectSp of F, l be Linear_Combination of V,
-  X be Subset of V;
+  let F be Field, V be VectSp of F, l be Linear_Combination of V, X be Subset
+  of V;
   cluster l .: X -> finite;
   coherence by Lm1;
 end;
@@ -1113,25 +1085,28 @@ definition
 end;
 
 theorem Th28:
-  for X being Subset of V st X misses Carrier l holds l .: X c= {0.F}
+  for X being Subset of V st X misses Carrier l holds l .: X c= {
+  0.F}
 proof
   let X be Subset of V such that
 A1: X misses Carrier l;
   set M = l .: X;
-  let y be set such that
-A2: y in M;
-  consider x being set such that
-A3: x in dom l and
-A4: x in X and
-A5: y = l.x by A2,FUNCT_1:def 12;
-  reconsider x as Element of V by A3;
+  let y be set;
+  assume
+  y in M;
+  then consider x being set such that
+A2: x in dom l and
+A3: x in X and
+A4: y = l.x by FUNCT_1:def 12;
+  reconsider x as Element of V by A2;
   now
-    assume l.x <> 0.F;
+    assume
+    l.x <> 0.F;
     then x in Carrier l;
-    then x in (Carrier l) /\ X by A4,XBOOLE_0:def 4;
+    then x in (Carrier l) /\ X by A3,XBOOLE_0:def 4;
     hence contradiction by A1,XBOOLE_0:def 7;
   end;
-  hence thesis by A5,TARSKI:def 1;
+  hence thesis by A4,TARSKI:def 1;
 end;
 
 :: The image of a linear combination under a linear transformation:
@@ -1149,145 +1124,143 @@ end;
 :: of the coefficients ai and aj, i.e., l(vi) and l(vj).
 
 definition
-  let F be Field, V,W be VectSp of F, l be Linear_Combination of V,
-  T be linear-transformation of V,W;
+  let F be Field, V,W be VectSp of F, l be Linear_Combination of V, T be
+  linear-transformation of V,W;
   func T@l -> Linear_Combination of W means
   :Def5:
-  for w being Element of W holds it.w = Sum (l .: (T"{w}));
+  for w being Element of W
+  holds it.w = Sum (l .: (T"{w}));
   existence
   proof
-    defpred P[set,set] means
-    ex w being Element of W st $1 = w & $2 = Sum (l .: (T"{w}));
-A2: for x being set st x in [#]W holds ex y being set st P[x,y]
+    defpred P[set,set] means ex w being Element of W st $1 = w & $2 = Sum (l
+    .: (T"{w}));
+A1: for x being set st x in [#]W holds ex y being set st P[x,y]
     proof
-      let x be set such that
-A3:   x in [#]W;
-      reconsider x as Element of W by A3;
+      let x be set;
+      assume
+      x in [#]W;
+      then reconsider x as Element of W;
       take Sum (l .: (T"{x}));
       thus thesis;
     end;
     consider f being Function such that
-A4: dom f = [#]W and
-A5: for x being set st x in [#]W holds P[x,f.x] from CLASSES1:sch 1(A2);
-A6: for w being Element of W holds f.w = Sum (l .: (T"{w}))
+A2: dom f = [#]W and
+A3: for x being set st x in [#]W holds P[x,f.x] from CLASSES1:sch 1(A1
+    );
+A4: rng f c= [#]F
+    proof
+      let y be set;
+      assume
+      y in rng f;
+      then consider x being set such that
+A5:   x in dom f and
+A6:   f.x = y by FUNCT_1:def 5;
+      ex w being Element of W st x = w & f.x = Sum (l .: (T"{w} )) by A2,
+      A3,A5;
+      hence thesis by A6;
+    end;
+A7: for w being Element of W holds f.w = Sum (l .: (T"{w}))
     proof
       let w be Element of W;
-      consider w' being Element of W such that
-A7:   w = w' and
-A8:   f.w = Sum (l .: (T"{w'})) by A5;
-      thus thesis by A7,A8;
+      ex w' being Element of W st w = w' & f.w = Sum (l .: (T"{ w'})) by A3;
+      hence thesis;
     end;
-    rng f c= [#]F
+    reconsider f as Element of Funcs([#]W,[#]F) by A2,A4,FUNCT_2:def 2;
+    ex T being finite Subset of W st for w being Element of W st not w in
+    T holds f.w = 0.F
     proof
-      let y be set such that
-A9:   y in rng f;
-      consider x being set such that
-A10:  x in dom f and
-A11:  f.x = y by A9,FUNCT_1:def 5;
-      consider w being Element of W such that x = w and
-A12:  f.x = Sum (l .: (T"{w})) by A4,A5,A10;
-      thus thesis by A11,A12;
-    end;
-    then reconsider f as Element of Funcs([#]W,[#]F) by A4,FUNCT_2:def 2;
-    ex T being finite Subset of W
-    st for w being Element of W st not w in T holds f.w = 0.F
-    proof
-      set C = Carrier l;
-      reconsider TC = T .: C as Subset of W;
       set X = { w where w is Element of W : f.w <> 0.F };
-      X is Subset of W
+      X c= [#]W
       proof
-        X c= [#]W
-        proof
-          let x be set such that
-A13:      x in X;
-          consider w being Element of W such that
-A14:      x = w and f.w <> 0.F by A13;
-          thus thesis by A14;
-        end;
+        let x be set;
+        assume
+        x in X;
+        then ex w being Element of W st x = w & f.w <> 0.F;
         hence thesis;
       end;
       then reconsider X as Subset of W;
+      set C = Carrier l;
+      reconsider TC = T .: C as Subset of W;
       X c= TC
       proof
-        let x be set such that
-A15:    x in X;
-        consider w being Element of W such that
-A16:    x = w and
-A17:    f.w <> 0.F by A15;
+        let x be set;
+        assume
+        x in X;
+        then consider w being Element of W such that
+A8:     x = w and
+A9:     f.w <> 0.F;
         T"{w} meets Carrier l
         proof
           assume
-A18:      T"{w} misses Carrier l;
+A10:      T"{w} misses Carrier l;
           then
-A19:      l .: T"{w} c= {0.F} by Th28;
+A11:      l .: T"{w} c= {0.F} by Th28;
           Sum (l .: T"{w}) = 0.F
           proof
             per cases;
-            suppose l .: T"{w} = {}F;
+            suppose
+              l .: T"{w} = {}F;
               hence thesis by RLVECT_2:14;
             end;
             suppose
-A20:          l .: T"{w} <> {}F;
-              l .: T"{w} = {0.F}
+A12:          l .: T"{w} <> {}F;
+A13:          {0.F} c= l .: T"{w}
               proof
-                thus l .: T"{w} c= {0.F} by A18,Th28;
-                thus {0.F} c= l .: T"{w}
-                proof
-                  let y be set such that
-A21:              y in {0.F};
-A22:              y = 0.F by A21,TARSKI:def 1;
-                  consider z being set such that
-A23:              z in l .: T"{w} by A20,XBOOLE_0:def 1;
-                  thus thesis by A19,A22,A23,TARSKI:def 1;
-                end;
+                let y be set;
+                assume
+                y in {0.F};
+                then
+A14:            y = 0.F by TARSKI:def 1;
+                ex z being set st z in l .: T"{w} by A12,XBOOLE_0:def 1;
+                hence thesis by A11,A14,TARSKI:def 1;
               end;
+              l .: T"{w} c= {0.F} by A10,Th28;
+              then l .: T"{w} = {0.F} by A13,XBOOLE_0:def 10;
               hence thesis by RLVECT_2:15;
             end;
           end;
-          hence contradiction by A6,A17;
+          hence contradiction by A7,A9;
         end;
         then consider y being set such that
-A24:    y in T"{w} and
-A25:    y in Carrier l by XBOOLE_0:3;
-        reconsider y as Element of V by A25;
-A26:    dom T = [#]V by Th7;
-        T.y in {w} by A24,FUNCT_1:def 13;
+A15:    y in T"{w} and
+A16:    y in Carrier l by XBOOLE_0:3;
+A17:    dom T = [#]V by Th7;
+        reconsider y as Element of V by A16;
+        T.y in {w} by A15,FUNCT_1:def 13;
         then T.y = w by TARSKI:def 1;
-        hence thesis by A16,A25,A26,FUNCT_1:def 12;
+        hence thesis by A8,A16,A17,FUNCT_1:def 12;
       end;
       then reconsider X as finite Subset of W;
       take X;
       thus thesis;
     end;
     then reconsider f as Linear_Combination of W by VECTSP_6:def 4;
-A27: for w being Element of W holds f.w = Sum (l .: (T"{w}))
+    take f;
+    for w being Element of W holds f.w = Sum (l .: (T"{w}))
     proof
       let w be Element of W;
-      consider w' being Element of W such that
-A28:  w = w' and
-A29:  f.w = Sum (l .: (T"{w'})) by A5;
-      thus thesis by A28,A29;
+      ex w' being Element of W st w = w' & f.w = Sum (l .: (T"{ w'})) by
+      A3;
+      hence thesis;
     end;
-    take f;
-    thus thesis by A27;
+    hence thesis;
   end;
   uniqueness
   proof
     let f,g be Linear_Combination of W such that
-A30: for w being Element of W holds f.w = Sum (l .: (T"{w})) and
-A31: for w being Element of W holds g.w = Sum (l .: (T"{w}));
-A32: dom f = [#]W by FUNCT_2:169;
-A33: dom g = [#]W by FUNCT_2:169;
-    for x being set st x in dom f holds f.x = g.x
+A18: for w being Element of W holds f.w = Sum (l .: (T"{w})) and
+A19: for w being Element of W holds g.w = Sum (l .: (T"{w}));
+A20: for x being set st x in dom f holds f.x = g.x
     proof
-      let x be set such that
-A34:  x in dom f;
-      reconsider x as Element of W by A34;
-      f.x = Sum (l .: (T"{x})) by A30;
-      hence thesis by A31;
+      let x be set;
+      assume
+      x in dom f;
+      then reconsider x as Element of W;
+      f.x = Sum (l .: (T"{x})) by A18;
+      hence thesis by A19;
     end;
-    hence thesis by A32,A33,FUNCT_1:def 17;
+    dom f = [#]W & dom g = [#]W by FUNCT_2:169;
+    hence thesis by A20,FUNCT_1:def 17;
   end;
 end;
 
@@ -1308,37 +1281,37 @@ A4:   l .: T"{w} c= {0.F} by Th28;
       Sum (l .: T"{w}) = 0.F
       proof
         per cases;
-        suppose l .: T"{w} = {}F;
+        suppose
+          l .: T"{w} = {}F;
           hence thesis by RLVECT_2:14;
         end;
         suppose
 A5:       l .: T"{w} <> {}F;
-          l .: T"{w} = {0.F}
+A6:       {0.F} c= l .: T"{w}
           proof
-            thus l .: T"{w} c= {0.F} by A3,Th28;
-            thus {0.F} c= l .: T"{w}
-            proof
-              let y be set such that
-A6:           y in {0.F};
-A7:           y = 0.F by A6,TARSKI:def 1;
-              consider z being set such that
-A8:           z in l .: T"{w} by A5,XBOOLE_0:def 1;
-              thus thesis by A4,A7,A8,TARSKI:def 1;
-            end;
+            let y be set;
+            assume
+            y in {0.F};
+            then
+A7:         y = 0.F by TARSKI:def 1;
+            ex z being set st z in l .: T"{w} by A5,XBOOLE_0:def 1;
+            hence thesis by A4,A7,TARSKI:def 1;
           end;
+          l .: T"{w} c= {0.F} by A3,Th28;
+          then l .: T"{w} = {0.F} by A6,XBOOLE_0:def 10;
           hence thesis by RLVECT_2:15;
         end;
       end;
       hence contradiction by A2,Def5;
     end;
     then consider x being set such that
-A9: x in T"{w} and
-A10: x in Carrier l by XBOOLE_0:3;
-A11: x in dom T by A9,FUNCT_1:def 13;
-A12: T.x in {w} by A9,FUNCT_1:def 13;
-    reconsider x as Element of V by A9;
-    T.x = w by A12,TARSKI:def 1;
-    hence thesis by A10,A11,FUNCT_1:def 12;
+A8: x in T"{w} and
+A9: x in Carrier l by XBOOLE_0:3;
+A10: x in dom T by A8,FUNCT_1:def 13;
+A11: T.x in {w} by A8,FUNCT_1:def 13;
+    reconsider x as Element of V by A8;
+    T.x = w by A11,TARSKI:def 1;
+    hence thesis by A9,A10,FUNCT_1:def 12;
   end;
   hence thesis by VECTSP_6:def 7;
 end;
@@ -1351,8 +1324,8 @@ proof
 end;
 
 theorem Th31:
-  for l,m being Linear_Combination of V st (Carrier l) misses (Carrier m)
-  holds Carrier (l + m) = (Carrier l) \/ (Carrier m)
+  for l,m being Linear_Combination of V st (Carrier l) misses (
+  Carrier m) holds Carrier (l + m) = (Carrier l) \/ (Carrier m)
 proof
   let l,m be Linear_Combination of V such that
 A1: (Carrier l) misses (Carrier m);
@@ -1365,29 +1338,29 @@ A2: v in (Carrier l) \/ (Carrier m);
     suppose
 A3:   v in Carrier l;
       then reconsider v as Element of V;
-A4:   (l+m).v = (l.v) + (m.v) by VECTSP_6:def 11;
-A5:   l.v <> 0.F by A3,VECTSP_6:20;
       not v in Carrier m by A1,A2,A3,XBOOLE_0:5;
-      then m.v = 0.F;
-      then (l+m).v = l.v by A4,RLVECT_1:10;
-      hence thesis by A5;
+      then (l+m).v = (l.v) + (m.v) & m.v = 0.F by VECTSP_6:def 11;
+      then
+A4:   (l+m).v = l.v by RLVECT_1:10;
+      l.v <> 0.F by A3,VECTSP_6:20;
+      hence thesis by A4;
     end;
     suppose
-A6:   v in Carrier m;
+A5:   v in Carrier m;
       then reconsider v as Element of V;
-A7:   (l+m).v = (l.v) + (m.v) by VECTSP_6:def 11;
-A8:   m.v <> 0.F by A6,VECTSP_6:20;
-      not v in Carrier l by A1,A2,A6,XBOOLE_0:5;
-      then l.v = 0.F;
-      then (l+m).v = m.v by A7,RLVECT_1:10;
-      hence thesis by A8;
+      not v in Carrier l by A1,A2,A5,XBOOLE_0:5;
+      then (l+m).v = (l.v) + (m.v) & l.v = 0.F by VECTSP_6:def 11;
+      then
+A6:   (l+m).v = m.v by RLVECT_1:10;
+      m.v <> 0.F by A5,VECTSP_6:20;
+      hence thesis by A6;
     end;
   end;
 end;
 
 theorem Th32:
-  for l,m being Linear_Combination of V st (Carrier l) misses (Carrier m)
-  holds Carrier (l - m) = (Carrier l) \/ (Carrier m)
+  for l,m being Linear_Combination of V st (Carrier l) misses (
+  Carrier m) holds Carrier (l - m) = (Carrier l) \/ (Carrier m)
 proof
   let l,m be Linear_Combination of V such that
 A1: (Carrier l) misses (Carrier m);
@@ -1396,159 +1369,164 @@ A1: (Carrier l) misses (Carrier m);
 end;
 
 theorem Th33:
-  for A,B being Subset of V st A c= B & B is Basis of V
-  holds V is_the_direct_sum_of Lin A, Lin (B \ A)
+  for A,B being Subset of V st A c= B & B is Basis of V holds V
+  is_the_direct_sum_of Lin A, Lin (B \ A)
 proof
   let A,B be Subset of V such that
 A1: A c= B and
 A2: B is Basis of V;
-A3: (Omega).V = (Lin A) + (Lin (B \ A))
-  proof
-    set U = (Lin A) + (Lin (B \ A));
-    [#]U = [#]V
-    proof
-      thus [#]U c= [#]V by VECTSP_4:def 2;
-      thus [#]V c= [#]U
-      proof
-        let v be set such that
-A4:     v in [#]V;
-        reconsider v as Element of V by A4;
-        v in Lin B by A2,VECTSP_9:14;
-        then consider l being Linear_Combination of B such that
-A5:     v = Sum l by VECTSP_7:12;
-        set m = l!A;
-        set n = l!(B\A);
-A6:     l = m + n by A1,Th27;
-        ex v1,v2 being Element of V
-        st v1 in Lin A & v2 in Lin (B \ A) & v = v1 + v2
-        proof
-          take Sum m, Sum n;
-          thus thesis by A5,A6,VECTSP_6:77,VECTSP_7:12;
-        end;
-        then v in (Lin A) + (Lin (B \ A)) by VECTSP_5:5;
-        hence thesis by STRUCT_0:def 5;
-      end;
-    end;
-    hence thesis by VECTSP_4:37;
-  end;
-  (Lin A) /\ (Lin (B \ A)) = (0).V
+A3: (Lin A) /\ (Lin (B \ A)) = (0).V
   proof
     set U = (Lin A) /\ (Lin (B \ A));
     reconsider W = (0).V as strict Subspace of U by VECTSP_4:50;
     for v being Element of U holds v in W
     proof
       let v be Element of U;
-A7:   v in U by STRUCT_0:def 5;
-      then
-A8:   v in Lin A by VECTSP_5:7;
-A9:   v in Lin (B \ A) by A7,VECTSP_5:7;
-      consider l being Linear_Combination of A such that
-A10:  v = Sum l by A8,VECTSP_7:12;
-      consider m being Linear_Combination of B \ A such that
-A11:  v = Sum m by A9,VECTSP_7:12;
-A12:  0.V = (Sum l) - (Sum m) by A10,A11,VECTSP_1:66
+A4:   B is linearly-independent by A2,VECTSP_7:def 3;
+A5:   v in U by STRUCT_0:def 5;
+      then v in Lin A by VECTSP_5:7;
+      then consider l being Linear_Combination of A such that
+A6:   v = Sum l by VECTSP_7:12;
+      v in Lin (B \ A) by A5,VECTSP_5:7;
+      then consider m being Linear_Combination of B \ A such that
+A7:   v = Sum m by VECTSP_7:12;
+A8:   0.V = (Sum l) - (Sum m) by A6,A7,VECTSP_1:66
         .= Sum (l - m) by VECTSP_6:80;
-A13:  Carrier (l - m) c= (Carrier l) \/ (Carrier m) by VECTSP_6:74;
-A14:  Carrier l c= A by VECTSP_6:def 7;
-A15:  Carrier m c= B \ A by VECTSP_6:def 7;
-A16:  A \/ (B \ A) = B by A1,XBOOLE_1:45;
-      (Carrier l) \/ (Carrier m) c= A \/ (B \ A) by A14,A15,XBOOLE_1:13;
-      then Carrier (l - m) c= B by A13,A16,XBOOLE_1:1;
+A9:   Carrier (l - m) c= (Carrier l) \/ (Carrier m) & A \/ (B \ A) = B by
+      A1, VECTSP_6:74,XBOOLE_1:45;
+A10:  Carrier l c= A & Carrier m c= B \ A by VECTSP_6:def 7;
+      then (Carrier l) \/ (Carrier m) c= A \/ (B \ A) by XBOOLE_1:13;
+      then Carrier (l - m) c= B by A9,XBOOLE_1:1;
       then reconsider n = l - m as Linear_Combination of B by VECTSP_6:def 7;
-      B is linearly-independent by A2,VECTSP_7:def 3;
-      then
-A17:  Carrier n = {} by A12,VECTSP_7:def 1;
       A misses (B \ A) by XBOOLE_1:79;
-      then Carrier n = (Carrier l) \/ (Carrier m) by A14,A15,Th32,XBOOLE_1:64;
-      then Carrier l = {} by A17;
+      then Carrier n = (Carrier l) \/ (Carrier m) by A10,
+      Th32,XBOOLE_1:64;
+      then Carrier l = {} by A8,A4,VECTSP_7:def 1;
       then l = ZeroLC(V) by VECTSP_6:def 6;
       then Sum l = 0.V by VECTSP_6:41;
-      hence thesis by A10,VECTSP_4:46;
+      hence thesis by A6,VECTSP_4:46;
     end;
     hence thesis by VECTSP_4:40;
+  end;
+  (Omega).V = (Lin A) + (Lin (B \ A))
+  proof
+    set U = (Lin A) + (Lin (B \ A));
+A11: [#]V c= [#]U
+    proof
+      let v be set;
+      assume
+      v in [#]V;
+      then reconsider v as Element of V;
+      v in Lin B by A2,VECTSP_9:14;
+      then consider l being Linear_Combination of B such that
+A12:  v = Sum l by VECTSP_7:12;
+      set n = l!(B\A);
+      set m = l!A;
+A13:  l = m + n by A1,Th27;
+      ex v1,v2 being Element of V st v1 in Lin A & v2 in Lin (B \ A) & v
+      = v1 + v2
+      proof
+        take Sum m, Sum n;
+        thus thesis by A12,A13,VECTSP_6:77,VECTSP_7:12;
+      end;
+      then v in (Lin A) + (Lin (B \ A)) by VECTSP_5:5;
+      hence thesis by STRUCT_0:def 5;
+    end;
+    [#]U c= [#]V by VECTSP_4:def 2;
+    then [#]U = [#]V by A11,XBOOLE_0:def 10;
+    hence thesis by VECTSP_4:37;
   end;
   hence thesis by A3,VECTSP_5:def 4;
 end;
 
 theorem Th34:
-  for A being Subset of V, l being Linear_Combination of A,
-  v being Element of V st T|A is one-to-one & v in A
-  holds ex X being Subset of V st X misses A & T"{T.v} = {v} \/ X
+  for A being Subset of V, l being Linear_Combination of A, v
+  being Element of V st T|A is one-to-one & v in A holds ex X being Subset of V
+  st X misses A & T"{T.v} = {v} \/ X
 proof
-  let A be Subset of V, l be Linear_Combination of A,
-  v be Element of V such that
+  let A be Subset of V, l be Linear_Combination of A, v be Element of V such
+  that
 A1: T|A is one-to-one and
 A2: v in A;
   set X = T"{T.v} \ {v};
-A3: {v} c= T"{T.v}
+A3: X misses A
   proof
-    let x be set such that
-A4: x in {v};
-A5: x = v by A4,TARSKI:def 1;
-A6: dom T = [#]V by Th7;
-    T.v in {T.v} by TARSKI:def 1;
-    hence thesis by A5,A6,FUNCT_1:def 13;
-  end;
-A7: X misses A
-  proof
-    assume X meets A;
-    then consider x being set such that
-A8: x in X and
-A9: x in A by XBOOLE_0:3;
-A10: x in T"{T.v} by A8,XBOOLE_0:def 5;
-    not x in {v} by A8,XBOOLE_0:def 5;
-    then
-A11: x <> v by TARSKI:def 1;
-    T.x in {T.v} by A10,FUNCT_1:def 13;
-    then
-A12: T.x = T.v by TARSKI:def 1;
-    T.x = (T|A).x by A9,FUNCT_1:72;
-    then
-A13: (T|A).v = (T|A).x by A2,A12,FUNCT_1:72;
     dom T = [#]V by Th7;
-    then dom (T|A) = A by RELAT_1:91;
-    hence thesis by A1,A2,A9,A11,A13,FUNCT_1:def 8;
+    then
+A4: dom (T|A) = A by RELAT_1:91;
+    assume
+    X meets A;
+    then consider x being set such that
+A5: x in X and
+A6: x in A by XBOOLE_0:3;
+    not x in {v} by A5,XBOOLE_0:def 5;
+    then
+A7: x <> v by TARSKI:def 1;
+    x in T"{T.v} by A5,XBOOLE_0:def 5;
+    then T.x in {T.v} by FUNCT_1:def 13;
+    then
+A8: T.x = T.v by TARSKI:def 1;
+    T.x = (T|A).x by A6,FUNCT_1:72;
+    then (T|A).v = (T|A).x by A2,A8,FUNCT_1:72;
+    hence thesis by A1,A2,A6,A7,A4,FUNCT_1:def 8;
   end;
   take X;
-  thus thesis by A3,A7,XBOOLE_1:45;
+  {v} c= T"{T.v}
+  proof
+    let x be set;
+    assume
+    x in {v};
+    then
+A9: x = v by TARSKI:def 1;
+    dom T = [#]V & T.v in {T.v} by Th7,TARSKI:def 1;
+    hence thesis by A9,FUNCT_1:def 13;
+  end;
+  hence thesis by A3,XBOOLE_1:45;
 end;
 
 theorem Th35:
-  for X being Subset of V st X misses Carrier l & X <> {} holds l .: X = {0.F}
+  for X being Subset of V st X misses Carrier l & X <> {} holds l
+  .: X = {0.F}
 proof
   let X be Subset of V such that
 A1: X misses Carrier l and
 A2: X <> {};
-A3: l .: X c= {0.F} by A1,Th28;
   dom l = [#]V by FUNCT_2:169;
-  then l .: X <> {} by A2,RELAT_1:152;
+  then
+A3: l .: X <> {} by A2,RELAT_1:152;
+  l .: X c= {0.F} by A1,Th28;
   hence thesis by A3,ZFMISC_1:39;
 end;
 
 theorem Th36:
-  for w being Element of W st w in Carrier (T@l) holds T"{w} meets Carrier l
+  for w being Element of W st w in Carrier (T@l) holds T"{w} meets
+  Carrier l
 proof
-  let w be Element of W such that
-A1: w in Carrier (T@l);
-A2: (T@l).w <> 0.F by A1,VECTSP_6:20;
+  let w be Element of W;
   assume
-A3: T"{w} misses Carrier l;
+  w in Carrier (T@l);
+  then
+A1: (T@l).w <> 0.F by VECTSP_6:20;
+  assume
+A2: T"{w} misses Carrier l;
   per cases;
-  suppose T"{w} = {};
+  suppose
+    T"{w} = {};
     then Sum (l .: T"{w}) = Sum ({}F) by RELAT_1:149
       .= 0.F by RLVECT_2:14;
-    hence thesis by A2,Def5;
+    hence thesis by A1,Def5;
   end;
-  suppose T"{w} <> {};
-    then l .: T"{w} = {0.F} by A3,Th35;
+  suppose
+    T"{w} <> {};
+    then l .: T"{w} = {0.F} by A2,Th35;
     then Sum (l .: T"{w}) = 0.F by RLVECT_2:15;
-    hence thesis by A2,Def5;
+    hence thesis by A1,Def5;
   end;
 end;
 
 theorem Th37:
-  for v being Element of V st T|(Carrier l) is one-to-one & v in Carrier l
-  holds (T@l).(T.v) = l.v
+  for v being Element of V st T|(Carrier l) is one-to-one & v in
+  Carrier l holds (T@l).(T.v) = l.v
 proof
   let v be Element of V such that
 A1: T|(Carrier l) is one-to-one and
@@ -1567,63 +1545,67 @@ A6: dom l = [#]V by FUNCT_2:169;
   end;
   suppose
 A7: X <> {};
-A8: l .: T"{T.v} = (l .: {v}) \/ (l .: X) by A4,RELAT_1:153;
-A9: dom l = [#]V by FUNCT_2:169;
-A10: l .: {v} = Im (l,v)
-      .= {l.v} by A9,FUNCT_1:117;
-A11: l .: X = {0.F}
+A8: l .: X c= {0.F}
     proof
-A12:  {0.F} c= l .: X
-      proof
-        let x be set such that
-A13:    x in {0.F};
-A14:    x = 0.F by A13,TARSKI:def 1;
-        consider y being set such that
-A15:    y in X by A7,XBOOLE_0:def 1;
-A16:    now
-          assume y in Carrier l;
-          then y in (Carrier l) /\ X by A15,XBOOLE_0:def 4;
-          hence contradiction by A3,XBOOLE_0:def 7;
-        end;
-        reconsider y as Element of V by A15;
-        l.y = x by A14,A16;
-        hence thesis by A9,A15,FUNCT_1:def 12;
-      end;
-      l .: X c= {0.F}
-      proof
-        let y be set such that
-A17:    y in l .: X;
-        consider x being set such that
-A18:    x in dom l and
-A19:    x in X and
-A20:    y = l.x by A17,FUNCT_1:def 12;
-A21:    now
-          assume x in Carrier l;
-          then x in (Carrier l) /\ X by A19,XBOOLE_0:def 4;
-          hence contradiction by A3,XBOOLE_0:def 7;
-        end;
-        reconsider x as Element of V by A18;
-        l.x = 0.F by A21;
-        hence thesis by A20,TARSKI:def 1;
-      end;
-      hence thesis by A12,XBOOLE_0:def 10;
-    end;
-    l .: X misses l .: {v}
-    proof
-A22:  dom l = [#]V by FUNCT_2:169;
-A23:  l .: {v} = Im (l,v)
-        .= {l.v} by A22,FUNCT_1:117;
-      assume l .: X meets l .: {v};
+      let y be set;
+      assume
+      y in l .: X;
       then consider x being set such that
-A24:  x in l .: X and
-A25:  x in l .: {v} by XBOOLE_0:3;
-A26:  x = 0.F by A11,A24,TARSKI:def 1;
-      x = l.v by A23,A25,TARSKI:def 1;
-      hence thesis by A2,A26,VECTSP_6:20;
+A9:   x in dom l and
+A10:  x in X and
+A11:  y = l.x by FUNCT_1:def 12;
+A12:  now
+        assume
+        x in Carrier l;
+        then x in (Carrier l) /\ X by A10,XBOOLE_0:def 4;
+        hence contradiction by A3,XBOOLE_0:def 7;
+      end;
+      reconsider x as Element of V by A9;
+      l.x = 0.F by A12;
+      hence thesis by A11,TARSKI:def 1;
     end;
-    then Sum (l .: T"{T.v}) = (Sum (l .: {v})) + (Sum (l .: X)) by A8,
-RLVECT_2:18
-      .= l.v + (Sum ({0.F})) by A10,A11,RLVECT_2:15
+A13: l .: X misses l .: {v}
+    proof
+      assume
+      l .: X meets l .: {v};
+      then consider x being set such that
+A14:  x in l .: X and
+A15:  x in l .: {v} by XBOOLE_0:3;
+A16:  dom l = [#]V by FUNCT_2:169;
+      l .: {v} = Im (l,v)
+        .= {l.v} by A16,FUNCT_1:117;
+      then
+A17:  x = l.v by A15,TARSKI:def 1;
+      x = 0.F by A8,A14,TARSKI:def 1;
+      hence thesis by A2,A17,VECTSP_6:20;
+    end;
+A18: dom l = [#]V by FUNCT_2:169;
+    {0.F} c= l .: X
+    proof
+      consider y being set such that
+A19:  y in X by A7,XBOOLE_0:def 1;
+A20:  now
+        assume
+        y in Carrier l;
+        then y in (Carrier l) /\ X by A19,XBOOLE_0:def 4;
+        hence contradiction by A3,XBOOLE_0:def 7;
+      end;
+      reconsider y as Element of V by A19;
+      let x be set;
+      assume
+      x in {0.F};
+      then x = 0.F by TARSKI:def 1;
+      then l.y = x by A20;
+      hence thesis by A18,A19,FUNCT_1:def 12;
+    end;
+    then
+A21: l .: X = {0.F} by A8,XBOOLE_0:def 10;
+A22: l .: {v} = Im (l,v)
+      .= {l.v} by A18,FUNCT_1:117;
+    l .: T"{T.v} = (l .: {v}) \/ (l .: X) by A4,RELAT_1:153;
+    then Sum (l .: T"{T.v}) = (Sum (l .: {v})) + (Sum (l .: X)) by A13,
+    RLVECT_2:18
+      .= l.v + (Sum ({0.F})) by A22,A21,RLVECT_2:15
       .= l.v + 0.F by RLVECT_2:15
       .= l.v by RLVECT_1:10;
     hence thesis by Def5;
@@ -1631,119 +1613,117 @@ RLVECT_2:18
 end;
 
 theorem Th38:
-  for G being FinSequence of V
-  st rng G = Carrier l & T|(Carrier l) is one-to-one
-  holds T*(l (#) G) = (T@l) (#) (T*G)
+  for G being FinSequence of V st rng G = Carrier l & T|(Carrier l
+  ) is one-to-one holds T*(l (#) G) = (T@l) (#) (T*G)
 proof
   let G be FinSequence of V such that
 A1: rng G = Carrier l and
 A2: T|(Carrier l) is one-to-one;
-  reconsider L = T*(l (#) G) as FinSequence of W;
   reconsider R = (T@l) (#) (T*G) as FinSequence of W;
-A3: len L = len (l (#) G) by FINSEQ_2:37
-    .= len G by VECTSP_6:def 8;
-A4: len R = len (T*G) by VECTSP_6:def 8
+  reconsider L = T*(l (#) G) as FinSequence of W;
+A3: len R = len (T*G) by VECTSP_6:def 8
     .= len G by FINSEQ_2:37;
+A4: len L = len (l (#) G) by FINSEQ_2:37
+    .= len G by VECTSP_6:def 8;
   for k being Nat st 1 <= k & k <= len L holds L.k = R.k
   proof
+A5: dom R = Seg len G by A3,FINSEQ_1:def 3;
     let k be Nat such that
-A5: 1 <= k and
-A6: k <= len L;
+A6: 1 <= k & k <= len L;
+    reconsider gk = G/.k as Element of V;
     len (l (#) G) = len G by VECTSP_6:def 8;
     then
 A7: dom (l (#) G) = Seg len G by FINSEQ_1:def 3;
     k in NAT by ORDINAL1:def 13;
     then
-A8: k in dom (l (#) G) by A3,A5,A6,A7;
+A8: k in dom (l (#) G) by A4,A6,A7;
     then
 A9: k in dom G by A7,FINSEQ_1:def 3;
     then
-A10: G.k in rng G by FUNCT_1:12;
-    reconsider gk = G/.k as Element of V;
-A11: (l (#) G).k = (l.gk)*gk by A8,VECTSP_6:def 8;
-A12: G.k = G/.k by A9,PARTFUN1:def 8;
+A10: G.k = G/.k by PARTFUN1:def 8;
     then reconsider Gk = G.k as Element of V;
     (T*G).k = T.Gk by A9,FUNCT_1:23;
     then reconsider TGk = (T*G).k as Element of W;
-A13: L.k = T.((l.gk)*gk) by A8,A11,FUNCT_1:23
+    (l (#) G).k = (l.gk)*gk by A8,VECTSP_6:def 8;
+    then
+A11: L.k = T.((l.gk)*gk) by A8,FUNCT_1:23
       .= (l.gk)*(T.gk) by MOD_2:def 5
-      .= (l.Gk)*TGk by A9,A12,FUNCT_1:23;
-A14: dom R = Seg len G by A4,FINSEQ_1:def 3;
+      .= (l.Gk)*TGk by A9,A10,FUNCT_1:23;
+    G.k in rng G & (T*G).k = T.(G.k) by A9,FUNCT_1:12,23;
+    then
+A12: (T@l).((T*G).k) = l.(G.k) by A1,A2,Th37;
     dom T = [#]V by Th7;
     then dom (T*G) = dom G by A1,RELAT_1:46;
-    then
-A15: (T*G)/.k = (T*G).k by A9,PARTFUN1:def 8;
-    (T@l).((T*G).k) = l.(G.k)
-    proof
-      (T*G).k = T.(G.k) by A9,FUNCT_1:23;
-      hence thesis by A1,A2,A10,Th37;
-    end;
-    hence thesis by A7,A8,A13,A14,A15,VECTSP_6:def 8;
+    then (T*G)/.k = (T*G).k by A9,PARTFUN1:def 8;
+    hence thesis by A7,A8,A11,A5,A12,VECTSP_6:def 8;
   end;
-  hence thesis by A3,A4,FINSEQ_1:18;
+  hence thesis by A4,A3,FINSEQ_1:18;
 end;
 
 theorem Th39:
-  T|(Carrier l) is one-to-one implies T .: (Carrier l) = Carrier (T@l)
+  T|(Carrier l) is one-to-one implies T .: (Carrier l) = Carrier (
+  T@l)
 proof
   assume
 A1: T|(Carrier l) is one-to-one;
-A2: Carrier (T@l) c= T .: (Carrier l) by Th30;
-  T .: (Carrier l) c= Carrier (T@l)
+A2: T .: (Carrier l) c= Carrier (T@l)
   proof
-    let w be set such that
-A3: w in T .: (Carrier l);
-    consider v being set such that
-A4: v in dom T and
-A5: v in Carrier l and
-A6: T.v = w by A3,FUNCT_1:def 12;
-    reconsider v as Element of V by A4;
-A7: (T@l).(T.v) = l.v by A1,A5,Th37;
-    l.v <> 0.F by A5,VECTSP_6:20;
-    hence thesis by A6,A7;
+    let w be set;
+    assume
+    w in T .: (Carrier l);
+    then consider v being set such that
+A3: v in dom T and
+A4: v in Carrier l and
+A5: T.v = w by FUNCT_1:def 12;
+    reconsider v as Element of V by A3;
+    (T@l).(T.v) = l.v & l.v <> 0.F by A1,A4,Th37,VECTSP_6:20;
+    hence thesis by A5;
   end;
+  Carrier (T@l) c= T .: (Carrier l) by Th30;
   hence thesis by A2,XBOOLE_0:def 10;
 end;
 
 theorem Th40:
-  for A being Subset of V, B being Basis of V,
-  l being Linear_Combination of B \ A st A is Basis of ker T & A c= B
-  holds T.(Sum l) = Sum (T@l)
+  for A being Subset of V, B being Basis of V, l being
+  Linear_Combination of B \ A st A is Basis of ker T & A c= B holds T.(Sum l) =
+  Sum (T@l)
 proof
-  let A be Subset of V, B be Basis of V,
-  l be Linear_Combination of B \ A such that
-A1: A is Basis of ker T and
-A2: A c= B;
-  consider G being FinSequence of V such that
-A3: G is one-to-one and
-A4: rng G = Carrier l and
-A5: Sum l = Sum (l (#) G) by VECTSP_6:def 9;
-  set H = T*G;
-  reconsider H as FinSequence of W;
-A6: T|(B \ A) is one-to-one by A1,A2,Th22;
+  let A be Subset of V, B be Basis of V, l be Linear_Combination of B \ A;
+  assume
+  A is Basis of ker T & A c= B;
+  then
+A1: T|(B \ A) is one-to-one by Th22;
   Carrier l c= B \ A by VECTSP_6:def 7;
   then
-A7: (T|(B \ A))|(Carrier l) = T|(Carrier l) by RELAT_1:103;
+A2: (T|(B \ A))|(Carrier l) = T|(Carrier l) by RELAT_1:103;
   then
-A8: T|(Carrier l) is one-to-one by A6,FUNCT_1:84;
+A3: T|(Carrier l) is one-to-one by A1,FUNCT_1:84;
+  consider G being FinSequence of V such that
+A4: G is one-to-one and
+A5: rng G = Carrier l and
+A6: Sum l = Sum (l (#) G) by VECTSP_6:def 9;
+  set H = T*G;
+  reconsider H as FinSequence of W;
+A7: rng H = T .: (Carrier l) by A5,RELAT_1:160
+    .= Carrier (T@l) by A3,Th39;
   dom T = [#]V by Th7;
+  then H is one-to-one by A4,A5,A1,A2,Th1,FUNCT_1:84;
   then
-A9: H is one-to-one by A3,A4,A6,A7,Th1,FUNCT_1:84;
-A10: rng H = T .: (Carrier l) by A4,RELAT_1:160
-    .= Carrier (T@l) by A8,Th39;
-A11: T*(l (#) G) = (T@l) (#) H by A4,A8,Th38;
-  Sum (T@l) = Sum ((T@l) (#) H) by A9,A10,VECTSP_6:def 9;
-  hence thesis by A5,A11,MATRLIN:20;
+A8: Sum (T@l) = Sum ((T@l) (#) H) by A7,VECTSP_6:def 9;
+  T*(l (#) G) = (T@l) (#) H by A5,A3,Th38;
+  hence thesis by A6,A8,MATRLIN:20;
 end;
 
 theorem Th41:
-  for X being Subset of V st X is linearly-dependent
-  holds ex l being Linear_Combination of X st Carrier l <> {} & Sum l = 0.V
+  for X being Subset of V st X is linearly-dependent holds ex l
+  being Linear_Combination of X st Carrier l <> {} & Sum l = 0.V
 proof
-  let X be Subset of V such that
-A1: X is linearly-dependent;
-  not (for l being Linear_Combination of X st Sum l = 0.V
-  holds Carrier l = {}) by A1,VECTSP_7:def 1;
+  let X be Subset of V;
+  assume
+  X is linearly-dependent;
+  then
+  not (for l being Linear_Combination of X st Sum l = 0.V holds Carrier l
+  = {}) by VECTSP_7:def 1;
   hence thesis;
 end;
 
@@ -1751,8 +1731,8 @@ end;
 :: linear transformation to the base space.
 
 definition
-  let F be Field, V,W be VectSp of F, X be Subset of V,
-  T be linear-transformation of V,W, l be Linear_Combination of T .: X;
+  let F be Field, V,W be VectSp of F, X be Subset of V, T be
+  linear-transformation of V,W, l be Linear_Combination of T .: X;
   assume
 A1: T|X is one-to-one;
   func T#l -> Linear_Combination of X equals
@@ -1760,123 +1740,103 @@ A1: T|X is one-to-one;
   (l*T) +* ((V \ X) --> 0.F);
   coherence
   proof
-    set f = (l*T) +* ((V \ X) --> 0.F);
+    rng (l*T) c= rng l & rng l c= [#]F by FUNCT_2:169,RELAT_1:45;
+    then
+A2: rng (l*T) c= [#]F by XBOOLE_1:1;
     dom l = [#]W by FUNCT_2:169;
     then rng T c= dom l by Th7;
     then
-A2: dom (l*T) = dom T by RELAT_1:46;
-A3: dom ((V \ X) --> 0.F) = [#]V \ X by FUNCOP_1:19;
-A4: dom T = [#]V by Th7;
-    [#]V \/ ([#]V \ X) = [#]V by XBOOLE_1:12;
-    then
-A5: dom f = [#]V by A2,A3,A4,FUNCT_4:def 1;
-A6: rng f c= rng (l*T) \/ rng ((V \ X) --> 0.F) by FUNCT_4:18;
-A7: rng (l*T) c= rng l by RELAT_1:45;
+A3: dom (l*T) = dom T by RELAT_1:46;
+    set f = (l*T) +* ((V \ X) --> 0.F);
+A4: dom ((V \ X) --> 0.F) = [#]V \ X by FUNCOP_1:19;
     rng ((V \ X) --> 0.F) c= {0.F} by FUNCOP_1:19;
+    then rng ((V \ X) --> 0.F) c= [#]F by XBOOLE_1:1;
+    then rng f c= rng (l*T) \/ rng ((V \ X) --> 0.F) & rng (l*T) \/ rng ((V \
+    X) --> 0.F) c= [#]F by A2,FUNCT_4:18,XBOOLE_1:8;
     then
-A8: rng ((V \ X) --> 0.F) c= [#]F by XBOOLE_1:1;
-    rng l c= [#]F by FUNCT_2:169;
-    then rng (l*T) c= [#]F by A7,XBOOLE_1:1;
-    then rng (l*T) \/ rng ((V \ X) --> 0.F) c= [#]F by A8,XBOOLE_1:8;
-    then rng f c= [#]F by A6,XBOOLE_1:1;
+A5: rng f c= [#]F by XBOOLE_1:1;
+    dom T = [#]V & [#]V \/ ([#]V \ X) = [#]V by Th7,XBOOLE_1:12;
+    then dom f = [#]V by A3,A4,FUNCT_4:def 1;
     then reconsider f as Element of Funcs ([#]V,[#]F) by A5,FUNCT_2:def 2;
-    ex T being finite Subset of V st
-    for v being Element of V st not v in T holds f.v = 0.F
+    ex T being finite Subset of V st for v being Element of V st not v in
+    T holds f.v = 0.F
     proof
       set C = { v where v is Element of V : f.v <> 0.F };
       C c= [#]V
       proof
-        let x be set such that
-A9:     x in C;
-        consider v being Element of V such that
-A10:    v = x and f.v <> 0.F by A9;
-        thus thesis by A10;
-      end;
-      then reconsider C as Subset of V;
-      C is finite
-      proof
-        card C c= card Carrier l
-        proof
-          ex g being Function
-          st g is one-to-one & dom g = C & rng g c= Carrier l
-          proof
-            set S = (T"(Carrier l)) /\ X;
-            set g = T|S;
-A11:        S = C
-            proof
-A12:          S c= C
-              proof
-                let x be set such that
-A13:            x in S;
-A14:            x in X by A13,XBOOLE_0:def 4;
-A15:            x in T"(Carrier l) by A13,XBOOLE_0:def 4;
-                then
-A16:            x in dom T by FUNCT_1:def 13;
-A17:            T.x in Carrier l by A15,FUNCT_1:def 13;
-                reconsider x as Element of V by A13;
-                not x in dom ((V \ X) --> 0.F) by A14,XBOOLE_0:def 5;
-                then
-A18:            f.x = (l*T).x by FUNCT_4:12;
-A19:            (l*T).x = l.(T.x) by A16,FUNCT_1:23;
-                l.(T.x) <> 0.F by A17,VECTSP_6:20;
-                hence thesis by A18,A19;
-              end;
-              C c= S
-              proof
-                let x be set such that
-A20:            x in C;
-                consider v being Element of V such that
-A21:            v = x and
-A22:            f.v <> 0.F by A20;
-                reconsider x as Element of V by A21;
-A23:            now
-                  assume not x in X;
-                  then
-A24:              x in V \ X by XBOOLE_0:def 5;
-                  then x in dom ((V \ X) --> 0.F) by FUNCOP_1:19;
-                  then f.x = ((V \ X) --> 0.F).x by FUNCT_4:14;
-                  hence contradiction by A21,A22,A24,FUNCOP_1:13;
-                end;
-                x in T"(Carrier l)
-                proof
-A25:              dom T = [#]V by Th7;
-                  T.x in Carrier l
-                  proof
-                    not x in V \ X by A23,XBOOLE_0:def 5;
-                    then
-A26:                f.x = (l*T).x by A3,FUNCT_4:12;
-                    (l*T).x = l.(T.x) by A25,FUNCT_1:23;
-                    hence thesis by A21,A22,A26;
-                  end;
-                  hence thesis by A25,FUNCT_1:def 13;
-                end;
-                hence thesis by A23,XBOOLE_0:def 4;
-              end;
-              hence thesis by A12,XBOOLE_0:def 10;
-            end;
-A27:        dom g = S
-            proof
-              dom T = [#]V by Th7;
-              hence thesis by RELAT_1:91;
-            end;
-A28:        rng g c= Carrier l
-            proof
-              let y be set such that
-A29:          y in rng g;
-              consider x being set such that
-A30:          x in dom g and
-A31:          y = g.x by A29,FUNCT_1:def 5;
-              x in T"(Carrier l) by A27,A30,XBOOLE_0:def 4;
-              then T.x in Carrier l by FUNCT_1:def 13;
-              hence thesis by A27,A30,A31,FUNCT_1:72;
-            end;
-            take g;
-            thus thesis by A1,A11,A27,A28,Th2,XBOOLE_1:17;
-          end;
-          hence thesis by CARD_1:26;
-        end;
+        let x be set;
+        assume
+        x in C;
+        then ex v being Element of V st v = x & f.v <> 0.F;
         hence thesis;
       end;
+      then reconsider C as Subset of V;
+      ex g being Function st g is one-to-one & dom g = C & rng g c=
+      Carrier l
+      proof
+        set S = (T"(Carrier l)) /\ X;
+        set g = T|S;
+        take g;
+A6:     C c= S
+        proof
+          let x be set such that
+A7:       x in C;
+A8:       ex v being Element of V st v = x & f.v <> 0.F by A7;
+          reconsider x as Element of V by A7;
+A9:       now
+            assume
+            not x in X;
+            then
+A10:        x in V \ X by XBOOLE_0:def 5;
+            then x in dom ((V \ X) --> 0.F) by FUNCOP_1:19;
+            then f.x = ((V \ X) --> 0.F).x by FUNCT_4:14;
+            hence contradiction by A8,A10,FUNCOP_1:13;
+          end;
+          then not x in V \ X by XBOOLE_0:def 5;
+          then
+A11:      f.x = (l*T).x by A4,FUNCT_4:12;
+A12:      dom T = [#]V by Th7;
+          then (l*T).x = l.(T.x) by FUNCT_1:23;
+          then T.x in Carrier l by A8,A11;
+          then x in T"(Carrier l) by A12,FUNCT_1:def 13;
+          hence thesis by A9,XBOOLE_0:def 4;
+        end;
+A13:    dom T = [#]V by Th7;
+        then
+A14:    dom g = S by RELAT_1:91;
+A15:    rng g c= Carrier l
+        proof
+          let y be set;
+          assume
+          y in rng g;
+          then consider x being set such that
+A16:      x in dom g and
+A17:      y = g.x by FUNCT_1:def 5;
+          x in T"(Carrier l) by A14,A16,XBOOLE_0:def 4;
+          then T.x in Carrier l by FUNCT_1:def 13;
+          hence thesis by A14,A16,A17,FUNCT_1:72;
+        end;
+        S c= C
+        proof
+          let x be set such that
+A18:      x in S;
+A19:      x in X by A18,XBOOLE_0:def 4;
+A20:      x in T"(Carrier l) by A18,XBOOLE_0:def 4;
+          then
+A21:      x in dom T by FUNCT_1:def 13;
+A22:      T.x in Carrier l by A20,FUNCT_1:def 13;
+          reconsider x as Element of V by A18;
+A23:      l.(T.x) <> 0.F by A22,VECTSP_6:20;
+          not x in dom ((V \ X) --> 0.F) by A19,XBOOLE_0:def 5;
+          then
+A24:      f.x = (l*T).x by FUNCT_4:12;
+          (l*T).x = l.(T.x) by A21,FUNCT_1:23;
+          hence thesis by A24,A23;
+        end;
+        then S = C by A6,XBOOLE_0:def 10;
+        hence thesis by A1,A13,A15,Th2,RELAT_1:91,XBOOLE_1:17;
+      end;
+      then card C c= card Carrier l by CARD_1:26;
       then reconsider C as finite Subset of V;
       take C;
       thus thesis;
@@ -1885,15 +1845,16 @@ A31:          y = g.x by A29,FUNCT_1:def 5;
     Carrier f c= X
     proof
       let x be set such that
-A32:  x in Carrier f;
-      reconsider x as Element of V by A32;
+A25:  x in Carrier f;
+      reconsider x as Element of V by A25;
       now
-        assume not x in X;
+        assume
+        not x in X;
         then
-A33:    x in V \ X by XBOOLE_0:def 5;
-        then f.x = ((V \ X) --> 0.F).x by A3,FUNCT_4:14
-          .= 0.F by A33,FUNCOP_1:13;
-        hence contradiction by A32,VECTSP_6:20;
+A26:    x in V \ X by XBOOLE_0:def 5;
+        then f.x = ((V \ X) --> 0.F).x by A4,FUNCT_4:14
+          .= 0.F by A26,FUNCOP_1:13;
+        hence contradiction by A25,VECTSP_6:20;
       end;
       hence thesis;
     end;
@@ -1902,66 +1863,66 @@ A33:    x in V \ X by XBOOLE_0:def 5;
 end;
 
 theorem Th42:
-  for X being Subset of V, l being Linear_Combination of T .: X,
-  v being Element of V st v in X & T|X is one-to-one holds (T#l).v = l.(T.v)
+  for X being Subset of V, l being Linear_Combination of T .: X, v
+  being Element of V st v in X & T|X is one-to-one holds (T#l).v = l.(T.v)
 proof
-  let X be Subset of V, l be Linear_Combination of T .: X,
-  v be Element of V such that
-A1: v in X and
-A2: T|X is one-to-one;
-A3: not v in dom ((V \ X) --> 0.F) by A1,XBOOLE_0:def 5;
-  T#l = (l*T) +* ((V \ X) --> 0.F) by A2,Def6;
+  let X be Subset of V, l be Linear_Combination of T .: X, v be Element of V;
+  assume
+  v in X & T|X is one-to-one;
+  then ( not v in dom ((V \ X) --> 0.F))& T#l = (l*T) +* ((V \ X) --> 0.F) by
+  Def6,XBOOLE_0:def 5;
   then
-A4: (T#l).v = (l*T).v by A3,FUNCT_4:12;
+A1: (T#l).v = (l*T).v by FUNCT_4:12;
   dom T = [#]V by Th7;
-  hence thesis by A4,FUNCT_1:23;
+  hence thesis by A1,FUNCT_1:23;
 end;
 
 :: # is a right inverse of @
 
 theorem Th43:
-  for X being Subset of V, l being Linear_Combination of T .: X
-  st T|X is one-to-one holds T@(T#l) = l
+  for X being Subset of V, l being Linear_Combination of T .: X st
+  T|X is one-to-one holds T@(T#l) = l
 proof
   let X be Subset of V, l be Linear_Combination of T .: X such that
 A1: T|X is one-to-one;
-  set m = T@(T#l);
   let w be Element of W;
+  set m = T@(T#l);
   per cases;
   suppose
 A2: w in Carrier l;
     then
 A3: l.w <> 0.F by VECTSP_6:20;
+A4: dom (T#l) = [#]V by FUNCT_2:169;
     Carrier l c= T .: X by VECTSP_6:def 7;
     then consider v being set such that
-A4: v in dom T and
-A5: v in X and
-A6: w = T.v by A2,FUNCT_1:def 12;
-    reconsider v as Element of V by A4;
+A5: v in dom T and
+A6: v in X and
+A7: w = T.v by A2,FUNCT_1:def 12;
+    reconsider v as Element of V by A5;
     consider B being Subset of V such that
-A7: B misses X and
-A8: T"{T.v} = {v} \/ B by A1,A5,Th34;
-A9: dom (T#l) = [#]V by FUNCT_2:169;
-A10: (T#l).v = l.(T.v) by A1,A5,Th42;
+A8: B misses X and
+A9: T"{T.v} = {v} \/ B by A1,A6,Th34;
+A10: (T#l).v = l.(T.v) by A1,A6,Th42;
 A11: (T#l) .: {v} = Im (T#l,v)
-      .= {(T#l).v} by A9,FUNCT_1:117;
-A12: m.w = Sum ((T#l) .: T"{T.v}) by A6,Def5
-      .= Sum ({l.(T.v)} \/ ((T#l) .: B)) by A8,A10,A11,RELAT_1:153;
+      .= {(T#l).v} by A4,FUNCT_1:117;
+A12: m.w = Sum ((T#l) .: T"{T.v}) by A7,Def5
+      .= Sum ({l.(T.v)} \/ ((T#l) .: B)) by A9,A10,A11,RELAT_1:153;
     per cases;
-    suppose B = {};
+    suppose
+      B = {};
       then m.w = Sum ({l.(T.v)} \/ {}F) by A12,RELAT_1:149
-        .= l.w by A6,RLVECT_2:15;
+        .= l.w by A7,RLVECT_2:15;
       hence thesis;
     end;
     suppose
 A13:  B <> {};
       Carrier (T#l) c= X by VECTSP_6:def 7;
-      then B misses Carrier (T#l) by A7,XBOOLE_1:63;
+      then B misses Carrier (T#l) by A8,XBOOLE_1:63;
       then m.w = Sum ({l.(T.v)} \/ {0.F}) by A12,A13,Th35
-        .= Sum ({l.(T.v)}) + Sum ({0.F}) by A3,A6,RLVECT_2:18,ZFMISC_1:17
+        .= Sum ({l.(T.v)}) + Sum ({0.F}) by A3,A7,RLVECT_2:18,ZFMISC_1:17
         .= l.(T.v) + Sum ({0.F}) by RLVECT_2:15
         .= l.(T.v) + 0.F by RLVECT_2:15
-        .= l.w by A6,RLVECT_1:10;
+        .= l.w by A7,RLVECT_1:10;
       hence thesis;
     end;
   end;
@@ -1993,24 +1954,21 @@ end;
 begin :: The rank+nullity theorem
 
 definition
-  let F be Field, V,W be finite-dimensional VectSp of F,
-  T be linear-transformation of V,W;
+  let F be Field, V,W be finite-dimensional VectSp of F, T be
+  linear-transformation of V,W;
   func rank(T) -> Nat equals
-
   dim (im T);
   coherence;
   func nullity(T) -> Nat equals
-
   dim (ker T);
   coherence;
 end;
 
 theorem Th44:
-  for V,W being finite-dimensional VectSp of F,
-  T being linear-transformation of V,W holds dim V = rank(T) + nullity(T)
+  for V,W being finite-dimensional VectSp of F, T being
+  linear-transformation of V,W holds dim V = rank(T) + nullity(T)
 proof
-  let V,W be finite-dimensional VectSp of F,
-  T be linear-transformation of V,W;
+  let V,W be finite-dimensional VectSp of F, T be linear-transformation of V,W;
   consider A being finite Basis of ker T;
   reconsider A' = A as Subset of V by Th19;
   consider B being Basis of V such that
@@ -2019,27 +1977,17 @@ A1: A c= B by VECTSP_9:17;
   reconsider X = B \ A' as finite Subset of B by XBOOLE_1:36;
   reconsider X as finite Subset of V;
 A2: B = A \/ X by A1,XBOOLE_1:45;
-  reconsider C = T .: X as finite Subset of W;
-  reconsider A as finite Basis of ker T;
   reconsider B as finite Basis of V;
+  reconsider A as finite Basis of ker T;
+  reconsider C = T .: X as finite Subset of W;
 A3: T|X is one-to-one by A1,Th22;
-A4: X c= dom (T|X)
+A4: C is linearly-independent
   proof
-    dom T = [#]V by Th7;
-    hence thesis by RELAT_1:91;
-  end;
-A5: card C = card X
-  proof
-    X,(T|X) .: X are_equipotent by A3,A4,CARD_1:60;
-    then X,C are_equipotent by RELAT_1:162;
-    hence thesis by CARD_1:21;
-  end;
-A6: C is linearly-independent
-  proof
-    assume C is linearly-dependent;
+    assume
+    C is linearly-dependent;
     then consider l being Linear_Combination of C such that
-A7: Carrier l <> {} and
-A8: Sum l = 0.W by Th41;
+A5: Carrier l <> {} and
+A6: Sum l = 0.W by Th41;
     ex m being Linear_Combination of X st l = T@m
     proof
       reconsider l' = l as Linear_Combination of T .: X;
@@ -2048,95 +1996,99 @@ A8: Sum l = 0.W by Th41;
       thus thesis by A3,Th43;
     end;
     then consider m being Linear_Combination of B \ A' such that
-A9: l = T@m;
-    T.(Sum m) = 0.W by A1,A8,A9,Th40;
+A7: l = T@m;
+    T.(Sum m) = 0.W by A1,A6,A7,Th40;
     then Sum m in ker T by Th10;
     then Sum m in Lin A by VECTSP_7:def 3;
     then Sum m in Lin A' by VECTSP_9:21;
     then consider n being Linear_Combination of A' such that
-A10: Sum m = Sum n by VECTSP_7:12;
-    (Sum m) - (Sum n) = 0.V by A10,VECTSP_1:66;
-    then
-A11: Sum (m - n) = 0.V by VECTSP_6:80;
-A12: Carrier (m - n) c= (Carrier m) \/ (Carrier n) by VECTSP_6:74;
-A13: Carrier m c= B \ A' by VECTSP_6:def 7;
-A14: Carrier n c= A by VECTSP_6:def 7;
-A15: (B \ A') \/ A' = B by A1,XBOOLE_1:45;
-    (Carrier m) \/ (Carrier n) c= (B \ A') \/ A by A13,A14,XBOOLE_1:13;
-    then Carrier (m - n) c= B by A12,A15,XBOOLE_1:1;
+A8: Sum m = Sum n by VECTSP_7:12;
+A9: Carrier (m - n) c= (Carrier m) \/ (Carrier n) & (B \ A') \/ A' = B by
+    A1, VECTSP_6:74,XBOOLE_1:45;
+A10: Carrier m c= B \ A' & Carrier n c= A by VECTSP_6:def 7;
+    then (Carrier m) \/ (Carrier n) c= (B \ A') \/ A by XBOOLE_1:13;
+    then Carrier (m - n) c= B by A9,XBOOLE_1:1;
     then reconsider o = m - n as Linear_Combination of B by VECTSP_6:def 7;
-    B is linearly-independent by VECTSP_7:def 3;
+A11: B is linearly-independent by VECTSP_7:def 3;
+    (Sum m) - (Sum n) = 0.V by A8,VECTSP_1:66;
+    then Sum (m - n) = 0.V by VECTSP_6:80;
     then
-A16: Carrier o = {} by A11,VECTSP_7:def 1;
+A12: Carrier o = {} by A11,VECTSP_7:def 1;
     A' misses B \ A' by XBOOLE_1:79;
-    then Carrier (m - n) = (Carrier m) \/ (Carrier n) by A13,A14,Th32,
-XBOOLE_1:64;
-    then Carrier m = {} by A16;
+    then Carrier (m - n) = (Carrier m) \/ (Carrier n) by A10,Th32,
+    XBOOLE_1:64;
+    then Carrier m = {} by A12;
     then T .: (Carrier m) = {} by RELAT_1:149;
-    hence thesis by A7,A9,Th30,XBOOLE_1:3;
+    hence thesis by A5,A7,Th30,XBOOLE_1:3;
   end;
+  dom T = [#]V by Th7;
+  then X c= dom (T|X) by RELAT_1:91;
+  then X,(T|X) .: X are_equipotent by A3,CARD_1:60;
+  then X,C are_equipotent by RELAT_1:162;
+  then
+A13: card C = card X by CARD_1:21;
   reconsider C as finite Subset of im T by Th12;
   reconsider L = Lin C as strict Subspace of im T;
   for v being Element of im T holds v in L
   proof
-    let v be Element of im T;
-A17: v in im T by STRUCT_0:def 5;
-    reconsider v' = v as Element of W by VECTSP_4:18;
-    consider u being Element of V such that
-A18: T.u = v' by A17,Th13;
     reconsider A' = A as Subset of V by Th19;
+    let v be Element of im T;
+    reconsider v' = v as Element of W by VECTSP_4:18;
+    reconsider C' = C as Subset of W;
+    v in im T by STRUCT_0:def 5;
+    then consider u being Element of V such that
+A14: T.u = v' by Th13;
     V is_the_direct_sum_of Lin A', Lin (B \ A') by A1,Th33;
     then
-A19: (Omega).V = (Lin A') + (Lin (B \ A')) by VECTSP_5:def 4;
+A15: (Omega).V = (Lin A') + (Lin (B \ A')) by VECTSP_5:def 4;
     u in (Omega).V by STRUCT_0:def 5;
     then consider u1, u2 being Element of V such that
-A20: u1 in Lin A' and
-A21: u2 in Lin (B \ A') and
-A22: u = u1 + u2 by A19,VECTSP_5:5;
-A23: T.u = T.u1 + T.u2 by A22,MOD_2:def 5;
-    Lin A = ker T by VECTSP_7:def 3;
-    then u1 in ker T by A20,VECTSP_9:21;
-    then T.u1 = 0.W by Th10;
-    then
-A24: T.u = T.u2 by A23,RLVECT_1:10;
+A16: u1 in Lin A' and
+A17: u2 in Lin (B \ A') and
+A18: u = u1 + u2 by A15,VECTSP_5:5;
     consider l being Linear_Combination of B \ A' such that
-A25: u2 = Sum l by A21,VECTSP_7:12;
-A26: T@l is Linear_Combination of T .: (Carrier l) by Th29;
-A27: Carrier l c= B \ A' by VECTSP_6:def 7;
-    reconsider C' = C as Subset of W;
-    reconsider m = T@l as Linear_Combination of C' by A26,A27,RELAT_1:156
-,VECTSP_6:25;
+A19: u2 = Sum l by A17,VECTSP_7:12;
+    Lin A = ker T by VECTSP_7:def 3;
+    then u1 in ker T by A16,VECTSP_9:21;
+    then
+A20: T.u1 = 0.W by Th10;
+    T@l is Linear_Combination of T .: (Carrier l) & Carrier l c= B \ A'
+    by Th29,VECTSP_6:def 7;
+    then reconsider m = T@l as Linear_Combination of C' by RELAT_1:156 ,
+    VECTSP_6:25;
+    T.u = T.u1 + T.u2 by A18,MOD_2:def 5;
+    then
+A21: T.u = T.u2 by A20,RLVECT_1:10;
     ex m being Linear_Combination of C' st v = Sum m
     proof
       take m;
-      thus thesis by A1,A18,A24,A25,Th40;
+      thus thesis by A1,A14,A21,A19,Th40;
     end;
     then v in Lin C' by VECTSP_7:12;
     hence thesis by VECTSP_9:21;
   end;
   then
-A28: Lin C = im T by VECTSP_4:40;
-  reconsider C as linearly-independent Subset of im T by A6,VECTSP_9:16;
-  reconsider C as finite Basis of im T by A28,VECTSP_7:def 3;
-A29: nullity T = card A by VECTSP_9:def 2;
-A30: rank T = card C by VECTSP_9:def 2;
+A22: Lin C = im T by VECTSP_4:40;
+  reconsider C as linearly-independent Subset of im T by A4,VECTSP_9:16;
+  reconsider C as finite Basis of im T by A22,VECTSP_7:def 3;
+A23: nullity T = card A & rank T = card C by VECTSP_9:def 2;
   dim V = card B by VECTSP_9:def 2
-    .= rank T + nullity T by A2,A5,A29,A30,CARD_2:53,XBOOLE_1:79;
+    .= rank T + nullity T by A2,A13,A23,CARD_2:53,XBOOLE_1:79;
   hence thesis;
 end;
 
 theorem
-  for V,W being finite-dimensional VectSp of F,
-  T being linear-transformation of V,W st T is one-to-one holds dim V = rank T
+  for V,W being finite-dimensional VectSp of F, T being
+  linear-transformation of V,W st T is one-to-one holds dim V = rank T
 proof
-  let V,W be finite-dimensional VectSp of F,
-  T be linear-transformation of V,W such that
-A1: T is one-to-one;
-  ker T = (0).V by A1,Th15;
+  let V,W be finite-dimensional VectSp of F, T be linear-transformation of V,W;
+  assume
+  T is one-to-one;
+  then ker T = (0).V by Th15;
   then
-A2: nullity(T) = 0 by Th16;
+A1: nullity(T) = 0 by Th16;
   dim V = rank(T) + nullity(T) by Th44
-    .= rank(T) by A2;
+    .= rank(T) by A1;
   hence thesis;
 end;
 

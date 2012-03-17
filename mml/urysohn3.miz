@@ -14,14 +14,13 @@ environ
       COMPLEX1, REAL_1, NAT_1, XXREAL_1, XXREAL_2, RELAT_1, FUNCT_1, PARTFUN1,
       FUNCT_2, NEWTON, SUPINF_2, SEQ_1, TOPMETR, COMPTS_1, STRUCT_0, PRE_TOPC,
       TMAP_1, METRIC_1, PCOMPS_1, SEQFUNC, PROB_1, LIMFUNC1, SUPINF_1,
-      MEASURE5, URYSOHN1;
+      URYSOHN1;
  constructors REAL_1, NAT_1, PROB_1, LIMFUNC1, SEQFUNC, NEWTON, SUPINF_2,
       MEASURE5, COMPTS_1, URYSOHN1, TMAP_1, WAYBEL_3, SEQ_1, BORSUK_4,
       SUPINF_1;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, PARTFUN1, NUMBERS,
       XXREAL_0, NAT_1, MEMBERED, STRUCT_0, PRE_TOPC, METRIC_1, URYSOHN1,
-      TOPMETR, WAYBEL_3, BORSUK_4, BORSUK_6, VALUED_0, XREAL_1, XREAL_0,
-      FRAENKEL, FUNCT_1;
+      TOPMETR, WAYBEL_3, BORSUK_4, BORSUK_6, VALUED_0, XREAL_0, FUNCT_1;
  requirements NUMERALS, SUBSET, BOOLE, REAL, ARITHM;
  definitions PRE_TOPC, TARSKI, STRUCT_0, LIMFUNC1, PROB_1;
  theorems TARSKI, FUNCT_1, FUNCT_2, NAT_1, PCOMPS_1, PRE_TOPC, TOPS_1, TOPMETR,
@@ -32,99 +31,100 @@ environ
 
 begin
 
-Lm1: for T being non empty normal TopSpace,
-A,B being closed Subset of T st A <> {} & A misses B
-ex G being Function of dyadic(0),bool the carrier of T st
-A c= G.0 & B = [#]T \ G.1 &
-(for r1,r2 being Element of dyadic(0) st r1 < r2 holds
-(G.r1 is open & G.r2 is open & Cl(G.r1) c= G.r2))
+Lm1: for T being non empty normal TopSpace, A,B being closed Subset of T st A
+<> {} & A misses B ex G being Function of dyadic(0),bool the carrier of T st A
+c= G.0 & B = [#]T \ G.1 & for r1,r2 being Element of dyadic(0) st r1 < r2 holds
+G.r1 is open & G.r2 is open & Cl(G.r1) c= G.r2
+
 proof
   let T be non empty normal TopSpace;
   let A,B be closed Subset of T;
-  assume
-A1: A <> {} & A misses B;
+  assume that
+A1: A <> {} and
+A2: A misses B;
   reconsider G1 = [#]T \ B as Subset of T;
-A2: G1 = B` by SUBSET_1:def 5;
+A3: G1 = B` by SUBSET_1:def 5;
   then
-A3: G1 is open by TOPS_1:29;
+A4: G1 is open by TOPS_1:29;
   A \ B c= G1 by XBOOLE_1:33;
-  then A c= G1 by A1,XBOOLE_1:83;
+  then A c= G1 by A2,XBOOLE_1:83;
   then consider G0 being Subset of T such that
-A4: G0 is open & A c= G0 & Cl(G0) c= G1 by A1,A3,URYSOHN1:31;
-  defpred P[set,set] means
-  ($1 = 0 implies $2 = G0) & ($1 = 1 implies $2 = G1);
-A5: for x being Element of dyadic(0) ex y being Subset of T st P[x,y]
+A5: G0 is open and
+A6: A c= G0 and
+A7: Cl(G0) c= G1 by A1,A4,URYSOHN1:31;
+
+  defpred P[set,set] means ($1 = 0 implies $2 = G0) & ($1 = 1 implies $2 = G1);
+
+A8: for x being Element of dyadic(0) ex y being Subset of T st P[x,y]
   proof
     let x be Element of dyadic(0);
     per cases by TARSKI:def 2,URYSOHN1:6;
     suppose
-A6:   x = 0;
+A9:   x = 0;
       take G0;
-      thus thesis by A6;
+      thus thesis by A9;
     end;
     suppose
-A7:   x = 1;
+A10:  x = 1;
       take G1;
-      thus thesis by A7;
+      thus thesis by A10;
     end;
   end;
-  ex F being Function of dyadic(0),bool the carrier of T st
-  for x being Element of dyadic(0) holds P[x,F.x] from FUNCT_2:sch 3(A5);
+
+  ex F being Function of dyadic(0),bool the carrier of T st for x being
+  Element of dyadic(0) holds P[x,F.x] from FUNCT_2:sch 3(A8);
+
   then consider F being Function of dyadic(0),bool the carrier of T such that
-A8: for x being Element of dyadic(0) holds P[x,F.x];
-  take F;
-A9: F.0 = G0 & F.1 = G1
-  proof
-    0 in dyadic(0) & 1 in dyadic(0) by TARSKI:def 2,URYSOHN1:6;
-    hence thesis by A8;
-  end;
-  for r1,r2 being Element of dyadic(0) st r1 < r2 holds
-  (F.r1 is open & F.r2 is open & Cl(F.r1) c= F.r2)
+A11: for x being Element of dyadic(0) holds P[x,F.x];
+
+A12: for r1,r2 being Element of dyadic(0) st r1 < r2 holds F.r1 is open & F.
+  r2 is open & Cl(F.r1) c= F.r2
+
   proof
     let r1,r2 be Element of dyadic(0);
+A13: r1 = 0 or r1 = 1 by TARSKI:def 2,URYSOHN1:6;
+A14: r2 = 0 or r2 = 1 by TARSKI:def 2,URYSOHN1:6;
     assume
-A10: r1 < r2;
-A11: (r1 = 0 or r1 = 1) & (r2 = 0 or r2 = 1) by TARSKI:def 2,URYSOHN1:6;
-    then F.0 = G0 & F.1 = G1 by A8,A10;
-    hence thesis by A2,A4,A10,A11,TOPS_1:29;
+A15: r1 < r2;
+    then F.1 = G1 by A11,A14,URYSOHN1:6;
+    hence thesis by A3,A5,A7,A11,A15,A13,A14,TOPS_1:29;
   end;
-  hence thesis by A4,A9,PRE_TOPC:22;
+  take F;
+  1 in dyadic(0) by TARSKI:def 2,URYSOHN1:6;
+  then 0 in dyadic(0) & F.1 = G1 by A11,TARSKI:def 2,URYSOHN1:6;
+  hence thesis by A6,A11,A12,PRE_TOPC:22;
 end;
 
 theorem Th1:
-  for T being non empty normal TopSpace, A,B being closed Subset of T st
-  A <> {} & A misses B holds for n being Element of NAT holds
-  ex G being Function of dyadic(n),bool the carrier of T st
-  A c= G.0 & B = [#]T \ G.1 &
-  (for r1,r2 being Element of dyadic(n) st r1 < r2 holds
-  G.r1 is open & G.r2 is open & Cl(G.r1) c= G.r2)
+  for T being non empty normal TopSpace, A,B being closed Subset of
+  T st A <> {} & A misses B holds for n being Element of NAT holds ex G being
+Function of dyadic(n),bool the carrier of T st A c= G.0 & B = [#]T \ G.1 & for
+r1,r2 being Element of dyadic(n) st r1 < r2 holds G.r1 is open & G.r2 is open &
+  Cl(G.r1) c= G.r2
 proof
   let T be non empty normal TopSpace;
   let A,B be closed Subset of T;
-  assume
-A1: A <> {} & A misses B;
-  defpred P[Element of NAT] means
-  ex G being Function of dyadic($1),bool the carrier of T st
-  A c= G.0 & B = [#]T \ G.1 &
-  (for r1,r2 being Element of dyadic($1) st r1 < r2 holds
-  (G.r1 is open & G.r2 is open & Cl(G.r1) c= G.r2));
-A2: P[0] by A1,Lm1;
+  assume that
+A1: A <> {} and
+A2: A misses B;
+  defpred P[Element of NAT] means ex G being Function of dyadic($1),bool the
+carrier of T st A c= G.0 & B = [#]T \ G.1 & (for r1,r2 being Element of dyadic(
+  $1) st r1 < r2 holds (G.r1 is open & G.r2 is open & Cl(G.r1) c= G.r2));
 A3: for n being Element of NAT st P[n] holds P[n+1]
   proof
     let n be Element of NAT;
     given G being Function of dyadic(n),bool the carrier of T such that
-A4: A c= G.0 & B = [#]T \ G.1 &
-    (for r1,r2 being Element of dyadic(n) st r1 < r2 holds
-    (G.r1 is open & G.r2 is open & Cl(G.r1) c= G.r2));
+A4: A c= G.0 & B = [#]T \ G.1 & for r1,r2 being Element of dyadic(n)
+    st r1 < r2 holds G.r1 is open & G.r2 is open & Cl(G.r1) c= G.r2;
     consider F being Function of dyadic(n+1),bool the carrier of T such that
-A5: A c= F.0 & B = [#]T \ F.1 &
-    for r1,r2,r being Element of dyadic(n+1) st r1 < r2 holds
-    (F.r1 is open & F.r2 is open & Cl(F.r1) c= F.r2 &
-    (r in dyadic(n) implies F.r = G.r)) by A1,A4,URYSOHN1:32;
+A5: A c= F.0 & B = [#]T \ F.1 & for r1,r2,r being Element of dyadic(n+
+    1) st r1 < r2 holds F.r1 is open & F.r2 is open & Cl(F.r1) c= F.r2 & (r in
+    dyadic(n) implies F.r = G.r) by A1,A4,URYSOHN1:32;
     take F;
     thus thesis by A5;
   end;
-  thus for n being Element of NAT holds P[n] from NAT_1:sch 1(A2,A3);
+A6: P[0] by A1,A2,Lm1;
+  thus for n being Element of NAT holds P[n] from NAT_1:sch 1(A6,A3);
 end;
 
 definition
@@ -134,53 +134,52 @@ definition
   assume
 A1: T is normal & A <> {} & A is closed & B is closed & A misses B;
   mode Drizzle of A,B,n -> Function of dyadic(n),bool the carrier of T means
-    :Def1:
-    A c= it.0 & B = [#]T \ it.1 &
-    for r1,r2 being Element of dyadic(n) st r1 < r2 holds
-    (it.r1 is open & it.r2 is open & Cl(it.r1) c= it.r2);
+    :
+    Def1: A
+ c= it.0 & B = [#]T \ it.1 & for r1,r2 being Element of dyadic(n) st r1
+    < r2 holds it.r1 is open & it.r2 is open & Cl(it.r1) c= it.r2;
   existence by A1,Th1;
 end;
 
 canceled;
 
 theorem Th3:
-  for T being non empty normal TopSpace, A,B being closed Subset of T st
-  A <> {} & A misses B holds for n being Element of NAT,
-  G being Drizzle of A,B,n holds ex F being Drizzle of A,B,n+1 st
-  for r being Element of dyadic(n+1) st r in dyadic(n) holds F.r = G.r
+  for T being non empty normal TopSpace, A,B being closed Subset of
+T st A <> {} & A misses B holds for n being Element of NAT, G being Drizzle of
+A,B,n holds ex F being Drizzle of A,B,n+1 st for r being Element of dyadic(n+1)
+  st r in dyadic(n) holds F.r = G.r
 proof
   let T be non empty normal TopSpace;
   let A,B be closed Subset of T;
-  assume
-A1: A <> {} & A misses B;
+  assume that
+A1: A <> {} and
+A2: A misses B;
   let n be Element of NAT;
   let G be Drizzle of A,B,n;
-A2: A c= G.0 & B = [#]T \ G.1 by A1,Def1;
-  for r1,r2 being Element of dyadic(n) st r1 < r2 holds
-  (G.r1 is open & G.r2 is open & Cl(G.r1) c= G.r2) by A1,Def1;
-  then consider F being Function of dyadic(n+1),bool the carrier of T such
-  that
-A3: A c= F.0 & B = [#]T \ F.1 &
-  for r1,r2,r being Element of dyadic(n+1) st r1 < r2 holds
-  (F.r1 is open & F.r2 is open & Cl(F.r1) c= F.r2 &
-  (r in dyadic(n) implies F.r = G.r)) by A1,A2,URYSOHN1:32;
-  for r1,r2 being Element of dyadic(n+1) st r1 < r2 holds
-  (F.r1 is open & F.r2 is open & Cl(F.r1) c= F.r2) by A3;
-  then reconsider F as Drizzle of A,B,n+1 by A1,A3,Def1;
+A3: for r1,r2 being Element of dyadic(n) st r1 < r2 holds G.r1 is open & G.
+  r2 is open & Cl(G.r1) c= G.r2 by A1,A2,Def1;
+  A c= G.0 & B = [#]T \ G.1 by A1,A2,Def1;
+  then consider
+  F being Function of dyadic(n+1),bool the carrier of T such that
+A4: A c= F.0 & B = [#]T \ F.1 and
+A5: for r1,r2,r being Element of dyadic(n+1) st r1 < r2 holds F.r1 is
+open & F.r2 is open & Cl(F.r1) c= F.r2 & (r in dyadic(n) implies F.r = G.r) by
+  A1,A3,URYSOHN1:32;
+  for r1,r2 being Element of dyadic(n+1) st r1 < r2 holds F.r1 is open & F
+  .r2 is open & Cl(F.r1) c= F.r2 by A5;
+  then reconsider F as Drizzle of A,B,n+1 by A1,A2,A4,Def1;
   take F;
   let r be Element of dyadic(n+1);
+A6: 0 in dyadic(n+1) & 1 in dyadic(n+1) by URYSOHN1:12;
   assume
-A4: r in dyadic(n);
-  0 in dyadic(n+1) & 1 in dyadic(n+1) by URYSOHN1:12;
-  then consider r1,r2 being Element of dyadic(n+1) such that
-A5: r1 = 0 & r2 = 1;
-  thus thesis by A3,A4,A5;
+  r in dyadic(n);
+  hence thesis by A5,A6;
 end;
 
 theorem Th4:
-  for T being non empty TopSpace, A,B being Subset of T,
-  n being Element of NAT, S being Drizzle of A,B,n holds
-  S is Element of PFuncs(DYADIC,bool the carrier of T)
+  for T being non empty TopSpace, A,B being Subset of T, n being
+  Element of NAT, S being Drizzle of A,B,n holds S is Element of PFuncs(DYADIC,
+  bool the carrier of T)
 proof
   let T be non empty TopSpace;
   let A,B be Subset of T;
@@ -200,189 +199,190 @@ definition
 end;
 
 theorem Th5:
-  for T being non empty normal TopSpace, A,B being closed Subset of T st
-  A <> {} & A misses B holds
-  ex F being Functional_Sequence of DYADIC,bool the carrier of T st
-  for n being Element of NAT holds F.n is Drizzle of A,B,n &
+  for T being non empty normal TopSpace, A,B being closed Subset of
+  T st A <> {} & A misses B holds ex F being Functional_Sequence of DYADIC,bool
+the carrier of T st for n being Element of NAT holds F.n is Drizzle of A,B,n &
   for r being Element of dom (F.n) holds (F.n).r = (F.(n+1)).r
 proof
   let T be non empty normal TopSpace;
   let A,B be closed Subset of T;
-  assume
-A1: A <> {} & A misses B;
   defpred P[set] means ex n being Element of NAT st $1 is Drizzle of A,B,n;
   consider D being set such that
-A2: for x being set holds
-  x in D iff x in PFuncs(DYADIC,bool the carrier of T) & P[x]
-  from XBOOLE_0:sch 1;
+A1: for x being set holds x in D iff x in PFuncs(DYADIC,bool the carrier
+  of T) & P[x] from XBOOLE_0:sch 1;
   consider S being Drizzle of A,B,0;
-A3: S is Element of PFuncs(DYADIC,bool the carrier of T) by Th4;
-  then reconsider D as non empty set by A2;
-  reconsider S as Element of D by A2,A3;
-  defpred P1[Element of D,Element of D] means
-  ex xx,yy being PartFunc of DYADIC,bool the carrier of T
-  st (xx=$1 & yy = $2 &
-  (ex k being Element of NAT st xx is Drizzle of A,B,k) &
-  (for k being Element of NAT st xx is Drizzle of A,B,k holds
-  yy is Drizzle of A,B,k+1) &
-  (for r being Element of dom xx holds xx.r = yy.r));
+A2: S is Element of PFuncs(DYADIC,bool the carrier of T) by Th4;
+  then reconsider D as non empty set by A1;
+  reconsider S as Element of D by A1,A2;
+  defpred P1[Element of D,Element of D] means ex xx,yy being PartFunc of
+  DYADIC,bool the carrier of T st (xx=$1 & yy = $2 & (ex k being Element of NAT
+st xx is Drizzle of A,B,k) & (for k being Element of NAT st xx is Drizzle of A,
+B,k holds yy is Drizzle of A,B,k+1) & (for r being Element of dom xx holds xx.r
+  = yy.r));
   defpred Q[Element of NAT,Element of D,Element of D] means P1[$2,$3];
-A4: for n being Element of NAT
-  for x being Element of D ex y being Element of D st Q[n,x,y]
+  assume
+A3: A <> {} & A misses B;
+A4: for n being Element of NAT for x being Element of D ex y being Element
+  of D st Q[n,x,y]
   proof
     let n be Element of NAT;
     let x be Element of D;
     consider s0 being Element of NAT such that
-A5: x is Drizzle of A,B,s0 by A2;
+A5: x is Drizzle of A,B,s0 by A1;
     reconsider xx = x as Drizzle of A,B,s0 by A5;
     consider yy being Drizzle of A,B,s0+1 such that
-A6: for r being Element of dyadic(s0+1) holds
-    (r in dyadic(s0) implies yy.r = xx.r) by A1,Th3;
-A7: for k being Element of NAT st xx is Drizzle of A,B,k holds
-    yy is Drizzle of A,B,k+1
-    proof
-      let k be Element of NAT;
-      assume xx is Drizzle of A,B,k;
-      then
-A8:   dom xx = dyadic(k) by FUNCT_2:def 1;
-      k = s0
-      proof
-        assume
-A9:     k <> s0;
-        per cases by A9,XXREAL_0:1;
-        suppose
-A10:      k < s0;
-          set o = 1/(2|^s0);
-          0 <= 1 & 1 <= (2|^s0) & o = 1/(2|^s0) by PREPOWER:19;
-          then
-A11:      o in dyadic(s0) by URYSOHN1:def 3;
-          not o in dyadic(k)
-          proof
-            assume o in dyadic(k);
-            then consider i being Element of NAT such that
-A12:        0 <= i & i <= (2|^k) & o = i/(2|^k) by URYSOHN1:def 3;
-A13:        0 < 2|^s0 & 0 < 2|^k by NEWTON:102;
-            then
-A14:        1*(2|^k) = i*(2|^s0) by A12,XCMPLX_1:96;
-            then
-A15:        i = (2|^k)/(2|^s0) by A13,XCMPLX_1:90;
-A16:        i <> 0 by A14,NEWTON:102;
-            (2|^k) < 1 * (2|^s0) by A10,PEPIN:71;
-            then
-A17:        i < 1 by A15,XREAL_1:85;
-            not ex n being Nat st i = n + 1
-            proof
-              given n being Nat such that
-A18:          i = n + 1;
-              n + 1 -1 < 0 by A17,A18,XREAL_1:51;
-              hence thesis;
-            end;
-            hence thesis by A16,NAT_1:6;
-          end;
-          hence thesis by A8,A11,FUNCT_2:def 1;
-        end;
-        suppose
-A19:      s0 < k;
-          set o = 1/(2|^k);
-          0 <= 1 & 1 <= (2|^k) & o = 1/(2|^k) by PREPOWER:19;
-          then
-A20:      o in dyadic(k) by URYSOHN1:def 3;
-          not o in dyadic(s0)
-          proof
-            assume o in dyadic(s0);
-            then consider i being Element of NAT such that
-A21:        0 <= i & i <= (2|^s0) & o = i/(2|^s0) by URYSOHN1:def 3;
-A22:        0 < 2|^s0 & 0 < 2|^k by NEWTON:102;
-            then
-A23:        1*(2|^s0) = i*(2|^k) by A21,XCMPLX_1:96;
-            then
-A24:        i = (2|^s0)/(2|^k) by A22,XCMPLX_1:90;
-A25:        i <> 0 by A23,NEWTON:102;
-            (2|^s0) < 1 * (2|^k) by A19,PEPIN:71;
-            then
-A26:        i < 1 by A24,XREAL_1:85;
-            not ex n being Nat st i = n + 1
-            proof
-              given n being Nat such that
-A27:          i = n + 1;
-              n + 1 -1 < 0 by A26,A27,XREAL_1:51;
-              hence thesis;
-            end;
-            hence thesis by A25,NAT_1:6;
-          end;
-          hence thesis by A8,A20,FUNCT_2:def 1;
-        end;
-      end;
-      hence thesis;
-    end;
-A28: for r being Element of dom xx holds xx.r = yy.r
+A6: for r being Element of dyadic(s0+1) holds (r in dyadic(s0) implies
+    yy.r = xx.r) by A3,Th3;
+A7: for r being Element of dom xx holds xx.r = yy.r
     proof
       let r be Element of dom xx;
       dom xx = dyadic(s0) by FUNCT_2:def 1;
       then
-A29:  r in dyadic(s0);
+A8:   r in dyadic(s0);
       dyadic(s0) c= dyadic(s0+1) by URYSOHN1:11;
-      hence thesis by A6,A29;
+      hence thesis by A6,A8;
+    end;
+A9: for k being Element of NAT st xx is Drizzle of A,B,k holds yy is
+    Drizzle of A,B,k+1
+    proof
+      let k be Element of NAT;
+      assume
+      xx is Drizzle of A,B,k;
+      then
+A10:  dom xx = dyadic(k) by FUNCT_2:def 1;
+      k = s0
+      proof
+        assume
+A11:    k <> s0;
+        per cases by A11,XXREAL_0:1;
+        suppose
+A12:      k < s0;
+          set o = 1/(2|^s0);
+A13:      not o in dyadic(k)
+          proof
+A14:        (2|^k) < 1 * (2|^s0) by A12,PEPIN:71;
+            assume
+            o in dyadic(k);
+            then consider i being Element of NAT such that
+            0 <= i and
+            i <= (2|^k) and
+A15:        o = i/(2|^k) by URYSOHN1:def 3;
+A16:        0 < 2|^s0 by NEWTON:102;
+            0 < 2|^k by NEWTON:102;
+            then
+A17:        1*(2|^k) = i*(2|^s0) by A15,A16,XCMPLX_1:96;
+            then
+A18:        i = (2|^k)/(2|^s0) by A16,XCMPLX_1:90;
+A19:        not ex n being Nat st i = n + 1
+            proof
+              given n being Nat such that
+A20:          i = n + 1;
+              n + 1 -1 < 0 by A18,A14,A20,XREAL_1:51,85;
+              hence thesis;
+            end;
+            i <> 0 by A17,NEWTON:102;
+            hence thesis by A19,NAT_1:6;
+          end;
+          1 <= (2|^s0) by PREPOWER:19;
+          then o in dyadic(s0) by URYSOHN1:def 3;
+          hence thesis by A10,A13,FUNCT_2:def 1;
+        end;
+        suppose
+A21:      s0 < k;
+          set o = 1/(2|^k);
+A22:      not o in dyadic(s0)
+          proof
+A23:        (2|^s0) < 1 * (2|^k) by A21,PEPIN:71;
+            assume
+            o in dyadic(s0);
+            then consider i being Element of NAT such that
+            0 <= i and
+            i <= (2|^s0) and
+A24:        o = i/(2|^s0) by URYSOHN1:def 3;
+A25:        0 < 2|^k by NEWTON:102;
+            0 < 2|^s0 by NEWTON:102;
+            then
+A26:        1*(2|^s0) = i*(2|^k) by A24,A25,XCMPLX_1:96;
+            then
+A27:        i = (2|^s0)/(2|^k) by A25,XCMPLX_1:90;
+A28:        not ex n being Nat st i = n + 1
+            proof
+              given n being Nat such that
+A29:          i = n + 1;
+              n + 1 -1 < 0 by A27,A23,A29,XREAL_1:51,85;
+              hence thesis;
+            end;
+            i <> 0 by A26,NEWTON:102;
+            hence thesis by A28,NAT_1:6;
+          end;
+          1 <= (2|^k) by PREPOWER:19;
+          then o in dyadic(k) by URYSOHN1:def 3;
+          hence thesis by A10,A22,FUNCT_2:def 1;
+        end;
+      end;
+      hence thesis;
     end;
     reconsider xx as Element of PFuncs(DYADIC,bool the carrier of T) by Th4;
     reconsider xx as Element of D;
 A30: yy is Element of PFuncs(DYADIC,bool the carrier of T) by Th4;
-    then reconsider yy as Element of D by A2;
+    then reconsider yy as Element of D by A1;
     ex y being Element of D st P1[x,y]
     proof
       take yy;
-      reconsider xx as PartFunc of DYADIC,
-      bool the carrier of T by PARTFUN1:121;
-      reconsider yy as PartFunc of DYADIC,
-      bool the carrier of T by A30,PARTFUN1:120;
+      reconsider yy as PartFunc of DYADIC, bool the carrier of T by A30,
+      PARTFUN1:120;
+      reconsider xx as PartFunc of DYADIC, bool the carrier of T by PARTFUN1:
+      121;
       take xx,yy;
-      thus thesis by A7,A28;
+      thus thesis by A9,A7;
     end;
     then consider y being Element of D such that
 A31: P1[x,y];
     take y;
     thus thesis by A31;
   end;
-  ex F being Function of NAT,D st F.0 = S &
-  for n being Element of NAT holds Q[n,F.n,F.(n+1)] from RECDEF_1:sch 2(A4);
+  ex F being Function of NAT,D st F.0 = S & for n being Element of NAT
+  holds Q[n,F.n,F.(n+1)] from RECDEF_1:sch 2(A4);
   then consider F being Function of NAT,D such that
-A32: F.0 = S & for n being Element of NAT holds P1[F.n,F.(n+1)];
-  defpred R[Element of NAT,PartFunc of DYADIC,bool the carrier of T,
-  PartFunc of DYADIC,bool the carrier of T] means ($2=F.$1 & $3 = F.($1+1) &
-  (ex k being Element of NAT st $2 is Drizzle of A,B,k) &
-  (for k being Element of NAT st $2 is Drizzle of A,B,k holds
-  $3 is Drizzle of A,B,k+1) &
-  (for r being Element of dom $2 holds $2.r = $3.r));
-A33: F is Function & dom F = NAT & rng F c= D by FUNCT_2:def 1,RELAT_1:def 19;
-  for x being set holds x in D implies
-  x in PFuncs(DYADIC,bool the carrier of T) by A2;
-  then D c= PFuncs(DYADIC,bool the carrier of T) by TARSKI:def 3;
-  then F is Function & dom F = NAT &
-  rng F c= PFuncs(DYADIC,bool the carrier of T) by A33,XBOOLE_1:1;
-  then reconsider F as Functional_Sequence of DYADIC,bool the carrier of T
-  by FUNCT_2:def 1,RELSET_1:11;
-  defpred P[Element of NAT] means F.$1 is Drizzle of A,B,$1 &
-  (for r being Element of dom (F.$1) holds (F.$1).r = (F.($1+1)).r);
-  ex xx,yy being PartFunc of DYADIC,bool the carrier of T st
-  R[0,xx,yy] by A32;
+A32: F.0 = S and
+A33: for n being Element of NAT holds P1[F.n,F.(n+1)];
+  for x being set holds x in D implies x in PFuncs(DYADIC,bool the
+  carrier of T) by A1;
+  then rng F c= D & D c= PFuncs(DYADIC,bool the carrier of T) by
+  RELAT_1:
+  def 19,TARSKI:def 3;
   then
-A34: P[0] by A32;
+A34: dom F = NAT & rng F c= PFuncs(DYADIC,bool the carrier of T) by
+  FUNCT_2:def 1,XBOOLE_1:1;
+  defpred R[Element of NAT,PartFunc of DYADIC,bool the carrier of T, PartFunc
+  of DYADIC,bool the carrier of T] means ($2=F.$1 & $3 = F.($1+1) & (ex k being
+  Element of NAT st $2 is Drizzle of A,B,k) & (for k being Element of NAT st $2
+  is Drizzle of A,B,k holds $3 is Drizzle of A,B,k+1) & (for r being Element of
+  dom $2 holds $2.r = $3.r));
+  reconsider F as Functional_Sequence of DYADIC,bool the carrier of T by A34,
+  FUNCT_2:def 1,RELSET_1:11;
+  defpred P[Element of NAT] means F.$1 is Drizzle of A,B,$1 & (for r being
+  Element of dom (F.$1) holds (F.$1).r = (F.($1+1)).r);
 A35: for n being Element of NAT st P[n] holds P[n+1]
   proof
     let n be Element of NAT;
     assume
 A36: P[n];
-    consider xx,yy being PartFunc of DYADIC,bool the carrier of T such that
-A37: R[n,xx,yy] by A32;
-    thus F.(n+1) is Drizzle of A,B,(n+1) by A36,A37;
+    ex xx,yy being PartFunc of DYADIC,bool the carrier of T st R[n,xx,yy]
+    by A33;
+    hence F.(n+1) is Drizzle of A,B,(n+1) by A36;
     let r be Element of dom (F.(n+1));
-    consider xx1,yy1 being PartFunc of DYADIC,bool the carrier of T such that
-A38: R[n+1,xx1,yy1] by A32;
-    thus thesis by A38;
+    ex xx1,yy1 being PartFunc of DYADIC,bool the carrier of T st R[n+1,xx1
+    ,yy1] by A33;
+    hence thesis;
   end;
-A39: for n being Element of NAT holds P[n] from NAT_1:sch 1(A34,A35);
   take F;
-  thus thesis by A39;
+  ex xx,yy being PartFunc of DYADIC,bool the carrier of T st R[0,xx,yy]
+  by A33;
+  then
+A37: P[0] by A32;
+  for n being Element of NAT holds P[n] from NAT_1:sch 1(A37,A35);
+  hence thesis;
 end;
 
 definition
@@ -393,8 +393,8 @@ A1: T is normal & A <> {} & A is closed & B is closed & A misses B;
   mode Rain of A,B -> Functional_Sequence of DYADIC,bool the carrier of T
     means
     :Def2:
-    for n being Element of NAT holds (it.n is Drizzle of A,B,n &
-    (for r being Element of dom (it.n) holds (it.n).r = (it.(n+1)).r));
+    for n being Element of NAT holds it.n is Drizzle of A,B,n & for r
+    being Element of dom (it.n) holds (it.n).r = (it.(n+1)).r;
   existence by A1,Th5;
 end;
 
@@ -404,8 +404,8 @@ definition
 A1: x in DYADIC;
   func inf_number_dyadic(x) -> Element of NAT means
   :Def3:
-  (x in dyadic(0) iff it = 0) &
-  for n being Element of NAT st x in dyadic(n+1) & not x in dyadic(n)
+  (x in dyadic(0) iff
+  it = 0) & for n being Element of NAT st x in dyadic(n+1) & not x in dyadic(n)
   holds it = n+1;
   existence
   proof
@@ -413,70 +413,78 @@ A1: x in DYADIC;
     ex s being Element of NAT st P[s] by A1,URYSOHN1:def 4;
     then
 A2: ex s being Nat st P[s];
-    ex q being Nat st P[q] &
-    (for i being Nat st P[i] holds q <= i) from NAT_1:sch 5(A2);
+    ex q being Nat st P[q] & for i being Nat st P[i] holds q <= i from
+    NAT_1:sch 5(A2);
     then consider q being Nat such that
-A3: x in dyadic(q) & (for i being Nat st x in dyadic(i) holds q <= i);
+A3: x in dyadic(q) and
+A4: for i being Nat st x in dyadic(i) holds q <= i;
     reconsider q as Element of NAT by ORDINAL1:def 13;
     take q;
-    for n being Element of NAT
-    st x in dyadic(n+1) & not x in dyadic(n) holds q = n+1
+    for n being Element of NAT st x in dyadic(n+1) & not x in dyadic(n)
+    holds q = n+1
     proof
       let n be Element of NAT;
-      assume
-A5:   x in dyadic(n+1) & not x in dyadic(n);
-      then
-A6:   q <= n + 1 by A3;
-      n + 1 <= q
+      assume that
+A5:   x in dyadic(n+1) and
+A6:   not x in dyadic(n);
+A7:   n + 1 <= q
       proof
-        assume not n + 1 <= q;
+        assume
+        not n + 1 <= q;
         then q <= n by NAT_1:13;
         then dyadic(q) c= dyadic(n) by URYSOHN2:33;
-        hence thesis by A3,A5;
+        hence thesis by A3,A6;
       end;
-      hence thesis by A6,XXREAL_0:1;
+      q <= n + 1 by A4,A5;
+      hence thesis by A7,XXREAL_0:1;
     end;
-    hence thesis by A3;
+    hence thesis by A3,A4;
   end;
   uniqueness
   proof
     let s1,s2 be Element of NAT such that
-A7: (x in dyadic(0) iff s1 = 0) &
-    (for n being Element of NAT st x in dyadic(n+1) & not x in dyadic(n)
-    holds s1 = n+1) and
-A8: (x in dyadic(0) iff s2 = 0) &
-    (for n being Element of NAT st x in dyadic(n+1) & not x in dyadic(n)
-    holds s2 = n+1);
+A8: x in dyadic(0) iff s1 = 0 and
+A9: for n being Element of NAT st x in dyadic(n+1) & not x in dyadic(
+    n ) holds s1 = n+1 and
+A10: x in dyadic(0) iff s2 = 0 and
+A11: for n being Element of NAT st x in dyadic(n+1) & not x in dyadic(
+    n ) holds s2 = n+1;
     per cases;
-    suppose s1 = 0;
-      hence thesis by A7,A8;
+    suppose
+      s1 = 0;
+      hence thesis by A8,A10;
     end;
     suppose
-A9:   0 < s1;
+A12:  0 < s1;
       defpred P[Nat] means x in dyadic($1);
       ex s being Element of NAT st P[s] by A1,URYSOHN1:def 4;
       then
-A10:  ex s being Nat st P[s];
-      ex q being Nat st P[q] &
-      (for i being Nat st P[i] holds q <= i) from NAT_1:sch 5(A10);
+A13:  ex s being Nat st P[s];
+      ex q being Nat st P[q] & for i being Nat st P[i] holds q <= i from
+      NAT_1:sch 5(A13);
       then consider q being Nat such that
-A11:  x in dyadic(q) & (for i being Nat st x in dyadic(i) holds q <= i);
-      now per cases;
-        case q = 0;
-          hence thesis by A7,A9,A11;
+A14:  x in dyadic(q) and
+A15:  for i being Nat st x in dyadic(i) holds q <= i;
+      now
+        per cases;
+        case
+          q = 0;
+          hence thesis by A8,A12,A14;
         end;
-        case 0 < q;
+        case
+          0 < q;
           then consider m being Nat such that
-A12:      q = m + 1 by NAT_1:6;
+A16:      q = m + 1 by NAT_1:6;
           reconsider m as Element of NAT by ORDINAL1:def 13;
-          not x in dyadic(m)
+A17:      not x in dyadic(m)
           proof
-            assume x in dyadic(m);
-            then m + 1 <= m + 0 by A11,A12;
+            assume
+            x in dyadic(m);
+            then m + 1 <= m + 0 by A15,A16;
             hence thesis by XREAL_1:8;
           end;
-          then s1 = m + 1 & s2 = m + 1 by A7,A8,A11,A12;
-          hence thesis;
+          then s1 = m + 1 by A9,A14,A16;
+          hence thesis by A11,A14,A16,A17;
         end;
       end;
       hence thesis;
@@ -485,58 +493,62 @@ A12:      q = m + 1 by NAT_1:6;
 end;
 
 theorem Th6:
-  for x being Real st x in DYADIC holds x in dyadic(inf_number_dyadic(x))
+  for x being Real st x in DYADIC holds x in dyadic(
+  inf_number_dyadic(x))
 proof
   let x be Real;
+  set s = inf_number_dyadic(x);
+  defpred P[Element of NAT] means not x in dyadic(s + 1 + $1);
   assume
 A1: x in DYADIC;
-  set s = inf_number_dyadic(x);
-  assume
-A2: not x in dyadic(s);
-  consider k being Element of NAT such that
-A3: x in dyadic(k) by A1,URYSOHN1:def 4;
-A4: s < k
-  proof
-    assume not s < k;
-    then dyadic(k) c= dyadic(s) by URYSOHN2:33;
-    hence thesis by A2,A3;
-  end;
-  defpred P[Element of NAT] means not x in dyadic(s + 1 + $1);
-A5: P[0] by A1,A2,Def3;
-A6: for i being Element of NAT st P[i] holds P[(i+1)]
+  then consider k being Element of NAT such that
+A2: x in dyadic(k) by URYSOHN1:def 4;
+A3: for i being Element of NAT st P[i] holds P[(i+1)]
   proof
     let i be Element of NAT;
     assume
-A7: not x in dyadic(s + 1 + i);
-    assume x in dyadic(s + 1 + (i + 1));
+A4: not x in dyadic(s + 1 + i);
+    assume
+    x in dyadic(s + 1 + (i + 1));
     then x in dyadic(s + 1 + i + 1);
-    then s + 0 = s + (i + 2) by A1,A7,Def3;
+    then s + 0 = s + (i + 2) by A1,A4,Def3;
     hence thesis;
   end;
-A8: for i being Element of NAT holds P[i] from NAT_1:sch 1(A5,A6);
-  consider i being Nat such that
-A9: k = i + 1 by A4,NAT_1:6;
-  s <= i by A4,A9,NAT_1:13;
+  assume
+A5: not x in dyadic(s);
+A6: s < k
+  proof
+    assume
+    not s < k;
+    then dyadic(k) c= dyadic(s) by URYSOHN2:33;
+    hence thesis by A5,A2;
+  end;
+  then consider i being Nat such that
+A7: k = i + 1 by NAT_1:6;
+  s <= i by A6,A7,NAT_1:13;
   then consider m being Nat such that
-A10: i = s + m by NAT_1:10;
+A8: i = s + m by NAT_1:10;
   reconsider m as Element of NAT by ORDINAL1:def 13;
-  not x in dyadic(s + 1 + m) by A8;
-  hence thesis by A3,A9,A10;
+A9: P[0] by A1,A5,Def3;
+  for i being Element of NAT holds P[i] from NAT_1:sch 1(A9,A3);
+  then not x in dyadic(s + 1 + m);
+  hence thesis by A2,A7,A8;
 end;
 
 theorem Th7:
-  for x being Real st x in DYADIC holds
-  for n being Element of NAT st inf_number_dyadic(x) <= n holds x in dyadic(n)
+  for x being Real st x in DYADIC holds for n being Element of NAT
+  st inf_number_dyadic(x) <= n holds x in dyadic(n)
 proof
   let x be Real;
   assume
-A1: x in DYADIC;
+  x in DYADIC;
+  then
+A1: x in dyadic(inf_number_dyadic(x)) by Th6;
   let n be Element of NAT;
   assume
-A2: inf_number_dyadic(x) <= n;
-A3: x in dyadic(inf_number_dyadic(x)) by A1,Th6;
-  dyadic(inf_number_dyadic(x)) c= dyadic(n) by A2,URYSOHN2:33;
-  hence thesis by A3;
+  inf_number_dyadic(x) <= n;
+  then dyadic(inf_number_dyadic(x)) c= dyadic(n) by URYSOHN2:33;
+  hence thesis by A1;
 end;
 
 theorem Th8:
@@ -545,41 +557,47 @@ theorem Th8:
 proof
   let x be Real;
   let n be Element of NAT;
-  assume
-A1: x in dyadic(n);
-A2: dyadic n c= DYADIC by URYSOHN2:27;
+A1: dyadic n c= DYADIC by URYSOHN2:27;
   defpred P[Nat] means x in dyadic($1);
-A3: ex s being Nat st P[s] by A1;
-  ex q being Nat st P[q] &
-  (for i being Nat st P[i] holds q <= i) from NAT_1:sch 5(A3);
+  assume
+A2: x in dyadic(n);
+  then
+A3: ex s being Nat st P[s];
+  ex q being Nat st P[q] & for i being Nat st P[i] holds q <= i from NAT_1
+  :sch 5(A3);
   then consider q being Nat such that
-A4: x in dyadic(q) & (for i being Nat st x in dyadic(i) holds q <= i);
-A5: q <= n by A1,A4;
-  now per cases;
-    case q = 0;
-      hence thesis by A1,A2,A4,Def3;
+A4: x in dyadic(q) and
+A5: for i being Nat st x in dyadic(i) holds q <= i;
+A6: q <= n by A2,A5;
+  now
+    per cases;
+    case
+      q = 0;
+      hence thesis by A2,A1,A4,Def3;
     end;
-    case 0 < q;
+    case
+      0 < q;
       then consider m being Nat such that
-A6:   q = m + 1 by NAT_1:6;
+A7:   q = m + 1 by NAT_1:6;
       reconsider m as Element of NAT by ORDINAL1:def 13;
       not x in dyadic(m)
       proof
-        assume x in dyadic(m);
-        then m + 1 <= m + 0 by A4,A6;
+        assume
+        x in dyadic(m);
+        then m + 1 <= m + 0 by A5,A7;
         hence thesis by XREAL_1:8;
       end;
-      hence thesis by A1,A2,A4,A5,A6,Def3;
+      hence thesis by A2,A1,A4,A6,A7,Def3;
     end;
   end;
   hence thesis;
 end;
 
 theorem Th9:
-  for T being non empty normal TopSpace, A,B being closed Subset of T st
-  (A <> {} & A misses B) holds for G being Rain of A,B,
-  x being Real st x in DYADIC holds for n being Element of NAT holds
-  (G.inf_number_dyadic(x)).x = (G.(inf_number_dyadic(x) + n)).x
+  for T being non empty normal TopSpace, A,B being closed Subset of
+  T st A <> {} & A misses B holds for G being Rain of A,B, x being Real st x in
+DYADIC holds for n being Element of NAT holds (G.inf_number_dyadic(x)).x = (G.(
+  inf_number_dyadic(x) + n)).x
 proof
   let T be non empty normal TopSpace;
   let A,B be closed Subset of T;
@@ -587,34 +605,34 @@ proof
 A1: A <> {} & A misses B;
   let G be Rain of A,B;
   let x be Real;
-  assume
-A2: x in DYADIC;
   set s = inf_number_dyadic(x);
   defpred Q[Element of NAT] means (G.s).x = (G.(s + $1)).x;
-A3: Q[0];
-A4: for n being Element of NAT st Q[n] holds Q[(n+1)]
+  assume
+A2: x in DYADIC;
+A3: for n being Element of NAT st Q[n] holds Q[(n+1)]
   proof
     let n be Element of NAT;
     assume
-A5: (G.s).x = (G.(s + n)).x;
-    s <= s + n & s <= s + (n + 1) by NAT_1:11;
+A4: (G.s).x = (G.(s + n)).x;
+    s <= s + (n + 1) by NAT_1:11;
     then
-A6: x in dyadic(s + n) & x in dyadic(s + n + 1) by A2,Th7;
-    G.(s + n) is Drizzle of A,B,s + n &
-    (for r being Element of dom (G.(s + n)) holds
-    (G.(s + n)).r = (G.(s + n + 1)).r) by A1,Def2;
-    then dom(G.(s + n)) = dyadic(s + n) by FUNCT_2:def 1;
-    hence thesis by A1,A5,A6,Def2;
+A5: x in dyadic(s + n + 1) by A2,Th7;
+    G.(s + n) is Drizzle of A,B,s + n by A1,Def2;
+    then
+A6: dom(G.(s + n)) = dyadic(s + n) by FUNCT_2:def 1;
+    x in dyadic(s + n) by A2,Th7,NAT_1:11;
+    hence thesis by A1,A4,A5,A6,Def2;
   end;
-  for i be Element of NAT holds Q[i] from NAT_1:sch 1(A3,A4);
+A7: Q[0];
+  for i be Element of NAT holds Q[i] from NAT_1:sch 1(A7,A3);
   hence thesis;
 end;
 
 theorem Th10:
-  for T being non empty normal TopSpace, A,B being closed Subset of T st
-  (A <> {} & A misses B) holds for G being Rain of A,B,
-  x being Real st x in DYADIC holds ex y being Subset of T st
-  (for n being Element of NAT st x in dyadic(n) holds y = (G.n).x)
+  for T being non empty normal TopSpace, A,B being closed Subset
+  of T st A <> {} & A misses B holds for G being Rain of A,B, x being Real st x
+  in DYADIC holds ex y being Subset of T st for n being Element of NAT st x in
+  dyadic(n) holds y = (G.n).x
 proof
   let T be non empty normal TopSpace;
   let A,B be closed Subset of T;
@@ -629,7 +647,8 @@ A2: x in DYADIC;
   then reconsider y = (G.s).x as Subset of T by A2,Th6,FUNCT_2:7;
   take y;
   let n be Element of NAT;
-  assume x in dyadic(n);
+  assume
+  x in dyadic(n);
   then consider m being Nat such that
 A3: n = s + m by Th8,NAT_1:10;
   m in NAT by ORDINAL1:def 13;
@@ -637,105 +656,104 @@ A3: n = s + m by Th8,NAT_1:10;
 end;
 
 theorem Th11:
-  for T being non empty normal TopSpace, A,B being closed Subset of T st
-  (A <> {} & A misses B) holds for G being Rain of A,B holds
-  ex F being Function of DOM,bool the carrier of T st
-  for x being Real st x in DOM holds ((x in halfline 0 implies F.x = {}) &
-  (x in right_open_halfline 1 implies F.x = the carrier of T) &
-  (x in DYADIC implies
-  (for n being Element of NAT st x in dyadic(n) holds F.x = (G.n).x)))
+  for T being non empty normal TopSpace, A,B being closed Subset
+  of T st A <> {} & A misses B holds for G being Rain of A,B holds ex F being
+Function of DOM,bool the carrier of T st for x being Real st x in DOM holds (x
+in halfline 0 implies F.x = {}) & (x in right_open_halfline 1 implies F.x = the
+carrier of T) & (x in DYADIC implies for n being Element of NAT st x in dyadic(
+  n) holds F.x = (G.n).x )
 proof
   let T be non empty normal TopSpace;
   let A,B be closed Subset of T;
   assume
 A1: A <> {} & A misses B;
   let G be Rain of A,B;
-  defpred P[Element of DOM,set] means (($1 in halfline 0 implies $2 = {}) &
-  ($1 in right_open_halfline 1 implies $2 = the carrier of T) &
-  ($1 in DYADIC implies
-  (for n being Element of NAT st $1 in dyadic(n) holds $2 = (G.n).$1)));
+  defpred P[Element of DOM,set] means (($1 in halfline 0 implies $2 = {}) & (
+  $1 in right_open_halfline 1 implies $2 = the carrier of T) & ($1 in DYADIC
+implies (for n being Element of NAT st $1 in dyadic(n) holds $2 = (G.n).$1)));
 A2: for x being Element of DOM ex y being Subset of T st P[x,y]
   proof
-    let x be Element of DOM;
-A3: x in halfline 0 \/ DYADIC or x in right_open_halfline 1
-    by URYSOHN1:def 5,XBOOLE_0:def 3;
     reconsider a = 0, b = 1 as R_eal by XXREAL_0:def 1;
+    let x be Element of DOM;
+A3: x in halfline 0 \/ DYADIC or x in right_open_halfline 1 by URYSOHN1:
+    def 5,XBOOLE_0:def 3;
     per cases by A3,XBOOLE_0:def 3;
     suppose
-A5:   x in halfline 0;
-      reconsider s = {} as Subset of T by XBOOLE_1:2;
-A6:   s = s;
-      not x in right_open_halfline 1 & not x in DYADIC
+A4:   x in halfline 0;
+A5:   not x in right_open_halfline 1 & not x in DYADIC
       proof
         assume
-A7:     x in right_open_halfline 1 or x in DYADIC;
-        per cases by A7;
-        suppose x in right_open_halfline 1;
+A6:     x in right_open_halfline 1 or x in DYADIC;
+        per cases by A6;
+        suppose
+          x in right_open_halfline 1;
           then 1 < x by XXREAL_1:235;
-          hence thesis by A5,XXREAL_1:233;
+          hence thesis by A4,XXREAL_1:233;
         end;
         suppose
-A8:       x in DYADIC;
+A7:       x in DYADIC;
           reconsider x as R_eal by XXREAL_0:def 1;
-          a <= x & x <= b & x in REAL by A8,URYSOHN2:32,XXREAL_1:1;
-          hence thesis by A5,XXREAL_1:233;
+          a <= x by A7,URYSOHN2:32,XXREAL_1:1;
+          hence thesis by A4,XXREAL_1:233;
         end;
       end;
-      hence thesis by A6;
+      reconsider s = {} as Subset of T by XBOOLE_1:2;
+      s = s;
+      hence thesis by A5;
     end;
     suppose
-A9:   x in DYADIC;
-      then consider s being Subset of T such that
-A10:  for n being Element of NAT st x in dyadic(n) holds s = (G.n).x
-      by A1,Th10;
+A8:   x in DYADIC;
+A9:   not x in halfline 0
+      proof
+        assume
+A10:    x in halfline 0;
+        reconsider x as R_eal by XXREAL_0:def 1;
+        a <= x by A8,URYSOHN2:32,XXREAL_1:1;
+        hence thesis by A10,XXREAL_1:233;
+      end;
 A11:  not x in right_open_halfline 1
       proof
         assume
 A12:    x in right_open_halfline 1;
         reconsider x as R_eal by XXREAL_0:def 1;
-        a <= x & x <= b & x in REAL by A9,URYSOHN2:32,XXREAL_1:1;
+        x <= b by A8,URYSOHN2:32,XXREAL_1:1;
         hence thesis by A12,XXREAL_1:235;
       end;
-      not x in halfline 0
-      proof
-        assume
-A13:    x in halfline 0;
-        reconsider x as R_eal by XXREAL_0:def 1;
-        a <= x & x <= b & x in REAL by A9,URYSOHN2:32,XXREAL_1:1;
-        hence thesis by A13,XXREAL_1:233;
-      end;
-      hence thesis by A10,A11;
+      ex s being Subset of T st for n being Element of NAT st x in dyadic(
+      n) holds s = (G.n).x by A1,A8,Th10;
+      hence thesis by A11,A9;
     end;
     suppose
-A14:  x in right_open_halfline 1;
-      the carrier of T c= the carrier of T;
-      then reconsider s = the carrier of T as Subset of T;
-A15:  s = s;
-      not x in halfline 0 & not x in DYADIC
+A13:  x in right_open_halfline 1;
+A14:  not x in halfline 0 & not x in DYADIC
       proof
         assume
-A16:    x in halfline 0 or x in DYADIC;
-        per cases by A16;
-        suppose x in halfline 0;
+A15:    x in halfline 0 or x in DYADIC;
+        per cases by A15;
+        suppose
+          x in halfline 0;
           then x < 0 by XXREAL_1:233;
-          hence thesis by A14,XXREAL_1:235;
+          hence thesis by A13,XXREAL_1:235;
         end;
         suppose
-A17:      x in DYADIC;
+A16:      x in DYADIC;
           reconsider x as R_eal by XXREAL_0:def 1;
-          a <= x & x <= b & x in REAL by A17,URYSOHN2:32,XXREAL_1:1;
-          hence thesis by A14,XXREAL_1:235;
+          x <= b by A16,URYSOHN2:32,XXREAL_1:1;
+          hence thesis by A13,XXREAL_1:235;
         end;
       end;
-      hence thesis by A15;
+      the carrier of T c= the carrier of T;
+      then reconsider s = the carrier of T as Subset of T;
+      s = s;
+      hence thesis by A14;
     end;
   end;
-  ex F being Function of DOM,bool the carrier of T st
-  for x being Element of DOM holds P[x,F.x] from FUNCT_2:sch 3(A2);
+  ex F being Function of DOM,bool the carrier of T st for x being Element
+  of DOM holds P[x,F.x] from FUNCT_2:sch 3(A2);
   then consider F being Function of DOM,bool the carrier of T such that
-A18: for x being Element of DOM holds P[x,F.x];
+A17: for x being Element of DOM holds P[x,F.x];
   take F;
-  thus thesis by A18;
+  thus thesis by A17;
 end;
 
 definition
@@ -746,45 +764,47 @@ A1: T is normal & A <> {} & A is closed & B is closed & A misses B;
   let R be Rain of A,B;
   func Tempest(R) -> Function of DOM,bool the carrier of T means
   :Def4:
-  for x being Real st x in DOM holds (x in halfline 0 implies it.x = {}) &
-  (x in right_open_halfline 1 implies it.x = the carrier of T) &
-  (x in DYADIC implies
-  (for n being Element of NAT st x in dyadic(n) holds it.x = (R.n).x));
+  for x
+  being Real st x in DOM holds (x in halfline 0 implies it.x = {}) & (x in
+  right_open_halfline 1 implies it.x = the carrier of T) & (x in DYADIC implies
+  for n being Element of NAT st x in dyadic(n) holds it.x = (R.n).x );
   existence by A1,Th11;
   uniqueness
   proof
     let G1,G2 be Function of DOM,bool the carrier of T such that
-A2: for x being Real st x in DOM holds ((x in halfline 0 implies G1.x = {}) &
-    (x in right_open_halfline 1 implies G1.x = the carrier of T) &
-    (x in DYADIC implies
-    (for n being Element of NAT st x in dyadic(n) holds G1.x = (R.n).x))) and
-A3: for x being Real st x in DOM holds ((x in halfline 0 implies G2.x = {}) &
-    (x in right_open_halfline 1 implies G2.x = the carrier of T) &
-    (x in DYADIC implies
-    (for n being Element of NAT st x in dyadic(n) holds G2.x = (R.n).x)));
+A2: for x being Real st x in DOM holds (x in halfline 0 implies G1.x =
+    {}) & (x in right_open_halfline 1 implies G1.x = the carrier of T) & (x in
+DYADIC implies for n being Element of NAT st x in dyadic(n) holds G1.x = (R.n).
+    x ) and
+A3: for x being Real st x in DOM holds (x in halfline 0 implies G2.x =
+    {}) & (x in right_open_halfline 1 implies G2.x = the carrier of T) & (x in
+DYADIC implies for n being Element of NAT st x in dyadic(n) holds G2.x = (R.n).
+    x );
     for x being set st x in DOM holds G1.x = G2.x
     proof
       let x be set;
       assume
 A4:   x in DOM;
       then reconsider x as Real;
-A5:   x in halfline 0 \/ DYADIC or x in right_open_halfline 1
-      by A4,URYSOHN1:def 5,XBOOLE_0:def 3;
+A5:   x in halfline 0 \/ DYADIC or x in right_open_halfline 1 by A4,
+      URYSOHN1:def 5,XBOOLE_0:def 3;
       per cases by A5,XBOOLE_0:def 3;
-      suppose x in halfline 0;
-        then G1.x = {} & G2.x = {} by A2,A3,A4;
-        hence thesis;
-      end;
-      suppose x in right_open_halfline 1;
-        then G1.x = the carrier of T & G2.x = the carrier of T by A2,A3,A4;
-        hence thesis;
+      suppose
+A6:     x in halfline 0;
+        then G1.x = {} by A2,A4;
+        hence thesis by A3,A4,A6;
       end;
       suppose
-A6:     x in DYADIC;
+A7:     x in right_open_halfline 1;
+        then G1.x = the carrier of T by A2,A4;
+        hence thesis by A3,A4,A7;
+      end;
+      suppose
+A8:     x in DYADIC;
         then consider n being Element of NAT such that
-A7:     x in dyadic(n) by URYSOHN1:def 4;
-        G1.x = (R.n).x & G2.x = (R.n).x by A2,A3,A4,A6,A7;
-        hence thesis;
+A9:     x in dyadic(n) by URYSOHN1:def 4;
+        G1.x = (R.n).x by A2,A4,A8,A9;
+        hence thesis by A3,A4,A8,A9;
       end;
     end;
     hence thesis by FUNCT_2:18;
@@ -805,9 +825,9 @@ definition
 end;
 
 theorem Th12:
-  for T being non empty normal TopSpace, A,B being closed Subset of T st
-  A <> {} & A misses B holds for G being Rain of A,B, r being Real,
-  C being Subset of T st C = (Tempest G).r & r in DOM holds C is open
+  for T being non empty normal TopSpace, A,B being closed Subset
+  of T st A <> {} & A misses B holds for G being Rain of A,B, r being Real, C
+  being Subset of T st C = (Tempest G).r & r in DOM holds C is open
 proof
   let T be non empty normal TopSpace;
   let A,B be closed Subset of T;
@@ -819,10 +839,11 @@ A1: A <> {} & A misses B;
   assume that
 A2: C = (Tempest G).r and
 A3: r in DOM;
-A4: r in halfline 0 \/ DYADIC or r in right_open_halfline 1
-  by A3,URYSOHN1:def 5,XBOOLE_0:def 3;
+A4: r in halfline 0 \/ DYADIC or r in right_open_halfline 1 by A3,URYSOHN1:
+  def 5,XBOOLE_0:def 3;
   per cases by A4,XBOOLE_0:def 3;
-  suppose r in halfline 0;
+  suppose
+    r in halfline 0;
     then C = {} by A1,A2,A3,Def4;
     then C in the topology of T by PRE_TOPC:5;
     hence thesis by PRE_TOPC:def 5;
@@ -831,41 +852,40 @@ A4: r in halfline 0 \/ DYADIC or r in right_open_halfline 1
 A5: r in DYADIC;
     then consider n being Element of NAT such that
 A6: r in dyadic(n) by URYSOHN1:def 4;
-A7: (Tempest G).r = (G.n).r by A1,A3,A5,A6,Def4;
     reconsider D = G.n as Drizzle of A,B,n by A1,Def2;
-A8: for r1,r2 being Element of dyadic(n) st (r1 < r2) holds
-    (D.r1 is open & D.r2 is open & Cl(D.r1) c= D.r2 &
-    A c= D.0 & B = [#]T \ D.1) by A1,Def1;
-    now per cases by A6,URYSOHN1:5;
+A7: for r1,r2 being Element of dyadic(n) st r1 < r2 holds D.r1 is open &
+    D.r2 is open & Cl(D.r1) c= D.r2 & A c= D.0 & B = [#]T \ D.1 by A1,Def1;
+A8: (Tempest G).r = (G.n).r by A1,A3,A5,A6,Def4;
+    now
+      per cases by A6,URYSOHN1:5;
       case
 A9:     r = 0;
-        then
-A10:    1 is Element of dyadic(n) & r is Element of dyadic(n) &
-        r < 1 by URYSOHN1:12;
-        reconsider r as Element of dyadic(n) by A9,URYSOHN1:12;
-        D.r = C by A1,A2,A3,A5,Def4;
-        hence thesis by A1,A10,Def1;
+        then reconsider r as Element of dyadic(n) by URYSOHN1:12;
+        1 is Element of dyadic(n) & D.r = C by A1,A2,A3,A5,Def4,URYSOHN1:
+        12;
+        hence thesis by A1,A9,Def1;
       end;
-      case 0 < r;
-        then 0 in dyadic(n) & 0 < r by URYSOHN1:12;
-        hence thesis by A2,A6,A7,A8;
+      case
+A10:    0 < r;
+        0 in dyadic(n) by URYSOHN1:12;
+        hence thesis by A2,A6,A8,A7,A10;
       end;
     end;
     hence thesis;
   end;
-  suppose r in right_open_halfline 1;
-    then
-A11: C = the carrier of T by A1,A2,A3,Def4;
-    the carrier of T in the topology of T by PRE_TOPC:def 1;
-    hence thesis by A11,PRE_TOPC:def 5;
+  suppose
+A11: r in right_open_halfline 1;
+A12: the carrier of T in the topology of T by PRE_TOPC:def 1;
+    C = the carrier of T by A1,A2,A3,A11,Def4;
+    hence thesis by A12,PRE_TOPC:def 5;
   end;
 end;
 
 theorem Th13:
-  for T being non empty normal TopSpace, A,B being closed Subset of T st
-  A <> {} & A misses B holds for G being Rain of A,B holds
-  for r1,r2 being Real st r1 in DOM & r2 in DOM & r1 < r2 holds
-  for C being Subset of T st C = (Tempest G).r1 holds Cl C c= (Tempest G).r2
+  for T being non empty normal TopSpace, A,B being closed Subset
+  of T st A <> {} & A misses B holds for G being Rain of A,B holds for r1,r2
+being Real st r1 in DOM & r2 in DOM & r1 < r2 holds for C being Subset of T st
+  C = (Tempest G).r1 holds Cl C c= (Tempest G).r2
 proof
   let T be non empty normal TopSpace;
   let A,B be closed Subset of T;
@@ -873,102 +893,104 @@ proof
 A1: A <> {} & A misses B;
   let G be Rain of A,B;
   let r1,r2 be Real;
-  assume
-A2: r1 in DOM & r2 in DOM & r1 < r2;
-  then
-A3: (r1 in halfline 0 \/ DYADIC or r1 in right_open_halfline 1) &
-  (r2 in halfline 0 \/ DYADIC or r2 in right_open_halfline 1)
-  by URYSOHN1:def 5,XBOOLE_0:def 3;
+  assume that
+A2: r1 in DOM and
+A3: r2 in DOM and
+A4: r1 < r2;
+A5: r1 in halfline 0 \/ DYADIC or r1 in right_open_halfline 1 by A2,
+  URYSOHN1:def 5,XBOOLE_0:def 3;
+A6: r2 in halfline 0 \/ DYADIC or r2 in right_open_halfline 1 by A3,
+  URYSOHN1:def 5,XBOOLE_0:def 3;
   let C be Subset of T;
   assume
-A4: C = (Tempest G).r1;
-  per cases by A3,XBOOLE_0:def 3;
-  suppose r1 in halfline 0 & r2 in halfline 0;
-    then
-A5: C = {} by A1,A2,A4,Def4;
-    {} T is closed;
-    then Cl C = {} by A5,PRE_TOPC:52;
+A7: C = (Tempest G).r1;
+  per cases by A5,A6,XBOOLE_0:def 3;
+  suppose
+A8: r1 in halfline 0 & r2 in halfline 0;
+A9: {} T is closed;
+    C = {} by A1,A2,A7,A8,Def4;
+    then Cl C = {} by A9,PRE_TOPC:52;
     hence thesis by XBOOLE_1:2;
   end;
   suppose
-A6: r1 in DYADIC & r2 in halfline 0;
-    then
-A7: r2 < 0 by XXREAL_1:233;
-    consider s being Element of NAT such that
-A8: r1 in dyadic(s) by A6,URYSOHN1:def 4;
-    thus thesis by A2,A7,A8,URYSOHN1:5;
+    r1 in DYADIC & r2 in halfline 0;
+    then r2 < 0 & ex s being Element of NAT st r1 in dyadic(s) by
+    URYSOHN1:def 4,XXREAL_1:233;
+    hence thesis by A4,URYSOHN1:5;
   end;
   suppose
-A9: r1 in right_open_halfline 1 & r2 in halfline 0;
+A10: r1 in right_open_halfline 1 & r2 in halfline 0;
     then 1 < r1 by XXREAL_1:235;
-    hence thesis by A2,A9,XXREAL_1:233;
+    hence thesis by A4,A10,XXREAL_1:233;
   end;
-  suppose r1 in halfline 0 & r2 in DYADIC;
-    then
-A10: C = {} by A1,A2,A4,Def4;
-    {} T is closed;
-    then Cl C = {} by A10,PRE_TOPC:52;
+  suppose
+A11: r1 in halfline 0 & r2 in DYADIC;
+A12: {} T is closed;
+    C = {} by A1,A2,A7,A11,Def4;
+    then Cl C = {} by A12,PRE_TOPC:52;
     hence thesis by XBOOLE_1:2;
   end;
   suppose
-A11: r1 in DYADIC & r2 in DYADIC;
-    then consider n1 being Element of NAT such that
-A12: r1 in dyadic(n1) by URYSOHN1:def 4;
-    consider n2 being Element of NAT such that
-A13: r2 in dyadic(n2) by A11,URYSOHN1:def 4;
+A13: r1 in DYADIC & r2 in DYADIC;
+    then consider n2 being Element of NAT such that
+A14: r2 in dyadic(n2) by URYSOHN1:def 4;
+    consider n1 being Element of NAT such that
+A15: r1 in dyadic(n1) by A13,URYSOHN1:def 4;
     set n = n1 + n2;
-A14: dyadic(n1) c= dyadic(n) & dyadic(n2) c= dyadic(n) by NAT_1:11,URYSOHN2:33;
+A16: dyadic(n1) c= dyadic(n) by NAT_1:11,URYSOHN2:33;
     then
-A15: (Tempest G).r1 = (G.n).r1 by A1,A2,A11,A12,Def4;
+A17: (Tempest G).r1 = (G.n).r1 by A1,A2,A13,A15,Def4;
+    dyadic(n2) c= dyadic(n) by NAT_1:11,URYSOHN2:33;
+    then reconsider r1,r2 as Element of dyadic(n) by A15,A14,A16;
     reconsider D = G.n as Drizzle of A,B,n by A1,Def2;
-    reconsider r1,r2 as Element of dyadic(n) by A12,A13,A14;
-    Cl(D.r1) c= D.r2 by A1,A2,Def1;
-    hence thesis by A1,A2,A4,A11,A15,Def4;
+    Cl(D.r1) c= D.r2 by A1,A4,Def1;
+    hence thesis by A1,A3,A7,A13,A17,Def4;
   end;
   suppose
-A16: r1 in right_open_halfline 1 & r2 in DYADIC;
+A18: r1 in right_open_halfline 1 & r2 in DYADIC;
+    then ex s being Element of NAT st r2 in dyadic(s) by URYSOHN1:def 4;
     then
-A17: 1 < r1 by XXREAL_1:235;
-    consider s being Element of NAT such that
-A18: r2 in dyadic(s) by A16,URYSOHN1:def 4;
-    r2 <= 1 by A18,URYSOHN1:5;
-    hence thesis by A2,A17,XXREAL_0:2;
+A19: r2 <= 1 by URYSOHN1:5;
+    1 < r1 by A18,XXREAL_1:235;
+    hence thesis by A4,A19,XXREAL_0:2;
   end;
-  suppose r1 in halfline 0 & r2 in right_open_halfline 1;
-    then
-A19: C = {} by A1,A2,A4,Def4;
-    {} T is closed;
-    then Cl C = {} by A19,PRE_TOPC:52;
+  suppose
+A20: r1 in halfline 0 & r2 in right_open_halfline 1;
+A21: {} T is closed;
+    C = {} by A1,A2,A7,A20,Def4;
+    then Cl C = {} by A21,PRE_TOPC:52;
     hence thesis by XBOOLE_1:2;
   end;
-  suppose r1 in DYADIC & r2 in right_open_halfline 1;
-    then (Tempest G).r2 = the carrier of T by A1,A2,Def4;
+  suppose
+    r1 in DYADIC & r2 in right_open_halfline 1;
+    then (Tempest G).r2 = the carrier of T by A1,A3,Def4;
     hence thesis;
   end;
-  suppose r1 in right_open_halfline 1 & r2 in right_open_halfline 1;
-    then (Tempest G).r2 = the carrier of T by A1,A2,Def4;
+  suppose
+    r1 in right_open_halfline 1 & r2 in right_open_halfline 1;
+    then (Tempest G).r2 = the carrier of T by A1,A3,Def4;
     hence thesis;
   end;
 end;
 
 theorem Th14:
-  for T being non empty TopSpace, A,B being Subset of T, G being Rain of A,B,
-  p being Point of T ex R being Subset of ExtREAL st
-  for x being set holds x in R iff (x in DYADIC &
-  for s being Real st s = x holds not p in (Tempest G).s)
+  for T being non empty TopSpace, A,B being Subset of T, G being
+Rain of A,B, p being Point of T ex R being Subset of ExtREAL st for x being set
+  holds x in R iff (x in DYADIC & for s being Real st s = x holds not p in (
+  Tempest G).s)
 proof
-  let T be non empty TopSpace, A,B be Subset of T, G be Rain of A,B,
-  p be Point of T;
-  defpred P[set] means
-  for s being Real st s = $1 holds not p in (Tempest G).s;
-  ex X being set st for x being set holds
-  x in X iff (x in DYADIC & P[x]) from XBOOLE_0:sch 1;
+  let T be non empty TopSpace, A,B be Subset of T, G be Rain of A,B, p be
+  Point of T;
+  defpred P[set] means for s being Real st s = $1 holds not p in (Tempest G).s;
+  ex X being set st for x being set holds x in X iff x in DYADIC & P[x]
+  from XBOOLE_0:sch 1;
   then consider R being set such that
-A1: for x being set holds x in R iff (x in DYADIC & P[x]);
+A1: for x being set holds x in R iff x in DYADIC & P[x];
   R c= REAL
   proof
     let x be set;
-    assume x in R;
+    assume
+    x in R;
     then x in DYADIC by A1;
     hence thesis;
   end;
@@ -978,32 +1000,37 @@ A1: for x being set holds x in R iff (x in DYADIC & P[x]);
 end;
 
 definition
-  let T be non empty TopSpace, A,B be Subset of T, R be Rain of A,B,
-  p be Point of T;
+  let T be non empty TopSpace, A,B be Subset of T, R be Rain of A,B, p be
+  Point of T;
   func Rainbow(p,R) -> Subset of ExtREAL means
   :Def5:
-  for x being set holds x in it iff (x in DYADIC &
-  for s being Real st s = x holds not p in (Tempest R).s);
+  for x being set holds x
+in it iff (x in DYADIC & for s being Real st s = x holds not p in (Tempest R).s
+  );
   existence by Th14;
   uniqueness
   proof
     let R1,R2 be Subset of ExtREAL such that
-A1: for x being set holds x in R1 iff (x in DYADIC &
-    for s being Real st s = x holds not p in (Tempest R).s) and
-A2: for x being set holds x in R2 iff (x in DYADIC &
-    for s being Real st s = x holds not p in (Tempest R).s);
+A1: for x being set holds x in R1 iff (x in DYADIC & for s being Real
+    st s = x holds not p in (Tempest R).s) and
+A2: for x being set holds x in R2 iff (x in DYADIC & for s being Real
+    st s = x holds not p in (Tempest R).s);
     for x being set holds x in R1 iff x in R2
     proof
       let x be set;
       hereby
-        assume x in R1;
-        then x in DYADIC &
-        for s being Real st s = x holds not p in (Tempest R).s by A1;
+        assume
+        x in R1;
+        then
+        x in DYADIC & for s being Real st s = x holds not p in (Tempest R)
+        .s by A1;
         hence x in R2 by A2;
       end;
-      assume x in R2;
-      then x in DYADIC &
-      for s being Real st s = x holds not p in (Tempest R).s by A2;
+      assume
+      x in R2;
+      then
+      x in DYADIC & for s being Real st s = x holds not p in (Tempest R).s
+      by A2;
       hence thesis by A1;
     end;
     hence thesis by TARSKI:2;
@@ -1011,26 +1038,25 @@ A2: for x being set holds x in R2 iff (x in DYADIC &
 end;
 
 theorem Th15:
-  for T being non empty TopSpace, A,B being Subset of T, G being Rain of A,B,
-  p being Point of T holds Rainbow(p,G) c= DYADIC
+  for T being non empty TopSpace, A,B being Subset of T, G being
+  Rain of A,B, p being Point of T holds Rainbow(p,G) c= DYADIC
 proof
-  let T be non empty TopSpace, A,B be Subset of T, G be Rain of A,B,
-  p be Point of T;
+  let T be non empty TopSpace, A,B be Subset of T, G be Rain of A,B, p be
+  Point of T;
   for x being set holds x in Rainbow(p,G) implies x in DYADIC by Def5;
   hence thesis by TARSKI:def 3;
 end;
 
 theorem Th16:
-  for T being non empty TopSpace, A,B being Subset of T, R being Rain of A,B
-  ex F being Function of T,R^1 st for p being Point of T holds
-  (Rainbow(p,R) = {} implies F.p = 0) &
-  (for S being non empty Subset of ExtREAL st S = Rainbow(p,R) holds
-  F.p = sup S)
+  for T being non empty TopSpace, A,B being Subset of T, R being
+  Rain of A,B ex F being Function of T,R^1 st for p being Point of T holds (
+Rainbow(p,R) = {} implies F.p = 0) & for S being non empty Subset of ExtREAL st
+  S = Rainbow(p,R) holds F.p = sup S
 proof
   let T be non empty TopSpace, A,B be Subset of T, R be Rain of A,B;
-  defpred P[Element of T,set] means ((Rainbow($1,R) = {} implies $2 = 0) &
-  (for S being non empty Subset of ExtREAL st S = Rainbow($1,R) holds
-  $2 = sup S));
+  defpred P[Element of T,set] means ((Rainbow($1,R) = {} implies $2 = 0) & (
+for S being non empty Subset of ExtREAL st S = Rainbow($1,R) holds $2 = sup S))
+  ;
 A1: for x being Element of T ex y being Element of R^1 st P[x,y]
   proof
     let x be Element of T;
@@ -1041,29 +1067,30 @@ A2:   Rainbow(x,R) = {};
       P[x,y] by A2;
       hence thesis;
     end;
-    suppose Rainbow(x,R) <> {};
+    suppose
+      Rainbow(x,R) <> {};
       then reconsider S = Rainbow(x,R) as non empty Subset of ExtREAL;
-A3:   S c= DYADIC by Th15;
       reconsider e1 = 1 as R_eal by XXREAL_0:def 1;
-      S c= [.0.,e1.] by A3,URYSOHN2:32,XBOOLE_1:1;
+      consider q being set such that
+A3:   q in S by XBOOLE_0:def 1;
+      reconsider q as R_eal by A3;
+      S c= DYADIC by Th15;
+      then S c= [.0.,e1.] by URYSOHN2:32,XBOOLE_1:1;
       then
 A4:   0 <= inf S & sup S <= e1 by URYSOHN2:30;
-      consider q being set such that
-A5:   q in S by XBOOLE_0:def 1;
-      reconsider q as R_eal by A5;
-      inf S <= q & q <= sup S by A5,XXREAL_2:3,4;
-      then reconsider y = sup S as Element of R^1
-      by A4,TOPMETR:24,XXREAL_0:45;
+      inf S <= q & q <= sup S by A3,XXREAL_2:3,4;
+      then reconsider y = sup S as Element of R^1 by A4,
+      TOPMETR:24,XXREAL_0:45;
       take y;
       thus thesis;
     end;
   end;
-  ex F being Function of the carrier of T,the carrier of R^1 st
-  for x being Element of T holds P[x,F.x] from FUNCT_2:sch 3(A1);
+  ex F being Function of the carrier of T,the carrier of R^1 st for x
+  being Element of T holds P[x,F.x] from FUNCT_2:sch 3(A1);
   then consider F being Function of T,R^1 such that
-A7: for x being Element of T holds P[x,F.x];
+A5: for x being Element of T holds P[x,F.x];
   take F;
-  thus thesis by A7;
+  thus thesis by A5;
 end;
 
 definition
@@ -1072,23 +1099,24 @@ definition
   let R be Rain of A,B;
   func Thunder(R) -> Function of T,R^1 means
   :Def6:
-  for p being Point of T holds (Rainbow(p,R) = {} implies it.p = 0) &
-  (for S being non empty Subset of ExtREAL st S = Rainbow(p,R) holds
-  it.p = sup S);
+  for p being Point of T
+  holds (Rainbow(p,R) = {} implies it.p = 0) & for S being non empty Subset of
+  ExtREAL st S = Rainbow(p,R) holds it.p = sup S;
   existence by Th16;
   uniqueness
   proof
     let G1,G2 be Function of T,R^1 such that
-A1: for p being Point of T holds ((Rainbow(p,R) = {} implies G1.p = 0) &
-    (for S being non empty Subset of ExtREAL st S = Rainbow(p,R) holds
-    G1.p = sup S)) and
-A2: for p being Point of T holds ((Rainbow(p,R) = {} implies G2.p = 0) &
-    (for S being non empty Subset of ExtREAL st S = Rainbow(p,R) holds
-    G2.p = sup S));
+A1: for p being Point of T holds (Rainbow(p,R) = {} implies G1.p = 0)
+& for S being non empty Subset of ExtREAL st S = Rainbow(p,R) holds G1.p = sup
+    S and
+A2: for p being Point of T holds (Rainbow(p,R) = {} implies G2.p = 0)
+& for S being non empty Subset of ExtREAL st S = Rainbow(p,R) holds G2.p = sup
+    S;
     for x being set st x in the carrier of T holds G1.x = G2.x
     proof
       let x be set;
-      assume x in the carrier of T;
+      assume
+      x in the carrier of T;
       then reconsider x as Point of T;
       per cases;
       suppose
@@ -1097,7 +1125,8 @@ A3:     Rainbow(x,R) = {};
           .= G2.x by A2,A3;
         hence thesis;
       end;
-      suppose Rainbow(x,R) <> {};
+      suppose
+        Rainbow(x,R) <> {};
         then reconsider S = Rainbow(x,R) as non empty Subset of ExtREAL;
         G1.x = sup S by A1
           .= G2.x by A2;
@@ -1109,36 +1138,36 @@ A3:     Rainbow(x,R) = {};
 end;
 
 theorem Th17:
-  for T being non empty TopSpace, A,B being Subset of T, G being Rain of A,B,
-  p being Point of T,
-  S being non empty Subset of ExtREAL st S = Rainbow(p,G) holds
-  for e1 being R_eal st e1 = 1 holds 0. <= sup S & sup S <= e1
+  for T being non empty TopSpace, A,B being Subset of T, G being
+  Rain of A,B, p being Point of T, S being non empty Subset of ExtREAL st S =
+Rainbow(p,G) holds for e1 being R_eal st e1 = 1 holds 0. <= sup S & sup S <= e1
 proof
-  let T be non empty TopSpace, A,B be Subset of T, G be Rain of A,B,
-  p be Point of T, S be non empty Subset of ExtREAL;
-  assume S = Rainbow(p,G);
-  then
-A1: S c= DYADIC by Th15;
-  let e1 be R_eal such that
-A2: e1 = 1;
   reconsider a = 0,b = 1 as R_eal by XXREAL_0:def 1;
-A3: S c= [.a,b.] by A1,URYSOHN2:32,XBOOLE_1:1;
-  then for x being ext-real number holds x in S implies x <= e1
-  by A2,XXREAL_1:1;
-  then
-A4: e1 is UpperBound of S by XXREAL_2:def 1;
+  let T be non empty TopSpace, A,B be Subset of T, G be Rain of A,B, p be
+  Point of T, S be non empty Subset of ExtREAL;
   consider s being set such that
-A5: s in S by XBOOLE_0:def 1;
-  reconsider s as R_eal by A5;
-  0. <= s & s <= sup S by A3,A5,XXREAL_1:1,XXREAL_2:4;
-  hence thesis by A4,XXREAL_2:def 3;
+A1: s in S by XBOOLE_0:def 1;
+  reconsider s as R_eal by A1;
+  assume
+  S = Rainbow(p,G);
+  then S c= DYADIC by Th15;
+  then
+A2: S c= [.a,b.] by URYSOHN2:32,XBOOLE_1:1;
+  let e1 be R_eal;
+  assume
+  e1 = 1;
+  then for x being ext-real number holds x in S implies x <= e1 by A2,
+  XXREAL_1:1;
+  then
+A3: e1 is UpperBound of S by XXREAL_2:def 1;
+  0. <= s by A2,A1,XXREAL_1:1;
+  hence thesis by A3,A1,XXREAL_2:4,def 3;
 end;
 
 theorem Th18:
-  for T being non empty normal TopSpace, A,B being closed Subset of T st
-  (A <> {} & A misses B) holds for G being Rain of A,B,
-  r being Element of DOM, p being Point of T st (Thunder G).p < r holds
-  p in (Tempest G).r
+  for T being non empty normal TopSpace, A,B being closed Subset
+of T st A <> {} & A misses B holds for G being Rain of A,B, r being Element of
+  DOM, p being Point of T st (Thunder G).p < r holds p in (Tempest G).r
 proof
   let T be non empty normal TopSpace;
   let A,B be closed Subset of T;
@@ -1149,71 +1178,79 @@ A1: A <> {} & A misses B;
   let p be Point of T;
   assume
 A2: (Thunder G).p < r;
-  now per cases;
-    suppose Rainbow(p,G) = {};
-      then
-A3:   0 < r by A2,Def6;
+  now
+    per cases;
+    suppose
+A3:   Rainbow(p,G) = {};
       assume
 A4:   not p in (Tempest G).r;
-      r in halfline 0 \/ DYADIC or r in right_open_halfline 1
-      by URYSOHN1:def 5,XBOOLE_0:def 3;
+      r in halfline 0 \/ DYADIC or r in right_open_halfline 1 by URYSOHN1:
+      def 5,XBOOLE_0:def 3;
       then
-A5:   r in halfline 0 or r in DYADIC or r in right_open_halfline 1
-      by XBOOLE_0:def 3;
-      now per cases by A3,A5,XXREAL_1:233;
+A5:   r in halfline 0 or r in DYADIC or r in right_open_halfline 1 by
+      XBOOLE_0:def 3;
+A6:   0 < r by A2,A3,Def6;
+      now
+        per cases by A6,A5,XXREAL_1:233;
         suppose
-A6:       r in DYADIC;
+A7:       r in DYADIC;
           reconsider r1 = r as R_eal by XXREAL_0:def 1;
-A7:       for s being Real st s = r1 holds not p in (Tempest G).s by A4;
-          then
-A8:       r1 in Rainbow(p,G) by A6,Def5;
-          reconsider S = Rainbow(p,G) as non empty Subset of ExtREAL by A6,A7
-,Def5;
-          (Thunder G).p = sup S by Def6;
-          hence thesis by A2,A8,XXREAL_2:4;
+A8:       for s being Real st s = r1 holds not p in (Tempest G).s by A4;
+          then reconsider
+          S = Rainbow(p,G) as non empty Subset of ExtREAL by A7,
+          Def5;
+A9:       (Thunder G).p = sup S by Def6;
+          r1 in Rainbow(p,G) by A7,A8,Def5;
+          hence thesis by A2,A9,XXREAL_2:4;
         end;
-        suppose r in right_open_halfline 1;
+        suppose
+          r in right_open_halfline 1;
           then (Tempest G).r = the carrier of T by A1,Def4;
           hence thesis;
         end;
       end;
       hence thesis;
     end;
-    suppose Rainbow(p,G) <> {};
+    suppose
+      Rainbow(p,G) <> {};
       then reconsider S = Rainbow(p,G) as non empty Subset of ExtREAL;
-A9:   (Thunder G).p = sup S by Def6;
       reconsider e1 = 1 as R_eal by XXREAL_0:def 1;
-A10:  for x being R_eal st x in S holds 0. <= x & x <= e1
+      consider s being set such that
+A10:  s in S by XBOOLE_0:def 1;
+      reconsider s as R_eal by A10;
+A11:  s <= sup S by A10,XXREAL_2:4;
+      assume
+A12:  not p in (Tempest G).r;
+      r in halfline 0 \/ DYADIC or r in right_open_halfline 1 by URYSOHN1
+      :def 5,XBOOLE_0:def 3;
+      then
+A13:  r in halfline 0 or r in DYADIC or r in right_open_halfline 1 by
+      XBOOLE_0:def 3;
+A14:  (Thunder G).p = sup S by Def6;
+      for x being R_eal st x in S holds 0. <= x & x <= e1
       proof
         let x be R_eal;
-        assume x in S;
+        assume
+        x in S;
         then
-A11:    x in DYADIC by Def5;
+A15:    x in DYADIC by Def5;
         then reconsider x as Real;
-        consider n being Element of NAT such that
-A12:    x in dyadic(n) by A11,URYSOHN1:def 4;
-        thus thesis by A12,URYSOHN1:5;
+        ex n being Element of NAT st x in dyadic(n) by A15,URYSOHN1:def 4;
+        hence thesis by URYSOHN1:5;
       end;
-      consider s being set such that
-A13:  s in S by XBOOLE_0:def 1;
-      reconsider s as R_eal by A13;
-A14:  0. <= s & s <= sup S by A10,A13,XXREAL_2:4;
-      assume
-A15:  not p in (Tempest G).r;
-      r in halfline 0 \/ DYADIC or
-      r in right_open_halfline 1 by URYSOHN1:def 5,XBOOLE_0:def 3;
       then
-A16:  r in halfline 0 or r in DYADIC or
-      r in right_open_halfline 1 by XBOOLE_0:def 3;
-      now per cases by A2,A9,A14,A16,XXREAL_1:233;
+A16:  0. <= s by A10;
+      now
+        per cases by A2,A14,A16,A11,A13,XXREAL_1:233;
         suppose
 A17:      r in DYADIC;
           reconsider r1 = r as R_eal by XXREAL_0:def 1;
-          for s being Real st s = r1 holds not p in (Tempest G).s by A15;
+          for s being Real st s = r1 holds not p in (Tempest G).s by A12;
           then r1 in Rainbow(p,G) by A17,Def5;
-          hence thesis by A2,A9,XXREAL_2:4;
+          hence thesis by A2,A14,XXREAL_2:4;
         end;
-        suppose r in right_open_halfline 1;
+        suppose
+          r in right_open_halfline 1;
           then (Tempest G).r = the carrier of T by A1,Def4;
           hence thesis;
         end;
@@ -1225,10 +1262,10 @@ A17:      r in DYADIC;
 end;
 
 theorem Th19:
-  for T being non empty normal TopSpace, A,B being closed Subset of T st
-  A <> {} & A misses B holds for G being Rain of A,B holds
-  for r being Real st r in DYADIC \/ (right_open_halfline 1) & 0 < r holds
-  for p being Point of T holds p in (Tempest G).r implies (Thunder G).p <= r
+  for T being non empty normal TopSpace, A,B being closed Subset
+  of T st A <> {} & A misses B holds for G being Rain of A,B holds for r being
+Real st r in DYADIC \/ (right_open_halfline 1) & 0 < r holds for p being Point
+  of T holds p in (Tempest G).r implies (Thunder G).p <= r
 proof
   let T be non empty normal TopSpace;
   let A,B be closed Subset of T;
@@ -1236,73 +1273,77 @@ proof
 A1: A <> {} & A misses B;
   let G be Rain of A,B;
   let r be Real;
-  assume
-A2: r in DYADIC \/ (right_open_halfline 1) & 0 < r;
+  assume that
+A2: r in DYADIC \/ (right_open_halfline 1) and
+A3: 0 < r;
   let p be Point of T;
   assume
-A3: p in (Tempest G).r;
+A4: p in (Tempest G).r;
   per cases by A2,XBOOLE_0:def 3;
   suppose
-A4: r in DYADIC;
+A5: r in DYADIC;
     then r in halfline 0 \/ DYADIC by XBOOLE_0:def 3;
     then
-A5: r in DOM by URYSOHN1:def 5,XBOOLE_0:def 3;
-    now per cases;
-      case Rainbow(p,G) = {};
-        hence thesis by A2,Def6;
+A6: r in DOM by URYSOHN1:def 5,XBOOLE_0:def 3;
+    now
+      per cases;
+      case
+        Rainbow(p,G) = {};
+        hence thesis by A3,Def6;
       end;
-      case Rainbow(p,G) <> {};
+      case
+        Rainbow(p,G) <> {};
         then reconsider S = Rainbow(p,G) as non empty Subset of ExtREAL;
         reconsider er = r as R_eal by XXREAL_0:def 1;
         for r1 being ext-real number holds r1 in S implies r1 <= er
         proof
           let r1 be ext-real number;
           assume
-A6:       r1 in S;
-A7:       S c= DYADIC by Th15;
-          then r1 in DYADIC by A6;
-          then reconsider p1 = r1 as Real;
+A7:       r1 in S;
           assume
 A8:       not r1 <= er;
+A9:       S c= DYADIC by Th15;
+          then r1 in DYADIC by A7;
+          then reconsider p1 = r1 as Real;
           per cases;
           suppose
-A9:         inf_number_dyadic(r) <= inf_number_dyadic(p1);
+A10:        inf_number_dyadic(r) <= inf_number_dyadic(p1);
             set n = inf_number_dyadic(p1);
-A10:        p1 in dyadic(n) by A6,A7,Th6;
-            r in dyadic(n) by A4,A9,Th7;
+            r in dyadic(n) by A5,A10,Th7;
             then
-A11:        (Tempest G).r = (G.n).r by A1,A4,A5,Def4;
-            p1 in halfline 0 \/ DYADIC by A6,A7,XBOOLE_0:def 3;
-            then p1 in DOM by URYSOHN1:def 5,XBOOLE_0:def 3;
-            then
-A12:        (Tempest G).p1 = (G.n).p1 by A1,A6,A7,A10,Def4;
+A11:        (Tempest G).r = (G.n).r by A1,A5,A6,Def4;
             reconsider D = G.n as Drizzle of A,B,n by A1,Def2;
-            reconsider r,p1 as Element of dyadic(n) by A4,A6,A7,A9,Th7;
-A13:        Cl(D.r) c= D.p1 by A1,A8,Def1;
-            D.r c= Cl(D.r) by PRE_TOPC:48;
-            then D.r c= D.p1 by A13,XBOOLE_1:1;
-            hence thesis by A3,A6,A11,A12,Def5;
+            p1 in halfline 0 \/ DYADIC by A7,A9,XBOOLE_0:def 3;
+            then
+A12:        p1 in DOM by URYSOHN1:def 5,XBOOLE_0:def 3;
+            p1 in dyadic(n) by A7,A9,Th6;
+            then
+A13:        (Tempest G).p1 = (G.n).p1 by A1,A7,A9,A12,Def4;
+            reconsider r,p1 as Element of dyadic(n) by A5,A7,A9,A10,Th7;
+            Cl(D.r) c= D.p1 & D.r c= Cl(D.r) by A1,A8,Def1,PRE_TOPC:48;
+            then D.r c= D.p1 by XBOOLE_1:1;
+            hence thesis by A4,A7,A11,A13,Def5;
           end;
           suppose
-A14:        inf_number_dyadic(p1) <= inf_number_dyadic(r);
-            set n = inf_number_dyadic(r);
-A15:        p1 in dyadic(inf_number_dyadic(p1)) by A6,A7,Th6;
-A16:        dyadic(inf_number_dyadic(p1)) c=
-            dyadic(inf_number_dyadic(r)) by A14,URYSOHN2:33;
-            r in dyadic(n) by A4,Th7;
+            inf_number_dyadic(p1) <= inf_number_dyadic(r);
             then
-A17:        (Tempest G).r = (G.n).r by A1,A4,A5,Def4;
-            p1 in halfline 0 \/ DYADIC by A6,A7,XBOOLE_0:def 3;
+A14:        dyadic(inf_number_dyadic(p1)) c= dyadic(inf_number_dyadic(r))
+            by URYSOHN2:33;
+            set n = inf_number_dyadic(r);
+            reconsider D = G.n as Drizzle of A,B,n by A1,Def2;
+A15:        p1 in dyadic(inf_number_dyadic(p1)) by A7,A9,Th6;
+            p1 in halfline 0 \/ DYADIC by A7,A9,XBOOLE_0:def 3;
             then p1 in DOM by URYSOHN1:def 5,XBOOLE_0:def 3;
             then
-A18:        (Tempest G).p1 = (G.n).p1 by A1,A6,A7,A15,A16,Def4;
-            reconsider D = G.n as Drizzle of A,B,n by A1,Def2;
-            reconsider r as Element of dyadic(n) by A4,Th7;
-            reconsider p1 as Element of dyadic(n) by A15,A16;
-A19:        Cl(D.r) c= D.p1 by A1,A8,Def1;
-            D.r c= Cl(D.r) by PRE_TOPC:48;
-            then D.r c= D.p1 by A19,XBOOLE_1:1;
-            hence thesis by A3,A6,A17,A18,Def5;
+A16:        (Tempest G).p1 = (G.n).p1 by A1,A7,A9,A15,A14, Def4;
+            r in dyadic(n) by A5,Th7;
+            then
+A17:        (Tempest G).r = (G.n).r by A1,A5,A6,Def4;
+            reconsider p1 as Element of dyadic(n) by A15,A14;
+            reconsider r as Element of dyadic(n) by A5,Th7;
+            Cl(D.r) c= D.p1 & D.r c= Cl(D.r) by A1,A8,Def1,PRE_TOPC:48;
+            then D.r c= D.p1 by XBOOLE_1:1;
+            hence thesis by A4,A7,A17,A16,Def5;
           end;
         end;
         then r is UpperBound of S by XXREAL_2:def 1;
@@ -1312,22 +1353,23 @@ A19:        Cl(D.r) c= D.p1 by A1,A8,Def1;
     end;
     hence thesis;
   end;
-  suppose r in right_open_halfline 1;
+  suppose
+    r in right_open_halfline 1;
     then
-A20: 1 < r by XXREAL_1:235;
-    now per cases;
-      case Rainbow(p,G) = {};
-        hence thesis by A20,Def6;
+A18: 1 < r by XXREAL_1:235;
+    now
+      per cases;
+      case
+        Rainbow(p,G) = {};
+        hence thesis by A18,Def6;
       end;
-      case Rainbow(p,G) <> {};
-        then consider S being non empty Subset of ExtREAL such that
-A21:    S = Rainbow(p,G);
+      case
+A19:    Rainbow(p,G) <> {};
         reconsider e1 = 1 as R_eal by XXREAL_0:def 1;
-        e1 = 1;
-        then
-A22:    0. <= sup S & sup S <= e1 by A21,Th17;
-        (Thunder G).p = sup S & 0. = 0 by A21,Def6;
-        hence thesis by A20,A22,XXREAL_0:2;
+        consider S being non empty Subset of ExtREAL such that
+A20:    S = Rainbow(p,G) by A19;
+        sup S <= e1 & (Thunder G).p = sup S by A20,Def6,Th17;
+        hence thesis by A18,XXREAL_0:2;
       end;
     end;
     hence thesis;
@@ -1335,10 +1377,10 @@ A22:    0. <= sup S & sup S <= e1 by A21,Th17;
 end;
 
 theorem Th20:
-  for T being non empty normal TopSpace, A,B being closed Subset of T st
-  A <> {} & A misses B holds for G being Rain of A,B,
-  r1 being Element of DOM st 0 < r1 holds
-  for p being Point of T st r1 < (Thunder G).p holds not p in (Tempest G).r1
+  for T being non empty normal TopSpace, A,B being closed Subset
+of T st A <> {} & A misses B holds for G being Rain of A,B, r1 being Element of
+DOM st 0 < r1 holds for p being Point of T st r1 < (Thunder G).p holds not p in
+  (Tempest G).r1
 proof
   let T be non empty normal TopSpace;
   let A,B be closed Subset of T;
@@ -1349,36 +1391,36 @@ A1: A <> {} & A misses B;
   assume
 A2: 0 < r1;
   let p be Point of T;
-  assume that
-A3: r1 < (Thunder G).p and
-A4: p in (Tempest G).r1;
-  r1 in halfline 0 \/ DYADIC or
-  r1 in right_open_halfline 1 by URYSOHN1:def 5,XBOOLE_0:def 3;
-  then r1 in halfline 0 or r1 in DYADIC or
-  r1 in right_open_halfline 1 by XBOOLE_0:def 3;
-  then r1 in DYADIC \/ right_open_halfline 1 by A2,XBOOLE_0:def 3,XXREAL_1:233;
-  hence thesis by A1,A2,A3,A4,Th19;
+  assume
+A3: r1 < (Thunder G).p & p in (Tempest G).r1;
+  r1 in halfline 0 \/ DYADIC or r1 in right_open_halfline 1 by URYSOHN1:
+  def 5,XBOOLE_0:def 3;
+  then r1 in halfline 0 or r1 in DYADIC or r1 in right_open_halfline 1 by
+  XBOOLE_0:def 3;
+  then r1 in DYADIC \/ right_open_halfline 1 by A2,
+  XBOOLE_0:def 3 ,XXREAL_1:
+  233;
+  hence thesis by A1,A2,A3,Th19;
 end;
 
 theorem Th21:
-  for T being non empty normal TopSpace,
-  A,B being closed Subset of T st A <> {} & A misses B holds
-  for G being Rain of A,B holds Thunder G is continuous &
-  (for x being Point of T holds 0 <= (Thunder G).x & (Thunder G).x <= 1 &
-  (x in A implies (Thunder G).x = 0) & (x in B implies (Thunder G).x = 1))
+  for T being non empty normal TopSpace, A,B being closed Subset
+  of T st A <> {} & A misses B holds for G being Rain of A,B holds Thunder G is
+continuous & for x being Point of T holds 0 <= (Thunder G).x & (Thunder G).x <=
+  1 & (x in A implies (Thunder G).x = 0) & (x in B implies (Thunder G).x = 1)
 proof
+A1: 1 in dyadic(0) by TARSKI:def 2,URYSOHN1:6;
+  then
+A2: 1 in DYADIC by URYSOHN1:def 4;
+  then 1 in halfline 0 \/ DYADIC by XBOOLE_0:def 3;
+  then
+A3: 1 in DOM by URYSOHN1:def 5,XBOOLE_0:def 3;
+  reconsider e1 = 1 as R_eal by XXREAL_0:def 1;
   let T be non empty normal TopSpace;
   let A,B be closed Subset of T;
   assume
-A1: A <> {} & A misses B;
+A4: A <> {} & A misses B;
   let G be Rain of A,B;
-  reconsider e1 = 1 as R_eal by XXREAL_0:def 1;
-A2: 1 in dyadic(0) by TARSKI:def 2,URYSOHN1:6;
-  then
-A3: 1 in DYADIC by URYSOHN1:def 4;
-  then 1 in halfline 0 \/ DYADIC by XBOOLE_0:def 3;
-  then
-A4: 1 in DOM by URYSOHN1:def 5,XBOOLE_0:def 3;
 A5: 0 in dyadic(0) by TARSKI:def 2,URYSOHN1:6;
   then
 A6: 0 in DYADIC by URYSOHN1:def 4;
@@ -1389,328 +1431,347 @@ A8: for x being Point of T holds 0 <= (Thunder G).x & (Thunder G).x <= 1 &
   (x in A implies (Thunder G).x = 0) & (x in B implies (Thunder G).x = 1)
   proof
     let x be Point of T;
-    now per cases;
+    now
+      per cases;
       case
 A9:     Rainbow(x,G) = {};
         x in B implies (Thunder G).x = 1
         proof
+          G.0 is Drizzle of A,B,0 by A4,Def2;
+          then
+A10:      B = [#]T \ (G.0).1 by A4,Def1;
           assume
-A10:      x in B;
-A11:      (Tempest G).1 = (G.0).1 by A1,A2,A3,A4,Def4;
-          (G.0 is Drizzle of A,B,0) &
-          (for r being Element of dom (G.0) holds (G.0).r = (G.(0+1)).r)
-          by A1,Def2;
-          then B = [#]T \ (G.0).1 by A1,Def1;
-          then for s being Real st s = 1 holds not x in (Tempest G).s
-          by A10,A11,XBOOLE_0:def 5;
+A11:      x in B;
+          (Tempest G).1 = (G.0).1 by A4,A1,A2,A3,Def4;
+          then for s being Real st s = 1 holds not x in (Tempest G).s by A11,
+          A10,XBOOLE_0:def 5;
           hence thesis by A9,Def5,URYSOHN2:31;
         end;
         hence thesis by A9,Def6;
       end;
       case
 A12:    Rainbow(x,G) <> {};
-        then reconsider S = Rainbow(x,G) as non empty Subset of ExtREAL;
-A13:    e1 = 1;
-        then
-A14:    0. <= sup S & sup S <= e1 by Th17;
-A15:    (Thunder G).x = sup S & 0. = 0 by Def6;
-A16:    x in A implies (Thunder G).x = 0
+A13:    x in A implies (Thunder G).x = 0
         proof
           assume
-A17:      x in A;
-A18:      (Tempest G).0 = (G.0).0 by A1,A5,A6,A7,Def4;
-          (G.0 is Drizzle of A,B,0) &
-          (for r being Element of dom (G.0) holds (G.0).r = (G.(0+1)).r)
-          by A1,Def2;
-          then
-A19:      A c= (G.0).0 by A1,Def1;
-A20:      for s being R_eal st 0. < s holds not s in Rainbow(x,G)
+A14:      x in A;
+A15:      for s being R_eal st 0. < s holds not s in Rainbow(x,G)
           proof
             let s be R_eal;
-            assume 0. < s;
             assume
-A21:        s in Rainbow(x,G);
+            0. < s;
+            assume
+A16:        s in Rainbow(x,G);
             then
-A22:        s in DYADIC & for t being Real st t = s holds
-            not x in (Tempest G).t by Def5;
+A17:        s in DYADIC by Def5;
             then reconsider s as Real;
-            s in halfline 0 \/ DYADIC by A22,XBOOLE_0:def 3;
-            then
-A23:        s in DOM by URYSOHN1:def 5,XBOOLE_0:def 3;
             consider n being Element of NAT such that
-A24:        s in dyadic(n) by A22,URYSOHN1:def 4;
-A25:        (Tempest G).s = (G.n).s by A1,A22,A23,A24,Def4;
-            reconsider D = G.n as Drizzle of A,B,n by A1,Def2;
-            reconsider r1=0,r2=s as Element of dyadic(n) by A24,URYSOHN1:12;
-            per cases by A24,URYSOHN1:5;
+A18:        s in dyadic(n) by A17,URYSOHN1:def 4;
+            s in halfline 0 \/ DYADIC by A17,XBOOLE_0:def 3;
+            then s in DOM by URYSOHN1:def 5,XBOOLE_0:def 3;
+            then
+A19:        (Tempest G).s = (G.n).s by A4,A17,A18,Def4;
+            reconsider r1=0,r2=s as Element of dyadic(n) by A18,URYSOHN1:12;
+            reconsider D = G.n as Drizzle of A,B,n by A4,Def2;
+            per cases by A18,URYSOHN1:5;
             suppose
-A26:          s = 0;
-              A c= D.0 by A1,Def1;
-              hence thesis by A17,A21,A25,A26,Def5;
+A20:          s = 0;
+              A c= D.0 by A4,Def1;
+              hence thesis by A14,A16,A19,A20,Def5;
             end;
-            suppose 0 < s;
+            suppose
+A21:          0 < s;
+A22:          D.r1 c= Cl(D.r1) by PRE_TOPC:48;
+              Cl(D.r1) c= D.r2 by A4,A21,Def1;
               then
-A27:          Cl(D.r1) c= D.r2 & A c= D.0 by A1,Def1;
-              D.r1 c= Cl(D.r1) by PRE_TOPC:48;
-              then D.r1 c= D.r2 by A27,XBOOLE_1:1;
-              then A c= D.s by A27,XBOOLE_1:1;
-              hence thesis by A17,A21,A25,Def5;
+A23:          D.r1 c= D.r2 by A22,XBOOLE_1:1;
+              A c= D.0 by A4,Def1;
+              then A c= D.s by A23,XBOOLE_1:1;
+              hence thesis by A14,A16,A19,Def5;
             end;
           end;
+          G.0 is Drizzle of A,B,0 by A4,Def2;
+          then
+A24:      A c= (G.0).0 by A4,Def1;
+A25:      (Tempest G).0 = (G.0).0 by A4,A5,A6,A7,Def4;
           consider a being set such that
-A28:      a in Rainbow(x,G) by A12,XBOOLE_0:def 1;
-A29:      a in DYADIC by A28,Def5;
+A26:      a in Rainbow(x,G) by A12,XBOOLE_0:def 1;
+A27:      a in DYADIC by A26,Def5;
           then reconsider a as Real;
-          consider n being Element of NAT such that
-A30:      a in dyadic(n) by A29,URYSOHN1:def 4;
-          per cases by A30,URYSOHN1:5;
-          suppose a = 0;
-            hence thesis by A17,A18,A19,A28,Def5;
+A28:      ex n being Element of NAT st a in dyadic(n) by A27,URYSOHN1:def
+          4;
+          per cases by A28,URYSOHN1:5;
+          suppose
+            a = 0;
+            hence thesis by A14,A25,A24,A26,Def5;
           end;
-          suppose 0 < a;
-            hence thesis by A20,A28;
+          suppose
+            0 < a;
+            hence thesis by A15,A26;
           end;
         end;
-        x in B implies (Thunder G).x = 1
+        reconsider S = Rainbow(x,G) as non empty Subset of ExtREAL by A12;
+A29:    sup S <= e1 by Th17;
+A30:    x in B implies (Thunder G).x = 1
         proof
+          G.0 is Drizzle of A,B,0 by A4,Def2;
+          then
+A31:      B = [#]T \ (G.0).1 by A4,Def1;
           assume
-A31:      x in B;
-A32:      (Tempest G).1 = (G.0).1 by A1,A2,A3,A4,Def4;
-          G.0 is Drizzle of A,B,0 &
-          (for r being Element of dom (G.0) holds (G.0).r = (G.(0+1)).r)
-          by A1,Def2;
-          then B = [#]T \ (G.0).1 by A1,Def1;
+A32:      x in B;
+          (Tempest G).1 = (G.0).1 by A4,A1,A2,A3,Def4;
           then
-A33:      for s being Real st s = 1 holds not x in (Tempest G).s
-          by A31,A32,XBOOLE_0:def 5;
+A33:      for s being Real st s = 1 holds not x in (Tempest G).s by A32,
+          A31,XBOOLE_0:def 5;
+          then reconsider S = Rainbow(x,G) as non empty Subset of ExtREAL by
+          Def5,URYSOHN2:31;
+          1 in Rainbow(x,G) by A33,Def5,URYSOHN2:31;
           then
-A34:      1 in Rainbow(x,G) by Def5,URYSOHN2:31;
-          reconsider S = Rainbow(x,G) as non empty Subset of ExtREAL by A33
-,Def5,URYSOHN2:31;
-A35:      e1 <= sup S by A34,XXREAL_2:4;
+A34:      e1 <= sup S by XXREAL_2:4;
           (Thunder G).x = sup S by Def6;
-          hence thesis by A14,A35,XXREAL_0:1;
+          hence thesis by A29,A34,XXREAL_0:1;
         end;
-        hence thesis by A13,A15,A16,Th17;
+        e1 = 1 & (Thunder G).x = sup S by Def6;
+        hence thesis by A13,A30,Th17;
       end;
     end;
     hence thesis;
   end;
-  Thunder G is continuous
+  for p being Point of T holds Thunder(G) is_continuous_at p
   proof
-    for p being Point of T holds Thunder(G) is_continuous_at p
+    let p be Point of T;
+    for Q being Subset of R^1 st Q is open & (Thunder G).p in Q ex H
+    being Subset of T st H is open & p in H & (Thunder G).:H c= Q
     proof
-      let p be Point of T;
-      for Q being Subset of R^1 st Q is open & (Thunder G).p in Q
+      let Q be Subset of R^1;
+      assume that
+A35:  Q is open and
+A36:  (Thunder G).p in Q;
+      reconsider x = (Thunder G).p as Element of RealSpace by A36,TOPMETR:16 ,
+      def 7;
+      reconsider Q as Subset of REAL by TOPMETR:24;
+      the topology of R^1 = Family_open_set RealSpace & Q in the topology
+      of R^1 by A35,PRE_TOPC:def 5,TOPMETR:16,def 7;
+      then consider r being Real such that
+A37:  r>0 and
+A38:  Ball(x,r) c= Q by A36,PCOMPS_1:def 5;
+      ex r0 being Real st r0 < r & 0 < r0 & r0 <= 1
+      proof
+        per cases;
+        suppose
+A39:      r <= 1;
+          consider r0 being real number such that
+A40:      0 < r0 & r0 < r by A37,XREAL_1:7;
+          reconsider r0 as Real by XREAL_0:def 1;
+          take r0;
+          thus thesis by A39,A40,XXREAL_0:2;
+        end;
+        suppose
+          1 < r;
+          hence thesis;
+        end;
+      end;
+      then consider r0 being Real such that
+A41:  r0 < r and
+A42:  0 < r0 & r0 <= 1;
+      consider r1 being Real such that
+A43:  r1 in DYADIC and
+A44:  0 < r1 and
+A45:  r1 < r0 by A42,URYSOHN2:28;
+A46:  r1 in DYADIC \/ right_open_halfline 1 by A43,XBOOLE_0:def 3;
+      consider n being Element of NAT such that
+A47:  r1 in dyadic(n) by A43,URYSOHN1:def 4;
+      reconsider D = G.n as Drizzle of A,B,n by A4,Def2;
+      r1 in halfline 0 \/ DYADIC by A43,XBOOLE_0:def 3;
+      then
+A48:  r1 in DOM by URYSOHN1:def 5,XBOOLE_0:def 3;
+      then
+A49:  (Tempest G).r1 = (G.n).r1 by A4,A43,A47,Def4;
+A50:  r1 < r by A41,A45,XXREAL_0:2;
+A51:  for p being Point of T holds p in (Tempest G).r1 implies (Thunder G
+      ).p < r
+      proof
+        let p be Point of T;
+        assume
+        p in (Tempest G).r1;
+        then (Thunder G).p <= r1 by A4,A44,A46,Th19;
+        hence thesis by A50,XXREAL_0:2;
+      end;
+A52:  the carrier of R^1 = the carrier of RealSpace by TOPMETR:16,def 7;
+      reconsider r1 as Element of dyadic(n) by A47;
+      reconsider H = D.r1 as Subset of T;
+A53:  0 in dyadic(n) by URYSOHN1:12;
       ex H being Subset of T st H is open & p in H & (Thunder G).:H c= Q
       proof
-        let Q be Subset of R^1;
-        assume
-A36:    Q is open & (Thunder G).p in Q;
-        reconsider Q as Subset of REAL by TOPMETR:24;
-A37:    the carrier of R^1 = the carrier of RealSpace &
-        the topology of R^1 = Family_open_set RealSpace by TOPMETR:16,def 7;
-A38:    Q in the topology of R^1 by A36,PRE_TOPC:def 5;
-        reconsider x = (Thunder G).p as Element of RealSpace by A36,TOPMETR:16
-,def 7;
-        consider r being Real such that
-A39:    r>0 & Ball(x,r) c= Q by A36,A37,A38,PCOMPS_1:def 5;
-        ex r0 being Real st r0 < r & 0 < r0 & r0 <= 1
-        proof
-          per cases;
-          suppose
-A40:        r <= 1;
-            consider r0 being real number such that
-A41:        0 < r0 & r0 < r by A39,XREAL_1:7;
-            reconsider r0 as Real by XREAL_0:def 1;
-            take r0;
-            thus thesis by A40,A41,XXREAL_0:2;
-          end;
-          suppose 1 < r;
-            hence thesis;
-          end;
-        end;
-        then consider r0 being Real such that
-A42:    r0 < r & 0 < r0 & r0 <= 1;
-        consider r1 being Real such that
-A43:    r1 in DYADIC & 0 < r1 & r1 < r0 by A42,URYSOHN2:28;
-A44:    r1 < r by A42,A43,XXREAL_0:2;
-A45:    r1 in DYADIC \/ right_open_halfline 1 & 0 < r1 by A43,XBOOLE_0:def 3;
-A46:    for p being Point of T holds
-        p in (Tempest G).r1 implies (Thunder G).p < r
-        proof
-          let p be Point of T;
-          assume p in (Tempest G).r1;
-          then (Thunder G).p <= r1 by A1,A45,Th19;
-          hence thesis by A44,XXREAL_0:2;
-        end;
-        consider n being Element of NAT such that
-A47:    r1 in dyadic(n) by A43,URYSOHN1:def 4;
-        r1 in halfline 0 \/ DYADIC by A43,XBOOLE_0:def 3;
-        then
-A48:    r1 in DOM by URYSOHN1:def 5,XBOOLE_0:def 3;
-        then
-A49:    (Tempest G).r1 = (G.n).r1 by A1,A43,A47,Def4;
-        reconsider D = G.n as Drizzle of A,B,n by A1,Def2;
-A50:    0 in dyadic(n) & r1 in dyadic(n) & 0 < r1 by A43,A47,URYSOHN1:12;
-        reconsider r1 as Element of dyadic(n) by A47;
-        reconsider H = D.r1 as Subset of T;
-        ex H being Subset of T st H is open & p in H & (Thunder G).:H c= Q
-        proof
-          per cases;
-          suppose
-A51:        x = 0;
-            take H;
-            (Thunder G).:H c= Q
+        per cases;
+        suppose
+A54:      x = 0;
+          take H;
+          (Thunder G).:H c= Q
+          proof
+            reconsider p = x as Real;
+            let y be set;
+            assume
+            y in (Thunder G).:H;
+            then consider x1 being set such that
+            x1 in dom (Thunder G) and
+A55:        x1 in H and
+A56:        y = (Thunder G).x1 by FUNCT_1:def 12;
+            reconsider y as Point of RealSpace by A52,A55,A56,FUNCT_2:7;
+            reconsider q = y as Real by METRIC_1:def 14;
+A57:        -(p - q) < r by A51,A49,A54,A55,A56;
+            reconsider x1 as Point of T by A55;
+A58:        0 <= (Thunder G).x1 by A8;
+A59:        q - p < r - 0 by A51,A49,A54,A55,A56;
+            then
+A60:        p - q < r by A54,A56,A58,XREAL_1:16;
+A61:        abs(p - q) <> r
             proof
-              let y be set;
-              assume y in (Thunder G).:H;
-              then consider x1 being set such that
-A52:          x1 in dom (Thunder G) & x1 in H &
-              y = (Thunder G).x1 by FUNCT_1:def 12;
-              reconsider x1 as Point of T by A52;
-A53:          0 <= (Thunder G).x1 by A8;
-              reconsider p = x as Real;
-              reconsider y as Point of RealSpace by A37,A52,FUNCT_2:7;
-              reconsider q = y as Real by METRIC_1:def 14;
-A54:          dist(x,y) = abs(p-q) by TOPMETR:15;
-A55:          dist(x,y) < r implies y in Ball(x,r) by METRIC_1:12;
-              q - p < r - 0 by A46,A49,A51,A52;
-              then
-A56:          p - q < r & -(p - q) < r by A51,A52,A53,XREAL_1:16;
-              --(p - q) = p - q;
-              then -r < p - q & p - q < r by A56,XREAL_1:26;
-              then
-A57:          abs(p - q) <= r by ABSVALUE:12;
-              abs(p - q) <> r
-              proof
-                assume
-A58:            abs(p - q) = r;
-                per cases;
-                suppose 0 <= p - q;
-                  thus thesis by A56,A58,ABSVALUE:def 1;
-                end;
-                suppose p - q < 0;
-                  then abs(p - q) = -(p - q) by ABSVALUE:def 1;
-                  hence thesis by A46,A49,A51,A52,A58;
-                end;
+              assume
+A62:          abs(p - q) = r;
+              per cases;
+              suppose
+                0 <= p - q;
+                thus thesis by A60,A57,A62,ABSVALUE:def 1;
               end;
-              hence thesis by A39,A54,A55,A57,XXREAL_0:1;
+              suppose
+                p - q < 0;
+                then abs(p - q) = -(p - q) by ABSVALUE:def 1;
+                hence thesis by A51,A49,A54,A55,A56,A62;
+              end;
             end;
-            hence thesis by A1,A48,A49,A50,A51,Def1,Th18;
+A63:        dist(x,y) < r implies y in Ball(x,r) by METRIC_1:12;
+            --(p - q) = p - q;
+            then -r < p - q by A57,XREAL_1:26;
+            then dist(x,y) = abs(p-q) & abs(p - q) <= r by A54,A56,A58,A59,
+            ABSVALUE:12 ,TOPMETR:15;
+            hence thesis by A38,A63,A61,XXREAL_0:1;
           end;
-          suppose
-A59:        x <> 0;
-A60:        0 <= (Thunder G).p & (Thunder G).p <= 1 by A8;
-            reconsider x as Real;
-            consider r1,r2 being Real such that
-A61:        r1 in DYADIC \/ right_open_halfline 1 &
-            r2 in DYADIC \/ right_open_halfline 1 &
-            0 < r1 & r1 < x & x < r2 & r2 - r1 < r by A39,A59,A60,URYSOHN2:35;
-            consider r4 being Real such that
-A62:        r4 in DYADIC & r1 < r4 & r4 < x by A60,A61,URYSOHN2:28;
-            consider r3 being Real such that
-A63:        r3 in DOM & x < r3 & r3 < r2 by A61,URYSOHN2:29;
-            reconsider A = (Tempest G).r3 as Subset of T by A63,FUNCT_2:7;
-A64:        A is open by A1,A63,Th12;
-            r1 in DYADIC or r1 in right_open_halfline 1 by A61,XBOOLE_0:def 3;
-            then r1 in halfline 0 \/ DYADIC or r1 in right_open_halfline 1
-            by XBOOLE_0:def 3;
-            then
-A65:        r1 in DOM by URYSOHN1:def 5,XBOOLE_0:def 3;
-            then reconsider B = (Tempest G).r1 as Subset of T by FUNCT_2:7;
-            reconsider C = [#]T \ Cl B as Subset of T;
-            Cl(Cl B) = Cl B;
-            then Cl B is closed by PRE_TOPC:52;
-            then
-A66:        C is open by PRE_TOPC:def 6;
-            take H = A /\ C;
-A67:        r4 in halfline 0 \/ DYADIC by A62,XBOOLE_0:def 3;
-            then r4 in DOM by URYSOHN1:def 5,XBOOLE_0:def 3;
-            then
-A68:        Cl B c= (Tempest G).r4 by A1,A62,A65,Th13;
-            reconsider r4 as Element of DOM
-            by A67,URYSOHN1:def 5,XBOOLE_0:def 3;
-            not p in (Tempest G).r4 by A1,A61,A62,Th20;
-            then not p in Cl B by A68;
-            then
-A69:        p in C by XBOOLE_0:def 5;
-A70:        p in (Tempest G).r3 by A1,A63,Th18;
-            (Thunder G).:H c= Q
-            proof
-              let y be set;
-              assume y in (Thunder G).:H;
-              then consider x1 being set such that
-A71:          x1 in dom (Thunder G) & x1 in H &
-              y = (Thunder G).x1 by FUNCT_1:def 12;
-              reconsider x1 as Point of T by A71;
-              reconsider y as Real by A71;
-A72:          x1 in (Tempest G).r3 & x1 in [#]T \ Cl B by A71,XBOOLE_0:def 4;
-              not x1 in B
-              proof
-                assume
-A73:            x1 in B;
-                B c= Cl B by PRE_TOPC:48;
-                hence thesis by A72,A73,XBOOLE_0:def 5;
-              end;
-              then
-A74:          r1 <= (Thunder G).x1 by A1,A65,Th18;
-              (r3 in halfline 0 \/ DYADIC or
-              r3 in right_open_halfline 1) & not r3 <= 0
-              by A8,A63,URYSOHN1:def 5,XBOOLE_0:def 3;
-              then (r3 in halfline 0 or r3 in DYADIC or
-              r3 in right_open_halfline 1) & not r3 <= 0 by XBOOLE_0:def 3;
-              then r3 in DYADIC \/ right_open_halfline 1 & 0 < r3
-              by XBOOLE_0:def 3,XXREAL_1:233;
-              then (Thunder G).x1 <= r3 by A1,A72,Th19;
-              then
-A75:          (Thunder G).x1 < r2 by A63,XXREAL_0:2;
-              reconsider x as Element of RealSpace;
-              reconsider p = x as Real;
-              reconsider y as Point of RealSpace by A37,A71,FUNCT_2:7;
-              reconsider q = y as Real;
-A76:          dist(x,y) = abs(p-q) by TOPMETR:15;
-A77:          dist(x,y) < r implies y in Ball(x,r) by METRIC_1:12;
-A78:          q - p < r2 - r1 by A61,A71,A75,XREAL_1:16;
-A79:          p - q < r2 - r1 by A61,A71,A74,XREAL_1:16;
-              then
-A80:          p - q < r & -(p - q) < r by A61,A78,XXREAL_0:2;
-              -(-(p - q)) = p - q;
-              then -r < p - q & p - q < r by A80,XREAL_1:26;
-              then
-A81:          abs(p - q) <= r by ABSVALUE:12;
-              abs(p - q) <> r
-              proof
-                assume
-A82:            abs(p - q) = r;
-                per cases;
-                suppose 0 <= p - q;
-                  hence thesis by A61,A79,A82,ABSVALUE:def 1;
-                end;
-                suppose p - q < 0;
-                  then abs(p - q) = -(p - q) by ABSVALUE:def 1;
-                  hence thesis by A61,A78,A82;
-                end;
-              end;
-              hence thesis by A39,A76,A77,A81,XXREAL_0:1;
-            end;
-            hence thesis by A64,A66,A69,A70,TOPS_1:38,XBOOLE_0:def 4;
-          end;
+          hence thesis by A4,A44,A48,A49,A53,A54,Def1,Th18;
         end;
-        hence thesis;
+        suppose
+A64:      x <> 0;
+          reconsider x as Real;
+          0 <= (Thunder G).p by A8;
+          then consider r1,r2 being Real such that
+A65:      r1 in DYADIC \/ right_open_halfline 1 and
+          r2 in DYADIC \/ right_open_halfline 1 and
+A66:      0 < r1 and
+A67:      r1 < x and
+A68:      x < r2 and
+A69:      r2 - r1 < r by A37,A64,URYSOHN2:35;
+          r1 in DYADIC or r1 in right_open_halfline 1 by A65, XBOOLE_0:
+          def 3;
+          then r1 in halfline 0 \/ DYADIC or r1 in right_open_halfline 1 by
+          XBOOLE_0:def 3;
+          then
+A70:      r1 in DOM by URYSOHN1:def 5,XBOOLE_0:def 3;
+          then reconsider B = (Tempest G).r1 as Subset of T by FUNCT_2:7;
+          reconsider C = [#]T \ Cl B as Subset of T;
+          consider r3 being Real such that
+A71:      r3 in DOM and
+A72:      x < r3 and
+A73:      r3 < r2 by A68,URYSOHN2:29;
+          Cl(Cl B) = Cl B;
+          then Cl B is closed by PRE_TOPC:52;
+          then
+A74:      C is open by PRE_TOPC:def 6;
+          reconsider A = (Tempest G).r3 as Subset of T by A71,FUNCT_2:7;
+          take H = A /\ C;
+A75:      (Thunder G).:H c= Q
+          proof
+            reconsider x as Element of RealSpace;
+            let y be set;
+            reconsider p = x as Real;
+            assume
+            y in (Thunder G).:H;
+            then consider x1 being set such that
+            x1 in dom (Thunder G) and
+A76:        x1 in H and
+A77:        y = (Thunder G).x1 by FUNCT_1:def 12;
+            reconsider x1 as Point of T by A76;
+A78:        x1 in (Tempest G).r3 by A76,XBOOLE_0:def 4;
+            reconsider y as Real by A77;
+            reconsider y as Point of RealSpace by A52,A76,A77,FUNCT_2:7;
+            reconsider q = y as Real;
+A79:        -(-(p - q)) = p - q;
+A80:        not r3 <= 0 by A8,A72;
+            r3 in halfline 0 \/ DYADIC or r3 in right_open_halfline 1 by
+            A71, URYSOHN1:def 5,XBOOLE_0:def 3;
+            then r3 in halfline 0 or r3 in DYADIC or r3 in
+            right_open_halfline 1 by XBOOLE_0:def 3;
+            then r3 in DYADIC \/ right_open_halfline 1 by A80,XBOOLE_0:
+            def 3 ,XXREAL_1:233;
+            then (Thunder G).x1 <= r3 by A4,A78,A80,Th19;
+            then (Thunder G).x1 < r2 by A73,XXREAL_0:2;
+            then
+A81:        q - p < r2 - r1 by A67,A77,XREAL_1:16;
+            then -(p - q) < r by A69,XXREAL_0:2;
+            then
+A82:        -r < p - q by A79,XREAL_1:26;
+A83:        x1 in [#]T \ Cl B by A76,XBOOLE_0:def 4;
+            not x1 in B
+            proof
+A84:          B c= Cl B by PRE_TOPC:48;
+              assume
+              x1 in B;
+              hence thesis by A83,A84,XBOOLE_0:def 5;
+            end;
+            then
+A85:        p - q < r2 - r1 by A4,A68,A70,A77,Th18,XREAL_1:16;
+            then p - q < r by A69,XXREAL_0:2;
+            then
+A86:        dist(x,y) = abs(p-q) & abs(p - q) <= r by A82,ABSVALUE
+            :12,TOPMETR:15;
+A87:        abs(p - q) <> r
+            proof
+              assume
+A88:          abs(p - q) = r;
+              per cases;
+              suppose
+                0 <= p - q;
+                hence thesis by A69,A85,A88,ABSVALUE:def 1;
+              end;
+              suppose
+                p - q < 0;
+                then abs(p - q) = -(p - q) by ABSVALUE:def 1;
+                hence thesis by A69,A81,A88;
+              end;
+            end;
+            dist(x,y) < r implies y in Ball(x,r) by METRIC_1:12;
+            hence thesis by A38,A86,A87,XXREAL_0:1;
+          end;
+          (Thunder G).p <= 1 by A8;
+          then consider r4 being Real such that
+A89:      r4 in DYADIC and
+A90:      r1 < r4 and
+A91:      r4 < x by A66,A67,URYSOHN2:28;
+A92:      r4 in halfline 0 \/ DYADIC by A89,XBOOLE_0:def 3;
+          then r4 in DOM by URYSOHN1:def 5,XBOOLE_0:def 3;
+          then
+A93:      Cl B c= (Tempest G).r4 by A4,A90,A70,Th13;
+          reconsider r4 as Element of DOM by A92,URYSOHN1:def 5,XBOOLE_0:def
+          3;
+          not p in (Tempest G).r4 by A4,A66,A90,A91,Th20;
+          then not p in Cl B by A93;
+          then
+A94:      p in C by XBOOLE_0:def 5;
+          A is open & p in (Tempest G).r3 by A4,A71,A72,Th12,Th18;
+          hence thesis by A74,A94,A75,TOPS_1:38,XBOOLE_0:def 4;
+        end;
       end;
-      hence thesis by TMAP_1:48;
+      hence thesis;
     end;
-    hence thesis by TMAP_1:49;
+    hence thesis by TMAP_1:48;
   end;
-  hence thesis by A8;
+  hence thesis by A8,TMAP_1:49;
 end;
 
 theorem Th22:
-  for T being non empty normal TopSpace, A,B being closed Subset of T st
-  A <> {} & A misses B holds ex F being Function of T,R^1 st F is continuous &
-  (for x being Point of T holds
-  0 <= F.x & F.x <= 1 & (x in A implies F.x = 0) & (x in B implies F.x = 1))
+  for T being non empty normal TopSpace, A,B being closed Subset
+  of T st A <> {} & A misses B holds ex F being Function of T,R^1 st F is
+continuous & for x being Point of T holds 0 <= F.x & F.x <= 1 & (x in A implies
+  F.x = 0) & (x in B implies F.x = 1)
 proof
   let T be non empty normal TopSpace;
   let A,B be closed Subset of T;
@@ -1724,17 +1785,18 @@ end;
 :: Urysohn Lemma
 
 theorem Th23:
-  for T being non empty normal TopSpace, A,B being closed Subset of T st
-  A misses B holds ex F being Function of T,R^1 st F is continuous &
-  (for x being Point of T holds
-  0 <= F.x & F.x <= 1 & (x in A implies F.x = 0) & (x in B implies F.x = 1))
+  for T being non empty normal TopSpace, A,B being closed Subset
+of T st A misses B holds ex F being Function of T,R^1 st F is continuous & for
+x being Point of T holds 0 <= F.x & F.x <= 1 & (x in A implies F.x = 0) & (x in
+  B implies F.x = 1)
 proof
   let T be non empty normal TopSpace;
   let A,B be closed Subset of T;
   assume
 A1: A misses B;
   per cases;
-  suppose A <> {};
+  suppose
+    A <> {};
     hence thesis by A1,Th22;
   end;
   suppose
@@ -1743,34 +1805,36 @@ A2: A = {};
     reconsider r = 1 as Element of L by TOPMETR:24;
     defpred P[set,set] means $2 = r;
 A3: for x being Element of S ex y being Element of L st P[x,y];
-    ex F being Function of S,L st
-    for x being Element of S holds P[x,F.x] from FUNCT_2:sch 3(A3);
+    ex F being Function of S,L st for x being Element of S holds P[x,F.x]
+    from FUNCT_2:sch 3(A3);
     then consider F being Function of S,L such that
 A4: for x being Element of S holds F.x = r;
-A5: dom F = the carrier of T & rng F c= the carrier of R^1
-    by FUNCT_2:def 1,RELAT_1:def 19;
     take F;
+A5: dom F = the carrier of T by FUNCT_2:def 1;
     thus F is continuous
     proof
-      let P be Subset of R^1;
-      assume P is closed;
       the carrier of T c= the carrier of T;
       then reconsider O1 = the carrier of T as Subset of T;
       reconsider O2 = {} as Subset of T by XBOOLE_1:2;
-      O1 in the topology of T & O2 in the topology of T by PRE_TOPC:5,def 1;
+      let P be Subset of R^1;
+      assume
+      P is closed;
+A6:   O2 = [#]T \ O1 by XBOOLE_1:37;
+      O1 in the topology of T by PRE_TOPC:def 1;
       then
-A6:   O1 is open by PRE_TOPC:def 5;
-A7:   O2 = [#]T \ O1 by XBOOLE_1:37;
+A7:   O1 is open by PRE_TOPC:def 5;
       O1 = [#]T \ O2;
       then
-A8:   O2 is closed by A6,PRE_TOPC:def 6;
+A8:   O2 is closed by A7,PRE_TOPC:def 6;
       per cases;
-      suppose 1 in P;
-        then for x being set holds
-        x in the carrier of T iff x in dom F & F.x in P by A4,FUNCT_2:def 1;
-        hence thesis by A7,FUNCT_1:def 13;
+      suppose
+        1 in P;
+        then for x being set holds x in the carrier of T iff x in dom F & F.x
+        in P by A4,FUNCT_2:def 1;
+        hence thesis by A6,FUNCT_1:def 13;
       end;
-      suppose not 1 in P;
+      suppose
+        not 1 in P;
         then for x being set holds x in {} iff x in dom F & F.x in P by A4,A5;
         hence thesis by A8,FUNCT_1:def 13;
       end;
@@ -1781,13 +1845,12 @@ A8:   O2 is closed by A6,PRE_TOPC:def 6;
 end;
 
 theorem
-  for T being non empty T_2 compact TopSpace,
-  A,B being closed Subset of T st A misses B ex F being Function of T,R^1 st
-  F is continuous & (for x being Point of T holds
-  0 <= F.x & F.x <= 1 & (x in A implies F.x = 0) & (x in B implies F.x = 1))
-  by Th23;
+  for T being non empty T_2 compact TopSpace, A,B being closed Subset of
+  T st A misses B ex F being Function of T,R^1 st F is continuous & for x being
+  Point of T holds 0 <= F.x & F.x <= 1 & (x in A implies F.x = 0) & (x in B
+  implies F.x = 1) by Th23;
 
-::  B i b l i o g r a p h y 
+::  B i b l i o g r a p h y
 ::  N.Bourbaki, "Topologie Generale", Hermann, Paris 1966. 
 ::  J.Dieudonne, "Foundations of Modern Analysis", Academic Press, 1960. 
 ::  J.L.Kelley, "General Topology", von Nostnend, 1955. 

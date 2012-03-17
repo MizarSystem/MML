@@ -13,6 +13,7 @@
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="XXREAL_0"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="NAT_1"/>
@@ -36,18 +37,18 @@
 <ArgTypes>
 <Typ kind="G" nr="16">
 <Cluster>
-<Adjective nr="39" value="false"/>
-<Adjective nr="63"/>
-<Adjective nr="88"/>
+<Adjective nr="41" value="false"/>
+<Adjective nr="64"/>
 <Adjective nr="89"/>
 <Adjective nr="90"/>
 <Adjective nr="91"/>
-<Adjective nr="94"/>
-<Adjective nr="101"/>
-<Adjective nr="108"/>
-<Adjective nr="112"/>
-<Adjective nr="114"/>
-<Adjective nr="125"/>
+<Adjective nr="92"/>
+<Adjective nr="95"/>
+<Adjective nr="102"/>
+<Adjective nr="109"/>
+<Adjective nr="113"/>
+<Adjective nr="115"/>
+<Adjective nr="126"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -68,7 +69,7 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="6"/>
-<Adjective nr="25">
+<Adjective nr="26">
 <Func kind="K" nr="48"/>
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
@@ -100,7 +101,7 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="98">
+<Func kind="K" nr="106">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
@@ -125,14 +126,14 @@
 </Not>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="98">
+<Func kind="K" nr="106">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
 <Var nr="2"/>
 <Var nr="3"/>
 </Func>
-<Func kind="K" nr="134">
+<Func kind="K" nr="142">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>

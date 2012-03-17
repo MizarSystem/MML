@@ -13,7 +13,7 @@ environ
       FUNCT_2, BINOP_1, SETFAM_1, DOMAIN_1, STRUCT_0, PRE_TOPC, TOPS_1,
       LATTICES, LATTICE2, FILTER_0, LATTICE4;
  constructors SETFAM_1, BINOP_1, DOMAIN_1, NAT_D, TOPS_1, LATTICE2, FILTER_1,
-      LATTICE4, RELSET_1;
+      LATTICE4, RELSET_1, FILTER_0;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, STRUCT_0, LATTICES, PRE_TOPC,
       FILTER_0, LATTICE2;
  requirements BOOLE, SUBSET;
@@ -33,13 +33,13 @@ theorem :: OPENLATT:1
   A /\ Int(A` \/ B) c= B;
 
 theorem :: OPENLATT:2
-  for C being Subset of T st C is open & A /\ C c= B holds C c= Int(A` \/ B);
+  for C being Subset of T st C is open & A /\ C c= B holds C c= Int
+  (A` \/ B);
 
 definition
   let T be TopStruct;
   func Topology_of T -> Subset-Family of T equals
 :: OPENLATT:def 1
-
   the topology of T;
 end;
 
@@ -72,14 +72,15 @@ end;
 canceled;
 
 theorem :: OPENLATT:4
-  for T being non empty TopSpace holds
-  LattStr(#Topology_of T,Top_Union T,Top_Meet T#) is Lattice;
+  for T being non empty TopSpace holds LattStr(#Topology_of T,
+    Top_Union T,Top_Meet T#) is Lattice;
 
 definition
   let T;
   func Open_setLatt(T) -> Lattice equals
 :: OPENLATT:def 4
-  LattStr(#Topology_of T,Top_Union T,Top_Meet T#);
+  LattStr(#Topology_of T,Top_Union T,
+    Top_Meet T#);
 end;
 
 theorem :: OPENLATT:5
@@ -94,8 +95,8 @@ theorem :: OPENLATT:7
   p [= q iff p c= q;
 
 theorem :: OPENLATT:8
-  for p',q' being Element of Topology_of T st p=p' & q=q'
-  holds p [= q iff p' c= q';
+  for p',q' being Element of Topology_of T st p=p' & q=q' holds p
+  [= q iff p' c= q';
 
 theorem :: OPENLATT:9
   Open_setLatt(T) is implicative;
@@ -120,7 +121,6 @@ definition
   let L;
   func F_primeSet(L) -> set equals
 :: OPENLATT:def 5
-
   { F: F <> the carrier of L & F is prime};
 end;
 
@@ -132,22 +132,21 @@ definition
   func StoneH(L) -> Function means
 :: OPENLATT:def 6
 
-  dom it = the carrier of L &
-  it.a = { F :F in F_primeSet(L) & a in F};
+  dom it = the carrier of L & it.a = {
+F: F in F_primeSet(L) & a in F};
 end;
 
 theorem :: OPENLATT:13
   F in StoneH(L).a iff F in F_primeSet(L) & a in F;
 
 theorem :: OPENLATT:14
-  x in StoneH(L).a iff
-  (ex F st F=x & F <> the carrier of L & F is prime & a in F);
+  x in StoneH(L).a iff ex F st F=x & F <> the carrier of L & F is
+  prime & a in F;
 
 definition
   let L;
   func StoneS(L) -> set equals
 :: OPENLATT:def 7
-
   rng StoneH(L);
 end;
 
@@ -169,7 +168,6 @@ definition
   let L, a;
   func SF_have a -> Subset-Family of L equals
 :: OPENLATT:def 8
-
   { F : a in F };
 end;
 
@@ -183,7 +181,8 @@ theorem :: OPENLATT:18
   x in SF_have a iff x is Filter of L & a in x;
 
 theorem :: OPENLATT:19
-  x in SF_have b \ SF_have a implies x is Filter of L & b in x & not a in x;
+  x in SF_have b \ SF_have a implies x is Filter of L & b in x &
+  not a in x;
 
 theorem :: OPENLATT:20
   for Z st Z <> {} & Z c= SF_have b \ SF_have a & Z is c=-linear
@@ -193,7 +192,8 @@ theorem :: OPENLATT:21
   not b [= a implies <.b.) in SF_have b \ SF_have a;
 
 theorem :: OPENLATT:22
-  not b [= a implies ex F st (F in F_primeSet(L) & not a in F & b in F );
+  not b [= a implies ex F st F in F_primeSet(L) & not a in F & b
+  in F;
 
 theorem :: OPENLATT:23
   a <> b implies ex F st F in F_primeSet(L);
@@ -216,11 +216,13 @@ definition
   func Set_Union L -> BinOp of StoneS(L) means
 :: OPENLATT:def 9
 
-  for A,B being Element of StoneS(L) holds it.(A,B) = A \/ B;
+  for A,B being Element of
+  StoneS(L) holds it.(A,B) = A \/ B;
   func Set_Meet L -> BinOp of StoneS(L) means
 :: OPENLATT:def 10
 
-  for A,B being Element of StoneS(L) holds it.(A,B) = A /\ B;
+  for A,B being Element of
+  StoneS(L) holds it.(A,B) = A /\ B;
 end;
 
 theorem :: OPENLATT:26
@@ -230,7 +232,8 @@ definition
   let L;
   func StoneLatt L -> Lattice equals
 :: OPENLATT:def 11
-  LattStr(#StoneS(L),Set_Union L,Set_Meet L#);
+  LattStr(#StoneS(L),Set_Union L,Set_Meet L
+  #);
 end;
 
 reserve p,q for Element of StoneLatt(L);
@@ -284,8 +287,8 @@ definition
   func HTopSpace H -> strict TopStruct means
 :: OPENLATT:def 12
 
-  the carrier of it = F_primeSet(H) &
-  the topology of it ={union A where A is Subset of StoneS(H):not
+  the carrier of it =
+F_primeSet(H) & the topology of it ={union A where A is Subset of StoneS(H):not
   contradiction};
 end;
 
@@ -295,8 +298,8 @@ registration
 end;
 
 theorem :: OPENLATT:36
-  the carrier of Open_setLatt(HTopSpace H) =
-  {union A where A is Subset of StoneS(H):not contradiction};
+  the carrier of Open_setLatt(HTopSpace H) = {union A where A is Subset
+  of StoneS(H):not contradiction};
 
 theorem :: OPENLATT:37
   StoneS(H) c= the carrier of Open_setLatt(HTopSpace H);

@@ -1,6 +1,6 @@
 :: Lebesgue's Convergence Theorem of Complex-Valued Function
 ::  by Keiko Narita , Noboru Endou and Yasunari Shidama
-:: 
+::
 :: Received March 17, 2009
 :: Copyright (c) 2009 Association of Mizar Users
 
@@ -36,1009 +36,1116 @@ environ
 begin :: Partial Sums of Real-valued Functional Sequences
 
 reserve X for non empty set,
-        S for SigmaField of X,
-        M for sigma_Measure of S,
-        E for Element of S,
-        F,G for Functional_Sequence of X,REAL,
-        I for Real_Sequence,
-        f,g for PartFunc of X,REAL,
-        seq for Real_Sequence,
-        n,m for Nat,
-        x for Element of X,
-        z,D for set;
+  S for SigmaField of X,
+  M for sigma_Measure of S,
+  E for Element of S,
+  F,G for Functional_Sequence of X,REAL,
+  I for Real_Sequence,
+  f,g for PartFunc of X,REAL,
+  seq for Real_Sequence,
+  n,m for Nat,
+  x for Element
+  of X,
+  z,D for set;
 
 definition
   let X,Y be set, F be Functional_Sequence of X,Y;
   let D be set;
   func F||D -> Functional_Sequence of X,Y means
-:Def1:
-  for n being Nat holds it.n = (F.n)|D;
+  :Def1:
+  for n being Nat holds
+  it.n = (F.n)|D;
   existence
   proof
     deffunc F(Nat) = (F.$1)|D;
-    ex G being Functional_Sequence of X,Y st
-    for n being Nat holds G.n = F(n) from SEQFUNC:sch 1;
+    ex G being Functional_Sequence of X,Y st for n being Nat holds G.n = F
+    (n) from SEQFUNC:sch 1;
     hence thesis;
   end;
   uniqueness
   proof
     let A, B be Functional_Sequence of X,Y such that
-a1: for n being Nat holds A.n = (F.n)|D and
-a2: for n being Nat holds B.n = (F.n)|D;
+A1: for n being Nat holds A.n = (F.n)|D and
+A2: for n being Nat holds B.n = (F.n)|D;
     let x be Element of NAT;
-    thus A.x = (F.x)|D by a1
-    .= B.x by a2;
+    thus A.x = (F.x)|D by A1
+      .= B.x by A2;
   end;
 end;
 
-theorem Th4:
+theorem Th1:
   x in D & F#x is convergent implies (F||D)#x is convergent
 proof
   set G = F||D;
-A1: for n be Nat holds (R_EAL G).n = ((R_EAL F).n)|D by Def1;
-   assume A2: x in D;
-   assume F#x is convergent; then
-   R_EAL(F#x) is convergent_to_finite_number by RINFSUP2:14; then
-   (R_EAL F)#x is convergent_to_finite_number by MESFUN7C:1; then
-P1:(R_EAL G)#x is convergent_to_finite_number by A1,A2,MESFUNC9:12;
-   (R_EAL G)#x = G#x by MESFUN7C:1;
-   hence thesis by P1,RINFSUP2:15;
+  assume
+A1: x in D;
+A2: (R_EAL G)#x = G#x by MESFUN7C:1;
+  assume
+  F#x is convergent;
+  then R_EAL(F#x) is convergent_to_finite_number by RINFSUP2:14;
+  then
+A3: (R_EAL F)#x is convergent_to_finite_number by MESFUN7C:1;
+  for n be Nat holds (R_EAL G).n = ((R_EAL F).n)|D by Def1;
+  then (R_EAL G)#x is convergent_to_finite_number by A1,A3,MESFUNC9:12;
+  hence thesis by A2,RINFSUP2:15;
 end;
 
-theorem Th8a:
-for X,Y,D be set, F be Functional_Sequence of X,Y st
- F is with_the_same_dom holds F||D is with_the_same_dom
+theorem Th2:
+  for X,Y,D be set, F be Functional_Sequence of X,Y st F is
+  with_the_same_dom holds F||D is with_the_same_dom
 proof
-   let X,Y,D be set, F be Functional_Sequence of X,Y;
-   assume
+  let X,Y,D be set, F be Functional_Sequence of X,Y;
+  assume
 A1: F is with_the_same_dom;
-   set G = F||D;
-   let n,m be Nat;
-   G.n = (F.n)|D & G.m = (F.m)|D by Def1; then
-   dom(G.n) = dom(F.n) /\ D & dom(G.m) = dom(F.m) /\ D by RELAT_1:90;
-   hence dom(G.n) = dom(G.m) by A1,MESFUNC8:def 2;
+  let n,m be Nat;
+  set G = F||D;
+  G.m = (F.m)|D by Def1;
+  then
+A2: dom(G.m) = dom(F.m) /\ D by RELAT_1:90;
+  G.n = (F.n)|D by Def1;
+  then dom(G.n) = dom(F.n) /\ D by RELAT_1:90;
+  hence dom(G.n) = dom(G.m) by A1,A2,MESFUNC8:def 2;
 end;
 
-theorem Th919r:
-D c= dom(F.0) &
- (for x be Element of X st x in D holds F#x is convergent) implies
-  (lim F)|D = lim (F||D)
+theorem Th3:
+  D c= dom(F.0) & (for x be Element of X st x in D holds F#x is
+  convergent) implies (lim F)|D = lim (F||D)
 proof
   set G = F||D;
-   assume that
+  assume that
 A1: D c= dom(F.0) and
-A3: for x be Element of X st x in D holds F#x is convergent;
-A4:for n be Nat holds (R_EAL G).n = ((R_EAL F).n)|D by Def1;
-   for x be Element of X st x in D holds (R_EAL F)#x is convergent
-   proof
+A2: for x be Element of X st x in D holds F#x is convergent;
+A3: for x be Element of X st x in D holds (R_EAL F)#x is convergent
+  proof
     let x be Element of X;
-    assume x in D; then
-A5: F#x is convergent by A3;
+    assume
+    x in D;
+    then
+A4: F#x is convergent by A2;
     (R_EAL F)#x = F#x by MESFUN7C:1;
-    hence (R_EAL F)#x is convergent by A5,RINFSUP2:14;
-   end;
-   hence (lim F)|D = lim G by A1,A4,MESFUNC9:19;
+    hence (R_EAL F)#x is convergent by A4,RINFSUP2:14;
+  end;
+  for n be Nat holds (R_EAL G).n = ((R_EAL F).n)|D by Def1;
+  hence (lim F)|D = lim G by A1,A3,MESFUNC9:19;
 end;
 
-theorem Th9:
-F is with_the_same_dom & E c= dom(F.0) &
-(for m be Nat holds F.m is_measurable_on E)
-implies (F||E).n is_measurable_on E
+theorem Th4:
+  F is with_the_same_dom & E c= dom(F.0) & (for m be Nat holds F.m
+  is_measurable_on E) implies (F||E).n is_measurable_on E
 proof
   set G = F||E;
-   assume A1: F is with_the_same_dom & E c= dom(F.0);
-   assume A2: for m be Nat holds F.m is_measurable_on E;
-   for m be Nat holds
-    (R_EAL F).m is_measurable_on E & (R_EAL G).m = ((R_EAL F).m)|E
-   proof
+  assume
+A1: F is with_the_same_dom & E c= dom(F.0);
+  assume
+A2: for m be Nat holds F.m is_measurable_on E;
+  for m be Nat holds (R_EAL F).m is_measurable_on E & (R_EAL G).m = ((
+  R_EAL F).m)|E
+  proof
     let m be Nat;
-    F.m is_measurable_on E by A2; then
-    R_EAL(F.m) is_measurable_on E by MESFUNC6:def 6;
+    F.m is_measurable_on E by A2;
+    then R_EAL(F.m) is_measurable_on E by MESFUNC6:def 6;
     hence (R_EAL F).m is_measurable_on E;
     thus (R_EAL G).m = ((R_EAL F).m)|E by Def1;
-   end; then
-   R_EAL(G.n) is_measurable_on E by A1,MESFUNC9:20;
-   hence G.n is_measurable_on E by MESFUNC6:def 6;
+  end;
+  then R_EAL(G.n) is_measurable_on E by A1,MESFUNC9:20;
+  hence G.n is_measurable_on E by MESFUNC6:def 6;
 end;
 
 reserve i for Element of NAT;
 
-theorem Lm10a:
+theorem Th5:
   Partial_Sums R_EAL seq = R_EAL(Partial_Sums seq)
 proof
-   defpred P[Element of NAT] means
-   (Partial_Sums(R_EAL seq)).$1 = (R_EAL Partial_Sums(seq)).$1;
-   (Partial_Sums(R_EAL seq)).0 = R_EAL seq.0 by MESFUNC9:def 1; then
-A1:P[0] by SERIES_1:def 1;
-A2:for k be Element of NAT st P[k] holds P[k+1]
-   proof
+  defpred P[Element of NAT] means (Partial_Sums(R_EAL seq)).$1 = (R_EAL
+  Partial_Sums(seq)).$1;
+A1: for k be Element of NAT st P[k] holds P[k+1]
+  proof
     let k be Element of NAT;
-    assume P[k]; then
-    (Partial_Sums(R_EAL seq)).(k+1)
-      =R_EAL Partial_Sums(seq).k + R_EAL seq.(k+1) by MESFUNC9:def 1
-     .=R_EAL(Partial_Sums(seq).k + seq.(k+1)) by MESFUN6C:1;
+    assume
+    P[k];
+    then
+    (Partial_Sums(R_EAL seq)).(k+1) =R_EAL Partial_Sums(seq).k + R_EAL seq
+    .(k+1) by MESFUNC9:def 1
+      .=R_EAL(Partial_Sums(seq).k + seq.(k+1)) by MESFUN6C:1;
     hence thesis by SERIES_1:def 1;
-   end;
-   for i holds P[i] from NAT_1:sch 1(A1,A2);
-   hence thesis by FUNCT_2:113;
+  end;
+  (Partial_Sums(R_EAL seq)).0 = R_EAL seq.0 by MESFUNC9:def 1;
+  then
+A2: P[0] by SERIES_1:def 1;
+  for i holds P[i] from NAT_1:sch 1(A2,A1);
+  hence thesis by FUNCT_2:113;
+end;
+
+theorem Th6:
+  (for x be Element of X st x in E holds F#x is summable) implies
+  for x be Element of X st x in E holds (F||E)#x is summable
+proof
+  set G = F||E;
+  assume
+A1: for x be Element of X st x in E holds F#x is summable;
+  let x be Element of X;
+  assume
+A2: x in E;
+  for n be Element of NAT holds (F#x).n = (G#x).n
+  proof
+    let n be Element of NAT;
+    (F#x).n = (F.n).x by SEQFUNC:def 11;
+    then (F#x).n = ((F.n)|E).x by A2,FUNCT_1:72;
+    then (F#x).n = (G.n).x by Def1;
+    hence (F#x).n = (G#x).n by SEQFUNC:def 11;
+  end;
+  then
+A3: Partial_Sums(F#x) = Partial_Sums(G#x) by FUNCT_2:113;
+  F#x is summable by A1,A2;
+  then Partial_Sums(F#x) is convergent by SERIES_1:def 2;
+  hence G#x is summable by A3,SERIES_1:def 2;
+end;
+
+definition
+  let X be non empty set, F be Functional_Sequence of X,REAL;
+  func Partial_Sums F -> Functional_Sequence of X,REAL means
+  :Def2:
+  it.0 = F.0
+  & for n be Nat holds it.(n+1) = it.n + F.(n+1);
+  existence
+  proof
+    defpred P[Element of NAT,set,set] means (not $2 is PartFunc of X,REAL & $3
+= F.$1) or ($2 is PartFunc of X,REAL & for F2 be PartFunc of X,REAL st F2 = $2
+    holds $3 = F2 + F.($1+1));
+A1: for n being Element of NAT for x being set ex y being set st P[n,x,y]
+    proof
+      let n be Element of NAT;
+      let x be set;
+      now
+        assume
+        x is PartFunc of X,REAL;
+        then reconsider G2 = x as PartFunc of X,REAL;
+        take y = G2 + F.(n+1);
+        thus not x is PartFunc of X,REAL & y = F.n or (x is PartFunc of X,REAL
+        & for F2 be PartFunc of X,REAL st F2 = x holds y = F2 + F.(n+1));
+      end;
+      hence thesis;
+    end;
+    consider IT being Function such that
+A2: dom IT = NAT & IT.0 = F.0 & for n being Element of NAT holds P[n,
+    IT.n,IT.(n+1)] from RECDEF_1:sch 1(A1);
+    now
+      defpred IND[Element of NAT] means IT.$1 is PartFunc of X,REAL;
+      let f be set;
+      assume
+      f in rng IT;
+      then consider m be set such that
+A3:   m in dom IT and
+A4:   f = IT.m by FUNCT_1:def 5;
+      reconsider m as Element of NAT by A2,A3;
+A5:   for n be Element of NAT st IND[n] holds IND[n+1]
+      proof
+        let n be Element of NAT;
+        assume
+        IND[n];
+        then reconsider F2 = IT.n as PartFunc of X,REAL;
+        IT.(n+1) = F2 + F.(n+1) by A2;
+        hence IND[n+1];
+      end;
+A6:   IND[0] by A2;
+      for n be Element of NAT holds IND[n] from NAT_1:sch 1(A6,A5);
+      then IT.m is PartFunc of X,REAL;
+      hence f in PFuncs(X,REAL) by A4,PARTFUN1:119;
+    end;
+    then rng IT c= PFuncs(X,REAL) by TARSKI:def 3;
+    then reconsider IT as Functional_Sequence of X,REAL by A2,FUNCT_2:def 1,
+    RELSET_1:11;
+    take IT;
+    for n be Nat holds IT.(n+1) = IT.n + F.(n+1)
+    proof
+      let n be Nat;
+      n is Element of NAT by ORDINAL1:def 13;
+      hence IT.(n+1) = IT.n + F.(n+1) by A2;
+    end;
+    hence thesis by A2;
+  end;
+  uniqueness
+  proof
+    let PS1,PS2 be Functional_Sequence of X,REAL;
+    assume that
+A7: PS1.0 = F.0 and
+A8: for n be Nat holds PS1.(n+1) = PS1.n + F.(n+1) and
+A9: PS2.0 = F.0 and
+A10: for n be Nat holds PS2.(n+1) = PS2.n + F.(n+1);
+    defpred IND[Nat] means PS1.$1 = PS2.$1;
+A11: for n be Nat st IND[n] holds IND[n+1]
+    proof
+      let n be Nat;
+      assume
+A12:  IND[n];
+      PS1.(n+1) = PS1.n + F.(n+1) by A8;
+      hence PS1.(n+1) = PS2.(n+1) by A10,A12;
+    end;
+A13: IND[0] by A7,A9;
+    for n be Nat holds IND[n] from NAT_1:sch 2(A13,A11);
+    then for m be Element of NAT holds PS1.m = PS2.m;
+    hence thesis by FUNCT_2:113;
+  end;
+end;
+
+theorem Th7:
+  Partial_Sums R_EAL F = R_EAL(Partial_Sums F)
+proof
+  defpred P[Element of NAT] means (Partial_Sums(R_EAL F)).$1 = (R_EAL
+  Partial_Sums F).$1;
+A1: for k be Element of NAT st P[k] holds P[k+1]
+  proof
+    let k be Element of NAT;
+    assume
+    P[k];
+    then
+    (Partial_Sums(R_EAL F)).(k+1) =R_EAL((Partial_Sums F).k) +R_EAL(F.(k+1
+    )) by MESFUNC9:def 4
+      .=R_EAL((Partial_Sums F).k + F.(k+1)) by MESFUNC6:23;
+    hence thesis by Def2;
+  end;
+  (Partial_Sums(R_EAL F)).0 = (R_EAL F).0 by MESFUNC9:def 4
+    .= R_EAL(Partial_Sums(F).0) by Def2;
+  then
+A2: P[0];
+  for i holds P[i] from NAT_1:sch 1(A2,A1);
+  hence thesis by FUNCT_2:113;
+end;
+
+theorem Th8:
+  z in dom((Partial_Sums F).n) & m <= n implies z in dom((
+  Partial_Sums F).m) & z in dom(F.m)
+proof
+  (Partial_Sums F).n = (R_EAL(Partial_Sums F)).n;
+  then
+A1: (Partial_Sums F).n = (Partial_Sums R_EAL F).n by Th7;
+  (Partial_Sums R_EAL F).m = (R_EAL(Partial_Sums F)).m by Th7;
+  hence thesis by A1,MESFUNC9:22;
+end;
+
+theorem Th9:
+  R_EAL F is additive
+proof
+  now
+    let n,m be Nat;
+    assume
+    n <> m;
+    let x be set;
+    assume
+    x in dom((R_EAL F).n) /\ dom((R_EAL F).m);
+    (R_EAL F).n = R_EAL(F.n);
+    hence ((R_EAL F).n).x <> +infty or ((R_EAL F).m).x <> -infty;
+  end;
+  hence thesis by MESFUNC9:def 5;
 end;
 
 theorem Th10:
-(for x be Element of X st x in E holds F#x is summable)
-implies for x be Element of X st x in E holds (F||E)#x is summable
+  dom((Partial_Sums F).n) = meet{dom(F.k) where k is Element of
+  NAT : k <= n}
 proof
-  set G = F||E;
-   assume that
-A3: for x be Element of X st x in E holds F#x is summable;
-   let x be Element of X;
-   assume P01: x in E; then
-   F#x is summable by A3; then
-P1:Partial_Sums(F#x) is convergent by SERIES_1:def 2;
-   for n be Element of NAT holds (F#x).n = (G#x).n
-   proof
-    let n be Element of NAT;
-    (F#x).n = (F.n).x by SEQFUNC:def 11; then
-    (F#x).n = ((F.n)|E).x by P01,FUNCT_1:72; then
-    (F#x).n = (G.n).x by Def1;
-    hence (F#x).n = (G#x).n by SEQFUNC:def 11;
-   end; then
-   Partial_Sums(F#x) = Partial_Sums(G#x) by FUNCT_2:113;
-   hence G#x is summable by P1,SERIES_1:def 2;
-end;
-
-definition let X be non empty set, F be Functional_Sequence of X,REAL;
- func Partial_Sums F -> Functional_Sequence of X,REAL means :Def0:
- it.0 = F.0 & for n be Nat holds it.(n+1) = it.n + F.(n+1);
-existence
-proof
-   defpred P[Element of NAT,set,set] means
-    (not $2 is PartFunc of X,REAL & $3 = F.$1) or
-    ($2 is PartFunc of X,REAL &
-     for F2 be PartFunc of X,REAL st F2 = $2 holds
-      $3 = F2 + F.($1+1));
-
-P1:for n being Element of NAT for x being set
-     ex y being set st P[n,x,y]
-   proof
-    let n be Element of NAT;
-    let x be set;
-    now assume x is PartFunc of X,REAL; then
-     reconsider G2 = x as PartFunc of X,REAL;
-     take y = G2 + F.(n+1);
-     thus (not x is PartFunc of X,REAL & y = F.n) or
-          (x is PartFunc of X,REAL &
-           for F2 be PartFunc of X,REAL st F2 = x holds
-            y = F2 + F.(n+1));
-    end;
-    hence thesis;
-   end;
-
-   consider IT being Function such that
-P3: dom IT = NAT & IT.0 = F.0 &
-    for n being Element of NAT holds P[n,IT.n,IT.(n+1)]
-       from RECDEF_1:sch 1(P1);
-
-   now let f be set;
-    assume f in rng IT; then
-    consider m be set such that
-P41: m in dom IT & f = IT.m by FUNCT_1:def 5;
-    reconsider m as Element of NAT by P41,P3;
-
-    defpred IND[Element of NAT] means IT.$1 is PartFunc of X,REAL;
-
-P42:IND[0] by P3;
-P43:for n be Element of NAT st IND[n] holds IND[n+1]
-    proof
-     let n be Element of NAT;
-     assume IND[n]; then
-     reconsider F2 = IT.n as PartFunc of X,REAL;
-     IT.(n+1) = F2 + F.(n+1) by P3;
-     hence IND[n+1];
-    end;
-    for n be Element of NAT holds IND[n] from NAT_1:sch 1(P42,P43); then
-    IT.m is PartFunc of X,REAL;
-    hence f in PFuncs(X,REAL) by P41,PARTFUN1:119;
-   end; then
-   rng IT c= PFuncs(X,REAL) by TARSKI:def 3; then
-   reconsider IT as Functional_Sequence of X,REAL
-     by P3,RELSET_1:11,FUNCT_2:def 1;
-
-   take IT;
-   for n be Nat holds IT.(n+1) = IT.n + F.(n+1)
-   proof
-    let n be Nat;
-    n is Element of NAT by ORDINAL1:def 13;
-    hence IT.(n+1) = IT.n + F.(n+1) by P3;
-   end;
-   hence thesis by P3;
-end;
-uniqueness
-proof
-   let PS1,PS2 be Functional_Sequence of X,REAL;
-   assume that
-A1: PS1.0 = F.0 & for n be Nat holds PS1.(n+1) = PS1.n + F.(n+1) and
-A2: PS2.0 = F.0 & for n be Nat holds PS2.(n+1) = PS2.n + F.(n+1);
-
-   defpred IND[Nat] means PS1.$1 = PS2.$1;
-
-P1:IND[0] by A1,A2;
-P2:for n be Nat st IND[n] holds IND[n+1]
-   proof
-    let n be Nat;
-    assume P21: IND[n];
-    PS1.(n+1) = PS1.n + F.(n+1) by A1;
-    hence PS1.(n+1) = PS2.(n+1) by A2,P21;
-   end;
-   for n be Nat holds IND[n] from NAT_1:sch 2(P1,P2); then
-
-   for m be Element of NAT holds PS1.m = PS2.m;
-   hence thesis by FUNCT_2:113;
-end;
-end;
-
-theorem Lm11:
-  Partial_Sums R_EAL F = R_EAL(Partial_Sums F)
-proof
-   defpred P[Element of NAT] means
-     (Partial_Sums(R_EAL F)).$1 = (R_EAL Partial_Sums F).$1;
-
-   (Partial_Sums(R_EAL F)).0 = (R_EAL F).0 by MESFUNC9:def 4
-      .= R_EAL(Partial_Sums(F).0) by Def0; then
-A1:P[0];
-A2:for k be Element of NAT st P[k] holds P[k+1]
-   proof
-    let k be Element of NAT;
-    assume P[k]; then
-    (Partial_Sums(R_EAL F)).(k+1)
-       =R_EAL((Partial_Sums F).k) +R_EAL(F.(k+1)) by MESFUNC9:def 4
-      .=R_EAL((Partial_Sums F).k + F.(k+1)) by MESFUNC6:23;
-    hence thesis by Def0;
-   end;
-   for i holds P[i] from NAT_1:sch 1(A1,A2);
-   hence thesis by FUNCT_2:113;
+  dom((Partial_Sums R_EAL F).n) = meet{dom((R_EAL F).k) where k is Element
+of NAT : k <= n} & (Partial_Sums R_EAL F).n = (R_EAL(Partial_Sums F)).n by Th7
+  ,Th9,MESFUNC9:28;
+  hence thesis;
 end;
 
 theorem Th11:
-z in dom((Partial_Sums F).n) & m <= n implies
-      z in dom((Partial_Sums F).m) & z in dom(F.m)
+  F is with_the_same_dom implies dom((Partial_Sums F).n) = dom(F.0
+  )
 proof
-   (Partial_Sums F).n = (R_EAL(Partial_Sums F)).n; then
-B1:(Partial_Sums F).n = (Partial_Sums R_EAL F).n by Lm11;
-   (Partial_Sums R_EAL F).m = (R_EAL(Partial_Sums F)).m by Lm11;
-   hence thesis by B1,MESFUNC9:22;
+  assume
+  F is with_the_same_dom;
+  then dom((Partial_Sums R_EAL F).n) = dom((R_EAL F).0) by
+  Th9,MESFUNC9:29;
+  then dom((R_EAL(Partial_Sums F)).n) = dom((R_EAL F).0) by Th7;
+  hence thesis;
 end;
 
-theorem Lem20:
-  R_EAL F is additive
+theorem Th12:
+  F is with_the_same_dom & D c= dom(F.0) & x in D implies (
+  Partial_Sums(F#x)).n = ((Partial_Sums F)#x).n
 proof
-  now let n,m be Nat;
-    assume n <> m;
-    let x be set;
-    assume x in dom((R_EAL F).n) /\ dom((R_EAL F).m);
-    (R_EAL F).n = R_EAL(F.n);
-    hence ((R_EAL F).n).x <> +infty or ((R_EAL F).m).x <> -infty;
-   end;
-   hence thesis by MESFUNC9:def 5;
+  assume
+  F is with_the_same_dom & D c= dom(F.0) & x in D;
+  then (Partial_Sums((R_EAL F)#x)).n = ((Partial_Sums(R_EAL F))#x).n by
+  Th9,
+  MESFUNC9:32;
+  then (Partial_Sums(R_EAL(F#x))).n = ((Partial_Sums(R_EAL F))#x).n by
+  MESFUN7C:1;
+  then (R_EAL(Partial_Sums(F#x))).n = ((Partial_Sums(R_EAL F))#x).n by
+  Th5;
+  then R_EAL((Partial_Sums(F#x)).n) = ((R_EAL(Partial_Sums F))#x).n by
+  Th7;
+  hence thesis by MESFUN7C:1;
 end;
 
-theorem Lem07:
-  dom((Partial_Sums F).n) = meet{dom(F.k) where k is Element of NAT : k <= n}
+theorem Th13:
+  F is with_the_same_dom & D c= dom(F.0) & x in D implies (
+  Partial_Sums(F#x) is convergent iff (Partial_Sums F)#x is convergent )
 proof
-A1:dom((Partial_Sums R_EAL F).n)
-    = meet{dom((R_EAL F).k) where k is Element of NAT : k <= n}
-      by Lem20,MESFUNC9:28;
-   (Partial_Sums R_EAL F).n = (R_EAL(Partial_Sums F)).n by Lm11;
-   hence thesis by A1;
+  assume
+A1: F is with_the_same_dom & D c= dom(F.0) & x in D;
+A2: R_EAL(F#x) = (R_EAL F)#x by MESFUN7C:1;
+  Partial_Sums R_EAL F = R_EAL(Partial_Sums F) by Th7;
+  then
+A3: (Partial_Sums(R_EAL F))#x= (Partial_Sums F)#x by MESFUN7C:1;
+A4: Partial_Sums(F#x) = R_EAL(Partial_Sums(F#x))
+    .= Partial_Sums(R_EAL(F#x)) by Th5;
+A5: R_EAL F is additive by Th9;
+  hereby
+    assume
+    Partial_Sums(F#x) is convergent;
+    then Partial_Sums(R_EAL(F#x)) is convergent_to_finite_number by A4,
+    RINFSUP2:14;
+    then
+    (Partial_Sums(R_EAL F))#x is convergent_to_finite_number by A1,A5,A2,
+    MESFUNC9:33;
+    hence (Partial_Sums F)#x is convergent by A3,RINFSUP2:15;
+  end;
+  assume
+  (Partial_Sums F)#x is convergent;
+  then (Partial_Sums(R_EAL F))#x is convergent_to_finite_number by A3,
+  RINFSUP2:14;
+  then Partial_Sums((R_EAL F)#x) is convergent_to_finite_number by A1,A5,
+  MESFUNC9:33;
+  hence Partial_Sums(F#x) is convergent by A4,A2,RINFSUP2:15;
 end;
 
-theorem ADD0:
-F is with_the_same_dom implies
-  dom((Partial_Sums F).n) = dom(F.0)
-proof
-   assume F is with_the_same_dom; then
-   dom((Partial_Sums R_EAL F).n) = dom((R_EAL F).0) by Lem20,MESFUNC9:29; then
-   dom((R_EAL(Partial_Sums F)).n) = dom((R_EAL F).0) by Lm11;
-   hence thesis;
-end;
-
-theorem Cor00:
-F is with_the_same_dom & D c= dom(F.0) & x in D implies
-  (Partial_Sums(F#x)).n = ((Partial_Sums F)#x).n
-proof
-   assume F is with_the_same_dom & D c= dom(F.0) & x in D; then
-   (Partial_Sums((R_EAL F)#x)).n = ((Partial_Sums(R_EAL F))#x).n
-     by Lem20,MESFUNC9:32; then
-   (Partial_Sums(R_EAL(F#x))).n = ((Partial_Sums(R_EAL F))#x).n
-     by MESFUN7C:1; then
-   (R_EAL(Partial_Sums(F#x))).n = ((Partial_Sums(R_EAL F))#x).n by Lm10a; then
-   R_EAL((Partial_Sums(F#x)).n) = ((R_EAL(Partial_Sums F))#x).n by Lm11;
-   hence thesis by MESFUN7C:1;
-end;
-
-theorem Cor01:
- F is with_the_same_dom & D c= dom(F.0) & x in D implies
-  ( Partial_Sums(F#x) is convergent iff (Partial_Sums F)#x is convergent )
-proof
-   assume A1: F is with_the_same_dom & D c= dom(F.0) & x in D;
-B2:R_EAL F is additive by Lem20;
-
-B4:Partial_Sums(F#x) = R_EAL(Partial_Sums(F#x))
-    .= Partial_Sums(R_EAL(F#x)) by Lm10a;
-B5:R_EAL(F#x) = (R_EAL F)#x by MESFUN7C:1;
-   Partial_Sums R_EAL F = R_EAL(Partial_Sums F) by Lm11; then
-B6:(Partial_Sums(R_EAL F))#x= (Partial_Sums F)#x by MESFUN7C:1;
-   hereby assume Partial_Sums(F#x) is convergent; then
-    Partial_Sums(R_EAL(F#x)) is convergent_to_finite_number
-       by B4,RINFSUP2:14; then
-    (Partial_Sums(R_EAL F))#x is convergent_to_finite_number
-      by A1,B2,B5,MESFUNC9:33;
-    hence (Partial_Sums F)#x is convergent by B6,RINFSUP2:15;
-   end;
-   assume (Partial_Sums F)#x is convergent; then
-   (Partial_Sums(R_EAL F))#x is convergent_to_finite_number
-     by B6,RINFSUP2:14; then
-   Partial_Sums((R_EAL F)#x) is convergent_to_finite_number
-     by A1,B2,MESFUNC9:33;
-   hence Partial_Sums(F#x) is convergent by B4,B5,RINFSUP2:15;
-end;
-
-theorem Th934r:
-F is with_the_same_dom & dom f c= dom(F.0) &
-x in dom f & f.x = Sum(F#x) implies
-   f.x = lim((Partial_Sums F)#x)
+theorem Th14:
+  F is with_the_same_dom & dom f c= dom(F.0) & x in dom f & f.x =
+  Sum(F#x) implies f.x = lim((Partial_Sums F)#x)
 proof
   assume that
 A1: F is with_the_same_dom & dom f c= dom(F.0) & x in dom f and
 A2: f.x = Sum(F#x);
-
-A3:for n be set st n in NAT holds
-   (Partial_Sums(F#x)).n = ((Partial_Sums F)#x).n by A1,Cor00;
-  dom Partial_Sums(F#x) = NAT & dom ((Partial_Sums F)#x) = NAT
-    by FUNCT_2:def 1;
+A3: dom Partial_Sums(F#x) = NAT & dom ((Partial_Sums F)#x) = NAT by FUNCT_2:
+  def 1;
+  for n be set st n in NAT holds (Partial_Sums(F#x)).n = ((Partial_Sums F)#
+  x).n by A1,Th12;
   hence f.x = lim((Partial_Sums F)#x) by A2,A3,FUNCT_1:9;
 end;
 
-theorem Th16:
-(for m be Nat holds F.m is_simple_func_in S) implies
-  (Partial_Sums F).n is_simple_func_in S
+theorem Th15:
+  (for m be Nat holds F.m is_simple_func_in S) implies (
+  Partial_Sums F).n is_simple_func_in S
 proof
-  assume A1: for m be Nat holds F.m is_simple_func_in S;
+  assume
+A1: for m be Nat holds F.m is_simple_func_in S;
   for m be Nat holds (R_EAL F).m is_simple_func_in S
   proof
-   let m be Nat;
-    F.m is_simple_func_in S by A1; then
-    R_EAL(F.m) is_simple_func_in S by MESFUNC6:49;
+    let m be Nat;
+    F.m is_simple_func_in S by A1;
+    then R_EAL(F.m) is_simple_func_in S by MESFUNC6:49;
     hence (R_EAL F).m is_simple_func_in S;
-  end; then
-  (Partial_Sums R_EAL F).n is_simple_func_in S by MESFUNC9:35; then
-  (R_EAL(Partial_Sums F)).n is_simple_func_in S by Lm11; then
-  R_EAL((Partial_Sums F).n) is_simple_func_in S;
+  end;
+  then (Partial_Sums R_EAL F).n is_simple_func_in S by MESFUNC9:35;
+  then (R_EAL(Partial_Sums F)).n is_simple_func_in S by Th7;
+  then R_EAL((Partial_Sums F).n) is_simple_func_in S;
   hence (Partial_Sums F).n is_simple_func_in S by MESFUNC6:49;
 end;
 
-theorem ADD1:
-(for n be Nat holds F.n is_measurable_on E)
-implies
-(Partial_Sums F).m is_measurable_on E
+theorem Th16:
+  (for n be Nat holds F.n is_measurable_on E) implies (
+  Partial_Sums F).m is_measurable_on E
 proof
-   set PF = Partial_Sums F;
-   defpred P[Nat] means PF.$1 is_measurable_on E;
-   assume
+  set PF = Partial_Sums F;
+  defpred P[Nat] means PF.$1 is_measurable_on E;
+  assume
 A1: for n be Nat holds F.n is_measurable_on E;
-
-   PF.0 = F.0 by Def0; then
-C1:P[0] by A1;
-
-C2:for k being Nat st P[k] holds P[k+1]
-   proof
+A2: for k being Nat st P[k] holds P[k+1]
+  proof
     let k be Nat;
-    assume C03: P[k];
-    F.(k+1) is_measurable_on E by A1; then
-    PF.k + F.(k+1) is_measurable_on E by C03,MESFUNC6:26;
-    hence thesis by Def0;
-   end;
-   for k being Nat holds P[k] from NAT_1:sch 2(C1,C2);
-   hence (Partial_Sums F).m is_measurable_on E;
+    assume
+A3: P[k];
+    F.(k+1) is_measurable_on E by A1;
+    then PF.k + F.(k+1) is_measurable_on E by A3,MESFUNC6:26;
+    hence thesis by Def2;
+  end;
+  PF.0 = F.0 by Def2;
+  then
+A4: P[0] by A1;
+  for k being Nat holds P[k] from NAT_1:sch 2(A4,A2);
+  hence (Partial_Sums F).m is_measurable_on E;
 end;
 
-theorem ADD5:
-for X be non empty set, F be Functional_Sequence of X,REAL st
-  F is with_the_same_dom holds
-  Partial_Sums F is with_the_same_dom
+theorem Th17:
+  for X be non empty set, F be Functional_Sequence of X,REAL st F
+  is with_the_same_dom holds Partial_Sums F is with_the_same_dom
 proof
-   let X be non empty set, F be Functional_Sequence of X,REAL;
-   assume A1: F is with_the_same_dom;
-   let n,m be Nat;
-   dom((Partial_Sums F).n) = dom(F.0) by A1,ADD0;
-   hence dom((Partial_Sums F).n) = dom((Partial_Sums F).m) by A1,ADD0;
+  let X be non empty set, F be Functional_Sequence of X,REAL;
+  assume
+A1: F is with_the_same_dom;
+  let n,m be Nat;
+  dom((Partial_Sums F).n) = dom(F.0) by A1,Th11;
+  hence dom((Partial_Sums F).n) = dom((Partial_Sums F).m) by A1,Th11;
 end;
 
-theorem Th22:
-dom(F.0) = E & F is with_the_same_dom &
-(for n be Nat holds (Partial_Sums F).n is_measurable_on E) &
-(for x be Element of X st x in E holds F#x is summable)
-  implies lim(Partial_Sums F) is_measurable_on E
+theorem Th18:
+  dom(F.0) = E & F is with_the_same_dom & (for n be Nat holds (
+Partial_Sums F).n is_measurable_on E) & (for x be Element of X st x in E holds
+  F#x is summable) implies lim(Partial_Sums F) is_measurable_on E
 proof
-   assume that
-A1: dom(F.0) = E and
-A5: F is with_the_same_dom and
+  assume that
+A1: dom(F.0) = E & F is with_the_same_dom and
 A2: for n be Nat holds (Partial_Sums F).n is_measurable_on E and
 A3: for x be Element of X st x in E holds F#x is summable;
-
-P1:dom((Partial_Sums F).0) = E by ADD0,A1,A5;
-
-A4:Partial_Sums F is with_the_same_dom Functional_Sequence of X,REAL
-     by A5,ADD5;
-   now let x be Element of X;
-    assume Q1: x in E; then
-    F#x is summable by A3; then
-    Partial_Sums(F#x) is convergent by SERIES_1:def 2;
-    hence (Partial_Sums F)#x is convergent by A1,A5,Q1,Cor01;
-   end;
-   hence thesis by P1,A2,A4,MESFUN7C:21;
+A4: now
+    let x be Element of X;
+    assume
+A5: x in E;
+    then F#x is summable by A3;
+    then Partial_Sums(F#x) is convergent by SERIES_1:def 2;
+    hence (Partial_Sums F)#x is convergent by A1,A5,Th13;
+  end;
+  dom((Partial_Sums F).0) = E & Partial_Sums F is with_the_same_dom
+  Functional_Sequence of X,REAL by A1,Th11,Th17;
+  hence thesis by A2,A4,MESFUN7C:21;
 end;
 
-theorem Th23:
-(for n be Nat holds F.n is_integrable_on M)
-implies
- (for m be Nat holds (Partial_Sums F).m is_integrable_on M)
+theorem Th19:
+  (for n be Nat holds F.n is_integrable_on M) implies for m be Nat
+  holds (Partial_Sums F).m is_integrable_on M
 proof
-  assume A1: for n be Nat holds F.n is_integrable_on M;
-B1:for n be Nat holds (R_EAL F).n is_integrable_on M
-   proof
+  assume
+A1: for n be Nat holds F.n is_integrable_on M;
+  let m be Nat;
+  for n be Nat holds (R_EAL F).n is_integrable_on M
+  proof
     let n be Nat;
-    F.n is_integrable_on M by A1; then
-    R_EAL(F.n) is_integrable_on M by MESFUNC6:def 9;
+    F.n is_integrable_on M by A1;
+    then R_EAL(F.n) is_integrable_on M by MESFUNC6:def 9;
     hence (R_EAL F).n is_integrable_on M;
-   end;
-   let m be Nat;
-   (Partial_Sums R_EAL F).m is_integrable_on M by B1,MESFUNC9:45; then
-   ((R_EAL(Partial_Sums F)).m) is_integrable_on M by Lm11; then
-   (R_EAL((Partial_Sums F).m)) is_integrable_on M;
-   hence (Partial_Sums F).m is_integrable_on M by MESFUNC6:def 9;
+  end;
+  then (Partial_Sums R_EAL F).m is_integrable_on M by MESFUNC9:45;
+  then ((R_EAL(Partial_Sums F)).m) is_integrable_on M by Th7;
+  then (R_EAL((Partial_Sums F).m)) is_integrable_on M;
+  hence (Partial_Sums F).m is_integrable_on M by MESFUNC6:def 9;
 end;
 
 begin :: Partial Sums of Complex-valued Functional Sequences
 
 reserve F,G for Functional_Sequence of X,COMPLEX,
-        f for PartFunc of X,COMPLEX,
-        A for set;
+  f for PartFunc of X,COMPLEX,
+  A for set;
 
-theorem MES6C7:
-(Re f)|A = Re(f|A) & (Im f)|A = Im(f|A)
+theorem Th20:
+  (Re f)|A = Re(f|A) & (Im f)|A = Im(f|A)
 proof
-   dom((Re f)|A) = (dom Re f) /\ A by RELAT_1:90 .= dom f /\ A
-    by MESFUN6C:def 1; then
-A1:dom((Re f)|A) = dom(f|A) by RELAT_1:90 .= dom Re(f|A)
-    by MESFUN6C:def 1;
-   now let x be set;
-    assume A2: x in dom(Re(f)|A); then
-    x in dom Re(f) /\ A by RELAT_1:90; then
-A3: x in dom Re f & x in A by XBOOLE_0:def 4;
+  dom((Re f)|A) = (dom Re f) /\ A by RELAT_1:90
+    .= dom f /\ A by MESFUN6C:def 1;
+  then
+A1: dom((Re f)|A) = dom(f|A) by RELAT_1:90
+    .= dom Re(f|A) by MESFUN6C:def 1;
+  now
+    let x be set;
+    assume
+A2: x in dom(Re(f)|A);
+    then
+A3: x in dom Re(f) /\ A by RELAT_1:90;
+    then
+A4: x in dom Re f by XBOOLE_0:def 4;
+A5: x in A by A3,XBOOLE_0:def 4;
     thus Re(f|A).x = Re((f|A).x) by A1,A2,MESFUN6C:def 1
-                   .= Re(f.x) by A3,FUNCT_1:72
-                   .= (Re f).x by A3,MESFUN6C:def 1
-                   .= ((Re f)|A).x by A3,FUNCT_1:72;
-   end;
-   hence (Re f)|A = Re(f|A) by A1,FUNCT_1:9;
-   dom((Im f)|A) = dom Im f /\ A by RELAT_1:90; then
-   dom((Im f)|A) = dom f /\ A by MESFUN6C:def 2; then
-B1:dom((Im f)|A) = dom(f|A) by RELAT_1:90 .= dom Im(f|A) by MESFUN6C:def 2;
-   now let x be set;
-    assume B2: x in dom(Im(f)|A); then
-    x in dom Im f /\ A by RELAT_1:90; then
-B3: x in dom Im f & x in A by XBOOLE_0:def 4;
-    thus Im(f|A).x = Im((f|A).x) by B1,B2,MESFUN6C:def 2
-                   .= Im(f.x) by B3,FUNCT_1:72
-                   .= (Im f).x by B3,MESFUN6C:def 2
-                   .= ((Im f)|A).x by B3,FUNCT_1:72;
-   end;
-   hence (Im f)|A = Im(f|A) by B1,FUNCT_1:9;
+      .= Re(f.x) by A5,FUNCT_1:72
+      .= (Re f).x by A4,MESFUN6C:def 1
+      .= ((Re f)|A).x by A5,FUNCT_1:72;
+  end;
+  hence (Re f)|A = Re(f|A) by A1,FUNCT_1:9;
+  dom((Im f)|A) = dom Im f /\ A by RELAT_1:90;
+  then dom((Im f)|A) = dom f /\ A by MESFUN6C:def 2;
+  then
+A6: dom((Im f)|A) = dom(f|A) by RELAT_1:90
+    .= dom Im(f|A) by MESFUN6C:def 2;
+  now
+    let x be set;
+    assume
+A7: x in dom(Im(f)|A);
+    then
+A8: x in dom Im f /\ A by RELAT_1:90;
+    then
+A9: x in dom Im f by XBOOLE_0:def 4;
+A10: x in A by A8,XBOOLE_0:def 4;
+    thus Im(f|A).x = Im((f|A).x) by A6,A7,MESFUN6C:def 2
+      .= Im(f.x) by A10,FUNCT_1:72
+      .= (Im f).x by A9,MESFUN6C:def 2
+      .= ((Im f)|A).x by A10,FUNCT_1:72;
+  end;
+  hence (Im f)|A = Im(f|A) by A6,FUNCT_1:9;
 end;
 
-Lem30:
-for n be Nat holds (Re (F||D)).n = ((Re F).n)|D & (Im (F||D)).n = ((Im F).n)|D
+Lm1: for n be Nat holds (Re (F||D)).n = ((Re F).n)|D & (Im (F||D)).n = ((Im F)
+.n)|D
+
 proof
-   set G = F||D;
-   let n be Nat;
-P2:Re(G.n) = (Re G).n & Im(G.n) = (Im G).n by MESFUN7C:24;
-   Re((F.n)|D) = (Re(F.n))|D & Im((F.n)|D) = (Im(F.n))|D by MES6C7; then
-   Re((F.n)|D) = ((Re F).n)|D & Im((F.n)|D) = ((Im F).n)|D by MESFUN7C:24;
-   hence (Re G).n = ((Re F).n)|D & (Im G).n = ((Im F).n)|D by Def1,P2;
+  set G = F||D;
+  let n be Nat;
+  Re((F.n)|D) = (Re(F.n))|D by Th20;
+  then
+A1: Re((F.n)|D) = ((Re F).n)|D by MESFUN7C:24;
+  Im((F.n)|D) = (Im(F.n))|D by Th20;
+  then
+A2: Im((F.n)|D) = ((Im F).n)|D by MESFUN7C:24;
+  Re(G.n) = (Re G).n & Im(G.n) = (Im G).n by MESFUN7C:24;
+  hence (Re G).n = ((Re F).n)|D & (Im G).n = ((Im F).n)|D by A1,A2,Def1;
 end;
 
-theorem Lm31:
+theorem Th21:
   Re (F||D) = (Re F)||D
 proof
-   let n be Element of NAT;
-   (Re (F||D)).n = ((Re F).n)|D by Lem30;
-   hence thesis by Def1;
+  let n be Element of NAT;
+  (Re (F||D)).n = ((Re F).n)|D by Lm1;
+  hence thesis by Def1;
 end;
 
-theorem Lm32:
+theorem Th22:
   Im (F||D) = (Im F)||D
 proof
-   let n be Element of NAT;
-   (Im (F||D)).n = ((Im F).n)|D by Lem30;
-   hence thesis by Def1;
+  let n be Element of NAT;
+  (Im (F||D)).n = ((Im F).n)|D by Lm1;
+  hence thesis by Def1;
 end;
 
-theorem M9C32c:
-F is with_the_same_dom & D c= dom(F.0) & x in D implies
-(F#x is convergent implies (F||D)#x is convergent)
+theorem Th23:
+  F is with_the_same_dom & D c= dom(F.0) & x in D implies (F#x is
+  convergent implies (F||D)#x is convergent)
 proof
   set G = F||D;
   assume that
-A0: F is with_the_same_dom and
-A1: D c= dom(F.0) and
+A1: F is with_the_same_dom and
+A2: D c= dom(F.0) and
 A3: x in D;
- Re G = (Re F)||D & Im G = (Im F)||D by Lm31,Lm32; then
-B3:( (Re F)#x is convergent implies (Re G)#x is convergent ) &
-   ( (Im F)#x is convergent implies (Im G)#x is convergent ) by A3,Th4;
-   dom((Re F).0) = dom(F.0) by MESFUN7C:def 11; then
-   dom(((Re F).0)|D) = D by A1,RELAT_1:91; then
-   dom((Re G).0) = D by Lem30; then
-B6:dom(G.0) = D by MESFUN7C:def 11;
-   G is with_the_same_dom by A0,Th8a; then
-   (Re F)#x = Re(F#x) & (Im F)#x = Im(F#x) &
-   (Re G)#x = Re(G#x) & (Im G)#x = Im(G#x) by A0,A1,A3,B6,MESFUN7C:23;
-   hence thesis by B3,COMSEQ_3:42;
+  Re G = (Re F)||D by Th21;
+  then
+A4: (Re F)#x is convergent implies (Re G)#x is convergent by A3,Th1;
+  dom((Re F).0) = dom(F.0) by MESFUN7C:def 11;
+  then dom(((Re F).0)|D) = D by A2,RELAT_1:91;
+  then dom((Re G).0) = D by Lm1;
+  then
+A5: dom(G.0) = D by MESFUN7C:def 11;
+  G is with_the_same_dom by A1,Th2;
+  then
+A6: (Re G)#x = Re(G#x) & (Im G)#x = Im(G#x) by A3,A5,MESFUN7C:23;
+  Im G = (Im F)||D by Th22;
+  then
+A7: (Im F)#x is convergent implies (Im G)#x is convergent by A3,Th1;
+  (Re F)#x = Re(F#x) & (Im F)#x = Im(F#x) by A1,A2,A3,MESFUN7C:23;
+  hence thesis by A4,A7,A6,COMSEQ_3:42;
 end;
 
-theorem Lm33a:
- F is with_the_same_dom iff Re F is with_the_same_dom
+theorem Th24:
+  F is with_the_same_dom iff Re F is with_the_same_dom
 proof
   hereby
-   assume A0: F is with_the_same_dom;
-   now let n,m be natural number;
-    dom((Re F).n) = dom(F.n) & dom((Re F).m) = dom(F.m) by MESFUN7C:def 11;
-    hence dom((Re F).n) = dom((Re F).m) by A0,MESFUNC8:def 2;
-   end;
-   hence Re F is with_the_same_dom by MESFUNC8:def 2;
+    assume
+A1: F is with_the_same_dom;
+    now
+      let n,m be natural number;
+      dom((Re F).n) = dom(F.n) & dom((Re F).m) = dom(F.m) by MESFUN7C:def
+      11;
+      hence dom((Re F).n) = dom((Re F).m) by A1,MESFUNC8:def 2;
+    end;
+    hence Re F is with_the_same_dom by MESFUNC8:def 2;
   end;
-
-  assume B0: Re F is with_the_same_dom;
-  now let n,m be natural number;
-   dom((Re F).n) = dom(F.n) & dom((Re F).m) = dom(F.m) by MESFUN7C:def 11;
-   hence dom(F.n) = dom(F.m) by B0,MESFUNC8:def 2;
+  assume
+A2: Re F is with_the_same_dom;
+  now
+    let n,m be natural number;
+    dom((Re F).n) = dom(F.n) & dom((Re F).m) = dom(F.m) by MESFUN7C:def 11;
+    hence dom(F.n) = dom(F.m) by A2,MESFUNC8:def 2;
   end;
   hence F is with_the_same_dom by MESFUNC8:def 2;
 end;
 
-theorem Lm33b:
-Re F is with_the_same_dom iff Im F is with_the_same_dom
+theorem Th25:
+  Re F is with_the_same_dom iff Im F is with_the_same_dom
 proof
   hereby
-   assume Re F is with_the_same_dom; then
-A0:F is with_the_same_dom by Lm33a;
-   now let n,m be natural number;
-    dom((Im F).n) = dom(F.n) & dom((Im F).m) = dom(F.m) by MESFUN7C:def 12;
-    hence dom((Im F).n) = dom((Im F).m) by A0,MESFUNC8:def 2;
-   end;
-   hence Im F is with_the_same_dom by MESFUNC8:def 2;
+    assume
+    Re F is with_the_same_dom;
+    then
+A1: F is with_the_same_dom by Th24;
+    now
+      let n,m be natural number;
+      dom((Im F).n) = dom(F.n) & dom((Im F).m) = dom(F.m) by MESFUN7C:def
+      12;
+      hence dom((Im F).n) = dom((Im F).m) by A1,MESFUNC8:def 2;
+    end;
+    hence Im F is with_the_same_dom by MESFUNC8:def 2;
   end;
-  assume A1:Im F is with_the_same_dom;
-  now let n,m be natural number;
-   dom((Im F).n) = dom(F.n) & dom((Im F).m) = dom(F.m) by MESFUN7C:def 12;
-   hence dom(F.n) = dom(F.m) by A1,MESFUNC8:def 2;
-  end; then
-  F is with_the_same_dom by MESFUNC8:def 2;
-  hence Re F is with_the_same_dom by Lm33a;
+  assume
+A2: Im F is with_the_same_dom;
+  now
+    let n,m be natural number;
+    dom((Im F).n) = dom(F.n) & dom((Im F).m) = dom(F.m) by MESFUN7C:def 12;
+    hence dom(F.n) = dom(F.m) by A2,MESFUNC8:def 2;
+  end;
+  then F is with_the_same_dom by MESFUNC8:def 2;
+  hence Re F is with_the_same_dom by Th24;
 end;
 
 theorem
-F is with_the_same_dom & D = dom(F.0) &
-(for x be Element of X st x in D holds F#x is convergent) implies
-  (lim F)|D = lim (F||D)
+  F is with_the_same_dom & D = dom(F.0) & (for x be Element of X st x in
+  D holds F#x is convergent) implies (lim F)|D = lim (F||D)
 proof
   set G = F||D;
   assume that
-A0: F is with_the_same_dom and
-A1: D = dom(F.0) and
+A1: F is with_the_same_dom and
+A2: D = dom(F.0) and
 A3: for x be Element of X st x in D holds F#x is convergent;
-A4:G is with_the_same_dom by A0,Th8a;
-B1:D c= dom((Re F).0) & D c= dom((Im F).0) by A1,MESFUN7C:def 11,def 12;
-b2: Re G = (Re F)||D & Im G = (Im F)||D by Lm31,Lm32;
-B4:for x be Element of X st x in D holds (Re F)#x is convergent
-   proof
+A4: Re G = (Re F)||D by Th21;
+A5: now
     let x be Element of X;
-    assume P01: x in D; then
-    F#x is convergent Complex_Sequence by A3; then
-    Re(F#x) is convergent;
-    hence (Re F)#x is convergent by A0,P01,A1,MESFUN7C:23;
-   end;
-
-   for x be Element of X st x in D holds (Im F)#x is convergent
-   proof
+    dom((F.0)|D) = D by A2,RELAT_1:91;
+    then
+A6: dom(G.0) = D by Def1;
+    assume
+A7: x in dom(G.0);
+    then F#x is convergent by A3,A6;
+    hence G#x is convergent by A1,A2,A7,A6,Th23;
+  end;
+A8: for x be Element of X st x in D holds (Re F)#x is convergent
+  proof
     let x be Element of X;
-    assume P01: x in D; then
-    F#x is convergent Complex_Sequence by A3; then
-    Im(F#x) is convergent;
-    hence (Im F)#x is convergent by A0,P01,A1,MESFUN7C:23;
-   end; then
-   (lim Re F)|D = lim Re G & (lim Im F)|D = lim Im G by B1,b2,B4,Th919r;
-   then
-C4:(Re lim F)|D = lim Re G & (Im lim F)|D = lim Im G by A0,A1,A3,MESFUN7C:25;
-
-   now let x be Element of X;
-    assume P01: x in dom(G.0);
-    dom((F.0)|D) = D by A1,RELAT_1:91; then
-P03:dom(G.0) = D by Def1; then
-    F#x is convergent by A3,P01;
-    hence G#x is convergent by P01,P03,A0,A1,M9C32c;
-   end; then
-   lim Re G = Re(lim G) & lim Im G = Im(lim G) by A4,MESFUN7C:25; then
-C3:Re((lim F)|D) = Re(lim G) & Im((lim F)|D) = Im(lim G) by C4,MES6C7;
-   thus lim G = Re(lim G) + <i>(#)(Im(lim G)) by MESFUN6C:8
-             .= (lim F)|D by C3,MESFUN6C:8;
+    assume
+A9: x in D;
+    then F#x is convergent Complex_Sequence by A3;
+    then Re(F#x) is convergent;
+    hence (Re F)#x is convergent by A1,A2,A9,MESFUN7C:23;
+  end;
+  D c= dom((Re F).0) by A2,MESFUN7C:def 11;
+  then (lim Re F)|D = lim Re G by A4,A8,Th3;
+  then
+A10: (Re lim F)|D = lim Re G by A1,A2,A3,MESFUN7C:25;
+A11: G is with_the_same_dom by A1,Th2;
+  then lim Re G = Re(lim G) by A5,MESFUN7C:25;
+  then
+A12: Re((lim F)|D) = Re(lim G) by A10,Th20;
+A13: for x be Element of X st x in D holds (Im F)#x is convergent
+  proof
+    let x be Element of X;
+    assume
+A14: x in D;
+    then F#x is convergent Complex_Sequence by A3;
+    then Im(F#x) is convergent;
+    hence (Im F)#x is convergent by A1,A2,A14,MESFUN7C:23;
+  end;
+A15: Im G = (Im F)||D by Th22;
+  D c= dom((Im F).0) by A2,MESFUN7C:def 12;
+  then (lim Im F)|D = lim Im G by A15,A13,Th3;
+  then
+A16: (Im lim F)|D = lim Im G by A1,A2,A3,MESFUN7C:25;
+  lim Im G = Im(lim G) by A11,A5,MESFUN7C:25;
+  then
+A17: Im((lim F)|D) = Im(lim G) by A16,Th20;
+  thus lim G = Re(lim G) + <i>(#)(Im(lim G)) by MESFUN6C:8
+    .= (lim F)|D by A12,A17,MESFUN6C:8;
 end;
 
 theorem
-F is with_the_same_dom & E c= dom(F.0) &
-(for m be Nat holds F.m is_measurable_on E)
-implies (F||E).n is_measurable_on E
+  F is with_the_same_dom & E c= dom(F.0) & (for m be Nat holds F.m
+  is_measurable_on E) implies (F||E).n is_measurable_on E
 proof
   set G = F||E;
-   assume F is with_the_same_dom; then
-B0:Re F is with_the_same_dom by Lm33a; then
-B3:Im F is with_the_same_dom by Lm33b;
-   assume E c= dom(F.0); then
-B1:E c= dom((Re F).0) & E c= dom((Im F).0) by MESFUN7C:def 11,def 12;
-   assume A2: for m be Nat holds F.m is_measurable_on E;
-aa: Re G = (Re F)||E & Im G = (Im F)||E by Lm31,Lm32;
-   for m be Nat holds
-     (Re F).m is_measurable_on E & (Im F).m is_measurable_on E
-   proof
+A1: Re G = (Re F)||E by Th21;
+A2: Im G = (Im F)||E by Th22;
+  assume
+  F is with_the_same_dom;
+  then
+A3: Re F is with_the_same_dom by Th24;
+  then
+A4: Im F is with_the_same_dom by Th25;
+  assume
+A5: E c= dom(F.0);
+  assume
+A6: for m be Nat holds F.m is_measurable_on E;
+A7: for m be Nat holds (Re F).m is_measurable_on E & (Im F).m
+  is_measurable_on E
+  proof
     let m be Nat;
-    F.m is_measurable_on E by A2; then
-    Re(F.m) is_measurable_on E & Im(F.m) is_measurable_on E by MESFUN6C:def 3;
+    F.m is_measurable_on E by A6;
+    then Re(F.m) is_measurable_on E & Im(F.m) is_measurable_on E by
+    MESFUN6C:def 3;
     hence thesis by MESFUN7C:24;
-   end; then
-   (Re G).n is_measurable_on E & (Im G).n is_measurable_on E
-     by aa,B0,B1,B3,Th9; then
-   Re(G.n) is_measurable_on E & Im(G.n) is_measurable_on E by MESFUN7C:24;
-   hence thesis by MESFUN6C:def 3;
+  end;
+  E c= dom((Im F).0) by A5,MESFUN7C:def 12;
+  then (Im G).n is_measurable_on E by A4,A2,A7,Th4;
+  then
+A8: Im(G.n) is_measurable_on E by MESFUN7C:24;
+  E c= dom((Re F).0) by A5,MESFUN7C:def 11;
+  then (Re G).n is_measurable_on E by A3,A1,A7,Th4;
+  then Re(G.n) is_measurable_on E by MESFUN7C:24;
+  hence thesis by A8,MESFUN6C:def 3;
 end;
 
 theorem
-E c= dom(F.0) & F is with_the_same_dom &
-(for x be Element of X st x in E holds F#x is summable)
-implies for x be Element of X st x in E holds (F||E)#x is summable
+  E c= dom(F.0) & F is with_the_same_dom & (for x be Element of X st x
+in E holds F#x is summable) implies for x be Element of X st x in E holds (F||E
+  )#x is summable
 proof
   set G = F||E;
   assume that
 A1: E c= dom(F.0) and
 A2: F is with_the_same_dom and
 A3: for x be Element of X st x in E holds F#x is summable;
-A5:G is with_the_same_dom by A2,Th8a;
-B31: for x be Element of X st x in E holds (Re F)#x is summable
-   proof
+A4: G is with_the_same_dom by A2,Th2;
+A5: for x be Element of X st x in E holds (Im F)#x is summable
+  proof
     let x be Element of X;
-    assume P01: x in E; then
-    F#x is summable by A3; then
-    Re(F#x) is summable;
-    hence (Re F)#x is summable by A1,P01,A2,MESFUN7C:23;
-   end;
-
-B32: for x be Element of X st x in E holds (Im F)#x is summable
-   proof
+    assume
+A6: x in E;
+    then F#x is summable by A3;
+    then Im(F#x) is summable;
+    hence (Im F)#x is summable by A1,A2,A6,MESFUN7C:23;
+  end;
+A7: for x be Element of X st x in E holds (Re F)#x is summable
+  proof
     let x be Element of X;
-    assume P01: x in E; then
-    F#x is summable by A3; then
-    Im(F#x) is summable;
-    hence (Im F)#x is summable by A1,P01,A2,MESFUN7C:23;
-   end;
-   hereby let x be Element of X;
-    assume P01: x in E;
-    G.0= (F.0)|E by Def1; then
-P03:x in dom(G.0) by P01,A1,RELAT_1:91;
-    Re G = (Re F)||E & Im G = (Im F)||E by Lm31,Lm32;
-    then (Re G)#x is summable & (Im G)#x is summable by P01,B31,B32,Th10; then
-    Re(G#x) is summable & Im(G#x) is summable by P03,A5,MESFUN7C:23;
-    hence G#x is summable by COMSEQ_3:58;
-   end;
+    assume
+A8: x in E;
+    then F#x is summable by A3;
+    then Re(F#x) is summable;
+    hence (Re F)#x is summable by A1,A2,A8,MESFUN7C:23;
+  end;
+  hereby
+    let x be Element of X;
+    assume
+A9: x in E;
+    G.0= (F.0)|E by Def1;
+    then
+A10: x in dom(G.0) by A1,A9,RELAT_1:91;
+    Im G = (Im F)||E by Th22;
+    then (Im G)#x is summable by A5,A9,Th6;
+    then
+A11: Im(G#x) is summable by A4,A10,MESFUN7C:23;
+    Re G = (Re F)||E by Th21;
+    then (Re G)#x is summable by A7,A9,Th6;
+    then Re(G#x) is summable by A4,A10,MESFUN7C:23;
+    hence G#x is summable by A11,COMSEQ_3:58;
+  end;
 end;
 
-definition let X be non empty set, F be Functional_Sequence of X,COMPLEX;
- func Partial_Sums F -> Functional_Sequence of X,COMPLEX means :Def0c:
- it.0 = F.0 & for n be Nat holds it.(n+1) = it.n + F.(n+1);
-existence
-proof
-   defpred P[Element of NAT,set,set] means
-    (not $2 is PartFunc of X,COMPLEX & $3 = F.$1) or
-    ($2 is PartFunc of X,COMPLEX &
-     for F2 be PartFunc of X,COMPLEX st F2 = $2 holds
-      $3 = F2 + F.($1+1));
-
-P1:for n being Element of NAT, x being set ex y being set st P[n,x,y]
-   proof
-    let n be Element of NAT;
-    let x be set;
-    now assume x is PartFunc of X,COMPLEX; then
-     reconsider G2 = x as PartFunc of X,COMPLEX;
-     take y = G2 + F.(n+1);
-     thus (not x is PartFunc of X,COMPLEX & y = F.n) or
-          (x is PartFunc of X,COMPLEX &
-           for F2 be PartFunc of X,COMPLEX st F2 = x holds
-            y = F2 + F.(n+1));
-    end;
-    hence thesis;
-   end;
-
-   consider IT being Function such that
-P3: dom IT = NAT & IT.0 = F.0 &
-    for n being Element of NAT holds P[n,IT.n,IT.(n+1)]
-       from RECDEF_1:sch 1(P1);
-
-   now let f be set;
-    assume f in rng IT; then
-    consider m be set such that
-P41: m in dom IT & f = IT.m by FUNCT_1:def 5;
-    reconsider m as Element of NAT by P41,P3;
-
-    defpred IND[Element of NAT] means IT.$1 is PartFunc of X,COMPLEX;
-
-P42:IND[0] by P3;
-P43:for n be Element of NAT st IND[n] holds IND[n+1]
+definition
+  let X be non empty set, F be Functional_Sequence of X,COMPLEX;
+  func Partial_Sums F -> Functional_Sequence of X,COMPLEX means
+  :Def3:
+  it.0 =
+  F.0 & for n be Nat holds it.(n+1) = it.n + F.(n+1);
+  existence
+  proof
+    defpred P[Element of NAT,set,set] means (not $2 is PartFunc of X,COMPLEX &
+$3 = F.$1) or ($2 is PartFunc of X,COMPLEX & for F2 be PartFunc of X,COMPLEX st
+    F2 = $2 holds $3 = F2 + F.($1+1));
+A1: for n being Element of NAT, x being set ex y being set st P[n,x,y]
     proof
-     let n be Element of NAT;
-     assume IND[n]; then
-     reconsider F2 = IT.n as PartFunc of X,COMPLEX;
-     IT.(n+1) = F2 + F.(n+1) by P3;
-     hence IND[n+1];
+      let n be Element of NAT;
+      let x be set;
+      now
+        assume
+        x is PartFunc of X,COMPLEX;
+        then reconsider G2 = x as PartFunc of X,COMPLEX;
+        take y = G2 + F.(n+1);
+        thus not x is PartFunc of X,COMPLEX & y = F.n or (x is PartFunc of X,
+COMPLEX & for F2 be PartFunc of X,COMPLEX st F2 = x holds y = F2 + F.(n+1));
+      end;
+      hence thesis;
     end;
-    for n be Element of NAT holds IND[n] from NAT_1:sch 1(P42,P43); then
-    IT.m is PartFunc of X,COMPLEX;
-    hence f in PFuncs(X,COMPLEX) by P41,PARTFUN1:119;
-   end; then
-   rng IT c= PFuncs(X,COMPLEX) by TARSKI:def 3; then
-   reconsider IT as Functional_Sequence of X,COMPLEX
-     by P3,RELSET_1:11,FUNCT_2:def 1;
-
-   take IT;
-   for n be Nat holds IT.(n+1) = IT.n + F.(n+1)
-   proof
-    let n be Nat;
-    reconsider m = n as Element of NAT by ORDINAL1:def 13;
-    IT.(m+1) = IT.m + F.(m+1) by P3;
-    hence IT.(n+1) = IT.n + F.(n+1);
-   end;
-   hence thesis by P3;
+    consider IT being Function such that
+A2: dom IT = NAT & IT.0 = F.0 & for n being Element of NAT holds P[n,
+    IT.n,IT.(n+1)] from RECDEF_1:sch 1(A1);
+    now
+      defpred IND[Element of NAT] means IT.$1 is PartFunc of X,COMPLEX;
+      let f be set;
+      assume
+      f in rng IT;
+      then consider m be set such that
+A3:   m in dom IT and
+A4:   f = IT.m by FUNCT_1:def 5;
+      reconsider m as Element of NAT by A2,A3;
+A5:   for n be Element of NAT st IND[n] holds IND[n+1]
+      proof
+        let n be Element of NAT;
+        assume
+        IND[n];
+        then reconsider F2 = IT.n as PartFunc of X,COMPLEX;
+        IT.(n+1) = F2 + F.(n+1) by A2;
+        hence IND[n+1];
+      end;
+A6:   IND[0] by A2;
+      for n be Element of NAT holds IND[n] from NAT_1:sch 1(A6,A5);
+      then IT.m is PartFunc of X,COMPLEX;
+      hence f in PFuncs(X,COMPLEX) by A4,PARTFUN1:119;
+    end;
+    then rng IT c= PFuncs(X,COMPLEX) by TARSKI:def 3;
+    then reconsider IT as Functional_Sequence of X,COMPLEX by A2,
+    FUNCT_2:def 1,
+    RELSET_1:11;
+    take IT;
+    for n be Nat holds IT.(n+1) = IT.n + F.(n+1)
+    proof
+      let n be Nat;
+      reconsider m = n as Element of NAT by ORDINAL1:def 13;
+      IT.(m+1) = IT.m + F.(m+1) by A2;
+      hence IT.(n+1) = IT.n + F.(n+1);
+    end;
+    hence thesis by A2;
+  end;
+  uniqueness
+  proof
+    let PS1,PS2 be Functional_Sequence of X,COMPLEX;
+    assume that
+A7: PS1.0 = F.0 and
+A8: for n be Nat holds PS1.(n+1) = PS1.n + F.(n+1) and
+A9: PS2.0 = F.0 and
+A10: for n be Nat holds PS2.(n+1) = PS2.n + F.(n+1);
+    defpred IND[Nat] means PS1.$1 = PS2.$1;
+A11: for n be Nat st IND[n] holds IND[n+1]
+    proof
+      let n be Nat;
+      assume
+A12:  IND[n];
+      PS1.(n+1) = PS1.n + F.(n+1) by A8;
+      hence PS1.(n+1) = PS2.(n+1) by A10,A12;
+    end;
+A13: IND[0] by A7,A9;
+    for n be Nat holds IND[n] from NAT_1:sch 2(A13,A11);
+    then for m be Element of NAT holds PS1.m = PS2.m;
+    hence thesis by FUNCT_2:113;
+  end;
 end;
-uniqueness
+
+theorem Th29:
+  Partial_Sums Re F = Re Partial_Sums F & Partial_Sums Im F = Im
+  Partial_Sums F
 proof
-   let PS1,PS2 be Functional_Sequence of X,COMPLEX;
-   assume that
-A1: PS1.0 = F.0 & for n be Nat holds PS1.(n+1) = PS1.n + F.(n+1) and
-A2: PS2.0 = F.0 & for n be Nat holds PS2.(n+1) = PS2.n + F.(n+1);
-
-   defpred IND[Nat] means PS1.$1 = PS2.$1;
-
-P1:IND[0] by A1,A2;
-P2:for n be Nat st IND[n] holds IND[n+1]
-   proof
-    let n be Nat;
-    assume P21: IND[n];
-    PS1.(n+1) = PS1.n + F.(n+1) by A1;
-    hence PS1.(n+1) = PS2.(n+1) by A2,P21;
-   end;
-   for n be Nat holds IND[n] from NAT_1:sch 2(P1,P2); then
-   for m be Element of NAT holds PS1.m = PS2.m;
-   hence thesis by FUNCT_2:113;
-end;
-end;
-
-theorem Lm326:
-  Partial_Sums Re F = Re Partial_Sums F &
-  Partial_Sums Im F = Im Partial_Sums F
-proof
-   defpred P[Element of NAT] means
-     Partial_Sums(Re F).$1 = (Re Partial_Sums F).$1;
-   Partial_Sums(Re F).0 = Re F.0 by Def0
-      .= Re(F.0) by MESFUN7C:24
-      .= Re(Partial_Sums F.0) by Def0c; then
-A1:P[0] by MESFUN7C:24;
-A2:for k be Element of NAT st P[k] holds P[k+1]
-   proof
+  defpred P[Element of NAT] means Partial_Sums(Re F).$1 = (Re Partial_Sums F).
+  $1;
+  defpred R[Element of NAT] means Partial_Sums(Im F).$1 = (Im Partial_Sums F).
+  $1;
+A1: for k be Element of NAT st P[k] holds P[k+1]
+  proof
     let k be Element of NAT;
-    assume P[k]; then
-    Partial_Sums(Re F).(k+1) =(Re Partial_Sums F).k + Re F.(k+1) by Def0
+    assume
+    P[k];
+    then Partial_Sums(Re F).(k+1) =(Re Partial_Sums F).k + Re F.(k+1) by
+    Def2
       .=(Re Partial_Sums F).k +Re(F.(k+1)) by MESFUN7C:24
       .=Re((Partial_Sums F).k) +Re(F.(k+1)) by MESFUN7C:24
       .=Re((Partial_Sums F).k + F.(k+1)) by MESFUN6C:5
-      .=Re((Partial_Sums F).(k+1)) by Def0c;
+      .=Re((Partial_Sums F).(k+1)) by Def3;
     hence thesis by MESFUN7C:24;
-   end;
-A3:for i holds P[i] from NAT_1:sch 1(A1,A2);
-
-   defpred R[Element of NAT] means
-     Partial_Sums(Im F).$1 = (Im Partial_Sums F).$1;
-   Partial_Sums(Im F).0 = Im F.0 by Def0
-       .= Im(F.0) by MESFUN7C:24
-       .= Im((Partial_Sums F).0) by Def0c; then
-A4:R[0] by MESFUN7C:24;
-A5:for k be Element of NAT st R[k] holds R[k+1]
-   proof
+  end;
+A2: for k be Element of NAT st R[k] holds R[k+1]
+  proof
     let k be Element of NAT;
-    assume R[k]; then
-    Partial_Sums(Im F).(k+1) = (Im Partial_Sums F).k + Im F.(k+1) by Def0
+    assume
+    R[k];
+    then Partial_Sums(Im F).(k+1) = (Im Partial_Sums F).k + Im F.(k+1) by
+    Def2
       .=(Im Partial_Sums F).k +Im(F.(k+1)) by MESFUN7C:24
       .=Im((Partial_Sums F).k) +Im(F.(k+1)) by MESFUN7C:24
       .=Im((Partial_Sums F).k + F.(k+1)) by MESFUN6C:5
-      .=Im((Partial_Sums F).(k+1)) by Def0c;
+      .=Im((Partial_Sums F).(k+1)) by Def3;
     hence thesis by MESFUN7C:24;
-   end;
-   for i holds R[i] from NAT_1:sch 1(A4,A5);
-   hence thesis by A3,FUNCT_2:113;
+  end;
+  Partial_Sums(Im F).0 = Im F.0 by Def2
+    .= Im(F.0) by MESFUN7C:24
+    .= Im((Partial_Sums F).0) by Def3;
+  then
+A3: R[0] by MESFUN7C:24;
+A4: for i holds R[i] from NAT_1:sch 1(A3,A2);
+  Partial_Sums(Re F).0 = Re F.0 by Def2
+    .= Re(F.0) by MESFUN7C:24
+    .= Re(Partial_Sums F.0) by Def3;
+  then
+A5: P[0] by MESFUN7C:24;
+  for i holds P[i] from NAT_1:sch 1(A5,A1);
+  hence thesis by A4,FUNCT_2:113;
 end;
 
 theorem
-z in dom((Partial_Sums F).n) & m <= n implies
-      z in dom((Partial_Sums F).m) & z in dom(F.m)
+  z in dom((Partial_Sums F).n) & m <= n implies z in dom((Partial_Sums F
+  ).m) & z in dom(F.m)
 proof
-   assume A0: z in dom((Partial_Sums F).n) & m <= n;
-A1:dom((Partial_Sums F).n) = dom((Re(Partial_Sums F)).n) by MESFUN7C:def 11
-                          .= dom((Partial_Sums Re F).n)  by Lm326; then
-A2:z in dom((Partial_Sums Re F).m) & z in dom((Re F).m) by A0,Th11;
-
-   dom((Partial_Sums Re F).m) = dom((Re(Partial_Sums F)).m) by Lm326
-                             .= dom((Partial_Sums F).m) by MESFUN7C:def 11;
-   hence z in dom((Partial_Sums F).m) by A1,A0,Th11;
-   thus z in dom(F.m) by A2,MESFUN7C:def 11;
+  assume
+A1: z in dom((Partial_Sums F).n) & m <= n;
+A2: dom((Partial_Sums F).n) = dom((Re(Partial_Sums F)).n) by MESFUN7C:def 11
+    .= dom((Partial_Sums Re F).n) by Th29;
+  dom((Partial_Sums Re F).m) = dom((Re(Partial_Sums F)).m) by Th29
+    .= dom((Partial_Sums F).m) by MESFUN7C:def 11;
+  hence z in dom((Partial_Sums F).m) by A1,A2,Th8;
+  z in dom((Re F).m) by A1,A2,Th8;
+  hence z in dom(F.m) by MESFUN7C:def 11;
 end;
 
 theorem
-  dom((Partial_Sums F).n) = meet{dom(F.k) where k is Element of NAT : k <= n}
+  dom((Partial_Sums F).n) = meet{dom(F.k) where k is Element of NAT : k
+  <= n}
 proof
-A1:dom((Partial_Sums Re F).n)
-    = meet{dom((Re F).k) where k is Element of NAT : k <= n} by Lem07;
-
-   dom((Partial_Sums Re F).n) = dom((Re(Partial_Sums F)).n) by Lm326; then
-A2:dom((Partial_Sums Re F).n) = dom((Partial_Sums F).n) by MESFUN7C:def 11;
-
-   now let A be set;
-    assume A in {dom((Re F).k) where k is Element of NAT : k <= n}; then
-    consider i be Element of NAT such that
-A3:  A = dom((Re F).i) & i <= n;
-    A = dom(F.i) by A3,MESFUN7C:def 11;
-    hence A in {dom(F.k) where k is Element of NAT : k <= n} by A3;
-   end; then
-A4:{dom((Re F).k) where k is Element of NAT : k <= n}
-    c= {dom(F.k) where k is Element of NAT : k <= n} by TARSKI:def 3;
-
-   now let A be set;
-    assume A in {dom(F.k) where k is Element of NAT : k <= n}; then
-    consider i be Element of NAT such that
-A5:  A = dom(F.i) & i <= n;
-    A = dom((Re F).i) by A5,MESFUN7C:def 11;
+  now
+    let A be set;
+    assume
+    A in {dom((Re F).k) where k is Element of NAT : k <= n};
+    then consider i be Element of NAT such that
+A1: A = dom((Re F).i) and
+A2: i <= n;
+    A = dom(F.i) by A1,MESFUN7C:def 11;
+    hence A in {dom(F.k) where k is Element of NAT : k <= n} by A2;
+  end;
+  then
+A3: {dom((Re F).k) where k is Element of NAT : k <= n} c= {dom(F.k) where k
+  is Element of NAT : k <= n} by TARSKI:def 3;
+  now
+    let A be set;
+    assume
+    A in {dom(F.k) where k is Element of NAT : k <= n};
+    then consider i be Element of NAT such that
+A4: A = dom(F.i) and
+A5: i <= n;
+    A = dom((Re F).i) by A4,MESFUN7C:def 11;
     hence A in {dom((Re F).k) where k is Element of NAT : k <= n} by A5;
-   end; then
-   {dom(F.k) where k is Element of NAT : k <= n}
-    c= {dom((Re F).k) where k is Element of NAT : k <= n} by TARSKI:def 3;
-   hence thesis by A1,A2,A4,XBOOLE_0:def 10;
+  end;
+  then
+A6: {dom(F.k) where k is Element of NAT : k <= n} c= {dom((Re F).k) where k
+  is Element of NAT : k <= n} by TARSKI:def 3;
+  dom((Partial_Sums Re F).n) = dom((Re(Partial_Sums F)).n) by Th29;
+  then
+A7: dom((Partial_Sums Re F).n) = dom((Partial_Sums F).n) by MESFUN7C:def
+  11;
+  dom((Partial_Sums Re F).n) = meet{dom((Re F).k) where k is Element of NAT
+  : k <= n} by Th10;
+  hence thesis by A7,A3,A6,XBOOLE_0:def 10;
 end;
 
-theorem ADD0c:
-F is with_the_same_dom implies dom((Partial_Sums F).n) = dom(F.0)
+theorem Th32:
+  F is with_the_same_dom implies dom((Partial_Sums F).n) = dom(F.0
+  )
 proof
-   assume F is with_the_same_dom; then
-   Re F is with_the_same_dom by Lm33a; then
-   dom((Partial_Sums Re F).n) = dom((Re F).0) by ADD0; then
-   dom((Partial_Sums Re F).n) = dom(F.0) by MESFUN7C:def 11; then
-   dom((Re Partial_Sums F).n) = dom(F.0) by Lm326;
-   hence dom((Partial_Sums F).n) = dom(F.0) by MESFUN7C:def 11;
+  assume
+  F is with_the_same_dom;
+  then Re F is with_the_same_dom by Th24;
+  then dom((Partial_Sums Re F).n) = dom((Re F).0) by Th11;
+  then dom((Partial_Sums Re F).n) = dom(F.0) by MESFUN7C:def 11;
+  then dom((Re Partial_Sums F).n) = dom(F.0) by Th29;
+  hence dom((Partial_Sums F).n) = dom(F.0) by MESFUN7C:def 11;
 end;
 
 theorem
-F is with_the_same_dom & D c= dom(F.0) & x in D implies
-  (Partial_Sums(F#x)).n = ((Partial_Sums F)#x).n
+  F is with_the_same_dom & D c= dom(F.0) & x in D implies (Partial_Sums(
+  F#x)).n = ((Partial_Sums F)#x).n
 proof
   assume that
 A1: F is with_the_same_dom and
-A2: D c= dom(F.0) & x in D;
-
-  dom((Partial_Sums F).n) = dom(F.0) by A1,ADD0c; then
-  x in dom((Partial_Sums F).n) by A2; then
-A4: x in dom Re((Partial_Sums F).n) &
-    x in dom Im((Partial_Sums F).n) by MESFUN6C:def 1,def 2;
-
-B1:Re F is with_the_same_dom by A1,Lm33a; then
-B4:Im F is with_the_same_dom by Lm33b;
-
-   D c= dom((Re F).0) & D c= dom((Im F).0) by A2,MESFUN7C:def 11,def 12; then
-B3:(Partial_Sums((Re F)#x)).n = ((Partial_Sums Re F)#x).n &
-   (Partial_Sums((Im F)#x)).n = ((Partial_Sums Im F)#x).n by A2,B1,B4,Cor00;
-
-C0:n is Element of NAT by ORDINAL1:def 13; then
-C1:Re((Partial_Sums(F#x)).n)
-     = (Re(Partial_Sums(F#x))).n by COMSEQ_3:def 3
+A2: D c= dom(F.0) and
+A3: x in D;
+A4: D c= dom((Im F).0) by A2,MESFUN7C:def 12;
+  dom((Partial_Sums F).n) = dom(F.0) by A1,Th32;
+  then
+A5: x in dom((Partial_Sums F).n) by A2,A3;
+  then
+A6: x in dom Re((Partial_Sums F).n) by MESFUN6C:def 1;
+A7: Re F is with_the_same_dom by A1,Th24;
+  then Im F is with_the_same_dom by Th25;
+  then
+A8: (Partial_Sums((Im F)#x)).n = ((Partial_Sums Im F)#x).n by A3,A4,
+  Th12;
+  D c= dom((Re F).0) by A2,MESFUN7C:def 11;
+  then
+A9: (Partial_Sums((Re F)#x)).n = ((Partial_Sums Re F)#x).n by A3,A7,
+  Th12;
+A10: n is Element of NAT by ORDINAL1:def 13;
+  then
+A11: Re((Partial_Sums(F#x)).n) = (Re(Partial_Sums(F#x))).n by COMSEQ_3:
+  def 3
     .= (Partial_Sums Re(F#x)).n by COMSEQ_3:26
-    .= (Partial_Sums((Re F)#x)).n by A1,A2,MESFUN7C:23
-    .= ((Partial_Sums Re F).n).x by C0,B3,SEQFUNC:def 11
-    .= ((Re(Partial_Sums F)).n).x by Lm326
+    .= (Partial_Sums((Re F)#x)).n by A1,A2,A3,MESFUN7C:23
+    .= ((Partial_Sums Re F).n).x by A9,A10,SEQFUNC:def 11
+    .= ((Re(Partial_Sums F)).n).x by Th29
     .= (Re((Partial_Sums F).n)).x by MESFUN7C:24
-    .= Re(((Partial_Sums F).n).x) by A4,MESFUN6C:def 1
+    .= Re(((Partial_Sums F).n).x) by A6,MESFUN6C:def 1
     .= Re(((Partial_Sums F)#x).n) by MESFUN7C:def 9;
-
-D1:Im((Partial_Sums(F#x)).n)
-     = (Im(Partial_Sums(F#x))).n by C0,COMSEQ_3:def 4
+A12: x in dom Im((Partial_Sums F).n) by A5,MESFUN6C:def 2;
+A13: Im((Partial_Sums(F#x)).n) = (Im(Partial_Sums(F#x))).n by A10,COMSEQ_3:
+  def 4
     .= (Partial_Sums Im(F#x)).n by COMSEQ_3:26
-    .= (Partial_Sums((Im F)#x)).n by A1,A2,MESFUN7C:23
-    .= ((Partial_Sums Im F).n).x by C0,B3,SEQFUNC:def 11
-    .= ((Im(Partial_Sums F)).n).x by Lm326
+    .= (Partial_Sums((Im F)#x)).n by A1,A2,A3,MESFUN7C:23
+    .= ((Partial_Sums Im F).n).x by A8,A10,SEQFUNC:def 11
+    .= ((Im(Partial_Sums F)).n).x by Th29
     .= (Im((Partial_Sums F).n)).x by MESFUN7C:24
-    .= Im(((Partial_Sums F).n).x) by A4,MESFUN6C:def 2
+    .= Im(((Partial_Sums F).n).x) by A12,MESFUN6C:def 2
     .= Im(((Partial_Sums F)#x).n) by MESFUN7C:def 9;
-
-   thus
-   (Partial_Sums(F#x)).n
-      = Re((Partial_Sums(F#x)).n) + ( Im((Partial_Sums(F#x)).n) )*<i>
-           by COMPLEX1:29
-     .= ((Partial_Sums F)#x).n by C1,D1,COMPLEX1:29;
+  thus (Partial_Sums(F#x)).n = Re((Partial_Sums(F#x)).n) + ( Im((Partial_Sums(
+  F#x)).n) )*<i> by COMPLEX1:29
+    .= ((Partial_Sums F)#x).n by A11,A13,COMPLEX1:29;
 end;
 
-theorem ADD5c:
-F is with_the_same_dom implies Partial_Sums F is with_the_same_dom
+theorem Th34:
+  F is with_the_same_dom implies Partial_Sums F is
+  with_the_same_dom
 proof
-  assume F is with_the_same_dom; then
-  Re F is with_the_same_dom by Lm33a; then
-  Partial_Sums Re F is with_the_same_dom by ADD5; then
-  Re(Partial_Sums F) is with_the_same_dom by Lm326;
-  hence Partial_Sums F is with_the_same_dom by Lm33a;
+  assume
+  F is with_the_same_dom;
+  then Re F is with_the_same_dom by Th24;
+  then Partial_Sums Re F is with_the_same_dom by Th17;
+  then Re(Partial_Sums F) is with_the_same_dom by Th29;
+  hence Partial_Sums F is with_the_same_dom by Th24;
 end;
 
-theorem Cor01c:
- F is with_the_same_dom & D c= dom(F.0) & x in D implies
-  ( Partial_Sums(F#x) is convergent iff (Partial_Sums F)#x is convergent )
+theorem Th35:
+  F is with_the_same_dom & D c= dom(F.0) & x in D implies (
+  Partial_Sums(F#x) is convergent iff (Partial_Sums F)#x is convergent )
 proof
   assume that
 A1: F is with_the_same_dom and
-A2: D c= dom(F.0) & x in D;
-
-A3:dom((Partial_Sums F).0) = dom(F.0) by A1,ADD0c;
-
-A5:Partial_Sums F is with_the_same_dom by A1,ADD5c;
-
-B1:Re F is with_the_same_dom by A1,Lm33a; then
-B4:Im F is with_the_same_dom by Lm33b;
-
-B2:D c= dom((Re F).0) & D c= dom((Im F).0) by A2,MESFUN7C:def 11,def 12; then
-B3:( Partial_Sums((Re F)#x) is convergent iff
-          (Partial_Sums Re F)#x is convergent ) &
-   ( Partial_Sums((Im F)#x) is convergent iff
-          (Partial_Sums Im F)#x is convergent ) by A2,B1,B4,Cor01;
-
-   hereby assume Partial_Sums(F#x) is convergent; then
-    Re(Partial_Sums(F#x)) is convergent &
-    Im(Partial_Sums(F#x)) is convergent; then
-    Partial_Sums Re(F#x) is convergent &
-    Partial_Sums Im(F#x) is convergent by COMSEQ_3:26; then
-    Partial_Sums((Re F)#x) is convergent &
-    Partial_Sums((Im F)#x) is convergent by A1,A2,MESFUN7C:23; then
-    (Partial_Sums Re F)#x is convergent &
-    (Partial_Sums Im F)#x is convergent by A2,B1,B2,B4,Cor01; then
-    (Re(Partial_Sums F))#x is convergent &
-    (Im(Partial_Sums F))#x is convergent by Lm326; then
-     Re((Partial_Sums F)#x) is convergent &
-    Im((Partial_Sums F)#x) is convergent by A2,A3,A5,MESFUN7C:23;
-    hence (Partial_Sums F)#x is convergent by COMSEQ_3:42;
-   end;
-
-   assume (Partial_Sums F)#x is convergent; then
-   Re((Partial_Sums F)#x) is convergent &
-   Im((Partial_Sums F)#x) is convergent; then
-D1:(Re(Partial_Sums F))#x is convergent &
-   (Im(Partial_Sums F))#x is convergent by A2,A3,A5,MESFUN7C:23;
-   (Re F)#x = Re(F#x) & (Im F)#x = Im(F#x) by A1,A2,MESFUN7C:23; then
-   Re(Partial_Sums(F#x)) is convergent &
-   Im(Partial_Sums(F#x)) is convergent by D1,B3,Lm326,COMSEQ_3:26;
-   hence Partial_Sums(F#x) is convergent by COMSEQ_3:42;
+A2: D c= dom(F.0) and
+A3: x in D;
+A4: D c= dom((Re F).0) by A2,MESFUN7C:def 11;
+A5: D c= dom((Im F).0) by A2,MESFUN7C:def 12;
+A6: dom((Partial_Sums F).0) = dom(F.0) & Partial_Sums F is with_the_same_dom
+  by A1,Th32,Th34;
+A7: Re F is with_the_same_dom by A1,Th24;
+  then
+A8: Im F is with_the_same_dom by Th25;
+  hereby
+    assume
+A9: Partial_Sums(F#x) is convergent;
+    then Im(Partial_Sums(F#x)) is convergent;
+    then Partial_Sums Im(F#x) is convergent by COMSEQ_3:26;
+    then Partial_Sums((Im F)#x) is convergent by A1,A2,A3,MESFUN7C:23;
+    then (Partial_Sums Im F)#x is convergent by A3,A8,A5,Th13;
+    then (Im(Partial_Sums F))#x is convergent by Th29;
+    then
+A10: Im((Partial_Sums F)#x) is convergent by A2,A3,A6,MESFUN7C:23;
+    Re(Partial_Sums(F#x)) is convergent by A9;
+    then Partial_Sums Re(F#x) is convergent by COMSEQ_3:26;
+    then Partial_Sums((Re F)#x) is convergent by A1,A2,A3,MESFUN7C:23;
+    then (Partial_Sums Re F)#x is convergent by A3,A7,A4,Th13;
+    then (Re(Partial_Sums F))#x is convergent by Th29;
+    then Re((Partial_Sums F)#x) is convergent by A2,A3,A6,MESFUN7C:23;
+    hence (Partial_Sums F)#x is convergent by A10,COMSEQ_3:42;
+  end;
+  assume
+A11: (Partial_Sums F)#x is convergent;
+  then Im((Partial_Sums F)#x) is convergent;
+  then
+A12: (Im(Partial_Sums F))#x is convergent by A2,A3,A6,MESFUN7C:23;
+A13: (Im F)#x = Im(F#x) by A1,A2,A3,MESFUN7C:23;
+  Re((Partial_Sums F)#x) is convergent by A11;
+  then
+A14: (Re(Partial_Sums F))#x is convergent by A2,A3,A6,MESFUN7C:23;
+  Partial_Sums((Im F)#x) is convergent iff (Partial_Sums Im F)#x is
+  convergent by A3,A8,A5,Th13;
+  then
+A15: Im(Partial_Sums(F#x)) is convergent by A12,A13,Th29,COMSEQ_3:26;
+A16: (Re F)#x = Re(F#x) by A1,A2,A3,MESFUN7C:23;
+  Partial_Sums((Re F)#x) is convergent iff (Partial_Sums Re F)#x is
+  convergent by A3,A7,A4,Th13;
+  then Re(Partial_Sums(F#x)) is convergent by A14,A16,Th29,COMSEQ_3:26;
+  hence Partial_Sums(F#x) is convergent by A15,COMSEQ_3:42;
 end;
 
 theorem
-F is with_the_same_dom & dom f c= dom(F.0) &
-x in dom f & F#x is summable & f.x = Sum(F#x) implies
-   f.x = lim((Partial_Sums F)#x)
+  F is with_the_same_dom & dom f c= dom(F.0) & x in dom f & F#x is
+  summable & f.x = Sum(F#x) implies f.x = lim((Partial_Sums F)#x)
 proof
   assume that
 A1: F is with_the_same_dom and
@@ -1046,388 +1153,416 @@ A2: dom f c= dom(F.0) and
 A3: x in dom f and
 A4: F#x is summable and
 A5: f.x = Sum(F#x);
-
-B1:Re F is with_the_same_dom by A1,Lm33a; then
-B4:Im F is with_the_same_dom by Lm33b;
-
-   dom Re f = dom f & dom Im f = dom f by MESFUN6C:def 1,def 2; then
-B2:dom Re f c= dom((Re F).0) & dom Im f c= dom((Im F).0)
-                                             by A2,MESFUN7C:def 11,def 12;
-
-B3:x in dom Re f & x in dom Im f by A3,MESFUN6C:def 1,def 2; then
-B5: (Re f).x = Re(f.x) & (Im f).x = Im(f.x) by MESFUN6C:def 1,def 2;
-
-   Re(F#x) = (Re F)#x & Im(F#x) = (Im F)#x by A1,A2,A3,MESFUN7C:23; then
-   Sum(F#x) = Sum((Re F)#x) + Sum((Im F)#x)*<i> by A4,COMSEQ_3:54; then
-   Re(Sum(F#x)) = Sum((Re F)#x) & Im(Sum(F#x)) = Sum((Im F)#x)
-                                              by COMPLEX1:28; then
-   (Re f).x = Sum((Re F)#x) & (Im f).x = Sum((Im F)#x)
-      by A5,B3,MESFUN6C:def 1,def 2; then
-B6:(Re f).x = lim((Partial_Sums Re F)#x) &
-   (Im f).x = lim((Partial_Sums Im F)#x) by B1,B2,B3,B4,Th934r;
-
-   Partial_Sums(F#x) is convergent by A4; then
-   (Partial_Sums F)#x is convergent by A1,A2,A3,Cor01c; then
-C1:lim(Re((Partial_Sums F)#x)) = Re(lim((Partial_Sums F)#x)) &
-   lim(Im((Partial_Sums F)#x)) = Im(lim((Partial_Sums F)#x)) by COMSEQ_3:41;
-
-C2:Partial_Sums F is with_the_same_dom by A1,ADD5c;
-
-   dom((Partial_Sums F).0) = dom(F.0) by A1,ADD0c; then
-   (Re(Partial_Sums F))#x = Re((Partial_Sums F)#x) &
-   (Im(Partial_Sums F))#x = Im((Partial_Sums F)#x)
-     by A2,A3,C2,MESFUN7C:23; then
-C3:lim((Partial_Sums Re F)#x) = lim(Re((Partial_Sums F)#x)) &
-   lim((Partial_Sums Im F)#x) = lim(Im((Partial_Sums F)#x)) by Lm326;
-   thus f.x = Re(f.x) + Im(f.x)*<i> by COMPLEX1:29
-      .= lim((Partial_Sums F)#x) by B5,B6,C1,C3,COMPLEX1:29;
+  dom Re f = dom f by MESFUN6C:def 1;
+  then
+A6: dom Re f c= dom((Re F).0) by A2,MESFUN7C:def 11;
+  Partial_Sums(F#x) is convergent by A4;
+  then (Partial_Sums F)#x is convergent by A1,A2,A3,Th35;
+  then
+A7: lim(Re((Partial_Sums F)#x)) = Re(lim((Partial_Sums F)#x)) & lim(Im((
+  Partial_Sums F)#x)) = Im(lim((Partial_Sums F)#x)) by COMSEQ_3:41;
+  dom Im f = dom f by MESFUN6C:def 2;
+  then
+A8: dom Im f c= dom((Im F).0) by A2,MESFUN7C:def 12;
+A9: x in dom Im f by A3,MESFUN6C:def 2;
+  then
+A10: (Im f).x = Im(f.x) by MESFUN6C:def 2;
+A11: Partial_Sums F is with_the_same_dom & dom((Partial_Sums F).0) = dom(F.0
+  ) by A1,Th32,Th34;
+  then (Re(Partial_Sums F))#x = Re((Partial_Sums F)#x) by A2,A3,MESFUN7C:
+  23;
+  then
+A12: lim((Partial_Sums Re F)#x) = lim(Re((Partial_Sums F)#x)) by Th29;
+  (Im(Partial_Sums F))#x = Im((Partial_Sums F)#x) by A2,A3,A11,MESFUN7C:
+  23;
+  then
+A13: lim((Partial_Sums Im F)#x) = lim(Im((Partial_Sums F)#x)) by Th29;
+A14: x in dom Re f by A3,MESFUN6C:def 1;
+  then
+A15: (Re f).x = Re(f.x) by MESFUN6C:def 1;
+A16: Re F is with_the_same_dom by A1,Th24;
+  then
+A17: Im F is with_the_same_dom by Th25;
+  Re(F#x) = (Re F)#x & Im(F#x) = (Im F)#x by A1,A2,A3,MESFUN7C:23;
+  then
+A18: Sum(F#x) = Sum((Re F)#x) + Sum((Im F)#x)*<i> by A4,COMSEQ_3:54;
+  then Re(Sum(F#x)) = Sum((Re F)#x) by COMPLEX1:28;
+  then (Re f).x = Sum((Re F)#x) by A5,A14,MESFUN6C:def 1;
+  then
+A19: (Re f).x = lim((Partial_Sums Re F)#x) by A16,A6,A14,Th14;
+  Im(Sum(F#x)) = Sum((Im F)#x) by A18,COMPLEX1:28;
+  then (Im f).x = Sum((Im F)#x) by A5,A9,MESFUN6C:def 2;
+  then
+A20: (Im f).x = lim((Partial_Sums Im F)#x) by A17,A8,A9,Th14;
+  thus f.x = Re(f.x) + Im(f.x)*<i> by COMPLEX1:29
+    .= lim((Partial_Sums F)#x) by A15,A10,A19,A20,A7,A12,A13,COMPLEX1:29;
 end;
 
 theorem
-(for m be Nat holds F.m is_simple_func_in S) implies
-  (Partial_Sums F).n is_simple_func_in S
+  (for m be Nat holds F.m is_simple_func_in S) implies (Partial_Sums F).
+  n is_simple_func_in S
 proof
-  assume A1: for m be Nat holds F.m is_simple_func_in S;
-
-  for m be Nat holds (Re F).m is_simple_func_in S
-  proof
-    let m be Nat;
-    F.m is_simple_func_in S by A1; then
-    Re(F.m) is_simple_func_in S by MESFUN7C:43;
-    hence (Re F).m is_simple_func_in S by MESFUN7C:24;
-  end; then
-  (Partial_Sums Re F).n is_simple_func_in S by Th16; then
-  (Re(Partial_Sums F)).n is_simple_func_in S by Lm326; then
-A2: Re((Partial_Sums F).n) is_simple_func_in S by MESFUN7C:24;
-
+  assume
+A1: for m be Nat holds F.m is_simple_func_in S;
   for m be Nat holds (Im F).m is_simple_func_in S
   proof
     let m be Nat;
-    F.m is_simple_func_in S by A1; then
-    Im(F.m) is_simple_func_in S by MESFUN7C:43;
+    F.m is_simple_func_in S by A1;
+    then Im(F.m) is_simple_func_in S by MESFUN7C:43;
     hence (Im F).m is_simple_func_in S by MESFUN7C:24;
-  end; then
-  (Partial_Sums Im F).n is_simple_func_in S by Th16; then
-  (Im(Partial_Sums F)).n is_simple_func_in S by Lm326; then
-  Im((Partial_Sums F).n) is_simple_func_in S by MESFUN7C:24;
+  end;
+  then (Partial_Sums Im F).n is_simple_func_in S by Th15;
+  then (Im(Partial_Sums F)).n is_simple_func_in S by Th29;
+  then
+A2: Im((Partial_Sums F).n) is_simple_func_in S by MESFUN7C:24;
+  for m be Nat holds (Re F).m is_simple_func_in S
+  proof
+    let m be Nat;
+    F.m is_simple_func_in S by A1;
+    then Re(F.m) is_simple_func_in S by MESFUN7C:43;
+    hence (Re F).m is_simple_func_in S by MESFUN7C:24;
+  end;
+  then (Partial_Sums Re F).n is_simple_func_in S by Th15;
+  then (Re(Partial_Sums F)).n is_simple_func_in S by Th29;
+  then Re((Partial_Sums F).n) is_simple_func_in S by MESFUN7C:24;
   hence (Partial_Sums F).n is_simple_func_in S by A2,MESFUN7C:43;
 end;
 
-Lm1:
-(for n be Nat holds F.n is_measurable_on E) implies
-  (Re F).m is_measurable_on E & (Im F).m is_measurable_on E
+Lm2: (for n be Nat holds F.n is_measurable_on E) implies (Re F).m
+is_measurable_on E & (Im F).m is_measurable_on E
+
 proof
-    assume for n be Nat holds F.n is_measurable_on E; then
-    F.m is_measurable_on E; then
-    Re(F.m) is_measurable_on E & Im(F.m) is_measurable_on E by MESFUN6C:def 3;
-    hence (Re F).m is_measurable_on E & (Im F).m is_measurable_on E
-      by MESFUN7C:24;
+  assume
+  for n be Nat holds F.n is_measurable_on E;
+  then F.m is_measurable_on E;
+
+  then Re(F.m) is_measurable_on E & Im(F.m) is_measurable_on E by
+  MESFUN6C:
+  def 3;
+
+  hence (Re F).m is_measurable_on E & (Im F).m is_measurable_on E by
+  MESFUN7C:24;
+
 end;
 
 theorem
-(for n be Nat holds F.n is_measurable_on E) implies
- (Partial_Sums F).m is_measurable_on E
+  (for n be Nat holds F.n is_measurable_on E) implies (Partial_Sums F).m
+  is_measurable_on E
 proof
-  assume A1: for n be Nat holds F.n is_measurable_on E;
-
-  for n be Nat holds (Re F).n is_measurable_on E by A1,Lm1; then
-  (Partial_Sums Re F).m is_measurable_on E by ADD1; then
-  (Re(Partial_Sums F)).m is_measurable_on E by Lm326; then
-A2: Re((Partial_Sums F).m) is_measurable_on E by MESFUN7C:24;
-
-  for n be Nat holds (Im F).n is_measurable_on E by A1,Lm1; then
-  (Partial_Sums Im F).m is_measurable_on E by ADD1; then
-  (Im(Partial_Sums F)).m is_measurable_on E by Lm326; then
-  Im((Partial_Sums F).m) is_measurable_on E by MESFUN7C:24;
-
+  assume
+A1: for n be Nat holds F.n is_measurable_on E;
+  then for n be Nat holds (Im F).n is_measurable_on E by Lm2;
+  then (Partial_Sums Im F).m is_measurable_on E by Th16;
+  then (Im(Partial_Sums F)).m is_measurable_on E by Th29;
+  then
+A2: Im((Partial_Sums F).m) is_measurable_on E by MESFUN7C:24;
+  for n be Nat holds (Re F).n is_measurable_on E by A1,Lm2;
+  then (Partial_Sums Re F).m is_measurable_on E by Th16;
+  then (Re(Partial_Sums F)).m is_measurable_on E by Th29;
+  then Re((Partial_Sums F).m) is_measurable_on E by MESFUN7C:24;
   hence (Partial_Sums F).m is_measurable_on E by A2,MESFUN6C:def 3;
 end;
 
 theorem
-dom(F.0) = E & F is with_the_same_dom &
-(for n be Nat holds (Partial_Sums F).n is_measurable_on E) &
-(for x be Element of X st x in E holds F#x is summable)
-  implies lim(Partial_Sums F) is_measurable_on E
+  dom(F.0) = E & F is with_the_same_dom & (for n be Nat holds (
+Partial_Sums F).n is_measurable_on E) & (for x be Element of X st x in E holds
+  F#x is summable) implies lim(Partial_Sums F) is_measurable_on E
 proof
   assume that
 A1: dom(F.0) = E and
 A2: F is with_the_same_dom and
 A3: for n be Nat holds (Partial_Sums F).n is_measurable_on E and
 A4: for x be Element of X st x in E holds F#x is summable;
-
-B1: dom((Re F).0) = E & dom((Im F).0) = E by A1,MESFUN7C:def 11,def 12;
-
-B2: Re F is with_the_same_dom by A2,Lm33a; then
-B3: Im F is with_the_same_dom by Lm33b;
-
-B31: for n be Nat holds (Partial_Sums Re F).n is_measurable_on E
-     proof
-       let n be Nat;
-       (Partial_Sums F).n is_measurable_on E by A3; then
-       Re((Partial_Sums F).n) is_measurable_on E by MESFUN6C:def 3; then
-       (Re(Partial_Sums F)).n is_measurable_on E by MESFUN7C:24;
-       hence (Partial_Sums Re F).n is_measurable_on E by Lm326;
-     end;
-
-B32: for n be Nat holds (Partial_Sums Im F).n is_measurable_on E
-     proof
-       let n be Nat;
-       (Partial_Sums F).n is_measurable_on E by A3; then
-       Im((Partial_Sums F).n) is_measurable_on E by MESFUN6C:def 3; then
-       (Im(Partial_Sums F)).n is_measurable_on E by MESFUN7C:24;
-       hence (Partial_Sums Im F).n is_measurable_on E by Lm326;
-     end;
-
-B41: for x be Element of X st x in E holds (Re F)#x is summable
-     proof
-       let x be Element of X;
-       assume P01: x in E; then
-       F#x is summable by A4; then
-       Re(F#x) is summable;
-       hence (Re F)#x is summable by P01,A1,A2,MESFUN7C:23;
-     end;
-
-B42: for x be Element of X st x in E holds (Im F)#x is summable
-     proof
-       let x be Element of X;
-       assume P01: x in E; then
-       F#x is summable by A4; then
-       Im(F#x) is summable;
-       hence (Im F)#x is summable by P01,A1,A2,MESFUN7C:23;
-     end;
-
-C1: for x be Element of X st x in dom((Partial_Sums F).0) holds
-                                     (Partial_Sums F)#x is convergent
-    proof
-      let x be Element of X;
-      assume P01: x in dom((Partial_Sums F).0);
-P02:  dom((Partial_Sums F).0) = dom(F.0) by A2,ADD0c; then
-      F#x is summable by A4,A1,P01; then
-      Partial_Sums (F#x) is convergent;
-      hence (Partial_Sums F)#x is convergent by P01,P02,A2,Cor01c;
-    end;
-
-  Partial_Sums F is with_the_same_dom by A2,ADD5c; then
-
-C2: lim(Re(Partial_Sums F)) = R_EAL Re(lim(Partial_Sums F)) &
-    lim(Im(Partial_Sums F)) = R_EAL Im(lim(Partial_Sums F)) by C1,MESFUN7C:25;
-
-  lim(Partial_Sums Re F) is_measurable_on E  by B1,B2,B31,B41,Th22; then
-  lim(Re(Partial_Sums F)) is_measurable_on E by Lm326; then
-C3: Re(lim(Partial_Sums F)) is_measurable_on E by C2,MESFUNC6:def 6;
-
-  lim(Partial_Sums Im F) is_measurable_on E  by B1,B3,B32,B42,Th22; then
-  lim(Im(Partial_Sums F)) is_measurable_on E by Lm326; then
-  Im(lim(Partial_Sums F)) is_measurable_on E by C2,MESFUNC6:def 6;
-
-  hence lim(Partial_Sums F) is_measurable_on E by C3,MESFUN6C:def 3;
+A5: dom((Im F).0) = E by A1,MESFUN7C:def 12;
+A6: for x be Element of X st x in dom((Partial_Sums F).0) holds (
+  Partial_Sums F)#x is convergent
+  proof
+    let x be Element of X;
+    assume
+A7: x in dom((Partial_Sums F).0);
+A8: dom((Partial_Sums F).0) = dom(F.0) by A2,Th32;
+    then F#x is summable by A1,A4,A7;
+    then Partial_Sums (F#x) is convergent;
+    hence (Partial_Sums F)#x is convergent by A2,A7,A8,Th35;
+  end;
+A9: for n be Nat holds (Partial_Sums Im F).n is_measurable_on E
+  proof
+    let n be Nat;
+    (Partial_Sums F).n is_measurable_on E by A3;
+    then Im((Partial_Sums F).n) is_measurable_on E by MESFUN6C:def 3;
+    then (Im(Partial_Sums F)).n is_measurable_on E by MESFUN7C:24;
+    hence (Partial_Sums Im F).n is_measurable_on E by Th29;
+  end;
+A10: for x be Element of X st x in E holds (Im F)#x is summable
+  proof
+    let x be Element of X;
+    assume
+A11: x in E;
+    then F#x is summable by A4;
+    then Im(F#x) is summable;
+    hence (Im F)#x is summable by A1,A2,A11,MESFUN7C:23;
+  end;
+A12: Re F is with_the_same_dom by A2,Th24;
+  then Im F is with_the_same_dom by Th25;
+  then lim(Partial_Sums Im F) is_measurable_on E by A5,A9,A10,Th18;
+  then
+A13: lim(Im(Partial_Sums F)) is_measurable_on E by Th29;
+A14: for x be Element of X st x in E holds (Re F)#x is summable
+  proof
+    let x be Element of X;
+    assume
+A15: x in E;
+    then F#x is summable by A4;
+    then Re(F#x) is summable;
+    hence (Re F)#x is summable by A1,A2,A15,MESFUN7C:23;
+  end;
+A16: for n be Nat holds (Partial_Sums Re F).n is_measurable_on E
+  proof
+    let n be Nat;
+    (Partial_Sums F).n is_measurable_on E by A3;
+    then Re((Partial_Sums F).n) is_measurable_on E by MESFUN6C:def 3;
+    then (Re(Partial_Sums F)).n is_measurable_on E by MESFUN7C:24;
+    hence (Partial_Sums Re F).n is_measurable_on E by Th29;
+  end;
+A17: Partial_Sums F is with_the_same_dom by A2,Th34;
+  then lim(Im(Partial_Sums F)) = R_EAL Im(lim(Partial_Sums F)) by A6,
+  MESFUN7C:25;
+  then
+A18: Im(lim(Partial_Sums F)) is_measurable_on E by A13,MESFUNC6:def 6;
+  dom((Re F).0) = E by A1,MESFUN7C:def 11;
+  then lim(Partial_Sums Re F) is_measurable_on E by A12,A16,A14,Th18;
+  then
+A19: lim(Re(Partial_Sums F)) is_measurable_on E by Th29;
+  lim(Re(Partial_Sums F)) = R_EAL Re(lim(Partial_Sums F)) by A6,A17,
+  MESFUN7C:25;
+  then Re(lim(Partial_Sums F)) is_measurable_on E by A19,MESFUNC6:def 6;
+  hence lim(Partial_Sums F) is_measurable_on E by A18,MESFUN6C:def 3;
 end;
 
 theorem
-(for n be Nat holds F.n is_integrable_on M)
-implies
- (for m be Nat holds (Partial_Sums F).m is_integrable_on M)
+  (for n be Nat holds F.n is_integrable_on M) implies for m be Nat holds
+  (Partial_Sums F).m is_integrable_on M
 proof
-  assume A1: for n be Nat holds F.n is_integrable_on M;
-
-A2:for n be Nat holds (Re F).n is_integrable_on M
+  assume
+A1: for n be Nat holds F.n is_integrable_on M;
+A2: for n be Nat holds (Im F).n is_integrable_on M
   proof
     let n be Nat;
-    F.n is_integrable_on M by A1; then
-    Re(F.n) is_integrable_on M by MESFUN6C:def 4;
-    hence (Re F).n is_integrable_on M by MESFUN7C:24;
-  end;
-
-A3:for n be Nat holds (Im F).n is_integrable_on M
-  proof
-    let n be Nat;
-    F.n is_integrable_on M by A1; then
-    Im(F.n) is_integrable_on M by MESFUN6C:def 4;
+    F.n is_integrable_on M by A1;
+    then Im(F.n) is_integrable_on M by MESFUN6C:def 4;
     hence (Im F).n is_integrable_on M by MESFUN7C:24;
   end;
-
-  thus
-  for m be Nat holds (Partial_Sums F).m is_integrable_on M
+A3: for n be Nat holds (Re F).n is_integrable_on M
+  proof
+    let n be Nat;
+    F.n is_integrable_on M by A1;
+    then Re(F.n) is_integrable_on M by MESFUN6C:def 4;
+    hence (Re F).n is_integrable_on M by MESFUN7C:24;
+  end;
+  thus for m be Nat holds (Partial_Sums F).m is_integrable_on M
   proof
     let m be Nat;
-    (Partial_Sums Re F).m is_integrable_on M by A2,Th23; then
-    (Re(Partial_Sums F)).m is_integrable_on M by Lm326; then
-B1: Re((Partial_Sums F).m) is_integrable_on M by MESFUN7C:24;
-
-    (Partial_Sums Im F).m is_integrable_on M by A3,Th23; then
-    (Im(Partial_Sums F)).m is_integrable_on M by Lm326; then
-    Im((Partial_Sums F).m) is_integrable_on M by MESFUN7C:24;
-
-    hence (Partial_Sums F).m is_integrable_on M by B1,MESFUN6C:def 4;
+    (Partial_Sums Im F).m is_integrable_on M by A2,Th19;
+    then (Im(Partial_Sums F)).m is_integrable_on M by Th29;
+    then
+A4: Im((Partial_Sums F).m) is_integrable_on M by MESFUN7C:24;
+    (Partial_Sums Re F).m is_integrable_on M by A3,Th19;
+    then (Re(Partial_Sums F)).m is_integrable_on M by Th29;
+    then Re((Partial_Sums F).m) is_integrable_on M by MESFUN7C:24;
+    hence (Partial_Sums F).m is_integrable_on M by A4,MESFUN6C:def 4;
   end;
 end;
 
 begin :: Selected Properties of Complex-valued Simple Functions
 
 reserve f,g for PartFunc of X,COMPLEX,
-        A for Element of S;
+  A for Element of S;
 
 theorem
   f is_simple_func_in S implies f is_measurable_on A
 proof
-  assume f is_simple_func_in S; then
-  Re f is_simple_func_in S & Im f is_simple_func_in S by MESFUN7C:43; then
-  Re f is_measurable_on A  & Im f is_measurable_on A by MESFUNC6:50;
-  hence f is_measurable_on A by MESFUN6C:def 3;
+  assume
+A1: f is_simple_func_in S;
+  then Im f is_simple_func_in S by MESFUN7C:43;
+  then
+A2: Im f is_measurable_on A by MESFUNC6:50;
+  Re f is_simple_func_in S by A1,MESFUN7C:43;
+  then Re f is_measurable_on A by MESFUNC6:50;
+  hence f is_measurable_on A by A2,MESFUN6C:def 3;
 end;
 
 theorem
   f is_simple_func_in S implies f|A is_simple_func_in S
 proof
-   assume f is_simple_func_in S; then
-   Re f is_simple_func_in S & Im f is_simple_func_in S by MESFUN7C:43; then
-   R_EAL Re f is_simple_func_in S & R_EAL Im f is_simple_func_in S
-     by MESFUNC6:49; then
-   R_EAL((Re f)|A) is_simple_func_in S & R_EAL((Im f)|A) is_simple_func_in S
-     by MESFUNC5:40; then
-   (Re f)|A is_simple_func_in S & (Im f)|A is_simple_func_in S
-     by MESFUNC6:49; then
-   Re(f|A) is_simple_func_in S & Im(f|A) is_simple_func_in S by MESFUN6C:7;
-   hence f|A is_simple_func_in S by MESFUN7C:43;
- end;
+  assume
+A1: f is_simple_func_in S;
+  then Im f is_simple_func_in S by MESFUN7C:43;
+  then R_EAL Im f is_simple_func_in S by MESFUNC6:49;
+  then R_EAL((Im f)|A) is_simple_func_in S by MESFUNC5:40;
+  then (Im f)|A is_simple_func_in S by MESFUNC6:49;
+  then
+A2: Im(f|A) is_simple_func_in S by MESFUN6C:7;
+  Re f is_simple_func_in S by A1,MESFUN7C:43;
+  then R_EAL Re f is_simple_func_in S by MESFUNC6:49;
+  then R_EAL((Re f)|A) is_simple_func_in S by MESFUNC5:40;
+  then (Re f)|A is_simple_func_in S by MESFUNC6:49;
+  then Re(f|A) is_simple_func_in S by MESFUN6C:7;
+  hence f|A is_simple_func_in S by A2,MESFUN7C:43;
+end;
 
 theorem
   f is_simple_func_in S implies dom f is Element of S
 proof
-  assume f is_simple_func_in S; then
-  ex F be Finite_Sep_Sequence of S st dom f = union rng F &
-  for n being Nat,x,y being Element of X st
-  n in dom F & x in F.n & y in F.n holds f.x = f.y by MESFUN7C:def 13;
+  assume
+  f is_simple_func_in S;
+  then ex F be Finite_Sep_Sequence of S st dom f = union rng F & for n being
+Nat,x,y being Element of X st n in dom F & x in F.n & y in F.n holds f.x = f.y
+  by MESFUN7C:def 13;
   hence thesis by MESFUNC2:34;
 end;
 
 theorem
-  f is_simple_func_in S & g is_simple_func_in S implies
-    f+g is_simple_func_in S
+  f is_simple_func_in S & g is_simple_func_in S implies f+g
+  is_simple_func_in S
 proof
-   assume f is_simple_func_in S & g is_simple_func_in S; then
-   Re f is_simple_func_in S & Im f is_simple_func_in S &
-   Re g is_simple_func_in S & Im g is_simple_func_in S by MESFUN7C:43; then
-   Re f + Re g is_simple_func_in S &
-   Im f + Im g is_simple_func_in S by MESFUNC6:72; then
-   Re(f+g) is_simple_func_in S & Im(f+g) is_simple_func_in S by MESFUN6C:5;
-   hence thesis by MESFUN7C:43;
+  assume
+A1: f is_simple_func_in S & g is_simple_func_in S;
+  then Im f is_simple_func_in S & Im g is_simple_func_in S by
+  MESFUN7C:43;
+  then Im f + Im g is_simple_func_in S by MESFUNC6:72;
+  then
+A2: Im(f+g) is_simple_func_in S by MESFUN6C:5;
+  Re f is_simple_func_in S & Re g is_simple_func_in S by A1,MESFUN7C:43;
+  then Re f + Re g is_simple_func_in S by MESFUNC6:72;
+  then Re(f+g) is_simple_func_in S by MESFUN6C:5;
+  hence thesis by A2,MESFUN7C:43;
 end;
 
 theorem
-  for c be complex number st
-  f is_simple_func_in S holds c(#)f is_simple_func_in S
+  for c be complex number st f is_simple_func_in S holds c(#)f
+  is_simple_func_in S
 proof
   let c be complex number;
-  assume f is_simple_func_in S; then
-  Re f is_simple_func_in S & Im f is_simple_func_in S by MESFUN7C:43; then
-A1: (Re c)(#)(Re f) is_simple_func_in S & (Re c)(#)(Im f) is_simple_func_in S &
-    (Im c)(#)(Re f) is_simple_func_in S & (Im c)(#)(Im f) is_simple_func_in S
-    by MESFUNC6:73; then
-    (-1)(#)((Im c)(#)(Im f)) is_simple_func_in S by MESFUNC6:73; then
-A4: R_EAL( -(Im c)(#)(Im f) ) is_simple_func_in S by MESFUNC6:49;
-  R_EAL( (Re c)(#)(Re f) ) is_simple_func_in S by A1,MESFUNC6:49; then
-A5: R_EAL( (Re c)(#)(Re f) ) + R_EAL( -(Im c)(#)(Im f) ) is_simple_func_in S
-    by A4,MESFUNC5:44;
-
-  R_EAL((Re c)(#)(Re f) - (Im c)(#)(Im f)) is_simple_func_in S
-    by A5,MESFUNC6:23; then
-A6: (Re c)(#)(Re f) - (Im c)(#)(Im f) is_simple_func_in S by MESFUNC6:49;
-  (Im c)(#)(Re f) + (Re c)(#)(Im f) is_simple_func_in S
-    by A1,MESFUNC6:72; then
-  Re(c(#)f) is_simple_func_in S & Im(c(#)f) is_simple_func_in S
-    by A6,MESFUN6C:3;
-  hence thesis by MESFUN7C:43;
+  assume
+A1: f is_simple_func_in S;
+  then
+A2: Re f is_simple_func_in S by MESFUN7C:43;
+  then
+A3: (Im c)(#)(Re f) is_simple_func_in S by MESFUNC6:73;
+A4: Im f is_simple_func_in S by A1,MESFUN7C:43;
+  then (Im c)(#)(Im f) is_simple_func_in S by MESFUNC6:73;
+  then (-1)(#)((Im c)(#)(Im f)) is_simple_func_in S by MESFUNC6:73;
+  then
+A5: R_EAL( -(Im c)(#)(Im f) ) is_simple_func_in S by MESFUNC6:49;
+  (Re c)(#)(Re f) is_simple_func_in S by A2,MESFUNC6:73;
+  then R_EAL( (Re c)(#)(Re f) ) is_simple_func_in S by MESFUNC6:49;
+  then R_EAL( (Re c)(#)(Re f) ) + R_EAL( -(Im c)(#)(Im f) ) is_simple_func_in
+  S by A5,MESFUNC5:44;
+  then R_EAL((Re c)(#)(Re f) - (Im c)(#)(Im f)) is_simple_func_in S by
+  MESFUNC6:23;
+  then (Re c)(#)(Re f) - (Im c)(#)(Im f) is_simple_func_in S by MESFUNC6:
+  49;
+  then
+A6: Re(c(#)f) is_simple_func_in S by MESFUN6C:3;
+  (Re c)(#)(Im f) is_simple_func_in S by A4,MESFUNC6:73;
+  then (Im c)(#)(Re f) + (Re c)(#)(Im f) is_simple_func_in S by
+  A3,MESFUNC6
+  :72;
+  then Im(c(#)f) is_simple_func_in S by MESFUN6C:3;
+  hence thesis by A6,MESFUN7C:43;
 end;
 
 begin :: Lebesgue's Convergence theorem of Complex-valued Function
 
 reserve F for with_the_same_dom Functional_Sequence of X,ExtREAL,
-        f,P for PartFunc of X,ExtREAL;
+  f,P for
+  PartFunc of X,ExtREAL;
 
-theorem MES1017e:
-E = dom(F.0) & E = dom P & (for n be Nat holds F.n is_measurable_on E) &
-P is_integrable_on M &
-(for x be Element of X, n be Nat st x in E holds (|. F.n .|).x <= P.x) &
-(for x be Element of X st x in E holds F#x is convergent)
-implies
-  lim F is_integrable_on M
+theorem Th46:
+  E = dom(F.0) & E = dom P & (for n be Nat holds F.n
+  is_measurable_on E) & P is_integrable_on M & (for x be Element of X, n be Nat
+st x in E holds (|. F.n .|).x <= P.x) & (for x be Element of X st x in E holds
+  F#x is convergent) implies lim F is_integrable_on M
 proof
-   assume that
-A1: E = dom(F.0) & E = dom P and
-A2: for n be Nat holds F.n is_measurable_on E and
-A3: P is_integrable_on M and
-A4: for x be Element of X, n be Nat st x in E holds (|. F.n .|).x <= P.x and
-A5: (for x be Element of X st x in E holds F#x is convergent);
-
-C0:E = dom lim_sup F by A1,MESFUNC8:def 9;
-C1:lim_sup F is_measurable_on E by A1,A2,MESFUNC8:23;
-
-C2:for x be Element of X, k be Nat st
-    x in E holds -(P.x) <= (F#x).k & (F#x).k <= P.x
-   proof
+  assume that
+A1: E = dom(F.0) and
+A2: E = dom P and
+A3: for n be Nat holds F.n is_measurable_on E and
+A4: P is_integrable_on M and
+A5: for x be Element of X, n be Nat st x in E holds (|. F.n .|).x <= P.x and
+A6: for x be Element of X st x in E holds F#x is convergent;
+A7: E = dom lim_sup F by A1,MESFUNC8:def 9;
+A8: for x be Element of X, k be Nat st x in E holds -(P.x) <= (F#x).k & (F#x)
+  .k <= P.x
+  proof
     let x be Element of X, k be Nat;
-    assume C3: x in E; then
-    x in dom(F.k) by A1,MESFUNC8:def 2; then
-C4: x in dom |.(F.k).| by MESFUNC1:def 10;
-    (|. F.k .|).x <= P.x by A4,C3; then
-    |. (F.k).x .| <= P.x by C4,MESFUNC1:def 10; then
-    -(P.x) <= (F.k).x & (F.k).x <= P.x by EXTREAL2:60;
+    assume
+A9: x in E;
+    then x in dom(F.k) by A1,MESFUNC8:def 2;
+    then
+A10: x in dom |.(F.k).| by MESFUNC1:def 10;
+    (|. F.k .|).x <= P.x by A5,A9;
+    then |. (F.k).x .| <= P.x by A10,MESFUNC1:def 10;
+    then -(P.x) <= (F.k).x & (F.k).x <= P.x by EXTREAL2:60;
     hence -(P.x) <= (F#x).k & (F#x).k <= P.x by MESFUNC5:def 13;
-   end;
-
-C5:now let x be Element of X;
-    assume D12: x in dom lim_sup F;
-
+  end;
+A11: now
+    let x be Element of X;
+    assume
+A12: x in dom lim_sup F;
     for k be Nat holds (superior_realsequence(F#x)).k >= -(P.x)
     proof
-     let k be Nat;
-     k is Element of NAT by ORDINAL1:def 13; then
-D14: (superior_realsequence(F#x)).k >= (F#x).k by RINFSUP2:8;
-     (F#x).k >= -(P.x) by C2,D12,C0;
-     hence (superior_realsequence(F#x)).k >= -(P.x) by D14,XXREAL_0:2;
-    end; then
-    lim_sup(F#x) >= -(P.x) by MESFUN10:4; then
-D15:(lim_sup F).x >= -(P.x) by D12,MESFUNC8:def 9;
-
-    now let y be ext-real number;
-     assume y in rng(F#x); then
-     ex k be set st k in dom(F#x) & y = (F#x).k by FUNCT_1:def 5;
-     hence P.x >= y by C2,D12,C0;
-    end; then
-    P.x is UpperBound of rng(F#x) by XXREAL_2:def 1; then
-    P.x >= sup rng(F#x) by XXREAL_2:def 3; then
-    P.x >= sup((F#x)^\0) by NAT_1:48; then
-D17:P.x >= (superior_realsequence(F#x)).0 by RINFSUP2:27;
-    (superior_realsequence(F#x)).0 >= inf superior_realsequence(F#x)
-      by RINFSUP2:23; then
-    P.x >= lim_sup(F#x) by D17,XXREAL_0:2; then
-    P.x >= (lim_sup F).x by D12,MESFUNC8:def 9;
-    hence |. (lim_sup F).x .| <= P.x by D15,EXTREAL2:60;
-   end;
-
-C6:E = dom lim F by A1,MESFUNC8:def 10;
-
-   now let x be Element of X;
-    assume P01: x in dom lim F; then
-    x in E by A1,MESFUNC8:def 10; then
-    F#x is convergent by A5;
-    hence (lim F).x = (lim_sup F).x by P01,MESFUNC8:14;
-   end; then
-   lim F = lim_sup F by C0,C6,PARTFUN1:34;
-   hence lim F is_integrable_on M by C5,C0,C1,A1,A3,MESFUNC5:108;
+      let k be Nat;
+      k is Element of NAT by ORDINAL1:def 13;
+      then
+A13:  (superior_realsequence(F#x)).k >= (F#x).k by RINFSUP2:8;
+      (F#x).k >= -(P.x) by A7,A8,A12;
+      hence (superior_realsequence(F#x)).k >= -(P.x) by A13,XXREAL_0:2;
+    end;
+    then lim_sup(F#x) >= -(P.x) by MESFUN10:4;
+    then
+A14: (lim_sup F).x >= -(P.x) by A12,MESFUNC8:def 9;
+    now
+      let y be ext-real number;
+      assume
+      y in rng(F#x);
+      then ex k be set st k in dom(F#x) & y = (F#x).k by FUNCT_1:def 5;
+      hence P.x >= y by A7,A8,A12;
+    end;
+    then P.x is UpperBound of rng(F#x) by XXREAL_2:def 1;
+    then P.x >= sup rng(F#x) by XXREAL_2:def 3;
+    then P.x >= sup((F#x)^\0) by NAT_1:48;
+    then
+A15: P.x >= (superior_realsequence(F#x)).0 by RINFSUP2:27;
+    (superior_realsequence(F#x)).0 >= inf superior_realsequence(F#x) by
+    RINFSUP2:23;
+    then P.x >= lim_sup(F#x) by A15,XXREAL_0:2;
+    then P.x >= (lim_sup F).x by A12,MESFUNC8:def 9;
+    hence |. (lim_sup F).x .| <= P.x by A14,EXTREAL2:60;
+  end;
+A16: now
+    let x be Element of X;
+    assume
+A17: x in dom lim F;
+    then x in E by A1,MESFUNC8:def 10;
+    then F#x is convergent by A6;
+    hence (lim F).x = (lim_sup F).x by A17,MESFUNC8:14;
+  end;
+A18: lim_sup F is_measurable_on E by A1,A3,MESFUNC8:23;
+  E = dom lim F by A1,MESFUNC8:def 10;
+  then lim F = lim_sup F by A7,A16,PARTFUN1:34;
+  hence lim F is_integrable_on M by A2,A4,A7,A18,A11,MESFUNC5:108;
 end;
 
 reserve F for with_the_same_dom Functional_Sequence of X,REAL,
-        f,P for PartFunc of X,REAL;
+  f,P for
+  PartFunc of X,REAL;
 
-theorem MES1017r:
-E = dom(F.0) & E = dom P & (for n be Nat holds F.n is_measurable_on E) &
-P is_integrable_on M &
-(for x be Element of X, n be Nat st x in E holds (|. F.n .|).x <= P.x) &
-(for x be Element of X st x in E holds F#x is convergent)
-implies
-  lim F is_integrable_on M
+theorem Th47:
+  E = dom(F.0) & E = dom P & (for n be Nat holds F.n
+  is_measurable_on E) & P is_integrable_on M & (for x be Element of X, n be Nat
+st x in E holds (|. F.n .|).x <= P.x) & (for x be Element of X st x in E holds
+  F#x is convergent) implies lim F is_integrable_on M
 proof
   assume that
 A1: E = dom(F.0) & E = dom P and
@@ -1435,919 +1570,935 @@ A2: for n be Nat holds F.n is_measurable_on E and
 A3: P is_integrable_on M and
 A4: for x be Element of X, n be Nat st x in E holds (|. F.n .|).x <= P.x and
 A5: for x be Element of X st x in E holds F#x is convergent;
-
-B2:for n be Nat holds (R_EAL F).n is_measurable_on E
-   proof
+A6: for n be Nat holds (R_EAL F).n is_measurable_on E
+  proof
     let n be Nat;
-    F.n is_measurable_on E by A2; then
-    R_EAL (F.n) is_measurable_on E by MESFUNC6:def 6;
+    F.n is_measurable_on E by A2;
+    then R_EAL (F.n) is_measurable_on E by MESFUNC6:def 6;
     hence (R_EAL F).n is_measurable_on E;
-   end;
-
-B3:R_EAL P is_integrable_on M by A3,MESFUNC6:def 9;
-
-B4:for x be Element of X, n be Nat st
-    x in E holds (|. (R_EAL F).n .|).x <= (R_EAL P).x
-   proof
-    let x be Element of X, n be Nat;
-    assume B5: x in E;
-    R_EAL |. F.n .| = |. R_EAL (F.n) .| by MESFUNC6:1;
-    hence (|. (R_EAL F).n .|).x <= (R_EAL P).x by B5,A4;
-   end;
-
-   for x be Element of X st x in E holds (R_EAL F)#x is convergent
-   proof
+  end;
+A7: for x be Element of X st x in E holds (R_EAL F)#x is convergent
+  proof
     let x be Element of X;
-    assume x in E; then
-P01:F#x is convergent by A5;
+    assume
+    x in E;
+    then
+A8: F#x is convergent by A5;
     (R_EAL F)#x = F#x by MESFUN7C:1;
-    hence (R_EAL F)#x is convergent by P01,RINFSUP2:14;
-   end;
-   hence lim F is_integrable_on M by A1,B2,B3,B4,MES1017e;
+    hence (R_EAL F)#x is convergent by A8,RINFSUP2:14;
+  end;
+A9: for x be Element of X, n be Nat st x in E holds (|. (R_EAL F).n .|).x <=
+  (R_EAL P).x
+  proof
+    let x be Element of X, n be Nat;
+A10: R_EAL |. F.n .| = |. R_EAL (F.n) .| by MESFUNC6:1;
+    assume
+    x in E;
+    hence (|. (R_EAL F).n .|).x <= (R_EAL P).x by A4,A10;
+  end;
+  R_EAL P is_integrable_on M by A3,MESFUNC6:def 9;
+  hence lim F is_integrable_on M by A1,A6,A9,A7,Th46;
 end;
 
 :: Lebesgue's Convergence theorem
-theorem MES1018r:
-E = dom(F.0) & E = dom P & (for n be Nat holds F.n is_measurable_on E) &
-P is_integrable_on M &
-(for x be Element of X, n be Nat st x in E holds (|. F.n .|).x <= P.x)
-implies
- ex I be Real_Sequence st
-  (for n be Nat holds I.n = Integral(M,F.n)) &
-  ( (for x be Element of X st x in E holds F#x is convergent)
-      implies I is convergent & lim I = Integral(M,lim F) )
+
+theorem Th48:
+  E = dom(F.0) & E = dom P & (for n be Nat holds F.n
+  is_measurable_on E) & P is_integrable_on M & (for x be Element of X, n be Nat
+  st x in E holds (|. F.n .|).x <= P.x) implies ex I be Real_Sequence st (for n
+be Nat holds I.n = Integral(M,F.n)) & ( (for x be Element of X st x in E holds
+  F#x is convergent) implies I is convergent & lim I = Integral(M,lim F) )
 proof
   assume that
-A1: E = dom(F.0) & E = dom P and
-A2: for n be Nat holds F.n is_measurable_on E and
-A3: P is_integrable_on M and
-A4: for x be Element of X, n be Nat st x in E holds (|. F.n .|).x <= P.x;
-
-B2:for n be Nat holds (R_EAL F).n is_measurable_on E
-   proof
-    let n be Nat;
-    F.n is_measurable_on E by A2; then
-    R_EAL (F.n) is_measurable_on E by MESFUNC6:def 6;
-    hence (R_EAL F).n is_measurable_on E;
-   end;
-
-B3:R_EAL P is_integrable_on M by A3,MESFUNC6:def 9;
-
-B4:for x be Element of X, n be Nat st
-    x in E holds (|. (R_EAL F).n .|).x <= (R_EAL P).x
-   proof
+A1: E = dom(F.0) and
+A2: E = dom P and
+A3: for n be Nat holds F.n is_measurable_on E and
+A4: P is_integrable_on M and
+A5: for x be Element of X, n be Nat st x in E holds (|. F.n .|).x <= P.x;
+A6: R_EAL P is_integrable_on M by A4,MESFUNC6:def 9;
+A7: for x be Element of X, n be Nat st x in E holds (|. (R_EAL F).n .|).x <=
+  (R_EAL P).x
+  proof
     let x be Element of X, n be Nat;
-    assume B5: x in E;
-    R_EAL |. F.n .| = |. R_EAL (F.n) .| by MESFUNC6:1;
-    hence (|. (R_EAL F).n .|).x <= (R_EAL P).x by B5,A4;
-   end;
-
-  now let x be set;
-    assume P01: x in dom P; then
-    x in dom|. F.0 .| by A1,VALUED_1:def 11; then
-    (|. F.0 .|).x = |. (F.0).x .| by VALUED_1:def 11; then
-    |. (F.0).x .| <= P.x by P01,A1,A4;
-     hence  0<= P.x by COMPLEX1:132;
-  end; then
-B5:  P is nonnegative by MESFUNC6:52;
-
-   consider J be ExtREAL_sequence such that
-C1: (for n be Nat holds J.n = Integral(M,(R_EAL F).n)) &
-    lim_inf J >= Integral(M,lim_inf(R_EAL F)) &
-    lim_sup J <= Integral(M,lim_sup(R_EAL F)) &
-    ( (for x be Element of X st x in E holds (R_EAL F)#x is convergent)
-        implies J is convergent & lim J = Integral(M,lim(R_EAL F)) )
-                                       by A1,B2,B3,B4,B5,MESFUN10:18;
-
-D1:Integral(M,R_EAL P) < +infty by B3,MESFUNC5:102;
-
-D2:for n be Nat holds |. J.n .| < +infty
-   proof
-    let n be Nat;
-P01:|. (R_EAL F).n .| is_integrable_on M by A1,B2,B3,B4,B5,MESFUN10:17;
-
-P02:E = dom((R_EAL F).n) by A1,MESFUNC8:def 2;
-P03:(R_EAL F).n is_measurable_on E by B2; then
-    (R_EAL F).n is_integrable_on M by P01,P02,MESFUNC5:106; then
-
-P05:|. Integral(M,(R_EAL F).n) .| <= Integral(M,|. (R_EAL F).n .|)
-       by MESFUNC5:107;
-
-    for x be Element of X st x in dom((R_EAL F).n) holds
-     |. ((R_EAL F).n).x .| <= (R_EAL P).x
-    proof
-     let x be Element of X;
-     assume Q01: x in dom((R_EAL F).n); then
-     x in E by A1,MESFUNC8:def 2; then
-Q02: (|. (R_EAL F).n .|).x <= (R_EAL P).x by B4;
-     x in dom |. (R_EAL F).n .| by Q01,MESFUNC1:def 10;
-     hence |. ((R_EAL F).n).x .| <= (R_EAL P).x by Q02,MESFUNC1:def 10;
-    end; then
-    Integral(M,|. (R_EAL F).n .|) <= Integral(M,R_EAL P)
-       by P02,P03,A1,B3,MESFUNC5:108; then
-    |. Integral(M,(R_EAL F).n) .| <= Integral(M,R_EAL P)
-       by P05,XXREAL_0:2; then
-    |. Integral(M,(R_EAL F).n) .| < +infty by D1,XXREAL_0:2;
-    hence |. J.n .| < +infty by C1;
-   end;
-
-D3:(for x be Element of X st x in E holds F#x is convergent) implies
-     J is convergent_to_finite_number & lim J = Integral(M,lim F)
-   proof
+A8: R_EAL |. F.n .| = |. R_EAL (F.n) .| by MESFUNC6:1;
     assume
-P01:  for x be Element of X st x in E holds F#x is convergent;
-P02:now let x be Element of X;
-     assume x in E; then
-Q01: F#x is convergent by P01;
-     F#x = (R_EAL F)#x by MESFUN7C:1;
-     hence (R_EAL F)#x is convergent by Q01,RINFSUP2:14;
+    x in E;
+    hence (|. (R_EAL F).n .|).x <= (R_EAL P).x by A5,A8;
+  end;
+A9: for n be Nat holds (R_EAL F).n is_measurable_on E
+  proof
+    let n be Nat;
+    F.n is_measurable_on E by A3;
+    then R_EAL (F.n) is_measurable_on E by MESFUNC6:def 6;
+    hence (R_EAL F).n is_measurable_on E;
+  end;
+  now
+    let x be set;
+    assume
+A10: x in dom P;
+    then x in dom|. F.0 .| by A1,A2,VALUED_1:def 11;
+    then (|. F.0 .|).x = |. (F.0).x .| by VALUED_1:def 11;
+    then |. (F.0).x .| <= P.x by A2,A5,A10;
+    hence 0<= P.x by COMPLEX1:132;
+  end;
+  then P is nonnegative by MESFUNC6:52;
+  then consider J be ExtREAL_sequence such that
+A11: for n be Nat holds J.n = Integral(M,(R_EAL F).n) and
+  lim_inf J >= Integral(M,lim_inf(R_EAL F)) and
+  lim_sup J <= Integral(M,lim_sup(R_EAL F)) and
+A12: (for x be Element of X st x in E holds (R_EAL F)#x is convergent)
+  implies J is convergent & lim J = Integral(M,lim(R_EAL F)) by A1,A2,A9,A6,A7,
+  MESFUN10:18;
+A13: Integral(M,R_EAL P) < +infty by A6,MESFUNC5:102;
+  for n be Nat holds |. J.n .| < +infty
+  proof
+    let n be Nat;
+A14: E = dom((R_EAL F).n) & (R_EAL F).n is_measurable_on E by A1,A9,
+    MESFUNC8:def 2;
+    |. (R_EAL F).n .| is_integrable_on M by A1,A2,A9,A6,A7,MESFUN10:17;
+    then (R_EAL F).n is_integrable_on M by A14,MESFUNC5:106;
+    then
+A15: |. Integral(M,(R_EAL F).n) .| <= Integral(M,|. (R_EAL F).n .|) by
+    MESFUNC5:107;
+    for x be Element of X st x in dom((R_EAL F).n) holds |. ((R_EAL F).n)
+    .x .| <= (R_EAL P).x
+    proof
+      let x be Element of X;
+      assume
+A16:  x in dom((R_EAL F).n);
+      then x in E by A1,MESFUNC8:def 2;
+      then
+A17:  (|. (R_EAL F).n .|).x <= (R_EAL P).x by A7;
+      x in dom |. (R_EAL F).n .| by A16,MESFUNC1:def 10;
+      hence |. ((R_EAL F).n).x .| <= (R_EAL P).x by A17,MESFUNC1:def 10;
     end;
-
-    lim F is_integrable_on M by P01,A1,A2,A3,A4,MES1017r; then
-P03:-infty < Integral(M,lim F) & Integral(M,lim F) < +infty
-      by MESFUNC5:102;
-
-    now assume R01: J is convergent;
-     assume not J is convergent_to_finite_number; then
-     J is convergent_to_+infty or J is convergent_to_-infty
-       by R01,MESFUNC5:def 11;
-     hence contradiction by P03,P02,C1,MESFUNC5:def 12;
+    then Integral(M,|. (R_EAL F).n .|) <= Integral(M,R_EAL P) by A2,A6,A14,
+    MESFUNC5:108;
+    then |. Integral(M,(R_EAL F).n) .| <= Integral(M,R_EAL P) by A15,
+    XXREAL_0:2;
+    then |. Integral(M,(R_EAL F).n) .| < +infty by A13,XXREAL_0:2;
+    hence |. J.n .| < +infty by A11;
+  end;
+  then for n be Element of NAT st n in dom J holds |. J.n .| < +infty;
+  then J is real-valued by MESFUNC2:def 1;
+  then reconsider I=J as Real_Sequence by RINFSUP2:6;
+  (for x be Element of X st x in E holds F#x is convergent) implies J is
+  convergent_to_finite_number & lim J = Integral(M,lim F)
+  proof
+    assume
+A18: for x be Element of X st x in E holds F#x is convergent;
+A19: now
+      let x be Element of X;
+      assume
+      x in E;
+      then
+A20:  F#x is convergent by A18;
+      F#x = (R_EAL F)#x by MESFUN7C:1;
+      hence (R_EAL F)#x is convergent by A20,RINFSUP2:14;
     end;
-    hence thesis by P02,C1;
-   end;
-
-   for n be Element of NAT st n in dom J holds |. J.n .| < +infty by D2; then
-   J is real-valued by MESFUNC2:def 1; then
-   reconsider I=J as Real_Sequence by RINFSUP2:6;
-
-F1:for n be Nat holds I.n = Integral(M,F.n) by C1;
-
-   (for x be Element of X st x in E holds F#x is convergent)
-    implies I is convergent & lim I = Integral(M,lim F) by D3,RINFSUP2:15;
-   hence thesis by F1;
+    lim F is_integrable_on M by A1,A2,A3,A4,A5,A18,Th47;
+    then
+A21: -infty < Integral(M,lim F) & Integral(M,lim F) < +infty by
+    MESFUNC5:102;
+    now
+      assume
+A22:  J is convergent;
+      assume
+      not J is convergent_to_finite_number;
+      then J is convergent_to_+infty or J is convergent_to_-infty by A22,
+      MESFUNC5:def 11;
+      hence contradiction by A12,A19,A21,MESFUNC5:def 12;
+    end;
+    hence thesis by A12,A19;
+  end;
+  then
+A23: (for x be Element of X st x in E holds F#x is convergent) implies I is
+  convergent & lim I = Integral(M,lim F) by RINFSUP2:15;
+  for n be Nat holds I.n = Integral(M,F.n) by A11;
+  hence thesis by A23;
 end;
 
-definition let X be set, F be Functional_Sequence of X,REAL;
-attr F is uniformly_bounded means :DefUBr:
- ex K be real number st
-  for n be Nat, x be Element of X st x in dom(F.0) holds |. (F.n).x .| <= K;
+definition
+  let X be set, F be Functional_Sequence of X,REAL;
+  attr F is uniformly_bounded means
+  :Def4:
+  ex K be real number st for n be Nat
+  , x be Element of X st x in dom(F.0) holds |. (F.n).x .| <= K;
 end;
 
 :: Lebesgue's Bounded Convergence Theorem
-theorem MES1020r:
-M.E < +infty & E = dom(F.0) &
-(for n be Nat holds F.n is_measurable_on E) &
-F is uniformly_bounded &
-(for x be Element of X st x in E holds F#x is convergent)
-implies
- (for n be Nat holds F.n is_integrable_on M) &
- lim F is_integrable_on M &
- ex I be ExtREAL_sequence st
-  (for n be Nat holds I.n = Integral(M,F.n)) &
-  I is convergent & lim I = Integral(M,lim F)
+
+theorem Th49:
+  M.E < +infty & E = dom(F.0) & (for n be Nat holds F.n
+is_measurable_on E) & F is uniformly_bounded & (for x be Element of X st x in E
+holds F#x is convergent) implies (for n be Nat holds F.n is_integrable_on M) &
+lim F is_integrable_on M & ex I be ExtREAL_sequence st (for n be Nat holds I.n
+  = Integral(M,F.n)) & I is convergent & lim I = Integral(M,lim F)
 proof
   assume that
 A1: M.E < +infty & E = dom(F.0) and
-A2: (for n be Nat holds F.n is_measurable_on E) and
+A2: for n be Nat holds F.n is_measurable_on E and
 A3: F is uniformly_bounded and
-A4: (for x be Element of X st x in E holds F#x is convergent);
-
-B2:for n be Nat holds (R_EAL F).n is_measurable_on E
-   proof
-    let n be Nat;
-    F.n is_measurable_on E by A2; then
-    R_EAL(F.n) is_measurable_on E by MESFUNC6:def 6;
-    hence (R_EAL F).n is_measurable_on E;
-   end;
-
-   consider K be real number such that
-B3: for n be Nat, x be Element of X st
-      x in dom(F.0) holds |. (F.n).x .| <= K by A3,DefUBr;
-
-   for n be Nat, x be set st
-    x in dom((R_EAL F).0) holds |. ((R_EAL F).n).x .| <= K
-   proof
-    let n be Nat, x be set;
-    assume P01: x in dom((R_EAL F).0);
-    |. (F.n).x .| = |. R_EAL(F.n).x .| by MESFUNC6:43;
-    hence |. ((R_EAL F).n).x .| <= K by P01,B3;
-   end; then
-B4:R_EAL F is uniformly_bounded by MESFUN10:def 1;
-
-C0:for x be Element of X st x in E holds (R_EAL F)#x is convergent
-   proof
+A4: for x be Element of X st x in E holds F#x is convergent;
+  consider K be real number such that
+A5: for n be Nat, x be Element of X st x in dom(F.0) holds |. (F.n).x .|
+  <= K by A3,Def4;
+A6: for x be Element of X st x in E holds (R_EAL F)#x is convergent
+  proof
     let x be Element of X;
-    assume x in E; then
-P01:F#x is convergent by A4;
+    assume
+    x in E;
+    then
+A7: F#x is convergent by A4;
     (R_EAL F)#x = F#x by MESFUN7C:1;
-    hence (R_EAL F)#x is convergent by P01,RINFSUP2:14;
-   end;
-
-   consider I be ExtREAL_sequence such that
-C2: (for n be Nat holds I.n = Integral(M,(R_EAL F).n)) &
-    I is convergent & lim I = Integral(M,lim (R_EAL F))
-       by C0,A1,B2,B4,MESFUN10:20;
-
-C3:for n be Nat holds F.n is_integrable_on M
-   proof
+    hence (R_EAL F)#x is convergent by A7,RINFSUP2:14;
+  end;
+  for n be Nat, x be set st x in dom((R_EAL F).0) holds |. ((R_EAL F).n).x
+  .| <= K
+  proof
+    let n be Nat, x be set;
+A8: |. (F.n).x .| = |. R_EAL(F.n).x .| by MESFUNC6:43;
+    assume
+    x in dom((R_EAL F).0);
+    hence |. ((R_EAL F).n).x .| <= K by A5,A8;
+  end;
+  then
+A9: R_EAL F is uniformly_bounded by MESFUN10:def 1;
+A10: for n be Nat holds (R_EAL F).n is_measurable_on E
+  proof
     let n be Nat;
-    R_EAL(F.n) is_integrable_on M by C0,A1,B2,B4,MESFUN10:20;
+    F.n is_measurable_on E by A2;
+    then R_EAL(F.n) is_measurable_on E by MESFUNC6:def 6;
+    hence (R_EAL F).n is_measurable_on E;
+  end;
+  then consider I be ExtREAL_sequence such that
+A11: for n be Nat holds I.n = Integral(M,(R_EAL F).n) and
+A12: I is convergent & lim I = Integral(M,lim (R_EAL F)) by A1,A9,
+  A6,MESFUN10:20;
+A13: for n be Nat holds F.n is_integrable_on M
+  proof
+    let n be Nat;
+    R_EAL(F.n) is_integrable_on M by A1,A10,A9,A6,MESFUN10:20;
     hence F.n is_integrable_on M by MESFUNC6:def 9;
-   end;
-
-   for n be Nat holds I.n = Integral(M,F.n) by C2;
-   hence thesis by C2,C3,C0,A1,B2,B4,MESFUN10:20;
+  end;
+  for n be Nat holds I.n = Integral(M,F.n) by A11;
+  hence thesis by A1,A10,A9,A6,A12,A13,MESFUN10:20;
 end;
 
-definition let X be set, F be Functional_Sequence of X,REAL,
-  f be PartFunc of X,REAL;
-pred F is_uniformly_convergent_to f means :DefUCr:
- F is with_the_same_dom &
- dom(F.0) = dom f &
- for e be real number st e>0
-  ex N be Nat st
-   for n be Nat, x be Element of X st n >= N & x in dom(F.0) holds
-    |. (F.n).x - f.x .| < e;
+definition
+  let X be set, F be Functional_Sequence of X,REAL, f be PartFunc of X,REAL;
+  pred F is_uniformly_convergent_to f means
+  :Def5:
+  F is with_the_same_dom &
+  dom(F.0) = dom f & for e be real number st e>0 ex N be Nat st for n be Nat, x
+  be Element of X st n >= N & x in dom(F.0) holds |. (F.n).x - f.x .| < e;
 end;
 
-theorem MES1022r:
-M.E < +infty & E = dom(F.0) &
-(for n be Nat holds F.n is_integrable_on M) &
-F is_uniformly_convergent_to f
-implies
- f is_integrable_on M &
- ex I be ExtREAL_sequence st
-  (for n be Nat holds I.n = Integral(M,F.n)) &
-  I is convergent & lim I = Integral(M,f)
+theorem Th50:
+  M.E < +infty & E = dom(F.0) & (for n be Nat holds F.n
+is_integrable_on M) & F is_uniformly_convergent_to f implies f is_integrable_on
+M & ex I be ExtREAL_sequence st (for n be Nat holds I.n = Integral(M,F.n)) & I
+  is convergent & lim I = Integral(M,f)
 proof
-   assume that
+  assume that
 A1: M.E < +infty & E = dom(F.0) and
-A2: (for n be Nat holds F.n is_integrable_on M) and
+A2: for n be Nat holds F.n is_integrable_on M and
 A3: F is_uniformly_convergent_to f;
-B3:dom((R_EAL F).0) = dom R_EAL f by A3,DefUCr;
-
-B2:for n be Nat holds (R_EAL F).n is_integrable_on M
-   proof
+A4: for n be Nat holds (R_EAL F).n is_integrable_on M
+  proof
     let n be Nat;
-    F.n is_integrable_on M by A2; then
-    R_EAL(F.n) is_integrable_on M by MESFUNC6:def 9;
+    F.n is_integrable_on M by A2;
+    then R_EAL(F.n) is_integrable_on M by MESFUNC6:def 9;
     hence (R_EAL F).n is_integrable_on M;
-   end;
-
-   for e be real number st e>0
-    ex N be Nat st
-     for n be Nat, x be set st n >= N & x in dom((R_EAL F).0) holds
-      |. ((R_EAL F).n).x - (R_EAL f).x .| < e
-   proof
+  end;
+A5: for e be real number st e>0 ex N be Nat st for n be Nat, x be set st n
+  >= N & x in dom((R_EAL F).0) holds |. ((R_EAL F).n).x - (R_EAL f).x .| < e
+  proof
     let e be real number;
-    assume e>0; then
-    consider N be Nat such that
-P1:  for n be Nat, x be Element of X st n >= N & x in dom(F.0) holds
-      |. (F.n).x - f.x .| < e by A3,DefUCr;
-    now let n be Nat, x be set;
-     assume n >= N & x in dom((R_EAL F).0); then
-P2:  |. (F.n).x - f.x .| < e by P1;
-     |. (F.n).x - f.x .| = |. R_EAL ((F.n).x - f.x) .| by MESFUNC6:43;
-     hence |. ((R_EAL F).n).x - (R_EAL f).x .| < e by P2,SUPINF_2:5;
+    assume
+    e>0;
+    then consider N be Nat such that
+A6: for n be Nat, x be Element of X st n >= N & x in dom(F.0) holds
+    |. (F.n).x - f.x .| < e by A3,Def5;
+    now
+      let n be Nat, x be set;
+      assume
+      n >= N & x in dom((R_EAL F).0);
+      then
+A7:   |. (F.n).x - f.x .| < e by A6;
+      |. (F.n).x - f.x .| = |. R_EAL ((F.n).x - f.x) .| by MESFUNC6:43;
+      hence |. ((R_EAL F).n).x - (R_EAL f).x .| < e by A7,SUPINF_2:5;
     end;
     hence thesis;
-   end; then
-C0:R_EAL F is_uniformly_convergent_to R_EAL f by B3,MESFUN10:def 2; then
-C1:R_EAL f is_integrable_on M by A1,B2,MESFUN10:22;
-   consider I be ExtREAL_sequence such that
-C2: (for n be Nat holds I.n = Integral(M,(R_EAL F).n)) &
-    I is convergent & lim I = Integral(M,R_EAL f)
-      by C0,A1,B2,MESFUN10:22;
-   for n be Nat holds I.n = Integral(M,F.n) by C2;
-   hence thesis by C2,C1,MESFUNC6:def 9;
+  end;
+  dom((R_EAL F).0) = dom R_EAL f by A3,Def5;
+  then
+A8: R_EAL F is_uniformly_convergent_to R_EAL f by A5,MESFUN10:def 2;
+  then
+A9: R_EAL f is_integrable_on M by A1,A4,MESFUN10:22;
+  consider I be ExtREAL_sequence such that
+A10: for n be Nat holds I.n = Integral(M,(R_EAL F).n) and
+A11: I is convergent & lim I = Integral(M,R_EAL f) by A1,A4,A8,MESFUN10
+  :22;
+  for n be Nat holds I.n = Integral(M,F.n) by A10;
+  hence thesis by A9,A11,MESFUNC6:def 9;
 end;
 
 reserve F for with_the_same_dom Functional_Sequence of X,COMPLEX,
-        f for PartFunc of X,COMPLEX;
+  f for
+  PartFunc of X,COMPLEX;
 
-theorem MES1017c:
-E = dom(F.0) & E = dom P & (for n be Nat holds F.n is_measurable_on E) &
-P is_integrable_on M &
-(for x be Element of X, n be Nat st x in E holds (|. F.n .|).x <= P.x) &
-(for x be Element of X st x in E holds F#x is convergent)
-implies
-  lim F is_integrable_on M
+theorem Th51:
+  E = dom(F.0) & E = dom P & (for n be Nat holds F.n
+  is_measurable_on E) & P is_integrable_on M & (for x be Element of X, n be Nat
+st x in E holds (|. F.n .|).x <= P.x) & (for x be Element of X st x in E holds
+  F#x is convergent) implies lim F is_integrable_on M
 proof
-   assume that
-A1: E = dom(F.0) & E = dom P and
-A2: for n be Nat holds F.n is_measurable_on E and
-A3: P is_integrable_on M and
-A4: for x be Element of X, n be Nat st x in E holds (|. F.n .|).x <= P.x and
-A5: for x be Element of X st x in E holds F#x is convergent;
-
-B1:E = dom((Re F).0) & E = dom((Im F).0) by A1,MESFUN7C:def 12,def 11;
-
-B2:for n be Nat holds (Re F).n is_measurable_on E & (Im F).n is_measurable_on E
-      by A2,Lm1;
-
-   for x be Element of X, n be Nat st x in E holds
-    (|. (Re F).n .|).x <= P.x & (|. (Im F).n .|).x <= P.x
-   proof
+  assume that
+A1: E = dom(F.0) and
+A2: E = dom P and
+A3: for n be Nat holds F.n is_measurable_on E and
+A4: P is_integrable_on M and
+A5: for x be Element of X, n be Nat st x in E holds (|. F.n .|).x <= P.x and
+A6: for x be Element of X st x in E holds F#x is convergent;
+A7: for n be Nat holds (Re F).n is_measurable_on E & (Im F).n
+  is_measurable_on E by A3,Lm2;
+  for x be Element of X, n be Nat st x in E holds (|. (Re F).n .|).x <= P
+  .x & (|. (Im F).n .|).x <= P.x
+  proof
     let x be Element of X, n be Nat;
-    assume P1: x in E; then
-    (|. F.n .|).x <= P.x by A4; then
-    |.(F.n).x .| <= P.x by VALUED_1:18; then
-P2: |. (F#x).n .| <= P.x by MESFUN7C:def 9;
     reconsider n1=n as Element of NAT by ORDINAL1:def 13;
-    Re((F#x).n1) = (Re(F#x)).n1 & Im((F#x).n1) = (Im(F#x)).n1
-      by COMSEQ_3:def 3,def 4; then
-P3: |. (Re(F#x)).n .| <= |. (F#x).n .| &
-    |. (Im(F#x)).n .| <= |. (F#x).n .| by COMSEQ_3:13;
-    (Re F)#x = Re(F#x) & (Im F)#x = Im(F#x) by A1,P1,MESFUN7C:23; then
-    |. ((Re F)#x).n1 .| <= P.x &
-    |. ((Im F)#x).n1 .| <= P.x by P2,P3,XXREAL_0:2; then
-    |. ((Re F).n1).x .| <= P.x & |. ((Im F).n1).x .| <= P.x by SEQFUNC:def 11;
-    hence (|. (Re F).n .|).x <= P.x & (|. (Im F).n .|).x <= P.x by VALUED_1:18;
-   end; then
-B3:for x be Element of X, n be Nat holds
-     (x in E implies (|. (Re F).n .|).x <= P.x) &
-     (x in E implies (|. (Im F).n .|).x <= P.x);
-
-   for x be Element of X st x in E holds
-    (Re F)#x is convergent & (Im F)#x is convergent
-   proof
+    Re((F#x).n1) = (Re(F#x)).n1 by COMSEQ_3:def 3;
+    then
+A8: |. (Re(F#x)).n .| <= |. (F#x).n .| by COMSEQ_3:13;
+    Im((F#x).n1) = (Im(F#x)).n1 by COMSEQ_3:def 4;
+    then
+A9: |. (Im(F#x)).n .| <= |. (F#x).n .| by COMSEQ_3:13;
+    assume
+A10: x in E;
+    then (|. F.n .|).x <= P.x by A5;
+    then |.(F.n).x .| <= P.x by VALUED_1:18;
+    then
+A11: |. (F#x).n .| <= P.x by MESFUN7C:def 9;
+    (Im F)#x = Im(F#x) by A1,A10,MESFUN7C:23;
+    then |. ((Im F)#x).n1 .| <= P.x by A11,A9,XXREAL_0:2;
+    then
+A12: |. ((Im F).n1).x .| <= P.x by SEQFUNC:def 11;
+    (Re F)#x = Re(F#x) by A1,A10,MESFUN7C:23;
+    then |. ((Re F)#x).n1 .| <= P.x by A11,A8,XXREAL_0:2;
+    then |. ((Re F).n1).x .| <= P.x by SEQFUNC:def 11;
+    hence (|. (Re F).n .|).x <= P.x & (|. (Im F).n .|).x <= P.x by A12,
+    VALUED_1:18;
+  end;
+  then
+A13: for x be Element of X, n be Nat holds (x in E implies (|. (Re F).n .|).x
+  <= P.x) & (x in E implies (|. (Im F).n .|).x <= P.x);
+A14: for x be Element of X st x in E holds (Re F)#x is convergent & (Im F)#x
+  is convergent
+  proof
     let x be Element of X;
-    assume P01: x in E; then
-    F#x is convergent Complex_Sequence by A5; then
-    Re(F#x) is convergent & Im(F#x) is convergent;
-    hence (Re F)#x is convergent & (Im F)#x is convergent
-      by P01,A1,MESFUN7C:23;
-   end; then
-   (for x be Element of X st x in E holds (Re F)#x is convergent) &
-   (for x be Element of X st x in E holds (Im F)#x is convergent); then
-   lim Re F is_integrable_on M & lim Im F is_integrable_on M
-      by A1,A3,B1,B2,B3,MES1017r; then
-   R_EAL(Re lim F) is_integrable_on M &
-   R_EAL(Im lim F) is_integrable_on M by A1,A5,MESFUN7C:25; then
-   Re lim F is_integrable_on M & Im lim F is_integrable_on M by MESFUNC6:def 9;
-   hence lim F is_integrable_on M by MESFUN6C:def 4;
+    assume
+A15: x in E;
+    then F#x is convergent Complex_Sequence by A6;
+    then Re(F#x) is convergent & Im(F#x) is convergent;
+    hence (Re F)#x is convergent & (Im F)#x is convergent by A1,A15,
+    MESFUN7C:23;
+  end;
+  then
+A16: for x be Element of X st x in E holds (Im F)#x is convergent;
+  E = dom((Im F).0) by A1,MESFUN7C:def 12;
+  then lim Im F is_integrable_on M by A2,A4,A7,A13,A16,Th47;
+  then R_EAL(Im lim F) is_integrable_on M by A1,A6,MESFUN7C:25;
+  then
+A17: Im lim F is_integrable_on M by MESFUNC6:def 9;
+A18: for x be Element of X st x in E holds (Re F)#x is convergent by A14;
+  E = dom((Re F).0) by A1,MESFUN7C:def 11;
+  then lim Re F is_integrable_on M by A2,A4,A7,A13,A18,Th47;
+  then R_EAL(Re lim F) is_integrable_on M by A1,A6,MESFUN7C:25;
+  then Re lim F is_integrable_on M by MESFUNC6:def 9;
+  hence lim F is_integrable_on M by A17,MESFUN6C:def 4;
 end;
 
 :: Lebesgue's Convergence theorem
-theorem
-E = dom(F.0) & E = dom P & (for n be Nat holds F.n is_measurable_on E) &
-P is_integrable_on M &
-(for x be Element of X, n be Nat st x in E holds (|. F.n .|).x <= P.x)
-implies
- ex I be Complex_Sequence st
-  (for n be Nat holds I.n = Integral(M,F.n)) &
-  ( (for x be Element of X st x in E holds F#x is convergent)
-      implies I is convergent & lim I = Integral(M,lim F) )
-proof
-   assume that
-A1: E = dom(F.0) & E = dom P and
-A2: (for n be Nat holds F.n is_measurable_on E) and
-A3: P is_integrable_on M and
-A4: (for x be Element of X, n be Nat st x in E holds (|. F.n .|).x <= P.x);
 
-   defpred P[Element of NAT,set] means $2 = Integral(M,F.$1);
-K0:for n being Element of NAT ex y being Element of COMPLEX st P[n,y]
-   proof
+theorem
+  E = dom(F.0) & E = dom P & (for n be Nat holds F.n is_measurable_on E)
+& P is_integrable_on M & (for x be Element of X, n be Nat st x in E holds (|. F
+.n .|).x <= P.x) implies ex I be Complex_Sequence st (for n be Nat holds I.n =
+Integral(M,F.n)) & ( (for x be Element of X st x in E holds F#x is convergent)
+  implies I is convergent & lim I = Integral(M,lim F) )
+proof
+  assume that
+A1: E = dom(F.0) and
+A2: E = dom P and
+A3: for n be Nat holds F.n is_measurable_on E and
+A4: P is_integrable_on M and
+A5: for x be Element of X, n be Nat st x in E holds (|. F.n .|).x <= P.x;
+A6: E = dom((Re F).0) by A1,MESFUN7C:def 11;
+A7: for n be Nat holds (Re F).n is_measurable_on E & (Im F).n
+  is_measurable_on E by A3,Lm2;
+A8: for x be Element of X, n be Nat st x in E holds (|. (Re F).n .|).x <= P.
+  x & (|. (Im F).n .|).x <= P.x
+  proof
+    let x be Element of X, n be Nat;
+    reconsider n1=n as Element of NAT by ORDINAL1:def 13;
+    Re((F#x).n1) = (Re(F#x)).n1 by COMSEQ_3:def 3;
+    then
+A9: |. (Re(F#x)).n .| <= |. (F#x).n .| by COMSEQ_3:13;
+    Im((F#x).n1) = (Im(F#x)).n1 by COMSEQ_3:def 4;
+    then
+A10: |. (Im(F#x)).n .| <= |. (F#x).n .| by COMSEQ_3:13;
+    assume
+A11: x in E;
+    then (|. F.n .|).x <= P.x by A5;
+    then |.(F.n).x .| <= P.x by VALUED_1:18;
+    then
+A12: |. (F#x).n .| <= P.x by MESFUN7C:def 9;
+    (Im F)#x = Im(F#x) by A1,A11,MESFUN7C:23;
+    then
+A13: |. ((Im F)#x).n1 .| <= P.x by A12,A10,XXREAL_0:2;
+    (Re F)#x = Re(F#x) by A1,A11,MESFUN7C:23;
+    then |. ((Re F)#x).n .| <= P.x by A12,A9,XXREAL_0:2;
+    then
+A14: |. ((Re F).n).x .| <= P.x by A13,SEQFUNC:def 11;
+    |. ((Im F).n).x .| <= P.x by A13,SEQFUNC:def 11;
+    hence (|. (Re F).n .|).x <= P.x & (|. (Im F).n .|).x <= P.x by A14,
+    VALUED_1:18;
+  end;
+  then
+  for x be Element of X, n be Nat st x in E holds (|. (Re F).n .|).x <= P
+  .x;
+  then consider A be Real_Sequence such that
+A15: for n be Nat holds A.n = Integral(M,(Re F).n) and
+A16: (for x be Element of X st x in E holds (Re F)#x is convergent)
+  implies A is convergent & lim A = Integral(M,lim Re F) by A2,A4,A6,A7,
+  Th48;
+  defpred P[Element of NAT,set] means $2 = Integral(M,F.$1);
+A17: for n being Element of NAT ex y being Element of COMPLEX st P[n,y]
+  proof
     let n be Element of NAT;
     Integral(M,F.n) is Element of COMPLEX by XCMPLX_0:def 2;
     hence thesis;
-   end;
-   consider I be Function of NAT,COMPLEX such that
-K1: for n be Element of NAT holds P[n,I.n] from FUNCT_2:sch 3(K0);
-
-   reconsider I as Complex_Sequence;
-   take I;
-
-   hereby let n be Nat;
-    n is Element of NAT by ORDINAL1:def 13;
-    hence I.n = Integral(M,F.n) by K1;
-   end;
-
-B1:E = dom((Re F).0) & E = dom((Im F).0) by A1,MESFUN7C:def 12,def 11;
-
-B2:for n be Nat holds (Re F).n is_measurable_on E & (Im F).n is_measurable_on E
-     by A2,Lm1;
-
-B3:for x be Element of X, n be Nat st x in E holds
-      (|. (Re F).n .|).x <= P.x & (|. (Im F).n .|).x <= P.x
-   proof
-    let x be Element of X, n be Nat;
-    assume P1: x in E; then
-    (|. F.n .|).x <= P.x by A4; then
-    |.(F.n).x .| <= P.x by VALUED_1:18; then
-P2: |. (F#x).n .| <= P.x by MESFUN7C:def 9;
-    reconsider n1=n as Element of NAT by ORDINAL1:def 13;
-    Re((F#x).n1) = (Re(F#x)).n1 &
-    Im((F#x).n1) = (Im(F#x)).n1 by COMSEQ_3:def 3,def 4; then
-P3: |. (Re(F#x)).n .| <= |. (F#x).n .| &
-    |. (Im(F#x)).n .| <= |. (F#x).n .| by COMSEQ_3:13;
-    (Re F)#x = Re(F#x) & (Im F)#x = Im(F#x) by A1,P1,MESFUN7C:23; then
-    |. ((Re F)#x).n .| <= P.x & |. ((Im F)#x).n1 .| <= P.x
-      by P2,P3,XXREAL_0:2; then
-    |. ((Re F).n).x .| <= P.x & |. ((Im F).n).x .| <= P.x by SEQFUNC:def 11;
-    hence (|. (Re F).n .|).x <= P.x & (|. (Im F).n .|).x <= P.x by VALUED_1:18;
-   end;
-
-B4:for n be Nat holds (Re F).n is_integrable_on M & (Im F).n is_integrable_on M
-   proof
+  end;
+  consider I be Function of NAT,COMPLEX such that
+A18: for n be Element of NAT holds P[n,I.n] from FUNCT_2:sch 3(A17);
+  reconsider I as Complex_Sequence;
+A19: E = dom((Im F).0) by A1,MESFUN7C:def 12;
+  for x be Element of X, n be Nat st x in E holds (|. (Im F).n .|).x <= P
+  .x by A8;
+  then consider B be Real_Sequence such that
+A20: for n be Nat holds B.n = Integral(M,(Im F).n) and
+A21: (for x be Element of X st x in E holds (Im F)#x is convergent)
+  implies B is convergent & lim B = Integral(M,lim Im F) by A2,A4,A19,A7,
+  Th48;
+A22: for n be Nat holds (Re F).n is_integrable_on M & (Im F).n
+  is_integrable_on M
+  proof
     let n be Nat;
-P1: now let x be Element of X;
-     assume x in dom((Re F).n); then
-     x in E by B1,MESFUNC8:def 2; then
-     (|. (Re F).n .|).x <= P.x by B3;
-     hence |. ((Re F).n).x .| <= P.x by VALUED_1:18;
+A23: now
+      let x be Element of X;
+      assume
+      x in dom((Re F).n);
+      then x in E by A6,MESFUNC8:def 2;
+      then (|. (Re F).n .|).x <= P.x by A8;
+      hence |. ((Re F).n).x .| <= P.x by VALUED_1:18;
     end;
-P3: now let x be Element of X;
-     assume x in dom((Im F).n); then
-     x in E by B1,MESFUNC8:def 2; then
-     (|. (Im F).n .|).x <= P.x by B3;
-     hence |. ((Im F).n).x .| <= P.x by VALUED_1:18;
+A24: now
+      let x be Element of X;
+      assume
+      x in dom((Im F).n);
+      then x in E by A19,MESFUNC8:def 2;
+      then (|. (Im F).n .|).x <= P.x by A8;
+      hence |. ((Im F).n).x .| <= P.x by VALUED_1:18;
     end;
-P2: dom((Re F).n) = E & dom((Im F).n) = E by B1,MESFUNC8:def 2;
-    (Re F).n is_measurable_on E & (Im F).n is_measurable_on E by A2,Lm1;
-    hence (Re F).n is_integrable_on M & (Im F).n is_integrable_on M
-      by A1,A3,P1,P2,P3,MESFUNC6:96;
-   end;
-
-   for x be Element of X, n be Nat st x in E holds
-      (|. (Re F).n .|).x <= P.x by B3; then
-   consider A be Real_Sequence such that
-B5: (for n be Nat holds A.n = Integral(M,(Re F).n)) &
-    ( (for x be Element of X st x in E holds (Re F)#x is convergent)
-        implies A is convergent & lim A = Integral(M,lim Re F) )
-                                      by A1,A3,B1,B2,MES1018r;
-
-   for x be Element of X, n be Nat st x in E holds
-      (|. (Im F).n .|).x <= P.x by B3; then
-   consider B be Real_Sequence such that
-B6: (for n be Nat holds B.n = Integral(M,(Im F).n)) &
-    ( (for x be Element of X st x in E holds (Im F)#x is convergent)
-        implies B is convergent & lim B = Integral(M,lim Im F) )
-
-                                      by A1,A3,B1,B2,MES1018r;
-   now let n1 be set;
-    assume n1 in NAT; then
-    reconsider n=n1 as Element of NAT;
-P1: (Re F).n = Re(F.n) & (Im F).n = Im(F.n) by MESFUN7C:24; then
-    Re(F.n) is_integrable_on M & Im(F.n) is_integrable_on M by B4; then
-    F.n is_integrable_on M by MESFUN6C:def 4; then
-    consider RF,IF be Real such that
-P2:  RF = Integral(M,Re(F.n)) & IF = Integral(M,Im(F.n)) &
-     Integral(M,F.n) = RF + IF * <i> by MESFUN6C:def 5;
-
-    I.n1 = Integral(M,F.n) by K1; then
-P3: Re(I.n1) = RF & Im(I.n1) = IF by P2,COMPLEX1:28;
-
-    (Re I).n = Re(I.n) & (Im I).n = Im(I.n) by COMSEQ_3:def 3,def 4;
-    hence (Re I).n1 = A.n1 & (Im I).n1 = B.n1 by B5,B6,P1,P2,P3;
-   end; then
-   (for x be set st x in NAT holds (Re I).x = A.x) &
-   (for x be set st x in NAT holds (Im I).x = B.x); then
-B7:Re I = A & Im I = B by FUNCT_2:18;
-
-   hereby assume C1: for x be Element of X st x in E holds F#x is convergent;
-C2: now let x be Element of X such that P1: x in E;
-     F#x is convergent Complex_Sequence by C1,P1; then
-     Re(F#x) is convergent & Im(F#x) is convergent;
-     hence (Re F)#x is convergent & (Im F)#x is convergent
-       by A1,P1,MESFUN7C:23;
+A25: (Re F).n is_measurable_on E & (Im F).n is_measurable_on E by A3,Lm2;
+    dom((Re F).n) = E & dom((Im F).n) = E by A6,A19,MESFUNC8:def 2;
+    hence (Re F).n is_integrable_on M & (Im F).n is_integrable_on M by A2,A4,
+    A23,A24,A25,MESFUNC6:96;
+  end;
+A26: now
+    let n1 be set;
+    assume
+    n1 in NAT;
+    then reconsider n=n1 as Element of NAT;
+A27: (Re I).n = Re(I.n) & (Im I).n = Im(I.n) by COMSEQ_3:def 3,def 4;
+A28: (Im F).n = Im(F.n) by MESFUN7C:24;
+    then
+A29: Im(F.n) is_integrable_on M by A22;
+A30: (Re F).n = Re(F.n) by MESFUN7C:24;
+    then Re(F.n) is_integrable_on M by A22;
+    then F.n is_integrable_on M by A29,MESFUN6C:def 4;
+    then consider RF,IF be Real such that
+A31: RF = Integral(M,Re(F.n)) & IF = Integral(M,Im(F.n)) and
+A32: Integral(M,F.n) = RF + IF * <i> by MESFUN6C:def 5;
+    I.n1 = Integral(M,F.n) by A18;
+    then Re(I.n1) = RF & Im(I.n1) = IF by A32,COMPLEX1:28;
+    hence (Re I).n1 = A.n1 & (Im I).n1 = B.n1 by A15,A20,A30,A28,A31,A27;
+  end;
+  then for x be set st x in NAT holds (Re I).x = A.x;
+  then
+A33: Re I = A by FUNCT_2:18;
+  take I;
+  hereby
+    let n be Nat;
+    n is Element of NAT by ORDINAL1:def 13;
+    hence I.n = Integral(M,F.n) by A18;
+  end;
+  for x be set st x in NAT holds (Im I).x = B.x by A26;
+  then
+A34: Im I = B by FUNCT_2:18;
+  hereby
+    assume
+A35: for x be Element of X st x in E holds F#x is convergent;
+    then
+A36: Integral(M,lim Im F) = Integral(M,Im lim F) by A1,MESFUN7C:25;
+A37: lim F is_integrable_on M & Integral(M,lim Re F) = Integral(M,Re lim F
+    ) by A1,A2,A3,A4,A5,A35,Th51,MESFUN7C:25;
+A38: now
+      let x be Element of X such that
+A39:  x in E;
+      F#x is convergent Complex_Sequence by A35,A39;
+      then Re(F#x) is convergent & Im(F#x) is convergent;
+      hence (Re F)#x is convergent & (Im F)#x is convergent by A1,A39,
+      MESFUN7C:23;
     end;
-    hence I is convergent by B7,B5,B6,COMSEQ_3:42;
-
-C3: lim F is_integrable_on M by A1,A2,A3,A4,C1,MES1017c;
-    for n be Element of NAT holds
-     (Re I).n = Re(I.n) & (Im I).n = Im(I.n) by COMSEQ_3:def 3,def 4; then
-C4: lim I = lim Re I + (lim Im I) * <i> by B7,B5,B6,C2,COMSEQ_3:39;
-
-    Integral(M,lim Re F) = Integral(M,Re lim F) &
-    Integral(M,lim Im F) = Integral(M,Im lim F) by A1,C1,MESFUN7C:25;
-    hence lim I = Integral(M,lim F) by B7,B5,B6,C2,C3,C4,MESFUN6C:def 5;
-   end;
+    hence I is convergent by A16,A21,A33,A34,COMSEQ_3:42;
+    for n be Element of NAT holds (Re I).n = Re(I.n) & (Im I).n = Im(I.n)
+    by COMSEQ_3:def 3,def 4;
+    then lim I = lim Re I + (lim Im I) * <i> by A16,A21,A33,A34,A38,
+    COMSEQ_3:39;
+    hence lim I = Integral(M,lim F) by A16,A21,A33,A34,A38,A37,A36,
+    MESFUN6C:def 5;
+  end;
 end;
 
-definition let X be set, F be Functional_Sequence of X,COMPLEX;
-attr F is uniformly_bounded means :DefUBc:
- ex K be real number st
-  for n be Nat, x be Element of X st x in dom(F.0) holds |. (F.n).x .| <= K;
+definition
+  let X be set, F be Functional_Sequence of X,COMPLEX;
+  attr F is uniformly_bounded means
+  :Def6:
+  ex K be real number st for n be Nat
+  , x be Element of X st x in dom(F.0) holds |. (F.n).x .| <= K;
 end;
 
 :: Lebesgue's Bounded Convergence Theorem
+
 theorem
-M.E < +infty & E = dom(F.0) &
-(for n be Nat holds F.n is_measurable_on E) &
-F is uniformly_bounded &
-(for x be Element of X st x in E holds F#x is convergent)
-implies
- (for n be Nat holds F.n is_integrable_on M) &
- lim F is_integrable_on M &
- ex I be Complex_Sequence st
-  (for n be Nat holds I.n = Integral(M,F.n)) &
-  I is convergent & lim I = Integral(M,lim F)
+  M.E < +infty & E = dom(F.0) & (for n be Nat holds F.n is_measurable_on
+  E) & F is uniformly_bounded & (for x be Element of X st x in E holds F#x is
+  convergent) implies (for n be Nat holds F.n is_integrable_on M) & lim F
+  is_integrable_on M & ex I be Complex_Sequence st (for n be Nat holds I.n =
+  Integral(M,F.n)) & I is convergent & lim I = Integral(M,lim F)
 proof
-    assume that
-A1:  M.E < +infty & E = dom(F.0) and
-A2:  (for n be Nat holds F.n is_measurable_on E) and
-A3:  F is uniformly_bounded and
-A4:  for x be Element of X st x in E holds F#x is convergent;
-
-A5: E = dom((Re F).0) & E = dom((Im F).0) by A1,MESFUN7C:def 12,def 11;
-
-A6: for n be Nat holds
-     (Re F).n is_measurable_on E & (Im F).n is_measurable_on E by A2,Lm1;
-
-    consider K be real number such that
-A8:  for n be Nat, x be Element of X st
-      x in dom(F.0) holds |. (F.n).x .| <= K by A3,DefUBc;
-
-A9: for x be Element of X st x in E holds (Re F)#x is convergent
-    proof
-     let x be Element of X;
-     assume P1: x in E; then
-     F#x is convergent Complex_Sequence by A4; then
-     Re(F#x) is convergent;
-     hence (Re F)#x is convergent by A1,P1,MESFUN7C:23;
-    end;
-
-A10:for x be Element of X st x in E holds (Im F)#x is convergent
-    proof
-     let x be Element of X;
-     assume P1: x in E; then
-     F#x is convergent Complex_Sequence by A4; then
-     Im(F#x) is convergent;
-     hence (Im F)#x is convergent by A1,P1,MESFUN7C:23;
-    end;
-
-    for n be Nat, x be Element of X st
-      x in dom((Re F).0) holds |. ((Re F).n).x .| <= K
-    proof
-     let n be Nat, x be Element of X;
-     assume x in dom((Re F).0); then
-P1:  x in E by A1,MESFUN7C:def 11; then
-     |. (F.n).x .| <= K by A1,A8; then
-P2:  |. (F#x).n .| <= K by MESFUN7C:def 9;
-
-P3:  n is Element of NAT by ORDINAL1:def 13; then
-     Re((F#x).n) = (Re(F#x)).n by COMSEQ_3:def 3; then
-     Re((F#x).n) = ((Re F)#x).n by P1,A1,MESFUN7C:23; then
-     |. ((Re F)#x).n .| <= |. (F#x).n .| by COMSEQ_3:13; then
-     |. ((Re F)#x).n .| <= K by P2,XXREAL_0:2;
-     hence |. ((Re F).n).x .| <= K by P3,SEQFUNC:def 11;
-    end; then
-A11:Re F is uniformly_bounded by DefUBr;
-
-    for n be Nat, x be Element of X st
-     x in dom((Im F).0) holds |. ((Im F).n).x .| <= K
-    proof
-     let n be Nat, x be Element of X;
-     assume x in dom((Im F).0); then
-P1:  x in E by A1,MESFUN7C:def 12; then
-     |. (F.n).x .| <= K by A1,A8; then
-P2:  |. (F#x).n .| <= K by MESFUN7C:def 9;
-
-P3:  n is Element of NAT by ORDINAL1:def 13; then
-     Im((F#x).n) = (Im(F#x)).n by COMSEQ_3:def 4; then
-     Im((F#x).n) = ((Im F)#x).n by P1,A1,MESFUN7C:23; then
-     |. ((Im F)#x).n .| <= |. (F#x).n .| by COMSEQ_3:13; then
-     |. ((Im F)#x).n .| <= K by P2,XXREAL_0:2;
-     hence thesis by P3,SEQFUNC:def 11;
-    end; then
-A12:Im F is uniformly_bounded by DefUBr;
-
-    thus
-T1: for n be Nat holds F.n is_integrable_on M
-    proof
-     let n be Nat;
-     (Re F).n = Re(F.n) & (Im F).n = Im(F.n) by MESFUN7C:24; then
-     Re(F.n) is_integrable_on M & Im(F.n) is_integrable_on M
-               by A1,A5,A6,A9,A10,A11,A12,MES1020r;
-     hence F.n is_integrable_on M by MESFUN6C:def 4;
-    end;
-
-A13:lim Re F is_integrable_on M &
-    lim Im F is_integrable_on M by A1,A5,A6,A9,A10,A11,A12,MES1020r; then
-    R_EAL Re lim F is_integrable_on M &
-    R_EAL Im lim F is_integrable_on M by A1,A4,MESFUN7C:25; then
-    Re lim F is_integrable_on M & Im lim F is_integrable_on M
-     by MESFUNC6:def 9;
-    hence
-T2: lim F is_integrable_on M by MESFUN6C:def 4;
-
-    defpred P[Element of NAT,set] means $2 = Integral(M,F.$1);
-
-A14:for n being Element of NAT ex y being Element of COMPLEX st P[n,y]
-    proof
-     let n being Element of NAT;
-     take y = Integral(M,F.n);
-     thus thesis by XCMPLX_0:def 2;
-    end;
-    consider I be Function of NAT,COMPLEX such that
-A15: for n be Element of NAT holds P[n,I.n] from FUNCT_2:sch 3(A14);
-
-    reconsider I as Complex_Sequence;
-    take I;
-
-    consider A be ExtREAL_sequence such that
-A16: (for n be Nat holds A.n = Integral(M,(Re F).n)) &
-     A is convergent & lim A = Integral(M,lim Re F)
-        by A1,A5,A6,A9,A11,MES1020r;
-
-    consider B be ExtREAL_sequence such that
-A17: (for n be Nat holds B.n = Integral(M,(Im F).n)) &
-     B is convergent & lim B = Integral(M,lim Im F)
-        by A1,A5,A6,A10,A12,MES1020r;
-
-    for n1 be set st n1 in NAT holds
-     (R_EAL Re I).n1 = A.n1 & (R_EAL Im I).n1 = B.n1
-    proof
-     let n1 be set;
-     assume n1 in NAT; then
-     reconsider n=n1 as Element of NAT;
-P1:  (Re F).n = Re(F.n) & (Im F).n = Im(F.n) by MESFUN7C:24;
-
-     F.n is_integrable_on M by T1; then
-     consider RF,IF be Real such that
-P2:   RF = Integral(M,Re(F.n)) & IF = Integral(M,Im(F.n)) &
-      Integral(M,F.n) = RF + IF * <i> by MESFUN6C:def 5;
-
-P3:  I.n1 = Integral(M,F.n) by A15;
-
-     (Re I).n = Re(I.n) by COMSEQ_3:def 3; then
-     (Re I).n1 = RF by P2,P3,COMPLEX1:28;
-     hence (R_EAL Re I).n1 = A.n1 by A16,P1,P2;
-     (Im I).n = Im(I.n) by COMSEQ_3:def 4; then
-     (Im I).n1 = IF by P2,P3,COMPLEX1:28;
-     hence (R_EAL Im I).n1 = B.n1 by A17,P1,P2;
-    end; then
-    (for n1 be set st n1 in NAT holds (R_EAL Re I).n1 = A.n1) &
-    (for n1 be set st n1 in NAT holds (R_EAL Im I).n1 = B.n1); then
-A18:Re I = A & Im I = B by FUNCT_2:18;
-
-A19:-infty < Integral(M,lim Re F) & Integral(M,lim Re F) < +infty &
-    -infty < Integral(M,lim Im F) & Integral(M,lim Im F) < +infty
-                                              by A13,MESFUNC5:102;
-
-    thus for n be Nat holds I.n = Integral(M,F.n)
-    proof
-     let n be Nat;
-P1:  I.n = Re(I.n) + Im(I.n)*<i> by COMPLEX1:29;
-
-     n is Element of NAT by ORDINAL1:def 13; then
-P2:  (Re I).n = Re(I.n) & (Im I).n = Im(I.n) by COMSEQ_3:def 3,def 4;
-
-     (Re F).n = Re(F.n) & (Im F).n = Im(F.n) by MESFUN7C:24; then
-P3:  (Re I).n = Integral(M,Re(F.n)) &
-     (Im I).n = Integral(M,Im(F.n)) by A16,A17,A18;
-
-     F.n is_integrable_on M by T1;
-     hence I.n = Integral(M,F.n) by P1,P2,P3,MESFUN6C:def 5;
-    end;
-
-A20:now assume R01: A is convergent;
-     assume not A is convergent_to_finite_number; then
-     A is convergent_to_+infty or A is convergent_to_-infty
-        by R01,MESFUNC5:def 11;
-     hence contradiction by A16,A19,MESFUNC5:def 12;
-    end;
-
-A21:now assume R01: B is convergent;
-     assume not B is convergent_to_finite_number; then
-     B is convergent_to_+infty or B is convergent_to_-infty
-       by R01,MESFUNC5:def 11;
-     hence contradiction by A17,A19,MESFUNC5:def 12;
-    end; then
-A22:Re I is convergent & Im I is convergent by A16,A17,A18,A20,RINFSUP2:15;
-    hence I is convergent by COMSEQ_3:42;
-
-A23:lim Re I = Integral(M,lim Re F) &
-    lim Im I = Integral(M,lim Im F) by A16,A17,A18,A20,A21,RINFSUP2:15;
-
-    for n be Element of NAT holds
-     (Re I).n = Re(I.n) & (Im I).n = Im(I.n) by COMSEQ_3:def 3,def 4; then
-A24:lim I = lim Re I + (lim Im I) * <i> by A22,COMSEQ_3:39;
-    Integral(M,lim Re F) = Integral(M,Re lim F) &
-    Integral(M,lim Im F) = Integral(M,Im lim F) by A1,A4,MESFUN7C:25;
-    hence lim I = Integral(M,lim F) by T2,A23,A24,MESFUN6C:def 5;
+  assume that
+A1: M.E < +infty and
+A2: E = dom(F.0) and
+A3: for n be Nat holds F.n is_measurable_on E and
+A4: F is uniformly_bounded and
+A5: for x be Element of X st x in E holds F#x is convergent;
+  consider K be real number such that
+A6: for n be Nat, x be Element of X st x in dom(F.0) holds |. (F.n).x .|
+  <= K by A4,Def6;
+A7: for x be Element of X st x in E holds (Re F)#x is convergent
+  proof
+    let x be Element of X;
+    assume
+A8: x in E;
+    then F#x is convergent Complex_Sequence by A5;
+    then Re(F#x) is convergent;
+    hence (Re F)#x is convergent by A2,A8,MESFUN7C:23;
+  end;
+  for n be Nat, x be Element of X st x in dom((Im F).0) holds |. ((Im F).
+  n).x .| <= K
+  proof
+    let n be Nat, x be Element of X;
+    assume
+    x in dom((Im F).0);
+    then
+A9: x in E by A2,MESFUN7C:def 12;
+    then |. (F.n).x .| <= K by A2,A6;
+    then
+A10: |. (F#x).n .| <= K by MESFUN7C:def 9;
+A11: n is Element of NAT by ORDINAL1:def 13;
+    then Im((F#x).n) = (Im(F#x)).n by COMSEQ_3:def 4;
+    then Im((F#x).n) = ((Im F)#x).n by A2,A9,MESFUN7C:23;
+    then |. ((Im F)#x).n .| <= |. (F#x).n .| by COMSEQ_3:13;
+    then |. ((Im F)#x).n .| <= K by A10,XXREAL_0:2;
+    hence thesis by A11,SEQFUNC:def 11;
+  end;
+  then
+A12: Im F is uniformly_bounded by Def4;
+A13: for x be Element of X st x in E holds (Im F)#x is convergent
+  proof
+    let x be Element of X;
+    assume
+A14: x in E;
+    then F#x is convergent Complex_Sequence by A5;
+    then Im(F#x) is convergent;
+    hence (Im F)#x is convergent by A2,A14,MESFUN7C:23;
+  end;
+  defpred P[Element of NAT,set] means $2 = Integral(M,F.$1);
+A15: for n being Element of NAT ex y being Element of COMPLEX st P[n,y]
+  proof
+    let n being Element of NAT;
+    take y = Integral(M,F.n);
+    thus thesis by XCMPLX_0:def 2;
+  end;
+  consider I be Function of NAT,COMPLEX such that
+A16: for n be Element of NAT holds P[n,I.n] from FUNCT_2:sch 3(A15);
+  reconsider I as Complex_Sequence;
+A17: for n be Nat holds (Re F).n is_measurable_on E & (Im F).n
+  is_measurable_on E by A3,Lm2;
+  for n be Nat, x be Element of X st x in dom((Re F).0) holds |. ((Re F).
+  n).x .| <= K
+  proof
+    let n be Nat, x be Element of X;
+    assume
+    x in dom((Re F).0);
+    then
+A18: x in E by A2,MESFUN7C:def 11;
+    then |. (F.n).x .| <= K by A2,A6;
+    then
+A19: |. (F#x).n .| <= K by MESFUN7C:def 9;
+A20: n is Element of NAT by ORDINAL1:def 13;
+    then Re((F#x).n) = (Re(F#x)).n by COMSEQ_3:def 3;
+    then Re((F#x).n) = ((Re F)#x).n by A2,A18,MESFUN7C:23;
+    then |. ((Re F)#x).n .| <= |. (F#x).n .| by COMSEQ_3:13;
+    then |. ((Re F)#x).n .| <= K by A19,XXREAL_0:2;
+    hence |. ((Re F).n).x .| <= K by A20,SEQFUNC:def 11;
+  end;
+  then
+A21: Re F is uniformly_bounded by Def4;
+A22: E = dom((Im F).0) by A2,MESFUN7C:def 12;
+  then consider B be ExtREAL_sequence such that
+A23: for n be Nat holds B.n = Integral(M,(Im F).n) and
+A24: B is convergent and
+A25: lim B = Integral(M,lim Im F) by A1,A17,A13,A12,Th49;
+A26: lim Im F is_integrable_on M by A1,A22,A17,A13,A12,Th49;
+  then R_EAL Im lim F is_integrable_on M by A2,A5,MESFUN7C:25;
+  then
+A27: Im lim F is_integrable_on M by MESFUNC6:def 9;
+A28: E = dom((Re F).0) by A2,MESFUN7C:def 11;
+  then consider A be ExtREAL_sequence such that
+A29: for n be Nat holds A.n = Integral(M,(Re F).n) and
+A30: A is convergent and
+A31: lim A = Integral(M,lim Re F) by A1,A17,A7,A21,Th49;
+  thus
+A32: for n be Nat holds F.n is_integrable_on M
+  proof
+    let n be Nat;
+    (Im F).n = Im(F.n) by MESFUN7C:24;
+    then
+A33: Im(F.n) is_integrable_on M by A1,A22,A17,A13,A12,Th49;
+    (Re F).n = Re(F.n) by MESFUN7C:24;
+    then Re(F.n) is_integrable_on M by A1,A28,A17,A7,A21,Th49;
+    hence F.n is_integrable_on M by A33,MESFUN6C:def 4;
+  end;
+A34: for n1 be set st n1 in NAT holds (R_EAL Re I).n1 = A.n1 & (R_EAL Im I).
+  n1 = B.n1
+  proof
+    let n1 be set;
+    assume
+    n1 in NAT;
+    then reconsider n=n1 as Element of NAT;
+A35: I.n1 = Integral(M,F.n) by A16;
+    F.n is_integrable_on M by A32;
+    then consider RF,IF be Real such that
+A36: RF = Integral(M,Re(F.n)) and
+A37: IF = Integral(M,Im(F.n)) and
+A38: Integral(M,F.n) = RF + IF * <i> by MESFUN6C:def 5;
+    (Re I).n = Re(I.n) by COMSEQ_3:def 3;
+    then (Re F).n = Re(F.n) & (Re I).n1 = RF by A38,A35,COMPLEX1:28,
+    MESFUN7C:24;
+    hence (R_EAL Re I).n1 = A.n1 by A29,A36;
+    (Im I).n = Im(I.n) by COMSEQ_3:def 4;
+    then (Im F).n = Im(F.n) & (Im I).n1 = IF by A38,A35,COMPLEX1:28,
+    MESFUN7C:24;
+    hence (R_EAL Im I).n1 = B.n1 by A23,A37;
+  end;
+  then for n1 be set st n1 in NAT holds (R_EAL Im I).n1 = B.n1;
+  then
+A39: Im I = B by FUNCT_2:18;
+A40: -infty < Integral(M,lim Im F) & Integral(M,lim Im F) < +infty by A26,
+  MESFUNC5:102;
+A41: now
+    assume
+A42: B is convergent;
+    assume
+    not B is convergent_to_finite_number;
+    then B is convergent_to_+infty or B is convergent_to_-infty by A42,
+    MESFUNC5:def 11;
+    hence contradiction by A24,A25,A40,MESFUNC5:def 12;
+  end;
+  then
+A43: lim Im I = Integral(M,lim Im F) by A24,A25,A39,RINFSUP2:15;
+A44: Im I is convergent by A24,A39,A41,RINFSUP2:15;
+A45: lim Re F is_integrable_on M by A1,A28,A17,A7,A21,Th49;
+  then R_EAL Re lim F is_integrable_on M by A2,A5,MESFUN7C:25;
+  then Re lim F is_integrable_on M by MESFUNC6:def 9;
+  hence
+A46: lim F is_integrable_on M by A27,MESFUN6C:def 4;
+  take I;
+  for n1 be set st n1 in NAT holds (R_EAL Re I).n1 = A.n1 by A34;
+  then
+A47: Re I = A by FUNCT_2:18;
+  thus for n be Nat holds I.n = Integral(M,F.n)
+  proof
+    let n be Nat;
+    n is Element of NAT by ORDINAL1:def 13;
+    then
+A48: (Re I).n = Re(I.n) & (Im I).n = Im(I.n) by
+    COMSEQ_3:def 3,def 4;
+    (Re F).n = Re(F.n) by MESFUN7C:24;
+    then
+A49: (Re I).n = Integral(M,Re(F.n)) by A29,A47;
+    (Im F).n = Im(F.n) by MESFUN7C:24;
+    then
+A50: (Im I).n = Integral(M,Im(F.n)) by A23,A39;
+    I.n = Re(I.n) + Im(I.n)*<i> & F.n is_integrable_on M by A32,COMPLEX1:
+    29;
+    hence I.n = Integral(M,F.n) by A48,A49,A50,MESFUN6C:def 5;
+  end;
+A51: -infty < Integral(M,lim Re F) & Integral(M,lim Re F) < +infty by A45,
+  MESFUNC5:102;
+A52: now
+    assume
+A53: A is convergent;
+    assume
+    not A is convergent_to_finite_number;
+    then A is convergent_to_+infty or A is convergent_to_-infty by A53,
+    MESFUNC5:def 11;
+    hence contradiction by A30,A31,A51,MESFUNC5:def 12;
+  end;
+  then
+A54: Re I is convergent by A30,A47,RINFSUP2:15;
+  hence I is convergent by A44,COMSEQ_3:42;
+  for n be Element of NAT holds (Re I).n = Re(I.n) & (Im I).n = Im(I.n)
+  by COMSEQ_3:def 3,def 4;
+  then
+A55: lim I = lim Re I + (lim Im I) * <i> by A54,A44,COMSEQ_3:39;
+A56: Integral(M,lim Re F) = Integral(M,Re lim F) & Integral(M,lim Im F) =
+  Integral(M,Im lim F) by A2,A5,MESFUN7C:25;
+  lim Re I = Integral(M,lim Re F) by A30,A31,A47,A52,RINFSUP2:15;
+  hence lim I = Integral(M,lim F) by A46,A43,A55,A56,MESFUN6C:def 5;
 end;
 
-definition let X be set, F be Functional_Sequence of X,COMPLEX,
-  f be PartFunc of X,COMPLEX;
-  pred F is_uniformly_convergent_to f means :DefUCc:
+definition
+  let X be set, F be Functional_Sequence of X,COMPLEX, f be PartFunc of X,
+  COMPLEX;
+  pred F is_uniformly_convergent_to f means
+  :Def7:
   F is with_the_same_dom &
-  dom(F.0) = dom f &
-  for e be real number st e>0
-   ex N be Nat st
-    for n be Nat, x be Element of X st n >= N & x in dom(F.0) holds
-     |. (F.n).x - f.x .| < e;
+  dom(F.0) = dom f & for e be real number st e>0 ex N be Nat st for n be Nat, x
+  be Element of X st n >= N & x in dom(F.0) holds |. (F.n).x - f.x .| < e;
 end;
 
 theorem
-M.E < +infty & E = dom(F.0) &
-(for n be Nat holds F.n is_integrable_on M) &
-F is_uniformly_convergent_to f
-implies
- f is_integrable_on M &
- ex I be Complex_Sequence st
-  (for n be Nat holds I.n = Integral(M,F.n)) &
-  I is convergent & lim I = Integral(M,f)
+  M.E < +infty & E = dom(F.0) & (for n be Nat holds F.n is_integrable_on
+  M) & F is_uniformly_convergent_to f implies f is_integrable_on M & ex I be
+  Complex_Sequence st (for n be Nat holds I.n = Integral(M,F.n)) & I is
+  convergent & lim I = Integral(M,f)
 proof
-    assume that
-A1:  M.E < +infty & E = dom(F.0) and
-A2:  (for n be Nat holds F.n is_integrable_on M) and
-A3:  F is_uniformly_convergent_to f;
-
-A4: E = dom((Re F).0) & E = dom((Im F).0) by A1,MESFUN7C:def 12,def 11;
-
-A5: for n be Nat holds (Re F).n is_integrable_on M
+  assume that
+A1: M.E < +infty and
+A2: E = dom(F.0) and
+A3: for n be Nat holds F.n is_integrable_on M and
+A4: F is_uniformly_convergent_to f;
+A5: for n be Nat holds (Im F).n is_integrable_on M
+  proof
+    let n be Nat;
+    F.n is_integrable_on M by A3;
+    then Im(F.n) is_integrable_on M by MESFUN6C:def 4;
+    hence (Im F).n is_integrable_on M by MESFUN7C:24;
+  end;
+A6: dom(F.0) = dom f by A4,Def7;
+A7: for e be real number st e>0 ex N be Nat st for n be Nat, x be Element
+  of X st n >= N & x in dom((Im F).0) holds |. ((Im F).n).x - (Im f).x .| < e
+  proof
+    let e be real number;
+    assume
+    e>0;
+    then consider N be Nat such that
+A8: for n be Nat, x be Element of X st n >= N & x in dom(F.0) holds
+    |. (F.n).x - f.x .| < e by A4,Def7;
+    for n be Nat, x be Element of X st n >= N & x in dom((Im F).0) holds
+    |. ((Im F).n).x - (Im f).x .| < e
     proof
-     let n be Nat;
-     F.n is_integrable_on M by A2; then
-     Re(F.n) is_integrable_on M by MESFUN6C:def 4;
-     hence (Re F).n is_integrable_on M by MESFUN7C:24;
-    end;
-
-A6: for n be Nat holds (Im F).n is_integrable_on M
-    proof
-     let n be Nat;
-     F.n is_integrable_on M by A2; then
-     Im(F.n) is_integrable_on M by MESFUN6C:def 4;
-     hence (Im F).n is_integrable_on M by MESFUN7C:24;
-    end;
-
-A7: dom(F.0) = dom f &
-    for e be real number st e>0
-     ex N be Nat st
-      for n be Nat, x be Element of X st n >= N & x in dom(F.0) holds
-       |. (F.n).x - f.x .| < e by A3,DefUCc; then
-    dom((Re F).0) = dom f & dom((Im F).0) = dom f
-      by MESFUN7C:def 12,def 11; then
-A8: dom((Re F).0) = dom Re f &
-    dom((Im F).0) = dom Im f by MESFUN6C:def 1,def 2;
-    for e be real number st e>0
-     ex N be Nat st
-      for n be Nat, x be Element of X st n >= N & x in dom((Re F).0) holds
-       |. ((Re F).n).x - (Re f).x .| < e
-    proof
-     let e be real number;
-     assume e>0; then
-     consider N be Nat such that
-P01:  for n be Nat, x be Element of X st n >= N & x in dom(F.0) holds
-       |. (F.n).x - f.x .| < e by A3,DefUCc;
-
-     for n be Nat, x be Element of X st n >= N & x in dom((Re F).0) holds
-      |. ((Re F).n).x - (Re f).x .| < e
-     proof
       let n be Nat, x be Element of X;
-      assume Q01: n >= N & x in dom((Re F).0); then
-Q02:  x in dom(F.0) by MESFUN7C:def 11;
-      (F.n).x = (F#x).n by MESFUN7C:def 9; then
-Q05:  |. (F#x).n - f.x .| < e by P01,Q01,Q02;
-
-      f.x in rng f by Q02,A7,FUNCT_1:12; then
-Q07:  Re((F#x).n - f.x) = Re((F#x).n) - Re(f.x) by COMPLEX1:48;
-
-      (F#x).n - f.x is Element of COMPLEX by XCMPLX_0:def 2; then
-Q08:  |. Re((F#x).n) - Re(f.x) .| <= |. (F#x).n - f.x .| by Q07,COMSEQ_3:13;
-
+      assume that
+A9:   n >= N and
+A10:  x in dom((Im F).0);
       reconsider n1=n as Element of NAT by ORDINAL1:def 13;
-Q09:  Re((F#x).n) = (Re(F#x)).n1 by COMSEQ_3:def 3
-                  .= ((Re F)#x).n by Q02,MESFUN7C:23
-                  .= ((Re F).n1).x by SEQFUNC:def 11;
-
-      x in dom Re f by Q02,A7,MESFUN6C:def 1; then
-      Re(f.x) = (Re f).x by MESFUN6C:def 1;
-      hence |. ((Re F).n).x - (Re f).x .| < e by Q08,Q09,Q05,XXREAL_0:2;
-     end;
-     hence thesis;
-    end; then
-A9: Re F is_uniformly_convergent_to Re f by A8,DefUCr; then
-A10:Re f is_integrable_on M by A1,A4,A5,MES1022r;
-
-    for e be real number st e>0
-     ex N be Nat st
-      for n be Nat, x be Element of X st n >= N & x in dom((Im F).0) holds
-       |. ((Im F).n).x - (Im f).x .| < e
+A11:  x in dom(F.0) by A10,MESFUN7C:def 12;
+      then |. (F.n).x - f.x .| < e by A8,A9;
+      then
+A12:  |. (F#x).n - f.x .| < e by MESFUN7C:def 9;
+      f.x in rng f by A6,A11,FUNCT_1:12;
+      then
+A13:  Im((F#x).n - f.x) = Im((F#x).n) - Im(f.x) by COMPLEX1:48;
+      (F#x).n - f.x is Element of COMPLEX by XCMPLX_0:def 2;
+      then
+A14:  |. Im((F#x).n) - Im(f.x) .| <= |. (F#x).n - f.x .| by A13,
+      COMSEQ_3:13;
+      x in dom Im f by A6,A11,MESFUN6C:def 2;
+      then
+A15:  Im(f.x) = (Im f).x by MESFUN6C:def 2;
+      Im((F#x).n1) = (Im(F#x)).n by COMSEQ_3:def 4
+        .= ((Im F)#x).n1 by A11,MESFUN7C:23
+        .= ((Im F).n).x by SEQFUNC:def 11;
+      hence |. ((Im F).n).x - (Im f).x .| < e by A12,A14,A15,XXREAL_0:2;
+    end;
+    hence thesis;
+  end;
+  dom((Im F).0) = dom f by A6,MESFUN7C:def 12;
+  then dom((Im F).0) = dom Im f by MESFUN6C:def 2;
+  then
+A16: Im F is_uniformly_convergent_to Im f by A7,Def5;
+A17: for e be real number st e>0 ex N be Nat st for n be Nat, x be Element
+  of X st n >= N & x in dom((Re F).0) holds |. ((Re F).n).x - (Re f).x .| < e
+  proof
+    let e be real number;
+    assume
+    e>0;
+    then consider N be Nat such that
+A18: for n be Nat, x be Element of X st n >= N & x in dom(F.0) holds
+    |. (F.n).x - f.x .| < e by A4,Def7;
+    for n be Nat, x be Element of X st n >= N & x in dom((Re F).0) holds
+    |. ((Re F).n).x - (Re f).x .| < e
     proof
-     let e be real number;
-     assume e>0; then
-     consider N be Nat such that
-P01:  for n be Nat, x be Element of X st n >= N & x in dom(F.0) holds
-       |. (F.n).x - f.x .| < e by A3,DefUCc;
-
-     for n be Nat, x be Element of X st n >= N & x in dom((Im F).0) holds
-      |. ((Im F).n).x - (Im f).x .| < e
-     proof
       let n be Nat, x be Element of X;
-      assume Q01: n >= N & x in dom((Im F).0); then
-Q02:  x in dom(F.0) by MESFUN7C:def 12; then
-      |. (F.n).x - f.x .| < e by P01,Q01; then
-Q05:  |. (F#x).n - f.x .| < e by MESFUN7C:def 9;
-
-      f.x in rng f by Q02,A7,FUNCT_1:12; then
-Q07:  Im((F#x).n - f.x) = Im((F#x).n) - Im(f.x) by COMPLEX1:48;
-
-      (F#x).n - f.x is Element of COMPLEX by XCMPLX_0:def 2; then
-Q08:  |. Im((F#x).n) - Im(f.x) .| <= |. (F#x).n - f.x .| by Q07,COMSEQ_3:13;
-
+      assume that
+A19:  n >= N and
+A20:  x in dom((Re F).0);
+A21:  x in dom(F.0) by A20,MESFUN7C:def 11;
+      then f.x in rng f by A6,FUNCT_1:12;
+      then
+A22:  Re((F#x).n - f.x) = Re((F#x).n) - Re(f.x) by COMPLEX1:48;
+      (F.n).x = (F#x).n by MESFUN7C:def 9;
+      then
+A23:  |. (F#x).n - f.x .| < e by A18,A19,A21;
+      x in dom Re f by A6,A21,MESFUN6C:def 1;
+      then
+A24:  Re(f.x) = (Re f).x by MESFUN6C:def 1;
       reconsider n1=n as Element of NAT by ORDINAL1:def 13;
-Q09:  Im((F#x).n1) = (Im(F#x)).n by COMSEQ_3:def 4
-                  .= ((Im F)#x).n1 by Q02,MESFUN7C:23
-                  .= ((Im F).n).x by SEQFUNC:def 11;
-
-      x in dom Im f by Q02,A7,MESFUN6C:def 2; then
-      Im(f.x) = (Im f).x by MESFUN6C:def 2;
-      hence |. ((Im F).n).x - (Im f).x .| < e by Q08,Q09,Q05,XXREAL_0:2;
-     end;
-     hence thesis;
-    end; then
-A11:Im F is_uniformly_convergent_to Im f by A8,DefUCr; then
-A12:Im f is_integrable_on M by A1,A4,A6,MES1022r;
-    hence
-A13:f is_integrable_on M by A10,MESFUN6C:def 4;
-
-    defpred P[Element of NAT,set] means $2 = Integral(M,F.$1);
-A14:for n being Element of NAT ex y being Element of COMPLEX st P[n,y]
-    proof
-      let n being Element of NAT;
-      Integral(M,F.n) is Element of COMPLEX by XCMPLX_0:def 2;
-      hence thesis;
+      (F#x).n - f.x is Element of COMPLEX by XCMPLX_0:def 2;
+      then
+A25:  |. Re((F#x).n) - Re(f.x) .| <= |. (F#x).n - f.x .| by A22,
+      COMSEQ_3:13;
+      Re((F#x).n) = (Re(F#x)).n1 by COMSEQ_3:def 3
+        .= ((Re F)#x).n by A21,MESFUN7C:23
+        .= ((Re F).n1).x by SEQFUNC:def 11;
+      hence |. ((Re F).n).x - (Re f).x .| < e by A23,A25,A24,XXREAL_0:2;
     end;
-    consider I be Function of NAT,COMPLEX such that
-A15: for n be Element of NAT holds P[n,I.n] from FUNCT_2:sch 3(A14);
-
-    reconsider I as Complex_Sequence;
-    take I;
-
-    consider A be ExtREAL_sequence such that
-A16: (for n be Nat holds A.n = Integral(M,(Re F).n)) &
-      A is convergent & lim A = Integral(M,Re f) by A1,A4,A5,A9,MES1022r;
-
-    consider B be ExtREAL_sequence such that
-A17: (for n be Nat holds B.n = Integral(M,(Im F).n)) &
-      B is convergent & lim B = Integral(M,Im f) by A1,A4,A6,A11,MES1022r;
-
-    now let n1 be set;
-     assume n1 in NAT; then
-     reconsider n=n1 as Element of NAT;
-
-P03: (Re F).n = Re(F.n) & (Im F).n = Im(F.n) &
-     (Re I).n = Re(I.n) & (Im I).n = Im(I.n)
-       by MESFUN7C:24,COMSEQ_3:def 3,def 4;
-
-     F.n is_integrable_on M by A2; then
-     consider RF,IF be Real such that
-P06:  RF = Integral(M,Re(F.n)) & IF = Integral(M,Im(F.n)) &
-      Integral(M,F.n) = RF + IF * <i> by MESFUN6C:def 5;
-
-     I.n1 = Integral(M,F.n) by A15; then
-     Re(I.n1) = RF & Im(I.n1) = IF by P06,COMPLEX1:28;
-     hence (R_EAL Re I).n1 = A.n1 & (R_EAL Im I).n1 = B.n1
-       by A16,A17,P03,P06;
-    end; then
-    (for x be set st x in NAT holds (R_EAL Re I).x = A.x) &
-    (for x be set st x in NAT holds (R_EAL Im I).x = B.x); then
-A18:Re I = A & Im I = B by FUNCT_2:18;
-
-A19:-infty < Integral(M,Re f) & Integral(M,Re f) < +infty &
-    -infty < Integral(M,Im f) & Integral(M,Im f) < +infty
-      by A10,A12,MESFUNC6:90;
-
-A20:now assume R01: A is convergent;
-     assume not A is convergent_to_finite_number; then
-     A is convergent_to_+infty or A is convergent_to_-infty
-      by R01,MESFUNC5:def 11;
-     hence contradiction by A16,A19,MESFUNC5:def 12;
-    end;
-
-A21:now assume R01: B is convergent;
-     assume not B is convergent_to_finite_number; then
-     B is convergent_to_+infty or B is convergent_to_-infty
-        by R01,MESFUNC5:def 11;
-     hence contradiction by A17,A19,MESFUNC5:def 12;
-    end; then
-A22:lim Re I = Integral(M,Re f) & lim Im I = Integral(M,Im f)
-      by A16,A17,A18,A20,RINFSUP2:15;
-
-    thus for n be Nat holds I.n = Integral(M,F.n)
-    proof
-     let n be Nat;
-     reconsider n1=n as Element of NAT by ORDINAL1:def 13;
-     (Re I).n1 = Re(I.n1) & (Im I).n1 = Im(I.n1)
-                                 by COMSEQ_3:def 3,def 4; then
-P02: I.n = ((Re I).n) + ((Im I).n) * <i> by COMPLEX1:29;
-
-P04: F.n is_integrable_on M by A2;
-
-     (Re F).n = Re(F.n) & (Im F).n = Im(F.n) by MESFUN7C:24; then
-     (Re I).n = Integral(M,Re(F.n)) & (Im I).n = Integral(M,Im(F.n))
-        by A16,A17,A18;
-     hence I.n = Integral(M,F.n) by P02,P04,MESFUN6C:def 5;
-    end;
-
-A23:Re I is convergent & Im I is convergent by A16,A17,A18,A20,A21,RINFSUP2:15;
-    hence I is convergent by COMSEQ_3:42;
-
-    for n be Element of NAT holds
-     (Re I).n = Re(I.n) & (Im I).n = Im(I.n) by COMSEQ_3:def 3,def 4; then
-    lim I = lim (Re I) + lim (Im I) * <i> by A23,COMSEQ_3:39;
-    hence lim I = Integral(M,f) by A13,A22,MESFUN6C:def 5;
+    hence thesis;
+  end;
+  dom((Re F).0) = dom f by A6,MESFUN7C:def 11;
+  then dom((Re F).0) = dom Re f by MESFUN6C:def 1;
+  then
+A26: Re F is_uniformly_convergent_to Re f by A17,Def5;
+  defpred P[Element of NAT,set] means $2 = Integral(M,F.$1);
+A27: for n being Element of NAT ex y being Element of COMPLEX st P[n,y]
+  proof
+    let n being Element of NAT;
+    Integral(M,F.n) is Element of COMPLEX by XCMPLX_0:def 2;
+    hence thesis;
+  end;
+  consider I be Function of NAT,COMPLEX such that
+A28: for n be Element of NAT holds P[n,I.n] from FUNCT_2:sch 3(A27);
+A29: for n be Nat holds (Re F).n is_integrable_on M
+  proof
+    let n be Nat;
+    F.n is_integrable_on M by A3;
+    then Re(F.n) is_integrable_on M by MESFUN6C:def 4;
+    hence (Re F).n is_integrable_on M by MESFUN7C:24;
+  end;
+A30: E = dom((Im F).0) by A2,MESFUN7C:def 12;
+  then
+A31: Im f is_integrable_on M by A1,A5,A16,Th50;
+A32: E = dom((Re F).0) by A2,MESFUN7C:def 11;
+  then consider A be ExtREAL_sequence such that
+A33: for n be Nat holds A.n = Integral(M,(Re F).n) and
+A34: A is convergent and
+A35: lim A = Integral(M,Re f) by A1,A29,A26,Th50;
+A36: Re f is_integrable_on M by A1,A32,A29,A26,Th50;
+  hence
+A37: f is_integrable_on M by A31,MESFUN6C:def 4;
+  reconsider I as Complex_Sequence;
+  consider B be ExtREAL_sequence such that
+A38: for n be Nat holds B.n = Integral(M,(Im F).n) and
+A39: B is convergent and
+A40: lim B = Integral(M,Im f) by A1,A30,A5,A16,Th50;
+A41: now
+    let n1 be set;
+    assume
+    n1 in NAT;
+    then reconsider n=n1 as Element of NAT;
+A42: (Re F).n = Re(F.n) & (Im F).n = Im(F.n) by MESFUN7C:24;
+    F.n is_integrable_on M by A3;
+    then consider RF,IF be Real such that
+A43: RF = Integral(M,Re(F.n)) & IF = Integral(M,Im(F.n)) and
+A44: Integral(M,F.n) = RF + IF * <i> by MESFUN6C:def 5;
+A45: (Re I).n = Re(I.n) & (Im I).n = Im(I.n) by COMSEQ_3:def 3,def 4;
+    I.n1 = Integral(M,F.n) by A28;
+    then Re(I.n1) = RF & Im(I.n1) = IF by A44,COMPLEX1:28;
+    hence (R_EAL Re I).n1 = A.n1 & (R_EAL Im I).n1 = B.n1 by A33,A38,A42,A45,
+    A43;
+  end;
+  then for x be set st x in NAT holds (R_EAL Im I).x = B.x;
+  then
+A46: Im I = B by FUNCT_2:18;
+A47: -infty < Integral(M,Im f) & Integral(M,Im f) < +infty by A31,MESFUNC6:
+  90;
+A48: now
+    assume
+A49: B is convergent;
+    assume
+    not B is convergent_to_finite_number;
+    then B is convergent_to_+infty or B is convergent_to_-infty by A49,
+    MESFUNC5:def 11;
+    hence contradiction by A39,A40,A47,MESFUNC5:def 12;
+  end;
+  then
+A50: lim Im I = Integral(M,Im f) by A39,A40,A46,RINFSUP2:15;
+A51: Im I is convergent by A39,A46,A48,RINFSUP2:15;
+  take I;
+  for x be set st x in NAT holds (R_EAL Re I).x = A.x by A41;
+  then
+A52: Re I = A by FUNCT_2:18;
+  thus for n be Nat holds I.n = Integral(M,F.n)
+  proof
+    let n be Nat;
+    reconsider n1=n as Element of NAT by ORDINAL1:def 13;
+    (Re I).n1 = Re(I.n1) & (Im I).n1 = Im(I.n1) by COMSEQ_3:def 3,def 4;
+    then
+A53: I.n = ((Re I).n) + ((Im I).n) * <i> by COMPLEX1:29;
+    (Re F).n = Re(F.n) by MESFUN7C:24;
+    then
+A54: (Re I).n = Integral(M,Re(F.n)) by A33,A52;
+    (Im F).n = Im(F.n) by MESFUN7C:24;
+    then
+A55: (Im I).n = Integral(M,Im(F.n)) by A38,A46;
+    F.n is_integrable_on M by A3;
+    hence I.n = Integral(M,F.n) by A53,A54,A55,MESFUN6C:def 5;
+  end;
+A56: -infty < Integral(M,Re f) & Integral(M,Re f) < +infty by A36,MESFUNC6:
+  90;
+A57: now
+    assume
+A58: A is convergent;
+    assume
+    not A is convergent_to_finite_number;
+    then A is convergent_to_+infty or A is convergent_to_-infty by A58,
+    MESFUNC5:def 11;
+    hence contradiction by A34,A35,A56,MESFUNC5:def 12;
+  end;
+  then
+A59: Re I is convergent by A34,A52,RINFSUP2:15;
+  hence I is convergent by A51,COMSEQ_3:42;
+  for n be Element of NAT holds (Re I).n = Re(I.n) & (Im I).n = Im(I.n)
+  by COMSEQ_3:def 3,def 4;
+  then
+A60: lim I = lim (Re I) + lim (Im I) * <i> by A59,A51,COMSEQ_3:39;
+  lim Re I = Integral(M,Re f) by A34,A35,A52,A57,RINFSUP2:15;
+  hence lim I = Integral(M,f) by A37,A50,A60,MESFUN6C:def 5;
 end;
+

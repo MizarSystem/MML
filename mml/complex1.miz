@@ -8,11 +8,11 @@ environ
 
  vocabularies ARYTM, ARYTM_3, SQUARE_1, ARYTM_1, RELAT_1, ABSVALUE, COMPLEX1,
       FUNCT_2, BOOLE, FUNCT_1, FUNCOP_1, XCMPLX_0, OPPCAT_1;
- notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, ARYTM_0, NUMBERS, XCMPLX_0,
-      XREAL_0, REAL_1, SQUARE_1, RELAT_1, FUNCT_1, FUNCT_2, FUNCT_4, XXREAL_0;
+ notations TARSKI, SUBSET_1, ORDINAL1, ARYTM_0, NUMBERS, XCMPLX_0, XREAL_0,
+      REAL_1, SQUARE_1, RELAT_1, FUNCT_1, FUNCT_2, FUNCT_4, XXREAL_0;
  constructors FUNCT_4, ARYTM_0, REAL_1, SQUARE_1, MEMBERED, RELSET_1;
- registrations XBOOLE_0, RELSET_1, NUMBERS, XCMPLX_0, XXREAL_0,
-      XREAL_0, SQUARE_1, MEMBERED, FUNCT_1, FUNCT_2;
+ registrations XBOOLE_0, RELSET_1, NUMBERS, XCMPLX_0, XXREAL_0, XREAL_0,
+      SQUARE_1, MEMBERED;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions SQUARE_1;
  theorems SQUARE_1, XREAL_0, FUNCT_2, XBOOLE_0, TARSKI, NUMBERS, FUNCT_4,
@@ -33,12 +33,14 @@ proof
   assume
 A1: a^2 + b^2 = 0;
 A2: 0 <= a^2 & 0 <= b^2 by XREAL_1:65;
-  assume a <> 0;
+  assume
+  a <> 0;
   hence contradiction by A1,A2;
 end;
 
-Lm2: 0 <= a^2 + b^2
-proof 0<=a^2 & 0<=b^2 by XREAL_1:65;
+Lm1: 0 <= a^2 + b^2
+proof
+  0<=a^2 & 0<=b^2 by XREAL_1:65;
   hence thesis;
 end;
 
@@ -49,15 +51,16 @@ definition
   canceled;
   func Re z means
   :Def2:
-  it = z if z in REAL otherwise
-  ex f being Function of 2,REAL st z = f & it = f.0;
+  it = z if z in REAL otherwise ex f being Function of
+  2,REAL st z = f & it = f.0;
   existence
   proof
     thus z in REAL implies ex IT being set st IT = z;
+A1: z in COMPLEX by XCMPLX_0:def 2;
     assume
-A1: not z in REAL;
-    z in COMPLEX by XCMPLX_0:def 2;
-    then z in Funcs(2,REAL) \ { x where x is Element of Funcs(2,REAL): x.1 = 0
+    not z in REAL;
+    then
+    z in Funcs(2,REAL) \ { x where x is Element of Funcs(2,REAL): x.1 = 0
     } by A1,CARD_1:88,NUMBERS:def 2,XBOOLE_0:def 3;
     then reconsider f = z as Function of 2, REAL by FUNCT_2:121;
     take f.0, f;
@@ -67,15 +70,16 @@ A1: not z in REAL;
   consistency;
   func Im z means
   :Def3:
-  it = 0 if z in REAL otherwise
-  ex f being Function of 2,REAL st z = f & it = f.1;
+  it = 0 if z in REAL otherwise ex f being Function of
+  2,REAL st z = f & it = f.1;
   existence
   proof
     thus z in REAL implies ex IT being set st IT = 0;
+A2: z in COMPLEX by XCMPLX_0:def 2;
     assume
-A2: not z in REAL;
-    z in COMPLEX by XCMPLX_0:def 2;
-    then z in Funcs(2,REAL) \ { x where x is Element of Funcs(2,REAL): x.1 = 0
+    not z in REAL;
+    then
+    z in Funcs(2,REAL) \ { x where x is Element of Funcs(2,REAL): x.1 = 0
     } by A2,CARD_1:88,NUMBERS:def 2,XBOOLE_0:def 3;
     then reconsider f = z as Function of 2, REAL by FUNCT_2:121;
     take f.1, f;
@@ -91,30 +95,36 @@ registration
   coherence
   proof
     per cases;
-    suppose z in REAL;
+    suppose
+      z in REAL;
       hence thesis by Def2;
     end;
-    suppose not z in REAL;
-      then consider f being Function of 2,REAL such that z = f and
-A2:   Re z = f.0 by Def2;
+    suppose
+      not z in REAL;
+      then consider f being Function of 2,REAL such that
+      z = f and
+A1:   Re z = f.0 by Def2;
       0 in 2 by CARD_1:88,TARSKI:def 2;
       then f.0 in REAL by FUNCT_2:7;
-      hence thesis by A2;
+      hence thesis by A1;
     end;
   end;
   cluster Im z -> real;
   coherence
   proof
     per cases;
-    suppose z in REAL;
+    suppose
+      z in REAL;
       hence thesis by Def3;
     end;
-    suppose not z in REAL;
-      then consider f being Function of 2,REAL such that z = f and
-A3:   Im z = f.1 by Def3;
+    suppose
+      not z in REAL;
+      then consider f being Function of 2,REAL such that
+      z = f and
+A2:   Im z = f.1 by Def3;
       1 in 2 by CARD_1:88,TARSKI:def 2;
       then f.1 in REAL by FUNCT_2:7;
-      hence thesis by A3;
+      hence thesis by A2;
     end;
   end;
 end;
@@ -140,41 +150,43 @@ proof
   hence thesis by FUNCT_4:69;
 end;
 
-Lm3: Re [*a,b*] = a & Im [*a,b*] = b
+Lm2: Re [*a,b*] = a & Im [*a,b*] = b
 proof
   reconsider a' =a, b' = b as Element of REAL;
   thus Re [*a,b*] = a
-  proof per cases;
-    suppose b = 0;
+  proof
+    per cases;
+    suppose
+      b = 0;
       then [*a,b*] = a by ARYTM_0:def 7;
       hence thesis by Def2;
     end;
-    suppose b <> 0;
+    suppose
+      b <> 0;
       then
 A1:   [*a,b*] = (0,1)-->(a',b') by ARYTM_0:def 7;
       then reconsider f = [*a,b*] as Function of 2, REAL by CARD_1:88;
-A2:   not [*a,b*] in REAL by A1,ARYTM_0:10;
-      f.0 = a by A1,FUNCT_4:66;
-      hence thesis by A2,Def2;
+      ( not [*a,b*] in REAL)& f.0 = a by A1,ARYTM_0:10,FUNCT_4:66;
+      hence thesis by Def2;
     end;
   end;
   per cases;
   suppose
-A3: b = 0;
+A2: b = 0;
     then [*a,b*] = a by ARYTM_0:def 7;
-    hence thesis by A3,Def3;
+    hence thesis by A2,Def3;
   end;
-  suppose b <> 0;
+  suppose
+    b <> 0;
     then
-A4: [*a,b*] = (0,1)-->(a',b') by ARYTM_0:def 7;
+A3: [*a,b*] = (0,1)-->(a',b') by ARYTM_0:def 7;
     then reconsider f = [*a,b*] as Function of 2, REAL by CARD_1:88;
-A5: not [*a,b*] in REAL by A4,ARYTM_0:10;
-    f.1 = b by A4,FUNCT_4:66;
-    hence thesis by A5,Def3;
+    ( not [*a,b*] in REAL)& f.1 = b by A3,ARYTM_0:10,FUNCT_4:66;
+    hence thesis by Def3;
   end;
 end;
 
-Lm4: for z being complex number holds [*Re z, Im z*] = z
+Lm3: for z being complex number holds [*Re z, Im z*] = z
 proof
   let z be complex number;
 A1: z in COMPLEX by XCMPLX_0:def 2;
@@ -187,45 +199,46 @@ A2: z in REAL;
   end;
   suppose
 A3: not z in REAL;
-    then consider f being Function of 2,REAL such that
-A4: z = f and
-A5: Im z = f.1 by Def3;
-    consider f being Function of 2,REAL such that
-A6: z = f and
-A7: Re z = f.0 by A3,Def2;
-    consider a,b such that
-A8: z = (0,1)-->(a,b) by A4,Th5;
-A9: Re z = a by A6,A7,A8,FUNCT_4:66;
-A10: Im z = b by A4,A5,A8,FUNCT_4:66;
-    z in Funcs(2,REAL) \ { x where x is Element of Funcs(2,REAL): x.1 = 0}
-    by A1,A3,CARD_1:88,NUMBERS:def 2,XBOOLE_0:def 3;
     then
-A11: not z in { x where x is Element of Funcs(2,REAL): x.1 = 0}
-    by XBOOLE_0:def 5;
-    reconsider f = z as Element of Funcs(2,REAL) by A8,CARD_1:88,FUNCT_2:11;
-    f.1 <> 0 by A11;
-    then b <> 0 by A8,FUNCT_4:66;
-    hence thesis by A8,A9,A10,ARYTM_0:def 7;
+A4: ex f being Function of 2,REAL st z = f & Im z = f.1 by Def3;
+    then consider a,b such that
+A5: z = (0,1)-->(a,b) by Th5;
+    reconsider f = z as Element of Funcs(2,REAL) by A5,CARD_1:88,FUNCT_2:11;
+
+    z in Funcs(2,REAL) \ { x where x is Element of Funcs(2,REAL): x.1 = 0
+    } by A1,A3,CARD_1:88,NUMBERS:def 2,XBOOLE_0:def 3;
+
+    then not z in { x where x is Element of Funcs(2,REAL): x.1 = 0} by
+    XBOOLE_0:def 5;
+
+    then f.1 <> 0;
+    then
+A6: b <> 0 by A5,FUNCT_4:66;
+    ex f being Function of 2,REAL st z = f & Re z = f.0 by A3,Def2;
+    then
+A7: Re z = a by A5,FUNCT_4:66;
+    Im z = b by A4,A5,FUNCT_4:66;
+    hence thesis by A5,A7,A6,ARYTM_0:def 7;
   end;
 end;
 
 canceled 3;
 
 theorem Th9:
-  for z1, z2 being complex number st
-  Re z1 = Re z2 & Im z1 = Im z2 holds z1 = z2
+  for z1, z2 being complex number st Re z1 = Re z2 & Im z1 = Im z2
+  holds z1 = z2
 proof
   let z1, z2 be complex number;
-  assume Re z1 = Re z2 & Im z1 = Im z2;
-  hence z1 = [*Re z2,Im z2*] by Lm4
-    .= z2 by Lm4;
+  assume
+  Re z1 = Re z2 & Im z1 = Im z2;
+  hence z1 = [*Re z2,Im z2*] by Lm3
+    .= z2 by Lm3;
 end;
 
 definition
   let z1,z2 be complex number;
   canceled;
   redefine pred z1 = z2 means
-
   Re z1 = Re z2 & Im z1 = Im z2;
   compatibility by Th9;
 end;
@@ -248,22 +261,24 @@ definition
   coherence by XCMPLX_0:def 2;
 end;
 
-Lm5: 0 = [*0,0*] by ARYTM_0:def 7;
+Lm4: 0 = [*0,0*] by ARYTM_0:def 7;
 
-Lm6: 1r = [*1,0*] by ARYTM_0:def 7;
+Lm5: 1r = [*1,0*] by ARYTM_0:def 7;
 
 canceled 2;
 
 theorem Th12:
-  Re 0 = 0 & Im 0 = 0 by Lm3,Lm5;
+  Re 0 = 0 & Im 0 = 0 by Lm2,Lm4;
 
 theorem Th13:
-  for z being complex number holds z = 0 iff (Re z)^2 + (Im z)^2 = 0
+  for z being complex number holds z = 0 iff (Re z)^2 + (Im z)^2 =
+  0
 proof
   let z be complex number;
   set r = Re z, i = Im z;
   thus z=0 implies r^2 + i^2 = 0 by Th12;
-  assume 0 = r^2+i^2;
+  assume
+  0 = r^2+i^2;
   then r = 0 & i = 0 by Th2;
   hence thesis by Th9,Th12;
 end;
@@ -271,24 +286,26 @@ end;
 canceled;
 
 theorem Th15:
-  Re(1r) = 1 & Im(1r) = 0 by Lm3,Lm6;
+  Re(1r) = 1 & Im(1r) = 0 by Lm2,Lm5;
 
 canceled;
 
-Lmx: <i> = [*0,1*] by ARYTM_0:def 7,XCMPLX_0:def 1;
+Lm6: <i> = [*0,1*] by ARYTM_0:def 7,XCMPLX_0:def 1;
 
 theorem Th17:
-  Re(<i>) = 0 & Im(<i>) = 1 by Lm3,Lmx;
+  Re(<i>) = 0 & Im(<i>) = 1 by Lm2,Lm6;
 
 Lm7: for x being real number, x1,x2 being Element of REAL st x = [*x1,x2*]
 holds x2 = 0 & x = x1
+
 proof
   let x be real number, x1,x2 being Element of REAL;
   assume
 A1: x = [*x1,x2*];
 A2: x in REAL by XREAL_0:def 1;
   thus now
-    assume x2 <> 0;
+    assume
+    x2 <> 0;
     then x = (0,1) --> (x1,x2) by A1,ARYTM_0:def 7;
     hence contradiction by A2,ARYTM_0:10;
   end;
@@ -297,17 +314,18 @@ end;
 
 Lm8: for x',y' being Element of REAL, x,y being real number st x' = x & y' = y
 holds +(x',y') = x + y
+
 proof
   let x',y' be Element of REAL, x,y be real number such that
 A1: x' = x & y' = y;
   consider x1,x2,y1,y2 being Element of REAL such that
-A2: x = [* x1,x2 *] and
-A3: y = [*y1,y2*] and
-A4: x+y = [*+(x1,y1),+(x2,y2)*] by XCMPLX_0:def 4;
-A5: x = x1 & y = y1 by A2,A3,Lm7;
-  x2 = 0 & y2 = 0 by A2,A3,Lm7;
-  then +(x2,y2) = 0 by ARYTM_0:13;
-  hence thesis by A1,A4,A5,ARYTM_0:def 7;
+A2: x = [* x1,x2 *] & y = [*y1,y2*] and
+A3: x+y = [*+(x1,y1),+(x2,y2)*] by XCMPLX_0:def 4;
+  x2 = 0 & y2 = 0 by A2,Lm7;
+  then
+A4: +(x2,y2) = 0 by ARYTM_0:13;
+  x = x1 & y = y1 by A2,Lm7;
+  hence thesis by A1,A3,A4,ARYTM_0:def 7;
 end;
 
 Lm9: for x being Element of REAL holds opp x = -x
@@ -318,22 +336,28 @@ proof
   hence thesis;
 end;
 
-Lm10: for x',y' being Element of REAL, x,y being real number st x' = x & y' = y
-holds *(x',y') = x * y
+Lm10: for x',y' being Element of REAL, x,y being real number st x' = x & y' =
+y holds *(x',y') = x * y
+
 proof
   let x',y' be Element of REAL, x,y be real number such that
 A1: x' = x & y' = y;
   consider x1,x2,y1,y2 being Element of REAL such that
 A2: x = [* x1,x2 *] and
 A3: y = [*y1,y2*] and
-A4: x*y = [* +(*(x1,y1),opp*(x2,y2)), +(*(x1,y2),*(x2,y1)) *]
-  by XCMPLX_0:def 5;
-A5: x = x1 & y = y1 by A2,A3,Lm7;
-A6: x2 = 0 & y2 = 0 by A2,A3,Lm7;
-  then *(x1,y2) = 0 & *(x2,y1) = 0 by ARYTM_0:14;
+
+A4: x*y = [* +(*(x1,y1),opp*(x2,y2)), +(*(x1,y2),*(x2,y1)) *] by
+  XCMPLX_0:def 5;
+
+  x2 = 0 by A2,Lm7;
   then
-A7: +(*(x1,y2),*(x2,y1)) = 0 by ARYTM_0:13;
-  thus *(x',y') = +(*(x1,y1),*(opp x2,y2)) by A1,A5,A6,ARYTM_0:13,14
+A5: *(x2,y1) = 0 by ARYTM_0:14;
+A6: y2 = 0 by A3,Lm7;
+  then *(x1,y2) = 0 by ARYTM_0:14;
+  then
+A7: +(*(x1,y2),*(x2,y1)) = 0 by A5,ARYTM_0:13;
+  x = x1 & y = y1 by A2,A3,Lm7;
+  hence *(x',y') = +(*(x1,y1),*(opp x2,y2)) by A1,A6,ARYTM_0:13,14
     .= +(*(x1,y1),opp*(x2,y2)) by ARYTM_0:17
     .= x * y by A4,A7,ARYTM_0:def 7;
 end;
@@ -343,12 +367,11 @@ proof
   let x,y,z be complex number such that
 A1: z = x + y;
   consider x1,x2,y1,y2 being Element of REAL such that
-A2: x = [*x1,x2*] and
-A3: y = [*y1,y2*] and
-A4: x + y = [*+(x1,y1),+(x2,y2)*] by XCMPLX_0:def 4;
-A5: Re x = x1 & Re y = y1 by A2,A3,Lm3;
-  thus Re z = +(x1,y1) by A1,A4,Lm3
-    .= Re x + Re y by A5,Lm8;
+A2: x = [*x1,x2*] & y = [*y1,y2*] and
+A3: x + y = [*+(x1,y1),+(x2,y2)*] by XCMPLX_0:def 4;
+A4: Re x = x1 & Re y = y1 by A2,Lm2;
+  thus Re z = +(x1,y1) by A1,A3,Lm2
+    .= Re x + Re y by A4,Lm8;
 end;
 
 Lm12: for x,y,z being complex number st z = x+y holds Im z = Im x + Im y
@@ -356,50 +379,53 @@ proof
   let x,y,z be complex number such that
 A1: z = x+y;
   consider x1,x2,y1,y2 being Element of REAL such that
-A2: x = [*x1,x2*] and
-A3: y = [*y1,y2*] and
-A4: x + y = [*+(x1,y1),+(x2,y2)*] by XCMPLX_0:def 4;
-A5: Im x = x2 & Im y = y2 by A2,A3,Lm3;
-  thus Im z = +(x2,y2) by A1,A4,Lm3
-    .= Im x + Im y by A5,Lm8;
+A2: x = [*x1,x2*] & y = [*y1,y2*] and
+A3: x + y = [*+(x1,y1),+(x2,y2)*] by XCMPLX_0:def 4;
+A4: Im x = x2 & Im y = y2 by A2,Lm2;
+  thus Im z = +(x2,y2) by A1,A3,Lm2
+    .= Im x + Im y by A4,Lm8;
 end;
 
-Lm13: for x,y,z being complex number st z = x * y
-holds Re z = Re x * Re y - Im x * Im y
+Lm13: for x,y,z being complex number st z = x * y holds Re z = Re x * Re y -
+Im x * Im y
+
 proof
   let x,y,z be complex number such that
 A1: z = x * y;
   consider x1,x2,y1,y2 being Element of REAL such that
-A2: x = [*x1,x2*] and
-A3: y = [*y1,y2*] and
-A4: x * y = [* +(*(x1,y1),opp*(x2,y2)), +(*(x1,y2),*(x2,y1)) *]
-  by XCMPLX_0:def 5;
-A5: Re x = x1 & Re y = y1 by A2,A3,Lm3;
-A6: Im x = x2 & Im y = y2 by A2,A3,Lm3;
-  thus Re z = +(*(x1,y1),opp*(x2,y2)) by A1,A4,Lm3
+A2: x = [*x1,x2*] & y = [*y1,y2*] and
+
+A3: x * y = [* +(*(x1,y1),opp*(x2,y2)), +(*(x1,y2),*(x2,y1)) *] by
+  XCMPLX_0:def 5;
+
+A4: Re x = x1 & Re y = y1 by A2,Lm2;
+A5: Im x = x2 & Im y = y2 by A2,Lm2;
+  thus Re z = +(*(x1,y1),opp*(x2,y2)) by A1,A3,Lm2
     .= *(x1,y1) + opp*(x2,y2) by Lm8
     .= x1*y1 + opp*(x2,y2) by Lm10
     .= x1*y1 + -*(x2,y2) by Lm9
     .= x1*y1 - *(x2,y2)
-    .= Re x * Re y - Im x * Im y by A5,A6,Lm10;
+    .= Re x * Re y - Im x * Im y by A4,A5,Lm10;
 end;
 
-Lm14: for x,y,z being complex number st z = x*y
-holds Im z = Re x * Im y + Im x * Re y
+Lm14: for x,y,z being complex number st z = x*y holds Im z = Re x * Im y + Im
+x * Re y
+
 proof
   let x,y,z be complex number such that
 A1: z = x*y;
   consider x1,x2,y1,y2 being Element of REAL such that
-A2: x = [*x1,x2*] and
-A3: y = [*y1,y2*] and
-A4: x * y = [* +(*(x1,y1),opp*(x2,y2)), +(*(x1,y2),*(x2,y1)) *]
-  by XCMPLX_0:def 5;
-A5: Im x = x2 & Im y = y2 by A2,A3,Lm3;
-A6: Re x = x1 & Re y = y1 by A2,A3,Lm3;
-  thus Im z = +(*(x1,y2),*(x2,y1)) by A1,A4,Lm3
+A2: x = [*x1,x2*] & y = [*y1,y2*] and
+
+A3: x * y = [* +(*(x1,y1),opp*(x2,y2)), +(*(x1,y2),*(x2,y1)) *] by
+  XCMPLX_0:def 5;
+
+A4: Im x = x2 & Im y = y2 by A2,Lm2;
+A5: Re x = x1 & Re y = y1 by A2,Lm2;
+  thus Im z = +(*(x1,y2),*(x2,y1)) by A1,A3,Lm2
     .= *(x1,y2) + *(x2,y1) by Lm8
     .= x1*y2 + *(x2,y1) by Lm10
-    .= Re x * Im y + Im x * Re y by A5,A6,Lm10;
+    .= Re x * Im y + Im x * Re y by A4,A5,Lm10;
 end;
 
 reserve z,z1,z2 for Element of COMPLEX;
@@ -408,43 +434,48 @@ Lm15: z1+z2 = [* Re z1 + Re z2, Im z1 + Im z2 *]
 proof
   set z = [* Re z1 + Re z2, Im z1 + Im z2 *];
   reconsider z' = z1 + z2 as Element of COMPLEX by XCMPLX_0:def 2;
-A1: Re z = Re z1 + Re z2 by Lm3
-    .= Re z' by Lm11;
-  Im z = Im z1 + Im z2 by Lm3
+A1: Im z = Im z1 + Im z2 by Lm2
     .= Im z' by Lm12;
+  Re z = Re z1 + Re z2 by Lm2
+    .= Re z' by Lm11;
   hence thesis by A1,Th9;
 end;
 
-Lm16: z1 * z2 =
-[* Re z1 * Re z2 - Im z1 * Im z2, Re z1 * Im z2 + Re z2 * Im z1 *]
+Lm16: z1 * z2 = [* Re z1 * Re z2 - Im z1 * Im z2, Re z1 * Im z2 + Re z2 * Im
+z1 *]
+
 proof
   set z = [* Re z1 * Re z2 - Im z1 * Im z2, Re z1 * Im z2 + Re z2 * Im z1 *];
   reconsider z' = z1 * z2 as Element of COMPLEX by XCMPLX_0:def 2;
-A1: Re z = Re z1 * Re z2 - Im z1 * Im z2 by Lm3
-    .= Re z' by Lm13;
-  Im z = Re z1 * Im z2 + Re z2 * Im z1 by Lm3
+A1: Im z = Re z1 * Im z2 + Re z2 * Im z1 by Lm2
     .= Im z' by Lm14;
+  Re z = Re z1 * Re z2 - Im z1 * Im z2 by Lm2
+    .= Re z' by Lm13;
   hence thesis by A1,Th9;
 end;
 
-Lm17: for z1, z2 being complex number holds
-Re(z1 * z2) = Re z1 * Re z2 - Im z1 * Im z2 &
-Im(z1 * z2) = Re z1 * Im z2 + Re z2 * Im z1
+Lm17: for z1, z2 being complex number holds Re(z1 * z2) = Re z1 * Re z2 - Im
+z1 * Im z2 & Im(z1 * z2) = Re z1 * Im z2 + Re z2 * Im z1
+
 proof
   let z1, z2 be complex number;
   z1 in COMPLEX & z2 in COMPLEX by XCMPLX_0:def 2;
-  then z1 * z2 = [*Re z1 * Re z2 - Im z1 * Im z2, Re z1 * Im z2 + Re z2 * Im
-  z1*] by Lm16;
-  hence thesis by Lm3;
+
+  then
+  z1 * z2 = [*Re z1 * Re z2 - Im z1 * Im z2, Re z1 * Im z2 + Re z2 * Im z1
+  *] by Lm16;
+
+  hence thesis by Lm2;
 end;
 
-Lm18: for z1, z2 being complex number holds
-Re(z1 + z2) = Re z1 + Re z2 & Im(z1 + z2) = Im z1 + Im z2
+Lm18: for z1, z2 being complex number holds Re(z1 + z2) = Re z1 + Re z2 & Im(
+z1 + z2) = Im z1 + Im z2
+
 proof
   let z1, z2 be complex number;
   z1 in COMPLEX & z2 in COMPLEX by XCMPLX_0:def 2;
   then (z1 + z2) = [* Re z1 + Re z2, Im z1 + Im z2 *] by Lm15;
-  hence thesis by Lm3;
+  hence thesis by Lm2;
 end;
 
 Lm19: for x being Real holds Re (x*<i>) = 0
@@ -467,23 +498,25 @@ end;
 Lm21: for x, y being Real holds [*x,y*] = x + y * <i>
 proof
   let x, y be Real;
-A1: Re (x + y*<i>) = Re x + Re (y*<i>) by Lm18
-    .= Re x + 0 by Lm19
-    .= x by Def2;
-  Im (x + y*<i>) = Im x + Im (y*<i>) by Lm18
+A1: Im (x + y*<i>) = Im x + Im (y*<i>) by Lm18
     .= 0 + Im (y*<i>) by Def3
     .= y by Lm20;
-  hence thesis by A1,Lm4;
+  Re (x + y*<i>) = Re x + Re (y*<i>) by Lm18
+    .= Re x + 0 by Lm19
+    .= x by Def2;
+  hence thesis by A1,Lm3;
 end;
 
 definition
- canceled;
+  canceled;
   let z1,z2;
   redefine func z1 + z2 -> Element of COMPLEX equals
-  Re z1 + Re z2+(Im z1 + Im z2)*<i>;
+  Re z1 + Re z2+(Im z1 + Im
+  z2)*<i>;
   coherence by XCMPLX_0:def 2;
   compatibility
-  proof z1 + z2 = [* Re z1 + Re z2, Im z1 + Im z2 *] by Lm15;
+  proof
+    z1 + z2 = [* Re z1 + Re z2, Im z1 + Im z2 *] by Lm15;
     hence thesis by Lm21;
   end;
 end;
@@ -491,25 +524,25 @@ end;
 canceled;
 
 theorem Th19:
-  for z1, z2 being complex number holds
-  Re(z1 + z2) = Re z1 + Re z2 & Im(z1 + z2) = Im z1 + Im z2
+  for z1, z2 being complex number holds Re(z1 + z2) = Re z1 + Re
+  z2 & Im(z1 + z2) = Im z1 + Im z2
 proof
   let z1, z2 be complex number;
   z1 in COMPLEX & z2 in COMPLEX by XCMPLX_0:def 2;
   then (z1 + z2) = [* Re z1 + Re z2, Im z1 + Im z2 *] by Lm15;
-  hence thesis by Lm3;
+  hence thesis by Lm2;
 end;
 
 definition
   let z1,z2 be Element of COMPLEX;
   redefine func z1 * z2 -> Element of COMPLEX equals
-  Re z1 * Re z2 - Im z1 * Im z2+(Re z1 * Im z2 + Re z2 * Im z1)*<i>;
+  Re z1 * Re z2 - Im z1 *
+  Im z2+(Re z1 * Im z2 + Re z2 * Im z1)*<i>;
   coherence by XCMPLX_0:def 2;
   compatibility
   proof
-    z1 * z2 =
-    [* Re z1 * Re z2 - Im z1 * Im z2, Re z1 * Im z2 + Re z2 * Im z1 *]
-    by Lm16;
+    z1 * z2 = [* Re z1 * Re z2 - Im z1 * Im z2, Re z1 * Im z2 + Re z2 * Im
+    z1 *] by Lm16;
     hence thesis by Lm21;
   end;
 end;
@@ -517,15 +550,15 @@ end;
 canceled 4;
 
 theorem Th24:
-  for z1, z2 being complex number holds
-  Re(z1 * z2) = Re z1 * Re z2 - Im z1 * Im z2 &
-  Im(z1 * z2) = Re z1 * Im z2 + Re z2 * Im z1
+  for z1, z2 being complex number holds Re(z1 * z2) = Re z1 * Re
+  z2 - Im z1 * Im z2 & Im(z1 * z2) = Re z1 * Im z2 + Re z2 * Im z1
 proof
   let z1, z2 be complex number;
   z1 in COMPLEX & z2 in COMPLEX by XCMPLX_0:def 2;
-  then z1 * z2 = [*Re z1 * Re z2 - Im z1 * Im z2, Re z1 * Im z2 + Re z2 * Im
-  z1*] by Lm16;
-  hence thesis by Lm3;
+  then
+  z1 * z2 = [*Re z1 * Re z2 - Im z1 * Im z2, Re z1 * Im z2 + Re z2 * Im z1
+  *] by Lm16;
+  hence thesis by Lm2;
 end;
 
 theorem
@@ -550,46 +583,49 @@ end;
 canceled;
 
 theorem Th28:
- for a,b being real number holds
-  Re(a+b*<i>) = a & Im(a+b*<i>) = b
-proof let a,b be real number;
- reconsider a,b as Real by XREAL_0:def 1;
- (a+b*<i>) = [*a,b*] by Lm21;
-  hence thesis by Lm3;
+  for a,b being real number holds Re(a+b*<i>) = a & Im(a+b*<i>) =
+  b
+proof
+  let a,b be real number;
+  reconsider a,b as Real by XREAL_0:def 1;
+  (a+b*<i>) = [*a,b*] by Lm21;
+  hence thesis by Lm2;
 end;
 
 theorem Th29:
   for z being complex number holds Re z+(Im z)*<i> = z
 proof
   let z be complex number;
-  [*Re z, Im z*] = z by Lm4;
+  [*Re z, Im z*] = z by Lm3;
   hence thesis by Lm21;
 end;
 
 theorem Th30:
-  for z1, z2 being complex number holds
-  Im z1 = 0 & Im z2 = 0 implies Re(z1*z2) = Re z1 * Re z2 & Im(z1*z2) = 0
+  for z1, z2 being complex number holds Im z1 = 0 & Im z2 = 0
+  implies Re(z1*z2) = Re z1 * Re z2 & Im(z1*z2) = 0
 proof
   let z1, z2 be complex number;
-  assume
-A1: Im z1 = 0 & Im z2 = 0;
+  assume that
+A1: Im z1 = 0 and
+A2: Im z2 = 0;
   thus Re(z1*z2) = Re z1 * Re z2 - Im z1 * Im z2 by Th24
     .= Re z1 * Re z2 by A1;
   thus Im(z1*z2) = Re z1 * Im z2 + Re z2 * Im z1 by Th24
-    .= 0 by A1;
+    .= 0 by A1,A2;
 end;
 
 theorem Th31:
-  for z1, z2 being complex number holds
-  Re z1 = 0 & Re z2 = 0 implies Re(z1*z2) = - Im z1 * Im z2 & Im(z1*z2) = 0
+  for z1, z2 being complex number holds Re z1 = 0 & Re z2 = 0
+  implies Re(z1*z2) = - Im z1 * Im z2 & Im(z1*z2) = 0
 proof
   let z1, z2 be complex number;
-  assume
-A1: Re z1 = 0 & Re z2 = 0;
+  assume that
+A1: Re z1 = 0 and
+A2: Re z2 = 0;
   thus Re(z1*z2) = Re z1 * Re z2 - Im z1 * Im z2 by Th24
     .= - Im z1 * Im z2 by A1;
   thus Im(z1*z2) = Re z1 * Im z2 + Re z2 * Im z1 by Th24
-    .= 0 by A1;
+    .= 0 by A1,A2;
 end;
 
 theorem
@@ -610,8 +646,8 @@ definition
   proof
     set z' = [* -Re z, -Im z *];
     z' + z = [* Re z' + Re z, Im z' + Im z *] by Lm15
-      .= [* -Re z + Re z, Im z' + Im z *] by Lm3
-      .= [* 0, -Im z + Im z *] by Lm3
+      .= [* -Re z + Re z, Im z' + Im z *] by Lm2
+      .= [* 0, -Im z + Im z *] by Lm2
       .= 0 by ARYTM_0:def 7;
     hence thesis by Lm21;
   end;
@@ -620,7 +656,8 @@ end;
 canceled;
 
 theorem Th34:
-  for z being complex number holds Re(-z) = -(Re z) & Im(-z) = -(Im z)
+  for z being complex number holds Re(-z) = -(Re z) & Im(-z) = -(
+  Im z)
 proof
   let z be complex number;
   z in COMPLEX by XCMPLX_0:def 2;
@@ -637,7 +674,8 @@ definition
   let z1,z2;
   redefine func z1 - z2 -> Element of COMPLEX equals
   :Def12:
-  Re z1 - Re z2 + (Im z1 - Im z2)*<i>;
+  Re z1 - Re z2 + (
+  Im z1 - Im z2)*<i>;
   coherence by XCMPLX_0:def 2;
   compatibility
   proof
@@ -664,15 +702,16 @@ definition
   let z;
   redefine func z" -> Element of COMPLEX equals
   :Def13:
-  Re z / ((Re z)^2+(Im z)^2)+((- Im z) / ((Re z)^2+(Im z)^2))*<i>;
+  Re z / ((Re z)^2+(Im z
+  )^2)+((- Im z) / ((Re z)^2+(Im z)^2))*<i>;
   coherence by XCMPLX_0:def 2;
   compatibility
   proof
-    reconsider
-    z' =Re z / ((Re z)^2+(Im z)^2)+((- Im z) / ((Re z)^2+(Im z)^2))*<i>
-    as Element of COMPLEX by XCMPLX_0:def 2;
+    reconsider z' =Re z / ((Re z)^2+(Im z)^2)+((- Im z) / ((Re z)^2+(Im z)^2))
+    *<i> as Element of COMPLEX by XCMPLX_0:def 2;
     per cases;
-    suppose z = 0;
+    suppose
+      z = 0;
       hence thesis by Th12;
     end;
     suppose
@@ -681,31 +720,31 @@ A1:   z <> 0;
 A2:   (Re z)^2+(Im z)^2 <> 0 by Th13;
 A3:   Im z' = (-Im z) / ((Re z)^2+(Im z)^2) by Th28;
       then
-A4:   Re z * Re z' - Im z * Im z' = (Re z)/1 * (Re z / ((Re z)^2+(Im z)^2)) -
-      Im z *((-Im z)/((Re z)^2+(Im z)^2)) by Th28
-        .= Re z * Re z / (1*((Re z)^2+(Im z)^2)) -
-      (Im z)/1 *((-Im z)/((Re z)^2+(Im z)^2)) by XCMPLX_1:77
-        .= (Re z)^2 / ((Re z)^2+(Im z)^2) -
-      Im z *(-Im z)/(1*((Re z)^2+(Im z)^2)) by XCMPLX_1:77
-        .= (Re z)^2 / ((Re z)^2+(Im z)^2) -
-      (-((Im z)^2))/(1*((Re z)^2+(Im z)^2))
-        .= (Re z)^2 / ((Re z)^2+(Im z)^2) -
-      -((Im z)^2)/((Re z)^2+(Im z)^2) by XCMPLX_1:188
+A4:   Re z * Im z' + Re z' * Im z = (Re z)/1 * ((-Im z) / ((Re z)^2+(Im z)
+      ^2)) + Re z / ((Re z)^2+(Im z)^2) * Im z by Th28
+        .= Re z * (-Im z) / (1*((Re z)^2+(Im z)^2)) + Re z / ((Re z)^2+(Im z
+      )^2) * (Im z)/1 by XCMPLX_1:77
+        .= Re z * (-Im z) / (1*((Re z)^2+(Im z)^2)) + (Im z)/1 * Re z / ((Re
+      z)^2+(Im z)^2) by XCMPLX_1:77
+        .= (- Re z * Im z + Re z * Im z) / ((Re z)^2+(Im z)^2) by XCMPLX_1:
+      63
+        .= 0;
+A5:   Re z * Re z' - Im z * Im z' = (Re z)/1 * (Re z / ((Re z)^2+(Im z)^2)
+      ) - Im z *((-Im z)/((Re z)^2+(Im z)^2)) by A3,Th28
+        .= Re z * Re z / (1*((Re z)^2+(Im z)^2)) - (Im z)/1 *((-Im z)/((Re z
+      )^2+(Im z)^2)) by XCMPLX_1:77
+        .= (Re z)^2 / ((Re z)^2+(Im z)^2) - Im z *(-Im z)/(1*((Re z)^2+(Im z
+      )^2)) by XCMPLX_1:77
+        .= (Re z)^2 / ((Re z)^2+(Im z)^2) - (-((Im z)^2))/(1*((Re z)^2+(Im z
+      )^2))
+        .= (Re z)^2 / ((Re z)^2+(Im z)^2) - -((Im z)^2)/((Re z)^2+(Im z)^2)
+      by XCMPLX_1:188
         .= (Re z)^2 / ((Re z)^2+(Im z)^2) + (Im z)^2/(1*((Re z)^2+(Im z)^2))
         .= ((Re z)^2 + (Im z)^2)/((Re z)^2+(Im z)^2) by XCMPLX_1:63
         .= 1 by A2,XCMPLX_1:60;
-A5:   Re z * Im z' + Re z' * Im z
-      = (Re z)/1 * ((-Im z) / ((Re z)^2+(Im z)^2)) +
-      Re z / ((Re z)^2+(Im z)^2) * Im z by A3,Th28
-        .= Re z * (-Im z) / (1*((Re z)^2+(Im z)^2)) +
-      Re z / ((Re z)^2+(Im z)^2) * (Im z)/1 by XCMPLX_1:77
-        .= Re z * (-Im z) / (1*((Re z)^2+(Im z)^2)) +
-      (Im z)/1 * Re z / ((Re z)^2+(Im z)^2) by XCMPLX_1:77
-        .= (- Re z * Im z + Re z * Im z) / ((Re z)^2+(Im z)^2) by XCMPLX_1:63
-        .= 0;
       z * z'= [*Re z * Re z' - Im z * Im z',Re z * Im z' + Re z' * Im z*]
       by Lm16
-        .= 1 by A4,A5,ARYTM_0:def 7;
+        .= 1 by A5,A4,ARYTM_0:def 7;
       hence thesis by A1,XCMPLX_0:def 7;
     end;
   end;
@@ -714,13 +753,14 @@ end;
 canceled 15;
 
 theorem Th64:
-  for z being complex number holds Re(z") = Re z / ((Re z)^2+(Im z)^2) &
-  Im(z") = (- Im z) / ((Re z)^2+(Im z)^2)
+  for z being complex number holds Re(z") = Re z / ((Re z)^2+(Im z
+  )^2) & Im(z") = (- Im z) / ((Re z)^2+(Im z)^2)
 proof
   let z be complex number;
   z in COMPLEX by XCMPLX_0:def 2;
-  then z" = Re z / ((Re z)^2+(Im z)^2)+((- Im z) / ((Re z)^2+(Im z)^2))*<i>
-  by Def13;
+  then
+  z" = Re z / ((Re z)^2+(Im z)^2)+((- Im z) / ((Re z)^2+(Im z)^2))*<i> by
+  Def13;
   hence thesis by Th28;
 end;
 
@@ -734,23 +774,25 @@ canceled 6;
 theorem Th79:
   Re z <> 0 & Im z = 0 implies Re(z") = (Re z)" & Im(z") = 0
 proof
-  assume
-A1: Re z <> 0 & Im z = 0;
-  hence Re(z") = (1*Re z) / (Re z * Re z) by Th64
+  assume that
+A1: Re z <> 0 and
+A2: Im z = 0;
+  thus Re(z") = (1*Re z) / (Re z * Re z) by A2,Th64
     .= 1/Re z by A1,XCMPLX_1:92
     .= (Re z)" by XCMPLX_1:217;
-  thus thesis by A1,Th64;
+  thus thesis by A2,Th64;
 end;
 
 theorem Th80:
   Re z = 0 & Im z <> 0 implies Re(z") = 0 & Im(z") = -(Im z)"
 proof
-  assume
-A1: Re z = 0 & Im z <> 0;
-  hence Re(z") = 0 by Th64;
+  assume that
+A1: Re z = 0 and
+A2: Im z <> 0;
+  thus Re(z") = 0 by A1,Th64;
   thus Im(z") = (- Im z) / (Im z)^2 by A1,Th64
     .= -(1*Im z / (Im z * Im z)) by XCMPLX_1:188
-    .= -(1 / Im z) by A1,XCMPLX_1:92
+    .= -(1 / Im z) by A2,XCMPLX_1:92
     .= - (Im z)" by XCMPLX_1:217;
 end;
 
@@ -758,12 +800,13 @@ definition
   let z1,z2 be complex number;
   redefine func z1 / z2 -> Element of COMPLEX equals
   :Def14:
-  (Re z1 * Re z2 + Im z1 * Im z2) / ((Re z2)^2 + (Im z2)^2) +
-  ((Re z2 * Im z1 - Re z1 * Im z2) / ((Re z2)^2 + (Im z2)^2))*<i>;
+  (Re z1 * Re z2 +
+Im z1 * Im z2) / ((Re z2)^2 + (Im z2)^2) + ((Re z2 * Im z1 - Re z1 * Im z2) / (
+  (Re z2)^2 + (Im z2)^2))*<i>;
   coherence by XCMPLX_0:def 2;
   compatibility
   proof
-   reconsider z1,z2 as Element of COMPLEX by XCMPLX_0:def 2;
+    reconsider z1,z2 as Element of COMPLEX by XCMPLX_0:def 2;
     set k = (Re z2)^2 + (Im z2)^2;
 A1: Re[*Re z2/k,(-Im z2)/k*] = Re(Re z2/k+(-Im z2)/k*<i>) by Lm21
       .= Re z2/k by Th28;
@@ -771,24 +814,24 @@ A2: Im[*Re z2/k,(-Im z2)/k*] = Im(Re z2/k+(-Im z2)/k*<i>) by Lm21
       .= (-Im z2)/k by Th28;
     z1 / z2 = z1 * z2" by XCMPLX_0:def 9
       .= z1*[* Re z2/k, (-Im z2)/k *] by Lm21
-      .= [* (Re z1)/1 * (Re z2/k) - Im z1 * ((-Im z2)/k),
-    Re z1 * ((-Im z2)/k) + (Re z2/k) * Im z1 *] by A1,A2,Lm16
-      .= (Re z1)/1 * (Re z2/k) - Im z1 * ((-Im z2)/k)+
-    (Re z1 * ((-Im z2)/k) + (Re z2/k) * Im z1)*<i> by Lm21
-      .= Re z1 * Re z2/(1*k) - (Im z1)/1 * ((-Im z2)/k)+
-    (Re z1 * ((-Im z2)/k) + (Re z2/k) * Im z1)*<i> by XCMPLX_1:77
-      .= Re z1 * Re z2/k - Im z1 * (-Im z2)/(1*k)+
-    ((Re z1)/1 * ((-Im z2)/k) + (Re z2/k) * Im z1)*<i> by XCMPLX_1:77
-      .= Re z1 * Re z2/k - Im z1 * (-Im z2)/k+
-    (Re z1 * (-Im z2)/(1*k) + (Re z2/k) * ((Im z1)/1))*<i> by XCMPLX_1:77
-      .= Re z1 * Re z2/k - Im z1 * (-Im z2)/k+
-    (Re z1 * (-Im z2)/k + Im z1 * Re z2/(1*k))*<i> by XCMPLX_1:77
-      .= (Re z1 * Re z2 - Im z1 * (-Im z2))/k+
-    (Re z1 * (-Im z2)/k + Im z1 * Re z2/(1*k))*<i> by XCMPLX_1:121
-      .= (Re z1 * Re z2 + Im z1 * Im z2)/k+
-    ((-Re z1 * Im z2 + Im z1 * Re z2)/k)*<i> by XCMPLX_1:63
-      .= (Re z1 * Re z2 + Im z1 * Im z2) / ((Re z2)^2 + (Im z2)^2) +
-    ((Re z2 * Im z1 - Re z1 * Im z2) / ((Re z2)^2 + (Im z2)^2))*<i>;
+      .= [* (Re z1)/1 * (Re z2/k) - Im z1 * ((-Im z2)/k), Re z1 * ((-Im z2)/
+    k) + (Re z2/k) * Im z1 *] by A1,A2,Lm16
+      .= (Re z1)/1 * (Re z2/k) - Im z1 * ((-Im z2)/k)+ (Re z1 * ((-Im z2)/k)
+    + (Re z2/k) * Im z1)*<i> by Lm21
+      .= Re z1 * Re z2/(1*k) - (Im z1)/1 * ((-Im z2)/k)+ (Re z1 * ((-Im z2)/
+    k) + (Re z2/k) * Im z1)*<i> by XCMPLX_1:77
+      .= Re z1 * Re z2/k - Im z1 * (-Im z2)/(1*k)+ ((Re z1)/1 * ((-Im z2)/k)
+    + (Re z2/k) * Im z1)*<i> by XCMPLX_1:77
+      .= Re z1 * Re z2/k - Im z1 * (-Im z2)/k+ (Re z1 * (-Im z2)/(1*k) + (Re
+    z2/k) * ((Im z1)/1))*<i> by XCMPLX_1:77
+      .= Re z1 * Re z2/k - Im z1 * (-Im z2)/k+ (Re z1 * (-Im z2)/k + Im z1 *
+    Re z2/(1*k))*<i> by XCMPLX_1:77
+      .= (Re z1 * Re z2 - Im z1 * (-Im z2))/k+ (Re z1 * (-Im z2)/k + Im z1 *
+    Re z2/(1*k))*<i> by XCMPLX_1:121
+      .= (Re z1 * Re z2 + Im z1 * Im z2)/k+ ((-Re z1 * Im z2 + Im z1 * Re z2
+    )/k)*<i> by XCMPLX_1:63
+      .= (Re z1 * Re z2 + Im z1 * Im z2) / ((Re z2)^2 + (Im z2)^2) + ((Re z2
+    * Im z1 - Re z1 * Im z2) / ((Re z2)^2 + (Im z2)^2))*<i>;
     hence thesis;
   end;
 end;
@@ -796,61 +839,60 @@ end;
 canceled;
 
 theorem
- for z1,z2 being complex number holds
-  Re(z1 / z2) = (Re z1 * Re z2 + Im z1 * Im z2) / ((Re z2)^2 + (Im z2)^2) &
-  Im(z1 / z2) = (Re z2 * Im z1 - Re z1 * Im z2) / ((Re z2)^2 + (Im z2)^2)
-proof let z1,z2 be complex number;
- thus
-  Re(z1 / z2) = Re((Re z1 * Re z2 + Im z1 * Im z2) / ((Re z2)^2 + (Im z2)^2) +
-  ((Re z2 * Im z1 - Re z1 * Im z2) / ((Re z2)^2 + (Im z2)^2))*<i>) by Def14
+  for z1,z2 being complex number holds Re(z1 / z2) = (Re z1 * Re z2 + Im
+z1 * Im z2) / ((Re z2)^2 + (Im z2)^2) & Im(z1 / z2) = (Re z2 * Im z1 - Re z1 *
+  Im z2) / ((Re z2)^2 + (Im z2)^2)
+proof
+  let z1,z2 be complex number;
+  thus Re(z1 / z2) = Re((Re z1 * Re z2 + Im z1 * Im z2) / ((Re z2)^2 + (Im z2)
+^2) + ((Re z2 * Im z1 - Re z1 * Im z2) / ((Re z2)^2 + (Im z2)^2))*<i>) by Def14
     .= (Re z1 * Re z2 + Im z1 * Im z2) / ((Re z2)^2 + (Im z2)^2) by Th28;
-    thus
-  Im(z1 / z2) = Im((Re z1 * Re z2 + Im z1 * Im z2) / ((Re z2)^2 + (Im z2)^2) +
-  ((Re z2 * Im z1 - Re z1 * Im z2) / ((Re z2)^2 + (Im z2)^2))*<i>) by Def14
+  thus Im(z1 / z2) = Im((Re z1 * Re z2 + Im z1 * Im z2) / ((Re z2)^2 + (Im z2)
+^2) + ((Re z2 * Im z1 - Re z1 * Im z2) / ((Re z2)^2 + (Im z2)^2))*<i>) by Def14
     .= (Re z2 * Im z1 - Re z1 * Im z2) / ((Re z2)^2 + (Im z2)^2) by Th28;
 end;
 
 canceled 26;
 
 theorem
-  Im z1 = 0 & Im z2 = 0 & Re z2 <> 0 implies
-  Re(z1/z2) = (Re z1)/(Re z2) & Im(z1/z2) = 0
+  Im z1 = 0 & Im z2 = 0 & Re z2 <> 0 implies Re(z1/z2) = (Re z1)/(Re z2)
+  & Im(z1/z2) = 0
 proof
-  assume
-A1: Im z1 = 0 & Im z2 = 0 & Re z2 <> 0;
-  then
-A2: z1/z2 = z1*z2" & Im(z2") = 0 by Th79,XCMPLX_0:def 9;
+  assume that
+A1: Im z1 = 0 and
+A2: Im z2 = 0 & Re z2 <> 0;
+A3: z1/z2 = z1*z2" & Im(z2") = 0 by A2,Th79,XCMPLX_0:def 9;
   hence Re(z1/z2) = (Re z1)*Re(z2") by A1,Th30
-    .= (Re z1)*(Re z2)" by A1,Th79
+    .= (Re z1)*(Re z2)" by A2,Th79
     .= (Re z1)/(Re z2) by XCMPLX_0:def 9;
-  thus thesis by A1,A2,Th30;
+  thus thesis by A1,A3,Th30;
 end;
 
 theorem
-  Re z1 = 0 & Re z2 = 0 & Im z2 <> 0 implies
-  Re(z1/z2) = (Im z1)/(Im z2) & Im(z1/z2) = 0
+  Re z1 = 0 & Re z2 = 0 & Im z2 <> 0 implies Re(z1/z2) = (Im z1)/(Im z2)
+  & Im(z1/z2) = 0
 proof
-  assume
-A1: Re z1 = 0 & Re z2 = 0 & Im z2 <> 0;
-  then
-A2: z1/z2 = z1*z2" & Re(z2") = 0 by Th80,XCMPLX_0:def 9;
+  assume that
+A1: Re z1 = 0 and
+A2: Re z2 = 0 & Im z2 <> 0;
+A3: z1/z2 = z1*z2" & Re(z2") = 0 by A2,Th80,XCMPLX_0:def 9;
   hence Re(z1/z2) = -(Im z1)*Im(z2") by A1,Th31
-    .= -(Im z1)*-(Im z2)" by A1,Th80
+    .= -(Im z1)*-(Im z2)" by A2,Th80
     .= --(Im z1)*(Im z2)"
     .= (Im z1)/(Im z2) by XCMPLX_0:def 9;
-  thus thesis by A1,A2,Th31;
+  thus thesis by A1,A3,Th31;
 end;
 
 definition
   let z be complex number;
   func z*' -> complex number equals
-
   Re z-(Im z)*<i>;
   correctness;
   involutiveness
   proof
     let z,z' be complex number;
-    assume z = Re z'-(Im z')*<i>;
+    assume
+    z = Re z'-(Im z')*<i>;
     then z = Re z'+(-Im z')*<i>;
     then Re z = Re z' & -Im z = --Im z' by Th28;
     hence z'= Re z+(-Im z)*<i> by Th29
@@ -867,7 +909,8 @@ end;
 canceled;
 
 theorem Th112:
-  for z being complex number holds Re (z*') = Re z & Im (z*') = -Im z
+  for z being complex number holds Re (z*') = Re z & Im (z*') = -
+  Im z
 proof
   let z be complex number;
   z*' = Re z+(-Im z)*<i>;
@@ -881,7 +924,8 @@ theorem
   for z being complex number holds z*' = 0 implies z = 0
 proof
   let z be complex number;
-  assume z*' = 0;
+  assume
+  z*' = 0;
   then 0 = Re z+(-Im z)*<i>;
   hence Re z = Re 0 & Im z = Im 0 by Th12,Th28;
 end;
@@ -934,9 +978,9 @@ proof
 end;
 
 theorem Th121:
- for z1,z2 being complex number holds
-  (z1*z2)*' = z1*'*z2*'
-proof let z1,z2 be complex number;
+  for z1,z2 being complex number holds (z1*z2)*' = z1*'*z2*'
+proof
+  let z1,z2 be complex number;
 A1: Re(z1*') = Re z1 & Re(z2*') = Re z2 by Th112;
 A2: Im(z1*') = -Im z1 & Im(z2*') = -Im z2 by Th112;
   thus Re((z1*z2)*') = Re(z1*z2) by Th112
@@ -950,23 +994,23 @@ A2: Im(z1*') = -Im z1 & Im(z2*') = -Im z2 by Th112;
 end;
 
 theorem Th122:
- for z being complex number holds
-  z"*' = z*'"
-proof let z be complex number;
+  for z being complex number holds z"*' = z*'"
+proof
+  let z be complex number;
 A1: Re z = Re (z*') & -Im z = Im (z*') by Th112;
   thus Re(z"*') = Re(z") by Th112
     .= Re z / ((Re z)^2+(Im z)^2) by Th64
-    .= Re(z*'") by Th64,A1;
+    .= Re(z*'") by A1,Th64;
   thus Im(z"*') = -Im(z") by Th112
     .= -((- Im z) / ((Re z)^2+(Im z)^2)) by Th64
-    .= (-Im (z*'))/((Re (z*'))^2+(Im (z*'))^2) by XCMPLX_1:188,A1
+    .= (-Im (z*'))/((Re (z*'))^2+(Im (z*'))^2) by A1,XCMPLX_1:188
     .= Im(z*'") by Th64;
 end;
 
 theorem
- for z1,z2 being complex number holds
-  (z1/z2)*' = (z1*')/(z2*')
-proof let z1,z2 be complex number;
+  for z1,z2 being complex number holds (z1/z2)*' = (z1*')/(z2*')
+proof
+  let z1,z2 be complex number;
   thus (z1/z2)*' = (z1*z2")*' by XCMPLX_0:def 9
     .= (z1*'*z2"*') by Th121
     .= (z1*'*z2*'") by Th122
@@ -975,7 +1019,8 @@ end;
 
 theorem
   Im z = 0 implies z*' = z
-proof Re (z*') = Re z & Im (z*') = -Im z by Th112;
+proof
+  Re (z*') = Re z & Im (z*') = -Im z by Th112;
   hence thesis by Th9;
 end;
 
@@ -1026,7 +1071,6 @@ end;
 definition
   let z be complex number;
   func |.z.| -> complex number equals
-
   sqrt ((Re z)^2 + (Im z)^2);
   coherence;
   projectivity
@@ -1035,13 +1079,13 @@ definition
     assume
 A1: r = sqrt ((Re z)^2 + (Im z)^2);
     then reconsider r' = r as real number;
+A2: Im r = 0 by A1,Def3;
     (Re z)^2 >= 0 & (Im z)^2 >= 0 by XREAL_1:65;
     then r' >= 0 by A1,SQUARE_1:def 4;
     then
-A2: Re r >= 0 by A1,Def2;
-A3: Im r = 0 by A1,Def3;
+A3: Re r >= 0 by A1,Def2;
     thus r = Re r by A1,Def2
-      .= sqrt ((Re r)^2 + (Im r)^2) by A2,A3,SQUARE_1:89;
+      .= sqrt ((Re r)^2 + (Im r)^2) by A3,A2,SQUARE_1:89;
   end;
 end;
 
@@ -1061,14 +1105,14 @@ theorem Th129:
   for x being real number st x >= 0 holds |.x.| = x
 proof
   let x be real number;
-  assume
-A1: x >= 0;
-A2: x in REAL by XREAL_0:def 1;
+A1: x in REAL by XREAL_0:def 1;
   then
-A3: Im x = 0 by Def3;
-  Re x >= 0 by A1,A2,Def2;
-  then |.x.| = Re x by A3,SQUARE_1:89
-    .= x by A2,Def2;
+A2: Im x = 0 by Def3;
+  assume
+  x >= 0;
+  then Re x >= 0 by A1,Def2;
+  then |.x.| = Re x by A2,SQUARE_1:89
+    .= x by A1,Def2;
   hence thesis;
 end;
 
@@ -1080,14 +1124,16 @@ theorem
 theorem Th131:
   |.z.| = 0 implies z = 0
 proof
-  assume |.z.| = 0;
-  then (Re z)^2 + (Im z)^2 = 0 by Lm2,SQUARE_1:92;
+  assume
+  |.z.| = 0;
+  then (Re z)^2 + (Im z)^2 = 0 by Lm1,SQUARE_1:92;
   hence thesis by Th13;
 end;
 
 theorem Th132:
   0 <= |.z.|
-proof |.z.| = sqrt ((Re z)^2 + (Im z)^2) & 0 <= (Re z)^2 + (Im z)^2 by Lm2;
+proof
+  0 <= (Re z)^2 + (Im z)^2 by Lm1;
   hence thesis by SQUARE_1:def 4;
 end;
 
@@ -1096,9 +1142,10 @@ theorem
 proof
   thus z <> 0 implies 0 < |.z.|
   proof
-    assume z <> 0;
-    then 0 <= |.z.| & 0 <> |.z.| by Th131,Th132;
-    hence thesis;
+    assume
+    z <> 0;
+    then 0 <> |.z.| by Th131;
+    hence thesis by Th132;
   end;
   thus thesis by Th12,SQUARE_1:82;
 end;
@@ -1119,7 +1166,8 @@ end;
 Lm23: for a being real number st a <= 0 holds |.a.| = -a
 proof
   let a be real number;
-  assume a <= 0;
+  assume
+  a <= 0;
   then |.-a.| = -a by Th129;
   hence thesis by Lm22;
 end;
@@ -1128,13 +1176,15 @@ Lm24: for a being real number holds sqrt a^2 = |.a.|
 proof
   let a be real number;
   per cases;
-  suppose 0 <= a;
-    then sqrt a^2 = a & |.a.| = a by Th129,SQUARE_1:89;
-    hence thesis;
+  suppose
+A1: 0 <= a;
+    then sqrt a^2 = a by SQUARE_1:89;
+    hence thesis by A1,Th129;
   end;
-  suppose not 0 <= a;
-    then |.a.| = -a & a < 0 by Lm23;
-    hence thesis by SQUARE_1:90;
+  suppose
+A2: not 0 <= a;
+    then |.a.| = -a by Lm23;
+    hence thesis by A2,SQUARE_1:90;
   end;
 end;
 
@@ -1158,41 +1208,49 @@ end;
 Lm25: for x being real number holds -|.x.| <= x & x <= |.x.|
 proof
   let x be real number;
-A1: x < 0 implies -|.x.| <= x & x <= |.x.|
+A1: 0 <= x implies -|.x.| <= x & x <= |.x.|
   proof
     assume
-A2: x < 0;
-    then |.x.| = -x by Lm23;
-    hence thesis by A2;
-  end;
-  0 <= x implies -|.x.| <= x & x <= |.x.|
-  proof
-    assume
-A3: 0 <= x;
+A2: 0 <= x;
     then -x <= -0;
-    hence thesis by A3,Th129;
+    hence thesis by A2,Th129;
+  end;
+  x < 0 implies -|.x.| <= x & x <= |.x.|
+  proof
+    assume
+A3: x < 0;
+    then |.x.| = -x by Lm23;
+    hence thesis by A3;
   end;
   hence thesis by A1;
 end;
 
 theorem
   Re z <= |.z.|
-proof (Re z)^2 <= (Re z)^2 & 0<=(Im z)^2 by XREAL_1:65;
-  then (Re z)^2+0 <= ((Re z)^2 + (Im z)^2) by XREAL_1:9;
-  then 0<=(Re z)^2 & (Re z)^2 <= ((Re z)^2 + (Im z)^2) by XREAL_1:65;
-  then sqrt (Re z)^2 <= |.z.| by SQUARE_1:94;
-  then Re z <= |.Re z.| & |.Re z.| <= |.z.| by Lm24,Lm25;
-  hence thesis by XXREAL_0:2;
+proof
+  0<=(Im z)^2 by XREAL_1:65;
+  then
+A1: (Re z)^2+0 <= ((Re z)^2 + (Im z)^2) by XREAL_1:9;
+  0<=(Re z)^2 by XREAL_1:65;
+  then sqrt (Re z)^2 <= |.z.| by A1,SQUARE_1:94;
+  then
+A2: |.Re z.| <= |.z.| by Lm24;
+  Re z <= |.Re z.| by Lm25;
+  hence thesis by A2,XXREAL_0:2;
 end;
 
 theorem
   Im z <= |.z.|
-proof (Im z)^2 <= (Im z)^2 & 0<=(Re z)^2 by XREAL_1:65;
-  then (Im z)^2+0 <= ((Re z)^2 + (Im z)^2) by XREAL_1:9;
-  then 0<=(Im z)^2 & (Im z)^2 <= ((Re z)^2 + (Im z)^2) by XREAL_1:65;
-  then sqrt (Im z)^2 <= |.z.| by SQUARE_1:94;
-  then Im z <= |.Im z.| & |.Im z.| <= |.z.| by Lm24,Lm25;
-  hence thesis by XXREAL_0:2;
+proof
+  0<=(Re z)^2 by XREAL_1:65;
+  then
+A1: (Im z)^2+0 <= ((Re z)^2 + (Im z)^2) by XREAL_1:9;
+  0<=(Im z)^2 by XREAL_1:65;
+  then sqrt (Im z)^2 <= |.z.| by A1,SQUARE_1:94;
+  then
+A2: |.Im z.| <= |.z.| by Lm24;
+  Im z <= |.Im z.| by Lm25;
+  hence thesis by A2,XXREAL_0:2;
 end;
 
 reserve z1, z2 for complex number;
@@ -1201,63 +1259,72 @@ theorem Th142:
   |.z1 + z2.| <= |.z1.| + |.z2.|
 proof
   set r1 = Re z1, r2 = Re z2, i1 = Im z1, i2 = Im z2;
-A1: 0 <= r1^2+i1^2 & 0 <= r2^2+i2^2 by Lm2;
-  then
-A2: (sqrt (r1^2+i1^2))^2 = r1^2+i1^2 &
-  (sqrt (r2^2+i2^2))^2 = r2^2+i2^2 by SQUARE_1:def 4;
-A3: (Re(z1 + z2))^2 = (r1+ r2)^2 by Th19
-    .= r1^2 + 2*r1*r2 + r2^2;
-  (Im(z1 + z2))^2 = (i1 + i2)^2 by Th19
+A1: (Im(z1 + z2))^2 = (i1 + i2)^2 by Th19
     .= i1^2 + 2*i1*i2 + i2^2;
+A2: 0 <= r1^2+i1^2 by Lm1;
   then
-A4: (Re(z1+z2))^2+(Im(z1+z2))^2
-  = r1^2 + i1^2 + (2*r1*r2 + 2*i1*i2) + (r2^2 + i2^2) by A3;
+A3: 0 <= sqrt (r1^2+i1^2) by SQUARE_1:def 4;
   (r1^2+i1^2)*(r2^2+i2^2)-(r1*r2+i1*i2)^2 = (r1*i2-i1*r2)^2;
   then 0 <= (r1^2+i1^2)*(r2^2+i2^2)-(r1*r2+i1*i2)^2 by XREAL_1:65;
-  then (r1*r2+i1*i2)^2+0 <= (r1^2+i1^2)*(r2^2+i2^2) by XREAL_1:21;
-  then 0<=(r1*r2+i1*i2)^2 & (r1*r2+i1*i2)^2 <= (r1^2+i1^2)*(r2^2+i2^2)
-  by XREAL_1:65;
-  then r1*r2+i1*i2 <= |.r1*r2+i1*i2.| & sqrt (r1*r2+i1*i2)^2 <=
-  sqrt ((r1^2+i1^2)*(r2^2+i2^2)) by Lm25,SQUARE_1:94;
-  then r1*r2+i1*i2 <= sqrt (r1*r2+i1*i2)^2 & sqrt (r1*r2+i1*i2)^2 <=
-  sqrt (r1^2+i1^2)*sqrt (r2^2+i2^2) by A1,Lm24,SQUARE_1:97;
   then
-A5: r1*r2 + i1*i2 <= sqrt (r1^2+i1^2)*sqrt (r2^2+i2^2) by XXREAL_0:2;
-  (2*r1*r2 + 2*i1*i2) = 2*(r1*r2 + i1*i2) & 0 <= 2;
-  then (2*r1*r2 + 2*i1*i2) <= 2*(sqrt (r1^2+i1^2)*sqrt (r2^2+i2^2))
-  by A5,XREAL_1:66;
-  then (r1^2 + i1^2)+(2*r1*r2+2*i1*i2) <=
-  (r1^2+i1^2)+2*sqrt (r1^2+i1^2)*sqrt (r2^2+i2^2) &
-  r2^2 + i2^2 <= r2^2 + i2^2 by XREAL_1:9;
-  then (Re(z1+z2))^2+(Im(z1+z2))^2 <=
-  (r1^2+i1^2)+2*sqrt (r1^2+i1^2)*sqrt (r2^2+i2^2)+(r2^2+i2^2) by A4,XREAL_1:9;
-  then 0 <= (Re(z1 + z2))^2 + (Im(z1 + z2))^2 & 0 <= sqrt (r1^2+i1^2) & 0 <=
-  sqrt (r2^2+i2^2) &
-  (Re(z1 + z2))^2 + (Im(z1 + z2))^2 <= (sqrt (r1^2+i1^2) + sqrt (r2^2+i2^2
-  ))^2 by A2,Lm2,SQUARE_1:def 4;
-  then 0 + 0 <= sqrt (r1^2+i1^2) + sqrt (r2^2+i2^2) &
-  sqrt ((Re(z1 + z2))^2 + (Im(z1 + z2))^2) <=
-  sqrt ((sqrt (r1^2+i1^2) + sqrt (r2^2+i2^2))^2) by SQUARE_1:94;
-  hence thesis by SQUARE_1:89;
+A4: (r1*r2+i1*i2)^2+0 <= (r1^2+i1^2)*(r2^2+i2^2) by XREAL_1:21;
+  r1*r2+i1*i2 <= |.r1*r2+i1*i2.| by Lm25;
+  then
+A5: r1*r2+i1*i2 <= sqrt (r1*r2+i1*i2)^2 by Lm24;
+A6: 0 <= r2^2+i2^2 by Lm1;
+  then
+A7: (sqrt (r2^2+i2^2))^2 = r2^2+i2^2 by SQUARE_1:def 4;
+  0<=(r1*r2+i1*i2)^2 by XREAL_1:65;
+  then sqrt (r1*r2+i1*i2)^2 <= sqrt ((r1^2+i1^2)*(r2^2+i2^2)) by A4,
+  SQUARE_1:94;
+  then sqrt (r1*r2+i1*i2)^2 <= sqrt (r1^2+i1^2)*sqrt (r2^2+i2^2) by A2,A6,
+  SQUARE_1:97;
+  then
+A8: r1*r2 + i1*i2 <= sqrt (r1^2+i1^2)*sqrt (r2^2+i2^2) by A5,
+  XXREAL_0:
+  2;
+  (2*r1*r2 + 2*i1*i2) = 2*(r1*r2 + i1*i2);
+  then (2*r1*r2 + 2*i1*i2) <= 2*(sqrt (r1^2+i1^2)*sqrt (r2^2+i2^2)) by A8,
+  XREAL_1:66;
+  then
+A9: (r1^2 + i1^2)+(2*r1*r2+2*i1*i2) <= (r1^2+i1^2)+2*sqrt (r1^2+i1^2)*sqrt
+  (r2^2+i2^2) by XREAL_1:9;
+  (Re(z1 + z2))^2 = (r1+ r2)^2 by Th19
+    .= r1^2 + 2*r1*r2 + r2^2;
+  then
+  (Re(z1+z2))^2+(Im(z1+z2))^2 = r1^2 + i1^2 + (2*r1*r2 + 2*i1*i2) + (r2^2
+  + i2^2) by A1;
+  then
+A10: (Re(z1+z2))^2+(Im(z1+z2))^2 <= (r1^2+i1^2)+2*sqrt (r1^2+i1^2)*sqrt (r2
+  ^2+i2^2)+(r2^2+i2^2) by A9, XREAL_1:9;
+A11: 0 <= (Re(z1 + z2))^2 + (Im(z1 + z2))^2 by Lm1;
+A12: 0 <= sqrt (r2^2+i2^2) by A6,SQUARE_1:def 4;
+  (sqrt (r1^2+i1^2))^2 = r1^2+i1^2 by A2,SQUARE_1:def 4;
+  then sqrt ((Re(z1 + z2))^2 + (Im(z1 + z2))^2) <= sqrt ((sqrt (r1^2+i1^2) +
+  sqrt (r2^2+i2^2))^2) by A7,A10,A11,SQUARE_1:94;
+  hence thesis by A3,A12,SQUARE_1:89;
 end;
 
 theorem Th143:
   |.z1 - z2.| <= |.z1.| + |.z2.|
-proof |.z1 - z2.| = |.z1 + - z2.|;
+proof
+  |.z1 - z2.| = |.z1 + - z2.|;
   then |.z1 - z2.| <= |.z1.| + |.-z2.| by Th142;
   hence thesis by Lm22;
 end;
 
 theorem
   |.z1.| - |.z2.| <= |.z1 + z2.|
-proof z1 = z1 + z2 - z2;
+proof
+  z1 = z1 + z2 - z2;
   then |.z1.| <= |.z1 + z2.| + |.z2.| by Th143;
   hence thesis by XREAL_1:22;
 end;
 
 theorem Th145:
   |.z1.| - |.z2.| <= |.z1 - z2.|
-proof z1 = z1 - z2 + z2;
+proof
+  z1 = z1 - z2 + z2;
   then |.z1.| <= |.z1 - z2.| + |.z2.| by Th142;
   hence thesis by XREAL_1:22;
 end;
@@ -1274,7 +1341,8 @@ theorem Th147:
 proof
   thus |.z1 - z2.| = 0 implies z1 = z2
   proof
-    assume |.z1 - z2.| = 0;
+    assume
+    |.z1 - z2.| = 0;
     then z1 - z2 = 0 by Th131;
     hence thesis;
   end;
@@ -1286,11 +1354,13 @@ theorem
 proof
   thus z1 <> z2 implies 0 < |.z1 - z2.|
   proof
-    assume z1 <> z2;
-    then 0 <= |.z1 - z2.| & |.z1 - z2.| <> 0 by Th132,Th147;
-    hence thesis;
+    assume
+    z1 <> z2;
+    then |.z1 - z2.| <> 0 by Th147;
+    hence thesis by Th132;
   end;
-  assume 0 < |.z1 - z2.|;
+  assume
+  0 < |.z1 - z2.|;
   hence thesis by Th147;
 end;
 
@@ -1304,30 +1374,29 @@ end;
 Lm26: for x, y being real number holds -y <= x & x <= y iff |.x.| <= y
 proof
   let x, y be real number;
-A1: -y <= x & x <= y implies |.x.| <= y
-  proof
-    assume that
-A2: -y <= x and
-A3: x <= y;
-    -x <= -(-y) by A2,XREAL_1:26;
-    then x < 0 implies |.x.| <= y by Lm23;
-    hence thesis by A3,Th129;
-  end;
-  |.x.| <= y implies -y <= x & x <= y
+A1: |.x.| <= y implies -y <= x & x <= y
   proof
     assume
-A4: |.x.| <= y;
-    then
-A5: 0 <= y by Th132;
-    x < -0 implies -y <= x & x <= y
+A2: |.x.| <= y;
+A3: x < -0 implies -y <= x & x <= y
     proof
       assume
-A8:   x < -0;
-      then -x <= y by A4,Lm23;
+A4:   x < -0;
+      then -x <= y by A2,Lm23;
       then -y <= -(-x) by XREAL_1:26;
-      hence thesis by A8;
+      hence thesis by A4;
     end;
-    hence thesis by A5,A4,Th129;
+    0 <= y by A2,Th132;
+    hence thesis by A2,A3,Th129;
+  end;
+  -y <= x & x <= y implies |.x.| <= y
+  proof
+    assume that
+A5: -y <= x and
+A6: x <= y;
+    -x <= -(-y) by A5,XREAL_1:26;
+    then x < 0 implies |.x.| <= y by Lm23;
+    hence thesis by A6,Th129;
   end;
   hence thesis by A1;
 end;
@@ -1337,33 +1406,34 @@ theorem
 proof
   |.z2.| - |.z1.| <= |.z2 - z1.| by Th145;
   then -(|.z1.| - |.z2.|) <= |.z1 - z2.| by Th146;
-  then -|.z1 - z2.| <= --(|.z1.| - |.z2.|) by XREAL_1:26;
-  then -|.z1 - z2.| <= (|.z1.| - |.z2.|) & |.z1.| - |.z2.| <= |.z1 - z2.|
-  by Th145;
-  hence thesis by Lm26;
+  then
+A1: -|.z1 - z2.| <= --(|.z1.| - |.z2.|) by XREAL_1:26;
+  |.z1.| - |.z2.| <= |.z1 - z2.| by Th145;
+  hence thesis by A1,Lm26;
 end;
 
 theorem Th151:
   |.z1*z2.| = |.z1.|*|.z2.|
 proof
   set r1 = Re z1, r2 = Re z2, i1 = Im z1, i2 = Im z2;
-A1: 0<=r1^2 + i1^2 & 0<=r2^2 + i2^2 by Lm2;
-A2: (Re(z1*z2))^2 = (r1*r2 - i1*i2)^2 by Th24
-    .= (r1*r2)^2 + (i1*i2)^2 + - 2*(r1*r2)*(i1*i2);
-  (Im(z1*z2))^2 = (r1*i2 + r2*i1)^2 by Th24
+A1: 0<=r1^2 + i1^2 & 0<=r2^2 + i2^2 by Lm1;
+A2: (Im(z1*z2))^2 = (r1*i2 + r2*i1)^2 by Th24
     .= 2*(r1*r2)*(i1*i2) + ((r1*i2)^2 + (r2*i1)^2);
+  (Re(z1*z2))^2 = (r1*r2 - i1*i2)^2 by Th24
+    .= (r1*r2)^2 + (i1*i2)^2 + - 2*(r1*r2)*(i1*i2);
   then (Re(z1*z2))^2+(Im(z1*z2))^2 = (r1^2 + i1^2)*(r2^2 + i2^2) by A2;
   hence thesis by A1,SQUARE_1:97;
 end;
 
 theorem Th152:
   |.z".| = |.z.|"
-proof per cases;
+proof
+  per cases;
   suppose
 A1: z <> 0;
     set r2i2 = (Re z)^2+(Im z)^2;
 A2: r2i2 <> 0 by A1,Th13;
-A3: 0 <= r2i2 by Lm2;
+A3: 0 <= r2i2 by Lm1;
     thus |.z".| = sqrt ((Re z / r2i2)^2 + (Im(z"))^2) by Th64
       .= sqrt ((Re z / r2i2)^2 + ((-Im z) / r2i2)^2) by Th64
       .= sqrt ((Re z)^2 / r2i2^2 + ((-Im z) / r2i2)^2) by XCMPLX_1:77
@@ -1393,10 +1463,9 @@ end;
 theorem
   |.z*z.| = (Re z)^2 + (Im z)^2
 proof
-A1: 0<=(Re z)^2 + (Im z)^2 by Lm2;
-  |.z*z.| = |.z.|*|.z.| & |.z.| = sqrt ((Re z)^2 + (Im z)^2) by Th151;
-  then |.z*z.| = sqrt (((Re z)^2 + (Im z)^2)^2) by A1,SQUARE_1:97;
-  hence thesis by Lm2,SQUARE_1:89;
+  0<=(Re z)^2 + (Im z)^2 & |.z*z.| = |.z.|*|.z.| by Lm1,Th151;
+  then |.z*z.| = sqrt (((Re z)^2 + (Im z)^2)^2) by SQUARE_1:97;
+  hence thesis by Lm1,SQUARE_1:89;
 end;
 
 theorem
@@ -1417,15 +1486,17 @@ theorem Th157:
 proof
   let a be real number;
   per cases;
-  suppose a >= 0;
+  suppose
+    a >= 0;
     hence thesis by Th129;
   end;
-  suppose a < 0;
+  suppose
+    a < 0;
     hence thesis by Lm23;
   end;
 end;
 
-theorem  :: SQUARE_1'91
+theorem :: SQUARE_1'91
   for a being real number holds sqrt a^2 = |.a.| by Lm24;
 
 theorem :: SQUARE_1'34
@@ -1497,8 +1568,8 @@ proof
 A1: a+b*<i> = c+d*<i>;
   reconsider a,b,c,d as Real by XREAL_0:def 1;
   a-c+(b-d)*<i> = 0 by A1;
-  then a-c = 0 & b-d = 0 by Th12,Th28;
-  hence thesis;
+  then a-c = 0 by Th12,Th28;
+  hence thesis by A1;
 end;
 
 :: from JGRAPH_1, 29.12.2006, AK
@@ -1508,36 +1579,32 @@ reserve r1, r2 for real number;
 theorem
   sqrt(r1^2+r2^2)<=abs(r1)+abs(r2)
 proof
-A1: r1^2>=0 by XREAL_1:65;
-  r2^2>=0 by XREAL_1:65;
+A1: (sqrt(r1^2+r2^2))^2>=0 by XREAL_1:65;
+  r1^2>=0 & r2^2>=0 by XREAL_1:65;
   then
-A2: (sqrt(r1^2+r2^2))^2=r1^2+r2^2 by SQUARE_1:def 4,A1;
-A3: (abs(r1)+abs(r2))^2=(abs(r1))^2+2*(abs(r1))*(abs(r2))+(abs(r2))^2;
-  (abs(r1))^2=r1^2 by Th161;
+A2: (sqrt(r1^2+r2^2))^2=r1^2+r2^2 by SQUARE_1:def 4;
+A3: abs(r1)>=0 & abs(r2)>=0 by Th132;
+  (abs(r1)+abs(r2))^2=(abs(r1))^2+2*(abs(r1))*(abs(r2))+(abs(r2))^2 & (abs
+  (r1) )^2=r1^2 by Th161;
   then
-A4: (abs(r1)+abs(r2))^2 - (sqrt(r1^2+r2^2))^2=
-  r1^2+2*(abs(r1))*(abs(r2))+r2^2-(r1^2+r2^2) by A2,A3,Th161
+  (abs(r1)+abs(r2))^2 - (sqrt(r1^2+r2^2))^2= r1^2+2*(abs(r1))*(abs(r2))+r2
+  ^2-(r1^2+r2^2) by A2,Th161
     .=2*(abs(r1))*(abs(r2));
-A5: abs(r1)>=0 by Th132;
-A7: abs(r2)>=0 by Th132;
-  then
-A8: (abs(r1)+abs(r2))^2>= (sqrt(r1^2+r2^2))^2 by A4,A5,XREAL_1:51;
-  (sqrt(r1^2+r2^2))^2>=0 by XREAL_1:65;
-  then
-    sqrt((abs(r1)+abs(r2))^2)>=sqrt((sqrt(r1^2+r2^2))^2) by A8,SQUARE_1:94;
-  hence thesis by A2,A5,A7,SQUARE_1:89;
+  then (abs(r1)+abs(r2))^2>= (sqrt(r1^2+r2^2))^2 by A3,XREAL_1:51;
+  then sqrt((abs(r1)+abs(r2))^2)>=sqrt((sqrt(r1^2+r2^2))^2) by A1,
+  SQUARE_1:94;
+  hence thesis by A2,A3,SQUARE_1:89;
 end;
 
 theorem
   abs(r1)<=sqrt(r1^2+r2^2)
 proof
-A1: r1^2>=0 by XREAL_1:65;
   r2^2>=0 by XREAL_1:65;
-  then r1^2+0<= r1^2+r2^2 by XREAL_1:8;
-  then sqrt(r1^2)<= sqrt(r1^2+r2^2) by A1,SQUARE_1:94;
+  then r1^2>=0 & r1^2+0<= r1^2+r2^2 by XREAL_1:8,65;
+  then sqrt(r1^2)<= sqrt(r1^2+r2^2) by SQUARE_1:94;
   hence thesis by Lm24;
 end;
 
 theorem
- for a being complex number holds |.1/a.| = 1/|.a.| by Th153,Th134;
+  for a being complex number holds |.1/a.| = 1/|.a.| by Th134,Th153;
 

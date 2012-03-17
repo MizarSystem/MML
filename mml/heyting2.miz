@@ -11,18 +11,18 @@ environ
       HEYTING1, BINOP_1, FDIFF_1, LATTICE2, SETWISEO, FUNCOP_1, FILTER_0,
       ZF_LANG, HEYTING2;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, RELSET_1,
-      FUNCOP_1, BINOP_1, FINSET_1, FINSUB_1, FUNCT_2, PARTFUN1,
-      LATTICES, STRUCT_0, SUBSTLAT, SETWISEO, HEYTING1, LATTICE2, FILTER_0;
- constructors FUNCOP_1, SETWISEO, FINSEQ_1, FILTER_0, LATTICE2,
-      HEYTING1, SUBSTLAT, RELSET_1;
+      FUNCOP_1, BINOP_1, FINSET_1, FINSUB_1, FUNCT_2, PARTFUN1, LATTICES,
+      STRUCT_0, SUBSTLAT, SETWISEO, HEYTING1, LATTICE2, FILTER_0;
+ constructors FUNCOP_1, SETWISEO, FINSEQ_1, FILTER_0, LATTICE2, HEYTING1,
+      SUBSTLAT, RELSET_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1, FINSET_1,
-      FINSUB_1, SETWISEO, FRAENKEL, RFINSEQ, STRUCT_0, LATTICES, SUBSTLAT,
-      FUNCT_2, RELSET_1;
+      FINSUB_1, SETWISEO, RFINSEQ, STRUCT_0, LATTICES, SUBSTLAT, FUNCT_2,
+      RELSET_1, PRE_POLY;
  requirements SUBSET, BOOLE;
  definitions TARSKI, FILTER_0, XBOOLE_0;
  theorems ZFMISC_1, TARSKI, FINSUB_1, FINSET_1, PARTFUN1, BINOP_1, LATTICES,
-      LATTICE2, RELAT_1, FUNCT_1, FUNCT_2, SUBSTLAT, SETWISEO,
-      FUNCOP_1, FILTER_0, HEYTING1, RELSET_1, XBOOLE_0, XBOOLE_1;
+      LATTICE2, RELAT_1, FUNCT_1, FUNCT_2, SUBSTLAT, SETWISEO, FUNCOP_1,
+      FILTER_0, HEYTING1, RELSET_1, XBOOLE_0, XBOOLE_1, PRE_POLY;
  schemes FRAENKEL, BINOP_1, LATTICE3, PRE_CIRC, FUNCT_1, FUNCT_2, XBOOLE_0;
 
 begin :: Preliminaries
@@ -30,152 +30,102 @@ begin :: Preliminaries
 reserve V, C, x, a, b for set;
 reserve A, B for Element of SubstitutionSet (V, C);
 
-theorem
-  for V, C being non empty set ex f be Element of PFuncs (V, C) st f <> {}
-proof
-  let V, C be non empty set;
-  consider a be set such that
-A1: a in V by XBOOLE_0:def 1;
-  consider b be set such that
-A2: b in C by XBOOLE_0:def 1;
-  set f = {[a,b]};
-  {a} c= V & {b} c= C by A1,A2,ZFMISC_1:37;
-  then dom f c= V & rng f c= C by RELAT_1:23;
-  then reconsider f as Element of PFuncs (V, C) by PARTFUN1:def 5;
-  f <> {};
-  hence thesis;
-end;
+canceled;
 
 theorem Th2:
   for a, b being set st b in SubstitutionSet (V, C) & a in b holds
   a is finite Function
 proof
   let a, b be set;
-  assume
-A1: b in SubstitutionSet (V, C) & a in b;
-  then b in { A where A is Element of Fin PFuncs (V,C) :
-  ( for u being set st u in A holds u is finite ) &
-  for s1, t being Element of PFuncs (V, C) holds
-  ( s1 in A & t in A & s1 c= t implies s1 = t ) } by SUBSTLAT:def 1;
-  then consider A being Element of Fin PFuncs (V,C) such that
-A2: A = b & ( for u being set st u in A holds u is finite ) &
-  for s, t being Element of PFuncs (V, C) holds
-  ( s in A & t in A & s c= t implies s = t );
-  thus thesis by A1,A2;
-end;
-
-theorem Th3:
-  for f being Element of PFuncs (V, C),
-  g being set st g c= f holds g in PFuncs (V, C)
-proof
-  let f be Element of PFuncs (V, C), g be set;
-  assume
-A1: g c= f;
-  consider f1 be Function such that
-A2: f1 = f & dom f1 c= V & rng f1 c= C by PARTFUN1:def 5;
-  reconsider g' = g as Function by A1;
-  dom g' c= dom f1 & rng g' c= rng f1 by A1,A2,RELAT_1:25;
-  then dom g' c= V & rng g' c= C by A2,XBOOLE_1:1;
-  hence thesis by PARTFUN1:def 5;
+  assume that
+A1: b in SubstitutionSet (V, C) and
+A2: a in b;
+  b in { A where A is Element of Fin PFuncs (V,C) : ( for u being set st u
+in A holds u is finite ) & for s1, t being Element of PFuncs (V, C) holds ( s1
+  in A & t in A & s1 c= t implies s1 = t ) } by A1,SUBSTLAT:def 1;
+  then
+  ex A being Element of Fin PFuncs (V,C) st A = b &( for u being set st u
+in A holds u is finite)& for s, t being Element of PFuncs (V, C ) holds ( s in
+  A & t in A & s c= t implies s = t );
+  hence thesis by A1,A2;
 end;
 
 Lm1: for A, B, C be set st A = B \/ C & A c= B holds A = B
 proof
   let A, B, C be set;
-  assume
-A1: A = B \/ C & A c= B;
-  then B c= A by XBOOLE_1:7;
-  hence thesis by A1,XBOOLE_0:def 10;
-end;
-
-theorem Th4:
-  PFuncs(V,C) c= bool [:V,C:]
-proof
-  let x be set;
-  assume x in PFuncs(V,C);
-  then consider f being Function such that
-A1: x = f and
-A2: dom f c= V & rng f c= C by PARTFUN1:def 5;
-A3: f c= [: dom f, rng f:] by RELAT_1:21;
-  [:dom f, rng f:] c= [:V,C:] by A2,ZFMISC_1:119;
-  then f c= [:V,C:] by A3,XBOOLE_1:1;
-  hence thesis by A1;
-end;
-
-theorem Th5:
-  V is finite & C is finite implies PFuncs (V, C) is finite
-proof
-  assume
-X:  V is finite & C is finite;
-    PFuncs(V,C) c= bool [:V,C:] by Th4;
-  hence thesis by X;
-end;
-
-registration
-  cluster functional finite non empty set;
-  existence
-  proof
-    consider A, B be finite non empty set;
-    take P = PFuncs(A,B);
-    thus P is functional;
-    thus P is finite by Th5;
-    thus thesis;
-  end;
+  assume that
+A1: A = B \/ C and
+A2: A c= B;
+  B c= A by A1,XBOOLE_1:7;
+  hence thesis by A2,XBOOLE_0:def 10;
 end;
 
 begin :: Some properties of sets of substitutions
 
+canceled 3;
+
 theorem Th6:
-  for a being finite Element of PFuncs (V, C) holds
-  {a} in SubstitutionSet (V, C)
+  for a being finite Element of PFuncs (V, C) holds {a} in
+  SubstitutionSet (V, C)
 proof
   let a be finite Element of PFuncs (V, C);
-A1: for u being set st u in {a} holds u is finite by TARSKI:def 1;
-  for s, t being Element of PFuncs (V,C) holds
-  ( s in { a } & t in { a } & s c= t implies s = t )
+A1: for s, t being Element of PFuncs (V,C) holds ( s in { a } & t in { a } &
+  s c= t implies s = t )
   proof
     let s, t be Element of PFuncs (V,C);
-    assume s in { a } & t in { a } & s c= t;
-    then s = a & t = a by TARSKI:def 1;
-    hence thesis;
+    assume that
+A2: s in { a } and
+A3: t in { a } and
+    s c= t;
+    s = a by A2,TARSKI:def 1;
+    hence thesis by A3,TARSKI:def 1;
   end;
-  then {.a.} in { A where A is Element of Fin PFuncs (V,C) :
-  ( for u being set st u in A holds u is finite ) &
-  for s, t being Element of PFuncs (V, C) holds
-  ( s in A & t in A & s c= t implies s = t ) } by A1;
+  for u being set st u in {a} holds u is finite by TARSKI:def 1;
+  then
+  {.a.} in { A where A is Element of Fin PFuncs (V,C) : ( for u being set
+st u in A holds u is finite ) & for s, t being Element of PFuncs (V, C) holds (
+  s in A & t in A & s c= t implies s = t ) } by A1;
   hence thesis by SUBSTLAT:def 1;
 end;
 
 theorem
-  A ^ B = A implies for a be set st a in A ex b be set st b in B & b c= a
+  A ^ B = A implies for a be set st a in A ex b be set st b in B & b c=
+  a
 proof
   assume
 A1: A ^ B = A;
   let a be set;
-  assume a in A;
+  assume
+  a in A;
   then consider b,c be set such that
-A2: b in A & c in B & a = b \/ c by A1,SUBSTLAT:15;
+  b in A and
+A2: c in B and
+A3: a = b \/ c by A1,SUBSTLAT:15;
   take c;
-  thus thesis by A2,XBOOLE_1:7;
+  thus thesis by A2,A3,XBOOLE_1:7;
 end;
 
 theorem Th8:
-  mi (A ^ B) = A implies for a be set st a in A ex b be set st b in B & b c= a
+  mi (A ^ B) = A implies for a be set st a in A ex b be set st b in
+  B & b c= a
 proof
   assume
 A1: mi (A ^ B) = A;
   let a be set;
 A2: mi (A ^ B) c= A ^ B by SUBSTLAT:8;
-  assume a in A;
+  assume
+  a in A;
   then consider b,c be set such that
-A3: b in A & c in B & a = b \/ c by A1,A2,SUBSTLAT:15;
+  b in A and
+A3: c in B and
+A4: a = b \/ c by A1,A2,SUBSTLAT:15;
   take c;
-  thus thesis by A3,XBOOLE_1:7;
+  thus thesis by A3,A4,XBOOLE_1:7;
 end;
 
 theorem Th9:
-  (for a be set st a in A ex b be set st b in
-  B & b c= a) implies mi (A ^ B) = A
+  (for a be set st a in A ex b be set st b in B & b c= a) implies
+  mi (A ^ B) = A
 proof
   assume
 A1: for a be set st a in A ex b be set st b in B & b c= a;
@@ -183,49 +133,57 @@ A2: mi (A ^ B) c= A ^ B by SUBSTLAT:8;
   thus mi (A ^ B) c= A
   proof
     let a be set;
+A3: A c= PFuncs (V, C) by FINSUB_1:def 5;
     assume
-A3: a in mi (A ^ B);
+A4: a in mi (A ^ B);
     then consider b, c be set such that
-A4: b in A & c in B & a = b \/ c by A2,SUBSTLAT:15;
+A5: b in A and
+    c in B and
+A6: a = b \/ c by A2,SUBSTLAT:15;
+A7: b c= a by A6,XBOOLE_1:7;
     consider b1 be set such that
-A5: b1 in B & b1 c= b by A1,A4;
-    B c= PFuncs (V, C) & A c= PFuncs (V, C) by FINSUB_1:def 5;
-    then reconsider b' = b, b1' = b1 as Element of PFuncs (V, C) by A4,A5;
-A6: b1' tolerates b' by A5,PARTFUN1:135;
-    b = b1 \/ b by A5,XBOOLE_1:12;
-    then
-A7: b in A ^ B by A4,A5,A6,SUBSTLAT:16;
-    b c= a by A4,XBOOLE_1:7;
-    hence thesis by A3,A4,A7,SUBSTLAT:6;
+A8: b1 in B and
+A9: b1 c= b by A1,A5;
+    B c= PFuncs (V, C) by FINSUB_1:def 5;
+    then reconsider b' = b, b1' = b1 as Element of PFuncs (V, C) by A5,A8,A3;
+A10: b = b1 \/ b by A9,XBOOLE_1:12;
+    b1' tolerates b' by A9,PARTFUN1:135;
+    then b in A ^ B by A5,A8,A10,SUBSTLAT:16;
+    hence thesis by A4,A5,A7,SUBSTLAT:6;
   end;
   thus A c= mi (A ^ B)
   proof
     let a be set;
+A11: A c= PFuncs (V, C) by FINSUB_1:def 5;
     assume
-A8: a in A;
+A12: a in A;
     then consider b be set such that
-A9: b in B & b c= a by A1;
-A10: a in mi A by A8,SUBSTLAT:11;
-A11: a is finite by A8,Th2;
-    B c= PFuncs (V, C) & A c= PFuncs (V, C) by FINSUB_1:def 5;
-    then reconsider a' = a, b' = b as Element of PFuncs (V, C) by A8,A9;
-A12: a' = a' \/ b' by A9,XBOOLE_1:12;
-    a' tolerates b' by A9,PARTFUN1:135;
-    then
-A13: a' in A ^ B by A8,A9,A12,SUBSTLAT:16;
-    for b be finite set st b in A ^ B & b c= a holds b = a
+A13: b in B and
+A14: b c= a by A1;
+    B c= PFuncs (V, C) by FINSUB_1:def 5;
+    then reconsider a' = a, b' = b as Element of PFuncs (V, C) by A12,A13,A11;
+A15: a' tolerates b' by A14,PARTFUN1:135;
+A16: a in mi A by A12,SUBSTLAT:11;
+A17: for b be finite set st b in A ^ B & b c= a holds b = a
     proof
       let b be finite set;
-      assume
-A14:  b in A ^ B & b c= a;
-      then consider c, d be set such that
-A15:  c in A & d in B & b = c \/ d by SUBSTLAT:15;
-      c c= b by A15,XBOOLE_1:7;
-      then c c= a by A14,XBOOLE_1:1;
-      then c = a by A10,A15,SUBSTLAT:6;
-      hence thesis by A14,A15,Lm1;
+      assume that
+A18:  b in A ^ B and
+A19:  b c= a;
+      consider c, d be set such that
+A20:  c in A and
+      d in B and
+A21:  b = c \/ d by A18,SUBSTLAT:15;
+      c c= b by A21,XBOOLE_1:7;
+      then c c= a by A19,XBOOLE_1:1;
+      then c = a by A16,A20,SUBSTLAT:6;
+      hence thesis by A19,A21,Lm1;
     end;
-    hence thesis by A11,A13,SUBSTLAT:7;
+    a' = a' \/ b' by A14,XBOOLE_1:12;
+    then
+A22: a' in A ^ B by A12,A13,A15,SUBSTLAT:16;
+    a is finite by A12,Th2;
+    hence thesis by A22,A17,SUBSTLAT:7;
   end;
 end;
 
@@ -234,7 +192,8 @@ definition
   let A be Element of Fin PFuncs (V, C);
   func Involved A means
   :Def1:
-  x in it iff ex f being finite Function st f in A & x in dom f;
+  x in it iff ex f being finite Function st f in
+  A & x in dom f;
   existence
   proof
     defpred P[set] means ex f being finite Function st f in A & $1 in dom f;
@@ -242,211 +201,226 @@ definition
 A1: x in X iff x in V & P[x] from XBOOLE_0:sch 1;
     take X;
     let x be set;
-    thus x in X implies
-    ex f being finite Function st f in A & x in dom f by A1;
+    thus x in X implies ex f being finite Function st f in A & x in dom f by
+    A1;
     given f being finite Function such that
-A2: f in A & x in dom f;
+A2: f in A and
+A3: x in dom f;
     A c= PFuncs (V, C) by FINSUB_1:def 5;
-    then consider f1 being Function such that
-A3: f = f1 & dom f1 c= V & rng f1 c= C by A2,PARTFUN1:def 5;
-    thus thesis by A1,A2,A3;
+    then
+    ex f1 being Function st f = f1 & dom f1 c= V & rng f1 c= C by A2,
+    PARTFUN1:def 5;
+    hence thesis by A1,A2,A3;
   end;
   uniqueness
   proof
     defpred P[set] means ex f being finite Function st f in A & $1 in dom f;
-A4: for X1,X2 being set st (for x being set holds x in X1 iff P[x]) &
-    (for x being set holds x in X2 iff P[x]) holds X1 = X2 from XBOOLE_0:sch 3;
     let r,s be set such that
-A5: x in r iff ex f being finite Function st f in A & x in dom f and
-A6: x in s iff ex f being finite Function st f in A & x in dom f;
-    thus thesis by A4,A5,A6;
+A4: x in r iff ex f being finite Function st f in A & x in dom f and
+A5: x in s iff ex f being finite Function st f in A & x in dom f;
+    for X1,X2 being set st (for x being set holds x in X1 iff P[x]) & (for
+    x being set holds x in X2 iff P[x]) holds X1 = X2 from XBOOLE_0:sch 3;
+    hence thesis by A4,A5;
   end;
 end;
 
 reserve C for finite set;
 
 theorem Th10:
-  for V being set, C be finite set,
-  A being Element of Fin PFuncs (V, C) holds Involved A c= V
+  for V being set, C be finite set, A being Element of Fin PFuncs
+  (V, C) holds Involved A c= V
 proof
   let V be set, C be finite set, A be Element of Fin PFuncs (V, C);
   let a be set;
-  assume a in Involved A;
+  assume
+  a in Involved A;
   then consider f being finite Function such that
-A1: f in A & a in dom f by Def1;
+A1: f in A and
+A2: a in dom f by Def1;
   A c= PFuncs (V, C) by FINSUB_1:def 5;
-  then consider f1 being Function such that
-A2: f = f1 & dom f1 c= V & rng f1 c= C by A1,PARTFUN1:def 5;
-  thus thesis by A1,A2;
+  then ex f1 being Function st f = f1 & dom f1 c= V & rng f1 c= C by A1,
+  PARTFUN1:def 5;
+  hence thesis by A2;
 end;
 
-Lm2: for V being set, C be finite set,
-A being non empty Element of Fin PFuncs (V, C) holds Involved A is finite
+Lm2: for V being set, C be finite set, A being non empty Element of Fin PFuncs
+(V, C) holds Involved A is finite
+
 proof
-  let V be set, C be finite set, A be non empty Element of Fin PFuncs (V, C);
   deffunc F(Function)=dom $1;
+  let V be set, C be finite set, A be non empty Element of Fin PFuncs (V, C);
   defpred P[set] means $1 in A & $1 is finite;
   defpred Q[set] means $1 in A;
   set X = { F(f) where f is Element of PFuncs(V, C) : P[f]};
-A1: for g being Element of PFuncs(V, C) holds P[g] implies Q[g];
-A2: X c= { F(f) where f is Element of PFuncs(V, C) : Q[f]}
-  from FRAENKEL:sch 1(A1);
-A3: A is finite;
-A4: { F(f) where f is Element of PFuncs(V, C) : f in A } is finite
-  from FRAENKEL:sch 21(A3);
+A1: for x be set st x in X holds x is finite
+  proof
+    let x be set;
+    assume
+    x in X;
+
+    then ex f1 being Element of PFuncs(V, C) st x = dom f1 & f1 in A & f1
+    is finite;
+
+    hence thesis;
+  end;
+A2: A is finite;
+
+A3: { F(f) where f is Element of PFuncs(V, C) : f in A } is finite from
+  FRAENKEL:sch 21(A2);
+
   x in Involved A iff ex Y be set st x in Y & Y in X
   proof
     hereby
-      assume x in Involved A;
+      assume
+      x in Involved A;
       then consider f being finite Function such that
-A5:   f in A & x in dom f by Def1;
+A4:   f in A and
+A5:   x in dom f by Def1;
       A c= PFuncs (V,C) by FINSUB_1:def 5;
-      then dom f in X by A5;
+      then dom f in X by A4;
       hence ex Y be set st x in Y & Y in X by A5;
     end;
     given Y be set such that
-A6: x in Y & Y in X;
-    consider f1 being Element of PFuncs(V, C) such that
-A7: Y = dom f1 & f1 in A & f1 is finite by A6;
-    thus thesis by A6,A7,Def1;
+A6: x in Y and
+A7: Y in X;
+
+    ex f1 being Element of PFuncs(V, C) st Y = dom f1 & f1 in A & f1
+    is finite by A7;
+
+    hence thesis by A6,Def1;
   end;
   then
 A8: Involved A = union X by TARSKI:def 4;
-  for x be set st x in X holds x is finite
-  proof
-    let x be set;
-    assume x in X;
-    then consider f1 being Element of PFuncs(V, C) such that
-A10: x = dom f1 & f1 in A & f1 is finite;
-    thus thesis by A10;
-  end;
-  hence thesis by A8,A2,A4,FINSET_1:25;
+A9: for g being Element of PFuncs(V, C) holds P[g] implies Q[g];
+
+  X c= { F(f) where f is Element of PFuncs(V, C) : Q[f]} from FRAENKEL:sch
+  1(A9);
+
+  hence thesis by A3,A8,A1,FINSET_1:25;
 end;
 
 theorem Th11:
-  for V being set, C being finite set,
-  A being Element of Fin PFuncs (V, C) st A = {} holds Involved A = {}
+  for V being set, C being finite set, A being Element of Fin
+  PFuncs (V, C) st A = {} holds Involved A = {}
 proof
   let V be set, C be finite set, A be Element of Fin PFuncs (V, C);
   assume
 A1: A = {};
-  assume Involved A <> {};
+  assume
+  Involved A <> {};
   then consider x be set such that
 A2: x in Involved A by XBOOLE_0:def 1;
-  consider f being finite Function such that
-A3: f in A & x in dom f by A2,Def1;
-  thus thesis by A1,A3;
+  ex f being finite Function st f in A & x in dom f by A2,Def1;
+  hence thesis by A1;
 end;
 
 theorem Th12:
-  for V being set, C being finite set,
-  A being Element of Fin PFuncs (V, C) holds Involved A is finite
+  for V being set, C being finite set, A being Element of Fin
+  PFuncs (V, C) holds Involved A is finite
 proof
   let V be set, C be finite set, A be Element of Fin PFuncs (V, C);
   per cases;
-  suppose A is non empty;
+  suppose
+    A is non empty;
     hence thesis by Lm2;
   end;
-  suppose A is empty;
+  suppose
+    A is empty;
     hence thesis by Th11;
   end;
 end;
 
 theorem
-  for C being finite set,
-  A being Element of Fin PFuncs ({}, C) holds Involved A = {}
-  by Th10,XBOOLE_1:3;
+  for C being finite set, A being Element of Fin PFuncs ({}, C) holds
+  Involved A = {} by Th10,XBOOLE_1:3;
 
 definition
   let V be set, C be finite set;
   let A be Element of Fin PFuncs (V, C);
   func -A -> Element of Fin PFuncs (V, C) equals
-  { f where f is Element of PFuncs (Involved A, C) :
-  for g be Element of PFuncs (V, C) st g in A holds not f tolerates g };
+  { f where f is Element of
+PFuncs (Involved A, C) : for g be Element of PFuncs (V, C) st g in A holds not
+  f tolerates g };
   coherence
   proof
-    set M = { f where f is Element of PFuncs (Involved A, C) :
-    for g be Element of PFuncs (V, C) st g in A holds not f tolerates g };
-    defpred P[Element of PFuncs (Involved A, C)] means
-    for h be Element of PFuncs (V, C) st h in A holds not $1 tolerates h;
-    defpred Q[set] means not contradiction;
-A1: for v being Element of PFuncs (Involved A, C) holds P[v] implies Q[v];
     deffunc F(set)=$1;
-A2: { F(f) where f is Element of PFuncs (Involved A, C) : P[f] } c=
-    { F(f) where f is Element of PFuncs (Involved A, C) : Q[f] }
-    from FRAENKEL:sch 1(A1);
-    Involved A is finite by Th12;
-    then
-A3: PFuncs (Involved A, C) is finite by Th5;
-    { f where f is Element of PFuncs (Involved A, C) : not contradiction } c=
-    PFuncs (Involved A, C)
+    defpred Q[set] means not contradiction;
+    defpred P[Element of PFuncs (Involved A, C)] means for h be Element of
+    PFuncs (V, C) st h in A holds not $1 tolerates h;
+    set M = { f where f is Element of PFuncs (Involved A, C) : for g be
+    Element of PFuncs (V, C) st g in A holds not f tolerates g };
+A1: { f where f is Element of PFuncs (Involved A, C) : not contradiction }
+    c= PFuncs (Involved A, C)
     proof
       let a be set;
-      assume a in { f where f is Element of PFuncs (Involved A, C) :
-      not contradiction };
-      then consider f1 be Element of PFuncs (Involved A, C) such that
-A4:   f1 = a & not contradiction;
-      thus thesis by A4;
+      assume
+      a in { f where f is Element of PFuncs (Involved A, C) : not
+      contradiction };
+      then ex f1 be Element of PFuncs (Involved A, C) st f1 = a & not
+      contradiction;
+      hence thesis;
     end;
-    then
-A5: M is finite by A2,A3;
-    M c= PFuncs (V, C)
+A2: for v being Element of PFuncs (Involved A, C) holds P[v] implies Q[v];
+A3: { F(f) where f is Element of PFuncs (Involved A, C) : P[f] } c= { F(f)
+where f is Element of PFuncs (Involved A, C) : Q[f] } from FRAENKEL:sch 1(A2);
+A4: M c= PFuncs (V, C)
     proof
       let a be set;
-      assume a in M;
-      then consider f1 be Element of PFuncs (Involved A, C) such that
-A6:   f1 = a &
-      for g be Element of PFuncs (V, C) st g in A holds not f1 tolerates g;
-      Involved A c= V by Th10;
+      assume
+      a in M;
+      then ex f1 be Element of PFuncs (Involved A, C) st f1 = a & for g be
+      Element of PFuncs (V, C) st g in A holds not f1 tolerates g;
       then
-A7:   PFuncs (Involved A, C) c= PFuncs (V, C) by PARTFUN1:128;
-      a in PFuncs (Involved A, C) by A6;
-      hence thesis by A7;
+A5:   a in PFuncs (Involved A, C);
+      Involved A c= V by Th10;
+      then PFuncs (Involved A, C) c= PFuncs (V, C) by PARTFUN1:128;
+      hence thesis by A5;
     end;
-    hence thesis by A5,FINSUB_1:def 5;
+    Involved A is finite by Th12;
+    then PFuncs (Involved A, C) is finite by PRE_POLY:17;
+    hence thesis by A3,A1,A4,FINSUB_1:def 5;
   end;
 end;
 
 theorem Th14:
   A ^ -A = {}
 proof
-  assume A ^ -A <> {};
+  assume
+  A ^ -A <> {};
   then consider x be set such that
 A1: x in A ^ -A by XBOOLE_0:def 1;
-  x in { s \/ t where s, t is Element of PFuncs (V,C) :
-  s in A & t in -A & s tolerates t } by A1,SUBSTLAT:def 3;
+  x in { s \/ t where s, t is Element of PFuncs (V,C) : s in A & t in -A &
+  s tolerates t } by A1,SUBSTLAT:def 3;
   then consider s1, t1 be Element of PFuncs (V,C) such that
-A2: x = s1 \/ t1 & s1 in A & t1 in -A & s1 tolerates t1;
-  consider f1 be Element of PFuncs (Involved A, C) such that
-A3: f1 = t1 &
-  for g be Element of PFuncs (V, C) st g in A holds not f1 tolerates g by A2;
-  thus thesis by A2,A3;
+  x = s1 \/ t1 and
+A2: s1 in A and
+A3: t1 in -A and
+A4: s1 tolerates t1;
+  ex f1 be Element of PFuncs (Involved A, C) st f1 = t1 & for g be
+  Element of PFuncs (V, C) st g in A holds not f1 tolerates g by A3;
+  hence thesis by A2,A4;
 end;
 
 theorem Th15:
   A = {} implies -A = { {} }
 proof
+  defpred P[Element of PFuncs (Involved A, C)] means for g be Element of
+  PFuncs (V, C) st g in A holds not $1 tolerates g;
   assume
 A1: A = {};
-  defpred P[Element of PFuncs (Involved A, C)] means
-  for g be Element of PFuncs (V, C) st g in A holds not $1 tolerates g;
-  { xx where xx is Element of PFuncs (Involved A, C) : P[xx]}
-  c= PFuncs (Involved A, C) from FRAENKEL:sch 10;
+  then
+A2: for g be Element of PFuncs (V, C) st g in A holds not {} tolerates g;
+  { xx where xx is Element of PFuncs (Involved A, C) : P[xx]} c= PFuncs (
+  Involved A, C) from FRAENKEL:sch 10;
   then -A c= PFuncs ({}, C) by A1,Th11;
   then
-A2: -A c= { {} } by PARTFUN1:122;
-  {} in -A
-  proof
-    {} in { {} } by TARSKI:def 1;
-    then {} in PFuncs ({}, C) by PARTFUN1:122;
-    then
-A3: {} in PFuncs (Involved A, C) by A1,Th11;
-    for g be Element of PFuncs (V, C) st g in A holds not {} tolerates g
-    by A1;
-    hence thesis by A3;
-  end;
+A3: -A c= { {} } by PARTFUN1:122;
+  {} in { {} } by TARSKI:def 1;
+  then {} in PFuncs ({}, C) by PARTFUN1:122;
+  then {} in PFuncs (Involved A, C) by A1,Th11;
+  then {} in -A by A2;
   then { {} } c= -A by ZFMISC_1:37;
-  hence thesis by A2,XBOOLE_0:def 10;
+  hence thesis by A3,XBOOLE_0:def 10;
 end;
 
 theorem
@@ -454,25 +428,25 @@ theorem
 proof
   assume
 A1: A = {{}};
-  assume -A <> {};
+  assume
+  -A <> {};
   then consider x1 be set such that
 A2: x1 in -A by XBOOLE_0:def 1;
   consider f1 being Element of PFuncs (Involved A, C) such that
-A3: x1 = f1 &
-  for g be Element of PFuncs (V, C) st g in {{}} holds not f1 tolerates g
-  by A1,A2;
+  x1 = f1 and
+A3: for g be Element of PFuncs (V, C) st g in {{}} holds not f1
+  tolerates g by A1,A2;
+A4: {} in {{}} by TARSKI:def 1;
   {} is PartFunc of V, C by RELSET_1:25;
   then
-A4: {} in PFuncs (V, C) by PARTFUN1:119;
-A5: {} in {{}} by TARSKI:def 1;
+A5: {} in PFuncs (V, C) by PARTFUN1:119;
   f1 tolerates {} by PARTFUN1:141;
-  hence thesis by A3,A4,A5;
+  hence thesis by A3,A5,A4;
 end;
 
 theorem Th17:
-  for V being set, C being finite set
-  for A being Element of SubstitutionSet (V, C) holds
-  mi (A ^ -A) = Bottom SubstLatt (V,C)
+  for V being set, C being finite set for A being Element of
+  SubstitutionSet (V, C) holds mi (A ^ -A) = Bottom SubstLatt (V,C)
 proof
   let V be set, C be finite set, A be Element of SubstitutionSet (V, C);
   mi (A ^ -A) = {} by Th14,SUBSTLAT:9
@@ -481,13 +455,13 @@ proof
 end;
 
 theorem
-  for V being non empty set, C being finite non empty set
-  for A being Element of SubstitutionSet (V, C) st A = {} holds
-  mi -A = Top SubstLatt (V,C)
+  for V being non empty set, C being finite non empty set for A being
+  Element of SubstitutionSet (V, C) st A = {} holds mi -A = Top SubstLatt (V,C)
 proof
-  let V be non empty set, C be finite non empty set,
-  A be Element of SubstitutionSet (V, C);
-  assume A = {};
+  let V be non empty set, C be finite non empty set, A be Element of
+  SubstitutionSet (V, C);
+  assume
+  A = {};
   then
 A1: -A = { {} } by Th15;
   then -A in SubstitutionSet (V, C) by SUBSTLAT:2;
@@ -496,11 +470,10 @@ A1: -A = { {} } by Th15;
 end;
 
 theorem Th19:
-  for V being set, C being finite set
-  for A being Element of SubstitutionSet (V, C),
-  a being Element of PFuncs (V, C),
-  B being Element of SubstitutionSet (V, C) st B = { a } holds
-  A ^ B = {} implies ex b being finite set st b in -A & b c= a
+  for V being set, C being finite set for A being Element of
+  SubstitutionSet (V, C), a being Element of PFuncs (V, C), B being Element of
+SubstitutionSet (V, C) st B = { a } holds A ^ B = {} implies ex b being finite
+  set st b in -A & b c= a
 proof
   let V, C;
   let A be Element of SubstitutionSet (V, C);
@@ -512,10 +485,12 @@ A2: A ^ B = {};
   per cases;
   suppose
 A3: A is non empty;
-    then
-A4: A = [A] by HEYTING1:def 2;
-    defpred P[Element of PFuncs (V, C),set] means
-    $2 in dom $1 /\ dom a & $1.$2 <> a.$2;
+    then reconsider AA = A as finite non empty set;
+    defpred P[Element of PFuncs (V, C),set] means $2 in dom $1 /\ dom a & $1.
+    $2 <> a.$2;
+    defpred P[set] means not contradiction;
+A4: ex kk be Function st kk = a & dom kk c= V & rng kk c= C by
+    PARTFUN1:def 5;
 A5: now
       let s be Element of PFuncs (V, C) such that
 A6:   s in A;
@@ -524,82 +499,88 @@ A6:   s in A;
         assume
 A7:     s tolerates a;
         a in B by A1,TARSKI:def 1;
-        then s \/ a in { s1 \/ t1 where s1,t1 is Element of PFuncs (V,C) :
-        s1 in A & t1 in B & s1 tolerates t1 } by A6,A7;
+        then s \/ a in { s1 \/ t1 where s1,t1 is Element of PFuncs (V,C) : s1
+        in A & t1 in B & s1 tolerates t1 } by A6,A7;
         hence thesis by A2,SUBSTLAT:def 3;
       end;
       then consider x be set such that
-A8:   x in dom s /\ dom a & s.x <> a.x by PARTFUN1:def 6;
+A8:   x in dom s /\ dom a and
+A9:   s.x <> a.x by PARTFUN1:def 6;
       consider a' be Function such that
-A9:   a' = a & dom a' c= V & rng a' c= C by PARTFUN1:def 5;
-      dom s /\ dom a c= dom a' by A9,XBOOLE_1:17;
-      then dom s /\ dom a c= V by A9,XBOOLE_1:1;
+A10:  a' = a and
+A11:  dom a' c= V and
+      rng a' c= C by PARTFUN1:def 5;
+      dom s /\ dom a c= dom a' by A10,XBOOLE_1:17;
+      then dom s /\ dom a c= V by A11,XBOOLE_1:1;
       then reconsider x as Element of [V] by A8,HEYTING1:def 2;
       take x;
-      thus P[s,x] by A8;
+      thus P[s,x] by A8,A9;
     end;
     consider g be Element of Funcs (PFuncs (V, C), [V]) such that
-A10: for s be Element of PFuncs (V, C) st s in A holds
-    P[s,g.s] from FRAENKEL:sch 27(A5);
+A12: for s be Element of PFuncs (V, C) st s in A holds P[s,g.s] from
+    FRAENKEL:sch 27(A5);
     deffunc G(set)=g.$1;
-    defpred P[set] means not contradiction;
-    reconsider AA = A as finite non empty set by A3;
-    { G(b) where b is Element of AA : P[b] } is finite from PRE_CIRC:sch 1;
-    then reconsider UKA = { g.b where b is Element of [A] : not contradiction }
-    as finite set by A4;
+A13: A = [A] by A3,HEYTING1:def 2;
+    { G(b) where b is Element of AA : P[b] } is finite from PRE_CIRC:sch
+    1;
+    then reconsider
+    UKA = { g.b where b is Element of [A] : not contradiction } as
+    finite set by A13;
     set f = a|UKA;
-A11: rng f c= rng a by RELAT_1:99;
-    consider kk be Function such that
-A12: kk = a & dom kk c= V & rng kk c= C by PARTFUN1:def 5;
-A13: dom f c= Involved A
+A14: dom f c= Involved A
     proof
       let x be set;
-      assume x in dom f;
+      assume
+      x in dom f;
       then x in UKA by RELAT_1:86;
       then consider b be Element of [A] such that
-A14:  x = g.b;
-      reconsider b as finite Function by A4,Th2;
-      reconsider b' = b as Element of PFuncs (V, C) by A4,SETWISEO:14;
-      g.b' in dom b' /\ dom a by A4,A10;
-      then x in dom b by A14,XBOOLE_0:def 4;
-      hence thesis by A4,Def1;
+A15:  x = g.b;
+      reconsider b as finite Function by A13,Th2;
+      reconsider b' = b as Element of PFuncs (V, C) by A13,SETWISEO:14;
+      g.b' in dom b' /\ dom a by A13,A12;
+      then x in dom b by A15,XBOOLE_0:def 4;
+      hence thesis by A13,Def1;
     end;
-    rng f c= C by A11,A12,XBOOLE_1:1;
-    then reconsider f' = f as Element of PFuncs (Involved A, C)
-    by A13,PARTFUN1:def 5;
+    rng f c= rng a by RELAT_1:99;
+    then rng f c= C by A4,XBOOLE_1:1;
+    then reconsider f' = f as Element of PFuncs (Involved A, C) by A14,
+    PARTFUN1
+    :def 5;
     for g be Element of PFuncs (V, C) st g in A holds not f tolerates g
     proof
       let g1 be Element of PFuncs (V, C);
       reconsider g' = g1 as Function;
       assume
-A15:  g1 in A;
+A16:  g1 in A;
       ex z be set st z in dom g1 /\ dom f & g'.z <> f.z
       proof
         set z = g.g1;
-A16:    g1.(g.g1) <> a.(g.g1) & z in dom g1 /\ dom a by A10,A15;
-A17:    g1.z <> a.z by A10,A15;
-A18:    z in dom a & z in dom g1 by A16,XBOOLE_0:def 4;
         take z;
-        z in { g.b1 where b1 is Element of [A] : not contradiction }
-        by A4,A15;
+A17:    z in dom g1 /\ dom a by A12,A16;
+        then
+A18:    z in dom a by XBOOLE_0:def 4;
+        z in { g.b1 where b1 is Element of [A] : not contradiction } by
+        A13,A16;
         then z in dom a /\ UKA by A18,XBOOLE_0:def 4;
         then
 A19:    z in dom f by RELAT_1:90;
-        hence z in dom g1 /\ dom f by A18,XBOOLE_0:def 4;
-        thus thesis by A17,A19,FUNCT_1:70;
+        z in dom g1 by A17,XBOOLE_0:def 4;
+        hence z in dom g1 /\ dom f by A19,XBOOLE_0:def 4;
+        g1.z <> a.z by A12,A16;
+        hence thesis by A19,FUNCT_1:70;
       end;
       hence thesis by PARTFUN1:def 6;
     end;
-    then f' in { f1 where f1 is Element of PFuncs (Involved A, C) :
-    for g be Element of PFuncs (V, C) st g in A holds not f1 tolerates g };
+    then f' in { f1 where f1 is Element of PFuncs (Involved A, C) : for g be
+    Element of PFuncs (V, C) st g in A holds not f1 tolerates g };
     hence thesis by RELAT_1:88;
   end;
-  suppose A is empty;
-    then
-A20: -A = {{}} by Th15;
+  suppose
+A20: A is empty;
     reconsider K = {} as finite set;
     take K;
-    thus thesis by A20,TARSKI:def 1,XBOOLE_1:2;
+    -A = {{}} by A20,Th15;
+    hence thesis by TARSKI:def 1,XBOOLE_1:2;
   end;
 end;
 
@@ -607,138 +588,124 @@ definition
   let V be set, C be finite set;
   let A, B be Element of Fin PFuncs (V, C);
   func A =>> B -> Element of Fin PFuncs (V, C) equals
-
-  PFuncs (V, C) /\
-  { union {f.i \ i where i is Element of PFuncs (V, C) : i in A}
-  where f is Element of PFuncs (A, B) : dom f = A };
+  PFuncs (V, C) /\ { union
+  {f.i \ i where i is Element of PFuncs (V, C) : i in A} where f is Element of
+  PFuncs (A, B) : dom f = A };
   coherence
   proof
+    reconsider PF = PFuncs (A, B) as functional finite non empty set
+           by PRE_POLY:17;
     set Z = { union {f.i \ i where i is Element of PFuncs (V, C) : i in A}
     where f is Element of PFuncs (A, B) : dom f = A};
     set K = PFuncs (V, C) /\ Z;
-A1: K c= PFuncs (V, C) by XBOOLE_1:17;
-A2: Z = { union {f.i \ i where i is Element of PFuncs (V, C) : i in A}
-    where f is Element of PFuncs (A, B) : f in PFuncs(A,B) & dom f = A}
+A1: Z c= { union {f.i \ i where i is Element of PFuncs (V, C) : i in A }
+    where f is Element of PFuncs (A, B) : f in PFuncs(A,B) & dom f = A }
     proof
-      thus Z c= { union {f.i \ i where i is Element of PFuncs (V, C) :
-      i in A } where f is Element of PFuncs (A, B) : f in PFuncs(A,B)
-      & dom f = A }
-      proof
-        let z be set;
-        assume z in Z;
-        then consider f1 be Element of PFuncs (A, B) such that
-A3:     z = union {f1.i \ i where i is Element of PFuncs (V, C) :
-        i in A} & dom f1 = A;
-        thus thesis by A3;
-      end;
-      thus { union {f.i \ i where i is Element of PFuncs (V, C) :
-      i in A} where f is Element of PFuncs (A, B) : f in PFuncs(A,B)
-      & dom f = A } c= Z
-      proof
-        let z be set;
-        assume z in { union {f.i \ i where i is Element of PFuncs (V, C) :
-        i in A} where f is Element of PFuncs (A, B) : f in PFuncs(A,B) &
-        dom f = A};
-        then consider f1 be Element of PFuncs (A, B) such that
-A4:     z = union {f1.i \ i where i is Element of PFuncs (V, C) : i in A}
-        & f1 in PFuncs (A, B) & dom f1 = A;
-        thus thesis by A4;
-      end;
+      let z be set;
+      assume
+      z in Z;
+      then
+      ex f1 be Element of PFuncs (A, B) st z = union {f1.i \ i where i is
+      Element of PFuncs (V, C) : i in A} & dom f1 = A;
+      hence thesis;
     end;
-    reconsider PF = PFuncs (A, B) as functional finite non empty set by Th5;
-    deffunc F(Element of PF)=
-    union {$1.i \ i where i is Element of PFuncs (V, C) : i in A};
     defpred P[Element of PF] means $1 in PFuncs(A,B) & dom $1 = A;
-    { F(f) where f is Element of PF : P[f]} is finite from PRE_CIRC:sch 1;
-    then K is finite by A2;
-    hence thesis by A1,FINSUB_1:def 5;
+    deffunc F(Element of PF)= union {$1.i \ i where i is Element of PFuncs (V,
+    C) : i in A};
+A2: { F(f) where f is Element of PF : P[f]} is finite from PRE_CIRC:sch 1;
+    K c= PFuncs (V, C) by XBOOLE_1:17;
+    hence thesis by A1,A2,FINSUB_1:def 5;
   end;
 end;
 
 theorem Th20:
-  for A, B being Element of Fin PFuncs (V, C), s being set st
-  s in A =>> B holds ex f being PartFunc of A, B st
-  s = union {f.i \ i where i is Element of PFuncs (V, C) : i in A} & dom f = A
+  for A, B being Element of Fin PFuncs (V, C), s being set st s in
+  A =>> B holds ex f being PartFunc of A, B st s = union {f.i \ i where i is
+  Element of PFuncs (V, C) : i in A} & dom f = A
 proof
   let A, B be Element of Fin PFuncs (V, C), s be set;
-  assume s in A =>> B;
+  assume
+  s in A =>> B;
   then s in { union {f.i \ i where i is Element of PFuncs (V, C) : i in A}
   where f is Element of PFuncs (A, B) : dom f = A} by XBOOLE_0:def 4;
   then consider f be Element of PFuncs (A, B) such that
-A1: s = union {f.i \ i where i is Element of PFuncs (V, C) : i in A}
-  & dom f = A;
+A1: s = union {f.i \ i where i is Element of PFuncs (V, C) : i in A} and
+A2: dom f = A;
   f is PartFunc of A, B by PARTFUN1:121;
-  hence thesis by A1;
+  hence thesis by A1,A2;
 end;
 
-Lm3: for V be set, C be finite set, A be Element of Fin PFuncs (V, C),
-K be Element of SubstitutionSet (V, C) holds
-a in A ^ (A =>> K) implies ex b st b in K & b c= a
+Lm3: for V be set, C be finite set, A be Element of Fin PFuncs (V, C), K be
+Element of SubstitutionSet (V, C) holds a in A ^ (A =>> K) implies ex b st b in
+K & b c= a
+
 proof
-  let V be set, C be finite set, A be Element of Fin PFuncs (V, C),
-  K be Element of SubstitutionSet (V, C);
-  assume a in A ^ (A =>> K);
+
+  let V be set, C be finite set, A be Element of Fin PFuncs (V, C), K be
+  Element of SubstitutionSet (V, C);
+
+A1: K c= PFuncs (V, C) by FINSUB_1:def 5;
+  assume
+  a in A ^ (A =>> K);
   then consider b,c be set such that
-A1: b in A and
-A2: c in A =>> K and
-A3: a = b \/ c by SUBSTLAT:15;
-  consider f be PartFunc of A, K such that
-A4: c = union {f.i \ i where i is Element of PFuncs (V, C) : i in A }
-  & dom f = A by A2,Th20;
-A5: f.b in K by A1,A4,PARTFUN1:27;
-  K c= PFuncs (V, C) by FINSUB_1:def 5;
-  then reconsider d = f.b as Element of PFuncs (V, C) by A5;
-  take d;
-  thus d in K by A1,A4,PARTFUN1:27;
+A2: b in A and
+A3: c in A =>> K and
+A4: a = b \/ c by SUBSTLAT:15;
   A c= PFuncs (V, C) by FINSUB_1:def 5;
-  then reconsider b' = b as Element of PFuncs (V, C) by A1;
-  d \ b' in {f.i \ i where i is Element of PFuncs (V, C) : i in A} by A1;
-  hence thesis by A3,A4,XBOOLE_1:44,ZFMISC_1:92;
+  then reconsider b' = b as Element of PFuncs (V, C) by A2;
+  consider f be PartFunc of A, K such that
+A5: c = union {f.i \ i where i is Element of PFuncs (V, C) : i in A } and
+A6: dom f = A by A3,Th20;
+  f.b in K by A2,A6,PARTFUN1:27;
+  then reconsider d = f.b as Element of PFuncs (V, C) by A1;
+  take d;
+  thus d in K by A2,A6,PARTFUN1:27;
+  d \ b' in {f.i \ i where i is Element of PFuncs (V, C) : i in A} by A2;
+  hence thesis by A4,A5,XBOOLE_1:44,ZFMISC_1:92;
 end;
 
 theorem
-  for V being set, C being finite set, A being Element of Fin PFuncs (V, C )
-  st A = {} holds A =>> A = {{}}
+  for V being set, C being finite set, A being Element of Fin PFuncs (V,
+  C ) st A = {} holds A =>> A = {{}}
 proof
-  let V be set, C be finite set, A be Element of Fin PFuncs (V, C);
-  assume
-A1: A = {};
-  defpred P[Function] means dom $1 = A;
-  deffunc F(Element of PFuncs (A, A))=
-  union {$1.i \ i where i is Element of PFuncs (V, C) : i in A};
   deffunc G(set)={};
-  now
-    let f be Element of PFuncs (A, A);
-    not ex x be set st x in
-    {f.i \ i where i is Element of PFuncs (V, C) : i in A}
-    proof
-      given x be set such that
-A2:   x in {f.i \ i where i is Element of PFuncs (V, C) : i in A};
-      consider x1 being Element of PFuncs (V, C) such that
-A3:   x = f.x1 \ x1 & x1 in A by A2;
-      thus contradiction by A1,A3;
-    end;
-    hence {f.i \ i where i is Element of PFuncs (V, C) : i in A} = {}
-    by XBOOLE_0:def 1;
-  end;
-  then
-A4: for v being Element of PFuncs (A, A) st P[v] holds F(v) = G(v)
-  by ZFMISC_1:2;
-A5: { F(f) where f is Element of PFuncs (A, A) : P[f]}
-  = { G(f) where f is Element of PFuncs (A, A) : P[f] }
-  from FRAENKEL:sch 6 (A4);
-A6: ex a being Element of PFuncs (A, A) st P[a]
+  let V be set, C be finite set, A be Element of Fin PFuncs (V, C);
+  defpred P[Function] means dom $1 = A;
+  deffunc F(Element of PFuncs (A, A))= union {$1.i \ i where i is Element of
+  PFuncs (V, C) : i in A};
+A1: ex a being Element of PFuncs (A, A) st P[a]
   proof
     reconsider e = id A as Element of PFuncs (A, A) by PARTFUN1:119;
     take e;
     thus thesis by RELAT_1:71;
   end;
-A7: { {} where f is Element of PFuncs (A, A) : P[f] } = {{}}
-  from LATTICE3:sch 1 (A6);
+A2: { {} where f is Element of PFuncs (A, A) : P[f] } = {{}} from LATTICE3:
+  sch 1 (A1);
+  assume
+A3: A = {};
+  now
+    let f be Element of PFuncs (A, A);
+    not ex x be set st x in {f.i \ i where i is Element of PFuncs (V, C) :
+    i in A}
+    proof
+      given x be set such that
+A4:   x in {f.i \ i where i is Element of PFuncs (V, C) : i in A};
+      ex x1 being Element of PFuncs (V, C) st x = f.x1 \ x1 & x1 in A
+      by A4;
+      hence contradiction by A3;
+    end;
+    hence {f.i \ i where i is Element of PFuncs (V, C) : i in A} = {} by
+    XBOOLE_0:def 1;
+  end;
+  then
+A5: for v being Element of PFuncs (A, A) st P[v] holds F(v) = G(v) by
+  ZFMISC_1:2;
+A6: { F(f) where f is Element of PFuncs (A, A) : P[f]} = { G(f) where f is
+  Element of PFuncs (A, A) : P[f] } from FRAENKEL:sch 6 (A5);
   {} is PartFunc of V,C by RELSET_1:25;
   then {} in PFuncs (V,C) by PARTFUN1:119;
   then {{}} c= PFuncs (V,C) by ZFMISC_1:37;
-  hence thesis by A5,A7,XBOOLE_1:28;
+  hence thesis by A6,A2,XBOOLE_1:28;
 end;
 
 reserve u, v for Element of SubstLatt (V, C);
@@ -750,15 +717,18 @@ proof
   let X be set;
   assume
 A1: X c= K;
-  K c= PFuncs (V, C) & K is finite by FINSUB_1:def 5;
-  then X c= PFuncs (V, C) & X is finite by A1,XBOOLE_1:1;
-  then reconsider B = X as Element of Fin PFuncs (V, C) by FINSUB_1:def 5;
-A2: for x be set st x in X holds x is finite by A1,Th2;
-  for a,b st a in B & b in B & a c= b holds a = b by A1,SUBSTLAT:5;
-  then X in { A where A is Element of Fin PFuncs (V,C) :
-  ( for u being set st u in A holds u is finite ) &
-  for s, t being Element of PFuncs (V, C) holds
-  ( s in A & t in A & s c= t implies s = t ) } by A2;
+  K c= PFuncs (V, C) by FINSUB_1:def 5;
+  then X c= PFuncs (V, C) by A1,XBOOLE_1:1;
+  then reconsider B = X as Element of Fin PFuncs (V, C) by A1,FINSUB_1:def 5;
+A2: for a,b st a in B & b in B & a c= b holds a = b by A1,SUBSTLAT:5;
+  for x be set st x in X holds x is finite by A1,Th2;
+
+  then
+  X in { A where A is Element of Fin PFuncs (V,C) : ( for u being set st u
+
+in A holds u is finite ) & for s, t being Element of PFuncs (V, C) holds ( s in
+  A & t in A & s c= t implies s = t ) } by A2;
+
   hence thesis by SUBSTLAT:def 1;
 end;
 
@@ -767,7 +737,8 @@ theorem Th22:
 proof
   let X be set;
   reconsider u' = u as Element of SubstitutionSet (V, C) by SUBSTLAT:def 4;
-  assume X c= u;
+  assume
+  X c= u;
   then X c= u';
   then X in SubstitutionSet (V, C) by Lm4;
   hence thesis by SUBSTLAT:def 4;
@@ -778,18 +749,19 @@ begin :: Lattice of substitutions is implicative
 definition
   let V, C;
   func pseudo_compl (V, C) -> UnOp of the carrier of SubstLatt (V, C) means
-  :Def4:
-  for u' being Element of SubstitutionSet (V, C) st u' = u holds
-  it.u = mi(-u');
+  :
+  Def4: for
+ u' being Element of SubstitutionSet (V, C) st u' = u holds it.u = mi(
+  -u');
   existence
   proof
     deffunc F(Element of SubstitutionSet (V, C))=mi(-$1);
-    consider IT being Function of SubstitutionSet (V, C),
-    SubstitutionSet (V, C) such that
-A1: for u being Element of SubstitutionSet (V, C) holds
-    IT.u = F(u) from FUNCT_2:sch 4;
-    SubstitutionSet (V, C) = the carrier of SubstLatt (V, C)
-    by SUBSTLAT:def 4;
+    consider IT being Function of SubstitutionSet (V, C), SubstitutionSet (V,
+    C) such that
+A1: for u being Element of SubstitutionSet (V, C) holds IT.u = F(u)
+    from FUNCT_2:sch 4;
+    SubstitutionSet (V, C) = the carrier of SubstLatt (V, C) by SUBSTLAT:
+    def 4;
     then reconsider IT as UnOp of the carrier of SubstLatt (V, C);
     take IT;
     thus thesis by A1;
@@ -798,130 +770,135 @@ A1: for u being Element of SubstitutionSet (V, C) holds
   proof
     let IT,IT' be UnOp of the carrier of SubstLatt (V, C);
     assume that
-A2: for u' being Element of SubstitutionSet (V, C) st u' = u holds
-    IT.u = mi (-u') and
-A3: for u' being Element of SubstitutionSet (V, C) st u' = u holds
-    IT'.u = mi (-u');
+A2: for u' being Element of SubstitutionSet (V, C) st u' = u holds IT.
+    u = mi (-u') and
+A3: for u' being Element of SubstitutionSet (V, C) st u' = u holds IT'
+    .u = mi (-u');
     now
       let u;
-      reconsider u' = u as Element of SubstitutionSet (V, C)
-      by SUBSTLAT:def 4;
+      reconsider u' = u as Element of SubstitutionSet (V, C) by SUBSTLAT:def 4;
       thus IT.u = mi (-u') by A2
         .= IT'.u by A3;
     end;
     hence IT = IT' by FUNCT_2:113;
   end;
   func StrongImpl(V, C) -> BinOp of the carrier of SubstLatt (V, C) means
-  :Def5:
-  for u', v' being Element of SubstitutionSet (V, C) st u' = u & v' = v
+  :
+  Def5: for u', v' being Element of SubstitutionSet (V, C) st u' = u & v' = v
   holds it.(u,v) = mi (u' =>> v');
   existence
   proof
-    defpred P[set, set, set] means
-    for u', v' being Element of SubstitutionSet (V, C) st u' = $1 & v' = $2
-    holds $3 = mi (u' =>> v');
     set ZA = the carrier of SubstLatt (V, C);
+    defpred P[set, set, set] means for u', v' being Element of SubstitutionSet
+    (V, C) st u' = $1 & v' = $2 holds $3 = mi (u' =>> v');
 A4: for x,y being Element of ZA ex z being Element of ZA st P[x,y,z]
     proof
       let x,y be Element of ZA;
-      reconsider x' = x, y' = y as Element of SubstitutionSet (V, C)
-      by SUBSTLAT:def 4;
+      reconsider x' = x, y' = y as Element of SubstitutionSet (V, C) by
+      SUBSTLAT:def 4;
       reconsider z = mi (x' =>> y') as Element of ZA by SUBSTLAT:def 4;
       take z;
       let u', v' be Element of SubstitutionSet (V, C);
-      assume u' = x & v' = y;
-      hence thesis;
+      assume that
+A5:   u' = x and
+A6:   v' = y;
+      thus thesis by A5,A6;
     end;
     consider o being BinOp of the carrier of SubstLatt (V, C) such that
-A5: for a,b being Element of SubstLatt (V, C) holds
-    P[a,b,o.(a,b)] from BINOP_1:sch 3(A4);
+A7: for a,b being Element of SubstLatt (V, C) holds P[a,b,o.(a,b)]
+    from BINOP_1:sch 3(A4);
     take o;
     let u,v;
     let u', v' be Element of SubstitutionSet (V, C);
-    assume u' = u & v' = v;
-    hence thesis by A5;
+    assume that
+A8: u' = u and
+A9: v' = v;
+    thus thesis by A7,A8,A9;
   end;
   correctness
   proof
     let IT1,IT2 be BinOp of the carrier of SubstLatt (V, C);
     assume that
-A6: for u', v' being Element of SubstitutionSet (V, C) st u' = u & v' = v
-    holds IT1.(u,v) = mi (u' =>> v') and
-A7: for u', v' being Element of SubstitutionSet (V, C) st u' = u & v' = v
-    holds IT2.(u,v) = mi (u' =>> v');
+A10: for u', v' being Element of SubstitutionSet (V, C) st u' = u & v'
+    = v holds IT1.(u,v) = mi (u' =>> v') and
+A11: for u', v' being Element of SubstitutionSet (V, C) st u' = u & v'
+    = v holds IT2.(u,v) = mi (u' =>> v');
     now
       let u, v;
-      reconsider u' = u, v' = v as Element of SubstitutionSet (V, C)
-      by SUBSTLAT:def 4;
-      thus IT1.(u,v) = mi (u' =>> v') by A6
-        .= IT2.(u,v) by A7;
+      reconsider u' = u, v' = v as Element of SubstitutionSet (V, C) by
+      SUBSTLAT:def 4;
+      thus IT1.(u,v) = mi (u' =>> v') by A10
+        .= IT2.(u,v) by A11;
     end;
     hence IT1 = IT2 by BINOP_1:2;
   end;
   let u;
   func SUB u -> Element of Fin the carrier of SubstLatt (V, C) equals
-
   bool u;
   coherence
   proof
     reconsider u' = u as Element of SubstitutionSet (V, C) by SUBSTLAT:def 4;
-A8: u' is finite;
-    bool u c= the carrier of SubstLatt (V, C)
+A12: bool u c= the carrier of SubstLatt (V, C)
     proof
       let x be set;
-      assume x in bool u;
+      assume
+      x in bool u;
       then x is Element of SubstLatt (V, C) by Th22;
       hence thesis;
     end;
-    hence thesis by A8,FINSUB_1:def 5;
+    u' is finite;
+    hence thesis by A12,FINSUB_1:def 5;
   end;
   correctness;
   func diff(u) -> UnOp of the carrier of SubstLatt (V, C) means
   :Def7:
-  it.v = u \ v;
+  it.v =
+  u \ v;
   existence
   proof
-    u in the carrier of SubstLatt (V, C);
-    then
-A9: u in SubstitutionSet (V, C) by SUBSTLAT:def 4;
     deffunc F(set)=u \ $1;
     consider IT being Function such that
-A10: dom IT = the carrier of SubstLatt (V, C) & for v be set st v in
+A13: dom IT = the carrier of SubstLatt (V, C) & for v be set st v in
     the carrier of SubstLatt (V, C) holds IT.v = F(v) from FUNCT_1:sch 3;
-    for x be set st x in the carrier of SubstLatt (V, C) holds
-    IT.x in Fin PFuncs (V, C)
+    u in the carrier of SubstLatt (V, C);
+    then
+A14: u in SubstitutionSet (V, C) by SUBSTLAT:def 4;
+    for x be set st x in the carrier of SubstLatt (V, C) holds IT.x in
+    Fin PFuncs (V, C)
     proof
       let x be set;
-      assume x in the carrier of SubstLatt (V, C);
+      assume
+      x in the carrier of SubstLatt (V, C);
       then
-A11:  IT.x = u \ x by A10;
-      u \ x in SubstitutionSet (V,C) by A9,Lm4;
-      hence thesis by A11;
+A15:  IT.x = u \ x by A13;
+      u \ x in SubstitutionSet (V,C) by A14,Lm4;
+      hence thesis by A15;
     end;
-    then reconsider IT as Function of the carrier of SubstLatt (V, C),
-    Fin PFuncs (V, C) by A10,FUNCT_2:5;
+    then reconsider
+    IT as Function of the carrier of SubstLatt (V, C), Fin PFuncs (
+    V, C) by A13,FUNCT_2:5;
     now
       let v be Element of SubstLatt (V, C);
-      u \ v in SubstitutionSet (V,C) by A9,Lm4;
-      then IT.v in SubstitutionSet (V,C) by A10;
+      u \ v in SubstitutionSet (V,C) by A14,Lm4;
+      then IT.v in SubstitutionSet (V,C) by A13;
       hence IT.v in the carrier of SubstLatt (V, C) by SUBSTLAT:def 4;
     end;
-    then reconsider IT as UnOp of the carrier of SubstLatt (V, C)
-    by HEYTING1:1;
+    then reconsider IT as UnOp of the carrier of SubstLatt (V, C) by
+    HEYTING1:1;
     take IT;
     let v;
-    thus thesis by A10;
+    thus thesis by A13;
   end;
   correctness
   proof
     let IT,IT' be UnOp of the carrier of SubstLatt (V, C);
     assume that
-A12: IT.v = u \ v and
-A13: IT'.v = u \ v;
+A16: IT.v = u \ v and
+A17: IT'.v = u \ v;
     now
       let v be Element of SubstLatt (V, C);
-      thus IT.v = u \ v by A12
-        .= IT'.v by A13;
+      thus IT.v = u \ v by A16
+        .= IT'.v by A17;
     end;
     hence IT = IT' by FUNCT_2:113;
   end;
@@ -931,148 +908,184 @@ Lm5: v in SUB u implies v "\/" (diff u).v = u
 proof
   assume
 A1: v in SUB u;
+
+  reconsider u' = u, v' = v, dv = (diff u).v as Element of SubstitutionSet (V,
+  C) by SUBSTLAT:def 4;
+
 A2: u \ v = (diff u).v by Def7;
-  reconsider u' = u, v' = v, dv = (diff u).v
-  as Element of SubstitutionSet (V, C) by SUBSTLAT:def 4;
-  thus v "\/" (diff u).v = (the L_join of SubstLatt (V,C)).(v, (diff u).v)
-  by LATTICES:def 1
+
+  thus v "\/" (diff u).v = (the L_join of SubstLatt (V,C)).(v, (diff u).v) by
+  LATTICES:def 1
+
     .= mi ( v' \/ dv ) by SUBSTLAT:def 4
     .= mi u' by A1,A2,XBOOLE_1:45
     .= u by SUBSTLAT:11;
 end;
 
-Lm6: for K be Element of Fin PFuncs (V, C) st a is finite & K = {a} holds
-ex v be Element of SubstitutionSet (V,C) st v in SUB u & v ^ K = {} &
-for b st b in (diff u).v holds b tolerates a
+Lm6: for K be Element of Fin PFuncs (V, C) st K = {a} holds ex v be Element of
+SubstitutionSet (V,C) st v in SUB u & v ^ K = {} & for b st b in (diff u).v
+holds b tolerates a
+
 proof
-  let K be Element of Fin PFuncs (V, C) such that
-A1: a is finite & K = {a};
-  defpred P[Element of PFuncs (V, C)] means $1 is finite & not $1 tolerates a;
   deffunc F(set)=$1;
+  let K be Element of Fin PFuncs (V, C) such that
+A1: K = {a};
+  deffunc F1(Element of PFuncs (V, C),Element of PFuncs (V, C))=$1 \/ $2;
+
+  defpred Q[Element of PFuncs (V, C)] means not $1 tolerates a & $1 in u & $1
+  tolerates a;
+
+  deffunc F(Element of PFuncs (V, C),Element of PFuncs (V, C))=$1 \/ $2;
+  defpred P[Element of PFuncs (V, C)] means $1 is finite & not $1 tolerates a;
   set M = { F(s) where s is Element of PFuncs (V, C): F(s) in u & P[s] };
+
+  defpred P[Element of PFuncs (V, C),Element of PFuncs (V, C)] means $1 in M &
+  $2 in { a } & $1 tolerates $2;
+
+  defpred Q[Element of PFuncs (V, C),Element of PFuncs (V, C)] means $2 = a &
+  $1 in M & $1 tolerates $2;
+
+  defpred P[Element of PFuncs (V, C)] means $1 in M & $1 tolerates a;
+
+  defpred P1[Element of PFuncs (V, C),Element of PFuncs (V, C)] means $1 in M
+  & $1 tolerates $2;
+
+  deffunc F(Element of PFuncs (V, C))=$1 \/ a;
 A2: M c= u from FRAENKEL:sch 17;
   then reconsider v = M as Element of SubstLatt (V, C) by Th22;
   reconsider v as Element of SubstitutionSet (V,C) by SUBSTLAT:def 4;
   take v;
   thus v in SUB u by A2;
-  deffunc F(Element of PFuncs (V, C),Element of PFuncs (V, C))=$1 \/ $2;
-  defpred P[Element of PFuncs (V, C),Element of PFuncs (V, C)] means
-  $1 in M & $2 in { a } & $1 tolerates $2;
-  defpred Q[Element of PFuncs (V, C),Element of PFuncs (V, C)] means
-  $2 = a & $1 in M & $1 tolerates $2;
 A3: P[s,t] iff Q[s,t] by TARSKI:def 1;
-A4: { F(s,t): P[s,t] } = { F(s',t') where s', t' is Element of PFuncs (V, C) :
-  Q[s',t'] } from FRAENKEL:sch 4(A3);
-  defpred P[Element of PFuncs (V, C)] means $1 in M & $1 tolerates a;
-  defpred Q[Element of PFuncs (V, C)] means
-  not $1 tolerates a & $1 in u & $1 tolerates a;
+
+A4: { F(s,t): P[s,t] } = { F(s',t') where s', t' is Element of PFuncs (V, C)
+  : Q[s',t'] } from FRAENKEL:sch 4(A3);
+
   s in M iff s is finite & not s tolerates a & s in u
   proof
     thus s in M implies s is finite & not s tolerates a & s in u
     proof
-      assume s in M;
-      then consider s2 be Element of PFuncs (V, C) such that
-A5:   s2 = s & s2 in u & s2 is finite & not s2 tolerates a;
-      thus thesis by A5;
+      assume
+      s in M;
+
+      then ex s2 be Element of PFuncs (V, C) st s2 = s & s2 in u & s2 is
+      finite & not s2 tolerates a;
+
+      hence thesis;
     end;
     thus thesis;
   end;
   then
-A6: P[s] iff Q[s];
-  deffunc F1(Element of PFuncs (V, C),Element of PFuncs (V, C))=$1 \/ $2;
-  defpred P1[Element of PFuncs (V, C),Element of PFuncs (V, C)] means
-  $1 in M & $1 tolerates $2;
-A7: { F1(s,t) where t is Element of PFuncs (V, C) : t = a & P1[s,t]} =
-  { F1(s',a) where s' is Element of PFuncs (V, C) : P1[s',a]}
-  from FRAENKEL:sch 20;
-  deffunc F(Element of PFuncs (V, C))=$1 \/ a;
-  { F(s') where s' is Element of PFuncs (V, C) : P[s']} = { F(s): Q[s]}
-  from FRAENKEL:sch 3(A6);
+A5: P[s] iff Q[s];
+
+A6: { F(s') where s' is Element of PFuncs (V, C) : P[s']} = { F(s): Q[s]}
+  from FRAENKEL:sch 3(A5);
+
+  { F1(s,t) where t is Element of PFuncs (V, C) : t = a & P1[s,t]} = { F1(
+  s',a) where s' is Element of PFuncs (V, C) : P1[s',a]} from FRAENKEL:sch 20;
+
   then
-A8: v ^ K = { s \/ a: not s tolerates a & s in u & s tolerates a }
-  by A1,A4,A7,SUBSTLAT:def 3;
+A7: v ^ K = { s \/ a: not s tolerates a & s in u & s tolerates a } by A1,A4
+  ,A6,SUBSTLAT:def 3;
+
   thus v ^ K = {}
   proof
-    assume v ^ K <> {};
+    assume
+    v ^ K <> {};
     then consider x be set such that
-A9: x in v ^ K by XBOOLE_0:def 1;
-    consider s1 be Element of PFuncs (V, C) such that
-A10: x = s1 \/ a & not s1 tolerates a & s1 in u & s1 tolerates a by A8,A9;
-    thus thesis by A10;
+A8: x in v ^ K by XBOOLE_0:def 1;
+
+    ex s1 be Element of PFuncs (V, C) st x = s1 \/ a &( not s1 tolerates
+    a)& s1 in u & s1 tolerates a by A7,A8;
+
+    hence thesis;
   end;
   let b;
-  assume b in (diff u).v;
+  assume
+  b in (diff u).v;
   then
-A11: b in u \ v by Def7;
+A9: b in u \ v by Def7;
   then
-A12: b in u & not b in M by XBOOLE_0:def 5;
+A10: not b in M by XBOOLE_0:def 5;
   u in the carrier of SubstLatt (V, C);
   then u in SubstitutionSet (V, C) by SUBSTLAT:def 4;
-  then b is finite by A11,Th2;
-  hence thesis by A12;
+  then b is finite by A9,Th2;
+  hence thesis by A9,A10;
 end;
 
 definition
   let V, C;
-  func Atom(V, C) -> Function of PFuncs (V, C), the carrier of SubstLatt (V, C)
-  means
+  func Atom(V, C) -> Function of PFuncs (V, C), the carrier of SubstLatt (V, C
+  ) means
   :Def8:
   for a being Element of PFuncs (V,C) holds it.a = mi {.a.};
   existence
   proof
-A1: the carrier of SubstLatt (V, C) = SubstitutionSet (V, C)
-    by SUBSTLAT:def 4;
     deffunc F(Element of PFuncs (V, C))= mi {.$1.};
     consider f be Function of PFuncs (V, C), SubstitutionSet (V, C) such that
-A2: for a be Element of PFuncs (V, C) holds f.a = F(a) from FUNCT_2:sch 4;
+A1: for a be Element of PFuncs (V, C) holds f.a = F(a) from FUNCT_2:
+    sch 4;
+A2: the carrier of SubstLatt (V, C) = SubstitutionSet (V, C) by SUBSTLAT:
+    def 4;
 A3: now
       let x be set;
-      assume x in PFuncs (V, C);
+      assume
+      x in PFuncs (V, C);
       then reconsider a = x as Element of PFuncs (V, C);
-      f.a = mi {.a.} by A2;
-      hence f.x in the carrier of SubstLatt (V, C) by A1;
+      f.a = mi {.a.} by A1;
+      hence f.x in the carrier of SubstLatt (V, C) by A2;
     end;
     dom f = PFuncs (V, C) by FUNCT_2:def 1;
-    then reconsider f as Function of PFuncs (V, C), the carrier of SubstLatt (V
-    , C) by A3,FUNCT_2:5;
-    take f; thus thesis by A2;
+    then reconsider
+    f as Function of PFuncs (V, C), the carrier of SubstLatt (V, C
+    ) by A3,FUNCT_2:5;
+    take f;
+    thus thesis by A1;
   end;
   correctness
   proof
-    let IT1,IT2 be
-    Function of PFuncs (V, C), the carrier of SubstLatt (V, C) such that
-A4: (for a holds IT1.a = mi {.a.}) & for a holds IT2.a = mi {.a.};
+    let IT1,IT2 be Function of PFuncs (V, C), the carrier of SubstLatt (V, C)
+    such that
+A4: for a holds IT1.a = mi {.a.} and
+A5: for a holds IT2.a = mi {.a.};
     now
       let a;
-      IT1.a = mi {.a.} & IT2.a = mi {.a.} by A4;
-      hence IT1.a = IT2.a;
+      IT1.a = mi {.a.} by A4;
+      hence IT1.a = IT2.a by A5;
     end;
     hence thesis by FUNCT_2:113;
   end;
 end;
 
-Lm7: for a be Element of PFuncs (V, C) st a is finite holds Atom (V, C).a = {a}
+Lm7: for a be Element of PFuncs (V, C) st a is finite holds Atom (V, C).a = {a
+}
+
 proof
   let a be Element of PFuncs (V, C);
-  assume
-A1: a is finite;
-  { a } in SubstitutionSet (V, C)
+
+A1: for s, t being Element of PFuncs (V,C) holds ( s in { a } & t in { a } &
+  s c= t implies s = t )
+
   proof
-A2: for u being set st u in { a } holds u is finite by A1,TARSKI:def 1;
-    for s, t being Element of PFuncs (V,C) holds
-    ( s in { a } & t in { a } & s c= t implies s = t )
-    proof
-      let s, t be Element of PFuncs (V,C);
-      assume s in { a } & t in { a } & s c= t;
-      then s = a & t = a by TARSKI:def 1;
-      hence thesis;
-    end;
-    then {.a.} in { A where A is Element of Fin PFuncs (V,C) :
-    ( for u being set st u in A holds u is finite ) &
-    for s, t being Element of PFuncs (V, C) holds
-    ( s in A & t in A & s c= t implies s = t ) } by A2;
-    hence thesis by SUBSTLAT:def 1;
+    let s, t be Element of PFuncs (V,C);
+    assume that
+A2: s in { a } and
+A3: t in { a } and
+    s c= t;
+    s = a by A2,TARSKI:def 1;
+    hence thesis by A3,TARSKI:def 1;
   end;
+  assume
+  a is finite;
+  then for u being set st u in { a } holds u is finite by TARSKI:def 1;
+
+  then
+  {.a.} in { A where A is Element of Fin PFuncs (V,C) : ( for u being set
+
+st u in A holds u is finite ) & for s, t being Element of PFuncs (V, C) holds (
+  s in A & t in A & s c= t implies s = t ) } by A1;
+
+  then { a } in SubstitutionSet (V, C) by SUBSTLAT:def 1;
   then {a} = mi {.a.} by SUBSTLAT:11
     .= Atom (V, C).a by Def8;
   hence thesis;
@@ -1082,107 +1095,106 @@ theorem Th23:
   FinJoin (K, Atom(V, C)) = FinUnion(K, singleton PFuncs (V, C))
 proof
 A1: the L_join of SubstLatt (V, C) is commutative by LATTICE2:27;
-A2: the L_join of SubstLatt (V, C) is associative by LATTICE2:29;
-A3: the L_join of SubstLatt (V, C) is idempotent by LATTICE2:26;
-A4: the L_join of SubstLatt (V, C) is having_a_unity by LATTICE2:67;
   deffunc F(Element of Fin PFuncs (V, C))= mi $1;
-  consider g being Function of Fin PFuncs (V, C), SubstitutionSet (V,C)
-  such that
-A5: for B be Element of Fin PFuncs (V, C) holds g.B = F(B) from FUNCT_2:sch 4;
-  the carrier of SubstLatt (V, C) = SubstitutionSet (V,C) by SUBSTLAT:def 4;
-  then reconsider g as Function of Fin PFuncs (V, C),
-  the carrier of SubstLatt (V, C);
-A6: g.{}.PFuncs (V, C) = mi {}.PFuncs (V, C) by A5
-    .= {} by SUBSTLAT:9
-    .= Bottom SubstLatt (V, C) by SUBSTLAT:26
-    .= the_unity_wrt the L_join of SubstLatt (V, C) by LATTICE2:28,67;
-A7: now
-    let x,y be Element of Fin PFuncs (V, C);
-A8: g.x = mi x by A5;
-A9: g.y = mi y by A5;
-    thus g.(x \/ y) = mi (x \/ y) by A5
-      .= mi (mi x \/ y) by SUBSTLAT:13
-      .= mi (mi x \/ mi y) by SUBSTLAT:13
-      .= (the L_join of SubstLatt (V, C)).(g.x,g.y) by A8,A9,SUBSTLAT:def 4;
-  end;
-A10: K c= PFuncs (V, C) by FINSUB_1:def 5;
-  then
-A11: K c= dom (Atom(V, C)) by FUNCT_2:def 1;
-A12: dom singleton PFuncs (V, C) = PFuncs (V, C) by FUNCT_2:def 1;
-A13: rng singleton PFuncs (V, C) c= Fin PFuncs (V, C);
-  dom g = Fin PFuncs (V, C) by FUNCT_2:def 1;
-  then dom ((g*singleton PFuncs (V, C))) = dom singleton PFuncs (V, C)
-  by A13,RELAT_1:46;
-  then
-A14: dom (Atom(V, C)|K) = K & dom ((g*singleton PFuncs (V, C))|K) = K
-  by A10,A11,A12,RELAT_1:91;
-  now
-    let a be set;
-    assume
-A15: a in K;
-    then reconsider a' = a as Element of PFuncs (V, C) by SETWISEO:14;
-A16: a' is finite by A15,Th2;
-    then reconsider KL = {a'} as Element of SubstitutionSet (V,C) by Th6;
-    thus ((g*singleton PFuncs (V, C))|K).a
-    = (g*singleton PFuncs (V, C)).a by A15,FUNCT_1:72
-      .= g.(singleton PFuncs (V, C) .a') by FUNCT_2:21
-      .= g.{a} by SETWISEO:67
-      .= mi KL by A5
-      .= KL by SUBSTLAT:11
-      .= Atom (V, C).a' by A16,Lm7
-      .= (Atom (V, C)|K).a by A15,FUNCT_1:72;
-  end;
-  then
-A17: Atom(V, C)|K = (g*singleton PFuncs (V, C))|K by A14,FUNCT_1:9;
-A18: mi (FinUnion(K,singleton PFuncs (V, C)))
-  c= FinUnion(K,singleton PFuncs (V, C)) by SUBSTLAT:8;
-A19: FinUnion(K,singleton PFuncs (V, C))
-  c= mi (FinUnion(K,singleton PFuncs (V, C)))
+A2: the L_join of SubstLatt (V, C) is associative by LATTICE2:29;
+A3: FinUnion(K,singleton PFuncs (V, C)) c= mi (FinUnion(K,singleton PFuncs
+  (V, C)))
   proof
     let a be set;
     assume
-A20: a in FinUnion(K,singleton PFuncs (V, C));
+A4: a in FinUnion(K,singleton PFuncs (V, C));
     then consider b be Element of PFuncs (V, C) such that
-A21: b in K and
-A22: a in (singleton PFuncs (V, C)).b by SETWISEO:70;
-A23: a = b by A22,SETWISEO:68;
-    then
-A24: a is finite by A21,Th2;
-    now
+A5: b in K and
+A6: a in (singleton PFuncs (V, C)).b by SETWISEO:70;
+A7: a = b by A6,SETWISEO:68;
+A8: now
+      K in SubstitutionSet (V, C);
+      then
+      K in { A where A is Element of Fin PFuncs (V,C) : ( for u being set
+st u in A holds u is finite ) & for s, t being Element of PFuncs (V, C) holds (
+      s in A & t in A & s c= t implies s = t ) } by SUBSTLAT:def 1;
+      then
+A9:   ex AA be Element of Fin PFuncs (V,C) st K = AA & ( for u being set
+st u in AA holds u is finite ) & for s, t being Element of PFuncs (V, C) holds
+      ( s in AA & t in AA & s c= t implies s = t );
       let s be finite set;
       assume that
-A25:  s in FinUnion(K,singleton PFuncs (V, C)) and
-A26:  s c= a;
+A10:  s in FinUnion(K,singleton PFuncs (V, C)) and
+A11:  s c= a;
       consider t such that
-A27:  t in K and
-A28:  s in (singleton PFuncs (V, C)).t by A25,SETWISEO:70;
-A29:  s = t by A28,SETWISEO:68;
-      K in SubstitutionSet (V, C);
-      then K in { A where A is Element of Fin PFuncs (V,C) :
-      ( for u being set st u in A holds u is finite ) &
-      for s, t being Element of PFuncs (V, C) holds
-      ( s in A & t in A & s c= t implies s = t ) } by SUBSTLAT:def 1;
-      then ex AA be Element of Fin PFuncs (V,C) st
-      K = AA & ( for u being set st u in AA holds u is finite ) &
-      for s, t being Element of PFuncs (V, C) holds
-      ( s in AA & t in AA & s c= t implies s = t );
-      hence s = a by A21,A23,A26,A27,A29;
+A12:  t in K and
+A13:  s in (singleton PFuncs (V, C)).t by A10,SETWISEO:70;
+      s = t by A13,SETWISEO:68;
+      hence s = a by A5,A7,A11,A12,A9;
     end;
-    hence thesis by A20,A24,SUBSTLAT:7;
+    a is finite by A5,A7,Th2;
+    hence thesis by A4,A8,SUBSTLAT:7;
   end;
-  reconsider gs = g*singleton PFuncs (V, C) as
-  Function of PFuncs (V, C), the carrier of SubstLatt (V, C);
-  thus FinJoin(K, Atom (V, C)) = FinJoin(K, gs) by A17,LATTICE2:69
+  consider g being Function of Fin PFuncs (V, C), SubstitutionSet (V,C) such
+  that
+A14: for B be Element of Fin PFuncs (V, C) holds g.B = F(B) from FUNCT_2:
+  sch 4;
+  reconsider g as Function of Fin PFuncs (V, C), the carrier of SubstLatt (V,
+  C) by SUBSTLAT:def 4;
+A15: the L_join of SubstLatt (V, C) is idempotent by LATTICE2:26;
+A16: now
+    let x,y be Element of Fin PFuncs (V, C);
+A17: g.x = mi x by A14;
+A18: g.y = mi y by A14;
+    thus g.(x \/ y) = mi (x \/ y) by A14
+      .= mi (mi x \/ y) by SUBSTLAT:13
+      .= mi (mi x \/ mi y) by SUBSTLAT:13
+      .= (the L_join of SubstLatt (V, C)).(g.x,g.y) by A17,A18
+    ,SUBSTLAT:def 4;
+  end;
+A19: now
+    let a be set;
+    assume
+A20: a in K;
+    then reconsider a' = a as Element of PFuncs (V, C) by SETWISEO:14;
+A21: a' is finite by A20,Th2;
+    then reconsider KL = {a'} as Element of SubstitutionSet (V,C) by Th6;
+    thus ((g*singleton PFuncs (V, C))|K).a = (g*singleton PFuncs (V, C)).a by
+    A20,FUNCT_1:72
+      .= g.(singleton PFuncs (V, C) .a') by FUNCT_2:21
+      .= g.{a} by SETWISEO:67
+      .= mi KL by A14
+      .= KL by SUBSTLAT:11
+      .= Atom (V, C).a' by A21,Lm7
+      .= (Atom (V, C)|K).a by A20,FUNCT_1:72;
+  end;
+A22: mi (FinUnion(K,singleton PFuncs (V, C))) c= FinUnion(K,singleton PFuncs
+  (V, C)) by SUBSTLAT:8;
+A23: rng singleton PFuncs (V, C) c= Fin PFuncs (V, C);
+A24: K c= PFuncs (V, C) by FINSUB_1:def 5;
+  then K c= dom (Atom(V, C)) by FUNCT_2:def 1;
+  then
+A25: dom (Atom(V, C)|K) = K by RELAT_1:91;
+  reconsider gs = g*singleton PFuncs (V, C) as Function of PFuncs (V, C), the
+  carrier of SubstLatt (V, C);
+A26: g.{}.PFuncs (V, C) = mi {}.PFuncs (V, C) by A14
+    .= {} by SUBSTLAT:9
+    .= Bottom SubstLatt (V, C) by SUBSTLAT:26
+    .= the_unity_wrt the L_join of SubstLatt (V, C) by LATTICE2:28,67;
+  dom g = Fin PFuncs (V, C) by FUNCT_2:def 1;
+  then
+A27: dom ((g*singleton PFuncs (V, C))) = dom singleton PFuncs (V, C) by A23,
+  RELAT_1:46;
+  dom singleton PFuncs (V, C) = PFuncs (V, C) by FUNCT_2:def 1;
+  then dom ((g*singleton PFuncs (V, C))|K) = K by A24,A27,RELAT_1:91;
+  hence FinJoin(K, Atom (V, C)) = FinJoin(K, gs) by A25,A19,FUNCT_1:9 ,
+  LATTICE2:69
     .= (the L_join of SubstLatt (V, C)) $$(K,gs) by LATTICE2:def 3
-    .= g.(FinUnion(K,singleton PFuncs (V, C)))
-  by A1,A2,A3,A4,A6,A7,SETWISEO:65
-    .= mi (FinUnion(K,singleton PFuncs (V, C))) by A5
-    .= FinUnion(K,singleton PFuncs (V, C)) by A18,A19,XBOOLE_0:def 10;
+    .= g.(FinUnion(K,singleton PFuncs (V, C))) by A1,A2,A15,A26,A16
+  ,LATTICE2:67
+  ,SETWISEO:65
+    .= mi (FinUnion(K,singleton PFuncs (V, C))) by A14
+    .= FinUnion(K,singleton PFuncs (V, C)) by A22,A3,XBOOLE_0:def 10;
 end;
 
 theorem Th24:
-  for u being Element of SubstitutionSet (V, C) holds
-  u = FinJoin(u, Atom (V, C))
+  for u being Element of SubstitutionSet (V, C) holds u = FinJoin(
+  u, Atom (V, C))
 proof
   let u be Element of SubstitutionSet (V, C);
   thus u = FinUnion(u, singleton PFuncs (V, C)) by SETWISEO:71
@@ -1193,8 +1205,10 @@ Lm8: (for a be set st a in u ex b be set st b in v & b c= a) implies u [= v
 proof
   assume
 A1: for a be set st a in u ex b be set st b in v & b c= a;
-  reconsider u' = u, v' = v as Element of SubstitutionSet (V, C)
-  by SUBSTLAT:def 4;
+
+  reconsider u' = u, v' = v as Element of SubstitutionSet (V, C) by SUBSTLAT:
+  def 4;
+
   u "/\" v = (the L_meet of SubstLatt (V, C)).(u', v') by LATTICES:def 2
     .= mi (u' ^ v') by SUBSTLAT:def 4
     .= u' by A1,Th9;
@@ -1203,53 +1217,57 @@ end;
 
 theorem Th25:
   (diff u).v [= u
-proof (diff u).v = u \ v by Def7;
+proof
+  (diff u).v = u \ v by Def7;
   then for a be set st a in (diff u).v ex b be set st b in u & b c= a;
   hence thesis by Lm8;
 end;
 
 theorem Th26:
-  for a being Element of PFuncs (V, C) st a is finite
-  for c being set st c in Atom(V, C).a holds c = a
+  for a being Element of PFuncs (V, C) st a is finite for c being
+  set st c in Atom(V, C).a holds c = a
 proof
   let a be Element of PFuncs (V, C);
-  assume a is finite;
+  assume
+  a is finite;
   then Atom(V, C).a = { a } by Lm7;
   hence thesis by TARSKI:def 1;
 end;
 
 theorem Th27:
-  for a being Element of PFuncs (V, C) st
-  K = {a} & L = u & L ^ K = {} holds Atom(V, C).a [= pseudo_compl(V, C).u
+  for a being Element of PFuncs (V, C) st K = {a} & L = u & L ^ K
+  = {} holds Atom(V, C).a [= pseudo_compl(V, C).u
 proof
   let a be Element of PFuncs (V, C);
-  assume
-A1: K = {a} & L = u & L ^ K = {};
-  then a in K by TARSKI:def 1;
+  assume that
+A1: K = {a} and
+A2: L = u and
+A3: L ^ K = {};
+  a in K by A1,TARSKI:def 1;
   then
-A2: a is finite by Th2;
+A4: a is finite by Th2;
   now
     let c be set;
     assume
-A3: c in Atom(V, C).a;
-    then
-A4: c = a by A2,Th26;
-    reconsider c' = c as Element of PFuncs (V, C) by A2,A3,Th26;
-    consider b be finite set such that
-A5: b in -L and
-A6: b c= c' by A1,A4,Th19;
+A5: c in Atom(V, C).a;
+    then reconsider c' = c as Element of PFuncs (V, C) by A4,Th26;
+    c = a by A4,A5,Th26;
+    then consider b be finite set such that
+A6: b in -L and
+A7: b c= c' by A1,A3,Th19;
     consider d be set such that
-A7: d c= b and
-A8: d in mi(-L) by A5,SUBSTLAT:10;
+A8: d c= b and
+A9: d in mi(-L) by A6,SUBSTLAT:10;
     take e = d;
-    thus e in pseudo_compl(V, C).u by A1,A8,Def4;
-    thus e c= c by A6,A7,XBOOLE_1:1;
+    thus e in pseudo_compl(V, C).u by A2,A9,Def4;
+    thus e c= c by A7,A8,XBOOLE_1:1;
   end;
   hence thesis by Lm8;
 end;
 
 theorem Th28:
-  for a being finite Element of PFuncs (V,C) holds a in Atom(V, C).a
+  for a being finite Element of PFuncs (V,C) holds a in Atom(V, C)
+  .a
 proof
   let a be finite Element of PFuncs (V,C);
   Atom(V, C).a = { a } by Lm7;
@@ -1258,9 +1276,12 @@ end;
 
 Lm9: u [= v implies for x be set st x in u ex b be set st b in v & b c= x
 proof
-  reconsider u' = u, v' = v as Element of SubstitutionSet (V, C)
-  by SUBSTLAT:def 4;
-  assume u [= v;
+
+  reconsider u' = u, v' = v as Element of SubstitutionSet (V, C) by SUBSTLAT:
+  def 4;
+
+  assume
+  u [= v;
   then u = u "/\" v by LATTICES:21
     .= (the L_meet of SubstLatt (V, C)).(u,v) by LATTICES:def 2
     .= mi (u' ^ v') by SUBSTLAT:def 4;
@@ -1268,133 +1289,142 @@ proof
 end;
 
 theorem Th29:
-  for u, v being Element of SubstitutionSet (V, C) holds
-  ((for c being set st c in u ex b being set st b in v & b c= c \/ a)
-  implies ex b being set st b in u =>> v & b c= a )
+  for u, v being Element of SubstitutionSet (V, C) holds ((for c
+being set st c in u ex b being set st b in v & b c= c \/ a) implies ex b being
+  set st b in u =>> v & b c= a )
 proof
   let u, v be Element of SubstitutionSet (V, C);
   reconsider u' = u as Element of SubstLatt (V, C) by SUBSTLAT:def 4;
+  defpred P[set,set] means $2 in v & $2 c= $1 \/ a;
   assume that
 A1: for b be set st b in u ex c be set st c in v & c c= b \/ a;
-  defpred P[set,set] means $2 in v & $2 c= $1 \/ a;
 A2: now
     let b be Element of PFuncs (V, C);
-    assume b in u;
+    assume
+    b in u;
     then consider c be set such that
-A3: c in v & c c= b \/ a by A1;
+A3: c in v and
+A4: c c= b \/ a by A1;
     v c= PFuncs (V, C) by FINSUB_1:def 5;
     then reconsider c as Element of PFuncs (V, C) by A3;
     take x = c;
-    thus P[b,x] by A3;
+    thus P[b,x] by A3,A4;
   end;
   consider f' be Element of Funcs(PFuncs (V, C), PFuncs (V, C)) such that
-A4: b in u implies P[b,f'.b] from FRAENKEL:sch 27(A2);
-  consider f2 be Function such that
-A5: f' = f2 & dom f2 = PFuncs (V, C) & rng f2 c= PFuncs (V, C)
-  by FUNCT_2:def 2;
+A5: b in u implies P[b,f'.b] from FRAENKEL:sch 27(A2);
   set g = f'|u;
-A6: for b be set st b in u' holds g.b c= b \/ a
-  proof
-    let b be set;
-    assume
-A7: b in u';
-    u c= PFuncs (V, C) by FINSUB_1:def 5;
-    then reconsider b' = b as Element of PFuncs (V, C) by A7;
-    g.b' = f2.b' by A5,A7,FUNCT_1:72;
-    hence thesis by A4,A5,A7;
-  end;
-A8: for b be set st b in u holds g.b in v
-  proof
-    let b be set;
-    assume
-A9: b in u;
-    u c= PFuncs (V, C) by FINSUB_1:def 5;
-    then reconsider b' = b as Element of PFuncs (V, C) by A9;
-    g.b' = f2.b' by A5,A9,FUNCT_1:72;
-    hence thesis by A4,A5,A9;
-  end;
+  consider f2 be Function such that
+A6: f' = f2 and
+  dom f2 = PFuncs (V, C) and
+  rng f2 c= PFuncs (V, C) by FUNCT_2:def 2;
   u c= PFuncs (V, C) by FINSUB_1:def 5;
   then g is Function of u, PFuncs (V, C) by FUNCT_2:38;
   then
-A10: dom g = u by FUNCT_2:def 1;
-  then g is Function of u, v by A8,FUNCT_2:5;
-  then rng g c= v by RELAT_1:def 19;
-  then reconsider g as Element of PFuncs (u, v) by A10,PARTFUN1:def 5;
+A7: dom g = u by FUNCT_2:def 1;
+  for b be set st b in u holds g.b in v
+  proof
+    let b be set;
+    assume
+A8: b in u;
+    u c= PFuncs (V, C) by FINSUB_1:def 5;
+    then reconsider b' = b as Element of PFuncs (V, C) by A8;
+    g.b' = f2.b' by A6,A8,FUNCT_1:72;
+    hence thesis by A5,A6,A8;
+  end;
+  then g is Function of u, v by A7,FUNCT_2:5;
+  then
+A9: rng g c= v by RELAT_1:def 19;
+A10: for b be set st b in u' holds g.b c= b \/ a
+  proof
+    let b be set;
+    assume
+A11: b in u';
+    u c= PFuncs (V, C) by FINSUB_1:def 5;
+    then reconsider b' = b as Element of PFuncs (V, C) by A11;
+    g.b' = f2.b' by A6,A11,FUNCT_1:72;
+    hence thesis by A5,A6,A11;
+  end;
+  reconsider g as Element of PFuncs (u, v) by A7,A9,PARTFUN1:def 5;
   set d = union {g.i \ i where i is Element of PFuncs (V, C) : i in u'};
-A11: d c= a
+A12: d c= a
   proof
     let x be set;
-    assume x in d;
+    assume
+    x in d;
     then consider Y be set such that
-A12: x in Y & Y in {g.i \ i where i is Element of PFuncs (V, C) : i in u'}
-    by TARSKI:def 4;
+A13: x in Y and
+A14: Y in {g.i \ i where i is Element of PFuncs (V, C) : i in u'} by
+    TARSKI:def 4;
     consider j be Element of PFuncs (V, C) such that
-A13: Y = g.j \ j & j in u' by A12;
-    g.j c= j \/ a by A6,A13;
+A15: Y = g.j \ j and
+A16: j in u' by A14;
+    g.j c= j \/ a by A10,A16;
     then g.j \j c= a by XBOOLE_1:43;
-    hence thesis by A12,A13;
+    hence thesis by A13,A15;
   end;
-  then reconsider d as Element of PFuncs (V, C) by Th3;
+  then reconsider d as Element of PFuncs (V, C) by PRE_POLY:15;
   take d;
   d in { union {f.i \ i where i is Element of PFuncs (V, C) : i in u}
-  where f is Element of PFuncs (u, v) : dom f = u } by A10;
+  where f is Element of PFuncs (u, v) : dom f = u } by A7;
   hence d in u =>> v by XBOOLE_0:def 4;
-  thus thesis by A11;
+  thus thesis by A12;
 end;
 
 theorem Th30:
-  for a being finite Element of PFuncs (V,C) st
-  (for b being Element of PFuncs (V, C) st b in u holds b tolerates a ) &
-  u "/\" Atom(V, C).a [= v holds Atom(V, C).a [= StrongImpl(V, C).(u, v)
+  for a being finite Element of PFuncs (V,C) st (for b being
+Element of PFuncs (V, C) st b in u holds b tolerates a ) & u "/\" Atom(V, C).a
+  [= v holds Atom(V, C).a [= StrongImpl(V, C).(u, v)
 proof
   let a be finite Element of PFuncs (V,C);
   assume that
 A1: for b be Element of PFuncs (V, C) st b in u holds b tolerates a and
 A2: u "/\" Atom(V, C).a [= v;
-  reconsider u' = u, v' = v, Aa = (Atom(V, C).a)
-  as Element of SubstitutionSet (V, C) by SUBSTLAT:def 4;
+  reconsider u' = u, v' = v, Aa = (Atom(V, C).a) as Element of SubstitutionSet
+  (V, C) by SUBSTLAT:def 4;
 A3: now
     let c be set;
+A4: a in Aa by Th28;
     assume
-A4: c in u;
+A5: c in u;
     then
-A5: c in u';
+A6: c in u';
     then reconsider c' = c as Element of PFuncs (V, C) by SETWISEO:14;
-A6: a in Aa by Th28;
-A7: c' tolerates a by A1,A4;
-A8: c is finite by A5,Th2;
-    c \/ a in { s1 \/ t1 where s1,t1 is Element of PFuncs (V,C) :
-    s1 in u' & t1 in Aa & s1 tolerates t1 } by A4,A6,A7;
-    then c \/ a in u' ^ Aa by SUBSTLAT:def 3;
+    c' tolerates a by A1,A5;
+    then
+    c \/ a in { s1 \/ t1 where s1,t1 is Element of PFuncs (V,C) : s1 in u'
+    & t1 in Aa & s1 tolerates t1 } by A5,A4;
+    then
+A7: c \/ a in u' ^ Aa by SUBSTLAT:def 3;
+    c is finite by A6,Th2;
     then consider b be set such that
-A9: b c= c \/ a and
-A10: b in mi(u' ^ Aa) by A8,SUBSTLAT:10;
-    b in (the L_meet of SubstLatt (V, C)).(u, Atom(V, C).a)
-    by A10,SUBSTLAT:def 4;
+A8: b c= c \/ a and
+A9: b in mi(u' ^ Aa) by A7,SUBSTLAT:10;
+    b in (the L_meet of SubstLatt (V, C)).(u, Atom(V, C).a) by A9,
+    SUBSTLAT:def 4;
     then b in u "/\" (Atom (V, C).a) by LATTICES:def 2;
     then consider d be set such that
-A11: d in v and
-A12: d c= b by A2,Lm9;
+A10: d in v and
+A11: d c= b by A2,Lm9;
     take e = d;
-    thus e in v by A11;
-    thus e c= c \/ a by A9,A12,XBOOLE_1:1;
+    thus e in v by A10;
+    thus e c= c \/ a by A8,A11,XBOOLE_1:1;
   end;
   now
     let c be set;
     assume
-A13: c in Atom(V, C).a;
+A12: c in Atom(V, C).a;
     then c = a by Th26;
     then consider b be set such that
-A14: b in u' =>> v' and
-A15: b c= c by A3,Th29;
-    c in Aa by A13;
+A13: b in u' =>> v' and
+A14: b c= c by A3,Th29;
+    c in Aa by A12;
     then c is finite by Th2;
     then consider d be set such that
-A16: d c= b and
-A17: d in mi(u' =>> v') by A14,A15,SUBSTLAT:10;
+A15: d c= b and
+A16: d in mi(u' =>> v') by A13,A14,SUBSTLAT:10;
     take e = d;
-    thus e in (StrongImpl(V, C).(u, v)) by A17,Def5;
-    thus e c= c by A15,A16,XBOOLE_1:1;
+    thus e in (StrongImpl(V, C).(u, v)) by A16,Def5;
+    thus e c= c by A14,A15,XBOOLE_1:1;
   end;
   hence thesis by Lm8;
 end;
@@ -1404,8 +1434,8 @@ theorem Th31:
   u "/\" pseudo_compl(V, C).u = Bottom SubstLatt (V, C)
 proof
   reconsider u' = u as Element of SubstitutionSet (V, C) by SUBSTLAT:def 4;
-  thus u "/\" pseudo_compl(V, C).u =
-  M(V, C).(u, pseudo_compl(V, C).u) by LATTICES:def 2
+  thus u "/\" pseudo_compl(V, C).u = M(V, C).(u, pseudo_compl(V, C).u) by
+  LATTICES:def 2
     .= M(V, C).(u, mi(-u')) by Def4
     .= mi(u' ^ mi(-u')) by SUBSTLAT:def 4
     .= mi(u' ^ -u') by SUBSTLAT:20
@@ -1416,15 +1446,16 @@ theorem Th32:
   u "/\" StrongImpl(V, C).(u, v) [= v
 proof
   now
+    reconsider u' = u, v' = v as Element of SubstitutionSet (V, C) by SUBSTLAT
+    :def 4;
     let a be set;
-    reconsider u' = u, v' = v as Element of SubstitutionSet (V, C)
-    by SUBSTLAT:def 4;
-A1: u "/\" StrongImpl(V, C).(u, v)
-    = M(V, C).(u, StrongImpl(V, C).(u, v)) by LATTICES:def 2
+    assume
+A1: a in u "/\" StrongImpl(V, C).(u, v);
+    u "/\" StrongImpl(V, C).(u, v) = M(V, C).(u, StrongImpl(V, C).(u, v))
+    by LATTICES:def 2
       .= M(V, C).(u, mi(u' =>> v')) by Def5
       .= mi(u' ^ mi(u' =>> v')) by SUBSTLAT:def 4
       .= mi(u' ^ (u' =>> v')) by SUBSTLAT:20;
-    assume a in u "/\" StrongImpl(V, C).(u, v);
     then a in u' ^ (u' =>> v') by A1,SUBSTLAT:6;
     hence ex b be set st b in v & b c= a by Lm3;
   end;
@@ -1433,85 +1464,106 @@ end;
 
 Lm10: now
   let V, C, u, v;
-  deffunc IMPL(Element of SubstLatt (V, C), Element of SubstLatt (V, C))
-  = FinJoin(SUB $1,
-  M(V, C).:(pseudo_compl(V, C), StrongImpl(V, C)[:](diff $1, $2)));
+
+  deffunc IMPL(Element of SubstLatt (V, C), Element of SubstLatt (V, C)) =
+
+FinJoin(SUB $1, M(V, C).:(pseudo_compl(V, C), StrongImpl(V, C)[:](diff $1, $2))
+  );
+
   set Psi = M(V, C).:(pseudo_compl(V, C), StrongImpl(V, C)[:](diff u, v));
+  reconsider v' = v as Element of SubstitutionSet (V, C) by SUBSTLAT:def 4;
 A1: now
     let w be Element of SubstLatt (V, C);
-    set u2 = (diff u).w, pc = pseudo_compl(V, C).w,
-    si = StrongImpl(V, C).(u2, v);
-    assume w in SUB u;
-    then
-A2: w "\/" u2 = u by Lm5;
-A3: w "/\" (pc "/\" si) = (w "/\" pc) "/\" si by LATTICES:def 7
+
+    set u2 = (diff u).w, pc = pseudo_compl(V, C).w, si = StrongImpl(V, C).(u2,
+    v);
+
+A2: w "/\" (pc "/\" si) = (w "/\" pc) "/\" si by LATTICES:def 7
       .= Bottom SubstLatt (V, C) "/\" si by Th31
       .= Bottom SubstLatt (V, C) by LATTICES:40;
-A4: u2 "/\" si [= v by Th32;
+    assume
+    w in SUB u;
+    then
+A3: w "\/" u2 = u by Lm5;
     M(V, C)[;](u, Psi).w = M(V, C).(u, Psi.w) by FUNCOP_1:66
       .= u "/\" Psi.w by LATTICES:def 2
-      .= u "/\" M(V, C).(pc, StrongImpl(V, C)[:](diff u, v).w) by FUNCOP_1:48
+
+      .= u "/\" M(V, C).(pc, StrongImpl(V, C)[:](diff u, v).w) by FUNCOP_1:
+    48
+
       .= u "/\" (pc "/\" StrongImpl(V, C)[:](diff u, v).w) by LATTICES:def 2
       .= u "/\" (pc "/\" si) by FUNCOP_1:60
-      .= (w "/\" (pc "/\" si)) "\/" (u2 "/\" (pc "/\"
-    si)) by A2,LATTICES:def 11
-      .= u2 "/\" (si "/\" pc) by A3,LATTICES:39
+
+      .= (w "/\" (pc "/\" si)) "\/" (u2 "/\" (pc "/\" si)) by A3,LATTICES:
+    def 11
+
+      .= u2 "/\" (si "/\" pc) by A2,LATTICES:39
       .= (u2 "/\" si) "/\" pc by LATTICES:def 7;
-    then M(V, C)[;](u, Psi).w [= u2 "/\" si by LATTICES:23;
+    then
+A4: M(V, C)[;](u, Psi).w [= u2 "/\" si by LATTICES:23;
+    u2 "/\" si [= v by Th32;
     hence M(V, C)[;](u, Psi).w [= v by A4,LATTICES:25;
   end;
   u "/\" IMPL(u,v) = FinJoin(SUB u, M(V, C)[;](u, Psi)) by LATTICE2:83;
   hence u "/\" IMPL(u,v) [= v by A1,LATTICE2:70;
   let w be Element of SubstLatt (V, C);
-  reconsider v' = v as Element of SubstitutionSet (V, C) by SUBSTLAT:def 4;
-A5: v = FinJoin(v', Atom(V, C)) by Th24;
-  then
-A6: u "/\" v = FinJoin(v', M(V, C)[;](u, Atom(V, C))) by LATTICE2:83;
   assume
-A7: u "/\" v [= w;
+A5: u "/\" v [= w;
+A6: v = FinJoin(v', Atom(V, C)) by Th24;
+  then
+A7: u "/\" v = FinJoin(v', M(V, C)[;](u, Atom(V, C))) by LATTICE2:83;
   now
+    set pf = pseudo_compl(V, C), sf = StrongImpl(V, C)[:](diff u, w);
     let a be Element of PFuncs (V, C);
-    assume
-A8: a in v';
-    then M(V, C)[;](u, Atom(V, C)).a [= w by A6,A7,LATTICE2:46;
-    then M(V, C).(u, Atom(V, C).a) [= w by FUNCOP_1:66;
-    then
-A9: u "/\" Atom(V, C).a [= w by LATTICES:def 2;
     reconsider SA = {.a.} as Element of Fin PFuncs (V, C);
-A10: a is finite by A8,Th2;
-    then reconsider SS = {a} as Element of SubstitutionSet (V, C) by Th6;
     consider v be Element of SubstitutionSet (V, C) such that
-A11: v in SUB u and
-A12: v ^ SA = {} and
-A13: for b be Element of PFuncs (V, C) st
-    b in (diff u).v holds b tolerates a by A10,Lm6;
-A14: v ^ SS = {} by A12;
+A8: v in SUB u and
+A9: v ^ SA = {} and
+
+A10: for b be Element of PFuncs (V, C) st b in (diff u).v holds b
+    tolerates a by Lm6;
+
+    assume
+A11: a in v';
+    then
+A12: a is finite by Th2;
     reconsider v' = v as Element of SubstLatt (V, C) by SUBSTLAT:def 4;
     set dv = (diff u).v';
+    M(V, C)[;](u, Atom(V, C)).a [= w by A7,A5,A11,LATTICE2:46;
+    then M(V, C).(u, Atom(V, C).a) [= w by FUNCOP_1:66;
+    then
+A13: u "/\" Atom(V, C).a [= w by LATTICES:def 2;
+    a is finite by A11,Th2;
+    then reconsider SS = {a} as Element of SubstitutionSet (V, C) by Th6;
+    v ^ SS = {} by A9;
+    then
+A14: Atom(V, C).a [= pf.v' by Th27;
     dv "/\" Atom(V, C).a [= u "/\" Atom(V, C).a by Th25,LATTICES:27;
+    then dv "/\" Atom(V, C).a [= w by A13,LATTICES:25;
+
+    then Atom(V, C).a [= StrongImpl(V, C).((diff u).v', w) by A10,
+    A12,Th30;
+
     then
-A15: dv "/\" Atom(V, C).a [= w by A9,LATTICES:25;
-    set pf = pseudo_compl(V, C), sf = StrongImpl(V, C)[:](diff u, w);
-A16: a is finite by A8,Th2;
-A17: Atom(V, C).a [= pf.v' by A14,Th27;
-    Atom(V, C).a [= StrongImpl(V, C).((diff u).v', w) by A13,A15,A16,Th30;
-    then
-A18: Atom(V, C).a [= sf.v' by FUNCOP_1:60;
+A15: Atom(V, C).a [= sf.v' by FUNCOP_1:60;
     pf.v'"/\" sf.v' = M(V, C).(pf.v', sf.v') by LATTICES:def 2
       .= M(V, C).:(pf, sf).v' by FUNCOP_1:48;
-    then Atom(V, C).a [= M(V, C).:(pf, sf).v' by A17,A18,FILTER_0:7;
-    hence Atom(V, C).a [= IMPL(u,w) by A11,LATTICE2:44;
+    then Atom(V, C).a [= M(V, C).:(pf, sf).v' by A14,A15,FILTER_0:7;
+    hence Atom(V, C).a [= IMPL(u,w) by A8,LATTICE2:44;
   end;
-  hence v [= IMPL(u,w) by A5,LATTICE2:70;
+  hence v [= IMPL(u,w) by A6,LATTICE2:70;
 end;
 
 Lm11: SubstLatt (V, C) is implicative
 proof
   let p,q be Element of SubstLatt (V, C);
-  take r = FinJoin(SUB p,M(V, C).:(pseudo_compl(V, C),
-  StrongImpl(V, C)[:](diff p, q)));
-  thus p "/\" r [= q & for r1 being Element of SubstLatt (V, C) st
-  p "/\" r1 [= q holds r1 [= r by Lm10;
+
+  take r = FinJoin(SUB p,M(V, C).:(pseudo_compl(V, C), StrongImpl(V, C)[:](
+  diff p, q)));
+
+  thus p "/\" r [= q & for r1 being Element of SubstLatt (V, C) st p "/\" r1
+  [= q holds r1 [= r by Lm10;
+
 end;
 
 registration
@@ -1521,15 +1573,15 @@ registration
 end;
 
 theorem
-  u => v = FinJoin(SUB u,
-  (the L_meet of SubstLatt (V, C)).:(pseudo_compl(V, C),
-  StrongImpl(V, C)[:](diff u, v)))
+  u => v = FinJoin(SUB u, (the L_meet of SubstLatt (V, C)).:(
+  pseudo_compl(V, C), StrongImpl(V, C)[:](diff u, v)))
 proof
-  deffunc IMPL(Element of SubstLatt (V, C), Element of SubstLatt (V, C))
-  = FinJoin(SUB $1,M(V, C).:(pseudo_compl(V, C),
-  StrongImpl(V, C)[:](diff $1, $2)));
-  u "/\" IMPL(u,v) [= v & for w be Element of SubstLatt (V, C)
-  st u "/\" w [= v holds w [= IMPL(u,v) by Lm10;
-  hence thesis by FILTER_0:def 8;
+  deffunc IMPL(Element of SubstLatt (V, C), Element of SubstLatt (V, C)) =
+FinJoin(SUB $1,M(V, C).:(pseudo_compl(V, C), StrongImpl(V, C)[:](diff $1, $2)))
+  ;
+A1: for w be Element of SubstLatt (V, C) st u "/\" w [= v holds w [= IMPL(u,
+  v) by Lm10;
+  u "/\" IMPL(u,v) [= v by Lm10;
+  hence thesis by A1,FILTER_0:def 8;
 end;
 

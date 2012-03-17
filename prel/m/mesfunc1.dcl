@@ -11,6 +11,7 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="NAT_1"/>
@@ -24,7 +25,7 @@
 </Signature>
 <FCluster aid="MESFUNC1" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="132"/>
+<Func kind="K" nr="140"/>
 <Cluster>
 <Adjective nr="17" value="false"/>
 </Cluster>
@@ -37,8 +38,8 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="134">
-<Func kind="K" nr="87">
+<Func kind="K" nr="142">
+<Func kind="K" nr="95">
 <LocusVar nr="1"/>
 <Num nr="1"/>
 </Func>

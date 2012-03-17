@@ -11,6 +11,7 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
@@ -34,22 +35,22 @@
 <ArgTypes>
 <Typ kind="G" nr="15">
 <Cluster>
-<Adjective nr="31" value="false"/>
-<Adjective nr="88"/>
-<Adjective nr="113"/>
+<Adjective nr="32" value="false"/>
+<Adjective nr="89"/>
 <Adjective nr="114"/>
 <Adjective nr="115"/>
 <Adjective nr="116"/>
-<Adjective nr="119"/>
-<Adjective nr="134"/>
+<Adjective nr="117"/>
+<Adjective nr="120"/>
+<Adjective nr="135"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="174">
+<Func kind="K" nr="182">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="31" value="false"/>
+<Adjective nr="32" value="false"/>
 <Adjective nr="63"/>
 <Adjective nr="64"/>
 <Adjective nr="65"/>

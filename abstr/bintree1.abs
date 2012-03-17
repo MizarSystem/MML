@@ -11,11 +11,11 @@ environ
       ARYTM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, NAT_1, RELAT_1,
       STRUCT_0, MCART_1, FUNCT_1, RELSET_1, FUNCT_2, FINSEQ_1, FINSET_1, LANG1,
-      TREES_1, TREES_2, TREES_3, TREES_4, DTCONSTR, XXREAL_0;
+      TREES_1, TREES_2, TREES_3, TREES_4, DTCONSTR, PRE_POLY, XXREAL_0;
  constructors DOMAIN_1, XXREAL_0, NAT_1, MEMBERED, FINSEQOP, DTCONSTR,
-      RELSET_1;
- registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, FRAENKEL, MEMBERED,
-      FINSEQ_1, TREES_2, TREES_3, STRUCT_0, DTCONSTR, FUNCT_2, FINSET_1;
+      RELSET_1, PRE_POLY;
+ registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, MEMBERED, FINSEQ_1,
+      TREES_2, TREES_3, STRUCT_0, DTCONSTR, FINSET_1, PRE_POLY;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
 
 
@@ -25,31 +25,31 @@ definition
   let D be non empty set, t be DecoratedTree of D;
   func root-label t -> Element of D equals
 :: BINTREE1:def 1
-
   t.{};
 end;
 
 theorem :: BINTREE1:1
-  for D being non empty set, t being DecoratedTree of D holds
-  roots <*t*> = <*root-label t*>;
+  for D being non empty set, t being DecoratedTree of D holds roots <*t
+  *> = <*root-label t*>;
 
 theorem :: BINTREE1:2
-  for D being non empty set, t1, t2 being DecoratedTree of D holds
-  roots <*t1, t2*> = <*root-label t1, root-label t2*>;
+  for D being non empty set, t1, t2 being DecoratedTree of D holds roots
+  <*t1, t2*> = <*root-label t1, root-label t2*>;
 
 definition
   let IT be Tree;
   attr IT is binary means
 :: BINTREE1:def 2
 
-  for t being Element of IT st not t in Leaves IT
-  holds succ t = { t^<*0*>, t^<*1*> };
+  for t being Element of IT st not t in Leaves
+  IT holds succ t = { t^<*0*>, t^<*1*> };
 end;
 
 canceled 2;
 
 theorem :: BINTREE1:5 :: LeavesDef3:
-  for T being Tree, t being Element of T holds succ t = {} iff t in Leaves T;
+  for T being Tree, t being Element of T holds succ t = {} iff t in
+  Leaves T;
 
 theorem :: BINTREE1:6
   elementary_tree 0 is binary;
@@ -83,31 +83,29 @@ registration
 end;
 
 theorem :: BINTREE1:8
-  for T0,T1 being Tree, t being Element of tree(T0,T1) holds
-  (for p being Element of T0 st t = <*0*>^p holds
-  t in Leaves tree(T0,T1) iff p in Leaves T0)
-  & (for p being Element of T1 st t = <*1*>^p holds
-  t in Leaves tree(T0,T1) iff p in Leaves T1);
+  for T0,T1 being Tree, t being Element of tree(T0,T1) holds (for p
+  being Element of T0 st t = <*0*>^p holds t in Leaves tree(T0,T1) iff p in
+Leaves T0) & for p being Element of T1 st t = <*1*>^p holds t in Leaves tree(T0
+  ,T1) iff p in Leaves T1;
 
 theorem :: BINTREE1:9
-  for T0,T1 being Tree, t being Element of tree(T0,T1) holds
-  (t = {} implies succ t = { t^<*0*>, t^<*1*> })
-  & (for p being Element of T0 st t = <*0*>^p for sp being FinSequence holds
-  sp in succ p iff <*0*>^sp in succ t)
-  & (for p being Element of T1 st t = <*1*>^p for sp being FinSequence holds
-  sp in succ p iff <*1*>^sp in succ t);
+  for T0,T1 being Tree, t being Element of tree(T0,T1) holds (t =
+  {} implies succ t = { t^<*0*>, t^<*1*> }) & (for p being Element of T0 st t =
+  <*0*>^p for sp being FinSequence holds sp in succ p iff <*0*>^sp in succ t) &
+  for p being Element of T1 st t = <*1*>^p for sp being FinSequence holds sp in
+  succ p iff <*1*>^sp in succ t;
 
 theorem :: BINTREE1:10
-  for T1,T2 being Tree holds T1 is binary & T2 is binary iff
-  tree(T1,T2) is binary;
+  for T1,T2 being Tree holds T1 is binary & T2 is binary iff tree(
+  T1,T2) is binary;
 
 theorem :: BINTREE1:11
-  for T1,T2 being DecoratedTree, x being set
-  holds T1 is binary & T2 is binary iff x-tree (T1,T2) is binary;
+  for T1,T2 being DecoratedTree, x being set holds T1 is binary &
+  T2 is binary iff x-tree (T1,T2) is binary;
 
 definition
-  let D be non empty set, x be Element of D,
-  T1, T2 be binary finite DecoratedTree of D;
+  let D be non empty set, x be Element of D, T1, T2 be binary finite
+  DecoratedTree of D;
   redefine func x-tree (T1,T2) -> binary finite DecoratedTree of D;
 end;
 
@@ -116,8 +114,8 @@ definition
   attr IT is binary means
 :: BINTREE1:def 4
 
-  for s being Symbol of IT, p being FinSequence st s ==> p
-  ex x1, x2 being Symbol of IT st p = <* x1, x2 *>;
+  for s being Symbol of IT, p being FinSequence
+  st s ==> p ex x1, x2 being Symbol of IT st p = <* x1, x2 *>;
 end;
 
 registration
@@ -126,110 +124,97 @@ registration
 end;
 
 scheme :: BINTREE1:sch 1
- BinDTConstrStrEx { S() -> non empty set, P[set, set, set] }:
-  ex G be binary strict (non empty DTConstrStr) st the carrier of G = S() &
-  for x, y, z being Symbol of G holds x ==> <*y,z*> iff P[x, y, z];
+
+  BinDTConstrStrEx { S() -> non empty set, P[set, set, set] }: ex G be binary
+  strict (non empty DTConstrStr) st the carrier of G = S() & for x, y, z being
+  Symbol of G holds x ==> <*y,z*> iff P[x, y, z];
 
 theorem :: BINTREE1:12
-  for G being binary with_terminals with_nonterminals (non empty DTConstrStr),
-  ts being FinSequence of TS G, nt being Symbol of G st nt ==> roots ts holds
-  nt is NonTerminal of G & dom ts = {1, 2} & 1 in dom ts & 2 in dom ts &
-  ex tl, tr being Element of TS G st
-  roots ts = <*root-label tl, root-label tr*> &
-  tl = ts.1 & tr = ts.2 & nt-tree ts = nt-tree (tl, tr) &
-  tl in rng ts & tr in rng ts;
+  for G being binary with_terminals with_nonterminals (non empty
+  DTConstrStr), ts being FinSequence of TS G, nt being Symbol of G st nt ==>
+  roots ts holds nt is NonTerminal of G & dom ts = {1, 2} & 1 in dom ts & 2 in
+  dom ts & ex tl, tr being Element of TS G st roots ts = <*root-label tl,
+root-label tr*> & tl = ts.1 & tr = ts.2 & nt-tree ts = nt-tree (tl, tr) & tl in
+  rng ts & tr in rng ts;
 
 scheme :: BINTREE1:sch 2
- BinDTConstrInd
-  { G() -> binary with_terminals with_nonterminals (non empty DTConstrStr),
-  P[set] }: for t being Element of TS(G()) holds P[t]
+
+  BinDTConstrInd { G() -> binary with_terminals with_nonterminals (non empty
+  DTConstrStr), P[set] }: for t being Element of TS(G()) holds P[t]
 provided
- for s being Terminal of G() holds P[root-tree s]
-and
- for nt being NonTerminal of G(), tl, tr being Element of TS(G())
-st nt ==> <*root-label tl, root-label tr*> & P[tl] & P[tr]
-holds P[nt-tree(tl, tr)];
+ for s being Terminal of G() holds P[root-tree s] and
+ for nt being NonTerminal of G(), tl, tr being Element of TS(G()) st
+nt ==> <*root-label tl, root-label tr*> & P[tl] & P[tr] holds P[nt-tree(tl, tr)
+];
 
 scheme :: BINTREE1:sch 3
- BinDTConstrIndDef
-  { G() -> binary with_terminals with_nonterminals with_useful_nonterminals
-  (non empty DTConstrStr), D()->non empty set, TermVal(set) -> Element of D(),
-  NTermVal(set, set, set, set, set) -> Element of D() }:
-  ex f being Function of TS(G()), D() st
-  (for t being Terminal of G() holds f.(root-tree t) = TermVal(t)) &
-  (for nt being NonTerminal of G(), tl, tr being Element of TS(G()),
-  rtl, rtr being Symbol of G()
-  st rtl = root-label tl & rtr = root-label tr & nt ==> <* rtl, rtr *>
-  for xl, xr being Element of D() st xl = f.tl & xr = f.tr
-  holds f.(nt-tree (tl, tr)) = NTermVal(nt, rtl, rtr, xl, xr));
+
+  BinDTConstrIndDef { G() -> binary with_terminals with_nonterminals
+with_useful_nonterminals (non empty DTConstrStr), D()->non empty set, TermVal(
+set) -> Element of D(), NTermVal(set, set, set, set, set) -> Element of D() }:
+  ex f being Function of TS(G()), D() st (for t being Terminal of G() holds f.(
+  root-tree t) = TermVal(t)) & for nt being NonTerminal of G(), tl, tr being
+Element of TS(G()), rtl, rtr being Symbol of G() st rtl = root-label tl & rtr =
+root-label tr & nt ==> <* rtl, rtr *> for xl, xr being Element of D() st xl = f
+  .tl & xr = f.tr holds f.(nt-tree (tl, tr)) = NTermVal(nt, rtl, rtr, xl, xr);
 
 scheme :: BINTREE1:sch 4
- BinDTConstrUniqDef
-  { G() -> binary with_terminals with_nonterminals with_useful_nonterminals
-  (non empty DTConstrStr), D()->non empty set,
-  f1, f2() -> Function of TS(G()), D(), TermVal(set) -> Element of D(),
-  NTermVal(set, set, set, set, set) -> Element of D() }: f1() = f2()
+
+  BinDTConstrUniqDef { G() -> binary with_terminals with_nonterminals
+with_useful_nonterminals (non empty DTConstrStr), D()->non empty set, f1, f2()
+-> Function of TS(G()), D(), TermVal(set) -> Element of D(), NTermVal(set, set,
+  set, set, set) -> Element of D() }: f1() = f2()
 provided
- (for t being Terminal of G() holds f1().(root-tree t) = TermVal(t)) &
-(for nt being NonTerminal of G(), tl, tr being Element of TS(G()),
-rtl, rtr being Symbol of G()
-st rtl = root-label tl & rtr = root-label tr & nt ==> <* rtl, rtr *>
-for xl, xr being Element of D() st xl = f1().tl & xr = f1().tr
-holds f1().(nt-tree (tl, tr)) = NTermVal(nt, rtl, rtr, xl, xr))
-and
- (for t being Terminal of G() holds f2().(root-tree t) = TermVal(t)) &
-(for nt being NonTerminal of G(), tl, tr being Element of TS(G()),
-rtl, rtr being Symbol of G()
-st rtl = root-label tl & rtr = root-label tr & nt ==> <* rtl, rtr *>
-for xl, xr being Element of D() st xl = f2().tl & xr = f2().tr
-holds f2().(nt-tree (tl, tr)) = NTermVal(nt, rtl, rtr, xl, xr));
+ (for t being Terminal of G() holds f1().(root-tree t) = TermVal(t))
+& for nt being NonTerminal of G(), tl, tr being Element of TS(G()), rtl, rtr
+being Symbol of G() st rtl = root-label tl & rtr = root-label tr & nt ==> <*
+rtl, rtr *> for xl, xr being Element of D() st xl = f1().tl & xr = f1().tr
+holds f1().(nt-tree (tl, tr)) = NTermVal(nt, rtl, rtr, xl, xr) and
+ (for t being Terminal of G() holds f2().(root-tree t) = TermVal(t))
+& for nt being NonTerminal of G(), tl, tr being Element of TS(G()), rtl, rtr
+being Symbol of G() st rtl = root-label tl & rtr = root-label tr & nt ==> <*
+rtl, rtr *> for xl, xr being Element of D() st xl = f2().tl & xr = f2().tr
+holds f2().(nt-tree (tl, tr)) = NTermVal(nt, rtl, rtr, xl, xr);
 
 definition
-  let A, B, C be non empty set,
-  a be Element of A, b be Element of B, c be Element of C;
+  let A, B, C be non empty set, a be Element of A, b be Element of B, c be
+  Element of C;
   redefine func [a, b, c] -> Element of [:A, B, C:];
 end;
 
 scheme :: BINTREE1:sch 5
- BinDTCDefLambda
-  { G() -> binary with_terminals with_nonterminals with_useful_nonterminals
-  (non empty DTConstrStr), A, B() -> non empty set,
-  F(set, set) -> Element of B(), H(set, set, set, set) -> Element of B() }:
-  ex f being Function of TS G(), Funcs(A(), B()) st
-  (for t being Terminal of G() ex g being Function of A(), B()
-  st g = f.(root-tree t) & for a being Element of A() holds g.a = F(t, a)) &
-  (for nt being NonTerminal of G(), t1, t2 being Element of TS G(),
-  rtl, rtr being Symbol of G()
-  st rtl = root-label t1 & rtr = root-label t2 & nt ==> <* rtl, rtr *>
-  ex g, f1, f2 being Function of A(), B()
-  st g = f.(nt-tree (t1, t2)) & f1 = f.t1 & f2 = f.t2 &
-  for a being Element of A() holds g.a = H(nt, f1, f2, a));
+
+  BinDTCDefLambda { G() -> binary with_terminals with_nonterminals
+  with_useful_nonterminals (non empty DTConstrStr), A, B() -> non empty set, F(
+  set, set) -> Element of B(), H(set, set, set, set) -> Element of B() }: ex f
+being Function of TS G(), Funcs(A(), B()) st (for t being Terminal of G() ex g
+being Function of A(), B() st g = f.(root-tree t) & for a being Element of A()
+holds g.a = F(t, a)) & for nt being NonTerminal of G(), t1, t2 being Element of
+TS G(), rtl, rtr being Symbol of G() st rtl = root-label t1 & rtr = root-label
+t2 & nt ==> <* rtl, rtr *> ex g, f1, f2 being Function of A(), B() st g = f.(nt
+-tree (t1, t2)) & f1 = f.t1 & f2 = f.t2 & for a being Element of A() holds g.a
+  = H(nt, f1, f2, a);
 
 scheme :: BINTREE1:sch 6
- BinDTCDefLambdaUniq
-  { G() -> binary with_terminals with_nonterminals with_useful_nonterminals
-  (non empty DTConstrStr), A, B() -> non empty set,
-  f1, f2() -> Function of TS G(), Funcs (A(), B()),
-  F(set, set) -> Element of B(), H(set, set, set, set) -> Element of B() }:
-  f1() = f2()
+
+  BinDTCDefLambdaUniq { G() -> binary with_terminals with_nonterminals
+with_useful_nonterminals (non empty DTConstrStr), A, B() -> non empty set, f1,
+f2() -> Function of TS G(), Funcs (A(), B()), F(set, set) -> Element of B(), H(
+  set, set, set, set) -> Element of B() }: f1() = f2()
 provided
- (for t being Terminal of G() ex g being Function of A(), B()
-st g = f1().(root-tree t) & for a being Element of A() holds g.a = F(t, a)) &
-(for nt being NonTerminal of G(), t1, t2 being Element of TS G(),
-rtl, rtr being Symbol of G()
-st rtl = root-label t1 & rtr = root-label t2 & nt ==> <* rtl, rtr *>
-ex g, f1, f2 being Function of A(), B()
-st g = f1().(nt-tree (t1, t2)) & f1 = f1().t1 & f2 = f1().t2 &
-for a being Element of A() holds g.a = H(nt, f1, f2, a))
+ (for t being Terminal of G() ex g being Function of A(), B() st g =
+f1().(root-tree t) & for a being Element of A() holds g.a = F(t, a)) & for nt
+being NonTerminal of G(), t1, t2 being Element of TS G(), rtl, rtr being Symbol
+of G() st rtl = root-label t1 & rtr = root-label t2 & nt ==> <* rtl, rtr *> ex
+g, f1, f2 being Function of A(), B() st g = f1().(nt-tree (t1, t2)) & f1 = f1()
+.t1 & f2 = f1().t2 & for a being Element of A() holds g.a = H(nt, f1, f2, a)
 and
- (for t being Terminal of G() ex g being Function of A(), B()
-st g = f2().(root-tree t) & for a being Element of A() holds g.a = F(t, a)) &
-(for nt being NonTerminal of G(), t1, t2 being Element of TS G(),
-rtl, rtr being Symbol of G()
-st rtl = root-label t1 & rtr = root-label t2 & nt ==> <* rtl, rtr *>
-ex g, f1, f2 being Function of A(), B()
-st g = f2().(nt-tree (t1, t2)) & f1 = f2().t1 & f2 = f2().t2 &
-for a being Element of A() holds g.a = H(nt, f1, f2, a));
+ (for t being Terminal of G() ex g being Function of A(), B() st g =
+f2().(root-tree t) & for a being Element of A() holds g.a = F(t, a)) & for nt
+being NonTerminal of G(), t1, t2 being Element of TS G(), rtl, rtr being Symbol
+of G() st rtl = root-label t1 & rtr = root-label t2 & nt ==> <* rtl, rtr *> ex
+g, f1, f2 being Function of A(), B() st g = f2().(nt-tree (t1, t2)) & f1 = f2()
+.t1 & f2 = f2().t2 & for a being Element of A() holds g.a = H(nt, f1, f2, a);
 
 registration
   let G be binary with_terminals with_nonterminals (non empty DTConstrStr);

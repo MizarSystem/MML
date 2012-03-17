@@ -9,9 +9,9 @@ environ
  vocabularies TAXONOM2, TAXONOM1, ABIAN, EQREL_1, TARSKI, PUA2MSS1, REALSET1,
       SETFAM_1, YELLOW_1, WELLORD2, HAHNBAN, ZFMISC_1, BOOLE, ORDERS_1,
       RELAT_1, RELAT_2, PARTIT1, ORDERS_2, LATTICES, TREES_1, COMPTS_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, REALSET1, RELAT_1,
-      ORDINAL1, RELSET_1, STRUCT_0, ORDERS_2, EQREL_1, ABIAN, PARTIT1,
-      ORDERS_1, YELLOW_1, TAXONOM1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, RELAT_1, ORDINAL1,
+      RELSET_1, STRUCT_0, ORDERS_2, EQREL_1, ABIAN, PARTIT1, ORDERS_1,
+      YELLOW_1, TAXONOM1;
  constructors SETFAM_1, REALSET1, ABIAN, YELLOW_1, TAXONOM1, RELSET_1;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, EQREL_1, YELLOW_1;
  requirements BOOLE, SUBSET;
@@ -31,55 +31,57 @@ reserve S1,S2 for Subset of Y;
 definition
   let A;
   attr A is with_superior means
-  ex x be Element of A st x is_superior_of the InternalRel of A;
+  ex x be Element of A st x is_superior_of the
+  InternalRel of A;
 end;
 
 definition
   let A;
   attr A is with_comparable_down means
   :Def2:
-  for x,y be Element of A holds
-  (ex z be Element of A st z <= x & z <= y) implies (x <= y or y <= x);
+  for x,y be Element of A holds (
+  ex z be Element of A st z <= x & z <= y) implies (x <= y or y <= x);
 end;
 
 theorem Th1:
-  for a being set holds
-  InclPoset {{a}} is non empty reflexive transitive antisymmetric
-  with_superior with_comparable_down
+  for a being set holds InclPoset {{a}} is non empty reflexive
+  transitive antisymmetric with_superior with_comparable_down
 proof
   let a be set;
   set A = {{a}};
   set R' = RelIncl A;
   reconsider R = R' as Relation of A;
-A1: RelStr(#A,R#) = InclPoset A by YELLOW_1:def 1;
   set L = RelStr(#A,R#);
-A2: L is with_superior
+A1: L is with_superior
   proof
     set max = {a};
     reconsider max' = max as Element of L by TARSKI:def 1;
     take max';
-    [max',max'] in R by WELLORD2:def 1;
-    then
-A3: max' in field R by RELAT_1:30;
-    for y be set st y in field R & y <> max' holds [y,max'] in R
+A2: for y be set st y in field R & y <> max' holds [y,max'] in R
     proof
       let y be set such that
-A4:   y in field R & y <> max';
+A3:   y in field R and
+A4:   y <> max';
       field R c= A \/ A by RELSET_1:19;
-      hence thesis by A4,TARSKI:def 1;
+      hence thesis by A3,A4,TARSKI:def 1;
     end;
-    hence thesis by A3,ORDERS_1:def 13;
+    [max',max'] in R by WELLORD2:def 1;
+    then max' in field R by RELAT_1:30;
+    hence thesis by A2,ORDERS_1:def 13;
   end;
-  for x,y be Element of L holds (ex z be Element of L st z <= x & z <= y)
+A5: for x,y be Element of L holds (ex z be Element of L st z <= x & z <= y)
   implies x <= y or y <= x
   proof
     let x,y be Element of L;
-    assume ex z be Element of L st z <= x & z <= y;
-    x = {a} & y = {a} by TARSKI:def 1;
-    then [x,y] in R by WELLORD2:def 1;
+    assume
+    ex z be Element of L st z <= x & z <= y;
+A6: y = {a} by TARSKI:def 1;
+    x = {a} by TARSKI:def 1;
+    then [x,y] in R by A6,WELLORD2:def 1;
     hence thesis by ORDERS_2:def 9;
   end;
-  hence thesis by A1,A2,Def2;
+  RelStr(#A,R#) = InclPoset A by YELLOW_1:def 1;
+  hence thesis by A1,A5,Def2;
 end;
 
 registration
@@ -97,144 +99,156 @@ definition
 end;
 
 theorem Th2:
-  for EqR being Equivalence_Relation of X, x,y,z be set holds
-  z in Class(EqR,x) & z in Class(EqR,y) implies Class(EqR,x) = Class(EqR,y)
+  for EqR being Equivalence_Relation of X, x,y,z be set holds z in
+  Class(EqR,x) & z in Class(EqR,y) implies Class(EqR,x) = Class(EqR,y)
 proof
   let EqR being Equivalence_Relation of X, x,y,z be set;
-  assume
-A1: z in Class(EqR,x) & z in Class(EqR,y);
-  then
-A2: [z,x] in EqR by EQREL_1:27;
-A3: [z,y] in EqR by A1,EQREL_1:27;
-  thus Class(EqR,x) = Class(EqR,z) by A1,A2,EQREL_1:44
+  assume that
+A1: z in Class(EqR,x) and
+A2: z in Class(EqR,y);
+A3: [z,y] in EqR by A2,EQREL_1:27;
+  [z,x] in EqR by A1,EQREL_1:27;
+  hence Class(EqR,x) = Class(EqR,z) by A1,EQREL_1:44
     .= Class(EqR,y) by A1,A3,EQREL_1:44;
 end;
 
 theorem Th3:
-  for P being a_partition of X,
-  x,y,z being set st x in P & y in P & z in x & z in y holds x = y
+  for P being a_partition of X, x,y,z being set st x in P & y in P
+  & z in x & z in y holds x = y
 proof
   let P be a_partition of X, x,y,z being set such that
-A1: x in P & y in P & z in x & z in y;
+A1: x in P and
+A2: y in P and
+A3: z in x and
+A4: z in y;
   consider EqR being Equivalence_Relation of X such that
-A2: P = Class EqR by EQREL_1:43;
-  consider x' being Element of X such that
-A3: x = Class(EqR,x') by A1,A2,EQREL_1:45;
-  consider y' being Element of X such that
-A4: y = Class(EqR,y') by A1,A2,EQREL_1:45;
-  thus thesis by A1,A3,A4,Th2;
+A5: P = Class EqR by EQREL_1:43;
+A6: ex y' being Element of X st y = Class(EqR,y') by A2,A5,EQREL_1:45;
+  ex x' being Element of X st x = Class(EqR,x') by A1,A5,EQREL_1:45;
+  hence thesis by A3,A4,A6,Th2;
 end;
 
 theorem Th4:
-  for C,x be set st C is Classification of X & x in union C holds x c= X
+  for C,x be set st C is Classification of X & x in union C holds x
+  c= X
 proof
   let C,x be set such that
-A1: C is Classification of X & x in union C;
-  let a be set such that
-A2: a in x;
+A1: C is Classification of X and
+A2: x in union C;
   consider Y be set such that
-A3: x in Y & Y in C by A1,TARSKI:def 4;
-  reconsider Y' = Y as a_partition of X by A1,A3,PARTIT1:def 3;
-  a in union Y' by A2,A3,TARSKI:def 4;
+A3: x in Y and
+A4: Y in C by A2,TARSKI:def 4;
+  reconsider Y' = Y as a_partition of X by A1,A4,PARTIT1:def 3;
+  let a be set;
+  assume
+  a in x;
+  then a in union Y' by A3,TARSKI:def 4;
   hence thesis;
 end;
 
 theorem
-  for C being set st C is Strong_Classification of X
-  holds InclPoset union C is Tree
+  for C being set st C is Strong_Classification of X holds InclPoset
+  union C is Tree
 proof
-  let C being set such that
-A1: C is Strong_Classification of X;
-  set B = union C;
+A1: X in {X} by TARSKI:def 1;
 A2: X in {X} by TARSKI:def 1;
-  {X} in C by A1,TAXONOM1:def 2;
-  then
-A3: B <> {} by A2,TARSKI:def 4;
+  let C being set such that
+A3: C is Strong_Classification of X;
+A4: C is Classification of X by A3,TAXONOM1:def 2;
+  set B = union C;
+A5: {X} in C by A3,TAXONOM1:def 2;
+  then reconsider B' = B as non empty set by A2,TARSKI:def 4;
   set R' = RelIncl B;
   reconsider R = R' as Relation of B;
-A4: RelStr(#B,R#) = InclPoset B by YELLOW_1:def 1;
   set D = RelStr(#B,R#);
-A5: C is Classification of X by A1,TAXONOM1:def 2;
-A6: {X} in C by A1,TAXONOM1:def 2;
-A7: X in {X} by TARSKI:def 1;
-  then reconsider B' = B as non empty set by A6,TARSKI:def 4;
-A8: D is with_superior
-  proof
-    reconsider s = X as Element of D by A6,A7,TARSKI:def 4;
-    consider x be set such that
-A9: x in SmallestPartition X by XBOOLE_0:def 1;
-    reconsider C' = C as Strong_Classification of X by A1;
-    SmallestPartition X in C' by TAXONOM1:def 2;
-    then reconsider x' = x as Element of D by A9,TARSKI:def 4;
-    take s;
-    [x',s] in R by A3,A9,WELLORD2:def 1;
-    then
-A10: s in field R by RELAT_1:30;
-    now
-      let y be set such that
-A11:  y in field R & y <> s;
-A12:  y in dom R \/ rng R by A11,RELAT_1:def 6;
-      per cases by A12,XBOOLE_0:def 3;
-      suppose y in dom R;
-        then reconsider y' = y as Element of B';
-        y' c= s by A5,Th4;
-        hence [y,s] in R by WELLORD2:def 1;
-      end;
-      suppose y in rng R;
-        then reconsider y' = y as Element of B';
-        y' c= s by A5,Th4;
-        hence [y,s] in R by WELLORD2:def 1;
-      end;
-    end;
-    hence thesis by A10,ORDERS_1:def 13;
-  end;
-  now
+  {X} in C by A3,TAXONOM1:def 2;
+  then
+A6: B <> {} by A1,TARSKI:def 4;
+A7: now
     let x,y be Element of D;
     given z be Element of D such that
-A13: z <= x & z <= y;
+A8: z <= x and
+A9: z <= y;
     reconsider z' = z as Element of B';
+    reconsider z'' = z' as Subset of X by A4,Th4;
     consider Z be set such that
-A14: z' in Z & Z in C by TARSKI:def 4;
-    reconsider z'' = z' as Subset of X by A5,Th4;
-    reconsider Z' = Z as a_partition of X by A1,A14,PARTIT1:def 3;
-    z'' in Z' by A14;
+A10: z' in Z and
+A11: Z in C by TARSKI:def 4;
+    reconsider Z' = Z as a_partition of X by A3,A11,PARTIT1:def 3;
+    z'' in Z' by A10;
     then z'' <> {} by EQREL_1:def 6;
     then consider a be set such that
-A15: a in z by XBOOLE_0:def 1;
-    [z,x] in R by A13,ORDERS_2:def 9;
+A12: a in z by XBOOLE_0:def 1;
+    [z,y] in R by A9,ORDERS_2:def 9;
     then
-A16: z c= x by A3,WELLORD2:def 1;
+A13: z c= y by A6,WELLORD2:def 1;
     then
-A17: a in x by A15;
-    [z,y] in R by A13,ORDERS_2:def 9;
-    then
-A18: z c= y by A3,WELLORD2:def 1;
-    then
-A19: a in y by A15;
+A14: a in y by A12;
+A15: C is Classification of X by A3,TAXONOM1:def 2;
     reconsider x' = x, y' = y as Element of B';
     consider S be set such that
-A20: x' in S & S in C by TARSKI:def 4;
-    reconsider S' = S as a_partition of X by A1,A20,PARTIT1:def 3;
+A16: x' in S and
+A17: S in C by TARSKI:def 4;
+    reconsider S' = S as a_partition of X by A3,A17,PARTIT1:def 3;
     consider T be set such that
-A21: y' in T & T in C by TARSKI:def 4;
-    reconsider T' = T as a_partition of X by A1,A21,PARTIT1:def 3;
-A22: C is Classification of X by A1,TAXONOM1:def 2;
-    now per cases by A20,A21,A22,TAXONOM1:def 1;
-      suppose S' is_finer_than T';
-        then consider Y be set such that
-A23:    Y in T' & x' c= Y by A20,SETFAM_1:def 2;
-        thus x' c= y' or y' c= x' by A15,A17,A18,A21,A23,Th3;
+A18: y' in T and
+A19: T in C by TARSKI:def 4;
+    reconsider T' = T as a_partition of X by A3,A19,PARTIT1:def 3;
+    [z,x] in R by A8,ORDERS_2:def 9;
+    then
+A20: z c= x by A6,WELLORD2:def 1;
+    then
+A21: a in x by A12;
+    now
+      per cases by A17,A19,A15,TAXONOM1:def 1;
+      suppose
+        S' is_finer_than T';
+        then ex Y be set st Y in T' & x' c= Y by A16,SETFAM_1:def 2;
+        hence x' c= y' or y' c= x' by A12,A21,A13,A18,Th3;
       end;
-      suppose T' is_finer_than S';
-        then consider Y be set such that
-A24:    Y in S' & y' c= Y by A21,SETFAM_1:def 2;
-        thus x' c= y' or y' c= x' by A15,A16,A19,A20,A24,Th3;
+      suppose
+        T' is_finer_than S';
+        then ex Y be set st Y in S' & y' c= Y by A18,SETFAM_1:def 2;
+        hence x' c= y' or y' c= x' by A12,A20,A14,A16,Th3;
       end;
     end;
     then [x',y'] in R or [y',x'] in R by WELLORD2:def 1;
     hence x <= y or y <= x by ORDERS_2:def 9;
   end;
-  hence thesis by A4,A8,Def2;
+A22: D is with_superior
+  proof
+    reconsider C' = C as Strong_Classification of X by A3;
+    reconsider s = X as Element of D by A5,A2,TARSKI:def 4;
+    consider x be set such that
+A23: x in SmallestPartition X by XBOOLE_0:def 1;
+    SmallestPartition X in C' by TAXONOM1:def 2;
+    then reconsider x' = x as Element of D by A23,TARSKI:def 4;
+    take s;
+A24: now
+      let y be set such that
+A25:  y in field R and
+      y <> s;
+A26:  y in dom R \/ rng R by A25,RELAT_1:def 6;
+      per cases by A26,XBOOLE_0:def 3;
+      suppose
+        y in dom R;
+        then reconsider y' = y as Element of B';
+        y' c= s by A4,Th4;
+        hence [y,s] in R by WELLORD2:def 1;
+      end;
+      suppose
+        y in rng R;
+        then reconsider y' = y as Element of B';
+        y' c= s by A4,Th4;
+        hence [y,s] in R by WELLORD2:def 1;
+      end;
+    end;
+    [x',s] in R by A6,A23,WELLORD2:def 1;
+    then s in field R by RELAT_1:30;
+    hence thesis by A24,ORDERS_1:def 13;
+  end;
+  RelStr(#B,R#) = InclPoset B by YELLOW_1:def 1;
+  hence thesis by A22,A7,Def2;
 end;
 
 begin
@@ -243,7 +257,8 @@ definition
   let Y;
   attr Y is hierarchic means
   :Def3:
-  for x,y be set st x in Y & y in Y holds (x c= y or y c= x or x misses y);
+  for x,y be set st x in Y & y in Y holds (x
+  c= y or y c= x or x misses y);
 end;
 
 registration
@@ -255,19 +270,21 @@ A1: X is trivial;
     per cases by A1,REALSET1:def 4;
     suppose
 A2:   X is empty;
-      for x,y be set st x in {} & y in {} holds
-      x c= y or y c= x or x misses y;
+      for x,y be set st x in {} & y in {} holds x c= y or y c= x or x
+      misses y;
       hence thesis by A2,Def3;
     end;
-    suppose ex a being set st X = {a};
+    suppose
+      ex a being set st X = {a};
       then consider a be set such that
 A3:   X = {a};
       X is hierarchic
       proof
         let x,y be set such that
-A4:     x in X & y in X;
-        x = a & y = a by A3,A4,TARSKI:def 1;
-        hence thesis;
+A4:     x in X and
+A5:     y in X;
+        x = a by A3,A4,TARSKI:def 1;
+        hence thesis by A3,A5,TARSKI:def 1;
       end;
       hence thesis;
     end;
@@ -278,41 +295,45 @@ registration
   cluster non trivial hierarchic set;
   existence
   proof
-    consider A be non empty set;
     consider B be empty set;
+    consider A be non empty set;
     consider C be set such that
 A1: C = {A,B};
-    take C;
 A2: C is hierarchic
     proof
       let x,y be set such that
-A3:   x in C & y in C;
+A3:   x in C and
+A4:   y in C;
       per cases by A1,A3,TARSKI:def 2;
       suppose
-A4:     x = A;
-        per cases by A1,A3,TARSKI:def 2;
-        suppose y = A;
-          hence thesis by A4;
+A5:     x = A;
+        per cases by A1,A4,TARSKI:def 2;
+        suppose
+          y = A;
+          hence thesis by A5;
         end;
-        suppose y = B;
+        suppose
+          y = B;
           hence thesis by XBOOLE_1:65;
         end;
       end;
-      suppose x = B;
+      suppose
+        x = B;
         hence thesis by XBOOLE_1:65;
       end;
     end;
+    take C;
     now
       assume
-A5:   C is trivial;
-      per cases by A5,REALSET1:def 4;
-      suppose C is empty;
+A6:   C is trivial;
+      per cases by A6,REALSET1:def 4;
+      suppose
+        C is empty;
         hence contradiction by A1;
       end;
-      suppose ex x being set st C = {x};
-        then consider a be set such that
-A6:     C = {a};
-        thus contradiction by A1,A6,ZFMISC_1:9;
+      suppose
+        ex x being set st C = {x};
+        hence contradiction by A1,ZFMISC_1:9;
       end;
     end;
     hence thesis by A2;
@@ -323,17 +344,20 @@ theorem Th6:
   {} is hierarchic
 proof
   let x,y be set;
-  assume x in {} & y in {};
-  hence thesis;
+  assume that
+A1: x in {} and
+  y in {};
+  thus thesis by A1;
 end;
 
 theorem
   {{}} is hierarchic
 proof
   let x,y be set such that
-A1: x in {{}} & y in {{}};
-  x = {} & y = {} by A1,TARSKI:def 1;
-  hence thesis;
+A1: x in {{}} and
+A2: y in {{}};
+  x = {} by A1,TARSKI:def 1;
+  hence thesis by A2,TARSKI:def 1;
 end;
 
 definition
@@ -354,14 +378,17 @@ definition
   let Y;
   attr Y is mutually-disjoint means
   :Def5:
-  for x,y be set st x in Y & y in Y & x <> y holds x misses y;
+  for x,y be set st x in Y & y in Y &
+  x <> y holds x misses y;
 end;
 
 Lm1: now
   let x,y be set such that
-A1: x in {{}} & y in {{}} & x <> y;
-  x = {} & y = {} by A1,TARSKI:def 1;
-  hence x misses y by A1;
+A1: x in {{}} and
+A2: y in {{}} and
+A3: x <> y;
+  x = {} by A1,TARSKI:def 1;
+  hence x misses y by A2,A3,TARSKI:def 1;
 end;
 
 registration
@@ -371,9 +398,10 @@ registration
   proof
     set e = {{}};
     now
-      let x be set such that
-A1:   x in {{}};
-      x = {} by A1,TARSKI:def 1;
+      let x be set;
+      assume
+      x in {{}};
+      then x = {} by TARSKI:def 1;
       then x c= Y by XBOOLE_1:2;
       hence x in bool Y;
     end;
@@ -387,8 +415,10 @@ theorem
   {} is mutually-disjoint
 proof
   let x,y be set;
-  assume x in {} & y in {};
-  hence thesis;
+  assume that
+A1: x in {} and
+  y in {};
+  thus thesis by A1;
 end;
 
 theorem
@@ -398,9 +428,11 @@ theorem Th10:
   {a} is mutually-disjoint
 proof
   let x,y be set such that
-A1: x in {a} & y in {a} & x <> y;
+A1: x in {a} and
+A2: y in {a} and
+A3: x <> y;
   x = a by A1,TARSKI:def 1;
-  hence thesis by A1,TARSKI:def 1;
+  hence thesis by A2,A3,TARSKI:def 1;
 end;
 
 Lm2: now
@@ -408,143 +440,174 @@ Lm2: now
   let H be Hierarchy of Y such that
 A1: H is covering;
   let B be mutually-disjoint Subset-Family of Y such that
-A2: B c= H & for C being mutually-disjoint Subset-Family of Y st
-  C c= H & union B c= union C holds B = C;
-  thus union B = Y
+A2: B c= H and
+
+A3: for C being mutually-disjoint Subset-Family of Y st C c= H & union B
+  c= union C holds B = C;
+
+  Y c= union B
   proof
-    thus union B c= Y;
-    thus Y c= union B
-    proof
-      let y be set such that
-A3:   y in Y;
-      y in union H by A1,A3,ABIAN:4;
-      then consider x be set such that
-A4:   y in x & x in H by TARSKI:def 4;
-      now
+    let y be set;
+    assume
+    y in Y;
+    then y in union H by A1,ABIAN:4;
+    then consider x be set such that
+A4: y in x and
+A5: x in H by TARSKI:def 4;
+    now
+      defpred X[set] means $1 c= x;
+      consider D be set such that
+
+A6:   for a be set holds a in D iff a in B & X[a] from XBOOLE_0:sch 1;
+
+      set C = (B \ D) \/ {x};
+A7:   (B \ D) c= C by XBOOLE_1:7;
+A8:   {x} c= H
+      proof
+        let s be set;
         assume
-A5:     not y in union B;
-        defpred X[set] means $1 c= x;
-        consider D be set such that
-A6:     for a be set holds a in D iff a in B & X[a] from XBOOLE_0:sch 1;
-        set C = (B \ D) \/ {x};
-        x in {x} by TARSKI:def 1;
-        then
-A7:     x in C by XBOOLE_0:def 3;
-A8:     (B \ D) c= C by XBOOLE_1:7;
-        (B \ D) c= B by XBOOLE_1:36;
-        then
-A9:     (B \ D) c= H by A2,XBOOLE_1:1;
-A10:    {x} c= H
-        proof
-          let s be set such that
-A11:      s in {x};
-          thus thesis by A4,A11,TARSKI:def 1;
-        end;
-        then
-A12:    C c= H by A9,XBOOLE_1:8;
-A13:    for p being set st p in B & not p in D & p <> x holds p misses x
-        proof
-          let p be set such that
-A14:      p in B & not p in D & p <> x;
-A15:      not p c= x by A6,A14;
-A16:      not x c= p by A4,A5,A14,TARSKI:def 4;
-          H is hierarchic by Def4;
-          hence thesis by A2,A4,A14,A15,A16,Def3;
-        end;
-        for p,q be set st p in C & q in C & p <> q holds p misses q
-        proof
-          let p,q be set such that
-A17:      p in C & q in C & p <> q;
-          per cases by A17,XBOOLE_0:def 3;
-          suppose p in (B \ D);
-            then
-A18:        p in B & not p in D by XBOOLE_0:def 5;
-            per cases by A17,XBOOLE_0:def 3;
-            suppose q in (B \ D);
-              then q in B & not q in D by XBOOLE_0:def 5;
-              hence thesis by A17,A18,Def5;
-            end;
-            suppose q in {x};
-              then q = x by TARSKI:def 1;
-              hence thesis by A13,A17,A18;
-            end;
-          end;
-          suppose p in {x};
-            then
-A19:        p = x by TARSKI:def 1;
-            per cases by A17,XBOOLE_0:def 3;
-            suppose q in (B \ D);
-              then q in B & not q in D by XBOOLE_0:def 5;
-              hence thesis by A13,A17,A19;
-            end;
-            suppose q in {x};
-              hence thesis by A17,A19,TARSKI:def 1;
-            end;
-          end;
-        end;
-        then
-A20:    C is mutually-disjoint Subset-Family of Y by A12,Def5,XBOOLE_1:1;
-        union B c= union C
-        proof
-          let s be set such that
-A21:      s in union B;
-          consider t be set such that
-A22:      s in t & t in B by A21,TARSKI:def 4;
-          per cases;
-          suppose t in D;
-            then t c= x by A6;
-            hence thesis by A7,A22,TARSKI:def 4;
-          end;
-          suppose not t in D;
-            then t in (B \ D) by A22,XBOOLE_0:def 5;
-            hence thesis by A8,A22,TARSKI:def 4;
-          end;
-        end;
-        then
-A23:    B = C by A2,A9,A10,A20,XBOOLE_1:8;
-A24:    {x} c= (B \ D) \/ {x} by XBOOLE_1:7;
-        x in {x} by TARSKI:def 1;
-        hence contradiction by A4,A5,A23,A24,TARSKI:def 4;
+        s in {x};
+        hence thesis by A5,TARSKI:def 1;
       end;
-      hence thesis;
+      assume
+A9:   not y in union B;
+A10:  for p being set st p in B & not p in D & p <> x holds p misses x
+      proof
+A11:    H is hierarchic by Def4;
+        let p be set such that
+A12:    p in B and
+A13:    not p in D and
+        p <> x;
+A14:    not x c= p by A4,A9,A12,TARSKI:def 4;
+        not p c= x by A6,A12,A13;
+        hence thesis by A2,A5,A12,A14,A11,Def3;
+      end;
+A15:  for p,q be set st p in C & q in C & p <> q holds p misses q
+      proof
+        let p,q be set such that
+A16:    p in C and
+A17:    q in C and
+A18:    p <> q;
+        per cases by A16,XBOOLE_0:def 3;
+        suppose
+A19:      p in (B \ D);
+          then
+A20:      not p in D by XBOOLE_0:def 5;
+A21:      p in B by A19,XBOOLE_0:def 5;
+          per cases by A17,XBOOLE_0:def 3;
+          suppose
+            q in (B \ D);
+            then q in B by XBOOLE_0:def 5;
+            hence thesis by A18,A21,Def5;
+          end;
+          suppose
+            q in {x};
+            then q = x by TARSKI:def 1;
+            hence thesis by A10,A18,A21,A20;
+          end;
+        end;
+        suppose
+          p in {x};
+          then
+A22:      p = x by TARSKI:def 1;
+          per cases by A17,XBOOLE_0:def 3;
+          suppose
+A23:        q in (B \ D);
+            then
+A24:        not q in D by XBOOLE_0:def 5;
+            q in B by A23,XBOOLE_0:def 5;
+            hence thesis by A10,A18,A22,A24;
+          end;
+          suppose
+            q in {x};
+            hence thesis by A18,A22,TARSKI:def 1;
+          end;
+        end;
+      end;
+      x in {x} by TARSKI:def 1;
+      then
+A25:  x in C by XBOOLE_0:def 3;
+A26:  union B c= union C
+      proof
+        let s be set;
+        assume
+        s in union B;
+        then consider t be set such that
+A27:    s in t and
+A28:    t in B by TARSKI:def 4;
+        per cases;
+        suppose
+          t in D;
+          then t c= x by A6;
+          hence thesis by A25,A27,TARSKI:def 4;
+        end;
+        suppose
+          not t in D;
+          then t in (B \ D) by A28,XBOOLE_0:def 5;
+          hence thesis by A7,A27,TARSKI:def 4;
+        end;
+      end;
+A29:  x in {x} by TARSKI:def 1;
+      (B \ D) c= B by XBOOLE_1:36;
+      then
+A30:  (B \ D) c= H by A2,XBOOLE_1:1;
+      then C c= H by A8,XBOOLE_1:8;
+
+      then C is mutually-disjoint Subset-Family of Y by
+      A15,Def5, XBOOLE_1
+      :1;
+
+      then
+A31:  B = C by A3,A30,A8,A26,XBOOLE_1:8;
+      {x} c= (B \ D) \/ {x} by XBOOLE_1:7;
+      hence contradiction by A4,A9,A31,A29,TARSKI:def 4;
     end;
+    hence thesis;
   end;
+  hence union B = Y by XBOOLE_0:def 10;
 end;
 
 Lm3: now
   let Y;
   let H be Hierarchy of Y;
   let B be mutually-disjoint Subset-Family of Y such that
-A1: B c= H & for C being mutually-disjoint Subset-Family of Y st
-  C c= H & union B c= union C holds B = C;
+A1: B c= H and
+
+A2: for C being mutually-disjoint Subset-Family of Y st C c= H & union B
+  c= union C holds B = C;
+
   let S1 such that
-A2: S1 in B;
+A3: S1 in B;
   now
-    assume
-A3: S1 = {};
     set C = B \ {{}};
-A4: union B c= union C
+    assume
+A4: S1 = {};
+A5: union B c= union C
     proof
-      let x be set such that
-A5:   x in union B;
-      consider y be set such that
-A6:   x in y & y in B by A5,TARSKI:def 4;
+      let x be set;
+      assume
+      x in union B;
+      then consider y be set such that
+A6:   x in y and
+A7:   y in B by TARSKI:def 4;
       not y in {{}} by A6,TARSKI:def 1;
-      then y in C by A6,XBOOLE_0:def 5;
+      then y in C by A7,XBOOLE_0:def 5;
       hence thesis by A6,TARSKI:def 4;
     end;
-    C c= B by XBOOLE_1:36;
-    then
-A7: C c= H by A1,XBOOLE_1:1;
-    C is mutually-disjoint
+A8: C is mutually-disjoint
     proof
       let x,y be set such that
-A8:   x in C & y in C & x <> y;
-      x in B & y in B by A8,XBOOLE_0:def 5;
-      hence thesis by A8,Def5;
+A9:   x in C and
+A10:  y in C and
+A11:  x <> y;
+A12:  y in B by A10,XBOOLE_0:def 5;
+      x in B by A9,XBOOLE_0:def 5;
+      hence thesis by A11,A12,Def5;
     end;
-    then B = C by A1,A4,A7;
-    then not {} in {{}} by A2,A3,XBOOLE_0:def 5;
+    C c= B by XBOOLE_1:36;
+    then C c= H by A1,XBOOLE_1:1;
+    then B = C by A2,A5,A8;
+    then not {} in {{}} by A3,A4,XBOOLE_0:def 5;
     hence contradiction by TARSKI:def 1;
   end;
   hence S1 <> {};
@@ -555,9 +618,8 @@ definition
   let F be Subset-Family of Y;
   attr F is T_3 means
   :Def6:
-  for A be Subset of Y st A in F
-  for x be Element of Y st not x in A
-  ex B be Subset of Y st x in B & B in F & A misses B;
+  for A be Subset of Y st A in F for x be Element
+  of Y st not x in A ex B be Subset of Y st x in B & B in F & A misses B;
 end;
 
 theorem Th11:
@@ -567,7 +629,8 @@ proof
 A1: F = {};
   let A be Subset of Y such that
 A2: A in F;
-  let x be Element of Y such that not x in A;
+  let x be Element of Y such that
+  not x in A;
   thus thesis by A1,A2;
 end;
 
@@ -584,9 +647,10 @@ A1:   Y <> {};
       H is hierarchic
       proof
         let x,y be set such that
-A2:     x in H & y in H;
-        x = Y & y = Y by A2,TARSKI:def 1;
-        hence thesis;
+A2:     x in H and
+A3:     y in H;
+        x = Y by A2,TARSKI:def 1;
+        hence thesis by A3;
       end;
       then reconsider H as Hierarchy of Y by Def4;
       take H;
@@ -594,21 +658,24 @@ A2:     x in H & y in H;
       hence H is covering by ABIAN:4;
       thus H is T_3
       proof
-        let A be Subset of Y such that
-A3:     A in H;
-A4:     A = Y by A3,TARSKI:def 1;
-        let x be Element of Y such that
-A5:     not x in A;
-        thus thesis by A1,A4,A5;
+        let A be Subset of Y;
+        assume
+        A in H;
+        then
+A4:     A = Y by TARSKI:def 1;
+        let x be Element of Y;
+        assume
+        not x in A;
+        hence thesis by A1,A4;
       end;
     end;
     suppose
-A6:   Y = {};
+A5:   Y = {};
       set H' = {};
       reconsider H = H' as Subset-Family of Y by XBOOLE_1:2;
       reconsider H1 = H as Hierarchy of Y by Def4,Th6;
       take H1;
-      thus H1 is covering by A6,ABIAN:4,ZFMISC_1:2;
+      thus H1 is covering by A5,ABIAN:4,ZFMISC_1:2;
       thus thesis by Th11;
     end;
   end;
@@ -619,69 +686,73 @@ definition
   let F be Subset-Family of Y;
   attr F is lower-bounded means
   :Def7:
-  for B being set st
-  B <> {} & B c= F & B is c=-linear ex c st c in F & c c= meet B;
+  for B being set st B <> {} & B c= F & B
+  is c=-linear ex c st c in F & c c= meet B;
 end;
 
 theorem Th12:
-  for B being mutually-disjoint Subset-Family of Y
-  st for b be set st b in B holds S1 misses b & Y <> {}
-  holds B \/ {S1} is mutually-disjoint Subset-Family of Y
-  & (S1 <> {} implies union (B \/ {S1}) <> union B)
+  for B being mutually-disjoint Subset-Family of Y st for b be set
+  st b in B holds S1 misses b & Y <> {} holds B \/ {S1} is mutually-disjoint
+  Subset-Family of Y & (S1 <> {} implies union (B \/ {S1}) <> union B)
 proof
   let B being mutually-disjoint Subset-Family of Y such that
 A1: for b be set st b in B holds S1 misses b & Y <> {};
   set C = B \/ {S1};
-A2: {S1} c= bool Y
-  proof
-    let p be set such that
-A3: p in {S1};
-    p = S1 by A3,TARSKI:def 1;
-    hence thesis;
-  end;
-  now
+A2: now
     let c1,c2 be set such that
-A4: c1 in C and
-A5: c2 in C and
-A6: c1 <> c2;
-    per cases by A4,XBOOLE_0:def 3;
+A3: c1 in C and
+A4: c2 in C and
+A5: c1 <> c2;
+    per cases by A3,XBOOLE_0:def 3;
     suppose
-A7:   c1 in B;
-      per cases by A5,XBOOLE_0:def 3;
-      suppose c2 in B;
-        hence c1 misses c2 by A6,A7,Def5;
+A6:   c1 in B;
+      per cases by A4,XBOOLE_0:def 3;
+      suppose
+        c2 in B;
+        hence c1 misses c2 by A5,A6,Def5;
       end;
-      suppose c2 in {S1};
+      suppose
+        c2 in {S1};
         then c2 = S1 by TARSKI:def 1;
-        hence c1 misses c2 by A1,A7;
+        hence c1 misses c2 by A1,A6;
       end;
     end;
-    suppose c1 in {S1};
+    suppose
+      c1 in {S1};
       then
-A8:   c1 = S1 by TARSKI:def 1;
-      then not c2 in {S1} by A6,TARSKI:def 1;
-      then c2 in B by A5,XBOOLE_0:def 3;
-      hence c1 misses c2 by A1,A8;
+A7:   c1 = S1 by TARSKI:def 1;
+      then not c2 in {S1} by A5,TARSKI:def 1;
+      then c2 in B by A4,XBOOLE_0:def 3;
+      hence c1 misses c2 by A1,A7;
     end;
+  end;
+  {S1} c= bool Y
+  proof
+    let p be set;
+    assume
+    p in {S1};
+    then p = S1 by TARSKI:def 1;
+    hence thesis;
   end;
   hence C is mutually-disjoint Subset-Family of Y by A2,Def5,XBOOLE_1:8;
   thus S1 <> {} implies union C <> union B
   proof
     assume
-A9: S1 <> {};
+A8: S1 <> {};
     not union C c= union B
     proof
+A9:   {S1} c= C by XBOOLE_1:7;
       assume
 A10:  union C c= union B;
       consider p be set such that
-A11:  p in S1 by A9,XBOOLE_0:def 1;
-A12:  S1 in {S1} by TARSKI:def 1;
-      {S1} c= C by XBOOLE_1:7;
-      then p in union C by A11,A12,TARSKI:def 4;
+A11:  p in S1 by A8,XBOOLE_0:def 1;
+      S1 in {S1} by TARSKI:def 1;
+      then p in union C by A11,A9,TARSKI:def 4;
       then consider S2 be set such that
-A13:  p in S2 & S2 in B by A10,TARSKI:def 4;
+A12:  p in S2 and
+A13:  S2 in B by A10,TARSKI:def 4;
       S1 misses S2 by A1,A13;
-      hence contradiction by A11,A13,XBOOLE_0:3;
+      hence contradiction by A11,A12,XBOOLE_0:3;
     end;
     hence thesis;
   end;
@@ -692,16 +763,16 @@ definition
   let F be Subset-Family of Y;
   attr F is with_max's means
   :Def8:
-  for S being Subset of Y st S in F
-  ex T being Subset of Y st S c= T & T in F &
-  for V being Subset of Y st T c= V & V in F holds V = Y;
+  for S being Subset of Y st S in F ex T
+being Subset of Y st S c= T & T in F & for V being Subset of Y st T c= V & V in
+  F holds V = Y;
 end;
 
 begin
 
 theorem
-  for H being covering Hierarchy of Y st H is with_max's
-  ex P being a_partition of Y st P c= H
+  for H being covering Hierarchy of Y st H is with_max's ex P being
+  a_partition of Y st P c= H
 proof
   let H be covering Hierarchy of Y such that
 A1: H is with_max's;
@@ -715,80 +786,83 @@ A2: Y = {};
   end;
   suppose
 A3: Y <> {};
-    now per cases;
+    now
+      per cases;
       suppose
 A4:     Y in H;
         set P = {Y};
-A5:     P is a_partition of Y by A3,EQREL_1:48;
-        P c= H
+A5:     P c= H
         proof
-          let p be set such that
-A6:       p in P;
-          thus thesis by A4,A6,TARSKI:def 1;
+          let p be set;
+          assume
+          p in P;
+          hence thesis by A4,TARSKI:def 1;
         end;
+        P is a_partition of Y by A3,EQREL_1:48;
         hence thesis by A5;
       end;
       suppose
-A7:     not Y in H;
-        defpred X[set] means ex S be Subset of Y st (S in H & S c= $1 &
-        for V being Subset of Y st $1 c= V & V in H holds V = Y);
+A6:     not Y in H;
+        defpred X[set] means ex S be Subset of Y st (S in H & S c= $1 & for V
+        being Subset of Y st $1 c= V & V in H holds V = Y);
         consider P' be set such that
-A8:     for T be set holds T in P' iff T in H & X[T] from XBOOLE_0:sch 1;
-A9:     union H = Y by ABIAN:4;
-A10:    P' c= H
+A7:     for T be set holds T in P' iff T in H & X[T] from XBOOLE_0:
+        sch 1;
+A8:     P' c= H
         proof
-          let p be set such that
-A11:      p in P';
-          thus thesis by A8,A11;
+          let p be set;
+          assume
+          p in P';
+          hence thesis by A7;
         end;
         then reconsider P = P' as Subset-Family of Y by XBOOLE_1:1;
-A12:    union P = Y
-        proof
-          thus union P c= Y;
-          thus Y c= union P
-          proof
-            let p be set such that
-A13:        p in Y;
-            consider h' be set such that
-A14:        p in h' & h' in H by A9,A13,TARSKI:def 4;
-            reconsider h = h' as Subset of Y by A14;
-            consider T be Subset of Y such that
-A15:        h
-
-c= T & T in H & for V being Subset of Y st T c= V & V in H holds V = Y
-            by A1,A14,Def8;
-            T in P by A8,A15;
-            hence thesis by A14,A15,TARSKI:def 4;
-          end;
-        end;
-        now
+A9:     now
           let S1 such that
-A16:      S1 in P;
+A10:      S1 in P;
           thus S1 <> {}
           proof
-            assume
-A17:        S1 = {};
             consider S be Subset of Y such that
-A18:        S in H and
-A19:        S c= S1 and
-A20:        for V being Subset of Y st S1 c= V & V in H holds V = Y by A8,A16;
-            S1 c= S by A17,XBOOLE_1:2;
-            then S1 = S by A19,XBOOLE_0:def 10
-              .= Y by A17,A18,A20,XBOOLE_1:2;
-            hence contradiction by A3,A17;
+A11:        S in H and
+A12:        S c= S1 and
+A13:        for V being Subset of Y st S1 c= V & V in H holds V = Y
+            by A7,A10;
+            assume
+A14:        S1 = {};
+            then S1 = S by A12
+              .= Y by A14,A11,A13,XBOOLE_1:2;
+            hence contradiction by A3,A14;
           end;
           thus for S2 st S2 in P holds S1 = S2 or S1 misses S2
           proof
             let S2 such that
-A21:        S2 in P;
-A22:        S2 in H by A8,A21;
-            consider T be Subset of Y such that T in H and T c= S2 and
-A23:        for V being Subset of Y st S2 c= V & V in H holds V = Y by A8,A21;
-            thus thesis by A7,A22,A23;
+A15:        S2 in P;
+A16:        ex T be Subset of Y st T in H & T c= S2 & for V being
+            Subset of Y st S2 c= V & V in H holds V = Y by A7,A15;
+            S2 in H by A7,A15;
+            hence thesis by A6,A16;
           end;
         end;
-        then P is a_partition of Y by A12,EQREL_1:def 6;
-        hence thesis by A10;
+A17:    union H = Y by ABIAN:4;
+        Y c= union P
+        proof
+          let p be set;
+          assume
+          p in Y;
+          then consider h' be set such that
+A18:      p in h' and
+A19:      h' in H by A17,TARSKI:def 4;
+          reconsider h = h' as Subset of Y by A19;
+          consider T be Subset of Y such that
+A20:      h c= T and
+A21:      T in H and
+A22:      for V being Subset of Y st T c= V & V in H holds V = Y by
+          A1,A19,Def8;
+          T in P by A7,A21,A22;
+          hence thesis by A18,A20,TARSKI:def 4;
+        end;
+        then union P = Y by XBOOLE_0:def 10;
+        then P is a_partition of Y by A9,EQREL_1:def 6;
+        hence thesis by A8;
       end;
     end;
     hence thesis;
@@ -796,154 +870,165 @@ A23:        for V being Subset of Y st S2 c= V & V in H holds V = Y by A8,A21;
 end;
 
 theorem
-  for H being covering Hierarchy of Y
-  for B being mutually-disjoint Subset-Family of Y st B c= H &
-  for C being mutually-disjoint Subset-Family of Y st
-  C c= H & union B c= union C holds B = C holds B is a_partition of Y
+  for H being covering Hierarchy of Y for B being mutually-disjoint
+Subset-Family of Y st B c= H & for C being mutually-disjoint Subset-Family of Y
+  st C c= H & union B c= union C holds B = C holds B is a_partition of Y
 proof
   let H be covering Hierarchy of Y;
   let B be mutually-disjoint Subset-Family of Y such that
-A1: B c= H & for C being mutually-disjoint Subset-Family of Y st
-  C c= H & union B c= union C holds B = C;
-  thus union B = Y by A1,Lm2;
-  thus thesis by A1,Def5,Lm3;
+A1: B c= H and
+A2: for C being mutually-disjoint Subset-Family of Y st C c= H & union B
+  c= union C holds B = C;
+  thus union B = Y by A1,A2,Lm2;
+  thus thesis by A1,A2,Def5,Lm3;
 end;
 
 theorem
-  for H being covering T_3 Hierarchy of Y st H is lower-bounded & not {} in H
-  for A being Subset of Y for B being mutually-disjoint Subset-Family of Y st
-  A in B & B c= H & for C being mutually-disjoint Subset-Family of Y st
-  A in C & C c= H & union B c= union C holds union B = union C
-  holds B is a_partition of Y
+  for H being covering T_3 Hierarchy of Y st H is lower-bounded & not {}
+  in H for A being Subset of Y for B being mutually-disjoint Subset-Family of Y
+st A in B & B c= H & for C being mutually-disjoint Subset-Family of Y st A in C
+& C c= H & union B c= union C holds union B = union C holds B is a_partition of
+  Y
 proof
   let H be covering T_3 Hierarchy of Y such that
-A1: H is lower-bounded & not {} in H;
+A1: H is lower-bounded and
+A2: not {} in H;
   let A be Subset of Y;
   let B be mutually-disjoint Subset-Family of Y such that
-A2: A in B and
-A3: B c= H and
-A4: for C being mutually-disjoint Subset-Family of Y st
-  A in C & C c= H & union B c= union C holds union B = union C;
-A5: union H = Y by ABIAN:4;
-A6: H is hierarchic by Def4;
+A3: A in B and
+A4: B c= H and
+A5: for C being mutually-disjoint Subset-Family of Y st A in C & C c= H
+  & union B c= union C holds union B = union C;
+A6: union H = Y by ABIAN:4;
+A7: H is hierarchic by Def4;
   per cases;
   suppose
-A7: Y <> {};
+A8: Y <> {};
     Y c= union B
     proof
-      assume not Y c= union B;
+      assume
+      not Y c= union B;
       then consider x be set such that
-A8:   x in Y and
-A9:   not x in union B by TARSKI:def 3;
+A9:   x in Y and
+A10:  not x in union B by TARSKI:def 3;
+      consider xx be set such that
+A11:  x in xx and
+A12:  xx in H by A6,A9,TARSKI:def 4;
       defpred X[set] means x in $1;
       consider D be set such that
-A10:  for h be set holds h in D iff h in H & X[h] from XBOOLE_0:sch 1;
-      consider xx be set such that
-A11:  x in xx & xx in H by A5,A8,TARSKI:def 4;
-A12:  xx in D by A10,A11;
-A13:  D c= H
+A13:  for h be set holds h in D iff h in H & X[h] from XBOOLE_0:sch 1;
+A14:  D c= H
       proof
-        let d be set such that
-A14:    d in D;
-        thus thesis by A10,A14;
+        let d be set;
+        assume
+        d in D;
+        hence thesis by A13;
       end;
       now
         let h1,h2 be set such that
-A15:    h1 in D & h2 in D;
+A15:    h1 in D and
+A16:    h2 in D;
         now
+A17:      x in h2 by A13,A16;
           assume
-A16:      h1 misses h2;
-          x in h1 & x in h2 by A10,A15;
-          hence contradiction by A16,XBOOLE_0:3;
+A18:      h1 misses h2;
+          x in h1 by A13,A15;
+          hence contradiction by A18,A17,XBOOLE_0:3;
         end;
-        then h1 c= h2 or h2 c= h1 by A6,A13,A15,Def3;
+        then h1 c= h2 or h2 c= h1 by A7,A14,A15,A16,Def3;
         hence h1,h2 are_c=-comparable by XBOOLE_0:def 9;
       end;
-      then D is c=-linear by ORDINAL1:def 9;
+      then
+A19:  D is c=-linear by ORDINAL1:def 9;
+      xx in D by A13,A11,A12;
       then consider min be set such that
-A17:  min in H and
-A18:  min c= meet D by A1,A12,A13,Def7;
-      reconsider min' = min as Subset of Y by A17;
+A20:  min in H and
+A21:  min c= meet D by A1,A14,A19,Def7;
+      reconsider min' = min as Subset of Y by A20;
+      set C = B \/ {min'};
+A22:  B c= C by XBOOLE_1:7;
       now
+        reconsider x' = x as Element of Y by A9;
         let b1 be set such that
-A19:    b1 in B;
-        reconsider b1' = b1 as Subset of Y by A19;
-        reconsider x' = x as Element of Y by A8;
-A20:    not x' in b1' by A9,A19,TARSKI:def 4;
-A21:    not min' c= b1
+A23:    b1 in B;
+        reconsider b1' = b1 as Subset of Y by A23;
+A24:    not x' in b1' by A10,A23,TARSKI:def 4;
+A25:    not b1 c= min'
         proof
-          assume
-A22:      min' c= b1;
+          reconsider b1' = b1 as Subset of Y by A23;
           consider k be Subset of Y such that
-A23:      x' in k and
-A24:      k in H and
-A25:      k misses b1' by A3,A19,A20,Def6;
-          k in D by A10,A23,A24;
+A26:      x' in k and
+A27:      k in H and
+A28:      k misses b1' by A4,A23,A24,Def6;
+          k in D by A13,A26,A27;
           then meet D c= k by SETFAM_1:4;
           then
-A26:      min' c= k by A18,XBOOLE_1:1;
-          consider y be set such that
-A27:      y in min' by A1,A17,XBOOLE_0:def 1;
-          thus contradiction by A22,A25,A26,A27,XBOOLE_0:3;
-        end;
-        not b1 c= min'
-        proof
-          assume
-A28:      b1 c= min';
-          reconsider b1' = b1 as Subset of Y by A19;
-          consider k be Subset of Y such that
-A29:      x' in k and
-A30:      k in H and
-A31:      k misses b1' by A3,A19,A20,Def6;
-A32:      b1 <> {} by A1,A3,A19;
-          k in D by A10,A29,A30;
-          then meet D c= k by SETFAM_1:4;
-          then min' c= k by A18,XBOOLE_1:1;
+A29:      min' c= k by A21,XBOOLE_1:1;
+          b1 <> {} by A2,A4,A23;
           then
-A33:      b1' c= k by A28,XBOOLE_1:1;
-          consider y be set such that
-A34:      y in b1' by A32,XBOOLE_0:def 1;
-          thus contradiction by A31,A33,A34,XBOOLE_0:3;
+A30:      ex y be set st y in b1' by XBOOLE_0:def 1;
+          assume
+          b1 c= min';
+          then b1' c= k by A29,XBOOLE_1:1;
+          hence contradiction by A28,A30,XBOOLE_0:3;
         end;
-        hence b1 misses min' by A3,A6,A17,A19,A21,Def3;
+        not min' c= b1
+        proof
+          consider k be Subset of Y such that
+A31:      x' in k and
+A32:      k in H and
+A33:      k misses b1' by A4,A23,A24,Def6;
+          k in D by A13,A31,A32;
+          then meet D c= k by SETFAM_1:4;
+          then
+A34:      min' c= k by A21,XBOOLE_1:1;
+          assume
+A35:      min' c= b1;
+          ex y be set st y in min' by A2,A20,XBOOLE_0:def 1;
+          hence contradiction by A35,A33,A34,XBOOLE_0:3;
+        end;
+        hence b1 misses min' by A4,A7,A20,A23,A25,Def3;
       end;
       then
-A35:  for b be set st b in B holds min' misses b & Y <> {} by A7;
-      set C = B \/ {min'};
-A36:  C is mutually-disjoint Subset-Family of Y
-      & union C <> union B by A1,A17,A35,Th12;
+A36:  for b be set st b in B holds min' misses b & Y <> {} by A8;
+      then
+A37:  C is mutually-disjoint Subset-Family of Y by Th12;
       {min'} c= H
       proof
-        let s be set such that
-A37:    s in {min'};
-        thus thesis by A17,A37,TARSKI:def 1;
+        let s be set;
+        assume
+        s in {min'};
+        hence thesis by A20,TARSKI:def 1;
       end;
       then
-A38:  C c= H by A3,XBOOLE_1:8;
-      B c= C by XBOOLE_1:7;
-      hence contradiction by A2,A4,A36,A38,ZFMISC_1:95;
+A38:  C c= H by A4,XBOOLE_1:8;
+      union C <> union B by A2,A20,A36,Th12;
+      hence contradiction by A3,A5,A37,A38,A22,ZFMISC_1:95;
     end;
     then
 A39: union B = Y by XBOOLE_0:def 10;
-    for A be Subset of Y st A in B holds (A <> {} &
-    for E be Subset of Y st E in B holds A = E or A misses E) by A1,A3,Def5;
+    for A be Subset of Y st A in B holds (A <> {} & for E be Subset of Y
+    st E in B holds A = E or A misses E) by A2,A4,Def5;
     hence thesis by A39,EQREL_1:def 6;
   end;
   suppose
 A40: Y = {};
-    now per cases by A40,ZFMISC_1:1,39;
-      suppose H = {};
-        hence B = {} by A3;
+    now
+      per cases by A40,ZFMISC_1:1,39;
+      suppose
+        H = {};
+        hence B = {} by A4;
       end;
       suppose
 A41:    H = {{}};
         B <> {{}}
         proof
-          assume B = {{}};
+          assume
+          B = {{}};
           then {} in B by TARSKI:def 1;
-          hence contradiction by A1,A3;
+          hence contradiction by A2,A4;
         end;
-        hence B = {} by A3,A41,ZFMISC_1:39;
+        hence B = {} by A4,A41,ZFMISC_1:39;
       end;
     end;
     hence thesis by A40,EQREL_1:54;
@@ -951,137 +1036,148 @@ A41:    H = {{}};
 end;
 
 theorem Th16:
-  for H being covering T_3 Hierarchy of Y st H is lower-bounded & not {} in H
-  for A being Subset of Y for B being mutually-disjoint Subset-Family of Y st
-  A in B & B c= H & for C being mutually-disjoint Subset-Family of Y st
-  A in C & C c= H & B c= C holds B = C holds B is a_partition of Y
+  for H being covering T_3 Hierarchy of Y st H is lower-bounded &
+not {} in H for A being Subset of Y for B being mutually-disjoint Subset-Family
+of Y st A in B & B c= H & for C being mutually-disjoint Subset-Family of Y st A
+  in C & C c= H & B c= C holds B = C holds B is a_partition of Y
 proof
   let H be covering T_3 Hierarchy of Y such that
-A1: H is lower-bounded & not {} in H;
+A1: H is lower-bounded and
+A2: not {} in H;
   let A be Subset of Y;
   let B be mutually-disjoint Subset-Family of Y such that
-A2: A in B and
-A3: B c= H and
-A4: for C being mutually-disjoint Subset-Family of Y st
-  A in C & C c= H & B c= C holds B = C;
-A5: union H = Y by ABIAN:4;
-A6: H is hierarchic by Def4;
+A3: A in B and
+A4: B c= H and
+A5: for C being mutually-disjoint Subset-Family of Y st A in C & C c= H
+  & B c= C holds B = C;
+A6: union H = Y by ABIAN:4;
+A7: H is hierarchic by Def4;
   per cases;
   suppose
-A7: Y <> {};
+A8: Y <> {};
     Y c= union B
     proof
-      assume not Y c= union B;
+      assume
+      not Y c= union B;
       then consider x be set such that
-A8:   x in Y and
-A9:   not x in union B by TARSKI:def 3;
+A9:   x in Y and
+A10:  not x in union B by TARSKI:def 3;
+      consider xx be set such that
+A11:  x in xx and
+A12:  xx in H by A6,A9,TARSKI:def 4;
       defpred X[set] means x in $1;
       consider D be set such that
-A10:  for h be set holds h in D iff h in H & X[h] from XBOOLE_0:sch 1;
-      consider xx be set such that
-A11:  x in xx & xx in H by A5,A8,TARSKI:def 4;
-A12:  xx in D by A10,A11;
-A13:  D c= H
+A13:  for h be set holds h in D iff h in H & X[h] from XBOOLE_0:sch 1;
+A14:  D c= H
       proof
-        let d be set such that
-A14:    d in D;
-        thus thesis by A10,A14;
+        let d be set;
+        assume
+        d in D;
+        hence thesis by A13;
       end;
       now
         let h1,h2 be set such that
-A15:    h1 in D & h2 in D;
+A15:    h1 in D and
+A16:    h2 in D;
         now
+A17:      x in h2 by A13,A16;
           assume
-A16:      h1 misses h2;
-          x in h1 & x in h2 by A10,A15;
-          hence contradiction by A16,XBOOLE_0:3;
+A18:      h1 misses h2;
+          x in h1 by A13,A15;
+          hence contradiction by A18,A17,XBOOLE_0:3;
         end;
-        then h1 c= h2 or h2 c= h1 by A6,A13,A15,Def3;
+        then h1 c= h2 or h2 c= h1 by A7,A14,A15,A16,Def3;
         hence h1,h2 are_c=-comparable by XBOOLE_0:def 9;
       end;
-      then D is c=-linear by ORDINAL1:def 9;
+      then
+A19:  D is c=-linear by ORDINAL1:def 9;
+      xx in D by A13,A11,A12;
       then consider min be set such that
-A17:  min in H and
-A18:  min c= meet D by A1,A12,A13,Def7;
-      reconsider min' = min as Subset of Y by A17;
+A20:  min in H and
+A21:  min c= meet D by A1,A14,A19,Def7;
+      reconsider min' = min as Subset of Y by A20;
+A22:  {min'} c= H
+      proof
+        let s be set;
+        assume
+        s in {min'};
+        hence thesis by A20,TARSKI:def 1;
+      end;
+      set C = B \/ {min'};
       now
+        reconsider x' = x as Element of Y by A9;
         let b1 be set such that
-A19:    b1 in B;
-        reconsider b1' = b1 as Subset of Y by A19;
-        reconsider x' = x as Element of Y by A8;
-A20:    not x' in b1' by A9,A19,TARSKI:def 4;
-A21:    not min' c= b1
+A23:    b1 in B;
+        reconsider b1' = b1 as Subset of Y by A23;
+A24:    not x' in b1' by A10,A23,TARSKI:def 4;
+A25:    not b1 c= min'
         proof
-          assume
-A22:      min' c= b1;
+          reconsider b1' = b1 as Subset of Y by A23;
           consider k be Subset of Y such that
-A23:      x' in k and
-A24:      k in H and
-A25:      k misses b1' by A3,A19,A20,Def6;
-          k in D by A10,A23,A24;
+A26:      x' in k and
+A27:      k in H and
+A28:      k misses b1' by A4,A23,A24,Def6;
+          k in D by A13,A26,A27;
           then meet D c= k by SETFAM_1:4;
           then
-A26:      min' c= k by A18,XBOOLE_1:1;
-          consider y be set such that
-A27:      y in min' by A1,A17,XBOOLE_0:def 1;
-          thus contradiction by A22,A25,A26,A27,XBOOLE_0:3;
-        end;
-        not b1 c= min'
-        proof
-          assume
-A28:      b1 c= min';
-          reconsider b1' = b1 as Subset of Y by A19;
-          consider k be Subset of Y such that
-A29:      x' in k and
-A30:      k in H and
-A31:      k misses b1' by A3,A19,A20,Def6;
-A32:      b1 <> {} by A1,A3,A19;
-          k in D by A10,A29,A30;
-          then meet D c= k by SETFAM_1:4;
-          then min' c= k by A18,XBOOLE_1:1;
+A29:      min' c= k by A21,XBOOLE_1:1;
+          b1 <> {} by A2,A4,A23;
           then
-A33:      b1' c= k by A28,XBOOLE_1:1;
-          consider y be set such that
-A34:      y in b1' by A32,XBOOLE_0:def 1;
-          thus contradiction by A31,A33,A34,XBOOLE_0:3;
+A30:      ex y be set st y in b1' by XBOOLE_0:def 1;
+          assume
+          b1 c= min';
+          then b1' c= k by A29,XBOOLE_1:1;
+          hence contradiction by A28,A30,XBOOLE_0:3;
         end;
-        hence b1 misses min' by A3,A6,A17,A19,A21,Def3;
+        not min' c= b1
+        proof
+          consider k be Subset of Y such that
+A31:      x' in k and
+A32:      k in H and
+A33:      k misses b1' by A4,A23,A24,Def6;
+          k in D by A13,A31,A32;
+          then meet D c= k by SETFAM_1:4;
+          then
+A34:      min' c= k by A21,XBOOLE_1:1;
+          assume
+A35:      min' c= b1;
+          ex y be set st y in min' by A2,A20,XBOOLE_0:def 1;
+          hence contradiction by A35,A33,A34,XBOOLE_0:3;
+        end;
+        hence b1 misses min' by A4,A7,A20,A23,A25,Def3;
       end;
       then
-A35:  for b be set st b in B holds min' misses b & Y <> {} by A7;
-      set C = B \/ {min'};
-A36:  C is mutually-disjoint Subset-Family of Y
-      & union C <> union B by A1,A17,A35,Th12;
-A37:  {min'} c= H
-      proof
-        let s be set such that
-A38:    s in {min'};
-        thus thesis by A17,A38,TARSKI:def 1;
-      end;
-      B c= C by XBOOLE_1:7;
-      hence contradiction by A2,A3,A4,A36,A37,XBOOLE_1:8;
+A36:  for b be set st b in B holds min' misses b & Y <> {} by A8;
+      then
+A37:  C is mutually-disjoint Subset-Family of Y by Th12;
+A38:  B c= C by XBOOLE_1:7;
+      union C <> union B by A2,A20,A36,Th12;
+      hence contradiction by A3,A4,A5,A37,A22,A38,XBOOLE_1:8;
     end;
     then
 A39: union B = Y by XBOOLE_0:def 10;
-    for A be Subset of Y st A in B holds (A <> {} &
-    for E be Subset of Y st E in B holds A = E or A misses E) by A1,A3,Def5;
+    for A be Subset of Y st A in B holds (A <> {} & for E be Subset of Y
+    st E in B holds A = E or A misses E) by A2,A4,Def5;
     hence thesis by A39,EQREL_1:def 6;
   end;
   suppose
 A40: Y = {};
-    now per cases by A40,ZFMISC_1:1,39;
-      suppose H = {};
-        hence B = {} by A3;
+    now
+      per cases by A40,ZFMISC_1:1,39;
+      suppose
+        H = {};
+        hence B = {} by A4;
       end;
       suppose
 A41:    H = {{}};
         B <> {{}}
         proof
-          assume B = {{}};
+          assume
+          B = {{}};
           then {} in B by TARSKI:def 1;
-          hence contradiction by A1,A3;
+          hence contradiction by A2,A4;
         end;
-        hence B = {} by A3,A41,ZFMISC_1:39;
+        hence B = {} by A4,A41,ZFMISC_1:39;
       end;
     end;
     hence thesis by A40,EQREL_1:54;
@@ -1089,356 +1185,341 @@ A41:    H = {{}};
 end;
 
 theorem Th17:
-  for H being covering T_3 Hierarchy of Y st H is lower-bounded & not {} in H
-  for A being Subset of Y st A in H
-  ex P being a_partition of Y st A in P & P c= H
+  for H being covering T_3 Hierarchy of Y st H is lower-bounded &
+not {} in H for A being Subset of Y st A in H ex P being a_partition of Y st A
+  in P & P c= H
 proof
   let H be covering T_3 Hierarchy of Y such that
 A1: H is lower-bounded and
 A2: not {} in H;
   let A be Subset of Y such that
 A3: A in H;
+  set k1 = {A};
+A4: k1 c= H by A3,ZFMISC_1:37;
+A5: A in k1 by TARSKI:def 1;
+A6: k1 c= bool Y by ZFMISC_1:37;
   defpred X[set] means A in $1 & $1 is mutually-disjoint & $1 c= H;
   consider K be set such that
-A4: for S be set holds S in K iff S in bool bool Y & X[S] from XBOOLE_0:sch 1;
-  set k1 = {A};
-A5: A in k1 by TARSKI:def 1;
-A6: k1 is mutually-disjoint by Th10;
-A7: k1 c= H by A3,ZFMISC_1:37;
-  k1 c= bool Y by ZFMISC_1:37;
+A7: for S be set holds S in K iff S in bool bool Y & X[S] from XBOOLE_0:
+  sch 1;
+  k1 is mutually-disjoint by Th10;
   then
-A8: k1 in K by A4,A5,A6,A7;
-  for Z be set st Z c= K & Z is c=-linear
-  ex X3 be set st X3 in K & for X1 be set st X1 in Z holds X1 c= X3
+A8: k1 in K by A7,A5,A4,A6;
+  for Z be set st Z c= K & Z is c=-linear ex X3 be set st X3 in K & for
+  X1 be set st X1 in Z holds X1 c= X3
   proof
     let Z be set such that
 A9: Z c= K and
 A10: Z is c=-linear;
 A11: now
       let X1,X2 be set;
-      assume X1 in Z & X2 in Z;
-      then X1,X2 are_c=-comparable by A10,ORDINAL1:def 9;
+      assume that
+A12:  X1 in Z and
+A13:  X2 in Z;
+      X1,X2 are_c=-comparable by A10,A12,A13,ORDINAL1:def 9;
       hence X1 c= X2 or X2 c= X1 by XBOOLE_0:def 9;
     end;
     per cases;
     suppose
-A12:  Z <> {};
+A14:  Z <> {};
       set X3 = union Z;
       take X3;
       now
         consider z be set such that
-A13:    z in Z by A12,XBOOLE_0:def 1;
-        A in z by A4,A9,A13;
-        hence A in X3 by A13,TARSKI:def 4;
-A14:    for a st a in Z holds a c= H by A4,A9;
+A15:    z in Z by A14,XBOOLE_0:def 1;
+        A in z by A7,A9,A15;
+        hence A in X3 by A15,TARSKI:def 4;
+A16:    for a st a in Z holds a c= H by A7,A9;
         then X3 c= H by ZFMISC_1:94;
         then X3 c= bool Y by XBOOLE_1:1;
         hence X3 in bool bool Y;
         thus X3 is mutually-disjoint
         proof
           let t1,t2 be set such that
-A15:      t1 in X3 and
-A16:      t2 in X3 and
-A17:      t1 <> t2;
+A17:      t1 in X3 and
+A18:      t2 in X3 and
+A19:      t1 <> t2;
           consider v1 be set such that
-A18:      t1 in v1 & v1 in Z by A15,TARSKI:def 4;
+A20:      t1 in v1 and
+A21:      v1 in Z by A17,TARSKI:def 4;
+A22:      v1 is mutually-disjoint by A7,A9,A21;
           consider v2 be set such that
-A19:      t2 in v2 & v2 in Z by A16,TARSKI:def 4;
-A20:      v1 is mutually-disjoint by A4,A9,A18;
-A21:      v2 is mutually-disjoint by A4,A9,A19;
-          per cases by A11,A18,A19;
-          suppose v1 c= v2;
-            hence thesis by A17,A18,A19,A21,Def5;
+A23:      t2 in v2 and
+A24:      v2 in Z by A18,TARSKI:def 4;
+A25:      v2 is mutually-disjoint by A7,A9,A24;
+          per cases by A11,A21,A24;
+          suppose
+            v1 c= v2;
+            hence thesis by A19,A20,A23,A25,Def5;
           end;
-          suppose v2 c= v1;
-            hence thesis by A17,A18,A19,A20,Def5;
+          suppose
+            v2 c= v1;
+            hence thesis by A19,A20,A23,A22,Def5;
           end;
         end;
-        thus X3 c= H by A14,ZFMISC_1:94;
+        thus X3 c= H by A16,ZFMISC_1:94;
       end;
-      hence X3 in K by A4;
+      hence X3 in K by A7;
       thus thesis by ZFMISC_1:92;
     end;
     suppose
-A22:  Z = {};
+A26:  Z = {};
       consider a be set such that
-A23:  a in K by A8;
+A27:  a in K by A8;
       take a;
-      thus a in K by A23;
-      thus thesis by A22;
+      thus a in K by A27;
+      thus thesis by A26;
     end;
   end;
   then consider M be set such that
-A24: M in K and
-A25: for Z be set st Z in K & Z <> M holds not M c= Z by A8,ORDERS_1:175;
-A26: M c= H by A4,A24;
-A27: M is mutually-disjoint Subset-Family of Y by A4,A24;
-A28: A in M by A4,A24;
-A29: now
+A28: M in K and
+A29: for Z be set st Z in K & Z <> M holds not M c= Z by A8,ORDERS_1
+  :175;
+A30: M is mutually-disjoint Subset-Family of Y by A7,A28;
+A31: now
     let C be mutually-disjoint Subset-Family of Y such that
-A30: A in C & C c= H & M c= C;
-    C in K by A4,A30;
-    hence M = C by A25,A30;
+A32: A in C and
+A33: C c= H and
+A34: M c= C;
+    C in K by A7,A32,A33;
+    hence M = C by A29,A34;
   end;
+A35: A in M by A7,A28;
   take M;
-  thus thesis by A1,A2,A26,A27,A28,A29,Th16;
+  M c= H by A7,A28;
+  hence thesis by A1,A2,A30,A35,A31,Th16;
 end;
 
 Lm4: now
   let x be non empty set;
-  let y such that
-A1: x c= y;
-  consider a be set such that
-A2: a in x by XBOOLE_0:def 1;
-  thus x meets y by A1,A2,XBOOLE_0:3;
+A1: ex a be set st a in x by XBOOLE_0:def 1;
+  let y;
+  assume
+  x c= y;
+  hence x meets y by A1,XBOOLE_0:3;
 end;
 
 theorem Th18:
-  for h being non empty set for Pmin being a_partition of X
-  for hw being set st hw in Pmin & h c= hw
-  for PS being a_partition of X st h in PS &
-  for x st x in PS holds (x c= hw or hw c= x or hw misses x)
-  for PT be set st (for a holds a in PT iff a in PS & a c= hw)
-  holds PT \/ (Pmin \ {hw}) is a_partition of X &
-  PT \/ (Pmin \ {hw}) is_finer_than Pmin
+  for h being non empty set for Pmin being a_partition of X for hw
+  being set st hw in Pmin & h c= hw for PS being a_partition of X st h in PS &
+  for x st x in PS holds (x c= hw or hw c= x or hw misses x) for PT be set st (
+  for a holds a in PT iff a in PS & a c= hw) holds PT \/ (Pmin \ {hw}) is
+  a_partition of X & PT \/ (Pmin \ {hw}) is_finer_than Pmin
 proof
   let h be non empty set;
   let Pmin be a_partition of X;
   let hw be set such that
-A1: hw in Pmin & h c= hw;
+A1: hw in Pmin and
+A2: h c= hw;
   let PS being a_partition of X such that
-A2: h in PS and
-A3: for x st x in PS holds (x c= hw or hw c= x or hw misses x);
+A3: h in PS and
+A4: for x st x in PS holds (x c= hw or hw c= x or hw misses x);
   let PT be set such that
-A4: for a holds a in PT iff a in PS & a c= hw;
-A5: union Pmin = X by EQREL_1:def 6;
-A6: union PS = X by EQREL_1:def 6;
+A5: for a holds a in PT iff a in PS & a c= hw;
+A6: PT c= PS
+  proof
+    let a;
+    assume
+    a in PT;
+    hence thesis by A5;
+  end;
+A7: union PS = X by EQREL_1:def 6;
+A8: union Pmin = X by EQREL_1:def 6;
   set P = PT \/ (Pmin \ {hw});
-A7: PT c= P by XBOOLE_1:7;
-A8: h in PT by A1,A2,A4;
-A9: Pmin \ {hw} c= P by XBOOLE_1:7;
-A10: PT c= PS
+A9: PT c= P by XBOOLE_1:7;
+A10: Pmin \ {hw} c= P by XBOOLE_1:7;
+A11: h in PT by A2,A3,A5;
+A12: X c= union P
   proof
     let a such that
-A11: a in PT;
-    thus thesis by A4,A11;
+A13: a in X;
+    consider b such that
+A14: a in b and
+A15: b in Pmin by A8,A13,TARSKI:def 4;
+    per cases;
+    suppose
+A16:  b = hw;
+      consider c such that
+A17:  a in c and
+A18:  c in PS by A7,A13,TARSKI:def 4;
+A19:  hw meets c by A14,A16,A17,XBOOLE_0:3;
+      per cases by A4,A18,A19;
+      suppose
+        hw c= c;
+        then
+A20:    h c= c by A2,XBOOLE_1:1;
+        h meets c
+        proof
+A21:      ex x st x in h by XBOOLE_0:def 1;
+          assume
+          h misses c;
+          hence contradiction by A20,A21,XBOOLE_0:3;
+        end;
+        then h = c by A3,A18,EQREL_1:def 6;
+        hence thesis by A9,A11,A17,TARSKI:def 4;
+      end;
+      suppose
+        c c= hw;
+        then c in PT by A5,A18;
+        hence thesis by A9,A17,TARSKI:def 4;
+      end;
+    end;
+    suppose
+      b <> hw;
+      then not b in {hw} by TARSKI:def 1;
+      then b in Pmin \ {hw} by A15,XBOOLE_0:def 5;
+      hence thesis by A10,A14,TARSKI:def 4;
+    end;
   end;
-  then
-A12: PT c= bool X by XBOOLE_1:1;
-A13: Pmin \ {hw} c= Pmin by XBOOLE_1:36;
-A14: P c= bool X by A12,XBOOLE_1:8;
-A15: now
+A22: Pmin \ {hw} c= Pmin by XBOOLE_1:36;
+A23: now
     let x,y such that
-A16: x in PT & y in Pmin \ {hw};
-A17: x c= hw by A4,A16;
-A18: y in Pmin & not y in {hw} by A16,XBOOLE_0:def 5;
+A24: x in PT and
+A25: y in Pmin \ {hw};
+A26: y in Pmin by A25,XBOOLE_0:def 5;
+    not y in {hw} by A25,XBOOLE_0:def 5;
     then
-A19: y <> hw by TARSKI:def 1;
+A27: y <> hw by TARSKI:def 1;
+A28: x c= hw by A5,A24;
     now
-      assume x meets y;
-      then consider a such that
-A20:  a in x & a in y by XBOOLE_0:3;
-      hw meets y by A17,A20,XBOOLE_0:3;
-      hence contradiction by A1,A18,A19,EQREL_1:def 6;
+      assume
+      x meets y;
+      then ex a st a in x & a in y by XBOOLE_0:3;
+      then hw meets y by A28,XBOOLE_0:3;
+      hence contradiction by A1,A26,A27,EQREL_1:def 6;
     end;
     hence x misses y;
   end;
-A21: union P = X
-  proof
-    thus union P c= X
-    proof
-      let a such that
-A22:  a in union P;
-      consider b such that
-A23:  a in b & b in P by A22,TARSKI:def 4;
-      thus thesis by A14,A23;
-    end;
-    thus X c= union P
-    proof
-      let a such that
-A24:  a in X;
-      consider b such that
-A25:  a in b & b in Pmin by A5,A24,TARSKI:def 4;
-      per cases;
-      suppose
-A26:    b = hw;
-        consider c such that
-A27:    a in c & c in PS by A6,A24,TARSKI:def 4;
-A28:    hw meets c by A25,A26,A27,XBOOLE_0:3;
-        per cases by A3,A27,A28;
-        suppose hw c= c;
-          then
-A29:      h c= c by A1,XBOOLE_1:1;
-          h meets c
-          proof
-            assume
-A30:        h misses c;
-            consider x such that
-A31:        x in h by XBOOLE_0:def 1;
-            thus contradiction by A29,A30,A31,XBOOLE_0:3;
-          end;
-          then h = c by A2,A27,EQREL_1:def 6;
-          hence thesis by A7,A8,A27,TARSKI:def 4;
-        end;
-        suppose c c= hw;
-          then c in PT by A4,A27;
-          hence thesis by A7,A27,TARSKI:def 4;
-        end;
-      end;
-      suppose b <> hw;
-        then not b in {hw} by TARSKI:def 1;
-        then b in Pmin \ {hw} by A25,XBOOLE_0:def 5;
-        hence thesis by A9,A25,TARSKI:def 4;
-      end;
-    end;
-  end;
-  now
+A29: now
     let A be Subset of X such that
-A32: A in P;
-    now per cases by A32,XBOOLE_0:def 3;
-      suppose A in PT;
-        hence A <> {} by A10,EQREL_1:def 6;
+A30: A in P;
+    now
+      per cases by A30,XBOOLE_0:def 3;
+      suppose
+        A in PT;
+        hence A <> {} by A6,EQREL_1:def 6;
       end;
-      suppose A in Pmin \ {hw};
-        hence A <> {} by A13,EQREL_1:def 6;
+      suppose
+        A in Pmin \ {hw};
+        hence A <> {} by A22,EQREL_1:def 6;
       end;
     end;
     hence A <> {};
     thus for B be Subset of X st B in P holds A = B or A misses B
     proof
       let B be Subset of X such that
-A33:  B in P;
-      per cases by A32,XBOOLE_0:def 3;
+A31:  B in P;
+      per cases by A30,XBOOLE_0:def 3;
       suppose
-A34:    A in PT;
-        per cases by A33,XBOOLE_0:def 3;
-        suppose B in PT;
-          hence thesis by A10,A34,EQREL_1:def 6;
+A32:    A in PT;
+        per cases by A31,XBOOLE_0:def 3;
+        suppose
+          B in PT;
+          hence thesis by A6,A32,EQREL_1:def 6;
         end;
-        suppose B in Pmin \ {hw};
-          hence thesis by A15,A34;
+        suppose
+          B in Pmin \ {hw};
+          hence thesis by A23,A32;
         end;
       end;
       suppose
-A35:    A in Pmin \ {hw};
-        per cases by A33,XBOOLE_0:def 3;
-        suppose B in PT;
-          hence thesis by A15,A35;
+A33:    A in Pmin \ {hw};
+        per cases by A31,XBOOLE_0:def 3;
+        suppose
+          B in PT;
+          hence thesis by A23,A33;
         end;
-        suppose B in Pmin \ {hw};
-          hence thesis by A13,A35,EQREL_1:def 6;
+        suppose
+          B in Pmin \ {hw};
+          hence thesis by A22,A33,EQREL_1:def 6;
         end;
       end;
     end;
   end;
-  hence PT \/ (Pmin \ {hw}) is a_partition of X by A14,A21,EQREL_1:def 6;
+  PT c= bool X by A6,XBOOLE_1:1;
+  then
+A34: P c= bool X by XBOOLE_1:8;
+  union P c= X
+  proof
+    let a;
+    assume
+    a in union P;
+    then ex b st a in b & b in P by TARSKI:def 4;
+    hence thesis by A34;
+  end;
+  then union P = X by A12,XBOOLE_0:def 10;
+  hence PT \/ (Pmin \ {hw}) is a_partition of X by A34,A29,EQREL_1:def 6;
   let a such that
-A36: a in P;
-  per cases by A36,XBOOLE_0:def 3;
-  suppose a in PT;
-    then a c= hw by A4;
+A35: a in P;
+  per cases by A35,XBOOLE_0:def 3;
+  suppose
+    a in PT;
+    then a c= hw by A5;
     hence thesis by A1;
   end;
-  suppose a in Pmin \ {hw};
-    hence thesis by A13;
+  suppose
+    a in Pmin \ {hw};
+    hence thesis by A22;
   end;
 end;
 
 theorem Th19:
-  for h being non empty set st h c= X for Pmax being a_partition of X st
-  ( (ex hy be set st hy in Pmax & hy c= h) &
-  for x st x in Pmax holds (x c= h or h c= x or h misses x)) for Pb be set st
-  (for x holds x in Pb iff (x in Pmax & x misses h))
-  holds Pb \/ {h} is a_partition of X & Pmax is_finer_than (Pb \/ {h})&
-  (for Pmin being a_partition of X st Pmax is_finer_than Pmin
-  for hw being set st hw in Pmin & h c= hw holds
-  (Pb \/ {h}) is_finer_than Pmin)
+  for h being non empty set st h c= X for Pmax being a_partition
+of X st ( (ex hy be set st hy in Pmax & hy c= h) & for x st x in Pmax holds (x
+c= h or h c= x or h misses x)) for Pb be set st (for x holds x in Pb iff (x in
+Pmax & x misses h)) holds Pb \/ {h} is a_partition of X & Pmax is_finer_than (
+  Pb \/ {h})& for Pmin being a_partition of X st Pmax is_finer_than Pmin for hw
+  being set st hw in Pmin & h c= hw holds (Pb \/ {h}) is_finer_than Pmin
 proof
   let h be non empty set such that
 A1: h c= X;
-  let Pmax be a_partition of X such that
-A2: ex hy be set st (hy in Pmax & hy c= h) and
-A3: for x st x in Pmax holds (x c= h or h c= x or h misses x);
-A4: union Pmax = X by EQREL_1:def 6;
-  let Pb be set such that
-A5: for x holds x in Pb iff (x in Pmax & x misses h);
-  set P = Pb \/ {h};
-A6: Pb c= P by XBOOLE_1:7;
-A7: h in {h} by TARSKI:def 1;
-A8: {h} c= P by XBOOLE_1:7;
-A9: now
-    let s be set such that
-A10: s in Pmax & h c= s;
-    consider hy be set such that
-A11: hy in Pmax & hy c= h by A2;
-    hy <> {} by A11,EQREL_1:def 6;
-    then hy meets s by A10,A11,Lm4,XBOOLE_1:1;
-    then s = hy by A10,A11,EQREL_1:def 6;
-    hence h = s by A10,A11,XBOOLE_0:def 10;
-  end;
-A12: Pb c= Pmax
-  proof
-    let s be set such that
-A13: s in Pb;
-    thus thesis by A5,A13;
-  end;
-  then
-A14: Pb c= bool X by XBOOLE_1:1;
-  {h} c= bool X
+A2: {h} c= bool X
   proof
     let s be set;
-    assume s in {h};
+    assume
+    s in {h};
     then s = h by TARSKI:def 1;
     hence thesis by A1;
   end;
-  then
-A15: P c= bool X by A14,XBOOLE_1:8;
-A16: union P = X
-  proof
-    thus union P c= X
-    proof
-      let s be set such that
-A17:  s in union P;
-      consider t be set such that
-A18:  s in t & t in P by A17,TARSKI:def 4;
-      thus thesis by A15,A18;
-    end;
-    thus X c= union P
-    proof
-      let s be set such that
-A19:  s in X;
-      consider t be set such that
-A20:  s in t & t in Pmax by A4,A19,TARSKI:def 4;
-      per cases;
-      suppose t in Pb;
-        hence thesis by A6,A20,TARSKI:def 4;
-      end;
-      suppose not t in Pb;
-        then
-A21:    t meets h by A5,A20;
-        per cases by A3,A20,A21;
-        suppose h c= t;
-          then t = h by A9,A20;
-          hence thesis by A7,A8,A20,TARSKI:def 4;
-        end;
-        suppose
-A22:      t c= h;
-          h in {h} by TARSKI:def 1;
-          hence thesis by A8,A20,A22,TARSKI:def 4;
-        end;
-      end;
-    end;
+A3: h in {h} by TARSKI:def 1;
+  let Pmax be a_partition of X such that
+A4: ex hy be set st hy in Pmax & hy c= h and
+A5: for x st x in Pmax holds (x c= h or h c= x or h misses x);
+A6: now
+    let s be set such that
+A7: s in Pmax and
+A8: h c= s;
+    consider hy be set such that
+A9: hy in Pmax and
+A10: hy c= h by A4;
+    hy <> {} by A9,EQREL_1:def 6;
+    then hy meets s by A8,A10,Lm4,XBOOLE_1:1;
+    then s = hy by A7,A9,EQREL_1:def 6;
+    hence h = s by A8,A10,XBOOLE_0:def 10;
   end;
-  now
+  let Pb be set such that
+A11: for x holds x in Pb iff x in Pmax & x misses h;
+  set P = Pb \/ {h};
+A12: Pb c= P by XBOOLE_1:7;
+A13: Pb c= Pmax
+  proof
+    let s be set;
+    assume
+    s in Pb;
+    hence thesis by A11;
+  end;
+A14: now
     let A be Subset of X such that
-A23: A in P;
+A15: A in P;
     now
-      per cases by A23,XBOOLE_0:def 3;
-      suppose A in Pb;
-        then A in Pmax by A5;
+      per cases by A15,XBOOLE_0:def 3;
+      suppose
+        A in Pb;
+        then A in Pmax by A11;
         hence A <> {} by EQREL_1:def 6;
       end;
-      suppose A in {h};
+      suppose
+        A in {h};
         hence A <> {} by TARSKI:def 1;
       end;
     end;
@@ -1446,555 +1527,669 @@ A23: A in P;
     thus for B be Subset of X st B in P holds A = B or A misses B
     proof
       let B be Subset of X such that
-A24:  B in P;
-      per cases by A23,XBOOLE_0:def 3;
+A16:  B in P;
+      per cases by A15,XBOOLE_0:def 3;
       suppose
-A25:    A in Pb;
-        per cases by A24,XBOOLE_0:def 3;
-        suppose B in Pb;
-          hence thesis by A12,A25,EQREL_1:def 6;
+A17:    A in Pb;
+        per cases by A16,XBOOLE_0:def 3;
+        suppose
+          B in Pb;
+          hence thesis by A13,A17,EQREL_1:def 6;
         end;
-        suppose B in {h};
+        suppose
+          B in {h};
           then B = h by TARSKI:def 1;
-          hence thesis by A5,A25;
+          hence thesis by A11,A17;
         end;
       end;
       suppose
-A26:    A in {h};
-        per cases by A24,XBOOLE_0:def 3;
+A18:    A in {h};
+        per cases by A16,XBOOLE_0:def 3;
         suppose
-A27:      B in Pb;
-          A = h by A26,TARSKI:def 1;
-          hence thesis by A5,A27;
+A19:      B in Pb;
+          A = h by A18,TARSKI:def 1;
+          hence thesis by A11,A19;
         end;
-        suppose B in {h};
+        suppose
+          B in {h};
           then B = h by TARSKI:def 1;
-          hence thesis by A26,TARSKI:def 1;
+          hence thesis by A18,TARSKI:def 1;
         end;
       end;
     end;
   end;
-  hence Pb \/ {h} is a_partition of X by A15,A16,EQREL_1:def 6;
+A20: {h} c= P by XBOOLE_1:7;
+A21: union Pmax = X by EQREL_1:def 6;
+A22: X c= union P
+  proof
+    let s be set;
+    assume
+    s in X;
+    then consider t be set such that
+A23: s in t and
+A24: t in Pmax by A21,TARSKI:def 4;
+    per cases;
+    suppose
+      t in Pb;
+      hence thesis by A12,A23,TARSKI:def 4;
+    end;
+    suppose
+      not t in Pb;
+      then
+A25:  t meets h by A11,A24;
+      per cases by A5,A24,A25;
+      suppose
+        h c= t;
+        then t = h by A6,A24;
+        hence thesis by A3,A20,A23,TARSKI:def 4;
+      end;
+      suppose
+A26:    t c= h;
+        h in {h} by TARSKI:def 1;
+        hence thesis by A20,A23,A26,TARSKI:def 4;
+      end;
+    end;
+  end;
+  Pb c= bool X by A13,XBOOLE_1:1;
+  then
+A27: P c= bool X by A2,XBOOLE_1:8;
+  union P c= X
+  proof
+    let s be set;
+    assume
+    s in union P;
+    then ex t be set st s in t & t in P by TARSKI:def 4;
+    hence thesis by A27;
+  end;
+  then union P = X by A22,XBOOLE_0:def 10;
+  hence Pb \/ {h} is a_partition of X by A27,A14,EQREL_1:def 6;
   thus Pmax is_finer_than (Pb \/ {h})
   proof
     let x be set such that
 A28: x in Pmax;
     per cases;
-    suppose x c= h;
-      hence thesis by A7,A8;
+    suppose
+      x c= h;
+      hence thesis by A3,A20;
     end;
     suppose
 A29:  not x c= h;
-      per cases by A3,A28,A29;
-      suppose h c= x;
-        then h = x by A9,A28;
-        hence thesis by A7,A8;
+      per cases by A5,A28,A29;
+      suppose
+        h c= x;
+        then h = x by A6,A28;
+        hence thesis by A3,A20;
       end;
-      suppose h misses x;
-        then x in Pb by A5,A28;
-        hence thesis by A6;
+      suppose
+        h misses x;
+        then x in Pb by A11,A28;
+        hence thesis by A12;
       end;
     end;
   end;
   let Pmin be a_partition of X such that
 A30: Pmax is_finer_than Pmin;
   let hw be set such that
-A31: hw in Pmin & h c= hw;
+A31: hw in Pmin and
+A32: h c= hw;
   let s be set such that
-A32: s in P;
-  per cases by A32,XBOOLE_0:def 3;
-  suppose s in Pb;
-    then s in Pmax by A5;
-    then consider t be set such that
-A33: t in Pmin & s c= t by A30,SETFAM_1:def 2;
-    thus thesis by A33;
+A33: s in P;
+  per cases by A33,XBOOLE_0:def 3;
+  suppose
+    s in Pb;
+    then s in Pmax by A11;
+    hence thesis by A30,SETFAM_1:def 2;
   end;
-  suppose s in {h};
+  suppose
+    s in {h};
     then s = h by TARSKI:def 1;
-    hence thesis by A31;
+    hence thesis by A31,A32;
   end;
 end;
 
 theorem
-  for H being covering T_3 Hierarchy of X st
-  H is lower-bounded & not {} in H & (for C1 be set st
-  (C1 <> {} & C1 c= PARTITIONS(X) &
-  (for P1,P2 be set st P1 in C1 & P2 in C1 holds
-  P1 is_finer_than P2 or P2 is_finer_than P1)) holds
-  (ex PX,PY st (PX in C1 & PY in C1 & for PZ st PZ in C1 holds
-  PZ is_finer_than PY & PX is_finer_than PZ)))
-  ex C being Classification of X st union C = H
+  for H being covering T_3 Hierarchy of X st H is lower-bounded & not {}
+in H & (for C1 be set st (C1 <> {} & C1 c= PARTITIONS(X) & (for P1,P2 be set st
+P1 in C1 & P2 in C1 holds P1 is_finer_than P2 or P2 is_finer_than P1)) holds (
+ex PX,PY st (PX in C1 & PY in C1 & for PZ st PZ in C1 holds PZ is_finer_than PY
+  & PX is_finer_than PZ))) ex C being Classification of X st union C = H
 proof
   let H be covering T_3 Hierarchy of X such that
 A1: H is lower-bounded and
 A2: not {} in H and
-A3: (for C1 be set st C1 <> {} & C1 c= PARTITIONS(X) &
-  (for P1,P2 be set st P1 in C1 & P2 in C1 holds
-  P1 is_finer_than P2 or P2 is_finer_than P1) holds
-  (ex PX,PY st (PX in C1 & PY in C1 & for PZ st PZ in C1 holds
-  PZ is_finer_than PY & PX is_finer_than PZ)));
-A4: H is hierarchic by Def4;
-  defpred X[set] means (for P be set holds P in $1 implies P c= H) &
-  (for P1,P2 be set holds P1 in $1 & P2 in $1 implies
-  P1 is_finer_than P2 or P2 is_finer_than P1);
-  consider RL be set such that
-A5: for L be set holds L in RL iff L in bool PARTITIONS X & X[L]
-  from XBOOLE_0:sch 1;
+A3: for C1 be set st C1 <> {} & C1 c= PARTITIONS(X) & (for P1,P2 be set
+st P1 in C1 & P2 in C1 holds P1 is_finer_than P2 or P2 is_finer_than P1) holds
+ex PX,PY st (PX in C1 & PY in C1 & for PZ st PZ in C1 holds PZ is_finer_than PY
+  & PX is_finer_than PZ);
   union H = X by ABIAN:4;
   then consider h be set such that
-A6: h in H by XBOOLE_0:def 1,ZFMISC_1:2;
-  reconsider h as Subset of X by A6;
-  consider PX being a_partition of X such that h in PX and
-A7: PX c= H by A1,A2,A6,Th17;
+A4: h in H by XBOOLE_0:def 1,ZFMISC_1:2;
+  reconsider h as Subset of X by A4;
+  consider PX being a_partition of X such that
+  h in PX and
+A5: PX c= H by A1,A2,A4,Th17;
   set L = {PX};
-A8: L c= PARTITIONS(X)
+A6: L c= PARTITIONS(X)
   proof
-    let l be set such that
-A9: l in L;
-    l = PX by A9,TARSKI:def 1;
+    let l be set;
+    assume
+    l in L;
+    then l = PX by TARSKI:def 1;
     hence thesis by PARTIT1:def 3;
   end;
-A10: for a st a in L holds a c= H by A7,TARSKI:def 1;
-  now
+A7: now
     let P1,P2 be set;
-    assume P1 in L & P2 in L;
-    then P1 = PX & P2 = PX by TARSKI:def 1;
-    hence P1 is_finer_than P2 or P2 is_finer_than P1;
+    assume that
+A8: P1 in L and
+A9: P2 in L;
+    P1 = PX by A8,TARSKI:def 1;
+    hence P1 is_finer_than P2 or P2 is_finer_than P1 by A9,TARSKI:def 1;
   end;
+A10: H is hierarchic by Def4;
+  defpred X[set] means (for P be set holds P in $1 implies P c= H) & (for P1,
+  P2 be set holds P1 in $1 & P2 in $1 implies P1 is_finer_than P2 or P2
+  is_finer_than P1);
+  consider RL be set such that
+A11: for L be set holds L in RL iff L in bool PARTITIONS X & X[L] from
+  XBOOLE_0:sch 1;
+  for a st a in L holds a c= H by A5,TARSKI:def 1;
   then
-A11: L in RL by A5,A8,A10;
+A12: L in RL by A11,A6,A7;
   now
     let Z be set such that
-A12: Z c= RL and
-A13: Z is c=-linear;
-A14: now
+A13: Z c= RL and
+A14: Z is c=-linear;
+    set Y = union Z;
+A15: now
       let X1,X2 be set;
-      assume X1 in Z & X2 in Z;
-      then X1,X2 are_c=-comparable by A13,ORDINAL1:def 9;
+      assume that
+A16:  X1 in Z and
+A17:  X2 in Z;
+      X1,X2 are_c=-comparable by A14,A16,A17,ORDINAL1:def 9;
       hence X1 c= X2 or X2 c= X1 by XBOOLE_0:def 9;
     end;
-    set Y = union Z;
-    take Y;
-A15: Y c= PARTITIONS(X)
-    proof
-      let P be set such that
-A16:  P in Y;
-      consider L4 be set such that
-A17:  P in L4 & L4 in Z by A16,TARSKI:def 4;
-      L4 in bool PARTITIONS(X) by A5,A12,A17;
-      hence thesis by A17;
-    end;
 A18: now
-      let P be set;
-      assume P in Y;
-      then consider L3 be set such that
-A19:  P in L3 & L3 in Z by TARSKI:def 4;
-      thus P c= H by A5,A12,A19;
-    end;
-    now
       let P1,P2 be set;
-      assume
-A20:  P1 in Y & P2 in Y;
-      then consider L1 be set such that
-A21:  P1 in L1 & L1 in Z by TARSKI:def 4;
+      assume that
+A19:  P1 in Y and
+A20:  P2 in Y;
+      consider L1 be set such that
+A21:  P1 in L1 and
+A22:  L1 in Z by A19,TARSKI:def 4;
       consider L2 be set such that
-A22:  P2 in L2 & L2 in Z by A20,TARSKI:def 4;
-      per cases by A14,A21,A22;
-      suppose L1 c= L2;
-        hence P1 is_finer_than P2 or P2 is_finer_than P1 by A5,A12,A21,A22;
+A23:  P2 in L2 and
+A24:  L2 in Z by A20,TARSKI:def 4;
+      per cases by A15,A22,A24;
+      suppose
+        L1 c= L2;
+        hence P1 is_finer_than P2 or P2 is_finer_than P1 by A11,A13,A21,A23,
+        A24;
       end;
-      suppose L2 c= L1;
-        hence P1 is_finer_than P2 or P2 is_finer_than P1 by A5,A12,A21,A22;
+      suppose
+        L2 c= L1;
+        hence P1 is_finer_than P2 or P2 is_finer_than P1 by A11,A13,A21,A22,
+        A23;
       end;
     end;
-    hence Y in RL by A5,A15,A18;
+    take Y;
+A25: now
+      let P be set;
+      assume
+      P in Y;
+      then ex L3 be set st P in L3 & L3 in Z by TARSKI:def 4;
+      hence P c= H by A11,A13;
+    end;
+    Y c= PARTITIONS(X)
+    proof
+      let P be set;
+      assume
+      P in Y;
+      then consider L4 be set such that
+A26:  P in L4 and
+A27:  L4 in Z by TARSKI:def 4;
+      L4 in bool PARTITIONS(X) by A11,A13,A27;
+      hence thesis by A26;
+    end;
+    hence Y in RL by A11,A25,A18;
     thus for X1 be set st X1 in Z holds X1 c= Y by ZFMISC_1:92;
   end;
   then consider C be set such that
-A23: C in RL and
-A24: for Z be set st Z in RL & Z <> C holds not C c= Z by A11,ORDERS_1:175;
-  reconsider C as Subset of PARTITIONS(X) by A5,A23;
-  take C;
-A25: C is Classification of X
+A28: C in RL and
+A29: for Z be set st Z in RL & Z <> C holds not C c= Z by A12,
+  ORDERS_1:175;
+  reconsider C as Subset of PARTITIONS(X) by A11,A28;
+A30: C is Classification of X
   proof
     let P1,P2 be a_partition of X such that
-A26: P1 in C and
-A27: P2 in C;
-    thus thesis by A5,A23,A26,A27;
+A31: P1 in C and
+A32: P2 in C;
+    thus thesis by A11,A28,A31,A32;
   end;
-A28: C <> {} by A11,A24,XBOOLE_1:2;
-  union C = H
+A33: C <> {} by A12,A29,XBOOLE_1:2;
+A34: H c= union C
   proof
-    thus union C c= H
-    proof
-      let h be set such that
-A29:  h in union C;
-      consider P be set such that
-A30:  h in P & P in C by A29,TARSKI:def 4;
-      P c= H by A5,A23,A30;
-      hence thesis by A30;
-    end;
-    thus H c= union C
-    proof
-      let h be set such that
-A31:  h in H;
-      per cases;
-      suppose
-A32:    not h in union C;
-        consider PS be a_partition of X such that
-A33:    h in PS and
-A34:    PS c= H by A1,A2,A31,Th17;
-A35:    h <> {} by A33,EQREL_1:def 6;
-        defpred X[set] means ex hx be set st (hx in $1 & h c= hx & h <> hx);
-        consider Ca be set such that
-A36:    for p be set holds p in Ca iff p in C & X[p] from XBOOLE_0:sch 1;
-A37:    Ca c= C
-        proof
-          let s be set such that
-A38:      s in Ca;
-          thus thesis by A36,A38;
+    let h be set such that
+A35: h in H;
+    per cases;
+    suppose
+A36:  not h in union C;
+      defpred X[set] means ex hx be set st (hx in $1 & h c= hx & h <> hx);
+      consider Ca be set such that
+A37:  for p be set holds p in Ca iff p in C & X[p] from XBOOLE_0:sch
+      1;
+A38:  Ca c= C
+      proof
+        let s be set;
+        assume
+        s in Ca;
+        hence thesis by A37;
+      end;
+      defpred X[set] means ex hx be set st (hx in $1 & hx c= h & h <> hx);
+      consider Cb be set such that
+A39:  for p be set holds p in Cb iff p in C & X[p] from XBOOLE_0:sch
+      1;
+      consider PS be a_partition of X such that
+A40:  h in PS and
+A41:  PS c= H by A1,A2,A35,Th17;
+A42:  h <> {} by A40,EQREL_1:def 6;
+A43:  now
+        consider t be set such that
+A44:    t in h by A42,XBOOLE_0:def 1;
+        let p be set;
+        assume
+        p in C;
+        then p is a_partition of X by PARTIT1:def 3;
+        then union p = X by EQREL_1:def 6;
+        then consider v be set such that
+A45:    t in v and
+A46:    v in p by A35,A44,TARSKI:def 4;
+        assume
+A47:    for hv be set st hv in p holds hv misses h;
+        not v misses h by A44,A45,XBOOLE_0:3;
+        hence contradiction by A47,A46;
+      end;
+A48:  C c= Ca \/ Cb
+      proof
+        let p be set such that
+A49:    p in C;
+        consider hv be set such that
+A50:    hv in p and
+A51:    not hv misses h by A43,A49;
+A52:    h <> hv by A36,A49,A50,TARSKI:def 4;
+A53:    p c= H by A11,A28,A49;
+        per cases by A10,A35,A50,A51,A53,Def3;
+        suppose
+          hv c= h;
+          then p in Cb by A39,A49,A50,A52;
+          hence thesis by XBOOLE_0:def 3;
         end;
-        defpred X[set] means ex hx be set st (hx in $1 & hx c= h & h <> hx);
-        consider Cb be set such that
-A39:    for p be set holds p in Cb iff p in C & X[p] from XBOOLE_0:sch 1;
-A40:    Cb c= C
-        proof
-          let s be set such that
-A41:      s in Cb;
-          thus thesis by A39,A41;
+        suppose
+          h c= hv;
+          then p in Ca by A37,A49,A50,A52;
+          hence thesis by XBOOLE_0:def 3;
         end;
-A42:    now
-          let p be set such that
-A43:      p in C;
-          assume
-A44:      for hv be set st hv in p holds hv misses h;
-          consider t be set such that
-A45:      t in h by A35,XBOOLE_0:def 1;
-          p is a_partition of X by A43,PARTIT1:def 3;
-          then union p = X by EQREL_1:def 6;
-          then consider v be set such that
-A46:      t in v & v in p by A31,A45,TARSKI:def 4;
-          not v misses h by A45,A46,XBOOLE_0:3;
-          hence contradiction by A44,A46;
-        end;
-A47:    C = Ca \/ Cb
-        proof
-          thus C c= Ca \/ Cb
-          proof
-            let p be set such that
-A48:        p in C;
-            consider hv be set such that
-A49:        hv in p & not hv misses h by A42,A48;
-A50:        p c= H by A5,A23,A48;
-A51:        h <> hv by A32,A48,A49,TARSKI:def 4;
-            per cases by A4,A31,A49,A50,Def3;
-            suppose hv c= h;
-              then p in Cb by A39,A48,A49,A51;
-              hence thesis by XBOOLE_0:def 3;
-            end;
-            suppose h c= hv;
-              then p in Ca by A36,A48,A49,A51;
-              hence thesis by XBOOLE_0:def 3;
-            end;
-          end;
-          thus thesis by A37,A40,XBOOLE_1:8;
-        end;
+      end;
+      Cb c= C
+      proof
+        let s be set;
+        assume
+        s in Cb;
+        hence thesis by A39;
+      end;
+      then Ca \/ Cb c= C by A38,XBOOLE_1:8;
+      then
+A54:  C = Ca \/ Cb by A48,XBOOLE_0:def 10;
+      then
+A55:  Ca c= C by XBOOLE_1:7;
+A56:  now
+        let P1,P2 be set such that
+A57:    P1 in Ca and
+A58:    P2 in Ca;
+        P2 in C by A55,A58;
         then
-A52:    Ca c= C by XBOOLE_1:7;
-A53:    Cb c= C by A47,XBOOLE_1:7;
-A54:    Ca c= PARTITIONS(X) by A52,XBOOLE_1:1;
-A55:    now
-          let P1,P2 be set such that
-A56:      P1 in Ca & P2 in Ca;
-          P1 in C & P2 in C by A52,A56;
-          then P1 is a_partition of X & P2 is a_partition of X
-          by PARTIT1:def 3;
-          hence P1 is_finer_than P2 or P2 is_finer_than P1
-          by A25,A52,A56,TAXONOM1:def 1;
-        end;
-A57:    Cb c= PARTITIONS(X) by A53,XBOOLE_1:1;
-A58:    now
-          let P1,P2 be set such that
-A59:      P1 in Cb & P2 in Cb;
-          P1 in C & P2 in C by A53,A59;
-          then P1 is a_partition of X & P2 is a_partition of X
-          by PARTIT1:def 3;
-          hence P1 is_finer_than P2 or P2 is_finer_than P1
-          by A25,A53,A59,TAXONOM1:def 1;
-        end;
-        now per cases;
-          suppose Cb <> {};
-            then consider PX,Pmax be set such that
-A60:        PX in Cb & Pmax in Cb and
-A61:        for PZ st PZ in Cb holds
-            PZ is_finer_than Pmax & PX is_finer_than PZ by A3,A57,A58;
-A62:        Pmax c= H by A5,A23,A53,A60;
-            Pmax in C by A53,A60;
-            then
-A63:        Pmax is a_partition of X by PARTIT1:def 3;
-            defpred X[set] means $1 misses h;
-            consider Pb be set such that
-A64:        for x holds x in Pb iff x in Pmax & X[x] from XBOOLE_0:sch 1;
-            set PS1 = Pb \/ {h};
-            Pb c= Pmax
-            proof
-              let s be set;
-              assume s in Pb;
-              hence thesis by A64;
-            end;
-            then
-A65:        Pb c= H by A62,XBOOLE_1:1;
-A66:        for a st a in Pmax holds a c= h or h c= a or h misses a
-            by A4,A31,A62,Def3;
-A67:        ex hx be set st (hx in Pmax & hx c= h & h <> hx) by A39,A60;
-            then
-A68:        PS1 is a_partition of X by A31,A35,A63,A64,A66,Th19;
-A69:        {PS1} c= PARTITIONS(X)
-            proof
-              let s be set such that
-A70:          s in {PS1};
-              s = PS1 by A70,TARSKI:def 1;
-              hence thesis by A68,PARTIT1:def 3;
-            end;
-A71:        {h} c= H
-            proof
-              let s be set such that
-A72:          s in {h};
-              thus thesis by A31,A72,TARSKI:def 1;
-            end;
-            h in {h} by TARSKI:def 1;
-            then
-A73:        h in PS1 by XBOOLE_0:def 3;
-A74:        PS1 c= H by A65,A71,XBOOLE_1:8;
-            set C1 = C \/ {PS1};
-            PS1 in {PS1} by TARSKI:def 1;
-            then
-A75:        PS1 in C1 by XBOOLE_0:def 3;
-A76:        C1 c= PARTITIONS(X) by A69,XBOOLE_1:8;
-A77:        now
-              let P3 be set;
-              assume
-A78:          P3 in C1;
-              per cases by A78,XBOOLE_0:def 3;
-              suppose P3 in C;
-                hence P3 c= H by A5,A23;
-              end;
-              suppose P3 in {PS1};
-                hence P3 c= H by A74,TARSKI:def 1;
-              end;
-            end;
-A79:        Pmax is_finer_than PS1 by A31,A35,A63,A64,A66,A67,Th19;
-A80:        now
-              let P3 be set such that
-A81:          P3 in C;
-              per cases;
-              suppose Ca = {};
-                then P3 is_finer_than Pmax by A47,A61,A81;
-
-hence PS1 is_finer_than P3 or P3 is_finer_than PS1 by A79,SETFAM_1:23;
-              end;
-              suppose
-A82:            Ca <> {};
-                now per cases by A47,A81,XBOOLE_0:def 3;
-                  suppose
-A83:                P3 in Ca;
-                    consider Pmin,PY be set such that
-A84:                Pmin in Ca & PY in Ca and
-A85:                for PZ st PZ in Ca holds
-
-PZ is_finer_than PY & Pmin is_finer_than PZ by A3,A54,A55,A82;
-                    Pmin in C by A52,A84;
-                    then
-A86:                Pmin is a_partition of X by PARTIT1:def 3;
-                    consider hw be set such that
-A87:                hw in Pmin & h c= hw & h <> hw by A36,A84;
-                    Pmax is_finer_than Pmin
-                    proof
-A88:                  Pmin in C & Pmax in C by A47,A60,A84,XBOOLE_0:def 3;
-                      then
-A89:                  Pmin is a_partition of X & Pmax is a_partition of X
-                      by PARTIT1:def 3;
-                      now
-                        assume
-A90:                    Pmin is_finer_than Pmax;
-                        consider hx be set such that
-A91:                    (hx in Pmin & h c= hx & h <> hx) by A36,A84;
-                        consider hy be set such that
-A92:                    (hy in Pmax & hy c= h & h <> hy) by A39,A60;
-A93:                    hy c= hx by A91,A92,XBOOLE_1:1;
-                        consider hz be set such that
-A94:                    hz in Pmax & hx c= hz by A90,A91,SETFAM_1:def 2;
-                        hy is non empty by A63,A92,EQREL_1:def 6;
-                        then hy meets hz by A93,A94,Lm4,XBOOLE_1:1;
-                        then hy = hz by A63,A92,A94,EQREL_1:def 6;
-                        then hx c= h by A92,A94,XBOOLE_1:1;
-                        hence contradiction by A91,XBOOLE_0:def 10;
-                      end;
-                      hence thesis by A25,A88,A89,TAXONOM1:def 1;
-                    end;
-                    then
-A95:                PS1
-                    is_finer_than Pmin by A31,A35,A63,A64,A66,A67,A86,A87,Th19;
-                    Pmin is_finer_than P3 by A83,A85;
-
-hence PS1 is_finer_than P3 or P3 is_finer_than PS1 by A95,SETFAM_1:23;
-                  end;
-                  suppose P3 in Cb;
-                    then P3 is_finer_than Pmax by A61;
-
-hence PS1 is_finer_than P3 or P3 is_finer_than PS1 by A79,SETFAM_1:23;
-                  end;
-                end;
-                hence PS1 is_finer_than P3 or P3 is_finer_than PS1;
-              end;
-            end;
-            now
-              let P1,P2 be set;
-              assume
-A96:          P1 in C1 & P2 in C1;
-              per cases by A96,XBOOLE_0:def 3;
-              suppose
-A97:            P1 in C;
-                per cases by A96,XBOOLE_0:def 3;
-                suppose
-A98:              P2 in C;
-A99:              P1 is a_partition of X by A97,PARTIT1:def 3;
-                  P2 is a_partition of X by A98,PARTIT1:def 3;
-                  hence P1 is_finer_than P2 or P2 is_finer_than P1
-                  by A25,A97,A98,A99,TAXONOM1:def 1;
-                end;
-                suppose P2 in {PS1};
-                  then P2 = PS1 by TARSKI:def 1;
-                  hence P1 is_finer_than P2 or P2 is_finer_than P1 by A80,A97;
-                end;
-              end;
-              suppose P1 in {PS1};
-                then
-A100:           P1 = PS1 by TARSKI:def 1;
-                per cases by A96,XBOOLE_0:def 3;
-                suppose P2 in C;
-                  hence P1 is_finer_than P2 or P2 is_finer_than P1 by A80,A100;
-                end;
-                suppose P2 in {PS1};
-
-hence P1 is_finer_than P2 or P2 is_finer_than P1 by A100,TARSKI:def 1;
-                end;
-              end;
-            end;
-            then C1 in RL by A5,A76,A77;
-            then C = C1 by A24,XBOOLE_1:7;
-            hence thesis by A73,A75,TARSKI:def 4;
-          end;
-          suppose
-A101:       Cb = {};
-            then consider Pmin,PY be set such that
-A102:       Pmin in Ca & PY in Ca and
-A103:       for PZ st PZ in Ca holds
-            PZ is_finer_than PY & Pmin is_finer_than PZ by A3,A28,A47,A55;
-A104:       Pmin c= H by A5,A23,A52,A102;
-            Pmin in C by A52,A102;
-            then
-A105:       Pmin is a_partition of X by PARTIT1:def 3;
-            consider hw be set such that
-A106:       hw in Pmin & h c= hw & h <> hw by A36,A102;
-A107:       Pmin \ {hw} c= H by A104,XBOOLE_1:1;
-            defpred X[set] means $1 c= hw;
-            consider PT be set such that
-A108:       for a holds a in PT iff a in PS & X[a] from XBOOLE_0:sch 1;
-            set PS1 = PT \/ (Pmin \ {hw});
-A109:       PT c= PS1 by XBOOLE_1:7;
-A110:       h in PT by A33,A106,A108;
-            PT c= PS
-            proof
-              let s be set;
-              assume s in PT;
-              hence thesis by A108;
-            end;
-            then PT c= H by A34,XBOOLE_1:1;
-            then
-A111:       PS1 c= H by A107,XBOOLE_1:8;
-A112:       for a st a in PS holds a c= hw or hw c= a or hw misses a
-            by A4,A34,A104,A106,Def3;
-            then
-A113:       PS1 is a_partition of X by A33,A35,A105,A106,A108,Th18;
-A114:       {PS1} c= PARTITIONS(X)
-            proof
-              let s be set such that
-A115:         s in {PS1};
-              s = PS1 by A115,TARSKI:def 1;
-              hence thesis by A113,PARTIT1:def 3;
-            end;
-            set C1 = C \/ {PS1};
-A116:       {PS1} c= C1 by XBOOLE_1:7;
-A117:       PS1 in {PS1} by TARSKI:def 1;
-A118:       PS1 is_finer_than Pmin by A33,A35,A105,A106,A108,A112,Th18;
-A119:       C1 c= PARTITIONS(X) by A114,XBOOLE_1:8;
-A120:       now
-              let P3 be set;
-              assume
-A121:         P3 in C1;
-              per cases by A121,XBOOLE_0:def 3;
-              suppose P3 in C;
-                hence P3 c= H by A5,A23;
-              end;
-              suppose P3 in {PS1};
-                hence P3 c= H by A111,TARSKI:def 1;
-              end;
-            end;
-A122:       now
-              let P3 be set such that
-A123:         P3 in C;
-              Pmin is_finer_than P3 by A47,A101,A103,A123;
-
-hence PS1 is_finer_than P3 or P3 is_finer_than PS1 by A118,SETFAM_1:23;
-            end;
-            now
-              let P1,P2 be set;
-              assume
-A124:         P1 in C1 & P2 in C1;
-              per cases by A124,XBOOLE_0:def 3;
-              suppose
-A125:           P1 in C;
-                per cases by A124,XBOOLE_0:def 3;
-                suppose
-A126:             P2 in C;
-A127:             P1 is a_partition of X by A125,PARTIT1:def 3;
-                  P2 is a_partition of X by A126,PARTIT1:def 3;
-                  hence P1 is_finer_than P2 or P2 is_finer_than P1
-                  by A25,A125,A126,A127,TAXONOM1:def 1;
-                end;
-                suppose P2 in {PS1};
-                  then P2 = PS1 by TARSKI:def 1;
-
-hence P1 is_finer_than P2 or P2 is_finer_than P1 by A122,A125;
-                end;
-              end;
-              suppose P1 in {PS1};
-                then
-A128:           P1 = PS1 by TARSKI:def 1;
-                per cases by A124,XBOOLE_0:def 3;
-                suppose P2 in C;
-
-hence P1 is_finer_than P2 or P2 is_finer_than P1 by A122,A128;
-                end;
-                suppose P2 in {PS1};
-
-hence P1 is_finer_than P2 or P2 is_finer_than P1 by A128,TARSKI:def 1;
-                end;
-              end;
-            end;
-            then C1 in RL by A5,A119,A120;
-            then C = C1 by A24,XBOOLE_1:7;
-            hence thesis by A109,A110,A116,A117,TARSKI:def 4;
-          end;
-        end;
-        hence thesis;
+A59:    P2 is a_partition of X by PARTIT1:def 3;
+        P1 in C by A55,A57;
+        then P1 is a_partition of X by PARTIT1:def 3;
+        hence P1 is_finer_than P2 or P2 is_finer_than P1 by A30,A55,A57,A58,
+        A59,TAXONOM1:def 1;
       end;
-      suppose h in union C;
-        hence thesis;
+A60:  Cb c= C by A54,XBOOLE_1:7;
+A61:  now
+        let P1,P2 be set such that
+A62:    P1 in Cb and
+A63:    P2 in Cb;
+        P2 in C by A60,A63;
+        then
+A64:    P2 is a_partition of X by PARTIT1:def 3;
+        P1 in C by A60,A62;
+        then P1 is a_partition of X by PARTIT1:def 3;
+        hence P1 is_finer_than P2 or P2 is_finer_than P1 by A30,A60,A62,A63,
+        A64,TAXONOM1:def 1;
       end;
+      now
+        per cases;
+        suppose
+A65:      Cb <> {};
+          defpred X[set] means $1 misses h;
+A66:      {h} c= H
+          proof
+            let s be set;
+            assume
+            s in {h};
+            hence thesis by A35,TARSKI:def 1;
+          end;
+          consider PX,Pmax be set such that
+          PX in Cb and
+A67:      Pmax in Cb and
+A68:      for PZ st PZ in Cb holds PZ is_finer_than Pmax & PX
+          is_finer_than PZ by A3,A60,A61,A65, XBOOLE_1:1;
+          consider Pb be set such that
+A69:      for x holds x in Pb iff x in Pmax & X[x] from XBOOLE_0:sch
+          1;
+          set PS1 = Pb \/ {h};
+          set C1 = C \/ {PS1};
+          Pmax in C by A60,A67;
+          then
+A70:      Pmax is a_partition of X by PARTIT1:def 3;
+A71:      Pmax c= H by A11,A28,A60,A67;
+          then
+A72:      for a st a in Pmax holds a c= h or h c= a or h misses a by A10,
+          A35,Def3;
+          Pb c= Pmax
+          proof
+            let s be set;
+            assume
+            s in Pb;
+            hence thesis by A69;
+          end;
+          then Pb c= H by A71,XBOOLE_1:1;
+          then
+A73:      PS1 c= H by A66,XBOOLE_1:8;
+A74:      now
+            let P3 be set;
+            assume
+A75:        P3 in C1;
+            per cases by A75,XBOOLE_0:def 3;
+            suppose
+              P3 in C;
+              hence P3 c= H by A11,A28;
+            end;
+            suppose
+              P3 in {PS1};
+              hence P3 c= H by A73,TARSKI:def 1;
+            end;
+          end;
+          PS1 in {PS1} by TARSKI:def 1;
+          then
+A76:      PS1 in C1 by XBOOLE_0:def 3;
+          h in {h} by TARSKI:def 1;
+          then
+A77:      h in PS1 by XBOOLE_0:def 3;
+A78:      ex hx be set st hx in Pmax & hx c= h & h <> hx by A39,A67;
+          then
+A79:      Pmax is_finer_than PS1 by A35,A42,A70,A69,A72,Th19;
+A80:      now
+            let P3 be set such that
+A81:        P3 in C;
+            per cases;
+            suppose
+              Ca = {};
+              then P3 is_finer_than Pmax by A48,A68,A81;
+              hence PS1 is_finer_than P3 or P3 is_finer_than PS1 by A79,
+              SETFAM_1:23;
+            end;
+            suppose
+A82:          Ca <> {};
+              now
+                per cases by A48,A81,XBOOLE_0:def 3;
+                suppose
+A83:              P3 in Ca;
+                  consider Pmin,PY be set such that
+A84:              Pmin in Ca and
+                  PY in Ca and
+A85:              for PZ st PZ in Ca holds PZ is_finer_than PY &
+                  Pmin is_finer_than PZ by A3,A55,A56,A82,XBOOLE_1:1;
+A86:              Pmin is_finer_than P3 by A83,A85;
+A87:              now
+                    consider hx be set such that
+A88:                hx in Pmin and
+A89:                h c= hx and
+A90:                h <> hx by A37,A84;
+                    assume
+                    Pmin is_finer_than Pmax;
+                    then consider hz be set such that
+A91:                hz in Pmax and
+A92:                hx c= hz by A88,SETFAM_1:def 2;
+                    consider hy be set such that
+A93:                hy in Pmax and
+A94:                hy c= h and
+                    h <> hy by A39,A67;
+A95:                hy is non empty by A70,A93,EQREL_1:def 6;
+                    hy c= hx by A89,A94,XBOOLE_1:1;
+                    then hy meets hz by A92,A95,Lm4,XBOOLE_1:1;
+                    then hy = hz by A70,A93,A91,EQREL_1:def 6;
+                    then hx c= h by A94,A92,XBOOLE_1:1;
+                    hence contradiction by A89,A90,XBOOLE_0:def 10;
+                  end;
+A96:              Pmax in C by A54,A67,XBOOLE_0:def 3;
+                  then
+A97:              Pmax is a_partition of X by PARTIT1:def 3;
+                  Pmin in C by A55,A84;
+                  then
+A98:              Pmin is a_partition of X by PARTIT1:def 3;
+A99:              ex hw be set st hw in Pmin & h c= hw & h <> hw by
+                  A37,A84;
+A100:             Pmin in C by A54,A84,XBOOLE_0:def 3;
+                  then Pmin is a_partition of X by PARTIT1:def 3;
+                  then Pmax is_finer_than Pmin by A30,A100,A96,A97,
+                  A87,TAXONOM1:def 1;
+                  then PS1 is_finer_than Pmin by A35,A42,A70,A69,A72,A78,
+                  A98,A99,Th19;
+                  hence PS1 is_finer_than P3 or P3 is_finer_than PS1 by
+                  A86,SETFAM_1:23;
+                end;
+                suppose
+                  P3 in Cb;
+                  then P3 is_finer_than Pmax by A68;
+                  hence PS1 is_finer_than P3 or P3 is_finer_than PS1 by A79,
+                  SETFAM_1:23;
+                end;
+              end;
+              hence PS1 is_finer_than P3 or P3 is_finer_than PS1;
+            end;
+          end;
+A101:     now
+            let P1,P2 be set;
+            assume that
+A102:       P1 in C1 and
+A103:       P2 in C1;
+            per cases by A102,XBOOLE_0:def 3;
+            suppose
+A104:         P1 in C;
+              per cases by A103,XBOOLE_0:def 3;
+              suppose
+A105:           P2 in C;
+                then
+A106:           P2 is a_partition of X by PARTIT1:def 3;
+                P1 is a_partition of X by A104,PARTIT1:def 3;
+                hence P1 is_finer_than P2 or P2 is_finer_than P1 by A30,A104,
+                A105,A106,TAXONOM1:def 1;
+              end;
+              suppose
+                P2 in {PS1};
+                then P2 = PS1 by TARSKI:def 1;
+                hence P1 is_finer_than P2 or P2 is_finer_than P1 by A80,A104;
+              end;
+            end;
+            suppose
+              P1 in {PS1};
+              then
+A107:         P1 = PS1 by TARSKI:def 1;
+              per cases by A103,XBOOLE_0:def 3;
+              suppose
+                P2 in C;
+                hence P1 is_finer_than P2 or P2 is_finer_than P1 by A80,A107;
+              end;
+              suppose
+                P2 in {PS1};
+                hence P1 is_finer_than P2 or P2 is_finer_than P1 by A107,
+                TARSKI:def 1;
+              end;
+            end;
+          end;
+A108:     PS1 is a_partition of X by A35,A42,A70,A69,A72,A78,Th19;
+          {PS1} c= PARTITIONS(X)
+          proof
+            let s be set;
+            assume
+            s in {PS1};
+            then s = PS1 by TARSKI:def 1;
+            hence thesis by A108,PARTIT1:def 3;
+          end;
+          then C1 c= PARTITIONS(X) by XBOOLE_1:8;
+          then C1 in RL by A11,A74,A101;
+          then C = C1 by A29,XBOOLE_1:7;
+          hence thesis by A77,A76,TARSKI:def 4;
+        end;
+        suppose
+A109:     Cb = {};
+          then consider Pmin,PY be set such that
+A110:     Pmin in Ca and
+          PY in Ca and
+A111:     for PZ st PZ in Ca holds PZ is_finer_than PY & Pmin
+          is_finer_than PZ by A3,A33,A54,A56;
+          consider hw be set such that
+A112:     hw in Pmin and
+A113:     h c= hw and
+          h <> hw by A37,A110;
+          defpred X[set] means $1 c= hw;
+          consider PT be set such that
+A114:     for a holds a in PT iff a in PS & X[a] from XBOOLE_0:sch 1;
+          set PS1 = PT \/ (Pmin \ {hw});
+          set C1 = C \/ {PS1};
+          PT c= PS
+          proof
+            let s be set;
+            assume
+            s in PT;
+            hence thesis by A114;
+          end;
+          then
+A115:     PT c= H by A41,XBOOLE_1:1;
+A116:     Pmin c= H by A11,A28,A55,A110;
+          then Pmin \ {hw} c= H by XBOOLE_1:1;
+          then
+A117:     PS1 c= H by A115,XBOOLE_1:8;
+A118:     now
+            let P3 be set;
+            assume
+A119:       P3 in C1;
+            per cases by A119,XBOOLE_0:def 3;
+            suppose
+              P3 in C;
+              hence P3 c= H by A11,A28;
+            end;
+            suppose
+              P3 in {PS1};
+              hence P3 c= H by A117,TARSKI:def 1;
+            end;
+          end;
+          Pmin in C by A55,A110;
+          then
+A120:     Pmin is a_partition of X by PARTIT1:def 3;
+A121:     for a st a in PS holds a c= hw or hw c= a or hw misses a by
+          A10
+          ,A41,A116,A112,Def3;
+          then
+A122:     PS1 is_finer_than Pmin by A40,A42,A120,A112,A113,A114,
+          Th18;
+A123:     now
+            let P3 be set;
+            assume
+            P3 in C;
+            then Pmin is_finer_than P3 by A48,A109,A111;
+            hence PS1 is_finer_than P3 or P3 is_finer_than PS1 by A122,
+            SETFAM_1:23;
+          end;
+A124:     now
+            let P1,P2 be set;
+            assume that
+A125:       P1 in C1 and
+A126:       P2 in C1;
+            per cases by A125,XBOOLE_0:def 3;
+            suppose
+A127:         P1 in C;
+              per cases by A126,XBOOLE_0:def 3;
+              suppose
+A128:           P2 in C;
+                then
+A129:           P2 is a_partition of X by PARTIT1:def 3;
+                P1 is a_partition of X by A127,PARTIT1:def 3;
+                hence P1 is_finer_than P2 or P2 is_finer_than P1 by A30,A127,
+                A128,A129,TAXONOM1:def 1;
+              end;
+              suppose
+                P2 in {PS1};
+                then P2 = PS1 by TARSKI:def 1;
+                hence P1 is_finer_than P2 or P2 is_finer_than P1 by A123,A127;
+              end;
+            end;
+            suppose
+              P1 in {PS1};
+              then
+A130:         P1 = PS1 by TARSKI:def 1;
+              per cases by A126,XBOOLE_0:def 3;
+              suppose
+                P2 in C;
+                hence P1 is_finer_than P2 or P2 is_finer_than P1 by A123,A130;
+              end;
+              suppose
+                P2 in {PS1};
+                hence P1 is_finer_than P2 or P2 is_finer_than P1 by A130,
+                TARSKI:def 1;
+              end;
+            end;
+          end;
+A131:     PS1 is a_partition of X by A40,A42,A120,A112,A113,A114,A121,
+          Th18;
+          {PS1} c= PARTITIONS(X)
+          proof
+            let s be set;
+            assume
+            s in {PS1};
+            then s = PS1 by TARSKI:def 1;
+            hence thesis by A131,PARTIT1:def 3;
+          end;
+          then C1 c= PARTITIONS(X) by XBOOLE_1:8;
+          then C1 in RL by A11,A118,A124;
+          then
+A132:     C = C1 by A29,XBOOLE_1:7;
+A133:     PT c= PS1 by XBOOLE_1:7;
+A134:     PS1 in {PS1} by TARSKI:def 1;
+A135:     {PS1} c= C1 by XBOOLE_1:7;
+          h in PT by A40,A113,A114;
+          hence thesis by A133,A135,A134,A132,TARSKI:def 4;
+        end;
+      end;
+      hence thesis;
+    end;
+    suppose
+      h in union C;
+      hence thesis;
     end;
   end;
-  hence thesis by A25;
+  take C;
+  union C c= H
+  proof
+    let h be set;
+    assume
+    h in union C;
+    then consider P be set such that
+A136: h in P and
+A137: P in C by TARSKI:def 4;
+    P c= H by A11,A28,A137;
+    hence thesis by A136;
+  end;
+  hence thesis by A30,A34,XBOOLE_0:def 10;
 end;
 

@@ -11,6 +11,7 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
@@ -27,7 +28,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="88"/>
+<Adjective nr="89"/>
 </Cluster>
 </RCluster>
 <RCluster aid="ANALOAF" nr="2">
@@ -36,8 +37,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="34" value="false"/>
-<Adjective nr="88"/>
+<Adjective nr="36" value="false"/>
+<Adjective nr="89"/>
 </Cluster>
 </RCluster>
 <RCluster aid="ANALOAF" nr="3">
@@ -46,10 +47,10 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="34" value="false"/>
-<Adjective nr="39" value="false"/>
-<Adjective nr="88"/>
+<Adjective nr="36" value="false"/>
+<Adjective nr="41" value="false"/>
 <Adjective nr="89"/>
+<Adjective nr="90"/>
 </Cluster>
 </RCluster>
 <RCluster aid="ANALOAF" nr="4">
@@ -58,32 +59,32 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="34" value="false"/>
-<Adjective nr="39" value="false"/>
-<Adjective nr="88"/>
+<Adjective nr="36" value="false"/>
+<Adjective nr="41" value="false"/>
 <Adjective nr="89"/>
 <Adjective nr="90"/>
+<Adjective nr="91"/>
 </Cluster>
 </RCluster>
 <FCluster aid="ANALOAF" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
-<Adjective nr="34" value="false"/>
-<Adjective nr="58"/>
-<Adjective nr="83"/>
+<Adjective nr="36" value="false"/>
+<Adjective nr="59"/>
 <Adjective nr="84"/>
 <Adjective nr="85"/>
 <Adjective nr="86"/>
+<Adjective nr="87"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="134">
+<Func kind="K" nr="142">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="34" value="false"/>
-<Adjective nr="88"/>
+<Adjective nr="36" value="false"/>
+<Adjective nr="89"/>
 </Cluster>
 </FCluster>
 </Registrations>

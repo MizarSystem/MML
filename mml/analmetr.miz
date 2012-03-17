@@ -8,9 +8,8 @@ environ
 
  vocabularies RLVECT_1, ARYTM_1, RELAT_1, ANALOAF, DIRAF, SYMSP_1, REALSET1,
       INCSP_1, AFF_1, ANALMETR, ARYTM;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, DOMAIN_1,
-      XXREAL_0, REAL_1, NUMBERS,
-      STRUCT_0, DIRAF, RELSET_1, RLVECT_1, AFF_1, ANALOAF;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, DOMAIN_1, XXREAL_0, REAL_1,
+      NUMBERS, STRUCT_0, DIRAF, RELSET_1, RLVECT_1, AFF_1, ANALOAF;
  constructors DOMAIN_1, XXREAL_0, REAL_1, MEMBERED, AFF_1;
  registrations SUBSET_1, RELSET_1, XXREAL_0, MEMBERED, STRUCT_0, ANALOAF,
       DIRAF, XBOOLE_0;
@@ -27,18 +26,18 @@ reserve u,u1,u2,v,v1,v2,w,w1,y for VECTOR of V;
 reserve a,a1,a2,b,b1,b2,c1,c2 for Real;
 reserve x,z for set;
 
-Lm1: v1 = b1*w + b2*y & v2 = c1*w + c2*y implies
-v1 + v2 = (b1 + c1)*w + (b2 + c2)*y & v1 - v2 = (b1 - c1)*w + (b2 - c2)*y
+Lm1: v1 = b1*w + b2*y & v2 = c1*w + c2*y implies v1 + v2 = (b1 + c1)*w + (b2 +
+c2)*y & v1 - v2 = (b1 - c1)*w + (b2 - c2)*y
+
 proof
-  assume that
-A1: v1 = b1*w + b2*y and
-A2: v2 = c1*w + c2*y;
-  thus v1 + v2 = ((b1*w + b2*y) + c1*w) + c2*y by A1,A2,RLVECT_1:def 6
+  assume
+A1: v1 = b1*w + b2*y & v2 = c1*w + c2*y;
+  hence v1 + v2 = ((b1*w + b2*y) + c1*w) + c2*y by RLVECT_1:def 6
     .= ((b1*w + c1*w) + b2*y) + c2*y by RLVECT_1:def 6
     .= ((b1 + c1)*w + b2*y) + c2*y by RLVECT_1:def 9
     .= (b1 + c1)*w + (b2*y + c2*y) by RLVECT_1:def 6
     .= (b1 + c1)*w + (b2 + c2)*y by RLVECT_1:def 9;
-  thus v1 - v2 = (b1*w + b2*y)+(-(c1*w) + -(c2*y)) by A1,A2,RLVECT_1:45
+  thus v1 - v2 = (b1*w + b2*y)+(-(c1*w) + -(c2*y)) by A1,RLVECT_1:45
     .= (b1*w + b2*y)+(c1*(-w) + -(c2*y)) by RLVECT_1:39
     .= (b1*w + b2*y)+(c1*(-w) + c2*(-y)) by RLVECT_1:39
     .= (b1*w + b2*y)+((-c1)*w + c2*(-y)) by RLVECT_1:38
@@ -61,7 +60,8 @@ end;
 
 Lm3: v = b1*w + b2*y implies a*v = (a*b1)*w + (a*b2)*y
 proof
-  assume v= b1*w + b2*y;
+  assume
+  v= b1*w + b2*y;
   hence a*v = a*(b1*w) + a*(b2*y) by RLVECT_1:def 9
     .= (a*b1)*w + a*(b2*y) by RLVECT_1:def 9
     .= (a*b1)*w + (a*b2)*y by RLVECT_1:def 9;
@@ -72,8 +72,8 @@ definition
   let w,y;
   pred Gen w,y means
   :Def1:
-  (for u ex a1,a2 st u = a1*w + a2*y) &
-  (for a1,a2 st a1*w + a2*y = 0.V holds a1=0 & a2=0);
+  (for u ex a1,a2 st u = a1*w + a2*y) & for a1,a2 st
+  a1*w + a2*y = 0.V holds a1=0 & a2=0;
 end;
 
 definition
@@ -81,7 +81,8 @@ definition
   let u,v,w,y;
   pred u,v are_Ort_wrt w,y means
   :Def2:
-  ex a1,a2,b1,b2 st (u = a1*w + a2*y & v = b1*w + b2*y & a1*b1 + a2*b2 = 0);
+  ex a1,a2,b1,b2 st u = a1*w + a2*y & v
+  = b1*w + b2*y & a1*b1 + a2*b2 = 0;
 end;
 
 Lm4: Gen w,y & a1*w + a2*y = b1*w + b2*y implies a1=b1 & a2=b2
@@ -98,31 +99,35 @@ end;
 canceled 4;
 
 theorem Th5:
-  for w,y st Gen w,y holds (u,v are_Ort_wrt w,y iff
-  (for a1,a2,b1,b2 st u = a1*w + a2*y & v = b1*w + b2*y
-  holds a1*b1 + a2*b2 = 0))
+  for w,y st Gen w,y holds (u,v are_Ort_wrt w,y iff for a1,a2,b1,b2
+  st u = a1*w + a2*y & v = b1*w + b2*y holds a1*b1 + a2*b2 = 0 )
 proof
   let w,y such that
 A1: Gen w,y;
   hereby
-    assume u,v are_Ort_wrt w,y;
+    assume
+    u,v are_Ort_wrt w,y;
     then consider a1,a2,b1,b2 such that
-A2: u = a1*w + a2*y & v = b1*w + b2*y and
-A3: a1*b1 + a2*b2 = 0 by Def2;
+A2: u = a1*w + a2*y and
+A3: v = b1*w + b2*y and
+A4: a1*b1 + a2*b2 = 0 by Def2;
     let a1',a2',b1',b2' be Real;
-    assume u = a1'*w + a2'*y & v = b1'*w + b2'*y;
-    then a1=a1' & a2=a2' & b1=b1' & b2=b2' by A1,A2,Lm4;
-    hence 0 = a1'*b1' + a2'*b2' by A3;
+    assume that
+A5: u = a1'*w + a2'*y and
+A6: v = b1'*w + b2'*y;
+A7: b1=b1' by A1,A3,A6,Lm4;
+    a1=a1' & a2=a2' by A1,A2,A5,Lm4;
+    hence 0 = a1'*b1' + a2'*b2' by A1,A3,A4,A6,A7,Lm4;
   end;
-  assume
-A4: for a1,a2,b1,b2 st u = a1*w + a2*y & v = b1*w + b2*y
-  holds a1*b1 + a2*b2 = 0;
   consider a1,a2 such that
-A5: u = a1*w + a2*y by A1,Def1;
+A8: u = a1*w + a2*y by A1,Def1;
   consider b1,b2 such that
-A6: v = b1*w + b2*y by A1,Def1;
-  a1*b1 + a2*b2 = 0 by A4,A5,A6;
-  hence thesis by A5,A6,Def2;
+A9: v = b1*w + b2*y by A1,Def1;
+  assume
+  for a1,a2,b1,b2 st u = a1*w + a2*y & v = b1*w + b2*y holds a1*b1 +
+  a2*b2 = 0;
+  then a1*b1 + a2*b2 = 0 by A8,A9;
+  hence thesis by A8,A9,Def2;
 end;
 
 Lm5: Gen w,y implies w<>0.V & y<>0.V
@@ -131,7 +136,8 @@ proof
 A1: Gen w,y;
   thus w<>0.V
   proof
-    assume w=0.V;
+    assume
+    w=0.V;
     then 0.V = 1*w by RLVECT_1:def 9
       .= 1*w + 0.V by RLVECT_1:10
       .= 1*w + 0*y by RLVECT_1:23;
@@ -139,7 +145,8 @@ A1: Gen w,y;
   end;
   thus y<>0.V
   proof
-    assume y=0.V;
+    assume
+    y=0.V;
     then 0.V = 1*y by RLVECT_1:def 9
       .= 0.V + 1*y by RLVECT_1:10
       .= 0*w + 1*y by RLVECT_1:23;
@@ -150,41 +157,44 @@ end;
 theorem
   w,y are_Ort_wrt w,y
 proof
-A1: w = w + 0.V by RLVECT_1:10
-    .= 1*w + 0.V by RLVECT_1:def 9
-    .= 1*w + 0*y by RLVECT_1:23;
-A2: y = 0.V + y by RLVECT_1:10
+A1: y = 0.V + y by RLVECT_1:10
     .= 0.V + 1*y by RLVECT_1:def 9
     .= 0*w + 1*y by RLVECT_1:23;
-  1*0 + 0*1 = 0;
+A2: 1*0 + 0*1 = 0;
+  w = w + 0.V by RLVECT_1:10
+    .= 1*w + 0.V by RLVECT_1:def 9
+    .= 1*w + 0*y by RLVECT_1:23;
   hence thesis by A1,A2,Def2;
 end;
 
 theorem Th7:
   ex V st ex w,y st Gen w,y
-proof consider V such that
-A1: ex u,v st (for a,b st a*u + b*v = 0.V holds a=0 & b=0) &
-  (for w ex a,b st w = a*u + b*v) by FUNCSDOM:37;
-  consider u,v such that
-A2: (for a,b st a*u + b*v = 0.V holds a=0 & b=0) &
-  (for w ex a,b st w = a*u + b*v) by A1;
+proof
+  consider V such that
+A1: ex u,v st (for a,b st a*u + b*v = 0.V holds a=0 & b=0) & for w ex a,
+  b st w = a*u + b*v by FUNCSDOM:37;
   take V;
-  take u,v; thus thesis by A2,Def1;
+  consider u,v such that
+A2: ( for a,b st a*u + b*v = 0.V holds a=0 & b=0)& for w ex a,b st w = a
+  *u + b*v by A1;
+  take u,v;
+  thus thesis by A2,Def1;
 end;
 
 theorem Th8:
   u,v are_Ort_wrt w,y implies v,u are_Ort_wrt w,y
 proof
-  assume u,v are_Ort_wrt w,y;
-  then consider a1,a2,b1,b2 such that
-A1: u = a1*w + a2*y & v = b1*w + b2*y and
-A2: a1*b1 + a2*b2 = 0 by Def2;
-  thus thesis by A1,A2,Def2;
+  assume
+  u,v are_Ort_wrt w,y;
+  then
+  ex a1,a2,b1,b2 st u = a1*w + a2*y & v = b1*w + b2*y & a1 *b1 + a2*b2 = 0
+  by Def2;
+  hence thesis by Def2;
 end;
 
 theorem Th9:
-  Gen w,y implies (for u,v holds
-  u,0.V are_Ort_wrt w,y & 0.V,v are_Ort_wrt w,y)
+  Gen w,y implies for u,v holds u,0.V are_Ort_wrt w,y & 0.V,v
+  are_Ort_wrt w,y
 proof
   assume
 A1: Gen w,y;
@@ -205,32 +215,35 @@ end;
 theorem Th10:
   u,v are_Ort_wrt w,y implies a*u,b*v are_Ort_wrt w,y
 proof
-  assume u,v are_Ort_wrt w,y;
+  assume
+  u,v are_Ort_wrt w,y;
   then consider a1,a2,b1,b2 such that
-A1: u = a1*w + a2*y & v = b1*w + b2*y and
-A2: a1*b1 + a2*b2 = 0 by Def2;
-A3: a*u = a*(a1*w) + a*(a2*y) by A1,RLVECT_1:def 9
-    .= (a*a1)*w + a*(a2*y) by RLVECT_1:def 9
-    .= (a*a1)*w + (a*a2)*y by RLVECT_1:def 9;
-A4: b*v = b*(b1*w) + b*(b2*y) by A1,RLVECT_1:def 9
+A1: u = a1*w + a2*y and
+A2: v = b1*w + b2*y and
+A3: a1*b1 + a2*b2 = 0 by Def2;
+A4: b*v = b*(b1*w) + b*(b2*y) by A2,RLVECT_1:def 9
     .= (b*b1)*w + b*(b2*y) by RLVECT_1:def 9
     .= (b*b1)*w + (b*b2)*y by RLVECT_1:def 9;
-  (a*a1)*(b*b1) + (a*a2)*(b*b2) = b*a*(a1*b1 + a2*b2)
-    .= 0 by A2;
-  hence thesis by A3,A4,Def2;
+A5: (a*a1)*(b*b1) + (a*a2)*(b*b2) = b*a*(a1*b1 + a2*b2)
+    .= 0 by A3;
+  a*u = a*(a1*w) + a*(a2*y) by A1,RLVECT_1:def 9
+    .= (a*a1)*w + a*(a2*y) by RLVECT_1:def 9
+    .= (a*a1)*w + (a*a2)*y by RLVECT_1:def 9;
+  hence thesis by A4,A5,Def2;
 end;
 
 theorem Th11:
-  u,v are_Ort_wrt w,y implies a*u,v are_Ort_wrt w,y & u,b*v are_Ort_wrt w,y
+  u,v are_Ort_wrt w,y implies a*u,v are_Ort_wrt w,y & u,b*v
+  are_Ort_wrt w,y
 proof
+A1: v = 1*v & u = 1*u by RLVECT_1:def 9;
   assume
-A1: u,v are_Ort_wrt w,y;
-  v = 1*v & u = 1*u by RLVECT_1:def 9;
+  u,v are_Ort_wrt w,y;
   hence thesis by A1,Th10;
 end;
 
 theorem Th12:
-  Gen w,y implies (for u ex v st (u,v are_Ort_wrt w,y & v<>0.V))
+  Gen w,y implies for u ex v st u,v are_Ort_wrt w,y & v<>0.V
 proof
   assume
 A1: Gen w,y;
@@ -238,34 +251,37 @@ A1: Gen w,y;
   consider a1,a2 such that
 A2: u = a1*w + a2*y by A1,Def1;
 A3: now
-    assume
-A4: u = 0.V;
-    take v=w; thus u,v are_Ort_wrt w,y by A1,A4,Th9;
-    thus v<>0.V by A1,Lm5;
-  end;
-  now
-    assume
-A5: u<>0.V;
     set v = a2*w + (-a1)*y;
-A6: v<>0.V
+    assume
+A4: u<>0.V;
+    take v;
+    a1*a2 + a2*(-a1) = 0;
+    hence u,v are_Ort_wrt w,y by A2,Def2;
+    v<>0.V
     proof
-      assume v=0.V;
+      assume
+      v=0.V;
       then a2 = 0 & -a1 = 0 by A1,Def1;
       then u = 0*w + 0.V by A2,RLVECT_1:23
         .= 0*w by RLVECT_1:10
         .= 0.V by RLVECT_1:23;
-      hence contradiction by A5;
+      hence contradiction by A4;
     end;
-A7: a1*a2 + a2*(-a1) = 0;
-    take v;
-    thus u,v are_Ort_wrt w,y by A2,A7,Def2; thus v<>0.V by A6;
+    hence v<>0.V;
+  end;
+  now
+    assume
+A5: u = 0.V;
+    take v=w;
+    thus u,v are_Ort_wrt w,y by A1,A5,Th9;
+    thus v<>0.V by A1,Lm5;
   end;
   hence thesis by A3;
 end;
 
 theorem Th13:
   Gen w,y & v,u1 are_Ort_wrt w,y & v,u2 are_Ort_wrt w,y & v<>0.V
-  implies ( ex a,b st a*u1 = b*u2 & (a<>0 or b<>0) )
+  implies ex a,b st a*u1 = b*u2 & (a<>0 or b<>0)
 proof
   assume that
 A1: Gen w,y and
@@ -273,119 +289,131 @@ A2: v,u1 are_Ort_wrt w,y and
 A3: v,u2 are_Ort_wrt w,y and
 A4: v<>0.V;
   consider a1,a2,b1,b2 such that
-A5: v = a1*w + a2*y & u1 = b1*w + b2*y and
-A6: a1*b1 + a2*b2 = 0 by A2,Def2;
+A5: v = a1*w + a2*y and
+A6: u1 = b1*w + b2*y and
+A7: a1*b1 + a2*b2 = 0 by A2,Def2;
   consider a1',a2',c1,c2 being Real such that
-A7: v = a1'*w + a2'*y & u2 = c1*w + c2*y and
-A8: a1'*c1 + a2'*c2 = 0 by A3,Def2;
-A9: a1 = a1' & a2 = a2' by A1,A5,A7,Lm4;
-A10: now
+A8: v = a1'*w + a2'*y and
+A9: u2 = c1*w + c2*y and
+A10: a1'*c1 + a2'*c2 = 0 by A3,Def2;
+A11: a2 = a2' by A1,A5,A8,Lm4;
+A12: a1 = a1' by A1,A5,A8,Lm4;
+A13: now
     assume
-A11: a1=0;
+A14: a1=0;
     then
-A12: a2<>0 by A4,A5,Lm2;
+A15: a2<>0 by A4,A5,Lm2;
+    then c2 = 0 by A10,A12,A11,A14,XCMPLX_1:6;
+    then u2 = c1*w + 0.V by A9,RLVECT_1:23;
     then
-A13: c2 = 0 by A8,A9,A11,XCMPLX_1:6;
-    b2 = 0 by A6,A11,A12,XCMPLX_1:6;
+A16: u2 = c1*w by RLVECT_1:10;
+    b2 = 0 by A7,A14,A15,XCMPLX_1:6;
     then
-A14: u1 = b1*w + 0.V & u2 = c1*w + 0.V by A5,A7,A13,RLVECT_1:23;
+A17: u1 = b1*w + 0.V by A6,RLVECT_1:23;
     then
-A15: u1 = b1*w & u2 = c1*w by RLVECT_1:10;
-A16: c1*u1 = c1*(b1*w) by A14,RLVECT_1:10
-      .= (b1*c1)*w by RLVECT_1:def 9
-      .= b1*u2 by A15,RLVECT_1:def 9;
-    now
-      assume b1=0;
-      then 1*u1 = 0*w by A15,RLVECT_1:def 9
+A18: u1 = b1*w by RLVECT_1:10;
+A19: now
+      assume
+      b1=0;
+      then 1*u1 = 0*w by A18,RLVECT_1:def 9
         .= 0.V by RLVECT_1:23
-        .= 0*u2
-      by RLVECT_1:23;
+        .= 0*u2 by RLVECT_1:23;
       hence thesis;
     end;
-    hence thesis by A16;
+    c1*u1 = c1*(b1*w) by A17,RLVECT_1:10
+      .= (b1*c1)*w by RLVECT_1:def 9
+      .= b1*u2 by A16,RLVECT_1:def 9;
+    hence thesis by A19;
   end;
   now
+A20: c2*(((-a2)*b2)*a1") = b2*(((-a2)*c2)*a1");
     assume
-A17: a1<>0;
-A18: b1 = 1*b1
-      .= (a1*a1")*b1 by A17,XCMPLX_0:def 7
+A21: a1<>0;
+A22: b1 = 1*b1
+      .= (a1*a1")*b1 by A21,XCMPLX_0:def 7
       .= (a1*b1)*a1"
-      .= ((-a2)*b2)*a1" by A6;
-A19: c1 = 1*c1
-      .= (a1*a1")*c1 by A17,XCMPLX_0:def 7
+      .= ((-a2)*b2)*a1" by A7;
+A23: c1 = 1*c1
+      .= (a1*a1")*c1 by A21,XCMPLX_0:def 7
       .= (a1*c1)*a1"
-      .= ((-a2)*c2)*a1" by A8,A9;
+      .= ((-a2)*c2)*a1" by A1,A5,A8,A10,A11,Lm4;
     then
-A20: b2*u2 = (b2*(((-a2)*c2)*a1"))*w + (b2*c2)*y by A7,Lm3;
-A21: c2*(((-a2)*b2)*a1") = b2*(((-a2)*c2)*a1");
-A22: now
+A24: b2*u2 = (b2*(((-a2)*c2)*a1"))*w + (b2*c2)*y by A9,Lm3;
+A25: now
       assume
-A23:  c2<>0 or b2<>0;
+A26:  c2<>0 or b2<>0;
       take a=c2,b=b2;
-      thus a*u1 = b*u2 & (a<>0 or b<>0) by A5,A18,A20,A21,A23,Lm3;
+      thus a*u1 = b*u2 & (a<>0 or b<>0) by A6,A22,A24,A20,A26,Lm3;
     end;
     now
-      assume b2=0 & c2=0;
-      then 1*u1 = 1*u2 by A5,A7,A18,A19;
+      assume
+      b2=0 & c2=0;
+      then 1*u1 = 1*u2 by A6,A9,A22,A23;
       hence thesis;
     end;
-    hence thesis by A22;
+    hence thesis by A25;
   end;
-  hence thesis by A10;
+  hence thesis by A13;
 end;
 
 theorem Th14:
-  Gen w,y & u,v1 are_Ort_wrt w,y & u,v2 are_Ort_wrt w,y implies
-  u,v1+v2 are_Ort_wrt w,y & u,v1-v2 are_Ort_wrt w,y
+  Gen w,y & u,v1 are_Ort_wrt w,y & u,v2 are_Ort_wrt w,y implies u,
+  v1+v2 are_Ort_wrt w,y & u,v1-v2 are_Ort_wrt w,y
 proof
   assume that
 A1: Gen w,y and
 A2: u,v1 are_Ort_wrt w,y and
 A3: u,v2 are_Ort_wrt w,y;
   consider a1,a2,b1,b2 such that
-A4: u = a1*w + a2*y & v1 = b1*w + b2*y and
-A5: a1*b1 + a2*b2 = 0 by A2,Def2;
+A4: u = a1*w + a2*y and
+A5: v1 = b1*w + b2*y and
+A6: a1*b1 + a2*b2 = 0 by A2,Def2;
   consider a1',a2',c1,c2 being Real such that
-A6: u = a1'*w + a2'*y & v2 = c1*w + c2*y and
-A7: a1'*c1 + a2'*c2 = 0 by A3,Def2;
-A8: a1 = a1' & a2 = a2' by A1,A4,A6,Lm4;
-A9: v1 + v2 = (b1 + c1)*w + (b2 + c2)*y by A4,A6,Lm1;
-  a1*(b1+c1) + a2*(b2+c2) = 0 by A5,A7,A8;
-  hence u,v1+v2 are_Ort_wrt w,y by A4,A9,Def2;
-A10: v1 - v2 = (b1 - c1)*w + (b2 - c2)*y by A4,A6,Lm1;
-  a1*(b1-c1) + a2*(b2-c2) = 0 by A5,A7,A8;
-  hence thesis by A4,A10,Def2;
+A7: u = a1'*w + a2'*y and
+A8: v2 = c1*w + c2*y and
+A9: a1'*c1 + a2'*c2 = 0 by A3,Def2;
+A10: a1 = a1' & a2 = a2' by A1,A4,A7,Lm4;
+  then
+A11: a1*(b1+c1) + a2*(b2+c2) = 0 by A6,A9;
+A12: a1*(b1-c1) + a2*(b2-c2) = 0 by A6,A9,A10;
+  v1 + v2 = (b1 + c1)*w + (b2 + c2)*y by A5,A8,Lm1;
+  hence u,v1+v2 are_Ort_wrt w,y by A4,A11,Def2;
+  v1 - v2 = (b1 - c1)*w + (b2 - c2)*y by A5,A8,Lm1;
+  hence thesis by A4,A12,Def2;
 end;
 
 theorem Th15:
   Gen w,y & u,u are_Ort_wrt w,y implies u = 0.V
 proof
-  assume that
-A1: Gen w,y and
-A2: u,u are_Ort_wrt w,y;
-  consider a1,a2,b1,b2 such that
-A3: u = a1*w + a2*y & u = b1*w + b2*y and
-A4: a1*b1 + a2*b2 = 0 by A2,Def2;
-A5: a1=b1 & a2=b2 by A1,A3,Lm4;
-A6: now
+A1: now
     let a such that
-A7: a<>0;
+A2: a<>0;
     0 < a implies 0 < a*a by XREAL_1:131;
-    hence 0 < a*a by A7,XREAL_1:132;
+    hence 0 < a*a by A2,XREAL_1:132;
   end;
-A8: a1 = 0
+  assume that
+A3: Gen w,y and
+A4: u,u are_Ort_wrt w,y;
+  consider a1,a2,b1,b2 such that
+A5: u = a1*w + a2*y and
+A6: u = b1*w + b2*y and
+A7: a1*b1 + a2*b2 = 0 by A4,Def2;
+A8: a1=b1 & a2=b2 by A3,A5,A6,Lm4;
+A9: a2 = 0
   proof
-    assume a1<>0;
-    then 0 < a1*a1 by A6;
-    hence contradiction by A4,A5,XREAL_1:31,65;
+    assume
+    a2<>0;
+    then 0 < a2*a2 by A1;
+    hence contradiction by A7,A8,XREAL_1:31,65;
   end;
-  a2 = 0
+  a1 = 0
   proof
-    assume a2<>0;
-    then 0 < a2*a2 by A6;
-    hence contradiction by A4,A5,XREAL_1:31,65;
+    assume
+    a1<>0;
+    then 0 < a1*a1 by A1;
+    hence contradiction by A7,A8,XREAL_1:31,65;
   end;
-  hence u = 0*w + 0.V by A3,A8,RLVECT_1:23
+  hence u = 0*w + 0.V by A5,A9,RLVECT_1:23
     .= 0*w by RLVECT_1:10
     .= 0.V by RLVECT_1:23;
 end;
@@ -396,25 +424,26 @@ theorem Th16:
 proof
   assume that
 A1: Gen w,y and
-X: u,u1-u2 are_Ort_wrt w,y and
-A2: u1,u2-u are_Ort_wrt w,y;
+A2: u,u1-u2 are_Ort_wrt w,y and
+A3: u1,u2-u are_Ort_wrt w,y;
   consider a1,a2 such that
-A3: u = a1*w + a2*y by A1,Def1;
-  consider b1,b2 such that
-A4: u1 = b1*w + b2*y by A1,Def1;
+A4: u = a1*w + a2*y by A1,Def1;
   consider c1,c2 such that
 A5: u2 = c1*w + c2*y by A1,Def1;
-A6: u1-u2 = (b1-c1)*w + (b2-c2)*y by A4,A5,Lm1;
-B6: u2-u = (c1-a1)*w + (c2-a2)*y by A3,A5,Lm1;
-C6: u-u1 = (a1-b1)*w + (a2-b2)*y by A3,A4,Lm1;
-A7: a1*(b1-c1) + a2*(b2-c2) = 0 by A6,A1,Th5,X,A3;
-    b1*(c1-a1) + b2*(c2-a2) = 0 by A1,A2,A4,Th5,B6;
-  then 0 = c1*(a1-b1) + c2*(a2-b2) by A7;
-  hence thesis by A5,Def2,C6;
+  consider b1,b2 such that
+A6: u1 = b1*w + b2*y by A1,Def1;
+A7: u-u1 = (a1-b1)*w + (a2-b2)*y by A4,A6,Lm1;
+  u2-u = (c1-a1)*w + (c2-a2)*y by A4,A5,Lm1;
+  then
+A8: b1*(c1-a1) + b2*(c2-a2) = 0 by A1,A3,A6,Th5;
+  u1-u2 = (b1-c1)*w + (b2-c2)*y by A6,A5,Lm1;
+  then a1*(b1-c1) + a2*(b2-c2) = 0 by A1,A2,A4,Th5;
+  then 0 = c1*(a1-b1) + c2*(a2-b2) by A8;
+  hence thesis by A5,A7,Def2;
 end;
 
 theorem Th17:
-  (Gen w,y & u <> 0.V) implies ex a st v - a*u,u are_Ort_wrt w,y
+  Gen w,y & u <> 0.V implies ex a st v - a*u,u are_Ort_wrt w,y
 proof
   assume that
 A1: Gen w,y and
@@ -424,122 +453,132 @@ A3: u = a1*w + a2*y by A1,Def1;
   consider b1,b2 such that
 A4: v = b1*w + b2*y by A1,Def1;
   set a = (b1*a1 + b2*a2)*(a1*a1 + a2*a2)";
-A5: a1*a1 + a2*a2 <> 0
+  a*u = (a*a1)*w + (a*a2)*y by A3,Lm3;
+  then
+A5: v - a*u = (b1-a*a1)*w + (b2-a*a2)*y by A4,Lm1;
+A6: (b1-a*a1)*a1 + (b2-a*a2)*a2 = (a1*b1 + a2*b2) + (-1)*(a1*(a*a1) + a2*(a
+  *a2));
+A7: a1*a1 + a2*a2 <> 0
   proof
-    assume a1*a1 + a2*a2 = 0;
+    assume
+    a1*a1 + a2*a2 = 0;
     then u,u are_Ort_wrt w,y by A3,Def2;
     hence contradiction by A1,A2,Th15;
   end;
-  a*u = (a*a1)*w + (a*a2)*y by A3,Lm3;
-  then
-A6: v - a*u = (b1-a*a1)*w + (b2-a*a2)*y by A4,Lm1;
-A7: (b1-a*a1)*a1 + (b2-a*a2)*a2 = (a1*b1 + a2*b2) +
-  (-1)*(a1*(a*a1) + a2*(a*a2));
-  (-1)*(a1*(a*a1) + a2*(a*a2)) = (-1)*((b1*a1 +
-  b2*a2)*((a1*a1 + a2*a2)"*(a1*a1 + a2*a2)))
-    .= (-1)*((b1*a1 + b2*a2)*1) by A5,XCMPLX_0:def 7
+  (-1)*(a1*(a*a1) + a2*(a*a2)) = (-1)*((b1*a1 + b2*a2)*((a1*a1 + a2*a2)"*
+  (a1*a1 + a2*a2)))
+    .= (-1)*((b1*a1 + b2*a2)*1) by A7,XCMPLX_0:def 7
     .= -(a1*b1 + a2*b2);
-  then v - a*u,u are_Ort_wrt w,y by A3,A6,A7,Def2;
+  then v - a*u,u are_Ort_wrt w,y by A3,A5,A6,Def2;
   hence thesis;
 end;
 
 theorem Th18:
-  (u,v // u1,v1 or u,v // v1,u1) iff
-  (ex a,b st a*(v-u) = b*(v1-u1) & (a<>0 or b<>0))
+  (u,v // u1,v1 or u,v // v1,u1) iff ex a,b st a*(v-u) = b*(v1-u1)
+  & (a<>0 or b<>0)
 proof
 A1: now
+    let w,y,w1,y1 be VECTOR of V;
+    given a,b such that
+A2: a*(y-w) = b*(y1-w1) & a=0 and
+A3: b<>0;
+    0.V = b*(y1-w1) by A2,RLVECT_1:23;
+    then y1-w1 = 0.V by A3,RLVECT_1:24;
+    then y1 = w1 by RLVECT_1:35;
+    hence w,y // w1,y1 by ANALOAF:18;
+  end;
+A4: now
+    let w,y,w1,y1 be VECTOR of V;
+    given a,b such that
+A5: a*(y-w) = b*(y1-w1) and
+A6: 0<a and
+A7: b<0;
+A8: a*(y-w) = b*(-(w1-y1)) by A5,RLVECT_1:47
+      .= (-b)*(w1-y1) by RLVECT_1:38;
+    0<-b by A7,XREAL_1:60;
+    hence w,y // y1,w1 by A6,A8,ANALOAF:def 1;
+  end;
+A9: now
+    given a,b such that
+A10: a*(v-u) = b*(v1-u1) and
+A11: a<>0 or b<>0;
+A12: now
+A13:  now
+        assume
+        a<0 & b<0;
+        then
+A14:    0< -a & 0< -b by XREAL_1:60;
+        (-a)*(u-v) = a*(-(u-v)) by RLVECT_1:38
+          .= b*(v1-u1) by A10,RLVECT_1:47
+          .= b*(-(u1-v1)) by RLVECT_1:47
+          .= (-b)*(u1-v1) by RLVECT_1:38;
+        then v,u // v1,u1 by A14,ANALOAF:def 1;
+        hence u,v // u1,v1 or u,v // v1,u1 by ANALOAF:21;
+      end;
+A15:  now
+        assume
+        a<0 & 0<b;
+        then u1,v1 // v,u by A4,A10;
+        then v,u // u1, v1 by ANALOAF:21;
+        hence u,v // u1,v1 or u,v // v1,u1 by ANALOAF:21;
+      end;
+      assume
+A16:  a<>0 & b<>0;
+      0<a & b<0 implies ( u,v // u1,v1 or u,v // v1,u1) by A4,A10;
+      hence u,v // u1,v1 or u,v // v1,u1 by A10,A16,A15,A13,ANALOAF:def 1;
+    end;
+    now
+      assume
+      b=0;
+      then u1,v1 // u,v by A1,A10,A11;
+      hence u,v // u1,v1 or u,v // v1,u1 by ANALOAF:21;
+    end;
+    hence u,v // u1,v1 or u,v // v1,u1 by A1,A10,A12;
+  end;
+A17: now
     let w,y,w1,y1 be VECTOR of V such that
-A2: w,y // w1,y1;
-A3: now
-      assume w=y;
+A18: w,y // w1,y1;
+A19: now
+      assume
+      w=y;
       then 1*(y-w) = 0.V by RLVECT_1:23,28
         .= 0*(y1-w1) by RLVECT_1:23;
       hence ex a,b st a*(y-w) = b*(y1-w1) & (a<>0 or b<>0);
     end;
-A4: now
-      assume w1=y1;
+A20: now
+      assume
+      w1=y1;
       then 1*(y1-w1) = 0.V by RLVECT_1:23,28
         .= 0*(y-w) by RLVECT_1:23;
       hence ex a,b st a*(y-w) = b*(y1-w1) & (a<>0 or b<>0);
     end;
-    (ex a,b st 0<a & 0<b & a*(y-w)=b*(y1-w1)) implies
-    ex a,b st a*(y-w) = b*(y1-w1) & (a<>0 or b<>0);
-
-hence ex a,b st a*(y-w) = b*(y1-w1) & (a<>0 or b<>0) by A2,A3,A4,ANALOAF:def 1;
-  end;
-A5: now
-    assume u,v // v1,u1;
-    then consider a,b such that
-A6: a*(v-u) = b*(u1-v1) and
-A7: a<>0 or b<>0 by A1;
-A8: (-b)*(v1-u1) = b*(-(v1-u1)) by RLVECT_1:38
-      .= a*(v-u) by A6,RLVECT_1:47;
-    a<>0 or -b<>0 by A7;
-    hence ex a,b st a*(v-u) = b*(v1-u1) & (a<>0 or b<>0 ) by A8;
-  end;
-A9: now
-    let w,y,w1,y1 be VECTOR of V;
-    given a,b such that
-A10: a*(y-w) = b*(y1-w1) and
-A11: a=0 & b<>0;
-    0.V = b*(y1-w1) by A10,A11,RLVECT_1:23;
-    then y1-w1 = 0.V by A11,RLVECT_1:24;
-    then y1 = w1 by RLVECT_1:35;
-    hence w,y // w1,y1 by ANALOAF:18;
-  end;
-A12: now
-    let w,y,w1,y1 be VECTOR of V;
-    given a,b such that
-A13: a*(y-w) = b*(y1-w1) and
-A14: 0<a & b<0;
-A15: 0<-b by A14,XREAL_1:60;
-    a*(y-w) = b*(-(w1-y1)) by A13,RLVECT_1:47
-      .= (-b)*(w1-y1) by RLVECT_1:38;
-    hence w,y // y1,w1 by A14,A15,ANALOAF:def 1;
+    (ex a,b st 0<a & 0<b & a*(y-w)=b*(y1-w1)) implies ex a,b st a*(y-w) =
+    b*(y1-w1) & (a<>0 or b<>0);
+    hence ex a,b st a*(y-w) = b*(y1-w1) & (a<>0 or b<>0) by A18,A19,A20,
+    ANALOAF:def 1;
   end;
   now
-    given a,b such that
-A16: a*(v-u) = b*(v1-u1) and
-A17: (a<>0 or b<>0);
-A18: now
-      assume b=0;
-      then u1,v1 // u,v by A9,A16,A17;
-      hence u,v // u1,v1 or u,v // v1,u1 by ANALOAF:21;
-    end;
-    now
-      assume
-A19:  a<>0 & b<>0;
-A20:  0<a & b<0 implies ( u,v // u1,v1 or u,v // v1,u1) by A12,A16;
-A21:  now
-        assume a<0 & 0<b;
-        then u1,v1 // v,u by A12,A16;
-        then v,u // u1, v1 by ANALOAF:21;
-        hence u,v // u1,v1 or u,v // v1,u1 by ANALOAF:21;
-      end;
-      now
-        assume a<0 & b<0;
-        then
-A22:    0< -a & 0< -b by XREAL_1:60;
-        (-a)*(u-v) = a*(-(u-v)) by RLVECT_1:38
-          .= b*(v1-u1) by A16,RLVECT_1:47
-          .= b*(-(u1-v1)) by RLVECT_1:47
-          .= (-b)*(u1-v1) by RLVECT_1:38;
-        then v,u // v1,u1 by A22,ANALOAF:def 1;
-        hence u,v // u1,v1 or u,v // v1,u1 by ANALOAF:21;
-      end;
-      hence u,v // u1,v1 or u,v // v1,u1 by A16,A19,A20,A21,ANALOAF:def 1;
-    end;
-    hence u,v // u1,v1 or u,v // v1,u1 by A9,A16,A18;
+    assume
+    u,v // v1,u1;
+    then consider a,b such that
+A21: a*(v-u) = b*(u1-v1) and
+A22: a<>0 or b<>0 by A17;
+A23: a<>0 or -b<>0 by A22;
+    (-b)*(v1-u1) = b*(-(v1-u1)) by RLVECT_1:38
+      .= a*(v-u) by A21,RLVECT_1:47;
+    hence ex a,b st a*(v-u) = b*(v1-u1) & (a<>0 or b<>0 ) by A23;
   end;
-  hence thesis by A1,A5;
+  hence thesis by A17,A9;
 end;
 
 theorem Th19:
-  [[u,v],[u1,v1]] in lambda(DirPar(V)) iff
-  (ex a,b st a*(v-u) = b*(v1-u1) & (a<>0 or b<>0))
-proof [[u,v],[u1,v1]] in lambda(DirPar(V)) iff
-  [[u,v],[u1,v1]] in DirPar(V) or [[u,v],[v1,u1]] in DirPar(V) by DIRAF:def 1;
-  then [[u,v],[u1,v1]] in lambda(DirPar(V)) iff (u,v // u1,v1 or u,v // v1,u1)
+  [[u,v],[u1,v1]] in lambda(DirPar(V)) iff ex a,b st a*(v-u) = b*(
+  v1-u1) & (a<>0 or b<>0)
+proof
+  [[u,v],[u1,v1]] in lambda(DirPar(V)) iff [[u,v],[u1,v1]] in DirPar(V) or
+  [[u,v],[v1,u1]] in DirPar(V) by DIRAF:def 1;
+  then
+  [[u,v],[u1,v1]] in lambda(DirPar(V)) iff (u,v // u1,v1 or u,v // v1,u1)
   by ANALOAF:33;
   hence thesis by Th18;
 end;
@@ -555,39 +594,39 @@ end;
 definition
   let V;
   let w,y;
-
-func Orthogonality(V,w,y) -> Relation of [:the carrier of V,the carrier of V:]
-  means
+  func Orthogonality(V,w,y) -> Relation of [:the carrier of V,the carrier of V
+  :] means
   :Def4:
-  [x,z] in it iff
-  ex u,u1,v,v1 st x=[u,u1] & z=[v,v1] & u,u1,v,v1 are_Ort_wrt w,y;
+  [x,z] in it iff ex u,u1,v,v1 st x=[u,u1] & z=[v,v1] & u,u1,v,v1
+  are_Ort_wrt w,y;
   existence
   proof
+    defpred P[set, set] means ex u,u1,v,v1 st $1=[u,u1] & $2=[v,v1] & u,u1,v,
+    v1 are_Ort_wrt w,y;
     set VV = [:the carrier of V,the carrier of V:];
-    defpred P[set, set] means ex u,u1,v,v1 st
-    $1=[u,u1] & $2=[v,v1] & u,u1,v,v1 are_Ort_wrt w,y;
     consider P being Relation of VV,VV such that
-A1: for x,z holds ([x,z] in P iff
-    x in VV & z in VV & P[x,z]) from RELSET_1:sch 1;
+A1: for x,z holds ([x,z] in P iff x in VV & z in VV & P[x,z]) from
+    RELSET_1:sch 1;
     take P;
     let x,z;
-    thus [x,z] in P implies ex u,u1,v,v1 st
-    x=[u,u1] & z=[v,v1] & u,u1,v,v1 are_Ort_wrt w,y by A1;
-    assume ex u,u1,v,v1 st x=[u,u1] & z=[v,v1] & u,u1,v,v1 are_Ort_wrt w,y;
+    thus [x,z] in P implies ex u,u1,v,v1 st x=[u,u1] & z=[v,v1] & u,u1,v,v1
+    are_Ort_wrt w,y by A1;
+    assume
+    ex u,u1,v,v1 st x=[u,u1] & z=[v,v1] & u,u1,v,v1 are_Ort_wrt w,y;
     hence thesis by A1;
   end;
   uniqueness
   proof
     let P,Q be Relation of [:the carrier of V,the carrier of V:] such that
-A2: [x,z] in P iff ex u,u1,v,v1 st x=[u,u1] & z=[v,v1]
-    & u,u1,v,v1 are_Ort_wrt w,y and
-A3: [x,z] in Q iff ex u,u1,v,v1 st x=[u,u1] & z=[v,v1]
-    & u,u1,v,v1 are_Ort_wrt w,y;
+A2: [x,z] in P iff ex u,u1,v,v1 st x=[u,u1] & z=[v,v1] & u,u1,v,v1
+    are_Ort_wrt w,y and
+A3: [x,z] in Q iff ex u,u1,v,v1 st x=[u,u1] & z=[v,v1] & u,u1,v,v1
+    are_Ort_wrt w,y;
     for x,z holds [x,z] in P iff [x,z] in Q
     proof
       let x,z;
-      [x,z] in P iff ex u,u1,v,v1 st x=[u,u1] & z=[v,v1]
-      & u,u1,v,v1 are_Ort_wrt w,y by A2;
+      [x,z] in P iff ex u,u1,v,v1 st x=[u,u1] & z=[v,v1] & u,u1,v,v1
+      are_Ort_wrt w,y by A2;
       hence thesis by A3;
     end;
     hence thesis by RELAT_1:def 2;
@@ -601,44 +640,46 @@ canceled 2;
 theorem Th22:
   the carrier of Lambda(OASpace(V)) = the carrier of V
 proof
-A1: Lambda(OASpace(V)) = AffinStruct(#the carrier of OASpace(V),
-    lambda(the CONGR of OASpace(V))#) by DIRAF:def 2;
-  OASpace(V) = AffinStruct (#the carrier of V, DirPar(V)#) by ANALOAF:def 4;
-  hence thesis by A1;
+  Lambda(OASpace(V)) = AffinStruct(#the carrier of OASpace(V), lambda(the
+CONGR of OASpace(V))#) & OASpace(V) = AffinStruct (#the carrier of V, DirPar(V)
+  #) by ANALOAF:def 4,DIRAF:def 2;
+  hence thesis;
 end;
 
 theorem Th23:
   the CONGR of Lambda(OASpace(V)) = lambda(DirPar(V))
 proof
-A1: Lambda(OASpace(V)) = AffinStruct(#the carrier of OASpace(V),
-    lambda(the CONGR of OASpace(V))#) by DIRAF:def 2;
-  OASpace(V) = AffinStruct (#the carrier of V, DirPar(V)#) by ANALOAF:def 4;
-  hence thesis by A1;
+  Lambda(OASpace(V)) = AffinStruct(#the carrier of OASpace(V), lambda(the
+CONGR of OASpace(V))#) & OASpace(V) = AffinStruct (#the carrier of V, DirPar(V)
+  #) by ANALOAF:def 4,DIRAF:def 2;
+  hence thesis;
 end;
 
 theorem
-  p=u & q=v & p1=u1 & q1=v1 implies
-  (p,q // p1,q1 iff (ex a,b st a*(v-u) = b*(v1-u1) & (a<>0 or b<>0)))
+  p=u & q=v & p1=u1 & q1=v1 implies (p,q // p1,q1 iff ex a,b st a*(v-u)
+  = b*(v1-u1) & (a<>0 or b<>0) )
 proof
   assume
 A1: p=u & q=v & p1=u1 & q1=v1;
   hereby
-    assume p,q // p1,q1;
-    then [[p,q],[p1,q1]] in the CONGR of Lambda(OASpace(V)) by ANALOAF:def 2;
+    assume
+    p,q // p1,q1;
+    then [[p,q],[p1,q1]] in the CONGR of Lambda(OASpace(V)) by
+    ANALOAF:def 2;
     then [[u,v],[u1,v1]] in lambda(DirPar(V)) by A1,Th23;
     hence ex a,b st a*(v-u) = b*(v1-u1) & (a<>0 or b<>0) by Th19;
   end;
   given a,b such that
-A2: a*(v-u) = b*(v1-u1) & (a<>0 or b<>0);
+A2: a*(v-u) = b*(v1-u1) &( a<>0 or b<>0);
   [[u,v],[u1,v1]] in lambda(DirPar(V)) by A2,Th19;
   then [[p,q],[p1,q1]] in the CONGR of Lambda(OASpace(V)) by A1,Th23;
   hence thesis by ANALOAF:def 2;
 end;
 
 definition
-  struct(AffinStruct) ParOrtStr (# carrier -> set,
-    CONGR -> (Relation of [:the carrier,the carrier:]),
-    orthogonality -> Relation of [:the carrier,the carrier:] #);
+  struct(AffinStruct) ParOrtStr (# carrier -> set, CONGR -> (Relation of [:the
+carrier,the carrier:]), orthogonality -> Relation of [:the carrier,the carrier
+    :] #);
 end;
 
 registration
@@ -665,7 +706,8 @@ end;
 definition
   let V,w,y;
   func AMSpace(V,w,y) -> strict ParOrtStr equals
-  ParOrtStr(#the carrier of V,lambda(DirPar(V)),Orthogonality(V,w,y)#);
+  ParOrtStr(#the carrier of V,
+    lambda(DirPar(V)),Orthogonality(V,w,y)#);
   correctness;
 end;
 
@@ -678,14 +720,15 @@ end;
 canceled 3;
 
 theorem
-  (the carrier of AMSpace(V,w,y) = the carrier of V
-  & the CONGR of AMSpace(V,w,y) = lambda(DirPar(V))
-  & the orthogonality of AMSpace(V,w,y) = Orthogonality(V,w,y));
+  the carrier of AMSpace(V,w,y) = the carrier of V & the CONGR of
+  AMSpace(V,w,y) = lambda(DirPar(V)) & the orthogonality of AMSpace(V,w,y) =
+  Orthogonality(V,w,y);
 
 definition
   let POS;
   func Af(POS) -> strict AffinStruct equals
-  AffinStruct (# the carrier of POS, the CONGR of POS #);
+  AffinStruct (# the carrier of POS,
+    the CONGR of POS #);
   correctness;
 end;
 
@@ -701,46 +744,50 @@ theorem Th30:
   Af(AMSpace(V,w,y)) = Lambda(OASpace(V))
 proof
   set Y = OASpace(V);
-  the carrier of Lambda(Y) = the carrier of V & the CONGR of Lambda(Y) =
-  lambda(DirPar(V)) by Th22,Th23;
-  hence thesis;
+  the carrier of Lambda(Y) = the carrier of V by Th22;
+  hence thesis by Th23;
 end;
 
 reserve p,p1,p2,q,q1,r,r1,r2 for Element of AMSpace(V,w,y);
 
 theorem Th31:
-  p=u & p1=u1 & q=v & q1=v1 implies
-  (p,q _|_ p1,q1 iff u,v,u1,v1 are_Ort_wrt w,y)
+  p=u & p1=u1 & q=v & q1=v1 implies (p,q _|_ p1,q1 iff u,v,u1,v1
+  are_Ort_wrt w,y)
 proof
-  assume that
+  assume
 A1: p=u & p1=u1 & q=v & q1=v1;
 A2: p,q _|_ p1,q1 iff [[p,q],[p1,q1]] in the orthogonality of AMSpace(V,w,y)
   by Def6;
   hereby
-    assume p,q _|_ p1,q1;
+    assume
+    p,q _|_ p1,q1;
     then consider u',v',u1',v1' being VECTOR of V such that
-A3: [u,v] = [u',v'] & [u1,v1] = [u1',v1'] and
-A4: u',v',u1',v1' are_Ort_wrt w,y by A1,A2,Def4;
-    u=u' & v=v' & u1=u1' & v1=v1' by A3,ZFMISC_1:33;
-    hence u,v,u1,v1 are_Ort_wrt w,y by A4;
+A3: [u,v] = [u',v'] and
+A4: [u1,v1] = [u1',v1'] and
+A5: u',v',u1',v1' are_Ort_wrt w,y by A1,A2,Def4;
+A6: u1=u1' by A4,ZFMISC_1:33;
+    u=u' & v=v' by A3,ZFMISC_1:33;
+    hence u,v,u1,v1 are_Ort_wrt w,y by A4,A5,A6,ZFMISC_1:33;
   end;
-  assume u,v,u1,v1 are_Ort_wrt w,y;
+  assume
+  u,v,u1,v1 are_Ort_wrt w,y;
   hence thesis by A1,A2,Def4;
 end;
 
 theorem Th32:
-  p=u & q=v & p1=u1 & q1=v1 implies
-  (p,q // p1,q1 iff (ex a,b st a*(v-u) = b*(v1-u1) & (a<>0 or b<>0)))
+  p=u & q=v & p1=u1 & q1=v1 implies (p,q // p1,q1 iff ex a,b st a*
+  (v-u) = b*(v1-u1) & (a<>0 or b<>0) )
 proof
-  assume that
+  assume
 A1: p=u & q=v & p1=u1 & q1=v1;
   hereby
-    assume p,q // p1,q1;
+    assume
+    p,q // p1,q1;
     then [[p,q],[p1,q1]] in the CONGR of AMSpace(V,w,y) by ANALOAF:def 2;
     hence ex a,b st a*(v-u) = b*(v1-u1) & (a<>0 or b<>0) by A1,Th19;
   end;
   given a,b such that
-A2: a*(v-u) = b*(v1-u1) & (a<>0 or b<>0);
+A2: a*(v-u) = b*(v1-u1) &( a<>0 or b<>0);
   [[u,v],[u1,v1]] in lambda(DirPar(V)) by A2,Th19;
   hence thesis by A1,ANALOAF:def 2;
 end;
@@ -748,10 +795,10 @@ end;
 theorem Th33:
   p,q _|_ p1,q1 implies p1,q1 _|_ p,q
 proof
-  assume that
-A1: p,q _|_ p1,q1;
   reconsider u=p,v=q,u1=p1,v1=q1 as Element of V;
-  u,v,u1,v1 are_Ort_wrt w,y by A1,Th31;
+  assume
+  p,q _|_ p1,q1;
+  then u,v,u1,v1 are_Ort_wrt w,y by Th31;
   then v-u,v1-u1 are_Ort_wrt w,y by Def3;
   then v1-u1,v-u are_Ort_wrt w,y by Th8;
   then u1,v1,u,v are_Ort_wrt w,y by Def3;
@@ -761,16 +808,16 @@ end;
 theorem Th34:
   p,q _|_ p1,q1 implies p,q _|_ q1,p1
 proof
-  assume that
-A1: p,q _|_ p1,q1;
   reconsider u=p,v=q,u1=p1,v1=q1 as Element of V;
-  u,v,u1,v1 are_Ort_wrt w,y by A1,Th31;
+  assume
+  p,q _|_ p1,q1;
+  then u,v,u1,v1 are_Ort_wrt w,y by Th31;
   then v-u,v1-u1 are_Ort_wrt w,y by Def3;
   then
-A2: v-u,(-1)*(v1-u1) are_Ort_wrt w,y by Th11;
+A1: v-u,(-1)*(v1-u1) are_Ort_wrt w,y by Th11;
   (-1)*(v1-u1) = -(v1-u1) by RLVECT_1:29
     .= u1-v1 by RLVECT_1:47;
-  then u,v,v1,u1 are_Ort_wrt w,y by A2,Def3;
+  then u,v,v1,u1 are_Ort_wrt w,y by A1,Def3;
   hence thesis by Th31;
 end;
 
@@ -793,65 +840,72 @@ proof
   assume that
 A1: p,p1 _|_ q,q1 and
 A2: p,p1 // r,r1;
-  assume
-A3: p<>p1;
   reconsider u=p,v=p1,u1=q,v1=q1,u2=r,v2=r1 as Element of V;
-  u,v,u1,v1 are_Ort_wrt w,y by A1,Th31;
-  then
-A4: v-u,v1-u1 are_Ort_wrt w,y by Def3;
   consider a,b such that
-A5: a*(v-u) = b*(v2-u2) and
-A6: a<>0 or b<>0 by A2,Th32;
+A3: a*(v-u) = b*(v2-u2) and
+A4: a<>0 or b<>0 by A2,Th32;
+  assume
+A5: p<>p1;
   b<>0
   proof
-    assume b=0;
-    then a*(v-u) = 0.V & a<>0 by A5,A6,RLVECT_1:23;
-    then v-u = 0.V by RLVECT_1:24;
-    hence contradiction by A3,RLVECT_1:35;
+    assume
+A6: b=0;
+    then a*(v-u) = 0.V by A3,RLVECT_1:23;
+    then v-u = 0.V by A4,A6,RLVECT_1:24;
+    hence contradiction by A5,RLVECT_1:35;
   end;
-  then v2-u2 = b"*(a*(v-u)) by A5,ANALOAF:12
+  then
+A7: v2-u2 = b"*(a*(v-u)) by A3,ANALOAF:12
     .= (b"*a)*(v-u) by RLVECT_1:def 9;
-  then v2-u2,v1-u1 are_Ort_wrt w,y by A4,Th11;
+  u,v,u1,v1 are_Ort_wrt w,y by A1,Th31;
+  then v-u,v1-u1 are_Ort_wrt w,y by Def3;
+  then v2-u2,v1-u1 are_Ort_wrt w,y by A7,Th11;
   then v1-u1,v2-u2 are_Ort_wrt w, y by Th8;
   then u1,v1,u2,v2 are_Ort_wrt w,y by Def3;
   hence thesis by Th31;
 end;
 
 theorem Th37:
-  Gen w,y implies (for p,q,r ex r1 st p,q _|_ r,r1 & r<>r1)
+  Gen w,y implies for p,q,r ex r1 st p,q _|_ r,r1 & r<>r1
 proof
   assume
 A1: Gen w,y;
   let p,q,r;
   reconsider u=p,v=q,u1=r as Element of V;
   consider v2 such that
-A2: v-u,v2 are_Ort_wrt w,y & v2<>0.V by A1,Th12;
+A2: v-u,v2 are_Ort_wrt w,y and
+A3: v2<>0.V by A1,Th12;
   set v1 = u1+v2;
-A3: v1-u1 = v2+(u1-u1) by RLVECT_1:def 6
+  reconsider r1=v1 as Element of AMSpace(V,w,y);
+A4: v1-u1 = v2+(u1-u1) by RLVECT_1:def 6
     .= v2+0.V by RLVECT_1:28
     .= v2 by RLVECT_1:10;
+  then u,v,u1,v1 are_Ort_wrt w,y by A2,Def3;
   then
-A4: u,v,u1,v1 are_Ort_wrt w,y by A2,Def3;
-  reconsider r1=v1 as Element of AMSpace(V,w,y);
-  p,q _|_ r,r1 & r<>r1 by A2,A3,A4,Th31,RLVECT_1:28;
-  hence thesis;
+A5: p,q _|_ r,r1 by Th31;
+  r<>r1 by A3,A4,RLVECT_1:28;
+  hence thesis by A5;
 end;
 
 theorem Th38:
-  Gen w,y & p,p1 _|_ q,q1 & p,p1 _|_ r,r1 implies p=p1 or q,q1 // r,r1
+  Gen w,y & p,p1 _|_ q,q1 & p,p1 _|_ r,r1 implies p=p1 or q,q1 //
+  r,r1
 proof
   assume that
 A1: Gen w,y and
-X: p,p1 _|_ q,q1 and
-A2: p,p1 _|_ r,r1;
-  assume
-A3: p<>p1;
+A2: p,p1 _|_ q,q1 and
+A3: p,p1 _|_ r,r1;
   reconsider u=p,v=p1,u1=q,v1=q1,u2=r,v2=r1 as Element of V;
-  u,v,u1,v1 are_Ort_wrt w,y & u,v,u2,v2 are_Ort_wrt w,y by A2,Th31,X;
+  u,v,u2,v2 are_Ort_wrt w,y by A3,Th31;
   then
-A4: v-u,v1-u1 are_Ort_wrt w,y & v-u,v2-u2 are_Ort_wrt w,y by Def3;
-  v-u <> 0.V by A3,RLVECT_1:35;
-  then ex a,b st a*(v1-u1) = b*(v2-u2) & (a<>0 or b<>0) by A1,A4,Th13;
+A4: v-u,v2-u2 are_Ort_wrt w,y by Def3;
+  assume
+  p<>p1;
+  then
+A5: v-u <> 0.V by RLVECT_1:35;
+  u,v,u1,v1 are_Ort_wrt w,y by A2,Th31;
+  then v-u,v1-u1 are_Ort_wrt w,y by Def3;
+  then ex a,b st a*(v1-u1) = b*(v2-u2) & (a<>0 or b<>0) by A1,A4,A5,Th13;
   hence thesis by Th32;
 end;
 
@@ -860,18 +914,20 @@ theorem Th39:
 proof
   assume that
 A1: Gen w,y and
-X: p,q _|_ r,r1 and
-A2: p,q _|_ r,r2;
+A2: p,q _|_ r,r1 and
+A3: p,q _|_ r,r2;
   reconsider u=p,v=q,w1=r,v1=r1,v2=r2 as Element of V;
-  u,v,w1,v1 are_Ort_wrt w,y & u,v,w1,v2 are_Ort_wrt w,y by A2,Th31,X;
-  then v-u,v1-w1 are_Ort_wrt w,y & v-u,v2-w1 are_Ort_wrt w,y by Def3;
+  u,v,w1,v2 are_Ort_wrt w,y by A3,Th31;
   then
-A3: v-u,(v2-w1)-(v1-w1) are_Ort_wrt w,y by A1,Th14;
-  (v2-w1)-(v1-w1) = v2-((v1-w1)+w1) by RLVECT_1:41
+A4: v-u,v2-w1 are_Ort_wrt w,y by Def3;
+A5: (v2-w1)-(v1-w1) = v2-((v1-w1)+w1) by RLVECT_1:41
     .= v2-(v1-(w1-w1)) by RLVECT_1:43
     .= v2-(v1-0.V) by RLVECT_1:28
     .= v2-v1 by RLVECT_1:26;
-  then u,v,v1,v2 are_Ort_wrt w,y by A3,Def3;
+  u,v,w1,v1 are_Ort_wrt w,y by A2,Th31;
+  then v-u,v1-w1 are_Ort_wrt w,y by Def3;
+  then v-u,(v2-w1)-(v1-w1) are_Ort_wrt w,y by A1,A4,Th14;
+  then u,v,v1,v2 are_Ort_wrt w,y by A5,Def3;
   hence thesis by Th31;
 end;
 
@@ -893,27 +949,31 @@ theorem
 proof
   assume that
 A1: Gen w,y and
-X: p,q _|_ p1,p2 and
-A2: p1,q _|_ p2,p;
+A2: p,q _|_ p1,p2 and
+A3: p1,q _|_ p2,p;
   reconsider u=p,v=q,u1=p1,u2=p2 as Element of V;
-  u,v,u1,u2 are_Ort_wrt w,y & u1,v,u2,u are_Ort_wrt w,y by A2,Th31,X;
+  u,v,u1,u2 are_Ort_wrt w,y by A2,Th31;
   then
-A3: v-u,u2-u1 are_Ort_wrt w,y & v-u1,u-u2 are_Ort_wrt w,y by Def3;
-A4: now
-    let u,v,w; thus (u-v)-(u-w) = (w-u) + (u-v) by RLVECT_1:47
+A4: v-u,u2-u1 are_Ort_wrt w,y by Def3;
+  u1,v,u2,u are_Ort_wrt w,y by A3,Th31;
+  then
+A5: v-u1,u-u2 are_Ort_wrt w,y by Def3;
+A6: now
+    let u,v,w;
+    thus (u-v)-(u-w) = (w-u) + (u-v) by RLVECT_1:47
       .= w-v by ANALOAF:4;
   end;
   then
-A5: (v-u1)-(v-u2)=u2-u1;
-A6: (v-u2)-(v-u)=u-u2 by A4;
-A7: (v-u)-(v-u1)=u1-u by A4;
-  v-u2,(v-u)-(v-u1) are_Ort_wrt w,y by A1,A3,A5,A6,Th16;
+A7: (v-u)-(v-u1)=u1-u;
+  (v-u1)-(v-u2)=u2-u1 & (v-u2)-(v-u)=u-u2 by A6;
+  then v-u2,(v-u)-(v-u1) are_Ort_wrt w,y by A1,A4,A5,Th16;
   then u2,v,u,u1 are_Ort_wrt w,y by A7,Def3;
   hence thesis by Th31;
 end;
 
 theorem Th42:
-  Gen w,y & p<>p1 implies for q ex q1 st p,p1 // p,q1 & p,p1 _|_ q1,q
+  Gen w,y & p<>p1 implies for q ex q1 st p,p1 // p,q1 & p,p1 _|_
+  q1,q
 proof
   assume that
 A1: Gen w,y and
@@ -925,61 +985,62 @@ A2: p<>p1;
 A3: (v-u) - a*(u1-u),u1-u are_Ort_wrt w,y by A1,Th17;
   set v1 = u + a*(u1-u);
   reconsider q1=v1 as Element of AMSpace(V,w,y);
+  v-v1 = (v-u)- a*(u1-u) by RLVECT_1:41;
+  then u1-u,v-v1 are_Ort_wrt w,y by A3,Th8;
+  then u,u1,v1,v are_Ort_wrt w,y by Def3;
+  then
+A4: p,p1 _|_ q1,q by Th31;
   a*(u1-u) = a*(u1-u)+0.V by RLVECT_1:10
     .= a*(u1-u)+(u-u) by RLVECT_1:28
     .= v1-u by RLVECT_1:def 6
     .= 1*(v1-u) by RLVECT_1:def 9;
-  then
-A4: p,p1 // p,q1 by Th32;
-  v-v1 = (v-u)- a*(u1-u) by RLVECT_1:41;
-  then u1-u,v-v1 are_Ort_wrt w,y by A3,Th8;
-  then u,u1,v1,v are_Ort_wrt w,y by Def3;
-  then p,p1 _|_ q1,q by Th31;
+  then p,p1 // p,q1 by Th32;
   hence thesis by A4;
 end;
 consider V0 being RealLinearSpace such that
-
 Lm6: ex w,y being VECTOR of V0 st Gen w,y by Th7;
 consider w0,y0 being VECTOR of V0 such that
-
 Lm7: Gen w0,y0 by Lm6;
 
 Lm8: now
-  set X = AffinStruct(#the carrier of AMSpace(V0,w0,y0),
-    the CONGR of AMSpace(V0,w0,y0)#);
+
+  set X = AffinStruct(#the carrier of AMSpace(V0,w0,y0), the CONGR of AMSpace(
+    V0,w0,y0)#);
+
   X = Af(AMSpace(V0,w0,y0));
   then
 A1: X = Lambda(OASpace(V0)) by Th30;
   for a,b being Real st a*w0 + b*y0 = 0.V0 holds a=0 & b=0 by Def1,Lm7;
   then OASpace(V0) is OAffinSpace by ANALOAF:38;
-  hence AffinStruct(#the carrier of AMSpace(V0,w0,y0),
-    the CONGR of AMSpace(V0,w0,y0)#) is AffinSpace
-  & (for a,b,c,d,p,q,r,s being Element of AMSpace(V0,w0,y0)
-  holds (a,b _|_ a,b implies a=b) & a,b _|_ c,c &
-  (a,b _|_ c,d implies a,b _|_ d,c & c,d _|_ a,b) &
-  (a,b _|_ p,q & a,b // r,s implies p,q _|_ r,s or a=b) &
-  (a,b _|_ p,q & a,b _|_ p,s implies a,b _|_ q,s)) &
-  (for a,b,c being Element of AMSpace(V0,w0,y0) st a<>b
-  ex x being Element of AMSpace(V0,w0,y0) st a,b // a,x & a,b _|_ x,c) &
-  (for a,b,c being Element of AMSpace(V0,w0,y0)
-  ex x being Element of AMSpace(V0,w0,y0) st a,b _|_ c,x & c <>x)
-  by A1,Lm7,Th33,Th34,Th35,Th36,Th37,Th39,Th40,Th42,DIRAF:48;
+
+  hence
+  AffinStruct(#the carrier of AMSpace(V0,w0,y0), the CONGR of AMSpace(V0,
+
+w0,y0)#) is AffinSpace & (for a,b,c,d,p,q,r,s being Element of AMSpace(V0,w0,y0
+
+) holds (a,b _|_ a,b implies a=b) & a,b _|_ c,c & (a,b _|_ c,d implies a,b _|_
+
+d,c & c,d _|_ a,b) & (a,b _|_ p,q & a,b // r,s implies p,q _|_ r,s or a=b) & (a
+  ,b _|_ p,q & a,b _|_ p,s implies a,b _|_ q,s)) & (for a,b,c being Element of
+
+AMSpace(V0,w0,y0) st a<>b ex x being Element of AMSpace(V0,w0,y0) st a,b // a,x
+  & a,b _|_ x,c) & for a,b,c being Element of AMSpace(V0,w0,y0) ex x being
+  Element of AMSpace(V0,w0,y0) st a,b _|_ c,x & c <>x by A1,Lm7,Th33,Th34,Th35
+  ,Th36,Th37,Th39,Th40,Th42,DIRAF:48;
+
 end;
 
 definition
   let IT be non empty ParOrtStr;
   attr IT is OrtAfSp-like means
   :Def9:
-  AffinStruct(#the carrier of IT,the CONGR of IT#) is AffinSpace
-  & (for a,b,c,d,p,q,r,s being Element of IT holds
-  (a,b _|_ a,b implies a=b) & a,b _|_ c,c &
-  (a,b _|_ c,d implies a,b _|_ d,c & c,d _|_ a,b) &
-  (a,b _|_ p,q & a,b // r,s implies p,q _|_ r,s or a=b) &
-  (a,b _|_ p,q & a,b _|_ p,s implies a,b _|_ q,s)) &
-  (for a,b,c being Element of IT st a<>b
-  ex x being Element of IT st a,b // a,x & a,b _|_ x,c) &
-  (for a,b,c being Element of IT
-  ex x being Element of IT st a,b _|_ c,x & c <>x);
+  AffinStruct(#the carrier of IT,the
+CONGR of IT#) is AffinSpace & (for a,b,c,d,p,q,r,s being Element of IT holds (a
+,b _|_ a,b implies a=b) & a,b _|_ c,c & (a,b _|_ c,d implies a,b _|_ d,c & c,d
+_|_ a,b) & (a,b _|_ p,q & a,b // r,s implies p,q _|_ r,s or a=b) & (a,b _|_ p,q
+& a,b _|_ p,s implies a,b _|_ q,s)) & (for a,b,c being Element of IT st a<>b ex
+x being Element of IT st a,b // a,x & a,b _|_ x,c) & for a,b,c being Element of
+  IT ex x being Element of IT st a,b _|_ c,x & c <>x;
 end;
 
 registration
@@ -1000,69 +1061,72 @@ canceled;
 theorem
   Gen w,y implies AMSpace(V,w,y) is OrtAfSp
 proof
+  set POS = AMSpace(V,w,y);
+  set X = AffinStruct(#the carrier of POS,the CONGR of POS#);
   assume
 A1: Gen w,y;
-  set POS = AMSpace(V,w,y);
-A2: for a,b,c,d,p,q,r,s be Element of POS holds (
-  (a,b _|_ a,b implies a=b) & a,b _|_ c,c &
-  (a,b _|_ c,d implies a,b _|_ d,c & c,d _|_ a,b) &
-  (a,b _|_ p,q & a,b // r,s implies p,q _|_ r,s or a=b) &
-  (a,b _|_ p,q & a,b _|_ p,s implies a,b _|_ q,s)) by A1,Th33,Th34,Th35,Th36
-  ,Th39,Th40;
-A3: for a,b,c be Element of POS holds a<>b implies (
-  ex x being Element of POS st a,b // a,x & a,b _|_ x,c) by A1,Th42;
-A4: for a,b,c be Element of POS holds ( ex x being
-  Element of POS st a,b _|_ c,x & c <>x) by A1,Th37;
-  set X = AffinStruct(#the carrier of POS,the CONGR of POS#);
+  then
+A2: for a,b,c be Element of POS holds ex x being Element of POS st a,b _|_ c
+  ,x & c <>x by Th37;
   X = Af(POS);
   then
-A5: X = Lambda(OASpace(V)) by Th30;
+A3: X = Lambda(OASpace(V)) by Th30;
   for a,b being Real st a*w + b*y = 0.V holds a=0 & b=0 by A1,Def1;
   then OASpace(V) is OAffinSpace by ANALOAF:38;
-  then X is AffinSpace by A5,DIRAF:48;
-  hence thesis by A2,A3,A4,Def9;
+  then
+A4: X is AffinSpace by A3,DIRAF:48;
+  ( for a,b,c,d,p,q,r,s be Element of POS holds (a,b _|_ a,b implies a=b)
+& a,b _|_ c,c & (a,b _|_ c,d implies a,b _|_ d,c & c,d _|_ a,b) & (a,b _|_ p,q
+& a,b // r,s implies p,q _|_ r,s or a=b) & (a,b _|_ p,q & a,b _|_ p,s implies a
+,b _|_ q,s))& for a,b,c be Element of POS holds a<>b implies ex x being Element
+  of POS st a,b // a,x & a,b _|_ x,c by A1,Th33,Th34,Th35,Th36,Th39,Th40,Th42;
+  hence thesis by A2,A4,Def9;
 end;
 consider V0 being RealLinearSpace such that
-
 Lm9: ex w,y being VECTOR of V0 st Gen w,y by Th7;
 consider w0,y0 being VECTOR of V0 such that
-
 Lm10: Gen w0,y0 by Lm9;
 
 Lm11: now
-  set X = AffinStruct(#the carrier of AMSpace(V0,w0,y0),
-    the CONGR of AMSpace(V0,w0,y0)#);
+
+  set X = AffinStruct(#the carrier of AMSpace(V0,w0,y0), the CONGR of AMSpace(
+    V0,w0,y0)#);
+
   X = Af(AMSpace(V0,w0,y0));
   then
 A1: X = Lambda(OASpace(V0)) by Th30;
-  (for a,b being Real st a*w0 + b*y0 = 0.V0 holds a=0 & b=0)
-  & (for w1 being VECTOR of V0
-  ex a,b being Real st w1 = a*w0+b*y0) by Def1,Lm10;
+
+  ( for a,b being Real st a*w0 + b*y0 = 0.V0 holds a=0 & b=0)& for w1
+  being VECTOR of V0 ex a,b being Real st w1 = a*w0+b*y0 by Def1,Lm10;
+
   then OASpace(V0) is OAffinPlane by ANALOAF:51;
-  hence AffinStruct(#the carrier of AMSpace(V0,w0,y0),
-    the CONGR of AMSpace(V0,w0,y0)#) is AffinPlane
-  & (for a,b,c,d,p,q,r,s being Element of AMSpace(V0,w0,y0) holds
-  (a,b _|_ a,b implies a=b) & a,b _|_ c,c &
-  (a,b _|_ c,d implies a,b _|_ d,c & c,d _|_ a,b) &
-  (a,b _|_ p,q & a,b // r,s implies p,q _|_ r,s or a=b) &
-  (a,b _|_ p,q & a,b _|_ r,s implies p,q // r,s or a=b)) &
-  (for a,b,c being Element of AMSpace(V0,w0,y0)
-  ex x being Element of AMSpace(V0,w0,y0) st a,b _|_ c,x & c <>x)
-  by A1,Lm10,Th33,Th34,Th35,Th36,Th37,Th38,Th40,DIRAF:53;
+
+  hence
+  AffinStruct(#the carrier of AMSpace(V0,w0,y0), the CONGR of AMSpace(V0,
+
+w0,y0)#) is AffinPlane & (for a,b,c,d,p,q,r,s being Element of AMSpace(V0,w0,y0
+
+) holds (a,b _|_ a,b implies a=b) & a,b _|_ c,c & (a,b _|_ c,d implies a,b _|_
+
+d,c & c,d _|_ a,b) & (a,b _|_ p,q & a,b // r,s implies p,q _|_ r,s or a=b) & (a
+
+,b _|_ p,q & a,b _|_ r,s implies p,q // r,s or a=b)) & for a,b,c being Element
+
+of AMSpace(V0,w0,y0) ex x being Element of AMSpace(V0,w0,y0) st a,b _|_ c,x & c
+  <>x by A1,Lm10,Th33,Th34,Th35,Th36,Th37,Th38,Th40,DIRAF:53;
+
 end;
 
 definition
   let IT be non empty ParOrtStr;
   attr IT is OrtAfPl-like means
   :Def10:
-  AffinStruct(#the carrier of IT,the CONGR of IT#) is AffinPlane
-  & (for a,b,c,d,p,q,r,s being Element of IT holds
-  (a,b _|_ a,b implies a=b) & a,b _|_ c,c &
-  (a,b _|_ c,d implies a,b _|_ d,c & c,d _|_ a,b) &
-  (a,b _|_ p,q & a,b // r,s implies p,q _|_ r,s or a=b) &
-  (a,b _|_ p,q & a,b _|_ r,s implies p,q // r,s or a=b)) &
-  (for a,b,c being Element of IT
-  ex x being Element of IT st a,b _|_ c,x & c <>x);
+  AffinStruct(#the carrier of IT,the
+CONGR of IT#) is AffinPlane & (for a,b,c,d,p,q,r,s being Element of IT holds (a
+,b _|_ a,b implies a=b) & a,b _|_ c,c & (a,b _|_ c,d implies a,b _|_ d,c & c,d
+_|_ a,b) & (a,b _|_ p,q & a,b // r,s implies p,q _|_ r,s or a=b) & (a,b _|_ p,q
+& a,b _|_ r,s implies p,q // r,s or a=b)) & for a,b,c being Element of IT ex x
+  being Element of IT st a,b _|_ c,x & c <>x;
 end;
 
 registration
@@ -1083,46 +1147,47 @@ canceled;
 theorem
   Gen w,y implies AMSpace(V,w,y) is OrtAfPl
 proof
-  assume
-A1: Gen w,y;
   set POS = AMSpace(V,w,y);
-A2: for a,b,c,d,p,q,r,s be Element of POS holds (
-  (a,b _|_ a,b implies a=b) & a,b _|_ c,c &
-  (a,b _|_ c,d implies a,b _|_ d,c & c,d _|_ a,b) &
-  (a,b _|_ p,q & a,b // r,s implies p,q _|_ r,s or a=b) &
-  (a,b _|_ p,q & a,b _|_ r,s implies p,q // r,s or a=b)
-  ) by A1,Th33,Th34,Th35,Th36,Th38,Th40;
-A3: for a,b,c be Element of POS holds ( ex x being
-  Element of POS st a,b _|_ c,x & c <>x) by A1,Th37;
   set X = AffinStruct(#the carrier of POS,the CONGR of POS#);
   X = Af(POS);
   then
-A4: X = Lambda(OASpace(V)) by Th30;
-  (for a,b being Real st a*w + b*y = 0.V holds a=0 & b=0)
-  & (for w1 ex a,b being Real st w1 = a*w+b*y) by A1,Def1;
+A1: X = Lambda(OASpace(V)) by Th30;
+  assume
+A2: Gen w,y;
+  then
+  ( for a,b being Real st a*w + b*y = 0.V holds a=0 & b=0)& for w1 ex a,b
+  being Real st w1 = a*w+b*y by Def1;
   then OASpace(V) is OAffinPlane by ANALOAF:51;
-  then X is AffinPlane by A4,DIRAF:53;
-  hence thesis by A2,A3,Def10;
+  then
+A3: X is AffinPlane by A1,DIRAF:53;
+  ( for a,b,c,d,p,q,r,s be Element of POS holds (a,b _|_ a,b implies a=b)
+& a,b _|_ c,c & (a,b _|_ c,d implies a,b _|_ d,c & c,d _|_ a,b) & (a,b _|_ p,q
+& a,b // r,s implies p,q _|_ r,s or a=b) & (a,b _|_ p,q & a,b _|_ r,s implies p
+,q // r,s or a=b))& for a,b,c be Element of POS holds ex x being Element of POS
+  st a,b _|_ c,x & c <>x by A2,Th33,Th34,Th35,Th36,Th37,Th38,Th40;
+  hence thesis by A3,Def10;
 end;
 
 theorem
-  for x being set holds (x is Element of POS iff x is Element of Af(POS));
+  for x being set holds (x is Element of POS iff x is Element of Af(POS)
+  );
 
 theorem Th48:
-  for a,b,c,d being Element of POS, a',b',c',d' being
-  Element of Af(POS) st a=a'& b=b' & c = c' & d=d' holds
-  (a,b // c,d iff a',b' // c',d')
+  for a,b,c,d being Element of POS, a',b',c',d' being Element of
+  Af(POS) st a=a'& b=b' & c = c' & d=d' holds (a,b // c,d iff a',b' // c',d')
 proof
-  let a,b,c,d be Element of POS, a',b',c',d' be Element
-  of the carrier of Af(POS) such that
-A1: a=a' & b=b' & c = c' & d=d';
   set AF = Af(POS);
+  let a,b,c,d be Element of POS, a',b',c',d' be Element of Af(
+  POS) such that
+A1: a=a' & b=b' & c = c' & d=d';
   hereby
-    assume a,b // c,d;
+    assume
+    a,b // c,d;
     then [[a',b'],[c',d']] in the CONGR of AF by A1,ANALOAF:def 2;
     hence a',b' // c',d' by ANALOAF:def 2;
   end;
-  assume a',b' // c',d';
+  assume
+  a',b' // c',d';
   then [[a,b],[c,d]] in the CONGR of POS by A1,ANALOAF:def 2;
   hence thesis by ANALOAF:def 2;
 end;
@@ -1143,66 +1208,75 @@ theorem Th49:
   for POS being OrtAfPl holds POS is OrtAfSp
 proof
   let POS be OrtAfPl;
-A1: Af(POS) = AffinStruct(#the carrier of POS, the CONGR of POS#);
-A2: for a,b,c being Element of POS ex x being Element
-  of the carrier of POS st a,b _|_ c,x & c <>x by Def10;
-A3: for a,b,c,d,p,q,r,s being Element of POS holds
-  (a,b _|_ p,q & a,b _|_ p,s implies a,b _|_ q,s)
+  for a,b,c,d,p,q,r,s being Element of POS holds (a,b _|_ p,q & a,b _|_ p,
+  s implies a,b _|_ q,s)
   proof
     let a,b,c,d,p,q,r,s be Element of POS such that
-A4: a,b _|_ p,q & a,b _|_ p,s;
-A5: now
-      assume a=b;
-      then q,s _|_ a,b by Def10;
-      hence thesis by Def10;
+A1: a,b _|_ p,q and
+A2: a,b _|_ p,s;
+A3: now
+      reconsider p'=p,q'=q,s'=s as Element of Af(POS);
+      assume that
+A4:   a<>b and
+A5:   p<>q;
+      p,q // p,s by A1,A2,A4,Def10;
+      then p',q' // p',s' by Th48;
+      then q',p' // q',s' by DIRAF:47;
+      then p',q' // q',s' by AFF_1:13;
+      then
+A6:   p,q // q,s by Th48;
+      p,q _|_ a,b by A1,Def10;
+      hence thesis by A5,A6,Def10;
     end;
     now
       assume
-A6:   a<>b & p<>q;
-      then
-A7:   p,q // p,s by A4,Def10;
-      reconsider p'=p,q'=q,s'=s as Element of Af(POS);
-A8:   p,q _|_ a,b by A4,Def10;
-      p',q' // p',s' by A7,Th48;
-      then q',p' // q',s' by DIRAF:47;
-      then p',q' // q',s' by AFF_1:13;
-      then p,q // q,s by Th48;
-      hence thesis by A6,A8,Def10;
+      a=b;
+      then q,s _|_ a,b by Def10;
+      hence thesis by Def10;
     end;
-    hence thesis by A4,A5;
+    hence thesis by A2,A3;
   end;
-A9: for a,b,c being Element of POS st a<>b
-  ex x being Element of POS st a,b // a,x & a,b _|_ x,c
+  then
+A7: for a,b,c,d,p,q,r,s be Element of POS holds (a,b _|_ a,b implies a=b) &
+a,b _|_ c,c & (a,b _|_ c,d implies a,b _|_ d,c & c,d _|_ a,b) & (a,b _|_ p,q &
+a,b // r,s implies p,q _|_ r,s or a=b) &( a,b _|_ p,q & a,b _|_ p,s implies a,b
+  _|_ q,s) by Def10;
+A8: for a,b,c being Element of POS st a<>b ex x being Element of POS st a,b
+  // a,x & a,b _|_ x,c
   proof
     let a,b,c be Element of POS such that
-A10: a<>b;
+A9: a<>b;
     consider y being Element of POS such that
-A11: a,b _|_ c,y & c <>y by Def10;
+A10: a,b _|_ c,y and
+A11: c <>y by Def10;
     reconsider a'=a,b'=b,c'=c,y'=y as Element of Af(POS);
     not a',b' // c',y'
     proof
-      assume not thesis;
+      assume
+      not thesis;
       then a,b // c,y by Th48;
-      then c,y _|_ c,y by A10,A11,Def10;
+      then c,y _|_ c,y by A9,A10,Def10;
       hence contradiction by A11,Def10;
     end;
     then consider x' being Element of Af(POS) such that
-A12: LIN a',b',x' & LIN c',y',x' by AFF_1:74;
+A12: LIN a',b',x' and
+A13: LIN c',y',x' by AFF_1:74;
     reconsider x=x' as Element of POS;
-    a',b' // a',x' & c',y' // c',x' by A12,AFF_1:def 1;
+    c',y' // c',x' by A13,AFF_1:def 1;
     then
-A13: a,b // a,x & c,y // c,x by Th48;
-    c,y _|_ a,b by A11,Def10;
-    then a,b _|_ c,x by A11,A13,Def10;
-    then a,b _|_ x,c by Def10;
-    hence thesis by A13;
+A14: c,y // c,x by Th48;
+    c,y _|_ a,b by A10,Def10;
+    then a,b _|_ c,x by A11,A14,Def10;
+    then
+A15: a,b _|_ x,c by Def10;
+    a',b' // a',x' by A12,AFF_1:def 1;
+    then a,b // a,x by Th48;
+    hence thesis by A15;
   end;
-  for a,b,c,d,p,q,r,s be Element of POS holds (
-  (a,b _|_ a,b implies a=b) & a,b _|_ c,c &
-  (a,b _|_ c,d implies a,b _|_ d,c & c,d _|_ a,b) &
-  (a,b _|_ p,q & a,b // r,s implies p,q _|_ r,s or a=b)) &(
-  a,b _|_ p,q & a,b _|_ p,s implies a,b _|_ q,s) by A3,Def10;
-  hence thesis by A1,A2,A9,Def9;
+  Af(POS) = AffinStruct(#the carrier of POS, the CONGR of POS#) & for a,b,
+c being Element of POS ex x being Element of POS st a,b _|_ c,x
+  & c <>x by Def10;
+  hence thesis by A8,A7,Def9;
 end;
 
 registration
@@ -1215,354 +1289,388 @@ theorem
 proof
   let POS be OrtAfSp such that
 A1: Af(POS) is AffinPlane;
-A2: for a,b,c being Element of POS
-  ex x being Element of POS st a,b _|_ c,x & c <>x by Def9;
-  now
+A2: now
     let a,b,c,d,p,q,r,s be Element of POS;
-    thus (a,b _|_ a,b implies a=b) & a,b _|_ c,c &
-    (a,b _|_ c,d implies a,b _|_ d,c & c,d _|_ a,b) &
-    (a,b _|_ p,q & a,b // r,s implies p,q _|_ r,s or a=b) by Def9;
+    thus (a,b _|_ a,b implies a=b) & a,b _|_ c,c & (a,b _|_ c,d implies a,b
+_|_ d,c & c,d _|_ a,b) & (a,b _|_ p,q & a,b // r,s implies p,q _|_ r,s or a=b)
+    by Def9;
     thus a,b _|_ p,q & a,b _|_ r,s implies p,q // r,s or a=b
     proof
-      assume
-A3:   a,b _|_ p,q & a,b _|_ r,s;
-      assume
-A4:   not thesis;
       reconsider a'=a,b'=b,p'=p,q'=q,r'=r,s'=s as Element of Af(POS);
-A5:   not p',q' // r',s' by A4,Th48;
+      assume that
+A3:   a,b _|_ p,q and
+A4:   a,b _|_ r,s;
+A5:   p,q _|_ a,b by A3,Def9;
+A6:   r,s _|_ a,b by A4,Def9;
+      assume
+A7:   not thesis;
       then
-A6:   p'<>q' & r'<>s' by AFF_1:12;
+A8:   not p',q' // r',s' by Th48;
+      then
+A9:   p'<>q' by AFF_1:12;
       consider x' being Element of Af(POS) such that
-A7:   LIN p',q',x' & LIN r',s',x' by A1,A5,AFF_1:74;
+A10:  LIN p',q',x' and
+A11:  LIN r',s',x' by A1,A8,AFF_1:74;
       reconsider x=x' as Element of POS;
-A8:   p,q _|_ a,b & r,s _|_ a,b by A3,Def9;
-      LIN q',p',x' & LIN s',r',x' by A7,AFF_1:15;
-      then q',p' // q',x' & s',r' // s',x' & p',q' // p',x' &
-      r',s' // r',x' by A7,AFF_1:def 1;
+A12:  r'<>s' by A8,AFF_1:12;
+      LIN s',r',x' by A11,AFF_1:15;
+      then s',r' // s',x' by AFF_1:def 1;
       then
-A9:   p',q' // x',q' & r',s' // x',s' &
-      p',q' // x',p' & r',s' // x',r' by AFF_1:13;
-      then p,q // x,q & r,s // x,s & p,q // x,p & r,s // x,r by Th48;
+A13:  r',s' // x',s' by AFF_1:13;
+      then r,s // x,s by Th48;
+      then a,b _|_ x,s by A12,A6,Def9;
       then
-A10:  a,b _|_ x,q & a,b _|_ x,p & a,b _|_ x,r & a,b _|_ x,s by A6,A8,Def9;
+A14:  x,s _|_ a,b by Def9;
+      LIN q',p',x' by A10,AFF_1:15;
+      then q',p' // q',x' by AFF_1:def 1;
+      then p',q' // x',q' by AFF_1:13;
+      then p,q // x,q by Th48;
       then
-A11:  x,q _|_ a,b & x,p _|_ a,b & x,r _|_ a,b & x,s _|_ a,b by Def9;
-A12:  now
-        assume
-A13:    x<>p & x<>r;
+A15:  a,b _|_ x,q by A9,A5,Def9;
+A16:  now
         consider y' being Element of Af(POS) such that
-A14:    a',b' // p',y' & p'<>y' by DIRAF:47;
-        not p',y' // x',r'
-        proof
-          assume not thesis;
-          then p',y' // r',s' by A9,A13,AFF_1:14;
-          then r',s' // a',b' by A14,AFF_1:14;
-          then r,s // a,b by Th48;
-          then a,b _|_ a,b by A6,A8,Def9;
-          hence contradiction by A4,Def9;
-        end;
-        then consider z' being Element of Af(POS) such that
-A15:    LIN p',y',z' & LIN x',r',z' by A1,AFF_1:74;
-        reconsider z=z' as Element of the carrier of POS;
-A16:    p',y' // p',z' & x',r' // x',z' by A15,AFF_1:def 1;
-        then a',b' // p',z' by A14,AFF_1:14;
-        then
-A17:    a,b // p,z by Th48;
-        x,r // x,z by A16,Th48;
-        then a,b _|_ x,z by A11,A13,Def9;
-        then a,b _|_ p,z by A10,Def9;
-        then p,z _|_ p,z by A4,A17,Def9;
-        then x',r' // x',p' by A16,Def9;
-        then
-A18:    LIN x',r',p' by AFF_1:def 1;
-        LIN x',r',x' & LIN x',p',q' by A7,AFF_1:15,16;
-        then LIN x',r',q' by A13,A18,AFF_1:20;
-        then x',r' // p',q' by A18,AFF_1:19;
-        then p',q' // r',s' by A9,A13,AFF_1:14;
-        hence contradiction by A4,Th48;
-      end;
-A19:  now
-        assume
-A20:    x<>p & x<>s;
-        consider y' being Element of Af(POS) such that
-A21:    a',b' // p',y' & p'<>y' by DIRAF:47;
-        not p',y' // x',s'
-        proof
-          assume not thesis;
-          then p',y' // r',s' by A9,A20,AFF_1:14;
-          then r',s' // a',b' by A21,AFF_1:14;
-          then r,s // a,b by Th48;
-          then a,b _|_ a,b by A6,A8,Def9;
-          hence contradiction by A4,Def9;
-        end;
-        then consider z' being Element of Af(POS) such that
-A22:    LIN p',y',z' & LIN x',s',z' by A1,AFF_1:74;
-        reconsider z=z' as Element of the carrier of POS;
-A23:    p',y' // p',z' & x',s' // x',z' by A22,AFF_1:def 1;
-        then a',b' // p',z' by A21,AFF_1:14;
-        then
-A24:    a,b // p,z by Th48;
-        x,s // x,z by A23,Th48;
-        then a,b _|_ x,z by A11,A20,Def9;
-        then a,b _|_ p,z by A10,Def9;
-        then p,z _|_ p,z by A4,A24,Def9;
-        then x',s' // x',p' by A23,Def9;
-        then
-A25:    LIN x',s',p' by AFF_1:def 1;
-        LIN x',s',x' & LIN x',p',q' by A7,AFF_1:15,16;
-        then LIN x',s',q' by A20,A25,AFF_1:20;
-        then x',s' // p',q' by A25,AFF_1:19;
-        then p',q' // r',s' by A9,A20,AFF_1:14;
-        hence contradiction by A4,Th48;
-      end;
-A26:  now
-        assume
-A27:    x<>q & x<>r;
-        consider y' being Element of Af(POS) such that
-A28:    a',b' // q',y' & q'<>y' by DIRAF:47;
-        not q',y' // x',r'
-        proof
-          assume not thesis;
-          then q',y' // r',s' by A9,A27,AFF_1:14;
-          then r',s' // a',b' by A28,AFF_1:14;
-          then r,s // a,b by Th48;
-          then a,b _|_ a,b by A6,A8,Def9;
-          hence contradiction by A4,Def9;
-        end;
-        then consider z' being Element of Af(POS) such that
-A29:    LIN q',y',z' & LIN x',r',z' by A1,AFF_1:74;
-        reconsider z=z' as Element of the carrier of POS;
-A30:    q',y' // q',z' & x',r' // x',z' by A29,AFF_1:def 1;
-        then a',b' // q',z' by A28,AFF_1:14;
-        then
-A31:    a,b // q,z by Th48;
-        x,r // x,z by A30,Th48;
-        then a,b _|_ x,z by A11,A27,Def9;
-        then a,b _|_ q,z by A10,Def9;
-        then q,z _|_ q,z by A4,A31,Def9;
-        then x',r' // x',q' by A30,Def9;
-        then
-A32:    LIN x',r',q' by AFF_1:def 1;
-        LIN x',r',x' & LIN x',q',p' by A7,AFF_1:15,16;
-        then LIN x',r',p' by A27,A32,AFF_1:20;
-        then x',r' // p',q' by A32,AFF_1:19;
-        then p',q' // r',s' by A9,A27,AFF_1:14;
-        hence contradiction by A4,Th48;
-      end;
-      now
-        assume
-A33:    x<>q & x<>s;
-        consider y' being Element of Af(POS) such that
-A34:    a',b' // q',y' & q'<>y' by DIRAF:47;
+A17:    a',b' // q',y' & q'<>y' by DIRAF:47;
+        assume that
+A18:    x<>q and
+A19:    x<>s;
         not q',y' // x',s'
         proof
-          assume not thesis;
-          then q',y' // r',s' by A9,A33,AFF_1:14;
-          then r',s' // a',b' by A34,AFF_1:14;
+          assume
+          not thesis;
+          then q',y' // r',s' by A13,A19,AFF_1:14;
+          then r',s' // a',b' by A17,AFF_1:14;
           then r,s // a,b by Th48;
-          then a,b _|_ a,b by A6,A8,Def9;
-          hence contradiction by A4,Def9;
+          then a,b _|_ a,b by A12,A6,Def9;
+          hence contradiction by A7,Def9;
         end;
         then consider z' being Element of Af(POS) such that
-A35:    LIN q',y',z' & LIN x',s',z' by A1,AFF_1:74;
-        reconsider z=z' as Element of the carrier of POS;
-A36:    q',y' // q',z' & x',s' // x',z' by A35,AFF_1:def 1;
-        then a',b' // q',z' by A34,AFF_1:14;
+A20:    LIN q',y',z' and
+A21:    LIN x',s',z' by A1,AFF_1:74;
+        reconsider z=z' as Element of POS;
+        q',y' // q',z' by A20,AFF_1:def 1;
+        then a',b' // q',z' by A17,AFF_1:14;
         then
-A37:    a,b // q,z by Th48;
-        x,s // x,z by A36,Th48;
-        then a,b _|_ x,z by A11,A33,Def9;
-        then a,b _|_ q,z by A10,Def9;
-        then q,z _|_ q,z by A4,A37,Def9;
-        then x',s' // x',q' by A36,Def9;
+A22:    a,b // q,z by Th48;
+A23:    x',s' // x',z' by A21,AFF_1:def 1;
+        then x,s // x,z by Th48;
+        then a,b _|_ x,z by A14,A19,Def9;
+        then a,b _|_ q,z by A15,Def9;
+        then q,z _|_ q,z by A7,A22,Def9;
+        then x',s' // x',q' by A23,Def9;
         then
-A38:    LIN x',s',q' by AFF_1:def 1;
-        LIN x',s',x' & LIN x',q',p' by A7,AFF_1:15,16;
-        then LIN x',s',p' by A33,A38,AFF_1:20;
-        then x',s' // p',q' by A38,AFF_1:19;
-        then p',q' // r',s' by A9,A33,AFF_1:14;
-        hence contradiction by A4,Th48;
+A24:    LIN x',s',q' by AFF_1:def 1;
+        LIN x',s',x' & LIN x',q',p' by A10,AFF_1:15,16;
+        then LIN x',s',p' by A18,A24,AFF_1:20;
+        then x',s' // p',q' by A24,AFF_1:19;
+        then p',q' // r',s' by A13,A19,AFF_1:14;
+        hence contradiction by A7,Th48;
       end;
-      hence contradiction by A5,A12,A19,A26,AFF_1:12;
+      r',s' // r',x' by A11,AFF_1:def 1;
+      then
+A25:  r',s' // x',r' by AFF_1:13;
+      then r,s // x,r by Th48;
+      then a,b _|_ x,r by A12,A6,Def9;
+      then
+A26:  x,r _|_ a,b by Def9;
+A27:  now
+        consider y' being Element of Af(POS) such that
+A28:    a',b' // q',y' & q'<>y' by DIRAF:47;
+        assume that
+A29:    x<>q and
+A30:    x<>r;
+        not q',y' // x',r'
+        proof
+          assume
+          not thesis;
+          then q',y' // r',s' by A25,A30,AFF_1:14;
+          then r',s' // a',b' by A28,AFF_1:14;
+          then r,s // a,b by Th48;
+          then a,b _|_ a,b by A12,A6,Def9;
+          hence contradiction by A7,Def9;
+        end;
+        then consider z' being Element of Af(POS) such that
+A31:    LIN q',y',z' and
+A32:    LIN x',r',z' by A1,AFF_1:74;
+        reconsider z=z' as Element of POS;
+        q',y' // q',z' by A31,AFF_1:def 1;
+        then a',b' // q',z' by A28,AFF_1:14;
+        then
+A33:    a,b // q,z by Th48;
+A34:    x',r' // x',z' by A32,AFF_1:def 1;
+        then x,r // x,z by Th48;
+        then a,b _|_ x,z by A26,A30,Def9;
+        then a,b _|_ q,z by A15,Def9;
+        then q,z _|_ q,z by A7,A33,Def9;
+        then x',r' // x',q' by A34,Def9;
+        then
+A35:    LIN x',r',q' by AFF_1:def 1;
+        LIN x',r',x' & LIN x',q',p' by A10,AFF_1:15,16;
+        then LIN x',r',p' by A29,A35,AFF_1:20;
+        then x',r' // p',q' by A35,AFF_1:19;
+        then p',q' // r',s' by A25,A30,AFF_1:14;
+        hence contradiction by A7,Th48;
+      end;
+      p',q' // p',x' by A10,AFF_1:def 1;
+      then p',q' // x',p' by AFF_1:13;
+      then p,q // x,p by Th48;
+      then
+A36:  a,b _|_ x,p by A9,A5,Def9;
+A37:  now
+        consider y' being Element of Af(POS) such that
+A38:    a',b' // p',y' & p'<>y' by DIRAF:47;
+        assume that
+A39:    x<>p and
+A40:    x<>s;
+        not p',y' // x',s'
+        proof
+          assume
+          not thesis;
+          then p',y' // r',s' by A13,A40,AFF_1:14;
+          then r',s' // a',b' by A38,AFF_1:14;
+          then r,s // a,b by Th48;
+          then a,b _|_ a,b by A12,A6,Def9;
+          hence contradiction by A7,Def9;
+        end;
+        then consider z' being Element of Af(POS) such that
+A41:    LIN p',y',z' and
+A42:    LIN x',s',z' by A1,AFF_1:74;
+        reconsider z=z' as Element of POS;
+        p',y' // p',z' by A41,AFF_1:def 1;
+        then a',b' // p',z' by A38,AFF_1:14;
+        then
+A43:    a,b // p,z by Th48;
+A44:    x',s' // x',z' by A42,AFF_1:def 1;
+        then x,s // x,z by Th48;
+        then a,b _|_ x,z by A14,A40,Def9;
+        then a,b _|_ p,z by A36,Def9;
+        then p,z _|_ p,z by A7,A43,Def9;
+        then x',s' // x',p' by A44,Def9;
+        then
+A45:    LIN x',s',p' by AFF_1:def 1;
+        LIN x',s',x' & LIN x',p',q' by A10,AFF_1:15,16;
+        then LIN x',s',q' by A39,A45,AFF_1:20;
+        then x',s' // p',q' by A45,AFF_1:19;
+        then p',q' // r',s' by A13,A40,AFF_1:14;
+        hence contradiction by A7,Th48;
+      end;
+      now
+        consider y' being Element of Af(POS) such that
+A46:    a',b' // p',y' & p'<>y' by DIRAF:47;
+        assume that
+A47:    x<>p and
+A48:    x<>r;
+        not p',y' // x',r'
+        proof
+          assume
+          not thesis;
+          then p',y' // r',s' by A25,A48,AFF_1:14;
+          then r',s' // a',b' by A46,AFF_1:14;
+          then r,s // a,b by Th48;
+          then a,b _|_ a,b by A12,A6,Def9;
+          hence contradiction by A7,Def9;
+        end;
+        then consider z' being Element of Af(POS) such that
+A49:    LIN p',y',z' and
+A50:    LIN x',r',z' by A1,AFF_1:74;
+        reconsider z=z' as Element of POS;
+        p',y' // p',z' by A49,AFF_1:def 1;
+        then a',b' // p',z' by A46,AFF_1:14;
+        then
+A51:    a,b // p,z by Th48;
+A52:    x',r' // x',z' by A50,AFF_1:def 1;
+        then x,r // x,z by Th48;
+        then a,b _|_ x,z by A26,A48,Def9;
+        then a,b _|_ p,z by A36,Def9;
+        then p,z _|_ p,z by A7,A51,Def9;
+        then x',r' // x',p' by A52,Def9;
+        then
+A53:    LIN x',r',p' by AFF_1:def 1;
+        LIN x',r',x' & LIN x',p',q' by A10,AFF_1:15,16;
+        then LIN x',r',q' by A47,A53,AFF_1:20;
+        then x',r' // p',q' by A53,AFF_1:19;
+        then p',q' // r',s' by A25,A48,AFF_1:14;
+        hence contradiction by A7,Th48;
+      end;
+      hence contradiction by A8,A37,A27,A16,AFF_1:12;
     end;
   end;
+  for a,b,c being Element of POS ex x being Element of POS st a,b _|_ c,x
+  & c <>x by Def9;
   hence thesis by A1,A2,Def10;
 end;
 
 theorem
-  for POS being non empty ParOrtStr holds POS is OrtAfPl-like iff
-  ( (ex a,b being Element of POS st a<>b) &
-  (for a,b,c,d,p,q,r,s being Element of POS
-  holds (a,b // b,a & a,b // c,c & (a,b // p,q & a,b // r,s
-  implies p,q // r,s or a=b) & (a,b // a,c implies b,a // b,c) &
-  (ex x being Element of POS st a,b // c,x & a,c // b,x) &
-  (ex x,y,z being Element of POS st not x,y // x,z ) &
-  (ex x being Element of POS st a,b // c,x & c <>x) &
-  (a,b // b,d & b<>a implies ex x being Element of POS
-  st c,b // b,x & c,a // d,x) & (a,b _|_ a,b implies a=b) & a,b _|_ c,c &
-  (a,b _|_ c,d implies a,b _|_ d,c & c,d _|_ a,b) &
-  (a,b _|_ p,q & a,b // r,s implies p,q _|_ r,s or a=b) &
-  (a,b _|_ p,q & a,b _|_ r,s implies p,q // r,s or a=b) &
-  (ex x being Element of POS st a,b _|_ c,x & c <>x) &
-  (not a,b // c,d implies ex x being Element of POS
-  st a,b // a,x & c,d // c,x ))))
+  for POS being non empty ParOrtStr holds POS is OrtAfPl-like iff (ex a,
+  b being Element of POS st a<>b) & for a,b,c,d,p,q,r,s being Element of POS
+holds a,b // b,a & a,b // c,c & (a,b // p,q & a,b // r,s implies p,q // r,s or
+a=b) & (a,b // a,c implies b,a // b,c) & (ex x being Element of POS st a,b // c
+  ,x & a,c // b,x) & (ex x,y,z being Element of POS st not x,y // x,z ) & (ex x
+  being Element of POS st a,b // c,x & c <>x) & (a,b // b,d & b<>a implies ex x
+being Element of POS st c,b // b,x & c,a // d,x) & (a,b _|_ a,b implies a=b) &
+a,b _|_ c,c & (a,b _|_ c,d implies a,b _|_ d,c & c,d _|_ a,b) & (a,b _|_ p,q &
+a,b // r,s implies p,q _|_ r,s or a=b) & (a,b _|_ p,q & a,b _|_ r,s implies p,q
+// r,s or a=b) & (ex x being Element of POS st a,b _|_ c,x & c <>x) & (not a,b
+  // c,d implies ex x being Element of POS st a,b // a,x & c,d // c,x )
 proof
   let POS be non empty ParOrtStr;
   set P = Af(POS);
   hereby
     assume
 A1: POS is OrtAfPl-like;
-    then
-A2: P is AffinPlane;
+    then P is AffinPlane;
     hence ex x,y being Element of POS st x<>y by DIRAF:54;
     let a,b,c,d,p,q,r,s be Element of POS;
     reconsider a'=a,b'=b,c'=c,d'=d,p'=p,q'=q,r'=r,s'=s as Element of P;
-    a',b' // b',a' & a',b' // c',c' by A2,DIRAF:54;
+    consider x' being Element of P such that
+A2: a',b' // c',x' & a',c' // b',x' by A1,DIRAF:54;
+    a',b' // b',a' & a',b' // c',c' by A1,DIRAF:54;
     hence a,b // b,a & a,b // c,c by Th48;
     hereby
-      assume a,b // p,q & a,b // r,s;
+      assume
+      a,b // p,q & a,b // r,s;
       then a',b' // p',q' & a',b' // r',s' by Th48;
-      then p',q' // r',s' or a'=b' by A2,DIRAF:54;
+      then p',q' // r',s' or a'=b' by A1,DIRAF:54;
       hence p,q // r,s or a=b by Th48;
     end;
     hereby
-      assume a,b // a,c;
+      assume
+      a,b // a,c;
       then a',b' // a',c' by Th48;
-      then b',a' // b',c' by A2,DIRAF:54;
+      then b',a' // b',c' by A1,DIRAF:54;
       hence b,a // b,c by Th48;
     end;
-    consider x' being Element of P such that
-A3: a',b' // c',x' & a',c' // b',x' by A2,DIRAF:54;
-    reconsider x=x' as Element of the carrier of POS;
-    a,b // c,x & a,c // b,x by A3,Th48;
-    hence ex x being Element of POS st a,b // c,x & a,c // b,x;
-    consider x',y',z' being Element of the carrier of P such that
-A4: not x',y' // x',z' by A2,DIRAF:54;
-    reconsider x=x',y=y',z=z' as Element of POS;
-    not x,y // x,z by A4,Th48;
-    hence ex x,y,z being Element of POS st not x,y // x,z;
-    consider x' being Element of P such that
-A5: a',b' // c',x' & c'<>x' by A2,DIRAF:54;
     reconsider x=x' as Element of POS;
-    a,b // c,x & c <>x by A5,Th48;
-    hence ex x being Element of POS st a,b // c,x & c <>x;
+    consider x',y',z' being Element of P such that
+A3: not x',y' // x',z' by A1,DIRAF:54;
+    a,b // c,x & a,c // b,x by A2,Th48;
+    hence ex x being Element of POS st a,b // c,x & a,c // b,x;
+    reconsider x=x',y=y',z=z' as Element of POS;
+    consider x' being Element of P such that
+A4: a',b' // c',x' and
+A5: c'<>x' by A1,DIRAF:54;
+    not x,y // x,z by A3,Th48;
+    hence ex x,y,z being Element of POS st not x,y // x,z;
+    reconsider x=x' as Element of POS;
+    a,b // c,x by A4,Th48;
+    hence ex x being Element of POS st a,b // c,x & c <>x by A5;
     hereby
-      assume a,b // b,d & b<>a;
-      then a',b' // b',d' & b'<>a' by Th48;
+      assume that
+A6:   a,b // b,d and
+A7:   b<>a;
+      a',b' // b',d' by A6,Th48;
       then consider x' being Element of P such that
-A6:   c',b' // b',x' & c',a' // d',x' by A2,DIRAF:54;
+A8:   c',b' // b',x' & c',a' // d',x' by A1,A7,DIRAF:54;
       reconsider x=x' as Element of POS;
-      c,b // b,x & c,a // d,x by A6,Th48;
+      c,b // b,x & c,a // d,x by A8,Th48;
       hence ex x being Element of POS st c,b // b,x & c,a // d,x;
     end;
-    thus (a,b _|_ a,b implies a=b) &
-    a,b _|_ c,c & (a,b _|_ c,d implies a,b _|_ d,c & c,d _|_ a,b) &
-    (a,b _|_ p,q & a,b // r,s implies p,q _|_ r,s or a=b) &
-    (a,b _|_ p,q & a,b _|_ r,s implies p,q // r,s or a=b) &
-    (ex x being Element of POS st a,b _|_ c,x & c <>x) by A1,Def10;
-    assume not a,b // c,d;
+    thus (a,b _|_ a,b implies a=b) & a,b _|_ c,c & (a,b _|_ c,d implies a,b
+_|_ d,c & c,d _|_ a,b) & (a,b _|_ p,q & a,b // r,s implies p,q _|_ r,s or a=b)
+& (a,b _|_ p,q & a,b _|_ r,s implies p,q // r,s or a=b) & ex x being Element of
+    POS st a,b _|_ c,x & c <>x by A1,Def10;
+    assume
+    not a,b // c,d;
     then not a',b' // c',d' by Th48;
-    then consider x' being Element of the carrier of P such that
-A7: a',b' // a',x' & c',d' // c',x' by A2,DIRAF:54;
+    then consider x' being Element of P such that
+A9: a',b' // a',x' & c',d' // c',x' by A1,DIRAF:54;
     reconsider x=x' as Element of POS;
-    a,b // a,x & c,d // c,x by A7,Th48;
+    a,b // a,x & c,d // c,x by A9,Th48;
     hence ex x being Element of POS st a,b // a,x & c,d // c,x;
   end;
   given a,b being Element of POS such that
-A8: a<>b;
+A10: a<>b;
   assume
-A9: for a,b,c,d,p,q,r,s being Element of POS
-  holds (a,b // b,a & a,b // c,c & (a,b // p,q & a,b // r,s
-  implies p,q // r,s or a=b) & (a,b // a,c implies b,a // b,c) &
-  (ex x being Element of POS st a,b // c,x & a,c // b,x) &
-  (ex x,y,z being Element of POS st not x,y // x,z ) &
-  (ex x being Element of POS st a,b // c,x & c <>x) &
-  (a,b // b,d & b<>a implies ex x being Element of POS
-  st c,b // b,x & c,a // d,x) & (a,b _|_ a,b implies a=b) &
-  a,b _|_ c,c & (a,b _|_ c,d implies a,b _|_ d,c & c,d _|_ a,b) &
-  (a,b _|_ p,q & a,b // r,s implies p,q _|_ r,s or a=b) &
-  (a,b _|_ p,q & a,b _|_ r,s implies p,q // r,s or a=b) &
-  (ex x being Element of POS st a,b _|_ c,x & c <>x) &
-  (not a,b // c,d implies ex x being Element of POS
-  st a,b // a,x & c,d // c,x ));
-A10: now
+A11: for a,b,c,d,p,q,r,s being Element of POS holds a,b // b,a & a,b //
+c,c & (a,b // p,q & a,b // r,s implies p,q // r,s or a=b) & (a,b // a,c implies
+b,a // b,c) & (ex x being Element of POS st a,b // c,x & a,c // b,x) & (ex x,y,
+z being Element of POS st not x,y // x,z ) & (ex x being Element of POS st a,b
+  // c,x & c <>x) & (a,b // b,d & b<>a implies ex x being Element of POS st c,b
+  // b,x & c,a // d,x) & (a,b _|_ a,b implies a=b) & a,b _|_ c,c & (a,b _|_ c,d
+implies a,b _|_ d,c & c,d _|_ a,b) & (a,b _|_ p,q & a,b // r,s implies p,q _|_
+  r,s or a=b) & (a,b _|_ p,q & a,b _|_ r,s implies p,q // r,s or a=b) & (ex x
+  being Element of POS st a,b _|_ c,x & c <>x) & (not a,b // c,d implies ex x
+  being Element of POS st a,b // a,x & c,d // c,x );
+A12: now
+    let x,y,z be Element of P;
+    reconsider x'=x,y'=y,z'=z as Element of POS;
+    consider t' being Element of POS such that
+A13: x',z' // y',t' and
+A14: y'<>t' by A11;
+    reconsider t=t' as Element of P;
+    x,z // y,t by A13,Th48;
+    hence ex t being Element of P st x,z // y,t & y<>t by A14;
+  end;
+A15: now
     let x,y,z,t,u,w be Element of P;
     reconsider a=x,b=y,c =z,d=t,e=u,f=w as Element of POS;
-    thus x,y // y,x & x,y // z,z
-    proof a,b // b,a & a,b // c,c by A9;
-      hence thesis by Th48;
-    end;
+    a,b // b,a & a,b // c,c by A11;
+    hence x,y // y,x & x,y // z,z by Th48;
     thus x<>y & x,y // z,t & x,y // u,w implies z,t // u,w
     proof
-      assume x<>y & x,y // z,t & x,y // u,w;
-      then a,b // c,d & a,b // e,f & a<>b by Th48;
-      then c,d // e,f by A9;
+      assume that
+A16:  x<>y and
+A17:  x,y // z,t & x,y // u,w;
+      a,b // c,d & a,b // e,f by A17,Th48;
+      then c,d // e,f by A11,A16;
       hence thesis by Th48;
     end;
     thus x,y // x,z implies y,x // y,z
     proof
-      assume x,y // x,z;
+      assume
+      x,y // x,z;
       then a,b // a, c by Th48;
-      then b,a // b,c by A9;
+      then b,a // b,c by A11;
       hence thesis by Th48;
     end;
   end;
-A11: ex x,y,z being Element of P st not x,y // x,z
-  proof
-    consider x,y,z being Element of POS such that
-A12: not x,y // x,z by A9;
-    reconsider x'=x,y'=y,z'=z as Element of P;
-    not x',y' // x',z' by A12,Th48;
-    hence thesis;
-  end;
-A13: now
-    let x,y,z be Element of P;
-    reconsider x'=x,y'=y,z'=z as Element of POS;
-    consider t' being Element of POS such that
-A14: x',z' // y',t' & y'<>t' by A9;
-    reconsider t=t' as Element of P;
-    x,z // y,t & y<>t by A14,Th48;
-    hence ex t being Element of P st x,z // y,t & y<>t;
-  end;
-A15: now
-    let x,y,z be Element of P;
-    reconsider x'=x,y'=y,z'=z as Element of POS;
-    consider t' being Element of POS such that
-A16: x',y' // z',t' & x',z' // y',t' by A9;
-    reconsider t=t' as Element of the carrier of P;
-    x,y // z,t & x,z // y,t by A16,Th48;
-    hence ex t being Element of P st x,y // z,t & x,z // y,t;
-  end;
-A17: now
+A18: now
     let x,y,z,t be Element of P such that
-A18: z,x // x,t & x<>z;
-    reconsider x'=x,y'=y,z'=z,t'=t as Element of the carrier of POS;
-    z',x' // x',t' & x'<>z' by A18,Th48;
+A19: not x,y // z,t;
+    reconsider x'=x,y'=y,z'=z,t'=t as Element of POS;
+    not x',y' // z',t' by A19,Th48;
     then consider u' being Element of POS such that
-A19: y',x' // x',u' & y',z' // t',u' by A9;
+A20: x',y' // x',u' & z',t' // z',u' by A11;
     reconsider u=u' as Element of P;
-    y,x // x,u & y,z // t,u by A19,Th48;
-    hence ex u being Element of P st y,x // x,u & y,z // t,u;
-  end;
-  now
-    let x,y,z,t be Element of P such that
-A20: not x,y // z,t;
-    reconsider x'=x,y'=y,z'=z,t'=t as Element of the carrier of POS;
-    not x',y' // z',t' by A20,Th48;
-    then consider u' being Element of the carrier of POS such that
-A21: x',y' // x',u' & z',t' // z',u' by A9;
-    reconsider u=u' as Element of P;
-    x,y // x,u & z,t // z,u by A21,Th48;
+    x,y // x,u & z,t // z,u by A20,Th48;
     hence ex u being Element of P st x,y // x,u & z,t // z,u;
   end;
-  hence AffinStruct(#the carrier of POS,the CONGR of POS#) is AffinPlane by A8
-  ,A10,A11,A13,A15,A17,DIRAF:54;
-  thus for a,b,c,d,p,q,r,s be Element of POS holds (
-  (a,b _|_ a,b implies a=b) & a,b _|_ c,c &
-  (a,b _|_ c,d implies a,b _|_ d,c & c,d _|_ a,b) &
-  (a,b _|_ p,q & a,b // r,s implies p,q _|_ r,s or a=b) &
-  (a,b _|_ p,q & a,b _|_ r,s implies p,q // r,s or a=b)) by A9;
-  thus thesis by A9;
+A21: now
+    let x,y,z,t be Element of P such that
+A22: z,x // x,t and
+A23: x<>z;
+    reconsider x'=x,y'=y,z'=z,t'=t as Element of POS;
+    z',x' // x',t' by A22,Th48;
+    then consider u' being Element of POS such that
+A24: y',x' // x',u' & y',z' // t',u' by A11,A23;
+    reconsider u=u' as Element of P;
+    y,x // x,u & y,z // t,u by A24,Th48;
+    hence ex u being Element of P st y,x // x,u & y,z // t,u;
+  end;
+A25: now
+    let x,y,z be Element of P;
+    reconsider x'=x,y'=y,z'=z as Element of POS;
+    consider t' being Element of POS such that
+A26: x',y' // z',t' & x',z' // y',t' by A11;
+    reconsider t=t' as Element of P;
+    x,y // z,t & x,z // y,t by A26,Th48;
+    hence ex t being Element of P st x,y // z,t & x,z // y,t;
+  end;
+  ex x,y,z being Element of P st not x,y // x,z
+  proof
+    consider x,y,z being Element of POS such that
+A27: not x,y // x,z by A11;
+    reconsider x'=x,y'=y,z'=z as Element of P;
+    not x',y' // x',z' by A27,Th48;
+    hence thesis;
+  end;
+  hence
+  AffinStruct(#the carrier of POS,the CONGR of POS#) is AffinPlane by A10
+  ,A15,A12,A25,A21,A18,DIRAF:54;
+  thus for a,b,c,d,p,q,r,s be Element of POS holds (a,b _|_ a,b implies a=b) &
+a,b _|_ c,c & (a,b _|_ c,d implies a,b _|_ d,c & c,d _|_ a,b) & (a,b _|_ p,q &
+a,b // r,s implies p,q _|_ r,s or a=b) & (a,b _|_ p,q & a,b _|_ r,s implies p,q
+  // r,s or a=b) by A11;
+  thus thesis by A11;
 end;
 
 reserve x,a,b,c,d,p,q,y for Element of POS;
@@ -1579,18 +1687,20 @@ definition
   let POS,a,b;
   func Line(a,b) -> Subset of POS means
   :Def12:
-  for x being Element of POS holds x in it iff LIN a,b,x;
+  for x being Element of POS
+  holds x in it iff LIN a,b,x;
   existence
   proof
     defpred P[set] means for y st y = $1 holds LIN a,b,y;
     consider X being Subset of POS such that
-A1: for x being set holds x in X iff x in the carrier of POS &
-    P[x] from SUBSET_1:sch 1;
+A1: for x being set holds x in X iff x in the carrier of POS & P[x]
+    from SUBSET_1:sch 1;
     take X;
     let x be Element of POS;
     thus x in X implies LIN a,b,x by A1;
-    assume LIN a,b,x;
-    then x in the carrier of POS & for y st y = x holds LIN a,b,y;
+    assume
+    LIN a,b,x;
+    then for y st y = x holds LIN a,b,y;
     hence thesis by A1;
   end;
   uniqueness
@@ -1632,28 +1742,30 @@ end;
 canceled 3;
 
 theorem Th55:
-  for POS being OrtAfSp for a,b,c being Element of POS,
-  a',b',c' being Element of Af(POS) st a=a'& b=b' & c = c' holds
-  (LIN a,b,c iff LIN a',b',c')
+  for POS being OrtAfSp for a,b,c being Element of POS, a',b',c'
+being Element of Af(POS) st a=a'& b=b' & c = c' holds (LIN a,b,c iff LIN a',b',
+  c')
 proof
   let POS be OrtAfSp;
   let a,b,c be Element of POS, a',b',c' be Element of Af(POS) such that
-A1: a=a'& b=b' & c = c';
+A1: a=a' & b=b' & c = c';
   hereby
-    assume LIN a,b,c;
+    assume
+    LIN a,b,c;
     then a,b // a,c by Def11;
     then a',b' // a',c' by A1,Th48;
     hence LIN a',b',c' by AFF_1:def 1;
   end;
-  assume LIN a',b',c';
+  assume
+  LIN a',b',c';
   then a',b' // a',c' by AFF_1:def 1;
   then a,b // a,c by A1,Th48;
   hence thesis by Def11;
 end;
 
 theorem Th56:
-  for POS being OrtAfSp for a,b being Element of POS,
-  a',b' being Element of Af(POS) st a=a' & b=b' holds Line(a,b) = Line(a',b')
+  for POS being OrtAfSp for a,b being Element of POS, a',b' being
+  Element of Af(POS) st a=a' & b=b' holds Line(a,b) = Line(a',b')
 proof
   let POS be OrtAfSp;
   let a,b be Element of POS, a',b' be Element of Af(POS) such that
@@ -1663,21 +1775,21 @@ A1: a=a' & b=b';
     let x1 be set;
 A2: now
       assume
-A3:   x1 in X;
-      then reconsider x=x1 as Element of POS;
-      reconsider x'=x as Element of the carrier of Af(POS);
-      LIN a,b,x by A3,Def12;
-      then LIN a',b',x' by A1,Th55;
-      hence x1 in Y by AFF_1:def 2;
+A3:   x1 in Y;
+      then reconsider x'=x1 as Element of Af(POS);
+      reconsider x=x' as Element of POS;
+      LIN a',b',x' by A3,AFF_1:def 2;
+      then LIN a,b,x by A1,Th55;
+      hence x1 in X by Def12;
     end;
     now
       assume
-A4:   x1 in Y;
-      then reconsider x'=x1 as Element of Af(POS);
-      reconsider x=x' as Element of POS;
-      LIN a',b',x' by A4,AFF_1:def 2;
-      then LIN a,b,x by A1,Th55;
-      hence x1 in X by Def12;
+A4:   x1 in X;
+      then reconsider x=x1 as Element of POS;
+      reconsider x'=x as Element of Af(POS);
+      LIN a,b,x by A4,Def12;
+      then LIN a',b',x' by A1,Th55;
+      hence x1 in Y by AFF_1:def 2;
     end;
     hence x1 in X iff x1 in Y by A2;
   end;
@@ -1688,26 +1800,30 @@ theorem
   for X being set holds ( X is Subset of POS iff X is Subset of Af(POS));
 
 theorem Th58:
-  for POS being OrtAfSp for X being Subset of POS,
-  Y being Subset of Af(POS) st X=Y holds ( X is being_line iff Y is being_line)
+  for POS being OrtAfSp for X being Subset of POS, Y being Subset
+  of Af(POS) st X=Y holds ( X is being_line iff Y is being_line)
 proof
   let POS be OrtAfSp;
   let X be Subset of the carrier of POS, Y be Subset of Af(POS) such that
 A1: X=Y;
   hereby
-    assume X is being_line;
+    assume
+    X is being_line;
     then consider a,b being Element of POS such that
-A2: a<>b & X = Line(a,b) by Def13;
+A2: a<>b and
+A3: X = Line(a,b) by Def13;
     reconsider a'=a,b'=b as Element of Af(POS);
-    Y = Line(a',b') by A1,A2,Th56;
+    Y = Line(a',b') by A1,A3,Th56;
     hence Y is being_line by A2,AFF_1:def 3;
   end;
-  assume Y is being_line;
+  assume
+  Y is being_line;
   then consider a',b' being Element of Af(POS) such that
-A3: a'<>b' & Y = Line(a',b') by AFF_1:def 3;
+A4: a'<>b' and
+A5: Y = Line(a',b') by AFF_1:def 3;
   reconsider a=a',b=b' as Element of POS;
-  X = Line(a,b) by A1,A3,Th56;
-  hence thesis by A3,Def13;
+  X = Line(a,b) by A1,A5,Th56;
+  hence thesis by A4,Def13;
 end;
 
 definition
@@ -1731,42 +1847,47 @@ definition
   let K,M;
   pred K // M means
   :Def16:
-  ex a,b,c,d st a<>b & c <>d & K = Line(a,b) & M = Line(c,d) & a,b // c,d;
+  ex a,b,c,d st a<>b & c <>d & K = Line(a,b) & M =
+  Line(c,d) & a,b // c,d;
 end;
 
 canceled 3;
 
 theorem Th62:
-  (a,b _|_ K implies K is being_line) &
-  (K _|_ M implies (K is being_line & M is being_line))
+  (a,b _|_ K implies K is being_line) & (K _|_ M implies K is
+  being_line & M is being_line )
 proof
 A1: now
     let a,b,K;
-    assume a,b _|_ K;
+    assume
+    a,b _|_ K;
     then ex p,q st p<>q & K = Line(p,q) & a,b _|_ p,q by Def14;
     hence K is being_line by Def13;
   end;
   now
-    assume K _|_ M;
+    assume
+    K _|_ M;
     then
 A2: ex p,q st p<>q & K = Line(p,q) & p,q _|_ M by Def15;
-    hence K is being_line by Def13; thus M is being_line by A1,A2;
+    hence K is being_line by Def13;
+    thus M is being_line by A1,A2;
   end;
   hence thesis by A1;
 end;
 
 theorem Th63:
-  K _|_ M iff ex a,b,c,d st (a<>b & c <>d & K = Line(a,b) & M = Line(c,d) &
-  a,b _|_ c,d)
+  K _|_ M iff ex a,b,c,d st a<>b & c <>d & K = Line(a,b) & M =
+  Line(c,d) & a,b _|_ c,d
 proof
   hereby
-    assume K _|_ M;
+    assume
+    K _|_ M;
     then consider a,b such that
 A1: a<>b & K = Line(a,b) and
 A2: a,b _|_ M by Def15;
     ex c,d st c <>d & M = Line(c,d) & a,b _|_ c,d by A2,Def14;
-    hence ex a,b,c,d st
-    (a<>b & c <>d & K = Line(a,b) & M = Line(c,d) & a,b _|_ c,d) by A1;
+    hence ex a,b,c,d st a<>b & c <>d & K = Line(a,b) & M = Line(c,d) & a,b _|_
+    c,d by A1;
   end;
   given a,b,c,d such that
 A3: a<>b and
@@ -1778,34 +1899,34 @@ A6: M = Line(c,d) & a,b _|_ c,d;
 end;
 
 theorem Th64:
-  for POS being OrtAfSp for M,N being Subset of POS,
-  M',N' being Subset of Af(POS) st M = M' & N = N' holds (M // N iff M' // N')
+  for POS being OrtAfSp for M,N being Subset of POS, M',N' being
+  Subset of Af(POS) st M = M' & N = N' holds (M // N iff M' // N')
 proof
   let POS be OrtAfSp;
   let M,N be Subset of POS, M',N' be Subset of Af(POS) such that
-A1: M = M' and
-A2: N = N';
+A1: M = M' & N = N';
   hereby
-    assume M // N;
+    assume
+    M // N;
     then consider a,b,c,d being Element of POS such that
-A3: a<>b & c <>d & M = Line(a,b) & N = Line(c,d) and
+A2: a<>b & c <>d and
+A3: M = Line(a,b) & N = Line(c,d) and
 A4: a,b // c,d by Def16;
     reconsider a'=a,b'=b,c'=c,d'=d as Element of Af(POS);
-A5: M'=Line(a',b') by A1,A3,Th56;
-A6: N'=Line(c',d') by A2,A3,Th56;
-    a',b' // c',d' by A4,Th48;
-    hence M' // N' by A3,A5,A6,AFF_1:51;
+A5: a',b' // c',d' by A4,Th48;
+    M'=Line(a',b') & N'=Line(c',d') by A1,A3,Th56;
+    hence M' // N' by A2,A5,AFF_1:51;
   end;
-  assume M' // N';
+  assume
+  M' // N';
   then consider a',b',c',d' being Element of Af(POS) such that
-A7: a'<>b' & c'<>d' and
-A8: a',b' // c',d' and
-A9: M' = Line(a',b') & N' = Line(c',d') by AFF_1:51;
+A6: a'<>b' & c'<>d' and
+A7: a',b' // c',d' and
+A8: M' = Line(a',b') & N' = Line(c',d') by AFF_1:51;
   reconsider a=a',b=b',c =c',d=d' as Element of POS;
-A10: M=Line(a,b) by A1,A9,Th56;
-A11: N=Line(c,d) by A2,A9,Th56;
-  a,b // c,d by A8,Th48;
-  hence thesis by A7,A10,A11,Def16;
+A9: a,b // c,d by A7,Th48;
+  M=Line(a,b) & N=Line(c,d) by A1,A8,Th56;
+  hence thesis by A6,A9,Def16;
 end;
 
 reserve POS for OrtAfSp;
@@ -1815,7 +1936,8 @@ reserve a,b,c,d,p,q,r,s for Element of POS;
 theorem
   K is being_line implies a,a _|_ K
 proof
-  assume K is being_line;
+  assume
+  K is being_line;
   then consider p,q such that
 A1: p<>q & K = Line(p,q) by Def13;
   p,q _|_ a,a by Def9;
@@ -1830,10 +1952,10 @@ proof
 A1: a,b _|_ K and
 A2: a,b // c,d or c,d // a,b and
 A3: a<>b;
+  reconsider a'=a,b'=b,c'=c,d'=d as Element of Af(POS);
   consider p,q such that
 A4: p<>q & K = Line(p,q) and
 A5: a,b _|_ p,q by A1,Def14;
-  reconsider a'=a,b'=b,c'=c,d'=d as Element of Af(POS);
   a',b' // c',d' or c',d' // a',b' by A2,Th48;
   then a',b' // c',d' by AFF_1:13;
   then a,b // c,d by Th48;
@@ -1845,7 +1967,8 @@ end;
 theorem
   a,b _|_ K implies b,a _|_ K
 proof
-  assume a,b _|_ K;
+  assume
+  a,b _|_ K;
   then consider p,q such that
 A1: p<>q & K = Line(p,q) and
 A2: a,b _|_ p,q by Def14;
@@ -1862,7 +1985,8 @@ definition
   symmetry
   proof
     let K,M be Subset of POS;
-    assume K // M;
+    assume
+    K // M;
     then consider a,b,c,d such that
 A1: a<>b & c <>d & K = Line(a,b) & M = Line(c,d) and
 A2: a,b // c,d by Def16;
@@ -1883,25 +2007,32 @@ proof
 A1: r,s _|_ K and
 A2: K // M;
   consider p,q such that
-A3: p<>q & K = Line(p,q) & r,s _|_ p,q by A1,Def14;
+A3: p<>q and
+A4: K = Line(p,q) and
+A5: r,s _|_ p,q by A1,Def14;
   consider a,b,c,d such that
-A4: a<>b & c <>d and
-A5: K = Line(a,b) and
-A6: M = Line(c,d) & a,b // c,d by A2,Def16;
-  reconsider p'=p,q'=q,a'=a,b'=b,c'=c,d'=d as Element of the
-  carrier of Af(POS);
-A7: K = Line(a',b') & K = Line(p',q') by A3,A5,Th56;
-  then p' in K & q' in K by AFF_1:26;
-  then LIN a',b',p' & LIN a',b',q' by A7,AFF_1:def 2;
+A6: a<>b and
+A7: c <>d and
+A8: K = Line(a,b) and
+A9: M = Line(c,d) and
+A10: a,b // c,d by A2,Def16;
+  reconsider p'=p,q'=q,a'=a,b'=b,c'=c,d'=d as Element of Af(POS
+  );
+A11: K = Line(a',b') by A8,Th56;
+A12: K = Line(p',q') by A4,Th56;
+  then q' in K by AFF_1:26;
   then
-A8: a',b' // p',q' by AFF_1:19;
-  a',b' // c',d' by A6,Th48;
-  then p',q' // c',d' by A4,A8,AFF_1:14;
+A13: LIN a',b',q' by A11,AFF_1:def 2;
+  p' in K by A12,AFF_1:26;
+  then LIN a',b',p' by A11,AFF_1:def 2;
   then
-A9: p,q // c,d by Th48;
-  p,q _|_ r,s by A3,Def9;
-  then r,s _|_ c,d by A3,A9,Def9;
-  hence thesis by A4,A6,Def14;
+A14: a',b' // p',q' by A13,AFF_1:19;
+A15: p,q _|_ r,s by A5,Def9;
+  a',b' // c',d' by A10,Th48;
+  then p',q' // c',d' by A6,A14,AFF_1:14;
+  then p,q // c,d by Th48;
+  then r,s _|_ c,d by A3,A15,Def9;
+  hence thesis by A7,A9,Def14;
 end;
 
 canceled;
@@ -1910,19 +2041,25 @@ theorem Th71:
   a in K & b in K & a,b _|_ K implies a=b
 proof
   assume that
-A1: a in K & b in K and
-A2: a,b _|_ K;
+A1: a in K and
+A2: b in K and
+A3: a,b _|_ K;
   consider p,q such that
-A3: p<>q & K = Line(p,q) & a,b _|_ p,q by A2,Def14;
+A4: p<>q and
+A5: K = Line(p,q) and
+A6: a,b _|_ p,q by A3,Def14;
   reconsider a'=a,b'=b,p'=p,q'=q as Element of Af(POS);
   set K' = Line(p',q');
-  a' in K' & b' in K' by A1,A3,Th56;
-  then LIN p',q',a' & LIN p',q',b' by AFF_1:def 2;
-  then p',q' // a',b' by AFF_1:19;
+  b' in K' by A2,A5,Th56;
   then
-A4: p,q // a,b by Th48;
-  p,q _|_ a,b by A3,Def9;
-  then a,b _|_ a,b by A3,A4,Def9;
+A7: LIN p',q',b' by AFF_1:def 2;
+  a' in K' by A1,A5,Th56;
+  then LIN p',q',a' by AFF_1:def 2;
+  then p',q' // a',b' by A7,AFF_1:19;
+  then
+A8: p,q // a,b by Th48;
+  p,q _|_ a,b by A6,Def9;
+  then a,b _|_ a,b by A4,A8,Def9;
   hence thesis by Def9;
 end;
 
@@ -1933,23 +2070,27 @@ definition
   irreflexivity
   proof
     let K be Subset of POS;
-    assume not thesis;
+    assume
+    not thesis;
     then consider a,b such that
-A1: a<>b & K = Line(a,b) & a,b _|_ K by Def15;
+A1: a<>b and
+A2: K = Line(a,b) and
+A3: a,b _|_ K by Def15;
     reconsider a'=a,b'=b as Element of Af(POS);
-    K = Line(a',b') by A1,Th56;
+    K = Line(a',b') by A2,Th56;
     then a in K & b in K by AFF_1:26;
-    hence contradiction by A1,Th71;
+    hence contradiction by A1,A3,Th71;
   end;
   symmetry
   proof
     let K,M be Subset of POS;
-    assume K _|_ M;
+    assume
+    K _|_ M;
     then consider a,b,c,d such that
-A2: a<>b & c <>d & K = Line(a,b) & M = Line(c,d) and
-A3: a,b _|_ c,d by Th63;
-    c,d _|_ a,b by A3,Def9;
-    hence thesis by A2,Th63;
+A4: a<>b & c <>d & K = Line(a,b) & M = Line(c,d) and
+A5: a,b _|_ c,d by Th63;
+    c,d _|_ a,b by A5,Def9;
+    hence thesis by A4,Th63;
   end;
 end;
 
@@ -1962,29 +2103,36 @@ proof
 A1: K _|_ M and
 A2: K // N;
   consider r,s such that
-A3: r<>s & M = Line(r,s) & r,s _|_ K by A1,Def15;
-  r,s _|_ N by A2,A3,Th69;
+A3: r<>s & M = Line(r,s) and
+A4: r,s _|_ K by A1,Def15;
+  r,s _|_ N by A2,A4,Th69;
   hence thesis by A3,Def15;
 end;
 
 canceled;
 
 theorem
-  a in K & b in K & c,d _|_ K implies (c,d _|_ a,b & a,b _|_ c,d)
+  a in K & b in K & c,d _|_ K implies c,d _|_ a,b & a,b _|_ c,d
 proof
   assume that
-A1: a in K & b in K and
-A2: c,d _|_ K;
+A1: a in K and
+A2: b in K and
+A3: c,d _|_ K;
   consider p,q such that
-A3: p<>q & K = Line(p,q) & c,d _|_ p,q by A2,Def14;
+A4: p<>q and
+A5: K = Line(p,q) and
+A6: c,d _|_ p,q by A3,Def14;
   reconsider a'=a,b'=b, p'=p,q'=q as Element of Af(POS);
-  LIN p,q,a & LIN p,q, b by A1,A3,Def12;
-  then LIN p',q',a' & LIN p',q',b' by Th55;
-  then p',q' // a', b' by AFF_1:19;
+  LIN p,q, b by A2,A5,Def12;
   then
-A4: p,q // a,b by Th48;
-  p,q _|_ c,d by A3,Def9;
-  hence c,d _|_ a,b by A3,A4,Def9;
+A7: LIN p',q',b' by Th55;
+  LIN p,q,a by A1,A5,Def12;
+  then LIN p',q',a' by Th55;
+  then p',q' // a', b' by A7,AFF_1:19;
+  then
+A8: p,q // a,b by Th48;
+  p,q _|_ c,d by A6,Def9;
+  hence c,d _|_ a,b by A4,A8,Def9;
   hence thesis by Def9;
 end;
 
@@ -1992,114 +2140,133 @@ theorem Th76:
   a in K & b in K & a<>b & K is being_line implies K =Line(a,b)
 proof
   assume that
-A1: a in K & b in K and
-A2: a<>b and
-A3: K is being_line;
-  reconsider K'=K as Subset of Af(POS);
+A1: a in K & b in K & a<>b and
+A2: K is being_line;
   reconsider a'=a,b'=b as Element of Af(POS);
-  K' is being_line by A3,Th58;
-  then K' = Line(a',b') by A1,A2,AFF_1:71;
+  reconsider K'=K as Subset of Af(POS);
+  K' is being_line by A2,Th58;
+  then K' = Line(a',b') by A1,AFF_1:71;
   hence thesis by Th56;
 end;
 
 theorem
-  a in K & b in
-  K & a<>b & K is being_line & (a,b _|_ c,d or c,d _|_ a,b) implies c,d _|_ K
+  a in K & b in K & a<>b & K is being_line & (a,b _|_ c,d or c,d _|_ a,b
+  ) implies c,d _|_ K
 proof
   assume that
-A1: a in K & b in K & a<>b & K is being_line and
-A2: a,b _|_ c,d or c,d _|_ a,b;
-A3: c,d _|_ a,b by A2,Def9;
-  K = Line(a,b) by A1,Th76;
-  hence thesis by A1,A3,Def14;
+A1: a in K & b in K and
+A2: a<>b and
+A3: K is being_line &( a,b _|_ c,d or c,d _|_ a,b);
+  c,d _|_ a,b & K = Line(a,b) by A1,A2,A3,Def9,Th76;
+  hence thesis by A2,Def14;
 end;
 
 theorem Th78:
   a in M & b in M & c in N & d in N & M _|_ N implies a,b _|_ c,d
 proof
   assume that
-A1: a in M & b in M and
-A2: c in N & d in N and
-A3: M _|_ N;
+A1: a in M and
+A2: b in M and
+A3: c in N and
+A4: d in N and
+A5: M _|_ N;
   consider p1,q1,p2,q2 being Element of POS such that
-A4: p1<>q1 & p2<>q2 and
-A5: M = Line(p1,q1) & N = Line(p2,q2) & p1,q1 _|_ p2,q2 by A3,Th63;
-  reconsider a'=a,b'=b,c'=c,d'=d,p1'=p1,q1'=q1,p2'=p2,q2'=q2
-  as Element of Af(POS);
-  LIN p1,q1,a & LIN p1,q1,b & LIN p2,q2,c & LIN p2,q2,d by A1,A2,A5,Def12;
-  then LIN p1',q1',a' & LIN p1',q1',b' & LIN p2',q2',c' & LIN
-  p2',q2',d' by Th55;
-  then p1',q1' // a',b' & p2',q2' // c',d' by AFF_1:19;
+A6: p1<>q1 and
+A7: p2<>q2 and
+A8: M = Line(p1,q1) and
+A9: N = Line(p2,q2) and
+A10: p1,q1 _|_ p2,q2 by A5,Th63;
+  reconsider a'=a,b'=b,c'=c,d'=d,p1'=p1,q1'=q1,p2'=p2,q2'=q2 as Element of Af(
+  POS);
+  LIN p1,q1,b by A2,A8,Def12;
   then
-A6: p1,q1 // a,b & p2,q2 // c,d by Th48;
-  then p2,q2 _|_ a,b by A4,A5,Def9;
-  hence thesis by A4,A6,Def9;
+A11: LIN p1',q1',b' by Th55;
+  LIN p1,q1,a by A1,A8,Def12;
+  then LIN p1',q1',a' by Th55;
+  then p1',q1' // a',b' by A11,AFF_1:19;
+  then p1,q1 // a,b by Th48;
+  then
+A12: p2,q2 _|_ a,b by A6,A10,Def9;
+  LIN p2,q2,d by A4,A9,Def12;
+  then
+A13: LIN p2',q2',d' by Th55;
+  LIN p2,q2,c by A3,A9,Def12;
+  then LIN p2',q2',c' by Th55;
+  then p2',q2' // c',d' by A13,AFF_1:19;
+  then p2,q2 // c,d by Th48;
+  hence thesis by A7,A12,Def9;
 end;
 
 theorem
-  p in M & p in N & a in M & b in N & a<>b & a in K & b in
-  K & A _|_ M & A _|_ N & K is being_line implies A _|_ K
+  p in M & p in N & a in M & b in N & a<>b & a in K & b in K & A _|_ M &
+  A _|_ N & K is being_line implies A _|_ K
 proof
   assume that
 A1: p in M & p in N & a in M & b in N and
 A2: a<>b and
 A3: a in K & b in K and
-A4: A _|_ M & A _|_ N and
-A5: K is being_line;
-A6: K = Line(a,b) by A2,A3,A5,Th76;
+A4: A _|_ M and
+A5: A _|_ N and
+A6: K is being_line;
   A is being_line by A4,Th62;
   then consider q,r such that
-A7: q<>r & A = Line(q,r) by Def13;
+A7: q<>r and
+A8: A = Line(q,r) by Def13;
   reconsider q'=q,r'=r as Element of Af(POS);
   Line(q,r) = Line(q',r') by Th56;
-  then q in A & r in A by A7,AFF_1:26;
-  then q,r _|_ p,a & q,r _|_ p,b by A1,A4,Th78;
-  then q,r _|_ a,b by Def9;
-  hence thesis by A2,A6,A7,Th63;
+  then q in A & r in A by A8,AFF_1:26;
+  then q,r _|_ p,a & q,r _|_ p,b by A1,A4,A5,Th78;
+  then
+A9: q,r _|_ a,b by Def9;
+  K = Line(a,b) by A2,A3,A6,Th76;
+  hence thesis by A2,A7,A8,A9,Th63;
 end;
 
 theorem Th80:
   b,c _|_ a,a & a,a _|_ b,c & b,c // a,a & a,a // b,c
-proof thus b,c _|_ a,a by Def9;
-  hence a,a _|_ b,c by Def9;
+proof
   reconsider a'=a,b'=b,c'=c as Element of Af(POS);
+  thus b,c _|_ a,a by Def9;
+  hence a,a _|_ b,c by Def9;
   b',c' // a',a' & a',a' // b',c' by AFF_1:12;
   hence thesis by Th48;
 end;
 
 theorem Th81:
-  a,b // c,d implies a,b // d,c & b,a // c,d & b,a // d,c &
-  c,d // a,b & c,d // b,a & d,c // a,b & d,c // b,a
+  a,b // c,d implies a,b // d,c & b,a // c,d & b,a // d,c & c,d //
+  a,b & c,d // b,a & d,c // a,b & d,c // b,a
 proof
+  reconsider a'=a,b'=b,c'= c,d'=d as Element of Af(POS);
   assume
-A1: a,b // c,d;
-  reconsider a'=a,b'=b,c'= c,d'=d as Element of the carrier of Af(POS);
-  a',b' // c',d' by A1,Th48;
-  then a',b' // d',c' &
-  b',a' // c',d' & b',a' // d',c' & c',d' // a',b' & c',d' // b',a' &
-  d',c' // a',b' & d',c' // b',a' by AFF_1:13;
-  hence thesis by Th48;
+  a,b // c,d;
+  then
+A1: a',b' // c',d' by Th48;
+  then
+A2: b',a' // d',c' & c',d' // a',b' by AFF_1:13;
+A3: d',c' // b',a' by A1,AFF_1:13;
+A4: c',d' // b',a' & d',c' // a',b' by A1,AFF_1:13;
+  a',b' // d',c' & b',a' // c',d' by A1,AFF_1:13;
+  hence thesis by A2,A4,A3,Th48;
 end;
 
 theorem
-  p<>q & ((p,q // a,b & p,q // c,d) or (p,q // a,b & c,d // p,q) or
-  (a,b // p,q & c,d // p,q) or (a,b // p,q & p,q // c,d)) implies a,b // c,d
+  p<>q & ( p,q // a,b & p,q // c,d or p,q // a,b & c,d // p,q or a,b //
+  p,q & c,d // p,q or a,b // p,q & p,q // c,d ) implies a,b // c,d
 proof
   assume that
 A1: p<>q and
-A2: (p,q // a,b & p,q // c,d) or (p,q // a,b &
-  c,d // p,q) or (a,b // p,q & c,d // p,q) or (a,b // p,q & p,q // c,d);
+A2: p,q // a,b & p,q // c,d or p,q // a,b & c,d // p,q or a,b // p,q & c
+  ,d // p,q or a,b // p,q & p,q // c,d;
   reconsider p'=p,q'=q,a'=a, b'=b,c'= c,d'=d as Element of Af(POS);
-  (p',q' // a',b' & p',q' // c',d') or (p',q' // a',b' &
-  c',d' // p',q') or (a',b' // p',q' & c',d' // p',q') or (a',b' // p',q' &
-  p',q' // c',d') by A2,Th48;
+  p',q' // a',b' & p',q' // c',d' or p',q' // a',b' & c',d' // p',q' or a'
+  ,b' // p',q' & c',d' // p',q' or a',b' // p',q' & p',q' // c',d' by A2,Th48;
   then a',b' // c',d' by A1,AFF_1:14;
   hence thesis by Th48;
 end;
 
 theorem Th83:
-  a,b _|_ c,d implies a,b _|_ d,c & b,a _|_ c,d & b,a _|_ d,c &
-  c,d _|_ a,b & c,d _|_ b,a & d,c _|_ a,b & d,c _|_ b,a
+  a,b _|_ c,d implies a,b _|_ d,c & b,a _|_ c,d & b,a _|_ d,c & c,
+  d _|_ a,b & c,d _|_ b,a & d,c _|_ a,b & d,c _|_ b,a
 proof
   assume
 A1: a,b _|_ c,d;
@@ -2113,28 +2280,28 @@ A2: d,c _|_ a,b by Def9;
 end;
 
 theorem Th84:
-  p<>q & ((p,q // a,b & p,q _|_ c,d) or (p,q // c,d & p,q _|_ a,b) or
-  (p,q // a,b & c,d _|_ p,q) or (p,q // c,d & a,b _|_ p,q) or
-  (a,b // p,q & c,d _|_ p,q) or (c,d // p,q & a,b _|_ p,q) or
-  (a,b // p,q & p,q _|_ c,d) or (c,d // p,q & p,q _|_ a,b))
-  implies a,b _|_ c,d
+  p<>q & ( p,q // a,b & p,q _|_ c,d or p,q // c,d & p,q _|_ a,b or
+p,q // a,b & c,d _|_ p,q or p,q // c,d & a,b _|_ p,q or a,b // p,q & c,d _|_ p,
+  q or c,d // p,q & a,b _|_ p,q or a,b // p,q & p,q _|_ c,d or c,d // p,q & p,q
+  _|_ a,b ) implies a,b _|_ c,d
 proof
   assume that
 A1: p<>q and
-A2: (p,q // a,b & p,q _|_ c,d) or (p,q // c,d & p,q _|_ a,b) or
-  (p,q // a,b & c,d _|_ p,q) or (p,q // c,d & a,b _|_ p,q) or
-  (a,b // p,q & c,d _|_ p,q) or (c,d // p,q & a,b _|_ p,q) or
-  (a,b // p,q & p,q _|_ c,d) or (c,d // p,q & p,q _|_ a,b);
+A2: p,q // a,b & p,q _|_ c,d or p,q // c,d & p,q _|_ a,b or p,q // a,b &
+c,d _|_ p,q or p,q // c,d & a,b _|_ p,q or a,b // p,q & c,d _|_ p,q or c,d // p
+  ,q & a,b _|_ p,q or a,b // p,q & p,q _|_ c,d or c,d // p,q & p,q _|_ a,b;
 A3: now
-    assume (p,q // a,b & p,q _|_ c,d) or (p,q // a,b & c,d _|_ p,q) or
-    (a,b // p,q & c,d _|_ p,q) or (a,b // p,q & p,q _|_ c,d);
+    assume
+    p,q // a,b & p,q _|_ c,d or p,q // a,b & c,d _|_ p,q or a,b // p,q
+    & c,d _|_ p,q or a,b // p,q & p,q _|_ c,d;
     then p,q // a,b & p,q _|_ c,d by Th81,Th83;
     then c,d _|_ a,b by A1,Def9;
     hence thesis by Th83;
   end;
   now
-    assume (p,q // c,d & p,q _|_ a,b) or (p,q // c,d & a,b _|_ p,q) or
-    (c,d // p,q & a,b _|_ p,q) or (c,d // p,q & p,q _|_ a,b);
+    assume
+    p,q // c,d & p,q _|_ a,b or p,q // c,d & a,b _|_ p,q or c,d // p,
+    q & a,b _|_ p,q or c,d // p,q & p,q _|_ a,b;
     then p,q // c,d & p,q _|_ a,b by Th81,Th83;
     hence thesis by A1,Def9;
   end;
@@ -2146,29 +2313,30 @@ reserve K,M,N for Subset of POS;
 reserve x,a,b,c,d,p,q for Element of POS;
 
 theorem Th85:
-  p<>q & ((p,q _|_ a,b & p,q _|_ c,d) or (p,q _|_ a,b & c,d _|_ p,q) or
-
-(a,b _|_ p,q & c,d _|_ p,q) or (a,b _|_ p,q & p,q _|_ c,d)) implies a,b // c,d
+  p<>q & ( p,q _|_ a,b & p,q _|_ c,d or p,q _|_ a,b & c,d _|_ p,q
+or a,b _|_ p,q & c,d _|_ p,q or a,b _|_ p,q & p,q _|_ c,d ) implies a,b // c,d
 proof
   assume that
 A1: p<>q and
-A2: (p,q _|_ a,b & p,q _|_ c,d) or (p,q _|_ a,b & c,d _|_ p,q) or
-  (a,b _|_ p,q & c,d _|_ p,q) or (a,b _|_ p,q & p,q _|_ c,d);
+A2: p,q _|_ a,b & p,q _|_ c,d or p,q _|_ a,b & c,d _|_ p,q or a,b _|_ p,
+  q & c,d _|_ p,q or a,b _|_ p,q & p,q _|_ c,d;
   p,q _|_ a,b & p,q _|_ c,d by A2,Th83;
   hence thesis by A1,Def10;
 end;
 
 theorem
-  a in M & b in M & a<>b & M is being_line & c in N & d in N
-   & c <>d & N is being_line &
-  a,b // c,d implies M // N
+  a in M & b in M & a<>b & M is being_line & c in N & d in N & c <>d & N
+  is being_line & a,b // c,d implies M // N
 proof
   assume that
-A1: a in M & b in M & a<>b & M is being_line and
-A2: c in N & d in N & c <>d & N is being_line and
-A3: a,b // c,d;
-  M = Line(a,b) & N = Line(c,d) by A1,A2,Th76;
-  hence thesis by A1,A2,A3,Def16;
+A1: a in M & b in M and
+A2: a<>b and
+A3: M is being_line & c in N & d in N and
+A4: c <>d and
+A5: N is being_line and
+A6: a,b // c,d;
+  M = Line(a,b) & N = Line(c,d) by A1,A2,A3,A4,A5,Th76;
+  hence thesis by A2,A4,A6,Def16;
 end;
 
 theorem
@@ -2178,102 +2346,121 @@ proof
 A1: M _|_ K and
 A2: N _|_ K;
   consider p1,q1,a,b being Element of POS such that
-A3: p1<>q1 & a<>b & K = Line(p1,q1) & M = Line(a,b) and
-A4: p1,q1 _|_ a,b by A1,Th63;
+A3: p1<>q1 and
+A4: a<>b and
+A5: K = Line(p1,q1) and
+A6: M = Line(a,b) and
+A7: p1,q1 _|_ a,b by A1,Th63;
   consider p2,q2,c,d being Element of POS such that
-A5: p2<>q2 & c <>d & K = Line(p2,q2) & N = Line(c,d) and
-A6: p2,q2 _|_ c,d by A2,Th63;
+A8: p2<>q2 and
+A9: c <>d and
+A10: K = Line(p2,q2) and
+A11: N = Line(c,d) and
+A12: p2,q2 _|_ c,d by A2,Th63;
   reconsider p1'=p1,p2'=p2,q1'=q1,q2'=q2 as Element of Af(POS);
-  Line(p1',q1') = Line(p2,q2) by A3,A5,Th56
+A13: Line(p1',q1') = Line(p2,q2) by A5,A10,Th56
     .= Line(p2',q2') by Th56;
-  then p2' in Line(p1',q1') & q2' in Line(p1',q1') by AFF_1:26;
-  then LIN p1',q1',p2' & LIN p1',q1',q2' by AFF_1:def 2;
-  then p1',q1' // p2',q2' by AFF_1:19;
+  then q2' in Line(p1',q1') by AFF_1:26;
+  then
+A14: LIN p1',q1',q2' by AFF_1:def 2;
+  p2' in Line(p1',q1') by A13,AFF_1:26;
+  then LIN p1',q1',p2' by AFF_1:def 2;
+  then p1',q1' // p2',q2' by A14,AFF_1:19;
   then p1,q1 // p2,q2 by Th48;
-  then a,b _|_ p2,q2 by A3,A4,Th84;
-  then a,b // c,d by A5,A6,Th85;
-  hence thesis by A3,A5,Def16;
+  then a,b _|_ p2,q2 by A3,A7,Th84;
+  then a,b // c,d by A8,A12,Th85;
+  hence thesis by A4,A6,A9,A11,Def16;
 end;
 
 theorem Th88:
   M _|_ N implies ex p st p in M & p in N
 proof
+  reconsider M'=M,N'=N as Subset of Af(POS);
   assume
 A1: M _|_ N;
+  then M is being_line by Th62;
   then
-A2: not M // N by Th73;
-  reconsider M'=M,N'=N as Subset of Af(POS);
-  M is being_line & N is being_line by A1,Th62;
+A2: M' is being_line by Th58;
+  N is being_line by A1,Th62;
   then
-A3: M' is being_line & N' is being_line by Th58;
-  not M' // N' by A2,Th64;
-  then consider p' being Element of Af(POS) such that
-A4: p' in M' & p' in N' by A3,AFF_1:72; thus thesis by A4;
+A3: N' is being_line by Th58;
+  not M // N by A1,Th73;
+  then not M' // N' by Th64;
+  hence thesis by A2,A3,AFF_1:72;
 end;
 
 theorem Th89:
   a,b _|_ c,d implies ex p st LIN a,b,p & LIN c,d,p
 proof
+  reconsider a'=a,b'=b,c'=c,d'=d as Element of Af(POS);
   assume
 A1: a,b _|_ c,d;
-  reconsider a'=a,b'=b,c'=c,d'=d as Element of the carrier of Af(POS);
-  LIN c',d',c' & LIN a',b',a' by AFF_1:16;
-  then
-A2: LIN c,d,c & LIN a,b,a by Th55;
-A3: now
-    assume a=b;
-    then a,b // a,c by Th80;
-    then LIN a,b,c by Def11;
-    hence
-    thesis by A2;
-  end;
-A4: now
-    assume c =d;
-    then c,d // c,a by Th80;
-    then LIN c,d,a by Def11;
-    hence thesis by A2;
-  end;
-  now
-    assume
-A5: a<>b & c <>d;
+A2: now
     set M = Line(a,b),N = Line(c,d);
-    M _|_ N by A1,A5,Th63;
+    assume
+    a<>b & c <>d;
+    then M _|_ N by A1,Th63;
     then consider p such that
-A6: p in M & p in N by Th88;
-    LIN a,b,p & LIN c,d,p by A6,Def12;
+A3: p in M & p in N by Th88;
+    LIN a,b,p & LIN c,d,p by A3,Def12;
     hence thesis;
   end;
-  hence thesis by A3,A4;
+  LIN a',b',a' by AFF_1:16;
+  then
+A4: LIN a,b,a by Th55;
+A5: now
+    assume
+    c =d;
+    then c,d // c,a by Th80;
+    then LIN c,d,a by Def11;
+    hence thesis by A4;
+  end;
+  LIN c',d',c' by AFF_1:16;
+  then
+A6: LIN c,d,c by Th55;
+  now
+    assume
+    a=b;
+    then a,b // a,c by Th80;
+    then LIN a,b,c by Def11;
+    hence thesis by A6;
+  end;
+  hence thesis by A5,A2;
 end;
 
 theorem
   a,b _|_ K implies ex p st LIN a,b,p & p in K
 proof
-  assume a,b _|_ K;
+  assume
+  a,b _|_ K;
   then consider p,q such that
-A1: p<>q & K = Line(p,q) & a,b _|_ p,q by Def14;
+  p<>q and
+A1: K = Line(p,q) and
+A2: a,b _|_ p,q by Def14;
   consider c such that
-A2: LIN a,b,c & LIN p,q,c by A1,Th89;
-  c in K by A1,A2,Def12;
-  hence thesis by A2;
+A3: LIN a,b,c and
+A4: LIN p,q,c by A2,Th89;
+  c in K by A1,A4,Def12;
+  hence thesis by A3;
 end;
 
 theorem Th91:
   ex x st a,x _|_ p,q & LIN p,q,x
 proof
 A1: now
-    assume p=q;
-    then
-A2: p,q // p,a & a,a _|_ p,q by Th80;
-    take x=a;
-    thus a,x _|_ p,q & LIN p,q,x by A2,Def11;
+    assume
+    p<>q;
+    then consider x such that
+A2: p,q // p,x & p,q _|_ x,a by Def9;
+    take x;
+    thus a,x _|_ p,q & LIN p,q,x by A2,Def11,Th83;
   end;
   now
-    assume p<>q;
-    then consider x such that
-A3: p,q // p,x & p,q _|_ x,a by Def9;
-    take x; thus
-    a,x _|_ p,q & LIN p,q,x by A3,Def11,Th83;
+    assume
+A3: p=q;
+    take x=a;
+    p,q // p,a by A3,Th80;
+    hence a,x _|_ p,q & LIN p,q,x by Def11,Th80;
   end;
   hence thesis by A1;
 end;
@@ -2281,12 +2468,16 @@ end;
 theorem
   K is being_line implies ex x st a,x _|_ K & x in K
 proof
-  assume K is being_line;
+  assume
+  K is being_line;
   then consider p,q such that
-A1: p<>q & K = Line(p,q) by Def13;
+A1: p<>q and
+A2: K = Line(p,q) by Def13;
   consider x such that
-A2: a,x _|_ p,q and
-A3: LIN p,q,x by Th91;
-  take x; thus a,x _|_ K by A1,A2,Def14; thus thesis by A1,A3,Def12;
+A3: a,x _|_ p,q and
+A4: LIN p,q,x by Th91;
+  take x;
+  thus a,x _|_ K by A1,A2,A3,Def14;
+  thus thesis by A2,A4,Def12;
 end;
 

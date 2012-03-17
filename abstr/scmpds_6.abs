@@ -12,12 +12,12 @@ environ
       UNIALG_2, SCMFSA7B, SCMFSA8B, SCMPDS_6, ARYTM, AMISTD_2;
  notations TARSKI, XBOOLE_0, SUBSET_1, XCMPLX_0, RELAT_1, FUNCT_1, CARD_1,
       NUMBERS, COMPLEX1, FUNCT_4, INT_1, NAT_1, STRUCT_0, AMI_1, SCMNORM,
-      AMI_2, AMI_3, FUNCT_7, SCMPDS_2, SCMPDS_3, SCMPDS_4, SCMPDS_5, XXREAL_0;
+      AMI_2, FUNCT_7, SCMPDS_2, SCMPDS_3, SCMPDS_4, SCMPDS_5, XXREAL_0;
  constructors XXREAL_0, REAL_1, NAT_1, INT_2, SCM_1, SCMPDS_4, SCMPDS_5,
       SCMNORM, SCMPDS_3;
- registrations SETFAM_1, FUNCT_1, RELSET_1, FRAENKEL, NUMBERS, XXREAL_0,
-      XREAL_0, NAT_1, INT_1, CARD_3, AMI_1, SCMPDS_2, SCMPDS_3, SCMPDS_4,
-      SCMPDS_5, ORDINAL1, XBOOLE_0, SCMNORM;
+ registrations SETFAM_1, FUNCT_1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1,
+      INT_1, CARD_3, AMI_1, SCMPDS_2, SCMPDS_4, SCMPDS_5, ORDINAL1, XBOOLE_0,
+      SCMNORM, VALUED_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
 
 
@@ -25,69 +25,70 @@ begin :: Preliminaries
 
 reserve m,n for Element of NAT,
   a for Int_position,
-  i,j for Instruction of SCMPDS,
+  i,j for Instruction of
+  SCMPDS,
   s,s1,s2 for State of SCMPDS,
   k1 for Integer,
-  loc for Instruction-Location of SCMPDS,
+  loc for
+  Instruction-Location of SCMPDS,
   I,J,K for Program of SCMPDS;
 
-theorem :: SCMPDS_6:1  :: S8A_Th3
+theorem :: SCMPDS_6:1
   for s being State of SCMPDS holds dom (s | NAT) = NAT;
 
 theorem :: SCMPDS_6:2
-  for s being State of SCMPDS st s is halting
-  for k being Element of NAT st LifeSpan s <= k holds
-  CurInstr Computation(s,k) = halt SCMPDS;
+  for s being State of SCMPDS st s is halting for k being Element
+  of NAT st LifeSpan s <= k holds CurInstr Computation(s,k) = halt SCMPDS;
 
 theorem :: SCMPDS_6:3
-  for s being State of SCMPDS st s is halting
-  for k being Element of NAT st LifeSpan s <= k holds
-  IC Computation(s,k) = IC Computation(s,LifeSpan s);
+  for s being State of SCMPDS st s is halting for k being Element
+of NAT st LifeSpan s <= k holds IC Computation(s,k) = IC Computation(s,LifeSpan
+  s);
 
-theorem :: SCMPDS_6:4  ::S8A_Th6
-  for s1,s2 being State of SCMPDS holds s1,s2 equal_outside NAT
-  iff IC s1 = IC s2 & DataPart s1 = DataPart s2;
+theorem :: SCMPDS_6:4
+  for s1,s2 being State of SCMPDS holds s1,s2 equal_outside NAT iff
+  IC s1 = IC s2 & DataPart s1 = DataPart s2;
 
 theorem :: SCMPDS_6:5
   for s being State of SCMPDS, I being Program of SCMPDS holds
   Initialized s +* Initialized I = s +* Initialized I;
 
 theorem :: SCMPDS_6:6
-  for I being Program of SCMPDS, l being Instruction-Location of SCMPDS holds
-  I c= I +* Start-At l;
+  for I being Program of SCMPDS, l being Instruction-Location of SCMPDS
+  holds I c= I +* Start-At l;
 
 theorem :: SCMPDS_6:7
-  for s being State of SCMPDS, l being Instruction-Location of SCMPDS holds
-  DataPart s = DataPart(s +* Start-At l);
+  for s being State of SCMPDS, l being Instruction-Location of
+  SCMPDS holds DataPart s = DataPart(s +* Start-At l);
 
-theorem :: SCMPDS_6:8   ::S8A_11
-  for s being State of SCMPDS,I being Program of SCMPDS,
-  l being Instruction-Location of SCMPDS holds
-  DataPart s = DataPart(s +* (I +* Start-At l));
+theorem :: SCMPDS_6:8
+  for s being State of SCMPDS,I being Program of SCMPDS, l being
+Instruction-Location of SCMPDS holds DataPart s = DataPart(s +* (I +* Start-At
+  l));
 
 theorem :: SCMPDS_6:9
-  for s being State of SCMPDS,I being Program of SCMPDS
-  holds DataPart s = DataPart(s +* Initialized I);
+  for s being State of SCMPDS,I being Program of SCMPDS holds
+  DataPart s = DataPart(s +* Initialized I);
 
-theorem :: SCMPDS_6:10  :: S8A_Th12
-  for s being State of SCMPDS, l being Instruction-Location of SCMPDS holds
-  dom (s | NAT) misses dom Start-At l;
+theorem :: SCMPDS_6:10
+  for s being State of SCMPDS, l being Instruction-Location of
+  SCMPDS holds dom (s | NAT) misses dom Start-At l;
 
-theorem :: SCMPDS_6:11  ::S8A_Th14
-  for s being State of SCMPDS, I,J being Program of SCMPDS,
-  l being Instruction-Location of SCMPDS holds
-  s +* (I +* Start-At l), s +* (J +* Start-At l) equal_outside NAT;
+theorem :: SCMPDS_6:11
+  for s being State of SCMPDS, I,J being Program of SCMPDS, l being
+  Instruction-Location of SCMPDS holds s +* (I +* Start-At l), s +* (J +*
+  Start-At l) equal_outside NAT;
 
-theorem :: SCMPDS_6:12  ::S8B_7
+theorem :: SCMPDS_6:12
   for s1,s2 be State of SCMPDS,I,J be Program of SCMPDS holds
-  DataPart s1 = DataPart s2 implies
-  s1 +* Initialized I, s2 +* Initialized J equal_outside NAT;
+  DataPart s1 = DataPart s2 implies s1 +* Initialized I, s2 +* Initialized J
+  equal_outside NAT;
 
 canceled;
 
-theorem :: SCMPDS_6:14  ::S8B_Th4
-  for s being State of SCMPDS, l1,l2 being Instruction-Location of SCMPDS
-  holds s +* Start-At l1 +* Start-At l2 = s +* Start-At l2;
+theorem :: SCMPDS_6:14
+  for s being State of SCMPDS, l1,l2 being Instruction-Location of
+  SCMPDS holds s +* Start-At l1 +* Start-At l2 = s +* Start-At l2;
 
 theorem :: SCMPDS_6:15
   card (i ';' I)= card I + 1;
@@ -95,7 +96,7 @@ theorem :: SCMPDS_6:15
 theorem :: SCMPDS_6:16
   (i ';' I).inspos 0=i;
 
-theorem :: SCMPDS_6:17     ::SP_15
+theorem :: SCMPDS_6:17
   I c= Initialized stop I;
 
 theorem :: SCMPDS_6:18
@@ -114,46 +115,46 @@ theorem :: SCMPDS_6:22
   CurInstr (s+* Initialized stop(i ';' I)) = i;
 
 theorem :: SCMPDS_6:23
-  for s being State of SCMPDS,m1,m2 being Element of NAT st IC s=inspos m1
-  holds ICplusConst(s,m2)=inspos (m1+m2);
+  for s being State of SCMPDS,m1,m2 being Element of NAT st IC s=
+  inspos m1 holds ICplusConst(s,m2)=inspos (m1+m2);
 
 theorem :: SCMPDS_6:24
-  for I,J being Program of SCMPDS holds Shift(stop J,card I) c= stop(I ';' J);
+  for I,J being Program of SCMPDS holds Shift(stop J,card I) c=
+  stop(I ';' J);
 
 theorem :: SCMPDS_6:25
-  inspos(card I) in dom (stop I) & (stop I).inspos(card I) = halt SCMPDS;
+  inspos(card I) in dom (stop I) & (stop I).inspos(card I) = halt
+  SCMPDS;
 
 theorem :: SCMPDS_6:26
-  for x,l being Instruction-Location of SCMPDS holds
-  IExec(J,s).x = (IExec(I,s) +* Start-At l).x;
+  for x,l being Instruction-Location of SCMPDS holds IExec(J,s).x
+  = (IExec(I,s) +* Start-At l).x;
 
 theorem :: SCMPDS_6:27
-  for x,l being Instruction-Location of SCMPDS holds
-  IExec(I,s).x = (s +* Start-At l).x;
+  for x,l being Instruction-Location of SCMPDS holds IExec(I,s).x
+  = (s +* Start-At l).x;
 
-theorem :: SCMPDS_6:28  ::S8B_12
-  for s being State of SCMPDS, i being No-StopCode parahalting Instruction
-  of SCMPDS,J being parahalting shiftable Program of SCMPDS,
-  a being Int_position
-  holds IExec(i ';' J,s).a = IExec(J,Exec(i,Initialized s)).a;
+theorem :: SCMPDS_6:28
+  for s being State of SCMPDS, i being No-StopCode parahalting
+Instruction of SCMPDS,J being parahalting shiftable Program of SCMPDS, a being
+  Int_position holds IExec(i ';' J,s).a = IExec(J,Exec(i,Initialized s)).a;
 
 theorem :: SCMPDS_6:29
-  for a being Int_position,k1,k2 being Integer holds
-  (a,k1)<>0_goto k2 <> halt SCMPDS;
+  for a being Int_position,k1,k2 being Integer holds (a,k1)
+  <>0_goto k2 <> halt SCMPDS;
 
 theorem :: SCMPDS_6:30
-  for a being Int_position,k1,k2 being Integer holds
-  (a,k1)<=0_goto k2 <> halt SCMPDS;
+  for a being Int_position,k1,k2 being Integer holds (a,k1)
+  <=0_goto k2 <> halt SCMPDS;
 
 theorem :: SCMPDS_6:31
-  for a being Int_position,k1,k2 being Integer holds
-  (a,k1)>=0_goto k2 <> halt SCMPDS;
+  for a being Int_position,k1,k2 being Integer holds (a,k1)
+  >=0_goto k2 <> halt SCMPDS;
 
 definition
   let k1;
   func Goto k1 -> Program of SCMPDS equals
 :: SCMPDS_6:def 1
-
   Load (goto k1);
 end;
 
@@ -171,7 +172,7 @@ end;
 
 canceled;
 
-theorem :: SCMPDS_6:33  ::S8A_Th47
+theorem :: SCMPDS_6:33
   inspos 0 in dom Goto k1 & (Goto k1).inspos 0 = goto k1;
 
 begin :: The predicates of is_closed_on and is_halting_on
@@ -182,103 +183,94 @@ definition
   pred I is_closed_on s means
 :: SCMPDS_6:def 2
 
-  for k being Element of NAT holds
-  IC Computation(s+*Initialized stop I,k) in dom stop I;
+  for k being Element of NAT holds IC
+  Computation(s+*Initialized stop I,k) in dom stop I;
   pred I is_halting_on s means
 :: SCMPDS_6:def 3
 
   s +* Initialized stop I is halting;
 end;
 
-theorem :: SCMPDS_6:34  ::S7B_Th24
-  for I being Program of SCMPDS holds
-  I is paraclosed iff for s being State of SCMPDS holds I is_closed_on s;
+theorem :: SCMPDS_6:34
+  for I being Program of SCMPDS holds I is paraclosed iff for s
+  being State of SCMPDS holds I is_closed_on s;
 
-theorem :: SCMPDS_6:35   ::S7B_25
-  for I being Program of SCMPDS holds
-  I is parahalting iff for s being State of SCMPDS holds I is_halting_on s;
+theorem :: SCMPDS_6:35
+  for I being Program of SCMPDS holds I is parahalting iff for s
+  being State of SCMPDS holds I is_halting_on s;
 
 theorem :: SCMPDS_6:36
   for s1,s2 being State of SCMPDS, I being Program of SCMPDS st
-  DataPart s1 = DataPart s2 holds
-  I is_closed_on s1 implies I is_closed_on s2;
+  DataPart s1 = DataPart s2 holds I is_closed_on s1 implies I is_closed_on s2;
 
-theorem :: SCMPDS_6:37  ::S8B_Th8
-  for s1,s2 being State of SCMPDS,I being Program of SCMPDS st
-  DataPart s1 = DataPart s2 holds
-  I is_closed_on s1 & I is_halting_on s1 implies
-  I is_closed_on s2 & I is_halting_on s2;
+theorem :: SCMPDS_6:37
+  for s1,s2 being State of SCMPDS,I being Program of SCMPDS st DataPart
+  s1 = DataPart s2 holds I is_closed_on s1 & I is_halting_on s1 implies I
+  is_closed_on s2 & I is_halting_on s2;
 
-theorem :: SCMPDS_6:38  ::S8B_Th9
-  for s being State of SCMPDS, I,J being Program of SCMPDS holds
-  I is_closed_on s iff I is_closed_on s +* Initialized J;
+theorem :: SCMPDS_6:38
+  for s being State of SCMPDS, I,J being Program of SCMPDS holds I
+  is_closed_on s iff I is_closed_on s +* Initialized J;
 
 theorem :: SCMPDS_6:39
-  for I,J being Program of SCMPDS,s being State of SCMPDS
-  st I is_closed_on s & I is_halting_on s holds
-  (for k being Element of NAT st k <= LifeSpan (s +* Initialized stop I) holds
-  IC  Computation( (s +* Initialized stop I),k) =
-  IC  Computation( (s +* Initialized stop (I ';' J)),k)) &
-   DataPart Computation( (s +* Initialized stop I),
-  (LifeSpan (s +* Initialized stop I))) =
-   DataPart Computation( (s +* Initialized stop (I ';' J)),
-  (LifeSpan (s +* Initialized stop I)));
+  for I,J being Program of SCMPDS,s being State of SCMPDS st I
+  is_closed_on s & I is_halting_on s holds (for k being Element of NAT st k <=
+LifeSpan (s +* Initialized stop I) holds IC Computation( (s +* Initialized stop
+  I),k) = IC Computation( (s +* Initialized stop (I ';' J)),k)) & DataPart
+Computation( (s +* Initialized stop I), (LifeSpan (s +* Initialized stop I))) =
+  DataPart Computation( (s +* Initialized stop (I ';' J)), (LifeSpan (s +*
+  Initialized stop I)));
 
 theorem :: SCMPDS_6:40
-  for I being Program of SCMPDS,k be Element of NAT st I is_closed_on s &
-  I is_halting_on s & k < LifeSpan (s +* Initialized stop(I))
-  holds IC  Computation( (s +* Initialized stop(I)),k) in dom I;
+  for I being Program of SCMPDS,k be Element of NAT st I
+  is_closed_on s & I is_halting_on s & k < LifeSpan (s +* Initialized stop(I))
+  holds IC Computation( (s +* Initialized stop(I)),k) in dom I;
 
 theorem :: SCMPDS_6:41
-  for I,J being Program of SCMPDS,s being State of SCMPDS,
-  k being Element of NAT
-  st I is_closed_on s & I is_halting_on s &
-  k < LifeSpan (s +* Initialized stop I) holds
-  CurInstr  Computation( (s +* Initialized stop I),k) =
-  CurInstr  Computation( (s +* Initialized stop (I ';' J)),k);
+  for I,J being Program of SCMPDS,s being State of SCMPDS, k being
+  Element of NAT st I is_closed_on s & I is_halting_on s & k < LifeSpan (s +*
+Initialized stop I) holds CurInstr Computation( (s +* Initialized stop I),k) =
+  CurInstr Computation( (s +* Initialized stop (I ';' J)),k);
 
-theorem :: SCMPDS_6:42      ::SCMPDS_5:32
-  for I being No-StopCode Program of SCMPDS,s being State of SCMPDS,
-  k being Element of NAT st I is_closed_on s & I is_halting_on s &
-  k < LifeSpan (s +* Initialized stop I)
-  holds CurInstr  Computation( (s +* Initialized stop I),k) <> halt SCMPDS;
+theorem :: SCMPDS_6:42  ::SCMPDS_5:32
+  for I being No-StopCode Program of SCMPDS,s being State of
+  SCMPDS, k being Element of NAT st I is_closed_on s & I is_halting_on s & k <
+  LifeSpan (s +* Initialized stop I) holds CurInstr Computation( (s +*
+  Initialized stop I),k) <> halt SCMPDS;
 
 theorem :: SCMPDS_6:43
-  for I being No-StopCode Program of SCMPDS,s being State of SCMPDS
-  st I is_closed_on s & I is_halting_on s holds
-  IC  Computation( (s +* Initialized stop I),
-  LifeSpan (s +* Initialized stop I)) = inspos card I;
+  for I being No-StopCode Program of SCMPDS,s being State of
+  SCMPDS st I is_closed_on s & I is_halting_on s holds IC Computation( (s +*
+  Initialized stop I), LifeSpan (s +* Initialized stop I)) = inspos card I;
 
-theorem :: SCMPDS_6:44   ::S8A_58
-  for I,J being Program of SCMPDS,s being State of SCMPDS
-  st I is_closed_on s & I is_halting_on s holds
-  I ';' Goto (card J + 1) ';' J is_halting_on s &
-  I ';' Goto (card J + 1) ';' J is_closed_on s;
+theorem :: SCMPDS_6:44
+  for I,J being Program of SCMPDS,s being State of SCMPDS st I
+  is_closed_on s & I is_halting_on s holds I ';' Goto (card J + 1) ';' J
+  is_halting_on s & I ';' Goto (card J + 1) ';' J is_closed_on s;
 
-theorem :: SCMPDS_6:45   :: SP4_88,Th27
-  for I being shiftable Program of SCMPDS st
-  Initialized stop I c= s1 & I is_closed_on s1
-  for n being Element of NAT st Shift(stop I,n) c= s2 &
-  IC s2 = inspos n & DataPart s1 = DataPart s2
-  for i being Element of NAT holds
-  IC  Computation( s1,i) + n = IC  Computation( s2,i) &
-  CurInstr ( Computation( s1,i)) = CurInstr ( Computation( s2,i)) &
-  DataPart Computation( s1,i) = DataPart Computation( s2,i);
+theorem :: SCMPDS_6:45
+  for I being shiftable Program of SCMPDS st Initialized stop I c=
+s1 & I is_closed_on s1 for n being Element of NAT st Shift(stop I,n) c= s2 & IC
+  s2 = inspos n & DataPart s1 = DataPart s2 for i being Element of NAT holds IC
+Computation( s1,i) + n = IC Computation( s2,i) & CurInstr ( Computation( s1,i))
+  = CurInstr ( Computation( s2,i)) & DataPart Computation( s1,i) = DataPart
+  Computation( s2,i);
 
-theorem :: SCMPDS_6:46   ::SCMFSA8A:61
-  for s being State of SCMPDS,I being No-StopCode Program of SCMPDS,
-  J being Program of SCMPDS st I is_closed_on s & I is_halting_on s holds
+theorem :: SCMPDS_6:46  ::SCMFSA8A:61
+  for s being State of SCMPDS,I being No-StopCode Program of
+SCMPDS, J being Program of SCMPDS st I is_closed_on s & I is_halting_on s holds
   IC IExec(I ';' Goto (card J + 1) ';' J,s) =inspos (card I + card J + 1);
 
-theorem :: SCMPDS_6:47   ::SCMFSA8A:62
-  for s being State of SCMPDS,I being No-StopCode Program of SCMPDS,
-  J being Program of SCMPDS st I is_closed_on s & I is_halting_on s holds
-  IExec(I ';' Goto (card J + 1) ';' J,s) =
-  IExec(I,s) +* Start-At inspos (card I + card J + 1);
+theorem :: SCMPDS_6:47  ::SCMFSA8A:62
+  for s being State of SCMPDS,I being No-StopCode Program of
+SCMPDS, J being Program of SCMPDS st I is_closed_on s & I is_halting_on s holds
+IExec(I ';' Goto (card J + 1) ';' J,s) = IExec(I,s) +* Start-At inspos (card I
+  + card J + 1);
 
 theorem :: SCMPDS_6:48
-  for s being State of SCMPDS,I being No-StopCode Program of SCMPDS
-  st I is_closed_on s & I is_halting_on s holds IC IExec(I,s) = inspos card I;
+  for s being State of SCMPDS,I being No-StopCode Program of
+  SCMPDS st I is_closed_on s & I is_halting_on s holds IC IExec(I,s) = inspos
+  card I;
 
 begin :: The construction of conditional statements
 
@@ -287,13 +279,16 @@ definition
   let I,J be Program of SCMPDS;
   func if=0(a,k,I,J) -> Program of SCMPDS equals
 :: SCMPDS_6:def 4
-  (a,k)<>0_goto (card I +2) ';' I ';' Goto (card J+1) ';' J;
+  (a,k)<>0_goto (card I +2) ';'
+  I ';' Goto (card J+1) ';' J;
   func if>0(a,k,I,J) -> Program of SCMPDS equals
 :: SCMPDS_6:def 5
-  (a,k)<=0_goto (card I +2) ';' I ';' Goto (card J+1) ';' J;
+  (a,k)<=0_goto (card I +2) ';'
+  I ';' Goto (card J+1) ';' J;
   func if<0(a,k,I,J) -> Program of SCMPDS equals
 :: SCMPDS_6:def 6
-  (a,k)>=0_goto (card I +2) ';' I ';' Goto (card J+1) ';' J;
+  (a,k)>=0_goto (card I +2) ';'
+  I ';' Goto (card J+1) ';' J;
 end;
 
 definition
@@ -301,67 +296,66 @@ definition
   let I be Program of SCMPDS;
   func if=0(a,k,I) -> Program of SCMPDS equals
 :: SCMPDS_6:def 7
-
   (a,k)<>0_goto (card I +1) ';' I;
   func if<>0(a,k,I) -> Program of SCMPDS equals
 :: SCMPDS_6:def 8
-  (a,k)<>0_goto 2 ';' goto (card I+1) ';' I;
+  (a,k)<>0_goto 2 ';' goto (card
+  I+1) ';' I;
   func if>0(a,k,I) -> Program of SCMPDS equals
 :: SCMPDS_6:def 9
-
   (a,k)<=0_goto (card I +1) ';' I;
   func if<=0(a,k,I) -> Program of SCMPDS equals
 :: SCMPDS_6:def 10
-  (a,k)<=0_goto 2 ';' goto (card I+1) ';' I;
+  (a,k)<=0_goto 2 ';' goto (card
+  I+1) ';' I;
   func if<0(a,k,I) -> Program of SCMPDS equals
 :: SCMPDS_6:def 11
-
   (a,k)>=0_goto (card I +1) ';' I;
   func if>=0(a,k,I) -> Program of SCMPDS equals
 :: SCMPDS_6:def 12
-  (a,k)>=0_goto 2 ';' goto (card I+1) ';' I;
+  (a,k)>=0_goto 2 ';' goto (card
+  I+1) ';' I;
 end;
 
 begin :: The computation of "if var=0 then block1 else block2"
 
-theorem :: SCMPDS_6:49  ::S8B_14
+theorem :: SCMPDS_6:49
   card if=0(a,k1,I,J) = card I + card J + 2;
 
-theorem :: SCMPDS_6:50   ::LmT5
+theorem :: SCMPDS_6:50
   inspos 0 in dom if=0(a,k1,I,J) & inspos 1 in dom if=0(a,k1,I,J);
 
-theorem :: SCMPDS_6:51   ::Lm6
+theorem :: SCMPDS_6:51
   if=0(a,k1,I,J).inspos 0 = (a,k1)<>0_goto (card I + 2);
 
-theorem :: SCMPDS_6:52  ::S8B_18
-  for s being State of SCMPDS, I,J being shiftable Program of SCMPDS,
-  a being Int_position,k1 being Integer
-  st s.DataLoc(s.a,k1)= 0 & I is_closed_on s & I is_halting_on s holds
-  if=0(a,k1,I,J) is_closed_on s & if=0(a,k1,I,J) is_halting_on s;
+theorem :: SCMPDS_6:52
+  for s being State of SCMPDS, I,J being shiftable Program of
+  SCMPDS, a being Int_position,k1 being Integer st s.DataLoc(s.a,k1)= 0 & I
+is_closed_on s & I is_halting_on s holds if=0(a,k1,I,J) is_closed_on s & if=0(a
+  ,k1,I,J) is_halting_on s;
 
-theorem :: SCMPDS_6:53  ::S8B_16
-  for s being State of SCMPDS,I being Program of SCMPDS,J being shiftable
-  Program of SCMPDS,a being Int_position,k1 being Integer
-  st s.DataLoc(s.a,k1)<> 0 & J is_closed_on s & J is_halting_on s holds
-  if=0(a,k1,I,J) is_closed_on s & if=0(a,k1,I,J) is_halting_on s;
+theorem :: SCMPDS_6:53
+  for s being State of SCMPDS,I being Program of SCMPDS,J being
+shiftable Program of SCMPDS,a being Int_position,k1 being Integer st s.DataLoc(
+  s.a,k1)<> 0 & J is_closed_on s & J is_halting_on s holds if=0(a,k1,I,J)
+  is_closed_on s & if=0(a,k1,I,J) is_halting_on s;
 
-theorem :: SCMPDS_6:54  ::E,SCM8B_19
-  for s being State of SCMPDS,I being No-StopCode shiftable Program of SCMPDS,
-  J being shiftable Program of SCMPDS,a being Int_position,k1 being Integer
-  st s.DataLoc(s.a,k1)= 0 & I is_closed_on s & I is_halting_on s holds
-  IExec(if=0(a,k1,I,J),s) = IExec(I,s) +*
-  Start-At inspos (card I + card J + 2);
+theorem :: SCMPDS_6:54
+  for s being State of SCMPDS,I being No-StopCode shiftable
+Program of SCMPDS, J being shiftable Program of SCMPDS,a being Int_position,k1
+  being Integer st s.DataLoc(s.a,k1)= 0 & I is_closed_on s & I is_halting_on s
+holds IExec(if=0(a,k1,I,J),s) = IExec(I,s) +* Start-At inspos (card I + card J
+  + 2);
 
-theorem :: SCMPDS_6:55  ::E,SCM8B_17
-  for s being State of SCMPDS,I being Program of SCMPDS,J being No-StopCode
-  shiftable Program of SCMPDS,a being Int_position,k1 being Integer
-  st s.DataLoc(s.a,k1)<> 0 & J is_closed_on s & J is_halting_on s holds
-  IExec(if=0(a,k1,I,J),s)
-  = IExec(J,s) +* Start-At inspos (card I + card J + 2);
+theorem :: SCMPDS_6:55
+  for s being State of SCMPDS,I being Program of SCMPDS,J being
+  No-StopCode shiftable Program of SCMPDS,a being Int_position,k1 being Integer
+  st s.DataLoc(s.a,k1)<> 0 & J is_closed_on s & J is_halting_on s holds IExec(
+  if=0(a,k1,I,J),s) = IExec(J,s) +* Start-At inspos (card I + card J + 2);
 
 registration
-  let I,J be shiftable parahalting Program of SCMPDS,
-  a be Int_position,k1 be Integer;
+  let I,J be shiftable parahalting Program of SCMPDS, a be Int_position,k1 be
+  Integer;
   cluster if=0(a,k1,I,J) -> shiftable parahalting;
 end;
 
@@ -370,59 +364,59 @@ registration
   cluster if=0(a,k1,I,J) -> No-StopCode;
 end;
 
-theorem :: SCMPDS_6:56  ::E,S8B_21A
-  for s being State of SCMPDS,I,J being No-StopCode shiftable parahalting
-  Program of SCMPDS,a being Int_position,k1 being Integer holds
-  IC IExec(if=0(a,k1,I,J),s) = inspos (card I + card J + 2);
+theorem :: SCMPDS_6:56
+  for s being State of SCMPDS,I,J being No-StopCode shiftable
+  parahalting Program of SCMPDS,a being Int_position,k1 being Integer holds IC
+  IExec(if=0(a,k1,I,J),s) = inspos (card I + card J + 2);
 
-theorem :: SCMPDS_6:57  ::E,S8B_21B
+theorem :: SCMPDS_6:57
   for s being State of SCMPDS,I being No-StopCode shiftable parahalting
   Program of SCMPDS,J being shiftable Program of SCMPDS,a,b being Int_position,
-  k1 being Integer st s.DataLoc(s.a,k1)= 0 holds
-  IExec(if=0(a,k1,I,J),s).b = IExec(I,s).b;
+  k1 being Integer st s.DataLoc(s.a,k1)= 0 holds IExec(if=0(a,k1,I,J),s).b =
+  IExec(I,s).b;
 
-theorem :: SCMPDS_6:58  ::E,S8B_21C
-  for s being State of SCMPDS,I being Program of SCMPDS,J being No-StopCode
-  parahalting shiftable Program of SCMPDS,a,b being Int_position,k1 being
-  Integer st s.DataLoc(s.a,k1)<> 0 holds
-  IExec(if=0(a,k1,I,J),s).b = IExec(J,s).b;
+theorem :: SCMPDS_6:58
+  for s being State of SCMPDS,I being Program of SCMPDS,J being
+  No-StopCode parahalting shiftable Program of SCMPDS,a,b being Int_position,k1
+being Integer st s.DataLoc(s.a,k1)<> 0 holds IExec(if=0(a,k1,I,J),s).b = IExec(
+  J,s).b;
 
 begin :: The computation of "if var=0 then block"
 
-theorem :: SCMPDS_6:59  ::E,S8B_14
+theorem :: SCMPDS_6:59
   card if=0(a,k1,I) = card I + 1;
 
 theorem :: SCMPDS_6:60
   inspos 0 in dom if=0(a,k1,I);
 
-theorem :: SCMPDS_6:61    ::Lm6
+theorem :: SCMPDS_6:61
   if=0(a,k1,I).inspos 0 = (a,k1)<>0_goto (card I + 1);
 
-theorem :: SCMPDS_6:62  ::E,S8B_18
-  for s being State of SCMPDS, I being shiftable Program of SCMPDS,
-  a being Int_position,k1 being Integer
-  st s.DataLoc(s.a,k1)= 0 & I is_closed_on s & I is_halting_on s holds
-  if=0(a,k1,I) is_closed_on s & if=0(a,k1,I) is_halting_on s;
+theorem :: SCMPDS_6:62
+  for s being State of SCMPDS, I being shiftable Program of SCMPDS
+  , a being Int_position,k1 being Integer st s.DataLoc(s.a,k1)= 0 & I
+is_closed_on s & I is_halting_on s holds if=0(a,k1,I) is_closed_on s & if=0(a,
+  k1,I) is_halting_on s;
 
-theorem :: SCMPDS_6:63  ::E,S8B_16
-  for s being State of SCMPDS,I being Program of SCMPDS, a being Int_position,
-  k1 being Integer st s.DataLoc(s.a,k1)<> 0 holds
-  if=0(a,k1,I) is_closed_on s & if=0(a,k1,I) is_halting_on s;
+theorem :: SCMPDS_6:63
+  for s being State of SCMPDS,I being Program of SCMPDS, a being
+  Int_position, k1 being Integer st s.DataLoc(s.a,k1)<> 0 holds if=0(a,k1,I)
+  is_closed_on s & if=0(a,k1,I) is_halting_on s;
 
-theorem :: SCMPDS_6:64  ::E,SCM8B_19
-  for s being State of SCMPDS,I being No-StopCode shiftable Program of SCMPDS,
-  a being Int_position,k1 being Integer
-  st s.DataLoc(s.a,k1)= 0 & I is_closed_on s & I is_halting_on s holds
-  IExec(if=0(a,k1,I),s) = IExec(I,s) +* Start-At inspos (card I + 1);
+theorem :: SCMPDS_6:64
+  for s being State of SCMPDS,I being No-StopCode shiftable
+Program of SCMPDS, a being Int_position,k1 being Integer st s.DataLoc(s.a,k1)=
+0 & I is_closed_on s & I is_halting_on s holds IExec(if=0(a,k1,I),s) = IExec(I,
+  s) +* Start-At inspos (card I + 1);
 
-theorem :: SCMPDS_6:65  ::E,SCM8B_17
-  for s being State of SCMPDS,I being Program of SCMPDS,a being Int_position,
-  k1 being Integer st s.DataLoc(s.a,k1)<> 0 holds
-  IExec(if=0(a,k1,I),s) = s +* Start-At inspos (card I + 1);
+theorem :: SCMPDS_6:65
+  for s being State of SCMPDS,I being Program of SCMPDS,a being
+Int_position, k1 being Integer st s.DataLoc(s.a,k1)<> 0 holds IExec(if=0(a,k1,I
+  ),s) = s +* Start-At inspos (card I + 1);
 
 registration
-  let I be shiftable parahalting Program of SCMPDS,
-  a be Int_position,k1 be Integer;
+  let I be shiftable parahalting Program of SCMPDS, a be Int_position,k1 be
+  Integer;
   cluster if=0(a,k1,I) -> shiftable parahalting;
 end;
 
@@ -431,58 +425,58 @@ registration
   cluster if=0(a,k1,I) -> No-StopCode;
 end;
 
-theorem :: SCMPDS_6:66  ::E2,S8B_21A
+theorem :: SCMPDS_6:66
   for s being State of SCMPDS,I being No-StopCode shiftable parahalting
-  Program of SCMPDS,a being Int_position,k1 being Integer holds
-  IC IExec(if=0(a,k1,I),s) = inspos (card I + 1);
+Program of SCMPDS,a being Int_position,k1 being Integer holds IC IExec(if=0(a,
+  k1,I),s) = inspos (card I + 1);
 
-theorem :: SCMPDS_6:67  ::E2,S8B_21B
+theorem :: SCMPDS_6:67
   for s being State of SCMPDS,I being No-StopCode shiftable parahalting
-  Program of SCMPDS,a,b being Int_position,k1 being Integer
-  st s.DataLoc(s.a,k1)= 0 holds IExec(if=0(a,k1,I),s).b = IExec(I,s).b;
+Program of SCMPDS,a,b being Int_position,k1 being Integer st s.DataLoc(s.a,k1)=
+  0 holds IExec(if=0(a,k1,I),s).b = IExec(I,s).b;
 
-theorem :: SCMPDS_6:68  ::E2,S8B_21C
-  for s being State of SCMPDS,I being Program of SCMPDS,a,b being Int_position,
-  k1 being Integer st s.DataLoc(s.a,k1)<> 0 holds
-  IExec(if=0(a,k1,I),s).b = s.b;
+theorem :: SCMPDS_6:68
+  for s being State of SCMPDS,I being Program of SCMPDS,a,b being
+Int_position, k1 being Integer st s.DataLoc(s.a,k1)<> 0 holds IExec(if=0(a,k1,I
+  ),s).b = s.b;
 
 begin :: The computation of "if var<>0 then block"
 
-theorem :: SCMPDS_6:69  ::E3,S8B_14
+theorem :: SCMPDS_6:69
   card if<>0(a,k1,I) = card I + 2;
 
 theorem :: SCMPDS_6:70
   inspos 0 in dom if<>0(a,k1,I) & inspos 1 in dom if<>0(a,k1,I);
 
-theorem :: SCMPDS_6:71    ::Lm6
-  if<>0(a,k1,I).inspos 0 = (a,k1)<>0_goto 2 &
-  if<>0(a,k1,I).inspos 1 = goto (card I + 1);
+theorem :: SCMPDS_6:71
+  if<>0(a,k1,I).inspos 0 = (a,k1)<>0_goto 2 & if<>0(a,k1,I).inspos 1 =
+  goto (card I + 1);
 
-theorem :: SCMPDS_6:72  ::S8B_18
-  for s being State of SCMPDS, I being shiftable Program of SCMPDS,
-  a being Int_position,k1 being Integer
-  st s.DataLoc(s.a,k1)<>0 & I is_closed_on s & I is_halting_on s holds
-  if<>0(a,k1,I) is_closed_on s & if<>0(a,k1,I) is_halting_on s;
+theorem :: SCMPDS_6:72
+  for s being State of SCMPDS, I being shiftable Program of SCMPDS
+  , a being Int_position,k1 being Integer st s.DataLoc(s.a,k1)<>0 & I
+is_closed_on s & I is_halting_on s holds if<>0(a,k1,I) is_closed_on s & if<>0(a
+  ,k1,I) is_halting_on s;
 
-theorem :: SCMPDS_6:73  ::E3,S8B_16
-  for s being State of SCMPDS,I being Program of SCMPDS, a being Int_position,
-  k1 being Integer st s.DataLoc(s.a,k1)= 0 holds
-  if<>0(a,k1,I) is_closed_on s & if<>0(a,k1,I) is_halting_on s;
+theorem :: SCMPDS_6:73
+  for s being State of SCMPDS,I being Program of SCMPDS, a being
+  Int_position, k1 being Integer st s.DataLoc(s.a,k1)= 0 holds if<>0(a,k1,I)
+  is_closed_on s & if<>0(a,k1,I) is_halting_on s;
 
-theorem :: SCMPDS_6:74  ::SCM8B_19
-  for s being State of SCMPDS,I being No-StopCode shiftable Program of SCMPDS,
-  a being Int_position,k1 being Integer
-  st s.DataLoc(s.a,k1) <> 0 & I is_closed_on s & I is_halting_on s holds
-  IExec(if<>0(a,k1,I),s) = IExec(I,s) +* Start-At inspos (card I + 2);
+theorem :: SCMPDS_6:74
+  for s being State of SCMPDS,I being No-StopCode shiftable
+  Program of SCMPDS, a being Int_position,k1 being Integer st s.DataLoc(s.a,k1)
+  <> 0 & I is_closed_on s & I is_halting_on s holds IExec(if<>0(a,k1,I),s) =
+  IExec(I,s) +* Start-At inspos (card I + 2);
 
-theorem :: SCMPDS_6:75  ::SCM8B_17
-  for s being State of SCMPDS,I being Program of SCMPDS,a being Int_position,
-  k1 being Integer st s.DataLoc(s.a,k1)= 0 holds
-  IExec(if<>0(a,k1,I),s) = s +* Start-At inspos (card I + 2);
+theorem :: SCMPDS_6:75
+  for s being State of SCMPDS,I being Program of SCMPDS,a being
+Int_position, k1 being Integer st s.DataLoc(s.a,k1)= 0 holds IExec(if<>0(a,k1,I
+  ),s) = s +* Start-At inspos (card I + 2);
 
 registration
-  let I be shiftable parahalting Program of SCMPDS,
-  a be Int_position,k1 be Integer;
+  let I be shiftable parahalting Program of SCMPDS, a be Int_position,k1 be
+  Integer;
   cluster if<>0(a,k1,I) -> shiftable parahalting;
 end;
 
@@ -491,24 +485,24 @@ registration
   cluster if<>0(a,k1,I) -> No-StopCode;
 end;
 
-theorem :: SCMPDS_6:76  ::E3,S8B_21A
+theorem :: SCMPDS_6:76
   for s being State of SCMPDS,I being No-StopCode shiftable parahalting
-  Program of SCMPDS,a being Int_position,k1 being Integer holds
-  IC IExec(if<>0(a,k1,I),s) = inspos (card I + 2);
+Program of SCMPDS,a being Int_position,k1 being Integer holds IC IExec(if<>0(a,
+  k1,I),s) = inspos (card I + 2);
 
-theorem :: SCMPDS_6:77  ::E3,S8B_21B
+theorem :: SCMPDS_6:77
   for s being State of SCMPDS,I being No-StopCode shiftable parahalting
-  Program of SCMPDS,a,b being Int_position,k1 being Integer
-  st s.DataLoc(s.a,k1)<> 0 holds IExec(if<>0(a,k1,I),s).b = IExec(I,s).b;
+Program of SCMPDS,a,b being Int_position,k1 being Integer st s.DataLoc(s.a,k1)
+  <> 0 holds IExec(if<>0(a,k1,I),s).b = IExec(I,s).b;
 
-theorem :: SCMPDS_6:78  ::E3,S8B_21C
-  for s being State of SCMPDS,I being Program of SCMPDS,a,b being Int_position,
-  k1 being Integer st s.DataLoc(s.a,k1)= 0 holds
-  IExec(if<>0(a,k1,I),s).b = s.b;
+theorem :: SCMPDS_6:78
+  for s being State of SCMPDS,I being Program of SCMPDS,a,b being
+Int_position, k1 being Integer st s.DataLoc(s.a,k1)= 0 holds IExec(if<>0(a,k1,I
+  ),s).b = s.b;
 
 begin :: The computation of "if var>0 then block1 else block2"
 
-theorem :: SCMPDS_6:79  ::G,S8B_14
+theorem :: SCMPDS_6:79
   card if>0(a,k1,I,J) = card I + card J + 2;
 
 theorem :: SCMPDS_6:80
@@ -517,35 +511,34 @@ theorem :: SCMPDS_6:80
 theorem :: SCMPDS_6:81
   if>0(a,k1,I,J).inspos 0 = (a,k1)<=0_goto (card I + 2);
 
-theorem :: SCMPDS_6:82  ::G,S8B_18
-  for s being State of SCMPDS, I,J being shiftable Program of SCMPDS,
-  a being Int_position,k1 being Integer
-  st s.DataLoc(s.a,k1)>0 & I is_closed_on s & I is_halting_on s holds
-  if>0(a,k1,I,J) is_closed_on s & if>0(a,k1,I,J) is_halting_on s;
+theorem :: SCMPDS_6:82
+  for s being State of SCMPDS, I,J being shiftable Program of
+  SCMPDS, a being Int_position,k1 being Integer st s.DataLoc(s.a,k1)>0 & I
+is_closed_on s & I is_halting_on s holds if>0(a,k1,I,J) is_closed_on s & if>0(a
+  ,k1,I,J) is_halting_on s;
 
-theorem :: SCMPDS_6:83  ::S8B_16
-  for s being State of SCMPDS,I being Program of SCMPDS,J being shiftable
-  Program of SCMPDS,a being Int_position,k1 being Integer
-  st s.DataLoc(s.a,k1) <= 0 & J is_closed_on s & J is_halting_on s holds
-  if>0(a,k1,I,J) is_closed_on s & if>0(a,k1,I,J) is_halting_on s;
+theorem :: SCMPDS_6:83
+  for s being State of SCMPDS,I being Program of SCMPDS,J being
+shiftable Program of SCMPDS,a being Int_position,k1 being Integer st s.DataLoc(
+  s.a,k1) <= 0 & J is_closed_on s & J is_halting_on s holds if>0(a,k1,I,J)
+  is_closed_on s & if>0(a,k1,I,J) is_halting_on s;
 
-theorem :: SCMPDS_6:84  ::G,SCM8B_19
-  for s being State of SCMPDS,I being No-StopCode shiftable Program of SCMPDS,
-  J being shiftable Program of SCMPDS,a being Int_position,k1 being Integer
-  st s.DataLoc(s.a,k1) > 0 & I is_closed_on s & I is_halting_on s holds
-  IExec(if>0(a,k1,I,J),s) = IExec(I,s) +*
-  Start-At inspos (card I + card J + 2);
+theorem :: SCMPDS_6:84
+  for s being State of SCMPDS,I being No-StopCode shiftable
+Program of SCMPDS, J being shiftable Program of SCMPDS,a being Int_position,k1
+  being Integer st s.DataLoc(s.a,k1) > 0 & I is_closed_on s & I is_halting_on s
+holds IExec(if>0(a,k1,I,J),s) = IExec(I,s) +* Start-At inspos (card I + card J
+  + 2);
 
-theorem :: SCMPDS_6:85  ::G,SCM8B_17
-  for s being State of SCMPDS,I being Program of SCMPDS,J being No-StopCode
-  shiftable Program of SCMPDS,a being Int_position,k1 being Integer
-  st s.DataLoc(s.a,k1) <= 0 & J is_closed_on s & J is_halting_on s holds
-  IExec(if>0(a,k1,I,J),s)
-  = IExec(J,s) +* Start-At inspos (card I + card J + 2);
+theorem :: SCMPDS_6:85
+  for s being State of SCMPDS,I being Program of SCMPDS,J being
+  No-StopCode shiftable Program of SCMPDS,a being Int_position,k1 being Integer
+  st s.DataLoc(s.a,k1) <= 0 & J is_closed_on s & J is_halting_on s holds IExec(
+  if>0(a,k1,I,J),s) = IExec(J,s) +* Start-At inspos (card I + card J + 2);
 
 registration
-  let I,J be shiftable parahalting Program of SCMPDS,
-  a be Int_position,k1 be Integer;
+  let I,J be shiftable parahalting Program of SCMPDS, a be Int_position,k1 be
+  Integer;
   cluster if>0(a,k1,I,J) -> shiftable parahalting;
 end;
 
@@ -554,59 +547,59 @@ registration
   cluster if>0(a,k1,I,J) -> No-StopCode;
 end;
 
-theorem :: SCMPDS_6:86  ::G,S8B_21A
-  for s being State of SCMPDS,I,J being No-StopCode shiftable parahalting
-  Program of SCMPDS,a being Int_position,k1 being Integer holds
-  IC IExec(if>0(a,k1,I,J),s) = inspos (card I + card J + 2);
+theorem :: SCMPDS_6:86
+  for s being State of SCMPDS,I,J being No-StopCode shiftable
+  parahalting Program of SCMPDS,a being Int_position,k1 being Integer holds IC
+  IExec(if>0(a,k1,I,J),s) = inspos (card I + card J + 2);
 
-theorem :: SCMPDS_6:87  ::G,S8B_21B
+theorem :: SCMPDS_6:87
   for s being State of SCMPDS,I being No-StopCode shiftable parahalting
   Program of SCMPDS,J being shiftable Program of SCMPDS,a,b being Int_position,
-  k1 being Integer st s.DataLoc(s.a,k1)>0 holds
-  IExec(if>0(a,k1,I,J),s).b = IExec(I,s).b;
+k1 being Integer st s.DataLoc(s.a,k1)>0 holds IExec(if>0(a,k1,I,J),s).b = IExec
+  (I,s).b;
 
-theorem :: SCMPDS_6:88  ::G,S8B_21C
-  for s being State of SCMPDS,I being Program of SCMPDS,J being No-StopCode
-  parahalting shiftable Program of SCMPDS,a,b being Int_position,k1 being
-  Integer st s.DataLoc(s.a,k1) <= 0 holds
-  IExec(if>0(a,k1,I,J),s).b = IExec(J,s).b;
+theorem :: SCMPDS_6:88
+  for s being State of SCMPDS,I being Program of SCMPDS,J being
+  No-StopCode parahalting shiftable Program of SCMPDS,a,b being Int_position,k1
+being Integer st s.DataLoc(s.a,k1) <= 0 holds IExec(if>0(a,k1,I,J),s).b = IExec
+  (J,s).b;
 
 begin :: The computation of "if var>0 then block"
 
-theorem :: SCMPDS_6:89  ::S8B_14
+theorem :: SCMPDS_6:89
   card if>0(a,k1,I) = card I + 1;
 
-theorem :: SCMPDS_6:90     ::LmT5
+theorem :: SCMPDS_6:90
   inspos 0 in dom if>0(a,k1,I);
 
-theorem :: SCMPDS_6:91    ::Lm6
+theorem :: SCMPDS_6:91
   if>0(a,k1,I).inspos 0 = (a,k1)<=0_goto (card I + 1);
 
-theorem :: SCMPDS_6:92  ::G2,S8B_18
-  for s being State of SCMPDS, I being shiftable Program of SCMPDS,
-  a being Int_position,k1 being Integer
-  st s.DataLoc(s.a,k1)> 0 & I is_closed_on s & I is_halting_on s holds
-  if>0(a,k1,I) is_closed_on s & if>0(a,k1,I) is_halting_on s;
+theorem :: SCMPDS_6:92
+  for s being State of SCMPDS, I being shiftable Program of SCMPDS
+  , a being Int_position,k1 being Integer st s.DataLoc(s.a,k1)> 0 & I
+is_closed_on s & I is_halting_on s holds if>0(a,k1,I) is_closed_on s & if>0(a,
+  k1,I) is_halting_on s;
 
-theorem :: SCMPDS_6:93  ::G,S8B_16
-  for s being State of SCMPDS,I being Program of SCMPDS, a being Int_position,
-  k1 being Integer st s.DataLoc(s.a,k1) <= 0 holds
-  if>0(a,k1,I) is_closed_on s & if>0(a,k1,I) is_halting_on s;
+theorem :: SCMPDS_6:93
+  for s being State of SCMPDS,I being Program of SCMPDS, a being
+  Int_position, k1 being Integer st s.DataLoc(s.a,k1) <= 0 holds if>0(a,k1,I)
+  is_closed_on s & if>0(a,k1,I) is_halting_on s;
 
-theorem :: SCMPDS_6:94  ::G2,SCM8B_19
-  for s being State of SCMPDS,I being No-StopCode shiftable Program of SCMPDS,
-  a being Int_position,k1 being Integer
-  st s.DataLoc(s.a,k1)> 0 & I is_closed_on s & I is_halting_on s holds
-  IExec(if>0(a,k1,I),s) = IExec(I,s) +* Start-At inspos (card I + 1);
+theorem :: SCMPDS_6:94
+  for s being State of SCMPDS,I being No-StopCode shiftable
+Program of SCMPDS, a being Int_position,k1 being Integer st s.DataLoc(s.a,k1)>
+0 & I is_closed_on s & I is_halting_on s holds IExec(if>0(a,k1,I),s) = IExec(I,
+  s) +* Start-At inspos (card I + 1);
 
-theorem :: SCMPDS_6:95  ::G2,SCM8B_17
-  for s being State of SCMPDS,I being Program of SCMPDS,a being Int_position,
-  k1 being Integer st s.DataLoc(s.a,k1) <= 0 holds
-  IExec(if>0(a,k1,I),s) = s +* Start-At inspos (card I + 1);
+theorem :: SCMPDS_6:95
+  for s being State of SCMPDS,I being Program of SCMPDS,a being
+Int_position, k1 being Integer st s.DataLoc(s.a,k1) <= 0 holds IExec(if>0(a,k1,
+  I),s) = s +* Start-At inspos (card I + 1);
 
 registration
-  let I be shiftable parahalting Program of SCMPDS,
-  a be Int_position,k1 be Integer;
+  let I be shiftable parahalting Program of SCMPDS, a be Int_position,k1 be
+  Integer;
   cluster if>0(a,k1,I) -> shiftable parahalting;
 end;
 
@@ -615,58 +608,58 @@ registration
   cluster if>0(a,k1,I) -> No-StopCode;
 end;
 
-theorem :: SCMPDS_6:96  ::G,S8B_21A
+theorem :: SCMPDS_6:96
   for s being State of SCMPDS,I being No-StopCode shiftable parahalting
-  Program of SCMPDS,a being Int_position,k1 being Integer holds
-  IC IExec(if>0(a,k1,I),s) = inspos (card I + 1);
+Program of SCMPDS,a being Int_position,k1 being Integer holds IC IExec(if>0(a,
+  k1,I),s) = inspos (card I + 1);
 
-theorem :: SCMPDS_6:97  ::G,S8B_21B
+theorem :: SCMPDS_6:97
   for s being State of SCMPDS,I being No-StopCode shiftable parahalting
-  Program of SCMPDS,a,b being Int_position,k1 being Integer
-  st s.DataLoc(s.a,k1)> 0 holds IExec(if>0(a,k1,I),s).b = IExec(I,s).b;
+Program of SCMPDS,a,b being Int_position,k1 being Integer st s.DataLoc(s.a,k1)>
+  0 holds IExec(if>0(a,k1,I),s).b = IExec(I,s).b;
 
-theorem :: SCMPDS_6:98  ::G,S8B_21C
-  for s being State of SCMPDS,I being Program of SCMPDS,a,b being Int_position,
-  k1 being Integer st s.DataLoc(s.a,k1) <= 0 holds
-  IExec(if>0(a,k1,I),s).b = s.b;
+theorem :: SCMPDS_6:98
+  for s being State of SCMPDS,I being Program of SCMPDS,a,b being
+Int_position, k1 being Integer st s.DataLoc(s.a,k1) <= 0 holds IExec(if>0(a,k1,
+  I),s).b = s.b;
 
 begin :: The computation of "if var<=0 then block"
 
-theorem :: SCMPDS_6:99  ::S8B_14
+theorem :: SCMPDS_6:99
   card if<=0(a,k1,I) = card I + 2;
 
-theorem :: SCMPDS_6:100     ::LmT5
+theorem :: SCMPDS_6:100
   inspos 0 in dom if<=0(a,k1,I) & inspos 1 in dom if<=0(a,k1,I);
 
-theorem :: SCMPDS_6:101    ::Lm6
-  if<=0(a,k1,I).inspos 0 = (a,k1)<=0_goto 2 &
-  if<=0(a,k1,I).inspos 1 = goto (card I + 1);
+theorem :: SCMPDS_6:101
+  if<=0(a,k1,I).inspos 0 = (a,k1)<=0_goto 2 & if<=0(a,k1,I).inspos 1 =
+  goto (card I + 1);
 
-theorem :: SCMPDS_6:102  ::S8B_18
-  for s being State of SCMPDS, I being shiftable Program of SCMPDS,
-  a being Int_position,k1 being Integer
-  st s.DataLoc(s.a,k1) <= 0 & I is_closed_on s & I is_halting_on s holds
-  if<=0(a,k1,I) is_closed_on s & if<=0(a,k1,I) is_halting_on s;
+theorem :: SCMPDS_6:102
+  for s being State of SCMPDS, I being shiftable Program of
+  SCMPDS, a being Int_position,k1 being Integer st s.DataLoc(s.a,k1) <= 0 & I
+is_closed_on s & I is_halting_on s holds if<=0(a,k1,I) is_closed_on s & if<=0(a
+  ,k1,I) is_halting_on s;
 
-theorem :: SCMPDS_6:103  ::G3,S8B_16
-  for s being State of SCMPDS,I being Program of SCMPDS, a being Int_position,
-  k1 being Integer st s.DataLoc(s.a,k1) > 0 holds
-  if<=0(a,k1,I) is_closed_on s & if<=0(a,k1,I) is_halting_on s;
+theorem :: SCMPDS_6:103
+  for s being State of SCMPDS,I being Program of SCMPDS, a being
+  Int_position, k1 being Integer st s.DataLoc(s.a,k1) > 0 holds if<=0(a,k1,I)
+  is_closed_on s & if<=0(a,k1,I) is_halting_on s;
 
-theorem :: SCMPDS_6:104  ::SCM8B_19
-  for s being State of SCMPDS,I being No-StopCode shiftable Program of SCMPDS,
-  a being Int_position,k1 being Integer
-  st s.DataLoc(s.a,k1) <= 0 & I is_closed_on s & I is_halting_on s holds
-  IExec(if<=0(a,k1,I),s) = IExec(I,s) +* Start-At inspos (card I + 2);
+theorem :: SCMPDS_6:104
+  for s being State of SCMPDS,I being No-StopCode shiftable
+  Program of SCMPDS, a being Int_position,k1 being Integer st s.DataLoc(s.a,k1)
+  <= 0 & I is_closed_on s & I is_halting_on s holds IExec(if<=0(a,k1,I),s) =
+  IExec(I,s) +* Start-At inspos (card I + 2);
 
-theorem :: SCMPDS_6:105  ::G3,SCM8B_17
-  for s being State of SCMPDS,I being Program of SCMPDS,a being Int_position,
-  k1 being Integer st s.DataLoc(s.a,k1) > 0 holds
-  IExec(if<=0(a,k1,I),s) = s +* Start-At inspos (card I + 2);
+theorem :: SCMPDS_6:105
+  for s being State of SCMPDS,I being Program of SCMPDS,a being
+Int_position, k1 being Integer st s.DataLoc(s.a,k1) > 0 holds IExec(if<=0(a,k1,
+  I),s) = s +* Start-At inspos (card I + 2);
 
 registration
-  let I be shiftable parahalting Program of SCMPDS,
-  a be Int_position,k1 be Integer;
+  let I be shiftable parahalting Program of SCMPDS, a be Int_position,k1 be
+  Integer;
   cluster if<=0(a,k1,I) -> shiftable parahalting;
 end;
 
@@ -675,24 +668,24 @@ registration
   cluster if<=0(a,k1,I) -> No-StopCode;
 end;
 
-theorem :: SCMPDS_6:106  ::G3,S8B_21A
+theorem :: SCMPDS_6:106
   for s being State of SCMPDS,I being No-StopCode shiftable parahalting
-  Program of SCMPDS,a being Int_position,k1 being Integer holds
-  IC IExec(if<=0(a,k1,I),s) = inspos (card I + 2);
+Program of SCMPDS,a being Int_position,k1 being Integer holds IC IExec(if<=0(a,
+  k1,I),s) = inspos (card I + 2);
 
-theorem :: SCMPDS_6:107  ::G3,S8B_21B
+theorem :: SCMPDS_6:107
   for s being State of SCMPDS,I being No-StopCode shiftable parahalting
-  Program of SCMPDS,a,b being Int_position,k1 being Integer
-  st s.DataLoc(s.a,k1) <= 0 holds IExec(if<=0(a,k1,I),s).b = IExec(I,s).b;
+Program of SCMPDS,a,b being Int_position,k1 being Integer st s.DataLoc(s.a,k1)
+  <= 0 holds IExec(if<=0(a,k1,I),s).b = IExec(I,s).b;
 
-theorem :: SCMPDS_6:108  ::S8B_21C
-  for s being State of SCMPDS,I being Program of SCMPDS,a,b being Int_position,
-  k1 being Integer st s.DataLoc(s.a,k1) > 0 holds
-  IExec(if<=0(a,k1,I),s).b = s.b;
+theorem :: SCMPDS_6:108
+  for s being State of SCMPDS,I being Program of SCMPDS,a,b being
+Int_position, k1 being Integer st s.DataLoc(s.a,k1) > 0 holds IExec(if<=0(a,k1,
+  I),s).b = s.b;
 
 begin :: The computation of "if var<0 then block1 else block2"
 
-theorem :: SCMPDS_6:109  ::L,S8B_14
+theorem :: SCMPDS_6:109
   card if<0(a,k1,I,J) = card I + card J + 2;
 
 theorem :: SCMPDS_6:110
@@ -701,35 +694,34 @@ theorem :: SCMPDS_6:110
 theorem :: SCMPDS_6:111
   if<0(a,k1,I,J).inspos 0 = (a,k1)>=0_goto (card I + 2);
 
-theorem :: SCMPDS_6:112  ::L,S8B_18
-  for s being State of SCMPDS, I,J being shiftable Program of SCMPDS,
-  a being Int_position,k1 being Integer
-  st s.DataLoc(s.a,k1)<0 & I is_closed_on s & I is_halting_on s holds
-  if<0(a,k1,I,J) is_closed_on s & if<0(a,k1,I,J) is_halting_on s;
+theorem :: SCMPDS_6:112
+  for s being State of SCMPDS, I,J being shiftable Program of
+  SCMPDS, a being Int_position,k1 being Integer st s.DataLoc(s.a,k1)<0 & I
+is_closed_on s & I is_halting_on s holds if<0(a,k1,I,J) is_closed_on s & if<0(a
+  ,k1,I,J) is_halting_on s;
 
-theorem :: SCMPDS_6:113  ::L,S8B_16
-  for s being State of SCMPDS,I being Program of SCMPDS,J being shiftable
-  Program of SCMPDS,a being Int_position,k1 being Integer
-  st s.DataLoc(s.a,k1) >= 0 & J is_closed_on s & J is_halting_on s holds
-  if<0(a,k1,I,J) is_closed_on s & if<0(a,k1,I,J) is_halting_on s;
+theorem :: SCMPDS_6:113
+  for s being State of SCMPDS,I being Program of SCMPDS,J being
+shiftable Program of SCMPDS,a being Int_position,k1 being Integer st s.DataLoc(
+  s.a,k1) >= 0 & J is_closed_on s & J is_halting_on s holds if<0(a,k1,I,J)
+  is_closed_on s & if<0(a,k1,I,J) is_halting_on s;
 
-theorem :: SCMPDS_6:114  ::L,SCM8B_19
-  for s being State of SCMPDS,I being No-StopCode shiftable Program of SCMPDS,
-  J being shiftable Program of SCMPDS,a being Int_position,k1 being Integer
-  st s.DataLoc(s.a,k1) < 0 & I is_closed_on s & I is_halting_on s holds
-  IExec(if<0(a,k1,I,J),s) = IExec(I,s) +*
-  Start-At inspos (card I + card J + 2);
+theorem :: SCMPDS_6:114
+  for s being State of SCMPDS,I being No-StopCode shiftable
+Program of SCMPDS, J being shiftable Program of SCMPDS,a being Int_position,k1
+  being Integer st s.DataLoc(s.a,k1) < 0 & I is_closed_on s & I is_halting_on s
+holds IExec(if<0(a,k1,I,J),s) = IExec(I,s) +* Start-At inspos (card I + card J
+  + 2);
 
-theorem :: SCMPDS_6:115  ::L,SCM8B_17
-  for s being State of SCMPDS,I being Program of SCMPDS,J being No-StopCode
-  shiftable Program of SCMPDS,a being Int_position,k1 being Integer
-  st s.DataLoc(s.a,k1) >= 0 & J is_closed_on s & J is_halting_on s holds
-  IExec(if<0(a,k1,I,J),s)
-  = IExec(J,s) +* Start-At inspos (card I + card J + 2);
+theorem :: SCMPDS_6:115
+  for s being State of SCMPDS,I being Program of SCMPDS,J being
+  No-StopCode shiftable Program of SCMPDS,a being Int_position,k1 being Integer
+  st s.DataLoc(s.a,k1) >= 0 & J is_closed_on s & J is_halting_on s holds IExec(
+  if<0(a,k1,I,J),s) = IExec(J,s) +* Start-At inspos (card I + card J + 2);
 
 registration
-  let I,J be shiftable parahalting Program of SCMPDS,
-  a be Int_position,k1 be Integer;
+  let I,J be shiftable parahalting Program of SCMPDS, a be Int_position,k1 be
+  Integer;
   cluster if<0(a,k1,I,J) -> shiftable parahalting;
 end;
 
@@ -738,59 +730,59 @@ registration
   cluster if<0(a,k1,I,J) -> No-StopCode;
 end;
 
-theorem :: SCMPDS_6:116  ::L,S8B_21A
-  for s being State of SCMPDS,I,J being No-StopCode shiftable parahalting
-  Program of SCMPDS,a being Int_position,k1 being Integer holds
-  IC IExec(if<0(a,k1,I,J),s) = inspos (card I + card J + 2);
+theorem :: SCMPDS_6:116
+  for s being State of SCMPDS,I,J being No-StopCode shiftable
+  parahalting Program of SCMPDS,a being Int_position,k1 being Integer holds IC
+  IExec(if<0(a,k1,I,J),s) = inspos (card I + card J + 2);
 
-theorem :: SCMPDS_6:117  ::S8B_21B
+theorem :: SCMPDS_6:117
   for s being State of SCMPDS,I being No-StopCode shiftable parahalting
   Program of SCMPDS,J being shiftable Program of SCMPDS,a,b being Int_position,
-  k1 being Integer st s.DataLoc(s.a,k1)<0 holds
-  IExec(if<0(a,k1,I,J),s).b = IExec(I,s).b;
+k1 being Integer st s.DataLoc(s.a,k1)<0 holds IExec(if<0(a,k1,I,J),s).b = IExec
+  (I,s).b;
 
-theorem :: SCMPDS_6:118  ::L,S8B_21C
-  for s being State of SCMPDS,I being Program of SCMPDS,J being No-StopCode
-  parahalting shiftable Program of SCMPDS,a,b being Int_position,k1 being
-  Integer st s.DataLoc(s.a,k1) >= 0 holds
-  IExec(if<0(a,k1,I,J),s).b = IExec(J,s).b;
+theorem :: SCMPDS_6:118
+  for s being State of SCMPDS,I being Program of SCMPDS,J being
+  No-StopCode parahalting shiftable Program of SCMPDS,a,b being Int_position,k1
+being Integer st s.DataLoc(s.a,k1) >= 0 holds IExec(if<0(a,k1,I,J),s).b = IExec
+  (J,s).b;
 
 begin :: The computation of "if var<0 then block"
 
-theorem :: SCMPDS_6:119  ::L2,S8B_14
+theorem :: SCMPDS_6:119
   card if<0(a,k1,I) = card I + 1;
 
-theorem :: SCMPDS_6:120     ::LmT5
+theorem :: SCMPDS_6:120
   inspos 0 in dom if<0(a,k1,I);
 
-theorem :: SCMPDS_6:121    ::Lm6
+theorem :: SCMPDS_6:121
   if<0(a,k1,I).inspos 0 = (a,k1)>=0_goto (card I + 1);
 
-theorem :: SCMPDS_6:122  ::L2,S8B_18
-  for s being State of SCMPDS, I being shiftable Program of SCMPDS,
-  a being Int_position,k1 being Integer
-  st s.DataLoc(s.a,k1) < 0 & I is_closed_on s & I is_halting_on s holds
-  if<0(a,k1,I) is_closed_on s & if<0(a,k1,I) is_halting_on s;
+theorem :: SCMPDS_6:122
+  for s being State of SCMPDS, I being shiftable Program of
+  SCMPDS, a being Int_position,k1 being Integer st s.DataLoc(s.a,k1) < 0 & I
+is_closed_on s & I is_halting_on s holds if<0(a,k1,I) is_closed_on s & if<0(a,
+  k1,I) is_halting_on s;
 
 theorem :: SCMPDS_6:123
-  for s being State of SCMPDS,I being Program of SCMPDS, a being Int_position,
-  k1 being Integer st s.DataLoc(s.a,k1) >= 0 holds
-  if<0(a,k1,I) is_closed_on s & if<0(a,k1,I) is_halting_on s;
+  for s being State of SCMPDS,I being Program of SCMPDS, a being
+  Int_position, k1 being Integer st s.DataLoc(s.a,k1) >= 0 holds if<0(a,k1,I)
+  is_closed_on s & if<0(a,k1,I) is_halting_on s;
 
-theorem :: SCMPDS_6:124  ::L,SCM8B_19
-  for s being State of SCMPDS,I being No-StopCode shiftable Program of SCMPDS,
-  a being Int_position,k1 being Integer
-  st s.DataLoc(s.a,k1) < 0 & I is_closed_on s & I is_halting_on s holds
-  IExec(if<0(a,k1,I),s) = IExec(I,s) +* Start-At inspos (card I + 1);
+theorem :: SCMPDS_6:124
+  for s being State of SCMPDS,I being No-StopCode shiftable
+Program of SCMPDS, a being Int_position,k1 being Integer st s.DataLoc(s.a,k1) <
+0 & I is_closed_on s & I is_halting_on s holds IExec(if<0(a,k1,I),s) = IExec(I,
+  s) +* Start-At inspos (card I + 1);
 
-theorem :: SCMPDS_6:125  ::L,SCM8B_17
-  for s being State of SCMPDS,I being Program of SCMPDS,a being Int_position,
-  k1 being Integer st s.DataLoc(s.a,k1) >= 0 holds
-  IExec(if<0(a,k1,I),s) = s +* Start-At inspos (card I + 1);
+theorem :: SCMPDS_6:125
+  for s being State of SCMPDS,I being Program of SCMPDS,a being
+Int_position, k1 being Integer st s.DataLoc(s.a,k1) >= 0 holds IExec(if<0(a,k1,
+  I),s) = s +* Start-At inspos (card I + 1);
 
 registration
-  let I be shiftable parahalting Program of SCMPDS,
-  a be Int_position,k1 be Integer;
+  let I be shiftable parahalting Program of SCMPDS, a be Int_position,k1 be
+  Integer;
   cluster if<0(a,k1,I) -> shiftable parahalting;
 end;
 
@@ -799,58 +791,58 @@ registration
   cluster if<0(a,k1,I) -> No-StopCode;
 end;
 
-theorem :: SCMPDS_6:126  ::L2,S8B_21A
+theorem :: SCMPDS_6:126
   for s being State of SCMPDS,I being No-StopCode shiftable parahalting
-  Program of SCMPDS,a being Int_position,k1 being Integer holds
-  IC IExec(if<0(a,k1,I),s) = inspos (card I + 1);
+Program of SCMPDS,a being Int_position,k1 being Integer holds IC IExec(if<0(a,
+  k1,I),s) = inspos (card I + 1);
 
-theorem :: SCMPDS_6:127  ::L,S8B_21B
+theorem :: SCMPDS_6:127
   for s being State of SCMPDS,I being No-StopCode shiftable parahalting
-  Program of SCMPDS,a,b being Int_position,k1 being Integer
-  st s.DataLoc(s.a,k1) < 0 holds IExec(if<0(a,k1,I),s).b = IExec(I,s).b;
+Program of SCMPDS,a,b being Int_position,k1 being Integer st s.DataLoc(s.a,k1)
+  < 0 holds IExec(if<0(a,k1,I),s).b = IExec(I,s).b;
 
-theorem :: SCMPDS_6:128  ::L2,S8B_21C
-  for s being State of SCMPDS,I being Program of SCMPDS,a,b being Int_position,
-  k1 being Integer st s.DataLoc(s.a,k1) >= 0 holds
-  IExec(if<0(a,k1,I),s).b = s.b;
+theorem :: SCMPDS_6:128
+  for s being State of SCMPDS,I being Program of SCMPDS,a,b being
+Int_position, k1 being Integer st s.DataLoc(s.a,k1) >= 0 holds IExec(if<0(a,k1,
+  I),s).b = s.b;
 
 begin :: The computation of "if var>=0 then block"
 
-theorem :: SCMPDS_6:129  ::L3,S8B_14
+theorem :: SCMPDS_6:129
   card if>=0(a,k1,I) = card I + 2;
 
-theorem :: SCMPDS_6:130     ::LmT5
+theorem :: SCMPDS_6:130
   inspos 0 in dom if>=0(a,k1,I) & inspos 1 in dom if>=0(a,k1,I);
 
-theorem :: SCMPDS_6:131    ::Lm6
-  if>=0(a,k1,I).inspos 0 = (a,k1)>=0_goto 2 &
-  if>=0(a,k1,I).inspos 1 = goto (card I + 1);
+theorem :: SCMPDS_6:131
+  if>=0(a,k1,I).inspos 0 = (a,k1)>=0_goto 2 & if>=0(a,k1,I).inspos 1 =
+  goto (card I + 1);
 
-theorem :: SCMPDS_6:132  ::S8B_18
-  for s being State of SCMPDS, I being shiftable Program of SCMPDS,
-  a being Int_position,k1 being Integer
-  st s.DataLoc(s.a,k1) >= 0 & I is_closed_on s & I is_halting_on s holds
-  if>=0(a,k1,I) is_closed_on s & if>=0(a,k1,I) is_halting_on s;
+theorem :: SCMPDS_6:132
+  for s being State of SCMPDS, I being shiftable Program of
+  SCMPDS, a being Int_position,k1 being Integer st s.DataLoc(s.a,k1) >= 0 & I
+is_closed_on s & I is_halting_on s holds if>=0(a,k1,I) is_closed_on s & if>=0(a
+  ,k1,I) is_halting_on s;
 
-theorem :: SCMPDS_6:133  ::L3,S8B_16
-  for s being State of SCMPDS,I being Program of SCMPDS, a being Int_position,
-  k1 being Integer st s.DataLoc(s.a,k1) < 0 holds
-  if>=0(a,k1,I) is_closed_on s & if>=0(a,k1,I) is_halting_on s;
+theorem :: SCMPDS_6:133
+  for s being State of SCMPDS,I being Program of SCMPDS, a being
+  Int_position, k1 being Integer st s.DataLoc(s.a,k1) < 0 holds if>=0(a,k1,I)
+  is_closed_on s & if>=0(a,k1,I) is_halting_on s;
 
-theorem :: SCMPDS_6:134  ::L,SCM8B_19
-  for s being State of SCMPDS,I being No-StopCode shiftable Program of SCMPDS,
-  a being Int_position,k1 being Integer
-  st s.DataLoc(s.a,k1) >= 0 & I is_closed_on s & I is_halting_on s holds
-  IExec(if>=0(a,k1,I),s) = IExec(I,s) +* Start-At inspos (card I + 2);
+theorem :: SCMPDS_6:134
+  for s being State of SCMPDS,I being No-StopCode shiftable
+  Program of SCMPDS, a being Int_position,k1 being Integer st s.DataLoc(s.a,k1)
+  >= 0 & I is_closed_on s & I is_halting_on s holds IExec(if>=0(a,k1,I),s) =
+  IExec(I,s) +* Start-At inspos (card I + 2);
 
-theorem :: SCMPDS_6:135  ::L,SCM8B_17
-  for s being State of SCMPDS,I being Program of SCMPDS,a being Int_position,
-  k1 being Integer st s.DataLoc(s.a,k1) < 0 holds
-  IExec(if>=0(a,k1,I),s) = s +* Start-At inspos (card I + 2);
+theorem :: SCMPDS_6:135
+  for s being State of SCMPDS,I being Program of SCMPDS,a being
+Int_position, k1 being Integer st s.DataLoc(s.a,k1) < 0 holds IExec(if>=0(a,k1,
+  I),s) = s +* Start-At inspos (card I + 2);
 
 registration
-  let I be shiftable parahalting Program of SCMPDS,
-  a be Int_position,k1 be Integer;
+  let I be shiftable parahalting Program of SCMPDS, a be Int_position,k1 be
+  Integer;
   cluster if>=0(a,k1,I) -> shiftable parahalting;
 end;
 
@@ -859,18 +851,18 @@ registration
   cluster if>=0(a,k1,I) -> No-StopCode;
 end;
 
-theorem :: SCMPDS_6:136  ::L2,S8B_21A
+theorem :: SCMPDS_6:136
   for s being State of SCMPDS,I being No-StopCode shiftable parahalting
-  Program of SCMPDS,a being Int_position,k1 being Integer holds
-  IC IExec(if>=0(a,k1,I),s) = inspos (card I + 2);
+Program of SCMPDS,a being Int_position,k1 being Integer holds IC IExec(if>=0(a,
+  k1,I),s) = inspos (card I + 2);
 
-theorem :: SCMPDS_6:137   ::L,S8B_21B
+theorem :: SCMPDS_6:137
   for s being State of SCMPDS,I being No-StopCode shiftable parahalting
-  Program of SCMPDS,a,b being Int_position,k1 being Integer
-  st s.DataLoc(s.a,k1) >= 0 holds IExec(if>=0(a,k1,I),s).b = IExec(I,s).b;
+Program of SCMPDS,a,b being Int_position,k1 being Integer st s.DataLoc(s.a,k1)
+  >= 0 holds IExec(if>=0(a,k1,I),s).b = IExec(I,s).b;
 
-theorem :: SCMPDS_6:138  ::L,S8B_21C
-  for s being State of SCMPDS,I being Program of SCMPDS,a,b being Int_position,
-  k1 being Integer st s.DataLoc(s.a,k1) < 0 holds
-  IExec(if>=0(a,k1,I),s).b = s.b;
+theorem :: SCMPDS_6:138
+  for s being State of SCMPDS,I being Program of SCMPDS,a,b being
+Int_position, k1 being Integer st s.DataLoc(s.a,k1) < 0 holds IExec(if>=0(a,k1,
+  I),s).b = s.b;
 

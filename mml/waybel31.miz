@@ -14,17 +14,16 @@ environ
       FINSEQ_4, WAYBEL_9, WELLORD1, CAT_1, WAYBEL31, RLVECT_3, ARYTM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, FINSET_1, RELAT_1,
       FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, FINSEQ_1, DOMAIN_1, FINSEQ_2,
-      FINSEQ_3, ORDINAL1, CARD_1, STRUCT_0, PRE_TOPC, TSP_1, TOPS_2, CANTOR_1,
+      FINSEQ_3, ORDINAL1, CARD_1, STRUCT_0, PRE_TOPC, TOPS_2, CANTOR_1,
       ORDERS_2, LATTICE3, YELLOW_0, YELLOW_1, YELLOW_9, WAYBEL_0, WAYBEL_1,
       WAYBEL_3, WAYBEL_8, WAYBEL_9, WAYBEL11, WAYBEL19, WAYBEL23;
  constructors SETFAM_1, DOMAIN_1, NAT_1, FINSEQ_3, BINARITH, TOPS_2, URYSOHN1,
       T_0TOPSP, CANTOR_1, WAYBEL_1, WAYBEL_8, WAYBEL11, YELLOW_9, WAYBEL19,
-      WAYBEL23, COMPTS_1, RELSET_1;
+      WAYBEL23, COMPTS_1, RELSET_1, FINSEQ_2;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, FINSET_1, CARD_1, FINSEQ_1,
-      STRUCT_0, ORDERS_2, LATTICE3, YELLOW_0, CANTOR_1, WAYBEL_0, YELLOW_1,
-      YELLOW_2, YELLOW_3, WAYBEL_3, WAYBEL_4, WAYBEL_8, WAYBEL14, YELLOW_9,
-      YELLOW11, WAYBEL19, YELLOW13, WAYBEL23, YELLOW15, WAYBEL25, WAYBEL30,
-      ORDINAL1, PRE_TOPC;
+      STRUCT_0, LATTICE3, YELLOW_0, WAYBEL_0, YELLOW_1, YELLOW_2, YELLOW_3,
+      WAYBEL_3, WAYBEL_4, WAYBEL_8, WAYBEL14, YELLOW_9, YELLOW11, WAYBEL19,
+      WAYBEL23, YELLOW15, WAYBEL25, WAYBEL30, ORDINAL1, PRE_TOPC;
  requirements NUMERALS, BOOLE, SUBSET;
  definitions TARSKI, YELLOW_0, WAYBEL_8, STRUCT_0;
  theorems TARSKI, SETFAM_1, SUBSET_1, FINSET_1, RELSET_1, FUNCT_1, FUNCT_2,
@@ -33,104 +32,105 @@ environ
       YELLOW_2, YELLOW_8, YELLOW_9, YELLOW12, YELLOW15, WAYBEL_0, WAYBEL_1,
       WAYBEL_3, WAYBEL_4, WAYBEL_7, WAYBEL_8, WAYBEL11, WAYBEL14, WAYBEL19,
       WAYBEL23, WAYBEL30, WAYBEL13, WSIERP_1, XBOOLE_0, XBOOLE_1, TRIANG_1,
-      FINSEQ_3;
+      FINSEQ_3, PRE_POLY;
  schemes ORDINAL1, FUNCT_2, PRE_CIRC, CLASSES1, FRAENKEL, WELLORD2;
 
 begin
 
-scheme UparrowUnion{L1()->RelStr,P[set]}: for S be Subset-Family of L1() st
-  S = { X where X is Subset of L1() : P[X] } holds
-  uparrow union S = union { uparrow X where X is Subset of L1() : P[X] }
-proof
+scheme
+  UparrowUnion{L1()->RelStr,P[set]}: for S be Subset-Family of L1() st S = { X
+  where X is Subset of L1() : P[X] } holds uparrow union S = union { uparrow X
+  where X is Subset of L1() : P[X] } proof
   let S be Subset-Family of L1();
   assume
 A1: S = { X where X is Subset of L1() : P[X] };
-A2: uparrow union S c= union { uparrow X where X is Subset of L1() : P[X]}
+A2: union { uparrow X where X is Subset of L1() : P[X] } c= uparrow union S
   proof
     let z be set;
     assume
-A3: z in uparrow union S;
-    then reconsider z1 = z as Element of L1();
-    consider y1 be Element of L1() such that
-A4: y1 <= z1 and
-A5: y1 in union S by A3,WAYBEL_0:def 16;
-    consider Z be set such that
-A6: y1 in Z and
-A7: Z in S by A5,TARSKI:def 4;
+    z in union { uparrow X where X is Subset of L1() : P[X] };
+    then consider Z be set such that
+A3: z in Z and
+A4: Z in { uparrow X where X is Subset of L1() : P[X] } by TARSKI:def 4;
     consider X1 be Subset of L1() such that
-A8: Z = X1 and
-A9: P[X1] by A1,A7;
-A10: z in uparrow X1 by A4,A6,A8,WAYBEL_0:def 16;
-    uparrow X1 in { uparrow X where X is Subset of L1() : P[X] } by A9;
-    hence thesis
-    by A10,TARSKI:def 4;
+A5: Z = uparrow X1 and
+A6: P[X1] by A4;
+    reconsider z1 = z as Element of L1() by A3,A5;
+    consider y1 be Element of L1() such that
+A7: y1 <= z1 and
+A8: y1 in X1 by A3,A5,WAYBEL_0:def 16;
+    X1 in S by A1,A6;
+    then y1 in union S by A8,TARSKI:def 4;
+    hence thesis by A7,WAYBEL_0:def 16;
   end;
-  union { uparrow X where X is Subset of L1() : P[X] } c= uparrow union S
+  uparrow union S c= union { uparrow X where X is Subset of L1() : P[X]}
   proof
     let z be set;
-    assume z in union { uparrow X where X is Subset of L1() : P[X] };
-    then consider Z be set such that
-A11: z in Z and
-A12: Z in { uparrow X where X is Subset of L1() : P[X] } by TARSKI:def 4;
-    consider X1 be Subset of L1() such that
-A13: Z = uparrow X1 and
-A14: P[X1] by A12;
-    reconsider z1 = z as Element of L1() by A11,A13;
+    assume
+A9: z in uparrow union S;
+    then reconsider z1 = z as Element of L1();
     consider y1 be Element of L1() such that
-A15: y1 <= z1 and
-A16: y1 in X1 by A11,A13,WAYBEL_0:def 16;
-    X1 in S by A1,A14;
-    then y1 in union S by A16,TARSKI:def 4;
-    hence thesis by A15,WAYBEL_0:def 16;
+A10: y1 <= z1 and
+A11: y1 in union S by A9,WAYBEL_0:def 16;
+    consider Z be set such that
+A12: y1 in Z and
+A13: Z in S by A11,TARSKI:def 4;
+    consider X1 be Subset of L1() such that
+A14: Z = X1 and
+A15: P[X1] by A1,A13;
+A16: uparrow X1 in { uparrow X where X is Subset of L1() : P[X] } by A15;
+    z in uparrow X1 by A10,A12,A14,WAYBEL_0:def 16;
+    hence thesis by A16,TARSKI:def 4;
   end;
   hence thesis by A2,XBOOLE_0:def 10;
 end;
 
-scheme DownarrowUnion{L1()->RelStr,P[set]}: for S be Subset-Family of L1() st
-  S = { X where X is Subset of L1() : P[X] } holds
-  downarrow union S = union { downarrow X where X is Subset of L1() : P[X]}
-proof
+scheme
+  DownarrowUnion{L1()->RelStr,P[set]}: for S be Subset-Family of L1() st S = {
+  X where X is Subset of L1() : P[X] } holds downarrow union S = union {
+  downarrow X where X is Subset of L1() : P[X]} proof
   let S be Subset-Family of L1();
   assume
 A1: S = { X where X is Subset of L1() : P[X] };
-A2: downarrow union S c=
-  union { downarrow X where X is Subset of L1() : P[X] }
+A2: union { downarrow X where X is Subset of L1(): P[X] } c= downarrow
+  union S
   proof
     let z be set;
     assume
-A3: z in downarrow union S;
-    then reconsider z1 = z as Element of L1();
-    consider y1 be Element of L1() such that
-A4: y1 >= z1 and
-A5: y1 in union S by A3,WAYBEL_0:def 15;
-    consider Z be set such that
-A6: y1 in Z and
-A7: Z in S by A5,TARSKI:def 4;
+    z in union { downarrow X where X is Subset of L1() : P[X] };
+    then consider Z be set such that
+A3: z in Z and
+A4: Z in { downarrow X where X is Subset of L1(): P[X]} by TARSKI:def 4;
     consider X1 be Subset of L1() such that
-A8: Z = X1 and
-A9: P[X1] by A1,A7;
-A10: z in downarrow X1 by A4,A6,A8,WAYBEL_0:def 15;
-    downarrow X1 in { downarrow X where X is Subset of L1() : P[X] } by A9;
-    hence thesis
-    by A10,TARSKI:def 4;
+A5: Z = downarrow X1 and
+A6: P[X1] by A4;
+    reconsider z1 = z as Element of L1() by A3,A5;
+    consider y1 be Element of L1() such that
+A7: y1 >= z1 and
+A8: y1 in X1 by A3,A5,WAYBEL_0:def 15;
+    X1 in S by A1,A6;
+    then y1 in union S by A8,TARSKI:def 4;
+    hence thesis by A7,WAYBEL_0:def 15;
   end;
-  union { downarrow X where X is Subset of L1(): P[X] } c= downarrow union S
+  downarrow union S c= union { downarrow X where X is Subset of L1() : P[X
+  ] }
   proof
     let z be set;
-    assume z in union { downarrow X where X is Subset of L1() : P[X] };
-    then consider Z be set such that
-A11: z in Z and
-A12: Z in { downarrow X where X is Subset of L1(): P[X]} by TARSKI:def 4;
-    consider X1 be Subset of L1() such that
-A13: Z = downarrow X1 and
-A14: P[X1] by A12;
-    reconsider z1 = z as Element of L1() by A11,A13;
+    assume
+A9: z in downarrow union S;
+    then reconsider z1 = z as Element of L1();
     consider y1 be Element of L1() such that
-A15: y1 >= z1 and
-A16: y1 in X1 by A11,A13,WAYBEL_0:def 15;
-    X1 in S by A1,A14;
-    then y1 in union S by A16,TARSKI:def 4;
-    hence thesis by A15,WAYBEL_0:def 15;
+A10: y1 >= z1 and
+A11: y1 in union S by A9,WAYBEL_0:def 15;
+    consider Z be set such that
+A12: y1 in Z and
+A13: Z in S by A11,TARSKI:def 4;
+    consider X1 be Subset of L1() such that
+A14: Z = X1 and
+A15: P[X1] by A1,A13;
+A16: downarrow X1 in { downarrow X where X is Subset of L1() : P[X] } by A15;
+    z in downarrow X1 by A10,A12,A14,WAYBEL_0:def 15;
+    hence thesis by A16,TARSKI:def 4;
   end;
   hence thesis by A2,XBOOLE_0:def 10;
 end;
@@ -142,14 +142,17 @@ registration
   coherence by WAYBEL13:10;
 end;
 
-definition  :: DEFINITION 4.5
+definition :: DEFINITION 4.5
   let L1 be continuous sup-Semilattice;
   func CLweight L1 -> Cardinal equals
-  meet {card B1 where B1 is with_bottom CLbasis of L1 : not contradiction};
+  meet {card B1 where B1 is with_bottom
+  CLbasis of L1 : not contradiction};
   coherence
   proof
-    defpred P[Ordinal] means
-    $1 in {card B1 where B1 is with_bottom CLbasis of L1 : not contradiction};
+    set X = { card B2 where B2 is with_bottom CLbasis of L1 : not
+    contradiction };
+    defpred P[Ordinal] means $1 in {card B1 where B1 is with_bottom CLbasis of
+L1: not contradiction};
 A1: ex A be Ordinal st P[A]
     proof
       take card [#]L1;
@@ -159,52 +162,49 @@ A1: ex A be Ordinal st P[A]
     consider A be Ordinal such that
 A2: P[A] and
 A3: for C be Ordinal st P[C] holds A c= C from ORDINAL1:sch 1(A1);
-    consider B1 be with_bottom CLbasis of L1 such that
-A4: A = card B1 by A2;
-    reconsider A as Cardinal by A4;
-    set X = { card B2 where B2 is with_bottom CLbasis of L1 :
-    not contradiction };
-    [#]L1 is CLbasis of L1 by YELLOW15:26;
-    then
-A5: card [#]L1 in X;
-    now
+    ex B1 be with_bottom CLbasis of L1 st A = card B1 by A2;
+    then reconsider A as Cardinal;
+A4: now
       let x be set;
       thus (for y be set holds y in X implies x in y) implies x in A by A2;
       assume
-A6:   x in A;
+A5:   x in A;
       let y be set;
       assume
-A7:   y in X;
-      then consider B2 be with_bottom CLbasis of L1 such that
-A8:   y = card B2;
-      reconsider y1 = y as Cardinal by A8;
-      A c= y1 by A3,A7;
-      hence x in y by A6;
+A6:   y in X;
+      then ex B2 be with_bottom CLbasis of L1 st y = card B2;
+      then reconsider y1 = y as Cardinal;
+      A c= y1 by A3,A6;
+      hence x in y by A5;
     end;
-    hence thesis by A5,SETFAM_1:def 1;
+    [#]L1 is CLbasis of L1 by YELLOW15:26;
+    then card [#]L1 in X;
+    hence thesis by A4,SETFAM_1:def 1;
   end;
 end;
 
 canceled 2;
 
 theorem Th3:
-  for L1 be continuous sup-Semilattice
-  for B1 be with_bottom CLbasis of L1 holds CLweight L1 c= card B1
+  for L1 be continuous sup-Semilattice for B1 be with_bottom
+  CLbasis of L1 holds CLweight L1 c= card B1
 proof
   let L1 be continuous sup-Semilattice;
   let B1 be with_bottom CLbasis of L1;
-  card B1 in { card B2 where B2 is with_bottom CLbasis of L1 :
-  not contradiction };
+  card B1 in { card B2 where B2 is with_bottom CLbasis of L1 : not
+  contradiction };
   hence thesis by SETFAM_1:4;
 end;
 
 theorem Th4:
-  for L1 be continuous sup-Semilattice ex B1 be with_bottom CLbasis of L1 st
-  card B1 = CLweight L1
+  for L1 be continuous sup-Semilattice ex B1 be with_bottom CLbasis
+  of L1 st card B1 = CLweight L1
 proof
   let L1 be continuous sup-Semilattice;
-  defpred P[Ordinal] means
-  $1 in {card B1 where B1 is with_bottom CLbasis of L1 : not contradiction};
+  defpred P[Ordinal] means $1 in {card B1 where B1 is with_bottom CLbasis of
+L1: not contradiction};
+  set X = { card B2 where B2 is with_bottom CLbasis of L1 : not contradiction
+  };
 A1: ex A be Ordinal st P[A]
   proof
     take card [#]L1;
@@ -216,13 +216,7 @@ A2: P[A] and
 A3: for C be Ordinal st P[C] holds A c= C from ORDINAL1:sch 1(A1);
   consider B1 be with_bottom CLbasis of L1 such that
 A4: A = card B1 by A2;
-  take B1;
-  set X = { card B2 where B2 is with_bottom CLbasis of L1 :
-  not contradiction };
-  [#]L1 is CLbasis of L1 by YELLOW15:26;
-  then
-A5: card [#]L1 in X;
-  now
+A5: now
     let x be set;
     thus (for y be set holds y in X implies x in y) implies x in A by A2;
     assume
@@ -230,44 +224,44 @@ A6: x in A;
     let y be set;
     assume
 A7: y in X;
-    then consider B2 be with_bottom CLbasis of L1 such that
-A8: y = card B2;
-    reconsider y1 = y as Cardinal by A8;
+    then ex B2 be with_bottom CLbasis of L1 st y = card B2;
+    then reconsider y1 = y as Cardinal;
     A c= y1 by A3,A7;
     hence x in y by A6;
   end;
+  take B1;
+  [#]L1 is CLbasis of L1 by YELLOW15:26;
+  then card [#]L1 in X;
   hence thesis by A4,A5,SETFAM_1:def 1;
 end;
 
-theorem Th5:  :: Under 4.5.
-  for L1 be algebraic lower-bounded LATTICE holds
-  CLweight L1 = card the carrier of CompactSublatt L1
+theorem Th5: :: Under 4.5.
+  for L1 be algebraic lower-bounded LATTICE holds CLweight L1 =
+  card the carrier of CompactSublatt L1
 proof
   let L1 be algebraic lower-bounded LATTICE;
-  set CB = {card B1 where B1 is with_bottom CLbasis of L1 :
-  not contradiction};
-  the carrier of CompactSublatt L1 is with_bottom CLbasis of L1
-  by WAYBEL23:72;
+  set CB = {card B1 where B1 is with_bottom CLbasis of L1 : not contradiction};
+  the carrier of CompactSublatt L1 is with_bottom CLbasis of L1 by WAYBEL23:72;
   then
 A1: card the carrier of CompactSublatt L1 in CB;
   then
 A2: meet CB c= card the carrier of CompactSublatt L1 by SETFAM_1:4;
   now
     let X be set;
-    assume X in CB;
+    assume
+    X in CB;
     then consider B1 be with_bottom CLbasis of L1 such that
 A3: X = card B1;
     the carrier of CompactSublatt L1 c= B1 by WAYBEL23:72;
     hence card the carrier of CompactSublatt L1 c= X by A3,CARD_1:27;
   end;
   then card the carrier of CompactSublatt L1 c= meet CB by A1,SETFAM_1:6;
-  hence thesis by A2,
-XBOOLE_0:def 10;
+  hence thesis by A2,XBOOLE_0:def 10;
 end;
 
 theorem Th6:
-  for T be non empty TopSpace for L1 be continuous sup-Semilattice st
-  InclPoset the topology of T = L1 for B1 be with_bottom CLbasis of L1 holds
+  for T be non empty TopSpace for L1 be continuous sup-Semilattice
+  st InclPoset the topology of T = L1 for B1 be with_bottom CLbasis of L1 holds
   B1 is Basis of T
 proof
   let T be non empty TopSpace;
@@ -278,50 +272,50 @@ A1: InclPoset the topology of T = L1;
   B1 c= the carrier of L1;
   then B1 c= the topology of T by A1,YELLOW_1:1;
   then reconsider B2 = B1 as Subset-Family of T by XBOOLE_1:1;
-A2: B2 c= the topology of T
-  proof
-    let x be set;
-    assume x in B2;
-    then reconsider x1 = x as Element of L1;
-    x1 in the carrier of L1;
-    hence thesis by A1,YELLOW_1:1;
-  end;
-  for A be Subset of T st A is open for p be Point of T st p in A
-  ex a be Subset of T st a in B2 & p in a & a c= A
+A2: for A be Subset of T st A is open for p be Point of T st p in A ex a be
+  Subset of T st a in B2 & p in a & a c= A
   proof
     let A be Subset of T;
     assume
-A3: A is open;
+    A is open;
+    then A in the topology of T by PRE_TOPC:def 5;
+    then reconsider A1 = A as Element of L1 by A1,YELLOW_1:1;
     let p be Point of T;
     assume
-A4: p in A;
-    A in the topology of T by A3,PRE_TOPC:def 5;
-    then reconsider A1 = A as Element of L1 by A1,YELLOW_1:1;
+A3: p in A;
     A1 = sup (waybelow A1 /\ B1) by WAYBEL23:def 7
       .= union (waybelow A1 /\ B1) by A1,YELLOW_1:22;
     then consider a be set such that
-A5: p in a and
-A6: a in waybelow A1 /\ B1 by A4,TARSKI:def 4;
-    a in the carrier of L1 by A6;
+A4: p in a and
+A5: a in waybelow A1 /\ B1 by A3,TARSKI:def 4;
+    a in the carrier of L1 by A5;
     then a in the topology of T by A1,YELLOW_1:1;
     then reconsider a as Subset of T;
     take a;
-    thus a in B2 by A6,XBOOLE_0:def 4;
-    thus p in a by A5;
-    reconsider a1 = a as Element of L1 by A6;
-    a1 in waybelow A1 by A6,XBOOLE_0:def 4;
+    thus a in B2 by A5,XBOOLE_0:def 4;
+    thus p in a by A4;
+    reconsider a1 = a as Element of L1 by A5;
+    a1 in waybelow A1 by A5,XBOOLE_0:def 4;
     then a1 << A1 by WAYBEL_3:7;
     then a1 <= A1 by WAYBEL_3:1;
     hence thesis by A1,YELLOW_1:3;
+  end;
+  B2 c= the topology of T
+  proof
+    let x be set;
+    assume
+    x in B2;
+    then reconsider x1 = x as Element of L1;
+    x1 in the carrier of L1;
+    hence thesis by A1,YELLOW_1:1;
   end;
   hence thesis by A2,YELLOW_9:32;
 end;
 
 theorem Th7:
-  for T be non empty TopSpace for L1 be continuous lower-bounded LATTICE st
-  InclPoset the topology of T = L1 for B1 be Basis of T
-  for B2 be Subset of L1 st B1 = B2 holds
-  finsups B2 is with_bottom CLbasis of L1
+  for T be non empty TopSpace for L1 be continuous lower-bounded
+  LATTICE st InclPoset the topology of T = L1 for B1 be Basis of T for B2 be
+  Subset of L1 st B1 = B2 holds finsups B2 is with_bottom CLbasis of L1
 proof
   let T be non empty TopSpace;
   let L1 be continuous lower-bounded LATTICE;
@@ -331,88 +325,89 @@ A1: InclPoset the topology of T = L1;
   let B2 be Subset of L1;
   assume
 A2: B1 = B2;
+A3: for x,y be Element of L1 st not y <= x ex b be Element of L1 st b in
+  finsups B2 & not b <= x & b <= y
+  proof
+    let x,y be Element of L1;
+    y in the carrier of L1;
+    then
+A4: y in the topology of T by A1,YELLOW_1:1;
+    then reconsider y1 = y as Subset of T;
+    assume
+    not y <= x;
+    then not y c= x by A1,YELLOW_1:3;
+    then consider v be set such that
+A5: v in y and
+A6: not v in x by TARSKI:def 3;
+    v in y1 by A5;
+    then reconsider v as Point of T;
+    y1 is open by A4,PRE_TOPC:def 5;
+    then consider b be Subset of T such that
+A7: b in B1 and
+A8: v in b and
+A9: b c= y1 by A5,YELLOW_9:31;
+    reconsider b as Element of L1 by A2,A7;
+    for z be set st z in {b} holds z in B2 by A2,A7,TARSKI:def 1;
+    then
+A10: {b} is finite Subset of B2 by TARSKI:def 3;
+    take b;
+    ex_sup_of {b},L1 & b = "\/"({b},L1) by YELLOW_0:38,39;
+    then
+    b in { "\/"(Y,L1) where Y is finite Subset of B2: ex_sup_of Y,L1 } by A10;
+    hence b in finsups B2 by WAYBEL_0:def 27;
+    not b c= x by A6,A8;
+    hence not b <= x by A1,YELLOW_1:3;
+    thus thesis by A1,A9,YELLOW_1:3;
+  end;
   now
     let x,y be Element of L1;
     assume that
-A3: x in finsups B2 and
-A4: y in finsups B2;
-    x in { "\/"(Y,L1) where Y is finite Subset of B2: ex_sup_of Y,L1 }
-    by A3,WAYBEL_0:def 27;
-    then consider Y1 be finite Subset of B2 such that
-A5: x = "\/"(Y1,L1) and
-A6: ex_sup_of Y1,L1;
-    y in { "\/"(Y,L1) where Y is finite Subset of B2: ex_sup_of Y,L1 }
-    by A4,WAYBEL_0:def 27;
+A11: x in finsups B2 and
+A12: y in finsups B2;
+    y in { "\/"(Y,L1) where Y is finite Subset of B2: ex_sup_of Y,L1 } by A12,
+WAYBEL_0:def 27;
     then consider Y2 be finite Subset of B2 such that
-A7: y = "\/"(Y2,L1) and
-A8: ex_sup_of Y2,L1;
+A13: y = "\/"(Y2,L1) and
+A14: ex_sup_of Y2,L1;
+    x in { "\/"(Y,L1) where Y is finite Subset of B2: ex_sup_of Y,L1 } by A11,
+WAYBEL_0:def 27;
+    then consider Y1 be finite Subset of B2 such that
+A15: x = "\/"(Y1,L1) and
+A16: ex_sup_of Y1,L1;
     ex_sup_of (Y1 \/ Y2),L1 & "\/"(Y1 \/ Y2, L1) = "\/"(Y1, L1) "\/" "\/"
-    (Y2, L1) by A6,A8,YELLOW_2:3;
-    then x "\/" y in { "\/"
-    (Y,L1) where Y is finite Subset of B2: ex_sup_of Y,L1 } by A5,A7;
+    (Y2, L1) by A16,A14,YELLOW_2:3;
+    then
+    x "\/" y in { "\/" (Y,L1) where Y is finite Subset of B2: ex_sup_of Y
+    ,L1 } by A15,A13;
     then x "\/" y in finsups B2 by WAYBEL_0:def 27;
     hence sup {x,y} in finsups B2 by YELLOW_0:41;
   end;
   then
-A9: finsups B2 is join-closed by WAYBEL23:18;
+A17: finsups B2 is join-closed by WAYBEL23:18;
   {} c= B2 & ex_sup_of {},L1 by XBOOLE_1:2,YELLOW_0:42;
-  then "\/"({},L1) in
-  {"\/"(Y,L1) where Y is finite Subset of B2: ex_sup_of Y,L1};
   then
-A10: Bottom L1 in finsups B2 by WAYBEL_0:def 27;
-  for x,y be Element of L1 st not y <= x
-  ex b be Element of L1 st b in finsups B2 & not b <= x & b <= y
-  proof
-    let x,y be Element of L1;
-    x in the carrier of L1 & y in the carrier of L1;
-    then
-A11: x in the topology of T & y in the topology of T by A1,YELLOW_1:1;
-    then reconsider y1 = y as Subset of T;
-    assume not y <= x;
-    then not y c= x by A1,YELLOW_1:3;
-    then consider v be set such that
-A12: v in y and
-A13: not v in x by TARSKI:def 3;
-    v in y1 by A12;
-    then reconsider v as Point of T;
-    y1 is open by A11,PRE_TOPC:def 5;
-    then consider b be Subset of T such that
-A14: b in B1 and
-A15: v in b and
-A16: b c= y1 by A12,YELLOW_9:31;
-    reconsider b as Element of L1 by A2,A14;
-    take b;
-    for z be set st z in {b} holds z in B2 by A2,A14,TARSKI:def 1;
-    then
-A17: {b} is finite Subset of B2 by TARSKI:def 3;
-A18: ex_sup_of {b},L1 by YELLOW_0:38;
-    b = "\/"({b},L1) by YELLOW_0:39;
-    then b in { "\/"(Y,L1) where Y is finite Subset of B2: ex_sup_of Y,L1 }
-    by A17,A18;
-    hence b in finsups B2 by WAYBEL_0:def 27;
-    not b c= x by A13,A15;
-    hence not b <= x by A1,YELLOW_1:3;
-    thus thesis by A1,A16,YELLOW_1:3;
-  end;
-  hence thesis by A9,A10,WAYBEL23:49,def 8;
+  "\/"({},L1) in {"\/"(Y,L1) where Y is finite Subset of B2: ex_sup_of Y,
+  L1};
+  then Bottom L1 in finsups B2 by WAYBEL_0:def 27;
+  hence thesis by A17,A3,WAYBEL23:49,def 8;
 end;
 
-theorem Th8:  :: PROPOSITION 4.6 (i)
-  for T be T_0 non empty TopSpace
-  for L1 be continuous lower-bounded sup-Semilattice st
-  InclPoset the topology of T = L1 holds
-  T is infinite implies weight T = CLweight L1
+theorem Th8: :: PROPOSITION 4.6 (i)
+  for T be T_0 non empty TopSpace for L1 be continuous
+  lower-bounded sup-Semilattice st InclPoset the topology of T = L1 holds T is
+  infinite implies weight T = CLweight L1
 proof
   let T be T_0 non empty TopSpace;
   let L1 be continuous lower-bounded sup-Semilattice;
   assume that
 A1: InclPoset the topology of T = L1 and
 A2: T is infinite;
-A3: { card B1 where B1 is Basis of T : not contradiction } c=
-  { card B1 where B1 is with_bottom CLbasis of L1 : not contradiction }
+A3: { card B1 where B1 is Basis of T : not contradiction } c= { card B1
+  where B1 is with_bottom CLbasis of L1 : not contradiction }
   proof
     let b be set;
-    assume b in { card B1 where B1 is Basis of T : not contradiction };
+    assume
+    b in { card B1 where B1 is Basis of T : not contradiction };
     then consider B2 be Basis of T such that
 A4: b = card B2;
     B2 c= the topology of T by CANTOR_1:def 2;
@@ -423,468 +418,483 @@ A5: card B2 = card finsups B3 by YELLOW15:28;
     finsups B3 is with_bottom CLbasis of L1 by A1,Th7;
     hence thesis by A4,A5;
   end;
-  { card B1 where B1 is with_bottom CLbasis of L1 : not contradiction } c=
-  { card B1 where B1 is Basis of T : not contradiction }
+  { card B1 where B1 is with_bottom CLbasis of L1 : not contradiction }
+  c= { card B1 where B1 is Basis of T : not contradiction }
   proof
     let b be set;
-    assume b in { card B1 where B1 is with_bottom CLbasis of L1 :
-    not contradiction };
+    assume
+    b in { card B1 where B1 is with_bottom CLbasis of L1 : not
+    contradiction };
     then consider B2 be with_bottom CLbasis of L1 such that
 A6: b = card B2;
     B2 is Basis of T by A1,Th6;
     hence thesis by A6;
   end;
-  then { card B1 where B1 is Basis of T : not contradiction } =
-  { card B1 where B1 is with_bottom CLbasis of L1 : not contradiction }
-  by A3,XBOOLE_0:def 10;
+  then { card B1 where B1 is Basis of T : not contradiction } = { card B1
+  where B1 is with_bottom CLbasis of L1 : not contradiction } by A3,
+XBOOLE_0:def 10;
   hence thesis by WAYBEL23:def 5;
 end;
 
-theorem Th9:  :: PROPOSITION 4.6 (ii) (a)
-  for T be T_0 non empty TopSpace for L1 be continuous sup-Semilattice st
-  InclPoset the topology of T = L1 holds
-  card the carrier of T c= card the carrier of L1
+theorem Th9: :: PROPOSITION 4.6 (ii) (a)
+  for T be T_0 non empty TopSpace for L1 be continuous
+sup-Semilattice st InclPoset the topology of T = L1 holds card the carrier of T
+  c= card the carrier of L1
 proof
   let T be T_0 non empty TopSpace;
   let L1 be continuous sup-Semilattice;
+A1: card the carrier of T c= card the topology of T by YELLOW15:29;
   assume
-A1: InclPoset the topology of T = L1;
-  card the carrier of T c= card the topology of T by YELLOW15:29;
+  InclPoset the topology of T = L1;
   hence thesis by A1,YELLOW_1:1;
 end;
 
 theorem Th10: :: PROPOSITION 4.6 (ii) (b)
-  for T be T_0 non empty TopSpace st T is finite holds
-  weight T = card the carrier of T
+  for T be T_0 non empty TopSpace st T is finite holds weight T =
+  card the carrier of T
 proof
   let T be T_0 non empty TopSpace;
-  assume
-A1: T is finite;
-  deffunc F(set) =
-  meet { A where A is Element of the topology of T : $1 in A };
-A2: for x be set st x in the carrier of T holds
-  F(x) in the carrier of BoolePoset the carrier of T
+  deffunc F(set) = meet { A where A is Element of the topology of T : $1 in A
+  };
+A1: for x be set st x in the carrier of T holds F(x) in the carrier of
+  BoolePoset the carrier of T
   proof
     let x be set;
-A3: the carrier of T in the topology of T by PRE_TOPC:def 1;
-    assume x in the carrier of T;
-    then the carrier of T in
-    { A where A is Element of the topology of T : x in A } by A3;
-    then meet { A where A is Element of the topology of T : x in A } c=
-    the carrier of T by SETFAM_1:4;
-    then meet { A where A is Element of the topology of T : x in A } in
-    bool the carrier of T;
+    assume
+A2: x in the carrier of T;
+    the carrier of T in the topology of T by PRE_TOPC:def 1;
+    then
+    the carrier of T in { A where A is Element of the topology of T : x in
+    A } by A2;
+    then meet { A where A is Element of the topology of T : x in A } c= the
+    carrier of T by SETFAM_1:4;
+    then meet { A where A is Element of the topology of T : x in A } in bool
+    the carrier of T;
     hence thesis by WAYBEL_7:4;
   end;
-  consider f be Function of the carrier of T,
-  the carrier of BoolePoset the carrier of T such that
-A4: for x be set st x in the carrier of T holds f.x = F(x) from FUNCT_2:sch 2
-  (A2);
+  consider f be Function of the carrier of T, the carrier of BoolePoset the
+  carrier of T such that
+A3: for x be set st x in the carrier of T holds f.x = F(x) from FUNCT_2:
+  sch 2 (A1);
   reconsider rf = rng f as Subset-Family of T by WAYBEL_7:4;
-A5: rf c= the topology of T
-  proof
-    let z be set;
-    assume z in rf;
-    then consider y be set such that
-A6: y in dom f and
-A7: z = f.y by FUNCT_1:def 5;
-A8: z = meet { A where A is Element of the topology of T : y in A }
-    by A4,A6,A7;
-    { A where A is Element of the topology of T : y in A } c=
-    bool the carrier of T
-    proof
-      let z be set;
-      assume z in { A where A is Element of the topology of T : y in A };
-      then consider A be Element of the topology of T such that
-A9:   z = A and y in A;
-      thus thesis by A9;
-    end;
-    then reconsider sfA = { A where A is Element of the topology of T :
-    y in A } as Subset-Family of T;
-    reconsider sfA as Subset-Family of T;
-    now
-      let P be Subset of T;
-      assume P in sfA;
-      then consider A be Element of the topology of T such that
-A10:  P = A and y in A;
-      thus P is open by A10,PRE_TOPC:def 5;
-    end;
-    then
-A11: sfA is open by TOPS_2:def 1;
-    the carrier of T is finite by A1;
-    then reconsider tT = the topology of T as finite non empty set;
-    deffunc F(set) = $1;
-    defpred P[set] means y in $1;
-    {F(A) where A is Element of tT: P[A]} is finite from PRE_CIRC:sch 1;
-    then meet sfA is open by A11,TOPS_2:27;
-    hence thesis by A8,PRE_TOPC:def 5;
-  end;
-  for A be Subset of T st A is open for p be Point of T st p in A
-  ex a be Subset of T st a in rf & p in a & a c= A
+A4: for A be Subset of T st A is open for p be Point of T st p in A ex a be
+  Subset of T st a in rf & p in a & a c= A
   proof
     let A be Subset of T;
     assume
-A12: A is open;
+    A is open;
+    then
+A5: A in the topology of T by PRE_TOPC:def 5;
     let p be Point of T;
     assume
-A13: p in A;
-    A in the topology of T by A12,PRE_TOPC:def 5;
+    p in A;
     then
-A14: A in { C where C is Element of the topology of T : p in C } by A13;
-    meet { C where C is Element of the topology of T : p in C } c=
-    the carrier of T
+A6: A in { C where C is Element of the topology of T : p in C } by A5;
+    meet { C where C is Element of the topology of T : p in C } c= the
+    carrier of T
     proof
       let z be set;
-      assume z in meet { C where C is Element of the topology of T : p in C };
-      then z in A by A14,SETFAM_1:def 1;
+      assume
+      z in meet { C where C is Element of the topology of T : p in C
+      };
+      then z in A by A6,SETFAM_1:def 1;
       hence thesis;
     end;
-    then reconsider a = meet { C where C is Element of the topology of T :
-    p in C } as Subset of T;
+    then reconsider
+    a = meet { C where C is Element of the topology of T : p in C }
+    as Subset of T;
     take a;
     p in the carrier of T;
     then
-A15: p in dom f by FUNCT_2:def 1;
-    a = f.p by A4;
-    hence a in rf by A15,FUNCT_1:def 5;
+A7: p in dom f by FUNCT_2:def 1;
+    a = f.p by A3;
+    hence a in rf by A7,FUNCT_1:def 5;
     now
       let Y be set;
-      assume Y in { C where C is Element of the topology of T : p in C };
-      then consider C be Element of the topology of T such that
-A16:  Y = C and
-A17:  p in C;
-      thus p in Y by A16,A17;
+      assume
+      Y in { C where C is Element of the topology of T : p in C };
+      then ex C be Element of the topology of T st Y = C & p in C;
+      hence p in Y;
     end;
-    hence p in a by A14,SETFAM_1:def 1;
+    hence p in a by A6,SETFAM_1:def 1;
     thus a c= A
     proof
       let z be set;
-      assume z in a;
-      hence thesis by A14,SETFAM_1:def 1;
+      assume
+      z in a;
+      hence thesis by A6,SETFAM_1:def 1;
     end;
   end;
-  then rng f is Basis of T by A5,YELLOW_9:32;
-  then
-A18: card rng f in {card B1 where B1 is Basis of T : not contradiction };
-  then
-A19: meet { card B1 where B1 is Basis of T : not contradiction } c=
-  card rng f by SETFAM_1:4;
-  for X be set st X in { card B1 where B1 is Basis of T : not contradiction }
-  holds card rng f c= X
+  assume
+A8: T is finite;
+  rf c= the topology of T
   proof
-    let X be set;
-    assume X in { card B1 where B1 is Basis of T : not contradiction };
-    then consider B2 be Basis of T such that
-A20: X = card B2;
-    rng f c= B2
+    reconsider tT = the topology of T as finite non empty set by A8;
+    let z be set;
+    deffunc F(set) = $1;
+    assume
+    z in rf;
+    then consider y be set such that
+A9: y in dom f & z = f.y by FUNCT_1:def 5;
+    { A where A is Element of the topology of T : y in A } c= bool the
+    carrier of T
     proof
-      let y be set;
-      assume y in rng f;
-      then consider x be set such that
-A21:  x in dom f and
-A22:  y = f.x by FUNCT_1:def 5;
-      reconsider x1 = x as Element of T by A21;
-      y = meet{ A where A is Element of the topology of T : x1 in
-      A } by A4,A22;
-      hence thesis by A1,YELLOW15:32;
+      let z be set;
+      assume
+      z in { A where A is Element of the topology of T : y in A };
+      then ex A be Element of the topology of T st z = A & y in A;
+      hence thesis;
     end;
-    hence thesis by A20,CARD_1:27;
+    then reconsider
+    sfA = { A where A is Element of the topology of T : y in A } as
+    Subset-Family of T;
+    defpred P[set] means y in $1;
+    reconsider sfA as Subset-Family of T;
+    now
+      let P be Subset of T;
+      assume
+      P in sfA;
+      then ex A be Element of the topology of T st P = A & y in A;
+      hence P is open by PRE_TOPC:def 5;
+    end;
+    then
+A10: sfA is open by TOPS_2:def 1;
+    {F(A) where A is Element of tT: P[A]} is finite from PRE_CIRC:sch 1;
+    then
+A11: meet sfA is open by A10,TOPS_2:27;
+    z = meet { A where A is Element of the topology of T : y in A } by A3,A9;
+    hence thesis by A11,PRE_TOPC:def 5;
   end;
-  then card rng f c= meet { card B1 where B1 is Basis of T :
-  not contradiction } by A18,SETFAM_1:6;
+  then rng f is Basis of T by A4,YELLOW_9:32;
   then
-A23: card rng f = meet { card B1 where B1 is Basis of T :
-  not contradiction } by A19,XBOOLE_0:def 10
-    .= weight T by WAYBEL23:def 5;
-A24: dom f = the carrier of T by FUNCT_2:def 1;
+A12: card rng f in {card B1 where B1 is Basis of T : not contradiction };
+  then
+A13: meet { card B1 where B1 is Basis of T : not contradiction } c= card rng
+  f by SETFAM_1:4;
   now
     let x1,x2 be set;
     assume that
-A25: x1 in dom f and
-A26: x2 in dom f and
-A27: f.x1 = f.x2;
-    reconsider x3 = x1, x4 = x2 as Point of T by A25,A26;
-A28: f.x3 = meet { A where A is Element of the topology of T : x3 in A }
-    by A4;
-A29: f.x4 = meet { A where A is Element of the topology of T : x4 in A }
-    by A4;
-    assume x1 <> x2;
+A14: x1 in dom f & x2 in dom f and
+A15: f.x1 = f.x2;
+    reconsider x3 = x1, x4 = x2 as Point of T by A14;
+    assume
+    x1 <> x2;
     then consider V be Subset of T such that
-A30: V is open and
-A31: (x3 in V & not x4 in V) or (x4 in V & not x3 in V) by T_0TOPSP:def 7;
-    now per cases by A31;
+A16: V is open and
+A17: x3 in V & not x4 in V or x4 in V & not x3 in V by T_0TOPSP:def 7;
+A18: f.x3 = meet { A where A is Element of the topology of T : x3 in A } &
+    f.x4 = meet { A where A is Element of the topology of T : x4 in A } by A3;
+    now
+      per cases by A17;
       suppose
-A32:    x3 in V & not x4 in V;
-        V in the topology of T by A30,PRE_TOPC:def 5;
+A19:    x3 in V & not x4 in V;
+        V in the topology of T by A16,PRE_TOPC:def 5;
         then
-A33:    V in { A where A is Element of the topology of T : x3 in A } by A32;
-A34:    meet { A where A is Element of the topology of T : x3 in A } c= V
+A20:    V in { A where A is Element of the topology of T : x3 in A } by A19;
+A21:    meet { A where A is Element of the topology of T : x3 in A } c= V
         proof
           let z be set;
-          assume z in meet { A where A is Element of the topology of T :
-          x3 in A };
-          hence thesis by A33,SETFAM_1:def 1;
+          assume
+          z in meet { A where A is Element of the topology of T : x3
+          in A };
+          hence thesis by A20,SETFAM_1:def 1;
+        end;
+A22:    now
+          let Y be set;
+          assume
+          Y in { A where A is Element of the topology of T : x4 in A
+          };
+          then ex A be Element of the topology of T st Y = A & x4 in A;
+          hence x4 in Y;
         end;
         the carrier of T in the topology of T by PRE_TOPC:def 1;
         then
-A35:    the carrier of T in { A where A is
-        Element of the topology of T : x4 in A };
-        now
-          let Y be set;
-          assume Y in { A where A is Element of the topology of T : x4 in A };
-          then consider A be Element of the topology of T such that
-A36:      Y = A and
-A37:      x4 in A;
-          thus x4 in Y by A36,A37;
-        end;
+        the carrier of T in { A where A is Element of the topology of T :
+        x4 in A };
         then x4 in meet { A where A is Element of the topology of T : x3 in A
-        } by A27,A28,A29,A35,SETFAM_1:def 1;
-        hence contradiction by A32,A34;
+        } by A15,A18,A22,SETFAM_1:def 1;
+        hence contradiction by A19,A21;
       end;
       suppose
-A38:    x4 in V & not x3 in V;
-        V in the topology of T by A30,PRE_TOPC:def 5;
+A23:    x4 in V & not x3 in V;
+        V in the topology of T by A16,PRE_TOPC:def 5;
         then
-A39:    V in { A where A is Element of the topology of T : x4 in A } by A38;
-A40:    meet { A where A is Element of the topology of T : x4 in A } c= V
+A24:    V in { A where A is Element of the topology of T : x4 in A } by A23;
+A25:    meet { A where A is Element of the topology of T : x4 in A } c= V
         proof
           let z be set;
-          assume z in meet { A where A is Element of the topology of T :
-          x4 in A };
-          hence thesis by A39,SETFAM_1:def 1;
+          assume
+          z in meet { A where A is Element of the topology of T : x4
+          in A };
+          hence thesis by A24,SETFAM_1:def 1;
+        end;
+A26:    now
+          let Y be set;
+          assume
+          Y in { A where A is Element of the topology of T : x3 in A
+          };
+          then ex A be Element of the topology of T st Y = A & x3 in A;
+          hence x3 in Y;
         end;
         the carrier of T in the topology of T by PRE_TOPC:def 1;
         then
-A41:    the carrier of T in { A where A is
-        Element of the topology of T : x3 in A };
-        now
-          let Y be set;
-          assume Y in { A where A is Element of the topology of T : x3 in A };
-          then consider A be Element of the topology of T such that
-A42:      Y = A and
-A43:      x3 in A;
-          thus x3 in Y by A42,A43;
-        end;
+        the carrier of T in { A where A is Element of the topology of T :
+        x3 in A };
         then x3 in meet { A where A is Element of the topology of T : x4 in A
-        } by A27,A28,A29,A41,SETFAM_1:def 1;
-        hence contradiction by A38,A40;
+        } by A15,A18,A26,SETFAM_1:def 1;
+        hence contradiction by A23,A25;
       end;
     end;
     hence contradiction;
   end;
-  then f is one-to-one by FUNCT_1:def 8;
-  then the carrier of T,rng f are_equipotent by A24,WELLORD2:def 4;
-  hence thesis by A23,CARD_1:21;
+  then dom f = the carrier of T & f is one-to-one by FUNCT_1:def 8
+,FUNCT_2:def 1;
+  then
+A27: the carrier of T,rng f are_equipotent by WELLORD2:def 4;
+  for X be set st X in { card B1 where B1 is Basis of T : not
+  contradiction } holds card rng f c= X
+  proof
+    let X be set;
+    assume
+    X in { card B1 where B1 is Basis of T : not contradiction };
+    then consider B2 be Basis of T such that
+A28: X = card B2;
+    rng f c= B2
+    proof
+      let y be set;
+      assume
+      y in rng f;
+      then consider x be set such that
+A29:  x in dom f and
+A30:  y = f.x by FUNCT_1:def 5;
+      reconsider x1 = x as Element of T by A29;
+      y = meet{ A where A is Element of the topology of T : x1 in A } by A3,A30
+;
+      hence thesis by A8,YELLOW15:32;
+    end;
+    hence thesis by A28,CARD_1:27;
+  end;
+  then
+  card rng f c= meet { card B1 where B1 is Basis of T : not contradiction
+  } by A12,SETFAM_1:6;
+  then card rng f = meet { card B1 where B1 is Basis of T : not contradiction
+  } by A13,XBOOLE_0:def 10
+    .= weight T by WAYBEL23:def 5;
+  hence thesis by A27,CARD_1:21;
 end;
 
-theorem Th11:  :: PROPOSITION 4.6 (ii) (c)
+theorem Th11: :: PROPOSITION 4.6 (ii) (c)
   for T be TopStruct for L1 be continuous lower-bounded LATTICE st
-  InclPoset the topology of T = L1 & T is finite holds
-  CLweight L1 = card the carrier of L1
+  InclPoset the topology of T = L1 & T is finite holds CLweight L1 = card the
+  carrier of L1
 proof
   let T be TopStruct;
   let L1 be continuous lower-bounded LATTICE;
   assume
 A1: InclPoset the topology of T = L1;
-  assume
-A2: T is finite;
   [#]L1 is with_bottom CLbasis of L1 by YELLOW15:26;
-  then the carrier of L1 is with_bottom CLbasis of L1;
   then
-A3: card the carrier of L1 in
-  { card B1 where B1 is with_bottom CLbasis of L1 : not contradiction };
-A4: CLweight L1 c= card the carrier of L1
+A2: card the carrier of L1 in { card B1 where B1 is with_bottom CLbasis of
+L1: not contradiction };
+A3: CLweight L1 c= card the carrier of L1
   proof
     let z be set;
-    assume z in CLweight L1;
-    hence thesis by A3,SETFAM_1:def 1;
+    assume
+    z in CLweight L1;
+    hence thesis by A2,SETFAM_1:def 1;
   end;
+  assume
+A4: T is finite;
   now
     let Z be set;
-    assume Z in { card B1 where B1 is with_bottom CLbasis of L1 :
-    not contradiction };
+    assume
+    Z in { card B1 where B1 is with_bottom CLbasis of L1 : not
+    contradiction };
     then consider B1 be with_bottom CLbasis of L1 such that
 A5: Z = card B1;
-    the carrier of T is finite by A2;
-    then the topology of T is finite;
-    then the carrier of L1 is finite by A1,YELLOW_1:1;
-    then
-A6: L1 is finite;
     Bottom L1 in B1 by WAYBEL23:def 8;
     then the carrier of CompactSublatt L1 c= B1 by WAYBEL23:48;
-    then card the carrier of CompactSublatt L1 c= card B1 by CARD_1:27;
+    then
+A6: card the carrier of CompactSublatt L1 c= card B1 by CARD_1:27;
+    L1 is finite by A1,A4,YELLOW_1:1;
     hence card the carrier of L1 c= Z by A5,A6,YELLOW15:27;
   end;
-  then card the carrier of L1 c= meet { card B1 where B1 is
-  with_bottom CLbasis of L1 : not contradiction } by A3,SETFAM_1:6;
-  hence thesis by A4,XBOOLE_0:def 10;
+  then card the carrier of L1 c= meet { card B1 where B1 is with_bottom
+  CLbasis of L1 : not contradiction } by A2,SETFAM_1:6;
+  hence thesis by A3,XBOOLE_0:def 10;
 end;
 
 theorem Th12:
-  for L1 be continuous lower-bounded sup-Semilattice
-  for T1 be Scott TopAugmentation of L1
-  for T2 be Lawson correct TopAugmentation of L1 for B2 be Basis of T2 holds
-  { uparrow V where V is Subset of T2 : V in B2 } is Basis of T1
+  for L1 be continuous lower-bounded sup-Semilattice for T1 be
+Scott TopAugmentation of L1 for T2 be Lawson correct TopAugmentation of L1 for
+  B2 be Basis of T2 holds { uparrow V where V is Subset of T2 : V in B2 } is
+  Basis of T1
 proof
   let L1 be continuous lower-bounded sup-Semilattice;
   let T1 be Scott TopAugmentation of L1;
   let T2 be Lawson correct TopAugmentation of L1;
   let B2 be Basis of T2;
-A1: the RelStr of T1 = the RelStr of L1 &
-  the RelStr of T2 = the RelStr of L1 by YELLOW_9:def 4;
-  { uparrow V where V is Subset of T2 : V in B2 } c= bool the carrier of T1
+A1: the RelStr of T1 = the RelStr of L1 & the RelStr of T2 = the RelStr of
+  L1 by YELLOW_9:def 4;
+  { uparrow V where V is Subset of T2 : V in B2 } c= bool the carrier of
+  T1
   proof
     let z be set;
-    assume z in { uparrow V where V is Subset of T2 : V in B2 };
-    then consider V be Subset of T2 such that
-A2: z = uparrow V and V in B2;
-    thus thesis by A1,A2;
+    assume
+    z in { uparrow V where V is Subset of T2 : V in B2 };
+    then ex V be Subset of T2 st z = uparrow V & V in B2;
+    hence thesis by A1;
   end;
   then reconsider upV = { uparrow V where V is Subset of T2 : V in B2 } as
   Subset-Family of T1;
   reconsider upV as Subset-Family of T1;
-A3: upV c= the topology of T1
-  proof
-    let z be set;
-    assume z in upV;
-    then consider V be Subset of T2 such that
-A4: z = uparrow V and
-A5: V in B2;
-A6: T1 is Scott TopAugmentation of T2 by A1,YELLOW_9:def 4;
-    B2 c= the topology of T2 by CANTOR_1:def 2;
-    then V in the topology of T2 by A5;
-    then V in lambda T2 by WAYBEL30:9;
-    then uparrow V in sigma T1 by A6,WAYBEL30:14;
-    hence thesis by A4,WAYBEL14:23;
-  end;
-  the topology of T1 c= UniCl upV
+A2: the topology of T1 c= UniCl upV
   proof
     let z be set;
     assume
-A7: z in the topology of T1;
+A3: z in the topology of T1;
     then reconsider z2 = z as Subset of T1;
-A8: z in sigma T1 by A7,WAYBEL14:23;
-A9: sigma T2 c= lambda T2 by WAYBEL30:10;
-    z in sigma T2 by A1,A8,YELLOW_9:52;
-    then z in lambda T2 by A9;
-    then
-A10: z in the topology of T2 by WAYBEL30:9;
-    reconsider z1 = z as Subset of T2 by A1,A7;
-    { G where G is Subset of T2 : G in B2 & G c= z1 } c=
-    bool the carrier of T1
-    proof
-      let v be set;
-      assume v in { G where G is Subset of T2 : G in B2 & G c= z1 };
-      then consider G be Subset of T2 such that
-A11:  v = G and G in B2 and G c= z1;
-      thus thesis by A1,A11;
-    end;
-    then reconsider Y1 = { G where G is Subset of T2 :
-    G in B2 & G c= z1 } as Subset-Family of T1;
-    reconsider Y1 as Subset-Family of T1;
-    reconsider Y3 = Y1 as Subset-Family of T2 by A1;
-    { uparrow G where G is Subset of T2 : G in B2 & G c= z1 } c=
-    bool the carrier of T1
-    proof
-      let v be set;
-      assume v in { uparrow G where G is Subset of T2 : G in B2 & G c= z1 };
-      then consider G be Subset of T2 such that
-A12:  v = uparrow G and G in B2 and G c= z1;
-      thus thesis by A1,A12;
-    end;
-    then reconsider Y = { uparrow G where G is Subset of T2 :
-    G in B2 & G c= z1 } as Subset-Family of T1;
-    reconsider Y as Subset-Family of T1;
-A13: z1 is open by A10,PRE_TOPC:def 5;
-    z2 is open by A7,PRE_TOPC:def 5;
+    z2 is open by A3,PRE_TOPC:def 5;
     then z2 is upper by WAYBEL11:def 4;
     then
-A14: uparrow z2 c= z2 by WAYBEL_0:24;
-    defpred P[set] means $1 in B2 & $1 c= z1;
-A15: for S be Subset-Family of T2 st
-    S = { X where X is Subset of T2 : P[X]} holds
-    uparrow union S = union { uparrow X where X is Subset of T2: P[X]}
-    from UparrowUnion;
-    z2 c= uparrow z2 by WAYBEL_0:16;
+A4: uparrow z2 c= z2 by WAYBEL_0:24;
+    reconsider z1 = z as Subset of T2 by A1,A3;
+    z in sigma T1 by A3,WAYBEL14:23;
+    then sigma T2 c= lambda T2 & z in sigma T2 by A1,WAYBEL30:10,YELLOW_9:52;
+    then z in lambda T2;
+    then z in the topology of T2 by WAYBEL30:9;
     then
-A16: z1 = uparrow z2 by A14,XBOOLE_0:def 10
-      .= uparrow union Y1 by A13,YELLOW_8:18
-      .= uparrow union Y3 by A1,WAYBEL_0:13
-      .= union Y by A15;
-    Y c= upV
+A5: z1 is open by PRE_TOPC:def 5;
+    { uparrow G where G is Subset of T2 : G in B2 & G c= z1 } c= bool the
+    carrier of T1
     proof
       let v be set;
-      assume v in Y;
-      then consider G be Subset of T2 such that
-A17:  v = uparrow G and
-A18:  G in B2 and G c= z1;
-      thus thesis by A17,A18;
+      assume
+      v in { uparrow G where G is Subset of T2 : G in B2 & G c= z1 };
+      then ex G be Subset of T2 st v = uparrow G & G in B2 & G c= z1;
+      hence thesis by A1;
     end;
-    hence thesis by A16,CANTOR_1:def 1;
+    then reconsider
+    Y = { uparrow G where G is Subset of T2 : G in B2 & G c= z1 }
+    as Subset-Family of T1;
+    { G where G is Subset of T2 : G in B2 & G c= z1 } c= bool the carrier
+    of T1
+    proof
+      let v be set;
+      assume
+      v in { G where G is Subset of T2 : G in B2 & G c= z1 };
+      then ex G be Subset of T2 st v = G & G in B2 & G c= z1;
+      hence thesis by A1;
+    end;
+    then reconsider Y1 = { G where G is Subset of T2 : G in B2 & G c= z1 } as
+    Subset-Family of T1;
+    defpred P[set] means $1 in B2 & $1 c= z1;
+    reconsider Y as Subset-Family of T1;
+    reconsider Y1 as Subset-Family of T1;
+    reconsider Y3 = Y1 as Subset-Family of T2 by A1;
+A6: Y c= upV
+    proof
+      let v be set;
+      assume
+      v in Y;
+      then ex G be Subset of T2 st v = uparrow G & G in B2 & G c= z1;
+      hence thesis;
+    end;
+A7: for S be Subset-Family of T2 st S = { X where X is Subset of T2 : P[X
+    ]} holds uparrow union S = union { uparrow X where X is Subset of T2: P[X]}
+    from UparrowUnion;
+    z2 c= uparrow z2 by WAYBEL_0:16;
+    then z1 = uparrow z2 by A4,XBOOLE_0:def 10
+      .= uparrow union Y1 by A5,YELLOW_8:18
+      .= uparrow union Y3 by A1,WAYBEL_0:13
+      .= union Y by A7;
+    hence thesis by A6,CANTOR_1:def 1;
   end;
-  hence thesis
-  by A3,CANTOR_1:def 2;
+  upV c= the topology of T1
+  proof
+    let z be set;
+    assume
+    z in upV;
+    then consider V be Subset of T2 such that
+A8: z = uparrow V and
+A9: V in B2;
+A10: T1 is Scott TopAugmentation of T2 by A1,YELLOW_9:def 4;
+    B2 c= the topology of T2 by CANTOR_1:def 2;
+    then V in the topology of T2 by A9;
+    then V in lambda T2 by WAYBEL30:9;
+    then uparrow V in sigma T1 by A10,WAYBEL30:14;
+    hence thesis by A8,WAYBEL14:23;
+  end;
+  hence thesis by A2,CANTOR_1:def 2;
 end;
 
-Lm1: for L1 be continuous lower-bounded sup-Semilattice
-for T1 be Scott TopAugmentation of L1
-for T2 be Lawson correct TopAugmentation of L1 holds weight T1 c= weight T2
+Lm1: for L1 be continuous lower-bounded sup-Semilattice for T1 be Scott
+TopAugmentation of L1 for T2 be Lawson correct TopAugmentation of L1 holds
+weight T1 c= weight T2
+
 proof
   let L1 be continuous lower-bounded sup-Semilattice;
   let T1 be Scott TopAugmentation of L1;
   let T2 be Lawson correct TopAugmentation of L1;
   consider B1 be Basis of T2 such that
 A1: card B1 = weight T2 by WAYBEL23:75;
-  { uparrow V where V is Subset of T2 : V in B1 } is Basis of T1 by Th12;
-  then card { uparrow V where V is Subset of T2 : V in B1 } in
-  {card B2 where B2 is Basis of T1 : not contradiction};
-  then
-A2: meet {card B2 where B2 is Basis of T1 : not contradiction} c=
-  card { uparrow V where V is Subset of T2 : V in B1 } by SETFAM_1:4;
   defpred P[set,set] means ex y be Subset of T2 st y = $1 & $2 = uparrow y;
-A3: for x be set st x in B1 ex z be set st P[x,z]
+A2: for x be set st x in B1 ex z be set st P[x,z]
   proof
     let x be set;
-    assume x in B1;
+    assume
+    x in B1;
     then reconsider y = x as Subset of T2;
     take uparrow y;
     take y;
     thus thesis;
   end;
   consider f be Function such that
-A4: dom f = B1 and
-A5: for x be set st x in B1 holds P[x,f.x] from CLASSES1:sch 1(A3);
+A3: dom f = B1 and
+A4: for x be set st x in B1 holds P[x,f.x] from CLASSES1:sch 1(A2);
   { uparrow V where V is Subset of T2 : V in B1 } c= rng f
   proof
     let z be set;
-    assume z in { uparrow V where V is Subset of T2 : V in B1 };
+    assume
+    z in { uparrow V where V is Subset of T2 : V in B1 };
     then consider V be Subset of T2 such that
-A6: z = uparrow V and
-A7: V in B1;
-    consider V1 be Subset of T2 such that
-A8: V1 = V and
-A9: f.V = uparrow V1 by A5,A7;
-    thus thesis by A4,A6,A7,A8,A9,FUNCT_1:def 5;
+A5: z = uparrow V and
+A6: V in B1;
+    ex V1 be Subset of T2 st V1 = V & f.V = uparrow V1 by A4,A6;
+    hence thesis by A3,A5,A6,FUNCT_1:def 5;
   end;
-  then card { uparrow V where V is Subset of T2 : V in B1 } c= card B1
-  by A4,CARD_1:28;
-  then meet {card B2 where B2 is Basis of T1 : not contradiction} c=
-  card B1 by A2,XBOOLE_1:1;
+
+  then
+A7: card { uparrow V where V is Subset of T2 : V in B1 } c= card B1 by A3,
+CARD_1:28;
+
+  { uparrow V where V is Subset of T2 : V in B1 } is Basis of T1 by Th12;
+
+  then card { uparrow V where V is Subset of T2 : V in B1 } in {card B2 where
+  B2 is Basis of T1 : not contradiction};
+
+  then meet {card B2 where B2 is Basis of T1 : not contradiction} c= card {
+  uparrow V where V is Subset of T2 : V in B1 } by SETFAM_1:4;
+
+  then meet {card B2 where B2 is Basis of T1 : not contradiction} c= card B1
+  by A7,XBOOLE_1:1;
+
   hence thesis by A1,WAYBEL23:def 5;
 end;
 
 canceled;
 
 theorem Th14:
-  for L1 be up-complete (non empty Poset) st L1 is finite
-  for x be Element of L1 holds x in compactbelow x
+  for L1 be up-complete (non empty Poset) st L1 is finite for x be
+  Element of L1 holds x in compactbelow x
 proof
   let L1 be up-complete (non empty Poset);
   assume
 A1: L1 is finite;
   let x be Element of L1;
-  x is compact & x <= x by A1,WAYBEL_3:17;
-  hence thesis;
+A2: x <= x;
+  x is compact by A1,WAYBEL_3:17;
+  hence thesis by A2;
 end;
 
 theorem Th15:
@@ -896,23 +906,24 @@ proof
   thus L1 is satisfying_axiom_K
   proof
     let x be Element of L1;
-    for y be Element of L1 st y in compactbelow x holds y <= x by WAYBEL_8:4;
-    then
-A1: x is_>=_than compactbelow x by LATTICE3:def 9;
-    now
+A1: now
       let y be Element of L1;
       assume
 A2:   y is_>=_than compactbelow x;
       x in compactbelow x by Th14;
       hence x <= y by A2,LATTICE3:def 9;
     end;
+    for y be Element of L1 st y in compactbelow x holds y <= x by WAYBEL_8:4;
+    then x is_>=_than compactbelow x by LATTICE3:def 9;
     hence thesis by A1,YELLOW_0:30;
   end;
   thus CompactSublatt L1 is meet-inheriting
   proof
     let x,y be Element of L1;
-    assume that x in the carrier of CompactSublatt L1 and
-    y in the carrier of CompactSublatt L1 and ex_inf_of {x,y},L1;
+    assume that
+    x in the carrier of CompactSublatt L1 and
+    y in the carrier of CompactSublatt L1 and
+    ex_inf_of {x,y},L1;
     x "/\" y is compact by WAYBEL_3:17;
     then x "/\" y in the carrier of CompactSublatt L1 by WAYBEL_8:def 1;
     hence thesis by YELLOW_0:40;
@@ -942,6 +953,7 @@ registration
       hence thesis by ORDERS_2:def 9;
     end;
     then reconsider T' = T as trivial non empty reflexive RelStr;
+    reconsider T'' = T' as LATTICE;
     T' is transitive;
     hence T is transitive;
     T' is antisymmetric;
@@ -950,7 +962,6 @@ registration
     hence T is with_suprema;
     T' is with_infima;
     hence T is with_infima;
-    reconsider T'' = T' as LATTICE;
     T'' is lower-bounded;
     hence T is lower-bounded;
     thus T is non empty;
@@ -960,20 +971,22 @@ registration
 end;
 
 theorem Th16:
-  for L1 be finite LATTICE for B1 be with_bottom CLbasis of L1 holds
-  card B1 = CLweight L1 iff B1 = the carrier of CompactSublatt L1
+  for L1 be finite LATTICE for B1 be with_bottom CLbasis of L1
+  holds card B1 = CLweight L1 iff B1 = the carrier of CompactSublatt L1
 proof
   let L1 be finite LATTICE;
   let B1 be with_bottom CLbasis of L1;
   thus card B1 = CLweight L1 implies B1 = the carrier of CompactSublatt L1
   proof
-    assume card B1 = CLweight L1;
+    assume
+    card B1 = CLweight L1;
     then
 A1: card the carrier of CompactSublatt L1 = card B1 by Th5;
-A2: the carrier of CompactSublatt L1 c= B1 by WAYBEL23:72;
-    thus thesis by A1,A2,TRIANG_1:3;
+    the carrier of CompactSublatt L1 c= B1 by WAYBEL23:72;
+    hence thesis by A1,PRE_POLY:8;
   end;
-  assume B1 = the carrier of CompactSublatt L1;
+  assume
+  B1 = the carrier of CompactSublatt L1;
   hence thesis by Th5;
 end;
 
@@ -982,7 +995,6 @@ definition
   let A be Subset of L1;
   let a be Element of L1;
   func Way_Up(a,A) -> Subset of L1 equals
-
   wayabove a \ uparrow A;
   coherence;
 end;
@@ -992,8 +1004,8 @@ theorem
   Way_Up(a,{}(L1)) = wayabove a;
 
 theorem
-  for L1 be non empty Poset for A be Subset of L1
-  for a be Element of L1 st a in uparrow A holds Way_Up(a,A) = {}
+  for L1 be non empty Poset for A be Subset of L1 for a be Element of L1
+  st a in uparrow A holds Way_Up(a,A) = {}
 proof
   let L1 be non empty Poset;
   let A be Subset of L1;
@@ -1014,67 +1026,64 @@ A2: z in wayabove a;
 end;
 
 theorem Th19:
-  for L1 be non empty finite reflexive transitive RelStr holds
-  Ids L1 is finite
+  for L1 be non empty finite reflexive transitive RelStr holds Ids
+  L1 is finite
 proof
+  deffunc F(set) = $1;
   let L1 be non empty finite reflexive transitive RelStr;
   reconsider Y = bool the carrier of L1 as finite non empty set;
-A1: { X where X is Ideal of L1 : not contradiction } c=
-  { X where X is Element of Y : X is Ideal of L1 }
+A1: { X where X is Ideal of L1 : not contradiction } c= { X where X is
+  Element of Y : X is Ideal of L1 }
   proof
     let z be set;
-    assume z in { X where X is Ideal of L1 : not contradiction };
-    then consider X1 be Ideal of L1 such that
-A2: z = X1;
-    thus thesis by A2;
+    assume
+    z in { X where X is Ideal of L1 : not contradiction };
+    then ex X1 be Ideal of L1 st z = X1;
+    hence thesis;
   end;
-A3: { X where X is Element of Y : X is Ideal of L1 } c=
-  { X where X is Ideal of L1 : not contradiction }
-  proof
-    let z be set;
-    assume z in { X where X is Element of Y : X is Ideal of L1 };
-    then consider X1 be Element of Y such that
-A4: z = X1 and
-A5: X1 is Ideal of L1;
-    thus thesis by A4,A5;
-  end;
-A6: Ids L1 =
-  { X where X is Ideal of L1 : not contradiction } by WAYBEL_0:def 23
-    .= { X where X is Element of Y : X is Ideal of L1 } by A1,A3,
-XBOOLE_0:def 10;
   defpred P[set] means $1 is Ideal of L1;
-  deffunc F(set) = $1;
-  {F(X) where X is Element of Y : P[X]} is finite from PRE_CIRC:sch 1;
-  hence thesis by A6;
+A2: { X where X is Element of Y : X is Ideal of L1 } c= { X where X is Ideal
+  of L1 : not contradiction }
+  proof
+    let z be set;
+    assume
+    z in { X where X is Element of Y : X is Ideal of L1 };
+    then ex X1 be Element of Y st z = X1 & X1 is Ideal of L1;
+    hence thesis;
+  end;
+A3: {F(X) where X is Element of Y : P[X]} is finite from PRE_CIRC:sch 1;
+  Ids L1 = { X where X is Ideal of L1 : not contradiction } by WAYBEL_0:def 23
+    .= { X where X is Element of Y : X is Ideal of L1 } by A1,A2,
+XBOOLE_0:def 10;
+  hence thesis by A3;
 end;
 
 theorem Th20:
-  for L1 be continuous lower-bounded sup-Semilattice st L1 is infinite
-  for B1 be with_bottom CLbasis of L1 holds B1 is infinite
+  for L1 be continuous lower-bounded sup-Semilattice st L1 is
+  infinite for B1 be with_bottom CLbasis of L1 holds B1 is infinite
 proof
   let L1 be continuous lower-bounded sup-Semilattice;
-  assume L1 is infinite;
-  then
-A1: the carrier of L1 is infinite;
+  assume
+A1: L1 is infinite;
   let B1 be with_bottom CLbasis of L1;
-A2: dom supMap subrelstr B1 = Ids subrelstr B1 by WAYBEL23:51;
-  rng supMap subrelstr B1 = the carrier of L1 by WAYBEL23:65;
-  then card the carrier of L1 c= card Ids subrelstr B1 by A2,CARD_1:28;
+  dom supMap subrelstr B1 = Ids subrelstr B1 & rng supMap subrelstr B1 =
+  the carrier of L1 by WAYBEL23:51,65;
+  then card the carrier of L1 c= card Ids subrelstr B1 by CARD_1:28;
   then Ids subrelstr B1 is infinite by A1;
   then subrelstr B1 is infinite by Th19;
-  then the carrier of subrelstr B1 is infinite;
   hence thesis by YELLOW_0:def 15;
 end;
 
 canceled 2;
 
 theorem
-  for L1 be complete (non empty Poset) for x be Element of L1 holds
-  x is compact implies x = inf wayabove x
+  for L1 be complete (non empty Poset) for x be Element of L1 holds x is
+  compact implies x = inf wayabove x
 proof
   let L1 be complete (non empty Poset);
   let x be Element of L1;
-  assume x is compact;
+  assume
+  x is compact;
   then x << x by WAYBEL_3:def 2;
   then x in wayabove x by WAYBEL_3:8;
   then
@@ -1084,10 +1093,9 @@ A1: inf wayabove x <= x by YELLOW_2:24;
 end;
 
 theorem Th24:
-  for L1 be continuous lower-bounded sup-Semilattice st L1 is infinite
-  for B1 be with_bottom CLbasis of L1 holds
-  card { Way_Up(a,A) where a is Element of L1, A is finite Subset of L1 :
-  a in B1 & A c= B1 } c= card B1
+  for L1 be continuous lower-bounded sup-Semilattice st L1 is
+  infinite for B1 be with_bottom CLbasis of L1 holds card { Way_Up(a,A) where a
+  is Element of L1, A is finite Subset of L1 : a in B1 & A c= B1 } c= card B1
 proof
   let L1 be continuous lower-bounded sup-Semilattice;
   assume
@@ -1097,333 +1105,344 @@ A1: L1 is infinite;
 A2: a1 in B1 by XBOOLE_0:def 1;
   reconsider a1 as Element of L1 by A2;
   {}(L1) c= B1 by XBOOLE_1:2;
-  then Way_Up(a1,{}(L1)) in { Way_Up(a,A) where a is Element of L1,
-  A is finite Subset of L1 : a in B1 & A c= B1 } by A2;
-  then reconsider WU = { Way_Up(a,A) where a is Element of L1,
-  A is finite Subset of L1 : a in B1 & A c= B1 } as non empty set;
-  B1 is infinite by A1,Th20;
   then
-A3: card B1 = card (B1*) by CARD_4:87;
-  defpred P[Element of B1*,set] means
-  ex y be Element of L1, z be Subset of L1 st
-  y = $1/.1 & z = rng Del($1,1) & $2 = Way_Up(y,z);
-A4: for x be Element of B1* ex u be Element of WU st P[x,u]
+  Way_Up(a1,{}(L1)) in { Way_Up(a,A) where a is Element of L1, A is finite
+  Subset of L1 : a in B1 & A c= B1 } by A2;
+  then reconsider
+  WU = { Way_Up(a,A) where a is Element of L1, A is finite Subset
+  of L1 : a in B1 & A c= B1 } as non empty set;
+  defpred P[Element of B1*,set] means ex y be Element of L1, z be Subset of L1
+  st y = $1/.1 & z = rng Del($1,1) & $2 = Way_Up(y,z);
+A3: for x be Element of B1* ex u be Element of WU st P[x,u]
   proof
     let x be Element of B1*;
     reconsider y = x/.1 as Element of L1 by TARSKI:def 3;
     rng Del(x,1) c= rng x by FINSEQ_3:115;
     then
-A5: rng Del(x,1) c= B1 by XBOOLE_1:1;
+A4: rng Del(x,1) c= B1 by XBOOLE_1:1;
     then reconsider z = rng Del(x,1) as Subset of L1 by XBOOLE_1:1;
-    Way_Up(y,z) in { Way_Up(a,A) where a is Element of L1,
-    A is finite Subset of L1 : a in B1 & A c= B1 } by A5;
+    Way_Up(y,z) in { Way_Up(a,A) where a is Element of L1, A is finite
+    Subset of L1 : a in B1 & A c= B1 } by A4;
     then reconsider u = Way_Up(y,z) as Element of WU;
     take u,y,z;
     thus thesis;
   end;
   consider f be Function of B1*,WU such that
-A6: for x be Element of B1* holds P[x,f.x] from FUNCT_2:sch 3(A4);
-A7: dom f = B1* by FUNCT_2:def 1;
-  WU c= rng f
+A5: for x be Element of B1* holds P[x,f.x] from FUNCT_2:sch 3(A3);
+A6: dom f = B1* by FUNCT_2:def 1;
+A7: WU c= rng f
   proof
     let z be set;
-    assume z in WU;
+    assume
+    z in WU;
     then consider a be Element of L1, A be finite Subset of L1 such that
 A8: z = Way_Up(a,A) and
 A9: a in B1 and
 A10: A c= B1;
+    reconsider a1 = a as Element of B1 by A9;
     consider p be FinSequence such that
 A11: A = rng p by FINSEQ_1:73;
     reconsider p as FinSequence of B1 by A10,A11,FINSEQ_1:def 4;
-    reconsider a1 = a as Element of B1 by A9;
     set q = <*a1*>^p;
 A12: q in B1* by FINSEQ_1:def 11;
     then consider y be Element of L1, v be Subset of L1 such that
 A13: y = q/.1 and
 A14: v = rng Del(q,1) and
-A15: f.q = Way_Up(y,v) by A6;
+A15: f.q = Way_Up(y,v) by A5;
 A16: a = y by A13,FINSEQ_5:16;
     A = v by A11,A14,WSIERP_1:48;
-    hence thesis by A7,A8,A12,A15,A16,FUNCT_1:def 5;
+    hence thesis by A6,A8,A12,A15,A16,FUNCT_1:def 5;
   end;
-  hence thesis by A3,A7,CARD_1:28;
+  B1 is infinite by A1,Th20;
+  then card B1 = card (B1*) by CARD_4:87;
+  hence thesis by A6,A7,CARD_1:28;
 end;
 
 theorem Th25:
-  for T be Lawson (complete TopLattice) for X be finite Subset of T holds
-  (uparrow X)` is open & (downarrow X)` is open
+  for T be Lawson (complete TopLattice) for X be finite Subset of
+  T holds (uparrow X)` is open & (downarrow X)` is open
 proof
   let T be Lawson (complete TopLattice);
   let X be finite Subset of T;
+  deffunc F(Element of T) = uparrow $1;
   { uparrow x where x is Element of T : x in X } c= bool the carrier of T
   proof
     let z be set;
-    assume z in { uparrow x where x is Element of T : x in X };
-    then consider x be Element of T such that
-A1: z = uparrow x and x in X;
-    thus thesis by A1;
+    assume
+    z in { uparrow x where x is Element of T : x in X };
+    then ex x be Element of T st z = uparrow x & x in X;
+    hence thesis;
   end;
-  then reconsider upx = { uparrow x where x is Element of T : x in X }
-  as Subset-Family of T;
-  reconsider upx as Subset-Family of T;
-  { downarrow x where x is Element of T : x in X } c= bool the carrier of T
+  then reconsider upx = { uparrow x where x is Element of T : x in X } as
+  Subset-Family of T;
+  { downarrow x where x is Element of T : x in X } c= bool the carrier of
+  T
   proof
     let z be set;
-    assume z in { downarrow x where x is Element of T : x in X };
-    then consider x be Element of T such that
-A2: z = downarrow x and x in X;
-    thus thesis by A2;
+    assume
+    z in { downarrow x where x is Element of T : x in X };
+    then ex x be Element of T st z = downarrow x & x in X;
+    hence thesis;
   end;
-  then reconsider dox = { downarrow x where x is Element of T : x in X }
-  as Subset-Family of T;
+  then reconsider dox = { downarrow x where x is Element of T : x in X } as
+  Subset-Family of T;
   reconsider dox as Subset-Family of T;
+  reconsider upx as Subset-Family of T;
+A1: uparrow X = union upx by YELLOW_9:4;
   now
     let P be Subset of T;
-    assume P in upx;
-    then consider x be Element of T such that
-A3: P = uparrow x and x in X;
-    thus P is closed by A3,WAYBEL19:38;
+    assume
+    P in upx;
+    then ex x be Element of T st P = uparrow x & x in X;
+    hence P is closed by WAYBEL19:38;
   end;
   then
-A4: upx is closed by TOPS_2:def 2;
-A5: X is finite;
-  deffunc F(Element of T) = uparrow $1;
-A6: {F(x) where x is Element of T : x in X } is finite from FRAENKEL:sch 21
-  (A5);
-  uparrow X = union upx by YELLOW_9:4;
-  then uparrow X is closed by A4,A6,TOPS_2:28;
+A2: upx is closed by TOPS_2:def 2;
+A3: X is finite;
+  {F(x) where x is Element of T : x in X } is finite from FRAENKEL:sch 21
+  (A3);
+  then uparrow X is closed by A2,A1,TOPS_2:28;
   hence (uparrow X)` is open by TOPS_1:29;
+  deffunc F(Element of T) = downarrow $1;
+A4: downarrow X = union dox by YELLOW_9:4;
   now
     let P be Subset of T;
-    assume P in dox;
-    then consider x be Element of T such that
-A7: P = downarrow x and x in X;
-    thus P is closed by A7,WAYBEL19:38;
+    assume
+    P in dox;
+    then ex x be Element of T st P = downarrow x & x in X;
+    hence P is closed by WAYBEL19:38;
   end;
   then
-A8: dox is closed by TOPS_2:def 2;
-  deffunc F(Element of T) = downarrow $1;
-A9: {F(x) where x is Element of T : x in X } is finite from FRAENKEL:sch 21
-  (A5);
-  downarrow X = union dox by YELLOW_9:4;
-  then downarrow X is closed by A8,A9,TOPS_2:28;
+A5: dox is closed by TOPS_2:def 2;
+  {F(x) where x is Element of T : x in X } is finite from FRAENKEL:sch 21
+  (A3);
+  then downarrow X is closed by A5,A4,TOPS_2:28;
   hence thesis by TOPS_1:29;
 end;
 
 theorem Th26:
-  for L1 be continuous lower-bounded sup-Semilattice
-  for T be Lawson correct TopAugmentation of L1 holds
-  for B1 be with_bottom CLbasis of L1 holds
-  { Way_Up(a,A) where a is Element of L1, A is finite Subset of L1 :
-  a in B1 & A c= B1 } is Basis of T
+  for L1 be continuous lower-bounded sup-Semilattice for T be
+Lawson correct TopAugmentation of L1 holds for B1 be with_bottom CLbasis of L1
+  holds { Way_Up(a,A) where a is Element of L1, A is finite Subset of L1 : a in
+  B1 & A c= B1 } is Basis of T
 proof
   let L1 be continuous lower-bounded sup-Semilattice;
   let T be Lawson correct TopAugmentation of L1;
   let B1 be with_bottom CLbasis of L1;
 A1: the RelStr of L1 = the RelStr of T by YELLOW_9:def 4;
-  { Way_Up(a,A) where a is Element of L1,
-  A is finite Subset of L1 : a in B1 & A c= B1 } c= bool the carrier of T
+  { Way_Up(a,A) where a is Element of L1, A is finite Subset of L1 : a in
+  B1 & A c= B1 } c= bool the carrier of T
   proof
     let z be set;
-    assume z in { Way_Up(a,A) where a is Element of L1,
-    A is finite Subset of L1 : a in B1 & A c= B1 };
-    then consider a be Element of L1, A be finite Subset of L1 such that
-A2: z = Way_Up(a,A) and a in B1 and A c= B1;
-    thus thesis by A1,A2;
-  end;
-  then reconsider WU = { Way_Up(a,A) where a is Element of L1,
-  A is finite Subset of L1 : a in B1 & A c= B1 } as Subset-Family of T;
-  reconsider WU as Subset-Family of T;
-A3: WU c= the topology of T
-  proof
-    let z be set;
-    assume z in WU;
-    then consider a be Element of L1, A be finite Subset of L1 such that
-A4: z = Way_Up(a,A) and a in B1 and A c= B1;
-    reconsider a1 = a as Element of T by A1;
-    reconsider A1 = A as finite Subset of T by A1;
-A5: wayabove a1 is open by WAYBEL19:40;
-    (uparrow A1)` is open by Th25;
+    assume
+    z in { Way_Up(a,A) where a is Element of L1, A is finite Subset of
+L1: a in B1 & A c= B1 };
     then
-A6: wayabove a1 /\ (uparrow A1)` is open by A5,TOPS_1:38;
-    z = wayabove a1 \ uparrow A by A1,A4,YELLOW12:13
-      .= wayabove a1 \ uparrow A1 by A1,WAYBEL_0:13
-      .= wayabove a1 /\ (uparrow A1)` by SUBSET_1:32;
-    hence thesis by A6,PRE_TOPC:def 5;
+    ex a be Element of L1, A be finite Subset of L1 st z = Way_Up(a,A) & a
+    in B1 & A c= B1;
+    hence thesis by A1;
   end;
-  now
-    let A be Subset of T;
-    assume
-A7: A is open;
-    let pT be Point of T;
-    assume
-A8: pT in A;
-    consider S be Scott TopAugmentation of T;
-A9: the RelStr of S = the RelStr of T by YELLOW_9:def 4;
+  then reconsider
+  WU = { Way_Up(a,A) where a is Element of L1, A is finite Subset
+  of L1 : a in B1 & A c= B1 } as Subset-Family of T;
+  reconsider WU as Subset-Family of T;
+A2: now
     reconsider BL = { W \ uparrow F where W,F is Subset of T : W in sigma T &
     F is finite} as Basis of T by WAYBEL19:32;
-    consider a be Subset of T such that
-A10: a in BL and
-A11: pT in a and
-A12: a c= A by A7,A8,YELLOW_9:31;
+    consider S be Scott TopAugmentation of T;
+    let A be Subset of T;
+    assume
+A3: A is open;
+    let pT be Point of T;
+    assume
+    pT in A;
+    then consider a be Subset of T such that
+A4: a in BL and
+A5: pT in a and
+A6: a c= A by A3,YELLOW_9:31;
     consider W,FT be Subset of T such that
-A13: a = W \ uparrow FT and
-A14: W in sigma T and
-A15: FT is finite by A10;
-    reconsider W1 = W as Subset of S by A9;
-    sigma S = sigma T by A9,YELLOW_9:52;
+A7: a = W \ uparrow FT and
+A8: W in sigma T and
+A9: FT is finite by A4;
+A10: the RelStr of S = the RelStr of T by YELLOW_9:def 4;
+    then reconsider pS = pT as Element of S;
+    reconsider W1 = W as Subset of S by A10;
+    sigma S = sigma T by A10,YELLOW_9:52;
     then
-A16: W = union { wayabove x where x is Element of S : x in W1 }
-    by A14,WAYBEL14:33;
-A17: pT in W & not pT in uparrow FT by A11,A13,XBOOLE_0:def 5;
-    then consider k be set such that
-A18: pT in k and
-A19: k in { wayabove x where x is Element of S : x in W1 }
-    by A16,TARSKI:def 4;
-    consider xS be Element of S such that
-A20: k = wayabove xS and
-A21: xS in W1 by A19;
-    reconsider pS = pT as Element of S by A9;
+A11: W = union { wayabove x where x is Element of S : x in W1 } by A8,
+WAYBEL14:33;
     reconsider pL = pS as Element of L1 by A1;
-    reconsider xL = xS as Element of L1 by A1,A9;
-    reconsider FL = FT as Subset of L1 by A1;
-    xS << pS by A18,A20,WAYBEL_3:8;
-    then
-A22: xL << pL by A1,A9,WAYBEL_8:8;
-    Bottom L1 in B1 by WAYBEL23:def 8;
+    defpred P[set,set] means ex b1,y1 be Element of L1 st y1 = $1 & b1 = $2 &
+    b1 in B1 & not b1 <= pL & b1 << y1;
+A12: Bottom L1 in B1 by WAYBEL23:def 8;
+    pT in W by A5,A7,XBOOLE_0:def 5;
+    then consider k be set such that
+A13: pT in k and
+A14: k in { wayabove x where x is Element of S : x in W1 } by A11,TARSKI:def 4;
+    consider xS be Element of S such that
+A15: k = wayabove xS and
+A16: xS in W1 by A14;
+    reconsider xL = xS as Element of L1 by A1,A10;
+    xS << pS by A13,A15,WAYBEL_3:8;
+    then xL << pL by A1,A10,WAYBEL_8:8;
     then consider bL be Element of L1 such that
-A23: bL in B1 and
-A24: xL <= bL and
-A25: bL << pL by A22,WAYBEL23:47;
-A26: pL in wayabove bL by A25,WAYBEL_3:8;
-A27: uparrow FT = uparrow FL by A1,WAYBEL_0:13;
-    defpred P[set,set] means ex b1,y1 be Element of L1 st
-    y1 = $1 & b1 = $2 & b1 in B1 & not b1 <= pL & b1 << y1;
-A28: for y be set st y in FL ex b be set st P[y,b]
+A17: bL in B1 and
+A18: xL <= bL and
+A19: bL << pL by A12,WAYBEL23:47;
+    reconsider FL = FT as Subset of L1 by A1;
+A20: uparrow FT = uparrow FL by A1,WAYBEL_0:13;
+A21: not pT in uparrow FT by A5,A7,XBOOLE_0:def 5;
+A22: for y be set st y in FL ex b be set st P[y,b]
     proof
       let y be set;
       assume
-A29:  y in FL;
+A23:  y in FL;
       then reconsider y1 = y as Element of L1;
-      not y1 <= pL by A17,A27,A29,WAYBEL_0:def 16;
+      not y1 <= pL by A21,A20,A23,WAYBEL_0:def 16;
       then consider b1 be Element of L1 such that
-A30:  b1 in B1 and
-A31:  not b1 <= pL and
-A32:  b1 << y1 by WAYBEL23:46;
+A24:  b1 in B1 & not b1 <= pL & b1 << y1 by WAYBEL23:46;
       reconsider b = b1 as set;
       take b,b1,y1;
-      thus thesis by A30,A31,A32;
+      thus thesis by A24;
     end;
     consider f be Function such that
-A33: dom f = FL and
-A34: for y be set st y in FL holds P[y,f.y] from CLASSES1:sch 1(A28);
+A25: dom f = FL and
+A26: for y be set st y in FL holds P[y,f.y] from CLASSES1:sch 1(A22);
     rng f c= the carrier of L1
     proof
       let z be set;
-      assume z in rng f;
+      assume
+      z in rng f;
       then consider v be set such that
-A35:  v in dom f and
-A36:  z = f.v by FUNCT_1:def 5;
-      consider b1,y1 be Element of L1 such that y1 = v and
-A37:  b1 = f.v and b1 in B1 and not b1 <= pL and b1 << y1 by A33,A34,A35;
-      thus thesis by A36,A37;
+A27:  v in dom f and
+A28:  z = f.v by FUNCT_1:def 5;
+      ex b1,y1 be Element of L1 st y1 = v & b1 = f.v & b1 in B1 &( not b1
+      <= pL)& b1 << y1 by A25,A26,A27;
+      hence thesis by A28;
     end;
     then reconsider FFL = rng f as Subset of L1;
-    reconsider cT = wayabove bL \ uparrow FFL as Subset of T by A1;
-    take cT;
-A38: cT = Way_Up(bL,FFL);
-A39: FFL is finite by A15,A33,FINSET_1:26;
-    FFL c= B1
+A29: FFL c= B1
     proof
       let z be set;
-      assume z in FFL;
+      assume
+      z in FFL;
       then consider v be set such that
-A40:  v in dom f and
-A41:  z = f.v by FUNCT_1:def 5;
-      consider b1,y1 be Element of L1 such that y1 = v and
-A42:  b1 = f.v and
-A43:  b1 in B1 and not b1 <= pL and b1 << y1 by A33,A34,A40;
-      thus thesis by A41,A42,A43;
+A30:  v in dom f and
+A31:  z = f.v by FUNCT_1:def 5;
+      ex b1,y1 be Element of L1 st y1 = v & b1 = f.v & b1 in B1 &( not b1
+      <= pL)& b1 << y1 by A25,A26,A30;
+      hence thesis by A31;
     end;
-    hence cT in WU by A23,A38,A39;
+A32: uparrow FL c= uparrow FFL
+    proof
+      let z be set;
+      assume
+A33:  z in uparrow FL;
+      then reconsider z1 = z as Element of L1;
+      consider v1 be Element of L1 such that
+A34:  v1 <= z1 and
+A35:  v1 in FL by A33,WAYBEL_0:def 16;
+      consider b1,y1 be Element of L1 such that
+A36:  y1 = v1 and
+A37:  b1 = f.v1 and
+      b1 in B1 and
+      not b1 <= pL and
+A38:  b1 << y1 by A26,A35;
+      b1 << z1 by A34,A36,A38,WAYBEL_3:2;
+      then
+A39:  b1 <= z1 by WAYBEL_3:1;
+      b1 in FFL by A25,A35,A37,FUNCT_1:def 5;
+      hence thesis by A39,WAYBEL_0:def 16;
+    end;
+    reconsider cT = wayabove bL \ uparrow FFL as Subset of T by A1;
+    take cT;
+    cT = Way_Up(bL,FFL) & FFL is finite by A9,A25,FINSET_1:26;
+    hence cT in WU by A17,A29;
+    wayabove bL c= wayabove xL by A18,WAYBEL_3:12;
+    then
+A40: wayabove bL \ uparrow FFL c= wayabove xL \ uparrow FL by A32,XBOOLE_1:35;
     for z be Element of L1 holds not z in FFL or not z <= pL
     proof
       let z be Element of L1;
-      assume z in FFL;
+      assume
+      z in FFL;
       then consider v be set such that
-A44:  v in dom f and
-A45:  z = f.v by FUNCT_1:def 5;
-      consider b1,y1 be Element of L1 such that y1 = v and
-A46:  b1 = f.v and b1 in B1 and
-A47:  not b1 <= pL and b1 << y1 by A33,A34,A44;
-      thus thesis by A45,A46,A47;
+A41:  v in dom f and
+A42:  z = f.v by FUNCT_1:def 5;
+      ex b1,y1 be Element of L1 st y1 = v & b1 = f.v & b1 in B1 &( not b1
+      <= pL)& b1 << y1 by A25,A26,A41;
+      hence thesis by A42;
     end;
     then for z be Element of L1 holds not z <= pL or not z in FFL;
-    then not pL in uparrow FFL by WAYBEL_0:def 16;
-    hence pT in cT by A26,XBOOLE_0:def 5;
-A48: wayabove bL c= wayabove xL by A24,WAYBEL_3:12;
-    uparrow FL c= uparrow FFL
-    proof
-      let z be set;
-      assume
-A49:  z in uparrow FL;
-      then reconsider z1 = z as Element of L1;
-      consider v1 be Element of L1 such that
-A50:  v1 <= z1 and
-A51:  v1 in FL by A49,WAYBEL_0:def 16;
-      consider b1,y1 be Element of L1 such that
-A52:  y1 = v1 and
-A53:  b1 = f.v1 and b1 in B1 and not b1 <= pL and
-A54:  b1 << y1 by A34,A51;
-A55:  b1 in FFL by A33,A51,A53,FUNCT_1:def 5;
-      b1 << z1 by A50,A52,A54,WAYBEL_3:2;
-      then b1 <= z1 by WAYBEL_3:1;
-      hence thesis by A55,WAYBEL_0:def 16;
-    end;
     then
-A56: wayabove bL \ uparrow FFL c= wayabove xL \ uparrow FL by A48,XBOOLE_1:35;
+A43: not pL in uparrow FFL by WAYBEL_0:def 16;
+    pL in wayabove bL by A19,WAYBEL_3:8;
+    hence pT in cT by A43,XBOOLE_0:def 5;
     wayabove xL c= W
     proof
       let z be set;
+      wayabove xL = wayabove xS by A1,A10,YELLOW12:13;
+      then
+A44:  wayabove xL in { wayabove x where x is Element of S : x in W1 } by A16;
       assume
-A57:  z in wayabove xL;
-      wayabove xL = wayabove xS by A1,A9,YELLOW12:13;
-      then wayabove xL in { wayabove x where x is Element of S : x in W1 }
-      by A21;
-      hence thesis by A16,A57,TARSKI:def 4;
+      z in wayabove xL;
+      hence thesis by A11,A44,TARSKI:def 4;
     end;
-    then wayabove xL \ uparrow FL c= a by A13,A27,XBOOLE_1:33;
-    then wayabove bL \ uparrow FFL c= a by A56,XBOOLE_1:1;
-    hence cT c= A by A12,XBOOLE_1:1;
+    then wayabove xL \ uparrow FL c= a by A7,A20,XBOOLE_1:33;
+    then wayabove bL \ uparrow FFL c= a by A40,XBOOLE_1:1;
+    hence cT c= A by A6,XBOOLE_1:1;
   end;
-  hence thesis by A3,YELLOW_9:32;
+  WU c= the topology of T
+  proof
+    let z be set;
+    assume
+    z in WU;
+    then consider a be Element of L1, A be finite Subset of L1 such that
+A45: z = Way_Up(a,A) and
+    a in B1 and
+    A c= B1;
+    reconsider A1 = A as finite Subset of T by A1;
+    reconsider a1 = a as Element of T by A1;
+    wayabove a1 is open & (uparrow A1)` is open by Th25,WAYBEL19:40;
+    then
+A46: wayabove a1 /\ (uparrow A1)` is open by TOPS_1:38;
+    z = wayabove a1 \ uparrow A by A1,A45,YELLOW12:13
+      .= wayabove a1 \ uparrow A1 by A1,WAYBEL_0:13
+      .= wayabove a1 /\ (uparrow A1)` by SUBSET_1:32;
+    hence thesis by A46,PRE_TOPC:def 5;
+  end;
+  hence thesis by A2,YELLOW_9:32;
 end;
 
-Lm2: for L1 be continuous lower-bounded sup-Semilattice
-for T be Lawson correct TopAugmentation of L1 holds weight T c= CLweight L1
+Lm2: for L1 be continuous lower-bounded sup-Semilattice for T be Lawson
+correct TopAugmentation of L1 holds weight T c= CLweight L1
+
 proof
   let L1 be continuous lower-bounded sup-Semilattice;
   let T be Lawson correct TopAugmentation of L1;
-A1: the RelStr of T = the RelStr of L1 by YELLOW_9:def 4;
   consider B1 be with_bottom CLbasis of L1 such that
-A2: card B1 = CLweight L1 by Th4;
-  now per cases;
+A1: card B1 = CLweight L1 by Th4;
+A2: the RelStr of T = the RelStr of L1 by YELLOW_9:def 4;
+  now
+    per cases;
     suppose
 A3:   L1 is finite;
-      then the carrier of L1 is finite;
       then
-A4:   T is finite by A1;
-      B1 = the carrier of CompactSublatt L1 by A2,A3,Th16
+A4:   T is finite by A2;
+      B1 = the carrier of CompactSublatt L1 by A1,A3,Th16
         .= the carrier of L1 by A3,YELLOW15:27;
-      hence thesis by A1,A2,A4,Th10;
+      hence thesis by A2,A1,A4,Th10;
     end;
     suppose
 A5:   L1 is infinite;
-      set WU = { Way_Up(a,A) where a is Element of L1,
-      A is finite Subset of L1 : a in B1 & A c= B1 };
-A6:   card WU c= CLweight L1 by A2,A5,Th24;
+
+      set WU = { Way_Up(a,A) where a is Element of L1, A is finite Subset of
+L1:   a in B1 & A c= B1 };
+
       WU is Basis of T by Th26;
-      then weight T c= card WU by WAYBEL23:74;
+      then
+A6:   weight T c= card WU by WAYBEL23:74;
+      card WU c= CLweight L1 by A1,A5,Th24;
       hence thesis by A6,XBOOLE_1:1;
     end;
   end;
@@ -1431,136 +1450,137 @@ A6:   card WU c= CLweight L1 by A2,A5,Th24;
 end;
 
 theorem Th27:
-  for L1 be continuous lower-bounded sup-Semilattice
-  for T be Scott TopAugmentation of L1 for b be Basis of T holds
-  { wayabove inf u where u is Subset of T : u in b } is Basis of T
+  for L1 be continuous lower-bounded sup-Semilattice for T be
+Scott TopAugmentation of L1 for b be Basis of T holds { wayabove inf u where u
+  is Subset of T : u in b } is Basis of T
 proof
   let L1 be continuous lower-bounded sup-Semilattice;
   let T be Scott TopAugmentation of L1;
   let b be Basis of T;
-  reconsider b1 = { wayabove x where x is Element of T: not contradiction }
-  as Basis of T by WAYBEL11:45;
   set b2 = { wayabove inf u where u is Subset of T : u in b };
   b2 c= bool the carrier of T
   proof
     let z be set;
-    assume z in b2;
-    then consider u be Subset of T such that
-A1: z = wayabove inf u and u in b;
-    thus thesis by A1;
+    assume
+    z in b2;
+    then ex u be Subset of T st z = wayabove inf u & u in b;
+    hence thesis;
   end;
   then reconsider b2 as Subset-Family of T;
-A2: b2 c= the topology of T
-  proof
-    let z be set;
-    assume z in b2;
-    then consider u be Subset of T such that
-A3: z = wayabove inf u and u in b;
-    wayabove inf u is open by WAYBEL11:36;
-    hence thesis by A3,PRE_TOPC:def 5;
-  end;
-  now
+  reconsider b1 = { wayabove x where x is Element of T: not contradiction } as
+  Basis of T by WAYBEL11:45;
+A1: now
     let A be Subset of T;
     assume
-A4: A is open;
+A2: A is open;
     let a be Point of T;
-    assume a in A;
+    assume
+    a in A;
     then consider C be Subset of T such that
-A5: C in b1 and
-A6: a in C and
-A7: C c= A by A4,YELLOW_9:31;
-    consider x be Element of T such that
-A8: C = wayabove x by A5;
-    C is open by A5,YELLOW_8:19;
+A3: C in b1 and
+A4: a in C and
+A5: C c= A by A2,YELLOW_9:31;
+    C is open by A3,YELLOW_8:19;
     then consider D be Subset of T such that
-A9: D in b and
-A10: a in D and
-A11: D c= C by A6,YELLOW_9:31;
-    reconsider a1 = a as Element of T;
-    D is open by A9,YELLOW_8:19;
+A6: D in b and
+A7: a in D and
+A8: D c= C by A4,YELLOW_9:31;
+    D is open by A6,YELLOW_8:19;
     then consider E be Subset of T such that
-A12: E in b1 and
-A13: a in E and
-A14: E c= D by A10,YELLOW_9:31;
+A9: E in b1 and
+A10: a in E and
+A11: E c= D by A7,YELLOW_9:31;
     consider z be Element of T such that
-A15: E = wayabove z by A12;
+A12: E = wayabove z by A9;
     take u = wayabove inf D;
-    thus u in b2 by A9;
-    z << a1 by A13,A15,WAYBEL_3:8;
+    thus u in b2 by A6;
+    reconsider a1 = a as Element of T;
+    consider x be Element of T such that
+A13: C = wayabove x by A3;
+    z << a1 by A10,A12,WAYBEL_3:8;
     then consider y be Element of T such that
-A16: z << y and
-A17: y << a1 by WAYBEL_4:53;
-A18: inf D is_<=_than D by YELLOW_0:33;
-    y in wayabove z by A16,WAYBEL_3:8;
-    then inf D <= y by A14,A15,A18,LATTICE3:def 8;
-    then inf D << a1 by A17,WAYBEL_3:2;
+A14: z << y and
+A15: y << a1 by WAYBEL_4:53;
+    inf D is_<=_than D & y in wayabove z by A14,WAYBEL_3:8,YELLOW_0:33;
+    then inf D <= y by A11,A12,LATTICE3:def 8;
+    then inf D << a1 by A15,WAYBEL_3:2;
     hence a in u by WAYBEL_3:8;
-A19: ex_inf_of uparrow x,T & ex_inf_of D,T by YELLOW_0:17;
-    wayabove x c= uparrow x by WAYBEL_3:11;
-    then inf uparrow x <= inf D by A8,A11,A19,XBOOLE_1:1,YELLOW_0:35;
+A16: wayabove x c= uparrow x by WAYBEL_3:11;
+    ex_inf_of uparrow x,T & ex_inf_of D,T by YELLOW_0:17;
+    then inf uparrow x <= inf D by A13,A8,A16,XBOOLE_1:1,YELLOW_0:35;
     then x <= inf D by WAYBEL_0:39;
-    then wayabove inf D c= C by A8,WAYBEL_3:12;
-    hence u c= A by A7,XBOOLE_1:1;
+    then wayabove inf D c= C by A13,WAYBEL_3:12;
+    hence u c= A by A5,XBOOLE_1:1;
   end;
-  hence thesis by A2,YELLOW_9:32;
+  b2 c= the topology of T
+  proof
+    let z be set;
+    assume
+    z in b2;
+    then consider u be Subset of T such that
+A17: z = wayabove inf u and
+    u in b;
+    wayabove inf u is open by WAYBEL11:36;
+    hence thesis by A17,PRE_TOPC:def 5;
+  end;
+  hence thesis by A1,YELLOW_9:32;
 end;
 
 theorem Th28:
-  for L1 be continuous lower-bounded sup-Semilattice
-  for T be Scott TopAugmentation of L1
-  for B1 be Basis of T st B1 is infinite holds
-  { inf u where u is Subset of T : u in B1 } is infinite
+  for L1 be continuous lower-bounded sup-Semilattice for T be
+Scott TopAugmentation of L1 for B1 be Basis of T st B1 is infinite holds { inf
+  u where u is Subset of T : u in B1 } is infinite
 proof
   let L1 be continuous lower-bounded sup-Semilattice;
   let T be Scott TopAugmentation of L1;
   let B1 be Basis of T;
+  reconsider B2 = { inf u where u is Subset of T : u in B1 } as set;
+  defpred P[set,set] means ex y be Element of T st $1 = y & $2 = wayabove y;
+  reconsider B3 = { wayabove inf u where u is Subset of T : u in B1 } as Basis
+  of T by Th27;
   assume that
 A1: B1 is infinite and
 A2: { inf u where u is Subset of T : u in B1 } is finite;
-  reconsider B2 = { inf u where u is Subset of T : u in B1 } as set;
-  reconsider B3 = { wayabove inf u where u is Subset of T : u in B1 }
-  as Basis of T by Th27;
-  defpred P[set,set] means ex y be Element of T st $1 = y & $2 = wayabove y;
 A3: for x be set st x in B2 ex y be set st y in B3 & P[x,y]
   proof
     let x be set;
-    assume x in B2;
-    then consider u1 be Subset of T such that
-A4: x = inf u1 and
-A5: u1 in B1;
-    reconsider z = x as Element of T by A4;
+    assume
+    x in B2;
+    then
+A4: ex u1 be Subset of T st x = inf u1 & u1 in B1;
+    then reconsider z = x as Element of T;
     take y = wayabove z;
-    thus y in B3 by A4,A5;
+    thus y in B3 by A4;
     take z;
     thus thesis;
   end;
   consider f be Function such that
-A6: dom f = B2 and
-A7: rng f c= B3 and
-A8: for x be set st x in B2 holds P[x,f.x] from WELLORD2:sch 1(A3);
+A5: dom f = B2 and
+A6: rng f c= B3 and
+A7: for x be set st x in B2 holds P[x,f.x] from WELLORD2:sch 1(A3);
   B3 c= rng f
   proof
     let z be set;
-    assume z in B3;
+    assume
+    z in B3;
     then consider u1 be Subset of T such that
-A9: z = wayabove inf u1 and
-A10: u1 in B1;
-    inf u1 in B2 by A10;
-    then consider y be Element of T such that
-A11: inf u1 = y and
-A12: f.(inf u1) = wayabove y by A8;
-    z = f.(inf u1) & inf u1 in B2 by A9,A10,A11,A12;
-    hence thesis by A6,FUNCT_1:def 5;
+A8: z = wayabove inf u1 and
+A9: u1 in B1;
+    inf u1 in B2 by A9;
+    then
+A10: ex y be Element of T st inf u1 = y & f.(inf u1) = wayabove y by A7;
+    inf u1 in B2 by A9;
+    hence thesis by A5,A8,A10,FUNCT_1:def 5;
   end;
-  then rng f = B3 by A7,XBOOLE_0:def 10;
-  then B3 is finite by A2,A6,FINSET_1:26;
+  then rng f = B3 by A6,XBOOLE_0:def 10;
+  then B3 is finite by A2,A5,FINSET_1:26;
   then T is finite by YELLOW15:31;
-  then the carrier of T is finite;
   hence contradiction by A1;
 end;
 
-Lm3: for L1 be continuous lower-bounded sup-Semilattice
-for T be Scott TopAugmentation of L1 holds CLweight L1 c= weight T
+Lm3: for L1 be continuous lower-bounded sup-Semilattice for T be Scott
+TopAugmentation of L1 holds CLweight L1 c= weight T
+
 proof
   let L1 be continuous lower-bounded sup-Semilattice;
   let T be Scott TopAugmentation of L1;
@@ -1569,202 +1589,217 @@ A1: card B1 = weight T by WAYBEL23:75;
   { inf u where u is Subset of T : u in B1 } c= the carrier of T
   proof
     let z be set;
-    assume z in { inf u where u is Subset of T : u in B1 };
-    then consider u be Subset of T such that
-A2: z = inf u and u in B1;
-    thus thesis by A2;
+    assume
+    z in { inf u where u is Subset of T : u in B1 };
+    then ex u be Subset of T st z = inf u & u in B1;
+    hence thesis;
   end;
-  then reconsider B0 = { inf u where u is Subset of T : u in B1 }
-  as Subset of T;
+
+  then reconsider
+  B0 = { inf u where u is Subset of T : u in B1 } as Subset of T;
+
+  set B2 = finsups B0;
   defpred P[set,set] means ex y be Subset of T st $1 = y & $2 = inf y;
-A3: for x be set st x in B1 ex y be set st y in B0 & P[x,y]
+A2: for x be set st x in B1 ex y be set st y in B0 & P[x,y]
   proof
     let x be set;
     assume
-A4: x in B1;
+A3: x in B1;
     then reconsider z = x as Subset of T;
     take y = inf z;
-    thus y in B0 by A4;
+    thus y in B0 by A3;
     take z;
     thus thesis;
   end;
   consider f be Function such that
-A5: dom f = B1 and rng f c= B0 and
-A6: for x be set st x in B1 holds P[x,f.x] from WELLORD2:sch 1(A3);
+A4: dom f = B1 and
+  rng f c= B0 and
+A5: for x be set st x in B1 holds P[x,f.x] from WELLORD2:sch 1(A2);
   B0 c= rng f
   proof
     let z be set;
-    assume z in B0;
+    assume
+    z in B0;
     then consider u be Subset of T such that
-A7: z = inf u and
-A8: u in B1;
-    consider y be Subset of T such that
-A9: u = y and
-A10: f.u = inf y by A6,A8;
-    thus thesis by A5,A7,A8,A9,A10,FUNCT_1:def 5;
+A6: z = inf u and
+A7: u in B1;
+    ex y be Subset of T st u = y & f.u = inf y by A5,A7;
+    hence thesis by A4,A6,A7,FUNCT_1:def 5;
   end;
   then
-A11: card B0 c= card B1 by A5,CARD_1:28;
-  set B2 = finsups B0;
-A12: the RelStr of L1 = the RelStr of T by YELLOW_9:def 4;
-A13: now per cases;
+A8: card B0 c= card B1 by A4,CARD_1:28;
+A9: the RelStr of L1 = the RelStr of T by YELLOW_9:def 4;
+A10: now
+    per cases;
     suppose
-A14:  L1 is finite;
-A15:  B0 c= B2 by WAYBEL_0:50;
+A11:  L1 is finite;
       the carrier of L1 c= B0
       proof
         let z be set;
-        assume z in the carrier of L1;
-        then reconsider z1 = z as Element of T by A12;
-        the carrier of T is finite by A12,A14;
-        then T is finite;
-        then
-A16:    uparrow z1 is open by WAYBEL11:def 5;
+        assume
+        z in the carrier of L1;
+        then reconsider z1 = z as Element of T by A9;
         z1 <= z1;
-        then z1 in uparrow z1 by WAYBEL_0:18;
-        then consider A be Subset of T such that
-A17:    A in B1 and
-A18:    z1 in A and
-A19:    A c= uparrow z1 by A16,YELLOW_9:31;
-        ex_inf_of uparrow z1,T & ex_inf_of A,T by YELLOW_0:17;
-        then inf uparrow z1 <= inf A by A19,YELLOW_0:35;
         then
-A20:    z1 <= inf A by WAYBEL_0:39;
-        inf A <= z1 by A18,YELLOW_2:24;
-        then z = inf A by A20,YELLOW_0:def 3;
-        hence thesis by A17;
+A12:    z1 in uparrow z1 by WAYBEL_0:18;
+        T is finite by A9,A11;
+        then uparrow z1 is open by WAYBEL11:def 5;
+        then consider A be Subset of T such that
+A13:    A in B1 and
+A14:    z1 in A and
+A15:    A c= uparrow z1 by A12,YELLOW_9:31;
+        ex_inf_of uparrow z1,T & ex_inf_of A,T by YELLOW_0:17;
+        then inf uparrow z1 <= inf A by A15,YELLOW_0:35;
+        then
+A16:    z1 <= inf A by WAYBEL_0:39;
+        inf A <= z1 by A14,YELLOW_2:24;
+        then z = inf A by A16,YELLOW_0:def 3;
+        hence thesis by A13;
       end;
-      then B2 c= B0 by A12,XBOOLE_1:1;
-      hence card B2 = card B0 by A15,XBOOLE_0:def 10;
+      then B0 c= B2 & B2 c= B0 by A9,WAYBEL_0:50,XBOOLE_1:1;
+      hence card B2 = card B0 by XBOOLE_0:def 10;
     end;
-    suppose L1 is infinite;
-      then the carrier of L1 is infinite;
-      then T is infinite by A12;
+    suppose
+      L1 is infinite;
+      then T is infinite by A9;
       then B0 is infinite by Th28,YELLOW15:31;
       hence card B2 = card B0 by YELLOW15:28;
     end;
   end;
-A21: ex_sup_of {},T by YELLOW_0:42;
-  {} is finite Subset of B0 by XBOOLE_1:2;
-  then "\/"({},T) in {"\/"
-  (Y,T) where Y is finite Subset of B0: ex_sup_of Y,T} by A21;
+  ex_sup_of {},T & {} is finite Subset of B0 by XBOOLE_1:2,YELLOW_0:42;
+
+  then
+  "\/"({},T) in {"\/" (Y,T) where Y is finite Subset of B0: ex_sup_of Y,T
+  };
+
   then "\/"({},T) in finsups B0 by WAYBEL_0:def 27;
   then
-A22: Bottom L1 in B2 by A12,A21,YELLOW_0:26;
-  reconsider B2 as Subset of L1 by A12;
+A17: Bottom L1 in B2 by A9,YELLOW_0:26,42;
+  reconsider B2 as Subset of L1 by A9;
   now
     let x,y be Element of L1;
     assume that
-A23: x in B2 and
-A24: y in B2;
-A25: x in { "\/"(Y,T) where Y is finite Subset of B0 : ex_sup_of Y,T } &
-    y in { "\/"(Y,T) where Y is finite Subset of B0 : ex_sup_of Y,T }
-    by A23,A24,WAYBEL_0:def 27;
+A18: x in B2 and
+A19: y in B2;
+
+    y in { "\/"(Y,T) where Y is finite Subset of B0 : ex_sup_of Y,T } by A19,
+WAYBEL_0:def 27;
+
+    then consider Y2 be finite Subset of B0 such that
+A20: y = "\/"(Y2,T) and
+A21: ex_sup_of Y2,T;
+
+    x in { "\/"(Y,T) where Y is finite Subset of B0 : ex_sup_of Y,T } by A18,
+WAYBEL_0:def 27;
+
     then consider Y1 be finite Subset of B0 such that
-A26: x = "\/"(Y1,T) and
-A27: ex_sup_of Y1,T;
-    consider Y2 be finite Subset of B0 such that
-A28: y = "\/"(Y2,T) and
-A29: ex_sup_of Y2,T by A25;
-A30: ex_sup_of Y1 \/ Y2,T by YELLOW_0:17;
+A22: x = "\/"(Y1,T) and
+A23: ex_sup_of Y1,T;
+A24: ex_sup_of Y1 \/ Y2,T by YELLOW_0:17;
     sup {x,y} = x "\/" y by YELLOW_0:41
-      .= "\/"(Y1,T) "\/" "\/"(Y2,T) by A12,A26,A28,YELLOW12:10
-      .= "\/"(Y1 \/ Y2,T) by A27,A29,YELLOW_2:3;
-    then sup {x,y} in
-    { "\/"(Y,T) where Y is finite Subset of B0 : ex_sup_of Y,T } by A30;
+      .= "\/"(Y1,T) "\/" "\/"(Y2,T) by A9,A22,A20,YELLOW12:10
+      .= "\/"(Y1 \/ Y2,T) by A23,A21,YELLOW_2:3;
+
+    then
+    sup {x,y} in { "\/"(Y,T) where Y is finite Subset of B0 : ex_sup_of Y
+    ,T } by A24;
+
     hence sup {x,y} in B2 by WAYBEL_0:def 27;
   end;
   then reconsider B2 as join-closed Subset of L1 by WAYBEL23:18;
-  for x,y be Element of L1 st x << y
-  ex b be Element of L1 st b in B2 & x <= b & b << y
+
+  for x,y be Element of L1 st x << y ex b be Element of L1 st b in B2 & x
+  <= b & b << y
+
   proof
     let x,y be Element of L1;
-    reconsider x1 = x, y1 = y as Element of T by A12;
-    assume x << y;
+    reconsider x1 = x, y1 = y as Element of T by A9;
+A25: B0 c= B2 by WAYBEL_0:50;
+    assume
+    x << y;
     then y in wayabove x by WAYBEL_3:8;
     then
-A31: y1 in wayabove x1 by A12,YELLOW12:13;
+A26: y1 in wayabove x1 by A9,YELLOW12:13;
     wayabove x1 is open by WAYBEL11:36;
     then consider u be Subset of T such that
-A32: u in B1 and
-A33: y1 in u and
-A34: u c= wayabove x1 by A31,YELLOW_9:31;
-    reconsider b = inf u as Element of L1 by A12;
+A27: u in B1 and
+A28: y1 in u and
+A29: u c= wayabove x1 by A26,YELLOW_9:31;
+    reconsider b = inf u as Element of L1 by A9;
     take b;
-A35: b in B0 by A32;
-    B0 c= B2 by WAYBEL_0:50;
-    hence b in B2 by A35;
-A36: ex_inf_of uparrow x1,T & ex_inf_of u,T by YELLOW_0:17;
-    wayabove x1 c= uparrow x1 by WAYBEL_3:11;
-    then inf uparrow x1 <= inf u by A34,A36,XBOOLE_1:1,YELLOW_0:35;
+    b in B0 by A27;
+    hence b in B2 by A25;
+A30: wayabove x1 c= uparrow x1 by WAYBEL_3:11;
+    ex_inf_of uparrow x1,T & ex_inf_of u,T by YELLOW_0:17;
+    then inf uparrow x1 <= inf u by A29,A30,XBOOLE_1:1,YELLOW_0:35;
     then x1 <= inf u by WAYBEL_0:39;
-    hence x <= b by A12,YELLOW_0:1;
-    u is open by A32,YELLOW_8:19;
-    hence thesis by A12,A33,WAYBEL14:26,WAYBEL_8:8;
+    hence x <= b by A9,YELLOW_0:1;
+    u is open by A27,YELLOW_8:19;
+    hence thesis by A9,A28,WAYBEL14:26,WAYBEL_8:8;
   end;
   then
-A37: B2 is CLbasis of L1 by A22,WAYBEL23:47;
-  B2 is with_bottom by A22,WAYBEL23:def 8;
-  then CLweight L1 c= card B0 by A13,A37,Th3;
-  hence thesis by A1,A11,XBOOLE_1:1;
+A31: B2 is CLbasis of L1 by A17,WAYBEL23:47;
+  B2 is with_bottom by A17,WAYBEL23:def 8;
+  then CLweight L1 c= card B0 by A10,A31,Th3;
+  hence thesis by A1,A8,XBOOLE_1:1;
 end;
 
-theorem Th29:  :: THEOREM 4.7 (1)=(2)
-  for L1 be continuous lower-bounded sup-Semilattice
-  for T be Scott TopAugmentation of L1 holds CLweight L1 = weight T
+theorem Th29: :: THEOREM 4.7 (1)=(2)
+  for L1 be continuous lower-bounded sup-Semilattice for T be
+  Scott TopAugmentation of L1 holds CLweight L1 = weight T
 proof
   let L1 be continuous lower-bounded sup-Semilattice;
   let T be Scott TopAugmentation of L1;
   consider T1 be Lawson correct TopAugmentation of L1;
-A1: CLweight L1 c= weight T by Lm3;
-A2: weight T c= weight T1 by Lm1;
-  weight T1 c= CLweight L1 by Lm2;
-  then weight T c= CLweight L1 by A2,XBOOLE_1:1;
+  weight T c= weight T1 & weight T1 c= CLweight L1 by Lm1,Lm2;
+  then
+A1: weight T c= CLweight L1 by XBOOLE_1:1;
+  CLweight L1 c= weight T by Lm3;
   hence thesis by A1,XBOOLE_0:def 10;
 end;
 
-theorem  :: THEOREM 4.7 (1)=(3)
-  for L1 be continuous lower-bounded sup-Semilattice
-  for T be Lawson correct TopAugmentation of L1 holds CLweight L1 = weight T
+theorem :: THEOREM 4.7 (1)=(3)
+  for L1 be continuous lower-bounded sup-Semilattice for T be Lawson
+  correct TopAugmentation of L1 holds CLweight L1 = weight T
 proof
   let L1 be continuous lower-bounded sup-Semilattice;
   let T be Lawson correct TopAugmentation of L1;
   consider T1 be Scott TopAugmentation of L1;
-A1: weight T c= CLweight L1 by Lm2;
-A2: CLweight L1 c= weight T1 by Lm3;
-  weight T1 c= weight T by Lm1;
-  then CLweight L1 c= weight T by A2,XBOOLE_1:1;
+  CLweight L1 c= weight T1 & weight T1 c= weight T by Lm1,Lm3;
+  then
+A1: CLweight L1 c= weight T by XBOOLE_1:1;
+  weight T c= CLweight L1 by Lm2;
   hence thesis by A1,XBOOLE_0:def 10;
 end;
 
 theorem Th31:
-  for L1,L2 be non empty RelStr st L1,L2 are_isomorphic holds
-  card the carrier of L1 = card the carrier of L2
+  for L1,L2 be non empty RelStr st L1,L2 are_isomorphic holds card
+  the carrier of L1 = card the carrier of L2
 proof
   let L1,L2 be non empty RelStr;
-  assume L1,L2 are_isomorphic;
+  assume
+  L1,L2 are_isomorphic;
   then consider f be Function of L1,L2 such that
 A1: f is isomorphic by WAYBEL_1:def 8;
 A2: dom f = the carrier of L1 by FUNCT_2:def 1;
   f is one-to-one & rng f = the carrier of L2 by A1,WAYBEL_0:66;
-  then the carrier of L1,the carrier of L2 are_equipotent
-  by A2,WELLORD2:def 4;
+  then the carrier of L1,the carrier of L2 are_equipotent by A2,WELLORD2:def 4;
   hence thesis by CARD_1:21;
 end;
 
-theorem  :: THEOREM 4.7 (1)=(4)
-  for L1 be continuous lower-bounded sup-Semilattice
-  for B1 be with_bottom CLbasis of L1 st card B1 = CLweight L1 holds
-  CLweight L1 = CLweight InclPoset Ids subrelstr B1
+theorem :: THEOREM 4.7 (1)=(4)
+  for L1 be continuous lower-bounded sup-Semilattice for B1 be
+with_bottom CLbasis of L1 st card B1 = CLweight L1 holds CLweight L1 = CLweight
+  InclPoset Ids subrelstr B1
 proof
   let L1 be continuous lower-bounded sup-Semilattice;
   let B1 be with_bottom CLbasis of L1;
   assume
 A1: card B1 = CLweight L1;
-A2: card the carrier of CompactSublatt InclPoset Ids subrelstr B1 =
-  card the carrier of subrelstr B1 by Th31,WAYBEL23:70;
-  thus CLweight InclPoset Ids subrelstr B1 =
-  card the carrier of CompactSublatt InclPoset Ids subrelstr B1 by Th5
+A2: card the carrier of CompactSublatt InclPoset Ids subrelstr B1 = card the
+  carrier of subrelstr B1 by Th31,WAYBEL23:70;
+  thus CLweight InclPoset Ids subrelstr B1 = card the carrier of
+  CompactSublatt InclPoset Ids subrelstr B1 by Th5
     .= CLweight L1 by A1,A2,YELLOW_0:def 15;
 end;
 
@@ -1782,47 +1817,46 @@ A1: the RelStr of S = the RelStr of L1 by YELLOW_9:def 4;
   end;
 end;
 
-theorem  :: THEOREM 4.7 (5)
-  for L1 be continuous lower-bounded sup-Semilattice holds
-  CLweight L1 c= CLweight InclPoset sigma L1
+theorem :: THEOREM 4.7 (5)
+  for L1 be continuous lower-bounded sup-Semilattice holds CLweight L1
+  c= CLweight InclPoset sigma L1
 proof
   let L1 be continuous lower-bounded sup-Semilattice;
   consider S be Scott TopAugmentation of L1;
 A1: the RelStr of S = the RelStr of L1 by YELLOW_9:def 4;
-A2: CLweight L1 = weight S by Th29;
-A3: InclPoset the topology of S = InclPoset sigma L1 by YELLOW_9:51;
-  now per cases;
-    suppose L1 is infinite;
-      then the carrier of S is infinite by A1;
-      then S is infinite;
-      hence thesis by A2,A3,Th8;
+A2: InclPoset the topology of S = InclPoset sigma L1 by YELLOW_9:51;
+A3: CLweight L1 = weight S by Th29;
+  now
+    per cases;
+    suppose
+      L1 is infinite;
+      then S is infinite by A1;
+      hence thesis by A3,A2,Th8;
     end;
-    suppose L1 is finite;
-      then the carrier of S is finite by A1;
-      then
-A4:   S is finite;
-A5:   card the carrier of S c= card the carrier of InclPoset sigma L1
-      by A3,Th9;
-      weight S = card the carrier of S by A4,Th10;
-      hence thesis by A2,A3,A4,A5,Th11;
+    suppose
+A4:   L1 is finite;
+A5:   card the carrier of S c= card the carrier of InclPoset sigma L1 by A2,Th9
+;
+A6:   S is finite by A1,A4;
+      then weight S = card the carrier of S by Th10;
+      hence thesis by A3,A2,A6,A5,Th11;
     end;
   end;
   hence thesis;
 end;
 
-theorem  :: THEOREM 4.7 (6)
-  for L1 be continuous lower-bounded sup-Semilattice st L1 is infinite holds
-  CLweight L1 = CLweight InclPoset sigma L1
+theorem :: THEOREM 4.7 (6)
+  for L1 be continuous lower-bounded sup-Semilattice st L1 is infinite
+  holds CLweight L1 = CLweight InclPoset sigma L1
 proof
   let L1 be continuous lower-bounded sup-Semilattice;
   consider S be Scott TopAugmentation of L1;
-A1: the RelStr of S = the RelStr of L1 by YELLOW_9:def 4;
   assume
-A2: L1 is infinite;
-A3: CLweight L1 = weight S by Th29;
-A4: InclPoset the topology of S = InclPoset sigma L1 by YELLOW_9:51;
-  the carrier of S is infinite by A1,A2;
-  then S is infinite;
-  hence thesis by A3,A4,Th8;
+A1: L1 is infinite;
+A2: CLweight L1 = weight S & InclPoset the topology of S = InclPoset sigma
+  L1 by Th29,YELLOW_9:51;
+  the RelStr of S = the RelStr of L1 by YELLOW_9:def 4;
+  then S is infinite by A1;
+  hence thesis by A2,Th8;
 end;
 

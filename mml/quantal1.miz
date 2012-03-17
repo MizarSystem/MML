@@ -25,37 +25,41 @@ environ
 
 begin
 
-scheme DenestFraenkel {A()->non empty set, B()->non empty set, F(set)->set,
-  G(set)->Element of B(), P[set]}:
-  {F(a) where a is Element of B(): a in {G(b) where b is Element of A(): P[b]}}
-  = {F(G(a)) where a is Element of A(): P[a]}
-proof
+scheme
+  DenestFraenkel {A()->non empty set, B()->non empty set, F(set)->set, G(set)
+->Element of B(), P[set]}: {F(a) where a is Element of B(): a in {G(b) where b
+  is Element of A(): P[b]}} = {F(G(a)) where a is Element of A(): P[a]} proof
   thus {F(a) where a is Element of B(): a in {G(b) where b is Element of A():
   P[b]}} c= {F(G(a)) where a is Element of A(): P[a]}
   proof
     let x be set;
-    assume x in {F(a) where a is Element of B():
-    a in {G(b) where b is Element of A(): P[b]}};
+    assume
+    x in {F(a) where a is Element of B(): a in {G(b) where b is
+    Element of A(): P[b]}};
     then consider a being Element of B() such that
-A1: x = F(a) & a in {G(b) where b is Element of A(): P[b]};
-    consider b being Element of A() such that
-A2: a = G(b) & P[b] by A1;
-    thus thesis by A1,A2;
+A1: x = F(a) and
+A2: a in {G(b) where b is Element of A(): P[b]};
+    ex b being Element of A() st a = G(b) & P[b] by A2;
+    hence thesis by A1;
   end;
   let x be set;
-  assume x in {F(G(a)) where a is Element of A(): P[a]};
+  assume
+  x in {F(G(a)) where a is Element of A(): P[a]};
   then consider a being Element of A() such that
-A3: x = F(G(a)) & P[a];
-  G(a) in {G(b) where b is Element of A(): P[b]} by A3;
+A3: x = F(G(a)) and
+A4: P[a];
+  G(a) in {G(b) where b is Element of A(): P[b]} by A4;
   hence thesis by A3;
 end;
 
-scheme EmptyFraenkel {A() -> non empty set, f(set) -> set, P[set]}:
-  {f(a) where a is Element of A(): P[a]} = {}
+scheme
+  EmptyFraenkel {A() -> non empty set, f(set) -> set, P[set]}: {f(a) where a
+  is Element of A(): P[a]} = {}
 provided
 A1: not ex a being Element of A() st P[a]
 proof
-  assume not thesis;
+  assume
+  not thesis;
   then reconsider X = {f(a) where a is Element of A(): P[a]} as non empty set;
   consider x being Element of X;
   x in X;
@@ -68,27 +72,27 @@ deffunc met(LattStr) = the L_meet of $1;
 deffunc times(multMagma) = the multF of $1;
 
 theorem Th1:
-  for L1,L2 being non empty LattStr st the LattStr of L1 = the LattStr of L2
-  for a1,b1 being Element of L1, a2,b2 being Element of L2 st
-  a1 = a2 & b1 = b2 holds
-  a1"\/"b1 = a2"\/"b2 & a1"/\"b1 = a2"/\"b2 & (a1 [= b1 iff a2 [= b2)
+  for L1,L2 being non empty LattStr st the LattStr of L1 = the
+LattStr of L2 for a1,b1 being Element of L1, a2,b2 being Element of L2 st a1 =
+a2 & b1 = b2 holds a1"\/"b1 = a2"\/"b2 & a1"/\"b1 = a2"/\"b2 & (a1 [= b1 iff a2
+  [= b2)
 proof
   let L1,L2 be non empty LattStr such that
 A1: the LattStr of L1 = the LattStr of L2;
   let a1,b1 be Element of L1, a2,b2 be Element of L2 such that
-A2: a1 = a2 & b1 = b2; thus
-  a1"\/"b1 = a2"\/"b2 by A1,A2;
+A2: a1 = a2 & b1 = b2;
+  thus a1"\/"b1 = a2"\/"b2 by A1,A2;
   thus a1"/\"b1 = a2"/\"b2 by A1,A2;
-  (a1 [= b1 iff a1"\/"b1 = b1) & (a2"\/"
-  b2 = b2 iff a2 [= b2) by LATTICES:def 3;
-  hence thesis by A1,A2;
+A3: a2"\/" b2 = b2 iff a2 [= b2 by LATTICES:def 3;
+  a1 [= b1 iff a1"\/"b1 = b1 by LATTICES:def 3;
+  hence thesis by A1,A2,A3;
 end;
 
 theorem Th2:
-  for L1,L2 being non empty LattStr st the LattStr of L1 = the LattStr of L2
-  for a being Element of L1, b being Element of L2, X being set st a = b
-  holds (a is_less_than X iff b is_less_than X) &
-  (a is_greater_than X iff b is_greater_than X)
+  for L1,L2 being non empty LattStr st the LattStr of L1 = the
+LattStr of L2 for a being Element of L1, b being Element of L2, X being set st
+a = b holds (a is_less_than X iff b is_less_than X) & (a is_greater_than X iff
+  b is_greater_than X)
 proof
   let L1,L2 be non empty LattStr such that
 A1: the LattStr of L1 = the LattStr of L2;
@@ -100,7 +104,8 @@ A2: a = b;
 A3: for c being Element of L1 st c in X holds a [= c;
     let c be Element of L2;
     reconsider d = c as Element of L1 by A1;
-    assume c in X;
+    assume
+    c in X;
     then a [= d by A3;
     hence thesis by A1,A2,Th1;
   end;
@@ -110,7 +115,8 @@ A3: for c being Element of L1 st c in X holds a [= c;
 A4: for c being Element of L2 st c in X holds b [= c;
     let c be Element of L1;
     reconsider d = c as Element of L2 by A1;
-    assume c in X;
+    assume
+    c in X;
     then b [= d by A4;
     hence thesis by A1,A2,Th1;
   end;
@@ -120,7 +126,8 @@ A4: for c being Element of L2 st c in X holds b [= c;
 A5: for c being Element of L1 st c in X holds c [= a;
     let c be Element of L2;
     reconsider d = c as Element of L1 by A1;
-    assume c in X;
+    assume
+    c in X;
     then d [= a by A5;
     hence thesis by A1,A2,Th1;
   end;
@@ -128,7 +135,8 @@ A5: for c being Element of L1 st c in X holds c [= a;
 A6: for c being Element of L2 st c in X holds c [= b;
   let c be Element of L1;
   reconsider d = c as Element of L2 by A1;
-  assume c in X;
+  assume
+  c in X;
   then d [= b by A6;
   hence thesis by A1,A2,Th1;
 end;
@@ -141,47 +149,48 @@ end;
 definition
   let L be non empty LattStr, X be Subset of L;
   attr X is directed means
-  for Y being finite Subset of X ex x being Element of L st
-  "\/"(Y, L) [= x & x in X;
+  for Y being finite Subset of X ex x being Element
+  of L st "\/"(Y, L) [= x & x in X;
 end;
 
 theorem
-  for L being non empty LattStr, X being Subset of L st X is directed holds
-  X is non empty
+  for L being non empty LattStr, X being Subset of L st X is directed
+  holds X is non empty
 proof
   let L be non empty LattStr, X be Subset of L;
   assume
-A1: for Y being finite Subset of X ex x being Element of L st
-  "\/"(Y, L) [= x & x in X;
-  ex x being Element of L st "\/"({}X, L) [= x & x in X by A1;
+  for Y being finite Subset of X ex x being Element of L st "\/"(Y, L)
+  [= x & x in X;
+  then ex x being Element of L st "\/"({}X, L) [= x & x in X;
   hence thesis;
 end;
 
 definition
-  struct (LattStr, multMagma) QuantaleStr (# carrier -> set,
-    L_join, L_meet, multF -> BinOp of the carrier #);
+  struct (LattStr, multMagma) QuantaleStr (# carrier -> set, L_join, L_meet,
+    multF -> BinOp of the carrier #);
 end;
 
 registration
   cluster non empty QuantaleStr;
   existence
-  proof consider A being non empty set, b1,b2,b3 being BinOp of A;
+  proof
+    consider A being non empty set, b1,b2,b3 being BinOp of A;
     take QuantaleStr(#A,b1,b2,b3#);
     thus the carrier of QuantaleStr(#A,b1,b2,b3#) is non empty;
   end;
 end;
 
 definition
-  struct (QuantaleStr, multLoopStr) QuasiNetStr (# carrier -> set,
-    L_join, L_meet, multF -> (BinOp of the carrier),
-    OneF -> Element of the carrier #);
+  struct (QuantaleStr, multLoopStr) QuasiNetStr (# carrier -> set, L_join,
+    L_meet, multF -> (BinOp of the carrier), OneF -> Element of the carrier #);
 end;
 
 registration
   cluster non empty QuasiNetStr;
   existence
-  proof consider A being non empty set, b1,b2,b3 being (BinOp of A),
-    e being Element of A;
+  proof
+    consider A being non empty set, b1,b2,b3 being (BinOp of A), e being
+    Element of A;
     take QuasiNetStr(#A,b1,b2,b3,e#);
     thus the carrier of QuasiNetStr(#A,b1,b2,b3,e#) is non empty;
   end;
@@ -190,13 +199,11 @@ end;
 definition
   let IT be non empty multMagma;
   attr IT is with_left-zero means
-
-  ex a being Element of IT st
-  for b being Element of IT holds a*b = a;
+  ex a being Element of IT st for b being
+  Element of IT holds a*b = a;
   attr IT is with_right-zero means
-
-  ex b being Element of IT st
-  for a being Element of IT holds a*b = b;
+  ex b being Element of IT st for a being
+  Element of IT holds a*b = b;
 end;
 
 definition
@@ -216,96 +223,111 @@ end;
 registration
   cluster with_zero (non empty multMagma);
   existence
-  proof consider x being set, f being BinOp of {x};
+  proof
+    consider x being set, f being BinOp of {x};
     take G = multMagma(#{x},f#);
     reconsider x as Element of G by TARSKI:def 1;
     thus G is with_left-zero
     proof
-      take x; thus thesis by TARSKI:def 1;
+      take x;
+      thus thesis by TARSKI:def 1;
     end;
-    take x; thus thesis by TARSKI:def 1;
+    take x;
+    thus thesis by TARSKI:def 1;
   end;
 end;
 
 definition
   let IT be non empty QuantaleStr;
   attr IT is right-distributive means
-  :
-  Def5: for a being Element of IT, X being set holds a [*] "\/"(X,IT) =
-  "\/"({a [*] b where b is Element of IT: b in X},IT);
+  : Def5:
+  for a being Element of IT, X
+being set holds a [*] "\/"(X,IT) = "\/"({a [*] b where b is Element of IT: b in
+  X},IT);
   attr IT is left-distributive means
-  :
-  Def6: for a being Element of IT, X being set holds "\/"(X,IT) [*] a =
-  "\/"({b [*] a where b is Element of IT: b in X},IT);
+  : Def6:
+  for a being Element of IT, X
+being set holds "\/"(X,IT) [*] a = "\/"({b [*] a where b is Element of IT: b in
+  X},IT);
   attr IT is times-additive means
-
-  for a,b,c being Element of IT holds
-  (a"\/"b)[*]c = (a[*]c)"\/"(b[*]c) & c[*](a"\/"b) = (c[*]a)"\/"(c[*]b);
+  for a,b,c being Element of IT holds (a"\/"b)
+  [*]c = (a[*]c)"\/"(b[*]c) & c[*](a"\/"b) = (c[*]a)"\/"(c[*]b);
   attr IT is times-continuous means
-  for X1, X2 being Subset of IT st X1 is directed & X2 is directed holds
-  ("\/"X1)[*]("\/"X2) = "\/"({a [*] b where
-  a is Element of IT, b is Element of IT: a in X1 & b in X2},IT);
+  for X1, X2 being Subset of IT st X1 is
+directed & X2 is directed holds ("\/"X1)[*]("\/"X2) = "\/"({a [*] b where a is
+  Element of IT, b is Element of IT: a in X1 & b in X2},IT);
 end;
 
 reserve x,y,z for set;
 
 theorem Th4:
-  for Q being non empty QuantaleStr st the LattStr of Q = BooleLatt {}
-  holds Q is associative commutative unital with_zero
-  complete right-distributive left-distributive Lattice-like
+  for Q being non empty QuantaleStr st the LattStr of Q = BooleLatt
+  {} holds Q is associative commutative unital with_zero complete
+  right-distributive left-distributive Lattice-like
 proof
-  let Q be non empty QuantaleStr;
   set B = BooleLatt {};
+  let Q be non empty QuantaleStr;
+  consider a being Element of Q;
   assume
 A1: the LattStr of Q = B;
 A2: now
     let x, y be Element of Q;
-    carr(B) = {{}} by LATTICE3:def 1,ZFMISC_1:1;
-    then x = {} & y = {} by A1,TARSKI:def 1;
-    hence x = y;
+A3: carr(B) = {{}} by LATTICE3:def 1,ZFMISC_1:1;
+    then x = {} by A1,TARSKI:def 1;
+    hence x = y by A1,A3,TARSKI:def 1;
   end;
   thus times(Q) is associative
   proof
-    let a,b,c be Element of Q; thus thesis by A2;
+    let a,b,c be Element of Q;
+    thus thesis by A2;
   end;
+A4: ( for p,q,r being Element of Q holds p"/\"(q"/\"r) = (p"/\"q)"/\"r)&
+  for p,q being Element of Q holds p"/\"(p"\/" q) = p by A2;
   thus times(Q) is commutative
   proof
-    let a,b be Element of Q; thus thesis by A2;
+    let a,b be Element of Q;
+    thus thesis by A2;
   end;
-  consider a being Element of Q;
   thus times(Q) is having_a_unity
   proof
     take a;
     thus a is_a_left_unity_wrt times(Q)
     proof
-      let b be Element of Q; thus thesis by A2;
+      let b be Element of Q;
+      thus thesis by A2;
     end;
-    let b be Element of Q; thus thesis by A2;
+    let b be Element of Q;
+    thus thesis by A2;
   end;
   thus Q is with_zero
   proof
     thus Q is with_left-zero
     proof
-      take a; thus thesis by A2;
+      take a;
+      thus thesis by A2;
     end;
-    take a; thus thesis by A2;
+    take a;
+    thus thesis by A2;
   end;
   now
     let X be set;
     consider p being Element of B such that
-A3: X is_less_than p & for r being Element of B st X is_less_than r
-    holds p [= r by LATTICE3:def 18;
+A5: X is_less_than p and
+A6: for r being Element of B st X is_less_than r holds p [= r by
+    LATTICE3:def 18;
     reconsider p' = p as Element of Q by A1;
-    take p'; thus X is_less_than p' by A1,A3,Th2;
+    take p';
+    thus X is_less_than p' by A1,A5,Th2;
     let r' be Element of Q;
     reconsider r = r' as Element of B by A1;
-    assume X is_less_than r';
+    assume
+    X is_less_than r';
     then X is_less_than r by A1,Th2;
-    then p [= r by A3;
+    then p [= r by A6;
     hence p' [= r' by A1,Th1;
   end;
-  hence for X being set ex p being Element of Q st X is_less_than p &
-  for r being Element of Q st X is_less_than r holds p [= r;
+  hence for X being set ex p being Element of Q st X is_less_than p & for r
+  being Element of Q st X is_less_than r holds p [= r;
   thus Q is right-distributive
   proof
     let a be Element of Q, X be set;
@@ -316,15 +338,13 @@ A3: X is_less_than p & for r being Element of B st X is_less_than r
     let a be Element of Q, X be set;
     thus thesis by A2;
   end;
-  (for p,q being Element of Q holds p"\/"q = q"\/"p) &
-  (for p,q,r being Element of Q holds p"\/"(q"\/"r) = (p"\/"q)"\/"r) &
-  (for p,q being Element of Q holds (p"/\"q)"\/" q = q) &
-  (for p,q being Element of Q holds p"/\"q = q"/\"p) &
-  (for p,q,r being Element of Q holds p"/\"(q"/\"r) = (p"/\"q)"/\"r) &
-  (for p,q being Element of Q holds p"/\"(p"\/" q) = p) by A2;
-  then Q is join-commutative join-associative meet-absorbing
-  meet-commutative meet-associative join-absorbing
-  by LATTICES:def 4,def 5,def 6,def 7,def 8,def 9;
+A7: ( for p,q being Element of Q holds (p"/\"q)"\/" q = q)& for p,q being
+  Element of Q holds p"/\"q = q"/\"p by A2;
+  ( for p,q being Element of Q holds p"\/"q = q"\/"p)& for p,q,r being
+  Element of Q holds p"\/"(q"\/"r) = (p"\/"q)"\/"r by A2;
+  then Q is join-commutative join-associative meet-absorbing meet-commutative
+  meet-associative join-absorbing by A7,A4,LATTICES:def 4,def 5,def 6,def 7
+  ,def 8,def 9;
   hence thesis;
 end;
 
@@ -335,9 +355,8 @@ registration
 end;
 
 registration
-  cluster associative commutative unital with_zero
-    left-distributive right-distributive complete Lattice-like
-    (non empty QuantaleStr);
+  cluster associative commutative unital with_zero left-distributive
+    right-distributive complete Lattice-like (non empty QuantaleStr);
   existence
   proof
     set B = BooleLatt {};
@@ -347,95 +366,104 @@ registration
   end;
 end;
 
-scheme LUBFraenkelDistr {Q() -> complete Lattice-like (non empty QuantaleStr),
-  f(set, set) -> Element of Q(), X, Y() -> set}:
-  "\/"({"\/"({f(a,b) where b is Element of Q(): b in Y()},Q())
-  where a is Element of Q(): a in X()}, Q()) =
-  "\/"({f(a,b) where a is Element of Q(), b is Element of Q(): a in X() & b in
-  Y()}, Q())
-proof
+scheme
+  LUBFraenkelDistr {Q() -> complete Lattice-like (non empty QuantaleStr), f(
+  set, set) -> Element of Q(), X, Y() -> set}: "\/"({"\/"({f(a,b) where b is
+  Element of Q(): b in Y()},Q()) where a is Element of Q(): a in X()}, Q()) =
+"\/"({f(a,b) where a is Element of Q(), b is Element of Q(): a in X() & b in Y(
+  )}, Q()) proof
   set Q = Q(), X = X(), Y = Y();
-  set Z = {{f(a,b) where b is Element of Q: b in Y}
-  where a is Element of Q: a in X};
+  set Z = {{f(a,b) where b is Element of Q: b in Y} where a is Element of Q: a
+  in X};
   set W = {"\/"V where V is Subset of Q: V in Z};
-  set S = {f(a,b) where a is Element of Q,
-  b is Element of Q: a in X & b in Y};
-A1: Z c= bool carr(Q)
+  set S = {f(a,b) where a is Element of Q, b is Element of Q: a in X & b in Y};
+A1: W = {"\/"({f(a,b) where b is Element of Q: b in Y}, Q) where a is
+  Element of Q: a in X}
   proof
-    let x;
-    assume x in Z;
-    then consider a being Element of Q such that
-A2: x = {f(a,b) where b is Element of Q: b in Y} & a in X;
-    x c= carr(Q)
-    proof
-      let y;
-      assume y in x;
-      then ex b being Element of Q st y = f(a,b) & b in Y by A2;
-      hence thesis;
-    end;
-    hence thesis;
-  end;
-A3: W = {"\/"({f(a,b) where b is Element of Q: b in Y}, Q)
-  where a is Element of Q: a in X}
-  proof
-    thus W c= {"\/" ({f(a,b) where b is Element of Q: b in Y}, Q)
-    where a is Element of Q: a in X}
+    thus W c= {"\/" ({f(a,b) where b is Element of Q: b in Y}, Q) where a is
+    Element of Q: a in X}
     proof
       let x;
-      assume x in W;
+      assume
+      x in W;
       then consider V being Subset of Q such that
-A4:   x = "\/"V & V in Z;
-      ex a being Element of Q st V = {f(a,b) where b is Element of Q: b in Y}
-      & a in X by A4;
-      hence thesis by A4;
+A2:   x = "\/"V and
+A3:   V in Z;
+      ex a being Element of Q st V = {f(a,b) where b is Element of Q: b
+      in Y} & a in X by A3;
+      hence thesis by A2;
     end;
     let x;
-    assume x in {"\/"({f(a,b) where b is Element of Q: b in Y}, Q)
-    where a is Element of Q: a in X};
+    assume
+    x in {"\/"({f(a,b) where b is Element of Q: b in Y}, Q) where a
+    is Element of Q: a in X};
     then consider a being Element of Q such that
-A5: x = "\/"({f(a,b) where b is Element of Q: b in Y}, Q) & a in X;
-    {f(a,b) where b is Element of Q: b in Y} c= carr(Q)
+A4: x = "\/"({f(a,b) where b is Element of Q: b in Y}, Q) and
+A5: a in X;
+A6: {f(a,b) where b is Element of Q: b in Y} c= carr(Q)
     proof
       let y;
-      assume y in {f(a,b) where b is Element of Q: b in Y};
+      assume
+      y in {f(a,b) where b is Element of Q: b in Y};
       then ex b being Element of Q st y = f(a,b) & b in Y;
       hence thesis;
     end;
-    then {f(a,b) where b is Element of Q: b in Y} is Subset of Q &
     {f(a,c) where c is Element of Q: c in Y} in Z by A5;
-    hence thesis by A5;
+    hence thesis by A4,A6;
   end;
-  S = union Z
+A7: S = union Z
   proof
     thus S c= union Z
     proof
       let x;
-      assume x in S;
+      assume
+      x in S;
       then consider a, b being Element of Q such that
-A6:   x = f(a,b) & a in X & b in Y;
-      x in {f(a,c) where c is Element of Q: c in Y} &
-      {f(a,d) where d is Element of Q: d in Y} in Z by A6;
+A8:   x = f(a,b) & a in X & b in Y;
+      x in {f(a,c) where c is Element of Q: c in Y} & {f(a,d) where d is
+      Element of Q: d in Y} in Z by A8;
       hence thesis by TARSKI:def 4;
     end;
     let x;
-    assume x in union Z;
+    assume
+    x in union Z;
     then consider V being set such that
-A7: x in V & V in Z by TARSKI:def 4;
+A9: x in V and
+A10: V in Z by TARSKI:def 4;
     consider a being Element of Q such that
-A8: V = {f(a,b) where b is Element of Q: b in Y} & a in X by A7;
-    ex b being Element of Q st x = f(a,b) & b in Y by A7,A8;
-    hence thesis by A8;
+A11: V = {f(a,b) where b is Element of Q: b in Y} and
+A12: a in X by A10;
+    ex b being Element of Q st x = f(a,b) & b in Y by A9,A11;
+    hence thesis by A12;
   end;
-  hence thesis by A1,A3,LATTICE3:49;
+  Z c= bool carr(Q)
+  proof
+    let x;
+    assume
+    x in Z;
+    then consider a being Element of Q such that
+A13: x = {f(a,b) where b is Element of Q: b in Y} and
+    a in X;
+    x c= carr(Q)
+    proof
+      let y;
+      assume
+      y in x;
+      then ex b being Element of Q st y = f(a,b) & b in Y by A13;
+      hence thesis;
+    end;
+    hence thesis;
+  end;
+  hence thesis by A1,A7,LATTICE3:49;
 end;
 
-reserve Q for left-distributive right-distributive complete Lattice-like
-  (non empty QuantaleStr),
+reserve Q for left-distributive right-distributive complete Lattice-like (non
+  empty QuantaleStr),
   a, b, c, d for Element of Q;
 
 theorem Th5:
-  for Q for X,Y being set holds "\/"(X,Q) [*] "\/"(Y,Q) = "\/"({a[*]
-b: a in X & b in Y}, Q)
+  for Q for X,Y being set holds "\/"(X,Q) [*] "\/"(Y,Q) = "\/"({a
+  [*] b: a in X & b in Y}, Q)
 proof
   let Q;
   let X,Y be set;
@@ -445,44 +473,45 @@ proof
   deffunc H(Element of Q,Element of Q) = $1[*]$2;
 A1: for a holds F(a) = G(a) by Def5;
   {F(c): P[c]} = {G(a): P[a]} from FRAENKEL:sch 5(A1);
-  hence "\/"(X,Q) [*] "\/"(Y,Q) =
-  "\/"({"\/"({H(a,b) where b is Element of Q: b in Y}, Q)
-  where a is Element of Q: a in X}, Q) by Def6
-    .=
-  "\/"({H(c,d) where c is Element of Q,
-  d is Element of Q: c in X & d in Y}, Q) from LUBFraenkelDistr;
+  hence
+  "\/"(X,Q) [*] "\/"(Y,Q) = "\/"({"\/"({H(a,b) where b is Element of Q: b
+  in Y}, Q) where a is Element of Q: a in X}, Q) by Def6
+    .= "\/"({H(c,d) where c is Element of Q, d is Element of Q: c in X & d
+  in Y}, Q) from LUBFraenkelDistr;
 end;
 
 theorem Th6:
-  (a"\/"b) [*] c = (a [*] c) "\/" (b [*] c) & c [*] (a"\/"b) = (c [*] a) "\/"
-  (c [*] b)
+  (a"\/"b) [*] c = (a [*] c) "\/" (b [*] c) & c [*] (a"\/"b) = (c
+  [*] a) "\/" (c [*] b)
 proof
   set X1 = {d [*] c: d in {a,b}}, X2 = {c [*] d: d in {a,b}};
-  a"\/"b = "\/"{a,b} by LATTICE3:44;
-  then
-A1: (a"\/"b) [*] c = "\/"(X1, Q) & c [*] (a"\/"b) = "\/"(X2, Q) by Def5,Def6;
   now
     let x;
     a in {a,b} & b in {a,b} by TARSKI:def 2;
     hence x = a [*] c or x = b [*] c implies x in X1;
-    assume x in X1;
-    then consider d such that
-A2: x = d [*] c & d in {a,b};
-    thus x = a [*] c or x = b [*] c by A2,TARSKI:def 2;
+    assume
+    x in X1;
+    then ex d st x = d [*] c & d in {a,b};
+    hence x = a [*] c or x = b [*] c by TARSKI:def 2;
   end;
-  then X1 = {a [*] c, b [*] c} by TARSKI:def 2;
-  hence (a"\/"b) [*] c = (a [*] c) "\/" (b [*] c) by A1,LATTICE3:44;
+  then
+A1: X1 = {a [*] c, b [*] c} by TARSKI:def 2;
   now
     let x;
     a in {a,b} & b in {a,b} by TARSKI:def 2;
     hence x = c [*] a or x = c [*] b implies x in X2;
-    assume x in X2;
-    then consider d such that
-A3: x = c [*] d & d in {a,b};
-    thus x = c [*] a or x = c [*] b by A3,TARSKI:def 2;
+    assume
+    x in X2;
+    then ex d st x = c [*] d & d in {a,b};
+    hence x = c [*] a or x = c [*] b by TARSKI:def 2;
   end;
-  then X2 = {c [*] a, c [*] b} by TARSKI:def 2;
-  hence thesis by A1,LATTICE3:44;
+  then
+A2: X2 = {c [*] a, c [*] b} by TARSKI:def 2;
+A3: a"\/"b = "\/"{a,b} by LATTICE3:44;
+  then (a"\/"b) [*] c = "\/"(X1, Q) by Def6;
+  hence (a"\/"b) [*] c = (a [*] c) "\/" (b [*] c) by A1,LATTICE3:44;
+  c [*] (a"\/"b) = "\/"(X2, Q) by A3,Def5;
+  hence thesis by A2,LATTICE3:44;
 end;
 
 registration
@@ -508,20 +537,20 @@ registration
   coherence
   proof
     let Q be complete Lattice-like (non empty QuasiNetStr);
-    assume Q is left-distributive right-distributive;
+    assume
+    Q is left-distributive right-distributive;
     hence (for X, Y being Subset of Q st X is directed & Y is directed holds
-    "\/"(X,Q) [*] "\/"(Y,Q) = "\/"({a[*]b where a is Element of Q,
-    b is Element of Q: a in X & b in Y}, Q)) &
-    for a,b,c being Element of Q holds
-    (a"\/"b)[*]c = (a[*]c)"\/"(b[*]c) & c[*](a"\/"b) = (c[*]a)"\/"(c[*]b)
-    by Th5,Th6;
+"\/"(X,Q) [*] "\/"(Y,Q) = "\/"({a[*]b where a is Element of Q, b is Element of
+Q:  a
+ in X & b in Y}, Q)) & for a,b,c being Element of Q holds (a"\/"b)[*]c = (a
+    [*]c)"\/"(b[*]c) & c[*](a"\/"b) = (c[*]a)"\/"(c[*]b) by Th5,Th6;
   end;
 end;
 
 registration
   cluster associative commutative unital with_zero with_left-zero
-    left-distributive right-distributive complete Lattice-like
-    (non empty QuasiNetStr);
+    left-distributive right-distributive complete Lattice-like (non empty
+    QuasiNetStr);
   existence
   proof
     set B = BooleLatt {};
@@ -533,8 +562,8 @@ registration
 end;
 
 definition
-  mode Quantale is associative left-distributive right-distributive
-    complete Lattice-like (non empty QuantaleStr);
+  mode Quantale is associative left-distributive right-distributive complete
+    Lattice-like (non empty QuantaleStr);
   mode QuasiNet is unital associative with_left-zero times-continuous
     times-additive complete Lattice-like (non empty QuasiNetStr);
 end;
@@ -544,16 +573,16 @@ definition
 end;
 
 theorem
-  for Q being unital (non empty QuasiNetStr) st Q is Quantale
-  holds Q is BlikleNet
+  for Q being unital (non empty QuasiNetStr) st Q is Quantale holds Q is
+  BlikleNet
 proof
+  defpred P[set] means $1 in {};
   let Q be unital (non empty QuasiNetStr);
   assume
-A1: Q is Quantale;
+  Q is Quantale;
   then reconsider Q' = Q as Quantale;
-  defpred P[set] means $1 in {};
+A1: Bottom Q' = "\/"({},Q') by LATTICE3:50;
 A2: not ex c being Element of Q' st P[c];
-A3: Bottom Q' = "\/"({},Q') by LATTICE3:50;
   Q' is with_zero
   proof
     hereby
@@ -561,19 +590,16 @@ A3: Bottom Q' = "\/"({},Q') by LATTICE3:50;
       take a;
       let b be Element of Q';
       deffunc F1(Element of Q') = $1 [*] b;
-      {F1(c) where c is Element of Q': P[c]} = {} from EmptyFraenkel(A2);
-      hence a[*]b = a by A3,Def6;
+      {F1(c) where c is Element of Q': P[c]} = {} from EmptyFraenkel(A2 );
+      hence a[*]b = a by A1,Def6;
     end;
     take b = Bottom Q';
     let a be Element of Q';
     deffunc F2(Element of Q') = a [*] $1;
     {F2(c) where c is Element of Q': P[c]} = {} from EmptyFraenkel(A2);
-    hence thesis by A3,Def5;
+    hence thesis by A1,Def5;
   end;
-  then Q is with_zero (non empty multMagma) &
-  Q is left-distributive right-distributive
-  complete Lattice-like (non empty QuasiNetStr);
-  hence thesis by A1;
+  hence thesis;
 end;
 
 reserve Q for Quantale,
@@ -585,33 +611,33 @@ proof
   assume
 A1: a [= b;
   thus (a [*] c) "\/" (b [*] c) = (a"\/"b) [*] c by Th6
-    .= b [*]
-  c by A1,LATTICES:def 3;
+    .= b [*] c by A1,LATTICES:def 3;
   thus (c [*] a) "\/" (c [*] b) = c [*] (a"\/"b) by Th6
-    .= c [*]
-  b by A1,LATTICES:def 3;
+    .= c [*] b by A1,LATTICES:def 3;
 end;
 
 theorem Th9:
   a [= b & c [= d implies a [*] c [= b [*] d
 proof
-  assume a [= b & c [= d;
-  then a [*] c [= b [*] c & b [*] c [= b [*] d & Q is Lattice by Th8;
+  assume
+  a [= b & c [= d;
+  then a [*] c [= b [*] c & b [*] c [= b [*] d by Th8;
   hence thesis by LATTICES:25;
 end;
 
 definition
   let f be Function;
   attr f is idempotent means
-
   f * f = f;
 end;
 
-Lm1: for A being non empty set, f being UnOp of A st f is idempotent
-for a being Element of A holds f.(f.a) = f.a
+Lm1: for A being non empty set, f being UnOp of A st f is idempotent for a
+being Element of A holds f.(f.a) = f.a
+
 proof
   let A be non empty set, f be UnOp of A;
-  assume f * f = f;
+  assume
+  f * f = f;
   hence thesis by FUNCT_2:21;
 end;
 
@@ -619,94 +645,99 @@ definition
   let L be non empty LattStr;
   let IT be UnOp of L;
   attr IT is inflationary means
-
   for p being Element of L holds p [= IT.p;
   attr IT is deflationary means
-
   for p being Element of L holds IT.p [= p;
   attr IT is monotone means
-  :
-  Def12: for p,q being Element of L st p [= q holds IT.p [= IT.q;
+  : Def12:
+  for p,q being Element of L st p [= q
+  holds IT.p [= IT.q;
   attr IT is \/-distributive means
-
-  for X being Subset of L holds
-  IT."\/"X [= "\/"({IT.a where a is Element of L: a in X}, L);
+  for X being Subset of L holds IT."\/"X [=
+  "\/"({IT.a where a is Element of L: a in X}, L);
 end;
 
 registration
   let L be Lattice;
   cluster inflationary deflationary monotone UnOp of L;
   existence
-  proof reconsider f = id the carrier of L as UnOp of L;
+  proof
+    reconsider f = id the carrier of L as UnOp of L;
     take f;
     thus f is inflationary
     proof
       let p be Element of L;
-      f.p = p & p [= p by FUNCT_1:34;
-      hence thesis;
+      p [= p;
+      hence thesis by FUNCT_1:34;
     end;
     thus f is deflationary
     proof
       let p be Element of L;
-      f.p = p & p [= p by FUNCT_1:34;
-      hence thesis;
+      p [= p;
+      hence thesis by FUNCT_1:34;
     end;
     let p,q be Element of L;
-    f.p = p & f.q = q by FUNCT_1:34;
-    hence thesis;
+    f.p = p by FUNCT_1:34;
+    hence thesis by FUNCT_1:34;
   end;
 end;
 
 theorem Th10:
-  for L being complete Lattice, j being UnOp of L st j is monotone holds
-  j is \/-distributive iff for X being Subset of L holds
-  j."\/"X = "\/"({j.a where a is Element of L: a in X}, L)
+  for L being complete Lattice, j being UnOp of L st j is monotone
+holds j is \/-distributive iff for X being Subset of L holds j."\/"X = "\/"({j.
+  a where a is Element of L: a in X}, L)
 proof
   let L be complete Lattice, j be UnOp of L such that
 A1: j is monotone;
-  thus j is \/-distributive implies for X being Subset of L holds
-  j."\/"X = "\/"({j.a where a is Element of L: a in X}, L)
+  thus j is \/-distributive implies for X being Subset of L holds j."\/"X =
+  "\/"({j.a where a is Element of L: a in X}, L)
   proof
     assume
-A2: for X being Subset of L holds j."\/"X [= "\/"
-    ({j.a where a is Element of L: a in X}, L);
+A2: for X being Subset of L holds j."\/"X [= "\/" ({j.a where a is
+    Element of L: a in X}, L);
     let X be Subset of L;
-A3: j."\/"X [= "\/" ({j.a where a is Element of L: a in X}, L) by A2;
     {j.a where a is Element of L: a in X} is_less_than j. "\/" X
     proof
       let x be Element of L;
-      assume x in {j.a where a is Element of L: a in X};
+      assume
+      x in {j.a where a is Element of L: a in X};
       then consider a being Element of L such that
-A4:   x = j.a & a in X;
+A3:   x = j.a and
+A4:   a in X;
       a [= "\/"X by A4,LATTICE3:38;
-      hence thesis by A1,A4,Def12;
+      hence thesis by A1,A3,Def12;
     end;
-    then "\/"({j.a where a is Element of L: a in X}, L) [= j. "\/"X
-    by LATTICE3:def 21;
-    hence thesis by A3,LATTICES:26;
+    then
+A5: "\/"({j.a where a is Element of L: a in X}, L) [= j. "\/"X by
+    LATTICE3:def 21;
+    j."\/"X [= "\/" ({j.a where a is Element of L: a in X}, L) by A2;
+    hence thesis by A5,LATTICES:26;
   end;
   assume
-A5: for X being Subset of L holds
-  j."\/"X = "\/"({j.a where a is Element of L: a in X}, L);
+A6: for X being Subset of L holds j."\/"X = "\/"({j.a where a is
+  Element of L: a in X}, L);
   let X be Subset of L;
   j."\/"X [= j."\/"X;
-  hence thesis by A5;
+  hence thesis by A6;
 end;
 
 definition
   let Q be non empty QuantaleStr;
   let IT be UnOp of Q;
   attr IT is times-monotone means
-  for a,b being Element of Q holds IT.a [*] IT.b [= IT.(a [*] b);
+  for a,b being Element of Q holds IT.a [*] IT
+  .b [= IT.(a [*] b);
 end;
 
 definition
   let Q be non empty QuantaleStr, a,b be Element of Q;
   func a -r> b -> Element of Q equals
-  "\/"({ c where c is Element of Q: c [*] a [= b }, Q);
+  "\/"({ c where c is Element of Q: c [*]
+  a [= b }, Q);
   correctness;
   func a -l> b -> Element of Q equals
-  "\/"({ c where c is Element of Q: a [*] c [= b }, Q);
+  "\/"({ c where c is Element of Q: a [*]
+  c [= b }, Q);
   correctness;
 end;
 
@@ -717,42 +748,46 @@ proof
   X c= carr(Q)
   proof
     let x;
-    assume x in X;
+    assume
+    x in X;
     then ex d st x = d & a [*] d [= c;
     hence thesis;
   end;
   then reconsider X as Subset of Q;
   thus a [*] b [= c implies b [= a -l> c
   proof
-    assume a [*] b [= c;
+    assume
+    a [*] b [= c;
     then b in X;
     hence thesis by LATTICE3:38;
   end;
-  assume b [= a -l> c;
-  then
-A1: a [*] b [= a [*] "\/"X & a [*] "\/"X = "\/"({a [*] d: d in
-  X}, Q) by Def5,Th8;
   deffunc F(Element of Q) = a [*] $1;
   defpred P1[set] means $1 in X;
   defpred P2[Element of Q] means a [*] $1 [= c;
+  assume
+  b [= a -l> c;
+  then
+A1: a [*] b [= a [*] "\/"X by Th8;
   now
     let d;
-    assume d in X;
+    assume
+    d in X;
     then ex d1 st d = d1 & a [*] d1 [= c;
     hence a [*] d [= c;
   end;
   then
 A2: P1[d] iff P2[d];
 A3: {F(d1): P1[d1]} = {F(d2): P2[d2]} from FRAENKEL:sch 3(A2);
-  {a [*] d: d in X} is_less_than c
+A4: {a [*] d: d in X} is_less_than c
   proof
     let d1;
-    assume d1 in {a [*] d: d in X};
-    then consider d2 such that
-A4: d1 = a [*] d2 & a [*] d2 [= c by A3;
-    thus thesis by A4;
+    assume
+    d1 in {a [*] d: d in X};
+    then ex d2 st d1 = a [*] d2 & a [*] d2 [= c by A3;
+    hence thesis;
   end;
-  then a [*] "\/"X [= c by A1,LATTICE3:def 21;
+  a [*] "\/"X = "\/"({a [*] d: d in X}, Q) by Def5;
+  then a [*] "\/"X [= c by A4,LATTICE3:def 21;
   hence thesis by A1,LATTICES:25;
 end;
 
@@ -763,80 +798,88 @@ proof
   X c= carr(Q)
   proof
     let x;
-    assume x in X;
+    assume
+    x in X;
     then ex d st x = d & d [*] b [= c;
     hence thesis;
   end;
   then reconsider X as Subset of Q;
   thus a [*] b [= c implies a [= b -r> c
   proof
-    assume a [*] b [= c;
+    assume
+    a [*] b [= c;
     then a in X;
     hence thesis by LATTICE3:38;
   end;
-  assume a [= b -r> c;
-  then
-A1: a [*] b [= ("\/"X) [*] b & ("\/"X) [*] b = "\/"({d [*]
-b: d in X}, Q) by Def6,Th8;
   deffunc F(Element of Q) = $1 [*] b;
   defpred P1[set] means $1 in X;
   defpred P2[Element of Q] means $1 [*] b [= c;
+  assume
+  a [= b -r> c;
+  then
+A1: a [*] b [= ("\/"X) [*] b by Th8;
   now
     let d;
-    assume d in X;
+    assume
+    d in X;
     then ex d1 st d = d1 & d1 [*] b [= c;
     hence d [*] b [= c;
   end;
   then
 A2: P1[d] iff P2[d];
 A3: {F(d1): P1[d1]} = {F(d2): P2[d2]} from FRAENKEL:sch 3(A2);
-  {d [*] b: d in X} is_less_than c
+A4: {d [*] b: d in X} is_less_than c
   proof
     let d1;
-    assume d1 in {d [*] b: d in X};
-    then consider d2 such that
-A4: d1 = d2 [*] b & d2 [*] b [= c by A3;
-    thus thesis by A4;
+    assume
+    d1 in {d [*] b: d in X};
+    then ex d2 st d1 = d2 [*] b & d2 [*] b [= c by A3;
+    hence thesis;
   end;
-  then ("\/"X) [*] b [= c by A1,LATTICE3:def 21;
+  ("\/"X) [*] b = "\/"({d [*] b: d in X}, Q) by Def6;
+  then ("\/"X) [*] b [= c by A4,LATTICE3:def 21;
   hence thesis by A1,LATTICES:25;
 end;
 
 theorem Th13:
-  for Q being Quantale, s,a,b being Element of Q st
-  a [= b holds b-r>s [= a-r>s & b-l>s [= a-l>s
+  for Q being Quantale, s,a,b being Element of Q st a [= b holds b
+  -r>s [= a-r>s & b-l>s [= a-l>s
 proof
   let Q be Quantale, s,a,b be Element of Q such that
 A1: a [= b;
-  {d where d is Element of Q: d [*] b [= s} c=
-  {c where c is Element of Q: c [*] a [= s}
+  {d where d is Element of Q: d [*] b [= s} c= {c where c is Element of Q:
+  c [*] a [= s}
   proof
     let x;
-    assume x in {d where d is Element of Q: d [*] b [= s};
+    assume
+    x in {d where d is Element of Q: d [*] b [= s};
     then consider d being Element of Q such that
-A2: x = d & d [*] b [= s;
+A2: x = d and
+A3: d [*] b [= s;
     d [*] a [= d [*] b by A1,Th8;
-    then d [*] a [= s by A2,LATTICES:25;
+    then d [*] a [= s by A3,LATTICES:25;
     hence thesis by A2;
   end;
   hence b-r>s [= a-r>s by LATTICE3:46;
-  {d where d is Element of Q: b [*] d [= s} c=
-  {c where c is Element of Q: a [*] c [= s}
+  {d where d is Element of Q: b [*] d [= s} c= {c where c is Element of Q:
+  a [*] c [= s}
   proof
     let x;
-    assume x in {d where d is Element of Q: b [*] d [= s};
+    assume
+    x in {d where d is Element of Q: b [*] d [= s};
     then consider d being Element of Q such that
-A3: x = d & b [*] d [= s;
+A4: x = d and
+A5: b [*] d [= s;
     a [*] d [= b [*] d by A1,Th8;
-    then a [*] d [= s by A3,LATTICES:25;
-    hence thesis by A3;
+    then a [*] d [= s by A5,LATTICES:25;
+    hence thesis by A4;
   end;
   hence thesis by LATTICE3:46;
 end;
 
 theorem
-  for Q being Quantale, s being Element of Q, j being UnOp of Q
-  st for a being Element of Q holds j.a = (a-r>s)-r>s holds j is monotone
+  for Q being Quantale, s being Element of Q, j being UnOp of Q st for a
+  being Element of Q holds j.a = (a-r>s)-r>s holds j is monotone
 proof
   let Q be Quantale, s be Element of Q;
   let j be UnOp of Q such that
@@ -844,10 +887,13 @@ A1: for a being Element of Q holds j.a = (a-r>s)-r>s;
   thus j is monotone
   proof
     let a,b be Element of Q;
-    assume a [= b;
+    assume
+    a [= b;
     then b-r>s [= a-r>s by Th13;
-    then (a-r>s)-r>s [= (b-r>s)-r>s & (a-r>s)-r>s = j.a by A1,Th13;
-    hence thesis by A1;
+    then
+A2: (a-r>s)-r>s [= (b-r>s)-r>s by Th13;
+    (a-r>s)-r>s = j.a by A1;
+    hence thesis by A1,A2;
   end;
 end;
 
@@ -856,11 +902,12 @@ definition
   let IT be Element of Q;
   attr IT is dualizing means
   : Def17:
-  for a being Element of Q
-  holds (a-r>IT)-l>IT = a & (a-l>IT)-r>IT = a;
+  for a being Element of Q holds (a-r>IT)
+  -l>IT = a & (a-l>IT)-r>IT = a;
   attr IT is cyclic means
-  :
-  Def18: for a being Element of Q holds a -r> IT = a -l> IT;
+  : Def18:
+  for a being Element of Q holds a -r> IT = a
+  -l> IT;
 end;
 
 theorem Th15:
@@ -871,7 +918,8 @@ proof
     assume
 A1: a -r> c = a -l> c;
     let a,b;
-    assume a [*] b [= c;
+    assume
+    a [*] b [= c;
     then a [= b-r>c by Th12;
     then a [= b-l>c by A1;
     hence thesis by Th11;
@@ -885,145 +933,169 @@ A2: a [*] b [= c implies b [*] a [= c;
     thus X1 c= X2
     proof
       let x;
-      assume x in X1;
+      assume
+      x in X1;
       then consider d such that
-A3:   x = d & d [*] a [= c;
-      a [*] d [= c by A2,A3;
+A3:   x = d and
+A4:   d [*] a [= c;
+      a [*] d [= c by A2,A4;
       hence thesis by A3;
     end;
     let x;
-    assume x in X2;
+    assume
+    x in X2;
     then consider d such that
-A4: x = d & a [*] d [= c;
-    d [*] a [= c by A2,A4;
-    hence thesis by A4;
+A5: x = d and
+A6: a [*] d [= c;
+    d [*] a [= c by A2,A6;
+    hence thesis by A5;
   end;
   hence thesis;
 end;
 
 theorem Th16:
-  for Q being Quantale, s,a being Element of Q st s is cyclic holds
-  a [= (a-r>s)-r>s & a [= (a-l>s)-l>s
+  for Q being Quantale, s,a being Element of Q st s is cyclic
+  holds a [= (a-r>s)-r>s & a [= (a-l>s)-l>s
 proof
   let Q;
   let s,a be Element of Q such that
 A1: s is cyclic;
-  {b: b [= a} c= {c: c[*](a-r>s) [= s}
+A2: {b: b [= a} c= {c: c[*](a-r>s) [= s}
   proof
     let x;
-    assume x in {b: b [= a};
+    assume
+    x in {b: b [= a};
     then consider b such that
-A2: x = b & b [= a;
-    a-r>s [= b-r>s & (b-r>s)[*]b [= s by A2,Th12,Th13;
-    then b[*](a-r>s) [= b[*](b-r>s) & b[*](b-r>s) [= s by A1,Th8,Th15;
-    then b[*](a-r>s) [= s by LATTICES:25;
-    hence thesis by A2;
-  end;
-  then a = "\/"({d: d [= a},Q) & "\/"({b: b [= a},Q) [= "\/"
-  ({c: c[*](a-r>s) [= s},Q) by LATTICE3:45,46;
-  hence a [= (a-r>s)-r>s;
-  {b: b [= a} c= {c: (a-l>s)[*]c [= s}
-  proof
-    let x;
-    assume x in {b: b [= a};
-    then consider b such that
-A3: x = b & b [= a;
-    a-l>s [= b-l>s & b[*](b-l>s) [= s by A3,Th11,Th13;
-    then (a-l>s)[*]b [= (b-l>s)[*]b & (b-l>s)[*]b [= s by A1,Th8,Th15;
-    then (a-l>s)[*]b [= s by LATTICES:25;
+A3: x = b and
+A4: b [= a;
+    (b-r>s)[*]b [= s by Th12;
+    then
+A5: b[*](b-r>s) [= s by A1,Th15;
+    a-r>s [= b-r>s by A4,Th13;
+    then b[*](a-r>s) [= b[*](b-r>s) by Th8;
+    then b[*](a-r>s) [= s by A5,LATTICES:25;
     hence thesis by A3;
   end;
-  then a = "\/"({d: d [= a},Q) & "\/"({b: b [= a},Q) [= "\/"
-  ({c: (a-l>s)[*]c [= s},Q) by LATTICE3:45,46;
-  hence thesis;
+A6: {b: b [= a} c= {c: (a-l>s)[*]c [= s}
+  proof
+    let x;
+    assume
+    x in {b: b [= a};
+    then consider b such that
+A7: x = b and
+A8: b [= a;
+    b[*](b-l>s) [= s by Th11;
+    then
+A9: (b-l>s)[*]b [= s by A1,Th15;
+    a-l>s [= b-l>s by A8,Th13;
+    then (a-l>s)[*]b [= (b-l>s)[*]b by Th8;
+    then (a-l>s)[*]b [= s by A9,LATTICES:25;
+    hence thesis by A7;
+  end;
+  a = "\/"({d: d [= a},Q) by LATTICE3:45;
+  hence a [= (a-r>s)-r>s by A2,LATTICE3:46;
+  a = "\/"({d: d [= a},Q) by LATTICE3:45;
+  hence thesis by A6,LATTICE3:46;
 end;
 
 theorem
-  for Q being Quantale, s,a being Element of Q st s is cyclic holds
-  a-r>s = ((a-r>s)-r>s)-r>s & a-l>s = ((a-l>s)-l>s)-l>s
+  for Q being Quantale, s,a being Element of Q st s is cyclic holds a-r>
+  s = ((a-r>s)-r>s)-r>s & a-l>s = ((a-l>s)-l>s)-l>s
 proof
   let Q;
   let s,a be Element of Q;
-  assume s is cyclic;
+  assume
+A1: s is cyclic;
+  then a [= (a-r>s)-r>s by Th16;
   then
-A1: a [= (a-r>s)-r>s & a-r>s [= ((a-r>s)-r>s)-r>s &
-  a [= (a-l>s)-l>s & a-l>s [= ((a-l>s)-l>s)-l>s by Th16;
-  then ((a-r>s)-r>s)-r>s [= a-r>s & ((a-l>s)-l>s)-l>s [= a-l>s by Th13;
-  hence thesis by A1,LATTICES:26;
+A2: ((a-r>s)-r>s)-r>s [= a-r>s by Th13;
+  a [= (a-l>s)-l>s by A1,Th16;
+  then
+A3: ((a-l>s)-l>s)-l>s [= a-l>s by Th13;
+  a-r>s [= ((a-r>s)-r>s)-r>s & a-l>s [= ((a-l>s)-l>s)-l>s by A1,Th16;
+  hence thesis by A2,A3,LATTICES:26;
 end;
 
 theorem
-  for Q being Quantale, s,a,b being Element of Q st s is cyclic holds
-  ((a-r>s)-r>s)[*]((b-r>s)-r>s) [= ((a[*]b)-r>s)-r>s
+  for Q being Quantale, s,a,b being Element of Q holds ((a-r>s)-r>s)[*](
+  (b-r>s)-r>s) [= ((a[*]b)-r>s)-r>s
 proof
   let Q;
-  let s,a,b be Element of Q such that s is cyclic;
+  let s,a,b be Element of Q;
   deffunc NEG(Element of Q) = {c: c[*]($1-r>s) [= s};
-A1: ((a-r>s)-r>s)[*]((b-r>s)-r>s) = "\/"({a'[*]
-b': a' in NEG(a) & b' in NEG(b)}, Q) by Th5;
-  {a'[*]b': a' in NEG(a) & b' in NEG(b)} c= NEG(a[*]b)
+A1: {a'[*]b': a' in NEG(a) & b' in NEG(b)} c= NEG(a[*]b)
   proof
-    let x;
-    assume x in {a'[*]b': a' in NEG(a) & b' in NEG(b)};
-    then consider a', b' such that
-A2: x = a'[*]b' & a' in NEG(a) & b' in NEG(b);
-A3: (ex c st a' = c & c[*](a-r>s) [= s) & (ex c st b' = c & c[*] (b-r>s) [= s)
-    by A2;
-    deffunc F(Element of Q) = a'[*]b'[*]$1;
-    deffunc G(Element of Q) = $1;
     defpred P[Element of Q] means $1[*](a[*]b) [= s;
+    deffunc G(Element of Q) = $1;
+    let x;
     set A = {G(c): P[c]};
+    assume
+    x in {a'[*]b': a' in NEG(a) & b' in NEG(b)};
+    then consider a', b' such that
+A2: x = a'[*]b' and
+A3: a' in NEG(a) and
+A4: b' in NEG(b);
+    deffunc F(Element of Q) = a'[*]b'[*]$1;
     set B = {F(G(c)): P[c]};
-    {F(c): c in A} = B from DenestFraenkel;
-    then
-A4: a'[*]b'[*]((a[*]b)-r>s) = "\/"(B, Q) by Def5;
-    B is_less_than s
+A5: ex c st b' = c & c[*] (b-r>s) [= s by A4;
+A6: ex c st a' = c & c[*](a-r>s) [= s by A3;
+A7: B is_less_than s
     proof
       let d;
-      assume d in B;
+      assume
+      d in B;
       then consider c such that
-A5:   d = a'[*]b'[*]c & c[*](a[*]b) [= s;
-      c[*]a[*]b [= s by A5,GROUP_1:def 4;
-      then c[*]a [= b-r>s & b-r>s [= b'-l>s by A3,Th11,Th12;
-      then c[*]a [= b'-l>s by LATTICES:25;
+A8:   d = a'[*]b'[*]c and
+A9:   c[*](a[*]b) [= s;
+A10:  b-r>s [= b'-l>s by A5,Th11;
+      c[*]a[*]b [= s by A9,GROUP_1:def 4;
+      then c[*]a [= b-r>s by Th12;
+      then c[*]a [= b'-l>s by A10,LATTICES:25;
       then b'[*](c[*]a) [= s by Th11;
       then b'[*]c[*]a [= s by GROUP_1:def 4;
-      then b'[*]c [= a-r>s & a-r>s [= a'-l>s by A3,Th11,Th12;
-      then b'[*]c [= a'-l>s by LATTICES:25;
+      then
+A11:  b'[*]c [= a-r>s by Th12;
+      a-r>s [= a'-l>s by A6,Th11;
+      then b'[*]c [= a'-l>s by A11,LATTICES:25;
       then a'[*](b'[*]c) [= s by Th11;
-      hence d [= s by A5,GROUP_1:def 4;
+      hence d [= s by A8,GROUP_1:def 4;
     end;
-    then a'[*]b'[*]((a[*]b)-r>s) [= s by A4,LATTICE3:def 21;
+    {F(c): c in A} = B from DenestFraenkel;
+    then a'[*]b'[*]((a[*]b)-r>s) = "\/"(B, Q) by Def5;
+    then a'[*]b'[*]((a[*]b)-r>s) [= s by A7,LATTICE3:def 21;
     hence thesis by A2;
   end;
+  ((a-r>s)-r>s)[*]((b-r>s)-r>s) = "\/"({a'[*] b': a' in NEG(a) & b' in NEG
+  (b)}, Q) by Th5;
   hence thesis by A1,LATTICE3:46;
 end;
 
 theorem Th19:
-  D is dualizing implies Q is unital &
-  the_unity_wrt the multF of Q = D -r> D &
-  the_unity_wrt the multF of Q = D -l> D
+  D is dualizing implies Q is unital & the_unity_wrt the multF of
+  Q = D -r> D & the_unity_wrt the multF of Q = D -l> D
 proof
+  set I = D-l>D, J = D-r>D;
   assume
 A1: (a-r>D)-l>D = a & (a-l>D)-r>D = a;
-  set I = D-l>D, J = D-r>D;
 A2: now
-    let a;
     deffunc F(set) = $1;
+    let a;
     defpred P1[Element of Q] means $1 [*] (a [*] I) [= D;
     defpred P2[Element of Q] means $1 [*] a [= D;
+    defpred P3[Element of Q] means J [*] a [*] $1 [= D;
+    defpred P4[Element of Q] means a [*] $1 [= D;
 A3: P1[b] iff P2[b]
-    proof b [*] (a [*] I) = b [*] a [*] I & I-r>D=D by A1,GROUP_1:def 4;
+    proof
+      b [*] (a [*] I) = b [*] a [*] I & I-r>D=D by A1,GROUP_1:def 4;
       hence thesis by Th12;
     end;
 A4: {F(b): P1[b]} = {F(c): P2[c]} from FRAENKEL:sch 3(A3);
     thus a [*] I = ((a [*] I)-r>D)-l>D by A1
       .= (a-r>D)-l>D by A4
       .= a by A1;
-    defpred P3[Element of Q] means J [*] a [*] $1 [= D;
-    defpred P4[Element of Q] means a [*] $1 [= D;
 A5: P3[b] iff P4[b]
-    proof J [*] (a [*] b) = J [*] a [*] b & J-l>D=D by A1,GROUP_1:def 4;
+    proof
+      J [*] (a [*] b) = J [*] a [*] b & J-l>D=D by A1,GROUP_1:def 4;
       hence thesis by Th11;
     end;
 A6: {F(b): P3[b]} = {F(c): P4[c]} from FRAENKEL:sch 3(A5);
@@ -1031,65 +1103,67 @@ A6: {F(b): P3[b]} = {F(c): P4[c]} from FRAENKEL:sch 3(A5);
       .= (a-l>D)-r>D by A6
       .= a by A1;
   end;
-  then
-A7: I = J [*] I & J = J [*] I;
-A8: I is_a_unity_wrt times(Q)
+A7: I is_a_right_unity_wrt times(Q)
   proof
-    thus I is_a_left_unity_wrt times(Q)
-    proof
-      let a;
-      thus times(Q).(I,a) = J [*] a by A7
-        .= a by A2;
-    end;
-    thus I is_a_right_unity_wrt times(Q)
-    proof
-      let a;
-      thus times(Q).(a,I) = a [*] I
-        .= a by A2;
-    end;
+    let a;
+    thus times(Q).(a,I) = a [*] I
+      .= a by A2;
   end;
+A8: I = J [*] I by A2;
+  I is_a_left_unity_wrt times(Q)
+  proof
+    let a;
+    thus times(Q).(I,a) = J [*] a by A2,A8
+      .= a by A2;
+  end;
+  then
+A9: I is_a_unity_wrt times(Q) by A7,BINOP_1:def 7;
   hence times(Q) is having_a_unity by SETWISEO:def 2;
-  thus thesis by A7,A8,BINOP_1:def 8;
+  J = J [*] I by A2;
+  hence thesis by A8,A9,BINOP_1:def 8;
 end;
 
 theorem
-  a is dualizing implies
-  b -r> c = (b [*] (c -l> a)) -r> a & b -l> c = ((c -r> a) [*] b) -l> a
+  a is dualizing implies b -r> c = (b [*] (c -l> a)) -r> a & b -l> c = (
+  (c -r> a) [*] b) -l> a
 proof
-  assume (d -r> a) -l> a = d & (d -l> a) -r> a = d;
-  then
-A1: c = (c -r> a) -l> a & c = (c -l> a) -r> a;
   deffunc F(set) = $1;
   defpred P1[Element of Q] means $1 [*] b [= c;
   defpred P2[Element of Q] means $1 [*] (b [*] (c -l> a)) [= a;
-A2: P1[d] iff P2[d]
-  proof d [*] (b [*] (c -l> a)) = d [*] b [*] (c -l> a) by GROUP_1:def 4;
-    hence thesis by A1,Th12;
-  end;
-  {F(d1): P1[d1]} = {F(d2): P2[d2]} from FRAENKEL:sch 3(A2);
-  hence b -r> c = (b [*] (c -l> a)) -r> a;
   defpred P3[Element of Q] means b [*] $1 [= c;
   defpred P4[Element of Q] means (c -r> a) [*] b [*] $1 [= a;
-A3: P3[d] iff P4[d]
-  proof (c -r> a) [*] b [*] d = (c -r> a) [*] (b [*] d) by GROUP_1:def 4;
-    hence thesis by A1,Th11;
+  assume
+A1: (d -r> a) -l> a = d & (d -l> a) -r> a = d;
+  then
+A2: c = (c -l> a) -r> a;
+A3: P1[d] iff P2[d]
+  proof
+    d [*] (b [*] (c -l> a)) = d [*] b [*] (c -l> a) by GROUP_1:def 4;
+    hence thesis by A2,Th12;
   end;
-  {F(d1): P3[d1]} = {F(d2): P4[d2]} from FRAENKEL:sch 3(A3);
+  {F(d1): P1[d1]} = {F(d2): P2[d2]} from FRAENKEL:sch 3(A3);
+  hence b -r> c = (b [*] (c -l> a)) -r> a;
+A4: c = (c -r> a) -l> a by A1;
+A5: P3[d] iff P4[d]
+  proof
+    (c -r> a) [*] b [*] d = (c -r> a) [*] (b [*] d) by GROUP_1:def 4;
+    hence thesis by A4,Th11;
+  end;
+  {F(d1): P3[d1]} = {F(d2): P4[d2]} from FRAENKEL:sch 3(A5);
   hence thesis;
 end;
 
 definition
-  struct (QuasiNetStr) Girard-QuantaleStr (# carrier -> set,
-    L_join, L_meet, multF -> (BinOp of the carrier),
-    OneF, absurd -> Element of the carrier #);
+  struct (QuasiNetStr) Girard-QuantaleStr (# carrier -> set, L_join, L_meet,
+    multF -> (BinOp of the carrier), OneF, absurd -> Element of the carrier #);
 end;
 
 registration
   cluster non empty Girard-QuantaleStr;
   existence
   proof
-    consider A being non empty set, b1,b2,b3 being (BinOp of A),
-    e1,e2 being Element of A;
+    consider A being non empty set, b1,b2,b3 being (BinOp of A), e1,e2 being
+    Element of A;
     take Girard-QuantaleStr(#A,b1,b2,b3,e1,e2#);
     thus the carrier of Girard-QuantaleStr(#A,b1,b2,b3,e1,e2#) is non empty;
   end;
@@ -1106,23 +1180,24 @@ definition
 end;
 
 theorem Th21:
-  for Q being non empty Girard-QuantaleStr st the LattStr of Q = BooleLatt {}
-  holds Q is cyclic dualized
+  for Q being non empty Girard-QuantaleStr st the LattStr of Q =
+  BooleLatt {} holds Q is cyclic dualized
 proof
   let Q be non empty Girard-QuantaleStr;
-  assume
-A1: the LattStr of Q = BooleLatt {};
   set c = the absurd of Q;
-A2: carr(Q) = {{}} by A1,LATTICE3:def 1,ZFMISC_1:1;
+  assume
+  the LattStr of Q = BooleLatt {};
+  then
+A1: carr(Q) = {{}} by LATTICE3:def 1,ZFMISC_1:1;
   thus Q is cyclic
   proof
     let a be Element of Q;
-    a -r> c = {} & a -l> c = {} by A2,TARSKI:def 1;
-    hence thesis;
+    a -r> c = {} by A1,TARSKI:def 1;
+    hence thesis by A1,TARSKI:def 1;
   end;
   let a be Element of Q;
-  (a-r>c)-l>c = {} & (a-l>c)-r>c = {} & a = {} by A2,TARSKI:def 1;
-  hence thesis;
+  (a-r>c)-l>c = {} & (a-l>c)-r>c = {} by A1,TARSKI:def 1;
+  hence thesis by A1,TARSKI:def 1;
 end;
 
 registration
@@ -1132,9 +1207,8 @@ registration
 end;
 
 registration
-  cluster associative commutative unital
-    left-distributive right-distributive complete Lattice-like
-    cyclic dualized strict (non empty Girard-QuantaleStr);
+  cluster associative commutative unital left-distributive right-distributive
+complete Lattice-like cyclic dualized strict (non empty Girard-QuantaleStr);
   existence
   proof
     set B = BooleLatt {};
@@ -1146,15 +1220,14 @@ registration
 end;
 
 definition
-  mode Girard-Quantale is associative unital
-    left-distributive right-distributive
-    complete Lattice-like cyclic dualized (non empty Girard-QuantaleStr);
+  mode Girard-Quantale is associative unital left-distributive
+    right-distributive complete Lattice-like cyclic dualized (non empty
+    Girard-QuantaleStr);
 end;
 
 definition
   let G be Girard-QuantaleStr;
   func Bottom G -> Element of G equals
-
   the absurd of G;
   correctness;
 end;
@@ -1162,12 +1235,10 @@ end;
 definition
   let G be non empty Girard-QuantaleStr;
   func Top G -> Element of G equals
-
   (Bottom G) -r> Bottom G;
   correctness;
   let a be Element of G;
   func Bottom a -> Element of G equals
-
   a -r> Bottom G;
   correctness;
 end;
@@ -1175,14 +1246,16 @@ end;
 definition
   let G be non empty Girard-QuantaleStr;
   func Negation G -> UnOp of G means
-  for a being Element of G holds it.a = Bottom a;
+  for a being Element of G holds it.a =
+  Bottom a;
   existence
   proof
     deffunc F(Element of G) = Bottom $1;
     consider f being Function of the carrier of G, the carrier of G such that
 A1: for a being Element of G holds f.a = F(a) from FUNCT_2:sch 4;
     reconsider f as UnOp of G;
-    take f; thus thesis by A1;
+    take f;
+    thus thesis by A1;
   end;
   uniqueness
   proof
@@ -1201,7 +1274,6 @@ end;
 definition
   let G be non empty Girard-QuantaleStr, u be UnOp of G;
   func Bottom u -> UnOp of G equals
-
   Negation(G)*u;
   correctness;
 end;
@@ -1209,7 +1281,6 @@ end;
 definition
   let G be non empty Girard-QuantaleStr, o be BinOp of G;
   func Bottom o -> BinOp of G equals
-
   Negation(G)*o;
   correctness;
 end;
@@ -1222,10 +1293,10 @@ theorem Th22:
   Bottom Bottom a = a
 proof
   the absurd of Q is cyclic by Def19;
-  then Bottom Bottom a = (Bottom a)-r>Bottom Q & Bottom a = a-r>Bottom Q &
-  Bottom Q = the absurd of Q & a-l>the absurd of Q = a-r>the absurd of Q &
-  the absurd of Q is dualizing by Def18,Def20;
-  hence thesis by Def17;
+  then
+A1: a-l>the absurd of Q = a-r>the absurd of Q by Def18;
+  the absurd of Q is dualizing by Def20;
+  hence thesis by A1,Def17;
 end;
 
 theorem
@@ -1234,100 +1305,108 @@ theorem
 theorem Th24:
   Bottom "\/"(X,Q) = "/\"({Bottom a: a in X}, Q)
 proof
-  Bottom "\/"(X,Q) is_less_than {Bottom a: a in X}
-  proof
-    let b;
-    assume b in {Bottom a: a in X};
-    then consider a such that
-A1: b = Bottom a & a in X;
-    a [= "\/"(X,Q) by A1,LATTICE3:38;
-    hence thesis by A1,Th13;
-  end;
-  then
-A2: Bottom "\/"(X,Q) [= "/\"({Bottom a: a in X}, Q) by LATTICE3:40;
   {"/\"({Bottom a: a in X}, Q) [*] b: b in X} is_less_than Bottom Q
   proof
     let c;
-    assume c in {"/\"({Bottom a: a in X}, Q) [*] b: b in X};
+    assume
+    c in {"/\"({Bottom a: a in X}, Q) [*] b: b in X};
     then consider b such that
-A3: c = "/\"({Bottom a: a in X}, Q) [*] b & b in X;
-    Bottom b in {Bottom a: a in X} by A3;
-    then "/\"({Bottom a: a in X}, Q) [= Bottom b & Bottom b = b -r> Bottom
-    Q by LATTICE3:38;
-    hence c [= Bottom Q by A3,Th12;
+A1: c = "/\"({Bottom a: a in X}, Q) [*] b & b in X;
+    Bottom b in {Bottom a: a in X} by A1;
+    then "/\"({Bottom a: a in X}, Q) [= Bottom b by LATTICE3:38;
+    hence c [= Bottom Q by A1,Th12;
   end;
-  then "\/"({"/\"
-  ({Bottom a: a in X}, Q) [*] b: b in X}, Q) [= Bottom Q by LATTICE3:def 21;
-  then "/\"({Bottom a: a in X}, Q) [*] "\/"(X,Q) [= Bottom Q & Bottom
-  "\/"(X,Q) = "\/"(X,Q) -r> Bottom Q by Def5;
-  then "/\"({Bottom a: a in X}, Q) [= Bottom "\/"(X,Q) by Th12;
+  then "\/"({"/\" ({Bottom a: a in X}, Q) [*] b: b in X}, Q) [= Bottom Q by
+  LATTICE3:def 21;
+  then "/\"({Bottom a: a in X}, Q) [*] "\/"(X,Q) [= Bottom Q by Def5;
+  then
+A2: "/\"({Bottom a: a in X}, Q) [= Bottom "\/"(X,Q) by Th12;
+  Bottom "\/"(X,Q) is_less_than {Bottom a: a in X}
+  proof
+    let b;
+    assume
+    b in {Bottom a: a in X};
+    then consider a such that
+A3: b = Bottom a and
+A4: a in X;
+    a [= "\/"(X,Q) by A4,LATTICE3:38;
+    hence thesis by A3,Th13;
+  end;
+  then Bottom "\/"(X,Q) [= "/\"({Bottom a: a in X}, Q) by LATTICE3:40;
   hence thesis by A2,LATTICES:26;
 end;
 
 theorem Th25:
   Bottom "/\"(X,Q) = "\/"({Bottom a: a in X}, Q)
 proof
-  {Bottom a: a in {Bottom b: b in X}} c= X
-  proof
-    let x;
-    assume x in {Bottom a: a in {Bottom b: b in X}};
-    then consider a such that
-A1: x = Bottom a & a in {Bottom b: b in X};
-    consider b such that
-A2: a = Bottom b & b in X by A1;
-    thus thesis by A1,A2,Th22;
-  end;
-  then
-A3: "/\"(X,Q) [= "/\"({Bottom a: a in {Bottom b: b in X}}, Q) by LATTICE3:46;
   X is_greater_than "/\"({Bottom a: a in {Bottom b: b in X}}, Q)
   proof
     let c;
-    assume c in X;
+    assume
+    c in X;
     then Bottom c in {Bottom b: b in X};
-    then Bottom Bottom c in {Bottom a: a in {Bottom b: b in X}} & Bottom
-    Bottom c = c by Th22;
-    hence thesis by LATTICE3:38;
+    then
+A1: Bottom Bottom c in {Bottom a: a in {Bottom b: b in X}};
+    Bottom Bottom c = c by Th22;
+    hence thesis by A1,LATTICE3:38;
   end;
-  then "/\"({Bottom a: a in {Bottom
-b: b in X}}, Q) [= "/\"(X,Q) by LATTICE3:40;
-  then "/\"(X,Q) = "/\"({Bottom a: a in {Bottom b: b in X}}, Q) by A3,
+  then
+A2: "/\"({Bottom a: a in {Bottom b: b in X}}, Q) [= "/\"(X,Q) by
+  LATTICE3:40;
+  {Bottom a: a in {Bottom b: b in X}} c= X
+  proof
+    let x;
+    assume
+    x in {Bottom a: a in {Bottom b: b in X}};
+    then consider a such that
+A3: x = Bottom a & a in {Bottom b: b in X};
+    ex b st a = Bottom b & b in X by A3;
+    hence thesis by A3,Th22;
+  end;
+  then "/\"(X,Q) [= "/\"({Bottom a: a in {Bottom b: b in X}}, Q) by
+  LATTICE3:46;
+  then "/\"(X,Q) = "/\"({Bottom a: a in {Bottom b: b in X}}, Q) by A2,
   LATTICES:26;
-  hence Bottom "/\"(X,Q) = Bottom Bottom "\/"({Bottom a: a in X}, Q) by Th24
+  hence Bottom "/\"(X,Q) = Bottom Bottom "\/"({Bottom a: a in X}, Q) by
+  Th24
     .= "\/"({Bottom a: a in X}, Q) by Th22;
 end;
 
 theorem Th26:
-  Bottom (a"\/"b) = Bottom a"/\"Bottom b & Bottom (a"/\"b) = Bottom a"\/"Bottom
-  b
+  Bottom (a"\/"b) = Bottom a"/\"Bottom b & Bottom (a"/\"b) =
+  Bottom a"\/"Bottom b
 proof
-A1: a"\/"b = "\/"{a,b} & Bottom a"\/"Bottom b = "\/"{Bottom a,Bottom b} &
-  a"/\"b = "/\"{a,b} & Bottom a"/\"Bottom b = "/\"{Bottom a,Bottom
-  b} by LATTICE3:44;
-A2: {Bottom c: c in {a,b}} = {Bottom a,Bottom b}
+A1: {Bottom c: c in {a,b}} = {Bottom a,Bottom b}
   proof
     thus {Bottom c: c in {a,b}} c= {Bottom a,Bottom b}
     proof
       let x;
-      assume x in {Bottom c: c in {a,b}};
+      assume
+      x in {Bottom c: c in {a,b}};
       then consider c such that
-A3:   x = Bottom c & c in {a,b};
+A2:   x = Bottom c and
+A3:   c in {a,b};
       c = a or c = b by A3,TARSKI:def 2;
-      hence thesis by A3,TARSKI:def 2;
+      hence thesis by A2,TARSKI:def 2;
     end;
     let x;
-    assume x in {Bottom a,Bottom b};
-
-then x = Bottom a & a in {a,b} or x = Bottom b & b in {a,b} by TARSKI:def 2;
+    assume
+    x in {Bottom a,Bottom b};
+    then x = Bottom a & a in {a,b} or x = Bottom b & b in {a,b} by TARSKI:
+    def 2;
     hence thesis;
   end;
+  a"\/"b = "\/"{a,b} & Bottom a"/\"Bottom b = "/\"{Bottom a,Bottom b} by
+  LATTICE3:44;
   hence Bottom (a"\/"b) = Bottom a"/\"Bottom b by A1,Th24;
-  thus thesis by A1,A2,Th25;
+  Bottom a"\/"Bottom b = "\/"{Bottom a,Bottom b} & a"/\"b = "/\"{a,b} by
+  LATTICE3:44;
+  hence thesis by A1,Th25;
 end;
 
 definition
   let Q,a,b;
   func a delta b -> Element of Q equals
-
   Bottom (Bottom a [*] Bottom b);
   correctness;
 end;
@@ -1336,19 +1415,19 @@ theorem
   a [*] "\/"(X,Q) = "\/"({a [*] b: b in X}, Q) & a delta "/\"(X,Q) =
   "/\"({a delta c: c in X}, Q)
 proof
-  thus a [*] "\/"(X,Q) = "\/"({a [*] b: b in X}, Q) by Def5;
   deffunc F(Element of Q) = Bottom a [*] $1;
   deffunc G(Element of Q) = Bottom $1;
   deffunc H(Element of Q) = Bottom a [*] Bottom $1;
   defpred P[set] means $1 in X;
-A1: {F(c): c in {G(d): P[d]}} = {F(G(b)): P[b]} from DenestFraenkel;
-A2: {G(c): c in {H(d): P[d]}} = {G(H(b)): P[b]} from DenestFraenkel;
   deffunc F1(Element of Q) = Bottom (Bottom a [*] Bottom $1);
   deffunc F2(Element of Q) = a delta $1;
+  thus a [*] "\/"(X,Q) = "\/"({a [*] b: b in X}, Q) by Def5;
+A1: {F(c): c in {G(d): P[d]}} = {F(G(b)): P[b]} from DenestFraenkel;
+A2: {G(c): c in {H(d): P[d]}} = {G(H(b)): P[b]} from DenestFraenkel;
 A3: F1(b) = F2(b);
 A4: {F1(b): P[b]} = {F2(c): P[c]} from FRAENKEL:sch 5(A3);
-  thus a delta "/\"(X,Q) =
-  Bottom (Bottom a [*] "\/"({Bottom b: b in X}, Q)) by Th25
+  thus a delta "/\"(X,Q) = Bottom (Bottom a [*] "\/"({Bottom b: b in X}, Q))
+  by Th25
     .= Bottom "\/"({Bottom a [*] Bottom b: b in X}, Q) by A1,Def5
     .= "/\"({a delta b: b in X}, Q) by A2,A4,Th24;
 end;
@@ -1357,26 +1436,26 @@ theorem
   "\/"(X,Q) [*] a = "\/"({b [*] a: b in X}, Q) & "/\"(X,Q) delta a =
   "/\"({c delta a: c in X}, Q)
 proof
-  thus "\/"(X,Q) [*] a = "\/"({b [*] a: b in X}, Q) by Def6;
   deffunc F(Element of Q) = $1 [*] Bottom a;
   deffunc G(Element of Q) = Bottom $1;
   deffunc H(Element of Q) = Bottom $1 [*] Bottom a;
   defpred P[set] means $1 in X;
-A1: {F(c): c in {G(d): P[d]}} = {F(G(b)): P[b]} from DenestFraenkel;
-A2: {G(c): c in {H(d): P[d]}} = {G(H(b)): P[b]} from DenestFraenkel;
   deffunc F1(Element of Q) = Bottom (Bottom $1 [*] Bottom a);
   deffunc F2(Element of Q) = $1 delta a;
+  thus "\/"(X,Q) [*] a = "\/"({b [*] a: b in X}, Q) by Def6;
+A1: {F(c): c in {G(d): P[d]}} = {F(G(b)): P[b]} from DenestFraenkel;
+A2: {G(c): c in {H(d): P[d]}} = {G(H(b)): P[b]} from DenestFraenkel;
 A3: F1(b) = F2(b);
 A4: {F1(b): P[b]} = {F2(c): P[c]} from FRAENKEL:sch 5(A3);
-  thus "/\"(X,Q) delta a =
-  Bottom ("\/"({Bottom b: b in X}, Q) [*] Bottom a) by Th25
+  thus "/\"(X,Q) delta a = Bottom ("\/"({Bottom b: b in X}, Q) [*] Bottom a)
+  by Th25
     .= Bottom "\/"({Bottom b [*] Bottom a: b in X}, Q) by A1,Def6
     .= "/\"({b delta a: b in X}, Q) by A2,A4,Th24;
 end;
 
 theorem
-  a delta (b"/\"c) = (a delta b)"/\"(a delta c) &
-  (b"/\"c) delta a = (b delta a)"/\"(c delta a)
+  a delta (b"/\"c) = (a delta b)"/\"(a delta c) & (b"/\"c) delta a = (b
+  delta a)"/\"(c delta a)
 proof
   thus a delta (b"/\"c) = Bottom (Bottom a [*] (Bottom b"\/"Bottom c)) by Th26
     .= Bottom ((Bottom a [*] Bottom b)"\/"(Bottom a [*] Bottom c)) by Th6
@@ -1389,11 +1468,10 @@ end;
 theorem
   a1 [= b1 & a2 [= b2 implies a1 delta a2 [= b1 delta b2
 proof
-  assume a1 [= b1 & a2 [= b2;
+  assume
+  a1 [= b1 & a2 [= b2;
   then Bottom b1 [= Bottom a1 & Bottom b2 [= Bottom a2 by Th13;
-  then Bottom b1 [*] Bottom b2 [= Bottom a1 [*] Bottom a2 & a1 delta a2 =
-  Bottom ( Bottom a1 [*] Bottom a2) &
-  b1 delta b2 = Bottom (Bottom b1 [*] Bottom b2) by Th9;
+  then Bottom b1 [*] Bottom b2 [= Bottom a1 [*] Bottom a2 by Th9;
   hence thesis by Th13;
 end;
 
@@ -1408,117 +1486,125 @@ end;
 theorem Th32:
   a [*] Top Q = a & Top Q [*] a = a
 proof
-  Top Q = Bottom Q -r> Bottom Q & Bottom
-  Q = the absurd of Q & the absurd of Q is dualizing by Def20;
-  then Top Q = the_unity_wrt times(Q) & times(Q) is having_a_unity
-  by Th19,MONOID_0:def 10;
-  hence thesis by SETWISEO:23;
+  the absurd of Q is dualizing by Def20;
+  then
+A1: Top Q = the_unity_wrt times(Q) by Th19;
+  times(Q) is having_a_unity by MONOID_0:def 10;
+  hence thesis by A1,SETWISEO:23;
 end;
 
 theorem
   a delta Bottom Q = a & (Bottom Q) delta a = a
 proof
-  a delta Bottom Q = Bottom (Bottom a [*] Bottom Bottom Q) & (Bottom
-  Q) delta a = Bottom (Bottom Bottom Q [*]
-  Bottom a) & Bottom Bottom Q = Bottom Q -r> Bottom Q &
-  Top Q = Bottom Q -r> Bottom Q & Bottom a [*] Top Q = Bottom a & Top
-  Q [*] Bottom a = Bottom a by Th32;
+  Bottom a [*] Top Q = Bottom a & Top Q [*] Bottom a = Bottom a by Th32;
   hence thesis by Th22;
 end;
 
 theorem
-  for Q being Quantale for j being UnOp of Q st
-  j is monotone idempotent \/-distributive
-  ex L being complete Lattice st the carrier of L = rng j &
-  for X being Subset of L holds "\/"X = j."\/"(X,Q)
+  for Q being Quantale for j being UnOp of Q st j is monotone idempotent
+\/-distributive ex L being complete Lattice st the carrier of L = rng j & for X
+  being Subset of L holds "\/"X = j."\/"(X,Q)
 proof
   let Q be Quantale, j be UnOp of Q;
   assume
 A1: j is monotone idempotent \/-distributive;
-  consider q being Element of Q;
-A2: dom j = carr(Q) & rng j c= carr(Q) & q in carr(Q) by FUNCT_2:def 1;
   reconsider D = rng j as non empty Subset of Q;
-  reconsider j' = j as Function of carr(Q), D by A2,RELSET_1:11;
+  dom j = carr(Q) by FUNCT_2:def 1;
+  then reconsider j' = j as Function of carr(Q), D by RELSET_1:11;
   deffunc F(Subset of D) = j'."\/"($1,Q);
   consider f being Function of bool D, D such that
-A3: for X being Subset of D holds f.X = F(X) from FUNCT_2:sch 4;
-A4: dom f = bool D by FUNCT_2:def 1;
-A5: for a being Element of D holds f.{a} = a
-  proof
-    let a be Element of D;
-    consider a' being set such that
-A6: a' in dom j & a = j.a' by FUNCT_1:def 5;
-    reconsider a' as Element of Q by A6;
-    reconsider x = a as Element of Q;
-    reconsider x' = {x} as Subset of Q;
-    thus f.{a} = j."\/"x' by A3
-      .= j.(j.a') by A6,LATTICE3:43
-      .= a by A1,A6,Lm1;
-  end;
-  for X being Subset-Family of D holds f.(f.:X) = f.(union X)
+A2: for X being Subset of D holds f.X = F(X) from FUNCT_2:sch 4;
+A3: dom f = bool D by FUNCT_2:def 1;
+A4: for X being Subset-Family of D holds f.(f.:X) = f.(union X)
   proof
     let X be Subset-Family of D;
     set A = {j.a where a is Element of Q: a in f.:X};
     set B = {j.b where b is Element of Q: b in union X};
     reconsider Y = f.:X, X' = union X as Subset of Q by XBOOLE_1:1;
+    now
+      let a be Element of Q;
+      assume
+      a in B;
+      then consider b' being Element of Q such that
+A5:   a = j.b' and
+A6:   b' in union X;
+      consider Y being set such that
+A7:   b' in Y and
+A8:   Y in X by A6,TARSKI:def 4;
+      reconsider Y as Subset of D by A8;
+A9:   b' [= "\/"(Y,Q) by A7,LATTICE3:38;
+      take b = j."\/"(Y,Q);
+      b = f.Y by A2;
+      then
+A10:  b in f.:X by A3,A8,FUNCT_1:def 12;
+      j.b = b by A1,Lm1;
+      hence a [= b & b in A by A1,A5,A10,A9,Def12;
+    end;
+    then
+A11: "\/"(B, Q) [= "\/"(A, Q) by LATTICE3:48;
     A is_less_than "\/"(B, Q)
     proof
       let a be Element of Q;
-      assume a in A;
+      assume
+      a in A;
       then consider a' being Element of Q such that
-A7:   a = j.a' & a' in f.:X;
+A12:  a = j.a' and
+A13:  a' in f.:X;
       consider x such that
-A8:   x in dom f & x in X & a' = f.x by A7,FUNCT_1:def 12;
-      reconsider x as Subset of D by A8;
+A14:  x in dom f and
+A15:  x in X and
+A16:  a' = f.x by A13,FUNCT_1:def 12;
+      reconsider x as Subset of D by A14;
       reconsider Y = x as Subset of Q by XBOOLE_1:1;
-      a' = j."\/"Y by A3,A8;
-      then
-A9:   a' = "\/" ({j.b where b is Element of Q: b in Y}, Q) by A1,Th10;
-      {j.b where b is Element of Q: b in Y} c= B
+A17:  {j.b where b is Element of Q: b in Y} c= B
       proof
         let z;
-        assume z in {j.b where b is Element of Q: b in Y};
+        assume
+        z in {j.b where b is Element of Q: b in Y};
         then consider b being Element of Q such that
-A10:    z = j.b & b in Y;
-        b in union X by A8,A10,TARSKI:def 4;
-        hence thesis by A10;
+A18:    z = j.b and
+A19:    b in Y;
+        b in union X by A15,A19,TARSKI:def 4;
+        hence thesis by A18;
       end;
-      then a' [= "\/"(B, Q) by A9,LATTICE3:46;
-      then a [= j."\/"(B, Q) by A1,A7,Def12;
+      a' = j."\/"Y by A2,A16;
+      then a' = "\/" ({j.b where b is Element of Q: b in Y}, Q) by A1,
+      Th10;
+      then a' [= "\/"(B, Q) by A17,LATTICE3:46;
+      then a [= j."\/"(B, Q) by A1,A12,Def12;
       then a [= j.(j."\/"X') by A1,Th10;
       then a [= j."\/"X' by A1,Lm1;
       hence thesis by A1,Th10;
     end;
     then
-A11: "\/"(A, Q) [= "\/"(B, Q) by LATTICE3:def 21;
-    now
-      let a be Element of Q;
-      assume a in B;
-      then consider b' being Element of Q such that
-A12:  a = j.b' & b' in union X;
-      consider Y being set such that
-A13:  b' in Y & Y in X by A12,TARSKI:def 4;
-      reconsider Y as Subset of D by A13;
-      take b = j."\/"(Y,Q);
-      b = f.Y by A3;
-      then b in f.:X & j.b = b & b' [= "\/"(Y,Q)
-      by A1,A4,A13,Lm1,FUNCT_1:def 12,LATTICE3:38;
-      hence a [= b & b in A by A1,A12,Def12;
-    end;
-    then
-A14: "\/"(B, Q) [= "\/"(A, Q) by LATTICE3:48;
-    thus f.(f.:X) = j."\/"Y by A3
+A20: "\/"(A, Q) [= "\/"(B, Q) by LATTICE3:def 21;
+    thus f.(f.:X) = j."\/"Y by A2
       .= "\/"(A, Q) by A1,Th10
-      .= "\/"(B, Q) by A11,A14,LATTICES:26
+      .= "\/"(B, Q) by A20,A11,LATTICES:26
       .= j."\/"X' by A1,Th10
-      .= f.union X by A3;
+      .= f.union X by A2;
+  end;
+  for a being Element of D holds f.{a} = a
+  proof
+    let a be Element of D;
+    consider a' being set such that
+A21: a' in dom j and
+A22: a = j.a' by FUNCT_1:def 5;
+    reconsider x = a as Element of Q;
+    reconsider x' = {x} as Subset of Q;
+    reconsider a' as Element of Q by A21;
+    thus f.{a} = j."\/"x' by A2
+      .= j.(j.a') by A22,LATTICE3:43
+      .= a by A1,A22,Lm1;
   end;
   then consider L being complete strict Lattice such that
-A15: carr(L) = D & for X being Subset of L holds "\/" X = f.X
-  by A5,LATTICE3:56;
-  take L; thus carr(L) = rng j by A15;
+A23: carr(L) = D and
+A24: for X being Subset of L holds "\/" X = f.X by A4,LATTICE3:56;
+  take L;
+  thus carr(L) = rng j by A23;
   let X be Subset of L;
-  thus "\/"X = f.X by A15
-    .= j."\/"(X,Q) by A3,A15;
+  thus "\/"X = f.X by A24
+    .= j."\/"(X,Q) by A2,A23;
+  consider q being Element of Q;
 end;
 

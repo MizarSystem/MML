@@ -10,16 +10,15 @@ environ
       ZF_LANG, CQC_LANG, FINSEQ_1, ARYTM_3, FUNCOP_1, ZF_MODEL, QC_LANG3,
       CAT_1, VALUAT_1, ARYTM;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, RELAT_1, FUNCT_1, FUNCT_2,
-      NAT_1, FINSEQ_1, QC_LANG1, QC_LANG3, CQC_LANG, MARGREL1,
-      XXREAL_0;
+      NAT_1, FINSEQ_1, QC_LANG1, QC_LANG3, CQC_LANG, MARGREL1, XXREAL_0;
  constructors XXREAL_0, MEMBERED, MARGREL1, QC_LANG3, CQC_LANG, RELSET_1;
  registrations XBOOLE_0, FUNCT_1, RELSET_1, MEMBERED, MARGREL1, QC_LANG1,
-      CQC_LANG, XXREAL_0, FRAENKEL, FUNCT_2;
+      CQC_LANG, XXREAL_0, FUNCT_2;
  requirements NUMERALS, SUBSET, BOOLE;
  definitions XBOOLEAN;
- theorems TARSKI, FINSEQ_1, FUNCT_1, FUNCT_2, FUNCOP_1, FRAENKEL, QC_LANG1,
-      QC_LANG2, QC_LANG3, CQC_LANG, MARGREL1, RELSET_1, RELAT_1, FINSEQ_3,
-      XBOOLE_0, XBOOLE_1, XBOOLEAN, ORDINAL1;
+ theorems TARSKI, FINSEQ_1, FUNCT_1, FUNCT_2, FUNCOP_1, QC_LANG1, QC_LANG2,
+      QC_LANG3, CQC_LANG, MARGREL1, RELSET_1, RELAT_1, FINSEQ_3, XBOOLE_0,
+      XBOOLE_1, XBOOLEAN, ORDINAL1;
  schemes QC_LANG1, CQC_LANG, FUNCT_2;
 
 begin
@@ -30,7 +29,6 @@ reserve i,j,k for Element of NAT,
 definition
   let A be set;
   func Valuations_in A -> set equals
-
   Funcs(bound_QC-variables, A);
   coherence;
 end;
@@ -38,23 +36,20 @@ end;
 registration
   let A;
   cluster Valuations_in A -> non empty functional;
-  coherence
-  proof
-    Valuations_in A = Funcs(bound_QC-variables, A);
-    hence thesis;
-  end;
+  coherence;
 end;
 
 canceled;
 
 theorem Th2:
-  for x being set st x is Element of Valuations_in A holds
-  x is Function of bound_QC-variables ,A
+  for x being set st x is Element of Valuations_in A holds x is
+  Function of bound_QC-variables ,A
 proof
   let x be set;
-  assume x is Element of Valuations_in A;
-  then ex f being Function st
-  x = f & dom f = bound_QC-variables & rng f c= A by FUNCT_2:def 2;
+  assume
+  x is Element of Valuations_in A;
+  then ex f being Function st x = f & dom f = bound_QC-variables & rng f c= A
+  by FUNCT_2:def 2;
   hence thesis by FUNCT_2:def 1,RELSET_1:11;
 end;
 
@@ -63,14 +58,15 @@ definition
   redefine func Valuations_in A -> FUNCTION_DOMAIN of bound_QC-variables, A;
   coherence
   proof
-    for x be Element of Valuations_in A holds
-    x is Function of bound_QC-variables ,A by Th2;
+    for x be Element of Valuations_in A holds x is Function of
+    bound_QC-variables ,A by Th2;
     hence thesis by FUNCT_2:def 13;
   end;
 end;
 
 reserve f1,f2 for Element of Funcs(Valuations_in A,BOOLEAN),
-  x,x1,y for bound_QC-variable,
+  x,x1,y for
+  bound_QC-variable,
   v,v1 for Element of Valuations_in A;
 
 definition
@@ -79,17 +75,19 @@ definition
   let p be Element of Funcs(Valuations_in A,BOOLEAN);
   func FOR_ALL(x,p) -> Element of Funcs(Valuations_in A,BOOLEAN) means
   :Def7:
-  for v holds it.v = ALL{p.v' where v' is Element of Valuations_in A:
-  for y st x <> y holds v'.y = v.y};
+for v holds it.v = ALL{p.v' where v' is Element of Valuations_in A: for y st x
+  <> y holds v'.y = v.y};
   existence
   proof
-    deffunc F(Function) = ALL{p.v' where v' is Element of Valuations_in A:
-    for y st x <> y holds v'.y = $1.y};
+    deffunc F(Function) = ALL{p.v' where v' is Element of Valuations_in A: for
+    y st x <> y holds v'.y = $1.y};
     consider f being Function of Valuations_in A, BOOLEAN such that
 A1: for v holds f.v = F(v) from FUNCT_2:sch 4;
-    dom f = Valuations_in A & rng f c= BOOLEAN by FUNCT_2:def 1,RELAT_1:def 19;
+    dom f = Valuations_in A & rng f c= BOOLEAN by FUNCT_2:def 1,RELAT_1:
+    def 19;
     then reconsider f as Element of Funcs(Valuations_in A,BOOLEAN) by
-FUNCT_2:def 2;
+    FUNCT_2:
+    def 2;
     take f;
     thus thesis by A1;
   end;
@@ -97,18 +95,16 @@ FUNCT_2:def 2;
   proof
     let f1,f2;
     assume that
-A2: for v holds f1.v = ALL{p.v' where v' is Element of Valuations_in A:
-    for y st x <> y holds v'.y = v.y} and
-A3: for v holds f2.v = ALL{p.v' where v' is Element of Valuations_in A:
-    for y st x <> y holds v'.y = v.y};
+A2: for v holds f1.v = ALL{p.v' where v' is Element of Valuations_in A
+    : for y st x <> y holds v'.y = v.y} and
+A3: for v holds f2.v = ALL{p.v' where v' is Element of Valuations_in A
+    : for y st x <> y holds v'.y = v.y};
     for v holds f1.v = f2.v
     proof
       let v;
-      f1.v = ALL{p.v' where v' is Element of Valuations_in A:
-      for y st x <> y holds v'.y = v.y} &
-      f2.v = ALL{p.v'' where v'' is Element of Valuations_in A:
-      for y st x <> y holds v''.y = v.y} by A2,A3;
-      hence thesis;
+      f1.v = ALL{p.v' where v' is Element of Valuations_in A: for y st x
+      <> y holds v'.y = v.y} by A2;
+      hence thesis by A3;
     end;
     hence thesis by FUNCT_2:113;
   end;
@@ -118,57 +114,65 @@ canceled 4;
 
 theorem Th7:
   for p being Element of Funcs(Valuations_in A,BOOLEAN) holds
-  FOR_ALL(x,p).v = FALSE iff ex v1 st p.v1 = FALSE &
-  for y st x <> y holds v1.y = v.y
+FOR_ALL(x,p).v = FALSE iff ex v1 st p.v1 = FALSE & for y st x <> y holds v1.y =
+  v.y
 proof
   let p be Element of Funcs(Valuations_in A,BOOLEAN);
 A1: now
-    assume FOR_ALL(x,p).v = FALSE;
-    then ALL{p.v'' where v'' is Element of Valuations_in A:
-    for y st x <> y holds v''.y = v.y} = FALSE by Def7;
-    then FALSE in {p.v'' where v'' is Element of Valuations_in A:
-    for y st x <> y holds v''.y = v.y} by MARGREL1:53;
-    hence ex v1 st p.v1 = FALSE & for y st x <> y holds v1.y = v.y;
+    assume
+    ex v1 st p.v1 = FALSE & for y st x <> y holds v1.y = v.y;
+    then
+    FALSE in {p.v'' where v'' is Element of Valuations_in A: for y st x <>
+    y holds v''.y = v.y};
+    then ALL{p.v'' where v'' is Element of Valuations_in A: for y st x <> y
+    holds v''.y = v.y} = FALSE by MARGREL1:53;
+    hence FOR_ALL(x,p).v = FALSE by Def7;
   end;
   now
-    assume ex v1 st p.v1 = FALSE & for y st x <> y holds v1.y = v.y;
-    then FALSE in {p.v'' where v'' is Element of Valuations_in A:
-    for y st x <> y holds v''.y = v.y};
-    then ALL{p.v'' where v'' is Element of Valuations_in A:
-    for y st x <> y holds v''.y = v.y} = FALSE by MARGREL1:53;
-    hence FOR_ALL(x,p).v = FALSE by Def7;
+    assume
+    FOR_ALL(x,p).v = FALSE;
+    then ALL{p.v'' where v'' is Element of Valuations_in A: for y st x <> y
+    holds v''.y = v.y} = FALSE by Def7;
+    then
+    FALSE in {p.v'' where v'' is Element of Valuations_in A: for y st x <>
+    y holds v''.y = v.y} by MARGREL1:53;
+    hence ex v1 st p.v1 = FALSE & for y st x <> y holds v1.y = v.y;
   end;
   hence thesis by A1;
 end;
 
 theorem Th8:
   for p being Element of Funcs(Valuations_in A,BOOLEAN) holds
-  FOR_ALL(x,p).v = TRUE iff for v1 st for y st x <> y holds v1.y = v.y holds
-  p.v1 = TRUE
+FOR_ALL(x,p).v = TRUE iff for v1 st for y st x <> y holds v1.y = v.y holds p.v1
+  = TRUE
 proof
   let p be Element of Funcs(Valuations_in A,BOOLEAN);
 A1: now
-    assume FOR_ALL(x,p).v = TRUE;
-    then ALL{p.v'' where v'' is Element of Valuations_in A:
-    for y st x <> y holds v''.y = v.y} = TRUE by Def7;
+    assume
+    FOR_ALL(x,p).v = TRUE;
+    then ALL{p.v'' where v'' is Element of Valuations_in A: for y st x <> y
+    holds v''.y = v.y} = TRUE by Def7;
     then
-A2: not FALSE in {p.v'' where v'' is Element of Valuations_in A:
-    for y st x <> y holds v''.y = v.y} by MARGREL1:53;
+A2: not FALSE in {p.v'' where v'' is Element of Valuations_in A: for y st
+    x <> y holds v''.y = v.y} by MARGREL1:53;
     thus for v1 st for y st x <> y holds v1.y = v.y holds p.v1 = TRUE
     proof
       let v1;
-      assume for y st x <> y holds v1.y = v.y;
+      assume
+      for y st x <> y holds v1.y = v.y;
       then not p.v1 = FALSE by A2;
       hence thesis by XBOOLEAN:def 3;
     end;
   end;
   now
-    assume for v1 st for y st x <> y holds v1.y = v.y holds p.v1 = TRUE;
+    assume
+    for v1 st for y st x <> y holds v1.y = v.y holds p.v1 = TRUE;
     then not ex v1 st p.v1 = FALSE & for y st x <> y holds v1.y = v.y;
-    then not FALSE in {p.v'' where v'' is Element of Valuations_in A:
-    for y st x <> y holds v''.y = v.y};
-    then ALL{p.v'' where v'' is Element of Valuations_in A:
-    for y st x <> y holds v''.y = v.y} = TRUE by MARGREL1:53;
+    then
+    not FALSE in {p.v'' where v'' is Element of Valuations_in A: for y st
+    x <> y holds v''.y = v.y};
+    then ALL{p.v'' where v'' is Element of Valuations_in A: for y st x <> y
+    holds v''.y = v.y} = TRUE by MARGREL1:53;
     hence FOR_ALL(x,p).v = TRUE by Def7;
   end;
   hence thesis by A1;
@@ -183,71 +187,73 @@ end;
 
 definition
   let A, k, ll, v;
-  redefine
-  func v*'ll -> FinSequence of A means
+  redefine func v*'ll -> FinSequence of A means
   :Def8:
-  len it = k & for i be Nat st 1 <= i & i <= k holds it.i = v.(ll.i);
+  len it = k & for i be
+  Nat st 1 <= i & i <= k holds it.i = v.(ll.i);
   coherence
   proof
-    dom v = bound_QC-variables by FUNCT_2:def 1;
+    rng v c= A & rng(v*ll) c= rng v by RELAT_1:45,def 19;
     then
-A1: rng ll c= dom v by RELAT_1:def 19;
+A1: rng( v*ll) c= A by XBOOLE_1:1;
 A2: len ll = k by FINSEQ_1:def 18;
-    dom(v*ll) = dom ll by A1,RELAT_1:46
+    dom v = bound_QC-variables by FUNCT_2:def 1;
+    then rng ll c= dom v by RELAT_1:def 19;
+    then dom(v*ll) = dom ll by RELAT_1:46
       .= Seg k by A2,FINSEQ_1:def 3;
-    then
-A3: v*ll is FinSequence-like by FINSEQ_1:def 2;
-A4: rng v c= A by RELAT_1:def 19;
-    rng(v*ll) c= rng v by RELAT_1:45;
-    then rng( v*ll) c= A by A4,XBOOLE_1:1;
-    hence thesis by A3,FINSEQ_1:def 4;
+    then v*ll is FinSequence-like by FINSEQ_1:def 2;
+    hence thesis by A1,FINSEQ_1:def 4;
   end;
   compatibility
   proof
     let IT be FinSequence of A;
+A3: len ll = k by FINSEQ_1:def 18;
     dom v = bound_QC-variables by FUNCT_2:def 1;
     then
-A5: rng ll c= dom v by RELAT_1:def 19;
-A6: len ll = k by FINSEQ_1:def 18;
-    thus IT = v*ll implies
-    len IT = k & for i be Nat st 1 <= i & i <= k holds IT.i = v.(ll.i)
+A4: rng ll c= dom v by RELAT_1:def 19;
+    thus IT = v*ll implies len IT = k & for i be Nat st 1 <= i & i <= k holds
+    IT.i = v.(ll.i)
     proof
       assume
-A7:   IT = v*ll;
+A5:   IT = v*ll;
       then
-A8:   dom ll = dom IT by A5,RELAT_1:46;
-      hence len IT = k by A6,FINSEQ_3:31;
+A6:   dom ll = dom IT by A4,RELAT_1:46;
+      hence len IT = k by A3,FINSEQ_3:31;
       let i be Nat;
-      assume 1 <= i & i <= k;
-      then i in dom IT by A6,A8,FINSEQ_3:27;
-      hence thesis by A7,FUNCT_1:22;
+      assume
+      1 <= i & i <= k;
+      then i in dom IT by A3,A6,FINSEQ_3:27;
+      hence thesis by A5,FUNCT_1:22;
     end;
     assume that
-A9: len IT = k and
-A10: for i be Nat st 1 <= i & i <= k holds IT.i = v.(ll.i);
-A11: for x being set holds x in dom IT iff x in dom ll & ll.x in dom v
+A7: len IT = k and
+A8: for i be Nat st 1 <= i & i <= k holds IT.i = v.(ll.i);
+A9: for x being set holds x in dom IT iff x in dom ll & ll.x in dom v
     proof
       let x be set;
       thus x in dom IT implies x in dom ll & ll.x in dom v
       proof
-        assume x in dom IT;
-        hence x in dom ll by A6,A9,FINSEQ_3:31;
+        assume
+        x in dom IT;
+        hence x in dom ll by A3,A7,FINSEQ_3:31;
         then ll.x in rng ll by FUNCT_1:def 5;
-        hence thesis by A5;
+        hence thesis by A4;
       end;
-      assume x in dom ll & ll.x in dom v;
-      hence thesis by A6,A9,FINSEQ_3:31;
+      assume that
+A10:  x in dom ll and
+      ll.x in dom v;
+      thus thesis by A3,A7,A10,FINSEQ_3:31;
     end;
     for x being set st x in dom IT holds IT.x = v.(ll.x)
     proof
       let x be set;
       assume
-A12:  x in dom IT;
+A11:  x in dom IT;
       then reconsider i = x as Element of NAT;
-      1 <= i & i <= k by A9,A12,FINSEQ_3:27;
-      hence thesis by A10;
+      1 <= i & i <= k by A7,A11,FINSEQ_3:27;
+      hence thesis by A8;
     end;
-    hence thesis by A11,FUNCT_1:20;
+    hence thesis by A9,FUNCT_1:20;
   end;
 end;
 
@@ -256,50 +262,52 @@ definition
   let r be Element of relations_on A;
   func ll 'in' r -> Element of Funcs(Valuations_in A,BOOLEAN) means
   :Def9:
-  for v being Element of Valuations_in A holds
-  (v*'ll in r implies it.v = TRUE) & (not v*'ll in r implies it.v = FALSE);
+  for
+  v being Element of Valuations_in A holds (v*'ll in r implies it.v = TRUE) & (
+  not v*'ll in r implies it.v = FALSE);
   existence
   proof
-    deffunc F(set) = FALSE;
+    defpred C[set] means ex v being Element of Valuations_in A st $1 = v & v*'
+    ll in r;
     deffunc T(set) = TRUE;
-    defpred C[set] means ex v being Element of Valuations_in A st $1 = v &
-    v*'ll in r;
-A1: for x being set st x in Valuations_in A holds
-    (C[x] implies T(x) in BOOLEAN) & (not C[x] implies F(x) in BOOLEAN);
+    deffunc F(set) = FALSE;
+A1: for x being set st x in Valuations_in A holds (C[x] implies T(x) in
+    BOOLEAN) & (not C[x] implies F(x) in BOOLEAN);
     consider f being Function of Valuations_in A, BOOLEAN such that
-A2: for x being set st x in Valuations_in A holds (C[x] implies f.x = T(x)) &
-    (not C[x] implies f.x = F(x)) from FUNCT_2:sch 5(A1);
-    dom f = Valuations_in A & rng f c= BOOLEAN by FUNCT_2:def 1,RELAT_1:def 19;
+A2: for x being set st x in Valuations_in A holds (C[x] implies f.x =
+    T(x)) & (not C[x] implies f.x = F(x)) from FUNCT_2:sch 5(A1);
+    dom f = Valuations_in A & rng f c= BOOLEAN by FUNCT_2:def 1,RELAT_1:
+    def 19;
     then reconsider f as Element of Funcs(Valuations_in A,BOOLEAN) by
-FUNCT_2:def 2;
+    FUNCT_2:
+    def 2;
     take f;
     let v be Element of Valuations_in A;
-    ((ex v' being Element of Valuations_in A st v = v' &
-    v'*'ll in r) implies f.v = TRUE) &
-    (not (ex v' being Element of Valuations_in A st v = v' &
-    v'*'ll in r) implies f.v = FALSE) by A2;
-    hence thesis;
+    not (ex v' being Element of Valuations_in A st v = v' & v'*'ll in r)
+    implies f.v = FALSE by A2;
+    hence thesis by A2;
   end;
   uniqueness
   proof
     let f1,f2 be Element of Funcs(Valuations_in A,BOOLEAN);
     assume that
-A3: for v being Element of Valuations_in A holds
-    (v*'ll in r implies f1.v = TRUE) &
-    (not v*'ll in r implies f1.v = FALSE) and
-A4: for v being Element of Valuations_in A holds
-    (v*'ll in r implies f2.v = TRUE) & (not v*'ll in r implies f2.v = FALSE);
+A3: for v being Element of Valuations_in A holds (v*'ll in r implies
+    f1.v = TRUE) & (not v*'ll in r implies f1.v = FALSE) and
+A4: for v being Element of Valuations_in A holds (v*'ll in r implies
+    f2.v = TRUE) & (not v*'ll in r implies f2.v = FALSE);
     for v being Element of Valuations_in A holds f1.v = f2.v
     proof
       let v be Element of Valuations_in A;
       per cases;
-      suppose v*'ll in r;
-        then f1.v = TRUE & f2.v = TRUE by A3,A4;
-        hence thesis;
+      suppose
+A5:     v*'ll in r;
+        then f1.v = TRUE by A3;
+        hence thesis by A4,A5;
       end;
-      suppose not v*'ll in r;
-        then f1.v = FALSE & f2.v = FALSE by A3,A4;
-        hence thesis;
+      suppose
+A6:     not v*'ll in r;
+        then f1.v = FALSE by A3;
+        hence thesis by A4,A6;
       end;
     end;
     hence thesis by FUNCT_2:113;
@@ -321,14 +329,12 @@ definition
   let D;
   mode interpretation of D -> Function of QC-pred_symbols, relations_on D
     means
-
-    for P being (Element of QC-pred_symbols),
-    r being Element of relations_on D st it.P = r holds
-    r = empty_rel(D) or the_arity_of P = the_arity_of r;
+    for P being (Element of QC-pred_symbols), r being Element of relations_on
+    D st it.P = r holds r = empty_rel(D) or the_arity_of P = the_arity_of r;
   existence
   proof
-    reconsider F1 = QC-pred_symbols --> empty_rel(D)
-    as Function of QC-pred_symbols, relations_on D;
+    reconsider F1 = QC-pred_symbols --> empty_rel(D) as Function of
+    QC-pred_symbols, relations_on D;
     take F1;
     let P be Element of QC-pred_symbols;
     thus thesis by FUNCOP_1:13;
@@ -337,7 +343,8 @@ end;
 
 reserve p,q,s,t for Element of CQC-WFF,
   J for interpretation of A,
-  P for QC-pred_symbol of k,
+  P for
+  QC-pred_symbol of k,
   r for Element of relations_on A;
 
 definition
@@ -350,66 +357,67 @@ definition
   let A, J, p;
   func Valid(p,J) -> Element of Funcs(Valuations_in A, BOOLEAN) means
   :Def11:
-  ex F being Function of CQC-WFF,Funcs(Valuations_in A, BOOLEAN) st it = F.p &
-  F.VERUM = (Valuations_in A --> TRUE) & for p,q being Element of CQC-WFF,
-  x being bound_QC-variable, k being Element of NAT,
-  ll being CQC-variable_list of k, P being QC-pred_symbol of k holds
-  F.(P!ll) = (ll 'in' (J.P)) & F.('not' p) = 'not'(F.p) &
-  (F.(p '&' q)) = ((F.p) '&' (F.q)) & F.(All(x,p)) = (FOR_ALL(x,F.p));
+ex F being Function of CQC-WFF,Funcs(Valuations_in A, BOOLEAN) st it = F.p & F.
+VERUM = (Valuations_in A --> TRUE) & for p,q being Element of CQC-WFF, x being
+  bound_QC-variable, k being Element of NAT, ll being CQC-variable_list of k, P
+  being QC-pred_symbol of k holds F.(P!ll) = (ll 'in' (J.P)) & F.('not' p) =
+'not'(F.p) & (F.(p '&' q)) = ((F.p) '&' (F.q)) & F.(All(x,p)) = (FOR_ALL(x,F.p)
+  );
   correctness
   proof
-    set D = Funcs(Valuations_in A, BOOLEAN);
+    deffunc A(Element of NAT, QC-pred_symbol of $1, CQC-variable_list of $1) =
+    $3 'in' (J.$2);
     set V = Valuations_in A --> TRUE;
-    deffunc A(Element of NAT, QC-pred_symbol of $1, CQC-variable_list of $1)
-    = $3 'in' (J.$2);
+    set D = Funcs(Valuations_in A, BOOLEAN);
     deffunc N(Element of D) = 'not' $1;
     deffunc C(Element of D, Element of D) = $1 '&' $2;
     deffunc Q(bound_QC-variable, Element of D) = FOR_ALL($1,$2);
-    thus (ex d being Element of D st
-    ex F being Function of CQC-WFF, D st d = F.p & F.VERUM = V &
-    for r,s being (Element of CQC-WFF),
-    x being bound_QC-variable, k being Element of NAT
-    for l being CQC-variable_list of k for P being QC-pred_symbol of k holds
-    F.(P!l) = A(k,P,l) & F.('not' r) = N(F.r) & F.(r '&' s) = C(F.r,F.s) &
-    F.All(x,r) = Q(x,F.r) ) & (for d1,d2 being Element of D st
-    (ex F being Function of CQC-WFF, D st d1 = F.p & F.VERUM = V &
-    for r,s being (Element of CQC-WFF),
-    x being bound_QC-variable, k being Element of NAT
-    for l being CQC-variable_list of k for P being QC-pred_symbol of k holds
-    F.(P!l) = A(k,P,l) & F.('not' r) = N(F.r) & F.(r '&' s) = C(F.r,F.s) &
-    F.All(x,r) = Q(x,F.r) ) & (ex F being Function of CQC-WFF, D st d2 = F.p &
-    F.VERUM = V & for r,s being (Element of CQC-WFF),
-    x being bound_QC-variable, k being Element of NAT
-    for l being CQC-variable_list of k for P being QC-pred_symbol of k holds
-    F.(P!l) = A(k,P,l) & F.('not' r) = N(F.r) & F.(r '&' s) = C(F.r,F.s) &
-    F.All(x,r) = Q(x,F.r) ) holds d1 = d2) from CQC_LANG:sch 4;
+    thus (ex d being Element of D st ex F being Function of CQC-WFF, D st d =
+    F.p & F.VERUM = V & for r,s being (Element of CQC-WFF), x being
+bound_QC-variable, k being Element of NAT for l being CQC-variable_list of k
+for P being QC-pred_symbol of k holds F.(P!l) = A(k,P,l) & F.('not' r) = N(F.r)
+& F.(r '&' s) = C(F.r,F.s) & F.All(x,r) = Q(x,F.r) ) & (for d1,d2 being Element
+of D st (ex F being Function of CQC-WFF, D st d1 = F.p & F.VERUM = V & for r,s
+being (Element of CQC-WFF), x being bound_QC-variable, k being Element of NAT
+for l being CQC-variable_list of k for P being QC-pred_symbol of k holds F.(P!l
+) = A(k,P,l) & F.('not' r) = N(F.r) & F.(r '&' s) = C(F.r,F.s) & F.All(x,r) = Q
+(x,F.r) ) & (ex F being Function of CQC-WFF, D st d2 = F.p & F.VERUM = V & for
+r,s being (Element of CQC-WFF), x being bound_QC-variable, k being Element of
+NAT for l being CQC-variable_list of k for P being QC-pred_symbol of k holds F.
+(P!l) = A(k,P,l) & F.('not' r) = N(F.r) & F.(r '&' s) = C(F.r,F.s) & F.All(x,r)
+    = Q(x,F.r) ) holds d1 = d2) from CQC_LANG:sch 4;
   end;
 end;
 
 canceled 4;
 
-Lm1: for A, J holds Valid(VERUM,J) = (Valuations_in A --> TRUE) &
-(for k, ll, P holds Valid(P!ll,J) = ll 'in' (J.P)) &
-(for p holds Valid('not' p,J) = 'not' Valid(p,J)) &
-(for q holds Valid(p '&' q,J) = Valid(p,J) '&' Valid(q,J)) &
-(for x holds Valid(All(x,p),J) = FOR_ALL(x,Valid(p,J)))
+Lm1: for A, J holds Valid(VERUM,J) = (Valuations_in A --> TRUE) & (for k, ll,
+P holds Valid(P!ll,J) = ll 'in' (J.P)) & (for p holds Valid('not' p,J) = 'not'
+Valid(p,J)) & (for q holds Valid(p '&' q,J) = Valid(p,J) '&' Valid(q,J)) & for
+x holds Valid(All(x,p),J) = FOR_ALL(x,Valid(p,J))
+
 proof
   let A, J;
   set D = Funcs(Valuations_in A, BOOLEAN);
   set V = Valuations_in A --> TRUE;
-  deffunc A(Element of NAT, QC-pred_symbol of $1, CQC-variable_list of $1)
-  = $3 'in' (J.$2);
+
+  deffunc A(Element of NAT, QC-pred_symbol of $1, CQC-variable_list of $1) =
+  $3 'in' (J.$2);
+
   deffunc N(Element of D) = 'not' $1;
   deffunc C(Element of D, Element of D) = $1 '&' $2;
   deffunc Q(bound_QC-variable, Element of D) = FOR_ALL($1,$2);
   deffunc X(Element of CQC-WFF) = Valid($1, J);
-A1: for p holds for d be Element of D holds ( d = (X(p)) iff
-  ex F being Function of CQC-WFF, D st d = F.p & F.VERUM = V &
-  for p,q being Element of CQC-WFF,
-  x being bound_QC-variable, k being Element of NAT,
-  ll being CQC-variable_list of k, P being QC-pred_symbol of k holds
-  F.(P!ll) = A(k, P, ll) & F.('not' p) = N(F.p) & (F.(p '&' q)) = C(F.p,F.q) &
-  F.(All(x,p)) = Q(x,F.p)) by Def11;
+
+A1: for p holds for d be Element of D holds ( d = (X(p)) iff ex F being
+  Function of CQC-WFF, D st d = F.p & F.VERUM = V & for p,q being Element of
+  CQC-WFF, x being bound_QC-variable, k being Element of NAT, ll being
+
+CQC-variable_list of k, P being QC-pred_symbol of k holds F.(P!ll) = A(k, P, ll
+
+) & F.('not' p) = N(F.p) & (F.(p '&' q)) = C(F.p,F.q) & F.(All(x,p)) = Q(x,F.p)
+  ) by Def11;
+
   thus X(VERUM) = V from CQC_LANG:sch 5(A1);
   hereby
     let k, ll, P;
@@ -443,37 +451,44 @@ theorem
 theorem Th16:
   p = P!ll & r = J.P implies (v*'ll in r iff Valid(p,J).v = TRUE)
 proof
-  assume
-A1: p = P!ll & r = J.P;
-A2: now
-    assume v*'ll in r;
-    then (ll 'in' (J.P)).v = TRUE by A1,Def9;
-    hence Valid(p,J).v = TRUE by A1,Lm1;
+  assume that
+A1: p = P!ll and
+A2: r = J.P;
+A3: now
+    assume
+    Valid(p,J).v = TRUE;
+    then (ll 'in' (J.P)).v <> FALSE by A1,Lm1;
+    hence v*'ll in r by A2,Def9;
   end;
   now
-    assume Valid(p,J).v = TRUE;
-    then (ll 'in' (J.P)).v <> FALSE by A1,Lm1;
-    hence v*'ll in r by A1,Def9;
+    assume
+    v*'ll in r;
+    then (ll 'in' (J.P)).v = TRUE by A2,Def9;
+    hence Valid(p,J).v = TRUE by A1,Lm1;
   end;
-  hence thesis by A2;
+  hence thesis by A3;
 end;
 
 theorem Th17:
-  p = P!ll & r = J.P implies (not (v*'ll in r) iff Valid(p,J).v = FALSE)
+  p = P!ll & r = J.P implies (not v*'ll in r iff Valid(p,J).v =
+  FALSE)
 proof
-  assume
-A1: p = P!ll & r = J.P;
-A2: now
-    assume not (v*'ll in r);
-    then (ll 'in' (J.P)).v = FALSE by A1,Def9;
-    hence Valid(p,J).v = FALSE by A1,Lm1;
+  assume that
+A1: p = P!ll and
+A2: r = J.P;
+A3: now
+    assume
+    Valid(p,J).v = FALSE;
+    then (ll 'in' (J.P)).v <> TRUE by A1,Lm1;
+    hence not v*'ll in r by A2,Def9;
   end;
   now
-    assume Valid(p,J).v = FALSE;
-    then (ll 'in' (J.P)).v <> TRUE by A1,Lm1;
-    hence not (v*'ll in r) by A1,Def9;
+    assume
+    not v*'ll in r;
+    then (ll 'in' (J.P)).v = FALSE by A2,Def9;
+    hence Valid(p,J).v = FALSE by A1,Lm1;
   end;
-  hence thesis by A2;
+  hence thesis by A3;
 end;
 
 canceled;
@@ -495,8 +510,7 @@ theorem Th22:
   Valid(p '&'q,J).v = (Valid(p,J).v) '&' (Valid(q,J).v)
 proof
   Valid(p '&'q,J).v = (Valid(p,J) '&' Valid(q,J)).v by Lm1;
-  hence thesis
-  by MARGREL1:def 21;
+  hence thesis by MARGREL1:def 21;
 end;
 
 theorem
@@ -505,22 +519,25 @@ theorem
 theorem Th24:
   Valid(p '&' 'not' p,J).v = FALSE
 proof
-A1: Valid(p '&' 'not' p,J).v = (Valid(p,J).v) '&' (Valid('not' p,J).v) by Th22
-    .= (Valid(p,J).v) '&' 'not'(Valid(p,J).v) by Th20;
-A2: now
-    assume (Valid(p,J)).v = TRUE;
+A1: now
+    assume
+    (Valid(p,J)).v = TRUE;
     then 'not'(Valid(p,J).v) = FALSE by MARGREL1:41;
     hence (Valid(p,J).v) '&' 'not'(Valid(p,J).v) = FALSE by MARGREL1:45;
   end;
-  Valid(p,J).v = FALSE implies (Valid(p,J).v) '&' 'not' (Valid(p,J).v) = FALSE
-  by MARGREL1:45;
+A2: Valid(p,J).v = FALSE implies (Valid(p,J).v) '&' 'not' (Valid(p,J).v) =
+  FALSE by MARGREL1:45;
+  Valid(p '&' 'not' p,J).v = (Valid(p,J).v) '&' (Valid('not' p,J).v) by
+  Th22
+    .= (Valid(p,J).v) '&' 'not'(Valid(p,J).v) by Th20;
   hence thesis by A1,A2,XBOOLEAN:def 3;
 end;
 
 theorem
   Valid('not'(p '&' 'not' p),J).v = TRUE
 proof
-  Valid('not'(p '&' 'not' p),J).v = 'not'(Valid(p '&' 'not' p,J).v) by Th20
+  Valid('not'(p '&' 'not' p),J).v = 'not'(Valid(p '&' 'not' p,J).v) by
+  Th20
     .= 'not' FALSE by Th24;
   hence thesis by MARGREL1:41;
 end;
@@ -538,14 +555,16 @@ theorem
   J,v |= P!ll iff (ll 'in' (J.P)).v = TRUE
 proof
 A1: now
-    assume J,v |= P!ll;
-    then Valid(P!ll,J).v = TRUE by Def12;
-    hence (ll 'in' (J.P)).v = TRUE by Lm1;
-  end;
-  now
-    assume (ll 'in' (J.P)).v = TRUE;
+    assume
+    (ll 'in' (J.P)).v = TRUE;
     then Valid(P!ll,J).v = TRUE by Lm1;
     hence J,v |= P!ll by Def12;
+  end;
+  now
+    assume
+    J,v |= P!ll;
+    then Valid(P!ll,J).v = TRUE by Def12;
+    hence (ll 'in' (J.P)).v = TRUE by Lm1;
   end;
   hence thesis by A1;
 end;
@@ -554,21 +573,23 @@ theorem
   J,v |= 'not' p iff not J,v |= p
 proof
 A1: now
-    assume J,v |= 'not' p;
-    then Valid('not' p,J).v = TRUE by Def12;
-    then ('not' Valid(p,J)).v = TRUE by Lm1;
-    then 'not'(Valid(p,J).v) = TRUE by MARGREL1:def 20;
-    then Valid(p,J).v = FALSE by MARGREL1:41;
-    hence not J,v |= p by Def12;
-  end;
-  now
-    assume not J,v |= p;
-    then not (Valid(p,J).v = TRUE) by Def12;
+    assume
+    not J,v |= p;
+    then not Valid(p,J).v = TRUE by Def12;
     then Valid(p,J).v = FALSE by XBOOLEAN:def 3;
     then 'not'(Valid(p,J).v) = TRUE by MARGREL1:41;
     then ('not' Valid(p,J)).v = TRUE by MARGREL1:def 20;
     then Valid('not' p,J).v = TRUE by Lm1;
     hence J,v |= 'not' p by Def12;
+  end;
+  now
+    assume
+    J,v |= 'not' p;
+    then Valid('not' p,J).v = TRUE by Def12;
+    then ('not' Valid(p,J)).v = TRUE by Lm1;
+    then 'not'(Valid(p,J).v) = TRUE by MARGREL1:def 20;
+    then Valid(p,J).v = FALSE by MARGREL1:41;
+    hence not J,v |= p by Def12;
   end;
   hence thesis by A1;
 end;
@@ -577,20 +598,22 @@ theorem
   J,v |= (p '&' q) iff J,v |= p & J,v |= q
 proof
 A1: now
-    assume J,v |= (p '&' q);
-    then Valid(p '&' q,J).v = TRUE by Def12;
-    then (Valid(p,J) '&' Valid(q,J)).v = TRUE by Lm1;
-    then (Valid(p,J).v) '&' (Valid(q,J).v) = TRUE by MARGREL1:def 21;
-    then Valid(p,J).v = TRUE & Valid(q,J).v = TRUE by MARGREL1:45;
-    hence J,v |= p & J,v |= q by Def12;
-  end;
-  now
-    assume J,v |= p & J,v |= q;
+    assume
+    J,v |= p & J,v |= q;
     then Valid(p,J).v = TRUE & Valid(q,J).v = TRUE by Def12;
     then (Valid(p,J).v) '&' (Valid(q,J).v) = TRUE;
     then (Valid(p,J) '&' Valid(q,J)).v = TRUE by MARGREL1:def 21;
     then Valid(p '&' q,J).v = TRUE by Lm1;
     hence J,v |= (p '&' q) by Def12;
+  end;
+  now
+    assume
+    J,v |= (p '&' q);
+    then Valid(p '&' q,J).v = TRUE by Def12;
+    then (Valid(p,J) '&' Valid(q,J)).v = TRUE by Lm1;
+    then (Valid(p,J).v) '&' (Valid(q,J).v) = TRUE by MARGREL1:def 21;
+    then Valid(p,J).v = TRUE & Valid(q,J).v = TRUE by MARGREL1:45;
+    hence J,v |= p & J,v |= q by Def12;
   end;
   hence thesis by A1;
 end;
@@ -599,29 +622,35 @@ theorem Th30:
   J,v |= All(x,p) iff FOR_ALL(x,Valid(p,J)).v = TRUE
 proof
 A1: now
-    assume J,v |= All(x,p);
-    then Valid(All(x,p),J).v = TRUE by Def12;
-    hence FOR_ALL(x,Valid(p,J)).v = TRUE by Lm1;
-  end;
-  now
-    assume FOR_ALL(x,Valid(p,J)).v = TRUE;
+    assume
+    FOR_ALL(x,Valid(p,J)).v = TRUE;
     then Valid(All(x,p),J).v = TRUE by Lm1;
     hence J,v |= All(x,p) by Def12;
+  end;
+  now
+    assume
+    J,v |= All(x,p);
+    then Valid(All(x,p),J).v = TRUE by Def12;
+    hence FOR_ALL(x,Valid(p,J)).v = TRUE by Lm1;
   end;
   hence thesis by A1;
 end;
 
 theorem Th31:
-  J,v |= All(x,p) iff
-  for v1 st for y st x <> y holds v1.y = v.y holds Valid(p,J).v1 = TRUE
+  J,v |= All(x,p) iff for v1 st for y st x <> y holds v1.y = v.y
+  holds Valid(p,J).v1 = TRUE
 proof
   hereby
-    assume J,v |= All(x,p);
+    assume
+    J,v |= All(x,p);
     then FOR_ALL(x,Valid(p,J)).v = TRUE by Th30;
-    hence for v1 st for y st x <> y holds v1.y = v.y holds Valid(p,J).v1 = TRUE
+    hence
+    for v1 st for y st x <> y holds v1.y = v.y holds Valid(p,J).v1 = TRUE
     by Th8;
   end;
-  assume for v1 st for y st x <> y holds v1.y = v.y holds Valid(p,J).v1 = TRUE;
+  assume
+  for v1 st for y st x <> y holds v1.y = v.y holds Valid(p,J).v1 =
+  TRUE;
   then FOR_ALL(x,Valid(p,J)).v = TRUE by Th8;
   hence thesis by Th30;
 end;
@@ -655,32 +684,11 @@ theorem Th35:
   J,v |= p => q iff Valid(p, J).v = FALSE or Valid(q, J).v = TRUE
 proof
 A1: now
-    assume J,v |= p => q;
-    then Valid(p => q, J).v = TRUE by Def12;
-    then Valid('not'(p '&' 'not' q), J).v = TRUE by QC_LANG2:def 2;
-    then 'not'(Valid(p '&' 'not' q, J).v) = TRUE by Th20;
-    then Valid(p '&' 'not' q, J).v = FALSE by MARGREL1:41;
-    then (Valid(p, J).v) '&' (Valid('not' q, J).v) = FALSE by Th22;
-    then (Valid(p, J).v) '&' 'not'(Valid(q, J).v) = FALSE by Th20;
-    then Valid(p, J).v = FALSE or 'not' (Valid(q, J).v) = FALSE by MARGREL1:45;
-    hence Valid(p, J).v = FALSE or Valid(q, J).v = TRUE by MARGREL1:41;
-  end;
-  now
-    assume
-A2: Valid(p, J).v = FALSE or Valid(q, J).v = TRUE;
-A3: now
-      assume Valid(p, J).v = FALSE;
-      then (Valid(p, J).v) '&' (Valid('not' q, J).v) = FALSE by MARGREL1:45;
-      then Valid(p '&' 'not' q, J).v = FALSE by Th22;
-      then 'not'(Valid(p '&' 'not' q, J).v) = TRUE by MARGREL1:41;
-      then Valid('not'(p '&' 'not' q), J).v = TRUE by Th20;
-      then Valid(p => q, J).v = TRUE by QC_LANG2:def 2;
-      hence J,v |= p => q by Def12;
-    end;
-    now
+A2: now
       assume
-A4:   Valid(q, J).v = TRUE;
-      assume not J,v |= p => q;
+A3:   Valid(q, J).v = TRUE;
+      assume
+      not J,v |= p => q;
       then Valid(p => q, J).v <> TRUE by Def12;
       then Valid(p => q, J).v = FALSE by XBOOLEAN:def 3;
       then Valid('not'(p '&' 'not' q), J).v = FALSE by QC_LANG2:def 2;
@@ -688,10 +696,37 @@ A4:   Valid(q, J).v = TRUE;
       then Valid(p '&' 'not' q, J).v = TRUE by MARGREL1:41;
       then (Valid(p, J).v) '&' (Valid('not' q, J).v) = TRUE by Th22;
       then (Valid(p, J).v) '&' 'not'(Valid(q, J).v) = TRUE by Th20;
-      then Valid(p, J).v = TRUE & 'not' (Valid(q, J).v) = TRUE by MARGREL1:45;
-      hence contradiction by A4,MARGREL1:41;
+      then 'not' (Valid(q, J).v) = TRUE by MARGREL1:45;
+      hence contradiction by A3,MARGREL1:41;
     end;
-    hence J,v |= p => q by A2,A3;
+A4: now
+      assume
+      Valid(p, J).v = FALSE;
+      then (Valid(p, J).v) '&' (Valid('not' q, J).v) = FALSE by MARGREL1:
+      45;
+      then Valid(p '&' 'not' q, J).v = FALSE by Th22;
+      then 'not'(Valid(p '&' 'not' q, J).v) = TRUE by MARGREL1:41;
+      then Valid('not'(p '&' 'not' q), J).v = TRUE by Th20;
+      then Valid(p => q, J).v = TRUE by QC_LANG2:def 2;
+      hence J,v |= p => q by Def12;
+    end;
+    assume
+    Valid(p, J).v = FALSE or Valid(q, J).v = TRUE;
+    hence J,v |= p => q by A4,A2;
+  end;
+  now
+    assume
+    J,v |= p => q;
+    then Valid(p => q, J).v = TRUE by Def12;
+    then Valid('not'(p '&' 'not' q), J).v = TRUE by QC_LANG2:def 2;
+    then 'not'(Valid(p '&' 'not' q, J).v) = TRUE by Th20;
+    then Valid(p '&' 'not' q, J).v = FALSE by MARGREL1:41;
+    then (Valid(p, J).v) '&' (Valid('not' q, J).v) = FALSE by Th22;
+    then (Valid(p, J).v) '&' 'not'(Valid(q, J).v) = FALSE by Th20;
+    then Valid(p, J).v = FALSE or 'not' (Valid(q, J).v) = FALSE by
+    MARGREL1
+    :45;
+    hence Valid(p, J).v = FALSE or Valid(q, J).v = TRUE by MARGREL1:41;
   end;
   hence thesis by A1;
 end;
@@ -700,11 +735,13 @@ theorem Th36:
   J,v |= p => q iff (J,v |= p implies J,v |= q)
 proof
   hereby
-    assume J,v |= p => q;
+    assume
+    J,v |= p => q;
     then Valid(p, J).v = FALSE or Valid(q, J).v = TRUE by Th35;
     hence J,v |= p implies J,v |= q by Def12;
   end;
-  assume J,v |= p implies J,v |= q;
+  assume
+  J,v |= p implies J,v |= q;
   then Valid(p, J).v = TRUE implies Valid(q, J).v = TRUE by Def12;
   then Valid(p, J).v = FALSE or Valid(q, J).v = TRUE by XBOOLEAN:def 3;
   hence thesis by Th35;
@@ -731,36 +768,45 @@ reserve u,w,z for Element of BOOLEAN;
 Lm2: 'not'('not'(u '&' 'not' w) '&' ('not'(w '&' z) '&' (u '&' z))) = TRUE
 proof
   per cases by XBOOLEAN:def 3;
-  suppose that
-A1: z = TRUE and
-A2: w = TRUE;
-    'not'(w '&' z) = FALSE by A1,A2,MARGREL1:41;
+  suppose
+    z = TRUE & w = TRUE;
+    then 'not'(w '&' z) = FALSE by MARGREL1:41;
     then 'not'(w '&' z) '&' (u '&' z) = FALSE by MARGREL1:45;
-    then 'not'(u '&' 'not' w) '&' ('not'
-    (w '&' z) '&' (u '&' z)) = FALSE by MARGREL1:45;
+
+    then 'not'(u '&' 'not' w) '&' ('not' (w '&' z) '&' (u '&' z)) = FALSE by
+    MARGREL1:45;
+
     hence thesis by MARGREL1:41;
   end;
   suppose that
-A3: w = FALSE and
-A4: u = TRUE;
-    'not' w = TRUE by A3,MARGREL1:41;
-    then 'not'(u '&' 'not' w) = FALSE by A4,MARGREL1:41;
-    then 'not'(u '&' 'not' w) '&' ('not'
-    (w '&' z) '&' (u '&' z)) = FALSE by MARGREL1:45;
+A1: w = FALSE and
+A2: u = TRUE;
+    'not' w = TRUE by A1,MARGREL1:41;
+    then 'not'(u '&' 'not' w) = FALSE by A2,MARGREL1:41;
+
+    then 'not'(u '&' 'not' w) '&' ('not' (w '&' z) '&' (u '&' z)) = FALSE by
+    MARGREL1:45;
+
     hence thesis by MARGREL1:41;
   end;
-  suppose u = FALSE;
+  suppose
+    u = FALSE;
     then u '&' z = FALSE by MARGREL1:45;
     then 'not'(w '&' z) '&' (u '&' z) = FALSE by MARGREL1:45;
-    then 'not'(u '&' 'not' w) '&' ('not'
-    (w '&' z) '&' (u '&' z)) = FALSE by MARGREL1:45;
+
+    then 'not'(u '&' 'not' w) '&' ('not' (w '&' z) '&' (u '&' z)) = FALSE by
+    MARGREL1:45;
+
     hence thesis by MARGREL1:41;
   end;
-  suppose z = FALSE;
+  suppose
+    z = FALSE;
     then u '&' z = FALSE by MARGREL1:45;
     then 'not'(w '&' z) '&' (u '&' z) = FALSE by MARGREL1:45;
-    then 'not'(u '&' 'not' w) '&' ('not'
-    (w '&' z) '&' (u '&' z)) = FALSE by MARGREL1:45;
+
+    then 'not'(u '&' 'not' w) '&' ('not' (w '&' z) '&' (u '&' z)) = FALSE by
+    MARGREL1:45;
+
     hence thesis by MARGREL1:41;
   end;
 end;
@@ -768,22 +814,21 @@ end;
 reserve w,v2 for Element of Valuations_in A,
   z for bound_QC-variable;
 
-scheme LambdaVal {A() -> non empty set, Y, Z() -> bound_QC-variable,
-  V1, V2() -> Element of Valuations_in A()}:
-  ex v being Element of Valuations_in A() st
-  (for x being bound_QC-variable st x <> Y() holds v.x = V1().x) &
-  v.Y() = V2().Z()
+scheme
+  LambdaVal {A() -> non empty set, Y, Z() -> bound_QC-variable, V1, V2() ->
+Element of Valuations_in A()}: ex v being Element of Valuations_in A() st (for
+  x being bound_QC-variable st x <> Y() holds v.x = V1().x) & v.Y() = V2().Z()
 proof
-  defpred C[set] means for x1 st x1 = $1 holds x1 <> Y();
-  deffunc F(set) = V1().$1;
   deffunc G(set) = V2().Z();
-A1: for x being set st x in bound_QC-variables holds
-  (C[x] implies F(x) in A()) & (not C[x] implies G(x) in A()) by FUNCT_2:7;
+  deffunc F(set) = V1().$1;
+  defpred C[set] means for x1 st x1 = $1 holds x1 <> Y();
+A1: for x being set st x in bound_QC-variables holds (C[x] implies F(x) in A
+  ()) & (not C[x] implies G(x) in A()) by FUNCT_2:7;
   consider f being Function of bound_QC-variables, A() such that
-A2: for x being set st x in bound_QC-variables holds
-  (C[x] implies f.x = F(x)) & (not C[x] implies f.x = G(x))
-  from FUNCT_2:sch 5(A1);
-  dom f = bound_QC-variables & rng f c= A() by FUNCT_2:def 1,RELAT_1:def 19;
+A2: for x being set st x in bound_QC-variables holds (C[x] implies f.x =
+  F(x)) & (not C[x] implies f.x = G(x)) from FUNCT_2:sch 5(A1);
+  dom f = bound_QC-variables & rng f c= A() by FUNCT_2:def 1,RELAT_1:def
+  19;
   then reconsider f as Element of Valuations_in A() by FUNCT_2:def 2;
   take f;
   now
@@ -803,313 +848,312 @@ end;
 canceled;
 
 theorem Th39:
-  not x in still_not-bound_in p implies
-  for v,w st for y st x<>y holds w.y = v.y holds Valid(p,J).v = Valid(p,J).w
+  not x in still_not-bound_in p implies for v,w st for y st x<>y
+  holds w.y = v.y holds Valid(p,J).v = Valid(p,J).w
 proof
   defpred PP[Element of CQC-WFF] means not x in still_not-bound_in $1 implies
-  for v,w st for y st x<>y holds w.y = v.y holds
-  Valid($1,J).v = Valid($1,J).w;
+  for v,w st for y st x<>y holds w.y = v.y holds Valid($1,J).v = Valid($1,J).w;
 A1: now
     let s,t,y,k,ll,P;
-A2: rng ll c= bound_QC-variables by RELAT_1:def 19;
     thus PP[VERUM]
     proof
-      assume not x in still_not-bound_in VERUM;
-      thus for v,w st for y st x<>y holds w.y = v.y holds
-      Valid(VERUM,J).v = Valid(VERUM,J).w
+      assume
+      not x in still_not-bound_in VERUM;
+      thus for v,w st for y st x<>y holds w.y = v.y holds Valid(VERUM,J).v =
+      Valid(VERUM,J).w
       proof
-        let v,w such that for y st x <> y holds w.y = v.y;
-        Valid(VERUM,J).v = TRUE & Valid(VERUM,J).w = TRUE by Th14;
-        hence thesis;
+        let v,w such that
+        for y st x <> y holds w.y = v.y;
+        Valid(VERUM,J).v = TRUE by Th14;
+        hence thesis by Th14;
       end;
     end;
+A2: rng ll c= bound_QC-variables by RELAT_1:def 19;
     thus PP[P!ll]
     proof
       assume
 A3:   not x in still_not-bound_in (P!ll);
-      thus for v,w st for y st x<>y holds w.y = v.y holds
-      Valid(P!ll,J).v = Valid(P!ll,J).w
+      thus for v,w st for y st x<>y holds w.y = v.y holds Valid(P!ll,J).v =
+      Valid(P!ll,J).w
       proof
         let v,w such that
 A4:     for y st x <> y holds w.y = v.y;
 A5:     now
-          assume
-A6:       Valid(P!ll,J).v = TRUE;
-          then (ll 'in' (J.P)).v = TRUE by Lm1;
-          then
-A7:       v*'ll in (J.P) by Def9;
-A8:       len (v*'ll) = k & len (w*'ll) = k by Def8;
-          now
+A6:       len (v*'ll) = k by Def8;
+A7:       now
             let i be Nat;
             assume
-A9:         1 <= i & i <= len (v*'ll);
-            then
-A10:        (v*'ll).i = v.(ll.i) by A8,Def8;
-A11:        i in NAT by ORDINAL1:def 13;
-A12:        len (v*'ll) = len ll by A8,FINSEQ_1:def 18;
-A13:        ll.i in bound_QC-variables
-            proof
-              i in dom ll by A9,A12,FINSEQ_3:27;
-              then ll.i in rng ll by FUNCT_1:def 5;
-              hence thesis by A2;
-            end;
-A14:        ll.i <> x
+A8:         1 <= i & i <= len (v*'ll);
+A9:         len (v*'ll) = len ll by A6,FINSEQ_1:def 18;
+            then i in dom ll by A8,FINSEQ_3:27;
+            then ll.i in rng ll by FUNCT_1:def 5;
+            then reconsider z = ll.i as bound_QC-variable by A2;
+A10:        i in NAT by ORDINAL1:def 13;
+            ll.i <> x
             proof
               reconsider M = still_not-bound_in ll as set;
               not x in M by A3,QC_LANG3:9;
-              then not x in variables_in(ll,bound_QC-variables) by QC_LANG3:6;
+              then not x in variables_in(ll,bound_QC-variables) by
+              QC_LANG3:6;
               then not x in {ll.i2 where i2 is Element of NAT : 1 <= i2 & i2
               <= len ll & ll.i2 in bound_QC-variables} by QC_LANG3:def 2;
-              hence thesis by A9,A11,A12;
+              hence thesis by A8,A10,A9;
             end;
-            reconsider z = ll.i as bound_QC-variable by A13;
-            w.z = v.z by A4,A14;
-            hence (v*'ll).i = (w*'ll).i by A8,A9,A10,Def8;
+            then
+A11:        w.z = v.z by A4;
+            (v*'ll).i = v.(ll.i) by A6,A8,Def8;
+            hence (v*'ll).i = (w*'ll).i by A6,A8,A11,Def8;
           end;
-          then w*'ll in (J.P) by A7,A8,FINSEQ_1:18;
+          assume
+A12:      Valid(P!ll,J).v = TRUE;
+          then (ll 'in' (J.P)).v = TRUE by Lm1;
+          then
+A13:      v*'ll in (J.P) by Def9;
+          len (w*'ll) = k by Def8;
+          then w*'ll in (J.P) by A13,A6,A7,FINSEQ_1:18;
           then (ll 'in' (J.P)).w = TRUE by Def9;
-          hence thesis by A6,Lm1;
+          hence thesis by A12,Lm1;
         end;
         now
-          assume
-A15:      Valid(P!ll,J).v = FALSE;
-          then (ll 'in' (J.P)).v = FALSE by Lm1;
-          then
-A16:      not v*'ll in (J.P) by Def9;
-A17:      len (v*'ll) = k & len (w*'ll) = k by Def8;
-          now
+A14:      len (v*'ll) = k by Def8;
+A15:      now
             let i be Nat;
             assume
-A18:        1 <= i & i <= len (v*'ll);
-            then
-A19:        (v*'ll).i = v.(ll.i) by A17,Def8;
-A20:        len (v*'ll) = len ll by A17,FINSEQ_1:def 18;
-A21:        ll.i in bound_QC-variables
+A16:        1 <= i & i <= len (v*'ll);
+A17:        len (v*'ll) = len ll by A14,FINSEQ_1:def 18;
+            then i in dom ll by A16,FINSEQ_3:27;
+            then ll.i in rng ll by FUNCT_1:def 5;
+            then reconsider z = ll.i as bound_QC-variable by A2;
+            ll.i <> x
             proof
-              i in dom ll by A18,A20,FINSEQ_3:27;
-              then ll.i in rng ll by FUNCT_1:def 5;
-              hence thesis by A2;
-            end;
-A22:        ll.i <> x
-            proof
-A23:          i in NAT by ORDINAL1:def 13;
               reconsider M = still_not-bound_in ll as set;
               not x in M by A3,QC_LANG3:9;
-              then not x in variables_in(ll,bound_QC-variables) by QC_LANG3:6;
-              then not
-              x in {ll.i2 where i2 is Element of NAT : 1 <= i2 & i2 <=
-              len ll & ll.i2 in bound_QC-variables} by QC_LANG3:def 2;
-              hence thesis by A18,A20,A23;
+              then not x in variables_in(ll,bound_QC-variables) by
+              QC_LANG3:6;
+              then i in NAT & not x in {ll.i2 where i2 is Element of NAT : 1
+<= i2 & i2 <= len ll & ll.i2 in bound_QC-variables} by ORDINAL1:def 13,
+              QC_LANG3:def 2;
+              hence thesis by A16,A17;
             end;
-            reconsider z = ll.i as bound_QC-variable by A21;
-            w.z = v.z by A4,A22;
-            hence (v*'ll).i = (w*'ll).i by A17,A18,A19,Def8;
+            then
+A18:        w.z = v.z by A4;
+            (v*'ll).i = v.(ll.i) by A14,A16,Def8;
+            hence (v*'ll).i = (w*'ll).i by A14,A16,A18,Def8;
           end;
-          then not w*'ll in (J.P) by A16,A17,FINSEQ_1:18;
+          assume
+A19:      Valid(P!ll,J).v = FALSE;
+          then (ll 'in' (J.P)).v = FALSE by Lm1;
+          then
+A20:      not v*'ll in (J.P) by Def9;
+          len (w*'ll) = k by Def8;
+          then not w*'ll in (J.P) by A20,A14,A15,FINSEQ_1:18;
           then (ll 'in' (J.P)).w = FALSE by Def9;
-          hence thesis by A15,Lm1;
+          hence thesis by A19,Lm1;
         end;
         hence thesis by A5,XBOOLEAN:def 3;
       end;
     end;
     thus PP[s] implies PP['not' s]
     proof
-      assume that
-A24:  not x in still_not-bound_in s implies
-      for v,w st for y st x<>y holds w.y = v.y holds
-      Valid(s,J).v = Valid(s,J).w and
-A25:  not x in still_not-bound_in 'not' s;
-      thus for v,w st for y st x<>y holds w.y = v.y holds
-      Valid('not' s,J).v = Valid('not' s,J).w
+      assume
+A21:  ( not x in still_not-bound_in s implies for v,w st for y st x<>
+      y holds w.y = v. y holds Valid(s,J).v = Valid(s,J).w)& not x in
+      still_not-bound_in 'not' s;
+      thus for v,w st for y st x<>y holds w.y = v.y holds Valid('not' s,J).v =
+      Valid('not' s,J).w
       proof
         let v,w such that
-A26:    for y st x<>y holds w.y = v.y;
-A27:    now
+A22:    for y st x<>y holds w.y = v.y;
+A23:    now
           assume
-A28:      Valid('not' s,J).v = TRUE;
-          then 'not'(Valid(s,J).v) = TRUE by Th20;
-          then Valid(s,J).v = FALSE by MARGREL1:41;
-          then Valid(s,J).w = FALSE by A24,A25,A26,QC_LANG3:11;
-          then 'not'(Valid(s,J).w) = TRUE by MARGREL1:41;
-          hence thesis by A28,Th20;
+A24:      Valid('not' s,J).v = FALSE;
+          then 'not'(Valid(s,J).v) = FALSE by Th20;
+          then Valid(s,J).v = TRUE by MARGREL1:41;
+          then Valid(s,J).w = TRUE by A21,A22,QC_LANG3:11;
+          then 'not'(Valid(s,J).w) = FALSE by MARGREL1:41;
+          hence thesis by A24,Th20;
         end;
         now
           assume
-A29:      Valid('not' s,J).v = FALSE;
-          then 'not'(Valid(s,J).v) = FALSE by Th20;
-          then Valid(s,J).v = TRUE by MARGREL1:41;
-          then Valid(s,J).w = TRUE by A24,A25,A26,QC_LANG3:11;
-          then 'not'(Valid(s,J).w) = FALSE by MARGREL1:41;
-          hence thesis by A29,Th20;
+A25:      Valid('not' s,J).v = TRUE;
+          then 'not'(Valid(s,J).v) = TRUE by Th20;
+          then Valid(s,J).v = FALSE by MARGREL1:41;
+          then Valid(s,J).w = FALSE by A21,A22,QC_LANG3:11;
+          then 'not'(Valid(s,J).w) = TRUE by MARGREL1:41;
+          hence thesis by A25,Th20;
         end;
-        hence thesis by A27,XBOOLEAN:def 3;
+        hence thesis by A23,XBOOLEAN:def 3;
       end;
     end;
     thus PP[s] & PP[t] implies PP[s '&' t]
     proof
       assume that
-A30:  not x in still_not-bound_in s implies
-      for v,w st for y st x<>y holds w.y = v.y holds
-      Valid(s,J).v = Valid(s,J).w and
-A31:  not x in still_not-bound_in t implies
-      for v,w st for y st x<>y holds w.y = v.y holds
-      Valid(t,J).v = Valid(t,J).w and
-A32:  not x in still_not-bound_in s '&' t;
-A33:  not (x in (still_not-bound_in s) \/ (still_not-bound_in t))
-      by A32,QC_LANG3:14;
-      thus for v,w st for y st x<>y holds w.y = v.y holds
-      Valid(s '&' t,J).v = Valid(s '&' t, J).w
+A26:  not x in still_not-bound_in s implies for v,w st for y st x<>y
+      holds w.y = v.y holds Valid(s,J).v = Valid(s,J).w and
+A27:  not x in still_not-bound_in t implies for v,w st for y st x<>y
+      holds w.y = v.y holds Valid(t,J).v = Valid(t,J).w and
+A28:  not x in still_not-bound_in s '&' t;
+A29:  not x in (still_not-bound_in s) \/ (still_not-bound_in t) by A28,
+      QC_LANG3:14;
+      thus for v,w st for y st x<>y holds w.y = v.y holds Valid(s '&' t,J).v =
+      Valid(s '&' t, J).w
       proof
         let v,w such that
-A34:    for y st x<>y holds w.y = v.y;
-A35:    now
+A30:    for y st x<>y holds w.y = v.y;
+A31:    now
           assume
-A36:      Valid(s '&' t,J).v = TRUE;
-          then (Valid(s,J).v) '&' (Valid(t,J).v) = TRUE by Th22;
-          then Valid(s,J).v = TRUE & Valid(t,J).v = TRUE by MARGREL1:45;
-          then Valid(s,J).w = TRUE & Valid(t,J).w = TRUE by A30,A31,A33,A34,
-XBOOLE_0:def 3;
-          then (Valid(s,J).w) '&' (Valid(t,J).w) = TRUE;
-          hence thesis by A36,Th22;
+A32:      Valid(s '&' t,J).v = FALSE;
+A33:      now
+            assume
+            Valid(s,J).v = FALSE;
+            then Valid(s,J).w = FALSE by A26,A29,A30,XBOOLE_0:def 3;
+            then (Valid(s,J).w) '&' (Valid(t,J).w) = FALSE by MARGREL1:
+            45;
+            hence thesis by A32,Th22;
+          end;
+A34:      now
+            assume
+            Valid(t,J).v = FALSE;
+            then Valid(t,J).w = FALSE by A27,A29,A30,XBOOLE_0:def 3;
+            then (Valid(s,J).w) '&' (Valid(t,J).w) = FALSE by MARGREL1:
+            45;
+            hence thesis by A32,Th22;
+          end;
+          (Valid(s,J).v) '&' (Valid(t,J).v) = FALSE by A32,Th22;
+          hence thesis by A33,A34,MARGREL1:45;
         end;
         now
           assume
-A37:      Valid(s '&' t,J).v = FALSE;
+A35:      Valid(s '&' t,J).v = TRUE;
           then
-A38:      (Valid(s,J).v) '&' (Valid(t,J).v) = FALSE by Th22;
-A39:      now
-            assume Valid(s,J).v = FALSE;
-            then Valid(s,J).w = FALSE by A30,A33,A34,XBOOLE_0:def 3;
-            then (Valid(s,J).w) '&' (Valid(t,J).w) = FALSE by MARGREL1:45;
-            hence thesis by A37,Th22;
-          end;
-          now
-            assume Valid(t,J).v = FALSE;
-            then Valid(t,J).w = FALSE by A31,A33,A34,XBOOLE_0:def 3;
-            then (Valid(s,J).w) '&' (Valid(t,J).w) = FALSE by MARGREL1:45;
-            hence thesis by A37,Th22;
-          end;
-          hence thesis by A38,A39,MARGREL1:45;
+A36:      (Valid(s,J).v) '&' (Valid(t,J).v) = TRUE by Th22;
+          then Valid(t,J).v = TRUE by MARGREL1:45;
+          then
+A37:      Valid(t,J).w = TRUE by A27,A29,A30,XBOOLE_0:def 3;
+          Valid(s,J).v = TRUE by A36,MARGREL1:45;
+          then Valid(s,J).w = TRUE by A26,A29,A30,XBOOLE_0:def 3;
+          then (Valid(s,J).w) '&' (Valid(t,J).w) = TRUE by A37;
+          hence thesis by A35,Th22;
         end;
-        hence thesis by A35,XBOOLEAN:def 3;
+        hence thesis by A31,XBOOLEAN:def 3;
       end;
     end;
     thus PP[s] implies PP[All(y,s)]
     proof
       assume that
-A40:  not x in still_not-bound_in s implies
-      for v,w st for y st x<>y holds w.y = v.y holds
-      Valid(s,J).v = Valid(s,J).w and
-A41:  not x in still_not-bound_in All(y,s);
-A42:  not (x in (still_not-bound_in s) \ {y}) by A41,QC_LANG3:16;
-      thus for v,w st for z st x<>z holds w.z = v.z holds
-      Valid(All(y,s),J).v = Valid(All(y,s),J).w
+A38:  not x in still_not-bound_in s implies for v,w st for y st x<>y
+      holds w.y = v.y holds Valid(s,J).v = Valid(s,J).w and
+A39:  not x in still_not-bound_in All(y,s);
+A40:  not x in (still_not-bound_in s) \ {y} by A39,QC_LANG3:16;
+      thus for v,w st for z st x<>z holds w.z = v.z holds Valid(All(y,s),J).v
+      = Valid(All(y,s),J).w
       proof
         let v,w such that
-A43:    for z st x<>z holds w.z = v.z;
-A44:    now
+A41:    for z st x<>z holds w.z = v.z;
+A42:    now
           assume
-A45:      Valid(All(y,s),J).v = TRUE;
+A43:      Valid(All(y,s),J).v = FALSE;
+          then FOR_ALL(y,Valid(s,J)).v = FALSE by Lm1;
+          then consider v1 such that
+A44:      Valid(s,J).v1 = FALSE and
+A45:      for z st y <> z holds v1.z = v.z by Th7;
+A46:      now
+            assume
+A47:        not x in (still_not-bound_in s);
+            consider v2 such that
+A48:        (for z st z <> y holds v2.z = w.z) & v2.y = v1.y from
+            LambdaVal;
+            take v2;
+            for z st x <> z holds v2.z = v1.z
+            proof
+              let z such that
+A49:          x <> z;
+              now
+                assume
+A50:            z <> y;
+                hence v2.z = w.z by A48
+                  .= v.z by A41,A49
+                  .= v1.z by A45,A50;
+              end;
+              hence thesis by A48;
+            end;
+            hence Valid(s,J).v2 = FALSE by A38,A44,A47;
+            thus for z st y <> z holds v2.z = w.z by A48;
+          end;
+          now
+            assume
+A51:        x in {y};
+            take v2 = v1;
+            thus Valid(s,J).v2 = FALSE by A44;
+            for z st y <> z holds v1.z = w.z
+            proof
+              let z;
+              assume
+A52:          y <> z;
+              then
+A53:          x <> z by A51,TARSKI:def 1;
+              thus v1.z = v.z by A45,A52
+                .= w.z by A41,A53;
+            end;
+            hence for z st y <> z holds v2.z = w.z;
+          end;
+          then FOR_ALL(y,Valid(s,J)).w = FALSE by A40,A46,Th7,
+          XBOOLE_0:def 5;
+          hence thesis by A43,Lm1;
+        end;
+        now
+          assume
+A54:      Valid(All(y,s),J).v = TRUE;
           then
-A46:      FOR_ALL(y,Valid(s,J)).v = TRUE by Lm1;
-          for v1 st for z st y<>z holds v1.z = w.z holds Valid(s,J).v1 = TRUE
+A55:      FOR_ALL(y,Valid(s,J)).v = TRUE by Lm1;
+          for v1 st for z st y<>z holds v1.z = w.z holds Valid(s,J).v1 =
+          TRUE
           proof
             let v1 such that
-A47:        for z st y<>z holds v1.z = w.z;
-A48:        now
+A56:        for z st y<>z holds v1.z = w.z;
+A57:        now
               assume
-A49:          not x in (still_not-bound_in s);
+A58:          not x in (still_not-bound_in s);
               consider v2 such that
-A50:          (for z st z <> y holds v2.z = v.z) & v2.y = v1.y from LambdaVal;
-A51:          for z st x <> z holds v2.z = v1.z
+A59:          (for z st z <> y holds v2.z = v.z) & v2.y = v1.y from
+              LambdaVal;
+A60:          for z st x <> z holds v2.z = v1.z
               proof
                 let z such that
-A52:            x <> z;
+A61:            x <> z;
                 now
                   assume
-A53:              z <> y;
-                  hence v2.z = v.z by A50
-                    .= w.z by A43,A52
-                    .= v1.z by A47,A53;
+A62:              z <> y;
+                  hence v2.z = v.z by A59
+                    .= w.z by A41,A61
+                    .= v1.z by A56,A62;
                 end;
-                hence thesis by A50;
+                hence thesis by A59;
               end;
-              Valid(s,J).v2 = TRUE by A46,A50,Th8;
-              hence thesis by A40,A49,A51;
+              Valid(s,J).v2 = TRUE by A55,A59,Th8;
+              hence thesis by A38,A58,A60;
             end;
             now
-              assume x in {y};
+              assume
+              x in {y};
               then
-A54:          x = y by TARSKI:def 1;
+A63:          x = y by TARSKI:def 1;
               for z st y <> z holds v1.z = v.z
               proof
                 let z;
                 assume
-A55:            y <> z;
-                hence v.z = w.z by A43,A54
-                  .= v1.z by A47,A55;
+A64:            y <> z;
+                hence v.z = w.z by A41,A63
+                  .= v1.z by A56,A64;
               end;
-              hence thesis by A46,Th8;
+              hence thesis by A55,Th8;
             end;
-            hence thesis by A42,A48,XBOOLE_0:def 5;
+            hence thesis by A40,A57,XBOOLE_0:def 5;
           end;
           then FOR_ALL(y,Valid(s,J)).w = TRUE by Th8;
-          hence thesis by A45,Lm1;
+          hence thesis by A54,Lm1;
         end;
-        now
-          assume
-A56:      Valid(All(y,s),J).v = FALSE;
-          then FOR_ALL(y,Valid(s,J)).v = FALSE by Lm1;
-          then consider v1 such that
-A57:      Valid(s,J).v1 = FALSE and
-A58:      for z st y <> z holds v1.z = v.z by Th7;
-          ex v2 st Valid(s,J).v2 = FALSE & for z st y<>z holds v2.z = w . z
-          proof
-A59:        now
-              assume
-A60:          not x in (still_not-bound_in s);
-              consider v2 such that
-A61:          (for z st z <> y holds v2.z = w.z) & v2.y = v1.y from LambdaVal;
-              take v2;
-              for z st x <> z holds v2.z = v1.z
-              proof
-                let z such that
-A62:            x <> z;
-                now
-                  assume
-A63:              z <> y;
-                  hence v2.z = w.z by A61
-                    .= v.z by A43,A62
-                    .= v1.z by A58,A63;
-                end;
-                hence thesis by A61;
-              end;
-              hence Valid(s,J).v2 = FALSE by A40,A57,A60;
-              thus for z st y <> z holds v2.z = w.z by A61;
-            end;
-            now
-              assume
-A64:          x in {y};
-              take v2 = v1;
-              thus Valid(s,J).v2 = FALSE by A57;
-              for z st y <> z holds v1.z = w.z
-              proof
-                let z;
-                assume
-A65:            y <> z;
-                then
-A66:            x <> z by A64,TARSKI:def 1;
-                thus v1.z = v.z by A58,A65
-                  .= w.z by A43,A66;
-              end;
-              hence for z st y <> z holds v2.z = w.z;
-            end;
-            hence thesis by A42,A59,XBOOLE_0:def 5;
-          end;
-          then FOR_ALL(y,Valid(s,J)).w = FALSE by Th7;
-          hence thesis by A56,Lm1;
-        end;
-        hence thesis by A44,XBOOLEAN:def 3;
+        hence thesis by A42,XBOOLEAN:def 3;
       end;
     end;
   end;
@@ -1118,8 +1162,8 @@ A66:            x <> z by A64,TARSKI:def 1;
 end;
 
 theorem Th40:
-  J,v |= p & not x in still_not-bound_in p implies
-  for w st for y st x<>y holds w.y = v.y holds J,w |= p
+  J,v |= p & not x in still_not-bound_in p implies for w st for y
+  st x<>y holds w.y = v.y holds J,w |= p
 proof
   assume that
 A1: J,v |= p and
@@ -1136,27 +1180,30 @@ A3: for y st x<>y holds w.y = v.y;
 end;
 
 theorem Th41:
-  J,v |= All(x,p) iff for w st for y st x<>y holds w.y = v.y holds J,w |= p
+  J,v |= All(x,p) iff for w st for y st x<>y holds w.y = v.y holds
+  J,w |= p
 proof
 A1: now
     assume
-A2: J,v |= All(x,p);
-    let w;
-    assume for y st x<>y holds w.y = v.y;
-    then Valid(p,J).w = TRUE by A2,Th31;
-    hence J,w |= p by Def12;
-  end;
-  now
-    assume
-A3: for w st for y st x<>y holds w.y = v.y holds J,w |= p;
+A2: for w st for y st x<>y holds w.y = v.y holds J,w |= p;
     for w st for y st x<>y holds w.y = v.y holds Valid(p,J).w = TRUE
     proof
       let w;
-      assume for y st x<>y holds w.y = v.y;
-      then J,w |= p by A3;
+      assume
+      for y st x<>y holds w.y = v.y;
+      then J,w |= p by A2;
       hence thesis by Def12;
     end;
     hence J,v |= All(x,p) by Th31;
+  end;
+  now
+    assume
+A3: J,v |= All(x,p);
+    let w;
+    assume
+    for y st x<>y holds w.y = v.y;
+    then Valid(p,J).w = TRUE by A3,Th31;
+    hence J,w |= p by Def12;
   end;
   hence thesis by A1;
 end;
@@ -1168,265 +1215,297 @@ theorem Th42:
   x <> y & p = s'.x & q = s'.y implies for v st v.x = v.y holds
   Valid(p,J).v = Valid(q,J).v
 proof
-  defpred PP[Element of QC-WFF] means
-  for x,y,p,q st x <> y & p = $1.x & q = $1.y holds
-  for v st v.x = v.y holds Valid(p,J).v = Valid(q,J).v;
+  defpred PP[Element of QC-WFF] means for x,y,p,q st x <> y & p = $1.x & q =
+  $1.y holds for v st v.x = v.y holds Valid(p,J).v = Valid(q,J).v;
 A1: now
     let s be Element of QC-WFF;
     thus s is atomic implies PP[s]
     proof
       assume
 A2:   s is atomic;
-      thus for x,y,p,q st x <> y & p = s.x & q = s.y holds
-      for v st v.x = v.y holds Valid(p,J).v = Valid(q,J).v
+      thus for x,y,p,q st x <> y & p = s.x & q = s.y holds for v st v.x = v.y
+      holds Valid(p,J).v = Valid(q,J).v
       proof
+        consider k being Element of NAT, P being (QC-pred_symbol of k), l
+        being QC-variable_list of k such that
+A3:     s = P!l by A2,QC_LANG1:def 17;
         let x,y,p,q such that
-A3:     x <> y & p = s.x & q = s.y;
-        let v such that
-A4:     v.x = v.y;
-        consider k being Element of NAT, P being (QC-pred_symbol of k),
-        l being QC-variable_list of k such that
-A5:     s = P!l by A2,QC_LANG1:def 17;
-A6:     p = P!Subst(l, a.0 .-->x) & q = P!Subst(l, a.0 .-->y)
-        by A3,A5,CQC_LANG:30;
+        x <> y and
+A4:     p = s.x and
+A5:     q = s.y;
         set lx = Subst(l, a.0 .-->x), ly = Subst(l, a.0 .-->y);
-A7:     {lx.i : 1 <= i & i <= len lx & lx.i in free_QC-variables} = {} &
+        let v such that
+A6:     v.x = v.y;
+A7:     p = P!Subst(l, a.0 .-->x) by A4,A3,CQC_LANG:30;
+        then
+A8:     {lx.i : 1 <= i & i <= len lx & lx.i in free_QC-variables} = {} by
+        CQC_LANG:17;
+A9:     q = P!Subst(l, a.0 .-->y) by A5,A3,CQC_LANG:30;
+        then
+A10:    {ly.i : 1 <= i & i <= len ly & ly.i in free_QC-variables} = {} by
+        CQC_LANG:17;
+A11:    {ly.j : 1 <= j & j <= len ly & ly.j in fixed_QC-variables} = {}
+        by A9, CQC_LANG:17;
         {lx.j : 1 <= j & j <= len lx & lx.j in fixed_QC-variables} = {}
-        by A6,CQC_LANG:17;
-        {ly.i : 1 <= i & i <= len ly & ly.i in free_QC-variables} = {} &
-        {ly.j : 1 <= j & j <= len ly & ly.j in fixed_QC-variables} = {}
-        by A6,CQC_LANG:17;
-        then reconsider lx,ly as CQC-variable_list of k by A7,CQC_LANG:15;
-A8:     len (v*'lx) = k &
-        for i st 1 <= i & i <= k holds (v*'lx).i = v.(lx.i) by Def8;
-A9:     len (v*'ly) = k &
-        for i st 1 <= i & i <= k holds (v*'ly).i = v.(ly.i) by Def8;
-A10:    v*'lx = v*'ly
-        proof
-          now
-            let i be Nat;
+        by A7, CQC_LANG:17;
+        then reconsider lx,ly as CQC-variable_list of k by A8,A10,A11,
+        CQC_LANG:15;
+A12:    len (v*'lx) = k by Def8;
+A13:    now
+          let i be Nat;
+          assume that
+A14:      1 <= i and
+A15:      i <= len (v*'lx);
+A16:      i in NAT by ORDINAL1:def 13;
+A17:      i <= len l by A12,A15,FINSEQ_1:def 18;
+A18:      now
             assume
-A11:        1 <= i & i <= len (v*'lx);
+            l.i <> a.0;
             then
-A12:        1 <= i & i <= len l by A8,FINSEQ_1:def 18;
-A13:        i in NAT by ORDINAL1:def 13;
-A14:        now
-              assume l.i <> a.0;
-              then
-A15:          lx.i = l.i & ly.i = l.i by A12,A13,CQC_LANG:11;
-              v.(lx.i) = (v*'lx).i & v.(ly.i) = (v*'ly).i by A8,A11,Def8;
-              hence (v*'lx).i = (v*'ly).i by A15;
-            end;
-            now
-              assume l.i = a.0;
-              then
-A16:          lx.i = x & ly.i = y by A12,A13,CQC_LANG:11;
-              v.(lx.i) = (v*'lx).i & v.(ly.i) = (v*'ly).i by A8,A11,Def8;
-              hence (v*'lx).i = (v*'ly).i by A4,A16;
-            end;
-            hence (v*'lx).i = (v*'ly).i by A14;
+A19:        lx.i = l.i & ly.i = l.i by A14,A17,A16,CQC_LANG:11;
+            v.(lx.i) = (v*'lx).i by A12,A14,A15,Def8;
+            hence (v*'lx).i = (v*'ly).i by A12,A14,A15,A19,Def8;
           end;
-          hence thesis by A8,A9,FINSEQ_1:18;
+          now
+            assume
+            l.i = a.0;
+            then
+A20:        lx.i = x & ly.i = y by A14,A17,A16,CQC_LANG:11;
+            v.(lx.i) = (v*'lx).i by A12,A14,A15,Def8;
+            hence (v*'lx).i = (v*'ly).i by A6,A12,A14,A15,A20,Def8;
+          end;
+          hence (v*'lx).i = (v*'ly).i by A18;
         end;
-A17:    now
-          assume Valid(p,J).v = TRUE;
-          then v*'lx in J.P by A6,Th16;
-          hence Valid(q,J).v = TRUE by A6,A10,Th16;
+        len (v*'ly) = k by Def8;
+        then
+A21:    v*'lx = v*'ly by A12,A13,FINSEQ_1:18;
+A22:    now
+          assume
+          Valid(p,J).v = FALSE;
+          then not v*'lx in J.P by A7,Th17;
+          hence Valid(q,J).v = FALSE by A9,A21,Th17;
         end;
         now
-          assume Valid(p,J).v = FALSE;
-          then not (v*'lx in J.P) by A6,Th17;
-          hence Valid(q,J).v = FALSE by A6,A10,Th17;
+          assume
+          Valid(p,J).v = TRUE;
+          then v*'lx in J.P by A7,Th16;
+          hence Valid(q,J).v = TRUE by A9,A21,Th16;
         end;
-        hence thesis by A17,XBOOLEAN:def 3;
+        hence thesis by A22,XBOOLEAN:def 3;
       end;
     end;
     thus PP[VERUM]
     proof
       let x,y,p,q such that
-A18:  x <> y & p = VERUM.x & q = VERUM.y;
-      let v such that v.x = v.y;
-      p = VERUM & q = VERUM by A18,CQC_LANG:28;
-      hence thesis;
+      x <> y and
+A23:  p = VERUM.x and
+A24:  q = VERUM.y;
+      let v such that
+      v.x = v.y;
+      p = VERUM by A23,CQC_LANG:28;
+      hence thesis by A24,CQC_LANG:28;
     end;
     thus s is negative & PP[the_argument_of s] implies PP[s]
     proof
       assume that
-A19:  s is negative and
-A20:  for x,y,p,q st x <> y & p = (the_argument_of s).x &
-      q = (the_argument_of s).y
-      holds for v st v.x = v.y holds Valid(p,J).v = Valid(q,J).v;
-      thus for x,y,p,q st x <> y & p = s.x & q = s.y holds
-      for v st v.x = v.y holds Valid(p,J).v = Valid(q,J).v
+A25:  s is negative and
+A26:  for x,y,p,q st x <> y & p = (the_argument_of s).x & q = (
+the_argument_of s).y holds for v st v.x = v.y holds Valid(p,J).v = Valid(q,J).v
+      ;
+      thus for x,y,p,q st x <> y & p = s.x & q = s.y holds for v st v.x = v.y
+      holds Valid(p,J).v = Valid(q,J).v
       proof
         let x,y,p,q such that
-A21:    x <> y & p = s.x & q = s.y;
+        x <> y and
+A27:    p = s.x and
+A28:    q = s.y;
+A29:    s.y = 'not' ((the_argument_of s).y) by A25,CQC_LANG:31;
+        then reconsider
+        qa = (the_argument_of s).y as Element of CQC-WFF by A28, CQC_LANG:18;
+A30:    s.x = 'not'((the_argument_of s).x) by A25,CQC_LANG:31;
+        then reconsider
+        pa = (the_argument_of s).x as Element of CQC-WFF by A27, CQC_LANG:18;
         let v such that
-A22:    v.x = v.y;
-A23:    s.x = 'not'((the_argument_of s).x) & s.y = 'not'
-        ((the_argument_of s).y) by A19,CQC_LANG:31;
-        then reconsider pa = (the_argument_of s).x as Element of CQC-WFF by A21
-,CQC_LANG:18;
-        reconsider qa = (the_argument_of s).y as Element of CQC-WFF by A21,A23,
-CQC_LANG:18;
-A24:    now
-          assume Valid(p,J).v = TRUE;
-          then 'not'(Valid(pa,J).v) = TRUE by A21,A23,Th20;
-          then Valid(pa,J).v = FALSE by MARGREL1:41;
-          then Valid(qa,J).v = FALSE by A20,A22;
-          then 'not'(Valid(qa,J).v) = TRUE by MARGREL1:41;
-          hence Valid(q,J).v = TRUE by A21,A23,Th20;
-        end;
-        now
-          assume Valid(p,J).v = FALSE;
-          then 'not'(Valid(pa,J).v) = FALSE by A21,A23,Th20;
+A31:    v.x = v.y;
+A32:    now
+          assume
+          Valid(p,J).v = FALSE;
+          then 'not'(Valid(pa,J).v) = FALSE by A27,A30,Th20;
           then Valid(pa,J).v = TRUE by MARGREL1:41;
-          then Valid(qa,J).v = TRUE by A20,A22;
+          then Valid(qa,J).v = TRUE by A26,A31;
           then 'not'(Valid(qa,J).v) = FALSE by MARGREL1:41;
-          hence Valid(q,J).v = FALSE by A21,A23,Th20;
-        end;
-        hence thesis by A24,XBOOLEAN:def 3;
-      end;
-    end;
-    thus (s is conjunctive & PP[the_left_argument_of s] &
-    PP[the_right_argument_of s]) implies PP[s]
-    proof
-      assume that
-A25:  s is conjunctive and
-A26:  for x,y,p,q st x <> y & p = (the_left_argument_of s).x &
-      q = (the_left_argument_of s).y holds
-      for v st v.x = v.y holds Valid(p,J).v = Valid(q,J).v and
-A27:  for x,y,p,q st x <> y & p = (the_right_argument_of s).x &
-      q = (the_right_argument_of s).y
-      holds for v st v.x = v.y holds Valid(p,J).v = Valid(q,J).v;
-      thus for x,y,p,q st x <> y & p = s.x & q = s.y holds
-      for v st v.x = v.y holds Valid(p,J).v = Valid(q,J).v
-      proof
-        let x,y,p,q such that
-A28:    x <> y & p = s.x & q = s.y;
-        let v such that
-A29:    v.x = v.y;
-A30:    s.x=((the_left_argument_of s).x) '&' ((the_right_argument_of s).x) &
-        s.y=((the_left_argument_of s).y) '&' ((the_right_argument_of s).y)
-        by A25,CQC_LANG:33;
-        then reconsider pla = (the_left_argument_of s).x,
-        pra = (the_right_argument_of s).x as Element of CQC-WFF
-        by A28,CQC_LANG:19;
-        reconsider qla = (the_left_argument_of s).y,
-        qra = (the_right_argument_of s).y as Element of CQC-WFF
-        by A28,A30,CQC_LANG:19;
-A31:    now
-          assume Valid(p,J).v = TRUE;
-          then (Valid(pla,J).v) '&' (Valid(pra,J).v) = TRUE by A28,A30,Th22;
-          then Valid(pla,J).v = TRUE & Valid(pra,J).v = TRUE by MARGREL1:45;
-          then Valid(qla,J).v = TRUE & Valid(qra,J).v = TRUE by A26,A27,A29;
-          then (Valid(qla,J).v) '&' (Valid(qra,J).v) = TRUE;
-          hence Valid(q,J).v = TRUE by A28,A30,Th22;
+          hence Valid(q,J).v = FALSE by A28,A29,Th20;
         end;
         now
           assume
-A32:      Valid(p,J).v = FALSE;
-          then
-A33:      (Valid(pla,J).v) '&' (Valid(pra,J).v) = FALSE by A28,A30,Th22;
-A34:      now
-            assume Valid(pla,J).v = FALSE;
-            then Valid(qla,J).v = FALSE by A26,A29;
-            then (Valid(qla,J).v) '&' (Valid(qra,J).v) = FALSE by MARGREL1:45;
-            hence thesis by A28,A30,A32,Th22;
-          end;
-          now
-            assume Valid(pra,J).v = FALSE;
-            then Valid(qra,J).v = FALSE by A27,A29;
-            then (Valid(qla,J).v) '&' (Valid(qra,J).v) = FALSE by MARGREL1:45;
-            hence thesis by A28,A30,A32,Th22;
-          end;
-          hence thesis by A33,A34,MARGREL1:45;
+          Valid(p,J).v = TRUE;
+          then 'not'(Valid(pa,J).v) = TRUE by A27,A30,Th20;
+          then Valid(pa,J).v = FALSE by MARGREL1:41;
+          then Valid(qa,J).v = FALSE by A26,A31;
+          then 'not'(Valid(qa,J).v) = TRUE by MARGREL1:41;
+          hence Valid(q,J).v = TRUE by A28,A29,Th20;
         end;
-        hence thesis by A31,XBOOLEAN:def 3;
+        hence thesis by A32,XBOOLEAN:def 3;
+      end;
+    end;
+    thus s is conjunctive & PP[the_left_argument_of s] & PP[
+    the_right_argument_of s] implies PP[s]
+    proof
+      assume that
+A33:  s is conjunctive and
+A34:  for x,y,p,q st x <> y & p = (the_left_argument_of s).x & q = (
+the_left_argument_of s).y holds for v st v.x = v.y holds Valid(p,J).v = Valid(q
+      ,J).v and
+A35:  for x,y,p,q st x <> y & p = (the_right_argument_of s).x & q = (
+the_right_argument_of s).y holds for v st v.x = v.y holds Valid(p,J).v = Valid(
+      q,J).v;
+      thus for x,y,p,q st x <> y & p = s.x & q = s.y holds for v st v.x = v.y
+      holds Valid(p,J).v = Valid(q,J).v
+      proof
+        let x,y,p,q such that
+        x <> y and
+A36:    p = s.x and
+A37:    q = s.y;
+A38:    s.x=((the_left_argument_of s).x) '&' ((the_right_argument_of s).x
+        ) by A33,CQC_LANG:33;
+        then reconsider pla = (the_left_argument_of s).x, pra = (
+        the_right_argument_of s).x as Element of CQC-WFF by A36,CQC_LANG:19;
+A39:    s.y=((the_left_argument_of s).y) '&' ((the_right_argument_of s).y
+        ) by A33,CQC_LANG:33;
+        then reconsider qla = (the_left_argument_of s).y, qra = (
+        the_right_argument_of s).y as Element of CQC-WFF by A37,CQC_LANG:19;
+        let v such that
+A40:    v.x = v.y;
+A41:    now
+          assume
+A42:      Valid(p,J).v = FALSE;
+A43:      now
+            assume
+            Valid(pla,J).v = FALSE;
+            then Valid(qla,J).v = FALSE by A34,A40;
+            then (Valid(qla,J).v) '&' (Valid(qra,J).v) = FALSE by
+            MARGREL1:45;
+            hence thesis by A37,A39,A42,Th22;
+          end;
+A44:      now
+            assume
+            Valid(pra,J).v = FALSE;
+            then Valid(qra,J).v = FALSE by A35,A40;
+            then (Valid(qla,J).v) '&' (Valid(qra,J).v) = FALSE by
+            MARGREL1:45;
+            hence thesis by A37,A39,A42,Th22;
+          end;
+          (Valid(pla,J).v) '&' (Valid(pra,J).v) = FALSE by A36,A38,A42
+          ,Th22;
+          hence thesis by A43,A44,MARGREL1:45;
+        end;
+        now
+          assume
+          Valid(p,J).v = TRUE;
+          then
+A45:      (Valid(pla,J).v) '&' (Valid(pra,J).v) = TRUE by A36,A38,
+          Th22;
+          then Valid(pra,J).v = TRUE by MARGREL1:45;
+          then
+A46:      Valid(qra,J).v = TRUE by A35,A40;
+          Valid(pla,J).v = TRUE by A45,MARGREL1:45;
+          then Valid(qla,J).v = TRUE by A34,A40;
+          then (Valid(qla,J).v) '&' (Valid(qra,J).v) = TRUE by A46;
+          hence Valid(q,J).v = TRUE by A37,A39,Th22;
+        end;
+        hence thesis by A41,XBOOLEAN:def 3;
       end;
     end;
     thus s is universal & PP[the_scope_of s] implies PP[s]
     proof
       assume that
-A35:  s is universal and
-A36:  for x,y,p,q st x<>y & p = (the_scope_of s).x & q = (the_scope_of s).y
-      holds for v st v.x = v.y holds Valid(p,J).v = Valid(q,J).v;
-      consider xx being bound_QC-variable, pp being Element of QC-WFF such that
-A37:  s = All(xx,pp) by A35,QC_LANG1:def 20;
-A38:  xx = bound_in s by A35,A37,QC_LANG1:def 26;
-      thus for x,y,p,q st x <> y & p = s.x & q = s.y holds
-      for v st v.x = v.y holds Valid(p,J).v = Valid(q,J).v
+A47:  s is universal and
+A48:  for x,y,p,q st x<>y & p = (the_scope_of s).x & q = (
+the_scope_of s).y holds for v st v.x = v.y holds Valid(p,J).v = Valid(q,J).v;
+      consider xx being bound_QC-variable, pp being Element of QC-WFF such
+      that
+A49:  s = All(xx,pp) by A47,QC_LANG1:def 20;
+A50:  xx = bound_in s by A47,A49,QC_LANG1:def 26;
+      thus for x,y,p,q st x <> y & p = s.x & q = s.y holds for v st v.x = v.y
+      holds Valid(p,J).v = Valid(q,J).v
       proof
         let x,y,p,q such that
-A39:    x <> y & p = s.x & q = s.y;
+        x <> y and
+A51:    p = s.x and
+A52:    q = s.y;
         let v such that
-A40:    v.x = v.y;
-A41:    now
+A53:    v.x = v.y;
+A54:    now
           assume
-A42:      x <> bound_in s;
-          then s.x = All(bound_in s, (the_scope_of s).x) by A35,CQC_LANG:36;
-          then reconsider ps = (the_scope_of s).x as Element of CQC-WFF by A39,
-CQC_LANG:23;
-A43:      All(bound_in s, ps) = p by A35,A39,A42,CQC_LANG:36;
-A44:      now
+A55:      x <> bound_in s;
+          then s.x = All(bound_in s, (the_scope_of s).x) by A47,
+          CQC_LANG:36;
+          then reconsider
+          ps = (the_scope_of s).x as Element of CQC-WFF by A51,
+          CQC_LANG:23;
+A56:      All(bound_in s, ps) = p by A47,A51,A55,CQC_LANG:36;
+A57:      now
             assume
-A45:        y <> bound_in s;
-            then s.y = All(bound_in s, (the_scope_of s).y) by A35,CQC_LANG:36;
-
-then reconsider qs = (the_scope_of s).y as Element of CQC-WFF by A39,
-CQC_LANG:23;
-A46:        All(bound_in s, qs) = q by A35,A39,A45,CQC_LANG:36;
-A47:        Valid(All(bound_in s, ps),J) = FOR_ALL(bound_in s, Valid(ps,J)) &
-            Valid(All(bound_in s, qs),J) = FOR_ALL(bound_in s, Valid(qs,J))
-            by Lm1;
-A48:        now
+A58:        y <> bound_in s;
+            then s.y = All(bound_in s, (the_scope_of s).y) by A47,
+            CQC_LANG:36;
+            then reconsider
+            qs = (the_scope_of s).y as Element of CQC-WFF by A52,
+            CQC_LANG:23;
+A59:        Valid(All(bound_in s, qs),J) = FOR_ALL(bound_in s, Valid(qs,
+            J)) by Lm1;
+A60:        Valid(All(bound_in s, ps),J) = FOR_ALL(bound_in s, Valid(ps,
+            J)) by Lm1;
+A61:        All(bound_in s, qs) = q by A47,A52,A58,CQC_LANG:36;
+A62:        now
               assume
-A49:          Valid(p,J).v = TRUE;
-              for v1 st for y st (bound_in s) <> y holds v1.y = v.y holds
-              Valid(qs,J).v1 = TRUE
+A63:          Valid(p,J).v = TRUE;
+              for v1 st for y st (bound_in s) <> y holds v1.y = v.y
+              holds Valid(qs,J).v1 = TRUE
               proof
                 let v1;
                 assume
-A50:            for y st (bound_in s) <> y holds v1.y = v.y;
+A64:            for y st (bound_in s) <> y holds v1.y = v.y;
                 then
-A51:            v1.x = v.x & v1.y = v.y by A42,A45;
-                Valid(ps,J).v1 = TRUE by A43,A47,A49,A50,Th8;
-                hence thesis by A36,A40,A51;
+A65:            v1.x = v.x & v1.y = v.y by A55,A58;
+                Valid(ps,J).v1 = TRUE by A56,A60,A63,A64,Th8;
+                hence thesis by A48,A53,A65;
               end;
-              hence Valid(q,J).v = TRUE by A46,A47,Th8;
+              hence Valid(q,J).v = TRUE by A61,A59,Th8;
             end;
             now
               assume
-A52:          Valid(p,J).v = FALSE;
-              ex v1 st Valid(qs,J).v1 = FALSE &
-              for y st (bound_in s) <> y holds v1.y = v.y
+A66:          Valid(p,J).v = FALSE;
+              ex v1 st Valid(qs,J).v1 = FALSE & for y st (bound_in s) <>
+              y holds v1.y = v.y
               proof
                 consider v1 such that
-A53:            Valid(ps,J).v1 = FALSE and
-A54:            for y st (bound_in s) <> y holds v1.y = v.y by A43,A47,A52,Th7;
-                v1.x = v.x & v1.y = v.y by A42,A45,A54;
-                then Valid(qs,J).v1 = FALSE by A36,A40,A53;
-                hence thesis by A54;
+A67:            Valid(ps,J).v1 = FALSE and
+A68:            for y st (bound_in s) <> y holds v1.y = v.y by A56,
+                A60,A66, Th7;
+                v1.x = v.x & v1.y = v.y by A55,A58,A68;
+                then Valid(qs,J).v1 = FALSE by A48,A53,A67;
+                hence thesis by A68;
               end;
-              hence Valid(q,J).v = FALSE by A46,A47,Th7;
+              hence Valid(q,J).v = FALSE by A61,A59,Th7;
             end;
-            hence thesis by A48,XBOOLEAN:def 3;
+            hence thesis by A62,XBOOLEAN:def 3;
           end;
           now
             assume
-A55:        y = bound_in s;
-            then q = All(y,pp) by A37,A38,A39,CQC_LANG:37;
-            hence thesis by A37,A38,A39,A55,CQC_LANG:40;
+A69:        y = bound_in s;
+            then q = All(y,pp) by A49,A50,A52,CQC_LANG:37;
+            hence thesis by A49,A50,A51,A69,CQC_LANG:40;
           end;
-          hence thesis by A44;
+          hence thesis by A57;
         end;
         now
           assume
-A56:      x = bound_in s;
-          then p = All(x,pp) by A37,A38,A39,CQC_LANG:37;
-          hence thesis by A37,A38,A39,A56,CQC_LANG:40;
+A70:      x = bound_in s;
+          then p = All(x,pp) by A49,A50,A51,CQC_LANG:37;
+          hence thesis by A49,A50,A52,A70,CQC_LANG:40;
         end;
-        hence thesis by A41;
+        hence thesis by A54;
       end;
     end;
   end;
@@ -1435,125 +1514,129 @@ A56:      x = bound_in s;
 end;
 
 theorem Th43:
-  x <> y & not x in still_not-bound_in s' implies
-  not x in still_not-bound_in (s'.y)
+  x <> y & not x in still_not-bound_in s' implies not x in
+  still_not-bound_in (s'.y)
 proof
-  defpred PP[Element of QC-WFF] means
-  x <> y & not x in still_not-bound_in ($1) implies
-  not x in still_not-bound_in ($1.y);
+  defpred PP[Element of QC-WFF] means x <> y & not x in still_not-bound_in ($1
+  ) implies not x in still_not-bound_in ($1.y);
 A1: now
     let s be Element of QC-WFF;
     thus s is atomic implies PP[s]
     proof
       assume that
 A2:   s is atomic and
-A3:   x <> y & not x in still_not-bound_in s;
+A3:   x <> y and
+A4:   not x in still_not-bound_in s;
       thus not x in still_not-bound_in (s.y)
       proof
         set l = the_arguments_of s;
-A4:     still_not-bound_in s = still_not-bound_in l by A2,QC_LANG3:8
-          .= variables_in(l, bound_QC-variables) by QC_LANG3:6
-          .={l.k : 1<=k & k<=len l & l.k in bound_QC-variables} by
-QC_LANG3:def 2;
-A5:     s.y = (the_pred_symbol_of s)!Subst(l,a.0 .-->y) by A2,CQC_LANG:29;
         set ll = Subst(l,a.0 .-->y);
-A6:     s.y is atomic & the_arguments_of s.y = ll
-        proof
-          consider k being Element of NAT, p being (QC-pred_symbol of k),
-          l2 being QC-variable_list of k such that
-A7:       s = p!l2 by A2,QC_LANG1:def 17;
-          l2 = l by A2,A7,QC_LANG1:def 22;
-          then len l = k by FINSEQ_1:def 18;
-          then len (Subst(l,a.0 .-->y)) = k by CQC_LANG:def 3;
-          then reconsider l3 = Subst(l,a.0 .-->y)
-          as QC-variable_list of k by FINSEQ_1:def 18;
-A8:       s.y = p!l3 by A2,A5,A7,QC_LANG1:def 21;
-          hence s.y is atomic by QC_LANG1:def 17;
-          hence thesis by A8,QC_LANG1:def 22;
-        end;
-        then
-A9:     still_not-bound_in the_arguments_of s.y =
-        variables_in(ll, bound_QC-variables) by QC_LANG3:6
-          .={ll.k : 1<=k & k<=
-        len ll & ll.k in bound_QC-variables} by QC_LANG3:def 2;
-        x in {ll.k : 1 <= k & k <= len ll & ll.k in bound_QC-variables}
+A5:     still_not-bound_in s = still_not-bound_in l by A2,QC_LANG3:8
+          .= variables_in(l, bound_QC-variables) by QC_LANG3:6
+          .={l.k : 1<=k & k<=len l & l.k in bound_QC-variables} by QC_LANG3:
+        def 2;
+A6:     x in {ll.k : 1 <= k & k <= len ll & ll.k in bound_QC-variables}
         implies x in {l.i : 1 <= i & i <= len l & l.i in bound_QC-variables}
         proof
           assume
-          x in {ll.k : 1 <= k & k <= len ll & ll.k in bound_QC-variables};
+          x in {ll.k : 1 <= k & k <= len ll & ll.k in
+          bound_QC-variables};
           then consider k such that
-A10:      x = ll.k & 1 <= k & k <= len ll & ll.k in bound_QC-variables;
-A11:      1 <= k & k <= len l by A10,CQC_LANG:def 3;
-          then x = l.k & l.k in bound_QC-variables by A3,A10,CQC_LANG:11;
-          hence thesis by A11;
+A7:       x = ll.k and
+A8:       1 <= k and
+A9:       k <= len ll and
+          ll.k in bound_QC-variables;
+A10:      k <= len l by A9,CQC_LANG:def 3;
+          then x = l.k by A3,A7,A8,CQC_LANG:11;
+          hence thesis by A8,A10;
         end;
-        hence thesis by A3,A4,A6,A9,QC_LANG3:8;
+A11:    s.y = (the_pred_symbol_of s)!Subst(l,a.0 .-->y) by A2
+        ,CQC_LANG:29;
+A12:    s.y is atomic & the_arguments_of s.y = ll
+        proof
+          consider k being Element of NAT, p being (QC-pred_symbol of k), l2
+          being QC-variable_list of k such that
+A13:      s = p!l2 by A2,QC_LANG1:def 17;
+          l2 = l by A2,A13,QC_LANG1:def 22;
+          then len l = k by FINSEQ_1:def 18;
+          then len (Subst(l,a.0 .-->y)) = k by CQC_LANG:def 3;
+          then reconsider l3 = Subst(l,a.0 .-->y) as QC-variable_list of k by
+          FINSEQ_1:def 18;
+A14:      s.y = p!l3 by A2,A11,A13,QC_LANG1:def 21;
+          hence s.y is atomic by QC_LANG1:def 17;
+          hence thesis by A14,QC_LANG1:def 22;
+        end;
+        then still_not-bound_in the_arguments_of s.y = variables_in(ll,
+        bound_QC-variables) by QC_LANG3:6
+          .={ll.k : 1<=k & k<= len ll & ll.k in bound_QC-variables} by
+        QC_LANG3:def 2;
+        hence thesis by A4,A5,A12,A6,QC_LANG3:8;
       end;
     end;
     thus PP[VERUM] by CQC_LANG:28;
     thus s is negative & PP[the_argument_of s] implies PP[s]
     proof
       assume that
-A12:  s is negative and
-A13:  x <> y & not x in still_not-bound_in (the_argument_of s)
-      implies not x in still_not-bound_in ((the_argument_of s).y) and
-A14:  x <> y & not x in still_not-bound_in s;
-      not x in
-
-still_not-bound_in 'not'((the_argument_of s).y) by A12,A13,A14,QC_LANG3:10,11;
-      hence thesis by A12,CQC_LANG:31;
+A15:  s is negative and
+A16:  ( x <> y & not x in still_not-bound_in (the_argument_of s)
+implies not x in still_not-bound_in ((the_argument_of s).y))& x <> y & not x in
+      still_not-bound_in s;
+      not x in still_not-bound_in 'not'((the_argument_of s).y) by A15,A16
+      ,QC_LANG3:10,11;
+      hence thesis by A15,CQC_LANG:31;
     end;
-    thus (s is conjunctive & PP[the_left_argument_of s] &
-    PP[the_right_argument_of s]) implies PP[s]
+    thus s is conjunctive & PP[the_left_argument_of s] & PP[
+    the_right_argument_of s] implies PP[s]
     proof
       assume that
-A15:  s is conjunctive and
-A16:  x <> y & not x in still_not-bound_in (the_left_argument_of s)
-      implies not x in still_not-bound_in ((the_left_argument_of s).y) and
-A17:  x <> y & not x in still_not-bound_in (the_right_argument_of s)
-      implies not x in still_not-bound_in ((the_right_argument_of s).y) and
-A18:  x <> y & not x in still_not-bound_in s;
-      still_not-bound_in s = (still_not-bound_in (the_left_argument_of s)) \/
-      (still_not-bound_in (the_right_argument_of s)) by A15,QC_LANG3:13;
+A17:  s is conjunctive and
+A18:  ( x <> y & not x in still_not-bound_in (the_left_argument_of s)
+implies not x in still_not-bound_in ((the_left_argument_of s).y))&( x <> y &
+      not x in still_not-bound_in (the_right_argument_of s) implies not x in
+      still_not-bound_in ((the_right_argument_of s).y)) & x <> y & not x in
+      still_not-bound_in s;
+      still_not-bound_in s = (still_not-bound_in (the_left_argument_of s)
+      ) \/ (still_not-bound_in (the_right_argument_of s)) by A17,QC_LANG3:13;
       then not x in still_not-bound_in ((the_left_argument_of s).y) \/
-      still_not-bound_in ((the_right_argument_of s).y) by A16,A17,A18,
-XBOOLE_0:def 3;
-      then not x in (still_not-bound_in ((the_left_argument_of s).y) '&'
-      ((the_right_argument_of s).y)) by QC_LANG3:14;
-      hence thesis by A15,CQC_LANG:33;
+      still_not-bound_in ((the_right_argument_of s).y) by A18, XBOOLE_0:def 3;
+      then not x in (still_not-bound_in ((the_left_argument_of s).y) '&' ((
+      the_right_argument_of s).y)) by QC_LANG3:14;
+      hence thesis by A17,CQC_LANG:33;
     end;
     thus s is universal & PP[the_scope_of s] implies PP[s]
     proof
       assume that
 A19:  s is universal and
-A20:  x <> y & not x in still_not-bound_in (the_scope_of s)
-      implies not x in still_not-bound_in ((the_scope_of s).y) and
-A21:  x <> y & not x in still_not-bound_in s;
-A22:  still_not-bound_in s =
-      still_not-bound_in (the_scope_of s) \ {bound_in s} by A19,QC_LANG3:15;
+A20:  x <> y & not x in still_not-bound_in (the_scope_of s) implies
+      not x in still_not-bound_in ((the_scope_of s).y) and
+A21:  x <> y and
+A22:  not x in still_not-bound_in s;
+A23:  still_not-bound_in s = still_not-bound_in (the_scope_of s) \ {
+      bound_in s} by A19,QC_LANG3:15;
       thus not x in still_not-bound_in (s.y)
       proof
-A23:    now
-          assume not x in still_not-bound_in (the_scope_of s);
-          then not x in still_not-bound_in ((the_scope_of s).y) \ {bound_in s}
+A24:    now
+          still_not-bound_in All(x,(the_scope_of s).y) =
+          still_not-bound_in ((the_scope_of s).y) \ {x} by QC_LANG3:16;
+          then
+A25:      not x in still_not-bound_in All(x,(the_scope_of s).y) iff not x
+in still_not-bound_in ((the_scope_of s).y) or x in {x} by XBOOLE_0:def 5;
+          assume
+          x in {bound_in s};
+          then x = bound_in s by TARSKI:def 1;
+          hence thesis by A19,A21,A25,CQC_LANG:36,TARSKI:def 1;
+        end;
+        now
+          assume
+          not x in still_not-bound_in (the_scope_of s);
+          then
+          not x in still_not-bound_in ((the_scope_of s).y) \ {bound_in s}
           by A20,A21,XBOOLE_0:def 5;
           then not x in still_not-bound_in All(bound_in s,(the_scope_of s).y)
           by QC_LANG3:16;
-          hence thesis by A19,A21,CQC_LANG:35,36;
+          hence thesis by A19,A22,CQC_LANG:35,36;
         end;
-        now
-          assume x in {bound_in s};
-          then
-A24:      x = bound_in s by TARSKI:def 1;
-          still_not-bound_in All(x,(the_scope_of s).y) =
-          still_not-bound_in ((the_scope_of s).y) \ {x} by QC_LANG3:16;
-          then not x in still_not-bound_in All(x,(the_scope_of s).y) iff
-          not x in still_not-bound_in ((the_scope_of s).y) or x in {x}
-          by XBOOLE_0:def 5;
-          hence thesis
-          by A19,A21,A24,CQC_LANG:36,TARSKI:def 1;
-        end;
-        hence thesis by A21,A22,A23,XBOOLE_0:def 5;
+        hence thesis by A22,A23,A24,XBOOLE_0:def 5;
       end;
     end;
   end;
@@ -1574,119 +1657,111 @@ theorem Th45:
 proof
   thus Valid(p '&' q => q '&' p, J).v = TRUE
   proof
-    assume not (Valid(p '&' q => q '&' p, J).v = TRUE);
+    assume
+    not Valid(p '&' q => q '&' p, J).v = TRUE;
     then
 A1: Valid(p '&' q => q '&' p, J).v = FALSE by XBOOLEAN:def 3;
-    Valid(p '&' q => q '&' p, J).v = Valid('not'((p '&' q) '&' 'not'
-    (q '&' p)), J).v by QC_LANG2:def 2
+    Valid(p '&' q => q '&' p, J).v = Valid('not'((p '&' q) '&' 'not' (q
+    '&' p)), J).v by QC_LANG2:def 2
       .= 'not'(Valid(((p '&' q) '&' 'not'(q '&' p)), J).v) by Th20
-      .= 'not'((Valid(p '&' q, J).v) '&' (Valid('not'
-    (q '&' p), J).v)) by Th22
-      .= 'not'((Valid(p '&' q, J).v) '&' 'not'
-    (Valid(q '&' p, J).v)) by Th20;
-    then (Valid(p '&' q, J).v) '&' 'not'(Valid(q '&' p, J).v) = TRUE by A1,
-MARGREL1:41;
-    then Valid(p '&' q, J).v=TRUE & 'not'
-    (Valid(q '&' p, J).v) = TRUE by MARGREL1:45;
-    then Valid(p '&' q, J).v = TRUE & Valid(q '&' p, J).v = FALSE by
-MARGREL1:41;
-    then (Valid(p, J).v) '&' (Valid(q, J).v) = TRUE &
-    (Valid(q, J).v) '&' (Valid(p, J).v) = FALSE by Th22;
-    hence thesis;
+      .= 'not'((Valid(p '&' q, J).v) '&' (Valid('not' (q '&' p), J).v)) by
+    Th22
+      .= 'not'((Valid(p '&' q, J).v) '&' 'not' (Valid(q '&' p, J).v)) by
+    Th20;
+    then
+A2: (Valid(p '&' q, J).v) '&' 'not'(Valid(q '&' p, J).v) = TRUE by A1,
+    MARGREL1:41;
+    then 'not' (Valid(q '&' p, J).v) = TRUE by MARGREL1:45;
+    then
+A3: Valid(q '&' p, J).v = FALSE by MARGREL1:41;
+    Valid(p '&' q, J).v = TRUE by A2,MARGREL1:45;
+    then (Valid(p, J).v) '&' (Valid(q, J).v) = TRUE by Th22;
+    hence thesis by A3,Th22;
   end;
 end;
 
 theorem Th46:
   J,v |= ('not' p => p) => p
 proof
-  thus Valid(('not' p => p) => p, J).v = TRUE
-  proof
-    'not' p => p = 'not'('not' p '&' 'not' p) by QC_LANG2:def 2;
-    then
-A1: Valid(('not' p => p) => p, J).v = Valid('not'('not'('not' p '&' 'not'
-    p) '&' 'not' p), J).v by QC_LANG2:def 2
-      .= 'not'(Valid('not'('not' p '&' 'not' p) '&' 'not' p, J).v) by Th20
-      .= 'not'((Valid('not'('not' p '&' 'not' p), J).v) '&' (Valid('not'
-    p, J).v)) by Th22;
-    Valid('not'('not' p '&' 'not' p), J).v = 'not'(Valid('not' p '&' 'not'
-    p, J).v) by Th20
-      .= 'not'(Valid('not' p, J).v) by Th33
-      .= 'not' 'not'(Valid(p, J).v) by Th20
-      .= Valid(p, J).v;
-    hence Valid(('not' p => p) => p, J).v='not'((Valid(p, J).v) '&' 'not'
-    (Valid(p, J).v)) by A1,Th20
-      .= TRUE by XBOOLEAN:102;
-  end;
+  'not' p => p = 'not'('not' p '&' 'not' p) by QC_LANG2:def 2;
+  then
+A1: Valid(('not' p => p) => p, J).v = Valid('not'('not'('not' p '&' 'not' p)
+  '&' 'not' p), J).v by QC_LANG2:def 2
+    .= 'not'(Valid('not'('not' p '&' 'not' p) '&' 'not' p, J).v) by Th20
+    .= 'not'((Valid('not'('not' p '&' 'not' p), J).v) '&' (Valid('not' p, J)
+  .v)) by Th22;
+  Valid('not'('not' p '&' 'not' p), J).v = 'not'(Valid('not' p '&' 'not' p
+  , J).v) by Th20
+    .= 'not'(Valid('not' p, J).v) by Th33
+    .= 'not' 'not'(Valid(p, J).v) by Th20
+    .= Valid(p, J).v;
+  then
+  Valid(('not' p => p) => p, J).v='not'((Valid(p, J).v) '&' 'not' (Valid(p
+  , J).v)) by A1,Th20
+    .= TRUE by XBOOLEAN:102;
+  hence Valid(('not' p => p) => p, J).v = TRUE;
 end;
 
 theorem Th47:
   J,v |= p => ('not' p => q)
 proof
-  thus Valid(p => ('not' p => q), J).v = TRUE
-  proof
-    'not' p => q = 'not'('not' p '&' 'not' q) by QC_LANG2:def 2;
-    then
-A1: Valid(p => ('not' p => q), J).v =
-    Valid('not'(p '&' 'not'('not'('not' p '&'
-    'not' q))), J).v by QC_LANG2:def 2
-      .= 'not'(Valid((p '&' 'not'('not'('not' p '&' 'not' q))), J).v) by Th20
-      .= 'not'((Valid(p,J).v) '&' (Valid('not'('not'('not' p '&' 'not'
-    q)), J).v)) by Th22;
-    Valid('not'('not'('not' p '&' 'not' q)), J).v = 'not'(Valid('not'('not'
-    p '&' 'not' q), J).v) by Th20
-      .= 'not' 'not'(Valid('not' p '&' 'not' q, J).v) by Th20
-      .= (Valid('not' p, J).v) '&' (Valid('not' q, J).v) by Th22
-      .= 'not'(Valid(p, J).v) '&' (Valid('not' q, J).v) by Th20
-      .= 'not'(Valid(p, J).v) '&' 'not'(Valid(q, J).v) by Th20;
-    then
-A2: Valid(p => ('not' p => q), J).v =
-    'not'(((Valid(p,J).v) '&' 'not'(Valid(p, J).v)) '&' 'not'(Valid(q, J).v))
-    by A1,MARGREL1:52
-      .= 'not'(FALSE '&' 'not'(Valid(q, J).v)) by XBOOLEAN:138;
-    FALSE '&' 'not'(Valid(q, J).v) = FALSE by MARGREL1:49;
-    hence thesis by A2,MARGREL1:41;
-  end;
+  'not' p => q = 'not'('not' p '&' 'not' q) by QC_LANG2:def 2;
+  then
+A1: Valid(p => ('not' p => q), J).v = Valid('not'(p '&' 'not'('not'('not' p
+  '&' 'not' q))), J).v by QC_LANG2:def 2
+    .= 'not'(Valid((p '&' 'not'('not'('not' p '&' 'not' q))), J).v) by Th20
+    .= 'not'((Valid(p,J).v) '&' (Valid('not'('not'('not' p '&' 'not' q)), J)
+  .v)) by Th22;
+  Valid('not'('not'('not' p '&' 'not' q)), J).v = 'not'(Valid('not'('not'
+  p '&' 'not' q), J).v) by Th20
+    .= 'not' 'not'(Valid('not' p '&' 'not' q, J).v) by Th20
+    .= (Valid('not' p, J).v) '&' (Valid('not' q, J).v) by Th22
+    .= 'not'(Valid(p, J).v) '&' (Valid('not' q, J).v) by Th20
+    .= 'not'(Valid(p, J).v) '&' 'not'(Valid(q, J).v) by Th20;
+  then
+A2: Valid(p => ('not' p => q), J).v = 'not'(((Valid(p,J).v) '&' 'not'(Valid(
+  p, J).v)) '&' 'not'(Valid(q, J).v)) by A1,MARGREL1:52
+    .= 'not'(FALSE '&' 'not'(Valid(q, J).v)) by XBOOLEAN:138;
+  FALSE '&' 'not'(Valid(q, J).v) = FALSE by MARGREL1:49;
+  hence Valid(p => ('not' p => q), J).v = TRUE by A2,MARGREL1:41;
 end;
 
 theorem Th48:
   J,v |= (p => q) => ('not'(q '&' t) => 'not'(p '&' t))
 proof
-  thus Valid((p => q) => ('not'(q '&' t) => 'not'(p '&' t)), J).v = TRUE
-  proof
-A1: p => q = 'not'(p '&' 'not' q) by QC_LANG2:def 2;
-    'not'(q '&' t) => 'not'(p '&' t) = 'not'('not'(q '&' t) '&'
-    'not' 'not' (p '&' t)) by QC_LANG2:def 2;
-    then
-A2: Valid((p => q) => ('not'(q '&' t) => 'not'(p '&' t)), J).v =
-    Valid('not'('not'(p '&' 'not' q) '&' 'not'('not'('not'(q '&' t) '&'
-    'not' 'not'(p '&' t)))), J).v by A1,QC_LANG2:def 2
-      .= 'not'(Valid('not'(p '&' 'not' q) '&' 'not'('not'('not'(q '&' t) '&'
-    'not' 'not'(p '&' t))), J).v) by Th20
-      .= 'not'((Valid('not'(p '&' 'not' q), J).v) '&'
-    (Valid('not'('not'('not'(q '&' t) '&' 'not' 'not'
-    (p '&' t))), J).v)) by Th22;
-A3: Valid('not'(p '&' 'not' q), J).v = 'not'(Valid(p '&' 'not' q, J).v)
-    by Th20
-      .= 'not'((Valid(p, J).v) '&' (Valid('not' q, J).v)) by Th22
-      .= 'not'((Valid(p, J).v) '&'('not'(Valid(q, J).v))) by Th20;
-    Valid('not'('not'('not'(q '&' t) '&' 'not' 'not'(p '&' t))), J).v =
-    'not'(Valid('not'('not'(q '&' t) '&' 'not' 'not' (p '&' t)), J).v) by Th20
-      .= 'not' 'not'(Valid('not'(q '&' t) '&' 'not' 'not'
-    (p '&' t), J).v) by Th20
-      .= (Valid('not'(q '&' t),J).v) '&' (Valid('not' 'not'
-    (p '&' t), J).v) by Th22
-      .= 'not'(Valid(q '&' t,J).v) '&' (Valid('not' 'not'
-    (p '&' t), J).v) by Th20
-      .= 'not'(Valid(q '&' t,J).v) '&'('not'(Valid('not'
-    (p '&' t), J).v)) by Th20
-      .= 'not'(Valid(q '&' t,J).v) '&'('not' 'not'
-    (Valid(p '&' t, J).v)) by Th20
-      .= 'not'((Valid(q,J).v) '&' (Valid(t,J).v)) '&'
-    (Valid(p '&' t, J).v) by Th22
-      .= 'not'((Valid(q,J).v) '&' (Valid(t,J).v)) '&'
-    ((Valid(p,J).v) '&' (Valid(t,J).v)) by Th22;
-    hence thesis by A2,A3,Lm2;
-  end;
+  p => q = 'not'(p '&' 'not' q) & 'not'(q '&' t) => 'not'(p '&' t) = 'not'
+  ( 'not'(q '&' t) '&' 'not' 'not' (p '&' t)) by QC_LANG2:def 2;
+  then
+A1: Valid((p => q) => ('not'(q '&' t) => 'not'(p '&' t)), J).v = Valid('not'
+('not'(p '&' 'not' q) '&' 'not'('not'('not'(q '&' t) '&' 'not' 'not'(p '&' t)))
+  ), J).v by QC_LANG2:def 2
+    .= 'not'(Valid('not'(p '&' 'not' q) '&' 'not'('not'('not'(q '&' t) '&'
+  'not' 'not'(p '&' t))), J).v) by Th20
+    .= 'not'((Valid('not'(p '&' 'not' q), J).v) '&' (Valid('not'('not'('not'
+  (q '&' t) '&' 'not' 'not' (p '&' t))), J).v)) by Th22;
+A2: Valid('not'(p '&' 'not' q), J).v = 'not'(Valid(p '&' 'not' q, J).v) by
+  Th20
+    .= 'not'((Valid(p, J).v) '&' (Valid('not' q, J).v)) by Th22
+    .= 'not'((Valid(p, J).v) '&'('not'(Valid(q, J).v))) by Th20;
+  Valid('not'('not'('not'(q '&' t) '&' 'not' 'not'(p '&' t))), J).v =
+  'not'(Valid('not'('not'(q '&' t) '&' 'not' 'not' (p '&' t)), J).v) by Th20
+    .= 'not' 'not'(Valid('not'(q '&' t) '&' 'not' 'not' (p '&' t), J).v) by
+  Th20
+    .= (Valid('not'(q '&' t),J).v) '&' (Valid('not' 'not' (p '&' t), J).v)
+  by Th22
+    .= 'not'(Valid(q '&' t,J).v) '&' (Valid('not' 'not' (p '&' t), J).v) by
+  Th20
+    .= 'not'(Valid(q '&' t,J).v) '&'('not'(Valid('not' (p '&' t), J).v)) by
+  Th20
+    .= 'not'(Valid(q '&' t,J).v) '&'('not' 'not' (Valid(p '&' t, J).v)) by
+  Th20
+    .= 'not'((Valid(q,J).v) '&' (Valid(t,J).v)) '&' (Valid(p '&' t, J).v) by
+  Th22
+    .= 'not'((Valid(q,J).v) '&' (Valid(t,J).v)) '&' ((Valid(p,J).v) '&' (
+  Valid(t,J).v)) by Th22;
+  hence
+  Valid((p => q) => ('not'(q '&' t) => 'not'(p '&' t)), J).v = TRUE by A1
+  ,A2,Lm2;
 end;
 
 theorem
@@ -1697,21 +1772,23 @@ theorem Th50:
 proof
   thus Valid(All(x,p) => p, J).v = TRUE
   proof
-    assume not (Valid(All(x,p) => p, J).v = TRUE);
+    assume
+    not Valid(All(x,p) => p, J).v = TRUE;
     then
 A1: Valid(All(x,p) => p, J).v = FALSE by XBOOLEAN:def 3;
-    Valid(All(x,p) => p, J).v = Valid('not'(All(x,p) '&' 'not'
-    p), J).v by QC_LANG2:def 2
+    Valid(All(x,p) => p, J).v = Valid('not'(All(x,p) '&' 'not' p), J).v by
+    QC_LANG2:def 2
       .= 'not'(Valid(All(x,p) '&' 'not' p, J).v) by Th20
       .= 'not'((Valid(All(x,p), J).v) '&' (Valid('not' p, J).v)) by Th22
       .= 'not'((Valid(All(x,p), J).v) '&' 'not' (Valid(p, J).v)) by Th20;
-    then (Valid(All(x,p), J).v) '&' 'not'(Valid(p, J).v) = TRUE by A1,
-MARGREL1:41;
     then
-A2: Valid(All(x,p), J).v=TRUE & 'not' (Valid(p, J).v) = TRUE by MARGREL1:45;
+A2: (Valid(All(x,p), J).v) '&' 'not'(Valid(p, J).v) = TRUE by A1,
+    MARGREL1:41;
+    then 'not' (Valid(p, J).v) = TRUE by MARGREL1:45;
     then
-A3: Valid(All(x,p), J).v = TRUE & Valid(p, J).v = FALSE by MARGREL1:41;
-    FOR_ALL(x, Valid(p,J)).v = TRUE by A2,Lm1;
+A3: Valid(p, J).v = FALSE by MARGREL1:41;
+    Valid(All(x,p), J).v=TRUE by A2,MARGREL1:45;
+    then FOR_ALL(x, Valid(p,J)).v = TRUE by Lm1;
     hence thesis by A3,Th37;
   end;
 end;
@@ -1754,12 +1831,11 @@ end;
 theorem
   J |= p & J |= (p => q) implies J |= q
 proof
-  assume that
-A1: J |= p and
-A2: J |= p => q;
+  assume
+A1: J |= p & J |= p => q;
   now
     let v;
-    J,v |= p & J,v |= p => q by A1,A2,Def13;
+    J,v |= p & J,v |= p => q by A1,Def13;
     hence J,v |= q by Th36;
   end;
   hence thesis by Def13;
@@ -1773,7 +1849,7 @@ proof
 end;
 
 theorem
-  (J |= p => q) & not x in still_not-bound_in p implies J |= p => All(x,q)
+  J |= p => q & not x in still_not-bound_in p implies J |= p => All(x,q)
 proof
   assume that
 A1: for v holds J,v |= p => q and
@@ -1784,7 +1860,8 @@ A2: not x in still_not-bound_in p;
 A3: J,u |= p;
     now
       let w;
-      assume for y st x<>y holds w.y = u.y;
+      assume
+      for y st x<>y holds w.y = u.y;
       then
 A4:   J,w |= p by A2,A3,Th40;
       J,w |= p => q by A1;
@@ -1796,38 +1873,39 @@ A4:   J,w |= p by A2,A3,Th40;
 end;
 
 theorem
-  for s being QC-formula st p = s.x & q = s.y & not x in still_not-bound_in s
-  & J |= p holds J |= q
+  for s being QC-formula st p = s.x & q = s.y & not x in
+  still_not-bound_in s & J |= p holds J |= q
 proof
   let s be QC-formula;
   assume that
-A1: p = s.x & q = s.y and
-A2: not x in still_not-bound_in s and
-A3: J |= p;
+A1: p = s.x and
+A2: q = s.y and
+A3: not x in still_not-bound_in s and
+A4: J |= p;
   now
     assume
-A4: x <> y;
-A5: now
+A5: x <> y;
+A6: now
       let u;
       consider w being Element of Valuations_in A such that
-A6:   (for z being bound_QC-variable st z <> x holds w.z = u.z) &
-      w.x = u.y from LambdaVal;
-      w.x = w.y by A6;
+A7:   (for z being bound_QC-variable st z <> x holds w.z = u.z) & w.x
+      = u.y from LambdaVal;
+      w.x = w.y by A7;
       then
-A7:   Valid(p,J).w = Valid(q,J).w by A1,Th42;
-      J,w |= p by A3,Def13;
+A8:   Valid(p,J).w = Valid(q,J).w by A1,A2,Th42;
+      J,w |= p by A4,Def13;
       then
-A8:   Valid(p,J).w = TRUE by Def12;
-      not x in still_not-bound_in q by A1,A2,A4,Th43;
-      hence Valid(q,J).u = TRUE by A6,A7,A8,Th39;
+A9:   Valid(p,J).w = TRUE by Def12;
+      not x in still_not-bound_in q by A2,A3,A5,Th43;
+      hence Valid(q,J).u = TRUE by A7,A8,A9,Th39;
     end;
     now
       let v;
-      Valid(q,J).v = TRUE by A5;
+      Valid(q,J).v = TRUE by A6;
       hence J,v |= q by Def12;
     end;
     hence thesis by Def13;
   end;
-  hence thesis by A1,A3;
+  hence thesis by A1,A2,A4;
 end;
 

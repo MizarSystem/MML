@@ -7,6 +7,7 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="TARSKI"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="MCART_1"/>
@@ -15,12 +16,12 @@
 <ArticleID name="XREAL_0"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="NAT_1"/>
+<ArticleID name="INT_1"/>
+<ArticleID name="RAT_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
-<ArticleID name="INT_1"/>
-<ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_1"/>
@@ -40,7 +41,7 @@
 <Adjective nr="10" value="false"/>
 </Cluster>
 <Func kind="K" nr="21">
-<Func kind="K" nr="122">
+<Func kind="K" nr="138">
 <LocusVar nr="2"/>
 </Func>
 </Func>
@@ -50,13 +51,13 @@
 <Adjective nr="10" value="false"/>
 </Cluster>
 <Func kind="K" nr="21">
-<Func kind="K" nr="122">
+<Func kind="K" nr="138">
 <LocusVar nr="2"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="204">
+<Func kind="K" nr="213">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -80,7 +81,7 @@
 <Adjective nr="10" value="false"/>
 </Cluster>
 <Func kind="K" nr="21">
-<Func kind="K" nr="122">
+<Func kind="K" nr="138">
 <LocusVar nr="2"/>
 </Func>
 </Func>
@@ -90,13 +91,13 @@
 <Adjective nr="10" value="false"/>
 </Cluster>
 <Func kind="K" nr="21">
-<Func kind="K" nr="122">
+<Func kind="K" nr="138">
 <LocusVar nr="2"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="205">
+<Func kind="K" nr="214">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -111,7 +112,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="6"/>
-<Adjective nr="32"/>
+<Adjective nr="35"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -119,8 +120,8 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="6"/>
-<Adjective nr="25"/>
-<Adjective nr="32"/>
+<Adjective nr="28"/>
+<Adjective nr="35"/>
 </Cluster>
 </CCluster>
 <CCluster aid="PNPROC_1" nr="2">
@@ -128,7 +129,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="6"/>
-<Adjective nr="31"/>
+<Adjective nr="34"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -136,7 +137,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="6"/>
-<Adjective nr="32"/>
+<Adjective nr="35"/>
 </Cluster>
 </CCluster>
 </Registrations>

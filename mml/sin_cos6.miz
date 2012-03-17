@@ -31,43 +31,46 @@ reserve r, s for real number,
 theorem Th1:
   0 <= r & r < s implies [\ r/s /] = 0
 proof
-  assume that
-A1: 0 <= r and
-A2: r < s;
-A3: 0 <= r/s by A1,A2;
-  r/s < s/s by A1,A2,XREAL_1:76;
+  assume
+A1: 0 <= r & r < s;
+  then r/s < s/s by XREAL_1:76;
   then r/s-1 < s/s-1 by XREAL_1:11;
-  then r/s-1 < 1-1 by A1,A2,XCMPLX_1:60;
-  hence thesis by A3,INT_1:def 4;
+  then r/s-1 < 1-1 by A1,XCMPLX_1:60;
+  hence thesis by A1,INT_1:def 4;
 end;
 
 theorem Th2:
-  for f being Function, X, Y being set st f|X is one-to-one & Y c= X holds
-  f|Y is one-to-one
+  for f being Function, X, Y being set st f|X is one-to-one & Y c=
+  X holds f|Y is one-to-one
 proof
   let f be Function, X, Y be set such that
 A1: f|X is one-to-one and
 A2: Y c= X;
-A3: dom (f|Y) = dom f /\ Y by RELAT_1:90;
   let x, y be set;
+A3: dom (f|Y) = dom f /\ Y by RELAT_1:90;
   assume
 A4: x in dom (f|Y);
   then
 A5: x in Y by A3,XBOOLE_0:def 4;
-  assume
-A6: y in dom (f|Y);
+  x in dom f by A3,A4,XBOOLE_0:def 4;
+  then x in dom f /\ X by A2,A5,XBOOLE_0:def 4;
   then
-A7: y in Y by A3,XBOOLE_0:def 4;
+A6: x in dom (f|X) by RELAT_1:90;
   assume
-A8: (f|Y).x = (f|Y).y;
-A9: (f|X).x = f.x by A2,A5,FUNCT_1:72
+A7: y in dom (f|Y);
+  then
+A8: y in Y by A3,XBOOLE_0:def 4;
+  y in dom f by A3,A7,XBOOLE_0:def 4;
+  then y in dom f /\ X by A2,A8,XBOOLE_0:def 4;
+  then
+A9: y in dom (f|X) by RELAT_1:90;
+  assume
+A10: (f|Y).x = (f|Y).y;
+  (f|X).x = f.x by A2,A5,FUNCT_1:72
     .= (f|Y).x by A5,FUNCT_1:72
-    .= f.y by A7,A8,FUNCT_1:72
-    .= (f|X).y by A2,A7,FUNCT_1:72;
-  x in dom f & y in dom f by A3,A4,A6,XBOOLE_0:def 4;
-  then x in dom f /\ X & y in dom f /\ X by A2,A5,A7,XBOOLE_0:def 4;
-  then x in dom (f|X) & y in dom (f|X) by RELAT_1:90;
-  hence thesis by A1,A9,FUNCT_1:def 8;
+    .= f.y by A8,A10,FUNCT_1:72
+    .= (f|X).y by A2,A8,FUNCT_1:72;
+  hence thesis by A1,A6,A9,FUNCT_1:def 8;
 end;
 
 begin :: sine and cosine
@@ -105,19 +108,15 @@ proof
 end;
 deffunc T(Integer) = 2*PI*$1;
 
-Lm1: dom sin = REAL by SIN_COS:27;
+Lm1: [.-PI/2+T(0),PI/2+T(0).] = [.-PI/2,PI/2.];
 
-Lm2: dom cos = REAL by SIN_COS:27;
+Lm2: [.PI/2+T(0),3/2*PI+T(0).] = [.PI/2,3/2*PI.];
 
-Lm3: [.-PI/2+T(0),PI/2+T(0).] = [.-PI/2,PI/2.];
+Lm3: [.T(0),PI+T(0).] = [.0,PI.];
 
-Lm4: [.PI/2+T(0),3/2*PI+T(0).] = [.PI/2,3/2*PI.];
+Lm4: [.PI+T(0),2*PI+T(0).] = [.PI,2*PI.];
 
-Lm5: [.T(0),PI+T(0).] = [.0,PI.];
-
-Lm6: [.PI+T(0),2*PI+T(0).] = [.PI,2*PI.];
-
-Lm7: r^2 + s^2 = 1 implies -1 <= r & r <= 1
+Lm5: r^2 + s^2 = 1 implies -1 <= r & r <= 1
 proof
   s^2 >= 0 by XREAL_1:65;
   then -s^2 <= -0;
@@ -134,35 +133,15 @@ registration
   end;
 end;
 
-Lm9: PI/2 < PI/1 by XREAL_1:78;
+Lm6: PI/2 < PI/1 by XREAL_1:78;
 
-Lm10: 1*PI < 3/2*PI by XREAL_1:70;
+Lm7: 1*PI < 3/2*PI by XREAL_1:70;
 
-Lm11: 0+T(1) < PI/2+T(1) by XREAL_1:8;
+Lm8: 0+T(1) < PI/2+T(1) by XREAL_1:8;
 
-Lm12: 3/2*PI < 2*PI by XREAL_1:70;
+Lm9: 3/2*PI < 2*PI by XREAL_1:70;
 
-Lm13: 1*PI < 2*PI by XREAL_1:70;
-
-Lm14: ].-1,1.[ c= [.-1,1.] by XXREAL_1:25;
-
-Lm15: ].-PI/2,0 .[ c= [.-PI/2,0 .] by XXREAL_1:25;
-
-Lm16: ].-PI/2,PI/2.[ c= [.-PI/2,PI/2.] by XXREAL_1:25;
-
-Lm17: ].0,PI/2.[ c= [.0,PI/2.] by XXREAL_1:25;
-
-Lm18: ].0,PI.[ c= [.0,PI.] by XXREAL_1:25;
-
-Lm19: ].PI/2,PI.[ c= [.PI/2,PI.] by XXREAL_1:25;
-
-Lm20: ].PI/2,3/2*PI.[ c= [.PI/2,3/2*PI.] by XXREAL_1:25;
-
-Lm21: ].PI,3/2*PI.[ c= [.PI,3/2*PI.] by XXREAL_1:25;
-
-Lm22: ].PI,2*PI.[ c= [.PI,2*PI.] by XXREAL_1:25;
-
-Lm23: ].3/2*PI,2*PI.[ c= [.3/2*PI,2*PI.] by XXREAL_1:25;
+Lm10: 1*PI < 2*PI by XREAL_1:70;
 
 theorem Th7:
   sin(-PI/2) = -1 & sin.-PI/2 = -1
@@ -199,7 +178,8 @@ end;
 theorem Th11:
   2*PI*i < r & r < PI+2*PI*i implies sin r > 0
 proof
-  assume T(i) < r & r < PI+T(i);
+  assume
+  T(i) < r & r < PI+T(i);
   then T(i)-T(i) < r-T(i) & r-T(i) < PI+T(i)-T(i) by XREAL_1:11;
   then r-T(i) in ].0,PI.[ by XXREAL_1:4;
   then sin.(r+T(-i)) > 0 by COMPTRIG:23;
@@ -210,7 +190,8 @@ end;
 theorem Th12:
   PI+2*PI*i < r & r < 2*PI+2*PI*i implies sin r < 0
 proof
-  assume PI+T(i) < r & r < 2*PI+T(i);
+  assume
+  PI+T(i) < r & r < 2*PI+T(i);
   then PI+T(i)-T(i) < r-T(i) & r-T(i) < 2*PI+T(i)-T(i) by XREAL_1:11;
   then r-T(i) in ].PI,2*PI.[ by XXREAL_1:4;
   then sin.(r+T(-i)) < 0 by COMPTRIG:25;
@@ -221,39 +202,51 @@ end;
 theorem Th13:
   -PI/2+2*PI*i < r & r < PI/2+2*PI*i implies cos r > 0
 proof
-  assume -PI/2+T(i) < r & r < PI/2+T(i);
-  then -PI/2+T(i)+PI/2 < r+PI/2 & r+PI/2 < PI/2+T(i)+PI/2 by XREAL_1:8;
+  assume that
+A1: -PI/2+T(i) < r and
+A2: r < PI/2+T(i);
+  r+PI/2 < PI/2+T(i)+PI/2 by A2,XREAL_1:8;
   then
-A1: T(i) < r+PI/2 & r+PI/2 < PI+T(i);
-  sin(r+PI/2) = cos r by SIN_COS:84;
-  hence thesis by A1,Th11;
+A3: r+PI/2 < PI+T(i);
+A4: sin(r+PI/2) = cos r by SIN_COS:84;
+  -PI/2+T(i)+PI/2 < r+PI/2 by A1,XREAL_1:8;
+  hence thesis by A3,A4,Th11;
 end;
 
 theorem Th14:
   PI/2+2*PI*i < r & r < 3/2*PI+2*PI*i implies cos r < 0
 proof
-  assume PI/2+T(i) < r & r < 3/2*PI+T(i);
-  then PI/2+T(i)+PI/2 < r+PI/2 & r+PI/2 < 3/2*PI+T(i)+PI/2 by XREAL_1:8;
+  assume that
+A1: PI/2+T(i) < r and
+A2: r < 3/2*PI+T(i);
+  PI/2+T(i)+PI/2 < r+PI/2 by A1,XREAL_1:8;
   then
-A1: PI+T(i) < r+PI/2 & r+PI/2 < 2*PI+T(i);
+A3: PI+T(i) < r+PI/2;
+  r+PI/2 < 3/2*PI+T(i)+PI/2 by A2,XREAL_1:8;
+  then
+A4: r+PI/2 < 2*PI+T(i);
   sin(r+PI/2) = cos r by SIN_COS:84;
-  hence thesis by A1,Th12;
+  hence thesis by A3,A4,Th12;
 end;
 
 theorem Th15:
   3/2*PI+2*PI*i < r & r < 2*PI+2*PI*i implies cos r > 0
 proof
-A1: PI+T(i) < 3/2*PI+T(i) by COMPTRIG:21,XREAL_1:8;
-  assume 3/2*PI+T(i) < r & r < 2*PI+T(i);
-  then 3/2*PI+T(i)-PI < r-PI & r-PI < 2*PI+T(i)-PI by XREAL_1:11;
+  assume that
+A1: 3/2*PI+T(i) < r and
+A2: r < 2*PI+T(i);
+  3/2*PI+T(i)-PI < r-PI by A1,XREAL_1:11;
   then
-A2: PI/2+T(i) < r-PI & r-PI < 3/2*PI+T(i) by A1,XXREAL_0:2;
+A3: PI/2+T(i) < r-PI;
+  PI+T(i) < 3/2*PI+T(i) & r-PI < 2*PI+T(i)-PI by A2,COMPTRIG:21,XREAL_1:8,
+  11;
+  then
+A4: r-PI < 3/2*PI+T(i) by XXREAL_0:2;
   cos(r-PI) = cos(-(PI-r))
     .= cos(PI+-r) by SIN_COS:34
     .= -cos(-r) by SIN_COS:84
     .= -cos r by SIN_COS:34;
-  then -cos r < -0 by A2,Th14;
-  hence thesis;
+  hence thesis by A3,A4,Th14;
 end;
 
 theorem
@@ -262,7 +255,8 @@ proof
   assume
 A1: 2*PI*i <= r & r <= PI+2*PI*i;
   per cases by A1,XXREAL_0:1;
-  suppose 2*PI*i < r & r < PI+2*PI*i;
+  suppose
+    2*PI*i < r & r < PI+2*PI*i;
     hence thesis by Th11;
   end;
   suppose
@@ -270,7 +264,8 @@ A2: 2*PI*i = r;
     sin(0+2*PI*i) = sin 0 by COMPLEX2:9;
     hence thesis by A2,SIN_COS:34;
   end;
-  suppose r = PI+2*PI*i;
+  suppose
+    r = PI+2*PI*i;
     hence thesis by COMPLEX2:9,SIN_COS:82;
   end;
 end;
@@ -278,27 +273,32 @@ end;
 theorem
   PI+2*PI*i <= r & r <= 2*PI+2*PI*i implies sin r <= 0
 proof
-  assume PI+2*PI*i <= r & r <= 2*PI+2*PI*i;
-  then PI+2*PI*i < r & r < 2*PI+2*PI*i or
-  PI+2*PI*i = r or r = 2*PI+2*PI*i by XXREAL_0:1;
+  assume
+  PI+2*PI*i <= r & r <= 2*PI+2*PI*i;
+  then PI+2*PI*i < r & r < 2*PI+2*PI*i or PI+2*PI*i = r or r = 2*PI+2*PI*i by
+  XXREAL_0:1;
   hence thesis by Th12,COMPLEX2:9,SIN_COS:82;
 end;
 
 theorem
   -PI/2+2*PI*i <= r & r <= PI/2+2*PI*i implies cos r >= 0
 proof
-  assume -PI/2+2*PI*i <= r & r <= PI/2+2*PI*i;
-  then -PI/2+2*PI*i < r & r < PI/2+2*PI*i or
-  -PI/2+2*PI*i = r or r = PI/2+2*PI*i by XXREAL_0:1;
+  assume
+  -PI/2+2*PI*i <= r & r <= PI/2+2*PI*i;
+  then
+  -PI/2+2*PI*i < r & r < PI/2+2*PI*i or -PI/2+2*PI*i = r or r = PI/2+2*PI*
+  i by XXREAL_0:1;
   hence thesis by Th9,Th13,COMPLEX2:10,SIN_COS:82;
 end;
 
 theorem
   PI/2+2*PI*i <= r & r <= 3/2*PI+2*PI*i implies cos r <= 0
 proof
-  assume PI/2+2*PI*i <= r & r <= 3/2*PI+2*PI*i;
-  then PI/2+2*PI*i < r & r < 3/2*PI+2*PI*i or
-  PI/2+2*PI*i = r or r = 3/2*PI+2*PI*i by XXREAL_0:1;
+  assume
+  PI/2+2*PI*i <= r & r <= 3/2*PI+2*PI*i;
+  then
+  PI/2+2*PI*i < r & r < 3/2*PI+2*PI*i or PI/2+2*PI*i = r or r = 3/2*PI+2*
+  PI*i by XXREAL_0:1;
   hence thesis by Th14,COMPLEX2:10,SIN_COS:82;
 end;
 
@@ -308,118 +308,118 @@ proof
   assume
 A1: 3/2*PI+2*PI*i <= r & r <= 2*PI+2*PI*i;
   per cases by A1,XXREAL_0:1;
-  suppose 3/2*PI+2*PI*i < r & r < 2*PI+2*PI*i;
+  suppose
+    3/2*PI+2*PI*i < r & r < 2*PI+2*PI*i;
     hence thesis by Th15;
   end;
-  suppose 3/2*PI+2*PI*i = r;
+  suppose
+    3/2*PI+2*PI*i = r;
     hence thesis by COMPLEX2:10,SIN_COS:82;
   end;
-  suppose r = 2*PI+2*PI*i;
+  suppose
+    r = 2*PI+2*PI*i;
     hence thesis by COMPLEX2:10,SIN_COS:82;
   end;
 end;
 
 theorem Th21:
-  2*PI*i <= r & r < 2*PI+2*PI*i & sin r = 0 implies
-  r = 2*PI*i or r = PI+2*PI*i
+  2*PI*i <= r & r < 2*PI+2*PI*i & sin r = 0 implies r = 2*PI*i or
+  r = PI+2*PI*i
 proof
-  assume that
-A1: T(i) <= r and
-A2: r < 2*PI+T(i);
-  assume sin r = 0;
-  then (r <= T(i) or r >= PI+T(i)) &
-  (r <= PI+T(i) or 2*PI+T(i) <= r) by Th11,Th12;
-  hence thesis by A1,A2,XXREAL_0:1;
+  assume
+A1: T(i) <= r & r < 2*PI+T(i);
+  assume
+A2: sin r = 0;
+  then
+A3: r <= PI+T(i) or 2*PI+T(i) <= r by Th12;
+  r <= T(i) or r >= PI+T(i) by A2,Th11;
+  hence thesis by A1,A3,XXREAL_0:1;
 end;
 
 theorem Th22:
-  2*PI*i <= r & r < 2*PI+2*PI*i & cos r = 0 implies
-  r = PI/2+2*PI*i or r = 3/2*PI+2*PI*i
+  2*PI*i <= r & r < 2*PI+2*PI*i & cos r = 0 implies r = PI/2+2*PI*
+  i or r = 3/2*PI+2*PI*i
 proof
   assume that
 A1: T(i) <= r and
 A2: r < 2*PI+T(i);
+A3: -PI/2+T(i) < 0+T(i) by XREAL_1:8;
   assume
-A3: cos r = 0;
+A4: cos r = 0;
   then
-A4: (-PI/2+T(i) >= r or r >= PI/2+T(i)) &
-  (PI/2+T(i) >= r or r >= 3/2*PI+T(i)) by Th13,Th14;
-  -PI/2+T(i) < 0+T(i) by XREAL_1:8;
-  then r = PI/2+T(i) or r = 3/2*PI+T(i) or r > 3/2*PI+T(i)
-  by A1,A4,XXREAL_0:1,2;
-  hence thesis by A2,A3,Th15;
+A5: PI/2+T(i) >= r or r >= 3/2*PI+T(i) by Th14;
+  -PI/2+T(i) >= r or r >= PI/2+T(i) by A4,Th13;
+  then r = PI/2+T(i) or r = 3/2*PI+T(i) or r > 3/2*PI+T(i) by A1,A5,A3,
+  XXREAL_0:1,2;
+  hence thesis by A2,A4,Th15;
 end;
 
 theorem Th23:
   sin r = -1 implies r = 3/2*PI + 2*PI*[\r/(2*PI)/]
 proof
   set i = [\r/(2*PI)/];
-  assume
-A1: sin r = -1;
   consider w being real number such that
-A2: w = (2*PI)*-i+r and
-A3: 0 <= w and
-A4: w < 2*PI by COMPLEX2:2;
-A5: 0+T(i) <= w+T(i) by A3,XREAL_1:8;
-A6: w+T(i) < 2*PI+T(i) by A4,XREAL_1:8;
-  (cos r)*(cos r)+(-1)*(-1) = 1 by A1,SIN_COS:32;
-  then cos r = 0;
-  then r = PI/2+T(i) or r = 3/2*PI+T(i) by A2,A5,A6,Th22;
-  hence thesis by A1,COMPLEX2:9,SIN_COS:82;
+A1: w = (2*PI)*-i+r and
+A2: 0 <= w & w < 2*PI by COMPLEX2:2;
+  assume
+A3: sin r = -1;
+  then (cos r)*(cos r)+(-1)*(-1) = 1 by SIN_COS:32;
+  then
+A4: cos r = 0;
+  0+T(i) <= w+T(i) & w+T(i) < 2*PI+T(i) by A2,XREAL_1:8;
+  then r = PI/2+T(i) or r = 3/2*PI+T(i) by A1,A4,Th22;
+  hence thesis by A3,COMPLEX2:9,SIN_COS:82;
 end;
 
 theorem Th24:
   sin r = 1 implies r = PI/2 + 2*PI*[\r/(2*PI)/]
 proof
   set i = [\r/(2*PI)/];
-  assume
-A1: sin r = 1;
   consider w being real number such that
-A2: w = (2*PI)*-i+r and
-A3: 0 <= w and
-A4: w < 2*PI by COMPLEX2:2;
-A5: 0+T(i) <= w+T(i) by A3,XREAL_1:8;
-A6: w+T(i) < 2*PI+T(i) by A4,XREAL_1:8;
-  (cos r)*(cos r)+1*1 = 1 by A1,SIN_COS:32;
-  then cos r = 0;
-  then r = PI/2+T(i) or r = 3/2*PI+T(i) by A2,A5,A6,Th22;
-  hence thesis by A1,COMPLEX2:9,SIN_COS:82;
+A1: w = (2*PI)*-i+r and
+A2: 0 <= w & w < 2*PI by COMPLEX2:2;
+  assume
+A3: sin r = 1;
+  then (cos r)*(cos r)+1*1 = 1 by SIN_COS:32;
+  then
+A4: cos r = 0;
+  0+T(i) <= w+T(i) & w+T(i) < 2*PI+T(i) by A2,XREAL_1:8;
+  then r = PI/2+T(i) or r = 3/2*PI+T(i) by A1,A4,Th22;
+  hence thesis by A3,COMPLEX2:9,SIN_COS:82;
 end;
 
 theorem Th25:
   cos r = -1 implies r = PI + 2*PI*[\r/(2*PI)/]
 proof
   set i = [\r/(2*PI)/];
-  assume
-A1: cos r = -1;
   consider w being real number such that
-A2: w = (2*PI)*-i+r and
-A3: 0 <= w and
-A4: w < 2*PI by COMPLEX2:2;
-A5: 0+T(i) <= w+T(i) by A3,XREAL_1:8;
-A6: w+T(i) < 2*PI+T(i) by A4,XREAL_1:8;
-  (sin r)*(sin r)+(-1)*(-1) = 1 by A1,SIN_COS:32;
-  then sin r = 0;
-  then r = 0+T(i) or r = PI+T(i) by A2,A5,A6,Th21;
-  hence thesis by A1,COMPLEX2:10,SIN_COS:34;
+A1: w = (2*PI)*-i+r and
+A2: 0 <= w & w < 2*PI by COMPLEX2:2;
+  assume
+A3: cos r = -1;
+  then (sin r)*(sin r)+(-1)*(-1) = 1 by SIN_COS:32;
+  then
+A4: sin r = 0;
+  0+T(i) <= w+T(i) & w+T(i) < 2*PI+T(i) by A2,XREAL_1:8;
+  then r = 0+T(i) or r = PI+T(i) by A1,A4,Th21;
+  hence thesis by A3,COMPLEX2:10,SIN_COS:34;
 end;
 
 theorem Th26:
   cos r = 1 implies r = 2*PI*[\r/(2*PI)/]
 proof
   set i = [\r/(2*PI)/];
-  assume
-A1: cos r = 1;
   consider w being real number such that
-A2: w = (2*PI)*-i+r and
-A3: 0 <= w and
-A4: w < 2*PI by COMPLEX2:2;
-A5: 0+T(i) <= w+T(i) by A3,XREAL_1:8;
-A6: w+T(i) < 2*PI+T(i) by A4,XREAL_1:8;
-  (sin r)*(sin r)+1*1 = 1 by A1,SIN_COS:32;
-  then sin r = 0;
-  then r = 0+T(i) or r = PI+T(i) by A2,A5,A6,Th21;
-  hence thesis by A1,COMPLEX2:10,SIN_COS:82;
+A1: w = (2*PI)*-i+r and
+A2: 0 <= w & w < 2*PI by COMPLEX2:2;
+  assume
+A3: cos r = 1;
+  then (sin r)*(sin r)+1*1 = 1 by SIN_COS:32;
+  then
+A4: sin r = 0;
+  0+T(i) <= w+T(i) & w+T(i) < 2*PI+T(i) by A2,XREAL_1:8;
+  then r = 0+T(i) or r = PI+T(i) by A1,A4,Th21;
+  hence thesis by A3,COMPLEX2:10,SIN_COS:82;
 end;
 
 theorem Th27:
@@ -484,41 +484,37 @@ A1: 0 <= r and
 A2: r < 3/2*PI and
 A3: sin r <= -1;
 A4: sin r >= -1 by Th3;
-  r <= 2*PI by A2,Lm12,XXREAL_0:2;
+  r <= 2*PI by A2,Lm9,XXREAL_0:2;
   hence thesis by A1,A2,A3,A4,Th27,XXREAL_0:1;
 end;
 
 theorem Th32:
   3/2*PI < r & r <= 2*PI implies sin r > -1
 proof
-  assume that
-A1: 3/2*PI < r and
-A2: r <= 2*PI and
-A3: sin r <= -1;
+  assume
+A1: 3/2*PI < r & r <= 2*PI & sin r <= -1;
   sin r >= -1 by Th3;
-  hence thesis by A1,A2,A3,Th27,XXREAL_0:1;
+  hence thesis by A1,Th27,XXREAL_0:1;
 end;
 
 theorem Th33:
   PI/2 < r & r <= 2*PI implies sin r < 1
 proof
-  assume that
-A1: PI/2 < r and
-A2: r <= 2*PI and
-A3: sin r >= 1;
+  assume
+A1: PI/2 < r & r <= 2*PI & sin r >= 1;
   sin r <= 1 by Th4;
-  hence thesis by A1,A2,A3,Th28,XXREAL_0:1;
+  hence thesis by A1,Th28,XXREAL_0:1;
 end;
 
 theorem Th34:
   0 < r & r < 2*PI implies cos r < 1
 proof
-  assume that
-A1: 0 < r and
-A2: r < 2*PI;
-A3: cos r <= 1 by Th6;
-  cos r <> 1 by A1,A2,COMPTRIG:79;
-  hence thesis by A3,XXREAL_0:1;
+  assume
+  0 < r & r < 2*PI;
+  then
+A1: cos r <> 1 by COMPTRIG:79;
+  cos r <= 1 by Th6;
+  hence thesis by A1,XXREAL_0:1;
 end;
 
 theorem Th35:
@@ -528,143 +524,132 @@ proof
 A1: 0 <= r and
 A2: r < PI;
 A3: cos r >= -1 by Th5;
-  r <= 2*PI by A2,Lm13,XXREAL_0:2;
-  then cos r <> -1 by A1,A2,Th29;
-  hence thesis by A3,XXREAL_0:1;
+  r <= 2*PI by A2,Lm10,XXREAL_0:2;
+  hence thesis by A1,A2,A3,Th29,XXREAL_0:1;
 end;
 
 theorem Th36:
   PI < r & r <= 2*PI implies cos r > -1
 proof
-  assume that
-A1: PI < r and
-A2: r <= 2*PI;
-A3: cos r >= -1 by Th5;
-  cos r <> -1 by A1,A2,Th29;
-  hence thesis by A3,XXREAL_0:1;
+  assume
+A1: PI < r & r <= 2*PI;
+  cos r >= -1 by Th5;
+  hence thesis by A1,Th29,XXREAL_0:1;
 end;
 
 theorem
   2*PI*i <= r & r < PI/2+2*PI*i implies sin r < 1
 proof
   assume that
-A1: T(i) <= r and
-A2: r < PI/2+T(i) and
-A3: sin r >= 1;
-A4: T(i)-T(i) <= r-T(i) & r-T(i) < PI/2+T(i)-T(i) by A1,A2,XREAL_1:11;
-A5: sin r <= 1 by Th4;
+A1: T(i) <= r & r < PI/2+T(i) and
+A2: sin r >= 1;
+A3: T(i)-T(i) <= r-T(i) & r-T(i) < PI/2+T(i)-T(i) by A1,XREAL_1:11;
+A4: sin r <= 1 by Th4;
   sin(r-T(i)) = sin(r+T(-i))
     .= sin r by COMPLEX2:9
-    .= 1 by A3,A5,XXREAL_0:1;
-  hence thesis by A4,Th30;
+    .= 1 by A2,A4,XXREAL_0:1;
+  hence thesis by A3,Th30;
 end;
 
 theorem
   2*PI*i <= r & r < 3/2*PI+2*PI*i implies sin r > -1
 proof
   assume that
-A1: T(i) <= r and
-A2: r < 3/2*PI+T(i) and
-A3: sin r <= -1;
-A4: T(i)-T(i) <= r-T(i) & r-T(i) < 3/2*PI+T(i)-T(i) by A1,A2,XREAL_1:11;
-A5: sin r >= -1 by Th3;
+A1: T(i) <= r & r < 3/2*PI+T(i) and
+A2: sin r <= -1;
+A3: T(i)-T(i) <= r-T(i) & r-T(i) < 3/2*PI+T(i)-T(i) by A1,XREAL_1:11;
+A4: sin r >= -1 by Th3;
   sin(r-T(i)) = sin(r+T(-i))
     .= sin r by COMPLEX2:9
-    .= -1 by A3,A5,XXREAL_0:1;
-  hence thesis by A4,Th31;
+    .= -1 by A2,A4,XXREAL_0:1;
+  hence thesis by A3,Th31;
 end;
 
 theorem
   3/2*PI+2*PI*i < r & r <= 2*PI+2*PI*i implies sin r > -1
 proof
   assume that
-A1: 3/2*PI+T(i) < r and
-A2: r <= 2*PI+T(i) and
-A3: sin r <= -1;
-A4: 3/2*PI+T(i)-T(i) < r-T(i) & r-T(i) <= 2*PI+T(i)-T(i) by A1,A2,XREAL_1:11;
-A5: sin r >= -1 by Th3;
+A1: 3/2*PI+T(i) < r & r <= 2*PI+T(i) and
+A2: sin r <= -1;
+A3: 3/2*PI+T(i)-T(i) < r-T(i) & r-T(i) <= 2*PI+T(i)-T(i) by A1,XREAL_1:11;
+A4: sin r >= -1 by Th3;
   sin(r-T(i)) = sin(r+T(-i))
     .= sin r by COMPLEX2:9
-    .= -1 by A3,A5,XXREAL_0:1;
-  hence thesis by A4,Th32;
+    .= -1 by A2,A4,XXREAL_0:1;
+  hence thesis by A3,Th32;
 end;
 
 theorem
   PI/2+2*PI*i < r & r <= 2*PI+2*PI*i implies sin r < 1
 proof
   assume that
-A1: PI/2+T(i) < r and
-A2: r <= 2*PI+T(i) and
-A3: sin r >= 1;
-A4: PI/2+T(i)-T(i) < r-T(i) & r-T(i) <= 2*PI+T(i)-T(i) by A1,A2,XREAL_1:11;
-A5: sin r <= 1 by Th4;
+A1: PI/2+T(i) < r & r <= 2*PI+T(i) and
+A2: sin r >= 1;
+A3: PI/2+T(i)-T(i) < r-T(i) & r-T(i) <= 2*PI+T(i)-T(i) by A1,XREAL_1:11;
+A4: sin r <= 1 by Th4;
   sin(r-T(i)) = sin(r+T(-i))
     .= sin r by COMPLEX2:9
-    .= 1 by A3,A5,XXREAL_0:1;
-  hence thesis by A4,Th33;
+    .= 1 by A2,A4,XXREAL_0:1;
+  hence thesis by A3,Th33;
 end;
 
 theorem
   2*PI*i < r & r < 2*PI+2*PI*i implies cos r < 1
 proof
   assume that
-A1: T(i) < r and
-A2: r < 2*PI+T(i) and
-A3: cos r >= 1;
-A4: T(i)-T(i) < r-T(i) & r-T(i) < 2*PI+T(i)-T(i) by A1,A2,XREAL_1:11;
-A5: cos r <= 1 by Th6;
+A1: T(i) < r & r < 2*PI+T(i) and
+A2: cos r >= 1;
+A3: T(i)-T(i) < r-T(i) & r-T(i) < 2*PI+T(i)-T(i) by A1,XREAL_1:11;
+A4: cos r <= 1 by Th6;
   cos(r-T(i)) = cos(r+T(-i))
     .= cos r by COMPLEX2:10
-    .= 1 by A3,A5,XXREAL_0:1;
-  hence thesis by A4,Th34;
+    .= 1 by A2,A4,XXREAL_0:1;
+  hence thesis by A3,Th34;
 end;
 
 theorem
   2*PI*i <= r & r < PI+2*PI*i implies cos r > -1
 proof
   assume that
-A1: T(i) <= r and
-A2: r < PI+T(i) and
-A3: cos r <= -1;
-A4: T(i)-T(i) <= r-T(i) & r-T(i) < PI+T(i)-T(i) by A1,A2,XREAL_1:11;
-A5: cos r >= -1 by Th5;
+A1: T(i) <= r & r < PI+T(i) and
+A2: cos r <= -1;
+A3: T(i)-T(i) <= r-T(i) & r-T(i) < PI+T(i)-T(i) by A1,XREAL_1:11;
+A4: cos r >= -1 by Th5;
   cos(r-T(i)) = cos(r+T(-i))
     .= cos r by COMPLEX2:10
-    .= -1 by A3,A5,XXREAL_0:1;
-  hence thesis by A4,Th35;
+    .= -1 by A2,A4,XXREAL_0:1;
+  hence thesis by A3,Th35;
 end;
 
 theorem
   PI+2*PI*i < r & r <= 2*PI+2*PI*i implies cos r > -1
 proof
   assume that
-A1: PI+T(i) < r and
-A2: r <= 2*PI+T(i) and
-A3: cos r <= -1;
-A4: PI+T(i)-T(i) < r-T(i) & r-T(i) <= 2*PI+T(i)-T(i) by A1,A2,XREAL_1:11;
-A5: cos r >= -1 by Th5;
+A1: PI+T(i) < r & r <= 2*PI+T(i) and
+A2: cos r <= -1;
+A3: PI+T(i)-T(i) < r-T(i) & r-T(i) <= 2*PI+T(i)-T(i) by A1,XREAL_1:11;
+A4: cos r >= -1 by Th5;
   cos(r-T(i)) = cos(r+T(-i))
     .= cos r by COMPLEX2:10
-    .= -1 by A3,A5,XXREAL_0:1;
-  hence thesis by A4,Th36;
+    .= -1 by A2,A4,XXREAL_0:1;
+  hence thesis by A3,Th36;
 end;
 
 theorem
   cos(2*PI*r) = 1 implies r in INT
 proof
+  reconsider d = 2 as positive (real number);
   assume
 A1: cos(2*PI*r) = 1;
-  set s = [\r/];
-  assume not r in INT;
+  assume
+  not r in INT;
   then r is not integer by INT_1:def 2;
   then reconsider t = frac r as positive (real number) by INT_1:72;
-A2: r = s+t by INT_1:68;
-A3: cos(2*PI*(s+t)) = cos(2*PI*s+2*PI*t)
+  set s = [\r/];
+A2: r = s+t & d*PI*t < d*PI*1 by INT_1:68,69,XREAL_1:70;
+  cos(2*PI*(s+t)) = cos(2*PI*s+2*PI*t)
     .= cos(2*PI*t) by COMPLEX2:10;
-  reconsider d = 2 as positive (real number);
-  t < 1 by INT_1:69;
-  then d*PI*t < d*PI*1 by XREAL_1:70;
-  hence contradiction by A1,A2,A3,Th34;
+  hence contradiction by A1,A2,Th34;
 end;
 
 theorem Th45:
@@ -673,7 +658,7 @@ theorem Th45:
 theorem Th46:
   sin.:].-PI/2,PI/2.[ = ].-1,1.[
 proof
-  sin|].-PI/2,PI/2.[ c= sin|[.-PI/2,PI/2.] by Lm16,RELAT_1:104;
+  sin|].-PI/2,PI/2.[ c= sin|[.-PI/2,PI/2.] by RELAT_1:104,XXREAL_1:25;
   then
 A1: rng (sin|].-PI/2,PI/2.[) c= rng (sin|[.-PI/2,PI/2.]) by RELAT_1:25;
 A2: rng (sin|].-PI/2,PI/2.[) = sin.:].-PI/2,PI/2.[ by RELAT_1:148;
@@ -687,54 +672,65 @@ A4: a in dom sin and
 A5: a in ].-PI/2,PI/2.[ and
 A6: sin.a = x by FUNCT_1:def 12;
     reconsider a, x as Real by A4,A6;
-A7: sin.a = sin a by SIN_COS:def 21;
-A8: -1 <= x & x <= 1 by A1,A2,A3,COMPTRIG:48,XXREAL_1:1;
     set i = [\a/(2*PI)/];
-A9: T(i)/(2*PI*1) = i/1 by XCMPLX_1:92;
-A10: now
-      assume x = -1;
-      then a = 3/2*PI+T(i) by A6,A7,Th23;
-      then -PI/2 < 3/2*PI+T(i) & 3/2*PI+T(i) < PI/2 by A5,XXREAL_1:4;
-      then -PI/2-3/2*PI < 3/2*PI+T(i)-3/2*PI &
-      3/2*PI+T(i)-3/2*PI < PI/2-3/2*PI by XREAL_1:11;
-      then (-2*PI)/(2*PI) < i & i < (-PI)/(2*PI) by A9,XREAL_1:76;
-      then -((2*PI)/(2*PI)) < i & i < -(PI/(2*PI)) by XCMPLX_1:188;
-      then -1 < i & i < -((1*PI)/(2*PI)) by XCMPLX_1:60;
-      then -1+1 <= i & i < -1/2 by INT_1:20,XCMPLX_1:92;
-      hence contradiction by XXREAL_0:2;
+A7: T(i)/(2*PI*1) = i/1 by XCMPLX_1:92;
+A8: sin.a = sin a by SIN_COS:def 21;
+A9: now
+      assume
+      x = 1;
+      then
+A10:  a = PI/2+T(i) by A6,A8,Th24;
+      then PI/2+T(i) < PI/2 by A5,XXREAL_1:4;
+      then PI/2+T(i)-PI/2 < PI/2-PI/2 by XREAL_1:11;
+      then i < 0;
+      then
+A11:  i <= -1 by INT_1:21;
+      -PI/2 < PI/2+T(i) by A5,A10,XXREAL_1:4;
+      then -PI/2-PI/2 < PI/2+T(i)-PI/2 by XREAL_1:11;
+      then ((-1)*PI)/(2*PI) < i by A7,XREAL_1:76;
+      then (-1)/2 < i by XCMPLX_1:92;
+      hence contradiction by A11,XXREAL_0:2;
     end;
-    now
-      assume x = 1;
-      then a = PI/2+T(i) by A6,A7,Th24;
-      then -PI/2 < PI/2+T(i) & PI/2+T(i) < PI/2 by A5,XXREAL_1:4;
-      then -PI/2-PI/2 < PI/2+T(i)-PI/2 & PI/2+T(i)-PI/2 < PI/2-PI/2
-      by XREAL_1:11;
-      then (-PI)/(2*PI) < T(i)/(2*PI) & T(i)/(2*PI) < 0/(2*PI)
-       by XREAL_1:76;
-      then ((-1)*PI)/(2*PI) < i & i < 0 by A9;
-      then (-1)/2 < i & i < 0 by XCMPLX_1:92;
-      then -1/2 < i & i <= -1 by INT_1:21;
-      hence contradiction by XXREAL_0:2;
+A12: now
+      assume
+      x = -1;
+      then
+A13:  a = 3/2*PI+T(i) by A6,A8,Th23;
+      then -PI/2 < 3/2*PI+T(i) by A5,XXREAL_1:4;
+      then -PI/2-3/2*PI < 3/2*PI+T(i)-3/2*PI by XREAL_1:11;
+      then (-2*PI)/(2*PI) < i by A7,XREAL_1:76;
+      then -((2*PI)/(2*PI)) < i by XCMPLX_1:188;
+      then -1 < i by XCMPLX_1:60;
+      then
+A14:  -1+1 <= i by INT_1:20;
+      3/2*PI+T(i) < PI/2 by A5,A13,XXREAL_1:4;
+      then 3/2*PI+T(i)-3/2*PI < PI/2-3/2*PI by XREAL_1:11;
+      then i < (-PI)/(2*PI) by A7,XREAL_1:76;
+      hence contradiction by A14,XCMPLX_1:92;
     end;
-    then -1 < x & x < 1 by A8,A10,XXREAL_0:1;
-    hence thesis by XXREAL_1:4;
+    x <= 1 by A1,A2,A3,COMPTRIG:48,XXREAL_1:1;
+    then
+A15: x < 1 by A9,XXREAL_0:1;
+    -1 <= x by A1,A2,A3,COMPTRIG:48,XXREAL_1:1;
+    then -1 < x by A12,XXREAL_0:1;
+    hence thesis by A15,XXREAL_1:4;
   end;
   let a be set;
   assume
-A11: a in ].-1,1.[;
+A16: a in ].-1,1.[;
   then reconsider a as Real;
-  -1 < a & a < 1 by A11,XXREAL_1:4;
+  -1 < a & a < 1 by A16,XXREAL_1:4;
   then a in rng (sin|[.-PI/2,PI/2.]) by COMPTRIG:48,XXREAL_1:1;
   then consider x being set such that
-A12: x in dom (sin|[.-PI/2,PI/2.]) and
-A13: (sin|[.-PI/2,PI/2.]).x = a by FUNCT_1:def 5;
-A14: dom (sin|[.-PI/2,PI/2.]) = [.-PI/2,PI/2.] by Lm1,RELAT_1:91;
-  reconsider x as Real by A12;
-A15: sin.x = a by A12,A13,FUNCT_1:70;
-  -PI/2 <= x & x <= PI/2 by A12,A14,XXREAL_1:1;
+A17: x in dom (sin|[.-PI/2,PI/2.]) and
+A18: (sin|[.-PI/2,PI/2.]).x = a by FUNCT_1:def 5;
+  reconsider x as Real by A17;
+A19: sin.x = a by A17,A18,FUNCT_1:70;
+  dom (sin|[.-PI/2,PI/2.]) = [.-PI/2,PI/2.] by RELAT_1:91,SIN_COS:27;
+  then -PI/2 <= x & x <= PI/2 by A17,XXREAL_1:1;
   then -PI/2 < x & x < PI/2 or -PI/2 = x or PI/2 = x by XXREAL_0:1;
-  then x in ].-PI/2,PI/2.[ by A11,A15,Th7,SIN_COS:81,XXREAL_1:4;
-  hence thesis by A15,Lm1,FUNCT_1:def 12;
+  then x in ].-PI/2,PI/2.[ by A16,A19,Th7,SIN_COS:81,XXREAL_1:4;
+  hence thesis by A19,FUNCT_1:def 12,SIN_COS:27;
 end;
 
 theorem
@@ -743,9 +739,10 @@ theorem
 theorem
   sin.:].PI/2,3/2*PI.[ = ].-1,1.[
 proof
-  sin|].PI/2,3/2*PI.[ c= sin|[.PI/2,3/2*PI.] by Lm20,RELAT_1:104;
+  sin|].PI/2,3/2*PI.[ c= sin|[.PI/2,3/2*PI.] by RELAT_1:104,XXREAL_1:25;
   then
-A1: rng (sin|].PI/2,3/2*PI.[) c= rng (sin|[.PI/2,3/2*PI.]) by RELAT_1:25;
+A1: rng (sin|].PI/2,3/2*PI.[) c= rng (sin|[.PI/2,3/2*PI.]) by
+  RELAT_1:25;
 A2: rng (sin|].PI/2,3/2*PI.[) = sin.:].PI/2,3/2*PI.[ by RELAT_1:148;
   thus sin.:].PI/2,3/2*PI.[ c= ].-1,1.[
   proof
@@ -757,53 +754,64 @@ A4: a in dom sin and
 A5: a in ].PI/2,3/2*PI.[ and
 A6: sin.a = x by FUNCT_1:def 12;
     reconsider a, x as Real by A4,A6;
-A7: sin.a = sin a by SIN_COS:def 21;
-A8: -1 <= x & x <= 1 by A1,A2,A3,COMPTRIG:49,XXREAL_1:1;
     set i = [\a/(2*PI)/];
-A9: T(i)/(2*PI*1) = i/1 by XCMPLX_1:92;
-A10: now
-      assume x = 1;
-      then a = PI/2+T(i) by A6,A7,Th24;
-      then PI/2 < PI/2+T(i) & PI/2+T(i) < 3/2*PI by A5,XXREAL_1:4;
-      then PI/2-PI/2 < PI/2+T(i)-PI/2 &
-      PI/2+T(i)-PI/2 < 3/2*PI-PI/2 by XREAL_1:11;
-      then 0/(2*PI) < i & T(i) < PI;
-      then 0 < i & i < (1*PI)/(2*PI) by A9,XREAL_1:76;
-      then 0+1 <= i & i < 1/2 by INT_1:20,XCMPLX_1:92;
-      hence contradiction by XXREAL_0:2;
+A7: T(i)/(2*PI*1) = i/1 by XCMPLX_1:92;
+A8: sin.a = sin a by SIN_COS:def 21;
+A9: now
+      assume
+      x = 1;
+      then
+A10:  a = PI/2+T(i) by A6,A8,Th24;
+      then PI/2 < PI/2+T(i) by A5,XXREAL_1:4;
+      then PI/2-PI/2 < PI/2+T(i)-PI/2 by XREAL_1:11;
+      then 0 < i;
+      then
+A11:  0+1 <= i by INT_1:20;
+      PI/2+T(i) < 3/2*PI by A5,A10,XXREAL_1:4;
+      then PI/2+T(i)-PI/2 < 3/2*PI-PI/2 by XREAL_1:11;
+      then i < (1*PI)/(2*PI) by A7,XREAL_1:76;
+      then i < 1/2 by XCMPLX_1:92;
+      hence contradiction by A11,XXREAL_0:2;
     end;
-    now
-      assume x = -1;
-      then a = 3/2*PI+T(i) by A6,A7,Th23;
-      then PI/2 < 3/2*PI+T(i) & 3/2*PI+T(i) < 3/2*PI by A5,XXREAL_1:4;
-      then PI/2-3/2*PI < 3/2*PI+T(i)-3/2*PI &
-      3/2*PI+T(i)-3/2*PI < 3/2*PI-3/2*PI by XREAL_1:11;
-      then (-PI)/(2*PI) < T(i)/(2*PI) & T(i)/(2*PI) < 0/(2*PI)
-       by XREAL_1:76;
-      then ((-1)*PI)/(2*PI) < i & i < 0 by A9;
-      then (-1)/2 < i & i < 0 by XCMPLX_1:92;
-      then -1/2 < i & i <= -1 by INT_1:21;
-      hence contradiction by XXREAL_0:2;
+A12: now
+      assume
+      x = -1;
+      then
+A13:  a = 3/2*PI+T(i) by A6,A8,Th23;
+      then 3/2*PI+T(i) < 3/2*PI by A5,XXREAL_1:4;
+      then 3/2*PI+T(i)-3/2*PI < 3/2*PI-3/2*PI by XREAL_1:11;
+      then i < 0;
+      then
+A14:  i <= -1 by INT_1:21;
+      PI/2 < 3/2*PI+T(i) by A5,A13,XXREAL_1:4;
+      then PI/2-3/2*PI < 3/2*PI+T(i)-3/2*PI by XREAL_1:11;
+      then ((-1)*PI)/(2*PI) < i by A7,XREAL_1:76;
+      then (-1)/2 < i by XCMPLX_1:92;
+      hence contradiction by A14,XXREAL_0:2;
     end;
-    then -1 < x & x < 1 by A8,A10,XXREAL_0:1;
-    hence thesis by XXREAL_1:4;
+    x <= 1 by A1,A2,A3,COMPTRIG:49,XXREAL_1:1;
+    then
+A15: x < 1 by A9,XXREAL_0:1;
+    -1 <= x by A1,A2,A3,COMPTRIG:49,XXREAL_1:1;
+    then -1 < x by A12,XXREAL_0:1;
+    hence thesis by A15,XXREAL_1:4;
   end;
   let a be set;
   assume
-A11: a in ].-1,1.[;
+A16: a in ].-1,1.[;
   then reconsider a as Real;
-  -1 < a & a < 1 by A11,XXREAL_1:4;
+  -1 < a & a < 1 by A16,XXREAL_1:4;
   then a in rng (sin|[.PI/2,3/2*PI.]) by COMPTRIG:49,XXREAL_1:1;
   then consider x being set such that
-A12: x in dom (sin|[.PI/2,3/2*PI.]) and
-A13: (sin|[.PI/2,3/2*PI.]).x = a by FUNCT_1:def 5;
-A14: dom (sin|[.PI/2,3/2*PI.]) = [.PI/2,3/2*PI.] by Lm1,RELAT_1:91;
-  reconsider x as Real by A12;
-A15: sin.x = a by A12,A13,FUNCT_1:70;
-  PI/2 <= x & x <= 3/2*PI by A12,A14,XXREAL_1:1;
+A17: x in dom (sin|[.PI/2,3/2*PI.]) and
+A18: (sin|[.PI/2,3/2*PI.]).x = a by FUNCT_1:def 5;
+  reconsider x as Real by A17;
+A19: sin.x = a by A17,A18,FUNCT_1:70;
+  dom (sin|[.PI/2,3/2*PI.]) = [.PI/2,3/2*PI.] by RELAT_1:91,SIN_COS:27;
+  then PI/2 <= x & x <= 3/2*PI by A17,XXREAL_1:1;
   then PI/2 < x & x < 3/2*PI or PI/2 = x or 3/2*PI = x by XXREAL_0:1;
-  then x in ].PI/2,3/2*PI.[ by A11,A15,SIN_COS:81,XXREAL_1:4;
-  hence thesis by A15,Lm1,FUNCT_1:def 12;
+  then x in ].PI/2,3/2*PI.[ by A16,A19,SIN_COS:81,XXREAL_1:4;
+  hence thesis by A19,FUNCT_1:def 12,SIN_COS:27;
 end;
 
 theorem Th49:
@@ -812,7 +820,7 @@ theorem Th49:
 theorem Th50:
   cos.:].0,PI.[ = ].-1,1.[
 proof
-  cos|].0,PI.[ c= cos|[.0,PI.] by Lm18,RELAT_1:104;
+  cos|].0,PI.[ c= cos|[.0,PI.] by RELAT_1:104,XXREAL_1:25;
   then
 A1: rng (cos|].0,PI.[) c= rng (cos|[.0,PI.]) by RELAT_1:25;
 A2: rng (cos|].0,PI.[) = cos.:].0,PI.[ by RELAT_1:148;
@@ -826,49 +834,63 @@ A4: a in dom cos and
 A5: a in ].0,PI.[ and
 A6: cos.a = x by FUNCT_1:def 12;
     reconsider a, x as Real by A4,A6;
-A7: cos.a = cos a by SIN_COS:def 23;
-A8: -1 <= x & x <= 1 by A1,A2,A3,COMPTRIG:50,XXREAL_1:1;
     set i = [\a/(2*PI)/];
-A9: T(i)/(2*PI*1) = i/1 by XCMPLX_1:92;
-A10: now
-      assume x = -1;
-      then a = PI+T(i) by A6,A7,Th25;
-      then 0 < PI+T(i) & PI+T(i) < PI by A5,XXREAL_1:4;
-      then 0-PI < PI+T(i)-PI & PI+T(i)-PI < PI-PI by XREAL_1:11;
-      then (-PI)/(2*PI) < T(i)/(2*PI) & T(i)/(2*PI) < 0/(2*PI)
-       by XREAL_1:76;
-      then -(1*PI)/(2*PI) < i & i < 0 by A9,XCMPLX_1:188;
-      then -1/2 < i & i <= -1 by INT_1:21,XCMPLX_1:92;
-      hence contradiction by XXREAL_0:2;
+A7: T(i)/(2*PI*1) = i/1 by XCMPLX_1:92;
+A8: cos.a = cos a by SIN_COS:def 23;
+A9: now
+      assume
+      x = 1;
+      then
+A10:  a = T(i) by A6,A8,Th26;
+      then T(i) < PI by A5,XXREAL_1:4;
+      then i < (1*PI)/(2*PI) by A7,XREAL_1:76;
+      then
+A11:  i < 1/2 by XCMPLX_1:92;
+      0 < i by A5,A10,XXREAL_1:4;
+      then 0+1 <= i by INT_1:20;
+      hence contradiction by A11,XXREAL_0:2;
     end;
-    now
-      assume x = 1;
-      then a = T(i) by A6,A7,Th26;
-      then 0 < T(i) & T(i) < PI by A5,XXREAL_1:4;
-      then 0/(2*PI) < T(i)/(2*PI) & T(i)/(2*PI) < PI/(2*PI) by XREAL_1:76;
-      then 0 < i & i < (1*PI)/(2*PI) by A9;
-      then 0+1 <= i & i < 1/2 by INT_1:20,XCMPLX_1:92;
-      hence contradiction by XXREAL_0:2;
+A12: now
+      assume
+      x = -1;
+      then
+A13:  a = PI+T(i) by A6,A8,Th25;
+      then 0 < PI+T(i) by A5,XXREAL_1:4;
+      then 0-PI < PI+T(i)-PI by XREAL_1:11;
+      then (-PI)/(2*PI) < T(i)/(2*PI) by XREAL_1:76;
+      then -(1*PI)/(2*PI) < i by A7,XCMPLX_1:188;
+      then
+A14:  -1/2 < i by XCMPLX_1:92;
+      PI+T(i) < PI by A5,A13,XXREAL_1:4;
+      then PI+T(i)-PI < PI-PI by XREAL_1:11;
+      then i < 0;
+      then i <= -1 by INT_1:21;
+      hence contradiction by A14,XXREAL_0:2;
     end;
-    then -1 < x & x < 1 by A8,A10,XXREAL_0:1;
-    hence thesis by XXREAL_1:4;
+    x <= 1 by A1,A2,A3,COMPTRIG:50,XXREAL_1:1;
+    then
+A15: x < 1 by A9,XXREAL_0:1;
+    -1 <= x by A1,A2,A3,COMPTRIG:50,XXREAL_1:1;
+    then -1 < x by A12,XXREAL_0:1;
+    hence thesis by A15,XXREAL_1:4;
   end;
   let a be set;
   assume
-A11: a in ].-1,1.[;
+A16: a in ].-1,1.[;
   then reconsider a as Real;
-  -1 < a & a < 1 by A11,XXREAL_1:4;
+  -1 < a & a < 1 by A16,XXREAL_1:4;
   then a in rng (cos|[.0,PI.]) by COMPTRIG:50,XXREAL_1:1;
   then consider x being set such that
-A12: x in dom (cos|[.0,PI.]) and
-A13: (cos|[.0,PI.]).x = a by FUNCT_1:def 5;
-A14: dom (cos|[.0,PI.]) = [.0,PI.] by Lm2,RELAT_1:91;
-  reconsider x as Real by A12;
-A15: cos.x = a by A12,A13,FUNCT_1:70;
-  0 <= x & x <= PI by A12,A14,XXREAL_1:1;
-  then 0 < x & x < PI or 0 = x or PI = x by XXREAL_0:1;
-  then x in ].0,PI.[ by A11,A15,SIN_COS:33,81,XXREAL_1:4;
-  hence thesis by A15,Lm2,FUNCT_1:def 12;
+A17: x in dom (cos|[.0,PI.]) and
+A18: (cos|[.0,PI.]).x = a by FUNCT_1:def 5;
+  reconsider x as Real by A17;
+A19: cos.x = a by A17,A18,FUNCT_1:70;
+A20: dom (cos|[.0,PI.]) = [.0,PI.] by RELAT_1:91,SIN_COS:27;
+  then x <= PI by A17,XXREAL_1:1;
+  then 0 < x & x < PI or 0 = x or PI = x by A17,A20,
+  XXREAL_0:1,XXREAL_1:1;
+  then x in ].0,PI.[ by A16,A19,SIN_COS:33,81,XXREAL_1:4;
+  hence thesis by A19,FUNCT_1:def 12,SIN_COS:27;
 end;
 
 theorem
@@ -877,7 +899,7 @@ theorem
 theorem
   cos.:].PI,2*PI.[ = ].-1,1.[
 proof
-  cos|].PI,2*PI.[ c= cos|[.PI,2*PI.] by Lm22,RELAT_1:104;
+  cos|].PI,2*PI.[ c= cos|[.PI,2*PI.] by RELAT_1:104,XXREAL_1:25;
   then
 A1: rng (cos|].PI,2*PI.[) c= rng (cos|[.PI,2*PI.]) by RELAT_1:25;
 A2: rng (cos|].PI,2*PI.[) = cos.:].PI,2*PI.[ by RELAT_1:148;
@@ -891,81 +913,105 @@ A4: a in dom cos and
 A5: a in ].PI,2*PI.[ and
 A6: cos.a = x by FUNCT_1:def 12;
     reconsider a, x as Real by A4,A6;
-A7: cos.a = cos a by SIN_COS:def 23;
-A8: -1 <= x & x <= 1 by A1,A2,A3,COMPTRIG:51,XXREAL_1:1;
     set i = [\a/(2*PI)/];
-A9: T(i)/(2*PI*1) = i/1 by XCMPLX_1:92;
-A10: now
-      assume x = 1;
-      then a = T(i) by A6,A7,Th26;
-      then PI < T(i) & T(i) < 2*PI by A5,XXREAL_1:4;
-      then (1*PI)/(2*PI) < i & i < 2*PI/(2*PI) by A9,XREAL_1:76;
-      then 1/2 < i & i < 1+0 by XCMPLX_1:60,92;
-      hence contradiction by INT_1:20;
+A7: T(i)/(2*PI*1) = i/1 by XCMPLX_1:92;
+A8: cos.a = cos a by SIN_COS:def 23;
+A9: now
+      assume
+      x = 1;
+      then
+A10:  a = T(i) by A6,A8,Th26;
+      then T(i) < 2*PI by A5,XXREAL_1:4;
+      then i < 2*PI/(2*PI) by A7,XREAL_1:76;
+      then
+A11:  i < 1+0 by XCMPLX_1:60;
+      PI < T(i) by A5,A10,XXREAL_1:4;
+      hence contradiction by A7,A11,INT_1:20;
     end;
-    now
-      assume x = -1;
-      then a = PI+T(i) by A6,A7,Th25;
-      then PI < PI+T(i) & PI+T(i) < 2*PI by A5,XXREAL_1:4;
-      then PI-PI < PI+T(i)-PI & PI+T(i)-PI < 2*PI-PI by XREAL_1:11;
-      then 0/(2*PI) < i & i < (1*PI)/(2*PI) by A9,XREAL_1:76;
-      then 0+1 <= i & i <= 1/2 by INT_1:20,XCMPLX_1:92;
-      hence contradiction by XXREAL_0:2;
+A12: now
+      assume
+      x = -1;
+      then
+A13:  a = PI+T(i) by A6,A8,Th25;
+      then PI < PI+T(i) by A5,XXREAL_1:4;
+      then PI-PI < PI+T(i)-PI by XREAL_1:11;
+      then 0/(2*PI) < i;
+      then
+A14:  0+1 <= i by INT_1:20;
+      PI+T(i) < 2*PI by A5,A13,XXREAL_1:4;
+      then PI+T(i)-PI < 2*PI-PI by XREAL_1:11;
+      then i < (1*PI)/(2*PI) by A7,XREAL_1:76;
+      then i <= 1/2 by XCMPLX_1:92;
+      hence contradiction by A14,XXREAL_0:2;
     end;
-    then -1 < x & x < 1 by A8,A10,XXREAL_0:1;
-    hence thesis by XXREAL_1:4;
+    x <= 1 by A1,A2,A3,COMPTRIG:51,XXREAL_1:1;
+    then
+A15: x < 1 by A9,XXREAL_0:1;
+    -1 <= x by A1,A2,A3,COMPTRIG:51,XXREAL_1:1;
+    then -1 < x by A12,XXREAL_0:1;
+    hence thesis by A15,XXREAL_1:4;
   end;
   let a be set;
   assume
-A11: a in ].-1,1.[;
+A16: a in ].-1,1.[;
   then reconsider a as Real;
-  -1 < a & a < 1 by A11,XXREAL_1:4;
+  -1 < a & a < 1 by A16,XXREAL_1:4;
   then a in rng (cos|[.PI,2*PI.]) by COMPTRIG:51,XXREAL_1:1;
   then consider x being set such that
-A12: x in dom (cos|[.PI,2*PI.]) and
-A13: (cos|[.PI,2*PI.]).x = a by FUNCT_1:def 5;
-A14: dom (cos|[.PI,2*PI.]) = [.PI,2*PI.] by Lm2,RELAT_1:91;
-  reconsider x as Real by A12;
-A15: cos.x = a by A12,A13,FUNCT_1:70;
-  PI <= x & x <= 2*PI by A12,A14,XXREAL_1:1;
+A17: x in dom (cos|[.PI,2*PI.]) and
+A18: (cos|[.PI,2*PI.]).x = a by FUNCT_1:def 5;
+  reconsider x as Real by A17;
+A19: cos.x = a by A17,A18,FUNCT_1:70;
+  dom (cos|[.PI,2*PI.]) = [.PI,2*PI.] by RELAT_1:91,SIN_COS:27;
+  then PI <= x & x <= 2*PI by A17,XXREAL_1:1;
   then PI < x & x < 2*PI or PI = x or 2*PI = x by XXREAL_0:1;
-  then x in ].PI,2*PI.[ by A11,A15,SIN_COS:81,XXREAL_1:4;
-  hence thesis by A15,Lm2,FUNCT_1:def 12;
+  then x in ].PI,2*PI.[ by A16,A19,SIN_COS:81,XXREAL_1:4;
+  hence thesis by A19,FUNCT_1:def 12,SIN_COS:27;
 end;
 
-Lm24: now
+Lm11: now
   let i, r;
   let p1, p2 be real number;
-  assume r in [.p1+T(i),p2+T(i).];
-  then p1+T(i) <= r & r <= p2+T(i) by XXREAL_1:1;
-  then p1+T(i)+2*PI <= r+2*PI & r+2*PI <= p2+T(i)+2*PI by XREAL_1:8;
-  hence r+2*PI in [.p1+T(i+1),p2+T(i+1).] by XXREAL_1:1;
+  assume
+A1: r in [.p1+T(i),p2+T(i).];
+  then r <= p2+T(i) by XXREAL_1:1;
+  then
+A2: r+2*PI <= p2+T(i)+2*PI by XREAL_1:8;
+  p1+T(i) <= r by A1,XXREAL_1:1;
+  then p1+T(i)+2*PI <= r+2*PI by XREAL_1:8;
+  hence r+2*PI in [.p1+T(i+1),p2+T(i+1).] by A2,XXREAL_1:1;
 end;
 
-Lm25: now
+Lm12: now
   let i, r;
   let p1, p2 be real number;
-  assume r in [.p1+T(i),p2+T(i).] /\ REAL;
-  then r in [.p1+T(i),p2+T(i).] & r in REAL by XBOOLE_0:def 4;
-  then r+2*PI in [.p1+T(i+1),p2+T(i+1).] & r+2*PI in REAL by Lm24;
+  assume
+  r in [.p1+T(i),p2+T(i).] /\ REAL;
+  then r in [.p1+T(i),p2+T(i).] by XBOOLE_0:def 4;
+  then r+2*PI in [.p1+T(i+1),p2+T(i+1).] by Lm11;
   hence r+2*PI in [.p1+T(i+1),p2+T(i+1).] /\ REAL by XBOOLE_0:def 4;
 end;
 
-Lm26: now
+Lm13: now
   let i, r;
   let p1, p2 be real number;
-  assume r in [.p1+T(i),p2+T(i).];
-  then p1+T(i) <= r & r <= p2+T(i) by XXREAL_1:1;
-  then p1+T(i)-2*PI <= r-2*PI & r-2*PI <= p2+T(i)-2*PI by XREAL_1:11;
-  hence r-2*PI in [.p1+T(i-1),p2+T(i-1).] by XXREAL_1:1;
+  assume
+A1: r in [.p1+T(i),p2+T(i).];
+  then r <= p2+T(i) by XXREAL_1:1;
+  then
+A2: r-2*PI <= p2+T(i)-2*PI by XREAL_1:11;
+  p1+T(i) <= r by A1,XXREAL_1:1;
+  then p1+T(i)-2*PI <= r-2*PI by XREAL_1:11;
+  hence r-2*PI in [.p1+T(i-1),p2+T(i-1).] by A2,XXREAL_1:1;
 end;
 
-Lm27: now
+Lm14: now
   let i, r;
   let p1, p2 be real number;
-  assume r in [.p1+T(i),p2+T(i).] /\ REAL;
-  then r in [.p1+T(i),p2+T(i).] & r in REAL by XBOOLE_0:def 4;
-  then r-2*PI in [.p1+T(i-1),p2+T(i-1).] & r-2*PI in REAL by Lm26;
+  assume
+  r in [.p1+T(i),p2+T(i).] /\ REAL;
+  then r in [.p1+T(i),p2+T(i).] by XBOOLE_0:def 4;
+  then r-2*PI in [.p1+T(i-1),p2+T(i-1).] by Lm13;
   hence r-2*PI in [.p1+T(i-1),p2+T(i-1).] /\ REAL by XBOOLE_0:def 4;
 end;
 
@@ -973,42 +1019,50 @@ theorem Th53:
   sin|[.-PI/2+2*PI*i,PI/2+2*PI*i.] is increasing
 proof
   defpred P[Integer] means sin|[.-PI/2+T($1),PI/2+T($1).] is increasing;
-A1: P[0] by COMPTRIG:39;
-A2: for i holds P[i] implies P[i-1] & P[i+1]
+A1: for i holds P[i] implies P[i-1] & P[i+1]
   proof
     let i such that
-A3: P[i];
+A2: P[i];
     set Z = [.-PI/2+T(i-1+1),PI/2+T(i-1+1).];
     thus P[i-1]
     proof
       set Y = [.-PI/2+T(i-1),PI/2+T(i-1).];
-      now let r1, r2 be Element of REAL;
-      assume r1 in Y /\ dom sin & r2 in Y /\ dom sin;
-      then
-A4:   r1+2*PI in Z /\ dom sin & r2+2*PI in Z /\ dom sin by Lm1,Lm25;
-      assume r1 < r2;
-      then r1+2*PI < r2+2*PI by XREAL_1:8;
-      then sin.(r1+2*PI) < sin.(r2+2*PI*1) by A3,A4,RFUNCT_2:43;
-      then sin.(r1+2*PI*1) < sin.r2 by Th8;
-      hence sin.r1 < sin.r2 by Th8;
-     end;
-     hence thesis by RFUNCT_2:43;
+      now
+        let r1, r2 be Element of REAL;
+        assume
+        r1 in Y /\ dom sin & r2 in Y /\ dom sin;
+        then
+A3:     r1+2*PI in Z /\ dom sin & r2+2*PI in Z /\ dom sin by Lm12,
+        SIN_COS:27;
+        assume
+        r1 < r2;
+        then r1+2*PI < r2+2*PI by XREAL_1:8;
+        then sin.(r1+2*PI) < sin.(r2+2*PI*1) by A2,A3,RFUNCT_2:43;
+        then sin.(r1+2*PI*1) < sin.r2 by Th8;
+        hence sin.r1 < sin.r2 by Th8;
+      end;
+      hence thesis by RFUNCT_2:43;
     end;
     set Y = [.-PI/2+T(i+1),PI/2+T(i+1).];
-A5: Z = [.-PI/2+T(i+1-1),PI/2+T(i+1-1).];
-    now let r1, r2 be Element of REAL;
-    assume r1 in Y /\ dom sin & r2 in Y /\ dom sin;
-    then
-A6: r1-2*PI in Z /\ dom sin & r2-2*PI in Z /\ dom sin by A5,Lm1,Lm27;
-    assume r1 < r2;
-    then r1-2*PI < r2-2*PI by XREAL_1:11;
-    then sin.(r1-2*PI) < sin.(r2+2*PI*(-1)) by A3,A6,RFUNCT_2:43;
-    then sin.(r1+2*PI*(-1)) < sin.r2 by Th8;
-    hence sin.r1 < sin.r2 by Th8;
-   end;
-   hence thesis by RFUNCT_2:43;
+A4: Z = [.-PI/2+T(i+1-1),PI/2+T(i+1-1).];
+    now
+      let r1, r2 be Element of REAL;
+      assume
+      r1 in Y /\ dom sin & r2 in Y /\ dom sin;
+      then
+A5:   r1-2*PI in Z /\ dom sin & r2-2*PI in Z /\ dom sin by A4,Lm14,
+      SIN_COS:27;
+      assume
+      r1 < r2;
+      then r1-2*PI < r2-2*PI by XREAL_1:11;
+      then sin.(r1-2*PI) < sin.(r2+2*PI*(-1)) by A2,A5,RFUNCT_2:43;
+      then sin.(r1+2*PI*(-1)) < sin.r2 by Th8;
+      hence sin.r1 < sin.r2 by Th8;
+    end;
+    hence thesis by RFUNCT_2:43;
   end;
-  for i holds P[i] from INT_1:sch 4(A1,A2);
+A6: P[0] by COMPTRIG:39;
+  for i holds P[i] from INT_1:sch 4(A6,A1);
   hence thesis;
 end;
 
@@ -1016,42 +1070,50 @@ theorem Th54:
   sin|[.PI/2+2*PI*i,3/2*PI+2*PI*i.] is decreasing
 proof
   defpred P[Integer] means sin|[.PI/2+T($1),3/2*PI+T($1).] is decreasing;
-A1: P[0] by COMPTRIG:40;
-A2: for i holds P[i] implies P[i-1] & P[i+1]
+A1: for i holds P[i] implies P[i-1] & P[i+1]
   proof
     let i such that
-A3: P[i];
+A2: P[i];
     set Z = [.PI/2+T(i-1+1),3/2*PI+T(i-1+1).];
     thus P[i-1]
     proof
       set Y = [.PI/2+T(i-1),3/2*PI+T(i-1).];
-      now let r1, r2 be Element of REAL;
-      assume r1 in Y /\ dom sin & r2 in Y /\ dom sin;
-      then
-A4:   r1+2*PI in Z /\ dom sin & r2+2*PI in Z /\ dom sin by Lm1,Lm25;
-      assume r1 < r2;
-      then r1+2*PI < r2+2*PI by XREAL_1:8;
-      then sin.(r1+2*PI) > sin.(r2+2*PI*1) by A3,A4,RFUNCT_2:44;
-      then sin.(r1+2*PI*1) > sin.r2 by Th8;
-      hence sin.r1 > sin.r2 by Th8;
+      now
+        let r1, r2 be Element of REAL;
+        assume
+        r1 in Y /\ dom sin & r2 in Y /\ dom sin;
+        then
+A3:     r1+2*PI in Z /\ dom sin & r2+2*PI in Z /\ dom sin by Lm12,
+        SIN_COS:27;
+        assume
+        r1 < r2;
+        then r1+2*PI < r2+2*PI by XREAL_1:8;
+        then sin.(r1+2*PI) > sin.(r2+2*PI*1) by A2,A3,RFUNCT_2:44;
+        then sin.(r1+2*PI*1) > sin.r2 by Th8;
+        hence sin.r1 > sin.r2 by Th8;
       end;
-     hence thesis by RFUNCT_2:44;
+      hence thesis by RFUNCT_2:44;
     end;
     set Y = [.PI/2+T(i+1),3/2*PI+T(i+1).];
-A5: Z = [.PI/2+T(i+1-1),3/2*PI+T(i+1-1).];
-    now let r1, r2 be Element of REAL;
-    assume r1 in Y /\ dom sin & r2 in Y /\ dom sin;
-    then
-A6: r1-2*PI in Z /\ dom sin & r2-2*PI in Z /\ dom sin by A5,Lm1,Lm27;
-    assume r1 < r2;
-    then r1-2*PI < r2-2*PI by XREAL_1:11;
-    then sin.(r1-2*PI) > sin.(r2+2*PI*(-1)) by A3,A6,RFUNCT_2:44;
-    then sin.(r1+2*PI*(-1)) > sin.r2 by Th8;
-    hence sin.r1 > sin.r2 by Th8;
-   end;
-  hence thesis by RFUNCT_2:44;
+A4: Z = [.PI/2+T(i+1-1),3/2*PI+T(i+1-1).];
+    now
+      let r1, r2 be Element of REAL;
+      assume
+      r1 in Y /\ dom sin & r2 in Y /\ dom sin;
+      then
+A5:   r1-2*PI in Z /\ dom sin & r2-2*PI in Z /\ dom sin by A4,Lm14,
+      SIN_COS:27;
+      assume
+      r1 < r2;
+      then r1-2*PI < r2-2*PI by XREAL_1:11;
+      then sin.(r1-2*PI) > sin.(r2+2*PI*(-1)) by A2,A5,RFUNCT_2:44;
+      then sin.(r1+2*PI*(-1)) > sin.r2 by Th8;
+      hence sin.r1 > sin.r2 by Th8;
+    end;
+    hence thesis by RFUNCT_2:44;
   end;
-  for i holds P[i] from INT_1:sch 4(A1,A2);
+A6: P[0] by COMPTRIG:40;
+  for i holds P[i] from INT_1:sch 4(A6,A1);
   hence thesis;
 end;
 
@@ -1059,44 +1121,52 @@ theorem Th55:
   cos|[.2*PI*i,PI+2*PI*i.] is decreasing
 proof
   defpred P[Integer] means cos|[.T($1),PI+T($1).] is decreasing;
-A1: P[0] by COMPTRIG:41;
-A2: for i holds P[i] implies P[i-1] & P[i+1]
+A1: for i holds P[i] implies P[i-1] & P[i+1]
   proof
     let i such that
-A3: P[i];
+A2: P[i];
     set Z = [.0+T(i-1+1),PI+T(i-1+1).];
     thus P[i-1]
     proof
       set Y = [.T(i-1),PI+T(i-1).];
-A4:   Y = [.0+T(i-1),PI+T(i-1).];
-      now let r1, r2 be Element of REAL;
-      assume r1 in Y /\ dom cos & r2 in Y /\ dom cos;
-      then
-A5:   r1+2*PI in Z /\ dom cos & r2+2*PI in Z /\ dom cos by A4,Lm2,Lm25;
-      assume r1 < r2;
-      then r1+2*PI < r2+2*PI by XREAL_1:8;
-      then cos.(r1+2*PI) > cos.(r2+2*PI*1) by A3,A5,RFUNCT_2:44;
-      then cos.(r1+2*PI*1) > cos.r2 by Th10;
-      hence cos.r1 > cos.r2 by Th10;
-     end;
-    hence thesis by RFUNCT_2:44;
+A3:   Y = [.0+T(i-1),PI+T(i-1).];
+      now
+        let r1, r2 be Element of REAL;
+        assume
+        r1 in Y /\ dom cos & r2 in Y /\ dom cos;
+        then
+A4:     r1+2*PI in Z /\ dom cos & r2+2*PI in Z /\ dom cos by A3,
+        Lm12,
+        SIN_COS:27;
+        assume
+        r1 < r2;
+        then r1+2*PI < r2+2*PI by XREAL_1:8;
+        then cos.(r1+2*PI) > cos.(r2+2*PI*1) by A2,A4,RFUNCT_2:44;
+        then cos.(r1+2*PI*1) > cos.r2 by Th10;
+        hence cos.r1 > cos.r2 by Th10;
+      end;
+      hence thesis by RFUNCT_2:44;
     end;
     set Y = [.T(i+1),PI+T(i+1).];
-A6: Y = [.0+T(i+1),PI+T(i+1).];
-A7: Z = [.T(i+1-1),PI+T(i+1-1).];
-    now let r1, r2 be Element of REAL;
-    assume r1 in Y /\ dom cos & r2 in Y /\ dom cos;
-    then
-A8: r1-2*PI in Z /\ dom cos & r2-2*PI in Z /\ dom cos by A6,A7,Lm2,Lm27;
-    assume r1 < r2;
-    then r1-2*PI < r2-2*PI by XREAL_1:11;
-    then cos.(r1-2*PI) > cos.(r2+2*PI*(-1)) by A3,A8,RFUNCT_2:44;
-    then cos.(r1+2*PI*(-1)) > cos.r2 by Th10;
-    hence cos.r1 > cos.r2 by Th10;
+A5: Y = [.0+T(i+1),PI+T(i+1).] & Z = [.T(i+1-1),PI+T(i+1-1).];
+    now
+      let r1, r2 be Element of REAL;
+      assume
+      r1 in Y /\ dom cos & r2 in Y /\ dom cos;
+      then
+A6:   r1-2*PI in Z /\ dom cos & r2-2*PI in Z /\ dom cos by A5,Lm14,
+      SIN_COS:27;
+      assume
+      r1 < r2;
+      then r1-2*PI < r2-2*PI by XREAL_1:11;
+      then cos.(r1-2*PI) > cos.(r2+2*PI*(-1)) by A2,A6,RFUNCT_2:44;
+      then cos.(r1+2*PI*(-1)) > cos.r2 by Th10;
+      hence cos.r1 > cos.r2 by Th10;
     end;
     hence thesis by RFUNCT_2:44;
   end;
-  for i holds P[i] from INT_1:sch 4(A1,A2);
+A7: P[0] by COMPTRIG:41;
+  for i holds P[i] from INT_1:sch 4(A7,A1);
   hence thesis;
 end;
 
@@ -1104,42 +1174,50 @@ theorem Th56:
   cos|[.PI+2*PI*i,2*PI+2*PI*i.] is increasing
 proof
   defpred P[Integer] means cos|[.PI+T($1),2*PI+T($1).] is increasing;
-A1: P[0] by COMPTRIG:42;
-A2: for i holds P[i] implies P[i-1] & P[i+1]
+A1: for i holds P[i] implies P[i-1] & P[i+1]
   proof
     let i such that
-A3: P[i];
+A2: P[i];
     set Z = [.PI+T(i-1+1),2*PI+T(i-1+1).];
     thus P[i-1]
     proof
       set Y = [.PI+T(i-1),2*PI+T(i-1).];
-      now let r1, r2 be Element of REAL;
-      assume r1 in Y /\ dom cos & r2 in Y /\ dom cos;
-      then
-A4:   r1+2*PI in Z /\ dom cos & r2+2*PI in Z /\ dom cos by Lm2,Lm25;
-      assume r1 < r2;
-      then r1+2*PI < r2+2*PI by XREAL_1:8;
-      then cos.(r1+2*PI) < cos.(r2+2*PI*1) by A3,A4,RFUNCT_2:43;
-      then cos.(r1+2*PI*1) < cos.r2 by Th10;
-      hence cos.r1 < cos.r2 by Th10;
+      now
+        let r1, r2 be Element of REAL;
+        assume
+        r1 in Y /\ dom cos & r2 in Y /\ dom cos;
+        then
+A3:     r1+2*PI in Z /\ dom cos & r2+2*PI in Z /\ dom cos by Lm12,
+        SIN_COS:27;
+        assume
+        r1 < r2;
+        then r1+2*PI < r2+2*PI by XREAL_1:8;
+        then cos.(r1+2*PI) < cos.(r2+2*PI*1) by A2,A3,RFUNCT_2:43;
+        then cos.(r1+2*PI*1) < cos.r2 by Th10;
+        hence cos.r1 < cos.r2 by Th10;
       end;
       hence thesis by RFUNCT_2:43;
     end;
     set Y = [.PI+T(i+1),2*PI+T(i+1).];
-A5: Z = [.PI+T(i+1-1),2*PI+T(i+1-1).];
-    now let r1, r2 be Element of REAL;
-    assume r1 in Y /\ dom cos & r2 in Y /\ dom cos;
-    then
-A6: r1-2*PI in Z /\ dom cos & r2-2*PI in Z /\ dom cos by A5,Lm2,Lm27;
-    assume r1 < r2;
-    then r1-2*PI < r2-2*PI by XREAL_1:11;
-    then cos.(r1-2*PI) < cos.(r2+2*PI*(-1)) by A3,A6,RFUNCT_2:43;
-    then cos.(r1+2*PI*(-1)) < cos.r2 by Th10;
-    hence cos.r1 < cos.r2 by Th10;
+A4: Z = [.PI+T(i+1-1),2*PI+T(i+1-1).];
+    now
+      let r1, r2 be Element of REAL;
+      assume
+      r1 in Y /\ dom cos & r2 in Y /\ dom cos;
+      then
+A5:   r1-2*PI in Z /\ dom cos & r2-2*PI in Z /\ dom cos by A4,Lm14,
+      SIN_COS:27;
+      assume
+      r1 < r2;
+      then r1-2*PI < r2-2*PI by XREAL_1:11;
+      then cos.(r1-2*PI) < cos.(r2+2*PI*(-1)) by A2,A5,RFUNCT_2:43;
+      then cos.(r1+2*PI*(-1)) < cos.r2 by Th10;
+      hence cos.r1 < cos.r2 by Th10;
     end;
-   hence thesis by RFUNCT_2:43;
+    hence thesis by RFUNCT_2:43;
   end;
-  for i holds P[i] from INT_1:sch 4(A1,A2);
+A6: P[0] by COMPTRIG:42;
+  for i holds P[i] from INT_1:sch 4(A6,A1);
   hence thesis;
 end;
 
@@ -1148,9 +1226,7 @@ theorem Th57:
 proof
   set Q = [.-PI/2+2*PI*i,PI/2+2*PI*i.];
   sin|Q is increasing by Th53;
-  then sin|Q|Q is increasing;
-  then sin|Q|Q is one-to-one by FCONT_3:16;
-  hence thesis by RELAT_1:101;
+  hence thesis by FCONT_3:16;
 end;
 
 theorem Th58:
@@ -1158,16 +1234,14 @@ theorem Th58:
 proof
   set Q = [.PI/2+2*PI*i,3/2*PI+2*PI*i.];
   sin|Q is decreasing by Th54;
-  then sin|Q|Q is decreasing;
-  then sin|Q|Q is one-to-one by FCONT_3:16;
-  hence thesis by RELAT_1:101;
+  hence thesis by FCONT_3:16;
 end;
 
 registration
   cluster sin | [.-PI/2,PI/2.] -> one-to-one;
-  coherence by Lm3,Th57;
+  coherence by Lm1,Th57;
   cluster sin | [.PI/2,3/2*PI.] -> one-to-one;
-  coherence by Lm4,Th58;
+  coherence by Lm2,Th58;
 end;
 
 registration
@@ -1187,19 +1261,19 @@ registration
   coherence
   proof
     sin | [.PI/2,3/2*PI.] is one-to-one;
-    hence thesis by Lm10,Th2,XXREAL_1:34;
+    hence thesis by Lm7,Th2,XXREAL_1:34;
   end;
   cluster sin | [.PI,3/2*PI.] -> one-to-one;
   coherence
   proof
     sin | [.PI/2,3/2*PI.] is one-to-one;
-    hence thesis by Lm9,Th2,XXREAL_1:34;
+    hence thesis by Lm6,Th2,XXREAL_1:34;
   end;
   cluster sin | [.3/2*PI,2*PI.] -> one-to-one;
   coherence
   proof
     sin | [.-PI/2+T(1),PI/2+T(1).] is one-to-one by Th57;
-    hence thesis by Lm11,Th2,XXREAL_1:34;
+    hence thesis by Lm8,Th2,XXREAL_1:34;
   end;
 end;
 
@@ -1208,43 +1282,43 @@ registration
   coherence
   proof
     sin | [.-PI/2,PI/2.] is one-to-one;
-    hence thesis by Lm16,Th2;
+    hence thesis by Th2,XXREAL_1:25;
   end;
   cluster sin | ].PI/2,3/2*PI.[ -> one-to-one;
   coherence
   proof
     sin | [.PI/2,3/2*PI.] is one-to-one;
-    hence thesis by Lm20,Th2;
+    hence thesis by Th2,XXREAL_1:25;
   end;
   cluster sin | ].-PI/2,0 .[ -> one-to-one;
   coherence
   proof
     sin | [.-PI/2,0 .] is one-to-one;
-    hence thesis by Lm15,Th2;
+    hence thesis by Th2,XXREAL_1:25;
   end;
   cluster sin | ].0,PI/2.[ -> one-to-one;
   coherence
   proof
     sin | [.0,PI/2.] is one-to-one;
-    hence thesis by Lm17,Th2;
+    hence thesis by Th2,XXREAL_1:25;
   end;
   cluster sin | ].PI/2,PI.[ -> one-to-one;
   coherence
   proof
     sin | [.PI/2,PI.] is one-to-one;
-    hence thesis by Lm19,Th2;
+    hence thesis by Th2,XXREAL_1:25;
   end;
   cluster sin | ].PI,3/2*PI.[ -> one-to-one;
   coherence
   proof
     sin | [.PI,3/2*PI.] is one-to-one;
-    hence thesis by Lm21,Th2;
+    hence thesis by Th2,XXREAL_1:25;
   end;
   cluster sin | ].3/2*PI,2*PI.[ -> one-to-one;
   coherence
   proof
     sin | [.3/2*PI,2*PI.] is one-to-one;
-    hence thesis by Lm23,Th2;
+    hence thesis by Th2,XXREAL_1:25;
   end;
 end;
 
@@ -1253,9 +1327,7 @@ theorem Th59:
 proof
   set Q1 = [.2*PI*i,PI+2*PI*i.];
   cos|Q1 is decreasing by Th55;
-  then cos|Q1|Q1 is decreasing;
-  then cos|Q1|Q1 is one-to-one by FCONT_3:16;
-  hence thesis by RELAT_1:101;
+  hence thesis by FCONT_3:16;
 end;
 
 theorem Th60:
@@ -1263,16 +1335,14 @@ theorem Th60:
 proof
   set Q1 = [.PI+2*PI*i,2*PI+2*PI*i.];
   cos|Q1 is increasing by Th56;
-  then cos|Q1|Q1 is increasing;
-  then cos|Q1|Q1 is one-to-one by FCONT_3:16;
-  hence thesis by RELAT_1:101;
+  hence thesis by FCONT_3:16;
 end;
 
 registration
   cluster cos | [.0,PI.] -> one-to-one;
-  coherence by Lm5,Th59;
+  coherence by Lm3,Th59;
   cluster cos | [.PI,2*PI.] -> one-to-one;
-  coherence by Lm6,Th60;
+  coherence by Lm4,Th60;
 end;
 
 registration
@@ -1280,7 +1350,7 @@ registration
   coherence
   proof
     cos | [.0,PI.] is one-to-one;
-    hence thesis by Lm9,Th2,XXREAL_1:34;
+    hence thesis by Lm6,Th2,XXREAL_1:34;
   end;
   cluster cos | [.PI/2,PI.] -> one-to-one;
   coherence
@@ -1292,13 +1362,13 @@ registration
   coherence
   proof
     cos | [.PI,2*PI.] is one-to-one;
-    hence thesis by Lm12,Th2,XXREAL_1:34;
+    hence thesis by Lm9,Th2,XXREAL_1:34;
   end;
   cluster cos | [.3/2*PI,2*PI.] -> one-to-one;
   coherence
   proof
     cos | [.PI,2*PI.] is one-to-one;
-    hence thesis by Lm10,Th2,XXREAL_1:34;
+    hence thesis by Lm7,Th2,XXREAL_1:34;
   end;
 end;
 
@@ -1307,83 +1377,84 @@ registration
   coherence
   proof
     cos | [.0,PI.] is one-to-one;
-    hence thesis by Lm18,Th2;
+    hence thesis by Th2,XXREAL_1:25;
   end;
   cluster cos | ].PI,2*PI.[ -> one-to-one;
   coherence
   proof
     cos | [.PI,2*PI.] is one-to-one;
-    hence thesis by Lm22,Th2;
+    hence thesis by Th2,XXREAL_1:25;
   end;
   cluster cos | ].0,PI/2.[ -> one-to-one;
   coherence
   proof
     cos | [.0,PI/2.] is one-to-one;
-    hence thesis by Lm17,Th2;
+    hence thesis by Th2,XXREAL_1:25;
   end;
   cluster cos | ].PI/2,PI.[ -> one-to-one;
   coherence
   proof
     cos | [.PI/2,PI.] is one-to-one;
-    hence thesis by Lm19,Th2;
+    hence thesis by Th2,XXREAL_1:25;
   end;
   cluster cos | ].PI,3/2*PI.[ -> one-to-one;
   coherence
   proof
     cos | [.PI,3/2*PI.] is one-to-one;
-    hence thesis by Lm21,Th2;
+    hence thesis by Th2,XXREAL_1:25;
   end;
   cluster cos | ].3/2*PI,2*PI.[ -> one-to-one;
   coherence
   proof
     cos | [.3/2*PI,2*PI.] is one-to-one;
-    hence thesis by Lm23,Th2;
+    hence thesis by Th2,XXREAL_1:25;
   end;
 end;
 
 theorem
-  2*PI*i <= r & r < 2*PI+2*PI*i & 2*PI*i <= s & s < 2*PI+2*PI*i &
-  sin r = sin s & cos r = cos s implies r = s
+  2*PI*i <= r & r < 2*PI+2*PI*i & 2*PI*i <= s & s < 2*PI+2*PI*i & sin r
+  = sin s & cos r = cos s implies r = s
 proof
   assume that
 A1: 2*PI*i <= r and
-A2: r < 2*PI+2*PI*i and
-A3: 2*PI*i <= s and
-A4: s < 2*PI+2*PI*i and
-A5: sin r = sin s and
-A6: cos r = cos s;
-A7: cos(r-s) = (cos r)*(cos s)+(sin r)*(sin s) by COMPLEX2:4
-    .= 1 by A5,A6,SIN_COS:32;
-A8: cos (s-r) = (cos r)*(cos s)+(sin r)*(sin s) by COMPLEX2:4
-    .= 1 by A5,A6,SIN_COS:32;
-A9: sin(r-s) = (sin r)*(cos s)-(cos r)*(sin s) by COMPLEX2:4
-    .= 0 by A5,A6;
-A10: sin (s-r) = (sin s)*(cos r)-(cos s)*(sin r) by COMPLEX2:4
-    .= 0 by A5,A6;
+A2: r < 2*PI+2*PI*i & 2*PI*i <= s and
+A3: s < 2*PI+2*PI*i and
+A4: sin r = sin s & cos r = cos s;
+A5: cos(r-s) = (cos r)*(cos s)+(sin r)*(sin s) by COMPLEX2:4
+    .= 1 by A4,SIN_COS:32;
+A6: sin(r-s) = (sin r)*(cos s)-(cos r)*(sin s) by COMPLEX2:4
+    .= 0 by A4;
+A7: cos (s-r) = (cos r)*(cos s)+(sin r)*(sin s) by COMPLEX2:4
+    .= 1 by A4,SIN_COS:32;
+A8: sin (s-r) = (sin s)*(cos r)-(cos s)*(sin r) by COMPLEX2:4
+    .= 0 by A4;
   per cases by XXREAL_0:1;
-  suppose r > s;
-    then r > s+0;
-    then
-A11: 0 <= r-s by XREAL_1:22;
-    r+2*PI*i < 2*PI+2*PI*i+s by A2,A3,XREAL_1:10;
+  suppose
+A9: r > s;
+    r+2*PI*i < 2*PI+2*PI*i+s by A2,XREAL_1:10;
     then r+2*PI*i-2*PI*i < 2*PI+2*PI*i+s-2*PI*i by XREAL_1:11;
     then r < 2*PI+s;
-    then r-s < 2*PI by XREAL_1:21;
-    then r-s = 0 or r-s = PI by A9,A11,COMPTRIG:33;
-    hence thesis by A7,SIN_COS:82;
-  end;
-  suppose r < s;
-    then s > r+0;
     then
-A12: 0 <= s-r by XREAL_1:22;
-    s+2*PI*i < 2*PI+2*PI*i+r by A1,A4,XREAL_1:10;
+A10: r-s < 2*PI by XREAL_1:21;
+    r > s+0 by A9;
+    then 0 <= r-s by XREAL_1:22;
+    then r-s = 0 or r-s = PI by A6,A10,COMPTRIG:33;
+    hence thesis by A5,SIN_COS:82;
+  end;
+  suppose
+A11: r < s;
+    s+2*PI*i < 2*PI+2*PI*i+r by A1,A3,XREAL_1:10;
     then s+2*PI*i-2*PI*i < 2*PI+2*PI*i+r-2*PI*i by XREAL_1:11;
     then s < 2*PI+r;
-    then s-r < 2*PI by XREAL_1:21;
-    then s-r = 0 or s-r = PI by A10,A12,COMPTRIG:33;
-    hence thesis by A8,SIN_COS:82;
+    then
+A12: s-r < 2*PI by XREAL_1:21;
+    s > r+0 by A11;
+    then 0 <= s-r by XREAL_1:22;
+    then s-r = 0 or s-r = PI by A8,A12,COMPTRIG:33;
+    hence thesis by A7,SIN_COS:82;
   end;
-  suppose r = s;
+  suppose
+    r = s;
     hence thesis;
   end;
 end;
@@ -1392,7 +1463,6 @@ begin :: arcsin
 
 definition
   func arcsin -> PartFunc of REAL, REAL equals
-
   (sin | [.-PI/2,PI/2.])";
   coherence;
 end;
@@ -1400,7 +1470,6 @@ end;
 definition
   let r be set;
   func arcsin r equals
-
   arcsin.r;
   coherence;
 end;
@@ -1411,14 +1480,14 @@ definition
   coherence;
 end;
 
-Lm28: arcsin qua Function" = sin | [.-PI/2,PI/2.] by FUNCT_1:65;
+Lm15: arcsin qua Function" = sin | [.-PI/2,PI/2.] by FUNCT_1:65;
 
 canceled;
 
 theorem Th63:
   rng arcsin = [.-PI/2,PI/2.]
 proof
-  dom (sin|[.-PI/2,PI/2.]) = [.-PI/2,PI/2.] by Lm1,RELAT_1:91;
+  dom (sin|[.-PI/2,PI/2.]) = [.-PI/2,PI/2.] by RELAT_1:91,SIN_COS:27;
   hence thesis by FUNCT_1:55;
 end;
 
@@ -1431,23 +1500,26 @@ theorem Th64:
   dom arcsin = [.-1,1.] by COMPTRIG:48,FUNCT_1:55;
 
 theorem Th65:
-  (sin | [.-PI/2,PI/2.]) qua Function * arcsin = id [.-1,1.]
-  by COMPTRIG:48,FUNCT_1:61;
+  (sin | [.-PI/2,PI/2.]) qua Function * arcsin = id [.-1,1.] by
+  COMPTRIG:48,FUNCT_1:61;
 
 theorem
-  arcsin * (sin | [.-PI/2,PI/2.]) = id [.-1,1.] by COMPTRIG:48,FUNCT_1:61;
+  arcsin * (sin | [.-PI/2,PI/2.]) = id [.-1,1.] by COMPTRIG:48,FUNCT_1:
+  61;
 
 theorem Th67:
-  (sin | [.-PI/2,PI/2.]) * arcsin = id [.-PI/2,PI/2.] by Lm28,Th63,FUNCT_1:61;
+  (sin | [.-PI/2,PI/2.]) * arcsin = id [.-PI/2,PI/2.] by Lm15,Th63
+  ,FUNCT_1:61;
 
 theorem
-  arcsin qua Function * (sin | [.-PI/2,PI/2.]) = id [.-PI/2,PI/2.]
-  by Lm28,Th63,FUNCT_1:61;
+  arcsin qua Function * (sin | [.-PI/2,PI/2.]) = id [.-PI/2,PI/2.] by
+  Lm15,Th63,FUNCT_1:61;
 
 theorem Th69:
   -1 <= r & r <= 1 implies sin arcsin r = r
 proof
-  assume -1 <= r & r <= 1;
+  assume
+  -1 <= r & r <= 1;
   then
 A1: r in [.-1,1.] by XXREAL_1:1;
   then
@@ -1461,14 +1533,15 @@ end;
 theorem Th70:
   -PI/2 <= r & r <= PI/2 implies arcsin sin r = r
 proof
-  assume -PI/2 <= r & r <= PI/2;
+A1: dom (sin|[.-PI/2,PI/2.]) = [.-PI/2,PI/2.] by RELAT_1:91,SIN_COS:27;
+  assume
+  -PI/2 <= r & r <= PI/2;
   then
-A1: r in [.-PI/2,PI/2.] by XXREAL_1:1;
-A2: dom (sin|[.-PI/2,PI/2.]) = [.-PI/2,PI/2.] by Lm1,RELAT_1:91;
+A2: r in [.-PI/2,PI/2.] by XXREAL_1:1;
   thus arcsin sin r = arcsin.(sin.r) by SIN_COS:def 21
-    .= arcsin.((sin|[.-PI/2,PI/2.]).r) by A1,FUNCT_1:72
-    .= (id [.-PI/2,PI/2.]).r by A1,A2,Th67,FUNCT_1:23
-    .= r by A1,FUNCT_1:35;
+    .= arcsin.((sin|[.-PI/2,PI/2.]).r) by A2,FUNCT_1:72
+    .= (id [.-PI/2,PI/2.]).r by A2,A1,Th67,FUNCT_1:23
+    .= r by A2,FUNCT_1:35;
 end;
 
 theorem
@@ -1492,7 +1565,8 @@ theorem
 theorem Th77:
   -1 <= r & r <= 1 implies -PI/2 <= arcsin r & arcsin r <= PI/2
 proof
-  assume -1 <= r & r <= 1;
+  assume
+  -1 <= r & r <= 1;
   then r in [.-1,1.] by XXREAL_1:1;
   then arcsin.r in rng arcsin by Th64,FUNCT_1:def 5;
   hence thesis by Th63,XXREAL_1:1;
@@ -1504,25 +1578,28 @@ proof
   assume
 A1: -1 < r & r < 1;
   then -PI/2 <= arcsin r & arcsin r <= PI/2 by Th77;
-  then -PI/2 < arcsin r & arcsin r < PI/2 or
-  -PI/2 = arcsin r or arcsin r = PI/2 by XXREAL_0:1;
+  then
+  -PI/2 < arcsin r & arcsin r < PI/2 or -PI/2 = arcsin r or arcsin r = PI/
+  2 by XXREAL_0:1;
   hence thesis by A1,Th7,Th69,SIN_COS:82;
 end;
 
 theorem Th79:
   -1 <= r & r <= 1 implies arcsin r = -arcsin(-r)
 proof
-  assume -1 <= r & r <= 1;
+  assume
+  -1 <= r & r <= 1;
   then
 A1: --1 >= -r & -r >= -1 by XREAL_1:26;
-A2: r = 0-1*(-r)
+  then arcsin(-r) <= PI/2 by Th77;
+  then
+A2: -PI/2 <= -arcsin(-r) by XREAL_1:26;
+  -PI/2 <= arcsin(-r) by A1,Th77;
+  then
+A3: -arcsin(-r) <= --PI/2 by XREAL_1:26;
+  r = 0-1*(-r)
     .= sin 0 * cos arcsin(-r) - cos 0 * sin arcsin(-r) by A1,Th69,SIN_COS:34
     .= sin(0-arcsin(-r)) by COMPLEX2:4;
-  arcsin(-r) <= PI/2 by A1,Th77;
-  then
-A3: -PI/2 <= -arcsin(-r) by XREAL_1:26;
-  -PI/2 <= arcsin(-r) by A1,Th77;
-  then -arcsin(-r) <= --PI/2 by XREAL_1:26;
   hence thesis by A2,A3,Th70;
 end;
 
@@ -1533,18 +1610,18 @@ proof
   assume that
 A1: 0 <= s and
 A2: r^2 + s^2 = 1;
-A3: -1 <= r & r <= 1 by A2,Lm7;
+A3: -1 <= r & r <= 1 by A2,Lm5;
+  then -PI/2 <= x & x <= PI/2 by Th77;
+  then
+A4: x in [.-PI/2,PI/2.] by XXREAL_1:1;
   (sin.x)^2 + (cos.x)^2 = 1 by SIN_COS:31;
   then (cos.x)^2 = 1 - (sin.x)^2
     .= 1 - (sin x)^2 by SIN_COS:def 21
     .= 1 - r^2 by A3,Th69;
   then
-A4: cos.x = s or cos.x = -s by A2,SQUARE_1:109;
-  -PI/2 <= x & x <= PI/2 by A3,Th77;
-  then
-A5: x in [.-PI/2,PI/2.] by XXREAL_1:1;
+A5: cos.x = s or cos.x = -s by A2,SQUARE_1:109;
   ---s < 0 or s = 0 by A1;
-  hence thesis by A4,A5,COMPTRIG:28,SIN_COS:def 23;
+  hence thesis by A5,A4,COMPTRIG:28,SIN_COS:def 23;
 end;
 
 theorem
@@ -1554,25 +1631,26 @@ proof
   assume that
 A1: s <= 0 and
 A2: r^2 + s^2 = 1;
-A3: -1 <= r & r <= 1 by A2,Lm7;
+A3: -1 <= r & r <= 1 by A2,Lm5;
+  then -PI/2 <= x & x <= PI/2 by Th77;
+  then
+A4: x in [.-PI/2,PI/2.] by XXREAL_1:1;
   (sin.x)^2 + (cos.x)^2 = 1 by SIN_COS:31;
   then (cos.x)^2 = 1 - (sin.x)^2
     .= 1 - (sin x)^2 by SIN_COS:def 21
     .= 1 - r^2 by A3,Th69;
   then
-A4: cos.x = s or cos.x = -s by A2,SQUARE_1:109;
-  -PI/2 <= x & x <= PI/2 by A3,Th77;
-  then
-A5: x in [.-PI/2,PI/2.] by XXREAL_1:1;
+A5: cos.x = s or cos.x = -s by A2,SQUARE_1:109;
   0 > s or s = 0 by A1;
-  hence thesis by A4,A5,COMPTRIG:28,SIN_COS:def 23;
+  hence thesis by A5,A4,COMPTRIG:28,SIN_COS:def 23;
 end;
 
 theorem Th82:
   -1 <= r & r <= 1 implies cos arcsin r = sqrt(1-r^2)
 proof
   set s = sqrt(1-r^2);
-  assume -1 <= r & r <= 1;
+  assume
+  -1 <= r & r <= 1;
   then r^2+0 <= 1^2 by SQUARE_1:119;
   then 0 <= 1-r^2 by XREAL_1:21;
   then 0 <= s & r^2 + s^2 = r^2 + (1-r^2) by SQUARE_1:def 4;
@@ -1583,48 +1661,47 @@ theorem
   arcsin|[.-1,1.] is increasing
 proof
   set f = sin | [.-PI/2,PI/2.];
-A1: f.:[.-PI/2,PI/2.] = [.-1,1.] by Th45,RELAT_1:162;
-  f|[.-PI/2,PI/2.] is increasing by COMPTRIG:39;
-  then (f|[.-PI/2,PI/2.])"|(f.:[.-PI/2,PI/2.]) is increasing  by FCONT_3:17;
-  hence thesis by A1,RELAT_1:101;
+  f.:[.-PI/2,PI/2.] = [.-1,1.] & (f|[.-PI/2,PI/2.])"|(f.:[.-PI/2,PI/2.])
+  is increasing by Th45,COMPTRIG:39,FCONT_3:17,RELAT_1:162;
+  hence thesis by RELAT_1:101;
 end;
 
 theorem
-  arcsin is_differentiable_on ].-1,1.[ &
-  (-1 < r & r < 1 implies diff(arcsin,r) = 1 / sqrt(1-r^2))
+  arcsin is_differentiable_on ].-1,1.[ & (-1 < r & r < 1 implies diff(
+  arcsin,r) = 1 / sqrt(1-r^2))
 proof
-  set f = sin|].-PI/2,PI/2.[;
-  set h = sin|[.-PI/2,PI/2.];
   set g = arcsin|].-1,1.[;
-A1: f|].-PI/2,PI/2.[ = f by RELAT_1:101;
-A2: f" = (h|].-PI/2,PI/2.[)" by Lm16,RELAT_1:103
-    .= h"|(h.:].-PI/2,PI/2.[) by RFUNCT_2:40
-    .= g by Lm16,Th46,RELAT_1:162;
-  then
-A3: dom (f") = ].-1,1.[ by Lm14,Th64,RELAT_1:91;
-A4: sin is_differentiable_on ].-PI/2,PI/2.[ by FDIFF_1:34,SIN_COS:73;
-  then
-A5: f is_differentiable_on ].-PI/2,PI/2.[ by FDIFF_2:16;
-X: dom f = ].-PI/2,PI/2.[ /\ REAL by RELAT_1:90,SIN_COS:27
-        .= ].-PI/2,PI/2.[ by XBOOLE_1:28;
-A6: now
-    let x0 be Real such that
-A7: x0 in ].-PI/2,PI/2.[;
-    diff(f,x0) = (f`|].-PI/2,PI/2.[).x0 by A5,A7,FDIFF_1:def 8
-      .= (sin`|].-PI/2,PI/2.[).x0 by A4,FDIFF_2:16
-      .= diff(sin,x0) by A4,A7,FDIFF_1:def 8
-      .= cos.x0 by SIN_COS:73;
-    hence 0 < diff(f,x0) by A7,COMPTRIG:27;
-  end;
-  then
-A8: g is_differentiable_on ].-1,1.[ by A1,A2,A3,A5,X,FDIFF_2:48;
-A9: ].-1,1.[ c= dom arcsin by Th64,XXREAL_1:25;
-  for x be Real st x in ].-1,1.[ holds
-  g is_differentiable_in x by A8,FDIFF_1:16;
-  hence
-A10: arcsin is_differentiable_on ].-1,1.[ by A9,FDIFF_1:def 7;
-  set s = sqrt(1-r^2);
+  set h = sin|[.-PI/2,PI/2.];
+  set f = sin|].-PI/2,PI/2.[;
+A1: dom f = ].-PI/2,PI/2.[ /\ REAL by RELAT_1:90,SIN_COS:27
+    .= ].-PI/2,PI/2.[ by XBOOLE_1:28;
   set x = arcsin.r;
+  set s = sqrt(1-r^2);
+A2: ].-1,1.[ c= dom arcsin by Th64,XXREAL_1:25;
+A3: sin is_differentiable_on ].-PI/2,PI/2.[ by FDIFF_1:34,SIN_COS:73;
+  then
+A4: f is_differentiable_on ].-PI/2,PI/2.[ by FDIFF_2:16;
+A5: now
+    let x0 be Real such that
+A6: x0 in ].-PI/2,PI/2.[;
+    diff(f,x0) = (f`|].-PI/2,PI/2.[).x0 by A4,A6,FDIFF_1:def 8
+      .= (sin`|].-PI/2,PI/2.[).x0 by A3,FDIFF_2:16
+      .= diff(sin,x0) by A3,A6,FDIFF_1:def 8
+      .= cos.x0 by SIN_COS:73;
+    hence 0 < diff(f,x0) by A6,COMPTRIG:27;
+  end;
+A7: f" = (h|].-PI/2,PI/2.[)" by RELAT_1:103,XXREAL_1:25
+    .= h"|(h.:].-PI/2,PI/2.[) by RFUNCT_2:40
+    .= g by Th46,RELAT_1:162,XXREAL_1:25;
+  then
+A8: f|].-PI/2,PI/2.[ = f & dom (f") = ].-1,1.[ by Th64,RELAT_1:91,101 ,
+  XXREAL_1:25;
+  then
+A9: g is_differentiable_on ].-1,1.[ by A7,A4,A1,A5,FDIFF_2:48;
+  then for x be Real st x in ].-1,1.[ holds g is_differentiable_in x by
+  FDIFF_1:16;
+  hence
+A10: arcsin is_differentiable_on ].-1,1.[ by A2,FDIFF_1:def 7;
   assume
 A11: -1 < r & r < 1;
   then
@@ -1636,35 +1713,32 @@ A13: g.r = x by FUNCT_1:72;
   then
 A14: x in ].-PI/2,PI/2.[ by XXREAL_1:4;
   then
-A15: diff(f,x) = (f`|].-PI/2,PI/2.[).x by A5,FDIFF_1:def 8
-    .= (sin`|].-PI/2,PI/2.[).x by A4,FDIFF_2:16
-    .= diff(sin,x) by A4,A14,FDIFF_1:def 8
+A15: diff(f,x) = (f`|].-PI/2,PI/2.[).x by A4,FDIFF_1:def 8
+    .= (sin`|].-PI/2,PI/2.[).x by A3,FDIFF_2:16
+    .= diff(sin,x) by A3,A14,FDIFF_1:def 8
     .= cos.x by SIN_COS:73
     .= cos arcsin r by SIN_COS:def 23
     .= s by A11,Th82;
   thus diff(arcsin,r) = (arcsin`|].-1,1.[).r by A10,A12,FDIFF_1:def 8
     .= (g`|].-1,1.[).r by A10,FDIFF_2:16
-    .= diff(g,r) by A8,A12,FDIFF_1:def 8
-    .= 1 / s by A1,A2,A3,A5,A6,A12,A13,A15,X,FDIFF_2:48;
+    .= diff(g,r) by A9,A12,FDIFF_1:def 8
+    .= 1 / s by A7,A8,A4,A1,A5,A12,A13,A15,FDIFF_2:48;
 end;
 
 theorem
   arcsin|[.-1,1.] is continuous
 proof
   set f = sin | [.-PI/2,PI/2.];
-A1: dom f = [.-PI/2,PI/2.] by Lm1,RELAT_1:91;
-A2: f|[.-PI/2,PI/2.] = f by RELAT_1:102;
-  f|[.-PI/2,PI/2.] is increasing  by COMPTRIG:39;
-  then (f|[.-PI/2,PI/2.])"|(f.:[.-PI/2,PI/2.]) is continuous
-  by A1,FCONT_1:54;
-  hence thesis by A2,COMPTRIG:48,RELAT_1:148;
+  dom f = [.-PI/2,PI/2.] by RELAT_1:91,SIN_COS:27;
+  then f|[.-PI/2,PI/2.] = f & (f|[.-PI/2,PI/2.])"|(f.:[.-PI/2,PI/2.]) is
+  continuous by COMPTRIG:39,FCONT_1:54,RELAT_1:102;
+  hence thesis by COMPTRIG:48,RELAT_1:148;
 end;
 
 begin :: arccos
 
 definition
   func arccos -> PartFunc of REAL, REAL equals
-
   (cos | [.0,PI.])";
   coherence;
 end;
@@ -1672,7 +1746,6 @@ end;
 definition
   let r be set;
   func arccos r equals
-
   arccos.r;
   coherence;
 end;
@@ -1683,14 +1756,14 @@ definition
   coherence;
 end;
 
-Lm29: arccos qua Function" = cos | [.0,PI.] by FUNCT_1:65;
+Lm16: arccos qua Function" = cos | [.0,PI.] by FUNCT_1:65;
 
 canceled;
 
 theorem Th87:
   rng arccos = [.0,PI.]
 proof
-  dom (cos|[.0,PI.]) = [.0,PI.] by Lm2,RELAT_1:91;
+  dom (cos|[.0,PI.]) = [.0,PI.] by RELAT_1:91,SIN_COS:27;
   hence thesis by FUNCT_1:55;
 end;
 
@@ -1703,23 +1776,24 @@ theorem Th88:
   dom arccos = [.-1,1.] by COMPTRIG:50,FUNCT_1:55;
 
 theorem Th89:
-  (cos | [.0,PI.]) qua Function * arccos = id [.-1,1.]
-  by COMPTRIG:50,FUNCT_1:61;
+  (cos | [.0,PI.]) qua Function * arccos = id [.-1,1.] by COMPTRIG
+  :50,FUNCT_1:61;
 
 theorem
   arccos * (cos | [.0,PI.]) = id [.-1,1.] by COMPTRIG:50,FUNCT_1:61;
 
 theorem Th91:
-  (cos | [.0,PI.]) * arccos = id [.0,PI.] by Lm29,Th87,FUNCT_1:61;
+  (cos | [.0,PI.]) * arccos = id [.0,PI.] by Lm16,Th87,FUNCT_1:61;
 
 theorem
-  arccos qua Function * (cos | [.0,PI.]) = id [.0,PI.]
-  by Lm29,Th87,FUNCT_1:61;
+  arccos qua Function * (cos | [.0,PI.]) = id [.0,PI.] by Lm16,Th87,
+  FUNCT_1:61;
 
 theorem Th93:
   -1 <= r & r <= 1 implies cos arccos r = r
 proof
-  assume -1 <= r & r <= 1;
+  assume
+  -1 <= r & r <= 1;
   then
 A1: r in [.-1,1.] by XXREAL_1:1;
   then
@@ -1733,21 +1807,22 @@ end;
 theorem Th94:
   0 <= r & r <= PI implies arccos cos r = r
 proof
-  assume 0 <= r & r <= PI;
+A1: dom (cos|[.0,PI.]) = [.0,PI.] by RELAT_1:91,SIN_COS:27;
+  assume
+  0 <= r & r <= PI;
   then
-A1: r in [.0,PI.] by XXREAL_1:1;
-A2: dom (cos|[.0,PI.]) = [.0,PI.] by Lm2,RELAT_1:91;
+A2: r in [.0,PI.] by XXREAL_1:1;
   thus arccos cos r = arccos.(cos.r) by SIN_COS:def 23
-    .= arccos.((cos|[.0,PI.]).r) by A1,FUNCT_1:72
-    .= (id [.0,PI.]).r by A1,A2,Th91,FUNCT_1:23
-    .= r by A1,FUNCT_1:35;
+    .= arccos.((cos|[.0,PI.]).r) by A2,FUNCT_1:72
+    .= (id [.0,PI.]).r by A2,A1,Th91,FUNCT_1:23
+    .= r by A2,FUNCT_1:35;
 end;
 
 theorem
   arccos (-1) = PI by Th94,SIN_COS:82;
 
 theorem
-  arccos 0 = PI/2 by Lm9,Th94,SIN_COS:82;
+  arccos 0 = PI/2 by Lm6,Th94,SIN_COS:82;
 
 theorem
   arccos 1 = 0 by Th94,SIN_COS:34;
@@ -1764,7 +1839,8 @@ theorem
 theorem Th101:
   -1 <= r & r <= 1 implies 0 <= arccos r & arccos r <= PI
 proof
-  assume -1 <= r & r <= 1;
+  assume
+  -1 <= r & r <= 1;
   then r in [.-1,1.] by XXREAL_1:1;
   then arccos.r in rng arccos by Th88,FUNCT_1:def 5;
   hence thesis by Th87,XXREAL_1:1;
@@ -1775,27 +1851,30 @@ theorem Th102:
 proof
   assume
 A1: -1 < r & r < 1;
-  then 0 <= arccos r & arccos r <= PI by Th101;
-  then 0 < arccos r & arccos r < PI or
-  0 = arccos r or arccos r = PI by XXREAL_0:1;
+  then arccos r <= PI by Th101;
+  then 0 < arccos r & arccos r < PI or 0 = arccos r or arccos r = PI by A1,
+  Th101,XXREAL_0:1;
   hence thesis by A1,Th93,SIN_COS:34,82;
 end;
 
 theorem Th103:
   -1 <= r & r <= 1 implies arccos r = PI - arccos(-r)
 proof
-  assume -1 <= r & r <= 1;
+  assume
+  -1 <= r & r <= 1;
   then
 A1: --1 >= -r & -r >= -1 by XREAL_1:26;
-A2: r = (-1)*(-r)
-    .= cos PI * cos arccos(-r) + sin PI * sin arccos(-r) by A1,Th93,SIN_COS:82
-    .= cos(PI-arccos(-r)) by COMPLEX2:4;
-  0+arccos(-r) <= PI by A1,Th101;
+  then 0+arccos(-r) <= PI by Th101;
   then
-A3: 0 <= PI-arccos(-r) by XREAL_1:21;
+A2: 0 <= PI-arccos(-r) by XREAL_1:21;
   0 <= arccos(-r) by A1,Th101;
   then PI+0 <= PI+arccos(-r) by XREAL_1:8;
-  then PI-arccos(-r) <= PI by XREAL_1:22;
+  then
+A3: PI-arccos(-r) <= PI by XREAL_1:22;
+  r = (-1)*(-r)
+    .= cos PI * cos arccos(-r) + sin PI * sin arccos(-r) by A1,Th93,SIN_COS:
+  82
+    .= cos(PI-arccos(-r)) by COMPLEX2:4;
   hence thesis by A2,A3,Th94;
 end;
 
@@ -1806,18 +1885,18 @@ proof
   assume that
 A1: 0 <= s and
 A2: r^2 + s^2 = 1;
-A3: -1 <= r & r <= 1 by A2,Lm7;
+A3: -1 <= r & r <= 1 by A2,Lm5;
+  then 0 <= x & x <= PI by Th101;
+  then
+A4: x in [.0,PI.] by XXREAL_1:1;
   (sin.x)^2 + (cos.x)^2 = 1 by SIN_COS:31;
   then (sin.x)^2 = 1 - (cos.x)^2
     .= 1 - (cos x)^2 by SIN_COS:def 23
     .= 1 - r^2 by A3,Th93;
   then
-A4: sin.x = s or sin.x = -s by A2,SQUARE_1:109;
-  0 <= x & x <= PI by A3,Th101;
-  then
-A5: x in [.0,PI.] by XXREAL_1:1;
+A5: sin.x = s or sin.x = -s by A2,SQUARE_1:109;
   ---s < 0 or s = 0 by A1;
-  hence thesis by A4,A5,COMPTRIG:24,SIN_COS:def 21;
+  hence thesis by A5,A4,COMPTRIG:24,SIN_COS:def 21;
 end;
 
 theorem
@@ -1827,25 +1906,26 @@ proof
   assume that
 A1: s <= 0 and
 A2: r^2 + s^2 = 1;
-A3: -1 <= r & r <= 1 by A2,Lm7;
+A3: -1 <= r & r <= 1 by A2,Lm5;
+  then 0 <= x & x <= PI by Th101;
+  then
+A4: x in [.0,PI.] by XXREAL_1:1;
   (sin.x)^2 + (cos.x)^2 = 1 by SIN_COS:31;
   then (sin.x)^2 = 1 - (cos.x)^2
     .= 1 - (cos x)^2 by SIN_COS:def 23
     .= 1 - r^2 by A3,Th93;
   then
-A4: sin.x = s or sin.x = -s by A2,SQUARE_1:109;
-  0 <= x & x <= PI by A3,Th101;
-  then
-A5: x in [.0,PI.] by XXREAL_1:1;
+A5: sin.x = s or sin.x = -s by A2,SQUARE_1:109;
   0 > s or s = 0 by A1;
-  hence thesis by A4,A5,COMPTRIG:24,SIN_COS:def 21;
+  hence thesis by A5,A4,COMPTRIG:24,SIN_COS:def 21;
 end;
 
 theorem Th106:
   -1 <= r & r <= 1 implies sin arccos r = sqrt(1-r^2)
 proof
   set s = sqrt(1-r^2);
-  assume -1 <= r & r <= 1;
+  assume
+  -1 <= r & r <= 1;
   then r^2+0 <= 1^2 by SQUARE_1:119;
   then 0 <= 1-r^2 by XREAL_1:21;
   then 0 <= s & r^2 + s^2 = r^2 + (1-r^2) by SQUARE_1:def 4;
@@ -1856,49 +1936,49 @@ theorem
   arccos|[.-1,1.] is decreasing
 proof
   set f = cos | [.0,PI.];
-A1: f.:[.0,PI.] = [.-1,1.] by Th49,RELAT_1:162;
-  f|[.0,PI.] is decreasing  by COMPTRIG:41;
-  then (f|[.0,PI.])"|(f.:[.0,PI.]) is decreasing by FCONT_3:18;
-  hence thesis by A1,RELAT_1:101;
+  f.:[.0,PI.] = [.-1,1.] & (f|[.0,PI.])"|(f.:[.0,PI.]) is decreasing by
+  Th49, COMPTRIG:41,FCONT_3:18,RELAT_1:162;
+  hence thesis by RELAT_1:101;
 end;
 
 theorem
-  arccos is_differentiable_on ].-1,1.[ &
-  (-1 < r & r < 1 implies diff(arccos,r) = -1 / sqrt(1-r^2))
+  arccos is_differentiable_on ].-1,1.[ & (-1 < r & r < 1 implies diff(
+  arccos,r) = -1 / sqrt(1-r^2))
 proof
-  set f = cos|].0,PI.[;
-  set h = cos|[.0,PI.];
   set g = arccos|].-1,1.[;
-A1: f|].0,PI.[ = f by RELAT_1:101;
-A2: f" = (h|].0,PI.[)" by Lm18,RELAT_1:103
-    .= h"|(h.:].0,PI.[) by RFUNCT_2:40
-    .= g by Lm18,Th50,RELAT_1:162;
-  then
-A3: dom (f") = ].-1,1.[ by Lm14,Th88,RELAT_1:91;
-A4: cos is_differentiable_on ].0,PI.[ by FDIFF_1:34,SIN_COS:72;
-  then
-A5: f is_differentiable_on ].0,PI.[ by FDIFF_2:16;
-X: dom f = ].0,PI.[ /\ REAL by RELAT_1:90,SIN_COS:27
-        .= ].0,PI.[ by XBOOLE_1:28;
-A6: now
-    let x0 be Real such that
-A7: x0 in ].0,PI.[;
-A8: diff(f,x0) = (f`|].0,PI.[).x0 by A5,A7,FDIFF_1:def 8
-      .= (cos`|].0,PI.[).x0 by A4,FDIFF_2:16
-      .= diff(cos,x0) by A4,A7,FDIFF_1:def 8
-      .= -sin.x0 by SIN_COS:72;
-    --sin.x0 > 0 by A7,COMPTRIG:23;
-    hence 0 > diff(f,x0) by A8;
-  end;
-  then
-A9: g is_differentiable_on ].-1,1.[ by A1,A2,A3,A5,X,FDIFF_2:48;
-A10: ].-1,1.[ c= dom arccos by Th88,XXREAL_1:25;
-  for x be Real st x in ].-1,1.[ holds
-  g is_differentiable_in x by A9,FDIFF_1:16;
-  hence
-A11: arccos is_differentiable_on ].-1,1.[ by A10,FDIFF_1:def 7;
-  set s = sqrt(1-r^2);
+  set h = cos|[.0,PI.];
+  set f = cos|].0,PI.[;
+A1: dom f = ].0,PI.[ /\ REAL by RELAT_1:90,SIN_COS:27
+    .= ].0,PI.[ by XBOOLE_1:28;
   set x = arccos.r;
+  set s = sqrt(1-r^2);
+A2: ].-1,1.[ c= dom arccos by Th88,XXREAL_1:25;
+A3: cos is_differentiable_on ].0,PI.[ by FDIFF_1:34,SIN_COS:72;
+  then
+A4: f is_differentiable_on ].0,PI.[ by FDIFF_2:16;
+A5: now
+    let x0 be Real such that
+A6: x0 in ].0,PI.[;
+A7: --sin.x0 > 0 by A6,COMPTRIG:23;
+    diff(f,x0) = (f`|].0,PI.[).x0 by A4,A6,FDIFF_1:def 8
+      .= (cos`|].0,PI.[).x0 by A3,FDIFF_2:16
+      .= diff(cos,x0) by A3,A6,FDIFF_1:def 8
+      .= -sin.x0 by SIN_COS:72;
+    hence 0 > diff(f,x0) by A7;
+  end;
+A8: f" = (h|].0,PI.[)" by RELAT_1:103,XXREAL_1:25
+    .= h"|(h.:].0,PI.[) by RFUNCT_2:40
+    .= g by Th50,RELAT_1:162,XXREAL_1:25;
+  then
+A9: f|].0,PI.[ = f & dom (f") = ].-1,1.[ by
+  Th88,RELAT_1:91,101,XXREAL_1:
+  25;
+  then
+A10: g is_differentiable_on ].-1,1.[ by A8,A4,A1,A5,FDIFF_2:48;
+  then for x be Real st x in ].-1,1.[ holds g is_differentiable_in x by
+  FDIFF_1:16;
+  hence
+A11: arccos is_differentiable_on ].-1,1.[ by A2,FDIFF_1:def 7;
   assume
 A12: -1 < r & r < 1;
   then
@@ -1910,16 +1990,16 @@ A14: g.r = x by FUNCT_1:72;
   then
 A15: x in ].0,PI.[ by XXREAL_1:4;
   then
-A16: diff(f,x) = (f`|].0,PI.[).x by A5,FDIFF_1:def 8
-    .= (cos`|].0,PI.[).x by A4,FDIFF_2:16
-    .= diff(cos,x) by A4,A15,FDIFF_1:def 8
+A16: diff(f,x) = (f`|].0,PI.[).x by A4,FDIFF_1:def 8
+    .= (cos`|].0,PI.[).x by A3,FDIFF_2:16
+    .= diff(cos,x) by A3,A15,FDIFF_1:def 8
     .= -sin.x by SIN_COS:72
     .= -sin arccos r by SIN_COS:def 21
     .= -s by A12,Th106;
   thus diff(arccos,r) = (arccos`|].-1,1.[).r by A11,A13,FDIFF_1:def 8
     .= (g`|].-1,1.[).r by A11,FDIFF_2:16
-    .= diff(g,r) by A9,A13,FDIFF_1:def 8
-    .= 1 / -s by A1,A2,A3,A5,A6,A13,A14,A16,X,FDIFF_2:48
+    .= diff(g,r) by A10,A13,FDIFF_1:def 8
+    .= 1 / -s by A8,A9,A4,A1,A5,A13,A14,A16,FDIFF_2:48
     .= (-1)/s by XCMPLX_1:193
     .= -1/s by XCMPLX_1:188;
 end;
@@ -1928,11 +2008,10 @@ theorem
   arccos|[.-1,1.] is continuous
 proof
   set f = cos | [.0,PI.];
-A1: dom f = [.0,PI.] by Lm2,RELAT_1:91;
-A2: f|[.0,PI.] = f by RELAT_1:102;
-  f|[.0,PI.] is decreasing  by COMPTRIG:41;
-  then (f|[.0,PI.])"|(f.:[.0,PI.]) is continuous  by A1,FCONT_1:54;
-  hence thesis by A2,COMPTRIG:50,RELAT_1:148;
+  dom f = [.0,PI.] by RELAT_1:91,SIN_COS:27;
+  then f|[.0,PI.] = f & (f|[.0,PI.])"|(f.:[.0,PI.]) is continuous by
+  COMPTRIG:41,FCONT_1:54,RELAT_1:102;
+  hence thesis by COMPTRIG:50,RELAT_1:148;
 end;
 
 :: Correspondence between arcsin and arccos
@@ -1942,13 +2021,18 @@ theorem Th110:
 proof
   assume
 A1: -1 <= r & r <= 1;
-  then -PI/2+PI/2 <= arccos r & arccos r <= PI/2+PI/2 by Th101;
-  then -PI/2 <= arccos r-PI/2 & arccos r-PI/2 <= PI/2 by XREAL_1:21,22;
+  then -PI/2+PI/2 <= arccos r by Th101;
+  then -PI/2 <= arccos r-PI/2 by XREAL_1:21;
   then
-A2: --PI/2 >= -(arccos r-PI/2) & -(arccos r-PI/2) >= -PI/2 by XREAL_1:26;
-  r = sin(PI/2)*cos arccos r - cos(PI/2)*sin arccos r by A1,Th93,SIN_COS:82
+A2: --PI/2 >= -(arccos r-PI/2) by XREAL_1:26;
+  arccos r <= PI/2+PI/2 by A1,Th101;
+  then arccos r-PI/2 <= PI/2 by XREAL_1:22;
+  then
+A3: -(arccos r-PI/2) >= -PI/2 by XREAL_1:26;
+  r = sin(PI/2)*cos arccos r - cos(PI/2)*sin arccos r by A1,Th93,SIN_COS:
+  82
     .= sin(PI/2-arccos r) by COMPLEX2:4;
-  then arcsin r = PI/2 - arccos r by A2,Th70;
+  then arcsin r = PI/2 - arccos r by A2,A3,Th70;
   hence thesis;
 end;
 

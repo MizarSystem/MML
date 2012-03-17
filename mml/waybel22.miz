@@ -12,16 +12,14 @@ environ
       SEQM_3, AMI_1, ZF_REFLE, PBOOLE, FUNCOP_1, PRALG_1, YELLOW_2, FUNCT_6,
       CARD_3, FRAENKEL, WAYBEL22, ORDERS_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1,
-      PBOOLE,
-      RELSET_1, PARTFUN1, FUNCT_2, FUNCT_6, PRALG_3, STRUCT_0, WELLORD1,
-      CARD_1, CARD_3, ORDERS_2, LATTICE3, FUNCOP_1, YELLOW_0,
-      YELLOW_1, YELLOW_2, YELLOW_7, WAYBEL_0, WAYBEL_1, WAYBEL_3, WAYBEL_5,
-      WAYBEL16;
+      PBOOLE, RELSET_1, PARTFUN1, FUNCT_2, FUNCT_6, STRUCT_0, WELLORD1, CARD_1,
+      CARD_3, ORDERS_2, LATTICE3, FUNCOP_1, YELLOW_0, YELLOW_1, YELLOW_2,
+      YELLOW_7, WAYBEL_0, WAYBEL_1, WAYBEL_3, WAYBEL_5, WAYBEL16;
  constructors SETFAM_1, DOMAIN_1, TOLER_1, ORDERS_3, PRALG_3, WAYBEL_1,
       WAYBEL_5, WAYBEL_8, WAYBEL16, RELSET_1, WAYBEL20;
- registrations XBOOLE_0, SUBSET_1, SETFAM_1, RELSET_1, FUNCT_2, FUNCOP_1,
-      FRAENKEL, CARD_3, PBOOLE, STRUCT_0, LATTICE3, YELLOW_0, PRALG_3,
-      WAYBEL_0, YELLOW_1, WAYBEL_5, YELLOW_7, WAYBEL_8, WAYBEL16, FUNCT_1;
+ registrations XBOOLE_0, SUBSET_1, RELSET_1, FUNCT_2, FUNCOP_1, CARD_3, PBOOLE,
+      STRUCT_0, LATTICE3, YELLOW_0, WAYBEL_0, YELLOW_1, WAYBEL_5, YELLOW_7,
+      WAYBEL_8, WAYBEL16, FUNCT_1;
  requirements SUBSET, BOOLE;
  definitions TARSKI, FUNCT_1, ORDERS_3, LATTICE3, WELLORD2, YELLOW_0, WAYBEL_0,
       STRUCT_0;
@@ -36,6 +34,7 @@ begin :: Preliminaries
 
 Lm1: for L being complete LATTICE, X being set st X c= bool the carrier of L
 holds "/\"(union X, L) = "/\"({inf Y where Y is Subset of L: Y in X}, L)
+
 proof
   let L be complete LATTICE, X be set such that
 A1: X c= bool the carrier of L;
@@ -44,25 +43,27 @@ A1: X c= bool the carrier of L;
 A2: now
     let x be set;
     hereby
-      assume x in XX;
-      then consider Z being Subset of L such that
-A3:   x = Z & Z in X;
-      thus x in X by A3;
+      assume
+      x in XX;
+      then ex Z being Subset of L st x = Z & Z in X;
+      hence x in X;
     end;
     assume
-A4: x in X;
+A3: x in X;
     then reconsider x' = x as Subset of L by A1;
-    x' in XX by A4;
+    x' in XX by A3;
     hence x in XX;
   end;
+
   "/\"({"/\"(Y, L) where Y is Subset of L: P[Y]}, L) = "/\"(union XX, L)
   from YELLOW_3:sch 3;
-  hence thesis
-  by A2,TARSKI:2;
+
+  hence thesis by A2,TARSKI:2;
 end;
 
 Lm2: for L being complete LATTICE, X being set st X c= bool the carrier of L
 holds "\/"(union X, L) = "\/"({sup Y where Y is Subset of L: Y in X}, L)
+
 proof
   let L be complete LATTICE, X be set such that
 A1: X c= bool the carrier of L;
@@ -71,46 +72,48 @@ A1: X c= bool the carrier of L;
 A2: now
     let x be set;
     hereby
-      assume x in XX;
-      then consider Z being Subset of L such that
-A3:   x = Z & Z in X;
-      thus x in X by A3;
+      assume
+      x in XX;
+      then ex Z being Subset of L st x = Z & Z in X;
+      hence x in X;
     end;
     assume
-A4: x in X;
+A3: x in X;
     then reconsider x' = x as Subset of L by A1;
-    x' in XX by A4;
+    x' in XX by A3;
     hence x in XX;
   end;
+
   "\/"({"\/"(Y, L) where Y is Subset of L: P[Y]}, L) = "\/"(union XX, L)
   from YELLOW_3:sch 5;
+
   hence thesis by A2,TARSKI:2;
 end;
 
 theorem Th1: :: cf. WAYBEL13:9
-  for L being upper-bounded Semilattice,
-  F being non empty directed Subset of InclPoset Filt L holds sup F = union F
+  for L being upper-bounded Semilattice, F being non empty directed
+  Subset of InclPoset Filt L holds sup F = union F
 proof
-  let L be upper-bounded Semilattice,
-  F be non empty directed Subset of InclPoset Filt L;
+  let L be upper-bounded Semilattice, F be non empty directed Subset of
+  InclPoset Filt L;
   Filt L = Ids (L opp) by WAYBEL16:7;
   hence thesis by WAYBEL13:9;
 end;
 
 theorem Th2:
-  for L, S, T being complete (non empty Poset),
-  f being CLHomomorphism of L, S, g being CLHomomorphism of S, T
-  holds g*f is CLHomomorphism of L, T
+  for L, S, T being complete (non empty Poset), f being
+  CLHomomorphism of L, S, g being CLHomomorphism of S, T holds g*f is
+  CLHomomorphism of L, T
 proof
-  let L, S, T be complete (non empty Poset),
-  f be CLHomomorphism of L, S, g be CLHomomorphism of S, T;
-A1: f is infs-preserving & g is infs-preserving &
-  f is directed-sups-preserving & g is directed-sups-preserving
-  by WAYBEL16:def 1;
+  let L, S, T be complete (non empty Poset), f be CLHomomorphism of L, S, g be
+  CLHomomorphism of S, T;
+  f is directed-sups-preserving & g is directed-sups-preserving by
+  WAYBEL16:def 1;
   then
-A2: g*f is infs-preserving by WAYBEL20:26;
-  g*f is directed-sups-preserving by A1,WAYBEL20:29;
-  hence thesis by A2,WAYBEL16:def 1;
+A1: g*f is directed-sups-preserving by WAYBEL20:29;
+  f is infs-preserving & g is infs-preserving by WAYBEL16:def 1;
+  then g*f is infs-preserving by WAYBEL20:26;
+  hence thesis by A1,WAYBEL16:def 1;
 end;
 
 theorem Th3:
@@ -118,39 +121,41 @@ theorem Th3:
 proof
   let L be non empty RelStr;
   let X be Subset of L;
-  assume
-A1: ex_inf_of X, L;
   set f = id L;
-A2: f.:X = X by FUNCT_1:162;
-  thus ex_inf_of f.:X, L by A1,FUNCT_1:162;
-  thus thesis by A2,FUNCT_1:35;
+  assume
+  ex_inf_of X, L;
+  hence ex_inf_of f.:X, L by FUNCT_1:162;
+  f.:X = X by FUNCT_1:162;
+  hence thesis by FUNCT_1:35;
 end;
 
 theorem Th4:
-  for L being non empty RelStr holds id L is directed-sups-preserving
+  for L being non empty RelStr holds id L is
+  directed-sups-preserving
 proof
   let L be non empty RelStr;
-  let X be Subset of L such that X is non empty directed;
-  assume
-A1: ex_sup_of X, L;
+  let X be Subset of L such that
+  X is non empty directed;
   set f = id L;
-A2: f.:X = X by FUNCT_1:162;
-  thus ex_sup_of f.:X, L by A1,FUNCT_1:162;
-  thus thesis by A2,FUNCT_1:35;
+  assume
+  ex_sup_of X, L;
+  hence ex_sup_of f.:X, L by FUNCT_1:162;
+  f.:X = X by FUNCT_1:162;
+  hence thesis by FUNCT_1:35;
 end;
 
 theorem Th5:
-  for L being complete (non empty Poset) holds id L is CLHomomorphism of L, L
+  for L being complete (non empty Poset) holds id L is
+  CLHomomorphism of L, L
 proof
   let L be complete (non empty Poset);
-A1: id L is directed-sups-preserving by Th4;
-  id L is infs-preserving by Th3;
-  hence thesis by A1,WAYBEL16:def 1;
+  id L is directed-sups-preserving & id L is infs-preserving by Th3,Th4;
+  hence thesis by WAYBEL16:def 1;
 end;
 
 theorem Th6:
-  for L being upper-bounded with_infima non empty Poset
-  holds InclPoset Filt L is CLSubFrame of BoolePoset the carrier of L
+  for L being upper-bounded with_infima non empty Poset holds
+  InclPoset Filt L is CLSubFrame of BoolePoset the carrier of L
 proof
   let L be upper-bounded with_infima non empty Poset;
   set cL = the carrier of L;
@@ -160,168 +165,172 @@ proof
   set IP = InclPoset Filt L;
   set cIP = the carrier of IP;
   set rIP = the InternalRel of IP;
-A1: BoolePoset cL = InclPoset bool cL by YELLOW_1:4;
-A2: InclPoset bool cL = RelStr(#bool cL, RelIncl bool cL#) by YELLOW_1:def 1;
-A3: InclPoset Filt L = RelStr(#Filt L, RelIncl Filt L#) by YELLOW_1:def 1;
-  then
-A4: field rIP = Filt L by WELLORD2:def 1;
-A5: Filt L c= bool cL
+A1: InclPoset bool cL = RelStr(#bool cL, RelIncl bool cL#) by YELLOW_1:def 1;
+A2: InclPoset Filt L = RelStr(#Filt L, RelIncl Filt L#) by YELLOW_1:def 1;
+A3: BoolePoset cL = InclPoset bool cL by YELLOW_1:4;
+A4: cIP c= cBP
   proof
     let x be set;
-    assume x in Filt L;
-    then consider X being Filter of L such that
-A6: x = X;
-    thus thesis by A6;
+    assume
+    x in cIP;
+    then ex X being Filter of L st x = X by A2;
+    hence thesis by A3,A1;
   end;
-A7: cIP c= cBP
-  proof
-    let x be set;
-    assume x in cIP;
-    then consider X being Filter of L such that
-A8: x = X by A3;
-    thus thesis by A1,A2,A8;
-  end;
+A5: field rIP = Filt L by A2,WELLORD2:def 1;
   rIP c= rBP
   proof
     let p be set;
     assume
-A9: p in rIP;
+A6: p in rIP;
     then consider x, y being set such that
-A10: p = [x, y] by RELAT_1:def 1;
-A11: x in field rIP & y in field rIP by A9,A10,RELAT_1:30;
+A7: p = [x, y] by RELAT_1:def 1;
+A8: y in field rIP by A6,A7,RELAT_1:30;
+    then consider Y being Filter of L such that
+A9: y = Y by A5;
+A10: x in field rIP by A6,A7,RELAT_1:30;
     then consider X being Filter of L such that
-A12: x = X by A4;
-    consider Y being Filter of L such that
-A13: y = Y by A4,A11;
-    X c= Y by A3,A4,A9,A10,A11,A12,A13,WELLORD2:def 1;
-    hence thesis by A1,A2,A10,A12,A13,WELLORD2:def 1;
+A11: x = X by A5;
+    X c= Y by A2,A5,A6,A7,A10,A8,A11,A9,WELLORD2:def 1;
+    hence thesis by A3,A1,A7,A11,A9,WELLORD2:def 1;
   end;
-  then reconsider IP as SubRelStr of BP by A7,YELLOW_0:def 13;
+  then reconsider IP as SubRelStr of BP by A4,YELLOW_0:def 13;
   now
     let p be set;
-A14: rBP|_2 cIP = rBP /\ [:cIP, cIP:] by WELLORD1:def 6;
+A12: rBP|_2 cIP = rBP /\ [:cIP, cIP:] by WELLORD1:def 6;
     hereby
       assume
-A15:  p in rIP;
+A13:  p in rIP;
       then consider x, y being set such that
-A16:  p = [x, y] by RELAT_1:def 1;
-A17:  x in field rIP & y in field rIP by A15,A16,RELAT_1:30;
+A14:  p = [x, y] by RELAT_1:def 1;
+A15:  y in field rIP by A13,A14,RELAT_1:30;
+      then consider Y being Filter of L such that
+A16:  y = Y by A5;
+A17:  x in field rIP by A13,A14,RELAT_1:30;
       then consider X being Filter of L such that
-A18:  x = X by A4;
-      consider Y being Filter of L such that
-A19:  y = Y by A4,A17;
-      X c= Y by A3,A4,A15,A16,A17,A18,A19,WELLORD2:def 1;
-      then p in rBP by A1,A2,A16,A18,A19,WELLORD2:def 1;
-      hence p in rBP|_2 cIP by A14,A15,XBOOLE_0:def 4;
+A18:  x = X by A5;
+      X c= Y by A2,A5,A13,A14,A17,A15,A18,A16,WELLORD2:def 1;
+      then p in rBP by A3,A1,A14,A18,A16,WELLORD2:def 1;
+      hence p in rBP|_2 cIP by A12,A13,XBOOLE_0:def 4;
     end;
-    assume p in rBP|_2 cIP;
+    assume
+A19: p in rBP|_2 cIP;
     then
-A20: p in rBP & p in [:cIP, cIP:] by A14,XBOOLE_0:def 4;
+A20: p in rBP by A12,XBOOLE_0:def 4;
+    p in [:cIP, cIP:] by A12,A19,XBOOLE_0:def 4;
     then consider x, y being set such that
-A21: x in cIP & y in cIP & p = [x, y] by ZFMISC_1:def 2;
-    consider X being Filter of L such that
-A22: x = X by A3,A21;
-    consider Y being Filter of L such that
-A23: y = Y by A3,A21;
-    x c= y by A1,A2,A20,A21,A22,A23,WELLORD2:def 1;
-    hence p in rIP by A3,A21,WELLORD2:def 1;
+A21: x in cIP & y in cIP and
+A22: p = [x, y] by ZFMISC_1:def 2;
+    (ex X being Filter of L st x = X )& ex Y being Filter of L st y = Y
+    by A2,A21;
+    then x c= y by A3,A1,A20,A22,WELLORD2:def 1;
+    hence p in rIP by A2,A21,A22,WELLORD2:def 1;
   end;
   then rIP = rBP|_2 cIP by TARSKI:2;
   then reconsider IP as full SubRelStr of BP by YELLOW_0:def 14;
-A24: IP is infs-inheriting
+A23: Filt L c= bool cL
   proof
-    let X be Subset of IP such that ex_inf_of X, BP;
-    set sX = "/\"(X, BP);
-    per cases;
-    suppose X is empty;
-      then
-A25:  "/\"(X, BP) = Top BP
-        .= cL by YELLOW_1:19;
-      [#]L = cL;
-      hence thesis by A3,A25;
-    end;
-    suppose
-A26:  X is non empty;
-      reconsider X' = X as Subset of BP by A1,A2,A3,A5,XBOOLE_1:1;
-      reconsider F = X as Subset-Family of cL by A3,A5,XBOOLE_1:1;
-A27:  inf X' = meet X by A26,YELLOW_1:20;
-      reconsider sX as Subset of L by A2,YELLOW_1:4;
-      for Y being set st Y in X holds Top L in Y
-      proof
-        let Y be set;
-        assume Y in X;
-        then Y in Filt L by A3;
-        then consider Z being Filter of L such that
-A28:    Y = Z;
-        thus thesis by A28,WAYBEL_4:22;
-      end;
-      then
-A29:  sX is non empty by A26,A27,SETFAM_1:def 1;
-A30:  for X being Subset of L st X in F holds X is upper filtered
-      proof
-        let X be Subset of L such that
-A31:    X in F;
-        X in Filt L by A3,A31;
-        then consider Y being Filter of L such that
-A32:    X = Y;
-        thus thesis by A32;
-      end;
-      then for X being Subset of L st X in F holds X is upper;
-      then
-A33:  sX is upper by A27,YELLOW_2:39;
-      sX is filtered by A27,A30,YELLOW_2:41;
-      hence thesis by A3,A29,A33;
-    end;
+    let x be set;
+    assume
+    x in Filt L;
+    then ex X being Filter of L st x = X;
+    hence thesis;
   end;
-  IP is directed-sups-inheriting
+A24: IP is directed-sups-inheriting
   proof
     let X be directed Subset of IP such that
-A34: X <> {} & ex_sup_of X, BP;
-    set sX = "\/"(X, BP);
-    reconsider X' = X as Subset of BP by A1,A2,A3,A5,XBOOLE_1:1;
-    reconsider F = X as Subset-Family of cL by A3,A5,XBOOLE_1:1;
-A35: sup X' = union X by YELLOW_1:21;
-    reconsider sX as Subset of L by A2,YELLOW_1:4;
+A25: X <> {} and
+    ex_sup_of X, BP;
     consider Y being set such that
-A36: Y in X by A34,XBOOLE_0:def 1;
-    Y in Filt L by A3,A36;
-    then consider Z being Filter of L such that
-A37: Y = Z;
-    Top L in Y by A37,WAYBEL_4:22;
-    then
-A38: sX is non empty by A35,A36,TARSKI:def 4;
-A39: for X being Subset of L st X in F holds X is upper filtered
-    proof
-      let X be Subset of L;
-      assume X in F;
-      then X in Filt L by A3;
-      then consider Y being Filter of L such that
-A40:  X = Y;
-      thus thesis by A40;
-    end;
-    then for X being Subset of L st X in F holds X is upper;
-    then
-A41: sX is upper by A35,WAYBEL_0:28;
-A42: for X being Subset of L st X in F holds X is filtered by A39;
-    for P, R being Subset of L st P in F & R in F
-    ex Z being Subset of L st Z in F & P \/ R c= Z
+A26: Y in X by A25,XBOOLE_0:def 1;
+    reconsider F = X as Subset-Family of cL by A2,A23,XBOOLE_1:1;
+A27: for P, R being Subset of L st P in F & R in F ex Z being Subset of L
+    st Z in F & P \/ R c= Z
     proof
       let P, R be Subset of L;
       assume
-A43:  P in F & R in F;
+A28:  P in F & R in F;
       then reconsider P' = P, R' = R as Element of IP;
       consider Z being Element of IP such that
-A44:  Z in X & P' <= Z & R' <= Z by A43,WAYBEL_0:def 1;
-      Z in the carrier of IP by A44;
+A29:  Z in X and
+A30:  P' <= Z & R' <= Z by A28,WAYBEL_0:def 1;
+      Z in the carrier of IP by A29;
       then consider Z' being Filter of L such that
-A45:  Z' = Z by A3;
+A31:  Z' = Z by A2;
       take Z';
-      thus Z' in F by A44,A45;
-      P' c= Z & R' c= Z by A44,YELLOW_1:3;
-      hence thesis by A45,XBOOLE_1:8;
+      thus Z' in F by A29,A31;
+      P' c= Z & R' c= Z by A30,YELLOW_1:3;
+      hence thesis by A31,XBOOLE_1:8;
     end;
-    then sX is filtered by A35,A42,WAYBEL_0:47;
-    hence thesis by A3,A38,A41;
+    reconsider X' = X as Subset of BP by A3,A1,A2,A23,XBOOLE_1:1;
+    set sX = "\/"(X, BP);
+A32: sup X' = union X by YELLOW_1:21;
+    reconsider sX as Subset of L by A1,YELLOW_1:4;
+A33: for X being Subset of L st X in F holds X is upper filtered
+    proof
+      let X be Subset of L;
+      assume
+      X in F;
+      then X in Filt L by A2;
+      then ex Y being Filter of L st X = Y;
+      hence thesis;
+    end;
+    then for X being Subset of L st X in F holds X is upper;
+    then
+A34: sX is upper by A32,WAYBEL_0:28;
+    for X being Subset of L st X in F holds X is filtered by A33;
+    then
+A35: sX is filtered by A32,A27,WAYBEL_0:47;
+    Y in Filt L by A2,A26;
+    then ex Z being Filter of L st Y = Z;
+    then Top L in Y by WAYBEL_4:22;
+    then sX is non empty by A32,A26,TARSKI:def 4;
+    hence thesis by A2,A34,A35;
+  end;
+  IP is infs-inheriting
+  proof
+    let X be Subset of IP such that
+    ex_inf_of X, BP;
+    set sX = "/\"(X, BP);
+    per cases;
+    suppose
+A36:  X is empty;
+A37:  [#]L = cL;
+      "/\"(X, BP) = Top BP by A36
+        .= cL by YELLOW_1:19;
+      hence thesis by A2,A37;
+    end;
+    suppose
+A38:  X is non empty;
+      reconsider F = X as Subset-Family of cL by A2,A23,XBOOLE_1:1;
+      reconsider sX as Subset of L by A1,YELLOW_1:4;
+      reconsider X' = X as Subset of BP by A3,A1,A2,A23,XBOOLE_1:1;
+A39:  inf X' = meet X by A38,YELLOW_1:20;
+A40:  for X being Subset of L st X in F holds X is upper filtered
+      proof
+        let X be Subset of L;
+        assume
+        X in F;
+        then X in Filt L by A2;
+        then ex Y being Filter of L st X = Y;
+        hence thesis;
+      end;
+      then
+A41:  sX is filtered by A39,YELLOW_2:41;
+      for X being Subset of L st X in F holds X is upper by A40;
+      then
+A42:  sX is upper by A39,YELLOW_2:39;
+      for Y being set st Y in X holds Top L in Y
+      proof
+        let Y be set;
+        assume
+        Y in X;
+        then Y in Filt L by A2;
+        then ex Z being Filter of L st Y = Z;
+        hence thesis by WAYBEL_4:22;
+      end;
+      then sX is non empty by A38,A39,SETFAM_1:def 1;
+      hence thesis by A2,A42,A41;
+    end;
   end;
   hence thesis by A24;
 end;
@@ -344,31 +353,30 @@ registration
     let x be Element of InclPoset Filt L;
     InclPoset Filt L = RelStr(#Filt L, RelIncl Filt L#) by YELLOW_1:def 1;
     then x in Filt L;
-    then consider X being Filter of L such that
-A1: x = X;
-    thus thesis by A1;
+    then ex X being Filter of L st x = X;
+    hence thesis;
   end;
 end;
 
 begin :: Free generators of continuous lattices
 
-definition :: replaces :: WAYBEL16:def 2
+definition
   let S be continuous complete (non empty Poset);
   let A be set;
   pred A is_FreeGen_set_of S means
   :Def1:
-  for T be continuous complete (non empty Poset)
-  for f be Function of A, the carrier of T ex h be CLHomomorphism of S, T st
-  h|A = f & for h' being CLHomomorphism of S,T st h'|A = f holds h' = h;
+  for T be continuous complete (non
+empty Poset) for f be Function of A, the carrier of T ex h be CLHomomorphism of
+S, T st h|A = f & for h' being CLHomomorphism of S,T st h'|A = f holds h' = h;
 end;
 
 theorem Th7:
-  for S being continuous complete (non empty Poset), A being set
-  st A is_FreeGen_set_of S holds A is Subset of S
+  for S being continuous complete (non empty Poset), A being set st
+  A is_FreeGen_set_of S holds A is Subset of S
 proof
+  consider T being continuous complete (non empty Poset);
   let S be continuous complete (non empty Poset), A be set such that
 A1: A is_FreeGen_set_of S;
-  consider T being continuous complete (non empty Poset);
   consider f being Function of A, the carrier of T;
   consider h being CLHomomorphism of S, T such that
 A2: h|A = f and
@@ -378,49 +386,56 @@ A2: h|A = f and
 end;
 
 theorem Th8:
-  for S being continuous complete (non empty Poset), A being set
-  st A is_FreeGen_set_of S
-  for h' being CLHomomorphism of S, S st h'|A = id A holds h' = id S
+  for S being continuous complete (non empty Poset), A being set st
+A is_FreeGen_set_of S for h' being CLHomomorphism of S, S st h'|A = id A holds
+  h' = id S
 proof
   let S be continuous complete (non empty Poset), A be set such that
 A1: A is_FreeGen_set_of S;
   set L = S;
 A2: A is Subset of L by A1,Th7;
+  then
+A3: (id L)|A = id A by FUNCT_3:1;
   dom id A = A & rng id A = A by RELAT_1:71;
-  then reconsider f = id A as Function of A,the carrier of L
-  by A2,RELSET_1:11;
-  consider h being CLHomomorphism of L, L such that h|A = f and
-A3: for h' being CLHomomorphism of L,L st h'|A = f holds h' = h by A1,Def1;
-  let h' be CLHomomorphism of S, S such that
-A4: h'|A = id A;
+  then reconsider f = id A as Function of A,the carrier of L by A2,
+  RELSET_1:11;
+  consider h being CLHomomorphism of L, L such that
+  h|A = f and
+A4: for h' being CLHomomorphism of L,L st h'|A = f holds h' = h by A1,
+  Def1;
 A5: id L is CLHomomorphism of L, L by Th5;
-A6: (id L)|A = id A by A2,FUNCT_3:1;
-  thus h' = h by A3,A4
-    .= id L by A3,A5,A6;
+  let h' be CLHomomorphism of S, S;
+  assume
+  h'|A = id A;
+  hence h' = h by A4
+    .= id L by A4,A5,A3;
 end;
 
 begin :: Representation theorem for free continuous lattices
 
 reserve X for set,
   F for Filter of BoolePoset X,
-  x for Element of BoolePoset X,
+  x for Element of BoolePoset X
+  ,
   z for Element of X;
 
 definition :: See proof of Theorem 4.17, p. 90
   let X;
   func FixedUltraFilters X -> Subset-Family of BoolePoset X equals
-  { uparrow x : ex z st x = {z} };
+  { uparrow x
+  : ex z st x = {z} };
   coherence
   proof
-    set FUF = { uparrow x where x is Element of BoolePoset X :
-    ex y being Element of X st x = {y} };
+    set FUF = { uparrow x where x is Element of BoolePoset X : ex y being
+    Element of X st x = {y} };
     FUF c= bool the carrier of BoolePoset X
     proof
       let z be set;
-      assume z in FUF;
-      then consider x being Element of BoolePoset X such that
-A1:   z = uparrow x & ex y being Element of X st x = {y};
-      thus thesis by A1;
+      assume
+      z in FUF;
+      then ex x being Element of BoolePoset X st z = uparrow x & ex y being
+      Element of X st x = {y};
+      hence thesis;
     end;
     hence thesis;
   end;
@@ -430,10 +445,12 @@ theorem Th9:
   FixedUltraFilters X c= Filt BoolePoset X
 proof
   let F be set;
-  assume F in FixedUltraFilters X;
-  then consider x being Element of BoolePoset X such that
-A1: F = uparrow x and ex y being Element of X st x = {y};
-  thus thesis by A1;
+  assume
+  F in FixedUltraFilters X;
+  then
+  ex x being Element of BoolePoset X st F = uparrow x & ex y being Element
+  of X st x = {y};
+  hence thesis;
 end;
 
 theorem Th10:
@@ -446,60 +463,65 @@ A2: InclPoset bool X = RelStr(#bool X, RelIncl bool X#) by YELLOW_1:def 1;
 A3: the carrier of BoolePoset X = bool X by YELLOW_1:4;
   X,FUF are_equipotent
   proof
-    defpred P[set, set] means
-    ex y being Element of X, x being Element of BoolePoset X
-    st x = {y} & $1 = y & $2 = uparrow x;
-A5: for x being set st x in X ex y being set st P[x,y]
+    defpred P[set, set] means ex y being Element of X, x being Element of
+    BoolePoset X st x = {y} & $1 = y & $2 = uparrow x;
+A4: for x being set st x in X ex y being set st P[x,y]
     proof
       let x be set;
       assume
-A6:   x in X;
+A5:   x in X;
       then reconsider x' = x as Element of X;
-      reconsider bx = {x} as Element of BoolePoset X by A1,A2,A6,ZFMISC_1:37;
+      reconsider bx = {x} as Element of BoolePoset X by A1,A2,A5,ZFMISC_1:37;
       take uparrow bx;
       take x';
-      take bx; thus thesis;
+      take bx;
+      thus thesis;
     end;
     consider f being Function such that
-A7: dom f = X & for x being set st x in X holds P[x, f.x]
-            from CLASSES1:sch 1(A5);
+A6: dom f = X & for x being set st x in X holds P[x, f.x] from
+    CLASSES1:sch 1(A4);
     take f;
     thus f is one-to-one
     proof
       let x1, x2 be set such that
-A8:   x1 in dom f & x2 in dom f and
+A7:   x1 in dom f and
+A8:   x2 in dom f and
 A9:   f.x1 = f.x2;
-      consider x1' being Element of X, bx1 being Element of BoolePoset X
-      such that
-A10:  bx1 = {x1'} & x1 = x1' & f.x1 = uparrow bx1 by A7,A8;
-      consider x2' being Element of X, bx2 being Element of BoolePoset X
-      such that
-A11:  bx2 = {x2'} & x2 = x2' & f.x2 = uparrow bx2 by A7,A8;
-      bx1 = bx2 by A9,A10,A11,WAYBEL_0:20;
-      hence thesis by A10,A11,ZFMISC_1:6;
+      consider x2' being Element of X, bx2 being Element of BoolePoset X such
+      that
+A10:  bx2 = {x2'} & x2 = x2' and
+A11:  f.x2 = uparrow bx2 by A6,A8;
+      consider x1' being Element of X, bx1 being Element of BoolePoset X such
+      that
+A12:  bx1 = {x1'} & x1 = x1' and
+A13:  f.x1 = uparrow bx1 by A6,A7;
+      bx1 = bx2 by A9,A13,A11,WAYBEL_0:20;
+      hence thesis by A12,A10,ZFMISC_1:6;
     end;
-    thus dom f = X by A7;
+    thus dom f = X by A6;
     now
       let z be set;
       hereby
-        assume z in rng f;
+        assume
+        z in rng f;
         then consider x1 being set such that
-A12:    x1 in dom f & z = f.x1 by FUNCT_1:def 5;
-        consider x1' being Element of X, bx1 being Element of BoolePoset X
-        such that
-A13:    bx1 = {x1'} & x1 = x1' & f.x1 = uparrow bx1 by A7,A12;
-        thus z in FUF by A12,A13;
+A14:    x1 in dom f and
+A15:    z = f.x1 by FUNCT_1:def 5;
+        ex x1' being Element of X, bx1 being Element of BoolePoset X st
+        bx1 = {x1'} & x1 = x1' & f.x1 = uparrow bx1 by A6,A14;
+        hence z in FUF by A15;
       end;
-      assume z in FUF;
+      assume
+      z in FUF;
       then consider bx being Element of BoolePoset X such that
-A14:  z = uparrow bx & ex y being Element of X st bx = {y};
+A16:  z = uparrow bx and
+A17:  ex y being Element of X st bx = {y};
       consider y being Element of X such that
-A15:  bx = {y} by A14;
-A16:  y in X by A3,A15,ZFMISC_1:37;
-      then consider x1' being Element of X, bx1 being Element of BoolePoset X
-      such that
-A17:  bx1 = {x1'} & y = x1' & f.y = uparrow bx1 by A7;
-      thus z in rng f by A7,A14,A15,A16,A17,FUNCT_1:def 5;
+A18:  bx = {y} by A17;
+A19:  y in X by A3,A18,ZFMISC_1:37;
+      then ex x1' being Element of X, bx1 being Element of BoolePoset X st bx1
+      = {x1'} & y = x1' & f.y = uparrow bx1 by A6;
+      hence z in rng f by A6,A16,A18,A19,FUNCT_1:def 5;
     end;
     hence thesis by TARSKI:2;
   end;
@@ -507,172 +529,180 @@ A17:  bx1 = {x1'} & y = x1' & f.y = uparrow bx1 by A7;
 end;
 
 theorem Th11:
-  F = "\/"({"/\"({uparrow x : ex z st x = {z} & z in Y},
-  InclPoset Filt BoolePoset X) where Y is Subset of X : Y in F},
-  InclPoset Filt BoolePoset X)
+  F = "\/"({"/\"({uparrow x : ex z st x = {z} & z in Y}, InclPoset
+Filt BoolePoset X) where Y is Subset of X : Y in F}, InclPoset Filt BoolePoset
+  X)
 proof
   set BP = BoolePoset X;
   set IP = InclPoset Filt BP;
   set cIP = the carrier of IP;
-  set Xs = {"/\"({uparrow x : ex z st x = {z} & z in Y }, IP
-  ) where Y is Subset of X : Y in F};
+  set Xs = {"/\"({uparrow x : ex z st x = {z} & z in Y }, IP ) where Y is
+  Subset of X : Y in F};
   set RS = "\/"(Xs, IP);
 A1: InclPoset Filt BP = RelStr(#Filt BP, RelIncl Filt BP#) by YELLOW_1:def 1;
-A2: the carrier of BP = the carrier of LattPOSet BooleLatt X by YELLOW_1:def 2
-    .= bool X by LATTICE3:def 1;
-A3: Xs c= cIP
-  proof
-    let p be set;
-    assume p in Xs;
-    then consider YY being Subset of X such that
-A4: p = "/\"({uparrow x : ex z st x = {z} & z in YY}, IP) and YY in F;
-    thus thesis by A4;
-  end;
-  now consider YY being set such that
-A5: YY in F by XBOOLE_0:def 1;
-    "/\"({uparrow x : ex z st x = {z} & z in YY}, IP) in Xs by A2,A5;
-    hence Xs is non empty;
-  end;
-  then reconsider Xs' = Xs as non empty Subset of IP by A3;
-A6: ex_sup_of Xs', IP by YELLOW_0:17;
   F in Filt BP;
   then reconsider F' = F as Element of IP by A1;
+A2: Xs c= cIP
+  proof
+    let p be set;
+    assume
+    p in Xs;
+    then
+    ex YY being Subset of X st p = "/\"({uparrow x : ex z st x = {z} & z in
+    YY}, IP) & YY in F;
+    hence thesis;
+  end;
+A3: the carrier of BP = the carrier of LattPOSet BooleLatt X by YELLOW_1:def
+  2
+    .= bool X by LATTICE3:def 1;
+  now
+    consider YY being set such that
+A4: YY in F by XBOOLE_0:def 1;
+    "/\"({uparrow x : ex z st x = {z} & z in YY}, IP) in Xs by A3,A4;
+    hence Xs is non empty;
+  end;
+  then reconsider Xs' = Xs as non empty Subset of IP by A2;
+A5: ex_sup_of Xs', IP by YELLOW_0:17;
   F c= RS
   proof
     let p be set;
     assume
-A7: p in F;
+A6: p in F;
     then reconsider Y = p as Element of F;
-    set Xsi = {uparrow x where x is Element of BP :
-    ex z being Element of X st x = {z} & z in Y};
-A8: "/\"(Xsi, IP) in Xs by A2;
+    set Xsi = {uparrow x where x is Element of BP : ex z being Element of X st
+    x = {z} & z in Y};
+A7: "/\"(Xsi, IP) in Xs by A3;
     per cases;
-    suppose Xsi is empty;
+    suppose
+A8:   Xsi is empty;
+A9:   p in the carrier of BP by A6;
+      Xs' is_<=_than RS by A5,YELLOW_0:def 9;
       then
-A9:   "/\"(Xsi, IP) = Top IP
+A10:  "/\"(Xsi, IP) <= RS by A7,LATTICE3:def 9;
+      "/\"(Xsi, IP) = Top IP by A8
         .= bool X by WAYBEL16:15;
-      Xs' is_<=_than RS by A6,YELLOW_0:def 9;
-      then "/\"(Xsi, IP) <= RS by A8,LATTICE3:def 9;
-      then
-A10:  bool X c= RS by A9,YELLOW_1:3;
-      p in the carrier of BP by A7;
-      hence thesis by A2,A10;
+      then bool X c= RS by A10,YELLOW_1:3;
+      hence thesis by A3,A9;
     end;
     suppose
 A11:  Xsi is non empty;
       Xsi c= cIP
       proof
         let r be set;
-        assume r in Xsi;
-        then consider xz being Element of BP such that
-A12:    r = uparrow xz and ex z being Element of X st xz = {z} & z in Y;
-        thus thesis by A1,A12;
+        assume
+        r in Xsi;
+        then ex xz being Element of BP st r = uparrow xz & ex z being Element
+        of X st xz = {z} & z in Y;
+        hence thesis by A1;
       end;
       then reconsider Xsi as non empty Subset of IP by A11;
-A13:  "/\"(Xsi, IP) = meet Xsi by WAYBEL16:10;
       for yy being set st yy in Xsi holds Y in yy
       proof
-        let yy be set;
-        assume yy in Xsi;
-        then consider r being Element of BP such that
-A14:    yy = uparrow r and
-A15:    ex z being Element of X st r = {z} & z in Y;
         reconsider Y' = Y as Element of BP;
-        r c= Y by A15,ZFMISC_1:37;
+        let yy be set;
+        assume
+        yy in Xsi;
+        then consider r being Element of BP such that
+A12:    yy = uparrow r and
+A13:    ex z being Element of X st r = {z} & z in Y;
+        r c= Y by A13,ZFMISC_1:37;
         then r <= Y' by YELLOW_1:2;
-        hence thesis by A14,WAYBEL_0:18;
+        hence thesis by A12,WAYBEL_0:18;
       end;
-      then Y in meet Xsi by SETFAM_1:def 1;
+      then "/\"(Xsi, IP) = meet Xsi & Y in meet Xsi by SETFAM_1:def 1,
+      WAYBEL16:10;
       then
-A16:  p in union Xs by A8,A13,TARSKI:def 4;
-      union Xs' c= RS by A6,WAYBEL16:17;
-      hence thesis by A16;
+A14:  p in union Xs by A7,TARSKI:def 4;
+      union Xs' c= RS by WAYBEL16:17,YELLOW_0:17;
+      hence thesis by A14;
     end;
   end;
   then
-A17: F' <= RS by YELLOW_1:3;
+A15: F' <= RS by YELLOW_1:3;
   Xs is_<=_than F'
   proof
     let b be Element of IP;
-    assume b in Xs;
+    assume
+    b in Xs;
     then consider Y being Subset of X such that
-A18: b = "/\"({uparrow x : ex z st x = {z} & z in Y}, IP) and
-A19: Y in F;
-    reconsider Y' = Y as Element of F by A19;
+A16: b = "/\"({uparrow x : ex z st x = {z} & z in Y}, IP) and
+A17: Y in F;
+    reconsider Y' = Y as Element of F by A17;
     set Xsi = {uparrow x : ex z st x = {z} & z in Y};
     per cases;
     suppose
-A20:  Y is empty;
+A18:  Y is empty;
       now
-        assume Xsi is non empty;
+        assume
+        Xsi is non empty;
         then consider p being set such that
-A21:    p in Xsi by XBOOLE_0:def 1;
-        consider x being Element of BP such that p = uparrow x and
-A22:    ex z being Element of X st x = {z} & z in Y by A21;
-        consider z being Element of X such that
-A23:    x = {z} & z in Y by A22;
-        thus contradiction by A20,A23;
+A19:    p in Xsi by XBOOLE_0:def 1;
+        ex x being Element of BP st p = uparrow x & ex z being Element of
+        X st x = {z} & z in Y by A19;
+        hence contradiction by A18;
       end;
       then
-A24:  "/\"(Xsi, IP) = Top IP
+A20:  "/\"(Xsi, IP) = Top IP
         .= bool X by WAYBEL16:15;
       Bottom BP = {} by YELLOW_1:18;
-      then uparrow Bottom BP c= F by A19,A20,WAYBEL11:42;
-      then bool X c= F by A2,WAYBEL14:10;
-      hence b <= F' by A2,A18,A24,XBOOLE_0:def 10;
+      then uparrow Bottom BP c= F by A17,A18,WAYBEL11:42;
+      then bool X c= F by A3,WAYBEL14:10;
+      hence b <= F' by A3,A16,A20,XBOOLE_0:def 10;
     end;
     suppose
-A25:  Y is non empty;
-A26:  now consider z being set such that
-A27:    z in Y by A25,XBOOLE_0:def 1;
-        reconsider z as Element of X by A27;
-        reconsider x = {z} as Element of BP by A2,A27,ZFMISC_1:37;
-        uparrow x in Xsi by A27;
+A21:  Y is non empty;
+A22:  now
+        consider z being set such that
+A23:    z in Y by A21,XBOOLE_0:def 1;
+        reconsider z as Element of X by A23;
+        reconsider x = {z} as Element of BP by A3,A23,ZFMISC_1:37;
+        uparrow x in Xsi by A23;
         hence Xsi is non empty;
       end;
       Xsi c= cIP
       proof
         let r be set;
-        assume r in Xsi;
-        then consider xz being Element of BP such that
-A28:    r = uparrow xz and ex z being Element of X st xz = {z} & z in Y;
-        thus thesis by A1,A28;
+        assume
+        r in Xsi;
+        then ex xz being Element of BP st r = uparrow xz & ex z being Element
+        of X st xz = {z} & z in Y;
+        hence thesis by A1;
       end;
-      then reconsider Xsi as non empty Subset of IP by A26;
-A29:  "/\"(Xsi, IP) = meet Xsi by WAYBEL16:10;
+      then reconsider Xsi as non empty Subset of IP by A22;
+A24:  "/\"(Xsi, IP) = meet Xsi by WAYBEL16:10;
       b c= F'
       proof
         let yy be set;
-        assume
-A30:    yy in b;
         b in Filt BP by A1;
         then consider bf being Filter of BP such that
-A31:    b = bf;
-        reconsider yy' = yy as Element of bf by A30,A31;
+A25:    b = bf;
+        assume
+A26:    yy in b;
+        then reconsider yy' = yy as Element of bf by A25;
         reconsider yy' as Element of BP;
-A32:    uparrow Y' c= F' by WAYBEL11:42;
         Y c= yy'
         proof
           let zz be set;
           assume
-A33:      zz in Y;
+A27:      zz in Y;
           then reconsider z = zz as Element of X;
-          reconsider xz = {z} as Element of BP by A2,A33,ZFMISC_1:37;
-          uparrow xz in Xsi by A33;
-          then yy in uparrow xz by A18,A29,A30,SETFAM_1:def 1;
+          reconsider xz = {z} as Element of BP by A3,A27,ZFMISC_1:37;
+          uparrow xz in Xsi by A27;
+          then yy in uparrow xz by A16,A24,A26,SETFAM_1:def 1;
           then xz <= yy' by WAYBEL_0:18;
           then {z} c= yy by YELLOW_1:2;
           hence thesis by ZFMISC_1:37;
         end;
         then Y' <= yy' by YELLOW_1:2;
-        then yy in uparrow Y' by WAYBEL_0:18;
-        hence thesis by A32;
+        then uparrow Y' c= F' & yy in uparrow Y' by WAYBEL11:42,WAYBEL_0:
+        18;
+        hence thesis;
       end;
       hence b <= F' by YELLOW_1:3;
     end;
   end;
-  then RS <= F' by A6,YELLOW_0:def 9;
-  hence thesis by A17,YELLOW_0:def 3;
+  then RS <= F' by A5,YELLOW_0:def 9;
+  hence thesis by A15,YELLOW_0:def 3;
 end;
 
 definition :: See proof of Theorem 4.17, p. 90
@@ -681,15 +711,14 @@ definition :: See proof of Theorem 4.17, p. 90
   let f be Function of FixedUltraFilters X, the carrier of L;
   func f-extension_to_hom -> Function of InclPoset Filt BoolePoset X, L means
   :Def3:
-  for Fi being Element of InclPoset Filt BoolePoset X holds
-  it.Fi = "\/"({"/\"({f.(uparrow x) : ex z st x = {z} & z in Y
-  }, L) where Y is Subset of X : Y in Fi }, L);
+  for Fi being Element of InclPoset Filt BoolePoset X holds it.Fi = "\/"({
+"/\"({f.(uparrow x) : ex z st x = {z} & z in Y }, L) where Y is Subset of X : Y
+  in Fi }, L);
   existence
   proof
     set IP = InclPoset Filt BoolePoset X;
-    deffunc F(Element of IP) =
-    "\/"({"/\"({f.(uparrow x) : ex z st x = {z} & z in Y
-    }, L) where Y is Subset of X : Y in $1 }, L);
+    deffunc F(Element of IP) = "\/"({"/\"({f.(uparrow x) : ex z st x = {z} & z
+    in Y }, L) where Y is Subset of X : Y in $1 }, L);
     consider F being Function of the carrier of IP, the carrier of L such that
 A1: for Fi being Element of IP holds F.Fi = F(Fi) from FUNCT_2:sch 4;
     reconsider F as Function of IP, L;
@@ -700,18 +729,17 @@ A1: for Fi being Element of IP holds F.Fi = F(Fi) from FUNCT_2:sch 4;
   proof
     set IP = InclPoset Filt BoolePoset X;
     let it1, it2 be Function of IP, L such that
-A2: for Fi being Element of IP holds
-    it1.Fi = "\/"({"/\"({f.(uparrow x) : ex z st x = {z} & z in Y
-    }, L) where Y is Subset of X : Y in Fi }, L) and
-A3: for Fi being Element of IP holds
-    it2.Fi = "\/"({"/\"({f.(uparrow x) : ex z st x = {z} & z in Y
-    }, L) where Y is Subset of X : Y in Fi }, L);
-    reconsider it1' = it1 as Function of the carrier of IP, the carrier of L;
+A2: for Fi being Element of IP holds it1.Fi = "\/"({"/\"({f.(uparrow x
+    ) : ex z st x = {z} & z in Y }, L) where Y is Subset of X : Y in Fi }, L)
+    and
+A3: for Fi being Element of IP holds it2.Fi = "\/"({"/\"({f.(uparrow x
+    ) : ex z st x = {z} & z in Y }, L) where Y is Subset of X : Y in Fi }, L);
     reconsider it2' = it2 as Function of the carrier of IP, the carrier of L;
+    reconsider it1' = it1 as Function of the carrier of IP, the carrier of L;
     now
       let Fi be Element of IP;
-      thus it1'.Fi = "\/"({"/\"({f.(uparrow x) : ex z st x = {z} & z in Y
-      }, L) where Y is Subset of X : Y in Fi }, L) by A2
+      thus it1'.Fi = "\/"({"/\"({f.(uparrow x) : ex z st x = {z} & z in Y }, L
+      ) where Y is Subset of X : Y in Fi }, L) by A2
         .= it2'.Fi by A3;
     end;
     hence it1 = it2 by FUNCT_2:113;
@@ -719,1061 +747,1095 @@ A3: for Fi being Element of IP holds
 end;
 
 theorem
-  for L being continuous complete (non empty Poset),
-  f being Function of FixedUltraFilters X, the carrier of L
-  holds f-extension_to_hom is monotone
+  for L being continuous complete (non empty Poset), f being Function of
+  FixedUltraFilters X, the carrier of L holds f-extension_to_hom is monotone
 proof
-  let L be continuous complete (non empty Poset),
-  f be Function of FixedUltraFilters X, the carrier of L;
+  let L be continuous complete (non empty Poset), f be Function of
+  FixedUltraFilters X, the carrier of L;
   let F1, F2 be Element of InclPoset Filt BoolePoset X;
-  assume F1 <= F2;
-  then
-A1: F1 c= F2 by YELLOW_1:3;
   set F = f-extension_to_hom;
-  let FF1, FF2 be Element of L such that
-A2: FF1 = F.F1 & FF2 = F.F2;
-A3: F.F1 = "\/"({"/\"({f.(uparrow x) : ex z st x = {z} & z in Y
-  }, L) where Y is Subset of X : Y in F1}, L) by Def3;
-A4: F.F2 = "\/"({"/\"({f.(uparrow x) : ex z st x = {z} & z in Y
-  }, L) where Y is Subset of X : Y in F2}, L) by Def3;
-  set F1s = {"/\"({f.(uparrow x) : ex z st x = {z} & z in Y
-  }, L) where Y is Subset of X : Y in F1};
-  set F2s = {"/\"({f.(uparrow x) : ex z st x = {z} & z in Y
-  }, L) where Y is Subset of X : Y in F2 };
-A5: ex_sup_of F1s, L by YELLOW_0:17;
-A6: ex_sup_of F2s, L by YELLOW_0:17;
-  F1s c= F2s
+  set F1s = {"/\"({f.(uparrow x) : ex z st x = {z} & z in Y }, L) where Y is
+  Subset of X : Y in F1};
+  set F2s = {"/\"({f.(uparrow x) : ex z st x = {z} & z in Y }, L) where Y is
+  Subset of X : Y in F2 };
+A1: ex_sup_of F1s, L & ex_sup_of F2s, L by YELLOW_0:17;
+A2: F.F1 = "\/"({"/\"({f.(uparrow x) : ex z st x = {z} & z in Y }, L) where
+  Y is Subset of X : Y in F1}, L) by Def3;
+  assume
+  F1 <= F2;
+  then
+A3: F1 c= F2 by YELLOW_1:3;
+A4: F1s c= F2s
   proof
     let s be set;
-    assume s in F1s;
-    then consider Y being Subset of X such that
-A7: s = "/\"({f.(uparrow x) : ex z st x = {z} & z in Y}, L) and
-A8: Y in F1;
-    thus thesis by A1,A7,A8;
+    assume
+    s in F1s;
+    then
+    ex Y being Subset of X st s = "/\"({f.(uparrow x) : ex z st x = {z} & z
+    in Y}, L) & Y in F1;
+    hence thesis by A3;
   end;
-  hence FF1 <= FF2 by A2,A3,A4,A5,A6,YELLOW_0:34;
+A5: F.F2 = "\/"({"/\"({f.(uparrow x) : ex z st x = {z} & z in Y }, L) where
+  Y is Subset of X : Y in F2}, L) by Def3;
+  let FF1, FF2 be Element of L;
+  assume
+  FF1 = F.F1 & FF2 = F.F2;
+  hence FF1 <= FF2 by A2,A5,A1,A4,YELLOW_0:34;
 end;
 
 theorem Th13:
-  for L being continuous complete (non empty Poset),
-  f being Function of FixedUltraFilters X, the carrier of L
-  holds (f-extension_to_hom).Top (InclPoset Filt BoolePoset X) = Top L
+  for L being continuous complete (non empty Poset), f being
+  Function of FixedUltraFilters X, the carrier of L holds (f-extension_to_hom).
+  Top (InclPoset Filt BoolePoset X) = Top L
 proof
-  let L be continuous complete (non empty Poset),
-  f be Function of FixedUltraFilters X, the carrier of L;
+  let L be continuous complete (non empty Poset), f be Function of
+  FixedUltraFilters X, the carrier of L;
   set IP = InclPoset Filt BoolePoset X;
   set F = f-extension_to_hom;
   reconsider T = Top IP as Element of IP;
-A1: F.T = "\/"({"/\"({f.(uparrow x) : ex z st x = {z} & z in Y
-  }, L) where Y is Subset of X : Y in T}, L) by Def3;
-A2: T = bool X by WAYBEL16:15;
   reconsider E = {} as Subset of X by XBOOLE_1:2;
-  set Z = {"/\"({f.(uparrow x) : ex z st x = {z} & z in Y
-  }, L) where Y is Subset of X : Y in T};
-A3: "/\"({f.(uparrow x) : ex z st x = {z} & z in E}, L) in Z by A2;
-A4: {f.(uparrow x) : ex z st x = {z} & z in E} = {}
+  set Z = {"/\"({f.(uparrow x) : ex z st x = {z} & z in Y }, L) where Y is
+  Subset of X : Y in T};
+A1: {f.(uparrow x) : ex z st x = {z} & z in E} = {}
   proof
-    assume not thesis;
+    assume
+    not thesis;
     then consider r being set such that
-A5: r in {f.(uparrow x) : ex z st x = {z} & z in E} by XBOOLE_0:def 1;
-    consider x such that r = f.(uparrow x) and
-A6: ex z st x = {z} & z in E by A5;
-    thus contradiction by A6;
+A2: r in {f.(uparrow x) : ex z st x = {z} & z in E} by XBOOLE_0:def
+    1;
+    ex x st r = f.(uparrow x) & ex z st x = {z} & z in E by A2;
+    hence contradiction;
   end;
+A3: F.T = "\/"({"/\"({f.(uparrow x) : ex z st x = {z} & z in Y }, L) where Y
+  is Subset of X : Y in T}, L) by Def3;
+  T = bool X by WAYBEL16:15;
+  then
+A4: "/\"({f.(uparrow x) : ex z st x = {z} & z in E}, L) in Z;
   Z is_<=_than "\/"(Z, L) by YELLOW_0:32;
-  then Top L <= "\/"(Z, L) by A3,A4,LATTICE3:def 9;
-  hence thesis by A1,WAYBEL15:5;
+  then Top L <= "\/"(Z, L) by A4,A1,LATTICE3:def 9;
+  hence thesis by A3,WAYBEL15:5;
 end;
 
 registration :: See proof of Theorem 4.17, p. 91
   let X;
-  let L be continuous complete (non empty Poset),
-  f be Function of FixedUltraFilters X, the carrier of L;
+  let L be continuous complete (non empty Poset), f be Function of
+  FixedUltraFilters X, the carrier of L;
   cluster f-extension_to_hom -> directed-sups-preserving;
   coherence
   proof
-    set IP = InclPoset Filt BoolePoset X;
     set F = f-extension_to_hom;
+    set IP = InclPoset Filt BoolePoset X;
     let Fs be Subset of IP such that
 A1: Fs is non empty directed;
-    assume ex_sup_of Fs, IP;
-    thus ex_sup_of F.:Fs, L by YELLOW_0:17;
-A2: sup Fs = union Fs by A1,Th1;
     reconsider Fs' = Fs as non empty Subset of IP by A1;
+    set FFsU = {{"/\"({f.(uparrow x) : ex z st x = {z} & z in Y}, L) where Y
+is Subset of X : Y in YY } where YY is Element of Fs' : not contradiction };
     reconsider sFs = sup Fs as Element of IP;
-A3: F.sFs = "\/"({"/\"({f.(uparrow x) : ex z st x = {z} & z in Y
-    }, L) where Y is Subset of X : Y in sFs }, L) by Def3;
-    set FFs = {"/\"({f.(uparrow x) : ex z st x = {z} & z in Y
-    }, L) where Y is Subset of X : Y in sFs };
-    set FFsU = {{"/\"({f.(uparrow x) : ex z st x = {z} & z in Y}, L)
-    where Y is Subset of X : Y in YY
-    } where YY is Element of Fs' : not contradiction };
+    set FFs = {"/\"({f.(uparrow x) : ex z st x = {z} & z in Y }, L) where Y is
+    Subset of X : Y in sFs };
+A2: sup Fs = union Fs by A1,Th1;
+    now
+      let p be set;
+      hereby
+        assume
+        p in FFs;
+        then consider Y being Subset of X such that
+A3:     p = "/\"({f.(uparrow x) : ex z st x = {z} & z in Y}, L) and
+A4:     Y in sFs;
+        consider YY being set such that
+A5:     Y in YY and
+A6:     YY in Fs by A2,A4,TARSKI:def 4;
+A7:     {"/\"({f.(uparrow x) : ex z st x = {z} & z in Y1}, L) where Y1 is
+        Subset of X : Y1 in YY} in FFsU by A6;
+        p in {"/\"({f.(uparrow x) : ex z st x = {z} & z in Y1}, L) where
+        Y1 is Subset of X : Y1 in YY} by A3,A5;
+        hence p in union FFsU by A7,TARSKI:def 4;
+      end;
+      assume
+      p in union FFsU;
+      then consider r being set such that
+A8:   p in r and
+A9:   r in FFsU by TARSKI:def 4;
+      consider YY being Element of Fs' such that
+A10:  r = {"/\"({f.(uparrow x) : ex z st x = {z} & z in Y}, L) where
+      Y is Subset of X: Y in YY} by A9;
+      consider Y being Subset of X such that
+A11:  p = "/\"({f.(uparrow x) : ex z st x = {z} & z in Y}, L) and
+A12:  Y in YY by A8,A10;
+      Y in sFs by A2,A12,TARSKI:def 4;
+      hence p in FFs by A11;
+    end;
+    then
+A13: FFs = union FFsU by TARSKI:2;
     set Zs = {sup Z where Z is Subset of L : Z in FFsU};
+    assume
+    ex_sup_of Fs, IP;
+    thus ex_sup_of F.:Fs, L by YELLOW_0:17;
     FFsU c= bool the carrier of L
     proof
       let r be set;
-      assume r in FFsU;
+      assume
+      r in FFsU;
       then consider YY being Element of Fs' such that
-A4:   r = {"/\"({f.(uparrow x) : ex z st x = {z} & z in Y}, L)
-      where Y is Subset of X : Y in YY};
+A14:  r = {"/\"({f.(uparrow x) : ex z st x = {z} & z in Y}, L) where Y
+      is Subset of X : Y in YY};
       r c= the carrier of L
       proof
         let s be set;
-        assume s in r;
-        then consider Y being Subset of X such that
-A5:     s = "/\"({f.(uparrow x) : ex z st x = {z} & z in Y}, L) and
-        Y in YY by A4;
-        thus thesis by A5;
+        assume
+        s in r;
+        then
+        ex Y being Subset of X st s = "/\"({f.(uparrow x) : ex z st x = {z}
+        & z in Y}, L) & Y in YY by A14;
+        hence thesis;
       end;
       hence thesis;
     end;
     then
-A6: "\/"(union FFsU, L) = "\/"(Zs, L) by Lm2;
-    now
-      let p be set;
-      hereby
-        assume p in FFs;
-        then consider Y being Subset of X such that
-A7:     p = "/\"({f.(uparrow x) : ex z st x = {z} & z in Y}, L) and
-A8:     Y in sFs;
-        consider YY being set such that
-A9:     Y in YY and
-A10:    YY in Fs by A2,A8,TARSKI:def 4;
-A11:    p in {"/\"({f.(uparrow x) : ex z st x = {z} & z in Y1}, L)
-        where Y1 is Subset of X : Y1 in YY} by A7,A9;
-        {"/\"({f.(uparrow x) : ex z st x = {z} & z in Y1}, L)
-        where Y1 is Subset of X : Y1 in YY} in FFsU by A10;
-        hence p in union FFsU by A11,TARSKI:def 4;
-      end;
-      assume p in union FFsU;
-      then consider r being set such that
-A12:  p in r and
-A13:  r in FFsU by TARSKI:def 4;
-      consider YY being Element of Fs' such that
-A14:  r = {"/\"({f.(uparrow x) : ex z st x = {z} & z in Y}, L)
-      where Y is Subset of X: Y in YY} by A13;
-      consider Y being Subset of X such that
-A15:  p = "/\"({f.(uparrow x) : ex z st x = {z} & z in Y}, L) and
-A16:  Y in YY by A12,A14;
-      Y in sFs by A2,A16,TARSKI:def 4;
-      hence p in FFs by A15;
-    end;
-    then
-A17: FFs = union FFsU by TARSKI:2;
-    now
+A15: "\/"(union FFsU, L) = "\/"(Zs, L) by Lm2;
+A16: now
       let r be set;
       hereby
-        assume r in F.:Fs;
+        assume
+        r in F.:Fs;
         then consider YY being set such that
-A18:    YY in the carrier of IP and
-A19:    YY in Fs and
-A20:    F.YY = r by FUNCT_2:115;
-        reconsider YY as Element of Fs by A19;
-        reconsider YY' = YY as Element of IP by A18;
-A21:    F.YY' = "\/"({"/\"({f.(uparrow x) : ex z st x = {z} & z in Y
-        }, L) where Y is Subset of X : Y in YY'}, L) by Def3;
-        set Zi = {"/\"({f.(uparrow x) : ex z st x = {z} & z in Y}, L)
-        where Y is Subset of X : Y in YY' };
+A17:    YY in the carrier of IP and
+A18:    YY in Fs and
+A19:    F.YY = r by FUNCT_2:115;
+        reconsider YY as Element of Fs by A18;
+        reconsider YY' = YY as Element of IP by A17;
+        set Zi = {"/\"({f.(uparrow x) : ex z st x = {z} & z in Y}, L) where Y
+        is Subset of X : Y in YY' };
         Zi c= the carrier of L
         proof
           let t be set;
-          assume t in Zi;
-          then consider Y being Subset of X such that
-A22:      t = "/\"({f.(uparrow x) : ex z st x = {z} & z in Y}, L) and
-          Y in YY';
-          thus thesis by A22;
+          assume
+          t in Zi;
+          then ex Y being Subset of X st t = "/\"({f.(uparrow x) : ex z st x =
+          {z} & z in Y}, L) & Y in YY';
+          hence thesis;
         end;
         then reconsider Zi as Subset of L;
-        Zi in FFsU;
-        hence r in Zs by A20,A21;
+A20:    Zi in FFsU;
+        F.YY' = "\/"({"/\"({f.(uparrow x) : ex z st x = {z} & z in Y }, L
+        ) where Y is Subset of X : Y in YY'}, L) by Def3;
+        hence r in Zs by A19,A20;
       end;
-      assume r in Zs;
+      assume
+      r in Zs;
       then consider Z being Subset of L such that
-A23:  r = sup Z and
-A24:  Z in FFsU;
+A21:  r = sup Z and
+A22:  Z in FFsU;
       consider YY being Element of Fs such that
-A25:  Z = {"/\"({f.(uparrow x) : ex z st x = {z} & z in Y}, L)
-      where Y is Subset of X : Y in YY} by A24;
+A23:  Z = {"/\"({f.(uparrow x) : ex z st x = {z} & z in Y}, L) where
+      Y is Subset of X : Y in YY} by A22;
       reconsider YY as Element of Fs';
       reconsider YY' = YY as Element of IP;
-      F.YY' = "\/"({"/\"({f.(uparrow x) : ex z st x = {z} & z in Y
-      }, L) where Y is Subset of X : Y in YY'}, L) by Def3;
-      hence r in F.:Fs by A23,A25,FUNCT_2:43;
+      F.YY' = "\/"({"/\"({f.(uparrow x) : ex z st x = {z} & z in Y }, L)
+      where Y is Subset of X : Y in YY'}, L) by Def3;
+      hence r in F.:Fs by A21,A23,FUNCT_2:43;
     end;
-    hence thesis by A3,A6,A17,TARSKI:2;
+    F.sFs = "\/"({"/\"({f.(uparrow x) : ex z st x = {z} & z in Y }, L)
+    where Y is Subset of X : Y in sFs }, L) by Def3;
+    hence thesis by A15,A13,A16,TARSKI:2;
   end;
 end;
 
 registration :: See proof of Theorem 4.17, p. 91
   let X;
-  let L be continuous complete (non empty Poset),
-  f be Function of FixedUltraFilters X, the carrier of L;
+  let L be continuous complete (non empty Poset), f be Function of
+  FixedUltraFilters X, the carrier of L;
   cluster f-extension_to_hom -> infs-preserving;
   coherence
   proof
+    set FUF = FixedUltraFilters X;
+    set cL = the carrier of L;
+    set F = f-extension_to_hom;
     set BP = BoolePoset X;
     set IP = InclPoset Filt BP;
-    set F = f-extension_to_hom;
     set cIP = the carrier of IP;
-    set cL = the carrier of L;
-    set FUF = FixedUltraFilters X;
-A1: InclPoset Filt BP = RelStr(#Filt BP, RelIncl Filt BP#) by YELLOW_1:def 1;
+A1: InclPoset Filt BP = RelStr(#Filt BP, RelIncl Filt BP#) by YELLOW_1:def
+    1;
+    let Fs be Subset of IP;
+    assume
+    ex_inf_of Fs, IP;
+    thus ex_inf_of F.:Fs, L by YELLOW_0:17;
 A2: BoolePoset X = InclPoset bool X by YELLOW_1:4;
 A3: InclPoset bool X = RelStr(#bool X, RelIncl bool X#) by YELLOW_1:def 1;
     then
 A4: the carrier of BoolePoset X = bool X by YELLOW_1:4;
-    let Fs be Subset of IP;
-    assume ex_inf_of Fs, IP;
-    thus ex_inf_of F.:Fs, L by YELLOW_0:17;
     per cases;
     suppose
-A5:   Fs is empty;
-      then
-A6:   "/\"(F.:Fs, L) = Top L by RELAT_1:149;
-      "/\"(Fs, IP) = Top IP by A5;
-      hence thesis by A6,Th13;
+      Fs is empty;
+      then "/\"(F.:Fs, L) = Top L & "/\"(Fs, IP) = Top IP by RELAT_1:149;
+      hence thesis by Th13;
     end;
-    suppose Fs is non empty;
+    suppose
+      Fs is non empty;
       then reconsider Fs' = Fs as non empty Subset of IP;
+      defpred P[set, set, set] means $1 = "/\"({f.(uparrow x) : ex z st x = {z
+      } & z in $2}, L);
+      deffunc FDi(Element of Fs') = {"/\"({f.(uparrow x) : ex z st x = {z} & z
+      in Y }, L) where Y is Subset of X : Y in $1};
       not {} in Fs';
       then Fs' is with_non-empty_elements by SETFAM_1:def 9;
       then reconsider K = id Fs' as non-empty ManySortedSet of Fs';
-      defpred P[set, set, set] means
-      $1 = "/\"({f.(uparrow x) : ex z st x = {z} & z in $2}, L);
-A7:   for i be set st i in Fs' holds
-      for s be set st s in K.i ex y be set st y in (Fs' --> cL).i & P[y, s, i]
+A5:   for i be set st i in Fs' holds for s be set st s in K.i ex y be set
+      st y in (Fs' --> cL).i & P[y, s, i]
       proof
         let i be set such that
-A8:     i in Fs';
-        let s be set such that s in K.i;
+A6:     i in Fs';
+        let s be set such that
+        s in K.i;
         take y = "/\"({f.(uparrow x) : ex z st x = {z} & z in s}, L);
         y in cL;
-        hence y in (Fs' --> cL).i by A8,FUNCOP_1:13;
+        hence y in (Fs' --> cL).i by A6,FUNCOP_1:13;
         thus thesis;
       end;
       consider FD being ManySortedFunction of K, (Fs' --> cL) such that
-A9:   for i being set st i in Fs' holds
-      ex g being Function of K.i, (Fs' --> cL).i st g = FD.i &
-      for s being set st s in K.i holds P[g.s, s, i] from MSSUBFAM:sch 1(A7);
-A10:  dom FD = Fs' by PARTFUN1:def 4;
-      deffunc FDi(Element of Fs')
-      = {"/\"({f.(uparrow x) : ex z st x = {z} & z in Y
-      }, L) where Y is Subset of X : Y in $1};
+A7:   for i being set st i in Fs' holds ex g being Function of K.i, (
+Fs' --> cL).i st g = FD.i & for s being set st s in K.i holds P[g.s, s, i] from
+      MSSUBFAM:sch 1(A5);
       defpred rFD[Element of Fs'] means rng (FD.$1) = FDi($1);
-A11:  for s being Element of Fs' holds rFD[s]
+A8:   for s being Element of Fs' holds rFD[s]
       proof
         let s be Element of Fs';
         now
           let t be set;
-          hereby
-            assume t in rng (FD.s);
-            then consider u being set such that
-A12:        u in dom (FD.s) and
-A13:        t = (FD.s).u by FUNCT_1:def 5;
-A14:        dom (FD.s) = K.s by FUNCT_2:def 1;
-            consider g being Function of K.s, (Fs' --> cL).s such that
-A15:        g = FD.s and
-A16:        for u being set st u in K.s holds P[g.u, u, s] by A9;
-A17:        g.u = "/\"({f.(uparrow x) : ex z st x = {z} & z in u}, L)
-            by A12,A16;
-A18:        K.s = s by FUNCT_1:35;
-            s in cIP;
-            then consider FF being Filter of BP such that
-A19:        s = FF by A1;
-            reconsider u as Subset of X by A3,A12,A14,A18,A19,YELLOW_1:4;
-            u in s by A12,A14,FUNCT_1:35;
-            hence t in FDi(s) by A13,A15,A17;
-          end;
-          assume t in FDi(s);
-          then consider Y being Subset of X such that
-A20:      t = "/\"({f.(uparrow x) : ex z st x = {z} & z in Y}, L) and
-A21:      Y in s;
-A22:      dom (FD.s) = K.s by FUNCT_2:def 1;
-A23:      K.s = s by FUNCT_1:35;
-A24:      Y in dom (FD.s) by A21,A22,FUNCT_1:35;
           consider g being Function of K.s, (Fs' --> cL).s such that
-A25:      g = FD.s and
-A26:      for u being set st u in K.s holds P[g.u, u, s] by A9;
-          g.Y = "/\"({f.(uparrow x) : ex z st x = {z} & z in Y}, L)
-          by A21,A23,A26;
-          hence t in rng (FD.s) by A20,A24,A25,FUNCT_1:def 5;
+A9:       g = FD.s and
+A10:      for u being set st u in K.s holds P[g.u, u, s] by A7;
+          hereby
+            assume
+            t in rng (FD.s);
+            then consider u being set such that
+A11:        u in dom (FD.s) and
+A12:        t = (FD.s).u by FUNCT_1:def 5;
+            consider g being Function of K.s, (Fs' --> cL).s such that
+A13:        g = FD.s and
+A14:        for u being set st u in K.s holds P[g.u, u, s] by A7;
+A15:        dom (FD.s) = K.s by FUNCT_2:def 1;
+A16:        g.u = "/\"({f.(uparrow x) : ex z st x = {z} & z in u}, L) by
+            A11,A14;
+            s in cIP;
+            then K.s = s & ex FF being Filter of BP st s = FF by A1,
+            FUNCT_1:35;
+            then reconsider u as Subset of X by A3,A11,A15,YELLOW_1:4;
+            u in s by A11,A15,FUNCT_1:35;
+            hence t in FDi(s) by A12,A13,A16;
+          end;
+          assume
+          t in FDi(s);
+          then consider Y being Subset of X such that
+A17:      t = "/\"({f.(uparrow x) : ex z st x = {z} & z in Y}, L) and
+A18:      Y in s;
+          dom (FD.s) = K.s by FUNCT_2:def 1;
+          then
+A19:      Y in dom (FD.s) by A18,FUNCT_1:35;
+          K.s = s by FUNCT_1:35;
+          then g.Y = "/\"({f.(uparrow x) : ex z st x = {z} & z in Y}, L) by
+          A18,A10;
+          hence t in rng (FD.s) by A17,A19,A9,FUNCT_1:def 5;
         end;
         hence thesis by TARSKI:2;
       end;
+      meet Fs' is Filter of BoolePoset X by WAYBEL16:9;
+      then meet Fs' in Filt BP;
+      then reconsider mFs = meet Fs' as Element of cIP by A1;
+      set smFs = {"/\"({f.(uparrow x) : ex z st x = {z} & z in Y }, L) where Y
+      is Subset of X : Y in mFs};
+A20:  dom FD = Fs' by PARTFUN1:def 4;
       reconsider FD as DoubleIndexedSet of K, L;
       now
         let r be set;
         hereby
-          assume r in F.:Fs;
+          assume
+          r in F.:Fs;
           then consider s being set such that
-A27:      s in cIP and
-A28:      s in Fs and
-A29:      F.s = r by FUNCT_2:115;
-          reconsider s' = s as Element of cIP by A27;
-A30:      F.s' = "\/"({"/\"({f.(uparrow x) : ex z st x = {z} & z in Y
-          }, L) where Y is Subset of X : Y in s' }, L) by Def3;
-          reconsider s as Element of Fs' by A28;
-          rFD[s] by A11;
-          then r = Sup (FD.s) by A29,A30,YELLOW_2:def 5;
+A21:      s in cIP and
+A22:      s in Fs and
+A23:      F.s = r by FUNCT_2:115;
+          reconsider s' = s as Element of cIP by A21;
+          reconsider s as Element of Fs' by A22;
+A24:      rFD[s] by A8;
+          F.s' = "\/"({"/\"({f.(uparrow x) : ex z st x = {z} & z in Y },
+          L) where Y is Subset of X : Y in s' }, L) by Def3;
+          then r = Sup (FD.s) by A23,A24,YELLOW_2:def 5;
           hence r in rng Sups FD by WAYBEL_5:14;
         end;
-        assume r in rng Sups FD;
+        assume
+        r in rng Sups FD;
         then consider s being Element of Fs' such that
-A31:    r = Sup (FD.s) by WAYBEL_5:14;
-        rFD[s] by A11;
+A25:    r = Sup (FD.s) by WAYBEL_5:14;
+        rFD[s] by A8;
         then F.s = "\/"(rng (FD.s), L) by Def3
           .= Sup (FD.s) by YELLOW_2:def 5;
-        hence r in F.:Fs by A31,FUNCT_2:43;
+        hence r in F.:Fs by A25,FUNCT_2:43;
       end;
       then F.:Fs = rng Sups FD by TARSKI:2;
       then
-A32:  inf (F.:Fs) = Inf Sups FD by YELLOW_2:def 6;
-      for j being Element of Fs' holds rng(FD.j) is directed
-      proof
-        let j be Element of Fs';
-        let k, m be Element of L;
-        assume
-A33:    k in rng(FD.j) & m in rng(FD.j);
-        then consider kd being set such that
-A34:    kd in dom (FD.j) and
-A35:    FD.j.kd = k by FUNCT_1:def 5;
-        consider md being set such that
-A36:    md in dom (FD.j) and
-A37:    FD.j.md = m by A33,FUNCT_1:def 5;
-A38:    dom (FD.j) = K.j by FUNCT_2:def 1;
-A39:    K.j = j by FUNCT_1:35;
-        j in cIP;
-        then consider FF being Filter of BP such that
-A40:    j = FF by A1;
-        reconsider kd as Element of BP by A34,A38,A39,A40;
-        reconsider md as Element of BP by A36,A38,A39,A40;
-        consider nd being Element of BP such that
-A41:    nd in FF & nd <= kd & nd <= md by A34,A36,A39,A40,WAYBEL_0:def 2;
-A42:    rng(FD.j) = FDi(j) by A11;
-        set n = FD.j.nd;
-        n in rng(FD.j) by A38,A39,A40,A41,FUNCT_1:def 5;
-        then consider Y being Subset of X such that
-A43:    n = "/\"({f.(uparrow x) : ex z st x = {z} & z in Y}, L) and
-        Y in j by A42;
-        reconsider n as Element of L by A43;
-        take n;
-        thus n in rng(FD.j) by A38,A39,A40,A41,FUNCT_1:def 5;
-        consider g being Function of K.j, (Fs' --> cL).j such that
-A44:    g = FD.j and
-A45:    for u being set st u in K.j holds P[g.u, u, j] by A9;
-        set kds = {f.(uparrow x) : ex z st x = {z} & z in kd};
-A46:    g.kd = "/\"(kds, L) by A34,A45;
-        set nds = {f.(uparrow x) : ex z st x = {z} & z in nd};
-A47:    g.nd = "/\"(nds, L) by A39,A40,A41,A45;
-A48:    nd c= kd by A41,YELLOW_1:2;
-A49:    ex_inf_of kds, L by YELLOW_0:17;
-A50:    ex_inf_of nds, L by YELLOW_0:17;
-        nds c= kds
-        proof
-          let w be set;
-          assume w in nds;
-          then consider x such that
-A51:      w = f.(uparrow x) and
-A52:      ex z st x = {z} & z in nd;
-          consider z such that
-A53:      x = {z} & z in nd by A52;
-          thus thesis by A48,A51,A53;
-        end;
-        hence k <= n by A35,A44,A46,A47,A49,A50,YELLOW_0:35;
-        set mds = {f.(uparrow x) : ex z st x = {z} & z in md};
-A54:    g.md = "/\"(mds, L) by A36,A45;
-A55:    nd c= md by A41,YELLOW_1:2;
-A56:    ex_inf_of mds, L by YELLOW_0:17;
-        nds c= mds
-        proof
-          let w be set;
-          assume w in nds;
-          then consider x such that
-A57:      w = f.(uparrow x) and
-A58:      ex z st x = {z} & z in nd;
-          consider z such that
-A59:      x = {z} & z in nd by A58;
-          thus thesis by A55,A57,A59;
-        end;
-        hence m <= n by A37,A44,A47,A50,A54,A56,YELLOW_0:35;
-      end;
-      then
-A60:  Inf Sups FD = Sup Infs Frege FD by WAYBEL_5:19
-        .= "\/"(rng Infs Frege FD, L) by YELLOW_2:def 5;
-      meet Fs' is Filter of BoolePoset X by WAYBEL16:9;
-      then meet Fs' in Filt BP;
-      then reconsider mFs = meet Fs' as Element of cIP by A1;
-A61:  inf Fs' = meet Fs' by WAYBEL16:10;
-      set smFs = {"/\"({f.(uparrow x) : ex z st x = {z} & z in Y
-      }, L) where Y is Subset of X : Y in mFs};
-A62:  F.(meet Fs') = "\/"(smFs, L) by Def3;
-      now
-        let r be set;
+A26:  inf (F.:Fs) = Inf Sups FD by YELLOW_2:def 6;
+A27:  now
         reconsider pdFD = product doms FD as non empty functional set;
+        let r be set;
         reconsider dFFD = product doms FD --> Fs' as ManySortedSet of pdFD;
         reconsider FFD = Frege FD as DoubleIndexedSet of dFFD, L;
-A63:    dom FFD = pdFD by PARTFUN1:def 4;
-        deffunc rFFDs(Element of pdFD) =
-        {"/\"({f.(uparrow x) : ex z st x = {z} & z in $1.u}, L)
-        where u is Element of Fs' : u in dom (FFD.$1) };
-A64:    now
+        deffunc rFFDs(Element of pdFD) = {"/\"({f.(uparrow x) : ex z st x = {z
+        } & z in $1.u}, L) where u is Element of Fs' : u in dom (FFD.$1) };
+A28:    dom FFD = pdFD by PARTFUN1:def 4;
+A29:    now
           let s be Element of pdFD;
-A65:      dom FD = dom (FFD.s) by A63,WAYBEL_5:8;
+A30:      dom FD = dom (FFD.s) by A28,WAYBEL_5:8;
           now
             let t be set;
             hereby
-              assume t in rng (FFD.s);
+              assume
+              t in rng (FFD.s);
               then consider u being set such that
-A66:          u in dom (FFD.s) and
-A67:          t = FFD.s.u by FUNCT_1:def 5;
-A68:          FFD.s.u = (FD.u).(s.u) by A63,A65,A66,WAYBEL_5:9;
-              reconsider u as Element of Fs' by A65,A66,PARTFUN1:def 4
-;
+A31:          u in dom (FFD.s) and
+A32:          t = FFD.s.u by FUNCT_1:def 5;
+A33:          FFD.s.u = (FD.u).(s.u) by A28,A30,A31,WAYBEL_5:9;
+              reconsider u as Element of Fs' by A30,A31,PARTFUN1:def 4;
               consider g being Function of K.u, (Fs' --> cL).u such that
-A69:          g = FD.u and
-A70:          for v being set st v in K.u holds P[g.v, v, u] by A9;
+A34:          g = FD.u and
+A35:          for v being set st v in K.u holds P[g.v, v, u] by A7;
               dom (FD.u) = K.u by FUNCT_2:def 1;
-              then s.u in K.u by A10,A63,WAYBEL_5:9;
-
-then g.(s.u) = "/\"({f.(uparrow x) : ex z st x = {z} & z in s.u}, L) by A70;
-              hence t in rFFDs(s) by A66,A67,A68,A69;
+              then
+              g.(s.u) = "/\"({f.(uparrow x) : ex z st x = {z} & z in s.u}
+              , L) by A20,A28,A35,WAYBEL_5:9;
+              hence t in rFFDs(s) by A31,A32,A33,A34;
             end;
-            assume t in rFFDs(s);
+            assume
+            t in rFFDs(s);
             then consider u being Element of Fs' such that
-A71:        t = "/\"({f.(uparrow x) : ex z st x = {z} & z in s.u}, L) and
-A72:        u in dom (FFD.s);
+A36:        t = "/\"({f.(uparrow x) : ex z st x = {z} & z in s.u}, L)
+            & u in dom (FFD.s);
             reconsider u as Element of Fs';
             consider g being Function of K.u, (Fs' --> cL).u such that
-A73:        g = FD.u and
-A74:        for v being set st v in K.u holds P[g.v, v, u] by A9;
+A37:        g = FD.u and
+A38:        for v being set st v in K.u holds P[g.v, v, u] by A7;
             dom (FD.u) = K.u by FUNCT_2:def 1;
-            then s.u in K.u by A10,A63,WAYBEL_5:9;
-
-then g.(s.u) = "/\"({f.(uparrow x) : ex z st x = {z} & z in s.u}, L) by A74;
-            hence t in rng(FFD.s) by A63,A65,A71,A72,A73,WAYBEL_5:9;
+            then g.(s.u) = "/\"({f.(uparrow x) : ex z st x = {z} & z in s.u},
+            L) by A20,A28,A38,WAYBEL_5:9;
+            hence t in rng(FFD.s) by A28,A30,A36,A37,WAYBEL_5:9;
           end;
           hence rng (FFD.s) = rFFDs(s) by TARSKI:2;
-        end; :: rFFDs
+        end;
         hereby
-          assume r in rng Infs Frege FD;
+          assume
+          r in rng Infs Frege FD;
           then consider s being Element of pdFD such that
-A75:      r = Inf (FFD.s) by WAYBEL_5:14;
-A76:      dom FD = dom (FFD.s) by A63,WAYBEL_5:8;
-A77:      dom s = dom FD by A63,WAYBEL_5:8;
-          union rng s c= X
+A39:      r = Inf (FFD.s) by WAYBEL_5:14;
+          set idFFDs = {{f.(uparrow x) : ex z st x = {z} & z in s.u} where u
+          is Element of Fs' : u in dom (FFD.s)};
+A40:      idFFDs c= bool the carrier of L
           proof
             let t be set;
-            assume t in union rng s;
-            then consider te being set such that
-A78:        t in te & te in rng s by TARSKI:def 4;
-            consider u being set such that
-A79:        u in dom s & te = s.u by A78,FUNCT_1:def 5;
-            FD.u is Function of K.u, cL by A10,A77,A79,WAYBEL_5:6;
-            then dom (FD.u) = K.u by FUNCT_2:def 1
-              .= u by A10,A77,A79,FUNCT_1:34;
-            then
-A80:        te in u by A63,A77,A79,WAYBEL_5:9;
-            u in cIP by A10,A77,A79;
-            then consider FF being Filter of BP such that
-A81:        u = FF by A1;
-            thus thesis by A4,A78,A80,A81;
-          end;
-          then reconsider Y = union rng s as Subset of X;
-          set Ys = {f.(uparrow x) : ex z st x = {z} & z in Y};
-          now
-            let Z be set;
             assume
-A82:        Z in Fs';
-            then Z in cIP;
-            then consider FF being Filter of BP such that
-A83:        Z = FF by A1;
-            s.Z in rng s by A10,A77,A82,FUNCT_1:def 5;
-            then
-A84:        s.Z c= Y by ZFMISC_1:92;
-A85:        s.Z in dom (FD.Z) by A10,A63,A82,WAYBEL_5:9;
-            FD.Z is Function of K.Z, cL by A82,WAYBEL_5:6;
-            then
-A86:        dom (FD.Z) = K.Z by FUNCT_2:def 1
-              .= Z by A82,FUNCT_1:34;
-            reconsider sZ = s.Z as Element of BP by A2,A3,A84,XBOOLE_1:1;
-            reconsider Y' = Y as Element of BP by A3,YELLOW_1:4;
-            sZ <= Y' by A84,YELLOW_1:2;
-            hence Y in Z by A83,A85,A86,WAYBEL_0:def 20;
-          end;
-          then Y in mFs by SETFAM_1:def 1;
-          then
-A87:      "/\"(Ys, L) in smFs;
-          set idFFDs = {{f.(uparrow x) : ex z st x = {z} & z in s.u}
-          where u is Element of Fs' : u in dom (FFD.s)};
-A88:      idFFDs c= bool the carrier of L
-          proof
-            let t be set;
-            assume t in idFFDs;
+            t in idFFDs;
             then consider u being Element of Fs' such that
-A89:        t = {f.(uparrow x) : ex z st x = {z} & z in s.u} and
+A41:        t = {f.(uparrow x) : ex z st x = {z} & z in s.u} and
             u in dom (FFD.s);
             t c= cL
             proof
               let v be set;
-              assume v in t;
+              assume
+              v in t;
               then consider x such that
-A90:          v = f.(uparrow x) and
-A91:          ex z st x = {z} & z in s.u by A89;
-              consider z such that
-A92:          x = {z} and z in s.u by A91;
-              uparrow x in FUF by A92;
-              hence thesis by A90,FUNCT_2:7;
+A42:          v = f.(uparrow x) and
+A43:          ex z st x = {z} & z in s.u by A41;
+              uparrow x in FUF by A43;
+              hence thesis by A42,FUNCT_2:7;
             end;
             hence thesis;
           end;
           now
             let t be set;
             hereby
-              assume t in rFFDs(s);
+              assume
+              t in rFFDs(s);
               then consider u being Element of Fs' such that
-A93:          t = "/\"({f.(uparrow x) : ex z st x = {z} & z in s.u}, L) and
-A94:          u in dom (FFD.s);
+A44:          t = "/\"({f.(uparrow x) : ex z st x = {z} & z in s.u},
+              L) and
+A45:          u in dom (FFD.s);
               {f.(uparrow x) : ex z st x = {z} & z in s.u} c= cL
               proof
                 let v be set;
-                assume v in {f.(uparrow x) : ex z st x = {z} & z in s.u};
+                assume
+                v in {f.(uparrow x) : ex z st x = {z} & z in s.u};
                 then consider x such that
-A95:            v = f.(uparrow x) and
-A96:            ex z st x = {z} & z in s.u;
-                consider z such that
-A97:            x = {z} and z in s.u by A96;
-                uparrow x in FUF by A97;
-                hence thesis by A95,FUNCT_2:7;
+A46:            v = f.(uparrow x) and
+A47:            ex z st x = {z} & z in s.u;
+                uparrow x in FUF by A47;
+                hence thesis by A46,FUNCT_2:7;
               end;
-              then reconsider Y1 ={f.(uparrow x) : ex z st x = {z} & z in s.u}
-              as Subset of L;
-              Y1 in idFFDs by A94;
-
-hence t in {inf YY where YY is Subset of L : YY in idFFDs} by A93;
+              then reconsider
+              Y1 ={f.(uparrow x) : ex z st x = {z} & z in s.u} as
+              Subset of L;
+              Y1 in idFFDs by A45;
+              hence t in {inf YY where YY is Subset of L : YY in idFFDs} by
+              A44;
             end;
-            assume t in {inf YY where YY is Subset of L : YY in idFFDs};
+            assume
+            t in {inf YY where YY is Subset of L : YY in idFFDs};
             then consider YY being Subset of L such that
-A98:        t = inf YY and
-A99:        YY in idFFDs;
-            consider u1 being Element of Fs' such that
-A100:       YY = {f.(uparrow x) : ex z st x = {z} & z in s.u1} and
-A101:       u1 in dom (FFD.s) by A99;
-            thus t in rFFDs(s) by A98,A100,A101;
+A48:        t = inf YY and
+A49:        YY in idFFDs;
+            ex u1 being Element of Fs' st YY = {f.(uparrow x) : ex z st x
+            = {z} & z in s.u1} & u1 in dom (FFD.s) by A49;
+            hence t in rFFDs(s) by A48;
           end;
           then
-A102:     rFFDs(s) = {inf YY where YY is Subset of L : YY in idFFDs}
-          by TARSKI:2;
-A103:     "/\"(rng (FFD.s), L) = "/\"(rFFDs(s), L) by A64
-            .= "/\"(union idFFDs, L) by A88,A102,Lm1;
+A50:      rFFDs(s) = {inf YY where YY is Subset of L : YY in idFFDs} by
+          TARSKI:2;
+A51:      dom s = dom FD by A28,WAYBEL_5:8;
+          union rng s c= X
+          proof
+            let t be set;
+            assume
+            t in union rng s;
+            then consider te being set such that
+A52:        t in te and
+A53:        te in rng s by TARSKI:def 4;
+            consider u being set such that
+A54:        u in dom s and
+A55:        te = s.u by A53,FUNCT_1:def 5;
+            FD.u is Function of K.u, cL by A20,A51,A54,WAYBEL_5:6;
+            then dom (FD.u) = K.u by FUNCT_2:def 1
+              .= u by A20,A51,A54,FUNCT_1:34;
+            then
+A56:        te in u by A28,A51,A54,A55,WAYBEL_5:9;
+            u in cIP by A20,A51,A54;
+            then ex FF being Filter of BP st u = FF by A1;
+            hence thesis by A4,A52,A56;
+          end;
+          then reconsider Y = union rng s as Subset of X;
+          set Ys = {f.(uparrow x) : ex z st x = {z} & z in Y};
+A57:      dom FD = dom (FFD.s) by A28,WAYBEL_5:8;
           now
             let t be set;
             hereby
-              assume t in union idFFDs;
+              assume
+              t in union idFFDs;
               then consider te being set such that
-A104:         t in te and
-A105:         te in idFFDs by TARSKI:def 4;
+A58:          t in te and
+A59:          te in idFFDs by TARSKI:def 4;
               consider u being Element of Fs' such that
-A106:         te = {f.(uparrow x) : ex z st x = {z} & z in s.u} and
-A107:         u in dom (FFD.s) by A105;
+A60:          te = {f.(uparrow x) : ex z st x = {z} & z in s.u} and
+A61:          u in dom (FFD.s) by A59;
               consider x such that
-A108:         t = f.(uparrow x) and
-A109:         ex z st x = {z} & z in s.u by A104,A106;
+A62:          t = f.(uparrow x) and
+A63:          ex z st x = {z} & z in s.u by A58,A60;
               consider z such that
-A110:         x = {z} & z in s.u by A109;
-              s.u in rng s by A76,A77,A107,FUNCT_1:def 5;
-              then z in Y by A110,TARSKI:def 4;
-              hence t in Ys by A108,A110;
+A64:          x = {z} and
+A65:          z in s.u by A63;
+              s.u in rng s by A57,A51,A61,FUNCT_1:def 5;
+              then z in Y by A65,TARSKI:def 4;
+              hence t in Ys by A62,A64;
             end;
-            assume t in Ys;
+            assume
+            t in Ys;
             then consider x such that
-A111:       t = f.(uparrow x) and
-A112:       ex z st x = {z} & z in Y;
+A66:        t = f.(uparrow x) and
+A67:        ex z st x = {z} & z in Y;
             consider z such that
-A113:       x = {z} & z in Y by A112;
+A68:        x = {z} and
+A69:        z in Y by A67;
             consider ze being set such that
-A114:       z in ze & ze in rng s by A113,TARSKI:def 4;
+A70:        z in ze and
+A71:        ze in rng s by A69,TARSKI:def 4;
             consider u being set such that
-A115:       u in dom s & ze = s.u by A114,FUNCT_1:def 5;
-            reconsider u as Element of Fs' by A77,A115,PARTFUN1:def 4
-;
-A116:       t in {f.(uparrow x1) where x1 is Element of BP :
-            ex z st x1 = {z} & z in s.u} by A111,A113,A114,A115;
-            {f.(uparrow x1) where x1 is Element of BP :
-            ex z st x1 = {z} & z in s.u} in idFFDs by A76,A77,A115;
-            hence t in union idFFDs by A116,TARSKI:def 4;
+A72:        u in dom s and
+A73:        ze = s.u by A71,FUNCT_1:def 5;
+            reconsider u as Element of Fs' by A51,A72,PARTFUN1:def 4;
+A74:        {f.(uparrow x1) where x1 is Element of BP : ex z st x1 = {z}
+            & z in s.u} in idFFDs by A57,A51,A72;
+            t in {f.(uparrow x1) where x1 is Element of BP : ex z st x1
+            = {z} & z in s.u} by A66,A68,A70,A73;
+            hence t in union idFFDs by A74,TARSKI:def 4;
           end;
-          then union idFFDs = Ys by TARSKI:2;
-          hence r in smFs by A75,A87,A103,YELLOW_2:def 6;
+          then
+A75:      union idFFDs = Ys by TARSKI:2;
+          now
+            reconsider Y' = Y as Element of BP by A3,YELLOW_1:4;
+            let Z be set;
+            assume
+A76:        Z in Fs';
+            then FD.Z is Function of K.Z, cL by WAYBEL_5:6;
+            then
+A77:        dom (FD.Z) = K.Z by FUNCT_2:def 1
+              .= Z by A76,FUNCT_1:34;
+            s.Z in rng s by A20,A51,A76,FUNCT_1:def 5;
+            then
+A78:        s.Z c= Y by ZFMISC_1:92;
+            then reconsider sZ = s.Z as Element of BP by A2,A3,XBOOLE_1:1;
+A79:        sZ <= Y' by A78,YELLOW_1:2;
+            Z in cIP by A76;
+            then
+A80:        ex FF being Filter of BP st Z = FF by A1;
+            s.Z in dom (FD.Z) by A20,A28,A76,WAYBEL_5:9;
+            hence Y in Z by A80,A77,A79,WAYBEL_0:def 20;
+          end;
+          then Y in mFs by SETFAM_1:def 1;
+          then
+A81:      "/\"(Ys, L) in smFs;
+          "/\"(rng (FFD.s), L) = "/\"(rFFDs(s), L) by A29
+            .= "/\"(union idFFDs, L) by A40,A50,Lm1;
+          hence r in smFs by A39,A81,A75,YELLOW_2:def 6;
         end;
-        assume r in smFs;
+        assume
+        r in smFs;
         then consider Y being Subset of X such that
-A117:   r = "/\"({f.(uparrow x) : ex z st x = {z} & z in Y}, L) and
-A118:   Y in mFs;
+A82:    r = "/\"({f.(uparrow x) : ex z st x = {z} & z in Y}, L) and
+A83:    Y in mFs;
+A84:    "/\"({r}, L) = r by A82,YELLOW_0:39;
         set s = Fs' --> Y;
-        set s' = s;
-A119:   dom doms FD = dom FD by FUNCT_6:89
-          .= dom s by A10,FUNCOP_1:19;
-        now
+A85:    dom doms FD = dom FD by FUNCT_6:89
+          .= dom s by A20,FUNCOP_1:19;
+A86:    now
           let w be set;
-          assume w in dom doms FD;
+          assume
+A87:      w in dom doms FD;
+          then FD.w is Function of K.w, (Fs' --> cL).w by A85,PBOOLE:
+          def 18;
           then
-A120:     w in Fs' by A119;
-          then
-A121:     (doms FD).w = dom (FD.w) by A10,FUNCT_6:31;
-A122:     FD.w is Function of K.w, (Fs' --> cL).w by A120,PBOOLE:def 18;
-          (Fs' --> cL).w = cL by A120,FUNCOP_1:13;
-          then
-A123:     dom (FD.w) = K.w by A122,FUNCT_2:def 1
-            .= w by A120,FUNCT_1:35;
-          s.w = Y by A120,FUNCOP_1:13;
-          hence s.w in (doms FD).w by A118,A120,A121,A123,SETFAM_1:def 1;
+A88:      dom (FD.w) = K.w by A85,A87,FUNCT_2:def 1
+            .= w by A85,A87,FUNCT_1:35;
+          (doms FD).w = dom (FD.w) & s.w = Y by A20,A85,A87,FUNCOP_1:
+          13,FUNCT_6:31;
+          hence s.w in (doms FD).w by A83,A85,A87,A88,SETFAM_1:def 1;
         end;
-        then reconsider s as Element of pdFD by A119,CARD_3:18;
-A124:   Inf (FFD.s) = "/\"(rng (FFD.s), L) by YELLOW_2:def 6;
-A125:   rng (FFD.s) = rFFDs(s) by A64;
+        set s' = s;
+        reconsider s as Element of pdFD by A85,A86,CARD_3:18;
         now
+          consider u being Element of Fs';
           let t be set;
+A89:      dom s' = Fs' & s.u = Y by FUNCOP_1:13,19;
           hereby
-            assume t in rFFDs(s);
+            assume
+            t in rFFDs(s);
             then consider u being Element of Fs' such that
-A126:       t = "/\"({f.(uparrow x) : ex z st x = {z} & z in s.u}, L) and
+A90:        t = "/\"({f.(uparrow x) : ex z st x = {z} & z in s.u}, L
+            ) and
             u in dom (FFD.s);
             s.u = Y by FUNCOP_1:13;
-            hence t in {r} by A117,A126,TARSKI:def 1;
+            hence t in {r} by A82,A90,TARSKI:def 1;
           end;
-          assume t in {r};
+          assume
+          t in {r};
           then
-A127:     t = r by TARSKI:def 1;
-          consider u being Element of Fs';
-A128:     dom FD = dom (FFD.s) by A63,WAYBEL_5:8;
-A129:     dom s = dom FD by A63,WAYBEL_5:8;
-A130:     s' = s & dom s' = Fs' by FUNCOP_1:19;
-          s.u = Y by FUNCOP_1:13;
-          hence t in rFFDs(s) by A117,A127,A128,A129,A130;
+A91:      t = r by TARSKI:def 1;
+          dom FD = dom (FFD.s) & dom s = dom FD by A28,WAYBEL_5:8;
+          hence t in rFFDs(s) by A82,A91,A89;
         end;
         then
-A131:   {"/\"({f.(uparrow x) : ex z st x = {z} & z in s.u}, L)
-        where u is Element of Fs' : u in dom (FFD.s) } = {r} by TARSKI:2;
-        "/\"({r}, L) = r by A117,YELLOW_0:39;
-        hence r in rng Infs Frege FD by A124,A125,A131,WAYBEL_5:14;
+A92:    {"/\"({f.(uparrow x) : ex z st x = {z} & z in s.u}, L) where u
+        is Element of Fs' : u in dom (FFD.s) } = {r} by TARSKI:2;
+        Inf (FFD.s) = "/\"(rng (FFD.s), L) & rng (FFD.s) = rFFDs(s) by
+        A29, YELLOW_2:def 6;
+        hence r in rng Infs Frege FD by A92,A84,WAYBEL_5:14;
       end;
-      hence thesis by A32,A60,A61,A62,TARSKI:2;
+      for j being Element of Fs' holds rng(FD.j) is directed
+      proof
+        let j be Element of Fs';
+        let k, m be Element of L;
+        assume that
+A93:    k in rng(FD.j) and
+A94:    m in rng(FD.j);
+        consider kd being set such that
+A95:    kd in dom (FD.j) and
+A96:    FD.j.kd = k by A93,FUNCT_1:def 5;
+        consider md being set such that
+A97:    md in dom (FD.j) and
+A98:    FD.j.md = m by A94,FUNCT_1:def 5;
+A99:    K.j = j by FUNCT_1:35;
+        j in cIP;
+        then consider FF being Filter of BP such that
+A100:   j = FF by A1;
+A101:   dom (FD.j) = K.j by FUNCT_2:def 1;
+        then reconsider kd as Element of BP by A95,A99,A100;
+        reconsider md as Element of BP by A97,A101,A99,A100;
+        consider nd being Element of BP such that
+A102:   nd in FF and
+A103:   nd <= kd and
+A104:   nd <= md by A95,A97,A99,A100,WAYBEL_0:def 2;
+        set n = FD.j.nd;
+A105:   n in rng(FD.j) by A101,A99,A100,A102,FUNCT_1:def 5;
+        consider g being Function of K.j, (Fs' --> cL).j such that
+A106:   g = FD.j and
+A107:   for u being set st u in K.j holds P[g.u, u, j] by A7;
+        set nds = {f.(uparrow x) : ex z st x = {z} & z in nd};
+A108:   g.nd = "/\"(nds, L) by A99,A100,A102,A107;
+        reconsider n as Element of L by A105;
+        take n;
+        thus n in rng(FD.j) by A101,A99,A100,A102,FUNCT_1:def 5;
+A109:   ex_inf_of nds, L by YELLOW_0:17;
+        set mds = {f.(uparrow x) : ex z st x = {z} & z in md};
+A110:   nd c= md by A104,YELLOW_1:2;
+A111:   nds c= mds
+        proof
+          let w be set;
+          assume
+          w in nds;
+          then ex x st w = f.(uparrow x) & ex z st x = {z} & z in nd;
+          hence thesis by A110;
+        end;
+A112:   ex_inf_of mds, L by YELLOW_0:17;
+        set kds = {f.(uparrow x) : ex z st x = {z} & z in kd};
+A113:   ex_inf_of kds, L by YELLOW_0:17;
+A114:   nd c= kd by A103,YELLOW_1:2;
+A115:   nds c= kds
+        proof
+          let w be set;
+          assume
+          w in nds;
+          then ex x st w = f.(uparrow x) & ex z st x = {z} & z in nd;
+          hence thesis by A114;
+        end;
+        g.kd = "/\"(kds, L) by A95,A107;
+        hence k <= n by A96,A106,A108,A113,A109,A115,YELLOW_0:35;
+        g.md = "/\"(mds, L) by A97,A107;
+        hence m <= n by A98,A106,A108,A109,A112,A111,YELLOW_0:35;
+      end;
+      then
+A116: Inf Sups FD = Sup Infs Frege FD by WAYBEL_5:19
+        .= "\/"(rng Infs Frege FD, L) by YELLOW_2:def 5;
+      inf Fs' = meet Fs' & F.(meet Fs') = "\/"(smFs, L) by Def3,WAYBEL16:
+      10;
+      hence thesis by A26,A116,A27,TARSKI:2;
     end;
   end;
 end;
 
 theorem Th14:
-  for L being continuous complete (non empty Poset),
-  f being Function of FixedUltraFilters X, the carrier of L
-  holds f-extension_to_hom | FixedUltraFilters X = f
+  for L being continuous complete (non empty Poset), f being
+  Function of FixedUltraFilters X, the carrier of L holds f-extension_to_hom |
+  FixedUltraFilters X = f
 proof
-  let L be continuous complete (non empty Poset),
-  f be Function of FixedUltraFilters X, the carrier of L;
+  let L be continuous complete (non empty Poset), f be Function of
+  FixedUltraFilters X, the carrier of L;
   set FUF = FixedUltraFilters X;
   set BP = BoolePoset X;
   set IP = InclPoset Filt BP;
 A1: InclPoset Filt BP = RelStr(#Filt BP, RelIncl Filt BP#) by YELLOW_1:def 1;
-A2: the carrier of BP = the carrier of LattPOSet BooleLatt X by YELLOW_1:def 2
-    .= bool X by LATTICE3:def 1;
   set F = f-extension_to_hom;
+A2: the carrier of BP = the carrier of LattPOSet BooleLatt X by YELLOW_1:def
+  2
+    .= bool X by LATTICE3:def 1;
   now
 A3: dom F = the carrier of IP by FUNCT_2:def 1;
-    then
-A4: FUF c= dom F by A1,Th9;
-    thus FUF = dom (F|FUF) by A1,A3,Th9,RELAT_1:91;
+    hence FUF = dom (F|FUF) by A1,Th9,RELAT_1:91;
     thus FUF = dom f by FUNCT_2:def 1;
     let xf be set;
     assume
-A5: xf in FUF;
-    then consider xx being Element of BoolePoset X such that
-A6: xf = uparrow xx and
-A7: ex y being Element of X st xx = {y};
-A8: (F|FUF).xf = F.xf by A5,FUNCT_1:72;
-    reconsider x' = xf as Element of IP by A4,A5,FUNCT_2:def 1;
-    set Xs = {"/\"({f.(uparrow x) : ex z st x = {z} & z in Y }, L)
-    where Y is Subset of X : Y in x' };
-A9: ex_sup_of Xs, L by YELLOW_0:17;
-    reconsider FUF' = FUF as non empty Subset-Family of BoolePoset X by A5;
-    reconsider xf' = xf as Element of FUF' by A5;
+A4: xf in FUF;
+    then reconsider FUF' = FUF as non empty Subset-Family of BoolePoset X;
+A5: (F|FUF).xf = F.xf by A4,FUNCT_1:72;
+    FUF c= dom F by A1,A3,Th9;
+    then reconsider x' = xf as Element of IP by A4,FUNCT_2:def 1;
+    reconsider xf' = xf as Element of FUF' by A4;
+    set Xs = {"/\"({f.(uparrow x) : ex z st x = {z} & z in Y }, L) where Y is
+    Subset of X : Y in x' };
     reconsider f' = f as Function of FUF', the carrier of L;
     f'.xf' is Element of L;
     then reconsider fxf = f.xf' as Element of L;
-A10: Xs is_<=_than fxf
+    consider xx being Element of BoolePoset X such that
+A6: xf = uparrow xx and
+A7: ex y being Element of X st xx = {y} by A4;
+A8: Xs is_<=_than fxf
     proof
       let b be Element of L;
-      assume b in Xs;
+      assume
+      b in Xs;
       then consider Y being Subset of X such that
-A11:  b = "/\"({f.(uparrow x) : ex z st x = {z} & z in Y}, L) and
-A12:  Y in x';
+A9:   b = "/\"({f.(uparrow x) : ex z st x = {z} & z in Y}, L) and
+A10:  Y in x';
       set Xsi = {f.(uparrow x) : ex z st x = {z} & z in Y };
-      consider y being Element of X such that
-A13:  xx = {y} by A7;
-      reconsider Y as Element of BoolePoset X by A6,A12;
-      xx <= Y by A6,A12,WAYBEL_0:18;
-      then xx c= Y by YELLOW_1:2;
-      then y in Y by A13,ZFMISC_1:37;
-      then
-A14:  fxf in Xsi by A6,A13;
       ex_inf_of Xsi, L by YELLOW_0:17;
-      then Xsi is_>=_than b by A11,YELLOW_0:def 10;
-      hence b <= fxf by A14,LATTICE3:def 8;
+      then
+A11:  Xsi is_>=_than b by A9,YELLOW_0:def 10;
+      reconsider Y as Element of BoolePoset X by A6,A10;
+      consider y being Element of X such that
+A12:  xx = {y} by A7;
+      xx <= Y by A6,A10,WAYBEL_0:18;
+      then xx c= Y by YELLOW_1:2;
+      then y in Y by A12,ZFMISC_1:37;
+      then fxf in Xsi by A6,A12;
+      hence b <= fxf by A11,LATTICE3:def 8;
     end;
-    for a being Element of L st Xs is_<=_than a holds fxf <= a
+A13: for a being Element of L st Xs is_<=_than a holds fxf <= a
     proof
-      let a be Element of L such that
-A15:  Xs is_<=_than a;
       xx <= xx;
       then reconsider Y = xx as Element of x' by A6,WAYBEL_0:18;
       set Xsi = {f.(uparrow x) : ex z st x = {z} & z in Y };
       consider y being Element of X such that
-A16:  xx = {y} by A7;
+A14:  xx = {y} by A7;
       now
         let p be set;
         hereby
-          assume p in Xsi;
+          assume
+          p in Xsi;
           then consider r being Element of BoolePoset X such that
-A17:      p = f.(uparrow r) and
-A18:      ex z being Element of X st r = {z} & z in Y;
-          consider z being Element of X such that
-A19:      r = {z} & z in Y by A18;
-          xx = r by A16,A19,TARSKI:def 1;
-          hence p in {fxf} by A6,A17,TARSKI:def 1;
+A15:      p = f.(uparrow r) and
+A16:      ex z being Element of X st r = {z} & z in Y;
+          xx = r by A14,A16,TARSKI:def 1;
+          hence p in {fxf} by A6,A15,TARSKI:def 1;
         end;
-        assume p in {fxf};
+        assume
+        p in {fxf};
         then
-A20:    p = fxf by TARSKI:def 1;
-        y in Y by A16,TARSKI:def 1;
-        hence p in Xsi by A6,A16,A20;
+A17:    p = fxf by TARSKI:def 1;
+        y in Y by A14,TARSKI:def 1;
+        hence p in Xsi by A6,A14,A17;
       end;
       then Xsi = {fxf} by TARSKI:2;
-      then fxf = "/\"(Xsi, L) & Y in x' by YELLOW_0:39;
-      then fxf in Xs by A2;
-      hence thesis by A15,LATTICE3:def 9;
+      then fxf = "/\"(Xsi, L) by YELLOW_0:39;
+      then
+A18:  fxf in Xs by A2;
+      let a be Element of L;
+      assume
+      Xs is_<=_than a;
+      hence thesis by A18,LATTICE3:def 9;
     end;
-    then f.xf = "\/"(Xs, L) by A9,A10,YELLOW_0:def 9;
-    hence (F|FUF).xf = f.xf by A8,Def3;
+    ex_sup_of Xs, L by YELLOW_0:17;
+    then f.xf = "\/"(Xs, L) by A8,A13,YELLOW_0:def 9;
+    hence (F|FUF).xf = f.xf by A5,Def3;
   end;
   hence thesis by FUNCT_1:9;
 end;
 
 theorem Th15:
-  for L being continuous complete (non empty Poset),
-  f being Function of FixedUltraFilters X, the carrier of L,
-  h being CLHomomorphism of InclPoset Filt BoolePoset X, L
-  st h | FixedUltraFilters X = f holds h = f-extension_to_hom
+  for L being continuous complete (non empty Poset), f being
+  Function of FixedUltraFilters X, the carrier of L, h being CLHomomorphism of
+  InclPoset Filt BoolePoset X, L st h | FixedUltraFilters X = f holds h = f
+  -extension_to_hom
 proof
-  let L be continuous complete (non empty Poset),
-  f be Function of FixedUltraFilters X, the carrier of L,
-  h be CLHomomorphism of InclPoset Filt BoolePoset X, L;
+  let L be continuous complete (non empty Poset), f be Function of
+  FixedUltraFilters X, the carrier of L, h be CLHomomorphism of InclPoset Filt
+  BoolePoset X, L;
   assume
 A1: h | FixedUltraFilters X = f;
+  set F = f-extension_to_hom;
+  set cL = the carrier of L;
   set BP = BoolePoset X;
   set IP = InclPoset Filt BP;
   set cIP = the carrier of IP;
-  set cL = the carrier of L;
-  set F = f-extension_to_hom;
 A2: InclPoset Filt BP = RelStr(#Filt BP, RelIncl Filt BP#) by YELLOW_1:def 1;
-A3: the carrier of BP = the carrier of LattPOSet BooleLatt X by YELLOW_1:def 2
-    .= bool X by LATTICE3:def 1;
-  reconsider h' = h as Function of cIP, cL;
   reconsider F' = F as Function of cIP, cL;
+  reconsider h' = h as Function of cIP, cL;
+A3: the carrier of BP = the carrier of LattPOSet BooleLatt X by YELLOW_1:def
+  2
+    .= bool X by LATTICE3:def 1;
   now
+    set FUF = FixedUltraFilters X;
     let Fi be Element of cIP;
     Fi in Filt BP by A2;
     then consider FF being Filter of BP such that
 A4: Fi = FF;
-A5: FF = "\/"({"/\"({uparrow x : ex z st x = {z} & z in Y}, IP)
-    where Y is Subset of X : Y in FF }, IP) by Th11;
-    set Xs = {"/\"({uparrow x : ex z st x = {z} & z in Y}, IP)
-    where Y is Subset of X : Y in FF };
-A6: h is infs-preserving & h is directed-sups-preserving by WAYBEL16:def 1;
-A7: Xs c= cIP
+    set Xsf = {"/\"({f.(uparrow x) : ex z st x = {z} & z in Y}, L) where Y is
+    Subset of X : Y in FF };
+    set Xs = {"/\"({uparrow x : ex z st x = {z} & z in Y}, IP) where Y is
+    Subset of X : Y in FF };
+A5: Xs c= cIP
     proof
       let p be set;
-      assume p in Xs;
-      then consider YY being Subset of X such that
-A8:   p = "/\"({uparrow x : ex z st x = {z} & z in YY}, IP) and YY in FF;
-      thus thesis by A8;
+      assume
+      p in Xs;
+      then
+      ex YY being Subset of X st p = "/\"({uparrow x : ex z st x = {z} & z
+      in YY}, IP) & YY in FF;
+      hence thesis;
     end;
-    now consider YY being set such that
-A9:   YY in FF by XBOOLE_0:def 1;
-      "/\"({uparrow x : ex z st x = {z} & z in YY}, IP) in Xs by A3,A9;
+    now
+      consider YY being set such that
+A6:   YY in FF by XBOOLE_0:def 1;
+      "/\"({uparrow x : ex z st x = {z} & z in YY}, IP) in Xs by A3,A6;
       hence Xs is non empty;
     end;
-    then reconsider Xs as non empty Subset of IP by A7;
-    Xs is directed
+    then reconsider Xs as non empty Subset of IP by A5;
+A7: ex_sup_of Xs, IP by YELLOW_0:17;
+A8: Xs is directed
     proof
       let a, b be Element of IP;
-      assume
-A10:  a in Xs & b in Xs;
-      then consider Ya being Subset of X such that
-A11:  a = "/\"({uparrow x : ex z st x = {z} & z in Ya}, IP) and
-A12:  Ya in FF;
-      reconsider Ya' = Ya as Element of FF by A12;
+      assume that
+A9:   a in Xs and
+A10:  b in Xs;
       consider Yb being Subset of X such that
-A13:  b = "/\"({uparrow x : ex z st x = {z} & z in Yb}, IP) and
-A14:  Yb in FF by A10;
-      reconsider Yb' = Yb as Element of FF by A14;
-      set Xsa = {uparrow x : ex z st x = {z} & z in Ya};
+A11:  b = "/\"({uparrow x : ex z st x = {z} & z in Yb}, IP) and
+A12:  Yb in FF by A10;
+      reconsider Yb' = Yb as Element of FF by A12;
       set Xsb = {uparrow x : ex z st x = {z} & z in Yb};
+      consider Ya being Subset of X such that
+A13:  a = "/\"({uparrow x : ex z st x = {z} & z in Ya}, IP) and
+A14:  Ya in FF by A9;
+      reconsider Ya' = Ya as Element of FF by A14;
+      set Xsa = {uparrow x : ex z st x = {z} & z in Ya};
       per cases;
-      suppose Xsa is empty;
-        then
-A15:    "/\"(Xsa, IP) = Top IP;
+      suppose
+A15:    Xsa is empty;
         take a;
-        thus a in Xs by A10;
+        thus a in Xs by A9;
         thus a <= a;
-        thus b <= a by A11,A15,YELLOW_0:45;
+        "/\"(Xsa, IP) = Top IP by A15;
+        hence b <= a by A13,YELLOW_0:45;
       end;
-      suppose Xsb is empty;
-        then
-A16:    "/\"(Xsb, IP) = Top IP;
+      suppose
+A16:    Xsb is empty;
         take b;
         thus b in Xs by A10;
-        thus a <= b by A13,A16,YELLOW_0:45;
+        "/\"(Xsb, IP) = Top IP by A16;
+        hence a <= b by A11,YELLOW_0:45;
         thus b <= b;
       end;
       suppose
 A17:    Xsa is non empty & Xsb is non empty;
-        Xsa c= cIP
-        proof
-          let r be set;
-          assume r in Xsa;
-          then consider xz being Element of BP such that
-A18:      r = uparrow xz and ex z st xz = {z} & z in Ya;
-          thus thesis by A2,A18;
-        end;
-        then reconsider Xsa as non empty Subset of IP by A17;
-A19:    "/\"(Xsa, IP) = meet Xsa by WAYBEL16:10;
         Xsb c= cIP
         proof
           let r be set;
-          assume r in Xsb;
-          then consider xz being Element of BP such that
-A20:      r = uparrow xz and ex z st xz = {z} & z in Yb;
-          thus thesis by A2,A20;
+          assume
+          r in Xsb;
+          then
+          ex xz being Element of BP st r = uparrow xz & ex z st xz = {z} &
+          z in Yb;
+          hence thesis by A2;
         end;
         then reconsider Xsb as non empty Subset of IP by A17;
-A21:    "/\"(Xsb, IP) = meet Xsb by WAYBEL16:10;
+        Xsa c= cIP
+        proof
+          let r be set;
+          assume
+          r in Xsa;
+          then
+          ex xz being Element of BP st r = uparrow xz & ex z st xz = {z} &
+          z in Ya;
+          hence thesis by A2;
+        end;
+        then reconsider Xsa as non empty Subset of IP by A17;
+A18:    "/\"(Xsb, IP) = meet Xsb by WAYBEL16:10;
         consider Yab being Element of BP such that
-A22:    Yab in FF and
-A23:    Yab <= Ya' and
-A24:    Yab <= Yb' by WAYBEL_0:def 2;
-        reconsider Yab as Element of FF by A22;
+A19:    Yab in FF and
+A20:    Yab <= Ya' and
+A21:    Yab <= Yb' by WAYBEL_0:def 2;
+        reconsider Yab as Element of FF by A19;
         set c = "/\"({uparrow x : ex z st x = {z} & z in Yab}, IP);
         set Xsc = {uparrow x : ex z st x = {z} & z in Yab};
+A22:    "/\"(Xsa, IP) = meet Xsa by WAYBEL16:10;
         thus thesis
         proof
           per cases;
-          suppose Xsc is empty;
-            then
-A25:        "/\"(Xsc, IP) = Top IP;
+          suppose
+A23:        Xsc is empty;
             take c;
             thus c in Xs by A3;
-            thus a <= c by A25,YELLOW_0:45;
-            thus b <= c by A25,YELLOW_0:45;
+A24:        "/\"(Xsc, IP) = Top IP by A23;
+            hence a <= c by YELLOW_0:45;
+            thus b <= c by A24,YELLOW_0:45;
           end;
           suppose
-A26:        Xsc is non empty;
+A25:        Xsc is non empty;
             Xsc c= cIP
             proof
               let r be set;
-              assume r in Xsc;
-              then consider xz being Element of BP such that
-A27:          r = uparrow xz and ex z st xz = {z} & z in Yab;
-              thus thesis by A2,A27;
+              assume
+              r in Xsc;
+              then
+              ex xz being Element of BP st r = uparrow xz & ex z st xz = {
+              z} & z in Yab;
+              hence thesis by A2;
             end;
-            then reconsider Xsc as non empty Subset of IP by A26;
-A28:        "/\"(Xsc, IP) = meet Xsc by WAYBEL16:10;
+            then reconsider Xsc as non empty Subset of IP by A25;
             take c;
             thus c in Xs by A3;
+A26:        "/\"(Xsc, IP) = meet Xsc by WAYBEL16:10;
             a c= c
             proof
               let d be set;
-              assume
-A29:          d in a;
               Xsc c= Xsa
               proof
                 let r be set;
-                assume r in Xsc;
-                then consider xz being Element of BP such that
-A30:            r = uparrow xz and
-A31:            ex z st xz = {z} & z in Yab;
-                consider zz being Element of X such that
-A32:            xz = {zz} and
-A33:            zz in Yab by A31;
-                Yab c= Ya by A23,YELLOW_1:2;
-                hence thesis by A30,A32,A33;
+                assume
+                r in Xsc;
+                then
+A27:            ex xz being Element of BP st r = uparrow xz & ex z st xz =
+                {z} & z in Yab;
+                Yab c= Ya by A20,YELLOW_1:2;
+                hence thesis by A27;
               end;
-              then meet Xsa c= meet Xsc by SETFAM_1:7;
-              hence thesis by A11,A19,A28,A29;
+              then
+A28:          meet Xsa c= meet Xsc by SETFAM_1:7;
+              assume
+              d in a;
+              hence thesis by A13,A22,A26,A28;
             end;
             hence a <= c by YELLOW_1:3;
             b c= c
             proof
               let d be set;
-              assume
-A34:          d in b;
               Xsc c= Xsb
               proof
                 let r be set;
-                assume r in Xsc;
-                then consider xz being Element of BP such that
-A35:            r = uparrow xz and
-A36:            ex z st xz = {z} & z in Yab;
-                consider zz being Element of X such that
-A37:            xz = {zz} and
-A38:            zz in Yab by A36;
-                Yab c= Yb by A24,YELLOW_1:2;
-                hence thesis by A35,A37,A38;
+                assume
+                r in Xsc;
+                then
+A29:            ex xz being Element of BP st r = uparrow xz & ex z st xz =
+                {z} & z in Yab;
+                Yab c= Yb by A21,YELLOW_1:2;
+                hence thesis by A29;
               end;
-              then meet Xsb c= meet Xsc by SETFAM_1:7;
-              hence thesis by A13,A21,A28,A34;
+              then
+A30:          meet Xsb c= meet Xsc by SETFAM_1:7;
+              assume
+              d in b;
+              hence thesis by A11,A18,A26,A30;
             end;
             hence b <= c by YELLOW_1:3;
           end;
         end;
       end;
     end;
-    then
-A39: h preserves_sup_of Xs by A6,WAYBEL_0:def 37;
-A40: ex_sup_of Xs, IP by YELLOW_0:17;
-    set Xsf = {"/\"({f.(uparrow x) : ex z st x = {z} & z in Y}, L)
-    where Y is Subset of X : Y in FF };
-    set FUF = FixedUltraFilters X;
+A31: h is infs-preserving by WAYBEL16:def 1;
     now
       let s be set;
       hereby
-        assume s in h.:Xs;
-        then consider t being set such that t in the carrier of IP and
-A41:    t in Xs and
-A42:    s = h.t by FUNCT_2:115;
+        assume
+        s in h.:Xs;
+        then consider t being set such that
+        t in the carrier of IP and
+A32:    t in Xs and
+A33:    s = h.t by FUNCT_2:115;
         consider Y being Subset of X such that
-A43:    t = "/\"({uparrow x : ex z st x = {z} & z in Y}, IP) and
-A44:    Y in FF by A41;
+A34:    t = "/\"({uparrow x : ex z st x = {z} & z in Y}, IP) & Y in
+        FF by A32;
         set Xsi = {uparrow x : ex z st x = {z} & z in Y};
         Xsi c= cIP
         proof
           let r be set;
-          assume r in Xsi;
-          then consider xz being Element of BP such that
-A45:      r = uparrow xz and ex z being Element of X st xz = {z} & z in Y;
-          thus thesis by A2,A45;
+          assume
+          r in Xsi;
+          then
+          ex xz being Element of BP st r = uparrow xz & ex z being Element
+          of X st xz = {z} & z in Y;
+          hence thesis by A2;
         end;
         then reconsider Xsi as Subset of IP;
-A46:    h preserves_inf_of Xsi by A6,WAYBEL_0:def 32;
-        ex_inf_of Xsi, IP by YELLOW_0:17;
-        then
-A47:    inf (h.:Xsi) = h.inf Xsi by A46,WAYBEL_0:def 30;
         set Xsif = {f.(uparrow x) : ex z st x = {z} & z in Y};
         now
           let u be set;
           hereby
-            assume u in h.:Xsi;
-            then consider v being set such that v in the carrier of IP and
-A48:        v in Xsi and
-A49:        u = h.v by FUNCT_2:115;
-            consider x such that
-A50:        v = uparrow x and
-A51:        ex z st x = {z} & z in Y by A48;
-            consider z such that
-A52:        x = {z} & z in Y by A51;
-            v in FUF by A50,A52;
+            assume
+            u in h.:Xsi;
+            then consider v being set such that
+            v in the carrier of IP and
+A35:        v in Xsi and
+A36:        u = h.v by FUNCT_2:115;
+A37:        ex x st v = uparrow x & ex z st x = {z} & z in Y by A35;
+            then v in FUF;
             then h.v = f.v by A1,FUNCT_1:72;
-            hence u in Xsif by A49,A50,A51;
+            hence u in Xsif by A36,A37;
           end;
-          assume u in Xsif;
+          assume
+          u in Xsif;
           then consider x such that
-A53:      u = f.(uparrow x) and
-A54:      ex z st x = {z} & z in Y;
-          consider z such that
-A55:      x = {z} & z in Y by A54;
-A56:      uparrow x in Xsi by A54;
-          uparrow x in FUF by A55;
-          then h.(uparrow x) = f.(uparrow x) by A1,FUNCT_1:72;
-          hence u in h.:Xsi by A53,A56,FUNCT_2:43;
+A38:      u = f.(uparrow x) and
+A39:      ex z st x = {z} & z in Y;
+          uparrow x in FUF by A39;
+          then
+A40:      h.(uparrow x) = f.(uparrow x) by A1,FUNCT_1:72;
+          uparrow x in Xsi by A39;
+          hence u in h.:Xsi by A38,A40,FUNCT_2:43;
         end;
-        then h.:Xsi = Xsif by TARSKI:2;
-        hence s in Xsf by A42,A43,A44,A47;
+        then
+A41:    h.:Xsi = Xsif by TARSKI:2;
+        h preserves_inf_of Xsi & ex_inf_of Xsi, IP by A31,WAYBEL_0:def 32
+        ,YELLOW_0:17;
+        then inf (h.:Xsi) = h.inf Xsi by WAYBEL_0:def 30;
+        hence s in Xsf by A33,A34,A41;
       end;
-      assume s in Xsf;
+      assume
+      s in Xsf;
       then consider Y being Subset of X such that
-A57:  s = "/\"({f.(uparrow x) : ex z st x = {z} & z in Y}, L) and
-A58:  Y in FF;
+A42:  s = "/\"({f.(uparrow x) : ex z st x = {z} & z in Y}, L) and
+A43:  Y in FF;
       set Xsi = {uparrow x : ex z st x = {z} & z in Y};
       Xsi c= cIP
       proof
         let r be set;
-        assume r in Xsi;
-        then consider xz being Element of BP such that
-A59:    r = uparrow xz and ex z being Element of X st xz = {z} & z in Y;
-        thus thesis by A2,A59;
+        assume
+        r in Xsi;
+        then ex xz being Element of BP st r = uparrow xz & ex z being Element
+        of X st xz = {z} & z in Y;
+        hence thesis by A2;
       end;
       then reconsider Xsi as Subset of IP;
-A60:  h preserves_inf_of Xsi by A6,WAYBEL_0:def 32;
-      ex_inf_of Xsi, IP by YELLOW_0:17;
-      then
-A61:  inf (h.:Xsi) = h.inf Xsi by A60,WAYBEL_0:def 30;
       set Xsif = {f.(uparrow x) : ex z st x = {z} & z in Y};
-A62:  inf Xsi in Xs by A58;
+      h preserves_inf_of Xsi & ex_inf_of Xsi, IP by A31,WAYBEL_0:def 32 ,
+      YELLOW_0:17;
+      then
+A44:  inf (h.:Xsi) = h.inf Xsi by WAYBEL_0:def 30;
       now
         let u be set;
         hereby
-          assume u in h.:Xsi;
-          then consider v being set such that v in the carrier of IP and
-A63:      v in Xsi and
-A64:      u = h.v by FUNCT_2:115;
-          consider x such that
-A65:      v = uparrow x and
-A66:      ex z st x = {z} & z in Y by A63;
-          consider z such that
-A67:      x = {z} & z in Y by A66;
-          v in FUF by A65,A67;
+          assume
+          u in h.:Xsi;
+          then consider v being set such that
+          v in the carrier of IP and
+A45:      v in Xsi and
+A46:      u = h.v by FUNCT_2:115;
+A47:      ex x st v = uparrow x & ex z st x = {z} & z in Y by A45;
+          then v in FUF;
           then h.v = f.v by A1,FUNCT_1:72;
-          hence u in Xsif by A64,A65,A66;
+          hence u in Xsif by A46,A47;
         end;
-        assume u in Xsif;
+        assume
+        u in Xsif;
         then consider x such that
-A68:    u = f.(uparrow x) and
-A69:    ex z st x = {z} & z in Y;
-        consider z such that
-A70:    x = {z} & z in Y by A69;
-A71:    uparrow x in Xsi by A69;
-        uparrow x in FUF by A70;
-        then h.(uparrow x) = f.(uparrow x) by A1,FUNCT_1:72;
-        hence u in h.:Xsi by A68,A71,FUNCT_2:43;
+A48:    u = f.(uparrow x) and
+A49:    ex z st x = {z} & z in Y;
+        uparrow x in FUF by A49;
+        then
+A50:    h.(uparrow x) = f.(uparrow x) by A1,FUNCT_1:72;
+        uparrow x in Xsi by A49;
+        hence u in h.:Xsi by A48,A50,FUNCT_2:43;
       end;
-      then h.:Xsi = Xsif by TARSKI:2;
-      hence s in h.:Xs by A57,A61,A62,FUNCT_2:43;
+      then
+A51:  h.:Xsi = Xsif by TARSKI:2;
+      inf Xsi in Xs by A43;
+      hence s in h.:Xs by A42,A44,A51,FUNCT_2:43;
     end;
     then
-A72: h.:Xs = Xsf by TARSKI:2;
-    thus h'.Fi = sup (h.:Xs) by A4,A5,A39,A40,WAYBEL_0:def 31
-      .= F'.Fi by A4,A72,Def3;
+A52: h.:Xs = Xsf by TARSKI:2;
+A53: FF = "\/"({"/\"({uparrow x : ex z st x = {z} & z in Y}, IP) where Y is
+    Subset of X : Y in FF }, IP) by Th11;
+    h is directed-sups-preserving by WAYBEL16:def 1;
+    then h preserves_sup_of Xs by A8,WAYBEL_0:def 37;
+    hence h'.Fi = sup (h.:Xs) by A4,A53,A7,WAYBEL_0:def 31
+      .= F'.Fi by A4,A52,Def3;
   end;
   hence thesis by FUNCT_2:113;
 end;
 
 theorem Th16:
-  FixedUltraFilters X is_FreeGen_set_of InclPoset Filt BoolePoset X
+  FixedUltraFilters X is_FreeGen_set_of InclPoset Filt BoolePoset
+  X
 proof
   set FUF = FixedUltraFilters X;
   set IP = InclPoset Filt BoolePoset X;
   let L be continuous complete (non empty Poset);
   let f be Function of FUF, the carrier of L;
-  reconsider F = f-extension_to_hom as CLHomomorphism of IP, L
-  by WAYBEL16:def 1;
+  reconsider F = f-extension_to_hom as CLHomomorphism of IP, L by WAYBEL16:def
+  1;
   take F;
   thus F|FUF = f by Th14;
   let h' be CLHomomorphism of IP, L;
-  assume h'|FUF = f;
+  assume
+  h'|FUF = f;
   hence thesis by Th15;
 end;
 
 theorem Th17:
-  for L, M being continuous complete LATTICE, F, G being set
-  st F is_FreeGen_set_of L & G is_FreeGen_set_of M & card F = card G
-  holds L, M are_isomorphic
+  for L, M being continuous complete LATTICE, F, G being set st F
+  is_FreeGen_set_of L & G is_FreeGen_set_of M & card F = card G holds L, M
+  are_isomorphic
 proof
   let L, M be continuous complete LATTICE, Lg, Mg be set such that
 A1: Lg is_FreeGen_set_of L and
@@ -1786,18 +1848,20 @@ A5: dom f = Lg and
 A6: rng f = Mg by WELLORD2:def 4;
   set g = f";
 A7: dom g = Mg by A4,A6,FUNCT_1:55;
+  reconsider Mg as Subset of M by A2,Th7;
 A8: rng g = Lg by A4,A5,FUNCT_1:55;
   reconsider Lg as Subset of L by A1,Th7;
-  reconsider Mg as Subset of M by A2,Th7;
   Mg c= the carrier of M;
-  then reconsider f as Function of Lg, the carrier of M
-  by A5,A6,FUNCT_2:def 1,RELSET_1:11;
-  Lg c= the carrier of L;
-  then reconsider g as Function of Mg, the carrier of L
-  by A7,A8,FUNCT_2:def 1,RELSET_1:11;
+  then reconsider f as Function of Lg, the carrier of M by A5,A6,
+  FUNCT_2:def 1,
+  RELSET_1:11;
   consider F being CLHomomorphism of L, M such that
 A9: F|Lg = f and
   for h' being CLHomomorphism of L, M st h'|Lg = f holds h' = F by A1,Def1;
+  Lg c= the carrier of L;
+  then reconsider g as Function of Mg, the carrier of L by A7,A8,
+  FUNCT_2:def 1,
+  RELSET_1:11;
   consider G being CLHomomorphism of M, L such that
 A10: G|Mg = g and
   for h' being CLHomomorphism of M, L st h'|Mg = g holds h' = G by A2,Def1;
@@ -1809,33 +1873,33 @@ A10: G|Mg = g and
 A11: GF = id L by A1,Th8;
   then
 A12: F is one-to-one by FUNCT_2:29;
+  reconsider FG = F*G as CLHomomorphism of M, M by Th2;
   F is directed-sups-preserving by WAYBEL16:def 1;
   then
 A13: F is monotone by WAYBEL17:3;
-  reconsider FG = F*G as CLHomomorphism of M, M by Th2;
+  G is directed-sups-preserving by WAYBEL16:def 1;
+  then
+A14: G is monotone by WAYBEL17:3;
   FG|Mg = F*g by A10,RELAT_1:112
     .= f*g by A8,A9,FUNCT_4:2
     .= id Mg by A4,A6,FUNCT_1:61;
   then FG = id M by A2,Th8;
   then rng F = the carrier of M by FUNCT_2:29;
-  then
-A14: G = (F qua Function)" by A11,A12,FUNCT_2:36;
-  G is directed-sups-preserving by WAYBEL16:def 1;
-  then G is monotone by WAYBEL17:3;
+  then G = (F qua Function)" by A11,A12,FUNCT_2:36;
   then F is isomorphic by A12,A13,A14,WAYBEL_0:def 38;
   hence thesis by WAYBEL_1:def 8;
 end;
 
 theorem :: Theorem 4.17, p. 90-91
-  for L being continuous complete LATTICE, G being set
-  st G is_FreeGen_set_of L & card G = card X
-  holds L, InclPoset Filt BoolePoset X are_isomorphic
+  for L being continuous complete LATTICE, G being set st G
+  is_FreeGen_set_of L & card G = card X holds L, InclPoset Filt BoolePoset X
+  are_isomorphic
 proof
-  let L be continuous complete LATTICE, G be set such that
-A1: G is_FreeGen_set_of L and
-A2: card G = card X;
-A3: FixedUltraFilters X is_FreeGen_set_of InclPoset Filt BoolePoset X by Th16;
-  card X = card FixedUltraFilters X by Th10;
-  hence thesis by A1,A2,A3,Th17;
+A1: FixedUltraFilters X is_FreeGen_set_of InclPoset Filt BoolePoset X & card
+  X = card FixedUltraFilters X by Th10,Th16;
+  let L be continuous complete LATTICE, G be set;
+  assume
+  G is_FreeGen_set_of L & card G = card X;
+  hence thesis by A1,Th17;
 end;
 

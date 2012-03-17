@@ -9,42 +9,42 @@ environ
  vocabularies RELAT_1, ARYTM_1, BOOLE, FINSEQ_1, FUNCT_1, TARSKI, EQREL_1,
       T_1TOPSP, ARYTM, FUNCT_2, SEQM_3, ORDINAL2, HENMODEL, NEWTON, FINSET_1,
       CARD_1, GR_CY_1, BORSUK_1, GROUP_10, RAMSEY_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XCMPLX_0, XXREAL_0, RELAT_1,
-      RELSET_1, FUNCT_1, FINSEQ_1, NAT_1, NAT_3, NUMBERS, PARTFUN1, SEQM_3,
-      EQREL_1, ORDINAL1, FINSET_1, CARD_1, FUNCT_2, CARD_3, XREAL_0, REAL_1,
-      MEMBERED, WELLORD2, BORSUK_1, GROUP_10, POLYNOM1, NEWTON, NAT_D, SEQ_1,
-      RVSUM_1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, XCMPLX_0, XXREAL_0, RELAT_1, RELSET_1,
+      FUNCT_1, FINSEQ_1, NAT_1, NUMBERS, PARTFUN1, EQREL_1, ORDINAL1, FINSET_1,
+      CARD_1, FUNCT_2, BORSUK_1, GROUP_10, NEWTON, NAT_D;
  constructors SETFAM_1, PARTFUN1, XXREAL_0, XREAL_0, NAT_1, NAT_3, FINSEQ_1,
       EQREL_1, NUMBERS, XCMPLX_0, CARD_1, MEMBERED, WELLORD2, FUNCT_2, RELAT_1,
       FUNCT_1, BORSUK_1, CARD_3, GROUP_10, SEQM_3, POLYNOM1, NEWTON, NAT_D,
       REAL_1, BINOP_2, INT_2, FINSOP_1, SEQ_1, RVSUM_1, CARD_5, CARD_2,
       ORDINAL2;
- registrations XBOOLE_0, SUBSET_1, PARTFUN1, XXREAL_0, XREAL_0, FINSEQ_1,
-      RELAT_1, ORDINAL1, EQREL_1, NUMBERS, REAL_1, CARD_3, CARD_5, NAT_1,
-      NAT_2, NAT_3, CARD_1, MEMBERED, FINSET_1, FUNCT_1, FUNCT_2, BORSUK_1,
-      GROUP_10, SEQM_3, POLYNOM1, NEWTON;
+ registrations XBOOLE_0, SUBSET_1, XXREAL_0, XREAL_0, FINSEQ_1, RELAT_1,
+      ORDINAL1, EQREL_1, CARD_3, NAT_1, CARD_1, MEMBERED, FINSET_1, FUNCT_1,
+      FUNCT_2;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, XBOOLE_0, EQREL_1, BORSUK_1, CARD_1, WELLORD2, ZFMISC_1,
       FUNCT_1, FUNCT_2, RELAT_1, FINSET_1, INT_1, NAT_1, ORDINAL1, MEMBERED,
       GROUP_10;
  theorems TARSKI, XBOOLE_0, XBOOLE_1, EQREL_1, BORSUK_1, CARD_1, WELLORD2,
-      FUNCT_1, FUNCT_2, RELAT_1, GROUP_10, ZFMISC_1, INT_1, CARD_2, NAT_1,
-      XREAL_1, ORDINAL1, XXREAL_0, STIRL2_1, WAYBEL12, COMPL_SP, CARD_FIL,
-      FINSEQ_1, NEWTON, ENUMSET1, NAT_D, XREAL_0, CARD_3;
+      FUNCT_1, FUNCT_2, RELAT_1, GROUP_10, ZFMISC_1, CARD_2, NAT_1, XREAL_1,
+      ORDINAL1, XXREAL_0, STIRL2_1, WAYBEL12, COMPL_SP, CARD_FIL, FINSEQ_1,
+      NEWTON, ENUMSET1, NAT_D, XREAL_0, CARD_3;
  schemes NAT_1, FUNCT_1, FUNCT_2, RECDEF_2;
 
 begin :: Preliminaries
 
 reserve n,m,k for natural number,
-        X,Y,Z for set,
-        f for Function of X,Y,
-        H for Subset of X;
+  X,Y,Z for set,
+  f for Function of X,Y,
+  H for
+  Subset of X;
 
 definition
   let X,Y,H;
   let P be a_partition of the_subsets_of_card(Y,X);
-  pred H is_homogeneous_for P means :Def1:
-  ex p being Element of P st the_subsets_of_card(Y,H) c= p;
+  pred H is_homogeneous_for P means
+  :Def1:
+  ex p being Element of P st
+  the_subsets_of_card(Y,H) c= p;
 end;
 
 registration
@@ -53,63 +53,73 @@ registration
   cluster the_subsets_of_card(n,X) -> non empty;
   correctness
   proof
-     not card X c= card n;
-     then card n c= card X;
+    not card X c= card n;
     hence thesis by GROUP_10:2;
   end;
 end;
 
 definition
   let n,X,Y,f;
-  assume A1: f is one-to-one & card n c= card X &
-             X is non empty & Y is non empty;
-  func f ||^ n ->
-    Function of the_subsets_of_card(n,X), the_subsets_of_card(n,Y) means :Def2:
-    for x being Element of the_subsets_of_card(n,X) holds it.x = f .: x;
+  assume that
+A1: f is one-to-one and
+A2: card n c= card X & X is non empty and
+A3: Y is non empty;
+  func f ||^ n -> Function of the_subsets_of_card(n,X), the_subsets_of_card(n,
+  Y) means
+  :Def2:
+  for x being Element of the_subsets_of_card(n,X) holds it.x = f
+  .: x;
   existence
   proof
-    deffunc F(set) = f .: $1;
     set D = the_subsets_of_card(n,X);
-    reconsider D as non empty set by A1,GROUP_10:2;
+    reconsider D as non empty set by A2,GROUP_10:2;
+    deffunc F(set) = f .: $1;
     consider IT be Function such that
-    A2: dom IT = D & for x being Element of D holds IT.x = F(x)
-      from FUNCT_1:sch 4;
+A4: dom IT = D & for x being Element of D holds IT.x = F(x) from
+    FUNCT_1:sch 4;
     for y being set st y in rng IT holds y in the_subsets_of_card(n,Y)
     proof
       let y be set;
-      assume y in rng IT; then
-      consider x be set such that
-      A3: x in dom IT & y = IT.x by FUNCT_1:def 5;
-      consider x' be Subset of X such that
-      A4: x=x' & card x' = n by A3,A2;
-      reconsider x as Element of D by A3,A2;
-      A5: y = f .: x by A3,A2;
-      f in Funcs(X, Y) by A1,FUNCT_2:11; then
-      consider f' be Function such that
-      A6: f=f' & dom f'=X & rng f' c= Y by FUNCT_2:def 2;
-      f .: x c= rng f by RELAT_1:144; then
-      reconsider y'=y as Subset of Y by A6,A5,XBOOLE_1:1;
-      x, f.: x are_equipotent by A6,A4,A1,CARD_1:60; then
-      card y' = n by A5,A4,CARD_1:21;
+      assume
+      y in rng IT;
+      then consider x be set such that
+A5:   x in dom IT and
+A6:   y = IT.x by FUNCT_1:def 5;
+A7:   ex x' be Subset of X st x=x' & card x' = n by A4,A5;
+      reconsider x as Element of D by A4,A5;
+A8:   y = f .: x by A4,A6;
+      f in Funcs(X, Y) by A3,FUNCT_2:11;
+      then
+A9:   ex f' be Function st f=f' & dom f'=X & rng f' c= Y by FUNCT_2:
+      def 2;
+      f .: x c= rng f by RELAT_1:144;
+      then reconsider y'=y as Subset of Y by A8,A9,XBOOLE_1:1;
+      x, f.: x are_equipotent by A1,A4,A5,A9,CARD_1:60;
+      then card y' = n by A7,A8,CARD_1:21;
       hence thesis;
-    end; then
-    rng IT c= the_subsets_of_card(n,Y) by TARSKI:def 3; then
-    reconsider IT as Function of the_subsets_of_card(n,X),
-      the_subsets_of_card(n,Y) by A2,FUNCT_2:4;
+    end;
+    then rng IT c= the_subsets_of_card(n,Y) by TARSKI:def 3;
+    then reconsider
+    IT as Function of the_subsets_of_card(n,X), the_subsets_of_card
+    (n,Y) by A4,FUNCT_2:4;
     take IT;
-    thus thesis by A2;
+    thus thesis by A4;
   end;
   uniqueness
   proof
     let F1,F2 be Function of the_subsets_of_card(n,X),the_subsets_of_card(n,Y)
     such that
-A7: for x being Element of the_subsets_of_card(n,X) holds F1.x = f .: x and
-A8: for x being Element of the_subsets_of_card(n,X) holds F2.x = f .: x;
+A10: for x being Element of the_subsets_of_card(n,X) holds F1.x = f .:
+    x and
+A11: for x being Element of the_subsets_of_card(n,X) holds F2.x = f .:
+    x;
     now
       let x be set;
-      assume x in the_subsets_of_card(n,X);
+      assume
+      x in the_subsets_of_card(n,X);
       then reconsider x' = x as Element of the_subsets_of_card(n,X);
-      thus F1.x = f .: x' by A7 .= F2.x by A8;
+      thus F1.x = f .: x' by A10
+        .= F2.x by A11;
     end;
     hence thesis by FUNCT_2:18;
   end;
@@ -117,84 +127,98 @@ end;
 
 Lm1: X c= Y implies the_subsets_of_card(Z,X) c= the_subsets_of_card(Z,Y)
 proof
-  assume A1: X c= Y;
-  for x being set holds
-  x in the_subsets_of_card(Z,X) implies x in the_subsets_of_card(Z,Y)
+  assume
+A1: X c= Y;
+
+  for x being set holds x in the_subsets_of_card(Z,X) implies x in
+  the_subsets_of_card(Z,Y)
+
   proof
     let x be set;
-    assume x in the_subsets_of_card(Z,X); then
-    consider x' be Subset of X such that
-    A2: x'=x & card x' = Z;
+    assume
+    x in the_subsets_of_card(Z,X);
+    then consider x' be Subset of X such that
+A2: x'=x and
+A3: card x' = Z;
     reconsider x''=x' as Subset of Y by A1,XBOOLE_1:1;
-    x''=x & card x'' = Z by A2;
-    hence thesis;
+    x''=x by A2;
+    hence thesis by A3;
   end;
   hence thesis by TARSKI:def 3;
 end;
 
 theorem Th1:
-  f is one-to-one & card n c= card X & X is non empty & Y is non empty
-  implies the_subsets_of_card(n,f .: H) = (f||^n) .: the_subsets_of_card(n,H)
+  f is one-to-one & card n c= card X & X is non empty & Y is non
+empty implies the_subsets_of_card(n,f .: H) = (f||^n) .: the_subsets_of_card(n,
+  H)
 proof
-  assume A1: f is one-to-one & card n c= card X &
-             X is non empty & Y is non empty; then
-  f in Funcs(X, Y) by FUNCT_2:11; then
-  consider f' be Function such that
-  A2: f=f' & dom f'=X & rng f' c= Y by FUNCT_2:def 2;
-  A3: card X c= card Y by A2,A1,CARD_1:26;
+  assume that
+A1: f is one-to-one and
+A2: card n c= card X and
+A3: X is non empty and
+A4: Y is non empty;
   consider f1 be Function such that
-  A4: n c= f1 .: X by A1,CARD_2:2;
-  consider f2 be Function such that
-  A5: X c= f2 .: Y by A3,CARD_2:2;
-  f1 .: X c= f1 .:(f2 .: Y) by A5,RELAT_1:156; then
-  n c= f1 .:(f2 .: Y) by A4,XBOOLE_1:1; then
-  n c= (f1*f2) .: Y by RELAT_1:159; then
-  card n c= card Y by CARD_2:2; then
-  the_subsets_of_card(n,Y) is non empty by A1,GROUP_10:2; then
-  f||^n in Funcs(the_subsets_of_card(n,X), the_subsets_of_card(n,Y))
-    by FUNCT_2:11; then
-  consider fn be Function such that
-  A6: f||^n=fn & dom fn=the_subsets_of_card(n,X) &
-    rng fn c= the_subsets_of_card(n,Y) by FUNCT_2:def 2;
-  for y being set holds
-    y in the_subsets_of_card(n,f.:H) iff y in (f||^n).:the_subsets_of_card(n,H)
+A5: n c= f1 .: X by A2,CARD_2:2;
+  f in Funcs(X, Y) by A4,FUNCT_2:11;
+  then
+A6: ex f' be Function st f=f' & dom f'=X & rng f' c= Y by
+  FUNCT_2:def 2;
+  then card X c= card Y by A1,CARD_1:26;
+  then consider f2 be Function such that
+A7: X c= f2 .: Y by CARD_2:2;
+  f1 .: X c= f1 .:(f2 .: Y) by A7,RELAT_1:156;
+  then n c= f1 .:(f2 .: Y) by A5,XBOOLE_1:1;
+  then n c= (f1*f2) .: Y by RELAT_1:159;
+  then card n c= card Y by CARD_2:2;
+  then the_subsets_of_card(n,Y) is non empty by A4,GROUP_10:2;
+  then f||^n in Funcs(the_subsets_of_card(n,X), the_subsets_of_card(n,Y)) by
+  FUNCT_2:11;
+  then
+A8: ex fn be Function st f||^n=fn & dom fn= the_subsets_of_card(n,X) & rng
+  fn c= the_subsets_of_card(n,Y) by FUNCT_2:def 2;
+  for y being set holds y in the_subsets_of_card(n,f.:H) iff y in (f||^n)
+  .:the_subsets_of_card(n,H)
   proof
     let y be set;
     hereby
-      assume y in the_subsets_of_card(n,f.:H); then
-      consider X' be Subset of f.:H such that
-      A7: y=X' & card X' = n;
-      A8: f.:H c= rng f by RELAT_1:144;
-      ex x being set st x in dom(f||^n) & x in the_subsets_of_card(n,H)
-      & y = (f||^n).x
+A9:   f.:H c= rng f by RELAT_1:144;
+      assume
+A10:  y in the_subsets_of_card(n,f.:H);
+      then
+A11:  ex X' be Subset of f.:H st y=X' & card X' = n;
+      ex x being set st x in dom(f||^n) & x in the_subsets_of_card(n,H) &
+      y = (f||^n).x
       proof
         set x = f"y;
-        A9: f.:x = y by A8,A7,FUNCT_1:147,XBOOLE_1:1;
         take x;
-        A10: x c= dom f by RELAT_1:167;
-        reconsider x'=x as Subset of H by A9,A7,A10,A1,FUNCT_1:157;
-        x, f.: x are_equipotent by A10,A1,CARD_1:60; then
-        A11: card x' = n by A7,A9,CARD_1:21; then
-        A12: x in the_subsets_of_card(n,H);
-        A13: the_subsets_of_card(n,H) c= the_subsets_of_card(n,X) by Lm1;
-        thus x in dom(f||^n) by A6,A13,A12;
-        thus x in the_subsets_of_card(n,H) by A11;
-        thus y = f.:x by A8,A7,FUNCT_1:147,XBOOLE_1:1
-        .= (f||^n).x by A1,A13,A12,Def2;
+A12:    x c= dom f by RELAT_1:167;
+A13:    f.:x = y by A10,A9,FUNCT_1:147,XBOOLE_1:1;
+        then reconsider x'=x as Subset of H by A1,A10,A12,FUNCT_1:157;
+        x, f.: x are_equipotent by A1,A12,CARD_1:60;
+        then
+A14:    card x' = n by A11,A13,CARD_1:21;
+        then
+A15:    x in the_subsets_of_card(n,H);
+A16:    the_subsets_of_card(n,H) c= the_subsets_of_card(n,X) by Lm1;
+        hence x in dom(f||^n) by A8,A15;
+        thus x in the_subsets_of_card(n,H) by A14;
+        thus y = f.:x by A10,A9,FUNCT_1:147,XBOOLE_1:1
+          .= (f||^n).x by A1,A2,A3,A4,A15,A16,Def2;
       end;
       hence y in (f||^n).:the_subsets_of_card(n,H) by FUNCT_1:def 12;
     end;
-    assume y in (f||^n).:the_subsets_of_card(n,H); then
-    consider x be set such that
-    A14: x in dom(f||^n) & x in the_subsets_of_card(n,H) & y = (f||^n).x
-      by FUNCT_1:def 12;
-    reconsider x as Element of the_subsets_of_card(n,X) by A14;
-    A15: y = f .: x by A14,A1,Def2;
-    consider x' be Subset of H such that
-    A16: x'=x & card x' = n by A14;
-    reconsider X'=y as Subset of f.:H by A15,A16,RELAT_1:156;
-    x, f.: x are_equipotent by A1,A2,A16,CARD_1:60,XBOOLE_1:1; then
-    card X' = n by A16,A15,CARD_1:21;
+    assume
+    y in (f||^n).:the_subsets_of_card(n,H);
+    then consider x be set such that
+A17: x in dom(f||^n) and
+A18: x in the_subsets_of_card(n,H) and
+A19: y = (f||^n).x by FUNCT_1:def 12;
+    reconsider x as Element of the_subsets_of_card(n,X) by A17;
+A20: y = f .: x by A1,A2,A3,A4,A19,Def2;
+    then reconsider X'=y as Subset of f.:H by A18,RELAT_1:156;
+    (ex x' be Subset of H st x'=x & card x' = n )& x, f.: x
+    are_equipotent by A1,A6,A18,CARD_1:60,XBOOLE_1:1;
+    then card X' = n by A20,CARD_1:21;
     hence thesis;
   end;
   hence thesis by TARSKI:2;
@@ -202,47 +226,52 @@ end;
 
 Lm2: the_subsets_of_card(0,X) = {0}
 proof
-  for x being set holds
-  x in the_subsets_of_card(0,X) iff x=0
+  for x being set holds x in the_subsets_of_card(0,X) iff x=0
   proof
     let x be set;
     hereby
-      assume x in the_subsets_of_card(0,X); then
-      consider x' be Subset of X such that
-      A1: x'=x & card x' = 0;
-      thus x=0 by A1;
+      assume
+      x in the_subsets_of_card(0,X);
+      then ex x' be Subset of X st x'=x & card x' = 0;
+      hence x=0;
     end;
-    assume A2: x=0; then
-    reconsider x'=x as Subset of X by XBOOLE_1:2;
-    card x' = 0 by A2;
+    assume
+A1: x=0;
+    then reconsider x'=x as Subset of X by XBOOLE_1:2;
+    card x' = 0 by A1;
     hence thesis;
   end;
   hence thesis by TARSKI:def 1;
 end;
 
-Lm3: for X,Y being finite set st card Y = X
-  holds the_subsets_of_card(X,Y) = {Y}
+Lm3: for X,Y being finite set st card Y = X holds the_subsets_of_card(X,Y) = {
+Y}
+
 proof
   let X,Y be finite set;
-  assume A1: card Y = X;
+  assume
+A1: card Y = X;
   for x being set holds x in the_subsets_of_card(X,Y) iff x = Y
   proof
     let x be set;
     hereby
-      assume x in the_subsets_of_card(X,Y); then
-      consider X' be Subset of Y such that
-      A2: X'=x & card X' = X;
+      assume
+      x in the_subsets_of_card(X,Y);
+      then consider X' be Subset of Y such that
+A2:   X'=x and
+A3:   card X' = X;
       reconsider X' as finite Subset of Y;
       card(Y \ X') = card Y - card X' by CARD_2:63
-      .= 0 by A2,A1; then
-      Y \ X' = {}; then
-      Y c= X' by XBOOLE_1:37;
+        .= 0 by A1,A3;
+      then Y \ X' = {};
+      then Y c= X' by XBOOLE_1:37;
       hence x = Y by A2,XBOOLE_0:def 10;
     end;
-    assume A3: x = Y; then
-    x c= Y; then
-    reconsider x'=x as Subset of Y;
-    x' in the_subsets_of_card(X,Y) by A1,A3;
+    assume
+A4: x = Y;
+    then x c= Y;
+    then reconsider x'=x as Subset of Y;
+    x' in the_subsets_of_card(X,Y) by A1,A4;
     hence thesis;
   end;
   hence thesis by TARSKI:def 1;
@@ -251,27 +280,32 @@ end;
 theorem Th2:
   X is infinite & X c= omega implies card X = omega
 proof
-  assume A1: X is infinite & X c= omega;
-  NAT,X are_equipotent by A1,WAYBEL12:3;
+  assume
+  X is infinite & X c= omega;
+  then NAT,X are_equipotent by WAYBEL12:3;
   hence thesis by CARD_1:21,84;
 end;
 
 theorem Th3:
   X is infinite implies X \/ Y is infinite
 proof
-  assume A1: X is infinite;
-  assume A2: X \/ Y is finite;
-  card X c= card(X \/ Y) by CARD_1:27,XBOOLE_1:7;
-  hence contradiction by A2,A1;
+  assume
+A1: X is infinite;
+A2: card X c= card(X \/ Y) by CARD_1:27,XBOOLE_1:7;
+  assume
+  X \/ Y is finite;
+  hence contradiction by A1,A2;
 end;
 
 theorem Th4:
   X is infinite & Y is finite implies X \ Y is infinite
 proof
-  assume A1: X is infinite & Y is finite;
-  assume A2: X \ Y is finite;
-      X \/ Y = (X \ Y) \/ Y by XBOOLE_1:39;
-  hence contradiction by A2,A1,Th3;
+  assume
+A1: X is infinite & Y is finite;
+A2: X \/ Y = (X \ Y) \/ Y by XBOOLE_1:39;
+  assume
+  X \ Y is finite;
+  hence contradiction by A1,A2,Th3;
 end;
 
 registration
@@ -288,774 +322,1026 @@ registration
   correctness by Th4;
 end;
 
-Lm5: for F being Function of (the_subsets_of_card(n,X)),k
-  st card X = omega & X c= omega & k<>0
-  holds ex H st H is infinite & F|the_subsets_of_card(n,H) is constant
+Lm4: for F being Function of (the_subsets_of_card(n,X)),k st card X = omega &
+X c= omega & k<>0 holds ex H st H is infinite & F|the_subsets_of_card(n,H) is
+constant
+
 proof
-  defpred P[natural number] means
-  for k being natural number, X being set,
-      F being Function of (the_subsets_of_card($1,X)),k
-  st card X = omega & X c= omega & k<>0
-  holds ex H being Subset of X
-    st H is infinite & F|the_subsets_of_card($1,H) is constant;
-A1: P[0]
-  proof
-    let k be natural number;
-    let X be set;
-    let F be Function of (the_subsets_of_card(0,X)),k;
-    assume A2: card X = omega;
-    assume X c= omega;
-    assume k<>0;
-    set H = X;
-    A3: H c= X;
-    reconsider H as Subset of X by A3;
-    take H;
-    thus H is infinite by A2;
-    for x,y being set holds
-    x in dom(F|the_subsets_of_card(0,H)) &
-      y in dom(F|the_subsets_of_card(0,H)) implies
-    F|the_subsets_of_card(0,H).x=F|the_subsets_of_card(0,H).y
-    proof
-      let x,y be set;
-      A4: dom(F|the_subsets_of_card(0,H)) = dom(F|{0}) by Lm2
-      .= dom F /\ {0} by RELAT_1:90;
-      assume x in dom(F|the_subsets_of_card(0,H)); then
-      A5: x in {0} by A4,XBOOLE_0:def 4;
-      assume y in dom(F|the_subsets_of_card(0,H)); then
-      y in {0} by A4,XBOOLE_0:def 4; then
-      y=0 by TARSKI:def 1;
-      hence thesis by A5,TARSKI:def 1;
-    end;
-    hence thesis by FUNCT_1:def 16;
-  end;
-A6: for n be natural number st P[n] holds P[n + 1]
+
+  defpred P[natural number] means for k being natural number, X being set, F
+
+being Function of (the_subsets_of_card($1,X)),k st card X = omega & X c= omega
+
+& k<>0 holds ex H being Subset of X st H is infinite & F|the_subsets_of_card($1
+  ,H) is constant;
+
+A1: for n be natural number st P[n] holds P[n + 1]
   proof
     let n be natural number;
-    assume A7: P[n];
+    assume
+A2: P[n];
     now
       let k be natural number;
       let X be set;
       let F be Function of (the_subsets_of_card(n+1,X)),k;
-      assume A8: card X = omega;
-      assume A9: X c= omega;
-      assume A10: k<>0;
-      A11: for Y being set,a being Element of Y st card Y = omega & Y c= X
-        ex Fa being Function of the_subsets_of_card(n,Y\{a}),k,
-           Ha being Subset of Y\{a}
-        st Ha is infinite & Fa|the_subsets_of_card(n,Ha) is constant &
-        for Y' being Element of the_subsets_of_card(n,Y\{a}) holds
-        Fa.Y' = F.(Y' \/ {a})
+      assume
+A3:   card X = omega;
+      X c= X;
+      then
+A4:   X in the_subsets_of_card(omega,X) by A3;
+      then reconsider A = the_subsets_of_card(omega,X) as non empty set;
+      reconsider X0=X as Element of A by A4;
+
+      defpred P1[set,set,set,set,set] means for x1,x2 being Element of A, y1,
+
+y2 being Element of omega st $2=x1 & $3=y1 & $4=x2 & $5=y2 holds (y1 in x1
+
+implies (ex F1 being Function of the_subsets_of_card(n,x1\{y1}),k, H1 being
+
+Subset of x1\{y1} st H1 is infinite & F1|the_subsets_of_card(n,H1) is constant
+
+& x2=H1 & y2 in H1 & y1 < y2 & (for x1' being Element of the_subsets_of_card(n,
+
+x1\{y1}) holds F1.x1' = F.(x1' \/ {y1})) & for y2' being Element of omega st
+      y2'>y1 & y2' in H1 holds y2<=y2')) & (not y1 in x1 implies x2=X & y2=0);
+
+      set Y0 = min* X;
+      assume
+A5:   X c= omega;
+      assume
+A6:   k<>0;
+
+A7:   for Y being set,a being Element of Y st card Y = omega & Y c= X ex
+
+Fa being Function of the_subsets_of_card(n,Y\{a}),k, Ha being Subset of Y\{a}
+
+st Ha is infinite & Fa|the_subsets_of_card(n,Ha) is constant & for Y' being
+      Element of the_subsets_of_card(n,Y\{a}) holds Fa.Y' = F.(Y' \/ {a})
+
       proof
         let Y be set;
         let a be Element of Y;
-        assume A12: card Y = omega;
-        assume A13: Y c= X;
         set Y1 = the_subsets_of_card(n,Y\{a});
-        A14: Y is infinite by A12;
-        Y is non empty by A12; then
-        A15: {a} c= Y by ZFMISC_1:37;
-        reconsider Y1 as non empty set by A14;
+        set Y'=Y\{a};
+        assume
+A8:     card Y = omega;
+        then
+A9:     Y is infinite;
+        then reconsider Y1 as non empty set;
         deffunc F1(Element of Y1)=F.($1 \/ {a});
-        A18: for x being Element of Y1 holds F1(x) in k
+        assume
+A10:    Y c= X;
+        Y is non empty by A8;
+        then
+A11:    {a} c= Y by ZFMISC_1:37;
+A12:    for x being Element of Y1 holds F1(x) in k
         proof
           let x be Element of Y1;
-          x in Y1; then
-          consider x' be Subset of Y\{a} such that
-          A19: x=x' & card x'=n;
-          x \/ {a} c= (Y\{a}) \/ {a} by A19,XBOOLE_1:9; then
-          x \/ {a} c= Y \/ {a} by XBOOLE_1:39; then
-          reconsider y=x \/ {a} as Subset of Y by A15,XBOOLE_1:12;
-          reconsider x''=x' as finite set by A19;
-          A20: not a in x''
+          x in Y1;
+          then consider x' be Subset of Y\{a} such that
+A13:      x=x' and
+A14:      card x'=n;
+          x \/ {a} c= (Y\{a}) \/ {a} by A13,XBOOLE_1:9;
+          then x \/ {a} c= Y \/ {a} by XBOOLE_1:39;
+          then reconsider y=x \/ {a} as Subset of Y by A11,XBOOLE_1:12;
+          reconsider x''=x' as finite set by A14;
+          not a in x''
           proof
-            assume a in x''; then
-            not a in {a} by XBOOLE_0:def 5;
+            assume
+            a in x'';
+            then not a in {a} by XBOOLE_0:def 5;
             hence contradiction by TARSKI:def 1;
           end;
-          A21: the_subsets_of_card(n+1,Y) c= the_subsets_of_card(n+1,X)
-            by A13,Lm1;
-          card y = n+1 by A19,A20,CARD_2:54; then
-          x \/ {a} in the_subsets_of_card(n+1,Y);
-          hence thesis by A10,A21,FUNCT_2:7;
+          then card y = n+1 by A13,A14,CARD_2:54;
+          then
+A15:      x \/ {a} in the_subsets_of_card(n+1,Y);
+
+          the_subsets_of_card(n+1,Y) c= the_subsets_of_card(n+1,X) by A10
+          ,Lm1;
+
+          hence thesis by A6,A15,FUNCT_2:7;
         end;
         consider Fa be Function of Y1,k such that
-        A22: for x being Element of Y1 holds Fa.x = F1(x)
-          from FUNCT_2:sch 8(A18);
+
+A16:    for x being Element of Y1 holds Fa.x = F1(x) from FUNCT_2:sch
+        8(A12);
+
         reconsider Fa as Function of the_subsets_of_card(n,Y\{a}),k;
-        set Y'=Y\{a};
-        A23: Y c= omega by A9,A13,XBOOLE_1:1;
-        card(Y\{a}) = omega by A14,A23,Th2,XBOOLE_1:1; then
-        consider Ha be Subset of Y\{a} such that
-        A25: Ha is infinite & Fa|the_subsets_of_card(n,Ha) is constant
-          by A7,A10,A23,XBOOLE_1:1;
+A17:    Y c= omega by A5,A10,XBOOLE_1:1;
+        then card(Y\{a}) = omega by A9,Th2,XBOOLE_1:1;
+        then consider Ha be Subset of Y\{a} such that
+
+A18:    Ha is infinite & Fa|the_subsets_of_card(n,Ha) is constant by
+        A2,A6,A17,XBOOLE_1:1;
+
         take Fa,Ha;
-        thus Ha is infinite & Fa|the_subsets_of_card(n,Ha) is constant by A25;
+        thus Ha is infinite & Fa|the_subsets_of_card(n,Ha) is constant by A18;
         let Y' be Element of the_subsets_of_card(n,Y\{a});
-        thus thesis by A22;
+        thus thesis by A16;
       end;
-      X c= X; then
-      A26: X in the_subsets_of_card(omega,X) by A8; then
-      reconsider A = the_subsets_of_card(omega,X) as non empty set;
-      defpred P1[set,set,set,set,set] means
-      for x1,x2 being Element of A, y1,y2 being Element of omega
-      st $2=x1 & $3=y1 & $4=x2 & $5=y2
-      holds
-       (y1 in x1 implies
-        (ex F1 being Function of the_subsets_of_card(n,x1\{y1}),k,
-           H1 being Subset of x1\{y1}
-        st H1 is infinite & F1|the_subsets_of_card(n,H1) is constant & x2=H1 &
-        y2 in H1 & y1 < y2 &
-        (for x1' being Element of the_subsets_of_card(n,x1\{y1}) holds
-        F1.x1' = F.(x1' \/ {y1})) &
-        for y2' being Element of omega st y2'>y1 & y2' in H1 holds y2<=y2')) &
-       (not y1 in x1 implies x2=X & y2=0);
-      A27: for a being Element of NAT,
-          x'' being Element of A, y'' being Element of omega
-      ex x1'' being Element of A, y1'' being Element of omega
-        st P1[a,x'',y'',x1'',y1'']
+
+A19:  for a being Element of NAT, x'' being Element of A, y'' being
+
+Element of omega ex x1'' being Element of A, y1'' being Element of omega st P1[
+      a,x'',y'',x1'',y1'']
+
       proof
         let a be Element of NAT;
         let x'' be Element of A;
         let y'' be Element of omega;
         per cases;
-        suppose A28: y'' in x''; then
-          reconsider a'=y'' as Element of x'';
-          x'' in A; then
-          consider x''' be Subset of X such that
-          A29: x'''=x'' & card x''' = omega;
-          consider Fa be Function of the_subsets_of_card(n,x''\{a'}),k,
-                   Ha be Subset of x''\{a'} such that
-          A30: Ha is infinite & Fa|the_subsets_of_card(n,Ha) is constant &
-          for Y' being Element of the_subsets_of_card(n,x''\{a'}) holds
-          Fa.Y' = F.(Y' \/ {a'}) by A11,A29;
-          Ha c= x'' by XBOOLE_1:1; then
-          A31: Ha c= X by A29,XBOOLE_1:1; then
-          A32: Ha c= omega by A9,XBOOLE_1:1;
-          card Ha = omega by A30,Th2,A9,A31,XBOOLE_1:1; then
-          Ha in A by A31; then
-          reconsider x1''=Ha as Element of A;
-          set y1''=min* {y2' where y2' is Element of omega:
-                           y2'>y'' & y2' in Ha};
+        suppose
+A20:      y'' in x'';
+          then reconsider a'=y'' as Element of x'';
+A21:      x'' in A;
+          then ex x''' be Subset of X st x'''=x'' & card x''' = omega;
+
+          then consider
+          Fa be Function of the_subsets_of_card(n,x''\{a'}),k, Ha be
+          Subset of x''\{a'} such that
+
+A22:      Ha is infinite and
+A23:      Fa|the_subsets_of_card(n,Ha) is constant and
+
+A24:      for Y' being Element of the_subsets_of_card(n,x''\{a'})
+          holds Fa.Y' = F.(Y' \/ {a'}) by A7;
+
+          Ha c= x'' by XBOOLE_1:1;
+          then
+A25:      Ha c= X by A21,XBOOLE_1:1;
+          then card Ha = omega by A5,A22,Th2,XBOOLE_1:1;
+          then Ha in A by A25;
+          then reconsider x1''=Ha as Element of A;
+
+          set y1''=min* {y2' where y2' is Element of omega: y2'>y'' & y2' in
+          Ha};
+
           take x1'', y1'';
+A26:      Ha c= omega by A5,A25,XBOOLE_1:1;
           now
             let x1,x2 be Element of A;
             let y1,y2 be Element of omega;
-            assume A33: x''=x1 & y''=y1;
-            assume A34: x1''=x2 & y1''=y2;
-            thus (y1 in x1 implies
-            (ex F1 being Function of the_subsets_of_card(n,x1\{y1}),k,
-            H1 being Subset of x1\{y1}
-            st H1 is infinite & F1|the_subsets_of_card(n,H1) is constant
-            & x2=H1 & y2 in H1 & y1 < y2 &
-            (for x1' being Element of the_subsets_of_card(n,x1\{y1})
-            holds F1.x1' = F.(x1' \/ {y1})) & for y2' being Element of omega
-            st y2'>y1 & y2' in H1 holds y2<=y2'))
+            assume that
+A27:        x''=x1 and
+A28:        y''=y1;
+            assume that
+A29:        x1''=x2 and
+A30:        y1''=y2;
+
+            thus y1 in x1 implies ex F1 being Function of the_subsets_of_card(
+            n,x1\{y1}),k, H1 being Subset of x1\{y1} st H1 is infinite & F1|
+
+the_subsets_of_card(n,H1) is constant & x2=H1 & y2 in H1 & y1 < y2 & (for x1'
+
+being Element of the_subsets_of_card(n,x1\{y1}) holds F1.x1' = F.(x1' \/ {y1}))
+
+& for y2' being Element of omega st y2'>y1 & y2' in H1 holds y2<=y2'
+
             proof
-              assume y1 in x1;
+              reconsider H1=Ha as Subset of x1\{y1} by A27,A28;
+
+              set A'= {y2' where y2' is Element of omega: y2'>y'' & y2' in Ha};
+
               reconsider F1=Fa as Function of the_subsets_of_card(n,x1\{y1}),k
-                by A33;
-              reconsider H1=Ha as Subset of x1\{y1} by A33;
+              by A27,A28;
+
+              assume
+              y1 in x1;
               take F1, H1;
-              thus H1 is infinite by A30;
-              thus F1|the_subsets_of_card(n,H1) is constant by A30;
-              thus x2=H1 by A34;
-              set A'= {y2' where y2' is Element of omega:
-                           y2'>y'' & y2' in Ha};
               for x being set st x in A' holds x in NAT
               proof
                 let x be set;
-                assume x in A'; then
-                consider x' be Element of omega such that
-                A35: x'=x & x'>y'' & x' in Ha;
-                thus thesis by A35;
-              end; then
-              reconsider A' as Subset of NAT by TARSKI:def 3;
-              A36: A' <> {}
-              proof
-                assume A37: A' = {};
-                set A'' = {y2''' where y2''' is Element of omega:
-                              y2'''<=y'' & y2''' in Ha};
-                now
-                  let x be set;
-                  assume x in A''; then
-                  consider x' be Element of omega such that
-                  A38: x=x' & x'<=y'' & x' in Ha;
-                  x' < y''+1 by A38,NAT_1:13;
-                  hence x in Segm(y''+1) by A38,NAT_1:45;
-                end; then
-B39:            A'' c= Segm(y''+1) by TARSKI:def 3;
-                A40: now
-                  let x be set;
-                  assume A41: x in A' \/ A'';
-                  per cases by A41,XBOOLE_0:def 3;
-                  suppose x in A'; then
-                    consider x' be Element of omega such that
-                    A42: x=x' & x'>y'' & x' in Ha;
-                    thus x in Ha by A42;
-                  end;
-                  suppose  x in A''; then
-                    consider x' be Element of omega such that
-                    A43: x=x' & x'<=y'' & x' in Ha;
-                    thus x in Ha by A43;
-                  end;
-                end;
-                now
-                  let x be set;
-                  assume A44: x in Ha; then
-                  reconsider x'=x as Element of omega by A32;
-                  per cases;
-                  suppose x'<=y''; then
-                    x in A'' by A44;
-                    hence x in A' \/ A'' by XBOOLE_0:def 3;
-                  end;
-                  suppose x'>y''; then
-                    x in A' by A44;
-                    hence x in A' \/ A'' by XBOOLE_0:def 3;
-                  end;
-                end;
-                hence contradiction by A30,A37,B39,A40,TARSKI:2;
+                assume
+                x in A';
+
+                then ex x' be Element of omega st x'=x & x'>y'' & x' in Ha;
+
+                hence thesis;
               end;
-              y1'' in A' by A36,NAT_1:def 1; then
-              consider y2'' be Element of omega such that
-              A45: y1''=y2'' & y2''>y'' & y2'' in Ha;
-              thus y2 in H1 by A45,A34;
-              thus y1 < y2 by A45,A33,A34;
-              thus (for x1' being Element of the_subsets_of_card(n,x1\{y1})
-                holds F1.x1' = F.(x1' \/ {y1})) by A33,A30;
+              then reconsider A' as Subset of NAT by TARSKI:def 3;
+              thus H1 is infinite by A22;
+              thus F1|the_subsets_of_card(n,H1) is constant by A23;
+              thus x2=H1 by A29;
+              A' <> {}
+              proof
+
+                set A'' = {y2''' where y2''' is Element of omega: y2'''<=y'' &
+                y2''' in Ha};
+
+A31:            now
+                  let x be set;
+                  assume
+A32:              x in A' \/ A'';
+                  per cases by A32,XBOOLE_0:def 3;
+                  suppose
+                    x in A';
+
+                    then ex x' be Element of omega st x=x' & x'>y'' & x' in Ha;
+
+                    hence x in Ha;
+                  end;
+                  suppose
+                    x in A'';
+
+                    then
+                    ex x' be Element of omega st x=x' & x'<=y'' & x' in Ha;
+
+                    hence x in Ha;
+                  end;
+                end;
+                now
+                  let x be set;
+                  assume
+                  x in A'';
+                  then consider x' be Element of omega such that
+A33:              x=x' and
+A34:              x'<=y'' and
+                  x' in Ha;
+                  x' < y''+1 by A34,NAT_1:13;
+                  hence x in Segm(y''+1) by A33,NAT_1:45;
+                end;
+                then
+A35:            A'' c= Segm(y''+1) by TARSKI:def 3;
+A36:            now
+                  let x be set;
+                  assume
+A37:              x in Ha;
+                  then reconsider x'=x as Element of omega by A26;
+                  per cases;
+                  suppose
+                    x'<=y'';
+                    then x in A'' by A37;
+                    hence x in A' \/ A'' by XBOOLE_0:def 3;
+                  end;
+                  suppose
+                    x'>y'';
+                    then x in A' by A37;
+                    hence x in A' \/ A'' by XBOOLE_0:def 3;
+                  end;
+                end;
+                assume
+                A' = {};
+                hence contradiction by A22,A35,A31,A36,TARSKI:2;
+              end;
+              then y1'' in A' by NAT_1:def 1;
+
+              then
+A38:          ex y2'' be Element of omega st y1''=y2'' & y2''>y'' & y2''
+              in Ha;
+
+              hence y2 in H1 by A30;
+              thus y1 < y2 by A28,A30,A38;
+
+              thus for x1' being Element of the_subsets_of_card(n,x1\{y1})
+              holds F1.x1' = F.(x1' \/ {y1}) by A24,A27,A28;
+
               let y2' be Element of omega;
-              assume A46: y2'>y1;
-              assume A47: y2' in H1;
-              y2' in A' by A46,A47,A33;
-              hence thesis by A34,NAT_1:def 1;
+              assume
+A39:          y2'>y1;
+              assume
+              y2' in H1;
+              then y2' in A' by A28,A39;
+              hence thesis by A30,NAT_1:def 1;
             end;
-            assume not y1 in x1;
-            hence thesis by A33,A28;
+            assume
+            not y1 in x1;
+            hence thesis by A20,A27,A28;
           end;
           hence thesis;
         end;
-        suppose A48: not y'' in x'';
-          reconsider x1''=X as Element of A by A26;
-          reconsider y1''=0 as Element of omega by INT_1:16;
+        suppose
+A40:      not y'' in x'';
+          reconsider y1''=0 as Element of omega;
+          reconsider x1''=X as Element of A by A4;
           take x1'', y1'';
-          thus thesis by A48;
+          thus thesis by A40;
         end;
       end;
-      reconsider X0=X as Element of A by A26;
-      set Y0 = min* X;
       consider S be Function of NAT, A, a be Function of NAT, omega such that
-      A49: S.0 = X0 & a.0 = Y0 &
-      for i being Element of NAT holds P1[i,S.i,a.i,S.(i+1),a.(i+1)]
-        from RECDEF_2:sch 3(A27);
-      defpred P2[natural number] means
-      a.$1 in a.($1+1) & S.($1+1) c= S.$1 & a.$1 in S.$1 &
-        a.($1+1) in S.($1+1) & not a.$1 in S.($1+1);
-      A50: P2[0]
+
+A41:  S.0 = X0 & a.0 = Y0 & for i being Element of NAT holds P1[i,S.i
+      ,a.i,S.(i+1),a.(i+1)] from RECDEF_2:sch 3(A19);
+
+      defpred P2[natural number] means a.$1 in a.($1+1) & S.($1+1) c= S.$1 & a
+      .$1 in S.$1 & a.($1+1) in S.($1+1) & not a.$1 in S.($1+1);
+
+A42:  P2[0]
       proof
         set i=0;
-        reconsider i as Element of NAT by ORDINAL1:def 13;
+        reconsider i as Element of NAT;
         reconsider x1=S.i as Element of A;
         reconsider x2=S.(i+1) as Element of A;
         reconsider y1=a.i as Element of omega;
         reconsider y2=a.(i+1) as Element of omega;
-        P1[i,S.i,a.i,S.(i+1),a.(i+1)] by A49; then
-        A51: (y1 in x1 implies
-        (ex F1 being Function of the_subsets_of_card(n,x1\{y1}),k,
-           H1 being Subset of x1\{y1}
-        st H1 is infinite & F1|the_subsets_of_card(n,H1) is constant & x2=H1 &
-        y2 in H1 & y1 < y2 &
-        (for x1' being Element of the_subsets_of_card(n,x1\{y1})
-        holds F1.x1' = F.(x1' \/ {y1})) &
-        for y2' being Element of omega st y2'>y1 & y2' in H1 holds y2<=y2')) &
-        (not y1 in x1 implies x2=X & y2=0);
-        consider F1 be Function of the_subsets_of_card(n,x1\{y1}),k,
-           H1 be Subset of x1\{y1} such that
-        A52: H1 is infinite & F1|the_subsets_of_card(n,H1) is constant & x2=H1
-          & y2 in H1 & y1 < y2 by A51,A49,A8,A9,CARD_1:47,NAT_1:def 1;
-        thus a.0 in a.(0+1) by A52,NAT_1:45;
-        thus S.(0+1) c= S.0 by A52,XBOOLE_1:1;
-        thus a.0 in S.0 by A49,A8,A9,CARD_1:47,NAT_1:def 1;
-        thus a.(0+1) in S.(0+1) by A52;
+
+A43:    y1 in x1 implies ex F1 being Function of the_subsets_of_card(n,x1
+        \{ y1}),k, H1 being Subset of x1\{y1} st H1 is infinite & F1|
+
+the_subsets_of_card(n,H1) is constant & x2=H1 & y2 in H1 & y1 < y2 & (for x1'
+
+being Element of the_subsets_of_card(n,x1\{y1}) holds F1.x1' = F.(x1' \/ {y1}))
+
+& for y2' being Element of omega st y2'>y1 & y2' in H1 holds y2<=y2' by A41;
+
+        hence a.0 in a.(0+1) by A3,A5,A41,CARD_1:47,NAT_1:45,def 1;
+
+        thus S.(0+1) c= S.0 by A3,A5,A41,A43,CARD_1:47,NAT_1:def 1 ,XBOOLE_1
+        :1;
+
+        thus a.0 in S.0 by A3,A5,A41,CARD_1:47,NAT_1:def 1;
+        thus a.(0+1) in S.(0+1) by A3,A5,A41,A43,CARD_1:47,NAT_1:def 1;
         not y1 in x2
         proof
-          assume y1 in x2; then
-          not y1 in {y1} by A52,XBOOLE_0:def 5;
+          assume
+          y1 in x2;
+
+          then not y1 in {y1} by A3,A5,A41,A43,CARD_1:47,NAT_1:def 1 ,
+          XBOOLE_0:def 5;
+
           hence contradiction by TARSKI:def 1;
         end;
         hence thesis;
       end;
-      A53: for i being natural number st P2[i] holds P2[i + 1]
+
+      defpred P4[set,set] means for Y being set, i being Element of NAT, Fi
+
+being Function of the_subsets_of_card(n,S.i\{a.i}),k st i=$1 & Y = {x where x
+
+is Element of omega: ex j being Element of NAT st a.j=x & j>i} & (for Y' being
+
+Element of the_subsets_of_card(n,S.i\{a.i}) holds Fi.Y' = F.(Y' \/ {a.i}))
+
+holds ex l being natural number st l=$2 & l in k & rng(Fi|the_subsets_of_card(n
+      ,Y)) = {l};
+
+      defpred P3[natural number] means for i,j being natural number st i>=j &
+
+i=$1+j holds S.i c= S.j & (for ai,aj being natural number st i<>j & ai=a.i & aj
+      =a.j holds ai > aj);
+
+A44:  for i being natural number st P2[i] holds P2[i + 1]
       proof
         let i be natural number;
-        assume A54: P2[i];
         reconsider i'=i+1 as Element of NAT by ORDINAL1:def 13;
         reconsider x1=S.i' as Element of A;
         reconsider x2=S.(i'+1) as Element of A;
         reconsider y1=a.i' as Element of omega;
         reconsider y2=a.(i'+1) as Element of omega;
-        consider F1 be Function of the_subsets_of_card(n,x1\{y1}),k,
-           H1 be Subset of x1\{y1} such that
-        A55: H1 is infinite & F1|the_subsets_of_card(n,H1) is constant &
-          x2=H1 & y2 in H1 & y1 < y2 &
-          (for x1' being Element of the_subsets_of_card(n,x1\{y1})
-          holds F1.x1' = F.(x1' \/ {y1})) &
-          for y2' being Element of omega st y2'>y1 & y2' in H1
-          holds y2<=y2' by A49,A54;
-        thus P2[i + 1]
+        assume
+A45:    P2[i];
+
+        then
+A46:    ex F1 be Function of the_subsets_of_card(n,x1\{y1}),k, H1 be
+
+Subset of x1\{y1} st H1 is infinite & F1|the_subsets_of_card(n,H1) is constant
+
+& x2=H1 & y2 in H1 & y1 < y2 &( for x1' being Element of the_subsets_of_card(n,
+
+x1\{y1}) holds F1. x1' = F.(x1' \/ {y1}))& for y2' being Element of omega st
+        y2'>y1 & y2' in H1 holds y2<=y2' by A41;
+
+        not y1 in x2
         proof
-          thus a.(i+1) in a.(i+1+1) by A55,NAT_1:45;
-          thus S.(i+1+1) c= S.(i+1) by A55,XBOOLE_1:1;
-          thus a.(i+1) in S.(i+1) by A54;
-          thus a.(i+1+1) in S.(i+1+1) by A55;
-          not y1 in x2
-          proof
-            assume y1 in x2; then
-            not y1 in {y1} by A55,XBOOLE_0:def 5;
-            hence contradiction by TARSKI:def 1;
-          end;
-          hence not a.(i+1) in S.(i+1+1);
+          assume
+          y1 in x2;
+          then not y1 in {y1} by A46,XBOOLE_0:def 5;
+          hence contradiction by TARSKI:def 1;
         end;
+        hence P2[i + 1] by A45,A46,NAT_1:45,XBOOLE_1:1;
       end;
-      A56: for i being natural number holds P2[i]
-        from NAT_1:sch 2(A50,A53);
-      defpred P3[natural number] means
-      for i,j being natural number st i>=j & i=$1+j
-      holds S.i c= S.j & (for ai,aj being natural number
-        st i<>j & ai=a.i & aj=a.j holds ai > aj);
-      A57: P3[0];
-      A58: for l being natural number st P3[l] holds P3[l+1]
+A47:  for i being natural number holds P2[i] from NAT_1:sch 2(A42,A44);
+A48:  for l being natural number st P3[l] holds P3[l+1]
       proof
         let l be natural number;
-        assume A59: P3[l];
+        assume
+A49:    P3[l];
         thus P3[l+1]
         proof
           let i,j be natural number;
-          assume A60: i>=j;
-          assume A61: i=l+1+j;
+          assume
+A50:      i>=j;
+          set j'=j+1;
+          assume
+A51:      i=l+1+j;
+          then
+A52:      i=l+j';
+A53:      S.(j+1) c= S.j by A47;
           i<>j
           proof
-            assume i=j; then
-            0=l+1 by A61;
+            assume
+            i=j;
+            then 0=l+1 by A51;
             hence contradiction;
-          end; then
-          A62: i>j by A60,XXREAL_0:1;
-          set j'=j+1;
-          i>=j' & i=l+j' by A62,A61,NAT_1:13; then
-          A63: S.i c= S.(j+1) & (for ai,aj' being natural number
-            st i<>j' & ai=a.i & aj'=a.j' holds ai > aj') by A59;
-          S.(j+1) c= S.j by A56;
-          hence S.i c= S.j by A63,XBOOLE_1:1;
-          thus for ai,aj being natural number st i<>j & ai=a.i & aj=a.j
-            holds ai > aj
+          end;
+          then i>j by A50,XXREAL_0:1;
+          then
+A54:      i>=j' by NAT_1:13;
+          then S.i c= S.(j+1) by A49,A52;
+          hence S.i c= S.j by A53,XBOOLE_1:1;
+
+A55:      for ai,aj' being natural number st i<>j' & ai=a.i & aj'=a.j'
+          holds ai > aj' by A49,A54,A52;
+
+          thus for ai,aj being natural number st i<>j & ai=a.i & aj=a.j holds
+          ai > aj
+
           proof
             let ai,aj be natural number;
-            assume i<>j;
-            assume A64: ai=a.i & aj=a.j;
+            assume
+            i<>j;
+            assume that
+A56:        ai=a.i and
+A57:        aj=a.j;
             per cases;
-            suppose A65: i=j';
-              a.j in a.(j+1) by A56;
-              hence thesis by A64,A65,NAT_1:45;
+            suppose
+A58:          i=j';
+              a.j in a.(j+1) by A47;
+              hence thesis by A56,A57,A58,NAT_1:45;
             end;
-            suppose i<>j';
+            suppose
+              i<>j';
               reconsider aj'=a.j' as natural number;
-              aj in aj' by A64,A56; then
-              aj' > aj by NAT_1:45;
-              hence thesis by A63,A64,XXREAL_0:2;
+              aj in aj' by A47,A57;
+              then aj' > aj by NAT_1:45;
+              hence thesis by A55,A56,XXREAL_0:2;
             end;
           end;
         end;
       end;
-      A66: for l being natural number holds P3[l] from NAT_1:sch 2(A57,A58);
-      A67: for i,j being natural number st i>=j
-      holds S.i c= S.j & (for ai,aj being natural number
-        st i<>j & ai=a.i & aj=a.j holds ai > aj)
+A59:  P3[0];
+
+A60:  for l being natural number holds P3[l] from NAT_1:sch 2(A59,A48);
+
+A61:  for i,j being natural number st i>=j holds S.i c= S.j & for ai,aj
+      being natural number st i<>j & ai=a.i & aj=a.j holds ai > aj
+
       proof
         let i,j be natural number;
-        assume A68: i>=j; then
-        consider l be natural number such that
-        A69: i = j + l by NAT_1:10;
-        thus S.i c= S.j by A66,A68,A69;
-        thus thesis by A66,A68,A69;
+        assume
+A62:    i>=j;
+        then
+A63:    ex l be natural number st i = j + l by NAT_1:10;
+        hence S.i c= S.j by A60,A62;
+        thus thesis by A60,A62,A63;
       end;
-      A70: for i being Element of NAT, Y being set,
-          Fi being Function of the_subsets_of_card(n,S.i\{a.i}),k
-      st Y = {x where x is Element of omega:
-               ex j being Element of NAT st a.j=x & j>i} &
-         (for Y' being Element of the_subsets_of_card(n,S.i\{a.i}) holds
-            Fi.Y' = F.(Y' \/ {a.i}))
-      holds Y c= S.(i+1) & Fi|the_subsets_of_card(n,Y) is constant
+
+A64:  for i being Element of NAT, Y being set, Fi being Function of
+
+the_subsets_of_card(n,S.i\{a.i}),k st Y = {x where x is Element of omega: ex j
+      being Element of NAT st a.j=x & j>i} & (for Y' being Element of
+
+the_subsets_of_card(n,S.i\{a.i}) holds Fi.Y' = F.(Y' \/ {a.i})) holds Y c= S.(i
+      +1) & Fi|the_subsets_of_card(n,Y) is constant
+
       proof
         let i be Element of NAT;
         let Y be set;
         let Fi be Function of the_subsets_of_card(n,S.i\{a.i}),k;
-        assume A71: Y = {x where x is Element of omega:
-                           ex j being Element of NAT st a.j=x & j>i};
-        assume A72: for Y' being Element of the_subsets_of_card(n,S.i\{a.i})
-                      holds Fi.Y' = F.(Y' \/ {a.i});
-        consider x1 be Element of A, y1 be Element of omega such that
-        A73: S.i=x1 & a.i=y1;
+        assume
+
+A65:    Y = {x where x is Element of omega: ex j being Element of
+        NAT st a.j=x & j>i};
+
         consider x2 be Element of A, y2 be Element of omega such that
-        A74: S.(i+1)=x2 & a.(i+1)=y2;
-        y1 in x1 implies
-          (ex F1 being Function of the_subsets_of_card(n,x1\{y1}),k,
-              H1 being Subset of x1\{y1}
-           st H1 is infinite & F1|the_subsets_of_card(n,H1) is constant &
-              x2=H1 & y2 in H1 & y1 < y2 &
-          (for x1' being Element of the_subsets_of_card(n,x1\{y1}) holds
-               F1.x1' = F.(x1' \/ {y1})) &
-        for y2' being Element of omega st y2'>y1 & y2' in H1 holds y2<=y2') &
-        (not y1 in x1 implies x2=X & y2=0) by A49,A73,A74; then
-        consider F1 be Function of the_subsets_of_card(n,x1\{y1}),k,
-                H1 be Subset of x1\{y1} such that
-        A75: H1 is infinite & F1|the_subsets_of_card(n,H1) is constant &
-        x2=H1 & (for x1' being Element of the_subsets_of_card(n,x1\{y1}) holds
-        F1.x1' = F.(x1' \/ {y1})) &
+A66:    S.(i+1)=x2 and
+A67:    a.(i+1)=y2;
+        consider x1 be Element of A, y1 be Element of omega such that
+A68:    S.i=x1 & a.i=y1;
+
+        y1 in x1 implies (ex F1 being Function of the_subsets_of_card(n,
+        x1\{y1}),k, H1 being Subset of x1\{y1} st H1 is infinite & F1|
+
+the_subsets_of_card(n,H1) is constant & x2=H1 & y2 in H1 & y1 < y2 & (for x1'
+
+being Element of the_subsets_of_card(n,x1\{y1}) holds F1.x1' = F.(x1' \/ {y1}))
+
+& for y2' being Element of omega st y2'>y1 & y2' in H1 holds y2<=y2') & (not y1
+        in x1 implies x2=X & y2=0) by A41,A68,A66,A67;
+
+        then consider
+        F1 be Function of the_subsets_of_card(n,x1\{y1}),k, H1 be
+        Subset of x1\{y1} such that
+
+        H1 is infinite and
+A69:    F1|the_subsets_of_card(n,H1) is constant & x2=H1 and
+
+A70:    for x1' being Element of the_subsets_of_card(n,x1\{y1})
+        holds F1. x1' = F.(x1' \/ {y1}) and
+
         for y2' being Element of omega st y2'>y1 & y2' in H1 holds y2<=y2'
-          by A73,A56;
-        reconsider F1 as Function of the_subsets_of_card(n,S.i\{a.i}),k by A73;
+        by A47,A68;
+
+        reconsider F1 as Function of the_subsets_of_card(n,S.i\{a.i}),k by
+        A68;
+
+        assume
+
+A71:    for Y' being Element of the_subsets_of_card(n,S.i\{a.i})
+        holds Fi.Y' = F.(Y' \/ {a.i});
+
         for x1' being Element of the_subsets_of_card(n,S.i\{a.i}) holds
         F1.x1' = Fi.x1'
+
         proof
           let x1' be Element of the_subsets_of_card(n,S.i\{a.i});
-          thus F1.x1' = F.(x1' \/ {a.i}) by A73,A75
-          .= Fi.x1' by A72;
-        end; then
-        A76: Fi|the_subsets_of_card(n,S.(i+1)) is constant
-          by A75,A74,FUNCT_2:113;
+          thus F1.x1' = F.(x1' \/ {a.i}) by A68,A70
+            .= Fi.x1' by A71;
+        end;
+
+        then
+A72:    Fi|the_subsets_of_card(n,S.(i+1)) is constant by A66,A69,
+        FUNCT_2:113;
+
         now
           let x be set;
-          assume x in Y; then
-          consider x' be Element of omega such that
-          A77: x=x' & ex j being Element of NAT st a.j=x' & j>i by A71;
-          consider j be Element of NAT such that
-          A78: a.j=x & j>i by A77;
-          j>=i+1 by A78,NAT_1:13; then
-          A79: S.j c= S.(i+1) by A67;
-          a.j in S.j by A56;
-          hence x in S.(i+1) by A78,A79;
+          assume
+          x in Y;
+
+          then ex x' be Element of omega st x=x' & ex j being Element of NAT
+          st a.j=x' & j>i by A65;
+
+          then consider j be Element of NAT such that
+A73:      a.j=x and
+A74:      j>i;
+          j>=i+1 by A74,NAT_1:13;
+          then
+A75:      S.j c= S.(i+1) by A61;
+          a.j in S.j by A47;
+          hence x in S.(i+1) by A73,A75;
         end;
-        hence A80: Y c= S.(i+1) by TARSKI:def 3;
-        A81: the_subsets_of_card(n,Y) c= the_subsets_of_card(n,S.(i+1))
-          by Lm1,A80;
-        for x,y being set st x in dom(Fi|the_subsets_of_card(n,Y)) &
-          y in dom(Fi|the_subsets_of_card(n,Y)) holds
-          Fi|the_subsets_of_card(n,Y).x = Fi|the_subsets_of_card(n,Y).y
+        hence Y c= S.(i+1) by TARSKI:def 3;
+
+        then
+A76:    the_subsets_of_card(n,Y) c= the_subsets_of_card(n,S.(i+1)) by
+        Lm1;
+
+        for x,y being set st x in dom(Fi|the_subsets_of_card(n,Y)) & y
+
+in dom(Fi|the_subsets_of_card(n,Y)) holds Fi|the_subsets_of_card(n,Y).x = Fi|
+        the_subsets_of_card(n,Y).y
+
         proof
           let x,y be set;
-          assume x in dom(Fi|the_subsets_of_card(n,Y)); then
-          A82: x in dom Fi & x in the_subsets_of_card(n,Y) by RELAT_1:86; then
-          A83: x in dom(Fi|the_subsets_of_card(n,S.(i+1))) by A81,RELAT_1:86;
-          assume y in dom(Fi|the_subsets_of_card(n,Y)); then
-          A84: y in dom Fi & y in the_subsets_of_card(n,Y) by RELAT_1:86; then
-          A85: y in dom(Fi|the_subsets_of_card(n,S.(i+1)))
-            by A81,RELAT_1:86;
-          thus Fi|the_subsets_of_card(n,Y).x
-          = (Fi|the_subsets_of_card(n,S.(i+1)))|the_subsets_of_card(n,Y).x
-            by A81,FUNCT_1:82
-          .= Fi|the_subsets_of_card(n,S.(i+1)).x by A82,FUNCT_1:72
-          .= Fi|the_subsets_of_card(n,S.(i+1)).y
-            by A85,A76,A83,FUNCT_1:def 16
-          .= (Fi|the_subsets_of_card(n,S.(i+1)))|the_subsets_of_card(n,Y).y
-            by A84,FUNCT_1:72
-          .= Fi|the_subsets_of_card(n,Y).y by A81,FUNCT_1:82;
+          assume
+A77:      x in dom(Fi|the_subsets_of_card(n,Y));
+          then
+A78:      x in the_subsets_of_card(n,Y) by RELAT_1:86;
+          x in dom Fi by A77,RELAT_1:86;
+
+          then
+A79:      x in dom(Fi|the_subsets_of_card(n,S.(i+1))) by A76,A78,
+          RELAT_1:86;
+
+          assume
+A80:      y in dom(Fi|the_subsets_of_card(n,Y));
+          then
+A81:      y in the_subsets_of_card(n,Y) by RELAT_1:86;
+          y in dom Fi by A80,RELAT_1:86;
+
+          then
+A82:      y in dom(Fi|the_subsets_of_card(n,S.(i+1))) by A76,A81,
+          RELAT_1:86;
+
+          thus Fi|the_subsets_of_card(n,Y).x = (Fi|the_subsets_of_card(n,S.(i+
+          1)))|the_subsets_of_card(n,Y).x by A76,FUNCT_1:82
+
+            .= Fi|the_subsets_of_card(n,S.(i+1)).x by A78,FUNCT_1:72
+
+            .= Fi|the_subsets_of_card(n,S.(i+1)).y by A72,A79,A82,FUNCT_1
+          :def 16
+
+            .= (Fi|the_subsets_of_card(n,S.(i+1)))|the_subsets_of_card(n,Y).
+          y by A81,FUNCT_1:72
+
+            .= Fi|the_subsets_of_card(n,Y).y by A76,FUNCT_1:82;
         end;
         hence thesis by FUNCT_1:def 16;
       end;
-      for x1,x2 being set
-      st x1 in dom a & x2 in dom a & a.x1 = a.x2 holds x1 = x2
+
+      for x1,x2 being set st x1 in dom a & x2 in dom a & a.x1 = a.x2
+      holds x1 = x2
+
       proof
         let x1,x2 be set;
-        assume A86: x1 in dom a;
-        assume A87: x2 in dom a;
-        assume A88: a.x1 = a.x2;
-        assume A89: x1 <> x2;
-        reconsider i1=x1 as Element of NAT by A86;
-        reconsider i2=x2 as Element of NAT by A87;
-        reconsider ai1=a.i1 as Element of NAT;
+        assume
+        x1 in dom a;
+        then reconsider i1=x1 as Element of NAT;
+        assume
+        x2 in dom a;
+        then reconsider i2=x2 as Element of NAT;
         reconsider ai2=a.i2 as Element of NAT;
-        per cases by A89,XXREAL_0:1;
-        suppose i1 < i2; then
-          ai1 < ai2 by A67;
-          hence contradiction by A88;
+        reconsider ai1=a.i1 as Element of NAT;
+        assume
+A83:    a.x1 = a.x2;
+        assume
+A84:    x1 <> x2;
+        per cases by A84,XXREAL_0:1;
+        suppose
+          i1 < i2;
+          then ai1 < ai2 by A61;
+          hence contradiction by A83;
         end;
-        suppose i1 > i2; then
-          ai1 > ai2 by A67;
-          hence contradiction by A88;
+        suppose
+          i1 > i2;
+          then ai1 > ai2 by A61;
+          hence contradiction by A83;
         end;
-      end; then
-      A90: a is one-to-one by FUNCT_1:def 8;
-      A91: NAT = dom a by FUNCT_2:def 1;
-      A92: for i being Element of NAT holds
-        card {x' where x' is Element of omega:
-              ex j being Element of NAT st a.j=x' & j>i} = omega
+      end;
+      then
+A85:  a is one-to-one by FUNCT_1:def 8;
+A86:  NAT = dom a by FUNCT_2:def 1;
+
+A87:  for i being Element of NAT holds card {x' where x' is Element of
+      omega: ex j being Element of NAT st a.j=x' & j>i} = omega
+
       proof
         let i be Element of NAT;
-        set Z = {x' where x' is Element of omega:
-                       ex j being Element of NAT st a.j=x' & j>i};
-        A93: dom(a|(NAT \ Segm(i+1)))
-        = dom a /\ (NAT \ Segm(i+1)) by RELAT_1:90
-        .= NAT /\ (NAT \ Segm(i+1)) by FUNCT_2:def 1
-        .= (NAT /\ NAT) \ Segm(i+1) by XBOOLE_1:49
-        .= NAT \ Segm(i+1);
+
+        set Z = {x' where x' is Element of omega: ex j being Element of NAT st
+        a.j=x' & j>i};
+
+        now
+          let z be set;
+          assume
+          z in Z;
+
+          then ex z' be Element of omega st z=z' & ex j being Element of NAT
+          st a.j=z' & j>i;
+
+          hence z in NAT;
+        end;
+        then
+A88:    Z c= NAT by TARSKI:def 3;
+
+A89:    dom(a|(NAT \ Segm(i+1))) = dom a /\ (NAT \ Segm(i+1)) by RELAT_1
+        :90
+
+          .= NAT /\ (NAT \ Segm(i+1)) by FUNCT_2:def 1
+          .= (NAT /\ NAT) \ Segm(i+1) by XBOOLE_1:49
+          .= NAT \ Segm(i+1);
         for z being set holds z in Z iff z in rng(a|(NAT \ Segm(i+1)))
         proof
           let z be set;
           hereby
-            assume z in Z; then
-            consider z' be Element of omega such that
-            A94: z=z' & ex j being Element of NAT st a.j=z' & j>i;
-            consider j be Element of NAT such that
-            A95: a.j=z & j>i by A94;
-            j>=i+1 by A95,NAT_1:13; then
-            not j in i+1 by NAT_1:45; then
-            j in dom a & j in (NAT \ Segm(i+1)) by A91,XBOOLE_0:def 5;
-            hence z in rng(a|(NAT \ Segm(i+1))) by A95,FUNCT_1:73;
+            assume
+            z in Z;
+
+            then ex z' be Element of omega st z=z' & ex j being Element of NAT
+            st a.j=z' & j>i;
+
+            then consider j be Element of NAT such that
+A90:        a.j=z and
+A91:        j>i;
+            j>=i+1 by A91,NAT_1:13;
+            then not j in i+1 by NAT_1:45;
+            then j in (NAT \ Segm(i+1)) by XBOOLE_0:def 5;
+            hence z in rng(a|(NAT \ Segm(i+1))) by A86,A90,FUNCT_1:73;
           end;
-          assume z in rng(a|(NAT \ Segm(i+1))); then
-          consider j be set such that
-          A96: j in dom(a|(NAT \ Segm(i+1))) & z =(a|(NAT \ Segm(i+1))).j
-            by FUNCT_1:def 5;
-          reconsider j as Element of NAT by A96;
-          not j in Segm(i+1) by A96,A93,XBOOLE_0:def 5; then
-          j>=i+1 by NAT_1:45; then
-          a.j=z & j>i by A96,FUNCT_1:70,NAT_1:13;
-          hence thesis;
-        end; then
-        A97: Z = rng(a|(NAT \ Segm(i+1))) by TARSKI:2;
-        A98: a|(NAT \ Segm(i+1)) is one-to-one by A90,FUNCT_1:84;
-        now
-          let z be set;
-          assume z in Z; then
-          consider z' be Element of omega such that
-          A99: z=z' & ex j being Element of NAT st a.j=z' & j>i;
-          thus z in NAT by A99;
-        end; then
-              Z c= NAT by TARSKI:def 3;
-        hence thesis by A97,A93,Th2,A98,CARD_1:97;
+          assume
+          z in rng(a|(NAT \ Segm(i+1)));
+          then consider j be set such that
+A92:      j in dom(a|(NAT \ Segm(i+1))) and
+A93:      z =(a|(NAT \ Segm(i+1))).j by FUNCT_1:def 5;
+          reconsider j as Element of NAT by A92;
+          not j in Segm(i+1) by A89,A92,XBOOLE_0:def 5;
+          then j>=i+1 by NAT_1:45;
+          then
+A94:      j>i by NAT_1:13;
+          a.j=z by A92,A93,FUNCT_1:70;
+          hence thesis by A94;
+        end;
+        then
+A95:    Z = rng(a|(NAT \ Segm(i+1))) by TARSKI:2;
+        a|(NAT \ Segm(i+1)) is one-to-one by A85,FUNCT_1:84;
+        hence thesis by A89,A95,A88,Th2,CARD_1:97;
       end;
-      defpred P4[set,set] means
-      for Y being set, i being Element of NAT,
-           Fi being Function of the_subsets_of_card(n,S.i\{a.i}),k
-        st i=$1 & Y = {x where x is Element of omega:
-                ex j being Element of NAT st a.j=x & j>i} &
-          (for Y' being Element of the_subsets_of_card(n,S.i\{a.i}) holds
-             Fi.Y' = F.(Y' \/ {a.i}))
-        holds ex l being natural number st l=$2 & l in k &
-          rng(Fi|the_subsets_of_card(n,Y)) = {l};
-      A101: for x being set st x in NAT ex y being set st y in k & P4[x,y]
+A96:  for x being set st x in NAT ex y being set st y in k & P4[x,y]
       proof
         let x be set;
-        assume x in NAT; then
-        reconsider i' = x as Element of NAT;
+        assume
+        x in NAT;
+        then reconsider i' = x as Element of NAT;
         set Y' = S.i';
-        reconsider a' = a.i' as Element of Y' by A56;
-        Y' in A; then
-        consider Y'' be Subset of X such that
-        A102: Y''=Y' & card Y'' = omega;
-        consider Fa be Function of the_subsets_of_card(n,Y'\{a'}),k,
-                 Ha be Subset of Y'\{a'} such that
-        A103: Ha is infinite & Fa|the_subsets_of_card(n,Ha) is constant &
-        for Y'' being Element of the_subsets_of_card(n,Y'\{a'}) holds
-           Fa.Y'' = F.(Y'' \/ {a'}) by A102,A11;
-        set Z = {x' where x' is Element of omega:
-                        ex j being Element of NAT st a.j=x' & j>i'};
-        A104: Z c= S.(i'+1) & Fa|the_subsets_of_card(n,Z) is constant
-          by A70,A103;
-        A105: a.i' in a.(i'+1) & S.(i'+1) c= S.i' & a.i' in S.i' &
-          a.(i'+1) in S.(i'+1) & not a.i' in S.(i'+1) by A56;
+A97:    not a.i' in S.(i'+1) by A47;
+        reconsider a' = a.i' as Element of Y' by A47;
+
+        set Z = {x' where x' is Element of omega: ex j being Element of NAT st
+        a.j=x' & j>i'};
+
+A98:    S.(i'+1) c= S.i' by A47;
+        Y' in A;
+        then ex Y'' be Subset of X st Y''=Y' & card Y'' = omega;
+
+        then consider
+        Fa be Function of the_subsets_of_card(n,Y'\{a'}),k, Ha be
+        Subset of Y'\{a'} such that
+
+        Ha is infinite and
+        Fa|the_subsets_of_card(n,Ha) is constant and
+
+A99:    for Y'' being Element of the_subsets_of_card(n,Y'\{a'})
+        holds Fa. Y'' = F.(Y'' \/ {a'}) by A7;
+
+A100:   Z c= S.(i'+1) by A64,A99;
         now
           let x be set;
-          assume x in Z; then
-          A106: x in S.(i'+1) by A104;
-          not x in {a.i'} by A106,A105,TARSKI:def 1;
-          hence x in S.i'\{a.i'} by A106,A105,XBOOLE_0:def 5;
-        end; then
-        Z c= S.i'\{a.i'} by TARSKI:def 3; then
-        A107: the_subsets_of_card(n,Z) c= the_subsets_of_card(n,Y'\{a'})
-          by Lm1;
-        A108: Fa|the_subsets_of_card(n,Z) is
-          Function of the_subsets_of_card(n,Z),k by A10,A107,FUNCT_2:38;
-        card Z = omega by A92;
-        then not card Z c= card n;
-        then card n c= card Z & Z is non empty; then
-        the_subsets_of_card(n,Z) is non empty by GROUP_10:2; then
-        consider y be Element of k such that
-        A109: rng(Fa|the_subsets_of_card(n,Z)) = {y}
-         by A10,A108,A104,FUNCT_2:188;
+          assume
+          x in Z;
+          then
+A101:     x in S.(i'+1) by A100;
+          then not x in {a.i'} by A97,TARSKI:def 1;
+          hence x in S.i'\{a.i'} by A98,A101,XBOOLE_0:def 5;
+        end;
+        then Z c= S.i'\{a.i'} by TARSKI:def 3;
+
+        then the_subsets_of_card(n,Z) c= the_subsets_of_card(n,Y'\{a'}) by
+        Lm1;
+
+        then
+A102:   Fa|the_subsets_of_card(n,Z) is Function of the_subsets_of_card(n
+        ,Z),k by A6,FUNCT_2:38;
+
+A103:   not card Z c= card n by A87;
+        then Z is non empty;
+        then
+A104:   the_subsets_of_card(n,Z) is non empty by A103,GROUP_10:2;
+        Fa|the_subsets_of_card(n,Z) is constant by A64,A99;
+        then consider y be Element of k such that
+
+A105:   rng(Fa|the_subsets_of_card(n,Z)) = {y} by A6,A102,A104
+        ,FUNCT_2:188;
+
         reconsider y as set;
         take y;
-        thus       y in k by A10;
-        thus P4[x,y]
+        thus y in k by A6;
+
+        for Y being set, i being Element of NAT, Fi being Function of
+
+the_subsets_of_card(n,S.i\{a.i}),k st i=x & Y = {x' where x' is Element of
+
+omega: ex j being Element of NAT st a.j=x' & j>i} & (for Y' being Element of
+
+the_subsets_of_card(n,S.i\{a.i}) holds Fi.Y' = F.(Y' \/ {a.i})) holds ex l
+
+being natural number st l=y & l in k & rng(Fi|the_subsets_of_card(n,Y)) = {l}
+
         proof
-          thus for Y being set, i being Element of NAT,
-              Fi being Function of the_subsets_of_card(n,S.i\{a.i}),k
-              st i=x & Y = {x' where x' is Element of omega:
-                     ex j being Element of NAT st a.j=x' & j>i} &
-              (for Y' being Element of the_subsets_of_card(n,S.i\{a.i})
-                 holds Fi.Y' = F.(Y' \/ {a.i}))
-              holds ex l being natural number
-                st l=y & l in k & rng(Fi|the_subsets_of_card(n,Y)) = {l}
+          reconsider k'=k as Element of NAT by ORDINAL1:def 13;
+          let Y be set;
+          let i be Element of NAT;
+          let Fi be Function of the_subsets_of_card(n,S.i\{a.i}),k;
+          assume
+A106:     i=x;
+          k' is Subset of NAT by STIRL2_1:8;
+          then reconsider l=y as natural number;
+          assume
+
+A107:     Y = {x' where x' is Element of omega: ex j being Element
+          of NAT st a.j=x' & j>i};
+
+          assume
+
+A108:     for Y' being Element of the_subsets_of_card(n,S.i\{a.i})
+          holds Fi.Y' = F.(Y' \/ {a.i});
+
+          take l;
+          thus l=y;
+          thus l in k by A6;
+
+          for x1' being Element of the_subsets_of_card(n,S.i\{a.i})
+          holds Fa.x1' = Fi.x1'
+
           proof
-            let Y be set;
-            let i be Element of NAT;
-            let Fi be Function of the_subsets_of_card(n,S.i\{a.i}),k;
-            assume A111: i=x;
-            assume A112: Y = {x' where x' is Element of omega:
-              ex j being Element of NAT st a.j=x' & j>i};
-            assume A113:
-              for Y' being Element of the_subsets_of_card(n,S.i\{a.i})
-                holds Fi.Y' = F.(Y' \/ {a.i});
-            reconsider k'=k as Element of NAT by ORDINAL1:def 13;
-            k' is Subset of NAT by STIRL2_1:8; then
-            reconsider l=y as natural number;
-            take l;
-            thus l=y;
-            thus l in k by A10;
-            for x1' being Element of the_subsets_of_card(n,S.i\{a.i}) holds
-            Fa.x1' = Fi.x1'
-            proof
-              let x1' be Element of the_subsets_of_card(n,S.i\{a.i});
-              thus Fa.x1' = F.(x1' \/ {a.i}) by A111,A103
-              .= Fi.x1' by A113;
-            end;
-            hence thesis
-              by A109,A112,A111,FUNCT_2:113;
+            let x1' be Element of the_subsets_of_card(n,S.i\{a.i});
+            thus Fa.x1' = F.(x1' \/ {a.i}) by A99,A106
+              .= Fi.x1' by A108;
           end;
+          hence thesis by A105,A106,A107,FUNCT_2:113;
         end;
+        hence P4[x,y];
       end;
       consider g be Function of NAT,k such that
-      A114: for x being set st x in NAT holds P4[x,g.x]
-        from FUNCT_2:sch 1(A101);
-      g in Funcs(NAT,k) by A10,FUNCT_2:11; then
-      consider g' be Function such that
-      A116: g=g' & dom g' = NAT & rng g' c= k by FUNCT_2:def 2;
-      consider k' be set such that
-      A117: k' in rng g & g"{k'} is infinite by A116,COMPL_SP:24;
+
+A109: for x being set st x in NAT holds P4[x,g.x] from FUNCT_2:sch 1
+      (A96);
+
+      g in Funcs(NAT,k) by A6,FUNCT_2:11;
+
+      then ex g' be Function st g=g' & dom g' = NAT & rng g' c= k by
+      FUNCT_2:def 2;
+
+      then consider k' be set such that
+      k' in rng g and
+A110: g"{k'} is infinite by COMPL_SP:24;
       set H = a.:(g"{k'});
-      A118: g"{k'} c= dom g by RELAT_1:167;
-      g"{k'}, H are_equipotent by A90,A91,A118,CARD_1:60,XBOOLE_1:1; then
-      A119: card(g"{k'}) = card H by CARD_1:21;
+      g"{k'} c= dom g by RELAT_1:167;
+      then g"{k'}, H are_equipotent by A85,A86,CARD_1:60,XBOOLE_1:1;
+      then
+A111: card(g"{k'}) = card H by CARD_1:21;
       now
         let y be set;
-        assume y in H; then
-        consider x be set such that
-        A121: [x,y] in a & x in g"{k'} by RELAT_1:def 13;
-        A122: x in dom a & y = a.x by A121,FUNCT_1:8; then
-        reconsider i=x as Element of NAT;
-        A123: y in S.i by A122,A56;
-        S.i in the_subsets_of_card(omega,X); then
-        consider Xi be Subset of X such that
-        A124: S.i=Xi & card Xi = omega;
-        thus y in X by A124,A123;
-      end; then
-      reconsider H as Subset of X by TARSKI:def 3;
+        assume
+        y in H;
+        then consider x be set such that
+A112:   [x,y] in a and
+        x in g"{k'} by RELAT_1:def 13;
+        x in dom a by A112,FUNCT_1:8;
+        then reconsider i=x as Element of NAT;
+        y = a.x by A112,FUNCT_1:8;
+        then
+A113:   y in S.i by A47;
+        S.i in the_subsets_of_card(omega,X);
+        hence y in X by A113;
+      end;
+      then reconsider H as Subset of X by TARSKI:def 3;
       take H;
-      thus H is infinite by A117,A119;
-      A125: for y being set st y in dom(F|the_subsets_of_card(n+1,H))
-        holds F|the_subsets_of_card(n+1,H).y = k'
+      thus H is infinite by A110,A111;
+
+A114: for y being set st y in dom(F|the_subsets_of_card(n+1,H)) holds F|
+      the_subsets_of_card(n+1,H).y = k'
+
       proof
         let y be set;
-        assume y in dom(F|the_subsets_of_card(n+1,H)); then
-        A126: y in dom F & y in the_subsets_of_card(n+1,H) by RELAT_1:86; then
-        consider Y be Subset of H such that
-        A127: y=Y & card Y = n+1;
+        assume
+        y in dom(F|the_subsets_of_card(n+1,H));
+        then
+A115:   y in the_subsets_of_card(n+1,H) by RELAT_1:86;
+        then consider Y be Subset of H such that
+A116:   y=Y and
+A117:   card Y = n+1;
         set y0 = min* Y;
-        Y c= X by XBOOLE_1:1; then
-        A128: Y c= NAT by A9,XBOOLE_1:1; then
-        A129: y0 in Y & for k being Element of NAT st k in Y
-          holds y0 <= k by A127,CARD_1:47,NAT_1:def 1; then
-        consider x0 be set such that
-        A130: x0 in dom a & x0 in g"{k'} & y0 = a.x0 by FUNCT_1:def 12;
-        consider y0' be set such that
-        A131: y0' in rng g & [x0,y0'] in g & y0' in {k'} by A130,RELAT_1:166;
-        A132: x0 in dom g & g.x0 = y0' by A131,FUNCT_1:8;
-        reconsider x0 as Element of NAT by A132;
-        reconsider a' = a.x0 as Element of S.x0 by A56;
-        S.x0 in the_subsets_of_card(omega,X); then
-        consider S0 be Subset of X such that
-        A133: S0=S.x0 & card S0 = omega;
-        consider F0 be Function of the_subsets_of_card(n,S.x0\{a'}),k,
-                 H0 be Subset of S.x0\{a'} such that
-        A134: H0 is infinite & F0|the_subsets_of_card(n,H0) is constant &
-        for Y' being Element of the_subsets_of_card(n,S.x0\{a'}) holds
-          F0.Y' = F.(Y' \/ {a'}) by A11,A133;
-        set Y0 = {x where x is Element of omega:
-                ex j being Element of NAT st a.j=x & j>x0};
-        consider l be natural number such that
-        A135: l=g.x0 & l in k & rng(F0|the_subsets_of_card(n,Y0)) = {l}
-          by A114,A134;
-        A136: rng(F0|the_subsets_of_card(n,Y0)) = {k'}
-          by A135,A132,A131,TARSKI:def 1;
         set Y' = y \ {y0};
-        A137: Y0 c= S.(x0+1) & F0|the_subsets_of_card(n,Y0) is constant
-          by A70,A134;
-        A138: a.x0 in a.(x0+1) & S.(x0+1) c= S.x0 & a.x0 in S.x0 &
-              a.(x0+1) in S.(x0+1) & not a.x0 in S.(x0+1) by A56;
-        A139: not a.x0 in Y0 by A137,A56;
-        Y0 c= S.x0 by A137,A138,XBOOLE_1:1; then
-        Y0\{a.x0} c= S.x0\{a.x0} by XBOOLE_1:33; then
-        Y0 c= S.x0\{a.x0} by A139,ZFMISC_1:65; then
-        A140: the_subsets_of_card(n,Y0) c= the_subsets_of_card(n,S.x0\{a.x0})
-          by Lm1;
+        Y c= X by XBOOLE_1:1;
+        then
+A118:   Y c= NAT by A5,XBOOLE_1:1;
+        then
+A119:   y0 in Y by A117,CARD_1:47,NAT_1:def 1;
+        then consider x0 be set such that
+        x0 in dom a and
+A120:   x0 in g"{k'} and
+A121:   y0 = a.x0 by FUNCT_1:def 12;
+        consider y0' be set such that
+        y0' in rng g and
+A122:   [x0,y0'] in g and
+A123:   y0' in {k'} by A120,RELAT_1:166;
+A124:   x0 in dom g by A122,FUNCT_1:8;
+A125:   g.x0 = y0' by A122,FUNCT_1:8;
+        reconsider x0 as Element of NAT by A124;
+
+        set Y0 = {x where x is Element of omega: ex j being Element of NAT st
+        a.j=x & j>x0};
+
+        {y0} c= y by A116,A119,ZFMISC_1:37;
+        then
+A126:   Y' \/ {a.x0} = y by A121,XBOOLE_1:45;
+        reconsider a' = a.x0 as Element of S.x0 by A47;
+        S.x0 in the_subsets_of_card(omega,X);
+        then ex S0 be Subset of X st S0=S.x0 & card S0 = omega;
+
+        then consider
+        F0 be Function of the_subsets_of_card(n,S.x0\{a'}),k, H0 be
+        Subset of S.x0\{a'} such that
+
+        H0 is infinite and
+        F0|the_subsets_of_card(n,H0) is constant and
+
+A127:   for Y' being Element of the_subsets_of_card(n,S.x0\{a'})
+        holds F0. Y' = F.(Y' \/ {a'}) by A7;
+
+        reconsider y'=y as finite set by A116,A117;
+        card Y' c= card y' by CARD_1:27;
+        then reconsider Y''=Y' as finite set;
+A128:   Y0 c= S.(x0+1) by A64,A127;
         now
           let x be set;
-          assume A141: x in Y'; then
-          A142: x in y & not x in {y0} by XBOOLE_0:def 5;
-          consider j be set such that
-          A143: j in dom a & j in g"{k'} & x = a.j by A142,A127,FUNCT_1:def 12;
-          reconsider x'=x as Element of omega by A142,A127,A128;
+          assume
+A129:     x in Y';
+          then
+A130:     x in y;
+          then consider j be set such that
+A131:     j in dom a and
+          j in g"{k'} and
+A132:     x = a.j by A116,FUNCT_1:def 12;
+          reconsider x'=x as Element of omega by A116,A118,A130;
+A133:     not x in {y0} by A129,XBOOLE_0:def 5;
           ex j being Element of NAT st a.j=x' & j>x0
           proof
-            reconsider j as Element of NAT by A143;
+            reconsider j as Element of NAT by A131;
             take j;
-            thus a.j=x' by A143;
-            A144: y0 <= x' by A128,A141,A127,NAT_1:def 1;
+            thus a.j=x' by A132;
+A134:       y0 <= x' by A116,A118,A129,NAT_1:def 1;
             thus j>x0
             proof
-              assume A145: x0>=j;
-              x0<>j by A143,A142,A130,TARSKI:def 1;
-              hence contradiction by A144,A130,A145,A143,A67;
+              assume
+A135:         x0>=j;
+              x0<>j by A121,A133,A132,TARSKI:def 1;
+              hence contradiction by A61,A121,A132,A134,A135;
             end;
           end;
           hence x in Y0;
-        end; then
-        A146: Y' is Subset of Y0 by TARSKI:def 3;
-        A147: {y0} c= y by A127,A129,ZFMISC_1:37;
-        A148: Y' \/ {a.x0}
-        = y by A130,A147,XBOOLE_1:45;
-        reconsider y'=y as finite set by A127;
-        card Y' c= card y' by CARD_1:27; then
-        reconsider Y''=Y' as finite set;
-        y0 in {y0} by TARSKI:def 1; then
-        A149: not a.x0 in Y' by A130,XBOOLE_0:def 5;
-        card y' = card Y'' + 1 by A148,A149,CARD_2:54; then
-        A150: Y' in the_subsets_of_card(n,Y0) by A127,A146; then
-        A151: Y' in the_subsets_of_card(n,S.x0\{a.x0}) by A140;
-        reconsider Y' as Element of the_subsets_of_card(n,S.x0\{a.x0})
-          by A140,A150;
-        Y' in dom F0 by A10,A151,FUNCT_2:def 1; then
-        Y' in dom(F0|the_subsets_of_card(n,Y0)) by A150,RELAT_1:86; then
-        F0|the_subsets_of_card(n,Y0).Y' in rng(F0|the_subsets_of_card(n,Y0))
-          by FUNCT_1:12; then
-        F0|the_subsets_of_card(n,Y0).Y' = k' by A136,TARSKI:def 1; then
-        A152: F0.Y' = k' by A150,FUNCT_1:72;
-        F0.Y' = F.(Y' \/ {a.x0}) by A134;
-        hence thesis by A152,A148,A126,FUNCT_1:72;
+        end;
+        then
+A136:   Y' is Subset of Y0 by TARSKI:def 3;
+        y0 in {y0} by TARSKI:def 1;
+        then not a.x0 in Y' by A121,XBOOLE_0:def 5;
+        then card y' = card Y'' + 1 by A126,CARD_2:54;
+        then
+A137:   Y' in the_subsets_of_card(n,Y0) by A116,A117,A136;
+
+        ex l be natural number st l=g.x0 & l in k & rng(F0|
+        the_subsets_of_card(n,Y0)) = {l} by A109,A127;
+
+        then
+A138:   rng(F0|the_subsets_of_card(n,Y0)) = {k'} by A123,A125,
+        TARSKI:def 1;
+
+        S.(x0+1) c= S.x0 by A47;
+        then Y0 c= S.x0 by A128,XBOOLE_1:1;
+        then
+A139:   Y0\{a.x0} c= S.x0\{a.x0} by XBOOLE_1:33;
+        not a.x0 in Y0 by A47,A128;
+        then Y0 c= S.x0\{a.x0} by A139,ZFMISC_1:65;
+
+        then
+A140:   the_subsets_of_card(n,Y0) c= the_subsets_of_card(n,S.x0\{a.x0})
+        by Lm1;
+
+        then
+A141:   Y' in the_subsets_of_card(n,S.x0\{a.x0}) by A137;
+
+        reconsider Y' as Element of the_subsets_of_card(n,S.x0\{a.x0}) by A140
+        ,A137;
+
+        Y' in dom F0 by A6,A141,FUNCT_2:def 1;
+        then Y' in dom(F0|the_subsets_of_card(n,Y0)) by A137,RELAT_1:86;
+
+        then F0|the_subsets_of_card(n,Y0).Y' in rng(F0|the_subsets_of_card(n,
+        Y0)) by FUNCT_1:12;
+
+        then F0|the_subsets_of_card(n,Y0).Y' = k' by A138,TARSKI:def 1;
+        then
+A142:   F0.Y' = k' by A137,FUNCT_1:72;
+        F0.Y' = F.(Y' \/ {a.x0}) by A127;
+        hence thesis by A115,A126,A142,FUNCT_1:72;
       end;
-      for x,y being set st x in dom(F|the_subsets_of_card(n+1,H)) &
-        y in dom(F|the_subsets_of_card(n+1,H)) holds
-        F|the_subsets_of_card(n+1,H).x = F|the_subsets_of_card(n+1,H).y
+
+      for x,y being set st x in dom(F|the_subsets_of_card(n+1,H)) & y in
+
+dom(F|the_subsets_of_card(n+1,H)) holds F|the_subsets_of_card(n+1,H).x = F|
+      the_subsets_of_card(n+1,H).y
+
       proof
         let x,y be set;
-        assume x in dom(F|the_subsets_of_card(n+1,H)); then
-        A153: F|the_subsets_of_card(n+1,H).x = k' by A125;
-        assume y in dom(F|the_subsets_of_card(n+1,H));
-        hence thesis by A153,A125;
+        assume
+        x in dom(F|the_subsets_of_card(n+1,H));
+        then
+A143:   F|the_subsets_of_card(n+1,H).x = k' by A114;
+        assume
+        y in dom(F|the_subsets_of_card(n+1,H));
+        hence thesis by A114,A143;
       end;
       hence F|the_subsets_of_card(n+1,H) is constant by FUNCT_1:def 16;
     end;
     hence thesis;
   end;
-  for n being natural number holds P[n] from NAT_1:sch 2(A1,A6);
+A144: P[0]
+  proof
+    let k be natural number;
+    let X be set;
+    set H = X;
+    H c= X;
+    then reconsider H as Subset of X;
+    let F be Function of (the_subsets_of_card(0,X)),k;
+    assume
+A145: card X = omega;
+    assume
+    X c= omega;
+    assume
+    k<>0;
+    take H;
+    thus H is infinite by A145;
+
+    for x,y being set holds x in dom(F|the_subsets_of_card(0,H)) & y in
+    dom(F|the_subsets_of_card(0,H)) implies F|the_subsets_of_card(0,H).x=F|
+    the_subsets_of_card(0,H).y
+
+    proof
+      let x,y be set;
+      assume
+A146: x in dom(F|the_subsets_of_card(0,H));
+A147: dom(F|the_subsets_of_card(0,H)) = dom(F|{0}) by Lm2
+        .= dom F /\ {0} by RELAT_1:90;
+      assume
+      y in dom(F|the_subsets_of_card(0,H));
+      then y in {0} by A147,XBOOLE_0:def 4;
+      then
+A148: y=0 by TARSKI:def 1;
+      x in {0} by A147,A146,XBOOLE_0:def 4;
+      hence thesis by A148,TARSKI:def 1;
+    end;
+    hence thesis by FUNCT_1:def 16;
+  end;
+  for n being natural number holds P[n] from NAT_1:sch 2(A144,A1);
   hence thesis;
 end;
 
@@ -1063,161 +1349,189 @@ theorem
   the_subsets_of_card(0,X) = {0} by Lm2;
 
 theorem Th6:
-  for X being finite set
-  st card X < n holds the_subsets_of_card(n, X) is empty
+  for X being finite set st card X < n holds the_subsets_of_card(n,
+  X) is empty
 proof
   let X be finite set;
-  assume A1: card X < n;
-  assume the_subsets_of_card(n, X) is not empty; then
-  consider x be set such that
-  A2: x in the_subsets_of_card(n, X) by XBOOLE_0:def 1;
-  consider X' be Subset of X such that
-  A3: x=X' & card X' = n by A2;
-  A4: card Seg n = n by FINSEQ_1:78;
-  card Seg n c= card X by A3,A4,CARD_1:27; then
-  card Seg n <= card X by NAT_1:40;
+  assume
+A1: card X < n;
+A2: card Seg n = n by FINSEQ_1:78;
+  assume
+  the_subsets_of_card(n, X) is not empty;
+  then consider x be set such that
+A3: x in the_subsets_of_card(n, X) by XBOOLE_0:def 1;
+  ex X' be Subset of X st x=X' & card X' = n by A3;
+  then card Seg n c= card X by A2,CARD_1:27;
+  then card Seg n <= card X by NAT_1:40;
   hence contradiction by A1,FINSEQ_1:78;
 end;
 
 theorem
-  X c= Y implies the_subsets_of_card(Z,X) c= the_subsets_of_card(Z,Y) by Lm1;
+  X c= Y implies the_subsets_of_card(Z,X) c= the_subsets_of_card(Z,Y) by
+  Lm1;
 
 theorem
-  X is finite & Y is finite & card Y = X implies
-  the_subsets_of_card(X,Y) = {Y} by Lm3;
+  X is finite & Y is finite & card Y = X implies the_subsets_of_card(X,Y
+  ) = {Y} by Lm3;
 
 theorem
-  X is non empty & Y is non empty implies
-  (f is constant iff ex y being Element of Y st rng f = {y}) by FUNCT_2:188;
+  X is non empty & Y is non empty implies (f is constant iff ex y being
+  Element of Y st rng f = {y}) by FUNCT_2:188;
 
 theorem Th10:
-  for X being finite set st k <= card X holds
-  ex Y being Subset of X st card Y = k
+  for X being finite set st k <= card X holds ex Y being Subset of
+  X st card Y = k
 proof
   let X be finite set;
-  assume k <= card X; then
-  card k <= card X by CARD_1:def 5; then
-  card k c= card X by NAT_1:40; then
-  consider Y be set such that
-  A1: Y c= X & card Y = card k by CARD_FIL:36;
+  assume
+  k <= card X;
+  then card k <= card X by CARD_1:def 5;
+  then card k c= card X by NAT_1:40;
+  then consider Y be set such that
+A1: Y c= X and
+A2: card Y = card k by CARD_FIL:36;
   reconsider Y as Subset of X by A1;
   take Y;
-  thus thesis by A1,CARD_1:def 5;
+  thus thesis by A2,CARD_1:def 5;
 end;
 
 theorem Th11:
   m>=1 implies n+1 <= (n+m) choose m
 proof
-  defpred Q[Nat] means
-    for n being Element of NAT st $1>=1 holds n+1 <= (n+$1) choose $1;
-  A1: Q[0];
-  A2: for k being Element of NAT st Q[k] holds Q[k+1]
+  defpred Q[Nat] means for n being Element of NAT st $1>=1 holds n+1 <= (n+$1)
+  choose $1;
+A1: for k being Element of NAT st Q[k] holds Q[k+1]
   proof
     let k be Element of NAT;
-    assume A3: Q[k];
     set k'=k+1;
     reconsider k' as Element of NAT by ORDINAL1:def 13;
+    assume
+A2: Q[k];
     for n being Element of NAT st k'>=1 holds n+1 <= (n+k') choose k'
     proof
       let n be Element of NAT;
-      assume A4: k'>=1;
-      per cases by A4,NAT_1:8;
-      suppose A5: k+1=1;
+      assume
+A3:   k'>=1;
+      per cases by A3,NAT_1:8;
+      suppose
+A4:     k+1=1;
         n+1 >= 0+1 by XREAL_1:8;
-        hence thesis by A5,NEWTON:33;
+        hence thesis by A4,NEWTON:33;
       end;
-      suppose k>=1; then
-        A6: n+1 <= (n+k) choose k by A3;
-        A7: (n+k') choose k' = (n+k+1) choose (k+1)
-        .= (n+k) choose (k+1) + (n+k) choose k by NEWTON:32;
-        A8: (n+1) + (n+k) choose (k+1) <= (n+k') choose k'
-          by A7,A6,XREAL_1:8;
+      suppose
+A5:     k>=1;
+A6:     (n+k') choose k' = (n+k+1) choose (k+1)
+          .= (n+k) choose (k+1) + (n+k) choose k by NEWTON:32;
+        n+1 <= (n+k) choose k by A2,A5;
+        then
+A7:     (n+1) + (n+k) choose (k+1) <= (n+k') choose k' by
+        A6,XREAL_1:
+        8;
         0+(n+1) <= (n+k) choose (k+1) + (n+1) by XREAL_1:8;
-        hence thesis by A8,XXREAL_0:2;
+        hence thesis by A7,XXREAL_0:2;
       end;
     end;
     hence thesis;
   end;
-  A9: for k being Element of NAT holds Q[k] from NAT_1:sch 1(A1,A2);
-  assume A10: m >= 1;
-  reconsider m'=m as Element of NAT by ORDINAL1:def 13;
   reconsider n'=n as Element of NAT by ORDINAL1:def 13;
-  n'+1 <= (n'+m') choose m' by A9,A10;
+  reconsider m'=m as Element of NAT by ORDINAL1:def 13;
+  assume
+A8: m >= 1;
+A9: Q[0];
+  for k being Element of NAT holds Q[k] from NAT_1:sch 1(A9,A1);
+  then n'+1 <= (n'+m') choose m' by A8;
   hence thesis;
 end;
 
 theorem Th12:
   m>=1 & n>=1 implies m+1 <= (n+m) choose m
 proof
-  defpred Q[Nat] means
-    for n being Element of NAT st $1>=1 & n>=1 holds $1+1 <= (n+$1) choose $1;
-  A1: Q[0];
-  A2: for k being Element of NAT st Q[k] holds Q[k+1]
+  defpred Q[Nat] means for n being Element of NAT st $1>=1 & n>=1 holds $1+1
+  <= (n+$1) choose $1;
+  assume
+A1: m >= 1 & n >= 1;
+  reconsider n'=n as Element of NAT by ORDINAL1:def 13;
+  reconsider m'=m as Element of NAT by ORDINAL1:def 13;
+A2: for k being Element of NAT st Q[k] holds Q[k+1]
   proof
     let k be Element of NAT;
-    assume A3: Q[k];
     set k'=k+1;
     reconsider k' as Element of NAT by ORDINAL1:def 13;
-    for n being Element of NAT st k'>=1 & n>=1 holds k'+1 <= (n+k') choose k'
+    assume
+A3: Q[k];
+    for n being Element of NAT st k'>=1 & n>=1 holds k'+1 <= (n+k') choose
+    k'
     proof
       let n be Element of NAT;
-      assume A4: k'>=1;
-      assume A5: n>=1;
+      assume
+A4:   k'>=1;
+      assume
+A5:   n>=1;
       per cases by A4,NAT_1:8;
-      suppose A6: k+1=1;
-        A7: n+1 >= 0+1 by XREAL_1:8;
-        n+1 >= 1+1 by A5,XREAL_1:8;
-        hence thesis by A6,A7,NEWTON:33;
+      suppose
+A6:     k+1=1;
+        n+1 >= 0+1 & n+1 >= 1+1 by A5,XREAL_1:8;
+        hence thesis by A6,NEWTON:33;
       end;
-      suppose k>=1; then
-        A8: k+1 <= (n+k) choose k by A5,A3;
-        A9: (n+k') choose k' = (n+k+1) choose (k+1)
-        .= (n+k) choose (k+1) + (n+k) choose k by NEWTON:32;
-        A10: (k+1) + (n+k) choose (k+1) <= (n+k') choose k'
-          by A9,A8,XREAL_1:8;
-        n-1 >= 1-1 by A5,XREAL_1:11; then
-        A11: n -' 1 = n - 1 by XREAL_0:def 2;
+      suppose
+A7:     k>=1;
         set k''=k+1;
-        k+1>=0+1 by XREAL_1:8; then
-        (n-'1) +1 <= (n-'1+k'') choose k'' by Th11; then
-        1 <= (n+k) choose (k+1) by A11,A5,XXREAL_0:2; then
-        1+(k+1) <= (n+k) choose (k+1) + (k+1) by XREAL_1:8;
+A8:     (n+k') choose k' = (n+k+1) choose (k+1)
+          .= (n+k) choose (k+1) + (n+k) choose k by NEWTON:32;
+        k+1>=0+1 by XREAL_1:8;
+        then
+A9:     (n-'1) +1 <= (n-'1+k'') choose k'' by Th11;
+        n-1 >= 1-1 by A5,XREAL_1:11;
+        then n -' 1 = n - 1 by XREAL_0:def 2;
+        then 1 <= (n+k) choose (k+1) by A5,A9,XXREAL_0:2;
+        then
+A10:    1+(k+1) <= (n+k) choose (k+1) + (k+1) by XREAL_1:8;
+        k+1 <= (n+k) choose k by A3,A5,A7;
+        then (k+1) + (n+k) choose (k+1) <= (n+k') choose k' by
+        A8,XREAL_1
+        :8;
         hence thesis by A10,XXREAL_0:2;
       end;
     end;
     hence thesis;
   end;
-  A12: for k being Element of NAT holds Q[k] from NAT_1:sch 1(A1,A2);
-  assume A13: m >= 1 & n >= 1;
-  reconsider m'=m as Element of NAT by ORDINAL1:def 13;
-  reconsider n'=n as Element of NAT by ORDINAL1:def 13;
-  m'+1 <= (n'+m') choose m' by A12,A13;
+A11: Q[0];
+  for k being Element of NAT holds Q[k] from NAT_1:sch 1(A11,A2);
+  then m'+1 <= (n'+m') choose m' by A1;
   hence thesis;
 end;
 
 theorem Th13:
-  for X being non empty set, p1,p2 being Element of X,
-      P being a_partition of X,
-      A being Element of P st p1 in A & (proj P).p1=(proj P).p2
+  for X being non empty set, p1,p2 being Element of X, P being
+  a_partition of X, A being Element of P st p1 in A & (proj P).p1=(proj P).p2
   holds p2 in A
 proof
   let X be non empty set;
   let p1,p2 be Element of X;
   let P be a_partition of X;
   let A be Element of P;
-  assume A1: p1 in A;
-  assume (proj P).p1=(proj P).p2; then
-  A2: (proj P).p2 = A by A1,BORSUK_1:29;
-  assume A3: not p2 in A;
-  union P = X by EQREL_1:def 6; then
-  consider B be set such that
-  A4: p2 in B & B in P by TARSKI:def 4;
-  reconsider B as Element of P by A4;
-  A5: (proj P).p2 = B by A4,BORSUK_1:29;
+  assume
+A1: p1 in A;
+  assume
+  (proj P).p1=(proj P).p2;
+  then
+A2: (proj P).p2 = A by A1,BORSUK_1:29;
+  assume
+A3: not p2 in A;
+  union P = X by EQREL_1:def 6;
+  then consider B be set such that
+A4: p2 in B and
+A5: B in P by TARSKI:def 4;
+  reconsider B as Element of P by A5;
+A6: (proj P).p2 = B by A4,BORSUK_1:29;
   per cases by EQREL_1:def 6;
-  suppose A=B; hence contradiction by A3,A4; end;
-  suppose A misses B; then
-    A /\ A = {} by A2,A5,XBOOLE_0:def 7;
+  suppose
+    A=B;
+    hence contradiction by A3,A4;
+  end;
+  suppose
+    A misses B;
+    then A /\ A = {} by A2,A6,XBOOLE_0:def 7;
     hence contradiction by EQREL_1:def 6;
   end;
 end;
@@ -1225,824 +1539,946 @@ end;
 begin :: Infinite Ramsey Theorem
 
 theorem Th14:
-  for F being Function of the_subsets_of_card(n,X),k
-  st k<>0 & X is infinite
-  holds ex H st H is infinite & F|the_subsets_of_card(n,H) is constant
+  for F being Function of the_subsets_of_card(n,X),k st k<>0 & X
+  is infinite holds ex H st H is infinite & F|the_subsets_of_card(n,H) is
+  constant
 proof
   let F be Function of the_subsets_of_card(n,X),k;
-  assume A1: k<>0 & X is infinite;
-  consider Y be set such that
-  A2: Y c= X & card Y = omega by A1,CARD_3:104;
-  reconsider Y as non empty set by A2;
-  Y,omega are_equipotent by A2,CARD_1:21,84; then
-  consider f be Function such that
-  A3: f is one-to-one & dom f = omega & rng f = Y by WELLORD2:def 4;
-  reconsider f as Function of omega,Y by A3,FUNCT_2:3;
-  set F' = F * (f||^n);
-  F in Funcs(the_subsets_of_card(n,X),k) by A1,FUNCT_2:11; then
-  consider g1 be Function such that
-  A4: F=g1 & dom g1=the_subsets_of_card(n,X) & rng g1 c= k by FUNCT_2:def 2;
-  not card omega c= card n;
+  assume that
+A1: k<>0 and
+A2: X is infinite;
+  F in Funcs(the_subsets_of_card(n,X),k) by A1,FUNCT_2:11;
   then
-  A5: card n c= card omega;
-  not card Y c= card n by A2;
-  then card n c= card Y; then
-  the_subsets_of_card(n,Y) is non empty by GROUP_10:2; then
-  f||^n in Funcs(the_subsets_of_card(n,omega), the_subsets_of_card(n,Y))
-    by FUNCT_2:11; then
-  consider g2 be Function such that
-  A6: f||^n=g2 & dom g2=the_subsets_of_card(n,omega) &
-    rng g2 c= the_subsets_of_card(n,Y) by FUNCT_2:def 2;
-  the_subsets_of_card(n,Y) c= the_subsets_of_card(n,X) by A2,Lm1; then
-  A7: dom F' = the_subsets_of_card(n,omega) by A6,A4,RELAT_1:46,XBOOLE_1:1;
-  A8: rng F' c= rng F by RELAT_1:45; then
-  A9: rng F' c= k by A4,XBOOLE_1:1;
-  reconsider F' as Function of the_subsets_of_card(n,omega),k
-    by A8,A7,A4,FUNCT_2:4,XBOOLE_1:1;
+A3: ex g1 be Function st F=g1 & dom g1=the_subsets_of_card(n,X) & rng g1 c=
+  k by FUNCT_2:def 2;
+  consider Y be set such that
+A4: Y c= X and
+A5: card Y = omega by A2,CARD_3:104;
+  reconsider Y as non empty set by A5;
+  Y,omega are_equipotent by A5,CARD_1:21,84;
+  then consider f be Function such that
+A6: f is one-to-one and
+A7: dom f = omega and
+A8: rng f = Y by WELLORD2:def 4;
+  reconsider f as Function of omega,Y by A7,A8,FUNCT_2:3;
+  not card Y c= card n by A5;
+  then the_subsets_of_card(n,Y) is non empty by GROUP_10:2;
+  then f||^n in Funcs(the_subsets_of_card(n,omega), the_subsets_of_card(n,Y))
+  by FUNCT_2:11;
+  then
+A9: ex g2 be Function st f||^n=g2 & dom g2= the_subsets_of_card(n,omega) &
+  rng g2 c= the_subsets_of_card(n,Y) by FUNCT_2:def 2;
+  set F' = F * (f||^n);
+  the_subsets_of_card(n,Y) c= the_subsets_of_card(n,X) by A4,Lm1;
+  then
+A10: dom F' = the_subsets_of_card(n,omega) by A3,A9,RELAT_1:46 ,
+  XBOOLE_1:1;
+A11: rng F' c= rng F by RELAT_1:45;
+  then
+A12: rng F' c= k by A3,XBOOLE_1:1;
+  reconsider F' as Function of the_subsets_of_card(n,omega),k by A3,A10,A11,
+  FUNCT_2:4,XBOOLE_1:1;
   consider H' be Subset of omega such that
-  A10: H' is infinite & F'|the_subsets_of_card(n,H') is constant
-    by A1,Lm5,CARD_1:84;
-  A12: dom(F'|the_subsets_of_card(n,H')) = the_subsets_of_card(n,H')
-    by A7,Lm1,RELAT_1:91;
-  rng(F'|the_subsets_of_card(n,H')) c= rng F' by RELAT_1:99; then
-  F'|the_subsets_of_card(n,H') is Function of the_subsets_of_card(n,H'),k
-    by A12,A9,FUNCT_2:4,XBOOLE_1:1; then
-  consider y be Element of k such that
-  A13: rng(F'|the_subsets_of_card(n,H')) = {y} by A10,A1,FUNCT_2:188;
+A13: H' is infinite and
+A14: F'|the_subsets_of_card(n,H') is constant by A1,Lm4,CARD_1:84;
+A15: rng(F'|the_subsets_of_card(n,H')) c= rng F' by RELAT_1:99;
   set H = f .: H';
-  A14: f .: H' c= rng f by RELAT_1:144;
-  reconsider H as Subset of X by A2,A3,A14,XBOOLE_1:1;
+  f .: H' c= rng f by RELAT_1:144;
+  then reconsider H as Subset of X by A4,A8,XBOOLE_1:1;
   take H;
-  H',f.:H' are_equipotent by A3,CARD_1:60;
-  hence A15: H is infinite by A10,CARD_1:68;
-  A17: dom(F|the_subsets_of_card(n,H)) = the_subsets_of_card(n,H)
-    by Lm1,A4,RELAT_1:91;
-  rng(F|the_subsets_of_card(n,H)) c= rng F by RELAT_1:99; then
-  A18: F|the_subsets_of_card(n,H) is Function of the_subsets_of_card(n,H),k
-    by A17,A4,FUNCT_2:4,XBOOLE_1:1;
-  ex y being Element of k st rng(F|the_subsets_of_card(n,H)) = {y}
+  H',f.:H' are_equipotent by A6,A7,CARD_1:60;
+  hence
+A16: H is infinite by A13,CARD_1:68;
+A17: rng(F|the_subsets_of_card(n,H)) c= rng F by RELAT_1:99;
+  dom(F'|the_subsets_of_card(n,H')) = the_subsets_of_card(n,H') by A10,
+  Lm1,RELAT_1:91;
+  then
+  F'|the_subsets_of_card(n,H') is Function of the_subsets_of_card(n,H'),k
+  by A12,A15,FUNCT_2:4,XBOOLE_1:1;
+  then consider y be Element of k such that
+A18: rng(F'|the_subsets_of_card(n,H')) = {y} by A1,A13,A14,FUNCT_2:
+  188;
+A19: not card omega c= card n;
+A20: ex y being Element of k st rng(F|the_subsets_of_card(n,H)) = {y}
   proof
     take y;
-    thus rng(F|the_subsets_of_card(n,H))
-    = F.:the_subsets_of_card(n,H) by RELAT_1:148
-    .= F.:((f||^n) .: the_subsets_of_card(n,H')) by A3,A5,Th1
-    .= F' .: the_subsets_of_card(n,H') by RELAT_1:159
-    .= {y} by A13,RELAT_1:148;
+    thus rng(F|the_subsets_of_card(n,H)) = F.:the_subsets_of_card(n,H) by
+    RELAT_1:148
+      .= F.:((f||^n) .: the_subsets_of_card(n,H')) by A6,A19,Th1
+      .= F' .: the_subsets_of_card(n,H') by RELAT_1:159
+      .= {y} by A18,RELAT_1:148;
   end;
-  hence thesis by A15,A1,A18,FUNCT_2:188;
+  dom(F|the_subsets_of_card(n,H)) = the_subsets_of_card(n,H) by A3,Lm1,
+  RELAT_1:91;
+  then
+  F|the_subsets_of_card(n,H) is Function of the_subsets_of_card(n,H),k by
+  A3,A17,FUNCT_2:4,XBOOLE_1:1;
+  hence thesis by A1,A16,A20,FUNCT_2:188;
 end;
 
 :: theorem 9.1 Set Theory T.Jech
+
 theorem
-  for X being infinite set,
-      P being a_partition of the_subsets_of_card(n,X)
-  st card P = k holds
-     ex H being Subset of X st H is infinite & H is_homogeneous_for P
+  for X being infinite set, P being a_partition of the_subsets_of_card(n
+  ,X) st card P = k holds ex H being Subset of X st H is infinite & H
+  is_homogeneous_for P
 proof
   let X be infinite set;
   let P be a_partition of the_subsets_of_card(n,X);
   assume
-Z:  card P = k; then
-      P,k are_equipotent by CARD_1:def 5; then
-  consider F1 be Function such that
-  A2: F1 is one-to-one & dom F1 = P & rng F1 = k by WELLORD2:def 4;
-  reconsider F1 as Function of P,k by A2,FUNCT_2:3;
+A1: card P = k;
+  then P,k are_equipotent by CARD_1:def 5;
+  then consider F1 be Function such that
+A2: F1 is one-to-one and
+A3: dom F1 = P and
+A4: rng F1 = k by WELLORD2:def 4;
+  reconsider F1 as Function of P,k by A3,A4,FUNCT_2:3;
   set F=F1*proj P;
   reconsider F as Function of the_subsets_of_card(n,X),k;
-  A3: k<>0 by Z;
   consider H be Subset of X such that
-  A4: H is infinite & F|the_subsets_of_card(n,H) is constant
-    by A3,Th14;
+A5: H is infinite and
+A6: F|the_subsets_of_card(n,H) is constant by A1,Th14;
   take H;
-  thus H is infinite by A4;
+  thus H is infinite by A5;
   consider h be Element of the_subsets_of_card(n,H);
-  A5: the_subsets_of_card(n,H) c= the_subsets_of_card(n,X) by Lm1;
-  A6: the_subsets_of_card(n,H) is non empty by A4; then
-  h in the_subsets_of_card(n,H); then
-  reconsider h as Element of the_subsets_of_card(n,X) by A5;
+  the_subsets_of_card(n,H) is non empty by A5;
+  then
+A7: h in the_subsets_of_card(n,H);
+A8: the_subsets_of_card(n,H) c= the_subsets_of_card(n,X) by Lm1;
+  then reconsider h as Element of the_subsets_of_card(n,X) by A7;
   set E = EqClass(h,P);
   reconsider E as Element of P by EQREL_1:def 8;
-  for x being set holds
-  x in the_subsets_of_card(n,H) implies x in E
+  for x being set holds x in the_subsets_of_card(n,H) implies x in E
   proof
     let x be set;
-    assume A7: x in the_subsets_of_card(n,H); then
-    reconsider x'=x as Element of the_subsets_of_card(n,X) by A5;
-    A8: h in E by EQREL_1:def 8;
-    k <> {} by Z; then
-    A9: dom F = the_subsets_of_card(n,X) by FUNCT_2:def 1;
-    x' in dom F /\ the_subsets_of_card(n,H) by A9,A7,XBOOLE_0:def 4; then
-    A10: x' in dom(F|the_subsets_of_card(n,H)) by RELAT_1:90;
-    h in dom F /\ the_subsets_of_card(n,H) by A9,A6,XBOOLE_0:def 4; then
-    A11: h in dom(F|the_subsets_of_card(n,H)) by RELAT_1:90;
-    A12: F.x' = F|the_subsets_of_card(n,H).x' by A7,FUNCT_1:72
-    .= F|the_subsets_of_card(n,H).h by A4,A10,A11,FUNCT_1:def 16
-    .= F.h by A4,FUNCT_1:72;
-    F1.((proj P).x')
-    = (F1*proj P).h by A12,A9,FUNCT_1:22
-    .= F1.((proj P).h) by A9,FUNCT_1:22; then
-    (proj P).h = (proj P).x' by A2,FUNCT_1:def 8;
-    hence thesis by A8,Th13;
-  end; then
-  the_subsets_of_card(n,H) c= E by TARSKI:def 3;
+    assume
+A9: x in the_subsets_of_card(n,H);
+    then reconsider x'=x as Element of the_subsets_of_card(n,X) by A8;
+A10: dom F = the_subsets_of_card(n,X) by A1,FUNCT_2:def 1;
+    then h in dom F /\ the_subsets_of_card(n,H) by A5,XBOOLE_0:def 4;
+    then
+A11: h in dom(F|the_subsets_of_card(n,H)) by RELAT_1:90;
+    x' in dom F /\ the_subsets_of_card(n,H) by A9,A10,XBOOLE_0:def 4;
+    then
+A12: x' in dom(F|the_subsets_of_card(n,H)) by RELAT_1:90;
+    F.x' = F|the_subsets_of_card(n,H).x' by A9,FUNCT_1:72
+      .= F|the_subsets_of_card(n,H).h by A6,A12,A11,FUNCT_1:def 16
+      .= F.h by A5,FUNCT_1:72;
+    then F1.((proj P).x') = (F1*proj P).h by A10,FUNCT_1:22
+      .= F1.((proj P).h) by A10,FUNCT_1:22;
+    then h in E & (proj P).h = (proj P).x' by A2,A3,
+    EQREL_1:def 8,FUNCT_1:
+    def 8;
+    hence thesis by Th13;
+  end;
+  then the_subsets_of_card(n,H) c= E by TARSKI:def 3;
   hence thesis by Def1;
 end;
 
 begin :: Ramsey's Theorem
 
-scheme BinInd2 { P[natural number,natural number] } :
-  P[m,n]
-  provided
+scheme
+  BinInd2 { P[natural number,natural number] } : P[m,n]
+provided
 A1: P[0,n] & P[n,0] and
 A2: P[m+1,n] & P[m,n+1] implies P[m+1,n+1]
 proof
-  defpred Q[Nat] means
-  for m,n being natural number st m+n=$1 holds P[m,n];
-  A3: Q[0]
-  proof
-    let m,n be natural number;
-    assume m+n=0; then
-    m=0 & n=0;
-    hence thesis by A1;
-  end;
-  A4: for k being Element of NAT st Q[k] holds Q[k+1]
+  defpred Q[Nat] means for m,n being natural number st m+n=$1 holds P[m,n];
+A3: for k being Element of NAT st Q[k] holds Q[k+1]
   proof
     let k be Element of NAT;
-    assume A5: Q[k];
+    assume
+A4: Q[k];
     for m,n being natural number st m+n=k+1 holds P[m,n]
     proof
       let m,n be natural number;
-      assume A6: m+n=k+1;
+      assume
+A5:   m+n=k+1;
       per cases;
-      suppose m=0 or n=0; hence thesis by A1; end;
-      suppose A7: m<>0 & n<>0; then
-        reconsider n'=n-1 as Element of NAT by NAT_1:20;
-        A8: m+n'=k by A6;
-        reconsider m'=m-1 as Element of NAT by A7,NAT_1:20;
-        m'+n=k by A6; then
-        P[m',n'+1] & P[m'+1,n'] by A5,A8;
-        hence thesis by A2;
+      suppose
+        m=0 or n=0;
+        hence thesis by A1;
+      end;
+      suppose
+A6:     m<>0 & n<>0;
+        then reconsider m'=m-1 as Element of NAT by NAT_1:20;
+        reconsider n'=n-1 as Element of NAT by A6,NAT_1:20;
+        m'+n=k by A5;
+        then
+A7:     P[m',n'+1] by A4;
+        m+n'=k by A5;
+        then P[m'+1,n'] by A4;
+        hence thesis by A2,A7;
       end;
     end;
     hence thesis;
   end;
-  A9: for k being Element of NAT holds Q[k] from NAT_1:sch 1(A3,A4);
   let m,n;
   set k=m+n;
   reconsider k as Element of NAT by ORDINAL1:def 13;
-  Q[k] by A9;
+A8: Q[0]
+  proof
+    let m,n be natural number;
+    assume
+    m+n=0;
+    then m=0;
+    hence thesis by A1;
+  end;
+  for k being Element of NAT holds Q[k] from NAT_1:sch 1(A8,A3);
+  then Q[k];
   hence thesis;
 end;
 
 :: Chapter 35 proof from THE BOOK Aigner-Ziegler
+
 theorem Th16:
-  m >= 2 & n >= 2 implies
-    ex r being natural number st r <= (m + n -' 2) choose (m -' 1) & r >= 2 &
-      for X being finite set,
-          F being Function of the_subsets_of_card(2,X), Seg 2 st card X >= r
-      holds ex S being Subset of X st
-        (card S >= m & rng(F|the_subsets_of_card(2,S)) = {1}) or
-        (card S >= n & rng(F|the_subsets_of_card(2,S)) = {2})
+  m >= 2 & n >= 2 implies ex r being natural number st r <= (m + n
+  -' 2) choose (m -' 1) & r >= 2 & for X being finite set, F being Function of
+the_subsets_of_card(2,X), Seg 2 st card X >= r holds ex S being Subset of X st
+  card S >= m & rng(F|the_subsets_of_card(2,S)) = {1} or card S >= n & rng(F|
+  the_subsets_of_card(2,S)) = {2}
 proof
-  defpred P[natural number,natural number] means $1 >= 2 & $2 >= 2 implies
-  ex r being natural number st r <= ($1 + $2 -' 2) choose ($1 -' 1) & r >= 2 &
-     for X being finite set,
-         F being Function of the_subsets_of_card(2,X), Seg 2 st card X >= r
-     holds ex S being Subset of X st
-       (card S >= $1 & rng(F|the_subsets_of_card(2,S)) = {1}) or
-       (card S >= $2 & rng(F|the_subsets_of_card(2,S)) = {2});
-  A1: for n being natural number holds P[0,n] & P[n,0];
-  A2: for m,n being natural number st P[m+1,n] & P[m,n+1] holds P[m+1,n+1]
+  defpred P[natural number,natural number] means $1 >= 2 & $2 >= 2 implies ex
+r being natural number st r <= ($1 + $2 -' 2) choose ($1 -' 1) & r >= 2 & for X
+being finite set, F being Function of the_subsets_of_card(2,X), Seg 2 st card X
+>= r holds ex S being Subset of X st (card S >= $1 & rng(F|the_subsets_of_card(
+  2,S)) = {1}) or (card S >= $2 & rng(F|the_subsets_of_card(2,S)) = {2});
+A1: for m,n being natural number st P[m+1,n] & P[m,n+1] holds P[m+1,n+1]
   proof
     let m,n be natural number;
-    assume A3: P[m+1,n];
-    assume A4: P[m,n+1];
-    assume A5: m+1 >= 2 & n+1 >= 2;
+    assume
+A2: P[m+1,n];
+    assume
+A3: P[m,n+1];
+    assume that
+A4: m+1 >= 2 and
+A5: n+1 >= 2;
     per cases by XXREAL_0:1;
-    suppose m+1<2 or n+1<2; hence thesis by A5; end;
-    suppose A6: m+1=2;
+    suppose
+      m+1<2 or n+1<2;
+      hence thesis by A4,A5;
+    end;
+    suppose
+A6:   m+1=2;
       set r=n+1;
       take r;
-      (m+1)+(n+1) >= 2+2 by A5,XREAL_1:9; then
-      A7: (m+1)+(n+1)-2 >= 4-2 by XREAL_1:11;
-      A8: m+n = (m+1) + (n+1) -' 2 by A7,XREAL_0:def 2;
-      A9: (m+1) -' 1 = m by NAT_D:34;
-      m+1-1 >= 2-1 by A5,XREAL_1:11;
-      hence r <= ((m+1) + (n+1) -' 2) choose ((m+1) -' 1) by A8,A9,Th11;
+      (m+1)+(n+1) >= 2+2 by A4,A5,XREAL_1:9;
+      then (m+1)+(n+1)-2 >= 4-2 by XREAL_1:11;
+      then
+A7:   m+n = (m+1) + (n+1) -' 2 by XREAL_0:def 2;
+      (m+1) -' 1 = m & m+1-1 >= 2-1 by A4,NAT_D:34,XREAL_1:11;
+      hence r <= ((m+1) + (n+1) -' 2) choose ((m+1) -' 1) by A7,Th11;
       thus r >= 2 by A5;
       let X be finite set;
       let F be Function of the_subsets_of_card(2,X), Seg 2;
-      assume A10: card X >= r;
-      F in Funcs(the_subsets_of_card(2,X), Seg 2)
-        by FUNCT_2:11; then
-      consider f be Function such that
-      A11: F = f & dom f = the_subsets_of_card(2,X) & rng f c= Seg 2
-        by FUNCT_2:def 2;
+      assume
+A8:   card X >= r;
+      F in Funcs(the_subsets_of_card(2,X), Seg 2) by FUNCT_2:11;
+      then
+A9:   ex f be Function st F = f & dom f = the_subsets_of_card( 2,X) & rng
+      f c= Seg 2 by FUNCT_2:def 2;
       per cases;
-      suppose A12: not 1 in rng F;
+      suppose
+A10:    not 1 in rng F;
         consider S be Subset of X such that
-        A13: card S = r by A10,Th10;
-        A14: the_subsets_of_card(2,S) c= the_subsets_of_card(2,X) by Lm1;
-        card 2 <= card S by A5,A13,CARD_1:def 5; then
-        A15: card 2 c= card S by NAT_1:40;
-        the_subsets_of_card(2,S) is non empty
-          by A15,A13,CARD_1:47,GROUP_10:2; then
-        consider x be set such that
-        A16: x in the_subsets_of_card(2,S) by XBOOLE_0:def 1;
-        A17: F|the_subsets_of_card(2,S) <> {}
-          by A11,A16,A14,RELAT_1:60,86;
-        A18: rng(F|the_subsets_of_card(2,S)) c= rng F by RELAT_1:99; then
-        A19: rng(F|the_subsets_of_card(2,S)) c= {1,2}
-          by A11,FINSEQ_1:4,XBOOLE_1:1;
-        A20: now
+A11:    card S = r by A8,Th10;
+        card 2 <= card S by A5,A11,CARD_1:def 5;
+        then card 2 c= card S by NAT_1:40;
+        then the_subsets_of_card(2,S) is non empty by A11,CARD_1:47,
+        GROUP_10:2;
+        then
+A12:    ex x be set st x in the_subsets_of_card(2,S) by
+        XBOOLE_0:def 1;
+        take S;
+A13:    rng(F|the_subsets_of_card(2,S)) c= rng F by RELAT_1:99;
+        then
+A14:    rng(F|the_subsets_of_card(2,S)) c= {1,2} by A9,FINSEQ_1:4,
+        XBOOLE_1:1;
+        the_subsets_of_card(2,S) c= the_subsets_of_card(2,X) by Lm1;
+        then
+A15:    F|the_subsets_of_card(2,S) <> {} by A9,A12,RELAT_1:60,86;
+        now
           let x be set;
+A16:      rng(F|the_subsets_of_card(2,S)) = {} or rng(F|
+the_subsets_of_card(2,S)) = {1} or rng(F|the_subsets_of_card(2,S)) = {2} or rng
+          (F|the_subsets_of_card(2,S)) = {1,2} by A14,ZFMISC_1:42;
           hereby
-            assume A21: x in rng(F|the_subsets_of_card(2,S)); then
-            x=1 or x=2 by A19,TARSKI:def 2;
-            hence x=2 by A21,A12,A18;
+            assume
+A17:        x in rng(F|the_subsets_of_card(2,S));
+            then x=1 or x=2 by A14,TARSKI:def 2;
+            hence x=2 by A10,A13,A17;
           end;
-          assume A22: x=2;
-          assume not x in rng(F|the_subsets_of_card(2,S)); then
-          A23: not 2 in rng(F|the_subsets_of_card(2,S)) &
-          not 1 in rng(F|the_subsets_of_card(2,S)) by A22,A12,A18;
-          rng(F|the_subsets_of_card(2,S)) = {} or
-          rng(F|the_subsets_of_card(2,S)) = {1} or
-          rng(F|the_subsets_of_card(2,S)) = {2} or
-          rng(F|the_subsets_of_card(2,S)) = {1,2} by A19,ZFMISC_1:42;
-          hence contradiction by A17,A23,TARSKI:def 1,def 2;
+          assume
+A18:      x=2;
+A19:      not 1 in rng(F|the_subsets_of_card(2,S)) by A10,A13;
+          assume
+          not x in rng(F|the_subsets_of_card(2,S));
+          hence contradiction by A15,A18,A19,A16,TARSKI:def 1,def 2;
         end;
-        take S;
-        thus thesis by A20,A13,TARSKI:def 1;
+        hence thesis by A11,TARSKI:def 1;
       end;
-      suppose 1 in rng F; then
-        consider S be set such that
-        A24: S in dom F & 1 = F.S by FUNCT_1:def 5;
-        S in {X' where X' is Subset of X: card X' = 2} by A24; then
-        consider X' be Subset of X such that
-        A25: S=X' & card X' = 2;
-        reconsider S as Subset of X by A25;
-        A26: {S} c= dom F by A24,ZFMISC_1:37;
-        the_subsets_of_card(2,S) = {S} by A25,Lm3; then
-        S in the_subsets_of_card(2,S) by TARSKI:def 1; then
-        A27: F|the_subsets_of_card(2,S).S = 1 by A24,FUNCT_1:72;
-        A28: dom(F|the_subsets_of_card(2,S)) =
-          dom F /\ the_subsets_of_card(2,S) by RELAT_1:90
-        .= dom F /\ {S} by A25,Lm3
-        .= {S} by A26,XBOOLE_1:28;
+      suppose
+        1 in rng F;
+        then consider S be set such that
+A20:    S in dom F and
+A21:    1 = F.S by FUNCT_1:def 5;
+        S in {X' where X' is Subset of X: card X' = 2} by A20;
+        then
+A22:    ex X' be Subset of X st S=X' & card X' = 2;
+        then reconsider S as Subset of X;
+        the_subsets_of_card(2,S) = {S} by A22,Lm3;
+        then S in the_subsets_of_card(2,S) by TARSKI:def 1;
+        then
+A23:    F|the_subsets_of_card(2,S).S = 1 by A21,FUNCT_1:72;
         take S;
-        thus thesis by A6,A28,A25,A27,FUNCT_1:14;
+A24:    {S} c= dom F by A20,ZFMISC_1:37;
+        dom(F|the_subsets_of_card(2,S)) = dom F /\ the_subsets_of_card(2,
+        S) by RELAT_1:90
+          .= dom F /\ {S} by A22,Lm3
+          .= {S} by A24,XBOOLE_1:28;
+        hence thesis by A6,A22,A23,FUNCT_1:14;
       end;
     end;
-    suppose A29: n+1=2;
+    suppose
+A25:  n+1=2;
       set r=m+1;
       take r;
-      (m+1)+(n+1) >= 2+2 by A5,XREAL_1:9; then
-      A30: (m+1)+(n+1)-2 >= 4-2 by XREAL_1:11;
-      A31: m+n = (m+1) + (n+1) -' 2 by A30,XREAL_0:def 2;
-      A32: (m+1) -' 1 = m by NAT_D:34;
-      A33: m+1-1 >= 2-1 by A5,XREAL_1:11;
-      n+1-1 >= 2-1 by A5,XREAL_1:11;
-      hence r <= ((m+1) + (n+1) -' 2) choose ((m+1) -' 1) by A31,A32,A33,Th12;
-      thus r >= 2 by A5;
+A26:  n+1-1 >= 2-1 by A5,XREAL_1:11;
+      (m+1)+(n+1) >= 2+2 by A4,A5,XREAL_1:9;
+      then (m+1)+(n+1)-2 >= 4-2 by XREAL_1:11;
+      then
+A27:  m+n = (m+1) + (n+1) -' 2 by XREAL_0:def 2;
+      (m+1) -' 1 = m & m+1-1 >= 2-1 by A4,NAT_D:34,XREAL_1:11;
+      hence r <= ((m+1) + (n+1) -' 2) choose ((m+1) -' 1) by A27,A26,Th12;
+      thus r >= 2 by A4;
       let X be finite set;
       let F be Function of the_subsets_of_card(2,X), Seg 2;
-      assume A34: card X >= r;
-      F in Funcs(the_subsets_of_card(2,X), Seg 2)
-        by FUNCT_2:11; then
-      consider f be Function such that
-      A35: F = f & dom f = the_subsets_of_card(2,X) & rng f c= Seg 2
-        by FUNCT_2:def 2;
+      assume
+A28:  card X >= r;
+      F in Funcs(the_subsets_of_card(2,X), Seg 2) by FUNCT_2:11;
+      then
+A29:  ex f be Function st F = f & dom f = the_subsets_of_card( 2,X) & rng
+      f c= Seg 2 by FUNCT_2:def 2;
       per cases;
-      suppose A36: not 2 in rng F;
+      suppose
+A30:    not 2 in rng F;
         consider S be Subset of X such that
-        A37: card S = r by A34,Th10;
-        A38: the_subsets_of_card(2,S) c= the_subsets_of_card(2,X) by Lm1;
-        card 2 <= card S by A5,A37,CARD_1:def 5; then
-        A39: card 2 c= card S by NAT_1:40;
-        the_subsets_of_card(2,S) is non empty
-          by A39,A37,CARD_1:47,GROUP_10:2; then
-        consider x be set such that
-        A40: x in the_subsets_of_card(2,S) by XBOOLE_0:def 1;
-        A41: F|the_subsets_of_card(2,S) <> {}
-          by A35,A40,A38,RELAT_1:60,86;
-        A42: rng(F|the_subsets_of_card(2,S)) c= rng F by RELAT_1:99; then
-        A43: rng(F|the_subsets_of_card(2,S)) c= {1,2}
-          by A35,FINSEQ_1:4,XBOOLE_1:1;
-        A44: now
+A31:    card S = r by A28,Th10;
+        card 2 <= card S by A4,A31,CARD_1:def 5;
+        then card 2 c= card S by NAT_1:40;
+        then the_subsets_of_card(2,S) is non empty by A31,CARD_1:47,
+        GROUP_10:2;
+        then
+A32:    ex x be set st x in the_subsets_of_card(2,S) by
+        XBOOLE_0:def 1;
+        take S;
+A33:    rng(F|the_subsets_of_card(2,S)) c= rng F by RELAT_1:99;
+        then
+A34:    rng(F|the_subsets_of_card(2,S)) c= {1,2} by A29,FINSEQ_1:4,
+        XBOOLE_1:1;
+        the_subsets_of_card(2,S) c= the_subsets_of_card(2,X) by Lm1;
+        then
+A35:    F|the_subsets_of_card(2,S) <> {} by A29,A32,RELAT_1:60,86;
+        now
           let x be set;
+A36:      rng(F|the_subsets_of_card(2,S)) = {} or rng(F|
+the_subsets_of_card(2,S)) = {1} or rng(F|the_subsets_of_card(2,S)) = {2} or rng
+          (F|the_subsets_of_card(2,S)) = {1,2} by A34,ZFMISC_1:42;
           hereby
-            assume A45: x in rng(F|the_subsets_of_card(2,S)); then
-            x=1 or x=2 by A43,TARSKI:def 2;
-            hence x=1 by A45,A36,A42;
+            assume
+A37:        x in rng(F|the_subsets_of_card(2,S));
+            then x=1 or x=2 by A34,TARSKI:def 2;
+            hence x=1 by A30,A33,A37;
           end;
-          assume A46: x=1;
-          assume not x in rng(F|the_subsets_of_card(2,S)); then
-          A47: not 2 in rng(F|the_subsets_of_card(2,S)) &
-          not 1 in rng(F|the_subsets_of_card(2,S)) by A46,A36,A42;
-          rng(F|the_subsets_of_card(2,S)) = {} or
-          rng(F|the_subsets_of_card(2,S)) = {1} or
-          rng(F|the_subsets_of_card(2,S)) = {2} or
-          rng(F|the_subsets_of_card(2,S)) = {1,2} by A43,ZFMISC_1:42;
-          hence contradiction by A41,A47,TARSKI:def 1,def 2;
+          assume
+A38:      x=1;
+A39:      not 2 in rng(F|the_subsets_of_card(2,S)) by A30,A33;
+          assume
+          not x in rng(F|the_subsets_of_card(2,S));
+          hence contradiction by A35,A38,A39,A36,TARSKI:def 1,def 2;
         end;
-        take S;
-        thus thesis by A44,A37,TARSKI:def 1;
+        hence thesis by A31,TARSKI:def 1;
       end;
-      suppose 2 in rng F; then
-        consider S be set such that
-        A48: S in dom F & 2 = F.S by FUNCT_1:def 5;
-        S in {X' where X' is Subset of X: card X' = 2} by A48; then
-        consider X' be Subset of X such that
-        A49: S=X' & card X' = 2;
-        reconsider S as Subset of X by A49;
-        A50: {S} c= dom F by A48,ZFMISC_1:37;
-        the_subsets_of_card(2,S) = {S} by A49,Lm3; then
-        S in the_subsets_of_card(2,S) by TARSKI:def 1; then
-        A51: F|the_subsets_of_card(2,S).S = 2 by A48,FUNCT_1:72;
-        A52: dom(F|the_subsets_of_card(2,S)) =
-          dom F /\ the_subsets_of_card(2,S) by RELAT_1:90
-        .= dom F /\ {S} by A49,Lm3
-        .= {S} by A50,XBOOLE_1:28;
+      suppose
+        2 in rng F;
+        then consider S be set such that
+A40:    S in dom F and
+A41:    2 = F.S by FUNCT_1:def 5;
+        S in {X' where X' is Subset of X: card X' = 2} by A40;
+        then
+A42:    ex X' be Subset of X st S=X' & card X' = 2;
+        then reconsider S as Subset of X;
+        the_subsets_of_card(2,S) = {S} by A42,Lm3;
+        then S in the_subsets_of_card(2,S) by TARSKI:def 1;
+        then
+A43:    F|the_subsets_of_card(2,S).S = 2 by A41,FUNCT_1:72;
         take S;
-        thus thesis by A29,A52,A49,A51,FUNCT_1:14;
+A44:    {S} c= dom F by A40,ZFMISC_1:37;
+        dom(F|the_subsets_of_card(2,S)) = dom F /\ the_subsets_of_card(2,
+        S) by RELAT_1:90
+          .= dom F /\ {S} by A42,Lm3
+          .= {S} by A44,XBOOLE_1:28;
+        hence thesis by A25,A42,A43,FUNCT_1:14;
       end;
     end;
-    suppose A53: m+1>2 & n+1>2;
-      consider r1 be natural number such that
-      A54: r1 <= ((m+1) + n -' 2) choose ((m+1) -' 1) and
-      A55: r1 >= 2 and
-      A56: for X being finite set,
-           F being Function of the_subsets_of_card(2,X), Seg 2
-       st card X >= r1
-       holds ex S being Subset of X st
-         (card S >= m+1 & rng(F|the_subsets_of_card(2,S)) = {1}) or
-         (card S >= n & rng(F|the_subsets_of_card(2,S)) = {2})
-         by A3,A53,NAT_1:13;
+    suppose
+A45:  m+1>2 & n+1>2;
+      set t = m + n -' 1;
+      set s = m -' 1;
+      m + 1 - 2 >= 2 - 2 by A4,XREAL_1:11;
+      then m -' 1 = m - 1 by XREAL_0:def 2;
+      then
+A46:  (m+1) -' 1 = s + 1 by NAT_D:34;
+      (m+1) + (n+1) >= 2+2 by A4,A5,XREAL_1:9;
+      then
+A47:  m+n+2-3 >= 4-3 by XREAL_1:11;
+      then
+A48:  m + n -' 1 = m + n - 1 by XREAL_0:def 2;
+A49:  m + n + 1 -' 2 = m + n + 1 - 2 by A47,XREAL_0:def 2;
+      m + n >= 0;
+      then
+A50:  (m+1) + (n+1) -' 2 = (m+1) + (n+1) - 2 by XREAL_0:def 2
+        .= t + 1 by A48;
       consider r2 be natural number such that
-      A57: r2 <= (m + (n+1) -' 2) choose (m -' 1) and
+A51:  r2 <= (m + (n+1) -' 2) choose (m -' 1) and
       r2 >= 2 and
-      A58: for X being finite set,
-           F being Function of the_subsets_of_card(2,X), Seg 2
-       st card X >= r2
-       holds ex S being Subset of X st
-         (card S >= m & rng(F|the_subsets_of_card(2,S)) = {1}) or
-         (card S >= n+1 & rng(F|the_subsets_of_card(2,S)) = {2})
-         by A4,A53,NAT_1:13;
+A52:  for X being finite set, F being Function of the_subsets_of_card
+(2,X), Seg 2 st card X >= r2 holds ex S being Subset of X st card S >= m & rng(
+F|the_subsets_of_card(2,S)) = {1} or card S >= n+1 & rng(F|the_subsets_of_card(
+      2,S)) = {2} by A3,A45,NAT_1:13;
+      consider r1 be natural number such that
+A53:  r1 <= ((m+1) + n -' 2) choose ((m+1) -' 1) and
+A54:  r1 >= 2 and
+A55:  for X being finite set, F being Function of the_subsets_of_card
+(2,X), Seg 2 st card X >= r1 holds ex S being Subset of X st card S >= m+1 &
+      rng(F|the_subsets_of_card(2,S)) = {1} or card S >= n & rng(F|
+      the_subsets_of_card(2,S)) = {2} by A2,A45,NAT_1:13;
       set r = r1+r2;
       take r;
-      set s = m -' 1;
-      set t = m + n -' 1;
-      m + 1 - 2 >= 2 - 2 by A5,XREAL_1:11; then
-      A59: m -' 1 = m - 1 by XREAL_0:def 2;
-      (m+1) + (n+1) >= 2+2 by A5,XREAL_1:9; then
-      A60: m+n+2-3 >= 4-3 by XREAL_1:11;
-      A61: m + n -' 1 = m + n - 1 by A60,XREAL_0:def 2;
-      A62: m + n + 1 -' 2 = m + n + 1 - 2 by A60,XREAL_0:def 2;
-      m + n >= 0; then
-      A63: (m+1) + (n+1) -' 2 = (m+1) + (n+1) - 2 by XREAL_0:def 2
-      .= t + 1 by A61;
-      A64: (m+1) -' 1 = s + 1 by A59,NAT_D:34;
-      r1+r2 <= ((m+1) + n -' 2) choose ((m+1) -' 1) +
-        (m + (n+1) -' 2) choose (m -' 1) by A54,A57,XREAL_1:9;
-      hence r <= ((m+1) + (n+1) -' 2) choose ((m+1) -' 1)
-        by A63,A62,A61,A64,NEWTON:32;
-        r1 + r2 >= 0 + 2 by A55,XREAL_1:9;
+      r1+r2 <= ((m+1) + n -' 2) choose ((m+1) -' 1) + (m + (n+1) -' 2)
+      choose (m -' 1) by A53,A51,XREAL_1:9;
+      hence r <= ((m+1) + (n+1) -' 2) choose ((m+1) -' 1) by A48,A49,A50,A46,
+      NEWTON:32;
+      r1 + r2 >= 0 + 2 by A54,XREAL_1:9;
       hence r >= 2;
       let X be finite set;
       let F be Function of (the_subsets_of_card(2,X)), Seg 2;
-      assume card X >= r; then
-      consider S be Subset of X such that
-      A66: card S = r by Th10;
-      F in Funcs(the_subsets_of_card(2,X), Seg 2)
-        by FUNCT_2:11; then
-      consider f be Function such that
-      A67: F = f & dom f = the_subsets_of_card(2,X) & rng f c= Seg 2
-        by FUNCT_2:def 2;
+      assume
+      card X >= r;
+      then consider S be Subset of X such that
+A56:  card S = r by Th10;
       consider s be set such that
-      A68: s in S by A66,A55,CARD_1:47,XBOOLE_0:def 1;
-      set A = {s' where s' is Element of S: F.{s,s'} = 1 & {s,s'} in dom F};
+A57:  s in S by A54,A56,CARD_1:47,XBOOLE_0:def 1;
       set B = {s' where s' is Element of S: F.{s,s'} = 2 & {s,s'} in dom F};
-      A69: S \ {s} c= S by XBOOLE_1:36;
-      A70: now
-        assume A /\ B <> {}; then
-        consider x be set such that
-        A71: x in A /\ B by XBOOLE_0:def 1;
-        A72: x in A & x in B by A71,XBOOLE_0:def 4; then
-        consider s1 be Element of S such that
-        A73: x = s1 & F.{s,s1} = 1 & {s,s1} in dom F;
-        consider s2 be Element of S such that
-        A74: x = s2 & F.{s,s2} = 2 & {s,s2} in dom F by A72;
-        thus contradiction by A73,A74;
-      end;
-      A75: for x being set holds x in A \/ B iff x in S \ {s}
+      set A = {s' where s' is Element of S: F.{s,s'} = 1 & {s,s'} in dom F};
+      F in Funcs(the_subsets_of_card(2,X), Seg 2) by FUNCT_2:11;
+      then
+A58:  ex f be Function st F = f & dom f = the_subsets_of_card( 2,X) & rng
+      f c= Seg 2 by FUNCT_2:def 2;
+A59:  for x being set holds x in A \/ B iff x in S \ {s}
       proof
         let x be set;
         hereby
-          assume A76: x in A \/ B;
-          per cases by A76,XBOOLE_0:def 3;
-          suppose x in A; then
-            consider s' be Element of S such that
-            A77: x = s' & F.{s,s'} = 1 & {s,s'} in dom F;
+          assume
+A60:      x in A \/ B;
+          per cases by A60,XBOOLE_0:def 3;
+          suppose
+            x in A;
+            then consider s' be Element of S such that
+A61:        x = s' and
+            F.{s,s'} = 1 and
+A62:        {s,s'} in dom F;
             now
-              assume x in {s}; then
-              A78: x = s by TARSKI:def 1;
-              {s,s'} = {s} \/ {s'} by ENUMSET1:41 .= {s} by A77,A78; then
-              {s} in the_subsets_of_card(2,X) by A77; then
-              consider X' be Subset of X such that
-              A79: X'={s} & card X' = 2;
-              thus contradiction by A79,CARD_1:50;
+              assume
+              x in {s};
+              then
+A63:          x = s by TARSKI:def 1;
+              {s,s'} = {s} \/ {s'} by ENUMSET1:41
+                .= {s} by A61,A63;
+              then {s} in the_subsets_of_card(2,X) by A62;
+              then ex X' be Subset of X st X'={s} & card X' = 2;
+              hence contradiction by CARD_1:50;
             end;
-            hence x in S \ {s} by A66,A55,A77,CARD_1:47,XBOOLE_0:def 5;
+            hence x in S \ {s} by A54,A56,A61,CARD_1:47,XBOOLE_0:def 5;
           end;
-          suppose x in B; then
-            consider s' be Element of S such that
-            A80: x = s' & F.{s,s'} = 2 & {s,s'} in dom F;
+          suppose
+            x in B;
+            then consider s' be Element of S such that
+A64:        x = s' and
+            F.{s,s'} = 2 and
+A65:        {s,s'} in dom F;
             now
-              assume x in {s}; then
-              A81: x = s by TARSKI:def 1;
-              {s,s'} = {s} \/ {s'} by ENUMSET1:41 .= {s} by A80,A81; then
-              {s} in the_subsets_of_card(2,X) by A80; then
-              consider X' be Subset of X such that
-              A82: X'={s} & card X' = 2;
-              thus contradiction by A82,CARD_1:50;
+              assume
+              x in {s};
+              then
+A66:          x = s by TARSKI:def 1;
+              {s,s'} = {s} \/ {s'} by ENUMSET1:41
+                .= {s} by A64,A66;
+              then {s} in the_subsets_of_card(2,X) by A65;
+              then ex X' be Subset of X st X'={s} & card X' = 2;
+              hence contradiction by CARD_1:50;
             end;
-            hence x in S \ {s} by A66,A55,A80,CARD_1:47,XBOOLE_0:def 5;
+            hence x in S \ {s} by A54,A56,A64,CARD_1:47,XBOOLE_0:def 5;
           end;
         end;
-        assume A83: x in S \ {s}; then
-        reconsider s'=x as Element of S by XBOOLE_0:def 5;
-        {s,s'} c= S by A68,ZFMISC_1:38; then
-        A84: {s,s'} is Subset of X by XBOOLE_1:1;
-        not s' in {s} by A83,XBOOLE_0:def 5; then
-        s<>s' by TARSKI:def 1; then
-        card {s,s'} = 2 by CARD_2:76; then
-        A85: {s,s'} in dom F by A84,A67; then
-        A86: F.{s,s'} in rng F by FUNCT_1:12;
-        per cases by A86,A67,FINSEQ_1:4,TARSKI:def 2;
-        suppose  F.{s,s'} = 1; then
-          x in A by A85;
+        assume
+A67:    x in S \ {s};
+        then reconsider s'=x as Element of S by XBOOLE_0:def 5;
+        not s' in {s} by A67,XBOOLE_0:def 5;
+        then s<>s' by TARSKI:def 1;
+        then
+A68:    card {s,s'} = 2 by CARD_2:76;
+        {s,s'} c= S by A57,ZFMISC_1:38;
+        then {s,s'} is Subset of X by XBOOLE_1:1;
+        then
+A69:    {s,s'} in dom F by A58,A68;
+        then
+A70:    F.{s,s'} in rng F by FUNCT_1:12;
+        per cases by A58,A70,FINSEQ_1:4,TARSKI:def 2;
+        suppose
+          F.{s,s'} = 1;
+          then x in A by A69;
           hence thesis by XBOOLE_0:def 3;
         end;
-        suppose  F.{s,s'} = 2; then
-          x in B by A85;
+        suppose
+          F.{s,s'} = 2;
+          then x in B by A69;
           hence thesis by XBOOLE_0:def 3;
         end;
       end;
-      A87: A \/ B c= S by A75,A69,TARSKI:2;
-      reconsider A as finite Subset of S by A87,XBOOLE_1:11;
-      reconsider B as finite Subset of S by A87,XBOOLE_1:11;
-      A88: card (A \/ B) = card A + card B - card {} by A70,CARD_2:64
-      .= card A + card B;
-      {s} c= S by A68,ZFMISC_1:37; then
-      card(S \ {s}) = card S - card {s} by CARD_2:63
-      .= r1 + r2 - 1 by A66,CARD_1:50; then
-      A89: card A + card B = r1 + r2 - 1 by A88,A75,TARSKI:2;
-      A90: card A >= r2 or card B >= r1
+A71:  now
+        assume
+        A /\ B <> {};
+        then consider x be set such that
+A72:    x in A /\ B by XBOOLE_0:def 1;
+        x in B by A72,XBOOLE_0:def 4;
+        then
+A73:    ex s2 be Element of S st x = s2 & F.{s,s2} = 2 & {s,s2} in dom F;
+        x in A by A72,XBOOLE_0:def 4;
+        then ex s1 be Element of S st x = s1 & F.{s,s1} = 1 & {s,s1} in dom F;
+        hence contradiction by A73;
+      end;
+      S \ {s} c= S by XBOOLE_1:36;
+      then
+A74:  A \/ B c= S by A59,TARSKI:2;
+      {s} c= S by A57,ZFMISC_1:37;
+      then
+A75:  card(S \ {s}) = card S - card {s} by CARD_2:63
+        .= r1 + r2 - 1 by A56,CARD_1:50;
+      reconsider B as finite Subset of S by A74,XBOOLE_1:11;
+      reconsider A as finite Subset of S by A74,XBOOLE_1:11;
+      card (A \/ B) = card A + card B - card {} by A71,CARD_2:64
+        .= card A + card B;
+      then
+A76:  card A + card B = r1 + r2 - 1 by A59,A75,TARSKI:2;
+A77:  card A >= r2 or card B >= r1
       proof
-        assume card A < r2; then
-        A91: card A + 1 <= r2 by NAT_1:13;
-        assume card B < r1; then
-        card A + 1 + card B < r2 + r1 by A91,XREAL_1:10;
-        hence contradiction by A89;
+        assume
+        card A < r2;
+        then
+A78:    card A + 1 <= r2 by NAT_1:13;
+        assume
+        card B < r1;
+        then card A + 1 + card B < r2 + r1 by A78,XREAL_1:10;
+        hence contradiction by A76;
       end;
-      per cases by A90;
-      suppose A92: card A >= r2;
+      per cases by A77;
+      suppose
+A79:    card A >= r2;
         set F' = F|the_subsets_of_card(2,A);
-        A c= X by XBOOLE_1:1; then
-        A93: the_subsets_of_card(2,X) /\ the_subsets_of_card(2,A) =
-          the_subsets_of_card(2,A) by Lm1,XBOOLE_1:28;
-        A94: dom(F|the_subsets_of_card(2,A)) = the_subsets_of_card(2,A)
-          by A67,A93,RELAT_1:90;
-        rng(F|the_subsets_of_card(2,A)) c= rng F by RELAT_1:99; then
-        reconsider F' as Function of the_subsets_of_card(2,A), Seg 2
-          by A94,A67,FUNCT_2:4,XBOOLE_1:1;
+        A c= X by XBOOLE_1:1;
+        then the_subsets_of_card(2,X) /\ the_subsets_of_card(2,A) =
+        the_subsets_of_card(2,A) by Lm1,XBOOLE_1:28;
+        then
+A80:    dom(F|the_subsets_of_card(2,A)) = the_subsets_of_card(2,A) by
+        A58,RELAT_1:90;
+        rng(F|the_subsets_of_card(2,A)) c= rng F by RELAT_1:99;
+        then reconsider
+        F' as Function of the_subsets_of_card(2,A), Seg 2 by A58,
+        A80,FUNCT_2:4,XBOOLE_1:1;
         consider S' be Subset of A such that
-        A95: (card S' >= m & rng(F'|the_subsets_of_card(2,S')) = {1}) or
-          (card S' >= n+1 & rng(F'|the_subsets_of_card(2,S')) = {2})
-          by A92,A58;
-        A96: F'|the_subsets_of_card(2,S')
-          = F|the_subsets_of_card(2,S') by Lm1,RELAT_1:103;
-        A c= X by XBOOLE_1:1; then
-        reconsider S' as Subset of X by XBOOLE_1:1;
-        per cases by A95;
-        suppose A97: card S' >= n+1 & rng(F'|the_subsets_of_card(2,S')) = {2};
+A81:    card S' >= m & rng(F'|the_subsets_of_card(2,S')) = {1} or
+        card S' >= n+1 & rng(F'|the_subsets_of_card(2,S')) = {2} by A52,A79;
+A82:    F'|the_subsets_of_card(2,S') = F|the_subsets_of_card(2,S') by
+        Lm1,RELAT_1:103;
+        A c= X by XBOOLE_1:1;
+        then reconsider S' as Subset of X by XBOOLE_1:1;
+        per cases by A81;
+        suppose
+A83:      card S' >= n+1 & rng(F'|the_subsets_of_card(2,S')) = {2};
           take S';
-          thus thesis by Lm1,A97,RELAT_1:103;
+          thus thesis by A83,Lm1,RELAT_1:103;
         end;
-        suppose A98: card S' >= m & rng(F'|the_subsets_of_card(2,S')) = {1};
+        suppose
+A84:      card S' >= m & rng(F'|the_subsets_of_card(2,S')) = {1};
           set S'' = S' \/ {s};
-          {s} c= X by A68,ZFMISC_1:37; then
-          reconsider S'' as Subset of X by XBOOLE_1:8;
-          A99: the_subsets_of_card(2,S') c= the_subsets_of_card(2,S'')
-            by Lm1,XBOOLE_1:7;
-          A100: rng(F|the_subsets_of_card(2,S')) = {1} by A98,Lm1,RELAT_1:103;
-          A101: for y being set holds
-              y in rng(F|the_subsets_of_card(2,S'')) iff y = 1
+          {s} c= X by A57,ZFMISC_1:37;
+          then reconsider S'' as Subset of X by XBOOLE_1:8;
+A85:      the_subsets_of_card(2,S') c= the_subsets_of_card(2,S'') by Lm1
+          ,XBOOLE_1:7;
+A86:      rng(F|the_subsets_of_card(2,S')) = {1} by A84,Lm1,RELAT_1:103;
+A87:      for y being set holds y in rng(F|the_subsets_of_card(2,S''))
+          iff y = 1
           proof
             let y be set;
+            F|the_subsets_of_card(2,S') c= F|the_subsets_of_card(2,S'')
+            by A85,RELAT_1:104;
+            then
+A88:        rng(F|the_subsets_of_card(2,S')) c= rng(F|
+            the_subsets_of_card(2,S'')) by RELAT_1:25;
             hereby
-              assume y in rng(F|the_subsets_of_card(2,S'')); then
-              consider x be set such that
-              A102: x in dom(F|the_subsets_of_card(2,S'')) and
-              A103: y = (F|the_subsets_of_card(2,S'')).x by FUNCT_1:def 5;
-              A104: x in the_subsets_of_card(2,S'') & x in dom F
-                by A102,RELAT_1:86;
-              x in {S''' where S''' is Subset of S'': card S''' = 2}
-                by A102,RELAT_1:86; then
-              consider S''' be Subset of S'' such that
-              A105: x=S''' & card S''' = 2;
+              assume
+              y in rng(F|the_subsets_of_card(2,S''));
+              then consider x be set such that
+A89:          x in dom(F|the_subsets_of_card(2,S'')) and
+A90:          y = (F|the_subsets_of_card(2,S'')).x by FUNCT_1:
+              def 5;
+A91:          x in the_subsets_of_card(2,S'') by A89,RELAT_1:86;
+A92:          x in dom F by A89,RELAT_1:86;
+              x in {S''' where S''' is Subset of S'': card S''' = 2} by
+              A89,RELAT_1:86;
+              then consider S''' be Subset of S'' such that
+A93:          x=S''' and
+A94:          card S''' = 2;
               consider s1,s2 be set such that
-              A106: s1 <> s2 & S''' = {s1,s2} by A105,CARD_2:79;
-              A107: s1 in S''' & s2 in S''' by A106,TARSKI:def 2;
-              per cases by A107,XBOOLE_0:def 3;
-              suppose A108: s1 in S';
-                per cases by A107,XBOOLE_0:def 3;
-                suppose s2 in S'; then
-                  reconsider x as Subset of S' by A105,A106,A108,ZFMISC_1:38;
-                  x in the_subsets_of_card(2,S') by A105; then
-                  A109: x in dom(F|the_subsets_of_card(2,S'))
-                    by A104,RELAT_1:86;
-                  A110: x in dom(F|the_subsets_of_card(2,S'')|
-                     the_subsets_of_card(2,S')) by A109,A99,RELAT_1:103;
-                  (F|the_subsets_of_card(2,S')).x =
-                  (F|the_subsets_of_card(2,S'')|the_subsets_of_card(2,S')).x
-                    by A99,RELAT_1:103
-                  .= (F|the_subsets_of_card(2,S'')).x by A110,FUNCT_1:70; then
-                  y in rng(F|the_subsets_of_card(2,S'))
-                    by A103,A109,FUNCT_1:12;
-                  hence y = 1 by A98,A96,TARSKI:def 1;
+A95:          s1 <> s2 and
+A96:          S''' = {s1,s2} by A94,CARD_2:79;
+A97:          s1 in S''' by A96,TARSKI:def 2;
+A98:          s2 in S''' by A96,TARSKI:def 2;
+              per cases by A97,XBOOLE_0:def 3;
+              suppose
+A99:            s1 in S';
+                per cases by A98,XBOOLE_0:def 3;
+                suppose
+                  s2 in S';
+                  then reconsider x as Subset of S' by A93,A96,A99,
+                  ZFMISC_1:38;
+                  x in the_subsets_of_card(2,S') by A93,A94;
+                  then
+A100:             x in dom(F|the_subsets_of_card(2,S')) by A92,
+                  RELAT_1:86;
+                  then
+A101:             x in dom(F|the_subsets_of_card(2,S'')|
+                  the_subsets_of_card(2,S')) by A85,RELAT_1:103;
+                  (F|the_subsets_of_card(2,S')).x = (F|
+the_subsets_of_card(2,S'')|the_subsets_of_card(2,S')).x by A85,RELAT_1:103
+                    .= (F|the_subsets_of_card(2,S'')).x by A101,FUNCT_1:70;
+                  then y in rng(F|the_subsets_of_card(2,S')) by A90,A100,
+                  FUNCT_1:12;
+                  hence y = 1 by A82,A84,TARSKI:def 1;
                 end;
-                suppose s2 in {s}; then
-                  A111: s1 <> s & x = {s1,s} by A106,A105,TARSKI:def 1;
-                  s1 in A by A108; then
-                  consider s'' be Element of S such that
-                  A112: s1=s'' & F.{s,s''} = 1 & {s,s''} in dom F;
-                  thus y = 1 by A103,A104,A111,A112,FUNCT_1:72;
+                suppose
+A102:             s2 in {s};
+                  s1 in A by A99;
+                  then
+A103:             ex s'' be Element of S st s1=s'' & F.{s,s''} = 1 & {s,
+                  s''} in dom F;
+                  x = {s1,s} by A93,A96,A102,TARSKI:def 1;
+                  hence y = 1 by A90,A91,A103,FUNCT_1:72;
                 end;
               end;
-              suppose A113: s1 in {s}; then
-                A114: s <> s2 & x = {s,s2} by A106,A105,TARSKI:def 1;
-                per cases by A107,XBOOLE_0:def 3;
-                suppose s2 in S'; then
-                  s2 in A; then
-                  consider s'' be Element of S such that
-                  A115: s2=s'' & F.{s,s''} = 1 & {s,s''} in dom F;
-                  F.x = 1 & x in dom F by A113,A115,A106,A105,TARSKI:def 1;
-                  hence y = 1 by A103,A104,FUNCT_1:72;
-                 end;
-                 suppose s2 in {s};
-                   hence y=1 by A114,TARSKI:def 1;
-                 end;
+              suppose
+A104:           s1 in {s};
+                then
+A105:           s <> s2 by A95,TARSKI:def 1;
+                per cases by A98,XBOOLE_0:def 3;
+                suppose
+                  s2 in S';
+                  then s2 in A;
+                  then ex s'' be Element of S st s2=s'' & F.{s,s''} = 1 & {s,
+                  s''} in dom F;
+                  then F.x = 1 by A93,A96,A104,TARSKI:def 1;
+                  hence y = 1 by A90,A91,FUNCT_1:72;
+                end;
+                suppose
+                  s2 in {s};
+                  hence y=1 by A105,TARSKI:def 1;
+                end;
               end;
             end;
-            assume y = 1; then
-            A116: y in rng(F|the_subsets_of_card(2,S')) by A100,TARSKI:def 1;
-            F|the_subsets_of_card(2,S') c= F|the_subsets_of_card(2,S'')
-              by A99,RELAT_1:104; then
-            rng(F|the_subsets_of_card(2,S')) c=
-              rng(F|the_subsets_of_card(2,S'')) by RELAT_1:25;
-            hence thesis by A116;
-          end;
-          A117: card S' + 1 >= m + 1 by A98,XREAL_1:8;
-          A118: not s in S'
-          proof
-            assume s in S'; then
-            s in A; then
-            consider s' be Element of S such that
-            A119: s=s' & F.{s,s'} = 1 & {s,s'} in dom F;
-            A120: {s,s} = {s} \/ {s} by ENUMSET1:41 .= {s};
-            {s} in the_subsets_of_card(2,X) by A119,A120; then
-            consider X' be Subset of X such that
-            A121: X'={s} & card X' = 2;
-            thus contradiction by A121,CARD_1:50;
+            assume
+            y = 1;
+            then y in rng(F|the_subsets_of_card(2,S')) by A86, TARSKI:
+            def 1;
+            hence thesis by A88;
           end;
           take S'';
-          thus thesis by A101,A118,A117,CARD_2:54,TARSKI:def 1;
+A106:     not s in S'
+          proof
+            assume
+            s in S';
+            then s in A;
+            then
+A107:       ex s' be Element of S st s=s' & F.{s,s'} = 1 & {s,s'} in dom
+            F;
+            {s,s} = {s} \/ {s} by ENUMSET1:41
+              .= {s};
+            then {s} in the_subsets_of_card(2,X) by A107;
+            then ex X' be Subset of X st X'={s} & card X' = 2;
+            hence contradiction by CARD_1:50;
+          end;
+          card S' + 1 >= m + 1 by A84,XREAL_1:8;
+          hence thesis by A87,A106,CARD_2:54,TARSKI:def 1;
         end;
       end;
-      suppose A122: card B >= r1;
+      suppose
+A108:   card B >= r1;
         set F' = F|the_subsets_of_card(2,B);
-        B c= X by XBOOLE_1:1; then
-        A123: the_subsets_of_card(2,X) /\ the_subsets_of_card(2,B) =
-          the_subsets_of_card(2,B) by Lm1,XBOOLE_1:28;
-        A124: dom(F|the_subsets_of_card(2,B)) = the_subsets_of_card(2,B)
-          by A67,A123,RELAT_1:90;
-        rng(F|the_subsets_of_card(2,B)) c= rng F by RELAT_1:99; then
-        reconsider F' as Function of the_subsets_of_card(2,B), Seg 2
-          by A124,A67,FUNCT_2:4,XBOOLE_1:1;
+        B c= X by XBOOLE_1:1;
+        then the_subsets_of_card(2,X) /\ the_subsets_of_card(2,B) =
+        the_subsets_of_card(2,B) by Lm1,XBOOLE_1:28;
+        then
+A109:   dom(F|the_subsets_of_card(2,B)) = the_subsets_of_card(2,B) by
+        A58,RELAT_1:90;
+        rng(F|the_subsets_of_card(2,B)) c= rng F by RELAT_1:99;
+        then reconsider
+        F' as Function of the_subsets_of_card(2,B), Seg 2 by A58,
+        A109,FUNCT_2:4,XBOOLE_1:1;
         consider S' be Subset of B such that
-        A125: (card S' >= m+1 & rng(F'|the_subsets_of_card(2,S')) = {1}) or
-          (card S' >= n & rng(F'|the_subsets_of_card(2,S')) = {2})
-          by A122,A56;
-        A126: F'|the_subsets_of_card(2,S')
-          = F|the_subsets_of_card(2,S') by Lm1,RELAT_1:103;
-        B c= X by XBOOLE_1:1; then
-        reconsider S' as Subset of X by XBOOLE_1:1;
-        per cases by A125;
-        suppose A127: card S' >= m+1 & rng(F'|the_subsets_of_card(2,S')) = {1};
+A110:   card S' >= m+1 & rng(F'|the_subsets_of_card(2,S')) = {1} or
+        card S' >= n & rng(F'|the_subsets_of_card(2,S')) = {2} by A55,A108;
+A111:   F'|the_subsets_of_card(2,S') = F|the_subsets_of_card(2,S') by
+        Lm1,RELAT_1:103;
+        B c= X by XBOOLE_1:1;
+        then reconsider S' as Subset of X by XBOOLE_1:1;
+        per cases by A110;
+        suppose
+A112:     card S' >= m+1 & rng(F'|the_subsets_of_card(2,S')) = {1};
           take S';
-          thus thesis by Lm1,A127,RELAT_1:103;
+          thus thesis by A112,Lm1,RELAT_1:103;
         end;
-        suppose A128: card S' >= n & rng(F'|the_subsets_of_card(2,S')) = {2};
+        suppose
+A113:     card S' >= n & rng(F'|the_subsets_of_card(2,S')) = {2};
           set S'' = S' \/ {s};
-          {s} c= X by A68,ZFMISC_1:37; then
-          reconsider S'' as Subset of X by XBOOLE_1:8;
-          A129: the_subsets_of_card(2,S') c= the_subsets_of_card(2,S'')
-            by Lm1,XBOOLE_1:7;
-          A130: rng(F|the_subsets_of_card(2,S')) = {2} by A128,Lm1,RELAT_1:103;
-          A131: for y being set holds
-              y in rng(F|the_subsets_of_card(2,S'')) iff y = 2
+          {s} c= X by A57,ZFMISC_1:37;
+          then reconsider S'' as Subset of X by XBOOLE_1:8;
+A114:     the_subsets_of_card(2,S') c= the_subsets_of_card(2,S'') by Lm1
+          ,XBOOLE_1:7;
+A115:     rng(F|the_subsets_of_card(2,S')) = {2} by A113,Lm1,RELAT_1:103;
+A116:     for y being set holds y in rng(F|the_subsets_of_card(2,S''))
+          iff y = 2
           proof
             let y be set;
+            F|the_subsets_of_card(2,S') c= F|the_subsets_of_card(2,S'')
+            by A114,RELAT_1:104;
+            then
+A117:       rng(F|the_subsets_of_card(2,S')) c= rng(F|
+            the_subsets_of_card(2,S'')) by RELAT_1:25;
             hereby
-              assume y in rng(F|the_subsets_of_card(2,S'')); then
-              consider x be set such that
-              A132: x in dom(F|the_subsets_of_card(2,S'')) and
-              A133: y = (F|the_subsets_of_card(2,S'')).x by FUNCT_1:def 5;
-              A134: x in the_subsets_of_card(2,S'') & x in dom F
-                by A132,RELAT_1:86;
-              x in {S''' where S''' is Subset of S'': card S''' = 2}
-                by A132,RELAT_1:86; then
-              consider S''' be Subset of S'' such that
-              A135: x=S''' & card S''' = 2;
+              assume
+              y in rng(F|the_subsets_of_card(2,S''));
+              then consider x be set such that
+A118:         x in dom(F|the_subsets_of_card(2,S'')) and
+A119:         y = (F|the_subsets_of_card(2,S'')).x by FUNCT_1:
+              def 5;
+A120:         x in the_subsets_of_card(2,S'') by A118,RELAT_1:86;
+A121:         x in dom F by A118,RELAT_1:86;
+              x in {S''' where S''' is Subset of S'': card S''' = 2} by
+              A118,RELAT_1:86;
+              then consider S''' be Subset of S'' such that
+A122:         x=S''' and
+A123:         card S''' = 2;
               consider s1,s2 be set such that
-              A136: s1 <> s2 & S''' = {s1,s2} by A135,CARD_2:79;
-              A137: s1 in S''' & s2 in S''' by A136,TARSKI:def 2;
-              per cases by A137,XBOOLE_0:def 3;
-              suppose A138: s1 in S';
-                per cases by A137,XBOOLE_0:def 3;
-                suppose s2 in S'; then
-                  reconsider x as Subset of S' by A135,A136,A138,ZFMISC_1:38;
-                  x in the_subsets_of_card(2,S') by A135; then
-                  A139: x in dom(F|the_subsets_of_card(2,S'))
-                    by A134,RELAT_1:86;
-                  A140: x in dom(F|the_subsets_of_card(2,S'')|
-                     the_subsets_of_card(2,S')) by A139,A129,RELAT_1:103;
-                  (F|the_subsets_of_card(2,S')).x =
-                  (F|the_subsets_of_card(2,S'')|the_subsets_of_card(2,S')).x
-                    by A129,RELAT_1:103
-                  .= (F|the_subsets_of_card(2,S'')).x by A140,FUNCT_1:70; then
-                  y in rng(F|the_subsets_of_card(2,S'))
-                    by A133,A139,FUNCT_1:12;
-                  hence y = 2 by A128,A126,TARSKI:def 1;
+A124:         s1 <> s2 and
+A125:         S''' = {s1,s2} by A123,CARD_2:79;
+A126:         s1 in S''' by A125,TARSKI:def 2;
+A127:         s2 in S''' by A125,TARSKI:def 2;
+              per cases by A126,XBOOLE_0:def 3;
+              suppose
+A128:           s1 in S';
+                per cases by A127,XBOOLE_0:def 3;
+                suppose
+                  s2 in S';
+                  then reconsider x as Subset of S' by A122,A125,A128,
+                  ZFMISC_1:38;
+                  x in the_subsets_of_card(2,S') by A122,A123;
+                  then
+A129:             x in dom(F|the_subsets_of_card(2,S')) by A121,
+                  RELAT_1:86;
+                  then
+A130:             x in dom(F|the_subsets_of_card(2,S'')|
+                  the_subsets_of_card(2,S')) by A114,RELAT_1:103;
+                  (F|the_subsets_of_card(2,S')).x = (F|
+the_subsets_of_card(2,S'')|the_subsets_of_card(2,S')).x by A114,RELAT_1:103
+                    .= (F|the_subsets_of_card(2,S'')).x by A130,FUNCT_1:70;
+                  then y in rng(F|the_subsets_of_card(2,S')) by A119,A129,
+                  FUNCT_1:12;
+                  hence y = 2 by A111,A113,TARSKI:def 1;
                 end;
-                suppose s2 in {s}; then
-                  A141: s1 <> s & x = {s1,s} by A136,A135,TARSKI:def 1;
-                  s1 in B by A138; then
-                  consider s'' be Element of S such that
-                  A142: s1=s'' & F.{s,s''} = 2 & {s,s''} in dom F;
-                  thus y = 2 by A133,A134,A141,A142,FUNCT_1:72;
+                suppose
+A131:             s2 in {s};
+                  s1 in B by A128;
+                  then
+A132:             ex s'' be Element of S st s1=s'' & F.{s,s''} = 2 & {s,
+                  s''} in dom F;
+                  x = {s1,s} by A122,A125,A131,TARSKI:def 1;
+                  hence y = 2 by A119,A120,A132,FUNCT_1:72;
                 end;
               end;
-              suppose A143: s1 in {s}; then
-                A144: s <> s2 & x = {s,s2} by A136,A135,TARSKI:def 1;
-                per cases by A137,XBOOLE_0:def 3;
-                suppose s2 in S'; then
-                  s2 in B; then
-                  consider s'' be Element of S such that
-                  A145: s2=s'' & F.{s,s''} = 2 & {s,s''} in dom F;
-                  F.x = 2 & x in dom F by A143,A145,A136,A135,TARSKI:def 1;
-                  hence y = 2 by A133,A134,FUNCT_1:72;
-                 end;
-                 suppose s2 in {s};
-                   hence y = 2 by A144,TARSKI:def 1;
-                 end;
+              suppose
+A133:           s1 in {s};
+                then
+A134:           s <> s2 by A124,TARSKI:def 1;
+                per cases by A127,XBOOLE_0:def 3;
+                suppose
+                  s2 in S';
+                  then s2 in B;
+                  then ex s'' be Element of S st s2=s'' & F.{s,s''} = 2 & {s,
+                  s''} in dom F;
+                  then F.x = 2 by A122,A125,A133,TARSKI:def 1;
+                  hence y = 2 by A119,A120,FUNCT_1:72;
+                end;
+                suppose
+                  s2 in {s};
+                  hence y = 2 by A134,TARSKI:def 1;
+                end;
               end;
             end;
-            assume y = 2; then
-            A146: y in rng(F|the_subsets_of_card(2,S')) by A130,TARSKI:def 1;
-            F|the_subsets_of_card(2,S') c= F|the_subsets_of_card(2,S'')
-              by A129,RELAT_1:104; then
-            rng(F|the_subsets_of_card(2,S')) c=
-              rng(F|the_subsets_of_card(2,S'')) by RELAT_1:25;
-            hence thesis by A146;
-          end;
-          A147: card S' + 1 >= n + 1 by A128,XREAL_1:8;
-          A148: not s in S'
-          proof
-            assume s in S'; then
-            s in B; then
-            consider s' be Element of S such that
-            A149: s=s' & F.{s,s'} = 2 & {s,s'} in dom F;
-            A150: {s,s} = {s} \/ {s} by ENUMSET1:41 .= {s};
-            {s} in the_subsets_of_card(2,X) by A149,A150; then
-            consider X' be Subset of X such that
-            A151: X'={s} & card X' = 2;
-            thus contradiction by A151,CARD_1:50;
+            assume
+            y = 2;
+            then y in rng(F|the_subsets_of_card(2,S')) by A115, TARSKI:
+            def 1;
+            hence thesis by A117;
           end;
           take S'';
-          thus thesis by A131,A148,A147,CARD_2:54,TARSKI:def 1;
+A135:     not s in S'
+          proof
+            assume
+            s in S';
+            then s in B;
+            then
+A136:       ex s' be Element of S st s=s' & F.{s,s'} = 2 & {s,s'} in dom
+            F;
+            {s,s} = {s} \/ {s} by ENUMSET1:41
+              .= {s};
+            then {s} in the_subsets_of_card(2,X) by A136;
+            then ex X' be Subset of X st X'={s} & card X' = 2;
+            hence contradiction by CARD_1:50;
+          end;
+          card S' + 1 >= n + 1 by A113,XREAL_1:8;
+          hence thesis by A116,A135,CARD_2:54,TARSKI:def 1;
         end;
       end;
     end;
   end;
-  for m,n being natural number holds P[m,n] from BinInd2(A1,A2);
+A137: for n being natural number holds P[0,n] & P[n,0];
+  for m,n being natural number holds P[m,n] from BinInd2(A137,A1);
   hence thesis;
 end;
 
 theorem
-  for m being natural number holds
-  ex r being natural number st
-    for X being finite set,
-        P being a_partition of the_subsets_of_card(2,X)
-    st card X >= r & card P = 2 holds
-    ex S being Subset of X st card S >= m & S is_homogeneous_for P
+  for m being natural number holds ex r being natural number st for X
+being finite set, P being a_partition of the_subsets_of_card(2,X) st card X >=
+  r & card P = 2 holds ex S being Subset of X st card S >= m & S
+  is_homogeneous_for P
 proof
   let m be natural number;
   per cases;
-  suppose m<2; then
-    m<1+1; then
-    A1: m<=1 by NAT_1:13;
+  suppose
+A1: m<2;
     set r=1;
     take r;
     let X be finite set;
     let P be a_partition of the_subsets_of_card(2,X);
-    assume A2: card X >= r;
-    assume card P = 2;
-    consider x be set such that
-    A3: x in X by A2,CARD_1:47,XBOOLE_0:def 1;
-    reconsider S = {x} as Subset of X by A3,ZFMISC_1:37;
+    assume
+    card X >= r;
+    then consider x be set such that
+A2: x in X by CARD_1:47,XBOOLE_0:def 1;
+    reconsider S = {x} as Subset of X by A2,ZFMISC_1:37;
+    assume
+    card P = 2;
     take S;
-    A4: card S = 1 by CARD_1:50;
-    thus card S >= m by A1,CARD_1:50;
+    m<1+1 by A1;
+    then m<=1 by NAT_1:13;
+    hence card S >= m by CARD_1:50;
+A3: card S = 1 by CARD_1:50;
     ex p being Element of P st the_subsets_of_card(2,S) c= p
     proof
       consider p be Element of P;
       take p;
-      the_subsets_of_card(2,S) = {} by A4,Th6;
+      the_subsets_of_card(2,S) = {} by A3,Th6;
       hence thesis by XBOOLE_1:2;
     end;
     hence thesis by Def1;
   end;
-  suppose  m>=2; then
-    consider r be natural number such that
-    A6: r <= (m + m -' 2) choose (m -' 1) & r >= 2 and
-    A7: for X being finite set,
-            F being Function of the_subsets_of_card(2,X), Seg 2 st card X >= r
-        holds ex S being Subset of X st
-          (card S >= m & rng(F|the_subsets_of_card(2,S)) = {1}) or
-          (card S >= m & rng(F|the_subsets_of_card(2,S)) = {2}) by Th16;
+  suppose
+    m>=2;
+    then consider r be natural number such that
+    r <= (m + m -' 2) choose (m -' 1) and
+A4: r >= 2 and
+A5: for X being finite set, F being Function of the_subsets_of_card(2
+,X), Seg 2 st card X >= r holds ex S being Subset of X st card S >= m & rng(F|
+the_subsets_of_card(2,S)) = {1} or card S >= m & rng(F|the_subsets_of_card(2,S)
+    ) = {2} by Th16;
     take r;
     let X be finite set;
     let P be a_partition of the_subsets_of_card(2,X);
-    assume A8: card X >= r & card P = 2; then
-    2 <= card X  by A6,XXREAL_0:2; then
-    card Seg 2 <= card X by FINSEQ_1:78; then
-    card Seg 2 c= card X by NAT_1:40; then
-    A9: card 2 c= card X by FINSEQ_1:76;
-    reconsider X' = the_subsets_of_card(2,X) as non empty set
-      by A8,A6,A9,CARD_1:47,GROUP_10:2;
+    assume that
+A6: card X >= r and
+A7: card P = 2;
+    2 <= card X by A4,A6,XXREAL_0:2;
+    then card Seg 2 <= card X by FINSEQ_1:78;
+    then card Seg 2 c= card X by NAT_1:40;
+    then card 2 c= card X by FINSEQ_1:76;
+    then reconsider X' = the_subsets_of_card(2,X) as non empty set by A4,A6,
+    CARD_1:47,GROUP_10:2;
     reconsider P'=P as a_partition of X';
-card P' = card Seg 2 by A8,FINSEQ_1:78; then
-         P', Seg 2 are_equipotent by CARD_1:21; then
-    consider F1 be Function such that
-    A11: F1 is one-to-one & dom F1 = P' & rng F1 = Seg 2 by WELLORD2:def 4;
-    reconsider F1 as Function of P',Seg 2 by A11,FUNCT_2:3;
+    card P' = card Seg 2 by A7,FINSEQ_1:78;
+    then P', Seg 2 are_equipotent by CARD_1:21;
+    then consider F1 be Function such that
+A8: F1 is one-to-one and
+A9: dom F1 = P' and
+A10: rng F1 = Seg 2 by WELLORD2:def 4;
+    reconsider F1 as Function of P',Seg 2 by A9,A10,FUNCT_2:3;
     set F=F1*(proj P');
     reconsider F as Function of the_subsets_of_card(2,X),Seg 2;
     consider S be Subset of X such that
-    A12: (card S >= m & rng(F|the_subsets_of_card(2,S)) = {1}) or
-        (card S >= m & rng(F|the_subsets_of_card(2,S)) = {2}) by A7,A8;
+A11: card S >= m & rng(F|the_subsets_of_card(2,S)) = {1} or card S >=
+    m & rng(F|the_subsets_of_card(2,S)) = {2} by A5,A6;
     take S;
-    thus card S >= m by A12;
+    thus card S >= m by A11;
     consider h be Element of the_subsets_of_card(2,S);
-    A13: the_subsets_of_card(2,S) c= the_subsets_of_card(2,X) by Lm1;
-    A14: the_subsets_of_card(2,S) is non empty
-      by A12; then
-    h in the_subsets_of_card(2,S); then
-    reconsider h as Element of X' by A13;
-    A15: F|the_subsets_of_card(2,S) is constant
-    proof
-      A16: 1 is Element of Seg 2 & 2 is Element of Seg 2
-        by FINSEQ_1:4,TARSKI:def 2;
-      F|the_subsets_of_card(2,S) is Function of the_subsets_of_card(2,S),Seg 2
-        by A13,FUNCT_2:38;
-      hence thesis by A16,A14,A12,FUNCT_2:188;
-    end;
+A12: the_subsets_of_card(2,S) is non empty by A11;
+    then
+A13: h in the_subsets_of_card(2,S);
+A14: 1 is Element of Seg 2 & 2 is Element of Seg 2 by FINSEQ_1:4,TARSKI:
+    def 2;
+A15: the_subsets_of_card(2,S) c= the_subsets_of_card(2,X) by Lm1;
+    then reconsider h as Element of X' by A13;
     set E = EqClass(h,P');
     reconsider E as Element of P by EQREL_1:def 8;
+    F|the_subsets_of_card(2,S) is Function of the_subsets_of_card(2,S),
+    Seg 2 by A15,FUNCT_2:38;
+    then
+A16: F|the_subsets_of_card(2,S) is constant by A11,A12,A14,
+    FUNCT_2:188;
     for x being set holds x in the_subsets_of_card(2,S) implies x in E
     proof
       let x be set;
-      assume A17: x in the_subsets_of_card(2,S); then
-      reconsider x'=x as Element of the_subsets_of_card(2,X) by A13;
-      reconsider x''=x as Element of X' by A17,A13;
-      A18: h in E by EQREL_1:def 8;
-      A19: dom F = the_subsets_of_card(2,X) by FUNCT_2:def 1;
-      x' in dom F /\ the_subsets_of_card(2,S) by A19,A17,XBOOLE_0:def 4; then
-      A20: x' in dom(F|the_subsets_of_card(2,S)) by RELAT_1:90;
-      h in dom F /\ the_subsets_of_card(2,S) by A19,A14,XBOOLE_0:def 4; then
-      A21: h in dom(F|the_subsets_of_card(2,S)) by RELAT_1:90;
-      A22: F.x' = F|the_subsets_of_card(2,S).x' by A17,FUNCT_1:72
-      .= F|the_subsets_of_card(2,S).h by A15,A20,A21,FUNCT_1:def 16
-      .= F.h by A14,FUNCT_1:72;
-      A23: F1.((proj P').x') = (F1*proj P').h by A22,A19,FUNCT_1:22
-      .= F1.((proj P').h) by A19,FUNCT_1:22;
-      A24: (proj P').x'' in P';
-      (proj P').h = (proj P').x' by A24,A23,A11,FUNCT_1:def 8;
-      hence thesis by A18,Th13;
-    end; then
-    the_subsets_of_card(2,S) c= E by TARSKI:def 3;
+      assume
+A17:  x in the_subsets_of_card(2,S);
+      then reconsider x'=x as Element of the_subsets_of_card(2,X) by A15;
+      reconsider x''=x as Element of X' by A15,A17;
+A18:  dom F = the_subsets_of_card(2,X) by FUNCT_2:def 1;
+      then h in dom F /\ the_subsets_of_card(2,S) by A12,XBOOLE_0:def 4;
+      then
+A19:  h in dom(F|the_subsets_of_card(2,S)) by RELAT_1:90;
+      x' in dom F /\ the_subsets_of_card(2,S) by A17,A18,XBOOLE_0:def 4;
+      then
+A20:  x' in dom(F|the_subsets_of_card(2,S)) by RELAT_1:90;
+      F.x' = F|the_subsets_of_card(2,S).x' by A17,FUNCT_1:72
+        .= F|the_subsets_of_card(2,S).h by A16,A20,A19,FUNCT_1:def 16
+        .= F.h by A12,FUNCT_1:72;
+      then
+A21:  F1.((proj P').x') = (F1*proj P').h by A18,FUNCT_1:22
+        .= F1.((proj P').h) by A18,FUNCT_1:22;
+      (proj P').x'' in P';
+      then h in E & (proj P').h = (proj P').x' by A8,A9,A21,EQREL_1:def
+      8 ,FUNCT_1:def 8;
+      hence thesis by Th13;
+    end;
+    then the_subsets_of_card(2,S) c= E by TARSKI:def 3;
     hence thesis by Def1;
   end;
 end;
+

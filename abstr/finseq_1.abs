@@ -11,10 +11,10 @@ environ
       ZF_REFLE, ARYTM, XREAL_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XCMPLX_0, RELAT_1, FUNCT_1,
       FUNCOP_1, WELLORD2, ORDINAL1, REAL_1, NAT_1, CARD_1, NUMBERS, PARTFUN1,
-      FUNCT_4, FINSET_1, XXREAL_0;
+      FINSET_1, XXREAL_0;
  constructors WELLORD2, FUNCOP_1, FUNCT_4, XXREAL_0, XREAL_0, NAT_1, CARD_1;
- registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
-      FINSET_1, XXREAL_0, XREAL_0, NAT_1, CARD_1, NUMBERS;
+ registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FINSET_1,
+      XXREAL_0, XREAL_0, NAT_1, CARD_1, NUMBERS;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -33,7 +33,6 @@ definition
   let n be Nat;
   func Seg n -> set equals
 :: FINSEQ_1:def 1
-
   { k where k is Element of NAT: 1 <= k & k <= n };
 end;
 
@@ -47,11 +46,19 @@ canceled 2;
 theorem :: FINSEQ_1:3
   a in Seg b iff 1 <= a & a <= b;
 
+registration let n be zero Nat;
+  cluster Seg n -> empty;
+end;
+
 theorem :: FINSEQ_1:4
-  Seg 0 = {} & Seg 1 = { 1 } & Seg 2 = { 1,2 };
+  Seg 1 = { 1 } & Seg 2 = { 1,2 };
 
 theorem :: FINSEQ_1:5
   a = 0 or a in Seg a;
+
+registration let n be non zero Nat;
+  cluster Seg n -> non empty;
+end;
 
 theorem :: FINSEQ_1:6
   a+1 in Seg(a+1);
@@ -121,10 +128,7 @@ definition
   redefine func dom p -> Subset of NAT;
 end;
 
-canceled;
-
-theorem :: FINSEQ_1:14
-  {} is FinSequence;
+canceled 2;
 
 theorem :: FINSEQ_1:15
   (ex k st dom f c= Seg k) implies ex p st f c= p;
@@ -211,7 +215,6 @@ definition
   let x;
   func <*x*> -> set equals
 :: FINSEQ_1:def 5
-
   { [1,x] };
 end;
 
@@ -219,13 +222,12 @@ definition
   let D be set;
   func <*>D -> FinSequence of D equals
 :: FINSEQ_1:def 6
-
   {};
 end;
 
 registration
   let D be set;
- cluster <*>D -> empty;
+  cluster <*>D -> empty;
 end;
 
 registration
@@ -233,10 +235,7 @@ registration
   cluster empty FinSequence of D;
 end;
 
-canceled 3;
-
-theorem :: FINSEQ_1:32
-  p=<*>D iff len p = 0;
+canceled 4;
 
 definition
   let p,q;
@@ -245,7 +244,7 @@ definition
 
   dom it = Seg (len p + len q) &
   (for k st k in dom p holds it.k=p.k) &
-  (for k st k in dom q holds it.(len p + k) = q.k);
+  for k st k in dom q holds it.(len p + k) = q.k;
 end;
 
 theorem :: FINSEQ_1:33
@@ -258,14 +257,14 @@ theorem :: FINSEQ_1:35
 
 theorem :: FINSEQ_1:36
   for k being Nat st
-  (len p + 1 <= k & k <= len p + len q) holds (p^q).k=q.(k-len p);
+  len p + 1 <= k & k <= len p + len q holds (p^q).k=q.(k-len p);
 
 theorem :: FINSEQ_1:37
   for k being Nat st len p < k & k <= len(p^q) holds (p^q).k = q.(k - len p);
 
 theorem :: FINSEQ_1:38
   for k being Nat st k in dom (p^q) holds
-  (k in dom p or (ex n st n in dom q & k=len p + n));
+  (k in dom p or ex n st n in dom q & k=len p + n );
 
 theorem :: FINSEQ_1:39
   dom p c= dom(p^q);
@@ -331,12 +330,10 @@ definition
   let x,y;
   func <*x,y*> -> set equals
 :: FINSEQ_1:def 9
-
   <*x*>^<*y*>;
   let z;
   func <*x,y,z*> -> set equals
 :: FINSEQ_1:def 10
-
   <*x*>^<*y*>^<*z*>;
 end;
 
@@ -399,8 +396,7 @@ end;
 scheme :: FINSEQ_1:sch 3
  IndSeq{P[FinSequence]}: for p holds P[p]
 provided
- P[{}]
-and
+ P[{}] and
  for p,x st P[p] holds P[p^<*x*>];
 
 theorem :: FINSEQ_1:64
@@ -428,7 +424,7 @@ theorem :: FINSEQ_1:66
 
 scheme :: FINSEQ_1:sch 4
  SepSeq{D()->non empty set, P[FinSequence]}:
-  ex X st (for x holds x in X iff ex p st (p in D()* & P[p] & x=p));
+  ex X st for x holds x in X iff ex p st p in D()* & P[p] & x=p;
 
 ::                           ::
 ::        Subsequences       ::
@@ -450,13 +446,12 @@ definition
   mode FinSubsequence is FinSubsequence-like Function;
 end;
 
-canceled;
-
-theorem :: FINSEQ_1:68
-  for p being FinSequence holds p is FinSubsequence;
-
-theorem :: FINSEQ_1:69
-  p|X is FinSubsequence & X|p is FinSubsequence;
+registration
+ cluster FinSequence-like -> FinSubsequence-like Function;
+ let p be FinSubsequence, X be set;
+ cluster p|X -> FinSubsequence-like;
+ cluster X|p -> FinSubsequence-like;
+end;
 
 reserve p' for FinSubsequence;
 
@@ -467,11 +462,11 @@ definition
   func Sgm X -> FinSequence of NAT means
 :: FINSEQ_1:def 13
 
-  rng it = X & for l,m,k1,k2 being Nat st ( 1 <= l & l < m & m <= len it &
-  k1=it.l & k2=it.m) holds k1 < k2;
+  rng it = X & for l,m,k1,k2 being Nat st 1 <= l & l < m & m <= len it &
+  k1=it.l & k2=it.m holds k1 < k2;
 end;
 
-canceled;
+canceled 4;
 
 theorem :: FINSEQ_1:71
   rng Sgm dom p' = dom p';
@@ -480,7 +475,6 @@ definition
   let p';
   func Seq p' -> Function equals
 :: FINSEQ_1:def 14
-
   p'* Sgm(dom p');
 end;
 
@@ -537,6 +531,12 @@ registration
   cluster f2^f1 -> non empty;
 end;
 
+registration
+  let x,y be set;
+  cluster <*x,y*> -> non empty;
+  let z be set;
+  cluster <*x,y,z*> -> non empty;
+end;
 :: from MATRIX_2
 
 scheme :: FINSEQ_1:sch 5
@@ -557,7 +557,6 @@ definition
   let m;
   func p|m -> FinSequence equals
 :: FINSEQ_1:def 15
-
   p|Seg m;
 end;
 
@@ -722,12 +721,6 @@ end;
 theorem :: FINSEQ_1:102
   for M1, M2 being set st card M1 = 0 & card M2 = 0 holds M1 = M2;
 
-:: 2008.08.31, A.K.
-
-registration
-  cluster Seg 0 -> empty;
-end;
-
 :: from CHAIN_1, 2008.08.31, A.K.
 
 registration
@@ -739,7 +732,7 @@ end;
 
 theorem :: FINSEQ_1:103
   for p being FinSequence, n,m being Nat st m <= n
-   holds p|n|m = p|m;
+  holds p|n|m = p|m;
 
 :: from CARD_5, 2008.10.08, A.T.
 
@@ -750,30 +743,82 @@ theorem :: FINSEQ_1:104
 
 :: new, 2009.01.26, A.T.
 
-definition let n be Nat, f be FinSequence;
- attr f is n-long means
+definition
+  let n be Nat, f be FinSequence;
+  attr f is n-long means
 :: FINSEQ_1:def 18
- len f = n;
+
+  len f = n;
 end;
 
 :: from CIRCCOMB, 2009.03.27, A.T.
 
-registration let n be Nat;
- cluster n-long FinSequence;
+registration
+  let n be Nat;
+  cluster n-long FinSequence;
 end;
 
 :: from FACIRC_1, 2009.02.16, A.T.
 
 registration
- let x be set;
- cluster <*x*> -> 1-long;
- let y be set;
- cluster <*x,y*> -> 2-long;
- let z be set;
- cluster <*x,y,z*> -> 3-long;
+  let x be set;
+  cluster <*x*> -> 1-long;
+  let y be set;
+  cluster <*x,y*> -> 2-long;
+  let z be set;
+  cluster <*x,y,z*> -> 3-long;
 end;
 
 registration
- cluster 0-long -> empty FinSequence;
- cluster empty -> 0-long FinSequence;
+  cluster 0-long -> empty FinSequence;
+  cluster empty -> 0-long FinSequence;
 end;
+
+:: new, 2009.08.24, A.T.
+
+definition let X be set;
+ attr X is FinSequence-membered means
+:: FINSEQ_1:def 19
+ x in X implies x is FinSequence;
+end;
+
+registration
+ cluster empty -> FinSequence-membered set;
+end;
+
+registration
+ cluster non empty FinSequence-membered set;
+end;
+
+registration let X be set;
+ cluster X* -> FinSequence-membered;
+end;
+
+theorem :: FINSEQ_1:105
+ for f being Function st f in D* & x in dom f holds f.x in D;
+
+registration
+ cluster FinSequence-membered -> functional set;
+end;
+
+theorem :: FINSEQ_1:106
+ for X being FinSequence-membered set
+  ex Y being non empty set st X c= Y*;
+
+registration let X be FinSequence-membered set;
+ cluster -> FinSequence-membered Subset of X;
+end;
+
+:: from TREES_1, 2009.09.09, A.T.
+
+
+theorem :: FINSEQ_1:107
+  for p,q being FinSequence st q = p|Seg n holds len q <= n;
+
+theorem :: FINSEQ_1:108
+  for p,q being FinSequence st p = p^q or p = q^p holds q = {};
+
+theorem :: FINSEQ_1:109
+  for p,q being FinSequence st p^q = <*x*> holds
+  p = <*x*> & q = {} or p = {} & q = <*x*>;
+

@@ -12,6 +12,7 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -28,8 +29,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="34" value="false"/>
-<Adjective nr="91"/>
+<Adjective nr="36" value="false"/>
+<Adjective nr="92"/>
 </Cluster>
 </RCluster>
 <RCluster aid="DIRORT" nr="2">
@@ -38,12 +39,12 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="34" value="false"/>
-<Adjective nr="91"/>
+<Adjective nr="36" value="false"/>
 <Adjective nr="92"/>
 <Adjective nr="93"/>
 <Adjective nr="94"/>
 <Adjective nr="95"/>
+<Adjective nr="96"/>
 </Cluster>
 </RCluster>
 <RCluster aid="DIRORT" nr="3">
@@ -52,12 +53,12 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="34" value="false"/>
-<Adjective nr="91"/>
+<Adjective nr="36" value="false"/>
 <Adjective nr="92"/>
 <Adjective nr="93"/>
 <Adjective nr="94"/>
-<Adjective nr="96"/>
+<Adjective nr="95"/>
+<Adjective nr="97"/>
 </Cluster>
 </RCluster>
 </Registrations>

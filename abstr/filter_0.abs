@@ -8,10 +8,10 @@ environ
 
  vocabularies LATTICES, BOOLE, ZFMISC_1, TARSKI, SETFAM_1, SUBSET_1, ZF_LANG,
       BINOP_1, RELAT_1, FUNCT_1, MCART_1, RELAT_2, EQREL_1, FILTER_0, HAHNBAN,
-      PARTFUN1, REALSET1;
+      REALSET1, WAYBEL23, FSM_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, FUNCT_1, MCART_1,
-      ORDINAL1, RELAT_2, PARTFUN1, FUNCT_2, BINOP_1, REALSET1, STRUCT_0,
-      LATTICES, DOMAIN_1, RELAT_1, RELSET_1, EQREL_1;
+      ORDINAL1, RELAT_2, FUNCT_2, BINOP_1, REALSET1, STRUCT_0, LATTICES,
+      DOMAIN_1, RELAT_1, RELSET_1, EQREL_1;
  constructors SETFAM_1, RELAT_2, ORDINAL1, PARTFUN1, BINOP_1, REALSET1,
       LATTICES, RELSET_1;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, STRUCT_0, LATTICES;
@@ -27,8 +27,8 @@ reserve x,y,z,X,Y,Z,X1,X2 for set;
 
 theorem :: FILTER_0:1
   for L being join-associative join-commutative meet-commutative
-  join-absorbing meet-absorbing (non empty LattStr),
-  p, q, r being Element of L st p [= q holds r "\/" p [= r "\/" q;
+  join-absorbing meet-absorbing (non empty LattStr), p, q, r being Element of L
+  st p [= q holds r "\/" p [= r "\/" q;
 
 theorem :: FILTER_0:2
   p [= r implies p "/\" q [= r;
@@ -37,47 +37,46 @@ theorem :: FILTER_0:3
   p [= r implies p [= q"\/"r;
 
 theorem :: FILTER_0:4
-  for L being join-absorbing join-commutative join-associative
-  (non empty LattStr), a, b, c, d being Element of L st
-  a [= b & c [= d holds a "\/" c [= b "\/" d;
+  for L being join-absorbing join-commutative join-associative (non
+empty LattStr), a, b, c, d being Element of L st a [= b & c [= d holds a "\/" c
+  [= b "\/" d;
 
 theorem :: FILTER_0:5
   for L being meet-absorbing meet-commutative join-absorbing
-  meet-associative (non empty LattStr), a, b, c, d being Element of L st
-  a [= b & c [= d holds a "/\" c [= b "/\" d;
+meet-associative (non empty LattStr), a, b, c, d being Element of L st a [= b &
+  c [= d holds a "/\" c [= b "/\" d;
 
 theorem :: FILTER_0:6
   for L being join-absorbing join-commutative join-associative
-  meet-absorbing meet-commutative (non empty LattStr),
-  a, b, c being Element of L st a [= c & b [= c holds a "\/" b [= c;
+meet-absorbing meet-commutative (non empty LattStr), a, b, c being Element of L
+  st a [= c & b [= c holds a "\/" b [= c;
 
 theorem :: FILTER_0:7
-  for L being meet-absorbing meet-commutative
-  join-absorbing meet-associative (non empty LattStr),
-  a, b, c being Element of L st a [= b & a [= c holds a [= b "/\" c;
+  for L being meet-absorbing meet-commutative join-absorbing
+meet-associative (non empty LattStr), a, b, c being Element of L st a [= b & a
+  [= c holds a [= b "/\" c;
 
 definition
   let L;
-  mode Filter of L -> non empty Subset of L means
-:: FILTER_0:def 1
-
-    p in it & q in it iff p "/\" q in it;
+  canceled;
+  mode Filter of L is non empty meet-closed final Subset of L;
 end;
 
-canceled;
+theorem :: FILTER_0:8
+ for S being non empty Subset of L holds S is Filter of L iff
+  for p,q being Element of L holds p in S & q in S iff p "/\" q in S;
 
 theorem :: FILTER_0:9
-  for D being non empty Subset of L holds D is Filter of L iff
-  (for p,q st p in D & q in D holds p "/\" q in D) &
-  for p,q st p in D & p [= q holds q in D;
+  for D being non empty Subset of L holds D is Filter of L iff (for
+p,q st p in D & q in D holds p "/\" q in D) & for p,q st p in D & p [= q holds
+  q in D;
 
 reserve H,F for Filter of L;
 
 theorem :: FILTER_0:10
   p in H implies p"\/"q in H & q"\/"p in H;
 
-theorem :: FILTER_0:11
-  ex p st p in H;
+canceled;
 
 theorem :: FILTER_0:12
   L is 1_Lattice implies Top L in H;
@@ -95,7 +94,6 @@ definition
   let L;
   func <.L.) -> Filter of L equals
 :: FILTER_0:def 2
-
   the carrier of L;
 end;
 
@@ -103,7 +101,6 @@ definition
   let L,p;
   func <.p.) -> Filter of L equals
 :: FILTER_0:def 3
-
   { q : p [= q };
 end;
 
@@ -123,22 +120,22 @@ definition
   attr F is being_ultrafilter means
 :: FILTER_0:def 4
 
-   F <> the carrier of L & for H st F c= H & H <> the carrier of L
-  holds F = H;
+  F <> the carrier of L & for H st F
+  c= H & H <> the carrier of L holds F = H;
 end;
 
 canceled;
 
 theorem :: FILTER_0:22
-  L is lower-bounded implies for F st F <> the carrier of L
-  ex H st F c= H & H is being_ultrafilter;
+  L is lower-bounded implies for F st F <> the carrier of L ex H
+  st F c= H & H is being_ultrafilter;
 
 theorem :: FILTER_0:23
   (ex r st p "/\" r <> p) implies <.p.) <> the carrier of L;
 
 theorem :: FILTER_0:24
-  L is 0_Lattice & p <> Bottom L implies
-   ex H st p in H & H is being_ultrafilter;
+  L is 0_Lattice & p <> Bottom L implies ex H st p in H & H is
+  being_ultrafilter;
 
 reserve D for non empty Subset of L;
 
@@ -147,7 +144,8 @@ definition
   func <.D.) -> Filter of L means
 :: FILTER_0:def 5
 
-   D c= it & for F st D c= F holds it c= F;
+  D c= it & for F st D c= F holds it
+  c= F;
 end;
 
 canceled;
@@ -169,17 +167,17 @@ theorem :: FILTER_0:30
   D = {p} implies <.D.) = <.p.);
 
 theorem :: FILTER_0:31
-  L is 0_Lattice & Bottom L in
-  D implies <.D.) = <.L.) & <.D.) = the carrier of L;
+  L is 0_Lattice & Bottom L in D implies <.D.) = <.L.) & <.D.) =
+  the carrier of L;
 
 theorem :: FILTER_0:32
-  L is 0_Lattice & Bottom L in F implies F = <.L.) & F = the carrier of L;
+  L is 0_Lattice & Bottom L in F implies F = <.L.) & F = the
+  carrier of L;
 
 definition
   let L,F;
   attr F is prime means
 :: FILTER_0:def 6
-
   p "\/" q in F iff p in F or q in F;
 end;
 
@@ -194,9 +192,9 @@ definition
   attr IT is implicative means
 :: FILTER_0:def 7
 
-  for p,q being Element of IT
-  ex r being Element of IT st p "/\" r [= q & for r1 being Element of IT st
-  p "/\" r1 [= q holds r1 [= r;
+  for p,q being Element of IT ex r being
+  Element of IT st p "/\" r [= q & for r1 being Element of IT st p "/\" r1 [= q
+  holds r1 [= r;
 end;
 
 registration
@@ -214,7 +212,8 @@ definition
   func p => q -> Element of L means
 :: FILTER_0:def 8
 
-   p "/\" it [= q & for r st p "/\" r [= q holds r [= it;
+  p "/\" it [= q & for r st p "/\" r
+  [= q holds r [= it;
 end;
 
 reserve I for I_Lattice,
@@ -256,7 +255,6 @@ definition
   let L,D1,D2;
   func D1 "/\" D2 -> Subset of L equals
 :: FILTER_0:def 9
-
   { p"/\"q : p in D1 & q in D2 };
 end;
 
@@ -289,7 +287,8 @@ definition
 end;
 
 theorem :: FILTER_0:47
-  <.D1 \/ D2.) = <.<.D1.) \/ D2.) & <.D1 \/ D2.) = <.D1 \/ <.D2.).);
+  <.D1 \/ D2.) = <.<.D1.) \/ D2.) & <.D1 \/ D2.) = <.D1 \/ <.D2.)
+  .);
 
 theorem :: FILTER_0:48
   <.F \/ H.) = { r : ex p,q st p"/\"q [= r & p in F & q in H };
@@ -323,18 +322,19 @@ theorem :: FILTER_0:56
   a [= b iff a"/\"b` = Bottom B;
 
 theorem :: FILTER_0:57
-  FB is being_ultrafilter iff
-  FB <> the carrier of B & for a holds a in FB or a` in FB;
+  FB is being_ultrafilter iff FB <> the carrier of B & for a holds
+  a in FB or a` in FB;
 
 theorem :: FILTER_0:58
   FB <> <.B.) & FB is prime iff FB is being_ultrafilter;
 
 theorem :: FILTER_0:59
-  FB is being_ultrafilter implies for a holds a in FB iff not a` in FB;
+  FB is being_ultrafilter implies for a holds a in FB iff not a`
+  in FB;
 
 theorem :: FILTER_0:60
-  a <> b implies ex FB st FB is being_ultrafilter &
-  (a in FB & not b in FB or not a in FB & b in FB);
+  a <> b implies ex FB st FB is being_ultrafilter & (a in FB & not b in
+  FB or not a in FB & b in FB);
 
 reserve o1,o2 for BinOp of F;
 
@@ -343,8 +343,8 @@ definition
   func latt F -> Lattice means
 :: FILTER_0:def 10
 
-   ex o1,o2 st o1 = (the L_join of L)||F &
-  o2 = (the L_meet of L)||F & it = LattStr (#F, o1, o2#);
+  ex o1,o2 st o1 = (the L_join of L)||F
+  & o2 = (the L_meet of L)||F & it = LattStr (#F, o1, o2#);
 end;
 
 registration
@@ -358,16 +358,16 @@ theorem :: FILTER_0:62
   for L being strict Lattice holds latt <.L.) = L;
 
 theorem :: FILTER_0:63
-  the carrier of latt F = F & the L_join of latt F = (the L_join of L)||F &
-  the L_meet of latt F = (the L_meet of L)||F;
+  the carrier of latt F = F & the L_join of latt F = (the L_join
+  of L)||F & the L_meet of latt F = (the L_meet of L)||F;
 
 theorem :: FILTER_0:64
-  for p',q' being Element of latt F st
-  p = p' & q = q' holds p"\/"q = p'"\/"q' & p"/\"q = p'"/\"q';
+  for p',q' being Element of latt F st p = p' & q = q' holds p"\/"
+  q = p'"\/"q' & p"/\"q = p'"/\"q';
 
 theorem :: FILTER_0:65
-  for p',q' being Element of latt F st
-  p = p' & q = q' holds p [= q iff p' [= q';
+  for p',q' being Element of latt F st p = p' & q = q' holds p [=
+  q iff p' [= q';
 
 theorem :: FILTER_0:66
   L is upper-bounded implies latt F is upper-bounded;
@@ -403,7 +403,6 @@ definition
   let L,p,q;
   func p <=> q -> Element of L equals
 :: FILTER_0:def 11
-
   (p => q)"/\"(q => p);
 end;
 
@@ -420,7 +419,8 @@ definition
   func equivalence_wrt F -> Relation means
 :: FILTER_0:def 12
 
-  field it c= the carrier of L & for p,q holds [p,q] in it iff p <=> q in F;
+  field it c= the carrier of
+  L & for p,q holds [p,q] in it iff p <=> q in F;
 end;
 
 canceled;
@@ -429,17 +429,19 @@ theorem :: FILTER_0:80
   equivalence_wrt F is Relation of the carrier of L;
 
 theorem :: FILTER_0:81
-  L is I_Lattice implies equivalence_wrt F is_reflexive_in the carrier of L;
+  L is I_Lattice implies equivalence_wrt F is_reflexive_in the
+  carrier of L;
 
 theorem :: FILTER_0:82
   equivalence_wrt F is_symmetric_in the carrier of L;
 
 theorem :: FILTER_0:83
-  L is I_Lattice implies equivalence_wrt F is_transitive_in the carrier of L;
+  L is I_Lattice implies equivalence_wrt F is_transitive_in the
+  carrier of L;
 
 theorem :: FILTER_0:84
-  L is I_Lattice implies
-  equivalence_wrt F is Equivalence_Relation of the carrier of L;
+  L is I_Lattice implies equivalence_wrt F is Equivalence_Relation
+  of the carrier of L;
 
 theorem :: FILTER_0:85
   L is I_Lattice implies field equivalence_wrt F = the carrier of L;
@@ -474,10 +476,9 @@ theorem :: FILTER_0:89
   p,q are_equivalence_wrt F implies q,p are_equivalence_wrt F;
 
 theorem :: FILTER_0:90
-  (i,j are_equivalence_wrt FI & j,k are_equivalence_wrt FI implies
-  i,k are_equivalence_wrt FI) &
-  (a,b are_equivalence_wrt FB & b,c are_equivalence_wrt FB implies
-  a,c are_equivalence_wrt FB);
+  (i,j are_equivalence_wrt FI & j,k are_equivalence_wrt FI implies i,k
+are_equivalence_wrt FI) & (a,b are_equivalence_wrt FB & b,c are_equivalence_wrt
+  FB implies a,c are_equivalence_wrt FB);
 
 begin :: Addenda
 
@@ -485,15 +486,13 @@ begin :: Addenda
 
 theorem :: FILTER_0:91
   for L being meet-absorbing meet-commutative meet-associative
-  join-absorbing join-commutative (non empty LattStr)
-  for x,y,z being Element of L st z [= x & z [= y &
-  for z' being Element of L st z' [= x & z' [= y holds z' [= z
-  holds z = x "/\" y;
+join-absorbing join-commutative (non empty LattStr) for x,y,z being Element of
+L st z [= x & z [= y & for z' being Element of L st z' [= x & z' [= y holds z'
+  [= z holds z = x "/\" y;
 
 theorem :: FILTER_0:92
   for L being meet-absorbing meet-commutative join-associative
-  join-absorbing join-commutative (non empty LattStr)
-  for x,y,z being Element of L st x [= z & y [= z &
-  for z' being Element of L st x [= z' & y [= z' holds z [= z'
-  holds z = x "\/" y;
+join-absorbing join-commutative (non empty LattStr) for x,y,z being Element of
+  L st x [= z & y [= z & for z' being Element of L st x [= z' & y [= z' holds z
+  [= z' holds z = x "\/" y;
 

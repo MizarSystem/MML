@@ -12,17 +12,16 @@ environ
       FINSEQ_6, FINSEQ_5, JORDAN6, TOPREAL2, RELAT_2, JORDAN8, FUNCT_1,
       RFINSEQ, ARYTM_3, JORDAN1A, ARYTM;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0, NAT_1,
-      NAT_D, COMPLEX1, FUNCT_1, BINARITH, RELSET_1, PARTFUN1, FINSEQ_1,
-      FINSEQ_4, FINSEQ_5, FINSEQ_6, MATRIX_1, STRUCT_0, PRE_TOPC, COMPTS_1,
-      CONNSP_1, RFINSEQ,
-      RLTOPSP1, EUCLID, TOPREAL1, TOPREAL2, GOBOARD1, SPPOL_1,
+      NAT_D, COMPLEX1, FUNCT_1, RELSET_1, PARTFUN1, FINSEQ_1, FINSEQ_4,
+      FINSEQ_5, FINSEQ_6, MATRIX_1, STRUCT_0, PRE_TOPC, COMPTS_1, CONNSP_1,
+      RFINSEQ, RLTOPSP1, EUCLID, TOPREAL1, TOPREAL2, GOBOARD1, SPPOL_1,
       PSCOMP_1, JORDAN6, JORDAN8, JORDAN9, JORDAN1A, JORDAN1E;
  constructors PARTFUN1, XXREAL_0, REAL_1, NAT_1, FINSEQ_4, NEWTON, RFINSEQ,
       BINARITH, FINSEQ_5, CONNSP_1, REALSET2, PSCOMP_1, JORDAN5C, JORDAN6,
       JORDAN8, GOBRD13, JORDAN9, JORDAN1A, JORDAN1E, NAT_D, SEQ_4, RELSET_1;
  registrations XBOOLE_0, RELSET_1, XXREAL_0, XREAL_0, NAT_1, MEMBERED,
-      FINSEQ_6, STRUCT_0, SPPOL_2, PSCOMP_1, SPRECT_1, SPRECT_2, REVROT_1,
-      TOPREAL6, JORDAN8, JORDAN1A, JORDAN1E, FUNCT_1, EUCLID;
+      FINSEQ_6, STRUCT_0, SPPOL_2, PSCOMP_1, SPRECT_1, SPRECT_2, TOPREAL6,
+      JORDAN8, JORDAN1A, JORDAN1E, FUNCT_1, EUCLID;
  requirements NUMERALS, SUBSET, BOOLE, REAL, ARITHM;
  definitions TARSKI, XBOOLE_0, PSCOMP_1, STRUCT_0;
  theorems JORDAN8, NAT_1, GOBOARD7, GOBOARD5, SPRECT_3, ABSVALUE, GOBOARD1,
@@ -35,254 +34,264 @@ environ
 begin
 
 reserve i,j,k,m,n,l for Element of NAT,
-  f for FinSequence of the carrier of TOP-REAL 2,
+  f for FinSequence of the carrier of
+  TOP-REAL 2,
   G for Go-board;
 
 theorem Th1:
-  f is_sequence_on G & LSeg(G*(i,j),G*(i,k)) meets L~f &
-  [i,j] in Indices G & [i,k] in Indices G & j <= k implies
-  ex n st j <= n & n <= k &
-  G*(i,n)`2 = inf(proj2.:(LSeg(G*(i,j),G*(i,k)) /\ L~f))
+  f is_sequence_on G & LSeg(G*(i,j),G*(i,k)) meets L~f & [i,j] in
+Indices G & [i,k] in Indices G & j <= k implies ex n st j <= n & n <= k & G*(i,
+  n)`2 = inf(proj2.:(LSeg(G*(i,j),G*(i,k)) /\ L~f))
 proof
   set X = LSeg(G*(i,j),G*(i,k)) /\ L~f;
   assume that
 A1: f is_sequence_on G and
 A2: LSeg(G*(i,j),G*(i,k)) meets L~f and
-A3: [i,j] in Indices G & [i,k] in Indices G and
-A4: j <= k;
+A3: [i,j] in Indices G and
+A4: [i,k] in Indices G and
+A5: j <= k;
+A6: 1 <= i & i <= len G by A3,MATRIX_1:39;
+  ex x being set st x in LSeg(G*(i,j),G*(i,k)) & x in L~f by A2,XBOOLE_0:3;
+  then reconsider X1=X as non empty compact Subset of TOP-REAL 2 by
+  PSCOMP_1:64
+  ,XBOOLE_0:def 4;
+  consider p being set such that
+A7: p in S-most X1 by XBOOLE_0:def 1;
+  reconsider p as Point of TOP-REAL 2 by A7;
+A8: p in X by A7,XBOOLE_0:def 4;
+  then
+A9: p in LSeg(G*(i,j),G*(i,k)) by XBOOLE_0:def 4;
   proj2.:X = (proj2|X).:X by RELAT_1:162;
   then
-A5: inf(proj2.:X) = inf((proj2|X).: [#]((TOP-REAL 2)|X)) by PRE_TOPC:def 10
+A10: inf(proj2.:X) = inf((proj2|X).: [#]((TOP-REAL 2)|X)) by
+  PRE_TOPC:def
+  10
     .= S-bound X;
-  ex x being set st x in LSeg(G*(i,j),G*(i,k)) & x in L~f by A2,XBOOLE_0:3;
-  then reconsider X1=X as non empty compact Subset of TOP-REAL 2 by PSCOMP_1:64
-,XBOOLE_0:def 4;
-  consider p being set such that
-A6: p in S-most X1 by XBOOLE_0:def 1;
-  reconsider p as Point of TOP-REAL 2 by A6;
-A7: p`2 = (S-min X)`2 by A6,PSCOMP_1:118
-    .= inf(proj2.:X) by A5,EUCLID:56;
-A8: p in X by A6,XBOOLE_0:def 4;
-  then p in L~f by XBOOLE_0:def 4;
-  then p in union { LSeg(f,k1) where k1 is Element of NAT :
-  1 <= k1 & k1+1 <= len f} by TOPREAL1:def 6;
+A11: 1 <= k by A4,MATRIX_1:39;
+A12: p`2 = (S-min X)`2 by A7,PSCOMP_1:118
+    .= inf(proj2.:X) by A10,EUCLID:56;
+A13: 1 <= i & i <= len G by A3,MATRIX_1:39;
+A14: 1 <= j by A3,MATRIX_1:39;
+A15: k <= width G by A4,MATRIX_1:39;
+  then
+A16: G*(i,j)`2 <= G*(i,k)`2 by A5,A6,A14,SPRECT_3:24;
+  then
+A17: G*(i,j)`2 <= p`2 by A9,TOPREAL1:10;
+A18: p`2 <= G*(i,k)`2 by A9,A16,TOPREAL1:10;
+A19: j <= width G by A3,MATRIX_1:39;
+  then
+A20: G*(i,j)`1 = G*(i,1)`1 by A6,A14,GOBOARD5:3
+    .= G*(i,k)`1 by A13,A11,A15,GOBOARD5:3;
+  p in L~f by A8,XBOOLE_0:def 4;
+  then p in union { LSeg(f,k1) where k1 is Element of NAT : 1 <= k1 & k1+1 <=
+  len f} by TOPREAL1:def 6;
   then consider Y being set such that
-A9: p in Y and
-A10: Y in { LSeg(f,k1) where k1 is Element of NAT :
-  1 <= k1 & k1+1 <= len f} by TARSKI:def 4;
+A21: p in Y and
+A22: Y in { LSeg(f,k1) where k1 is Element of NAT : 1 <= k1 & k1+1 <=
+  len f} by TARSKI:def 4;
   consider i1 being Element of NAT such that
-A11: Y = LSeg(f,i1) and
-A12: 1 <= i1 and
-A13: i1+1 <= len f by A10;
-A14: p in LSeg(f/.i1,f/.(i1+1)) by A9,A11,A12,A13,TOPREAL1:def 5;
-  i1 <= len f by A13,NAT_1:13;
-  then i1 in Seg len f by A12,FINSEQ_1:3;
+A23: Y = LSeg(f,i1) and
+A24: 1 <= i1 and
+A25: i1+1 <= len f by A22;
+A26: p in LSeg(f/.i1,f/.(i1+1)) by A21,A23,A24,A25,TOPREAL1:def 5;
+  1 < i1+1 by A24,NAT_1:13;
+  then i1+1 in Seg len f by A25,FINSEQ_1:3;
   then
-A15: i1 in dom f by FINSEQ_1:def 3;
+A27: i1+1 in dom f by FINSEQ_1:def 3;
+  then consider io,jo being Element of NAT such that
+A28: [io,jo] in Indices G and
+A29: f/.(i1+1) = G*(io,jo) by A1,GOBOARD1:def 11;
+A30: 1 <= io & io <= len G by A28,MATRIX_1:39;
+A31: 1 <= jo by A28,MATRIX_1:39;
+  i1 <= len f by A25,NAT_1:13;
+  then i1 in Seg len f by A24,FINSEQ_1:3;
   then
-A16: f is special by A1,JORDAN8:7,RELAT_1:60;
-  1 < i1+1 by A12,NAT_1:13;
-  then i1+1 in Seg len f by A13,FINSEQ_1:3;
-  then
-A17: i1+1 in dom f by FINSEQ_1:def 3;
-  consider i0,j0 being Element of NAT such that
-A18: [i0,j0] in Indices G & f/.i1 = G*(i0,j0) by A1,A15,GOBOARD1:def 11;
-  consider io,jo being Element of NAT such that
-A19: [io,jo] in Indices G & f/.(i1+1) = G*(io,jo) by A1,A17,GOBOARD1:def 11;
-A20: 1 <= i & i <= len G & 1 <= j & j <= width G by A3,MATRIX_1:39;
-A21: 1 <= i & i <= len G & 1 <= k & k <= width G by A3,MATRIX_1:39;
-A22: 1 <= i0 & i0 <= len G & 1 <= j0 & j0 <= width G by A18,MATRIX_1:39;
-A23: 1 <= io & io <= len G & 1 <= jo & jo <= width G by A19,MATRIX_1:39;
-A24: G*(i,j)`1 = G*(i,1)`1 by A20,GOBOARD5:3
-    .= G*(i,k)`1 by A21,GOBOARD5:3;
-A25: p in LSeg(G*(i,j),G*(i,k)) by A8,XBOOLE_0:def 4;
-  G*(i,j)`2 <= G*(i,k)`2 by A4,A20,A21,SPRECT_3:24;
-  then
-A26: G*(i,j)`2 <= p`2 & p`2 <= G*(i,k)`2 by A25,TOPREAL1:10;
+A32: i1 in dom f by FINSEQ_1:def 3;
+  then consider i0,j0 being Element of NAT such that
+A33: [i0,j0] in Indices G and
+A34: f/.i1 = G*(i0,j0) by A1,GOBOARD1:def 11;
+A35: 1 <= i0 & i0 <= len G by A33,MATRIX_1:39;
+A36: 1 <= j0 by A33,MATRIX_1:39;
+A37: j0 <= width G by A33,MATRIX_1:39;
+A38: jo <= width G by A28,MATRIX_1:39;
+A39: f is special by A1,A32,JORDAN8:7,RELAT_1:60;
   ex n st j <= n & n <= k & G*(i,n) = p
   proof
-    per cases by A12,A13,A16,TOPREAL1:def 7;
+    per cases by A24,A25,A39,TOPREAL1:def 7;
     suppose
-A27:  (f/.i1)`1 = (f/.(i1+1))`1;
-      G*(i0,j)`1 = G*(i0,1)`1 by A20,A22,GOBOARD5:3
-        .= G*(i0,j0)`1 by A22,GOBOARD5:3
-        .= p`1 by A14,A18,A27,GOBOARD7:5
-        .= G*(i,j)`1 by A24,A25,GOBOARD7:5;
+A40:  (f/.i1)`1 = (f/.(i1+1))`1;
+      G*(io,j)`1 = G*(io,1)`1 by A14,A19,A30,GOBOARD5:3
+        .= G*(io,jo)`1 by A30,A31,A38,GOBOARD5:3
+        .= p`1 by A26,A29,A40,GOBOARD7:5
+        .= G*(i,j)`1 by A20,A9,GOBOARD7:5;
       then
-A28:  i0<=i & i0>=i by A20,A22,GOBOARD5:4;
+A41:  io<=i & io>=i by A6,A14,A19,A30,GOBOARD5:4;
       then
-A29:  i=i0 by XXREAL_0:1;
-      G*(io,j)`1 = G*(io,1)`1 by A20,A23,GOBOARD5:3
-        .= G*(io,jo)`1 by A23,GOBOARD5:3
-        .= p`1 by A14,A19,A27,GOBOARD7:5
-        .= G*(i,j)`1 by A24,A25,GOBOARD7:5;
+A42:  i=io by XXREAL_0:1;
+      G*(i0,j)`1 = G*(i0,1)`1 by A14,A19,A35,GOBOARD5:3
+        .= G*(i0,j0)`1 by A35,A36,A37,GOBOARD5:3
+        .= p`1 by A26,A34,A40,GOBOARD7:5
+        .= G*(i,j)`1 by A20,A9,GOBOARD7:5;
       then
-A30:  io<=i & io>=i by A20,A23,GOBOARD5:4;
+A43:  i0<=i & i0>=i by A6,A14,A19,A35,GOBOARD5:4;
       then
-A31:  i=io by XXREAL_0:1;
+A44:  i=i0 by XXREAL_0:1;
       thus thesis
       proof
         per cases;
         suppose
-A32:      (f/.i1)`2 <= (f/.(i1+1))`2;
+A45:      (f/.i1)`2 <= (f/.(i1+1))`2;
           thus thesis
           proof
             per cases;
             suppose
-A33:          (f/.i1) in LSeg(G*(i,j),G*(i,k));
-              1+1<=i1+1 by A12,XREAL_1:8;
-              then f/.i1 in L~f by A13,A15,GOBOARD1:16,XXREAL_0:2;
-              then f/.i1 in X1 by A33,XBOOLE_0:def 4;
+A46:          (f/.i1) in LSeg(G*(i,j),G*(i,k));
+              1+1<=i1+1 by A24,XREAL_1:8;
+              then f/.i1 in L~f by A25,A32,GOBOARD1:16,XXREAL_0:2;
+              then f/.i1 in X1 by A46,XBOOLE_0:def 4;
               then
-A34:          p`2 <= (f/.i1)`2 by A5,A7,PSCOMP_1:71;
-              p`2 >= (f/.i1)`2 by A14,A32,TOPREAL1:10;
-              then
-A35:          p`2 = (f/.i1)`2 by A34,XXREAL_0:1;
+A47:          p`2 <= (f/.i1)`2 by A10,A12,PSCOMP_1:71;
               take n=j0;
-A36:          p in LSeg(G*(i,j),G*(i,k)) by A8,XBOOLE_0:def 4;
+A48:          p in LSeg(G*(i,j),G*(i,k)) by A8,XBOOLE_0:def 4;
+              p`2 >= (f/.i1)`2 by A26,A45,TOPREAL1:10;
+              then p`2 = (f/.i1)`2 by A47,XXREAL_0:1;
               then
-A37:          p`1 = G*(i,j)`1 by A24,GOBOARD7:5
-                .= G*(i,1)`1 by A20,GOBOARD5:3
-                .= G*(i,n)`1 by A20,A22,GOBOARD5:3;
-A38:          p`2 = G*(1,j0)`2 by A18,A22,A35,GOBOARD5:2
-                .= G*(i,n)`2 by A20,A22,GOBOARD5:2;
-              G*(i,j)`2 <= G*(i,k)`2 by A4,A20,A21,SPRECT_3:24;
-              then
-A39:          G*(i,j)`2 <= G*(i,n)`2 & G*(i,n)`2 <= G*(i,k) `2 by A36,A38,
-TOPREAL1:10;
-              hence j <= n by A20,A22,GOBOARD5:5;
-              thus n <= k by A21,A22,A39,GOBOARD5:5;
-              thus thesis by A37,A38,TOPREAL3:11;
+A49:          p`2 = G*(1,j0)`2 by A34,A35,A36,A37,GOBOARD5:2
+                .= G*(i,n)`2 by A6,A36,A37,GOBOARD5:2;
+A50:          G*(i,j)`2 <= G*(i,k)`2 by A5,A6,A14,A15,SPRECT_3:24;
+              then G*(i,j)`2 <= G*(i,n)`2 by A48,A49,TOPREAL1:10;
+              hence j <= n by A6,A19,A36,GOBOARD5:5;
+              G*(i,n)`2 <= G*(i,k) `2 by A48,A49,A50,TOPREAL1:10;
+              hence n <= k by A13,A11,A37,GOBOARD5:5;
+              p`1 = G*(i,j)`1 by A20,A48,GOBOARD7:5
+                .= G*(i,1)`1 by A6,A14,A19,GOBOARD5:3
+                .= G*(i,n)`1 by A6,A36,A37,GOBOARD5:3;
+              hence thesis by A49,TOPREAL3:11;
             end;
             suppose
-A40:          not f/.i1 in LSeg(G*(i,j),G*(i,k));
-A41:          (f/.i1)`1 = p`1 by A14,A27,GOBOARD7:5
-                .= G*(i,j)`1 by A24,A25,GOBOARD7:5;
+A51:          not f/.i1 in LSeg(G*(i,j),G*(i,k));
+A52:          (f/.i1)`1 = p`1 by A26,A40,GOBOARD7:5
+                .= G*(i,j)`1 by A20,A9,GOBOARD7:5;
               thus thesis
               proof
-                per cases by A24,A40,A41,GOBOARD7:8;
+                per cases by A20,A51,A52,GOBOARD7:8;
                 suppose
-A42:              (f/.i1)`2 < G*(i,j)`2;
+A53:              (f/.i1)`2 < G*(i,j)`2;
+                  p`2 <= G*(io,jo)`2 by A26,A29,A45,TOPREAL1:10;
+                  then p`2 <= G*(1,jo)`2 by A30,A31,A38,GOBOARD5:2;
+                  then p`2 <= G*(i,jo)`2 by A6,A31,A38,GOBOARD5:2;
+                  then G*(i,j)`2 <= G*(i,jo)`2 by A17,XXREAL_0:2;
                   then
-A43:              G*(i,j0)`2 < G*(i,j)`2 by A18,A28,XXREAL_0:1;
-                  j0<=j by A18,A20,A22,A29,A42,GOBOARD5:5;
+A54:              j<=jo by A6,A19,A31,GOBOARD5:5;
+                  abs(i0-io)+abs(j0-jo) = 1 by A1,A32,A27,A33,A34,A28,A29
+                  ,GOBOARD1:def 11;
+                  then 0+abs(j0-jo) = 1 by A44,A42,ABSVALUE:7;
                   then
-A44:              j0<j by A43,XXREAL_0:1;
-                  j0<=jo+0 by A18,A19,A22,A23,A29,A31,A32,GOBOARD5:5;
+A55:              abs(-(j0-jo)) = 1 by COMPLEX1:138;
+                  j0<=jo+0 by A34,A29,A35,A37,A31,A44,A42,A45,GOBOARD5:5;
                   then j0-jo <= 0 by XREAL_1:22;
+                  then jo-j0 = 1 by A55,ABSVALUE:def 1;
                   then
-A45:              -(j0-jo) >= -0;
-
-abs(i0-io)+abs(j0-jo) = 1 by A1,A15,A17,A18,A19,GOBOARD1:def 11;
-                  then 0+abs(j0-jo) = 1 by A29,A31,ABSVALUE:7;
-                  then abs(-(j0-jo)) = 1 by COMPLEX1:138;
-                  then jo-j0 = 1 by A45,ABSVALUE:def 1;
-                  then j0+1=jo+0;
+A56:              j0+1=jo+0;
+                  G*(i,j0)`2 < G*(i,j)`2 & j0<=j by A34,A6,A14,A37,A43,
+                  A44,A53,GOBOARD5:5 ,XXREAL_0:1;
+                  then j0<j by XXREAL_0:1;
+                  then jo<=j by A56,NAT_1:13;
                   then
-A46:              jo<=j by A44,NAT_1:13;
-                  p`2 <= G*(io,jo)`2 by A14,A19,A32,TOPREAL1:10;
-                  then p`2 <= G*(1,jo)`2 by A23,GOBOARD5:2;
-                  then p`2 <= G*(i,jo)`2 by A20,A23,GOBOARD5:2;
-                  then G*(i,j)`2 <= G*(i,jo)`2 by A26,XXREAL_0:2;
-                  then j<=jo by A20,A23,GOBOARD5:5;
-                  then
-A47:              j=jo by A46,XXREAL_0:1;
+A57:              j=jo by A54,XXREAL_0:1;
                   take n=jo;
-A48:              p`1 = G*(i,j)`1 by A24,A25,GOBOARD7:5
-                    .= G*(i,1)`1 by A20,GOBOARD5:3
-                    .= G*(i,n)`1 by A20,A23,GOBOARD5:3;
-                  p`2 <= G*(io,jo)`2 by A14,A19,A32,TOPREAL1:10;
-                  then p`2 <= G*(1,jo)`2 by A23,GOBOARD5:2;
-                  then p`2 <= G*(i,jo)`2 by A20,A23,GOBOARD5:2;
-                  then p`2 = G*(i,j)`2 by A26,A47,XXREAL_0:1;
-                  hence thesis by A4,A47,A48,TOPREAL3:11;
+A58:              p`1 = G*(i,j)`1 by A20,A9,GOBOARD7:5
+                    .= G*(i,1)`1 by A6,A14,A19,GOBOARD5:3
+                    .= G*(i,n)`1 by A6,A31,A38,GOBOARD5:3;
+                  p`2 <= G*(io,jo)`2 by A26,A29,A45,TOPREAL1:10;
+                  then p`2 <= G*(1,jo)`2 by A30,A31,A38,GOBOARD5:2;
+                  then p`2 <= G*(i,jo)`2 by A6,A31,A38,GOBOARD5:2;
+                  then p`2 = G*(i,j)`2 by A17,A57,XXREAL_0:1;
+                  hence thesis by A5,A57,A58,TOPREAL3:11;
                 end;
                 suppose
-A49:              (f/.i1)`2 > G*(i,k)`2;
-                  p`2 >= (f/.i1)`2 by A14,A32,TOPREAL1:10;
-                  hence thesis by A26,A49,XXREAL_0:2;
+A59:              (f/.i1)`2 > G*(i,k)`2;
+                  p`2 >= (f/.i1)`2 by A26,A45,TOPREAL1:10;
+                  hence thesis by A18,A59,XXREAL_0:2;
                 end;
               end;
             end;
           end;
         end;
         suppose
-A50:      (f/.i1)`2 > (f/.(i1+1))`2;
+A60:      (f/.i1)`2 > (f/.(i1+1))`2;
           thus thesis
           proof
             per cases;
             suppose
-A51:          (f/.(i1+1)) in LSeg(G*(i,j),G*(i,k));
-              1+1<=i1+1 by A12,XREAL_1:8;
-              then f/.(i1+1) in L~f by A13,A17,GOBOARD1:16,XXREAL_0:2;
-              then f/.(i1+1) in X1 by A51,XBOOLE_0:def 4;
+A61:          (f/.(i1+1)) in LSeg(G*(i,j),G*(i,k));
+              1+1<=i1+1 by A24,XREAL_1:8;
+              then f/.(i1+1) in L~f by A25,A27,GOBOARD1:16,XXREAL_0:2;
+              then f/.(i1+1) in X1 by A61,XBOOLE_0:def 4;
               then
-A52:          p`2 <= (f/.(i1+1))`2 by A5,A7,PSCOMP_1:71;
-              p`2 >= (f/.(i1+1))`2 by A14,A50,TOPREAL1:10;
-              then
-A53:          p`2 = (f/.(i1+1))`2 by A52,XXREAL_0:1;
+A62:          p`2 <= (f/.(i1+1))`2 by A10,A12,PSCOMP_1:71;
               take n=jo;
-A54:          p in LSeg(G*(i,j),G*(i,k)) by A8,XBOOLE_0:def 4;
+A63:          p in LSeg(G*(i,j),G*(i,k)) by A8,XBOOLE_0:def 4;
+              p`2 >= (f/.(i1+1))`2 by A26,A60,TOPREAL1:10;
+              then p`2 = (f/.(i1+1))`2 by A62,XXREAL_0:1;
               then
-A55:          p`1 = G*(i,j)`1 by A24,GOBOARD7:5
-                .= G*(i,1)`1 by A20,GOBOARD5:3
-                .= G*(i,n)`1 by A20,A23,GOBOARD5:3;
-A56:          p`2 = G*(1,jo)`2 by A19,A23,A53,GOBOARD5:2
-                .= G*(i,n)`2 by A20,A23,GOBOARD5:2;
-              G*(i,j)`2 <= G*(i,k)`2 by A4,A20,A21,SPRECT_3:24;
-              then
-A57:          G*(i,j)`2 <= G*(i,n)`2 & G*(i,n)`2 <= G*(i,k) `2 by A54,A56,
-TOPREAL1:10;
-              hence j <= n by A20,A23,GOBOARD5:5;
-              thus n <= k by A21,A23,A57,GOBOARD5:5;
-              thus thesis by A55,A56,TOPREAL3:11;
+A64:          p`2 = G*(1,jo)`2 by A29,A30,A31,A38,GOBOARD5:2
+                .= G*(i,n)`2 by A6,A31,A38,GOBOARD5:2;
+A65:          G*(i,j)`2 <= G*(i,k)`2 by A5,A6,A14,A15,SPRECT_3:24;
+              then G*(i,j)`2 <= G*(i,n)`2 by A63,A64,TOPREAL1:10;
+              hence j <= n by A6,A19,A31,GOBOARD5:5;
+              G*(i,n)`2 <= G*(i,k) `2 by A63,A64,A65,TOPREAL1:10;
+              hence n <= k by A13,A11,A38,GOBOARD5:5;
+              p`1 = G*(i,j)`1 by A20,A63,GOBOARD7:5
+                .= G*(i,1)`1 by A6,A14,A19,GOBOARD5:3
+                .= G*(i,n)`1 by A6,A31,A38,GOBOARD5:3;
+              hence thesis by A64,TOPREAL3:11;
             end;
             suppose
-A58:          not f/.(i1+1) in LSeg(G*(i,j),G*(i,k));
-A59:          (f/.(i1+1))`1 = p`1 by A14,A27,GOBOARD7:5
-                .= G*(i,j)`1 by A24,A25,GOBOARD7:5;
+A66:          not f/.(i1+1) in LSeg(G*(i,j),G*(i,k));
+A67:          (f/.(i1+1))`1 = p`1 by A26,A40,GOBOARD7:5
+                .= G*(i,j)`1 by A20,A9,GOBOARD7:5;
               thus thesis
               proof
-                per cases by A24,A58,A59,GOBOARD7:8;
+                per cases by A20,A66,A67,GOBOARD7:8;
                 suppose
-A60:              (f/.(i1+1))`2 < G*(i,j)`2;
+A68:              (f/.(i1+1))`2 < G*(i,j)`2;
+                  p`2 <= G*(i0,j0)`2 by A26,A34,A60,TOPREAL1:10;
+                  then p`2 <= G*(1,j0)`2 by A35,A36,A37,GOBOARD5:2;
+                  then p`2 <= G*(i,j0)`2 by A6,A36,A37,GOBOARD5:2;
+                  then G*(i,j)`2 <= G*(i,j0)`2 by A17,XXREAL_0:2;
                   then
-A61:              G*(i,jo)`2 < G*(i,j)`2 by A19,A30,XXREAL_0:1;
-                  jo<=j by A19,A20,A23,A31,A60,GOBOARD5:5;
-                  then
-A62:              jo<j by A61,XXREAL_0:1;
-                  jo<=j0+0 by A18,A19,A22,A23,A29,A31,A50,GOBOARD5:5;
+A69:              j<=j0 by A6,A19,A36,GOBOARD5:5;
+                  jo<=j0+0 by A34,A29,A35,A36,A38,A44,A42,A60,GOBOARD5:5;
                   then jo-j0 <= 0 by XREAL_1:22;
                   then
-A63:              -(jo-j0) >= -0;
-
-abs(i0-io)+abs(j0-jo) = 1 by A1,A15,A17,A18,A19,GOBOARD1:def 11;
-                  then 0+abs(j0-jo) = 1 by A29,A31,ABSVALUE:7;
-                  then j0-jo = 1 by A63,ABSVALUE:def 1;
-                  then jo+1=j0-0;
+A70:              -(jo-j0) >= -0;
+                  abs(i0-io)+abs(j0-jo) = 1 by A1,A32,A27,A33,A34,A28,
+                  A29,GOBOARD1:def 11;
+                  then 0+abs(j0-jo) = 1 by A44,A42,ABSVALUE:7;
+                  then j0-jo = 1 by A70,ABSVALUE:def 1;
                   then
-A64:              j0<=j by A62,NAT_1:13;
-                  p`2 <= G*(i0,j0)`2 by A14,A18,A50,TOPREAL1:10;
-                  then p`2 <= G*(1,j0)`2 by A22,GOBOARD5:2;
-                  then p`2 <= G*(i,j0)`2 by A20,A22,GOBOARD5:2;
-                  then G*(i,j)`2 <= G*(i,j0)`2 by A26,XXREAL_0:2;
-                  then j<=j0 by A20,A22,GOBOARD5:5;
+A71:              jo+1=j0-0;
+                  G*(i,jo)`2 < G*(i,j)`2 & jo<=j by A29,A6,A14,A38,A41,
+                  A42,A68,GOBOARD5:5 ,XXREAL_0:1;
+                  then jo<j by XXREAL_0:1;
+                  then j0<=j by A71,NAT_1:13;
                   then
-A65:              j=j0 by A64,XXREAL_0:1;
+A72:              j=j0 by A69,XXREAL_0:1;
                   take n=j0;
-A66:              p`1 = G*(i,j)`1 by A24,A25,GOBOARD7:5
-                    .= G*(i,1)`1 by A20,GOBOARD5:3
-                    .= G*(i,n)`1 by A20,A22,GOBOARD5:3;
-                  p`2 <= G*(i0,j0)`2 by A14,A18,A50,TOPREAL1:10;
-                  then p`2 <= G*(1,j0)`2 by A22,GOBOARD5:2;
-                  then p`2 <= G*(i,j0)`2 by A20,A22,GOBOARD5:2;
-                  then p`2 = G*(i,j)`2 by A26,A65,XXREAL_0:1;
-                  hence thesis by A4,A65,A66,TOPREAL3:11;
+A73:              p`1 = G*(i,j)`1 by A20,A9,GOBOARD7:5
+                    .= G*(i,1)`1 by A6,A14,A19,GOBOARD5:3
+                    .= G*(i,n)`1 by A6,A36,A37,GOBOARD5:3;
+                  p`2 <= G*(i0,j0)`2 by A26,A34,A60,TOPREAL1:10;
+                  then p`2 <= G*(1,j0)`2 by A35,A36,A37,GOBOARD5:2;
+                  then p`2 <= G*(i,j0)`2 by A6,A36,A37,GOBOARD5:2;
+                  then p`2 = G*(i,j)`2 by A17,A72,XXREAL_0:1;
+                  hence thesis by A5,A72,A73,TOPREAL3:11;
                 end;
                 suppose
-A67:              (f/.(i1+1))`2 > G*(i,k)`2;
-                  p`2 >= (f/.(i1+1))`2 by A14,A50,TOPREAL1:10;
-                  hence thesis by A26,A67,XXREAL_0:2;
+A74:              (f/.(i1+1))`2 > G*(i,k)`2;
+                  p`2 >= (f/.(i1+1))`2 by A26,A60,TOPREAL1:10;
+                  hence thesis by A18,A74,XXREAL_0:2;
                 end;
               end;
             end;
@@ -290,271 +299,281 @@ A67:              (f/.(i1+1))`2 > G*(i,k)`2;
         end;
       end;
     end;
-    suppose (f/.i1)`2 = (f/.(i1+1))`2;
-      then
-A68:  p`2 = (f/.i1)`2 by A14,GOBOARD7:6;
+    suppose
+A75:  (f/.i1)`2 = (f/.(i1+1))`2;
       take n=j0;
-A69:  p`1 = G*(i,j)`1 by A24,A25,GOBOARD7:5
-        .= G*(i,1)`1 by A20,GOBOARD5:3
-        .= G*(i,n)`1 by A20,A22,GOBOARD5:3;
-A70:  p`2 = G*(1,j0)`2 by A18,A22,A68,GOBOARD5:2
-        .= G*(i,n)`2 by A20,A22,GOBOARD5:2;
-      G*(i,j)`2 <= G*(i,k)`2 by A4,A20,A21,SPRECT_3:24;
+      p`2 = (f/.i1)`2 by A26,A75,GOBOARD7:6;
       then
-A71:  G*(i,j)`2 <= G*(i,n)`2 & G*(i,n)`2 <= G*(i,k)`2 by A25,A70,TOPREAL1:10;
-      hence j <= n by A20,A22,GOBOARD5:5;
-      thus n <= k by A21,A22,A71,GOBOARD5:5;
-      thus thesis by A69,A70,TOPREAL3:11;
+A76:  p`2 = G*(1,j0)`2 by A34,A35,A36,A37,GOBOARD5:2
+        .= G*(i,n)`2 by A6,A36,A37,GOBOARD5:2;
+A77:  G*(i,j)`2 <= G*(i,k)`2 by A5,A6,A14,A15,SPRECT_3:24;
+      then G*(i,j)`2 <= G*(i,n)`2 by A9,A76,TOPREAL1:10;
+      hence j <= n by A6,A19,A36,GOBOARD5:5;
+      G*(i,n)`2 <= G*(i,k)`2 by A9,A76,A77,TOPREAL1:10;
+      hence n <= k by A13,A11,A37,GOBOARD5:5;
+      p`1 = G*(i,j)`1 by A20,A9,GOBOARD7:5
+        .= G*(i,1)`1 by A6,A14,A19,GOBOARD5:3
+        .= G*(i,n)`1 by A6,A36,A37,GOBOARD5:3;
+      hence thesis by A76,TOPREAL3:11;
     end;
   end;
-  hence thesis by A7;
+  hence thesis by A12;
 end;
 
 theorem
-  f is_sequence_on G & LSeg(G*(i,j),G*(i,k)) meets L~f &
-  [i,j] in Indices G & [i,k] in Indices G & j <= k implies
-  ex n st j <= n & n <= k &
-  G*(i,n)`2 = sup(proj2.:(LSeg(G*(i,j),G*(i,k)) /\ L~f))
+  f is_sequence_on G & LSeg(G*(i,j),G*(i,k)) meets L~f & [i,j] in
+Indices G & [i,k] in Indices G & j <= k implies ex n st j <= n & n <= k & G*(i,
+  n)`2 = sup(proj2.:(LSeg(G*(i,j),G*(i,k)) /\ L~f))
 proof
   set X = LSeg(G*(i,j),G*(i,k)) /\ L~f;
   assume that
 A1: f is_sequence_on G and
 A2: LSeg(G*(i,j),G*(i,k)) meets L~f and
-A3: [i,j] in Indices G & [i,k] in Indices G and
-A4: j <= k;
+A3: [i,j] in Indices G and
+A4: [i,k] in Indices G and
+A5: j <= k;
+A6: 1 <= i & i <= len G by A3,MATRIX_1:39;
+  ex x being set st x in LSeg(G*(i,j),G*(i,k)) & x in L~f by A2,XBOOLE_0:3;
+  then reconsider X1=X as non empty compact Subset of TOP-REAL 2 by
+  PSCOMP_1:64
+  ,XBOOLE_0:def 4;
+  consider p being set such that
+A7: p in N-most X1 by XBOOLE_0:def 1;
+  reconsider p as Point of TOP-REAL 2 by A7;
+A8: p in X by A7,XBOOLE_0:def 4;
+  then
+A9: p in LSeg(G*(i,j),G*(i,k)) by XBOOLE_0:def 4;
+  p in L~f by A8,XBOOLE_0:def 4;
+  then p in union { LSeg(f,k1) where k1 is Element of NAT : 1 <= k1 & k1+1 <=
+  len f} by TOPREAL1:def 6;
+  then consider Y being set such that
+A10: p in Y and
+A11: Y in { LSeg(f,k1) where k1 is Element of NAT : 1 <= k1 & k1+1 <=
+  len f} by TARSKI:def 4;
+  consider i1 being Element of NAT such that
+A12: Y = LSeg(f,i1) and
+A13: 1 <= i1 and
+A14: i1+1 <= len f by A11;
+A15: p in LSeg(f/.i1,f/.(i1+1)) by A10,A12,A13,A14,TOPREAL1:def 5;
   proj2.:X = (proj2|X).:X by RELAT_1:162;
   then
-A5: sup(proj2.:X) = sup((proj2|X).: [#]((TOP-REAL 2)|X)) by PRE_TOPC:def 10
+A16: sup(proj2.:X) = sup((proj2|X).: [#]((TOP-REAL 2)|X)) by
+  PRE_TOPC:def
+  10
     .= N-bound X;
-  ex x being set st x in LSeg(G*(i,j),G*(i,k)) & x in L~f by A2,XBOOLE_0:3;
-  then reconsider X1=X as non empty compact Subset of TOP-REAL 2 by PSCOMP_1:64
-,XBOOLE_0:def 4;
-  consider p being set such that
-A6: p in N-most X1 by XBOOLE_0:def 1;
-  reconsider p as Point of TOP-REAL 2 by A6;
-A7: p`2 = (N-min X)`2 by A6,PSCOMP_1:98
-    .= sup(proj2.:X) by A5,EUCLID:56;
-A8: p in X by A6,XBOOLE_0:def 4;
-  then p in L~f by XBOOLE_0:def 4;
-  then p in union { LSeg(f,k1) where k1 is Element of NAT :
-  1 <= k1 & k1+1 <= len f} by TOPREAL1:def 6;
-  then consider Y being set such that
-A9: p in Y and
-A10: Y in { LSeg(f,k1) where k1 is Element of NAT :
-  1 <= k1 & k1+1 <= len f} by TARSKI:def 4;
-  consider i1 being Element of NAT such that
-A11: Y = LSeg(f,i1) and
-A12: 1 <= i1 and
-A13: i1+1 <= len f by A10;
-A14: p in LSeg(f/.i1,f/.(i1+1)) by A9,A11,A12,A13,TOPREAL1:def 5;
-  i1 <= len f by A13,NAT_1:13;
-  then i1 in Seg len f by A12,FINSEQ_1:3;
+A17: 1 <= k by A4,MATRIX_1:39;
+A18: 1 <= j by A3,MATRIX_1:39;
+  1 < i1+1 by A13,NAT_1:13;
+  then i1+1 in Seg len f by A14,FINSEQ_1:3;
   then
-A15: i1 in dom f by FINSEQ_1:def 3;
+A19: i1+1 in dom f by FINSEQ_1:def 3;
+  then consider io,jo being Element of NAT such that
+A20: [io,jo] in Indices G and
+A21: f/.(i1+1) = G*(io,jo) by A1,GOBOARD1:def 11;
+A22: 1 <= io & io <= len G by A20,MATRIX_1:39;
+A23: 1 <= jo by A20,MATRIX_1:39;
+A24: p`2 = (N-min X)`2 by A7,PSCOMP_1:98
+    .= sup(proj2.:X) by A16,EUCLID:56;
+A25: 1 <= i & i <= len G by A3,MATRIX_1:39;
+A26: k <= width G by A4,MATRIX_1:39;
   then
-A16: f is special by A1,JORDAN8:7,RELAT_1:60;
-  1 < i1+1 by A12,NAT_1:13;
-  then i1+1 in Seg len f by A13,FINSEQ_1:3;
+A27: G*(i,j)`2 <= G*(i,k)`2 by A5,A6,A18,SPRECT_3:24;
   then
-A17: i1+1 in dom f by FINSEQ_1:def 3;
-  consider i0,j0 being Element of NAT such that
-A18: [i0,j0] in Indices G & f/.i1 = G*(i0,j0) by A1,A15,GOBOARD1:def 11;
-  consider io,jo being Element of NAT such that
-A19: [io,jo] in Indices G & f/.(i1+1) = G*(io,jo) by A1,A17,GOBOARD1:def 11;
-A20: 1 <= i & i <= len G & 1 <= j & j <= width G by A3,MATRIX_1:39;
-A21: 1 <= i & i <= len G & 1 <= k & k <= width G by A3,MATRIX_1:39;
-A22: 1 <= i0 & i0 <= len G & 1 <= j0 & j0 <= width G by A18,MATRIX_1:39;
-A23: 1 <= io & io <= len G & 1 <= jo & jo <= width G by A19,MATRIX_1:39;
-A24: G*(i,j)`1 = G*(i,1)`1 by A20,GOBOARD5:3
-    .= G*(i,k)`1 by A21,GOBOARD5:3;
-A25: p in LSeg(G*(i,j),G*(i,k)) by A8,XBOOLE_0:def 4;
-  G*(i,j)`2 <= G*(i,k)`2 by A4,A20,A21,SPRECT_3:24;
+A28: G*(i,j)`2 <= p`2 by A9,TOPREAL1:10;
+A29: p`2 <= G*(i,k)`2 by A9,A27,TOPREAL1:10;
+A30: j <= width G by A3,MATRIX_1:39;
   then
-A26: G*(i,j)`2 <= p`2 & p`2 <= G*(i,k)`2 by A25,TOPREAL1:10;
+A31: G*(i,j)`1 = G*(i,1)`1 by A6,A18,GOBOARD5:3
+    .= G*(i,k)`1 by A25,A17,A26,GOBOARD5:3;
+A32: jo <= width G by A20,MATRIX_1:39;
+  i1 <= len f by A14,NAT_1:13;
+  then i1 in Seg len f by A13,FINSEQ_1:3;
+  then
+A33: i1 in dom f by FINSEQ_1:def 3;
+  then consider i0,j0 being Element of NAT such that
+A34: [i0,j0] in Indices G and
+A35: f/.i1 = G*(i0,j0) by A1,GOBOARD1:def 11;
+A36: 1 <= i0 & i0 <= len G by A34,MATRIX_1:39;
+A37: 1 <= j0 by A34,MATRIX_1:39;
+A38: j0 <= width G by A34,MATRIX_1:39;
+A39: f is special by A1,A33,JORDAN8:7,RELAT_1:60;
   ex n st j <= n & n <= k & G*(i,n) = p
   proof
-    per cases by A12,A13,A16,TOPREAL1:def 7;
+    per cases by A13,A14,A39,TOPREAL1:def 7;
     suppose
-A27:  (f/.i1)`1 = (f/.(i1+1))`1;
-      G*(i0,j)`1 = G*(i0,1)`1 by A20,A22,GOBOARD5:3
-        .= G*(i0,j0)`1 by A22,GOBOARD5:3
-        .= p`1 by A14,A18,A27,GOBOARD7:5
-        .= G*(i,j)`1 by A24,A25,GOBOARD7:5;
+A40:  (f/.i1)`1 = (f/.(i1+1))`1;
+      G*(io,j)`1 = G*(io,1)`1 by A18,A30,A22,GOBOARD5:3
+        .= G*(io,jo)`1 by A22,A23,A32,GOBOARD5:3
+        .= p`1 by A15,A21,A40,GOBOARD7:5
+        .= G*(i,j)`1 by A31,A9,GOBOARD7:5;
       then
-A28:  i0<=i & i0>=i by A20,A22,GOBOARD5:4;
+A41:  io<=i & io>=i by A6,A18,A30,A22,GOBOARD5:4;
       then
-A29:  i=i0 by XXREAL_0:1;
-      G*(io,j)`1 = G*(io,1)`1 by A20,A23,GOBOARD5:3
-        .= G*(io,jo)`1 by A23,GOBOARD5:3
-        .= p`1 by A14,A19,A27,GOBOARD7:5
-        .= G*(i,j)`1 by A24,A25,GOBOARD7:5;
+A42:  i=io by XXREAL_0:1;
+      G*(i0,j)`1 = G*(i0,1)`1 by A18,A30,A36,GOBOARD5:3
+        .= G*(i0,j0)`1 by A36,A37,A38,GOBOARD5:3
+        .= p`1 by A15,A35,A40,GOBOARD7:5
+        .= G*(i,j)`1 by A31,A9,GOBOARD7:5;
       then
-A30:  io<=i & io>=i by A20,A23,GOBOARD5:4;
+A43:  i0<=i & i0>=i by A6,A18,A30,A36,GOBOARD5:4;
       then
-A31:  i=io by XXREAL_0:1;
+A44:  i=i0 by XXREAL_0:1;
       thus thesis
       proof
         per cases;
         suppose
-A32:      (f/.i1)`2 <= (f/.(i1+1))`2;
+A45:      (f/.i1)`2 <= (f/.(i1+1))`2;
           thus thesis
           proof
             per cases;
             suppose
-A33:          (f/.(i1+1)) in LSeg(G*(i,j),G*(i,k));
-              1+1<=i1+1 by A12,XREAL_1:8;
-              then f/.(i1+1) in L~f by A13,A17,GOBOARD1:16,XXREAL_0:2;
-              then f/.(i1+1) in X1 by A33,XBOOLE_0:def 4;
+A46:          (f/.(i1+1)) in LSeg(G*(i,j),G*(i,k));
+              1+1<=i1+1 by A13,XREAL_1:8;
+              then f/.(i1+1) in L~f by A14,A19,GOBOARD1:16,XXREAL_0:2;
+              then f/.(i1+1) in X1 by A46,XBOOLE_0:def 4;
               then
-A34:          p`2 >= (f/.(i1+1))`2 by A5,A7,PSCOMP_1:71;
-              p`2 <= (f/.(i1+1))`2 by A14,A32,TOPREAL1:10;
-              then
-A35:          p`2 = (f/.(i1+1))`2 by A34,XXREAL_0:1;
+A47:          p`2 >= (f/.(i1+1))`2 by A16,A24,PSCOMP_1:71;
               take n=jo;
-A36:          p in LSeg(G*(i,j),G*(i,k)) by A8,XBOOLE_0:def 4;
+A48:          p in LSeg(G*(i,j),G*(i,k)) by A8,XBOOLE_0:def 4;
+              p`2 <= (f/.(i1+1))`2 by A15,A45,TOPREAL1:10;
+              then p`2 = (f/.(i1+1))`2 by A47,XXREAL_0:1;
               then
-A37:          p`1 = G*(i,j)`1 by A24,GOBOARD7:5
-                .= G*(i,1)`1 by A20,GOBOARD5:3
-                .= G*(i,n)`1 by A20,A23,GOBOARD5:3;
-A38:          p`2 = G*(1,jo)`2 by A19,A23,A35,GOBOARD5:2
-                .= G*(i,n)`2 by A20,A23,GOBOARD5:2;
-              G*(i,j)`2 <= G*(i,k)`2 by A4,A20,A21,SPRECT_3:24;
-              then
-A39:          G*(i,j)`2 <= G*(i,n)`2 & G*(i,n)`2 <= G*(i,k) `2 by A36,A38,
-TOPREAL1:10;
-              hence j <= n by A20,A23,GOBOARD5:5;
-              thus n <= k by A21,A23,A39,GOBOARD5:5;
-              thus thesis by A37,A38,TOPREAL3:11;
+A49:          p`2 = G*(1,jo)`2 by A21,A22,A23,A32,GOBOARD5:2
+                .= G*(i,n)`2 by A6,A23,A32,GOBOARD5:2;
+A50:          G*(i,j)`2 <= G*(i,k)`2 by A5,A6,A18,A26,SPRECT_3:24;
+              then G*(i,j)`2 <= G*(i,n)`2 by A48,A49,TOPREAL1:10;
+              hence j <= n by A6,A30,A23,GOBOARD5:5;
+              G*(i,n)`2 <= G*(i,k) `2 by A48,A49,A50,TOPREAL1:10;
+              hence n <= k by A25,A17,A32,GOBOARD5:5;
+              p`1 = G*(i,j)`1 by A31,A48,GOBOARD7:5
+                .= G*(i,1)`1 by A6,A18,A30,GOBOARD5:3
+                .= G*(i,n)`1 by A6,A23,A32,GOBOARD5:3;
+              hence thesis by A49,TOPREAL3:11;
             end;
             suppose
-A40:          not f/.(i1+1) in LSeg(G*(i,j),G*(i,k));
-A41:          (f/.(i1+1))`1 = p`1 by A14,A27,GOBOARD7:5
-                .= G*(i,j)`1 by A24,A25,GOBOARD7:5;
+A51:          not f/.(i1+1) in LSeg(G*(i,j),G*(i,k));
+A52:          (f/.(i1+1))`1 = p`1 by A15,A40,GOBOARD7:5
+                .= G*(i,j)`1 by A31,A9,GOBOARD7:5;
               thus thesis
               proof
-                per cases by A24,A40,A41,GOBOARD7:8;
+                per cases by A31,A51,A52,GOBOARD7:8;
                 suppose
-A42:              (f/.(i1+1))`2 > G*(i,k)`2;
+A53:              (f/.(i1+1))`2 > G*(i,k)`2;
+                  p`2 >= G*(i0,j0)`2 by A15,A35,A45,TOPREAL1:10;
+                  then p`2 >= G*(1,j0)`2 by A36,A37,A38,GOBOARD5:2;
+                  then p`2 >= G*(i,j0)`2 by A6,A37,A38,GOBOARD5:2;
+                  then G*(i,k)`2 >= G*(i,j0)`2 by A29,XXREAL_0:2;
                   then
-A43:              G*(i,jo)`2 > G*(i,k)`2 by A19,A30,XXREAL_0:1;
-                  jo>=k by A19,A21,A23,A31,A42,GOBOARD5:5;
+A54:              k>=j0 by A25,A17,A38,GOBOARD5:5;
+                  abs(i0-io)+abs(j0-jo) = 1 by A1,A33,A19,A34,A35,A20,A21
+                  ,GOBOARD1:def 11;
+                  then 0+abs(j0-jo) = 1 by A44,A42,ABSVALUE:7;
                   then
-A44:              jo>k by A43,XXREAL_0:1;
-                  j0<=jo+0 by A18,A19,A22,A23,A29,A31,A32,GOBOARD5:5;
+A55:              abs(-(j0-jo)) = 1 by COMPLEX1:138;
+                  j0<=jo+0 by A35,A21,A36,A38,A23,A44,A42,A45,GOBOARD5:5;
                   then j0-jo <= 0 by XREAL_1:22;
+                  then jo-j0 = 1 by A55,ABSVALUE:def 1;
                   then
-A45:              -(j0-jo) >= -0;
-
-abs(i0-io)+abs(j0-jo) = 1 by A1,A15,A17,A18,A19,GOBOARD1:def 11;
-                  then 0+abs(j0-jo) = 1 by A29,A31,ABSVALUE:7;
-                  then abs(-(j0-jo)) = 1 by COMPLEX1:138;
-                  then jo-j0 = 1 by A45,ABSVALUE:def 1;
-                  then j0+1=jo+0;
+A56:              j0+1=jo+0;
+                  G*(i,jo)`2 > G*(i,k)`2 & jo>=k by A21,A25,A26,A23,A41,
+                  A42,A53,GOBOARD5:5 ,XXREAL_0:1;
+                  then jo>k by XXREAL_0:1;
+                  then j0>=k by A56,NAT_1:13;
                   then
-A46:              j0>=k by A44,NAT_1:13;
-                  p`2 >= G*(i0,j0)`2 by A14,A18,A32,TOPREAL1:10;
-                  then p`2 >= G*(1,j0)`2 by A22,GOBOARD5:2;
-                  then p`2 >= G*(i,j0)`2 by A20,A22,GOBOARD5:2;
-                  then G*(i,k)`2 >= G*(i,j0)`2 by A26,XXREAL_0:2;
-                  then k>=j0 by A21,A22,GOBOARD5:5;
-                  then
-A47:              k=j0 by A46,XXREAL_0:1;
+A57:              k=j0 by A54,XXREAL_0:1;
                   take n=j0;
-A48:              p`1 = G*(i,j)`1 by A24,A25,GOBOARD7:5
-                    .= G*(i,1)`1 by A20,GOBOARD5:3
-                    .= G*(i,n)`1 by A20,A22,GOBOARD5:3;
-                  p`2 >= G*(i0,j0)`2 by A14,A18,A32,TOPREAL1:10;
-                  then p`2 >= G*(1,j0)`2 by A22,GOBOARD5:2;
-                  then p`2 >= G*(i,j0)`2 by A20,A22,GOBOARD5:2;
-                  then p`2 = G*(i,k)`2 by A26,A47,XXREAL_0:1;
-                  hence thesis by A4,A47,A48,TOPREAL3:11;
+A58:              p`1 = G*(i,j)`1 by A31,A9,GOBOARD7:5
+                    .= G*(i,1)`1 by A6,A18,A30,GOBOARD5:3
+                    .= G*(i,n)`1 by A6,A37,A38,GOBOARD5:3;
+                  p`2 >= G*(i0,j0)`2 by A15,A35,A45,TOPREAL1:10;
+                  then p`2 >= G*(1,j0)`2 by A36,A37,A38,GOBOARD5:2;
+                  then p`2 >= G*(i,j0)`2 by A6,A37,A38,GOBOARD5:2;
+                  then p`2 = G*(i,k)`2 by A29,A57,XXREAL_0:1;
+                  hence thesis by A5,A57,A58,TOPREAL3:11;
                 end;
                 suppose
-A49:              (f/.(i1+1))`2 < G*(i,j)`2;
-                  p`2 <= (f/.(i1+1))`2 by A14,A32,TOPREAL1:10;
-                  hence thesis by A26,A49,XXREAL_0:2;
+A59:              (f/.(i1+1))`2 < G*(i,j)`2;
+                  p`2 <= (f/.(i1+1))`2 by A15,A45,TOPREAL1:10;
+                  hence thesis by A28,A59,XXREAL_0:2;
                 end;
               end;
             end;
           end;
         end;
         suppose
-A50:      (f/.i1)`2 > (f/.(i1+1))`2;
+A60:      (f/.i1)`2 > (f/.(i1+1))`2;
           thus thesis
           proof
             per cases;
             suppose
-A51:          f/.i1 in LSeg(G*(i,j),G*(i,k));
-              1+1<=i1+1 by A12,XREAL_1:8;
-              then f/.i1 in L~f by A13,A15,GOBOARD1:16,XXREAL_0:2;
-              then f/.i1 in X1 by A51,XBOOLE_0:def 4;
+A61:          f/.i1 in LSeg(G*(i,j),G*(i,k));
+              1+1<=i1+1 by A13,XREAL_1:8;
+              then f/.i1 in L~f by A14,A33,GOBOARD1:16,XXREAL_0:2;
+              then f/.i1 in X1 by A61,XBOOLE_0:def 4;
               then
-A52:          p`2 >= (f/.i1)`2 by A5,A7,PSCOMP_1:71;
-              p`2 <= (f/.i1)`2 by A14,A50,TOPREAL1:10;
-              then
-A53:          p`2 = (f/.i1)`2 by A52,XXREAL_0:1;
+A62:          p`2 >= (f/.i1)`2 by A16,A24,PSCOMP_1:71;
               take n=j0;
-A54:          p in LSeg(G*(i,j),G*(i,k)) by A8,XBOOLE_0:def 4;
+A63:          p in LSeg(G*(i,j),G*(i,k)) by A8,XBOOLE_0:def 4;
+              p`2 <= (f/.i1)`2 by A15,A60,TOPREAL1:10;
+              then p`2 = (f/.i1)`2 by A62,XXREAL_0:1;
               then
-A55:          p`1 = G*(i,j)`1 by A24,GOBOARD7:5
-                .= G*(i,1)`1 by A20,GOBOARD5:3
-                .= G*(i,n)`1 by A20,A22,GOBOARD5:3;
-A56:          p`2 = G*(1,j0)`2 by A18,A22,A53,GOBOARD5:2
-                .= G*(i,n)`2 by A20,A22,GOBOARD5:2;
-              G*(i,j)`2 <= G*(i,k)`2 by A4,A20,A21,SPRECT_3:24;
-              then
-A57:          G*(i,j)`2 <= G*(i,n)`2 & G*(i,n)`2 <= G*(i,k) `2 by A54,A56,
-TOPREAL1:10;
-              hence j <= n by A20,A22,GOBOARD5:5;
-              thus n <= k by A21,A22,A57,GOBOARD5:5;
-              thus thesis by A55,A56,TOPREAL3:11;
+A64:          p`2 = G*(1,j0)`2 by A35,A36,A37,A38,GOBOARD5:2
+                .= G*(i,n)`2 by A6,A37,A38,GOBOARD5:2;
+A65:          G*(i,j)`2 <= G*(i,k)`2 by A5,A6,A18,A26,SPRECT_3:24;
+              then G*(i,j)`2 <= G*(i,n)`2 by A63,A64,TOPREAL1:10;
+              hence j <= n by A6,A30,A37,GOBOARD5:5;
+              G*(i,n)`2 <= G*(i,k) `2 by A63,A64,A65,TOPREAL1:10;
+              hence n <= k by A25,A17,A38,GOBOARD5:5;
+              p`1 = G*(i,j)`1 by A31,A63,GOBOARD7:5
+                .= G*(i,1)`1 by A6,A18,A30,GOBOARD5:3
+                .= G*(i,n)`1 by A6,A37,A38,GOBOARD5:3;
+              hence thesis by A64,TOPREAL3:11;
             end;
             suppose
-A58:          not f/.i1 in LSeg(G*(i,j),G*(i,k));
-A59:          (f/.i1)`1 = p`1 by A14,A27,GOBOARD7:5
-                .= G*(i,j)`1 by A24,A25,GOBOARD7:5;
+A66:          not f/.i1 in LSeg(G*(i,j),G*(i,k));
+A67:          (f/.i1)`1 = p`1 by A15,A40,GOBOARD7:5
+                .= G*(i,j)`1 by A31,A9,GOBOARD7:5;
               thus thesis
               proof
-                per cases by A24,A58,A59,GOBOARD7:8;
+                per cases by A31,A66,A67,GOBOARD7:8;
                 suppose
-A60:              (f/.i1)`2 > G*(i,k)`2;
+A68:              (f/.i1)`2 > G*(i,k)`2;
+                  p`2 >= G*(io,jo)`2 by A15,A21,A60,TOPREAL1:10;
+                  then p`2 >= G*(1,jo)`2 by A22,A23,A32,GOBOARD5:2;
+                  then p`2 >= G*(i,jo)`2 by A6,A23,A32,GOBOARD5:2;
+                  then G*(i,k)`2 >= G*(i,jo)`2 by A29,XXREAL_0:2;
                   then
-A61:              G*(i,j0)`2 > G*(i,k)`2 by A18,A28,XXREAL_0:1;
-                  j0>=k by A18,A21,A22,A29,A60,GOBOARD5:5;
-                  then
-A62:              j0>k by A61,XXREAL_0:1;
-                  jo<=j0+0 by A18,A19,A22,A23,A29,A31,A50,GOBOARD5:5;
+A69:              k>=jo by A25,A17,A32,GOBOARD5:5;
+                  jo<=j0+0 by A35,A21,A36,A37,A32,A44,A42,A60,GOBOARD5:5;
                   then jo-j0 <= 0 by XREAL_1:22;
                   then
-A63:              -(jo-j0) >= -0;
-
-abs(i0-io)+abs(j0-jo) = 1 by A1,A15,A17,A18,A19,GOBOARD1:def 11;
-                  then 0+abs(j0-jo) = 1 by A29,A31,ABSVALUE:7;
-                  then j0-jo = 1 by A63,ABSVALUE:def 1;
-                  then jo+1=j0-0;
+A70:              -(jo-j0) >= -0;
+                  abs(i0-io)+abs(j0-jo) = 1 by A1,A33,A19,A34,A35,A20,
+                  A21,GOBOARD1:def 11;
+                  then 0+abs(j0-jo) = 1 by A44,A42,ABSVALUE:7;
+                  then j0-jo = 1 by A70,ABSVALUE:def 1;
                   then
-A64:              jo>=k by A62,NAT_1:13;
-                  p`2 >= G*(io,jo)`2 by A14,A19,A50,TOPREAL1:10;
-                  then p`2 >= G*(1,jo)`2 by A23,GOBOARD5:2;
-                  then p`2 >= G*(i,jo)`2 by A20,A23,GOBOARD5:2;
-                  then G*(i,k)`2 >= G*(i,jo)`2 by A26,XXREAL_0:2;
-                  then k>=jo by A21,A23,GOBOARD5:5;
+A71:              jo+1=j0-0;
+                  G*(i,j0)`2 > G*(i,k)`2 & j0>=k by A35,A25,A26,A37,A43,
+                  A44,A68,GOBOARD5:5 ,XXREAL_0:1;
+                  then j0>k by XXREAL_0:1;
+                  then jo>=k by A71,NAT_1:13;
                   then
-A65:              k=jo by A64,XXREAL_0:1;
+A72:              k=jo by A69,XXREAL_0:1;
                   take n=jo;
-A66:              p`1 = G*(i,j)`1 by A24,A25,GOBOARD7:5
-                    .= G*(i,1)`1 by A20,GOBOARD5:3
-                    .= G*(i,n)`1 by A20,A23,GOBOARD5:3;
-                  p`2 >= G*(io,jo)`2 by A14,A19,A50,TOPREAL1:10;
-                  then p`2 >= G*(1,jo)`2 by A23,GOBOARD5:2;
-                  then p`2 >= G*(i,jo)`2 by A20,A23,GOBOARD5:2;
-                  then p`2 = G*(i,k)`2 by A26,A65,XXREAL_0:1;
-                  hence thesis by A4,A65,A66,TOPREAL3:11;
+A73:              p`1 = G*(i,j)`1 by A31,A9,GOBOARD7:5
+                    .= G*(i,1)`1 by A6,A18,A30,GOBOARD5:3
+                    .= G*(i,n)`1 by A6,A23,A32,GOBOARD5:3;
+                  p`2 >= G*(io,jo)`2 by A15,A21,A60,TOPREAL1:10;
+                  then p`2 >= G*(1,jo)`2 by A22,A23,A32,GOBOARD5:2;
+                  then p`2 >= G*(i,jo)`2 by A6,A23,A32,GOBOARD5:2;
+                  then p`2 = G*(i,k)`2 by A29,A72,XXREAL_0:1;
+                  hence thesis by A5,A72,A73,TOPREAL3:11;
                 end;
                 suppose
-A67:              (f/.i1)`2 < G*(i,j)`2;
-                  p`2 <= (f/.i1)`2 by A14,A50,TOPREAL1:10;
-                  hence thesis by A26,A67,XXREAL_0:2;
+A74:              (f/.i1)`2 < G*(i,j)`2;
+                  p`2 <= (f/.i1)`2 by A15,A60,TOPREAL1:10;
+                  hence thesis by A28,A74,XXREAL_0:2;
                 end;
               end;
             end;
@@ -562,271 +581,281 @@ A67:              (f/.i1)`2 < G*(i,j)`2;
         end;
       end;
     end;
-    suppose (f/.i1)`2 = (f/.(i1+1))`2;
-      then
-A68:  p`2 = (f/.i1)`2 by A14,GOBOARD7:6;
+    suppose
+A75:  (f/.i1)`2 = (f/.(i1+1))`2;
       take n=j0;
-A69:  p`1 = G*(i,j)`1 by A24,A25,GOBOARD7:5
-        .= G*(i,1)`1 by A20,GOBOARD5:3
-        .= G*(i,n)`1 by A20,A22,GOBOARD5:3;
-A70:  p`2 = G*(1,j0)`2 by A18,A22,A68,GOBOARD5:2
-        .= G*(i,n)`2 by A20,A22,GOBOARD5:2;
-      G*(i,j)`2 <= G*(i,k)`2 by A4,A20,A21,SPRECT_3:24;
+      p`2 = (f/.i1)`2 by A15,A75,GOBOARD7:6;
       then
-A71:  G*(i,j)`2 <= G*(i,n)`2 & G*(i,n)`2 <= G*(i,k)`2 by A25,A70,TOPREAL1:10;
-      hence j <= n by A20,A22,GOBOARD5:5;
-      thus n <= k by A21,A22,A71,GOBOARD5:5;
-      thus thesis by A69,A70,TOPREAL3:11;
+A76:  p`2 = G*(1,j0)`2 by A35,A36,A37,A38,GOBOARD5:2
+        .= G*(i,n)`2 by A6,A37,A38,GOBOARD5:2;
+A77:  G*(i,j)`2 <= G*(i,k)`2 by A5,A6,A18,A26,SPRECT_3:24;
+      then G*(i,j)`2 <= G*(i,n)`2 by A9,A76,TOPREAL1:10;
+      hence j <= n by A6,A30,A37,GOBOARD5:5;
+      G*(i,n)`2 <= G*(i,k)`2 by A9,A76,A77,TOPREAL1:10;
+      hence n <= k by A25,A17,A38,GOBOARD5:5;
+      p`1 = G*(i,j)`1 by A31,A9,GOBOARD7:5
+        .= G*(i,1)`1 by A6,A18,A30,GOBOARD5:3
+        .= G*(i,n)`1 by A6,A37,A38,GOBOARD5:3;
+      hence thesis by A76,TOPREAL3:11;
     end;
   end;
-  hence thesis by A7;
+  hence thesis by A24;
 end;
 
 theorem
-  f is_sequence_on G & LSeg(G*(j,i),G*(k,i)) meets L~f &
-  [j,i] in Indices G & [k,i] in Indices G & j <= k implies
-  ex n st j <= n & n <= k &
-  G*(n,i)`1 = inf(proj1.:(LSeg(G*(j,i),G*(k,i)) /\ L~f))
+  f is_sequence_on G & LSeg(G*(j,i),G*(k,i)) meets L~f & [j,i] in
+Indices G & [k,i] in Indices G & j <= k implies ex n st j <= n & n <= k & G*(n,
+  i)`1 = inf(proj1.:(LSeg(G*(j,i),G*(k,i)) /\ L~f))
 proof
   set X = LSeg(G*(j,i),G*(k,i)) /\ L~f;
   assume that
 A1: f is_sequence_on G and
 A2: LSeg(G*(j,i),G*(k,i)) meets L~f and
-A3: [j,i] in Indices G & [k,i] in Indices G and
-A4: j <= k;
+A3: [j,i] in Indices G and
+A4: [k,i] in Indices G and
+A5: j <= k;
+A6: 1 <= j by A3,MATRIX_1:39;
+  ex x being set st x in LSeg(G*(j,i),G*(k,i)) & x in L~f by A2,XBOOLE_0:3;
+  then reconsider X1=X as non empty compact Subset of TOP-REAL 2 by
+  PSCOMP_1:64
+  ,XBOOLE_0:def 4;
+  consider p being set such that
+A7: p in W-most X1 by XBOOLE_0:def 1;
+  reconsider p as Point of TOP-REAL 2 by A7;
+A8: p in X by A7,XBOOLE_0:def 4;
+  then
+A9: p in LSeg(G*(j,i),G*(k,i)) by XBOOLE_0:def 4;
   proj1.:X = (proj1|X).:X by RELAT_1:162;
   then
-A5: inf(proj1.:X) = inf((proj1|X).: [#]((TOP-REAL 2)|X)) by PRE_TOPC:def 10
+A10: inf(proj1.:X) = inf((proj1|X).: [#]((TOP-REAL 2)|X)) by
+  PRE_TOPC:def
+  10
     .= W-bound X;
-  ex x being set st x in LSeg(G*(j,i),G*(k,i)) & x in L~f by A2,XBOOLE_0:3;
-  then reconsider X1=X as non empty compact Subset of TOP-REAL 2 by PSCOMP_1:64
-,XBOOLE_0:def 4;
-  consider p being set such that
-A6: p in W-most X1 by XBOOLE_0:def 1;
-  reconsider p as Point of TOP-REAL 2 by A6;
-A7: p`1 = (W-min X)`1 by A6,PSCOMP_1:88
-    .= inf(proj1.:X) by A5,EUCLID:56;
-A8: p in X by A6,XBOOLE_0:def 4;
-  then p in L~f by XBOOLE_0:def 4;
-  then p in union { LSeg(f,k1) where k1 is Element of NAT :
-  1 <= k1 & k1+1 <= len f} by TOPREAL1:def 6;
+A11: 1 <= k & 1 <= i by A3,A4,MATRIX_1:39;
+A12: p`1 = (W-min X)`1 by A7,PSCOMP_1:88
+    .= inf(proj1.:X) by A10,EUCLID:56;
+A13: i <= width G by A3,MATRIX_1:39;
+A14: 1 <= i & i <= width G by A3,MATRIX_1:39;
+A15: k <= len G by A4,MATRIX_1:39;
+  then
+A16: G*(j,i)`1 <= G*(k,i)`1 by A5,A6,A14,SPRECT_3:25;
+  then
+A17: G*(j,i)`1 <= p`1 by A9,TOPREAL1:9;
+A18: p`1 <= G*(k,i)`1 by A9,A16,TOPREAL1:9;
+A19: j <= len G by A3,MATRIX_1:39;
+  then
+A20: G*(j,i)`2 = G*(1,i)`2 by A6,A14,GOBOARD5:2
+    .= G*(k,i)`2 by A15,A11,A13,GOBOARD5:2;
+  p in L~f by A8,XBOOLE_0:def 4;
+  then p in union { LSeg(f,k1) where k1 is Element of NAT : 1 <= k1 & k1+1 <=
+  len f} by TOPREAL1:def 6;
   then consider Y being set such that
-A9: p in Y and
-A10: Y in { LSeg(f,k1) where k1 is Element of NAT :
-  1 <= k1 & k1+1 <= len f} by TARSKI:def 4;
+A21: p in Y and
+A22: Y in { LSeg(f,k1) where k1 is Element of NAT : 1 <= k1 & k1+1 <=
+  len f} by TARSKI:def 4;
   consider i1 being Element of NAT such that
-A11: Y = LSeg(f,i1) and
-A12: 1 <= i1 and
-A13: i1+1 <= len f by A10;
-A14: p in LSeg(f/.i1,f/.(i1+1)) by A9,A11,A12,A13,TOPREAL1:def 5;
-  i1 <= len f by A13,NAT_1:13;
-  then i1 in Seg len f by A12,FINSEQ_1:3;
+A23: Y = LSeg(f,i1) and
+A24: 1 <= i1 and
+A25: i1+1 <= len f by A22;
+A26: p in LSeg(f/.i1,f/.(i1+1)) by A21,A23,A24,A25,TOPREAL1:def 5;
+  1 < i1+1 by A24,NAT_1:13;
+  then i1+1 in Seg len f by A25,FINSEQ_1:3;
   then
-A15: i1 in dom f by FINSEQ_1:def 3;
+A27: i1+1 in dom f by FINSEQ_1:def 3;
+  then consider jo,io being Element of NAT such that
+A28: [jo,io] in Indices G and
+A29: f/.(i1+1) = G*(jo,io) by A1,GOBOARD1:def 11;
+A30: 1 <= jo by A28,MATRIX_1:39;
+  i1 <= len f by A25,NAT_1:13;
+  then i1 in Seg len f by A24,FINSEQ_1:3;
   then
-A16: f is special by A1,JORDAN8:7,RELAT_1:60;
-  1 < i1+1 by A12,NAT_1:13;
-  then i1+1 in Seg len f by A13,FINSEQ_1:3;
-  then
-A17: i1+1 in dom f by FINSEQ_1:def 3;
-  consider j0,i0 being Element of NAT such that
-A18: [j0,i0] in Indices G & f/.i1 = G*(j0,i0) by A1,A15,GOBOARD1:def 11;
-  consider jo,io being Element of NAT such that
-A19: [jo,io] in Indices G & f/.(i1+1) = G*(jo,io) by A1,A17,GOBOARD1:def 11;
-A20: 1 <= j & j <= len G & 1 <= i & i <= width G by A3,MATRIX_1:39;
-A21: 1 <= k & k <= len G & 1 <= i & i <= width G by A3,MATRIX_1:39;
-A22: 1 <= j0 & j0 <= len G & 1 <= i0 & i0 <= width G by A18,MATRIX_1:39;
-A23: 1 <= jo & jo <= len G & 1 <= io & io <= width G by A19,MATRIX_1:39;
-A24: G*(j,i)`2 = G*(1,i)`2 by A20,GOBOARD5:2
-    .= G*(k,i)`2 by A21,GOBOARD5:2;
-A25: p in LSeg(G*(j,i),G*(k,i)) by A8,XBOOLE_0:def 4;
-  G*(j,i)`1 <= G*(k,i)`1 by A4,A20,A21,SPRECT_3:25;
-  then
-A26: G*(j,i)`1 <= p`1 & p`1 <= G*(k,i)`1 by A25,TOPREAL1:9;
+A31: i1 in dom f by FINSEQ_1:def 3;
+  then consider j0,i0 being Element of NAT such that
+A32: [j0,i0] in Indices G and
+A33: f/.i1 = G*(j0,i0) by A1,GOBOARD1:def 11;
+A34: 1 <= j0 by A32,MATRIX_1:39;
+A35: 1 <= i0 & i0 <= width G by A32,MATRIX_1:39;
+A36: j0 <= len G by A32,MATRIX_1:39;
+A37: 1 <= io & io <= width G by A28,MATRIX_1:39;
+A38: jo <= len G by A28,MATRIX_1:39;
+A39: f is special by A1,A31,JORDAN8:7,RELAT_1:60;
   ex n st j <= n & n <= k & G*(n,i) = p
   proof
-    per cases by A12,A13,A16,TOPREAL1:def 7;
+    per cases by A24,A25,A39,TOPREAL1:def 7;
     suppose
-A27:  (f/.i1)`2 = (f/.(i1+1))`2;
-      G*(j,i0)`2 = G*(1,i0)`2 by A20,A22,GOBOARD5:2
-        .= G*(j0,i0)`2 by A22,GOBOARD5:2
-        .= p`2 by A14,A18,A27,GOBOARD7:6
-        .= G*(j,i)`2 by A24,A25,GOBOARD7:6;
+A40:  (f/.i1)`2 = (f/.(i1+1))`2;
+      G*(j,io)`2 = G*(1,io)`2 by A6,A19,A37,GOBOARD5:2
+        .= G*(jo,io)`2 by A30,A38,A37,GOBOARD5:2
+        .= p`2 by A26,A29,A40,GOBOARD7:6
+        .= G*(j,i)`2 by A20,A9,GOBOARD7:6;
       then
-A28:  i0<=i & i0>=i by A20,A22,GOBOARD5:5;
+A41:  io<=i & io>=i by A6,A19,A14,A37,GOBOARD5:5;
       then
-A29:  i=i0 by XXREAL_0:1;
-      G*(j,io)`2 = G*(1,io)`2 by A20,A23,GOBOARD5:2
-        .= G*(jo,io)`2 by A23,GOBOARD5:2
-        .= p`2 by A14,A19,A27,GOBOARD7:6
-        .= G*(j,i)`2 by A24,A25,GOBOARD7:6;
+A42:  i=io by XXREAL_0:1;
+      G*(j,i0)`2 = G*(1,i0)`2 by A6,A19,A35,GOBOARD5:2
+        .= G*(j0,i0)`2 by A34,A36,A35,GOBOARD5:2
+        .= p`2 by A26,A33,A40,GOBOARD7:6
+        .= G*(j,i)`2 by A20,A9,GOBOARD7:6;
       then
-A30:  io<=i & io>=i by A20,A23,GOBOARD5:5;
+A43:  i0<=i & i0>=i by A6,A19,A14,A35,GOBOARD5:5;
       then
-A31:  i=io by XXREAL_0:1;
+A44:  i=i0 by XXREAL_0:1;
       thus thesis
       proof
         per cases;
         suppose
-A32:      (f/.i1)`1 <= (f/.(i1+1))`1;
+A45:      (f/.i1)`1 <= (f/.(i1+1))`1;
           thus thesis
           proof
             per cases;
             suppose
-A33:          (f/.i1) in LSeg(G*(j,i),G*(k,i));
-              1+1<=i1+1 by A12,XREAL_1:8;
-              then f/.i1 in L~f by A13,A15,GOBOARD1:16,XXREAL_0:2;
-              then f/.i1 in X1 by A33,XBOOLE_0:def 4;
+A46:          (f/.i1) in LSeg(G*(j,i),G*(k,i));
+              1+1<=i1+1 by A24,XREAL_1:8;
+              then f/.i1 in L~f by A25,A31,GOBOARD1:16,XXREAL_0:2;
+              then f/.i1 in X1 by A46,XBOOLE_0:def 4;
               then
-A34:          p`1 <= (f/.i1)`1 by A5,A7,PSCOMP_1:71;
-              p`1 >= (f/.i1)`1 by A14,A32,TOPREAL1:9;
-              then
-A35:          p`1 = (f/.i1)`1 by A34,XXREAL_0:1;
+A47:          p`1 <= (f/.i1)`1 by A10,A12,PSCOMP_1:71;
               take n=j0;
-A36:          p in LSeg(G*(j,i),G*(k,i)) by A8,XBOOLE_0:def 4;
+A48:          p in LSeg(G*(j,i),G*(k,i)) by A8,XBOOLE_0:def 4;
+              p`1 >= (f/.i1)`1 by A26,A45,TOPREAL1:9;
+              then p`1 = (f/.i1)`1 by A47,XXREAL_0:1;
               then
-A37:          p`2 = G*(j,i)`2 by A24,GOBOARD7:6
-                .= G*(1,i)`2 by A20,GOBOARD5:2
-                .= G*(n,i)`2 by A20,A22,GOBOARD5:2;
-A38:          p`1 = G*(j0,1)`1 by A18,A22,A35,GOBOARD5:3
-                .= G*(n,i)`1 by A20,A22,GOBOARD5:3;
-              G*(j,i)`1 <= G*(k,i)`1 by A4,A20,A21,SPRECT_3:25;
-              then
-A39:          G*(j,i)`1 <= G*(n,i)`1 & G*(n,i)`1 <= G*(k,i) `1 by A36,A38,
-TOPREAL1:9;
-              hence j <= n by A20,A22,GOBOARD5:4;
-              thus n <= k by A21,A22,A39,GOBOARD5:4;
-              thus thesis by A37,A38,TOPREAL3:11;
+A49:          p`1 = G*(j0,1)`1 by A33,A34,A36,A35,GOBOARD5:3
+                .= G*(n,i)`1 by A14,A34,A36,GOBOARD5:3;
+A50:          G*(j,i)`1 <= G*(k,i)`1 by A5,A6,A14,A15,SPRECT_3:25;
+              then G*(j,i)`1 <= G*(n,i)`1 by A48,A49,TOPREAL1:9;
+              hence j <= n by A19,A14,A34,GOBOARD5:4;
+              G*(n,i)`1 <= G*(k,i) `1 by A48,A49,A50,TOPREAL1:9;
+              hence n <= k by A11,A13,A36,GOBOARD5:4;
+              p`2 = G*(j,i)`2 by A20,A48,GOBOARD7:6
+                .= G*(1,i)`2 by A6,A19,A14,GOBOARD5:2
+                .= G*(n,i)`2 by A14,A34,A36,GOBOARD5:2;
+              hence thesis by A49,TOPREAL3:11;
             end;
             suppose
-A40:          not f/.i1 in LSeg(G*(j,i),G*(k,i));
-A41:          (f/.i1)`2 = p`2 by A14,A27,GOBOARD7:6
-                .= G*(j,i)`2 by A24,A25,GOBOARD7:6;
+A51:          not f/.i1 in LSeg(G*(j,i),G*(k,i));
+A52:          (f/.i1)`2 = p`2 by A26,A40,GOBOARD7:6
+                .= G*(j,i)`2 by A20,A9,GOBOARD7:6;
               thus thesis
               proof
-                per cases by A24,A40,A41,GOBOARD7:9;
+                per cases by A20,A51,A52,GOBOARD7:9;
                 suppose
-A42:              (f/.i1)`1 < G*(j,i)`1;
+A53:              (f/.i1)`1 < G*(j,i)`1;
+                  p`1 <= G*(jo,io)`1 by A26,A29,A45,TOPREAL1:9;
+                  then p`1 <= G*(jo,1)`1 by A30,A38,A37,GOBOARD5:3;
+                  then p`1 <= G*(jo,i)`1 by A14,A30,A38,GOBOARD5:3;
+                  then G*(j,i)`1 <= G*(jo,i)`1 by A17,XXREAL_0:2;
                   then
-A43:              G*(j0,i)`1 < G*(j,i)`1 by A18,A28,XXREAL_0:1;
-                  j0<=j by A18,A20,A22,A29,A42,GOBOARD5:4;
+A54:              j<=jo by A19,A14,A30,GOBOARD5:4;
+                  abs(i0-io)+abs(j0-jo) = 1 by A1,A31,A27,A32,A33,A28,A29
+                  ,GOBOARD1:def 11;
+                  then 0+abs(j0-jo) = 1 by A44,A42,ABSVALUE:7;
                   then
-A44:              j0<j by A43,XXREAL_0:1;
-                  j0<=jo+0 by A18,A19,A22,A23,A29,A31,A32,GOBOARD5:4;
+A55:              abs(-(j0-jo)) = 1 by COMPLEX1:138;
+                  j0<=jo+0 by A33,A29,A36,A35,A30,A44,A42,A45,GOBOARD5:4;
                   then j0-jo <= 0 by XREAL_1:22;
+                  then jo-j0 = 1 by A55,ABSVALUE:def 1;
                   then
-A45:              -(j0-jo) >= -0;
-
-abs(i0-io)+abs(j0-jo) = 1 by A1,A15,A17,A18,A19,GOBOARD1:def 11;
-                  then 0+abs(j0-jo) = 1 by A29,A31,ABSVALUE:7;
-                  then abs(-(j0-jo)) = 1 by COMPLEX1:138;
-                  then jo-j0 = 1 by A45,ABSVALUE:def 1;
-                  then j0+1=jo+0;
+A56:              j0+1=jo+0;
+                  G*(j0,i)`1 < G*(j,i)`1 & j0<=j by A33,A6,A14,A36,A43,
+                  A44,A53,GOBOARD5:4 ,XXREAL_0:1;
+                  then j0<j by XXREAL_0:1;
+                  then jo<=j by A56,NAT_1:13;
                   then
-A46:              jo<=j by A44,NAT_1:13;
-                  p`1 <= G*(jo,io)`1 by A14,A19,A32,TOPREAL1:9;
-                  then p`1 <= G*(jo,1)`1 by A23,GOBOARD5:3;
-                  then p`1 <= G*(jo,i)`1 by A20,A23,GOBOARD5:3;
-                  then G*(j,i)`1 <= G*(jo,i)`1 by A26,XXREAL_0:2;
-                  then j<=jo by A20,A23,GOBOARD5:4;
-                  then
-A47:              j=jo by A46,XXREAL_0:1;
+A57:              j=jo by A54,XXREAL_0:1;
                   take n=jo;
-A48:              p`2 = G*(j,i)`2 by A24,A25,GOBOARD7:6
-                    .= G*(1,i)`2 by A20,GOBOARD5:2
-                    .= G*(n,i)`2 by A20,A23,GOBOARD5:2;
-                  p`1 <= G*(jo,io)`1 by A14,A19,A32,TOPREAL1:9;
-                  then p`1 <= G*(jo,1)`1 by A23,GOBOARD5:3;
-                  then p`1 <= G*(jo,i)`1 by A20,A23,GOBOARD5:3;
-                  then p`1 = G*(j,i)`1 by A26,A47,XXREAL_0:1;
-                  hence thesis by A4,A47,A48,TOPREAL3:11;
+A58:              p`2 = G*(j,i)`2 by A20,A9,GOBOARD7:6
+                    .= G*(1,i)`2 by A6,A19,A14,GOBOARD5:2
+                    .= G*(n,i)`2 by A14,A30,A38,GOBOARD5:2;
+                  p`1 <= G*(jo,io)`1 by A26,A29,A45,TOPREAL1:9;
+                  then p`1 <= G*(jo,1)`1 by A30,A38,A37,GOBOARD5:3;
+                  then p`1 <= G*(jo,i)`1 by A14,A30,A38,GOBOARD5:3;
+                  then p`1 = G*(j,i)`1 by A17,A57,XXREAL_0:1;
+                  hence thesis by A5,A57,A58,TOPREAL3:11;
                 end;
                 suppose
-A49:              (f/.i1)`1 > G*(k,i)`1;
-                  p`1 >= (f/.i1)`1 by A14,A32,TOPREAL1:9;
-                  hence thesis by A26,A49,XXREAL_0:2;
+A59:              (f/.i1)`1 > G*(k,i)`1;
+                  p`1 >= (f/.i1)`1 by A26,A45,TOPREAL1:9;
+                  hence thesis by A18,A59,XXREAL_0:2;
                 end;
               end;
             end;
           end;
         end;
         suppose
-A50:      (f/.i1)`1 > (f/.(i1+1))`1;
+A60:      (f/.i1)`1 > (f/.(i1+1))`1;
           thus thesis
           proof
             per cases;
             suppose
-A51:          (f/.(i1+1)) in LSeg(G*(j,i),G*(k,i));
-              1+1<=i1+1 by A12,XREAL_1:8;
-              then f/.(i1+1) in L~f by A13,A17,GOBOARD1:16,XXREAL_0:2;
-              then f/.(i1+1) in X1 by A51,XBOOLE_0:def 4;
+A61:          (f/.(i1+1)) in LSeg(G*(j,i),G*(k,i));
+              1+1<=i1+1 by A24,XREAL_1:8;
+              then f/.(i1+1) in L~f by A25,A27,GOBOARD1:16,XXREAL_0:2;
+              then f/.(i1+1) in X1 by A61,XBOOLE_0:def 4;
               then
-A52:          p`1 <= (f/.(i1+1))`1 by A5,A7,PSCOMP_1:71;
-              p`1 >= (f/.(i1+1))`1 by A14,A50,TOPREAL1:9;
-              then
-A53:          p`1 = (f/.(i1+1))`1 by A52,XXREAL_0:1;
+A62:          p`1 <= (f/.(i1+1))`1 by A10,A12,PSCOMP_1:71;
               take n=jo;
-A54:          p in LSeg(G*(j,i),G*(k,i)) by A8,XBOOLE_0:def 4;
+A63:          p in LSeg(G*(j,i),G*(k,i)) by A8,XBOOLE_0:def 4;
+              p`1 >= (f/.(i1+1))`1 by A26,A60,TOPREAL1:9;
+              then p`1 = (f/.(i1+1))`1 by A62,XXREAL_0:1;
               then
-A55:          p`2 = G*(j,i)`2 by A24,GOBOARD7:6
-                .= G*(1,i)`2 by A20,GOBOARD5:2
-                .= G*(n,i)`2 by A20,A23,GOBOARD5:2;
-A56:          p`1 = G*(jo,1)`1 by A19,A23,A53,GOBOARD5:3
-                .= G*(n,i)`1 by A20,A23,GOBOARD5:3;
-              G*(j,i)`1 <= G*(k,i)`1 by A4,A20,A21,SPRECT_3:25;
-              then
-A57:          G*(j,i)`1 <= G*(n,i)`1 & G*(n,i)`1 <= G*(k,i) `1 by A54,A56,
-TOPREAL1:9;
-              hence j <= n by A20,A23,GOBOARD5:4;
-              thus n <= k by A21,A23,A57,GOBOARD5:4;
-              thus thesis by A55,A56,TOPREAL3:11;
+A64:          p`1 = G*(jo,1)`1 by A29,A30,A38,A37,GOBOARD5:3
+                .= G*(n,i)`1 by A14,A30,A38,GOBOARD5:3;
+A65:          G*(j,i)`1 <= G*(k,i)`1 by A5,A6,A14,A15,SPRECT_3:25;
+              then G*(j,i)`1 <= G*(n,i)`1 by A63,A64,TOPREAL1:9;
+              hence j <= n by A19,A14,A30,GOBOARD5:4;
+              G*(n,i)`1 <= G*(k,i) `1 by A63,A64,A65,TOPREAL1:9;
+              hence n <= k by A11,A13,A38,GOBOARD5:4;
+              p`2 = G*(j,i)`2 by A20,A63,GOBOARD7:6
+                .= G*(1,i)`2 by A6,A19,A14,GOBOARD5:2
+                .= G*(n,i)`2 by A14,A30,A38,GOBOARD5:2;
+              hence thesis by A64,TOPREAL3:11;
             end;
             suppose
-A58:          not f/.(i1+1) in LSeg(G*(j,i),G*(k,i));
-A59:          (f/.(i1+1))`2 = p`2 by A14,A27,GOBOARD7:6
-                .= G*(j,i)`2 by A24,A25,GOBOARD7:6;
+A66:          not f/.(i1+1) in LSeg(G*(j,i),G*(k,i));
+A67:          (f/.(i1+1))`2 = p`2 by A26,A40,GOBOARD7:6
+                .= G*(j,i)`2 by A20,A9,GOBOARD7:6;
               thus thesis
               proof
-                per cases by A24,A58,A59,GOBOARD7:9;
+                per cases by A20,A66,A67,GOBOARD7:9;
                 suppose
-A60:              (f/.(i1+1))`1 < G*(j,i)`1;
+A68:              (f/.(i1+1))`1 < G*(j,i)`1;
+                  p`1 <= G*(j0,i0)`1 by A26,A33,A60,TOPREAL1:9;
+                  then p`1 <= G*(j0,1)`1 by A34,A36,A35,GOBOARD5:3;
+                  then p`1 <= G*(j0,i)`1 by A14,A34,A36,GOBOARD5:3;
+                  then G*(j,i)`1 <= G*(j0,i)`1 by A17,XXREAL_0:2;
                   then
-A61:              G*(jo,i)`1 < G*(j,i)`1 by A19,A30,XXREAL_0:1;
-                  jo<=j by A19,A20,A23,A31,A60,GOBOARD5:4;
-                  then
-A62:              jo<j by A61,XXREAL_0:1;
-                  jo<=j0+0 by A18,A19,A22,A23,A29,A31,A50,GOBOARD5:4;
+A69:              j<=j0 by A19,A14,A34,GOBOARD5:4;
+                  jo<=j0+0 by A33,A29,A34,A35,A38,A44,A42,A60,GOBOARD5:4;
                   then jo-j0 <= 0 by XREAL_1:22;
                   then
-A63:              -(jo-j0) >= -0;
-
-abs(i0-io)+abs(j0-jo) = 1 by A1,A15,A17,A18,A19,GOBOARD1:def 11;
-                  then 0+abs(j0-jo) = 1 by A29,A31,ABSVALUE:7;
-                  then j0-jo = 1 by A63,ABSVALUE:def 1;
-                  then jo+1=j0-0;
+A70:              -(jo-j0) >= -0;
+                  abs(i0-io)+abs(j0-jo) = 1 by A1,A31,A27,A32,A33,A28,
+                  A29,GOBOARD1:def 11;
+                  then 0+abs(j0-jo) = 1 by A44,A42,ABSVALUE:7;
+                  then j0-jo = 1 by A70,ABSVALUE:def 1;
                   then
-A64:              j0<=j by A62,NAT_1:13;
-                  p`1 <= G*(j0,i0)`1 by A14,A18,A50,TOPREAL1:9;
-                  then p`1 <= G*(j0,1)`1 by A22,GOBOARD5:3;
-                  then p`1 <= G*(j0,i)`1 by A20,A22,GOBOARD5:3;
-                  then G*(j,i)`1 <= G*(j0,i)`1 by A26,XXREAL_0:2;
-                  then j<=j0 by A20,A22,GOBOARD5:4;
+A71:              jo+1=j0-0;
+                  G*(jo,i)`1 < G*(j,i)`1 & jo<=j by A29,A6,A14,A38,A41,
+                  A42,A68,GOBOARD5:4 ,XXREAL_0:1;
+                  then jo<j by XXREAL_0:1;
+                  then j0<=j by A71,NAT_1:13;
                   then
-A65:              j=j0 by A64,XXREAL_0:1;
+A72:              j=j0 by A69,XXREAL_0:1;
                   take n=j0;
-A66:              p`2 = G*(j,i)`2 by A24,A25,GOBOARD7:6
-                    .= G*(1,i)`2 by A20,GOBOARD5:2
-                    .= G*(n,i)`2 by A20,A22,GOBOARD5:2;
-                  p`1 <= G*(j0,i0)`1 by A14,A18,A50,TOPREAL1:9;
-                  then p`1 <= G*(j0,1)`1 by A22,GOBOARD5:3;
-                  then p`1 <= G*(j0,i)`1 by A20,A22,GOBOARD5:3;
-                  then p`1 = G*(j,i)`1 by A26,A65,XXREAL_0:1;
-                  hence thesis by A4,A65,A66,TOPREAL3:11;
+A73:              p`2 = G*(j,i)`2 by A20,A9,GOBOARD7:6
+                    .= G*(1,i)`2 by A6,A19,A14,GOBOARD5:2
+                    .= G*(n,i)`2 by A14,A34,A36,GOBOARD5:2;
+                  p`1 <= G*(j0,i0)`1 by A26,A33,A60,TOPREAL1:9;
+                  then p`1 <= G*(j0,1)`1 by A34,A36,A35,GOBOARD5:3;
+                  then p`1 <= G*(j0,i)`1 by A14,A34,A36,GOBOARD5:3;
+                  then p`1 = G*(j,i)`1 by A17,A72,XXREAL_0:1;
+                  hence thesis by A5,A72,A73,TOPREAL3:11;
                 end;
                 suppose
-A67:              (f/.(i1+1))`1 > G*(k,i)`1;
-                  p`1 >= (f/.(i1+1))`1 by A14,A50,TOPREAL1:9;
-                  hence thesis by A26,A67,XXREAL_0:2;
+A74:              (f/.(i1+1))`1 > G*(k,i)`1;
+                  p`1 >= (f/.(i1+1))`1 by A26,A60,TOPREAL1:9;
+                  hence thesis by A18,A74,XXREAL_0:2;
                 end;
               end;
             end;
@@ -834,271 +863,281 @@ A67:              (f/.(i1+1))`1 > G*(k,i)`1;
         end;
       end;
     end;
-    suppose (f/.i1)`1 = (f/.(i1+1))`1;
-      then
-A68:  p`1 = (f/.i1)`1 by A14,GOBOARD7:5;
+    suppose
+A75:  (f/.i1)`1 = (f/.(i1+1))`1;
       take n=j0;
-A69:  p`2 = G*(j,i)`2 by A24,A25,GOBOARD7:6
-        .= G*(1,i)`2 by A20,GOBOARD5:2
-        .= G*(n,i)`2 by A20,A22,GOBOARD5:2;
-A70:  p`1 = G*(j0,1)`1 by A18,A22,A68,GOBOARD5:3
-        .= G*(n,i)`1 by A20,A22,GOBOARD5:3;
-      G*(j,i)`1 <= G*(k,i)`1 by A4,A20,A21,SPRECT_3:25;
+      p`1 = (f/.i1)`1 by A26,A75,GOBOARD7:5;
       then
-A71:  G*(j,i)`1 <= G*(n,i)`1 & G*(n,i)`1 <= G*(k,i)`1 by A25,A70,TOPREAL1:9;
-      hence j <= n by A20,A22,GOBOARD5:4;
-      thus n <= k by A21,A22,A71,GOBOARD5:4;
-      thus thesis by A69,A70,TOPREAL3:11;
+A76:  p`1 = G*(j0,1)`1 by A33,A34,A36,A35,GOBOARD5:3
+        .= G*(n,i)`1 by A14,A34,A36,GOBOARD5:3;
+A77:  G*(j,i)`1 <= G*(k,i)`1 by A5,A6,A14,A15,SPRECT_3:25;
+      then G*(j,i)`1 <= G*(n,i)`1 by A9,A76,TOPREAL1:9;
+      hence j <= n by A19,A14,A34,GOBOARD5:4;
+      G*(n,i)`1 <= G*(k,i)`1 by A9,A76,A77,TOPREAL1:9;
+      hence n <= k by A11,A13,A36,GOBOARD5:4;
+      p`2 = G*(j,i)`2 by A20,A9,GOBOARD7:6
+        .= G*(1,i)`2 by A6,A19,A14,GOBOARD5:2
+        .= G*(n,i)`2 by A14,A34,A36,GOBOARD5:2;
+      hence thesis by A76,TOPREAL3:11;
     end;
   end;
-  hence thesis by A7;
+  hence thesis by A12;
 end;
 
 theorem
-  f is_sequence_on G & LSeg(G*(j,i),G*(k,i)) meets L~f &
-  [j,i] in Indices G & [k,i] in Indices G & j <= k implies
-  ex n st j <= n & n <= k &
-  G*(n,i)`1 = sup(proj1.:(LSeg(G*(j,i),G*(k,i)) /\ L~f))
+  f is_sequence_on G & LSeg(G*(j,i),G*(k,i)) meets L~f & [j,i] in
+Indices G & [k,i] in Indices G & j <= k implies ex n st j <= n & n <= k & G*(n,
+  i)`1 = sup(proj1.:(LSeg(G*(j,i),G*(k,i)) /\ L~f))
 proof
   set X = LSeg(G*(j,i),G*(k,i)) /\ L~f;
   assume that
 A1: f is_sequence_on G and
 A2: LSeg(G*(j,i),G*(k,i)) meets L~f and
-A3: [j,i] in Indices G & [k,i] in Indices G and
-A4: j <= k;
+A3: [j,i] in Indices G and
+A4: [k,i] in Indices G and
+A5: j <= k;
+A6: 1 <= j by A3,MATRIX_1:39;
+  ex x being set st x in LSeg(G*(j,i),G*(k,i)) & x in L~f by A2,XBOOLE_0:3;
+  then reconsider X1=X as non empty compact Subset of TOP-REAL 2 by
+  PSCOMP_1:64
+  ,XBOOLE_0:def 4;
+  consider p being set such that
+A7: p in E-most X1 by XBOOLE_0:def 1;
+  reconsider p as Point of TOP-REAL 2 by A7;
+A8: p in X by A7,XBOOLE_0:def 4;
+  then
+A9: p in LSeg(G*(j,i),G*(k,i)) by XBOOLE_0:def 4;
   proj1.:X = (proj1|X).:X by RELAT_1:162;
   then
-A5: sup(proj1.:X) = sup((proj1|X).: [#]((TOP-REAL 2)|X)) by PRE_TOPC:def 10
+A10: sup(proj1.:X) = sup((proj1|X).: [#]((TOP-REAL 2)|X)) by
+  PRE_TOPC:def
+  10
     .= E-bound X;
-  ex x being set st x in LSeg(G*(j,i),G*(k,i)) & x in L~f by A2,XBOOLE_0:3;
-  then reconsider X1=X as non empty compact Subset of TOP-REAL 2 by PSCOMP_1:64
-,XBOOLE_0:def 4;
-  consider p being set such that
-A6: p in E-most X1 by XBOOLE_0:def 1;
-  reconsider p as Point of TOP-REAL 2 by A6;
-A7: p`1 = (E-min X)`1 by A6,PSCOMP_1:108
-    .= sup(proj1.:X) by A5,EUCLID:56;
-A8: p in X by A6,XBOOLE_0:def 4;
-  then p in L~f by XBOOLE_0:def 4;
-  then p in union { LSeg(f,k1) where k1 is Element of NAT :
-  1 <= k1 & k1+1 <= len f} by TOPREAL1:def 6;
+A11: 1 <= i & i <= width G by A3,MATRIX_1:39;
+A12: p`1 = (E-min X)`1 by A7,PSCOMP_1:108
+    .= sup(proj1.:X) by A10,EUCLID:56;
+A13: 1 <= k by A4,MATRIX_1:39;
+A14: 1 <= i & i <= width G by A3,MATRIX_1:39;
+A15: k <= len G by A4,MATRIX_1:39;
+  then
+A16: G*(j,i)`1 <= G*(k,i)`1 by A5,A6,A14,SPRECT_3:25;
+  then
+A17: G*(j,i)`1 <= p`1 by A9,TOPREAL1:9;
+A18: p`1 <= G*(k,i)`1 by A9,A16,TOPREAL1:9;
+A19: j <= len G by A3,MATRIX_1:39;
+  then
+A20: G*(j,i)`2 = G*(1,i)`2 by A6,A14,GOBOARD5:2
+    .= G*(k,i)`2 by A13,A15,A11,GOBOARD5:2;
+  p in L~f by A8,XBOOLE_0:def 4;
+  then p in union { LSeg(f,k1) where k1 is Element of NAT : 1 <= k1 & k1+1 <=
+  len f} by TOPREAL1:def 6;
   then consider Y being set such that
-A9: p in Y and
-A10: Y in { LSeg(f,k1) where k1 is Element of NAT :
-  1 <= k1 & k1+1 <= len f} by TARSKI:def 4;
+A21: p in Y and
+A22: Y in { LSeg(f,k1) where k1 is Element of NAT : 1 <= k1 & k1+1 <=
+  len f} by TARSKI:def 4;
   consider i1 being Element of NAT such that
-A11: Y = LSeg(f,i1) and
-A12: 1 <= i1 and
-A13: i1+1 <= len f by A10;
-A14: p in LSeg(f/.i1,f/.(i1+1)) by A9,A11,A12,A13,TOPREAL1:def 5;
-  i1 <= len f by A13,NAT_1:13;
-  then i1 in Seg len f by A12,FINSEQ_1:3;
+A23: Y = LSeg(f,i1) and
+A24: 1 <= i1 and
+A25: i1+1 <= len f by A22;
+A26: p in LSeg(f/.i1,f/.(i1+1)) by A21,A23,A24,A25,TOPREAL1:def 5;
+  1 < i1+1 by A24,NAT_1:13;
+  then i1+1 in Seg len f by A25,FINSEQ_1:3;
   then
-A15: i1 in dom f by FINSEQ_1:def 3;
+A27: i1+1 in dom f by FINSEQ_1:def 3;
+  then consider jo,io being Element of NAT such that
+A28: [jo,io] in Indices G and
+A29: f/.(i1+1) = G*(jo,io) by A1,GOBOARD1:def 11;
+A30: 1 <= jo by A28,MATRIX_1:39;
+  i1 <= len f by A25,NAT_1:13;
+  then i1 in Seg len f by A24,FINSEQ_1:3;
   then
-A16: f is special by A1,JORDAN8:7,RELAT_1:60;
-  1 < i1+1 by A12,NAT_1:13;
-  then i1+1 in Seg len f by A13,FINSEQ_1:3;
-  then
-A17: i1+1 in dom f by FINSEQ_1:def 3;
-  consider j0,i0 being Element of NAT such that
-A18: [j0,i0] in Indices G & f/.i1 = G*(j0,i0) by A1,A15,GOBOARD1:def 11;
-  consider jo,io being Element of NAT such that
-A19: [jo,io] in Indices G & f/.(i1+1) = G*(jo,io) by A1,A17,GOBOARD1:def 11;
-A20: 1 <= j & j <= len G & 1 <= i & i <= width G by A3,MATRIX_1:39;
-A21: 1 <= k & k <= len G & 1 <= i & i <= width G by A3,MATRIX_1:39;
-A22: 1 <= j0 & j0 <= len G & 1 <= i0 & i0 <= width G by A18,MATRIX_1:39;
-A23: 1 <= jo & jo <= len G & 1 <= io & io <= width G by A19,MATRIX_1:39;
-A24: G*(j,i)`2 = G*(1,i)`2 by A20,GOBOARD5:2
-    .= G*(k,i)`2 by A21,GOBOARD5:2;
-A25: p in LSeg(G*(j,i),G*(k,i)) by A8,XBOOLE_0:def 4;
-  G*(j,i)`1 <= G*(k,i)`1 by A4,A20,A21,SPRECT_3:25;
-  then
-A26: G*(j,i)`1 <= p`1 & p`1 <= G*(k,i)`1 by A25,TOPREAL1:9;
+A31: i1 in dom f by FINSEQ_1:def 3;
+  then consider j0,i0 being Element of NAT such that
+A32: [j0,i0] in Indices G and
+A33: f/.i1 = G*(j0,i0) by A1,GOBOARD1:def 11;
+A34: 1 <= j0 by A32,MATRIX_1:39;
+A35: 1 <= i0 & i0 <= width G by A32,MATRIX_1:39;
+A36: j0 <= len G by A32,MATRIX_1:39;
+A37: 1 <= io & io <= width G by A28,MATRIX_1:39;
+A38: jo <= len G by A28,MATRIX_1:39;
+A39: f is special by A1,A31,JORDAN8:7,RELAT_1:60;
   ex n st j <= n & n <= k & G*(n,i) = p
   proof
-    per cases by A12,A13,A16,TOPREAL1:def 7;
+    per cases by A24,A25,A39,TOPREAL1:def 7;
     suppose
-A27:  (f/.i1)`2 = (f/.(i1+1))`2;
-      G*(j,i0)`2 = G*(1,i0)`2 by A20,A22,GOBOARD5:2
-        .= G*(j0,i0)`2 by A22,GOBOARD5:2
-        .= p`2 by A14,A18,A27,GOBOARD7:6
-        .= G*(j,i)`2 by A24,A25,GOBOARD7:6;
+A40:  (f/.i1)`2 = (f/.(i1+1))`2;
+      G*(j,io)`2 = G*(1,io)`2 by A6,A19,A37,GOBOARD5:2
+        .= G*(jo,io)`2 by A30,A38,A37,GOBOARD5:2
+        .= p`2 by A26,A29,A40,GOBOARD7:6
+        .= G*(j,i)`2 by A20,A9,GOBOARD7:6;
       then
-A28:  i0<=i & i0>=i by A20,A22,GOBOARD5:5;
+A41:  io<=i & io>=i by A6,A19,A14,A37,GOBOARD5:5;
       then
-A29:  i=i0 by XXREAL_0:1;
-      G*(j,io)`2 = G*(1,io)`2 by A20,A23,GOBOARD5:2
-        .= G*(jo,io)`2 by A23,GOBOARD5:2
-        .= p`2 by A14,A19,A27,GOBOARD7:6
-        .= G*(j,i)`2 by A24,A25,GOBOARD7:6;
+A42:  i=io by XXREAL_0:1;
+      G*(j,i0)`2 = G*(1,i0)`2 by A6,A19,A35,GOBOARD5:2
+        .= G*(j0,i0)`2 by A34,A36,A35,GOBOARD5:2
+        .= p`2 by A26,A33,A40,GOBOARD7:6
+        .= G*(j,i)`2 by A20,A9,GOBOARD7:6;
       then
-A30:  io<=i & io>=i by A20,A23,GOBOARD5:5;
+A43:  i0<=i & i0>=i by A6,A19,A14,A35,GOBOARD5:5;
       then
-A31:  i=io by XXREAL_0:1;
+A44:  i=i0 by XXREAL_0:1;
       thus thesis
       proof
         per cases;
         suppose
-A32:      (f/.i1)`1 <= (f/.(i1+1))`1;
+A45:      (f/.i1)`1 <= (f/.(i1+1))`1;
           thus thesis
           proof
             per cases;
             suppose
-A33:          (f/.(i1+1)) in LSeg(G*(j,i),G*(k,i));
-              1+1<=i1+1 by A12,XREAL_1:8;
-              then f/.(i1+1) in L~f by A13,A17,GOBOARD1:16,XXREAL_0:2;
-              then f/.(i1+1) in X1 by A33,XBOOLE_0:def 4;
+A46:          (f/.(i1+1)) in LSeg(G*(j,i),G*(k,i));
+              1+1<=i1+1 by A24,XREAL_1:8;
+              then f/.(i1+1) in L~f by A25,A27,GOBOARD1:16,XXREAL_0:2;
+              then f/.(i1+1) in X1 by A46,XBOOLE_0:def 4;
               then
-A34:          p`1 >= (f/.(i1+1))`1 by A5,A7,PSCOMP_1:71;
-              p`1 <= (f/.(i1+1))`1 by A14,A32,TOPREAL1:9;
-              then
-A35:          p`1 = (f/.(i1+1))`1 by A34,XXREAL_0:1;
+A47:          p`1 >= (f/.(i1+1))`1 by A10,A12,PSCOMP_1:71;
               take n=jo;
-A36:          p in LSeg(G*(j,i),G*(k,i)) by A8,XBOOLE_0:def 4;
+A48:          p in LSeg(G*(j,i),G*(k,i)) by A8,XBOOLE_0:def 4;
+              p`1 <= (f/.(i1+1))`1 by A26,A45,TOPREAL1:9;
+              then p`1 = (f/.(i1+1))`1 by A47,XXREAL_0:1;
               then
-A37:          p`2 = G*(j,i)`2 by A24,GOBOARD7:6
-                .= G*(1,i)`2 by A20,GOBOARD5:2
-                .= G*(n,i)`2 by A20,A23,GOBOARD5:2;
-A38:          p`1 = G*(jo,1)`1 by A19,A23,A35,GOBOARD5:3
-                .= G*(n,i)`1 by A20,A23,GOBOARD5:3;
-              G*(j,i)`1 <= G*(k,i)`1 by A4,A20,A21,SPRECT_3:25;
-              then
-A39:          G*(j,i)`1 <= G*(n,i)`1 & G*(n,i)`1 <= G*(k,i) `1 by A36,A38,
-TOPREAL1:9;
-              hence j <= n by A20,A23,GOBOARD5:4;
-              thus n <= k by A21,A23,A39,GOBOARD5:4;
-              thus thesis by A37,A38,TOPREAL3:11;
+A49:          p`1 = G*(jo,1)`1 by A29,A30,A38,A37,GOBOARD5:3
+                .= G*(n,i)`1 by A14,A30,A38,GOBOARD5:3;
+A50:          G*(j,i)`1 <= G*(k,i)`1 by A5,A6,A14,A15,SPRECT_3:25;
+              then G*(j,i)`1 <= G*(n,i)`1 by A48,A49,TOPREAL1:9;
+              hence j <= n by A19,A14,A30,GOBOARD5:4;
+              G*(n,i)`1 <= G*(k,i) `1 by A48,A49,A50,TOPREAL1:9;
+              hence n <= k by A13,A11,A38,GOBOARD5:4;
+              p`2 = G*(j,i)`2 by A20,A48,GOBOARD7:6
+                .= G*(1,i)`2 by A6,A19,A14,GOBOARD5:2
+                .= G*(n,i)`2 by A14,A30,A38,GOBOARD5:2;
+              hence thesis by A49,TOPREAL3:11;
             end;
             suppose
-A40:          not f/.(i1+1) in LSeg(G*(j,i),G*(k,i));
-A41:          (f/.(i1+1))`2 = p`2 by A14,A27,GOBOARD7:6
-                .= G*(j,i)`2 by A24,A25,GOBOARD7:6;
+A51:          not f/.(i1+1) in LSeg(G*(j,i),G*(k,i));
+A52:          (f/.(i1+1))`2 = p`2 by A26,A40,GOBOARD7:6
+                .= G*(j,i)`2 by A20,A9,GOBOARD7:6;
               thus thesis
               proof
-                per cases by A24,A40,A41,GOBOARD7:9;
+                per cases by A20,A51,A52,GOBOARD7:9;
                 suppose
-A42:              (f/.(i1+1))`1 > G*(k,i)`1;
+A53:              (f/.(i1+1))`1 > G*(k,i)`1;
+                  p`1 >= G*(j0,i0)`1 by A26,A33,A45,TOPREAL1:9;
+                  then p`1 >= G*(j0,1)`1 by A34,A36,A35,GOBOARD5:3;
+                  then p`1 >= G*(j0,i)`1 by A14,A34,A36,GOBOARD5:3;
+                  then G*(k,i)`1 >= G*(j0,i)`1 by A18,XXREAL_0:2;
                   then
-A43:              G*(jo,i)`1 > G*(k,i)`1 by A19,A30,XXREAL_0:1;
-                  jo>=k by A19,A21,A23,A31,A42,GOBOARD5:4;
+A54:              k>=j0 by A13,A11,A36,GOBOARD5:4;
+                  abs(i0-io)+abs(j0-jo) = 1 by A1,A31,A27,A32,A33,A28,A29
+                  ,GOBOARD1:def 11;
+                  then 0+abs(j0-jo) = 1 by A44,A42,ABSVALUE:7;
                   then
-A44:              jo>k by A43,XXREAL_0:1;
-                  j0<=jo+0 by A18,A19,A22,A23,A29,A31,A32,GOBOARD5:4;
+A55:              abs(-(j0-jo)) = 1 by COMPLEX1:138;
+                  j0<=jo+0 by A33,A29,A36,A35,A30,A44,A42,A45,GOBOARD5:4;
                   then j0-jo <= 0 by XREAL_1:22;
+                  then jo-j0 = 1 by A55,ABSVALUE:def 1;
                   then
-A45:              -(j0-jo) >= -0;
-
-abs(i0-io)+abs(j0-jo) = 1 by A1,A15,A17,A18,A19,GOBOARD1:def 11;
-                  then 0+abs(j0-jo) = 1 by A29,A31,ABSVALUE:7;
-                  then abs(-(j0-jo)) = 1 by COMPLEX1:138;
-                  then jo-j0 = 1 by A45,ABSVALUE:def 1;
-                  then j0+1=jo+0;
+A56:              j0+1=jo+0;
+                  G*(jo,i)`1 > G*(k,i)`1 & jo>=k by A29,A15,A11,A30,A41,
+                  A42,A53,GOBOARD5:4 ,XXREAL_0:1;
+                  then jo>k by XXREAL_0:1;
+                  then j0>=k by A56,NAT_1:13;
                   then
-A46:              j0>=k by A44,NAT_1:13;
-                  p`1 >= G*(j0,i0)`1 by A14,A18,A32,TOPREAL1:9;
-                  then p`1 >= G*(j0,1)`1 by A22,GOBOARD5:3;
-                  then p`1 >= G*(j0,i)`1 by A20,A22,GOBOARD5:3;
-                  then G*(k,i)`1 >= G*(j0,i)`1 by A26,XXREAL_0:2;
-                  then k>=j0 by A21,A22,GOBOARD5:4;
-                  then
-A47:              k=j0 by A46,XXREAL_0:1;
+A57:              k=j0 by A54,XXREAL_0:1;
                   take n=j0;
-A48:              p`2 = G*(j,i)`2 by A24,A25,GOBOARD7:6
-                    .= G*(1,i)`2 by A20,GOBOARD5:2
-                    .= G*(n,i)`2 by A20,A22,GOBOARD5:2;
-                  p`1 >= G*(j0,i0)`1 by A14,A18,A32,TOPREAL1:9;
-                  then p`1 >= G*(j0,1)`1 by A22,GOBOARD5:3;
-                  then p`1 >= G*(j0,i)`1 by A20,A22,GOBOARD5:3;
-                  then p`1 = G*(k,i)`1 by A26,A47,XXREAL_0:1;
-                  hence thesis by A4,A47,A48,TOPREAL3:11;
+A58:              p`2 = G*(j,i)`2 by A20,A9,GOBOARD7:6
+                    .= G*(1,i)`2 by A6,A19,A14,GOBOARD5:2
+                    .= G*(n,i)`2 by A14,A34,A36,GOBOARD5:2;
+                  p`1 >= G*(j0,i0)`1 by A26,A33,A45,TOPREAL1:9;
+                  then p`1 >= G*(j0,1)`1 by A34,A36,A35,GOBOARD5:3;
+                  then p`1 >= G*(j0,i)`1 by A14,A34,A36,GOBOARD5:3;
+                  then p`1 = G*(k,i)`1 by A18,A57,XXREAL_0:1;
+                  hence thesis by A5,A57,A58,TOPREAL3:11;
                 end;
                 suppose
-A49:              (f/.(i1+1))`1 < G*(j,i)`1;
-                  p`1 <= (f/.(i1+1))`1 by A14,A32,TOPREAL1:9;
-                  hence thesis by A26,A49,XXREAL_0:2;
+A59:              (f/.(i1+1))`1 < G*(j,i)`1;
+                  p`1 <= (f/.(i1+1))`1 by A26,A45,TOPREAL1:9;
+                  hence thesis by A17,A59,XXREAL_0:2;
                 end;
               end;
             end;
           end;
         end;
         suppose
-A50:      (f/.i1)`1 > (f/.(i1+1))`1;
+A60:      (f/.i1)`1 > (f/.(i1+1))`1;
           thus thesis
           proof
             per cases;
             suppose
-A51:          f/.i1 in LSeg(G*(j,i),G*(k,i));
-              1+1<=i1+1 by A12,XREAL_1:8;
-              then f/.i1 in L~f by A13,A15,GOBOARD1:16,XXREAL_0:2;
-              then f/.i1 in X1 by A51,XBOOLE_0:def 4;
+A61:          f/.i1 in LSeg(G*(j,i),G*(k,i));
+              1+1<=i1+1 by A24,XREAL_1:8;
+              then f/.i1 in L~f by A25,A31,GOBOARD1:16,XXREAL_0:2;
+              then f/.i1 in X1 by A61,XBOOLE_0:def 4;
               then
-A52:          p`1 >= (f/.i1)`1 by A5,A7,PSCOMP_1:71;
-              p`1 <= (f/.i1)`1 by A14,A50,TOPREAL1:9;
-              then
-A53:          p`1 = (f/.i1)`1 by A52,XXREAL_0:1;
+A62:          p`1 >= (f/.i1)`1 by A10,A12,PSCOMP_1:71;
               take n=j0;
-A54:          p in LSeg(G*(j,i),G*(k,i)) by A8,XBOOLE_0:def 4;
+A63:          p in LSeg(G*(j,i),G*(k,i)) by A8,XBOOLE_0:def 4;
+              p`1 <= (f/.i1)`1 by A26,A60,TOPREAL1:9;
+              then p`1 = (f/.i1)`1 by A62,XXREAL_0:1;
               then
-A55:          p`2 = G*(j,i)`2 by A24,GOBOARD7:6
-                .= G*(1,i)`2 by A20,GOBOARD5:2
-                .= G*(n,i)`2 by A20,A22,GOBOARD5:2;
-A56:          p`1 = G*(j0,1)`1 by A18,A22,A53,GOBOARD5:3
-                .= G*(n,i)`1 by A20,A22,GOBOARD5:3;
-              G*(j,i)`1 <= G*(k,i)`1 by A4,A20,A21,SPRECT_3:25;
-              then
-A57:          G*(j,i)`1 <= G*(n,i)`1 & G*(n,i)`1 <= G*(k,i) `1 by A54,A56,
-TOPREAL1:9;
-              hence j <= n by A20,A22,GOBOARD5:4;
-              thus n <= k by A21,A22,A57,GOBOARD5:4;
-              thus thesis by A55,A56,TOPREAL3:11;
+A64:          p`1 = G*(j0,1)`1 by A33,A34,A36,A35,GOBOARD5:3
+                .= G*(n,i)`1 by A14,A34,A36,GOBOARD5:3;
+A65:          G*(j,i)`1 <= G*(k,i)`1 by A5,A6,A14,A15,SPRECT_3:25;
+              then G*(j,i)`1 <= G*(n,i)`1 by A63,A64,TOPREAL1:9;
+              hence j <= n by A19,A14,A34,GOBOARD5:4;
+              G*(n,i)`1 <= G*(k,i) `1 by A63,A64,A65,TOPREAL1:9;
+              hence n <= k by A13,A11,A36,GOBOARD5:4;
+              p`2 = G*(j,i)`2 by A20,A63,GOBOARD7:6
+                .= G*(1,i)`2 by A6,A19,A14,GOBOARD5:2
+                .= G*(n,i)`2 by A14,A34,A36,GOBOARD5:2;
+              hence thesis by A64,TOPREAL3:11;
             end;
             suppose
-A58:          not f/.i1 in LSeg(G*(j,i),G*(k,i));
-A59:          (f/.i1)`2 = p`2 by A14,A27,GOBOARD7:6
-                .= G*(j,i)`2 by A24,A25,GOBOARD7:6;
+A66:          not f/.i1 in LSeg(G*(j,i),G*(k,i));
+A67:          (f/.i1)`2 = p`2 by A26,A40,GOBOARD7:6
+                .= G*(j,i)`2 by A20,A9,GOBOARD7:6;
               thus thesis
               proof
-                per cases by A24,A58,A59,GOBOARD7:9;
+                per cases by A20,A66,A67,GOBOARD7:9;
                 suppose
-A60:              (f/.i1)`1 > G*(k,i)`1;
+A68:              (f/.i1)`1 > G*(k,i)`1;
+                  p`1 >= G*(jo,io)`1 by A26,A29,A60,TOPREAL1:9;
+                  then p`1 >= G*(jo,1)`1 by A30,A38,A37,GOBOARD5:3;
+                  then p`1 >= G*(jo,i)`1 by A14,A30,A38,GOBOARD5:3;
+                  then G*(k,i)`1 >= G*(jo,i)`1 by A18,XXREAL_0:2;
                   then
-A61:              G*(j0,i)`1 > G*(k,i)`1 by A18,A28,XXREAL_0:1;
-                  j0>=k by A18,A21,A22,A29,A60,GOBOARD5:4;
-                  then
-A62:              j0>k by A61,XXREAL_0:1;
-                  jo<=j0+0 by A18,A19,A22,A23,A29,A31,A50,GOBOARD5:4;
+A69:              k>=jo by A13,A11,A38,GOBOARD5:4;
+                  jo<=j0+0 by A33,A29,A34,A35,A38,A44,A42,A60,GOBOARD5:4;
                   then jo-j0 <= 0 by XREAL_1:22;
                   then
-A63:              -(jo-j0) >= -0;
-
-abs(i0-io)+abs(j0-jo) = 1 by A1,A15,A17,A18,A19,GOBOARD1:def 11;
-                  then 0+abs(j0-jo) = 1 by A29,A31,ABSVALUE:7;
-                  then j0-jo = 1 by A63,ABSVALUE:def 1;
-                  then jo+1=j0-0;
+A70:              -(jo-j0) >= -0;
+                  abs(i0-io)+abs(j0-jo) = 1 by A1,A31,A27,A32,A33,A28,
+                  A29,GOBOARD1:def 11;
+                  then 0+abs(j0-jo) = 1 by A44,A42,ABSVALUE:7;
+                  then j0-jo = 1 by A70,ABSVALUE:def 1;
                   then
-A64:              jo>=k by A62,NAT_1:13;
-                  p`1 >= G*(jo,io)`1 by A14,A19,A50,TOPREAL1:9;
-                  then p`1 >= G*(jo,1)`1 by A23,GOBOARD5:3;
-                  then p`1 >= G*(jo,i)`1 by A20,A23,GOBOARD5:3;
-                  then G*(k,i)`1 >= G*(jo,i)`1 by A26,XXREAL_0:2;
-                  then k>=jo by A21,A23,GOBOARD5:4;
+A71:              jo+1=j0-0;
+                  G*(j0,i)`1 > G*(k,i)`1 & j0>=k by A33,A15,A11,A34,A43,
+                  A44,A68,GOBOARD5:4 ,XXREAL_0:1;
+                  then j0>k by XXREAL_0:1;
+                  then jo>=k by A71,NAT_1:13;
                   then
-A65:              k=jo by A64,XXREAL_0:1;
+A72:              k=jo by A69,XXREAL_0:1;
                   take n=jo;
-A66:              p`2 = G*(j,i)`2 by A24,A25,GOBOARD7:6
-                    .= G*(1,i)`2 by A20,GOBOARD5:2
-                    .= G*(n,i)`2 by A20,A23,GOBOARD5:2;
-                  p`1 >= G*(jo,io)`1 by A14,A19,A50,TOPREAL1:9;
-                  then p`1 >= G*(jo,1)`1 by A23,GOBOARD5:3;
-                  then p`1 >= G*(jo,i)`1 by A20,A23,GOBOARD5:3;
-                  then p`1 = G*(k,i)`1 by A26,A65,XXREAL_0:1;
-                  hence thesis by A4,A65,A66,TOPREAL3:11;
+A73:              p`2 = G*(j,i)`2 by A20,A9,GOBOARD7:6
+                    .= G*(1,i)`2 by A6,A19,A14,GOBOARD5:2
+                    .= G*(n,i)`2 by A14,A30,A38,GOBOARD5:2;
+                  p`1 >= G*(jo,io)`1 by A26,A29,A60,TOPREAL1:9;
+                  then p`1 >= G*(jo,1)`1 by A30,A38,A37,GOBOARD5:3;
+                  then p`1 >= G*(jo,i)`1 by A14,A30,A38,GOBOARD5:3;
+                  then p`1 = G*(k,i)`1 by A18,A72,XXREAL_0:1;
+                  hence thesis by A5,A72,A73,TOPREAL3:11;
                 end;
                 suppose
-A67:              (f/.i1)`1 < G*(j,i)`1;
-                  p`1 <= (f/.i1)`1 by A14,A50,TOPREAL1:9;
-                  hence thesis by A26,A67,XXREAL_0:2;
+A74:              (f/.i1)`1 < G*(j,i)`1;
+                  p`1 <= (f/.i1)`1 by A26,A60,TOPREAL1:9;
+                  hence thesis by A17,A74,XXREAL_0:2;
                 end;
               end;
             end;
@@ -1106,41 +1145,43 @@ A67:              (f/.i1)`1 < G*(j,i)`1;
         end;
       end;
     end;
-    suppose (f/.i1)`1 = (f/.(i1+1))`1;
-      then
-A68:  p`1 = (f/.i1)`1 by A14,GOBOARD7:5;
+    suppose
+A75:  (f/.i1)`1 = (f/.(i1+1))`1;
       take n=j0;
-A69:  p`2 = G*(j,i)`2 by A24,A25,GOBOARD7:6
-        .= G*(1,i)`2 by A20,GOBOARD5:2
-        .= G*(n,i)`2 by A20,A22,GOBOARD5:2;
-A70:  p`1 = G*(j0,1)`1 by A18,A22,A68,GOBOARD5:3
-        .= G*(n,i)`1 by A20,A22,GOBOARD5:3;
-      G*(j,i)`1 <= G*(k,i)`1 by A4,A20,A21,SPRECT_3:25;
+      p`1 = (f/.i1)`1 by A26,A75,GOBOARD7:5;
       then
-A71:  G*(j,i)`1 <= G*(n,i)`1 & G*(n,i)`1 <= G*(k,i)`1 by A25,A70,TOPREAL1:9;
-      hence j <= n by A20,A22,GOBOARD5:4;
-      thus n <= k by A21,A22,A71,GOBOARD5:4;
-      thus thesis by A69,A70,TOPREAL3:11;
+A76:  p`1 = G*(j0,1)`1 by A33,A34,A36,A35,GOBOARD5:3
+        .= G*(n,i)`1 by A14,A34,A36,GOBOARD5:3;
+A77:  G*(j,i)`1 <= G*(k,i)`1 by A5,A6,A14,A15,SPRECT_3:25;
+      then G*(j,i)`1 <= G*(n,i)`1 by A9,A76,TOPREAL1:9;
+      hence j <= n by A19,A14,A34,GOBOARD5:4;
+      G*(n,i)`1 <= G*(k,i)`1 by A9,A76,A77,TOPREAL1:9;
+      hence n <= k by A13,A11,A36,GOBOARD5:4;
+      p`2 = G*(j,i)`2 by A20,A9,GOBOARD7:6
+        .= G*(1,i)`2 by A6,A19,A14,GOBOARD5:2
+        .= G*(n,i)`2 by A14,A34,A36,GOBOARD5:2;
+      hence thesis by A76,TOPREAL3:11;
     end;
   end;
-  hence thesis by A7;
+  hence thesis by A12;
 end;
 
 theorem Th5:
-  for C being compact non vertical non horizontal Subset of TOP-REAL 2
-  for n being Element of NAT holds Upper_Seq(C,n)/.1 = W-min(L~Cage(C,n))
+  for C being compact non vertical non horizontal Subset of
+TOP-REAL 2 for n being Element of NAT holds Upper_Seq(C,n)/.1 = W-min(L~Cage(C,
+  n))
 proof
   let C be compact non vertical non horizontal Subset of TOP-REAL 2;
   let n be Element of NAT;
-A1: Upper_Seq(C,n) = Rotate(Cage(C,n),W-min L~Cage(C,n))-:E-max L~Cage(C,n)
-  by JORDAN1E:def 1;
-A2: W-min L~Cage(C,n) in rng Cage(C,n) by SPRECT_2:47;
   E-max L~Cage(C,n) in rng Cage(C,n) by SPRECT_2:50;
-  then E-max L~Cage(C,n) in rng Rotate(Cage(C,n),W-min L~Cage(C,n))
-  by FINSEQ_6:96,SPRECT_2:47;
-  then Upper_Seq(C,n)/.1 = Rotate(Cage(C,n),W-min L~Cage(C,n))/.1
-  by A1,FINSEQ_5:47;
-  hence thesis by A2,FINSEQ_6:98;
+  then
+  Upper_Seq(C,n) = Rotate(Cage(C,n),W-min L~Cage(C,n))-:E-max L~Cage(C,n)
+  & E-max L~Cage(C,n) in rng Rotate(Cage(C,n),W-min L~Cage(C,n)) by FINSEQ_6:
+  96 ,JORDAN1E:def 1,SPRECT_2:47;
+  then
+  W-min L~Cage(C,n) in rng Cage(C,n) & Upper_Seq(C,n)/.1 = Rotate(Cage(C,n
+  ), W-min L~Cage(C,n))/.1 by FINSEQ_5:47,SPRECT_2:47;
+  hence thesis by FINSEQ_6:98;
 end;
 
 theorem Th6:
@@ -1155,479 +1196,470 @@ proof
 end;
 
 theorem Th7:
-  for C being compact non vertical non horizontal Subset of TOP-REAL 2
-  for n being Element of NAT holds
-  Upper_Seq(C,n)/. len Upper_Seq(C,n) = E-max(L~Cage(C,n))
+  for C being compact non vertical non horizontal Subset of
+TOP-REAL 2 for n being Element of NAT holds Upper_Seq(C,n)/. len Upper_Seq(C,n)
+  = E-max(L~Cage(C,n))
 proof
   let C be compact non vertical non horizontal Subset of TOP-REAL 2;
   let n be Element of NAT;
 A1: Upper_Seq(C,n) = Rotate(Cage(C,n),W-min L~Cage(C,n))-:E-max L~Cage(C,n)
-  by JORDAN1E:def 1;
-A2: rng Rotate(Cage(C,n),W-min L~Cage(C,n)) = rng Cage(C,n) by FINSEQ_6:96
-,SPRECT_2:47;
-  then len Upper_Seq(C,n) =
-  (E-max L~Cage(C,n))..Rotate(Cage(C,n),W-min L~Cage(C,n)) by A1,FINSEQ_5:45
-,SPRECT_2:50;
-  hence thesis by A1,A2,FINSEQ_5:48,SPRECT_2:50;
+  & rng Rotate(Cage(C,n),W-min L~Cage(C,n)) = rng Cage(C,n) by FINSEQ_6:96 ,
+  JORDAN1E:def 1,SPRECT_2:47;
+  then
+  len Upper_Seq(C,n) = (E-max L~Cage(C,n))..Rotate(Cage(C,n),W-min L~Cage(
+  C,n)) by FINSEQ_5:45 ,SPRECT_2:50;
+  hence thesis by A1,FINSEQ_5:48,SPRECT_2:50;
 end;
 
 theorem Th8:
   for C be compact non vertical non horizontal Subset of TOP-REAL 2
-  for n be Element of NAT holds
-  Lower_Seq(C,n)/.(len Lower_Seq(C,n)) = W-min L~Cage(C,n)
+  for n be Element of NAT holds Lower_Seq(C,n)/.(len Lower_Seq(C,n)) = W-min L~
+  Cage(C,n)
 proof
   let C be compact non vertical non horizontal Subset of TOP-REAL 2;
   let n be Element of NAT;
-A1: Lower_Seq(C,n) = Rotate(Cage(C,n),W-min L~Cage(C,n)):-E-max L~Cage(C,n)
-  by JORDAN1E:def 2;
-A2: W-min L~Cage(C,n) in rng Cage(C,n) by SPRECT_2:47;
+A1: W-min L~Cage(C,n) in rng Cage(C,n) by SPRECT_2:47;
   E-max L~Cage(C,n) in rng Cage(C,n) by SPRECT_2:50;
-  then E-max L~Cage(C,n) in rng Rotate(Cage(C,n),W-min L~Cage(C,n))
-  by FINSEQ_6:96,SPRECT_2:47;
-  hence Lower_Seq(C,n)/.(len Lower_Seq(C,n)) =
-  Rotate(Cage(C,n),W-min L~Cage(C,n))/.
-  (len Rotate(Cage(C,n),W-min L~Cage(C,n))) by A1,FINSEQ_5:57
+  then
+  Lower_Seq(C,n) = Rotate(Cage(C,n),W-min L~Cage(C,n)):-E-max L~Cage(C,n)
+  & E-max L~Cage(C,n) in rng Rotate(Cage(C,n),W-min L~Cage(C,n)) by FINSEQ_6:
+  96 ,JORDAN1E:def 2,SPRECT_2:47;
+  hence
+  Lower_Seq(C,n)/.(len Lower_Seq(C,n)) = Rotate(Cage(C,n),W-min L~Cage(C,
+  n))/. (len Rotate(Cage(C,n),W-min L~Cage(C,n))) by FINSEQ_5:57
     .= Rotate(Cage(C,n),W-min L~Cage(C,n))/.1 by FINSEQ_6:def 1
-    .= W-min L~Cage(C,n) by A2,FINSEQ_6:98;
+    .= W-min L~Cage(C,n) by A1,FINSEQ_6:98;
 end;
 
 theorem Th9:
-  for C being compact non vertical non horizontal Subset of TOP-REAL 2
-  for n being Element of NAT holds L~Upper_Seq(C,n) = Upper_Arc L~Cage(C,n) &
-  L~Lower_Seq(C,n) = Lower_Arc L~Cage(C,n) or
-  L~Upper_Seq(C,n) = Lower_Arc L~Cage(C,n) &
-  L~Lower_Seq(C,n) = Upper_Arc L~Cage(C,n)
+  for C being compact non vertical non horizontal Subset of
+TOP-REAL 2 for n being Element of NAT holds L~Upper_Seq(C,n) = Upper_Arc L~Cage
+  (C,n) & L~Lower_Seq(C,n) = Lower_Arc L~Cage(C,n) or L~Upper_Seq(C,n) =
+  Lower_Arc L~Cage(C,n) & L~Lower_Seq(C,n) = Upper_Arc L~Cage(C,n)
 proof
   let C be compact non vertical non horizontal Subset of TOP-REAL 2;
   let n be Element of NAT;
   set WC = W-min(L~Cage(C,n));
   set EC = E-max(L~Cage(C,n));
-A1: Upper_Seq(C,n)/.1 = WC by Th5;
-A2: Upper_Seq(C,n)/. len Upper_Seq(C,n) = EC by Th7;
-A3: Lower_Seq(C,n)/.1 = EC by Th6;
-A4: Lower_Seq(C,n)/. len Lower_Seq(C,n) = WC by Th8;
-A5: L~Upper_Seq(C,n) is_an_arc_of WC,EC by A1,A2,TOPREAL1:31;
-A6: L~Lower_Seq(C,n) is_an_arc_of WC,EC by A3,A4,JORDAN5B:14,TOPREAL1:31;
-A7: L~Upper_Seq(C,n) \/ L~Lower_Seq(C,n)=L~Cage(C,n) by JORDAN1E:17;
-  Upper_Arc(L~Cage(C,n)) is_an_arc_of WC,EC &
-  Lower_Arc(L~Cage(C,n)) is_an_arc_of WC,EC &
-  Upper_Arc(L~Cage(C,n)) \/ Lower_Arc(L~Cage(C,n))=L~Cage(C,n) &
-  Upper_Arc(L~Cage(C,n)) /\ Lower_Arc(L~Cage(C,n))= {WC,EC} by JORDAN6:65;
-  hence thesis by A5,A6,A7,JORDAN6:61;
+A1: Lower_Arc(L~Cage(C,n)) is_an_arc_of WC,EC & Upper_Arc(L~Cage(C,n)) \/
+  Lower_Arc(L~Cage(C,n))=L~Cage(C,n) by JORDAN6:65;
+  Upper_Seq(C,n)/.1 = WC & Upper_Seq(C,n)/. len Upper_Seq(C,n) = EC by Th5
+  ,Th7;
+  then
+A2: L~Upper_Seq(C,n) is_an_arc_of WC,EC by TOPREAL1:31;
+  Lower_Seq(C,n)/.1 = EC & Lower_Seq(C,n)/. len Lower_Seq(C,n) = WC by Th6
+  ,Th8;
+  then
+A3: L~Lower_Seq(C,n) is_an_arc_of WC,EC by JORDAN5B:14,TOPREAL1:31;
+  L~Upper_Seq(C,n) \/ L~Lower_Seq(C,n)=L~Cage(C,n) & Upper_Arc(L~Cage(C,n)
+  ) is_an_arc_of WC,EC by JORDAN1E:17,JORDAN6:65;
+  hence thesis by A2,A3,A1,JORDAN6:61;
 end;
 
 reserve C for compact non vertical non horizontal non empty
   being_simple_closed_curve Subset of TOP-REAL 2,
   p for Point of TOP-REAL 2,
-  i1,j1,i2,j2 for Element of NAT;
+  i1,
+  j1,i2,j2 for Element of NAT;
 
 theorem Th10:
-
-for C being connected compact non vertical non horizontal Subset of TOP-REAL 2
-  for n being Element of NAT holds Upper_Seq(C,n) is_sequence_on Gauge(C,n)
+  for C being connected compact non vertical non horizontal Subset
+  of TOP-REAL 2 for n being Element of NAT holds Upper_Seq(C,n) is_sequence_on
+  Gauge(C,n)
 proof
   let C be connected compact non vertical non horizontal Subset of TOP-REAL 2;
   let n be Element of NAT;
   Cage(C,n) is_sequence_on Gauge(C,n) by JORDAN9:def 1;
   then
-A1: Rotate(Cage(C,n),W-min L~Cage(C,n))
-  is_sequence_on Gauge(C,n) by REVROT_1:34;
-  Upper_Seq(C,n) =
-  Rotate(Cage(C,n),W-min L~Cage(C,n))-:E-max L~Cage(C,n) by JORDAN1E:def 1
-    .= Rotate(Cage(C,n),W-min L~Cage(C,n)) |
-  ((E-max L~Cage(C,n))..Rotate(Cage(C,n),W-min L~Cage(C,n))) by FINSEQ_5:def 1;
+A1: Rotate(Cage(C,n),W-min L~Cage(C,n)) is_sequence_on Gauge(C,n) by
+  REVROT_1:34;
+  Upper_Seq(C,n) = Rotate(Cage(C,n),W-min L~Cage(C,n))-:E-max L~Cage(C,n)
+  by JORDAN1E:def 1
+    .= Rotate(Cage(C,n),W-min L~Cage(C,n)) | ((E-max L~Cage(C,n))..Rotate(
+  Cage(C,n),W-min L~Cage(C,n))) by FINSEQ_5:def 1;
   hence thesis by A1,GOBOARD1:38;
 end;
 
 theorem Th11: :: symmetric to JORDAN8:9
-  for f being FinSequence of TOP-REAL 2 st f is_sequence_on G &
-  (ex i,j st [i,j] in Indices G & p = G*(i,j)) & (for i1,j1,i2,j2
-  st [i1,j1] in Indices G & [i2,j2] in Indices G &
-  p = G*(i1,j1) & f/.1 = G*(i2,j2) holds abs(i2-i1)+abs(j2-j1) = 1)
-  holds <*p*>^f is_sequence_on G
+  for f being FinSequence of TOP-REAL 2 st f is_sequence_on G & (
+  ex i,j st [i,j] in Indices G & p = G*(i,j)) & (for i1,j1,i2,j2 st [i1,j1] in
+Indices G & [i2,j2] in Indices G & p = G*(i1,j1) & f/.1 = G*(i2,j2) holds abs(
+  i2-i1)+abs(j2-j1) = 1) holds <*p*>^f is_sequence_on G
 proof
   let f be FinSequence of TOP-REAL 2 such that
 A1: f is_sequence_on G and
 A2: ex i,j st [i,j] in Indices G & p = G*(i,j) and
-A3: for i1,j1,i2,j2 st [i1,j1] in Indices G & [i2,j2] in Indices G &
-  p = G*(i1,j1) & f/.1 = G*(i2,j2) holds abs(i2-i1)+abs(j2-j1) = 1;
-A4: for n st n in dom f & n+1 in dom f holds
-  for m,k,i,j st [m,k] in Indices G & [i,j] in Indices G & f/.n=G*(m,k) &
-  f/.(n+1)=G*(i,j) holds abs(m-i)+abs(k-j)=1 by A1,GOBOARD1:def 11;
-A5: now
-    let n;
-    assume n in dom <*p*> & n+1 in dom <*p*>;
-    then 1 <= n & n+1 <= len <*p*> by FINSEQ_3:27;
-    then 1+1 <= n+1 & n+1 <= 1 by FINSEQ_1:56,XREAL_1:8;
-    hence for m,k,i,j st [m,k] in Indices G & [i,j] in Indices G &
-    <*p*>/.n=G*(m,k) & <*p*>/.(n+1)=G*(i,j)
-    holds abs(m-i)+abs(k-j)=1 by XXREAL_0:2;
-  end;
-  now
+A3: for i1,j1,i2,j2 st [i1,j1] in Indices G & [i2,j2] in Indices G & p =
+  G*(i1,j1) & f/.1 = G*(i2,j2) holds abs(i2-i1)+abs(j2-j1) = 1;
+A4: now
     let m,k,i,j such that
-A6: [m,k] in Indices G & [i,j] in Indices G & <*p*>/.(len <*p*>)=G*(m,k) &
-    f/.1=G*(i,j) and
-A7: len <*p*> in dom <*p*> & 1 in dom f;
+A5: [m,k] in Indices G & [i,j] in Indices G & <*p*>/.(len <*p*>)=G*(m
+    ,k) & f/.1=G*(i,j) and
+A6: len <*p*> in dom <*p*> and
+    1 in dom f;
     len <*p*> = 1 by FINSEQ_1:57;
     then <*p*>.(len <*p*>) = p by FINSEQ_1:57;
-    then <*p*>/.(len <*p*>) = p by A7,PARTFUN1:def 8;
-    then abs(i-m)+abs(j-k)=1 by A3,A6;
+    then <*p*>/.(len <*p*>) = p by A6,PARTFUN1:def 8;
+    then abs(i-m)+abs(j-k)=1 by A3,A5;
     hence 1 = abs(m-i)+abs(j-k) by UNIFORM1:13
       .= abs(m-i)+abs(k-j) by UNIFORM1:13;
   end;
-  then
-A8: for n st n in dom(<*p*>^f) & n+1 in dom(<*p*>^f) holds
-  for m,k,i,j st [m,k] in Indices G & [i,j] in Indices G &
-  (<*p*>^f)/.n =G*(m,k) & (<*p*>^f)/.(n+1)=G*(i,j)
-  holds abs(m-i)+abs(k-j)=1 by A4,A5,GOBOARD1:40;
-  now
+A7: now
     let n such that
-A9: n in dom(<*p*>^f);
-    per cases by A9,FINSEQ_1:38;
+A8: n in dom(<*p*>^f);
+    per cases by A8,FINSEQ_1:38;
     suppose
-A10:  n in dom <*p*>;
-      then n in Seg 1 by FINSEQ_1:55;
+A9:   n in dom <*p*>;
+      consider i,j such that
+A10:  [i,j] in Indices G and
+A11:  p = G*(i,j) by A2;
+      take i,j;
+      thus [i,j] in Indices G by A10;
+      n in Seg 1 by A9,FINSEQ_1:55;
       then 1 <= n & n <= 1 by FINSEQ_1:3;
       then n=1 by XXREAL_0:1;
       then <*p*>.n = p by FINSEQ_1:57;
-      then
-A11:  <*p*>/.n = p by A10,PARTFUN1:def 8;
-      consider i,j such that
-A12:  [i,j] in Indices G and
-A13:  p = G*(i,j) by A2;
-      take i,j;
-      thus [i,j] in Indices G by A12;
-      thus (<*p*>^f)/.n = G*(i,j) by A10,A11,A13,FINSEQ_4:83;
+      then <*p*>/.n = p by A9,PARTFUN1:def 8;
+      hence (<*p*>^f)/.n = G*(i,j) by A9,A11,FINSEQ_4:83;
     end;
-    suppose ex l be Nat st l in dom f & n = (len <*p*>) + l;
+    suppose
+      ex l be Nat st l in dom f & n = (len <*p*>) + l;
       then consider l be Nat such that
-A14:  l in dom f and
-A15:  n = (len <*p*>) + l;
+A12:  l in dom f and
+A13:  n = (len <*p*>) + l;
       consider i,j such that
-A16:  [i,j] in Indices G and
-A17:  f/.l = G*(i,j) by A1,A14,GOBOARD1:def 11;
+A14:  [i,j] in Indices G and
+A15:  f/.l = G*(i,j) by A1,A12,GOBOARD1:def 11;
       take i,j;
-      thus [i,j] in Indices G by A16;
-      thus (<*p*>^f)/.n = G*(i,j) by A14,A15,A17,FINSEQ_4:84;
+      thus [i,j] in Indices G by A14;
+      thus (<*p*>^f)/.n = G*(i,j) by A12,A13,A15,FINSEQ_4:84;
     end;
   end;
-  hence thesis by A8,GOBOARD1:def 11;
+A16: now
+    let n;
+    assume that
+A17: n in dom <*p*> and
+A18: n+1 in dom <*p*>;
+    n+1 <= len <*p*> by A18,FINSEQ_3:27;
+    then
+A19: n+1 <= 1 by FINSEQ_1:56;
+    1 <= n by A17,FINSEQ_3:27;
+    then 1+1 <= n+1 by XREAL_1:8;
+    hence
+    for m,k,i,j st [m,k] in Indices G & [i,j] in Indices G & <*p*>/.n=G*(
+    m,k) & <*p*>/.(n+1)=G*(i,j) holds abs(m-i)+abs(k-j)=1 by A19,XXREAL_0:2;
+  end;
+  for n st n in dom f & n+1 in dom f holds for m,k,i,j st [m,k] in Indices
+G & [i,j] in Indices G & f/.n=G*(m,k) & f/.(n+1)=G*(i,j) holds abs(m-i)+abs(k-j
+  )=1 by A1,GOBOARD1:def 11;
+  then
+  for n st n in dom(<*p*>^f) & n+1 in dom(<*p*>^f) holds for m,k,i,j st [
+m,k] in Indices G & [i,j] in Indices G & (<*p*>^f)/.n =G*(m,k) & (<*p*>^f)/.(n+
+  1)=G*(i,j) holds abs(m-i)+abs(k-j)=1 by A16,A4,GOBOARD1:40;
+  hence thesis by A7,GOBOARD1:def 11;
 end;
 
 theorem Th12:
-
-for C being connected compact non vertical non horizontal Subset of TOP-REAL 2
-  for n being Element of NAT holds Lower_Seq(C,n) is_sequence_on Gauge(C,n)
+  for C being connected compact non vertical non horizontal Subset
+  of TOP-REAL 2 for n being Element of NAT holds Lower_Seq(C,n) is_sequence_on
+  Gauge(C,n)
 proof
   let C be connected compact non vertical non horizontal Subset of TOP-REAL 2;
   let n be Element of NAT;
-A1: Cage(C,n) is_sequence_on Gauge(C,n) by JORDAN9:def 1;
-  then Rotate(Cage(C,n),W-min L~Cage(C,n))
-  is_sequence_on Gauge(C,n) by REVROT_1:34;
-  then
-A2: (Rotate(Cage(C,n),W-min L~Cage(C,n))/^
-  (E-max L~Cage(C,n))..Rotate(Cage(C,n),W-min L~Cage(C,n)))
-  is_sequence_on Gauge(C,n) by JORDAN8:5;
   consider j such that
-A3: 1 <= j & j <= width Gauge(C,n) &
-  E-max L~Cage(C,n)=Gauge(C,n)*(len Gauge(C,n),j) by JORDAN1D:29;
+A1: 1 <= j & j <= width Gauge(C,n) and
+A2: E-max L~Cage(C,n)=Gauge(C,n)*(len Gauge(C,n),j) by JORDAN1D:29;
+  set E1 = ((Rotate(Cage(C,n),W-min L~Cage(C,n))/^ (E-max L~Cage(C,n))..Rotate
+  (Cage(C,n),W-min L~Cage(C,n))))/.1;
   set i = len Gauge(C,n);
-  i >=4 by JORDAN8:13;
-  then 1<=i by XXREAL_0:2;
+A3: Lower_Seq(C,n) = Rotate(Cage(C,n),W-min L~Cage(C,n)):-E-max L~Cage(C,n)
+  by JORDAN1E:def 2
+    .= <*E-max L~Cage(C,n)*>^(Rotate(Cage(C,n),W-min L~Cage(C,n))/^ (E-max
+  L~Cage(C,n))..Rotate(Cage(C,n),W-min L~Cage(C,n))) by FINSEQ_5:def 2;
+A4: Cage(C,n) is_sequence_on Gauge(C,n) by JORDAN9:def 1;
+  then Rotate(Cage(C,n),W-min L~Cage(C,n)) is_sequence_on Gauge(C,n) by
+  REVROT_1:34;
   then
-A4: [i,j] in Indices Gauge(C,n) by A3,MATRIX_1:37;
-  set E1 = ((Rotate(Cage(C,n),W-min L~Cage(C,n))/^
-  (E-max L~Cage(C,n))..Rotate(Cage(C,n),W-min L~Cage(C,n))))/.1;
-A5: for i1,j1,i2,j2
-  st [i1,j1] in Indices Gauge(C,n) & [i2,j2] in Indices Gauge(C,n) &
-  E-max L~Cage(C,n) = Gauge(C,n)*(i1,j1) & E1 = Gauge(C,n)*(i2,j2)
+A5: (Rotate(Cage(C,n),W-min L~Cage(C,n))/^ (E-max L~Cage(C,n))..Rotate(Cage(
+  C,n),W-min L~Cage(C,n))) is_sequence_on Gauge(C,n) by JORDAN8:5;
+A6: for i1,j1,i2,j2 st [i1,j1] in Indices Gauge(C,n) & [i2,j2] in Indices
+  Gauge(C,n) & E-max L~Cage(C,n) = Gauge(C,n)*(i1,j1) & E1 = Gauge(C,n)*(i2,j2)
   holds abs(i2-i1)+abs(j2-j1) = 1
   proof
-    let i1,j1,i2,j2;
-    assume that
-A6: [i1,j1] in Indices Gauge(C,n) and
-A7: [i2,j2] in Indices Gauge(C,n) and
-A8: E-max L~Cage(C,n) = Gauge(C,n)*(i1,j1) and
-A9: E1 = Gauge(C,n)*(i2,j2);
     set en = (E-max L~Cage(C,n))..Cage(C,n);
-A10: E-max L~Cage(C,n) in rng Cage(C,n) by SPRECT_2:50;
-A11: W-min L~Cage(C,n) in rng Cage(C,n) by SPRECT_2:47;
-A12: Cage(C,n)/.1 = N-min L~Cage(C,n) by JORDAN9:34;
-    then (E-max L~Cage(C,n))..Cage(C,n) < (E-min L~Cage(C,n))..Cage(C,n)
-    by SPRECT_2:75;
-    then (E-max L~Cage(C,n))..Cage(C,n) < (S-max L~Cage(C,n))..Cage(C,n)
-    by A12,SPRECT_2:76,XXREAL_0:2;
-    then (E-max L~Cage(C,n))..Cage(C,n) < (S-min L~Cage(C,n))..Cage(C,n)
-    by A12,SPRECT_2:77,XXREAL_0:2;
-    then
-A13: (E-max L~Cage(C,n))..Cage(C,n) < (W-min L~Cage(C,n))..Cage(C,n)
-    by A12,SPRECT_2:78,XXREAL_0:2;
-A14: E-max L~Cage(C,n)=Cage(C,n)/.en by A10,FINSEQ_5:41;
-A15: en in dom Cage(C,n) by A10,FINSEQ_4:30;
-A16: 1<=en+1 by NAT_1:11;
+    let i1,j1,i2,j2;
+    assume
+A7: [i1,j1] in Indices Gauge(C,n) & [i2,j2] in Indices Gauge(C,n) &
+    E-max L~Cage(C,n) = Gauge(C,n)*(i1,j1) & E1 = Gauge(C,n)*(i2,j2);
     en < len Cage(C,n) by SPRECT_5:17;
-    then en+1 <= len Cage(C,n) by NAT_1:13;
+    then 1<=en+1 & en+1 <= len Cage(C,n) by NAT_1:11,13;
     then
-A17: en+1 in dom Cage(C,n) by A16,FINSEQ_3:27;
-    1 <= (E-max L~Cage(C,n))..Cage(C,n) by A10,FINSEQ_4:31;
+A8: en+1 in dom Cage(C,n) by FINSEQ_3:27;
+A9: W-min L~Cage(C,n) in rng Cage(C,n) by SPRECT_2:47;
+A10: Cage(C,n)/.1 = N-min L~Cage(C,n) by JORDAN9:34;
+    then (E-max L~Cage(C,n))..Cage(C,n) < (E-min L~Cage(C,n))..Cage(C,n) by
+    SPRECT_2:75;
+    then (E-max L~Cage(C,n))..Cage(C,n) < (S-max L~Cage(C,n))..Cage(C,n) by
+    A10,SPRECT_2:76,XXREAL_0:2;
+    then (E-max L~Cage(C,n))..Cage(C,n) < (S-min L~Cage(C,n))..Cage(C,n) by
+    A10,SPRECT_2:77,XXREAL_0:2;
     then
-A18: 1 < (E-max L~Cage(C,n))..Cage(C,n)+1 by NAT_1:13;
-A19: (E-max L~Cage(C,n))..Cage(C,n)+1 <= (W-min L~Cage(C,n))..Cage(C,n)
-    by A13,NAT_1:13;
-A20: len Cage(C,n) - (W-min L~Cage(C,n))..Cage(C,n) > 0 by SPRECT_5:21
-,XREAL_1:52;
+A11: (E-max L~Cage(C,n))..Cage(C,n) < (W-min L~Cage(C,n))..Cage(C,n) by
+    A10,SPRECT_2:78,XXREAL_0:2;
     then
-A21: ((E-max L~Cage(C,n))..Cage(C,n) + 1 + (len Cage(C,n) -
-    (W-min L~Cage(C,n))..Cage(C,n))) >= 0+0;
-    E-max L~Cage(C,n) in rng Rotate(Cage(C,n),W-min L~Cage(C,n))
-    by A10,FINSEQ_6:96,SPRECT_2:47;
+A12: (E-max L~Cage(C,n))..Cage(C,n)+1 <= (W-min L~Cage(C,n))..Cage(C,n) by
+    NAT_1:13;
+A13: len Cage(C,n) - (W-min L~Cage(C,n))..Cage(C,n) > 0 by SPRECT_5:21 ,
+    XREAL_1:52;
     then
-A22: 1 <= (E-max L~Cage(C,n))..Rotate(Cage(C,n),W-min L~Cage(C,n)) &
-    (E-max L~Cage(C,n))..Rotate(Cage(C,n),W-min L~Cage(C,n))
-    <= len Rotate(Cage(C,n),W-min L~Cage(C,n)) by FINSEQ_4:31;
+A14: ((E-max L~Cage(C,n))..Cage(C,n) + 1 + (len Cage(C,n) - (W-min L~Cage(
+    C,n))..Cage(C,n))) >= 0+0;
+A15: E-max L~Cage(C,n) in rng Cage(C,n) by SPRECT_2:50;
+    then 1 <= (E-max L~Cage(C,n))..Cage(C,n) by FINSEQ_4:31;
+    then
+A16: 1 < (E-max L~Cage(C,n))..Cage(C,n)+1 by NAT_1:13;
+    E-max L~Cage(C,n) in rng Rotate(Cage(C,n),W-min L~Cage(C,n)) by A15,
+    FINSEQ_6:96,SPRECT_2:47;
+    then
+A17: (E-max L~Cage(C,n))..Rotate(Cage(C,n),W-min L~Cage(C,n)) <= len
+    Rotate( Cage(C,n),W-min L~Cage(C,n)) by FINSEQ_4:31;
     now
-      assume (E-max L~Cage(C,n))..Rotate(Cage(C,n),W-min L~Cage(C,n)) =
-      len (Rotate(Cage(C,n),W-min L~Cage(C,n)));
-      then (E-max L~Cage(C,n))..Rotate(Cage(C,n),W-min L~Cage(C,n)) =
-      len Cage(C,n) by REVROT_1:14;
+      assume
+      (E-max L~Cage(C,n))..Rotate(Cage(C,n),W-min L~Cage(C,n)) = len
+      (Rotate(Cage(C,n),W-min L~Cage(C,n)));
+      then
+      (E-max L~Cage(C,n))..Rotate(Cage(C,n),W-min L~Cage(C,n)) = len Cage
+      (C,n) by REVROT_1:14;
       then len Upper_Seq(C,n) = len Cage(C,n) by JORDAN1E:12;
-      then len Cage(C,n) + len Lower_Seq(C,n) = len Cage(C,n)+1 by JORDAN1E:14;
+      then len Cage(C,n) + len Lower_Seq(C,n) = len Cage(C,n)+1 by
+      JORDAN1E:14;
       hence contradiction by JORDAN1E:19;
     end;
-    then (E-max L~Cage(C,n))..Rotate(Cage(C,n),W-min L~Cage(C,n)) <
-    len (Rotate(Cage(C,n),W-min L~Cage(C,n))) by A22,XXREAL_0:1;
-    then (E-max L~Cage(C,n))..Rotate(Cage(C,n),W-min L~Cage(C,n)) + 1 <=
-    len (Rotate(Cage(C,n),W-min L~Cage(C,n))) by NAT_1:13;
-    then 1 + (E-max L~Cage(C,n))..Rotate(Cage(C,n),W-min L~Cage(C,n))
-    - (E-max L~Cage(C,n))..Rotate(Cage(C,n),W-min L~Cage(C,n)) <=
-    len (Rotate(Cage(C,n),W-min L~Cage(C,n)))
-    - (E-max L~Cage(C,n))..Rotate(Cage(C,n),W-min L~Cage(C,n)) by XREAL_1:11;
-    then 1 <= len (Rotate(Cage(C,n),W-min L~Cage(C,n))/^
-    (E-max L~Cage(C,n))..Rotate(Cage(C,n),W-min L~Cage(C,n)))
-    by A22,RFINSEQ:def 2;
-    then 1 in dom (Rotate(Cage(C,n),W-min L~Cage(C,n))/^
-    (E-max L~Cage(C,n))..Rotate(Cage(C,n),W-min L~Cage(C,n))) by FINSEQ_3:27;
-    then E1 = Rotate(Cage(C,n),W-min L~Cage(C,n))/.
-    ((E-max L~Cage(C,n))..Rotate(Cage(C,n),W-min L~Cage(C,n))+1)
-    by FINSEQ_5:30
-      .= Rotate(Cage(C,n),W-min L~Cage(C,n))/.
-    (len Cage(C,n) + (E-max L~Cage(C,n))..Cage(C,n) -
-    (W-min L~Cage(C,n))..Cage(C,n)+1) by A10,A11,A13,SPRECT_5:10
-      .= Rotate(Cage(C,n),W-min L~Cage(C,n))/.
-    ((E-max L~Cage(C,n))..Cage(C,n)+
-    (len Cage(C,n) - (W-min L~Cage(C,n))..Cage(C,n))+1)
-      .= Rotate(Cage(C,n),W-min L~Cage(C,n))/.
-    ((E-max L~Cage(C,n))..Cage(C,n)+
-    (len Cage(C,n) -' (W-min L~Cage(C,n))..Cage(C,n))+1) by A20,XREAL_0:def 2
-      .= Rotate(Cage(C,n),W-min L~Cage(C,n))/.
-    ((E-max L~Cage(C,n))..Cage(C,n)+1+
-    (len Cage(C,n) -'(W-min L~Cage(C,n))..Cage(C,n)))
-      .= Rotate(Cage(C,n),W-min L~Cage(C,n))/.
-    ((E-max L~Cage(C,n))..Cage(C,n)+1+
-    (len Cage(C,n) - (W-min L~Cage(C,n))..Cage(C,n))) by A20,XREAL_0:def 2
-      .= Rotate(Cage(C,n),W-min L~Cage(C,n))/.
-    ((E-max L~Cage(C,n))..Cage(C,n)+1+
-    len Cage(C,n) - (W-min L~Cage(C,n))..Cage(C,n))
-      .= Rotate(Cage(C,n),W-min L~Cage(C,n))/.
-    ((E-max L~Cage(C,n))..Cage(C,n)+1+
-    len Cage(C,n) -' (W-min L~Cage(C,n))..Cage(C,n)) by A21,XREAL_0:def 2;
-    then E1=Cage(C,n)/.(en+1) by A11,A18,A19,REVROT_1:13;
-    then abs(i1-i2)+abs(j1-j2) = 1 by A1,A6,A7,A8,A9,A14,A15,A17,
-GOBOARD1:def 11;
+    then (E-max L~Cage(C,n))..Rotate(Cage(C,n),W-min L~Cage(C,n)) < len (
+    Rotate(Cage(C,n),W-min L~Cage(C,n))) by A17,XXREAL_0:1;
+    then
+    (E-max L~Cage(C,n))..Rotate(Cage(C,n),W-min L~Cage(C,n)) + 1 <= len (
+    Rotate(Cage(C,n),W-min L~Cage(C,n))) by NAT_1:13;
+    then
+    1 + (E-max L~Cage(C,n))..Rotate(Cage(C,n),W-min L~Cage(C,n)) - (E-max
+    L~Cage(C,n))..Rotate(Cage(C,n),W-min L~Cage(C,n)) <= len (Rotate(Cage(C,n),
+W-min L~Cage(C,n))) - (E-max L~Cage(C,n))..Rotate(Cage(C,n),W-min L~Cage(C,n))
+    by XREAL_1:11;
+    then
+    1 <= len (Rotate(Cage(C,n),W-min L~Cage(C,n))/^ (E-max L~Cage(C,n))..
+    Rotate(Cage(C,n),W-min L~Cage(C,n))) by A17,RFINSEQ:def 2;
+    then
+    1 in dom (Rotate(Cage(C,n),W-min L~Cage(C,n))/^ (E-max L~Cage(C,n))..
+    Rotate(Cage(C,n),W-min L~Cage(C,n))) by FINSEQ_3:27;
+    then E1 = Rotate(Cage(C,n),W-min L~Cage(C,n))/. ((E-max L~Cage(C,n))..
+    Rotate(Cage(C,n),W-min L~Cage(C,n))+1) by FINSEQ_5:30
+      .= Rotate(Cage(C,n),W-min L~Cage(C,n))/. (len Cage(C,n) + (E-max L~
+    Cage(C,n))..Cage(C,n) - (W-min L~Cage(C,n))..Cage(C,n)+1) by A15,A9,A11,
+    SPRECT_5:10
+      .= Rotate(Cage(C,n),W-min L~Cage(C,n))/. ((E-max L~Cage(C,n))..Cage(C,
+    n)+ (len Cage(C,n) - (W-min L~Cage(C,n))..Cage(C,n))+1)
+      .= Rotate(Cage(C,n),W-min L~Cage(C,n))/. ((E-max L~Cage(C,n))..Cage(C,
+n)+ (len Cage(C,n) -' (W-min L~Cage(C,n))..Cage(C,n))+1) by A13,XREAL_0:def 2
+      .= Rotate(Cage(C,n),W-min L~Cage(C,n))/. ((E-max L~Cage(C,n))..Cage(C,
+    n)+1+ (len Cage(C,n) -'(W-min L~Cage(C,n))..Cage(C,n)))
+      .= Rotate(Cage(C,n),W-min L~Cage(C,n))/. ((E-max L~Cage(C,n))..Cage(C,
+n)+1+ (len Cage(C,n) - (W-min L~Cage(C,n))..Cage(C,n))) by A13,XREAL_0:def 2
+      .= Rotate(Cage(C,n),W-min L~Cage(C,n))/. ((E-max L~Cage(C,n))..Cage(C,
+    n)+1+ len Cage(C,n) - (W-min L~Cage(C,n))..Cage(C,n))
+      .= Rotate(Cage(C,n),W-min L~Cage(C,n))/. ((E-max L~Cage(C,n))..Cage(C,
+n)+1+ len Cage(C,n) -' (W-min L~Cage(C,n))..Cage(C,n)) by A14,XREAL_0:def 2;
+    then
+A18: E1=Cage(C,n)/.(en+1) by A9,A16,A12,REVROT_1:13;
+    E-max L~Cage(C,n)=Cage(C,n)/.en & en in dom Cage(C,n) by A15,FINSEQ_4
+    :30 ,FINSEQ_5:41;
+    then abs(i1-i2)+abs(j1-j2) = 1 by A4,A7,A8,A18,GOBOARD1:def 11;
     then abs(i1-i2)+abs(j2-j1) = 1 by UNIFORM1:13;
     hence thesis by UNIFORM1:13;
   end;
-  Lower_Seq(C,n) =
-  Rotate(Cage(C,n),W-min L~Cage(C,n)):-E-max L~Cage(C,n) by JORDAN1E:def 2
-    .= <*E-max L~Cage(C,n)*>^(Rotate(Cage(C,n),W-min L~Cage(C,n))/^
-  (E-max L~Cage(C,n))..Rotate(Cage(C,n),W-min L~Cage(C,n))) by FINSEQ_5:def 2;
-  hence thesis by A2,A3,A4,A5,Th11;
+  i >=4 by JORDAN8:13;
+  then 1<=i by XXREAL_0:2;
+  then [i,j] in Indices Gauge(C,n) by A1,MATRIX_1:37;
+  hence thesis by A5,A2,A6,A3,Th11;
 end;
 
 theorem
-  p`1 = (W-bound C + E-bound C)/2 &
-  p`2 = inf(proj2.:(LSeg(Gauge(C,1)*(Center Gauge(C,1),1),
-  Gauge(C,1)*(Center Gauge(C,1),width Gauge(C,1))) /\ Upper_Arc L~Cage(C,i+1)))
-  implies ex j st 1 <= j & j <= width Gauge(C,i+1) &
-  p = Gauge(C,i+1)*(Center Gauge(C,i+1),j)
+  p`1 = (W-bound C + E-bound C)/2 & p`2 = inf(proj2.:(LSeg(Gauge(C,1)*(
+  Center Gauge(C,1),1), Gauge(C,1)*(Center Gauge(C,1),width Gauge(C,1))) /\
+Upper_Arc L~Cage(C,i+1))) implies ex j st 1 <= j & j <= width Gauge(C,i+1) & p
+  = Gauge(C,i+1)*(Center Gauge(C,i+1),j)
 proof
   assume that
 A1: p`1 = (W-bound C + E-bound C)/2 and
-A2: p`2 = inf(proj2.:(LSeg(Gauge(C,1)*(Center Gauge(C,1),1),
-
-Gauge(C,1)*(Center Gauge(C,1),width Gauge(C,1))) /\ Upper_Arc L~Cage(C,i+1)));
+A2: p`2 = inf(proj2.:(LSeg(Gauge(C,1)*(Center Gauge(C,1),1), Gauge(C,1)*
+  (Center Gauge(C,1),width Gauge(C,1))) /\ Upper_Arc L~Cage(C,i+1)));
   per cases by Th9;
   suppose
-A3: L~Upper_Seq(C,i+1) = Upper_Arc L~Cage(C,i+1) &
-    L~Lower_Seq(C,i+1) = Lower_Arc L~Cage(C,i+1);
-    set f = Upper_Seq (C,i+1);
-    set G = Gauge(C,i+1);
-    set l = Center Gauge(C,i+1);
+A3: L~Upper_Seq(C,i+1) = Upper_Arc L~Cage(C,i+1) & L~Lower_Seq(C,i+1)
+    = Lower_Arc L~Cage(C,i+1);
+A4: 1 <= Center Gauge(C,1) by JORDAN1B:12;
     set k = width Gauge(C,i+1);
-A4: width Gauge(C,i+1) = len Gauge(C,i+1) &
-    width Gauge(C,1) = len Gauge(C,1) by JORDAN8:def 1;
-A5: f is_sequence_on G by Th10;
-    k >= 4 by A4,JORDAN8:13;
+    set l = Center Gauge(C,i+1);
+    set G = Gauge(C,i+1);
+    set f = Upper_Seq (C,i+1);
+A5: 1 <= l by JORDAN1B:12;
+A6: width Gauge(C,i+1) = len Gauge(C,i+1) by JORDAN8:def 1;
+    then k >= 4 by JORDAN8:13;
     then
-A6: 1 <= k by XXREAL_0:2;
+A7: 1 <= k by XXREAL_0:2;
     then
-A7: l <= len G by A4,JORDAN1B:13;
-    width Gauge(C,1) >= 4 by A4,JORDAN8:13;
+A8: l <= len G by A6,JORDAN1B:13;
     then
-A8: 1 <= width Gauge(C,1) by XXREAL_0:2;
+A9: [l,1] in Indices G & [l,k] in Indices G by A7,A5,MATRIX_1:37;
+A10: width Gauge(C,1) = len Gauge(C,1) by JORDAN8:def 1;
+    then width Gauge(C,1) >= 4 by JORDAN8:13;
     then
-A9: Center Gauge(C,1) <= len Gauge(C,1) by A4,JORDAN1B:13;
-A10: 1 <= l by JORDAN1B:12;
-A11: 1 <= Center Gauge(C,1) by JORDAN1B:12;
-A12: LSeg(G*(l,1),G*(l,k)) meets L~f by A3,A4,A6,A10,JORDAN1B:13,32;
-A13: [l,1] in Indices G by A6,A7,A10,MATRIX_1:37;
-    [l,k] in Indices G by A6,A7,A10,MATRIX_1:37;
+A11: 1 <= width Gauge(C,1) by XXREAL_0:2;
+    then
+A12: Center Gauge(C,1) <= len Gauge(C,1) by A10,JORDAN1B:13;
+A13: LSeg(Gauge(C,1)*(Center Gauge(C,1),1), Gauge(C,1)*(Center Gauge(C,1),
+    width Gauge(C,1))) /\ L~f c= LSeg(G*(l,1),G*(l,k)) /\ L~f
+    proof
+      let a be set;
+A14:  Upper_Arc L~Cage(C,i+1) c= L~Cage(C,i+1) by JORDAN6:76;
+      assume
+A15:  a in LSeg(Gauge(C,1)*(Center Gauge(C,1),1), Gauge(C,1)*(Center
+      Gauge(C,1),width Gauge(C,1))) /\ L~f;
+      then reconsider a1=a as Point of TOP-REAL 2;
+A16:  a1 in LSeg(Gauge(C,1)*(Center Gauge(C,1),1), Gauge(C,1)*(Center
+      Gauge(C,1),width Gauge(C,1))) by A15,XBOOLE_0:def 4;
+      a1 in Upper_Arc L~Cage(C,i+1) by A3,A15,XBOOLE_0:def 4;
+      then
+A17:  a1`2 <= N-bound L~Cage(C,i+1) by A14,PSCOMP_1:71;
+      Cage(C,i+1) is_sequence_on G by JORDAN9:def 1;
+      then G*(l,k)`2 >= N-bound L~Cage(C,i+1) by A6,A7,A5,JORDAN1A:41 ,
+      JORDAN1B:13;
+      then
+A18:  a1`2 <= G*(l,k)`2 by A17,XXREAL_0:2;
+      a1 in Upper_Arc L~Cage(C,i+1) by A3,A15,XBOOLE_0:def 4;
+      then
+A19:  a1`2 >= S-bound L~Cage(C,i+1) by A14,PSCOMP_1:71;
+      Cage(C,i+1) is_sequence_on G by JORDAN9:def 1;
+      then G*(l,1)`2 <= S-bound L~Cage(C,i+1) by A6,A7,A5,JORDAN1A:43 ,
+      JORDAN1B:13;
+      then
+A20:  a1`2 >= G*(l,1)`2 by A19,XXREAL_0:2;
+A21:  a1 in L~f by A15,XBOOLE_0:def 4;
+      Gauge(C,1)*(Center Gauge(C,1),1)`1 = Gauge(C,1)*(Center Gauge(C,1),
+      width Gauge(C,1))`1 by A11,A12,A4,GOBOARD5:3;
+      then
+A22:  a1`1 = Gauge(C,1)*(Center Gauge(C,1),1)`1 by A16,GOBOARD7:5
+        .= G*(l,1)`1 by A6,A10,A7,A11,JORDAN1A:57;
+      then a1`1 = G*(l,k)`1 by A7,A8,A5,GOBOARD5:3;
+      then a1 in LSeg(G*(l,1),G*(l,k)) by A22,A20,A18,GOBOARD7:8;
+      hence thesis by A21,XBOOLE_0:def 4;
+    end;
+    1 <= i+1 by NAT_1:11;
+    then
+    LSeg(G*(l,1),G*(l,k)) /\ L~f c= LSeg(Gauge(C,1)*(Center Gauge(C,1),1)
+, Gauge(C,1)*(Center Gauge(C,1),width Gauge(C,1))) /\ L~f by A6,A10,JORDAN1A
+    :65,XBOOLE_1:26;
+    then
+A23: LSeg(Gauge(C,1)*(Center Gauge(C,1),1), Gauge(C,1)*(Center Gauge(C,1),
+    width Gauge(C,1))) /\ L~f = LSeg(G*(l,1),G*(l,k)) /\ L~f by A13,XBOOLE_0:
+    def 10;
+    LSeg(G*(l,1),G*(l,k)) meets L~f by A3,A6,A7,A5,JORDAN1B:13,32;
     then consider n such that
-A14: 1 <= n & n <= k and
-A15: G*(l,n)`2 = inf(proj2.:(LSeg(G*(l,1),G*(l,k)) /\ L~f)) by A5,A6,A12,A13
-,Th1;
+A24: 1 <= n & n <= k and
+A25: G*(l,n)`2 = inf(proj2.:(LSeg(G*(l,1),G*(l,k)) /\ L~f)) by A7,
+    A9,Th1,Th10;
     take n;
-    thus 1 <= n & n <= width Gauge(C,i+1) by A14;
+    thus 1 <= n & n <= width Gauge(C,i+1) by A24;
     len Gauge(C,1) >= 4 by JORDAN8:13;
     then
-A16: 1 <= len Gauge(C,1) by XXREAL_0:2;
-    then
-A17: p`1 = (Gauge(C,1)*(Center Gauge(C,1),1))`1 by A1,JORDAN1A:59
-      .= Gauge(C,i+1)*(Center Gauge(C,i+1),n)`1 by A4,A14,A16,JORDAN1A:57;
-A18: 1 <= i+1 by NAT_1:11;
-    LSeg(Gauge(C,1)*(Center Gauge(C,1),1),
-    Gauge(C,1)*(Center Gauge(C,1),width Gauge(C,1))) /\ L~f =
-    LSeg(G*(l,1),G*(l,k)) /\ L~f
-    proof
-      thus LSeg(Gauge(C,1)*(Center Gauge(C,1),1),
-      Gauge(C,1)*(Center Gauge(C,1),width Gauge(C,1))) /\ L~f c=
-      LSeg(G*(l,1),G*(l,k)) /\ L~f
-      proof
-        let a be set;
-        assume
-A19:    a in LSeg(Gauge(C,1)*(Center Gauge(C,1),1),
-        Gauge(C,1)*(Center Gauge(C,1),width Gauge(C,1))) /\ L~f;
-        then reconsider a1=a as Point of TOP-REAL 2;
-A20:    a1 in LSeg(Gauge(C,1)*(Center Gauge(C,1),1),
-        Gauge(C,1)*(Center Gauge(C,1),width Gauge(C,1)))
-        & a1 in L~f by A19,XBOOLE_0:def 4;
-        Gauge(C,1)*(Center Gauge(C,1),1)`1 =
-        Gauge(C,1)*(Center Gauge(C,1),width Gauge(C,1))`1
-        by A8,A9,A11,GOBOARD5:3;
-        then
-A21:    a1`1 = Gauge(C,1)*(Center Gauge(C,1),1)`1 by A20,GOBOARD7:5
-          .= G*(l,1)`1 by A4,A6,A8,JORDAN1A:57;
-        then
-A22:    a1`1 = G*(l,k)`1 by A6,A7,A10,GOBOARD5:3;
-        Cage(C,i+1) is_sequence_on G by JORDAN9:def 1;
-        then
-A23:    G*(l,1)`2 <= S-bound L~Cage(C,i+1) by A4,A6,A10,JORDAN1A:43,JORDAN1B:13
-        ;
-A24:    Upper_Arc L~Cage(C,i+1) c= L~Cage(C,i+1) by JORDAN6:76;
-        a1 in Upper_Arc L~Cage(C,i+1) by A3,A19,XBOOLE_0:def 4;
-        then a1`2 >= S-bound L~Cage(C,i+1) by A24,PSCOMP_1:71;
-        then
-A25:    a1`2 >= G*(l,1)`2 by A23,XXREAL_0:2;
-        Cage(C,i+1) is_sequence_on G by JORDAN9:def 1;
-        then
-A26:    G*(l,k)`2 >= N-bound L~Cage(C,i+1) by A4,A6,A10,JORDAN1A:41,JORDAN1B:13
-        ;
-        a1 in Upper_Arc L~Cage(C,i+1) by A3,A19,XBOOLE_0:def 4;
-        then a1`2 <= N-bound L~Cage(C,i+1) by A24,PSCOMP_1:71;
-        then a1`2 <= G*(l,k)`2 by A26,XXREAL_0:2;
-        then a1 in LSeg(G*(l,1),G*(l,k)) by A21,A22,A25,GOBOARD7:8;
-        hence thesis by A20,XBOOLE_0:def 4;
-      end;
-      thus thesis by A4,A18,JORDAN1A:65,XBOOLE_1:26;
-    end;
-
-hence thesis by A2,A3,A15,A17,TOPREAL3:11;
+A26: 1 <= len Gauge(C,1) by XXREAL_0:2;
+    then p`1 = (Gauge(C,1)*(Center Gauge(C,1),1))`1 by A1,JORDAN1A:59
+      .= Gauge(C,i+1)*(Center Gauge(C,i+1),n)`1 by A6,A24,A26,JORDAN1A:57;
+    hence thesis by A2,A3,A25,A23,TOPREAL3:11;
   end;
   suppose
-A27: L~Upper_Seq(C,i+1) = Lower_Arc L~Cage(C,i+1) &
-    L~Lower_Seq(C,i+1) = Upper_Arc L~Cage(C,i+1);
-    set f = Lower_Seq (C,i+1);
-    set G = Gauge(C,i+1);
-    set l = Center Gauge(C,i+1);
+A27: L~Upper_Seq(C,i+1) = Lower_Arc L~Cage(C,i+1) & L~Lower_Seq(C,i+1)
+    = Upper_Arc L~Cage(C,i+1);
+A28: 1 <= Center Gauge(C,1) by JORDAN1B:12;
     set k = width Gauge(C,i+1);
-A28: width Gauge(C,i+1) = len Gauge(C,i+1) &
-    width Gauge(C,1) = len Gauge(C,1) by JORDAN8:def 1;
-A29: f is_sequence_on G by Th12;
-    k >= 4 by A28,JORDAN8:13;
+    set l = Center Gauge(C,i+1);
+    set G = Gauge(C,i+1);
+    set f = Lower_Seq (C,i+1);
+A29: 1 <= l by JORDAN1B:12;
+A30: width Gauge(C,i+1) = len Gauge(C,i+1) by JORDAN8:def 1;
+    then k >= 4 by JORDAN8:13;
     then
-A30: 1 <= k by XXREAL_0:2;
+A31: 1 <= k by XXREAL_0:2;
     then
-A31: l <= len G by A28,JORDAN1B:13;
-    width Gauge(C,1) >= 4 by A28,JORDAN8:13;
+A32: l <= len G by A30,JORDAN1B:13;
     then
-A32: 1 <= width Gauge(C,1) by XXREAL_0:2;
+A33: [l,1] in Indices G & [l,k] in Indices G by A31,A29,MATRIX_1:37;
+A34: width Gauge(C,1) = len Gauge(C,1) by JORDAN8:def 1;
+    then width Gauge(C,1) >= 4 by JORDAN8:13;
     then
-A33: Center Gauge(C,1) <= len Gauge(C,1) by A28,JORDAN1B:13;
-A34: 1 <= l by JORDAN1B:12;
-A35: 1 <= Center Gauge(C,1) by JORDAN1B:12;
-A36: LSeg(G*(l,1),G*(l,k)) meets L~f by A27,A28,A30,A34,JORDAN1B:13,32;
-A37: [l,1] in Indices G by A30,A31,A34,MATRIX_1:37;
-    [l,k] in Indices G by A30,A31,A34,MATRIX_1:37;
+A35: 1 <= width Gauge(C,1) by XXREAL_0:2;
+    then
+A36: Center Gauge(C,1) <= len Gauge(C,1) by A34,JORDAN1B:13;
+A37: LSeg(Gauge(C,1)*(Center Gauge(C,1),1), Gauge(C,1)*(Center Gauge(C,1),
+    width Gauge(C,1))) /\ L~f c= LSeg(G*(l,1),G*(l,k)) /\ L~f
+    proof
+      let a be set;
+A38:  Upper_Arc L~Cage(C,i+1) c= L~Cage(C,i+1) by JORDAN6:76;
+      assume
+A39:  a in LSeg(Gauge(C,1)*(Center Gauge(C,1),1), Gauge(C,1)*(Center
+      Gauge(C,1),width Gauge(C,1))) /\ L~f;
+      then reconsider a1=a as Point of TOP-REAL 2;
+A40:  a1 in LSeg(Gauge(C,1)*(Center Gauge(C,1),1), Gauge(C,1)*(Center
+      Gauge(C,1),width Gauge(C,1))) by A39,XBOOLE_0:def 4;
+      a1 in Upper_Arc L~Cage(C,i+1) by A27,A39,XBOOLE_0:def 4;
+      then
+A41:  a1`2 <= N-bound L~Cage(C,i+1) by A38,PSCOMP_1:71;
+      Cage(C,i+1) is_sequence_on G by JORDAN9:def 1;
+      then G*(l,k)`2 >= N-bound L~Cage(C,i+1) by A30,A31,A29,
+      JORDAN1A:41,
+      JORDAN1B:13;
+      then
+A42:  a1`2 <= G*(l,k)`2 by A41,XXREAL_0:2;
+      a1 in Upper_Arc L~Cage(C,i+1) by A27,A39,XBOOLE_0:def 4;
+      then
+A43:  a1`2 >= S-bound L~Cage(C,i+1) by A38,PSCOMP_1:71;
+      Cage(C,i+1) is_sequence_on G by JORDAN9:def 1;
+      then G*(l,1)`2 <= S-bound L~Cage(C,i+1) by A30,A31,A29,
+      JORDAN1A:43,
+      JORDAN1B:13;
+      then
+A44:  a1`2 >= G*(l,1)`2 by A43,XXREAL_0:2;
+A45:  a1 in L~f by A39,XBOOLE_0:def 4;
+      Gauge(C,1)*(Center Gauge(C,1),1)`1 = Gauge(C,1)*(Center Gauge(C,1),
+      width Gauge(C,1))`1 by A35,A36,A28,GOBOARD5:3;
+      then
+A46:  a1`1 = Gauge(C,1)*(Center Gauge(C,1),1)`1 by A40,GOBOARD7:5
+        .= G*(l,1)`1 by A30,A34,A31,A35,JORDAN1A:57;
+      then a1`1 = G*(l,k)`1 by A31,A32,A29,GOBOARD5:3;
+      then a1 in LSeg(G*(l,1),G*(l,k)) by A46,A44,A42,GOBOARD7:8;
+      hence thesis by A45,XBOOLE_0:def 4;
+    end;
+    1 <= i+1 by NAT_1:11;
+    then
+    LSeg(G*(l,1),G*(l,k)) /\ L~f c= LSeg(Gauge(C,1)*(Center Gauge(C,1),1),
+    Gauge(C,1)*(Center Gauge(C,1),width Gauge(C,1))) /\ L~f by A30,A34,JORDAN1A
+    :65,XBOOLE_1:26;
+    then
+A47: LSeg(Gauge(C,1)*(Center Gauge(C,1),1), Gauge(C,1)*(Center Gauge(C,1),
+    width Gauge(C,1))) /\ L~f = LSeg(G*(l,1),G*(l,k)) /\ L~f by A37,XBOOLE_0:
+    def 10;
+    LSeg(G*(l,1),G*(l,k)) meets L~f by A27,A30,A31,A29,JORDAN1B:13,32;
     then consider n such that
-A38: 1 <= n & n <= k and
-A39: G*(l,n)`2 = inf(proj2.:(LSeg(G*(l,1),G*(l,k)) /\ L~f)) by A29,A30,A36,A37
-,Th1;
+A48: 1 <= n & n <= k and
+A49: G*(l,n)`2 = inf(proj2.:(LSeg(G*(l,1),G*(l,k)) /\ L~f)) by A31,
+    A33,Th1,Th12;
     take n;
-    thus 1 <= n & n <= width Gauge(C,i+1) by A38;
+    thus 1 <= n & n <= width Gauge(C,i+1) by A48;
     len Gauge(C,1) >= 4 by JORDAN8:13;
     then
-A40: 1 <= len Gauge(C,1) by XXREAL_0:2;
-    then
-A41: p`1 = (Gauge(C,1)*(Center Gauge(C,1),1))`1 by A1,JORDAN1A:59
-      .= Gauge(C,i+1)*(Center Gauge(C,i+1),n)`1 by A28,A38,A40,JORDAN1A:57;
-A42: 1 <= i+1 by NAT_1:11;
-    LSeg(Gauge(C,1)*(Center Gauge(C,1),1),
-    Gauge(C,1)*(Center Gauge(C,1),width Gauge(C,1))) /\ L~f =
-    LSeg(G*(l,1),G*(l,k)) /\ L~f
-    proof
-      thus LSeg(Gauge(C,1)*(Center Gauge(C,1),1),
-      Gauge(C,1)*(Center Gauge(C,1),width Gauge(C,1))) /\ L~f c=
-      LSeg(G*(l,1),G*(l,k)) /\ L~f
-      proof
-        let a be set;
-        assume
-A43:    a in LSeg(Gauge(C,1)*(Center Gauge(C,1),1),
-        Gauge(C,1)*(Center Gauge(C,1),width Gauge(C,1))) /\ L~f;
-        then reconsider a1=a as Point of TOP-REAL 2;
-A44:    a1 in LSeg(Gauge(C,1)*(Center Gauge(C,1),1),
-        Gauge(C,1)*(Center Gauge(C,1),width Gauge(C,1)))
-        & a1 in L~f by A43,XBOOLE_0:def 4;
-        Gauge(C,1)*(Center Gauge(C,1),1)`1 =
-        Gauge(C,1)*(Center Gauge(C,1),width Gauge(C,1))`1
-        by A32,A33,A35,GOBOARD5:3;
-        then
-A45:    a1`1 = Gauge(C,1)*(Center Gauge(C,1),1)`1 by A44,GOBOARD7:5
-          .= G*(l,1)`1 by A28,A30,A32,JORDAN1A:57;
-        then
-A46:    a1`1 = G*(l,k)`1 by A30,A31,A34,GOBOARD5:3;
-        Cage(C,i+1) is_sequence_on G by JORDAN9:def 1;
-        then
-A47:    G*(l,1)`2 <= S-bound L~Cage(C,i+1) by A28,A30,A34,JORDAN1A:43
-,JORDAN1B:13;
-A48:    Upper_Arc L~Cage(C,i+1) c= L~Cage(C,i+1) by JORDAN6:76;
-        a1 in Upper_Arc L~Cage(C,i+1) by A27,A43,XBOOLE_0:def 4;
-        then a1`2 >= S-bound L~Cage(C,i+1) by A48,PSCOMP_1:71;
-        then
-A49:    a1`2 >= G*(l,1)`2 by A47,XXREAL_0:2;
-        Cage(C,i+1) is_sequence_on G by JORDAN9:def 1;
-        then
-A50:    G*(l,k)`2 >= N-bound L~Cage(C,i+1) by A28,A30,A34,JORDAN1A:41
-,JORDAN1B:13;
-        a1 in Upper_Arc L~Cage(C,i+1) by A27,A43,XBOOLE_0:def 4;
-        then a1`2 <= N-bound L~Cage(C,i+1) by A48,PSCOMP_1:71;
-        then a1`2 <= G*(l,k)`2 by A50,XXREAL_0:2;
-        then a1 in LSeg(G*(l,1),G*(l,k)) by A45,A46,A49,GOBOARD7:8;
-        hence thesis by A44,XBOOLE_0:def 4;
-      end;
-      thus thesis by A28,A42,JORDAN1A:65,XBOOLE_1:26;
-    end;
-
-hence thesis by A2,A27,A39,A41,TOPREAL3:11;
+A50: 1 <= len Gauge(C,1) by XXREAL_0:2;
+    then p`1 = (Gauge(C,1)*(Center Gauge(C,1),1))`1 by A1,JORDAN1A:59
+      .= Gauge(C,i+1)*(Center Gauge(C,i+1),n)`1 by A30,A48,A50,JORDAN1A:57;
+    hence thesis by A2,A27,A49,A47,TOPREAL3:11;
   end;
 end;
 

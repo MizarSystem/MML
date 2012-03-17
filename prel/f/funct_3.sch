@@ -7,6 +7,7 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="BINOP_1"/>
@@ -61,7 +62,7 @@
 <Pred kind="P" nr="1">
 <Var nr="2"/>
 <Var nr="3"/>
-<Func kind="K" nr="64">
+<Func kind="K" nr="72">
 <Var nr="1"/>
 <Var nr="2"/>
 <Var nr="3"/>
@@ -210,7 +211,7 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="64">
+<Func kind="K" nr="72">
 <Var nr="1"/>
 <Var nr="2"/>
 <Var nr="3"/>

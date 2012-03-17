@@ -13,24 +13,25 @@ environ
       VALUED_0, INT_2;
  notations TARSKI, XBOOLE_0, SUBSET_1, FINSET_1, REALSET1, ORDINAL1, CARD_1,
       NUMBERS, XCMPLX_0, XXREAL_0, REAL_1, NAT_D, INT_2, RELAT_1, FUNCT_1,
-      FUNCT_2, FINSEQ_1, VALUED_0, SEQ_1, SEQM_3, PBOOLE, POLYNOM1, POLYNOM2,
-      RVSUM_1, NAT_1, NEWTON, WSIERP_1, BINARITH, TREES_4, UPROOTS, BINOP_2,
-      FUNCOP_1, XXREAL_2, SETWOP_2;
+      FUNCT_2, FINSEQ_1, VALUED_0, SEQ_1, PBOOLE, RVSUM_1, NAT_1, NEWTON,
+      WSIERP_1, TREES_4, UPROOTS, BINOP_2, FUNCOP_1, XXREAL_2, SETWOP_2,
+      PRE_POLY, POLYNOM2;
  constructors BINOP_1, SETWISEO, XXREAL_0, NAT_D, FINSEQOP, FINSOP_1, NEWTON,
-      REALSET1, BINARITH, WSIERP_1, FACIRC_1, POLYNOM2, UPROOTS,
-      SEQ_1, RECDEF_1, BINOP_2, XXREAL_2, RELSET_1;
+      REALSET1, BINARITH, WSIERP_1, FACIRC_1, POLYNOM2, UPROOTS, SEQ_1,
+      RECDEF_1, BINOP_2, XXREAL_2, RELSET_1;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1, FINSET_1, NUMBERS,
       XCMPLX_0, XXREAL_0, XREAL_0, NAT_1, INT_1, BINOP_2, MEMBERED, NEWTON,
-      PRE_CIRC, TEX_2, POLYNOM1, SEQM_3, VALUED_0, FINSEQ_1, XXREAL_2, CARD_1,
-      REALSET1, UPROOTS, FUNCT_2, RELSET_1, ZFMISC_1, FINSEQ_2;
+      VALUED_0, FINSEQ_1, XXREAL_2, CARD_1, UPROOTS, FUNCT_2, RELSET_1,
+      ZFMISC_1, FINSEQ_2, PRE_POLY;
  requirements NUMERALS, SUBSET, ARITHM, REAL, BOOLE;
  definitions TARSKI, XBOOLE_0, INT_2, NAT_D, FINSEQ_1, POLYNOM1, FINSEQ_2,
-      VALUED_0;
+      VALUED_0, PRE_POLY;
  theorems ORDINAL1, NEWTON, NAT_1, XCMPLX_1, INT_1, CARD_4, XREAL_0, RVSUM_1,
-      INT_2, PEPIN, PBOOLE, FUNCT_1, CARD_2, PREPOWER, POLYNOM1, FINSEQ_1,
+      INT_2, PEPIN, PBOOLE, FUNCT_1, CARD_2, PREPOWER, FINSEQ_1,
       TARSKI, XBOOLE_1, FUNCOP_1, WSIERP_1, XBOOLE_0, RADIX_1, BAGORDER,
       FINSEQ_2, FINSEQ_3, FINSEQ_4, RELAT_1, UPROOTS, CIRCCMB3, FINSOP_1,
-      FUNCT_2, XREAL_1, XXREAL_0, NAT_D, VALUED_0, XXREAL_2, PARTFUN1;
+      FUNCT_2, XREAL_1, XXREAL_0, NAT_D, VALUED_0, XXREAL_2, PARTFUN1,
+      PRE_POLY;
  schemes NAT_1, PRE_CIRC, FINSEQ_1, FINSEQ_2, PBOOLE, CLASSES1;
 
 begin :: Preliminaries
@@ -55,7 +56,7 @@ registration
   cluster a |^ b -> non empty;
   coherence
   proof
-    a is Real & b in NAT by ORDINAL1:def 13,XREAL_0:def 1;
+    a is Real by XREAL_0:def 1;
     hence thesis by CARD_4:51;
   end;
 end;
@@ -83,37 +84,39 @@ end;
 theorem Th2:
   1 < a implies b <= a |^ b
 proof
+  defpred P[natural number] means $1 <= a |^ $1;
   assume
 A1: 1 < a;
   then reconsider a1 = a-1 as Element of NAT by INT_1:18;
-  defpred P[natural number] means $1 <= a |^ $1;
-A2: P[0];
-A3: for k being natural number st P[k] holds P[k+1]
+A2: for k being natural number st P[k] holds P[k+1]
   proof
-    let k be natural number such that
-A4: P[k];
-A5: k+1 <= a |^ k + 1 by A4,XREAL_1:8;
-A6: a |^ (k+1) = a |^ k * a by NEWTON:11;
-    now
+    let k be natural number;
+    assume
+    P[k];
+    then
+A3: k+1 <= a |^ k + 1 by XREAL_1:8;
+A4: now
       set x = a |^ k;
-      assume x + 1 > x * a;
+      assume
+      x + 1 > x * a;
       then x*a - (x+1) < (x+1) - (x+1) by XREAL_1:16;
       then x*a1 - 1 + 1 < 0+1 by XREAL_1:8;
-      then x*a1 <= 0 by NAT_1:13;
-      then x*a1 = 0;
-      then x = 0 or a1 = 0;
+      then x = 0 or a1 = 0 by NAT_1:13;
       hence contradiction by A1;
     end;
-    hence thesis by A5,A6,XXREAL_0:2;
+    a |^ (k+1) = a |^ k * a by NEWTON:11;
+    hence thesis by A3,A4,XXREAL_0:2;
   end;
-  for k being natural number holds P[k] from NAT_1:sch 2(A2,A3);
+A5: P[0];
+  for k being natural number holds P[k] from NAT_1:sch 2(A5,A2);
   hence thesis;
 end;
 
 theorem Th3:
   a <> 0 implies n divides n |^ a
 proof
-  assume a <> 0;
+  assume
+  a <> 0;
   then consider b being Nat such that
 A1: a = b+1 by NAT_1:6;
   reconsider b as Element of NAT by ORDINAL1:def 13;
@@ -122,8 +125,8 @@ A1: a = b+1 by NAT_1:6;
 end;
 
 theorem Th4:
-  for i, j, m, n being natural number
-  st i < j & m |^ j divides n holds m |^ (i+1) divides n
+  for i, j, m, n being natural number st i < j & m |^ j divides n
+  holds m |^ (i+1) divides n
 proof
   let i, j, m, n be natural number such that
 A1: i < j and
@@ -142,123 +145,127 @@ A1: p divides a |^ b and
 A2: not p divides a;
   reconsider p,a as Element of NAT by ORDINAL1:def 13;
   defpred P[Nat] means p divides a|^($1+1);
+A3: for k being Nat st k <> 0 & P[k] ex n being Nat st n < k & P[n]
+  proof
+    let k be Nat such that
+A4: k <> 0 and
+A5: P[k];
+A6: p divides a |^ k * a by A5,NEWTON:11;
+    take k-'1;
+A7: k >= 0+1 by A4,NAT_1:13;
+    then k-1 >= 0+1-1 by XREAL_1:15;
+    then k-'1 = k-1 by XREAL_0:def 2;
+    then k-'1 < k-0 by XREAL_1:17;
+    hence k-'1 < k;
+    k-'1+1 = k by A7,XREAL_1:237;
+    hence thesis by A2,A6,NEWTON:98;
+  end;
   now
-    assume 0+1 > b;
-    then b <= 0 by NAT_1:13;
-    then b = 0;
+    assume
+    0+1 > b;
+    then b = 0 by NAT_1:13;
     then p divides 1 by A1,NEWTON:9;
     then p = 1 by WSIERP_1:20;
     hence contradiction by INT_2:def 5;
   end;
   then b = b-'1+1 by XREAL_1:237;
   then
-A3: ex k being Nat st P[k] by A1;
-A4: for k being Nat st k <> 0 & P[k] ex n being Nat st n < k & P[n]
-  proof
-    let k be Nat such that
-A5: k <> 0 and
-A6: P[k];
-    take k-'1;
-    k > 0 by A5;
-    then
-A7: k >= 0+1 by NAT_1:13;
-    then k-1 >= 0+1-1 by XREAL_1:15;
-    then k-'1 = k-1 by XREAL_0:def 2;
-    then k-'1 < k-0 by XREAL_1:17;
-    hence k-'1 < k;
-A8: k-'1+1 = k by A7,XREAL_1:237;
-    p divides a |^ k * a by A6,NEWTON:11;
-    hence thesis by A2,A8,NEWTON:98;
-  end;
-  P[0] from NAT_1:sch 7(A3,A4);
+A8: ex k being Nat st P[k] by A1;
+  P[0] from NAT_1:sch 7(A8,A3);
   hence thesis by A2,NEWTON:10;
 end;
 
 theorem Th6:
   for a being Prime st a divides p |^ b holds a = p
 proof
-  let a be Prime such that
-A1: a divides p |^ b;
-A2: a <> 1 by INT_2:def 5;
-  a divides p by A1,Th5;
-  hence thesis by A2,INT_2:def 5;
+  let a be Prime;
+  assume
+  a divides p |^ b;
+  then a <> 1 & a divides p by Th5,INT_2:def 5;
+  hence thesis by INT_2:def 5;
 end;
 
 theorem
   for f being FinSequence of NAT st a in rng f holds a divides Product f
 proof
-  defpred P[FinSequence of NAT] means
-  for a being natural number st a in rng $1 holds a divides Product $1;
-A1: P[<*>NAT];
-A2: for p being FinSequence of NAT, n being Element of NAT st P[p]
-  holds P[p^<*n*>]
+  defpred P[FinSequence of NAT] means for a being natural number st a in rng
+  $1 holds a divides Product $1;
+A1: for p being FinSequence of NAT, n being Element of NAT st P[p] holds P[p
+  ^<*n*>]
   proof
     let p be FinSequence of NAT, n be Element of NAT such that
-A3: P[p];
+A2: P[p];
     set p1 = p^<*n*>;
+A3: rng p1 = rng p \/ rng <*n*> by FINSEQ_1:44;
+A4: Product p1 = Product p * n by RVSUM_1:126;
     let a be natural number such that
-A4: a in rng p1;
-A5: rng p1 = rng p \/ rng <*n*> by FINSEQ_1:44;
-A6: Product p1 = Product p * n by RVSUM_1:126;
-    per cases by A4,A5,XBOOLE_0:def 3;
-    suppose a in rng p;
-      hence thesis by A3,A6,NAT_D:9;
+A5: a in rng p1;
+    per cases by A5,A3,XBOOLE_0:def 3;
+    suppose
+      a in rng p;
+      hence thesis by A2,A4,NAT_D:9;
     end;
-    suppose a in rng <*n*>;
+    suppose
+      a in rng <*n*>;
       then a in {n} by FINSEQ_1:56;
       then a = n by TARSKI:def 1;
-      hence thesis by A6,NAT_D:9;
+      hence thesis by A4,NAT_D:9;
     end;
   end;
-  for p being FinSequence of NAT holds P[p] from FINSEQ_2:sch 2(A1,A2);
+A6: P[<*>NAT qua FinSequence of NAT];
+  for p being FinSequence of NAT holds P[p] from FINSEQ_2:sch 2(A6,A1);
   hence thesis;
 end;
 
 theorem
-  for f being FinSequence of SetPrimes st p divides Product f holds p in rng f
+  for f being FinSequence of SetPrimes st p divides Product f holds p in
+  rng f
 proof
-  defpred P[FinSequence of SetPrimes] means
-  for p being Prime st p divides Product $1 holds p in rng $1;
-A1: P[<*>SetPrimes]
-  proof
-    let p being Prime;
-    assume p divides Product <*>SetPrimes;
-    then p <= 1 by NAT_D:7,RVSUM_1:124;
-    hence thesis by INT_2:def 5;
-  end;
-A2: now
+  defpred P[FinSequence of SetPrimes] means for p being Prime st p divides
+  Product $1 holds p in rng $1;
+A1: now
     let f be FinSequence of SetPrimes, n be Element of SetPrimes;
-    assume
-A3: P[f];
     set f1 = f^<*n*>;
+    assume
+A2: P[f];
     thus P[f1]
     proof
+      reconsider nn = n as Nat;
+      reconsider ff = f as FinSequence of NAT;
       let p be Prime;
       assume
-A4:   p divides Product f1;
-      reconsider ff = f as FinSequence of NAT;
-A5:   p divides Product ff * n by A4,RVSUM_1:126;
-      reconsider nn = n as Nat;
-      per cases by A5,NEWTON:98;
-      suppose p divides Product f;
-        then
-A6:     p in rng f by A3;
-        rng f c= rng f1 by FINSEQ_1:42;
-        hence thesis by A6;
+      p divides Product f1;
+      then
+A3:   p divides Product ff * n by RVSUM_1:126;
+      per cases by A3,NEWTON:98;
+      suppose
+A4:     p divides Product f;
+A5:     rng f c= rng f1 by FINSEQ_1:42;
+        p in rng f by A2,A4;
+        hence thesis by A5;
       end;
       suppose
-A7:     p divides nn;
+A6:     p divides nn;
         nn is prime by NEWTON:def 6;
-        then p = 1 or p = n by A7,INT_2:def 5;
+        then p = 1 or p = n by A6,INT_2:def 5;
         then p in {n} by INT_2:def 5,TARSKI:def 1;
         then
-A8:     p in rng <*n*> by FINSEQ_1:55;
+A7:     p in rng <*n*> by FINSEQ_1:55;
         rng <*n*> c= rng f1 by FINSEQ_1:43;
-        hence thesis by A8;
+        hence thesis by A7;
       end;
     end;
   end;
-  for p being FinSequence of SetPrimes holds P[p] from FINSEQ_2:sch 2(A1,A2 );
+A8: P[<*>SetPrimes qua FinSequence of SetPrimes]
+  proof
+    let p being Prime;
+    assume
+    p divides Product(<*>SetPrimes qua FinSequence of SetPrimes);
+    then p <= 1 by NAT_D:7,RVSUM_1:124;
+    hence thesis by INT_2:def 5;
+  end;
+  for p being FinSequence of SetPrimes holds P[p] from FINSEQ_2:sch 2(A8
+  ,A1 );
   hence thesis;
 end;
 
@@ -269,8 +276,8 @@ definition
   let a be natural number;
   func f |^ a -> FinSequence means
   :Def1:
-  len it = len f &
-  for i being set st i in dom it holds it.i = f.i |^ a;
+  len it = len f & for i being set st
+  i in dom it holds it.i = f.i |^ a;
   existence
   proof
     deffunc F(Nat) = f.$1 |^ a;
@@ -281,26 +288,25 @@ A2: for k being Nat st k in dom p holds p.k = F(k) from FINSEQ_1:sch 2;
     thus len p = len f by A1;
     let i be set;
     assume
-A5: i in dom p;
-    thus thesis by A2,A5;
+    i in dom p;
+    hence thesis by A2;
   end;
   uniqueness
   proof
     let g,h be FinSequence such that
-A6: len g = len f and
-A7: for i being set st i in dom g holds g.i = f.i |^ a and
-A8: len h = len f and
-A9: for i being set st i in dom h holds h.i = f.i |^ a;
-A10: dom g = Seg len g by FINSEQ_1:def 3;
-A11: dom h = Seg len h by FINSEQ_1:def 3;
+A3: len g = len f and
+A4: for i being set st i in dom g holds g.i = f.i |^ a and
+A5: len h = len f and
+A6: for i being set st i in dom h holds h.i = f.i |^ a;
+A7: dom g = Seg len g & dom h = Seg len h by FINSEQ_1:def 3;
     for k being Nat st k in dom g holds g.k = h.k
     proof
       let k be Nat such that
-A12:  k in dom g;
-      thus g.k = f.k |^ a by A7,A12
-        .= h.k by A6,A8,A9,A10,A11,A12;
+A8:   k in dom g;
+      thus g.k = f.k |^ a by A4,A8
+        .= h.k by A3,A5,A6,A7,A8;
     end;
-    hence thesis by A6,A8,A10,A11,FINSEQ_1:17;
+    hence thesis by A3,A5,A7,FINSEQ_1:17;
   end;
 end;
 
@@ -310,9 +316,10 @@ registration
   cluster f |^ a -> real-valued;
   coherence
   proof
-    set g = f|^a;
     let x be set;
-    assume x in dom g;
+    set g = f|^a;
+    assume
+    x in dom g;
     then (f |^ a).x = f.x |^ a by Def1;
     hence thesis;
   end;
@@ -324,9 +331,10 @@ registration
   cluster f |^ a -> natural-valued;
   coherence
   proof
-    set g = f|^a;
     let x be set;
-    assume x in dom g;
+    set g = f|^a;
+    assume
+    x in dom g;
     then (f |^ a).x = f.x |^ a by Def1;
     hence thesis;
   end;
@@ -356,8 +364,8 @@ theorem Th9:
   f |^ 0 = (len f) |-> 1
 proof
 A1: len (f|^0) = len f by Def1;
-A2: len (len f |-> 1) = len f by FINSEQ_1:def 18;
-  for k being Nat st 1 <= k & k <= len (f|^0) holds (f|^0).k = (len f |-> 1).k
+A2: for k being Nat st 1 <= k & k <= len (f|^0) holds (f|^0).k = (len f |->
+  1).k
   proof
     let k be Nat;
     assume
@@ -370,21 +378,23 @@ A5: k in Seg len f by A1,A3;
       .= 1 by NEWTON:9
       .= (len f |-> 1).k by A5,FUNCOP_1:13;
   end;
+  len (len f |-> 1) = len f by FINSEQ_1:def 18;
   hence thesis by A1,A2,FINSEQ_1:18;
 end;
 
 theorem
   f |^ 1 = f
 proof
-A1: len (f|^1) = len f by Def1;
-  for k being Nat st 1 <= k & k <= len (f|^1) holds (f|^1).k = f.k
+A1: for k being Nat st 1 <= k & k <= len (f|^1) holds (f|^1).k = f.k
   proof
     let k be Nat;
-    assume 1 <= k & k <= len (f|^1);
+    assume
+    1 <= k & k <= len (f|^1);
     then k in dom (f|^1) by FINSEQ_3:27;
     hence (f|^1).k = f.k |^ 1 by Def1
       .= f.k by NEWTON:10;
   end;
+  len (f|^1) = len f by Def1;
   hence thesis by A1,FINSEQ_1:18;
 end;
 
@@ -411,66 +421,61 @@ end;
 theorem Th13:
   (f^<*r*>) |^ a = (f|^a)^(<*r*>|^a)
 proof
-A1: len ((f^<*r*>) |^ a) = len (f^<*r*>) by Def1
+A1: len (f|^a) = len f by Def1;
+A2: len ((f^<*r*>) |^ a) = len (f^<*r*>) by Def1
     .= len f + len <*r*> by FINSEQ_1:35
     .= len f + 1 by FINSEQ_1:57;
-A2: len ((f|^a)^(<*r*>|^a)) = len (f|^a) + len (<*r*>|^a) by FINSEQ_1:35
-    .= len f + len (<*r*>|^a) by Def1
-    .= len f + len (<*r|^a*>) by Th12
-    .= len f + 1 by FINSEQ_1:57;
-A3: len (f|^a) = len f by Def1;
-X: dom ((f^<*r*>) |^ a) = Seg(len f +1)  by A1,FINSEQ_1:def 3;
-  now
+  then
+A3: dom ((f^<*r*>) |^ a) = Seg(len f +1) by FINSEQ_1:def 3;
+A4: now
     let i be Nat such that
-A4: i in dom ((f^<*r*>) |^ a);
-A5: 1 <= i & i <= len f + 1 by A4,X,FINSEQ_1:3;
-A6: i in dom ((f^<*r*>) |^ a) by A4;
-    per cases by A5,XXREAL_0:1;
-    suppose i < len f +1;
+A5: i in dom ((f^<*r*>) |^ a);
+A6: 1 <= i by A3,A5,FINSEQ_1:3;
+A7: i <= len f + 1 by A3,A5,FINSEQ_1:3;
+    per cases by A7,XXREAL_0:1;
+    suppose
+      i < len f +1;
       then
-A7:   i <= len f by NAT_1:13;
+A8:   i <= len f by NAT_1:13;
       then
-A8:   i in dom f by A5,FINSEQ_3:27;
-A9:   i in dom (f|^a) by A3,A5,A7,FINSEQ_3:27;
-      thus ((f^<*r*>) |^ a).i = (f^<*r*>).i |^ a by A6,Def1
-        .= f.i |^a by A8,FINSEQ_1:def 7
-        .= (f|^a).i by A9,Def1
-        .= ((f|^a)^(<*r*>|^a)).i by A9,FINSEQ_1:def 7;
+A9:   i in dom f by A6,FINSEQ_3:27;
+A10:  i in dom (f|^a) by A1,A6,A8,FINSEQ_3:27;
+      thus ((f^<*r*>) |^ a).i = (f^<*r*>).i |^ a by A5,Def1
+        .= f.i |^a by A9,FINSEQ_1:def 7
+        .= (f|^a).i by A10,Def1
+        .= ((f|^a)^(<*r*>|^a)).i by A10,FINSEQ_1:def 7;
     end;
     suppose
-A10:  i = len f +1;
-      thus ((f^<*r*>) |^ a).i = (f^<*r*>).i |^ a by A6,Def1
-        .= r |^ a by A10,FINSEQ_1:59
-        .= ((f|^a)^(<*r|^a*>)).i by A3,A10,FINSEQ_1:59
+A11:  i = len f +1;
+      thus ((f^<*r*>) |^ a).i = (f^<*r*>).i |^ a by A5,Def1
+        .= r |^ a by A11,FINSEQ_1:59
+        .= ((f|^a)^(<*r|^a*>)).i by A1,A11,FINSEQ_1:59
         .= ((f|^a)^(<*r*>|^a)).i by Th12;
     end;
   end;
-  hence thesis by A1,A2,FINSEQ_2:10;
+  len ((f|^a)^(<*r*>|^a)) = len (f|^a) + len (<*r*>|^a) by FINSEQ_1:35
+    .= len f + len (<*r*>|^a) by Def1
+    .= len f + len (<*r|^a*>) by Th12
+    .= len f + 1 by FINSEQ_1:57;
+  hence thesis by A2,A4,FINSEQ_2:10;
 end;
 
 theorem Th14:
   Product (f|^(b+1)) = Product (f|^b) * Product f
 proof
-  defpred P[FinSequence of REAL] means for b being natural number
-  holds Product ($1|^(b+1)) = Product ($1|^b) * Product $1;
-A1: P[<*>REAL]
-  proof
-    let b be natural number;
-    set f = <*>REAL;
-    thus Product (f|^(b+1)) = 1 by Th11,RVSUM_1:124
-      .= Product (f|^b) * Product f by Th11,RVSUM_1:124;
-  end;
-A2: now
+  defpred P[FinSequence of REAL] means for b being natural number holds
+  Product ($1|^(b+1)) = Product ($1|^b) * Product $1;
+A1: now
     let p be FinSequence of REAL, x being Element of REAL such that
-A3: P[p];
+A2: P[p];
     thus P[p^<*x*>]
     proof
-      let b be natural number;
       set p1 = p^<*x*>;
+      let b be natural number;
       p1 |^ (b+1) = (p|^(b+1))^(<*x*>|^(b+1)) by Th13;
-      hence Product (p1|^(b+1))
-      = Product (p|^(b+1)) * Product (<*x*>|^(b+1)) by RVSUM_1:127
-        .= (Product (p|^b) * Product p) * Product (<*x*>|^(b+1)) by A3
+      hence Product (p1|^(b+1)) = Product (p|^(b+1)) * Product (<*x*>|^(b+1))
+      by RVSUM_1:127
+        .= (Product (p|^b) * Product p) * Product (<*x*>|^(b+1)) by A2
         .= (Product (p|^b) * Product p) * Product (<*x|^(b+1)*>) by Th12
         .= (Product (p|^b) * Product p) * x|^(b+1) by RVSUM_1:125
         .= (Product (p|^b) * Product p) * (x|^b * x) by NEWTON:11
@@ -482,7 +487,14 @@ A3: P[p];
         .= Product (p1|^b) * Product p1 by RVSUM_1:126;
     end;
   end;
-  for p being FinSequence of REAL holds P[p] from FINSEQ_2:sch 2(A1,A2);
+A3: P[<*>REAL]
+  proof
+    set f = <*>REAL;
+    let b be natural number;
+    thus Product (f|^(b+1)) = 1 by Th11,RVSUM_1:124
+      .= Product (f|^b) * Product f by Th11,RVSUM_1:124;
+  end;
+  for p being FinSequence of REAL holds P[p] from FINSEQ_2:sch 2(A3, A1);
   hence thesis;
 end;
 
@@ -490,33 +502,30 @@ theorem
   Product (f|^a) = (Product f) |^ a
 proof
   defpred P[natural number] means Product (f|^$1) = (Product f) |^ $1;
-A1: P[0]
-  proof
-    thus Product (f|^0) = Product ((len f) |-> 1) by Th9
-      .= 1 by RVSUM_1:132
-      .= (Product f) |^ 0 by NEWTON:9;
-  end;
-A2: P[b] implies P[b+1]
+A1: P[b] implies P[b+1]
   proof
     assume
-A3: P[b];
+A2: P[b];
     thus Product (f|^(b+1)) = Product (f|^b) * Product f by Th14
-      .= (Product f) |^ (b+1) by A3,NEWTON:11;
+      .= (Product f) |^ (b+1) by A2,NEWTON:11;
   end;
-  P[b] from NAT_1:sch 2(A1,A2);
+  Product (f|^0) = Product ((len f) |-> 1) by Th9
+    .= 1 by RVSUM_1:132
+    .= (Product f) |^ 0 by NEWTON:9;
+  then
+A3: P[0];
+  P[b] from NAT_1:sch 2(A3,A1);
   hence thesis;
 end;
 
 begin :: More about bags
 
-registration :: cluster natural-valued FinSequence;
+registration
   let X be set;
   cluster natural-valued finite-support ManySortedSet of X;
   existence
   proof
     consider r being natural-valued finite-support ManySortedSet of X;
-
-::       ten cluster jest w polynom1
     r = r;
     hence thesis;
   end;
@@ -526,7 +535,8 @@ definition
   let X be set, b be real-valued ManySortedSet of X, a be natural number;
   func a * b -> ManySortedSet of X means
   :Def2:
-  for i being set holds it.i = a * b.i;
+  for i being set holds it.i = a
+  * b.i;
   existence
   proof
     deffunc F(set) = a * b.$1;
@@ -535,13 +545,14 @@ A1: for i being set st i in X holds f.i = F(i) from PBOOLE:sch 4;
     take f;
     let i be set;
     per cases;
-    suppose i in X;
+    suppose
+      i in X;
       hence thesis by A1;
     end;
     suppose
 A2:   not i in X;
 A3:   dom b = X by PARTFUN1:def 4;
-       dom f = X by PARTFUN1:def 4;
+      dom f = X by PARTFUN1:def 4;
       hence f.i = a * 0 by A2,FUNCT_1:def 4
         .= a * b.i by A2,A3,FUNCT_1:def 4;
     end;
@@ -554,7 +565,8 @@ A5: for i being set holds g.i = a * b.i;
     for i being set st i in X holds f.i = g.i
     proof
       let i be set;
-      assume i in X;
+      assume
+      i in X;
       thus f.i = a * b.i by A4
         .= g.i by A5;
     end;
@@ -568,7 +580,8 @@ registration
   coherence
   proof
     let x be set;
-    assume x in dom (a*b);
+    assume
+    x in dom (a*b);
     (a*b).x = a * b.x by Def2;
     hence thesis;
   end;
@@ -580,7 +593,8 @@ registration
   coherence
   proof
     let x be set;
-    assume x in dom (a*b);
+    assume
+    x in dom (a*b);
     (a*b).x = a * b.x by Def2;
     hence thesis;
   end;
@@ -591,49 +605,53 @@ registration
   cluster support (0*b) -> empty;
   coherence
   proof
-    assume support (0*b) is non empty;
+    assume
+    support (0*b) is non empty;
     then consider x being set such that
 A1: x in support (0*b) by XBOOLE_0:def 1;
-    (0*b).x <> 0 by A1,POLYNOM1:def 7;
+    (0*b).x <> 0 by A1,PRE_POLY:def 7;
     then 0 * b.x <> 0 by Def2;
     hence thesis;
   end;
 end;
 
 theorem Th16:
-  for X being set, b being real-valued ManySortedSet of X
-  st a <> 0 holds support b = support (a*b)
+  for X being set, b being real-valued ManySortedSet of X st a <>
+  0 holds support b = support (a*b)
 proof
   let X be set, b be real-valued ManySortedSet of X such that
 A1: a <> 0;
   hereby
     let x be set;
-    assume x in support b;
-    then b.x <> 0 by POLYNOM1:def 7;
+    assume
+    x in support b;
+    then b.x <> 0 by PRE_POLY:def 7;
     then a*b.x <> 0 by A1;
     then (a*b).x <> 0 by Def2;
-    hence x in support (a*b) by POLYNOM1:def 7;
+    hence x in support (a*b) by PRE_POLY:def 7;
   end;
   let x be set;
-  assume x in support (a*b);
-  then (a*b).x <> 0 by POLYNOM1:def 7;
+  assume
+  x in support (a*b);
+  then (a*b).x <> 0 by PRE_POLY:def 7;
   then a*b.x <> 0 by Def2;
   then b.x <> 0;
-  hence thesis by POLYNOM1:def 7;
+  hence thesis by PRE_POLY:def 7;
 end;
 
 registration
-  let X be set, b be real-valued finite-support ManySortedSet of X,
-  a be natural number;
+  let X be set, b be real-valued finite-support ManySortedSet of X, a be
+  natural number;
   cluster a * b -> finite-support;
   coherence
   proof
     per cases;
     suppose
-A1:   a = 0;
-      thus support (a*b) is finite by A1;
+      a = 0;
+      hence support (a*b) is finite;
     end;
-    suppose a <> 0;
+    suppose
+      a <> 0;
       then support (a*b) = support b by Th16;
       hence support (a*b) is finite;
     end;
@@ -645,50 +663,53 @@ definition
   let b1, b2 be real-valued ManySortedSet of X;
   func min(b1,b2) -> ManySortedSet of X means
   :Def3:
-  for i being set holds (b1.i <= b2.i implies it.i = b1.i) &
-  (b1.i > b2.i implies it.i = b2.i);
+  for i being set holds (b1
+  .i <= b2.i implies it.i = b1.i) & (b1.i > b2.i implies it.i = b2.i);
   existence
   proof
-    defpred P[set] means b1.$1 <= b2.$1;
-    deffunc F(set) = b1.$1;
     deffunc G(set) = b2.$1;
+    deffunc F(set) = b1.$1;
+    defpred P[set] means b1.$1 <= b2.$1;
     consider f being ManySortedSet of X such that
-A1: for i being Element of X st i in X
-    holds (P[i] implies f.i = F(i)) & (not P[i] implies f.i = G(i))
-    from PRE_CIRC:sch 2;
+A1: for i being Element of X st i in X holds (P[i] implies f.i = F(i))
+    & (not P[i] implies f.i = G(i)) from PRE_CIRC:sch 2;
     take f;
     let i be set;
     per cases;
-    suppose i in X;
+    suppose
+      i in X;
       hence thesis by A1;
     end;
-    suppose not i in X;
-      then not i in dom f & not i in dom b1 & not i in dom b2 by PARTFUN1:def 4
-;
-      then f.i = 0 & b1.i = 0 & b2.i = 0 by FUNCT_1:def 4;
-      hence thesis;
+    suppose
+A2:   not i in X;
+      then not i in dom f by PARTFUN1:def 4;
+      then
+A3:   f.i = 0 by FUNCT_1:def 4;
+      ( not i in dom b1)& not i in dom b2 by A2,PARTFUN1:def 4;
+      hence thesis by A3,FUNCT_1:def 4;
     end;
   end;
   uniqueness
   proof
     let f, g be ManySortedSet of X such that
-A2: for i being set holds (b1.i <= b2.i implies f.i = b1.i) &
-    (b1.i > b2.i implies f.i = b2.i) and
-A3: for i being set holds (b1.i <= b2.i implies g.i = b1.i) &
-    (b1.i > b2.i implies g.i = b2.i);
+A4: for i being set holds (b1.i <= b2.i implies f.i = b1.i) & (b1.i >
+    b2.i implies f.i = b2.i) and
+A5: for i being set holds (b1.i <= b2.i implies g.i = b1.i) & (b1.i >
+    b2.i implies g.i = b2.i);
     now
       let i be set;
-      assume i in X;
+      assume
+      i in X;
       per cases;
       suppose
-A4:     b1.i <= b2.i;
-        hence f.i = b1.i by A2
-          .= g.i by A3,A4;
+A6:     b1.i <= b2.i;
+        hence f.i = b1.i by A4
+          .= g.i by A5,A6;
       end;
       suppose
-A5:     b1.i > b2.i;
-        hence f.i = b2.i by A2
-          .= g.i by A3,A5;
+A7:     b1.i > b2.i;
+        hence f.i = b2.i by A4
+          .= g.i by A5,A7;
       end;
     end;
     hence thesis by PBOOLE:3;
@@ -701,9 +722,10 @@ registration
   cluster min(b1,b2) -> real-valued;
   coherence
   proof
-    set f = min(b1,b2);
     let x be set;
-    assume x in dom f;
+    set f = min(b1,b2);
+    assume
+    x in dom f;
     b1.x <= b2.x or b1.x > b2.x;
     hence thesis by Def3;
   end;
@@ -715,28 +737,30 @@ registration
   cluster min(b1,b2) -> natural-valued;
   coherence
   proof
-    set f = min(b1,b2);
     let x be set;
-    assume x in dom f;
+    set f = min(b1,b2);
+    assume
+    x in dom f;
     b1.x <= b2.x or b1.x > b2.x;
     hence thesis by Def3;
   end;
 end;
 
 theorem Th17:
-  for X being set, b1, b2 being real-valued finite-support ManySortedSet of X
-  holds support min(b1,b2) c= support b1 \/ support b2
+  for X being set, b1, b2 being real-valued finite-support
+  ManySortedSet of X holds support min(b1,b2) c= support b1 \/ support b2
 proof
   let X be set;
   let b1, b2 be real-valued finite-support ManySortedSet of X;
   set f = min(b1,b2);
   let x be set;
-  assume x in support f;
+  assume
+  x in support f;
   then
-A1: f.x <> 0 by POLYNOM1:def 7;
+A1: f.x <> 0 by PRE_POLY:def 7;
   b1.x <= b2.x or b1.x > b2.x;
   then f.x = b1.x or f.x = b2.x by Def3;
-  then x in support b1 or x in support b2 by A1,POLYNOM1:def 7;
+  then x in support b1 or x in support b2 by A1,PRE_POLY:def 7;
   hence thesis by XBOOLE_0:def 3;
 end;
 
@@ -756,50 +780,53 @@ definition
   let b1, b2 be real-valued ManySortedSet of X;
   func max(b1,b2) -> ManySortedSet of X means
   :Def4:
-  for i being set holds (b1.i <= b2.i implies it.i = b2.i) &
-  (b1.i > b2.i implies it.i = b1.i);
+  for i being set holds (b1
+  .i <= b2.i implies it.i = b2.i) & (b1.i > b2.i implies it.i = b1.i);
   existence
   proof
-    defpred P[set] means b1.$1 <= b2.$1;
-    deffunc F(set) = b2.$1;
     deffunc G(set) = b1.$1;
+    deffunc F(set) = b2.$1;
+    defpred P[set] means b1.$1 <= b2.$1;
     consider f being ManySortedSet of X such that
-A1: for i being Element of X st i in X
-    holds (P[i] implies f.i = F(i)) & (not P[i] implies f.i = G(i))
-    from PRE_CIRC:sch 2;
+A1: for i being Element of X st i in X holds (P[i] implies f.i = F(i))
+    & (not P[i] implies f.i = G(i)) from PRE_CIRC:sch 2;
     take f;
     let i be set;
     per cases;
-    suppose i in X;
+    suppose
+      i in X;
       hence thesis by A1;
     end;
-    suppose not i in X;
-      then not i in dom f & not i in dom b1 & not i in dom b2 by PARTFUN1:def 4
-;
-      then f.i = 0 & b1.i = 0 & b2.i = 0 by FUNCT_1:def 4;
-      hence thesis;
+    suppose
+A2:   not i in X;
+      then not i in dom f by PARTFUN1:def 4;
+      then
+A3:   f.i = 0 by FUNCT_1:def 4;
+      ( not i in dom b1)& not i in dom b2 by A2,PARTFUN1:def 4;
+      hence thesis by A3,FUNCT_1:def 4;
     end;
   end;
   uniqueness
   proof
     let f, g be ManySortedSet of X such that
-A2: for i being set holds (b1.i <= b2.i implies f.i = b2.i) &
-    (b1.i > b2.i implies f.i = b1.i) and
-A3: for i being set holds (b1.i <= b2.i implies g.i = b2.i) &
-    (b1.i > b2.i implies g.i = b1.i);
+A4: for i being set holds (b1.i <= b2.i implies f.i = b2.i) & (b1.i >
+    b2.i implies f.i = b1.i) and
+A5: for i being set holds (b1.i <= b2.i implies g.i = b2.i) & (b1.i >
+    b2.i implies g.i = b1.i);
     now
       let i be set;
-      assume i in X;
+      assume
+      i in X;
       per cases;
       suppose
-A4:     b1.i <= b2.i;
-        hence f.i = b2.i by A2
-          .= g.i by A3,A4;
+A6:     b1.i <= b2.i;
+        hence f.i = b2.i by A4
+          .= g.i by A5,A6;
       end;
       suppose
-A5:     b1.i > b2.i;
-        hence f.i = b1.i by A2
-          .= g.i by A3,A5;
+A7:     b1.i > b2.i;
+        hence f.i = b1.i by A4
+          .= g.i by A5,A7;
       end;
     end;
     hence thesis by PBOOLE:3;
@@ -812,9 +839,10 @@ registration
   cluster max(b1,b2) -> real-valued;
   coherence
   proof
-    set f = max(b1,b2);
     let x be set;
-    assume x in dom f;
+    set f = max(b1,b2);
+    assume
+    x in dom f;
     b1.x <= b2.x or b1.x > b2.x;
     hence thesis by Def4;
   end;
@@ -826,28 +854,30 @@ registration
   cluster max(b1,b2) -> natural-valued;
   coherence
   proof
-    set f = max(b1,b2);
     let x be set;
-    assume x in dom f;
+    set f = max(b1,b2);
+    assume
+    x in dom f;
     b1.x <= b2.x or b1.x > b2.x;
     hence thesis by Def4;
   end;
 end;
 
 theorem Th18:
-  for X being set, b1, b2 being real-valued finite-support ManySortedSet of X
-  holds support max(b1,b2) c= support b1 \/ support b2
+  for X being set, b1, b2 being real-valued finite-support
+  ManySortedSet of X holds support max(b1,b2) c= support b1 \/ support b2
 proof
   let X be set;
   let b1, b2 be real-valued finite-support ManySortedSet of X;
   set f = max(b1,b2);
   let x be set;
-  assume x in support f;
+  assume
+  x in support f;
   then
-A1: f.x <> 0 by POLYNOM1:def 7;
+A1: f.x <> 0 by PRE_POLY:def 7;
   b1.x <= b2.x or b1.x > b2.x;
   then f.x = b1.x or f.x = b2.x by Def4;
-  then x in support b1 or x in support b2 by A1,POLYNOM1:def 7;
+  then x in support b1 or x in support b2 by A1,PRE_POLY:def 7;
   hence thesis by XBOOLE_0:def 3;
 end;
 
@@ -877,21 +907,20 @@ definition
   let A be set, b be finite-support complex-yielding ManySortedSet of A;
   func Product b -> complex number means
   :Def5:
-  ex f being FinSequence of COMPLEX st
-  it = Product f & f = b*canFS(support b);
+  ex f being FinSequence of
+  COMPLEX st it = Product f & f = b*canFS(support b);
   existence
   proof
     set cS = canFS(support b);
     set f = b*cS;
-A1: support b c= dom b by POLYNOM1:41;
-    rng cS = support b by FUNCT_2:def 3;
-    then dom f = dom cS by A1,RELAT_1:46;
+A1: rng f c= COMPLEX by VALUED_0:def 1;
+    support b c= dom b & rng cS = support b by FUNCT_2:def 3,PRE_POLY:37;
+    then dom f = dom cS by RELAT_1:46;
     then dom f = Seg len cS by FINSEQ_1:def 3;
-    then
-A2: f is FinSequence by FINSEQ_1:def 2;
-    rng f c= COMPLEX by VALUED_0:def 1;
-    then reconsider f as FinSequence of COMPLEX by A2,FINSEQ_1:def 4;
-    take S = Product f; thus thesis;
+    then f is FinSequence by FINSEQ_1:def 2;
+    then reconsider f as FinSequence of COMPLEX by A1,FINSEQ_1:def 4;
+    take S = Product f;
+    thus thesis;
   end;
   uniqueness;
 end;
@@ -902,10 +931,10 @@ definition
   coherence
   proof
     consider f being FinSequence of COMPLEX such that
-A1: Product b = Product f & f = b*canFS support b by Def5;
-A2: rng b c= NAT by VALUED_0:def 6;
-    rng f c= rng b by A1,RELAT_1:45;
-    then rng f c= NAT by A2,XBOOLE_1:1;
+A1: Product b = Product f and
+A2: f = b*canFS support b by Def5;
+    rng b c= NAT & rng f c= rng b by A2,RELAT_1:45,VALUED_0:def 6;
+    then rng f c= NAT by XBOOLE_1:1;
     then reconsider g = f as FinSequence of NAT by FINSEQ_1:def 4;
     Product g in NAT;
     hence thesis by A1;
@@ -913,177 +942,182 @@ A2: rng b c= NAT by VALUED_0:def 6;
 end;
 
 theorem Th19:
-  for X being set, a, b being bag of X
-  st support a misses support b holds Product (a+b) = (Product a) * Product b
+  for X being set, a, b being bag of X st support a misses support
+  b holds Product (a+b) = (Product a) * Product b
 proof
   let X be set, a, b be bag of X;
-  assume support a misses support b;
-  then
-A1: support a /\ support b = {} by XBOOLE_0:def 7;
   set ab= a+b;
   set Pa = Product a, Pb = Product b, Pab = Product ab;
   set sab = support (a+b);
   set sa = support a;
   set sb = support b;
-  consider f being FinSequence of COMPLEX such that
-A2: Pab = Product f and
-A3: f = ab*canFS(support ab) by Def5;
-  consider fa being FinSequence of COMPLEX such that
-A4: Pa = Product fa and
-A5: fa = a*canFS(support a) by Def5;
-  consider fb being FinSequence of COMPLEX such that
-A6: Pb = Product fb and
-A7: fb = b*canFS(support b) by Def5;
-  set g = fa^fb;
   set ca = canFS(support a), cb = canFS(support b);
   set cg = ca^cb, cf = canFS(support ab);
   set p = cg" * cf;
-  len cf = card sab by UPROOTS:5;
+A1: rng cf = sab by FUNCT_2:def 3;
+  assume
+  support a misses support b;
   then
-A8: dom cf = Seg card sab by FINSEQ_1:def 3;
-A9: rng cf = sab by FUNCT_2:def 3;
-  dom ab = X by PARTFUN1:def 4;
+A2: support a /\ support b = {} by XBOOLE_0:def 7;
+A3: rng ca = sa by FUNCT_2:def 3;
+A4: sab = sa \/ sb by PRE_POLY:38;
+A5: rng cb = sb by FUNCT_2:def 3;
   then
-A11: dom f = Seg card sab by A3,A8,A9,RELAT_1:46;
-A12: len cb = card sb by UPROOTS:5;
-A13: len ca = card sa by UPROOTS:5;
-A14: sab = sa \/ sb by POLYNOM1:42;
-A15: rng cb = sb by FUNCT_2:def 3;
-A16: rng ca = sa by FUNCT_2:def 3;
-A19: len cg = card sa + card sb - card {} by A12,A13,FINSEQ_1:35
-    .= card sab by A1,A14,CARD_2:64;
+A6: rng cg = sab by A4,A3,FINSEQ_1:44;
+A7: len cb = card sb & len ca = card sa by UPROOTS:5;
   then
-A20: dom cg = Seg card sab by FINSEQ_1:def 3;
-A21: rng cg = sab by A14,A15,A16,FINSEQ_1:44;
+A8: len cg = card sa + card sb - card {} by FINSEQ_1:35
+    .= card sab by A2,A4,CARD_2:64;
   then
-A22: cg is one-to-one by A19,FINSEQ_4:77;
+A9: cg is one-to-one by A6,FINSEQ_4:77;
   then
-A23: dom (cg") = sab by A21,FUNCT_1:55;
-A24: rng (cg") = Seg card sab by A20,A22,FUNCT_1:55;
+A10: dom (cg") = sab by A6,FUNCT_1:55;
+  then
+A11: rng p = rng (cg") by A1,RELAT_1:47;
+  dom cg = Seg card sab by A8,FINSEQ_1:def 3;
+  then
+A12: rng (cg") = Seg card sab by A9,FUNCT_1:55;
+  consider fa being FinSequence of COMPLEX such that
+A13: Pa = Product fa and
+A14: fa = a*canFS(support a) by Def5;
+  consider fb being FinSequence of COMPLEX such that
+A15: Pb = Product fb and
+A16: fb = b*canFS(support b) by Def5;
+  set g = fa^fb;
+  consider f being FinSequence of COMPLEX such that
+A17: Pab = Product f and
+A18: f = ab*canFS(support ab) by Def5;
   dom a = X by PARTFUN1:def 4;
   then
-A29: dom ca = dom fa by A5,A16,RELAT_1:46;
+A19: dom ca = dom fa by A14,A3,RELAT_1:46;
   then
-A30: len ca = len fa by FINSEQ_3:31;
+A20: len ca = len fa by FINSEQ_3:31;
+  len cf = card sab by UPROOTS:5;
+  then
+A21: dom cf = Seg card sab by FINSEQ_1:def 3;
+  then
+A22: dom p = Seg card sab by A1,A10,RELAT_1:46;
+A23: dom ab = X by PARTFUN1:def 4;
+  then
+A24: dom f = Seg card sab by A18,A21,A1,RELAT_1:46;
   dom b = X by PARTFUN1:def 4;
-  then dom cb = dom fb by A7,A15,RELAT_1:46;
+  then dom cb = dom fb by A16,A5,RELAT_1:46;
   then
-A31: len cb = len fb by FINSEQ_3:31;
-A32: len cg = len ca + len cb by FINSEQ_1:35;
-A33: dom p = Seg card sab by A8,A9,A23,RELAT_1:46;
-  len g = card sa + card sb - card {} by A12,A13,A30,A31,FINSEQ_1:35
-    .= card sab by A1,A14,CARD_2:64;
+A25: len cb = len fb by FINSEQ_3:31;
+  then len g = card sa + card sb - card {} by A7,A20,FINSEQ_1:35
+    .= card sab by A2,A4,CARD_2:64;
   then
-A34: dom g = Seg card sab by FINSEQ_1:def 3;
-A35: rng p = rng (cg") by A9,A23,RELAT_1:47;
-  then reconsider p as Function of dom g, dom g by A24,A33,A34,FUNCT_2:3;
-  cg" is one-to-one by A22;
-  then
-A36: p is one-to-one;
-  p is onto by A24,A34,A35,FUNCT_2:def 3;
-  then reconsider p as Permutation of dom g by A36;
-A37: dom (g*p) = Seg card sab by A24,A33,A34,A35,RELAT_1:46;
+A26: dom g = Seg card sab by FINSEQ_1:def 3;
+  then reconsider p as Function of dom g, dom g by A12,A22,A11,FUNCT_2:3;
+  p is onto by A12,A26,A11,FUNCT_2:def 3;
+  then reconsider p as Permutation of dom g by A9;
+A27: dom (g*p) = Seg card sab by A12,A22,A26,A11,RELAT_1:46;
+A28: len cg = len ca + len cb by FINSEQ_1:35;
   now
     let x be set;
-    assume
-A38: x in dom f;
     set cgx = cg".(cf.x);
-A39: (g*p).x = g.(p.x) by A11,A37,A38,FUNCT_1:22
-      .= g.cgx by A8,A11,A38,FUNCT_1:23;
-A40: cf.x in sab by A8,A9,A11,A38,FUNCT_1:12;
-    then cgx in Seg card sab by A23,A24,FUNCT_1:12;
+    assume
+A29: x in dom f;
+    then
+A30: (g*p).x = g.(p.x) by A24,A27,FUNCT_1:22
+      .= g.cgx by A21,A24,A29,FUNCT_1:23;
+A31: cf.x in sab by A21,A1,A24,A29,FUNCT_1:12;
+    then consider d being set such that
+A32: d in dom cg and
+A33: cg.d = cf.x by A6,FUNCT_1:def 5;
+    cgx in Seg card sab by A10,A12,A31,FUNCT_1:12;
     then reconsider cgx as natural number;
     reconsider cgxN = cgx as Nat;
-    consider d being set such that
-A41: d in dom cg and
-A42: cg.d = cf.x by A21,A40,FUNCT_1:def 5;
-A43: cgx = d by A22,A41,A42,FUNCT_1:56;
+A34: cgx = d by A9,A32,A33,FUNCT_1:56;
     then
-A44: cgxN <= len fa + len fb by A30,A31,A32,A41,FINSEQ_3:27;
-A45: 1 <= cgxN by A41,A43,FINSEQ_3:27;
-    per cases by A14,A40,XBOOLE_0:def 3;
-    suppose cf.x in sa;
+A35: 1 <= cgxN by A32,FINSEQ_3:27;
+A36: cgxN <= len fa + len fb by A20,A25,A28,A32,A34,FINSEQ_3:27;
+    per cases by A4,A31,XBOOLE_0:def 3;
+    suppose
+      cf.x in sa;
       then
-A47:  not cf.x in sb by A1,XBOOLE_0:def 4;
-      set cax = ca".(cf.x);
+A37:  not cf.x in sb by A2,XBOOLE_0:def 4;
       now
-        assume len fa < cgx;
+A38:    cgx -len ca <= len ca + len cb - len ca by A20,A25,A36,XREAL_1:11;
+        assume
+        len fa < cgx;
         then
-A48:    len fa +1 <= cgx by NAT_1:13;
+A39:    len fa +1 <= cgx by NAT_1:13;
         then
-A49:    cg.cgxN = cb.(cgx-len ca) by A30,A31,A44,FINSEQ_1:36;
-A50:    len ca +1 - len ca <= cgx - len ca by A30,A48,XREAL_1:11;
+A40:    len ca +1 - len ca <= cgx - len ca by A20,XREAL_1:11;
+        then cgx - len ca is Element of NAT by INT_1:16;
         then
-A51:    cgx - len ca is Element of NAT by INT_1:16;
-        cgx -len ca <= len ca + len cb - len ca by A30,A31,A44,XREAL_1:11;
-        then cgx-len ca in dom cb by A50,A51,FINSEQ_3:27;
-        hence contradiction by A15,A42,A43,A47,A49,FUNCT_1:12;
+A41:    cgx-len ca in dom cb by A40,A38,FINSEQ_3:27;
+        cg.cgxN = cb.(cgx-len ca) by A20,A25,A36,A39,FINSEQ_1:36;
+        hence contradiction by A5,A33,A34,A37,A41,FUNCT_1:12;
       end;
       then
-A52:  cgxN in dom fa by A45,FINSEQ_3:27;
+A42:  cgxN in dom fa by A35,FINSEQ_3:27;
       then
-A53:  cg.cgx = ca.cgx by A29,FINSEQ_1:def 7;
-A54:  g.cgx = fa.cgxN by A52,FINSEQ_1:def 7
-        .= a.(cf.x) by A5,A29,A42,A43,A52,A53,FUNCT_1:23;
-      thus f.x = ab.(cf.x) by A3,A38,FUNCT_1:22
-        .= a.(cf.x) + b.(cf.x) by POLYNOM1:def 5
-        .= a.(cf.x) + 0 by A47,POLYNOM1:def 7
-        .= (g*p).x by A39,A54;
+A43:  cg.cgx = ca.cgx by A19,FINSEQ_1:def 7;
+A44:  g.cgx = fa.cgxN by A42,FINSEQ_1:def 7
+        .= a.(cf.x) by A14,A19,A33,A34,A42,A43,FUNCT_1:23;
+      thus f.x = ab.(cf.x) by A18,A29,FUNCT_1:22
+        .= a.(cf.x) + b.(cf.x) by PRE_POLY:def 5
+        .= a.(cf.x) + 0 by A37,PRE_POLY:def 7
+        .= (g*p).x by A30,A44;
+      set cax = ca".(cf.x);
     end;
     suppose
-A55:  cf.x in sb;
-      then
-A56:  not cf.x in sa by A1,XBOOLE_0:def 4;
-      set cbx = cb".(cf.x);
-A57:  now
-        assume len fa +1 > cgx;
+A45:  cf.x in sb;
+A46:  now
+        assume
+        len fa +1 > cgx;
         then cgx <= len fa by NAT_1:13;
         then
-A58:    cgx in dom ca by A29,A45,FINSEQ_3:27;
-        then ca.cgx in sa by A16,FUNCT_1:12;
-        then cg.cgxN in sa by A58,FINSEQ_1:def 7;
-        hence contradiction by A1,A42,A43,A55,XBOOLE_0:def 4;
+A47:    cgx in dom ca by A19,A35,FINSEQ_3:27;
+        then ca.cgx in sa by A3,FUNCT_1:12;
+        then cg.cgxN in sa by A47,FINSEQ_1:def 7;
+        hence contradiction by A2,A33,A34,A45,XBOOLE_0:def 4;
       end;
       then
-A59:  cg.cgx = cb.(cgx-len ca) by A30,A31,A44,FINSEQ_1:36;
-A60:  cgx-len ca <= len ca + len cb - len ca by A30,A31,A44,XREAL_1:11;
-A61:  len ca + 1 - len ca <= cgx-len ca by A30,A57,XREAL_1:11;
+A48:  cg.cgx = cb.(cgx-len ca) by A20,A25,A36,FINSEQ_1:36;
+      set cbx = cb".(cf.x);
+A49:  cgx-len ca <= len ca + len cb - len ca by A20,A25,A36,XREAL_1:11;
+A50:  len ca + 1 - len ca <= cgx-len ca by A20,A46,XREAL_1:11;
       then cgxN-len ca in NAT by INT_1:16;
-      then cgxN-len ca is Nat;
       then
-A62:  cgxN-len ca in dom cb by A60,A61,FINSEQ_3:27;
-A63:  g.cgx = fb.(cgxN-len fa) by A44,A57,FINSEQ_1:36
-        .= b.(cf.x) by A7,A30,A42,A43,A59,A62,FUNCT_1:23;
-      thus f.x = ab.(cf.x) by A3,A38,FUNCT_1:22
-        .= a.(cf.x) + b.(cf.x) by POLYNOM1:def 5
-        .= 0 + b.(cf.x) by A56,POLYNOM1:def 7
-        .= (g*p).x by A39,A63;
+A51:  cgxN-len ca in dom cb by A49,A50,FINSEQ_3:27;
+A52:  g.cgx = fb.(cgxN-len fa) by A36,A46,FINSEQ_1:36
+        .= b.(cf.x) by A16,A20,A33,A34,A48,A51,FUNCT_1:23;
+A53:  not cf.x in sa by A2,A45,XBOOLE_0:def 4;
+      thus f.x = ab.(cf.x) by A18,A29,FUNCT_1:22
+        .= a.(cf.x) + b.(cf.x) by PRE_POLY:def 5
+        .= 0 + b.(cf.x) by A53,PRE_POLY:def 7
+        .= (g*p).x by A30,A52;
     end;
   end;
   then
-A64: f = g*p by A11,A37,FUNCT_1:9;
-  thus Product (a+b) = multcomplex $$ f by A2,RVSUM_1:def 14
-    .= multcomplex $$ g by A64,FINSOP_1:8
+A54: f = g*p by A18,A21,A1,A23,A27,FUNCT_1:9,RELAT_1:46;
+  thus Product (a+b) = multcomplex $$ f by A17,RVSUM_1:def 14
+    .= multcomplex $$ g by A54,FINSOP_1:8
     .= Product g by RVSUM_1:def 14
-    .= (Product a) * Product b by A4,A6,RVSUM_1:127;
+    .= (Product a) * Product b by A13,A15,RVSUM_1:127;
 end;
 
 definition
-  let X be set, b be real-valued ManySortedSet of X,
-  n be non empty natural number;
+  let X be set, b be real-valued ManySortedSet of X, n be non empty natural
+  number;
   func b |^ n -> ManySortedSet of X means
   :Def6:
-  support it = support b &
-  for i being set holds it.i = b.i |^ n;
+  support it = support b & for
+  i being set holds it.i = b.i |^ n;
   existence
   proof
+    reconsider n1 = n as Element of NAT by ORDINAL1:def 13;
     deffunc F(Element of X) = b.$1 |^ n;
     defpred P[set,set] means ex a being Element of X st a = $1 & $2 = F(a);
-A1: dom b = X by PARTFUN1:def 4;
+A1: n1 >= 1 by NAT_1:54;
 A2: for e being set st e in X ex u being set st P[e,u]
     proof
       let e be set;
-      assume e in X;
+      assume
+      e in X;
       then reconsider f = e as Element of X;
       take F(f), f;
       thus thesis;
@@ -1091,62 +1125,68 @@ A2: for e being set st e in X ex u being set st P[e,u]
     consider f being Function such that
 A3: dom f = X and
 A4: for x being set st x in X holds P[x,f.x] from CLASSES1:sch 1(A2);
-    reconsider n1 = n as Element of NAT by ORDINAL1:def 13;
-A5: n1 >= 1 by UPROOTS:1;
     reconsider f as ManySortedSet of X by A3,PARTFUN1:def 4,RELAT_1:def 18;
     take f;
+A5: dom b = X by PARTFUN1:def 4;
     now
       let x be set;
       hereby
         assume
 A6:     x in support f;
-        assume not x in support b;
-        then b.x = 0 by POLYNOM1:def 7;
+        assume
+        not x in support b;
+        then b.x = 0 by PRE_POLY:def 7;
         then
-A7:     b.x |^ n = 0 by A5,NEWTON:16;
-        support f c= X by A3,POLYNOM1:41;
+A7:     b.x |^ n = 0 by A1,NEWTON:16;
+        support f c= X by A3,PRE_POLY:37;
         then P[x,f.x] by A4,A6;
-        hence contradiction by A6,A7,POLYNOM1:def 7;
+        hence contradiction by A6,A7,PRE_POLY:def 7;
       end;
-      assume x in support b;
-      then
-A8:   b.x <> 0 by POLYNOM1:def 7;
-      now per cases;
-        suppose x in X;
+A8:   now
+        per cases;
+        suppose
+          x in X;
           then P[x,f.x] by A4;
           hence f.x = b.x |^ n1;
         end;
         suppose
 A9:       not x in X;
           hence f.x = 0 by A3,FUNCT_1:def 4
-            .= (0 qua Nat) |^ n1 by A5,NEWTON:16
-            .= b.x |^ n1 by A1,A9,FUNCT_1:def 4;
+            .= (0 qua Nat) |^ n1 by A1,NEWTON:16
+            .= b.x |^ n1 by A5,A9,FUNCT_1:def 4;
         end;
       end;
+      assume
+      x in support b;
+      then b.x <> 0 by PRE_POLY:def 7;
       then f.x <> 0 by A8,CARD_4:51;
-      hence x in support f by POLYNOM1:def 7;
+      hence x in support f by PRE_POLY:def 7;
     end;
     hence support f = support b by TARSKI:2;
     let i be set;
     per cases;
-    suppose i in X;
+    suppose
+      i in X;
       then P[i,f.i] by A4;
       hence thesis;
     end;
     suppose
 A10:  not i in X;
       hence f.i = 0 by A3,FUNCT_1:def 4
-        .= (0 qua Nat) |^ n by A5,NEWTON:16
-        .= b.i |^ n by A1,A10,FUNCT_1:def 4;
+        .= (0 qua Nat) |^ n by A1,NEWTON:16
+        .= b.i |^ n by A5,A10,FUNCT_1:def 4;
     end;
   end;
   uniqueness
   proof
-    let it1, it2 be ManySortedSet of X such that support it1 = support b and
-A11: for i being set holds it1.i = b.i |^ n and support it2 = support b and
+    let it1, it2 be ManySortedSet of X such that
+    support it1 = support b and
+A11: for i being set holds it1.i = b.i |^ n and
+    support it2 = support b and
 A12: for i being set holds it2.i = b.i |^ n;
     now
-      let x be set such that x in X;
+      let x be set such that
+      x in X;
       thus it1.x = b.x |^ n by A11
         .= it2.x by A12;
     end;
@@ -1155,22 +1195,23 @@ A12: for i being set holds it2.i = b.i |^ n;
 end;
 
 registration
-  let X be set, b be natural-valued ManySortedSet of X,
-  n be non empty natural number;
+  let X be set, b be natural-valued ManySortedSet of X, n be non empty natural
+  number;
   cluster b |^ n -> natural-valued;
   coherence
   proof
-    set f = b |^ n;
     let x be set;
-    assume x in dom f;
+    set f = b |^ n;
+    assume
+    x in dom f;
     f.x = b.x |^ n by Def6;
     hence thesis;
   end;
 end;
 
 registration
-  let X be set, b be real-valued finite-support ManySortedSet of X,
-  n be non empty natural number;
+  let X be set, b be real-valued finite-support ManySortedSet of X, n be non
+  empty natural number;
   cluster b |^ n -> finite-support;
   coherence
   proof
@@ -1186,8 +1227,6 @@ proof
   set b = EmptyBag A;
   set cS = canFS(support b);
   support b = {} by BAGORDER:19;
-  then len cS = 0;
-  then cS = <*>NAT;
   then b*cS = <*>COMPLEX;
   hence thesis by Def5,RVSUM_1:124;
 end;
@@ -1200,7 +1239,8 @@ A1: d <> 1 and
 A2: n <> 0;
   func d |-count n -> Nat means
   :Def7:
-  d |^ it divides n & not d |^ (it+1) divides n;
+  d |^ it divides n & not d |^ (it+1)
+  divides n;
   existence
   proof
     reconsider n1 = n as Element of NAT by ORDINAL1:def 13;
@@ -1215,70 +1255,70 @@ A3:   d = 0;
     end;
     suppose
 A4:   d <> 0;
-A5:   n > 0 by A2;
       defpred P[Nat] means d |^ $1 divides n;
-A6:   for k being Nat st P[k] holds k <= n1
+A5:   for k being Nat st P[k] holds k <= n1
       proof
         let k be Nat;
-        assume P[k];
+        assume
+        P[k];
         then
-A7:     d |^ k <= n by A5,NAT_D:7;
+A6:     d |^ k <= n by A2,NAT_D:7;
         k <= d |^ k by A1,A4,Th2,NAT_1:26;
-        hence thesis by A7,XXREAL_0:2;
+        hence thesis by A6,XXREAL_0:2;
       end;
-A8:   ex k being Nat st P[k]
+A7:   ex k being Nat st P[k]
       proof
         take 0;
         d |^ 0 = 1 by NEWTON:9;
         hence thesis by NAT_D:6;
       end;
       consider k being Nat such that
-A9:   P[k] & for n being Nat st P[n] holds n <= k from NAT_1:sch 6(A6,A8);
+A8:   P[k] & for n being Nat st P[n] holds n <= k from NAT_1:sch 6(A5
+      ,A7 );
       take k;
       k+(0 qua Nat)< k+1 by XREAL_1:8;
-      hence thesis by A9;
+      hence thesis by A8;
     end;
   end;
   uniqueness
   proof
-    let a, b be Nat such that
-A10: d |^ a divides n and
-A11: not d |^ (a+1) divides n and
-A12: d |^ b divides n and
-A13: not d |^ (b+1) divides n and
-A14: a <> b;
-    reconsider a,b as Element of NAT by ORDINAL1:def 13;
     reconsider d1 = d as Element of NAT by ORDINAL1:def 13;
-    per cases by A14,XXREAL_0:1;
+    let a, b be Nat such that
+A9: d |^ a divides n and
+A10: ( not d |^ (a+1) divides n)& d |^ b divides n and
+A11: not d |^ (b+1) divides n and
+A12: a <> b;
+    reconsider a,b as Element of NAT by ORDINAL1:def 13;
+    per cases by A12,XXREAL_0:1;
     suppose
-A15:  a < b;
+A13:  a < b;
       then consider x being Nat such that
-A16:  a + x = b by NAT_1:10;
+A14:  a + x = b by NAT_1:10;
       reconsider x as Element of NAT by ORDINAL1:def 13;
       now
-        assume 0+1 > x;
-        then x <= 0 by NAT_1:13;
-        then x = 0;
-        hence contradiction by A15,A16;
+        assume
+        0+1 > x;
+        then x = 0 by NAT_1:13;
+        hence contradiction by A13,A14;
       end;
       then a+1 <= a+x by XREAL_1:8;
       then d1 |^ (a+1) divides d1 |^ (a+x) by RADIX_1:7;
-      hence contradiction by A11,A12,A16,NAT_D:4;
+      hence contradiction by A10,A14,NAT_D:4;
     end;
     suppose
-A17:  b < a;
+A15:  b < a;
       then consider x being Nat such that
-A18:  b + x = a by NAT_1:10;
+A16:  b + x = a by NAT_1:10;
       reconsider x as Element of NAT by ORDINAL1:def 13;
       now
-        assume 0+1 > x;
-        then x <= 0 by NAT_1:13;
-        then x = 0;
-        hence contradiction by A17,A18;
+        assume
+        0+1 > x;
+        then x = 0 by NAT_1:13;
+        hence contradiction by A15,A16;
       end;
       then b+1 <= b+x by XREAL_1:8;
       then d1 |^ (b+1) divides d1 |^ (b+x) by RADIX_1:7;
-      hence contradiction by A10,A13,A18,NAT_D:4;
+      hence contradiction by A9,A11,A16,NAT_D:4;
     end;
   end;
 end;
@@ -1294,8 +1334,7 @@ theorem Th21:
 proof
   assume
 A1: 1 <> n;
-A2: n |^ 0 divides 1 by NEWTON:9;
-  now
+A2: now
     assume
 A3: n |^ (0+1) divides 1;
     then n |^ 1 <= 1 by NAT_D:7;
@@ -1304,6 +1343,7 @@ A3: n |^ (0+1) divides 1;
     then 0 divides 1 by A3,NEWTON:10;
     hence contradiction by INT_2:3;
   end;
+  n |^ 0 divides 1 by NEWTON:9;
   hence thesis by A1,A2,Def7;
 end;
 
@@ -1312,12 +1352,13 @@ theorem
 proof
   assume
 A1: 1 < n;
-A2: n |^ 1 divides n by NEWTON:10;
-  now
-    assume n |^ (1+1) divides n;
+A2: now
+    assume
+    n |^ (1+1) divides n;
     then n |^ 2 <= n by A1,NAT_D:7;
     hence contradiction by A1,PREPOWER:21;
   end;
+  n |^ 1 divides n by NEWTON:10;
   hence thesis by A1,A2,Def7;
 end;
 
@@ -1331,9 +1372,8 @@ A3: a <> 1;
   a |^ 0 = 1 by NEWTON:9;
   then
 A4: a |^ 0 divides b by NAT_D:6;
-A5: a |^ 1 = a by NEWTON:10;
-  b > 0 by A1;
-  then not a |^ (0+1) divides b by A2,A5,NAT_D:7;
+  a |^ 1 = a by NEWTON:10;
+  then not a |^ (0+1) divides b by A1,A2,NAT_D:7;
   hence thesis by A1,A3,A4,Def7;
 end;
 
@@ -1354,16 +1394,17 @@ end;
 theorem Th25:
   1 < b implies b |-count (b|^a) = a
 proof
+  reconsider a as Element of NAT by ORDINAL1:def 13;
   assume
 A1: b > 1;
   then reconsider b as non empty Element of NAT by ORDINAL1:def 13;
-  reconsider a as Element of NAT by ORDINAL1:def 13;
   now
-    assume b|^(a+1) divides b|^a;
-    then
-A2: b|^(a+1) <= b|^a by NAT_D:7;
     b|^a divides b|^(a+1) by NAT_1:11,RADIX_1:7;
-    then b|^a <= b|^(a+1) by NAT_D:7;
+    then
+A2: b|^a <= b|^(a+1) by NAT_D:7;
+    assume
+    b|^(a+1) divides b|^a;
+    then b|^(a+1) <= b|^a by NAT_D:7;
     then b|^a = b|^(a+1) by A2,XXREAL_0:1;
     then a+0 = a+1 by A1,PEPIN:31;
     hence contradiction;
@@ -1372,95 +1413,96 @@ A2: b|^(a+1) <= b|^a by NAT_D:7;
 end;
 
 theorem Th26:
-  b <> 1 & a <> 0 & b divides b |^ (b |-count a) implies b divides a
+  b <> 1 & a <> 0 & b divides b |^ (b |-count a) implies b divides
+  a
 proof
   assume that
-A1: b <> 1 and
-A2: a <> 0 and
-A3: b divides b |^ (b |-count a);
-  b |^ (b |-count a) divides a by A1,A2,Def7;
-  hence thesis by A3,NAT_D:4;
+A1: b <> 1 & a <> 0 and
+A2: b divides b |^ (b |-count a);
+  b |^ (b |-count a) divides a by A1,Def7;
+  hence thesis by A2,NAT_D:4;
 end;
 
 theorem Th27:
   b <> 1 implies (a <> 0 & b |-count a = 0 iff not b divides a)
 proof
+  1 divides a by NAT_D:6;
+  then
+A1: b |^ 0 divides a by NEWTON:9;
   assume
-A1: b <> 1;
+A2: b <> 1;
   thus a <> 0 & b |-count a = 0 implies not b divides a
   proof
     assume that
-A2: a <> 0 and
-A3: b |-count a = 0 and
+A3: a <> 0 & b |-count a = 0 and
 A4: b divides a;
-    not b |^ (0+1) divides a by A1,A2,A3,Def7;
+    not b |^ (0+1) divides a by A2,A3,Def7;
     hence contradiction by A4,NEWTON:10;
   end;
   assume
-A5: not b divides a;
-  then
-A6: not b |^ (0+1) divides a by NEWTON:10;
-A7: a <> 0 by A5,NAT_D:6;
-  1 divides a by NAT_D:6;
-  then b |^ 0 divides a by NEWTON:9;
-  hence thesis by A1,A6,A7,Def7;
+  not b divides a;
+  then ( not b |^ (0+1) divides a)& a <> 0 by NAT_D:6,NEWTON:10;
+  hence thesis by A2,A1,Def7;
 end;
 
 theorem Th28:
-  for a, b being non empty natural number
-  holds p |-count (a*b) = (p |-count a) + (p |-count b)
+  for a, b being non empty natural number holds p |-count (a*b) =
+  (p |-count a) + (p |-count b)
 proof
   let a,b be non empty natural number;
   set x = p |-count a;
   set y = p |-count b;
   set z = p |-count (a*b);
 A1: p <> 1 by INT_2:def 5;
-A2: p |^ (x+y) = p |^ x * p |^ y by NEWTON:13;
-A3: p |^ x divides a by A1,Def7;
-A4: p |^ y divides b by A1,Def7;
   then
-A5: p |^ (x+y) divides a*b by A2,A3,Th1;
-  now
+A2: p |^ y divides b by Def7;
+A3: p |^ x divides a by A1,Def7;
+A4: now
     assume
-A6: p |^ (x+y+1) divides a*b;
-A7: p |^ (x+y+1) = p |^ (x+y) * p by NEWTON:11;
-A8: not p |^ (y+1) divides b by A1,Def7;
-A9: not p |^ (x+1) divides a by A1,Def7;
+    p |^ (x+y+1) divides a*b;
+    then consider v being Nat such that
+A5: a*b = p |^ (x+y+1) * v by NAT_D:def 3;
+    p |^ (x+y+1) = p |^ (x+y) * p by NEWTON:11;
+    then
+A6: a*b = p |^ (x+y) * (p * v) by A5;
     consider t being Nat such that
-A10: a = (p |^ x) * t by A3,NAT_D:def 3;
+A7: a = (p |^ x) * t by A3,NAT_D:def 3;
+A8: not p |^ (x+1) divides a by A1,Def7;
+A9: not p |^ (y+1) divides b by A1,Def7;
     consider u being Nat such that
-A11: b = (p |^ y) * u by A4,NAT_D:def 3;
-    consider v being Nat such that
-A12: a*b = p |^ (x+y+1) * v by A6,NAT_D:def 3;
-A13: a*b = (p |^ x) * (p |^ y) * t * u by A10,A11
+A10: b = (p |^ y) * u by A2,NAT_D:def 3;
+    a*b = (p |^ x) * (p |^ y) * t * u by A7,A10
       .= p |^ (x+y) * t * u by NEWTON:13
       .= p |^ (x+y) * (t * u);
-    a*b = p |^ (x+y) * (p * v) by A7,A12;
-    then p*v = t*u by A13,XCMPLX_1:5;
+    then p*v = t*u by A6,XCMPLX_1:5;
     then
-A14: p divides t*u by NAT_D:def 3;
-    per cases by A14,NEWTON:98;
-    suppose p divides t;
+A11: p divides t*u by NAT_D:def 3;
+    per cases by A11,NEWTON:98;
+    suppose
+      p divides t;
       then consider t1 being Nat such that
-A15:  t = p * t1 by NAT_D:def 3;
-      a = (p |^ x) * p * t1 by A10,A15
+A12:  t = p * t1 by NAT_D:def 3;
+      a = (p |^ x) * p * t1 by A7,A12
         .= p |^ (x+1) * t1 by NEWTON:11;
-      hence contradiction by A9,NAT_D:def 3;
-    end;
-    suppose p divides u;
-      then consider t1 being Nat such that
-A16:  u = p * t1 by NAT_D:def 3;
-      b = (p |^ y) * p * t1 by A11,A16
-        .= p |^ (y+1) * t1 by NEWTON:11;
       hence contradiction by A8,NAT_D:def 3;
     end;
+    suppose
+      p divides u;
+      then consider t1 being Nat such that
+A13:  u = p * t1 by NAT_D:def 3;
+      b = (p |^ y) * p * t1 by A10,A13
+        .= p |^ (y+1) * t1 by NEWTON:11;
+      hence contradiction by A9,NAT_D:def 3;
+    end;
   end;
-  hence thesis by A1,A5,Def7;
+  p |^ (x+y) = p |^ x * p |^ y by NEWTON:13;
+  then p |^ (x+y) divides a*b by A3,A2,Th1;
+  hence thesis by A1,A4,Def7;
 end;
 
 theorem Th29:
-  for a, b being non empty natural number
-  holds p |^ (p |-count (a*b)) = (p |^ (p |-count a)) * (p |^ (p |-count b))
+  for a, b being non empty natural number holds p |^ (p |-count (a
+  *b)) = (p |^ (p |-count a)) * (p |^ (p |-count b))
 proof
   let a,b be non empty natural number;
   set x = p |-count a;
@@ -1470,27 +1512,28 @@ proof
 end;
 
 theorem Th30:
-  for a, b being non empty natural number
-  st b divides a holds p |-count b <= p |-count a
+  for a, b being non empty natural number st b divides a holds p
+  |-count b <= p |-count a
 proof
   let a,b be non empty natural number;
   set x = p |-count a;
   set y = p |-count b;
   set z = p |-count (a div b);
-  assume b divides a;
-  then
-A1: a = b * (a div b) by NAT_D:3;
-A2: p > 1 by INT_2:def 5;
-A3: a div b <> 0 by A1;
   0+1 <= p |^ z by NAT_1:13;
-  then 1 * p |^ y <= p |^ z * p |^ y by XREAL_1:68;
-  then p |^ y <= p |^ x by A1,A3,Th29;
-  hence thesis by A2,PEPIN:71;
+  then
+A1: 1 * p |^ y <= p |^ z * p |^ y by XREAL_1:68;
+  assume
+  b divides a;
+  then
+A2: a = b * (a div b) by NAT_D:3;
+  then a div b <> 0;
+  then p > 1 & p |^ y <= p |^ x by A2,A1,Th29,INT_2:def 5;
+  hence thesis by PEPIN:71;
 end;
 
 theorem Th31:
-  for a, b being non empty natural number
-  st b divides a holds p |-count (a div b) = (p |-count a) -' (p |-count b)
+  for a, b being non empty natural number st b divides a holds p
+  |-count (a div b) = (p |-count a) -' (p |-count b)
 proof
   let a,b be non empty natural number;
   set x = p |-count a;
@@ -1509,26 +1552,25 @@ A2: z + y = x + 0 by A1,NAT_D:3;
 end;
 
 theorem Th32:
-  for a being non empty natural number
-  holds p |-count (a|^b) = b * (p |-count a)
+  for a being non empty natural number holds p |-count (a|^b) = b
+  * (p |-count a)
 proof
   let a be non empty natural number;
 A1: p <> 1 by INT_2:def 5;
   defpred P[natural number] means p |-count (a|^$1) = $1 * (p |-count a);
-A2: P[0]
-  proof
-    thus p |-count (a|^0) = p |-count 1 by NEWTON:9
-      .= 0 * (p |-count a) by A1,Th21;
-  end;
-A3: for x being natural number st P[x] holds P[x+1]
+A2: for x being natural number st P[x] holds P[x+1]
   proof
     let x be natural number such that
-A4: P[x];
+A3: P[x];
     thus p |-count (a|^(x+1)) = p |-count (a|^x*a) by NEWTON:11
-      .= x * (p |-count a) + 1 * (p |-count a) by A4,Th28
+      .= x * (p |-count a) + 1 * (p |-count a) by A3,Th28
       .= (x+1) * (p |-count a);
   end;
-  for x being natural number holds P[x] from NAT_1:sch 2(A2,A3);
+  p |-count (a|^0) = p |-count 1 by NEWTON:9
+    .= 0 * (p |-count a) by A1,Th21;
+  then
+A4: P[0];
+  for x being natural number holds P[x] from NAT_1:sch 2(A4,A2);
   hence thesis;
 end;
 
@@ -1538,7 +1580,8 @@ definition
   let n be natural number;
   func prime_exponents n -> ManySortedSet of SetPrimes means
   :Def8:
-  for p being Prime holds it.p = p |-count n;
+  for p
+  being Prime holds it.p = p |-count n;
   existence
   proof
     deffunc F(natural number) = $1 |-count n;
@@ -1546,13 +1589,15 @@ definition
 A1: for i being set st i in SetPrimes ex j being set st P[i,j]
     proof
       let i be set;
-      assume i in SetPrimes;
+      assume
+      i in SetPrimes;
       then reconsider i as prime Element of NAT by NEWTON:def 6;
       take F(i), i;
       thus thesis;
     end;
     consider f being ManySortedSet of SetPrimes such that
-A2: for i being set st i in SetPrimes holds P[i,f.i] from PBOOLE:sch 3(A1);
+A2: for i being set st i in SetPrimes holds P[i,f.i] from PBOOLE:sch 3
+    (A1);
     take f;
     let i be Prime;
     i in SetPrimes by NEWTON:def 6;
@@ -1566,7 +1611,8 @@ A3: for i being Prime holds f.i = i |-count n and
 A4: for i being Prime holds g.i = i |-count n;
     now
       let i be set;
-      assume i in SetPrimes;
+      assume
+      i in SetPrimes;
       then reconsider a = i as prime Element of NAT by NEWTON:def 6;
       thus f.i = a |-count n by A3
         .= g.i by A4;
@@ -1577,17 +1623,17 @@ end;
 
 notation
   let n be natural number;
-  synonym pfexp n for prime_exponents n; :: for prime factors exponents
+  synonym pfexp n for prime_exponents n;
 end;
 
 theorem Th33:
   for x being set st x in dom pfexp n holds x is Prime
 proof
   let x be set;
-  assume x in dom pfexp n;
+  assume
+  x in dom pfexp n;
   then x in SetPrimes by PARTFUN1:def 4;
-  then x is prime Element of NAT by NEWTON:def 6;
-  hence thesis;
+  hence thesis by NEWTON:def 6;
 end;
 
 theorem Th34:
@@ -1595,29 +1641,29 @@ theorem Th34:
 proof
   let x be set;
   set f = pfexp n;
+A1: support f c= dom f by PRE_POLY:37;
   assume
-A1: x in support f;
-  support f c= dom f by POLYNOM1:41;
+  x in support f;
   hence thesis by A1,Th33;
 end;
 
 theorem Th35:
   a > n & n <> 0 implies (pfexp n).a = 0
 proof
-  assume that
-A1: a > n and
-A2: n <> 0;
+  assume
+A1: a > n & n <> 0;
   reconsider a as Element of NAT by ORDINAL1:def 13;
   per cases;
-  suppose a is not prime;
+  suppose
+    a is not prime;
     then not a in dom pfexp n by Th33;
     hence thesis by FUNCT_1:def 4;
   end;
   suppose
-A3: a is prime;
+A2: a is prime;
     then a <> 1 by INT_2:def 5;
-    then a |-count n = 0 by A1,A2,Th23;
-    hence thesis by A3,Def8;
+    then a |-count n = 0 by A1,Th23;
+    hence thesis by A2,Def8;
   end;
 end;
 
@@ -1626,9 +1672,10 @@ registration
   cluster pfexp n -> natural-valued;
   coherence
   proof
-    set f = pfexp n;
     let x be set;
-    assume x in dom f;
+    set f = pfexp n;
+    assume
+    x in dom f;
     then reconsider x as Prime by Th33;
     f.x = x |-count n by Def8;
     hence thesis;
@@ -1642,14 +1689,14 @@ proof
   assume
 A1: a in support f;
   then reconsider a as Prime by Th34;
-A2: f.a <> 0 by A1,POLYNOM1:def 7;
-A3: a <> 1 by INT_2:def 5;
-  f.a = a |-count b by Def8;
-  hence thesis by A2,A3,Th27;
+A2: a <> 1 & f.a = a |-count b by Def8,INT_2:def 5;
+  f.a <> 0 by A1,PRE_POLY:def 7;
+  hence thesis by A2,Th27;
 end;
 
 theorem Th37:
-  b is non empty & a is Prime & a divides b implies a in support pfexp b
+  b is non empty & a is Prime & a divides b implies a in support
+  pfexp b
 proof
   assume that
 A1: b is non empty and
@@ -1659,7 +1706,7 @@ A3: a divides b;
   then
 A4: a |-count b <> 0 by A1,A3,Th27;
   (pfexp b).a = a |-count b by A2,Def8;
-  hence thesis by A4,POLYNOM1:def 7;
+  hence thesis by A4,PRE_POLY:def 7;
 end;
 
 registration
@@ -1667,37 +1714,37 @@ registration
   cluster pfexp n -> finite-support;
   coherence
   proof
-    set f = pfexp n;
-    deffunc F(set) = $1;
     defpred P[Nat] means $1 is prime;
+    deffunc F(set) = $1;
+    set f = pfexp n;
     reconsider n as Element of NAT by ORDINAL1:def 13;
     set A = {F(i) where i is Element of NAT: 0 <= i & i <= n & P[i]};
-A1: A is finite from FINSEQ_1:sch 6;
-    support f c= A
+A1: support f c= A
     proof
       let x be set;
       assume
 A2:   x in support f;
       then reconsider x as Prime by Th34;
-A3:   x is prime Element of NAT by ORDINAL1:def 13;
-      f.x <> 0 by A2,POLYNOM1:def 7;
-      then x <= n by Th35;
-      hence thesis by A3;
+      f.x <> 0 by A2,PRE_POLY:def 7;
+      then x is prime Element of NAT & x <= n by Th35,ORDINAL1:def 13;
+      hence thesis;
     end;
+    A is finite from FINSEQ_1:sch 6;
     hence support f is finite by A1;
   end;
 end;
 
 theorem Th38:
-  for a being non empty natural number st p divides a holds (pfexp a).p <> 0
+  for a being non empty natural number st p divides a holds (pfexp
+  a).p <> 0
 proof
   let a be non empty natural number;
-  assume p divides a;
+  assume
+  p divides a;
   then
 A1: p |^ (0+1) divides a by NEWTON:10;
-A2: (pfexp a).p = p |-count a by Def8;
-  p <> 1 by INT_2:def 5;
-  hence thesis by A1,A2,Def7;
+  (pfexp a).p = p |-count a & p <> 1 by Def8,INT_2:def 5;
+  hence thesis by A1,Def7;
 end;
 
 theorem Th39:
@@ -1707,7 +1754,8 @@ proof
   for z being set st z in dom f holds f.z = 0
   proof
     let z be set;
-    assume z in dom f;
+    assume
+    z in dom f;
     then reconsider z as Prime by Th33;
 A1: z <> 1 by INT_2:def 5;
     f.z = z |-count 1 by Def8
@@ -1723,11 +1771,12 @@ registration
   coherence
   proof
     set f = pfexp 1;
-    assume support f is non empty;
+    assume
+    support f is non empty;
     then consider x being set such that
 A1: x in support f by XBOOLE_0:def 1;
-    f.x <> 0 by A1,POLYNOM1:def 7;
-    hence contradiction by Th39,POLYNOM1:56;
+    f.x <> 0 by A1,PRE_POLY:def 7;
+    hence contradiction by Th39,PRE_POLY:52;
   end;
 end;
 
@@ -1735,14 +1784,14 @@ theorem Th40:
   (pfexp (p|^a)).p = a
 proof
   set f = pfexp (p|^a);
-A1: p > 1 by INT_2:def 5;
-  f.p = p |-count (p|^a) by Def8;
-  hence thesis by A1,Th25;
+  p > 1 & f.p = p |-count (p|^a) by Def8,INT_2:def 5;
+  hence thesis by Th25;
 end;
 
 theorem
   (pfexp p).p = 1
-proof p = p |^ 1 by NEWTON:10;
+proof
+  p = p |^ 1 by NEWTON:10;
   hence thesis by Th40;
 end;
 
@@ -1751,32 +1800,33 @@ theorem Th42:
 proof
   set f = pfexp (p|^a);
   assume
-A1: a <> 0;
+  a <> 0;
+  then p divides p|^a by Th3;
+  then
+A1: f.p <> 0 by Th38;
   thus support f c= {p}
   proof
     let x be set;
     assume
 A2: x in support f;
     then reconsider x as Prime by Th34;
-A3: f.x <> 0 by A2,POLYNOM1:def 7;
-A4: x <> 1 by INT_2:def 5;
-    f.x = x |-count (p|^a) by Def8;
-    then x divides p|^a by A3,A4,Th27;
+A3: x <> 1 & f.x = x |-count (p|^a) by Def8,INT_2:def 5;
+    f.x <> 0 by A2,PRE_POLY:def 7;
+    then x divides p|^a by A3,Th27;
     then x = p by Th6;
     hence thesis by TARSKI:def 1;
   end;
   let x be set;
-  assume x in {p};
-  then
-A5: x = p by TARSKI:def 1;
-  p divides p|^a by A1,Th3;
-  then f.p <> 0 by Th38;
-  hence thesis by A5,POLYNOM1:def 7;
+  assume
+  x in {p};
+  then x = p by TARSKI:def 1;
+  hence thesis by A1,PRE_POLY:def 7;
 end;
 
 theorem Th43:
   support pfexp p = {p}
-proof p = p |^ 1 by NEWTON:10;
+proof
+  p = p |^ 1 by NEWTON:10;
   hence thesis by Th42;
 end;
 
@@ -1785,7 +1835,8 @@ registration
   let a be non empty natural number;
   cluster support pfexp (p|^a) -> non empty trivial;
   coherence
-  proof support pfexp (p|^a) = {p} by Th42;
+  proof
+    support pfexp (p|^a) = {p} by Th42;
     hence thesis;
   end;
 end;
@@ -1794,46 +1845,50 @@ registration
   let p be Prime;
   cluster support pfexp p -> non empty trivial;
   coherence
-  proof support pfexp p = {p} by Th43;
+  proof
+    support pfexp p = {p} by Th43;
     hence thesis;
   end;
 end;
 
 theorem Th44:
-  for a, b being non empty Nat
-  st a,b are_relative_prime holds support pfexp a misses support pfexp b
+  for a, b being non empty Nat st a,b are_relative_prime holds
+  support pfexp a misses support pfexp b
 proof
   let a, b be non empty Nat;
-  assume a,b are_relative_prime;
-  then
-A1: a gcd b = 1 by INT_2:def 4;
   set f = pfexp a;
   set g = pfexp b;
-  assume support f meets support g;
+  assume
+  a,b are_relative_prime;
+  then
+A1: a gcd b = 1 by INT_2:def 4;
+  assume
+  support f meets support g;
   then consider x being set such that
 A2: x in support f and
 A3: x in support g by XBOOLE_0:3;
   reconsider x as Prime by A2,Th34;
-A5: f.x <> 0 by A2,POLYNOM1:def 7;
-A6: f.x = x |-count a by Def8;
+A4: f.x = x |-count a by Def8;
+A5: g.x = x |-count b by Def8;
+  g.x <> 0 by A3,PRE_POLY:def 7;
+  then
+A6: x divides x |^ (x |-count b) by A5,Th3;
 A7: x <> 1 by INT_2:def 5;
+  then x |^ (x |-count b) divides b by Def7;
   then
-A8: x |^ (x |-count a) divides a by Def7;
-  x divides x |^ (x |-count a) by A5,A6,Th3;
+A8: x divides b by A6,NAT_D:4;
+  f.x <> 0 by A2,PRE_POLY:def 7;
   then
-A9: x divides a by A8,NAT_D:4;
-A10: g.x <> 0 by A3,POLYNOM1:def 7;
-A11: g.x = x |-count b by Def8;
-A12: x |^ (x |-count b) divides b by A7,Def7;
-  x divides x |^ (x |-count b) by A10,A11,Th3;
-  then x divides b by A12,NAT_D:4;
-  then x divides 1 by A1,A9,NAT_D:def 5;
+A9: x divides x |^ (x |-count a) by A4,Th3;
+  x |^ (x |-count a) divides a by A7,Def7;
+  then x divides a by A9,NAT_D:4;
+  then x divides 1 by A1,A8,NAT_D:def 5;
   hence contradiction by A7,WSIERP_1:20;
 end;
 
 theorem Th45:
-  for a,b being non empty natural number
-  holds support pfexp a c= support pfexp (a*b)
+  for a,b being non empty natural number holds support pfexp a c=
+  support pfexp (a*b)
 proof
   let a, b be non empty natural number;
   set f = pfexp a;
@@ -1842,24 +1897,24 @@ proof
   assume
 A1: x in support f;
   then reconsider x as Prime by Th34;
-A2: f.x <> 0 by A1,POLYNOM1:def 7;
-A3: x <> 1 by INT_2:def 5;
+A2: f.x = x |-count a by Def8;
+  f.x <> 0 by A1,PRE_POLY:def 7;
   then
-A4: x |^ (x |-count a) divides a by Def7;
-  f.x = x |-count a by Def8;
-  then x divides x |^ (x |-count a) by A2,Th3;
-  then x divides a by A4,NAT_D:4;
+A3: x divides x |^ (x |-count a) by A2,Th3;
+A4: x <> 1 by INT_2:def 5;
+  then x |^ (x |-count a) divides a by Def7;
+  then x divides a by A3,NAT_D:4;
   then x |^ 1 divides a by NEWTON:10;
   then
 A5: x |^ (0+1) divides a*b by NAT_D:9;
   h.x = x |-count (a*b) by Def8;
-  then h.x <> 0 by A3,A5,Def7;
-  hence thesis by POLYNOM1:def 7;
+  then h.x <> 0 by A4,A5,Def7;
+  hence thesis by PRE_POLY:def 7;
 end;
 
 theorem Th46:
-  for a, b being non empty Nat
-  holds support pfexp (a*b) = support pfexp a \/ support pfexp b
+  for a, b being non empty Nat holds support pfexp (a*b) = support
+  pfexp a \/ support pfexp b
 proof
   let a, b be non empty Nat;
   set f = pfexp a;
@@ -1871,22 +1926,23 @@ proof
     assume
 A1: x in support h;
     then reconsider x as Prime by Th34;
-A2: h.x <> 0 by A1,POLYNOM1:def 7;
+A2: h.x <> 0 by A1,PRE_POLY:def 7;
 A3: x <> 1 by INT_2:def 5;
-A4: h.x = x |-count (a*b) by Def8;
-A5: x |^ (x |-count(a*b)) = (x |^ (x |-count a)) * (x |^ (x |-count b))
-    by Th29;
-    per cases by A2,A4,A5,Th3,NEWTON:98;
-    suppose x divides x |^ (x |-count a);
+A4: h.x = x |-count (a*b) & x |^ (x |-count(a*b)) = (x |^ (x |-count a)) *
+    (x |^ (x |-count b)) by Def8,Th29;
+    per cases by A2,A4,Th3,NEWTON:98;
+    suppose
+      x divides x |^ (x |-count a);
       then x divides a by A3,Th26;
       then f.x <> 0 by Th38;
-      then x in support f by POLYNOM1:def 7;
+      then x in support f by PRE_POLY:def 7;
       hence thesis by XBOOLE_0:def 3;
     end;
-    suppose x divides x |^ (x |-count b);
+    suppose
+      x divides x |^ (x |-count b);
       then x divides b by A3,Th26;
       then g.x <> 0 by Th38;
-      then x in support g by POLYNOM1:def 7;
+      then x in support g by PRE_POLY:def 7;
       hence thesis by XBOOLE_0:def 3;
     end;
   end;
@@ -1895,8 +1951,8 @@ A5: x |^ (x |-count(a*b)) = (x |^ (x |-count a)) * (x |^ (x |-count b))
 end;
 
 theorem
-  for a, b being non empty Nat st a,b are_relative_prime
-  holds card support pfexp (a*b) = card support pfexp a + card support pfexp b
+  for a, b being non empty Nat st a,b are_relative_prime holds card
+  support pfexp (a*b) = card support pfexp a + card support pfexp b
 proof
   let a, b be non empty Nat;
   assume
@@ -1906,8 +1962,8 @@ A1: a,b are_relative_prime;
 end;
 
 theorem
-  for a, b being non empty natural number
-  holds support pfexp a = support pfexp (a|^b)
+  for a, b being non empty natural number holds support pfexp a =
+  support pfexp (a|^b)
 proof
   let a, b be non empty natural number;
   set f = pfexp a;
@@ -1918,12 +1974,11 @@ proof
   assume
 A1: x in support g;
   then reconsider x as Prime by Th34;
-A2: g.x <> 0 by A1,POLYNOM1:def 7;
-A3: g.x = x |-count (a|^b) by Def8;
-  x <> 1 by INT_2:def 5;
-  then x divides a|^b by A2,A3,Th27;
+A2: g.x = x |-count (a|^b) & x <> 1 by Def8,INT_2:def 5;
+  g.x <> 0 by A1,PRE_POLY:def 7;
+  then x divides a|^b by A2,Th27;
   then f.x <> 0 by Th5,Th38;
-  hence thesis by POLYNOM1:def 7;
+  hence thesis by PRE_POLY:def 7;
 end;
 
 reserve n, m for non empty natural number;
@@ -1931,17 +1986,18 @@ reserve n, m for non empty natural number;
 theorem
   pfexp (n*m) = pfexp n + pfexp m
 proof
-  for i being set st i in SetPrimes holds
-  (pfexp (n*m)).i = (pfexp n + pfexp m).i
+  for i being set st i in SetPrimes holds (pfexp (n*m)).i = (pfexp n +
+  pfexp m).i
   proof
     let i be set;
-    assume i in SetPrimes;
+    assume
+    i in SetPrimes;
     then reconsider a = i as prime Element of NAT by NEWTON:def 6;
     thus (pfexp (n*m)).i = a |-count (n*m) by Def8
       .= (a |-count n) + (a |-count m) by Th28
       .= (pfexp n).i + (a |-count m) by Def8
       .= (pfexp n).i + (pfexp m).i by Def8
-      .= (pfexp n + pfexp m).i by POLYNOM1:def 5;
+      .= (pfexp n + pfexp m).i by PRE_POLY:def 5;
   end;
   hence thesis by PBOOLE:3;
 end;
@@ -1951,17 +2007,18 @@ theorem
 proof
   assume
 A1: m divides n;
-  for i being set st i in SetPrimes holds
-  (pfexp (n div m)).i = (pfexp n -' pfexp m).i
+  for i being set st i in SetPrimes holds (pfexp (n div m)).i = (pfexp n
+  -' pfexp m).i
   proof
     let i be set;
-    assume i in SetPrimes;
+    assume
+    i in SetPrimes;
     then reconsider a = i as prime Element of NAT by NEWTON:def 6;
     thus (pfexp (n div m)).i = a |-count (n div m) by Def8
       .= (a |-count n) -' (a |-count m) by A1,Th31
       .= (pfexp n).i -' (a |-count m) by Def8
       .= (pfexp n).i -' (pfexp m).i by Def8
-      .= (pfexp n -' pfexp m).i by POLYNOM1:def 6;
+      .= (pfexp n -' pfexp m).i by PRE_POLY:def 6;
   end;
   hence thesis by PBOOLE:3;
 end;
@@ -1969,10 +2026,12 @@ end;
 theorem
   pfexp (n|^a) = a * pfexp n
 proof
-  for i being set st i in SetPrimes holds (pfexp (n|^a)).i = (a * pfexp n).i
+  for i being set st i in SetPrimes holds (pfexp (n|^a)).i = (a * pfexp n)
+  .i
   proof
     let i be set;
-    assume i in SetPrimes;
+    assume
+    i in SetPrimes;
     then reconsider x = i as prime Element of NAT by NEWTON:def 6;
     thus (pfexp (n|^a)).i = x |-count (n|^a) by Def8
       .= a * (x |-count n) by Th32
@@ -1990,76 +2049,80 @@ A1: support pfexp n = {} and
 A2: n <> 1;
   n >= 0+1 by NAT_1:13;
   then n > 1 by A2,XXREAL_0:1;
-  then n >= 1+1 & n is Nat by NAT_1:13;
+  then n >= 1+1 by NAT_1:13;
   then consider p being Element of NAT such that
 A3: p is prime and
 A4: p divides n by INT_2:48;
   p > 1 by A3,INT_2:def 5;
   then p |-count n <> 0 by A4,Th27;
   then (pfexp n).p <> 0 by A3,Def8;
-  hence contradiction by A1,POLYNOM1:def 7;
+  hence contradiction by A1,PRE_POLY:def 7;
 end;
 
 theorem
-  for m, n being non empty Nat holds pfexp (n gcd m) = min(pfexp n, pfexp m)
+  for m, n being non empty Nat holds pfexp (n gcd m) = min(pfexp n,
+  pfexp m)
 proof
   let m, n be non empty Nat;
   now
-    let i be set;
-    assume i in SetPrimes;
-    then reconsider j = i as prime Element of NAT by NEWTON:def 6;
-    set lhs = pfexp (n gcd m);
     set rhs = min(pfexp n, pfexp m);
+    set lhs = pfexp (n gcd m);
+    let i be set;
+    assume
+    i in SetPrimes;
+    then reconsider j = i as prime Element of NAT by NEWTON:def 6;
     set x = j |-count n, y = j |-count m, z = j |-count (n gcd m);
-A1: j <> 1 by INT_2:def 5;
-A2: n gcd m <> 0 by INT_2:5;
-A3: lhs.j = z by Def8;
-A4: j |^ z divides (n gcd m) by A1,A2,Def7;
-A5: not j |^ (z+1) divides (n gcd m) by A1,A2,Def7;
-A6: (pfexp n).j = x by Def8;
-A7: j |^ x divides n by A1,Def7;
-A8: not j |^ (x+1) divides n by A1,Def7;
-A9: (pfexp m).j = y by Def8;
-A10: j |^ y divides m by A1,Def7;
-A11: not j |^ (y+1) divides m by A1,Def7;
-A12: n gcd m divides m by NAT_D:def 5;
-A13: n gcd m divides n by NAT_D:def 5;
-A14: j |^ z divides m by A4,A12,NAT_D:4;
-A15: j |^ z divides n by A4,A13,NAT_D:4;
+A1: lhs.j = z by Def8;
+A2: j <> 1 by INT_2:def 5;
+    then
+A3: j |^ x divides n by Def7;
+A4: n gcd m <> 0 by INT_2:5;
+    then
+A5: j |^ z divides (n gcd m) by A2,Def7;
+A6: not j |^ (z+1) divides (n gcd m) by A2,A4,Def7;
+A7: not j |^ (y+1) divides m by A2,Def7;
+A8: j |^ y divides m by A2,Def7;
+    n gcd m divides m by NAT_D:def 5;
+    then
+A9: j |^ z divides m by A5,NAT_D:4;
+A10: (pfexp n).j = x by Def8;
+    n gcd m divides n by NAT_D:def 5;
+    then
+A11: j |^ z divides n by A5,NAT_D:4;
+A12: (pfexp m).j = y by Def8;
+A13: not j |^ (x+1) divides n by A2,Def7;
     thus lhs.i = rhs.i
     proof
       per cases;
       suppose
-A16:    (pfexp n).j <= (pfexp m).j;
-        then
-A17:    rhs.j = x by A6,Def3;
-A18:    z <= x by A8,A15,Th4;
-        now
+A14:    (pfexp n).j <= (pfexp m).j;
+A15:    now
           assume
-A19:      z < x;
+A16:      z < x;
+          then z < y by A10,A12,A14,XXREAL_0:2;
           then
-A20:      j |^ (z+1) divides n by A7,Th4;
-          z < y by A6,A9,A16,A19,XXREAL_0:2;
-          then j |^ (z+1) divides m by A10,Th4;
-          hence contradiction by A5,A20,NAT_D:def 5;
+A17:      j |^ (z+1) divides m by A8,Th4;
+          j |^ (z+1) divides n by A3,A16,Th4;
+          hence contradiction by A6,A17,NAT_D:def 5;
         end;
-        hence thesis by A3,A17,A18,XXREAL_0:1;
+A18:    z <= x by A13,A11,Th4;
+        rhs.j = x by A10,A14,Def3;
+        hence thesis by A1,A18,A15,XXREAL_0:1;
       end;
       suppose
-A21:    (pfexp n).j > (pfexp m).j;
-        then
-A22:    rhs.j = y by A9,Def3;
-A23:    z <= y by A11,A14,Th4;
-        now
+A19:    (pfexp n).j > (pfexp m).j;
+A20:    now
           assume
-A24:      z < y;
+A21:      z < y;
+          then z < x by A10,A12,A19,XXREAL_0:2;
           then
-A25:      j |^ (z+1) divides m by A10,Th4;
-          z < x by A6,A9,A21,A24,XXREAL_0:2;
-          then j |^ (z+1) divides n by A7,Th4;
-          hence contradiction by A5,A25,NAT_D:def 5;
+A22:      j |^ (z+1) divides n by A3,Th4;
+          j |^ (z+1) divides m by A8,A21,Th4;
+          hence contradiction by A6,A22,NAT_D:def 5;
         end;
-        hence thesis by A3,A22,A23,XXREAL_0:1;
+A23:    z <= y by A7,A9,Th4;
+        rhs.j = y by A12,A19,Def3;
+        hence thesis by A1,A23,A20,XXREAL_0:1;
       end;
     end;
   end;
@@ -2067,181 +2130,179 @@ A25:      j |^ (z+1) divides m by A10,Th4;
 end;
 
 theorem
-  for m, n being non empty Nat holds pfexp (n lcm m) = max(pfexp n, pfexp m)
+  for m, n being non empty Nat holds pfexp (n lcm m) = max(pfexp n,
+  pfexp m)
 proof
   let m, n be non empty Nat;
   now
-    let i be set;
-    assume i in SetPrimes;
-    then reconsider j = i as prime Element of NAT by NEWTON:def 6;
-    set lhs = pfexp (n lcm m);
     set rhs = max(pfexp n, pfexp m);
+    set lhs = pfexp (n lcm m);
+    let i be set;
+A1: m divides n lcm m by NAT_D:def 4;
+    assume
+    i in SetPrimes;
+    then reconsider j = i as prime Element of NAT by NEWTON:def 6;
     set x = j |-count n, y = j |-count m, z = j |-count (n lcm m);
-A1: j > 1 by INT_2:def 5;
-A2: n lcm m <> 0 by INT_2:4;
-A3: lhs.j = z by Def8;
-A4: j |^ z divides (n lcm m) by A1,A2,Def7;
-A5: not j |^ (z+1) divides (n lcm m) by A1,A2,Def7;
-A6: (pfexp n).j = x by Def8;
-A7: j |^ x divides n by A1,Def7;
-A8: not j |^ (x+1) divides n by A1,Def7;
+A2: lhs.j = z by Def8;
+A3: (pfexp n).j = x by Def8;
+A4: j > 1 by INT_2:def 5;
+    then
+A5: not j |^ (x+1) divides n by Def7;
+A6: n lcm m <> 0 by INT_2:4;
+    then
+A7: j |^ z divides (n lcm m) by A4,Def7;
+A8: not j |^ (z+1) divides (n lcm m) by A4,A6,Def7;
 A9: (pfexp m).j = y by Def8;
-A10: j |^ y divides m by A1,Def7;
-A11: not j |^ (y+1) divides m by A1,Def7;
-A12: m divides n lcm m by NAT_D:def 4;
-A13: n divides n lcm m by NAT_D:def 4;
-A14: j |^ y divides n lcm m by A10,A12,NAT_D:4;
-A15: j |^ x divides n lcm m by A7,A13,NAT_D:4;
+A10: n divides n lcm m by NAT_D:def 4;
+A11: j |^ x divides n by A4,Def7;
+    then
+A12: j |^ x divides n lcm m by A10,NAT_D:4;
+A13: not j |^ (y+1) divides m by A4,Def7;
+A14: j |^ y divides m by A4,Def7;
+    then
+A15: j |^ y divides n lcm m by A1,NAT_D:4;
     thus lhs.i = rhs.i
     proof
       per cases;
       suppose
 A16:    (pfexp n).j <= (pfexp m).j;
-        then
-A17:    rhs.j = y by A9,Def4;
-A18:    y <= z by A5,A14,Th4;
-        now
-          assume y < z;
-          then j |^ (y+1) divides n lcm m by A4,Th4;
-          then consider k being Nat such that
-A19:      n lcm m = (j |^ (y+1))*k by NAT_D:def 3;
-A20:      n lcm m = (j |^ y)*j*k by A19,NEWTON:11
-            .= (j |^ y)*(k*j);
-          0 <> k by A19,INT_2:4;
-          then
-A21:      0 < k;
-          then
-A22:      0*k < (j |^ y)*k;
-          consider t being Nat such that
-A23:      n = (j |^ x) * t by A7,NAT_D:def 3;
-          consider u being Nat such that
-A24:      n lcm m = n*u by A13,NAT_D:def 3;
+A17:    now
           consider p being Nat such that
-A25:      y = x+p by A6,A9,A16,NAT_1:10;
-          (j |^ x)*((j |^ p) *(k*j)) = ((j |^ x)*(j |^ p)) *(k*j)
-            .= (j |^ x)*(t*u) by A20,A23,A24,A25,NEWTON:13;
-          then (j |^p)*k*j = t*u by XCMPLX_1:5;
-          then
-A26:      j divides t*u by NAT_D:def 3;
-          now
-            assume j divides t;
+A18:      y = x+p by A3,A9,A16,NAT_1:10;
+          consider t being Nat such that
+A19:      n = (j |^ x) * t by A11,NAT_D:def 3;
+A20:      now
+            assume
+            j divides t;
             then consider w being Nat such that
-A27:        t = j*w by NAT_D:def 3;
-            n = (j |^ x) * j * w by A23,A27
+A21:        t = j*w by NAT_D:def 3;
+            n = (j |^ x) * j * w by A19,A21
               .= (j |^ (x+1)) * w by NEWTON:11;
-            hence contradiction by A8,NAT_D:def 3;
+            hence contradiction by A5,NAT_D:def 3;
           end;
-          then j divides u by A26,NEWTON:98;
+          consider u being Nat such that
+A22:      n lcm m = n*u by A10,NAT_D:def 3;
+          assume
+          y < z;
+          then j |^ (y+1) divides n lcm m by A7,Th4;
+          then consider k being Nat such that
+A23:      n lcm m = (j |^ (y+1))*k by NAT_D:def 3;
+A24:      n lcm m = (j |^ y)*j*k by A23,NEWTON:11
+            .= (j |^ y)*(k*j);
+          (j |^ x)*((j |^ p) *(k*j)) = ((j |^ x)*(j |^ p)) *(k*j)
+            .= (j |^ x)*(t*u) by A24,A19,A22,A18,NEWTON:13;
+          then (j |^p)*k*j = t*u by XCMPLX_1:5;
+          then j divides t*u by NAT_D:def 3;
+          then j divides u by A20,NEWTON:98;
           then consider w being Nat such that
-A28:      u = j*w by NAT_D:def 3;
-          (j |^ y)*k*j = n*w*j by A20,A24,A28;
+A25:      u = j*w by NAT_D:def 3;
+          (j |^ y)*k*j = n*w*j by A24,A22,A25;
           then (j |^ y)*k = n*w by XCMPLX_1:5;
           then
-A29:      n divides (j |^ y)*k by NAT_D:def 3;
+A26:      n divides (j |^ y)*k by NAT_D:def 3;
           consider t being Nat such that
-A30:      m = (j |^ y) * t by A10,NAT_D:def 3;
-          consider u being Nat such that
-A31:      n lcm m = m*u by A12,NAT_D:def 3;
-          (j |^ y)*(k*j) = (j |^ y)*(t*u) by A20,A30,A31;
-          then k*j = t*u by XCMPLX_1:5;
-          then
-A32:      j divides t*u by NAT_D:def 3;
-          now
-            assume j divides t;
+A27:      m = (j |^ y) * t by A14,NAT_D:def 3;
+A28:      now
+            assume
+            j divides t;
             then consider w being Nat such that
-A33:        t = j*w by NAT_D:def 3;
-            m = (j |^ y) * j * w by A30,A33
+A29:        t = j*w by NAT_D:def 3;
+            m = (j |^ y) * j * w by A27,A29
               .= (j |^ (y+1)) * w by NEWTON:11;
-            hence contradiction by A11,NAT_D:def 3;
+            hence contradiction by A13,NAT_D:def 3;
           end;
-          then j divides u by A32,NEWTON:98;
+          consider u being Nat such that
+A30:      n lcm m = m*u by A1,NAT_D:def 3;
+          (j |^ y)*(k*j) = (j |^ y)*(t*u) by A24,A27,A30;
+          then k*j = t*u by XCMPLX_1:5;
+          then j divides t*u by NAT_D:def 3;
+          then j divides u by A28,NEWTON:98;
           then consider w being Nat such that
-A34:      u = j*w by NAT_D:def 3;
-          (j |^ y)*k*j = m*w*j by A20,A31,A34;
+A31:      u = j*w by NAT_D:def 3;
+          (j |^ y)*k*j = m*w*j by A24,A30,A31;
           then (j |^ y)*k = m*w by XCMPLX_1:5;
           then m divides (j |^ y)*k by NAT_D:def 3;
-          then n lcm m divides (j |^ y)*k by A29,NAT_D:def 4;
-          then (j |^ (y+1))*k <= (j |^ y)*k by A19,A22,NAT_D:7;
-          then j |^ (y+1) <= j |^ y by A21,XREAL_1:70;
+          then
+A32:      n lcm m divides (j |^ y)*k by A26,NAT_D:def 4;
+          0 <> k by A23,INT_2:4;
+          then j |^ (y+1) <= j |^ y by A23,A32,NAT_D:7,XREAL_1:70;
           then (j |^ y) * j <= (j |^ y)*1 by NEWTON:11;
           then j <= 1 by XREAL_1:70;
           hence contradiction by INT_2:def 5;
         end;
-        hence thesis by A3,A17,A18,XXREAL_0:1;
+A33:    y <= z by A8,A15,Th4;
+        rhs.j = y by A9,A16,Def4;
+        hence thesis by A2,A33,A17,XXREAL_0:1;
       end;
       suppose
-A35:    (pfexp n).j > (pfexp m).j;
-        then
-A36:    rhs.j = x by A6,Def4;
-A37:    x <= z by A5,A15,Th4;
-        now
-          assume x < z;
-          then j |^ (x+1) divides n lcm m by A4,Th4;
-          then consider k being Nat such that
-A38:      n lcm m = (j |^ (x+1))*k by NAT_D:def 3;
-A39:      n lcm m = (j |^ x)*j*k by A38,NEWTON:11
-            .= (j |^ x)*(k*j);
-          0 <> k by A38,INT_2:4;
-          then
-A40:      0 < k;
-          then
-A41:      0*k < (j |^ x)*k;
-          consider t being Nat such that
-A42:      m = (j |^ y) * t by A10,NAT_D:def 3;
-          consider u being Nat such that
-A43:      n lcm m = m*u by A12,NAT_D:def 3;
+A34:    (pfexp n).j > (pfexp m).j;
+A35:    now
           consider p being Nat such that
-A44:      x = y+p by A6,A9,A35,NAT_1:10;
-          (j |^ y)*((j |^ p) *(k*j)) = (j |^ y)*(j |^ p) *(k*j)
-            .= (j|^y)*(t*u) by A39,A42,A43,A44,NEWTON:13;
-          then t*u = (j|^p)*k*j by XCMPLX_1:5;
-          then
-A45:      j divides t*u by NAT_D:def 3;
-          now
-            assume j divides t;
+A36:      x = y+p by A3,A9,A34,NAT_1:10;
+          consider t being Nat such that
+A37:      m = (j |^ y) * t by A14,NAT_D:def 3;
+A38:      now
+            assume
+            j divides t;
             then consider w being Nat such that
-A46:        t = j*w by NAT_D:def 3;
-            m = (j |^ y) * j * w by A42,A46
+A39:        t = j*w by NAT_D:def 3;
+            m = (j |^ y) * j * w by A37,A39
               .= (j |^ (y+1)) * w by NEWTON:11;
-            hence contradiction by A11,NAT_D:def 3;
+            hence contradiction by A13,NAT_D:def 3;
           end;
-          then j divides u by A45,NEWTON:98;
+          consider u being Nat such that
+A40:      n lcm m = m*u by A1,NAT_D:def 3;
+          assume
+          x < z;
+          then j |^ (x+1) divides n lcm m by A7,Th4;
+          then consider k being Nat such that
+A41:      n lcm m = (j |^ (x+1))*k by NAT_D:def 3;
+A42:      n lcm m = (j |^ x)*j*k by A41,NEWTON:11
+            .= (j |^ x)*(k*j);
+          (j |^ y)*((j |^ p) *(k*j)) = (j |^ y)*(j |^ p) *(k*j)
+            .= (j|^y)*(t*u) by A42,A37,A40,A36,NEWTON:13;
+          then t*u = (j|^p)*k*j by XCMPLX_1:5;
+          then j divides t*u by NAT_D:def 3;
+          then j divides u by A38,NEWTON:98;
           then consider w being Nat such that
-A47:      u = j*w by NAT_D:def 3;
-          (j |^ x)*k*j = m*w*j by A39,A43,A47;
+A43:      u = j*w by NAT_D:def 3;
+          (j |^ x)*k*j = m*w*j by A42,A40,A43;
           then (j |^ x)*k = m*w by XCMPLX_1:5;
           then
-A48:      m divides (j |^ x)*k by NAT_D:def 3;
+A44:      m divides (j |^ x)*k by NAT_D:def 3;
           consider t being Nat such that
-A49:      n = (j |^ x) * t by A7,NAT_D:def 3;
-          consider u being Nat such that
-A50:      n lcm m = n*u by A13,NAT_D:def 3;
-          (j |^ x)*(k*j) = (j |^ x)*(t*u) by A39,A49,A50;
-          then k*j = t*u by XCMPLX_1:5;
-          then
-A51:      j divides t*u by NAT_D:def 3;
-          now
-            assume j divides t;
+A45:      n = (j |^ x) * t by A11,NAT_D:def 3;
+A46:      now
+            assume
+            j divides t;
             then consider w being Nat such that
-A52:        t = j*w by NAT_D:def 3;
-            n = (j |^ x) * j * w by A49,A52
+A47:        t = j*w by NAT_D:def 3;
+            n = (j |^ x) * j * w by A45,A47
               .= (j |^ (x+1)) * w by NEWTON:11;
-            hence contradiction by A8,NAT_D:def 3;
+            hence contradiction by A5,NAT_D:def 3;
           end;
-          then j divides u by A51,NEWTON:98;
+          consider u being Nat such that
+A48:      n lcm m = n*u by A10,NAT_D:def 3;
+          (j |^ x)*(k*j) = (j |^ x)*(t*u) by A42,A45,A48;
+          then k*j = t*u by XCMPLX_1:5;
+          then j divides t*u by NAT_D:def 3;
+          then j divides u by A46,NEWTON:98;
           then consider w being Nat such that
-A53:      u = j*w by NAT_D:def 3;
-          (j |^ x)*k*j = n*w*j by A39,A50,A53;
+A49:      u = j*w by NAT_D:def 3;
+          (j |^ x)*k*j = n*w*j by A42,A48,A49;
           then (j |^ x)*k = n*w by XCMPLX_1:5;
           then n divides (j |^ x)*k by NAT_D:def 3;
-          then n lcm m divides (j |^ x)*k by A48,NAT_D:def 4;
-          then (j |^ (x+1))*k <= (j |^ x)*k by A38,A41,NAT_D:7;
-          then j |^ (x+1) <= j |^ x by A40,XREAL_1:70;
+          then
+A50:      n lcm m divides (j |^ x)*k by A44,NAT_D:def 4;
+          0 <> k by A41,INT_2:4;
+          then j |^ (x+1) <= j |^ x by A41,A50,NAT_D:7,XREAL_1:70;
           then (j |^ x) * j <= (j |^ x)*1 by NEWTON:11;
           then j <= 1 by XREAL_1:70;
           hence contradiction by INT_2:def 5;
         end;
-        hence thesis by A3,A36,A37,XXREAL_0:1;
+A51:    x <= z by A8,A12,Th4;
+        rhs.j = x by A3,A34,Def4;
+        hence thesis by A2,A51,A35,XXREAL_0:1;
       end;
     end;
   end;
@@ -2254,90 +2315,95 @@ definition
   let n be non empty natural number;
   func prime_factorization n -> ManySortedSet of SetPrimes means
   :Def9:
-  support it = support pfexp n &
-  for p being natural number st p in support pfexp n holds
-  it.p = p |^ (p |-count n);
+support it = support pfexp n & for p being natural number st p in support pfexp
+  n holds it.p = p |^ (p |-count n);
   existence
   proof
-    defpred P[set,set] means for p being Prime st $1 = p holds
-    (p in support pfexp n implies $2 = p |^ (p |-count n)) &
-    (not p in support pfexp n implies $2 = 0);
-A5: for x being set st x in SetPrimes ex y being set st P[x,y]
+    defpred P[set,set] means for p being Prime st $1 = p holds (p in support
+pfexp n implies $2 = p |^ (p |-count n)) & (not p in support pfexp n implies $2
+    = 0);
+A1: for x being set st x in SetPrimes ex y being set st P[x,y]
     proof
-      let x be set such that
-A6:   x in SetPrimes;
-      reconsider i = x as prime Element of NAT by A6,NEWTON:def 6;
+      let x be set;
+      assume
+      x in SetPrimes;
+      then reconsider i = x as prime Element of NAT by NEWTON:def 6;
       per cases;
       suppose
-A7:     i in support pfexp n;
+A2:     i in support pfexp n;
         take i |^ (i |-count n);
         let p be Prime;
-        assume p = x;
-        hence thesis by A7;
+        assume
+        p = x;
+        hence thesis by A2;
       end;
       suppose
-A8:     not i in support pfexp n;
+A3:     not i in support pfexp n;
         take 0;
         let p be Prime;
-        assume p = x;
-        hence thesis by A8;
+        assume
+        p = x;
+        hence thesis by A3;
       end;
     end;
     consider f being Function such that
-A9: dom f = SetPrimes and
-A10: for x being set st x in SetPrimes holds P[x,f.x] from CLASSES1:sch 1(A5);
-A11: support f c= SetPrimes by A9,POLYNOM1:41;
-A12: now
+A4: dom f = SetPrimes and
+A5: for x being set st x in SetPrimes holds P[x,f.x] from CLASSES1:sch
+    1(A1 );
+A6: support f c= SetPrimes by A4,PRE_POLY:37;
+A7: now
       let x be set;
       hereby
         assume
-A13:    x in support f;
-        then x in SetPrimes by A11;
+A8:     x in support f;
+        then x in SetPrimes by A6;
         then reconsider i = x as prime Element of NAT by NEWTON:def 6;
-        assume not x in support pfexp n;
-        then f.i = 0 by A10,A11,A13;
-        hence contradiction by A13,POLYNOM1:def 7;
+        assume
+        not x in support pfexp n;
+        then f.i = 0 by A5,A6,A8;
+        hence contradiction by A8,PRE_POLY:def 7;
       end;
       assume
-A14:  x in support pfexp n;
+A9:   x in support pfexp n;
       then x in SetPrimes;
       then reconsider i = x as prime Element of NAT by NEWTON:def 6;
-      f.i = i |^ (i |-count n) by A10,A14;
-      hence x in support f by POLYNOM1:def 7;
+      f.i = i |^ (i |-count n) by A5,A9;
+      hence x in support f by PRE_POLY:def 7;
     end;
-    reconsider f as ManySortedSet of SetPrimes by A9,PARTFUN1:def 4
-,RELAT_1:def 18;
+    reconsider f as ManySortedSet of SetPrimes by A4,PARTFUN1:def 4 ,RELAT_1:
+    def 18;
     take f;
-    thus support f = support pfexp n by A12,TARSKI:2;
+    thus support f = support pfexp n by A7,TARSKI:2;
     let p be natural number;
     assume
-A15: p in support pfexp n;
+A10: p in support pfexp n;
     then p is Prime by Th34;
-    hence thesis by A10,A15;
+    hence thesis by A5,A10;
   end;
   uniqueness
   proof
     let it1, it2 be ManySortedSet of SetPrimes such that
-A16: support it1 = support pfexp n and
-A17: for p being natural number st p in support pfexp n holds
-    it1.p = p|^(p|-count n) and
-A18: support it2 = support pfexp n and
-A19: for p being natural number st p in support pfexp n holds
-    it2.p = p|^(p|-count n);
+A11: support it1 = support pfexp n and
+A12: for p being natural number st p in support pfexp n holds it1.p =
+    p|^(p|-count n) and
+A13: support it2 = support pfexp n and
+A14: for p being natural number st p in support pfexp n holds it2.p =
+    p|^(p|-count n);
     now
-      let i be set such that
-A20:  i in SetPrimes;
-      reconsider p = i as prime Element of NAT by A20,NEWTON:def 6;
+      let i be set;
+      assume
+      i in SetPrimes;
+      then reconsider p = i as prime Element of NAT by NEWTON:def 6;
       per cases;
       suppose
-A21:    p in support pfexp n;
-        hence it1.i = p|^(p|-count n) by A17
-          .= it2.i by A19,A21;
+A15:    p in support pfexp n;
+        hence it1.i = p|^(p|-count n) by A12
+          .= it2.i by A14,A15;
       end;
       suppose
-A22:    not p in support pfexp n;
-        hence it1.i = 0 by A16,POLYNOM1:def 7
-          .= it2.i by A18,A22,POLYNOM1:def 7;
+A16:    not p in support pfexp n;
+        hence it1.i = 0 by A11,PRE_POLY:def 7
+          .= it2.i by A13,A16,PRE_POLY:def 7;
       end;
     end;
     hence it1 = it2 by PBOOLE:3;
@@ -2346,8 +2412,10 @@ end;
 
 notation
   let n be non empty natural number;
-  synonym ppf n for prime_factorization n; :: for prime-power factorization
+  synonym ppf n for prime_factorization n;
 end;
+
+:: for prime-power factorization
 
 registration
   let n be non empty natural number;
@@ -2357,20 +2425,23 @@ registration
     rng ppf n c= NAT
     proof
       let y be set;
-      assume y in rng ppf n;
+      assume
+      y in rng ppf n;
       then consider x being set such that
 A1:   x in dom ppf n and
 A2:   (ppf n).x = y by FUNCT_1:def 5;
       dom ppf n = SetPrimes by PARTFUN1:def 4;
       then reconsider x as prime Element of NAT by A1,NEWTON:def 6;
       per cases;
-      suppose x in support pfexp n;
+      suppose
+        x in support pfexp n;
         then (ppf n).x = x |^ (x |-count n) by Def9;
         hence thesis by A2;
       end;
-      suppose not x in support pfexp n;
+      suppose
+        not x in support pfexp n;
         then not x in support ppf n by Def9;
-        then (ppf n).x = 0 by POLYNOM1:def 7;
+        then (ppf n).x = 0 by PRE_POLY:def 7;
         hence thesis by A2;
       end;
     end;
@@ -2383,117 +2454,123 @@ end;
 theorem Th55:
   p |-count n = 0 implies (ppf n).p = 0
 proof
-  assume p |-count n = 0;
+  assume
+  p |-count n = 0;
   then (pfexp n).p = 0 by Def8;
-  then not p in support pfexp n by POLYNOM1:def 7;
+  then not p in support pfexp n by PRE_POLY:def 7;
   then not p in support ppf n by Def9;
-  hence thesis by POLYNOM1:def 7;
+  hence thesis by PRE_POLY:def 7;
 end;
 
 theorem Th56:
   p |-count n <> 0 implies (ppf n).p = p |^ (p |-count n)
 proof
-  assume p |-count n <> 0;
+  assume
+  p |-count n <> 0;
   then (pfexp n).p <> 0 by Def8;
-  then p in support pfexp n by POLYNOM1:def 7;
+  then p in support pfexp n by PRE_POLY:def 7;
   hence thesis by Def9;
 end;
 
 theorem
   support ppf n = {} implies n = 1
 proof
-  assume support ppf n = {};
+  assume
+  support ppf n = {};
   then support pfexp n = {} by Def9;
   hence thesis by Th52;
 end;
 
 theorem Th58:
-  for a, b being non empty Nat st a, b are_relative_prime
-  holds ppf (a*b) = ppf a + ppf b
+  for a, b being non empty Nat st a, b are_relative_prime holds
+  ppf (a*b) = ppf a + ppf b
 proof
   let a, b be non empty Nat such that
 A1: a, b are_relative_prime;
   reconsider an = a, bn = b as non empty natural number;
   now
-    let i be set such that
-A2: i in SetPrimes;
-    reconsider p = i as prime Element of NAT by A2,NEWTON:def 6;
-A3: p |-count (an*bn) = (p |-count a) + (p |-count b) by Th28;
-A4: p > 1 by INT_2:def 5;
-A5: a gcd b = 1 by A1,INT_2:def 4;
+A2: a gcd b = 1 by A1,INT_2:def 4;
+    let i be set;
+    assume
+    i in SetPrimes;
+    then reconsider p = i as prime Element of NAT by NEWTON:def 6;
+A3: p > 1 by INT_2:def 5;
+A4: p |-count (an*bn) = (p |-count a) + (p |-count b) by Th28;
     per cases;
     suppose
-A6:   p |-count (a*b) = 0;
+A5:   p |-count (a*b) = 0;
       then
-A7:   (p |-count a) = 0 & (p |-count b) = 0 by A3;
-      thus (ppf (a*b)).i = 0 by A6,Th55
-        .= 0 + (ppf b).i by A7,Th55
+A6:   (p |-count b) = 0 by A4;
+A7:   (p |-count a) = 0 by A4,A5;
+      thus (ppf (a*b)).i = 0 by A5,Th55
+        .= 0 + (ppf b).i by A6,Th55
         .= (ppf a).i + (ppf b).i by A7,Th55
-        .= (ppf a + ppf b).i by POLYNOM1:def 5;
+        .= (ppf a + ppf b).i by PRE_POLY:def 5;
     end;
     suppose
 A8:   p |-count (a*b) <> 0;
       thus (ppf (a*b)).i = (ppf a + ppf b).i
       proof
-        per cases by A3,A8;
+        per cases by A4,A8;
         suppose
 A9:       (p |-count a) <> 0;
 A10:      now
-            assume (p |-count b) <> 0;
-            then consider kb being Nat such that
-A11:        (p |-count b) = kb+1 by NAT_1:6;
-            p |^ (p |-count b) divides b by A4,Def7;
-            then p*(p|^kb) divides b by A11,NEWTON:11;
-            then consider lb being Nat such that
-A12:        b = p*(p|^kb)*lb by NAT_D:def 3;
-            b = p*((p|^kb)*lb) by A12;
-            then
-A13:        p divides b by NAT_D:def 3;
             consider ka being Nat such that
-A14:        (p |-count a) = ka+1 by A9,NAT_1:6;
-            p |^ (p |-count a) divides a by A4,Def7;
-            then p*(p|^ka) divides a by A14,NEWTON:11;
+A11:        (p |-count a) = ka+1 by A9,NAT_1:6;
+            p |^ (p |-count a) divides a by A3,Def7;
+            then p*(p|^ka) divides a by A11,NEWTON:11;
             then consider la being Nat such that
-A15:        a = p*(p|^ka)*la by NAT_D:def 3;
-            a = p*((p|^ka)*la) by A15;
-            then p divides a by NAT_D:def 3;
-            then p divides 1 by A5,A13,NAT_D:def 5;
-            hence contradiction by A4,NAT_D:7;
+A12:        a = p*(p|^ka)*la by NAT_D:def 3;
+            a = p*((p|^ka)*la) by A12;
+            then
+A13:        p divides a by NAT_D:def 3;
+            assume
+            (p |-count b) <> 0;
+            then consider kb being Nat such that
+A14:        (p |-count b) = kb+1 by NAT_1:6;
+            p |^ (p |-count b) divides b by A3,Def7;
+            then p*(p|^kb) divides b by A14,NEWTON:11;
+            then consider lb being Nat such that
+A15:        b = p*(p|^kb)*lb by NAT_D:def 3;
+            b = p*((p|^kb)*lb) by A15;
+            then p divides b by NAT_D:def 3;
+            then p divides 1 by A2,A13,NAT_D:def 5;
+            hence contradiction by A3,NAT_D:7;
           end;
-          hence (ppf (a*b)).i = p |^ (p |-count a) by A3,A8,Th56
+          hence (ppf (a*b)).i = p |^ (p |-count a) by A4,A8,Th56
             .= (ppf a).p + 0 by A9,Th56
             .= (ppf a).p + (ppf b).p by A10,Th55
-            .= (ppf a + ppf b).i by POLYNOM1:def 5;
+            .= (ppf a + ppf b).i by PRE_POLY:def 5;
         end;
         suppose
 A16:      (p |-count b) <> 0;
 A17:      now
             assume
-A18:        (p |-count a) <> 0;
-            consider kb being Nat such that
-A19:        (p |-count b) = kb+1 by A16,NAT_1:6;
-            p |^ (p |-count b) divides b by A4,Def7;
-            then p*(p|^kb) divides b by A19,NEWTON:11;
-            then consider lb being Nat such that
-A20:        b = p*(p|^kb)*lb by NAT_D:def 3;
-            b = p*((p|^kb)*lb) by A20;
-            then
-A21:        p divides b by NAT_D:def 3;
-            consider ka being Nat such that
-A22:        (p |-count a) = ka+1 by A18,NAT_1:6;
-            p |^ (p |-count a) divides a by A4,Def7;
-            then p*(p|^ka) divides a by A22,NEWTON:11;
+            (p |-count a) <> 0;
+            then consider ka being Nat such that
+A18:        (p |-count a) = ka+1 by NAT_1:6;
+            p |^ (p |-count a) divides a by A3,Def7;
+            then p*(p|^ka) divides a by A18,NEWTON:11;
             then consider la being Nat such that
-A23:        a = p*(p|^ka)*la by NAT_D:def 3;
-            a = p*((p|^ka)*la) by A23;
-            then p divides a by NAT_D:def 3;
-            then p divides 1 by A5,A21,NAT_D:def 5;
-            hence contradiction by A4,NAT_D:7;
+A19:        a = p*(p|^ka)*la by NAT_D:def 3;
+            a = p*((p|^ka)*la) by A19;
+            then
+A20:        p divides a by NAT_D:def 3;
+            consider kb being Nat such that
+A21:        (p |-count b) = kb+1 by A16,NAT_1:6;
+            p |^ (p |-count b) divides b by A3,Def7;
+            then p*(p|^kb) divides b by A21,NEWTON:11;
+            then consider lb being Nat such that
+A22:        b = p*(p|^kb)*lb by NAT_D:def 3;
+            b = p*((p|^kb)*lb) by A22;
+            then p divides b by NAT_D:def 3;
+            then p divides 1 by A2,A20,NAT_D:def 5;
+            hence contradiction by A3,NAT_D:7;
           end;
-          hence (ppf (a*b)).i = p |^ (p |-count b) by A3,A8,Th56
+          hence (ppf (a*b)).i = p |^ (p |-count b) by A4,A8,Th56
             .= 0+(ppf b).p by A16,Th56
             .= (ppf a).p + (ppf b).p by A17,Th55
-            .= (ppf a + ppf b).i by POLYNOM1:def 5;
+            .= (ppf a + ppf b).i by PRE_POLY:def 5;
         end;
       end;
     end;
@@ -2514,23 +2591,24 @@ theorem
 proof
   now
     let i be set;
-    assume i in SetPrimes;
-    then reconsider p = i as prime Element of NAT by NEWTON:def 6;
 A1: m >= 0+1 by NAT_1:13;
-A2: p |-count (n |^ m) = m * (p |-count n) by Th32;
-A3: ((ppf n) |^ m).i = (ppf n).i |^ m by Def6;
+A2: ((ppf n) |^ m).i = (ppf n).i |^ m by Def6;
+    assume
+    i in SetPrimes;
+    then reconsider p = i as prime Element of NAT by NEWTON:def 6;
+A3: p |-count (n |^ m) = m * (p |-count n) by Th32;
     per cases;
     suppose
 A4:   p |-count n = 0;
-      hence (ppf (n|^m)).i = 0 by A2,Th55
+      hence (ppf (n|^m)).i = 0 by A3,Th55
         .= (0 qua Nat) |^ m by A1,NEWTON:16
-        .= ((ppf n) |^ m).i by A3,A4,Th55;
+        .= ((ppf n) |^ m).i by A2,A4,Th55;
     end;
     suppose
 A5:   p |-count n <> 0;
-      hence (ppf (n|^m)).i = p |^ (p |-count (n |^ m)) by A2,Th56
-        .= (p |^ (p |-count n)) |^ m by A2,NEWTON:14
-        .= ((ppf n) |^ m).i by A3,A5,Th56;
+      hence (ppf (n|^m)).i = p |^ (p |-count (n |^ m)) by A3,Th56
+        .= (p |^ (p |-count n)) |^ m by A3,NEWTON:14
+        .= ((ppf n) |^ m).i by A2,A5,Th56;
     end;
   end;
   hence thesis by PBOOLE:3;
@@ -2539,192 +2617,194 @@ end;
 theorem
   Product ppf n = n
 proof
-  defpred P[natural number] means for n being non empty natural number
-  st support ppf n c= Seg $1 holds Product ppf n = n;
-A1: P[0]
+  defpred P[natural number] means for n being non empty natural number st
+  support ppf n c= Seg $1 holds Product ppf n = n;
+A1: support ppf n = support pfexp n by Def9;
+A2: P[0]
   proof
     let n be non empty natural number;
+A3: {} c= support ppf n by XBOOLE_1:2;
     assume
-A2: support ppf n c= Seg 0;
-    {} c= support ppf n by XBOOLE_1:2;
+    support ppf n c= Seg 0;
     then
-A3: support ppf n = {} by A2,XBOOLE_0:def 10;
-    then
-A4: ppf n = EmptyBag SetPrimes by BAGORDER:20;
-    now
+A4: support ppf n = {} by A3,XBOOLE_0:def 10;
+A5: now
       reconsider k = n as Nat;
-      assume n <> 1;
-      then k > 1 by UPROOTS:1;
+      assume
+      n <> 1;
+      then k > 1 by NAT_1:54;
       then k >=1+1 by NAT_1:13;
-      then consider p being Element of NAT such that
-A5:   p is prime and
-A6:   p divides k by INT_2:48;
-      support pfexp n is non empty by A5,A6,Th37;
-      hence contradiction by A3,Def9;
+      then ex p being Element of NAT st p is prime & p divides k by
+      INT_2:48;
+      then support pfexp n is non empty by Th37;
+      hence contradiction by A4,Def9;
     end;
-    hence thesis by A4,Th20;
+    ppf n = EmptyBag SetPrimes by A4,BAGORDER:20;
+    hence thesis by A5,Th20;
   end;
-A7: for k being natural number st P[k] holds P[k+1]
+A6: for k being natural number st P[k] holds P[k+1]
   proof
     let k be natural number;
     assume
-A8: P[k];
+A7: P[k];
     let n be non empty natural number such that
-A9: support ppf n c= Seg (k+1);
-A10: support ppf n = support pfexp n by Def9;
+A8: support ppf n c= Seg (k+1);
+A9: support ppf n = support pfexp n by Def9;
     per cases;
     suppose
-A11:  not support ppf n c= Seg k;
-A12:  now
+A10:  not support ppf n c= Seg k;
+      set p = k+1;
+      set e = p |-count n;
+      set s = p |^ e;
+A11:  now
         assume
-A13:    not k+1 in support ppf n;
+A12:    not k+1 in support ppf n;
         support ppf n c= Seg k
         proof
           let x be set;
           assume
-A14:      x in support ppf n;
+A13:      x in support ppf n;
+          then reconsider m = x as natural number;
+          m <= k+1 by A8,A13,FINSEQ_1:3;
+          then m < k+1 by A12,A13,XXREAL_0:1;
           then
-A15:      x is Prime by A10,Th34;
-          reconsider m = x as natural number by A14;
-A16:      1 <= m by A15,INT_2:def 5;
-          m <= k+1 by A9,A14,FINSEQ_1:3;
-          then m < k+1 by A13,A14,XXREAL_0:1;
-          then m <= k by NAT_1:13;
-          hence thesis by A16,FINSEQ_1:3;
+A14:      m <= k by NAT_1:13;
+          x is Prime by A9,A13,Th34;
+          then 1 <= m by INT_2:def 5;
+          hence thesis by A14,FINSEQ_1:3;
         end;
-        hence contradiction by A11;
+        hence contradiction by A10;
       end;
-      set p = k+1;
-      set e = p |-count n;
-      set s = p |^ e;
-A17:  p is Prime by A10,A12,Th34;
       then
-A18:  (pfexp n).p = e by Def8;
-A19:  p > 1 by A17,INT_2:def 5;
+A15:  p is Prime by A9,Th34;
+      then
+A16:  p > 1 by INT_2:def 5;
       then s divides n by Def7;
       then consider t being Nat such that
-A20:  n = s * t by NAT_D:def 3;
-      reconsider s, t as non empty natural number by A20;
-A21:  support ppf t = support pfexp t by Def9;
-A22:  support ppf t c= Seg k
+A17:  n = s * t by NAT_D:def 3;
+      reconsider s, t as non empty natural number by A17;
+A18:  dom ppf s = SetPrimes by PARTFUN1:def 4;
+      (pfexp n).p = e by A15,Def8;
+      then
+A19:  e <> 0 by A9,A11,PRE_POLY:def 7;
+      reconsider s1 = s, t1 = t as non empty Nat;
+A20:  support ppf t = support pfexp t by Def9;
+A21:  support ppf t c= Seg k
       proof
+        set f = p |-count t;
         let x be set;
         assume
-A23:    x in support ppf t;
-        then
-A24:    x in support pfexp t by Def9;
-        then
-A25:    x is Prime by Th34;
-        reconsider m = x as natural number by A24;
-A26:    1 <= m by A25,INT_2:def 5;
-        support ppf t c= support ppf n by A10,A20,A21,Th45;
-        then m in support ppf n by A23;
-        then
-A27:    m <= k+1 by A9,FINSEQ_1:3;
-        set f = p |-count t;
-        now
+A22:    x in support ppf t;
+        then reconsider m = x as natural number;
+A23:    x in support pfexp t by A22,Def9;
+A24:    now
           assume
-A28:      m = p;
-          (pfexp t).p = f by A17,Def8;
-          then f <> 0 by A24,A28,POLYNOM1:def 7;
-          then f > 0;
+A25:      m = p;
+          (pfexp t).p = f by A15,Def8;
+          then f <> 0 by A23,A25,PRE_POLY:def 7;
           then f >= 0+1 by NAT_1:13;
           then consider g being Nat such that
-A29:      f = 1+g by NAT_1:10;
-          p |^ f divides t by A19,Def7;
+A26:      f = 1+g by NAT_1:10;
+          p |^ f divides t by A16,Def7;
           then consider u being Nat such that
-A30:      t = (p |^ f)*u by NAT_D:def 3;
-          n = s * (((p |^ g)*p)*u) by A20,A29,A30,NEWTON:11
+A27:      t = (p |^ f)*u by NAT_D:def 3;
+          n = s * (((p |^ g)*p)*u) by A17,A26,A27,NEWTON:11
             .= s*p *((p |^ g)*u)
             .= (p |^ (e+1))*((p |^ g)*u) by NEWTON:11;
           then p |^ (e+1) divides n by NAT_D:def 3;
-          hence contradiction by A19,Def7;
+          hence contradiction by A16,Def7;
         end;
-        then m < p by A27,XXREAL_0:1;
-        then m <= k by NAT_1:13;
-        hence thesis by A26,FINSEQ_1:3;
+        support ppf t c= support ppf n by A9,A17,A20,Th45;
+        then m in support ppf n by A22;
+        then m <= k+1 by A8,FINSEQ_1:3;
+        then m < p by A24,XXREAL_0:1;
+        then
+A28:    m <= k by NAT_1:13;
+        x is Prime by A23,Th34;
+        then 1 <= m by INT_2:def 5;
+        hence thesis by A28,FINSEQ_1:3;
       end;
-A31:  e <> 0 by A10,A12,A18,POLYNOM1:def 7;
-      support ppf s = support pfexp s by Def9;
-      then
-A32:  support ppf s = {p} by A17,A31,Th42;
-      now
-        assume (support ppf s) /\ (support ppf t) <> {};
-        then consider x being set such that
-A33:    x in (support ppf s) /\ support ppf t by XBOOLE_0:def 1;
-A34:    x in support ppf s by A33,XBOOLE_0:def 4;
-A35:    x in support ppf t by A33,XBOOLE_0:def 4;
-        x = p by A32,A34,TARSKI:def 1;
-        then p <= k by A22,A35,FINSEQ_1:3;
-        hence contradiction by NAT_1:13;
-      end;
-      then
-A36:  support ppf s misses support ppf t by XBOOLE_0:def 7;
-      reconsider s1 = s, t1 = t as non empty Nat;
       s1,t1 are_relative_prime
       proof
-        assume
-A37:    s1 gcd t1 <> 1;
         set u = s1 gcd t1;
-A38:    u divides s1 by NAT_D:def 5;
+A29:    u divides t1 by NAT_D:def 5;
         u <> 0 by INT_2:5;
-        then 0 < u;
-        then 0+1 <= u by NAT_1:13;
-        then u > 1 by A37,XXREAL_0:1;
+        then
+A30:    0+1 <= u by NAT_1:13;
+        assume
+        s1 gcd t1 <> 1;
+        then u > 1 by A30,XXREAL_0:1;
         then u >= 1+1 by NAT_1:13;
         then consider r being Element of NAT such that
-A39:    r is prime and
-A40:    r divides u by INT_2:48;
-        r divides s1 by A38,A40,NAT_D:4;
-        then r divides p by A39,Th5;
-        then
-A41:    r = 1 or r = p by A17,INT_2:def 5;
-        u divides t1 by NAT_D:def 5;
-        then p divides t1 by A39,A40,A41,INT_2:def 5,NAT_D:4;
-        then p in support pfexp t by A17,Th37;
-        then k+1 <= k by A21,A22,FINSEQ_1:3;
+A31:    r is prime and
+A32:    r divides u by INT_2:48;
+        u divides s1 by NAT_D:def 5;
+        then r divides s1 by A32,NAT_D:4;
+        then r divides p by A31,Th5;
+        then r = 1 or r = p by A15,INT_2:def 5;
+        then p divides t1 by A31,A32,A29,INT_2:def 5,NAT_D:4;
+        then p in support pfexp t by A15,Th37;
+        then k+1 <= k by A20,A21,FINSEQ_1:3;
         hence contradiction by NAT_1:13;
       end;
       then
-A42:  ppf n = ppf s + ppf t by A20,Th58;
+A33:  ppf n = ppf s + ppf t by A17,Th58;
       consider f being FinSequence of COMPLEX such that
-A43:  Product ppf s = Product f and
-A44:  f = (ppf s)*canFS(support ppf s) by Def5;
-A45:  dom ppf s = SetPrimes by PARTFUN1:def 4;
-      f = (ppf s)*<*p*> by A32,A44,UPROOTS:6
-        .= <* (ppf s).p *> by A12,A45,CIRCCMB3:36;
+A34:  Product ppf s = Product f and
+A35:  f = (ppf s)*canFS(support ppf s) by Def5;
+      support ppf s = support pfexp s by Def9;
       then
-A46:  Product ppf s = (ppf s).p by A43,RVSUM_1:125
-        .= s by A17,A31,Th59;
-      Product ppf t = t by A8,A22;
-      hence thesis by A20,A36,A42,A46,Th19;
+A36:  support ppf s = {p} by A15,A19,Th42;
+      then f = (ppf s)*<*p*> by A35,UPROOTS:6
+        .= <* (ppf s).p *> by A11,A18,CIRCCMB3:36;
+      then
+A37:  Product ppf s = (ppf s).p by A34,RVSUM_1:125
+        .= s by A15,A19,Th59;
+      now
+        assume
+        (support ppf s) /\ (support ppf t) <> {};
+        then consider x being set such that
+A38:    x in (support ppf s) /\ support ppf t by XBOOLE_0:def 1;
+        x in support ppf s by A38,XBOOLE_0:def 4;
+        then
+A39:    x = p by A36,TARSKI:def 1;
+        x in support ppf t by A38,XBOOLE_0:def 4;
+        then p <= k by A21,A39,FINSEQ_1:3;
+        hence contradiction by NAT_1:13;
+      end;
+      then
+A40:  support ppf s misses support ppf t by XBOOLE_0:def 7;
+      Product ppf t = t by A7,A21;
+      hence thesis by A17,A40,A33,A37,Th19;
     end;
-    suppose support ppf n c= Seg k;
-      hence thesis by A8;
+    suppose
+      support ppf n c= Seg k;
+      hence thesis by A7;
     end;
   end;
-A47: for k being natural number holds P[k] from NAT_1:sch 2(A1,A7);
-A48: support ppf n = support pfexp n by Def9;
+A41: for k being natural number holds P[k] from NAT_1:sch 2(A2,A6);
   per cases;
-  suppose support ppf n is empty;
-    hence thesis by A1;
+  suppose
+    support ppf n is empty;
+    hence thesis by A2;
   end;
-  suppose support ppf n is non empty;
-    then reconsider S = support ppf n as finite non empty Subset of NAT
-    by XBOOLE_1:1;
+  suppose
+    support ppf n is non empty;
+    then reconsider S = support ppf n as finite non empty Subset of NAT by
+    XBOOLE_1:1;
     support ppf n c= Seg max S
     proof
       let x be set;
       assume
-A49:  x in support ppf n;
+A42:  x in support ppf n;
+      then reconsider m = x as natural number;
+      x is Prime by A1,A42,Th34;
       then
-A50:  x is Prime by A48,Th34;
-      reconsider m = x as natural number by A49;
-A51:  1 <= m by A50,INT_2:def 5;
-      m <= max S by A49,XXREAL_2:def 8;
-      hence thesis by A51,FINSEQ_1:3;
+A43:  1 <= m by INT_2:def 5;
+      m <= max S by A42,XXREAL_2:def 8;
+      hence thesis by A43,FINSEQ_1:3;
     end;
-    hence thesis by A47;
+    hence thesis by A41;
   end;
 end;
 

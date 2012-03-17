@@ -1,6 +1,6 @@
 :: Probability on Finite Set and Real Valued Random Variables
 ::  by Hiroyuki Okazaki and Yasunari Shidama
-:: 
+::
 :: Received March 17, 2009
 :: Copyright (c) 2009 Association of Mizar Users
 
@@ -38,371 +38,368 @@ environ
 
 begin
 
-theorem LMMarkov1:
-  for X be non empty set,
-  S be SigmaField of X,
-  M be sigma_Measure of S,
-  f be PartFunc of X,ExtREAL,
-  E be Element of S,
-  a be Real
-  st f is_integrable_on M & E c= dom f & M.E < +infty &
-  (for x be Element of X st x in E holds a <= f.x) holds
-  (R_EAL a)*(M.E) <= Integral(M,f|E)
+theorem Th1:
+  for X be non empty set, S be SigmaField of X, M be sigma_Measure
+  of S, f be PartFunc of X,ExtREAL, E be Element of S, a be Real st f
+is_integrable_on M & E c= dom f & M.E < +infty & (for x be Element of X st x in
+  E holds a <= f.x) holds (R_EAL a)*(M.E) <= Integral(M,f|E)
+proof
+  let X be non empty set, S be SigmaField of X, M be sigma_Measure of S, f be
+  PartFunc of X,ExtREAL, E be Element of S, a be Real;
+  assume that
+A1: f is_integrable_on M and
+A2: E c= dom f and
+A3: M.E < +infty and
+A4: for x be Element of X st x in E holds a <= f.x;
+  set C = chi(E,X);
+A5: f|E is_integrable_on M by A1,MESFUNC5:103;
+  for x be Element of X st x in dom(a(#)(C|E)) holds (a(#)(C|E)).x <= (f|E
+  ).x
   proof
-    let X be non empty set,
-    S be SigmaField of X,
-    M be sigma_Measure of S,
-    f be PartFunc of X,ExtREAL,
-    E be Element of S,
-    a be Real;
-    assume that
-    A1: f is_integrable_on M and
-    A2: E c= dom f and
-    A3: M.E < +infty and
-    A4: for x be Element of X st x in E holds a <= f.x;
-    set C = chi(E,X);
-    A5: f|E is_integrable_on M by A1,MESFUNC5:103;
-    chi(E,X) is_integrable_on M by A3,MESFUNC7:24;
+    let x be Element of X;
+    assume
+A6: x in dom(a(#)(C|E));
     then
-    A6: C|E is_integrable_on M by MESFUNC5:103;
+A7: x in dom(C|E) by MESFUNC1:def 6;
+    then x in dom C /\ E by RELAT_1:90;
     then
-    A7: a(#)(C|E) is_integrable_on M by MESFUNC5:116;
-    for x be Element of X st x in dom(a(#)(C|E)) holds
-    (a(#)(C|E)).x <= (f|E).x
-    proof
-      let x be Element of X;
-      assume
-      A8: x in dom(a(#)(C|E));then
-      A9: x in dom(C|E) by MESFUNC1:def 6;
-      then x in dom C /\ E by RELAT_1:90;then
-      A10: x in dom chi(E,X) & x in E by XBOOLE_0:def 4;
-      then a <= f.x by A4;then
-      A11: a <= (f|E).x by A10,FUNCT_1:72;
-      (a(#)(C|E)).x = R_EAL a * (C|E).x by A8,MESFUNC1:def 6
+A8: x in E by XBOOLE_0:def 4;
+    then a <= f.x by A4;
+    then
+A9: a <= (f|E).x by A8,FUNCT_1:72;
+    (a(#)(C|E)).x = R_EAL a * (C|E).x by A6,MESFUNC1:def 6
+      .= R_EAL a * C.x by A7,FUNCT_1:70
+      .= R_EAL a * 1.by A8,FUNCT_3:def 3;
+    hence thesis by A9,XXREAL_3:92;
+  end;
+  then
+A10: (f|E) - (a(#)(C|E)) is nonnegative by MESFUNC7:1;
+  dom(a(#)(C|E)) = dom(C|E) by MESFUNC1:def 6;
+  then dom(a(#)(C|E)) = dom C /\ E by RELAT_1:90;
+  then dom(a(#)(C|E)) = X /\ E by FUNCT_3:def 3;
+  then
+A11: dom(a(#)(C|E)) = E by XBOOLE_1:28;
+  E = E/\E;
+  then
+A12: Integral(M,C|E) = M.E by A3,MESFUNC7:25;
+  chi(E,X) is_integrable_on M by A3,MESFUNC7:24;
+  then
+A13: C|E is_integrable_on M by MESFUNC5:103;
+  then a(#)(C|E) is_integrable_on M by MESFUNC5:116;
+  then consider E1 be Element of S such that
+A14: E1 = dom(f|E) /\ dom(a(#)(C|E)) and
+A15: Integral(M,(a(#)(C|E))|E1) <= Integral(M,(f|E)|E1) by A5,A10,
+  MESFUNC7:3;
+  dom(f|E) = dom f /\ E by RELAT_1:90;
+  then dom(f|E) = E by A2,XBOOLE_1:28;
+  then (a(#)(C|E))|E1 = a(#)(C|E) & (f|E)|E1 = f|E by A14,
+  A11,RELAT_1:98;
+  hence thesis by A13,A15,A12,MESFUNC5:116;
+end;
+
+theorem Th2:
+  for X be non empty set, S be SigmaField of X, M be sigma_Measure
+  of S, f be PartFunc of X,REAL, E be Element of S, a be Real st f
+is_integrable_on M & E c= dom f & M.E < +infty & (for x be Element of X st x in
+  E holds a <= f.x) holds (R_EAL a)*M.E <= Integral(M,f|E)
+proof
+  let X be non empty set, S be SigmaField of X, M be sigma_Measure of S, f be
+  PartFunc of X,REAL, E be Element of S, a be Real;
+  assume
+  f is_integrable_on M;
+  then R_EAL f is_integrable_on M by MESFUNC6:def 9;
+  hence thesis by Th1;
+end;
+
+theorem Th3:
+  for X be non empty set, S be SigmaField of X, M be sigma_Measure
+  of S, f be PartFunc of X,ExtREAL, E be Element of S, a be Real st f
+is_integrable_on M & E c= dom f & M.E < +infty & (for x be Element of X st x in
+  E holds f.x <= a) holds Integral(M,f|E) <= (R_EAL a)*M.E
+proof
+  let X be non empty set, S be SigmaField of X, M be sigma_Measure of S, f be
+  PartFunc of X,ExtREAL, E be Element of S, a be Real;
+  assume that
+A1: f is_integrable_on M and
+A2: E c= dom f and
+A3: M.E < +infty and
+A4: for x be Element of X st x in E holds f.x <=a;
+  set C = chi(E,X);
+A5: f|E is_integrable_on M by A1,MESFUNC5:103;
+  dom(a(#)(C|E)) = dom(C|E) by MESFUNC1:def 6;
+  then dom(a(#)(C|E)) = dom C /\ E by RELAT_1:90;
+  then dom(a(#)(C|E)) = X /\ E by FUNCT_3:def 3;
+  then
+A6: dom(a(#)(C|E)) = E by XBOOLE_1:28;
+  dom(f|E) = dom f /\ E by RELAT_1:90;
+  then
+A7: dom(f|E) = E by A2,XBOOLE_1:28;
+  for x be Element of X st x in dom(f|E) holds (f|E).x <= (a(#)(C|E)).x
+  proof
+    let x be Element of X;
+    assume
+A8: x in dom(f|E);
+    then
+A9: x in dom(C|E) by A7,A6,MESFUNC1:def 6;
+    then x in dom C /\ E by RELAT_1:90;
+    then
+A10: x in E by XBOOLE_0:def 4;
+    then f.x <= a by A4;
+    then
+A11: (f|E).x <=a by A10,FUNCT_1:72;
+    (a(#)(C|E)).x = R_EAL a * (C|E).x by A7,A6,A8,MESFUNC1:def 6
       .= R_EAL a * C.x by A9,FUNCT_1:70
       .= R_EAL a * 1.by A10,FUNCT_3:def 3;
-      hence thesis by A11,XXREAL_3:92;
-    end;
-    then (f|E) - (a(#)(C|E)) is nonnegative by MESFUNC7:1;
-    then consider E1 be Element of S such that
-    A12: E1 = dom(f|E) /\ dom(a(#)(C|E)) &
-    Integral(M,(a(#)(C|E))|E1) <= Integral(M,(f|E)|E1) by A5,A7,MESFUNC7:3;
-    dom(f|E) = dom f /\ E by RELAT_1:90;
-    then
-    A13: dom(f|E) = E by A2,XBOOLE_1:28;
-    dom(a(#)(C|E)) = dom(C|E) by MESFUNC1:def 6;
-    then dom(a(#)(C|E)) = dom C /\ E by RELAT_1:90;
-    then dom(a(#)(C|E)) = X /\ E by FUNCT_3:def 3;
-    then
-    A14: dom(a(#)(C|E)) = E by XBOOLE_1:28;
-    A20: (a(#)(C|E))|E1 = a(#)(C|E) &
-    (f|E)|E1 = f|E by A12,A13,A14,RELAT_1:98;
-    E = E/\E;
-    then Integral(M,C|E) = M.E by A3,MESFUNC7:25;
-    hence thesis by A6,A12,A20,MESFUNC5:116;
+    hence thesis by A11,XXREAL_3:92;
   end;
-
-theorem LMMarkov2:
-  for X be non empty set,
-  S be SigmaField of X,
-  M be sigma_Measure of S,
-  f be PartFunc of X,REAL,
-  E be Element of S,
-  a be Real
-  st f is_integrable_on M & E c= dom f & M.E < +infty &
-  (for x be Element of X st x in E holds a <= f.x)
-  holds
-  (R_EAL a)*M.E <= Integral(M,f|E)
-  proof
-    let X be non empty set,
-    S be SigmaField of X,
-    M be sigma_Measure of S,
-    f be PartFunc of X,REAL,
-    E be Element of S,
-    a be Real;
-    assume f is_integrable_on M; then
-    R_EAL f is_integrable_on M by MESFUNC6:def 9;
-    hence thesis by LMMarkov1;
-  end;
-
-theorem LMMarkov3:
-  for X be non empty set,
-  S be SigmaField of X,
-  M be sigma_Measure of S,
-  f be PartFunc of X,ExtREAL,
-  E be Element of S,
-  a be Real
-  st f is_integrable_on M & E c= dom f & M.E < +infty &
-  (for x be Element of X st x in E holds f.x <= a) holds
-  Integral(M,f|E) <= (R_EAL a)*M.E
-  proof
-    let X be non empty set,
-    S be SigmaField of X,
-    M be sigma_Measure of S,
-    f be PartFunc of X,ExtREAL,
-    E be Element of S,
-    a be Real;
-    assume that
-    A1: f is_integrable_on M and
-    A2: E c= dom f and
-    A3: M.E < +infty and
-    A4: for x be Element of X st x in E holds f.x <=a;
-    set C = chi(E,X);
-    A5: f|E is_integrable_on M by A1,MESFUNC5:103;
-    chi(E,X) is_integrable_on M by A3,MESFUNC7:24;
-    then
-    A6: C|E is_integrable_on M by MESFUNC5:103;
-    then
-    A7: a(#)(C|E) is_integrable_on M by MESFUNC5:116;
-    dom(f|E) = dom f /\ E by RELAT_1:90;
-    then
-    A13: dom(f|E) = E by A2,XBOOLE_1:28;
-    dom(a(#)(C|E)) = dom(C|E) by MESFUNC1:def 6;
-    then dom(a(#)(C|E)) = dom C /\ E by RELAT_1:90;
-    then dom(a(#)(C|E)) = X /\ E by FUNCT_3:def 3;
-    then
-    A14: dom(a(#)(C|E)) = E by XBOOLE_1:28;
-    for x be Element of X st x in dom(f|E) holds
-    (f|E).x <= (a(#)(C|E)).x
-    proof
-      let x be Element of X;
-      assume
-      A8: x in dom(f|E);
-      then
-      A16: x in dom(C|E) by A13,A14,MESFUNC1:def 6;
-      then x in dom C /\ E by RELAT_1:90;
-      then
-      A10: x in dom chi(E,X) & x in E by XBOOLE_0:def 4;
-      then f.x <= a by A4;
-      then
-      A11: (f|E).x <=a by A10,FUNCT_1:72;
-      (a(#)(C|E)).x = R_EAL a * (C|E).x by A13,A14,A8,MESFUNC1:def 6
-      .= R_EAL a * C.x by A16,FUNCT_1:70
-      .= R_EAL a * 1.by A10,FUNCT_3:def 3;
-      hence thesis by A11,XXREAL_3:92;
-    end;
-    then (a(#)(C|E))-(f|E) is nonnegative by MESFUNC7:1;
-    then consider E1 be Element of S such that
-    A12: E1 = dom(f|E) /\ dom(a(#)(C|E)) &
-    Integral(M,(f|E)|E1) <= Integral(M,(a(#)(C|E))|E1) by A5,A7,MESFUNC7:3;
-    dom(f|E) = dom f /\ E by RELAT_1:90;
-    then
-    A13: dom(f|E) = E by A2,XBOOLE_1:28;
-    dom(a(#)(C|E)) = dom(C|E) by MESFUNC1:def 6;
-    then dom(a(#)(C|E)) = dom C /\ E by RELAT_1:90;
-    then dom(a(#)(C|E)) = X /\ E by FUNCT_3:def 3;
-    then
-    A14: dom(a(#)(C|E)) = E by XBOOLE_1:28;
-    A20: (a(#)(C|E))|E1 = a(#)(C|E) &
-    (f|E)|E1 = f|E by A12,A13,A14,RELAT_1:98;
-    E = E/\E;
-    then Integral(M,C|E) = M.E by A3,MESFUNC7:25;
-    hence thesis by A6,A12,A20,MESFUNC5:116;
-  end;
+  then
+A12: (a(#)(C|E))-(f|E) is nonnegative by MESFUNC7:1;
+  dom(a(#)(C|E)) = dom(C|E) by MESFUNC1:def 6;
+  then dom(a(#)(C|E)) = dom C /\ E by RELAT_1:90;
+  then dom(a(#)(C|E)) = X /\ E by FUNCT_3:def 3;
+  then
+A13: dom(a(#)(C|E)) = E by XBOOLE_1:28;
+  E = E/\E;
+  then
+A14: Integral(M,C|E) = M.E by A3,MESFUNC7:25;
+  chi(E,X) is_integrable_on M by A3,MESFUNC7:24;
+  then
+A15: C|E is_integrable_on M by MESFUNC5:103;
+  then a(#)(C|E) is_integrable_on M by MESFUNC5:116;
+  then consider E1 be Element of S such that
+A16: E1 = dom(f|E) /\ dom(a(#)(C|E)) and
+A17: Integral(M,(f|E)|E1) <= Integral(M,(a(#)(C|E))|E1) by A5,A12,
+  MESFUNC7:3;
+  dom(f|E) = dom f /\ E by RELAT_1:90;
+  then dom(f|E) = E by A2,XBOOLE_1:28;
+  then (a(#)(C|E))|E1 = a(#)(C|E) & (f|E)|E1 = f|E by A16,
+  A13,RELAT_1:98;
+  hence thesis by A15,A17,A14,MESFUNC5:116;
+end;
 
 theorem
-  for X be non empty set,
-  S be SigmaField of X,
-  M be sigma_Measure of S,
-  f be PartFunc of X,REAL,
-  E be Element of S,
-  a be Real
-  st f is_integrable_on M & E c= dom f & M.E < +infty &
-  (for x be Element of X st x in E holds f.x <= a)
-  holds
-  Integral(M,f|E) <=(R_EAL a)*M.E
-  proof
-    let X be non empty set,
-    S be SigmaField of X,
-    M be sigma_Measure of S,
-    f be PartFunc of X,REAL,
-    E be Element of S,
-    a be Real;
-    assume f is_integrable_on M; then
-    R_EAL f is_integrable_on M by MESFUNC6:def 9;
-    hence thesis by LMMarkov3;
-  end;
+  for X be non empty set, S be SigmaField of X, M be sigma_Measure of S,
+f be PartFunc of X,REAL, E be Element of S, a be Real st f is_integrable_on M &
+  E c= dom f & M.E < +infty & (for x be Element of X st x in E holds f.x <= a)
+  holds Integral(M,f|E) <=(R_EAL a)*M.E
+proof
+  let X be non empty set, S be SigmaField of X, M be sigma_Measure of S, f be
+  PartFunc of X,REAL, E be Element of S, a be Real;
+  assume
+  f is_integrable_on M;
+  then R_EAL f is_integrable_on M by MESFUNC6:def 9;
+  hence thesis by Th3;
+end;
 
 :: Integral of real valued simple functions
 
-  MES43:
-  for X be non empty set,S be SigmaField of X,f be PartFunc of X,REAL,
-  M be sigma_Measure of S,F be Finite_Sep_Sequence of S,
-  a be FinSequence of REAL,
-  x be FinSequence of ExtREAL st
-  f is_simple_func_in S & dom f <> {} & f is nonnegative
-  & dom f = union rng F
-  & dom F = dom a
-  & (for n be Nat st n in dom F
-  for x be set st x in F.n holds f.x=a.n)
-  & dom x = dom F
-  & (for n be Nat st n in dom x holds x.n=R_EAL(a.n)*(M*F).n) holds
-  Integral(M,f)=Sum(x)
-  proof
-    let X be non empty set,S be SigmaField of X,f be PartFunc of X,REAL,
-    M be sigma_Measure of S,
-    F be Finite_Sep_Sequence of S,
-    a be FinSequence of REAL,
-    x be FinSequence of ExtREAL;
-    assume that
-    A1: f is_simple_func_in S & dom f <> {} and
-    A2: f is nonnegative and
-    A3: dom f = union rng F & dom F = dom a &
-    (for n be Nat st n in dom F
-    for x be set st x in F.n holds f.x=a.n )
-    & dom x = dom F and
-    A4: for n be Nat st n in dom x holds x.n = R_EAL(a.n)*(M*F).n;
-    B1: R_EAL f is_simple_func_in S & dom(R_EAL f) <> {} by A1,MESFUNC6:49;
-    B2: for x be set st x in dom(R_EAL f) holds 0 <=(R_EAL f).x
-    by MESFUNC6:51,A2;
-    reconsider a0=a as FinSequence of ExtREAL by MESFUNC3:11;
-    B3: F,a0 are_Re-presentation_of R_EAL f by MESFUNC3:def 1,A3;
-    B5: for n be Nat st n in dom x holds x.n = a0.n*(M*F).n
-    proof
-      let n be Nat;
-      assume n in dom x;then
-      x.n=R_EAL(a.n)*(M*F).n by A4;
-      hence thesis;
-    end;
-    thus Integral(M,f) = integral'(M,R_EAL f) by A2,A1,MESFUNC6:83
-    .= integral(X,S,M,R_EAL f) by A1,MESFUNC5:def 14
-    .= Sum(x) by A3,B1,B2,B3,B5,MESFUNC4:3;
-  end;
+Lm1: for X be non empty set,S be SigmaField of X,f be PartFunc of X,REAL, M be
+sigma_Measure of S,F be Finite_Sep_Sequence of S, a be FinSequence of REAL, x
+be FinSequence of ExtREAL st f is_simple_func_in S & dom f <> {} & f is
+nonnegative & dom f = union rng F & dom F = dom a & (for n be Nat st n in dom F
+for x be set st x in F.n holds f.x=a.n) & dom x = dom F & (for n be Nat st n in
+dom x holds x.n=R_EAL(a.n)*(M*F).n) holds Integral(M,f)=Sum(x)
 
-  MES33:
-  for X be non empty set,S be SigmaField of X,
-  f be PartFunc of X,REAL st f is_simple_func_in S holds
-  ex F be Finite_Sep_Sequence of S,a be FinSequence of REAL st
-  dom f = union rng F & dom F= dom a &
-  (for n be Nat st n in dom F for x be set st x in F.n holds f.x = a.n)
-  proof
-    let X be non empty set;
-    let S be SigmaField of X;
-    let f be PartFunc of X,REAL;
-    assume f is_simple_func_in S;then
-    consider F be Finite_Sep_Sequence of S such that
-    A1: dom f = union rng F and
-    A2: for n being Nat,x,y being Element of X st
-    n in dom F & x in F.n & y in F.n holds f.x = f.y by MESFUNC6:def 7;
-    defpred P[Nat,Element of REAL] means
-    for x be set st x in F.$1 holds $2 = f.x;
-    A3: for k be Nat st k in Seg len F ex y be Element of REAL st P[k,y]
-    proof
-      let k be Nat;
-      assume k in Seg len F;then
-      A4: k in dom F by FINSEQ_1:def 3;then
-      A5: F.k in rng F by FUNCT_1:12;
-      per cases;
-      suppose
-        A6: F.k = {};
-        take y = 0;
-        thus thesis by A6;
-      end;
-      suppose F.k <> {};then
-        consider x1 be set such that
-        A7: x1 in F.k by XBOOLE_0:def 1;
-        take y = f.x1;
-        rng F c= bool X by XBOOLE_1:1;
-        hence thesis by A2,A5,A4,A7;
-      end;
-    end;
-    consider a be FinSequence of REAL such that
-    A10: dom a = Seg len F & for k be Nat st k in Seg len F holds P[k,a.k]
-    from FINSEQ_1:sch 5(A3);
-    A11: for n be Nat st n in dom F for x be set st x in F.n holds a.n = f.x
-    proof
-      let n be Nat;
-      assume n in dom F;then
-      n in Seg len F by FINSEQ_1:def 3;
-      hence thesis by A10;
-    end;
-    take F,a;
-    thus thesis by A1,A10,A11,FINSEQ_1:def 3;
-  end;
+proof
 
-  Lm9C0:
-  for X be non empty set,S be SigmaField of X,
-  f be PartFunc of X,REAL st
-  f is_simple_func_in S holds rng f is bounded
-  proof
-    let X be non empty set,S be SigmaField of X,
-    f be PartFunc of X,REAL;
-    assume f is_simple_func_in S;then
-    consider F be Finite_Sep_Sequence of S,a be FinSequence of REAL such that
-    A1: dom f = union rng F & dom F = dom a &
-    for n be Nat st n in dom F
-    for x be set st x in F.n holds f.x = a.n by MES33;
-    rng f c= rng a
-    proof let y be set;
-      assume y in rng f;
-      then
-      consider x be set such that
-      P01: x in dom(f) & y = f.x by FUNCT_1:def 5;
-      consider z be set such that
-      P02: x in z & z in rng F by A1,P01,TARSKI:def 4;
-      consider n be set such that
-      P03: n in dom F & z= F.n by P02,FUNCT_1:def 5;
-      f.x = a.n by A1,P03,P02;
-      hence y in rng a by P03,A1,FUNCT_1:def 5,P01;
-    end;
-    hence thesis by RCOMP_1:28;
-  end;
+  let X be non empty set,S be SigmaField of X,f be PartFunc of X,REAL, M be
 
-  Lm9B0:
-  for X be non empty set,S be SigmaField of X,
-  M being sigma_Measure of S,f be PartFunc of X,REAL st
-  dom f <> {} &
-  rng f is bounded & M.(dom f) < +infty & ex E be Element of S
-  st E = dom f & f is_measurable_on E
-  holds f is_integrable_on M
+sigma_Measure of S, F be Finite_Sep_Sequence of S, a be FinSequence of REAL, x
+  be FinSequence of ExtREAL;
+
+  assume that
+A1: f is_simple_func_in S and
+A2: dom f <> {} and
+A3: f is nonnegative and
+
+A4: dom f = union rng F & dom F = dom a & for n be Nat st n in dom F for
+  x be set st x in F.n holds f.x=a.n and
+A5: dom x = dom F and
+A6: for n be Nat st n in dom x holds x.n = R_EAL(a.n)*(M*F).n;
+
+A7: R_EAL f is_simple_func_in S & for x be set st x in dom(R_EAL f) holds 0
+  <=( R_EAL f).x by A1,A3,MESFUNC6:49,51;
+
+  reconsider a0=a as FinSequence of ExtREAL by MESFUNC3:11;
+A8: F,a0 are_Re-presentation_of R_EAL f by A4,MESFUNC3:def 1;
+A9: for n be Nat st n in dom x holds x.n = a0.n*(M*F).n
   proof
-    let X be non empty set,S be SigmaField of X,
-    M being sigma_Measure of S,f be PartFunc of X,REAL;
-    assume that
-    A0: dom f <> {} & rng f is bounded and
-    A1: M.(dom f) < +infty and
-    A2: ex E be Element of S
-    st E = dom f & f is_measurable_on E;
-    consider E be Element of S such that
-    A3: E = dom f & f is_measurable_on E by A2;
-    A4: rng(R_EAL f) is non empty Subset of ExtREAL by RELAT_1:65,A0;
-    B1: R_EAL f is_measurable_on E by A3,MESFUNC6:def 6;
-    B2: chi(E,X) is_integrable_on M by A1,A3,MESFUNC7:24;
-    B4: chi(E,X) is real-valued by MESFUNC2:31;
-    B51: dom (R_EAL f) /\ dom(chi(E,X)) = E /\ X by A3,FUNCT_3:def 3;
-    dom (R_EAL f) /\ dom(chi(E,X)) = E by B51,XBOOLE_1:28;then
-    B6: ((R_EAL f)(#)(chi(E,X)) )|E is_integrable_on M
-    by A4,A0,B1,B2,B4,MESFUNC7:17;
-    B7: dom((R_EAL f)(#)(chi(E,X)))
-    = dom (R_EAL f) /\ dom(chi(E,X)) by MESFUNC1:def 5
-    .= E by B51,XBOOLE_1:28;
+    let n be Nat;
+    assume
+    n in dom x;
+    then x.n=R_EAL(a.n)*(M*F).n by A6;
+    hence thesis;
+  end;
+  thus Integral(M,f) = integral'(M,R_EAL f) by A1,A3,MESFUNC6:83
+    .= integral(X,S,M,R_EAL f) by A2,MESFUNC5:def 14
+    .= Sum(x) by A2,A5,A7,A8,A9,MESFUNC4:3;
+end;
+
+Lm2: for X be non empty set,S be SigmaField of X, f be PartFunc of X,REAL st f
+is_simple_func_in S holds ex F be Finite_Sep_Sequence of S,a be FinSequence of
+REAL st dom f = union rng F & dom F= dom a & for n be Nat st n in dom F for x
+be set st x in F.n holds f.x = a.n
+
+proof
+  let X be non empty set;
+  let S be SigmaField of X;
+  let f be PartFunc of X,REAL;
+  assume
+  f is_simple_func_in S;
+  then consider F be Finite_Sep_Sequence of S such that
+A1: dom f = union rng F and
+
+A2: for n being Nat,x,y being Element of X st n in dom F & x in F.n & y
+  in F.n holds f.x = f.y by MESFUNC6:def 7;
+
+  defpred P[Nat,Element of REAL] means for x be set st x in F.$1 holds $2 = f.
+  x;
+
+A3: for k be Nat st k in Seg len F ex y be Element of REAL st P[k,y]
+  proof
+    let k be Nat;
+    assume
+    k in Seg len F;
     then
-    B8: dom(( (R_EAL f)(#)(chi(E,X)) )|E) = dom f by A3,RELAT_1:91;
-    now let x be set;
-      assume AA3: x in dom f;
-      P02: ( (R_EAL f)(#)(chi(E,X)) ).x = (R_EAL f).x * (chi(E,X)).x
-      by MESFUNC1:def 5,B7,A3,AA3;
-      ( (R_EAL f)(#)(chi(E,X)) ).x
-      = (R_EAL f).x * R_EAL(1) by P02,A3,AA3,FUNCT_3:def 3
-      .= f.x by XXREAL_3:92;
-      hence (( (R_EAL f)(#)(chi(E,X)) )|E).x = f.x by B7,RELAT_1:97;
-    end;then
-    ( (R_EAL f)(#)(chi(E,X)) )|E = f by B8,FUNCT_1:9;
-    hence thesis by B6,MESFUNC6:def 9;
+A4: k in dom F by FINSEQ_1:def 3;
+    then
+A5: F.k in rng F by FUNCT_1:12;
+    per cases;
+    suppose
+A6:   F.k = {};
+      take y = 0;
+      thus thesis by A6;
+    end;
+    suppose
+      F.k <> {};
+      then consider x1 be set such that
+A7:   x1 in F.k by XBOOLE_0:def 1;
+      take y = f.x1;
+      rng F c= bool X by XBOOLE_1:1;
+      hence thesis by A2,A4,A5,A7;
+    end;
   end;
+  consider a be FinSequence of REAL such that
 
-  Lm9A0:
-  for X be non empty set,S be SigmaField of X,
-  M being sigma_Measure of S,f be PartFunc of X,REAL st
-  f is_simple_func_in S & dom f <> {} & (dom f) in S & M.(dom f) < +infty
-  holds f is_integrable_on M
+A8: dom a = Seg len F & for k be Nat st k in Seg len F holds P[k,a.k]
+  from FINSEQ_1:sch 5(A3);
+
+  take F,a;
+  for n be Nat st n in dom F for x be set st x in F.n holds a.n = f.x
   proof
-    let X be non empty set,S be SigmaField of X,
-    M be sigma_Measure of S,f be PartFunc of X,REAL;
-    assume A1: f is_simple_func_in S;
-    rng f is bounded by Lm9C0,A1;
-    hence thesis by Lm9B0,A1,MESFUNC6:50;
+    let n be Nat;
+    assume
+    n in dom F;
+    then n in Seg len F by FINSEQ_1:def 3;
+    hence thesis by A8;
   end;
+  hence thesis by A1,A8,FINSEQ_1:def 3;
+end;
+
+Lm3: for X be non empty set,S be SigmaField of X, f be PartFunc of X,REAL st f
+is_simple_func_in S holds rng f is bounded
+
+proof
+  let X be non empty set,S be SigmaField of X, f be PartFunc of X,REAL;
+  assume
+  f is_simple_func_in S;
+  then consider
+  F be Finite_Sep_Sequence of S,a be FinSequence of REAL such that
+A1: dom f = union rng F and
+A2: dom F = dom a and
+
+A3: for n be Nat st n in dom F for x be set st x in F.n holds f.x = a.n
+  by Lm2;
+
+  rng f c= rng a
+  proof
+    let y be set;
+    assume
+    y in rng f;
+    then consider x be set such that
+A4: x in dom(f) and
+A5: y = f.x by FUNCT_1:def 5;
+    consider z be set such that
+A6: x in z and
+A7: z in rng F by A1,A4,TARSKI:def 4;
+    consider n be set such that
+A8: n in dom F and
+A9: z= F.n by A7,FUNCT_1:def 5;
+    f.x = a.n by A3,A6,A8,A9;
+    hence y in rng a by A2,A5,A8,FUNCT_1:def 5;
+  end;
+  hence thesis by RCOMP_1:28;
+end;
+
+Lm4: for X be non empty set,S be SigmaField of X, M being sigma_Measure of S,f
+be PartFunc of X,REAL st dom f <> {} & rng f is bounded & M.(dom f) < +infty &
+ex E be Element of S st E = dom f & f is_measurable_on E holds f
+is_integrable_on M
+
+proof
+
+  let X be non empty set,S be SigmaField of X, M being sigma_Measure of S,f be
+  PartFunc of X,REAL;
+
+  assume that
+A1: dom f <> {} and
+A2: rng f is bounded and
+A3: M.(dom f) < +infty and
+A4: ex E be Element of S st E = dom f & f is_measurable_on E;
+  consider E be Element of S such that
+A5: E = dom f and
+A6: f is_measurable_on E by A4;
+A7: dom (R_EAL f) /\ dom(chi(E,X)) = E /\ X by A5,FUNCT_3:def 3;
+
+  then
+A8: chi(E,X) is real-valued & dom (R_EAL f) /\ dom(chi(E,X)) = E by
+  MESFUNC2:31,XBOOLE_1:28;
+
+A9: dom((R_EAL f)(#)(chi(E,X))) = dom (R_EAL f) /\ dom(chi(E,X)) by
+  MESFUNC1:def 5
+
+    .= E by A7,XBOOLE_1:28;
+A10: now
+    let x be set;
+    assume
+A11: x in dom f;
+
+    then ( (R_EAL f)(#)(chi(E,X)) ).x = (R_EAL f).x * (chi(E,X)).x by A5,A9,
+    MESFUNC1:def 5;
+
+    then ( (R_EAL f)(#)(chi(E,X)) ).x = (R_EAL f).x * R_EAL(1) by A5,A11,
+    FUNCT_3:def 3
+
+      .= f.x by XXREAL_3:92;
+    hence (( (R_EAL f)(#)(chi(E,X)) )|E).x = f.x by A9,RELAT_1:97;
+  end;
+A12: R_EAL f is_measurable_on E by A6,MESFUNC6:def 6;
+A13: rng(R_EAL f) is non empty Subset of ExtREAL by A1,RELAT_1:65;
+  dom(( (R_EAL f)(#)(chi(E,X)) )|E) = dom f by A5,A9,RELAT_1:91;
+  then
+A14: ( (R_EAL f)(#)(chi(E,X)) )|E = f by A10,FUNCT_1:9;
+  chi(E,X) is_integrable_on M by A3,A5,MESFUNC7:24;
+
+  then ((R_EAL f)(#)(chi(E,X)) )|E is_integrable_on M by A2,A13,A12,A8,
+  MESFUNC7:17;
+
+  hence thesis by A14,MESFUNC6:def 9;
+end;
+
+Lm5: for X be non empty set,S be SigmaField of X, M being sigma_Measure of S,f
+be PartFunc of X,REAL st f is_simple_func_in S & dom f <> {} & (dom f) in S & M
+.(dom f) < +infty holds f is_integrable_on M
+
+proof
+
+  let X be non empty set,S be SigmaField of X, M be sigma_Measure of S,f be
+  PartFunc of X,REAL;
+
+  assume
+A1: f is_simple_func_in S;
+  then rng f is bounded by Lm3;
+  hence thesis by A1,Lm4,MESFUNC6:50;
+end;
 
 begin :: Trivial SigmaField and Probability on Finite set
 
@@ -422,1282 +419,1280 @@ notation
   synonym Trivial-SigmaField (E) for bool E;
 end;
 
-definition let E be non empty set;
+definition
+  let E be non empty set;
   redefine func Trivial-SigmaField (E) -> SigmaField of E;
   correctness by PROB_1:76;
 end;
 
-Lm6A:
-for Omega be non empty finite set,
-f be PartFunc of Omega,REAL holds
-ex F be Finite_Sep_Sequence of Trivial-SigmaField (Omega) st
-dom f = union (rng F) &
-dom F = dom canFS dom f &
-(for k be Nat st k in dom F holds F.k={(canFS dom f).k})
-& for n being Nat for x,y being Element of Omega
-st n in dom F & x in F.n & y in F.n holds f.x = f.y
+Lm6: for Omega be non empty finite set, f be PartFunc of Omega,REAL holds ex F
+be Finite_Sep_Sequence of Trivial-SigmaField (Omega) st dom f = union (rng F) &
+dom F = dom canFS dom f & (for k be Nat st k in dom F holds F.k={(canFS dom f).
+k}) & for n being Nat for x,y being Element of Omega st n in dom F & x in F.n &
+y in F.n holds f.x = f.y
+
 proof
   let Omega be non empty finite set, f be PartFunc of Omega,REAL;
   set Sigma =Trivial-SigmaField (Omega);
   set D=dom f;
   defpred P[Nat,set] means $2={(canFS(D)).$1 };
   set L= len (canFS(D));
-  P1:for k be Nat st k in Seg L ex x being Element of
-  bool Omega st P[k,x]
+A1: for k be Nat st k in Seg L ex x being Element of bool Omega st P[k,x]
   proof
     let k be Nat;
-    assume k in Seg L;
-    then k in dom canFS(D) by FINSEQ_1:def 3;
-    then (canFS(D)).k in rng canFS(D) by FUNCT_1:12;then
-    PPPP1: (canFS(D)).k in D;
+    assume
+A2: k in Seg L;
     take {(canFS(D)).k };
-    thus thesis by PPPP1,ZFMISC_1:37;
+    k in dom canFS(D) by A2,FINSEQ_1:def 3;
+    then (canFS(D)).k in rng canFS(D) by FUNCT_1:12;
+    then (canFS(D)).k in D;
+    hence thesis by ZFMISC_1:37;
   end;
   consider F being FinSequence of bool Omega such that
-  P2: dom F = Seg L &
-  for k be Nat st k in Seg L holds P[k,F.k] from FINSEQ_1:sch 5(P1);
-  now let i,j be Nat;
-    assume A1: i in dom F & j in dom F & i <> j;
-    A4: i in dom (canFS(D)) & j in dom (canFS(D))
-    by FINSEQ_1:def 3,A1,P2;
-    AA3: (canFS(D)).i <> (canFS(D)).j by A1,A4,FUNCT_1:def 8;
-    F.i = {(canFS(D)).i } & F.j = {(canFS(D)).j } by A1,P2;
-    hence F.i misses F.j by AA3,ZFMISC_1:17;
+
+A3: dom F = Seg L & for k be Nat st k in Seg L holds P[k,F.k] from
+  FINSEQ_1:sch 5(A1);
+
+  now
+    let i,j be Nat;
+    assume that
+A4: i in dom F & j in dom F and
+A5: i <> j;
+    i in dom (canFS(D)) & j in dom (canFS(D)) by A3,A4,FINSEQ_1:def 3;
+    then
+A6: (canFS(D)).i <> (canFS(D)).j by A5,FUNCT_1:def 8;
+    F.i = {(canFS(D)).i } & F.j = {(canFS(D)).j } by A3,A4;
+    hence F.i misses F.j by A6,ZFMISC_1:17;
   end;
   then reconsider F as Finite_Sep_Sequence of Sigma by MESFUNC3:4;
-  take F;
-  PP3:
-  union rng F = rng canFS(D)
-  proof
-    now let x be set;
-      assume x in union rng F;
-      then consider y be set such that
-      A2: x in y & y in rng F by TARSKI:def 4;
-      consider n be set such that
-      A3: n in dom F & y=F.n by A2,FUNCT_1:def 5;
-      reconsider n as Element of NAT by A3;
-      F.n = {(canFS(D)).n } by A3,P2;then
-      A5:x= (canFS(D)).n by A2,A3,TARSKI:def 1;
-      n in dom (canFS(D)) by P2,A3,FINSEQ_1:def 3;
-      hence x in rng canFS(D) by FUNCT_1:def 5,A5;
-    end;then
-    A4:union rng F c= rng canFS(D) by TARSKI:def 3;
-    now let x be set;
-      assume x in rng canFS(D);then
-      consider n be set such that
-      A5: n in dom (canFS(D)) & x=(canFS(D)).n by FUNCT_1:def 5;
-      A4: n in Seg L by A5,FINSEQ_1:def 3;
-      reconsider n as Element of NAT by A5;
-      A3: n in dom F by P2,A5,FINSEQ_1:def 3;
-      x in {(canFS(D)).n} by A5,TARSKI:def 1;then
-      A2: x in F.n by P2,A4;
-      F.n in rng F by A3,FUNCT_1:def 5;
-      hence x in union rng F by A2,TARSKI:def 4;
-    end;
-    then rng canFS(D) c= union rng F by TARSKI:def 3;
-    hence thesis by XBOOLE_0:def 10,A4;
+  now
+    let x be set;
+    assume
+    x in rng canFS(D);
+    then consider n be set such that
+A7: n in dom (canFS(D)) and
+A8: x=(canFS(D)).n by FUNCT_1:def 5;
+A9: n in Seg L by A7,FINSEQ_1:def 3;
+    reconsider n as Element of NAT by A7;
+    n in dom F by A3,A7,FINSEQ_1:def 3;
+    then
+A10: F.n in rng F by FUNCT_1:def 5;
+    x in {(canFS(D)).n} by A8,TARSKI:def 1;
+    then x in F.n by A3,A9;
+    hence x in union rng F by A10,TARSKI:def 4;
   end;
-  for n being Nat
-  for x,y being Element of Omega
-  st n in dom F & x in F.n & y in F.n holds
-  f.x = f.y
+  then
+A11: rng canFS(D) c= union rng F by TARSKI:def 3;
+  take F;
+
+A12: for n being Nat for x,y being Element of Omega st n in dom F & x in F.n
+  & y in F.n holds f.x = f.y
+
   proof
     let n be Nat;
     let x,y be Element of Omega;
-    assume AS1: n in dom F & x in F.n & y in F.n;
-    P41: F.n = {(canFS(D)).n} by P2,AS1;
-    hence f.x =f.((canFS(D)).n) by AS1,TARSKI:def 1
-    .=f.y by P41,AS1,TARSKI:def 1;
+    assume that
+A13: n in dom F and
+A14: x in F.n and
+A15: y in F.n;
+A16: F.n = {(canFS(D)).n} by A3,A13;
+    hence f.x =f.((canFS(D)).n) by A14,TARSKI:def 1
+      .=f.y by A15,A16,TARSKI:def 1;
   end;
-  hence thesis by FINSEQ_1:def 3,P2,PP3,FUNCT_2:def 3;
+  now
+    let x be set;
+    assume
+    x in union rng F;
+    then consider y be set such that
+A17: x in y and
+A18: y in rng F by TARSKI:def 4;
+    consider n be set such that
+A19: n in dom F and
+A20: y=F.n by A18,FUNCT_1:def 5;
+    reconsider n as Element of NAT by A19;
+    F.n = {(canFS(D)).n } by A3,A19;
+    then
+A21: x= (canFS(D)).n by A17,A20,TARSKI:def 1;
+    n in dom (canFS(D)) by A3,A19,FINSEQ_1:def 3;
+    hence x in rng canFS(D) by A21,FUNCT_1:def 5;
+  end;
+  then union rng F c= rng canFS(D) by TARSKI:def 3;
+  then union rng F = rng canFS(D) by A11,XBOOLE_0:def 10;
+  hence thesis by A3,A12,FINSEQ_1:def 3,FUNCT_2:def 3;
 end;
 
 theorem
-  for Omega be non empty finite set,
-  f be PartFunc of Omega,REAL holds
-  ex F be Finite_Sep_Sequence of Trivial-SigmaField (Omega),
-  s being FinSequence of (dom f) st
-  dom f = union (rng F) &
-  dom F = dom (s) &
-  s is one-to-one &
-  rng s = dom f &
-  len s = card (dom f) &
-  (for k be Nat st k in dom F holds F.k={s.k} )
-  & for n being Nat for x,y being Element of Omega
-  st n in dom F & x in F.n & y in F.n holds
-  f.x = f.y
+  for Omega be non empty finite set, f be PartFunc of Omega,REAL holds
+ex F be Finite_Sep_Sequence of Trivial-SigmaField (Omega), s being FinSequence
+of (dom f) st dom f = union (rng F) & dom F = dom (s) & s is one-to-one & rng s
+= dom f & len s = card (dom f) & (for k be Nat st k in dom F holds F.k={s.k} )
+  & for n being Nat for x,y being Element of Omega st n in dom F & x in F.n & y
+  in F.n holds f.x = f.y
+proof
+  let Omega be non empty finite set, f be PartFunc of Omega,REAL;
+  set Sigma = Trivial-SigmaField (Omega);
+  set D = dom f;
+  set s=canFS(D);
+A1: len s = card (dom f) by UPROOTS:5;
+  (ex F be Finite_Sep_Sequence of Sigma st dom f = union (rng F) & dom F =
+dom (canFS(D)) &( for k be Nat st k in dom F holds F.k={(canFS(D) ).k})& for n
+  being Nat for x,y being Element of Omega st n in dom F & x in F.n & y in F.n
+  holds f.x = f.y )& rng s = dom f by Lm6,FUNCT_2:def 3;
+  hence thesis by A1;
+end;
+
+theorem Th6:
+  for Omega be non empty finite set, f be PartFunc of Omega,REAL
+  holds f is_simple_func_in Trivial-SigmaField (Omega) & dom f is Element of
+  Trivial-SigmaField (Omega)
+proof
+  let Omega be non empty finite set, f be PartFunc of Omega,REAL;
+  set Sigma = Trivial-SigmaField (Omega),D = dom f;
+  ex F be Finite_Sep_Sequence of Sigma st dom f = union (rng F) & dom F =
+dom (canFS(D)) &( for k be Nat st k in dom F holds F.k={(canFS(D) ).k})& for n
+  being Nat for x,y being Element of Omega st n in dom F & x in F.n & y in F.n
+  holds f.x = f.y by Lm6;
+  hence thesis by MESFUNC6:def 7;
+end;
+
+theorem
+  for Omega be non empty finite set, M being sigma_Measure of
+Trivial-SigmaField (Omega), f be PartFunc of Omega,REAL st dom f <> {} & M.(dom
+  f) < +infty holds f is_integrable_on M by Lm5,Th6;
+
+Lm7: for Omega be non empty set, Sigma be SigmaField of Omega, M being
+sigma_Measure of Sigma, A,B be set st A in Sigma & B in Sigma & A c= B & M.B <
++infty holds M.A in REAL
+
+proof
+
+  let Omega be non empty set, Sigma be SigmaField of Omega, M be sigma_Measure
+  of Sigma, A,B be set;
+
+  assume
+  A in Sigma & B in Sigma & A c= B & M.B < +infty;
+  then M.A <> -infty & M.A <> +infty by MEASURE1:62,def 4;
+  hence thesis by XXREAL_0:14;
+end;
+
+Lm8: for Omega be non empty finite set, f be PartFunc of Omega,REAL holds f*
+canFS dom f is FinSequence of REAL
+
+proof
+  let Omega be non empty finite set, f be PartFunc of Omega,REAL;
+  rng canFS dom f c= dom f;
+  then
+A1: f*canFS dom f is FinSequence by FINSEQ_1:20;
+  rng(f*canFS dom f) c= REAL;
+  hence f*canFS dom f is FinSequence of REAL by A1,FINSEQ_1:def 4;
+end;
+
+Lm9: for Omega be non empty finite set, f be PartFunc of Omega,REAL holds dom(
+f*canFS dom f) = dom canFS dom f
+
+proof
+  let Omega be non empty finite set, f be PartFunc of Omega,REAL;
+  rng canFS dom f c= dom f;
+  hence dom(f*canFS dom f) = dom canFS dom f by RELAT_1:46;
+end;
+
+theorem Th8:
+  for Omega be non empty finite set, f be PartFunc of Omega,REAL ex
+X be Element of Trivial-SigmaField (Omega) st dom f = X & f is_measurable_on X
+proof
+  let Omega be non empty finite set, f be PartFunc of Omega,REAL;
+  set Sigma = Trivial-SigmaField (Omega);
+  reconsider X = dom f as Element of Sigma;
+  take X;
+  thus thesis by Th6,MESFUNC6:50;
+end;
+
+Lm10: for Omega be non empty finite set, M being sigma_Measure of
+Trivial-SigmaField (Omega), f be Function of Omega,REAL st M.Omega < +infty
+holds ex x being FinSequence of ExtREAL st len x = card (Omega) & (for n being
+Nat st n in dom x holds x.n = R_EAL (f.((canFS(Omega)).n)) * M.{(canFS(Omega)).
+n}) & Integral(M,f) = Sum x
+
+proof
+
+  let Omega be non empty finite set, M being sigma_Measure of
+  Trivial-SigmaField (Omega), f be Function of Omega,REAL;
+
+  set fm=max-(f);
+  set Dm = dom fm;
+  reconsider am = fm*canFS Dm as FinSequence of REAL by Lm8;
+  set fp=max+(f);
+  set Dp = dom fp;
+  reconsider ap = fp*canFS Dp as FinSequence of REAL by Lm8;
+  set Sigma= Trivial-SigmaField (Omega),D =dom f;
+  consider F be Finite_Sep_Sequence of Sigma such that
+  dom f = union (rng F) and
+A1: dom F = dom (canFS(D)) and
+A2: for k be Nat st k in dom F holds F.k={(canFS(D)).k} and
+
+  for n being Nat for x,y being Element of Omega st n in dom F & x in F.n
+  & y in F.n holds f.x = f.y by Lm6;
+
+  set L=len F;
+  consider Fp be Finite_Sep_Sequence of Sigma such that
+A3: dom fp = union (rng Fp) and
+A4: dom Fp = dom (canFS(Dp)) and
+A5: for k be Nat st k in dom Fp holds Fp.k={(canFS(Dp)).k} and
+
+  for n being Nat for x,y being Element of Omega st n in dom Fp & x in Fp.
+  n & y in Fp.n holds fp.x = fp.y by Lm6;
+
+  defpred Pp[ Nat,set ] means $2=R_EAL (ap.$1) *(M*Fp).$1;
+
+A6: for k being Nat st k in Seg L holds ex x being Element of ExtREAL st Pp
+  [k,x];
+
+  consider xp being FinSequence of ExtREAL such that
+
+A7: dom xp = Seg L & for k being Nat st k in Seg L holds Pp[k,xp.k]
+  from FINSEQ_1:sch 5(A6);
+
+A8: dom Fp=dom ap by A4,Lm9;
+A9: for n be Nat st n in dom Fp for x be set st x in Fp.n holds fp.x=ap.n
   proof
-    let Omega be non empty finite set,
-    f be PartFunc of Omega,REAL;
-    set Sigma = Trivial-SigmaField (Omega);
-    set D = dom f;
-    consider F be Finite_Sep_Sequence of Sigma such that
-    P1: dom f = union (rng F) &
-    dom F = dom (canFS(D)) &
-    (for k be Nat st k in dom F holds F.k={(canFS(D)).k} )
-    & for n being Nat for x,y being Element of Omega
-    st n in dom F & x in F.n & y in F.n holds f.x = f.y by Lm6A;
-    set s=canFS(D);
-    dom f = union (rng F) &
-    dom F = dom (s) &
-    s is one-to-one &
-    rng s = dom f &
-    len s = card (dom f) &
-    (for k be Nat st k in dom F holds F.k={s.k})
-    & for n being Nat for x,y being Element of Omega
-    st n in dom F & x in F.n & y in F.n holds
-    f.x = f.y by P1,FUNCT_2:def 3,UPROOTS:5;
+    let n be Nat such that
+A10: n in dom Fp;
+    let x be set;
+    assume
+    x in Fp.n;
+    then x in {(canFS(Dp)).n} by A5,A10;
+    then x = (canFS(Dp)).n by TARSKI:def 1;
+    hence fp.x=ap.n by A8,A10,FUNCT_1:22;
+  end;
+  reconsider a = f*canFS D as FinSequence of REAL by Lm8;
+A11: R_EAL(-1)*Integral(M,fm) =(-R_EAL(1)) *Integral(M,fm) by SUPINF_2:3
+    .= -(R_EAL(1)*Integral(M,fm) ) by XXREAL_3:103
+    .=-Integral(M,fm) by XXREAL_3:92;
+  defpred PX[ Nat,set ] means $2=R_EAL (a.$1) *(M*F).$1;
+
+A12: for k being Nat st k in Seg L holds ex x being Element of ExtREAL st PX
+  [k,x];
+
+  consider x being FinSequence of ExtREAL such that
+
+A13: dom x = Seg L & for k being Nat st k in Seg L holds PX[k,x.k] from
+  FINSEQ_1:sch 5(A12);
+
+  assume
+A14: M.Omega < +infty;
+
+A15: for n be Nat st n in dom canFS(Omega) holds M.{(canFS(Omega)).n} in
+  REAL
+
+  proof
+    let n be Nat;
+    assume
+    n in dom canFS(Omega);
+    then (canFS(Omega)).n in rng canFS(Omega) by FUNCT_1:12;
+    then
+A16: {(canFS(Omega)).n } c= Omega by ZFMISC_1:37;
+    Omega in Sigma by MEASURE1:21;
+    hence M.({(canFS(Omega)).n }) in REAL by A14,A16,Lm7;
+  end;
+A17: dom f =Omega by FUNCT_2:def 1;
+  then
+A18: dom fm = Omega by RFUNCT_3:def 11;
+  then
+A19: fm is_integrable_on M by A14,Lm5,Th6;
+A20: dom x = dom F by A13,FINSEQ_1:def 3;
+
+A21: for n being Nat st n in dom x holds x.n = R_EAL (f.((canFS(Omega)).n) )
+  * M.{(canFS(Omega)).n}
+
+  proof
+    let n be Nat;
+    assume
+A22: n in dom x;
+    then
+A23: (M*F).n =M.(F.n) by A20,FUNCT_1:23
+      .= M.{(canFS(Omega)).n} by A2,A17,A20,A22;
+A24: f.((canFS(D)).n) =a.n by A1,A20,A22,FUNCT_1:23;
+    thus x.n=R_EAL (a.n) *(M*F).n by A13,A22
+
+      .= R_EAL (f.((canFS(Omega)).n) ) * M.{(canFS(Omega)).n} by A24,A23,
+    FUNCT_2:def 1;
+
+  end;
+  x is FinSequence of REAL
+  proof
+    let y be set;
+    assume
+    y in rng x;
+    then consider n be Element of NAT such that
+A25: n in dom x and
+A26: y=x.n by PARTFUN1:26;
+    reconsider z=M.{(canFS(Omega)).n} as Element of REAL by A1,A17,A20,A15,A25;
+    reconsider w=f.((canFS(Omega)).n) as Element of REAL;
+    x.n = R_EAL (f.((canFS(Omega)).n) ) * M.{(canFS(Omega)).n} by A21,A25
+      .= w*z by EXTREAL1:13;
+    hence y in REAL by A26;
+  end;
+  then reconsider x1=x as FinSequence of REAL;
+  take x;
+A27: fm is_simple_func_in Sigma & fm is nonnegative by Th6,MESFUNC6:61;
+A28: dom Fp=dom F by A1,A4,RFUNCT_3:def 10;
+  then
+A29: dom xp = dom Fp by A7,FINSEQ_1:def 3;
+A30: Dp=D by RFUNCT_3:def 10;
+
+A31: for n being Nat st n in dom xp holds xp.n = R_EAL (fp.((canFS(Omega)).n
+  ) ) * M.{(canFS(Omega)).n}
+
+  proof
+    let n be Nat;
+    assume
+A32: n in dom xp;
+    then
+A33: (M*Fp).n =M.(Fp.n) by A29,FUNCT_1:23
+      .= M.{(canFS(Omega)).n} by A17,A5,A30,A29,A32;
+A34: fp.((canFS(D)).n) =ap.n by A4,A30,A29,A32,FUNCT_1:23;
+    thus xp.n=R_EAL (ap.n) *(M*Fp).n by A7,A32
+
+      .= R_EAL (fp.((canFS(Omega)).n) ) * M.{(canFS(Omega)).n} by A34,A33,
+    FUNCT_2:def 1;
+
+  end;
+  now
+    let y be set;
+    assume
+    y in rng xp;
+    then consider n be Element of NAT such that
+A35: n in dom xp and
+A36: y=xp.n by PARTFUN1:26;
+
+    reconsider z=M.{(canFS(Omega)).n} as Element of REAL by A17,A4,A30,A29,A15
+    ,
+    A35;
+
+    reconsider w=fp.((canFS(Omega)).n) as Element of REAL;
+
+    xp.n = R_EAL (fp.((canFS(Omega)).n)) * M.{(canFS(Omega)).n} by A31,
+    A35
+
+      .= w*z by EXTREAL1:13;
+    hence y in REAL by A36;
+  end;
+  then rng xp c= REAL by TARSKI:def 3;
+  then reconsider xp1=xp as FinSequence of REAL by FINSEQ_1:def 4;
+  consider Fm be Finite_Sep_Sequence of Sigma such that
+A37: dom fm = union (rng Fm) and
+A38: dom Fm = dom (canFS(Dm)) and
+A39: for k be Nat st k in dom Fm holds Fm.k={(canFS(Dm)).k} and
+
+  for n being Nat for x,y being Element of Omega st n in dom Fm & x in Fm.
+  n & y in Fm.n holds fm.x = fm.y by Lm6;
+
+  defpred Pm[Nat,set] means $2=R_EAL (am.$1) *(M*Fm).$1;
+
+A40: for k being Nat st k in Seg L holds ex x being Element of ExtREAL st Pm
+  [k,x];
+
+  consider xm being FinSequence of ExtREAL such that
+
+A41: dom xm = Seg L & for k being Nat st k in Seg L holds Pm[k,xm.k]
+  from FINSEQ_1:sch 5(A40);
+
+A42: dom Fm= dom F by A1,A38,RFUNCT_3:def 11;
+  then
+A43: dom xm = dom Fm by A41,FINSEQ_1:def 3;
+A44: Dm=D by RFUNCT_3:def 11;
+
+A45: for n being Nat st n in dom xm holds xm.n = R_EAL (fm.((canFS(Omega)).n
+  ) ) * M.{(canFS(Omega)).n}
+
+  proof
+    let n be Nat;
+    assume
+A46: n in dom xm;
+    then
+A47: (M*Fm).n =M.(Fm.n) by A43,FUNCT_1:23
+      .= M.{(canFS(Omega)).n} by A17,A39,A44,A43,A46;
+    thus xm.n=R_EAL (am.n) *(M*Fm).n by A41,A46
+
+      .= R_EAL (fm.((canFS(Omega)).n) ) * M.{(canFS(Omega)).n} by A38,A43,
+    A18,A46,A47,FUNCT_1:23;
+
+  end;
+  now
+    let y be set;
+    assume
+    y in rng xm;
+    then consider n be Element of NAT such that
+A48: n in dom xm and
+A49: y=xm.n by PARTFUN1:26;
+
+    reconsider z=M.{(canFS(Omega)).n} as Element of REAL by A17,A38,A44,A43,
+    A15
+    ,A48;
+
+    reconsider w=fm.((canFS(Omega)).n) as Element of REAL;
+
+    xm.n = R_EAL (fm.((canFS(Omega)).n) ) * M.{(canFS(Omega)).n} by A45,
+    A48
+
+      .= w*z by EXTREAL1:13;
+    hence y in REAL by A49;
+  end;
+  then rng xm c= REAL by TARSKI:def 3;
+  then reconsider xm1=xm as FinSequence of REAL by FINSEQ_1:def 4;
+A50: Sum(xp) = Sum(xp1) & Sum(xm) = Sum(xm1) by MESFUNC3:2;
+  dom fp = Omega by A17,RFUNCT_3:def 10;
+  then
+A51: fp is_integrable_on M by A14,Lm5,Th6;
+A52: dom fm=dom f by RFUNCT_3:def 11;
+  then
+A53: fm is Function of Omega,REAL by A17,FUNCT_2:def 1;
+  then M.(dom ((-1)(#)fm)) < +infty by A14,FUNCT_2:def 1;
+  then (-1)(#)fm is_integrable_on M by A53,Lm5,Th6;
+  then consider E be Element of Sigma such that
+A54: E = (dom fp) /\ dom ((-1)(#)fm) and
+
+A55: Integral(M,fp+(-1)(#)fm) =Integral(M,fp|E)+Integral(M,((-1)(#)fm)|E
+  ) by A51,MESFUNC6:101;
+
+A56: dom fp=dom f by RFUNCT_3:def 10;
+  then
+A57: fp is Function of Omega,REAL by A17,FUNCT_2:def 1;
+  dom ((-1)(#)fm) =dom fm by VALUED_1:def 5
+    .=Omega by A52,FUNCT_2:def 1;
+  then
+A58: E = Omega /\ Omega by A56,A54,FUNCT_2:def 1
+    .= Omega;
+  then ((-1)(#)fm)|E = (-1)(#)fm by A53,FUNCT_2:40;
+
+  then
+A59: Integral(M,fp+(-1)(#)fm) =Integral(M,fp) +Integral(M,(-1)(#)fm) by A57,
+  A55,A58,FUNCT_2:40
+
+    .=Integral(M,fp) +-Integral(M,fm) by A19,A11,MESFUNC6:102;
+A60: dom Fm=dom am by A38,Lm9;
+A61: for n be Nat st n in dom Fm for x be set st x in Fm.n holds fm.x=am.n
+  proof
+    let n be Nat such that
+A62: n in dom Fm;
+    let x be set;
+    assume
+    x in Fm.n;
+    then x in {(canFS(Dm)).n} by A39,A62;
+    then x = (canFS(Dm)).n by TARSKI:def 1;
+    hence fm.x=am.n by A60,A62,FUNCT_1:22;
+  end;
+  fp is_simple_func_in Sigma & fp is nonnegative by Th6,MESFUNC6:61;
+  then
+A63: Integral(M,fp)=Sum(xp) by A56,A3,A7,A29,A8,A9,Lm1;
+  dom (canFS(D))=Seg (len F) by A1,FINSEQ_1:def 3;
+  then
+A64: len F = len (canFS(D)) by FINSEQ_1:def 3;
+A65: len x = L by A13,FINSEQ_1:def 3;
+A66: dom (xp1-xm1) = (dom xp1) /\ (dom xm1) by VALUED_1:12
+    .= dom x1 by A28,A42,A13,A29,A43,FINSEQ_1:def 3;
+A67: len xp1 =L by A7,FINSEQ_1:def 3
+    .= len xm1 by A41,FINSEQ_1:def 3;
+A68: for k be Nat st k in dom x1 holds (xp1 - xm1).k =x1.k
+  proof
+    let k be Nat;
+A69: f =fp-fm by MESFUNC6:42;
+    assume
+A70: k in dom x1;
+    then reconsider z=M.{(canFS(Omega)).k} as Element of REAL by A1,A17,A20,
+    A15;
+
+A71: xm1.k =R_EAL (fm.((canFS(Omega)).k) ) * M.{(canFS(Omega)).k} by A13,
+    A41,A45,A70
+
+      .= (fm.((canFS(Omega)).k) ) * z by EXTREAL1:13;
+    k in dom canFS(Omega) by A1,A20,A70,FUNCT_2:def 1;
+    then (canFS(Omega)).k in rng canFS(Omega) by FUNCT_1:12;
+    then (canFS(Omega)).k in Omega;
+    then
+A72: (canFS(Omega)).k in dom f by FUNCT_2:def 1;
+    k in (dom xp1) /\ (dom xm1) by A13,A7,A41,A70;
+    then
+A73: k in dom (xp1 - xm1) by VALUED_1:12;
+
+    xp1.k =R_EAL (fp.((canFS(Omega)).k) ) * M.{(canFS(Omega)).k} by A13,
+    A7,A31,A70
+
+      .=(fp.((canFS(Omega)).k) )*z by EXTREAL1:13;
+
+    hence
+    (xp1 - xm1).k = (fp.((canFS(Omega)).k) ) * z - (fm.((canFS(Omega)).k)
+    ) * z by A73,A71,VALUED_1:13
+
+      .=( fp.((canFS(Omega)).k) - fm.((canFS(Omega)).k) ) * z
+      .= (f.((canFS(Omega)).k) ) * z by A72,A69,VALUED_1:13
+      .= R_EAL (f.((canFS(Omega)).k) ) * M.{(canFS(Omega)).k} by EXTREAL1:13
+      .=x1.k by A21,A70;
+  end;
+  Integral(M,f) =Integral(M,fp-fm) by MESFUNC6:42
+    .=Sum(xp) -Sum(xm) by A52,A37,A27,A41,A43,A63,A59,A60,A61,Lm1
+    .=Sum(xp1) -Sum(xm1) by A50,SUPINF_2:5
+    .=Sum(xp1-xm1) by A67,INTEGRA5:2
+    .=Sum(x) by A66,A68,FINSEQ_1:17,MESFUNC3:2;
+  hence thesis by A17,A21,A65,A64,UPROOTS:5;
+end;
+
+theorem Th9:
+  for Omega be non empty finite set, M being sigma_Measure of
+Trivial-SigmaField (Omega), f be Function of Omega,REAL, x being FinSequence of
+ExtREAL, s being FinSequence of (Omega) st s is one-to-one & rng s = Omega ex F
+  be Finite_Sep_Sequence of Trivial-SigmaField (Omega), a being FinSequence of
+  REAL st dom f = union (rng F) & dom a = dom s & dom F = dom s & (for k be Nat
+  st k in dom F holds F.k={s.k} ) & for n being Nat for x,y being Element of
+  Omega st n in dom F & x in F.n & y in F.n holds f.x = f.y
+proof
+  let Omega be non empty finite set, M be sigma_Measure of Trivial-SigmaField
+  (Omega), f be Function of Omega,REAL, x be FinSequence of ExtREAL, s be
+  FinSequence of (Omega);
+  assume that
+A1: s is one-to-one and
+A2: rng s = Omega;
+  defpred Q[Nat,set] means $2=f.(s.$1);
+  set Sigma=Trivial-SigmaField (Omega);
+  set L = len s;
+  defpred P[Nat,set] means $2={s.$1};
+A3: for k be Nat st k in Seg L ex x being Element of bool Omega st P[k,x]
+  proof
+    let k be Nat;
+    assume
+A4: k in Seg L;
+    take {s.k};
+    k in dom s by A4,FINSEQ_1:def 3;
+    then s.k in rng s by FUNCT_1:12;
+    hence thesis by ZFMISC_1:37;
+  end;
+  consider F being FinSequence of bool Omega such that
+A5: dom F = Seg L & for k be Nat st k in Seg L holds P[k,F.k] from
+  FINSEQ_1:sch 5(A3);
+A6: now
+    let i,j be Nat;
+    assume that
+A7: i in dom F & j in dom F and
+A8: i <> j;
+    i in dom s & j in dom s by A5,A7,FINSEQ_1:def 3;
+    then
+A9: s.i <> s.j by A1,A8,FUNCT_1:def 8;
+    F.i = {s.i } & F.j = {s.j } by A5,A7;
+    hence F.i misses F.j by A9,ZFMISC_1:17;
+  end;
+A10: dom F = dom s by A5,FINSEQ_1:def 3;
+  reconsider F as Finite_Sep_Sequence of Sigma by A6,MESFUNC3:4;
+  union rng F = rng s
+  proof
+    now
+      let x be set;
+      assume
+      x in union rng F;
+      then consider y be set such that
+A11:  x in y and
+A12:  y in rng F by TARSKI:def 4;
+      consider n be set such that
+A13:  n in dom F and
+A14:  y=F.n by A12,FUNCT_1:def 5;
+      F.n = {s.n } by A5,A13;
+      then
+A15:  x = s.n by A11,A14,TARSKI:def 1;
+      n in dom s by A5,A13,FINSEQ_1:def 3;
+      hence x in rng s by A15,FUNCT_1:def 5;
+    end;
+    hence union rng F c= rng s by TARSKI:def 3;
+    let x be set;
+    assume
+    x in rng s;
+    then consider n be set such that
+A16: n in dom s and
+A17: x=s.n by FUNCT_1:def 5;
+A18: n in Seg L by A16,FINSEQ_1:def 3;
+    reconsider n as Element of NAT by A16;
+    n in dom F by A5,A16,FINSEQ_1:def 3;
+    then
+A19: F.n in rng F by FUNCT_1:def 5;
+    x in {s.n} by A17,TARSKI:def 1;
+    then x in F.n by A5,A18;
+    hence x in union rng F by A19,TARSKI:def 4;
+  end;
+  then
+A20: dom f = union rng F by A2,FUNCT_2:def 1;
+  take F;
+A21: for n being Nat for x,y being Element of Omega st n in dom F & x in F.n
+  & y in F.n holds f.x = f.y
+  proof
+    let n be Nat;
+    let x,y be Element of Omega;
+    assume that
+A22: n in dom F and
+A23: x in F.n and
+A24: y in F.n;
+A25: F.n = {s.n} by A5,A22;
+    hence f.x =f.(s.n) by A23,TARSKI:def 1
+      .=f.y by A24,A25,TARSKI:def 1;
+  end;
+A26: for k be Nat st k in Seg L ex x being Element of REAL st Q[k,x];
+  ex a being FinSequence of REAL st ( dom a = Seg L & for k be Nat st k in
+  Seg L holds Q[k,a.k]) from FINSEQ_1:sch 5(A26 );
+  hence thesis by A5,A10,A20,A21;
+end;
+
+theorem Th10:
+  for Omega be non empty finite set, M being sigma_Measure of
+Trivial-SigmaField (Omega), f be Function of Omega,REAL, x being FinSequence of
+  ExtREAL, s being FinSequence of (Omega) st M.Omega < +infty & len x = card (
+Omega) & s is one-to-one & rng s = Omega & len s = card (Omega) & (for n being
+Nat st n in dom x holds x.n = R_EAL (f.(s.n)) * M.{s.n}) holds Integral(M,f) =
+  Sum x
+proof
+  let Omega be non empty finite set, M be sigma_Measure of Trivial-SigmaField
+  (Omega), f be Function of Omega,REAL, x be FinSequence of ExtREAL, s be
+  FinSequence of (Omega);
+  assume that
+A1: M.Omega < +infty and
+A2: len x = card (Omega) and
+A3: s is one-to-one and
+A4: rng s = Omega and
+A5: len s = card (Omega) and
+A6: for n being Nat st n in dom x holds x.n = R_EAL (f.(s.n)) * M.{s.n};
+  set Sigma= Trivial-SigmaField (Omega);
+  consider F be Finite_Sep_Sequence of Sigma, a being FinSequence of REAL such
+  that
+A7: dom f = union (rng F) and
+  dom a = dom s and
+A8: dom F = dom s and
+A9: for k be Nat st k in dom F holds F.k={s.k} and
+  for n being Nat for x,y being Element of Omega st n in dom F & x in F.n
+  & y in F.n holds f.x = f.y by A3,A4,Th9;
+A10: dom x =Seg len s by A2,A5,FINSEQ_1:def 3
+    .= dom F by A8,FINSEQ_1:def 3;
+  set fm=max-(f);
+  set fp=max+(f);
+A11: dom f =Omega by FUNCT_2:def 1;
+  then dom fp = Omega by RFUNCT_3:def 10;
+  then
+A12: fp is_integrable_on M by A1,Lm5,Th6;
+A13: for n be Nat st n in dom s holds M.{s.n} in REAL
+  proof
+    let n be Nat;
+    assume
+    n in dom s;
+    then s.n in rng s by FUNCT_1:12;
+    then {s.n } c= Omega by ZFMISC_1:37;
+    hence M.({s.n }) in REAL by A1,A4,Lm7;
+  end;
+  now
+    let y be set;
+    assume
+    y in rng x;
+    then consider n be Element of NAT such that
+A14: n in dom x and
+A15: y=x.n by PARTFUN1:26;
+    reconsider z=M.{s.n} as Element of REAL by A8,A10,A13,A14;
+    reconsider w=f.(s.n) as Element of REAL;
+    x.n = R_EAL (f.(s.n) ) * M.{s.n} by A6,A14
+      .= w*z by EXTREAL1:13;
+    hence y in REAL by A15;
+  end;
+  then rng x c= REAL by TARSKI:def 3;
+  then reconsider x1=x as FinSequence of REAL by FINSEQ_1:def 4;
+A16: fm is_simple_func_in Sigma & fm is nonnegative by Th6,MESFUNC6:61;
+  defpred AP[Nat,set] means for x be set st x in F.$1 holds $2=fp.x;
+  set L=len F;
+A17: dom F =Seg L by FINSEQ_1:def 3;
+A18: for k be Nat st k in Seg L ex y being Element of REAL st AP[k,y]
+  proof
+    let k be Nat;
+    assume
+A19: k in Seg L;
+    take y=fp.(s.k);
+    F.k = {s.k} by A9,A17,A19;
+    hence thesis by TARSKI:def 1;
+  end;
+  consider ap being FinSequence of REAL such that
+A20: dom ap = Seg L & for k be Nat st k in Seg L holds AP[k,ap.k] from
+  FINSEQ_1:sch 5(A18);
+  defpred AM[Nat,set] means for x be set st x in F.$1 holds $2=fm.x;
+A21: for k be Nat st k in Seg L ex y being Element of REAL st AM[k,y]
+  proof
+    let k be Nat;
+    assume
+A22: k in Seg L;
+    take y=fm.(s.k);
+    F.k = {s.k} by A9,A17,A22;
+    hence thesis by TARSKI:def 1;
+  end;
+  consider am being FinSequence of REAL such that
+A23: dom am = Seg L & for k be Nat st k in Seg L holds AM[k,am.k] from
+  FINSEQ_1:sch 5(A21);
+A24: dom fm=dom f by RFUNCT_3:def 11;
+  then
+A25: fm is Function of Omega,REAL by A11,FUNCT_2:def 1;
+  then M.(dom ((-1)(#)fm)) < +infty by A1,FUNCT_2:def 1;
+  then (-1)(#)fm is_integrable_on M by A25,Lm5,Th6;
+  then consider E be Element of Sigma such that
+A26: E = (dom fp) /\ dom ((-1)(#)fm) and
+A27: Integral(M,fp+(-1)(#)fm) =Integral(M,fp|E)+Integral(M,((-1)(#)fm)|E
+  ) by A12,MESFUNC6:101;
+A28: R_EAL(-1)*Integral(M,fm) =(-R_EAL(1)) *Integral(M,fm) by SUPINF_2:3
+    .= -(R_EAL(1)*Integral(M,fm) ) by XXREAL_3:103
+    .=-Integral(M,fm) by XXREAL_3:92;
+  defpred Pp[ Nat,set ] means $2=R_EAL (ap.$1) *(M*F).$1;
+A29: for k being Nat st k in Seg L holds ex x being Element of ExtREAL st Pp
+  [k,x];
+  consider xp being FinSequence of ExtREAL such that
+A30: dom xp = Seg L & for k being Nat st k in Seg L holds Pp[k,xp.k]
+  from FINSEQ_1:sch 5(A29);
+A31: dom xp = dom F by A30,FINSEQ_1:def 3;
+A32: for n being Nat st n in dom xp holds xp.n = R_EAL (fp.(s.n) ) * M.{s.n}
+  proof
+    let n be Nat;
+    assume
+A33: n in dom xp;
+    then
+A34: (M*F).n =M.(F.n) by A31,FUNCT_1:23
+      .= M.{s.n} by A9,A31,A33;
+    F.n={s.n} by A9,A31,A33;
+    then
+A35: s.n in F.n by TARSKI:def 1;
+    thus xp.n=R_EAL (ap.n) *(M*F).n by A30,A33
+      .= R_EAL (fp.(s.n) ) * M.{s.n} by A20,A30,A33,A35,A34;
+  end;
+  now
+    let y be set;
+    assume
+    y in rng xp;
+    then consider n be Element of NAT such that
+A36: n in dom xp and
+A37: y=xp.n by PARTFUN1:26;
+    reconsider z=M.{s.n} as Element of REAL by A8,A31,A13,A36;
+    reconsider w=fp.(s.n) as Element of REAL;
+    xp.n = R_EAL (fp.(s.n) ) * M.{s.n} by A32,A36
+      .= w*z by EXTREAL1:13;
+    hence y in REAL by A37;
+  end;
+  then rng xp c= REAL by TARSKI:def 3;
+  then reconsider xp1=xp as FinSequence of REAL by FINSEQ_1:def 4;
+  defpred Pm[ Nat,set ] means $2=R_EAL (am.$1) *(M*F).$1;
+A38: for k being Nat st k in Seg L holds ex x being Element of ExtREAL st Pm
+  [k,x];
+  consider xm being FinSequence of ExtREAL such that
+A39: dom xm = Seg L & for k being Nat st k in Seg L holds Pm[k,xm.k]
+  from FINSEQ_1:sch 5(A38);
+A40: dom xm = dom F by A39,FINSEQ_1:def 3;
+A41: for n being Nat st n in dom xm holds xm.n = R_EAL (fm.(s.n) ) * M.{s.n}
+  proof
+    let n be Nat;
+    assume
+A42: n in dom xm;
+    then
+A43: (M*F).n =M.(F.n) by A40,FUNCT_1:23
+      .= M.{s.n} by A9,A40,A42;
+    F.n={s.n} by A9,A40,A42;
+    then
+A44: s.n in F.n by TARSKI:def 1;
+    thus xm.n=R_EAL (am.n) *(M*F).n by A39,A42
+      .= R_EAL (fm.(s.n) ) * M.{s.n} by A23,A39,A42,A44,A43;
+  end;
+  now
+    let y be set;
+    assume
+    y in rng xm;
+    then consider n be Element of NAT such that
+A45: n in dom xm and
+A46: y=xm.n by PARTFUN1:26;
+    reconsider z=M.{s.n} as Element of REAL by A8,A40,A13,A45;
+    reconsider w=fm.(s.n) as Element of REAL;
+    xm.n = R_EAL (fm.(s.n) ) * M.{s.n} by A41,A45
+      .= w*z by EXTREAL1:13;
+    hence y in REAL by A46;
+  end;
+  then rng xm c= REAL by TARSKI:def 3;
+  then reconsider xm1=xm as FinSequence of REAL by FINSEQ_1:def 4;
+A47: Sum(xp) = Sum(xp1) & Sum(xm) = Sum(xm1) by MESFUNC3:2;
+A48: for k be Nat st k in dom x1 holds (xp1 - xm1).k =x1.k
+  proof
+    let k be Nat;
+A49: f =fp-fm by MESFUNC6:42;
+    assume
+A50: k in dom x1;
+    then reconsider z=M.{s.k} as Element of REAL by A8,A10,A13;
+A51: xm1.k=R_EAL (fm.(s.k) ) * M.{s.k} by A10,A40,A41,A50
+      .= (fm.(s.k) ) * z by EXTREAL1:13;
+    s.k in rng s by A8,A10,A50,FUNCT_1:12;
+    then s.k in Omega;
+    then
+A52: s.k in dom f by FUNCT_2:def 1;
+    k in (dom xp1) /\ (dom xm1) by A10,A31,A40,A50;
+    then
+A53: k in dom (xp1 - xm1) by VALUED_1:12;
+    xp1.k=R_EAL (fp.(s.k) ) * M.{s.k} by A10,A31,A32,A50
+      .=(fp.(s.k) )*z by EXTREAL1:13;
+    hence (xp1 - xm1).k = (fp.(s.k) ) * z - (fm.(s.k) ) * z by A53,A51,
+    VALUED_1:13
+      .=( fp.(s.k) - fm.(s.k) ) * z
+      .= (f.(s.k) ) * z by A52,A49,VALUED_1:13
+      .= R_EAL (f.(s.k) ) * M.{s.k}by EXTREAL1:13
+      .=x1.k by A6,A50;
+  end;
+  dom fm = Omega by A11,RFUNCT_3:def 11;
+  then
+A54: fm is_integrable_on M by A1,Lm5,Th6;
+A55: dom fp=dom f by RFUNCT_3:def 10;
+  then
+A56: fp is Function of Omega,REAL by A11,FUNCT_2:def 1;
+A57: dom (xp1-xm1) = (dom xp1) /\ (dom xm1) by VALUED_1:12
+    .= dom x1 by A10,A31,A40;
+A58: len xp1=L by A30,FINSEQ_1:def 3
+    .= len xm1 by A39,FINSEQ_1:def 3;
+  dom ((-1)(#)fm) = dom fm by VALUED_1:def 5
+    .=Omega by A11,RFUNCT_3:def 11;
+  then
+A59: E = Omega /\ Omega by A11,A26,RFUNCT_3:def 10
+    .= Omega;
+  then ((-1)(#)fm)|E = (-1)(#)fm by A25,FUNCT_2:40;
+  then
+A60: Integral(M,fp+(-1)(#)fm) =Integral(M,fp) +Integral(M,(-1)(#)fm) by A56,
+  A27,A59,FUNCT_2:40
+    .=Integral(M,fp) +-Integral(M,fm) by A54,A28,MESFUNC6:102;
+  fp is_simple_func_in Sigma & fp is nonnegative by Th6,MESFUNC6:61;
+  then
+A61: Integral(M,fp)=Sum(xp) by A7,A55,A17,A20,A30,Lm1;
+  thus Integral(M,f) =Integral(M,fp-fm) by MESFUNC6:42
+    .=Sum(xp) -Sum(xm) by A7,A24,A17,A23,A16,A39,A61,A60,Lm1
+    .=Sum(xp1) -Sum(xm1) by A47,SUPINF_2:5
+    .=Sum(xp1-xm1) by A58,INTEGRA5:2
+    .=Sum(x) by A57,A48,FINSEQ_1:17,MESFUNC3:2;
+end;
+
+theorem
+  for Omega be non empty finite set, M being sigma_Measure of
+  Trivial-SigmaField (Omega), f be Function of Omega,REAL st M.Omega < +infty
+holds ex x being FinSequence of ExtREAL, s being FinSequence of (Omega) st len
+  x = card (Omega) & s is one-to-one & rng s = Omega & len s = card (Omega) & (
+for n being Nat st n in dom x holds x.n = R_EAL (f.(s.n)) * M.{s.n}) & Integral
+  (M,f) = Sum x
+proof
+  let Omega be non empty finite set, M be sigma_Measure of Trivial-SigmaField
+  (Omega), f be Function of Omega,REAL;
+  set Sigma= Trivial-SigmaField (Omega);
+  set s=canFS(Omega);
+  assume
+  M.Omega < +infty;
+  then
+A1: ex x being FinSequence of ExtREAL st len x = card (Omega) &( for n being
+Nat st n in dom x holds x.n = R_EAL (f.((canFS(Omega)). n)) * M .{(canFS(Omega)
+  ).n})& Integral(M,f) =Sum x by Lm10;
+  rng s = Omega & len s = card (Omega) by FUNCT_2:def 3,UPROOTS:5;
+  hence thesis by A1;
+  reconsider s as FinSequence of Omega;
+end;
+
+Lm11: for Omega be non empty finite set, P be Probability of
+Trivial-SigmaField (Omega), f be Function of Omega,REAL holds ex F being
+FinSequence of REAL st len F = card (Omega) & (for n being Nat st n in dom F
+holds F.n = f.((canFS(Omega)).n) * P.{(canFS(Omega)).n}) & Integral(P2M(P),f) =
+Sum F
+
+proof
+
+  let Omega be non empty finite set, P be Probability of Trivial-SigmaField (
+  Omega), f be Function of Omega,REAL;
+
+  set Sigma=Trivial-SigmaField (Omega);
+  set M = P2M(P);
+A1: P.Omega in REAL;
+  then consider x being FinSequence of ExtREAL such that
+A2: len x = card (Omega) and
+
+A3: for n being Nat st n in dom x holds x.n = R_EAL (f.((canFS(Omega)).
+  n)) * (P2M(P)).{(canFS(Omega)).n} and
+A4: Integral(P2M(P),f) = Sum x by Lm10,XXREAL_0:9;
+A5: (P2M(P)).Omega < +infty by A1,XXREAL_0:9;
+A6: for n be Nat st n in dom canFS(Omega) holds M.{(canFS(Omega)).n} in REAL
+  proof
+    let n be Nat;
+    assume
+    n in dom canFS(Omega);
+    then (canFS(Omega)).n in rng canFS(Omega) by FUNCT_1:12;
+    then
+A7: {(canFS(Omega)).n } c= Omega by ZFMISC_1:37;
+    Omega in Sigma by MEASURE1:21;
+    hence M.({(canFS(Omega)).n }) in REAL by A5,A7,Lm7;
+  end;
+  now
+    let y be set;
+    assume
+    y in rng x;
+    then consider n be Element of NAT such that
+A8: n in dom x and
+A9: y=x.n by PARTFUN1:26;
+    Seg len x=Seg(len(canFS(Omega))) by A2,UPROOTS:5;
+    then dom x = Seg (len (canFS(Omega))) by FINSEQ_1:def 3;
+    then n in dom canFS(Omega) by A8,FINSEQ_1:def 3;
+    then reconsider z=M.{(canFS(Omega)).n} as Element of REAL by A6;
+    reconsider w=f.((canFS(Omega)).n) as Element of REAL;
+    x.n = R_EAL (f.((canFS(Omega)).n) ) * M.{(canFS(Omega)).n} by A3,A8
+      .= w*z by EXTREAL1:13;
+    hence y in REAL by A9;
+  end;
+  then rng x c= REAL by TARSKI:def 3;
+  then reconsider F=x as FinSequence of REAL by FINSEQ_1:def 4;
+  take F;
+  now
+    let n be Nat;
+    assume
+    n in dom F;
+
+    hence
+    F.n =R_EAL (f.((canFS(Omega)).n)) * (P2M(P)).{(canFS(Omega)).n} by A3
+
+      .= (f.((canFS(Omega)).n)) * P.({(canFS(Omega)).n}) by EXTREAL1:13;
+  end;
+  hence thesis by A2,A4,MESFUNC3:2;
+end;
+
+theorem Th12:
+  for Omega be non empty finite set, P be Probability of
+  Trivial-SigmaField (Omega), f be Function of Omega,REAL, x be FinSequence of
+REAL, s be FinSequence of Omega st len x = card (Omega) & s is one-to-one & rng
+s = Omega & len s = card (Omega) & (for n being Nat st n in dom x holds x.n = f
+  .(s.n) * P.{s.n}) holds Integral(P2M(P),f) =Sum x
+proof
+  let Omega be non empty finite set, P be Probability of Trivial-SigmaField (
+Omega), f be Function of Omega,REAL, x be FinSequence of REAL, s be FinSequence
+  of Omega;
+  assume that
+A1: len x = card (Omega) & s is one-to-one & rng s = Omega & len s =
+  card (Omega) and
+A2: for n being Nat st n in dom x holds x.n = f.(s.n) * P.{s.n};
+  set M = P2M(P);
+  rng x c= ExtREAL by NUMBERS:31,XBOOLE_1:1;
+  then reconsider x1= x as FinSequence of ExtREAL by FINSEQ_1:def 4;
+A3: now
+    let n be Nat;
+    assume
+    n in dom x1;
+    hence x1.n = f.(s.n) * P.{s.n} by A2
+      .=R_EAL (f.(s.n) ) * (P2M(P)).{s.n} by EXTREAL1:13;
+  end;
+  P.Omega in REAL;
+  then Integral(M,f) =Sum x1 by A1,A3,Th10,XXREAL_0:9
+    .=Sum x by MESFUNC3:2;
+  hence thesis;
+  set Sigma= Trivial-SigmaField (Omega);
+end;
+
+theorem Th13:
+  for Omega be non empty finite set, P be Probability of
+  Trivial-SigmaField (Omega), f be Function of Omega,REAL holds ex F being
+  FinSequence of REAL, s being FinSequence of Omega st len F = card (Omega) & s
+is one-to-one & rng s = Omega & len s = card (Omega) & (for n being Nat st n in
+  dom F holds F.n = f.(s.n) * P.{s.n}) & Integral(P2M(P),f) = Sum F
+proof
+  let Omega be non empty finite set, P be Probability of Trivial-SigmaField (
+  Omega), f be Function of Omega,REAL;
+  set Sigma =Trivial-SigmaField (Omega);
+  set s=canFS(Omega);
+A1: len s = card Omega by UPROOTS:5;
+  (ex F being FinSequence of REAL st len F = card (Omega) &( for n being
+  Nat st n in dom F holds F.n = f.((canFS(Omega)).n) * P. {(canFS( Omega)).n})&
+  Integral(P2M(P),f) =Sum F )& rng s = Omega by Lm11,FUNCT_2:def 3;
+  hence thesis by A1;
+end;
+
+theorem Th14:
+  for E be finite non empty set, ASeq being SetSequence of E st
+  ASeq is non-ascending holds ex N be Element of NAT st for m be Element of NAT
+  st N<=m holds ASeq.N = ASeq.m
+proof
+  let E be finite non empty set, ASeq being SetSequence of E;
+  defpred P[Element of NAT,set] means $2=card(ASeq.$1 );
+A1: for x be Element of NAT ex y be Element of REAL st P[x,y]
+  proof
+    let x be Element of NAT;
+    card(ASeq.x) in NAT;
     hence thesis;
   end;
-
-theorem Lm6:
-  for Omega be non empty finite set,
-  f be PartFunc of Omega,REAL holds
-  f is_simple_func_in Trivial-SigmaField (Omega)
-  & dom f is Element of Trivial-SigmaField (Omega)
-  proof
-    let Omega be non empty finite set,
-    f be PartFunc of Omega,REAL;
-    set Sigma = Trivial-SigmaField (Omega),D = dom f;
-    consider F be Finite_Sep_Sequence of Sigma such that
-    P1: dom f = union (rng F) &
-    dom F = dom (canFS(D)) &
-    (for k be Nat st k in dom F holds F.k={(canFS(D)).k} )
-    & for n being Nat for x,y being Element of Omega
-    st n in dom F & x in F.n & y in F.n holds f.x = f.y by Lm6A;
-    thus thesis by MESFUNC6:def 7,P1;
-  end;
-
-theorem
-  for Omega be non empty finite set,
-  M being sigma_Measure of Trivial-SigmaField (Omega),
-  f be PartFunc of Omega,REAL
-  st dom f <> {} & M.(dom f) < +infty
-  holds f is_integrable_on M by Lm9A0,Lm6;
-
-Lm9A2: for Omega be non empty set,
-  Sigma be SigmaField of Omega,
-  M being sigma_Measure of Sigma,
-  A,B be set
-  st A in Sigma & B in Sigma & A c= B
-  & M.B < +infty holds M.A in REAL
-  proof
-    let Omega be non empty set,
-    Sigma be SigmaField of Omega,
-    M be sigma_Measure of Sigma,
-    A,B be set;
-    assume AS: A in Sigma & B in Sigma & A c= B & M.B < +infty;
-    M.A <> -infty & M.A <> +infty by MEASURE1:62,AS,MEASURE1:def 4;
-    hence thesis by XXREAL_0:14;
-  end;
-
-  LmX1:
-  for Omega be non empty finite set,
-  f be PartFunc of Omega,REAL
-  holds f*canFS dom f is FinSequence of REAL
-  proof let Omega be non empty finite set,
-    f be PartFunc of Omega,REAL;
-    rng canFS dom f c= dom f;then
-    X: f*canFS dom f is FinSequence by FINSEQ_1:20;
-    rng(f*canFS dom f) c= REAL;
-    hence f*canFS dom f is FinSequence of REAL by FINSEQ_1:def 4,X;
-  end;
-
-LmX2:
-  for Omega be non empty finite set,
-  f be PartFunc of Omega,REAL
-  holds dom(f*canFS dom f) = dom canFS dom f
-  proof let Omega be non empty finite set,
-    f be PartFunc of Omega,REAL;
-    rng canFS dom f c= dom f;
-    hence dom(f*canFS dom f) = dom canFS dom f by RELAT_1:46;
-  end;
-
-theorem Lm7:
-  for Omega be non empty finite set,
-  f be PartFunc of Omega,REAL
-  ex X be Element of Trivial-SigmaField (Omega) st dom f = X &
-  f is_measurable_on X
-  proof
-    let Omega be non empty finite set,
-    f be PartFunc of Omega,REAL;
-    set Sigma = Trivial-SigmaField (Omega);
-    reconsider X = dom f as Element of Sigma;
-    take X;
-    thus thesis by Lm6,MESFUNC6:50;
-  end;
-
-  Lm9A:
-  for Omega be non empty finite set,
-  M being sigma_Measure of Trivial-SigmaField (Omega),
-  f be Function of Omega,REAL
-  st M.Omega < +infty holds
-  ex x being FinSequence of ExtREAL
-  st len x = card (Omega)
-  & (for n being Nat st n in dom x
-  holds x.n = R_EAL (f.((canFS(Omega)).n)) * M.{(canFS(Omega)).n})
-  & Integral(M,f) = Sum x
-  proof
-    let Omega be non empty finite set,
-    M being sigma_Measure of Trivial-SigmaField (Omega),
-    f be Function of Omega,REAL;
-    assume AS: M.Omega < +infty;
-    set Sigma= Trivial-SigmaField (Omega),D =dom f;
-    consider F be Finite_Sep_Sequence of Sigma such that
-    P1:
-    dom f = union (rng F) &
-    dom F = dom (canFS(D)) &
-    (for k be Nat st k in dom F holds F.k={(canFS(D)).k} )
-    & for n being Nat for x,y being Element of Omega
-    st n in dom F & x in F.n & y in F.n holds f.x = f.y by Lm6A;
-    set fp=max+(f);
-    set fm=max-(f);
-    XD0: dom f =Omega by FUNCT_2:def 1;
-    XDp: dom fp=dom f by RFUNCT_3:def 10;
-    XDm:dom fm=dom f by RFUNCT_3:def 11;
-    set Dp = dom fp;
-    consider Fp be Finite_Sep_Sequence of Sigma such that
-    Q1: dom fp = union (rng Fp) & dom Fp = dom (canFS(Dp)) &
-    (for k be Nat st k in dom Fp holds Fp.k={(canFS(Dp)).k} )
-    & for n being Nat for x,y being Element of Omega
-    st n in dom Fp & x in Fp.n & y in Fp.n holds fp.x = fp.y by Lm6A;
-    set Dm = dom fm;
-    consider Fm be Finite_Sep_Sequence of Sigma such that
-    R1:
-    dom fm = union (rng Fm) &
-    dom Fm = dom (canFS(Dm)) &
-    (for k be Nat st k in dom Fm holds Fm.k={(canFS(Dm)).k} )
-    & for n being Nat for x,y being Element of Omega
-    st n in dom Fm & x in Fm.n & y in Fm.n holds
-    fm.x = fm.y by Lm6A;
-
-    FPP: fp is Function of Omega,REAL by XD0,XDp,FUNCT_2:def 1;
-    A1: fp is_simple_func_in Sigma by Lm6;
-    A2: fp is nonnegative by MESFUNC6:61;
-    FMM: fm is Function of Omega,REAL by XD0,XDm,FUNCT_2:def 1;
-    B1: fm is_simple_func_in Sigma by Lm6;
-    B2: fm is nonnegative by MESFUNC6:61;
-    XXX1: Dp=D & Dm=D by RFUNCT_3:def 10,RFUNCT_3:def 11;
-    XXX2: dom Fp=dom F &dom Fm= dom F
-    by R1,Q1,P1,RFUNCT_3:def 10,RFUNCT_3:def 11;
-    set L=len F;
-    reconsider a = f*canFS D as FinSequence of REAL by LmX1;
-    defpred PX[ Nat,set ] means $2=R_EAL (a.$1) *(M*F).$1;
-
-    A1X: for k being Nat st k in Seg L holds
-    ex x being Element of ExtREAL st PX[k,x];
-
-    consider x being FinSequence of ExtREAL such that
-    C30: dom x = Seg L & for k being Nat st k in Seg L holds
-    PX[k,x.k] from FINSEQ_1:sch 5(A1X);
-    C3: dom x = dom F
-    & for n be Nat st n in dom x holds x.n=R_EAL (a.n) *(M*F).n
-    by C30,FINSEQ_1:def 3;
-    take x;
-    reconsider ap = fp*canFS Dp as FinSequence of REAL by LmX1;
-    defpred Pp[ Nat,set ] means $2=R_EAL (ap.$1) *(M*Fp).$1;
-
-    A1P: for k being Nat st k in Seg L holds
-    ex x being Element of ExtREAL st Pp[k,x];
-
-    consider xp being FinSequence of ExtREAL such that
-    A30: dom xp = Seg L & for k being Nat st k in Seg L holds
-    Pp[k,xp.k] from FINSEQ_1:sch 5(A1P);
-    A3: dom xp = dom Fp
-    & for n be Nat st n in dom xp holds xp.n=R_EAL (ap.n) *(M*Fp).n
-    by A30,FINSEQ_1:def 3,XXX2;
-    reconsider am = fm*canFS Dm as FinSequence of REAL by LmX1;
-    defpred Pm[Nat,set] means $2=R_EAL (am.$1) *(M*Fm).$1;
-
-    B1P: for k being Nat st k in Seg L holds
-    ex x being Element of ExtREAL st Pm[k,x];
-
-    consider xm being FinSequence of ExtREAL such that
-    B30: dom xm = Seg L & for k being Nat st k in Seg L holds
-    Pm[k,xm.k] from FINSEQ_1:sch 5(B1P);
-
-    B3: dom xm = dom Fm
-    & for n be Nat st n in dom xm holds xm.n=R_EAL (am.n) *(M*Fm).n
-    by B30,FINSEQ_1:def 3,XXX2;
-
-    UU1: dom Fp=dom ap by LmX2,Q1;
-    for n be Nat st n in dom Fp
-    for x be set st x in Fp.n holds fp.x=ap.n
-    proof let n be Nat such that
-      Z: n in dom Fp;
-      let x be set;
-      assume x in Fp.n;
-      then x in {(canFS(Dp)).n} by Z,Q1;
-      then x = (canFS(Dp)).n by TARSKI:def 1;
-      hence fp.x=ap.n by Z,UU1,FUNCT_1:22;
-    end;
-    then
-    A5:Integral(M,fp)=Sum(xp) by MES43,A1,A2,A3,Q1,XDp,UU1;
-
-    X2:dom fp = Omega by XD0,RFUNCT_3:def 10;
-    K2: fp is_integrable_on M by X2,Lm9A0,Lm6,AS;
-    X3: dom fm = Omega by XD0,RFUNCT_3:def 11;
-    K3: fm is_integrable_on M by X3,Lm9A0,Lm6,AS;
-    M.(dom ((-1)(#)fm)) < +infty by AS,FUNCT_2:def 1,FMM;then
-    K5: (-1)(#)fm is_integrable_on M by FMM,Lm9A0,Lm6;
-    consider E be Element of Sigma such that
-    K6: E = (dom fp) /\ dom ((-1)(#)fm)
-    & Integral(M,fp+(-1)(#)fm)
-    =Integral(M,fp|E)+Integral(M,((-1)(#)fm)|E) by K2,K5,MESFUNC6:101;
-
-    K8: dom ((-1)(#)fm) =dom fm by VALUED_1:def 5
-    .=Omega by XDm,FUNCT_2:def 1;
-    K9: E = Omega /\ Omega by XDp,FUNCT_2:def 1,K8,K6
-    .= Omega;
-
-    K10: R_EAL(-1)*Integral(M,fm)
-    =(-R_EAL(1)) *Integral(M,fm) by SUPINF_2:3
-    .= -(R_EAL(1)*Integral(M,fm) ) by XXREAL_3:103
-    .=-Integral(M,fm) by XXREAL_3:92;
-
-    P6: ((-1)(#)fm)|E = (-1)(#)fm by FMM,K9,FUNCT_2:40;
-    P7: Integral(M,fp+(-1)(#)fm)
-    =Integral(M,fp) +Integral(M,(-1)(#)fm) by FPP,K9,FUNCT_2:40,P6,K6
-    .=Integral(M,fp) +-Integral(M,fm) by K10,MESFUNC6:102,K3;
-
-    CFSD:
-    for n be Nat
-    st n in dom canFS(Omega) holds M.{(canFS(Omega)).n} in REAL
-    proof
-      let n be Nat;
-      assume n in dom canFS(Omega);then
-      (canFS(Omega)).n in rng canFS(Omega) by FUNCT_1:12;then
-      B1: {(canFS(Omega)).n } c= Omega by ZFMISC_1:37;
-      Omega in Sigma by MEASURE1:21;
-      hence M.({(canFS(Omega)).n }) in REAL by Lm9A2,B1,AS;
-    end;
-
-    C7: for n being Nat st n in dom x
-    holds x.n = R_EAL (f.((canFS(Omega)).n) ) * M.{(canFS(Omega)).n}
-    proof
-      let n be Nat;
-      assume C71: n in dom x;
-      C73:f.((canFS(D)).n) =a.n by C3,P1,C71,FUNCT_1:23;
-      C74: (M*F).n =M.(F.n) by FUNCT_1:23,C3,C71
-      .= M.{(canFS(Omega)).n} by XD0,P1,C3,C71;
-      thus x.n=R_EAL (a.n) *(M*F).n by C30,C71
-      .= R_EAL (f.((canFS(Omega)).n) )
-      * M.{(canFS(Omega)).n} by C73,C74,FUNCT_2:def 1;
-    end;
-
-    x is FinSequence of REAL
-    proof
-      let y be set;
-      assume y in rng x;then
-      consider n be Element of NAT such that
-      C71: n in dom x & y=x.n by PARTFUN1:26;
-      reconsider w=f.((canFS(Omega)).n) as Element of REAL;
-      reconsider z=M.{(canFS(Omega)).n}
-      as Element of REAL by CFSD,C3,P1,C71,XD0;
-      x.n = R_EAL (f.((canFS(Omega)).n) )
-      * M.{(canFS(Omega)).n} by C7,C71
-      .= w*z by EXTREAL1:13;
-      hence y in REAL by C71;
-    end;then
-    reconsider x1=x as FinSequence of REAL;
-    XB7: for n being Nat st n in dom xp
-    holds xp.n = R_EAL (fp.((canFS(Omega)).n) ) * M.{(canFS(Omega)).n}
-    proof
-      let n be Nat;
-      assume C71: n in dom xp;
-      C73:fp.((canFS(D)).n) =ap.n by A3,Q1,C71,FUNCT_1:23,XXX1;
-      C74: (M*Fp).n =M.(Fp.n) by FUNCT_1:23,A3,C71
-      .= M.{(canFS(Omega)).n} by XD0,XXX1,A3,Q1,C71;
-      thus xp.n=R_EAL (ap.n) *(M*Fp).n by A30,C71
-      .= R_EAL (fp.((canFS(Omega)).n) ) * M.{(canFS(Omega)).n}
-      by C73,C74,FUNCT_2:def 1;
-    end;
-
-    xp is FinSequence of REAL
-    proof
-      now let y be set;
-        assume y in rng xp;
-        then consider n be Element of NAT such that
-        C71: n in dom xp & y=xp.n by PARTFUN1:26;
-        reconsider w=fp.((canFS(Omega)).n)
-        as Element of REAL;
-        reconsider z=M.{(canFS(Omega)).n}
-        as Element of REAL by CFSD,XXX1,A3,Q1,C71,XD0;
-        xp.n = R_EAL (fp.((canFS(Omega)).n)) * M.{(canFS(Omega)).n}
-          by XB7,C71
-        .= w*z by EXTREAL1:13;
-        hence y in REAL by C71;
-      end;
-      hence rng xp c= REAL by TARSKI:def 3;
-    end;then
-    reconsider xp1=xp as FinSequence of REAL;
-
-    XA7: for n being Nat st n in dom xm
-    holds xm.n = R_EAL (fm.((canFS(Omega)).n) ) * M.{(canFS(Omega)).n}
-    proof
-      let n be Nat;
-      assume C71: n in dom xm;
-      C74: (M*Fm).n =M.(Fm.n) by FUNCT_1:23,B3,C71
-      .= M.{(canFS(Omega)).n} by XD0,XXX1,B3,R1,C71;
-      thus xm.n=R_EAL (am.n) *(M*Fm).n by B30,C71
-      .= R_EAL (fm.((canFS(Omega)).n) )
-      * M.{(canFS(Omega)).n} by B3,R1,C71,C74,FUNCT_1:23,X3;
-    end;
-
-    xm is FinSequence of REAL
-    proof
-      now let y be set;
-        assume y in rng xm;
-        then consider n be Element of NAT such that
-        C71: n in dom xm & y=xm.n by PARTFUN1:26;
-        reconsider w=fm.((canFS(Omega)).n)
-        as Element of REAL;
-        reconsider z=M.{(canFS(Omega)).n}
-        as Element of REAL by CFSD,XXX1,B3,R1,C71,XD0;
-        xm.n = R_EAL (fm.((canFS(Omega)).n) )
-        * M.{(canFS(Omega)).n} by XA7,C71
-        .= w*z by EXTREAL1:13;
-        hence y in REAL by C71;
-      end;
-      hence rng xm c= REAL by TARSKI:def 3;
-    end;then
-    reconsider xm1=xm as FinSequence of REAL;
-
-    C51: Sum(xp) = Sum(xp1) by MESFUNC3:2;
-    C52: Sum(xm) = Sum(xm1) by MESFUNC3:2;
-    C54: len xp1 =L by A30,FINSEQ_1:def 3
-    .= len xm1 by B30,FINSEQ_1:def 3;
-
-    C53: x1=xp1-xm1
-    proof
-      AA4: dom (xp1-xm1) = (dom xp1) /\ (dom xm1) by VALUED_1:12
-      .= dom x1 by A3,B3,C30,FINSEQ_1:def 3,XXX2;
-      for k be Nat st k in dom x1 holds (xp1 - xm1).k =x1.k
-      proof
-        let k be Nat;
-        assume A6: k in dom x1;
-        k in (dom xp1) /\ (dom xm1) by A30,B30,C30,A6;then
-        PA8: k in dom (xp1 - xm1) by VALUED_1:12;
-        A80: k in dom canFS(Omega) by C3,P1,A6,FUNCT_2:def 1;
-        reconsider z=M.{(canFS(Omega)).k} as Element of REAL
-        by CFSD,C3,P1,A6,XD0;
-        A9: xp1.k =R_EAL (fp.((canFS(Omega)).k) )
-        * M.{(canFS(Omega)).k} by XB7,A30,C30,A6
-        .=(fp.((canFS(Omega)).k) )*z by EXTREAL1:13;
-        A10: xm1.k =R_EAL (fm.((canFS(Omega)).k) ) * M.{(canFS(Omega)).k}
-        by XA7,B30,C30,A6
-        .= (fm.((canFS(Omega)).k) ) * z by EXTREAL1:13;
-        (canFS(Omega)).k in rng canFS(Omega) by A80,FUNCT_1:12;
-        then (canFS(Omega)).k in Omega;
-        then
-        A11: (canFS(Omega)).k in dom f by FUNCT_2:def 1;
-        A12: f =fp-fm by MESFUNC6:42;
-        thus (xp1 - xm1).k = (fp.((canFS(Omega)).k) )
-        * z - (fm.((canFS(Omega)).k) ) * z by A9,A10,VALUED_1:13,PA8
-        .=( fp.((canFS(Omega)).k) - fm.((canFS(Omega)).k) ) * z
-        .= (f.((canFS(Omega)).k) ) * z by VALUED_1:13,A11,A12
-        .= R_EAL (f.((canFS(Omega)).k) ) * M.{(canFS(Omega)).k}
-        by EXTREAL1:13
-        .=x1.k by C7,A6;
-      end;
-      hence thesis by FINSEQ_1:17,AA4;
-    end;
-
-    UU1: dom Fm=dom am by LmX2,R1;
-    UU2: for n be Nat st n in dom Fm
-    for x be set st x in Fm.n holds fm.x=am.n
-    proof let n be Nat such that
-      Z: n in dom Fm;
-      let x be set;
-      assume x in Fm.n;
-      then x in {(canFS(Dm)).n} by Z,R1;
-      then x = (canFS(Dm)).n by TARSKI:def 1;
-      hence fm.x=am.n by Z,UU1,FUNCT_1:22;
-    end;
-
-    C5:Integral(M,f) =Integral(M,fp-fm) by MESFUNC6:42
-    .=Sum(xp) -Sum(xm) by A5,MES43,B1,B2,B3,R1,XDm,UU1,UU2,P7
-    .=Sum(xp1) -Sum(xm1) by C51,C52,SUPINF_2:5
-    .=Sum(xp1-xm1) by INTEGRA5:2,C54
-    .=Sum(x) by MESFUNC3:2,C53;
-    C61: len x = L by C30,FINSEQ_1:def 3;
-    dom (canFS(D))=Seg (len F) by FINSEQ_1:def 3,P1;then
-    len F = len (canFS(D)) by FINSEQ_1:def 3;
-    hence thesis by C5,C61,XD0,UPROOTS:5,C7;
-  end;
-
-theorem Lm9A4:
-  for Omega be non empty finite set,
-  M being sigma_Measure of Trivial-SigmaField (Omega),
-  f be Function of Omega,REAL,
-  x being FinSequence of ExtREAL,
-  s being FinSequence of (Omega) st
-  M.Omega < +infty
-  & s is one-to-one
-  & rng s = Omega
-  & len s = card (Omega)
-  ex F be Finite_Sep_Sequence of Trivial-SigmaField (Omega),
-  a being FinSequence of REAL st
-  dom f = union (rng F) &
-  dom a = dom s &
-  dom F = dom s &
-  (for k be Nat st k in dom F holds F.k={s.k} )
-  & for n being Nat for x,y being Element of Omega
-  st n in dom F & x in F.n & y in F.n holds f.x = f.y
-  proof
-    let Omega be non empty finite set,
-    M be sigma_Measure of Trivial-SigmaField (Omega),
-    f be Function of Omega,REAL,
-    x be FinSequence of ExtREAL,
-    s be FinSequence of (Omega);
-    assume AS: M.Omega < +infty
-    & s is one-to-one
-    & rng s = Omega
-    & len s = card (Omega);
-    set Sigma=Trivial-SigmaField (Omega);
-    defpred P[Nat,set] means $2={s.$1};
-    set L = len s;
-    P1:for k be Nat st k in Seg L ex x being Element of bool Omega st P[k,x]
-    proof
-      let k be Nat;
-      assume k in Seg L;
-      then k in dom s by FINSEQ_1:def 3;then
-      PP1PP: s.k in rng s by FUNCT_1:12;
-      take {s.k};
-      thus thesis by PP1PP,ZFMISC_1:37;
-    end;
-
-    consider F being FinSequence of bool Omega such that
-    P2: dom F = Seg L &
-    for k be Nat st k in Seg L holds P[k,F.k] from FINSEQ_1:sch 5(P1);
-    defpred Q[Nat,set] means $2=f.(s.$1);
-    R1:for k be Nat st k in Seg L ex x being Element of REAL st Q[k,x];
-    consider a being FinSequence of REAL
-    such that Q2: dom a = Seg L &
-    for k be Nat st k in Seg L holds Q[k,a.k] from FINSEQ_1:sch 5(R1);
-    Q1: dom F = dom s by P2,FINSEQ_1:def 3;
-    now let i,j be Nat;
-      assume A1: i in dom F & j in dom F & i <> j;
-      A4: i in dom s & j in dom s by FINSEQ_1:def 3,A1,P2;
-      PA3: s.i <> s.j by A1,A4,FUNCT_1:def 8,AS;
-      F.i = {s.i } & F.j = {s.j } by A1,P2;
-      hence F.i misses F.j by ZFMISC_1:17,PA3;
-    end;
-    then
-    reconsider F as Finite_Sep_Sequence of Sigma by MESFUNC3:4;
-    take F;
-    union rng F = rng s
-    proof
-      now let x be set;
-        assume x in union rng F;
-        then consider y be set such that
-        A2: x in y & y in rng F by TARSKI:def 4;
-        consider n be set such that
-        A3: n in dom F & y=F.n by A2,FUNCT_1:def 5;
-        F.n = {s.n } by A3,P2;then
-        A5:x = s.n by A2,A3,TARSKI:def 1;
-        n in dom s by P2,A3,FINSEQ_1:def 3;
-        hence x in rng s by FUNCT_1:def 5,A5;
-      end;
-      hence union rng F c= rng s by TARSKI:def 3;
-      let x be set;
-      assume x in rng s;then
-      consider n be set such that
-      A5: n in dom s & x=s.n by FUNCT_1:def 5;
-      A4: n in Seg L by A5,FINSEQ_1:def 3;
-      reconsider n as Element of NAT by A5;
-      A3: n in dom F by P2,A5,FINSEQ_1:def 3;
-      x in {s.n} by A5,TARSKI:def 1;then
-      A2: x in F.n by P2,A4;
-      F.n in rng F by A3,FUNCT_1:def 5;
-      hence x in union rng F by A2,TARSKI:def 4;
-    end;then
-    P3: dom f = union rng F by AS,FUNCT_2:def 1;
-    for n being Nat for x,y being Element of Omega
-    st n in dom F & x in F.n & y in F.n holds f.x = f.y
-    proof
-      let n be Nat;
-      let x,y be Element of Omega;
-      assume AS1: n in dom F & x in F.n & y in F.n;
-      P41: F.n = {s.n} by P2,AS1;
-      thus f.x =f.(s.n) by P41,AS1,TARSKI:def 1
-      .=f.y by P41,AS1,TARSKI:def 1;
-    end;
-    hence thesis by Q1,P2,P3,Q2;
-  end;
-
-theorem Lm9A3:
-  for Omega be non empty finite set,
-  M being sigma_Measure of Trivial-SigmaField (Omega),
-  f be Function of Omega,REAL,
-  x being FinSequence of ExtREAL,
-  s being FinSequence of (Omega)
-  st M.Omega < +infty
-  & len x = card (Omega)
-  & s is one-to-one
-  & rng s = Omega
-  & len s = card (Omega)
-  & (for n being Nat st n in dom x holds x.n = R_EAL (f.(s.n)) * M.{s.n})
-  holds
-  Integral(M,f) =Sum x
-  proof
-    let Omega be non empty finite set,
-    M be sigma_Measure of Trivial-SigmaField (Omega),
-    f be Function of Omega,REAL,
-    x be FinSequence of ExtREAL,
-    s be FinSequence of (Omega);
-    assume AS: M.Omega < +infty
-    & len x = card (Omega) & s is one-to-one
-    & rng s = Omega & len s = card (Omega)
-    & (for n being Nat st n in dom x
-    holds x.n = R_EAL (f.(s.n)) * M.{s.n});
-    set Sigma= Trivial-SigmaField (Omega);
-    consider F be Finite_Sep_Sequence of Sigma,
-    a being FinSequence of REAL such that
-    P1: dom f = union (rng F) &
-    dom a = dom s &
-    dom F = dom s &
-    (for k be Nat st k in dom F holds F.k={s.k} )
-    & for n being Nat for x,y being Element of Omega
-    st n in dom F & x in F.n & y in F.n holds
-    f.x = f.y by Lm9A4,AS;
-    set fp=max+(f);
-    set fm=max-(f);
-    XSD: dom x =Seg len s by AS,FINSEQ_1:def 3
-    .= dom F by P1,FINSEQ_1:def 3;
-    XD0: dom f =Omega by FUNCT_2:def 1;
-    XDp: dom fp=dom f by RFUNCT_3:def 10;
-    XDm:dom fm=dom f by RFUNCT_3:def 11;
-
-    set L=len F;
-    CC:dom F =Seg L by FINSEQ_1:def 3;
-
-    defpred AP[Nat,set] means
-    for x be set st x in F.$1 holds $2=fp.x;
-
-    AP1:for k be Nat st k in Seg L ex y being Element of REAL st AP[k,y]
-    proof
-      let k be Nat;
-      assume P0: k in Seg L;
-      take y=fp.(s.k);
-      F.k = {s.k} by P1,CC,P0;
-      hence thesis by TARSKI:def 1;
-    end;
-    consider ap being FinSequence of REAL
-    such that AP2: dom ap = Seg L &
-    for k be Nat st k in Seg L holds AP[k,ap.k] from FINSEQ_1:sch 5(AP1);
-    defpred AM[Nat,set] means
-    for x be set st x in F.$1 holds $2=fm.x;
-    AM1:for k be Nat st k in Seg L ex y being Element of REAL st AM[k,y]
-    proof
-      let k be Nat;
-      assume P0: k in Seg L;
-      take y=fm.(s.k);
-      F.k = {s.k} by P1,CC,P0;
-      hence thesis by TARSKI:def 1;
-    end;
-    consider am being FinSequence of REAL such that
-    AM2: dom am = Seg L &
-    for k be Nat st k in Seg L holds AM[k,am.k]
-    from FINSEQ_1:sch 5(AM1);
-    FPP: fp is Function of Omega,REAL by XD0,XDp,FUNCT_2:def 1;
-    A1: fp is_simple_func_in Sigma by Lm6;
-    A2: fp is nonnegative by MESFUNC6:61;
-
-    FMM: fm is Function of Omega,REAL by XD0,XDm,FUNCT_2:def 1;
-    B1: fm is_simple_func_in Sigma by Lm6;
-    B2: fm is nonnegative by MESFUNC6:61;
-
-    defpred Pp[ Nat,set ] means
-    $2=R_EAL (ap.$1) *(M*F).$1;
-    A1P: for k being Nat st k in Seg L holds
-    ex x being Element of ExtREAL st Pp[k,x];
-    consider xp being FinSequence of ExtREAL such that
-    A30: dom xp = Seg L & for k being Nat st k in Seg L holds
-    Pp[k,xp.k] from FINSEQ_1:sch 5(A1P);
-    A3: dom xp = dom F
-    & for n be Nat st n in dom xp holds xp.n=R_EAL (ap.n) *(M*F).n
-    by A30,FINSEQ_1:def 3;
-    defpred Pm[ Nat,set ] means
-    $2=R_EAL (am.$1) *(M*F).$1;
-    B1P: for k being Nat st k in Seg L holds
-    ex x being Element of ExtREAL st Pm[k,x];
-    consider xm being FinSequence of ExtREAL such that
-    B30: dom xm = Seg L & for k being Nat st k in Seg L holds
-    Pm[k,xm.k] from FINSEQ_1:sch 5(B1P);
-    B3: dom xm = dom F
-    & for n be Nat st n in dom xm holds xm.n=R_EAL (am.n) *(M*F).n
-    by B30,FINSEQ_1:def 3;
-    A5:Integral(M,fp)=Sum(xp) by MES43,A1,A2,A30,P1,CC,AP2,XDp;
-    X2:dom fp = Omega by XD0,RFUNCT_3:def 10;
-    K2: fp is_integrable_on M by X2,Lm9A0,Lm6,AS;
-    X3: dom fm = Omega by XD0,RFUNCT_3:def 11;
-    K3: fm is_integrable_on M by X3,Lm9A0,Lm6,AS;
-    M.(dom ((-1)(#)fm)) < +infty by AS,FUNCT_2:def 1,FMM;then
-    K5:(-1)(#)fm is_integrable_on M by FMM,Lm9A0,Lm6;
-    consider E be Element of Sigma such that
-    K6: E = (dom fp) /\ dom ((-1)(#)fm)
-    & Integral(M,fp+(-1)(#)fm)
-    =Integral(M,fp|E)+Integral(M,((-1)(#)fm)|E) by K2,K5,MESFUNC6:101;
-    K8: dom ((-1)(#)fm) = dom fm by VALUED_1:def 5
-    .=Omega by XD0,RFUNCT_3:def 11;
-    K9: E = Omega /\ Omega by K8,XD0,RFUNCT_3:def 10,K6
-    .= Omega;
-    K10: R_EAL(-1)*Integral(M,fm)
-    =(-R_EAL(1)) *Integral(M,fm) by SUPINF_2:3
-    .= -(R_EAL(1)*Integral(M,fm) ) by XXREAL_3:103
-    .=-Integral(M,fm) by XXREAL_3:92;
-    P6: ((-1)(#)fm)|E = (-1)(#)fm by FMM,K9,FUNCT_2:40;
-    P7: Integral(M,fp+(-1)(#)fm)
-    =Integral(M,fp) +Integral(M,(-1)(#)fm) by FPP,K9,FUNCT_2:40,P6,K6
-    .=Integral(M,fp) +-Integral(M,fm) by K10,MESFUNC6:102,K3;
-
-    CFSD:for n be Nat st n in dom s holds M.{s.n} in REAL
-    proof
-      let n be Nat;
-      assume n in dom s;then
-      s.n in rng s by FUNCT_1:12;then
-      {s.n } c= Omega by ZFMISC_1:37;
-      hence M.({s.n }) in REAL by Lm9A2,AS;
-    end;
-    x is FinSequence of REAL
-    proof
-      now let y be set;
-        assume y in rng x;
-        then consider n be Element of NAT such that
-        C71: n in dom x & y=x.n by PARTFUN1:26;
-        reconsider w=f.(s.n) as Element of REAL;
-        reconsider z=M.{s.n} as Element of REAL by CFSD,XSD,P1,C71;
-        x.n = R_EAL (f.(s.n) ) * M.{s.n} by AS,C71
-        .= w*z by EXTREAL1:13;
-        hence y in REAL by C71;
-      end;
-      hence rng x c= REAL by TARSKI:def 3;
-    end;
-    then reconsider x1=x as FinSequence of REAL;
-    XB7: for n being Nat st n in dom xp
-    holds xp.n = R_EAL (fp.(s.n) ) * M.{s.n}
-    proof
-      let n be Nat;
-      assume C71: n in dom xp;
-      F.n={s.n} by P1,A3,C71;then
-      PC73: s.n in F.n by TARSKI:def 1;
-      C74: (M*F).n =M.(F.n) by FUNCT_1:23,A3,C71
-      .= M.{s.n} by P1,A3,C71;
-      thus xp.n=R_EAL (ap.n) *(M*F).n by A30,C71
-      .= R_EAL (fp.(s.n) ) * M.{s.n} by A30,AP2,C71,PC73,C74;
-    end;
-    xp is FinSequence of REAL
-    proof
-      now let y be set;
-        assume y in rng xp;
-        then consider n be Element of NAT such that
-        C71: n in dom xp & y=xp.n by PARTFUN1:26;
-        reconsider w=fp.(s.n) as Element of REAL;
-        reconsider z=M.{s.n} as Element of REAL by CFSD,P1,A3,C71;
-        xp.n = R_EAL (fp.(s.n) ) * M.{s.n} by XB7,C71
-        .= w*z by EXTREAL1:13;
-        hence y in REAL by C71;
-      end;
-      hence rng xp c= REAL by TARSKI:def 3;
-    end;
-    then reconsider xp1=xp as FinSequence of REAL;
-    XA7: for n being Nat st n in dom xm
-    holds xm.n = R_EAL (fm.(s.n) ) * M.{s.n}
-    proof
-      let n be Nat;
-      assume C71: n in dom xm;
-      F.n={s.n} by P1,B3,C71;then
-      PC73: s.n in F.n by TARSKI:def 1;
-      C74: (M*F).n =M.(F.n) by FUNCT_1:23,B3,C71
-      .= M.{s.n} by P1,B3,C71;
-      thus xm.n=R_EAL (am.n) *(M*F).n by B30,C71
-      .= R_EAL (fm.(s.n) ) * M.{s.n} by B30,AM2,C71,PC73,C74;
-    end;
-    xm is FinSequence of REAL
-    proof
-      now let y be set;
-        assume y in rng xm;
-        then consider n be Element of NAT such that
-        C71: n in dom xm & y=xm.n by PARTFUN1:26;
-        reconsider w=fm.(s.n) as Element of REAL;
-        reconsider z=M.{s.n}
-        as Element of REAL by CFSD,B3,C71,P1;
-        xm.n = R_EAL (fm.(s.n) ) * M.{s.n} by XA7,C71
-        .= w*z by EXTREAL1:13;
-        hence y in REAL by C71;
-      end;
-      hence rng xm c= REAL by TARSKI:def 3;
-    end;
-    then reconsider xm1=xm as FinSequence of REAL;
-    C51: Sum(xp) = Sum(xp1) by MESFUNC3:2;
-    C52: Sum(xm) = Sum(xm1) by MESFUNC3:2;
-    C54: len xp1=L by A30,FINSEQ_1:def 3
-    .= len xm1 by B30,FINSEQ_1:def 3;
-    C53: x1=xp1-xm1
-    proof
-      AA4: dom (xp1-xm1) = (dom xp1) /\ (dom xm1) by VALUED_1:12
-      .= dom x1 by XSD,A3,B3;
-      for k be Nat st k in dom x1 holds (xp1 - xm1).k =x1.k
-      proof
-        let k be Nat;
-        assume A6: k in dom x1;
-        k in (dom xp1) /\ (dom xm1) by XSD,A3,B3,A6;then
-        PA8: k in dom (xp1 - xm1) by VALUED_1:12;
-        reconsider z=M.{s.k} as Element of REAL by CFSD,XSD,P1,A6;
-        A9: xp1.k=R_EAL (fp.(s.k) ) * M.{s.k} by XB7,XSD,A3,A6
-        .=(fp.(s.k) )*z by EXTREAL1:13;
-        A10: xm1.k=R_EAL (fm.(s.k) ) * M.{s.k} by XA7,XSD,B3,A6
-        .= (fm.(s.k) ) * z by EXTREAL1:13;
-        s.k in rng s by XSD,P1,A6,FUNCT_1:12;
-        then s.k in Omega;then
-        A11: s.k in dom f by FUNCT_2:def 1;
-        A12: f =fp-fm by MESFUNC6:42;
-        thus (xp1 - xm1).k = (fp.(s.k) ) * z - (fm.(s.k) ) * z
-        by A9,A10,VALUED_1:13,PA8
-        .=( fp.(s.k) - fm.(s.k) ) * z
-        .= (f.(s.k) ) * z by VALUED_1:13,A11,A12
-        .= R_EAL (f.(s.k) ) * M.{s.k}by EXTREAL1:13
-        .=x1.k by AS,A6;
-      end;
-      hence thesis by FINSEQ_1:17,AA4;
-    end;
-    thus Integral(M,f) =Integral(M,fp-fm) by MESFUNC6:42
-    .=Sum(xp) -Sum(xm) by A5,MES43,B1,B2,B30,XDm,P1,AM2,CC,P7
-    .=Sum(xp1) -Sum(xm1) by C51,C52,SUPINF_2:5
-    .=Sum(xp1-xm1) by INTEGRA5:2,C54
-    .=Sum(x) by MESFUNC3:2,C53;
-  end;
-
-theorem
-  for Omega be non empty finite set,
-  M being sigma_Measure of Trivial-SigmaField (Omega),
-  f be Function of Omega,REAL
-  st M.Omega < +infty holds
-  ex x being FinSequence of ExtREAL,
-  s being FinSequence of (Omega)
-  st len x = card (Omega)
-  & s is one-to-one
-  & rng s = Omega
-  & len s = card (Omega)
-  & (for n being Nat st n in dom x
-  holds x.n = R_EAL (f.(s.n)) * M.{s.n})
-  & Integral(M,f) = Sum x
-  proof
-    let Omega be non empty finite set,
-    M be sigma_Measure of Trivial-SigmaField (Omega),
-    f be Function of Omega,REAL;
-    assume AS:M.Omega < +infty;
-    set Sigma= Trivial-SigmaField (Omega);
-    consider x being FinSequence of ExtREAL such that
-    P1: len x = card (Omega)
-    & (for n being Nat st n in dom x
-    holds x.n = R_EAL (f.((canFS(Omega)).n)) * M.{(canFS(Omega)).n} )
-    & Integral(M,f) =Sum x by AS,Lm9A;
-    set s=canFS(Omega);
-    P3: rng s = Omega by FUNCT_2:def 3;
-    P4: len s = card (Omega) by UPROOTS:5;
-    reconsider s as FinSequence of Omega;
-    thus thesis by P1,P3,P4;
-  end;
-
-  Lm10A:
-  for Omega be non empty finite set,
-  P be Probability of Trivial-SigmaField (Omega),
-  f be Function of Omega,REAL
-  holds
-  ex F being FinSequence of REAL
-  st len F = card (Omega)
-  & (for n being Nat st n in dom F
-  holds F.n = f.((canFS(Omega)).n) * P.{(canFS(Omega)).n})
-  & Integral(P2M(P),f) =Sum F
-  proof
-    let Omega be non empty finite set,
-    P be Probability of Trivial-SigmaField (Omega),
-    f be Function of Omega,REAL;
-    set Sigma=Trivial-SigmaField (Omega);
-    PAA1: P.Omega in REAL;then
-    AA1: (P2M(P)).Omega < +infty by XXREAL_0:9;
-    consider x being FinSequence of ExtREAL such that
-    P1: len x = card (Omega)
-    & (for n being Nat st n in dom x
-    holds x.n = R_EAL (f.((canFS(Omega)).n))
-    * (P2M(P)).{(canFS(Omega)).n})
-    & Integral(P2M(P),f) = Sum x by Lm9A,PAA1,XXREAL_0:9;
-    set M = P2M(P);
-    CFSD: for n be Nat st n in dom canFS(Omega) holds
-    M.{(canFS(Omega)).n} in REAL
-    proof
-      let n be Nat;
-      assume n in dom canFS(Omega);then
-      (canFS(Omega)).n in rng canFS(Omega) by FUNCT_1:12;then
-      B1: {(canFS(Omega)).n } c= Omega by ZFMISC_1:37;
-      Omega in Sigma by MEASURE1:21;
-      hence M.({(canFS(Omega)).n }) in REAL by Lm9A2,B1,AA1;
-    end;
-    x is FinSequence of REAL
-    proof
-      now let y be set;
-        assume y in rng x;
-        then consider n be Element of NAT such that
-        C71: n in dom x & y=x.n by PARTFUN1:26;
-        reconsider w=f.((canFS(Omega)).n) as Element of REAL;
-        Seg len x=Seg(len(canFS(Omega))) by P1,UPROOTS:5;then
-        dom x = Seg (len (canFS(Omega))) by FINSEQ_1:def 3;
-        then n in dom canFS(Omega) by FINSEQ_1:def 3,C71;then
-        reconsider z=M.{(canFS(Omega)).n} as Element of REAL by CFSD;
-        x.n = R_EAL (f.((canFS(Omega)).n) ) *
-        M.{(canFS(Omega)).n} by P1,C71
-        .= w*z by EXTREAL1:13;
-        hence y in REAL by C71;
-      end;
-      hence rng x c= REAL by TARSKI:def 3;
-    end;
-    then reconsider F=x as FinSequence of REAL;
-    take F;
-    P2: now let n be Nat;
-    assume P21: n in dom F;
-    thus F.n =R_EAL (f.((canFS(Omega)).n)) * (P2M(P)).{(canFS(Omega)).n}
-    by P21,P1
-    .= (f.((canFS(Omega)).n)) * P.({(canFS(Omega)).n}) by EXTREAL1:13;
-  end;
-  thus thesis by P1,P2,MESFUNC3:2;
-end;
-
-theorem LMTX1:
-  for Omega be non empty finite set,
-  P be Probability of Trivial-SigmaField (Omega),
-  f be Function of Omega,REAL,
-  x be FinSequence of REAL,
-  s be FinSequence of Omega st
-  len x = card (Omega)
-  & s is one-to-one & rng s = Omega & len s = card (Omega)
-  & (for n being Nat st n in dom x holds x.n = f.(s.n) * P.{s.n}) holds
-  Integral(P2M(P),f) =Sum x
-  proof
-    let Omega be non empty finite set,
-    P be Probability of Trivial-SigmaField (Omega),
-    f be Function of Omega,REAL,
-    x be FinSequence of REAL,
-    s be FinSequence of Omega;
-    assume that
-    AS: len x = card (Omega) &
-    s is one-to-one &rng s = Omega &len s = card (Omega) and
-    ASt:(for n being Nat st n in dom x holds x.n = f.(s.n) * P.{s.n});
-    set Sigma= Trivial-SigmaField (Omega);
-    AA1: P.Omega in REAL;
-    rng x c= ExtREAL by NUMBERS:31,XBOOLE_1:1;
-    then reconsider x1= x as FinSequence of ExtREAL by FINSEQ_1:def 4;
-    set M = P2M(P);
-    AA2: now let n be Nat;
-    assume P21: n in dom x1;
-    thus x1.n = f.(s.n) * P.{s.n} by ASt,P21
-    .=R_EAL (f.(s.n) ) * (P2M(P)).{s.n} by EXTREAL1:13;
-  end;
-  Integral(M,f) =Sum x1 by AA1,AA2,AS,Lm9A3,XXREAL_0:9
-  .=Sum x by MESFUNC3:2;
-  hence thesis;
-end;
-
-theorem LMTX2:
-  for Omega be non empty finite set,
-  P be Probability of Trivial-SigmaField (Omega),
-  f be Function of Omega,REAL
-  holds
-  ex F being FinSequence of REAL,
-  s being FinSequence of Omega
-  st len F = card (Omega)
-  & s is one-to-one
-  & rng s = Omega
-  & len s = card (Omega)
-  & (for n being Nat st n in dom F holds F.n = f.(s.n) * P.{s.n})
-  & Integral(P2M(P),f) = Sum F
-  proof
-    let Omega be non empty finite set,
-    P be Probability of Trivial-SigmaField (Omega),
-    f be Function of Omega,REAL;
-    set Sigma =Trivial-SigmaField (Omega);
-    consider F being FinSequence of REAL such that
-    P1: len F = card (Omega)
-    & (for n being Nat st n in dom F
-    holds F.n = f.((canFS(Omega)).n)
-    * P.{(canFS(Omega)).n}) & Integral(P2M(P),f) =Sum F by Lm10A;
-    set s=canFS(Omega);
-    P3: rng s = Omega by FUNCT_2:def 3;
-    len s = card Omega by UPROOTS:5;
-    hence thesis by P1,P3;
-  end;
-
-theorem LME1:
-  for E be finite non empty set,
-  ASeq being SetSequence of E
-  st ASeq is non-ascending holds
-  ex N be Element of NAT st for m be Element of NAT
-  st N<=m holds
-  ASeq.N = ASeq.m
-  proof
-    let E be finite non empty set,
-    ASeq being SetSequence of E;
-    assume A1: ASeq is non-ascending;
-    defpred P[Element of NAT,set] means $2=card(ASeq.$1 );
-    P1:for x be Element of NAT ex y be Element of REAL st P[x,y]
-    proof
-      let x be Element of NAT;
-      card(ASeq.x) in NAT;
-      hence thesis;
-    end;
-    consider seq being Function of NAT,REAL such that
-    P2: for n being Element of NAT holds P[n,seq.n]
-    from FUNCT_2:sch 3(P1);
-    PP3: now let n,m be Element of NAT;
-    assume n <= m;then
-    P21: ASeq.m c= ASeq.n by A1,PROB_1:def 6;
-    seq.m = card(ASeq.m) & seq.n = card(ASeq.n) by P2;
-    hence seq.m <=seq.n by P21,NAT_1:44;
-  end;then
-  P3: seq is non-increasing by SEQM_3:14;
-  now let m be Element of NAT;
-    seq.m = card(ASeq.m) by P2;
+  consider seq being Function of NAT,REAL such that
+A2: for n being Element of NAT holds P[n,seq.n] from FUNCT_2:sch 3(A1);
+  now
+    let m be Element of NAT;
+    seq.m = card(ASeq.m) by A2;
     hence -1 < seq.m;
   end;
-  then seq is bounded_below by SEQ_2:def 4;
+  then
+A3: seq is bounded_below by SEQ_2:def 4;
+  assume
+A4: ASeq is non-ascending;
+A5: now
+    let n,m be Element of NAT;
+    assume
+    n <= m;
+    then
+A6: ASeq.m c= ASeq.n by A4,PROB_1:def 6;
+    seq.m = card(ASeq.m) & seq.n = card(ASeq.n) by A2;
+    hence seq.m <=seq.n by A6,NAT_1:44;
+  end;
+  then seq is non-increasing by SEQM_3:14;
   then consider g be real number such that
-  P4:for p be real number st 0<p ex n be Element of NAT
-  st for m be Element of NAT st n<=m
-  holds abs (seq.m-g) < p by P3,SEQ_2:def 6;
+A7: for p be real number st 0<p ex n be Element of NAT st for m be
+  Element of NAT st n<=m holds abs (seq.m-g) < p by A3,SEQ_2:def 6;
   consider N be Element of NAT such that
-  P5: for m be Element of NAT st N<=m holds abs (seq.m-g) < 1/2 by P4;
+A8: for m be Element of NAT st N<=m holds abs (seq.m-g) < 1/2 by A7;
   take N;
-  now let m be Element of NAT;
-    assume P6: N<=m;then
-    P7: abs (seq.m-g) < 1/2 by P5;
-    abs (seq.N-g) < 1/2 by P5;then
-    abs (g-seq.N) < 1/2 by COMPLEX1:146;then
-    P71: abs (seq.m-g) + abs (g-seq.N)
-    <1/2 + 1/2 by P7,XREAL_1:10;
-    abs (seq.m-seq.N) <= abs (seq.m-g) + abs (g-seq.N) by COMPLEX1:149;then
-    P72: abs (seq.m-seq.N) < 1 by P71,XXREAL_0:2;
-    X1:seq.N =card(ASeq.N) by P2;
-    X2:seq.m =card(ASeq.m) by P2;
-    P75:seq.m <= seq.N by PP3,P6;
-    PP81: ASeq.m c= ASeq.N by P6,A1,PROB_1:def 6;
-    abs (seq.N-seq.m) < 1 by P72,COMPLEX1:146;then
-    seq.N-seq.m < 1 by ABSVALUE:def 1;then
-    seq.N-seq.m + seq.m < 1 + seq.m by XREAL_1:10;then
-    seq.N <=seq.m by X1,X2,NAT_1:8;
-    hence ASeq.m=ASeq.N by PP81,CARD_FIN:1,X1,X2,P75,XXREAL_0:1;
+  now
+    abs (seq.N-g) < 1/2 by A8;
+    then
+A9: abs (g-seq.N) < 1/2 by COMPLEX1:146;
+    let m be Element of NAT;
+A10: seq.N =card(ASeq.N) & seq.m =card(ASeq.m) by A2;
+    assume
+A11: N<=m;
+    then
+A12: seq.m <= seq.N & ASeq.m c= ASeq.N by A4,A5,PROB_1:def 6;
+    abs (seq.m-g) < 1/2 by A8,A11;
+    then
+A13: abs (seq.m-g) + abs (g-seq.N) <1/2 + 1/2 by A9,XREAL_1:10;
+    abs (seq.m-seq.N) <= abs (seq.m-g) + abs (g-seq.N) by COMPLEX1:149;
+    then abs (seq.m-seq.N) < 1 by A13,XXREAL_0:2;
+    then abs (seq.N-seq.m) < 1 by COMPLEX1:146;
+    then seq.N-seq.m < 1 by ABSVALUE:def 1;
+    then seq.N-seq.m + seq.m < 1 + seq.m by XREAL_1:10;
+    then seq.N <=seq.m by A10,NAT_1:8;
+    hence ASeq.m=ASeq.N by A10,A12,CARD_FIN:1,XXREAL_0:1;
   end;
   hence thesis;
 end;
 
-theorem LME2:
-  for E be finite non empty set,
-  ASeq being SetSequence of E
-  st ASeq is non-ascending holds
-  ex N be Element of NAT st for m be Element of NAT
-  st N<=m holds
-  Intersection ASeq = ASeq.m
+theorem Th15:
+  for E be finite non empty set, ASeq being SetSequence of E st
+  ASeq is non-ascending holds ex N be Element of NAT st for m be Element of NAT
+  st N<=m holds Intersection ASeq = ASeq.m
+proof
+  let E be finite non empty set, ASeq being SetSequence of E;
+  assume
+A1: ASeq is non-ascending;
+  then consider N0 be Element of NAT such that
+A2: for m be Element of NAT st N0<=m holds ASeq.N0 = ASeq.m by Th14;
+  take N0;
+  let N be Element of NAT;
+  assume
+  N0 <= N;
+  then
+A3: ASeq.N= ASeq.N0 by A2;
+  thus Intersection ASeq = ASeq.N
   proof
-    let E be finite non empty set,
-    ASeq being SetSequence of E;
-    assume AS: ASeq is non-ascending;then
-    consider N0 be Element of NAT such that
-    P1: for m be Element of NAT st N0<=m holds ASeq.N0 = ASeq.m by LME1;
-    take N0;
-    let N be Element of NAT;
-    assume N0 <= N;
-    then XG:ASeq.N= ASeq.N0 by P1;
-    thus Intersection ASeq = ASeq.N
-    proof
-      for x be set st x in Intersection ASeq
-      holds x in ASeq.N by PROB_1:29;
-      hence Intersection ASeq c= ASeq.N by TARSKI:def 3;
-      let x be set;
-      assume AS1: x in ASeq.N;
-      now let n be Element of NAT;
-        per cases;
-        suppose n <= N0;
-          then ASeq.N0 c= ASeq.n by AS,PROB_1:def 6;
-          hence x in ASeq.n by AS1,XG;
-        end;
-        suppose N0 < n;
-          hence x in ASeq.n by AS1,XG,P1;
-        end;
+    for x be set st x in Intersection ASeq holds x in ASeq.N by PROB_1:29;
+    hence Intersection ASeq c= ASeq.N by TARSKI:def 3;
+    let x be set;
+    assume
+A4: x in ASeq.N;
+    now
+      let n be Element of NAT;
+      per cases;
+      suppose
+        n <= N0;
+        then ASeq.N0 c= ASeq.n by A1,PROB_1:def 6;
+        hence x in ASeq.n by A3,A4;
       end;
-      hence x in Intersection ASeq by PROB_1:29;
+      suppose
+        N0 < n;
+        hence x in ASeq.n by A2,A3,A4;
+      end;
     end;
+    hence x in Intersection ASeq by PROB_1:29;
   end;
+end;
 
-theorem LME3:
-  for E be finite non empty set,
-  ASeq being SetSequence of E
-  st ASeq is non-descending holds
-  ex N be Element of NAT st for m be Element of NAT
-  st N <= m holds
-  ASeq.N = ASeq.m
+theorem Th16:
+  for E be finite non empty set, ASeq being SetSequence of E st
+ASeq is non-descending holds ex N be Element of NAT st for m be Element of NAT
+  st N <= m holds ASeq.N = ASeq.m
+proof
+  let E be finite non empty set,ASeq being SetSequence of E;
+  defpred P[Element of NAT,set] means $2=card(ASeq.$1);
+A1: for x be Element of NAT ex y be Element of REAL st P[x,y]
   proof
-    let E be finite non empty set,ASeq being SetSequence of E;
-    assume A1: ASeq is non-descending;
-    defpred P[Element of NAT,set] means $2=card(ASeq.$1);
-    P1:for x be Element of NAT ex y be Element of REAL st P[x,y]
-    proof
-      let x be Element of NAT;
-      card(ASeq.x) in NAT;
-      hence thesis;
-    end;
-    consider seq being Function of NAT,REAL such that
-    P2: for n being Element of NAT holds P[n,seq.n] from FUNCT_2:sch 3(P1);
-    PP3: now let n,m be Element of NAT;
-    assume n <= m;then
-    PP21: ASeq.n c= ASeq.m by A1,PROB_1:def 7;
-    seq.m = card(ASeq.m) & seq.n = card(ASeq.n) by P2;
-    hence seq.n <=seq.m by NAT_1:44,PP21;
-  end;then
-  P3:seq is non-decreasing by SEQM_3:12;
-  now let n be Element of NAT;
-    card(ASeq.n) <= card E by NAT_1:44;then
-    card(ASeq.n) < card E + 1 by NAT_1:13;
-    hence seq.n < card E + 1 by P2;
-  end;then
-  seq is bounded_above by SEQ_2:def 3;then
-  consider g be real number such that
-  P4: for p be real number st 0<p ex n be Element of NAT st
-  for m be Element of NAT st n<=m holds abs (seq.m-g) < p by P3,SEQ_2:def 6;
-  consider N be Element of NAT such that
-  P5: for m be Element of NAT st N<=m holds abs (seq.m-g) < 1/2 by P4;
-  take N;
-  now let m be Element of NAT;
-    assume P6: N<=m;then
-    P7: abs (seq.m-g) < 1/2 by P5;
-    abs (seq.N-g) < 1/2 by P5;then
-    abs (g-seq.N) < 1/2 by COMPLEX1:146;then
-    P71:abs (seq.m-g) + abs (g-seq.N) <1/2 + 1/2 by P7,XREAL_1:10;
-    abs (seq.m-seq.N) <= abs (seq.m-g) + abs (g-seq.N) by COMPLEX1:149;
+    let x be Element of NAT;
+    card(ASeq.x) in NAT;
+    hence thesis;
+  end;
+  consider seq being Function of NAT,REAL such that
+A2: for n being Element of NAT holds P[n,seq.n] from FUNCT_2:sch 3(A1);
+  now
+    let n be Element of NAT;
+    card(ASeq.n) <= card E by NAT_1:44;
+    then card(ASeq.n) < card E + 1 by NAT_1:13;
+    hence seq.n < card E + 1 by A2;
+  end;
+  then
+A3: seq is bounded_above by SEQ_2:def 3;
+  assume
+A4: ASeq is non-descending;
+A5: now
+    let n,m be Element of NAT;
+    assume
+    n <= m;
     then
-    P72:abs (seq.m-seq.N) < 1 by P71,XXREAL_0:2;
-    X1: seq.N =card(ASeq.N) by P2;
-    X2: seq.m =card(ASeq.m) by P2;
-    P75:seq.N <= seq.m by PP3,P6;
-    PP81: ASeq.N c= ASeq.m by P6,A1,PROB_1:def 7;
-    seq.m-seq.N < 1 by ABSVALUE:def 1,P72;
+A6: ASeq.n c= ASeq.m by A4,PROB_1:def 7;
+    seq.m = card(ASeq.m) & seq.n = card(ASeq.n) by A2;
+    hence seq.n <=seq.m by A6,NAT_1:44;
+  end;
+  then seq is non-decreasing by SEQM_3:12;
+  then consider g be real number such that
+A7: for p be real number st 0<p ex n be Element of NAT st for m be
+  Element of NAT st n<=m holds abs (seq.m-g) < p by A3,SEQ_2:def 6;
+  consider N be Element of NAT such that
+A8: for m be Element of NAT st N<=m holds abs (seq.m-g) < 1/2 by A7;
+  take N;
+  now
+    abs (seq.N-g) < 1/2 by A8;
+    then
+A9: abs (g-seq.N) < 1/2 by COMPLEX1:146;
+    let m be Element of NAT;
+A10: seq.N =card(ASeq.N) & seq.m =card(ASeq.m) by A2;
+    assume
+A11: N<=m;
+    then
+A12: seq.N <= seq.m & ASeq.N c= ASeq.m by A4,A5,PROB_1:def 7;
+    abs (seq.m-g) < 1/2 by A8,A11;
+    then
+A13: abs (seq.m-g) + abs (g-seq.N) <1/2 + 1/2 by A9,XREAL_1:10;
+    abs (seq.m-seq.N) <= abs (seq.m-g) + abs (g-seq.N) by COMPLEX1:149;
+    then abs (seq.m-seq.N) < 1 by A13,XXREAL_0:2;
+    then seq.m-seq.N < 1 by ABSVALUE:def 1;
     then seq.m-seq.N + seq.N < 1 + seq.N by XREAL_1:10;
-    then seq.m <=seq.N by X1,X2,NAT_1:8;
-    hence ASeq.m=ASeq.N by PP81,CARD_FIN:1,X1,X2,P75,XXREAL_0:1;
+    then seq.m <=seq.N by A10,NAT_1:8;
+    hence ASeq.m=ASeq.N by A10,A12,CARD_FIN:1,XXREAL_0:1;
   end;
   hence thesis;
 end;
 
 theorem
-  for E be finite non empty set,
-  ASeq being SetSequence of E
-  st ASeq is non-descending holds
-  ex N be Nat st for m be Nat st N<=m holds
-  Union ASeq = ASeq.m
-  proof
-    let E be finite non empty set,
-    ASeq being SetSequence of E;
-    assume AS: ASeq is non-descending;then
-    consider N0 be Element of NAT such that
-    P1: for m be Element of NAT st N0 <= m holds ASeq.N0 = ASeq.m by LME3;
-    reconsider N = N0 as Nat;
-    take N;
-    let m be Nat;
-    reconsider M = m as Element of NAT by ORDINAL1:def 13;
-    assume AS2: N <= m;
-    thus ASeq.m = Union ASeq
-    proof
-      now let x be set;
-        assume x in Union ASeq;then
-        consider n be Element of NAT such that
-        P2: x in ASeq.n by PROB_1:25;
-        per cases;
-        suppose n < N;then
-          P21: ASeq.n c= ASeq.N by AS,PROB_1:def 7;
-          ASeq.N c= ASeq.M by AS2,P1;then
-          ASeq.n c= ASeq.m by P21,XBOOLE_1:1;
-          hence x in ASeq.m by P2;
-        end;
-        suppose N <= n;then
-          ASeq.N = ASeq.n by P1;then
-          ASeq.n c= ASeq.M by P1,AS2;
-          hence x in ASeq.m by P2;
-        end;
-      end;then
-      L1: Union ASeq c= ASeq.m by TARSKI:def 3;
-      ASeq.m c= Union ASeq by ABCMIZ_1:1;
-      hence thesis by L1,XBOOLE_0:def 10;
+  for E be finite non empty set, ASeq being SetSequence of E st ASeq is
+  non-descending holds ex N be Nat st for m be Nat st N<=m holds Union ASeq =
+  ASeq.m
+proof
+  let E be finite non empty set, ASeq being SetSequence of E;
+  assume
+A1: ASeq is non-descending;
+  then consider N0 be Element of NAT such that
+A2: for m be Element of NAT st N0 <= m holds ASeq.N0 = ASeq.m by Th16;
+  reconsider N = N0 as Nat;
+  take N;
+  let m be Nat;
+  reconsider M = m as Element of NAT by ORDINAL1:def 13;
+  assume
+A3: N <= m;
+  now
+    let x be set;
+    assume
+    x in Union ASeq;
+    then consider n be Element of NAT such that
+A4: x in ASeq.n by PROB_1:25;
+    per cases;
+    suppose
+A5:   n < N;
+A6:   ASeq.N c= ASeq.M by A2,A3;
+      ASeq.n c= ASeq.N by A1,A5,PROB_1:def 7;
+      then ASeq.n c= ASeq.m by A6,XBOOLE_1:1;
+      hence x in ASeq.m by A4;
+    end;
+    suppose
+      N <= n;
+      then ASeq.N = ASeq.n by A2;
+      then ASeq.n c= ASeq.M by A2,A3;
+      hence x in ASeq.m by A4;
     end;
   end;
+  then
+A7: Union ASeq c= ASeq.m by TARSKI:def 3;
+  ASeq.m c= Union ASeq by ABCMIZ_1:1;
+  hence ASeq.m = Union ASeq by A7,XBOOLE_0:def 10;
+end;
 
-  LME10:
-  ex EP be Probability of Trivial-SigmaField (E)
-  st for A be Event of E holds EP.A =prob(A)
+Lm12: ex EP be Probability of Trivial-SigmaField (E) st for A be Event of E
+holds EP.A =prob(A)
+
+proof
+  deffunc F(Element of bool E)=prob($1);
+  consider EP be Function of Trivial-SigmaField (E),REAL such that
+
+A1: for x be Element of Trivial-SigmaField (E) holds EP.x=F(x) from
+  FUNCT_2:sch 4;
+
+A2: for A,B being Event of Trivial-SigmaField (E) st A misses B holds EP.(A
+  \/ B) = EP.A + EP.B
+
   proof
-    deffunc F(Element of bool E)=prob($1);
-    consider EP be Function of Trivial-SigmaField (E),REAL such that
-    P1: for x be Element of Trivial-SigmaField (E) holds EP.x=F(x)
-    from FUNCT_2:sch 4;
-    take EP;
-    EP is Probability of Trivial-SigmaField (E)
-    proof
-      thus for A being Event of Trivial-SigmaField (E) holds 0 <= EP.A
-      proof
-        let A being Event of Trivial-SigmaField (E);
-        EP.A =prob(A) by P1;
-        hence thesis;
-      end;
-      thus EP.E =prob([#]E) by P1
-      .= 1 by RPR_1:39;
-      thus for A,B being Event of Trivial-SigmaField (E)
-      st A misses B holds EP.(A \/ B) = EP.A + EP.B
-      proof
-        let A,B being Event of Trivial-SigmaField (E);
-        assume A1:A misses B;
-        thus EP.(A \/ B) =prob(A \/ B) by P1
-        .=((prob A) + (prob B)) - (prob (A /\ B)) by RPR_1:46
-        .=prob (A) + prob (B) - 0 by A1,RPR_1:41
-        .= (EP.A) + prob (B) by P1
-        .= (EP.A) + (EP.B) by P1;
-      end;
-      thus for ASeq being SetSequence of Trivial-SigmaField (E)
-      st ASeq is non-ascending holds
-      (EP * ASeq is convergent & lim (EP * ASeq)
-      = EP.(Intersection ASeq))
-      proof
-        let ASeq being SetSequence of Trivial-SigmaField (E);
-        assume ASeq is non-ascending;
-        then consider N be Element of NAT such that
-        P30: for m be Element of NAT st N<=m holds
-        Intersection ASeq = ASeq.m by LME2;
-        now let m be Element of NAT;
-          assume P31: N <= m;
-          m in NAT;
-          then m in dom ASeq by FUNCT_2:def 1;
-          hence (EP * ASeq).m = EP.(ASeq.m) by FUNCT_1:23
-          .= EP.(Intersection ASeq) by P30,P31;
-        end;
-        hence thesis by PROB_1:3;
-      end;
-    end;
-    hence thesis by P1;
+    let A,B being Event of Trivial-SigmaField (E);
+    assume
+A3: A misses B;
+    thus EP.(A \/ B) =prob(A \/ B) by A1
+      .=((prob A) + (prob B)) - (prob (A /\ B)) by RPR_1:46
+      .=prob (A) + prob (B) - 0 by A3,RPR_1:41
+      .= (EP.A) + prob (B) by A1
+      .= (EP.A) + (EP.B) by A1;
   end;
+A4: for A being Event of Trivial-SigmaField (E) holds 0 <= EP.A
+  proof
+    let A being Event of Trivial-SigmaField (E);
+    EP.A =prob(A) by A1;
+    hence thesis;
+  end;
+  take EP;
 
-definition let E;
-  func Trivial-Probability (E) -> Probability of Trivial-SigmaField (E)
-  means :defTP:
+A5: for ASeq being SetSequence of Trivial-SigmaField (E) st ASeq is
+  non-ascending holds EP * ASeq is convergent & lim (EP * ASeq) = EP.(
+  Intersection ASeq)
+
+  proof
+    let ASeq being SetSequence of Trivial-SigmaField (E);
+    assume
+    ASeq is non-ascending;
+    then consider N be Element of NAT such that
+
+A6: for m be Element of NAT st N<=m holds Intersection ASeq = ASeq.m
+    by Th15;
+
+    now
+      let m be Element of NAT;
+      assume
+A7:   N <= m;
+      m in NAT;
+      then m in dom ASeq by FUNCT_2:def 1;
+      hence (EP * ASeq).m = EP.(ASeq.m) by FUNCT_1:23
+        .= EP.(Intersection ASeq) by A6,A7;
+    end;
+    hence thesis by PROB_1:3;
+  end;
+  EP.E =prob([#]E) by A1
+    .= 1 by RPR_1:39;
+  hence thesis by A1,A4,A2,A5,PROB_1:def 13;
+end;
+
+definition
+  let E;
+  func Trivial-Probability (E) -> Probability of Trivial-SigmaField (E) means
+  :Def1:
   for A be Event of E holds it.A = prob(A);
-  existence by LME10;
+  existence by Lm12;
   uniqueness
   proof
     let F,G be Probability of Trivial-SigmaField (E);
     assume
-    A1: for A be Event of E holds F.A =prob(A);
+A1: for A be Event of E holds F.A =prob(A);
     assume
-    A2: for A be Event of E holds G.A =prob(A);
-    now let x be set;
-      assume x in Trivial-SigmaField (E);
+A2: for A be Event of E holds G.A =prob(A);
+    now
+      let x be set;
+      assume
+      x in Trivial-SigmaField (E);
       then reconsider A=x as Event of E;
-      thus F.x =prob(A) by A1.=G.x by A2;
+      thus F.x =prob(A) by A1
+        .=G.x by A2;
     end;
     hence thesis by FUNCT_2:18;
   end;
@@ -1705,513 +1700,496 @@ end;
 
 :: Real-Valued-Random-Variable
 
-definition let Omega,Sigma;
-  mode Real-Valued-Random-Variable of Sigma
-  -> Function of Omega,REAL means :def1:
-  ex X be Element of Sigma st X = Omega & it is_measurable_on X;
+definition
+  let Omega,Sigma;
+  mode Real-Valued-Random-Variable of Sigma -> Function of Omega,REAL means
+    :
+    Def2: ex X be Element of Sigma st X = Omega & it is_measurable_on X;
   correctness
   proof
     reconsider X = Omega as Element of Sigma by MEASURE1:21;
-    Q1: dom chi(X,Omega) =Omega by FUNCT_3:def 3;
-    chi(X,Omega) is real-valued by MESFUNC2:31;then
-    rng chi(X,Omega) c= REAL by VALUED_0:def 3;
-    then reconsider f= chi(X,Omega)
-    as Function of Omega,REAL by Q1,FUNCT_2:4;
-    P2: R_EAL f = chi(X,Omega);
-    chi(X,Omega) is_measurable_on X by MESFUNC2:32;
-    then f is_measurable_on X by P2,MESFUNC6:def 6;
+    chi(X,Omega) is real-valued by MESFUNC2:31;
+    then dom chi(X,Omega) =Omega & rng chi(X,Omega) c= REAL by
+    FUNCT_3:def 3
+    ,VALUED_0:def 3;
+    then reconsider f= chi(X,Omega) as Function of Omega,REAL by FUNCT_2:4;
+    R_EAL f = chi(X,Omega) & chi(X,Omega) is_measurable_on X by MESFUNC2:
+    32;
+    then f is_measurable_on X by MESFUNC6:def 6;
     hence thesis;
   end;
 end;
 
 reserve f,g,h for Real-Valued-Random-Variable of Sigma;
 
-theorem FPG:
+theorem Th18:
   f+g is Real-Valued-Random-Variable of Sigma
-  proof
-    consider X be Element of Sigma such that
-    P1: X=Omega & f is_measurable_on X by def1;
-    consider Y be Element of Sigma such that
-    P2: Y=Omega & g is_measurable_on Y by def1;
-    thus thesis by def1,P1,P2,MESFUNC6:26;
-  end;
+proof
+  (ex X be Element of Sigma st X=Omega & f is_measurable_on X )& ex Y be
+  Element of Sigma st Y=Omega & g is_measurable_on Y by Def2;
+  hence thesis by Def2,MESFUNC6:26;
+end;
 
 definition
   let Omega,Sigma,f,g;
   redefine func f+ g -> Real-Valued-Random-Variable of Sigma;
-  correctness by FPG;
+  correctness by Th18;
 end;
 
-theorem FMG:
+theorem Th19:
   f-g is Real-Valued-Random-Variable of Sigma
-  proof
-    consider X be Element of Sigma such that
-    P1: X=Omega & f is_measurable_on X by def1;
-    consider Y be Element of Sigma such that
-    P2: Y=Omega & g is_measurable_on Y by def1;
-    dom g = Y by FUNCT_2:def 1,P2;
-    hence thesis by def1,P1,P2,MESFUNC6:29;
-  end;
+proof
+A1: ex X be Element of Sigma st X=Omega & f is_measurable_on X by Def2;
+  consider Y be Element of Sigma such that
+A2: Y=Omega and
+A3: g is_measurable_on Y by Def2;
+  dom g = Y by A2,FUNCT_2:def 1;
+  hence thesis by A1,A2,A3,Def2,MESFUNC6:29;
+end;
 
 definition
   let Omega,Sigma,f,g;
   redefine func f-g -> Real-Valued-Random-Variable of Sigma;
-  correctness by FMG;
+  correctness by Th19;
 end;
 
-theorem RF:
-  for r be Real
-  holds r(#)f is Real-Valued-Random-Variable of Sigma
-  proof
-    let r be Real;
-    consider X be Element of Sigma such that
-    P1: X=Omega & f is_measurable_on X by def1;
-    dom f = X by FUNCT_2:def 1,P1;
-    hence thesis by def1,P1,MESFUNC6:21;
-  end;
+theorem Th20:
+  for r be Real holds r(#)f is Real-Valued-Random-Variable of
+  Sigma
+proof
+  let r be Real;
+  consider X be Element of Sigma such that
+A1: X=Omega and
+A2: f is_measurable_on X by Def2;
+  dom f = X by A1,FUNCT_2:def 1;
+  hence thesis by A1,A2,Def2,MESFUNC6:21;
+end;
 
 definition
   let Omega,Sigma,f;
   let r be Real;
   redefine func r(#)f -> Real-Valued-Random-Variable of Sigma;
-  correctness by RF;
+  correctness by Th20;
 end;
 
-theorem Cor1:
-  for f,g be PartFunc of Omega,REAL holds (R_EAL f)(#)(R_EAL g) = R_EAL (f(#)g)
-  proof
-    let f,g be PartFunc of Omega,REAL;
-    P1: dom ((R_EAL f)(#) (R_EAL g))
-    =dom ( R_EAL f ) /\ dom ( R_EAL g ) by MESFUNC1:def 5
+theorem Th21:
+  for f,g be PartFunc of Omega,REAL holds (R_EAL f)(#)(R_EAL g) =
+  R_EAL (f(#)g)
+proof
+  let f,g be PartFunc of Omega,REAL;
+A1: dom ((R_EAL f)(#) (R_EAL g)) =dom ( R_EAL f ) /\ dom ( R_EAL g ) by
+  MESFUNC1:def 5
     .=dom (f (#)g ) by VALUED_1:def 4;
-    now let x be set;
-      assume AS: x in dom ((R_EAL f )(#) (R_EAL g));
-      thus ((R_EAL f)(#)(R_EAL g)).x
-      =((R_EAL f ).x) * ((R_EAL g).x) by AS,MESFUNC1:def 5
+  now
+    let x be set;
+    assume
+A2: x in dom ((R_EAL f )(#) (R_EAL g));
+    hence ((R_EAL f)(#)(R_EAL g)).x =((R_EAL f ).x) * ((R_EAL g).x) by
+    MESFUNC1:def 5
       .= (f.x) * (g.x) by EXTREAL1:13
-      .= (f (#) g).x by VALUED_1:def 4,AS,P1;
-    end;
-    hence thesis by FUNCT_1:9,P1;
+      .= (f (#) g).x by A1,A2,VALUED_1:def 4;
   end;
+  hence thesis by A1,FUNCT_1:9;
+end;
 
-theorem FXG:
+theorem Th22:
   f(#)g is Real-Valued-Random-Variable of Sigma
-  proof
-    consider X be Element of Sigma such that
-    P1: X = Omega & f is_measurable_on X by def1;
-    consider Y be Element of Sigma such that
-    P2: Y = Omega & g is_measurable_on Y by def1;
-    P3:R_EAL f is_measurable_on X & R_EAL g is_measurable_on X
-    by P1,P2,MESFUNC6:def 6;
-    dom(R_EAL f)=X& dom(R_EAL g)=X by P1,FUNCT_2:def 1;
-    then dom(R_EAL f) /\ dom(R_EAL g)=X;
-    then (R_EAL f)(#)(R_EAL g) is_measurable_on X by P3,MESFUNC7:15;then
-    R_EAL(f(#)g) is_measurable_on X by Cor1;then
-    f(#)g is_measurable_on X by MESFUNC6:def 6;
-    hence thesis by P1,def1;
-  end;
+proof
+  consider X be Element of Sigma such that
+A1: X = Omega and
+A2: f is_measurable_on X by Def2;
+A3: R_EAL f is_measurable_on X by A2,MESFUNC6:def 6;
+  dom(R_EAL f)=X & dom(R_EAL g)=X by A1,FUNCT_2:def 1;
+  then
+A4: dom(R_EAL f) /\ dom(R_EAL g)=X;
+  ex Y be Element of Sigma st Y = Omega & g is_measurable_on Y by Def2;
+  then R_EAL g is_measurable_on X by A1,MESFUNC6:def 6;
+  then (R_EAL f)(#)(R_EAL g) is_measurable_on X by A3,A4,MESFUNC7:15;
+  then R_EAL(f(#)g) is_measurable_on X by Th21;
+  then f(#)g is_measurable_on X by MESFUNC6:def 6;
+  hence thesis by A1,Def2;
+end;
 
 definition
   let Omega,Sigma,f,g;
   redefine func f(#)g -> Real-Valued-Random-Variable of Sigma;
-  correctness by FXG;
+  correctness by Th22;
 end;
 
-theorem AF0:
-  for r be real number st 0 <= r & f is nonnegative
-  holds (f to_power r) is Real-Valued-Random-Variable of Sigma
-  proof
-    let r be real number;
-    assume AS:0 <= r & f is nonnegative;
-    consider X be Element of Sigma such that
-    P1: X=Omega & f is_measurable_on X by def1;
-    P4: rng (f to_power r) c= REAL;
-    P3: dom (f to_power r) = dom f by MESFUN6C:def 6;
-    dom f = Omega by FUNCT_2:def 1;then
-    P2: (f to_power r) is Function of Omega,REAL by P3,P4,FUNCT_2:4;
-    dom f = X by FUNCT_2:def 1,P1;
-    hence thesis by def1,P1,P2,AS,MESFUN6C:29;
-  end;
+theorem Th23:
+  for r be real number st 0 <= r & f is nonnegative holds (f
+  to_power r) is Real-Valued-Random-Variable of Sigma
+proof
+  let r be real number;
+  assume
+A1: 0 <= r & f is nonnegative;
+A2: dom f = Omega by FUNCT_2:def 1;
+  rng (f to_power r) c= REAL & dom (f to_power r) = dom f by MESFUN6C:def
+  6;
+  then
+A3: (f to_power r) is Function of Omega,REAL by A2,FUNCT_2:4;
+  consider X be Element of Sigma such that
+A4: X=Omega and
+A5: f is_measurable_on X by Def2;
+  dom f = X by A4,FUNCT_2:def 1;
+  hence thesis by A1,A4,A5,A3,Def2,MESFUN6C:29;
+end;
 
-  Lem02:
-  for X be non empty set,f be PartFunc of X,REAL
-  holds abs f is nonnegative
-  proof
-    let X be non empty set,f be PartFunc of X,REAL;
-    now let x be set;
-      assume x in dom (abs f);then
-      (abs f).x = abs(f.x) by VALUED_1:def 11;
-      hence 0 <= (abs f).x by COMPLEX1:132;
-    end;
-    hence abs f is nonnegative by MESFUNC6:52;
-  end;
+Lm13: for X be non empty set,f be PartFunc of X,REAL holds abs f is
+nonnegative
 
-theorem AF1:
+proof
+  let X be non empty set,f be PartFunc of X,REAL;
+  now
+    let x be set;
+    assume
+    x in dom (abs f);
+    then (abs f).x = abs(f.x) by VALUED_1:def 11;
+    hence 0 <= (abs f).x by COMPLEX1:132;
+  end;
+  hence abs f is nonnegative by MESFUNC6:52;
+end;
+
+theorem Th24:
   abs f is Real-Valued-Random-Variable of Sigma
-  proof
-    consider X be Element of Sigma such that
-    P1: X=Omega & f is_measurable_on X by def1;
-    P3: dom f = X by FUNCT_2:def 1,P1;
-    R_EAL f is_measurable_on X by P1,MESFUNC6:def 6;
-    then |.R_EAL f.| is_measurable_on X by P3,MESFUNC2:29;
-    then R_EAL abs(f) is_measurable_on X by MESFUNC6:1;
-    then abs(f) is_measurable_on X by MESFUNC6:def 6;
-    hence thesis by def1,P1;
-  end;
+proof
+  consider X be Element of Sigma such that
+A1: X=Omega and
+A2: f is_measurable_on X by Def2;
+  dom f = X & R_EAL f is_measurable_on X by A1,A2,FUNCT_2:def 1 ,MESFUNC6:
+  def 6;
+  then |.R_EAL f.| is_measurable_on X by MESFUNC2:29;
+  then R_EAL abs(f) is_measurable_on X by MESFUNC6:1;
+  then abs(f) is_measurable_on X by MESFUNC6:def 6;
+  hence thesis by A1,Def2;
+end;
 
 definition
   let Omega,Sigma,f;
   redefine func abs f -> Real-Valued-Random-Variable of Sigma;
-  correctness by AF1;
+  correctness by Th24;
 end;
 
 theorem
-  for r be real number st 0 <= r
-  holds (abs(f) to_power r) is Real-Valued-Random-Variable of Sigma
-  proof
-    let r be real number;
-    assume AS:0 <= r;
-    abs f is nonnegative by Lem02;
-    hence thesis by AS,AF0;
-  end;
+  for r be real number st 0 <= r holds (abs(f) to_power r) is
+  Real-Valued-Random-Variable of Sigma
+proof
+  let r be real number;
+  assume
+A1: 0 <= r;
+  abs f is nonnegative by Lm13;
+  hence thesis by A1,Th23;
+end;
 
 :: Definition of the Expectations
 
 definition
   let Omega,Sigma,f,P;
-  pred f is_integrable_on P means :defintf:
+  pred f is_integrable_on P means
+  :Def3:
   f is_integrable_on P2M(P);
 end;
 
-definition let Omega,Sigma,P;
+definition
+  let Omega,Sigma,P;
   let f be Real-Valued-Random-Variable of Sigma;
-  assume AS0: f is_integrable_on P;
-  func expect (f,P) -> Element of REAL equals :def2:
+  assume
+A1: f is_integrable_on P;
+  func expect (f,P) -> Element of REAL equals
+  :Def4:
   Integral(P2M(P),f);
   correctness
   proof
-    f is_integrable_on P2M(P) by AS0,defintf;then
-    -infty < Integral(P2M(P),f) & Integral(P2M(P),f) < +infty
-    by MESFUNC6:90;
+    f is_integrable_on P2M(P) by A1,Def3;
+    then -infty < Integral(P2M(P),f) & Integral(P2M(P),f) < +infty by
+    MESFUNC6:90;
     hence thesis by XXREAL_0:48;
   end;
 end;
 
-theorem EXPFG:
-  f is_integrable_on P & g is_integrable_on P implies
-  expect (f+g,P) = expect (f,P) + expect (g,P)
-  proof
-    assume
-    AS0: f is_integrable_on P & g is_integrable_on P;then
-    AS: f is_integrable_on P2M(P) & g is_integrable_on P2M(P) by defintf;
-    set h=f+g;
-    consider E be Element of Sigma such that
-    P1: E = dom f /\ dom g & Integral(P2M(P),f+g)
-    =Integral(P2M(P),f|E)+Integral(P2M(P),g|E) by AS,MESFUNC6:101;
-    P2: dom f = Omega & dom g=Omega by FUNCT_2:def 1;
-    P5: f|E = f by P2,P1,FUNCT_2:40;
-    P7: Integral(P2M(P),f) =expect (f,P) by def2,AS0;
-    P8: Integral(P2M(P),g) =expect (g,P) by def2,AS0;
-    h is_integrable_on P2M(P) by AS,MESFUNC6:100;
-    then h is_integrable_on P by defintf;
-    hence expect (h,P) = Integral(P2M(P),f+g) by def2
-    .=Integral(P2M(P),f) +Integral(P2M(P),g) by P2,P1,FUNCT_2:40,P5
-    .= expect (f,P)+expect (g,P) by P7,P8,SUPINF_2:1;
-  end;
+theorem Th26:
+  f is_integrable_on P & g is_integrable_on P implies expect (f+g,
+  P) = expect (f,P) + expect (g,P)
+proof
+  set h=f+g;
+  assume
+A1: f is_integrable_on P & g is_integrable_on P;
+  then
+A2: Integral(P2M(P),f) =expect (f,P) & Integral(P2M(P),g) =expect (g,P) by
+  Def4;
+A3: f is_integrable_on P2M(P) & g is_integrable_on P2M(P) by A1,Def3;
+  then consider E be Element of Sigma such that
+A4: E = dom f /\ dom g and
+A5: Integral(P2M(P),f+g) =Integral(P2M(P),f|E)+Integral(P2M(P),g|E) by
+  MESFUNC6:101;
+A6: dom f = Omega & dom g=Omega by FUNCT_2:def 1;
+  then
+A7: f|E = f by A4,FUNCT_2:40;
+  h is_integrable_on P2M(P) by A3,MESFUNC6:100;
+  then h is_integrable_on P by Def3;
+  hence expect (h,P) = Integral(P2M(P),f+g) by Def4
+    .=Integral(P2M(P),f) +Integral(P2M(P),g) by A4,A5,A6,A7,FUNCT_2:40
+    .= expect (f,P)+expect (g,P) by A2,SUPINF_2:1;
+end;
 
-theorem EXPRF:
-  f is_integrable_on P implies
-  expect (r(#)f,P) = r* expect (f,P)
-  proof
-    set h=r(#)f;
-    assume
-    AS0: f is_integrable_on P;then
-    AS: f is_integrable_on P2M(P) by defintf;
-    P7: Integral(P2M(P),f) =expect (f,P) by AS0,def2;
-    h is_integrable_on P2M(P) by AS,MESFUNC6:102;
-    then h is_integrable_on P by defintf;
-    hence expect (h,P)
-    =Integral(P2M(P),r(#)f) by def2
-    .=(R_EAL r)*Integral(P2M(P),f) by AS,MESFUNC6:102
-    .= r* expect (f,P) by P7,EXTREAL1:13;
-  end;
+theorem Th27:
+  f is_integrable_on P implies expect (r(#)f,P) = r* expect (f,P)
+proof
+  set h=r(#)f;
+  assume
+A1: f is_integrable_on P;
+  then
+A2: Integral(P2M(P),f) =expect (f,P) by Def4;
+A3: f is_integrable_on P2M(P) by A1,Def3;
+  then h is_integrable_on P2M(P) by MESFUNC6:102;
+  then h is_integrable_on P by Def3;
+  hence expect (h,P) =Integral(P2M(P),r(#)f) by Def4
+    .=(R_EAL r)*Integral(P2M(P),f) by A3,MESFUNC6:102
+    .= r* expect (f,P) by A2,EXTREAL1:13;
+end;
 
 theorem
-  f is_integrable_on P & g is_integrable_on P implies
-  expect (f-g,P) = expect (f,P) - expect (g,P)
-  proof
-    assume
-    AS0: f is_integrable_on P & g is_integrable_on P;then
-    g is_integrable_on P2M(P) by defintf;then
-    (-1)(#)g is_integrable_on P2M(P) by MESFUNC6:102;then
-    P1: (-1)(#)g is_integrable_on P by defintf;
-    thus expect (f-g,P) = expect (f,P)
-    + expect ((-1)(#)g,P) by P1,AS0,EXPFG
-    .= expect (f,P) + (-1)*expect (g,P) by AS0,EXPRF
+  f is_integrable_on P & g is_integrable_on P implies expect (f-g,P) =
+  expect (f,P) - expect (g,P)
+proof
+  assume that
+A1: f is_integrable_on P and
+A2: g is_integrable_on P;
+  g is_integrable_on P2M(P) by A2,Def3;
+  then (-1)(#)g is_integrable_on P2M(P) by MESFUNC6:102;
+  then (-1)(#)g is_integrable_on P by Def3;
+  hence expect (f-g,P) = expect (f,P) + expect ((-1)(#)g,P) by A1,Th26
+    .= expect (f,P) + (-1)*expect (g,P) by A2,Th27
     .= expect (f,P) - expect (g,P);
-  end;
+end;
 
 theorem
-  for Omega be non empty finite set,
-  f be Function of Omega,REAL
-  holds f is Real-Valued-Random-Variable of Trivial-SigmaField (Omega)
-  proof
-    let Omega be non empty finite set,
-    f be Function of Omega,REAL;
-    set Sigma= Trivial-SigmaField (Omega);
-    P1: ex X be Element of Sigma st dom f = X &
-    f is_measurable_on X by Lm7;
-    dom f = Omega by FUNCT_2:def 1;
-    hence thesis by P1,def1;
-  end;
+  for Omega be non empty finite set, f be Function of Omega,REAL holds f
+  is Real-Valued-Random-Variable of Trivial-SigmaField (Omega)
+proof
+  let Omega be non empty finite set, f be Function of Omega,REAL;
+  set Sigma= Trivial-SigmaField (Omega);
+  ( ex X be Element of Sigma st dom f = X & f is_measurable_on X)& dom f =
+  Omega by Th8,FUNCT_2:def 1;
+  hence thesis by Def2;
+end;
 
-theorem LMTX3:
-  for Omega be non empty finite set,
-  P be Probability of Trivial-SigmaField (Omega),
-  X be Real-Valued-Random-Variable of Trivial-SigmaField (Omega)
-  holds X is_integrable_on P
-  proof
-    let Omega be non empty finite set,
-    P be Probability of Trivial-SigmaField (Omega),
-    X be Real-Valued-Random-Variable of Trivial-SigmaField (Omega);
-    set M= P2M(P);
-    dom X = Omega by FUNCT_2:def 1;
-    then M.(dom X) = 1 by PROB_1:def 13;
-    then dom X <> {} & M.(dom X) < +infty by XXREAL_0:9;
-    then X is_integrable_on M by Lm9A0,Lm6;
-    hence thesis by defintf;
-  end;
+theorem Th30:
+  for Omega be non empty finite set, P be Probability of
+  Trivial-SigmaField (Omega), X be Real-Valued-Random-Variable of
+  Trivial-SigmaField (Omega) holds X is_integrable_on P
+proof
+  let Omega be non empty finite set, P be Probability of Trivial-SigmaField (
+  Omega), X be Real-Valued-Random-Variable of Trivial-SigmaField (Omega);
+  set M= P2M(P);
+  dom X = Omega by FUNCT_2:def 1;
+  then M.(dom X) = 1 by PROB_1:def 13;
+  then M.(dom X) < +infty by XXREAL_0:9;
+  then X is_integrable_on M by Lm5,Th6;
+  hence thesis by Def3;
+end;
 
-theorem LMTX4:
-  for Omega be non empty finite set,
-  P be Probability of Trivial-SigmaField (Omega),
-  X be Real-Valued-Random-Variable of Trivial-SigmaField (Omega),
-  F being FinSequence of REAL,
-  s being FinSequence of Omega
-  st len F = card (Omega)
-  & s is one-to-one
-  & rng s = Omega
-  & len s = card (Omega)
-  & (for n being Nat st n in dom F holds F.n = X.(s.n) * P.{s.n})
-  holds expect(X,P) = Sum F
-  proof
-    let Omega be non empty finite set,
-    P be Probability of Trivial-SigmaField (Omega),
-    X be Real-Valued-Random-Variable of Trivial-SigmaField (Omega),
-    F being FinSequence of REAL,
-    s being FinSequence of Omega;
-    assume that AS: len F = card (Omega) & s is one-to-one
-    & rng s = Omega & len s = card (Omega) &
-    (for n being Nat st n in dom F holds F.n = X.(s.n) * P.{s.n});
-    set M = P2M(P);
-    Integral(P2M(P),X) = Sum F by LMTX1,AS;
-    hence thesis by def2,LMTX3;
-  end;
+theorem Th31:
+  for Omega be non empty finite set, P be Probability of
+  Trivial-SigmaField (Omega), X be Real-Valued-Random-Variable of
+Trivial-SigmaField (Omega), F being FinSequence of REAL, s being FinSequence of
+Omega st len F = card (Omega) & s is one-to-one & rng s = Omega & len s = card
+  (Omega) & (for n being Nat st n in dom F holds F.n = X.(s.n) * P.{s.n}) holds
+  expect(X,P) = Sum F
+proof
+  let Omega be non empty finite set, P be Probability of Trivial-SigmaField (
+Omega), X be Real-Valued-Random-Variable of Trivial-SigmaField (Omega), F being
+  FinSequence of REAL, s being FinSequence of Omega;
+  set M = P2M(P);
+  assume
+  len F = card (Omega) & s is one-to-one & rng s = Omega & len s =
+  card ( Omega) & for n being Nat st n in dom F holds F.n = X.(s.n) * P.{s.n};
+  then Integral(P2M(P),X) = Sum F by Th12;
+  hence thesis by Def4,Th30;
+end;
 
 theorem
-  for Omega be non empty finite set,
-  P be Probability of Trivial-SigmaField (Omega),
-  X be Real-Valued-Random-Variable of Trivial-SigmaField (Omega)
-  ex F being FinSequence of REAL,
-  s being FinSequence of Omega
-  st len F = card (Omega)
-  & s is one-to-one
-  & rng s = Omega
-  & len s = card (Omega)
-  & (for n being Nat st n in dom F holds F.n = X.(s.n) * P.{s.n})
-  & expect(X,P) = Sum F
-  proof
-    let Omega be non empty finite set,
-    P be Probability of Trivial-SigmaField (Omega),
-    X be Real-Valued-Random-Variable of Trivial-SigmaField (Omega);
-    set M= P2M(P);
-    P1: X is_integrable_on P by LMTX3;
-    ex F being FinSequence of REAL,
-    s being FinSequence of Omega
-    st len F = card (Omega)
-    & s is one-to-one & rng s = Omega & len s = card (Omega)
-    & (for n being Nat st n in dom F holds F.n = X.(s.n) * P.{s.n})
-    & Integral(P2M(P),X) = Sum F by LMTX2;
-    hence thesis by def2,P1;
-  end;
+  for Omega be non empty finite set, P be Probability of
+  Trivial-SigmaField (Omega), X be Real-Valued-Random-Variable of
+Trivial-SigmaField (Omega) ex F being FinSequence of REAL, s being FinSequence
+  of Omega st len F = card (Omega) & s is one-to-one & rng s = Omega & len s =
+card (Omega) & (for n being Nat st n in dom F holds F.n = X.(s.n) * P.{s.n}) &
+  expect(X,P) = Sum F
+proof
+  let Omega be non empty finite set, P be Probability of Trivial-SigmaField (
+  Omega), X be Real-Valued-Random-Variable of Trivial-SigmaField (Omega);
+  set M= P2M(P);
+  X is_integrable_on P & ex F being FinSequence of REAL, s being
+FinSequence of Omega st len F = card (Omega) & s is one-to-one & rng s = Omega
+& len s = card (Omega) & (for n being Nat st n in dom F holds F.n = X.(s.n) * P
+  .{s.n}) & Integral(P2M(P),X) = Sum F by Th13,Th30;
+  hence thesis by Def4;
+end;
 
-theorem LMTX5:
-  for Omega be non empty finite set,
-  P be Probability of Trivial-SigmaField (Omega),
-  X be Real-Valued-Random-Variable of Trivial-SigmaField (Omega)
-  ex F being FinSequence of REAL,
-  s being FinSequence of Omega
-  st len F = card (Omega)
-  & s is one-to-one
-  & rng s = Omega
-  & len s = card (Omega)
-  & (for n being Nat st n in dom F holds F.n = X.(s.n) * P.{s.n})
-  & expect(X,P) = Sum F
-  proof
-    let Omega be non empty finite set,
-    P be Probability of Trivial-SigmaField (Omega),
-    X be Real-Valued-Random-Variable of Trivial-SigmaField (Omega);
-    set M= P2M(P);
-    P1: X is_integrable_on P by LMTX3;
-    ex F being FinSequence of REAL,
-    s being FinSequence of Omega
-    st len F = card (Omega)
-    & s is one-to-one & rng s = Omega & len s = card (Omega)
-    & (for n being Nat st n in dom F holds F.n = X.(s.n) * P.{s.n})
-    & Integral(P2M(P),X) = Sum F by LMTX2;
-    hence thesis by def2,P1;
-  end;
+theorem Th33:
+  for Omega be non empty finite set, P be Probability of
+  Trivial-SigmaField (Omega), X be Real-Valued-Random-Variable of
+Trivial-SigmaField (Omega) ex F being FinSequence of REAL, s being FinSequence
+  of Omega st len F = card (Omega) & s is one-to-one & rng s = Omega & len s =
+card (Omega) & (for n being Nat st n in dom F holds F.n = X.(s.n) * P.{s.n}) &
+  expect(X,P) = Sum F
+proof
+  let Omega be non empty finite set, P be Probability of Trivial-SigmaField (
+  Omega), X be Real-Valued-Random-Variable of Trivial-SigmaField (Omega);
+  set M= P2M(P);
+  X is_integrable_on P & ex F being FinSequence of REAL, s being
+FinSequence of Omega st len F = card (Omega) & s is one-to-one & rng s = Omega
+& len s = card (Omega) & (for n being Nat st n in dom F holds F.n = X.(s.n) * P
+  .{s.n}) & Integral(P2M(P),X) = Sum F by Th13,Th30;
+  hence thesis by Def4;
+end;
 
 theorem
-  for Omega be non empty finite set,
-  X be Real-Valued-Random-Variable of Trivial-SigmaField (Omega),
-  G being FinSequence of REAL,
-  s being FinSequence of Omega
-  st len G = card (Omega)
-  & s is one-to-one
-  & rng s = Omega
-  & len s = card (Omega)
-  & (for n being Nat st n in dom G holds G.n = X.(s.n) )
-  holds
-  expect(X,Trivial-Probability (Omega)) = (Sum G) / card (Omega)
-  proof
-    let Omega be non empty finite set,
-    X be Real-Valued-Random-Variable of Trivial-SigmaField (Omega),
-    G being FinSequence of REAL,
-    s being FinSequence of Omega;
-    assume that
-    AS0: len G = card (Omega) and
-    AS0a: s is one-to-one and
-    AS0b: rng s = Omega & len s = card (Omega) and
-    AS0c:(for n being Nat st n in dom G holds G.n = X.(s.n) );
-    set P= Trivial-Probability (Omega);
-    deffunc GF(Nat) = X.(s.$1) * P.{s.$1};
-    consider F being FinSequence of REAL
-    such that P2:len F = len G &
-    for j being Nat st j in dom F holds F.j = GF(j) from FINSEQ_2:sch 1;
-    P4: dom F = dom G by FINSEQ_3:31,P2;then
-    P7: dom F = dom ((1/card (Omega))(#)G) by VALUED_1:def 5;
-    now let n be Nat;
-      assume AS1:n in dom F;
-      dom s = Seg len s by FINSEQ_1:def 3
-      .= dom F by FINSEQ_1:def 3,AS0,AS0b,P2;
-      then s.n in Omega by PARTFUN1:27,AS1;
-      then reconsider A={s.n} as El_ev of Omega by RPR_1:7;
-      P3: P.{s.n} = prob(A) by defTP
+  for Omega be non empty finite set, X be Real-Valued-Random-Variable of
+Trivial-SigmaField (Omega), G being FinSequence of REAL, s being FinSequence of
+Omega st len G = card (Omega) & s is one-to-one & rng s = Omega & len s = card
+(Omega) & (for n being Nat st n in dom G holds G.n = X.(s.n) ) holds expect(X,
+  Trivial-Probability (Omega)) = (Sum G) / card (Omega)
+proof
+  let Omega be non empty finite set, X be Real-Valued-Random-Variable of
+Trivial-SigmaField (Omega), G being FinSequence of REAL, s being FinSequence of
+  Omega;
+  assume that
+A1: len G = card (Omega) and
+A2: s is one-to-one & rng s = Omega and
+A3: len s = card (Omega) and
+A4: for n being Nat st n in dom G holds G.n = X.(s.n);
+  set P= Trivial-Probability (Omega);
+  deffunc GF(Nat) = X.(s.$1) * P.{s.$1};
+  consider F being FinSequence of REAL such that
+A5: len F = len G & for j being Nat st j in dom F holds F.j = GF(j) from
+  FINSEQ_2:sch 1;
+A6: dom F = dom G by A5,FINSEQ_3:31;
+A7: now
+    let n be Nat;
+    assume
+A8: n in dom F;
+    dom s = Seg len s by FINSEQ_1:def 3
+      .= dom F by A1,A3,A5,FINSEQ_1:def 3;
+    then s.n in Omega by A8,PARTFUN1:27;
+    then reconsider A={s.n} as El_ev of Omega by RPR_1:7;
+A9: P.{s.n} = prob(A) by Def1
       .=1/card (Omega) by RPR_1:38;
-      thus ((1/card (Omega))(#)G).n
-      = (1/card (Omega))*G.n by VALUED_1:6
-      .= (1/card (Omega))*X.(s.n) by P4,AS1,AS0c
-      .= F.n by P3,P2,AS1;
-    end;
-    then (1/card (Omega))(#)G = F by FINSEQ_1:17,P7;
-    then expect(X,P) = Sum ((1/card (Omega))(#)G) by LMTX4,P2,AS0,AS0a,AS0b
+    thus ((1/card (Omega))(#)G).n = (1/card (Omega))*G.n by VALUED_1:6
+      .= (1/card (Omega))*X.(s.n) by A4,A6,A8
+      .= F.n by A5,A8,A9;
+  end;
+  dom F = dom ((1/card (Omega))(#)G) by A6,VALUED_1:def 5;
+  then (1/card (Omega))(#)G = F by A7,FINSEQ_1:17;
+  then expect(X,P) = Sum ((1/card (Omega))(#)G) by A1,A2,A3,A5,Th31
     .= Sum(G) /card (Omega) by RVSUM_1:117;
-    hence thesis;
-  end;
+  hence thesis;
+end;
 
 theorem
-  for Omega be non empty finite set,
-  X be Real-Valued-Random-Variable of Trivial-SigmaField (Omega) holds
-  ex G being FinSequence of REAL,
-  s being FinSequence of Omega
-  st len G = card (Omega)
-  & s is one-to-one
-  & rng s = Omega
-  & len s = card (Omega)
-  & (for n being Nat st n in dom G holds G.n = X.(s.n) )
-  & expect(X,Trivial-Probability (Omega))
-  = (Sum G) / card (Omega)
-  proof
-    let Omega be non empty finite set,
-    X be Real-Valued-Random-Variable of Trivial-SigmaField (Omega);
-    set P= Trivial-Probability (Omega);
-    consider F being FinSequence of REAL,
-    s being FinSequence of Omega such that
-    P1: len F = card (Omega)
-    & s is one-to-one
-    & rng s = Omega
-    & len s = card (Omega)
-    & (for n being Nat st n in dom F holds F.n = X.(s.n) * P.{s.n})
-    & expect(X,P) = Sum F by LMTX5;
-    deffunc GF(Nat) = X.(s.$1);
-    consider G being FinSequence of REAL
-    such that P2:len G = len F &
-    for j being Nat st j in dom G holds G.j = GF(j) from FINSEQ_2:sch 1;
-    take G;
-    P4: dom F = dom G by FINSEQ_3:31,P2;then
-    P7: dom F = dom ((1/card (Omega))(#)G) by VALUED_1:def 5;
-    now let n be Nat;
-      assume AS0:n in dom F;
-      dom s= Seg len s by FINSEQ_1:def 3
-      .= dom F by FINSEQ_1:def 3,P1;
-      then s.n in Omega by PARTFUN1:27,AS0;
-      then reconsider A={s.n} as El_ev of Omega by RPR_1:7;
-      P3: P.{s.n} = prob(A) by defTP
+  for Omega be non empty finite set, X be Real-Valued-Random-Variable of
+  Trivial-SigmaField (Omega) holds ex G being FinSequence of REAL, s being
+FinSequence of Omega st len G = card (Omega) & s is one-to-one & rng s = Omega
+& len s = card (Omega) & (for n being Nat st n in dom G holds G.n = X.(s.n) ) &
+  expect(X,Trivial-Probability (Omega)) = (Sum G) / card (Omega)
+proof
+  let Omega be non empty finite set, X be Real-Valued-Random-Variable of
+  Trivial-SigmaField (Omega);
+  set P= Trivial-Probability (Omega);
+  consider F being FinSequence of REAL, s being FinSequence of Omega such that
+A1: len F = card (Omega) and
+A2: s is one-to-one & rng s = Omega and
+A3: len s = card (Omega) and
+A4: for n being Nat st n in dom F holds F.n = X.(s.n) * P.{s.n} and
+A5: expect(X,P) = Sum F by Th33;
+  deffunc GF(Nat) = X.(s.$1);
+  consider G being FinSequence of REAL such that
+A6: len G = len F & for j being Nat st j in dom G holds G.j = GF(j) from
+  FINSEQ_2:sch 1;
+A7: dom F = dom G by A6,FINSEQ_3:31;
+A8: now
+    let n be Nat;
+    assume
+A9: n in dom F;
+    dom s= Seg len s by FINSEQ_1:def 3
+      .= dom F by A1,A3,FINSEQ_1:def 3;
+    then s.n in Omega by A9,PARTFUN1:27;
+    then reconsider A={s.n} as El_ev of Omega by RPR_1:7;
+A10: P.{s.n} = prob(A) by Def1
       .=1/card (Omega) by RPR_1:38;
-      thus ((1/card (Omega))(#)G).n = (1/card (Omega))*G.n by VALUED_1:6
-      .= (1/card (Omega))*X.(s.n) by P2,P4,AS0
-      .= F.n by AS0,P1 ,P3;
-    end;then
-    (1/card (Omega))(#)G = F by FINSEQ_1:17,P7;
-    hence thesis by P1,P2,RVSUM_1:117;
+    thus ((1/card (Omega))(#)G).n = (1/card (Omega))*G.n by VALUED_1:6
+      .= (1/card (Omega))*X.(s.n) by A6,A7,A9
+      .= F.n by A4,A9,A10;
   end;
+  take G;
+  dom F = dom ((1/card (Omega))(#)G) by A7,VALUED_1:def 5;
+  then (1/card (Omega))(#)G = F by A8,FINSEQ_1:17;
+  hence thesis by A1,A2,A3,A5,A6,RVSUM_1:117;
+end;
 
 :: Markov's Theorem
 
 theorem
-  for X be Real-Valued-Random-Variable of Sigma st 0 < r &
-  X is nonnegative & X is_integrable_on P holds
-  P.({t where t is Element of Omega : r <= X.t }) <= expect (X,P)/r
-  proof
-    let X be Real-Valued-Random-Variable of Sigma;
-    assume that
-    A1: 0 < r and
-    A2:X is nonnegative and
-    A30:X is_integrable_on P;
-    A3: X is_integrable_on P2M(P) by A30,defintf;
-    consider S be Element of Sigma such that
-    A4: S=Omega & X is_measurable_on S by def1;
-    A5: dom X = S by FUNCT_2:def 1,A4;
-    set K={t where t is Element of Omega : r <= X.t };
-    S /\ great_eq_dom(X,r) = K
-    proof
-      now let t be set;
-        assume P0:t in S /\ great_eq_dom(X,r);
-        t in great_eq_dom(X,r) by P0,XBOOLE_0:def 4;
-        then t in dom X & r <= X.t by MESFUNC1:def 15;
-        hence t in K;
-      end;then
-      A7: S /\ great_eq_dom(X,r) c= K by TARSKI:def 3;
-      now let x be set;
-        assume x in K;then
-        P0: ex t be Element of Omega st x=t & r <= X.t;
-        x in great_eq_dom(X,r) by A4,A5,P0,MESFUNC1:def 15;
-        hence x in S /\ great_eq_dom(X,r) by P0,A4,XBOOLE_0:def 4;
-      end;
-      then K c= S /\ great_eq_dom(X,r) by TARSKI:def 3;
-      hence thesis by XBOOLE_0:def 10,A7;
-    end;then
-    reconsider K as Element of Sigma by A5,A4,MESFUNC6:13;
-    set PM=P2M(P);
-    expect (X,P)=Integral(PM,X) by def2,A30;
-    then reconsider IX=Integral(PM,X) as Element of REAL;
-    PM.K <=1 by PROB_1:71;then
-    Q1: PM.K < +infty by XXREAL_0:9,XXREAL_0:2;
-    reconsider PMK=PM.K as Element of REAL by XXREAL_0:14;
-    Q2: for t be Element of Omega st t in K holds r <= X.t
-    proof
-      let t be Element of Omega;
-      assume t in K;then
-      ex s be Element of Omega st s=t & r <= X.s;
-      hence thesis;
-    end;
-    (R_EAL r)*(PM.K) <= Integral(PM,X|K) by LMMarkov2,A3,Q1,Q2,A4,A5;then
-    P1: r*PMK <= Integral(PM,X|K) by EXTREAL1:13;
-    Integral(PM,X|K) <= Integral(PM,X|S) by A2,A4,A5,MESFUNC6:87;then
-    P2: Integral(PM,X|K) <= Integral(PM,X) by A4,FUNCT_2:40;
-    r*PMK <= Integral(PM,X) by P1,P2,XXREAL_0:2;
-    then (r*PMK)/r <= IX /r by A1,XREAL_1:74;
-    then PMK <= IX /r by A1,XCMPLX_1:90;
-    hence thesis by def2,A30;
+  for X be Real-Valued-Random-Variable of Sigma st 0 < r & X is
+nonnegative & X is_integrable_on P holds P.({t where t is Element of Omega : r
+  <= X.t }) <= expect (X,P)/r
+proof
+  let X be Real-Valued-Random-Variable of Sigma;
+  assume that
+A1: 0 < r and
+A2: X is nonnegative and
+A3: X is_integrable_on P;
+  set PM=P2M(P);
+  set K={t where t is Element of Omega : r <= X.t };
+  consider S be Element of Sigma such that
+A4: S=Omega and
+A5: X is_measurable_on S by Def2;
+  now
+    let t be set;
+    assume
+    t in S /\ great_eq_dom(X,r);
+    then t in great_eq_dom(X,r) by XBOOLE_0:def 4;
+    then t in dom X & r <= X.t by MESFUNC1:def 15;
+    hence t in K;
   end;
+  then
+A6: S /\ great_eq_dom(X,r) c= K by TARSKI:def 3;
+A7: dom X = S by A4,FUNCT_2:def 1;
+  now
+    let x be set;
+    assume
+    x in K;
+    then
+A8: ex t be Element of Omega st x=t & r <= X.t;
+    then x in great_eq_dom(X,r) by A4,A7,MESFUNC1:def 15;
+    hence x in S /\ great_eq_dom(X,r) by A4,A8,XBOOLE_0:def 4;
+  end;
+  then K c= S /\ great_eq_dom(X,r) by TARSKI:def 3;
+  then S /\ great_eq_dom(X,r) = K by A6,XBOOLE_0:def 10;
+  then reconsider K as Element of Sigma by A5,A7,MESFUNC6:13;
+  Integral(PM,X|K) <= Integral(PM,X|S) by A2,A4,A5,A7,MESFUNC6:87;
+  then
+A9: Integral(PM,X|K) <= Integral(PM,X) by A4,FUNCT_2:40;
+  expect (X,P)=Integral(PM,X) by A3,Def4;
+  then reconsider IX=Integral(PM,X) as Element of REAL;
+  reconsider PMK=PM.K as Element of REAL by XXREAL_0:14;
+A10: for t be Element of Omega st t in K holds r <= X.t
+  proof
+    let t be Element of Omega;
+    assume
+    t in K;
+    then ex s be Element of Omega st s=t & r <= X.s;
+    hence thesis;
+  end;
+  PM.K <=1 by PROB_1:71;
+  then
+A11: PM.K < +infty by XXREAL_0:2,9;
+  X is_integrable_on P2M(P) by A3,Def3;
+  then (R_EAL r)*(PM.K) <= Integral(PM,X|K) by A4,A7,A11,A10,Th2;
+  then r*PMK <= Integral(PM,X|K) by EXTREAL1:13;
+  then r*PMK <= Integral(PM,X) by A9,XXREAL_0:2;
+  then (r*PMK)/r <= IX /r by A1,XREAL_1:74;
+  then PMK <= IX /r by A1,XCMPLX_1:90;
+  hence thesis by A3,Def4;
+end;
+

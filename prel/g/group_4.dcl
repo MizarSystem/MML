@@ -7,6 +7,7 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="TARSKI"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
@@ -30,21 +31,21 @@
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>
-<Adjective nr="35" value="false"/>
-<Adjective nr="101"/>
-<Adjective nr="102"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="106"/>
+<Adjective nr="107"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="188">
+<Func kind="K" nr="196">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="35" value="false"/>
-<Adjective nr="49"/>
-<Adjective nr="56"/>
-<Adjective nr="59"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="50"/>
+<Adjective nr="57"/>
 <Adjective nr="60"/>
+<Adjective nr="61"/>
 </Cluster>
 </FCluster>
 </Registrations>

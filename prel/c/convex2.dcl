@@ -13,8 +13,11 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="NAT_1"/>
+<ArticleID name="INT_1"/>
+<ArticleID name="RAT_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
@@ -22,8 +25,6 @@
 <ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="RLSUB_1"/>
-<ArticleID name="INT_1"/>
-<ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_1"/>
@@ -34,12 +35,12 @@
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
-<Adjective nr="35" value="false"/>
-<Adjective nr="59"/>
-<Adjective nr="84"/>
-<Adjective nr="85"/>
-<Adjective nr="86"/>
+<Adjective nr="39" value="false"/>
+<Adjective nr="62"/>
 <Adjective nr="87"/>
+<Adjective nr="88"/>
+<Adjective nr="89"/>
+<Adjective nr="90"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -58,16 +59,16 @@
 <Func kind="K" nr="64"/>
 </Adjective>
 <Adjective nr="9"/>
-<Adjective nr="22">
+<Adjective nr="23">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
 <Func kind="K" nr="64"/>
 </Adjective>
-<Adjective nr="92"/>
 <Adjective nr="93"/>
 <Adjective nr="94"/>
-<Adjective nr="115">
+<Adjective nr="95"/>
+<Adjective nr="116">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -76,12 +77,12 @@
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
-<Adjective nr="35" value="false"/>
-<Adjective nr="59"/>
-<Adjective nr="84"/>
-<Adjective nr="85"/>
-<Adjective nr="86"/>
+<Adjective nr="39" value="false"/>
+<Adjective nr="62"/>
 <Adjective nr="87"/>
+<Adjective nr="88"/>
+<Adjective nr="89"/>
+<Adjective nr="90"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -111,16 +112,16 @@
 <Func kind="K" nr="64"/>
 </Adjective>
 <Adjective nr="9"/>
-<Adjective nr="22">
+<Adjective nr="23">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
 <Func kind="K" nr="64"/>
 </Adjective>
-<Adjective nr="92"/>
 <Adjective nr="93"/>
 <Adjective nr="94"/>
-<Adjective nr="115">
+<Adjective nr="95"/>
+<Adjective nr="116">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

@@ -11,24 +11,24 @@ environ
       FVSUM_1, ARYTM_1, RELAT_1, ARYTM, ALGSTR_0;
  notations MATRIX_1, VECTSP_1, GROUP_1, XBOOLE_0, ZFMISC_1, SUBSET_1, NAT_1,
       TARSKI, FINSEQ_1, FINSEQ_2, MATRIX_3, FVSUM_1, FUNCT_1, STRUCT_0,
-      BINOP_1, FINSEQOP, ORDINAL1, XXREAL_0, MATRIX_2, FUNCOP_1, INT_1,
-      NUMBERS, XCMPLX_0, MATRIX_6, RELAT_1, NAT_D, FUNCT_2, ALGSTR_0, PARTFUN1,
-      MATRIX13;
+      BINOP_1, XXREAL_0, MATRIX_2, FUNCOP_1, INT_1, NUMBERS, XCMPLX_0,
+      MATRIX_6, RELAT_1, ALGSTR_0, PARTFUN1, MATRIX13;
  constructors MATRIX_1, GROUP_1, MATRIX_3, DOMAIN_1, FVSUM_1, REAL_1, POLYNOM7,
-      MATRIX_6, BINOP_1, XXREAL_0, NAT_D, MATRIX11, MATRIX13, RELSET_1;
- registrations MATRIX_1, GROUP_1, STRUCT_0, INT_1, RELSET_1, VECTSP_1,
-      FINSEQ_2, XXREAL_0, NAT_1, RLVECT_2, FUNCOP_1, FINSEQ_1, MATRIX_6,
-      XREAL_0, XBOOLE_0, FUNCT_1, ORDINAL1;
+      MATRIX_6, BINOP_1, XXREAL_0, NAT_D, MATRIX11, MATRIX13, RELSET_1,
+      POLYNOM1, BINOP_2;
+ registrations STRUCT_0, INT_1, RELSET_1, VECTSP_1, FINSEQ_2, XXREAL_0,
+      FUNCOP_1, XREAL_0, XBOOLE_0, FUNCT_1, ORDINAL1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
 
 
 begin :: Basic Properties of Circulant Matrices
 
- reserve i,j,k,n,l,m for Element of NAT,
-         K for Field,
-         a,b,c for Element of K,
-         p,q,r for FinSequence of K,
-         M1,M2,M3 for Matrix of n,K;
+reserve i,j,k,n,l,m for Element of NAT,
+  K for Field,
+  a,b,c for Element of K,
+  p
+  ,q,r for FinSequence of K,
+  M1,M2,M3 for Matrix of n,K;
 
 theorem :: MATRIX16:1
   (1_K)*p=p;
@@ -42,8 +42,9 @@ definition
   let p be FinSequence;
   pred M is_line_circulant_about p means
 :: MATRIX16:def 1
-   len p = width M & for i,j be Nat st [i,j] in Indices M holds
-   M*(i,j) = p.((j-i mod len p)+1);
+
+  len p = width M & for i,j be
+  Nat st [i,j] in Indices M holds M*(i,j) = p.((j-i mod len p)+1);
 end;
 
 definition
@@ -51,8 +52,9 @@ definition
   let M be Matrix of K;
   attr M is line_circulant means
 :: MATRIX16:def 2
-   ex p being FinSequence of K st
-   len p=width M & M is_line_circulant_about p;
+
+  ex p being FinSequence of K st len p=
+  width M & M is_line_circulant_about p;
 end;
 
 definition
@@ -60,7 +62,9 @@ definition
   let p be FinSequence of K;
   attr p is first-line-of-circulant means
 :: MATRIX16:def 3
-   ex M being Matrix of len p,K st M is_line_circulant_about p;
+
+  ex M being Matrix of len p,K
+  st M is_line_circulant_about p;
 end;
 
 definition
@@ -69,8 +73,9 @@ definition
   let p be FinSequence;
   pred M is_col_circulant_about p means
 :: MATRIX16:def 4
-   len p = len M & for i,j be Nat st [i,j] in Indices M
-   holds M*(i,j)=p.((i-j mod len p)+1);
+
+  len p = len M & for i,j be Nat
+  st [i,j] in Indices M holds M*(i,j)=p.((i-j mod len p)+1);
 end;
 
 definition
@@ -78,8 +83,9 @@ definition
   let M be Matrix of K;
   attr M is col_circulant means
 :: MATRIX16:def 5
-  ex p being FinSequence of K st
-    len p = len M & M is_col_circulant_about p;
+
+  ex p being FinSequence of K st len p =
+  len M & M is_col_circulant_about p;
 end;
 
 definition
@@ -87,43 +93,57 @@ definition
   let p be FinSequence of K;
   attr p is first-col-of-circulant means
 :: MATRIX16:def 6
-   ex M being Matrix of len p,K st M is_col_circulant_about p;
+
+  ex M being Matrix of len p,K
+  st M is_col_circulant_about p;
 end;
 
-definition let K be non empty set, p be FinSequence of K;
-  assume p is first-line-of-circulant;
+definition
+  let K be non empty set, p be FinSequence of K;
+  assume
+ p is first-line-of-circulant;
   func LCirc(p) -> Matrix of len p,K means
 :: MATRIX16:def 7
-   it is_line_circulant_about p;
+
+  it is_line_circulant_about p;
 end;
 
-definition let K be non empty set, p be FinSequence of K;
-  assume p is first-col-of-circulant;
+definition
+  let K be non empty set, p be FinSequence of K;
+  assume
+ p is first-col-of-circulant;
   func CCirc(p) -> Matrix of len p,K means
 :: MATRIX16:def 8
-   it is_col_circulant_about p;
+
+  it is_col_circulant_about p;
 end;
 
-registration let K be Field;
+registration
+  let K be Field;
   cluster first-line-of-circulant first-col-of-circulant FinSequence of K;
 end;
 
-registration let K,n;
+registration
+  let K,n;
   cluster 0.(K,n) -> line_circulant col_circulant;
 end;
 
-registration let K;let n;let a be Element of K;
+registration
+  let K;
+  let n;
+  let a be Element of K;
   cluster (n,n)-->a -> line_circulant Matrix of n,K;
   cluster (n,n)-->a -> col_circulant Matrix of n,K;
 end;
 
-registration let K;
+registration
+  let K;
   cluster line_circulant col_circulant Matrix of K;
 end;
 
- reserve D for non empty set,
-         t for FinSequence of D,
-         A for Matrix of n,D;
+reserve D for non empty set,
+  t for FinSequence of D,
+  A for Matrix of n,D;
 
 theorem :: MATRIX16:3
   A is line_circulant & n>0 implies A@ is col_circulant;
@@ -132,50 +152,50 @@ theorem :: MATRIX16:4
   A is_line_circulant_about t & n>0 implies t = Line(A,1);
 
 theorem :: MATRIX16:5
-  A is line_circulant & [i,j] in [:Seg n, Seg n:] &
-    k=i+1 & l=j+1 & i<n & j<n implies A*(i,j)=A*(k,l);
+  A is line_circulant & [i,j] in [:Seg n, Seg n:] & k=i+1 & l=j+1 & i<n
+  & j<n implies A*(i,j)=A*(k,l);
 
 theorem :: MATRIX16:6
   M1 is line_circulant implies a*M1 is line_circulant;
 
 theorem :: MATRIX16:7
-  M1 is line_circulant & M2 is line_circulant implies
-    M1+M2 is line_circulant;
+  M1 is line_circulant & M2 is line_circulant implies M1+M2 is
+  line_circulant;
 
 theorem :: MATRIX16:8
-  M1 is line_circulant & M2 is line_circulant & M3 is line_circulant
-    implies M1+M2+M3 is line_circulant;
+  M1 is line_circulant & M2 is line_circulant & M3 is
+  line_circulant implies M1+M2+M3 is line_circulant;
 
 theorem :: MATRIX16:9
-  M1 is line_circulant & M2 is line_circulant
-    implies a*M1+b*M2 is line_circulant;
+  M1 is line_circulant & M2 is line_circulant implies a*M1+b*M2 is
+  line_circulant;
 
 theorem :: MATRIX16:10
   M1 is line_circulant & M2 is line_circulant & M3 is line_circulant
-    implies a*M1+b*M2+c*M3 is line_circulant;
+  implies a*M1+b*M2+c*M3 is line_circulant;
 
 theorem :: MATRIX16:11
   M1 is line_circulant implies -M1 is line_circulant;
 
 theorem :: MATRIX16:12
-  M1 is line_circulant & M2 is line_circulant
-    implies M1 - M2 is line_circulant;
+  M1 is line_circulant & M2 is line_circulant implies M1 - M2 is
+  line_circulant;
 
 theorem :: MATRIX16:13
-  M1 is line_circulant & M2 is line_circulant
-    implies a*M1 - b*M2 is line_circulant;
+  M1 is line_circulant & M2 is line_circulant implies a*M1 - b*M2
+  is line_circulant;
 
 theorem :: MATRIX16:14
   M1 is line_circulant & M2 is line_circulant & M3 is line_circulant
-    implies a*M1+b*M2-c*M3 is line_circulant;
+  implies a*M1+b*M2-c*M3 is line_circulant;
 
 theorem :: MATRIX16:15
   M1 is line_circulant & M2 is line_circulant & M3 is line_circulant
-    implies a*M1-b*M2-c*M3 is line_circulant;
+  implies a*M1-b*M2-c*M3 is line_circulant;
 
 theorem :: MATRIX16:16
   M1 is line_circulant & M2 is line_circulant & M3 is line_circulant
-    implies a*M1-b*M2+c*M3 is line_circulant;
+  implies a*M1-b*M2+c*M3 is line_circulant;
 
 theorem :: MATRIX16:17
   A is col_circulant & n>0 implies A@ is line_circulant;
@@ -184,83 +204,80 @@ theorem :: MATRIX16:18
   A is_col_circulant_about t & n>0 implies t = Col(A,1);
 
 theorem :: MATRIX16:19
-  A is col_circulant & [i,j] in [:Seg n, Seg n:] &
-    k=i+1 & l=j+1 & i<n & j<n implies A*(i,j)=A*(k,l);
+  A is col_circulant & [i,j] in [:Seg n, Seg n:] & k=i+1 & l=j+1 & i<n &
+  j<n implies A*(i,j)=A*(k,l);
 
 theorem :: MATRIX16:20
   M1 is col_circulant implies a*M1 is col_circulant;
 
 theorem :: MATRIX16:21
-  M1 is col_circulant & M2 is col_circulant implies
-    M1+M2 is col_circulant;
+  M1 is col_circulant & M2 is col_circulant implies M1+M2 is
+  col_circulant;
 
 theorem :: MATRIX16:22
   M1 is col_circulant & M2 is col_circulant & M3 is col_circulant
-    implies M1+M2+M3 is col_circulant;
+  implies M1+M2+M3 is col_circulant;
 
 theorem :: MATRIX16:23
-  M1 is col_circulant &M2 is col_circulant
-    implies a*M1+b*M2 is col_circulant;
+  M1 is col_circulant &M2 is col_circulant implies a*M1+b*M2 is
+  col_circulant;
 
 theorem :: MATRIX16:24
   M1 is col_circulant & M2 is col_circulant & M3 is col_circulant
-    implies a*M1+b*M2+c*M3 is col_circulant;
+  implies a*M1+b*M2+c*M3 is col_circulant;
 
 theorem :: MATRIX16:25
   M1 is col_circulant implies -M1 is col_circulant;
 
 theorem :: MATRIX16:26
-  M1 is col_circulant & M2 is col_circulant
-    implies M1 - M2 is col_circulant;
+  M1 is col_circulant & M2 is col_circulant implies M1 - M2 is
+  col_circulant;
 
 theorem :: MATRIX16:27
-  M1 is col_circulant & M2 is col_circulant
-    implies a*M1 - b*M2 is col_circulant;
+  M1 is col_circulant & M2 is col_circulant implies a*M1 - b*M2 is
+  col_circulant;
 
 theorem :: MATRIX16:28
   M1 is col_circulant & M2 is col_circulant & M3 is col_circulant
-    implies a*M1+b*M2-c*M3 is col_circulant;
+  implies a*M1+b*M2-c*M3 is col_circulant;
 
 theorem :: MATRIX16:29
   M1 is col_circulant & M2 is col_circulant & M3 is col_circulant
-    implies a*M1-b*M2-c*M3 is col_circulant;
+  implies a*M1-b*M2-c*M3 is col_circulant;
 
 theorem :: MATRIX16:30
   M1 is col_circulant & M2 is col_circulant & M3 is col_circulant
-    implies a*M1-b*M2+c*M3 is col_circulant;
+  implies a*M1-b*M2+c*M3 is col_circulant;
 
 theorem :: MATRIX16:31
-  p is first-line-of-circulant implies
-    -p is first-line-of-circulant;
+  p is first-line-of-circulant implies -p is
+  first-line-of-circulant;
 
 theorem :: MATRIX16:32
   p is first-line-of-circulant implies LCirc(-p) =-(LCirc p);
 
 theorem :: MATRIX16:33
-  p is first-line-of-circulant &
-  q is first-line-of-circulant & len p=len q implies
-  p+q is first-line-of-circulant;
+  p is first-line-of-circulant & q is first-line-of-circulant &
+  len p=len q implies p+q is first-line-of-circulant;
 
 theorem :: MATRIX16:34
-  len p=len q & p is first-line-of-circulant &
-    q is first-line-of-circulant implies
-      LCirc(p+q) = LCirc(p)+LCirc(q);
+  len p=len q & p is first-line-of-circulant & q is
+  first-line-of-circulant implies LCirc(p+q) = LCirc(p)+LCirc(q);
 
 theorem :: MATRIX16:35
-  p is first-col-of-circulant implies
-    -p is first-col-of-circulant;
+  p is first-col-of-circulant implies -p is first-col-of-circulant;
 
 theorem :: MATRIX16:36
-  for p being FinSequence of K st p is first-col-of-circulant
-    holds CCirc(-p) =-(CCirc p);
+  for p being FinSequence of K st p is first-col-of-circulant holds
+  CCirc(-p) =-(CCirc p);
 
 theorem :: MATRIX16:37
-  p is first-col-of-circulant & q is first-col-of-circulant
-    & len p=len q implies p+q is first-col-of-circulant;
+  p is first-col-of-circulant & q is first-col-of-circulant & len
+  p=len q implies p+q is first-col-of-circulant;
 
 theorem :: MATRIX16:38
-  len p=len q & p is first-col-of-circulant &
-    q is first-col-of-circulant implies CCirc(p+q) = CCirc(p)+CCirc(q);
+  len p=len q & p is first-col-of-circulant & q is
+  first-col-of-circulant implies CCirc(p+q) = CCirc(p)+CCirc(q);
 
 theorem :: MATRIX16:39
   n>0 implies 1.(K,n) is col_circulant;
@@ -269,61 +286,62 @@ theorem :: MATRIX16:40
   n>0 implies 1.(K,n) is line_circulant;
 
 theorem :: MATRIX16:41
-  p is first-line-of-circulant implies a*p is first-line-of-circulant;
+  p is first-line-of-circulant implies a*p is
+  first-line-of-circulant;
 
 theorem :: MATRIX16:42
   p is first-line-of-circulant implies LCirc(a*p) =a*(LCirc p);
 
 theorem :: MATRIX16:43
-  p is first-line-of-circulant implies
-  a*(LCirc p)+b*(LCirc p)=LCirc((a+b)*p);
+  p is first-line-of-circulant implies a*(LCirc p)+b*(LCirc p)=LCirc((a+
+  b)*p);
 
 theorem :: MATRIX16:44
-  p is first-line-of-circulant & q is first-line-of-circulant &
-    len p = len q & len p > 0 implies
-  a*(LCirc p)+a*(LCirc q)=LCirc(a*(p+q));
+  p is first-line-of-circulant & q is first-line-of-circulant & len p =
+  len q implies a*(LCirc p)+a*(LCirc q)=LCirc(a*(p+q));
 
 theorem :: MATRIX16:45
-  p is first-line-of-circulant & q is first-line-of-circulant &
-  len p = len q implies
-  a*(LCirc p)+b*(LCirc q)=LCirc(a*p+b*q);
+  p is first-line-of-circulant & q is first-line-of-circulant & len p =
+  len q implies a*(LCirc p)+b*(LCirc q)=LCirc(a*p+b*q);
 
 theorem :: MATRIX16:46
-  p is first-col-of-circulant implies a*p is first-col-of-circulant;
+  p is first-col-of-circulant implies a*p is
+  first-col-of-circulant;
 
 theorem :: MATRIX16:47
   p is first-col-of-circulant implies CCirc(a*p)=a*(CCirc p);
 
 theorem :: MATRIX16:48
-  p is first-col-of-circulant implies
-   a*(CCirc p)+b*(CCirc p)=CCirc((a+b)*p);
+  p is first-col-of-circulant implies a*(CCirc p)+b*(CCirc p)=CCirc((a+b
+  )*p);
 
 theorem :: MATRIX16:49
-  p is first-col-of-circulant & q is first-col-of-circulant &
-    len p = len q & len p > 0 implies
-  a*(CCirc p)+a*(CCirc q)=CCirc(a*(p+q));
+  p is first-col-of-circulant & q is first-col-of-circulant & len p =
+  len q & len p > 0 implies a*(CCirc p)+a*(CCirc q)=CCirc(a*(p+q));
 
 theorem :: MATRIX16:50
-  p is first-col-of-circulant & q is first-col-of-circulant &
-    len p = len q implies
-      a*(CCirc p)+b*(CCirc q)=CCirc(a*p+b*q);
+  p is first-col-of-circulant & q is first-col-of-circulant & len p =
+  len q implies a*(CCirc p)+b*(CCirc q)=CCirc(a*p+b*q);
 
-notation let K be set;
-         let M be Matrix of K;
+notation
+  let K be set;
+  let M be Matrix of K;
   synonym M is circulant for M is line_circulant;
 end;
 
 begin :: Basic Properties of Anti-circular Matrices
 
 definition
- let K be Field;
- let M1 be Matrix of K;
- let p be FinSequence of K;
- pred M1 is_anti-circular_about p means
+  let K be Field;
+  let M1 be Matrix of K;
+  let p be FinSequence of K;
+  pred M1 is_anti-circular_about p means
 :: MATRIX16:def 9
- len p=width M1 & (for i,j be Nat st [i,j] in Indices M1 & i<=j holds
- M1*(i,j)=p.((j-i mod len p)+1)) & for i,j be Nat st [i,j] in Indices M1
- & i>=j holds M1*(i,j)=(-p).((j-i mod len p)+1);
+
+  len p=width M1 & (for i,j be
+Nat st [i,j] in Indices M1 & i<=j holds M1*(i,j)=p.((j-i mod len p)+1)) & for i
+,j be Nat st [i,j] in Indices M1 & i>=j holds M1*(i,j)=(-p).((j-i mod len p)+1)
+  ;
 end;
 
 definition
@@ -331,8 +349,9 @@ definition
   let M be Matrix of K;
   attr M is anti-circular means
 :: MATRIX16:def 10
-  ex p being FinSequence of K st
-  len p=width M & M is_anti-circular_about p;
+
+  ex p being FinSequence of K st len p=
+  width M & M is_anti-circular_about p;
 end;
 
 definition
@@ -340,78 +359,84 @@ definition
   let p be FinSequence of K;
   attr p is first-line-of-anti-circular means
 :: MATRIX16:def 11
-  ex M being Matrix of len p,K st
-  M is_anti-circular_about p;
+
+  ex M being Matrix of len
+  p,K st M is_anti-circular_about p;
 end;
 
-definition let K be Field, p be FinSequence of K;
-  assume p is first-line-of-anti-circular;
+definition
+  let K be Field, p be FinSequence of K;
+  assume
+ p is first-line-of-anti-circular;
   func ACirc(p) -> Matrix of len p,K means
 :: MATRIX16:def 12
-   it is_anti-circular_about p;
- end;
+
+  it is_anti-circular_about p;
+end;
 
 theorem :: MATRIX16:51
   M1 is anti-circular implies a*M1 is anti-circular;
 
 theorem :: MATRIX16:52
-  M1 is anti-circular & M2 is anti-circular implies
-    M1+M2 is anti-circular;
+  M1 is anti-circular & M2 is anti-circular implies M1+M2 is
+  anti-circular;
 
 theorem :: MATRIX16:53
-  for K being Fanoian Field, n,i,j being Nat, M1 being Matrix of n,K
-  st [i,j] in Indices M1 & i=j & M1 is anti-circular holds M1*(i,j)=0.K;
+  for K being Fanoian Field, n,i,j being Nat, M1 being Matrix of n,K st
+  [i,j] in Indices M1 & i=j & M1 is anti-circular holds M1*(i,j)=0.K;
 
 theorem :: MATRIX16:54
-  M1 is anti-circular & [i,j] in [:Seg n, Seg n:] &
-  k=i+1 & l=j+1 & i<n & j<n implies M1*(k,l)=M1*(i,j);
+  M1 is anti-circular & [i,j] in [:Seg n, Seg n:] & k=i+1 & l=j+1 & i<n
+  & j<n implies M1*(k,l)=M1*(i,j);
 
 theorem :: MATRIX16:55
   M1 is anti-circular implies -M1 is anti-circular;
 
 theorem :: MATRIX16:56
-  M1 is anti-circular & M2 is anti-circular
-    implies M1-M2 is anti-circular;
+  M1 is anti-circular & M2 is anti-circular implies M1-M2 is
+  anti-circular;
 
 theorem :: MATRIX16:57
   M1 is_anti-circular_about p & n>0 implies p = Line(M1,1);
 
 theorem :: MATRIX16:58
-  p is first-line-of-anti-circular implies
-  -p is first-line-of-anti-circular;
+  p is first-line-of-anti-circular implies -p is
+  first-line-of-anti-circular;
 
 theorem :: MATRIX16:59
   p is first-line-of-anti-circular implies ACirc(-p) =-(ACirc(p));
 
 theorem :: MATRIX16:60
-  p is first-line-of-anti-circular &
-  q is first-line-of-anti-circular & len p = len q
-  implies p+q is first-line-of-anti-circular;
+  p is first-line-of-anti-circular & q is
+  first-line-of-anti-circular & len p = len q implies p+q is
+  first-line-of-anti-circular;
 
 theorem :: MATRIX16:61
-  p is first-line-of-anti-circular &
-  q is first-line-of-anti-circular & len p = len q implies
-  ACirc(p+q) = ACirc(p)+ACirc(q);
+  p is first-line-of-anti-circular & q is
+first-line-of-anti-circular & len p = len q implies ACirc(p+q) = ACirc(p)+ACirc
+  (q);
 
 theorem :: MATRIX16:62
-  p is first-line-of-anti-circular implies a*p is first-line-of-anti-circular;
+  p is first-line-of-anti-circular implies a*p is
+  first-line-of-anti-circular;
 
 theorem :: MATRIX16:63
   p is first-line-of-anti-circular implies ACirc(a*p) =a*(ACirc p);
 
 theorem :: MATRIX16:64
-  p is first-line-of-anti-circular implies
-   a*(ACirc p)+b*(ACirc p)=ACirc((a+b)*p);
+  p is first-line-of-anti-circular implies a*(ACirc p)+b*(ACirc p)=ACirc
+  ((a+b)*p);
 
 theorem :: MATRIX16:65
   p is first-line-of-anti-circular & q is first-line-of-anti-circular &
-  len p = len q & len p > 0 implies
-   a*(ACirc p)+a*(ACirc q)=ACirc(a*(p+q));
+  len p = len q implies a*(ACirc p)+a*(ACirc q)=ACirc(a*(p+q));
 
 theorem :: MATRIX16:66
- p is first-line-of-anti-circular & q is first-line-of-anti-circular &
- len p = len q implies a*(ACirc p)+b*(ACirc q)=ACirc(a*p+b*q);
+  p is first-line-of-anti-circular & q is first-line-of-anti-circular &
+  len p = len q implies a*(ACirc p)+b*(ACirc q)=ACirc(a*p+b*q);
 
-registration let K,n;
+registration
+  let K,n;
   cluster 0.(K,n) -> anti-circular;
 end;
+

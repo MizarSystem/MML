@@ -12,13 +12,13 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="NAT_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="PARTFUN1"/>
 </Signature>
 <Scheme>
 <ArgTypes>
@@ -46,7 +46,7 @@
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="108">
+<Func kind="K" nr="116">
 <Var nr="1"/>
 </Func>
 <Func kind="F" nr="3"/>
@@ -55,7 +55,7 @@
 <And>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="130">
+<Func kind="K" nr="69">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Num nr="1"/>
@@ -92,15 +92,15 @@
 <Not>
 <Pred kind="P" nr="1">
 <Var nr="2"/>
-<Func kind="K" nr="130">
+<Func kind="K" nr="69">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>
-<Func kind="K" nr="130">
+<Func kind="K" nr="69">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
-<Func kind="K" nr="92">
+<Func kind="K" nr="100">
 <Var nr="2"/>
 <Num nr="1"/>
 </Func>
@@ -189,7 +189,7 @@
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="92">
+<Func kind="K" nr="100">
 <Var nr="1"/>
 <Num nr="1"/>
 </Func>

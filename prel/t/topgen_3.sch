@@ -12,6 +12,7 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="ARYTM_3"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -195,7 +196,7 @@
 </Func>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="109">
+<Func kind="K" nr="117">
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>
@@ -323,7 +324,7 @@
 </Func>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="110">
+<Func kind="K" nr="118">
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>

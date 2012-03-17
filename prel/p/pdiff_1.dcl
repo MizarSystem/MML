@@ -12,6 +12,7 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
@@ -26,11 +27,11 @@
 <ArticleID name="VALUED_0"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="LOPBAN_1"/>
+<ArticleID name="INT_1"/>
+<ArticleID name="RAT_1"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="FINSEQ_2"/>
-<ArticleID name="INT_1"/>
 <ArticleID name="BINOP_1"/>
-<ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="FUNCT_5"/>
@@ -42,20 +43,20 @@
 </Signature>
 <FCluster aid="PDIFF_1" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="328">
+<Func kind="K" nr="337">
 <Num nr="1"/>
 <Num nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="6"/>
-<Adjective nr="22">
-<Func kind="K" nr="302">
+<Adjective nr="23">
+<Func kind="K" nr="311">
 <Num nr="1"/>
 </Func>
 <Func kind="K" nr="44"/>
 </Adjective>
-<Adjective nr="24">
-<Func kind="K" nr="302">
+<Adjective nr="25">
+<Func kind="K" nr="311">
 <Num nr="1"/>
 </Func>
 <Func kind="K" nr="44"/>

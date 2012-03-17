@@ -31,21 +31,18 @@ A1: X misses Y;
   correctness
   proof
     set M = Net (# X, Y, {} #);
-    (the Places of M) misses (the Transitions of M) &
-    (the Flow of M) c= [:the Places of M, the Transitions of M:] \/
-    [:the Transitions of M, the Places of M:] by A1,XBOOLE_1:2;
-    hence thesis by NET_1:def 1;
+    (the Flow of M) c= [:the Places of M, the Transitions of M:] \/ [:the
+    Transitions of M, the Places of M:] by XBOOLE_1:2;
+    hence thesis by A1,NET_1:def 1;
   end;
 end;
 
 definition
   let X;
   func Tempty_f_net(X) -> strict Pnet equals
-
   PTempty_f_net(X,{});
   correctness;
   func Pempty_f_net(X) -> strict Pnet equals
-
   PTempty_f_net({},X);
   correctness;
 end;
@@ -53,18 +50,15 @@ end;
 definition
   let x;
   func Tsingle_f_net(x) -> strict Pnet equals
-
   PTempty_f_net({},{x});
   correctness;
   func Psingle_f_net(x) -> strict Pnet equals
-
   PTempty_f_net({x},{});
   correctness;
 end;
 
 definition
   func empty_f_net -> strict Pnet equals
-
   PTempty_f_net({},{});
   correctness;
 end;
@@ -131,23 +125,23 @@ end;
 canceled 3;
 
 theorem Th11:
-  (([x,y] in the Flow of M & x in the Transitions of M) implies
+  ( [x,y] in the Flow of M & x in the Transitions of M implies
   not x in the Places of M & not y in the Transitions of M &
   y in the Places of M) &
-  (([x,y] in the Flow of M & y in the Transitions of M) implies
+  ( [x,y] in the Flow of M & y in the Transitions of M implies
   not y in the Places of M & not x in the Transitions of M &
   x in the Places of M) &
-  (([x,y] in the Flow of M & x in the Places of M) implies
+  ( [x,y] in the Flow of M & x in the Places of M implies
   not y in the Places of M & not x in the Transitions of M &
   y in the Transitions of M) &
-  (([x,y] in the Flow of M & y in the Places of M) implies
+  ( [x,y] in the Flow of M & y in the Places of M implies
   not x in the Places of M & not y in the Transitions of M &
   x in the Transitions of M)
 proof
-  (the Places of M) misses (the Transitions of M) &
-  ((the Flow of M) c= [:the Places of M, the Transitions of M:] \/
-  [:the Transitions of M, the Places of M:]) by NET_1:def 1;
-  hence thesis by SYSREL:22;
+A1: (the Places of M) misses (the Transitions of M) by NET_1:def 1;
+  (the Flow of M) c= [:the Places of M, the Transitions of M:] \/ [:the
+  Transitions of M, the Places of M:] by NET_1:def 1;
+  hence thesis by A1,SYSREL:22;
 end;
 
 canceled;
@@ -156,23 +150,20 @@ theorem Th13:
   (the Flow of M) c= [:Elements(M), Elements(M):] &
   (the Flow of M)~ c= [:Elements(M), Elements(M):]
 proof
-  (the Flow of M) c= [:Elements(M), Elements(M):]
-  proof
 A1: the Places of M c= Elements(M) by XBOOLE_1:7;
 A2: the Transitions of M c= Elements(M) by XBOOLE_1:7;
-    then
+  then
 A3: [:the Places of M, the Transitions of M:] c=
-    [:Elements(M), Elements(M):] by A1,ZFMISC_1:119;
-    [:the Transitions of M, the Places of M:] c=
-    [:Elements(M), Elements(M):] by A1,A2,ZFMISC_1:119;
-    then
+  [:Elements(M), Elements(M):] by A1,ZFMISC_1:119;
+  [:the Transitions of M, the Places of M:] c=
+  [:Elements(M), Elements(M):] by A1,A2,ZFMISC_1:119;
+  then
 A4: [:the Places of M, the Transitions of M:] \/
-    [:the Transitions of M, the Places of M:] c=
-    [:Elements(M), Elements(M):] by A3,XBOOLE_1:8;
-    the Flow of M c= [:the Places of M, the Transitions of M:] \/
-    [:the Transitions of M, the Places of M:] by NET_1:def 1;
-    hence thesis by A4,XBOOLE_1:1;
-  end;
+  [:the Transitions of M, the Places of M:] c=
+  [:Elements(M), Elements(M):] by A3,XBOOLE_1:8;
+  the Flow of M c= [:the Places of M, the Transitions of M:] \/
+  [:the Transitions of M, the Places of M:] by NET_1:def 1;
+  then (the Flow of M) c= [:Elements(M), Elements(M):] by A4,XBOOLE_1:1;
   hence thesis by SYSREL:16;
 end;
 
@@ -186,80 +177,67 @@ theorem Th14:
   rng id(the Places of M) c= (the Places of M) &
   dom id(the Places of M) c= (the Places of M)
 proof
-A1: rng ((the Flow of M)|(the Transitions of M)) c= (the Places of M)
+A1: for x holds x in rng ((the Flow of M)|(the Transitions of M)) implies
+  x in (the Places of M)
   proof
-    for x holds x in rng ((the Flow of M)|(the Transitions of M)) implies
-    x in (the Places of M)
-    proof
-      let x;
-      assume x in rng ((the Flow of M)|(the Transitions of M));
-      then consider y such that
-A2:   [y,x] in (the Flow of M)|(the Transitions of M) by RELAT_1:def 5;
-      y in (the Transitions of M) & [y,x] in (the Flow of M) by A2,
-RELAT_1:def 11;
-      hence thesis by Th11;
-    end;
-    hence thesis by TARSKI:def 3;
+    let x;
+    assume x in rng ((the Flow of M)|(the Transitions of M));
+    then consider y such that
+A2: [y,x] in (the Flow of M)|(the Transitions of M) by RELAT_1:def 5;
+A3: y in (the Transitions of M) by A2,RELAT_1:def 11;
+    [y,x] in (the Flow of M) by A2,RELAT_1:def 11;
+    hence thesis by A3,Th11;
   end;
-A3: rng ((the Flow of M)~|(the Transitions of M)) c= (the Places of M)
+A4: for x holds x in rng ((the Flow of M)~|(the Transitions of M)) implies
+  x in (the Places of M)
   proof
-    for x holds x in rng ((the Flow of M)~|(the Transitions of M)) implies
-    x in (the Places of M)
-    proof
-      let x;
-      assume x in rng ((the Flow of M)~|(the Transitions of M));
-      then consider y such that
-A4:   [y,x] in (the Flow of M)~|(the Transitions of M) by RELAT_1:def 5;
-      y in (the Transitions of M) & [y,x] in (the Flow of M)~ by A4,
-RELAT_1:def 11;
-
-then y in (the Transitions of M) & [x,y] in (the Flow of M) by RELAT_1:def 7;
-      hence thesis by Th11;
-    end;
-    hence thesis by TARSKI:def 3;
+    let x;
+    assume x in rng ((the Flow of M)~|(the Transitions of M));
+    then consider y such that
+A5: [y,x] in (the Flow of M)~|(the Transitions of M) by RELAT_1:def 5;
+A6: [y,x] in (the Flow of M)~ by A5,RELAT_1:def 11;
+A7: y in (the Transitions of M) by A5,RELAT_1:def 11;
+    [x,y] in (the Flow of M) by A6,RELAT_1:def 7;
+    hence thesis by A7,Th11;
   end;
-A5: rng ((the Flow of M)|(the Places of M)) c= (the Transitions of M)
+A8: for x holds x in rng ((the Flow of M)|(the Places of M)) implies
+  x in (the Transitions of M)
   proof
-    for x holds x in rng ((the Flow of M)|(the Places of M)) implies
-    x in (the Transitions of M)
-    proof
-      let x;
-      assume x in rng ((the Flow of M)|(the Places of M));
-      then consider y such that
-A6:   [y,x] in (the Flow of M)|(the Places of M) by RELAT_1:def 5;
-      y in (the Places of M) & [y,x] in (the Flow of M) by A6,RELAT_1:def 11;
-      hence thesis by Th11;
-    end;
-    hence thesis by TARSKI:def 3;
+    let x;
+    assume x in rng ((the Flow of M)|(the Places of M));
+    then consider y such that
+A9: [y,x] in (the Flow of M)|(the Places of M) by RELAT_1:def 5;
+A10: y in (the Places of M) by A9,RELAT_1:def 11;
+    [y,x] in (the Flow of M) by A9,RELAT_1:def 11;
+    hence thesis by A10,Th11;
   end;
-  rng ((the Flow of M)~|(the Places of M)) c= (the Transitions of M)
+  for x holds x in rng ((the Flow of M)~|(the Places of M)) implies
+  x in (the Transitions of M)
   proof
-    for x holds x in rng ((the Flow of M)~|(the Places of M)) implies
-    x in (the Transitions of M)
-    proof
-      let x;
-      assume x in rng ((the Flow of M)~|(the Places of M));
-      then consider y such that
-A7:   [y,x] in (the Flow of M)~|(the Places of M) by RELAT_1:def 5;
-      y in (the Places of M) & [y,x] in (the Flow of M)~ by A7,RELAT_1:def 11;
-      then y in (the Places of M) & [x,y] in (the Flow of M) by RELAT_1:def 7;
-      hence thesis by Th11;
-    end;
-    hence thesis by TARSKI:def 3;
+    let x;
+    assume x in rng ((the Flow of M)~|(the Places of M));
+    then consider y such that
+A11: [y,x] in (the Flow of M)~|(the Places of M) by RELAT_1:def 5;
+A12: [y,x] in (the Flow of M)~ by A11,RELAT_1:def 11;
+A13: y in (the Places of M) by A11,RELAT_1:def 11;
+    [x,y] in (the Flow of M) by A12,RELAT_1:def 7;
+    hence thesis by A13,Th11;
   end;
-  hence thesis by A1,A3,A5,RELAT_1:71;
+  hence thesis by A1,A4,A8,RELAT_1:71,TARSKI:def 3;
 end;
 
 Lm1: for A,B,C,D being set st B misses D & A c= B & C c= D holds A misses C
 proof
   let A,B,C,D be set;
-  assume
-A1: B misses D & A c= B & C c= D;
+  assume that
+A1: B misses D and
+A2: A c= B and
+A3: C c= D;
   assume A meets C;
-  then consider x be set such that
-A2: x in A /\ C by XBOOLE_0:4;
-  A /\ C c= B /\ D by A1,XBOOLE_1:27;
-  hence thesis by A1,A2,XBOOLE_0:4;
+  then
+A4: ex x be set st ( x in A /\ C) by XBOOLE_0:4;
+  A /\ C c= B /\ D by A2,A3,XBOOLE_1:27;
+  hence thesis by A1,A4,XBOOLE_0:4;
 end;
 
 theorem Th15:
@@ -315,110 +293,72 @@ proof
   set R1 = (the Flow of M)|(the Places of M);
   set S1 = (the Flow of M)~|(the Places of M);
   set T1 = id(the Places of M);
-A1: dom R c= the Transitions of M & rng R c= the Places of M
-  by Th14,RELAT_1:87;
-A2: dom S c= the Transitions of M & rng S c= the Places of M
-  by Th14,RELAT_1:87;
-A3: dom T c= the Transitions of M & rng T c= the Transitions of M by Th14;
-A4: dom R1 c= the Places of M & rng R1 c= the Transitions of M
-  by Th14,RELAT_1:87;
-A5: dom S1 c= the Places of M & rng S1 c= the Transitions of M
-  by Th14,RELAT_1:87;
-A6: dom T1 c= the Places of M & rng T1 c= the Places of M by Th14;
+A1: dom R c= the Transitions of M by RELAT_1:87;
+A2: rng R c= the Places of M by Th14;
+A3: dom S c= the Transitions of M by RELAT_1:87;
+A4: rng S c= the Places of M by Th14;
+A5: dom T c= the Transitions of M by Th14;
+A6: rng T c= the Transitions of M by Th14;
+A7: dom R1 c= the Places of M by RELAT_1:87;
+A8: rng R1 c= the Transitions of M by Th14;
+A9: dom S1 c= the Places of M by RELAT_1:87;
+A10: rng S1 c= the Transitions of M by Th14;
+A11: dom T1 c= the Places of M by Th14;
+A12: rng T1 c= the Places of M by Th14;
   (the Places of M) misses (the Transitions of M) by NET_1:def 1;
-  hence thesis by A1,A2,A3,A4,A5,A6,Lm1;
+  hence thesis by A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,Lm1;
 end;
 
 theorem Th16:
-  (((the Flow of M)|(the Transitions of M)) *
-  ((the Flow of M)|(the Transitions of M)) = {}) &
-  (((the Flow of M)~|(the Transitions of M)) *
-  ((the Flow of M)~|(the Transitions of M)) = {}) &
-  (((the Flow of M)|(the Transitions of M)) *
-  ((the Flow of M)~|(the Transitions of M)) = {}) &
-  (((the Flow of M)~|(the Transitions of M)) *
-  ((the Flow of M)|(the Transitions of M)) = {}) &
-  (((the Flow of M)|(the Places of M)) *
-  ((the Flow of M)|(the Places of M)) = {}) &
-  (((the Flow of M)~|(the Places of M)) *
-  ((the Flow of M)~|(the Places of M)) = {}) &
-  (((the Flow of M)|(the Places of M)) *
-  ((the Flow of M)~|(the Places of M)) = {}) &
-  (((the Flow of M)~|(the Places of M)) *
-  ((the Flow of M)|(the Places of M)) = {})
-proof
-A1: (((the Flow of M)|(the Transitions of M)) *
-  ((the Flow of M)|(the Transitions of M)) = {})
-  proof
-    rng ((the Flow of M)|(the Transitions of M)) misses
-    dom ((the Flow of M)|(the Transitions of M)) by Th15;
-    hence thesis by RELAT_1:67;
-  end;
-A2: ((the Flow of M)~|(the Transitions of M)) *
-  ((the Flow of M)~|(the Transitions of M)) = {}
-  proof
-    rng ((the Flow of M)~|(the Transitions of M)) misses
-    dom ((the Flow of M)~|(the Transitions of M)) by Th15;
-    hence thesis by RELAT_1:67;
-  end;
-A3: ((the Flow of M)|(the Transitions of M)) *
-  ((the Flow of M)~|(the Transitions of M)) = {}
-  proof
-    rng ((the Flow of M)|(the Transitions of M)) misses
-    dom ((the Flow of M)~|(the Transitions of M)) by Th15;
-    hence thesis by RELAT_1:67;
-  end;
-A4: ((the Flow of M)~|(the Transitions of M)) *
-  ((the Flow of M)|(the Transitions of M)) = {}
-  proof
-    rng ((the Flow of M)~|(the Transitions of M)) misses
-    dom ((the Flow of M)|(the Transitions of M)) by Th15;
-    hence thesis by RELAT_1:67;
-  end;
-A5: (((the Flow of M)|(the Places of M)) *
-  ((the Flow of M)|(the Places of M)) = {})
-  proof
-    rng ((the Flow of M)|(the Places of M)) misses
-    dom ((the Flow of M)|(the Places of M)) by Th15;
-    hence thesis by RELAT_1:67;
-  end;
-A6: ((the Flow of M)~|(the Places of M)) *
-  ((the Flow of M)~|(the Places of M)) = {}
-  proof
-    rng ((the Flow of M)~|(the Places of M)) misses
-    dom ((the Flow of M)~|(the Places of M)) by Th15;
-    hence thesis by RELAT_1:67;
-  end;
-A7: ((the Flow of M)|(the Places of M)) *
-  ((the Flow of M)~|(the Places of M)) = {}
-  proof
-    rng ((the Flow of M)|(the Places of M)) misses
-    dom ((the Flow of M)~|(the Places of M)) by Th15;
-    hence thesis by RELAT_1:67;
-  end;
+  ((the Flow of M)|(the Transitions of M)) *
+  ((the Flow of M)|(the Transitions of M)) = {} &
+  ((the Flow of M)~|(the Transitions of M)) *
+  ((the Flow of M)~|(the Transitions of M)) = {} &
+  ((the Flow of M)|(the Transitions of M)) *
+  ((the Flow of M)~|(the Transitions of M)) = {} &
+  ((the Flow of M)~|(the Transitions of M)) *
+  ((the Flow of M)|(the Transitions of M)) = {} &
+  ((the Flow of M)|(the Places of M)) *
+  ((the Flow of M)|(the Places of M)) = {} &
+  ((the Flow of M)~|(the Places of M)) *
+  ((the Flow of M)~|(the Places of M)) = {} &
+  ((the Flow of M)|(the Places of M)) *
+  ((the Flow of M)~|(the Places of M)) = {} &
   ((the Flow of M)~|(the Places of M)) *
   ((the Flow of M)|(the Places of M)) = {}
-  proof
-    rng ((the Flow of M)~|(the Places of M)) misses
-    dom ((the Flow of M)|(the Places of M)) by Th15;
-    hence thesis by RELAT_1:67;
-  end;
-  hence thesis by A1,A2,A3,A4,A5,A6,A7;
+proof
+A1: rng ((the Flow of M)|(the Transitions of M)) misses
+  dom ((the Flow of M)|(the Transitions of M)) by Th15;
+A2: rng ((the Flow of M)~|(the Transitions of M)) misses
+  dom ((the Flow of M)~|(the Transitions of M)) by Th15;
+A3: rng ((the Flow of M)|(the Transitions of M)) misses
+  dom ((the Flow of M)~|(the Transitions of M)) by Th15;
+A4: rng ((the Flow of M)~|(the Transitions of M)) misses
+  dom ((the Flow of M)|(the Transitions of M)) by Th15;
+A5: rng ((the Flow of M)|(the Places of M)) misses
+  dom ((the Flow of M)|(the Places of M)) by Th15;
+A6: rng ((the Flow of M)~|(the Places of M)) misses
+  dom ((the Flow of M)~|(the Places of M)) by Th15;
+A7: rng ((the Flow of M)|(the Places of M)) misses
+  dom ((the Flow of M)~|(the Places of M)) by Th15;
+  rng ((the Flow of M)~|(the Places of M)) misses
+  dom ((the Flow of M)|(the Places of M)) by Th15;
+  hence thesis by A1,A2,A3,A4,A5,A6,A7,RELAT_1:67;
 end;
 
 theorem Th17:
-  (((the Flow of M)|(the Transitions of M)) *
-  id(the Places of M) = (the Flow of M)|(the Transitions of M)) &
-  (((the Flow of M)~|(the Transitions of M)) *
-  id(the Places of M) = (the Flow of M)~|(the Transitions of M)) &
-  ((id(the Transitions of M) * ((the Flow of M)|(the Transitions of M))) =
-  (the Flow of M)|(the Transitions of M)) & ((id(the Transitions of M) *
+  ((the Flow of M)|(the Transitions of M)) *
+  id(the Places of M) = (the Flow of M)|(the Transitions of M) &
+  ((the Flow of M)~|(the Transitions of M)) *
+  id(the Places of M) = (the Flow of M)~|(the Transitions of M) &
+  (id(the Transitions of M) * ((the Flow of M)|(the Transitions of M))) =
+  (the Flow of M)|(the Transitions of M) & (id(the Transitions of M) *
   ((the Flow of M)~|(the Transitions of M))) =
-  (the Flow of M)~|(the Transitions of M)) &
-  (((the Flow of M)|(the Places of M)) *
-  id(the Transitions of M) = (the Flow of M)|(the Places of M)) &
-  (((the Flow of M)~|(the Places of M)) *
-  id(the Transitions of M) = (the Flow of M)~|(the Places of M)) &
+  (the Flow of M)~|(the Transitions of M) &
+  ((the Flow of M)|(the Places of M)) *
+  id(the Transitions of M) = (the Flow of M)|(the Places of M) &
+  ((the Flow of M)~|(the Places of M)) *
+  id(the Transitions of M) = (the Flow of M)~|(the Places of M) &
   (id(the Places of M)) * ((the Flow of M)|(the Places of M)) =
   (the Flow of M)|(the Places of M) &
   (id(the Places of M)) * ((the Flow of M)~|(the Places of M)) =
@@ -436,112 +376,36 @@ theorem Th17:
   ((the Flow of M)|(the Transitions of M)) * (id(the Transitions of M)) = {} &
   ((the Flow of M)~|(the Transitions of M)) * (id(the Transitions of M)) = {}
 proof
-A1: ((the Flow of M)|(the Transitions of M)) *
-  id(the Places of M) = (the Flow of M)|(the Transitions of M)
-  proof
-    rng ((the Flow of M)|(the Transitions of M)) c= the Places of M by Th14;
-    hence thesis by RELAT_1:79;
-  end;
-A2: ((the Flow of M)~|(the Transitions of M)) *
-  id(the Places of M) = (the Flow of M)~|(the Transitions of M)
-  proof
-    rng ((the Flow of M)~|(the Transitions of M)) c= the Places of M by Th14;
-    hence thesis by RELAT_1:79;
-  end;
-A3: (id(the Transitions of M) * ((the Flow of M)|(the Transitions of M))) =
-  (the Flow of M)|(the Transitions of M)
-  proof
-    dom ((the Flow of M)|(the Transitions of M)) c= the Transitions of M
-    by RELAT_1:87;
-    hence thesis by RELAT_1:77;
-  end;
-A4: (id(the Transitions of M) * ((the Flow of M)~|(the Transitions of M))) =
-  (the Flow of M)~|(the Transitions of M)
-  proof
-    dom ((the Flow of M)~|(the Transitions of M)) c= (the Transitions of M)
-    by RELAT_1:87;
-    hence thesis by RELAT_1:77;
-  end;
-A5: ((the Flow of M)|(the Places of M)) *
-  id(the Transitions of M) = (the Flow of M)|(the Places of M)
-  proof
-    rng ((the Flow of M)|(the Places of M)) c= the Transitions of M by Th14;
-    hence thesis by RELAT_1:79;
-  end;
-A6: ((the Flow of M)~|(the Places of M)) *
-  id(the Transitions of M) = (the Flow of M)~|(the Places of M)
-  proof
-    rng ((the Flow of M)~|(the Places of M)) c= the Transitions of M by Th14;
-    hence thesis by RELAT_1:79;
-  end;
-A7: (id(the Places of M) * ((the Flow of M)|(the Places of M))) =
-  (the Flow of M)|(the Places of M)
-  proof
-    dom ((the Flow of M)|(the Places of M)) c= the Places of M by RELAT_1:87;
-    hence thesis by RELAT_1:77;
-  end;
-A8: (id(the Places of M) * ((the Flow of M)~|(the Places of M))) =
-  (the Flow of M)~|(the Places of M)
-  proof
-    dom ((the Flow of M)~|(the Places of M)) c= the Places of M by RELAT_1:87;
-    hence thesis by RELAT_1:77;
-  end;
-A9: (id(the Transitions of M) * ((the Flow of M)|(the Places of M))) = {}
-  proof
-    dom ((the Flow of M)|(the Places of M)) misses
-    rng (id(the Transitions of M)) by Th15;
-    hence thesis by RELAT_1:67;
-  end;
-A10: (id(the Transitions of M) * ((the Flow of M)~|(the Places of M))) = {}
-  proof
-    dom ((the Flow of M)~|(the Places of M)) misses
-    rng (id(the Transitions of M)) by Th15;
-    hence thesis by RELAT_1:67;
-  end;
-A11: ((the Flow of M)|(the Places of M)) * id(the Places of M) = {}
-  proof
-    rng ((the Flow of M)|(the Places of M)) misses
-    dom (id(the Places of M)) by Th15;
-    hence thesis by RELAT_1:67;
-  end;
-A12: ((the Flow of M)~|(the Places of M)) * id(the Places of M) = {}
-  proof
-    rng ((the Flow of M)~|(the Places of M)) misses
-    dom (id(the Places of M)) by Th15;
-    hence thesis by RELAT_1:67;
-  end;
-A13: (id(the Places of M) * ((the Flow of M)|(the Transitions of M))) = {}
-  proof
-    rng id(the Places of M) misses
-    dom ((the Flow of M)|(the Transitions of M)) by Th15;
-    hence thesis by RELAT_1:67;
-  end;
-A14: (id(the Places of M) * ((the Flow of M)~|(the Transitions of M))) = {}
-  proof
-    rng id(the Places of M) misses
-    dom ((the Flow of M)~|(the Transitions of M)) by Th15;
-    hence thesis by RELAT_1:67;
-  end;
-A15: ((the Flow of M)|(the Transitions of M)) * id(the Transitions of M) = {}
-  proof
-    rng ((the Flow of M)|(the Transitions of M)) misses
-    dom id(the Transitions of M) by Th15;
-    hence thesis by RELAT_1:67;
-  end;
-  ((the Flow of M)~|(the Transitions of M)) * id(the Transitions of M) = {}
-  proof
-    rng ((the Flow of M)~|(the Transitions of M)) misses
-    dom id(the Transitions of M) by Th15;
-    hence thesis by RELAT_1:67;
-  end;
-  hence thesis by A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13,A14,A15;
+A1: rng ((the Flow of M)|(the Transitions of M)) c= the Places of M by Th14;
+A2: rng ((the Flow of M)~|(the Transitions of M)) c= the Places of M by
+  Th14;
+A3: rng ((the Flow of M)|(the Places of M)) c= the Transitions of M by Th14;
+A4: rng ((the Flow of M)~|(the Places of M)) c= the Transitions of M by
+  Th14;
+A5: dom ((the Flow of M)|(the Places of M)) misses
+  rng (id(the Transitions of M)) by Th15;
+A6: dom ((the Flow of M)~|(the Places of M)) misses
+  rng (id(the Transitions of M)) by Th15;
+A7: rng ((the Flow of M)|(the Places of M)) misses
+  dom (id(the Places of M)) by Th15;
+A8: rng ((the Flow of M)~|(the Places of M)) misses
+  dom (id(the Places of M)) by Th15;
+A9: rng id(the Places of M) misses
+  dom ((the Flow of M)|(the Transitions of M)) by Th15;
+A10: rng id(the Places of M) misses
+  dom ((the Flow of M)~|(the Transitions of M)) by Th15;
+A11: rng ((the Flow of M)|(the Transitions of M)) misses
+  dom id(the Transitions of M) by Th15;
+  rng ((the Flow of M)~|(the Transitions of M)) misses
+  dom id(the Transitions of M) by Th15;
+  hence thesis by A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,RELAT_1:67,77,79,87;
 end;
 
 theorem Th18:
-  (((the Flow of M)~|(the Transitions of M)) misses (id(Elements(M)))) &
-  (((the Flow of M)|(the Transitions of M)) misses (id(Elements(M)))) &
-  (((the Flow of M)~|(the Places of M)) misses (id(Elements(M)))) &
-  (((the Flow of M)|(the Places of M)) misses (id(Elements(M))))
+  ((the Flow of M)~|(the Transitions of M)) misses (id(Elements(M))) &
+  ((the Flow of M)|(the Transitions of M)) misses (id(Elements(M))) &
+  ((the Flow of M)~|(the Places of M)) misses (id(Elements(M))) &
+  ((the Flow of M)|(the Places of M)) misses (id(Elements(M)))
 proof
   set T = id(Elements(M));
   thus ((the Flow of M)~|(the Transitions of M)) misses (id(Elements(M)))
@@ -550,15 +414,16 @@ proof
     for x,y holds not [x,y] in R /\ T
     proof
       let x,y;
-      assume [x,y] in R /\ T;
+      assume
+A1:   [x,y] in R /\ T;
       then
-A1:   [x,y] in R & [x,y] in T by XBOOLE_0:def 4;
-      then x in (the Transitions of M) & [x,y] in (the Flow of M)~ by
-RELAT_1:def 11;
-
-then x in (the Transitions of M) & [y,x] in (the Flow of M) by RELAT_1:def 7;
-      then x <> y by Th11;
-      hence thesis by A1,RELAT_1:def 10;
+A2:   [x,y] in R by XBOOLE_0:def 4;
+A3:   [x,y] in T by A1,XBOOLE_0:def 4;
+A4:   [x,y] in (the Flow of M)~ by A2,RELAT_1:def 11;
+A5:   x in (the Transitions of M) by A2,RELAT_1:def 11;
+      [y,x] in (the Flow of M) by A4,RELAT_1:def 7;
+      then x <> y by A5,Th11;
+      hence thesis by A3,RELAT_1:def 10;
     end;
     then R /\ T = {} by RELAT_1:56;
     hence thesis by XBOOLE_0:def 7;
@@ -569,13 +434,15 @@ then x in (the Transitions of M) & [y,x] in (the Flow of M) by RELAT_1:def 7;
     for x,y holds not [x,y] in R /\ T
     proof
       let x,y;
-      assume [x,y] in R /\ T;
+      assume
+A6:   [x,y] in R /\ T;
       then
-A2:   [x,y] in R & [x,y] in T by XBOOLE_0:def 4;
-      then x in (the Transitions of M) & [x,y] in (the Flow of M) by
-RELAT_1:def 11;
-      then x <> y by Th11;
-      hence thesis by A2,RELAT_1:def 10;
+A7:   [x,y] in R by XBOOLE_0:def 4;
+A8:   [x,y] in T by A6,XBOOLE_0:def 4;
+A9:   x in (the Transitions of M) by A7,RELAT_1:def 11;
+      [x,y] in (the Flow of M) by A7,RELAT_1:def 11;
+      then x <> y by A9,Th11;
+      hence thesis by A8,RELAT_1:def 10;
     end;
     then R /\ T = {} by RELAT_1:56;
     hence thesis by XBOOLE_0:def 7;
@@ -586,13 +453,16 @@ RELAT_1:def 11;
     for x,y holds not [x,y] in R /\ T
     proof
       let x,y;
-      assume [x,y] in R /\ T;
+      assume
+A10:  [x,y] in R /\ T;
       then
-A3:   [x,y] in R & [x,y] in T by XBOOLE_0:def 4;
-      then x in the Places of M & [x,y] in (the Flow of M)~ by RELAT_1:def 11;
-      then x in the Places of M & [y,x] in the Flow of M by RELAT_1:def 7;
-      then x <> y by Th11;
-      hence thesis by A3,RELAT_1:def 10;
+A11:  [x,y] in R by XBOOLE_0:def 4;
+A12:  [x,y] in T by A10,XBOOLE_0:def 4;
+A13:  [x,y] in (the Flow of M)~ by A11,RELAT_1:def 11;
+A14:  x in the Places of M by A11,RELAT_1:def 11;
+      [y,x] in the Flow of M by A13,RELAT_1:def 7;
+      then x <> y by A14,Th11;
+      hence thesis by A12,RELAT_1:def 10;
     end;
     then R /\ T = {} by RELAT_1:56;
     hence thesis by XBOOLE_0:def 7;
@@ -601,12 +471,15 @@ A3:   [x,y] in R & [x,y] in T by XBOOLE_0:def 4;
   for x,y holds not [x,y] in R /\ T
   proof
     let x,y;
-    assume [x,y] in R /\ T;
+    assume
+A15: [x,y] in R /\ T;
     then
-A4: [x,y] in R & [x,y] in T by XBOOLE_0:def 4;
-    then x in the Places of M & [x,y] in the Flow of M by RELAT_1:def 11;
-    then x <> y by Th11;
-    hence thesis by A4,RELAT_1:def 10;
+A16: [x,y] in R by XBOOLE_0:def 4;
+A17: [x,y] in T by A15,XBOOLE_0:def 4;
+A18: x in the Places of M by A16,RELAT_1:def 11;
+    [x,y] in the Flow of M by A16,RELAT_1:def 11;
+    then x <> y by A18,Th11;
+    hence thesis by A17,RELAT_1:def 10;
   end;
   then R /\ T = {} by RELAT_1:56;
   hence thesis by XBOOLE_0:def 7;
@@ -757,61 +630,66 @@ proof
   set R = the Flow of M;
   set X = the Places of M;
   set Y = the Transitions of M;
-A1: ((R|X)~) c= ((R~)|Y)
+  for x,y holds [x,y] in (R|X)~ implies [x,y] in (R~)|Y
   proof
-    for x,y holds [x,y] in (R|X)~ implies [x,y] in (R~)|Y
-    proof
-      let x,y;
-      assume [x,y] in (R|X)~;
-      then [y,x] in R|X by RELAT_1:def 7;
-      then [y,x] in R & y in X by RELAT_1:def 11;
-      then [x,y] in R~ & x in Y by Th11,RELAT_1:def 7;
-      hence thesis by RELAT_1:def 11;
-    end;
-    hence thesis by RELAT_1:def 3;
+    let x,y;
+    assume [x,y] in (R|X)~;
+    then
+A1: [y,x] in R|X by RELAT_1:def 7;
+    then
+A2: [y,x] in R by RELAT_1:def 11;
+A3: y in X by A1,RELAT_1:def 11;
+A4: [x,y] in R~ by A2,RELAT_1:def 7;
+    x in Y by A2,A3,Th11;
+    hence thesis by A4,RELAT_1:def 11;
   end;
-A2: ((R~)|Y) c= ((R|X)~)
+  then
+A5: ((R|X)~) c= ((R~)|Y) by RELAT_1:def 3;
+  for x,y holds [x,y] in (R~)|Y implies [x,y] in (R|X)~
   proof
-    for x,y holds [x,y] in (R~)|Y implies [x,y] in (R|X)~
-    proof
-      let x,y;
-      assume [x,y] in (R~)|Y;
-      then [x,y] in R~ & x in Y by RELAT_1:def 11;
-      then [y,x] in R & x in Y by RELAT_1:def 7;
-      then [y,x] in R & y in X by Th11;
-      then [y,x] in R|X by RELAT_1:def 11;
-      hence thesis by RELAT_1:def 7;
-    end;
-    hence thesis by RELAT_1:def 3;
+    let x,y;
+    assume
+A6: [x,y] in (R~)|Y;
+    then [x,y] in R~ by RELAT_1:def 11;
+    then
+A7: [y,x] in R by RELAT_1:def 7;
+    x in Y by A6,RELAT_1:def 11;
+    then y in X by A7,Th11;
+    then [y,x] in R|X by A7,RELAT_1:def 11;
+    hence thesis by RELAT_1:def 7;
   end;
-A3: ((R|Y)~) c= ((R~)|X)
+  then
+A8: ((R~)|Y) c= ((R|X)~) by RELAT_1:def 3;
+  for x,y holds [x,y] in (R|Y)~ implies [x,y] in (R~)|X
   proof
-    for x,y holds [x,y] in (R|Y)~ implies [x,y] in (R~)|X
-    proof
-      let x,y;
-      assume [x,y] in (R|Y)~;
-      then [y,x] in R|Y by RELAT_1:def 7;
-      then [y,x] in R & y in Y by RELAT_1:def 11;
-      then [x,y] in R~ & x in X by Th11,RELAT_1:def 7;
-      hence thesis by RELAT_1:def 11;
-    end;
-    hence thesis by RELAT_1:def 3;
+    let x,y;
+    assume [x,y] in (R|Y)~;
+    then
+A9: [y,x] in R|Y by RELAT_1:def 7;
+    then
+A10: [y,x] in R by RELAT_1:def 11;
+A11: y in Y by A9,RELAT_1:def 11;
+A12: [x,y] in R~ by A10,RELAT_1:def 7;
+    x in X by A10,A11,Th11;
+    hence thesis by A12,RELAT_1:def 11;
   end;
-  ((R~)|X) c= ((R|Y)~)
+  then
+A13: ((R|Y)~) c= ((R~)|X) by RELAT_1:def 3;
+  for x,y holds [x,y] in (R~)|X implies [x,y] in (R|Y)~
   proof
-    for x,y holds [x,y] in (R~)|X implies [x,y] in (R|Y)~
-    proof
-      let x,y;
-      assume [x,y] in (R~)|X;
-      then [x,y] in R~ & x in X by RELAT_1:def 11;
-      then [y,x] in R & x in X by RELAT_1:def 7;
-      then [y,x] in R & y in Y by Th11;
-      then [y,x] in R|Y by RELAT_1:def 11;
-      hence thesis by RELAT_1:def 7;
-    end;
-    hence thesis by RELAT_1:def 3;
+    let x,y;
+    assume
+A14: [x,y] in (R~)|X;
+    then [x,y] in R~ by RELAT_1:def 11;
+    then
+A15: [y,x] in R by RELAT_1:def 7;
+    x in X by A14,RELAT_1:def 11;
+    then y in Y by A15,Th11;
+    then [y,x] in R|Y by A15,RELAT_1:def 11;
+    hence thesis by RELAT_1:def 7;
   end;
-  hence thesis by A1,A2,A3,XBOOLE_0:def 10;
+  then ((R~)|X) c= ((R|Y)~) by RELAT_1:def 3;
+  hence thesis by A5,A8,A13,XBOOLE_0:def 10;
 end;
 
 theorem Th21:
@@ -847,31 +725,25 @@ theorem
   f_exit(M) c= [:Elements(M),Elements(M):] &
   f_enter(M) c= [:Elements(M),Elements(M):]
 proof
-  thus f_exit(M) c= [:Elements(M),Elements(M):]
-  proof
-A1: id(the Places of M) c= [:Elements(M),Elements(M):]
-    proof
-A2:   id(the Places of M) c= id(Elements(M)) by SYSREL:33,XBOOLE_1:7;
-      id(Elements(M)) c= [:Elements(M),Elements(M):] by RELSET_1:28;
-      hence thesis by A2,XBOOLE_1:1;
-    end;
+A1: id(the Places of M) c= id(Elements(M)) by SYSREL:33,XBOOLE_1:7;
+  id(Elements(M)) c= [:Elements(M),Elements(M):] by RELSET_1:28;
+  then
+A2: id(the Places of M) c= [:Elements(M),Elements(M):] by A1,XBOOLE_1:1;
 A3: (the Flow of M)|(the Transitions of M) c= (the Flow of M) by RELAT_1:88;
-    (the Flow of M) c= [:Elements(M),Elements(M):] by Th13;
-    then (the Flow of M)|(the Transitions of M) c= [:Elements(M),Elements(M):]
-    by A3,XBOOLE_1:1;
-    hence thesis by A1,XBOOLE_1:8;
-  end;
-A4: id(the Places of M) c= [:Elements(M),Elements(M):]
-  proof
-A5: id(the Places of M) c= id(Elements(M)) by SYSREL:33,XBOOLE_1:7;
-    id(Elements(M)) c= [:Elements(M),Elements(M):] by RELSET_1:28;
-    hence thesis by A5,XBOOLE_1:1;
-  end;
-A6: (the Flow of M)~|(the Transitions of M) c= (the Flow of M)~ by RELAT_1:88;
+  (the Flow of M) c= [:Elements(M),Elements(M):] by Th13;
+  then (the Flow of M)|(the Transitions of M) c= [:Elements(M),Elements(M):]
+  by A3,XBOOLE_1:1;
+  hence f_exit(M) c= [:Elements(M),Elements(M):] by A2,XBOOLE_1:8;
+A4: id(the Places of M) c= id(Elements(M)) by SYSREL:33,XBOOLE_1:7;
+  id(Elements(M)) c= [:Elements(M),Elements(M):] by RELSET_1:28;
+  then
+A5: id(the Places of M) c= [:Elements(M),Elements(M):] by A4,XBOOLE_1:1;
+  A6: (
+the Flow of M)~|(the Transitions of M) c= (the Flow of M)~ by RELAT_1:88;
   (the Flow of M)~ c= [:Elements(M),Elements(M):] by Th13;
   then (the Flow of M)~|(the Transitions of M) c= [:Elements(M),Elements(M):]
   by A6,XBOOLE_1:1;
-  hence thesis by A4,XBOOLE_1:8;
+  hence thesis by A5,XBOOLE_1:8;
 end;
 
 theorem
@@ -886,7 +758,8 @@ A1: for x holds x in dom(f_exit(M)) implies x in Elements(M)
     dom(id(the Places of M)) by RELAT_1:13;
     then x in dom((the Flow of M)|(the Transitions of M)) or
     x in dom(id(the Places of M)) by XBOOLE_0:def 3;
-    then x in (the Transitions of M) or x in the Places of M by RELAT_1:71,86;
+    then x in (the Transitions of M) or x in the Places of M by
+    RELAT_1:71,86;
     hence thesis by XBOOLE_0:def 3;
   end;
 A2: for x holds x in rng(f_exit(M)) implies x in Elements(M)
@@ -901,20 +774,22 @@ A4: x in rng((the Flow of M)|(the Transitions of M)) implies thesis
       assume x in rng((the Flow of M)|(the Transitions of M));
       then consider y such that
 A5:   [y,x] in (the Flow of M)|(the Transitions of M) by RELAT_1:def 5;
-      y in (the Transitions of M) & [y,x] in (the Flow of M) by A5,
-RELAT_1:def 11;
-      then x in (the Transitions of M) or x in the Places of M by Th11;
+A6:   y in (the Transitions of M) by A5,RELAT_1:def 11;
+      [y,x] in (the Flow of M) by A5,RELAT_1:def 11;
+      then x in (the Transitions of M) or x in the Places of M by A6,
+      Th11;
       hence thesis by XBOOLE_0:def 3;
     end;
     x in rng(id(the Places of M)) implies thesis
     proof
       assume x in rng(id(the Places of M));
-      then x in (the Transitions of M) or x in the Places of M by RELAT_1:71;
+      then x in (the Transitions of M) or x in the Places of M by
+      RELAT_1:71;
       hence thesis by XBOOLE_0:def 3;
     end;
     hence thesis by A3,A4,XBOOLE_0:def 3;
   end;
-A6: for x holds x in dom(f_enter(M)) implies x in Elements(M)
+A7: for x holds x in dom(f_enter(M)) implies x in Elements(M)
   proof
     let x;
     assume x in dom(f_enter(M));
@@ -922,7 +797,8 @@ A6: for x holds x in dom(f_enter(M)) implies x in Elements(M)
     dom(id(the Places of M)) by RELAT_1:13;
     then x in dom((the Flow of M)~|(the Transitions of M)) or
     x in dom(id(the Places of M)) by XBOOLE_0:def 3;
-    then x in (the Transitions of M) or x in the Places of M by RELAT_1:71,86;
+    then x in (the Transitions of M) or x in the Places of M by RELAT_1:71
+    ,86;
     hence thesis by XBOOLE_0:def 3;
   end;
   for x holds x in rng(f_enter(M)) implies x in Elements(M)
@@ -930,29 +806,30 @@ A6: for x holds x in dom(f_enter(M)) implies x in Elements(M)
     let x;
     assume x in rng(f_enter(M));
     then
-A7: x in rng((the Flow of M)~|(the Transitions of M)) \/
+A8: x in rng((the Flow of M)~|(the Transitions of M)) \/
     rng(id(the Places of M)) by RELAT_1:26;
-A8: x in rng((the Flow of M)~|(the Transitions of M)) implies thesis
+A9: x in rng((the Flow of M)~|(the Transitions of M)) implies thesis
     proof
       assume x in rng((the Flow of M)~|(the Transitions of M));
       then consider y such that
-A9:   [y,x] in (the Flow of M)~|(the Transitions of M) by RELAT_1:def 5;
-      y in (the Transitions of M) & [y,x] in (the Flow of M)~ by A9,
-RELAT_1:def 11;
-
-then y in (the Transitions of M) & [x,y] in (the Flow of M) by RELAT_1:def 7;
-      then x in (the Transitions of M) or x in the Places of M by Th11;
+A10:  [y,x] in (the Flow of M)~|(the Transitions of M) by RELAT_1:def 5;
+A11:  [y,x] in (the Flow of M)~ by A10,RELAT_1:def 11;
+A12:  y in (the Transitions of M) by A10,RELAT_1:def 11;
+      [x,y] in (the Flow of M) by A11,RELAT_1:def 7;
+      then x in (the Transitions of M) or x in the Places of M by A12,
+      Th11;
       hence thesis by XBOOLE_0:def 3;
     end;
     x in rng(id(the Places of M)) implies thesis
     proof
       assume x in rng(id(the Places of M));
-      then x in (the Transitions of M) or x in the Places of M by RELAT_1:71;
+      then x in (the Transitions of M) or x in the Places of M by
+      RELAT_1:71;
       hence thesis by XBOOLE_0:def 3;
     end;
-    hence thesis by A7,A8,XBOOLE_0:def 3;
+    hence thesis by A8,A9,XBOOLE_0:def 3;
   end;
-  hence thesis by A1,A2,A6,TARSKI:def 3;
+  hence thesis by A1,A2,A7,TARSKI:def 3;
 end;
 
 theorem
@@ -1050,12 +927,10 @@ end;
 definition
   let M;
   func f_prox(M) -> Relation equals
-
   ((the Flow of M)|(the Places of M) \/
   (the Flow of M)~|(the Places of M)) \/ id(the Places of M);
   correctness;
   func f_flow(M) -> Relation equals
-
   (the Flow of M) \/ id(Elements(M));
   correctness;
 end;
@@ -1069,55 +944,34 @@ proof
   set S = (the Flow of M)~|(the Places of M);
   set T = id(the Places of M);
   set Q = id(Elements(M));
-A1: ((R \/ S) \/ T) \ Q = R \/ S
-  proof
-    ((R \/ S) \/ T) \ Q = ((R \/ T) \/ (S \/ T)) \ Q by XBOOLE_1:5
-      .= ((R \/ T) \ (id(Elements(M))) \/
-    ((S \/ T) \ (id(Elements(M))))) by XBOOLE_1:42
-      .= R \/
-    ((S \/ T) \ (id(Elements(M)))) by Th19
-      .= R \/ S by Th19;
-    hence thesis;
-  end;
-A2: (R \/ S) * (R \/ S) = {}
-  proof
-    (R \/ S) * (R \/ S) = ((R \/ S) * R) \/ ((R \/ S) *S) by RELAT_1:51
-      .= ((R * R) \/ (S * R)) \/ ((R \/ S) *S) by SYSREL:20
-      .= ((R * R) \/ (S * R)) \/ ((R * S) \/ (S *S)) by SYSREL:20
-      .= ({} \/ (S * R)) \/ ((R * S) \/ (S *S)) by Th16
-      .= ({} \/ {}) \/ ((R * S) \/ (S *S)) by Th16
-      .= ({} \/ {}) \/ ({} \/ (S *S)) by Th16
-      .= {} by Th16;
-    hence thesis;
-  end;
-A3: R \/ S~ = the Flow of M & R~ \/ S = (the Flow of M)~
-  proof
-A4: R \/ S~ = R \/ (((the Flow of M)|(the Transitions of M))~)~ by Th20
-      .= the Flow of M by Th21;
-    R~ \/ S = R~ \/ ((the Flow of M)|(the Transitions of M))~ by Th20
-      .= (the Flow of M)~ by Th21;
-    hence thesis by A4;
-  end;
-A5: (R \/ S)~ \/ (R \/ S) = (the Flow of M) \/ (the Flow of M)~
-  proof
-    (R \/ S)~ \/ (R \/ S) = (R~ \/ S~) \/ (R \/ S) by RELAT_1:40
-      .= (R~ \/ (S \/ R)) \/ S~ by XBOOLE_1:4
-      .= ((R~ \/ S) \/ R) \/ S~ by XBOOLE_1:4
-      .= (the Flow of M) \/ (the Flow of M)~ by A3,XBOOLE_1:4;
-    hence thesis;
-  end;
+A1: ((R \/ S) \/ T) \ Q = ((R \/ T) \/ (S \/ T)) \ Q by XBOOLE_1:5
+    .= ((R \/ T) \ (id(Elements(M))) \/
+  ((S \/ T) \ (id(Elements(M))))) by XBOOLE_1:42
+    .= R \/
+  ((S \/ T) \ (id(Elements(M)))) by Th19
+    .= R \/ S by Th19;
+A2: (R \/ S) * (R \/ S) = ((R \/ S) * R) \/ ((R \/ S) *S) by RELAT_1:51
+    .= ((R * R) \/ (S * R)) \/ ((R \/ S) *S) by SYSREL:20
+    .= ((R * R) \/ (S * R)) \/ ((R * S) \/ (S *S)) by SYSREL:20
+    .= ({} \/ (S * R)) \/ ((R * S) \/ (S *S)) by Th16
+    .= ({} \/ {}) \/ ((R * S) \/ (S *S)) by Th16
+    .= ({} \/ {}) \/ ({} \/ (S *S)) by Th16
+    .= {} by Th16;
+A3: R \/ S~ = R \/ (((the Flow of M)|(the Transitions of M))~)~ by Th20
+    .= the Flow of M by Th21;
+A4: R~ \/ S = R~ \/ ((the Flow of M)|(the Transitions of M))~ by Th20
+    .= (the Flow of M)~ by Th21;
+A5: (R \/ S)~ \/ (R \/ S) = (R~ \/ S~) \/ (R \/ S) by RELAT_1:40
+    .= (R~ \/ (S \/ R)) \/ S~ by XBOOLE_1:4
+    .= ((R~ \/ S) \/ R) \/ S~ by XBOOLE_1:4
+    .= (the Flow of M) \/ (the Flow of M)~ by A3,A4,XBOOLE_1:4;
 A6: f_prox(M) \/ (f_prox(M))~ =
-  ((the Flow of M) \/ (the Flow of M)~) \/ id(the Places of M)
-  proof
-    f_prox(M) \/ (f_prox(M))~ =
-    ((R \/ S) \/ T) \/ ((R \/ S)~ \/ T~) by RELAT_1:40
-      .= (((R \/ S) \/ T) \/ (R \/ S)~) \/ T~ by XBOOLE_1:4
-      .= (((R \/ S) \/ (R \/ S)~) \/ T) \/ T~ by XBOOLE_1:4
-      .= ((R \/ S) \/ (R \/ S)~) \/ (T \/ T~) by XBOOLE_1:4
-      .= ((R \/ S) \/ (R \/ S)~) \/ (T \/ T) by RELAT_1:72
-      .= ((the Flow of M) \/ (the Flow of M)~) \/ id(the Places of M) by A5;
-    hence thesis;
-  end;
+  ((R \/ S) \/ T) \/ ((R \/ S)~ \/ T~) by RELAT_1:40
+    .= (((R \/ S) \/ T) \/ (R \/ S)~) \/ T~ by XBOOLE_1:4
+    .= (((R \/ S) \/ (R \/ S)~) \/ T) \/ T~ by XBOOLE_1:4
+    .= ((R \/ S) \/ (R \/ S)~) \/ (T \/ T~) by XBOOLE_1:4
+    .= ((R \/ S) \/ (R \/ S)~) \/ (T \/ T) by RELAT_1:72
+    .= ((the Flow of M) \/ (the Flow of M)~) \/ id(the Places of M) by A5;
 A7: id(the Places of M) c= id(Elements(M)) by SYSREL:33,XBOOLE_1:7;
 A8: f_prox(M) * f_prox(M) = (((R \/ S) \/ T) * (R \/ S)) \/
   (((R \/ S) \/ T) * T) by RELAT_1:51
@@ -1154,7 +1008,7 @@ A8: f_prox(M) * f_prox(M) = (((R \/ S) \/ T) * (R \/ S)) \/
     .= R \/ S \/ ({} \/ T) by Th17
     .= f_prox(M);
 A9: (f_prox(M) \ id(Elements(M))) * f_prox(M) = {} \/ ((R \/ S) * T) by A1,A2,
-RELAT_1:51
+  RELAT_1:51
     .= (R * T) \/ (S * T) by SYSREL:20
     .= {} \/ (S * T) by Th17
     .= {} by Th17;
@@ -1176,19 +1030,15 @@ end;
 definition
   let M;
   func f_places(M) -> set equals
-
   the Places of M;
   correctness;
   func f_transitions(M) -> set equals
-
   the Transitions of M;
   correctness;
   func f_pre(M) -> Relation equals
-
   (the Flow of M)|(the Transitions of M);
   correctness;
   func f_post(M) -> Relation equals
-
   (the Flow of M)~|(the Transitions of M);
   correctness;
 end;
@@ -1201,23 +1051,26 @@ A1: for x,y holds [x,y] in f_pre(M) implies
   [x,y] in [:f_transitions(M),f_places(M):]
   proof
     let x,y;
-    assume [x,y] in f_pre(M);
-    then x in (the Transitions of M) & [x,y] in (the Flow of M) by
-RELAT_1:def 11;
-    then x in f_transitions(M) & y in (the Places of M) by Th11;
-    hence thesis by ZFMISC_1:106;
+    assume
+A2: [x,y] in f_pre(M);
+    then
+A3: x in (the Transitions of M) by RELAT_1:def 11;
+    [x,y] in (the Flow of M) by A2,RELAT_1:def 11;
+    then y in (the Places of M) by A3,Th11;
+    hence thesis by A3,ZFMISC_1:106;
   end;
   for x,y holds [x,y] in f_post(M) implies
   [x,y] in [:f_transitions(M),f_places(M):]
   proof
     let x,y;
-    assume [x,y] in f_post(M);
-    then x in (the Transitions of M) & [x,y] in (the Flow of M)~ by
-RELAT_1:def 11;
-
-then x in (the Transitions of M) & [y,x] in (the Flow of M) by RELAT_1:def 7;
-    then x in f_transitions(M) & y in (the Places of M) by Th11;
-    hence thesis by ZFMISC_1:106;
+    assume
+A4: [x,y] in f_post(M);
+    then
+A5: [x,y] in (the Flow of M)~ by RELAT_1:def 11;
+A6: x in (the Transitions of M) by A4,RELAT_1:def 11;
+    [y,x] in (the Flow of M) by A5,RELAT_1:def 7;
+    then y in (the Places of M) by A6,Th11;
+    hence thesis by A6,ZFMISC_1:106;
   end;
   hence thesis by A1,RELAT_1:def 3;
 end;
@@ -1228,31 +1081,29 @@ theorem
   f_prox(M) c= [:Elements(M), Elements(M):] &
   f_flow(M) c= [:Elements(M), Elements(M):]
 proof
-  thus f_prox(M) c= [:Elements(M), Elements(M):]
-  proof
 A1: (the Flow of M)|(the Places of M) c= the Flow of M by RELAT_1:88;
-    the Flow of M c= [:Elements(M), Elements(M):] by Th13;
-    then
+  the Flow of M c= [:Elements(M), Elements(M):] by Th13;
+  then
 A2: (the Flow of M)|(the Places of M) c= [:Elements(M), Elements(M):]
-    by A1,XBOOLE_1:1;
+  by A1,XBOOLE_1:1;
 A3: (the Flow of M)~|(the Places of M) c= (the Flow of M)~ by RELAT_1:88;
-    (the Flow of M)~ c= [:Elements(M), Elements(M):] by Th13;
-    then
+  (the Flow of M)~ c= [:Elements(M), Elements(M):] by Th13;
+  then
 A4: (the Flow of M)~|(the Places of M) c= [:Elements(M), Elements(M):]
-    by A3,XBOOLE_1:1;
-    the Places of M c= Elements(M) by XBOOLE_1:7;
-    then
+  by A3,XBOOLE_1:1;
+  the Places of M c= Elements(M) by XBOOLE_1:7;
+  then
 A5: [:the Places of M, the Places of M:] c=
-    [:Elements(M), Elements(M):] by ZFMISC_1:119;
-    id(the Places of M) c= [:the Places of M, the Places of M:]
-    by RELSET_1:28;
-    then
-A6: id(the Places of M) c= [:Elements(M), Elements(M):] by A5,XBOOLE_1:1;
-    (the Flow of M)|(the Places of M) \/
-    (the Flow of M)~|(the Places of M) c= [:Elements(M), Elements(M):]
-    by A2,A4,XBOOLE_1:8;
-    hence thesis by A6,XBOOLE_1:8;
-  end;
+  [:Elements(M), Elements(M):] by ZFMISC_1:119;
+  id(the Places of M) c= [:the Places of M, the Places of M:]
+  by RELSET_1:28;
+  then
+A6: id(the Places of M) c= [:Elements(M), Elements(M):] by A5,
+  XBOOLE_1:1;
+  (the Flow of M)|(the Places of M) \/
+  (the Flow of M)~|(the Places of M) c= [:Elements(M), Elements(M):]
+  by A2,A4,XBOOLE_1:8;
+  hence f_prox(M) c= [:Elements(M), Elements(M):] by A6,XBOOLE_1:8;
 A7: the Flow of M c= [:Elements(M), Elements(M):] by Th13;
   id(Elements(M)) c= [:Elements(M), Elements(M):] by RELSET_1:28;
   hence thesis by A7,XBOOLE_1:8;
@@ -1274,31 +1125,26 @@ theorem
   f_escape(M) c= [:Elements(M),Elements(M):] &
   f_entrance(M) c= [:Elements(M),Elements(M):]
 proof
-  thus f_escape(M) c= [:Elements(M),Elements(M):]
-  proof
-A1: id(the Transitions of M) c= [:Elements(M),Elements(M):]
-    proof
-A2:   id(the Transitions of M) c= id(Elements(M)) by SYSREL:33,XBOOLE_1:7;
-      id(Elements(M)) c= [:Elements(M),Elements(M):] by RELSET_1:28;
-      hence thesis by A2,XBOOLE_1:1;
-    end;
+A1: id(the Transitions of M) c= id(Elements(M)) by SYSREL:33,XBOOLE_1:7;
+  id(Elements(M)) c= [:Elements(M),Elements(M):] by RELSET_1:28;
+  then
+A2: id(the Transitions of M) c= [:Elements(M),Elements(M):] by A1,
+  XBOOLE_1:1;
 A3: (the Flow of M)|(the Places of M) c= (the Flow of M) by RELAT_1:88;
-    (the Flow of M) c= [:Elements(M),Elements(M):] by Th13;
-    then (the Flow of M)|(the Places of M) c= [:Elements(M),Elements(M):]
-    by A3,XBOOLE_1:1;
-    hence thesis by A1,XBOOLE_1:8;
-  end;
-A4: id(the Transitions of M) c= [:Elements(M),Elements(M):]
-  proof
-A5: id(the Transitions of M) c= id(Elements(M)) by SYSREL:33,XBOOLE_1:7;
-    id(Elements(M)) c= [:Elements(M),Elements(M):] by RELSET_1:28;
-    hence thesis by A5,XBOOLE_1:1;
-  end;
+  (the Flow of M) c= [:Elements(M),Elements(M):] by Th13;
+  then (the Flow of M)|(the Places of M) c= [:Elements(M),Elements(M):]
+  by A3,XBOOLE_1:1;
+  hence f_escape(M) c= [:Elements(M),Elements(M):] by A2,XBOOLE_1:8;
+A4: id(the Transitions of M) c= id(Elements(M)) by SYSREL:33,XBOOLE_1:7;
+  id(Elements(M)) c= [:Elements(M),Elements(M):] by RELSET_1:28;
+  then
+A5: id(the Transitions of M) c= [:Elements(M),Elements(M):] by A4,
+  XBOOLE_1:1;
 A6: (the Flow of M)~|(the Places of M) c= (the Flow of M)~ by RELAT_1:88;
   (the Flow of M)~ c= [:Elements(M),Elements(M):] by Th13;
   then (the Flow of M)~|(the Places of M) c= [:Elements(M),Elements(M):]
   by A6,XBOOLE_1:1;
-  hence thesis by A4,XBOOLE_1:8;
+  hence thesis by A5,XBOOLE_1:8;
 end;
 
 theorem
@@ -1313,7 +1159,8 @@ A1: for x holds x in dom(f_escape(M)) implies x in Elements(M)
     dom(id(the Transitions of M)) by RELAT_1:13;
     then x in dom((the Flow of M)|(the Places of M)) or
     x in dom(id(the Transitions of M)) by XBOOLE_0:def 3;
-    then x in (the Places of M) or x in the Transitions of M by RELAT_1:71,86;
+    then x in (the Places of M) or x in the Transitions of M by
+    RELAT_1:71,86;
     hence thesis by XBOOLE_0:def 3;
   end;
 A2: for x holds x in rng(f_escape(M)) implies x in Elements(M)
@@ -1328,19 +1175,22 @@ A4: x in rng((the Flow of M)|(the Places of M)) implies thesis
       assume x in rng((the Flow of M)|(the Places of M));
       then consider y such that
 A5:   [y,x] in (the Flow of M)|(the Places of M) by RELAT_1:def 5;
-      y in (the Places of M) & [y,x] in (the Flow of M) by A5,RELAT_1:def 11;
-      then x in (the Places of M) or x in the Transitions of M by Th11;
+A6:   y in (the Places of M) by A5,RELAT_1:def 11;
+      [y,x] in (the Flow of M) by A5,RELAT_1:def 11;
+      then x in (the Places of M) or x in the Transitions of M by A6,
+      Th11;
       hence thesis by XBOOLE_0:def 3;
     end;
     x in rng(id(the Transitions of M)) implies thesis
     proof
       assume x in rng(id(the Transitions of M));
-      then x in (the Places of M) or x in the Transitions of M by RELAT_1:71;
+      then x in (the Places of M) or x in the Transitions of M by
+      RELAT_1:71;
       hence thesis by XBOOLE_0:def 3;
     end;
     hence thesis by A3,A4,XBOOLE_0:def 3;
   end;
-A6: for x holds x in dom(f_entrance(M)) implies x in Elements(M)
+A7: for x holds x in dom(f_entrance(M)) implies x in Elements(M)
   proof
     let x;
     assume x in dom(f_entrance(M));
@@ -1348,7 +1198,8 @@ A6: for x holds x in dom(f_entrance(M)) implies x in Elements(M)
     dom(id(the Transitions of M)) by RELAT_1:13;
     then x in dom((the Flow of M)~|(the Places of M)) or
     x in dom(id(the Transitions of M)) by XBOOLE_0:def 3;
-    then x in (the Places of M) or x in the Transitions of M by RELAT_1:71,86;
+    then x in (the Places of M) or x in the Transitions of M by RELAT_1:71
+    ,86;
     hence thesis by XBOOLE_0:def 3;
   end;
   for x holds x in rng(f_entrance(M)) implies x in Elements(M)
@@ -1356,27 +1207,30 @@ A6: for x holds x in dom(f_entrance(M)) implies x in Elements(M)
     let x;
     assume x in rng(f_entrance(M));
     then
-A7: x in rng((the Flow of M)~|(the Places of M)) \/
+A8: x in rng((the Flow of M)~|(the Places of M)) \/
     rng(id(the Transitions of M)) by RELAT_1:26;
-A8: x in rng((the Flow of M)~|(the Places of M)) implies thesis
+A9: x in rng((the Flow of M)~|(the Places of M)) implies thesis
     proof
       assume x in rng((the Flow of M)~|(the Places of M));
       then consider y such that
-A9:   [y,x] in (the Flow of M)~|(the Places of M) by RELAT_1:def 5;
-      y in (the Places of M) & [y,x] in (the Flow of M)~ by A9,RELAT_1:def 11;
-      then y in (the Places of M) & [x,y] in (the Flow of M) by RELAT_1:def 7;
-      then x in (the Places of M) or x in the Transitions of M by Th11;
+A10:  [y,x] in (the Flow of M)~|(the Places of M) by RELAT_1:def 5;
+A11:  [y,x] in (the Flow of M)~ by A10,RELAT_1:def 11;
+A12:  y in (the Places of M) by A10,RELAT_1:def 11;
+      [x,y] in (the Flow of M) by A11,RELAT_1:def 7;
+      then x in (the Places of M) or x in the Transitions of M by A12,
+      Th11;
       hence thesis by XBOOLE_0:def 3;
     end;
     x in rng(id(the Transitions of M)) implies thesis
     proof
       assume x in rng(id(the Transitions of M));
-      then x in (the Places of M) or x in the Transitions of M by RELAT_1:71;
+      then x in (the Places of M) or x in the Transitions of M by
+      RELAT_1:71;
       hence thesis by XBOOLE_0:def 3;
     end;
-    hence thesis by A7,A8,XBOOLE_0:def 3;
+    hence thesis by A8,A9,XBOOLE_0:def 3;
   end;
-  hence thesis by A1,A2,A6,TARSKI:def 3;
+  hence thesis by A1,A2,A7,TARSKI:def 3;
 end;
 
 theorem
@@ -1387,19 +1241,15 @@ theorem
 proof
   set R = ((the Flow of M)|(the Places of M));
   set S = id(the Transitions of M);
-A1: (f_escape(M)) * (f_escape(M)) = f_escape(M)
-  proof
-A2: S * R = {} by Th17;
-A3: R * S = R by Th17;
-A4: S * S = S by SYSREL:29;
-    (f_escape(M)) * (f_escape(M)) =
-    (R * (R \/ S)) \/ (S * (R \/ S)) by SYSREL:20
-      .= ((R * R) \/ (R * S)) \/ (S * (R \/ S)) by RELAT_1:51
-      .= ((R * R) \/ (R * S)) \/ ((S * R) \/ (S * S)) by RELAT_1:51
-      .= ({} \/ R) \/ ({} \/ S) by A2,A3,A4,Th16
-      .=f_escape(M);
-    hence thesis;
-  end;
+A1: S * R = {} by Th17;
+A2: R * S = R by Th17;
+A3: S * S = S by SYSREL:29;
+A4: (f_escape(M)) * (f_escape(M)) =
+  (R * (R \/ S)) \/ (S * (R \/ S)) by SYSREL:20
+    .= ((R * R) \/ (R * S)) \/ (S * (R \/ S)) by RELAT_1:51
+    .= ((R * R) \/ (R * S)) \/ ((S * R) \/ (S * S)) by RELAT_1:51
+    .= ({} \/ R) \/ ({} \/ S) by A1,A2,A3,Th16
+    .=f_escape(M);
 A5: (f_escape(M)) * (f_entrance(M)) = f_escape(M)
   proof
     set T = ((the Flow of M)~|(the Places of M));
@@ -1442,7 +1292,7 @@ A15: S * S = S by SYSREL:29;
       .=f_entrance(M);
     hence thesis;
   end;
-  hence thesis by A1,A5,A9;
+  hence thesis by A4,A5,A9;
 end;
 
 theorem
@@ -1451,17 +1301,15 @@ theorem
 proof
   set R = (the Flow of M)|(the Places of M);
   set S = id(the Transitions of M);
-  thus (f_escape(M)) * (f_escape(M) \ id(Elements(M))) = {}
-  proof
 A1: S * R = {} by Th17;
-    (f_escape(M)) * (f_escape(M) \ id(Elements(M))) = (R \/ S) * R by Th19
-      .= (R * R) \/ (S * R) by SYSREL:20
-      .= {} by A1,Th16;
-    hence thesis;
-  end;
+  (f_escape(M)) * (f_escape(M) \ id(Elements(M))) = (R \/ S) * R by Th19
+    .= (R * R) \/ (S * R) by SYSREL:20
+    .= {} by A1,Th16;
+  hence (f_escape(M)) * (f_escape(M) \ id(Elements(M))) = {};
   set R = ((the Flow of M)~|(the Places of M));
 A2: S * R = {} by Th17;
-  (f_entrance(M)) * (f_entrance(M) \ id(Elements(M))) = (R \/ S) * R by Th19
+  (f_entrance(M)) * (f_entrance(M) \ id(Elements(M))) = (R \/ S) * R by
+  Th19
     .= (R * R) \/ (S * R) by SYSREL:20
     .= {} by A2,Th16;
   hence thesis;
@@ -1493,56 +1341,35 @@ proof
   set S = (the Flow of M)~|(the Transitions of M);
   set T = id(the Transitions of M);
   set Q = id(Elements(M));
-A1: ((R \/ S) \/ T) \ Q = R \/ S
-  proof
-    ((R \/ S) \/ T) \ Q = ((R \/ T) \/ (S \/ T)) \ Q by XBOOLE_1:5
-      .= ((R \/ T) \ (id(Elements(M))) \/
-    ((S \/ T) \ (id(Elements(M))))) by XBOOLE_1:42
-      .= R \/
-    ((S \/ T) \ (id(Elements(M)))) by Th19
-      .= R \/ S by Th19;
-    hence thesis;
-  end;
-A2: (R \/ S) * (R \/ S) = {}
-  proof
-    (R \/ S) * (R \/ S) = ((R \/ S) * R) \/ ((R \/ S) *S) by RELAT_1:51
-      .= ((R * R) \/ (S * R)) \/ ((R \/ S) *S) by SYSREL:20
-      .= ((R * R) \/ (S * R)) \/ ((R * S) \/ (S *S)) by SYSREL:20
-      .= ({} \/ (S * R)) \/ ((R * S) \/ (S *S)) by Th16
-      .= ({} \/ {}) \/ ((R * S) \/ (S *S)) by Th16
-      .= ({} \/ {}) \/ ({} \/ (S *S)) by Th16
-      .= {} by Th16;
-    hence thesis;
-  end;
-A3: R \/ S~ = the Flow of M & R~ \/ S = (the Flow of M)~
-  proof
-A4: R \/ S~ = R \/ (((the Flow of M)|(the Places of M))~)~ by Th20
-      .= the Flow of M by Th21;
-    R~ \/ S = R~ \/ ((the Flow of M)|(the Places of M))~ by Th20
-      .= (the Flow of M)~ by Th21;
-    hence thesis by A4;
-  end;
-A5: (R \/ S)~ \/ (R \/ S) = (the Flow of M) \/ (the Flow of M)~
-  proof
-    (R \/ S)~ \/ (R \/ S) = (R~ \/ S~) \/ (R \/ S) by RELAT_1:40
-      .= (R~ \/ (S \/ R)) \/ S~ by XBOOLE_1:4
-      .= ((R~ \/ S) \/ R) \/ S~ by XBOOLE_1:4
-      .= (the Flow of M) \/ (the Flow of M)~ by A3,XBOOLE_1:4;
-    hence thesis;
-  end;
+A1: ((R \/ S) \/ T) \ Q = ((R \/ T) \/ (S \/ T)) \ Q by XBOOLE_1:5
+    .= ((R \/ T) \ (id(Elements(M))) \/
+  ((S \/ T) \ (id(Elements(M))))) by XBOOLE_1:42
+    .= R \/
+  ((S \/ T) \ (id(Elements(M)))) by Th19
+    .= R \/ S by Th19;
+A2: (R \/ S) * (R \/ S) = ((R \/ S) * R) \/ ((R \/ S) *S) by RELAT_1:51
+    .= ((R * R) \/ (S * R)) \/ ((R \/ S) *S) by SYSREL:20
+    .= ((R * R) \/ (S * R)) \/ ((R * S) \/ (S *S)) by SYSREL:20
+    .= ({} \/ (S * R)) \/ ((R * S) \/ (S *S)) by Th16
+    .= ({} \/ {}) \/ ((R * S) \/ (S *S)) by Th16
+    .= ({} \/ {}) \/ ({} \/ (S *S)) by Th16
+    .= {} by Th16;
+A3: R \/ S~ = R \/ (((the Flow of M)|(the Places of M))~)~ by Th20
+    .= the Flow of M by Th21;
+A4: R~ \/ S = R~ \/ ((the Flow of M)|(the Places of M))~ by Th20
+    .= (the Flow of M)~ by Th21;
+A5: (R \/ S)~ \/ (R \/ S) = (R~ \/ S~) \/ (R \/ S) by RELAT_1:40
+    .= (R~ \/ (S \/ R)) \/ S~ by XBOOLE_1:4
+    .= ((R~ \/ S) \/ R) \/ S~ by XBOOLE_1:4
+    .= (the Flow of M) \/ (the Flow of M)~ by A3,A4,XBOOLE_1:4;
 A6: f_adjac(M) \/ (f_adjac(M))~ =
-  ((the Flow of M) \/ (the Flow of M)~) \/ id(the Transitions of M)
-  proof
-    f_adjac(M) \/ (f_adjac(M))~ =
-    ((R \/ S) \/ T) \/ ((R \/ S)~ \/ T~) by RELAT_1:40
-      .= (((R \/ S) \/ T) \/ (R \/ S)~) \/ T~ by XBOOLE_1:4
-      .= (((R \/ S) \/ (R \/ S)~) \/ T) \/ T~ by XBOOLE_1:4
-      .= ((R \/ S) \/ (R \/ S)~) \/ (T \/ T~) by XBOOLE_1:4
-      .= ((R \/ S) \/ (R \/ S)~) \/ (T \/ T) by RELAT_1:72
-      .= ((the Flow of M) \/ (the Flow of M)~) \/
-    id(the Transitions of M) by A5;
-    hence thesis;
-  end;
+  ((R \/ S) \/ T) \/ ((R \/ S)~ \/ T~) by RELAT_1:40
+    .= (((R \/ S) \/ T) \/ (R \/ S)~) \/ T~ by XBOOLE_1:4
+    .= (((R \/ S) \/ (R \/ S)~) \/ T) \/ T~ by XBOOLE_1:4
+    .= ((R \/ S) \/ (R \/ S)~) \/ (T \/ T~) by XBOOLE_1:4
+    .= ((R \/ S) \/ (R \/ S)~) \/ (T \/ T) by RELAT_1:72
+    .= ((the Flow of M) \/ (the Flow of M)~) \/
+  id(the Transitions of M) by A5;
 A7: id(the Transitions of M) c= id(Elements(M)) by SYSREL:33,XBOOLE_1:7;
 A8: f_adjac(M) * f_adjac(M) =
   (((R \/ S) \/ T) * (R \/ S)) \/ (((R \/ S) \/ T) * T) by RELAT_1:51
@@ -1574,7 +1401,7 @@ A8: f_adjac(M) * f_adjac(M) =
     .= R \/ S \/ ({} \/ T) by Th17
     .= f_adjac(M);
 A9: (f_adjac(M) \ id(Elements(M))) * f_adjac(M) = {} \/ ((R \/ S) * T) by A1,A2
-,RELAT_1:51
+  ,RELAT_1:51
     .= (R * T) \/ (S * T) by SYSREL:20
     .= {} \/ (S * T) by Th17
     .= {} by Th17;

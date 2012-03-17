@@ -10,16 +10,15 @@ environ
       RELAT_1, FUNCT_1, CFUNCT_1, FCONT_1, FINSEQ_4, ARYTM_1, ANPROJ_1, BOOLE,
       ARYTM, ARYTM_3, FDIFF_1, PRE_TOPC, INCSP_1, RCOMP_1, ABSVALUE, NORMSP_1,
       LATTICES, FUNCOP_1, SQUARE_1, SUBSET_1, CFDIFF_1, ASYMPT_0, OPPCAT_1;
- notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, ORDINAL1, FUNCT_1, NUMBERS,
-      XCMPLX_0, XREAL_0, COMPLEX1, REAL_1, NAT_1, PARTFUN1, PARTFUN2, FUNCT_2,
-      FUNCOP_1, VALUED_0, VALUED_1, SEQ_1, RELSET_1, SEQ_2, SEQM_3, CFUNCT_1,
-      COMSEQ_1, COMSEQ_2, COMSEQ_3, FINSEQ_4, CFCONT_1, XXREAL_0, SQUARE_1;
+ notations TARSKI, SUBSET_1, ORDINAL1, FUNCT_1, NUMBERS, XCMPLX_0, XREAL_0,
+      COMPLEX1, REAL_1, NAT_1, PARTFUN1, FUNCT_2, FUNCOP_1, VALUED_0, VALUED_1,
+      SEQ_1, RELSET_1, SEQ_2, CFUNCT_1, COMSEQ_1, COMSEQ_2, COMSEQ_3, CFCONT_1,
+      XXREAL_0;
  constructors PARTFUN1, REAL_1, NAT_1, VALUED_0, VALUED_1, SEQ_1, SEQ_2,
       FINSEQ_4, SEQM_3, PARTFUN2, SQUARE_1, COMSEQ_2, COMSEQ_3, CFCONT_1,
       XXREAL_0, CFUNCT_1, RELSET_1;
  registrations FUNCT_1, RELSET_1, FUNCT_2, MEMBERED, NUMBERS, ORDINAL1,
-      XREAL_0, XXREAL_0, COMSEQ_1, COMSEQ_2, NAT_1, XBOOLE_0, VALUED_0, SEQM_3,
-      SEQ_4, VALUED_1, FUNCOP_1, SEQ_2;
+      XREAL_0, XXREAL_0, COMSEQ_2, NAT_1, VALUED_0, SEQ_4, VALUED_1, FUNCOP_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -40,12 +39,13 @@ definition
   attr IT is convergent_to_0 means
 :: CFDIFF_1:def 1
 
-  IT is non-zero convergent & lim IT = 0;
+  IT is non-zero convergent & lim IT =
+  0;
 end;
 
 theorem :: CFDIFF_1:1
-  for rs be Real_Sequence, cs be Complex_Sequence
-  st rs = cs & rs is convergent holds cs is convergent;
+  for rs be Real_Sequence, cs be Complex_Sequence st rs = cs & rs is
+  convergent holds cs is convergent;
 
 definition
   let r be real number;
@@ -96,6 +96,7 @@ definition
   let IT be PartFunc of COMPLEX,COMPLEX;
   attr IT is REST-like means
 :: CFDIFF_1:def 3
+
   for h holds (h")(#)(IT/*h) is convergent &
   lim ((h")(#)(IT/*h)) = 0;
 end;
@@ -127,30 +128,36 @@ end;
 reserve R, R1, R2 for C_REST;
 reserve L, L1, L2 for C_LINEAR;
 
-registration let L1,L2;
+registration
+  let L1,L2;
   cluster L1+L2 -> total linear PartFunc of COMPLEX,COMPLEX;
   cluster L1-L2 -> total linear PartFunc of COMPLEX,COMPLEX;
 end;
 
-registration let a,L;
+registration
+  let a,L;
   cluster a(#)L -> total linear PartFunc of COMPLEX,COMPLEX;
 end;
 
-registration let R1,R2;
+registration
+  let R1,R2;
   cluster R1+R2 -> total REST-like PartFunc of COMPLEX,COMPLEX;
   cluster R1-R2 -> total REST-like PartFunc of COMPLEX,COMPLEX;
   cluster R1(#)R2 -> total REST-like PartFunc of COMPLEX,COMPLEX;
 end;
 
-registration let a,R;
+registration
+  let a,R;
   cluster a(#)R -> total REST-like PartFunc of COMPLEX,COMPLEX;
 end;
 
-registration let L1,L2;
+registration
+  let L1,L2;
   cluster L1(#)L2 -> total REST-like PartFunc of COMPLEX,COMPLEX;
 end;
 
-registration let R,L;
+registration
+  let R,L;
   cluster R(#)L -> total REST-like PartFunc of COMPLEX,COMPLEX;
   cluster L(#)R -> total REST-like PartFunc of COMPLEX,COMPLEX;
 end;
@@ -160,12 +167,13 @@ definition
   mode Neighbourhood of z0 -> Subset of COMPLEX means
 :: CFDIFF_1:def 5
 
-  ex g be Real st 0 < g & {y where y is Complex : |.y-z0.| < g} c= it;
+    ex g be Real st 0
+    < g & {y where y is Complex : |.y-z0.| < g} c= it;
 end;
 
 theorem :: CFDIFF_1:6
-  for g be real number st 0 < g holds
-  {y where y is Complex : |.y-z0.| < g} is Neighbourhood of z0;
+  for g be real number st 0 < g holds {y where y is Complex : |.y-
+  z0.| < g} is Neighbourhood of z0;
 
 theorem :: CFDIFF_1:7
   for N being Neighbourhood of z0 holds z0 in N;
@@ -176,20 +184,22 @@ definition
   pred f is_differentiable_in z0 means
 :: CFDIFF_1:def 6
 
-  ex N being Neighbourhood of z0 st N c= dom f & ex L,R st for z be Complex
-  st z in N holds f/.z-f/.z0 = L/.(z-z0)+R/.(z-z0);
+  ex N being Neighbourhood of z0
+st N c= dom f & ex L,R st for z be Complex st z in N holds f/.z-f/.z0 = L/.(z-
+  z0)+R/.(z-z0);
 end;
 
 definition
   let f;
   let z0 be Complex;
-  assume f is_differentiable_in z0;
+  assume
+ f is_differentiable_in z0;
   func diff(f,z0) -> Complex means
 :: CFDIFF_1:def 7
 
-  ex N being Neighbourhood of z0 st N c= dom f &
-  ex L,R st it = L/.1r & for z be Complex
-  st z in N holds f/.z-f/.z0 = L/.(z-z0)+R/.(z-z0);
+  ex N being Neighbourhood of z0 st N
+c= dom f & ex L,R st it = L/.1r & for z be Complex st z in N holds f/.z-f/.z0 =
+  L/.(z-z0)+R/.(z-z0);
 end;
 
 definition
@@ -197,7 +207,8 @@ definition
   attr f is differentiable means
 :: CFDIFF_1:def 8
 
-  for x st x in dom f holds f is_differentiable_in x;
+  for x st x in dom f holds f
+  is_differentiable_in x;
 end;
 
 definition
@@ -205,7 +216,8 @@ definition
   pred f is_differentiable_on X means
 :: CFDIFF_1:def 9
 
-  X c= dom f & f|X is differentiable;
+  X c= dom f & f|X is
+  differentiable;
 end;
 
 theorem :: CFDIFF_1:8
@@ -216,8 +228,8 @@ definition :: complex-membered set
   attr X is closed means
 :: CFDIFF_1:def 10
 
-  for s1 be Complex_Sequence
-  st rng s1 c= X & s1 is convergent holds lim s1 in X;
+  for s1 be Complex_Sequence st rng s1 c= X &
+  s1 is convergent holds lim s1 in X;
 end;
 
 definition
@@ -229,34 +241,28 @@ definition
 end;
 
 theorem :: CFDIFF_1:9
-  for X being Subset of COMPLEX st X is open
-  for z0 be Complex st z0 in X
-  ex N being Neighbourhood of z0 st N c= X;
+  for X being Subset of COMPLEX st X is open for z0 be Complex st
+  z0 in X ex N being Neighbourhood of z0 st N c= X;
 
 theorem :: CFDIFF_1:10
-  for X being Subset of COMPLEX st X is open
-  for z0 be Complex st z0 in X holds
-  ex g be Real st {y where y is Complex : |.y-z0.| < g} c= X;
+  for X being Subset of COMPLEX st X is open for z0 be Complex st z0 in
+  X holds ex g be Real st {y where y is Complex : |.y-z0.| < g} c= X;
 
 theorem :: CFDIFF_1:11
-  for X being Subset of COMPLEX holds
-  ((for z0 be Complex st z0 in X holds ex N be Neighbourhood of z0 st N c= X)
-  implies X is open);
+  for X being Subset of COMPLEX holds ((for z0 be Complex st z0 in
+  X holds ex N be Neighbourhood of z0 st N c= X) implies X is open);
 
 theorem :: CFDIFF_1:12
-  for X be Subset of COMPLEX holds X is open iff
-  for x be Complex st x in X
-  ex N be Neighbourhood of x st N c= X;
+  for X be Subset of COMPLEX holds X is open iff for x be Complex st x
+  in X ex N be Neighbourhood of x st N c= X;
 
 theorem :: CFDIFF_1:13
-  for X be Subset of COMPLEX, z0 be Element of COMPLEX, r be Element of REAL st
-  X = {y where y is Complex : |.y-z0.| < r} holds X is open;
+  for X be Subset of COMPLEX, z0 be Element of COMPLEX, r be
+  Element of REAL st X = {y where y is Complex : |.y-z0.| < r} holds X is open;
 
 theorem :: CFDIFF_1:14
-  for X be Subset of COMPLEX,
-  z0 be Element of COMPLEX,
-  r be Element of REAL
-  st X = {y where y is Complex : |.y-z0.| <= r} holds X is closed;
+  for X be Subset of COMPLEX, z0 be Element of COMPLEX, r be Element of
+  REAL st X = {y where y is Complex : |.y-z0.| <= r} holds X is closed;
 
 registration
   cluster open Subset of COMPLEX;
@@ -265,30 +271,34 @@ end;
 reserve Z for open Subset of COMPLEX;
 
 theorem :: CFDIFF_1:15
-  f is_differentiable_on Z iff
-  Z c= dom f & for x st x in Z holds f is_differentiable_in x;
+  f is_differentiable_on Z iff Z c= dom f & for x st x in Z holds
+  f is_differentiable_in x;
 
 theorem :: CFDIFF_1:16
   f is_differentiable_on Y implies Y is open;
 
 definition
   let f, X;
-  assume f is_differentiable_on X;
+  assume
+ f is_differentiable_on X;
   func f`|X -> PartFunc of COMPLEX,COMPLEX means
 :: CFDIFF_1:def 12
 
-  dom it = X & for x st x in X holds it/.x = diff(f,x);
+  dom it = X & for x st
+  x in X holds it/.x = diff(f,x);
 end;
 
 theorem :: CFDIFF_1:17
-  for f,Z st Z c= dom f & ex a1 st rng f = {a1} holds
-  f is_differentiable_on Z & for x st x in Z holds (f`|Z)/.x = 0c;
+  for f,Z st Z c= dom f & ex a1 st rng f = {a1} holds f
+  is_differentiable_on Z & for x st x in Z holds (f`|Z)/.x = 0c;
 
-registration let seq be non-zero Complex_Sequence, k be Nat;
- cluster seq ^\k -> non-zero;
+registration
+  let seq be non-zero Complex_Sequence, k be Nat;
+  cluster seq ^\k -> non-zero;
 end;
 
-registration let h,n;
+registration
+  let h,n;
   cluster h^\n -> convergent_to_0;
 end;
 
@@ -305,66 +315,64 @@ theorem :: CFDIFF_1:21
   (seq(#)seq1)^\k = (seq^\k)(#)(seq1^\k);
 
 theorem :: CFDIFF_1:22
-  for x0 be Complex for N being Neighbourhood of x0 st
-  f is_differentiable_in x0 & N c= dom f holds
-  for h,c st rng c = {x0} & rng (h+c) c= N holds
-  h"(#)(f/*(h+c)-f/*c) is convergent & diff(f,x0) = lim (h"(#)(f/*(h+c)-f/*c));
+  for x0 be Complex for N being Neighbourhood of x0 st f
+is_differentiable_in x0 & N c= dom f holds for h,c st rng c = {x0} & rng (h+c)
+c= N holds h"(#)(f/*(h+c)-f/*c) is convergent & diff(f,x0) = lim (h"(#)(f/*(h+c
+  )-f/*c));
 
 theorem :: CFDIFF_1:23
-  for f1,f2,x0 st f1 is_differentiable_in x0 & f2 is_differentiable_in x0
-  holds f1+f2 is_differentiable_in x0 &
-  diff(f1+f2,x0) = diff(f1,x0)+diff(f2,x0);
+  for f1,f2,x0 st f1 is_differentiable_in x0 & f2
+is_differentiable_in x0 holds f1+f2 is_differentiable_in x0 & diff(f1+f2,x0) =
+  diff(f1,x0)+diff(f2,x0);
 
 theorem :: CFDIFF_1:24
-  for f1,f2,x0 st f1 is_differentiable_in x0 & f2 is_differentiable_in x0
-  holds f1-f2 is_differentiable_in x0 &
-  diff(f1-f2,x0) = diff(f1,x0)-diff(f2,x0);
+  for f1,f2,x0 st f1 is_differentiable_in x0 & f2
+is_differentiable_in x0 holds f1-f2 is_differentiable_in x0 & diff(f1-f2,x0) =
+  diff(f1,x0)-diff(f2,x0);
 
 theorem :: CFDIFF_1:25
-  for a,f,x0 st f is_differentiable_in x0 holds
-  a(#)f is_differentiable_in x0 & diff((a(#)f),x0) = a*diff(f,x0);
+  for a,f,x0 st f is_differentiable_in x0 holds a(#)f
+  is_differentiable_in x0 & diff((a(#)f),x0) = a*diff(f,x0);
 
 theorem :: CFDIFF_1:26
-  for f1,f2,x0 st f1 is_differentiable_in x0 & f2 is_differentiable_in x0 holds
-  f1(#)f2 is_differentiable_in x0 &
-  diff(f1(#)f2,x0) = (f2/.x0)*diff(f1,x0)+(f1/.x0)*diff(f2,x0);
+  for f1,f2,x0 st f1 is_differentiable_in x0 & f2
+is_differentiable_in x0 holds f1(#)f2 is_differentiable_in x0 & diff(f1(#)f2,x0
+  ) = (f2/.x0)*diff(f1,x0)+(f1/.x0)*diff(f2,x0);
 
 theorem :: CFDIFF_1:27
-  for f,Z st Z c= dom f & f|Z = id Z holds
-  f is_differentiable_on Z & for x st x in Z holds (f`|Z)/.x = 1r;
+  for f,Z st Z c= dom f & f|Z = id Z holds f is_differentiable_on Z &
+  for x st x in Z holds (f`|Z)/.x = 1r;
 
 theorem :: CFDIFF_1:28
-  for f1,f2,Z st Z c= dom (f1+f2) & f1 is_differentiable_on Z &
-  f2 is_differentiable_on Z holds f1+f2 is_differentiable_on Z &
-  for x st x in Z holds ((f1+f2)`|Z)/.x = diff(f1,x)+diff(f2,x);
+  for f1,f2,Z st Z c= dom (f1+f2) & f1 is_differentiable_on Z & f2
+  is_differentiable_on Z holds f1+f2 is_differentiable_on Z & for x st x in Z
+  holds ((f1+f2)`|Z)/.x = diff(f1,x)+diff(f2,x);
 
 theorem :: CFDIFF_1:29
-  for f1,f2,Z st Z c= dom (f1-f2) & f1 is_differentiable_on Z &
-  f2 is_differentiable_on Z holds f1-f2 is_differentiable_on Z &
-  for x st x in Z holds ((f1-f2)`|Z)/.x = diff(f1,x)-diff(f2,x);
+  for f1,f2,Z st Z c= dom (f1-f2) & f1 is_differentiable_on Z & f2
+  is_differentiable_on Z holds f1-f2 is_differentiable_on Z & for x st x in Z
+  holds ((f1-f2)`|Z)/.x = diff(f1,x)-diff(f2,x);
 
 theorem :: CFDIFF_1:30
-  for a,f,Z st Z c= dom (a(#)f) & f is_differentiable_on Z holds
-  a(#)f is_differentiable_on Z & for x st x in Z holds
-  ((a(#)f)`|Z)/.x = a*diff(f,x);
+  for a,f,Z st Z c= dom (a(#)f) & f is_differentiable_on Z holds a(#)f
+  is_differentiable_on Z & for x st x in Z holds ((a(#)f)`|Z)/.x = a*diff(f,x);
 
 theorem :: CFDIFF_1:31
-  for f1,f2,Z st Z c= dom (f1(#)f2) & f1 is_differentiable_on Z &
-  f2 is_differentiable_on Z holds f1(#)f2 is_differentiable_on Z &
-  for x st x in Z holds
-  ((f1(#)f2)`|Z)/.x = (f2/.x)*diff(f1,x)+(f1/.x)*diff(f2,x);
+  for f1,f2,Z st Z c= dom (f1(#)f2) & f1 is_differentiable_on Z & f2
+  is_differentiable_on Z holds f1(#)f2 is_differentiable_on Z & for x st x in Z
+  holds ((f1(#)f2)`|Z)/.x = (f2/.x)*diff(f1,x)+(f1/.x)*diff(f2,x);
 
 theorem :: CFDIFF_1:32
-  Z c= dom f & f|Z is constant implies
-  f is_differentiable_on Z & for x st x in Z holds (f`|Z)/.x = 0c;
+  Z c= dom f & f|Z is constant implies f is_differentiable_on Z & for x
+  st x in Z holds (f`|Z)/.x = 0c;
 
 theorem :: CFDIFF_1:33
-  Z c= dom f & (for x st x in Z holds f/.x = a*x+b) implies
-  f is_differentiable_on Z & for x st x in Z holds (f`|Z)/.x = a;
+  Z c= dom f & (for x st x in Z holds f/.x = a*x+b) implies f
+  is_differentiable_on Z & for x st x in Z holds (f`|Z)/.x = a;
 
 theorem :: CFDIFF_1:34
-  for x0 be Complex holds
-  f is_differentiable_in x0 implies f is_continuous_in x0;
+  for x0 be Complex holds f is_differentiable_in x0 implies f
+  is_continuous_in x0;
 
 theorem :: CFDIFF_1:35
   f is_differentiable_on X implies f is_continuous_on X;
@@ -376,4 +384,6 @@ theorem :: CFDIFF_1:37
   seq is convergent implies |.seq.| is convergent;
 
 theorem :: CFDIFF_1:38
-  f is_differentiable_in x0 implies ex R st R/.0c = 0c & R is_continuous_in 0c;
+  f is_differentiable_in x0 implies ex R st R/.0c = 0c & R
+  is_continuous_in 0c;
+

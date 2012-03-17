@@ -12,8 +12,7 @@ environ
       PRE_TOPC, TOPS_1, TMAP_1, TDLAT_3, TOPS_3, COMPTS_1, PCOMPS_1;
  constructors SETFAM_1, DOMAIN_1, TOPS_1, COMPTS_1, PCOMPS_1, TDLAT_3, TMAP_1,
       TOPS_3;
- registrations XBOOLE_0, SUBSET_1, STRUCT_0, PRE_TOPC, TOPS_1, COMPLSP1,
-      TDLAT_3, TMAP_1;
+ registrations XBOOLE_0, SUBSET_1, STRUCT_0, PRE_TOPC, TOPS_1, TDLAT_3, TMAP_1;
  requirements BOOLE, SUBSET;
  definitions PRE_TOPC, TDLAT_3, COMPTS_1, SUBSET_1, STRUCT_0;
  theorems TARSKI, SUBSET_1, ZFMISC_1, ENUMSET1, PRE_TOPC, TOPS_1, PCOMPS_1,
@@ -27,42 +26,42 @@ reserve X for non empty TopSpace,
   D for Subset of X;
 
 theorem Th1:
-  for B being Subset of X, C being Subset of X modified_with_respect_to D st
-  B = C holds B is open implies C is open
+  for B being Subset of X, C being Subset of X
+  modified_with_respect_to D st B = C holds B is open implies C is open
 proof
   let B be Subset of X, C be Subset of X modified_with_respect_to D;
   assume
 A1: B = C;
+A2: the topology of X c= D-extension_of_the_topology_of X by TMAP_1:99;
+A3: the topology of X modified_with_respect_to D = D
+  -extension_of_the_topology_of X by TMAP_1:104;
   assume
-A2: B in the topology of X;
-  the topology of X c= D-extension_of_the_topology_of X &
-  the topology of X modified_with_respect_to D =
-  D-extension_of_the_topology_of X by TMAP_1:99,104;
-  hence thesis by A1,A2,PRE_TOPC:def 5;
+  B in the topology of X;
+  hence thesis by A1,A2,A3,PRE_TOPC:def 5;
 end;
 
 theorem
-  for B being Subset of X, C being Subset of X modified_with_respect_to D st
-  B = C holds B is closed implies C is closed
+  for B being Subset of X, C being Subset of X modified_with_respect_to
+  D st B = C holds B is closed implies C is closed
 proof
   let B be Subset of X, C be Subset of X modified_with_respect_to D;
   assume
 A1: B = C;
-  assume B is closed;
-  then
-A2: B` is open;
-  the carrier of (X modified_with_respect_to D) = the carrier of X
-  by TMAP_1:104;
+A2: the carrier of (X modified_with_respect_to D) = the carrier of X by
+  TMAP_1:104;
+  assume
+  B is closed;
   then C` is open by A1,A2,Th1;
   hence thesis by TOPS_1:29;
 end;
 
 theorem Th3:
-  for C being Subset of X modified_with_respect_to D` st C = D holds
-  C is closed
+  for C being Subset of X modified_with_respect_to D` st C = D
+  holds C is closed
 proof
   let C be Subset of X modified_with_respect_to D`;
-  assume C = D;
+  assume
+  C = D;
   then C` = D` by TMAP_1:104;
   then C` is open by TMAP_1:105;
   hence thesis by TOPS_1:29;
@@ -75,81 +74,98 @@ proof
   let C be Subset of X modified_with_respect_to D;
   assume
 A1: C = D;
-  assume
-A2: D is dense;
   set A = (Cl C)`;
-  reconsider B = A as Subset of X by TMAP_1:104;
   A in the topology of (X modified_with_respect_to D) by PRE_TOPC:def 5;
   then A in D-extension_of_the_topology_of X by TMAP_1:104;
-  then A in {H \/ (G /\ D) where H is Subset of X, G is Subset of X :
-  H in the topology of X & G in the topology of X} by TMAP_1:def 7;
-  then consider H, G being Subset of X such that
+  then
+A2: A in {H \/ (G /\ D) where H is Subset of X, G is Subset of X : H in the
+  topology of X & G in the topology of X} by TMAP_1:def 7;
+  reconsider B = A as Subset of X by TMAP_1:104;
+  consider H, G being Subset of X such that
 A3: A = H \/ (G /\ D) and
-A4: H in the topology of X and G in the topology of X;
-A5: C c= Cl C by PRE_TOPC:48;
-  then D misses A & G /\ D c= D by A1,SUBSET_1:44,XBOOLE_1:17;
-  then (G /\ D) misses A by XBOOLE_1:63;
+A4: H in the topology of X and
+  G in the topology of X by A2;
+A5: H c= A by A3,XBOOLE_1:7;
+A6: C c= Cl C by PRE_TOPC:48;
+  then D misses A by A1,SUBSET_1:44;
+  then (G /\ D) misses A by XBOOLE_1:17,63;
   then
-A6: (G /\ D) /\ A = {} by XBOOLE_0:def 7;
+A7: (G /\ D) /\ A = {} by XBOOLE_0:def 7;
   A = (H \/ (G /\ D)) /\ A by A3
-    .= (H /\ A) \/ {} by A6,XBOOLE_1:23
+    .= (H /\ A) \/ {} by A7,XBOOLE_1:23
     .= H /\ A;
-  then A c= H & H c= A by A3,XBOOLE_1:7,17;
-  then B = H by XBOOLE_0:def 10;
-  then B is open & D misses B by A1,A4,A5,PRE_TOPC:def 5,SUBSET_1:44;
-  then (Cl D) misses B & Cl D = [#]X by A2,TOPS_1:def 3,TSEP_1:40;
+  then A c= H by XBOOLE_1:17;
+  then B = H by A5,XBOOLE_0:def 10;
   then
-A7: (Cl D) /\ B = {} & Cl D = [#]X by XBOOLE_0:def 7;
+A8: B is open by A4,PRE_TOPC:def 5;
+  D misses B by A1,A6,SUBSET_1:44;
+  then (Cl D) misses B by A8,TSEP_1:40;
+  then
+A9: (Cl D) /\ B = {} by XBOOLE_0:def 7;
+  assume
+  D is dense;
+  then
+A10: Cl D = [#]X by TOPS_1:def 3;
   thus C is dense
   proof
-    assume C is not dense;
+    assume
+    C is not dense;
     then Cl C <> [#](X modified_with_respect_to D) by TOPS_1:def 3;
     then B <> {}(X modified_with_respect_to D) by TOPS_3:2;
-    hence contradiction by A7,XBOOLE_1:28;
+    hence contradiction by A9,A10,XBOOLE_1:28;
   end;
   thus thesis by A1,TMAP_1:105;
 end;
 
 theorem Th5:
-  for C being Subset of X modified_with_respect_to D st D c= C holds
-  D is dense implies C is everywhere_dense
+  for C being Subset of X modified_with_respect_to D st D c= C
+  holds D is dense implies C is everywhere_dense
 proof
   let C be Subset of X modified_with_respect_to D;
   assume
 A1: D c= C;
+  reconsider E = D as Subset of X modified_with_respect_to D by TMAP_1:104;
   assume
 A2: D is dense;
-  reconsider E = D as Subset of X modified_with_respect_to D by TMAP_1:104;
-  E is dense & E is open by A2,Th4;
-  hence thesis by A1,TOPS_3:36,38;
+  then
+A3: E is open by Th4;
+  E is dense by A2,Th4;
+  hence thesis by A1,A3,TOPS_3:36,38;
 end;
 
 theorem Th6:
-  for C being Subset of X modified_with_respect_to D` st C = D holds
-  D is boundary implies C is boundary & C is closed
+  for C being Subset of X modified_with_respect_to D` st C = D
+  holds D is boundary implies C is boundary & C is closed
 proof
   let C be Subset of X modified_with_respect_to D`;
-  assume C = D;
+  assume
+  C = D;
   then
 A1: C` = D` by TMAP_1:104;
-  assume D is boundary;
-  then D` is dense by TOPS_1:def 4;
-  then C` is dense & C` is open by A1,Th4;
-  hence thesis by TOPS_1:29,def 4;
+  assume
+  D is boundary;
+  then
+A2: D` is dense by TOPS_1:def 4;
+  then
+A3: C` is open by A1,Th4;
+  C` is dense by A1,A2,Th4;
+  hence thesis by A3,TOPS_1:29,def 4;
 end;
 
 theorem Th7:
-  for C being Subset of X modified_with_respect_to D` st C c= D holds
-  D is boundary implies C is nowhere_dense
+  for C being Subset of X modified_with_respect_to D` st C c= D
+  holds D is boundary implies C is nowhere_dense
 proof
   let C be Subset of X modified_with_respect_to D`;
   assume
 A1: C c= D;
+  reconsider E = D as Subset of X modified_with_respect_to D` by TMAP_1:104;
   assume
 A2: D is boundary;
-  reconsider E = D as Subset of X modified_with_respect_to D` by TMAP_1:104;
-  E is boundary & E is closed by A2,Th6;
-  hence thesis by A1,TOPS_3:26;
+  then
+A3: E is closed by Th6;
+  E is boundary by A2,Th6;
+  hence thesis by A1,A3,TOPS_3:26;
 end;
 
 Lm1: for X,Y be set holds X c= Y iff X is Subset of Y;
@@ -162,7 +178,8 @@ definition
   let Y be non empty 1-sorted;
   redefine attr Y is trivial means
   :Def1:
-  ex d being Element of Y st the carrier of Y = {d};
+  ex d being Element of Y st the
+  carrier of Y = {d};
   compatibility
   proof
     hereby
@@ -176,11 +193,12 @@ A1:   Y is trivial;
         take d;
         now
           let a be Element of Y;
-          assume a in A;
+          assume
+          a in A;
           a = d by A1,STRUCT_0:def 10;
           hence a in D by TARSKI:def 1;
         end;
-        then A c= D & D c= A by SUBSET_1:7;
+        then A c= D by SUBSET_1:7;
         hence thesis by XBOOLE_0:def 10;
       end;
     end;
@@ -188,8 +206,8 @@ A1:   Y is trivial;
 A2: the carrier of Y = {d};
     now
       let a,b be Element of Y;
-      a = d & b = d by A2,TARSKI:def 1;
-      hence a = b;
+      a = d by A2,TARSKI:def 1;
+      hence a = b by A2,TARSKI:def 1;
     end;
     hence thesis by STRUCT_0:def 10;
   end;
@@ -216,34 +234,37 @@ registration
 end;
 
 theorem
-  for Y being trivial non empty TopStruct st the topology of Y is non empty
-  holds Y is almost_discrete implies Y is TopSpace-like
+  for Y being trivial non empty TopStruct st the topology of Y is non
+  empty holds Y is almost_discrete implies Y is TopSpace-like
 proof
   let Y be trivial non empty TopStruct;
   consider d being Element of Y such that
 A1: the carrier of Y = {d} by Def1;
   reconsider D = {d} as Subset of Y;
-A2: bool D = {{},D} by ZFMISC_1:30;
-  assume the topology of Y is non empty;
-  then consider A being Subset of Y such that
-A3: A in the topology of Y by SUBSET_1:10;
   assume
-A4: for A being Subset of Y st A in the topology of Y holds
-  (the carrier of Y) \ A in the topology of Y;
-  now per cases by A1,A2,TARSKI:def 2;
+  the topology of Y is non empty;
+  then consider A being Subset of Y such that
+A2: A in the topology of Y by SUBSET_1:10;
+  assume
+A3: for A being Subset of Y st A in the topology of Y holds (the carrier
+  of Y) \ A in the topology of Y;
+A4: bool D = {{},D} by ZFMISC_1:30;
+  now
+    per cases by A1,A4,TARSKI:def 2;
     suppose
 A5:   A = {};
-      D \ A in the topology of Y by A1,A3,A4;
-      hence {{},D} c= the topology of Y by A3,A5,ZFMISC_1:38;
+      D \ A in the topology of Y by A1,A2,A3;
+      hence {{},D} c= the topology of Y by A2,A5,ZFMISC_1:38;
     end;
     suppose
 A6:   A = D;
-      D \ A in the topology of Y by A1,A3,A4;
+      D \ A in the topology of Y by A1,A2,A3;
       then {} in the topology of Y by A6,XBOOLE_1:37;
-      hence {{},D} c= the topology of Y by A3,A6,ZFMISC_1:38;
+      hence {{},D} c= the topology of Y by A2,A6,ZFMISC_1:38;
     end;
   end;
-  then the topology of Y = {{}, the carrier of Y} by A1,A2,XBOOLE_0:def 10;
+  then the topology of Y = {{}, the carrier of Y} by A1,A4,
+  XBOOLE_0:def 10;
   then reconsider Y as anti-discrete TopStruct by TDLAT_3:def 2;
   Y is TopSpace-like;
   hence thesis;
@@ -268,28 +289,29 @@ registration
   coherence
   proof
     let Y be non empty TopSpace;
-    assume Y is trivial;
-    then consider d being Element of Y such that
-A1: the carrier of Y = {d} by Def1;
-    {} in the topology of Y & the carrier of Y in the topology of Y
-    by PRE_TOPC:5,def 1;
+A1: the carrier of Y in the topology of Y by PRE_TOPC:def 1;
+    assume
+    Y is trivial;
+    then ex d being Element of Y st the carrier of Y = {d} by Def1;
     then
-A2: {{}, the carrier of Y} c= the topology of Y by ZFMISC_1:38;
-A3: bool the carrier of Y = {{}, the carrier of Y} by A1,ZFMISC_1:30;
+A2: bool the carrier of Y = {{}, the carrier of Y} by ZFMISC_1:30;
+    {} in the topology of Y by PRE_TOPC:5;
+    then {{}, the carrier of Y} c= the topology of Y by A1,ZFMISC_1:38;
     then the topology of Y = bool the carrier of Y by A2,XBOOLE_0:def 10;
-    hence thesis by A3,TDLAT_3:def 1,def 2;
+    hence thesis by A2,TDLAT_3:def 1,def 2;
   end;
   cluster discrete anti-discrete -> trivial (non empty TopSpace);
   coherence
   proof
     let Y be non empty TopSpace;
-    assume Y is discrete anti-discrete;
+    assume
+    Y is discrete anti-discrete;
     then
-A4: bool the carrier of Y = {{}, the carrier of Y} by TDLAT_3:12;
+A3: bool the carrier of Y = {{}, the carrier of Y} by TDLAT_3:12;
     now
       consider d0 being Element of Y;
       take d0;
-      thus {d0} = the carrier of Y by A4,TARSKI:def 2;
+      thus {d0} = the carrier of Y by A3,TARSKI:def 2;
     end;
     hence thesis by Def1;
   end;
@@ -302,15 +324,16 @@ registration
     set D = {{},1};
     reconsider tau = bool D as Subset-Family of D;
     reconsider tau as Subset-Family of D;
-    reconsider Y=TopStruct (#D,tau#) as discrete non empty TopStruct
-    by TDLAT_3:def 1;
+    reconsider Y=TopStruct (#D,tau#) as discrete non empty TopStruct by
+    TDLAT_3:def 1;
     take Y;
     now
-      assume Y is trivial;
+      assume
+      Y is trivial;
       then consider d being Element of Y such that
 A1:   the carrier of Y = {d} by Def1;
-      d = {} & d = 1 by A1,ZFMISC_1:8;
-      hence contradiction;
+      d = {} by A1,ZFMISC_1:8;
+      hence contradiction by A1,ZFMISC_1:8;
     end;
     hence thesis;
   end;
@@ -330,12 +353,12 @@ begin
 definition
   let D be set;
   func cobool D -> Subset-Family of D equals
-
   {{},D};
   coherence
   proof
-    {} c= D & D in bool D by XBOOLE_1:2,ZFMISC_1:def 1;
-    hence thesis by ZFMISC_1:38;
+A1: D in bool D by ZFMISC_1:def 1;
+    {} c= D by XBOOLE_1:2;
+    hence thesis by A1,ZFMISC_1:38;
   end;
 end;
 
@@ -348,7 +371,6 @@ end;
 definition
   let D be set;
   func ADTS(D) -> TopStruct equals
-
   TopStruct(#D,cobool D#);
   coherence;
 end;
@@ -374,25 +396,26 @@ end;
 canceled 2;
 
 theorem Th11:
-  for X being anti-discrete non empty TopSpace
-  for A being Subset of X holds (A is empty implies Cl A = {}) &
-  (A is non empty implies Cl A = the carrier of X)
+  for X being anti-discrete non empty TopSpace for A being Subset
+of X holds (A is empty implies Cl A = {}) & (A is non empty implies Cl A = the
+  carrier of X)
 proof
   let X be anti-discrete non empty TopSpace;
   let A be Subset of X;
   thus A is empty implies Cl A = {} by PRE_TOPC:52;
   thus A is non empty implies Cl A = the carrier of X
   proof
-    assume A is non empty;
+    assume
+    A is non empty;
     then Cl A <> {} by PCOMPS_1:2;
     hence thesis by TDLAT_3:21;
   end;
 end;
 
 theorem Th12:
-  for X being anti-discrete non empty TopSpace
-  for A being Subset of X holds (A <> the carrier of X implies Int A = {}) &
-  (A = the carrier of X implies Int A = the carrier of X)
+  for X being anti-discrete non empty TopSpace for A being Subset
+  of X holds (A <> the carrier of X implies Int A = {}) & (A = the carrier of X
+  implies Int A = the carrier of X)
 proof
   let X be anti-discrete non empty TopSpace;
   let A be Subset of X;
@@ -401,32 +424,36 @@ proof
     assume
 A1: A <> the carrier of X;
     now
-      assume Int A = the carrier of X;
-      then the carrier of X c= A & A c= the carrier of X by TOPS_1:44;
+      assume
+      Int A = the carrier of X;
+      then the carrier of X c= A by TOPS_1:44;
       hence contradiction by A1,XBOOLE_0:def 10;
     end;
     hence thesis by TDLAT_3:20;
   end;
   thus A = the carrier of X implies Int A = the carrier of X
   proof
-    assume A = the carrier of X;
+    assume
+    A = the carrier of X;
     then A = [#]X;
     hence thesis by TOPS_1:43;
   end;
 end;
 
 theorem Th13:
-  for X being non empty TopSpace holds (for A being Subset of X holds
-  (A is non empty implies Cl A = the carrier of X)) implies X is anti-discrete
+  for X being non empty TopSpace holds (for A being Subset of X
+  holds (A is non empty implies Cl A = the carrier of X)) implies X is
+  anti-discrete
 proof
   let X be non empty TopSpace;
   assume
-A1: for A being Subset of X holds
-  (A is non empty implies Cl A = the carrier of X);
+A1: for A being Subset of X holds (A is non empty implies Cl A = the
+  carrier of X);
   now
     let A be Subset of X;
-    assume A is closed;
-    then A = Cl A & (A <> {} iff A is non empty) by PRE_TOPC:52;
+    assume
+    A is closed;
+    then A = Cl A by PRE_TOPC:52;
     hence A = {} or A = the carrier of X by A1;
   end;
   hence thesis by TDLAT_3:21;
@@ -438,10 +465,12 @@ theorem Th14:
 proof
   let X be non empty TopSpace;
   assume
-A1: for A being Subset of X holds (A <> the carrier of X implies Int A = {});
+A1: for A being Subset of X holds (A <> the carrier of X implies Int A =
+  {});
   now
     let A be Subset of X;
-    assume A is open;
+    assume
+    A is open;
     then A = Int A by TOPS_1:55;
     hence A = {} or A = the carrier of X by A1;
   end;
@@ -449,30 +478,31 @@ A1: for A being Subset of X holds (A <> the carrier of X implies Int A = {});
 end;
 
 theorem
-  for X being anti-discrete non empty TopSpace
-  for A being Subset of X holds (A <> {} implies A is dense) &
-  (A <> the carrier of X implies A is boundary)
+  for X being anti-discrete non empty TopSpace for A being Subset of X
+  holds (A <> {} implies A is dense) & (A <> the carrier of X implies A is
+  boundary)
 proof
   let X be anti-discrete non empty TopSpace;
   let A be Subset of X;
   thus A <> {} implies A is dense
   proof
-    assume A <> {};
+    assume
+    A <> {};
     then Cl A = the carrier of X by Th11;
     hence thesis by TOPS_3:def 2;
   end;
   thus A <> the carrier of X implies A is boundary
   proof
-    assume A <> the carrier of X;
+    assume
+    A <> the carrier of X;
     then Int A = {} by Th12;
     hence thesis by TOPS_1:84;
   end;
 end;
 
 theorem
-  for X being non empty TopSpace holds
-  (for A being Subset of X holds (A <> {} implies A is dense))
-  implies X is anti-discrete
+  for X being non empty TopSpace holds (for A being Subset of X holds (A
+  <> {} implies A is dense)) implies X is anti-discrete
 proof
   let X be non empty TopSpace;
   assume
@@ -480,7 +510,8 @@ A1: for A being Subset of X holds (A <> {} implies A is dense);
   now
     let A be Subset of X;
     reconsider B = A as Subset of X;
-    assume A is non empty;
+    assume
+    A is non empty;
     then B is dense by A1;
     hence Cl A = the carrier of X by TOPS_3:def 2;
   end;
@@ -488,18 +519,18 @@ A1: for A being Subset of X holds (A <> {} implies A is dense);
 end;
 
 theorem
-  for X being non empty TopSpace holds (for A being Subset of X
-  holds (A <> the carrier of X implies A is boundary))
-  implies X is anti-discrete
+  for X being non empty TopSpace holds (for A being Subset of X holds (A
+  <> the carrier of X implies A is boundary)) implies X is anti-discrete
 proof
   let X be non empty TopSpace;
   assume
-A1: for A being Subset of X holds
-  (A <> the carrier of X implies A is boundary);
+A1: for A being Subset of X holds (A <> the carrier of X implies A is
+  boundary);
   now
     let A be Subset of X;
     reconsider B = A as Subset of X;
-    assume A <> the carrier of X;
+    assume
+    A <> the carrier of X;
     then B is boundary by A1;
     hence Int A = {};
   end;
@@ -515,19 +546,20 @@ end;
 canceled 2;
 
 theorem
-  for X being discrete non empty TopSpace
-  for A being Subset of X holds Cl A = A & Int A = A
+  for X being discrete non empty TopSpace for A being Subset of X holds
+  Cl A = A & Int A = A
 proof
   let X be discrete non empty TopSpace;
   let A be Subset of X;
   reconsider B = A as Subset of X;
-  B is open & B is closed by TDLAT_3:17,18;
-  hence thesis by PRE_TOPC:52,TOPS_1:55;
+A1: B is closed by TDLAT_3:18;
+  B is open by TDLAT_3:17;
+  hence thesis by A1,PRE_TOPC:52,TOPS_1:55;
 end;
 
 theorem
-  for X being non empty TopSpace holds
-  (for A being Subset of X holds Cl A = A) implies X is discrete
+  for X being non empty TopSpace holds (for A being Subset of X holds Cl
+  A = A) implies X is discrete
 proof
   let X be non empty TopSpace;
   assume
@@ -541,8 +573,8 @@ A1: for A being Subset of X holds Cl A = A;
 end;
 
 theorem
-  for X being non empty TopSpace holds (for A being Subset of X
-  holds Int A = A) implies X is discrete
+  for X being non empty TopSpace holds (for A being Subset of X holds
+  Int A = A) implies X is discrete
 proof
   let X be non empty TopSpace;
   assume
@@ -556,15 +588,15 @@ A1: for A being Subset of X holds Int A = A;
 end;
 
 theorem Th23:
-  for D being non empty set holds
-  ADTS(D) = 1TopSp(D) iff ex d0 being Element of D st D = {d0}
+  for D being non empty set holds ADTS(D) = 1TopSp(D) iff ex d0
+  being Element of D st D = {d0}
 proof
   let D be non empty set;
   thus ADTS(D) = 1TopSp(D) implies ex d0 being Element of D st D = {d0}
   proof
+    consider d0 being Element of D;
     assume
 A1: ADTS(D) = 1TopSp(D);
-    consider d0 being Element of D;
     take d0;
     thus thesis by A1,TARSKI:def 2;
   end;
@@ -581,12 +613,13 @@ registration
     set Y = 1TopSp(D);
     take Y;
     now
-      assume Y is anti-discrete;
+      assume
+      Y is anti-discrete;
       then the TopStruct of Y = the TopStruct of ADTS(D) by TDLAT_3:def 2;
       then consider d0 being Element of D such that
 A1:   D = {d0} by Th23;
-      d0 = {} & d0 = 1 by A1,ZFMISC_1:8;
-      hence contradiction;
+      d0 = {} by A1,ZFMISC_1:8;
+      hence contradiction by A1,ZFMISC_1:8;
     end;
     hence thesis;
   end;
@@ -597,12 +630,14 @@ A1:   D = {d0} by Th23;
     set Y = ADTS(D);
     take Y;
     now
-      assume Y is discrete;
-      then the TopStruct of Y = the TopStruct of 1TopSp(D) by TDLAT_3:def 1;
+      assume
+      Y is discrete;
+      then the TopStruct of Y = the TopStruct of 1TopSp(D) by
+      TDLAT_3:def 1;
       then consider d0 being Element of D such that
 A2:   D = {d0} by Th23;
-      d0 = {} & d0 = 1 by A2,ZFMISC_1:8;
-      hence contradiction;
+      d0 = {} by A2,ZFMISC_1:8;
+      hence contradiction by A2,ZFMISC_1:8;
     end;
     hence thesis;
   end;
@@ -616,7 +651,8 @@ definition
   let D be set, d0 be Element of D;
   canceled;
   func STS(D,d0) -> TopStruct equals
-  TopStruct (#D,(bool D) \ {A where A is Subset of D : d0 in A & A <> D}#);
+  TopStruct (#D,(bool D) \ {A where A is
+    Subset of D : d0 in A & A <> D}#);
   coherence;
 end;
 
@@ -625,83 +661,95 @@ registration
   cluster STS(D,d0) -> strict TopSpace-like;
   coherence
   proof
+    reconsider E = D as Subset of D by Lm1;
     set G = {A where A is Subset of D : d0 in A & A <> D};
     set T = (bool D) \ G;
     set Y = TopStruct (#D,T#);
     thus STS(D,d0) is strict;
-    reconsider E = D as Subset of D by Lm1;
     not ex A being Subset of D st A = E & d0 in A & A <> D;
     then
 A1: not E in G;
-    then
-A2: the carrier of Y in the topology of Y by XBOOLE_0:def 5;
-A3: now
+A2: now
       let F be Subset-Family of Y;
-      assume F c= the topology of Y;
-      then F c= bool D & F misses G by XBOOLE_1:63,79;
+      assume
+      F c= the topology of Y;
+      then F misses G by XBOOLE_1:63,79;
       then
-A4:   F c= bool D & F /\ G = {} by XBOOLE_0:def 7;
-      now per cases;
-        case union F = D;
+A3:   F /\ G = {} by XBOOLE_0:def 7;
+      now
+        per cases;
+        case
+          union F = D;
           hence union F in the topology of Y by A1,XBOOLE_0:def 5;
         end;
         case
-A5:       union F <> D;
-A6:       now
+A4:       union F <> D;
+A5:       now
             let A be Subset of D;
             assume
-A7:         A in F;
-            assume A = D;
-            then D c= union F by A7,ZFMISC_1:92;
-            hence contradiction by A5,XBOOLE_0:def 10;
+A6:         A in F;
+            assume
+            A = D;
+            then D c= union F by A6,ZFMISC_1:92;
+            hence contradiction by A4,XBOOLE_0:def 10;
           end;
           now
             let A be set;
             assume
-A8:         A in F;
+A7:         A in F;
             then reconsider B = A as Subset of D;
-            not B in G by A4,A8,XBOOLE_0:def 4;
+            not B in G by A3,A7,XBOOLE_0:def 4;
             then not (d0 in B & B <> D);
-            hence not d0 in A by A6,A8;
+            hence not d0 in A by A5,A7;
           end;
           then not ex A being set st d0 in A & A in F;
-          then not ex A being Subset of D
-          st A = union F & d0 in A & A <> D by TARSKI:def 4;
+          then
+          not ex A being Subset of D st A = union F & d0 in A & A <> D by
+          TARSKI:def 4;
           then not union F in G;
           hence union F in the topology of Y by XBOOLE_0:def 5;
         end;
       end;
       hence union F in the topology of Y;
     end;
-    now
+A8: now
       let C,E be Subset of Y;
-      assume
-A9:   C in the topology of Y & E in the topology of Y;
-A10:  now
+      assume that
+A9:   C in the topology of Y and
+A10:  E in the topology of Y;
+A11:  now
         let P be Subset of D;
-        assume
-A11:    P in the topology of Y & P <> D;
-        then not P in G by XBOOLE_0:def 5;
-        hence not d0 in P by A11;
+        assume that
+A12:    P in the topology of Y and
+A13:    P <> D;
+        not P in G by A12,XBOOLE_0:def 5;
+        hence not d0 in P by A13;
       end;
-      now per cases;
-        case C = D & E = D;
+      now
+        per cases;
+        case
+          C = D & E = D;
           hence C /\ E in the topology of Y by A1,XBOOLE_0:def 5;
         end;
         case
-A12:      C <> D or E <> D;
-          now per cases by A12;
-            case C <> D;
-              then not d0 in C & C /\ E c= C by A9,A10,XBOOLE_1:17;
-              then not ex A being Subset of D st
-              A = C /\ E & d0 in A & A <> D;
+A14:      C <> D or E <> D;
+          now
+            per cases by A14;
+            case
+A15:          C <> D;
+              C /\ E c= C by XBOOLE_1:17;
+              then
+              not ex A being Subset of D st A = C /\ E & d0 in A & A <> D
+              by A9,A11,A15;
               then not C /\ E in G;
               hence C /\ E in the topology of Y by XBOOLE_0:def 5;
             end;
-            case E <> D;
-              then not d0 in E & C /\ E c= E by A9,A10,XBOOLE_1:17;
-              then not ex A being Subset of D st
-              A = C /\ E & d0 in A & A <> D;
+            case
+A16:          E <> D;
+              C /\ E c= E by XBOOLE_1:17;
+              then
+              not ex A being Subset of D st A = C /\ E & d0 in A & A <> D
+              by A10,A11,A16;
               then not C /\ E in G;
               hence C /\ E in the topology of Y by XBOOLE_0:def 5;
             end;
@@ -711,7 +759,8 @@ A12:      C <> D or E <> D;
       end;
       hence C /\ E in the topology of Y;
     end;
-    hence thesis by A2,A3,PRE_TOPC:def 1;
+    the carrier of Y in the topology of Y by A1,XBOOLE_0:def 5;
+    hence thesis by A2,A8,PRE_TOPC:def 1;
   end;
 end;
 
@@ -725,29 +774,30 @@ reserve D for non empty set,
   d0 for Element of D;
 
 theorem Th24:
-  for A being Subset of STS(D,d0) holds ({d0} c= A implies A is closed) &
-  (A is non empty & A is closed implies {d0} c= A)
+  for A being Subset of STS(D,d0) holds ({d0} c= A implies A is
+  closed) & (A is non empty & A is closed implies {d0} c= A)
 proof
   let A be Subset of STS(D,d0);
   set Z = A`;
   set G = {P where P is Subset of D : d0 in P & P <> D};
   thus {d0} c= A implies A is closed
   proof
+A1: d0 in {d0} by TARSKI:def 1;
     assume
-A1: {d0} c= A;
-    d0 in {d0} by TARSKI:def 1;
-    then not ex Q being Subset of D
-    st Q = Z & d0 in Q & Q <> D by A1,XBOOLE_0:def 5;
+    {d0} c= A;
+    then not ex Q being Subset of D st Q = Z & d0 in Q & Q <> D by A1,
+    XBOOLE_0:def 5;
     then not Z in G;
     then Z in the topology of STS(D,d0) by XBOOLE_0:def 5;
     then Z is open by PRE_TOPC:def 5;
     hence thesis by TOPS_1:29;
   end;
-  assume A is non empty;
+  assume
+  A is non empty;
   then
 A2: Z <> D by TOPS_3:1;
-  assume A is closed;
-  then Z is open;
+  assume
+  A is closed;
   then Z in the topology of STS(D,d0) by PRE_TOPC:def 5;
   then not Z in G by XBOOLE_0:def 5;
   then not d0 in Z by A2;
@@ -756,24 +806,21 @@ A2: Z <> D by TOPS_3:1;
 end;
 
 theorem Th25:
-  D \ {d0} is non empty implies for A being Subset of STS(D,d0) holds
-  (A = {d0} implies A is closed & A is boundary) &
-  (A is non empty & A is closed & A is boundary implies A = {d0})
+  D \ {d0} is non empty implies for A being Subset of STS(D,d0)
+  holds (A = {d0} implies A is closed & A is boundary) & (A is non empty & A is
+  closed & A is boundary implies A = {d0})
 proof
   assume
 A1: D \ {d0} is non empty;
-  let A be Subset of STS(D,d0);
   set G = {P where P is Subset of D : d0 in P & P <> D};
+  let A be Subset of STS(D,d0);
 A2: Int A in the topology of STS(D,d0) by PRE_TOPC:def 5;
   thus A = {d0} implies A is closed & A is boundary
   proof
     assume
 A3: A = {d0};
     hence A is closed by Th24;
-    Int A c= A by TOPS_1:44;
-    then
-A4: Int A = {} or Int A = A by A3,ZFMISC_1:39;
-    now
+A4: now
       assume
 A5:   Int A = A;
       then
@@ -782,46 +829,53 @@ A6:   d0 in Int A by A3,TARSKI:def 1;
       then Int A in G by A6;
       hence contradiction by A2,XBOOLE_0:def 5;
     end;
+    Int A c= A by TOPS_1:44;
+    then Int A = {} or Int A = A by A3,ZFMISC_1:39;
     hence thesis by A4,TOPS_1:84;
   end;
   thus A is non empty & A is closed & A is boundary implies A = {d0}
   proof
-    assume A is non empty & A is closed;
-    then
-A7: {d0} c= A by Th24;
     set Z = A \ {d0};
-A8: Z c= A by XBOOLE_1:36;
+    assume that
+A7: A is non empty and
+A8: A is closed;
+A9: {d0} c= A by A7,A8,Th24;
+A10: Z c= A by XBOOLE_1:36;
     reconsider Z as Subset of STS(D,d0);
-    assume A is boundary;
-    then
-A9: Int A = {};
-    assume
-A10: A <> {d0};
-A11: now
-      assume Z = {};
-      then A c= {d0} by XBOOLE_1:37;
-      hence contradiction by A7,A10,XBOOLE_0:def 10;
-    end;
     d0 in {d0} by TARSKI:def 1;
-    then not ex Q being Subset of D
-    st Q = Z & d0 in Q & Q <> D by XBOOLE_0:def 5;
+    then not ex Q being Subset of D st Q = Z & d0 in Q & Q <> D by
+    XBOOLE_0:def 5;
     then not Z in G;
     then Z in the topology of STS(D,d0) by XBOOLE_0:def 5;
-    then Z is open by PRE_TOPC:def 5;
-    hence contradiction by A8,A9,A11,TOPS_1:56,XBOOLE_1:3;
+    then
+A11: Z is open by PRE_TOPC:def 5;
+    assume
+    A is boundary;
+    then
+A12: Int A = {};
+    assume
+A13: A <> {d0};
+    now
+      assume
+      Z = {};
+      then A c= {d0} by XBOOLE_1:37;
+      hence contradiction by A9,A13,XBOOLE_0:def 10;
+    end;
+    hence contradiction by A10,A12,A11,TOPS_1:56,XBOOLE_1:3;
   end;
 end;
 
 theorem Th26:
-  for A being Subset of STS(D,d0) holds (A c= D \ {d0} implies A is open) &
-  (A <> D & A is open implies A c= D \ {d0})
+  for A being Subset of STS(D,d0) holds (A c= D \ {d0} implies A
+  is open) & (A <> D & A is open implies A c= D \ {d0})
 proof
   let A be Subset of STS(D,d0);
   set Z = A`;
   reconsider P = {d0} as Subset of STS(D,d0);
   thus A c= D \ {d0} implies A is open
   proof
-    assume A c= D \ {d0};
+    assume
+    A c= D \ {d0};
     then [#]STS(D,d0) \ (D \ {d0}) c= [#]STS(D,d0) \ A by XBOOLE_1:34;
     then P c= Z by PRE_TOPC:22;
     then Z is closed by Th24;
@@ -829,11 +883,12 @@ proof
   end;
   thus A <> D & A is open implies A c= D \ {d0}
   proof
-    assume A <> D;
+    assume
+    A <> D;
     then
 A1: Z <> {}STS(D,d0) by TOPS_3:2;
-    assume A is open;
-    then Z is closed;
+    assume
+    A is open;
     then {d0} c= Z by A1,Th24;
     then Z` c= P` by SUBSET_1:31;
     hence thesis;
@@ -841,15 +896,15 @@ A1: Z <> {}STS(D,d0) by TOPS_3:2;
 end;
 
 theorem
-  D \ {d0} is non empty implies for A being Subset of STS(D,d0) holds
-  (A = D \ {d0} implies A is open & A is dense) &
-  (A <> D & A is open & A is dense implies A = D \ {d0})
+  D \ {d0} is non empty implies for A being Subset of STS(D,d0) holds (A
+  = D \ {d0} implies A is open & A is dense) & (A <> D & A is open & A is dense
+  implies A = D \ {d0})
 proof
   assume
 A1: D \ {d0} is non empty;
+  reconsider P = {d0} as Subset of STS(D,d0);
   let A be Subset of STS(D,d0);
   set Z = A`;
-  reconsider P = {d0} as Subset of STS(D,d0);
   thus A = D \ {d0} implies A is open & A is dense
   proof
     assume
@@ -857,18 +912,19 @@ A2: A = D \ {d0};
     hence A is open by Th26;
     [#]STS(D,d0) \ ([#]STS(D,d0) \ P) = Z by A2;
     then P = Z by PRE_TOPC:22;
-    then Z is closed & Z is boundary by A1,Th25;
+    then Z is boundary by A1,Th25;
     hence thesis by TOPS_3:18;
   end;
   thus A <> D & A is open & A is dense implies A = D \ {d0}
   proof
-    assume A <> D;
+    assume
+    A <> D;
     then
 A3: Z <> {}STS(D,d0) by TOPS_3:2;
-    assume A is open;
-    then
-A4: Z is closed;
-    assume A is dense;
+    assume
+A4: A is open;
+    assume
+    A is dense;
     then Z is boundary by TOPS_3:18;
     then Z = {d0} by A1,A3,A4,Th25;
     then A = P`;
@@ -885,27 +941,29 @@ registration
     set Y = STS(D,a);
     take Y;
     reconsider A = {a} as non empty Subset of Y;
-A1: 1 in D & not 1 in A by TARSKI:def 1,def 2;
-    then D \ A is non empty by XBOOLE_0:def 5;
+A1: not 1 in A by TARSKI:def 1;
+A2: 1 in D by TARSKI:def 2;
     then
-A2: A is closed & A is boundary by Th25;
+A3: D \ A is non empty by A1,XBOOLE_0:def 5;
+    then A is boundary by Th25;
     then Int A <> A;
-    then A is not open by TOPS_1:55;
-    hence thesis by A1,A2,TDLAT_3:17,21;
+    then
+A4: A is not open by TOPS_1:55;
+    A is closed by A3,Th25;
+    hence thesis by A2,A1,A4,TDLAT_3:17,21;
   end;
 end;
 
 theorem Th28:
-  for Y being non empty TopSpace holds
-  the TopStruct of Y = the TopStruct of STS(D,d0) iff the carrier of Y = D &
-  for A being Subset of Y holds ({d0} c= A implies A is closed) &
-  (A is non empty & A is closed implies {d0} c= A)
+  for Y being non empty TopSpace holds the TopStruct of Y = the
+TopStruct of STS(D,d0) iff the carrier of Y = D & for A being Subset of Y holds
+({d0} c= A implies A is closed) & (A is non empty & A is closed implies {d0} c=
+  A)
 proof
   let Y be non empty TopSpace;
-  thus the TopStruct of Y = the TopStruct of STS(D,d0) implies
-  the carrier of Y = D & for A being Subset of Y
-  holds ({d0} c= A implies A is closed) &
-  (A is non empty & A is closed implies {d0} c= A)
+  thus the TopStruct of Y = the TopStruct of STS(D,d0) implies the carrier of
+  Y = D & for A being Subset of Y holds ({d0} c= A implies A is closed) & (A is
+  non empty & A is closed implies {d0} c= A)
   proof
     assume
 A1: the TopStruct of Y = the TopStruct of STS(D,d0);
@@ -915,7 +973,8 @@ A1: the TopStruct of Y = the TopStruct of STS(D,d0);
       reconsider B = A as Subset of STS(D,d0) by A1;
       thus {d0} c= A implies A is closed
       proof
-        assume {d0} c= A;
+        assume
+        {d0} c= A;
         then B is closed by Th24;
         hence thesis by A1,TOPS_3:79;
       end;
@@ -923,7 +982,8 @@ A1: the TopStruct of Y = the TopStruct of STS(D,d0);
       proof
         assume
 A2:     A is non empty;
-        assume A is closed;
+        assume
+        A is closed;
         then B is closed by A1,TOPS_3:79;
         hence thesis by A2,Th24;
       end;
@@ -933,41 +993,45 @@ A2:     A is non empty;
   assume
 A3: the carrier of Y = D;
   assume
-A4: for A being Subset of Y holds ({d0} c= A implies A is closed) &
-  (A is non empty & A is closed implies {d0} c= A);
+A4: for A being Subset of Y holds ({d0} c= A implies A is closed) & (A
+  is non empty & A is closed implies {d0} c= A);
   now
     let A be Subset of Y, C be Subset of STS(D,d0);
     assume
 A5: A = C;
 A6: now
       assume
-A7:   A is closed;
-      now per cases;
-        case A = {};
-          then C = {}STS(D,d0) by A5;
-          hence C is closed;
+A7:   C is closed;
+      now
+        per cases;
+        case
+          C = {};
+          hence A is closed by A5;
         end;
-        case A <> {};
-          then {d0} c= C by A4,A5,A7;
-          hence C is closed by Th24;
-        end;
-      end;
-      hence C is closed;
-    end;
-    now
-      assume
-A8:   C is closed;
-      now per cases;
-        case C = {};
-          then A = {}Y by A5;
-          hence A is closed;
-        end;
-        case C <> {};
-          then {d0} c= A by A5,A8,Th24;
+        case
+          C <> {};
+          then {d0} c= A by A5,A7,Th24;
           hence A is closed by A4;
         end;
       end;
       hence A is closed;
+    end;
+    now
+      assume
+A8:   A is closed;
+      now
+        per cases;
+        case
+          A = {};
+          hence C is closed by A5;
+        end;
+        case
+          A <> {};
+          then {d0} c= C by A4,A5,A8;
+          hence C is closed by Th24;
+        end;
+      end;
+      hence C is closed;
     end;
     hence A is closed iff C is closed by A6;
   end;
@@ -975,16 +1039,14 @@ A8:   C is closed;
 end;
 
 theorem Th29:
-  for Y being non empty TopSpace holds
-  the TopStruct of Y = the TopStruct of STS(D,d0) iff the carrier of Y = D &
-  for A being Subset of Y holds (A c= D \ {d0} implies A is open) &
-  (A <> D & A is open implies A c= D \ {d0})
+  for Y being non empty TopSpace holds the TopStruct of Y = the
+TopStruct of STS(D,d0) iff the carrier of Y = D & for A being Subset of Y holds
+(A c= D \ {d0} implies A is open) & (A <> D & A is open implies A c= D \ {d0})
 proof
   let Y be non empty TopSpace;
-  thus the TopStruct of Y = the TopStruct of STS(D,d0) implies
-  the carrier of Y = D & for A being Subset of Y
-  holds (A c= D \ {d0} implies A is open) &
-  (A <> D & A is open implies A c= D \ {d0})
+  thus the TopStruct of Y = the TopStruct of STS(D,d0) implies the carrier of
+Y = D & for A being Subset of Y holds (A c= D \ {d0} implies A is open) & (A <>
+  D & A is open implies A c= D \ {d0})
   proof
     assume
 A1: the TopStruct of Y = the TopStruct of STS(D,d0);
@@ -993,7 +1055,8 @@ A1: the TopStruct of Y = the TopStruct of STS(D,d0);
     reconsider B = A as Subset of STS(D,d0) by A1;
     thus A c= D \ {d0} implies A is open
     proof
-      assume A c= D \ {d0};
+      assume
+      A c= D \ {d0};
       then B is open by Th26;
       hence thesis by A1,TOPS_3:76;
     end;
@@ -1001,7 +1064,8 @@ A1: the TopStruct of Y = the TopStruct of STS(D,d0);
     proof
       assume
 A2:   A <> D;
-      assume A is open;
+      assume
+      A is open;
       then B is open by A1,TOPS_3:76;
       hence thesis by A2,Th26;
     end;
@@ -1009,8 +1073,8 @@ A2:   A <> D;
   assume
 A3: the carrier of Y = D;
   assume
-A4: for A being Subset of Y holds (A c= D \ {d0} implies A is open) &
-  (A <> D & A is open implies A c= D \ {d0});
+A4: for A being Subset of Y holds (A c= D \ {d0} implies A is open) & (A
+  <> D & A is open implies A c= D \ {d0});
   now
     let A be Subset of Y, C be Subset of STS(D,d0);
     assume
@@ -1018,12 +1082,15 @@ A5: A = C;
 A6: now
       assume
 A7:   A is open;
-      now per cases;
-        case A = D;
+      now
+        per cases;
+        case
+          A = D;
           then C = [#]STS(D,d0) by A5;
           hence C is open;
         end;
-        case A <> D;
+        case
+          A <> D;
           then A c= D \ {d0} by A4,A7;
           hence C is open by A5,Th26;
         end;
@@ -1033,12 +1100,15 @@ A7:   A is open;
     now
       assume
 A8:   C is open;
-      now per cases;
-        case C = D;
+      now
+        per cases;
+        case
+          C = D;
           then A = [#]Y by A3,A5;
           hence A is open;
         end;
-        case C <> D;
+        case
+          C <> D;
           then A c= D \ {d0} by A5,A8,Th26;
           hence A is open by A4;
         end;
@@ -1051,14 +1121,13 @@ A8:   C is open;
 end;
 
 theorem
-  for Y being non empty TopSpace holds
-  the TopStruct of Y = the TopStruct of STS(D,d0) iff the carrier of Y = D &
-  for A being non empty Subset of Y holds Cl A = A \/ {d0}
+  for Y being non empty TopSpace holds the TopStruct of Y = the
+TopStruct of STS(D,d0) iff the carrier of Y = D & for A being non empty Subset
+  of Y holds Cl A = A \/ {d0}
 proof
   let Y be non empty TopSpace;
-  thus the TopStruct of Y = the TopStruct of STS(D,d0) implies
-  the carrier of Y = D & for A being non empty Subset of Y holds Cl A = A \/
-  {d0}
+  thus the TopStruct of Y = the TopStruct of STS(D,d0) implies the carrier of
+  Y = D & for A being non empty Subset of Y holds Cl A = A \/ {d0}
   proof
     assume
 A1: the TopStruct of Y = the TopStruct of STS(D,d0);
@@ -1067,55 +1136,61 @@ A1: the TopStruct of Y = the TopStruct of STS(D,d0);
     now
       let A be non empty Subset of Y;
       reconsider B = A as Subset of Y;
+      Cl A is non empty by PCOMPS_1:2;
+      then
+A2:   {d0} c= Cl A by A1,Th28;
+      A c= Cl A by PRE_TOPC:48;
+      then
+A3:   A \/ {d0} c= Cl A by A2,XBOOLE_1:8;
       {d0} c= A \/ P by XBOOLE_1:7;
       then B \/ P is closed by A1,Th28;
       then
-A2:   Cl(A \/ P) = A \/ {d0} by PRE_TOPC:52;
-A3:   Cl A c= Cl(A \/ P) by PRE_TOPC:49,XBOOLE_1:7;
-      Cl A is non empty & Cl A is closed by PCOMPS_1:2;
-      then {d0} c= Cl A & A c= Cl A by A1,Th28,PRE_TOPC:48;
-      then A \/ {d0} c= Cl A by XBOOLE_1:8;
-      hence Cl A = A \/ {d0} by A2,A3,XBOOLE_0:def 10;
+A4:   Cl(A \/ P) = A \/ {d0} by PRE_TOPC:52;
+      Cl A c= Cl(A \/ P) by PRE_TOPC:49,XBOOLE_1:7;
+      hence Cl A = A \/ {d0} by A4,A3,XBOOLE_0:def 10;
     end;
     hence thesis;
   end;
   assume
-A4: the carrier of Y = D;
+A5: the carrier of Y = D;
   assume
-A5: for A being non empty Subset of Y holds Cl A = A \/ {d0};
+A6: for A being non empty Subset of Y holds Cl A = A \/ {d0};
   now
     let A be Subset of Y;
     thus {d0} c= A implies A is closed
     proof
-      assume {d0} c= A;
+      assume
+      {d0} c= A;
       then A = A \/ {d0} by XBOOLE_1:12;
-      then Cl A = A by A5;
+      then Cl A = A by A6;
       hence thesis;
     end;
     thus A is non empty & A is closed implies {d0} c= A
     proof
       assume
-A6:   A is non empty;
+      A is non empty;
+      then
+A7:   Cl A = A \/ {d0} by A6;
       assume
-A7:   A is closed;
+      A is closed;
+      then
+A8:   Cl A = A by PRE_TOPC:52;
       assume
-A8:   not {d0} c= A;
-      Cl A = A \/ {d0} & Cl A = A by A5,A6,A7,PRE_TOPC:52;
-      hence contradiction by A8,XBOOLE_1:7;
+      not {d0} c= A;
+      hence contradiction by A7,A8,XBOOLE_1:7;
     end;
   end;
-  hence thesis by A4,Th28;
+  hence thesis by A5,Th28;
 end;
 
 theorem
-  for Y being non empty TopSpace holds
-  the TopStruct of Y = the TopStruct of STS(D,d0) iff the carrier of Y = D &
-  for A being Subset of Y st A <> D holds Int A = A \ {d0}
+  for Y being non empty TopSpace holds the TopStruct of Y = the
+TopStruct of STS(D,d0) iff the carrier of Y = D & for A being Subset of Y st A
+  <> D holds Int A = A \ {d0}
 proof
   let Y be non empty TopSpace;
-  thus the TopStruct of Y = the TopStruct of STS(D,d0) implies
-  the carrier of Y = D & for A being Subset of Y st A <> D
-  holds Int A = A \ {d0}
+  thus the TopStruct of Y = the TopStruct of STS(D,d0) implies the carrier of
+  Y = D & for A being Subset of Y st A <> D holds Int A = A \ {d0}
   proof
     assume
 A1: the TopStruct of Y = the TopStruct of STS(D,d0);
@@ -1124,82 +1199,91 @@ A1: the TopStruct of Y = the TopStruct of STS(D,d0);
     now
       let A be Subset of Y;
       reconsider B = A as Subset of Y;
+A2:   A = A /\ D by A1,XBOOLE_1:28;
       assume
-A2:   A <> D;
+A3:   A <> D;
+      now
+        assume
+        Int A = D;
+        then D c= A by TOPS_1:44;
+        hence contradiction by A1,A3,XBOOLE_0:def 10;
+      end;
+      then
+A4:   Int A c= D \ P by A1,Th29;
       A \ {d0} c= D \ {d0} by A1,XBOOLE_1:33;
       then B \ P is open by A1,Th29;
       then Int(A \ P) = A \ P by TOPS_1:55;
       then
-A3:   A \ {d0} c= Int A by TOPS_1:48,XBOOLE_1:36;
-      now
-        assume Int A = D;
-        then D c= A by TOPS_1:44;
-        hence contradiction by A1,A2,XBOOLE_0:def 10;
-      end;
-      then Int A c= D \ P & Int A c= A by A1,Th29,TOPS_1:44;
-      then Int A c= A /\ (D \ P) & A = A /\ D by A1,XBOOLE_1:19,28;
-      then Int A c= A \ {d0} by XBOOLE_1:49;
-      hence Int A = A \ {d0} by A3,XBOOLE_0:def 10;
+A5:   A \ {d0} c= Int A by TOPS_1:48,XBOOLE_1:36;
+      Int A c= A by TOPS_1:44;
+      then Int A c= A /\ (D \ P) by A4,XBOOLE_1:19;
+      then Int A c= A \ {d0} by A2,XBOOLE_1:49;
+      hence Int A = A \ {d0} by A5,XBOOLE_0:def 10;
     end;
     hence thesis;
   end;
   assume
-A4: the carrier of Y = D;
+A6: the carrier of Y = D;
   assume
-A5: for A being Subset of Y st A <> D holds Int A = A \ {d0};
+A7: for A being Subset of Y st A <> D holds Int A = A \ {d0};
   now
     let A be Subset of Y;
     thus A c= D \ {d0} implies A is open
     proof
       assume
-A6:   A c= D \ {d0};
-A7:   now
-        assume A = D;
+A8:   A c= D \ {d0};
+A9:   now
+        D /\ {d0} = {d0} by ZFMISC_1:52;
         then
-A8:     D = D \ {d0} by A6,XBOOLE_0:def 10;
-        D /\ {d0} = {d0} & {d0} <> {} by ZFMISC_1:52;
-        then D meets {d0} by XBOOLE_0:def 7;
-        hence contradiction by A8,XBOOLE_1:83;
+A10:    D meets {d0} by XBOOLE_0:def 7;
+        assume
+        A = D;
+        then D = D \ {d0} by A8,XBOOLE_0:def 10;
+        hence contradiction by A10,XBOOLE_1:83;
       end;
-      A = A /\ (D \ {d0}) & A = A /\ D by A4,A6,XBOOLE_1:28;
-      then A = A \ {d0} by XBOOLE_1:49;
-      then Int A = A by A5,A7;
+A11:  A = A /\ D by A6,XBOOLE_1:28;
+      A = A /\ (D \ {d0}) by A8,XBOOLE_1:28;
+      then A = A \ {d0} by A11,XBOOLE_1:49;
+      then Int A = A by A7,A9;
       hence thesis;
     end;
     thus A <> D & A is open implies A c= D \ {d0}
     proof
       assume
-A9:   A <> D;
-      assume A is open;
+A12:  A <> D;
+      assume
+      A is open;
       then Int A = A by TOPS_1:55;
-      then A \ {d0} = A & A c= D by A4,A5,A9;
-      hence thesis by XBOOLE_1:33;
+      then A \ {d0} = A by A7,A12;
+      hence thesis by A6,XBOOLE_1:33;
     end;
   end;
-  hence thesis by A4,Th29;
+  hence thesis by A6,Th29;
 end;
 
 Lm2: now
   let D be non empty set, d0 be Element of D, G be set;
   assume
 A1: G = {P where P is Subset of D : d0 in P & P <> D};
+  consider x being Element of G;
   assume
 A2: D = {d0};
   assume
-A3: G <> {};
-  consider x being Element of G;
-  x in G by A3;
-  then consider S being Subset of D such that x = S and
-A4: d0 in S and
-A5: S <> D by A1;
-A6: now
-    assume D \ S = {};
-    then D c= S by XBOOLE_1:37;
-    hence contradiction by A5,XBOOLE_0:def 10;
-  end;
+  G <> {};
+  then x in G;
+  then consider S being Subset of D such that
+  x = S and
+A3: d0 in S and
+A4: S <> D by A1;
   consider d1 being Element of D \ S;
-  reconsider d1 as Element of D by A6,XBOOLE_0:def 5;
-  d0 <> d1 by A4,A6,XBOOLE_0:def 5;
+A5: now
+    assume
+    D \ S = {};
+    then D c= S by XBOOLE_1:37;
+    hence contradiction by A4,XBOOLE_0:def 10;
+  end;
+  then reconsider d1 as Element of D by XBOOLE_0:def 5;
+  d0 <> d1 by A3,A5,XBOOLE_0:def 5;
   hence contradiction by A2,TARSKI:def 1;
 end;
 
@@ -1209,25 +1293,29 @@ proof
   set G = {P where P is Subset of D : d0 in P & P <> D};
   thus STS(D,d0) = ADTS(D) implies D = {d0}
   proof
+    consider d1 being Element of D \ {d0};
     assume
 A1: STS(D,d0) = ADTS(D);
     assume
 A2: D <> {d0};
-A3: {d0} c= D;
-A4: now
-      assume D \ {d0} = {};
+A3: now
+      assume
+      D \ {d0} = {};
       then D c= {d0} by XBOOLE_1:37;
       hence contradiction by A2,XBOOLE_0:def 10;
     end;
-    consider d1 being Element of D \ {d0};
-    reconsider d1 as Element of D by A4,XBOOLE_0:def 5;
-A5: d0 <> d1 by A4,ZFMISC_1:64;
+    then reconsider d1 as Element of D by XBOOLE_0:def 5;
     reconsider P = {d1} as Subset of D;
-    not ex Q being Subset of D st Q = P & d0 in Q & Q <> D by A5,TARSKI:def 1;
+A4: d0 <> d1 by A3,ZFMISC_1:64;
+    then not ex Q being Subset of D st Q = P & d0 in Q & Q <> D by
+    TARSKI:
+    def 1;
     then not P in G;
-    then P in {{},D} by A1,XBOOLE_0:def 5;
-    then {d0} c= {d1} by A3,TARSKI:def 2;
-    hence contradiction by A5,ZFMISC_1:24;
+    then
+A5: P in {{},D} by A1,XBOOLE_0:def 5;
+    {d0} c= D;
+    then {d0} c= {d1} by A5,TARSKI:def 2;
+    hence contradiction by A4,ZFMISC_1:24;
   end;
   assume
 A6: D = {d0};
@@ -1241,82 +1329,85 @@ proof
   set G = {P where P is Subset of D : d0 in P & P <> D};
   thus STS(D,d0) = 1TopSp(D) implies D = {d0}
   proof
-    assume
-A1: STS(D,d0) = 1TopSp(D);
-A2: G c= bool D
-    proof
-      now
-        let x be set;
-        assume x in G;
-        then consider Q being Subset of D such that
-A3:     x = Q and d0 in Q & Q <> D;
-        thus x in bool D by A3;
-      end;
-      hence thesis by TARSKI:def 3;
+    now
+      let x be set;
+      assume
+      x in G;
+      then ex Q being Subset of D st x = Q & d0 in Q & Q <> D;
+      hence x in bool D;
     end;
-    assume
-A4: D <> {d0};
+    then
+A1: G c= bool D by TARSKI:def 3;
     reconsider P = {d0} as Subset of D;
-    d0 in P by TARSKI:def 1;
-    then P in G by A4;
-    hence contradiction by A1,A2,XBOOLE_1:38;
+    assume
+A2: STS(D,d0) = 1TopSp(D);
+A3: d0 in P by TARSKI:def 1;
+    assume
+    D <> {d0};
+    then P in G by A3;
+    hence contradiction by A2,A1,XBOOLE_1:38;
   end;
-  assume D = {d0};
+  assume
+  D = {d0};
   then G = {} by Lm2;
   hence thesis;
 end;
 
 theorem
-  for D being non empty set, d0 being Element of D
-  for A being Subset of STS(D,d0) st A = {d0} holds
-  1TopSp(D) = STS(D,d0) modified_with_respect_to A
+  for D being non empty set, d0 being Element of D for A being Subset of
+  STS(D,d0) st A = {d0} holds 1TopSp(D) = STS(D,d0) modified_with_respect_to A
 proof
   let D be non empty set, d0 be Element of D;
   set G = {P where P is Subset of D : d0 in P & P <> D};
   set T = (bool D) \ G;
-  T \/ G = (bool D) \/ G by XBOOLE_1:39;
-  then
-A1: bool D c= T \/ G by XBOOLE_1:7;
   let A be Subset of STS(D,d0);
   assume
-A2: A = {d0};
-A3: G c= A-extension_of_the_topology_of STS(D,d0)
-  proof
-A4: A-extension_of_the_topology_of STS(D,d0) =
-    {H \/ (F /\ A) where H is Subset of STS(D,d0),
-    F is Subset of STS(D,d0) : H in T & F in T} by TMAP_1:def 7;
-    now
-      let W be set;
-      assume W in G;
-      then consider P being Subset of D such that
-A5:   W = P and
-A6:   d0 in P and P <> D;
-      reconsider F=D as Subset of D by Lm1;
-      set H = P \ {d0};
-      reconsider H as Subset of D;
-      not ex K being Subset of D st K = F & d0 in K & K <> D;
-      then not F in G;
-      then
-A7:   F in T by XBOOLE_0:def 5;
-      d0 in {d0} by TARSKI:def 1;
-      then not ex K being Subset of D
-      st K = H & d0 in K & K <> D by XBOOLE_0:def 5;
-      then not H in G;
-      then
-A8:   H in T by XBOOLE_0:def 5;
-      A c= P & A c= D by A2,A6,ZFMISC_1:37;
-      then W = H \/ A & A = F /\ A by A2,A5,XBOOLE_1:28,45;
-      hence W in A-extension_of_the_topology_of STS(D,d0) by A4,A7,A8;
-    end;
-    hence thesis by TARSKI:def 3;
+A1: A = {d0};
+A2: A-extension_of_the_topology_of STS(D,d0) = {H \/ (F /\ A) where H is
+Subset of STS(D,d0), F is Subset of STS(D,d0) : H in T & F in T} by TMAP_1:def
+  7;
+  now
+    reconsider F=D as Subset of D by Lm1;
+    let W be set;
+    assume
+    W in G;
+    then consider P being Subset of D such that
+A3: W = P and
+A4: d0 in P and
+    P <> D;
+    set H = P \ {d0};
+    reconsider H as Subset of D;
+    A c= P by A1,A4,ZFMISC_1:37;
+    then
+A5: W = H \/ A by A1,A3,XBOOLE_1:45;
+    not ex K being Subset of D st K = F & d0 in K & K <> D;
+    then not F in G;
+    then
+A6: F in T by XBOOLE_0:def 5;
+    d0 in {d0} by TARSKI:def 1;
+    then not ex K being Subset of D st K = H & d0 in K & K <> D by
+    XBOOLE_0:def 5;
+    then not H in G;
+    then
+A7: H in T by XBOOLE_0:def 5;
+    A = F /\ A by XBOOLE_1:28;
+    hence W in A-extension_of_the_topology_of STS(D,d0) by A2,A6,A7,A5;
   end;
-  T c= A-extension_of_the_topology_of STS(D,d0) by TMAP_1:99;
-  then T \/ G c= A-extension_of_the_topology_of STS(D,d0) by A3,XBOOLE_1:8;
   then
-A9: bool D c= A-extension_of_the_topology_of STS(D,d0) by A1,XBOOLE_1:1;
-  the topology of STS(D,d0) modified_with_respect_to A
-  = A-extension_of_the_topology_of STS(D,d0) by TMAP_1:104
-    .= the topology of 1TopSp(D) by A9,XBOOLE_0:def 10;
+A8: G c= A-extension_of_the_topology_of STS(D,d0) by TARSKI:def 3;
+  T \/ G = (bool D) \/ G by XBOOLE_1:39;
+  then
+A9: bool D c= T \/ G by XBOOLE_1:7;
+  T c= A-extension_of_the_topology_of STS(D,d0) by TMAP_1:99;
+  then T \/ G c= A-extension_of_the_topology_of STS(D,d0) by A8,
+  XBOOLE_1:
+  8;
+  then
+A10: bool D c= A-extension_of_the_topology_of STS(D,d0) by A9,
+  XBOOLE_1:1;
+  the topology of STS(D,d0) modified_with_respect_to A = A
+  -extension_of_the_topology_of STS(D,d0) by TMAP_1:104
+    .= the topology of 1TopSp(D) by A10,XBOOLE_0:def 10;
   hence thesis by TMAP_1:104;
 end;
 
@@ -1328,14 +1419,16 @@ definition
   let X be non empty TopSpace;
   redefine attr X is discrete means
   :Def6:
-  for A being non empty Subset of X holds A is not boundary;
+  for A being non empty Subset of X
+  holds A is not boundary;
   compatibility
   proof
     hereby
       assume
 A1:   X is discrete;
       let A be non empty Subset of X;
-      assume A is boundary;
+      assume
+      A is boundary;
       then Int A <> A;
       then A is not open by TOPS_1:55;
       hence contradiction by A1,TDLAT_3:17;
@@ -1346,15 +1439,19 @@ A2: for A being non empty Subset of X holds A is not boundary;
       let A be Subset of X, x be Point of X;
       assume
 A3:   A = {x};
-      hereby per cases;
-        suppose A = {};
-          then A = {}X;
+      hereby
+        per cases;
+        suppose
+          A = {};
           hence A is open;
         end;
-        suppose A <> {};
+        suppose
+          A <> {};
           then A is not boundary by A2;
-          then Int A <> {} & Int A c= {x} by A3,TOPS_1:44,84;
-          hence A is open by A3,ZFMISC_1:39;
+          then
+A4:       Int A <> {} by TOPS_1:84;
+          Int A c= {x} by A3,TOPS_1:44;
+          hence A is open by A3,A4,ZFMISC_1:39;
         end;
       end;
     end;
@@ -1363,14 +1460,15 @@ A3:   A = {x};
 end;
 
 theorem
-  X is discrete iff for A being Subset of X
-  holds A <> the carrier of X implies A is not dense
+  X is discrete iff for A being Subset of X holds A <> the carrier of X
+  implies A is not dense
 proof
   hereby
     assume
 A1: X is discrete;
-    assume not for A being Subset of X holds
-    A <> the carrier of X implies A is not dense;
+    assume
+    not for A being Subset of X holds A <> the carrier of X implies A
+    is not dense;
     then consider A being Subset of X such that
 A2: A <> the carrier of X and
 A3: A is dense;
@@ -1382,9 +1480,10 @@ A3: A is dense;
     hence contradiction by A1,Def6;
   end;
   assume
-A4: for C being Subset of X holds
-  C <> the carrier of X implies C is not dense;
-  assume X is non discrete;
+A4: for C being Subset of X holds C <> the carrier of X implies C is not
+  dense;
+  assume
+  X is non discrete;
   then consider A being non empty Subset of X such that
 A5: A is boundary by Def6;
   now
@@ -1395,8 +1494,8 @@ A5: A is boundary by Def6;
 end;
 
 registration
-  cluster non almost_discrete ->
-    non discrete non anti-discrete (non empty TopSpace);
+  cluster non almost_discrete -> non discrete non anti-discrete (non empty
+    TopSpace);
   coherence;
 end;
 
@@ -1404,7 +1503,8 @@ definition
   let X be non empty TopSpace;
   redefine attr X is almost_discrete means
   :Def7:
-  for A being non empty Subset of X holds A is not nowhere_dense;
+  for A being non empty Subset
+  of X holds A is not nowhere_dense;
   compatibility
   proof
     hereby
@@ -1420,12 +1520,15 @@ A1:   X is almost_discrete;
 A2: for A being non empty Subset of X holds A is not nowhere_dense;
     now
       let A be Subset of X, x be Point of X;
-      assume A = {x};
+      assume
+      A = {x};
       hereby
         Fr(Cl A) = {} by A2;
         then (Cl A) \ Int Cl A = {} by TOPS_1:77;
-        then Cl A c= Int Cl A & Int Cl A c= Cl A by TOPS_1:44,XBOOLE_1:37;
-        hence Cl A is open by XBOOLE_0:def 10;
+        then
+A3:     Cl A c= Int Cl A by XBOOLE_1:37;
+        Int Cl A c= Cl A by TOPS_1:44;
+        hence Cl A is open by A3,XBOOLE_0:def 10;
       end;
     end;
     hence thesis by TDLAT_3:27;
@@ -1433,14 +1536,15 @@ A2: for A being non empty Subset of X holds A is not nowhere_dense;
 end;
 
 theorem Th36:
-  X is almost_discrete iff for A being Subset of X holds
-  A <> the carrier of X implies A is not everywhere_dense
+  X is almost_discrete iff for A being Subset of X holds A <> the
+  carrier of X implies A is not everywhere_dense
 proof
   hereby
     assume
 A1: X is almost_discrete;
-    assume not for A being Subset of X holds
-    A <> the carrier of X implies A is not everywhere_dense;
+    assume
+    not for A being Subset of X holds A <> the carrier of X implies A
+    is not everywhere_dense;
     then consider A being Subset of X such that
 A2: A is everywhere_dense and
 A3: A <> the carrier of X;
@@ -1452,9 +1556,10 @@ A3: A <> the carrier of X;
     hence contradiction by A1,Def7;
   end;
   assume
-A4: for A being Subset of X holds
-  A <> the carrier of X implies A is not everywhere_dense;
-  assume X is non almost_discrete;
+A4: for A being Subset of X holds A <> the carrier of X implies A is not
+  everywhere_dense;
+  assume
+  X is non almost_discrete;
   then consider A being non empty Subset of X such that
 A5: A is nowhere_dense by Def7;
   now
@@ -1465,237 +1570,269 @@ A5: A is nowhere_dense by Def7;
 end;
 
 theorem Th37:
-  X is non almost_discrete iff
-  ex A being non empty Subset of X st A is boundary & A is closed
+  X is non almost_discrete iff ex A being non empty Subset of X st
+  A is boundary & A is closed
 proof
-  thus X is non almost_discrete implies
-  ex A being non empty Subset of X st A is boundary & A is closed
+  thus X is non almost_discrete implies ex A being non empty Subset of X st A
+  is boundary & A is closed
   proof
-    assume X is non almost_discrete;
+    assume
+    X is non almost_discrete;
     then consider A being non empty Subset of X such that
 A1: A is nowhere_dense by Def7;
     consider C being Subset of X such that
 A2: A c= C and
-A3: C is closed & C is boundary by A1,TOPS_3:27;
+A3: C is closed and
+A4: C is boundary by A1,TOPS_3:27;
     reconsider C as non empty Subset of X by A2;
     reconsider C as non empty Subset of X;
     take C;
-    thus thesis by A3;
+    thus thesis by A3,A4;
   end;
   given A being non empty Subset of X such that
-A4: A is boundary & A is closed;
-  ex A being non empty Subset of X st A is nowhere_dense by A4;
-  hence thesis by Def7;
+A5: A is boundary and
+A6: A is closed;
+  thus thesis by A5,A6,Def7;
 end;
 
 theorem
-  X is non almost_discrete iff
-  ex A being Subset of X st A <> the carrier of X & A is dense & A is open
+  X is non almost_discrete iff ex A being Subset of X st A <> the
+  carrier of X & A is dense & A is open
 proof
-  thus X is non almost_discrete implies ex A being Subset of X
-  st A <> the carrier of X & A is dense & A is open
+  thus X is non almost_discrete implies ex A being Subset of X st A <> the
+  carrier of X & A is dense & A is open
   proof
-    assume X is non almost_discrete;
+    assume
+    X is non almost_discrete;
     then consider A being non empty Subset of X such that
-A1: A is boundary & A is closed by Th37;
+A1: A is boundary and
+A2: A is closed by Th37;
     take B = A`;
-    thus thesis
-    by A1,TOPS_3:1;
+    thus thesis by A1,A2,TOPS_3:1;
   end;
   given A being Subset of X such that
-A2: A <> the carrier of X and
-A3: A is dense & A is open;
+A3: A <> the carrier of X and
+A4: A is dense and
+A5: A is open;
   now
-    reconsider B = A` as non empty Subset of X by A2,TOPS_3:2;
+    reconsider B = A` as non empty Subset of X by A3,TOPS_3:2;
     take B;
-    thus B is boundary & B is closed by A3,TOPS_3:18;
+    thus B is boundary & B is closed by A4,A5,TOPS_3:18;
   end;
   hence thesis by Th37;
 end;
 
 registration
-  cluster
-    almost_discrete non discrete non anti-discrete strict non empty TopSpace;
+  cluster almost_discrete non discrete non anti-discrete strict non empty
+    TopSpace;
   existence
   proof
     set C = bool {{},1};
     set Y = ADTS(C);
-A1: {} c= {{},1} by XBOOLE_1:2;
-    then
-A2: {} in C;
-    reconsider A = {{}} as Subset of Y by A1,ZFMISC_1:37;
+A1: 1 in {{},1} by TARSKI:def 2;
+    {} in {{},1} by TARSKI:def 2;
+    then reconsider B0 = {{}}, B1 = {1} as Subset of {{},1} by
+    A1,ZFMISC_1:37;
+A2: {} c= {{},1} by XBOOLE_1:2;
+    then reconsider A = {{}} as Subset of Y by ZFMISC_1:37;
     set Y1 = Y modified_with_respect_to A;
 A3: the carrier of Y1 = the carrier of Y by TMAP_1:104;
     reconsider A1 = A as Subset of Y1 by TMAP_1:104;
-A4: A1 is open by TMAP_1:105;
+    set Y2 = Y1 modified_with_respect_to A1`;
+    reconsider A2 = A1 as Subset of Y2 by TMAP_1:104;
+    set A3 = A2`;
+A4: the carrier of Y2 = the carrier of Y1 by TMAP_1:104;
+    then reconsider B = {B0,B1} as non empty Subset of Y2 by TMAP_1:104;
     now
       let H be set;
-      assume H in the topology of Y1;
+      assume
+      H in the topology of Y1;
       then H in A-extension_of_the_topology_of Y by TMAP_1:104;
-      then H in {p \/ (q /\ A) where p,q is Subset of Y :
-      p in the topology of Y & q in the topology of Y} by TMAP_1:def 7;
+      then
+      H in {p \/ (q /\ A) where p,q is Subset of Y : p in the topology of
+      Y & q in the topology of Y} by TMAP_1:def 7;
       then consider P,Q being Subset of Y such that
 A5:   H = P \/ (Q /\ A) and
-A6:   P in the topology of Y & Q in the topology of Y;
-      now per cases by A6,TARSKI:def 2;
-        case P = {} & Q = {};
+A6:   P in the topology of Y and
+A7:   Q in the topology of Y;
+      now
+        per cases by A6,A7,TARSKI:def 2;
+        case
+          P = {} & Q = {};
           hence H = {} by A5;
         end;
-        case P = C & Q = {};
+        case
+          P = C & Q = {};
           hence H = C by A5;
         end;
-        case P = {} & Q = C;
+        case
+          P = {} & Q = C;
           hence H = A by A5,XBOOLE_1:28;
         end;
-        case P = C & Q = C;
+        case
+          P = C & Q = C;
           hence H = C by A5,XBOOLE_1:12;
         end;
       end;
       hence H in {{},A1,C} by ENUMSET1:def 1;
     end;
     then
-A7: the topology of Y1 c= {{},A1,C} by TARSKI:def 3;
-    set Y2 = Y1 modified_with_respect_to A1`;
-    take Y2;
-A8: the carrier of Y2 = the carrier of Y1 by TMAP_1:104;
-    reconsider A2 = A1 as Subset of Y2 by TMAP_1:104;
-    set A3 = A2`;
-A9: A2 is closed & A2 is open by A4,Th1,Th3;
+A8: the topology of Y1 c= {{},A1,C} by TARSKI:def 3;
     now
       let H be set;
-      assume H in the topology of Y2;
+      assume
+      H in the topology of Y2;
       then H in ( A1`)-extension_of_the_topology_of Y1 by TMAP_1:104;
-      then H in {P \/ (Q /\ A1`) where P,Q is Subset of Y1 :
-      P in the topology of Y1 & Q in the topology of Y1} by TMAP_1:def 7;
+      then
+      H in {P \/ (Q /\ A1`) where P,Q is Subset of Y1 : P in the topology
+      of Y1 & Q in the topology of Y1} by TMAP_1:def 7;
       then consider P,Q being Subset of Y1 such that
-A11:  H = P \/ (Q /\ A1`) and
-A12:  P in the topology of Y1 & Q in the topology of Y1;
-      now per cases by A7,A12,ENUMSET1:def 1;
-        case P = {} & Q = {};
-          hence H = {} by A11;
-        end;
-        case P = A1 & Q = {};
-          hence H = A1 by A11;
-        end;
-        case P = C & Q = {};
-          hence H = C by A11;
+A9:   H = P \/ (Q /\ A1`) and
+A10:  P in the topology of Y1 and
+A11:  Q in the topology of Y1;
+      now
+        per cases by A8,A10,A11,ENUMSET1:def 1;
+        case
+          P = {} & Q = {};
+          hence H = {} by A9;
         end;
         case
-A13:      P = {} & Q = A1;
+          P = A1 & Q = {};
+          hence H = A1 by A9;
+        end;
+        case
+          P = C & Q = {};
+          hence H = C by A9;
+        end;
+        case
+A12:      P = {} & Q = A1;
           A1 misses A1` by XBOOLE_1:79;
-          hence H = {} by A11,A13,XBOOLE_0:def 7;
+          hence H = {} by A9,A12,XBOOLE_0:def 7;
         end;
         case
-A14:      P = A1 & Q = A1;
+A13:      P = A1 & Q = A1;
           A1 misses A1` by XBOOLE_1:79;
           then A1 /\ A1` = {}Y1 by XBOOLE_0:def 7;
-          hence H = A1 by A11,A14;
+          hence H = A1 by A9,A13;
         end;
         case
-A15:      P = C & Q = A1;
+A14:      P = C & Q = A1;
           A1 misses A1` by XBOOLE_1:79;
           then A1 /\ A1` = {}Y1 by XBOOLE_0:def 7;
-          hence H = C by A11,A15;
+          hence H = C by A9,A14;
         end;
-        case P = {} & Q = C;
-          hence H = A2` by A3,A8,A11,XBOOLE_1:28;
+        case
+          P = {} & Q = C;
+          hence H = A2` by A3,A4,A9,XBOOLE_1:28;
         end;
-        case P = A1 & Q = C;
-          then H = A1 \/ A1` & A1 \/ A1` = [#]Y1
-          by A3,A11,PRE_TOPC:18,XBOOLE_1:28;
-          hence H = C by TMAP_1:104;
+        case
+A15:      P = A1 & Q = C;
+          A1 \/ A1` = [#]Y1 by PRE_TOPC:18;
+          hence H = C by A3,A9,A15,XBOOLE_1:28;
         end;
-        case P = C & Q = C;
-          hence H = C by A3,A11,XBOOLE_1:12;
+        case
+          P = C & Q = C;
+          hence H = C by A3,A9,XBOOLE_1:12;
         end;
       end;
       hence H in {{},A2,A3,C} by ENUMSET1:def 2;
     end;
     then
 A16: the topology of Y2 c= {{},A2,A3,C} by TARSKI:def 3;
+A17: A2 is open by Th1,TMAP_1:105;
+A18: A2 is closed by Th3;
     now
       let H be set;
-      assume H in {{},A2,A3,C};
+      assume
+      H in {{},A2,A3,C};
       then H = {} or H = A2 or H = A3 or H = C by ENUMSET1:def 2;
-      hence H in the topology of Y2 by A3,A8,A9,PRE_TOPC:5,def 1,def 5;
+      hence H in the topology of Y2 by A3,A4,A18,A17,PRE_TOPC:5,def 1 ,def
+      5;
     end;
     then {{},A2,A3,C} c= the topology of Y2 by TARSKI:def 3;
     then
-A17: the topology of Y2 = {{},A2,A3,C} by A16,XBOOLE_0:def 10;
-    {} in {{},1} & 1 in {{},1} by TARSKI:def 2;
-    then reconsider B0 = {{}}, B1 = {1} as Subset of {{},1} by ZFMISC_1:37;
-    reconsider B = {B0,B1} as non empty Subset of Y2 by A8,TMAP_1:104;
-A18: now
-      take A2;
-      now
-        assume A2 = C;
-        then B0 = {} by TARSKI:def 1;
-        hence contradiction;
-      end;
-      hence A2 is open & A2 <> {} & A2 <> the carrier of Y2 by A4,A8,Th1,
-TMAP_1:104;
-    end;
-A19: now
-      take B;
-      Int B in {{},A2,A3,C} by A17,PRE_TOPC:def 5;
-      then
-A20:  Int B = {} or Int B = A2 or Int B = A3 or Int B = C by ENUMSET1:def 2;
+A19: the topology of Y2 = {{},A2,A3,C} by A16,XBOOLE_0:def 10;
+A20: now
+      let G be Subset of Y2;
 A21:  now
-        assume Int B = C;
-        then C c= B by TOPS_1:44;
-        hence contradiction by A2,TARSKI:def 2;
+        assume
+        G = {} or G = C;
+        then G = {}Y2 or G = [#]Y2 by A4,TMAP_1:104;
+        hence G is closed;
       end;
 A22:  now
-        assume Int B = A2;
-        then {} in Int B & Int B c= B by TARSKI:def 1,TOPS_1:44;
-        hence contradiction by TARSKI:def 2;
-      end;
-      now
+        A3 in the topology of Y2 by A19,ENUMSET1:def 2;
+        then
+A23:    A3 is open by PRE_TOPC:def 5;
         assume
-A23:    Int B = A3;
-        reconsider I={{},1} as Point of Y2 by A3,A8,ZFMISC_1:def 1;
-        not I in A2 by TARSKI:def 1;
-        then I in Int B & Int B c= B by A23,SUBSET_1:50,TOPS_1:44;
-        then I = B0 or I = B1 by TARSKI:def 2;
+        G = A2;
+        hence G is closed by A23,TOPS_1:29;
+      end;
+A24:  now
+        A2 in the topology of Y2 by A19,ENUMSET1:def 2;
+        then
+A25:    A3` is open by PRE_TOPC:def 5;
+        assume
+        G = A3;
+        hence G is closed by A25;
+      end;
+      assume
+      G is open;
+      then G in {{},A2,A3,C} by A19,PRE_TOPC:def 5;
+      hence G is closed by A21,A22,A24,ENUMSET1:def 2;
+    end;
+A26: {} in C by A2;
+A27: now
+A28:  now
+        reconsider I={{},1} as Point of Y2 by A3,A4,ZFMISC_1:def 1;
+A29:    not I in A2 by TARSKI:def 1;
+A30:    Int B c= B by TOPS_1:44;
+        assume
+        Int B = A3;
+        then I in Int B by A29,SUBSET_1:50;
+        then I = B0 or I = B1 by A30,TARSKI:def 2;
         then 1 in B0 or {} in B1 by TARSKI:def 2;
         hence contradiction by TARSKI:def 1;
       end;
-      hence B is boundary by A20,A21,A22,TOPS_1:84;
-    end;
-    now
-      let G be Subset of Y2;
-      assume G is open;
-      then
-A24:  G in {{},A2,A3,C} by A17,PRE_TOPC:def 5;
-A25:  now
-        assume G = {} or G = C;
-        then (G = {}Y2 or G = [#]Y2) & {}Y2 is closed & [#] Y2 is closed
-        by A8,TMAP_1:104;
-        hence G is closed;
-      end;
-A26:  now
+      take B;
+A31:  now
         assume
-A27:    G = A2;
-        A3 in the topology of Y2 by A17,ENUMSET1:def 2;
-        then A3 is open by PRE_TOPC:def 5;
-        hence G is closed by A27,TOPS_1:29;
+        Int B = A2;
+        then
+A32:    {} in Int B by TARSKI:def 1;
+        Int B c= B by TOPS_1:44;
+        hence contradiction by A32,TARSKI:def 2;
       end;
+A33:  now
+        assume
+        Int B = C;
+        then C c= B by TOPS_1:44;
+        hence contradiction by A26,TARSKI:def 2;
+      end;
+      Int B in {{},A2,A3,C} by A19,PRE_TOPC:def 5;
+      then Int B = {} or Int B = A2 or Int B = A3 or Int B = C by
+      ENUMSET1:def 2;
+      hence B is boundary by A33,A31,A28,TOPS_1:84;
+    end;
+    take Y2;
+    now
+      take A2;
       now
         assume
-A28:    G = A3;
-        A2 in the topology of Y2 by A17,ENUMSET1:def 2;
-        then A3` is open by PRE_TOPC:def 5;
-        hence G is closed by A28;
+        A2 = C;
+        then B0 = {} by TARSKI:def 1;
+        hence contradiction;
       end;
-      hence G is closed by A24,A25,A26,ENUMSET1:def 2;
+      hence A2 is open & A2 <> {} & A2 <> the carrier of Y2 by A4,Th1,
+      TMAP_1:104,105;
     end;
-    hence thesis by A18,A19,Def6,TDLAT_3:20,23;
+    hence thesis by A27,A20,Def6,TDLAT_3:20,23;
   end;
 end;
 
 theorem Th39:
-  for C being non empty set, c0 being Element of C holds
-  C \ {c0} is non empty iff STS(C,c0) is non almost_discrete
+  for C being non empty set, c0 being Element of C holds C \ {c0}
+  is non empty iff STS(C,c0) is non almost_discrete
 proof
   let C be non empty set, c0 be Element of C;
   hereby
@@ -1704,19 +1841,22 @@ A1: C \ {c0} is non empty;
     now
       reconsider A = {c0} as non empty Subset of STS(C,c0);
       take A;
-      A is closed & A is boundary by A1,Th25;
-      hence A is nowhere_dense;
+A2:   A is boundary by A1,Th25;
+      A is closed by A1,Th25;
+      hence A is nowhere_dense by A2;
     end;
     hence STS(C,c0) is non almost_discrete by Def7;
   end;
-  assume STS(C,c0) is non almost_discrete;
+  assume
+  STS(C,c0) is non almost_discrete;
   then consider A being non empty Subset of STS(C,c0) such that
-A2: A is nowhere_dense by Def7;
-  assume C \ {c0} is empty;
-  then C c= {c0} & {c0} c= C by XBOOLE_1:37;
+A3: A is nowhere_dense by Def7;
+  assume
+  C \ {c0} is empty;
+  then C c= {c0} by XBOOLE_1:37;
   then C = {c0} by XBOOLE_0:def 10;
   then A = C by ZFMISC_1:39;
-  hence contradiction by A2,TOPS_3:23;
+  hence contradiction by A3,TOPS_3:23;
 end;
 
 registration
@@ -1728,20 +1868,21 @@ registration
     set Y = STS(D,a);
     take Y;
     reconsider A = {a} as non empty Subset of Y;
-    1 in D & not 1 in A by TARSKI:def 1,def 2;
-    then D \ A is non empty by XBOOLE_0:def 5;
+A1: not 1 in A by TARSKI:def 1;
+    1 in D by TARSKI:def 2;
+    then D \ A is non empty by A1,XBOOLE_0:def 5;
     hence thesis by Th39;
   end;
 end;
 
 theorem
-  for A being non empty Subset of X st A is boundary holds
-  X modified_with_respect_to A` is non almost_discrete
+  for A being non empty Subset of X st A is boundary holds X
+  modified_with_respect_to A` is non almost_discrete
 proof
   let A be non empty Subset of X;
+  set Z = X modified_with_respect_to A`;
   assume
 A1: A is boundary;
-  set Z = X modified_with_respect_to A`;
   now
     reconsider C = A as non empty Subset of Z by TMAP_1:104;
     take C;
@@ -1751,20 +1892,19 @@ A1: A is boundary;
 end;
 
 theorem
-  for A being Subset of X st A <> the carrier of X & A is dense holds
-  X modified_with_respect_to A is non almost_discrete
+  for A being Subset of X st A <> the carrier of X & A is dense holds X
+  modified_with_respect_to A is non almost_discrete
 proof
   let A be Subset of X;
   assume
 A1: A <> the carrier of X;
+  set Z = X modified_with_respect_to A;
   assume
 A2: A is dense;
-  set Z = X modified_with_respect_to A;
   now
     reconsider C = A as Subset of Z by TMAP_1:104;
     take C;
-    thus C <> the carrier of Z &
-    C is everywhere_dense by A1,A2,Th5,TMAP_1:104;
+    thus C <> the carrier of Z & C is everywhere_dense by A1,A2,Th5,TMAP_1:104;
   end;
   hence thesis by Th36;
 end;

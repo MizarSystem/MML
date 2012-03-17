@@ -11,6 +11,7 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="NAT_1"/>
@@ -24,9 +25,9 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="6"/>
-<Adjective nr="30"/>
-<Adjective nr="35"/>
-<Adjective nr="39"/>
+<Adjective nr="31"/>
+<Adjective nr="37"/>
+<Adjective nr="41"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -35,8 +36,8 @@
 <Adjective nr="1"/>
 <Adjective nr="6"/>
 <Adjective nr="7"/>
-<Adjective nr="30"/>
-<Adjective nr="35"/>
+<Adjective nr="31"/>
+<Adjective nr="37"/>
 </Cluster>
 </CCluster>
 </Registrations>

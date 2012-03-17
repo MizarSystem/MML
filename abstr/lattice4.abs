@@ -8,12 +8,12 @@ environ
 
  vocabularies SETFAM_1, BOOLE, LATTICES, FILTER_0, GROUP_6, FUNCT_1, RELAT_1,
       WELLORD1, FILTER_1, ZF_LANG, SUBSET_1, FINSUB_1, LATTICE2, SETWISEO,
-      BINOP_1, FUNCOP_1, VECTSP_1, LATTICE4, HAHNBAN, SGRAPH1;
+      BINOP_1, FUNCOP_1, VECTSP_1, LATTICE4, HAHNBAN, SGRAPH1, WAYBEL23;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, RELAT_1, ORDINAL1,
       FUNCT_1, PARTFUN1, FUNCT_2, BINOP_1, FINSUB_1, STRUCT_0, LATTICES,
       LATTICE2, FILTER_0, FUNCOP_1, SETWISEO, WELLORD1, FILTER_1;
  constructors WELLORD1, DOMAIN_1, SETWISEO, LATTICE2, FILTER_1, GRCAT_1,
-      FUNCOP_1, RELSET_1;
+      FUNCOP_1, RELSET_1, FILTER_0;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, FUNCT_2, STRUCT_0, LATTICES,
       FILTER_0;
  requirements BOOLE, SUBSET;
@@ -26,9 +26,9 @@ reserve x,y,X,X1,Y,Z for set;
 canceled 2;
 
 theorem :: LATTICE4:3
-  for X st X <> {} & for Z st Z <> {} & Z c= X & Z is c=-linear
-  ex Y st Y in X & for X1 st X1 in Z holds X1 c= Y
-  ex Y st Y in X & for Z st Z in X & Z <> Y holds not Y c= Z;
+  for X st X <> {} & for Z st Z <> {} & Z c= X & Z is c=-linear ex Y st
+  Y in X & for X1 st X1 in Z holds X1 c= Y ex Y st Y in X & for Z st Z in X & Z
+  <> Y holds not Y c= Z;
 
 begin :: Lattice Theory
 
@@ -51,11 +51,12 @@ reserve a2 for Element of L2;
 
 definition
   let L1,L2;
-  mode Homomorphism of L1,L2 ->
-    Function of the carrier of L1, the carrier of L2 means
+  mode Homomorphism of L1,L2 -> Function of the carrier of L1, the carrier of
+    L2 means
 :: LATTICE4:def 1
 
-    it.(a1 "\/" b1) = it.a1 "\/" it.b1 & it.(a1 "/\" b1) = it.a1 "/\" it.b1;
+    it.(a1 "\/" b1) = it.a1 "\/" it.b1 & it.(a1 "/\" b1) = it.a1
+    "/\" it.b1;
 end;
 
 reserve f for Homomorphism of L1,L2;
@@ -67,15 +68,14 @@ theorem :: LATTICE4:8
   f is one-to-one implies (a1 [= b1 iff (f.a1) [= (f.b1));
 
 theorem :: LATTICE4:9
-  for f being Function of the carrier of L1, the carrier of L2 holds
-  f is onto implies (for a2 ex a1 st a2 = f.a1);
+  for f being Function of the carrier of L1, the carrier of L2
+  holds f is onto implies for a2 ex a1 st a2 = f.a1;
 
 definition
   let L1,L2;
   canceled 3;
   redefine pred L1,L2 are_isomorphic means
 :: LATTICE4:def 5
-
   ex f st f is bijective;
 end;
 
@@ -101,10 +101,8 @@ end;
 
 definition
   let L;
-  mode ClosedSubset of L -> Subset of L means
-:: LATTICE4:def 10
-
-    p in it & q in it implies p "/\" q in it & p "\/" q in it;
+  canceled;
+  mode ClosedSubset of L is meet-closed join-closed Subset of L;
 end;
 
 theorem :: LATTICE4:10
@@ -117,6 +115,7 @@ end;
 
 theorem :: LATTICE4:11
   for F being Filter of L holds F is ClosedSubset of L;
+:::                by FILTER_0:10,8,LATTICES:def 24,def 25;
 
 reserve B for Finite_Subset of the carrier of L;
 
@@ -125,11 +124,9 @@ definition
   canceled;
   func FinJoin B -> Element of L equals
 :: LATTICE4:def 12
-
   FinJoin (B,id L);
   func FinMeet B -> Element of L equals
 :: LATTICE4:def 13
-
   FinMeet (B,id L);
 end;
 
@@ -152,12 +149,13 @@ theorem :: LATTICE4:18
 begin :: Lower-bounded Lattices
 
 reserve 0L for lower-bounded Lattice,
-  B,B1,B2 for Finite_Subset of the carrier of 0L,
+  B,B1,B2 for Finite_Subset of the carrier
+  of 0L,
   b for Element of 0L;
 
 theorem :: LATTICE4:19
-  for f being Homomorphism of 0L,L2 st f is onto holds
-  L2 is lower-bounded & f preserves_bottom;
+  for f being Homomorphism of 0L,L2 st f is onto holds L2 is
+  lower-bounded & f preserves_bottom;
 
 reserve f for UnOp of the carrier of 0L;
 
@@ -174,18 +172,19 @@ theorem :: LATTICE4:23
   FinJoin {}.the carrier of 0L = Bottom 0L;
 
 theorem :: LATTICE4:24
-  for A being ClosedSubset of 0L st Bottom 0L in A
-  for B holds B c= A implies FinJoin B in A;
+  for A being ClosedSubset of 0L st Bottom 0L in A for B holds B
+  c= A implies FinJoin B in A;
 
 begin :: Upper-bounded Lattices
 
 reserve 1L for upper-bounded Lattice,
-  B,B1,B2 for Finite_Subset of the carrier of 1L,
+  B,B1,B2 for Finite_Subset of the carrier
+  of 1L,
   b for Element of 1L;
 
 theorem :: LATTICE4:25
-  for f being Homomorphism of 1L,L2 st f is onto
-  holds L2 is upper-bounded & f preserves_top;
+  for f being Homomorphism of 1L,L2 st f is onto holds L2 is
+  upper-bounded & f preserves_top;
 
 theorem :: LATTICE4:26
   FinMeet {}.the carrier of 1L = Top 1L;
@@ -205,13 +204,14 @@ theorem :: LATTICE4:30
   FinMeet B1 "/\" FinMeet B2 = FinMeet (B1 \/ B2);
 
 theorem :: LATTICE4:31
-  for F being ClosedSubset of 1L st Top 1L in F
-  for B holds B c= F implies FinMeet B in F;
+  for F being ClosedSubset of 1L st Top 1L in F for B holds B c= F
+  implies FinMeet B in F;
 
 begin :: Distributive Upper-bounded Lattices
 
 reserve DL for distributive upper-bounded Lattice,
-  B for Finite_Subset of the carrier of DL,
+  B for Finite_Subset of the
+  carrier of DL,
   p for Element of DL,
   f for UnOp of the carrier of DL;
 
@@ -229,10 +229,11 @@ theorem :: LATTICE4:33
   f.i "/\" f.(i => j) [= f.j;
 
 theorem :: LATTICE4:34
-  f is one-to-one implies (f.i "/\" f.k [= f.j implies f.k [= f.(i => j));
+  f is one-to-one implies (f.i "/\" f.k [= f.j implies f.k [= f.(i
+  => j));
 
 theorem :: LATTICE4:35
-  f is bijective implies (CL is implicative & f preserves_implication);
+  f is bijective implies CL is implicative & f preserves_implication;
 
 begin ::Boolean Lattices
 
@@ -256,7 +257,8 @@ definition
   mode Field of BL -> non empty Subset of BL means
 :: LATTICE4:def 14
 
-    a in it & b in it implies a "/\" b in it & a` in it;
+    a in it & b in it
+    implies a "/\" b in it & a` in it;
 end;
 
 reserve F,H for Field of BL;
@@ -278,14 +280,14 @@ definition
   func field_by A -> Field of BL means
 :: LATTICE4:def 15
 
-  A c= it & for F st A c= F holds it c= F;
+  A c= it & for F st A c= F holds
+  it c= F;
 end;
 
 definition
   let BL,A;
   func SetImp A -> Subset of BL equals
 :: LATTICE4:def 16
-
   { a => b : a in A & b in A};
 end;
 
@@ -305,7 +307,7 @@ definition
   func comp BL -> Function of the carrier of BL, the carrier of BL means
 :: LATTICE4:def 17
 
-  it.a = a`;
+   it.a = a`;
 end;
 
 theorem :: LATTICE4:45
@@ -321,12 +323,11 @@ theorem :: LATTICE4:48
   (FinMeet B)` = FinJoin (B,comp BL);
 
 theorem :: LATTICE4:49
-  for AF being non empty ClosedSubset of BL st Bottom BL in AF & Top BL in AF
-  for B holds B c= SetImp AF implies
-  ex B0 st B0 c= SetImp AF & FinJoin( B,comp BL) = FinMeet B0;
+  for AF being non empty ClosedSubset of BL st Bottom BL in AF &
+  Top BL in AF for B holds B c= SetImp AF implies ex B0 st B0 c= SetImp AF &
+  FinJoin( B,comp BL) = FinMeet B0;
 
 theorem :: LATTICE4:50
-  for AF being non empty ClosedSubset of BL st
-  Bottom BL in AF & Top BL in AF holds
-  { FinMeet B : B c= SetImp AF } = field_by AF;
+  for AF being non empty ClosedSubset of BL st Bottom BL in AF & Top BL
+  in AF holds { FinMeet B : B c= SetImp AF } = field_by AF;
 

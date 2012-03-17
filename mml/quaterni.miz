@@ -7,15 +7,15 @@
 environ
 
  vocabularies ARYTM, RELAT_1, COMPLEX1, FUNCT_2, BOOLE, FUNCT_1, FUNCOP_1,
-      ORDINAL2, ORDINAL1, QUATERNI, FUNCT_4, ARYTM_1, ARYTM_2, ARYTM_3,
-      XCMPLX_0, SQUARE_1, INCPROJ;
+      ORDINAL2, QUATERNI, FUNCT_4, ARYTM_1, ARYTM_2, ARYTM_3, XCMPLX_0,
+      SQUARE_1, INCPROJ;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, ARYTM_3, NUMBERS, RELAT_1,
       FUNCT_1, FUNCT_2, FUNCT_4, ENUMSET1, COMPLEX1, ARYTM_0, ZFMISC_1,
       ARYTM_2, XCMPLX_0, XREAL_0, REAL_1, SQUARE_1, XXREAL_0, RELSET_1, SEQ_1;
- constructors ENUMSET1, FUNCT_4, ARYTM_1, ARYTM_0, REAL_1, SQUARE_1,
-      COMPLEX1, SEQ_1, VALUED_1, RELSET_1;
+ constructors ENUMSET1, FUNCT_4, ARYTM_1, ARYTM_0, REAL_1, SQUARE_1, COMPLEX1,
+      SEQ_1, VALUED_1, RELSET_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, ORDINAL1, FUNCT_2, FUNCT_4,
-      NUMBERS, XXREAL_0, XREAL_0, SQUARE_1, MEMBERED, VALUED_0, FUNCT_1;
+      NUMBERS, XXREAL_0, XREAL_0, SQUARE_1, MEMBERED, VALUED_0;
  requirements NUMERALS, SUBSET, BOOLE, REAL, ARITHM;
  definitions SQUARE_1, TARSKI, COMPLEX1, ARYTM_3, XCMPLX_0;
  theorems FUNCT_2, XBOOLE_0, TARSKI, NUMBERS, ENUMSET1, FUNCT_4, XBOOLE_1,
@@ -64,8 +64,9 @@ theorem Th1:
   dom (x,y,w,z) --> (a,b,c,d) = {x,y,w,z}
 proof
   set f=(x,y) --> (a,b), g=(w,z) --> (c,d);
-  dom f={x,y} & dom g={w,z} by FUNCT_4:65;
-  then dom f \/ dom g = {x,y,w,z} by ENUMSET1:45;
+A1: dom f={x,y} by FUNCT_4:65;
+  dom g={w,z} by FUNCT_4:65;
+  then dom f \/ dom g = {x,y,w,z} by A1,ENUMSET1:45;
   hence thesis by FUNCT_4:def 1;
 end;
 
@@ -74,12 +75,13 @@ theorem Th2:
 proof
   set f=(x,y) --> (a,b),g=(w,z) --> (c,d),
   h=((x,y) --> (a,b)) +* ((w,z) --> (c,d));
-  rng f c= {a,b} & rng g c= {c,d} by FUNCT_4:65;
-  then rng f \/ rng g c= {a,b} \/ {c,d} by XBOOLE_1:13;
+A1: rng f c= {a,b} by FUNCT_4:65;
+  rng g c= {c,d} by FUNCT_4:65;
+  then rng f \/ rng g c= {a,b} \/ {c,d} by A1,XBOOLE_1:13;
   then
-A1: rng f \/ rng g c= {a,b,c,d} by ENUMSET1:45;
+A2: rng f \/ rng g c= {a,b,c,d} by ENUMSET1:45;
   rng h c= rng f \/ rng g by FUNCT_4:18;
-  hence thesis by A1,XBOOLE_1:1;
+  hence thesis by A2,XBOOLE_1:1;
 end;
 
 Lm1: 0,1,2,3 are_mutually_different by ZFMISC_1:def 6;
@@ -89,18 +91,27 @@ theorem Th3:
   ((x,y,w,z) --> (a,b,c,d)).x=a & ((x,y,w,z) --> (a,b,c,d)).y=b &
   ((x,y,w,z) --> (a,b,c,d)).w=c & ((x,y,w,z) --> (a,b,c,d)).z=d
 proof
-  assume x,y,w,z are_mutually_different;
+  assume
+A1: x,y,w,z are_mutually_different;
   then
-A1: x<>w & x<>z & y<>w & y<>z & w<>y & z<>y & x<>y & w<>z by ZFMISC_1:def 6;
+A2: x<>w by ZFMISC_1:def 6;
+A3: x<>z by A1,ZFMISC_1:def 6;
+A4: y<>w by A1,ZFMISC_1:def 6;
+A5: y<>z by A1,ZFMISC_1:def 6;
+A6: x<>y by A1,ZFMISC_1:def 6;
+A7: w<>z by A1,ZFMISC_1:def 6;
   set f=(x,y) --> (a,b),g=(w,z) --> (c,d);
-A2: f.x=a & f.y=b & g.w=c & g.z=d by A1,FUNCT_4:66;
-A3: dom f = {x,y} & dom g = {w,z} by FUNCT_4:65;
+A8: f.x=a by A6,FUNCT_4:66;
+A9: f.y=b by FUNCT_4:66;
+A10: g.w=c by A7,FUNCT_4:66;
+A11: g.z=d by FUNCT_4:66;
+A12: dom g = {w,z} by FUNCT_4:65;
   then
-A4: not x in dom g by A1,TARSKI:def 2;
-A5: not y in dom g by A1,A3,TARSKI:def 2;
-A6: w in dom g by A3,TARSKI:def 2;
-  z in dom g by A3,TARSKI:def 2;
-  hence thesis by A2,A4,A5,A6,FUNCT_4:12,14;
+A13: not x in dom g by A2,A3,TARSKI:def 2;
+A14: not y in dom g by A4,A5,A12,TARSKI:def 2;
+A15: w in dom g by A12,TARSKI:def 2;
+  z in dom g by A12,TARSKI:def 2;
+  hence thesis by A8,A9,A10,A11,A13,A14,A15,FUNCT_4:12,14;
 end;
 
 Lm2: x,y,w,z are_mutually_different implies
@@ -115,8 +126,11 @@ A1: x,y,w,z are_mutually_different;
 A2: y1=a or y1=b or y1=c or y1=d by ENUMSET1:def 2;
 A3: dom h = {x,y,w,z} by Th1;
 A4: h.x=y1 or h.y=y1 or h.w=y1 or h.z=y1 by A1,A2,Th3;
-  x in dom h & y in dom h & w in dom h & z in dom h by A3,ENUMSET1:def 2;
-  hence thesis by A4,FUNCT_1:def 5;
+A5: x in dom h by A3,ENUMSET1:def 2;
+A6: y in dom h by A3,ENUMSET1:def 2;
+A7: w in dom h by A3,ENUMSET1:def 2;
+  z in dom h by A3,ENUMSET1:def 2;
+  hence thesis by A4,A5,A6,A7,FUNCT_1:def 5;
 end;
 
 theorem
@@ -134,17 +148,21 @@ end;
 theorem
   {x1,x2,x3,x4} c= X iff x1 in X & x2 in X & x3 in X & x4 in X
 proof
-  thus {x1,x2,x3,x4} c= X implies x1 in X & x2 in X & x3 in X & x4 in X
-  proof
-    x1 in {x1,x2,x3,x4} & x2 in {x1,x2,x3,x4} & x3 in {x1,x2,x3,x4} &
-    x4 in {x1,x2,x3,x4} by ENUMSET1:def 2;
-    hence thesis;
-  end;
-  assume
-A1: x1 in X & x2 in X & x3 in X & x4 in X;
+A1: x1 in {x1,x2,x3,x4} by ENUMSET1:def 2;
+A2: x2 in {x1,x2,x3,x4} by ENUMSET1:def 2;
+A3: x3 in {x1,x2,x3,x4} by ENUMSET1:def 2;
+  x4 in {x1,x2,x3,x4} by ENUMSET1:def 2;
+  hence
+  {x1,x2,x3,x4} c= X implies x1 in X & x2 in X & x3 in X & x4 in X by A1,A2
+  ,A3;
+  assume that
+A4: x1 in X and
+A5: x2 in X and
+A6: x3 in X and
+A7: x4 in X;
   let z;
   assume z in {x1,x2,x3,x4};
-  hence thesis by A1,ENUMSET1:def 2;
+  hence thesis by A4,A5,A6,A7,ENUMSET1:def 2;
 end;
 
 definition
@@ -154,33 +172,29 @@ definition
   coherence
   proof
     set f=(x,y) --> (a,b),g=(w,z) --> (c,d),h = (x,y,w,z) --> (a,b,c,d);
-    now
-      thus dom h = {x,y,w,z} by Th1;
-      rng f \/ rng g c= A & rng h c= rng f \/ rng g by FUNCT_4:18;
-      hence rng h c= A by XBOOLE_1:1;
-    end;
-    hence thesis by FUNCT_2:def 1,RELSET_1:11;
+A1: rng h c= rng f \/ rng g by FUNCT_4:18;
+A2: dom h = {x,y,w,z} by Th1;
+    rng h c= A by A1,XBOOLE_1:1;
+    hence thesis by A2,FUNCT_2:def 1,RELSET_1:11;
   end;
 end;
 
 definition
   func <j> equals
-
   (0,1,2,3) --> (0,0,1,0);
   coherence;
   func <k> equals
-
   (0,1,2,3) --> (0,0,0,1);
   coherence;
 end;
 
-Lmx: <i> = [*0,1*] by ARYTM_0:def 7;
+Lm3: <i> = [*0,1*] by ARYTM_0:def 7;
 
 registration
   cluster <i> -> quaternion;
   coherence
   proof
-    thus <i> in QUATERNION by XBOOLE_0:def 3,Lmx;
+    thus <i> in QUATERNION by Lm3,XBOOLE_0:def 3;
   end;
   cluster <j> -> quaternion;
   coherence
@@ -230,23 +244,24 @@ end;
 
 definition
   let x,y,w,z be real number;
-  func [*x,y,w,z*] -> Element of QUATERNION means :Def6:
-  (ex x', y' being Element of REAL st
-    x' = x & y' = y & it = [*x',y'*]) if w=0 & z=0
+  func [*x,y,w,z*] -> Element of QUATERNION means
+  :Def6:
+  ex x', y' being Element of REAL st
+  x' = x & y' = y & it = [*x',y'*] if w=0 & z=0
   otherwise it = (0,1,2,3) --> (x,y,w,z);
   consistency;
   existence
   proof
     reconsider x' = x, y' = y, w' = w, z' = z as Element of REAL
-      by XREAL_0:def 1;
+    by XREAL_0:def 1;
     thus w = 0 & z = 0 implies
     ex t being Element of QUATERNION st
     ex x', y' being Element of REAL st
     x' = x & y' = y & t = [*x',y'*]
     proof
-      assume w = 0 & z = 0;
+      assume that w = 0
+      and z = 0;
       set t = [*x',y'*];
-      t in COMPLEX; then
       reconsider t as Element of QUATERNION by XBOOLE_0:def 3;
       take t;
       take x', y';
@@ -257,31 +272,33 @@ definition
     ex t being Element of QUATERNION st t = (0,1,2,3) --> (x,y,w,z)
     proof
       assume
-A1:   w <> 0 or z <> 0; then
+A1:   w <> 0 or z <> 0;
 A2:   e in Funcs(4,REAL) by CARD_1:90,FUNCT_2:11;
       now
-        assume e in {r where r is Element of Funcs(4,REAL): r.2=0 & r.3=0};
+        assume
+        e in {r where r is Element of Funcs(4,REAL): r.2=0 & r.3=0};
         then ex r being Element of Funcs(4,REAL) st e = r & r.2=0 & r.3=0;
         hence contradiction by A1,Lm1,Th3;
       end;
       then e in Funcs(4,REAL)
-        \ { r where r is Element of Funcs(4,REAL): r.2=0 & r.3 = 0}
-          by A2,XBOOLE_0:def 5; then
-      reconsider e as Element of QUATERNION by XBOOLE_0:def 3;
+      \ { r where r is Element of Funcs(4,REAL): r.2=0 & r.3 = 0}
+      by A2,XBOOLE_0:def 5;
+      then reconsider e as Element of QUATERNION by XBOOLE_0:def 3;
       take e;
-      thus thesis by XBOOLE_0:def 3;
+      thus thesis;
     end;
-    hence thesis;
+    thus thesis;
   end;
   uniqueness;
 end;
 
-Def6': for x,y being Element of REAL holds [*x,y,0,0*] = [*x,y*]
+Lm4: for x,y being Element of REAL holds [*x,y,0,0*] = [*x,y*]
 proof
   let x,y be Element of REAL;
-  consider x', y' being Element of REAL such that
-A1: x' = x & y' = y & [*x,y,0,0*] = [*x',y'*] by Def6;
-  thus thesis by A1;
+
+  ex x', y' being Element of REAL st ( x' = x)&( y' = y)&( [*x
+  ,y,0,0*] = [*x',y'*]) by Def6;
+  hence thesis;
 end;
 
 theorem Th6:
@@ -291,42 +308,49 @@ theorem Th6:
 proof
   let a,b,c,d,e,i,j,k be set;
   let h be Function such that
-A1: a<>b & c <>d & dom h = {a,b,c,d} & h.a = e & h.b = i & h.c = j & h.d=k;
+A1: a<>b and
+A2: c <>d and
+A3: dom h = {a,b,c,d} and
+A4: h.a = e and
+A5: h.b = i and
+A6: h.c = j and
+A7: h.d=k;
   set f = (a,b) --> (e,i);
   set g = (c,d) --> (j,k);
-A2: dom f = {a,b} & dom g = {c,d} by FUNCT_4:65;
+A8: dom f = {a,b} by FUNCT_4:65;
+A9: dom g = {c,d} by FUNCT_4:65;
   then
-A3: dom h = dom f \/ dom g by A1,ENUMSET1:45;
+A10: dom h = dom f \/ dom g by A3,A8,ENUMSET1:45;
   now
     let x such that
-A4: x in dom f \/ dom g;
+A11: x in dom f \/ dom g;
     thus x in dom g implies h.x = g.x
     proof
       assume
-A5:   x in dom g;
-      per cases by A2,A5,TARSKI:def 2;
+A12:  x in dom g;
+      per cases by A9,A12,TARSKI:def 2;
       suppose x=c;
-        hence thesis by A1,FUNCT_4:66;
+        hence thesis by A2,A6,FUNCT_4:66;
       end;
       suppose x=d;
-        hence thesis by A1,FUNCT_4:66;
+        hence thesis by A7,FUNCT_4:66;
       end;
     end;
     thus not x in dom g implies h.x = f.x
     proof
       assume not x in dom g;
       then
-A6:   x in dom f by A4,XBOOLE_0:def 3;
-      per cases by A2,A6,TARSKI:def 2;
+A13:  x in dom f by A11,XBOOLE_0:def 3;
+      per cases by A8,A13,TARSKI:def 2;
       suppose x=a;
-        hence thesis by A1,FUNCT_4:66;
+        hence thesis by A1,A4,FUNCT_4:66;
       end;
       suppose x=b;
-        hence thesis by A1,FUNCT_4:66;
+        hence thesis by A5,FUNCT_4:66;
       end;
     end;
   end;
-  hence thesis by A3,FUNCT_4:def 1;
+  hence thesis by A10,FUNCT_4:def 1;
 end;
 
 theorem Th7:
@@ -349,21 +373,30 @@ A2: g in Funcs(4,REAL) \ { x where x is Element of Funcs(4,REAL):
 A3: g = f and
 A4: dom f = 4 and
 A5: rng f c= REAL by FUNCT_2:def 2;
-    0 in 4 & 1 in 4 & 2 in 4 & 3 in 4 by CARD_1:90,ENUMSET1:def 2;
-    then f.0 in rng f & f.1 in rng f & f.2 in rng f &
-    f.3 in rng f by A4,FUNCT_1:12;
-    then reconsider r = f.0, s = f.1, t=f.2, u=f.3 as Element of REAL by A5;
-A6: g = (0,1,2,3)-->(r,s,t,u) by A3,A4,Th6,CARD_1:90;
+A6: 0 in 4 by CARD_1:90,ENUMSET1:def 2;
+A7: 1 in 4 by CARD_1:90,ENUMSET1:def 2;
+A8: 2 in 4 by CARD_1:90,ENUMSET1:def 2;
+A9: 3 in 4 by CARD_1:90,ENUMSET1:def 2;
+A10: f.0 in rng f by A4,A6,FUNCT_1:12;
+A11: f.1 in rng f by A4,A7,FUNCT_1:12;
+A12: f.2 in rng f by A4,A8,FUNCT_1:12;
+    f.3 in rng f by A4,A9,FUNCT_1:12;
+    then reconsider
+    r = f.0, s = f.1, t=f.2, u=f.3 as Element of REAL by A5,A10,A11
+    ,A12;
+A13: g = (0,1,2,3)-->(r,s,t,u) by A3,A4,Th6,CARD_1:90;
     take r,s,t,u;
     now
-      assume t=0 & u=0;
-      then (0,1,2,3)-->(r,s,t,u).2 = 0 &
-      (0,1,2,3)-->(r,s,t,u).3 = 0 by Lm1,Th3;
+      assume that
+A14:  t=0 and
+A15:  u=0;
+A16:  (0,1,2,3)-->(r,s,t,u).2 = 0 by A14,Lm1,Th3;
+      (0,1,2,3)-->(r,s,t,u).3 = 0 by A15,Lm1,Th3;
       then g in { x where x is Element of Funcs(4,REAL):
-      x.2=0 & x.3=0} by A2,A6;
+      x.2=0 & x.3=0} by A2,A13,A16;
       hence contradiction by A2,XBOOLE_0:def 5;
     end;
-    hence thesis by A6,Def6;
+    hence thesis by A13,Def6;
   end;
 end;
 
@@ -371,15 +404,24 @@ theorem Th8:
   a,c,x,w are_mutually_different
   implies (a,c,x,w) --> (b,d,y,z) = { [a,b], [c,d],[x,y],[w,z] }
 proof
-  assume a,c,x,w are_mutually_different;
+  assume
+A1: a,c,x,w are_mutually_different;
   then
-A1: a <> c & a <> x & a <> w & c <> x & c <> w & x<>w by ZFMISC_1:def 6;
+A2: a <> c by ZFMISC_1:def 6;
+A3: a <> x by A1,ZFMISC_1:def 6;
+A4: a <> w by A1,ZFMISC_1:def 6;
+A5: c <> x by A1,ZFMISC_1:def 6;
+A6: c <> w by A1,ZFMISC_1:def 6;
+A7: x<>w by A1,ZFMISC_1:def 6;
   set m=(a,c) --> (b,d), n = (x,w) --> (y,z);
-A2: dom m = {a,c} & dom n = {x,w} by FUNCT_4:65;
-  not a in {x,w} & not c in {x,w} by A1,TARSKI:def 2;
-  then (a,c,x,w) --> (b,d,y,z) = m \/ n by A2,FUNCT_4:32,ZFMISC_1:57
-    .={ [a,b], [c,d] } \/ n by A1,FUNCT_4:71
-    .={ [a,b], [c,d] } \/ {[x,y],[w,z]} by A1,FUNCT_4:71
+A8: dom m = {a,c} by FUNCT_4:65;
+A9: dom n = {x,w} by FUNCT_4:65;
+A10: not a in {x,w} by A3,A4,TARSKI:def 2;
+  not c in {x,w} by A5,A6,TARSKI:def 2;
+  then (a,c,x,w) --> (b,d,y,z) = m \/ n by A8,A9,A10,
+  FUNCT_4:32,ZFMISC_1:57
+    .={ [a,b], [c,d] } \/ n by A2,FUNCT_4:71
+    .={ [a,b], [c,d] } \/ {[x,y],[w,z]} by A7,FUNCT_4:71
     .={ [a,b], [c,d], [x,y],[w,z]} by ENUMSET1:45;
   hence thesis;
 end;
@@ -388,16 +430,18 @@ reserve i,j,k for Element of NAT;
 reserve a,b,c,d for Element of REAL;
 reserve y,r,s,x,t,w for Element of RAT+;
 
-Lm3: for x,y,z being set st [x,y] = {z} holds z = {x} & x = y
+Lm5: for x,y,z being set st [x,y] = {z} holds z = {x} & x = y
 proof
   let x,y,z be set;
-  assume [x,y] = {z};
+  assume
+A1: [x,y] = {z};
   then
-A1: {x,y} in {z} & {x} in {z} by TARSKI:def 2;
+A2: {x,y} in {z} by TARSKI:def 2;
+  {x} in {z} by A1,TARSKI:def 2;
   hence
-A2: z = {x} by TARSKI:def 1;
-  {x,y} = z by A1,TARSKI:def 1;
-  hence thesis by A2,ZFMISC_1:9;
+A3: z = {x} by TARSKI:def 1;
+  {x,y} = z by A2,TARSKI:def 1;
+  hence thesis by A3,ZFMISC_1:9;
 end;
 
 theorem Th9:
@@ -410,47 +454,50 @@ theorem Th9:
 proof
   let A be Subset of RAT+;
   given t such that
-A1: t in A & t <> {};
+A1: t in A and
+A2: t <> {};
   assume
-A2: for r,s st r in A & s <=' r holds s in A;
+A3: for r,s st r in A & s <=' r holds s in A;
   consider x such that
-A3: t = x+x by ARYTM_3:66;
+A4: t = x+x by ARYTM_3:66;
   consider y such that
-A4: x = y+y by ARYTM_3:66;
+A5: x = y+y by ARYTM_3:66;
   consider w such that
-A5: y = w+w by ARYTM_3:66;
+A6: y = w+w by ARYTM_3:66;
   take {},w,y,x,t;
-A6: {} <=' t & x <=' t by A3,ARYTM_3:71,def 13;
-A7: y <=' x & w<=' y by A4,A5,ARYTM_3:def 13;
+A7: {} <=' t by ARYTM_3:71;
+A8: x <=' t by A4,ARYTM_3:def 13;
+A9: y <=' x by A5,ARYTM_3:def 13;
+A10: w<=' y by A6,ARYTM_3:def 13;
+A11: y <=' t by A8,A9,ARYTM_3:74;
+  w <=' x by A9,A10,ARYTM_3:74;
+  hence {} in A & w in A & y in A & x in A & t in A by A1,A3,A7,A8,A9,
+  ARYTM_3:74;
+A12: {} <> x by A2,A4,ARYTM_3:56;
   then
-A8: y <=' t by A6,ARYTM_3:74;
-  w <=' x by A7,ARYTM_3:74;
-  hence {} in A & w in A & y in A & x in A & t in A by A1,A2,A6,A7,ARYTM_3:74;
-A9: {} <> x by A1,A3,ARYTM_3:56;
-  then
-A10: {} <> y by A4,ARYTM_3:56;
-A11: x <> t
+A13: {} <> y by A5,ARYTM_3:56;
+A14: x <> t
   proof
     assume x = t;
-    then t+{} = t+t by A3,ARYTM_3:56;
-    hence contradiction by A1,ARYTM_3:69;
+    then t+{} = t+t by A4,ARYTM_3:56;
+    hence contradiction by A2,ARYTM_3:69;
   end;
-A12: y <> x
+A15: y <> x
   proof
     assume y = x;
-    then x+{} = x+x by A4,ARYTM_3:56;
-    hence contradiction by A9,ARYTM_3:69;
+    then x+{} = x+x by A5,ARYTM_3:56;
+    hence contradiction by A12,ARYTM_3:69;
   end;
   w <> y
   proof
     assume w = y;
-    then y+{} = y+y by A5,ARYTM_3:56;
-    hence contradiction by A10,ARYTM_3:69;
+    then y+{} = y+y by A6,ARYTM_3:56;
+    hence contradiction by A13,ARYTM_3:69;
   end;
-  hence thesis by A1,A3,A4,A5,A6,A7,A8,A11,A12,ARYTM_3:56,73;
+  hence thesis by A2,A4,A5,A6,A8,A9,A10,A11,A14,A15,ARYTM_3:56,73;
 end;
 
-Lm4: not (0,1,2,3) --> (a,b,c,d) in REAL
+Lm6: not (0,1,2,3) --> (a,b,c,d) in REAL
 proof
   set f = (0,1,2,3)-->(a,b,c,d);
 A1: f = { [0,a], [1,b],[2,c],[3,d]} by Lm1,Th8;
@@ -463,146 +510,147 @@ A4: {i,j} in f by A2,TARSKI:def 2;
 A5: now
       assume i = j;
       then {i} = {i,j} by ENUMSET1:69;
-      then [i,j] = {{i}} by ENUMSET1:69;
-      then [0,a] in {{i}} & [1,b] in {{i}} & [2,c] in {{i}} & [3,d] in {{i}}
-      by A1,A2,ENUMSET1:def 2;
-      then [0,a] = {i} & [1,b] = {i} & [2,c] = {i} & [3,d] = {i}
-      by TARSKI:def 1;
-      hence contradiction by ZFMISC_1:33;
+      then
+A6:   [i,j] = {{i}} by ENUMSET1:69;
+      then
+A7:   [0,a] in {{i}} by A1,A2,ENUMSET1:def 2;
+A8:   [1,b] in {{i}} by A1,A2,A6,ENUMSET1:def 2;
+A9:   [0,a] = {i} by A7,TARSKI:def 1;
+      [1,b] = {i} by A8,TARSKI:def 1;
+      hence contradiction by A9,ZFMISC_1:33;
     end;
     per cases by A1,A3,A4,ENUMSET1:def 2;
     suppose {i} = [0,a] & {i,j} = [0,a];
       hence contradiction by A5,ZFMISC_1:9;
     end;
     suppose that
-A6:   {i} = [0,a] and
-A7:   {i,j} = [1,b];
-A8:   i = {0} by A6,Lm3;
-      i in [1,b] by A7,TARSKI:def 2;
+A10:  {i} = [0,a] and
+A11:  {i,j} = [1,b];
+A12:  i = {0} by A10,Lm5;
+      i in [1,b] by A11,TARSKI:def 2;
       then i = {1,b} or i = {1} by TARSKI:def 2;
       then 1 in i by TARSKI:def 1,def 2;
-      hence contradiction by A8,TARSKI:def 1;
+      hence contradiction by A12,TARSKI:def 1;
     end;
     suppose that
-A9:   {i} = [0,a] and
-A10:  {i,j} = [2,c];
-A11:  i = {0} by A9,Lm3;
-      i in [2,c] by A10,TARSKI:def 2;
+A13:  {i} = [0,a] and
+A14:  {i,j} = [2,c];
+A15:  i = {0} by A13,Lm5;
+      i in [2,c] by A14,TARSKI:def 2;
       then i = {2,c} or i = {2} by TARSKI:def 2;
       then 2 in i by TARSKI:def 1,def 2;
-      hence contradiction by A11,TARSKI:def 1;
+      hence contradiction by A15,TARSKI:def 1;
     end;
     suppose that
-A12:  {i} = [0,a] and
-A13:  {i,j} = [3,d];
-A14:  i = {0} by A12,Lm3;
-      i in [3,d] by A13,TARSKI:def 2;
+A16:  {i} = [0,a] and
+A17:  {i,j} = [3,d];
+A18:  i = {0} by A16,Lm5;
+      i in [3,d] by A17,TARSKI:def 2;
       then i = {3,d} or i = {3} by TARSKI:def 2;
       then 3 in i by TARSKI:def 1,def 2;
-      hence contradiction by A14,TARSKI:def 1;
+      hence contradiction by A18,TARSKI:def 1;
     end;
     suppose that
-A15:  {i} = [1,b] and
-A16:  {i,j} = [0,a];
-A17:  i = {1} by A15,Lm3;
-      i in [0,a] by A16,TARSKI:def 2;
+A19:  {i} = [1,b] and
+A20:  {i,j} = [0,a];
+A21:  i = {1} by A19,Lm5;
+      i in [0,a] by A20,TARSKI:def 2;
       then i = {0,a} or i = {0} by TARSKI:def 2;
       then 0 in i by TARSKI:def 1,def 2;
-      hence contradiction by A17,TARSKI:def 1;
+      hence contradiction by A21,TARSKI:def 1;
     end;
     suppose {i} = [1,b] & {i,j} = [1,b];
       hence contradiction by A5,ZFMISC_1:9;
     end;
     suppose that
-A18:  {i} = [1,b] and
-A19:  {i,j} = [2,c];
-A20:  i = {1} by A18,Lm3;
-      i in [2,c] by A19,TARSKI:def 2;
+A22:  {i} = [1,b] and
+A23:  {i,j} = [2,c];
+A24:  i = {1} by A22,Lm5;
+      i in [2,c] by A23,TARSKI:def 2;
       then i = {2,c} or i = {2} by TARSKI:def 2;
       then 2 in i by TARSKI:def 1,def 2;
-      hence contradiction by A20,TARSKI:def 1;
+      hence contradiction by A24,TARSKI:def 1;
     end;
     suppose that
-A21:  {i} = [1,b] and
-A22:  {i,j} = [3,d];
-A23:  i = {1} by A21,Lm3;
-      i in [3,d] by A22,TARSKI:def 2;
+A25:  {i} = [1,b] and
+A26:  {i,j} = [3,d];
+A27:  i = {1} by A25,Lm5;
+      i in [3,d] by A26,TARSKI:def 2;
       then i = {3,d} or i = {3} by TARSKI:def 2;
       then 3 in i by TARSKI:def 1,def 2;
-      hence contradiction by A23,TARSKI:def 1;
+      hence contradiction by A27,TARSKI:def 1;
     end;
     suppose that
-A24:  {i} = [2,c] and
-A25:  {i,j} = [0,a];
-A26:  i = {2} by A24,Lm3;
-      i in [0,a] by A25,TARSKI:def 2;
+A28:  {i} = [2,c] and
+A29:  {i,j} = [0,a];
+A30:  i = {2} by A28,Lm5;
+      i in [0,a] by A29,TARSKI:def 2;
       then i = {0,a} or i = {0} by TARSKI:def 2;
       then 0 in i by TARSKI:def 1,def 2;
-      hence contradiction by A26,TARSKI:def 1;
+      hence contradiction by A30,TARSKI:def 1;
     end;
     suppose that
-A27:  {i} = [2,c] and
-A28:  {i,j} = [1,b];
-A29:  i = {2} by A27,Lm3;
-      i in [1,b] by A28,TARSKI:def 2;
+A31:  {i} = [2,c] and
+A32:  {i,j} = [1,b];
+A33:  i = {2} by A31,Lm5;
+      i in [1,b] by A32,TARSKI:def 2;
       then i = {1,b} or i = {1} by TARSKI:def 2;
       then 1 in i by TARSKI:def 1,def 2;
-      hence contradiction by A29,TARSKI:def 1;
+      hence contradiction by A33,TARSKI:def 1;
     end;
     suppose {i} = [2,c] & {i,j} = [2,c];
       hence contradiction by A5,ZFMISC_1:9;
     end;
     suppose that
-A30:  {i} = [2,c] and
-A31:  {i,j} = [3,d];
-A32:  i = {2} by A30,Lm3;
-      i in [3,d] by A31,TARSKI:def 2;
+A34:  {i} = [2,c] and
+A35:  {i,j} = [3,d];
+A36:  i = {2} by A34,Lm5;
+      i in [3,d] by A35,TARSKI:def 2;
       then i = {3,d} or i = {3} by TARSKI:def 2;
       then 3 in i by TARSKI:def 1,def 2;
-      hence contradiction by A32,TARSKI:def 1;
+      hence contradiction by A36,TARSKI:def 1;
     end;
     suppose that
-A33:  {i} = [3,d] and
-A34:  {i,j} = [0,a];
-A35:  i = {3} by A33,Lm3;
-      i in [0,a] by A34,TARSKI:def 2;
+A37:  {i} = [3,d] and
+A38:  {i,j} = [0,a];
+A39:  i = {3} by A37,Lm5;
+      i in [0,a] by A38,TARSKI:def 2;
       then i = {0,a} or i = {0} by TARSKI:def 2;
       then 0 in i by TARSKI:def 1,def 2;
-      hence contradiction by A35,TARSKI:def 1;
+      hence contradiction by A39,TARSKI:def 1;
     end;
     suppose that
-A36:  {i} = [3,d] and
-A37:  {i,j} = [1,b];
-A38:  i = {3} by A36,Lm3;
-      i in [1,b] by A37,TARSKI:def 2;
+A40:  {i} = [3,d] and
+A41:  {i,j} = [1,b];
+A42:  i = {3} by A40,Lm5;
+      i in [1,b] by A41,TARSKI:def 2;
       then i = {1,b} or i = {1} by TARSKI:def 2;
       then 1 in i by TARSKI:def 1,def 2;
-      hence contradiction by A38,TARSKI:def 1;
+      hence contradiction by A42,TARSKI:def 1;
     end;
     suppose that
-A39:  {i} = [3,d] and
-A40:  {i,j} = [2,c];
-A41:  i = {3} by A39,Lm3;
-      i in [2,c] by A40,TARSKI:def 2;
+A43:  {i} = [3,d] and
+A44:  {i,j} = [2,c];
+A45:  i = {3} by A43,Lm5;
+      i in [2,c] by A44,TARSKI:def 2;
       then i = {2,c} or i = {2} by TARSKI:def 2;
       then 2 in i by TARSKI:def 1,def 2;
-      hence contradiction by A41,TARSKI:def 1;
+      hence contradiction by A45,TARSKI:def 1;
     end;
     suppose {i} = [3,d] & {i,j} = [3,d];
       hence contradiction by A5,ZFMISC_1:9;
     end;
   end;
   then
-A42: not f in {[i,j]: i,j are_relative_prime & j <> {}} \
+A46: not f in {[i,j]: i,j are_relative_prime & j <> {}} \
   {[k,1]: not contradiction};
   now
     assume f in omega;
-    then f is ordinal;
     then {} in f by ORDINAL3:10;
     hence contradiction by A1,ENUMSET1:def 2;
   end;
   then
-A43: not f in RAT+ by A42,XBOOLE_0:def 3;
+A47: not f in RAT+ by A46,XBOOLE_0:def 3;
   set IR = { A where A is Subset of RAT+:
   for r being Element of RAT+ st r in A holds
   (for s being Element of RAT+ st s <=' r holds s in A) &
@@ -610,39 +658,58 @@ A43: not f in RAT+ by A42,XBOOLE_0:def 3;
   not ex x,y,z,w being set st {[0,x],[1,y],[2,z],[3,w]} in IR
   proof
     given x,y,z,w being set such that
-A44: {[0,x],[1,y],[2,z],[3,w]} in IR;
+A48: {[0,x],[1,y],[2,z],[3,w]} in IR;
     consider A being Subset of RAT+ such that
-A45: {[0,x],[1,y],[2,z],[3,w]} = A and
-A46: for r being Element of RAT+ st r in A holds
+A49: {[0,x],[1,y],[2,z],[3,w]} = A and
+A50: for r being Element of RAT+ st r in A holds
     (for s being Element of RAT+ st s <=' r holds s in A) &
-    ex s being Element of RAT+ st s in A & r < s by A44;
-A47: [0,x] in A by A45,ENUMSET1:def 2;
-    for r,s being Element of RAT+ st r in A & s <=' r holds s in A by A46;
+    ex s being Element of RAT+ st s in A & r < s by A48;
+A51: [0,x] in A by A49,ENUMSET1:def 2;
+    for r,s being Element of RAT+ st r in A & s <=' r holds s in A by A50;
     then consider r1,r2,r3,r4,r5 being Element of RAT+ such that
-A48: r1 in A & r2 in A & r3 in A & r4 in A & r5 in A and
-A49: r1 <> r2 & r1 <> r3 & r1<>r4 & r1 <> r5 & r2<> r3 & r2<> r4 &
-    r2<> r5& r3 <> r4 & r3 <> r5 & r4 <> r5 by A47,Th9;
-    (r1 = [0,x] or r1 = [1,y] or r1 = [2,z] or r1 = [3,w]) &
-    (r2 = [0,x] or r2 = [1,y] or r2 = [2,z] or r2 = [3,w]) &
-    (r3 = [0,x] or r3 = [1,y] or r3 = [2,z] or r3 = [3,w]) &
-    (r4 = [0,x] or r4 = [1,y] or r4 = [2,z] or r4 = [3,w]) &
-    (r5 = [0,x] or r5 = [1,y] or r5 = [2,z] or r5 = [3,w])
-    by A45,A48,ENUMSET1:def 2;
-    hence contradiction by A49;
+A52: r1 in A and
+A53: r2 in A and
+A54: r3 in A and
+A55: r4 in A and
+A56: r5 in A and
+A57: r1 <> r2 and
+A58: r1 <> r3 and
+A59: r1<>r4 and
+A60: r1 <> r5 and
+A61: r2<> r3 and
+A62: r2<> r4 and
+A63: r2<> r5 and
+A64: r3 <> r4 and
+A65: r3 <> r5 and
+A66: r4 <> r5 by A51,Th9;
+
+A67: r1 = [0,x] or r1 = [1,y] or r1 = [2,z] or r1 = [3,w] by A49,A52,
+    ENUMSET1:def 2;
+
+A68: r2 = [0,x] or r2 = [1,y] or r2 = [2,z] or r2 = [3,w] by A49,A53,
+    ENUMSET1:def 2;
+
+A69: r3 = [0,x] or r3 = [1,y] or r3 = [2,z] or r3 = [3,w] by A49,A54,
+    ENUMSET1:def 2;
+
+    r4 = [0,x] or r4 = [1,y] or r4 = [2,z] or r4 = [3,w] by A49,A55,
+    ENUMSET1:def 2;
+    hence contradiction by A49,A56,A57,A58,A59,A60,A61,A62,A63,A64
+    ,A65,A66,A67,A68,A69,ENUMSET1:def 2;
   end;
   then not f in DEDEKIND_CUTS by A1,ARYTM_2:def 1;
   then
-A50: not f in REAL+ by A43,ARYTM_2:def 2,XBOOLE_0:def 3;
+A70: not f in REAL+ by A47,ARYTM_2:def 2,XBOOLE_0:def 3;
   now
     assume f in [:{{}},REAL+:];
     then consider x,y being set such that
-A51: x in {{}} and y in REAL+ and
-A52: f = [x,y] by ZFMISC_1:103;
-A53: x = 0 by A51,TARSKI:def 1;
+A71: x in {{}} and y in REAL+ and
+A72: f = [x,y] by ZFMISC_1:103;
+A73: x = 0 by A71,TARSKI:def 1;
     f = {[0,a],[1,b],[2,c],[3,d]} by Lm1,Th8;
     then
-A54: [1,b] in f by ENUMSET1:def 2;
-    per cases by A52,A53,A54,TARSKI:def 2;
+A74: [1,b] in f by ENUMSET1:def 2;
+    per cases by A72,A73,A74,TARSKI:def 2;
     suppose {{1,b},{1}} = {0};
       then 0 in {{1,b},{1}} by TARSKI:def 1;
       hence contradiction by TARSKI:def 2;
@@ -652,14 +719,14 @@ A54: [1,b] in f by ENUMSET1:def 2;
       hence contradiction by TARSKI:def 2;
     end;
   end;
-  hence thesis by A50,NUMBERS:def 1,XBOOLE_0:def 3;
+  hence thesis by A70,NUMBERS:def 1,XBOOLE_0:def 3;
 end;
 
 theorem Th10:
   not (0,1,2,3) --> (a,b,c,d) in COMPLEX
 proof
   set f = (0,1,2,3)-->(a,b,c,d);
-A1: not f in REAL by Lm4;
+A1: not f in REAL by Lm6;
   not f in Funcs({0,1},REAL)
   proof
     assume f in Funcs({0,1},REAL);
@@ -703,21 +770,23 @@ A1: [*x1,x2,x3,x4*] = [*y1,y2,y3,y4*];
   suppose
 A2: x3=0 & x4=0;
     then
-A3: [*x1,x2,x3,x4*] = [*x1,x2*] by Def6';
+A3: [*x1,x2,x3,x4*] = [*x1,x2*] by Lm4;
 A4: now
       assume y3<>0 or y4<>0;
       then [*x1,x2*] = (0,1,2,3) --> (y1,y2,y3,y4) by A1,A3,Def6;
       hence contradiction by Th10;
     end;
-    then [*y1,y2,y3,y4*] = [*y1,y2*] by Def6';
+    then [*y1,y2,y3,y4*] = [*y1,y2*] by Lm4;
     hence thesis by A1,A2,A3,A4,ARYTM_0:12;
   end;
   suppose x3<>0 or x4<>0;
     then
 A5: [*y1,y2,y3,y4*] = (0,1,2,3) --> (x1,x2,x3,x4) by A1,Def6;
     now
-      assume y3=0 & y4=0;
-      then [*y1,y2,y3,y4*] = [*y1,y2*] by Def6';
+      assume that
+A6:   y3=0 and
+A7:   y4=0;
+      [*y1,y2,y3,y4*] = [*y1,y2*] by A6,A7,Lm4;
       hence contradiction by A5,Th10;
     end;
     then [*y1,y2,y3,y4*] = (0,1,2,3) --> (y1,y2,y3,y4) by Def6;
@@ -754,20 +823,24 @@ A5: c1 = [*x1+y1,x2+y2,x3+y3,x4+y4*];
 A6: x = [*x1',x2',x3',x4'*] and
 A7: y = [*y1',y2',y3',y4'*] and
 A8: c2 = [*x1'+y1',x2'+y2',x3'+y3',x4'+y4'*];
-    x1 = x1' & x2 = x2' & x3=x3' & x4=x4' & y1 = y1' & y2 = y2' &
-    y3=y3' & y4=y4' by A3,A4,A6,A7,Th12;
-    hence thesis by A5,A8;
+A9: x1 = x1' by A3,A6,Th12;
+A10: x2 = x2' by A3,A6,Th12;
+A11: x3=x3' by A3,A6,Th12;
+A12: x4=x4' by A3,A6,Th12;
+A13: y1 = y1' by A4,A7,Th12;
+A14: y2 = y2' by A4,A7,Th12;
+    y3=y3' by A4,A7,Th12;
+    hence thesis by A4,A5,A7,A8,A9,A10,A11,A12,A13,A14,Th12;
   end;
   commutativity;
 end;
 
-Lm5: 0 = [*0,0,0,0*]
+Lm7: 0 = [*0,0,0,0*]
 proof
-A: 0 in REAL;
-C: 0 = [*0,0*] by ARYTM_0:def 7;
-  consider x', y' being Element of REAL such that
-B:  x' = 0 & y' = 0 & [*0,0,0,0*] = [*x',y'*] by Def6;
-  thus thesis by B,A,C,Def6;
+
+  ex x', y' being Element of REAL st ( x' = 0)&( y' = 0)&( [*0
+  ,0,0,0*] = [*x',y'*]) by Def6;
+  hence thesis by ARYTM_0:def 7;
 end;
 
 definition
@@ -782,32 +855,38 @@ A1: z = [*v,w,x,y*] by Th7;
   proof
     reconsider z' = [*- v, - w, - x, - y*] as quaternion number;
     take z';
-    0 =v+ -v & 0 = w+ -w & 0 = x+ -x & 0 = y+ -y;
-    hence thesis by A1,Def7,Lm5;
+A2: 0 =v+ -v;
+A3: 0 = w+ -w;
+A4: 0 = x+ -x;
+    0 = y+ -y;
+    hence thesis by A1,A2,A3,A4,Def7,Lm7;
   end;
   uniqueness
   proof
     let c1,c2 be quaternion number such that
-A2: z+c1 = 0 and
-A3: z+c2 = 0;
+A5: z+c1 = 0 and
+A6: z+c2 = 0;
     consider x1,x2,x3,x4,y1,y2,y3,y4 being Element of REAL such that
-A4: z = [*x1,x2,x3,x4*] and
-A5: c1 = [*y1,y2,y3,y4*] and
-A6: 0 = [*x1+y1,x2+y2,x3+y3,x4+y4*] by A2,Def7;
+A7: z = [*x1,x2,x3,x4*] and
+A8: c1 = [*y1,y2,y3,y4*] and
+A9: 0 = [*x1+y1,x2+y2,x3+y3,x4+y4*] by A5,Def7;
     consider x1',x2',x3',x4',y1',y2',y3',y4' being Element of REAL such that
-A7: z = [*x1',x2',x3',x4'*] and
-A8: c2 = [*y1',y2',y3',y4'*] and
-A9: 0 = [*x1'+y1',x2'+y2',x3'+y3',x4'+y4'*] by A3,Def7;
-A10: x1 = x1' & x2 = x2' & x3 = x3' & x4 = x4' by A4,A7,Th12;
-A11: x1+y1 = 0 by A6,Lm5,Th12;
-A12: x1+y1' = 0 by A9,A10,Lm5,Th12;
-A13: x2+y2 = 0 by A6,Lm5,Th12;
-A14: x2+y2' = 0 by A9,A10,Lm5,Th12;
-A15: x3+y3 = 0 by A6,Lm5,Th12;
-A16: x3+y3' = 0 by A9,A10,Lm5,Th12;
-A17: x4+y4 = 0 by A6,Lm5,Th12;
-    x4+y4' = 0 by A9,A10,Lm5,Th12;
-    hence thesis by A5,A8,A11,A12,A13,A14,A15,A16,A17;
+A10: z = [*x1',x2',x3',x4'*] and
+A11: c2 = [*y1',y2',y3',y4'*] and
+A12: 0 = [*x1'+y1',x2'+y2',x3'+y3',x4'+y4'*] by A6,Def7;
+A13: x1 = x1' by A7,A10,Th12;
+A14: x2 = x2' by A7,A10,Th12;
+A15: x3 = x3' by A7,A10,Th12;
+A16: x4 = x4' by A7,A10,Th12;
+A17: x1+y1 = 0 by A9,Lm7,Th12;
+A18: x1+y1' = 0 by A12,A13,Lm7,Th12;
+A19: x2+y2 = 0 by A9,Lm7,Th12;
+A20: x2+y2' = 0 by A12,A14,Lm7,Th12;
+A21: x3+y3 = 0 by A9,Lm7,Th12;
+A22: x3+y3' = 0 by A12,A15,Lm7,Th12;
+A23: x4+y4 = 0 by A9,Lm7,Th12;
+    x4+y4' = 0 by A12,A16,Lm7,Th12;
+    hence thesis by A8,A11,A17,A18,A19,A20,A21,A22,A23;
   end;
   involutiveness;
 end;
@@ -815,7 +894,6 @@ end;
 definition
   let x,y be quaternion number;
   func x-y equals
-
   x + -y;
   coherence;
 end;
@@ -853,9 +931,15 @@ A6: x = [*x1',x2',x3',x4'*] and
 A7: y = [*y1',y2',y3',y4'*] and
 A8: c2 = [* x1'*y1'-x2'*y2'-x3'*y3'-x4'*y4', x1'*y2'+x2'*y1'+x3'*y4'-x4'*y3',
     x1'*y3'+y1'*x3'+y2'*x4'-y4'*x2', x1'*y4'+x4'*y1'+x2'*y3'-x3'*y2' *];
-    x1 = x1' & x2 = x2' & x3 = x3' & x4 = x4' & y1 = y1' & y2 = y2' &
-    y3 = y3' & y4 = y4' by A3,A4,A6,A7,Th12;
-    hence thesis by A5,A8;
+A9: x1 = x1' by A3,A6,Th12;
+A10: x2 = x2' by A3,A6,Th12;
+A11: x3 = x3' by A3,A6,Th12;
+A12: x4 = x4' by A3,A6,Th12;
+A13: y1 = y1' by A4,A7,Th12;
+A14: y2 = y2' by A4,A7,Th12;
+A15: y3 = y3' by A4,A7,Th12;
+    y4 = y4' by A4,A7,Th12;
+    hence thesis by A5,A8,A9,A10,A11,A12,A13,A14,A15;
   end;
 end;
 
@@ -882,12 +966,10 @@ end;
 
 definition
   redefine func <j> -> Element of QUATERNION equals
-
   [*0,0,1,0*];
   coherence by Def2;
   compatibility by Def6;
   redefine func <k> -> Element of QUATERNION equals
-
   [*0,0,0,1*];
   coherence by Def2;
   compatibility by Def6;
@@ -896,12 +978,13 @@ end;
 theorem
   <i> * <i> = -1
 proof
-  <i> = [*0,1,0,0*] by Def6',Lmx; then
+  <i> = [*0,1,0,0*] by Lm3,Lm4;
+  then
 A1: <i> * <i> = [* 0*0-1*1-0*0-0*0, 0*1+1*0+0*0-0*0,
   0*0+0*0+1*0-0*1, 0*0+0*0+1*0-0*1 *] by Def10
     .= [*-1,0,0,0*];
   -1 = [*-1,0*] by ARYTM_0:def 7;
-  hence thesis by A1,Def6';
+  hence thesis by A1,Lm4;
 end;
 
 theorem
@@ -910,7 +993,7 @@ proof
 A1: <j> * <j> = [* 0*0-0*0-1*1-0*0, 0*0+0*0+0*0-0*1,
   0*1+0*1+0*0-0*0, 0*0+0*0+0*1-1*0 *] by Def10
     .= [*-1,0,0,0*];
-  [*-1,0,0,0*] = [*-1,0*] by Def6';
+  [*-1,0,0,0*] = [*-1,0*] by Lm4;
   hence thesis by A1,ARYTM_0:def 7;
 end;
 
@@ -921,13 +1004,13 @@ A1: <k> * <k> = [* 0*0-0*0-0*0-1*1, 0*0+0*0+0*1-1*0,
   0*0+0*0+0*1-1*0, 0*1+1*0+0*0-0*0 *] by Def10
     .= [*-1,0,0,0*];
   -1 = [*-1,0*] by ARYTM_0:def 7;
-  hence thesis by A1,Def6';
+  hence thesis by A1,Lm4;
 end;
 
 theorem
   <i> * <j> = <k>
 proof
-  <i> = [*0,1,0,0*] by Def6',Lmx;
+  <i> = [*0,1,0,0*] by Lm3,Lm4;
   then <i> * <j> = [* 0*0-1*0-0*1-0*0, 0*0+1*0+0*0-0*1,
   0*1+0*0+0*0-0*1, 0*0+0*0+1*1-0*0 *] by Def10
     .= [*0,0,0,1*];
@@ -940,13 +1023,13 @@ proof
   <j> * <k> = [* 0*0-0*0-1*0-0*1, 0*0+0*0+1*1-0*0,
   0*0+0*1+0*0-1*0, 0*1+0*0+0*0-1*0 *] by Def10
     .= [*0,1,0,0*];
-  hence thesis by Def6',Lmx;
+  hence thesis by Lm3,Lm4;
 end;
 
 theorem
   <k> * <i> = <j>
 proof
-  <i> = [*0,1,0,0*] by Def6',Lmx;
+  <i> = [*0,1,0,0*] by Lm3,Lm4;
   then <k> * <i> = [* 0*0-0*1-0*0-1*0, 0*1+0*0+0*0-1*0,
   0*0+0*0+1*1-0*0, 0*0+1*0+0*0-0*1 *] by Def10
     .= [*0,0,1,0*];
@@ -956,7 +1039,7 @@ end;
 theorem
   <i> * <j> = - <j> * <i>
 proof
-A1: <i> = [*0,1,0,0*] by Def6',Lmx;
+A1: <i> = [*0,1,0,0*] by Lm3,Lm4;
   then
 A2: <i> * <j> = [* 0*0-1*0-0*1-0*0, 0*0+1*0+0*0-0*1,
   0*1+0*0+0*0-0*1, 0*0+0*0+1*1-0*0 *] by Def10
@@ -965,7 +1048,7 @@ A2: <i> * <j> = [* 0*0-1*0-0*1-0*0, 0*0+1*0+0*0-0*1,
   0*0+0*1+1*0-0*0, 0*0+0*0+0*0-1*1 *] by A1,Def10
     .= [*0,0,0,-1*];
   then <i> * <j> + <j> * <i> = [*0+0,0+0,0+0,1+ -1*] by A2,Def7
-    .= 0 by Lm5;
+    .= 0 by Lm7;
   hence thesis by Def8;
 end;
 
@@ -979,14 +1062,14 @@ A1: <j> * <k> = [* 0*0-0*0-1*0-0*1, 0*0+0*0+1*1-0*0,
   0*1+0*0+0*1-0*0, 0*0+1*0+0*1-0*0 *] by Def10
     .= [*0,-1,0,0*];
   then <j> * <k> + <k> * <j> = [*0+0,0+0,0+0,1+ -1*] by A1,Def7
-    .= 0 by Lm5;
+    .= 0 by Lm7;
   hence thesis by Def8;
 end;
 
 theorem
   <k> * <i> = - <i> * <k>
 proof
-A1: <i> = [*0,1,0,0*] by Def6',Lmx;
+A1: <i> = [*0,1,0,0*] by Lm3,Lm4;
   then
 A2: <k> * <i> = [* 0*0-0*1-0*0-1*0, 0*1+0*0+0*0-1*0,
   0*0+0*0+1*1-0*0, 0*0+1*0+0*0-0*1 *] by Def10
@@ -995,7 +1078,7 @@ A2: <k> * <i> = [* 0*0-0*1-0*0-1*0, 0*1+0*0+0*0-1*0,
   0*0+0*0+0*1-1*1, 0*1+0*0+1*0-0*0 *] by A1,Def10
     .= [*0,0,-1,0*];
   then <k> * <i> + <i> * <k> = [*0+0,0+0,1+ -1,0+0*] by A2,Def7
-    .= 0 by Lm5;
+    .= 0 by Lm7;
   hence thesis by Def8;
 end;
 
@@ -1100,14 +1183,14 @@ registration
   proof
     per cases;
     suppose z in COMPLEX;
-      then consider z' being complex number such that z = z' and
-A1:   Rea z = Re z' by Def13;
-      thus thesis by A1;
+      then ex z' being complex number st ( z = z')&( Rea z = Re z')
+      by Def13;
+      hence thesis;
     end;
     suppose not z in COMPLEX;
-      then consider f being Function of 4,REAL such that z = f and
-A2:   Rea z = f.0 by Def13;
-      thus thesis by A2;
+      then ex f being Function of 4,REAL st ( z = f)&( Rea z = f.0)
+      by Def13;
+      hence thesis;
     end;
   end;
   cluster Im1 z -> real;
@@ -1115,14 +1198,14 @@ A2:   Rea z = f.0 by Def13;
   proof
     per cases;
     suppose z in COMPLEX;
-      then consider z' being complex number such that z = z' and
-A3:   Im1 z = Im z' by Def14;
-      thus thesis by A3;
+      then ex z' being complex number st ( z = z')&( Im1 z = Im z')
+      by Def14;
+      hence thesis;
     end;
     suppose not z in COMPLEX;
-      then consider f being Function of 4,REAL such that z = f and
-A4:   Im1 z = f.1 by Def14;
-      thus thesis by A4;
+      then ex f being Function of 4,REAL st ( z = f)&( Im1 z = f.1)
+      by Def14;
+      hence thesis;
     end;
   end;
   cluster Im2 z -> real;
@@ -1133,9 +1216,9 @@ A4:   Im1 z = f.1 by Def14;
       hence thesis by Def15;
     end;
     suppose not z in COMPLEX;
-      then consider f being Function of 4,REAL such that z = f and
-A5:   Im2 z = f.2 by Def15;
-      thus thesis by A5;
+      then ex f being Function of 4,REAL st ( z = f)&( Im2 z = f.2)
+      by Def15;
+      hence thesis;
     end;
   end;
   cluster Im3 z -> real;
@@ -1146,9 +1229,9 @@ A5:   Im2 z = f.2 by Def15;
       hence thesis by Def16;
     end;
     suppose not z in COMPLEX;
-      then consider f being Function of 4,REAL such that z = f and
-A6:   Im3 z = f.3 by Def16;
-      thus thesis by A6;
+      then ex f being Function of 4,REAL st ( z = f)&( Im3 z = f.3)
+      by Def16;
+      hence thesis;
     end;
   end;
 end;
@@ -1175,7 +1258,7 @@ proof
   hence thesis by Th6;
 end;
 
-Lm6: Re [*a,b*] = a & Im [*a,b*] = b
+Lm8: Re [*a,b*] = a & Im [*a,b*] = b
 proof
   reconsider a' =a, b' = b as Element of REAL;
   thus Re [*a,b*] = a
@@ -1209,7 +1292,7 @@ A5: not [*a,b*] in REAL by A4,ARYTM_0:10;
   end;
 end;
 
-Lm7: for z being complex number holds [*Re z, Im z*] = z
+Lm9: for z being complex number holds [*Re z, Im z*] = z
 proof
   let z be complex number;
 A1: z in COMPLEX by XCMPLX_0:def 2;
@@ -1222,25 +1305,27 @@ A2: z in REAL;
   end;
   suppose
 A3: not z in REAL;
-    then consider f being Function of 2,REAL such that
-A4: z = f and
-A5: Im z = f.1 by COMPLEX1:def 3;
-    consider f being Function of 2,REAL such that
-A6: z = f and
-A7: Re z = f.0 by A3,COMPLEX1:def 2;
+
+    then
+A4: ex f being Function of 2,REAL st ( z = f)&( Im z = f.1) by
+    COMPLEX1:def 3;
+
+A5: ex f being Function of 2,REAL st ( z = f)&( Re z = f.0) by A3,
+    COMPLEX1:def 2;
     consider a,b such that
-A8: z = (0,1)-->(a,b) by A4,COMPLEX1:5;
-A9: Re z = a by A6,A7,A8,FUNCT_4:66;
-A10: Im z = b by A4,A5,A8,FUNCT_4:66;
+A6: z = (0,1)-->(a,b) by A4,COMPLEX1:5;
+A7: Re z = a by A5,A6,FUNCT_4:66;
+A8: Im z = b by A4,A6,FUNCT_4:66;
+
     z in Funcs(2,REAL) \ { x where x is Element of Funcs(2,REAL): x.1 = 0 }
     by A1,A3,CARD_1:88,NUMBERS:def 2,XBOOLE_0:def 3;
     then
-A11: not z in { x where x is Element of Funcs(2,REAL): x.1 = 0}
+A9: not z in { x where x is Element of Funcs(2,REAL): x.1 = 0}
     by XBOOLE_0:def 5;
-    reconsider f = z as Element of Funcs(2,REAL) by A8,CARD_1:88,FUNCT_2:11;
-    f.1 <> 0 by A11;
-    then b <> 0 by A8,FUNCT_4:66;
-    hence thesis by A8,A9,A10,ARYTM_0:def 7;
+    reconsider f = z as Element of Funcs(2,REAL) by A6,CARD_1:88,FUNCT_2:11;
+    f.1 <> 0 by A9;
+    then b <> 0 by A6,FUNCT_4:66;
+    hence thesis by A6,A7,A8,ARYTM_0:def 7;
   end;
 end;
 
@@ -1254,8 +1339,8 @@ proof
     per cases;
     suppose c = 0 & d=0;
       then
-A1:   [*a,b,c,d*] = [*a,b*] by Def6';
-      Re [*a,b*] =a by Lm6;
+A1:   [*a,b,c,d*] = [*a,b*] by Lm4;
+      Re [*a,b*] =a by Lm8;
       hence thesis by A1,Def13;
     end;
     suppose c <> 0 or d<>0;
@@ -1272,8 +1357,8 @@ A3:   not [*a,b,c,d*] in COMPLEX by A2,Th10;
     per cases;
     suppose c = 0 & d = 0;
       then
-A4:   [*a,b,c,d*] = [*a,b*] by Def6';
-      Im [*a,b*] = b by Lm6;
+A4:   [*a,b,c,d*] = [*a,b*] by Lm4;
+      Im [*a,b*] = b by Lm8;
       hence thesis by A4,Def14;
     end;
     suppose c <> 0 or d <> 0;
@@ -1290,7 +1375,7 @@ A6:   not [*a,b,c,d*] in COMPLEX by A5,Th10;
     per cases;
     suppose
 A7:   c = 0 & d = 0;
-      then [*a,b,c,d*] = [*a,b*] by Def6';
+      then [*a,b,c,d*] = [*a,b*] by Lm4;
       hence thesis by A7,Def15;
     end;
     suppose c <> 0 or d <> 0;
@@ -1305,7 +1390,7 @@ A9:   not [*a,b,c,d*] in COMPLEX by A8,Th10;
   per cases;
   suppose
 A10: c = 0 & d = 0;
-    then [*a,b,c,d*] = [*a,b*] by Def6';
+    then [*a,b,c,d*] = [*a,b*] by Lm4;
     hence thesis by A10,Def16;
   end;
   suppose c <> 0 or d <> 0;
@@ -1328,45 +1413,42 @@ A1: z in QUATERNION by Def2;
   suppose
 A2: z in COMPLEX;
     then
-A3: Im2 z = 0 & Im3 z = 0 by Def15,Def16;
-    consider z' being complex number such that
-A4: z = z' and
-A5: Rea z = Re z' by A2,Def13;
+A3: Im2 z = 0 by Def15;
+A4: Im3 z = 0 by A2,Def16;
+A5: ex z' being complex number st ( z = z')&( Rea z = Re z')
+    by A2,Def13;
     consider z' being complex number such that
 A6: z = z' and
 A7: Im1 z = Im z' by A2,Def14;
-    [*Rea z, Im1 z*] = z' by A4,A5,A6,A7,Lm7;
-    hence thesis by A3,A6,Def6';
+    [*Rea z, Im1 z*] = z' by A5,A6,A7,Lm9;
+    hence thesis by A3,A4,A6,Lm4;
   end;
   suppose
 A8: not z in COMPLEX;
-    then consider f being Function of 4,REAL such that
-A9: z = f and
-A10: Im1 z = f.1 by Def14;
-    consider f being Function of 4,REAL such that
-A11: z = f and
-A12: Rea z = f.0 by A8,Def13;
-    consider f being Function of 4,REAL such that
-A13: z = f and
-A14: Im2 z = f.2 by A8,Def15;
-    consider f being Function of 4,REAL such that
-A15: z = f and
-A16: Im3 z = f.3 by A8,Def16;
+    then
+A9: ex f being Function of 4,REAL st ( z = f)&( Im1 z = f.1)
+    by Def14;
+A10: ex f being Function of 4,REAL st ( z = f)&( Rea z = f.0)
+    by A8,Def13;
+A11: ex f being Function of 4,REAL st ( z = f)&( Im2 z = f.2)
+    by A8,Def15;
+A12: ex f being Function of 4,REAL st ( z = f)&( Im3 z = f.3)
+    by A8,Def16;
     consider a,b,c,d such that
-A17: z = (0,1,2,3)-->(a,b,c,d) by A9,Th22;
-A18: Rea z = a by A11,A12,A17,Lm1,Th3;
-A19: Im1 z = b by A9,A10,A17,Lm1,Th3;
-A20: Im2 z = c by A13,A14,A17,Lm1,Th3;
-A21: Im3 z = d by A15,A16,A17,Lm1,Th3;
+A13: z = (0,1,2,3)-->(a,b,c,d) by A9,Th22;
+A14: Rea z = a by A10,A13,Lm1,Th3;
+A15: Im1 z = b by A9,A13,Lm1,Th3;
+A16: Im2 z = c by A11,A13,Lm1,Th3;
+A17: Im3 z = d by A12,A13,Lm1,Th3;
     z in Funcs(4,REAL) \ { x where x is Element of Funcs(4,REAL):
     x.2 = 0 & x.3 = 0} by A1,A8,XBOOLE_0:def 3;
     then
-A22: not z in { x where x is Element of Funcs(4,REAL):
+A18: not z in { x where x is Element of Funcs(4,REAL):
     x.2 = 0 & x.3 = 0} by XBOOLE_0:def 5;
-    reconsider f = z as Element of Funcs(4,REAL) by A17,CARD_1:90,FUNCT_2:11;
-    f.2 <> 0 or f.3 <> 0 by A22;
-    then c <> 0 or d <> 0 by A17,Lm1,Th3;
-    hence thesis by A17,A18,A19,A20,A21,Def6;
+    reconsider f = z as Element of Funcs(4,REAL) by A13,CARD_1:90,FUNCT_2:11;
+    f.2 <> 0 or f.3 <> 0 by A18;
+    then c <> 0 or d <> 0 by A13,Lm1,Th3;
+    hence thesis by A13,A14,A15,A16,A17,Def6;
   end;
 end;
 
@@ -1374,63 +1456,57 @@ theorem Th25:
   Rea z1 = Rea z2 & Im1 z1 = Im1 z2 & Im2 z1 = Im2 z2 &
   Im3 z1 = Im3 z2 implies z1 = z2
 proof
-  assume Rea z1 = Rea z2 & Im1 z1 = Im1 z2 & Im2 z1 = Im2 z2 &
-  Im3 z1 = Im3 z2;
-  hence z1 = [*Rea z2,Im1 z2,Im2 z2,Im3 z2*] by Th24
+  assume that
+A1: Rea z1 = Rea z2 and
+A2: Im1 z1 = Im1 z2 and
+A3: Im2 z1 = Im2 z2 and
+A4: Im3 z1 = Im3 z2;
+  thus z1 = [*Rea z2,Im1 z2,Im2 z2,Im3 z2*] by A1,A2,A3,A4,Th24
     .= z2 by Th24;
 end;
 
 definition
   func 0q -> quaternion number equals
-
   0;
-  coherence by Lm5;
+  coherence by Lm7;
   func 1q -> quaternion number equals
-
   1;
   coherence
   proof
-    [*1,0,0,0*] = [*1,0*] by Def6';
+    [*1,0,0,0*] = [*1,0*] by Lm4;
     hence thesis by ARYTM_0:def 7;
   end;
 end;
 
-Lm8: for a, b, c, d being real number st a^2 + b^2 + c^2 + d^2 = 0 holds
-  a = 0 & b = 0 & c = 0 & d = 0
+Lm10: for a, b, c, d being real number st a^2 + b^2 + c^2 + d^2 = 0 holds
+a = 0 & b = 0 & c = 0 & d = 0
 proof
   let a, b, c, d be real number;
   assume
 A1: a^2 + b^2 + c^2 + d^2 = 0;
-A2: 0 <= a^2 & 0 <= b^2 & 0 <= c^2 & 0 <= d^2 by XREAL_1:65;
+A2: 0 <= a^2 by XREAL_1:65;
+A3: 0 <= b^2 by XREAL_1:65;
+A4: 0 <= c^2 by XREAL_1:65;
+A5: 0 <= d^2 by XREAL_1:65;
   assume
-A3: a <> 0 or b <> 0 or c <> 0 or d <> 0;
-  per cases by A3;
+A6: a <> 0 or b <> 0 or c <> 0 or d <> 0;
+  per cases by A6;
   suppose a <> 0;
-    then
-A4: 0 < a^2 + b^2 by A2,SQUARE_1:74,XREAL_1:36;
-    0 <= c^2 +d^2 by A2;
-    then 0 < (a^2 + b^2) + (c^2 + d^2) by A4;
-    hence contradiction by A1;
+    then 0 < a^2 + b^2 by A3,SQUARE_1:74,XREAL_1:36;
+    hence contradiction by A1,A4,A5;
   end;
   suppose b <> 0;
-    then
-A5: 0 < a^2 + b^2 by A2,SQUARE_1:74,XREAL_1:36;
-    0 <= c^2 +d^2 by A2;
-    then 0 < (a^2 + b^2) + (c^2 + d^2) by A5;
-    hence contradiction by A1;
+    then 0 < a^2 + b^2 by A2,SQUARE_1:74,XREAL_1:36;
+    hence contradiction by A1,A4,A5;
   end;
   suppose c <> 0;
-    then
-A6: 0 < c^2 + d^2 by A2,SQUARE_1:74,XREAL_1:36;
-    0 <= a^2 +b^2 by A2;
-    then 0 < (a^2 + b^2) + (c^2 + d^2) by A6;
+    then 0 < c^2 + d^2 by A5,SQUARE_1:74,XREAL_1:36;
+    then 0 < (a^2 + b^2) + (c^2 + d^2) by A2,A3;
     hence contradiction by A1;
   end;
   suppose d <> 0;
-    then
-A7: 0 < c^2 + d^2 by A2,SQUARE_1:74,XREAL_1:36;
-    0 <= a^2 +b^2 by A2;
-    then 0 < (a^2 + b^2) + (c^2 + d^2) by A7;
+    then 0 < c^2 + d^2 by A4,SQUARE_1:74,XREAL_1:36;
+    then 0 < (a^2 + b^2) + (c^2 + d^2) by A2,A3;
     hence contradiction by A1;
   end;
 end;
@@ -1438,49 +1514,64 @@ end;
 theorem Th26:
   Rea z = 0 & Im1 z = 0 & Im2 z = 0 & Im3 z = 0 implies z = 0q
 proof
-  assume Rea z = 0 & Im1 z = 0 & Im2 z = 0 & Im3 z = 0;
-  then Rea z = Rea [*0,0,0,0*] & Im1 z = Im1 [*0,0,0,0*] &
-  Im2 z = Im2 [*0,0,0,0*] & Im3 z = Im3 [*0,0,0,0*] by Th23;
-  hence thesis by Lm5,Th25;
+  assume that
+A1: Rea z = 0 and
+A2: Im1 z = 0 and
+A3: Im2 z = 0 and
+A4: Im3 z = 0;
+A5: Rea z = Rea [*0,0,0,0*] by A1,Th23;
+A6: Im1 z = Im1 [*0,0,0,0*] by A2,Th23;
+A7: Im2 z = Im2 [*0,0,0,0*] by A3,Th23;
+  Im3 z = Im3 [*0,0,0,0*] by A4,Th23;
+  hence thesis by A5,A6,A7,Lm7,Th25;
 end;
 
 theorem
   z = 0 implies (Rea z)^2 + (Im1 z)^2 +(Im2 z)^2 + (Im3 z)^2 = 0
 proof
-  assume z = 0;
-  then Rea z = 0 & Im1 z =0 & Im2 z = 0 & Im3 z = 0 by Lm5,Th23;
-  hence thesis;
+  assume
+A1: z = 0;
+  then
+A2: Rea z = 0 by Lm7,Th23;
+A3: Im1 z =0 by A1,Lm7,Th23;
+  Im2 z = 0 by A1,Lm7,Th23;
+  hence thesis by A1,A2,A3,Lm7,Th23;
 end;
 
 theorem
   (Rea z)^2 + (Im1 z)^2 +(Im2 z)^2 + (Im3 z)^2 = 0 implies z = 0q
 proof
-  assume (Rea z)^2 + (Im1 z)^2 +(Im2 z)^2 + (Im3 z)^2 = 0;
-  then Rea z = 0 & Im1 z = 0 & Im2 z = 0 & Im3 z = 0 by Lm8;
-  hence thesis by Th26;
+  assume
+A1: (Rea z)^2 + (Im1 z)^2 +(Im2 z)^2 + (Im3 z)^2 = 0;
+  then
+A2: Rea z = 0 by Lm10;
+A3: Im1 z = 0 by A1,Lm10;
+A4: Im2 z = 0 by A1,Lm10;
+  Im3 z = 0 by A1,Lm10;
+  hence thesis by A2,A3,A4,Th26;
 end;
 
-Lm9: [*1,0,0,0*] = 1
+Lm11: [*1,0,0,0*] = 1
 proof
-  [*1,0,0,0*] = [*1,0*] by Def6';
+  [*1,0,0,0*] = [*1,0*] by Lm4;
   hence thesis by ARYTM_0:def 7;
 end;
 
 theorem
-  Rea (1q) = 1 & Im1(1q) = 0 & Im2 (1q) =0 & Im3 (1q) = 0 by Lm9,Th23;
+  Rea (1q) = 1 & Im1(1q) = 0 & Im2 (1q) =0 & Im3 (1q) = 0 by Lm11,Th23;
 
 theorem Th30:
   Rea <i> = 0 & Im1 <i> = 1 & Im2 <i> = 0 & Im3 <i> = 0
 proof
-  [*0,1*] = [*0,1,0,0*] by Def6';
-  hence thesis by Th23,Lmx;
+  [*0,1*] = [*0,1,0,0*] by Lm4;
+  hence thesis by Lm3,Th23;
 end;
 
 theorem Th31:
   Rea <j> = 0 & Im1 <j> = 0 & Im2 <j> = 1 & Im3 <j> = 0 &
   Rea <k> = 0 & Im1 <k> = 0 & Im2 <k> = 0 & Im3 <k> = 1 by Th23;
 
-Lm10: for m,n,x,y,z being quaternion number st z = m+n+x + y
+Lm12: for m,n,x,y,z being quaternion number st z = m+n+x + y
 holds Rea z = Rea m +Rea n +Rea x + Rea y &
 Im1 z = Im1 m + Im1 n + Im1 x + Im1 y &
 Im2 z = Im2 m + Im2 n + Im2 x + Im2 y & Im3 z = Im3 m + Im3 n + Im3 x + Im3 y
@@ -1494,17 +1585,30 @@ A4: m + n = [*m1+n1, m2+n2, m3+n3, m4+n4*] by Def7;
   consider x1,x2,x3,x4,y1,y2,y3,y4 being Element of REAL such that
 A5: x = [*x1,x2,x3,x4*] and
 A6: y = [*y1,y2,y3,y4*] and x + y = [*x1+y1, x2+y2, x3+y3, x4+y4*] by Def7;
-A7: Rea m = m1 & Rea n = n1 & Rea x = x1 & Rea y = y1 &
-  Im1 m = m2 & Im1 n = n2 & Im1 x = x2 & Im1 y = y2 &
-  Im2 m = m3 & Im2 n = n3 & Im2 x = x3 & Im2 y = y3 &
-  Im3 m = m4 & Im3 n = n4 & Im3 x = x4 & Im3 y = y4 by A2,A3,A5,A6,Th23;
+A7: Rea m = m1 by A2,Th23;
+A8: Rea n = n1 by A3,Th23;
+A9: Rea x = x1 by A5,Th23;
+A10: Rea y = y1 by A6,Th23;
+A11: Im1 m = m2 by A2,Th23;
+A12: Im1 n = n2 by A3,Th23;
+A13: Im1 x = x2 by A5,Th23;
+A14: Im1 y = y2 by A6,Th23;
+A15: Im2 m = m3 by A2,Th23;
+A16: Im2 n = n3 by A3,Th23;
+A17: Im2 x = x3 by A5,Th23;
+A18: Im2 y = y3 by A6,Th23;
+A19: Im3 m = m4 by A2,Th23;
+A20: Im3 n = n4 by A3,Th23;
+A21: Im3 x = x4 by A5,Th23;
+A22: Im3 y = y4 by A6,Th23;
   m+n+x =[*m1+n1+x1, m2+n2+x2, m3+n3+x3, m4+n4+x4*] by A4,A5,Def7;
   then z = [*m1+n1+x1+y1, m2+n2+x2+y2,
   m3+n3+x3+y3, m4+n4+x4+y4*] by A1,A6,Def7;
-  hence thesis by A7,Th23;
+  hence thesis by A7,A8,A9,A10,A11,A12,A13,A14,A15,A16,A17,A18,A19,A20,A21,A22
+  ,Th23;
 end;
 
-Lm11: for x,y,z being quaternion number st z = x + y
+Lm13: for x,y,z being quaternion number st z = x + y
 holds Rea z = Rea x + Rea y & Im1 z = Im1 x + Im1 y &
 Im2 z = Im2 x + Im2 y & Im3 z = Im3 x + Im3 y
 proof
@@ -1514,29 +1618,35 @@ A1: z = x + y;
 A2: x = [*x1,x2,x3,x4*] and
 A3: y = [*y1,y2,y3,y4*] and
 A4: x + y = [*x1+y1, x2+y2, x3+y3, x4+y4*] by Def7;
-  Rea x = x1 & Rea y = y1& Im1 x = x2 & Im1 y = y2 &
-  Im2 x = x3 & Im2 y = y3 & Im3 x = x4 & Im3 y = y4 by A2,A3,Th23;
-  hence thesis by A1,A4,Th23;
+A5: Rea x = x1 by A2,Th23;
+A6: Rea y = y1 by A3,Th23;
+A7: Im1 x = x2 by A2,Th23;
+A8: Im1 y = y2 by A3,Th23;
+A9: Im2 x = x3 by A2,Th23;
+A10: Im2 y = y3 by A3,Th23;
+A11: Im3 x = x4 by A2,Th23;
+  Im3 y = y4 by A3,Th23;
+  hence thesis by A1,A4,A5,A6,A7,A8,A9,A10,A11,Th23;
 end;
 
-Lm12: z1 + z2 = [* Rea z1 + Rea z2, Im1 z1 + Im1 z2,
+Lm14: z1 + z2 = [* Rea z1 + Rea z2, Im1 z1 + Im1 z2,
 Im2 z1 + Im2 z2, Im3 z1 + Im3 z2 *]
 proof
   set z = [* Rea z1 + Rea z2, Im1 z1 + Im1 z2,
   Im2 z1 + Im2 z2, Im3 z1 + Im3 z2 *];
   reconsider z' = z1 + z2 as quaternion number;
 A1: Rea z = Rea z1 + Rea z2 by Th23
-    .= Rea z' by Lm11;
+    .= Rea z' by Lm13;
 A2: Im1 z = Im1 z1 + Im1 z2 by Th23
-    .= Im1 z' by Lm11;
+    .= Im1 z' by Lm13;
 A3: Im2 z = Im2 z1 + Im2 z2 by Th23
-    .= Im2 z' by Lm11;
+    .= Im2 z' by Lm13;
   Im3 z = Im3 z1 + Im3 z2 by Th23
-    .= Im3 z' by Lm11;
+    .= Im3 z' by Lm13;
   hence thesis by A1,A2,A3,Th25;
 end;
 
-Lm13: for x,y,z being quaternion number st z = x * y
+Lm15: for x,y,z being quaternion number st z = x * y
 holds Rea z = Rea x * Rea y - Im1 x * Im1 y - Im2 x * Im2 y - Im3 x * Im3 y &
 Im1 z = Rea x * Im1 y + Im1 x * Rea y + Im2 x * Im3 y - Im3 x * Im2 y &
 Im2 z = Rea x * Im2 y + Im2 x * Rea y + Im3 x * Im1 y - Im1 x * Im3 y &
@@ -1549,14 +1659,18 @@ A2: x = [*x1,x2,x3,x4*] and
 A3: y = [*y1,y2,y3,y4*] and
 A4: x * y = [* x1*y1-x2*y2-x3*y3-x4*y4, x1*y2+x2*y1+x3*y4-x4*y3,
   x1*y3+y1*x3+y2*x4-y4*x2, x1*y4+x4*y1+x2*y3-x3*y2 *] by Def10;
-A5: Rea x = x1 & Rea y = y1 by A2,A3,Th23;
-A6: Im1 x = x2 & Im1 y = y2 by A2,A3,Th23;
-A7: Im2 x = x3 & Im2 y = y3 by A2,A3,Th23;
-  Im3 x = x4 & Im3 y = y4 by A2,A3,Th23;
-  hence thesis by A1,A4,A5,A6,A7,Th23;
+A5: Rea x = x1 by A2,Th23;
+A6: Rea y = y1 by A3,Th23;
+A7: Im1 x = x2 by A2,Th23;
+A8: Im1 y = y2 by A3,Th23;
+A9: Im2 x = x3 by A2,Th23;
+A10: Im2 y = y3 by A3,Th23;
+A11: Im3 x = x4 by A2,Th23;
+  Im3 y = y4 by A3,Th23;
+  hence thesis by A1,A4,A5,A6,A7,A8,A9,A10,A11,Th23;
 end;
 
-Lm14: z1 + z2 + z3 + z4 = [* Rea z1 + Rea z2 + Rea z3 + Rea z4,
+Lm16: z1 + z2 + z3 + z4 = [* Rea z1 + Rea z2 + Rea z3 + Rea z4,
 Im1 z1 + Im1 z2 + Im1 z3 + Im1 z4, Im2 z1 + Im2 z2 + Im2 z3 + Im2 z4,
 Im3 z1 + Im3 z2 + Im3 z3 + Im3 z4 *]
 proof
@@ -1565,17 +1679,17 @@ proof
   Im3 z1 + Im3 z2 + Im3 z3 + Im3 z4 *];
   reconsider z' = z1 + z2 + z3 + z4 as quaternion number;
 A1: Rea z = Rea z1 + Rea z2 + Rea z3 + Rea z4 by Th23
-    .= Rea z' by Lm10;
+    .= Rea z' by Lm12;
 A2: Im1 z = Im1 z1 + Im1 z2 + Im1 z3 + Im1 z4 by Th23
-    .= Im1 z' by Lm10;
+    .= Im1 z' by Lm12;
 A3: Im2 z = Im2 z1 + Im2 z2 + Im2 z3 + Im2 z4 by Th23
-    .= Im2 z' by Lm10;
+    .= Im2 z' by Lm12;
   Im3 z = Im3 z1 + Im3 z2 + Im3 z3 + Im3 z4 by Th23
-    .= Im3 z' by Lm10;
+    .= Im3 z' by Lm12;
   hence thesis by A1,A2,A3,Th25;
 end;
 
-Lm15: z1 * z2 =
+Lm17: z1 * z2 =
 [*Rea z1 * Rea z2 - Im1 z1 * Im1 z2 - Im2 z1 * Im2 z2 - Im3 z1 * Im3 z2,
 Rea z1 * Im1 z2 + Im1 z1 * Rea z2 + Im2 z1 * Im3 z2 - Im3 z1 * Im2 z2,
 Rea z1 * Im2 z2 + Im2 z1 * Rea z2 + Im3 z1 * Im1 z2 - Im1 z1 * Im3 z2,
@@ -1589,20 +1703,20 @@ proof
   reconsider z' = z1 * z2 as quaternion number;
 A1: Rea z = Rea z1 * Rea z2 - Im1 z1 * Im1 z2 -
   Im2 z1 * Im2 z2 - Im3 z1 * Im3 z2 by Th23
-    .= Rea z' by Lm13;
+    .= Rea z' by Lm15;
 A2: Im1 z = Rea z1 * Im1 z2 + Im1 z1 * Rea z2 +
   Im2 z1 * Im3 z2 - Im3 z1 * Im2 z2 by Th23
-    .= Im1 z' by Lm13;
+    .= Im1 z' by Lm15;
 A3: Im2 z = Rea z1 * Im2 z2 + Im2 z1 * Rea z2 +
   Im3 z1 * Im1 z2 - Im1 z1 * Im3 z2 by Th23
-    .= Im2 z' by Lm13;
+    .= Im2 z' by Lm15;
   Im3 z = Rea z1 * Im3 z2 + Im3 z1 * Rea z2 +
   Im1 z1 * Im2 z2 - Im2 z1 * Im1 z2 by Th23
-    .= Im3 z' by Lm13;
+    .= Im3 z' by Lm15;
   hence thesis by A1,A2,A3,Th25;
 end;
 
-Lm16: Rea (z1 * z2) =
+Lm18: Rea (z1 * z2) =
 Rea z1 * Rea z2 - Im1 z1 * Im1 z2 - Im2 z1 * Im2 z2 - Im3 z1 * Im3 z2 &
 Im1 (z1 * z2) =
 Rea z1 * Im1 z2 + Im1 z1 * Rea z2 + Im2 z1 * Im3 z2 - Im3 z1 * Im2 z2 &
@@ -1616,7 +1730,7 @@ proof
   Rea z1 * Im1 z2 + Im1 z1 * Rea z2 + Im2 z1 * Im3 z2 - Im3 z1 * Im2 z2,
   Rea z1 * Im2 z2 + Im2 z1 * Rea z2 + Im3 z1 * Im1 z2 - Im1 z1 * Im3 z2,
   Rea z1 * Im3 z2 + Im3 z1 * Rea z2 + Im1 z1 * Im2 z2 - Im2 z1 * Im1 z2 *]
-  by Lm15;
+  by Lm17;
   hence thesis by Th23;
 end;
 
@@ -1628,18 +1742,18 @@ theorem
 proof
   (z1 + z2 + z3 + z4) = [* Rea z1 + Rea z2 + Rea z3 + Rea z4,
   Im1 z1 + Im1 z2 + Im1 z3 + Im1 z4, Im2 z1 + Im2 z2 + Im2 z3 + Im2 z4,
-  Im3 z1 + Im3 z2 + Im3 z3 + Im3 z4*] by Lm14;
+  Im3 z1 + Im3 z2 + Im3 z3 + Im3 z4*] by Lm16;
   hence thesis by Th23;
 end;
 
 reserve x for Real;
 
-Lm17: z = x implies Rea z = x & Im1 z = 0 & Im2 z = 0 & Im3 z = 0
+Lm19: z = x implies Rea z = x & Im1 z = 0 & Im2 z = 0 & Im3 z = 0
 proof
   assume
 A1: z = x;
 A2: x = [*x,0*] by ARYTM_0:def 7;
-  [*x,0*] = [*x,0,0,0*] by Def6';
+  [*x,0*] = [*x,0,0,0*] by Lm4;
   hence thesis by A1,A2,Th23;
 end;
 
@@ -1649,15 +1763,15 @@ theorem
 proof
   assume
 A1: z1 = x;
-  Rea (z1 * <i>) = Rea z1 * Rea <i> - Im1 z1 * Im1 <i> -
-  Im2 z1 * Im2 <i> - Im3 z1 * Im3 <i> &
-  Im1 (z1 * <i>) = Rea z1 * Im1 <i> + Im1 z1 * Rea <i> +
-  Im2 z1 * Im3 <i> - Im3 z1 * Im2 <i> &
-  Im2 (z1 * <i>) = Rea z1 * Im2 <i> + Im2 z1 * Rea <i> +
-  Im3 z1 * Im1 <i> - Im1 z1 * Im3 <i> &
-  Im3 (z1 * <i>) = Rea z1 * Im3 <i> + Im3 z1 * Rea <i> +
-  Im1 z1 * Im2 <i> - Im2 z1 * Im1 <i> by Lm16;
-  hence thesis by A1,Lm17,Th30;
+A2: Rea (z1 * <i>) = Rea z1 * Rea <i> - Im1 z1 * Im1 <i> - Im2 z1 * Im2 <i>
+  - Im3 z1 * Im3 <i> by Lm18;
+A3: Im1 (z1 * <i>) = Rea z1 * Im1 <i> + Im1 z1 * Rea <i> + Im2 z1 * Im3 <i>
+  - Im3 z1 * Im2 <i> by Lm18;
+A4: Im2 (z1 * <i>) = Rea z1 * Im2 <i> + Im2 z1 * Rea <i> + Im3 z1 * Im1 <i>
+  - Im1 z1 * Im3 <i> by Lm18;
+  Im3 (z1 * <i>) = Rea z1 * Im3 <i> + Im3 z1 * Rea <i> + Im1 z1 * Im2 <i>
+  - Im2 z1 * Im1 <i> by Lm18;
+  hence thesis by A1,A2,A3,A4,Lm19,Th30;
 end;
 
 theorem
@@ -1666,15 +1780,15 @@ theorem
 proof
   assume
 A1: z1 = x;
-  Rea (z1 * <j>) = Rea z1 * Rea <j> - Im1 z1 * Im1 <j> -
-  Im2 z1 * Im2 <j> - Im3 z1 * Im3 <j> &
-  Im1 (z1 * <j>) = Rea z1 * Im1 <j> + Im1 z1 * Rea <j> +
-  Im2 z1 * Im3 <j> - Im3 z1 * Im2 <j> &
-  Im2 (z1 * <j>) = Rea z1 * Im2 <j> + Im2 z1 * Rea <j> +
-  Im3 z1 * Im1 <j> - Im1 z1 * Im3 <j> &
-  Im3 (z1 * <j>) = Rea z1 * Im3 <j> + Im3 z1 * Rea <j> +
-  Im1 z1 * Im2 <j> - Im2 z1 * Im1 <j> by Lm16;
-  hence thesis by A1,Lm17,Th31;
+A2: Rea (z1 * <j>) = Rea z1 * Rea <j> - Im1 z1 * Im1 <j> - Im2 z1 * Im2 <j>
+  - Im3 z1 * Im3 <j> by Lm18;
+A3: Im1 (z1 * <j>) = Rea z1 * Im1 <j> + Im1 z1 * Rea <j> + Im2 z1 * Im3 <j>
+  - Im3 z1 * Im2 <j> by Lm18;
+A4: Im2 (z1 * <j>) = Rea z1 * Im2 <j> + Im2 z1 * Rea <j> + Im3 z1 * Im1 <j>
+  - Im1 z1 * Im3 <j> by Lm18;
+  Im3 (z1 * <j>) = Rea z1 * Im3 <j> + Im3 z1 * Rea <j> + Im1 z1 * Im2 <j>
+  - Im2 z1 * Im1 <j> by Lm18;
+  hence thesis by A1,A2,A3,A4,Lm19,Th31;
 end;
 
 theorem
@@ -1683,15 +1797,15 @@ theorem
 proof
   assume
 A1: z1 = x;
-  Rea (z1 * <k>) = Rea z1 * Rea <k> - Im1 z1 * Im1 <k> -
-  Im2 z1 * Im2 <k> - Im3 z1 * Im3 <k> &
-  Im1 (z1 * <k>) = Rea z1 * Im1 <k> + Im1 z1 * Rea <k> +
-  Im2 z1 * Im3 <k> - Im3 z1 * Im2 <k> &
-  Im2 (z1 * <k>) = Rea z1 * Im2 <k> + Im2 z1 * Rea <k> +
-  Im3 z1 * Im1 <k> - Im1 z1 * Im3 <k> &
-  Im3 (z1 * <k>) = Rea z1 * Im3 <k> + Im3 z1 * Rea <k> +
-  Im1 z1 * Im2 <k> - Im2 z1 * Im1 <k> by Lm16;
-  hence thesis by A1,Lm17,Th31;
+A2: Rea (z1 * <k>) = Rea z1 * Rea <k> - Im1 z1 * Im1 <k> - Im2 z1 * Im2 <k>
+  - Im3 z1 * Im3 <k> by Lm18;
+A3: Im1 (z1 * <k>) = Rea z1 * Im1 <k> + Im1 z1 * Rea <k> + Im2 z1 * Im3 <k>
+  - Im3 z1 * Im2 <k> by Lm18;
+A4: Im2 (z1 * <k>) = Rea z1 * Im2 <k> + Im2 z1 * Rea <k> + Im3 z1 * Im1 <k>
+  - Im1 z1 * Im3 <k> by Lm18;
+  Im3 (z1 * <k>) = Rea z1 * Im3 <k> + Im3 z1 * Rea <k> + Im1 z1 * Im2 <k>
+  - Im2 z1 * Im1 <k> by Lm18;
+  hence thesis by A1,A2,A3,A4,Lm19,Th31;
 end;
 
 definition
@@ -1717,15 +1831,16 @@ A3: c1 = [*x+y1,y2,y3,y4*];
     given y1',y2',y3',y4' being Real such that
 A4: y = [*y1',y2',y3',y4'*] and
 A5: c2 = [*x+y1',y2',y3',y4'*];
-    y1 = y1' & y2 = y2' & y3 = y3' & y4 = y4' by A2,A4,Th12;
-    hence thesis by A3,A5;
+A6: y1 = y1' by A2,A4,Th12;
+A7: y2 = y2' by A2,A4,Th12;
+    y3 = y3' by A2,A4,Th12;
+    hence thesis by A2,A3,A4,A5,A6,A7,Th12;
   end;
 end;
 
 definition
   let x be Real, y be quaternion number;
   func x - y equals
-
   x + -y;
   coherence;
 end;
@@ -1753,8 +1868,10 @@ A3: c1 = [*x*y1,x*y2,x*y3,x*y4*];
     given y1',y2',y3',y4' being Real such that
 A4: y = [*y1',y2',y3',y4'*] and
 A5: c2 = [*x*y1',x*y2',x*y3',x*y4'*];
-    y1 = y1' & y2 = y2' & y3 = y3' & y4 = y4' by A2,A4,Th12;
-    hence thesis by A3,A5;
+A6: y1 = y1' by A2,A4,Th12;
+A7: y2 = y2' by A2,A4,Th12;
+    y3 = y3' by A2,A4,Th12;
+    hence thesis by A2,A3,A4,A5,A6,A7,Th12;
   end;
 end;
 
@@ -1778,10 +1895,10 @@ registration
   coherence;
 end;
 
-Lm18: for x,y,z,w being Real holds [*x,y,z,w*] = x + y*<i> + z*<j> + w*<k>
+Lm20: for x,y,z,w being Real holds [*x,y,z,w*] = x + y*<i> + z*<j> + w*<k>
 proof
   let x,y,z,w be Real;
-  <i> = [*0,1,0,0*] by Def6',Lmx;
+  <i> = [*0,1,0,0*] by Lm3,Lm4;
   then
 A1: y*<i> = [*y*0,y*1,y*0,y*0*] by Def21
     .= [*0,y,0,0*];
@@ -1807,8 +1924,8 @@ definition
   compatibility
   proof
     z1 + z2 = [* Rea z1 + Rea z2, Im1 z1 + Im1 z2,
-    Im2 z1 + Im2 z2, Im3 z1 + Im3 z2 *] by Lm12;
-    hence thesis by Lm18;
+    Im2 z1 + Im2 z2, Im3 z1 + Im3 z2 *] by Lm14;
+    hence thesis by Lm20;
   end;
 end;
 
@@ -1817,7 +1934,7 @@ theorem
   Im2 (z1 + z2) = Im2 z1 + Im2 z2 & Im3(z1 + z2) = Im3 z1 + Im3 z2
 proof
   (z1 + z2) = [* Rea z1 + Rea z2, Im1 z1 + Im1 z2,
-  Im2 z1 + Im2 z2, Im3 z1 + Im3 z2*] by Lm12;
+  Im2 z1 + Im2 z2, Im3 z1 + Im3 z2*] by Lm14;
   hence thesis by Th23;
 end;
 
@@ -1836,8 +1953,8 @@ definition
     Rea z1 * Im1 z2 + Im1 z1 * Rea z2 + Im2 z1 * Im3 z2 - Im3 z1 * Im2 z2,
     Rea z1 * Im2 z2 + Im2 z1 * Rea z2 + Im3 z1* Im1 z2 - Im1 z1* Im3 z2,
     Rea z1 * Im3 z2 + Im3 z1 * Rea z2 + Im1 z1 * Im2 z2 - Im2 z1* Im1 z2 *]
-    by Lm15;
-    hence thesis by Lm18;
+    by Lm17;
+    hence thesis by Lm20;
   end;
 end;
 
@@ -1845,7 +1962,7 @@ theorem
   z = Rea z+(Im1 z)*<i> + (Im2 z)*<j> + (Im3 z)*<k>
 proof
   [*Rea z, Im1 z, Im2 z, Im3 z*] = z by Th24;
-  hence thesis by Lm18;
+  hence thesis by Lm20;
 end;
 
 theorem
@@ -1853,19 +1970,19 @@ theorem
   Im3 z1 = 0 & Im3 z2 = 0 implies Rea(z1*z2) = Rea z1 * Rea z2 &
   Im1(z1*z2) = Im2 z1 * Im3 z2 - Im3 z1 * Im2 z2 &
   Im2(z1*z2) = Im3 z1 * Im1 z2 - Im1 z1 * Im3 z2 &
-  Im3(z1*z2) = Im1 z1 * Im2 z2 - Im2 z1 * Im1 z2 by Lm16;
+  Im3(z1*z2) = Im1 z1 * Im2 z2 - Im2 z1 * Im1 z2 by Lm18;
 
 theorem
   Rea z1 = 0 & Rea z2 = 0 implies
   Rea(z1*z2) = - Im1 z1 * Im1 z2 - Im2 z1 * Im2 z2 - Im3 z1 * Im3 z2 &
   Im1(z1*z2) = Im2 z1 * Im3 z2 - Im3 z1 * Im2 z2 &
   Im2(z1*z2) = Im3 z1 * Im1 z2 - Im1 z1 * Im3 z2 &
-  Im3(z1*z2) = Im1 z1 * Im2 z2 - Im2 z1 * Im1 z2 by Lm16;
+  Im3(z1*z2) = Im1 z1 * Im2 z2 - Im2 z1 * Im1 z2 by Lm18;
 
 theorem
   Rea(z*z) = (Rea z)^2 - (Im1 z)^2 - (Im2 z)^2 - (Im3 z)^2 &
   Im1(z*z) = 2*(Rea z * Im1 z) & Im2(z*z) = 2*( Rea z * Im2 z) &
-  Im3(z*z) = 2*(Rea z * Im3 z) by Lm16;
+  Im3(z*z) = 2*(Rea z * Im3 z) by Lm18;
 
 definition
   let z be quaternion number;
@@ -1875,15 +1992,15 @@ definition
   compatibility
   proof
     set z' = [* -Rea z, -Im1 z, -Im2 z, -Im3 z *];
-A1: z' = -Rea z+(-Im1 z)*<i> + (-Im2 z)*<j> + (-Im3 z)*<k> by Lm18;
+A1: z' = -Rea z+(-Im1 z)*<i> + (-Im2 z)*<j> + (-Im3 z)*<k> by Lm20;
     z' + z =
-    [* Rea z' + Rea z, Im1 z' + Im1 z, Im2 z' + Im2 z,Im3 z' + Im3 z*] by Lm12
+    [* Rea z' + Rea z, Im1 z' + Im1 z, Im2 z' + Im2 z,Im3 z' + Im3 z*] by Lm14
       .= [* -Rea z + Rea z, Im1 z' + Im1 z,Im2 z' + Im2 z,Im3 z' + Im3 z *]
     by Th23
       .= [* 0, - Im1 z + Im1 z,Im2 z' + Im2 z,Im3 z' + Im3 z *] by Th23
       .= [* 0, 0,- Im2 z + Im2 z,Im3 z' + Im3 z *] by Th23
       .= [* 0, 0,0,-Im3 z + Im3 z *] by Th23
-      .= 0 by Lm5;
+      .= 0 by Lm7;
     hence thesis by A1,Def8;
   end;
 end;
@@ -1892,7 +2009,7 @@ theorem Th41:
   Rea(-z) = -(Rea z) & Im1(-z) = -(Im1 z) & Im2(-z) = -(Im2 z) &
   Im3(-z) = -(Im3 z)
 proof
-  -z = [*-Rea z,-Im1 z,-Im2 z,-Im3 z*] by Lm18;
+  -z = [*-Rea z,-Im1 z,-Im2 z,-Im3 z*] by Lm20;
   hence thesis by Th23;
 end;
 
@@ -1923,7 +2040,7 @@ theorem Th42:
   Im2(z1 - z2) = Im2 z1 - Im2 z2 & Im3(z1 - z2) = Im3 z1 - Im3 z2
 proof
   z1 - z2 = [*Rea z1 - Rea z2, Im1 z1 - Im1 z2,
-  Im2 z1 - Im2 z2, Im3 z1 - Im3 z2*] by Lm18;
+  Im2 z1 - Im2 z2, Im3 z1 - Im3 z2*] by Lm20;
   hence thesis by Th23;
 end;
 
@@ -1943,7 +2060,7 @@ end;
 theorem Th43:
   z*' = [*Rea z, -Im1 z, -Im2 z, -Im3 z*]
 proof
-  <i> = [*0,1,0,0*] by Def6',Lmx;
+  <i> = [*0,1,0,0*] by Lm3,Lm4;
   then z*'= Rea z + [*(-Im1 z)*0,(-Im1 z) *1,(-Im1 z) *0,(-Im1 z) *0 *]
   + (-Im2 z)*<j> + (-Im3 z)*<k> by Def21
     .= Rea z + [*0,-Im1 z,0,0 *] +
@@ -1962,16 +2079,21 @@ theorem
   Rea (z*') = Rea z & Im1 (z*') = -Im1 z &
   Im2 (z*') = -Im2 z & Im3 (z*') = -Im3 z
 proof
-  z*' = [*Rea z, -Im1 z, -Im2 z, -Im3 z*] by Lm18;
+  z*' = [*Rea z, -Im1 z, -Im2 z, -Im3 z*] by Lm20;
   hence thesis by Th23;
 end;
 
 theorem
   z = 0 implies z*' = 0
 proof
-  assume z = 0;
-  then Rea z = 0 & Im1 z = 0 & Im2 z = 0 & Im3 z = 0 by Lm5,Th23;
-  hence thesis by Lm5,Th43;
+  assume
+A1: z = 0;
+  then
+A2: Rea z = 0 by Lm7,Th23;
+A3: Im1 z = 0 by A1,Lm7,Th23;
+A4: Im2 z = 0 by A1,Lm7,Th23;
+  Im3 z = 0 by A1,Lm7,Th23;
+  hence thesis by A2,A3,A4,Lm7,Th43;
 end;
 
 theorem
@@ -1980,21 +2102,28 @@ proof
   assume
 A1: z*' = 0;
 A2: z*' = [*Rea z, -Im1 z, -Im2 z, -Im3 z*] by Th43;
-A3: Rea z*' = 0 & Im1 z*' = 0 & Im2 z*'= 0 & Im3 z*' = 0 by A1,Lm5,Th23;
-  Rea z*' = Rea z & Im1 z*' = -Im1 z &
-  Im2 z*'= -Im2 z & Im3 z*' = -Im3 z by A2,Th23;
-  hence thesis by A3,Th26;
+A3: Rea z*' = 0 by A1,Lm7,Th23;
+A4: Im1 z*' = 0 by A1,Lm7,Th23;
+A5: Im2 z*'= 0 by A1,Lm7,Th23;
+A6: Im3 z*' = 0 by A1,Lm7,Th23;
+A7: Rea z*' = Rea z by A2,Th23;
+A8: Im1 z*' = -Im1 z by A2,Th23;
+A9: Im2 z*'= -Im2 z by A2,Th23;
+  Im3 z*' = -Im3 z by A2,Th23;
+  hence thesis by A3,A4,A5,A6,A7,A8,A9,Th26;
 end;
 
 theorem
   1q*' = 1q
 proof
-  [*1,0*] = [*1,0,0,0*] by Def6';
+  [*1,0*] = [*1,0,0,0*] by Lm4;
   then
 A1: 1q = [*1,0,0,0*] by ARYTM_0:def 7;
-  Rea [*1,0,0,0*] = 1 & Im1 [*1,0,0,0*] = 0 &
-  Im2 [*1,0,0,0*] = 0 & Im3 [*1,0,0,0*] = 0 by Th23;
-  hence thesis by A1,Th43;
+A2: Rea [*1,0,0,0*] = 1 by Th23;
+A3: Im1 [*1,0,0,0*] = 0 by Th23;
+A4: Im2 [*1,0,0,0*] = 0 by Th23;
+  Im3 [*1,0,0,0*] = 0 by Th23;
+  hence thesis by A1,A2,A3,A4,Th43;
 end;
 
 theorem
@@ -2027,39 +2156,38 @@ theorem
 theorem
   <k>*' = -<k> by Th31;
 
-Lm19: Rea(z1+z2) = Rea z1 + Rea z2 & Im1 (z1+z2) = Im1 z1 + Im1 z2 &
+Lm21: Rea(z1+z2) = Rea z1 + Rea z2 & Im1 (z1+z2) = Im1 z1 + Im1 z2 &
 Im2 (z1+z2) = Im2 z1 + Im2 z2 & Im3 (z1+z2) = Im3 z1 + Im3 z2
 proof
-  z1 = [*Rea z1, Im1 z1, Im2 z1, Im3 z1*] &
-  z2 = [*Rea z2, Im1 z2, Im2 z2, Im3 z2*] &
-  (z1+z2) = [*Rea (z1+z2), Im1 (z1+z2), Im2 (z1+z2), Im3 (z1+z2)*] by Th24;
+A1: z1 = [*Rea z1, Im1 z1, Im2 z1, Im3 z1*] by Th24;
+  z2 = [*Rea z2, Im1 z2, Im2 z2, Im3 z2*] by Th24;
   then z1+z2 = [*Rea z1+Rea z2, Im1 z1+Im1 z2,
-  Im2 z1+Im2 z2, Im3 z1+Im3 z2*] by Def7;
+  Im2 z1+Im2 z2, Im3 z1+Im3 z2*] by A1,Def7;
   hence thesis by Th23;
 end;
 
 theorem
   (z1 + z2)*' = z1*' + z2*'
 proof
-A1: z1*' = [*Rea z1, -Im1 z1, -Im2 z1, -Im3 z1*] &
-  z2*' = [*Rea z2, -Im1 z2, -Im2 z2, -Im3 z2*] &
-  (z1+z2)*' = [*Rea (z1+z2), -Im1 (z1+z2), -Im2 (z1+z2), -Im3 (z1+z2)*]
+A1: z1*' = [*Rea z1, -Im1 z1, -Im2 z1, -Im3 z1*] by Th43;
+A2: z2*' = [*Rea z2, -Im1 z2, -Im2 z2, -Im3 z2*] by Th43;
+A3: (z1+z2)*' = [*Rea (z1+z2), -Im1 (z1+z2), -Im2 (z1+z2), -Im3 (z1+z2)*]
   by Th43;
-  then z1*' + z2*' = [* Rea z1 + Rea z2, - Im1 z1 + - Im1 z2,
-  - Im2 z1 + - Im2 z2, - Im3 z1 + - Im3 z2*] by Def7
+  z1*' + z2*' = [* Rea z1 + Rea z2, - Im1 z1 + - Im1 z2,
+  - Im2 z1 + - Im2 z2, - Im3 z1 + - Im3 z2*] by A1,A2,Def7
     .= [* Rea (z1 + z2), - (Im1 z1 + Im1 z2),
-  - (Im2 z1 + Im2 z2), - (Im3 z1 + Im3 z2)*] by Lm19
+  - (Im2 z1 + Im2 z2), - (Im3 z1 + Im3 z2)*] by Lm21
     .= [* Rea (z1 + z2), - Im1 (z1 + z2),
-  - (Im2 z1 + Im2 z2), - (Im3 z1 + Im3 z2)*] by Lm19
+  - (Im2 z1 + Im2 z2), - (Im3 z1 + Im3 z2)*] by Lm21
     .= [* Rea (z1 + z2), - Im1 (z1 + z2),
-  - Im2 (z1+z2), - (Im3 z1 + Im3 z2)*] by Lm19;
-  hence thesis by A1,Lm19;
+  - Im2 (z1+z2), - (Im3 z1 + Im3 z2)*] by Lm21;
+  hence thesis by A3,Lm21;
 end;
 
 theorem Th55:
   (-z)*' = -(z*')
 proof
-A1: z*' = [*Rea z, -Im1 z, -Im2 z, -Im3 z*] &
+A1: z*' = [*Rea z, -Im1 z, -Im2 z, -Im3 z*] by Th43;
   (-z)*' = [*Rea (-z), -Im1 (-z), -Im2 (-z), -Im3 (-z)*] by Th43;
   then (-z)*' = [*-Rea z, -Im1 (-z), -Im2 (-z), -Im3 (-z)*] by Th41
     .= [*-Rea z, - - Im1 z, -Im2 (-z), -Im3 (-z)*] by Th41
@@ -2068,20 +2196,19 @@ A1: z*' = [*Rea z, -Im1 z, -Im2 z, -Im3 z*] &
     .= [*-Rea z, Im1 z, Im2 z, Im3 z*];
   then z*' + (-z)*' = [*Rea z+ -Rea z, -Im1 z+ Im1 z,
   -Im2 z+ Im2 z, -Im3 z+Im3 z*] by A1,Def7
-    .=0 by Lm5;
+    .=0 by Lm7;
   hence thesis by Def8;
 end;
 
-Lm20: Rea(z1-z2) = Rea z1 - Rea z2 & Im1 (z1-z2) = Im1 z1 - Im1 z2 &
+Lm22: Rea(z1-z2) = Rea z1 - Rea z2 & Im1 (z1-z2) = Im1 z1 - Im1 z2 &
 Im2 (z1-z2) = Im2 z1 - Im2 z2 & Im3 (z1-z2) = Im3 z1 - Im3 z2
 proof
-A1: z1 = [*Rea z1, Im1 z1, Im2 z1, Im3 z1*] &
-  z2 = [*Rea z2, Im1 z2, Im2 z2, Im3 z2*] &
-  (z1-z2) = [*Rea (z1-z2), Im1 (z1-z2), Im2 (z1-z2), Im3 (z1-z2)*] by Th24;
+A1: z1 = [*Rea z1, Im1 z1, Im2 z1, Im3 z1*] by Th24;
+A2: z2 = [*Rea z2, Im1 z2, Im2 z2, Im3 z2*] by Th24;
   set z2' = [*-Rea z2, -Im1 z2, -Im2 z2,-Im3 z2*];
   z2 + z2' = [*Rea z2+ -Rea z2, Im1 z2+ -Im1 z2,
-  Im2 z2+ -Im2 z2, Im3 z2+ -Im3 z2*] by A1,Def7
-    .= 0 by Lm5;
+  Im2 z2+ -Im2 z2, Im3 z2+ -Im3 z2*] by A2,Def7
+    .= 0 by Lm7;
   then -z2 = [*-Rea z2, -Im1 z2, -Im2 z2,-Im3 z2*] by Def8;
   then z1-z2 = [*Rea z1-Rea z2, Im1 z1-Im1 z2,
   Im2 z1-Im2 z2, Im3 z1-Im3 z2*] by A1,Def7;
@@ -2091,14 +2218,13 @@ end;
 theorem
   (z1 - z2)*' = z1*' - z2*'
 proof
-A1: z1*' = [*Rea z1, -Im1 z1, -Im2 z1, -Im3 z1*] &
-  z2*' = [*Rea z2, -Im1 z2, -Im2 z2, -Im3 z2*] &
-  (-z2)*' = [*Rea (-z2), -Im1 (-z2), -Im2 (-z2), -Im3 (-z2)*] &
-  (z1-z2)*' = [*Rea (z1-z2), -Im1 (z1-z2), -Im2 (z1-z2), -Im3 (z1-z2)*]
+A1: z1*' = [*Rea z1, -Im1 z1, -Im2 z1, -Im3 z1*] by Th43;
+A2: (-z2)*' = [*Rea (-z2), -Im1 (-z2), -Im2 (-z2), -Im3 (-z2)*] by Th43;
+A3: (z1-z2)*' = [*Rea (z1-z2), -Im1 (z1-z2), -Im2 (z1-z2), -Im3 (z1-z2)*]
   by Th43;
-A2: z1*' - z2*' = z1*' + (- z2)*' by Th55
+A4: z1*' - z2*' = z1*' + (- z2)*' by Th55
     .= [*Rea z1+Rea (-z2), -Im1 z1+ -Im1(-z2),
-  -Im2 z1+ - Im2 (-z2), -Im3 z1+ - Im3 (-z2)*] by A1,Def7
+  -Im2 z1+ - Im2 (-z2), -Im3 z1+ - Im3 (-z2)*] by A1,A2,Def7
     .= [*Rea z1+- Rea z2, -Im1 z1+ -Im1(-z2),
   -Im2 z1+ - Im2 (-z2), -Im3 z1+ - Im3 (-z2)*] by Th41
     .= [*Rea z1- Rea z2, -Im1 z1- - Im1 z2,
@@ -2109,14 +2235,14 @@ A2: z1*' - z2*' = z1*' + (- z2)*' by Th55
   -Im2 z1 + Im2 z2, -Im3 z1 - -Im3 z2*] by Th41
     .= [*Rea z1- Rea z2, -Im1 z1+ Im1 z2, -Im2 z1 + Im2 z2, -Im3 z1 +Im3 z2*];
   (z1-z2)*' = [*Rea z1-Rea z2, -Im1 (z1-z2), -Im2 (z1-z2), -Im3 (z1-z2)*]
-  by A1,Lm20
+  by A3,Lm22
     .= [*Rea z1-Rea z2, -(Im1 z1- Im1 z2), -Im2 (z1-z2), -Im3 (z1-z2)*]
-  by Lm20
+  by Lm22
     .= [*Rea z1-Rea z2, -Im1 z1+ Im1 z2,
-  -(Im2 z1- Im2 z2), -Im3 (z1-z2)*] by Lm20
+  -(Im2 z1- Im2 z2), -Im3 (z1-z2)*] by Lm22
     .= [*Rea z1-Rea z2, -Im1 z1+ Im1 z2,
-  -Im2 z1+ Im2 z2, -(Im3 z1- Im3 z2)*] by Lm20;
-  hence thesis by A2;
+  -Im2 z1+ Im2 z2, -(Im3 z1- Im3 z2)*] by Lm22;
+  hence thesis by A4;
 end;
 
 theorem
@@ -2126,19 +2252,18 @@ proof
 A1: (Im2 z1 * Im3 z2) <> (Im3 z1)*(Im2 z2);
   assume
 A2: (z1*z2)*' = z1*' * z2*';
-A3: z1*' = [*Rea z1, -Im1 z1, -Im2 z1, -Im3 z1*] &
-  z2*' = [*Rea z2, -Im1 z2, -Im2 z2, -Im3 z2*] &
-  (z1*z2)*' = [*Rea (z1*z2), -Im1 (z1*z2), -Im2 (z1*z2), -Im3 (z1*z2)*]
+A3: z1*' = [*Rea z1, -Im1 z1, -Im2 z1, -Im3 z1*] by Th43;
+A4: z2*' = [*Rea z2, -Im1 z2, -Im2 z2, -Im3 z2*] by Th43;
+A5: (z1*z2)*' = [*Rea (z1*z2), -Im1 (z1*z2), -Im2 (z1*z2), -Im3 (z1*z2)*]
   by Th43;
-  then
-A4: z1*' * z2*' = [*(Rea z1)*(Rea z2) - (- Im1 z1)*(- Im1 z2) -
+A6: z1*' * z2*' = [*(Rea z1)*(Rea z2) - (- Im1 z1)*(- Im1 z2) -
   (- Im2 z1)*(- Im2 z2) - (-Im3 z1)*(-Im3 z2),
   (Rea z1)*(- Im1 z2) + (- Im1 z1)*(Rea z2) +
   (- Im2 z1)*(-Im3 z2) - (-Im3 z1)*(- Im2 z2),
   (Rea z1)*(- Im2 z2) + (Rea z2)*(- Im2 z1) +
   (- Im1 z2)*(-Im3 z1) - (-Im3 z2)*(- Im1 z1),
   (Rea z1)*(-Im3 z2) + (-Im3 z1)*(Rea z2) +
-  (- Im1 z1)*(- Im2 z2) - (- Im2 z1)*(- Im1 z2) *] by Def10
+  (- Im1 z1)*(- Im2 z2) - (- Im2 z1)*(- Im1 z2) *] by A3,A4,Def10
     .= [*(Rea z1)*(Rea z2) - (Im1 z1)*(Im1 z2) -
   (Im2 z1)*(Im2 z2) - (Im3 z1)*(Im3 z2),
   -(Rea z1)*( Im1 z2) - ( Im1 z1)*(Rea z2) +
@@ -2147,21 +2272,21 @@ A4: z1*' * z2*' = [*(Rea z1)*(Rea z2) - (- Im1 z1)*(- Im1 z2) -
   (Im1 z2)*(Im3 z1) - (Im3 z2)*(Im1 z1),
   -(Rea z1)*(Im3 z2) - (Im3 z1)*(Rea z2) +
   (Im1 z1)*(Im2 z2) - (Im2 z1)*(Im1 z2) *];
-A5: (z1*z2)*' =
+A7: (z1*z2)*' =
   [*Rea z1 * Rea z2 - Im1 z1 * Im1 z2 - Im2 z1 * Im2 z2 - Im3 z1 * Im3 z2,
-  -Im1 (z1*z2), -Im2 (z1*z2), -Im3 (z1*z2)*] by A3,Lm16
+  -Im1 (z1*z2), -Im2 (z1*z2), -Im3 (z1*z2)*] by A5,Lm18
     .=[*Rea z1 * Rea z2 - Im1 z1 * Im1 z2 - Im2 z1 * Im2 z2 - Im3 z1 * Im3 z2,
   -(Rea z1 * Im1 z2 + Im1 z1 * Rea z2 + Im2 z1 * Im3 z2 - Im3 z1 * Im2 z2),
-  -Im2 (z1*z2), -Im3 (z1*z2)*] by Lm16
+  -Im2 (z1*z2), -Im3 (z1*z2)*] by Lm18
     .=[*Rea z1 * Rea z2 - Im1 z1 * Im1 z2 - Im2 z1 * Im2 z2 - Im3 z1 * Im3 z2,
   -(Rea z1 * Im1 z2 + Im1 z1 * Rea z2 + Im2 z1 * Im3 z2 - Im3 z1 * Im2 z2),
   -(Rea z1 * Im2 z2 + Im2 z1 * Rea z2 + Im3 z1 * Im1 z2 - Im1 z1 * Im3 z2),
-  -Im3 (z1*z2)*] by Lm16
+  -Im3 (z1*z2)*] by Lm18
     .=[*Rea z1 * Rea z2 - Im1 z1 * Im1 z2 - Im2 z1 * Im2 z2 - Im3 z1 * Im3 z2,
   -(Rea z1 * Im1 z2 + Im1 z1 * Rea z2 + Im2 z1 * Im3 z2 - Im3 z1 * Im2 z2),
   -(Rea z1 * Im2 z2 + Im2 z1 * Rea z2 + Im3 z1 * Im1 z2 - Im1 z1 * Im3 z2),
   -(Rea z1 * Im3 z2 + Im3 z1 * Rea z2 + Im1 z1 * Im2 z2 - Im2 z1 * Im1 z2)*]
-  by Lm16
+  by Lm18
     .=[*Rea z1 * Rea z2 - (Im1 z1 * Im1 z2) -
   (Im2 z1 * Im2 z2) - (Im3 z1 * Im3 z2),
   -(Rea z1 * Im1 z2) - (Im1 z1 * Rea z2) -
@@ -2170,26 +2295,27 @@ A5: (z1*z2)*' =
   (Im3 z1 * Im1 z2) + (Im1 z1 * Im3 z2),
   -(Rea z1 * Im3 z2) - (Im3 z1 * Rea z2) -
   (Im1 z1 * Im2 z2) + (Im2 z1 * Im1 z2)*];
-A6: Im1 (z1*' * z2*') = -(Rea z1)*( Im1 z2) - ( Im1 z1)*(Rea z2) +
-  (Im2 z1)*(Im3 z2) - (Im3 z1)*(Im2 z2) by A4,Th23;
+A8: Im1 (z1*' * z2*') = -(Rea z1)*( Im1 z2) - ( Im1 z1)*(Rea z2) +
+  (Im2 z1)*(Im3 z2) - (Im3 z1)*(Im2 z2) by A6,Th23;
   Im1(z1*z2)*' = -(Rea z1 * Im1 z2) - (Im1 z1 * Rea z2) -
-  (Im2 z1 * Im3 z2) + (Im3 z1 * Im2 z2) by A5,Th23;
-  hence contradiction by A1,A2,A6;
+  (Im2 z1 * Im3 z2) + (Im3 z1 * Im2 z2) by A7,Th23;
+  hence contradiction by A1,A2,A8;
 end;
 
 theorem
   Im1 z = 0 & Im2 z = 0 & Im3 z = 0 implies z*' = z
 proof
-  assume
-A1: Im1 z = 0 & Im2 z = 0 & Im3 z = 0;
-  then
-A2: z = [*Rea z,0,0,0*] by Th24
-    .= [*Rea z,0*] by Def6'
+  assume that
+A1: Im1 z = 0 and
+A2: Im2 z = 0 and
+A3: Im3 z = 0;
+A4: z = [*Rea z,0,0,0*] by A1,A2,A3,Th24
+    .= [*Rea z,0*] by Lm4
     .=Rea z by ARYTM_0:def 7;
-  z*' = [*Rea z, 0,0,0*] by A1,Th43
-    .= [*Rea z, 0*] by Def6'
+  z*' = [*Rea z, 0,0,0*] by A1,A2,A3,Th43
+    .= [*Rea z, 0*] by Lm4
     .= Rea z by ARYTM_0:def 7;
-  hence thesis by A2;
+  hence thesis by A4;
 end;
 
 theorem
@@ -2228,7 +2354,7 @@ A1: z = [*Rea z, Im1 z, Im2 z, Im3 z*] by Th24;
   set z' = [*-Rea z, -Im1 z, -Im2 z, -Im3 z*];
   z + z' = [*Rea z+ -Rea z, Im1 z+ -Im1 z, Im2 z+ -Im2 z, Im3 z+ -Im3 z*]
   by A1,Def7
-    .= 0 by Lm5;
+    .= 0 by Lm7;
   hence thesis by Def8;
 end;
 
@@ -2236,12 +2362,12 @@ theorem
   z1 - z2 = [*Rea z1 - Rea z2, Im1 z1 - Im1 z2,
   Im2 z1 - Im2 z2, Im3 z1 - Im3 z2*]
 proof
-A1: z1 = [*Rea z1, Im1 z1, Im2 z1, Im3 z1*] &
-  z2 = [*Rea z2, Im1 z2, Im2 z2, Im3 z2*] by Th24;
+A1: z1 = [*Rea z1, Im1 z1, Im2 z1, Im3 z1*] by Th24;
+A2: z2 = [*Rea z2, Im1 z2, Im2 z2, Im3 z2*] by Th24;
   set z' = [*-Rea z2, -Im1 z2, -Im2 z2, -Im3 z2*];
   z2 + z' = [*Rea z2+ -Rea z2, Im1 z2+ -Im1 z2,
-  Im2 z2+ -Im2 z2, Im3 z2+ -Im3 z2*] by A1,Def7
-    .= 0 by Lm5;
+  Im2 z2+ -Im2 z2, Im3 z2+ -Im3 z2*] by A2,Def7
+    .= 0 by Lm7;
   then -z2 = [*-Rea z2, -Im1 z2, -Im2 z2, -Im3 z2*] by Def8;
   hence thesis by A1,Def7;
 end;
@@ -2251,10 +2377,13 @@ theorem
   Im2(z - z*') = 2*Im2 z & Im3(z - z*') = 2*Im3 z
 proof
 A1: z = [*Rea z, Im1 z, Im2 z, Im3 z*] by Th24;
-  z*' = [*Rea z, -Im1 z, -Im2 z, -Im3 z*] by Th43;
-  then Rea z*' = Rea z & Im1 z*' = - Im1 z &
-  Im2 z*' = - Im2 z & Im3 z*' = - Im3 z by Th23;
-  then -(z*') = [*-Rea z,Im1 z, Im2 z,Im3 z*] by Th62;
+A2: z*' = [*Rea z, -Im1 z, -Im2 z, -Im3 z*] by Th43;
+  then
+A3: Rea z*' = Rea z by Th23;
+A4: Im1 z*' = - Im1 z by A2,Th23;
+A5: Im2 z*' = - Im2 z by A2,Th23;
+  Im3 z*' = - Im3 z by A2,Th23;
+  then -(z*') = [*-Rea z,Im1 z, Im2 z,Im3 z*] by A3,A4,A5,Th62;
   then z - z*' = [*Rea z+ (-Rea z), Im1 z + Im1 z, Im2 z + Im2 z, Im3 z +Im3
   z *] by A1,Def7
     .= [*0, 2* Im1 z, 2* Im2 z,2* Im3 z*];
@@ -2271,8 +2400,10 @@ end;
 theorem Th65:
   |.0q.| = 0
 proof
-  Rea 0q = 0 & Im1 0q = 0 & Im2 0q = 0 & Im3 0q = 0 by Lm5,Th23;
-  hence thesis by SQUARE_1:82;
+A1: Rea 0q = 0 by Lm7,Th23;
+A2: Im1 0q = 0 by Lm7,Th23;
+  Im2 0q = 0 by Lm7,Th23;
+  hence thesis by A1,A2,Lm7,Th23,SQUARE_1:82;
 end;
 
 theorem Th66:
@@ -2280,28 +2411,38 @@ theorem Th66:
 proof
   assume
 A1: |.z.| = 0;
-A2: 0 <= (Rea z)^2 & 0 <= (Im1 z)^2 &
-  0 <= (Im2 z)^2 & 0 <= (Im3 z)^2 by XREAL_1:65;
-  0 <= (Rea z)^2+(Im1 z)^2+ (Im2 z)^2 + (Im3 z)^2 by A2;
-  then 0 = (Rea z)^2+(Im1 z)^2+ (Im2 z)^2 + (Im3 z)^2 by A1,SQUARE_1:93;
-  then Rea z = 0 & Im1 z = 0 & Im2 z = 0 & Im3 z = 0 by Lm8;
-  hence thesis by Lm5,Th24;
+A2: 0 <= (Rea z)^2 by XREAL_1:65;
+A3: 0 <= (Im1 z)^2 by XREAL_1:65;
+A4: 0 <= (Im2 z)^2 by XREAL_1:65;
+  0 <= (Im3 z)^2 by XREAL_1:65;
+  then
+A5: 0 = (Rea z)^2+(Im1 z)^2+ (Im2 z)^2 + (Im3 z)^2 by A1,A2,A3,A4,
+  SQUARE_1:93;
+  then
+A6: Rea z = 0 by Lm10;
+A7: Im1 z = 0 by A5,Lm10;
+A8: Im2 z = 0 by A5,Lm10;
+  Im3 z = 0 by A5,Lm10;
+  hence thesis by A6,A7,A8,Lm7,Th24;
 end;
 
 theorem Th67:
   0 <= |.z.|
 proof
-A1: 0 <= (Rea z)^2 & 0 <= (Im1 z)^2 &
-  0 <= (Im2 z)^2 & 0 <= (Im3 z)^2 by XREAL_1:65;
-  0 <= (Rea z)^2+(Im1 z)^2+ (Im2 z)^2 + (Im3 z)^2 by A1;
-  hence thesis by SQUARE_1:def 4;
+A1: 0 <= (Rea z)^2 by XREAL_1:65;
+A2: 0 <= (Im1 z)^2 by XREAL_1:65;
+A3: 0 <= (Im2 z)^2 by XREAL_1:65;
+  0 <= (Im3 z)^2 by XREAL_1:65;
+  hence thesis by A1,A2,A3,SQUARE_1:def 4;
 end;
 
 theorem
   |.1q.| = 1
 proof
-  Rea 1q =1 & Im1 1q = 0 & Im2 1q = 0 & Im3 1q = 0 by Lm9,Th23;
-  hence thesis by SQUARE_1:83;
+A1: Rea 1q =1 by Lm11,Th23;
+A2: Im1 1q = 0 by Lm11,Th23;
+  Im2 1q = 0 by Lm11,Th23;
+  hence thesis by A1,A2,Lm11,Th23,SQUARE_1:83;
 end;
 
 theorem
@@ -2316,55 +2457,64 @@ theorem
 theorem Th72:
   |.-z.| = |.z.|
 proof
-  -z = [*-Rea z, -Im1 z, -Im2 z, -Im3 z*] by Th62;
-  then Rea -z = - Rea z & Im1 -z = - Im1 z &
-  Im2 -z = - Im2 z & Im3 -z = - Im3 z by Th23;
-  hence thesis;
+A1: -z = [*-Rea z, -Im1 z, -Im2 z, -Im3 z*] by Th62;
+  then
+A2: Rea -z = - Rea z by Th23;
+A3: Im1 -z = - Im1 z by A1,Th23;
+A4: Im2 -z = - Im2 z by A1,Th23;
+  Im3 -z = - Im3 z by A1,Th23;
+  hence thesis by A2,A3,A4;
 end;
 
 theorem Th73:
   |.z*'.| = |.z.|
 proof
-  z*' = [*Rea z, -Im1 z, -Im2 z, -Im3 z*] by Th43;
-  then Rea z*' = Rea z & Im1 z*' = - Im1 z &
-  Im2 z*' = - Im2 z & Im3 z*' = - Im3 z by Th23;
-  hence thesis;
+A1: z*' = [*Rea z, -Im1 z, -Im2 z, -Im3 z*] by Th43;
+  then
+A2: Im1 z*' = - Im1 z by Th23;
+A3: Im2 z*' = - Im2 z by A1,Th23;
+  Im3 z*' = - Im3 z by A1,Th23;
+  hence thesis by A1,A2,A3,Th23;
 end;
 
-Lm21: for a,b,c,d being real number holds a^2 + b^2 + c^2 + d^2 >= 0
+Lm23: for a,b,c,d being real number holds a^2 + b^2 + c^2 + d^2 >= 0
 proof
   let a,b,c,d be real number;
-  a^2 >= 0 & b^2>= 0 & c^2 >= 0 & d^2 >= 0 by XREAL_1:65;
-  then a^2 + b^2>= 0 & c^2 + d^2 >= 0;
-  then (a^2 + b^2) + (c^2 + d^2) >= 0;
-  hence thesis;
+A1: a^2 >= 0 by XREAL_1:65;
+A2: b^2>= 0 by XREAL_1:65;
+A3: c^2 >= 0 by XREAL_1:65;
+  d^2 >= 0 by XREAL_1:65;
+  hence thesis by A1,A2,A3;
 end;
 
 theorem
-  0 <= (Rea z)^2 + (Im1 z)^2 + (Im2 z)^2 + (Im3 z)^2 by Lm21;
+  0 <= (Rea z)^2 + (Im1 z)^2 + (Im2 z)^2 + (Im3 z)^2 by Lm23;
 
-Lm22: a^2 <= a^2 + b^2 + c^2 + d^2
+Lm24: a^2 <= a^2 + b^2 + c^2 + d^2
 proof
-A1: 0 <= a^2 & 0 <= b^2 & 0 <= c^2 & 0<= d^2 by XREAL_1:65;
+A1: 0 <= c^2 by XREAL_1:65;
+A2: 0<= d^2 by XREAL_1:65;
   a^2 <= a^2 + b^2 by XREAL_1:33,65;
   then 0+a^2 <= (a^2 + b^2) + c^2 by A1,XREAL_1:9;
-  hence thesis by A1,XREAL_1:9;
+  hence thesis by A2,XREAL_1:9;
 end;
 
-Lm23: for a, b, c, d being real number holds c^2 <= a^2 + b^2 + c^2 + d^2
+Lm25: for a, b, c, d being real number holds c^2 <= a^2 + b^2 + c^2 + d^2
 proof
   let a, b, c, d be real number;
-A1: 0 <= a^2 & 0 <= b^2 & 0 <= c^2 & 0 <= d^2 by XREAL_1:65;
+A1: 0 <= b^2 by XREAL_1:65;
+A2: 0 <= d^2 by XREAL_1:65;
   c^2 <= a^2 + c^2 by XREAL_1:33,65;
   then 0+c^2 <= (a^2 + c^2) + b^2 by A1,XREAL_1:9;
-  hence thesis by A1,XREAL_1:9;
+  hence thesis by A2,XREAL_1:9;
 end;
 
-Lm24: d^2 <= a^2 + b^2 + c^2 + d^2
+Lm26: d^2 <= a^2 + b^2 + c^2 + d^2
 proof
-A1: 0 <= a^2 & 0 <= b^2 & 0 <= c^2 & 0 <= d^2 by XREAL_1:65;
+A1: 0 <= b^2 by XREAL_1:65;
+A2: 0 <= c^2 by XREAL_1:65;
   d^2 <= a^2 + d^2 by XREAL_1:33,65;
-  then 0+d^2 <= (a^2 + d^2) + c^2 by A1,XREAL_1:9;
+  then 0+d^2 <= (a^2 + d^2) + c^2 by A2,XREAL_1:9;
   then 0+ d^2 <= b^2 + (a^2 + d^2 + c^2) by A1,XREAL_1:9;
   hence thesis;
 end;
@@ -2372,98 +2522,86 @@ end;
 theorem
   Rea z <= |.z.|
 proof
-  0 <= (Rea z)^2 & 0 <= (Im1 z)^2 &
-  0 <= (Im2 z)^2 & 0<= (Im3 z)^2 by XREAL_1:65;
+  0 <= (Rea z)^2 by XREAL_1:65;
   then
-A1: sqrt ((Rea z)^2) <= sqrt ((Rea z)^2 + (Im1 z)^2 + (Im2 z)^2 + (Im3 z )^2)
-  by Lm22,SQUARE_1:94;
+  A1: sqrt ((Rea z)^2) <= sqrt ((Rea z)^2 + (Im1 z)^2 + (Im2 z)^2 + (Im3 z )^2)
+  by Lm24,SQUARE_1:94;
   per cases;
   suppose Rea z >= 0;
     hence thesis by A1,SQUARE_1:89;
   end;
   suppose
 A2: Rea z < 0;
-    then
-A3: - Rea z <= |.z.| by A1,SQUARE_1:90;
-    0* (-1) < (Rea z) * (-1) by A2,XREAL_1:71;
-    hence thesis by A3;
+    then - Rea z <= |.z.| by A1,SQUARE_1:90;
+    hence thesis by A2;
   end;
 end;
 
 theorem
   Im1 z <= |.z.|
 proof
-  0 <= (Rea z)^2 & 0 <= (Im1 z)^2 &
-  0 <= (Im2 z)^2 & 0<= (Im3 z)^2 by XREAL_1:65;
+  0 <= (Im1 z)^2 by XREAL_1:65;
   then
-A1: sqrt ((Im1 z)^2) <= sqrt ((Rea z)^2 + (Im1 z)^2 + (Im2 z)^2 + (Im3 z )^2)
-  by Lm22,SQUARE_1:94;
+  A1: sqrt ((Im1 z)^2) <= sqrt ((Rea z)^2 + (Im1 z)^2 + (Im2 z)^2 + (Im3 z )^2)
+  by Lm24,SQUARE_1:94;
   per cases;
   suppose Im1 z >= 0;
     hence thesis by A1,SQUARE_1:89;
   end;
   suppose
 A2: Im1 z < 0;
-    then
-A3: -Im1 z <= |.z.| by A1,SQUARE_1:90;
-    0* (-1) < (Im1 z) * (-1) by A2,XREAL_1:71;
-    hence thesis by A3;
+    then -Im1 z <= |.z.| by A1,SQUARE_1:90;
+    hence thesis by A2;
   end;
 end;
 
 theorem
   Im2 z <= |.z.|
 proof
-  0 <= (Rea z)^2 & 0 <= (Im1 z)^2 &
-  0 <= (Im2 z)^2 & 0<= (Im3 z)^2 by XREAL_1:65;
+  0 <= (Im2 z)^2 by XREAL_1:65;
   then
-A1: sqrt ((Im2 z)^2) <= sqrt ((Rea z)^2 + (Im1 z)^2 + (Im2 z)^2 + (Im3 z )^2)
-  by Lm23,SQUARE_1:94;
+  A1: sqrt ((Im2 z)^2) <= sqrt ((Rea z)^2 + (Im1 z)^2 + (Im2 z)^2 + (Im3 z )^2)
+  by Lm25,SQUARE_1:94;
   per cases;
   suppose Im2 z >= 0;
     hence thesis by A1,SQUARE_1:89;
   end;
   suppose
 A2: Im2 z < 0;
-    then
-A3: -Im2 z <= |.z.| by A1,SQUARE_1:90;
-    0* (-1) < (Im2 z) * (-1) by A2,XREAL_1:71;
-    hence thesis by A3;
+    then -Im2 z <= |.z.| by A1,SQUARE_1:90;
+    hence thesis by A2;
   end;
 end;
 
 theorem
   Im3 z <= |.z.|
 proof
-  0 <= (Rea z)^2 & 0 <= (Im1 z)^2 &
-  0 <= (Im2 z)^2 & 0<= (Im3 z)^2 by XREAL_1:65;
+  0<= (Im3 z)^2 by XREAL_1:65;
   then
-A1: sqrt ((Im3 z)^2) <= sqrt ((Rea z)^2 + (Im1 z)^2 + (Im2 z)^2 + (Im3 z )^2)
-  by Lm24,SQUARE_1:94;
+  A1: sqrt ((Im3 z)^2) <= sqrt ((Rea z)^2 + (Im1 z)^2 + (Im2 z)^2 + (Im3 z )^2)
+  by Lm26,SQUARE_1:94;
   per cases;
   suppose Im3 z >= 0;
     hence thesis by A1,SQUARE_1:89;
   end;
   suppose
 A2: Im3 z < 0;
-    then
-A3: -Im3 z <= |.z.| by A1,SQUARE_1:90;
-    0* (-1) < (Im3 z) * (-1)by A2,XREAL_1:71;
-    hence thesis by A3;
+    then -Im3 z <= |.z.| by A1,SQUARE_1:90;
+    hence thesis by A2;
   end;
 end;
 
-Lm25: Rea (z1+z2) = Rea z1 + Rea z2 & Im1 (z1+z2) = Im1 z1 + Im1 z2 &
+Lm27: Rea (z1+z2) = Rea z1 + Rea z2 & Im1 (z1+z2) = Im1 z1 + Im1 z2 &
 Im2 (z1+z2) = Im2 z1 + Im2 z2 & Im3 (z1+z2) = Im3 z1 + Im3 z2
 proof
-  z1 = [*Rea z1, Im1 z1, Im2 z1, Im3 z1*] &
+A1: z1 = [*Rea z1, Im1 z1, Im2 z1, Im3 z1*] by Th24;
   z2 = [*Rea z2, Im1 z2, Im2 z2, Im3 z2*] by Th24;
   then z1 + z2 = [*Rea z1 + Rea z2, Im1 z1 + Im1 z2,
-  Im2 z1 + Im2 z2, Im3 z1+ Im3 z2 *] by Def7;
+  Im2 z1 + Im2 z2, Im3 z1+ Im3 z2 *] by A1,Def7;
   hence thesis by Th23;
 end;
 
-Lm26: a >= b^2 implies sqrt a >= b
+Lm28: a >= b^2 implies sqrt a >= b
 proof
   assume
 A1: a >= b^2;
@@ -2476,55 +2614,64 @@ A2: sqrt a >= sqrt b^2 by A1,SQUARE_1:94;
   end;
   suppose
 A3: b < 0;
-    then
-A4: sqrt a >= -b by A2,SQUARE_1:90;
-    thus thesis by A3,A4;
+    then sqrt a >= -b by A2,SQUARE_1:90;
+    hence thesis by A3;
   end;
 end;
 
-Lm27: for a1,a2,a3,a4,a5,a6,b1,b2,b3,b4,b5,b6 being real number st
+Lm29: for a1,a2,a3,a4,a5,a6,b1,b2,b3,b4,b5,b6 being real number st
 a1 >= b1 & a2 >= b2 & a3 >= b3 & a4 >= b4 & a5 >= b5 & a6 >= b6 holds
 a1 + a2 + a3 + a4 + a5 + a6 >= b1 + b2 + b3 + b4 + b5 + b6
 proof
   let a1,a2,a3,a4,a5,a6,b1,b2,b3,b4,b5,b6 be real number;
-  assume a1 >= b1 & a2 >= b2 & a3 >= b3 & a4 >= b4 & a5 >= b5 & a6 >= b6;
-  then
-A1: a1+a2>=b1+b2 & a3+a4 >= b3+b4 & a5+a6 >= b5+b6 by XREAL_1:9;
-  then (a1+a2)+(a3+a4)>=(b1+b2) + (b3+b4) by XREAL_1:9;
-  then (a1+a2)+(a3+a4)+(a5+a6)>=(b1+b2) + (b3+b4)+(b5+b6) by A1,XREAL_1:9;
+  assume that
+A1: a1 >= b1 and
+A2: a2 >= b2 and
+A3: a3 >= b3 and
+A4: a4 >= b4 and
+A5: a5 >= b5 and
+A6: a6 >= b6;
+A7: a1+a2>=b1+b2 by A1,A2,XREAL_1:9;
+A8: a3+a4 >= b3+b4 by A3,A4,XREAL_1:9;
+A9: a5+a6 >= b5+b6 by A5,A6,XREAL_1:9;
+  (a1+a2)+(a3+a4)>=(b1+b2) + (b3+b4) by A7,A8,XREAL_1:9;
+  then (a1+a2)+(a3+a4)+(a5+a6)>=(b1+b2) + (b3+b4)+(b5+b6) by A9,XREAL_1:9;
   hence thesis;
 end;
 
-Lm28: a>=0 & b>=0 & a^2 >= b^2 implies a >= b
+Lm30: a>=0 & b>=0 & a^2 >= b^2 implies a >= b
 proof
-  assume
-A1: a>=0 & b>=0 & a^2 >= b^2;
-  sqrt a^2 >= sqrt b^2 by A1,SQUARE_1:94;
+  assume that
+A1: a>=0 and
+A2: b>=0 and
+A3: a^2 >= b^2;
+  sqrt a^2 >= sqrt b^2 by A2,A3,SQUARE_1:94;
   then a >= sqrt b^2 by A1,SQUARE_1:89;
   hence thesis by A1,SQUARE_1:89;
 end;
 
-Lm29: for m1,m2,m4,m3,n1,n2,n3,n4 being real number holds
+Lm31: for m1,m2,m4,m3,n1,n2,n3,n4 being real number holds
 (sqrt (m1^2 + m2^2 + m3^2 + m4^2)+sqrt (n1^2 + n2^2 + n3^2 + n4^2))^2
 = (m1^2 + m2^2 + m3^2 + m4^2 + n1^2 + n2^2 + n3^2 + n4^2)+
 2*sqrt((m1^2 + m2^2 + m3^2 + m4^2) * (n1^2 + n2^2 + n3^2 + n4^2))
 proof
   let m1,m2,m4,m3,n1,n2,n3,n4 be real number;
   set a = m1^2 + m2^2 + m3^2 + m4^2, b = n1^2 + n2^2 + n3^2 + n4^2;
-A1: a >= 0 & b>= 0 by Lm21;
+A1: a >= 0 by Lm23;
+A2: b>= 0 by Lm23;
   (sqrt a + sqrt b)^2 = (sqrt a)^2 + 2*(sqrt a)*(sqrt b) + (sqrt b)^2
     .= a + 2*(sqrt a)*(sqrt b) + (sqrt b)^2 by A1,SQUARE_1:def 4
-    .= a + 2*((sqrt a)*(sqrt b)) + b by A1,SQUARE_1:def 4
-    .= a + 2*sqrt (a* b) + b by A1,SQUARE_1:97;
+    .= a + 2*((sqrt a)*(sqrt b)) + b by A2,SQUARE_1:def 4
+    .= a + 2*sqrt (a* b) + b by A1,A2,SQUARE_1:97;
   hence thesis;
 end;
 
-Lm30: for m1,m2,m3,m4,n1,n2,n3,n4 being real number holds
+Lm32: for m1,m2,m3,m4,n1,n2,n3,n4 being real number holds
 (sqrt ((m1 + n1)^2 + (m2+n2)^2 + (m3+n3)^2 + (m4 +n4)^2))^2
 = (m1+n1)^2+(m2+n2)^2+(m3+n3)^2+(m4+n4)^2
 proof
   let m1,m2,m3,m4,n1,n2,n3,n4 be real number;
-  (m1+n1)^2+(m2+n2)^2+(m3+n3)^2+(m4+n4)^2 >= 0 by Lm21;
+  (m1+n1)^2+(m2+n2)^2+(m3+n3)^2+(m4+n4)^2 >= 0 by Lm23;
   hence thesis by SQUARE_1:def 4;
 end;
 
@@ -2534,22 +2681,25 @@ proof
   set m1 = Rea z1, m2 = Im1 z1, m3 = Im2 z1, m4 = Im3 z1,
   n1 = Rea z2, n2 = Im1 z2, n3 = Im2 z2, n4 = Im3 z2, a = m1^2+m2^2+m3^2+m4^2,
   b = n1^2 +n2^2 + n3^2 + n4^2;
-  |.z1.| >= 0 & |.z2.| >= 0 & |.z1+z2.| >= 0 by Th67;
+A1: |.z1.| >= 0 by Th67;
+  |.z2.| >= 0 by Th67;
   then
-A1: |.z1.| + |.z2.| >= 0;
-A2: (sqrt (m1^2 + m2^2 + m3^2 + m4^2)+sqrt (n1^2 + n2^2 + n3^2 + n4^2))^2
+A2: |.z1.| + |.z2.| >= 0 by A1;
+A3: (sqrt (m1^2 + m2^2 + m3^2 + m4^2)+sqrt (n1^2 + n2^2 + n3^2 + n4^2))^2
   = (m1^2 + m2^2 + m3^2 + m4^2 + n1^2 + n2^2 + n3^2 + n4^2)+
-  2*sqrt((m1^2 + m2^2 + m3^2 + m4^2) * (n1^2 + n2^2 + n3^2 + n4^2)) by Lm29;
-A3: (sqrt ((m1 + n1)^2 + ( m2+n2)^2 + (m3+n3)^2 + (m4 +n4)^2))^2
-  = (m1+n1)^2+(m2+n2)^2+(m3+n3)^2+(m4+n4)^2 by Lm30;
-A4: Rea (z1+z2) = Rea z1 + Rea z2 & Im1 (z1+z2) = Im1 z1 + Im1 z2
-  & Im2 (z1+z2) = Im2 z1 + Im2 z2 & Im3 (z1+z2) = Im3 z1 + Im3 z2 by Lm25;
-A5: (m1*n2)^2 + (m2*n1)^2 >= 2*(m1*n2)*(m2*n1) &
-  (m1*n3)^2 + (m3*n1)^2 >= 2*(m1*n3)*(m3*n1) &
-  (m1*n4)^2 + (m4*n1)^2 >= 2*(m1*n4)*(m4*n1) &
-  (m2*n3)^2 + (m3*n2)^2 >= 2*(m2*n3)*(m3*n2) &
-  (m2*n4)^2 + (m4*n2)^2 >= 2*(m2*n4)*(m4*n2) &
-  (m3*n4)^2 + (m4*n3)^2 >= 2*(m3*n4)*(m4*n3) by SERIES_3:6;
+  2*sqrt((m1^2 + m2^2 + m3^2 + m4^2) * (n1^2 + n2^2 + n3^2 + n4^2)) by Lm31;
+A4: (sqrt ((m1 + n1)^2 + ( m2+n2)^2 + (m3+n3)^2 + (m4 +n4)^2))^2
+  = (m1+n1)^2+(m2+n2)^2+(m3+n3)^2+(m4+n4)^2 by Lm32;
+A5: Rea (z1+z2) = Rea z1 + Rea z2 by Lm27;
+A6: Im1 (z1+z2) = Im1 z1 + Im1 z2 by Lm27;
+A7: Im2 (z1+z2) = Im2 z1 + Im2 z2 by Lm27;
+A8: Im3 (z1+z2) = Im3 z1 + Im3 z2 by Lm27;
+A9: (m1*n2)^2 + (m2*n1)^2 >= 2*(m1*n2)*(m2*n1) by SERIES_3:6;
+A10: (m1*n3)^2 + (m3*n1)^2 >= 2*(m1*n3)*(m3*n1) by SERIES_3:6;
+A11: (m1*n4)^2 + (m4*n1)^2 >= 2*(m1*n4)*(m4*n1) by SERIES_3:6;
+A12: (m2*n3)^2 + (m3*n2)^2 >= 2*(m2*n3)*(m3*n2) by SERIES_3:6;
+A13: (m2*n4)^2 + (m4*n2)^2 >= 2*(m2*n4)*(m4*n2) by SERIES_3:6;
+A14: (m3*n4)^2 + (m4*n3)^2 >= 2*(m3*n4)*(m4*n3) by SERIES_3:6;
   set a1= (m1*n2)^2, a2= (m2*n1)^2, a3=(m1*n3)^2,a4= (m3*n1)^2,
   a5= (m1*n4)^2, a6= (m4*n1)^2, a7= (m2*n3)^2, a8= (m3*n2)^2,
   a9 =(m2*n4)^2, a10= (m4*n2)^2, a11= (m3*n4)^2,a12= (m4*n3)^2,
@@ -2557,19 +2707,19 @@ A5: (m1*n2)^2 + (m2*n1)^2 >= 2*(m1*n2)*(m2*n1) &
   b3 = 2*(m1*n4)*(m4*n1), b4= 2*(m2*n3)*(m3*n2),
   b5= 2*(m2*n4)*(m4*n2), b6 =2*(m3*n4)*(m4*n3);
   ((a1 + a2) + (a3 + a4) + (a5 + a6)+(a7 + a8) + (a9 + a10) + (a11 + a12)) >=
-  b1 + b2 + b3 + b4 + b5 + b6 by A5,Lm27;
+  b1 + b2 + b3 + b4 + b5 + b6 by A9,A10,A11,A12,A13,A14,Lm29;
   then (a1 + a2 + a3 + a4 + a5 + a6+a7 + a8 + a9 + a10 + a11 + a12)
   +((m1*n1)^2+(m2*n2)^2+(m3*n3)^2+(m4*n4)^2) >= (b1 + b2 + b3 + b4 + b5 + b6)
   +((m1*n1)^2+(m2*n2)^2+(m3*n3)^2+(m4*n4)^2) by XREAL_1:8;
   then (a1 + a2 + a3 + a4 + a5 + a6+a7 + a8 + a9 + a10 + a11 + a12 )
   +((m1*n1)^2+(m2*n2)^2+(m3*n3)^2+(m4*n4)^2) >= (m1*n1+m2*n2+m3*n3+m4*n4)^2;
   then sqrt ((m1^2+m2^2+m3^2+m4^2)*(n1^2+n2^2+n3^2+n4^2)) >=
-  m1*n1+m2*n2+m3*n3+m4*n4 by Lm26;
+  m1*n1+m2*n2+m3*n3+m4*n4 by Lm28;
   then 2*sqrt ((m1^2+m2^2+m3^2+m4^2)*(n1^2+n2^2+n3^2+n4^2)) >=
   2*(m1*n1+m2*n2+m3*n3+m4*n4) by XREAL_1:66;
   then (a+b)+2*sqrt ((m1^2+m2^2+m3^2+m4^2)*(n1^2+n2^2+n3^2+n4^2)) >=
   (a+b)+2*(m1*n1+m2*n2+m3*n3+m4*n4) by XREAL_1:8;
-  hence thesis by A1,A2,A3,A4,Lm28;
+  hence thesis by A2,A3,A4,A5,A6,A7,A8,Lm30;
 end;
 
 theorem Th80:
@@ -2579,76 +2729,81 @@ proof
   hence thesis by Th72;
 end;
 
-Lm31: z1 = z1+z2-z2
+Lm33: z1 = z1+z2-z2
 proof
-A1: z1 = [*Rea z1, Im1 z1, Im2 z1, Im3 z1*] &
-  z2 = [*Rea z2, Im1 z2, Im2 z2, Im3 z2*] by Th24;
-A2: -z2 = [*-Rea z2, -Im1 z2, -Im2 z2, -Im3 z2*] by Th62;
+A1: z1 = [*Rea z1, Im1 z1, Im2 z1, Im3 z1*] by Th24;
+A2: z2 = [*Rea z2, Im1 z2, Im2 z2, Im3 z2*] by Th24;
+A3: -z2 = [*-Rea z2, -Im1 z2, -Im2 z2, -Im3 z2*] by Th62;
   z1 + z2 = [*Rea z1+ Rea z2, Im1 z1+ Im1 z2,
-  Im2 z1+ Im2 z2, Im3 z1+ Im3 z2*] by A1,Def7;
+  Im2 z1+ Im2 z2, Im3 z1+ Im3 z2*] by A1,A2,Def7;
   then z1+z2-z2 = [*Rea z1+ Rea z2 -Rea z2, Im1 z1+ Im1 z2-Im1 z2,
-  Im2 z1+ Im2 z2-Im2 z2, Im3 z1+ Im3 z2-Im3 z2*] by A2,Def7;
+  Im2 z1+ Im2 z2-Im2 z2, Im3 z1+ Im3 z2-Im3 z2*] by A3,Def7;
   hence thesis by Th24;
 end;
 
-Lm32: z1 = z1-z2+z2
+Lm34: z1 = z1-z2+z2
 proof
-A1: z1 = [*Rea z1, Im1 z1, Im2 z1, Im3 z1*] &
-  z2 = [*Rea z2, Im1 z2, Im2 z2, Im3 z2*] by Th24;
+A1: z1 = [*Rea z1, Im1 z1, Im2 z1, Im3 z1*] by Th24;
+A2: z2 = [*Rea z2, Im1 z2, Im2 z2, Im3 z2*] by Th24;
   -z2 = [*-Rea z2, -Im1 z2, -Im2 z2, -Im3 z2*] by Th62;
   then z1 - z2 = [*Rea z1+ -Rea z2, Im1 z1+ -Im1 z2,
   Im2 z1+ -Im2 z2, Im3 z1+ -Im3 z2*] by A1,Def7;
   then z1-z2+z2 = [*Rea z1+ -Rea z2 +Rea z2, Im1 z1+ -Im1 z2+ Im1 z2,
-  Im2 z1+ -Im2 z2+ Im2 z2, Im3 z1+ -Im3 z2+ Im3 z2*] by A1,Def7
+  Im2 z1+ -Im2 z2+ Im2 z2, Im3 z1+ -Im3 z2+ Im3 z2*] by A2,Def7
     .= [*Rea z1+ Rea z2 -Rea z2, Im1 z1+ Im1 z2-Im1 z2,
   Im2 z1+ Im2 z2-Im2 z2, Im3 z1+ Im3 z2-Im3 z2*];
   hence thesis by Th24;
 end;
 
-Lm33: z1-z2 = [*Rea z1-Rea z2, Im1 z1-Im1 z2, Im2 z1-Im2 z2, Im3 z1-Im3 z2*]
+Lm35: z1-z2 = [*Rea z1-Rea z2, Im1 z1-Im1 z2, Im2 z1-Im2 z2, Im3 z1-Im3 z2*]
 proof
-A1: z1 = [*Rea z1, Im1 z1, Im2 z1, Im3 z1*] &
-  z2 = [*Rea z2, Im1 z2, Im2 z2, Im3 z2*] by Th24;
+A1: z1 = [*Rea z1, Im1 z1, Im2 z1, Im3 z1*] by Th24;
   -z2 = [*-Rea z2, -Im1 z2, -Im2 z2, -Im3 z2*] by Th62;
   hence thesis by A1,Def7;
 end;
 
-Lm34: Rea (z1-z2) = Rea z1 - Rea z2 & Im1 (z1 - z2) = Im1 z1 - Im1 z2 &
+Lm36: Rea (z1-z2) = Rea z1 - Rea z2 & Im1 (z1 - z2) = Im1 z1 - Im1 z2 &
 Im2 (z1 - z2) = Im2 z1 - Im2 z2 & Im3 (z1 - z2) = Im3 z1 - Im3 z2
 proof
   z1-z2 = [*Rea z1-Rea z2, Im1 z1-Im1 z2,
-  Im2 z1-Im2 z2, Im3 z1-Im3 z2*] by Lm33;
+  Im2 z1-Im2 z2, Im3 z1-Im3 z2*] by Lm35;
   hence thesis by Th23;
 end;
 
-Lm35: z1-z2 = -(z2 - z1)
+Lm37: z1-z2 = -(z2 - z1)
 proof
-  Rea (z2-z1) = Rea z2 - Rea z1 & Im1 (z2 - z1) = Im1 z2 - Im1 z1 &
-  Im2 (z2 - z1) = Im2 z2 - Im2 z1 & Im3 (z2 - z1) = Im3 z2 - Im3 z1 by Lm34;
-  hence thesis;
+A1: Rea (z2-z1) = Rea z2 - Rea z1 by Lm36;
+A2: Im1 (z2 - z1) = Im1 z2 - Im1 z1 by Lm36;
+A3: Im2 (z2 - z1) = Im2 z2 - Im2 z1 by Lm36;
+  Im3 (z2 - z1) = Im3 z2 - Im3 z1 by Lm36;
+  hence thesis by A1,A2,A3;
 end;
 
-Lm36: z1 - z2 = 0 implies z1 = z2
+Lm38: z1 - z2 = 0 implies z1 = z2
 proof
   assume
 A1: z1 - z2 = 0;
-A2: Rea (z1-z2) = Rea z1 - Rea z2 & Im1 (z1 - z2) = Im1 z1 - Im1 z2 &
-  Im2 (z1 - z2) = Im2 z1 - Im2 z2 & Im3 (z1 - z2) = Im3 z1 - Im3 z2 by Lm34;
-  Rea (z1-z2) = 0 & Im1 (z1 - z2) = 0 &
-  Im2 (z1 - z2) =0 & Im3 (z1 - z2) = 0 by A1,Lm5,Th23;
-  hence thesis by A2,Th25;
+A2: Rea (z1-z2) = Rea z1 - Rea z2 by Lm36;
+A3: Im1 (z1 - z2) = Im1 z1 - Im1 z2 by Lm36;
+A4: Im2 (z1 - z2) = Im2 z1 - Im2 z2 by Lm36;
+A5: Im3 (z1 - z2) = Im3 z1 - Im3 z2 by Lm36;
+A6: Rea (z1-z2) = 0 by A1,Lm7,Th23;
+A7: Im1 (z1 - z2) = 0 by A1,Lm7,Th23;
+A8: Im2 (z1 - z2) =0 by A1,Lm7,Th23;
+  Im3 (z1 - z2) = 0 by A1,Lm7,Th23;
+  hence thesis by A2,A3,A4,A5,A6,A7,A8,Th25;
 end;
 
 theorem
   |.z1.| - |.z2.| <= |.z1 + z2.|
-proof z1 = z1 + z2 - z2 by Lm31;
+proof z1 = z1 + z2 - z2 by Lm33;
   then |.z1.| <= |.z1 + z2.| + |.z2.| by Th80;
   hence thesis by XREAL_1:22;
 end;
 
 theorem Th82:
   |.z1.| - |.z2.| <= |.z1 - z2.|
-proof z1 = z1 - z2 + z2 by Lm32;
+proof z1 = z1 - z2 + z2 by Lm34;
   then |.z1.| <= |.z1 - z2.| + |.z2.| by Th79;
   hence thesis by XREAL_1:22;
 end;
@@ -2656,44 +2811,44 @@ end;
 theorem Th83:
   |.z1 - z2.| = |.z2 - z1.|
 proof
-  thus |.z1 - z2.| = |.-(z2 - z1).| by Lm35
+  thus |.z1 - z2.| = |.-(z2 - z1).| by Lm37
     .= |.z2 - z1.| by Th72;
 end;
 
 theorem
   |.z1 - z2.| = 0 iff z1 = z2
 proof
-  thus |.z1 - z2.| = 0 implies z1 = z2 by Lm36,Th66;
+  thus |.z1 - z2.| = 0 implies z1 = z2 by Lm38,Th66;
   assume z1 = z2;
-  hence thesis by Lm5,Lm33,Th65;
+  hence thesis by Lm7,Lm35,Th65;
 end;
 
-Lm37: for z,z1,z2 being quaternion number holds z1-z2 = (z1 - z) + (z - z2)
+Lm39: for z,z1,z2 being quaternion number holds z1-z2 = (z1 - z) + (z - z2)
 proof
   let z,z1,z2 be quaternion number;
-A1: Rea ((z1 - z) + (z - z2)) = Rea (z1 - z) + Rea (z - z2) by Lm11
+A1: Rea ((z1 - z) + (z - z2)) = Rea (z1 - z) + Rea (z - z2) by Lm13
     .= Rea (z1 - z) + (Rea z - Rea z2) by Th42
     .= (Rea z1 - Rea z) + (Rea z - Rea z2) by Th42
-    .= Rea (z1 - z2) by Lm34;
-A2: Im1 ((z1 - z) + (z - z2)) = Im1 (z1 - z) + Im1 (z - z2) by Lm11
+    .= Rea (z1 - z2) by Lm36;
+A2: Im1 ((z1 - z) + (z - z2)) = Im1 (z1 - z) + Im1 (z - z2) by Lm13
     .= Im1 (z1 - z) + (Im1 z - Im1 z2) by Th42
     .= (Im1 z1 - Im1 z) + (Im1 z - Im1 z2) by Th42
-    .= Im1 (z1 - z2) by Lm34;
-A3: Im2 ((z1 - z) + (z - z2)) = Im2 (z1 - z) + Im2 (z - z2) by Lm11
+    .= Im1 (z1 - z2) by Lm36;
+A3: Im2 ((z1 - z) + (z - z2)) = Im2 (z1 - z) + Im2 (z - z2) by Lm13
     .= Im2 (z1 - z) + (Im2 z - Im2 z2) by Th42
     .= (Im2 z1 - Im2 z) + (Im2 z - Im2 z2) by Th42
-    .= Im2 (z1 - z2) by Lm34;
-  Im3 ((z1 - z) + (z - z2)) = Im3 (z1 - z) + Im3 (z - z2) by Lm11
+    .= Im2 (z1 - z2) by Lm36;
+  Im3 ((z1 - z) + (z - z2)) = Im3 (z1 - z) + Im3 (z - z2) by Lm13
     .= Im3 (z1 - z) + (Im3 z - Im3 z2) by Th42
     .= (Im3 z1 - Im3 z) + (Im3 z - Im3 z2) by Th42
-    .= Im3 (z1 - z2) by Lm34;
+    .= Im3 (z1 - z2) by Lm36;
   hence thesis by A1,A2,A3,Th25;
 end;
 
 theorem
   |.z1 - z2.| <= |.z1 - z.| + |.z - z2.|
 proof
-  |.z1 - z2.| = |.(z1 - z) + (z - z2).| by Lm37;
+  |.z1 - z2.| = |.(z1 - z) + (z - z2).| by Lm39;
   hence thesis by Th79;
 end;
 
@@ -2702,10 +2857,10 @@ theorem
 proof
   |.z2.| - |.z1.| <= |.z2 - z1.| by Th82;
   then -(|.z1.| - |.z2.|) <= |.z1 - z2.| by Th83;
-  then -|.z1 - z2.| <= --(|.z1.| - |.z2.|) by XREAL_1:26;
-  then -|.z1 - z2.| <= (|.z1.| - |.z2.|) & |.z1.| - |.z2.| <= |.z1 - z2.|
-  by Th82;
-  hence thesis by ABSVALUE:12;
+  then
+A1: -|.z1 - z2.| <= --(|.z1.| - |.z2.|) by XREAL_1:26;
+  |.z1.| - |.z2.| <= |.z1 - z2.| by Th82;
+  hence thesis by A1,ABSVALUE:12;
 end;
 
 theorem Th87:
@@ -2713,23 +2868,23 @@ theorem Th87:
 proof
   set m1 = Rea z1, m2 = Im1 z1, m3 = Im2 z1, m4 = Im3 z1,
   n1 = Rea z2, n2 = Im1 z2, n3 = Im2 z2, n4 = Im3 z2;
-A1: Rea (z1 * z2) = m1*n1 - m2*n2 - m3*n3 - m4*n4 &
-  Im1 (z1 * z2) = m1*n2 + m2*n1 + m3*n4 - m4*n3 &
-  Im2 (z1 * z2) = m1*n3 + m3*n1 + m4*n2 - m2*n4 &
-  Im3 (z1 * z2) = m1*n4 + m4*n1 + m2*n3 - m3*n2 by Lm16;
+A1: Rea (z1 * z2) = m1*n1 - m2*n2 - m3*n3 - m4*n4 by Lm18;
+A2: Im1 (z1 * z2) = m1*n2 + m2*n1 + m3*n4 - m4*n3 by Lm18;
+A3: Im2 (z1 * z2) = m1*n3 + m3*n1 + m4*n2 - m2*n4 by Lm18;
+A4: Im3 (z1 * z2) = m1*n4 + m4*n1 + m2*n3 - m3*n2 by Lm18;
   set b1=m1*n1 - m2*n2 - m3*n3 - m4*n4, b2 = m1*n2 + m2*n1 + m3*n4 - m4*n3,
   b3 = m1*n3 + m3*n1 + m4*n2 - m2*n4, b4 = m1*n4 + m4*n1 + m2*n3 - m3*n2;
-A2: b1^2 +b2^2 +b3^2 +b4^2 >= 0 & (m1^2 + m2^2 + m3^2 + m4^2)>=0 &
-  (n1^2 + n2^2 + n3^2 + n4^2) >= 0 by Lm21;
+A5: (m1^2 + m2^2 + m3^2 + m4^2)>=0 by Lm23;
+A6: (n1^2 + n2^2 + n3^2 + n4^2) >= 0 by Lm23;
   sqrt(b1^2 +b2^2 +b3^2 +b4^2)
   =sqrt((m1^2 + m2^2 + m3^2 + m4^2) * (n1^2 + n2^2 + n3^2 + n4^2));
-  hence thesis by A1,A2,SQUARE_1:97;
+  hence thesis by A1,A2,A3,A4,A5,A6,SQUARE_1:97;
 end;
 
 theorem
   |.z*z.| = (Rea z)^2 + (Im1 z)^2 + (Im2 z)^2 + (Im3 z)^2
 proof
-A1: (Rea z)^2 + (Im1 z)^2 + (Im2 z)^2 + (Im3 z)^2 >= 0 by Lm21;
+A1: (Rea z)^2 + (Im1 z)^2 + (Im2 z)^2 + (Im3 z)^2 >= 0 by Lm23;
   |.z.| * |.z.| =(sqrt ((Rea z)^2 + (Im1 z)^2 + (Im2 z)^2 + (Im3 z)^2))^2
     .=(Rea z)^2 + (Im1 z)^2 + (Im2 z)^2 + (Im3 z)^2 by A1,SQUARE_1:def 4;
   hence thesis by Th87;
@@ -2745,12 +2900,12 @@ end;
 
 theorem
   z is real implies Rea z = z
-  proof
-    assume z is real; then
-    z in REAL by XREAL_0:def 1;
-    then Rea z = z & Im1 z = 0 & Im2 z = 0 & Im3 z = 0 by Lm17;
-    hence thesis;
-  end;
+proof
+  assume z is real;
+  then z in REAL by XREAL_0:def 1;
+  hence thesis by Lm19;
+end;
 
 theorem
-  for x,y being Element of REAL holds [*x,y,0,0*] = [*x,y*] by Def6';
+  for x,y being Element of REAL holds [*x,y,0,0*] = [*x,y*] by Lm4;
+

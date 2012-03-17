@@ -7,6 +7,7 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="BINOP_1"/>
@@ -28,41 +29,7 @@
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="37" value="false"/>
-<Adjective nr="100"/>
-</Cluster>
-</Typ>
-</ArgTypes>
-<Func kind="U" nr="5">
-<LocusVar nr="1"/>
-</Func>
-<Cluster>
-<Adjective nr="6"/>
-<Adjective nr="13">
-<Func kind="K" nr="22">
-<Func kind="U" nr="1">
-<LocusVar nr="1"/>
-</Func>
-<Func kind="U" nr="1">
-<LocusVar nr="1"/>
-</Func>
-</Func>
-<Func kind="U" nr="1">
-<LocusVar nr="1"/>
-</Func>
-</Adjective>
-<Adjective nr="16">
-<Func kind="U" nr="1">
-<LocusVar nr="1"/>
-</Func>
-</Adjective>
-</Cluster>
-</FCluster>
-<FCluster aid="FVSUM_1" nr="2">
-<ArgTypes>
-<Typ kind="G" nr="7">
-<Cluster>
-<Adjective nr="37" value="false"/>
+<Adjective nr="39" value="false"/>
 <Adjective nr="101"/>
 </Cluster>
 </Typ>
@@ -72,7 +39,7 @@
 </Func>
 <Cluster>
 <Adjective nr="6"/>
-<Adjective nr="13">
+<Adjective nr="14">
 <Func kind="K" nr="22">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
@@ -92,21 +59,21 @@
 </Adjective>
 </Cluster>
 </FCluster>
-<FCluster aid="FVSUM_1" nr="3">
+<FCluster aid="FVSUM_1" nr="2">
 <ArgTypes>
-<Typ kind="G" nr="8">
+<Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="37" value="false"/>
-<Adjective nr="97"/>
+<Adjective nr="39" value="false"/>
+<Adjective nr="102"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="U" nr="6">
+<Func kind="U" nr="5">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="6"/>
-<Adjective nr="13">
+<Adjective nr="14">
 <Func kind="K" nr="22">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
@@ -119,7 +86,41 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="16">
+<Adjective nr="18">
+<Func kind="U" nr="1">
+<LocusVar nr="1"/>
+</Func>
+</Adjective>
+</Cluster>
+</FCluster>
+<FCluster aid="FVSUM_1" nr="3">
+<ArgTypes>
+<Typ kind="G" nr="8">
+<Cluster>
+<Adjective nr="39" value="false"/>
+<Adjective nr="98"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Func kind="U" nr="6">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="6"/>
+<Adjective nr="14">
+<Func kind="K" nr="22">
+<Func kind="U" nr="1">
+<LocusVar nr="1"/>
+</Func>
+<Func kind="U" nr="1">
+<LocusVar nr="1"/>
+</Func>
+</Func>
+<Func kind="U" nr="1">
+<LocusVar nr="1"/>
+</Func>
+</Adjective>
+<Adjective nr="17">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
@@ -129,16 +130,16 @@
 <CCluster aid="FVSUM_1" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="37" value="false"/>
-<Adjective nr="100"/>
-<Adjective nr="102"/>
+<Adjective nr="39" value="false"/>
+<Adjective nr="101"/>
+<Adjective nr="103"/>
 </Cluster>
 <Typ kind="G" nr="7">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="37" value="false"/>
-<Adjective nr="85"/>
+<Adjective nr="39" value="false"/>
+<Adjective nr="86"/>
 </Cluster>
 </CCluster>
 </Registrations>

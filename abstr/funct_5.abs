@@ -13,18 +13,20 @@ environ
       FUNCT_2, MCART_1, BINOP_1, FUNCT_3, CARD_1, PARTFUN1, FUNCOP_1, FUNCT_4;
  constructors PARTFUN1, WELLORD2, BINOP_1, FUNCT_3, FUNCOP_1, FUNCT_4, CARD_1,
       RELSET_1;
- registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, FUNCOP_1, RELSET_1;
+ registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, RELSET_1;
  requirements SUBSET, BOOLE;
 
 
 begin
 
 reserve X,Y,Z,X1,X2,Y1,Y2,x,y,z,t,x1,x2 for set,
-  f,g,h,f1,f2,g1,g2 for Function;
+  f,g,h,f1,f2,g1,g2 for
+  Function;
 
 scheme :: FUNCT_5:sch 1
- LambdaFS { FS()->set, f(set)->set }:
-  ex f st dom f = FS() & for g st g in FS() holds f.g = f(g);
+
+  LambdaFS { FS()->set, f(set)->set }: ex f st dom f = FS() & for g st g in FS
+  () holds f.g = f(g);
 
 theorem :: FUNCT_5:1
   ~{} = {};
@@ -38,24 +40,27 @@ theorem :: FUNCT_5:5
   X c= Y implies proj1 X c= proj1 Y & proj2 X c= proj2 Y;
 
 theorem :: FUNCT_5:6
-  proj1(X \/ Y) = proj1 X \/ proj1 Y & proj2(X \/ Y) = proj2 X \/ proj2 Y;
+  proj1(X \/ Y) = proj1 X \/ proj1 Y & proj2(X \/ Y) = proj2 X \/
+  proj2 Y;
 
 theorem :: FUNCT_5:7
-  proj1(X /\ Y) c= proj1 X /\ proj1 Y & proj2(X /\ Y) c= proj2 X /\ proj2 Y;
+  proj1(X /\ Y) c= proj1 X /\ proj1 Y & proj2(X /\ Y) c= proj2 X /\
+  proj2 Y;
 
 theorem :: FUNCT_5:8
-  proj1 X \ proj1 Y c= proj1(X \ Y) & proj2 X \ proj2 Y c= proj2(X \ Y);
+  proj1 X \ proj1 Y c= proj1(X \ Y) & proj2 X \ proj2 Y c= proj2(X
+  \ Y);
 
 theorem :: FUNCT_5:9
-  proj1 X \+\ proj1 Y c= proj1(X \+\ Y) &
-  proj2 X \+\ proj2 Y c= proj2(X \+\ Y);
+  proj1 X \+\ proj1 Y c= proj1(X \+\ Y) & proj2 X \+\ proj2 Y c= proj2(X
+  \+\ Y);
 
 theorem :: FUNCT_5:10
   proj1 {} = {} & proj2 {} = {};
 
 theorem :: FUNCT_5:11
-  Y <> {} or [:X,Y:] <> {} or [:Y,X:] <> {} implies
-  proj1 [:X,Y:] = X & proj2 [:Y,X:] = X;
+  Y <> {} or [:X,Y:] <> {} or [:Y,X:] <> {} implies proj1 [:X,Y:]
+  = X & proj2 [:Y,X:] = X;
 
 theorem :: FUNCT_5:12
   proj1 [:X,Y:] c= X & proj2 [:X,Y:] c= Y;
@@ -92,36 +97,36 @@ definition
   func curry f -> Function means
 :: FUNCT_5:def 3
 
-  dom it = proj1 dom f & for x st x in proj1 dom f ex g st it.x = g &
-  dom g = proj2 (dom f /\ [:{x},proj2 dom f:]) &
+  dom it = proj1 dom f & for x st x in
+  proj1 dom f ex g st it.x = g & dom g = proj2 (dom f /\ [:{x},proj2 dom f:]) &
   for y st y in dom g holds g.y = f.(x,y);
   func uncurry f -> Function means
 :: FUNCT_5:def 4
 
-  (for t holds t in dom it iff
-  ex x,g,y st t = [x,y] & x in dom f & g = f.x & y in dom g) &
-  for x,g st x in dom it & g = f.x`1 holds it.x = g.x`2;
+  (for t holds t in dom it iff ex x,g
+,y st t = [x,y] & x in dom f & g = f.x & y in dom g) & for x,g st x in dom it &
+  g = f.x`1 holds it.x = g.x`2;
 end;
 
 definition
   let f;
   func curry' f -> Function equals
 :: FUNCT_5:def 5
-
   curry ~f;
   func uncurry' f -> Function equals
 :: FUNCT_5:def 6
-
   ~(uncurry f);
 end;
 
 canceled 4;
 
 theorem :: FUNCT_5:26
-  [x,y] in dom f implies x in dom curry f & (curry f).x is Function;
+  [x,y] in dom f implies x in dom curry f & (curry f).x is
+  Function;
 
 theorem :: FUNCT_5:27
-  [x,y] in dom f & g = (curry f).x implies y in dom g & g.y = f.(x,y);
+  [x,y] in dom f & g = (curry f).x implies y in dom g & g.y = f.(x
+  ,y);
 
 theorem :: FUNCT_5:28
   [x,y] in dom f implies y in dom curry' f & (curry' f).y is Function;
@@ -133,73 +138,74 @@ theorem :: FUNCT_5:30
   dom curry' f = proj2 dom f;
 
 theorem :: FUNCT_5:31
-  [:X,Y:] <> {} & dom f = [:X,Y:] implies dom curry f = X & dom curry' f = Y;
+  [:X,Y:] <> {} & dom f = [:X,Y:] implies dom curry f = X & dom
+  curry' f = Y;
 
 theorem :: FUNCT_5:32
   dom f c= [:X,Y:] implies dom curry f c= X & dom curry' f c= Y;
 
 theorem :: FUNCT_5:33
-  rng f c= Funcs(X,Y) implies
-  dom uncurry f = [:dom f,X:] & dom uncurry' f = [:X,dom f:];
+  rng f c= Funcs(X,Y) implies dom uncurry f = [:dom f,X:] & dom
+  uncurry' f = [:X,dom f:];
 
 theorem :: FUNCT_5:34
   not (ex x,y st [x,y] in dom f) implies curry f = {} & curry' f = {};
 
 theorem :: FUNCT_5:35
-  not (ex x st x in dom f & f.x is Function) implies
-  uncurry f = {} & uncurry' f = {};
+  not (ex x st x in dom f & f.x is Function) implies uncurry f = {} &
+  uncurry' f = {};
 
 theorem :: FUNCT_5:36
-  [:X,Y:] <> {} & dom f = [:X,Y:] & x in X implies
-  ex g st (curry f).x = g & dom g = Y & rng g c= rng f &
-  for y st y in Y holds g.y = f.(x,y);
+  [:X,Y:] <> {} & dom f = [:X,Y:] & x in X implies ex g st (curry
+  f).x = g & dom g = Y & rng g c= rng f & for y st y in Y holds g.y = f.(x,y);
 
 theorem :: FUNCT_5:37
   x in dom curry f implies (curry f).x is Function;
 
 theorem :: FUNCT_5:38
-  x in dom curry f & g = (curry f).x implies
-  dom g = proj2 (dom f /\ [:{x},proj2 dom f:]) & dom g c= proj2 dom f &
-  rng g c= rng f & for y st y in dom g holds g.y = f.(x,y) & [x,y] in dom f;
+  x in dom curry f & g = (curry f).x implies dom g = proj2 (dom f
+/\ [:{x},proj2 dom f:]) & dom g c= proj2 dom f & rng g c= rng f & for y st y in
+  dom g holds g.y = f.(x,y) & [x,y] in dom f;
 
 theorem :: FUNCT_5:39
-  [:X,Y:] <> {} & dom f = [:X,Y:] & y in Y implies
-  ex g st (curry' f).y = g & dom g = X & rng g c= rng f &
-  for x st x in X holds g.x = f.(x,y);
+  [:X,Y:] <> {} & dom f = [:X,Y:] & y in Y implies ex g st (curry'
+  f).y = g & dom g = X & rng g c= rng f & for x st x in X holds g.x = f.(x,y);
 
 theorem :: FUNCT_5:40
   x in dom curry' f implies (curry' f).x is Function;
 
 theorem :: FUNCT_5:41
-  x in dom curry' f & g = (curry' f).x implies
-  dom g = proj1 (dom f /\ [:proj1 dom f,{x}:]) & dom g c= proj1 dom f &
-  rng g c= rng f & for y st y in dom g holds g.y = f.(y,x) & [y,x] in dom f;
+  x in dom curry' f & g = (curry' f).x implies dom g = proj1 (dom f /\
+  [:proj1 dom f,{x}:]) & dom g c= proj1 dom f & rng g c= rng f & for y st y in
+  dom g holds g.y = f.(y,x) & [y,x] in dom f;
 
 theorem :: FUNCT_5:42
-  dom f = [:X,Y:] implies
-  rng curry f c= Funcs(Y,rng f) & rng curry' f c= Funcs(X,rng f);
+  dom f = [:X,Y:] implies rng curry f c= Funcs(Y,rng f) & rng
+  curry' f c= Funcs(X,rng f);
 
 theorem :: FUNCT_5:43
-  rng curry f c= PFuncs(proj2 dom f,rng f) &
-  rng curry' f c= PFuncs(proj1 dom f,rng f);
+  rng curry f c= PFuncs(proj2 dom f,rng f) & rng curry' f c= PFuncs(
+  proj1 dom f,rng f);
 
 theorem :: FUNCT_5:44
-  rng f c= PFuncs(X,Y) implies
-  dom uncurry f c= [:dom f,X:] & dom uncurry' f c= [:X,dom f:];
+  rng f c= PFuncs(X,Y) implies dom uncurry f c= [:dom f,X:] & dom
+  uncurry' f c= [:X,dom f:];
 
 theorem :: FUNCT_5:45
-  x in dom f & g = f.x & y in dom g implies
-  [x,y] in dom uncurry f & (uncurry f).(x,y) = g.y & g.y in rng uncurry f;
+  x in dom f & g = f.x & y in dom g implies [x,y] in dom uncurry f
+  & (uncurry f).(x,y) = g.y & g.y in rng uncurry f;
 
 theorem :: FUNCT_5:46
-  x in dom f & g = f.x & y in dom g implies
-  [y,x] in dom uncurry' f & (uncurry' f).(y,x) = g.y & g.y in rng uncurry' f;
+  x in dom f & g = f.x & y in dom g implies [y,x] in dom uncurry' f & (
+  uncurry' f).(y,x) = g.y & g.y in rng uncurry' f;
 
 theorem :: FUNCT_5:47
-  rng f c= PFuncs(X,Y) implies rng uncurry f c= Y & rng uncurry' f c= Y;
+  rng f c= PFuncs(X,Y) implies rng uncurry f c= Y & rng uncurry' f
+  c= Y;
 
 theorem :: FUNCT_5:48
-  rng f c= Funcs(X,Y) implies rng uncurry f c= Y & rng uncurry' f c= Y;
+  rng f c= Funcs(X,Y) implies rng uncurry f c= Y & rng uncurry' f
+  c= Y;
 
 theorem :: FUNCT_5:49
   curry {} = {} & curry' {} = {};
@@ -208,47 +214,51 @@ theorem :: FUNCT_5:50
   uncurry {} = {} & uncurry' {} = {};
 
 theorem :: FUNCT_5:51
-  dom f1 = [:X,Y:] & dom f2 = [:X,Y:] & curry f1 = curry f2 implies f1 = f2;
+  dom f1 = [:X,Y:] & dom f2 = [:X,Y:] & curry f1 = curry f2
+  implies f1 = f2;
 
 theorem :: FUNCT_5:52
-  dom f1 = [:X,Y:] & dom f2 = [:X,Y:] & curry' f1 = curry' f2 implies f1 = f2;
+  dom f1 = [:X,Y:] & dom f2 = [:X,Y:] & curry' f1 = curry' f2
+  implies f1 = f2;
 
 theorem :: FUNCT_5:53
-  rng f1 c= Funcs(X,Y) & rng f2 c= Funcs(X,Y) & X <> {} &
-  uncurry f1 = uncurry f2 implies f1 = f2;
+  rng f1 c= Funcs(X,Y) & rng f2 c= Funcs(X,Y) & X <> {} & uncurry
+  f1 = uncurry f2 implies f1 = f2;
 
 theorem :: FUNCT_5:54
-  rng f1 c= Funcs(X,Y) & rng f2 c= Funcs(X,Y) & X <> {} &
-  uncurry' f1 = uncurry' f2 implies f1 = f2;
+  rng f1 c= Funcs(X,Y) & rng f2 c= Funcs(X,Y) & X <> {} & uncurry' f1 =
+  uncurry' f2 implies f1 = f2;
 
 theorem :: FUNCT_5:55
-  rng f c= Funcs(X,Y) & X <> {} implies
-  curry uncurry f = f & curry' uncurry' f = f;
+  rng f c= Funcs(X,Y) & X <> {} implies curry uncurry f = f &
+  curry' uncurry' f = f;
 
 theorem :: FUNCT_5:56
   dom f = [:X,Y:] implies uncurry curry f = f & uncurry' curry' f = f;
 
 theorem :: FUNCT_5:57
-  dom f c= [:X,Y:] implies uncurry curry f = f & uncurry' curry' f = f;
+  dom f c= [:X,Y:] implies uncurry curry f = f & uncurry' curry' f
+  = f;
 
 theorem :: FUNCT_5:58
-  rng f c= PFuncs(X,Y) & not {} in rng f implies
-  curry uncurry f = f & curry' uncurry' f = f;
+  rng f c= PFuncs(X,Y) & not {} in rng f implies curry uncurry f =
+  f & curry' uncurry' f = f;
 
 theorem :: FUNCT_5:59
-  dom f1 c= [:X,Y:] & dom f2 c= [:X,Y:] & curry f1 = curry f2 implies f1 = f2;
+  dom f1 c= [:X,Y:] & dom f2 c= [:X,Y:] & curry f1 = curry f2 implies f1
+  = f2;
 
 theorem :: FUNCT_5:60
-  dom f1 c= [:X,Y:] & dom f2 c= [:X,Y:] & curry' f1 = curry' f2 implies f1 =
-  f2;
+  dom f1 c= [:X,Y:] & dom f2 c= [:X,Y:] & curry' f1 = curry' f2 implies
+  f1 = f2;
 
 theorem :: FUNCT_5:61
-  rng f1 c= PFuncs(X,Y) & rng f2 c= PFuncs(X,Y) & not {} in rng f1 &
-  not {} in rng f2 & uncurry f1 = uncurry f2 implies f1 = f2;
+  rng f1 c= PFuncs(X,Y) & rng f2 c= PFuncs(X,Y) & not {} in rng f1 & not
+  {} in rng f2 & uncurry f1 = uncurry f2 implies f1 = f2;
 
 theorem :: FUNCT_5:62
-  rng f1 c= PFuncs(X,Y) & rng f2 c= PFuncs(X,Y) & not {} in rng f1 &
-  not {} in rng f2 & uncurry' f1 = uncurry' f2 implies f1 = f2;
+  rng f1 c= PFuncs(X,Y) & rng f2 c= PFuncs(X,Y) & not {} in rng f1 & not
+  {} in rng f2 & uncurry' f1 = uncurry' f2 implies f1 = f2;
 
 theorem :: FUNCT_5:63
   X c= Y implies Funcs(Z,X) c= Funcs(Z,Y);
@@ -263,34 +273,32 @@ theorem :: FUNCT_5:66
   Funcs(X,{x}) = {X --> x};
 
 theorem :: FUNCT_5:67
-  X1,Y1 are_equipotent & X2,Y2 are_equipotent implies
-  Funcs(X1,X2),Funcs(Y1,Y2) are_equipotent &
-  card Funcs(X1,X2) = card Funcs(Y1,Y2);
+  X1,Y1 are_equipotent & X2,Y2 are_equipotent implies Funcs(X1,X2)
+  ,Funcs(Y1,Y2) are_equipotent & card Funcs(X1,X2) = card Funcs(Y1,Y2);
 
 theorem :: FUNCT_5:68
-  card X1 = card Y1 & card X2 = card Y2 implies
-  card Funcs(X1,X2) = card Funcs(Y1,Y2);
+  card X1 = card Y1 & card X2 = card Y2 implies card Funcs(X1,X2) = card
+  Funcs(Y1,Y2);
 
 theorem :: FUNCT_5:69
-  X1 misses X2 implies
-  Funcs(X1 \/ X2,X),[:Funcs(X1,X),Funcs(X2,X):] are_equipotent &
-  card Funcs(X1 \/ X2,X) = card [:Funcs(X1,X),Funcs(X2,X):];
+  X1 misses X2 implies Funcs(X1 \/ X2,X),[:Funcs(X1,X),Funcs(X2,X):]
+  are_equipotent & card Funcs(X1 \/ X2,X) = card [:Funcs(X1,X),Funcs(X2,X):];
 
 theorem :: FUNCT_5:70
-  Funcs([:X,Y:],Z),Funcs(X,Funcs(Y,Z)) are_equipotent &
-  card Funcs([:X,Y:],Z) = card Funcs(X,Funcs(Y,Z));
+  Funcs([:X,Y:],Z),Funcs(X,Funcs(Y,Z)) are_equipotent & card Funcs([:X,Y
+  :],Z) = card Funcs(X,Funcs(Y,Z));
 
 theorem :: FUNCT_5:71
-  Funcs(Z,[:X,Y:]),[:Funcs(Z,X),Funcs(Z,Y):] are_equipotent &
-  card Funcs(Z,[:X,Y:]) = card [:Funcs(Z,X),Funcs(Z,Y):];
+  Funcs(Z,[:X,Y:]),[:Funcs(Z,X),Funcs(Z,Y):] are_equipotent & card Funcs
+  (Z,[:X,Y:]) = card [:Funcs(Z,X),Funcs(Z,Y):];
 
 theorem :: FUNCT_5:72
-  x <> y implies Funcs(X,{x,y}),bool X are_equipotent &
-  card Funcs(X,{x,y}) = card bool X;
+  x <> y implies Funcs(X,{x,y}),bool X are_equipotent & card Funcs(X,{x,
+  y}) = card bool X;
 
 theorem :: FUNCT_5:73
-  x <> y implies Funcs({x,y},X),[:X,X:] are_equipotent &
-  card Funcs({x,y},X) = card [:X,X:];
+  x <> y implies Funcs({x,y},X),[:X,X:] are_equipotent & card Funcs({x,y
+  },X) = card [:X,X:];
 
 begin :: Addenda
 
@@ -307,11 +315,9 @@ end;
 definition
   func op1 equals
 :: FUNCT_5:def 7
-
   0 .--> 0;
   func op2 equals
 :: FUNCT_5:def 8
-
   (0,0) :-> 0;
 end;
 

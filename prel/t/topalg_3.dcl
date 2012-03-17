@@ -12,6 +12,7 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="MCART_1"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -27,7 +28,6 @@
 <ArticleID name="ORDERS_2"/>
 <ArticleID name="TAXONOM2"/>
 <ArticleID name="RELAT_2"/>
-<ArticleID name="PARTFUN1"/>
 <ArticleID name="EQREL_1"/>
 <ArticleID name="ENUMSET1"/>
 <ArticleID name="DOMAIN_1"/>
@@ -104,7 +104,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="206">
+<Func kind="K" nr="207">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -117,7 +117,7 @@
 <CCluster aid="TOPALG_3" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="31"/>
+<Adjective nr="32"/>
 </Cluster>
 <Typ kind="G" nr="6">
 <Cluster/>
@@ -129,24 +129,24 @@
 <CCluster aid="TOPALG_3" nr="2">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="31" value="false"/>
-<Adjective nr="36"/>
+<Adjective nr="32" value="false"/>
+<Adjective nr="37"/>
 <Adjective nr="44"/>
 </Cluster>
 <Typ kind="G" nr="6">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="31" value="false"/>
+<Adjective nr="32" value="false"/>
 <Adjective nr="44"/>
-<Adjective nr="108"/>
+<Adjective nr="107"/>
 </Cluster>
 </CCluster>
 <CCluster aid="TOPALG_3" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="31" value="false"/>
+<Adjective nr="32" value="false"/>
 <Adjective nr="44"/>
 </Cluster>
 </Typ>
@@ -166,7 +166,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="47">
-<Func kind="K" nr="228"/>
+<Func kind="K" nr="229"/>
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

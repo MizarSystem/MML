@@ -8,16 +8,17 @@ environ
 
  vocabularies FINSEQ_1, TREES_3, RELAT_1, FUNCT_1, FINSET_1, TREES_2, BOOLE,
       TREES_4, FUNCT_3, MCART_1, LANG1, TDGROUP, PROB_1, TARSKI, TREES_1,
-      FUNCT_6, BINOP_1, FINSOP_1, FINSEQ_2, DTCONSTR, SETWISEO, ARYTM;
+      FUNCT_6, FINSEQ_2, DTCONSTR, ARYTM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, RELSET_1,
       RELAT_1, STRUCT_0, FUNCT_1, FUNCT_2, FINSEQ_1, FINSEQ_2, FINSET_1,
-      MCART_1, CARD_3, DOMAIN_1, BINOP_1, FINSOP_1, LANG1, TREES_1, TREES_2,
-      FINSEQ_4, SEQ_1, TREES_3, TREES_4, SETWISEO, FINSEQOP, XXREAL_0, NAT_1;
+      MCART_1, CARD_3, DOMAIN_1, LANG1, TREES_1, TREES_2, FINSEQ_4, TREES_3,
+      TREES_4, FINSEQOP, XXREAL_0, NAT_1, PRE_POLY;
  constructors PARTFUN1, BINOP_1, DOMAIN_1, SETWISEO, XXREAL_0, XREAL_0, NAT_1,
-      CARD_3, FINSEQOP, FINSEQ_4, FINSOP_1, TREES_4, LANG1, SEQ_1, RELSET_1;
+      CARD_3, FINSEQOP, FINSEQ_4, FINSOP_1, TREES_4, LANG1, SEQ_1, RELSET_1,
+      PRE_POLY;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, XXREAL_0,
-      XREAL_0, NAT_1, FINSEQ_1, TREES_1, TREES_2, TREES_3, TREES_4, STRUCT_0,
-      LANG1, FINSET_1, CARD_1, FINSEQ_2;
+      XREAL_0, NAT_1, FINSEQ_1, TREES_1, TREES_2, TREES_3, STRUCT_0, LANG1,
+      FINSET_1, CARD_1, FINSEQ_2;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
 
 
@@ -29,11 +30,6 @@ theorem :: DTCONSTR:1  :: This really belongs elsewhere
 
 theorem :: DTCONSTR:2
   for x,y being set, p being FinSequence of x st y in dom p holds p.y in x;
-
-registration
-  let X be set;
-  cluster -> FinSequence-like Element of X*;
-end;
 
 registration
   let D be non empty set, T be DTree-set of D;
@@ -109,17 +105,15 @@ scheme :: DTCONSTR:sch 3
   holds root-tree [d, TermVal(d)] in X) & (for o being Symbol of G(),
   p being FinSequence of X st o ==> pr1 roots p
   holds [o, NTermVal(o, pr1 roots p, pr2 roots p)]-tree p in X ) &
-  (for F being Subset of FinTrees [:the carrier of G(), D():] st
+  for F being Subset of FinTrees [:the carrier of G(), D():] st
   (for d being Symbol of G() st d in Terminals G()
   holds root-tree [d, TermVal(d)] in F ) & (for o being Symbol of G(),
   p being FinSequence of F st o ==> pr1 roots p
-  holds [o, NTermVal(o, pr1 roots p, pr2 roots p)]-tree p in F) holds X c= F )
+  holds [o, NTermVal(o, pr1 roots p, pr2 roots p)]-tree p in F) holds X c= F
 provided
- dom f() = NAT
-and
+ dom f() = NAT and
  f().0 = { root-tree [t, d] where t is Symbol of G(), d is Element of D() :
-t in Terminals G() & d = TermVal(t) or t ==> {} & d = NTermVal(t, {}, {}) }
-and
+t in Terminals G() & d = TermVal(t) or t ==> {} & d = NTermVal(t, {}, {}) } and
  for n being Element of NAT holds f().(n+1) =
 f().n \/ { [o, NTermVal(o, pr1 roots p, pr2 roots p)]-tree p
 where o is Symbol of G(), p is Element of (f().n)* :
@@ -140,11 +134,9 @@ scheme :: DTCONSTR:sch 4
   (for o being Symbol of G(), p being FinSequence of F st o ==> roots p
   holds o-tree p in F) holds X1 c= F
 provided
- dom f() = NAT
-and
+ dom f() = NAT and
  f().0 = { root-tree [t, d] where t is Symbol of G(), d is Element of D() :
-t in Terminals G() & d = TermVal(t) or t ==> {} & d = NTermVal(t, {}, {}) }
-and
+t in Terminals G() & d = TermVal(t) or t ==> {} & d = NTermVal(t, {}, {}) } and
  for n being Element of NAT holds f().(n+1) =
 f().n \/ { [o, NTermVal(o, pr1 roots p, pr2 roots p)]-tree p
 where o is Symbol of G(), p is Element of (f().n)* :
@@ -159,11 +151,9 @@ scheme :: DTCONSTR:sch 5
   dt being Element of FinTrees [:the carrier of G(), D():]
   st dt in Union f() holds dt in f().n iff height dom dt <= n
 provided
- dom f() = NAT
-and
+ dom f() = NAT and
  f().0 = { root-tree [t, d] where t is Symbol of G(), d is Element of D() :
-t in Terminals G() & d = TermVal(t) or t ==> {} & d = NTermVal(t, {}, {}) }
-and
+t in Terminals G() & d = TermVal(t) or t ==> {} & d = NTermVal(t, {}, {}) } and
  for n being Element of NAT holds f().(n+1) =
 f().n \/ { [o, NTermVal(o, pr1 roots p, pr2 roots p)]-tree p
 where o is Symbol of G(), p is Element of (f().n)* :
@@ -177,11 +167,9 @@ scheme :: DTCONSTR:sch 6
   for dt1, dt2 being DecoratedTree of [:(the carrier of G()), D():]
   st dt1 in Union f() & dt2 in Union f() & dt1`1 = dt2`1 holds dt1 = dt2
 provided
- dom f() = NAT
-and
+ dom f() = NAT and
  f().0 = { root-tree [t, d] where t is Symbol of G(), d is Element of D() :
-t in Terminals G() & d = TermVal(t) or t ==> {} & d = NTermVal(t, {}, {}) }
-and
+t in Terminals G() & d = TermVal(t) or t ==> {} & d = NTermVal(t, {}, {}) } and
  for n being Element of NAT holds f().(n+1) =
 f().n \/ { [o, NTermVal(o, pr1 roots p, pr2 roots p)]-tree p
 where o is Symbol of G(), p is Element of (f().n)* :
@@ -206,8 +194,7 @@ scheme :: DTCONSTR:sch 7
  DTConstrInd{ G()->non empty DTConstrStr, P[set] }:
   for t being DecoratedTree of the carrier of G() st t in TS(G()) holds P[t]
 provided
- for s being Symbol of G() st s in Terminals G() holds P[root-tree s]
-and
+ for s being Symbol of G() st s in Terminals G() holds P[root-tree s] and
  for nt being Symbol of G(),
 ts being FinSequence of TS(G()) st nt ==> roots ts &
 for t being DecoratedTree of the carrier of G() st t in rng ts holds P[t]
@@ -218,9 +205,9 @@ scheme :: DTCONSTR:sch 8
   TermVal(set) -> Element of D(), NTermVal(set, set, set) -> Element of D() }:
   ex f being Function of TS(G()), D() st
   (for t being Symbol of G() st t in Terminals G()
-  holds f.(root-tree t) = TermVal(t)) & (for nt being Symbol of G(),
+  holds f.(root-tree t) = TermVal(t)) & for nt being Symbol of G(),
   ts being FinSequence of TS(G()) st nt ==> roots ts
-  holds f.(nt-tree ts) = NTermVal(nt, roots ts, f * ts));
+  holds f.(nt-tree ts) = NTermVal(nt, roots ts, f * ts);
 
 scheme :: DTCONSTR:sch 9
  DTConstrUniqDef{G()->non empty DTConstrStr, D()->non empty set,
@@ -228,14 +215,13 @@ scheme :: DTCONSTR:sch 9
   f1, f2() -> Function of TS(G()), D() }: f1() = f2()
 provided
  (for t being Symbol of G() st t in Terminals G()
-holds f1().(root-tree t) = TermVal(t)) & (for nt being Symbol of G(),
+holds f1().(root-tree t) = TermVal(t)) & for nt being Symbol of G(),
 ts being FinSequence of TS(G()) st nt ==> roots ts
-holds f1().(nt-tree ts) = NTermVal(nt, roots ts, f1() * ts))
-and
+holds f1().(nt-tree ts) = NTermVal(nt, roots ts, f1() * ts) and
  (for t being Symbol of G() st t in Terminals G()
-holds f2().(root-tree t) = TermVal(t)) & (for nt being Symbol of G(),
+holds f2().(root-tree t) = TermVal(t)) & for nt being Symbol of G(),
 ts being FinSequence of TS(G()) st nt ==> roots ts
-holds f2().(nt-tree ts) = NTermVal(nt, roots ts, f2() * ts));
+holds f2().(nt-tree ts) = NTermVal(nt, roots ts, f2() * ts);
 
 begin
 
@@ -364,16 +350,15 @@ definition
 :: DTCONSTR:def 11
 
   (for t being Symbol of PeanoNat st t in Terminals PeanoNat
-  holds it.(root-tree t) = 0) & (for nt being Symbol of PeanoNat,
+  holds it.(root-tree t) = 0) & for nt being Symbol of PeanoNat,
   ts being FinSequence of TS(PeanoNat) st nt ==> roots ts
-  holds it.(nt-tree ts) = plus-one(it * ts));
+  holds it.(nt-tree ts) = plus-one(it * ts);
 end;
 
 definition
   let x be Element of TS(PeanoNat);
   func PNsucc x -> Element of TS(PeanoNat) equals
 :: DTCONSTR:def 12
-
   1-tree <*x*>;
 end;
 
@@ -396,19 +381,8 @@ begin
 :: Tree traversals and terminal language
 
 definition
-  let D be set, F be FinSequence of D*;
-  func FlattenSeq F -> Element of D* means
-:: DTCONSTR:def 14
-
-  ex g being BinOp of D* st
-  (for p, q being Element of D* holds g.(p,q) = p^q) & it = g "**" F;
-end;
-
-theorem :: DTCONSTR:13
-  for D being set, d be Element of D* holds FlattenSeq <*d*> = d;
-
-definition
   let G be non empty DTConstrStr, tsg be DecoratedTree of the carrier of G;
+  canceled;
   assume
  tsg in TS G;
   func TerminalString tsg -> FinSequence of Terminals G means
@@ -416,29 +390,29 @@ definition
 
   ex f being Function of (TS G), (Terminals G)* st it = f.tsg &
   (for t being Symbol of G st t in Terminals G
-  holds f.(root-tree t) = <*t*>) & (for nt being Symbol of G,
+  holds f.(root-tree t) = <*t*>) & for nt being Symbol of G,
   ts being FinSequence of TS(G) st nt ==> roots ts
-  holds f.(nt-tree ts) = FlattenSeq(f * ts));
+  holds f.(nt-tree ts) = FlattenSeq(f * ts);
   func PreTraversal tsg -> FinSequence of the carrier of G means
 :: DTCONSTR:def 16
 
   ex f being Function of (TS G), (the carrier of G)* st it = f.tsg &
   (for t being Symbol of G st t in Terminals G
-  holds f.(root-tree t) = <*t*>) & (for nt being Symbol of G,
+  holds f.(root-tree t) = <*t*>) & for nt being Symbol of G,
   ts being FinSequence of TS(G),
   rts being FinSequence st rts = roots ts & nt ==> rts
   for x being FinSequence of (the carrier of G)* st x = f * ts
-  holds f.(nt-tree ts) = <*nt*>^FlattenSeq(x));
+  holds f.(nt-tree ts) = <*nt*>^FlattenSeq(x);
   func PostTraversal tsg -> FinSequence of the carrier of G means
 :: DTCONSTR:def 17
 
   ex f being Function of (TS G), (the carrier of G)* st it = f.tsg &
   (for t being Symbol of G st t in Terminals G
-  holds f.(root-tree t) = <*t*>) & (for nt being Symbol of G,
+  holds f.(root-tree t) = <*t*>) & for nt being Symbol of G,
   ts being FinSequence of TS(G),
   rts being FinSequence st rts = roots ts & nt ==> rts
   for x being FinSequence of (the carrier of G)* st x = f * ts
-  holds f.(nt-tree ts) = FlattenSeq(x)^<*nt*>);
+  holds f.(nt-tree ts) = FlattenSeq(x)^<*nt*>;
 end;
 
 definition
@@ -457,6 +431,8 @@ definition
   { PostTraversal tsg where tsg is Element of FinTrees the carrier of G :
   tsg in TS G & tsg.{} = nt };
 end;
+
+canceled;
 
 theorem :: DTCONSTR:14
   for t being DecoratedTree of the carrier of PeanoNat
@@ -489,28 +465,4 @@ theorem :: DTCONSTR:19
 ::
 :: - partial trees (grown from the root towards the leaves)
 :: - phrases
-
-begin :: Addenda
-
-:: from SCMFSA_7, 2006.03.14, A.T.
-
-theorem :: DTCONSTR:20
-  for D being set holds FlattenSeq <*>(D*) = <*>D;
-
-theorem :: DTCONSTR:21
-  for D being set, F,G be FinSequence of D* holds
-  FlattenSeq (F ^ G) = FlattenSeq F ^ FlattenSeq G;
-
-theorem :: DTCONSTR:22
-  for D being set, p,q be Element of D* holds FlattenSeq <* p,q *> = p ^ q;
-
-theorem :: DTCONSTR:23
-  for D being set, p,q,r be Element of D* holds
-  FlattenSeq <* p,q,r *> = p ^ q ^ r;
-
-:: from SCMFSA_7, 2007.07.22, A.T.
-
-theorem :: DTCONSTR:24
-  for D being set, F,G be FinSequence of D* holds
-  F c= G implies FlattenSeq F c= FlattenSeq G;
 

@@ -11,8 +11,8 @@ environ
       FIN_TOPO, HAHNBAN, FINSEQ_4, ORDERS_1, EQREL_1, ARYTM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, CARD_1, NUMBERS,
       XCMPLX_0, FINSET_1, SETFAM_1, RELAT_1, EQREL_1, FUNCT_1, PARTFUN1,
-      FUNCT_2, FUNCOP_1, DOMAIN_1, RELSET_1, FINSEQ_1, INT_2, SEQ_1, NAT_1,
-      XXREAL_0, STRUCT_0, ORDERS_2;
+      FUNCT_2, FUNCOP_1, DOMAIN_1, RELSET_1, FINSEQ_1, INT_2, NAT_1, XXREAL_0,
+      STRUCT_0, ORDERS_2;
  constructors SETFAM_1, DOMAIN_1, FUNCOP_1, XXREAL_0, REAL_1, NAT_1, INT_2,
       EQREL_1, FINSEQ_4, ORDERS_2, SEQ_1, RELSET_1;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, FUNCOP_1, XXREAL_0,
@@ -29,100 +29,105 @@ environ
 begin
 
 theorem Th1:
-  for A being set, f being FinSequence of bool A st
-  (for i being Element of NAT st 1 <= i & i < len f holds f/.i c= f/.(i+1))
-  for i, j being Element of NAT st
-  i <= j & 1 <= i & j <= len f holds f/.i c= f/.j
+  for A being set, f being FinSequence of bool A st (for i being
+  Element of NAT st 1 <= i & i < len f holds f/.i c= f/.(i+1)) for i, j being
+  Element of NAT st i <= j & 1 <= i & j <= len f holds f/.i c= f/.j
 proof
   let A be set;
   let f be FinSequence of bool A such that
-A1: for i being Element of NAT st 1 <= i & i < len f holds f/.i c= f/.(i+1);
+A1: for i being Element of NAT st 1 <= i & i < len f holds f/.i c= f/.(i
+  +1);
   let i, j be Element of NAT such that
-A2: i <= j & 1 <= i & j <= len f;
+A2: i <= j and
+A3: 1 <= i and
+A4: j <= len f;
+  consider k be Nat such that
+A5: i+k = j by A2,NAT_1:10;
   defpred P[Element of NAT] means i+$1 <= j implies f/.i c= f/.(i+$1);
-A3: P[0];
-A4: now
+A6: now
     let k be Element of NAT;
-A5: i+k+1 = i+(k+1);
+A7: i+k+1 = i+(k+1);
     assume
-A6: P[k];
+A8: P[k];
     thus P[k+1]
     proof
-      assume
-A7:   i+(k+1) <= j;
-      then
-A8:   i+k < j by A5,NAT_1:13;
       i+k >= i by NAT_1:11;
-      then i+k >= 1 & i+k < len f by A2,A8,XXREAL_0:2;
-      then f/.(i+k) c= f/.(i+(k+1)) by A1,A5;
-      hence thesis by A5,A6,A7,NAT_1:13,XBOOLE_1:1;
+      then
+A9:   i+k >= 1 by A3,XXREAL_0:2;
+      assume
+A10:  i+(k+1) <= j;
+      then i+k < j by A7,NAT_1:13;
+      then i+k < len f by A4,XXREAL_0:2;
+      then f/.(i+k) c= f/.(i+(k+1)) by A1,A7,A9;
+      hence thesis by A7,A8,A10,NAT_1:13,XBOOLE_1:1;
     end;
   end;
-A9: for k being Element of NAT holds P[k] from NAT_1:sch 1(A3,A4);
-  consider k be Nat such that
-A10: i+k = j by A2,NAT_1:10;
+A11: P[0];
+A12: for k being Element of NAT holds P[k] from NAT_1:sch 1(A11,A6);
   k in NAT by ORDINAL1:def 13;
-  hence thesis by A9,A10;
+  hence thesis by A12,A5;
 end;
 
 theorem Th2:
-  for A being set, f being FinSequence of bool A st
-  (for i being Element of NAT st 1 <= i & i < len f holds f/.i c= f/.(i+1))
-  for i, j being Element of NAT st i < j & 1 <= i & j <= len f & f/.j c= f/.i
-  for k being Element of NAT st i <= k & k <= j holds f/.j = f/.k
+  for A being set, f being FinSequence of bool A st (for i being
+  Element of NAT st 1 <= i & i < len f holds f/.i c= f/.(i+1)) for i, j being
+Element of NAT st 1 <= i & j <= len f & f/.j c= f/.i for k being Element of NAT
+  st i <= k & k <= j holds f/.j = f/.k
 proof
   let A be set;
   let f be FinSequence of bool A such that
-A1: for i being Element of NAT st 1 <= i & i < len f holds f/.i c= f/.(i+1);
+A1: for i being Element of NAT st 1 <= i & i < len f holds f/.i c= f/.(i
+  +1);
   let i, j be Element of NAT;
-  assume
-A2: i < j & 1 <= i & j <= len f & f/.j c= f/.i;
+  assume that
+A2: 1 <= i and
+A3: j <= len f and
+A4: f/.j c= f/.i;
+  let k be Element of NAT;
+  assume that
+A5: i <= k and
+A6: k <= j;
+  1 <= k by A2,A5,XXREAL_0:2;
+  then
+A7: f/.k c= f/.j by A1,A3,A6,Th1;
   defpred P[Element of NAT] means i+$1 <= j implies f/.j c= f/.(i+$1);
-A3: P[0] by A2;
-A4: now
+A8: now
     let k be Element of NAT;
-A5: i+k+1 = i+(k+1);
     assume
-A6: P[k];
+A9: P[k];
+A10: i+k+1 = i+(k+1);
     thus P[k+1]
     proof
-      assume
-A7:   i+(k+1) <= j;
-      then
-A8:   i+k < j by A5,NAT_1:13;
       i+k >= i by NAT_1:11;
-      then i+k >= 1 & i+k < len f by A2,A8,XXREAL_0:2;
-      then f/.(i+k) c= f/.(i+k+1) by A1;
-      hence thesis by A6,A7,NAT_1:13,XBOOLE_1:1;
+      then
+A11:  i+k >= 1 by A2,XXREAL_0:2;
+      assume
+A12:  i+(k+1) <= j;
+      then i+k < j by A10,NAT_1:13;
+      then i+k < len f by A3,XXREAL_0:2;
+      then f/.(i+k) c= f/.(i+k+1) by A1,A11;
+      hence thesis by A9,A12,NAT_1:13,XBOOLE_1:1;
     end;
   end;
-A9: for k being Element of NAT holds P[k] from NAT_1:sch 1(A3,A4);
-  let k be Element of NAT;
-  assume
-A10: i <= k & k <= j;
-  then consider m be Nat such that
-A11: k = i + m by NAT_1:10;
+A13: P[0] by A4;
+A14: for k being Element of NAT holds P[k] from NAT_1:sch 1(A13,A8);
+  consider m be Nat such that
+A15: k = i + m by A5,NAT_1:10;
   reconsider m as Element of NAT by ORDINAL1:def 13;
-  k=i+m by A11;
-  then
-A12: f/.j c= f/.k by A9,A10;
-  1 <= k by A2,A10,XXREAL_0:2;
-  then f/.k c= f/.j by A1,A2,A10,Th1;
-  hence thesis by A12,XBOOLE_0:def 10;
+  k=i+m by A15;
+  then f/.j c= f/.k by A14,A6;
+  hence thesis by A7,XBOOLE_0:def 10;
 end;
 
-scheme MaxFinSeqEx {X() -> non empty set, A,B() -> Subset of X(),
-  F(Subset of X()) -> Subset of X()}: ex f being FinSequence of bool X() st
-  len f > 0 & f/.1=B() &
-  (for i being Element of NAT st i > 0 & i < len f holds f/.(i+1)=F(f/.i)) &
-  F(f/.len f)=f/.len f &
-  (for i, j being Element of NAT st i > 0 & i < j & j <= len f holds
-  f/.i c= A() & f/.i c< f/.j)
+scheme
+  MaxFinSeqEx {X() -> non empty set, A,B() -> Subset of X(), F(Subset of X())
+-> Subset of X()}: ex f being FinSequence of bool X() st len f > 0 & f/.1=B() &
+(for i being Element of NAT st i > 0 & i < len f holds f/.(i+1)=F(f/.i)) & F(f
+/.len f)=f/.len f & for i, j being Element of NAT st i > 0 & i < j & j <= len f
+  holds f/.i c= A() & f/.i c< f/.j
 provided
-A1: A() is finite
-and
-A2: B() c= A()
-and
+A1: A() is finite and
+A2: B() c= A() and
 A3: for A being Subset of X() st A c= A() holds A c= F(A) & F(A) c= A()
 proof
   deffunc F(Nat,Subset of X()) = F($2);
@@ -130,198 +135,202 @@ proof
 A4: f.0 = B() and
 A5: for n being Nat holds f.(n+1) = F(n,f.n) from NAT_1:sch 12;
   defpred P[Nat] means f.$1 c= A();
-A6: P[0] by A2,A4;
-A7: now
+A6: now
     let n be Element of NAT such that
-A8: P[n];
+A7: P[n];
     f.(n+1) = F(f.n) by A5;
-    hence P[n+1] by A3,A8;
+    hence P[n+1] by A3,A7;
   end;
-A9: for n being Element of NAT holds P[n] from NAT_1:sch 1(A6,A7);
-A10: rng f c= bool A()
+A8: P[0] by A2,A4;
+A9: for n being Element of NAT holds P[n] from NAT_1:sch 1(A8,A6);
+A10: for i being Element of NAT holds f.i c= f.(i+1)
+  proof
+    let i be Element of NAT;
+    f.(i+1) = F(f.i) & f.i c= A() by A5,A9;
+    hence thesis by A3;
+  end;
+A11: dom f = NAT by FUNCT_2:def 1;
+A12: rng f is c=-linear
+  proof
+    let B,C be set;
+    assume
+    B in rng f;
+    then consider i being set such that
+A13: i in NAT and
+A14: B = f.i by A11,FUNCT_1:def 5;
+    reconsider i as Element of NAT by A13;
+    assume
+    C in rng f;
+    then consider j being set such that
+A15: j in NAT and
+A16: C = f.j by A11,FUNCT_1:def 5;
+    reconsider j as Element of NAT by A15;
+    i <= j or j <= i;
+    hence B c= C or C c= B by A10,A14,A16,MEASURE2:22;
+  end;
+A17: rng f c= bool A()
   proof
     let x be set;
-    assume x in rng f;
+    assume
+    x in rng f;
     then x in f.:NAT by FUNCT_2:45;
     then ex k being Element of NAT st k in NAT & f.k=x by FUNCT_2:116;
     then x c= A() by A9;
     hence thesis;
   end;
-  bool A() is finite by A1;
-  then
-A11: rng f is finite by A10;
-A12: dom f = NAT by FUNCT_2:def 1;
-  then
-A13: rng f <> {} by A4,FUNCT_1:def 5;
-A14: for i being Element of NAT holds f.i c= f.(i+1)
-  proof
-    let i be Element of NAT;
-A15: f.(i+1) = F(f.i) by A5;
-    f.i c= A() by A9;
-    hence thesis by A3,A15;
-  end;
-  rng f is c=-linear
-  proof
-    let B,C be set;
-    assume B in rng f;
-    then consider i being set such that
-A16: i in NAT & B = f.i by A12,FUNCT_1:def 5;
-    assume C in rng f;
-    then consider j being set such that
-A17: j in NAT & C = f.j by A12,FUNCT_1:def 5;
-    reconsider i as Element of NAT by A16;
-    reconsider j as Element of NAT by A17;
-    i <= j or j <= i;
-    hence B c= C or C c= B by A14,A16,A17,MEASURE2:22;
-  end;
+  rng f <> {} by A4,A11,FUNCT_1:def 5;
   then consider m being set such that
 A18: m in rng f and
-A19: for C being set st C in rng f holds C c= m by A11,A13,FINSET_1:31;
+A19: for C being set st C in rng f holds C c= m by A1,A17,A12,
+  FINSET_1:31;
+  deffunc G(Nat) = f.(abs($1-1));
   defpred P[set] means $1 in NAT & f.$1=m;
   m in f.:NAT by A18,FUNCT_2:45;
-  then consider k being Element of NAT such that
-A20: P[k] by FUNCT_2:116;
-A21: ex k being Nat st P[k] by A20;
-  consider k being Nat such that
-A22: P[k] and
-A23: for n being Nat st P[n] holds k <= n from NAT_1:sch 5(A21);
-A24: k+1 in Seg(k+1) by FINSEQ_1:6;
-  deffunc G(Nat) = f.(abs($1-1));
-  consider z being FinSequence of bool X() such that
-A25: len z = k+1 and
-A26: for j being Nat st j in dom z holds z.j = G(j) from FINSEQ_2:sch 1;
-A27: dom z = Seg(k+1)  by A25,FINSEQ_1:def 3;
-  take z;
-  thus 0 < len z by A25;
-A28: 0+1 <= len z by A25,NAT_1:13;
+  then ex k being Element of NAT st P[k] by FUNCT_2:116;
   then
-A29: 1 in Seg(k+1) by A25,FINSEQ_1:3;
-  thus z/.1 = z.1 by A28,FINSEQ_4:24
-    .= f.(abs(1-1)) by A26,A29,A27
-    .= B() by A4,ABSVALUE:7; thus
-A30: for i being Element of NAT st i > 0 & i < len z holds z/.(i+1)=F(z/.i)
+A20: ex k being Nat st P[k];
+  consider k being Nat such that
+A21: P[k] and
+A22: for n being Nat st P[n] holds k <= n from NAT_1:sch 5(A20);
+  consider z being FinSequence of bool X() such that
+A23: len z = k+1 and
+A24: for j being Nat st j in dom z holds z.j = G(j) from FINSEQ_2:sch 1;
+A25: 0+1 <= len z by A23,NAT_1:13;
+  then
+A26: 1 in Seg(k+1) by A23,FINSEQ_1:3;
+  take z;
+  thus 0 < len z by A23;
+A27: dom z = Seg(k+1) by A23,FINSEQ_1:def 3;
+  thus z/.1 = z.1 by A25,FINSEQ_4:24
+    .= f.(abs(1-1)) by A24,A27,A26
+    .= B() by A4,ABSVALUE:7;
+  thus
+A28: for i being Element of NAT st i > 0 & i < len z holds z/.(i+1)=F(z
+  /.i)
   proof
     let i be Element of NAT;
-    assume
-A31: i > 0 & i < len z;
+    assume that
+A29: i > 0 and
+A30: i < len z;
+A31: 0+1 < i+1 & i+1 <= k+1 by A23,A29,A30,NAT_1:13,XREAL_1:8;
     then
-A32: 0+1 <= i & i <= k+1 by A25,NAT_1:13;
+A32: i+1 in Seg(k+1) by FINSEQ_1:3;
+A33: 0+1 <= i by A29,NAT_1:13;
+    then i in Seg(k+1) by A23,A30,FINSEQ_1:3;
     then
-A33: i in Seg(k+1) by FINSEQ_1:3;
+A34: z.i = f.(abs(i-1)) & i in dom z by A23,A24,A27,FINSEQ_1:def 3;
+    1-1 <= i-1 by A33,XREAL_1:11;
     then
-A34: z.i = f.(abs(i-1)) by A26,A27;
-    0+1 < i+1 by A31,XREAL_1:8;
-    then
-A35: 1 <= i+1 & i+1 <= k+1 by A25,A31,NAT_1:13;
-    then
-A36: i+1 in Seg(k+1) by FINSEQ_1:3;
-    1-1 <= i-1 by A32,XREAL_1:11;
-    then
-A37: 0 <= (i-1)*1;
-A38: i in dom z by A25,A33,FINSEQ_1:def 3;
-    thus z/.(i+1) = z.(i+1) by A25,A35,FINSEQ_4:24
-      .= f.(abs(i+1-1)) by A26,A36,A27
+A35: 0 <= (i-1)*1;
+    thus z/.(i+1) = z.(i+1) by A23,A31,FINSEQ_4:24
+      .= f.(abs(i+1-1)) by A24,A27,A32
       .= f.(abs(i-1+1))
-      .= f.(abs(i-1)+abs(1)) by A37,ABSVALUE:24
+      .= f.(abs(i-1)+abs(1)) by A35,ABSVALUE:24
       .= f.(abs(i-1)+1) by ABSVALUE:def 1
       .= F(f.(abs(i-1))) by A5
-      .= F(z/.i) by A34,A38,PARTFUN1:def 8;
+      .= F(z/.i) by A34,PARTFUN1:def 8;
   end;
   thus F(z/.len z)=z/.len z
   proof
-    k in NAT by ORDINAL1:def 13;
-    then
-A39: f.k c= f.(k+1) by A14;
     k+1 in NAT;
     then k+1 in dom f by FUNCT_2:def 1;
     then f.(k+1) in rng f by FUNCT_1:def 5;
     then
-A40: f.(k+1) c= f.k by A19,A22;
+A36: f.(k+1) c= f.k by A19,A21;
+    reconsider k'=k as Element of NAT by ORDINAL1:def 13;
+    k in NAT by ORDINAL1:def 13;
+    then
+A37: f.k c= f.(k+1) by A10;
     len z = 0 or len z in Seg(len z) by FINSEQ_1:5;
     then
-A41: len z in dom z by A25,FINSEQ_1:def 3;
-    reconsider k'=k as Element of NAT by ORDINAL1:def 13;
-A42: z.len z = f.(abs(k+1-1)) by A25,A26,A27,FINSEQ_1:5
+A38: len z in dom z by A23,FINSEQ_1:def 3;
+A39: z.len z = f.(abs(k+1-1)) by A23,A24,A27,FINSEQ_1:5
       .= f.k by ABSVALUE:def 1;
-    hence F(z/.len z) = F(f.k') by A41,PARTFUN1:def 8
+    hence F(z/.len z) = F(f.k') by A38,PARTFUN1:def 8
       .= f.(k+1) by A5
-      .= z.len z by A39,A40,A42,XBOOLE_0:def 10
-      .= z/.len z by A41,PARTFUN1:def 8;
+      .= z.len z by A37,A36,A39,XBOOLE_0:def 10
+      .= z/.len z by A38,PARTFUN1:def 8;
   end;
   let i, j be Element of NAT;
-  assume
-A43: 0 < i & i < j & j <= len z;
+  assume that
+A40: 0 < i and
+A41: i < j and
+A42: j <= len z;
+A43: 0+1 <= i by A40,NAT_1:13;
+  then reconsider l = i-1 as Element of NAT by INT_1:18;
+A44: i <= len z by A41,A42,XXREAL_0:2;
   then
-A44: 0+1 <= i by NAT_1:13;
-A45: i <= len z by A43,XXREAL_0:2;
-A46: i < len z by A43,XXREAL_0:2;
-  reconsider l = i-1 as Element of NAT by A44,INT_1:18;
-A47: i in Seg(k+1) by A25,A44,A45,FINSEQ_1:3;
-A48: z/.i = z.i by A44,A45,FINSEQ_4:24
-    .= f.(abs(i-1)) by A26,A47,A27
+A45: i in Seg(k+1) by A23,A43,FINSEQ_1:3;
+A46: z/.i = z.i by A43,A44,FINSEQ_4:24
+    .= f.(abs(i-1)) by A24,A27,A45
     .= f.l by ABSVALUE:def 1;
   hence z/.i c= A() by A9;
-A49: for i being Element of NAT st 1 <= i & i < len z holds z/.i c= z/.(i+1)
+A47: for i being Element of NAT st 1 <= i & i < len z holds z/.i c= z/.(i+1)
   proof
     let i be Element of NAT;
-    assume
-A50: 1 <= i & i < len z;
+    assume that
+A48: 1 <= i and
+A49: i < len z;
+A50: i in Seg(k+1) by A23,A48,A49,FINSEQ_1:3;
+A51: 1-1 <= i-1 by A48,XREAL_1:11;
     then
-A51: i in Seg(k+1) by A25,FINSEQ_1:3;
-A52: 1-1 <= i-1 by A50,XREAL_1:11;
-A53: z/.i = z.i by A50,FINSEQ_4:24
-      .= f.(abs(i-1)) by A26,A51,A27
-      .= f.(i-1) by A52,ABSVALUE:def 1;
-A54: 1 <= i+1 & i+1 <= len z by A50,NAT_1:13;
+A52: i-1 is Element of NAT by INT_1:16;
+A53: 1 <= i+1 & i+1 <= len z by A48,A49,NAT_1:13;
     then
-A55: i+1 in Seg(k+1) by A25,FINSEQ_1:3;
-A56: z/.(i+1) = z.(i+1) by A54,FINSEQ_4:24
-      .= f.(abs(i+1-1)) by A26,A55,A27
+A54: i+1 in Seg(k+1) by A23,FINSEQ_1:3;
+A55: z/.(i+1) = z.(i+1) by A53,FINSEQ_4:24
+      .= f.(abs(i+1-1)) by A24,A27,A54
       .= f.(i-1+1) by ABSVALUE:def 1;
-    i-1 is Element of NAT by A52,INT_1:16;
-    hence thesis by A14,A53,A56;
+    z/.i = z.i by A48,A49,FINSEQ_4:24
+      .= f.(abs(i-1)) by A24,A27,A50
+      .= f.(i-1) by A51,ABSVALUE:def 1;
+    hence thesis by A10,A55,A52;
   end;
-  hence z/.i c= z/.j by A43,A44,Th1;
-  assume
-A57: z/.i = z/.j;
-  i <= i+1 & i+1 <= j by A43,NAT_1:13;
-  then
-A58: z/.i = z/.(i+1) by A43,A44,A49,A57,Th2
-    .= F(z/.i) by A30,A43,A46;
+  hence z/.i c= z/.j by A41,A42,A43,Th1;
   defpred P[Element of NAT] means i+$1 <= len z implies z/.i = z/.(i+$1);
-A59: P[0];
+A56: i <= i+1 & i+1 <= j by A41,NAT_1:13;
+  k+1 in Seg(k+1) by FINSEQ_1:6;
+  then
+A57: k+1 in dom z by A23,FINSEQ_1:def 3;
+A58: i < len z by A41,A42,XXREAL_0:2;
+  assume
+  z/.i = z/.j;
+  then
+A59: z/.i = z/.(i+1) by A42,A43,A47,A56,Th2
+    .= F(z/.i) by A28,A40,A58;
 A60: now
     let n be Element of NAT such that
 A61: P[n];
     thus P[n+1]
     proof
-A62:  i+n > 0 by A43;
-      assume i+(n+1) <= len z;
+      assume
+      i+(n+1) <= len z;
       then i+n+1 <= len z;
       then i+n < len z by NAT_1:13;
-      hence z/.i = z/.(i+n+1) by A30,A58,A61,A62
+      hence z/.i = z/.(i+n+1) by A28,A40,A59,A61
         .= z/.(i+(n+1));
     end;
   end;
-A63: for n being Element of NAT holds P[n] from NAT_1:sch 1(A59,A60);
   consider n0 being Nat such that
-A64: i+n0 = len z by A45,NAT_1:10;
+A62: i+n0 = len z by A41,A42,NAT_1:10,XXREAL_0:2;
   reconsider n0 as Element of NAT by ORDINAL1:def 13;
-A65: k+1 in dom z by A24,A25,FINSEQ_1:def 3;
-  i+n0=len z by A64;
-  then f.l = z/.(k+1) by A25,A48,A63
-    .= z.(k+1) by A65,PARTFUN1:def 8
-    .= f.(abs(k+1-1)) by A26,A27,FINSEQ_1:6
-    .= m by A22,ABSVALUE:def 1;
-  then k <= l by A23;
-  then len z <= l + 1 by A25,XREAL_1:8;
-  hence contradiction by A43,XXREAL_0:2;
+A63: i+n0=len z by A62;
+A64: P[0];
+  for n being Element of NAT holds P[n] from NAT_1:sch 1(A64,A60);
+  then f.l = z/.(k+1) by A23,A46,A63
+    .= z.(k+1) by A57,PARTFUN1:def 8
+    .= f.(abs(k+1-1)) by A24,A27,FINSEQ_1:6
+    .= m by A21,ABSVALUE:def 1;
+  then k <= l by A22;
+  then len z <= l + 1 by A23,XREAL_1:8;
+  hence contradiction by A41,A42,XXREAL_0:2;
 end;
 
 registration
   cluster non empty strict RelStr;
   existence
-  proof consider D being non empty set,f being Relation of D;
+  proof
+    consider D being non empty set,f being Relation of D;
     take RelStr(#D,f#);
     thus the carrier of RelStr(#D,f#) is non empty;
     thus thesis;
@@ -335,7 +344,6 @@ definition
   let FT be RelStr;
   let x be Element of FT;
   func U_FT x -> Subset of FT equals
-
   Class(the InternalRel of FT,x);
   coherence;
 end;
@@ -356,7 +364,6 @@ end;
 definition
   let x be set;
   func SinglRel x -> Relation of {x} equals
-
   {[x,x]};
   coherence
   proof
@@ -367,7 +374,6 @@ end;
 
 definition
   func FT{0} -> strict RelStr equals
-
   RelStr (#{0},SinglRel 0#);
   coherence;
 end;
@@ -384,10 +390,10 @@ end;
 
 definition
   let IT be non empty RelStr;
-  redefine
-  attr IT is filled means
+  redefine attr IT is filled means
   :Def4:
-  for x being Element of IT holds x in U_FT x;
+  for x being Element of IT holds x in
+  U_FT x;
   compatibility
   proof
     thus IT is filled implies for x being Element of IT holds x in U_FT x
@@ -402,7 +408,8 @@ A1:   IT is filled;
     assume
 A2: for x being Element of IT holds x in U_FT x;
     let x be set;
-    assume x in the carrier of IT;
+    assume
+    x in the carrier of IT;
     then reconsider x as Element of IT;
     x in U_FT x by A2;
     hence thesis by EQREL_1:26;
@@ -415,9 +422,8 @@ theorem Th7:
   FT{0} is filled
 proof
   let x be Element of FT{0};
-A1: x = 0 by TARSKI:def 1;
-  [0,0] in SinglRel 0 by TARSKI:def 1;
-  hence thesis by A1,RELAT_1:def 13;
+  x = 0 & [0,0] in SinglRel 0 by TARSKI:def 1;
+  hence thesis by RELAT_1:def 13;
 end;
 
 registration
@@ -433,26 +439,26 @@ end;
 canceled;
 
 theorem
-  for FT being filled (non empty RelStr) holds
-  {U_FT x where x is Element of FT : not contradiction} is Cover of FT
+  for FT being filled (non empty RelStr) holds {U_FT x where x is
+  Element of FT : not contradiction} is Cover of FT
 proof
   let FT be filled (non empty RelStr);
   let a be set;
-  assume a in the carrier of FT;
+  assume
+  a in the carrier of FT;
   then reconsider b = a as Element of FT;
-A1: b in U_FT b by Def4;
-  U_FT b in {U_FT x where x is Element of FT : not contradiction};
-  hence thesis by A1,TARSKI:def 4;
+  b in U_FT b & U_FT b in {U_FT x where x is Element of FT : not
+  contradiction } by Def4;
+  hence thesis by TARSKI:def 4;
 end;
 
 reserve A for Subset of FT;
 
 definition
- canceled 2;
+  canceled 2;
   let FT;
   let A be Subset of FT;
   func A^delta -> Subset of FT equals
-
   {x:U_FT x meets A & U_FT x meets A` };
   coherence
   proof
@@ -467,11 +473,13 @@ theorem Th10:
 proof
   thus x in A^delta implies U_FT x meets A & U_FT x meets A`
   proof
-    assume x in A^delta;
+    assume
+    x in A^delta;
     then ex y st y=x & U_FT y meets A & U_FT y meets A`;
     hence thesis;
   end;
-  assume U_FT x meets A & U_FT x meets A`;
+  assume
+  U_FT x meets A & U_FT x meets A`;
   hence thesis;
 end;
 
@@ -479,11 +487,9 @@ definition
   let FT;
   let A be Subset of FT;
   func A^deltai -> Subset of FT equals
-
   A /\ (A^delta);
   coherence;
   func A^deltao -> Subset of FT equals
-
   A` /\ (A^delta);
   coherence;
 end;
@@ -496,12 +502,14 @@ proof
     let x be set;
     thus x in A^delta implies x in A^deltai \/ A^deltao
     proof
-      assume x in A^delta;
+      assume
+      x in A^delta;
       then x in [#](the carrier of FT) /\ (A^delta) by XBOOLE_1:28;
       then x in (A \/ A`) /\ (A^delta) by SUBSET_1:25;
       hence thesis by XBOOLE_1:23;
     end;
-    assume x in A^deltai \/ A^deltao;
+    assume
+    x in A^deltai \/ A^deltao;
     then x in (A \/ A`) /\ (A^delta) by XBOOLE_1:23;
     then x in [#](the carrier of FT) /\ (A^delta) by SUBSET_1:25;
     hence thesis by XBOOLE_1:28;
@@ -513,7 +521,6 @@ definition
   let FT;
   let A be Subset of FT;
   func A^i -> Subset of FT equals
-
   {x:U_FT x c= A};
   coherence
   proof
@@ -522,7 +529,6 @@ definition
     hence thesis;
   end;
   func A^b -> Subset of FT equals
-
   {x:U_FT x meets A};
   coherence
   proof
@@ -531,7 +537,6 @@ definition
     hence thesis;
   end;
   func A^s -> Subset of FT equals
-
   {x:x in A & U_FT x \ {x} misses A };
   coherence
   proof
@@ -545,11 +550,9 @@ definition
   let FT;
   let A be Subset of FT;
   func A^n -> Subset of FT equals
-
   A \ A^s;
   coherence;
   func A^f -> Subset of FT equals
-
   {x:ex y st y in A & x in U_FT y};
   coherence
   proof
@@ -563,8 +566,8 @@ definition
   let IT be non empty RelStr;
   attr IT is symmetric means
   :Def15:
-  for x, y being Element of IT holds
-  y in U_FT x implies x in U_FT y;
+  for x, y being Element of IT holds y in
+  U_FT x implies x in U_FT y;
 end;
 
 theorem Th12:
@@ -572,11 +575,13 @@ theorem Th12:
 proof
   thus x in A^i implies U_FT x c= A
   proof
-    assume x in A^i;
+    assume
+    x in A^i;
     then ex y st y=x & U_FT y c= A;
     hence thesis;
   end;
-  assume U_FT x c= A;
+  assume
+  U_FT x c= A;
   hence thesis;
 end;
 
@@ -585,11 +590,13 @@ theorem Th13:
 proof
   thus x in A^b implies U_FT x meets A
   proof
-    assume x in A^b;
+    assume
+    x in A^b;
     then ex y st y = x & U_FT y meets A;
     hence thesis;
   end;
-  assume U_FT x meets A;
+  assume
+  U_FT x meets A;
   hence thesis;
 end;
 
@@ -598,11 +605,13 @@ theorem Th14:
 proof
   thus x in A^s implies x in A & U_FT x \ {x} misses A
   proof
-    assume x in A^s;
+    assume
+    x in A^s;
     then ex y st y = x & y in A & U_FT y \ {y} misses A;
     hence thesis;
   end;
-  assume x in A & U_FT x \ {x} misses A;
+  assume
+  x in A & U_FT x \ {x} misses A;
   hence thesis;
 end;
 
@@ -611,13 +620,16 @@ theorem
 proof
   thus x in A^n implies x in A & U_FT x \ {x} meets A
   proof
-    assume x in A^n;
+    assume
+    x in A^n;
     then x in A & not x in A^s by XBOOLE_0:def 5;
     hence thesis;
   end;
-  assume x in A & U_FT x \ {x} meets A;
-  then x in A & not x in A^s by Th14;
-  hence thesis by XBOOLE_0:def 5;
+  assume that
+A1: x in A and
+A2: U_FT x \ {x} meets A;
+  not x in A^s by A2,Th14;
+  hence thesis by A1,XBOOLE_0:def 5;
 end;
 
 theorem Th16:
@@ -625,11 +637,13 @@ theorem Th16:
 proof
   thus x in A^f implies ex y st y in A & x in U_FT y
   proof
-    assume x in A^f;
+    assume
+    x in A^f;
     then ex y st y = x & ex z st z in A & y in U_FT z;
     hence thesis;
   end;
-  assume ex z st z in A & x in U_FT z;
+  assume
+  ex z st z in A & x in U_FT z;
   hence thesis;
 end;
 
@@ -651,8 +665,10 @@ A2:   x in A^b;
       then consider z be set such that
 A3:   z in U_FT y /\ A by XBOOLE_0:4;
       reconsider z as Element of FT by A3;
-A4:   z in U_FT y & z in A by A3,XBOOLE_0:def 4;
-      then y in U_FT z by A1,Def15;
+      z in U_FT y by A3,XBOOLE_0:def 4;
+      then
+A4:   y in U_FT z by A1,Def15;
+      z in A by A3,XBOOLE_0:def 4;
       hence thesis by A4;
     end;
     let x be set;
@@ -660,21 +676,22 @@ A4:   z in U_FT y & z in A by A3,XBOOLE_0:def 4;
 A5: x in A^f;
     then reconsider y = x as Element of FT;
     consider z such that
-A6: z in A & y in U_FT z by A5,Th16;
-    z in U_FT y by A1,A6,Def15;
+A6: z in A and
+A7: y in U_FT z by A5,Th16;
+    z in U_FT y by A1,A7,Def15;
     then U_FT y meets A by A6,XBOOLE_0:3;
     hence thesis;
   end;
   assume
-A7: for A being Subset of FT holds A^b = A^f;
+A8: for A being Subset of FT holds A^b = A^f;
   let x, y be Element of FT;
-  assume y in U_FT x;
+  assume
+  y in U_FT x;
   then U_FT x meets {y} by ZFMISC_1:54;
   then x in {y}^b;
-  then x in {y}^f by A7;
-  then consider z such that
-A8: z in {y} & x in U_FT z by Th16;
-  thus thesis by A8,TARSKI:def 1;
+  then x in {y}^f by A8;
+  then ex z st z in {y} & x in U_FT z by Th16;
+  hence thesis by TARSKI:def 1;
 end;
 
 reserve F for Subset of FT;
@@ -690,15 +707,14 @@ definition
   IT = IT^b;
   attr IT is connected means
   :Def18:
-  for B,C being Subset of FT st
-  IT = B \/ C & B <> {} & C <> {} & B misses C holds B^b meets C;
+  for B,C being Subset of FT st IT = B \/ C
+  & B <> {} & C <> {} & B misses C holds B^b meets C;
 end;
 
 definition
   let FT;
   let A be Subset of FT;
   func A^fb -> Subset of FT equals
-
   meet{F:A c= F & F is closed};
   coherence
   proof
@@ -706,7 +722,8 @@ definition
     FF c= bool the carrier of FT
     proof
       let x be set;
-      assume x in FF;
+      assume
+      x in FF;
       then ex F st x = F & A c= F & F is closed;
       hence thesis;
     end;
@@ -715,7 +732,6 @@ definition
     hence thesis;
   end;
   func A^fi -> Subset of FT equals
-
   union{F:A c= F & F is open};
   coherence
   proof
@@ -723,7 +739,8 @@ definition
     FF c= bool the carrier of FT
     proof
       let x be set;
-      assume x in FF;
+      assume
+      x in FF;
       then ex F st x = F & A c= F & F is open;
       hence thesis;
     end;
@@ -734,7 +751,8 @@ definition
 end;
 
 theorem Th18:
-  for FT being filled (non empty RelStr), A being Subset of FT holds A c= A^b
+  for FT being filled (non empty RelStr), A being Subset of FT
+  holds A c= A^b
 proof
   let FT be filled (non empty RelStr);
   let A be Subset of FT;
@@ -748,8 +766,8 @@ A1: x in A;
 end;
 
 theorem Th19:
-  for FT being non empty RelStr, A, B being Subset of FT holds
-  A c= B implies A^b c= B^b
+  for FT being non empty RelStr, A, B being Subset of FT holds A
+  c= B implies A^b c= B^b
 proof
   let FT be non empty RelStr;
   let A, B be Subset of FT;
@@ -760,142 +778,144 @@ A1: A c= B;
 A2: x in A^b;
   then reconsider y=x as Element of FT;
   U_FT y meets A by A2,Th13;
-  then consider w being set such that
-A3: w in U_FT y & w in A by XBOOLE_0:3;
-  U_FT y meets B by A1,A3,XBOOLE_0:3;
+  then ex w being set st w in U_FT y & w in A by XBOOLE_0:3;
+  then U_FT y meets B by A1,XBOOLE_0:3;
   hence thesis;
 end;
 
 theorem
-  for FT being filled finite (non empty RelStr), A being Subset of FT holds
-  A is connected iff for x being Element of FT st x in A
-  ex S being FinSequence of bool the carrier of FT st len S > 0 & S/.1 = {x} &
-  (for i being Element of NAT st i > 0 & i < len S
-  holds S/.(i+1) = (S/.i)^b /\ A) & A c= S/.len S
+  for FT being filled finite (non empty RelStr), A being Subset of FT
+  holds A is connected iff for x being Element of FT st x in A ex S being
+FinSequence of bool the carrier of FT st len S > 0 & S/.1 = {x} & (for i being
+Element of NAT st i > 0 & i < len S holds S/.(i+1) = (S/.i)^b /\ A) & A c= S/.
+  len S
 proof
   let FT be filled finite (non empty RelStr), A be Subset of FT;
-  thus A is connected implies for x being Element of FT st x in A
-  ex S being FinSequence of bool the carrier of FT st len S > 0 & S/.1 = {x} &
-  (for i being Element of NAT st i > 0 & i < len S holds S/.(i+1) =
-  (S/.i)^b /\ A) & A c= S/.len S
+  thus A is connected implies for x being Element of FT st x in A ex S being
+FinSequence of bool the carrier of FT st len S > 0 & S/.1 = {x} & (for i being
+Element of NAT st i > 0 & i < len S holds S/.(i+1) = (S/.i)^b /\ A) & A c= S/.
+  len S
   proof
+    deffunc F(Subset of FT) = $1^b /\ A;
     assume
 A1: A is connected;
-    let x be Element of FT such that
-A2: x in A;
-    deffunc F(Subset of FT) = $1^b /\ A;
-A3: A is finite;
-A4: {x} c= A by A2,ZFMISC_1:37;
-A5: for B being Subset of FT st B c= A holds B c= F(B) & F(B) c= A
+    let x be Element of FT;
+    assume
+    x in A;
+    then
+A2: {x} c= A by ZFMISC_1:37;
+A3: for B being Subset of FT st B c= A holds B c= F(B) & F(B) c= A
     proof
       let B be Subset of FT such that
-A6:   B c= A;
+A4:   B c= A;
       B c= B^b by Th18;
-      hence B c= B^b /\ A by A6,XBOOLE_1:19;
+      hence B c= B^b /\ A by A4,XBOOLE_1:19;
       thus thesis by XBOOLE_1:17;
     end;
+A5: A is finite;
     consider S being FinSequence of bool the carrier of FT such that
-A7: len S > 0 and
-A8: S/.1={x} and
-A9: (for i being Element of NAT st i > 0 & i < len S
-    holds S/.(i+1)=F(S/.i)) and
-A10: F(S/.len S) = S/.len S and
-A11: (for i, j being Element of NAT st i > 0 & i < j & j <= len S holds
-    S/.i c= A & S/.i c< S/.j) from MaxFinSeqEx(A3,A4,A5);
-    take S;
-    thus len S > 0 by A7;
-    thus S/.1 = {x} by A8;
-    thus for i being Element of NAT st
-    i > 0 & i < len S holds S/.(i+1) = S/.i^b /\ A by A9;
+A6: len S > 0 and
+A7: S/.1={x} and
+A8: for i being Element of NAT st i > 0 & i < len S holds S/.(i+1)=F(
+    S/.i) and
+A9: F(S/.len S) = S/.len S and
+A10: for i, j being Element of NAT st i > 0 & i < j & j <= len S holds
+    S/.i c= A & S/.i c< S/.j from MaxFinSeqEx(A5,A2,A3);
+    consider k being Nat such that
+A11: len S = k+1 by A6,NAT_1:6;
     set B = S/.len S;
     set C = A \ B;
-A12: B \/ C = B \/ A by XBOOLE_1:39
-      .= A by A10,XBOOLE_1:12,17;
-    assume not A c= S/.len S;
-    then
-A13: C <> {} by XBOOLE_1:37;
+A12: B misses ( A \ B ) by XBOOLE_1:79;
     defpred P[Element of NAT] means $1 < len S implies S/.($1+1) <> {};
-A14: P[0] by A8;
-A15: now
+A13: now
       let i be Element of NAT;
       assume
-A16:  P[i];
+A14:  P[i];
       thus P[i+1]
       proof
         assume
-A17:    i + 1 < len S;
-A18:    i+1 < i+1+1 by NAT_1:13;
-        i+1+1 <= len S by A17,NAT_1:13;
-        then S/.(i+1) c< S/.(i+1+1) by A11,A18;
+A15:    i + 1 < len S;
+        then i+1 < i+1+1 & i+1+1 <= len S by NAT_1:13;
+        then S/.(i+1) c< S/.(i+1+1) by A10;
         then S/.(i+1) c= S/.(i+1+1) by XBOOLE_0:def 8;
-        hence thesis by A16,A17,NAT_1:13;
+        hence thesis by A14,A15,NAT_1:13;
       end;
     end;
-A19: for i being Element of NAT holds P[i] from NAT_1:sch 1(A14,A15);
-    consider k being Nat such that
-A20: len S = k+1 by A7,NAT_1:6;
+A16: P[0] by A7;
+A17: for i being Element of NAT holds P[i] from NAT_1:sch 1(A16,A13);
     reconsider k as Element of NAT by ORDINAL1:def 13;
-    k < len S by A20,NAT_1:13;
+    k < len S by A11,NAT_1:13;
     then
-A21: B <> {} by A19,A20;
-A22: B misses C by XBOOLE_1:79;
-A23: B misses ( A \ B ) by XBOOLE_1:79;
+A18: B <> {} by A17,A11;
+    take S;
+    thus len S > 0 by A6;
+    thus S/.1 = {x} by A7;
+    thus for i being Element of NAT st i > 0 & i < len S holds S/.(i+1) = S/.i
+    ^b /\ A by A8;
+    assume
+    not A c= S/.len S;
+    then
+A19: C <> {} by XBOOLE_1:37;
     B^b /\ C = B^b /\ ( A /\ ( A \ B ) ) by XBOOLE_1:28,36
-      .= B /\ ( A \ B ) by A10,XBOOLE_1:16
-      .= {} by A23,XBOOLE_0:def 7;
-    then B^b misses C by XBOOLE_0:def 7;
-    hence contradiction by A1,A12,A13,A21,A22,Def18;
+      .= B /\ ( A \ B ) by A9,XBOOLE_1:16
+      .= {} by A12,XBOOLE_0:def 7;
+    then
+A20: B misses C & B^b misses C by XBOOLE_0:def 7,XBOOLE_1:79;
+    B \/ C = B \/ A by XBOOLE_1:39
+      .= A by A9,XBOOLE_1:12,17;
+    hence contradiction by A1,A19,A18,A20,Def18;
   end;
   assume
-A24: for x being Element of FT st x in A
-  ex S being FinSequence of bool the carrier of FT st len S > 0 & S/.1 = {x} &
-  (for i being Element of NAT st i > 0 & i < len S holds
-  S/.(i+1) = S/.i^b /\ A) & A c= S/.len S;
+A21: for x being Element of FT st x in A ex S being FinSequence of bool
+the carrier of FT st len S > 0 & S/.1 = {x} & (for i being Element of NAT st i
+  > 0 & i < len S holds S/.(i+1) = S/.i^b /\ A) & A c= S/.len S;
   given B, C being Subset of FT such that
-A25: A = B \/ C and
-A26: B <> {} and
-A27: C <> {} and
-A28: B misses C and
-A29: B^b misses C;
-A30: B^b /\ C = {} by A29,XBOOLE_0:def 7;
-A31: B /\ C = {} by A28,XBOOLE_0:def 7;
-A32: B^b /\ A = B^b /\ B \/ {} by A25,A30,XBOOLE_1:23
-    .= B by Th18,XBOOLE_1:28;
+A22: A = B \/ C and
+A23: B <> {} and
+A24: C <> {} and
+A25: B misses C and
+A26: B^b misses C;
   consider x being Element of B;
-  x in A by A25,A26,XBOOLE_0:def 3;
+  x in A by A22,A23,XBOOLE_0:def 3;
   then consider S being FinSequence of bool the carrier of FT such that
-A33: len S > 0 and
-A34: S/.1 = {x} and
-A35: for i being Element of NAT st i > 0 & i < len S holds S/.(i+1) =
-  (S/.i)^b /\ A and
-A36: A c= S/.len S by A24;
-A37: B c= A by A25,XBOOLE_1:7;
+A27: len S > 0 and
+A28: S/.1 = {x} and
+A29: for i being Element of NAT st i > 0 & i < len S holds S/.(i+1) = (S
+  /.i)^b /\ A and
+A30: A c= S/.len S by A21;
+  consider k being Nat such that
+A31: len S = k + 1 by A27,NAT_1:6;
   defpred P[Element of NAT] means $1 < len S implies S/.($1+1) c= B;
-A38: P[0] by A26,A34,ZFMISC_1:37;
-A39: now
+  B^b /\ C = {} by A26,XBOOLE_0:def 7;
+  then
+A32: B^b /\ A = B^b /\ B \/ {} by A22,XBOOLE_1:23
+    .= B by Th18,XBOOLE_1:28;
+A33: now
     let i be Element of NAT;
     assume
-A40: P[i];
+A34: P[i];
     thus P[i+1]
     proof
       assume
-A41:  i+1 < len S;
-      then S/.(i+1)^b c= B^b by A40,Th19,NAT_1:13;
+A35:  i+1 < len S;
+      then S/.(i+1)^b c= B^b by A34,Th19,NAT_1:13;
       then S/.(i+1)^b /\ A c= B^b /\ A by XBOOLE_1:26;
-      hence thesis by A32,A35,A41;
+      hence thesis by A32,A29,A35;
     end;
   end;
-A42: for i being Element of NAT holds P[i] from NAT_1:sch 1(A38,A39);
-  consider k being Nat such that
-A43: len S = k + 1 by A33,NAT_1:6;
+A36: P[0] by A23,A28,ZFMISC_1:37;
+A37: for i being Element of NAT holds P[i] from NAT_1:sch 1(A36,A33);
   reconsider k as Element of NAT by ORDINAL1:def 13;
-  k < len S by A43,NAT_1:13;
+  k < len S by A31,NAT_1:13;
   then
-A44: S/.len S c= B by A42,A43;
-  then S/.len S c= A by A37,XBOOLE_1:1;
-  then S/.len S = A by A36,XBOOLE_0:def 10;
-  then A = B by A37,A44,XBOOLE_0:def 10;
-  hence contradiction by A25,A27,A31,XBOOLE_1:7,28;
+A38: S/.len S c= B by A37,A31;
+A39: B c= A by A22,XBOOLE_1:7;
+  then S/.len S c= A by A38,XBOOLE_1:1;
+  then S/.len S = A by A30,XBOOLE_0:def 10;
+  then
+A40: A = B by A39,A38,XBOOLE_0:def 10;
+  B /\ C = {} by A25,XBOOLE_0:def 7;
+  hence contradiction by A22,A24,A40,XBOOLE_1:7,28;
 end;
 
 canceled;
@@ -914,18 +934,18 @@ A1:   x in ((A`)^i)`;
       not y in (A`)^i by A1,XBOOLE_0:def 5;
       then not U_FT y c= A`;
       then consider z being set such that
-A2:   not(z in U_FT y implies z in A`) by TARSKI:def 3;
-      z in U_FT y & z in A by A2,SUBSET_1:50;
-      then U_FT y meets A by XBOOLE_0:3;
+A2:   z in U_FT y and
+A3:   not z in A` by TARSKI:def 3;
+      z in A by A2,A3,SUBSET_1:50;
+      then U_FT y meets A by A2,XBOOLE_0:3;
       hence thesis;
     end;
     assume
-A3: x in A^b;
+A4: x in A^b;
     then reconsider y=x as Element of FT;
-    U_FT y meets A by A3,Th13;
-    then consider z being set such that
-A4: z in U_FT y & z in A by XBOOLE_0:3;
-    not U_FT y c= A` by A4,XBOOLE_0:def 5;
+    U_FT y meets A by A4,Th13;
+    then ex z being set st z in U_FT y & z in A by XBOOLE_0:3;
+    then not U_FT y c= A` by XBOOLE_0:def 5;
     then not y in (A`)^i by Th12;
     hence thesis by SUBSET_1:50;
   end;
@@ -974,17 +994,22 @@ proof
       assume
 A1:   x in A^delta;
       then reconsider y=x as Element of FT;
-      U_FT y meets A & U_FT y meets A` by A1,Th10;
-      then x in A^b & x in (A`)^b;
-      hence thesis by XBOOLE_0:def 4;
+      U_FT y meets A` by A1,Th10;
+      then
+A2:   x in (A`)^b;
+      U_FT y meets A by A1,Th10;
+      then x in A^b;
+      hence thesis by A2,XBOOLE_0:def 4;
     end;
     assume
-A2: x in (A^b) /\ ((A`)^b);
+A3: x in (A^b) /\ ((A`)^b);
+    then reconsider y=x as Element of FT;
+    x in ((A`)^b) by A3,XBOOLE_0:def 4;
     then
-A3: x in A^b & x in ((A`)^b) by XBOOLE_0:def 4;
-    reconsider y=x as Element of FT by A2;
-    U_FT y meets A & U_FT y meets A` by A3,Th13;
-    hence thesis;
+A4: U_FT y meets A` by Th13;
+    x in A^b by A3,XBOOLE_0:def 4;
+    then U_FT y meets A by Th13;
+    hence thesis by A4;
   end;
   hence thesis by TARSKI:2;
 end;
@@ -1015,17 +1040,21 @@ end;
 theorem
   x in A^s implies not x in (A \ {x})^b
 proof
-  assume x in A^s;
+  assume
+  x in A^s;
   then A misses (U_FT x \ {x}) by Th14;
   then A /\ (U_FT x \ {x}) = {} by XBOOLE_0:def 7;
   then
 A1: (A /\ U_FT x) \ {x} = {} by XBOOLE_1:49;
-  now per cases by A1,ZFMISC_1:66;
-    suppose A /\ U_FT x = {};
+  now
+    per cases by A1,ZFMISC_1:66;
+    suppose
+      A /\ U_FT x = {};
       then A misses U_FT x by XBOOLE_0:def 7;
       hence (A \ {x}) misses U_FT x by XBOOLE_1:36,63;
     end;
-    suppose A /\ U_FT x = {x};
+    suppose
+      A /\ U_FT x = {x};
       then (U_FT x /\ A) \ {x} = {} by XBOOLE_1:37;
       then U_FT x /\ (A \ {x}) = {} by XBOOLE_1:49;
       hence (A \ {x}) misses U_FT x by XBOOLE_0:def 7;
@@ -1037,44 +1066,49 @@ end;
 theorem
   A^s <> {} & card A <> 1 implies A is not connected
 proof
-  assume
-A1: A^s <> {} & card A <> 1;
-  then consider z being Element of FT such that
-A2: z in A^s by SUBSET_1:10;
-A3: z in A & (U_FT z \ {z}) misses A by A2,Th14;
-  set B = A \ {z};
+  assume that
+A1: A^s <> {} and
+A2: card A <> 1;
+  consider z being Element of FT such that
+A3: z in A^s by A1,SUBSET_1:10;
   set C = {z};
-  {z} is Subset of A by A3,SUBSET_1:63;
+  set B = A \ {z};
+  card {z} = 1 & A <> {} by A3,Th14,CARD_1:50;
   then
-A4: A = B \/ C by XBOOLE_1:45;
-A5: card {z} = 1 by CARD_1:50;
-  A <> {} by A2,Th14;
+A4: B <> {} by A2,ZFMISC_1:66;
+  z in A by A3,Th14;
+  then {z} is Subset of A by SUBSET_1:63;
   then
-A6: B <> {} by A1,A5,ZFMISC_1:66;
-A7: B misses C by XBOOLE_1:79;
-  B^b misses C
+A5: A = B \/ C by XBOOLE_1:45;
+A6: (U_FT z \ {z}) misses A by A3,Th14;
+A7: B^b misses C
   proof
-    assume B^b meets C;
+    assume
+    B^b meets C;
     then consider x being set such that
-A8: x in B^b & x in C by XBOOLE_0:3;
+A8: x in B^b and
+A9: x in C by XBOOLE_0:3;
     reconsider x as Element of FT by A8;
+A10: x = z by A9,TARSKI:def 1;
     U_FT x meets B by A8,Th13;
     then consider y being set such that
-A9: y in U_FT x & y in B by XBOOLE_0:3;
-A10: x = z by A8,TARSKI:def 1;
-    not x in B by A8,XBOOLE_0:def 5;
-    then y in U_FT x \ {x} by A9,ZFMISC_1:64;
-    then (U_FT z \ {z}) meets B by A9,A10,XBOOLE_0:3;
-    then consider w being set such that
-A11: w in (U_FT z \ {z}) /\ B by XBOOLE_0:4;
+A11: y in U_FT x and
+A12: y in B by XBOOLE_0:3;
+    not x in B by A9,XBOOLE_0:def 5;
+    then y in U_FT x \ {x} by A11,A12,ZFMISC_1:64;
+    then (U_FT z \ {z}) meets B by A12,A10,XBOOLE_0:3;
+    then
+A13: ex w being set st w in (U_FT z \ {z}) /\ B by XBOOLE_0:4;
     (U_FT z \ {z}) /\ B c= (U_FT z \ {z}) /\ A by XBOOLE_1:26,36;
-    hence contradiction by A3,A11,XBOOLE_0:4;
+    hence contradiction by A6,A13,XBOOLE_0:4;
   end;
-  hence thesis by A4,A6,A7,Def18;
+  B misses C by XBOOLE_1:79;
+  hence thesis by A5,A4,A7,Def18;
 end;
 
 theorem
-  for FT being filled (non empty RelStr), A being Subset of FT holds A^i c= A
+  for FT being filled (non empty RelStr), A being Subset of FT holds A^i
+  c= A
 proof
   let FT be filled (non empty RelStr);
   let A be Subset of FT;
@@ -1092,7 +1126,8 @@ canceled;
 theorem
   A is open implies A` is closed
 proof
-  assume A is open;
+  assume
+  A is open;
   then
 A1: A = A^i by Def16;
   A^i = ((A`)^b)` by Th23;
@@ -1102,7 +1137,8 @@ end;
 theorem
   A is closed implies A` is open
 proof
-  assume A is closed;
+  assume
+  A is closed;
   then
 A1: A = A^b by Def17;
   A^b = ((A`)^i)` by Th22;

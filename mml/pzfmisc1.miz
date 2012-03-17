@@ -49,8 +49,8 @@ A2: X is empty-yielding and
 A3: X is non-empty;
   consider i such that
 A4: i in I by A1,XBOOLE_0:def 1;
-  X.i is empty & X.i is non empty by A2,A3,A4,PBOOLE:def 15,def 16;
-  hence contradiction;
+  X.i is empty by A2,A4,PBOOLE:def 15;
+  hence contradiction by A3,A4,PBOOLE:def 16;
 end;
 
 begin :: Singelton and unordered pairs
@@ -69,7 +69,7 @@ definition
   uniqueness
   proof
     let X, Y be ManySortedSet of I such that
-A1: (for i st i in I holds X.i = {A.i}) and
+A1: for i st i in I holds X.i = {A.i} and
 A2: for i st i in I holds Y.i = {A.i};
     now
       let i;
@@ -115,7 +115,7 @@ definition
   uniqueness
   proof
     let X, Y be ManySortedSet of I such that
-A1: (for i st i in I holds X.i = {A.i,B.i}) and
+A1: for i st i in I holds X.i = {A.i,B.i} and
 A2: for i st i in I holds Y.i = {A.i,B.i};
     now
       let i;
@@ -587,34 +587,28 @@ end;
 theorem     :: ZFMISC_1:19
   {x} /\ {x,y} = {x} & {y} /\ {x,y} = {y}
 proof
-  thus {x} /\ {x,y} = {x}
-  proof
-    now
-      let i;
-      assume
-A1:   i in I;
-      hence ({x} /\ {x,y}).i = {x}.i /\ {x,y}.i by PBOOLE:def 8
-        .= {x.i} /\ {x,y}.i by A1,Def1
-        .= {x.i} /\ {x.i,y.i} by A1,Def2
-        .= {x.i} by ZFMISC_1:19
-        .= {x}.i by A1,Def1;
-    end;
-    hence thesis by PBOOLE:3;
+  now
+    let i;
+    assume
+A1: i in I;
+    hence ({x} /\ {x,y}).i = {x}.i /\ {x,y}.i by PBOOLE:def 8
+      .= {x.i} /\ {x,y}.i by A1,Def1
+      .= {x.i} /\ {x.i,y.i} by A1,Def2
+      .= {x.i} by ZFMISC_1:19
+      .= {x}.i by A1,Def1;
   end;
-  thus {y} /\ {x,y} = {y}
-  proof
-    now
-      let i;
-      assume
-A2:   i in I;
-      hence ({y} /\ {x,y}).i = {y}.i /\ {x,y}.i by PBOOLE:def 8
-        .= {y.i} /\ {x,y}.i by A2,Def1
-        .= {y.i} /\ {x.i,y.i} by A2,Def2
-        .= {y.i} by ZFMISC_1:19
-        .= {y}.i by A2,Def1;
-    end;
-    hence thesis by PBOOLE:3;
+  hence {x} /\ {x,y} = {x} by PBOOLE:3;
+  now
+    let i;
+    assume
+A2: i in I;
+    hence ({y} /\ {x,y}).i = {y}.i /\ {x,y}.i by PBOOLE:def 8
+      .= {y.i} /\ {x,y}.i by A2,Def1
+      .= {y.i} /\ {x.i,y.i} by A2,Def2
+      .= {y.i} by ZFMISC_1:19
+      .= {y}.i by A2,Def1;
   end;
+  hence {y} /\ {x,y} = {y} by PBOOLE:3;
 end;
 
 theorem     :: ZFMISC_1:20
@@ -657,20 +651,17 @@ end;
 theorem     :: ZFMISC_1:22
   {x} \ {x,y} = [0]I & {y} \ {x,y} = [0]I
 proof
-  thus {x} \ {x,y} = [0]I
-  proof
-    now
-      let i;
-      assume
-A1:   i in I;
-      hence ({x} \ {x,y}).i = {x}.i \ {x,y}.i by PBOOLE:def 9
-        .= {x.i} \ {x,y}.i by A1,Def1
-        .= {x.i} \ {x.i,y.i} by A1,Def2
-        .= {} by ZFMISC_1:22
-        .= [0]I.i by PBOOLE:5;
-    end;
-    hence thesis by PBOOLE:3;
+  now
+    let i;
+    assume
+A1: i in I;
+    hence ({x} \ {x,y}).i = {x}.i \ {x,y}.i by PBOOLE:def 9
+      .= {x.i} \ {x,y}.i by A1,Def1
+      .= {x.i} \ {x.i,y.i} by A1,Def2
+      .= {} by ZFMISC_1:22
+      .= [0]I.i by PBOOLE:5;
   end;
+  hence {x} \ {x,y} = [0]I by PBOOLE:3;
   now
     let i;
     assume
@@ -709,19 +700,16 @@ theorem     :: ZFMISC_1:26
 proof
   assume
 A1: {x,y} c= {A};
-  thus x = A
-  proof
-    now
-      let i;
-      assume
-A2:   i in I;
-      then {x,y}.i c= {A}.i by A1,PBOOLE:def 5;
-      then {x,y}.i c= {A.i} by A2,Def1;
-      then {x.i,y.i} c= {A.i} by A2,Def2;
-      hence x.i = A.i by ZFMISC_1:26;
-    end;
-    hence thesis by PBOOLE:3;
+  now
+    let i;
+    assume
+A2: i in I;
+    then {x,y}.i c= {A}.i by A1,PBOOLE:def 5;
+    then {x,y}.i c= {A.i} by A2,Def1;
+    then {x.i,y.i} c= {A.i} by A2,Def2;
+    hence x.i = A.i by ZFMISC_1:26;
   end;
+  hence x = A by PBOOLE:3;
   now
     let i;
     assume
@@ -874,14 +862,17 @@ A3: i in I;
     then {x1.i,x2.i} c= X.i by A3,Def2;
     hence thesis by ZFMISC_1:38;
   end;
-  assume
-A4: x1 in X & x2 in X;
+  assume that
+A4: x1 in X and
+A5: x2 in X;
   let i;
   assume
-A5: i in I;
-  then x1.i in X.i & x2.i in X.i by A4,PBOOLE:def 4;
-  then {x1.i,x2.i} c= X.i by ZFMISC_1:38;
-  hence thesis by A5,Def2;
+A6: i in I;
+  then
+A7: x1.i in X.i by A4,PBOOLE:def 4;
+  x2.i in X.i by A5,A6,PBOOLE:def 4;
+  then {x1.i,x2.i} c= X.i by A7,ZFMISC_1:38;
+  hence thesis by A6,Def2;
 end;
 
 theorem     :: ZFMISC_1:42
@@ -962,15 +953,18 @@ A3:   i in I;
     then A.i \/ {x.i} c= B.i by A2;
     hence thesis by SETWISEO:8;
   end;
-  assume
-A4: x in B & A c= B;
+  assume that
+A4: x in B and
+A5: A c= B;
   let i;
   assume
-A5: i in I;
-  then x.i in B.i & A.i c= B.i by A4,PBOOLE:def 4,def 5;
-  then A.i \/ {x.i} c= B.i by SETWISEO:8;
-  then A.i \/ {x}.i c= B.i by A5,Def1;
-  hence thesis by A5,PBOOLE:def 7;
+A6: i in I;
+  then
+A7: x.i in B.i by A4,PBOOLE:def 4;
+  A.i c= B.i by A5,A6,PBOOLE:def 5;
+  then A.i \/ {x.i} c= B.i by A7,SETWISEO:8;
+  then A.i \/ {x}.i c= B.i by A6,Def1;
+  hence thesis by A6,PBOOLE:def 7;
 end;
 
 theorem     :: ZFMISC_1:45
@@ -1027,17 +1021,19 @@ A3: i in I;
       .= A.i by A1,A3,PBOOLE:def 7;
     hence thesis by ZFMISC_1:47;
   end;
-  assume
-A4: x in A & y in A;
+  assume that
+A4: x in A and
+A5: y in A;
   now
     let i;
     assume
-A5: i in I;
+A6: i in I;
     then
-A6: x.i in A.i & y.i in A.i by A4,PBOOLE:def 4;
-    thus ({x,y} \/ A).i = {x,y}.i \/ A.i by A5,PBOOLE:def 7
-      .= {x.i,y.i} \/ A.i by A5,Def2
-      .= A.i by A6,ZFMISC_1:48;
+A7: x.i in A.i by A4,PBOOLE:def 4;
+A8: y.i in A.i by A5,A6,PBOOLE:def 4;
+    thus ({x,y} \/ A).i = {x,y}.i \/ A.i by A6,PBOOLE:def 7
+      .= {x.i,y.i} \/ A.i by A6,Def2
+      .= A.i by A7,A8,ZFMISC_1:48;
   end;
   hence thesis by PBOOLE:3;
 end;
@@ -1091,21 +1087,18 @@ theorem     :: ZFMISC_1:52
 proof
   assume
 A1: x in X;
-  thus X /\ {x} = {x}
-  proof
-    now
-      let i;
-      assume
-A2:   i in I;
-      then
-A3:   x.i in X.i by A1,PBOOLE:def 4;
-      thus (X /\ {x}).i = X.i /\ {x}.i by A2,PBOOLE:def 8
-        .= X.i /\ {x.i} by A2,Def1
-        .= {x.i} by A3,ZFMISC_1:52
-        .= {x}.i by A2,Def1;
-    end;
-    hence thesis by PBOOLE:3;
+  now
+    let i;
+    assume
+A2: i in I;
+    then
+A3: x.i in X.i by A1,PBOOLE:def 4;
+    thus (X /\ {x}).i = X.i /\ {x}.i by A2,PBOOLE:def 8
+      .= X.i /\ {x.i} by A2,Def1
+      .= {x.i} by A3,ZFMISC_1:52
+      .= {x}.i by A2,Def1;
   end;
+  hence X /\ {x} = {x} by PBOOLE:3;
 end;
 
 theorem     :: ZFMISC_1:53, 63
@@ -1113,39 +1106,41 @@ theorem     :: ZFMISC_1:53, 63
 proof
   thus x in X & y in X implies {x,y} /\ X = {x,y}
   proof
-    assume
-A1: x in X & y in X;
+    assume that
+A1: x in X and
+A2: y in X;
     now
       let i;
       assume
-A2:   i in I;
+A3:   i in I;
       then
-A3:   x.i in X.i & y.i in X.i by A1,PBOOLE:def 4;
-      thus ({x,y} /\ X).i = {x,y}.i /\ X.i by A2,PBOOLE:def 8
-        .= {x.i,y.i} /\ X.i by A2,Def2
-        .= {x.i,y.i} by A3,ZFMISC_1:53
-        .= {x,y}.i by A2,Def2;
+A4:   x.i in X.i by A1,PBOOLE:def 4;
+A5:   y.i in X.i by A2,A3,PBOOLE:def 4;
+      thus ({x,y} /\ X).i = {x,y}.i /\ X.i by A3,PBOOLE:def 8
+        .= {x.i,y.i} /\ X.i by A3,Def2
+        .= {x.i,y.i} by A4,A5,ZFMISC_1:53
+        .= {x,y}.i by A3,Def2;
     end;
     hence thesis by PBOOLE:3;
   end;
   assume
-A4: {x,y} /\ X = {x,y};
+A6: {x,y} /\ X = {x,y};
   thus x in X
   proof
     let i;
     assume
-A5: i in I;
+A7: i in I;
     then {x.i,y.i} /\ X.i = {x,y}.i /\ X.i by Def2
-      .= ({x,y} /\ X).i by A5,PBOOLE:def 8
-      .= {x.i,y.i} by A4,A5,Def2;
+      .= ({x,y} /\ X).i by A7,PBOOLE:def 8
+      .= {x.i,y.i} by A6,A7,Def2;
     hence thesis by ZFMISC_1:63;
   end;
   let i;
   assume
-A6: i in I;
+A8: i in I;
   then {x.i,y.i} /\ X.i = {x,y}.i /\ X.i by Def2
-    .= ({x,y} /\ X).i by A6,PBOOLE:def 8
-    .= {x.i,y.i} by A4,A6,Def2;
+    .= ({x,y} /\ X).i by A8,PBOOLE:def 8
+    .= {x.i,y.i} by A6,A8,Def2;
   hence thesis by ZFMISC_1:63;
 end;
 
@@ -1385,17 +1380,19 @@ A3: i in I;
       .= {} by A1,PBOOLE:5;
     hence thesis by ZFMISC_1:73;
   end;
-  assume
-A4: x in X & y in X;
+  assume that
+A4: x in X and
+A5: y in X;
   now
     let i;
     assume
-A5: i in I;
+A6: i in I;
     then
-A6: x.i in X.i & y.i in X.i by A4,PBOOLE:def 4;
-    thus ({x,y} \ X).i = {x,y}.i \ X.i by A5,PBOOLE:def 9
-      .= {x.i,y.i} \ X.i by A5,Def2
-      .= {} by A6,ZFMISC_1:73
+A7: x.i in X.i by A4,PBOOLE:def 4;
+A8: y.i in X.i by A5,A6,PBOOLE:def 4;
+    thus ({x,y} \ X).i = {x,y}.i \ X.i by A6,PBOOLE:def 9
+      .= {x.i,y.i} \ X.i by A6,Def2
+      .= {} by A7,A8,ZFMISC_1:73
       .= [0]I.i by PBOOLE:5;
   end;
   hence thesis by PBOOLE:3;
@@ -1484,17 +1481,19 @@ theorem     :: ZFMISC_1:114
   X is non-empty & Y is non-empty & [|X,Y|] = [|Y,X|] implies X = Y
 proof
   assume that
-A1: X is non-empty & Y is non-empty and
-A2: [|X,Y|] = [|Y,X|];
+A1: X is non-empty and
+A2: Y is non-empty and
+A3: [|X,Y|] = [|Y,X|];
   now
     let i;
     assume
-A3: i in I;
+A4: i in I;
     then
-A4: X.i is non empty & Y.i is non empty by A1,PBOOLE:def 16;
-    [:X.i,Y.i:] = [|X,Y|].i by A3,PBOOLE:def 21
-      .= [:Y.i,X.i:] by A2,A3,PBOOLE:def 21;
-    hence X.i = Y.i by A4,ZFMISC_1:114;
+A5: X.i is non empty by A1,PBOOLE:def 16;
+A6: Y.i is non empty by A2,A4,PBOOLE:def 16;
+    [:X.i,Y.i:] = [|X,Y|].i by A4,PBOOLE:def 21
+      .= [:Y.i,X.i:] by A3,A4,PBOOLE:def 21;
+    hence X.i = Y.i by A5,A6,ZFMISC_1:114;
   end;
   hence thesis by PBOOLE:3;
 end;
@@ -1575,35 +1574,35 @@ end;
 theorem     :: ZFMISC_1:119
   x1 c= A & x2 c= B implies [|x1,x2|] c= [|A,B|]
 proof
-  assume
-A1: x1 c= A & x2 c= B;
+  assume that
+A1: x1 c= A and
+A2: x2 c= B;
   let i;
   assume
-A2: i in I;
-  then x1.i c= A.i & x2.i c= B.i by A1,PBOOLE:def 5;
-  then [:x1.i,x2.i:] c= [:A.i,B.i:] by ZFMISC_1:119;
-  then [|x1,x2|].i c= [:A.i,B.i:] by A2,PBOOLE:def 21;
-  hence thesis by A2,PBOOLE:def 21;
+A3: i in I;
+  then
+A4: x1.i c= A.i by A1,PBOOLE:def 5;
+  x2.i c= B.i by A2,A3,PBOOLE:def 5;
+  then [:x1.i,x2.i:] c= [:A.i,B.i:] by A4,ZFMISC_1:119;
+  then [|x1,x2|].i c= [:A.i,B.i:] by A3,PBOOLE:def 21;
+  hence thesis by A3,PBOOLE:def 21;
 end;
 
 theorem     :: ZFMISC_1:120
   [|X \/ Y, Z|] = [|X, Z|] \/ [|Y, Z|] & [|Z, X \/ Y|] = [|Z, X|] \/ [|Z, Y|]
 proof
-  thus [|X \/ Y, Z|] = [|X, Z|] \/ [|Y, Z|]
-  proof
-    now
-      let i;
-      assume
-A1:   i in I;
-      hence [|X \/ Y, Z|].i = [:(X \/ Y).i, Z.i:] by PBOOLE:def 21
-        .= [:X.i \/ Y.i, Z.i:] by A1,PBOOLE:def 7
-        .= [:X.i, Z.i:] \/ [:Y.i, Z.i:] by ZFMISC_1:120
-        .= [|X,Z|].i \/ [:Y.i, Z.i:] by A1,PBOOLE:def 21
-        .= [|X,Z|].i \/ [|Y,Z|].i by A1,PBOOLE:def 21
-        .= ([|X, Z|] \/ [|Y, Z|]).i by A1,PBOOLE:def 7;
-    end;
-    hence thesis by PBOOLE:3;
+  now
+    let i;
+    assume
+A1: i in I;
+    hence [|X \/ Y, Z|].i = [:(X \/ Y).i, Z.i:] by PBOOLE:def 21
+      .= [:X.i \/ Y.i, Z.i:] by A1,PBOOLE:def 7
+      .= [:X.i, Z.i:] \/ [:Y.i, Z.i:] by ZFMISC_1:120
+      .= [|X,Z|].i \/ [:Y.i, Z.i:] by A1,PBOOLE:def 21
+      .= [|X,Z|].i \/ [|Y,Z|].i by A1,PBOOLE:def 21
+      .= ([|X, Z|] \/ [|Y, Z|]).i by A1,PBOOLE:def 7;
   end;
+  hence [|X \/ Y, Z|] = [|X, Z|] \/ [|Y, Z|] by PBOOLE:3;
   now
     let i;
     assume
@@ -1651,21 +1650,18 @@ end;
 theorem     :: ZFMISC_1:122
   [|X /\ Y, Z|] = [|X, Z|] /\ [|Y, Z|] & [|Z, X /\ Y|] = [|Z, X|] /\ [|Z, Y|]
 proof
-  thus [|X /\ Y, Z|] = [|X, Z|] /\ [|Y, Z|]
-  proof
-    now
-      let i;
-      assume
-A1:   i in I;
-      hence [|X /\ Y, Z|].i = [:(X /\ Y).i,Z.i:] by PBOOLE:def 21
-        .= [:X.i /\ Y.i,Z.i:] by A1,PBOOLE:def 8
-        .= [:X.i,Z.i:] /\ [:Y.i,Z.i:] by ZFMISC_1:122
-        .= [|X,Z|].i /\ [:Y.i,Z.i:] by A1,PBOOLE:def 21
-        .= [|X,Z|].i /\ [|Y,Z|].i by A1,PBOOLE:def 21
-        .= ([|X, Z|] /\ [|Y, Z|]).i by A1,PBOOLE:def 8;
-    end;
-    hence thesis by PBOOLE:3;
+  now
+    let i;
+    assume
+A1: i in I;
+    hence [|X /\ Y, Z|].i = [:(X /\ Y).i,Z.i:] by PBOOLE:def 21
+      .= [:X.i /\ Y.i,Z.i:] by A1,PBOOLE:def 8
+      .= [:X.i,Z.i:] /\ [:Y.i,Z.i:] by ZFMISC_1:122
+      .= [|X,Z|].i /\ [:Y.i,Z.i:] by A1,PBOOLE:def 21
+      .= [|X,Z|].i /\ [|Y,Z|].i by A1,PBOOLE:def 21
+      .= ([|X, Z|] /\ [|Y, Z|]).i by A1,PBOOLE:def 8;
   end;
+  hence [|X /\ Y, Z|] = [|X, Z|] /\ [|Y, Z|] by PBOOLE:3;
   now
     let i;
     assume
@@ -1702,19 +1698,21 @@ end;
 theorem     :: ZFMISC_1:124
   A c= X & B c= Y implies [|A,Y|] /\ [|X,B|] = [|A,B|]
 proof
-  assume
-A1: A c= X & B c= Y;
+  assume that
+A1: A c= X and
+A2: B c= Y;
   now
     let i;
     assume
-A2: i in I;
+A3: i in I;
     then
-A3: A.i c= X.i & B.i c= Y.i by A1,PBOOLE:def 5;
-    thus ([|A,Y|] /\ [|X,B|]).i = [|A,Y|].i /\ [|X,B|].i by A2,PBOOLE:def 8
-      .= [:A.i,Y.i:] /\ [|X,B|].i by A2,PBOOLE:def 21
-      .= [:A.i,Y.i:] /\ [:X.i,B.i:] by A2,PBOOLE:def 21
-      .= [:A.i,B.i:] by A3,ZFMISC_1:124
-      .= [|A,B|].i by A2,PBOOLE:def 21;
+A4: A.i c= X.i by A1,PBOOLE:def 5;
+A5: B.i c= Y.i by A2,A3,PBOOLE:def 5;
+    thus ([|A,Y|] /\ [|X,B|]).i = [|A,Y|].i /\ [|X,B|].i by A3,PBOOLE:def 8
+      .= [:A.i,Y.i:] /\ [|X,B|].i by A3,PBOOLE:def 21
+      .= [:A.i,Y.i:] /\ [:X.i,B.i:] by A3,PBOOLE:def 21
+      .= [:A.i,B.i:] by A4,A5,ZFMISC_1:124
+      .= [|A,B|].i by A3,PBOOLE:def 21;
   end;
   hence thesis by PBOOLE:3;
 end;
@@ -1722,21 +1720,18 @@ end;
 theorem     :: ZFMISC_1:125
   [|X \ Y, Z|] = [|X, Z|] \ [|Y, Z|] & [|Z, X \ Y|] = [|Z, X|] \ [|Z, Y|]
 proof
-  thus [|X \ Y, Z|] = [|X, Z|] \ [|Y, Z|]
-  proof
-    now
-      let i;
-      assume
-A1:   i in I;
-      hence [|X \ Y, Z|].i = [:(X \ Y).i,Z.i:] by PBOOLE:def 21
-        .= [:X.i \ Y.i,Z.i:] by A1,PBOOLE:def 9
-        .= [:X.i,Z.i:] \ [:Y.i,Z.i:] by ZFMISC_1:125
-        .= [|X,Z|].i \ [:Y.i,Z.i:] by A1,PBOOLE:def 21
-        .= [|X,Z|].i \ [|Y,Z|].i by A1,PBOOLE:def 21
-        .= ([|X, Z|] \ [|Y, Z|]).i by A1,PBOOLE:def 9;
-    end;
-    hence thesis by PBOOLE:3;
+  now
+    let i;
+    assume
+A1: i in I;
+    hence [|X \ Y, Z|].i = [:(X \ Y).i,Z.i:] by PBOOLE:def 21
+      .= [:X.i \ Y.i,Z.i:] by A1,PBOOLE:def 9
+      .= [:X.i,Z.i:] \ [:Y.i,Z.i:] by ZFMISC_1:125
+      .= [|X,Z|].i \ [:Y.i,Z.i:] by A1,PBOOLE:def 21
+      .= [|X,Z|].i \ [|Y,Z|].i by A1,PBOOLE:def 21
+      .= ([|X, Z|] \ [|Y, Z|]).i by A1,PBOOLE:def 9;
   end;
+  hence [|X \ Y, Z|] = [|X, Z|] \ [|Y, Z|] by PBOOLE:3;
   now
     let i;
     assume
@@ -1758,7 +1753,8 @@ proof
     let i;
     assume
 A1: i in I;
-    hence ([|x1,x2|] \ [|A,B|]).i = [|x1,x2|].i \ [|A,B|].i by PBOOLE:def 9
+    hence ([|x1,x2|] \ [|A,B|]).i = [|x1,x2|].i \ [|A,B|].i by
+    PBOOLE:def 9
       .= [:x1.i,x2.i:] \ [|A,B|].i by A1,PBOOLE:def 21
       .= [:x1.i,x2.i:] \ [:A.i,B.i:] by A1,PBOOLE:def 21
       .= [:x1.i\A.i,x2.i:] \/ [:x1.i,x2.i\B.i:] by ZFMISC_1:126
@@ -1846,23 +1842,20 @@ end;
 theorem     :: ZFMISC_1:132
   [|{x,y},X|] = [|{x},X|] \/ [|{y},X|] & [|X,{x,y}|] = [|X,{x}|] \/ [|X,{y}|]
 proof
-  thus [|{x,y},X|] = [|{x},X|] \/ [|{y},X|]
-  proof
-    now
-      let i;
-      assume
-A1:   i in I;
-      hence [|{x,y},X|].i = [:{x,y}.i,X.i:] by PBOOLE:def 21
-        .= [:{x.i,y.i},X.i:] by A1,Def2
-        .= [:{x.i},X.i:] \/ [:{y.i},X.i:] by ZFMISC_1:132
-        .= [:{x}.i,X.i:] \/ [:{y.i},X.i:] by A1,Def1
-        .= [:{x}.i,X.i:] \/ [:{y}.i,X.i:] by A1,Def1
-        .= [|{x},X|].i \/ [:{y}.i,X.i:] by A1,PBOOLE:def 21
-        .= [|{x},X|].i \/ [|{y},X|].i by A1,PBOOLE:def 21
-        .= ([|{x},X|] \/ [|{y},X|]).i by A1,PBOOLE:def 7;
-    end;
-    hence thesis by PBOOLE:3;
+  now
+    let i;
+    assume
+A1: i in I;
+    hence [|{x,y},X|].i = [:{x,y}.i,X.i:] by PBOOLE:def 21
+      .= [:{x.i,y.i},X.i:] by A1,Def2
+      .= [:{x.i},X.i:] \/ [:{y.i},X.i:] by ZFMISC_1:132
+      .= [:{x}.i,X.i:] \/ [:{y.i},X.i:] by A1,Def1
+      .= [:{x}.i,X.i:] \/ [:{y}.i,X.i:] by A1,Def1
+      .= [|{x},X|].i \/ [:{y}.i,X.i:] by A1,PBOOLE:def 21
+      .= [|{x},X|].i \/ [|{y},X|].i by A1,PBOOLE:def 21
+      .= ([|{x},X|] \/ [|{y},X|]).i by A1,PBOOLE:def 7;
   end;
+  hence [|{x,y},X|] = [|{x},X|] \/ [|{y},X|] by PBOOLE:3;
   now
     let i;
     assume
@@ -1884,31 +1877,31 @@ theorem     :: ZFMISC_1:134
   implies x1 = x2 & A = B
 proof
   assume that
-A1: x1 is non-empty & A is non-empty and
-A2: [|x1,A|] = [|x2,B|];
-  thus x1 = x2
-  proof
-    now
-      let i;
-      assume
-A3:   i in I;
-      then
-A4:   x1.i is non empty & A.i is non empty by A1,PBOOLE:def 16;
-      [:x1.i,A.i:] = [|x1,A|].i by A3,PBOOLE:def 21
-        .= [:x2.i,B.i:] by A2,A3,PBOOLE:def 21;
-      hence x1.i = x2.i by A4,ZFMISC_1:134;
-    end;
-    hence thesis by PBOOLE:3;
-  end;
+A1: x1 is non-empty and
+A2: A is non-empty and
+A3: [|x1,A|] = [|x2,B|];
   now
     let i;
     assume
-A5: i in I;
+A4: i in I;
     then
-A6: x1.i is non empty & A.i is non empty by A1,PBOOLE:def 16;
-    [:x1.i,A.i:] = [|x1,A|].i by A5,PBOOLE:def 21
-      .= [:x2.i,B.i:] by A2,A5,PBOOLE:def 21;
-    hence A.i = B.i by A6,ZFMISC_1:134;
+A5: x1.i is non empty by A1,PBOOLE:def 16;
+A6: A.i is non empty by A2,A4,PBOOLE:def 16;
+    [:x1.i,A.i:] = [|x1,A|].i by A4,PBOOLE:def 21
+      .= [:x2.i,B.i:] by A3,A4,PBOOLE:def 21;
+    hence x1.i = x2.i by A5,A6,ZFMISC_1:134;
+  end;
+  hence x1 = x2 by PBOOLE:3;
+  now
+    let i;
+    assume
+A7: i in I;
+    then
+A8: x1.i is non empty by A1,PBOOLE:def 16;
+A9: A.i is non empty by A2,A7,PBOOLE:def 16;
+    [:x1.i,A.i:] = [|x1,A|].i by A7,PBOOLE:def 21
+      .= [:x2.i,B.i:] by A3,A7,PBOOLE:def 21;
+    hence A.i = B.i by A8,A9,ZFMISC_1:134;
   end;
   hence thesis by PBOOLE:3;
 end;
@@ -1950,17 +1943,21 @@ end;
 theorem     :: BORSUK_1:2
   A in [|x,y|] & A in [|X,Y|] implies A in [|x /\ X, y /\ Y|]
 proof
-  assume
-A1: A in [|x,y|] & A in [|X,Y|];
+  assume that
+A1: A in [|x,y|] and
+A2: A in [|X,Y|];
   let i;
   assume
-A2: i in I;
-  then A.i in [|x,y|].i & A.i in [|X,Y|].i by A1,PBOOLE:def 4;
-  then A.i in [:x.i,y.i:] & A.i in [:X.i,Y.i:] by A2,PBOOLE:def 21;
-  then A.i in [:x.i /\ X.i, y.i /\ Y.i:] by ZFMISC_1:137;
-  then A.i in [:(x /\ X).i, y.i /\ Y.i:] by A2,PBOOLE:def 8;
-  then A.i in [:(x /\ X).i, (y /\ Y).i:] by A2,PBOOLE:def 8;
-  hence thesis by A2,PBOOLE:def 21;
+A3: i in I;
+  then
+A4: A.i in [|x,y|].i by A1,PBOOLE:def 4;
+A5: A.i in [|X,Y|].i by A2,A3,PBOOLE:def 4;
+A6: A.i in [:x.i,y.i:] by A3,A4,PBOOLE:def 21;
+  A.i in [:X.i,Y.i:] by A3,A5,PBOOLE:def 21;
+  then A.i in [:x.i /\ X.i, y.i /\ Y.i:] by A6,ZFMISC_1:137;
+  then A.i in [:(x /\ X).i, y.i /\ Y.i:] by A3,PBOOLE:def 8;
+  then A.i in [:(x /\ X).i, (y /\ Y).i:] by A3,PBOOLE:def 8;
+  hence thesis by A3,PBOOLE:def 21;
 end;
 
 theorem     :: BORSUK_1:7
@@ -2067,18 +2064,22 @@ end;
 theorem     :: PARTFUN1:1
   x c= [|A,B|] & y c= [|X,Y|] implies x \/ y c= [|A \/ X,B \/ Y|]
 proof
-  assume
-A1: x c= [|A,B|] & y c= [|X,Y|];
+  assume that
+A1: x c= [|A,B|] and
+A2: y c= [|X,Y|];
   let i;
   assume
-A2: i in I;
-  then x.i c= [|A,B|].i & y.i c= [|X,Y|].i by A1,PBOOLE:def 5;
-  then x.i c= [:A.i,B.i:] & y.i c= [:X.i,Y.i:] by A2,PBOOLE:def 21;
-  then x.i \/ y.i c= [:A.i \/ X.i,B.i \/ Y.i:] by ZFMISC_1:143;
-  then (x \/ y).i c= [:A.i \/ X.i,B.i \/ Y.i:] by A2,PBOOLE:def 7;
-  then (x \/ y).i c= [:(A \/ X).i,B.i \/ Y.i:] by A2,PBOOLE:def 7;
-  then (x \/ y).i c= [:(A \/ X).i,(B \/ Y).i:] by A2,PBOOLE:def 7;
-  hence thesis by A2,PBOOLE:def 21;
+A3: i in I;
+  then
+A4: x.i c= [|A,B|].i by A1,PBOOLE:def 5;
+A5: y.i c= [|X,Y|].i by A2,A3,PBOOLE:def 5;
+A6: x.i c= [:A.i,B.i:] by A3,A4,PBOOLE:def 21;
+  y.i c= [:X.i,Y.i:] by A3,A5,PBOOLE:def 21;
+  then x.i \/ y.i c= [:A.i \/ X.i,B.i \/ Y.i:] by A6,ZFMISC_1:143;
+  then (x \/ y).i c= [:A.i \/ X.i,B.i \/ Y.i:] by A3,PBOOLE:def 7;
+  then (x \/ y).i c= [:(A \/ X).i,B.i \/ Y.i:] by A3,PBOOLE:def 7;
+  then (x \/ y).i c= [:(A \/ X).i,(B \/ Y).i:] by A3,PBOOLE:def 7;
+  hence thesis by A3,PBOOLE:def 21;
 end;
 
 begin :: Addenda

@@ -11,10 +11,10 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="NAT_1"/>
-<ArticleID name="PARTFUN1"/>
 <ArticleID name="MESFUNC8"/>
 </Signature>
 <RCluster aid="MESFUNC8" nr="1">
@@ -31,7 +31,7 @@
 <Func kind="K" nr="21">
 <Func kind="K" nr="22">
 <Func kind="K" nr="48"/>
-<Func kind="K" nr="97">
+<Func kind="K" nr="61">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -44,7 +44,7 @@
 <Func kind="K" nr="48"/>
 </Adjective>
 <Adjective nr="5">
-<Func kind="K" nr="97">
+<Func kind="K" nr="61">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -53,13 +53,13 @@
 <Adjective nr="10" value="false"/>
 <Adjective nr="21">
 <Func kind="K" nr="48"/>
-<Func kind="K" nr="97">
+</Adjective>
+<Adjective nr="22">
+<Func kind="K" nr="48"/>
+<Func kind="K" nr="61">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
-</Adjective>
-<Adjective nr="24">
-<Func kind="K" nr="48"/>
 </Adjective>
 <Adjective nr="25">
 <LocusVar nr="1"/>
@@ -78,9 +78,9 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="6"/>
-<Adjective nr="21">
+<Adjective nr="22">
 <Func kind="K" nr="48"/>
-<Func kind="K" nr="97">
+<Func kind="K" nr="61">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -93,7 +93,7 @@
 <Func kind="K" nr="21">
 <Func kind="K" nr="22">
 <Func kind="K" nr="48"/>
-<Func kind="K" nr="97">
+<Func kind="K" nr="61">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -105,8 +105,8 @@
 <Func kind="K" nr="48"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="93">
-<Func kind="K" nr="97">
+<Func kind="K" nr="101">
+<Func kind="K" nr="61">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -115,9 +115,9 @@
 </Func>
 <Cluster>
 <Adjective nr="6"/>
-<Adjective nr="21">
+<Adjective nr="22">
 <Func kind="K" nr="48"/>
-<Func kind="K" nr="97">
+<Func kind="K" nr="61">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

@@ -1,0 +1,243 @@
+:: Small Inductive Dimension of Topological Spaces, Part {II}
+::  by Karol P\c{a}k
+::
+:: Received August 7, 2009
+:: Copyright (c) 2009 Association of Mizar Users
+
+environ
+
+ vocabularies BOOLE, PRE_TOPC, COMPTS_1, SETFAM_1, METRIC_1, SUBSET_1,
+      PCOMPS_1, RELAT_1, ORDINAL2, PROB_1, FUNCT_1, ARYTM, ARYTM_1, RELAT_2,
+      ABSVALUE, FINSET_1, TARSKI, CARD_1, RLVECT_3, CARD_4, WAYBEL23, SQUARE_1,
+      TOPS_1, T_0TOPSP, INT_1, FUNCOP_1, CARD_2, FINSEQ_1, RLVECT_1, FUNCT_4,
+      TOPGEN_4, EUCLID, CONNSP_1, RVSUM_1, FUNCT_3, MCART_1, COMPLEX1,
+      SUPINF_1, TREES_2, PEPIN, METRIZTS, TOPDIM_1, MIDSP_3;
+ notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, RELSET_1, MCART_1,
+      ZFMISC_1, FUNCT_2, CARD_1, CANTOR_1, COMPLEX1, FINSET_1, ORDINAL1,
+      NUMBERS, XXREAL_0, XREAL_0, REAL_1, XXREAL_3, NAT_1, INT_1, SETFAM_1,
+      DOMAIN_1, FUNCOP_1, TOPS_2, STRUCT_0, PRE_TOPC, METRIC_1, PCOMPS_1,
+      CARD_3, PROB_1, KURATO_2, WAYBEL23, TOPS_1, T_0TOPSP, CARD_2, RVSUM_1,
+      FINSEQ_1, FINSEQ_2, EUCLID, BORSUK_1, TOPGEN_4, FUNCT_4, SQUARE_1,
+      CONNSP_1, TOPREAL9, ORDERS_4, METRIZTS, TOPDIM_1;
+ constructors TOPS_2, BORSUK_1, REAL_1, COMPLEX1, CANTOR_1, TOPGEN_4, WAYBEL23,
+      TOPS_1, SQUARE_1, RVSUM_1, BORSUK_3, CARD_2, TSP_1, CONNSP_1, BINOP_2,
+      TOPREAL9, ORDERS_4, XXREAL_3, METRIZTS, TOPDIM_1, FUNCOP_1, FUNCSDOM;
+ registrations REALSET1, PRE_TOPC, PCOMPS_1, NAT_1, XREAL_0, SUBSET_1,
+      STRUCT_0, TOPS_1, XXREAL_0, YELLOW13, CARD_1, XBOOLE_0, FINSET_1,
+      VALUED_0, RELAT_1, FUNCT_1, INT_1, CARD_3, TOPGEN_4, BORSUK_3, MEMBERED,
+      XXREAL_3, METRIZTS, TOPDIM_1, EUCLID;
+ requirements REAL, SUBSET, NUMERALS, ARITHM, BOOLE;
+
+
+begin :: Order of a Family of Subsets of a Set
+
+reserve n for Nat,
+        X for set,
+        Fx,Gx for Subset-Family of X;
+
+definition
+  let X,Fx;
+  attr Fx is finite-order means
+:: TOPDIM_2:def 1
+  ex n st for Gx st Gx c=Fx & n in card Gx holds meet Gx is empty;
+end;
+
+registration
+  let X;
+  cluster finite-order Subset-Family of X;
+  cluster finite -> finite-order Subset-Family of X;
+end;
+
+definition
+  let X,Fx;
+  func order Fx -> ext-real number means
+:: TOPDIM_2:def 2
+  (for Gx st it+1 in card Gx & Gx c= Fx holds meet Gx is empty)
+    & ex Gx st Gx c= Fx & card Gx = it+1 &
+  (meet Gx is non empty or Gx is empty) if Fx is finite-order
+  otherwise it = +infty;
+end;
+
+registration
+  let X;
+  let F be finite-order Subset-Family of X;
+  cluster order F + 1 -> natural;
+  cluster order F -> integer;
+end;
+
+theorem :: TOPDIM_2:1
+  order Fx <= n implies Fx is finite-order;
+
+theorem :: TOPDIM_2:2
+  order Fx <= n implies
+    for Gx st Gx c= Fx & n+1 in card Gx holds meet Gx is empty;
+
+theorem :: TOPDIM_2:3
+  (for G be finite Subset-Family of X st G c=Fx & n+1<card G holds
+     meet G is empty) implies order Fx <= n;
+
+begin :: Basic Properties for n-dimensional Topological Spaces
+
+reserve TM for metrizable TopSpace,
+        TM1,TM2 for finite-ind second-countable metrizable TopSpace,
+        A,B,L,H for Subset of TM,
+        U,W for open Subset of TM,
+        p for Point of TM,
+        F for Subset-Family of TM,
+        F,G for finite Subset-Family of TM,
+        I for Integer;
+
+::Teoria wymiaru Th 1.5.3
+
+theorem :: TOPDIM_2:4
+  for TM st TM is second-countable &
+    ex F st F is closed & F is Cover of TM & F is countable &
+       F is finite-ind & ind F <= n
+  holds TM is finite-ind & ind TM <= n;
+
+::Teoria wymiaru Th 1.5.5
+
+theorem :: TOPDIM_2:5
+  for A,B be finite-ind Subset of TM st A is closed &
+  TM|(A\/B) is second-countable & ind A<=I & ind B<=I holds
+  ind(A\/B)<=I & A\/B is finite-ind;
+
+::Teoria wymiaru Th 1.5.7 "=>"
+
+theorem :: TOPDIM_2:6
+  for TM st TM is second-countable & TM is finite-ind & ind TM<=n
+    ex A,B st [#]TM = A\/B & A misses B & ind A <= n-1 & ind B <= 0;
+
+::Teoria wymiaru Th 1.5.8 "=>"
+
+theorem :: TOPDIM_2:7
+  for TM st TM is second-countable finite-ind & ind TM <= I
+  ex F st F is Cover of TM & F is finite-ind & ind F <= 0 & card F <= I+1
+         & for A,B st A in F & B in F & A meets B holds A = B;
+
+::Teoria wymiaru Th 1.5.8 "<="
+
+theorem :: TOPDIM_2:8
+  for TM st TM is second-countable &
+    ex F st F is Cover of TM & F is finite-ind & ind F<=0 & card F <= I+1
+  holds TM is finite-ind & ind TM <= I;
+
+registration
+  let TM be second-countable metrizable TopSpace;
+  let A,B be finite-ind Subset of TM;
+  cluster A\/B -> finite-ind Subset of TM;
+end;
+
+::Teoria wymiaru Th 1.5.10
+
+theorem :: TOPDIM_2:9
+  A is finite-ind & B is finite-ind & TM|(A\/B) is second-countable
+    implies A\/B is finite-ind & ind(A\/B) <= ind A+ind B+1;
+
+theorem :: TOPDIM_2:10
+  for T1,T2 be TopSpace,A1 be Subset of T1,A2 be Subset of T2 holds
+  Fr [:A1,A2:] = [:Fr A1,Cl A2:] \/ [:Cl A1,Fr A2:];
+
+registration
+  let TM1,TM2;
+  cluster [:TM1,TM2:] -> finite-ind;
+end;
+
+::Teoria wymiaru Th 1.5.12
+
+theorem :: TOPDIM_2:11
+  for A,B st A is closed & B is closed & A misses B
+  for H st ind H<=n & TM|H is second-countable finite-ind
+    ex L st L separates A,B & ind(L/\H) <= n-1;
+
+::Teoria wymiaru Th 1.5.13
+
+theorem :: TOPDIM_2:12
+  for TM st TM is finite-ind second-countable & ind TM<=n
+  for A,B st A is closed & B is closed & A misses B
+  ex L st L separates A,B & ind L<=n-1;
+
+::Teoria wymiaru Th 1.5.14
+
+theorem :: TOPDIM_2:13
+  for H st TM|H is second-countable holds H is
+  finite-ind & ind H<=n iff for p,U st p in U
+  ex W st p in W & W c=U & H/\Fr W is finite-ind & ind(H/\Fr W)<=n-1;
+
+::Teoria wymiaru Th 1.5.15
+
+theorem :: TOPDIM_2:14
+  for H st TM|H is second-countable holds H is
+  finite-ind & ind H<=n iff ex Bas be Basis of TM st
+  for A st A in Bas holds H/\Fr A is finite-ind & ind(H/\Fr A)<=n-1;
+
+::Teoria wymiaru Th 1.5.16
+
+theorem :: TOPDIM_2:15
+  TM1 is non empty or TM2 is non empty implies
+    ind [:TM1,TM2:] <= ind TM1+ind TM2;
+
+:: Wprowadzenie do topologii 3.4.10
+
+theorem :: TOPDIM_2:16
+  ind TM2 = 0 implies ind [:TM1,TM2:] = ind TM1;
+
+begin :: The Small Inductive Dimension of Euclidean Spaces
+
+reserve u for Point of Euclid 1,
+  U for Point of TOP-REAL 1,
+  r,u1 for real number,
+  s for Real;
+
+theorem :: TOPDIM_2:17
+  <*u1*> = u & r > 0 implies cl_Ball(u,r)={<*s*>:u1-r <= s & s <= u1+r};
+
+theorem :: TOPDIM_2:18
+  <*u1*> = U & r > 0 implies Fr Ball(U,r) = {<*u1-r*>,<*u1+r*>};
+
+theorem :: TOPDIM_2:19
+  for T be TopSpace,A be countable Subset of T st T|A is T_4
+    holds A is finite-ind & ind A<=0;
+
+registration
+  let TM be metrizable TopSpace;
+  cluster countable -> finite-ind Subset of TM;
+end;
+
+registration
+  let n be Nat;
+  cluster TOP-REAL n -> finite-ind;
+end;
+
+theorem :: TOPDIM_2:20
+  n <= 1 implies ind TOP-REAL n = n;
+
+theorem :: TOPDIM_2:21
+  ind TOP-REAL n <= n;
+
+::Wprowadzenie do topologii Th 3.4.13
+
+theorem :: TOPDIM_2:22
+  for A st TM|A is second-countable finite-ind & ind A<=0
+     for F st F is open & F is Cover of A
+     ex g be Function of F,bool the carrier of TM st
+       rng g is open & rng g is Cover of A &
+       (for a be set st a in F holds g.a c= a) &
+       for a,b be set st a in F & b in F & a<>b holds g.a misses g.b;
+
+:: Wprowadzenie do topologii Th 3.4.14
+
+theorem :: TOPDIM_2:23
+  for TM st TM is second-countable finite-ind & ind TM <= n
+  for F st F is open & F is Cover of TM
+  ex G st G is open & G is Cover of TM & G is_finer_than F &
+  card G <= card F*(n+1) & order G <= n;
+
+::Wprowadzenie do topologii Lm 3.4.17
+
+theorem :: TOPDIM_2:24
+  for TM st TM is finite-ind
+  for A st ind A`<=n & TM|A` is second-countable
+  for A1,A2 be closed Subset of TM st A=A1\/A2
+  ex X1,X2 be closed Subset of TM st[#]TM=X1\/X2 & A1 c=X1 & A2 c=X2 &
+  A1/\X2=A1/\A2 & A1/\A2=X1/\A2 & ind((X1/\X2)\(A1/\A2))<=n-1;

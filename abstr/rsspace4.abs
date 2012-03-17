@@ -14,14 +14,13 @@ environ
       DOMAIN_1, FUNCOP_1, REALSET1, XXREAL_0, XXREAL_2, COMPLEX1, REAL_1,
       NAT_1, STRUCT_0, ALGSTR_0, XREAL_0, ORDINAL1, NUMBERS, FUNCT_1, RELSET_1,
       FUNCT_2, INTEGRA2, PSCOMP_1, RLVECT_1, NORMSP_1, VALUED_1, SEQ_1, SEQ_2,
-      SEQM_3, SEQ_4, RLSUB_1, PARTFUN1, RSSPACE, RSSPACE3, LOPBAN_1;
+      SEQ_4, RLSUB_1, PARTFUN1, RSSPACE, RSSPACE3, LOPBAN_1;
  constructors PARTFUN1, REAL_1, NAT_1, COMPLEX1, SEQM_3, REALSET1, RLSUB_1,
       PSCOMP_1, INTEGRA2, RSSPACE3, LOPBAN_1, SEQ_1, XXREAL_2, RVSUM_1, SEQ_4,
       RELSET_1;
- registrations XBOOLE_0, SUBSET_1, RELAT_1, ORDINAL1, FUNCT_2, NUMBERS,
-      XXREAL_0, XREAL_0, MEMBERED, SEQM_3, REALSET1, STRUCT_0, RLVECT_1,
-      RFUNCT_1, SEQ_2, NORMSP_1, RSSPACE3, VALUED_0, RSSPACE, VALUED_1,
-      FUNCOP_1, SEQ_4;
+ registrations SUBSET_1, RELAT_1, ORDINAL1, FUNCT_2, NUMBERS, XXREAL_0,
+      XREAL_0, MEMBERED, REALSET1, STRUCT_0, RLVECT_1, RFUNCT_1, SEQ_2,
+      NORMSP_1, RSSPACE3, VALUED_0, RSSPACE, VALUED_1, FUNCOP_1, SEQ_4;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
 
 
@@ -32,8 +31,8 @@ definition
   Linear_Space_of_RealSequences means
 :: RSSPACE4:def 1
 
-  for x being set holds x in it iff
-  (x in the_set_of_RealSequences & seq_id x is bounded);
+  for x being set holds x in it iff x
+  in the_set_of_RealSequences & seq_id x is bounded;
 end;
 
 registration
@@ -42,74 +41,70 @@ registration
 end;
 
 registration
-  cluster RLSStruct (# the_set_of_BoundedRealSequences,
-      Zero_(the_set_of_BoundedRealSequences,Linear_Space_of_RealSequences),
-      Add_(the_set_of_BoundedRealSequences,Linear_Space_of_RealSequences),
-      Mult_(the_set_of_BoundedRealSequences,Linear_Space_of_RealSequences) #)
-    -> Abelian add-associative right_zeroed right_complementable
-    RealLinearSpace-like;
+  cluster RLSStruct (# the_set_of_BoundedRealSequences, Zero_(
+      the_set_of_BoundedRealSequences,Linear_Space_of_RealSequences), Add_(
+      the_set_of_BoundedRealSequences,Linear_Space_of_RealSequences), Mult_(
+the_set_of_BoundedRealSequences,Linear_Space_of_RealSequences) #) -> Abelian
+    add-associative right_zeroed right_complementable RealLinearSpace-like;
 end;
 
 definition
   func linfty_norm -> Function of the_set_of_BoundedRealSequences, REAL means
 :: RSSPACE4:def 2
 
-  for x be set st x in the_set_of_BoundedRealSequences holds
-  it.x = sup rng abs seq_id x;
+  for x be set st x in the_set_of_BoundedRealSequences holds it.x = sup
+  rng abs seq_id x;
 end;
 
 canceled;
 
 theorem :: RSSPACE4:2
-  for rseq be Real_Sequence holds
-  ( rseq is bounded & sup rng abs rseq = 0 ) iff
-  for n be Nat holds rseq.n = 0;
+  for rseq be Real_Sequence holds rseq is bounded & sup rng abs rseq = 0
+  iff for n be Nat holds rseq.n = 0;
 
 registration
-  cluster NORMSTR (# the_set_of_BoundedRealSequences,
-      Zero_(the_set_of_BoundedRealSequences,Linear_Space_of_RealSequences),
-      Add_(the_set_of_BoundedRealSequences,Linear_Space_of_RealSequences),
-      Mult_(the_set_of_BoundedRealSequences,Linear_Space_of_RealSequences),
-      linfty_norm #) -> Abelian add-associative right_zeroed
-    right_complementable RealLinearSpace-like;
+  cluster NORMSTR (# the_set_of_BoundedRealSequences, Zero_(
+      the_set_of_BoundedRealSequences,Linear_Space_of_RealSequences), Add_(
+      the_set_of_BoundedRealSequences,Linear_Space_of_RealSequences), Mult_(
+the_set_of_BoundedRealSequences,Linear_Space_of_RealSequences), linfty_norm #)
+    -> Abelian add-associative right_zeroed right_complementable
+    RealLinearSpace-like;
 end;
 
 definition
   func linfty_Space -> non empty NORMSTR equals
 :: RSSPACE4:def 3
-  NORMSTR (# the_set_of_BoundedRealSequences,
-    Zero_(the_set_of_BoundedRealSequences,Linear_Space_of_RealSequences),
-    Add_(the_set_of_BoundedRealSequences,Linear_Space_of_RealSequences),
-    Mult_(the_set_of_BoundedRealSequences,Linear_Space_of_RealSequences),
-    linfty_norm #);
+  NORMSTR (#
+    the_set_of_BoundedRealSequences, Zero_(the_set_of_BoundedRealSequences,
+    Linear_Space_of_RealSequences), Add_(the_set_of_BoundedRealSequences,
+    Linear_Space_of_RealSequences), Mult_(the_set_of_BoundedRealSequences,
+    Linear_Space_of_RealSequences), linfty_norm #);
 end;
 
 theorem :: RSSPACE4:3
-  the carrier of linfty_Space = the_set_of_BoundedRealSequences &
-  ( for x be set holds x is VECTOR of linfty_Space
-  iff x is Real_Sequence & seq_id x is bounded ) & 0.linfty_Space = Zeroseq &
-  ( for u be VECTOR of linfty_Space holds u = seq_id u ) &
-  ( for u,v be VECTOR of linfty_Space holds u+v =seq_id(u)+seq_id(v) ) &
-  ( for r be Real for u be VECTOR of linfty_Space holds r*u =r(#)seq_id(u) ) &
-  ( for u be VECTOR of linfty_Space holds
-  -u = -seq_id u & seq_id(-u) = -seq_id u ) &
-  ( for u,v be VECTOR of linfty_Space holds u-v =seq_id(u)-seq_id(v) ) &
-  ( for v be VECTOR of linfty_Space holds seq_id v is bounded ) &
-  ( for v be VECTOR of linfty_Space holds ||.v.|| = sup rng abs seq_id v );
+  the carrier of linfty_Space = the_set_of_BoundedRealSequences & (
+for x be set holds x is VECTOR of linfty_Space iff x is Real_Sequence & seq_id
+  x is bounded ) & 0.linfty_Space = Zeroseq & ( for u be VECTOR of linfty_Space
+holds u = seq_id u ) & ( for u,v be VECTOR of linfty_Space holds u+v =seq_id(u)
++seq_id(v) ) & ( for r be Real for u be VECTOR of linfty_Space holds r*u =r(#)
+seq_id(u) ) & ( for u be VECTOR of linfty_Space holds -u = -seq_id u & seq_id(-
+  u) = -seq_id u ) & ( for u,v be VECTOR of linfty_Space holds u-v =seq_id(u)-
+  seq_id(v) ) & ( for v be VECTOR of linfty_Space holds seq_id v is bounded ) &
+  for v be VECTOR of linfty_Space holds ||.v.|| = sup rng abs seq_id v;
 
 theorem :: RSSPACE4:4
-  for x, y being Point of linfty_Space, a be Real holds
-  ( ||.x.|| = 0 iff x = 0.linfty_Space ) & 0 <= ||.x.|| &
-  ||.x+y.|| <= ||.x.|| + ||.y.|| & ||. a*x .|| = abs(a) * ||.x.||;
+  for x, y being Point of linfty_Space, a be Real holds ( ||.x.|| =
+  0 iff x = 0.linfty_Space ) & 0 <= ||.x.|| & ||.x+y.|| <= ||.x.|| + ||.y.|| &
+  ||. a*x .|| = abs(a) * ||.x.||;
 
 registration
-  cluster linfty_Space -> RealNormSpace-like RealLinearSpace-like
-    Abelian add-associative right_zeroed right_complementable;
+  cluster linfty_Space -> RealNormSpace-like RealLinearSpace-like Abelian
+    add-associative right_zeroed right_complementable;
 end;
 
 theorem :: RSSPACE4:5
-  for vseq be sequence of linfty_Space st vseq is Cauchy_sequence_by_Norm
-  holds vseq is convergent;
+  for vseq be sequence of linfty_Space st vseq is
+  Cauchy_sequence_by_Norm holds vseq is convergent;
 
 begin
 
@@ -120,14 +115,14 @@ definition
   attr IT is bounded means
 :: RSSPACE4:def 4
 
-  ex K being Real st 0 <= K &
-  for x being Element of X holds ||. IT.x .|| <= K;
+  ex K being Real st 0 <= K & for x being
+  Element of X holds ||. IT.x .|| <= K;
 end;
 
 theorem :: RSSPACE4:6
-  for X be non empty set for Y be RealNormSpace holds
-  for f be Function of X,the carrier of Y
-  st (for x be Element of X holds f.x=0.Y) holds f is bounded;
+  for X be non empty set for Y be RealNormSpace holds for f be
+Function of X,the carrier of Y st (for x be Element of X holds f.x=0.Y) holds f
+  is bounded;
 
 registration
   let X be non empty set;
@@ -141,8 +136,8 @@ definition
   func BoundedFunctions(X,Y) -> Subset of RealVectSpace(X,Y) means
 :: RSSPACE4:def 5
 
-  for x being set holds x in it iff
-  x is bounded Function of X,the carrier of Y;
+  for
+  x being set holds x in it iff x is bounded Function of X,the carrier of Y;
 end;
 
 registration
@@ -156,20 +151,18 @@ theorem :: RSSPACE4:7
   BoundedFunctions(X,Y) is linearly-closed;
 
 theorem :: RSSPACE4:8
-  for X be non empty set for Y be RealNormSpace holds
-  RLSStruct (# BoundedFunctions(X,Y), Zero_(BoundedFunctions(X,Y),
-    RealVectSpace(X,Y)), Add_(BoundedFunctions(X,Y), RealVectSpace(X,Y)),
-    Mult_(BoundedFunctions(X,Y), RealVectSpace(X,Y)) #)
-  is Subspace of RealVectSpace(X,Y);
+  for X be non empty set for Y be RealNormSpace holds RLSStruct (#
+BoundedFunctions(X,Y), Zero_(BoundedFunctions(X,Y), RealVectSpace(X,Y)), Add_(
+    BoundedFunctions(X,Y), RealVectSpace(X,Y)), Mult_(BoundedFunctions(X,Y),
+    RealVectSpace(X,Y)) #) is Subspace of RealVectSpace(X,Y);
 
 registration
   let X be non empty set;
   let Y be RealNormSpace;
   cluster RLSStruct (# BoundedFunctions(X,Y), Zero_(BoundedFunctions(X,Y),
-      RealVectSpace(X,Y)), Add_(BoundedFunctions(X,Y), RealVectSpace(X,Y)),
-      Mult_(BoundedFunctions(X,Y), RealVectSpace(X,Y)) #)
-    -> Abelian add-associative right_zeroed right_complementable
-    RealLinearSpace-like;
+RealVectSpace(X,Y)), Add_(BoundedFunctions(X,Y), RealVectSpace(X,Y)), Mult_(
+      BoundedFunctions(X,Y), RealVectSpace(X,Y)) #) -> Abelian add-associative
+    right_zeroed right_complementable RealLinearSpace-like;
 end;
 
 definition
@@ -177,9 +170,9 @@ definition
   let Y be RealNormSpace;
   func R_VectorSpace_of_BoundedFunctions(X,Y) -> RealLinearSpace equals
 :: RSSPACE4:def 6
-  RLSStruct (# BoundedFunctions(X,Y), Zero_(BoundedFunctions(X,Y),
-    RealVectSpace(X,Y)), Add_(BoundedFunctions(X,Y), RealVectSpace(X,Y)),
-    Mult_(BoundedFunctions(X,Y), RealVectSpace(X,Y)) #);
+RLSStruct (# BoundedFunctions(X,Y), Zero_(BoundedFunctions(X,Y), RealVectSpace(
+X,Y)), Add_(BoundedFunctions(X,Y), RealVectSpace(X,Y)), Mult_(BoundedFunctions(
+    X,Y), RealVectSpace(X,Y)) #);
 end;
 
 registration
@@ -191,21 +184,20 @@ end;
 canceled;
 
 theorem :: RSSPACE4:10
-  for X be non empty set for Y be RealNormSpace
-  for f,g,h be VECTOR of R_VectorSpace_of_BoundedFunctions(X,Y)
-  for f',g',h' be bounded Function of X,the carrier of Y
-  st f'=f & g'=g & h'=h holds
-  (h = f+g iff (for x be Element of X holds (h'.x = f'.x + g'.x)) );
+  for X be non empty set for Y be RealNormSpace for f,g,h be
+  VECTOR of R_VectorSpace_of_BoundedFunctions(X,Y) for f',g',h' be bounded
+  Function of X,the carrier of Y st f'=f & g'=g & h'=h holds (h = f+g iff for x
+  be Element of X holds h'.x = f'.x + g'.x );
 
 theorem :: RSSPACE4:11
-  for X be non empty set for Y be RealNormSpace
-  for f,h be VECTOR of R_VectorSpace_of_BoundedFunctions(X,Y)
-  for f',h' be bounded Function of X,the carrier of Y st f'=f & h'=h
-  for a be Real holds h = a*f iff for x be Element of X holds h'.x = a*f'.x;
+  for X be non empty set for Y be RealNormSpace for f,h be VECTOR
+  of R_VectorSpace_of_BoundedFunctions(X,Y) for f',h' be bounded Function of X,
+  the carrier of Y st f'=f & h'=h for a be Real holds h = a*f iff for x be
+  Element of X holds h'.x = a*f'.x;
 
 theorem :: RSSPACE4:12
-  for X be non empty set for Y be RealNormSpace holds
-  0.R_VectorSpace_of_BoundedFunctions(X,Y) =(X -->0.Y);
+  for X be non empty set for Y be RealNormSpace holds 0.
+  R_VectorSpace_of_BoundedFunctions(X,Y) =(X -->0.Y);
 
 definition
   let X be non empty set;
@@ -214,6 +206,7 @@ definition
  f in BoundedFunctions(X,Y);
   func modetrans(f,X,Y) -> bounded Function of X,the carrier of Y equals
 :: RSSPACE4:def 7
+
 
   f;
 end;
@@ -224,93 +217,88 @@ definition
   let u be Function of X,the carrier of Y;
   func PreNorms(u) -> non empty Subset of REAL equals
 :: RSSPACE4:def 8
-  {||.u.t.|| where t is Element of X : not contradiction };
+  {||.u.t.|| where t is
+  Element of X : not contradiction };
 end;
 
 theorem :: RSSPACE4:13
-  for X be non empty set for Y be RealNormSpace
-  for g be bounded Function of X,the carrier of Y
-  holds PreNorms(g) is non empty bounded_above;
+  for X be non empty set for Y be RealNormSpace for g be bounded
+  Function of X,the carrier of Y holds PreNorms(g) is non empty bounded_above;
 
 theorem :: RSSPACE4:14
-  for X be non empty set for Y be RealNormSpace
-  for g be Function of X,the carrier of Y
-  holds g is bounded iff PreNorms(g) is bounded_above;
+  for X be non empty set for Y be RealNormSpace for g be Function of X,
+  the carrier of Y holds g is bounded iff PreNorms(g) is bounded_above;
 
 theorem :: RSSPACE4:15
-  for X be non empty set for Y be RealNormSpace
-  ex NORM be Function of BoundedFunctions(X,Y),REAL st
-  for f be set st f in BoundedFunctions(X,Y) holds
-  NORM.f = sup PreNorms(modetrans(f,X,Y));
+  for X be non empty set for Y be RealNormSpace ex NORM be
+Function of BoundedFunctions(X,Y),REAL st for f be set st f in BoundedFunctions
+  (X,Y) holds NORM.f = sup PreNorms(modetrans(f,X,Y));
 
 definition
   let X be non empty set;
   let Y be RealNormSpace;
-  func BoundedFunctionsNorm(X,Y)
-  -> Function of BoundedFunctions(X,Y), REAL means
+  func BoundedFunctionsNorm(X,Y) -> Function of BoundedFunctions(X,Y), REAL
+  means
 :: RSSPACE4:def 9
 
-  for x be set st x in BoundedFunctions(X,Y) holds
-  it.x = sup PreNorms(modetrans(x,X,Y));
+  for x be set st x in BoundedFunctions(X,Y) holds it.x = sup
+  PreNorms(modetrans(x,X,Y));
 end;
 
 theorem :: RSSPACE4:16
-  for X be non empty set for Y be RealNormSpace
-  for f be bounded Function of X,the carrier of Y holds modetrans(f,X,Y)=f;
+  for X be non empty set for Y be RealNormSpace for f be bounded
+  Function of X,the carrier of Y holds modetrans(f,X,Y)=f;
 
 theorem :: RSSPACE4:17
-  for X be non empty set for Y be RealNormSpace
-  for f be bounded Function of X,the carrier of Y holds
-  BoundedFunctionsNorm(X,Y).f = sup PreNorms(f);
+  for X be non empty set for Y be RealNormSpace for f be bounded
+Function of X,the carrier of Y holds BoundedFunctionsNorm(X,Y).f = sup PreNorms
+  (f);
 
 definition
   let X be non empty set;
   let Y be RealNormSpace;
   func R_NormSpace_of_BoundedFunctions(X,Y) -> non empty NORMSTR equals
 :: RSSPACE4:def 10
-  NORMSTR (# BoundedFunctions(X,Y), Zero_(BoundedFunctions(X,Y),
-    RealVectSpace(X,Y)), Add_(BoundedFunctions(X,Y), RealVectSpace(X,Y)),
-    Mult_(BoundedFunctions(X,Y), RealVectSpace(X,Y)),
-    BoundedFunctionsNorm(X,Y) #);
+NORMSTR (# BoundedFunctions(X,Y), Zero_(BoundedFunctions(X,Y), RealVectSpace(X,
+Y)), Add_(BoundedFunctions(X,Y), RealVectSpace(X,Y)), Mult_(BoundedFunctions(X,
+    Y), RealVectSpace(X,Y)), BoundedFunctionsNorm(X,Y) #);
 end;
 
 theorem :: RSSPACE4:18
-  for X be non empty set for Y be RealNormSpace holds (X --> 0.Y) =
-  0.R_NormSpace_of_BoundedFunctions(X,Y);
+  for X be non empty set for Y be RealNormSpace holds (X --> 0.Y)
+  = 0.R_NormSpace_of_BoundedFunctions(X,Y);
 
 theorem :: RSSPACE4:19
-  for X be non empty set for Y be RealNormSpace for f being Point of
-  R_NormSpace_of_BoundedFunctions(X,Y)
-  for g be bounded Function of X,the carrier of Y st g=f holds
-  for t be Element of X holds ||.g.t.|| <= ||.f.||;
+  for X be non empty set for Y be RealNormSpace for f being Point
+  of R_NormSpace_of_BoundedFunctions(X,Y) for g be bounded Function of X,the
+  carrier of Y st g=f holds for t be Element of X holds ||.g.t.|| <= ||.f.||;
 
 theorem :: RSSPACE4:20
   for X be non empty set for Y be RealNormSpace for f being Point of
   R_NormSpace_of_BoundedFunctions(X,Y) holds 0 <= ||.f.||;
 
 theorem :: RSSPACE4:21
-  for X be non empty set for Y be RealNormSpace for f being Point of
-  R_NormSpace_of_BoundedFunctions(X,Y)
-  st f = 0.R_NormSpace_of_BoundedFunctions(X,Y) holds 0 = ||.f.||;
+  for X be non empty set for Y be RealNormSpace for f being Point
+  of R_NormSpace_of_BoundedFunctions(X,Y) st f = 0.
+  R_NormSpace_of_BoundedFunctions(X,Y) holds 0 = ||.f.||;
 
 theorem :: RSSPACE4:22
-  for X be non empty set for Y be RealNormSpace
-  for f,g,h be Point of R_NormSpace_of_BoundedFunctions(X,Y)
-  for f',g',h' be bounded Function of X,the carrier of Y
-  st f'=f & g'=g & h'=h holds (h = f+g iff
-  (for x be Element of X holds (h'.x = f'.x + g'.x)) );
+  for X be non empty set for Y be RealNormSpace for f,g,h be Point
+of R_NormSpace_of_BoundedFunctions(X,Y) for f',g',h' be bounded Function of X,
+the carrier of Y st f'=f & g'=g & h'=h holds (h = f+g iff for x be Element of X
+  holds h'.x = f'.x + g'.x );
 
 theorem :: RSSPACE4:23
-  for X be non empty set for Y be RealNormSpace
-  for f,h be Point of R_NormSpace_of_BoundedFunctions(X,Y)
-  for f',h' be bounded Function of X,the carrier of Y st f'=f & h'=h
-  for a be Real holds h = a*f iff for x be Element of X holds h'.x = a*f'.x;
+  for X be non empty set for Y be RealNormSpace for f,h be Point
+of R_NormSpace_of_BoundedFunctions(X,Y) for f',h' be bounded Function of X,the
+carrier of Y st f'=f & h'=h for a be Real holds h = a*f iff for x be Element of
+  X holds h'.x = a*f'.x;
 
 theorem :: RSSPACE4:24
-  for X be non empty set for Y be RealNormSpace for f, g being Point of
-  R_NormSpace_of_BoundedFunctions(X,Y) for a be Real holds ( ||.f.|| = 0 iff
-  f = 0.R_NormSpace_of_BoundedFunctions(X,Y) ) &
-  ||.a*f.|| = abs(a) * ||.f.|| & ||.f+g.|| <= ||.f.|| + ||.g.||;
+  for X be non empty set for Y be RealNormSpace for f, g being
+Point of R_NormSpace_of_BoundedFunctions(X,Y) for a be Real holds ( ||.f.|| = 0
+iff f = 0.R_NormSpace_of_BoundedFunctions(X,Y) ) & ||.a*f.|| = abs(a) * ||.f.||
+  & ||.f+g.|| <= ||.f.|| + ||.g.||;
 
 theorem :: RSSPACE4:25
   for X be non empty set for Y be RealNormSpace holds
@@ -323,22 +311,20 @@ theorem :: RSSPACE4:26
 registration
   let X be non empty set;
   let Y be RealNormSpace;
-  cluster R_NormSpace_of_BoundedFunctions(X,Y) ->
-    RealNormSpace-like RealLinearSpace-like
-    Abelian add-associative right_zeroed right_complementable;
+  cluster R_NormSpace_of_BoundedFunctions(X,Y) -> RealNormSpace-like
+RealLinearSpace-like Abelian add-associative right_zeroed right_complementable;
 end;
 
 theorem :: RSSPACE4:27
-  for X be non empty set for Y be RealNormSpace
-  for f,g,h be Point of R_NormSpace_of_BoundedFunctions(X,Y)
-  for f',g',h' be bounded Function of X,the carrier of Y
-  st f'=f & g'=g & h'=h holds (h = f-g iff
-  (for x be Element of X holds (h'.x = f'.x - g'.x)) );
+  for X be non empty set for Y be RealNormSpace for f,g,h be Point
+of R_NormSpace_of_BoundedFunctions(X,Y) for f',g',h' be bounded Function of X,
+the carrier of Y st f'=f & g'=g & h'=h holds (h = f-g iff for x be Element of X
+  holds h'.x = f'.x - g'.x );
 
 theorem :: RSSPACE4:28
   for X be non empty set for Y be RealNormSpace st Y is complete
-  for seq be sequence of R_NormSpace_of_BoundedFunctions(X,Y)
-  st seq is Cauchy_sequence_by_Norm holds seq is convergent;
+  for seq be sequence of R_NormSpace_of_BoundedFunctions(X,Y) st seq is
+  Cauchy_sequence_by_Norm holds seq is convergent;
 
 theorem :: RSSPACE4:29
   for X be non empty set for Y be RealBanachSpace holds

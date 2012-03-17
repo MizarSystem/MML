@@ -12,6 +12,7 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="NAT_1"/>
@@ -20,10 +21,10 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
+<ArticleID name="RAT_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="ALGSTR_0"/>
-<ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_1"/>
@@ -43,7 +44,7 @@
 <Cluster/>
 <Func kind="K" nr="21">
 <Func kind="U" nr="1">
-<Func kind="K" nr="266">
+<Func kind="K" nr="275">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -51,14 +52,14 @@
 </Typ>
 <Cluster>
 <Adjective nr="10" value="false"/>
-<Adjective nr="146"/>
-<Adjective nr="148">
-<Func kind="K" nr="266">
+<Adjective nr="147"/>
+<Adjective nr="149">
+<Func kind="K" nr="275">
 <Num nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="149" value="false"/>
 <Adjective nr="150" value="false"/>
+<Adjective nr="151" value="false"/>
 </Cluster>
 </RCluster>
 </Registrations>

@@ -22,7 +22,6 @@
 <ArticleID name="LATTICES"/>
 <ArticleID name="FUNCT_4"/>
 <ArticleID name="EQREL_1"/>
-<ArticleID name="FILTER_0"/>
 <ArticleID name="FILTER_1"/>
 <ArticleID name="LATTICE3"/>
 <ArticleID name="FINSEQ_1"/>
@@ -44,29 +43,29 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="226">
+<Func kind="K" nr="216">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="54"/>
-<Adjective nr="145"/>
+<Adjective nr="53"/>
+<Adjective nr="146"/>
 </Cluster>
 </FCluster>
 <CCluster aid="WAYBEL15" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
+<Adjective nr="55"/>
 <Adjective nr="56"/>
 <Adjective nr="57"/>
-<Adjective nr="58"/>
 <Adjective nr="81"/>
 <Adjective nr="82"/>
-<Adjective nr="135"/>
+<Adjective nr="136"/>
 </Cluster>
 </Typ>
 </ArgTypes>
 <Cluster>
-<Adjective nr="146">
+<Adjective nr="147">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -77,7 +76,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="142">
+<Adjective nr="143">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

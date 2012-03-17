@@ -14,14 +14,14 @@ environ
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS, RELAT_1,
       FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_4, XXREAL_0, NAT_1, FINSEQ_1, FINSET_1,
       TREES_2, TREES_3, TREES_4, CARD_3, FUNCT_6, LANG1, DTCONSTR, PBOOLE,
-      FUNCOP_1, SEQ_1, XXREAL_2, STRUCT_0, PRALG_1, MSUALG_1, MSUALG_2,
-      MSUALG_3, MSAFREE, MSAFREE2, CIRCUIT1, MSATERM;
+      FUNCOP_1, XXREAL_2, STRUCT_0, PRALG_1, MSUALG_1, MSUALG_2, MSUALG_3,
+      MSAFREE, MSAFREE2, CIRCUIT1, MSATERM;
  constructors XXREAL_0, NAT_1, PRALG_1, MSUALG_3, MSATERM, CIRCUIT1, SEQ_1,
       SEQ_4, XXREAL_2, RELSET_1, FUNCT_4;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1, FINSET_1,
-      FRAENKEL, XREAL_0, MEMBERED, FINSEQ_1, CARD_3, TREES_3, PRE_CIRC,
-      STRUCT_0, DTCONSTR, MSUALG_1, MSUALG_3, MSAFREE, MSAFREE2, CIRCUIT1,
-      XXREAL_2, CARD_1, RELSET_1, PBOOLE;
+      XREAL_0, MEMBERED, FINSEQ_1, CARD_3, TREES_3, PRE_CIRC, STRUCT_0,
+      DTCONSTR, MSUALG_1, MSUALG_3, MSAFREE, MSAFREE2, CIRCUIT1, XXREAL_2,
+      CARD_1, RELSET_1, PBOOLE;
  requirements NUMERALS, BOOLE, SUBSET;
  definitions PBOOLE, MSAFREE2;
  theorems TARSKI, NAT_1, FINSEQ_1, FINSEQ_2, FINSEQ_3, RELAT_1, GRFUNC_1,
@@ -39,182 +39,178 @@ reserve IIG for monotonic Circuit-like non void (non empty ManySortedSign);
 Lm1: for x being set holds not x in x;
 
 theorem Th1:
-  for X being non-empty ManySortedSet of the carrier of IIG,
-  H being ManySortedFunction of FreeMSA X, FreeMSA X,
-  HH being Function-yielding Function, v being SortSymbol of IIG,
-  p being DTree-yielding FinSequence,
-  t being Element of (the Sorts of FreeMSA X).v st v in InnerVertices IIG
-  & t = [action_at v,the carrier of IIG]-tree p
-  & H is_homomorphism FreeMSA X, FreeMSA X & HH = H * the_arity_of action_at v
-  ex HHp being DTree-yielding FinSequence
-  st HHp = HH..p & H.v.t = [action_at v,the carrier of IIG]-tree HHp
+  for X being non-empty ManySortedSet of the carrier of IIG, H
+  being ManySortedFunction of FreeMSA X, FreeMSA X, HH being Function-yielding
+  Function, v being SortSymbol of IIG, p being DTree-yielding FinSequence, t
+  being Element of (the Sorts of FreeMSA X).v st v in InnerVertices IIG & t = [
+action_at v,the carrier of IIG]-tree p & H is_homomorphism FreeMSA X, FreeMSA X
+& HH = H * the_arity_of action_at v ex HHp being DTree-yielding FinSequence st
+  HHp = HH..p & H.v.t = [action_at v,the carrier of IIG]-tree HHp
 proof
-  let X be non-empty ManySortedSet of the carrier of IIG,
-  H be ManySortedFunction of FreeMSA X, FreeMSA X,
-  HH be Function-yielding Function, v be SortSymbol of IIG,
-  p be DTree-yielding FinSequence,
-  t be Element of (the Sorts of FreeMSA X).v such that
+  let X be non-empty ManySortedSet of the carrier of IIG, H be
+ManySortedFunction of FreeMSA X, FreeMSA X, HH be Function-yielding Function, v
+  be SortSymbol of IIG, p be DTree-yielding FinSequence, t be Element of (the
+  Sorts of FreeMSA X).v such that
 A1: v in InnerVertices IIG and
 A2: t = [action_at v,the carrier of IIG]-tree p and
 A3: H is_homomorphism FreeMSA X, FreeMSA X and
 A4: HH = H * the_arity_of action_at v;
   reconsider av = action_at v as OperSymbol of IIG;
-  reconsider HHp = HH..p as Function;
-A5: dom HHp = dom HH by PRALG_1:def 17;
-A6: rng the_arity_of av c= the carrier of IIG by FINSEQ_1:def 4;
+A5: the_result_sort_of av = v by A1,MSAFREE2:def 7;
+  then len p = len the_arity_of av by A2,MSAFREE2:13;
   then
-A7: rng the_arity_of av c= dom H by PARTFUN1:def 4;
-  then H * the_arity_of av is FinSequence by FINSEQ_1:20;
-  then consider n being Nat such that
-A8: dom HH = Seg n by A4,FINSEQ_1:def 2;
-  reconsider HHp as FinSequence by A5,A8,FINSEQ_1:def 2;
-A9: the_result_sort_of av = v by A1,MSAFREE2:def 7;
-  now
+A6: dom p = dom (the_arity_of av) by FINSEQ_3:31;
+A7: rng the_arity_of av c= the carrier of IIG by FINSEQ_1:def 4;
+  then
+A8: rng the_arity_of av c= dom H by PARTFUN1:def 4;
+  then
+A9: dom (the_arity_of av) = dom HH by A4,RELAT_1:46;
+A10: FreeMSA X = MSAlgebra (# FreeSort X, FreeOper X #) by MSAFREE:def 16;
+  then (the Sorts of FreeMSA X).v = FreeSort(X,v) by MSAFREE:def 13;
+  then [av,the carrier of IIG]-tree p in FreeSort(X,v) by A2;
+  then
+A11: [av,the carrier of IIG]-tree p in {a where a is Element of TS(DTConMSA(
+  X)): (ex x be set st x in X.v & a = root-tree [x,v]) or ex o be OperSymbol of
+  IIG st [o,the carrier of IIG] = a.{} & the_result_sort_of o = v} by
+  MSAFREE:def 12;
+  reconsider HHp = HH..p as Function;
+A12: dom HHp = dom HH by PRALG_1:def 17;
+  H * the_arity_of av is FinSequence by A8,FINSEQ_1:20;
+  then ex n being Nat st dom HH = Seg n by A4,FINSEQ_1:def 2;
+  then reconsider HHp as FinSequence by A12,FINSEQ_1:def 2;
+A13: now
+    reconsider HH' = HH as FinSequence by A4,A8,FINSEQ_1:20;
     let x' be set;
-    assume
-A10: x' in dom HHp;
     set x = HHp.x';
-    reconsider k = x' as Element of NAT by A10;
     reconsider g = HH.x' as Function;
-    reconsider HH' = HH as FinSequence by A4,A7,FINSEQ_1:20;
-    len HH' = len the_arity_of av by A4,A7,FINSEQ_2:33;
+    assume
+A14: x' in dom HHp;
+    then reconsider k = x' as Element of NAT;
+A15: x = g.(p.k) by A12,A14,PRALG_1:def 17;
+    len HH' = len the_arity_of av by A4,A8,FINSEQ_2:33;
     then
-A11: dom HH' = dom the_arity_of av by FINSEQ_3:31;
-    then reconsider s = (the_arity_of av).k as SortSymbol of IIG by A5,A10,
-FINSEQ_2:13;
-A12: g = H.s by A4,A5,A10,A11,FUNCT_1:23;
-    x = g.(p.k) by A5,A10,PRALG_1:def 17;
-    then x in (the Sorts of FreeMSA X).s by A2,A5,A9,A10,A11,A12,FUNCT_2:7
-,MSAFREE2:14;
+A16: dom HH' = dom the_arity_of av by FINSEQ_3:31;
+    then reconsider s = (the_arity_of av).k as SortSymbol of IIG by A12,A14,
+    FINSEQ_2:13;
+    g = H.s by A4,A12,A14,A16,FUNCT_1:23;
+    then x in (the Sorts of FreeMSA X).s by A2,A12,A5,A14,A16,
+    A15,FUNCT_2:
+    7 ,MSAFREE2:14;
     hence x is DecoratedTree;
   end;
-  then reconsider HHp as DTree-yielding FinSequence by TREES_3:26;
-  take HHp;
-  thus HHp = HH..p;
+  set f = (the Sorts of FreeMSA X)*(the_arity_of av);
   dom the Arity of IIG = the carrier' of IIG by FUNCT_2:def 1;
   then
-A13: ((the Sorts of FreeMSA X)# * the Arity of IIG).av
-  = (the Sorts of FreeMSA X)#.((the Arity of IIG).av) by FUNCT_1:23
+A17: ((the Sorts of FreeMSA X)# * the Arity of IIG).av = (the Sorts of
+  FreeMSA X)#.((the Arity of IIG).av) by FUNCT_1:23
     .= (the Sorts of FreeMSA X)#.(the_arity_of av) by MSUALG_1:def 6
     .= product((the Sorts of FreeMSA X)*(the_arity_of av)) by PBOOLE:def 19;
-  set f = (the Sorts of FreeMSA X)*(the_arity_of av);
-A14: dom the Sorts of FreeMSA X = the carrier of IIG by PARTFUN1:def 4
-;
+  reconsider HHp as DTree-yielding FinSequence by A13,TREES_3:26;
+  consider a being Element of TS(DTConMSA(X)) such that
+A18: a = [av,the carrier of IIG]-tree p and
+A19: (ex x be set st x in X.v & a = root-tree [x,v]) or ex o be
+  OperSymbol of IIG st [o,the carrier of IIG] = a.{} & the_result_sort_of o = v
+  by A11;
+  consider x' being set such that
+A20: x' in X.v & a = root-tree [x',v] or ex o being OperSymbol of IIG st
+  [o,the carrier of IIG] = a.{} & the_result_sort_of o = v by A19;
+A21: dom the Sorts of FreeMSA X = the carrier of IIG by PARTFUN1:def 4;
   then
-A15: dom f = dom (the_arity_of av)
-  & dom (the_arity_of av) = dom HH by A4,A6,A7,RELAT_1:46;
-  len p = len the_arity_of av by A2,A9,MSAFREE2:13;
-  then
-A16: dom p = dom (the_arity_of av) by FINSEQ_3:31;
+A22: dom f = dom (the_arity_of av) by A7,RELAT_1:46;
   now
     let x be set;
     assume
-A17: x in dom f;
-    then reconsider n = x as Element of NAT by A15;
-A18: n in dom (the_arity_of av) by A6,A14,A17,RELAT_1:46;
-    (the_arity_of av).x in rng the_arity_of av by A15,A17,FUNCT_1:def 5;
-    then reconsider s = (the_arity_of av).x as SortSymbol of IIG by A6;
-    ((the Sorts of FreeMSA X)*(the_arity_of av)).x
-    = (the Sorts of FreeMSA X).s by A15,A17,FUNCT_1:23;
-    hence p.x in f.x by A2,A9,A18,MSAFREE2:14;
+A23: x in dom f;
+    then reconsider n = x as Element of NAT by A22;
+    (the_arity_of av).x in rng the_arity_of av by A22,A23,FUNCT_1:def 5;
+    then reconsider s = (the_arity_of av).x as SortSymbol of IIG by A7;
+    n in dom (the_arity_of av) & ((the Sorts of FreeMSA X)*(the_arity_of
+av)).x = (the Sorts of FreeMSA X).s by A7,A21,A22,A23,FUNCT_1:23,RELAT_1:46;
+    hence p.x in f.x by A2,A5,MSAFREE2:14;
   end;
-  then p in ((the Sorts of FreeMSA X)# * the Arity of IIG).av
-  by A13,A15,A16,CARD_3:def 5;
+  then p in ((the Sorts of FreeMSA X)# * the Arity of IIG).av by A17,A22,A6,
+  CARD_3:def 5;
   then reconsider x = p as Element of Args(av, FreeMSA X) by MSUALG_1:def 9;
-A19: FreeMSA X = MSAlgebra (# FreeSort X, FreeOper X #) by MSAFREE:def 16;
+A24: a.{} = [av,the carrier of IIG] by A18,TREES_4:def 4;
+  reconsider Hx = H#x as Function;
+A25: now
+    let x' be set;
+    assume
+A26: x' in dom HH;
+    then reconsider n = x' as Element of NAT by A9;
+    (the_arity_of av).n in rng the_arity_of av by A9,A26,FUNCT_1:def 5;
+    then reconsider s = (the_arity_of av).n as SortSymbol of IIG by A7;
+    Hx.n = (H.((the_arity_of av)/.n)).(p.n) by A9,A6,A26,MSUALG_3:def 8
+      .= (H.s).(p.n) by A9,A26,PARTFUN1:def 8;
+    hence Hx.x' = (HH.x').(p.x') by A4,A9,A26,FUNCT_1:23;
+  end;
+  dom Hx = dom HH by A9,MSUALG_3:6;
   then
-A20: Den(av, FreeMSA X) = (FreeOper X).av by MSUALG_1:def 11
-    .= DenOp(av, X) by MSAFREE:def 15;
-  (the Sorts of FreeMSA X).v = FreeSort(X,v) by A19,MSAFREE:def 13;
-  then [av,the carrier of IIG]-tree p in FreeSort(X,v) by A2;
-  then [av,the carrier of IIG]-tree p
-  in {a where a is Element of TS(DTConMSA(X)):
-  (ex x be set st x in X.v & a = root-tree [x,v]) or
-  ex o be OperSymbol of IIG st
-  [o,the carrier of IIG] = a.{} & the_result_sort_of o = v} by MSAFREE:def 12;
-  then consider a being Element of TS(DTConMSA(X)) such that
-A21: a = [av,the carrier of IIG]-tree p and
-A22: (ex x be set st x in X.v & a = root-tree [x,v]) or
-  ex o be OperSymbol of IIG st
-  [o,the carrier of IIG] = a.{} & the_result_sort_of o = v;
-  consider x' being set such that
-A23: (x' in X.v & a = root-tree [x',v]) or
-  ex o being OperSymbol of IIG st [o,the carrier of IIG] = a.{}
-  & the_result_sort_of o = v by A22;
+A27: HHp = H#x by A25,PRALG_1:def 17;
   now
-    assume a = root-tree [x',v];
-    then a.{} = [x',v] & a.{} = [av,the carrier of IIG]
-    by A21,TREES_4:3,def 4;
-    then the carrier of IIG = v by ZFMISC_1:33;
+    assume
+    a = root-tree [x',v];
+    then
+A28: a.{} = [x',v] by TREES_4:3;
+    a.{} = [av,the carrier of IIG] by A18,TREES_4:def 4;
+    then the carrier of IIG = v by A28,ZFMISC_1:33;
     hence contradiction by Lm1;
   end;
   then consider o being OperSymbol of IIG such that
-A24: [o,the carrier of IIG] = a.{} and the_result_sort_of o = v by A23;
+A29: [o,the carrier of IIG] = a.{} and
+  the_result_sort_of o = v by A20;
   the carrier of IIG in {the carrier of IIG} by TARSKI:def 1;
-  then [o,the carrier of IIG] in
-  [:the carrier' of IIG,{the carrier of IIG}:] by ZFMISC_1:106;
-  then reconsider nt = [o,the carrier of IIG] as NonTerminal of DTConMSA(X)
-  by MSAFREE:6;
-A25: a.{} = [av,the carrier of IIG] by A21,TREES_4:def 4;
+  then [o,the carrier of IIG] in [:the carrier' of IIG,{the carrier of IIG}:]
+  by ZFMISC_1:106;
+  then reconsider
+  nt = [o,the carrier of IIG] as NonTerminal of DTConMSA(X) by
+  MSAFREE:6;
   consider ts being FinSequence of TS(DTConMSA(X)) such that
-A26: a = nt-tree ts and
-A27: nt ==> roots ts by A24,DTCONSTR:10;
-A28: ts = p by A21,A26,TREES_4:15;
-  reconsider p' = p as FinSequence of TS(DTConMSA(X)) by A21,A26,TREES_4:15;
-A29: Sym(av, X) = [av,the carrier of IIG] by MSAFREE:def 11;
-  then
-A30: DenOp(av, X).p' = t by A2,A24,A25,A27,A28,MSAFREE:def 14;
-  reconsider Hx = H#x as Function;
-A31: dom Hx = dom HH by A15,MSUALG_3:6;
-  now
-    let x' be set;
-    assume
-A32: x' in dom HH;
-    then reconsider n = x' as Element of NAT by A15;
-    (the_arity_of av).n in rng the_arity_of av by A15,A32,FUNCT_1:def 5;
-    then reconsider s = (the_arity_of av).n as SortSymbol of IIG by A6;
-    Hx.n = (H.((the_arity_of av)/.n)).(p.n) by A15,A16,A32,MSUALG_3:def 8
-      .= (H.s).(p.n) by A15,A32,PARTFUN1:def 8;
-    hence Hx.x' = (HH.x').(p.x') by A4,A15,A32,FUNCT_1:23;
-  end;
-  then
-A33: HHp = H#x by A31,PRALG_1:def 17;
+A30: a = nt-tree ts and
+A31: nt ==> roots ts by A29,DTCONSTR:10;
+  take HHp;
+  thus HHp = HH..p;
+A32: Sym(av, X) = [av,the carrier of IIG] by MSAFREE:def 11;
   now
     let x be set;
-    assume
-A34: x in dom f;
-    then (the_arity_of av).x in rng the_arity_of av by A15,FUNCT_1:def 5;
-    then reconsider s = (the_arity_of av).x as SortSymbol of IIG by A6;
-A35: ((the Sorts of FreeMSA X)*(the_arity_of av)).x
-    = (the Sorts of FreeMSA X).s by A15,A34,FUNCT_1:23;
     reconsider g = HH.x as Function;
-A36: g = H.s by A4,A15,A34,FUNCT_1:23;
-A37: the_result_sort_of av = v by A1,MSAFREE2:def 7;
-    reconsider x' = x as Element of NAT by A15,A34;
-A38: p.x' in (the Sorts of FreeMSA X).s by A2,A15,A34,A37,MSAFREE2:14;
-    HHp.x = g.(p.x) by A15,A34,PRALG_1:def 17;
-    hence HHp.x in f.x by A35,A36,A38,FUNCT_2:7;
+    assume
+A33: x in dom f;
+    then
+A34: HHp.x = g.(p.x) by A22,A9,PRALG_1:def 17;
+    (the_arity_of av).x in rng the_arity_of av by A22,A33,FUNCT_1:def 5;
+    then reconsider s = (the_arity_of av).x as SortSymbol of IIG by A7;
+    reconsider x' = x as Element of NAT by A22,A33;
+A35: the_result_sort_of av = v by A1,MSAFREE2:def 7;
+    ((the Sorts of FreeMSA X)*(the_arity_of av)).x = (the Sorts of
+    FreeMSA X).s & g = H.s by A4,A22,A33,FUNCT_1:23;
+    hence HHp.x in f.x by A2,A22,A33,A35,A34,FUNCT_2:7,MSAFREE2:14;
   end;
   then
-A39: HHp in ((FreeSort X)# * (the Arity of IIG)).av
-  by A5,A13,A15,A19,CARD_3:def 5;
+A36: HHp in ((FreeSort X)# * (the Arity of IIG)).av by A12,A17,A22,A9,A10,
+  CARD_3:def 5;
   then reconsider HHp' = HHp as FinSequence of TS(DTConMSA(X)) by MSAFREE:8;
-A40: Sym(av, X) ==> roots HHp' by A39,MSAFREE:10;
-  thus H.v.t = DenOp(av, X).HHp by A3,A9,A20,A30,A33,MSUALG_3:def 9
-    .= [action_at v,the carrier of IIG]-tree HHp by A29,A40,MSAFREE:def 14;
+A37: Sym(av, X) ==> roots HHp' by A36,MSAFREE:10;
+  reconsider p' = p as FinSequence of TS(DTConMSA(X)) by A18,A30,TREES_4:15;
+  ts = p by A18,A30,TREES_4:15;
+  then
+A38: DenOp(av, X).p' = t by A2,A29,A24,A31,A32,MSAFREE:def 14;
+  Den(av, FreeMSA X) = (FreeOper X).av by A10,MSUALG_1:def 11
+    .= DenOp(av, X) by MSAFREE:def 15;
+  hence H.v.t = DenOp(av, X).HHp by A3,A5,A38,A27,MSUALG_3:def 9
+    .= [action_at v,the carrier of IIG]-tree HHp by A32,A37,MSAFREE:def 14;
 end;
 
 definition
   let IIG;
-  let SCS be non-empty Circuit of IIG, s be State of SCS,
-  iv be InputValues of SCS;
+  let SCS be non-empty Circuit of IIG, s be State of SCS, iv be InputValues of
+  SCS;
   redefine func s +* iv -> State of SCS;
   coherence
   proof
-A1: dom iv = InputVertices IIG & dom the Sorts of SCS = the carrier of IIG
-    by PARTFUN1:def 4;
-    then for x be set st x in dom iv holds
-    iv.x in (the Sorts of SCS).x by MSAFREE2:def 5;
+A1: dom iv = InputVertices IIG by PARTFUN1:def 4;
+    then dom the Sorts of SCS = the carrier of IIG & for x be set st x in dom
+    iv holds iv.x in (the Sorts of SCS).x by MSAFREE2:def 5,PARTFUN1:def 4;
     hence thesis by A1,PRE_CIRC:9;
   end;
 end;
@@ -222,268 +218,264 @@ end;
 definition
   let IIG;
   let A be non-empty Circuit of IIG, iv be InputValues of A;
-  func Fix_inp iv -> ManySortedFunction of FreeGen the Sorts of A,
-  the Sorts of FreeEnv A means
+  func Fix_inp iv -> ManySortedFunction of FreeGen the Sorts of A, the Sorts
+  of FreeEnv A means
   :Def1:
-  for v being Vertex of IIG
-  holds (v in InputVertices IIG implies it.v
-  = FreeGen(v, the Sorts of A) --> root-tree[iv.v, v])
-  & (v in SortsWithConstants IIG implies it.v = FreeGen(v, the Sorts of A)
-  --> root-tree [action_at v,the carrier of IIG])
-  & (v in (InnerVertices IIG \ SortsWithConstants IIG) implies
-  it.v = id FreeGen(v, the Sorts of A));
+  for v being Vertex of IIG holds (v in InputVertices
+  IIG implies it.v = FreeGen(v, the Sorts of A) --> root-tree[iv.v, v]) & (v in
+SortsWithConstants IIG implies it.v = FreeGen(v, the Sorts of A) --> root-tree
+  [action_at v,the carrier of IIG]) & (v in (InnerVertices IIG \
+  SortsWithConstants IIG) implies it.v = id FreeGen(v, the Sorts of A));
   existence
   proof
-    defpred P[set,set] means ex v being Vertex of IIG st v = $1
-    & ($1 in InputVertices IIG implies $2
-    = FreeGen(v, the Sorts of A) --> root-tree[iv.v, v])
-    & ($1 in SortsWithConstants IIG implies $2 = FreeGen(v, the Sorts of A)
-    --> root-tree [action_at v,the carrier of IIG])
-    & ($1 in (InnerVertices IIG \ SortsWithConstants IIG) implies
-    $2 = id FreeGen(v, the Sorts of A));
+    defpred P[set,set] means ex v being Vertex of IIG st v = $1 & ($1 in
+InputVertices IIG implies $2 = FreeGen(v, the Sorts of A) --> root-tree[iv.v, v
+]) & ($1 in SortsWithConstants IIG implies $2 = FreeGen(v, the Sorts of A) -->
+    root-tree [action_at v,the carrier of IIG]) & ($1 in (InnerVertices IIG \
+    SortsWithConstants IIG) implies $2 = id FreeGen(v, the Sorts of A));
 A1: now
       let i be set;
       assume
 A2:   i in the carrier of IIG;
       then reconsider v = i as Vertex of IIG;
-A3:   (InnerVertices IIG \ SortsWithConstants IIG) \/ SortsWithConstants IIG
-      = InnerVertices IIG by MSAFREE2:5,XBOOLE_1:45;
       v in InputVertices IIG \/ InnerVertices IIG by A2,XBOOLE_1:45;
       then
-A4:   v in InputVertices IIG or v in InnerVertices IIG by XBOOLE_0:def 3;
+A3:   v in InputVertices IIG or v in InnerVertices IIG by
+      XBOOLE_0:def
+      3;
+A4:   (InnerVertices IIG \ SortsWithConstants IIG) \/ SortsWithConstants
+      IIG = InnerVertices IIG by MSAFREE2:5,XBOOLE_1:45;
       thus ex j being set st P[i,j]
       proof
-        per cases by A3,A4,XBOOLE_0:def 3;
+        per cases by A4,A3,XBOOLE_0:def 3;
         suppose
 A5:       v in InputVertices IIG;
-          reconsider
-          j = FreeGen(v, the Sorts of A) --> root-tree[iv.v, v] as set;
+          reconsider j = FreeGen(v, the Sorts of A) --> root-tree[iv.v, v] as
+          set;
           take j,v;
           thus v = i;
-          thus i in InputVertices IIG implies
-          j = FreeGen(v, the Sorts of A) --> root-tree[iv.v, v];
+          thus i in InputVertices IIG implies j = FreeGen(v, the Sorts of A)
+          --> root-tree[iv.v, v];
           hereby
+A6:         InputVertices IIG misses SortsWithConstants IIG by MSAFREE2:6;
             assume
-A6:         i in SortsWithConstants IIG;
-            InputVertices IIG misses SortsWithConstants IIG by MSAFREE2:6;
-            hence j = FreeGen(v, the Sorts of A)
-            --> root-tree [action_at v,the carrier of IIG]
-            by A5,A6,XBOOLE_0:3;
+            i in SortsWithConstants IIG;
+            hence
+            j = FreeGen(v, the Sorts of A) --> root-tree [action_at v,the
+            carrier of IIG] by A5,A6,XBOOLE_0:3;
           end;
+A7:       InnerVertices IIG \ SortsWithConstants IIG c= InnerVertices IIG
+          & InputVertices IIG misses InnerVertices IIG by XBOOLE_1:36,79;
           assume
-A7:       i in InnerVertices IIG \ SortsWithConstants IIG;
-A8:       InnerVertices IIG \ SortsWithConstants IIG
-          c= InnerVertices IIG by XBOOLE_1:36;
-          InputVertices IIG misses InnerVertices IIG by XBOOLE_1:79;
-          hence thesis by A5,A7,A8,XBOOLE_0:3;
+          i in InnerVertices IIG \ SortsWithConstants IIG;
+          hence thesis by A5,A7,XBOOLE_0:3;
         end;
         suppose
-A9:       v in SortsWithConstants IIG;
-          reconsider j = FreeGen(v, the Sorts of A)
-          --> root-tree [action_at v,the carrier of IIG] as set;
+A8:       v in SortsWithConstants IIG;
+          reconsider j = FreeGen(v, the Sorts of A) --> root-tree [action_at v
+          ,the carrier of IIG] as set;
           take j,v;
           thus v = i;
           hereby
+A9:         InputVertices IIG misses SortsWithConstants IIG by MSAFREE2:6;
             assume
-A10:        i in InputVertices IIG;
-            InputVertices IIG misses SortsWithConstants IIG by MSAFREE2:6;
-            hence j = FreeGen(v, the Sorts of A) --> root-tree[iv.v, v]
-            by A9,A10,XBOOLE_0:3;
+            i in InputVertices IIG;
+            hence
+            j = FreeGen(v, the Sorts of A) --> root-tree[iv.v, v] by A8,
+            A9,XBOOLE_0:3;
           end;
-          thus i in SortsWithConstants IIG implies
-          j = FreeGen(v, the Sorts of A)
-          --> root-tree [action_at v,the carrier of IIG];
-          assume
-A11:      i in InnerVertices IIG \ SortsWithConstants IIG;
-          InnerVertices IIG \ SortsWithConstants IIG misses
+          thus i in SortsWithConstants IIG implies j = FreeGen(v, the Sorts of
+          A) --> root-tree [action_at v,the carrier of IIG];
+A10:      InnerVertices IIG \ SortsWithConstants IIG misses
           SortsWithConstants IIG by XBOOLE_1:79;
-          hence thesis by A9,A11,XBOOLE_0:3;
+          assume
+          i in InnerVertices IIG \ SortsWithConstants IIG;
+          hence thesis by A8,A10,XBOOLE_0:3;
         end;
         suppose
-A12:      v in InnerVertices IIG \ SortsWithConstants IIG;
+A11:      v in InnerVertices IIG \ SortsWithConstants IIG;
           reconsider j = id FreeGen(v, the Sorts of A) as set;
           take j,v;
           thus v = i;
           hereby
+A12:        InnerVertices IIG \ SortsWithConstants IIG c= InnerVertices
+            IIG & InputVertices IIG misses InnerVertices IIG by XBOOLE_1:36,79;
             assume
-A13:        i in InputVertices IIG;
-A14:        InnerVertices IIG \ SortsWithConstants IIG
-            c= InnerVertices IIG by XBOOLE_1:36;
-            InputVertices IIG misses InnerVertices IIG by XBOOLE_1:79;
-            hence j = FreeGen(v, the Sorts of A) --> root-tree[iv.v, v]
-            by A12,A13,A14,XBOOLE_0:3;
+            i in InputVertices IIG;
+            hence
+            j = FreeGen(v, the Sorts of A) --> root-tree[iv.v, v] by A11,
+            A12,XBOOLE_0:3;
           end;
           hereby
-            assume
-A15:        i in SortsWithConstants IIG;
-            InnerVertices IIG \ SortsWithConstants IIG misses
+A13:        InnerVertices IIG \ SortsWithConstants IIG misses
             SortsWithConstants IIG by XBOOLE_1:79;
-            hence j = FreeGen(v, the Sorts of A)
-            --> root-tree [action_at v,the carrier of IIG]
-            by A12,A15,XBOOLE_0:3;
+            assume
+            i in SortsWithConstants IIG;
+            hence
+            j = FreeGen(v, the Sorts of A) --> root-tree [action_at v,the
+            carrier of IIG] by A11,A13,XBOOLE_0:3;
           end;
-          assume i in InnerVertices IIG \ SortsWithConstants IIG;
+          assume
+          i in InnerVertices IIG \ SortsWithConstants IIG;
           thus thesis;
         end;
       end;
     end;
     consider M being ManySortedSet of the carrier of IIG such that
-A16: for i being set st i in the carrier of IIG holds P[i,M.i]
-    from PBOOLE:sch 3(A1);
-A17: now
+A14: for i being set st i in the carrier of IIG holds P[i,M.i] from
+    PBOOLE:sch 3(A1);
+A15: now
       let i be set;
+A16:  (InnerVertices IIG \ SortsWithConstants IIG) \/ SortsWithConstants
+      IIG = InnerVertices IIG by MSAFREE2:5,XBOOLE_1:45;
       assume
-A18:  i in the carrier of IIG;
+A17:  i in the carrier of IIG;
       then reconsider v = i as Vertex of IIG;
-A19:  (InnerVertices IIG \ SortsWithConstants IIG) \/ SortsWithConstants IIG
-      = InnerVertices IIG by MSAFREE2:5,XBOOLE_1:45;
-      v in InputVertices IIG \/ InnerVertices IIG by A18,XBOOLE_1:45;
+      v in InputVertices IIG \/ InnerVertices IIG by A17,XBOOLE_1:45;
       then
-A20:  v in InputVertices IIG or v in InnerVertices IIG by XBOOLE_0:def 3;
-A21:  FreeGen(v, the Sorts of A) = (FreeGen the Sorts of A).v
-      by MSAFREE:def 18;
-A22:  FreeEnv A =
-      MSAlgebra (# FreeSort the Sorts of A, FreeOper the Sorts of A#)
-      by MSAFREE:def 16;
-      per cases by A19,A20,XBOOLE_0:def 3;
+A18:  v in InputVertices IIG or v in InnerVertices IIG by XBOOLE_0:
+      def 3;
+A19:  FreeGen(v, the Sorts of A) = (FreeGen the Sorts of A).v by MSAFREE:
+      def 18;
+A20:  FreeEnv A = MSAlgebra (# FreeSort the Sorts of A, FreeOper the
+        Sorts of A#) by MSAFREE:def 16;
+      per cases by A16,A18,XBOOLE_0:def 3;
       suppose
-A23:    v in InputVertices IIG;
+A21:    v in InputVertices IIG;
         then iv.v in (the Sorts of A).v by MSAFREE2:def 5;
         then
-A24:    root-tree[iv.v, v] in FreeGen(v, the Sorts of A) by MSAFREE:def 17;
-        P[v,M.v] by A16;
-        hence M.i is Function of (FreeGen the Sorts of A).i,
-        (the Sorts of FreeEnv A).i by A21,A22,A23,A24,FUNCOP_1:57;
+A22:    root-tree[iv.v, v] in FreeGen(v, the Sorts of A) by
+        MSAFREE:
+        def 17;
+        P[v,M.v] by A14;
+        hence M.i is Function of (FreeGen the Sorts of A).i, (the Sorts of
+        FreeEnv A).i by A19,A20,A21,A22,FUNCOP_1:57;
       end;
       suppose
-A25:    v in SortsWithConstants IIG;
-        then v in { s where s is SortSymbol of IIG : s is with_const_op }
-        by MSAFREE2:def 1;
-        then consider s being SortSymbol of IIG such that
-A26:    v = s and
-A27:    s is with_const_op;
-        consider o being OperSymbol of IIG such that
-A28:    (the Arity of IIG).o = {} and
-A29:    (the ResultSort of IIG).o = v by A26,A27,MSUALG_2:def 2;
-        set e = root-tree [action_at v,the carrier of IIG];
-A30:    SortsWithConstants IIG c= InnerVertices IIG by MSAFREE2:5;
-        the_result_sort_of o = v by A29,MSUALG_1:def 7;
-        then
-A31:    o = action_at v by A25,A30,MSAFREE2:def 7;
-A32:    e = [action_at v,the carrier of IIG]-tree {} by TREES_4:20;
-A33:    {} = <*>(IIG-Terms the Sorts of A);
+A23:    v in SortsWithConstants IIG;
+        reconsider sy = Sym(action_at v, the Sorts of A) as NonTerminal of
+        DTConMSA the Sorts of A;
         set p = <*>TS(DTConMSA the Sorts of A);
-        reconsider sy = Sym(action_at v, the Sorts of A) as
-        NonTerminal of DTConMSA the Sorts of A;
-A34:    p = the_arity_of o by A28,MSUALG_1:def 6;
-        for n be Nat st n in dom p
-        holds p.n in FreeSort(the Sorts of A,(the_arity_of o)/.n
-        qua SortSymbol of IIG);
-        then p in ((FreeSort the Sorts of A)# * (the Arity of IIG)).o
-        by A34,MSAFREE:9;
-        then sy ==> roots p by A31,MSAFREE:10;
-        then p is SubtreeSeq of Sym(action_at v, the Sorts of A)
-        by DTCONSTR:def 9;
-        then {} is ArgumentSeq of sy by A33,MSATERM:def 2;
-        then e in IIG-Terms the Sorts of A by A32,MSATERM:1;
-        then reconsider e as Element of TS(DTConMSA(the Sorts of A))
-        by MSATERM:def 1;
-A35:    e.{} = [action_at v,the carrier of IIG] by TREES_4:3;
-        the_result_sort_of action_at v = v by A25,A30,MSAFREE2:def 7;
-        then e in {a where a is Element of TS(DTConMSA(the Sorts of A)):
-        (ex x be set st x in (the Sorts of A).v & a = root-tree [x,v]) or
-        ex o be OperSymbol of IIG st [o,the carrier of IIG] = a.{} &
-        the_result_sort_of o = v} by A35;
+        set e = root-tree [action_at v,the carrier of IIG];
+A24:    SortsWithConstants IIG c= InnerVertices IIG by MSAFREE2:5;
+        v in { s where s is SortSymbol of IIG : s is with_const_op } by
+        A23,MSAFREE2:def 1;
+        then ex s being SortSymbol of IIG st v = s & s is with_const_op;
+        then consider o being OperSymbol of IIG such that
+A25:    (the Arity of IIG).o = {} and
+A26:    (the ResultSort of IIG).o = v by MSUALG_2:def 2;
+A27:    for n be Nat st n in dom p holds p.n in FreeSort(the Sorts of A,(
+        the_arity_of o)/.n qua SortSymbol of IIG);
+        p = the_arity_of o by A25,MSUALG_1:def 6;
+        then
+A28:    p in ((FreeSort the Sorts of A)# * (the Arity of IIG)).o by
+        A27,MSAFREE:9;
+        the_result_sort_of o = v by A26,MSUALG_1:def 7;
+        then o = action_at v by A23,A24,MSAFREE2:def 7;
+        then sy ==> roots p by A28,MSAFREE:10;
+        then {} = <*>(IIG-Terms the Sorts of A) & p is SubtreeSeq of Sym(
+        action_at v, the Sorts of A) by DTCONSTR:def 9;
+        then e = [action_at v,the carrier of IIG]-tree {} & {} is ArgumentSeq
+        of sy by MSATERM:def 2,TREES_4:20;
+        then e in IIG-Terms the Sorts of A by MSATERM:1;
+        then reconsider e as Element of TS(DTConMSA(the Sorts of A)) by
+        MSATERM
+        :def 1;
+        e.{} = [action_at v,the carrier of IIG] & the_result_sort_of
+        action_at v = v by A23,A24,MSAFREE2:def 7,TREES_4:3;
+        then
+        e in {a where a is Element of TS(DTConMSA(the Sorts of A)): (ex x
+be set st x in (the Sorts of A).v & a = root-tree [x,v]) or ex o be OperSymbol
+        of IIG st [o,the carrier of IIG] = a.{} & the_result_sort_of o = v};
         then e in FreeSort(the Sorts of A,v) by MSAFREE:def 12;
         then
-A36:    e in (the Sorts of FreeEnv A).v by A22,MSAFREE:def 13;
-        P[v,M.v] by A16;
-        hence M.i is Function of (FreeGen the Sorts of A).i,
-        (the Sorts of FreeEnv A).i by A21,A25,A36,FUNCOP_1:57;
+A29:    e in (the Sorts of FreeEnv A).v by A20,MSAFREE:def 13;
+        P[v,M.v] by A14;
+        hence M.i is Function of (FreeGen the Sorts of A).i, (the Sorts of
+        FreeEnv A).i by A19,A23,A29,FUNCOP_1:57;
       end;
       suppose
-A37:    v in InnerVertices IIG \ SortsWithConstants IIG;
-A38:    dom(id FreeGen(v, the Sorts of A)) = FreeGen(v, the Sorts of A) &
-        rng(id FreeGen(v, the Sorts of A)) = FreeGen(v, the Sorts of A)
-        by RELAT_1:71;
-        P[v,M.v] by A16;
-        hence M.i is Function of (FreeGen the Sorts of A).i,
-        (the Sorts of FreeEnv A).i
-        by A21,A22,A37,A38,FUNCT_2:def 1,RELSET_1:11;
+A30:    v in InnerVertices IIG \ SortsWithConstants IIG;
+A31:    dom(id FreeGen(v, the Sorts of A)) = FreeGen(v, the Sorts of A) &
+rng(id FreeGen(v, the Sorts of A)) = FreeGen(v, the Sorts of A) by RELAT_1:71;
+        P[v,M.v] by A14;
+        hence M.i is Function of (FreeGen the Sorts of A).i, (the Sorts of
+        FreeEnv A).i by A19,A20,A30,A31,FUNCT_2:def 1,RELSET_1:11;
       end;
     end;
     now
       let i be set;
-      assume i in dom M;
+      assume
+      i in dom M;
       then i in the carrier of IIG by PARTFUN1:def 4;
-      hence M.i is Function by A17;
+      hence M.i is Function by A15;
     end;
-    then reconsider M as ManySortedFunction of the carrier of IIG
-    by FUNCOP_1:def 6;
-    reconsider M as ManySortedFunction of FreeGen the Sorts of A,
-    the Sorts of FreeEnv A by A17,PBOOLE:def 18;
+    then reconsider M as ManySortedFunction of the carrier of IIG by FUNCOP_1:
+    def 6;
+    reconsider M as ManySortedFunction of FreeGen the Sorts of A, the Sorts of
+    FreeEnv A by A15,PBOOLE:def 18;
     take M;
     let v be Vertex of IIG;
     hereby
       assume
-A39:  v in InputVertices IIG;
-      P[v,M.v] by A16;
-      hence M.v = FreeGen(v, the Sorts of A) --> root-tree[iv.v, v] by A39;
+A32:  v in InputVertices IIG;
+      P[v,M.v] by A14;
+      hence M.v = FreeGen(v, the Sorts of A) --> root-tree[iv.v, v] by A32;
     end;
     hereby
       assume
-A40:  v in SortsWithConstants IIG;
-      P[v,M.v] by A16;
-      hence M.v = FreeGen(v, the Sorts of A)
-      --> root-tree [action_at v,the carrier of IIG] by A40;
+A33:  v in SortsWithConstants IIG;
+      P[v,M.v] by A14;
+      hence M.v = FreeGen(v, the Sorts of A) --> root-tree [action_at v,the
+      carrier of IIG] by A33;
     end;
     assume
-A41: v in InnerVertices IIG \ SortsWithConstants IIG;
-    P[v,M.v] by A16;
-    hence thesis by A41;
+A34: v in InnerVertices IIG \ SortsWithConstants IIG;
+    P[v,M.v] by A14;
+    hence thesis by A34;
   end;
   uniqueness
   proof
-    let M1,M2 be ManySortedFunction of FreeGen the Sorts of A,
-    the Sorts of FreeEnv A such that
-A42: for v being Vertex of IIG holds (v in InputVertices IIG implies M1.v
-    = FreeGen(v, the Sorts of A) --> root-tree[iv.v, v])
-    & (v in SortsWithConstants IIG implies M1.v = FreeGen(v, the Sorts of A)
-    --> root-tree [action_at v,the carrier of IIG])
-    & (v in (InnerVertices IIG \ SortsWithConstants IIG) implies
-    M1.v = id FreeGen(v, the Sorts of A)) and
-A43: for v being Vertex of IIG holds (v in InputVertices IIG implies M2.v
-    = FreeGen(v, the Sorts of A) --> root-tree[iv.v, v])
-    & (v in SortsWithConstants IIG implies M2.v = FreeGen(v, the Sorts of A)
-    --> root-tree [action_at v,the carrier of IIG])
-    & (v in (InnerVertices IIG \ SortsWithConstants IIG) implies
-    M2.v = id FreeGen(v, the Sorts of A));
+    let M1,M2 be ManySortedFunction of FreeGen the Sorts of A, the Sorts of
+    FreeEnv A such that
+A35: for v being Vertex of IIG holds (v in InputVertices IIG implies
+    M1.v = FreeGen(v, the Sorts of A) --> root-tree[iv.v, v]) & (v in
+SortsWithConstants IIG implies M1.v = FreeGen(v, the Sorts of A) --> root-tree
+    [action_at v,the carrier of IIG]) & (v in (InnerVertices IIG \
+    SortsWithConstants IIG) implies M1.v = id FreeGen(v, the Sorts of A)) and
+A36: for v being Vertex of IIG holds (v in InputVertices IIG implies
+    M2.v = FreeGen(v, the Sorts of A) --> root-tree[iv.v, v]) & (v in
+SortsWithConstants IIG implies M2.v = FreeGen(v, the Sorts of A) --> root-tree
+    [action_at v,the carrier of IIG]) & (v in (InnerVertices IIG \
+    SortsWithConstants IIG) implies M2.v = id FreeGen(v, the Sorts of A));
     now
       let i be set;
+A37:  (InnerVertices IIG \ SortsWithConstants IIG) \/ SortsWithConstants
+      IIG = InnerVertices IIG by MSAFREE2:5,XBOOLE_1:45;
       assume
-A44:  i in the carrier of IIG;
+A38:  i in the carrier of IIG;
       then reconsider v = i as Vertex of IIG;
-A45:  (InnerVertices IIG \ SortsWithConstants IIG) \/ SortsWithConstants IIG
-      = InnerVertices IIG by MSAFREE2:5,XBOOLE_1:45;
-      v in InputVertices IIG \/ InnerVertices IIG by A44,XBOOLE_1:45;
+      v in InputVertices IIG \/ InnerVertices IIG by A38,XBOOLE_1:45;
       then
-A46:  v in InputVertices IIG or v in InnerVertices IIG by XBOOLE_0:def 3;
-      per cases by A45,A46,XBOOLE_0:def 3;
+A39:  v in InputVertices IIG or v in InnerVertices IIG by XBOOLE_0:
+      def 3;
+      per cases by A37,A39,XBOOLE_0:def 3;
       suppose
-A47:    v in InputVertices IIG;
-        then M1.v = FreeGen(v, the Sorts of A) --> root-tree[iv.v, v] by A42;
-        hence M1.i = M2.i by A43,A47;
+A40:    v in InputVertices IIG;
+        then
+        M1.v = FreeGen(v, the Sorts of A) --> root-tree[iv.v, v] by A35;
+        hence M1.i = M2.i by A36,A40;
       end;
       suppose
-A48:    v in SortsWithConstants IIG;
-        then M1.v = FreeGen(v, the Sorts of A)
-        --> root-tree [action_at v,the carrier of IIG] by A42;
-        hence M1.i = M2.i by A43,A48;
+A41:    v in SortsWithConstants IIG;
+        then M1.v = FreeGen(v, the Sorts of A) --> root-tree [action_at v,the
+        carrier of IIG] by A35;
+        hence M1.i = M2.i by A36,A41;
       end;
       suppose
-A49:    v in InnerVertices IIG \ SortsWithConstants IIG;
-        then M1.v = id FreeGen(v, the Sorts of A) by A42;
-        hence M1.i = M2.i by A43,A49;
+A42:    v in InnerVertices IIG \ SortsWithConstants IIG;
+        then M1.v = id FreeGen(v, the Sorts of A) by A35;
+        hence M1.i = M2.i by A36,A42;
       end;
     end;
     hence M1 = M2 by PBOOLE:3;
@@ -494,12 +486,12 @@ definition
   let IIG;
   let A be non-empty Circuit of IIG, iv be InputValues of A;
   func Fix_inp_ext iv -> ManySortedFunction of FreeEnv A, FreeEnv A means
-  :Def2:
-  it is_homomorphism FreeEnv A, FreeEnv A & Fix_inp iv c= it;
+  :
+  Def2: it is_homomorphism FreeEnv A, FreeEnv A & Fix_inp iv c= it;
   existence
   proof
-    reconsider G = FreeGen the Sorts of A as free GeneratorSet of FreeEnv A
-    by MSAFREE:17;
+    reconsider G = FreeGen the Sorts of A as free GeneratorSet of FreeEnv A by
+    MSAFREE:17;
     consider h being ManySortedFunction of FreeEnv A, FreeEnv A such that
 A1: h is_homomorphism FreeEnv A, FreeEnv A and
 A2: h || G = Fix_inp iv by MSAFREE:def 5;
@@ -508,9 +500,9 @@ A2: h || G = Fix_inp iv by MSAFREE:def 5;
     let i be set;
     assume
 A3: i in the carrier of IIG;
-    then reconsider hi = h.i as
-    Function of (the Sorts of FreeEnv A).i,(the Sorts of FreeEnv A).i
-    by PBOOLE:def 18;
+    then reconsider
+    hi = h.i as Function of (the Sorts of FreeEnv A).i,(the Sorts
+    of FreeEnv A).i by PBOOLE:def 18;
     (Fix_inp iv).i = hi | (G.i) by A2,A3,MSAFREE:def 1;
     hence thesis by RELAT_1:88;
   end;
@@ -521,502 +513,488 @@ A4: h1 is_homomorphism FreeEnv A, FreeEnv A and
 A5: Fix_inp iv c= h1 and
 A6: h2 is_homomorphism FreeEnv A, FreeEnv A and
 A7: Fix_inp iv c= h2;
-    reconsider f1=h1, f2=h2 as
-    ManySortedFunction of FreeMSA the Sorts of A, FreeMSA the Sorts of A;
+    reconsider f1=h1, f2=h2 as ManySortedFunction of FreeMSA the Sorts of A,
+    FreeMSA the Sorts of A;
     now
       let i be set such that
 A8:   i in the carrier of IIG;
-      let f be Function of (the Sorts of FreeMSA the Sorts of A).i,
-      (the Sorts of FreeMSA the Sorts of A).i such that
-A9:   f = f1.i;
-      reconsider g = f2.i as
-      Function of (the Sorts of FreeMSA the Sorts of A).i,
-      (the Sorts of FreeMSA the Sorts of A).i by A8,PBOOLE:def 18;
+      reconsider g = f2.i as Function of (the Sorts of FreeMSA the Sorts of A)
+      .i, (the Sorts of FreeMSA the Sorts of A).i by A8,PBOOLE:def 18;
+A9:   (Fix_inp iv).i c= g by A7,A8,PBOOLE:def 5;
       reconsider Fi = (Fix_inp iv).i as Function;
-A10:  (the Sorts of FreeMSA the Sorts of A).i <> {} by A8;
-      Fi is Function of (FreeGen the Sorts of A).i,
-      (the Sorts of FreeMSA the Sorts of A).i by A8,PBOOLE:def 18;
+      Fi is Function of (FreeGen the Sorts of A).i, (the Sorts of FreeMSA
+      the Sorts of A).i by A8,PBOOLE:def 18;
       then
-A11:  dom Fi = (FreeGen the Sorts of A).i by A10,FUNCT_2:def 1;
-A12:  (Fix_inp iv).i c= g by A7,A8,PBOOLE:def 5;
-A13:  (Fix_inp iv).i c= f by A5,A8,A9,PBOOLE:def 5;
-      thus (f2 || FreeGen the Sorts of A).i
-      = g | ((FreeGen the Sorts of A).i) by A8,MSAFREE:def 1
-        .= (Fix_inp iv).i by A11,A12,GRFUNC_1:64
-        .= f | ((FreeGen the Sorts of A).i) by A11,A13,GRFUNC_1:64;
+A10:  dom Fi = (FreeGen the Sorts of A).i by A8,FUNCT_2:def 1;
+      let f be Function of (the Sorts of FreeMSA the Sorts of A).i, (the Sorts
+      of FreeMSA the Sorts of A).i;
+      assume
+      f = f1.i;
+      then
+A11:  (Fix_inp iv).i c= f by A5,A8,PBOOLE:def 5;
+      thus (f2 || FreeGen the Sorts of A).i = g | ((FreeGen the Sorts of A).i)
+      by A8,MSAFREE:def 1
+        .= (Fix_inp iv).i by A10,A9,GRFUNC_1:64
+        .= f | ((FreeGen the Sorts of A).i) by A10,A11,GRFUNC_1:64;
     end;
-    then f1 || FreeGen the Sorts of A = f2 || FreeGen the Sorts of A
-    by MSAFREE:def 1;
+    then f1 || FreeGen the Sorts of A = f2 || FreeGen the Sorts of A by
+    MSAFREE:def 1;
     hence h1 = h2 by A4,A6,EXTENS_1:18;
   end;
 end;
 
 theorem Th2:
   for A being non-empty Circuit of IIG, iv being InputValues of A,
-  v being Vertex of IIG, e being Element of (the Sorts of FreeEnv A).v,
-  x being set st
-  v in InnerVertices IIG \ SortsWithConstants IIG & e = root-tree[x,v]
+  v being Vertex of IIG, e being Element of (the Sorts of FreeEnv A).v, x being
+  set st v in InnerVertices IIG \ SortsWithConstants IIG & e = root-tree[x,v]
   holds (Fix_inp_ext iv).v.e = e
 proof
-  let A be non-empty Circuit of IIG, iv be InputValues of A,
-  v be Vertex of IIG, e be Element of (the Sorts of FreeEnv A).v,
-  x be set such that
+  let A be non-empty Circuit of IIG, iv be InputValues of A, v be Vertex of
+  IIG, e be Element of (the Sorts of FreeEnv A).v, x be set such that
 A1: v in InnerVertices IIG \ SortsWithConstants IIG and
 A2: e = root-tree[x,v];
-  set X = the Sorts of A;
-  FreeEnv A = MSAlgebra (# FreeSort the Sorts of A, FreeOper the Sorts of A #)
-  by MSAFREE:def 16;
-  then e in (FreeSort X).v;
-  then
-A3: e in FreeSort(X,v) by MSAFREE:def 13;
-  FreeSort(X,v) = {a where a is Element of TS(DTConMSA(X)):
-  (ex x being set st x in X.v & a = root-tree[x,v]) or
-  ex o being OperSymbol of IIG st [o,the carrier of IIG] = a.{}
-  & the_result_sort_of o = v} by MSAFREE:def 12;
-  then consider a being Element of TS(DTConMSA(X)) such that
-A4: a = e and
-A5: (ex x being set st x in X.v & a = root-tree[x,v]) or
-  ex o being OperSymbol of IIG st [o,the carrier of IIG] = a.{}
-  & the_result_sort_of o = v by A3;
-A6: e.{} = [x,v] by A2,TREES_4:3;
-  now
+A3: e.{} = [x,v] by A2,TREES_4:3;
+A4: now
     given o being OperSymbol of IIG such that
-A7: [o,the carrier of IIG] = e.{} and the_result_sort_of o = v;
-    v = the carrier of IIG by A6,A7,ZFMISC_1:33;
+A5: [o,the carrier of IIG] = e.{} and
+    the_result_sort_of o = v;
+    v = the carrier of IIG by A3,A5,ZFMISC_1:33;
     hence contradiction by Lm1;
   end;
-  then consider x' being set such that
-A8: x' in X.v and
-A9: e = root-tree[x',v] by A4,A5;
-A10: e in FreeGen(v, the Sorts of A) by A8,A9,MSAFREE:def 17;
-  then e in (FreeGen the Sorts of A).v by MSAFREE:def 18;
+  set X = the Sorts of A;
+  FreeEnv A = MSAlgebra (# FreeSort the Sorts of A, FreeOper the Sorts of
+    A #) by MSAFREE:def 16;
+  then e in (FreeSort X).v;
   then
-A11: e in dom((Fix_inp iv).v) by FUNCT_2:def 1;
+A6: e in FreeSort(X,v) by MSAFREE:def 13;
   Fix_inp iv c= Fix_inp_ext iv by Def2;
-  then (Fix_inp iv).v c= (Fix_inp_ext iv).v by PBOOLE:def 5;
-  hence (Fix_inp_ext iv).v.e = (Fix_inp iv).v.e by A11,GRFUNC_1:8
+  then
+A7: (Fix_inp iv).v c= (Fix_inp_ext iv).v by PBOOLE:def 5;
+  FreeSort(X,v) = {a where a is Element of TS(DTConMSA(X)): (ex x being
+set st x in X.v & a = root-tree[x,v]) or ex o being OperSymbol of IIG st [o,the
+  carrier of IIG] = a.{} & the_result_sort_of o = v} by MSAFREE:def 12;
+  then
+  ex a being Element of TS(DTConMSA(X)) st a = e &( (ex x being set st x in
+X.v & a = root-tree[x,v]) or ex o being OperSymbol of IIG st [o,the carrier of
+  IIG] = a.{} & the_result_sort_of o = v) by A6;
+  then
+A8: e in FreeGen(v, the Sorts of A) by A4,MSAFREE:def 17;
+  then e in (FreeGen the Sorts of A).v by MSAFREE:def 18;
+  then e in dom((Fix_inp iv).v) by FUNCT_2:def 1;
+  hence (Fix_inp_ext iv).v.e = (Fix_inp iv).v.e by A7,GRFUNC_1:8
     .= (id FreeGen(v, the Sorts of A)).e by A1,Def1
-    .= e by A10,FUNCT_1:34;
+    .= e by A8,FUNCT_1:34;
 end;
 
 theorem Th3:
   for A being non-empty Circuit of IIG, iv being InputValues of A,
-  v being Vertex of IIG, x being Element of (the Sorts of A).v
-  st v in InputVertices IIG
-  holds (Fix_inp_ext iv).v.(root-tree[x,v]) = root-tree[iv.v,v]
+  v being Vertex of IIG, x being Element of (the Sorts of A).v st v in
+InputVertices IIG holds (Fix_inp_ext iv).v.(root-tree[x,v]) = root-tree[iv.v,v]
 proof
-  let A be non-empty Circuit of IIG, iv be InputValues of A,
-  v be Vertex of IIG, x be Element of (the Sorts of A).v;
-A1: FreeEnv A = MSAlgebra (#FreeSort the Sorts of A,FreeOper the Sorts of A#)
-  by MSAFREE:def 16;
+  let A be non-empty Circuit of IIG, iv be InputValues of A, v be Vertex of
+  IIG, x be Element of (the Sorts of A).v;
   set e = root-tree[x,v];
   assume
-A2: v in InputVertices IIG;
-A3: e in FreeGen(v, the Sorts of A) by MSAFREE:def 17;
-  then reconsider e as Element of (the Sorts of FreeEnv A).v by A1;
-  e in (FreeGen the Sorts of A).v by A3,MSAFREE:def 18;
-  then
-A4: e in dom((Fix_inp iv).v) by FUNCT_2:def 1;
+A1: v in InputVertices IIG;
+A2: e in FreeGen(v, the Sorts of A) by MSAFREE:def 17;
   Fix_inp iv c= Fix_inp_ext iv by Def2;
-  then (Fix_inp iv).v c= (Fix_inp_ext iv).v by PBOOLE:def 5;
-  hence (Fix_inp_ext iv).v.root-tree[x,v] = (Fix_inp iv).v.e by A4,GRFUNC_1:8
-    .= (FreeGen(v, the Sorts of A) --> root-tree [iv.v,v]).e by A2,Def1
-    .= root-tree[iv.v,v] by A3,FUNCOP_1:13;
+  then
+A3: (Fix_inp iv).v c= (Fix_inp_ext iv).v by PBOOLE:def 5;
+  FreeEnv A = MSAlgebra (#FreeSort the Sorts of A,FreeOper the Sorts of A
+  #) by MSAFREE:def 16;
+  then reconsider e as Element of (the Sorts of FreeEnv A).v by A2;
+  e in (FreeGen the Sorts of A).v by A2,MSAFREE:def 18;
+  then e in dom((Fix_inp iv).v) by FUNCT_2:def 1;
+  hence (Fix_inp_ext iv).v.root-tree[x,v] = (Fix_inp iv).v.e by A3, GRFUNC_1
+  :8
+    .= (FreeGen(v, the Sorts of A) --> root-tree [iv.v,v]).e by A1,Def1
+    .= root-tree[iv.v,v] by A2,FUNCOP_1:13;
 end;
 
 theorem Th4:
   for A being non-empty Circuit of IIG, iv being InputValues of A,
-  v being Vertex of IIG, e being Element of (the Sorts of FreeEnv A).v,
-  p, q being DTree-yielding FinSequence
-  st v in InnerVertices IIG & e = [action_at v,the carrier of IIG]-tree p
-  & dom p = dom q & for k being Element of NAT st k in dom p
-  holds q.k = (Fix_inp_ext iv).((the_arity_of action_at v)/.k).(p.k)
-  holds (Fix_inp_ext iv).v.e = [action_at v,the carrier of IIG]-tree q
+  v being Vertex of IIG, e being Element of (the Sorts of FreeEnv A).v, p, q
+being DTree-yielding FinSequence st v in InnerVertices IIG & e = [action_at v,
+the carrier of IIG]-tree p & dom p = dom q & for k being Element of NAT st k in
+dom p holds q.k = (Fix_inp_ext iv).((the_arity_of action_at v)/.k).(p.k) holds
+  (Fix_inp_ext iv).v.e = [action_at v,the carrier of IIG]-tree q
 proof
-  let A be non-empty Circuit of IIG, iv be InputValues of A,
-  v be Vertex of IIG, e be Element of (the Sorts of FreeEnv A).v,
-  p, q be DTree-yielding FinSequence such that
+  let A be non-empty Circuit of IIG, iv be InputValues of A, v be Vertex of
+  IIG, e be Element of (the Sorts of FreeEnv A).v, p, q be DTree-yielding
+  FinSequence such that
 A1: v in InnerVertices IIG and
 A2: e = [action_at v,the carrier of IIG]-tree p and
 A3: dom p = dom q and
-A4: for k being Element of NAT st k in dom p
-  holds q.k = (Fix_inp_ext iv).((the_arity_of action_at v)/.k).(p.k);
-A5: for k being Nat st k in dom p
-  holds q.k = (Fix_inp_ext iv).((the_arity_of action_at v)/.k).(p.k) by A4;
-A6: FreeEnv A =
-  MSAlgebra (# FreeSort the Sorts of A, FreeOper the Sorts of A #)
-  by MSAFREE:def 16;
+A4: for k being Element of NAT st k in dom p holds q.k = (Fix_inp_ext iv
+  ).((the_arity_of action_at v)/.k).(p.k);
   set o = action_at v;
-A7: the_result_sort_of o = v by A1,MSAFREE2:def 7;
+A5: the_result_sort_of o = v by A1,MSAFREE2:def 7;
   then
-A8: len p = len the_arity_of o by A2,MSAFREE2:13;
-A9: now
-    let k be Nat;
-    assume k in dom p;
-    then
-A10: k in dom the_arity_of o by A8,FINSEQ_3:31;
-    then p.k in (the Sorts of FreeEnv A).((the_arity_of o).k)
-    by A2,A7,MSAFREE2:14;
-    hence p.k in (the Sorts of FreeEnv A).((the_arity_of o)/.k)
-    by A10,PARTFUN1:def 8;
-  end;
-  then
-A11: p in Args(o,FreeEnv A) by A8,MSAFREE2:7;
-A12: Args(o,FreeEnv A)
-  = ((FreeSort the Sorts of A)# * (the Arity of IIG)).o by A6,MSUALG_1:def 9;
-A13: len q = len the_arity_of o by A3,A8,FINSEQ_3:31;
-A14: now
+A6: len p = len the_arity_of o by A2,MSAFREE2:13;
+A7: now
     let k be Nat;
     assume
-A15: k in dom q;
+A8: k in dom q;
     then
-A16: k in dom the_arity_of o by A3,A8,FINSEQ_3:31;
-A17: q.k = (Fix_inp_ext iv).((the_arity_of o)/.k).(p.k) by A3,A4,A15;
-    p.k in (the Sorts of FreeEnv A).((the_arity_of o).k)
-    by A2,A7,A16,MSAFREE2:14;
-    then p.k in (the Sorts of FreeEnv A).((the_arity_of o)/.k)
-    by A16,PARTFUN1:def 8;
-    hence q.k in (the Sorts of FreeEnv A).((the_arity_of o)/.k) by A17,
-FUNCT_2:7;
+A9: k in dom the_arity_of o by A3,A6,FINSEQ_3:31;
+    then p.k in (the Sorts of FreeEnv A).((the_arity_of o).k) by A2,A5,
+    MSAFREE2:14;
+    then
+A10: p.k in (the Sorts of FreeEnv A).((the_arity_of o)/.k) by A9,
+    PARTFUN1:def 8;
+    q.k = (Fix_inp_ext iv).((the_arity_of o)/.k).(p.k) by A3,A4,A8;
+    hence q.k in (the Sorts of FreeEnv A).((the_arity_of o)/.k) by A10,
+    FUNCT_2:7;
   end;
+A11: now
+    let k be Nat;
+    assume
+    k in dom p;
+    then
+A12: k in dom the_arity_of o by A6,FINSEQ_3:31;
+    then p.k in (the Sorts of FreeEnv A).((the_arity_of o).k) by A2,A5,
+    MSAFREE2:14;
+    hence p.k in (the Sorts of FreeEnv A).((the_arity_of o)/.k) by A12,
+    PARTFUN1:def 8;
+  end;
+  then reconsider x = p as Element of Args(o,FreeEnv A) by A6,MSAFREE2:7;
+A13: FreeEnv A = MSAlgebra (# FreeSort the Sorts of A, FreeOper the Sorts of
+    A #) by MSAFREE:def 16;
   then
-A18: q in Args(o,FreeEnv A) by A13,MSAFREE2:7;
-  reconsider y = q as Element of Args(o,FreeEnv A) by A13,A14,MSAFREE2:7;
-  reconsider x = p as Element of Args(o,FreeEnv A) by A8,A9,MSAFREE2:7;
-A19: y = (Fix_inp_ext iv)#x by A5,MSUALG_3:def 8;
-  reconsider pp = p as FinSequence of TS(DTConMSA(the Sorts of A))
-  by A11,A12,MSAFREE:8;
-A20: (Sym(o,the Sorts of A)) ==> roots pp by A11,A12,MSAFREE:10;
-A21: e = (Sym(action_at v,the Sorts of A))-tree pp by A2,MSAFREE:def 11
-    .= (DenOp(action_at v,the Sorts of A)).x by A20,MSAFREE:def 14
-    .= ((the Charact of FreeEnv A).o).x by A6,MSAFREE:def 15
+A14: Args(o,FreeEnv A) = ((FreeSort the Sorts of A)# * (the Arity of IIG)).o
+  by MSUALG_1:def 9;
+  then reconsider
+  pp = p as FinSequence of TS(DTConMSA(the Sorts of A)) by A6,A11,
+  MSAFREE:8,MSAFREE2:7;
+  p in Args(o,FreeEnv A) by A6,A11,MSAFREE2:7;
+  then
+A15: (Sym(o,the Sorts of A)) ==> roots pp by A14,MSAFREE:10;
+A16: len q = len the_arity_of o by A3,A6,FINSEQ_3:31;
+  then reconsider y = q as Element of Args(o,FreeEnv A) by A7,MSAFREE2:7;
+A17: Fix_inp_ext iv is_homomorphism FreeEnv A,FreeEnv A by Def2;
+  reconsider qq = q as FinSequence of TS(DTConMSA(the Sorts of A)) by A14,A16,
+  A7,MSAFREE:8,MSAFREE2:7;
+  q in Args(o,FreeEnv A) by A16,A7,MSAFREE2:7;
+  then
+A18: (Sym(o,the Sorts of A)) ==> roots qq by A14,MSAFREE:10;
+  for k being Nat st k in dom p holds q.k = (Fix_inp_ext iv).((
+  the_arity_of action_at v)/.k).(p.k) by A4;
+  then
+A19: y = (Fix_inp_ext iv)#x by MSUALG_3:def 8;
+  e = (Sym(action_at v,the Sorts of A))-tree pp by A2,MSAFREE:def 11
+    .= (DenOp(action_at v,the Sorts of A)).x by A15,MSAFREE:def 14
+    .= ((the Charact of FreeEnv A).o).x by A13,MSAFREE:def 15
     .= Den(action_at v,FreeEnv A).x by MSUALG_1:def 11;
-  reconsider qq = q as FinSequence of TS(DTConMSA(the Sorts of A))
-  by A12,A18,MSAFREE:8;
-A22: (Sym(o,the Sorts of A)) ==> roots qq by A12,A18,MSAFREE:10;
-  Fix_inp_ext iv is_homomorphism FreeEnv A,FreeEnv A by Def2;
-  hence (Fix_inp_ext iv).v.e
-  = Den(action_at v,FreeEnv A).q by A7,A19,A21,MSUALG_3:def 9
-    .= ((FreeOper the Sorts of A).o).q by A6,MSUALG_1:def 11
+  hence (Fix_inp_ext iv).v.e = Den(action_at v,FreeEnv A).q by A5,A19,A17,
+  MSUALG_3:def 9
+    .= ((FreeOper the Sorts of A).o).q by A13,MSUALG_1:def 11
     .= (DenOp(action_at v,the Sorts of A)).q by MSAFREE:def 15
-    .= (Sym(action_at v,the Sorts of A))-tree qq by A22,MSAFREE:def 14
+    .= (Sym(action_at v,the Sorts of A))-tree qq by A18,MSAFREE:def 14
     .= [action_at v,the carrier of IIG]-tree q by MSAFREE:def 11;
 end;
 
 theorem Th5:
   for A being non-empty Circuit of IIG, iv being InputValues of A,
-  v being Vertex of IIG, e being Element of (the Sorts of FreeEnv A).v
-  st v in SortsWithConstants IIG
-  holds (Fix_inp_ext iv).v.e = root-tree[action_at v,the carrier of IIG]
+  v being Vertex of IIG, e being Element of (the Sorts of FreeEnv A).v st v in
+  SortsWithConstants IIG holds (Fix_inp_ext iv).v.e = root-tree[action_at v,the
+  carrier of IIG]
 proof
-  let A be non-empty Circuit of IIG, iv be InputValues of A,
-  v be Vertex of IIG, e be Element of (the Sorts of FreeEnv A).v;
-A1: FreeEnv A =
-  MSAlgebra (# FreeSort the Sorts of A, FreeOper the Sorts of A #)
-  by MSAFREE:def 16;
+  let A be non-empty Circuit of IIG, iv be InputValues of A, v be Vertex of
+  IIG, e be Element of (the Sorts of FreeEnv A).v;
   set X = the Sorts of A;
   assume
-A2: v in SortsWithConstants IIG;
-  e in (FreeSort the Sorts of A).v by A1;
+A1: v in SortsWithConstants IIG;
+A2: FreeEnv A = MSAlgebra (# FreeSort the Sorts of A, FreeOper the Sorts of
+    A #) by MSAFREE:def 16;
+  then e in (FreeSort the Sorts of A).v;
   then e in FreeSort(the Sorts of A,v) by MSAFREE:def 13;
-  then e in {a where a is Element of TS(DTConMSA(X)):
-  (ex x be set st x in X.v & a = root-tree [x,v]) or
-  ex o be OperSymbol of IIG st [o,the carrier of IIG] = a.{}
-  & the_result_sort_of o = v} by MSAFREE:def 12;
-  then consider a being Element of TS(DTConMSA(X)) such that
-A3: e = a & ((ex x be set st x in X.v & a = root-tree [x,v]) or
-  ex o be OperSymbol of IIG st [o,the carrier of IIG] = a.{}
-  & the_result_sort_of o = v);
+  then
+  e in {a where a is Element of TS(DTConMSA(X)): (ex x be set st x in X.v
+& a = root-tree [x,v]) or ex o be OperSymbol of IIG st [o,the carrier of IIG] =
+  a.{} & the_result_sort_of o = v} by MSAFREE:def 12;
+  then
+A3: ex a being Element of TS(DTConMSA(X)) st e = a &( (ex x be set st x in X.
+v & a = root-tree [x,v]) or ex o be OperSymbol of IIG st [o,the carrier of IIG]
+  = a.{} & the_result_sort_of o = v);
   per cases by A3;
-  suppose ex x be set st x in X.v & e = root-tree [x,v];
-    then
-A4: e in FreeGen(v, the Sorts of A) by MSAFREE:def 17;
-    then e in (FreeGen the Sorts of A).v by MSAFREE:def 18;
-    then
-A5: e in dom((Fix_inp iv).v) by FUNCT_2:def 1;
+  suppose
+A4: ex x be set st x in X.v & e = root-tree [x,v];
     Fix_inp iv c= Fix_inp_ext iv by Def2;
-    then (Fix_inp iv).v c= (Fix_inp_ext iv).v by PBOOLE:def 5;
+    then
+A5: (Fix_inp iv).v c= (Fix_inp_ext iv).v by PBOOLE:def 5;
+A6: e in FreeGen(v, the Sorts of A) by A4,MSAFREE:def 17;
+    then e in (FreeGen the Sorts of A).v by MSAFREE:def 18;
+    then e in dom((Fix_inp iv).v) by FUNCT_2:def 1;
     hence (Fix_inp_ext iv).v.e = (Fix_inp iv).v.e by A5,GRFUNC_1:8
-      .= (FreeGen(v, the Sorts of A)
-    --> root-tree [action_at v,the carrier of IIG]).e by A2,Def1
-      .= root-tree[action_at v,the carrier of IIG] by A4,FUNCOP_1:13;
+      .= (FreeGen(v, the Sorts of A) --> root-tree [action_at v,the carrier
+    of IIG]).e by A1,Def1
+      .= root-tree[action_at v,the carrier of IIG] by A6,FUNCOP_1:13;
   end;
-  suppose ex o be OperSymbol of IIG st [o,the carrier of IIG] = e.{}
-    & the_result_sort_of o = v;
+  suppose
+    ex o be OperSymbol of IIG st [o,the carrier of IIG] = e.{} &
+    the_result_sort_of o = v;
     then consider o' be OperSymbol of IIG such that
-A6: [o',the carrier of IIG] = e.{} and
-A7: the_result_sort_of o' = v;
-A8: SortsWithConstants IIG c= InnerVertices IIG by MSAFREE2:5;
+A7: [o',the carrier of IIG] = e.{} and
+A8: the_result_sort_of o' = v;
+A9: SortsWithConstants IIG c= InnerVertices IIG by MSAFREE2:5;
+    then o' = action_at v by A1,A8,MSAFREE2:def 7;
+    then consider q being DTree-yielding FinSequence such that
+A10: e = [action_at v,the carrier of IIG]-tree q by A7,CIRCUIT1:
+    10;
+    v in { s where s is SortSymbol of IIG : s is with_const_op } by A1,
+    MSAFREE2:def 1;
+    then ex s being SortSymbol of IIG st v = s & s is with_const_op;
+    then consider o being OperSymbol of IIG such that
+A11: (the Arity of IIG).o = {} and
+A12: (the ResultSort of IIG).o = v by MSUALG_2:def 2;
+A13: Fix_inp_ext iv is_homomorphism FreeEnv A,FreeEnv A by Def2;
+    the_result_sort_of o = v by A12,MSUALG_1:def 7;
     then
-A9: the_result_sort_of action_at v = v by A2,MSAFREE2:def 7;
-    v in { s where s is SortSymbol of IIG : s is with_const_op }
-    by A2,MSAFREE2:def 1;
-    then consider s being SortSymbol of IIG such that
-A10: v = s and
-A11: s is with_const_op;
-    consider o being OperSymbol of IIG such that
-A12: (the Arity of IIG).o = {} and
-A13: (the ResultSort of IIG).o = v by A10,A11,MSUALG_2:def 2;
-    the_result_sort_of o = v by A13,MSUALG_1:def 7;
-    then
-A14: o = action_at v by A2,A8,MSAFREE2:def 7;
-A15: o' = action_at v by A2,A7,A8,MSAFREE2:def 7;
+A14: o = action_at v by A1,A9,MSAFREE2:def 7;
     action_at v in the carrier' of IIG;
     then
-A16: action_at v in dom the Arity of IIG by FUNCT_2:def 1;
-A17: Args(action_at v,FreeEnv A)
-    = ((the Sorts of FreeEnv A)# * the Arity of IIG).action_at v
-    by MSUALG_1:def 9
-      .= (the Sorts of FreeEnv A)#.<*>the carrier of IIG
-    by A12,A14,A16,FUNCT_1:23
+A15: action_at v in dom the Arity of IIG by FUNCT_2:def 1;
+A16: Args(action_at v,FreeEnv A) = ((the Sorts of FreeEnv A)# * the Arity
+    of IIG).action_at v by MSUALG_1:def 9
+      .= (the Sorts of FreeEnv A)#.<*>the carrier of IIG by A11,A14,A15,
+    FUNCT_1:23
       .= {{}} by PRE_CIRC:5;
-    then reconsider x = {} as Element of Args(action_at v,FreeEnv A)
-    by TARSKI:def 1;
-A18: x = (Fix_inp_ext iv)#x by A17,TARSKI:def 1;
-A19: Fix_inp_ext iv is_homomorphism FreeEnv A,FreeEnv A by Def2;
-    consider q being DTree-yielding FinSequence such that
-A20: e = [action_at v,the carrier of IIG]-tree q by A6,A15,CIRCUIT1:10;
-    len q = len the_arity_of action_at v by A9,A20,MSAFREE2:13
-      .= len {} by A12,A14,MSUALG_1:def 6
+    then reconsider x = {} as Element of Args(action_at v,FreeEnv A) by
+    TARSKI:
+    def 1;
+A17: x = (Fix_inp_ext iv)#x by A16,TARSKI:def 1;
+A18: Args(action_at v,FreeEnv A) = ((FreeSort the Sorts of A)# * (the
+    Arity of IIG)).o by A2,A14, MSUALG_1:def 9;
+    then reconsider p = x as FinSequence of TS(DTConMSA(the Sorts of A)) by
+    MSAFREE:8;
+A19: (Sym(action_at v,the Sorts of A)) ==> roots p by A14,A18,MSAFREE:10;
+A20: the_result_sort_of action_at v = v by A1,A9,MSAFREE2:def 7;
+    then len q = len the_arity_of action_at v by A10,MSAFREE2:13
+      .= len {} by A11,A14,MSUALG_1:def 6
       .= 0;
     then q = {};
     then
-A21: e = root-tree[action_at v,the carrier of IIG] by A20,TREES_4:20;
-A22: Args(action_at v,FreeEnv A)
-    = ((FreeSort the Sorts of A)# * (the Arity of IIG)).o by A1,A14,
-MSUALG_1:def 9;
-    then reconsider p = x as FinSequence of TS(DTConMSA(the Sorts of A))
-    by MSAFREE:8;
-A23: (Sym(action_at v,the Sorts of A)) ==> roots p by A14,A22,MSAFREE:10;
-    Den(action_at v,FreeEnv A).x
-    = ((FreeOper the Sorts of A).action_at v).x by A1,MSUALG_1:def 11
+A21: e = root-tree[action_at v,the carrier of IIG] by A10,TREES_4:20;
+    Den(action_at v,FreeEnv A).x = ((FreeOper the Sorts of A).action_at v
+    ).x by A2,MSUALG_1:def 11
       .= (DenOp(action_at v,the Sorts of A)).x by MSAFREE:def 15
-      .= (Sym(action_at v,the Sorts of A))-tree p by A23,MSAFREE:def 14
+      .= (Sym(action_at v,the Sorts of A))-tree p by A19,MSAFREE:def 14
       .= [action_at v,the carrier of IIG]-tree p by MSAFREE:def 11
       .= root-tree[action_at v,the carrier of IIG] by TREES_4:20;
-    hence thesis by A9,A18,A19,A21,MSUALG_3:def 9;
+    hence thesis by A20,A17,A13,A21,MSUALG_3:def 9;
   end;
 end;
 
 theorem Th6:
   for A being non-empty Circuit of IIG, iv being InputValues of A,
-  v being Vertex of IIG, e, e1 being Element of (the Sorts of FreeEnv A).v,
-  t, t1 being DecoratedTree st t = e & t1 = e1 & e1 = (Fix_inp_ext iv).v.e
-  holds dom t = dom t1
+v being Vertex of IIG, e, e1 being Element of (the Sorts of FreeEnv A).v, t, t1
+being DecoratedTree st t = e & t1 = e1 & e1 = (Fix_inp_ext iv).v.e holds dom t
+  = dom t1
 proof
-  let A be non-empty Circuit of IIG, iv be InputValues of A,
-  v be Vertex of IIG, e, e1 be Element of (the Sorts of FreeEnv A).v,
-  t, t1 be DecoratedTree;
+  let A be non-empty Circuit of IIG, iv be InputValues of A, v be Vertex of
+  IIG, e, e1 be Element of (the Sorts of FreeEnv A).v, t, t1 be DecoratedTree;
   set X = the Sorts of A;
   set FX = the Sorts of FreeEnv A;
-A1: FreeMSA X = MSAlgebra (# FreeSort(X), FreeOper(X) #) by MSAFREE:def 16;
-  defpred P[Element of NAT] means for v being Vertex of IIG,
-  e, e1 being Element of FX.v, t, t1 being DecoratedTree st t = e
-  & t1 = e1 & depth(v,A) <= $1 & e1 = (Fix_inp_ext iv).v.e
-  holds dom t = dom t1;
-A2: P[0]
+  defpred P[Element of NAT] means for v being Vertex of IIG, e, e1 being
+  Element of FX.v, t, t1 being DecoratedTree st t = e & t1 = e1 & depth(v,A) <=
+  $1 & e1 = (Fix_inp_ext iv).v.e holds dom t = dom t1;
+  reconsider k = depth(v,A) as Element of NAT by ORDINAL1:def 13;
+A1: depth(v,A) <= k;
+A2: FreeMSA X = MSAlgebra (# FreeSort(X), FreeOper(X) #) by MSAFREE:def 16;
+A3: for k be Element of NAT st P[k] holds P[k+1]
   proof
-    let v be Vertex of IIG, e, e1 be Element of FX.v,
-    t, t1 be DecoratedTree such that
-A3: t = e & t1 = e1 and
-A4: depth(v,A) <= 0 and
-A5: e1 = (Fix_inp_ext iv).v.e;
-A6: depth(v,A) = 0 by A4,NAT_1:3;
-A7: e in FX.v;
-A8: (FreeSort X).v = FreeSort(X,v) by MSAFREE:def 13;
-    FreeSort(X,v) = {a where a is Element of TS(DTConMSA(X)):
-    (ex x being set st x in X.v & a = root-tree[x,v]) or
-    ex o being OperSymbol of IIG st [o,the carrier of IIG] = a.{}
-    & the_result_sort_of o = v} by MSAFREE:def 12;
+A4: (InnerVertices IIG \ SortsWithConstants IIG ) \/ SortsWithConstants
+    IIG = InnerVertices IIG by MSAFREE2:5,XBOOLE_1:45;
+    let k be Element of NAT;
+    assume
+A5: P[k];
+    let v be Vertex of IIG, e, e1 be Element of FX.v, t, t1 be DecoratedTree;
+    assume that
+A6: t = e and
+A7: t1 = e1 and
+A8: depth(v,A) <= (k+1) and
+A9: e1 = (Fix_inp_ext iv).v.e;
+A10: FreeSort(X,v) = {a where a is Element of TS(DTConMSA(X)): (ex x being
+set st x in X.v & a = root-tree[x,v]) or ex o being OperSymbol of IIG st [o,the
+    carrier of IIG] = a.{} & the_result_sort_of o = v} by MSAFREE:def 12;
+    InputVertices IIG \/ InnerVertices IIG = the carrier of IIG by
+    XBOOLE_1:45;
+    then
+A11: v in InputVertices IIG or v in InnerVertices IIG by XBOOLE_0:def
+    3;
+    e in FX.v & (FreeSort X).v = FreeSort(X,v) by MSAFREE:def 13;
     then consider a being Element of TS(DTConMSA(X)) such that
-A9: a = e and
-A10: (ex x being set st x in X.v & a = root-tree[x,v]) or
-    ex o being OperSymbol of IIG st [o,the carrier of IIG] = a.{}
-    & the_result_sort_of o = v by A1,A7,A8;
-    per cases by A6,A10,CIRCUIT1:19;
+A12: a = e and
+A13: (ex x being set st x in X.v & a = root-tree[x,v]) or ex o being
+OperSymbol of IIG st [o,the carrier of IIG] = a.{} & the_result_sort_of o = v
+    by A2,A10;
+    per cases by A13,A11,A4,XBOOLE_0:def 3;
     suppose
-A11:  v in InputVertices IIG;
-      then consider x being set such that
-A12:  x in X.v and
-A13:  a = root-tree[x,v] by A10,MSAFREE2:2;
-A14:  (Fix_inp_ext iv).v.a = root-tree[iv.v,v] by A11,A12,A13,Th3;
-      thus dom t = {{}} by A3,A9,A13,TREES_1:56,TREES_4:3
-        .= dom t1 by A3,A5,A9,A14,TREES_1:56,TREES_4:3;
+A14:  v in InputVertices IIG;
+      then
+A15:  (Fix_inp_ext iv).v.a = root-tree[iv.v,v] by A13,
+      Th3,MSAFREE2:2;
+      thus dom t = {{}} by A6,A12,A13,A14,MSAFREE2:2,TREES_1:56,TREES_4:3
+        .= dom t1 by A7,A9,A12,A15,TREES_1:56,TREES_4:3;
+    end;
+    suppose
+      v in InnerVertices IIG \ SortsWithConstants IIG & ex x being
+      set st x in X.v & a = root-tree[x,v];
+      hence thesis by A6,A7,A9,A12,Th2;
     end;
     suppose that
-A15:  v in SortsWithConstants IIG and
-A16:  ex x being set st x in X.v & a = root-tree[x,v];
-      consider x being set such that x in X.v and
-A17:  a = root-tree[x,v] by A16;
-A18:  (Fix_inp_ext iv).v.a = root-tree[action_at v,the carrier of IIG]
-      by A9,A15,Th5;
-      thus dom t = {{}} by A3,A9,A17,TREES_1:56,TREES_4:3
-        .= dom t1 by A3,A5,A9,A18,TREES_1:56,TREES_4:3;
+A16:  v in SortsWithConstants IIG and
+A17:  ex x being set st x in X.v & a = root-tree[x,v];
+A18:  (Fix_inp_ext iv).v.a = root-tree[action_at v,the carrier of IIG] by
+      A12,A16,Th5;
+      thus dom t = {{}} by A6,A12,A17,TREES_1:56,TREES_4:3
+        .= dom t1 by A7,A9,A12,A18,TREES_1:56,TREES_4:3;
     end;
     suppose that
-A19:  v in SortsWithConstants IIG and
-A20:  ex o being OperSymbol of IIG st [o,the carrier of IIG] = a.{}
-      & the_result_sort_of o = v;
+A19:  v in InnerVertices IIG and
+A20:  ex o being OperSymbol of IIG st [o,the carrier of IIG] = a.{} &
+      the_result_sort_of o = v;
       consider o being OperSymbol of IIG such that
 A21:  [o,the carrier of IIG] = a.{} and
 A22:  the_result_sort_of o = v by A20;
-      v in { s where s is SortSymbol of IIG : s is with_const_op }
-      by A19,MSAFREE2:def 1;
-      then consider s being SortSymbol of IIG such that
-A23:  v = s and
-A24:  s is with_const_op;
-      consider o' being OperSymbol of IIG such that
-A25:  (the Arity of IIG).o' = {} and
-A26:  (the ResultSort of IIG).o' = v by A23,A24,MSUALG_2:def 2;
-A27:  SortsWithConstants IIG c= InnerVertices IIG by MSAFREE2:5;
-A28:  the_result_sort_of o' = v by A26,MSUALG_1:def 7;
-      then
-A29:  o' = action_at v by A19,A27,MSAFREE2:def 7;
-      o = action_at v by A19,A22,A27,MSAFREE2:def 7;
+A23:  o = action_at v by A19,A22,MSAFREE2:def 7;
       then consider p being DTree-yielding FinSequence such that
-A30:  a = [action_at v,the carrier of IIG]-tree p by A9,A21,CIRCUIT1:10;
-      len p = len the_arity_of o' by A9,A28,A29,A30,MSAFREE2:13
-        .= len {} by A25,MSUALG_1:def 6
-        .= 0;
-      then p = {};
-      then
-A31:  a = root-tree[o',the carrier of IIG] by A29,A30,TREES_4:20;
-A32:  (Fix_inp_ext iv).v.a = root-tree[action_at v,the carrier of IIG]
-      by A9,A19,Th5;
-      thus dom t = {{}} by A3,A9,A31,TREES_1:56,TREES_4:3
-        .= dom t1 by A3,A5,A9,A32,TREES_1:56,TREES_4:3;
-    end;
-  end;
-A33: for k be Element of NAT st P[k] holds P[k+1]
-  proof
-    let k be Element of NAT;
-    assume
-A34: P[k];
-    let v be Vertex of IIG, e, e1 be Element of FX.v, t, t1 be DecoratedTree;
-    assume
-A35: t = e & t1 = e1 & depth(v,A) <= (k+1) & e1 = (Fix_inp_ext iv).v.e;
-A36: e in FX.v;
-A37: (FreeSort X).v = FreeSort(X,v) by MSAFREE:def 13;
-    FreeSort(X,v) = {a where a is Element of TS(DTConMSA(X)):
-    (ex x being set st x in X.v & a = root-tree[x,v]) or
-    ex o being OperSymbol of IIG st [o,the carrier of IIG] = a.{}
-    & the_result_sort_of o = v} by MSAFREE:def 12;
-    then consider a being Element of TS(DTConMSA(X)) such that
-A38: a = e and
-A39: (ex x being set st x in X.v & a = root-tree[x,v]) or
-    ex o being OperSymbol of IIG st [o,the carrier of IIG] = a.{}
-    & the_result_sort_of o = v by A1,A36,A37;
-    InputVertices IIG \/ InnerVertices IIG = the carrier of IIG
-    by XBOOLE_1:45;
-    then
-A40: v in InputVertices IIG or v in InnerVertices IIG by XBOOLE_0:def 3;
-A41: (InnerVertices IIG \ SortsWithConstants IIG ) \/ SortsWithConstants IIG
-    = InnerVertices IIG by MSAFREE2:5,XBOOLE_1:45;
-    per cases by A39,A40,A41,XBOOLE_0:def 3;
-    suppose
-A42:  v in InputVertices IIG;
-      then consider x being set such that
-A43:  x in X.v and
-A44:  a = root-tree[x,v] by A39,MSAFREE2:2;
-A45:  (Fix_inp_ext iv).v.a = root-tree[iv.v,v] by A42,A43,A44,Th3;
-      thus dom t = {{}} by A35,A38,A44,TREES_1:56,TREES_4:3
-        .= dom t1 by A35,A38,A45,TREES_1:56,TREES_4:3;
-    end;
-    suppose that
-A46:  v in InnerVertices IIG \ SortsWithConstants IIG and
-A47:  ex x being set st x in X.v & a = root-tree[x,v];
-      consider x being set such that x in X.v and
-A48:  a = root-tree[x,v] by A47;
-      thus thesis by A35,A38,A46,A48,Th2;
-    end;
-    suppose that
-A49:  v in SortsWithConstants IIG and
-A50:  ex x being set st x in X.v & a = root-tree[x,v];
-      consider x being set such that x in X.v and
-A51:  a = root-tree[x,v] by A50;
-A52:  (Fix_inp_ext iv).v.a = root-tree[action_at v,the carrier of IIG]
-      by A38,A49,Th5;
-      thus dom t = {{}} by A35,A38,A51,TREES_1:56,TREES_4:3
-        .= dom t1 by A35,A38,A52,TREES_1:56,TREES_4:3;
-    end;
-    suppose that
-A53:  v in InnerVertices IIG and
-A54:  ex o being OperSymbol of IIG st [o,the carrier of IIG] = a.{}
-      & the_result_sort_of o = v;
-      consider o being OperSymbol of IIG such that
-A55:  [o,the carrier of IIG] = a.{} and
-A56:  the_result_sort_of o = v by A54;
-A57:  o = action_at v by A53,A56,MSAFREE2:def 7;
-      then consider p being DTree-yielding FinSequence such that
-A58:  e = [action_at v,the carrier of IIG]-tree p by A38,A55,CIRCUIT1:10;
-      deffunc F(Nat) =
-      (Fix_inp_ext iv).((the_arity_of action_at v)/.$1).(p.$1);
+A24:  e = [action_at v,the carrier of IIG]-tree p by A12,A21,
+      CIRCUIT1:10;
+      deffunc F(Nat) = (Fix_inp_ext iv).((the_arity_of action_at v)/.$1).(p.$1
+      );
       consider q being FinSequence such that
-A59:  len q = len p and
-A60:  for k being Nat st k in dom q holds q.k = F(k) from FINSEQ_1:sch 2;
-A61:  for k being Element of NAT st k in dom q holds q.k = F(k) by A60;
-      len p = len the_arity_of action_at v by A56,A57,A58,MSAFREE2:13;
+A25:  len q = len p and
+A26:  for k being Nat st k in dom q holds q.k = F(k) from FINSEQ_1:
+      sch 2;
+A27:  dom p = dom q by A25,FINSEQ_3:31;
+      len p = len the_arity_of action_at v by A22,A23,A24,MSAFREE2:13;
       then
-A62:  dom p = dom the_arity_of action_at v by FINSEQ_3:31;
-A63:  dom doms p = dom p by TREES_3:39;
-A64:  dom p = dom q by A59,FINSEQ_3:31;
-      now
+A28:  dom p = dom the_arity_of action_at v by FINSEQ_3:31;
+A29:  now
         let x be set;
         assume
-A65:    x in dom q;
+A30:    x in dom q;
         then reconsider i = x as Element of NAT;
         set v1 = (the_arity_of action_at v)/.i;
-A66:    i in dom p by A59,A65,FINSEQ_3:31;
-        v1 = (the_arity_of o).i by A57,A62,A64,A65,PARTFUN1:def 8;
-        then reconsider ee = p.i as Element of FX.v1
-        by A56,A57,A58,A62,A64,A65,MSAFREE2:14;
+        v1 = (the_arity_of o).i by A23,A28,A27,A30,PARTFUN1:def 8;
+        then reconsider
+        ee = p.i as Element of FX.v1 by A22,A23,A24,A28,A27,A30,MSAFREE2:14;
         reconsider fv1 = (Fix_inp_ext iv).v1 as Function of FX.v1,FX.v1;
-        q.i = fv1.ee by A60,A66,A64;
+        q.i = fv1.ee by A26,A30;
         hence q.x is DecoratedTree;
       end;
-      then reconsider q as DTree-yielding FinSequence by TREES_3:26;
-A67:  (Fix_inp_ext iv).v.e = [action_at v,the carrier of IIG]-tree q
-      by A53,A58,A61,A64,Th4;
-A68:  dom q = dom doms q by TREES_3:39;
-      now
+A31:  for k being Element of NAT st k in dom q holds q.k = F(k) by A26;
+      reconsider q as DTree-yielding FinSequence by A29,TREES_3:26;
+A32:  (Fix_inp_ext iv).v.e = [action_at v,the carrier of IIG]-tree q by
+      A19,A24,A31,A27,Th4;
+A33:  dom doms p = dom p by TREES_3:39;
+A34:  now
         let i be Nat;
         set v1 = (the_arity_of action_at v)/.i;
-        assume
-A69:    i in dom doms p;
-        then
-A70:    q.i = (Fix_inp_ext iv).v1.(p.i) by A60,A63,A64;
-        v1 = (the_arity_of o).i by A57,A62,A63,A69,PARTFUN1:def 8;
-        then reconsider ee = p.i as Element of FX.v1
-        by A56,A57,A58,A62,A63,A69,MSAFREE2:14;
         reconsider fv1 = (Fix_inp_ext iv).v1 as Function of FX.v1,FX.v1;
-        q.i = fv1.ee by A60,A63,A69,A64;
+        assume
+A35:    i in dom doms p;
+        then v1 = (the_arity_of o).i by A23,A28,A33,PARTFUN1:def 8;
+        then reconsider
+        ee = p.i as Element of FX.v1 by A22,A23,A24,A28,A33,A35,MSAFREE2:14;
+        q.i = fv1.ee by A26,A33,A27,A35;
         then reconsider ee1 = q.i as Element of FX.v1;
-        v1 in rng the_arity_of action_at v by A62,A63,A69,PARTFUN2:4;
-        then depth(v1,A) < k+1 by A35,A53,CIRCUIT1:20,XXREAL_0:2;
-        then depth(v1,A) <= k by NAT_1:13;
-        then dom ee = dom ee1 by A34,A70;
-        hence (doms p).i = dom ee1 by A63,A69,FUNCT_6:31
-          .= (doms q).i by A63,A64,A69,FUNCT_6:31;
+        v1 in rng the_arity_of action_at v by A28,A33,A35,PARTFUN2:4;
+        then depth(v1,A) < k+1 by A8,A19,CIRCUIT1:20,XXREAL_0:2;
+        then
+A36:    depth(v1,A) <= k by NAT_1:13;
+        q.i = (Fix_inp_ext iv).v1.(p.i) by A26,A33,A27,A35;
+        then dom ee = dom ee1 by A5,A36;
+        hence (doms p).i = dom ee1 by A33,A35,FUNCT_6:31
+          .= (doms q).i by A33,A27,A35,FUNCT_6:31;
       end;
-      then doms p = doms q by A63,A64,A68,FINSEQ_1:17;
-      hence dom t = tree(doms q) by A35,A58,TREES_4:10
-        .= dom t1 by A35,A67,TREES_4:10;
+      dom q = dom doms q by TREES_3:39;
+      then doms p = doms q by A27,A34,FINSEQ_1:17,TREES_3:39;
+      hence dom t = tree(doms q) by A6,A24,TREES_4:10
+        .= dom t1 by A7,A9,A32,TREES_4:10;
     end;
   end;
-A71: for k being Element of NAT holds P[k] from NAT_1:sch 1(A2,A33);
-  reconsider k = depth(v,A) as Element of NAT by ORDINAL1:def 13;
-  depth(v,A) <= k;
-  hence thesis by A71;
+A37: P[0]
+  proof
+    let v be Vertex of IIG, e, e1 be Element of FX.v, t, t1 be DecoratedTree
+    such that
+A38: t = e and
+A39: t1 = e1 and
+A40: depth(v,A) <= 0 and
+A41: e1 = (Fix_inp_ext iv).v.e;
+A42: depth(v,A) = 0 by A40,NAT_1:3;
+A43: FreeSort(X,v) = {a where a is Element of TS(DTConMSA(X)): (ex x being
+set st x in X.v & a = root-tree[x,v]) or ex o being OperSymbol of IIG st [o,the
+    carrier of IIG] = a.{} & the_result_sort_of o = v} by MSAFREE:def 12;
+    e in FX.v & (FreeSort X).v = FreeSort(X,v) by MSAFREE:def 13;
+    then consider a being Element of TS(DTConMSA(X)) such that
+A44: a = e and
+A45: (ex x being set st x in X.v & a = root-tree[x,v]) or ex o being
+OperSymbol of IIG st [o,the carrier of IIG] = a.{} & the_result_sort_of o = v
+    by A2,A43;
+    per cases by A42,A45,CIRCUIT1:19;
+    suppose
+A46:  v in InputVertices IIG;
+      then
+A47:  (Fix_inp_ext iv).v.a = root-tree[iv.v,v] by A45,
+      Th3,MSAFREE2:2;
+      thus dom t = {{}} by A38,A44,A45,A46,MSAFREE2:2,TREES_1:56,TREES_4:3
+        .= dom t1 by A39,A41,A44,A47,TREES_1:56,TREES_4:3;
+    end;
+    suppose that
+A48:  v in SortsWithConstants IIG and
+A49:  ex x being set st x in X.v & a = root-tree[x,v];
+A50:  (Fix_inp_ext iv).v.a = root-tree[action_at v,the carrier of IIG] by
+      A44,A48,Th5;
+      thus dom t = {{}} by A38,A44,A49,TREES_1:56,TREES_4:3
+        .= dom t1 by A39,A41,A44,A50,TREES_1:56,TREES_4:3;
+    end;
+    suppose that
+A51:  v in SortsWithConstants IIG and
+A52:  ex o being OperSymbol of IIG st [o,the carrier of IIG] = a.{} &
+      the_result_sort_of o = v;
+A53:  (Fix_inp_ext iv).v.a = root-tree[action_at v,the carrier of IIG] by
+      A44,A51,Th5;
+      consider o being OperSymbol of IIG such that
+A54:  [o,the carrier of IIG] = a.{} and
+A55:  the_result_sort_of o = v by A52;
+A56:  SortsWithConstants IIG c= InnerVertices IIG by MSAFREE2:5;
+      then o = action_at v by A51,A55,MSAFREE2:def 7;
+      then consider p being DTree-yielding FinSequence such that
+A57:  a = [action_at v,the carrier of IIG]-tree p by A44,A54,
+      CIRCUIT1:10;
+      v in { s where s is SortSymbol of IIG : s is with_const_op } by A51
+      ,MSAFREE2:def 1;
+      then ex s being SortSymbol of IIG st v = s & s is with_const_op;
+      then consider o' being OperSymbol of IIG such that
+A58:  (the Arity of IIG).o' = {} and
+A59:  (the ResultSort of IIG).o' = v by MSUALG_2:def 2;
+A60:  the_result_sort_of o' = v by A59,MSUALG_1:def 7;
+      then
+A61:  o' = action_at v by A51,A56,MSAFREE2:def 7;
+      then len p = len the_arity_of o' by A44,A60,A57,MSAFREE2:13
+        .= len {} by A58,MSUALG_1:def 6
+        .= 0;
+      then p = {};
+      then a = root-tree[o',the carrier of IIG] by A61,A57,TREES_4:20;
+      hence dom t = {{}} by A38,A44,TREES_1:56,TREES_4:3
+        .= dom t1 by A39,A41,A44,A53,TREES_1:56,TREES_4:3;
+    end;
+  end;
+  for k being Element of NAT holds P[k] from NAT_1:sch 1(A37,A3);
+  hence thesis by A1;
 end;
 
 theorem Th7:
   for A being non-empty Circuit of IIG, iv being InputValues of A,
-  v being Vertex of IIG, e, e1 being Element of (the Sorts of FreeEnv A).v
-  st e1 = (Fix_inp_ext iv).v.e holds card e = card e1
+v being Vertex of IIG, e, e1 being Element of (the Sorts of FreeEnv A).v st e1
+  = (Fix_inp_ext iv).v.e holds card e = card e1
 proof
-  let A be non-empty Circuit of IIG, iv be InputValues of A,
-  v be Vertex of IIG, e, e1 be Element of (the Sorts of FreeEnv A).v;
-  assume e1 = (Fix_inp_ext iv).v.e;
+  let A be non-empty Circuit of IIG, iv be InputValues of A, v be Vertex of
+  IIG, e, e1 be Element of (the Sorts of FreeEnv A).v;
+  assume
+  e1 = (Fix_inp_ext iv).v.e;
   then dom e = dom e1 by Th6;
   hence card e = card dom e1 by CARD_1:104
     .= card e1 by CARD_1:104;
@@ -1024,14 +1002,16 @@ end;
 
 definition
   let IIG;
-  let SCS be non-empty Circuit of IIG, v be Vertex of IIG,
-  iv be InputValues of SCS;
+  let SCS be non-empty Circuit of IIG, v be Vertex of IIG, iv be InputValues
+  of SCS;
   func IGTree(v,iv) -> Element of (the Sorts of FreeEnv SCS).v means
   :Def3:
-  ex e being Element of (the Sorts of FreeEnv SCS).v
-  st card e = size(v,SCS) & it = (Fix_inp_ext iv).v.e;
+  ex
+e being Element of (the Sorts of FreeEnv SCS).v st card e = size(v,SCS) & it =
+  (Fix_inp_ext iv).v.e;
   existence
   proof
+    reconsider SFv = (the Sorts of FreeEnv SCS).v as non empty set;
     consider s being finite non empty Subset of NAT such that
 A1: s = { card t where t is Element of (the Sorts of FreeEnv SCS).v :
     not contradiction } and
@@ -1039,9 +1019,8 @@ A2: size(v,SCS) = max s by CIRCUIT1:def 4;
     size(v,SCS) in s by A2,XXREAL_2:def 8;
     then consider e being Element of (the Sorts of FreeEnv SCS).v such that
 A3: size(v,SCS) = card e by A1;
-    reconsider SFv = (the Sorts of FreeEnv SCS).v as non empty set;
-    reconsider e' = e as Element of SFv;
     reconsider Fiev = (Fix_inp_ext iv).v as Function of SFv, SFv;
+    reconsider e' = e as Element of SFv;
     reconsider IT = Fiev.e' as Element of SFv;
     reconsider IT as Element of (the Sorts of FreeEnv SCS).v;
     take IT, e;
@@ -1050,130 +1029,135 @@ A3: size(v,SCS) = card e by A1;
   end;
   uniqueness
   proof
+    defpred P[Nat] means ex v being Vertex of IIG, it1, it2 being Element of (
+the Sorts of FreeEnv SCS).v st size(v,SCS) = $1 & (ex e1 being Element of (the
+Sorts of FreeEnv SCS).v st card e1 = size(v,SCS) & it1 = (Fix_inp_ext iv).v.e1)
+& (ex e2 being Element of (the Sorts of FreeEnv SCS).v st card e2 = size(v,SCS)
+    & it2 = (Fix_inp_ext iv).v.e2) & it1 <> it2;
     let it1, it2 be Element of (the Sorts of FreeEnv SCS).v;
-    defpred P[Nat] means ex v being Vertex of IIG,
-    it1, it2 being Element of (the Sorts of FreeEnv SCS).v st size(v,SCS) = $1
-    & (ex e1 being Element of (the Sorts of FreeEnv SCS).v
-    st card e1 = size(v,SCS) & it1 = (Fix_inp_ext iv).v.e1)
-    & (ex e2 being Element of (the Sorts of FreeEnv SCS).v
-    st card e2 = size(v,SCS) & it2 = (Fix_inp_ext iv).v.e2) & it1 <> it2;
     now
       assume
 A4:   ex n being Nat st P[n];
       consider n being Nat such that
 A5:   P[n] and
 A6:   for k being Nat st P[k] holds n <= k from NAT_1:sch 5(A4);
-      consider v being Vertex of IIG,
-      it1, it2 being Element of (the Sorts of FreeEnv SCS).v such that
+      consider v being Vertex of IIG, it1, it2 being Element of (the Sorts of
+      FreeEnv SCS).v such that
 A7:   size(v,SCS) = n and
-A8:   ex e1 being Element of (the Sorts of FreeEnv SCS).v
-      st card e1 = size(v,SCS) & it1 = (Fix_inp_ext iv).v.e1 and
-A9:   ex e2 being Element of (the Sorts of FreeEnv SCS).v
-      st card e2 = size(v,SCS) & it2 = (Fix_inp_ext iv).v.e2 and
+A8:   ex e1 being Element of (the Sorts of FreeEnv SCS).v st card e1
+      = size(v,SCS) & it1 = (Fix_inp_ext iv).v.e1 and
+A9:   ex e2 being Element of (the Sorts of FreeEnv SCS).v st card e2
+      = size(v,SCS) & it2 = (Fix_inp_ext iv).v.e2 and
 A10:  it1 <> it2 by A5;
-      consider e1 being Element of (the Sorts of FreeEnv SCS).v such that
-A11:  card e1 = size(v,SCS) and
-A12:  it1 = (Fix_inp_ext iv).v.e1 by A8;
       consider e2 being Element of (the Sorts of FreeEnv SCS).v such that
-A13:  card e2 = size(v,SCS) and
-A14:  it2 = (Fix_inp_ext iv).v.e2 by A9;
+A11:  card e2 = size(v,SCS) and
+A12:  it2 = (Fix_inp_ext iv).v.e2 by A9;
+      consider e1 being Element of (the Sorts of FreeEnv SCS).v such that
+A13:  card e1 = size(v,SCS) and
+A14:  it1 = (Fix_inp_ext iv).v.e1 by A8;
       per cases;
       suppose
 A15:    v in InputVertices IIG;
-        then consider x1 being Element of (the Sorts of SCS).v such that
-A16:    e1 = root-tree[x1,v] by MSAFREE2:12;
-        consider x2 being Element of (the Sorts of SCS).v such that
-A17:    e2 = root-tree[x2,v] by A15,MSAFREE2:12;
-        it1 = root-tree[iv.v, v] by A12,A15,A16,Th3
-          .= it2 by A14,A15,A17,Th3;
+        then
+A16:    ex x2 being Element of (the Sorts of SCS).v st e2 = root-tree[x2,v
+        ] by MSAFREE2:12;
+        ex x1 being Element of (the Sorts of SCS).v st e1 = root-tree[x1,v
+        ] by A15,MSAFREE2:12;
+        then it1 = root-tree[iv.v, v] by A14,A15,Th3
+          .= it2 by A12,A15,A16,Th3;
         hence contradiction by A10;
       end;
       suppose
-A18:    v in SortsWithConstants IIG;
-        then it1 = root-tree[action_at v,the carrier of IIG] by A12,Th5
-          .= it2 by A14,A18,Th5;
+A17:    v in SortsWithConstants IIG;
+        then it1 = root-tree[action_at v,the carrier of IIG] by A14,Th5
+          .= it2 by A12,A17,Th5;
         hence contradiction by A10;
       end;
       suppose that
-A19:    not v in InputVertices IIG and
-A20:    not v in SortsWithConstants IIG;
-        InputVertices IIG \/ InnerVertices IIG = the carrier of IIG
-        by XBOOLE_1:45;
-        then
-A21:    v in InnerVertices IIG by A19,XBOOLE_0:def 3;
-        then
-A22:    v in (InnerVertices IIG \ SortsWithConstants IIG) by A20,XBOOLE_0:def 5
-;
-        then consider q1 being DTree-yielding FinSequence such that
-A23:    e1 = [action_at v,the carrier of IIG]-tree q1 by A11,CIRCUIT1:13;
-        consider q2 being DTree-yielding FinSequence such that
-A24:    e2 = [action_at v,the carrier of IIG]-tree q2 by A13,A22,CIRCUIT1:13;
+A18:    not v in InputVertices IIG and
+A19:    not v in SortsWithConstants IIG;
         set Ht = (Fix_inp_ext iv) * (the_arity_of action_at v);
-
-::        reconsider Ht as Function-yielding Function;
+        InputVertices IIG \/ InnerVertices IIG = the carrier of IIG by
+        XBOOLE_1:45;
+        then
+A20:    v in InnerVertices IIG by A18,XBOOLE_0:def 3;
+        then
+A21:    v in (InnerVertices IIG \ SortsWithConstants IIG) by A19,
+        XBOOLE_0:def 5;
+        then consider q1 being DTree-yielding FinSequence such that
+A22:    e1 = [action_at v,the carrier of IIG]-tree q1 by A13,
+        CIRCUIT1:13;
+        consider q2 being DTree-yielding FinSequence such that
+A23:    e2 = [action_at v,the carrier of IIG]-tree q2 by A11,A21,
+        CIRCUIT1:13;
+        [action_at v,the carrier of IIG]-tree q2 in (the Sorts of FreeEnv
+        SCS). v by A23;
+        then
+A24:    [action_at v,the carrier of IIG]-tree q2 in (the Sorts of FreeEnv
+        SCS). (the_result_sort_of action_at v) by A20,MSAFREE2:def 7;
 A25:    Fix_inp_ext iv is_homomorphism FreeEnv SCS, FreeEnv SCS by Def2;
         then consider p1 being DTree-yielding FinSequence such that
 A26:    p1 = Ht..q1 and
-A27:    it1 = [action_at v,the carrier of IIG]-tree p1 by A12,A21,A23,Th1;
+A27:    it1 = [action_at v,the carrier of IIG]-tree p1 by A14,A20,A22
+        ,Th1;
         consider p2 being DTree-yielding FinSequence such that
 A28:    p2 = Ht..q2 and
-A29:    it2 = [action_at v,the carrier of IIG]-tree p2 by A14,A21,A24,A25,Th1;
-A30:    dom p1 = dom Ht & dom p2 = dom Ht by A26,A28,PRALG_1:def 17;
-        rng (the_arity_of action_at v) c= the carrier of IIG
-        by FINSEQ_1:def 4;
-        then rng (the_arity_of action_at v) c= dom (Fix_inp_ext iv)
-        by PARTFUN1:def 4;
-        then
-A31:    dom (the_arity_of action_at v) = dom Ht by RELAT_1:46;
-        len p1 = len p2 by A30,FINSEQ_3:31;
+A29:    it2 = [action_at v,the carrier of IIG]-tree p2 by A12,A20,A23
+        ,A25,Th1;
+A30:    dom p1 = dom Ht by A26,PRALG_1:def 17;
+        dom p2 = dom Ht by A28,PRALG_1:def 17;
+        then len p1 = len p2 by A30,FINSEQ_3:31;
         then consider i being Nat such that
-A32:    i in dom p1 and
-A33:    p1.i <> p2.i by A10,A27,A29,FINSEQ_2:10;
-A34:    i in dom p1 by A32;
-        i in dom the_arity_of action_at v by A30,A31,A32;
-        then reconsider w = (the_arity_of action_at v).i as Vertex of IIG
-        by FINSEQ_2:13;
-        [action_at v,the carrier of IIG]-tree p1 in
-        (the Sorts of FreeEnv SCS).v &
-        [action_at v,the carrier of IIG]-tree p2 in
-        (the Sorts of FreeEnv SCS).v by A27,A29;
-        then [action_at v,the carrier of IIG]-tree p1
-        in (the Sorts of FreeEnv SCS).(the_result_sort_of action_at v)
-        & [action_at v,the carrier of IIG]-tree p2
-        in (the Sorts of FreeEnv SCS).(the_result_sort_of action_at v)
-        by A21,MSAFREE2:def 7;
-        then reconsider It1 = p1.i, It2 = p2.i as Element of
-        (the Sorts of FreeEnv SCS).w by A30,A31,A34,MSAFREE2:14;
-        [action_at v,the carrier of IIG]-tree q1
-        in (the Sorts of FreeEnv SCS).v
-        & [action_at v,the carrier of IIG]-tree q2
-        in (the Sorts of FreeEnv SCS).v by A23,A24;
+A31:    i in dom p1 and
+A32:    p1.i <> p2.i by A10,A27,A29,FINSEQ_2:10;
+        rng (the_arity_of action_at v) c= the carrier of IIG by FINSEQ_1:
+        def 4;
+        then rng (the_arity_of action_at v) c= dom (Fix_inp_ext iv) by
+        PARTFUN1:def 4;
         then
-A35:    [action_at v,the carrier of IIG]-tree q1
-        in (the Sorts of FreeEnv SCS).(the_result_sort_of action_at v)
-        & [action_at v,the carrier of IIG]-tree q2
-        in (the Sorts of FreeEnv SCS).(the_result_sort_of action_at v)
-        by A21,MSAFREE2:def 7;
-        then reconsider E1 = q1.i, E2 = q2.i
-        as Element of (the Sorts of FreeEnv SCS).w by A30,A31,A34,MSAFREE2:14;
-        len q1 = len the_arity_of action_at v by A35,MSAFREE2:13;
-        then i in dom q1 by A30,A31,A34,FINSEQ_3:31;
-        then E1 in rng q1 by FUNCT_1:def 5;
+A33:    dom (the_arity_of action_at v) = dom Ht by RELAT_1:46;
+        then reconsider
+        w = (the_arity_of action_at v).i as Vertex of IIG by A30,
+        A31,FINSEQ_2:13;
+        [action_at v,the carrier of IIG]-tree q1 in (the Sorts of FreeEnv
+        SCS). v by A22;
         then
-A36:    card E1 = size(w,SCS) by A11,A22,A23,CIRCUIT1:12;
+A34:    [action_at v,the carrier of IIG]-tree q1 in (the Sorts of FreeEnv
+        SCS). (the_result_sort_of action_at v) by A20,MSAFREE2:def 7;
+        then reconsider
+        E1 = q1.i, E2 = q2.i as Element of (the Sorts of FreeEnv
+        SCS).w by A30,A33,A31,A24, MSAFREE2:14;
+        [action_at v,the carrier of IIG]-tree p2 in (the Sorts of FreeEnv
+        SCS). v by A29;
+        then
+A35:    [action_at v,the carrier of IIG]-tree p2 in (the Sorts of FreeEnv
+        SCS). (the_result_sort_of action_at v) by A20,MSAFREE2:def 7;
+        [action_at v,the carrier of IIG]-tree p1 in (the Sorts of FreeEnv
+        SCS). v by A27;
+        then
+        [action_at v,the carrier of IIG]-tree p1 in (the Sorts of FreeEnv
+        SCS). (the_result_sort_of action_at v) by A20,MSAFREE2:def 7;
+        then reconsider
+        It1 = p1.i, It2 = p2.i as Element of (the Sorts of FreeEnv
+        SCS).w by A30,A33,A31,A35,MSAFREE2:14;
         reconsider Hti = Ht.i as Function;
-A37:    Hti = (Fix_inp_ext iv).((the_arity_of action_at v).i)
-        by A30,A34,FUNCT_1:22;
+A36:    Hti = (Fix_inp_ext iv).((the_arity_of action_at v).i) by A30,A31,
+        FUNCT_1:22;
         then
-A38:    It1 = (Fix_inp_ext iv).w.E1 by A26,A30,A34,PRALG_1:def 17;
-        len q2 = len the_arity_of action_at v by A35,MSAFREE2:13;
-        then i in dom q2 by A30,A31,A34,FINSEQ_3:31;
+A37:    It2 = (Fix_inp_ext iv).w.E2 by A28,A30,A31,PRALG_1:def 17;
+        len q2 = len the_arity_of action_at v by A24,MSAFREE2:13;
+        then i in dom q2 by A30,A33,A31,FINSEQ_3:31;
         then E2 in rng q2 by FUNCT_1:def 5;
         then
-A39:    card E2 = size(w,SCS) by A13,A22,A24,CIRCUIT1:12;
-A40:    It2 = (Fix_inp_ext iv).w.E2 by A28,A30,A34,A37,PRALG_1:def 17;
-        w in rng the_arity_of action_at v by A30,A31,A34,FUNCT_1:def 5;
-        hence contradiction by A6,A7,A21,A33,A36,A38,A39,A40,CIRCUIT1:15;
+A38:    card E2 = size(w,SCS) by A11,A21,A23,CIRCUIT1:12;
+        len q1 = len the_arity_of action_at v by A34,MSAFREE2:13;
+        then i in dom q1 by A30,A33,A31,FINSEQ_3:31;
+        then E1 in rng q1 by FUNCT_1:def 5;
+        then
+A39:    card E1 = size(w,SCS) by A13,A21,A22,CIRCUIT1:12;
+A40:    w in rng the_arity_of action_at v by A30,A33,A31,FUNCT_1:def 5;
+        It1 = (Fix_inp_ext iv).w.E1 by A26,A30,A31,A36,PRALG_1:def 17;
+        hence contradiction by A6,A7,A20,A32,A39,A38,A37,A40,CIRCUIT1:15;
       end;
     end;
     hence thesis;
@@ -1181,219 +1165,221 @@ A40:    It2 = (Fix_inp_ext iv).w.E2 by A28,A30,A34,A37,PRALG_1:def 17;
 end;
 
 theorem Th8:
-  for SCS being non-empty Circuit of IIG, v being Vertex of IIG,
-  iv being InputValues of SCS
-  holds IGTree(v,iv) = (Fix_inp_ext iv).v.IGTree(v,iv)
+  for SCS being non-empty Circuit of IIG, v being Vertex of IIG, iv
+  being InputValues of SCS holds IGTree(v,iv) = (Fix_inp_ext iv).v.IGTree(v,iv)
 proof
-  let SCS be non-empty Circuit of IIG, v be Vertex of IIG,
-  iv be InputValues of SCS;
-  consider e being Element of (the Sorts of FreeEnv SCS).v such that
-A1: card e = size(v,SCS) & IGTree(v,iv) = (Fix_inp_ext iv).v.e by Def3;
+  let SCS be non-empty Circuit of IIG, v be Vertex of IIG, iv be InputValues
+  of SCS;
   reconsider igt = IGTree(v,iv) as Element of (the Sorts of FreeEnv SCS).v;
-  card igt = size(v,SCS) by A1,Th7;
+  ex e being Element of (the Sorts of FreeEnv SCS).v st card e = size(v,SCS
+  ) & IGTree(v,iv) = (Fix_inp_ext iv).v.e by Def3;
+  then card igt = size(v,SCS) by Th7;
   hence thesis by Def3;
 end;
 
 theorem Th9:
-  for SCS being non-empty Circuit of IIG, v being Vertex of IIG,
-  iv being InputValues of SCS,
-  p being DTree-yielding FinSequence st v in InnerVertices IIG
-  & dom p = dom the_arity_of action_at v
-  & for k being Element of NAT st k in dom p
-  holds p.k = IGTree((the_arity_of action_at v)/.k, iv)
+  for SCS being non-empty Circuit of IIG, v being Vertex of IIG, iv
+  being InputValues of SCS, p being DTree-yielding FinSequence st v in
+InnerVertices IIG & dom p = dom the_arity_of action_at v & for k being Element
+  of NAT st k in dom p holds p.k = IGTree((the_arity_of action_at v)/.k, iv)
   holds IGTree(v,iv) = [action_at v,the carrier of IIG]-tree p
 proof
-  let SCS be non-empty Circuit of IIG, v be Vertex of IIG,
-  iv be InputValues of SCS, p be DTree-yielding FinSequence;
-  assume
-A1: v in InnerVertices IIG & dom p = dom the_arity_of action_at v
-  & for k being Element of NAT st k in dom p
-  holds p.k = IGTree((the_arity_of action_at v)/.k, iv);
-  set X = the Sorts of SCS;
-  set o = action_at v;
+  let SCS be non-empty Circuit of IIG, v be Vertex of IIG, iv be InputValues
+  of SCS, p be DTree-yielding FinSequence;
+  assume that
+A1: v in InnerVertices IIG and
+A2: dom p = dom the_arity_of action_at v and
+A3: for k being Element of NAT st k in dom p holds p.k = IGTree((
+  the_arity_of action_at v)/.k, iv);
   set U1 = FreeEnv SCS;
-A2: len p = len the_arity_of o by A1,FINSEQ_3:31;
-  now
+  set o = action_at v;
+A4: now
     let k be Nat;
-    assume k in dom p;
-    then p.k = IGTree((the_arity_of o)/.k, iv) by A1;
+    assume
+    k in dom p;
+    then p.k = IGTree((the_arity_of o)/.k, iv) by A3;
     hence p.k in (the Sorts of U1).((the_arity_of o)/.k);
   end;
-  then reconsider p'' = p as Element of Args(o,U1) by A2,MSAFREE2:7;
-A3: U1 = MSAlgebra (# FreeSort(X), FreeOper(X) #) by MSAFREE:def 16;
-A4: Args(o,U1) = ((the Sorts of U1)# * the Arity of IIG).o by MSUALG_1:def 9;
-  then reconsider p' = p'' as FinSequence of TS(DTConMSA(X)) by A3,MSAFREE:8;
-A5: Sym(o,X) ==> roots p' by A3,A4,MSAFREE:10;
+  len p = len the_arity_of o by A2,FINSEQ_3:31;
+  then reconsider p'' = p as Element of Args(o,U1) by A4,MSAFREE2:7;
+  set X = the Sorts of SCS;
+A5: dom the ResultSort of IIG = the carrier' of IIG by FUNCT_2:def 1;
+A6: Result(o,U1) = ((the Sorts of U1) * the ResultSort of IIG).o by
+  MSUALG_1:def 10
+    .= (the Sorts of U1).((the ResultSort of IIG).o) by A5,FUNCT_1:23;
+A7: U1 = MSAlgebra (# FreeSort(X), FreeOper(X) #) & Args(o,U1) = ((the Sorts
+  of U1)# * the Arity of IIG).o by MSAFREE:def 16,MSUALG_1:def 9;
+  then reconsider p' = p'' as FinSequence of TS(DTConMSA(X)) by MSAFREE:8;
   U1 = MSAlgebra (# FreeSort(X), FreeOper(X) #) by MSAFREE:def 16;
-  then Den(o,U1) = (FreeOper X).o by MSUALG_1:def 11
-    .= DenOp(o,X) by MSAFREE:def 15;
   then
-A6: Den(o,U1).p = (Sym(o,X))-tree p' by A5,MSAFREE:def 14
+A8: Den(o,U1) = (FreeOper X).o by MSUALG_1:def 11
+    .= DenOp(o,X) by MSAFREE:def 15;
+  Sym(o,X) ==> roots p' by A7,MSAFREE:10;
+  then
+A9: Den(o,U1).p = (Sym(o,X))-tree p' by A8,MSAFREE:def 14
     .= [o,the carrier of IIG]-tree p' by MSAFREE:def 11;
-A7: (the ResultSort of IIG).o = the_result_sort_of o by MSUALG_1:def 7
+  (the ResultSort of IIG).o = the_result_sort_of o by MSUALG_1:def 7
     .= v by A1,MSAFREE2:def 7;
-A8: dom the ResultSort of IIG = the carrier' of IIG by FUNCT_2:def 1;
-  Result(o,U1) = ((the Sorts of U1) * the ResultSort of IIG).o
-  by MSUALG_1:def 10
-    .= (the Sorts of U1).((the ResultSort of IIG).o)
-  by A8,FUNCT_1:23;
-  then reconsider t = [action_at v,the carrier of IIG]-tree p
-  as Element of (the Sorts of FreeMSA X).v by A6,A7,FUNCT_2:7;
+  then reconsider
+  t = [action_at v,the carrier of IIG]-tree p as Element of (the
+  Sorts of FreeMSA X).v by A9,A6,FUNCT_2:7;
   now
     let k be Element of NAT;
-    assume
-A9: k in dom p;
     set v1 = (the_arity_of action_at v)/.k;
-A10: p.k = IGTree(v1,iv) by A1,A9;
+    assume
+    k in dom p;
+    then
+A10: p.k = IGTree(v1,iv) by A3;
     then reconsider ek = p.k as Element of (the Sorts of FreeEnv SCS).v1;
     take ek;
     thus ek = p.k;
-    consider e1 being Element of (the Sorts of FreeMSA X).v1 such that
-A11: card e1 = size(v1,SCS) & ek = (Fix_inp_ext iv).v1.e1 by A10,Def3;
-    thus card ek = size(v1,SCS) by A11,Th7;
+    ex e1 being Element of (the Sorts of FreeMSA X).v1 st card e1 = size(
+    v1,SCS) & ek = (Fix_inp_ext iv).v1.e1 by A10,Def3;
+    hence card ek = size(v1,SCS) by Th7;
   end;
   then
-A12: card t = size(v,SCS) by A1,CIRCUIT1:17;
+A11: card t = size(v,SCS) by A1,CIRCUIT1:17;
   now
     let k be Element of NAT;
-    assume k in dom p;
-    then p.k = IGTree((the_arity_of action_at v)/.k, iv) by A1;
-    hence p.k = (Fix_inp_ext iv).((the_arity_of action_at v)/.k).(p.k) by Th8;
+    assume
+    k in dom p;
+    then p.k = IGTree((the_arity_of action_at v)/.k, iv) by A3;
+    hence p.k = (Fix_inp_ext iv).((the_arity_of action_at v)/.k).(p.k) by
+    Th8;
   end;
-  then [action_at v,the carrier of IIG]-tree p = (Fix_inp_ext iv).v.t
-  by A1,Th4;
-  hence thesis by A12,Def3;
+  then [action_at v,the carrier of IIG]-tree p = (Fix_inp_ext iv).v.t by A1,
+  Th4;
+  hence thesis by A11,Def3;
 end;
 
 definition
   let IIG;
-  let SCS be non-empty Circuit of IIG, v be Vertex of IIG,
-  iv be InputValues of SCS;
+  let SCS be non-empty Circuit of IIG, v be Vertex of IIG, iv be InputValues
+  of SCS;
   func IGValue(v,iv) -> Element of (the Sorts of SCS).v equals
-  (Eval SCS).v.(IGTree(v,iv));
+  (Eval SCS).v.(
+  IGTree(v,iv));
   coherence;
 end;
 
 theorem Th10:
-  for SCS being non-empty Circuit of IIG,
-  v being Vertex of IIG, iv being InputValues of SCS st v in InputVertices IIG
-  holds IGValue(v,iv) = iv.v
+  for SCS being non-empty Circuit of IIG, v being Vertex of IIG,
+iv being InputValues of SCS st v in InputVertices IIG holds IGValue(v,iv) = iv.
+  v
 proof
-  let SCS be non-empty Circuit of IIG,
-  v be Vertex of IIG, iv be InputValues of SCS;
-  assume
-A1: v in InputVertices IIG;
-  consider e being Element of (the Sorts of FreeEnv SCS).v such that
-  card e = size(v,SCS) and
-A2: IGTree(v,iv) = (Fix_inp_ext iv).v.e by Def3;
+  let SCS be non-empty Circuit of IIG, v be Vertex of IIG, iv be InputValues
+  of SCS;
   set X = the Sorts of SCS;
-A3: e in (the Sorts of FreeMSA X).v;
-A4: FreeMSA X = MSAlgebra (# FreeSort(X), FreeOper(X) #) by MSAFREE:def 16;
-A5: (FreeSort X).v = FreeSort(X, v) by MSAFREE:def 13;
-  FreeSort(X,v) = {a where a is Element of TS(DTConMSA(X)):
-  (ex x being set st x in X.v & a = root-tree[x,v]) or
-  ex o being OperSymbol of IIG st [o,the carrier of IIG] = a.{}
-  & the_result_sort_of o = v} by MSAFREE:def 12;
-  then consider a being Element of TS(DTConMSA(X)) such that
-A6: a = e and
-A7: (ex x being set st x in X.v & a = root-tree[x,v]) or
-  ex o being OperSymbol of IIG st [o,the carrier of IIG] = a.{}
-  & the_result_sort_of o = v by A3,A4,A5;
-  consider x being set such that
-A8: x in X.v & a = root-tree[x,v] by A1,A7,MSAFREE2:2;
-A9: e in FreeGen(v,the Sorts of SCS) by A6,A8,MSAFREE:def 17;
-A10: (Fix_inp iv).v = FreeGen(v,the Sorts of SCS) --> root-tree[iv.v,v]
-  by A1,Def1;
-  Fix_inp iv c= Fix_inp_ext iv by Def2;
+A1: (FreeSort X).v = FreeSort(X, v) & FreeSort(X,v) = {a where a is Element
+  of TS(DTConMSA(X)): (ex x being set st x in X.v & a = root-tree[x,v]) or ex o
+being OperSymbol of IIG st [o,the carrier of IIG] = a.{} & the_result_sort_of o
+  = v} by MSAFREE:def 12,def 13;
+  assume
+A2: v in InputVertices IIG;
   then
-A11: (Fix_inp iv).v c= (Fix_inp_ext iv).v by PBOOLE:def 5;
-  e in dom ((Fix_inp iv).v) by A9,A10,FUNCOP_1:19;
-  then
-A12: (Fix_inp iv).v.e = (Fix_inp_ext iv).v.e by A11,GRFUNC_1:8;
-A13: iv.v in (the Sorts of SCS).v by A1,MSAFREE2:def 5;
-  then root-tree[iv.v,v] in FreeGen(v, the Sorts of SCS) by MSAFREE:def 17;
+A3: iv.v in (the Sorts of SCS).v by MSAFREE2:def 5;
+  then root-tree[iv.v,v] in FreeGen(v, the Sorts of SCS) by
+  MSAFREE:def 17;
   then root-tree[iv.v,v] in (FreeSort(the Sorts of SCS)).v;
   then
-A14: root-tree[iv.v,v] in FreeSort(the Sorts of SCS,v) by MSAFREE:def 13;
-  thus IGValue(v,iv) = (Eval SCS).v.(root-tree[iv.v,v]) by A2,A9,A10,A12,
-FUNCOP_1:13
-    .= iv.v by A13,A14,MSAFREE2:def 9;
+A4: root-tree[iv.v,v] in FreeSort(the Sorts of SCS,v) by
+  MSAFREE:def 13;
+  consider e being Element of (the Sorts of FreeEnv SCS).v such that
+  card e = size(v,SCS) and
+A5: IGTree(v,iv) = (Fix_inp_ext iv).v.e by Def3;
+  e in (the Sorts of FreeMSA X).v & FreeMSA X = MSAlgebra (# FreeSort(X),
+    FreeOper(X) #) by MSAFREE:def 16;
+  then
+  ex a being Element of TS(DTConMSA(X)) st a = e &( (ex x being set st x in
+X.v & a = root-tree[x,v]) or ex o being OperSymbol of IIG st [o,the carrier of
+  IIG] = a.{} & the_result_sort_of o = v) by A1;
+  then
+A6: e in FreeGen(v,the Sorts of SCS) by A2,MSAFREE:def 17,MSAFREE2:2;
+  Fix_inp iv c= Fix_inp_ext iv by Def2;
+  then
+A7: (Fix_inp iv).v c= (Fix_inp_ext iv).v by PBOOLE:def 5;
+A8: (Fix_inp iv).v = FreeGen(v,the Sorts of SCS) --> root-tree[iv.v,v] by A2
+  ,Def1;
+  then e in dom ((Fix_inp iv).v) by A6,FUNCOP_1:19;
+  then (Fix_inp iv).v.e = (Fix_inp_ext iv).v.e by A7,GRFUNC_1:8;
+  hence IGValue(v,iv) = (Eval SCS).v.(root-tree[iv.v,v]) by A5,A6,A8,
+  FUNCOP_1:13
+    .= iv.v by A3,A4,MSAFREE2:def 9;
 end;
 
 theorem Th11:
-  for SCS being non-empty Circuit of IIG,
-  v being Vertex of IIG, iv being InputValues of SCS
-  st v in SortsWithConstants IIG holds IGValue(v,iv) = (Set-Constants SCS).v
+  for SCS being non-empty Circuit of IIG, v being Vertex of IIG,
+iv being InputValues of SCS st v in SortsWithConstants IIG holds IGValue(v,iv)
+  = (Set-Constants SCS).v
 proof
-  let SCS be non-empty Circuit of IIG,
-  v be Vertex of IIG, iv be InputValues of SCS;
+  reconsider p = {} as DTree-yielding FinSequence;
+  let SCS be non-empty Circuit of IIG, v be Vertex of IIG, iv be InputValues
+  of SCS;
   assume
 A1: v in SortsWithConstants IIG;
-  consider e being Element of (the Sorts of FreeEnv SCS).v
-  such that card e = size(v,SCS) and
-A2: IGTree(v,iv) = (Fix_inp_ext iv).v.e by Def3;
+  set e = (Eval SCS).v.root-tree[action_at v,the carrier of IIG];
+A2: {} = <*>the carrier of IIG;
+  set X = the Sorts of SCS;
   set F = Eval SCS;
+A3: dom the Arity of IIG = the carrier' of IIG by FUNCT_2:def 1;
+A4: dom the ResultSort of IIG = the carrier' of IIG by FUNCT_2:def 1;
   set o = action_at v;
-A3: SortsWithConstants IIG c= InnerVertices IIG by MSAFREE2:5;
+A5: SortsWithConstants IIG c= InnerVertices IIG by MSAFREE2:5;
   then
-A4: v = the_result_sort_of o by A1,MSAFREE2:def 7;
-  SortsWithConstants IIG = {v1 where v1 is SortSymbol of IIG :
-  v1 is with_const_op } by MSAFREE2:def 1;
+A6: v = the_result_sort_of o by A1,MSAFREE2:def 7;
+  SortsWithConstants IIG = {v1 where v1 is SortSymbol of IIG : v1 is
+  with_const_op } by MSAFREE2:def 1;
   then consider x' being SortSymbol of IIG such that
-A5: x'=v & x' is with_const_op by A1;
+A7: x'=v and
+A8: x' is with_const_op by A1;
   consider o1 being OperSymbol of IIG such that
-A6: (the Arity of IIG).o1 = {}
-  & (the ResultSort of IIG).o1 = x' by A5,MSUALG_2:def 2;
+A9: (the Arity of IIG).o1 = {} and
+A10: (the ResultSort of IIG).o1 = x' by A8,MSUALG_2:def 2;
   (the ResultSort of IIG).o1 = the_result_sort_of o1 by MSUALG_1:def 7;
   then
-A7: o = o1 by A1,A3,A5,A6,MSAFREE2:def 7;
-A8: dom the Arity of IIG = the carrier' of IIG by FUNCT_2:def 1;
-A9: {} = <*>the carrier of IIG;
-A10: Args(o,FreeEnv SCS) = ((the Sorts of FreeEnv SCS)# * the Arity of IIG).o
-  by MSUALG_1:def 9
-    .= (the Sorts of FreeEnv SCS)#.((the Arity of IIG).o)
-  by A8,FUNCT_1:23
-    .= {{}} by A6,A7,A9,PRE_CIRC:5;
-  then
-A11: {} in Args(o,FreeEnv SCS) by TARSKI:def 1;
-  reconsider x = {} as Element of Args(o,FreeEnv SCS) by A10,TARSKI:def 1;
+A11: o = o1 by A1,A5,A7,A10,MSAFREE2:def 7;
+A12: Args(o,FreeEnv SCS) = ((the Sorts of FreeEnv SCS)# * the Arity of IIG).
+  o by MSUALG_1:def 9
+    .= (the Sorts of FreeEnv SCS)#.((the Arity of IIG).o) by A3,FUNCT_1:23
+    .= {{}} by A9,A11,A2,PRE_CIRC:5;
+  then reconsider x = {} as Element of Args(o,FreeEnv SCS) by TARSKI:def 1;
   reconsider Fx = F#x as Element of Args(o,SCS);
-  set X = the Sorts of SCS;
-A12: FreeMSA X = MSAlgebra (# FreeSort(X), FreeOper(X) #) by MSAFREE:def 16;
-  then
-A13: Den(o,FreeEnv SCS) = (FreeOper X).o by MSUALG_1:def 11
-    .= DenOp(o,X) by MSAFREE:def 15;
-  reconsider p = {} as DTree-yielding FinSequence;
-A14: p in ((FreeSort X)# * (the Arity of IIG)).o by A11,A12,MSUALG_1:def 9;
-  then reconsider p' = {} as FinSequence of TS(DTConMSA(X)) by MSAFREE:8;
-  Sym(o,X) ==> roots p' by A14,MSAFREE:10;
-  then
-A15: Den(o,FreeEnv SCS).{} = (Sym(o,X))-tree p by A13,MSAFREE:def 14
-    .= [o,the carrier of IIG]-tree {} by MSAFREE:def 11
-    .= root-tree [o,the carrier of IIG] by TREES_4:20;
   F is_homomorphism FreeEnv SCS, SCS by MSAFREE2:def 9;
   then
-A16: (F.(the_result_sort_of o)).(Den(o,FreeEnv SCS).x) = Den(o, SCS).(Fx )
+A13: (F.(the_result_sort_of o)).(Den(o,FreeEnv SCS).x) = Den(o, SCS).(Fx )
   by MSUALG_3:def 9;
-  set e = (Eval SCS).v.root-tree[action_at v,the carrier of IIG];
+A14: FreeMSA X = MSAlgebra (# FreeSort(X), FreeOper(X) #) by MSAFREE:def 16;
+  then
+A15: Den(o,FreeEnv SCS) = (FreeOper X).o by MSUALG_1:def 11
+    .= DenOp(o,X) by MSAFREE:def 15;
+  {} in Args(o,FreeEnv SCS) by A12,TARSKI:def 1;
+  then
+A16: p in ((FreeSort X)# * (the Arity of IIG)).o by A14,MSUALG_1:def 9;
+  then reconsider p' = {} as FinSequence of TS(DTConMSA(X)) by MSAFREE:8;
+  Sym(o,X) ==> roots p' by A16,MSAFREE:10;
+  then
+A17: Den(o,FreeEnv SCS).{} = (Sym(o,X))-tree p by A15,MSAFREE:def 14
+    .= [o,the carrier of IIG]-tree {} by MSAFREE:def 11
+    .= root-tree [o,the carrier of IIG] by TREES_4:20;
   dom Den(o,SCS) = Args(o,SCS) by FUNCT_2:def 1;
   then
-A17: e in rng Den(o,SCS) by A4,A15,A16,FUNCT_1:def 5;
-A18: dom the ResultSort of IIG = the carrier' of IIG by FUNCT_2:def 1;
-  Result(o,SCS) = ((the Sorts of SCS) * the ResultSort of IIG).o
-  by MSUALG_1:def 10
-    .= (the Sorts of SCS).((the ResultSort of IIG).o)
-  by A18,FUNCT_1:23;
-  then reconsider e as Element of (the Sorts of SCS).v by A4,A15,A16,
-MSUALG_1:def 7;
-  consider A being non empty set such that
-A19: A =(the Sorts of SCS).v &
-  Constants (SCS, v) = { a where a is Element of A :
-  ex o be OperSymbol of IIG st (the Arity of IIG).o = {} &
-  (the ResultSort of IIG).o = v & a in rng Den(o,SCS)} by MSUALG_2:def 4;
-A20: e in Constants(SCS,v) by A5,A6,A7,A17,A19;
-  thus IGValue(v,iv) = e by A1,A2,Th5
-    .= (Set-Constants SCS).v by A1,A20,CIRCUIT1:1;
+A18: e in rng Den(o,SCS) by A6,A17,A13,FUNCT_1:def 5;
+  Result(o,SCS) = ((the Sorts of SCS) * the ResultSort of IIG).o by
+  MSUALG_1:def 10
+    .= (the Sorts of SCS).((the ResultSort of IIG).o) by A4,FUNCT_1:23;
+  then reconsider e as Element of (the Sorts of SCS).v by A6,A17,A13,
+  MSUALG_1:
+  def 7;
+  ex A being non empty set st A =(the Sorts of SCS).v & Constants (SCS, v)
+= { a where a is Element of A : ex o be OperSymbol of IIG st (the Arity of IIG)
+.o = {} & (the ResultSort of IIG).o = v & a in rng Den(o,SCS) } by MSUALG_2:def
+  4;
+  then
+A19: e in Constants(SCS,v) by A7,A9,A10,A11,A18;
+  ex e being Element of (the Sorts of FreeEnv SCS).v st card e = size(v,SCS
+  ) & IGTree(v,iv) = (Fix_inp_ext iv).v.e by Def3;
+  hence IGValue(v,iv) = e by A1,Th5
+    .= (Set-Constants SCS).v by A1,A19,CIRCUIT1:1;
 end;
 
 begin
@@ -1408,83 +1394,86 @@ definition
   func Following s -> State of SCS means
   :Def5:
   for v being Vertex of IIG
-  holds (v in InputVertices IIG implies it.v = s.v)
-  & (v in InnerVertices IIG implies
-  it.v = (Den(action_at v,SCS)).(action_at v depends_on_in s));
+  holds (v in InputVertices IIG implies it.v = s.v) & (v in InnerVertices IIG
+  implies it.v = (Den(action_at v,SCS)).(action_at v depends_on_in s));
   existence
   proof
-    defpred P[set] means $1 in InputVertices IIG;
+    deffunc G(Vertex of IIG) = (Den(action_at $1,SCS)).(action_at $1
+    depends_on_in s);
     deffunc F(set) = s.$1;
-    deffunc G(Vertex of IIG) =
-    (Den(action_at $1,SCS)).(action_at $1 depends_on_in s);
+    defpred P[set] means $1 in InputVertices IIG;
     consider f being ManySortedSet of the carrier of IIG such that
-A1: for v being Vertex of IIG st v in the carrier of IIG
-    holds (P[v] implies f.v = F(v))
-    & (not P[v] implies f.v = G(v)) from PRE_CIRC:sch 2;
-A2: dom f = the carrier of IIG by PARTFUN1:def 4;
-A3: dom the Sorts of SCS = the carrier of IIG by PARTFUN1:def 4;
-A4: InputVertices IIG misses InnerVertices IIG by XBOOLE_1:79;
-    now
+A1: for v being Vertex of IIG st v in the carrier of IIG holds (P[v]
+    implies f.v = F(v)) & (not P[v] implies f.v = G(v)) from PRE_CIRC:sch 2;
+A2: now
       let x be set;
-      assume x in dom the Sorts of SCS;
+      assume
+      x in dom the Sorts of SCS;
       then reconsider v = x as Vertex of IIG by PARTFUN1:def 4;
       per cases;
-      suppose v in InputVertices IIG;
+      suppose
+        v in InputVertices IIG;
         then f.v = s.v by A1;
         hence f.x in (the Sorts of SCS).x by CIRCUIT1:5;
       end;
       suppose
-A5:     not v in InputVertices IIG;
-        then
-A6:     f.x = (Den(action_at v,SCS)).(action_at v depends_on_in s) by A1;
+A3:     not v in InputVertices IIG;
         v in the carrier of IIG;
         then v in InputVertices IIG \/ InnerVertices IIG by XBOOLE_1:45;
-        then v in InnerVertices IIG by A5,XBOOLE_0:def 3;
-        then the_result_sort_of action_at v = v by MSAFREE2:def 7;
-        hence f.x in (the Sorts of SCS).x by A6,CIRCUIT1:9;
+        then v in InnerVertices IIG by A3,XBOOLE_0:def 3;
+        then
+A4:     the_result_sort_of action_at v = v by MSAFREE2:def 7;
+        f.x = (Den(action_at v,SCS)).(action_at v depends_on_in s) by A1,
+        A3;
+        hence f.x in (the Sorts of SCS).x by A4,CIRCUIT1:9;
       end;
     end;
-    then reconsider f as State of SCS by A2,A3,CARD_3:def 5;
+    dom f = the carrier of IIG & dom the Sorts of SCS = the carrier of IIG
+    by PARTFUN1:def 4;
+    then reconsider f as State of SCS by A2,CARD_3:def 5;
     take f;
     let v be Vertex of IIG;
     thus v in InputVertices IIG implies f.v = s.v by A1;
-    assume v in InnerVertices IIG;
-    then not v in InputVertices IIG by A4,XBOOLE_0:3;
+A5: InputVertices IIG misses InnerVertices IIG by XBOOLE_1:79;
+    assume
+    v in InnerVertices IIG;
+    then not v in InputVertices IIG by A5,XBOOLE_0:3;
     hence thesis by A1;
   end;
   uniqueness
   proof
     let it1, it2 be State of SCS such that
-A7: for v being Vertex of IIG
-    holds (v in InputVertices IIG implies it1.v = s.v)
-    & (v in InnerVertices IIG implies it1.v = (Den(action_at v,SCS))
-    .(action_at v depends_on_in s)) and
-A8: for v being Vertex of IIG
-    holds (v in InputVertices IIG implies it2.v = s.v)
-    & (v in InnerVertices IIG implies it2.v = (Den(action_at v,SCS))
-    .(action_at v depends_on_in s));
-A9: dom it1 = the carrier of IIG by CIRCUIT1:4;
-A10: dom it2 = the carrier of IIG by CIRCUIT1:4;
-    assume it1 <> it2;
+A6: for v being Vertex of IIG holds (v in InputVertices IIG implies
+it1.v = s.v) & (v in InnerVertices IIG implies it1.v = (Den(action_at v,SCS)) .
+    (action_at v depends_on_in s)) and
+A7: for v being Vertex of IIG holds (v in InputVertices IIG implies
+it2.v = s.v) & (v in InnerVertices IIG implies it2.v = (Den(action_at v,SCS)) .
+    (action_at v depends_on_in s));
+    assume
+A8: it1 <> it2;
+    dom it2 = the carrier of IIG by CIRCUIT1:4;
     then consider x being set such that
-A11: x in dom it1 & it1.x <> it2.x by A9,A10,FUNCT_1:9;
-    reconsider v = x as Vertex of IIG by A11,CIRCUIT1:4;
-    v in InputVertices IIG \/ InnerVertices IIG by A9,A11,XBOOLE_1:45;
+A9: x in dom it1 and
+A10: it1.x <> it2.x by A8,CIRCUIT1:4,FUNCT_1:9;
+    reconsider v = x as Vertex of IIG by A9,CIRCUIT1:4;
+A11: v in InnerVertices IIG implies it1.v = (Den(action_at v,SCS)).(
+    action_at v depends_on_in s) by A6;
+    dom it1 = the carrier of IIG by CIRCUIT1:4;
+    then v in InputVertices IIG \/ InnerVertices IIG by A9,XBOOLE_1:45;
     then
-A12: v in InputVertices IIG or v in InnerVertices IIG by XBOOLE_0:def 3;
-    (v in InputVertices IIG implies it1.v = s.v)
-    & (v in InnerVertices IIG implies
-    it1.v = (Den(action_at v,SCS)).(action_at v depends_on_in s)) by A7;
-    hence contradiction by A8,A11,A12;
+A12: v in InputVertices IIG or v in InnerVertices IIG by XBOOLE_0:def
+    3;
+    v in InputVertices IIG implies it1.v = s.v by A6;
+    hence contradiction by A7,A10,A12,A11;
   end;
 end;
 
 theorem Th12:
-  for SCS being non-empty Circuit of IIG, s being State of SCS,
-  iv being InputValues of SCS st iv c= s holds iv c= Following s
+  for SCS being non-empty Circuit of IIG, s being State of SCS, iv
+  being InputValues of SCS st iv c= s holds iv c= Following s
 proof
-  let SCS be non-empty Circuit of IIG, s be State of SCS,
-  iv be InputValues of SCS such that
+  let SCS be non-empty Circuit of IIG, s be State of SCS, iv be InputValues of
+  SCS such that
 A1: iv c= s;
   now
     dom s = the carrier of IIG by CIRCUIT1:4
@@ -1511,60 +1500,55 @@ end;
 
 definition
   let IIG;
-  let SCS be non-empty Circuit of IIG, s be State of SCS,
-  iv be InputValues of SCS;
+  let SCS be non-empty Circuit of IIG, s be State of SCS, iv be InputValues of
+  SCS;
   func Following(s,iv) -> State of SCS equals
-
   Following(s+*iv);
   coherence;
 end;
 
 definition
   let IIG;
-  let SCS be non-empty Circuit of IIG, InpFs be InputFuncs of SCS,
-  s be State of SCS;
+  let SCS be non-empty Circuit of IIG, InpFs be InputFuncs of SCS, s be State
+  of SCS;
   func InitialComp(s,InpFs) -> State of SCS equals
-  s +* (0-th_InputValues InpFs) +* Set-Constants SCS;
+  s +* (0-th_InputValues
+  InpFs) +* Set-Constants SCS;
   coherence
   proof
     set sc = Set-Constants SCS;
-A1: dom sc = SortsWithConstants IIG
-    & dom the Sorts of SCS = the carrier of IIG by PARTFUN1:def 4
-;
-    now
+A1: dom sc = SortsWithConstants IIG by PARTFUN1:def 4;
+A2: now
       let x be set;
       assume
-A2:   x in dom sc;
+A3:   x in dom sc;
       then reconsider v = x as Vertex of IIG by A1;
-      sc.x in Constants(SCS,v) by A2,CIRCUIT1:def 1;
+      sc.x in Constants(SCS,v) by A3,CIRCUIT1:def 1;
       hence sc.x in (the Sorts of SCS).x;
     end;
-    hence thesis by A1,PRE_CIRC:9;
+    dom the Sorts of SCS = the carrier of IIG by PARTFUN1:def 4;
+    hence thesis by A1,A2,PRE_CIRC:9;
   end;
 end;
 
 definition
   let IIG;
-  let SCS be non-empty Circuit of IIG, InpFs be InputFuncs of SCS,
-  s be State of SCS;
+  let SCS be non-empty Circuit of IIG, InpFs be InputFuncs of SCS, s be State
+  of SCS;
   func Computation(s,InpFs) -> Function of NAT, (product the Sorts of SCS)
   means
   :Def9:
-  it.0 = InitialComp(s,InpFs) & for i being Nat
-  holds it.(i+1) = Following(it.i,(i+1)-th_InputValues InpFs);
+  it.0 = InitialComp(s,InpFs) & for i being Nat holds it.(i+1) =
+  Following(it.i,(i+1)-th_InputValues InpFs);
   correctness
   proof
-    deffunc F(Nat,State of SCS) =
-    Following($2,($1+1)-th_InputValues InpFs);
-    thus (ex IT being Function of NAT, product the Sorts of SCS
-    st IT.0 = InitialComp(s,InpFs)
-    & for i being Nat holds IT.(i+1) = F(i,IT.i))
-    & for IT1, IT2 being Function of NAT, product the Sorts of SCS
-    st (IT1.0 = InitialComp(s,InpFs)
-    & for i being Nat holds IT1.(i+1) = F(i,IT1.i))
-    & (IT2.0 = InitialComp(s,InpFs)
-    & for i being Nat holds IT2.(i+1) = F(i,IT2.i))
-    holds IT1 = IT2 from PRE_CIRC:sch 3;
+    deffunc F(Nat,State of SCS) = Following($2,($1+1)-th_InputValues InpFs);
+    thus (ex IT being Function of NAT, product the Sorts of SCS st IT.0 =
+InitialComp(s,InpFs) & for i being Nat holds IT.(i+1) = F(i,IT.i)) & for IT1,
+IT2 being Function of NAT, product the Sorts of SCS st (IT1.0 = InitialComp(s,
+InpFs) & for i being Nat holds IT1.(i+1) = F(i,IT1.i)) & (IT2.0 = InitialComp(s
+,InpFs) & for i being Nat holds IT2.(i+1) = F(i,IT2.i)) holds IT1 = IT2 from
+    PRE_CIRC:sch 3;
   end;
 end;
 
@@ -1573,13 +1557,13 @@ reserve s for State of SCS;
 reserve iv for InputValues of SCS;
 
 theorem Th13:
-  for k being Element of NAT st for v being Vertex of IIG st depth(v,SCS) <= k
-  holds s.v = IGValue(v,iv) holds
-  for v1 being Vertex of IIG st depth(v1,SCS) <= k+1
-  holds (Following s).v1 = IGValue(v1,iv)
+  for k being Element of NAT st for v being Vertex of IIG st depth
+  (v,SCS) <= k holds s.v = IGValue(v,iv) holds for v1 being Vertex of IIG st
+  depth(v1,SCS) <= k+1 holds (Following s).v1 = IGValue(v1,iv)
 proof
   let k be Element of NAT such that
-A1: for v being Vertex of IIG st depth(v,SCS) <= k holds s.v = IGValue(v,iv);
+A1: for v being Vertex of IIG st depth(v,SCS) <= k holds s.v = IGValue(v
+  ,iv);
   let v be Vertex of IIG such that
 A2: depth(v,SCS) <= k+1;
   v in the carrier of IIG;
@@ -1595,71 +1579,73 @@ A5: depth(v,SCS) = 0 by CIRCUIT1:19;
   end;
   suppose
 A6: v in InnerVertices IIG;
-    set o = action_at v;
-    set U1 = FreeEnv SCS;
     set F = Eval SCS;
+    set X = the Sorts of SCS;
+    set U1 = FreeEnv SCS;
+    set o = action_at v;
     set taofo =the_arity_of o;
-A7: dom the Arity of IIG = the carrier' of IIG by FUNCT_2:def 1;
     deffunc F(Nat) = IGTree((taofo/.$1) qua Vertex of IIG, iv);
     consider p being FinSequence such that
-A8: len p = len the_arity_of o and
-A9: for k being Nat st k in dom p holds p.k = F(k) from FINSEQ_1:sch 2;
-A10: for k being Element of NAT st k in dom p
-    holds p.k = F(k) by A9;
-A11: dom p = dom the_arity_of o by A8,FINSEQ_3:31;
-    now
+A7: len p = len the_arity_of o and
+A8: for k being Nat st k in dom p holds p.k = F(k) from FINSEQ_1:sch
+    2;
+A9: for k being Element of NAT st k in dom p holds p.k = F(k) by A8;
+A10: now
       let k be Nat;
-      assume k in dom p;
-      then p.k = IGTree(taofo/.k, iv) by A9;
+      assume
+      k in dom p;
+      then p.k = IGTree(taofo/.k, iv) by A8;
       hence p.k in (the Sorts of U1).((the_arity_of o)/.k);
     end;
-    then reconsider p as Element of Args(o,U1) by A8,MSAFREE2:7;
-A12: F is_homomorphism U1, SCS by MSAFREE2:def 9;
-    set X = the Sorts of SCS;
-A13: U1 = MSAlgebra (# FreeSort(X), FreeOper(X) #) by MSAFREE:def 16;
-A14: Args(o,U1) = ((the Sorts of U1)# * the Arity of IIG).o by MSUALG_1:def 9;
-    then reconsider p' = p as FinSequence of TS(DTConMSA(X)) by A13,MSAFREE:8;
-A15: Sym(o,X) ==> roots p' by A13,A14,MSAFREE:10;
     U1 = MSAlgebra (# FreeSort(X), FreeOper(X) #) by MSAFREE:def 16;
-    then Den(o,U1) = (FreeOper X).o by MSUALG_1:def 11
-      .= DenOp(o,X) by MSAFREE:def 15;
     then
-A16: Den(o,U1).p = (Sym(o,X))-tree p' by A15,MSAFREE:def 14
-      .= [o,the carrier of IIG]-tree p' by MSAFREE:def 11
-      .= IGTree(v,iv) by A6,A10,A11,Th9;
-A17: ((the Sorts of SCS)# * the Arity of IIG).o
-    = (the Sorts of SCS)#.((the Arity of IIG).o) by A7,FUNCT_1:23
+A11: Den(o,U1) = (FreeOper X).o by MSUALG_1:def 11
+      .= DenOp(o,X) by MSAFREE:def 15;
+    reconsider ods = o depends_on_in s as Function;
+A12: F is_homomorphism U1, SCS by MSAFREE2:def 9;
+    dom the Arity of IIG = the carrier' of IIG by FUNCT_2:def 1;
+    then
+A13: ((the Sorts of SCS)# * the Arity of IIG).o = (the Sorts of SCS)#.((
+    the Arity of IIG).o) by FUNCT_1:23
       .= (the Sorts of SCS)#.(the_arity_of o) by MSUALG_1:def 6
       .= product ((the Sorts of SCS) * the_arity_of o) by PBOOLE:def 19;
-A18: Args(o,SCS) = ((the Sorts of SCS)# * the Arity of IIG).o
-    by MSUALG_1:def 9;
+A14: dom p = dom the_arity_of o by A7,FINSEQ_3:31;
+    reconsider p as Element of Args(o,U1) by A7,A10,MSAFREE2:7;
+A15: U1 = MSAlgebra (# FreeSort(X), FreeOper(X) #) & Args(o,U1) = ((the
+    Sorts of U1)# * the Arity of IIG).o by MSAFREE:def 16,MSUALG_1:def 9;
+    then reconsider p' = p as FinSequence of TS(DTConMSA(X)) by MSAFREE:8;
+    Sym(o,X) ==> roots p' by A15,MSAFREE:10;
+    then
+A16: Den(o,U1).p = (Sym(o,X))-tree p' by A11,MSAFREE:def 14
+      .= [o,the carrier of IIG]-tree p' by MSAFREE:def 11
+      .= IGTree(v,iv) by A6,A9,A14,Th9;
     reconsider Fp = F#p as Function;
-    reconsider ods = o depends_on_in s as Function;
+A17: Args(o,SCS) = ((the Sorts of SCS)# * the Arity of IIG).o by MSUALG_1:
+    def 9;
     now
-      dom the Sorts of SCS = the carrier of IIG
-      & rng the_arity_of o c= the carrier of IIG
-      by FINSEQ_1:def 4,PARTFUN1:def 4;
-      hence dom the_arity_of o
-      = dom ((the Sorts of SCS) * the_arity_of o) by RELAT_1:46
-        .= dom Fp by A17,A18,CARD_3:18;
-      dom s = the carrier of IIG
-      & rng the_arity_of o c= the carrier of IIG by CIRCUIT1:4,FINSEQ_1:def 4;
+      dom the Sorts of SCS = the carrier of IIG & rng the_arity_of o c=
+      the carrier of IIG by FINSEQ_1:def 4,PARTFUN1:def 4;
+      hence dom the_arity_of o = dom ((the Sorts of SCS) * the_arity_of o) by
+      RELAT_1:46
+        .= dom Fp by A13,A17,CARD_3:18;
+      dom s = the carrier of IIG & rng the_arity_of o c= the carrier of
+      IIG by CIRCUIT1:4,FINSEQ_1:def 4;
       hence dom the_arity_of o = dom (s * the_arity_of o) by RELAT_1:46
         .= dom ods by CIRCUIT1:def 3;
       let x be set;
+      reconsider v1 = (the_arity_of o)/.x as Element of IIG;
       assume
-A19:  x in dom the_arity_of o;
-      reconsider v1 = (the_arity_of o)/.x as Element of the carrier of IIG;
-      reconsider x' = x as Element of NAT by A19;
-A20:  v1 = (the_arity_of o).x' by A19,PARTFUN1:def 8;
-      then v1 in rng the_arity_of o by A19,FUNCT_1:def 5;
+A18:  x in dom the_arity_of o;
+      then reconsider x' = x as Element of NAT;
+A19:  v1 = (the_arity_of o).x' by A18,PARTFUN1:def 8;
+      then v1 in rng the_arity_of o by A18,FUNCT_1:def 5;
       then depth(v1,SCS) < k+1 by A2,A6,CIRCUIT1:20,XXREAL_0:2;
       then
-A21:  depth(v1,SCS) <= k by NAT_1:13;
-      thus Fp.x = (F.v1).(p'.x') by A11,A19,MSUALG_3:def 8
-        .= IGValue(v1,iv) by A9,A19,A11
-        .= s.v1 by A1,A21
-        .= (s * (the_arity_of o)).x by A19,A20,FUNCT_1:23
+A20:  depth(v1,SCS) <= k by NAT_1:13;
+      thus Fp.x = (F.v1).(p'.x') by A14,A18,MSUALG_3:def 8
+        .= IGValue(v1,iv) by A8,A14,A18
+        .= s.v1 by A1,A20
+        .= (s * (the_arity_of o)).x by A18,A19,FUNCT_1:23
         .= ods.x by CIRCUIT1:def 3;
     end;
     then F#p = o depends_on_in s by FUNCT_1:9;
@@ -1669,8 +1655,8 @@ A21:  depth(v1,SCS) <= k by NAT_1:13;
   end;
 end;
 
-reserve IIG for finite monotonic Circuit-like non void
-  (non empty ManySortedSign);
+reserve IIG for finite monotonic Circuit-like non void (non empty
+  ManySortedSign);
 
 reserve SCS for non-empty Circuit of IIG;
 reserve InpFs for InputFuncs of SCS;
@@ -1678,24 +1664,25 @@ reserve s for State of SCS;
 reserve iv for InputValues of SCS;
 
 theorem Th14:
-  commute InpFs is constant & InputVertices IIG is non empty implies
-  for s, iv st iv = (commute InpFs).0 for k being Element of NAT
-  holds iv c= (Computation(s,InpFs)).k
+  commute InpFs is constant & InputVertices IIG is non empty
+implies for s, iv st iv = (commute InpFs).0 for k being Element of NAT holds iv
+  c= (Computation(s,InpFs)).k
 proof
-  assume
-A1: commute InpFs is constant & InputVertices IIG is non empty;
-  then
-A2: IIG is with_input_V by MSAFREE2:def 4;
+  assume that
+A1: commute InpFs is constant and
+A2: InputVertices IIG is non empty;
+A3: dom commute InpFs = NAT by A2,PRE_CIRC:8;
   let s, iv;
   assume
-A3: iv = (commute InpFs).0;
+A4: iv = (commute InpFs).0;
   let k be Element of NAT;
+  IIG is with_input_V by A2,MSAFREE2:def 4;
+  then
+A5: k-th_InputValues InpFs = (commute InpFs).k by CIRCUIT1:def 2
+    .= iv by A1,A4,A3,FUNCT_1:def 16;
   set Ck = (Computation(s,InpFs)).k;
-A4: dom commute InpFs = NAT by A1,PRE_CIRC:8;
-A5: k-th_InputValues InpFs = (commute InpFs).k by A2,CIRCUIT1:def 2
-    .= iv by A1,A3,A4,FUNCT_1:def 16;
-  dom iv = InputVertices IIG & dom Set-Constants SCS
-  = SortsWithConstants IIG by PARTFUN1:def 4;
+  dom iv = InputVertices IIG & dom Set-Constants SCS = SortsWithConstants
+  IIG by PARTFUN1:def 4;
   then
 A6: dom iv misses dom Set-Constants SCS by MSAFREE2:6;
   per cases by NAT_1:6;
@@ -1705,7 +1692,8 @@ A7: k = 0;
       .= s +* (0-th_InputValues InpFs) +* Set-Constants SCS;
     hence thesis by A5,A6,A7,FUNCT_4:26,PRE_CIRC:4;
   end;
-  suppose ex n being Nat st k=n+1;
+  suppose
+    ex n being Nat st k=n+1;
     then consider n being Nat such that
 A8: k=n+1;
     reconsider n as Element of NAT by ORDINAL1:def 13;
@@ -1717,96 +1705,98 @@ A8: k=n+1;
 end;
 
 theorem
-  for n being Element of NAT st commute InpFs is constant
-  & InputVertices IIG is non empty & (Computation(s,InpFs)).n is stable
-  for m being Element of NAT st n <= m
-  holds (Computation(s,InpFs)).n = (Computation(s,InpFs)).m
+  for n being Element of NAT st commute InpFs is constant &
+InputVertices IIG is non empty & (Computation(s,InpFs)).n is stable for m being
+Element of NAT st n <= m holds (Computation(s,InpFs)).n = (Computation(s,InpFs)
+  ).m
 proof
   let n be Element of NAT such that
-A1: commute InpFs is constant & InputVertices IIG is non empty
-  & (Computation(s,InpFs)).n is stable;
-  defpred P[Element of NAT] means
-  n <= $1 implies (Computation(s,InpFs)).n = (Computation(s,InpFs)).$1;
-A2: P[0] by NAT_1:3;
-A3: now
+A1: commute InpFs is constant and
+A2: InputVertices IIG is non empty and
+A3: (Computation(s,InpFs)).n is stable;
+  defpred P[Element of NAT] means n <= $1 implies (Computation(s,InpFs)).n = (
+  Computation(s,InpFs)).$1;
+A4: now
     let m be Element of NAT;
     assume
-A4: P[m];
+A5: P[m];
     thus P[m+1]
     proof
-      assume
-A5:   n <= m+1;
-A6:   IIG is with_input_V by A1,MSAFREE2:def 4;
-      then reconsider iv = (commute InpFs).0 as InputValues of SCS
-      by CIRCUIT1:2;
-A7:   dom commute InpFs = NAT by A1,PRE_CIRC:8;
-      (m+1)-th_InputValues InpFs = (commute InpFs).(m+1) by A6,CIRCUIT1:def 2
+A6:   IIG is with_input_V by A2,MSAFREE2:def 4;
+      then reconsider iv = (commute InpFs).0 as InputValues of SCS by
+      CIRCUIT1:2;
+      reconsider Ckm = (Computation(s,InpFs)).m as State of SCS;
+A7:   dom commute InpFs = NAT by A2,PRE_CIRC:8;
+      (m+1)-th_InputValues InpFs = (commute InpFs).(m+1) by A6, CIRCUIT1:
+      def 2
         .= iv by A1,A7,FUNCT_1:def 16;
       then
-A8:   (m+1)-th_InputValues InpFs c= (Computation(s,InpFs)).m by A1,Th14;
-      reconsider Ckm = (Computation(s,InpFs)).m as State of SCS;
-      per cases by A5,NAT_1:8;
-      suppose n <= m;
-        hence (Computation(s,InpFs)).n = Following Ckm by A1,A4,Def6
-          .= Following((Computation(s,InpFs)).m, (m+1)-th_InputValues
-        InpFs) by A8,FUNCT_4:79
+A8:   (m+1)-th_InputValues InpFs c= (Computation(s,InpFs)).m by A1,A2,
+      Th14;
+      assume
+A9:   n <= m+1;
+      per cases by A9,NAT_1:8;
+      suppose
+        n <= m;
+        hence (Computation(s,InpFs)).n = Following Ckm by A3,A5,Def6
+          .= Following((Computation(s,InpFs)).m, (m+1)-th_InputValues InpFs)
+        by A8,FUNCT_4:79
           .= (Computation(s,InpFs)).(m+1) by Def9;
       end;
-      suppose n = m+1;
+      suppose
+        n = m+1;
         hence thesis;
       end;
     end;
   end;
-  thus for m being Element of NAT holds P[m] from NAT_1:sch 1(A2,A3);
+A10: P[0] by NAT_1:3;
+  thus for m being Element of NAT holds P[m] from NAT_1:sch 1(A10,A4);
 end;
 
 theorem Th16:
   commute InpFs is constant & InputVertices IIG is non empty
-  implies for s, iv st iv = (commute InpFs).0
-  for k being Element of NAT, v being Vertex of IIG st depth(v,SCS) <= k
-  holds ((Computation(s,InpFs)).k
-  qua Element of product the Sorts of SCS).v = IGValue(v,iv)
+implies for s, iv st iv = (commute InpFs).0 for k being Element of NAT, v being
+Vertex of IIG st depth(v,SCS) <= k holds ((Computation(s,InpFs)).k qua Element
+  of product the Sorts of SCS).v = IGValue(v,iv)
 proof
-  assume
-A1: commute InpFs is constant & InputVertices IIG is non empty;
-  then
-A2: IIG is with_input_V by MSAFREE2:def 4;
+  assume that
+A1: commute InpFs is constant and
+A2: InputVertices IIG is non empty;
   let s, iv;
   assume
 A3: iv = (commute InpFs).0;
-  defpred P[Element of NAT] means
-  for v being Vertex of IIG st depth(v,SCS) <= $1
-  holds ((Computation(s,InpFs)).$1 qua State of SCS).v = IGValue(v,iv);
-A4: P[0]
+  defpred P[Element of NAT] means for v being Vertex of IIG st depth(v,SCS) <=
+  $1 holds ((Computation(s,InpFs)).$1 qua State of SCS).v = IGValue(v,iv);
+A4: IIG is with_input_V by A2,MSAFREE2:def 4;
+A5: P[0]
   proof
     let v be Vertex of IIG;
-    assume depth(v,SCS) <= 0;
+    assume
+    depth(v,SCS) <= 0;
     then
-A5: depth(v,SCS) = 0 by NAT_1:3;
-A6: (Computation(s,InpFs)).0 = InitialComp(s,InpFs) by Def9
+A6: depth(v,SCS) = 0 by NAT_1:3;
+A7: (Computation(s,InpFs)).0 = InitialComp(s,InpFs) by Def9
       .= s +* (0-th_InputValues InpFs) +* Set-Constants SCS;
-    per cases by A5,CIRCUIT1:19;
+    per cases by A6,CIRCUIT1:19;
     suppose
-A7:   v in InputVertices IIG;
+A8:   v in InputVertices IIG;
+A9:   dom (0-th_InputValues InpFs) = InputVertices IIG by PARTFUN1:def 4;
       InputVertices IIG misses SortsWithConstants IIG by MSAFREE2:6;
-      then not v in SortsWithConstants IIG by A7,XBOOLE_0:3;
-      then
-A8:   not v in dom Set-Constants SCS by PARTFUN1:def 4;
-A9:   dom (0-th_InputValues InpFs) = InputVertices IIG by PARTFUN1:def 4
-;
-      thus ((Computation(s,InpFs)).0
-      qua Element of product the Sorts of SCS).v
-      = (s +* (0-th_InputValues InpFs)).v by A6,A8,FUNCT_4:12
-        .= (0-th_InputValues InpFs).v by A7,A9,FUNCT_4:14
-        .= iv.v by A2,A3,CIRCUIT1:def 2
-        .= IGValue(v,iv) by A7,Th10;
+      then not v in SortsWithConstants IIG by A8,XBOOLE_0:3;
+      then not v in dom Set-Constants SCS by PARTFUN1:def 4;
+      hence
+      ((Computation(s,InpFs)).0 qua Element of product the Sorts of SCS).
+      v = (s +* (0-th_InputValues InpFs)).v by A7,FUNCT_4:12
+        .= (0-th_InputValues InpFs).v by A8,A9,FUNCT_4:14
+        .= iv.v by A4,A3,CIRCUIT1:def 2
+        .= IGValue(v,iv) by A8,Th10;
     end;
     suppose
 A10:  v in SortsWithConstants IIG;
       then v in dom Set-Constants SCS by PARTFUN1:def 4;
-      hence ((Computation(s,InpFs)).0
-      qua Element of product the Sorts of SCS).v
-      = (Set-Constants SCS).v by A6,FUNCT_4:14
+      hence
+      ((Computation(s,InpFs)).0 qua Element of product the Sorts of SCS).
+      v = (Set-Constants SCS).v by A7,FUNCT_4:14
         .= IGValue(v,iv) by A10,Th11;
     end;
   end;
@@ -1816,92 +1806,95 @@ A11: for k be Element of NAT st P[k] holds P[k+1]
     reconsider Ck = (Computation(s,InpFs)).k as State of SCS;
     assume
 A12: P[k];
-A13: dom commute InpFs = NAT by A1,PRE_CIRC:8;
-A14: (k+1)-th_InputValues InpFs = (commute InpFs).(k+1) by A2,CIRCUIT1:def 2
-      .= (commute InpFs).0 by A1,A13,FUNCT_1:def 16;
-A15: iv c= Ck by A1,A3,Th14;
     let v be Vertex of IIG such that
-A16: depth(v,SCS) <= k+1;
-    thus ((Computation(s,InpFs)).(k+1) qua State of SCS).v
-    = (Following(Ck,(k+1)-th_InputValues InpFs)).v by Def9
-      .= (Following Ck).v by A3,A14,A15,FUNCT_4:79
-      .= IGValue(v,iv) by A12,A16,Th13;
+A13: depth(v,SCS) <= k+1;
+A14: dom commute InpFs = NAT by A2,PRE_CIRC:8;
+A15: (k+1)-th_InputValues InpFs = (commute InpFs).(k+1) by A4,CIRCUIT1:def
+    2
+      .= (commute InpFs).0 by A1,A14,FUNCT_1:def 16;
+A16: iv c= Ck by A1,A2,A3,Th14;
+    thus ((Computation(s,InpFs)).(k+1) qua State of SCS).v = (Following(Ck,(k+
+    1)-th_InputValues InpFs)).v by Def9
+      .= (Following Ck).v by A3,A15,A16,FUNCT_4:79
+      .= IGValue(v,iv) by A12,A13,Th13;
   end;
-  thus for k being Element of NAT holds P[k] from NAT_1:sch 1(A4,A11);
+  thus for k being Element of NAT holds P[k] from NAT_1:sch 1(A5,A11);
 end;
 
 theorem Th17:
-  commute InpFs is constant & InputVertices IIG is non empty
-  & iv = (commute InpFs).0 implies
-  for s being State of SCS, v being Vertex of IIG,
-  n being Element of NAT st n = depth SCS
-  holds ((Computation(s,InpFs)).n qua State of SCS).v = IGValue(v,iv)
+  commute InpFs is constant & InputVertices IIG is non empty & iv
+= (commute InpFs).0 implies for s being State of SCS, v being Vertex of IIG, n
+being Element of NAT st n = depth SCS holds ((Computation(s,InpFs)).n qua State
+  of SCS).v = IGValue(v,iv)
 proof
   assume
-A1: commute InpFs is constant & InputVertices IIG is non empty
-  & iv = (commute InpFs).0;
+A1: commute InpFs is constant & InputVertices IIG is non empty & iv = (
+  commute InpFs).0;
   let s be State of SCS, v be Vertex of IIG;
-  let n be Element of NAT such that
-A2: n = depth SCS;
-  depth(v,SCS) <= depth SCS by CIRCUIT1:18;
+A2: depth(v,SCS) <= depth SCS by CIRCUIT1:18;
+  let n be Element of NAT;
+  assume
+  n = depth SCS;
   hence thesis by A1,A2,Th16;
 end;
 
 theorem
-  commute InpFs is constant & InputVertices IIG is non empty implies
-  for s being State of SCS, n be Element of NAT st n = depth SCS
-  holds (Computation(s,InpFs)).n is stable
+  commute InpFs is constant & InputVertices IIG is non empty implies for
+s being State of SCS, n be Element of NAT st n = depth SCS holds (Computation(s
+  ,InpFs)).n is stable
 proof
-  assume
-A1: commute InpFs is constant & InputVertices IIG is non empty;
-  then
-A2: IIG is with_input_V by MSAFREE2:def 4;
+  assume that
+A1: commute InpFs is constant and
+A2: InputVertices IIG is non empty;
+A3: dom commute InpFs = NAT by A2,PRE_CIRC:8;
+A4: IIG is with_input_V by A2,MSAFREE2:def 4;
+  then reconsider iv = (commute InpFs).0 as InputValues of SCS by CIRCUIT1:2;
   let s be State of SCS, n be Element of NAT such that
-A3: n = depth SCS;
-A4: dom commute InpFs = NAT by A1,PRE_CIRC:8;
-A5: (n+1)-th_InputValues InpFs = (commute InpFs).(n+1) by A2,CIRCUIT1:def 2
-    .= (commute InpFs).0 by A1,A4,FUNCT_1:def 16;
+A5: n = depth SCS;
   reconsider Cn = (Computation(s,InpFs)).n as State of SCS;
-  reconsider iv = (commute InpFs).0 as InputValues of SCS by A2,CIRCUIT1:2;
-A6: iv c= Cn by A1,Th14;
+A6: iv c= Cn by A1,A2,Th14;
+A7: (n+1)-th_InputValues InpFs = (commute InpFs).(n+1) by A4,CIRCUIT1:def 2
+    .= (commute InpFs).0 by A1,A3,FUNCT_1:def 16;
   reconsider Cn1 = (Computation(s,InpFs)).(n+1) as State of SCS;
   now
     thus the carrier of IIG = dom Cn by CIRCUIT1:4;
     thus the carrier of IIG = dom Cn1 by CIRCUIT1:4;
     let x be set;
-    assume x in the carrier of IIG;
+    assume
+    x in the carrier of IIG;
     then reconsider x' = x as Vertex of IIG;
-A7: depth(x',SCS) <= n by A3,CIRCUIT1:18;
-    then Cn.x' = IGValue(x',iv) by A1,Th16;
-    hence Cn.x = Cn1.x by A1,A7,Th16,NAT_1:12;
+A8: depth(x',SCS) <= n by A5,CIRCUIT1:18;
+    then Cn.x' = IGValue(x',iv) by A1,A2,Th16;
+    hence Cn.x = Cn1.x by A1,A2,A8,Th16,NAT_1:12;
   end;
   hence (Computation(s,InpFs)).n = (Computation(s,InpFs)).(n+1) by FUNCT_1:9
     .= Following(Cn,(n+1)-th_InputValues InpFs) by Def9
-    .= Following((Computation(s,InpFs)).n) by A5,A6,FUNCT_4:79;
+    .= Following((Computation(s,InpFs)).n) by A7,A6,FUNCT_4:79;
 end;
 
 theorem
-  commute InpFs is constant & InputVertices IIG is non empty implies
-  for s1, s2 being State of SCS holds (Computation(s1,InpFs)).(depth SCS)
-  = (Computation(s2,InpFs)).(depth SCS)
+  commute InpFs is constant & InputVertices IIG is non empty implies for
+  s1, s2 being State of SCS holds (Computation(s1,InpFs)).(depth SCS) = (
+  Computation(s2,InpFs)).(depth SCS)
 proof
-  assume
-A1: commute InpFs is constant & InputVertices IIG is non empty;
-  then
-A2: IIG is with_input_V by MSAFREE2:def 4;
-  let s1, s2 be State of SCS;
+  assume that
+A1: commute InpFs is constant and
+A2: InputVertices IIG is non empty;
+  IIG is with_input_V by A2,MSAFREE2:def 4;
+  then reconsider iv = (commute InpFs).0 as InputValues of SCS by CIRCUIT1:2;
   reconsider dSCS = depth SCS as Element of NAT by ORDINAL1:def 13;
+  let s1, s2 be State of SCS;
   reconsider Cs1 = (Computation(s1,InpFs)).dSCS as State of SCS;
   reconsider Cs2 = (Computation(s2,InpFs)).dSCS as State of SCS;
-  reconsider iv = (commute InpFs).0 as InputValues of SCS by A2,CIRCUIT1:2;
   now
     thus the carrier of IIG = dom Cs1 by CIRCUIT1:4;
     thus the carrier of IIG = dom Cs2 by CIRCUIT1:4;
     let x be set;
-    assume x in the carrier of IIG;
+    assume
+    x in the carrier of IIG;
     then reconsider x' = x as Vertex of IIG;
-    Cs1.x' = IGValue(x',iv) & Cs2.x' = IGValue(x',iv) by A1,Th17;
-    hence Cs1.x = Cs2.x;
+    Cs1.x' = IGValue(x',iv) by A1,A2,Th17;
+    hence Cs1.x = Cs2.x by A1,A2,Th17;
   end;
   hence thesis by FUNCT_1:9;
 end;

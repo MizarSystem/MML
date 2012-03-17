@@ -11,12 +11,11 @@ environ
       SEQM_3, LATTICES, GROUP_1, ANPROJ_1, INT_2;
  notations SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0, SQUARE_1, NAT_1,
       NAT_D, INT_2, VALUED_0, VALUED_1, SEQ_1, XXREAL_0, COMPLEX1, PRE_FF,
-      SEQ_2, SEQM_3, LIMFUNC1, QUIN_1, NEWTON, POWER;
+      SEQ_2, LIMFUNC1, QUIN_1, NEWTON, POWER;
  constructors REAL_1, SQUARE_1, NAT_1, NAT_D, QUIN_1, SEQ_2, SEQM_3, LIMFUNC1,
       NEWTON, POWER, PRE_FF, SEQ_1, VALUED_1, PARTFUN1, SETFAM_1, RELSET_1;
  registrations RELSET_1, XREAL_0, SQUARE_1, MEMBERED, QUIN_1, NEWTON, INT_1,
-      VALUED_0, VALUED_1, FUNCT_2, NUMBERS, SEQ_4, SETFAM_1, REALSET1,
-      FINSET_1;
+      VALUED_0, VALUED_1, FUNCT_2, NUMBERS, SEQ_4, SETFAM_1, REALSET1;
  requirements SUBSET, NUMERALS, REAL, ARITHM, BOOLE;
  definitions SQUARE_1, VALUED_1, XCMPLX_0;
  theorems NAT_1, PRE_FF, INT_2, SQUARE_1, WSIERP_1, EULER_1, PYTHTRIP, QUIN_1,
@@ -41,21 +40,24 @@ proof
   let m, n;
   set a = m gcd n;
   set b = m gcd (n + m);
-A1: a divides m & a divides n by NAT_D:def 5;
-  then a divides n + m by NAT_D:8;
+A1: a divides m by NAT_D:def 5;
+A2: b divides m by NAT_D:def 5;
+  b divides n + m by NAT_D:def 5;
+  then b divides n by A2,NAT_D:10;
   then
-A2: a divides b by A1,NAT_D:def 5;
-A3: b divides m & b divides n + m by NAT_D:def 5;
-  then b divides n by NAT_D:10;
-  then b divides a by A3,NAT_D:def 5;
-  hence thesis by A2,NAT_D:5;
+A3: b divides a by A2,NAT_D:def 5;
+  a divides n by NAT_D:def 5;
+  then a divides n + m by A1,NAT_D:8;
+  then a divides b by A1,NAT_D:def 5;
+  hence thesis by A3,NAT_D:5;
 end;
 
 theorem Th2:
-  for k, m, n being Element of NAT st k gcd m = 1 holds k gcd m * n = k gcd n
+  for k, m, n being Element of NAT st k gcd m = 1 holds k gcd m * n
+  = k gcd n
 proof
-  defpred P[Nat] means
-  for m, n holds $1 gcd m = 1 implies $1 gcd m * n = $1 gcd n;
+  defpred P[Nat] means for m, n holds $1 gcd m = 1 implies $1 gcd m * n = $1
+  gcd n;
 A1: for k being Nat holds (for a being Nat st a < k holds P[a]) implies P[k]
   proof
     let k be Nat;
@@ -65,27 +67,30 @@ A2: for a being Nat st a < k holds P[a];
     suppose
 A3:   k = 0;
       let m, n;
-      assume k gcd m = 1;
+      assume
+      k gcd m = 1;
       then 1 = m by A3,NEWTON:65;
       hence thesis;
     end;
     suppose
 A4:   k = 1;
       let m, n;
-      assume k gcd m = 1;
+      assume
+      k gcd m = 1;
       k gcd m * n = 1 by A4,NEWTON:64;
       hence thesis by A4,NEWTON:64;
     end;
     suppose
 A5:   k > 1;
       let m, n;
+      set b = k gcd m * n;
       assume
 A6:   k gcd m = 1;
-      set b = k gcd m * n;
       thus thesis
       proof
         per cases by NAT_1:26;
-        suppose b = 0;
+        suppose
+          b = 0;
           then 0 divides k by NAT_D:def 5;
           then k = 0 by INT_2:3;
           hence thesis by A5;
@@ -94,70 +99,63 @@ A6:   k gcd m = 1;
 A7:       b = 1;
           set c = k gcd n;
 A8:       c divides k by NAT_D:def 5;
-A9:       c divides n by NAT_D:def 5;
-          n divides m * n by NAT_D:def 3;
+A9:       n divides m * n by NAT_D:def 3;
+          c divides n by NAT_D:def 5;
           then c divides m * n by A9,NAT_D:4;
           then c divides 1 by A7,A8,NAT_D:def 5;
           hence thesis by A7,WSIERP_1:20;
         end;
-        suppose b > 1;
+        suppose
+          b > 1;
           then b >= 1 + 1 by NAT_1:13;
           then consider p such that
 A10:      p is prime and
 A11:      p divides b by INT_2:48;
-A12:      p divides k
-          proof
-            b divides k by NAT_D:def 5;
-            hence thesis by A11,NAT_D:4;
-          end;
+          b divides k by NAT_D:def 5;
+          then
+A12:      p divides k by A11,NAT_D:4;
           then consider s being Nat such that
 A13:      k = p * s by NAT_D:def 3;
-          reconsider s as Element of NAT by ORDINAL1:def 13;
-A14:      s < k
+A14:      not p divides m
           proof
-            p > 1 by A10,INT_2:def 5;
-            then p >= 1 + 1 by NAT_1:13;
-            then
-A15:        s * p >= s * (1 + 1) by NAT_1:4;
-            s <> 0 by A5,A13;
-            then s + s > s by NAT_1:3,XREAL_1:31;
-            then s + s >= s + 1 by NAT_1:13;
-            then
-A16:        k >= s + 1 by A13,A15,XXREAL_0:2;
-            s + 1 > s by XREAL_1:31;
-            hence thesis by A16,XXREAL_0:2;
-          end;
-A17:      not p divides m
-          proof
-            assume p divides m;
+            assume
+            p divides m;
             then p divides 1 by A6,A12,NAT_D:def 5;
             then p = 1 by WSIERP_1:20;
             hence thesis by A10,INT_2:def 5;
           end;
-          p divides m * n
-          proof
-            b divides m * n by NAT_D:def 5;
-            hence thesis by A11,NAT_D:4;
-          end;
-          then p divides n by A10,A17,NEWTON:98;
+          b divides m * n by NAT_D:def 5;
+          then p divides m * n by A11,NAT_D:4;
+          then p divides n by A10,A14,NEWTON:98;
           then consider r being Nat such that
-A18:      n = p * r by NAT_D:def 3;
-          reconsider r as Element of NAT by ORDINAL1:def 13;
+A15:      n = p * r by NAT_D:def 3;
+          reconsider s as Element of NAT by ORDINAL1:def 13;
+A16:      s + 1 > s by XREAL_1:31;
+          p > 1 by A10,INT_2:def 5;
+          then p >= 1 + 1 by NAT_1:13;
+          then
+A17:      s * p >= s * (1 + 1) by NAT_1:4;
+          s <> 0 by A5,A13;
+          then s + s > s by NAT_1:3,XREAL_1:31;
+          then s + s >= s + 1 by NAT_1:13;
+          then k >= s + 1 by A13,A17,XXREAL_0:2;
+          then
+A18:      s < k by A16,XXREAL_0:2;
 A19:      s gcd m = 1
           proof
             set c = s gcd m;
 A20:        c divides s by NAT_D:def 5;
+A21:        c divides m by NAT_D:def 5;
             s divides k by A13,NAT_D:def 3;
-            then
-A21:        c divides k by A20,NAT_D:4;
-            c divides m by NAT_D:def 5;
+            then c divides k by A20,NAT_D:4;
             then c divides 1 by A6,A21,NAT_D:def 5;
             hence thesis by WSIERP_1:20;
           end;
-A22:      k gcd m * n = p * s gcd p * (m * r) by A13,A18
+          reconsider r as Element of NAT by ORDINAL1:def 13;
+A22:      k gcd n = p * (s gcd r) by A13,A15,PYTHTRIP:8;
+          k gcd m * n = p * s gcd p * (m * r) by A13,A15
             .= p * (s gcd m * r) by PYTHTRIP:8;
-          k gcd n = p * (s gcd r) by A13,A18,PYTHTRIP:8;
-          hence thesis by A2,A14,A19,A22;
+          hence thesis by A2,A18,A19,A22;
         end;
       end;
     end;
@@ -167,52 +165,52 @@ A22:      k gcd m * n = p * s gcd p * (m * r) by A13,A18
 end;
 
 theorem Th3:
-  for s being real number st s > 0 ex n being Element of NAT st
-  (n > 0 & 0 < 1/n & 1/n <= s)
+  for s being real number st s > 0 ex n being Element of NAT st n >
+  0 & 0 < 1/n & 1/n <= s
 proof
   let s be real number;
-  assume s > 0;
-  then
-A1: 1/s > 0 by XREAL_1:141;
   consider n such that
-A2: n > 1/s by SEQ_4:10;
-A3: n > 0 by A1,A2,XXREAL_0:2;
-A4: 1/(1/s) = 1/s"
+A1: n > 1/s by SEQ_4:10;
+A2: 1/(1/s) = 1/s"
     .= s;
+  assume
+  s > 0;
+  then
+A3: 1/s > 0 by XREAL_1:141;
   take n;
-  thus thesis by A1,A2,A3,A4,XREAL_1:87,141;
+  n > 0 by A3,A1,XXREAL_0:2;
+  hence thesis by A3,A1,A2,XREAL_1:87,141;
 end;
 
-scheme FibInd {P[set] } : for k being Nat holds P[k]
+scheme
+  FibInd {P[set] } : for k being Nat holds P[k]
 provided
-A1: P[0]
-and
-A2: P[1]
-and
+A1: P[0] and
+A2: P[1] and
 A3: for k being Nat st P[k] & P[k+1] holds P[k+2]
 proof
+  let k be Nat;
   defpred Q[Nat] means P[$1] & P[$1 + 1];
-A4: Q[0] by A1,A2;
-A5: for k being Nat st Q[k] holds Q[k+1]
+A4: for k being Nat st Q[k] holds Q[k+1]
   proof
     let k be Nat;
+A5: k + 2 = (k + 1) + 1;
     assume
-A6: Q[k];
-    k + 2 = (k + 1) + 1;
-    hence thesis by A3,A6;
+    Q[k];
+    hence thesis by A3,A5;
   end;
-A7: for k being Nat holds Q[k] from NAT_1:sch 2(A4,A5);
-  let k be Nat;
-  thus thesis by A7;
+A6: Q[0] by A1,A2;
+  for k being Nat holds Q[k] from NAT_1:sch 2(A6,A4);
+  hence thesis;
 end;
 
-scheme BinInd { P[Nat,Nat] } : for m, n being Element of NAT holds P[m, n]
+scheme
+  BinInd { P[Nat,Nat] } : for m, n being Element of NAT holds P[m, n]
 provided
-A1: for m, n being Element of NAT st P[m,n] holds P[n,m]
-and
-A2: for k being Element of NAT st
-(for m, n being Element of NAT st (m < k & n < k) holds P[m,n]) holds
-(for m being Element of NAT st m <= k holds P[k,m])
+A1: for m, n being Element of NAT st P[m,n] holds P[n,m] and
+A2: for k being Element of NAT st (for m, n being Element of NAT st (m <
+k & n < k) holds P[m,n]) holds for m being Element of NAT st m <= k holds P[k,m
+]
 proof
   defpred Q[Nat] means for m, n st (m <= $1 & n <= $1) holds P[m,n];
 A3: for k being Nat st (for r being Nat st r < k holds Q[r]) holds Q[k]
@@ -221,50 +219,54 @@ A3: for k being Nat st (for r being Nat st r < k holds Q[r]) holds Q[k]
     assume
 A4: for r being Nat st r < k holds Q[r];
     let m, n;
-    assume
-A5: m <= k & n <= k;
+    assume that
+A5: m <= k and
+A6: n <= k;
     set s = max(m,n);
-A6: s <= k by A5,XXREAL_0:28;
-    per cases by A6,XXREAL_0:1;
-    suppose s < k;
-      then (m <= s & n <= s) implies P[m,n] by A4;
+A7: s <= k by A5,A6,XXREAL_0:28;
+    per cases by A7,XXREAL_0:1;
+    suppose
+      s < k;
+      then m <= s & n <= s implies P[m,n] by A4;
       hence thesis by XXREAL_0:25;
     end;
     suppose
-A7:   s = k;
-A8:   for m, n holds (m < k & n < k) implies P[m,n]
+A8:   s = k;
+A9:   for m, n holds m < k & n < k implies P[m,n]
       proof
         let m, n;
-        assume
-A9:     m < k & n < k;
+        assume that
+A10:    m < k and
+A11:    n < k;
         set s = max(m,n);
-A10:    s < k by A9,XXREAL_0:16;
-A11:    m <= s by XXREAL_0:25;
-        n <= s by XXREAL_0:25;
-        hence thesis by A4,A10,A11;
+A12:    m <= s by XXREAL_0:25;
+A13:    n <= s by XXREAL_0:25;
+        s < k by A10,A11,XXREAL_0:16;
+        hence thesis by A4,A12,A13;
       end;
       thus thesis
       proof
-        per cases by A7,XXREAL_0:16;
-        suppose k = m;
-          hence thesis by A2,A5,A8;
+        per cases by A8,XXREAL_0:16;
+        suppose
+          k = m;
+          hence thesis by A2,A6,A9;
         end;
-        suppose k = n;
-          then P[n,m] by A2,A5,A8;
+        suppose
+          k = n;
+          then P[n,m] by A2,A5,A9;
           hence thesis by A1;
         end;
       end;
     end;
   end;
-A12: for k being Nat holds Q[k] from NAT_1:sch 4(A3);
+A14: for k being Nat holds Q[k] from NAT_1:sch 4(A3);
   let m, n;
   set k = max(m,n);
-  (m <= k & n <= k) implies P[m,n] by A12;
+  m <= k & n <= k implies P[m,n] by A14;
   hence thesis by XXREAL_0:30;
 end;
 0 + 1 + 1 = 2;
 then
-
 Lm1: Fib(2) = 1 by PRE_FF:1;
 
 Lm2: 1 + 1 + 1 = 3;
@@ -272,90 +274,96 @@ Lm2: 1 + 1 + 1 = 3;
 Lm3: for k being Nat holds Fib(k+1) >= k
 proof
   defpred P[Nat] means Fib($1 +1) >= $1;
-A1: P[0] by PRE_FF:1;
   0 + 1 + 1 = 2;
   then
-A2: P[1] by PRE_FF:1;
-A3: for k being Nat st P[k] & P[k+1] holds P[k+2]
+A1: P[1] by PRE_FF:1;
+A2: for k being Nat st P[k] & P[k+1] holds P[k+2]
   proof
     let k be Nat;
     assume that
-A4: P[k] and
-A5: P[k+1];
+A3: P[k] and
+A4: P[k+1];
     per cases;
-    suppose k = 0;
+    suppose
+      k = 0;
       hence thesis by Lm1,Lm2,PRE_FF:1;
     end;
-    suppose k <> 0;
+    suppose
+      k <> 0;
+      then 1 <= k by NAT_1:14;
       then
-A6:   1 <= k by NAT_1:14;
-A7:   Fib((k + 2) + 1) = Fib((k+1) + 1) + Fib(k+1) by PRE_FF:1;
-A8:   Fib(k+1) + (k+1) <= Fib((k+1)+1) + Fib(k+1) by A5,XREAL_1:8;
-      k + (k+1) <= Fib(k+1) + (k+1) by A4,XREAL_1:8;
-      then
-A9:   k + (k+1) <= Fib((k+2)+1) by A7,A8,XXREAL_0:2;
-      1 + (k+1) <= k + (k+1) by A6,XREAL_1:8;
-      hence thesis by A9,XXREAL_0:2;
+A5:   1 + (k+1) <= k + (k+1) by XREAL_1:8;
+A6:   Fib((k + 2) + 1) = Fib((k+1) + 1) + Fib(k+1) by PRE_FF:1;
+A7:   k + (k+1) <= Fib(k+1) + (k+1) by A3,XREAL_1:8;
+      Fib(k+1) + (k+1) <= Fib((k+1)+1) + Fib(k+1) by A4,XREAL_1:8;
+      then k + (k+1) <= Fib((k+2)+1) by A6,A7,XXREAL_0:2;
+      hence thesis by A5,XXREAL_0:2;
     end;
   end;
-  thus for k being Nat holds P[k] from FibInd(A1, A2, A3);
+A8: P[0] by PRE_FF:1;
+  thus for k being Nat holds P[k] from FibInd(A8, A1, A2);
 end;
 
 Lm4: for m being Element of NAT holds Fib(m+1) >= Fib(m)
 proof
   defpred P[Element of NAT] means Fib($1 + 1) >= Fib($1);
-A1: P[0] by PRE_FF:1;
-A2: for k st P[k] holds P[k+1]
+A1: for k st P[k] holds P[k+1]
   proof
     let k;
-A3: Fib((k+1) + 1) = Fib(k+1) + Fib(k) by PRE_FF:1;
-    Fib(k) >= 0 by NAT_1:2;
-    then Fib((k+1) + 1) >= Fib(k+1) + 0 by A3,XREAL_1:8;
+A2: Fib(k) >= 0 by NAT_1:2;
+    Fib((k+1) + 1) = Fib(k+1) + Fib(k) by PRE_FF:1;
+    then Fib((k+1) + 1) >= Fib(k+1) + 0 by A2,XREAL_1:8;
     hence thesis;
   end;
-  thus for k being Element of NAT holds P[k] from NAT_1:sch 1(A1,A2);
+A3: P[0] by PRE_FF:1;
+  thus for k being Element of NAT holds P[k] from NAT_1:sch 1(A3,A1);
 end;
 
 Lm5: for m, n being Element of NAT st m >= n holds Fib(m) >= Fib(n)
 proof
-  let m, n be Element of NAT;
-  assume m >= n;
-  then consider k be Nat such that
-A1: m = n+k by NAT_1:10;
-  reconsider k as Element of NAT by ORDINAL1:def 13;
-A2: m = n+k by A1;
-  for k, n being Element of NAT holds Fib(n+k) >= Fib(n)
+A1: for k, n being Element of NAT holds Fib(n+k) >= Fib(n)
   proof
-    defpred P[Element of NAT] means
-    for n being Element of NAT holds Fib(n+$1) >= Fib(n);
-A3: P[0];
-A4: for k being Element of NAT st P[k] holds P[k+1]
+
+    defpred P[Element of NAT] means for n being Element of NAT holds Fib(n+$1)
+    >= Fib(n);
+
+A2: for k being Element of NAT st P[k] holds P[k+1]
     proof
       let k;
       assume
-A5:   P[k];
+A3:   P[k];
       let n;
       n + (k+1) = (n+k) + 1;
       then
-A6:   Fib(n + (k+1)) >= Fib(n+k) by Lm4;
-      Fib(n+k) >= Fib(n) by A5;
-      hence thesis by A6,XXREAL_0:2;
+A4:   Fib(n + (k+1)) >= Fib(n+k) by Lm4;
+      Fib(n+k) >= Fib(n) by A3;
+      hence thesis by A4,XXREAL_0:2;
     end;
-A7: for k holds P[k] from NAT_1:sch 1(A3, A4);
     let k, n be Element of NAT;
-    thus thesis by A7;
+A5: P[0];
+    for k holds P[k] from NAT_1:sch 1(A5, A2);
+    hence thesis;
   end;
-  hence thesis by A2;
+  let m, n be Element of NAT;
+  assume
+  m >= n;
+  then consider k be Nat such that
+A6: m = n+k by NAT_1:10;
+  reconsider k as Element of NAT by ORDINAL1:def 13;
+  m = n+k by A6;
+  hence thesis by A1;
 end;
 
 Lm6: for m being Element of NAT holds Fib(m+1) <> 0
 proof
   let m;
   per cases;
-  suppose m = 0;
+  suppose
+    m = 0;
     hence thesis by PRE_FF:1;
   end;
-  suppose m <> 0;
+  suppose
+    m <> 0;
     hence thesis by Lm3,NAT_1:3;
   end;
 end;
@@ -364,115 +372,115 @@ theorem Th4:
   for m, n being Nat holds Fib(m + (n + 1)) = (Fib(n) * Fib (m)) +
   (Fib(n + 1) * Fib (m + 1))
 proof
-  defpred P[Nat] means for n being Nat holds
-  Fib($1 + (n + 1)) = (Fib(n) * Fib($1)) + (Fib(n + 1) * Fib($1 + 1));
+  defpred P[Nat] means for n being Nat holds Fib($1 + (n + 1)) = (Fib(n) * Fib
+  ($1)) + (Fib(n + 1) * Fib($1 + 1));
 A1: P[0] by PRE_FF:1;
-A2: P[1] by Lm1,PRE_FF:1;
-A3: now
+A2: now
     let k be Nat;
     assume that
-A4: P[k] and
-A5: P[k+1];
+A3: P[k] and
+A4: P[k+1];
     thus P[k+2]
     proof
       let n be Nat;
-A6:   Fib(((k+1) + 1) + (n+1)) = Fib(((k + (n + 1)) + 1) + 1)
+A5:   Fib(((k+1) + 1) + (n+1)) = Fib(((k + (n + 1)) + 1) + 1)
         .= Fib(k + (n+1)) + Fib((k+1) + (n+1)) by PRE_FF:1;
-A7:   Fib(k + (n+1)) = Fib(n) * Fib(k) + Fib(n+1) * Fib(k+1) by A4;
       set a = Fib(n) * Fib(k), b = Fib(n+1) * Fib(k+1), c = Fib(n) * Fib(k+1),
       d = Fib(n+1) * Fib((k+1) + 1);
-A8:   (a + b) + (c + d) = (a + c) + (b + d);
-A9:   a + c = Fib(n) * (Fib(k) + Fib(k+1))
-        .= Fib(n) * Fib((k+1) + 1) by PRE_FF:1;
-      b + d = Fib(n+1) * (Fib(k+1) + Fib ((k+1) + 1))
+A6:   (a + b) + (c + d) = (a + c) + (b + d);
+A7:   b + d = Fib(n+1) * (Fib(k+1) + Fib ((k+1) + 1))
         .= Fib(n+1) * Fib(((k + 1) + 1) + 1) by PRE_FF:1;
-      hence thesis by A5,A6,A7,A8,A9;
+A8:   a + c = Fib(n) * (Fib(k) + Fib(k+1))
+        .= Fib(n) * Fib((k+1) + 1) by PRE_FF:1;
+      Fib(k + (n+1)) = Fib(n) * Fib(k) + Fib(n+1) * Fib(k+1) by A3;
+      hence thesis by A4,A5,A6,A8,A7;
     end;
   end;
-  thus for k being Nat holds P[k] from FibInd(A1, A2, A3);
+A9: P[1] by Lm1,PRE_FF:1;
+  thus for k being Nat holds P[k] from FibInd(A1, A9, A2);
 end;
 
 Lm7: for n being Element of NAT holds Fib(n) gcd Fib(n + 1) = 1
 proof
   defpred P[Element of NAT] means Fib($1) gcd Fib($1 + 1) = 1;
-A1: P[0] by NEWTON:65,PRE_FF:1;
-A2: now
+A1: now
     let k;
     assume
-A3: P[k];
-    thus P[k+1]
-    proof
-      thus Fib(k +1) gcd Fib((k + 1) + 1)
-      = Fib(k +1) gcd (Fib(k + 1) + Fib(k)) by PRE_FF:1
-        .= 1 by A3,Th1;
-    end;
+A2: P[k];
+
+    Fib(k +1) gcd Fib((k + 1) + 1) = Fib(k +1) gcd (Fib(k + 1) + Fib(k))
+    by PRE_FF:1
+
+      .= 1 by A2,Th1;
+    hence P[k+1];
   end;
-  thus for m being Element of NAT holds P[m] from NAT_1:sch 1(A1,A2);
+A3: P[0] by NEWTON:65,PRE_FF:1;
+  thus for m being Element of NAT holds P[m] from NAT_1:sch 1(A3,A1);
 end;
 
 theorem
   for m, n being Element of NAT holds Fib(m) gcd Fib(n) = Fib(m gcd n)
 proof
-  defpred P[Element of NAT,Element of NAT] means
-  Fib($1) gcd Fib($2) = Fib($1 gcd $2);
-A1: for m, n holds P[m,n] implies P[n,m];
-A2: for k st (for m, n st (m < k & n < k) holds P[m,n])
-  holds (for m st m <= k holds P[k,m])
+  defpred P[Element of NAT,Element of NAT] means Fib($1) gcd Fib($2) = Fib($1
+  gcd $2);
+A1: for k st (for m, n st (m < k & n < k) holds P[m,n]) holds for m st m <=
+  k holds P[k,m]
   proof
     let k;
     assume
-A3: for m, n st m < k & n < k holds P[m,n];
+A2: for m, n st m < k & n < k holds P[m,n];
     let m;
     assume
-A4: m <= k;
-    per cases by A4,XXREAL_0:1;
+A3: m <= k;
+    per cases by A3,XXREAL_0:1;
     suppose
-A5:   m = k;
+A4:   m = k;
       hence Fib k gcd Fib m = Fib k by NAT_D:32
-        .= Fib(k gcd m) by A5,NAT_D:32;
+        .= Fib(k gcd m) by A4,NAT_D:32;
     end;
     suppose
-A6:   m < k;
-A7:   not m < 0 by NAT_1:2;
+A5:   m < k;
+A6:   not m < 0 by NAT_1:2;
       thus thesis
       proof
-        per cases by A7,XXREAL_0:1;
+        per cases by A6,XXREAL_0:1;
         suppose
-A8:       m = 0;
+A7:       m = 0;
           then Fib(k) gcd Fib(m) = Fib(k) by NEWTON:65,PRE_FF:1;
-          hence thesis by A8,NEWTON:65;
+          hence thesis by A7,NEWTON:65;
         end;
         suppose
-A9:       m > 0;
+A8:       m > 0;
           thus thesis
           proof
             consider r be Nat such that
-A10:        k = m + r by A4,NAT_1:10;
+A9:         k = m + r by A3,NAT_1:10;
             reconsider r as Element of NAT by ORDINAL1:def 13;
-            r <> 0 by A6,A10;
+A10:        r <= k by A9,NAT_1:11;
+            r <> 0 by A5,A9;
             then consider rr being Nat such that
 A11:        r = rr + 1 by NAT_1:6;
             reconsider rr as Element of NAT by ORDINAL1:def 13;
-            Fib(k) = (Fib(rr+1) * Fib(m+1)) + (Fib (rr) * Fib(m))
-            by A10,A11,Th4;
+            Fib(k) = (Fib(rr+1) * Fib(m+1)) + (Fib (rr) * Fib(m)) by A9,
+            A11,Th4;
             then
-A12:        Fib(k) gcd Fib(m) = Fib(m) gcd (Fib(m+1) * Fib(r))
-            by A11,EULER_1:9;
+A12:        Fib
+(k) gcd Fib(m) = Fib(m) gcd (Fib(m+1) * Fib(r)) by A11,EULER_1:9;
             Fib(m) gcd Fib(m+1) = 1 by Lm7;
             then
 A13:        Fib(k) gcd Fib(m) = Fib(m) gcd Fib(r) by A12,Th2;
-A14:        r <= k by A10,NAT_1:11;
-            r <> k by A9,A10;
+            r <> k by A8,A9;
             then
-A15:        r < k by A14,XXREAL_0:1;
-            k gcd m = m gcd r by A10,Th1;
-            hence thesis by A3,A6,A13,A15;
+A14:        r < k by A10,XXREAL_0:1;
+            k gcd m = m gcd r by A9,Th1;
+            hence thesis by A2,A5,A13,A14;
           end;
         end;
       end;
     end;
   end;
-  thus for m, n holds P[m,n] from BinInd(A1,A2);
+A15: for m, n holds P[m,n] implies P[n,m];
+  thus for m, n holds P[m,n] from BinInd(A15,A1);
 end;
 
 begin
@@ -484,9 +492,9 @@ begin
 reserve x, a, b, c for real number;
 
 theorem Th6:
-  for x, a, b, c being real number st (a <> 0 & delta(a,b,c) >= 0) holds
-  (a * x^2 + b * x + c = 0) iff (x = (- b - sqrt delta(a,b,c))/(2 * a) or
-  x = (- b + sqrt delta(a,b,c))/(2 * a))
+  for x, a, b, c being real number st a <> 0 & delta(a,b,c) >= 0
+holds a * x^2 + b * x + c = 0 iff (x = (- b - sqrt delta(a,b,c))/(2 * a) or x =
+  (- b + sqrt delta(a,b,c))/(2 * a))
 proof
   let x, a, b, c;
   set lh = a * x^2 + b * x + c;
@@ -495,7 +503,7 @@ proof
   assume that
 A1: a <> 0 and
 A2: delta(a,b,c) >= 0;
- lh = a * (x - r1) * (x - r2) by A1,A2,QUIN_1:16;
+  lh = a * (x - r1) * (x - r2) by A1,A2,QUIN_1:16;
   hence thesis by A1,A2,QUIN_1:15;
 end;
 
@@ -504,7 +512,6 @@ end;
 
 definition
   func tau -> real number equals
-
   (1 + sqrt 5)/2;
   correctness;
 end;
@@ -513,22 +520,22 @@ end;
 
 definition
   func tau_bar -> real number equals
-
   (1 - sqrt 5)/2;
   correctness;
 end;
 
-Lm8: (tau ^2 = tau + 1) & (tau_bar ^2 = tau_bar + 1)
+Lm8: tau ^2 = tau + 1 & tau_bar ^2 = tau_bar + 1
 proof
 A1: delta(1, -1, -1) = (-1) ^2 - (4 * 1 * (-1)) by QUIN_1:def 1
     .= 5;
   then
 A2: (- (-1) - sqrt delta(1, -1, -1)) / (2 * 1) = tau_bar;
-A3: for x holds (x = tau or x = tau_bar) implies (x^2 = x + 1)
+A3: for x holds (x = tau or x = tau_bar) implies x^2 = x + 1
   proof
     let x;
-    assume x = tau or x = tau_bar;
-    then (1 * x^2 + (-1) * x + (-1) = 0) by A1,A2,Th6;
+    assume
+    x = tau or x = tau_bar;
+    then 1 * x^2 + (-1) * x + (-1) = 0 by A1,A2,Th6;
     hence thesis;
   end;
   hence tau^2 = tau + 1;
@@ -554,13 +561,12 @@ proof
   hence thesis;
 end;
 then
-
 Lm12: 0 < tau by XXREAL_0:2;
 
 Lm13: tau_bar < 0
 proof
   2 < sqrt 5 by SQUARE_1:85,95;
-  then not ((0 + sqrt 5) <= 1) by XXREAL_0:2;
+  then not (0 + sqrt 5) <= 1 by XXREAL_0:2;
   then 0 * 2 > (1 - sqrt 5)/1 by XREAL_1:21;
   then (1 - sqrt 5)/2 < 0 * 1 by XREAL_1:115;
   hence thesis;
@@ -568,51 +574,38 @@ end;
 
 Lm14: abs(tau_bar) < 1
 proof
-A1: abs(tau_bar) = -(1 - sqrt 5)/2 by Lm13,ABSVALUE:def 1
-    .= (sqrt 5 - 1)/2;
   sqrt 5 - 1 < 3 - 1 by Lm11,XREAL_1:11;
-  then (sqrt 5 - 1)/2 < 2/2 by XREAL_1:76;
+  then
+A1: (sqrt 5 - 1)/2 < 2/2 by XREAL_1:76;
+  abs(tau_bar) = -(1 - sqrt 5)/2 by Lm13,ABSVALUE:def 1
+    .= (sqrt 5 - 1)/2;
   hence thesis by A1;
 end;
 
 theorem Th7:
-  for n being Nat holds
-  Fib(n) = ((tau to_power n) - (tau_bar to_power n))/(sqrt 5)
+  for n being Nat holds Fib(n) = ((tau to_power n) - (tau_bar
+  to_power n))/(sqrt 5)
 proof
-  defpred P[Nat] means
-  Fib($1) = ((tau to_power $1) - (tau_bar to_power $1))/(sqrt 5);
-A1: P[0]
-  proof
-    tau_bar to_power 0 = 1 by POWER:29;
-    then ((tau to_power 0) - (tau_bar to_power 0))/(sqrt 5) =
-    (1 - 1)/(sqrt 5) by POWER:29
-      .= 0;
-    hence thesis by PRE_FF:1;
-  end;
-A2: P[1]
-  proof
-A3: tau - tau_bar = sqrt 5;
-    tau_bar to_power 1 = tau_bar by POWER:30;
-    then ((tau to_power 1) - (tau_bar to_power 1))/(sqrt 5)
-    = (sqrt 5)/(sqrt 5) by A3,POWER:30
-      .= Fib(1) by Lm10,PRE_FF:1,XCMPLX_1:60;
-    hence thesis;
-  end;
-A4: for k being Nat st P[k] & P[k+1] holds P[k+2]
+  defpred P[Nat] means Fib($1) = ((tau to_power $1) - (tau_bar to_power $1))/(
+  sqrt 5);
+A1: tau_bar to_power 1 = tau_bar by POWER:30;
+  tau_bar to_power 0 = 1 by POWER:29;
+  then
+  ((tau to_power 0) - (tau_bar to_power 0))/(sqrt 5) = (1 - 1)/(sqrt 5) by
+  POWER:29
+    .= 0;
+  then
+A2: P[0] by PRE_FF:1;
+A3: for k being Nat st P[k] & P[k+1] holds P[k+2]
   proof
     let k be Nat;
     assume that
-A5: P[k] and
-A6: P[k+1];
+A4: P[k] and
+A5: P[k+1];
     set a = tau to_power k, a1 = tau_bar to_power k, b = tau to_power (k+1),
-    b1 = tau_bar to_power (k+1), c = tau to_power (k+2),
-    c1 = tau_bar to_power (k+2);
-A7: c = (tau to_power 2) * (tau to_power k) by Lm12,POWER:32
-      .= (tau to_power k) * (tau + 1) by Lm8,POWER:53
-      .= (tau to_power k) * tau + (tau to_power k) * 1
-      .= (tau to_power k) * (tau to_power 1) + a by POWER:30
-      .= a + b by Lm12,POWER:32;
-    c1 = tau_bar |^ (k + 2) by POWER:46
+b1 = tau_bar to_power (k+1), c = tau to_power (k+2), c1 = tau_bar to_power (k+2
+    );
+A6: c1 = tau_bar |^ (k + 2) by POWER:46
       .= (tau_bar |^ k) * (tau_bar |^ (1 + 1)) by NEWTON:13
       .= (tau_bar |^ k) * (tau_bar * (tau_bar |^ 1)) by NEWTON:11
       .= (tau_bar |^ k) * (tau_bar + 1) by Lm8,NEWTON:10
@@ -620,44 +613,45 @@ A7: c = (tau to_power 2) * (tau to_power k) by Lm12,POWER:32
       .= (tau_bar |^ (k+1)) + (tau_bar |^ k) * 1 by NEWTON:11
       .= b1 + (tau_bar |^ k) by POWER:46
       .= a1 + b1 by POWER:46;
-    then
-A8: (a - a1) + (b - b1) = c - c1 by A7;
+A7: c = (tau to_power 2) * (tau to_power k) by Lm12,POWER:32
+      .= (tau to_power k) * (tau + 1) by Lm8,POWER:53
+      .= (tau to_power k) * tau + (tau to_power k) * 1
+      .= (tau to_power k) * (tau to_power 1) + a by POWER:30
+      .= a + b by Lm12,POWER:32;
     Fib(k+2) = Fib((k + 1) + 1)
-      .= (a - a1)/(sqrt 5) + (b - b1)/(sqrt 5)
-    by A5,A6,PRE_FF:1
-      .= (c - c1)/(sqrt 5) by A8,XCMPLX_1:63;
+      .= (a - a1)/(sqrt 5) + (b - b1)/(sqrt 5) by A4,A5,PRE_FF:1
+      .= (c - c1)/(sqrt 5) by A7,A6;
     hence thesis;
   end;
-  thus for n being Nat holds P[n] from FibInd(A1, A2, A4);
+  tau - tau_bar = sqrt 5;
+  then ((tau to_power 1) - (tau_bar to_power 1))/(sqrt 5) = (sqrt 5)/(sqrt 5)
+  by A1,POWER:30
+    .= Fib(1) by Lm10,PRE_FF:1,XCMPLX_1:60;
+  then
+A8: P[1];
+  thus for n being Nat holds P[n] from FibInd(A2, A8, A3);
 end;
 
 Lm15: for x being real number st abs(x) <= 1 holds abs(x |^ n) <= 1
 proof
   let x;
+  defpred P[Element of NAT] means abs(x |^ $1) <= 1;
   assume
 A1: abs(x) <= 1;
-  defpred P[Element of NAT] means abs(x |^ $1) <= 1;
-  for k holds P[k]
+A2: for k being Element of NAT st P[k] holds P[k+1]
   proof
-A2: P[0]
-    proof
-      abs(x |^ 0) = abs(1) by NEWTON:9
-        .= 1 by ABSVALUE:def 1;
-      hence thesis;
-    end;
-A3: for k being Element of NAT st P[k] holds P[k+1]
-    proof
-      let k;
-      assume
-A4:   P[k];
-A5:   abs(x |^ (k+1)) = abs ((x |^ k) * x) by NEWTON:11
-        .= abs(x |^ k) * abs(x) by COMPLEX1:151;
-A6:   0 <= abs(x) by COMPLEX1:132;
-      0 <= abs(x |^ k) by COMPLEX1:132;
-      hence thesis by A1,A4,A5,A6,XREAL_1:162;
-    end;
-    thus thesis from NAT_1:sch 1(A2, A3);
+    let k;
+A3: abs(x |^ (k+1)) = abs ((x |^ k) * x) by NEWTON:11
+      .= abs(x |^ k) * abs(x) by COMPLEX1:151;
+    assume
+    P[k];
+    hence thesis by A1,A3,COMPLEX1:132,XREAL_1:162;
   end;
+  abs(x |^ 0) = abs(1) by NEWTON:9
+    .= 1 by ABSVALUE:def 1;
+  then
+A4: P[0];
+  for k holds P[k] from NAT_1:sch 1(A4, A2);
   hence thesis;
 end;
 
@@ -665,27 +659,23 @@ Lm16: for n holds abs((tau_bar to_power n)/(sqrt 5)) < 1
 proof
   let n;
   set y = (tau_bar to_power n), z = sqrt 5;
-  abs(y) = abs(tau_bar |^ n) by POWER:46;
-  then
-A1: abs(y) <=1 by Lm14,Lm15;
-A2: abs(y) >= 0 by COMPLEX1:132;
-A3: abs(y/z) = abs(y * z")
+A1: abs(y) = abs(tau_bar |^ n) by POWER:46;
+A2: abs(y/z) = abs(y * z")
     .= abs(y) * abs(z") by COMPLEX1:151;
+A3: 1/z < 1/2 by Lm9,XREAL_1:90;
   z > 0 by Lm9,XXREAL_0:2;
   then
 A4: z" > 0 by XREAL_1:124;
+  then abs(z") = z" by ABSVALUE:def 1;
   then
-A5: abs(z") = z" by ABSVALUE:def 1;
-  1/z < 1/2 by Lm9,XREAL_1:90;
-  then 1/z < 1 by XXREAL_0:2;
-  then
-A6: abs(z") < 1 by A5;
+A5: abs(z") < 1 by A3,XXREAL_0:2;
   abs(z") >= 0 by A4,ABSVALUE:def 1;
-  hence thesis by A1,A2,A3,A6,XREAL_1:164;
+  hence thesis by A1,A2,A5,Lm14,Lm15,XREAL_1:164;
 end;
 
 theorem
-  for n being Element of NAT holds abs(Fib(n) - (tau to_power n)/(sqrt 5)) < 1
+  for n being Element of NAT holds abs(Fib(n) - (tau to_power n)/(sqrt 5
+  )) < 1
 proof
   let n;
   set k = Fib(n), x = (tau to_power n), y = (tau_bar to_power n), z = sqrt 5;
@@ -700,8 +690,8 @@ reserve F, f, g, h for Real_Sequence;
 canceled;
 
 theorem Th10:
-  for f, g, h being Real_Sequence st g is non-zero holds
-  (f /" g) (#) (g /" h) = (f /" h)
+  for f, g, h being Real_Sequence st g is non-zero holds (f /" g)
+  (#) (g /" h) = (f /" h)
 proof
   let f, g, h be Real_Sequence;
   set f3 = (f /" g), g3 = (g /" h), h3 = (f /" h);
@@ -711,26 +701,26 @@ A1: g is non-zero;
   proof
     let n;
     set a = f.n, b = (g.n)", c = g.n, d = (h.n)";
-A2: g.n <> 0 by A1,SEQ_1:7;
-A3: f3.n = a * (g".n) by SEQ_1:12
-      .= a * b by VALUED_1:10;
-A4: g3.n = c * (h".n) by SEQ_1:12
+A2: g3.n = c * (h".n) by SEQ_1:12
       .= c * d by VALUED_1:10;
-A5: h3.n = a * (h".n) by SEQ_1:12
+A3: h3.n = a * (h".n) by SEQ_1:12
       .= a * d by VALUED_1:10;
-A6: b * c = (1/c) * c
-      .= 1 by A2,XCMPLX_1:107;
-    (f3 (#) g3).n = (a * b) * (c * d) by A3,A4,SEQ_1:12
+A4: g.n <> 0 by A1,SEQ_1:7;
+A5: b * c = (1/c) * c
+      .= 1 by A4,XCMPLX_1:107;
+    f3.n = a * (g".n) by SEQ_1:12
+      .= a * b by VALUED_1:10;
+    then (f3 (#) g3).n = (a * b) * (c * d) by A2,SEQ_1:12
       .= ((b * c) * a) * d
-      .= h3.n by A5,A6;
+      .= h3.n by A3,A5;
     hence thesis;
   end;
   hence thesis by FUNCT_2:113;
 end;
 
 theorem Th11:
-  for f, g being Real_Sequence for n being Element of NAT holds
-  (f /" g) . n = (f .n) / (g.n) & (f /" g) . n = (f.n) * (g.n)"
+  for f, g being Real_Sequence for n being Element of NAT holds (f
+  /" g) . n = (f .n) / (g.n) & (f /" g) . n = (f.n) * (g.n)"
 proof
   let f, g;
   let n;
@@ -741,260 +731,232 @@ A1: (f /" g). n = (f.n) * (g".n) by SEQ_1:12
 end;
 
 theorem
-  for F being Real_Sequence st
-  (for n being Element of NAT holds F.n = Fib(n+1)/Fib(n)) holds
-  F is convergent & lim F = tau
+  for F being Real_Sequence st (for n being Element of NAT holds F.n =
+  Fib(n+1)/Fib(n)) holds F is convergent & lim F = tau
 proof
+  deffunc ff(Element of NAT) = (tau to_power $1)/(sqrt 5);
   let F;
-  assume
-A1: for n being Element of NAT holds F.n = Fib(n+1)/Fib(n);
   consider f such that
-A2: for n holds f.n = Fib(n) from SEQ_1:sch 1;
+A1: for n holds f.n = Fib(n) from SEQ_1:sch 1;
+  set f2 = f ^\ 2;
   set f1 = (f ^\ 1);
-A3: for n holds f1.n = Fib(n+1)
+A2: f1 ^\ 1 = f ^\ (1 + 1) by NAT_1:49
+    .= f2;
+A3: for n holds f2.n <> 0
+  proof
+    let n;
+    f2.n = f.(n+2) by NAT_1:def 3
+      .= Fib((n+1) + 1) by A1;
+    hence thesis by Lm3,NAT_1:5;
+  end;
+A4: for n being Nat holds (f2 /" f2) . n = 1
+  proof
+    let n be Nat;
+A5: n in NAT by ORDINAL1:def 13;
+    then (f2 /" f2).n = (f2.n) * (f2.n)" by Th11
+      .= (f2.n) * ( 1/ (f2.n))
+      .= 1 by A3,A5,XCMPLX_1:107;
+    hence thesis;
+  end;
+  then
+A6: (f2 /" f2) is constant by VALUED_0:def 18;
+A7: (f /" f) ^\ 2 = (f2 /" f2) by SEQM_3:43;
+  then
+A8: f /" f is convergent by A6,SEQ_4:35;
+  (f2 /" f2) . 0 = 1 by A4;
+  then lim (f2 /" f2) = 1 by A6,SEQ_4:40;
+  then
+A9: lim (f /" f) = 1 by A6,A7,SEQ_4:36;
+  ex g st for n holds g . n = ff(n) from SEQ_1:sch 1;
+  then consider g such that
+A10: for n holds g.n = ff(n);
+  set g1 = g ^\ 1;
+A11: for n holds g.n <> 0
+  proof
+    let n;
+A12: (sqrt 5) " <> 0 by SQUARE_1:85,95,XCMPLX_1:203;
+A13: (tau |^ n) <> 0 by Lm12,PREPOWER:12;
+    g.n = (tau to_power n) / (sqrt 5) by A10
+      .= (tau to_power n) * (sqrt 5)"
+      .= (tau |^ n) * (sqrt 5)" by POWER:46;
+    hence thesis by A13,A12,XCMPLX_1:6;
+  end;
+  then
+A14: g is non-zero by SEQ_1:7;
+  then
+A15: (f2 /" f1) = (f2 /" g1) (#) (g1 /" f1) by Th10;
+  set g2 = g1 ^\ 1;
+  for n holds f1.n <> 0
   proof
     let n;
     f1.n = f.(n+1) by NAT_1:def 3
-      .= Fib(n+1) by A2;
+      .= Fib(n+1) by A1;
+    hence thesis by Lm6;
+  end;
+  then
+A16: f1 is non-zero by SEQ_1:7;
+  for n holds (g2 /" f2).n <> 0
+  proof
+    let n;
+A17: (g2.n) <> 0 by A14,SEQ_1:7;
+A18: (g2 /" f2).n = (g2.n) * (f2.n)" by Th11;
+    (f2.n)" <> 0 by A16,A2,SEQ_1:7,XCMPLX_1:203;
+    hence thesis by A17,A18,XCMPLX_1:6;
+  end;
+  then
+A19: (g2 /" f2) is non-zero by SEQ_1:7;
+  g2 = g ^\ (1 + 1) by NAT_1:49;
+  then
+A20: (g2 /" f2) = (g /" f) ^\ 2 by SEQM_3:43;
+A21: for n holds f1.n = Fib(n+1)
+  proof
+    let n;
+    f1.n = f.(n+1) by NAT_1:def 3
+      .= Fib(n+1) by A1;
     hence thesis;
   end;
-A4: F = f1 /" f
+  assume
+A22: for n being Element of NAT holds F.n = Fib(n+1)/Fib(n);
+  for n holds F.n = (f1 /" f). n
   proof
-    for n holds F.n = (f1 /" f). n
-    proof
-      let n;
-      (f1 /" f). n = (f1 . n) / (f . n) by Th11
-        .= Fib(n+1)/ (f.n) by A3
-        .= Fib(n+1)/Fib(n) by A2;
-      hence thesis by A1;
-    end;
-    hence thesis by FUNCT_2:113;
+    let n;
+    (f1 /" f). n = (f1 . n) / (f . n) by Th11
+      .= Fib(n+1)/ (f.n) by A21
+      .= Fib(n+1)/Fib(n) by A1;
+    hence thesis by A22;
   end;
-  deffunc ff(Element of NAT) = (tau to_power $1)/(sqrt 5);
-  ex g st for n holds g . n = ff(n) from SEQ_1:sch 1;
-  then consider g such that
-A5: for n holds g.n = ff(n);
-  deffunc ff(Element of NAT) = (tau_bar to_power $1)/(sqrt 5);
-  ex h st for n holds h . n = ff(n) from SEQ_1:sch 1;
-  then consider h such that
-A6: for n holds h.n = ff(n);
-A7: g = f + h
-  proof
-A8: for n holds f.n = g.n - h.n
-    proof
-      let n;
-      f.n = Fib(n) by A2
-        .= ((tau to_power n) - (tau_bar to_power n))/(sqrt 5)
-      by Th7
-        .= (tau to_power n)/(sqrt 5) - (tau_bar to_power n)/(sqrt 5)
-        .= g.n - (tau_bar to_power n)/(sqrt 5) by A5
-        .= g.n - h.n by A6;
-      hence thesis;
-    end;
-    for n holds g.n = f.n + h.n
-    proof
-      let n;
-      f.n = g.n - h.n by A8;
-      hence thesis;
-    end;
-    hence thesis by SEQ_1:11;
-  end;
-A9: h /" f is convergent & lim (h /" f) = 0
-  proof
-A10: h is bounded
-    proof
-      for n holds abs(h.n) < 1
-      proof
-        let n;
-        h.n = (tau_bar to_power n)/(sqrt 5) by A6;
-        hence thesis by Lm16;
-      end;
-      hence thesis by SEQ_2:15;
-    end;
-A11: f" is convergent & lim f" = 0
-    proof
-A12:  for x st 0 < x ex n st for m st n <= m holds abs ((f".m) - 0) < x
-      proof
-        let x;
-        assume 0 < x;
-        then consider k such that
-A13:    k > 0 and 0 < 1/k and
-A14:    1/k <= x by Th3;
-        for m st (k+2) <= m holds abs((f" . m) - 0) < x
-        proof
-          let m;
-          assume (k+2) <= m;
-          then
-A15:      Fib(k+2) <= Fib(m) by Lm5;
-          k + 2 = (k + 1) + 1;
-          then Fib(k+2) >= k+1 by Lm3;
-          then k + 1 <= Fib(m) by A15,XXREAL_0:2;
-          then
-A16:      k + 1 <= f.m by A2;
-          0 < k+1 by NAT_1:5;
-          then
-A17:      1/(f.m) <= 1/(k+1) by A16,XREAL_1:87;
-          k + 0 < (k+1) by XREAL_1:8;
-          then
-A18:      1/(k+1) < 1/k by A13,XREAL_1:90;
-          0 < f.m by A16,NAT_1:5,XXREAL_0:2;
-          then
-A19:      0 <= (f.m)" by XREAL_1:124;
-A20:      abs((f".m) - 0) = abs ((f.m)") by VALUED_1:10
-            .= (f.m)" by A19,ABSVALUE:def 1
-            .= 1/(f.m);
-          1/(f.m) < 1/k by A17,A18,XXREAL_0:2;
-          hence thesis by A14,A20,XXREAL_0:2;
-        end;
-        hence thesis;
-      end;
-      hence f" is convergent by SEQ_2:def 6;
-      hence thesis by A12,SEQ_2:def 7;
-    end;
-    hence h /" f is convergent by A10,SEQ_2:39;
-    thus thesis by A10,A11,SEQ_2:40;
-  end;
-  set f2 = f ^\ 2;
-A21: f /" f is convergent & lim (f /" f) = 1
-  proof
-A22: for n holds f2.n <> 0
-    proof
-      let n;
-      f2.n = f.(n+2) by NAT_1:def 3
-        .= Fib((n+1) + 1) by A2;
-      hence thesis by Lm3,NAT_1:5;
-    end;
-A23: for n being Nat holds (f2 /" f2) . n = 1
-    proof
-      let n be Nat;
-X:   n in NAT by ORDINAL1:def 13;
-      then (f2 /" f2).n = (f2.n) * (f2.n)" by Th11
-        .= (f2.n) * ( 1/ (f2.n))
-        .= 1 by A22,X,XCMPLX_1:107;
-      hence thesis;
-    end;
-    then
-A24: (f2 /" f2) is constant by VALUED_0:def 18;
-    (f2 /" f2) . 0 = 1 by A23;
-    then
-A25: lim (f2 /" f2) = 1 by A24,SEQ_4:40;
-A26: (f /" f) ^\ 2 = (f2 /" f2) by SEQM_3:43;
-    hence f /" f is convergent by A24,SEQ_4:35;
-    thus thesis by A24,A25,A26,SEQ_4:36;
-  end;
-A27: (g /" f) = (f /" f) + (h /" f) by A7,SEQ_1:57;
+  then F = f1 /" f by FUNCT_2:113;
   then
-A28: (g /" f) is convergent by A9,A21,SEQ_2:19;
-A29: lim (g /" f) = 1 + 0 by A9,A21,A27,SEQ_2:20
-    .= 1;
-  set g1 = g ^\ 1;
-A30: g is non-zero
+A23: (f2 /" f1) = F ^\ 1 by A2,SEQM_3:43;
+A24: (g2 /" g1) = (g1 /" g) ^\ 1 by SEQM_3:43;
+A25: for n being Nat holds (g1 /" g) . n = tau
   proof
-    for n holds g.n <> 0
-    proof
-      let n;
-A31:  g.n = (tau to_power n) / (sqrt 5) by A5
-        .= (tau to_power n) * (sqrt 5)"
-        .= (tau |^ n) * (sqrt 5)" by POWER:46;
-A32:  (tau |^ n) <> 0 by Lm12,PREPOWER:12;
-      (sqrt 5) " <> 0 by SQUARE_1:85,95,XCMPLX_1:203;
-      hence thesis by A31,A32,XCMPLX_1:6;
-    end;
-    hence thesis by SEQ_1:7;
-  end;
-A33: (g1 /" g) is convergent & lim (g1 /" g) = tau
-  proof
-Y:   tau in REAL by XREAL_0:def 1;
-A34: for n being Nat holds (g1 /" g) . n = tau
-    proof
-      let n be Nat;
-X:   n in NAT by ORDINAL1:def 13;
-      then
-A35:  g.n = (tau to_power n) / (sqrt 5) by A5
-        .= (tau to_power n) * (sqrt 5)"
-        .= (tau |^ n) * (sqrt 5)" by POWER:46;
-A36:  g1.n = g.(n+1) by NAT_1:def 3
-        .= (tau to_power (n + 1)) / (sqrt 5) by A5
-        .= (tau to_power (n+1)) * (sqrt 5)"
-        .= (tau |^ (n+1)) * (sqrt 5)" by POWER:46
-        .= (tau * (tau |^ n)) * (sqrt 5)" by NEWTON:11
-        .= tau * (g.n) by A35;
-A37:  g.n <> 0 by A30,X,SEQ_1:7;
-      (g1 /" g).n = (tau * (g.n)) * ((g.n)") by A36,Th11,X
-        .= tau * ((g.n) * (g.n)")
-        .= tau * 1 by A37,XCMPLX_0:def 7
-        .= tau;
-      hence thesis;
-    end;
+    let n be Nat;
+A26: n in NAT by ORDINAL1:def 13;
     then
-A38: (g1 /" g) is constant by Y,VALUED_0:def 18;
-    hence (g1 /" g) is convergent;
-    (g1 /" g) . 0 = tau by A34;
-    hence thesis by A38,SEQ_4:40;
-  end;
-A39: f1 is non-zero
-  proof
-    for n holds f1.n <> 0
-    proof
-      let n;
-      f1.n = f.(n+1) by NAT_1:def 3
-        .= Fib(n+1) by A2;
-      hence thesis by Lm6;
-    end;
-    hence thesis by SEQ_1:7;
-  end;
-A40: f1 ^\ 1 = f ^\ (1 + 1) by NAT_1:49
-      .= f2;
-  set g2 = g1 ^\ 1;
-A42: f2 is non-zero by A39,A40;
-A43: f2 /" g1 is convergent & lim (f2 /" g1 ) = tau
-  proof
-A44: f2 /" g1 = (f2 /" g2) (#) (g2 /" g1) by A30,Th10;
-A45: g2 = g ^\ (1 + 1) by NAT_1:49;
-A46: (f2 /" g2) is convergent & lim (f2 /" g2) = 1
-    proof
-A47:  (g2 /" f2) = (g /" f) ^\ 2 by A45,SEQM_3:43;
-A49:  lim (g2 /" f2) = 1 by A28,A29,A47,SEQ_4:33;
-      for n holds (g2 /" f2).n <> 0
-      proof
-        let n;
-A50:    (g2.n) <> 0 by A30,SEQ_1:7;
-A51:    (f2.n)" <> 0 by A42,SEQ_1:7,XCMPLX_1:203;
-        (g2 /" f2).n = (g2.n) * (f2.n)" by Th11;
-        hence thesis by A50,A51,XCMPLX_1:6;
-      end;
-      then
-A52:  (g2 /" f2) is non-zero by SEQ_1:7;
-      then (g2 /" f2)" is convergent by A47,A28,A49,SEQ_2:35;
-      hence (f2 /" g2) is convergent by SEQ_1:48;
-      lim (g2 /" f2)" = 1" by A47,A28,A49,A52,SEQ_2:36
-        .= 1;
-      hence thesis by SEQ_1:48;
-    end;
-A53: (g2 /" g1) is convergent & lim (g2 /" g1) = tau
-    proof
-      (g2 /" g1) = (g1 /" g) ^\ 1 by SEQM_3:43;
-      hence thesis by A33,SEQ_4:33;
-    end;
-    hence f2 /" g1 is convergent by A44,A46,SEQ_2:28;
-    lim (f2 /" g1) = 1 * tau by A44,A46,A53,SEQ_2:29
+A27: g.n = (tau to_power n) / (sqrt 5) by A10
+      .= (tau to_power n) * (sqrt 5)"
+      .= (tau |^ n) * (sqrt 5)" by POWER:46;
+A28: g.n <> 0 by A11,A26;
+    g1.n = g.(n+1) by NAT_1:def 3
+      .= (tau to_power (n + 1)) / (sqrt 5) by A10
+      .= (tau to_power (n+1)) * (sqrt 5)"
+      .= (tau |^ (n+1)) * (sqrt 5)" by POWER:46
+      .= (tau * (tau |^ n)) * (sqrt 5)" by NEWTON:11
+      .= tau * (g.n) by A27;
+    then (g1 /" g).n = (tau * (g.n)) * ((g.n)") by A26,Th11
+      .= tau * ((g.n) * (g.n)")
+      .= tau * 1 by A28,XCMPLX_0:def 7
       .= tau;
     hence thesis;
   end;
-A54: (g1 /" f1) is convergent & lim (g1 /" f1) = 1
+  tau in REAL by XREAL_0:def 1;
+  then
+A29: (g1 /" g) is constant by A25,VALUED_0:def 18;
+A30: for x st 0 < x ex n st for m st n <= m holds abs ((f".m) - 0) < x
   proof
-    (g1 /" f1) = (g /" f) ^\ 1 by SEQM_3:43;
-    hence thesis by A28,A29,SEQ_4:33;
-  end;
-A55: (f2 /" f1) is convergent & lim (f2 /" f1) = tau
-  proof
-A56: (f2 /" f1) = (f2 /" g1) (#) (g1 /" f1) by A30,Th10;
-    hence (f2 /" f1) is convergent by A43,A54,SEQ_2:28;
-    lim (f2 /" f1) = tau * 1 by A43,A54,A56,SEQ_2:29;
+    let x;
+    assume
+    0 < x;
+    then consider k such that
+A31: k > 0 and
+    0 < 1/k and
+A32: 1/k <= x by Th3;
+    for m st (k+2) <= m holds abs((f" . m) - 0) < x
+    proof
+      let m;
+      k + 2 = (k + 1) + 1;
+      then
+A33:  Fib(k+2) >= k+1 by Lm3;
+      assume
+      (k+2) <= m;
+      then Fib(k+2) <= Fib(m) by Lm5;
+      then k + 1 <= Fib(m) by A33,XXREAL_0:2;
+      then
+A34:  k + 1 <= f.m by A1;
+      then 0 < f.m by NAT_1:5,XXREAL_0:2;
+      then
+A35:  0 <= (f.m)" by XREAL_1:124;
+      k + 0 < (k+1) by XREAL_1:8;
+      then
+A36:  1/(k+1) < 1/k by A31,XREAL_1:90;
+A37:  abs((f".m) - 0) = abs ((f.m)") by VALUED_1:10
+        .= (f.m)" by A35,ABSVALUE:def 1
+        .= 1/(f.m);
+      1/(f.m) <= 1/(k+1) by A34,NAT_1:5,XREAL_1:87;
+      then 1/(f.m) < 1/k by A36,XXREAL_0:2;
+      hence thesis by A32,A37,XXREAL_0:2;
+    end;
     hence thesis;
   end;
-A57: (f2 /" f1) = F ^\ 1 by A4,A40,SEQM_3:43;
-  hence F is convergent by A55,SEQ_4:35;
-  thus thesis by A55,A57,SEQ_4:36;
+  then
+A38: f" is convergent by SEQ_2:def 6;
+  then
+A39: lim f" = 0 by A30,SEQ_2:def 7;
+  deffunc ff(Element of NAT) = (tau_bar to_power $1)/(sqrt 5);
+  ex h st for n holds h . n = ff(n) from SEQ_1:sch 1;
+  then consider h such that
+A40: for n holds h.n = ff(n);
+A41: for n holds f.n = g.n - h.n
+  proof
+    let n;
+    f.n = Fib(n) by A1
+      .= ((tau to_power n) - (tau_bar to_power n))/(sqrt 5) by Th7
+      .= (tau to_power n)/(sqrt 5) - (tau_bar to_power n)/(sqrt 5)
+      .= g.n - (tau_bar to_power n)/(sqrt 5) by A10
+      .= g.n - h.n by A40;
+    hence thesis;
+  end;
+  for n holds g.n = f.n + h.n
+  proof
+    let n;
+    f.n = g.n - h.n by A41;
+    hence thesis;
+  end;
+  then g = f + h by SEQ_1:11;
+  then
+A42: (g /" f) = (f /" f) + (h /" f) by SEQ_1:57;
+  for n holds abs(h.n) < 1
+  proof
+    let n;
+    h.n = (tau_bar to_power n)/(sqrt 5) by A40;
+    hence thesis by Lm16;
+  end;
+  then
+A43: h is bounded by SEQ_2:15;
+  f" is convergent by A30,SEQ_2:def 6;
+  then
+A44: h /" f is convergent by A43,A39,SEQ_2:39;
+  then
+A45: (g /" f) is convergent by A8,A42,SEQ_2:19;
+  (g1 /" g) . 0 = tau by A25;
+  then lim (g1 /" g) = tau by A29,SEQ_4:40;
+  then
+A46: lim (g2 /" g1) = tau by A29,A24,SEQ_4:33;
+A47: (g1 /" f1) = (g /" f) ^\ 1 by SEQM_3:43;
+  lim (h /" f) = 0 by A43,A38,A39,SEQ_2:40;
+  then
+A48: lim (g /" f) = 1 + 0 by A44,A8,A9,A42,SEQ_2:20
+    .= 1;
+  then
+A49: lim (g2 /" f2) = 1 by A45,A20,SEQ_4:33;
+  then (g2 /" f2)" is convergent by A45,A20,A19,SEQ_2:35;
+  then
+A50: (f2 /" g2) is convergent by SEQ_1:48;
+A51: f2 /" g1 = (f2 /" g2) (#) (g2 /" g1) by A14,Th10;
+  then
+A52: f2 /" g1 is convergent by A29,A50,A24,SEQ_2:28;
+  then
+A53: (f2 /" f1) is convergent by A45,A47,A15,SEQ_2:28;
+  hence F is convergent by A23,SEQ_4:35;
+  lim (g2 /" f2)" = 1" by A45,A20,A49,A19,SEQ_2:36
+    .= 1;
+  then lim (f2 /" g2) = 1 by SEQ_1:48;
+  then
+A54: lim (f2 /" g1) = 1 * tau by A29,A51,A50,A24,A46,SEQ_2:29
+    .= tau;
+  lim (g1 /" f1) = 1 by A45,A48,A47,SEQ_4:33;
+  then lim (f2 /" f1) = tau * 1 by A45,A54,A52,A47,A15,SEQ_2:29;
+  hence thesis by A53,A23,SEQ_4:36;
 end;
 

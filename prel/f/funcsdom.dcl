@@ -7,6 +7,7 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="BINOP_1"/>
@@ -15,11 +16,11 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="INT_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="ALGSTR_0"/>
-<ArticleID name="INT_1"/>
 <ArticleID name="GROUP_1"/>
 <ArticleID name="VECTSP_1"/>
 <ArticleID name="FINSEQ_1"/>
@@ -32,16 +33,16 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="35" value="false"/>
-<Adjective nr="59"/>
-<Adjective nr="82"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="60"/>
+<Adjective nr="83"/>
 <Adjective nr="86"/>
 <Adjective nr="88"/>
 <Adjective nr="90"/>
 <Adjective nr="92"/>
-<Adjective nr="103"/>
 <Adjective nr="104"/>
 <Adjective nr="105"/>
+<Adjective nr="106"/>
 </Cluster>
 </RCluster>
 <RCluster aid="FUNCSDOM" nr="2">
@@ -50,7 +51,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="108"/>
+<Adjective nr="109"/>
 </Cluster>
 </RCluster>
 <RCluster aid="FUNCSDOM" nr="3">
@@ -59,7 +60,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="35" value="false"/>
+<Adjective nr="37" value="false"/>
 </Cluster>
 </RCluster>
 <RCluster aid="FUNCSDOM" nr="4">
@@ -68,17 +69,17 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="35" value="false"/>
-<Adjective nr="59"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="60"/>
 <Adjective nr="86"/>
 <Adjective nr="88"/>
 <Adjective nr="90"/>
 <Adjective nr="92"/>
-<Adjective nr="103"/>
 <Adjective nr="104"/>
 <Adjective nr="105"/>
-<Adjective nr="108"/>
+<Adjective nr="106"/>
 <Adjective nr="109"/>
+<Adjective nr="110"/>
 </Cluster>
 </RCluster>
 <FCluster aid="FUNCSDOM" nr="1">
@@ -89,12 +90,12 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="184">
+<Func kind="K" nr="192">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="35" value="false"/>
-<Adjective nr="82"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="83"/>
 </Cluster>
 </FCluster>
 <FCluster aid="FUNCSDOM" nr="2">
@@ -105,11 +106,11 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="184">
+<Func kind="K" nr="192">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="82"/>
+<Adjective nr="83"/>
 <Adjective nr="84"/>
 </Cluster>
 </FCluster>
@@ -121,12 +122,12 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="185">
+<Func kind="K" nr="193">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="35" value="false"/>
-<Adjective nr="108"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="109"/>
 </Cluster>
 </FCluster>
 <FCluster aid="FUNCSDOM" nr="4">
@@ -137,12 +138,12 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="185">
+<Func kind="K" nr="193">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="84"/>
-<Adjective nr="108"/>
+<Adjective nr="109"/>
 </Cluster>
 </FCluster>
 </Registrations>

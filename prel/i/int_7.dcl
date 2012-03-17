@@ -15,6 +15,7 @@
 <ArticleID name="COMPLEX1"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="INT_2"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSUB_1"/>
@@ -24,9 +25,9 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="NEWTON"/>
-<ArticleID name="NAT_1"/>
-<ArticleID name="FINSEQ_3"/>
 <ArticleID name="RAT_1"/>
+<ArticleID name="CARD_3"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_1"/>
@@ -36,19 +37,13 @@
 <ArticleID name="TREES_2"/>
 <ArticleID name="TREES_3"/>
 <ArticleID name="TREES_4"/>
+<ArticleID name="RELAT_2"/>
+<ArticleID name="WELLORD1"/>
+<ArticleID name="PRE_POLY"/>
+<ArticleID name="NAT_3"/>
 <ArticleID name="STRUCT_0"/>
-<ArticleID name="PARTFUN1"/>
-<ArticleID name="CARD_3"/>
 <ArticleID name="ALGSTR_0"/>
 <ArticleID name="GROUP_1"/>
-<ArticleID name="RLVECT_1"/>
-<ArticleID name="VECTSP_1"/>
-<ArticleID name="RELAT_2"/>
-<ArticleID name="FVSUM_1"/>
-<ArticleID name="MATRIX_1"/>
-<ArticleID name="MATRLIN"/>
-<ArticleID name="POLYNOM1"/>
-<ArticleID name="NAT_3"/>
 <ArticleID name="INT_7"/>
 </Signature>
 <FCluster aid="INT_7" nr="1">
@@ -60,19 +55,19 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="467">
+<Func kind="K" nr="385">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4">
-<Func kind="K" nr="179"/>
+<Func kind="K" nr="188"/>
 </Adjective>
 <Adjective nr="6"/>
-<Adjective nr="88">
-<Func kind="K" nr="179"/>
+<Adjective nr="24">
+<Func kind="K" nr="188"/>
 </Adjective>
-<Adjective nr="165"/>
+<Adjective nr="148"/>
 </Cluster>
 </FCluster>
 <FCluster aid="INT_7" nr="2">
@@ -84,15 +79,15 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="470">
+<Func kind="K" nr="416">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="76" value="false"/>
-<Adjective nr="82"/>
-<Adjective nr="131"/>
-<Adjective nr="132"/>
-<Adjective nr="134"/>
+<Adjective nr="95" value="false"/>
+<Adjective nr="101"/>
+<Adjective nr="143"/>
+<Adjective nr="144"/>
+<Adjective nr="146"/>
 </Cluster>
 </FCluster>
 </Registrations>

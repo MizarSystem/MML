@@ -1,6 +1,6 @@
 :: Riemann Integral of Functions $\mathbbbR$ into $\mathbbbR^n$
 ::  by Keiichi Miyajima and Yasunari Shidama
-:: 
+::
 :: Received May 5, 2009
 :: Copyright (c) 2009 Association of Mizar Users
 
@@ -11,15 +11,14 @@ environ
       MEASURE5, PARTFUN1, RLVECT_1, BOOLE, FUNCT_3, INTEGR15, FINSEQ_4,
       FINSEQ_2, SQUARE_1, SEQ_4, REALSET1, ABSVALUE, PRE_TOPC, ARYTM_3;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XREAL_0, COMPLEX1,
-      RELAT_1, NAT_1, FUNCT_1, FUNCT_2, STRUCT_0, REAL_1, RCOMP_1, VALUED_1,
-      RELSET_1, PARTFUN1, SEQ_1, SEQ_2, SEQ_4, FINSEQ_1, FINSEQ_2, FINSEQOP,
-      RVSUM_1, PRE_TOPC, XXREAL_0, EUCLID, PDIFF_1, INTEGRA1, INTEGRA2,
-      INTEGRA5, NORMSP_1, REAL_NS1;
+      NAT_1, FUNCT_1, FUNCT_2, STRUCT_0, REAL_1, RCOMP_1, VALUED_1, RELSET_1,
+      PARTFUN1, SEQ_1, SEQ_2, SEQ_4, FINSEQ_1, FINSEQ_2, FINSEQOP, RVSUM_1,
+      PRE_TOPC, XXREAL_0, EUCLID, PDIFF_1, INTEGRA1, INTEGRA2, INTEGRA5,
+      NORMSP_1, REAL_NS1;
  constructors REAL_1, FINSEQOP, MONOID_0, SEQ_4, PSCOMP_1, NAT_D, VFUNCT_1,
       PDIFF_1, BINOP_2, SEQ_1, INTEGRA2, INTEGRA5, RELSET_1;
  registrations NUMBERS, XREAL_0, FINSEQ_2, SEQ_2, INTEGRA1, FUNCT_2, NAT_1,
-      MEMBERED, RELAT_1, XXREAL_0, ORDINAL1, VALUED_0, VALUED_1, REAL_NS1,
-      RELSET_1;
+      MEMBERED, XXREAL_0, ORDINAL1, VALUED_0, VALUED_1, REAL_NS1, RELSET_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions XBOOLE_0, EUCLID, INTEGRA1, INTEGRA5;
  theorems XBOOLE_0, XBOOLE_1, XREAL_0, INTEGRA1, INTEGRA2, INTEGRA4, XXREAL_2,
@@ -34,299 +33,314 @@ definition
   let A be closed-interval Subset of REAL;
   let f be Function of A,REAL;
   let D be Division of A;
-  mode middle_volume of f,D -> FinSequence of REAL means :defx0:
-  len it = len D &
-  for i be Nat st i in dom D holds
-  ex r be Element of REAL st r in rng (f|divset(D,i)) &
-  it.i=r*vol divset(D,i);
-correctness
-proof
- defpred P1[ Nat, Element of REAL ] means
-   ex r be Element of REAL st r in rng (f|divset(D,$1)) &
-     $2=r*vol divset(D,$1);
-A1: for k being Nat st k in Seg len D holds
-     ex x being Element of REAL st P1[k,x]
+  mode middle_volume of f,D -> FinSequence of REAL means
+    :Def1:
+    len it = len D
+    & for i be Nat st i in dom D holds ex r be Element of REAL st r in rng (f|
+    divset(D,i)) & it.i=r*vol divset(D,i);
+  correctness
   proof
-  let k be Nat;
-  assume k in Seg len D; then
-  B1: k in dom D by FINSEQ_1:def 3;
-  rng (f|divset(D,k)) is non empty
+    defpred P1[ Nat, Element of REAL ] means ex r be Element of REAL st r in
+    rng (f|divset(D,$1)) & $2=r*vol divset(D,$1);
+A1: Seg len D = dom D by FINSEQ_1:def 3;
+A2: for k being Nat st k in Seg len D holds ex x being Element of REAL st
+    P1[k,x]
     proof
-    dom f = A by FUNCT_2:def 1; then
-    dom (f|divset(D,k)) = divset(D,k) by B1,INTEGRA1:10,RELAT_1:91;
-    hence thesis by RELAT_1:65;
-    end; then
-  consider r be set such that
-  B2: r in rng (f|divset(D,k)) by XBOOLE_0:def 1;
-  reconsider r as Element of REAL by B2;
-  r*vol divset(D,k) is Element of REAL;
-  hence thesis by B2;
+      let k be Nat;
+      assume
+      k in Seg len D;
+      then
+A3:   k in dom D by FINSEQ_1:def 3;
+      dom f = A by FUNCT_2:def 1;
+      then dom (f|divset(D,k)) = divset(D,k) by A3,INTEGRA1:10,RELAT_1:91;
+      then rng (f|divset(D,k)) is non empty by RELAT_1:65;
+      then consider r be set such that
+A4:   r in rng (f|divset(D,k)) by XBOOLE_0:def 1;
+      reconsider r as Element of REAL by A4;
+      r*vol divset(D,k) is Element of REAL;
+      hence thesis by A4;
+    end;
+    consider p being FinSequence of REAL such that
+A5: dom p = Seg len D & for k being Nat st k in Seg len D holds P1[k,p
+    .k] from FINSEQ_1:sch 5(A2);
+    len p = len D by A5,FINSEQ_1:def 3;
+    hence thesis by A5,A1;
   end;
-consider p being FinSequence of REAL such that
-A2: dom p = Seg len D
-  & for k being Nat st k in Seg len D holds P1[k,p.k] from FINSEQ_1:sch 5(A1);
-len p = len D & Seg len D = dom D by FINSEQ_1:def 3,A2;
-hence thesis by A2;
-end;
 end;
 
-PX0101:
-for A be closed-interval Subset of REAL,
-    f be Function of A,REAL,
-    D be Division of A,
-    F be middle_volume of f,D,
-    i be Nat st f|A is bounded_below & i in dom D holds
-  (lower_volume (f,D)).i <= F.i
-proof
-let A be closed-interval Subset of REAL,
-    f be Function of A,REAL,
-    D be Division of A,
-    F be middle_volume of f,D,
-    i be Nat;
-assume AS: f|A is bounded_below & i in dom D;
-consider r be Element of REAL such that
-P1: r in rng (f|divset(D,i)) & F.i=r*vol divset(D,i) by defx0,AS;
-P2:(lower_volume (f,D)).i
-   = (lower_bound rng (f|divset(D,i)))*vol divset(D,i)
-   by INTEGRA1:def 8,AS;
-P3: 0 <= vol(divset (D,i)) by INTEGRA1:11;
-rng(f|divset(D,i)) is bounded_below & rng(f|divset(D,i)) is non empty
-  proof
-  rng f is bounded_below by AS,INTEGRA1:13;
-  hence rng(f|divset(D,i)) is bounded_below by RELAT_1:99,XXREAL_2:44;
-  dom f = A by FUNCT_2:def 1; then
-  dom (f|divset(D,i)) = divset(D,i) by INTEGRA1:10,AS,RELAT_1:91;
-  hence thesis by RELAT_1:65;
-  end; then
-lower_bound (rng (f | (divset (D,i)))) <= r by SEQ_4:def 5,P1;
-hence (lower_volume (f,D)).i <= F.i by P1,P2,P3,XREAL_1:66;
-end;
+Lm1: for A be closed-interval Subset of REAL, f be Function of A,REAL, D be
+Division of A, F be middle_volume of f,D, i be Nat st f|A is bounded_below & i
+in dom D holds (lower_volume (f,D)).i <= F.i
 
-PX0201:
-for A be closed-interval Subset of REAL,
-    f be Function of A,REAL,
-    D be Division of A,
-    e be Real
- st f|A is bounded_below & 0 < e holds
-  ex F be middle_volume of f,D st
-  for i be Nat st i in dom D holds
-   (lower_volume (f,D)).i <=F.i &
-    F.i < (lower_volume (f,D)).i + e
 proof
-let A be closed-interval Subset of REAL,
-    f be Function of A,REAL,
-    D be Division of A,
-    e be Real;
-assume AS: f|A is bounded_below & 0 < e;
-defpred P1[Nat, Element of REAL] means
- ex r be Element of REAL st
-    r in rng (f|divset(D,$1)) & $2=r*vol divset(D,$1) &
-    (lower_volume (f,D)).$1 <= $2 &
-    $2 < (lower_volume (f,D)).$1 + e;
-A1: for k being Nat st k in Seg len D holds
-    ex x being Element of REAL st P1[k,x]
-  proof
-  let k be Nat;
-  assume k in Seg len D; then
-  P1: k in dom D by FINSEQ_1:def 3;
-  A10:rng(f|divset(D,k)) is bounded_below
-    & rng(f|divset(D,k)) is non empty
-    proof
-    rng f is bounded_below by AS,INTEGRA1:13;
-    hence rng(f|divset(D,k)) is bounded_below by RELAT_1:99,XXREAL_2:44;
-    dom f = A by FUNCT_2:def 1; then
-    dom (f|divset(D,k)) = divset(D,k) by INTEGRA1:10,P1,RELAT_1:91;
-    hence thesis by RELAT_1:65;
-    end;
-  per cases;
-    suppose C1: vol divset(D,k) = 0;
-     consider r be set such that
-    C11: r in rng (f|divset(D,k)) by A10,XBOOLE_0:def 1;
-     reconsider r as Element of REAL by C11;
-     reconsider x=r*vol divset(D,k) as Element of REAL;
-    C12:(lower_volume (f,D)).k
-     = (lower_bound rng (f|divset(D,k)))*vol divset(D,k) by INTEGRA1:def 8,P1
-    .= 0 by C1; then
-     x < (lower_volume (f,D)).k + e by AS,C1;
-     hence ex x being Element of REAL st P1[k,x] by C11,C12,C1;
-    end;
-    suppose C2: vol divset(D,k) <> 0; then
-    C21: 0 < vol divset(D,k) by INTEGRA1:11;
-     set e1=e/(vol divset(D,k));
-    C22: 0 < e1 by C21,AS,XREAL_1:141;
-     set l=lower_bound rng (f|divset(D,k));
-     consider r being real number such that
-    C23: r in rng (f|divset(D,k))
-       & r < l + e1 by C22,A10,SEQ_4:def 5;
-    C24: l <= r by A10,C23,SEQ_4:def 5;
-     reconsider x=r*vol divset(D,k) as Element of REAL;
-    C25:(lower_volume (f,D)).k
-     = (lower_bound rng (f|divset(D,k)))*vol divset(D,k) by INTEGRA1:def 8,P1;
-    C26:(lower_volume (f,D)).k <= x by C21,C24,C25,XREAL_1:66;
-     x < (l + e1)* (vol divset(D,k)) by C21,C23,XREAL_1:70; then
-     x < (lower_volume (f,D)).k + e1* (vol divset(D,k)) by C25; then
-     x < (lower_volume (f,D)).k + e by C2,XCMPLX_1:88;
-     hence ex x being Element of REAL st P1[k,x] by C23,C26;
-    end;
-  end;
-consider p being FinSequence of REAL such that
-B1: dom p = Seg len D
-  & for k being Nat st k in Seg len D holds
-    P1[k,p . k] from FINSEQ_1:sch 5(A1);
-B2: len p = len D & Seg len D = dom D by FINSEQ_1:def 3,B1;
-now let i be Nat;
-  assume i in dom D; then
-  i in Seg len D by FINSEQ_1:def 3; then
+
+  let A be closed-interval Subset of REAL, f be Function of A,REAL, D be
+  Division of A, F be middle_volume of f,D, i be Nat;
+
+  assume that
+A1: f|A is bounded_below and
+A2: i in dom D;
+
+A3: (lower_volume (f,D)).i = (lower_bound rng (f|divset(D,i)))*vol divset(D,i
+  ) by A2,INTEGRA1:def 8;
+
   consider r be Element of REAL such that
-  C1:r in rng (f|divset(D,i)) &
-     p.i=r*vol divset(D,i) & (lower_volume (f,D)).i <= p.i &
-     p.i < (lower_volume (f,D)).i + e by B1;
-  take r;
-  thus r in rng (f|divset(D,i)) & p.i=r*vol divset(D,i) by C1;
-end; then
-reconsider p as middle_volume of f,D by defx0,B2;
-now let i be Nat;
-  assume i in dom D; then
-  i in Seg len D by FINSEQ_1:def 3; then
-  consider r be Element of REAL such that
-  C1: r in rng (f|divset(D,i)) & p.i=r*vol divset(D,i) &
-      (lower_volume (f,D)).i <= p.i &
-      p.i < (lower_volume (f,D)).i + e by B1;
-  thus (lower_volume (f,D)).i <= p.i &
-       p.i < (lower_volume (f,D)).i + e by C1;
-end;
-hence thesis;
+A4: r in rng (f|divset(D,i)) and
+A5: F.i=r*vol divset(D,i) by A2,Def1;
+  rng f is bounded_below by A1,INTEGRA1:13;
+  then rng(f|divset(D,i)) is bounded_below by RELAT_1:99,XXREAL_2:44;
+
+  then
+  0 <= vol(divset (D,i)) & lower_bound (rng (f | (divset (D,i)))) <= r by
+  A4,INTEGRA1:11,SEQ_4:def 5;
+
+  hence (lower_volume (f,D)).i <= F.i by A5,A3,XREAL_1:66;
 end;
 
-PX0202:
-for A be closed-interval Subset of REAL,
-    f be Function of A,REAL,
-    D be Division of A,
-    e be Real st f|A is bounded_above & 0 < e holds
-   ex F be middle_volume of f,D st
-   for i be Nat st i in dom D holds
-      F.i <= (upper_volume (f,D)).i &
-     (upper_volume (f,D)).i - e < F.i
+Lm2: for A be closed-interval Subset of REAL, f be Function of A,REAL, D be
+Division of A, e be Real st f|A is bounded_below & 0 < e holds ex F be
+middle_volume of f,D st for i be Nat st i in dom D holds (lower_volume (f,D)).i
+<=F.i & F.i < (lower_volume (f,D)).i + e
+
 proof
-let A be closed-interval Subset of REAL,
-    f be Function of A,REAL,
-    D be Division of A,
-    e be Real;
-assume AS: f|A is bounded_above & 0 < e;
-defpred P1[ Nat, Element of REAL ] means
- ex r be Element of REAL st
-    r in rng (f|divset(D,$1)) &
-    $2=r*vol divset(D,$1) &
-    $2 <= (upper_volume (f,D)).$1 &
-    (upper_volume (f,D)).$1 - e < $2;
-A1: for k being Nat st k in Seg len D holds
-    ex x being Element of REAL st P1[k,x]
+
+  let A be closed-interval Subset of REAL, f be Function of A,REAL, D be
+  Division of A, e be Real;
+
+  assume that
+A1: f|A is bounded_below and
+A2: 0 < e;
+
+  defpred P1[Nat, Element of REAL] means ex r be Element of REAL st r in rng (
+
+f|divset(D,$1)) & $2=r*vol divset(D,$1) & (lower_volume (f,D)).$1 <= $2 & $2 <
+  (lower_volume (f,D)).$1 + e;
+
+A3: for k being Nat st k in Seg len D holds ex x being Element of REAL st P1
+  [k,x]
+
   proof
-  let k being Nat;
-  assume k in Seg len D; then
-  P1: k in dom D by FINSEQ_1:def 3;
-  A10:rng(f|divset(D,k)) is bounded_above
-    & rng(f|divset(D,k)) is non empty
-    proof
-    rng f is bounded_above by AS,INTEGRA1:15;
-    hence rng(f|divset(D,k)) is bounded_above by RELAT_1:99,XXREAL_2:43;
-    dom f = A by FUNCT_2:def 1; then
-    dom (f|divset(D,k)) = divset(D,k) by INTEGRA1:10,P1,RELAT_1:91;
-    hence thesis by RELAT_1:65;
+    let k be Nat;
+    assume
+    k in Seg len D;
+    then
+A4: k in dom D by FINSEQ_1:def 3;
+    dom f = A by FUNCT_2:def 1;
+    then dom (f|divset(D,k)) = divset(D,k) by A4,INTEGRA1:10,RELAT_1:91;
+    then
+A5: rng(f|divset(D,k)) is non empty by RELAT_1:65;
+    rng f is bounded_below by A1,INTEGRA1:13;
+    then
+A6: rng(f|divset(D,k)) is bounded_below by RELAT_1:99,XXREAL_2:44;
+    per cases;
+    suppose
+A7:   vol divset(D,k) = 0;
+      consider r be set such that
+A8:   r in rng (f|divset(D,k)) by A5,XBOOLE_0:def 1;
+      reconsider r as Element of REAL by A8;
+      reconsider x=r*vol divset(D,k) as Element of REAL;
+
+A9:   (lower_volume (f,D)).k = (lower_bound rng (f|divset(D,k)))*vol
+      divset(D,k) by A4,INTEGRA1:def 8
+
+        .= 0 by A7;
+      then x < (lower_volume (f,D)).k + e by A2,A7;
+      hence ex x being Element of REAL st P1[k,x] by A7,A8,A9;
     end;
-  per cases;
-    suppose C1: vol divset(D,k) = 0;
-     consider r be set such that
-    C11: r in rng (f|divset(D,k)) by A10,XBOOLE_0:def 1;
-     reconsider r as Element of REAL by C11;
-     reconsider x=r*vol divset(D,k) as Element of REAL;
-    C12:(upper_volume (f,D)).k
-     = (upper_bound rng (f|divset(D,k)))*vol divset(D,k) by INTEGRA1:def 7,P1
-    .= 0 by C1; then
-     (upper_volume (f,D)).k - e <  x by AS,C1;
-     hence ex x being Element of REAL st P1[k,x] by C11,C12,C1;
-    end;
-    suppose C2:  vol divset(D,k) <> 0; then
-    C21: 0 < vol divset(D,k) by INTEGRA1:11;
-     set e1=e/(vol divset(D,k));
-    C22: 0 < e1 by C21,AS,XREAL_1:141;
-     set l=upper_bound rng (f|divset(D,k));
-     consider r being real number such that
-    C23: r in rng (f|divset(D,k))
-       & l - e1 < r by C22,A10,SEQ_4:def 4;
-    C24: r <= l by A10,C23,SEQ_4:def 4;
-     reconsider x=r*vol divset(D,k) as Element of REAL;
-    C25:(upper_volume (f,D)).k
-     = (upper_bound rng (f|divset(D,k)))*vol divset(D,k) by INTEGRA1:def 7,P1;
-    C26:x <=(upper_volume (f,D)).k by C21,C24,C25,XREAL_1:66;
-     (l - e1)* (vol divset(D,k)) < x by C21,C23,XREAL_1:70; then
-     (upper_volume (f,D)).k - e1* (vol divset(D,k)) < x by C25; then
-     (upper_volume (f,D)).k - e < x by C2,XCMPLX_1:88;
-     hence ex x being Element of REAL st P1[k,x] by C23,C26;
+    suppose
+A10:  vol divset(D,k) <> 0;
+      set l=lower_bound rng (f|divset(D,k));
+      set e1=e/(vol divset(D,k));
+A11:  0 < vol divset(D,k) by A10,INTEGRA1:11;
+      then 0 < e1 by A2,XREAL_1:141;
+      then consider r being real number such that
+A12:  r in rng (f|divset(D,k)) and
+A13:  r < l + e1 by A6,A5,SEQ_4:def 5;
+
+A14:  (lower_volume (f,D)).k = (lower_bound rng (f|divset(D,k)))*vol
+      divset(D,k) by A4,INTEGRA1:def 8;
+
+      reconsider x=r*vol divset(D,k) as Element of REAL;
+      x < (l + e1)* (vol divset(D,k)) by A11,A13,XREAL_1:70;
+      then x < (lower_volume (f,D)).k + e1* (vol divset(D,k)) by A14;
+      then
+A15:  x < (lower_volume (f,D)).k + e by A10,XCMPLX_1:88;
+      l <= r by A6,A12,SEQ_4:def 5;
+      then (lower_volume (f,D)).k <= x by A11,A14,XREAL_1:66;
+      hence ex x being Element of REAL st P1[k,x] by A12,A15;
     end;
   end;
-consider p being FinSequence of REAL such that
-B1: dom p = Seg len D
-  & for k being Nat st k in Seg len D holds
-     P1[k,p . k] from FINSEQ_1:sch 5(A1);
-B2: len p = len D & Seg len D = dom D by FINSEQ_1:def 3,B1;
-now let i be Nat;
-  assume i in dom D; then
-  i in Seg len D by FINSEQ_1:def 3; then
-  consider r be Element of REAL such that
-  C1: r in rng (f|divset(D,i)) &
-      p.i=r*vol divset(D,i) &
-      p.i <= (upper_volume (f,D)).i &
-      (upper_volume (f,D)).i - e < p.i by B1;
-  take r;
-  thus r in rng (f|divset(D,i)) &
-       p.i=r*vol divset(D,i) by C1;
-end; then
-reconsider p as middle_volume of f,D by defx0,B2;
-now let i be Nat;
-  assume i in dom D; then
-  i in Seg len D by FINSEQ_1:def 3; then
-  consider r be Element of REAL such that
-  C1: r in rng (f|divset(D,i)) &
-      p.i=r*vol divset(D,i) &
-      p.i<=(upper_volume (f,D)).i &
-      (upper_volume (f,D)).i - e < p.i by B1;
-  thus p.i<=(upper_volume (f,D)).i &
-       (upper_volume (f,D)).i - e < p.i by C1;
-end;
-hence thesis;
+  consider p being FinSequence of REAL such that
+
+A16: dom p = Seg len D & for k being Nat st k in Seg len D holds P1[k,p
+  . k] from FINSEQ_1:sch 5(A3);
+
+A17: now
+    let i be Nat;
+    assume
+    i in dom D;
+    then i in Seg len D by FINSEQ_1:def 3;
+    then consider r be Element of REAL such that
+A18: r in rng (f|divset(D,i)) & p.i=r*vol divset(D,i) and
+    (lower_volume (f,D)).i <= p.i and
+    p.i < (lower_volume (f,D)).i + e by A16;
+    take r;
+    thus r in rng (f|divset(D,i)) & p.i=r*vol divset(D,i) by A18;
+  end;
+  len p = len D by A16,FINSEQ_1:def 3;
+  then reconsider p as middle_volume of f,D by A17,Def1;
+  now
+    let i be Nat;
+    assume
+    i in dom D;
+    then i in Seg len D by FINSEQ_1:def 3;
+
+    then ex r be Element of REAL st r in rng (f|divset(D,i)) & p.i =r*vol
+
+divset(D,i) & (lower_volume (f,D)).i <= p.i & p.i < (lower_volume (f,D )).i + e
+    by A16;
+
+    hence (lower_volume (f,D)).i <= p.i & p.i < (lower_volume (f,D)).i + e;
+
+  end;
+  hence thesis;
 end;
 
-PX0102:
-for A be closed-interval Subset of REAL,
-    f be Function of A,REAL,
-    D be Division of A,
-    F be middle_volume of f,D,
-    i be Nat st f|A is bounded_above & i in dom D holds
-    F.i <=(upper_volume (f,D)).i
+Lm3: for A be closed-interval Subset of REAL, f be Function of A,REAL, D be
+Division of A, e be Real st f|A is bounded_above & 0 < e holds ex F be
+middle_volume of f,D st for i be Nat st i in dom D holds F.i <= (upper_volume (
+f,D)).i & (upper_volume (f,D)).i - e < F.i
+
 proof
-let A be closed-interval Subset of REAL,
-    f be Function of A,REAL,
-    D be Division of A,
-    F be middle_volume of f,D,
-    i be Nat;
-assume AS: f|A is bounded_above & i in dom D;
-consider r be Element of REAL such that
-P1: r in rng (f|divset(D,i)) &
-    F.i=r*vol divset(D,i) by defx0,AS;
-P2:(upper_volume (f,D)).i
- = (upper_bound rng (f|divset(D,i)))*vol divset(D,i) by INTEGRA1:def 7,AS;
-P3: 0 <= vol(divset (D,i)) by INTEGRA1:11;
-rng(f|divset(D,i)) is bounded_above & rng(f|divset(D,i)) is non empty
+
+  let A be closed-interval Subset of REAL, f be Function of A,REAL, D be
+  Division of A, e be Real;
+
+  assume that
+A1: f|A is bounded_above and
+A2: 0 < e;
+
+  defpred P1[ Nat, Element of REAL ] means ex r be Element of REAL st r in rng
+  (f|divset(D,$1)) & $2=r*vol divset(D,$1) & $2 <= (upper_volume (f,D)).$1 & (
+  upper_volume (f,D)).$1 - e < $2;
+
+A3: for k being Nat st k in Seg len D holds ex x being Element of REAL st P1
+  [k,x]
+
   proof
-    rng f is bounded_above by AS,INTEGRA1:15;
-    hence rng(f|divset(D,i)) is bounded_above by RELAT_1:99,XXREAL_2:43;
-    dom f = A by FUNCT_2:def 1; then
-    dom (f|divset(D,i)) = divset(D,i) by INTEGRA1:10,AS,RELAT_1:91;
-    hence thesis by RELAT_1:65;
-  end; then
-r <= upper_bound (rng (f | (divset (D,i)))) by SEQ_4:def 4,P1;
-hence F.i <= (upper_volume (f,D)).i by P1,P2,P3,XREAL_1:66;
+    let k being Nat;
+    assume
+    k in Seg len D;
+    then
+A4: k in dom D by FINSEQ_1:def 3;
+    dom f = A by FUNCT_2:def 1;
+    then dom (f|divset(D,k)) = divset(D,k) by A4,INTEGRA1:10,RELAT_1:91;
+    then
+A5: rng(f|divset(D,k)) is non empty by RELAT_1:65;
+    rng f is bounded_above by A1,INTEGRA1:15;
+    then
+A6: rng(f|divset(D,k)) is bounded_above by RELAT_1:99,XXREAL_2:43;
+    per cases;
+    suppose
+A7:   vol divset(D,k) = 0;
+      consider r be set such that
+A8:   r in rng (f|divset(D,k)) by A5,XBOOLE_0:def 1;
+      reconsider r as Element of REAL by A8;
+      reconsider x=r*vol divset(D,k) as Element of REAL;
+
+A9:   (upper_volume (f,D)).k = (upper_bound rng (f|divset(D,k)))*vol
+      divset(D,k) by A4,INTEGRA1:def 7
+
+        .= 0 by A7;
+      then (upper_volume (f,D)).k - e < x by A2,A7;
+      hence ex x being Element of REAL st P1[k,x] by A7,A8,A9;
+    end;
+    suppose
+A10:  vol divset(D,k) <> 0;
+      set l=upper_bound rng (f|divset(D,k));
+      set e1=e/(vol divset(D,k));
+A11:  0 < vol divset(D,k) by A10,INTEGRA1:11;
+      then 0 < e1 by A2,XREAL_1:141;
+      then consider r being real number such that
+A12:  r in rng (f|divset(D,k)) and
+A13:  l - e1 < r by A6,A5,SEQ_4:def 4;
+
+A14:  (upper_volume (f,D)).k = (upper_bound rng (f|divset(D,k)))*vol
+      divset(D,k) by A4,INTEGRA1:def 7;
+
+      reconsider x=r*vol divset(D,k) as Element of REAL;
+      (l - e1)* (vol divset(D,k)) < x by A11,A13,XREAL_1:70;
+      then (upper_volume (f,D)).k - e1* (vol divset(D,k)) < x by A14;
+      then
+A15:  (upper_volume (f,D)).k - e < x by A10,XCMPLX_1:88;
+      r <= l by A6,A12,SEQ_4:def 4;
+      then x <=(upper_volume (f,D)).k by A11,A14,XREAL_1:66;
+      hence ex x being Element of REAL st P1[k,x] by A12,A15;
+    end;
+  end;
+  consider p being FinSequence of REAL such that
+
+A16: dom p = Seg len D & for k being Nat st k in Seg len D holds P1[k,p
+  . k] from FINSEQ_1:sch 5(A3);
+
+A17: now
+    let i be Nat;
+    assume
+    i in dom D;
+    then i in Seg len D by FINSEQ_1:def 3;
+    then consider r be Element of REAL such that
+A18: r in rng (f|divset(D,i)) & p.i=r*vol divset(D,i) and
+    p.i <= (upper_volume (f,D)).i and
+    (upper_volume (f,D)).i - e < p.i by A16;
+    take r;
+    thus r in rng (f|divset(D,i)) & p.i=r*vol divset(D,i) by A18;
+  end;
+  len p = len D by A16,FINSEQ_1:def 3;
+  then reconsider p as middle_volume of f,D by A17,Def1;
+  now
+    let i be Nat;
+    assume
+    i in dom D;
+    then i in Seg len D by FINSEQ_1:def 3;
+
+    then ex r be Element of REAL st r in rng (f|divset(D,i)) & p.i =r*vol
+
+divset(D,i) & p.i<=(upper_volume (f,D)).i & (upper_volume (f,D)).i - e < p.i by
+    A16;
+
+    hence p.i<=(upper_volume (f,D)).i & (upper_volume (f,D)).i - e < p.i;
+
+  end;
+  hence thesis;
+end;
+
+Lm4: for A be closed-interval Subset of REAL, f be Function of A,REAL, D be
+Division of A, F be middle_volume of f,D, i be Nat st f|A is bounded_above & i
+in dom D holds F.i <=(upper_volume (f,D)).i
+
+proof
+
+  let A be closed-interval Subset of REAL, f be Function of A,REAL, D be
+  Division of A, F be middle_volume of f,D, i be Nat;
+
+  assume that
+A1: f|A is bounded_above and
+A2: i in dom D;
+
+A3: (upper_volume (f,D)).i = (upper_bound rng (f|divset(D,i)))*vol divset(D,i
+  ) by A2,INTEGRA1:def 7;
+
+  consider r be Element of REAL such that
+A4: r in rng (f|divset(D,i)) and
+A5: F.i=r*vol divset(D,i) by A2,Def1;
+  rng f is bounded_above by A1,INTEGRA1:15;
+  then rng(f|divset(D,i)) is bounded_above by RELAT_1:99,XXREAL_2:43;
+
+  then
+  0 <= vol(divset (D,i)) & r <= upper_bound (rng (f | (divset (D,i)))) by
+  A4,INTEGRA1:11,SEQ_4:def 4;
+
+  hence F.i <= (upper_volume (f,D)).i by A5,A3,XREAL_1:66;
 end;
 
 definition
@@ -335,715 +349,669 @@ definition
   let D be Division of A;
   let F be middle_volume of f,D;
   func middle_sum(f,F) -> Real equals
-    Sum(F);
+  Sum(F);
   correctness;
 end;
 
-theorem PX0103:
-for A be closed-interval Subset of REAL,
-    f be Function of A,REAL,
-    D be Division of A,
-    F be middle_volume of f,D
- st f|A is bounded_below
-   holds
-    lower_sum (f,D) <= middle_sum(f,F)
+theorem Th1:
+  for A be closed-interval Subset of REAL, f be Function of A,REAL,
+  D be Division of A, F be middle_volume of f,D st f|A is bounded_below holds
+  lower_sum (f,D) <= middle_sum(f,F)
 proof
-let A be closed-interval Subset of REAL,
-    f be Function of A,REAL,
-    D be Division of A,
-    F be middle_volume of f,D;
-assume AS: f|A is bounded_below;
-A1: len lower_volume (f,D) = len D by INTEGRA1:def 8;
-B1: len F = len D by defx0;
- reconsider p = lower_volume (f,D)
-as Element of (len D)-tuples_on REAL by A1,FINSEQ_2:110;
- reconsider q =F as Element of (len D)-tuples_on REAL by B1,FINSEQ_2:110;
-now
-  let i be Nat;
-  assume i in Seg len D; then
-  i in dom D by FINSEQ_1:def 3;
-  hence p.i <= q.i by AS,PX0101;
-end;
+  let A be closed-interval Subset of REAL, f be Function of A,REAL, D be
+  Division of A, F be middle_volume of f,D;
+  len lower_volume (f,D) = len D by INTEGRA1:def 8;
+  then reconsider
+  p = lower_volume (f,D) as Element of (len D)-tuples_on REAL by FINSEQ_2:110;
+  len F = len D by Def1;
+  then reconsider q =F as Element of (len D)-tuples_on REAL by FINSEQ_2:110;
+  assume
+A1: f|A is bounded_below;
+  now
+    let i be Nat;
+    assume
+    i in Seg len D;
+    then i in dom D by FINSEQ_1:def 3;
+    hence p.i <= q.i by A1,Lm1;
+  end;
   hence thesis by RVSUM_1:112;
 end;
 
-theorem PX0104:
-for A be closed-interval Subset of REAL,
-    f be Function of A,REAL,
-    D be Division of A,
-    F be middle_volume of f,D
- st f|A is bounded_above holds
-    middle_sum(f,F) <= upper_sum (f,D)
+theorem Th2:
+  for A be closed-interval Subset of REAL, f be Function of A,REAL,
+  D be Division of A, F be middle_volume of f,D st f|A is bounded_above holds
+  middle_sum(f,F) <= upper_sum (f,D)
 proof
-let A be closed-interval Subset of REAL,
-    f be Function of A,REAL,
-    D be Division of A,
-    F be middle_volume of f,D;
-assume AS: f|A is bounded_above;
-A1: len upper_volume (f,D) = len D by INTEGRA1:def 7;
-B1: len F = len D by defx0;
- reconsider p = upper_volume (f,D)
-  as Element of (len D)-tuples_on REAL by A1,FINSEQ_2:110;
- reconsider q =F as Element of (len D)-tuples_on REAL by B1,FINSEQ_2:110;
-now
-  let i be Nat;
-  assume i in Seg (len D); then
-  i in dom D by FINSEQ_1:def 3;
-  hence q.i <= p.i by AS,PX0102;
-end;
-hence thesis by RVSUM_1:112;
+  let A be closed-interval Subset of REAL, f be Function of A,REAL, D be
+  Division of A, F be middle_volume of f,D;
+  len upper_volume (f,D) = len D by INTEGRA1:def 7;
+  then reconsider
+  p = upper_volume (f,D) as Element of (len D)-tuples_on REAL by FINSEQ_2:110;
+  len F = len D by Def1;
+  then reconsider q =F as Element of (len D)-tuples_on REAL by FINSEQ_2:110;
+  assume
+A1: f|A is bounded_above;
+  now
+    let i be Nat;
+    assume
+    i in Seg (len D);
+    then i in dom D by FINSEQ_1:def 3;
+    hence q.i <= p.i by A1,Lm4;
+  end;
+  hence thesis by RVSUM_1:112;
 end;
 
-theorem PX0203:
-for A be closed-interval Subset of REAL,
-    f be Function of A,REAL,
-    D be Division of A,
-    e be Real st
-    f|A is bounded_below & 0 < e holds
-    ex F be middle_volume of f,D st
-       middle_sum(f,F) <= lower_sum (f,D) + e
+theorem Th3:
+  for A be closed-interval Subset of REAL, f be Function of A,REAL,
+  D be Division of A, e be Real st f|A is bounded_below & 0 < e holds ex F be
+  middle_volume of f,D st middle_sum(f,F) <= lower_sum (f,D) + e
 proof
-let A be closed-interval Subset of REAL,
-    f be Function of A,REAL,
-    D be Division of A,
-    e be Real;
-assume AS: f|A is bounded_below & 0 < e;
-P1: 0 < len D by FINSEQ_1:28;
-set e1= e/(len D);
-consider F be middle_volume of f,D such that
-R1: for i be Nat st i in dom D holds
-      (lower_volume (f,D)).i <=F.i &
-      F.i < (lower_volume (f,D)).i + e1 by AS,P1,PX0201,XREAL_1:141;
-take F;
-set s= (len D) |-> e1;
-A1: len lower_volume (f,D) = len D by INTEGRA1:def 8;
-B1: len F = len D by defx0;
- reconsider p = lower_volume (f,D)
-as Element of (len D)-tuples_on REAL by A1,FINSEQ_2:110;
- reconsider q =F as Element of (len D)-tuples_on REAL by B1,FINSEQ_2:110;
- reconsider t =p + s as Element of (len D)-tuples_on REAL;
-now
-  let i be Nat;
-  assume C0: i in Seg (len D); then
-  i in dom D by FINSEQ_1:def 3; then
-  q.i <= p.i + e1 by R1; then
-  q.i <= p.i + s.i by FINSEQ_2:71,C0;
-  hence q.i <= t.i by RVSUM_1:27;
-end; then
-Sum(q) <= Sum(t) by RVSUM_1:112; then
-Sum(q) <= Sum(p)+Sum(s) by RVSUM_1:119; then
-Sum(q) <= Sum(p)+ (len D)*e1 by RVSUM_1:110;
-hence thesis by XCMPLX_1:88,P1;
+  let A be closed-interval Subset of REAL, f be Function of A,REAL, D be
+  Division of A, e be Real;
+A1: 0 < len D by FINSEQ_1:28;
+  len lower_volume (f,D) = len D by INTEGRA1:def 8;
+  then reconsider
+  p = lower_volume (f,D) as Element of (len D)-tuples_on REAL by FINSEQ_2:110;
+  set e1= e/(len D);
+  assume
+  f|A is bounded_below & 0 < e;
+  then consider F be middle_volume of f,D such that
+A2: for i be Nat st i in dom D holds (lower_volume (f,D)).i <=F.i & F.i
+  < (lower_volume (f,D)).i + e1 by A1,Lm2,XREAL_1:141;
+  set s= (len D) |-> e1;
+  reconsider t =p + s as Element of (len D)-tuples_on REAL;
+  take F;
+  len F = len D by Def1;
+  then reconsider q =F as Element of (len D)-tuples_on REAL by FINSEQ_2:110;
+  now
+    let i be Nat;
+    assume
+A3: i in Seg (len D);
+    then i in dom D by FINSEQ_1:def 3;
+    then q.i <= p.i + e1 by A2;
+    then q.i <= p.i + s.i by A3,FINSEQ_2:71;
+    hence q.i <= t.i by RVSUM_1:27;
+  end;
+  then Sum(q) <= Sum(t) by RVSUM_1:112;
+  then Sum(q) <= Sum(p)+Sum(s) by RVSUM_1:119;
+  then Sum(q) <= Sum(p)+ (len D)*e1 by RVSUM_1:110;
+  hence thesis by A1,XCMPLX_1:88;
 end;
 
-theorem PX0204:
-for A be closed-interval Subset of REAL,
-    f be Function of A,REAL,
-    D be Division of A,
-    e be Real st
-    f|A is bounded_above & 0 < e holds
-    ex F be middle_volume of f,D st
-    upper_sum (f,D) - e <= middle_sum(f,F)
+theorem Th4:
+  for A be closed-interval Subset of REAL, f be Function of A,REAL,
+  D be Division of A, e be Real st f|A is bounded_above & 0 < e holds ex F be
+  middle_volume of f,D st upper_sum (f,D) - e <= middle_sum(f,F)
 proof
-let A be closed-interval Subset of REAL,
-    f be Function of A,REAL,
-    D be Division of A,
-    e be Real;
-assume AS: f|A is bounded_above & 0 < e;
-P1: 0 < len D by FINSEQ_1:28;
-set e1= e/(len D);
-consider F be  middle_volume of f,D such that
-R1: for i be Nat st i in dom D holds
-    F.i <= (upper_volume (f,D)).i &
-    (upper_volume (f,D)).i - e1 < F.i by AS,P1,XREAL_1:141,PX0202;
-take F;
-set s= (len D) |-> e1;
-A1: len upper_volume (f,D) = len D by INTEGRA1:def 7;
-B1: len F = len D by defx0;
- reconsider p = upper_volume (f,D)
-as Element of (len D)-tuples_on REAL by A1,FINSEQ_2:110;
- reconsider q =F as Element of (len D)-tuples_on REAL by B1,FINSEQ_2:110;
- reconsider t =p - s as Element of (len D)-tuples_on REAL;
-now
-  let i be Nat;
-  assume C0: i in Seg (len D); then
-  i in dom D by FINSEQ_1:def 3; then
-  p.i - e1 <= q.i by R1; then
-  p.i - s.i <= q.i by FINSEQ_2:71,C0;
-  hence t.i <= q.i by RVSUM_1:48;
-end; then
-Sum(t) <= Sum(q) by RVSUM_1:112; then
-Sum(p)-Sum(s) <= Sum(q) by RVSUM_1:120; then
-Sum(p)- (len D)*e1 <= Sum(q) by RVSUM_1:110;
-hence thesis by XCMPLX_1:88,P1;
+  let A be closed-interval Subset of REAL, f be Function of A,REAL, D be
+  Division of A, e be Real;
+A1: 0 < len D by FINSEQ_1:28;
+  len upper_volume (f,D) = len D by INTEGRA1:def 7;
+  then reconsider
+  p = upper_volume (f,D) as Element of (len D)-tuples_on REAL by FINSEQ_2:110;
+  set e1= e/(len D);
+  assume
+  f|A is bounded_above & 0 < e;
+  then consider F be middle_volume of f,D such that
+A2: for i be Nat st i in dom D holds F.i <= (upper_volume (f,D)).i & (
+  upper_volume (f,D)).i - e1 < F.i by A1,Lm3,XREAL_1:141;
+  set s= (len D) |-> e1;
+  reconsider t =p - s as Element of (len D)-tuples_on REAL;
+  take F;
+  len F = len D by Def1;
+  then reconsider q =F as Element of (len D)-tuples_on REAL by FINSEQ_2:110;
+  now
+    let i be Nat;
+    assume
+A3: i in Seg (len D);
+    then i in dom D by FINSEQ_1:def 3;
+    then p.i - e1 <= q.i by A2;
+    then p.i - s.i <= q.i by A3,FINSEQ_2:71;
+    hence t.i <= q.i by RVSUM_1:48;
+  end;
+  then Sum(t) <= Sum(q) by RVSUM_1:112;
+  then Sum(p)-Sum(s) <= Sum(q) by RVSUM_1:120;
+  then Sum(p)- (len D)*e1 <= Sum(q) by RVSUM_1:110;
+  hence thesis by A1,XCMPLX_1:88;
 end;
 
 definition
-let A be closed-interval Subset of REAL,
-    f be Function of A,REAL,
-    T be DivSequence of A;
-mode middle_volume_Sequence of f,T -> Function of NAT, (REAL)* means :defx2:
-  for k be Element of NAT holds
-   it.k is middle_volume of f,T.k;
-correctness
-proof
-defpred P[Element of NAT,set]
-  means $2 is middle_volume of f,T.$1;
-A1: for x being Element of NAT
-     ex y being Element of (REAL)* st P[x, y]
+  let A be closed-interval Subset of REAL, f be Function of A,REAL, T be
+  DivSequence of A;
+  mode middle_volume_Sequence of f,T -> Function of NAT, (REAL)* means
+    :Def3:
+    for k be Element of NAT holds it.k is middle_volume of f,T.k;
+  correctness
   proof
-  let x being Element of NAT;
-  consider y be middle_volume of f,T.x;
-  reconsider y as Element of (REAL)* by FINSEQ_1:def 11;
-  y is middle_volume of f,T.x;
-  hence thesis;
- end;
-consider f being Function of NAT, (REAL)* such that
-A2: for x being Element of NAT holds P[x, f.x] from FUNCT_2:sch 10(A1);
-thus thesis by A2;
-end;
-end;
-
-definition
-let A be closed-interval Subset of REAL,
-    f be Function of A,REAL,
-    T be DivSequence of A,
-    S be middle_volume_Sequence of f,T,
-    k be Element of NAT;
-redefine func S.k -> middle_volume of f,T.k;
-coherence by defx2;
+    defpred P[Element of NAT,set] means $2 is middle_volume of f,T.$1;
+A1: for x being Element of NAT ex y being Element of (REAL)* st P[x, y]
+    proof
+      let x being Element of NAT;
+      consider y be middle_volume of f,T.x;
+      reconsider y as Element of (REAL)* by FINSEQ_1:def 11;
+      y is middle_volume of f,T.x;
+      hence thesis;
+    end;
+    ex f being Function of NAT, (REAL)* st for x being Element of NAT holds
+    P[x, f.x] from FUNCT_2:sch 10(A1 );
+    hence thesis;
+  end;
 end;
 
 definition
-let A be closed-interval Subset of REAL,
-    f be Function of A,REAL,
-    T be DivSequence of A,
-    S be middle_volume_Sequence of f,T;
-    func middle_sum(f,S) -> Real_Sequence means :defx3:
- for i be Element of NAT
-   holds it.i = middle_sum(f,S.i);
-existence
-proof
-deffunc H1(Element of NAT) = middle_sum(f,S.$1);
-thus ex IT being Real_Sequence st
-for i being Element of NAT holds IT . i = H1(i) from SEQ_1:sch 1;
+  let A be closed-interval Subset of REAL, f be Function of A,REAL, T be
+  DivSequence of A, S be middle_volume_Sequence of f,T, k be Element of NAT;
+  redefine func S.k -> middle_volume of f,T.k;
+  coherence by Def3;
 end;
-uniqueness
-proof
-let F1, F2 be Real_Sequence;
-assume that
+
+definition
+  let A be closed-interval Subset of REAL, f be Function of A,REAL, T be
+  DivSequence of A, S be middle_volume_Sequence of f,T;
+  func middle_sum(f,S) -> Real_Sequence means
+  :Def4:
+  for i be Element of NAT
+  holds it.i = middle_sum(f,S.i);
+  existence
+  proof
+    deffunc H1(Element of NAT) = middle_sum(f,S.$1);
+    thus ex IT being Real_Sequence st for i being Element of NAT holds IT . i
+    = H1(i) from SEQ_1:sch 1;
+  end;
+  uniqueness
+  proof
+    let F1, F2 be Real_Sequence;
+    assume that
 A1: for i being Element of NAT holds F1.i = middle_sum(f,S.i) and
 A2: for i being Element of NAT holds F2.i = middle_sum(f,S.i);
-for i being Element of NAT holds F1.i = F2.i
-  proof
-  let i be Element of NAT;
-  F1.i = middle_sum(f,S.i) by A1  .= F2.i by A2;
-  hence F1.i = F2.i;
+    for i being Element of NAT holds F1.i = F2.i
+    proof
+      let i be Element of NAT;
+      F1.i = middle_sum(f,S.i) by A1
+        .= F2.i by A2;
+      hence F1.i = F2.i;
+    end;
+    hence F1 = F2 by FUNCT_2:113;
   end;
-hence F1 = F2 by FUNCT_2:113;
-end;
 end;
 
-theorem PX011:
-for A be closed-interval Subset of REAL,
-    f being Function of A,REAL,
-    T being DivSequence of A,
-    S be middle_volume_Sequence of f,T,
-    i be Element of NAT
- st f|A is bounded_below holds
-    (lower_sum(f,T)).i <= (middle_sum(f,S)).i
+theorem Th5:
+  for A be closed-interval Subset of REAL, f being Function of A,
+  REAL, T being DivSequence of A, S be middle_volume_Sequence of f,T, i be
+Element of NAT st f|A is bounded_below holds (lower_sum(f,T)).i <= (middle_sum(
+  f,S)).i
 proof
-let A be closed-interval Subset of REAL,
-    f being Function of A,REAL,
-    T being DivSequence of A,
-    S be middle_volume_Sequence of f,T,
-    i be Element of NAT;
-assume AS: f|A is bounded_below;
-P1: (middle_sum(f,S)).i= middle_sum(f,S.i) by defx3;
-(lower_sum(f,T)).i = lower_sum(f,T.i) by INTEGRA2:def 5;
-hence thesis by AS,PX0103,P1;
+  let A be closed-interval Subset of REAL, f being Function of A,REAL, T being
+  DivSequence of A, S be middle_volume_Sequence of f,T, i be Element of NAT;
+  assume
+A1: f|A is bounded_below;
+  (middle_sum(f,S)).i= middle_sum(f,S.i) & (lower_sum(f,T)).i = lower_sum(
+  f,T. i) by Def4,INTEGRA2:def 5;
+  hence thesis by A1,Th1;
 end;
 
-theorem PX012:
-for A be closed-interval Subset of REAL,
-    f being Function of A,REAL,
-    T being DivSequence of A,
-    S be middle_volume_Sequence of f,T,
-    i be Element of NAT
- st f|A is bounded_above holds
-    (middle_sum(f,S)).i <= (upper_sum(f,T)).i
+theorem Th6:
+  for A be closed-interval Subset of REAL, f being Function of A,
+  REAL, T being DivSequence of A, S be middle_volume_Sequence of f,T, i be
+Element of NAT st f|A is bounded_above holds (middle_sum(f,S)).i <= (upper_sum(
+  f,T)).i
 proof
-let A be closed-interval Subset of REAL,
-    f being Function of A,REAL,
-    T being DivSequence of A,
-    S be middle_volume_Sequence of f,T,
-    i be Element of NAT;
-assume AS: f|A is bounded_above;
-P1: (middle_sum(f,S)).i= middle_sum(f,S.i) by defx3;
-(upper_sum(f,T)).i = upper_sum(f,T.i) by INTEGRA2:def 4;
-hence thesis by AS,PX0104,P1;
+  let A be closed-interval Subset of REAL, f being Function of A,REAL, T being
+  DivSequence of A, S be middle_volume_Sequence of f,T, i be Element of NAT;
+  assume
+A1: f|A is bounded_above;
+  (middle_sum(f,S)).i= middle_sum(f,S.i) & (upper_sum(f,T)).i = upper_sum(
+  f,T. i) by Def4,INTEGRA2:def 4;
+  hence thesis by A1,Th2;
 end;
 
-theorem PX02:
-for A be closed-interval Subset of REAL,
-    f being Function of A,REAL,
-    T being DivSequence of A,
-    e be Element of REAL
- st 0 < e & f|A is bounded_below holds
-    ex S be middle_volume_Sequence of f,T
-    st for i be Element of NAT holds
-       (middle_sum(f,S)).i <= (lower_sum(f,T)).i + e
+theorem Th7:
+  for A be closed-interval Subset of REAL, f being Function of A,
+  REAL, T being DivSequence of A, e be Element of REAL st 0 < e & f|A is
+  bounded_below holds ex S be middle_volume_Sequence of f,T st for i be Element
+  of NAT holds (middle_sum(f,S)).i <= (lower_sum(f,T)).i + e
 proof
-let A be closed-interval Subset of REAL,
-    f being Function of A,REAL,
-    T being DivSequence of A,
-    e be Element of REAL;
-assume AS:0 < e & f|A is bounded_below;
-defpred P[Element of NAT,set ] means
-  $2 is middle_volume of f,T.$1 & ex z be middle_volume of f,T.$1 st
-     z=$2 &
-     middle_sum(f,z) <= lower_sum(f,T.$1) + e;
-A1: for x being Element of NAT
-      ex y being Element of (REAL)* st P[x, y]
+  let A be closed-interval Subset of REAL, f being Function of A,REAL, T being
+  DivSequence of A, e be Element of REAL;
+  defpred P[Element of NAT,set ] means $2 is middle_volume of f,T.$1 & ex z be
+  middle_volume of f,T.$1 st z=$2 & middle_sum(f,z) <= lower_sum(f,T.$1) + e;
+  assume
+A1: 0 < e & f|A is bounded_below;
+A2: for x being Element of NAT ex y being Element of (REAL)* st P[x, y]
   proof
-  let x be Element of NAT;
-  consider z be middle_volume of f,T.x such that
-  X1: middle_sum(f,z) <= lower_sum (f,T.x) + e by PX0203,AS;
-  reconsider y=z as Element of (REAL)* by FINSEQ_1:def 11;
-  take y;
-  thus thesis by X1;
+    let x be Element of NAT;
+    consider z be middle_volume of f,T.x such that
+A3: middle_sum(f,z) <= lower_sum (f,T.x) + e by A1,Th3;
+    reconsider y=z as Element of (REAL)* by FINSEQ_1:def 11;
+    take y;
+    thus thesis by A3;
   end;
-consider F being Function of NAT, (REAL)* such that
-A2: for x being Element of NAT holds P[x, F.x] from FUNCT_2:sch 10(A1);
-reconsider F as middle_volume_Sequence of f,T by A2,defx2;
-now let x being Element of NAT;
-  ex z be middle_volume of f,T.x st z=F.x &
-     middle_sum(f,z) <= lower_sum(f,T.x) + e by A2; then
-  (middle_sum(f,F)).x <= lower_sum(f,T.x) + e by defx3;
-  hence (middle_sum(f,F)).x <= (lower_sum(f,T)).x + e by INTEGRA2:def 5;
-end;
-hence thesis;
+  consider F being Function of NAT, (REAL)* such that
+A4: for x being Element of NAT holds P[x, F.x] from FUNCT_2:sch 10(A2);
+  reconsider F as middle_volume_Sequence of f,T by A4,Def3;
+  now
+    let x being Element of NAT;
+    ex z be middle_volume of f,T.x st z=F.x & middle_sum(f,z) <= lower_sum
+    (f,T.x) + e by A4;
+    then (middle_sum(f,F)).x <= lower_sum(f,T.x) + e by Def4;
+    hence (middle_sum(f,F)).x <= (lower_sum(f,T)).x + e by INTEGRA2:def 5;
+  end;
+  hence thesis;
 end;
 
-theorem PX03:
-for A be closed-interval Subset of REAL,
-    f being Function of A,REAL,
-    T being DivSequence of A,
-    e be Element of REAL
- st 0 < e & f|A is bounded_above holds
-    ex S be middle_volume_Sequence of f,T st
-     for i be Element of NAT
-       holds
-     (upper_sum(f,T)).i - e <= (middle_sum(f,S)).i
+theorem Th8:
+  for A be closed-interval Subset of REAL, f being Function of A,
+  REAL, T being DivSequence of A, e be Element of REAL st 0 < e & f|A is
+  bounded_above holds ex S be middle_volume_Sequence of f,T st for i be Element
+  of NAT holds (upper_sum(f,T)).i - e <= (middle_sum(f,S)).i
 proof
-let A be closed-interval Subset of REAL,
-    f being Function of A,REAL,
-    T being DivSequence of A,
-    e be Element of REAL;
-assume AS:0 < e & f|A is bounded_above;
-defpred P[Element of NAT,set ] means
-  $2 is middle_volume of f,T.$1 &
-  ex z be middle_volume of f,T.$1 st z=$2 &
-     upper_sum(f,T.$1) -e <= middle_sum(f,z);
-A1: for x being Element of NAT
-      ex y being Element of (REAL)* st P[x, y]
+  let A be closed-interval Subset of REAL, f being Function of A,REAL, T being
+  DivSequence of A, e be Element of REAL;
+  defpred P[Element of NAT,set ] means $2 is middle_volume of f,T.$1 & ex z be
+  middle_volume of f,T.$1 st z=$2 & upper_sum(f,T.$1) -e <= middle_sum(f,z);
+  assume
+A1: 0 < e & f|A is bounded_above;
+A2: for x being Element of NAT ex y being Element of (REAL)* st P[x, y]
   proof
-  let x being Element of NAT;
-  consider z be middle_volume of f,T.x such that
-  X1: upper_sum (f,T.x) - e <= middle_sum(f,z) by PX0204,AS;
-  reconsider y=z  as Element of (REAL)* by FINSEQ_1:def 11;
-  take y;
-  thus thesis by X1;
+    let x being Element of NAT;
+    consider z be middle_volume of f,T.x such that
+A3: upper_sum (f,T.x) - e <= middle_sum(f,z) by A1,Th4;
+    reconsider y=z as Element of (REAL)* by FINSEQ_1:def 11;
+    take y;
+    thus thesis by A3;
   end;
-consider F being Function of NAT, (REAL)* such that
-A2: for x being Element of NAT holds P[x, F.x] from FUNCT_2:sch 10(A1);
-reconsider F as  middle_volume_Sequence of f,T by A2,defx2;
-now let x being Element of NAT;
-  ex z be middle_volume of f,T.x st z=F.x &
-     upper_sum (f,T.x) - e <= middle_sum(f,z) by A2; then
-  upper_sum(f,T.x) - e <= (middle_sum(f,F)).x by defx3;
-  hence (upper_sum(f,T)).x - e <=(middle_sum(f,F)).x by INTEGRA2:def 4;
-end;
-hence thesis;
+  consider F being Function of NAT, (REAL)* such that
+A4: for x being Element of NAT holds P[x, F.x] from FUNCT_2:sch 10(A2);
+  reconsider F as middle_volume_Sequence of f,T by A4,Def3;
+  now
+    let x being Element of NAT;
+    ex z be middle_volume of f,T.x st z=F.x & upper_sum (f,T.x) - e <=
+    middle_sum(f,z) by A4;
+    then upper_sum(f,T.x) - e <= (middle_sum(f,F)).x by Def4;
+    hence (upper_sum(f,T)).x - e <=(middle_sum(f,F)).x by INTEGRA2:def 4;
+  end;
+  hence thesis;
 end;
 
-PX041:
-for p,q,r be Real_Sequence
-  st p is convergent
-   & r is convergent
-   & lim p = lim r
-   & (for i be Element of NAT holds p.i <= q.i)
-   & (for i be Element of NAT holds q.i <= r.i) holds
-     q is convergent
-   & lim p = lim q
-   & lim r = lim q
+Lm5: for p,q,r be Real_Sequence st p is convergent & r is convergent & lim p =
+lim r & (for i be Element of NAT holds p.i <= q.i) & (for i be Element of NAT
+holds q.i <= r.i) holds q is convergent & lim p = lim q & lim r = lim q
+
 proof
-let p,q,r be Real_Sequence;
-assume AS: p is convergent
-         & r is convergent
-         & lim p = lim r
-         & (for i be Element of NAT holds p.i <= q.i)
-         & (for i be Element of NAT holds q.i <= r.i);
-X:now let e be real number;
-    assume AS1: 0<e;
-    consider n1 be Element of NAT such that
-  P1: for m be Element of NAT st
-    n1<=m holds abs(p.m-lim p )<e by SEQ_2:def 7,AS,AS1;
+  let p,q,r be Real_Sequence;
+  assume that
+A1: p is convergent and
+A2: r is convergent and
+A3: lim p = lim r and
+A4: for i be Element of NAT holds p.i <= q.i and
+A5: for i be Element of NAT holds q.i <= r.i;
+A6: now
+    let e be real number;
+    assume
+A7: 0<e;
+    then consider n1 be Element of NAT such that
+
+A8: for m be Element of NAT st n1<=m holds abs(p.m-lim p )<e by A1,
+    SEQ_2:def 7;
+
     consider n2 be Element of NAT such that
-  P2: for m be Element of NAT st
-    n2<=m holds abs(r.m-lim r )<e by SEQ_2:def 7,AS,AS1;
+
+A9: for m be Element of NAT st n2<=m holds abs(r.m-lim r )<e by A2,A7,
+    SEQ_2:def 7;
+
     reconsider n=max(n1,n2) as Element of NAT by ORDINAL1:def 13;
     take n;
-    thus for m be Element of NAT
-       st n<=m holds abs(q.m-lim p )<e
-     proof
+    thus for m be Element of NAT st n<=m holds abs(q.m-lim p )<e
+    proof
       let m be Element of NAT;
-      assume AS2: n<=m;
-      n1 <=n by XXREAL_0:25; then
-      n1 <= m by AS2,XXREAL_0:2; then
-     A1:abs(p.m-lim p )<e by P1;
-      n2 <=n by XXREAL_0:25; then
-      n2 <= m by AS2,XXREAL_0:2; then
-     A2:abs(r.m-lim r )<e by P2;
-      p.m in ].lim p - e,lim p + e.[ by RCOMP_1:8,A1; then
-      p.m in {z where z is Real : lim p - e<z & z<lim p + e }
-      by RCOMP_1:def 2; then
-     A3:ex z be Real st z=p.m & lim p - e < z & z < lim p + e;
-      p.m <= q.m by AS; then
-     A4: lim p - e < q.m by XXREAL_0:2,A3;
-      r.m in ].lim r - e,lim r + e.[ by RCOMP_1:8,A2; then
-      r.m in {z where z is Real : lim r - e<z & z<lim r + e }
-      by RCOMP_1:def 2; then
-     A5:ex z be Real st z=r.m & lim r - e < z & z < lim r + e;
-      q.m <= r.m by AS; then
-      q.m < lim p + e by XXREAL_0:2,A5,AS; then
-      q.m in {z where z is Real : lim p - e<z & z<lim p + e } by A4; then
-      q.m in ].lim p - e,lim p + e.[ by RCOMP_1:def 2;
+      assume
+A10:  n<=m;
+      n1 <=n by XXREAL_0:25;
+      then n1 <= m by A10,XXREAL_0:2;
+      then abs(p.m-lim p )<e by A8;
+      then p.m in ].lim p - e,lim p + e.[ by RCOMP_1:8;
+
+      then p.m in {z where z is Real : lim p - e<z & z<lim p + e } by
+      RCOMP_1:def 2;
+
+      then
+A11:  ex z be Real st z=p.m & lim p - e < z & z < lim p + e;
+      p.m <= q.m by A4;
+      then
+A12:  lim p - e < q.m by A11,XXREAL_0:2;
+      n2 <=n by XXREAL_0:25;
+      then n2 <= m by A10,XXREAL_0:2;
+      then abs(r.m-lim r )<e by A9;
+      then r.m in ].lim r - e,lim r + e.[ by RCOMP_1:8;
+
+      then r.m in {z where z is Real : lim r - e<z & z<lim r + e } by
+      RCOMP_1:def 2;
+
+      then
+A13:  ex z be Real st z=r.m & lim r - e < z & z < lim r + e;
+      q.m <= r.m by A5;
+      then q.m < lim p + e by A3,A13,XXREAL_0:2;
+      then q.m in {z where z is Real : lim p - e<z & z<lim p + e } by A12;
+      then q.m in ].lim p - e,lim p + e.[ by RCOMP_1:def 2;
       hence abs(q.m-lim p )<e by RCOMP_1:8;
-     end;
-  end;
-hence q is convergent by SEQ_2:def 6;
-hence lim q = lim p & lim q = lim r by X,SEQ_2:def 7,AS;
-end;
-
-theorem PX04:
-for A be closed-interval Subset of REAL,
-    f being Function of A,REAL,
-    T being DivSequence of A,
-    S be middle_volume_Sequence of f,T
- st f is bounded
-  & f is integrable
-  & delta(T) is convergent & lim delta(T)=0
-  holds
-    middle_sum(f,S) is convergent
-  & lim (middle_sum(f,S))=integral(f)
-proof
-let A be closed-interval Subset of REAL,
-    f being Function of A,REAL,
-    T being DivSequence of A,
-    S be middle_volume_Sequence of f,T;
-assume AS1: f is bounded & f is integrable
-          & delta(T) is convergent & lim delta(T)=0;
-X0:dom f = A by FUNCT_2:def 1; then
-X1: f|A= f by RELAT_1:98;
-Q1:f|A is bounded_below by X0,RELAT_1:98,AS1;
-Q2:f|A is bounded_above by X0,RELAT_1:98,AS1;
-P1:lower_sum(f,T) is convergent by INTEGRA4:8,AS1,X1;
-P2:upper_sum(f,T) is convergent by INTEGRA4:9,AS1,X1;
-P3:lim upper_sum(f,T)-lim lower_sum(f,T)=0 by INTEGRA4:12,AS1,X1; then
-P4:lim lower_sum(f,T) = integral(f) by X1,INTEGRA4:9,AS1;
-P5: for i be Element of NAT holds
-     (lower_sum(f,T)).i <= (middle_sum(f,S)).i by Q1,PX011;
-    for i be Element of NAT holds
-     (middle_sum(f,S)).i <= (upper_sum(f,T)).i by Q2,PX012;
-  hence thesis by P1,P2,P3,P4,P5,PX041;
-end;
-
-theorem PX05:
-for A be closed-interval Subset of REAL,
-    f being Function of A,REAL st f is bounded
-  holds
-    f is integrable iff
-    ex I be Real st
-     for T being DivSequence of A,
-         S be middle_volume_Sequence of f,T
-      st delta(T) is convergent & lim delta(T)=0 holds
-         middle_sum(f,S) is convergent & lim (middle_sum(f,S))=I
-proof
-let A be closed-interval Subset of REAL,
-    f being Function of A,REAL;
-assume AS0: f is bounded;
-dom f = A by FUNCT_2:def 1; then
-AS:f|A is bounded by RELAT_1:98,AS0;
-hereby assume AS1:f is integrable;
- take I=integral(f);
- thus for T being DivSequence of A,
-     S be middle_volume_Sequence of f,T
-  st delta(T) is convergent & lim delta(T)=0
-   holds middle_sum(f,S) is convergent & lim (middle_sum(f,S))=I
-                                                 by PX04,AS0,AS1;
-end;
-now assume
-  ex I be Real st
-   for T being DivSequence of A,
-       S be middle_volume_Sequence of f,T
-    st delta(T) is convergent & lim delta(T)=0
-     holds
-      middle_sum(f,S) is convergent & lim (middle_sum(f,S))=I; then
-consider I be Real such that
-AS2: for T being DivSequence of A,
-         S be middle_volume_Sequence of f,T
-      st delta(T) is convergent & lim delta(T)=0 holds
-        middle_sum(f,S) is convergent & lim (middle_sum(f,S))=I;
-X1:for T being DivSequence of A
- st delta(T) is convergent & lim delta(T)=0
-  holds I = lim lower_sum(f,T)
- proof
-  let T being DivSequence of A;
-  assume AS3: delta(T) is convergent & lim delta(T)=0;
- P1:lower_sum(f,T) is convergent
-  & lim lower_sum(f,T) = lower_integral(f) by AS,AS3,INTEGRA4:8;
-  consider S be middle_volume_Sequence of f,T;
- P2: now let i be Element of NAT;
-       (lower_sum(f,T)).i <= (middle_sum(f,S)).i by PX011,AS; then
-          (lower_sum(f,T)).i - (lower_sum(f,T)).i
-       <= (middle_sum(f,S)).i - (lower_sum(f,T)).i by XREAL_1:11;
-       hence 0 <= (middle_sum(f,S) - lower_sum(f,T)).i by VALUED_1:15;
-     end;
- P3: middle_sum(f,S) is convergent by AS2,AS3; then
- P4: middle_sum(f,S) - lower_sum(f,T) is convergent by P1,SEQ_2:25;
- lim (middle_sum(f,S) - lower_sum(f,T))
-   = lim (middle_sum(f,S))- lim(lower_sum(f,T)) by P1,P3,SEQ_2:26
-  .= I -lim(lower_sum(f,T)) by AS2,AS3; then
- X10: 0 <= I -lim(lower_sum(f,T)) by SEQ_2:31,P2,P4;
- now let e1 be real number;
-   assume A31:0 < e1;
-   reconsider e=e1 as Real by XREAL_0:def 1;
-   consider S be middle_volume_Sequence of f,T such that
-   N1:for i be Element of NAT
-       holds
-         (middle_sum(f,S)).i <= (lower_sum(f,T)).i + e by A31,PX02,AS;
-   N2:now let i be Element of NAT;
-       (middle_sum(f,S)).i <= (lower_sum(f,T)).i + e by N1; then
-       (middle_sum(f,S)).i - (lower_sum(f,T)).i
-       <= (lower_sum(f,T)).i + e - (lower_sum(f,T)).i by XREAL_1:11;
-       hence (middle_sum(f,S) - lower_sum(f,T)).i <= e by VALUED_1:15;
-      end;
-   N3:middle_sum(f,S) is convergent by AS2,AS3; then
-   N4:middle_sum(f,S) - lower_sum(f,T) is convergent by P1,SEQ_2:25;
-       lim (middle_sum(f,S) - lower_sum(f,T))
-     = lim (middle_sum(f,S))- lim(lower_sum(f,T)) by P1,N3,SEQ_2:26
-    .= I -lim(lower_sum(f,T)) by AS2,AS3;
-   hence I -lim(lower_sum(f,T)) <= e1 by N2,N4,PREPOWER:3;
- end; then
- I-lim(lower_sum(f,T)) =0 by XREAL_1:7,X10;
- hence thesis;
- end;
-X2: for T being DivSequence of A
- st delta(T) is convergent & lim delta(T)=0
-   holds
-   lim upper_sum(f,T)= I
- proof
-  let T being DivSequence of A;
-  assume AS4: delta(T) is convergent
-            & lim delta(T)=0;
- P1:upper_sum(f,T) is convergent
-  & lim upper_sum(f,T) = upper_integral(f) by AS,AS4,INTEGRA4:9;
-  consider S be middle_volume_Sequence of f,T;
- P2:now let i be Element of NAT;
-     (middle_sum(f,S)).i <=(upper_sum(f,T)).i by PX012,AS; then
-     (middle_sum(f,S)).i - (middle_sum(f,S)).i
-     <= (upper_sum(f,T)).i - (middle_sum(f,S)).i by XREAL_1:11;
-     hence 0 <= ( upper_sum(f,T) - middle_sum(f,S)).i by VALUED_1:15;
     end;
- P3:middle_sum(f,S) is convergent by AS2,AS4; then
- P4:upper_sum(f,T) - middle_sum(f,S) is convergent by P1,SEQ_2:25;
-     lim (upper_sum(f,T) - middle_sum(f,S) )
-   = lim(upper_sum(f,T)) - lim (middle_sum(f,S)) by P1,P3,SEQ_2:26
-  .= lim(upper_sum(f,T)) - I by AS2,AS4; then
- X10: 0 <= lim(upper_sum(f,T)) - I by SEQ_2:31,P2,P4;
- now let e1 be real number;
-   assume A41:0 < e1;
-   reconsider e=e1 as Real by XREAL_0:def 1;
-   consider S be middle_volume_Sequence of f,T such that
-   N1:for i be Element of NAT holds
-        (upper_sum(f,T)).i - e <=(middle_sum(f,S)).i by A41,PX03,AS;
-   N2:now let i be Element of NAT;
-       (upper_sum(f,T)).i - e <=(middle_sum(f,S)).i by N1; then
-       (upper_sum(f,T)).i - e + e <=(middle_sum(f,S)).i + e by XREAL_1:8;then
-       (upper_sum(f,T)).i - (middle_sum(f,S)).i
-       <= (middle_sum(f,S)).i + e - (middle_sum(f,S)).i by XREAL_1:11;
-       hence (upper_sum(f,T) - middle_sum(f,S) ).i <= e by VALUED_1:15;
+  end;
+  hence q is convergent by SEQ_2:def 6;
+  hence lim q = lim p & lim q = lim r by A3,A6,SEQ_2:def 7;
+end;
+
+theorem Th9:
+  for A be closed-interval Subset of REAL, f being Function of A,
+  REAL, T being DivSequence of A, S be middle_volume_Sequence of f,T st f is
+  bounded & f is integrable & delta(T) is convergent & lim delta(T)=0 holds
+  middle_sum(f,S) is convergent & lim (middle_sum(f,S))=integral(f)
+proof
+  let A be closed-interval Subset of REAL, f being Function of A,REAL, T being
+  DivSequence of A, S be middle_volume_Sequence of f,T;
+  assume that
+A1: f is bounded and
+A2: f is integrable and
+A3: delta(T) is convergent & lim delta(T)=0;
+A4: dom f = A by FUNCT_2:def 1;
+  then f|A is bounded_below by A1,RELAT_1:98;
+  then
+A5: for i be Element of NAT holds (lower_sum(f,T)).i <= (middle_sum(f,S)).i
+  by Th5;
+A6: f|A= f by A4,RELAT_1:98;
+  then
+A7: lower_sum(f,T) is convergent & upper_sum(f,T) is convergent by A1,A3,
+  INTEGRA4:8,9;
+  f|A is bounded_above by A1,A4,RELAT_1:98;
+  then
+A8: for i be Element of NAT holds (middle_sum(f,S)).i <= (upper_sum(f,T)).i
+  by Th6;
+A9: lim upper_sum(f,T)-lim lower_sum(f,T)=0 by A1,A2,A3,A6,INTEGRA4:12;
+  then lim lower_sum(f,T) = integral(f) by A1,A3,A6,INTEGRA4:9;
+  hence thesis by A7,A9,A5,A8,Lm5;
+end;
+
+theorem Th10:
+  for A be closed-interval Subset of REAL, f being Function of A,
+  REAL st f is bounded holds f is integrable iff ex I be Real st for T being
+DivSequence of A, S be middle_volume_Sequence of f,T st delta(T) is convergent
+& lim delta(T)=0 holds middle_sum(f,S) is convergent & lim (middle_sum(f,S))=I
+proof
+  let A be closed-interval Subset of REAL, f being Function of A,REAL;
+  assume
+A1: f is bounded;
+  hereby
+    assume
+A2: f is integrable;
+    take I=integral(f);
+    thus for T being DivSequence of A, S be middle_volume_Sequence of f,T st
+delta(T) is convergent & lim delta(T)=0 holds middle_sum(f,S) is convergent &
+    lim (middle_sum(f,S))=I by A1,A2,Th9;
+  end;
+  dom f = A by FUNCT_2:def 1;
+  then
+A3: f|A is bounded by A1,RELAT_1:98;
+  now
+    assume
+    ex I be Real st for T being DivSequence of A, S be
+middle_volume_Sequence of f,T st delta(T) is convergent & lim delta(T)=0 holds
+    middle_sum(f,S) is convergent & lim (middle_sum(f,S))=I;
+    then consider I be Real such that
+A4: for T being DivSequence of A, S be middle_volume_Sequence of f,T
+st delta(T) is convergent & lim delta(T)=0 holds middle_sum(f,S) is convergent
+    & lim (middle_sum(f,S))=I;
+A5: for T being DivSequence of A st delta(T) is convergent & lim delta(T)
+    =0 holds lim upper_sum(f,T)= I
+    proof
+      let T being DivSequence of A;
+      consider S be middle_volume_Sequence of f,T;
+A6:   now
+        let i be Element of NAT;
+        (middle_sum(f,S)).i <=(upper_sum(f,T)).i by A3,Th6;
+        then
+        (middle_sum(f,S)).i - (middle_sum(f,S)).i <= (upper_sum(f,T)).i -
+        (middle_sum(f,S)).i by XREAL_1:11;
+        hence 0 <= ( upper_sum(f,T) - middle_sum(f,S)).i by VALUED_1:15;
       end;
-   N3:middle_sum(f,S) is convergent by AS2,AS4; then
-   N4:upper_sum(f,T) - middle_sum(f,S) is convergent by P1,SEQ_2:25;
-      lim (upper_sum(f,T) - middle_sum(f,S))
-     =lim (upper_sum(f,T))- lim(middle_sum(f,S)) by P1,N3,SEQ_2:26
-    .=lim(upper_sum(f,T)) - I by AS2,AS4;
-   hence lim(upper_sum(f,T)) - I <= e1 by N2,N4,PREPOWER:3;
- end; then
- lim(upper_sum(f,T)) - I  = 0 by X10,XREAL_1:7;
- hence thesis;
- end;
- now let T being DivSequence of A;
-  assume XX:delta(T) is convergent & lim delta(T)=0;
-  thus lim upper_sum(f,T)-lim lower_sum(f,T)
-   =lim upper_sum(f,T)-I by X1,XX
-  .=I-I by X2,XX
-  .=0;
- end;
- hence f is integrable by INTEGRA4:12,AS;
-end;
-hence thesis;
-end;
-
-definition let n be Element of NAT;
-let A be closed-interval Subset of REAL;
-let f be Function of A,REAL n;
-let D be Division of A;
-mode middle_volume of f,D -> FinSequence of (REAL n) means :defxn0:
-   len it = len D &
-   for i be Nat st i in dom D holds
-    ex r be Element of (REAL n) st
-       r in rng (f|divset(D,i)) & it.i=vol divset(D,i)*r;
-correctness
-proof
-defpred P1[ Nat, set ] means
-  ex r be Element of (REAL n) st
-     r in rng (f|divset(D,$1)) & $2=vol divset(D,$1)*r;
-A1:for k being Nat st k in Seg len D holds
-    ex x being Element of (REAL n) st P1[k,x]
-  proof
-  let k being Nat;
-  assume k in Seg len D; then
-  A10:k in dom D by FINSEQ_1:def 3;
-      rng (f|divset(D,k)) is non empty
-      proof
-       dom f = A by FUNCT_2:def 1; then
-       dom (f|divset(D,k)) = divset(D,k) by A10,INTEGRA1:10,RELAT_1:91;
-       hence thesis by RELAT_1:65;
-      end; then
-  consider r be set such that
-  A11:r in rng (f|divset(D,k)) by XBOOLE_0:def 1;
-  reconsider r as Element of (REAL n) by A11;
-  (vol divset(D,k))*r is Element of (REAL n);
-  hence thesis by A11;
+      assume
+A7:   delta(T) is convergent & lim delta(T)=0;
+      then
+A8:   upper_sum(f,T) is convergent by A3,INTEGRA4:9;
+A9:   now
+        let e1 be real number;
+        reconsider e=e1 as Real by XREAL_0:def 1;
+        assume
+        0 < e1;
+        then consider S be middle_volume_Sequence of f,T such that
+A10:    for i be Element of NAT holds (upper_sum(f,T)).i - e <=(
+        middle_sum(f,S)).i by A3,Th8;
+A11:    now
+          let i be Element of NAT;
+          (upper_sum(f,T)).i - e <=(middle_sum(f,S)).i by A10;
+          then (upper_sum(f,T)).i - e + e <=(middle_sum(f,S)).i + e by
+          XREAL_1:8;
+          then
+          (upper_sum(f,T)).i - (middle_sum(f,S)).i <= (middle_sum(f,S)).i
+          + e - (middle_sum(f,S)).i by XREAL_1:11;
+          hence (upper_sum(f,T) - middle_sum(f,S) ).i <= e by VALUED_1:15;
+        end;
+A12:    middle_sum(f,S) is convergent by A4,A7;
+        then
+A13:    upper_sum(f,T) - middle_sum(f,S) is convergent by A8,
+        SEQ_2:25;
+        lim (upper_sum(f,T) - middle_sum(f,S)) =lim (upper_sum(f,T))- lim
+        (middle_sum(f,S)) by A8,A12,SEQ_2:26
+          .=lim(upper_sum(f,T)) - I by A4,A7;
+        hence lim(upper_sum(f,T)) - I <= e1 by A11,A13,PREPOWER:3;
+      end;
+A14:  middle_sum(f,S) is convergent by A4,A7;
+      then
+A15:  upper_sum(f,T) - middle_sum(f,S) is convergent by A8,SEQ_2:25;
+      lim (upper_sum(f,T) - middle_sum(f,S) ) = lim(upper_sum(f,T)) - lim
+      (middle_sum(f,S)) by A8,A14,SEQ_2:26
+        .= lim(upper_sum(f,T)) - I by A4,A7;
+      then 0 <= lim(upper_sum(f,T)) - I by A6,A15,SEQ_2:31;
+      then lim(upper_sum(f,T)) - I = 0 by A9,XREAL_1:7;
+      hence thesis;
+    end;
+A16: for T being DivSequence of A st delta(T) is convergent & lim delta(T)=0
+    holds I = lim lower_sum(f,T)
+    proof
+      let T being DivSequence of A;
+      consider S be middle_volume_Sequence of f,T;
+A17:  now
+        let i be Element of NAT;
+        (lower_sum(f,T)).i <= (middle_sum(f,S)).i by A3,Th5;
+        then (lower_sum(f,T)).i - (lower_sum(f,T)).i <= (middle_sum(f,S)).i -
+        (lower_sum(f,T)).i by XREAL_1:11;
+        hence 0 <= (middle_sum(f,S) - lower_sum(f,T)).i by VALUED_1:15;
+      end;
+      assume
+A18:  delta(T) is convergent & lim delta(T)=0;
+      then
+A19:  lower_sum(f,T) is convergent by A3,INTEGRA4:8;
+A20:  now
+        let e1 be real number;
+        reconsider e=e1 as Real by XREAL_0:def 1;
+        assume
+        0 < e1;
+        then consider S be middle_volume_Sequence of f,T such that
+A21:    for i be Element of NAT holds (middle_sum(f,S)).i <= (
+        lower_sum(f,T)).i + e by A3,Th7;
+A22:    now
+          let i be Element of NAT;
+          (middle_sum(f,S)).i <= (lower_sum(f,T)).i + e by A21;
+          then (middle_sum(f,S)).i - (lower_sum(f,T)).i <= (lower_sum(f,T)).i
+          + e - (lower_sum(f,T)).i by XREAL_1:11;
+          hence (middle_sum(f,S) - lower_sum(f,T)).i <= e by VALUED_1:15;
+        end;
+A23:    middle_sum(f,S) is convergent by A4,A18;
+        then
+A24:    middle_sum(f,S) - lower_sum(f,T) is convergent by A19,
+        SEQ_2:25;
+        lim (middle_sum(f,S) - lower_sum(f,T)) = lim (middle_sum(f,S))-
+        lim(lower_sum(f,T)) by A19,A23,SEQ_2:26
+          .= I -lim(lower_sum(f,T)) by A4,A18;
+        hence I -lim(lower_sum(f,T)) <= e1 by A22,A24,PREPOWER:3;
+      end;
+A25:  middle_sum(f,S) is convergent by A4,A18;
+      then
+A26:  middle_sum(f,S) - lower_sum(f,T) is convergent by A19,
+      SEQ_2:25;
+      lim (middle_sum(f,S) - lower_sum(f,T)) = lim (middle_sum(f,S))- lim
+      (lower_sum(f,T)) by A19,A25,SEQ_2:26
+        .= I -lim(lower_sum(f,T)) by A4,A18;
+      then 0 <= I -lim(lower_sum(f,T)) by A17,A26,SEQ_2:31;
+      then I-lim(lower_sum(f,T)) =0 by A20,XREAL_1:7;
+      hence thesis;
+    end;
+    now
+      let T being DivSequence of A;
+      assume
+A27:  delta(T) is convergent & lim delta(T)=0;
+      hence lim upper_sum(f,T)-lim lower_sum(f,T) =lim upper_sum(f,T)-I by A16
+        .=I-I by A5,A27
+        .=0;
+    end;
+    hence f is integrable by A3,INTEGRA4:12;
   end;
-consider p being FinSequence of (REAL n) such that
-B1: dom p = Seg len D
-  & for k being Nat st k in Seg len D holds
-     P1[k,p . k] from FINSEQ_1:sch 5(A1);
-len p = len D & Seg len D = dom D by FINSEQ_1:def 3,B1;
-hence thesis by B1;
-end;
-end;
-
-definition
-let n be Element of NAT;
-let A be closed-interval Subset of REAL;
-let f be Function of A,REAL n;
-let D be Division of A;
-let F be middle_volume of f,D;
-  func middle_sum(f,F) -> Element of (REAL n) means :defxn1:
-   for i be Element of NAT st i in Seg n holds
-    ex Fi be FinSequence of REAL st Fi=proj(i,n)*F &
-        it.i = Sum(Fi);
-existence
-proof
-defpred P[Nat, Element of REAL] means
-  ex i be Element of NAT,
-    Fi be FinSequence of REAL st $1 = i &
-       Fi=proj(i,n)*F & $2 = Sum(Fi);
-PN:for i be Nat st i in Seg n
-    ex x being Element of REAL st P[i,x]
-  proof
-  let i be Nat;
-  assume i in Seg n; then
-  reconsider ii = i as Element of NAT;
-  reconsider Fi = proj(ii,n)*F as FinSequence of REAL;
-  reconsider x = Sum(Fi) as Element of REAL;
-  take x;
-  thus ex ii be Element of NAT,
-      Fi be FinSequence of REAL st i = ii &
-      Fi=proj(ii,n)*F &
-      x = Sum(Fi);
-  end;
-consider p being FinSequence of REAL such that
-A1: dom p = Seg n & for i be Nat st i in Seg n holds P[i,p.i]
-    from FINSEQ_1:sch 5(PN);
-take p;
-A2: len p = n by A1,FINSEQ_1:def 3;
-for i be Element of NAT st i in Seg n holds
- ex Fi be FinSequence of REAL
- st Fi=proj(i,n)*F & p.i = Sum(Fi)
-  proof
-   let i be Element of NAT;
-   assume F0: i in Seg n;
-   reconsider k=i as Nat;
-   P[k,p.k] by A1,F0;
-   hence thesis;
-  end;
-hence thesis by A2,FINSEQ_2:110;
-end;
-uniqueness
-proof
-let x1, x2 be Element of REAL n such that
-A1:for i be Element of NAT st i in Seg n
-     holds
-    ex Fi1 be FinSequence of REAL st
-       Fi1=proj(i,n)*F &
-       x1.i = Sum(Fi1) and
-A2:for i be Element of NAT st i in Seg n holds
-    ex Fi2 be FinSequence of REAL st
-       Fi2=proj(i,n)*F &
-       x2.i = Sum(Fi2);
-A3:for k0 be Nat st k0 in dom x1 holds x1.k0 = x2.k0
-  proof
-  let k0 be Nat;
-  assume B1: k0 in dom x1;
-  len x1= n by FINSEQ_1:def 18; then
-  B2: k0 in Seg n by FINSEQ_1:def 3,B1;
-  reconsider k=k0 as Element of NAT by B1;
-  consider Fi1 be FinSequence of REAL such that
-  B21: Fi1=proj(k,n)*F & x1.k = Sum(Fi1) by B2,A1;
-  consider Fi2 be FinSequence of REAL such that
-  B22: Fi2=proj(k,n)*F & x2.k = Sum(Fi2) by B2,A2;
-  thus thesis by B21,B22;
-  end;
-D1: len x1= n by FINSEQ_1:def 18;
-D2: len x2= n by FINSEQ_1:def 18;
-dom x1 =Seg n by D1,FINSEQ_1:def 3
-      .=dom x2 by D2,FINSEQ_1:def 3;
-hence thesis by A3, FINSEQ_1:17;
-end;
-end;
-
-definition
-let n be Element of NAT;
-let A be closed-interval Subset of REAL;
-let f be Function of A,REAL n;
-let T be DivSequence of A;
-  mode middle_volume_Sequence of f,T -> Function of NAT, (REAL n)*
-   means :defxn2:
-   for k be Element of NAT holds
-    it.k is middle_volume of f,T.k;
-correctness
-proof
-defpred P[Element of NAT,set]
-  means $2 is middle_volume of f,T.$1;
-A1:for x being Element of NAT
-    ex y being Element of (REAL n)* st P[x, y]
-  proof
-  let x being Element of NAT;
-  consider y be middle_volume of f,T.x;
-  reconsider y as Element of (REAL n)* by FINSEQ_1:def 11;
-  y is middle_volume of f,T.x;
   hence thesis;
-  end;
-consider f being Function of NAT, (REAL n)* such that
-A2:for x being Element of NAT holds P[x, f.x] from FUNCT_2:sch 10(A1);
-thus thesis by A2;
 end;
+
+definition
+  let n be Element of NAT;
+  let A be closed-interval Subset of REAL;
+  let f be Function of A,REAL n;
+  let D be Division of A;
+  mode middle_volume of f,D -> FinSequence of (REAL n) means
+    :Def5:
+    len it =
+len D & for i be Nat st i in dom D holds ex r be Element of (REAL n) st r in
+    rng (f|divset(D,i)) & it.i=vol divset(D,i)*r;
+  correctness
+  proof
+    defpred P1[ Nat, set ] means ex r be Element of (REAL n) st r in rng (f|
+    divset(D,$1)) & $2=vol divset(D,$1)*r;
+A1: Seg len D = dom D by FINSEQ_1:def 3;
+A2: for k being Nat st k in Seg len D holds ex x being Element of (REAL n)
+    st P1[k,x]
+    proof
+      let k being Nat;
+      assume
+      k in Seg len D;
+      then
+A3:   k in dom D by FINSEQ_1:def 3;
+      dom f = A by FUNCT_2:def 1;
+      then dom (f|divset(D,k)) = divset(D,k) by A3,INTEGRA1:10,RELAT_1:91;
+      then rng (f|divset(D,k)) is non empty by RELAT_1:65;
+      then consider r be set such that
+A4:   r in rng (f|divset(D,k)) by XBOOLE_0:def 1;
+      reconsider r as Element of (REAL n) by A4;
+      (vol divset(D,k))*r is Element of (REAL n);
+      hence thesis by A4;
+    end;
+    consider p being FinSequence of (REAL n) such that
+A5: dom p = Seg len D & for k being Nat st k in Seg len D holds P1[k,p
+    . k] from FINSEQ_1:sch 5(A2);
+    len p = len D by A5,FINSEQ_1:def 3;
+    hence thesis by A5,A1;
+  end;
+end;
+
+definition
+  let n be Element of NAT;
+  let A be closed-interval Subset of REAL;
+  let f be Function of A,REAL n;
+  let D be Division of A;
+  let F be middle_volume of f,D;
+  func middle_sum(f,F) -> Element of (REAL n) means
+  :Def6:
+  for i be Element of
+NAT st i in Seg n holds ex Fi be FinSequence of REAL st Fi=proj(i,n)*F & it.i =
+  Sum(Fi);
+  existence
+  proof
+    defpred P[Nat, Element of REAL] means ex i be Element of NAT, Fi be
+    FinSequence of REAL st $1 = i & Fi=proj(i,n)*F & $2 = Sum(Fi);
+A1: for i be Nat st i in Seg n ex x being Element of REAL st P[i,x]
+    proof
+      let i be Nat;
+      assume
+      i in Seg n;
+      then reconsider ii = i as Element of NAT;
+      reconsider Fi = proj(ii,n)*F as FinSequence of REAL;
+      reconsider x = Sum(Fi) as Element of REAL;
+      take x;
+      thus ex ii be Element of NAT, Fi be FinSequence of REAL st i = ii & Fi=
+      proj(ii,n)*F & x = Sum(Fi);
+    end;
+    consider p being FinSequence of REAL such that
+A2: dom p = Seg n & for i be Nat st i in Seg n holds P[i,p.i] from
+    FINSEQ_1:sch 5(A1);
+    take p;
+A3: for i be Element of NAT st i in Seg n holds ex Fi be FinSequence of
+    REAL st Fi=proj(i,n)*F & p.i = Sum(Fi)
+    proof
+      let i be Element of NAT;
+      reconsider k=i as Nat;
+      assume
+      i in Seg n;
+      then P[k,p.k] by A2;
+      hence thesis;
+    end;
+    len p = n by A2,FINSEQ_1:def 3;
+    hence thesis by A3,FINSEQ_2:110;
+  end;
+  uniqueness
+  proof
+    let x1, x2 be Element of REAL n such that
+A4: (for i be Element of NAT st i in Seg n holds ex Fi1 be FinSequence
+of REAL st Fi1=proj(i,n)*F & x1.i = Sum(Fi1))& for i be Element of NAT st i in
+Seg n holds ex Fi2 be FinSequence of REAL st Fi2=proj(i,n)*F & x2.i = Sum(Fi2);
+A5: for k0 be Nat st k0 in dom x1 holds x1.k0 = x2.k0
+    proof
+      let k0 be Nat;
+      assume
+A6:   k0 in dom x1;
+      then reconsider k=k0 as Element of NAT;
+      len x1= n by FINSEQ_1:def 18;
+      then k0 in Seg n by A6,FINSEQ_1:def 3;
+      then
+      (ex Fi1 be FinSequence of REAL st Fi1=proj(k,n)*F & x1.k = Sum(Fi1)
+)& ex Fi2 be FinSequence of REAL st Fi2=proj(k,n)*F & x2.k = Sum(Fi2) by A4;
+      hence thesis;
+    end;
+A7: len x2= n by FINSEQ_1:def 18;
+    len x1= n by FINSEQ_1:def 18;
+    then dom x1 =Seg n by FINSEQ_1:def 3
+      .=dom x2 by A7,FINSEQ_1:def 3;
+    hence thesis by A5,FINSEQ_1:17;
+  end;
+end;
+
+definition
+  let n be Element of NAT;
+  let A be closed-interval Subset of REAL;
+  let f be Function of A,REAL n;
+  let T be DivSequence of A;
+  mode middle_volume_Sequence of f,T -> Function of NAT, (REAL n)* means
+    :Def7
+    :
+    for k be Element of NAT holds it.k is middle_volume of f,T.k;
+  correctness
+  proof
+    defpred P[Element of NAT,set] means $2 is middle_volume of f,T.$1;
+A1: for x being Element of NAT ex y being Element of (REAL n)* st P[x, y]
+    proof
+      let x being Element of NAT;
+      consider y be middle_volume of f,T.x;
+      reconsider y as Element of (REAL n)* by FINSEQ_1:def 11;
+      y is middle_volume of f,T.x;
+      hence thesis;
+    end;
+    ex f being Function of NAT, (REAL n)* st for x being Element of NAT
+    holds P[x, f.x] from FUNCT_2:sch 10(A1 );
+    hence thesis;
+  end;
 end;
 
 definition
@@ -1054,1221 +1022,1234 @@ definition
   let S be middle_volume_Sequence of f,T;
   let k be Element of NAT;
   redefine func S.k -> middle_volume of f,T.k;
-  coherence by defxn2;
+  coherence by Def7;
 end;
 
 definition
-let n be Element of NAT;
-let A be closed-interval Subset of REAL;
-let f be Function of A,REAL n;
-let T be DivSequence of A;
-let S be middle_volume_Sequence of f,T;
-  func middle_sum(f,S) -> sequence of (REAL-NS n) means :defxn3:
-  for i be Element of NAT
-    holds it.i = middle_sum(f,S.i);
-existence
-proof
-deffunc H1( Element of NAT ) = middle_sum(f,S.$1);
-A1:ex IT being sequence of (REAL n) st
-    for i being Element of NAT holds IT.i =H1(i) from FUNCT_2:sch 4;
-(REAL n) = the carrier of (REAL-NS n) by REAL_NS1:def 4;
-hence thesis by A1;
-end;
-uniqueness
-proof
-let F1, F2 be sequence of (REAL-NS n);
-assume that
-A1: for i being Element of NAT holds F1.i = middle_sum(f,S.i) and
-A2: for i being Element of NAT holds F2.i = middle_sum(f,S.i);
-for i being Element of NAT holds F1.i = F2.i
+  let n be Element of NAT;
+  let A be closed-interval Subset of REAL;
+  let f be Function of A,REAL n;
+  let T be DivSequence of A;
+  let S be middle_volume_Sequence of f,T;
+  func middle_sum(f,S) -> sequence of (REAL-NS n) means
+  :Def8:
+  for i be
+  Element of NAT holds it.i = middle_sum(f,S.i);
+  existence
   proof
-  let i be Element of NAT;
-  thus F1.i = middle_sum(f,S.i) by A1
-           .= F2.i by A2;
+    deffunc H1( Element of NAT ) = middle_sum(f,S.$1);
+A1: (REAL n) = the carrier of (REAL-NS n) by REAL_NS1:def 4;
+    ex IT being sequence of (REAL n) st for i being Element of NAT holds IT
+    .i =H1(i) from FUNCT_2:sch 4;
+    hence thesis by A1;
   end;
-hence F1 = F2 by FUNCT_2:113;
-end;
+  uniqueness
+  proof
+    let F1, F2 be sequence of (REAL-NS n);
+    assume that
+A2: for i being Element of NAT holds F1.i = middle_sum(f,S.i) and
+A3: for i being Element of NAT holds F2.i = middle_sum(f,S.i);
+    for i being Element of NAT holds F1.i = F2.i
+    proof
+      let i be Element of NAT;
+      thus F1.i = middle_sum(f,S.i) by A2
+        .= F2.i by A3;
+    end;
+    hence F1 = F2 by FUNCT_2:113;
+  end;
 end;
 
-definition let n be Element of NAT;
-let Z be non empty set;
-let f,g be PartFunc of Z,REAL n;
-deffunc F(Element of Z) = (f/.$1) + (g/.$1);
-deffunc G(Element of Z) = (f/.$1) - (g/.$1);
-defpred P[set] means $1 in dom f /\ dom g;
-set X = dom f /\ dom g;
-  func f+g -> PartFunc of Z, REAL n means :Def1:
-    dom it = dom f /\ dom g &
-    for c be Element of Z st c in dom it holds
-    it/.c = (f/.c) + (g/.c);
-existence
-proof
- consider F be PartFunc of Z, REAL n such that
+definition
+  let n be Element of NAT;
+  let Z be non empty set;
+  let f,g be PartFunc of Z,REAL n;
+  deffunc F(Element of Z) = (f/.$1) + (g/.$1);
+  deffunc G(Element of Z) = (f/.$1) - (g/.$1);
+  defpred P[set] means $1 in dom f /\ dom g;
+  set X = dom f /\ dom g;
+  func f+g -> PartFunc of Z, REAL n means
+  :Def9:
+  dom it = dom f /\ dom g & for
+  c be Element of Z st c in dom it holds it/.c = (f/.c) + (g/.c);
+  existence
+  proof
+    consider F be PartFunc of Z, REAL n such that
 A1: for c be Element of Z holds c in dom F iff P[c] and
-A2: for c be Element of Z st c in dom F holds
-     F/.c = F(c) from PARTFUN2:sch 2;
-  take F;
-  thus dom F = dom f /\ dom g by A1,SUBSET_1:8;
-  let c be Element of Z; assume c in dom F; hence thesis by A2;
-end;
-uniqueness
-proof
-  thus for f1,g1 being PartFunc of Z, REAL n st
-   (dom f1=X & for c be Element of Z st c in dom f1
-    holds f1/.c = F(c))
-   & (dom g1=X & for c be Element of Z st c in dom g1
-   holds g1/.c = F(c))
-  holds f1 = g1 from PARTFUN2:sch 3;
-end;
-func f-g -> PartFunc of Z, REAL n means :Def2:
+A2: for c be Element of Z st c in dom F holds F/.c = F(c) from
+    PARTFUN2:sch 2;
+    take F;
+    thus dom F = dom f /\ dom g by A1,SUBSET_1:8;
+    let c be Element of Z;
+    assume
+    c in dom F;
+    hence thesis by A2;
+  end;
+  uniqueness
+  proof
+    thus for f1,g1 being PartFunc of Z, REAL n st (dom f1=X & for c be Element
+of Z st c in dom f1 holds f1/.c = F(c)) & (dom g1=X & for c be Element of Z st
+    c in dom g1 holds g1/.c = F(c)) holds f1 = g1 from PARTFUN2:sch 3;
+  end;
+  func f-g -> PartFunc of Z, REAL n means
+  :Def10:
   dom it = dom f /\ dom g &
-  for c be Element of Z st c in dom it holds
-  it/.c = (f/.c) - (g/.c);
-existence
-proof
-   consider F be PartFunc of Z, REAL n such that
+  for c be Element of Z st c in dom it holds it/.c = (f/.c) - (g/.c);
+  existence
+  proof
+    consider F be PartFunc of Z, REAL n such that
 A3: for c be Element of Z holds c in dom F iff P[c] and
-A4: for c be Element of Z st c in dom F holds
-    F/.c = G(c) from PARTFUN2:sch 2;
-  take F;
-  thus dom F = dom f /\ dom g by A3,SUBSET_1:8;
-  let c be Element of Z;
-  assume c in dom F;
-  hence thesis by A4;
-end;
-uniqueness
-proof
-   thus for f1,g1 being PartFunc of Z, REAL n st
-   (dom f1=X & for c be Element of Z st c in dom f1 holds f1/.c = G(c)) &
-   (dom g1=X & for c be Element of Z st c in dom g1 holds g1/.c = G(c)) holds
-    f1 = g1 from PARTFUN2:sch 3;
-end;
+A4: for c be Element of Z st c in dom F holds F/.c = G(c) from
+    PARTFUN2:sch 2;
+    take F;
+    thus dom F = dom f /\ dom g by A3,SUBSET_1:8;
+    let c be Element of Z;
+    assume
+    c in dom F;
+    hence thesis by A4;
+  end;
+  uniqueness
+  proof
+    thus for f1,g1 being PartFunc of Z, REAL n st (dom f1=X & for c be Element
+of Z st c in dom f1 holds f1/.c = G(c)) & (dom g1=X & for c be Element of Z st
+    c in dom g1 holds g1/.c = G(c)) holds f1 = g1 from PARTFUN2:sch 3;
+  end;
 end;
 
-definition let n be Element of NAT;
-let r be real number;
-let Z be non empty set;
-let f be PartFunc of Z,REAL n;
-deffunc F(Element of Z) = r * (f/.$1);
-defpred P[set] means $1 in dom f;
-set X = dom f;
-func r(#)f -> PartFunc of Z, REAL n means :Def3:
-  dom it = dom f &
-  for c be Element of Z st c in dom it holds
-  it/.c = r * (f/.c);
-existence
-proof
-consider F be PartFunc of Z, REAL n such that
- A1: for c be Element of Z holds c in dom F iff P[c] and
- A2: for c be Element of Z st c in dom F holds
-     F/.c = F(c) from PARTFUN2:sch 2;
- take F;
- thus dom F = dom f by A1,SUBSET_1:8;
- let c be Element of Z; assume c in dom F; hence thesis by A2;
-end;
-uniqueness
-proof
-  thus for f1,g1 being PartFunc of Z, REAL n st
-   (dom f1=X & for c be Element of Z st c in dom f1 holds f1/.c = F(c)) &
-   (dom g1=X & for c be Element of Z st c in dom g1 holds g1/.c = F(c))
-  holds f1 = g1 from PARTFUN2:sch 3;
-end;
+definition
+  let n be Element of NAT;
+  let r be real number;
+  let Z be non empty set;
+  let f be PartFunc of Z,REAL n;
+  deffunc F(Element of Z) = r * (f/.$1);
+  defpred P[set] means $1 in dom f;
+  set X = dom f;
+  func r(#)f -> PartFunc of Z, REAL n means
+  :Def11:
+  dom it = dom f & for c be
+  Element of Z st c in dom it holds it/.c = r * (f/.c);
+  existence
+  proof
+    consider F be PartFunc of Z, REAL n such that
+A1: for c be Element of Z holds c in dom F iff P[c] and
+A2: for c be Element of Z st c in dom F holds F/.c = F(c) from
+    PARTFUN2:sch 2;
+    take F;
+    thus dom F = dom f by A1,SUBSET_1:8;
+    let c be Element of Z;
+    assume
+    c in dom F;
+    hence thesis by A2;
+  end;
+  uniqueness
+  proof
+    thus for f1,g1 being PartFunc of Z, REAL n st (dom f1=X & for c be Element
+of Z st c in dom f1 holds f1/.c = F(c)) & (dom g1=X & for c be Element of Z st
+    c in dom g1 holds g1/.c = F(c)) holds f1 = g1 from PARTFUN2:sch 3;
+  end;
 end;
 
 begin :: Definition of Riemann Integral on Functions REAL to REAL n
 
-definition let n be Element of NAT;
-let A be closed-interval Subset of REAL;
-let f be Function of A,REAL n;
- attr f is bounded means :Defboundn:
-     for i be Element of NAT st i in Seg n holds (proj(i,n)*f) is bounded;
-end;
-
-LMDEF:
-for n,i be Element of NAT,
-      f be PartFunc of REAL,REAL n,
-      i be Element of NAT,
-      A be Subset of REAL st i in Seg n holds
-      proj(i,n)*(f|A) = (proj(i,n)*f)|A
-proof
-let n,i be Element of NAT,
-      f be PartFunc of REAL,REAL n,
-      i be Element of NAT,
-      A be Subset of REAL;
-assume i in Seg n;
-K1:dom (proj(i,n))=REAL n by FUNCT_2:def 1; then
-K2:rng f c= dom(proj(i,n));
-K3:rng (f|A) c= dom (proj(i,n)) by K1;
-KK:dom ((proj(i,n)*f)|A) = dom (proj(i,n)*f) /\ A by RELAT_1:90
-                        .= dom f /\ A by K2,RELAT_1:46
-                        .= dom (f|A) by RELAT_1:90
-                        .= dom (proj(i,n)*(f|A)) by K3,RELAT_1:46;
-   now
-     let c be set;
-     assume K4: c in dom ((proj(i,n)*f)|A); then
-     c in dom (proj(i,n)*f) /\ A by RELAT_1:90; then
-   K5: c in dom (proj(i,n)*f) & c in A by XBOOLE_0:def 4; then
-     c in dom f by K2, RELAT_1:46; then
-     c in dom f /\ A by K5,XBOOLE_0:def 4; then
-   K6: c in dom (f|A) by RELAT_1:90; then
-     c in dom (proj(i,n)*(f|A)) by K3,RELAT_1:46; then
-     (proj(i,n)*(f|A)).c = (proj(i,n)).((f|A).c) by FUNCT_1:22
-                        .= (proj(i,n)).(f.c) by K6,FUNCT_1:70
-                        .= (proj(i,n)*f).c by K5,FUNCT_1:22;
-     hence ((proj(i,n)*f)|A).c = (proj(i,n)*(f|A)).c by K4,FUNCT_1:70;
-   end;
-hence thesis by KK,FUNCT_1:9;
-end;
-
-definition let n be Element of NAT;
+definition
+  let n be Element of NAT;
   let A be closed-interval Subset of REAL;
   let f be Function of A,REAL n;
-  attr f is integrable means :Intablen:
-    for i be Element of NAT
-     st i in Seg n holds
-        (proj(i,n)*f) is integrable;
+  attr f is bounded means
+  :Def12:
+  for i be Element of NAT st i in Seg n holds
+  (proj(i,n)*f) is bounded;
 end;
 
-definition let n be Element of NAT;
-let A be closed-interval Subset of REAL;
-let f be Function of A,REAL n;
- func integral(f) -> Element of REAL n means :DefintNn:
-   dom it = Seg n &
-   for i be Element of NAT st i in Seg n holds
-      it.i = integral((proj(i,n)*f));
-existence
+Lm6: for n,i be Element of NAT, f be PartFunc of REAL,REAL n, i be Element of
+NAT, A be Subset of REAL holds proj(i,n)*(f|A) = (proj(i,n)*f)|A
+
 proof
-defpred P[Nat, Element of REAL] means
-  ex i be Element of NAT st $1 = i & $2 = integral( (proj(i,n)*f) );
-PN:for i be Nat st i in Seg n
-    ex x being Element of REAL st P[i,x]
-  proof
-  let i be Nat;
-  assume i in Seg n; then
-  reconsider ii = i as Element of NAT;
-  consider x be Element of REAL such that
-  P1: x = integral( (proj(ii,n)*f));
-  take x;
-  thus thesis by P1;
+
+  let n,i be Element of NAT, f be PartFunc of REAL,REAL n, i be Element of NAT
+  , A be Subset of REAL;
+
+A1: dom (proj(i,n))=REAL n by FUNCT_2:def 1;
+  then
+A2: rng f c= dom(proj(i,n));
+A3: rng (f|A) c= dom (proj(i,n)) by A1;
+A4: now
+    let c be set;
+    assume
+A5: c in dom ((proj(i,n)*f)|A);
+    then
+A6: c in dom (proj(i,n)*f) /\ A by RELAT_1:90;
+    then
+A7: c in A by XBOOLE_0:def 4;
+A8: c in dom (proj(i,n)*f) by A6,XBOOLE_0:def 4;
+    then c in dom f by A2,RELAT_1:46;
+    then c in dom f /\ A by A7,XBOOLE_0:def 4;
+    then
+A9: c in dom (f|A) by RELAT_1:90;
+    then c in dom (proj(i,n)*(f|A)) by A3,RELAT_1:46;
+    then (proj(i,n)*(f|A)).c = (proj(i,n)).((f|A).c) by FUNCT_1:22
+      .= (proj(i,n)).(f.c) by A9,FUNCT_1:70
+      .= (proj(i,n)*f).c by A8,FUNCT_1:22;
+    hence ((proj(i,n)*f)|A).c = (proj(i,n)*(f|A)).c by A5,FUNCT_1:70;
   end;
-consider p being FinSequence of REAL such that
-A1:dom p = Seg n & for i be Nat st i in Seg n holds P[i,p.i]
-   from FINSEQ_1:sch 5(PN);
-take p;
-A2: len p = n by A1,FINSEQ_1:def 3;
-for i be Element of NAT st i in Seg n holds
-  p.i = integral( (proj(i,n)*f))
-  proof
-  let i be Element of NAT;
-  assume i in Seg n; then
-  P[i,p.i] by A1;
-  hence thesis;
-  end;
-hence thesis by A1,A2,FINSEQ_2:110;
-end;
-uniqueness
-proof
-let x1, x2 be Element of REAL n such that
-A1:dom x1 = Seg n &
-   for i be Element of NAT st i in Seg n holds
-     x1.i = integral( (proj(i,n)*f) ) and
-A2:dom x2 = Seg n &
-   for i be Element of NAT st i in Seg n holds
-     x2.i = integral( (proj(i,n)*f) );
-now let k be Nat;
-  assume A30: k in dom x1; then
-  reconsider i=k as Element of NAT;
-  x1.i = integral( (proj(i,n)*f)) by A1,A30
-      .= x2.i by A30,A1,A2;
-  hence x1.k = x2.k;
-end;
-hence thesis by A1,A2, FINSEQ_1:17;
-end;
+  dom ((proj(i,n)*f)|A) = dom (proj(i,n)*f) /\ A by RELAT_1:90
+    .= dom f /\ A by A2,RELAT_1:46
+    .= dom (f|A) by RELAT_1:90
+    .= dom (proj(i,n)*(f|A)) by A3,RELAT_1:46;
+  hence thesis by A4,FUNCT_1:9;
 end;
 
-theorem PX04n:
-for n be Element of NAT,
-    A be closed-interval Subset of REAL,
-    f being Function of A,REAL n,
-    T being DivSequence of A,
-    S be middle_volume_Sequence of f,T
- st f is bounded
-  & f is integrable
-  & delta(T) is convergent & lim delta(T)=0
- holds middle_sum(f,S) is convergent
-     & lim (middle_sum(f,S))=integral(f)
-proof
-let n be Element of NAT,
-    A be closed-interval Subset of REAL,
-    f being Function of A,REAL n,
-    T being DivSequence of A,
-    S be middle_volume_Sequence of f,T;
-assume AS: f is bounded
-         & f is integrable
-         & delta(T) is convergent & lim delta(T)=0;
-set xs=integral(f);
-set seq=middle_sum(f,S);
-  (REAL n) = the carrier of (REAL-NS n) by REAL_NS1:def 4; then
-  reconsider xseq=seq as Function of NAT ,(REAL n);
-  reconsider x=xs as Point of REAL-NS n by REAL_NS1:def 4;
-P1:for i be Element of NAT st i in Seg n ex rseqi be Real_Sequence st
-    for k be Element of NAT holds rseqi.k = (xseq.k).i
-  & rseqi is convergent & xs.i = lim rseqi
+definition
+  let n be Element of NAT;
+  let A be closed-interval Subset of REAL;
+  let f be Function of A,REAL n;
+  attr f is integrable means
+  :Def13:
+  for i be Element of NAT st i in Seg n
+  holds (proj(i,n)*f) is integrable;
+end;
+
+definition
+  let n be Element of NAT;
+  let A be closed-interval Subset of REAL;
+  let f be Function of A,REAL n;
+  func integral(f) -> Element of REAL n means
+  :Def14:
+  dom it = Seg n & for i
+  be Element of NAT st i in Seg n holds it.i = integral((proj(i,n)*f));
+  existence
   proof
-  let i be Element of NAT;
-  assume P11: i in Seg n;
-  reconsider pjinf= (proj(i,n)*f) as Function of A,REAL;
-  P12:(proj(i,n)*f) is bounded by AS,P11,Defboundn;
-  P13:pjinf is integrable by AS,P11,Intablen;
-  P14:for x being Element of NAT
-       holds
-        proj(i,n)*(S.x) is FinSequence of REAL &
-        dom(proj(i,n)*(S.x)) =Seg len(S.x) &
-        rng(proj(i,n)*(S.x)) c= REAL
-      proof
-      let x being Element of NAT;
-      dom (proj(i,n))=REAL n by FUNCT_2:def 1; then
-      rng (S.x) c= dom(proj(i,n)); then
-      dom(proj(i,n)*(S.x)) = dom (S.x) by RELAT_1:46
-                          .= Seg len(S.x) by FINSEQ_1:def 3;
+    defpred P[Nat, Element of REAL] means ex i be Element of NAT st $1 = i &
+    $2 = integral( (proj(i,n)*f) );
+A1: for i be Nat st i in Seg n ex x being Element of REAL st P[i,x]
+    proof
+      let i be Nat;
+      assume
+      i in Seg n;
+      then reconsider ii = i as Element of NAT;
+      consider x be Element of REAL such that
+A2:   x = integral( (proj(ii,n)*f));
+      take x;
+      thus thesis by A2;
+    end;
+    consider p being FinSequence of REAL such that
+A3: dom p = Seg n & for i be Nat st i in Seg n holds P[i,p.i] from
+    FINSEQ_1:sch 5(A1);
+    take p;
+A4: for i be Element of NAT st i in Seg n holds p.i = integral( (proj(i,n)
+    *f))
+    proof
+      let i be Element of NAT;
+      assume
+      i in Seg n;
+      then P[i,p.i] by A3;
       hence thesis;
-      end;
-  defpred P[Element of NAT,set] means
-          $2= proj(i,n)*(S.$1);
-  A1: for x being Element of NAT
-       ex y being Element of (REAL)* st P[x, y]
-      proof
+    end;
+    len p = n by A3,FINSEQ_1:def 3;
+    hence thesis by A3,A4,FINSEQ_2:110;
+  end;
+  uniqueness
+  proof
+    let x1, x2 be Element of REAL n such that
+A5: dom x1 = Seg n and
+A6: for i be Element of NAT st i in Seg n holds x1.i = integral( (
+    proj( i,n)*f) ) and
+A7: dom x2 = Seg n and
+A8: for i be Element of NAT st i in Seg n holds x2.i = integral( (
+    proj( i,n)*f) );
+    now
+      let k be Nat;
+      assume
+A9:   k in dom x1;
+      then reconsider i=k as Element of NAT;
+      x1.i = integral( (proj(i,n)*f)) by A5,A6,A9
+        .= x2.i by A5,A8,A9;
+      hence x1.k = x2.k;
+    end;
+    hence thesis by A5,A7,FINSEQ_1:17;
+  end;
+end;
+
+theorem Th11:
+  for n be Element of NAT, A be closed-interval Subset of REAL, f
+  being Function of A,REAL n, T being DivSequence of A, S be
+  middle_volume_Sequence of f,T st f is bounded & f is integrable & delta(T) is
+  convergent & lim delta(T)=0 holds middle_sum(f,S) is convergent & lim (
+  middle_sum(f,S))=integral(f)
+proof
+  let n be Element of NAT, A be closed-interval Subset of REAL, f being
+Function of A,REAL n, T being DivSequence of A, S be middle_volume_Sequence of
+  f,T;
+  assume that
+A1: f is bounded & f is integrable and
+A2: delta(T) is convergent & lim delta(T)=0;
+  set seq=middle_sum(f,S);
+  set xs=integral(f);
+  (REAL n) = the carrier of (REAL-NS n) by REAL_NS1:def 4;
+  then reconsider xseq=seq as Function of NAT ,(REAL n);
+A3: for i be Element of NAT st i in Seg n ex rseqi be Real_Sequence st for k
+be Element of NAT holds rseqi.k = (xseq.k).i & rseqi is convergent & xs.i = lim
+  rseqi
+  proof
+    let i be Element of NAT;
+    reconsider pjinf= (proj(i,n)*f) as Function of A,REAL;
+    defpred P[Element of NAT,set] means $2= proj(i,n)*(S.$1);
+A4: for x being Element of NAT ex y being Element of (REAL)* st P[x, y]
+    proof
       let x being Element of NAT;
       proj(i,n)*(S.x) is Element of REAL* by FINSEQ_1:def 11;
       hence thesis;
+    end;
+    consider F being Function of NAT, (REAL)* such that
+A5: for x being Element of NAT holds P[x, F.x] from FUNCT_2:sch 10(A4
+    );
+A6: for x being Element of NAT holds proj(i,n)*(S.x) is FinSequence of REAL
+    & dom(proj(i,n)*(S.x)) =Seg len(S.x) & rng(proj(i,n)*(S.x)) c= REAL
+    proof
+      let x being Element of NAT;
+      dom (proj(i,n))=REAL n by FUNCT_2:def 1;
+      then rng (S.x) c= dom(proj(i,n));
+      then dom(proj(i,n)*(S.x)) = dom (S.x) by RELAT_1:46
+        .= Seg len(S.x) by FINSEQ_1:def 3;
+      hence thesis;
+    end;
+    for k be Element of NAT holds F.k is middle_volume of pjinf,T.k
+    proof
+      let k be Element of NAT;
+      reconsider Tk=T.k as FinSequence;
+      reconsider Fk=F.k as FinSequence of REAL by FINSEQ_1:def 11;
+A7:   F.k= proj(i,n)*(S.k) by A5;
+      then
+A8:   dom (Fk) =Seg len(S.k) by A6
+        .=Seg len(Tk) by Def5;
+      then
+A9:   dom (Fk) = dom (Tk) by FINSEQ_1:def 3;
+A10:  now
+        let j be Nat;
+        dom (proj(i,n))=REAL n by FUNCT_2:def 1;
+        then
+A11:    rng (f) c= dom(proj(i,n));
+        assume
+A12:    j in dom (Tk);
+        then consider r be Element of (REAL n) such that
+A13:    r in rng (f|divset((T.k),j)) and
+A14:    (S.k).j=vol divset((T.k),j)*r by Def5;
+        reconsider v=proj(i,n).r as Element of REAL;
+        take v;
+        consider t be set such that
+A15:    t in dom (f|divset((T.k),j)) and
+A16:    r=(f|divset((T.k),j)).t by A13,FUNCT_1:def 5;
+        t in dom(f) /\ divset((T.k),j) by A15,RELAT_1:90;
+        then t in dom(f) by XBOOLE_0:def 4;
+        then
+A17:    t in dom (proj(i,n)*f) by A11,RELAT_1:46;
+A18:    dom (f|divset((T.k),j)) =dom (f) /\ divset((T.k),j) by RELAT_1:90
+          .=dom (pjinf) /\ divset((T.k),j) by A11,RELAT_1:46
+          .=dom (pjinf|divset((T.k),j)) by RELAT_1:90;
+        proj(i,n).r = proj(i,n).(f.t) by A15,A16,FUNCT_1:70
+          .= (proj(i,n)*f).t by A17,FUNCT_1:22
+          .= (pjinf|divset((T.k),j)).t by A15,A18,FUNCT_1:70;
+        hence v in rng (pjinf|divset((T.k),j)) by A15,A18,FUNCT_1:12;
+        thus (Fk).j = proj(i,n).((S.k).j) by A7,A9,A12,FUNCT_1:22
+          .= (vol divset((T.k),j)*r).i by A14,PDIFF_1:def 1
+          .= vol divset((T.k),j) * (r.i) by RVSUM_1:66
+          .= v*vol divset((T.k),j) by PDIFF_1:def 1;
       end;
-  consider F being Function of NAT, (REAL)* such that
-  P15:for x being Element of NAT holds P[x, F.x] from FUNCT_2:sch 10(A1);
-  for k be Element of NAT holds
-    F.k is middle_volume of pjinf,T.k
-    proof
-    let k be Element of NAT;
-    reconsider Tk=T.k as FinSequence by INTEGRA1:def 3;
-    reconsider Fk=F.k as FinSequence of REAL by FINSEQ_1:def 11;
-    P161: F.k= proj(i,n)*(S.k) by P15; then
-    P162: dom (Fk) =Seg len(S.k) by P14
-                  .=Seg len(Tk) by defxn0; then
-    P163: len (Fk) = len(Tk) by FINSEQ_1:def 3;
-    P164: dom (Fk) = dom (Tk) by FINSEQ_1:def 3,P162;
-    now let j be Nat;
-      assume P170: j in dom (Tk); then
-      consider r be Element of (REAL n) such that
-      P171: r in rng (f|divset((T.k),j)) &
-            (S.k).j=vol divset((T.k),j)*r by defxn0;
-      consider t be set such that
-      P172: t in dom (f|divset((T.k),j)) &
-            r=(f|divset((T.k),j)).t by P171,FUNCT_1:def 5;
-      dom (proj(i,n))=REAL n by FUNCT_2:def 1; then
-      K1:rng (f) c= dom(proj(i,n));
-      XXX: dom (f|divset((T.k),j))
-          =dom (f) /\ divset((T.k),j) by RELAT_1:90
-         .=dom (pjinf) /\ divset((T.k),j) by K1,RELAT_1:46
-         .=dom (pjinf|divset((T.k),j)) by RELAT_1:90;
-      t in dom(f) /\ divset((T.k),j) by RELAT_1:90,P172; then
-      t in dom(f) by XBOOLE_0:def 4; then
-      YYY: t in dom (proj(i,n)*f) by K1,RELAT_1:46;
-      P173: proj(i,n).r
-          = proj(i,n).(f.t) by P172,FUNCT_1:70
-         .= (proj(i,n)*f).t by YYY,FUNCT_1:22
-         .= (pjinf|divset((T.k),j)).t by XXX,P172,FUNCT_1:70;
-      reconsider v=proj(i,n).r as Element of REAL;
-      take v;
-      thus v in rng (pjinf|divset((T.k),j)) by XXX,P172,P173,FUNCT_1:12;
-      thus (Fk).j = proj(i,n).((S.k).j) by P170,P164,P161,FUNCT_1:22
-            .= (vol divset((T.k),j)*r).i by P171,PDIFF_1:def 1
-            .= vol divset((T.k),j) * (r.i) by RVSUM_1:66
-            .= v*vol divset((T.k),j) by PDIFF_1:def 1;
+      len (Fk) = len(Tk) by A8,FINSEQ_1:def 3;
+      hence thesis by A10,Def1;
     end;
-    hence thesis by defx0, P163;
-    end; then
-  reconsider pjis = F as middle_volume_Sequence of pjinf,T by defx2;
-  reconsider rseqi = middle_sum(pjinf,pjis) as Real_Sequence;
-  take rseqi;
-  P18: middle_sum(pjinf,pjis) is convergent
-     & lim (middle_sum(pjinf,pjis))=integral(pjinf) by PX04,AS,P12,P13;
-  for k be Element of NAT holds rseqi.k = (xseq.k).i
+    then reconsider pjis = F as middle_volume_Sequence of pjinf,T by Def3;
+    reconsider rseqi = middle_sum(pjinf,pjis) as Real_Sequence;
+    assume
+A19: i in Seg n;
+A20: for k be Element of NAT holds rseqi.k = (xseq.k).i
     proof
-    let k be Element of NAT;
-    P191: ex Fi be FinSequence of REAL
-          st Fi=proj(i,n)*(S.k) &
-             (middle_sum(f,S.k)).i = Sum(Fi) by defxn1,P11;
-    thus rseqi.k = middle_sum(pjinf,pjis.k) by defx3
-                .= (middle_sum(f,S.k)).i by P15,P191
-                .= (xseq.k).i by defxn3;
+      let k be Element of NAT;
+A21:  ex Fi be FinSequence of REAL st Fi=proj(i,n)*(S.k) & (middle_sum(f,
+      S.k)).i = Sum(Fi) by A19,Def6;
+      thus rseqi.k = middle_sum(pjinf,pjis.k) by Def4
+        .= (middle_sum(f,S.k)).i by A5,A21
+        .= (xseq.k).i by Def8;
     end;
-  hence thesis by P11,DefintNn,P18;
+    take rseqi;
+A22: (proj(i,n)*f) is bounded & pjinf is integrable by A1,A19,Def12,Def13;
+    then lim (middle_sum(pjinf,pjis))=integral(pjinf) by A2,Th9;
+    hence thesis by A2,A19,A22,A20,Def14,Th9;
   end;
-xs = x & xseq = seq;
-hence thesis by P1,REAL_NS1:11;
+  reconsider x=xs as Point of REAL-NS n by REAL_NS1:def 4;
+  xs = x;
+  hence thesis by A3,REAL_NS1:11;
 end;
 
 theorem
-for n be Element of NAT,
-    A be closed-interval Subset of REAL,
-    f being Function of A,REAL n st f is bounded
- holds
-   f is integrable
-    iff
-   ex I be Element of REAL n st
-    for T being DivSequence of A,
-        S be middle_volume_Sequence of f,T
-          st delta(T) is convergent & lim delta(T)=0
-     holds middle_sum(f,S) is convergent & lim (middle_sum(f,S))=I
+  for n be Element of NAT, A be closed-interval Subset of REAL, f being
+Function of A,REAL n st f is bounded holds f is integrable iff ex I be Element
+  of REAL n st for T being DivSequence of A, S be middle_volume_Sequence of f,T
+st delta(T) is convergent & lim delta(T)=0 holds middle_sum(f,S) is convergent
+  & lim (middle_sum(f,S))=I
 proof
-let n be Element of NAT,
-    A be closed-interval Subset of REAL,
-    f being Function of A,REAL n;
-assume AS:f is bounded;
-hereby assume
-  AS1: f is integrable;
-  reconsider I=integral(f) as Element of REAL n;
-  take I;
-  thus for T being DivSequence of A,
-        S be middle_volume_Sequence of f,T
-          st delta(T) is convergent & lim delta(T)=0
-     holds middle_sum(f,S) is convergent
-         & lim (middle_sum(f,S))=I by PX04n,AS,AS1;
-end;
-now assume
-  ex I be Element of REAL n st
-     for T being DivSequence of A,
-         S be middle_volume_Sequence of f,T
-        st delta(T) is convergent & lim delta(T)=0
-      holds middle_sum(f,S) is convergent & lim (middle_sum(f,S))=I; then
-  consider I be Element of REAL n such that
-  P1: for T being DivSequence of A,
-          S be middle_volume_Sequence of f,T
-       st delta(T) is convergent & lim delta(T)=0
-       holds middle_sum(f,S) is convergent & lim (middle_sum(f,S))=I;
-  now let i be Element of NAT;
-    assume AS1:i in Seg n; then
-    P2: proj(i,n)*f is bounded by AS,Defboundn;
-    reconsider Ii=I.i as Element of REAL;
-    now let T being DivSequence of A,
-           Si be middle_volume_Sequence of (proj(i,n)*f) ,T;
-      assume AS2:delta(T) is convergent & lim delta(T)=0;
-      defpred P[Element of NAT,set] means
-              ex H be FinSequence,z be FinSequence st
-                 H=T.$1 & z = $2 &
-                 len z = len H &
-                 for j be Element of NAT st j in dom H holds
-                 ex rji be Element of REAL n,
-                    tji be Element of REAL st
-                    tji in dom ( f|divset((T.$1),j) ) &
-                   (Si.$1).j = vol divset((T.$1),j)*
-                              (((proj(i,n)*f)|divset((T.$1),j)).tji) &
-                    rji=(f|divset((T.$1),j)).tji &
-                    z.j =(vol divset((T.$1),j))* rji;
-      A1:for k being Element of NAT
-          ex y being Element of (REAL n)* st P[k, y]
-          proof
+  let n be Element of NAT, A be closed-interval Subset of REAL, f being
+  Function of A,REAL n;
+  assume
+A1: f is bounded;
+  hereby
+    reconsider I=integral(f) as Element of REAL n;
+    assume
+A2: f is integrable;
+    take I;
+    thus for T being DivSequence of A, S be middle_volume_Sequence of f,T st
+delta(T) is convergent & lim delta(T)=0 holds middle_sum(f,S) is convergent &
+    lim (middle_sum(f,S))=I by A1,A2,Th11;
+  end;
+  now
+    assume
+    ex I be Element of REAL n st for T being DivSequence of A, S be
+middle_volume_Sequence of f,T st delta(T) is convergent & lim delta(T)=0 holds
+    middle_sum(f,S) is convergent & lim (middle_sum(f,S))=I;
+    then consider I be Element of REAL n such that
+A3: for T being DivSequence of A, S be middle_volume_Sequence of f,T
+st delta(T) is convergent & lim delta(T)=0 holds middle_sum(f,S) is convergent
+    & lim (middle_sum(f,S))=I;
+    now
+      let i be Element of NAT;
+      reconsider Ii=I.i as Element of REAL;
+      assume
+A4:   i in Seg n;
+A5:   now
+        set x=I;
+        let T being DivSequence of A, Si be middle_volume_Sequence of (proj(i,
+        n)*f) ,T;
+        defpred P[Element of NAT,set] means ex H be FinSequence,z be
+FinSequence st H=T.$1 & z = $2 & len z = len H & for j be Element of NAT st j
+in dom H holds ex rji be Element of REAL n, tji be Element of REAL st tji in
+dom ( f|divset((T.$1),j) ) & (Si.$1).j = vol divset((T.$1),j)* (((proj(i,n)*f)|
+divset((T.$1),j)).tji) & rji=(f|divset((T.$1),j)).tji & z.j =(vol divset((T.$1)
+        ,j))* rji;
+        reconsider xs=x as Element of REAL n;
+A6:     for k being Element of NAT ex y being Element of (REAL n)* st P[k,
+        y]
+        proof
           let k being Element of NAT;
-          reconsider Tk=T.k as FinSequence by INTEGRA1:def 3;
-          reconsider Sik=Si.k  as FinSequence of REAL;
-          defpred P1[Nat, set] means
-                  ex j be Element of NAT st $1 = j &
-                     ex rji be Element of (REAL n),
-                        tji be Element of REAL st
-                        tji in dom ( f|divset((T.k),j) ) &
-                        ((Si.k)).j = vol divset((T.k),j)*
-                                    (((proj(i,n)*f)|divset((T.k),j)).tji) &
-                        rji=(f|divset((T.k),j)).tji &
-                        $2=vol divset((T.k),j)*rji;
-          PN:for j be Nat st j in Seg len Tk
-              ex x being Element of (REAL n) st P1[j,x]
-              proof
-              let j0 be Nat;
-              assume GGG: j0 in Seg len Tk; then
-              reconsider j = j0 as Element of NAT;
-              j in dom (Tk) by FINSEQ_1:def 3,GGG; then
-              consider r be Element of REAL such that
-              PN1: r in rng ((proj(i,n)*f)|divset((T.k),j)) &
-                    (Si.k).j=r * vol divset((T.k),j) by defx0;
-              consider tji be set such that
-              PN2: tji in dom ((proj(i,n)*f)|divset((T.k),j)) &
-                r=((proj(i,n)*f)|divset((T.k),j)).tji by PN1,FUNCT_1:def 5;
-              dom (proj(i,n))=REAL n by FUNCT_2:def 1; then
-              K1:rng (f) c= dom(proj(i,n));
-              K2:dom (f|divset((T.k),j))
-               = dom (f) /\ divset((T.k),j) by RELAT_1:90
-              .= dom ((proj(i,n)*f)) /\ divset((T.k),j) by K1,RELAT_1:46
+          reconsider Tk=T.k as FinSequence;
+          reconsider Sik=Si.k as FinSequence of REAL;
+          defpred P1[Nat, set] means ex j be Element of NAT st $1 = j & ex rji
+be Element of (REAL n), tji be Element of REAL st tji in dom ( f|divset((T.k),j
+) ) & ((Si.k)).j = vol divset((T.k),j)* (((proj(i,n)*f)|divset((T.k),j)).tji) &
+          rji=(f|divset((T.k),j)).tji & $2=vol divset((T.k),j)*rji;
+A7:       for j be Nat st j in Seg len Tk ex x being Element of (REAL n)
+          st P1[j,x]
+          proof
+            dom (proj(i,n))=REAL n by FUNCT_2:def 1;
+            then
+A8:         rng (f) c= dom(proj(i,n));
+            let j0 be Nat;
+            assume
+A9:         j0 in Seg len Tk;
+            then reconsider j = j0 as Element of NAT;
+            j in dom (Tk) by A9,FINSEQ_1:def 3;
+            then consider r be Element of REAL such that
+A10:        r in rng ((proj(i,n)*f)|divset((T.k),j)) and
+A11:        (Si.k).j=r * vol divset((T.k),j) by Def1;
+            consider tji be set such that
+A12:        tji in dom ((proj(i,n)*f)|divset((T.k),j)) and
+A13:        r=((proj(i,n)*f)|divset((T.k),j)).tji by A10,FUNCT_1:def
+            5;
+            tji in dom((proj(i,n)*f)) /\ divset((T.k),j) by A12,RELAT_1:
+            90;
+            then reconsider tji as Element of REAL;
+A14:        dom (f|divset((T.k),j)) = dom (f) /\ divset((T.k),j) by
+            RELAT_1:90
+              .= dom ((proj(i,n)*f)) /\ divset((T.k),j) by A8,RELAT_1:46
               .= dom ((proj(i,n)*f)|divset((T.k),j)) by RELAT_1:90;
-              tji in dom((proj(i,n)*f)) /\ divset((T.k),j)
-                                           by RELAT_1:90,PN2; then
-              reconsider tji as Element of REAL;
-              (f|divset((T.k),j)).tji
-                  in rng (f|divset((T.k),j)) by K2,PN2,FUNCT_1:12; then
-              reconsider rji=(f|divset((T.k),j)).tji as Element of REAL n;
-              reconsider x=vol divset((T.k),j)*rji as Element of REAL n;
-              take x;
-              thus P1[j0,x] by PN1,PN2,K2;
-              end;
+            then
+(f|divset((T.k),j)).tji in rng (f|divset((T.k),j)) by A12,FUNCT_1:12;
+            then reconsider rji=(f|divset((T.k),j)).tji as Element of REAL n;
+            reconsider x=vol divset((T.k),j)*rji as Element of REAL n;
+            take x;
+            thus P1[j0,x] by A11,A12,A13,A14;
+          end;
           consider p being FinSequence of (REAL n ) such that
-          PN1: dom p = Seg len Tk
-             & for j be Nat st j in Seg len Tk holds P1[j,p.j]
-                                         from FINSEQ_1:sch 5(PN);
+A15:      dom p = Seg len Tk & for j be Nat st j in Seg len Tk holds
+          P1[j,p.j] from FINSEQ_1:sch 5(A7);
           reconsider x=p as Element of (REAL n)* by FINSEQ_1:def 11;
           take x;
-          AAA: len p = len Tk by PN1,FINSEQ_1:def 3;
-          now let jj0 be Element of NAT;
-            assume AS0: jj0 in dom Tk;
+A16:      now
+            let jj0 be Element of NAT;
             reconsider j0=jj0 as Nat;
-            dom Tk = Seg len Tk by FINSEQ_1:def 3; then
-            P1[j0,p.j0] by PN1,AS0;
-              hence ex rji be Element of REAL n,
-                 tji be Element of REAL st
-                 tji in dom ( f|divset((T.k),jj0) ) &
-                 (Si.k).jj0 = vol divset((T.k),jj0)*
-                             (((proj(i,n)*f)|divset((T.k),jj0)).tji) &
-                 rji=(f|divset((T.k),jj0)).tji &
-                 p.jj0 =(vol divset((T.k),jj0))* rji;
+A17:        dom Tk = Seg len Tk by FINSEQ_1:def 3;
+            assume
+            jj0 in dom Tk;
+            then P1[j0,p.j0] by A15,A17;
+            hence
+            ex rji be Element of REAL n, tji be Element of REAL st tji in
+dom ( f|divset((T.k),jj0) ) & (Si.k).jj0 = vol divset((T.k),jj0)* (((proj(i,n)*
+f)|divset((T.k),jj0)).tji) & rji=(f|divset((T.k),jj0)).tji & p.jj0 =(vol divset
+            ((T.k),jj0))* rji;
           end;
-          hence P[k,x] by AAA;
-          end;
-      consider S being Function of NAT, (REAL n)* such that
-      A2: for x being Element of NAT holds P[x, S.x]
-                                   from FUNCT_2:sch 10(A1);
-      for k be Element of NAT holds S.k is middle_volume of f,T.k
-      proof
-      let k be Element of NAT;
-      consider H be FinSequence,z be FinSequence such that
-      P1: H=T.k & z = S.k &
-          len H = len z &
-          for j be Element of NAT st j in dom H holds
-            ex rji be Element of REAL n,
-               tji be Element of REAL st
-               tji in dom ( f|divset((T.k),j) ) &
-               (Si.k).j = vol divset((T.k),j)*
-                         (((proj(i,n)*f)|divset((T.k),j)).tji) &
-               rji=(f|divset((T.k),j)).tji &
-               z.j =(vol divset((T.k),j))* rji by A2;
-      E1: S.k is FinSequence of (REAL n) by FINSEQ_1:def 11;
-      now let x be Nat;
-        assume AA: x in dom H; then
-        reconsider j=x as Element of NAT;
-        consider rji be Element of REAL n,
-                 tji be Element of REAL such that
-        AB: tji in dom ( f|divset((T.k),j) ) &
-            (Si.k).j = vol divset((T.k),j)*
-                      (((proj(i,n)*f)|divset((T.k),j)).tji) &
-            rji=(f|divset((T.k),j)).tji &
-            z.j =(vol divset((T.k),j))* rji by AA,P1;
-        take rji;
-        thus rji in rng (f|divset((T.k),x)) by AB,FUNCT_1:12;
-        thus z.x =(vol divset((T.k),x))* rji by AB;
-      end;
-      hence thesis by E1,defxn0,P1;
-      end; then
-      reconsider S as middle_volume_Sequence of f,T by defxn2;
-      set x=I;
-      set seq=middle_sum(f,S);
-      (REAL n) = the carrier of (REAL-NS n) by REAL_NS1:def 4; then
-      reconsider xseq=seq as Function of NAT ,(REAL n);
-      reconsider xs=x as Element of REAL n;
-      seq is convergent & lim seq = x by AS2,P1; then
-      consider rseqi be Real_Sequence such that
-      R1:for k be Element of NAT holds
-          rseqi.k = (xseq.k).i
-        & rseqi is convergent & xs.i = lim rseqi by REAL_NS1:11,AS1;
-      for k be Element of NAT holds
-        rseqi.k = (middle_sum((proj(i,n)*f),Si)).k
-        proof
-        let k be Element of NAT;
-        consider H be FinSequence,z be FinSequence such that
-        PP1: H=T.k & z = S.k &
-             len H = len z &
-             for j be Element of NAT st j in dom H holds
-              ex rji be Element of REAL n,
-                 tji be Element of REAL st
-                 tji in dom ( f|divset((T.k),j) ) &
-                 (Si.k).j = vol divset((T.k),j)*
-                           (((proj(i,n)*f)|divset((T.k),j)).tji) &
-                 rji=(f|divset((T.k),j)).tji &
-                 z.j =(vol divset((T.k),j))* rji by A2;
-        dom (proj(i,n))=REAL n by FUNCT_2:def 1; then
-        rng (S.k) c= dom(proj(i,n)); then
-        E1: dom(proj(i,n)*(S.k)) =dom (S.k) by RELAT_1:46
-                                .=Seg len(H) by PP1,FINSEQ_1:def 3
-                                .=Seg len(Si.k) by defx0,PP1
-                                .=dom (Si.k) by FINSEQ_1:def 3;
-        E2:for j be Nat st j in dom(proj(i,n)*(S.k)) holds
-            (proj(i,n)*(S.k)).j = (Si.k).j
-           proof
-           let j0 be Nat;
-           assume ASX: j0 in dom(proj(i,n)*(S.k));
-           reconsider j=j0 as Element of NAT by ORDINAL1:def 13;
-           j0 in Seg len(Si.k) by ASX,E1,FINSEQ_1:def 3; then
-           j0 in Seg len(H) by defx0,PP1; then
-           j in dom H by FINSEQ_1:def 3; then
-           consider rji be Element of REAL n,
-                    tji be Element of REAL such that
-           U1: tji in dom ( f|divset((T.k),j) ) &
-              (Si.k).j = vol divset((T.k),j)*
-                        (((proj(i,n)*f)|divset((T.k),j)).tji) &
-               rji=(f|divset((T.k),j)).tji &
-               z.j =(vol divset((T.k),j))* rji by PP1;
-              dom (proj(i,n))=REAL n by FUNCT_2:def 1; then
-           K1:rng (f) c= dom(proj(i,n));
-           K2:dom (f|divset((T.k),j))
-             =dom (f) /\ divset((T.k),j) by RELAT_1:90
-            .=dom ((proj(i,n)*f)) /\ divset((T.k),j) by K1,RELAT_1:46
-            .= dom ((proj(i,n)*f)|divset((T.k),j)) by RELAT_1:90; then
-           tji in dom((proj(i,n)*f)) /\ divset((T.k),j)
-               by U1,RELAT_1:90; then
-           K3:tji in dom((proj(i,n)*f)) by XBOOLE_0:def 4;
-           V1: ((proj(i,n)*f)|divset((T.k),j)).tji
-              =(proj(i,n)*f).tji by U1,K2,FUNCT_1:70
-             .= proj(i,n).(f.tji) by FUNCT_1:22,K3
-             .= proj(i,n).rji by U1,FUNCT_1:70;
-           (proj(i,n)*(S.k)).j
-              = proj(i,n).((S.k).j) by FUNCT_1:22,ASX
-             .= (vol divset((T.k),j)*rji).i by U1,PP1,PDIFF_1:def 1
-             .= vol divset((T.k),j) * (rji.i) by RVSUM_1:66
-             .= (Si.k).j by U1,V1,PDIFF_1:def 1;
-           hence thesis;
-           end;
-        consider Fi be FinSequence of REAL such that
-        P14: Fi=proj(i,n)*(S.k) &
-             (middle_sum(f,S.k)).i = Sum(Fi) by defxn1,AS1;
-        thus
-          rseqi.k = (xseq.k).i by R1
-                 .=Sum(Fi) by defxn3,P14
-                 .=(middle_sum((proj(i,n)*f),Si.k)) by E2,FINSEQ_1:17,E1,P14
-                 .=(middle_sum((proj(i,n)*f),Si)).k by defx3;
+          len p = len Tk by A15,FINSEQ_1:def 3;
+          hence P[k,x] by A16;
         end;
-      hence middle_sum((proj(i,n)*f),Si) is convergent
-          & lim (middle_sum((proj(i,n)*f),Si))=Ii by R1,FUNCT_2:113;
+        consider S being Function of NAT, (REAL n)* such that
+A18:    for x being Element of NAT holds P[x, S.x] from FUNCT_2:sch
+        10(A6);
+        for k be Element of NAT holds S.k is middle_volume of f,T.k
+        proof
+          let k be Element of NAT;
+          consider H be FinSequence,z be FinSequence such that
+A19:      H=T.k & z = S.k & len H = len z and
+A20:      for j be Element of NAT st j in dom H holds ex rji be
+Element of REAL n, tji be Element of REAL st tji in dom ( f|divset((T.k),j) ) &
+(Si.k).j = vol divset((T.k),j)* (((proj(i,n)*f)|divset((T.k),j)).tji) & rji=(f|
+          divset((T.k ),j)).tji & z.j =(vol divset((T.k),j))* rji by A18;
+A21:      now
+            let x be Nat;
+            assume
+A22:        x in dom H;
+            then reconsider j=x as Element of NAT;
+            consider rji be Element of REAL n, tji be Element of REAL such
+            that
+A23:        tji in dom ( f|divset((T.k),j) ) and
+            (Si.k).j = vol divset((T.k),j)* (((proj(i,n)*f)|divset((T.k),j
+            )). tji) and
+A24:        rji=(f|divset((T.k),j)).tji and
+A25:        z.j =(vol divset((T.k),j))* rji by A20,A22;
+            take rji;
+            thus rji in rng (f|divset((T.k),x)) by A23,A24,FUNCT_1:12;
+            thus z.x =(vol divset((T.k),x))* rji by A25;
+          end;
+          S.k is FinSequence of (REAL n) by FINSEQ_1:def 11;
+          hence thesis by A19,A21,Def5;
+        end;
+        then reconsider S as middle_volume_Sequence of f,T by Def7;
+        set seq=middle_sum(f,S);
+        (REAL n) = the carrier of (REAL-NS n) by REAL_NS1:def 4;
+        then reconsider xseq=seq as Function of NAT ,(REAL n);
+        assume
+        delta(T) is convergent & lim delta(T)=0;
+        then seq is convergent & lim seq = x by A3;
+        then consider rseqi be Real_Sequence such that
+A26:    for k be Element of NAT holds rseqi.k = (xseq.k).i & rseqi is
+        convergent & xs.i = lim rseqi by A4,REAL_NS1:11;
+        for k be Element of NAT holds rseqi.k = (middle_sum((proj(i,n)*f)
+        ,Si)).k
+        proof
+          let k be Element of NAT;
+          consider H be FinSequence,z be FinSequence such that
+A27:      H=T.k and
+A28:      z = S.k and
+A29:      len H = len z and
+A30:      for j be Element of NAT st j in dom H holds ex rji be
+Element of REAL n, tji be Element of REAL st tji in dom ( f|divset((T.k),j) ) &
+(Si.k).j = vol divset((T.k),j)* (((proj(i,n)*f)|divset((T.k),j)).tji) & rji=(f|
+          divset((T.k ),j)).tji & z.j =(vol divset((T.k),j))* rji by A18;
+          dom (proj(i,n))=REAL n by FUNCT_2:def 1;
+          then rng (S.k) c= dom(proj(i,n));
+          then
+A31:      dom(proj(i,n)*(S.k)) =dom (S.k) by RELAT_1:46
+            .=Seg len(H) by A28,A29,FINSEQ_1:def 3
+            .=Seg len(Si.k) by A27,Def1
+            .=dom (Si.k) by FINSEQ_1:def 3;
+A32:      for j be Nat st j in dom(proj(i,n)*(S.k)) holds (proj(i,n)*(S.k)
+          ).j = (Si.k).j
+          proof
+            let j0 be Nat;
+            reconsider j=j0 as Element of NAT by ORDINAL1:def 13;
+            dom (proj(i,n))=REAL n by FUNCT_2:def 1;
+            then
+A33:        rng (f) c= dom(proj(i,n));
+            assume
+A34:        j0 in dom(proj(i,n)*(S.k));
+            then j0 in Seg len(Si.k) by A31,FINSEQ_1:def 3;
+            then j0 in Seg len(H) by A27,Def1;
+            then j in dom H by FINSEQ_1:def 3;
+            then consider
+            rji be Element of REAL n, tji be Element of REAL such
+            that
+A35:        tji in dom ( f|divset((T.k),j) ) and
+A36:        (Si.k).j = vol divset((T.k),j)* (((proj(i,n)*f)|divset((T
+            .k),j)). tji) and
+A37:        rji=(f|divset((T.k),j)).tji and
+A38:        z.j =(vol divset((T.k),j))* rji by A30;
+A39:        dom (f|divset((T.k),j)) =dom (f) /\ divset((T.k),j) by RELAT_1
+            :90
+              .=dom ((proj(i,n)*f)) /\ divset((T.k),j) by A33,RELAT_1:46
+              .= dom ((proj(i,n)*f)|divset((T.k),j)) by RELAT_1:90;
+            then tji in dom((proj(i,n)*f)) /\ divset((T.k),j) by A35,
+            RELAT_1:90;
+            then
+A40:        tji in dom((proj(i,n)*f)) by XBOOLE_0:def 4;
+A41:        ((proj(i,n)*f)|divset((T.k),j)).tji =(proj(i,n)*f).tji by A35
+            ,A39,FUNCT_1:70
+              .= proj(i,n).(f.tji) by A40,FUNCT_1:22
+              .= proj(i,n).rji by A35,A37,FUNCT_1:70;
+            (proj(i,n)*(S.k)).j = proj(i,n).((S.k).j) by A34,FUNCT_1:22
+              .= (vol divset((T.k),j)*rji).i by A28,A38,PDIFF_1:def 1
+              .= vol divset((T.k),j) * (rji.i) by RVSUM_1:66
+              .= (Si.k).j by A36,A41,PDIFF_1:def 1;
+            hence thesis;
+          end;
+          consider Fi be FinSequence of REAL such that
+A42:      Fi=proj(i,n)*(S.k) and
+A43:      (middle_sum(f,S.k)).i = Sum(Fi) by A4,Def6;
+          thus rseqi.k = (xseq.k).i by A26
+            .=Sum(Fi) by A43,Def8
+            .=(middle_sum((proj(i,n)*f),Si.k)) by A31,A32,A42,FINSEQ_1:17
+            .=(middle_sum((proj(i,n)*f),Si)).k by Def4;
+        end;
+        hence middle_sum((proj(i,n)*f),Si) is convergent & lim (middle_sum((
+        proj(i,n)*f),Si))=Ii by A26,FUNCT_2:113;
       end;
-      hence (proj(i,n)*f) is integrable by P2,PX05;
+      proj(i,n)*f is bounded by A1,A4,Def12;
+      hence (proj(i,n)*f) is integrable by A5,Th10;
     end;
-    hence f is integrable by Intablen;
+    hence f is integrable by Def13;
   end;
-hence thesis;
+  hence thesis;
 end;
 
-definition let n be Element of NAT;
+definition
+  let n be Element of NAT;
   let f be PartFunc of REAL,REAL n;
-  attr f is bounded means :Defbounded:
-     for i be Element of NAT st i in Seg n holds
-       (proj(i,n)*f) is bounded;
+  attr f is bounded means
+  :Def15:
+  for i be Element of NAT st i in Seg n holds
+  (proj(i,n)*f) is bounded;
 end;
 
-definition let n be Element of NAT;
+definition
+  let n be Element of NAT;
   let A be closed-interval Subset of REAL;
   let f be PartFunc of REAL,REAL n;
-  pred f is_integrable_on A means :Defintable:
-     for i be Element of NAT st i in Seg n holds
-        (proj(i,n)*f) is_integrable_on A;
+  pred f is_integrable_on A means
+  :Def16:
+  for i be Element of NAT st i in Seg
+  n holds (proj(i,n)*f) is_integrable_on A;
 end;
 
-definition let n be Element of NAT;
-let A be closed-interval Subset of REAL;
-let f be PartFunc of REAL,REAL n;
-func integral(f,A) -> Element of REAL n means :DefintN:
-  dom it = Seg n &
-  for i be Element of NAT st i in Seg n holds
-     it.i = integral( (proj(i,n)*f), A);
-existence
-proof
-defpred P[Nat, Element of REAL] means
-  ex i be Element of NAT st $1 = i & $2 = integral((proj(i,n)*f), A);
-PN: for i be Nat st i in Seg n
-    ex x being Element of REAL st P[i,x]
+definition
+  let n be Element of NAT;
+  let A be closed-interval Subset of REAL;
+  let f be PartFunc of REAL,REAL n;
+  func integral(f,A) -> Element of REAL n means
+  :Def17:
+  dom it = Seg n & for i
+  be Element of NAT st i in Seg n holds it.i = integral( (proj(i,n)*f), A);
+  existence
+  proof
+    defpred P[Nat, Element of REAL] means ex i be Element of NAT st $1 = i &
+    $2 = integral((proj(i,n)*f), A);
+A1: for i be Nat st i in Seg n ex x being Element of REAL st P[i,x]
     proof
-    let i be Nat;
-    assume i in Seg n; then
-    reconsider ii = i as Element of NAT;
-    consider x be Element of REAL such that
-    P1: x = integral( (proj(ii,n)*f), A);
-    take x;
-    thus thesis by P1;
+      let i be Nat;
+      assume
+      i in Seg n;
+      then reconsider ii = i as Element of NAT;
+      consider x be Element of REAL such that
+A2:   x = integral( (proj(ii,n)*f), A);
+      take x;
+      thus thesis by A2;
     end;
-consider p being FinSequence of REAL such that
-A1: dom p = Seg n & for i be Nat st i in Seg n holds P[i,p.i]
-    from FINSEQ_1:sch 5(PN);
-take p;
-A2: len p = n by A1,FINSEQ_1:def 3;
-for i be Element of NAT st i in Seg n holds
-  p.i = integral( (proj(i,n)*f), A)
-  proof
-  let i be Element of NAT;
-  assume i in Seg n; then
-  P[i,p.i] by A1;
-  hence thesis;
+    consider p being FinSequence of REAL such that
+A3: dom p = Seg n & for i be Nat st i in Seg n holds P[i,p.i] from
+    FINSEQ_1:sch 5(A1);
+    take p;
+A4: for i be Element of NAT st i in Seg n holds p.i = integral( (proj(i,n)
+    *f), A)
+    proof
+      let i be Element of NAT;
+      assume
+      i in Seg n;
+      then P[i,p.i] by A3;
+      hence thesis;
+    end;
+    len p = n by A3,FINSEQ_1:def 3;
+    hence thesis by A3,A4,FINSEQ_2:110;
   end;
-hence thesis by A1,A2,FINSEQ_2:110;
-end;
-uniqueness
-proof
-let x1, x2 be Element of REAL n such that
-A1: dom x1 = Seg n &
-    for i be Element of NAT st i in Seg n
-      holds
-      x1.i = integral( (proj(i,n)*f), A) and
-A2: dom x2 = Seg n &
-    for i be Element of NAT st i in Seg n
-   holds x2.i = integral( (proj(i,n)*f), A);
-for k be Nat st k in dom x1 holds x1.k = x2.k
+  uniqueness
   proof
-  let k be Nat;
-  assume A31: k in dom x1; then
-  reconsider k as Element of NAT;
-  x2.k = integral( (proj(k,n)*f), A) by A31,A1,A2;
-  hence thesis by A31,A1;
+    let x1, x2 be Element of REAL n such that
+A5: dom x1 = Seg n and
+A6: for i be Element of NAT st i in Seg n holds x1.i = integral( (
+    proj( i,n)*f), A) and
+A7: dom x2 = Seg n and
+A8: for i be Element of NAT st i in Seg n holds x2.i = integral( (
+    proj( i,n)*f), A);
+    for k be Nat st k in dom x1 holds x1.k = x2.k
+    proof
+      let k be Nat;
+      assume
+A9:   k in dom x1;
+      then reconsider k as Element of NAT;
+      x2.k = integral( (proj(k,n)*f), A) by A5,A8,A9;
+      hence thesis by A5,A6,A9;
+    end;
+    hence thesis by A5,A7,FINSEQ_1:17;
   end;
-hence thesis by A1,A2,FINSEQ_1:17;
-end;
 end;
 
 theorem
-for n be Element of NAT,
-    A be closed-interval Subset of REAL,
-    f be PartFunc of REAL,REAL n,
-    g be Function of A,REAL n
-     st f|A = g
-  holds f is_integrable_on A
-        iff
-        g is integrable
+  for n be Element of NAT, A be closed-interval Subset of REAL, f be
+  PartFunc of REAL,REAL n, g be Function of A,REAL n st f|A = g holds f
+  is_integrable_on A iff g is integrable
 proof
-let n be Element of NAT,
-    A be closed-interval Subset of REAL,
-    f be PartFunc of REAL,REAL n,
-    g be Function of A,REAL n;
-assume A0: f|A = g;
+  let n be Element of NAT, A be closed-interval Subset of REAL, f be PartFunc
+  of REAL,REAL n, g be Function of A,REAL n;
+  assume
+A1: f|A = g;
   thus f is_integrable_on A implies g is integrable
   proof
-  assume A10: f is_integrable_on A;
-  for i be Element of NAT st i in Seg n
-    holds (proj(i,n)*g) is integrable
+    assume
+A2: f is_integrable_on A;
+    for i be Element of NAT st i in Seg n holds (proj(i,n)*g) is
+    integrable
     proof
-    let i be Element of NAT;
-    assume K0: i in Seg n; then
-    K1: (proj(i,n)*f) is_integrable_on A by A10,Defintable;
-    dom (proj(i,n))=REAL n by FUNCT_2:def 1; then
-    rng f c= dom(proj(i,n)); then
-    K2:dom(proj(i,n)*f) = dom f by RELAT_1:46;
-    A = dom g by FUNCT_2:def 1
-     .= dom f /\ A by A0,RELAT_1:90; then
-    (proj(i,n)*f)||A is total by K2,XBOOLE_1:17,INTEGRA5:6; then
-    reconsider F = (proj(i,n)*f)|A as Function of A,REAL;
-    F is integrable by K1,INTEGRA5:def 2;
-    hence thesis by A0,K0,LMDEF;
+      let i be Element of NAT;
+      dom (proj(i,n))=REAL n by FUNCT_2:def 1;
+      then rng f c= dom(proj(i,n));
+      then
+A3:   dom(proj(i,n)*f) = dom f by RELAT_1:46;
+      A = dom g by FUNCT_2:def 1
+        .= dom f /\ A by A1,RELAT_1:90;
+      then (proj(i,n)*f)||A is total by A3,INTEGRA5:6,XBOOLE_1:17;
+      then reconsider F = (proj(i,n)*f)|A as Function of A,REAL;
+      assume
+      i in Seg n;
+      then (proj(i,n)*f) is_integrable_on A by A2,Def16;
+      then F is integrable by INTEGRA5:def 2;
+      hence thesis by A1,Lm6;
     end;
-  hence thesis by Intablen;
+    hence thesis by Def13;
   end;
-  assume K0: g is integrable;
-  for i be Element of NAT st i in Seg n
-    holds (proj(i,n)*f) is_integrable_on A
-    proof
+  assume
+A4: g is integrable;
+  for i be Element of NAT st i in Seg n holds (proj(i,n)*f)
+  is_integrable_on A
+  proof
     let i be Element of NAT;
-    assume K1: i in Seg n; then
-    proj(i,n)*g = (proj(i,n)*f)|A by A0,LMDEF; then
-    (proj(i,n)*f)||A is integrable by K0,K1,Intablen;
+    assume
+A5: i in Seg n;
+    proj(i,n)*g = (proj(i,n)*f)|A by A1,Lm6;
+    then (proj(i,n)*f)||A is integrable by A4,A5,Def13;
     hence thesis by INTEGRA5:def 2;
-    end;
-  hence thesis by Defintable;
+  end;
+  hence thesis by Def16;
 end;
 
 theorem
-for n be Element of NAT,
-    A be closed-interval Subset of REAL,
-    f be PartFunc of REAL,REAL n,
-    g be Function of A,REAL n
-     st f|A = g
-  holds integral(f,A) = integral(g)
+  for n be Element of NAT, A be closed-interval Subset of REAL, f be
+PartFunc of REAL,REAL n, g be Function of A,REAL n st f|A = g holds integral(f,
+  A) = integral(g)
 proof
-let n be Element of NAT,
-    A be closed-interval Subset of REAL,
-    f be PartFunc of REAL,REAL n,
-    g be Function of A,REAL n;
-assume A0: f|A = g;
-A1:dom (integral(f,A)) = Seg n by DefintN
-                      .= dom (integral(g)) by DefintNn;
-now let k be Nat;
-  assume K0: k in dom (integral(f,A)); then
-  reconsider i=k as Element of NAT;
-  K1: i in Seg n by K0,DefintN; then
-  K2: integral(f,A).i = integral((proj(i,n)*f), A) by DefintN
-                     .= integral((proj(i,n)*f)||A );
-  dom (proj(i,n))=REAL n by FUNCT_2:def 1; then
-  rng f c= dom(proj(i,n)); then
-  K3:dom(proj(i,n)*f) = dom f by RELAT_1:46;
-  A = dom g by FUNCT_2:def 1
-   .= dom f /\ A by A0,RELAT_1:90; then
-  (proj(i,n)*f)||A is total by XBOOLE_1:17,K3,INTEGRA5:6; then
-  reconsider F = (proj(i,n)*f)|A as Function of A,REAL;
-  F = proj(i,n)*g by A0,K1,LMDEF;
-  hence integral(f,A).k = (integral(g)).k by K1,K2,DefintNn;
-end;
-hence thesis by A1,FINSEQ_1:17;
+  let n be Element of NAT, A be closed-interval Subset of REAL, f be PartFunc
+  of REAL,REAL n, g be Function of A,REAL n;
+  assume
+A1: f|A = g;
+A2: now
+    let k be Nat;
+    assume
+A3: k in dom (integral(f,A));
+    then reconsider i=k as Element of NAT;
+    dom (proj(i,n))=REAL n by FUNCT_2:def 1;
+    then rng f c= dom(proj(i,n));
+    then
+A4: dom(proj(i,n)*f) = dom f by RELAT_1:46;
+    A = dom g by FUNCT_2:def 1
+      .= dom f /\ A by A1,RELAT_1:90;
+    then (proj(i,n)*f)||A is total by A4,INTEGRA5:6,XBOOLE_1:17;
+    then reconsider F = (proj(i,n)*f)|A as Function of A,REAL;
+A5: F = proj(i,n)*g by A1,Lm6;
+A6: i in Seg n by A3,Def17;
+    then integral(f,A).i = integral((proj(i,n)*f), A) by Def17
+      .= integral((proj(i,n)*f)||A );
+    hence integral(f,A).k = (integral(g)).k by A6,A5,Def14;
+  end;
+  dom (integral(f,A)) = Seg n by Def17
+    .= dom (integral(g)) by Def14;
+  hence thesis by A2,FINSEQ_1:17;
 end;
 
-definition let a,b be real number;
-let n be Element of NAT;
-let f be PartFunc of REAL, REAL n;
-func integral(f,a,b) -> Element of REAL n means :Defintn:
-  dom it = Seg n &
-  for i be Element of NAT st i in Seg n
-  holds
-    it.i = integral( (proj(i,n)*f) ,a,b);
-existence
-proof
-defpred P[Nat, Element of REAL] means
- ex i be Element of NAT st $1 = i & $2 = integral((proj(i,n)*f), a,b);
-PN:for i be Nat st i in Seg n
-    ex x being Element of REAL st P[i,x]
-   proof
-   let i be Nat;
-   assume i in Seg n; then
-   reconsider ii = i as Element of NAT;
-   consider x be Element of REAL such that
-   P1: x = integral((proj(ii,n)*f), a,b);
-   take x;
-   thus thesis by P1;
-   end;
-consider p being FinSequence of REAL such that
-A1: dom p = Seg n & for i be Nat st i in Seg n holds P[i,p.i]
-    from FINSEQ_1:sch 5(PN);
-take p;
-A2: len p = n by A1,FINSEQ_1:def 3;
-for i be Element of NAT st i in Seg n holds
-  p.i = integral( (proj(i,n)*f), a,b)
+definition
+  let a,b be real number;
+  let n be Element of NAT;
+  let f be PartFunc of REAL, REAL n;
+  func integral(f,a,b) -> Element of REAL n means
+  :Def18:
+  dom it = Seg n & for
+  i be Element of NAT st i in Seg n holds it.i = integral( (proj(i,n)*f) ,a,b);
+  existence
   proof
-  let i be Element of NAT;
-  assume i in Seg n; then
-  P[i,p.i] by A1;
-  hence thesis;
+    defpred P[Nat, Element of REAL] means ex i be Element of NAT st $1 = i &
+    $2 = integral((proj(i,n)*f), a,b);
+A1: for i be Nat st i in Seg n ex x being Element of REAL st P[i,x]
+    proof
+      let i be Nat;
+      assume
+      i in Seg n;
+      then reconsider ii = i as Element of NAT;
+      consider x be Element of REAL such that
+A2:   x = integral((proj(ii,n)*f), a,b);
+      take x;
+      thus thesis by A2;
+    end;
+    consider p being FinSequence of REAL such that
+A3: dom p = Seg n & for i be Nat st i in Seg n holds P[i,p.i] from
+    FINSEQ_1:sch 5(A1);
+    take p;
+A4: for i be Element of NAT st i in Seg n holds p.i = integral( (proj(i,n)
+    *f), a,b)
+    proof
+      let i be Element of NAT;
+      assume
+      i in Seg n;
+      then P[i,p.i] by A3;
+      hence thesis;
+    end;
+    len p = n by A3,FINSEQ_1:def 3;
+    hence thesis by A3,A4,FINSEQ_2:110;
   end;
-hence thesis by A1,A2,FINSEQ_2:110;
-end;
-uniqueness
-proof
-let x1, x2 be Element of REAL n such that
-A1:dom x1 = Seg n &
-   for i be Element of NAT st i in Seg n holds
-     x1.i = integral( (proj(i,n)*f), a,b) and
-A2:dom x2 = Seg n &
-   for i be Element of NAT st i in Seg n
-   holds x2.i = integral( (proj(i,n)*f), a,b);
-for k be Nat st k in dom x1 holds x1.k = x2.k
+  uniqueness
   proof
-  let k be Nat;
-  assume A31: k in dom x1; then
-  reconsider k as Element of NAT;
-  x2.k = integral( (proj(k,n)*f), a,b) by A31,A1,A2;
-  hence thesis by A31,A1;
+    let x1, x2 be Element of REAL n such that
+A5: dom x1 = Seg n and
+A6: for i be Element of NAT st i in Seg n holds x1.i = integral( (
+    proj( i,n)*f), a,b) and
+A7: dom x2 = Seg n and
+A8: for i be Element of NAT st i in Seg n holds x2.i = integral( (
+    proj( i,n)*f), a,b);
+    for k be Nat st k in dom x1 holds x1.k = x2.k
+    proof
+      let k be Nat;
+      assume
+A9:   k in dom x1;
+      then reconsider k as Element of NAT;
+      x2.k = integral( (proj(k,n)*f), a,b) by A5,A8,A9;
+      hence thesis by A5,A6,A9;
+    end;
+    hence thesis by A5,A7,FINSEQ_1:17;
   end;
-hence thesis by A1,A2,FINSEQ_1:17;
-end;
 end;
 
 begin :: Linearity of the Integration Operator
 
-theorem Th31:
-for n be Element of NAT,
-    f1,f2 be PartFunc of REAL, REAL n,
-    i be Element of NAT st i in Seg n
-holds proj(i,n)*(f1+f2) = proj(i,n)*f1 + proj(i,n)*f2
-    & proj(i,n)*(f1-f2) = proj(i,n)*f1 - proj(i,n)*f2
+theorem Th15:
+  for n be Element of NAT, f1,f2 be PartFunc of REAL, REAL n, i be
+Element of NAT holds proj(i,n)*(f1+f2) = proj(i,n)*f1 + proj(i,n)*f2 & proj(i,n
+  )*(f1-f2) = proj(i,n)*f1 - proj(i,n)*f2
 proof
-let n be Element of NAT;
-let f1,f2 be PartFunc of REAL, REAL n;
-let i be Element of NAT;
-assume i in Seg n;
-S0:dom(f1+f2) = dom f1 /\ dom f2 by Def1;
-L1:dom(proj(i,n))= REAL n by FUNCT_2:def 1; then
-rng f1 c= dom(proj(i,n)); then
-L2:dom(proj(i,n)*f1) = dom f1 by RELAT_1:46;
-rng f2 c= dom(proj(i,n)) by L1; then
-L3:dom(proj(i,n)*f2) = dom f2 by RELAT_1:46;
-L4: rng (f1+f2) c= dom(proj(i,n)) by L1; then
-L5: dom(proj(i,n)*(f1+f2)) = dom(f1+f2) by RELAT_1:46;
-P1:dom(proj(i,n)*(f1+f2)) = dom(proj(i,n)*f1+proj(i,n)*f2)
-    by S0,L5,L2,L3,VALUED_1:def 1;
-for z being Element of REAL st z in dom(proj(i,n)*(f1+f2)) holds
- (proj(i,n)*(f1+f2)).z = (proj(i,n)*f1+proj(i,n)*f2).z
+  let n be Element of NAT;
+  let f1,f2 be PartFunc of REAL, REAL n;
+  let i be Element of NAT;
+A1: dom(proj(i,n))= REAL n by FUNCT_2:def 1;
+  then rng f1 c= dom(proj(i,n));
+  then
+A2: dom(proj(i,n)*f1) = dom f1 by RELAT_1:46;
+A3: rng (f1+f2) c= dom(proj(i,n)) by A1;
+  then
+A4: dom(proj(i,n)*(f1+f2)) = dom(f1+f2) by RELAT_1:46;
+  rng f2 c= dom(proj(i,n)) by A1;
+  then
+A5: dom(proj(i,n)*f2) = dom f2 by RELAT_1:46;
+A6: dom(f1+f2) = dom f1 /\ dom f2 by Def9;
+A7: for z being Element of REAL st z in dom(proj(i,n)*(f1+f2)) holds (proj(
+  i,n)*(f1+f2)).z = (proj(i,n)*f1+proj(i,n)*f2).z
   proof
-  let z be Element of REAL;
-  assume A1: z in dom(proj(i,n)*(f1+f2)); then
-  A2:z in dom(f1+f2) by L4,RELAT_1:46; then
-  proj(i,n).((f1+f2).z)=proj(i,n).((f1+f2)/.z) by PARTFUN1:def 8; then
-  proj(i,n).((f1+f2).z)=proj(i,n).(f1/.z+f2/.z) by A2, Def1; then
-  A3: proj(i,n).((f1+f2).z)= (f1/.z+f2/.z).i by PDIFF_1:def 1;
-  reconsider f1z = f1/.z as Element of n-tuples_on REAL;
-  reconsider f2z = f2/.z as Element of n-tuples_on REAL;
-  F1: proj(i,n).((f1+f2).z)= f1z.i + f2z.i by A3,RVSUM_1:27;
-  A4:z in dom(proj(i,n)*f1+proj(i,n)*f2)
-       by A1,S0,L5,L2,L3,VALUED_1:def 1;
-     z in dom(proj(i,n)*f1) /\ dom(proj(i,n)*f2) by A1,Def1,L5,L2,L3; then
-  A5:z in dom(proj(i,n)*f1) & z in dom(proj(i,n)*f2) by XBOOLE_0:def 4; then
-  A51: (proj(i,n)*f1).z = proj(i,n).(f1.z) by FUNCT_1:22;
-  A52: (proj(i,n)*f2).z = proj(i,n).(f2.z) by A5, FUNCT_1:22;
-  z in dom f1 /\ dom f2 by A2, Def1; then
-  A6: z in dom f1 & z in dom f2 by XBOOLE_0:def 4; then
-  A61: f1.z = f1z by PARTFUN1:def 8;
-  A62: f2.z = f2z by A6, PARTFUN1:def 8;
-  A7: (proj(i,n)*f1).z = f1z.i by A51,A61,PDIFF_1:def 1;
-      (proj(i,n)*f2).z = f2z.i by A52,A62,PDIFF_1:def 1; then
-  (proj(i,n)*f1+proj(i,n)*f2).z = f1z.i + f2z.i by A4,VALUED_1:def 1,A7;
-  hence thesis by F1,A1,FUNCT_1:22;
+    let z be Element of REAL;
+    reconsider f1z = f1/.z as Element of n-tuples_on REAL;
+    reconsider f2z = f2/.z as Element of n-tuples_on REAL;
+    assume
+A8: z in dom(proj(i,n)*(f1+f2));
+    then
+A9: z in dom(f1+f2) by A3,RELAT_1:46;
+    then
+A10: z in dom f1 /\ dom f2 by Def9;
+    then z in dom f1 by XBOOLE_0:def 4;
+    then
+A11: f1.z = f1z by PARTFUN1:def 8;
+    proj(i,n).((f1+f2).z)=proj(i,n).((f1+f2)/.z) by A9,PARTFUN1:def 8;
+    then proj(i,n).((f1+f2).z)=proj(i,n).(f1/.z+f2/.z) by A9,Def9;
+    then proj(i,n).((f1+f2).z)= (f1/.z+f2/.z).i by PDIFF_1:def 1;
+    then
+A12: proj(i,n).((f1+f2).z)= f1z.i + f2z.i by RVSUM_1:27;
+    z in dom f2 by A10,XBOOLE_0:def 4;
+    then
+A13: f2.z = f2z by PARTFUN1:def 8;
+A14: z in dom(proj(i,n)*f1) /\ dom(proj(i,n)*f2) by A2,A5,A4,A8,Def9;
+    then z in dom(proj(i,n)*f1) by XBOOLE_0:def 4;
+    then (proj(i,n)*f1).z = proj(i,n).(f1.z) by FUNCT_1:22;
+    then
+A15: (proj(i,n)*f1).z = f1z.i by A11,PDIFF_1:def 1;
+    z in dom(proj(i,n)*f2) by A14,XBOOLE_0:def 4;
+    then (proj(i,n)*f2).z = proj(i,n).(f2.z) by FUNCT_1:22;
+    then
+A16: (proj(i,n)*f2).z = f2z.i by A13,PDIFF_1:def 1;
+    z in dom(proj(i,n)*f1+proj(i,n)*f2) by A6,A2,A5,A4,A8,VALUED_1:def 1;
+    then (proj(i,n)*f1+proj(i,n)*f2).z = f1z.i + f2z.i by A15,A16,
+    VALUED_1:def 1;
+    hence thesis by A8,A12,FUNCT_1:22;
   end;
-hence proj(i,n)*(f1+f2) = proj(i,n)*f1 + proj(i,n)*f2 by PARTFUN1:34,P1;
-S0P:dom(f1-f2) = dom f1 /\ dom f2 by Def2;
-L4P: rng (f1-f2) c= dom(proj(i,n)) by L1; then
-L5P: dom(proj(i,n)*(f1-f2)) = dom(f1-f2) by RELAT_1:46;
-P1P:dom(proj(i,n)*(f1-f2)) = dom(proj(i,n)*f1-proj(i,n)*f2)
-    by S0P,L5P,L2,L3,VALUED_1:12;
-for z being Element of REAL st z in dom(proj(i,n)*(f1-f2)) holds
-  (proj(i,n)*(f1-f2)).z = (proj(i,n)*f1-proj(i,n)*f2).z
+  dom(proj(i,n)*(f1+f2)) = dom(proj(i,n)*f1+proj(i,n)*f2) by A6,A2,A5,A4,
+  VALUED_1:def 1;
+  hence proj(i,n)*(f1+f2) = proj(i,n)*f1 + proj(i,n)*f2 by A7,PARTFUN1:34;
+A17: rng (f1-f2) c= dom(proj(i,n)) by A1;
+  then
+A18: dom(proj(i,n)*(f1-f2)) = dom(f1-f2) by RELAT_1:46;
+A19: dom(f1-f2) = dom f1 /\ dom f2 by Def10;
+  then
+A20: dom(proj(i,n)*(f1-f2)) = dom(proj(i,n)*f1-proj(i,n)*f2) by A2,A5,
+  A18
+  ,VALUED_1:12;
+  for z being Element of REAL st z in dom(proj(i,n)*(f1-f2)) holds (proj(
+  i,n)*(f1-f2)).z = (proj(i,n)*f1-proj(i,n)*f2).z
   proof
-  let z being Element of REAL;
-  assume A1: z in dom(proj(i,n)*(f1-f2)); then
-  A2: z in dom(f1-f2) by L4P,RELAT_1:46; then
-  proj(i,n).((f1-f2).z)=proj(i,n).((f1-f2)/.z) by PARTFUN1:def 8; then
-  proj(i,n).((f1-f2).z)=proj(i,n).(f1/.z-f2/.z) by A2, Def2; then
-  A3: proj(i,n).((f1-f2).z)= (f1/.z-f2/.z).i by PDIFF_1:def 1;
-  reconsider f1z = f1/.z as Element of n-tuples_on REAL;
-  reconsider f2z = f2/.z as Element of n-tuples_on REAL;
-  F1: proj(i,n).((f1-f2).z)= f1z.i - f2z.i by A3,RVSUM_1:48;
-  A4: (proj(i,n)*f1-proj(i,n)*f2).z = (proj(i,n)*f1).z - (proj(i,n)*f2).z
-      by A1,P1P,VALUED_1:13;
-  A5: z in dom(proj(i,n)*f1) & z in dom(proj(i,n)*f2)
-      by A1,S0P,L5P,L2,L3,XBOOLE_0:def 4; then
-  A51: (proj(i,n)*f1).z = proj(i,n).(f1.z) by FUNCT_1:22;
-  A52: (proj(i,n)*f2).z = proj(i,n).(f2.z) by A5, FUNCT_1:22;
-  z in dom f1 /\ dom f2 by A2, Def2; then
-  A6: z in dom f1 & z in dom f2 by XBOOLE_0:def 4; then
-  A61: f1.z = f1z by PARTFUN1:def 8;
-  A62: f2.z = f2z by A6, PARTFUN1:def 8;
-  A7: (proj(i,n)*f1).z = f1z.i by A51,A61,PDIFF_1:def 1;
-      (proj(i,n)*f2).z = f2z.i by A52,A62,PDIFF_1:def 1;
-  hence thesis by F1,A1,FUNCT_1:22,A4,A7;
+    let z being Element of REAL;
+    reconsider f1z = f1/.z as Element of n-tuples_on REAL;
+    reconsider f2z = f2/.z as Element of n-tuples_on REAL;
+    assume
+A21: z in dom(proj(i,n)*(f1-f2));
+    then
+A22: z in dom(f1-f2) by A17,RELAT_1:46;
+    then
+A23: z in dom f1 /\ dom f2 by Def10;
+    then z in dom f1 by XBOOLE_0:def 4;
+    then
+A24: f1.z = f1z by PARTFUN1:def 8;
+    z in dom f2 by A23,XBOOLE_0:def 4;
+    then
+A25: f2.z = f2z by PARTFUN1:def 8;
+    z in dom(proj(i,n)*f2) by A5,A19,A18,A21,XBOOLE_0:def 4;
+    then (proj(i,n)*f2).z = proj(i,n).(f2.z) by FUNCT_1:22;
+    then
+A26: (proj(i,n)*f2).z = f2z.i by A25,PDIFF_1:def 1;
+    proj(i,n).((f1-f2).z)=proj(i,n).((f1-f2)/.z) by A22,PARTFUN1:def 8;
+    then proj(i,n).((f1-f2).z)=proj(i,n).(f1/.z-f2/.z) by A22,Def10;
+    then proj(i,n).((f1-f2).z)= (f1/.z-f2/.z).i by PDIFF_1:def 1;
+    then
+A27: proj(i,n).((f1-f2).z)= f1z.i - f2z.i by RVSUM_1:48;
+    z in dom(proj(i,n)*f1) by A2,A19,A18,A21,XBOOLE_0:def 4;
+    then (proj(i,n)*f1).z = proj(i,n).(f1.z) by FUNCT_1:22;
+    then
+A28: (proj(i,n)*f1).z = f1z.i by A24,PDIFF_1:def 1;
+    (proj(i,n)*f1-proj(i,n)*f2).z = (proj(i,n)*f1).z - (proj(i,n)*f2).z
+    by A20,A21,VALUED_1:13;
+    hence thesis by A21,A27,A28,A26,FUNCT_1:22;
   end;
-hence thesis by PARTFUN1:34,P1P;
+  hence thesis by A20,PARTFUN1:34;
 end;
 
-theorem Th32:
-for n be Element of NAT,
-    r be Real,
-    f be PartFunc of REAL, REAL n,
-    i be Element of NAT st i in Seg n
-holds proj(i,n)*(r(#)f) = r(#)(proj(i,n)*f)
+theorem Th16:
+  for n be Element of NAT, r be Real, f be PartFunc of REAL, REAL
+  n, i be Element of NAT holds proj(i,n)*(r(#)f) = r(#)(proj(i,n)*f)
 proof
-let n be Element of NAT;
-let r be Real;
-let f be PartFunc of REAL, REAL n;
-let i be Element of NAT;
-assume i in Seg n;
-N1:dom (r(#)f) = dom f by Def3;
-N2:dom (proj(i,n))=REAL n by FUNCT_2:def 1; then
-rng f c= dom(proj(i,n)); then
-N3:dom(proj(i,n)*f) = dom f by RELAT_1:46; then
-N4:dom(r(#)(proj(i,n)*f)) = dom f by VALUED_1:def 5;
-rng (r(#)f) c= dom(proj(i,n)) by N2; then
-N5:dom((proj(i,n))*(r(#)f)) = dom(r(#)(proj(i,n)*f)) by N1,N4,RELAT_1:46;
-for z being Element of REAL st z in dom (r(#)(proj(i,n)*f)) holds
-  (proj(i,n)*(r(#)f)).z = (r(#)(proj(i,n)*f)).z
-  proof
-  let z be Element of REAL;
-  assume K1: z in dom (r(#)(proj(i,n)*f)); then
-  K2: z in dom (proj(i,n)*f) by VALUED_1:def 5;
-  reconsider fz = f/.z as Element of n-tuples_on REAL;
-  reconsider rfz = (r(#)f)/.z as Element of n-tuples_on REAL;
-  K3: (f.z) = (fz) by N3,K2,PARTFUN1:def 8;
-  (r(#)(proj(i,n)*f)).z = r * (proj(i,n)*f).z by K1,VALUED_1:def 5
-                       .= r * ((proj(i,n)).(fz)) by K2,K3,FUNCT_1:22; then
-  K4: (r(#)(proj(i,n)*f)).z = r * fz.i by PDIFF_1:def 1;
-  K5: ((r(#)f).z) = (rfz) by K2,N1,N3,PARTFUN1:def 8;
-  thus (proj(i,n)*(r(#)f)).z = (proj(i,n)).((r(#)f).z) by K1,N5,FUNCT_1:22
-                            .= (rfz).i by K5,PDIFF_1:def 1
-                            .= (r * fz).i by K2,N1,N3,Def3
-                            .= (r(#)(proj(i,n)*f)).z by K4,RVSUM_1:66;
-  end;
-hence thesis by PARTFUN1:34,N5;
-end;
-
-theorem
-for n be Element of NAT
-for A be closed-interval Subset of REAL
-for f1,f2 be PartFunc of REAL, REAL n
-            st f1 is_integrable_on A & f2 is_integrable_on A
-             & A c= dom f1 & A c= dom f2
-             & (f1|A) is bounded & (f2|A) is bounded
-holds f1+f2 is_integrable_on A &
-      f1-f2 is_integrable_on A
-       & integral(f1+f2,A)=integral(f1,A)+integral(f2,A)
-       & integral(f1-f2,A)=integral(f1,A)-integral(f2,A)
-proof
-let n be Element of NAT;
-let A be closed-interval Subset of REAL;
-let f1,f2 be PartFunc of REAL, REAL n;
-assume
-A1: f1 is_integrable_on A & f2 is_integrable_on A &
-    A c= dom f1 & A c= dom f2 &
-    f1|A is bounded & f2|A is bounded;
-A2: for i be Element of NAT st i in Seg n
-      holds A c= dom (proj(i,n)*f1) & A c= dom (proj(i,n)*f2)
-  proof
+  let n be Element of NAT;
+  let r be Real;
+  let f be PartFunc of REAL, REAL n;
   let i be Element of NAT;
-  assume i in Seg n;
-  dom proj(i,n) = REAL n by FUNCT_2:def 1; then
-  rng f1 c= dom proj(i,n) & rng f2 c= dom proj(i,n);
-  hence thesis by A1,RELAT_1:46;
-  end;
-A3: for i be Element of NAT st i in Seg n holds
-   ( proj(i,n)*f1 + proj(i,n)*f2 is_integrable_on A
-     & integral(proj(i,n)*f1+proj(i,n)*f2,A)
-     = integral(proj(i,n)*f1,A) + integral(proj(i,n)*f2,A) ) &
-   ( proj(i,n)*f1 - proj(i,n)*f2 is_integrable_on A
-     & integral(proj(i,n)*f1-proj(i,n)*f2,A)
-     = integral(proj(i,n)*f1,A) - integral(proj(i,n)*f2,A) )
+A1: dom (r(#)f) = dom f by Def11;
+A2: dom (proj(i,n))=REAL n by FUNCT_2:def 1;
+  then
+A3: rng (r(#)f) c= dom(proj(i,n));
+  rng f c= dom(proj(i,n)) by A2;
+  then
+A4: dom(proj(i,n)*f) = dom f by RELAT_1:46;
+  then dom(r(#)(proj(i,n)*f)) = dom f by VALUED_1:def 5;
+  then
+A5: dom((proj(i,n))*(r(#)f)) = dom(r(#)(proj(i,n)*f)) by A1,
+  A3,RELAT_1:46;
+  for z being Element of REAL st z in dom (r(#)(proj(i,n)*f)) holds (proj(
+  i,n)*(r(#)f)).z = (r(#)(proj(i,n)*f)).z
   proof
-  let i be Element of NAT;
-  assume B1:i in Seg n; then
-  P1: A c= dom (proj(i,n)*f1) & A c= dom (proj(i,n)*f2) by A2;
-      proj(i,n)*(f1|A) is bounded &
-      proj(i,n)*(f2|A) is bounded by A1,Defbounded,B1; then
-  P2: (proj(i,n)*f1)|A is bounded &
-      (proj(i,n)*f2)|A is bounded by LMDEF,B1;
-  P3:  proj(i,n)*f1 is_integrable_on A
-     & proj(i,n)*f2 is_integrable_on A by B1,A1, Defintable;
-  thus proj(i,n)*f1 + proj(i,n)*f2 is_integrable_on A &
-       integral(proj(i,n)*f1+proj(i,n)*f2,A)
-     = integral(proj(i,n)*f1,A) + integral(proj(i,n)*f2,A)
-       by INTEGRA6:11,P1,P2,P3;
-  thus proj(i,n)*f1 - proj(i,n)*f2 is_integrable_on A &
-       integral(proj(i,n)*f1-proj(i,n)*f2,A)
-     = integral(proj(i,n)*f1,A) - integral(proj(i,n)*f2,A)
-       by INTEGRA6:11,P1,P2,P3;
+    let z be Element of REAL;
+    reconsider fz = f/.z as Element of n-tuples_on REAL;
+    reconsider rfz = (r(#)f)/.z as Element of n-tuples_on REAL;
+    assume
+A6: z in dom (r(#)(proj(i,n)*f));
+    then
+A7: z in dom (proj(i,n)*f) by VALUED_1:def 5;
+    then
+A8: (f.z) = (fz) by A4,PARTFUN1:def 8;
+    (r(#)(proj(i,n)*f)).z = r * (proj(i,n)*f).z by A6,VALUED_1:def 5
+      .= r * ((proj(i,n)).(fz)) by A7,A8,FUNCT_1:22;
+    then
+A9: (r(#)(proj(i,n)*f)).z = r * fz.i by PDIFF_1:def 1;
+A10: ((r(#)f).z) = (rfz) by A1,A4,A7,PARTFUN1:def 8;
+    thus (proj(i,n)*(r(#)f)).z = (proj(i,n)).((r(#)f).z) by A5,A6,FUNCT_1:22
+      .= (rfz).i by A10,PDIFF_1:def 1
+      .= (r * fz).i by A1,A4,A7,Def11
+      .= (r(#)(proj(i,n)*f)).z by A9,RVSUM_1:66;
   end;
-A4: for i be Element of NAT st i in Seg n
-     holds proj(i,n)*(f1+f2) is_integrable_on A &
-           proj(i,n)*(f1-f2) is_integrable_on A
-  proof
-  let i be Element of NAT;
-  assume B1:i in Seg n; then
-  (proj(i,n)*f1+proj(i,n)*f2) is_integrable_on A &
-  (proj(i,n)*f1-proj(i,n)*f2) is_integrable_on A by A3;
-  hence thesis by B1,Th31;
-  end; then
-for i be Element of NAT st i in Seg n
-  holds proj(i,n)*(f1+f2) is_integrable_on A;
-hence f1+f2 is_integrable_on A by Defintable;
-for i be Element of NAT st i in Seg n
-  holds proj(i,n)*(f1-f2) is_integrable_on A by A4;
-hence f1-f2 is_integrable_on A by Defintable;
-A5: for i be Element of NAT st i in Seg n holds
-   ( integral(f1,A).i + integral(f2,A).i
-    =integral((proj(i,n)*f1),A) + integral((proj(i,n)*f2),A) ) &
-   ( integral(f1,A).i - integral(f2,A).i
-    =integral((proj(i,n)*f1),A) - integral((proj(i,n)*f2),A) )
-  proof
-  let i be Element of NAT;
-  assume i in Seg n; then
-  (integral(f1,A).i = integral((proj(i,n)*f1),A) &
-   integral(f2,A).i = integral((proj(i,n)*f2),A)) by DefintN;
-  hence thesis;
-  end;
-A6: for i be Element of NAT st i in Seg n holds
-   ( integral(f1,A).i + integral(f2,A).i
-           = integral(proj(i,n)*f1+proj(i,n)*f2,A) ) &
-   ( integral(f1,A).i - integral(f2,A).i
-           = integral(proj(i,n)*f1-proj(i,n)*f2,A) )
- proof
- let i be Element of NAT;
- assume i in Seg n; then
- integral(f1,A).i + integral(f2,A).i
-  =integral((proj(i,n)*f1),A) + integral((proj(i,n)*f2),A) &
-   integral(proj(i,n)*f1,A) + integral(proj(i,n)*f2,A)
-  =integral(proj(i,n)*f1+proj(i,n)*f2,A) &
-   integral(f1,A).i - integral(f2,A).i
-  =integral((proj(i,n)*f1),A) - integral((proj(i,n)*f2),A) &
-   integral(proj(i,n)*f1,A) - integral(proj(i,n)*f2,A)
-  =integral(proj(i,n)*f1-proj(i,n)*f2,A) by A3,A5;
- hence thesis;
- end;
-A7: for i be Element of NAT st i in Seg n holds
-   ( integral(f1,A).i + integral(f2,A).i
-           = integral(proj(i,n)*(f1+f2),A) ) &
-   ( integral(f1,A).i - integral(f2,A).i
-           = integral(proj(i,n)*(f1-f2),A) )
-  proof
-  let i be Element of NAT;
-  assume i in Seg n; then
-  integral(f1,A).i + integral(f2,A).i
-          = integral(proj(i,n)*f1+proj(i,n)*f2,A) &
-  integral(proj(i,n)*f1+proj(i,n)*f2,A)
-          = integral(proj(i,n)*(f1+f2),A) &
-  integral(f1,A).i - integral(f2,A).i
-          = integral(proj(i,n)*f1-proj(i,n)*f2,A) &
-  integral(proj(i,n)*f1-proj(i,n)*f2,A)
-          = integral(proj(i,n)*(f1-f2),A) by A6,Th31;
-  hence thesis;
-  end;
-A8: for i be Element of NAT st i in Seg n holds
-   ( integral(f1+f2,A).i = integral(f1,A).i + integral(f2,A).i ) &
-   ( integral(f1-f2,A).i = integral(f1,A).i - integral(f2,A).i )
-  proof
-  let i be Element of NAT;
-  assume i in Seg n; then
-  integral(f1,A).i + integral(f2,A).i
-          = integral(proj(i,n)*(f1+f2),A) &
-  integral(proj(i,n)*(f1+f2),A) = integral(f1+f2,A).i &
-  integral(f1,A).i - integral(f2,A).i
-          = integral(proj(i,n)*(f1-f2),A) &
-  integral(proj(i,n)*(f1-f2),A) = integral(f1-f2,A).i by A7,DefintN;
-  hence thesis;
-  end;
-C1:dom(integral(f1+f2,A)) = Seg n &
-   dom(integral(f1,A) + integral(f2,A)) = Seg n &
-   dom(integral(f1-f2,A)) = Seg n &
-   dom(integral(f1,A) - integral(f2,A)) = Seg n by EUCLID:3;
-for i be Element of NAT st i in dom (integral(f1+f2,A)) holds
-       (integral(f1+f2,A)).i = (integral(f1,A) + integral(f2,A)).i
-  proof
-  let i be Element of NAT;
-  assume i in dom (integral(f1+f2,A)); then
-  integral(f1+f2,A).i = integral(f1,A).i + integral(f2,A).i &
-  (integral(f1,A) + integral(f2,A) ).i
-   = integral(f1,A).i + integral(f2,A).i by A8,RVSUM_1:27,C1;
-  hence thesis;
-  end;
-hence integral(f1+f2,A) = integral(f1,A)+integral(f2,A) by PARTFUN1:34,C1;
-for i be Element of NAT st i in dom (integral(f1-f2,A)) holds
-       (integral(f1-f2,A)).i = (integral(f1,A) - integral(f2,A)).i
-  proof
-  let i be Element of NAT;
-  assume i in dom (integral(f1-f2,A)); then
-  integral(f1-f2,A).i = integral(f1,A).i - integral(f2,A).i &
-  (integral(f1,A) - integral(f2,A) ).i
-   = integral(f1,A).i - integral(f2,A).i by A8,RVSUM_1:48,C1;
-  hence thesis;
-  end;
-hence thesis by PARTFUN1:34,C1;
+  hence thesis by A5,PARTFUN1:34;
 end;
 
 theorem
-for n be Element of NAT
-for r be Real
-for A be closed-interval Subset of REAL
-for f be PartFunc of REAL, REAL n
- st A c= dom f & f is_integrable_on A & f|A is bounded
-holds r(#)f is_integrable_on A
-      & integral( (r(#)f) ,A) = r*integral(f,A)
+  for n be Element of NAT for A be closed-interval Subset of REAL for f1
+,f2 be PartFunc of REAL, REAL n st f1 is_integrable_on A & f2 is_integrable_on
+A & A c= dom f1 & A c= dom f2 & (f1|A) is bounded & (f2|A) is bounded holds f1+
+f2 is_integrable_on A & f1-f2 is_integrable_on A & integral(f1+f2,A)=integral(
+  f1,A)+integral(f2,A) & integral(f1-f2,A)=integral(f1,A)-integral(f2,A)
 proof
-let n be Element of NAT;
-let r be Real;
-let A be closed-interval Subset of REAL;
-let f be PartFunc of REAL, REAL n;
-assume A1: A c= dom f & f is_integrable_on A & f|A is bounded;
-A2:now let i be Element of NAT;
-  dom proj(i,n) = REAL n by FUNCT_2:def 1; then
-  rng f c= dom proj(i,n);
-  hence A c= dom (proj(i,n)*f) by A1,RELAT_1:46;
-  end;
-for i be Element of NAT st i in Seg n
-  holds (proj(i,n)*(r(#)f) ) is_integrable_on A
+  let n be Element of NAT;
+  let A be closed-interval Subset of REAL;
+  let f1,f2 be PartFunc of REAL, REAL n;
+  assume that
+A1: f1 is_integrable_on A & f2 is_integrable_on A and
+A2: A c= dom f1 & A c= dom f2 and
+A3: f1|A is bounded and
+A4: f2|A is bounded;
+A5: for i be Element of NAT st i in Seg n holds A c= dom (proj(i,n)*f1) & A
+  c= dom (proj(i,n)*f2)
   proof
-  let i be Element of NAT;
-  assume A50: i in Seg n; then
-  A51:(proj(i,n)*f ) is_integrable_on A by A1,Defintable;
-  (proj(i,n)*f)|A = proj(i,n)*(f|A) by A50,LMDEF; then
-  A52:(proj(i,n)*f)|A is bounded by A50,A1,Defbounded;
-  A c= dom (proj(i,n)*f) by A2; then
-  r(#)(proj(i,n)*f ) is_integrable_on A &
-  integral(r(#)(proj(i,n)*f ),A)=r*integral((proj(i,n)*f ),A)
-                                 by A51,A52,INTEGRA6:9;
-  hence thesis by A50,Th32;
+    let i be Element of NAT;
+    assume
+    i in Seg n;
+    dom proj(i,n) = REAL n by FUNCT_2:def 1;
+    then rng f1 c= dom proj(i,n) & rng f2 c= dom proj(i,n);
+    hence thesis by A2,RELAT_1:46;
   end;
-hence r(#)f is_integrable_on A by Defintable;
-A3:for i be Element of NAT st i in Seg n
-     holds integral(r(#)(proj(i,n)*f), A)=r*integral((proj(i,n)*f), A)
+A6: for i be Element of NAT st i in Seg n holds proj(i,n)*f1 + proj(i,n)*f2
+is_integrable_on A & integral(proj(i,n)*f1+proj(i,n)*f2,A) = integral(proj(i,n)
+  *f1,A) + integral(proj(i,n)*f2,A) & proj(i,n)*f1 - proj(i,n)*f2
+is_integrable_on A & integral(proj(i,n)*f1-proj(i,n)*f2,A) = integral(proj(i,n)
+  *f1,A) - integral(proj(i,n)*f2,A)
   proof
-  let i be Element of NAT;
-  assume B1: i in Seg n; then
-  B2:(proj(i,n)*f) is_integrable_on A by A1,Defintable;
-  (proj(i,n)*f)|A = proj(i,n)*(f|A) by B1,LMDEF; then
-  B3:(proj(i,n)*f)|A is bounded by B1,A1,Defbounded;
-  A c= dom (proj(i,n)*f) by A2;
-  hence thesis by B2,B3,INTEGRA6:9;
+    let i be Element of NAT;
+    assume
+A7: i in Seg n;
+    then
+A8: A c= dom (proj(i,n)*f1) & A c= dom (proj(i,n)*f2) by A5;
+    proj(i,n)*(f2|A) is bounded by A4,A7,Def15;
+    then
+A9: (proj(i,n)*f2)|A is bounded by Lm6;
+    proj(i,n)*(f1|A) is bounded by A3,A7,Def15;
+    then
+A10: (proj(i,n)*f1)|A is bounded by Lm6;
+A11: proj(i,n)*f1 is_integrable_on A & proj(i,n)*f2 is_integrable_on A by
+    A1,A7, Def16;
+    hence proj(i,n)*f1 + proj(i,n)*f2 is_integrable_on A & integral(proj(i,n)*
+f1+proj(i,n)*f2,A) = integral(proj(i,n)*f1,A) + integral(proj(i,n)*f2,A) by A8
+    ,A10,A9,INTEGRA6:11;
+    thus proj(i,n)*f1 - proj(i,n)*f2 is_integrable_on A & integral(proj(i,n)*
+f1-proj(i,n)*f2,A) = integral(proj(i,n)*f1,A) - integral(proj(i,n)*f2,A) by A8
+    ,A10,A9,A11,INTEGRA6:11;
   end;
-A4:for i be Element of NAT st i in Seg n holds
-    (r*integral(f,A)).i = r*integral((proj(i,n)*f ),A)
+A12: for i be Element of NAT st i in Seg n holds proj(i,n)*(f1+f2)
+  is_integrable_on A & proj(i,n)*(f1-f2) is_integrable_on A
   proof
-  let i be Element of NAT;
-  assume i in Seg n; then
-  r*integral(f,A).i = r*integral((proj(i,n)*f ),A) by DefintN;
-  hence thesis by RVSUM_1:67;
+    let i be Element of NAT;
+    assume
+    i in Seg n;
+    then
+    (proj(i,n)*f1+proj(i,n)*f2) is_integrable_on A & (proj(i,n)*f1-proj(i
+    ,n)*f2) is_integrable_on A by A6;
+    hence thesis by Th15;
   end;
-A5:for i be Element of NAT st i in Seg n holds
-    integral((r(#)f), A).i = (r*integral(f,A)).i
+  then for i be Element of NAT st i in Seg n holds proj(i,n)*(f1+f2)
+  is_integrable_on A;
+  hence f1+f2 is_integrable_on A by Def16;
+A13: for i be Element of NAT st i in Seg n holds integral(f1,A).i + integral
+(f2,A).i =integral((proj(i,n)*f1),A) + integral((proj(i,n)*f2),A) & integral(f1
+,A).i - integral(f2,A).i =integral((proj(i,n)*f1),A) - integral((proj(i,n)*f2),
+  A)
   proof
-  let i be Element of NAT;
-  assume B1:i in Seg n; then
-  B2:integral((r(#)f),A).i = integral((proj(i,n)*(r(#)f)),A) by DefintN;
-  B3:(r*integral(f,A)).i = r*integral((proj(i,n)*f ),A) by B1,A4;
-  integral(r(#)(proj(i,n)*f),A)=integral((proj(i,n)*(r(#)f)),A) by B1,Th32;
-  hence thesis by B1,A3,B2,B3;
+    let i be Element of NAT;
+    assume
+A14: i in Seg n;
+    then integral(f1,A).i = integral((proj(i,n)*f1),A) by Def17;
+    hence thesis by A14,Def17;
   end;
-A6:dom(integral((r(#)f),A)) = Seg n by EUCLID:3; then
-   dom(integral((r(#)f),A)) = dom(r*integral(f,A)) by EUCLID:3;
-hence thesis by PARTFUN1:34,A5,A6;
+A15: for i be Element of NAT st i in Seg n holds integral(f1,A).i + integral
+(f2,A).i = integral(proj(i,n)*f1+proj(i,n)*f2,A) & integral(f1,A).i - integral(
+  f2,A).i = integral(proj(i,n)*f1-proj(i,n)*f2,A)
+  proof
+    let i be Element of NAT;
+    assume
+A16: i in Seg n;
+    then integral(f1,A).i + integral(f2,A).i =integral((proj(i,n)*f1),A) +
+integral(( proj(i,n)*f2),A) & integral(f1,A).i - integral(f2,A).i =integral((
+    proj(i,n)*f1 ),A) - integral((proj(i,n)*f2),A) by A13;
+    hence thesis by A6,A16;
+  end;
+A17: for i be Element of NAT st i in Seg n holds integral(f1,A).i + integral
+(f2,A).i = integral(proj(i,n)*(f1+f2),A) & integral(f1,A).i - integral(f2,A).i
+  = integral(proj(i,n)*(f1-f2),A)
+  proof
+    let i be Element of NAT;
+    assume
+    i in Seg n;
+    then
+    integral(f1,A).i + integral(f2,A).i = integral(proj(i,n)*f1+proj(i,n)
+* f2,A) & integral(f1,A).i - integral(f2,A).i = integral(proj(i,n)*f1-proj(i,n)
+    * f2,A) by A15;
+    hence thesis by Th15;
+  end;
+A18: for i be Element of NAT st i in Seg n holds integral(f1+f2,A).i =
+integral(f1,A).i + integral(f2,A).i & integral(f1-f2,A).i = integral(f1,A).i -
+  integral(f2,A).i
+  proof
+    let i be Element of NAT;
+    assume
+A19: i in Seg n;
+    then
+    integral(f1,A).i + integral(f2,A).i = integral(proj(i,n)*(f1+f2),A) &
+    integral(f1,A).i - integral(f2,A).i = integral(proj(i,n)*(f1-f2),A) by A17;
+    hence thesis by A19,Def17;
+  end;
+  for i be Element of NAT st i in Seg n holds proj(i,n)*(f1-f2)
+  is_integrable_on A by A12;
+  hence f1-f2 is_integrable_on A by Def16;
+A20: dom(integral(f1+f2,A)) = Seg n by EUCLID:3;
+A21: for i be Element of NAT st i in dom (integral(f1+f2,A)) holds (integral
+  (f1+f2,A)).i = (integral(f1,A) + integral(f2,A)).i
+  proof
+    let i be Element of NAT;
+    assume
+    i in dom (integral(f1+f2,A));
+    then
+    integral(f1+f2,A).i = integral(f1,A).i + integral(f2,A).i by A18,A20;
+    hence thesis by RVSUM_1:27;
+  end;
+  dom(integral(f1,A) + integral(f2,A)) = Seg n by EUCLID:3;
+  hence integral(f1+f2,A) = integral(f1,A)+integral(f2,A) by A21,EUCLID:3 ,
+  PARTFUN1:34;
+A22: dom(integral(f1-f2,A)) = Seg n by EUCLID:3;
+A23: for i be Element of NAT st i in dom (integral(f1-f2,A)) holds (integral
+  (f1-f2,A)).i = (integral(f1,A) - integral(f2,A)).i
+  proof
+    let i be Element of NAT;
+    assume
+    i in dom (integral(f1-f2,A));
+    then
+    integral(f1-f2,A).i = integral(f1,A).i - integral(f2,A).i by A18,A22;
+    hence thesis by RVSUM_1:48;
+  end;
+  dom(integral(f1,A) - integral(f2,A)) = Seg n by EUCLID:3;
+  hence thesis by A23,EUCLID:3,PARTFUN1:34;
 end;
 
 theorem
-for n be Element of NAT
-for f being PartFunc of REAL,REAL n,
-    A being closed-interval Subset of REAL,
-  a,b be Real st A=[.a,b.]
- holds integral(f,A)=integral(f,a,b)
+  for n be Element of NAT for r be Real for A be closed-interval Subset
+of REAL for f be PartFunc of REAL, REAL n st A c= dom f & f is_integrable_on A
+  & f|A is bounded holds r(#)f is_integrable_on A & integral( (r(#)f) ,A) = r*
+  integral(f,A)
 proof
-let n be Element of NAT;
-let f being PartFunc of REAL,REAL n,
-    A being closed-interval Subset of REAL,
+  let n be Element of NAT;
+  let r be Real;
+  let A be closed-interval Subset of REAL;
+  let f be PartFunc of REAL, REAL n;
+  assume that
+A1: A c= dom f and
+A2: f is_integrable_on A and
+A3: f|A is bounded;
+A4: now
+    let i be Element of NAT;
+    dom proj(i,n) = REAL n by FUNCT_2:def 1;
+    then rng f c= dom proj(i,n);
+    hence A c= dom (proj(i,n)*f) by A1,RELAT_1:46;
+  end;
+A5: for i be Element of NAT st i in Seg n holds integral(r(#)(proj(i,n)*f),
+  A)=r*integral((proj(i,n)*f), A)
+  proof
+    let i be Element of NAT;
+    assume
+A6: i in Seg n;
+    (proj(i,n)*f)|A = proj(i,n)*(f|A) by Lm6;
+    then
+A7: (proj(i,n)*f)|A is bounded by A3,A6,Def15;
+A8: A c= dom (proj(i,n)*f) by A4;
+    (proj(i,n)*f) is_integrable_on A by A2,A6,Def16;
+    hence thesis by A7,A8,INTEGRA6:9;
+  end;
+A9: for i be Element of NAT st i in Seg n holds (r*integral(f,A)).i = r*
+  integral((proj(i,n)*f ),A)
+  proof
+    let i be Element of NAT;
+    assume
+    i in Seg n;
+    then r*integral(f,A).i = r*integral((proj(i,n)*f ),A) by Def17;
+    hence thesis by RVSUM_1:67;
+  end;
+A10: for i be Element of NAT st i in Seg n holds integral((r(#)f), A).i = (r*
+  integral(f,A)).i
+  proof
+    let i be Element of NAT;
+A11: integral(r(#)(proj(i,n)*f),A)=integral((proj(i,n)*(r(#)f)),A) by Th16;
+    assume
+A12: i in Seg n;
+    then
+    integral((r(#)f),A).i = integral((proj(i,n)*(r(#)f)),A) & (r*integral
+    (f,A)).i = r*integral((proj(i,n)*f ),A) by A9,Def17;
+    hence thesis by A5,A12,A11;
+  end;
+  for i be Element of NAT st i in Seg n holds (proj(i,n)*(r(#)f) )
+  is_integrable_on A
+  proof
+    let i be Element of NAT;
+    assume
+A13: i in Seg n;
+    (proj(i,n)*f)|A = proj(i,n)*(f|A) by Lm6;
+    then
+A14: (proj(i,n)*f)|A is bounded by A3,A13,Def15;
+A15: A c= dom (proj(i,n)*f) by A4;
+    (proj(i,n)*f ) is_integrable_on A by A2,A13,Def16;
+    then r(#)(proj(i,n)*f ) is_integrable_on A by A14,A15,INTEGRA6:9;
+    hence thesis by Th16;
+  end;
+  hence r(#)f is_integrable_on A by Def16;
+A16: dom(integral((r(#)f),A)) = Seg n by EUCLID:3;
+  then dom(integral((r(#)f),A)) = dom(r*integral(f,A)) by EUCLID:3;
+  hence thesis by A10,A16,PARTFUN1:34;
+end;
+
+theorem
+  for n be Element of NAT for f being PartFunc of REAL,REAL n, A being
+  closed-interval Subset of REAL, a,b be Real st A=[.a,b.] holds integral(f,A)=
+  integral(f,a,b)
+proof
+  let n be Element of NAT;
+  let f being PartFunc of REAL,REAL n, A being closed-interval Subset of REAL,
   a,b be Real;
-assume A0: A=[.a,b.];
-A1:dom (integral(f,A)) = Seg n by DefintN
-                      .= dom (integral(f,a,b)) by Defintn;
-now let i be Nat;
-  assume B0:i in dom (integral(f,A)); then
-  reconsider k=i as Element of NAT;
-  B1:dom (integral(f,A)) = Seg n by DefintN; then
-  B2:integral(f,A).k = integral((proj(k,n)*f),A) by B0,DefintN;
-  integral(f,a,b).k = integral((proj(k,n)*f), a,b) by B0,B1,Defintn;
-  hence integral(f,A).i = integral(f,a,b).i by A0,INTEGRA5:19,B2;
-end;
-hence integral(f,A)=integral(f,a,b) by A1, FINSEQ_1:17;
+  assume
+A1: A=[.a,b.];
+A2: now
+    let i be Nat;
+    assume
+A3: i in dom (integral(f,A));
+    then reconsider k=i as Element of NAT;
+    dom (integral(f,A)) = Seg n by Def17;
+    then integral(f,A).k = integral((proj(k,n)*f),A) & integral(f,a,b).k =
+    integral(( proj(k,n)*f), a,b) by A3,Def17,Def18;
+    hence integral(f,A).i = integral(f,a,b).i by A1,INTEGRA5:19;
+  end;
+  dom (integral(f,A)) = Seg n by Def17
+    .= dom (integral(f,a,b)) by Def18;
+  hence integral(f,A)=integral(f,a,b) by A2,FINSEQ_1:17;
 end;
 
 theorem
-for n be Element of NAT
-for f being PartFunc of REAL,REAL n,
-    A being closed-interval Subset of REAL,
-  a,b be Real st A=[.b,a.] holds -integral(f,A)=integral(f,a,b)
+  for n be Element of NAT for f being PartFunc of REAL,REAL n, A being
+closed-interval Subset of REAL, a,b be Real st A=[.b,a.] holds -integral(f,A)=
+  integral(f,a,b)
 proof
-let n be Element of NAT;
-let f being PartFunc of REAL,REAL n,
-    A being closed-interval Subset of REAL,
+  let n be Element of NAT;
+  let f being PartFunc of REAL,REAL n, A being closed-interval Subset of REAL,
   a,b be Real;
-assume A0: A=[.b,a.];
-A1:dom (-integral(f,A)) = dom ((-1)(#)integral(f,A)) by VALUED_1:def 6
-                       .= dom (integral(f,A)) by VALUED_1:def 5
-                       .= Seg n by DefintN
-                       .= dom (integral(f,a,b)) by Defintn;
-now let i be Nat;
-  assume B1:i in dom (-integral(f,A)); then
-  reconsider k=i as Element of NAT;
-  B2:k in dom (integral(f,A)) by B1,VALUED_1:8;
-  B3:dom (integral(f,A))= Seg n by DefintN;
-  B4:(-integral(f,A)).k =-((integral(f,A)).k) by VALUED_1:8
-                       .=-integral((proj(k,n)*f),A) by B2,B3,DefintN;
-  integral(f,a,b).k = integral((proj(k,n)*f), a,b) by B2,B3,Defintn;
-  hence (-integral(f,A)).i = integral(f,a,b).i by A0,B4,INTEGRA5:20;
+  assume
+A1: A=[.b,a.];
+A2: now
+    let i be Nat;
+    assume
+A3: i in dom (-integral(f,A));
+    then reconsider k=i as Element of NAT;
+A4: dom (integral(f,A))= Seg n by Def17;
+A5: k in dom (integral(f,A)) by A3,VALUED_1:8;
+    then
+A6: integral(f,a,b).k = integral((proj(k,n)*f), a,b) by A4,Def18;
+    (-integral(f,A)).k =-((integral(f,A)).k) by VALUED_1:8
+      .=-integral((proj(k,n)*f),A) by A5,A4,Def17;
+    hence (-integral(f,A)).i = integral(f,a,b).i by A1,A6,INTEGRA5:20;
+  end;
+  dom (-integral(f,A)) = dom ((-1)(#)integral(f,A)) by VALUED_1:def 6
+    .= dom (integral(f,A)) by VALUED_1:def 5
+    .= Seg n by Def17
+    .= dom (integral(f,a,b)) by Def18;
+  hence thesis by A2,FINSEQ_1:17;
 end;
-hence thesis by A1, FINSEQ_1:17;
-end;
+

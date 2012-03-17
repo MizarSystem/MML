@@ -16,12 +16,13 @@
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="REAL_1"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="INT_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FUNCT_4"/>
-<ArticleID name="INT_1"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="TURING_1"/>
 </Signature>
@@ -31,7 +32,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="36"/>
+<Adjective nr="38"/>
 </Cluster>
 </RCluster>
 <FCluster aid="TURING_1" nr="1">
@@ -42,12 +43,12 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="180">
+<Func kind="K" nr="84">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="25"/>
+<Adjective nr="27"/>
 </Cluster>
 </FCluster>
 </Registrations>

@@ -11,10 +11,10 @@ environ
       ARYTM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS, REAL_1,
       BINOP_1, RELSET_1, STRUCT_0, FINSEQ_1, FINSEQ_2, FINSET_1, MCART_1,
-      RELAT_1, FUNCT_1, FUNCT_2, FUNCT_3, FUNCOP_1, FUNCT_5, RVSUM_1, XCMPLX_0,
-      NAT_1, TREES_1, TREES_2, XXREAL_0;
+      RELAT_1, FUNCT_1, FUNCT_2, FUNCOP_1, FUNCT_5, RVSUM_1, XCMPLX_0, NAT_1,
+      TREES_1, TREES_2, XXREAL_0;
  constructors BINOP_1, FUNCT_3, XXREAL_0, NAT_1, RVSUM_1, TREES_2, MIDSP_1,
-      FUNCT_5, RELSET_1;
+      FUNCT_5, RELSET_1, BINOP_2;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FINSET_1,
       NUMBERS, MEMBERED, FINSEQ_1, TREES_2, STRUCT_0, VALUED_0, RELSET_1;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
@@ -57,15 +57,12 @@ reserve s for non empty typealg,
 definition
   let s,x,y;
   func x\y -> type of s equals
-
   (the left_quotient of s).(x,y);
   correctness;
   func x/"y -> type of s equals
-
   (the right_quotient of s).(x,y);
   correctness;
   func x*y -> type of s equals
-
   (the inner_product of s).(x,y);
   correctness;
 end;
@@ -107,13 +104,10 @@ definition
   let s;
   let IT be type of s;
   attr IT is left means
-
   ex x,y st IT = x\y;
   attr IT is right means
-
   ex x,y st IT = x/"y;
   attr IT is middle means
-
   ex x,y st IT = x*y;
 end;
 
@@ -121,7 +115,6 @@ definition
   let s;
   let IT be type of s;
   attr IT is primitive means
-
   not (IT is left or IT is right or IT is middle);
 end;
 
@@ -143,7 +136,6 @@ definition
   let s;
   let Tr be finite DecoratedTree of the carrier of s, x;
   pred Tr represents x means
-
   dom Tr is finite &
   for v being Element of dom Tr holds (branchdeg v = 0 or branchdeg v = 2)
   & (branchdeg v = 0 implies Tr.v is primitive) & (branchdeg v = 2 implies
@@ -223,17 +215,18 @@ A3: v = {} by A1,TARSKI:def 1;
 A4: now consider x being Element of dom Tr-level 1;
       assume dom Tr-level 1 <> {};
       then x in dom Tr-level 1;
-      then x in {w where w is Element of dom Tr: len w = 1} by TREES_2:def 6;
-      then consider w being Element of dom Tr such that
-A5:   x = w & len w = 1;
-      w = {} by A1,TARSKI:def 1;
-      hence contradiction by A5,CARD_1:47;
+      then x in {w where w is Element of dom Tr: len w = 1} by
+      TREES_2:def 6;
+      then ex w being Element of dom Tr st ( x = w)&( len w = 1);
+      hence contradiction by A1,CARD_1:47,TARSKI:def 1;
     end;
-A6: branchdeg v = card succ v by TREES_2:def 13
+A5: branchdeg v = card succ v by TREES_2:def 13
       .= 0 by A3,A4,CARD_1:47,TREES_2:15;
-    Tr.v = [[<*x*>,x],0] by A1,FUNCOP_1:13;
-    then (Tr.v)`1 = [<*x*>,x] & (Tr.v)`2 = 0 by MCART_1:7;
-    hence thesis by A6,Def5;
+A6: Tr.v = [[<*x*>,x],0] by A1,FUNCOP_1:13;
+    then
+A7: (Tr.v)`1 = [<*x*>,x] by MCART_1:7;
+    (Tr.v)`2 = 0 by A6,MCART_1:7;
+    hence thesis by A5,A7,Def5;
   end;
 end;
 
@@ -251,7 +244,8 @@ A1: succ v <> {} by CARD_1:47,TREES_2:def 13;
   then x in {v^<*n*> where n is Element of NAT: v^<*n*> in dom p}
   by TREES_2:def 5;
   then consider n being Element of NAT such that
-A2: x = v^<*n*> & v^<*n*> in dom p;
+  x = v^<*n*> and
+A2: v^<*n*> in dom p;
   0 <= n by NAT_1:2;
   hence thesis by A2,TREES_1:def 5;
 end;
@@ -264,19 +258,22 @@ A1: succ v = {v^<*n*> where n is Element of NAT: v^<*n*> in dom p}
   assume branchdeg v = 2;
   then card succ v = 2 by TREES_2:def 13;
   then consider x,y being set such that
-A2: x <> y & succ v = {x,y} by CARD_2:79;
-  x in succ v by A2,TARSKI:def 2;
+A2: x <> y and
+A3: succ v = {x,y} by CARD_2:79;
+  x in succ v by A3,TARSKI:def 2;
   then consider n being Element of NAT such that
-A3: x = v^<*n*> & v^<*n*> in dom p by A1;
-  y in succ v by A2,TARSKI:def 2;
+A4: x = v^<*n*> and
+A5: v^<*n*> in dom p by A1;
+  y in succ v by A3,TARSKI:def 2;
   then consider k being Element of NAT such that
-A4: y = v^<*k*> & v^<*k*> in dom p by A1;
-  n <> 0 or k <> 0 by A2,A3,A4;
+A6: y = v^<*k*> and
+A7: v^<*k*> in dom p by A1;
+  n <> 0 or k <> 0 by A2,A4,A6;
   then
-A5: n > 0 or k > 0 by NAT_1:3;
-  hence v^<*0*> in dom p by A3,A4,TREES_1:def 5;
-  n >= 0+1 or k >= 0+1 by A5,NAT_1:13;
-  hence thesis by A3,A4,TREES_1:def 5;
+A8: n > 0 or k > 0 by NAT_1:3;
+  hence v^<*0*> in dom p by A5,A7,TREES_1:def 5;
+  n >= 0+1 or k >= 0+1 by A8,NAT_1:13;
+  hence thesis by A5,A7,TREES_1:def 5;
 end;
 
 theorem
@@ -294,7 +291,8 @@ A1: v is correct by Def13;
   assume
 A2: (p.v)`2 = 1;
   then
-A3: ex T,x,y st (p.v)`1 = [T,x/"y] & (p.(v^<*0*>))`1 = [T^<*y*>,x] by A1,Def5;
+A3: ex T,x,y st (p.v)`1 = [T,x/"y] & (p.(v^<*0*>))`1 = [T^<*y*>,x] by A1,
+  Def5;
   branchdeg v = 1 by A1,A2,Def5;
   then v^<*0*> in dom p by Th1;
   hence thesis by A3;
@@ -308,7 +306,8 @@ A1: v is correct by Def13;
   assume
 A2: (p.v)`2 = 2;
   then
-A3: ex T,x,y st (p.v)`1 = [T,y\x] & (p.(v^<*0*>))`1 = [<*y*>^T,x] by A1,Def5;
+A3: ex T,x,y st (p.v)`1 = [T,y\x] & (p.(v^<*0*>))`1 = [<*y*>^T,x] by A1,
+  Def5;
   branchdeg v = 1 by A1,A2,Def5;
   then v^<*0*> in dom p by Th1;
   hence thesis by A3;
@@ -325,9 +324,11 @@ A2: (p.v)`2 = 3;
   then
 A3: ex T,X,Y,x,y,z st (p.v)`1 = [X^<*x/"y*>^T^Y,z] &
   (p.(v^<*0*>))`1 = [T,y] & (p.(v^<*1*>))`1 = [X^<*x*>^Y,z] by A1,Def5;
-  branchdeg v = 2 by A1,A2,Def5;
-  then v^<*0*> in dom p & v^<*1*> in dom p by Th2;
-  hence thesis by A3;
+A4: branchdeg v = 2 by A1,A2,Def5;
+  then
+A5: v^<*0*> in dom p by Th2;
+  v^<*1*> in dom p by A4,Th2;
+  hence thesis by A3,A5;
 end;
 
 theorem
@@ -341,9 +342,11 @@ A2: (p.v)`2 = 4;
   then
 A3: ex T,X,Y,x,y,z st (p.v)`1 = [X^T^<*y\x*>^Y,z] &
   (p.(v^<*0*>))`1 = [T,y] & (p.(v^<*1*>))`1 = [X^<*x*>^Y,z] by A1,Def5;
-  branchdeg v = 2 by A1,A2,Def5;
-  then v^<*0*> in dom p & v^<*1*> in dom p by Th2;
-  hence thesis by A3;
+A4: branchdeg v = 2 by A1,A2,Def5;
+  then
+A5: v^<*0*> in dom p by Th2;
+  v^<*1*> in dom p by A4,Th2;
+  hence thesis by A3,A5;
 end;
 
 theorem
@@ -371,9 +374,11 @@ A2: (p.v)`2 = 6;
   then
 A3: ex X,Y,x,y st (p.v)`1 = [X^Y,x*y] & (p.(v^<*0*>))`1 = [X,x] &
   (p.(v^<*1*>))`1 = [Y,y] by A1,Def5;
-  branchdeg v = 2 by A1,A2,Def5;
-  then v^<*0*> in dom p & v^<*1*> in dom p by Th2;
-  hence thesis by A3;
+A4: branchdeg v = 2 by A1,A2,Def5;
+  then
+A5: v^<*0*> in dom p by Th2;
+  v^<*1*> in dom p by A4,Th2;
+  hence thesis by A3,A5;
 end;
 
 theorem Th10:
@@ -387,9 +392,11 @@ A2: (p.v)`2 = 7;
   then
 A3: ex T,X,Y,y,z st (p.v)`1 = [X^T^Y,z] & (p.(v^<*0*>))`1 = [T,y] &
   (p.(v^<*1*>))`1 = [X^<*y*>^Y,z] by A1,Def5;
-  branchdeg v = 2 by A1,A2,Def5;
-  then v^<*0*> in dom p & v^<*1*> in dom p by Th2;
-  hence thesis by A3;
+A4: branchdeg v = 2 by A1,A2,Def5;
+  then
+A5: v^<*0*> in dom p by Th2;
+  v^<*1*> in dom p by A4,Th2;
+  hence thesis by A3,A5;
 end;
 
 theorem
@@ -404,7 +411,6 @@ definition
   let s;
   let IT be PreProof of s;
   attr IT is cut-free means
-
   for v being Element of dom IT holds (IT.v)`2 <> 7;
 end;
 
@@ -433,38 +439,39 @@ A2: g.x = card dom repr_of x;
   end;
 end;
 
-Lm3: for D being non empty set, T being FinSequence of D,
+Lm1: for D being non empty set, T being FinSequence of D,
 f being Function of D,NAT holds f*T is FinSequence of NAT
 proof
   let D be non empty set, T be FinSequence of D;
   let f be Function of D, NAT;
-  rng T c= D & dom f = D by FINSEQ_1:def 4,FUNCT_2:def 1;
+A1: rng T c= D by FINSEQ_1:def 4;
+  dom f = D by FUNCT_2:def 1;
   then
-A1: f*T is FinSequence by FINSEQ_1:20;
-  rng f c= NAT & rng (f*T) c= rng f by RELAT_1:45,def 19;
-  then rng (f*T) c= NAT by XBOOLE_1:1;
-  hence thesis by A1,FINSEQ_1:def 4;
+A2: f*T is FinSequence by A1,FINSEQ_1:20;
+  rng (f*T) c= NAT by RELAT_1:def 19;
+  hence thesis by A2,FINSEQ_1:def 4;
 end;
 
-Lm4: for D being non empty set, T being FinSequence of D,
+Lm2: for D being non empty set, T being FinSequence of D,
 f being Function of D,NAT holds f*T is FinSequence of REAL
 proof
   let D be non empty set, T be FinSequence of D;
   let f be Function of D, NAT;
-  rng T c= D & dom f = D by FINSEQ_1:def 4,FUNCT_2:def 1;
+A1: rng T c= D by FINSEQ_1:def 4;
+  dom f = D by FUNCT_2:def 1;
   then
-A1: f*T is FinSequence by FINSEQ_1:20;
+A2: f*T is FinSequence by A1,FINSEQ_1:20;
   rng (f*T) c= REAL;
-  hence thesis by A1,FINSEQ_1:def 4;
+  hence thesis by A2,FINSEQ_1:def 4;
 end;
 
 definition
   let D be non empty set, T be FinSequence of D, f be Function of D,NAT;
   redefine func f*T -> FinSequence of REAL;
-  coherence by Lm4;
+  coherence by Lm2;
 end;
 
-Lm5: for D being non empty set, T being FinSequence of D
+Lm3: for D being non empty set, T being FinSequence of D
 for f being Function of D, NAT holds Sum(f*T) is Nat
 proof
   let D be non empty set, T be FinSequence of D;
@@ -484,15 +491,18 @@ A4: rng (p^<*x*>) c= NAT by FINSEQ_1:def 4;
     then
 A5: rng p c= NAT by A4,XBOOLE_1:1;
     rng <*x*> c= rng (p^<*x*>) by FINSEQ_1:43;
-    then rng <*x*> c= NAT & rng <*x*> = {x} by A4,FINSEQ_1:55,XBOOLE_1:1;
-    then reconsider n=x as Element of NAT by ZFMISC_1:37;
+    then
+A6: rng <*x*> c= NAT by A4,XBOOLE_1:1;
+    rng <*x*> = {x} by FINSEQ_1:55;
+    then reconsider n=x as Element of NAT by A6,ZFMISC_1:37;
     reconsider s = Sum p as Nat by A3,A5,FINSEQ_1:def 4;
     Sum(p^<*x*>) = s + n by RVSUM_1:104;
     hence thesis;
   end;
-A6: for p being FinSequence of REAL holds P[p] from FINSEQ_2:sch 2(A1,A2);
-  f*T is FinSequence of REAL & f*T is FinSequence of NAT by Lm3;
-  hence thesis by A6;
+A7: for p being FinSequence of REAL holds P[p] from FINSEQ_2:sch 2(A1,A2
+  );
+  f*T is FinSequence of NAT by Lm1;
+  hence thesis by A7;
 end;
 
 definition
@@ -514,11 +524,14 @@ A2:   {}^<*1*> = <*1*> by FINSEQ_1:47;
       reconsider v = {} as Element of dom p by TREES_1:47;
       assume (p.{})`2 = 7;
       then consider w,u being Element of dom p, T,X,Y,y,z such that
-A3:   w = v^<*0*> & u = v^<*1*> & (p.v)`1 = [X^T^Y,z] & (p.w)`1 = [T,y] &
-      (p.u)`1 = [X^<*y*>^Y,z] by Th10;
-      reconsider a = Sum((size_w.r.t. s)*(X^T^Y)) as Nat by Lm5;
+A3:   w = v^<*0*> and
+A4:   u = v^<*1*> and
+A5:   (p.v)`1 = [X^T^Y,z] and
+A6:   (p.w)`1 = [T,y] and
+A7:   (p.u)`1 = [X^<*y*>^Y,z] by Th10;
+      reconsider a = Sum((size_w.r.t. s)*(X^T^Y)) as Nat by Lm3;
       take (size_w.r.t. s).y + (size_w.r.t. s).z + a;
-      thus thesis by A1,A2,A3;
+      thus thesis by A1,A2,A3,A4,A5,A6,A7;
     end;
     thus thesis;
   end;
@@ -535,20 +548,24 @@ A3:   w = v^<*0*> & u = v^<*1*> & (p.v)`1 = [X^T^Y,z] & (p.w)`1 = [T,y] &
     proof
       assume (p.{})`2 = 7;
       given T,X,Y,y,z such that
-A4:   (p.{})`1 = [X^T^Y,z] & (p.<*0*>)`1 = [T,y] &
-      (p.<*1*>)`1 = [X^<*y*>^Y,z] & r1 = (size_w.r.t. s).y + (size_w.r.t. s).z
-      + Sum((size_w.r.t. s)*(X^T^Y));
+A8:   (p.{})`1 = [X^T^Y,z] and
+A9:   (p.<*0*>)`1 = [T,y]
+      and (p.<*1*>)`1 = [X^<*y*>^Y,z] and
+A10:  r1 = (size_w.r.t. s).y + (size_w.r.t. s).z + Sum((size_w.r.t. s)*(X
+      ^T^Y));
       given T',X',Y',y',z' such that
-A5:   (p.{})`1 = [X'^T'^Y',z'] & (p.<*0*>)`1 =
-      [T',y'] & (p.<*1*>)`1 = [X'^<*y'*>^Y',z'] & r2 = (size_w.r.t. s).y' +
-      (size_w.r.t. s).z' + Sum((size_w.r.t. s)*(X'^T'^Y'));
-A6:   X^T^Y = [X^T^Y,z]`1 by MCART_1:7
-        .= X'^T'^Y' by A4,A5,MCART_1:7;
-A7:   y = [T,y]`2 by MCART_1:7
-        .= y' by A4,A5,MCART_1:7;
+A11:  (p.{})`1 = [X'^T'^Y',z'] and
+A12:  (p.<*0*>)`1 = [T',y']
+      and (p.<*1*>)`1 = [X'^<*y'*>^Y',z'] and
+A13:  r2 = (size_w.r.t. s).y' + (size_w.r.t. s).z' + Sum((size_w.r.t. s)*
+      (X'^T'^Y'));
+A14:  X^T^Y = [X^T^Y,z]`1 by MCART_1:7
+        .= X'^T'^Y' by A8,A11,MCART_1:7;
+A15:  y = [T,y]`2 by MCART_1:7
+        .= y' by A9,A12,MCART_1:7;
       z = [X^T^Y,z]`2 by MCART_1:7
-        .= z' by A4,A5,MCART_1:7;
-      hence thesis by A4,A5,A6,A7;
+        .= z' by A8,A11,MCART_1:7;
+      hence thesis by A10,A13,A14,A15;
     end;
     thus thesis;
   end;
@@ -594,16 +611,22 @@ A3: {} is Element of A* by FINSEQ_1:66;
         let t be set;
         assume t in f.(x*y);
         then t = {} by A1;
-        then t = {}^{} & {} in f.x & {} in f.y by A2,FINSEQ_1:47;
-        hence thesis;
+        then
+A4:     t = {}^{} by FINSEQ_1:47;
+A5:     {} in f.x by A2;
+        {} in f.y by A2;
+        hence thesis by A4,A5;
       end;
       let t be set;
       assume t in { a ^ b : a in f.x & b in f.y };
       then consider a,b such that
-A4:   t = a ^ b & a in f.x & b in f.y;
-      a = {} & b = {}by A1,A4;
-      then a ^ b = {} by FINSEQ_1:47;
-      hence thesis by A2,A4;
+A6:   t = a ^ b and
+A7:   a in f.x and
+A8:   b in f.y;
+A9:   a = {} by A1,A7;
+      b = {} by A1,A8;
+      then a ^ b = {} by A9,FINSEQ_1:47;
+      hence thesis by A2,A6;
     end;
     thus f.(x/"y) = { a : for b st b in f.y holds a ^ b in f.x }
     proof
@@ -612,7 +635,7 @@ A4:   t = a ^ b & a in f.x & b in f.y;
         let t be set;
         assume t in f.(x/"y);
         then
-A5:     t = {} by A1;
+A10:    t = {} by A1;
         now
           let b;
           assume b in f.y;
@@ -620,17 +643,17 @@ A5:     t = {} by A1;
           then {} ^ b = {} by FINSEQ_1:47;
           hence {} ^ b in f.x by A2;
         end;
-        hence thesis by A3,A5;
+        hence thesis by A3,A10;
       end;
       let t be set;
       assume t in { a : for b st b in f.y holds a ^ b in f.x };
       then consider a such that
-A6:   t = a & for b st b in f.y holds a ^ b in f.x;
+A11:  t = a and
+A12:  for b st b in f.y holds a ^ b in f.x;
       {} in f.y by A2;
-      then a ^ {} in f.x by A6;
-      then a in f.x by FINSEQ_1:47;
+      then a ^ {} in f.x by A12;
       then a = {} by A1;
-      hence thesis by A2,A6;
+      hence thesis by A2,A11;
     end;
     thus f.(y\x) = { a : for b st b in f.y holds b ^ a in f.x }
     proof
@@ -639,7 +662,7 @@ A6:   t = a & for b st b in f.y holds a ^ b in f.x;
         let t be set;
         assume t in f.(y\x);
         then
-A7:     t = {} by A1;
+A13:    t = {} by A1;
         now
           let b;
           assume b in f.y;
@@ -647,17 +670,17 @@ A7:     t = {} by A1;
           then b ^ {} = {} by FINSEQ_1:47;
           hence b ^ {} in f.x by A2;
         end;
-        hence thesis by A3,A7;
+        hence thesis by A3,A13;
       end;
       let t be set;
       assume t in { a : for b st b in f.y holds b ^ a in f.x };
       then consider a such that
-A8:   t = a & for b st b in f.y holds b ^ a in f.x;
+A14:  t = a and
+A15:  for b st b in f.y holds b ^ a in f.x;
       {} in f.y by A2;
-      then {} ^ a in f.x by A8;
-      then a in f.x by FINSEQ_1:47;
+      then {} ^ a in f.x by A15;
       then a = {} by A1;
-      hence thesis by A2,A8;
+      hence thesis by A2,A14;
     end;
   end;
 end;
@@ -707,8 +730,8 @@ definition
   st T ==>. y & X^<*x*>^Y ==>. z holds X^T^<*y\x*>^Y ==>. z) &
   (for X,Y being FinSequence of the carrier of IT, x,y,z being type of IT
   st X^<*x*>^<*y*>^Y ==>. z holds X^<*x*y*>^Y ==>.z) &
-  (for X,Y being FinSequence of the carrier of IT, x,y being type of IT
-  st X ==>. x & Y ==>. y holds X^Y ==>. x*y);
+  for X,Y being FinSequence of the carrier of IT, x,y being type of IT
+  st X ==>. x & Y ==>. y holds X^Y ==>. x*y;
 end;
 
 registration
@@ -716,7 +739,7 @@ registration
   existence
   proof
     [:1*,1:] c= [:1*,1:];
-    then reconsider DER = [:1*,1:] as non empty Relation of 1*,1 ;
+    then reconsider DER = [:1*,1:] as non empty Relation of 1*,1;
     reconsider EM = typestr (#1,op2,op2,op2,DER#) as non empty typestr;
     take EM;
 A1: for x being type of EM, X being FinSequence of the carrier of EM
@@ -740,55 +763,67 @@ reserve s for SynTypes_Calculus,
   x,y,z for type of s;
 deffunc e(typestr) = <*>the carrier of $1;
 
-Lm6: T ==>. y & X^<*x*> ==>. z implies X^<*x/"y*>^T ==>. z
+Lm4: T ==>. y & X^<*x*> ==>. z implies X^<*x/"y*>^T ==>. z
 proof
-  assume T ==>. y & X^<*x*> ==>. z;
-  then T ==>. y & X^<*x*>^e(s) ==>. z by FINSEQ_1:47;
-  then X^<*x/"y*>^T^e(s) ==>. z by Def19;
+  assume that
+A1: T ==>. y and
+A2: X^<*x*> ==>. z;
+  X^<*x*>^e(s) ==>. z by A2,FINSEQ_1:47;
+  then X^<*x/"y*>^T^e(s) ==>. z by A1,Def19;
   hence thesis by FINSEQ_1:47;
 end;
 
-Lm7: T ==>. y & <*x*>^Y ==>. z implies <*x/"y*>^T^Y ==>. z
+Lm5: T ==>. y & <*x*>^Y ==>. z implies <*x/"y*>^T^Y ==>. z
 proof
-  assume T ==>. y & <*x*>^Y ==>. z;
-  then T ==>. y & e(s)^<*x*>^Y ==>. z by FINSEQ_1:47;
-  then e(s)^<*x/"y*>^T^Y ==>. z by Def19;
+  assume that
+A1: T ==>. y and
+A2: <*x*>^Y ==>. z;
+  e(s)^<*x*>^Y ==>. z by A2,FINSEQ_1:47;
+  then e(s)^<*x/"y*>^T^Y ==>. z by A1,Def19;
   hence thesis by FINSEQ_1:47;
 end;
 
-Lm8: T ==>. y & <*x*> ==>. z implies <*x/"y*>^T ==>. z
+Lm6: T ==>. y & <*x*> ==>. z implies <*x/"y*>^T ==>. z
 proof
-  assume T ==>. y & <*x*> ==>. z;
-  then T ==>. y & e(s)^<*x*> ==>. z by FINSEQ_1:47;
-  then e(s)^<*x/"y*>^T ==>. z by Lm6;
+  assume that
+A1: T ==>. y and
+A2: <*x*> ==>. z;
+  e(s)^<*x*> ==>. z by A2,FINSEQ_1:47;
+  then e(s)^<*x/"y*>^T ==>. z by A1,Lm4;
   hence thesis by FINSEQ_1:47;
 end;
 
-Lm9: T ==>. y & X^<*x*> ==>. z implies X^T^<*y\x*> ==>. z
+Lm7: T ==>. y & X^<*x*> ==>. z implies X^T^<*y\x*> ==>. z
 proof
-  assume T ==>. y & X^<*x*> ==>. z;
-  then T ==>. y & X^<*x*>^e(s) ==>. z by FINSEQ_1:47;
-  then X^T^<*y\x*>^e(s) ==>. z by Def19;
+  assume that
+A1: T ==>. y and
+A2: X^<*x*> ==>. z;
+  X^<*x*>^e(s) ==>. z by A2,FINSEQ_1:47;
+  then X^T^<*y\x*>^e(s) ==>. z by A1,Def19;
   hence thesis by FINSEQ_1:47;
 end;
 
-Lm10: T ==>. y & <*x*>^Y ==>. z implies T^<*y\x*>^Y ==>. z
+Lm8: T ==>. y & <*x*>^Y ==>. z implies T^<*y\x*>^Y ==>. z
 proof
-  assume T ==>. y & <*x*>^Y ==>. z;
-  then T ==>. y & e(s)^<*x*>^Y ==>. z by FINSEQ_1:47;
-  then e(s)^T^<*y\x*>^Y ==>. z by Def19;
+  assume that
+A1: T ==>. y and
+A2: <*x*>^Y ==>. z;
+  e(s)^<*x*>^Y ==>. z by A2,FINSEQ_1:47;
+  then e(s)^T^<*y\x*>^Y ==>. z by A1,Def19;
   hence thesis by FINSEQ_1:47;
 end;
 
-Lm11: T ==>. y & <*x*> ==>. z implies T^<*y\x*> ==>. z
+Lm9: T ==>. y & <*x*> ==>. z implies T^<*y\x*> ==>. z
 proof
-  assume T ==>. y & <*x*> ==>. z;
-  then T ==>. y & e(s)^<*x*> ==>. z by FINSEQ_1:47;
-  then e(s)^T^<*y\x*> ==>. z by Lm9;
+  assume that
+A1: T ==>. y and
+A2: <*x*> ==>. z;
+  e(s)^<*x*> ==>. z by A2,FINSEQ_1:47;
+  then e(s)^T^<*y\x*> ==>. z by A1,Lm7;
   hence thesis by FINSEQ_1:47;
 end;
 
-Lm12: <*x*>^<*y*>^Y ==>. z implies <*x*y*>^Y ==>. z
+Lm10: <*x*>^<*y*>^Y ==>. z implies <*x*y*>^Y ==>. z
 proof
   assume <*x*>^<*y*>^Y ==>. z;
   then e(s)^<*x*>^<*y*>^Y ==>. z by FINSEQ_1:47;
@@ -796,7 +831,7 @@ proof
   hence thesis by FINSEQ_1:47;
 end;
 
-Lm13: X^<*x*>^<*y*> ==>. z implies X^<*x*y*> ==>. z
+Lm11: X^<*x*>^<*y*> ==>. z implies X^<*x*y*> ==>. z
 proof
   assume X^<*x*>^<*y*> ==>. z;
   then X^<*x*>^<*y*>^e(s) ==>. z by FINSEQ_1:47;
@@ -804,33 +839,36 @@ proof
   hence thesis by FINSEQ_1:47;
 end;
 
-Lm14: <*x*>^<*y*> ==>. z implies <*x*y*> ==>. z
+Lm12: <*x*>^<*y*> ==>. z implies <*x*y*> ==>. z
 proof
   assume <*x*>^<*y*> ==>. z;
   then e(s)^<*x*>^<*y*> ==>. z by FINSEQ_1:47;
-  then e(s)^<*x*y*> ==>. z by Lm13;
+  then e(s)^<*x*y*> ==>. z by Lm11;
   hence thesis by FINSEQ_1:47;
 end;
 
 theorem Th12:
   <*x/"y*>^<*y*> ==>. x & <*y*>^<*y\x*> ==>. x
 proof
-  <*x*> ==>. x & <*y*> ==>. y by Def19;
-  hence thesis by Lm8,Lm11;
+A1: <*x*> ==>. x by Def19;
+  <*y*> ==>. y by Def19;
+  hence thesis by A1,Lm6,Lm9;
 end;
 
 theorem Th13:
   <*x*> ==>. y/"(x\y) & <*x*> ==>. (y/"x)\y
 proof
-  <*y/"x*>^<*x*> ==>. y & <*x*>^<*x\y*> ==>. y by Th12;
-  hence thesis by Def19;
+A1: <*y/"x*>^<*x*> ==>. y by Th12;
+  <*x*>^<*x\y*> ==>. y by Th12;
+  hence thesis by A1,Def19;
 end;
 
 theorem Th14:
   <*x/"y*> ==>. (x/"z)/"(y/"z)
 proof
-  <*x/"y*>^<*y*> ==>. x & <*z*> ==>. z by Def19,Th12;
-  then <*x/"y*>^<*y/"z*>^<*z*> ==>. x by Lm6;
+A1: <*x/"y*>^<*y*> ==>. x by Th12;
+  <*z*> ==>. z by Def19;
+  then <*x/"y*>^<*y/"z*>^<*z*> ==>. x by A1,Lm4;
   then <*x/"y*>^<*y/"z*> ==>. x/"z by Def19;
   hence thesis by Def19;
 end;
@@ -838,8 +876,9 @@ end;
 theorem Th15:
   <*y\x*> ==>. (z\y)\(z\x)
 proof
-  <*y*>^<*y\x*> ==>. x & <*z*> ==>. z by Def19,Th12;
-  then <*z*>^<*z\y*>^<*y\x*> ==>. x by Lm10;
+A1: <*y*>^<*y\x*> ==>. x by Th12;
+  <*z*> ==>. z by Def19;
+  then <*z*>^<*z\y*>^<*y\x*> ==>. x by A1,Lm8;
   then <*z*>^(<*z\y*>^<*y\x*>) ==>. x by FINSEQ_1:45;
   then <*z\y*>^<*y\x*> ==>. z\x by Def19;
   hence thesis by Def19;
@@ -848,19 +887,25 @@ end;
 theorem
   <*x*> ==>. y implies <*x/"z*> ==>. y/"z & <*z\x*> ==>. z\y
 proof
-  assume <*x*> ==>. y;
-  then <*x*> ==>. y & <*z*> ==>. z by Def19;
-  then <*x/"z*>^<*z*> ==>. y & <*z*>^<*z\x*> ==>. y by Lm8,Lm11;
-  hence thesis by Def19;
+  assume
+A1: <*x*> ==>. y;
+A2: <*z*> ==>. z by Def19;
+  then
+A3: <*x/"z*>^<*z*> ==>. y by A1,Lm6;
+  <*z*>^<*z\x*> ==>. y by A1,A2,Lm9;
+  hence thesis by A3,Def19;
 end;
 
 theorem Th17:
   <*x*> ==>. y implies <*z/"y*> ==>. z/"x & <*y\z*> ==>. x\z
 proof
-  assume <*x*> ==>. y;
-  then <*x*> ==>. y & <*z*> ==>. z by Def19;
-  then <*z/"y*>^<*x*> ==>. z & <*x*>^<*y\z*> ==>. z by Lm8,Lm11;
-  hence thesis by Def19;
+  assume
+A1: <*x*> ==>. y;
+A2: <*z*> ==>. z by Def19;
+  then
+A3: <*z/"y*>^<*x*> ==>. z by A1,Lm6;
+  <*x*>^<*y\z*> ==>. z by A1,A2,Lm9;
+  hence thesis by A3,Def19;
 end;
 
 theorem Th18:
@@ -876,8 +921,9 @@ theorem Th19:
 proof
   assume
 A1: <*x*> ==>. y;
-  e(s)^<*x*> = <*x*> & <*x*>^e(s) = <*x*> by FINSEQ_1:47;
-  hence thesis by A1,Def19;
+A2: e(s)^<*x*> = <*x*> by FINSEQ_1:47;
+  <*x*>^e(s) = <*x*> by FINSEQ_1:47;
+  hence thesis by A1,A2,Def19;
 end;
 
 theorem Th20:
@@ -891,36 +937,43 @@ theorem
   <*>the carrier of s ==>. (y/"(x\y))/"x & <*>the carrier of s ==>. x\((y/"x )
   \ y )
 proof
-  <*x*> ==>. y/"(x\y) & <*x*> ==>. (y/"x)\y by Th13;
-  hence thesis by Th19;
+A1: <*x*> ==>. y/"(x\y) by Th13;
+  <*x*> ==>. (y/"x)\y by Th13;
+  hence thesis by A1,Th19;
 end;
 
 theorem
   <*>the carrier of s ==>. ((x/"z)/"(y/"z))/"(x/"y) &
   <*>the carrier of s ==>. (y\x)\((z\y)\(z\x))
 proof
-  <*x/"y*> ==>. (x/"z)/"(y/"z) & <*y\x*> ==>. (z\y)\(z\x) by Th14,Th15;
-  hence thesis by Th19;
+A1: <*x/"y*> ==>. (x/"z)/"(y/"z) by Th14;
+  <*y\x*> ==>. (z\y)\(z\x) by Th15;
+  hence thesis by A1,Th19;
 end;
 
 theorem
   <*>the carrier of s ==>. x implies
   <*>the carrier of s ==>. y/"(y/"x) & <*>the carrier of s ==>. (x\y)\y
 proof
-  <*y*> ==>. y by Def19;
+A1: <*y*> ==>. y by Def19;
   then
-A1: e(s)^<*y*> ==>. y & <*y*>^e(s) ==>. y by FINSEQ_1:47;
-  assume e(s) ==>. x;
-  then e(s)^<*y/"x*>^e(s) ==>. y & e(s)^<*x\y*>^e(s) ==>. y by A1,Lm6,Lm10;
-  then e(s)^<*y/"x*> ==>. y & <*x\y*>^e(s) ==>. y by FINSEQ_1:47;
-  hence thesis by Def19;
+A2: e(s)^<*y*> ==>. y by FINSEQ_1:47;
+A3: <*y*>^e(s) ==>. y by A1,FINSEQ_1:47;
+  assume
+A4: e(s) ==>. x;
+  then
+A5: e(s)^<*y/"x*>^e(s) ==>. y by A2,Lm4;
+A6: e(s)^<*x\y*>^e(s) ==>. y by A3,A4,Lm8;
+A7: e(s)^<*y/"x*> ==>. y by A5,FINSEQ_1:47;
+  <*x\y*>^e(s) ==>. y by A6,FINSEQ_1:47;
+  hence thesis by A7,Def19;
 end;
 
 theorem
   <*x/"(y/"y)*> ==>. x
 proof
-  e(s) ==>.y/"y & <*x*> ==>. x by Def19,Th20;
-  then <*x/"(y/"y)*>^e(s) ==>. x by Lm8;
+  <*x*> ==>. x by Def19;
+  then <*x/"(y/"y)*>^e(s) ==>. x by Lm6,Th20;
   hence thesis by FINSEQ_1:47;
 end;
 
@@ -949,52 +1002,62 @@ end;
 theorem
   x/"(z*y) <==>. (x/"y)/"z
 proof
-A1: <*z*> ==>. z & <*y*> ==>. y & <*x*> ==>. x by Def19;
-  then <*z*>^<*y*> ==>. z*y & <*x*> ==>. x by Def19;
-  then <*x/"(z*y)*>^(<*z*>^<*y*>) ==>. x by Lm8;
+A1: <*z*> ==>. z by Def19;
+A2: <*y*> ==>. y by Def19;
+A3: <*x*> ==>. x by Def19;
+  <*z*>^<*y*> ==>. z*y by A1,A2,Def19;
+  then <*x/"(z*y)*>^(<*z*>^<*y*>) ==>. x by A3,Lm6;
   then <*x/"(z*y)*>^<*z*>^<*y*> ==>. x by FINSEQ_1:45;
   then <*x/"(z*y)*>^<*z*> ==>. x/"y by Def19;
   then
-A2: <*x/"(z*y)*> ==>. (x/"y)/"z by Def19;
-  <*z*> ==>. z & <*x/"y*>^<*y*> ==>. x by A1,Lm8;
-  then <*(x/"y)/"z*>^<*z*>^<*y*> ==>. x by Lm7;
-  then <*(x/"y)/"z*>^<*z*y*> ==>. x by Lm13;
+A4: <*x/"(z*y)*> ==>. (x/"y)/"z by Def19;
+  <*x/"y*>^<*y*> ==>. x by A2,A3,Lm6;
+  then <*(x/"y)/"z*>^<*z*>^<*y*> ==>. x by A1,Lm5;
+  then <*(x/"y)/"z*>^<*z*y*> ==>. x by Lm11;
   then <*(x/"y)/"z*> ==>. x/"(z*y) by Def19;
-  hence thesis by A2,Def20;
+  hence thesis by A4,Def20;
 end;
 
 theorem
   <*x*(y/"z)*> ==>. (x*y)/"z ::and analogously <*z\y*x*> > z\(y*x)
 proof
-  <*x*> ==>. x & <*y*> ==>. y & <*z*> ==>. z by Def19;
-  then <*x*>^<*y*> ==>. x*y & <*z*> ==>. z by Def19;
-  then <*x*>^<*y/"z*>^<*z*> ==>. x*y by Lm6;
-  then <*x*(y/"z)*>^<*z*> ==>. x*y by Lm12;
+A1: <*x*> ==>. x by Def19;
+  <*y*> ==>. y by Def19;
+  then
+A2: <*x*>^<*y*> ==>. x*y by A1,Def19;
+  <*z*> ==>. z by Def19;
+  then <*x*>^<*y/"z*>^<*z*> ==>. x*y by A2,Lm4;
+  then <*x*(y/"z)*>^<*z*> ==>. x*y by Lm10;
   hence thesis by Def19;
 end;
 
 theorem
   <*x*> ==>. (x*y)/"y & <*x*> ==>. y\(y*x)
 proof
-  <*x*> ==>.x & <*y*> ==>.y by Def19;
-  then <*x*>^<*y*> ==>. x*y & <*y*>^<*x*> ==>. y*x by Def19;
-  hence thesis by Def19;
+A1: <*x*> ==>.x by Def19;
+A2: <*y*> ==>.y by Def19;
+  then
+A3: <*x*>^<*y*> ==>. x*y by A1,Def19;
+  <*y*>^<*x*> ==>. y*x by A1,A2,Def19;
+  hence thesis by A3,Def19;
 end;
 
 theorem
   x*y*z <==>. x*(y*z)
 proof
-A1: <*x*> ==>. x & <*y*> ==>. y & <*z*> ==>. z by Def19;
-  then <*x*>^<*y*> ==>. x*y & <*z*> ==>. z by Def19;
-  then <*x*>^<*y*>^<*z*> ==>. (x*y)*z by Def19;
-  then <*x*>^<*y*z*> ==>. (x*y)*z by Lm13;
+A1: <*x*> ==>. x by Def19;
+A2: <*y*> ==>. y by Def19;
+A3: <*z*> ==>. z by Def19;
+  <*x*>^<*y*> ==>. x*y by A1,A2,Def19;
+  then <*x*>^<*y*>^<*z*> ==>. (x*y)*z by A3,Def19;
+  then <*x*>^<*y*z*> ==>. (x*y)*z by Lm11;
   then
-A2: <*x*(y*z)*> ==>. (x*y)*z by Lm14;
-  <*x*> ==>. x & <*y*>^<*z*> ==>. y*z by A1,Def19;
-  then <*x*>^(<*y*>^<*z*>) ==>. x*(y*z) by Def19;
+A4: <*x*(y*z)*> ==>. (x*y)*z by Lm12;
+  <*y*>^<*z*> ==>. y*z by A2,A3,Def19;
+  then <*x*>^(<*y*>^<*z*>) ==>. x*(y*z) by A1,Def19;
   then <*x*>^<*y*>^<*z*> ==>. x*(y*z) by FINSEQ_1:45;
-  then <*x*y*>^<*z*> ==>. x*(y*z) by Lm12;
-  then <*x*y*z*> ==>. x*(y*z) by Lm14;
-  hence thesis by A2,Def20;
+  then <*x*y*>^<*z*> ==>. x*(y*z) by Lm10;
+  then <*x*y*z*> ==>. x*(y*z) by Lm12;
+  hence thesis by A4,Def20;
 end;
 

@@ -26,8 +26,7 @@ environ
       ZFMISC_1, XBOOLE_0, XBOOLE_1, STRUCT_0, ALGSTR_0;
  schemes BINOP_1, DOMAIN_1, FUNCT_2, XBOOLE_0, BINOP_2;
 
-begin
-::  Schemes
+begin ::  Schemes
 
 scheme ElementEq {A()->set,P[set]} : for X1,X2 being Element of A() st
   (for x being set holds x in X1 iff P[x]) &
@@ -132,8 +131,7 @@ end;
 scheme Fr2 {X() -> set, A() -> non empty set, a() -> Element of A(), P[set]}:
   P[a()]
 provided
-A1: a() in X()
-and
+A1: a() in X() and
 A2: X() = {a where a is Element of A() : P[a]}
 proof
 A3: a() in {a where a is Element of A() : P[a]} by A1,A2;
@@ -144,15 +142,15 @@ scheme Fr3 {x() -> set, X() -> set, A() -> non empty set, P[set]} :
   x() in X() iff ex a being Element of A() st x()=a & P[a]
 provided
 A1: X() = {a where a is Element of A() : P[a]}
-proof thus thesis by A1;
+proof
+  thus thesis by A1;
 end;
 
 scheme Fr4 {D1,D2() -> non empty set, B() -> set,
   a() -> Element of D1(), F(set) -> set, P[set,set], Q[set,set]} :
   a() in F(B()) iff for b being Element of D2() st b in B() holds P[a(),b]
 provided
-A1: F(B()) = {a where a is Element of D1() : Q[a,B()]}
-and
+A1: F(B()) = {a where a is Element of D1() : Q[a,B()]} and
 A2: Q[a(),B()] iff for b being Element of D2() st b in B() holds P[a(),b]
 proof
   thus a() in F(B()) implies for b being Element of D2() st b in
@@ -195,10 +193,11 @@ end;
 theorem Th1:
   K is non trivial & A is linearly-independent implies not 0.V in A
 proof
-  assume
-A1: K is non trivial & A is linearly-independent;
-  then 0.K <> 1_K by LMOD_6:def 2;
-  hence thesis by A1,LMOD_5:3;
+  assume that
+A1: K is non trivial and
+A2: A is linearly-independent;
+  0.K <> 1_K by A1,LMOD_6:def 2;
+  hence thesis by A2,LMOD_5:3;
 end;
 
 theorem Th2:
@@ -215,24 +214,24 @@ theorem
   K is trivial implies (for l holds Carrier(l) = {}) & Lin A is trivial
 proof
   assume
-A1: K is trivial; thus
+A1: K is trivial;
+  thus
 A2: for l holds Carrier l = {}
   proof
     let l;
     assume
 A3: Carrier l <> {};
     consider x being Element of Carrier l;
-    consider a such that
-A4: x = a & l.a <> 0.K by A3,VECTSP_6:19;
-    thus contradiction by A1,A4,LMOD_6:5;
+    ex a st ( x = a)&( l.a <> 0.K) by A3,VECTSP_6:19;
+    hence contradiction by A1,LMOD_6:5;
   end;
   now
     let a be Vector of Lin A;
     a in Lin A by RLVECT_1:3;
     then consider l such that
-A5: a = Sum(l) by MOD_3:11;
+A4: a = Sum(l) by MOD_3:11;
     Carrier l = {} by A2;
-    then a = 0.V by A5,VECTSP_6:45;
+    then a = 0.V by A4,VECTSP_6:45;
     hence a=0.(Lin A) by VECTSP_4:19;
   end;
   hence thesis by STRUCT_0:def 19;
@@ -256,53 +255,58 @@ theorem Th5:
   A1 \/ A2 is linearly-independent & A1 misses A2
   implies Lin A1 /\ Lin A2 = (0).V
 proof
-  assume
-A1: A1 \/ A2 is linearly-independent & A1 /\ A2 = {};
+  assume that
+A1: A1 \/ A2 is linearly-independent and
+A2: A1 /\ A2 = {};
   reconsider P=Lin A1 /\ Lin A2 as strict Subspace of V;
   set Z=the carrier of P;
-A2: Z=(the carrier of Lin A1)/\ (the carrier of Lin A2) by VECTSP_5:def 2;
-A3: now
+A3: Z=(the carrier of Lin A1)/\ (the carrier of Lin A2) by VECTSP_5:def 2;
+A4: now
     let x;
-    assume x in Z;
-    then x in the carrier of Lin A1
-    & x in the carrier of Lin A2 by A2,XBOOLE_0:def 4;
+    assume
+A5: x in Z;
     then
-A4: x in Lin A1 & x in Lin A2 by STRUCT_0:def 5;
-    then consider l1 being Linear_Combination of A1 such that
-A5: x = Sum(l1) by MOD_3:11;
+A6: x in the carrier of Lin A1 by A3,XBOOLE_0:def 4;
+A7: x in the carrier of Lin A2 by A3,A5,XBOOLE_0:def 4;
+A8: x in Lin A1 by A6,STRUCT_0:def 5;
+A9: x in Lin A2 by A7,STRUCT_0:def 5;
+    consider l1 being Linear_Combination of A1 such that
+A10: x = Sum(l1) by A8,MOD_3:11;
     consider l2 being Linear_Combination of A2 such that
-A6: x = Sum(l2) by A4,MOD_3:11;
-A7: Carrier l1 c= A1 & Carrier l2 c= A2 by VECTSP_6:def 7;
+A11: x = Sum(l2) by A9,MOD_3:11;
+A12: Carrier l1 c= A1 by VECTSP_6:def 7;
+    Carrier l2 c= A2 by VECTSP_6:def 7;
     then
-A8: Carrier l1 \/ Carrier l2 c= A1 \/ A2 by XBOOLE_1:13;
+A13: Carrier l1 \/ Carrier l2 c= A1 \/ A2 by A12,XBOOLE_1:13;
     Carrier(l1 - l2) c= Carrier l1 \/ Carrier l2 by VECTSP_6:74;
-    then Carrier(l1 - l2) c= A1 \/ A2 by A8,XBOOLE_1:1;
+    then Carrier(l1 - l2) c= A1 \/ A2 by A13,XBOOLE_1:1;
     then reconsider l = l1 - l2 as Linear_Combination of A1 \/ A2
     by VECTSP_6:def 7;
     Sum(l) = Sum(l1) - Sum(l2) by VECTSP_6:80
-      .= 0.V by A5,A6,VECTSP_1:66;
+      .= 0.V by A10,A11,VECTSP_1:66;
     then
-A9: Carrier l = {} by A1,LMOD_5:def 1;
+A14: Carrier l = {} by A1,LMOD_5:def 1;
     Carrier l1 = {}
     proof
       assume
-A10:  Carrier l1 <> {};
+A15:  Carrier l1 <> {};
       consider x being Element of Carrier l1;
       consider b such that
-A11:  x = b & l1.b <> 0.K by A10,VECTSP_6:19;
-      b in A1 by A7,A10,A11,TARSKI:def 3;
+A16:  x = b and
+A17:  l1.b <> 0.K by A15,VECTSP_6:19;
+      b in A1 by A12,A15,A16,TARSKI:def 3;
       then
-A12:  not b in A2 by A1,XBOOLE_0:def 4;
-      0.K = l.b by A9,VECTSP_6:20
+A18:  not b in A2 by A2,XBOOLE_0:def 4;
+      0.K = l.b by A14,VECTSP_6:20
         .= l1.b - l2.b by VECTSP_6:73;
       then l1.b = l2.b by RLVECT_1:35
-        .= 0.K by A12,Th2;
-      hence contradiction by A11;
+        .= 0.K by A18,Th2;
+      hence contradiction by A17;
     end;
-    hence x = 0.V by A5,VECTSP_6:45;
+    hence x = 0.V by A10,VECTSP_6:45;
   end;
   0.V in Lin A1 /\ Lin A2 by VECTSP_4:25;
-  then x in Z iff x=0.V by A3,STRUCT_0:def 5;
+  then x in Z iff x=0.V by A4,STRUCT_0:def 5;
   then Z = {0.V} by TARSKI:def 1;
   hence thesis by VECTSP_4:def 3;
 end;
@@ -311,14 +315,17 @@ theorem Th6:
   A is base & A = A1 \/ A2 & A1 misses A2 implies
   V is_the_direct_sum_of Lin A1,Lin A2
 proof
-  assume
-A1: A is base & A = A1 \/ A2 & A1 misses A2;
+  assume that
+A1: A is base and
+A2: A = A1 \/ A2 and
+A3: A1 misses A2;
   set W=the VectSpStr of V;
-A2: A is linearly-independent & Lin A = W by A1,MOD_3:def 2;
+A4: A is linearly-independent by A1,MOD_3:def 2;
+  Lin A = W by A1,MOD_3:def 2;
   then
-A3: W = Lin A1 + Lin A2 by A1,MOD_3:19;
-  Lin A1 /\ Lin A2 = (0).V by A1,A2,Th5;
-  hence thesis by A3,VECTSP_5:def 4;
+A5: W = Lin A1 + Lin A2 by A2,MOD_3:19;
+  Lin A1 /\ Lin A2 = (0).V by A2,A3,A4,Th5;
+  hence thesis by A5,VECTSP_5:def 4;
 end;
 
 begin :: 2. Domains of submodules
@@ -345,9 +352,8 @@ definition
     now
       let x;
       assume x in Submodules(V);
-      then consider W being strict Subspace of V such that
-A1:   W = x by VECTSP_5:def 3;
-      thus x is strict Subspace of V by A1;
+      then ex W being strict Subspace of V st ( W = x) by VECTSP_5:def 3;
+      hence x is strict Subspace of V;
     end;
     hence thesis by Def1;
   end;
@@ -377,7 +383,6 @@ definition
   assume
 A1: V is non trivial;
   mode LINE of V -> strict Subspace of V means
-
     ex a st a<>0.V & it = <:a:>;
   existence
   proof consider a such that
@@ -404,7 +409,6 @@ end;
 definition
   let K,V;
   func lines(V) -> LINE_DOMAIN of V means
-
   x in it iff x is LINE of V;
   existence
   proof
@@ -416,9 +420,9 @@ definition
 A1: now
       let x;
       assume x in D;
-      then consider a being Element of Submodules(V) such that
-A2:   x = a & a is LINE of V;
-      thus x is LINE of V by A2;
+      then ex a being Element of Submodules(V) st ( x = a)&( a is LINE
+      of V);
+      hence x is LINE of V;
     end;
     then reconsider D' = D as LINE_DOMAIN of V by Def3;
     take D';
@@ -428,9 +432,9 @@ A2:   x = a & a is LINE of V;
       thus x is LINE of V implies x in D'
       proof
         assume
-A3:     x is LINE of V;
+A2:     x is LINE of V;
         then reconsider x1 = x as Element of Submodules(V) by VECTSP_5:def 3;
-        x1 in D by A3;
+        x1 in D by A2;
         hence thesis;
       end;
     end;
@@ -439,12 +443,12 @@ A3:     x is LINE of V;
   uniqueness
   proof
     let D1,D2 be LINE_DOMAIN of V such that
-A4: x in D1 iff x is LINE of V and
-A5: x in D2 iff x is LINE of V;
+A3: x in D1 iff x is LINE of V and
+A4: x in D2 iff x is LINE of V;
     now
       let x;
-      x in D1 iff x is LINE of V by A4;
-      hence x in D1 iff x in D2 by A5;
+      x in D1 iff x is LINE of V by A3;
+      hence x in D1 iff x in D2 by A4;
     end;
     hence thesis by TARSKI:2;
   end;
@@ -472,23 +476,23 @@ A3: A is base by A2,MOD_3:def 3;
 A4: A is linearly-independent by A3,MOD_3:def 2;
 A5: A <> {} by A1,A3,Th4;
     consider x being Element of A;
-A6: K is non trivial by A1,LMOD_6:6;
     reconsider a = x as Vector of V by A5,TARSKI:def 3;
     reconsider A1 = {a} as Subset of V;
     set A2 = A\A1;
     set H = Lin(A2);
     A1 c= A by A5,ZFMISC_1:37;
     then
-A7: A = A1 \/ A2 by XBOOLE_1:45;
+A6: A = A1 \/ A2 by XBOOLE_1:45;
     A1 misses A2 by XBOOLE_1:79;
     then
-A8: V is_the_direct_sum_of Lin(A1),H by A3,A7,Th6;
-A9: ex a st a<>0.V & V is_the_direct_sum_of <:a:>,H
+A7: V is_the_direct_sum_of Lin(A1),H by A3,A6,Th6;
+A8: ex a st a<>0.V & V is_the_direct_sum_of <:a:>,H
     proof
-      take a; thus thesis by A4,A5,A6,A8,Th1,LMOD_6:def 6;
+      take a;
+      thus thesis by A1,A4,A5,A7,Th1,LMOD_6:6,def 6;
     end;
     take H;
-    thus thesis by A9;
+    thus thesis by A8;
   end;
 end;
 
@@ -520,9 +524,9 @@ definition
 A1: now
       let x;
       assume x in D;
-      then consider a being Element of Submodules(V) such that
-A2:   x = a & a is HIPERPLANE of V;
-      thus x is HIPERPLANE of V by A2;
+      then ex a being Element of Submodules(V) st ( x = a)&( a is
+      HIPERPLANE of V);
+      hence x is HIPERPLANE of V;
     end;
     then reconsider D' = D as HIPERPLANE_DOMAIN of V by Def6;
     take D';
@@ -543,12 +547,12 @@ A2:   x = a & a is HIPERPLANE of V;
   uniqueness
   proof
     let D1,D2 be HIPERPLANE_DOMAIN of V such that
-A3: x in D1 iff x is HIPERPLANE of V and
-A4: x in D2 iff x is HIPERPLANE of V;
+A2: x in D1 iff x is HIPERPLANE of V and
+A3: x in D2 iff x is HIPERPLANE of V;
     now
       let x;
-      x in D1 iff x is HIPERPLANE of V by A3;
-      hence x in D1 iff x in D2 by A4;
+      x in D1 iff x is HIPERPLANE of V by A2;
+      hence x in D1 iff x in D2 by A3;
     end;
     hence thesis by TARSKI:2;
   end;
@@ -566,11 +570,9 @@ begin :: 3. Join and meet of finite sequences of submodules
 definition
   let K,V,Li;
   func Sum Li -> Element of Submodules(V) equals
-
   SubJoin(V) $$ Li;
   coherence;
   func /\ Li -> Element of Submodules(V) equals
-
   SubMeet(V) $$ Li;
   coherence;
 end;
@@ -643,16 +645,14 @@ definition
 A1: now
       let x;
       assume x in S;
-      then consider a1,a2 such that
-A2:   x = a1+a2 & a1 in A1 & a2 in A2;
-      thus ex a1,a2 st a1 in A1 & a2 in A2 & x = a1+a2 by A2;
+      then ex a1,a2 st ( x = a1+a2)&( a1 in A1)&( a2 in A2);
+      hence ex a1,a2 st a1 in A1 & a2 in A2 & x = a1+a2;
     end;
     now
       let x;
       assume x in S;
-      then consider a1,a2 such that
-A3:   x = a1+a2 & a1 in A1 & a2 in A2;
-      thus x in the carrier of V by A3;
+      then ex a1,a2 st ( x = a1+a2)&( a1 in A1)&( a2 in A2);
+      hence x in the carrier of V;
     end;
     then reconsider S' = S as Subset of V by TARSKI:def 3;
     take S';
@@ -661,12 +661,12 @@ A3:   x = a1+a2 & a1 in A1 & a2 in A2;
   uniqueness
   proof
     let D1,D2 be Subset of V such that
-A4: x in D1 iff ex a1,a2 st a1 in A1 & a2 in A2 & x = a1+a2 and
-A5: x in D2 iff ex a1,a2 st a1 in A1 & a2 in A2 & x = a1+a2;
+A2: x in D1 iff ex a1,a2 st a1 in A1 & a2 in A2 & x = a1+a2 and
+A3: x in D2 iff ex a1,a2 st a1 in A1 & a2 in A2 & x = a1+a2;
     now
       let x;
-      x in D1 iff ex a1,a2 st a1 in A1 & a2 in A2 & x = a1+a2 by A4;
-      hence x in D1 iff x in D2 by A5;
+      x in D1 iff ex a1,a2 st a1 in A1 & a2 in A2 & x = a1+a2 by A2;
+      hence x in D1 iff x in D2 by A3;
     end;
     hence thesis by TARSKI:2;
   end;
@@ -694,13 +694,14 @@ theorem
   A1 <> {} & A1 c= A2 implies for x st x is Vector of A1 holds x is Vector of
   A2
 proof
-  assume
-A1: A1 <> {} & A1 c= A2;
+  assume that
+A1: A1 <> {} and
+A2: A1 c= A2;
   let x;
   assume x is Vector of A1;
   then reconsider a=x as Vector of A1;
   a is Element of A1 by A1,Def11;
-  then a in A2 by A1,TARSKI:def 3;
+  then a in A2 by A1,A2,TARSKI:def 3;
   hence thesis by Def11;
 end;
 
@@ -754,7 +755,6 @@ end;
 definition
   let K,V,W,a;
   func a..W -> Element of V..W equals
-
   a + W;
   coherence by Def12;
 end;
@@ -777,7 +777,6 @@ reserve S1,S2 for Element of V..W;
 definition
   let K,V,W,S1;
   func -S1 -> Element of V..W means
-
   S1 = a..W implies it = (-a)..W;
   existence
   proof
@@ -848,7 +847,6 @@ definition
   let K,V,W;
   deffunc U(Element of V..W) = -$1;
   func COMPL W -> UnOp of V..W means
-
   it.S1 = -S1;
   existence
   proof
@@ -881,7 +879,6 @@ end;
 definition
   let K,V,W;
   func V.W -> strict addLoopStr equals
-
   addLoopStr(#V..W,ADD W,(0.V)..W#);
   coherence;
 end;
@@ -898,7 +895,6 @@ theorem
 definition
   let K,V,W,a;
   func a.W -> Element of V.W equals
-
   a..W;
   coherence;
 end;
@@ -936,8 +932,8 @@ registration
 A1:   x = a.W by Th22;
       consider b being Vector of V such that
 A2:   y = b.W by Th22;
-      x+y = (a+b).W & y+x = (b+a).W by A1,A2,Th24;
-      hence x+y = y+x;
+      x+y = (a+b).W by A1,A2,Th24;
+      hence x+y = y+x by A1,A2,Th24;
     end;
     hereby
       let x,y,z be Element of G;
@@ -947,27 +943,28 @@ A3:   x = a.W by Th22;
 A4:   y = b.W by Th22;
       consider c being Vector of V such that
 A5:   z = c.W by Th22;
-A6:   x+y = (a+b).W & y+x = (b+a).W & y+z = (b+c).W by A3,A4,A5,Th24;
-      hence (x+y)+z = (a+b+c).W by A5,Th24
+A6:   x+y = (a+b).W by A3,A4,Th24;
+A7:   y+z = (b+c).W by A4,A5,Th24;
+      thus (x+y)+z = (a+b+c).W by A5,A6,Th24
         .= (a+(b+c)).W by RLVECT_1:def 6
-        .= x+(y+z) by A3,A6,Th24;
+        .= x+(y+z) by A3,A7,Th24;
     end;
     hereby
       let x be Element of G;
       consider a being Vector of V such that
-A7:   x = a.W by Th22;
+A8:   x = a.W by Th22;
       0.G = (0.V).W;
-      hence x+(0.G) = (a+0.V).W by A7,Th24
-        .= x by A7,RLVECT_1:10;
+      hence x+(0.G) = (a+0.V).W by A8,Th24
+        .= x by A8,RLVECT_1:10;
     end;
     let x be Element of G;
     consider a being Vector of V such that
-A8: x = a.W by Th22;
+A9: x = a.W by Th22;
     consider b being Vector of V such that
-A9: a + b = 0.V by ALGSTR_0:def 11;
+A10: a + b = 0.V by ALGSTR_0:def 11;
     reconsider b' = b.W as Element of G;
     take b';
-    thus x+b' = (0.V).W by A8,A9,Th24
+    thus x+b' = (0.V).W by A9,A10,Th24
       .= 0.G;
   end;
 end;
@@ -1028,7 +1025,8 @@ A1: F.(r,S) = U(r,S) from BINOP_1:sch 4;
 A2: F.(r,S) = r*S and
 A3: G.(r,S) = r*S;
     now
-      let r,S; thus F.(r,S) = r*S by A2
+      let r,S;
+      thus F.(r,S) = r*S by A2
         .= G.(r,S) by A3;
     end;
     hence thesis by BINOP_1:2;
@@ -1061,7 +1059,6 @@ theorem
 definition
   let K,V,W,a;
   func a/W -> Vector of V/W equals
-
   a.W;
   coherence;
 end;
@@ -1132,15 +1129,16 @@ proof
 A1: v = a/W by Th28;
     consider b such that
 A2: w = b/W by Th28;
-A3: (x*a)/W = x*v & (x*b)/W = x*w & (y*a)/W = y*v & (y*b)/W = y*w
-    by A1,A2,Th30;
+A3: (x*a)/W = x*v by A1,Th30;
+A4: (x*b)/W = x*w by A2,Th30;
+A5: (y*a)/W = y*v by A1,Th30;
     thus x*(v+w) = x*((a+b)/W) by A1,A2,Th30
       .= (x*(a+b))/W by Th30
       .= (x*a+x*b)/W by VECTSP_1:def 26
-      .= x*v+x*w by A3,Th30;
+      .= x*v+x*w by A3,A4,Th30;
     thus (x+y)*v = ((x+y)*a)/W by A1,Th30
       .= (x*a+y*a)/W by VECTSP_1:def 26
-      .= x*v+y*v by A3,Th30;
+      .= x*v+y*v by A3,A5,Th30;
     thus (x*y)*v = ((x*y)*a)/W by A1,Th30
       .= (x*(y*a))/W by VECTSP_1:def 26
       .= x*((y*a)/W) by Th30

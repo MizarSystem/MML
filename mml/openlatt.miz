@@ -13,7 +13,7 @@ environ
       FUNCT_2, BINOP_1, SETFAM_1, DOMAIN_1, STRUCT_0, PRE_TOPC, TOPS_1,
       LATTICES, LATTICE2, FILTER_0, LATTICE4;
  constructors SETFAM_1, BINOP_1, DOMAIN_1, NAT_D, TOPS_1, LATTICE2, FILTER_1,
-      LATTICE4, RELSET_1;
+      LATTICE4, RELSET_1, FILTER_0;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, STRUCT_0, LATTICES, PRE_TOPC,
       FILTER_0, LATTICE2;
  requirements BOOLE, SUBSET;
@@ -39,27 +39,30 @@ reserve A,B for Subset of T;
 theorem Th1:
   A /\ Int(A` \/ B) c= B
 proof
-A1: A /\ Int(A` \/ B) c= A /\ (A` \/ B) by TOPS_1:44,XBOOLE_1:26;
-A2: A misses A` by XBOOLE_1:79;
+A1: A misses A` by XBOOLE_1:79;
   A /\ (A` \/ B) = (A /\ A`) \/ A /\ B by XBOOLE_1:23
-    .= {} \/ A /\ B by A2,XBOOLE_0:def 7
+    .= {} \/ A /\ B by A1,XBOOLE_0:def 7
     .= A /\ B;
-  then A /\ (A` \/ B)c= B by XBOOLE_1:17;
-  hence thesis by A1,XBOOLE_1:1;
+  then
+A2: A /\ (A` \/ B)c= B by XBOOLE_1:17;
+  A /\ Int(A` \/ B) c= A /\ (A` \/ B) by TOPS_1:44,XBOOLE_1:26;
+  hence thesis by A2,XBOOLE_1:1;
 end;
 
 theorem Th2:
-  for C being Subset of T st C is open & A /\ C c= B holds C c= Int(A` \/ B)
+  for C being Subset of T st C is open & A /\ C c= B holds C c= Int
+  (A` \/ B)
 proof
   let C be Subset of T;
-  assume
-A1: C is open & A /\ C c= B;
-A2: C c= C \/ A` by XBOOLE_1:7;
+  assume that
+A1: C is open and
+A2: A /\ C c= B;
+A3: C c= C \/ A` by XBOOLE_1:7;
   (A /\ C) \/ A` = (A \/ A`) /\ (C \/ A`) by XBOOLE_1:24
     .= [#] T /\ (C \/ A`) by PRE_TOPC:18
     .= C \/ A` by XBOOLE_1:28;
-  then C \/ A` c= B \/ A` by A1,XBOOLE_1:9;
-  then C c= B \/ A` by A2,XBOOLE_1:1;
+  then C \/ A` c= B \/ A` by A2,XBOOLE_1:9;
+  then C c= B \/ A` by A3,XBOOLE_1:1;
   then Int(C) c= Int(A` \/ B) by TOPS_1:48;
   hence thesis by A1,TOPS_1:55;
 end;
@@ -67,7 +70,6 @@ end;
 definition
   let T be TopStruct;
   func Topology_of T -> Subset-Family of T equals
-
   the topology of T;
   coherence;
 end;
@@ -84,16 +86,18 @@ definition
   coherence
   proof
     reconsider A = P, B = Q as Subset of T;
-    A is open & B is open by PRE_TOPC:def 5;
-    then P \/ Q is open by TOPS_1:37;
+A1: B is open by PRE_TOPC:def 5;
+    A is open by PRE_TOPC:def 5;
+    then P \/ Q is open by A1,TOPS_1:37;
     hence thesis by PRE_TOPC:def 5;
   end;
   redefine func P /\ Q -> Element of Topology_of T;
   coherence
   proof
     reconsider A = P, B = Q as Subset of T;
-    A is open & B is open by PRE_TOPC:def 5;
-    then P /\ Q is open by TOPS_1:38;
+A2: B is open by PRE_TOPC:def 5;
+    A is open by PRE_TOPC:def 5;
+    then P /\ Q is open by A2,TOPS_1:38;
     hence thesis by PRE_TOPC:def 5;
   end;
 end;
@@ -109,18 +113,16 @@ definition
   existence
   proof
     deffunc F(Element of Topology_of T, Element of Topology_of T) = $1 \/ $2;
-    thus ex F being BinOp of Topology_of T st
-    for P,Q being Element of Topology_of T holds
-    F.(P,Q) = F(P,Q) from BINOP_1:sch 4;
+    thus ex F being BinOp of Topology_of T st for P,Q being Element of
+    Topology_of T holds F.(P,Q) = F(P,Q) from BINOP_1:sch 4;
   end;
   uniqueness
   proof
     set A = Topology_of T;
     deffunc O(Element of A, Element of A) = $1 \/ $2;
-    thus for o1,o2 being BinOp of A st
-    (for a,b being Element of A holds o1.(a,b) = O(a,b)) &
-    (for a,b being Element of A holds o2.(a,b) = O(a,b))
-    holds o1 = o2 from BINOP_2:sch 2;
+    thus for o1,o2 being BinOp of A st (for a,b being Element of A holds o1.(a
+,b) = O(a,b)) & (for a,b being Element of A holds o2.(a,b) = O(a,b)) holds o1 =
+    o2 from BINOP_2:sch 2;
   end;
   func Top_Meet T -> BinOp of Topology_of T means
   :Def3:
@@ -128,26 +130,24 @@ definition
   existence
   proof
     deffunc F(Element of Topology_of T, Element of Topology_of T) = $1 /\ $2;
-    thus ex F being BinOp of Topology_of T st
-    for P,Q being Element of Topology_of T holds
-    F.(P,Q) = F(P,Q) from BINOP_1:sch 4;
+    thus ex F being BinOp of Topology_of T st for P,Q being Element of
+    Topology_of T holds F.(P,Q) = F(P,Q) from BINOP_1:sch 4;
   end;
   uniqueness
   proof
     set A = Topology_of T;
     deffunc O(Element of A, Element of A) = $1 /\ $2;
-    thus for o1,o2 being BinOp of A st
-    (for a,b being Element of A holds o1.(a,b) = O(a,b)) &
-    (for a,b being Element of A holds o2.(a,b) = O(a,b))
-    holds o1 = o2 from BINOP_2:sch 2;
+    thus for o1,o2 being BinOp of A st (for a,b being Element of A holds o1.(a
+,b) = O(a,b)) & (for a,b being Element of A holds o2.(a,b) = O(a,b)) holds o1 =
+    o2 from BINOP_2:sch 2;
   end;
 end;
 
 canceled;
 
 theorem Th4:
-  for T being non empty TopSpace holds
-  LattStr(#Topology_of T,Top_Union T,Top_Meet T#) is Lattice
+  for T being non empty TopSpace holds LattStr(#Topology_of T,
+    Top_Union T,Top_Meet T#) is Lattice
 proof
   let T;
   set L = LattStr(#Topology_of T,Top_Union T,Top_Meet T#);
@@ -157,25 +157,18 @@ A1: now
       .= q"\/"p by Def2;
   end;
 A2: now
-    let p,q,r be Element of L;
-    thus p"\/"(q"\/"r) = p \/ q "\/" r by Def2
-      .= p \/ (q \/ r) by Def2
-      .= (p \/ q) \/ r by XBOOLE_1:4
-      .= p "\/" q \/ r by Def2
-      .= (p"\/"q)"\/"r by Def2;
-  end;
-A3: now
     let p,q be Element of L;
     thus (p"/\"q)"\/"q = p"/\"q \/ q by Def2
       .= (p /\ q) \/ q by Def3
       .= q by XBOOLE_1:22;
   end;
-A4: now
+A3: now
     let p,q be Element of L;
-    thus p "/\" q =q /\ p by Def3
-      .= q"/\"p by Def3;
+    thus p"/\"(p"\/"q) = p /\ (p"\/"q) by Def3
+      .= p /\ (p \/ q) by Def2
+      .= p by XBOOLE_1:21;
   end;
-A5: now
+A4: now
     let p,q,r be Element of L;
     thus p"/\"(q"/\"r) = p /\ (q "/\" r) by Def3
       .= p /\ (q /\ r) by Def3
@@ -183,22 +176,30 @@ A5: now
       .= p "/\" q /\ r by Def3
       .= (p"/\"q)"/\"r by Def3;
   end;
-  now
+A5: now
     let p,q be Element of L;
-    thus p"/\"(p"\/"q) = p /\ (p"\/"q) by Def3
-      .= p /\ (p \/ q) by Def2
-      .= p by XBOOLE_1:21;
+    thus p "/\" q =q /\ p by Def3
+      .= q"/\"p by Def3;
   end;
-  then L is join-commutative join-associative meet-absorbing
-  meet-commutative meet-associative join-absorbing by A1,A2,A3,A4,A5,
-LATTICES:def 4,def 5,def 6,def 7,def 8,def 9;
+  now
+    let p,q,r be Element of L;
+    thus p"\/"(q"\/"r) = p \/ q "\/" r by Def2
+      .= p \/ (q \/ r) by Def2
+      .= (p \/ q) \/ r by XBOOLE_1:4
+      .= p "\/" q \/ r by Def2
+      .= (p"\/"q)"\/"r by Def2;
+  end;
+  then L is join-commutative join-associative meet-absorbing meet-commutative
+  meet-associative join-absorbing by A1,A2,A5,A4,A3, LATTICES:def 4,def 5,def
+  6,def 7,def 8,def 9;
   hence thesis;
 end;
 
 definition
   let T;
   func Open_setLatt(T) -> Lattice equals
-  LattStr(#Topology_of T,Top_Union T,Top_Meet T#);
+  LattStr(#Topology_of T,Top_Union T,
+    Top_Meet T#);
   coherence by Th4;
 end;
 
@@ -213,27 +214,29 @@ theorem
 theorem Th7:
   p [= q iff p c= q
 proof
-  (p [= q iff p "\/" q = q) & p "\/" q = p \/ q by Def2,LATTICES:def 3;
-  hence thesis by XBOOLE_1:7,12;
+A1: p [= q iff p "\/" q = q by LATTICES:def 3;
+  p "\/" q = p \/ q by Def2;
+  hence thesis by A1,XBOOLE_1:7,12;
 end;
 
 theorem Th8:
-  for p',q' being Element of Topology_of T st p=p' & q=q'
-  holds p [= q iff p' c= q'
+  for p',q' being Element of Topology_of T st p=p' & q=q' holds p
+  [= q iff p' c= q'
 proof
   let p',q' be Element of Topology_of T such that
-A1: p=p' & q=q';
+A1: p=p' and
+A2: q=q';
   hereby
     assume
-A2: p [= q;
-    p' \/ q' = p"\/"q by A1,Def2
-      .= q' by A1,A2,LATTICES:def 3;
+A3: p [= q;
+    p' \/ q' = p"\/"q by A1,A2,Def2
+      .= q' by A2,A3,LATTICES:def 3;
     hence p' c= q' by XBOOLE_1:7;
   end;
   assume
-A3: p' c= q';
-  p "\/" q = p' \/ q' by A1,Def2
-    .=q by A1,A3,XBOOLE_1:12;
+A4: p' c= q';
+  p "\/" q = p' \/ q' by A1,A2,Def2
+    .=q by A2,A4,XBOOLE_1:12;
   hence thesis by LATTICES:def 3;
 end;
 
@@ -244,12 +247,12 @@ proof
   let p,q be Element of OL;
   reconsider p'=p, q'=q as Element of Topology_of T;
   Int(p'` \/ q') is open by TOPS_1:51;
-  then reconsider r'= Int(p'` \/ q') as Element of Topology_of T by
-PRE_TOPC:def 5;
+  then reconsider r'= Int(p'` \/ q') as Element of Topology_of T by PRE_TOPC:
+  def 5;
   reconsider r=r' as Element of OL;
   take r;
-A1: p' /\ r c= q' by Th1;
-  p "/\" r = p' /\ r' by Def3;
+A1: p "/\" r = p' /\ r' by Def3;
+  p' /\ r c= q' by Th1;
   hence p "/\" r [= q by A1,Th8;
   let r1 be Element of OL;
   reconsider r2 = r1 as Element of Topology_of T;
@@ -316,7 +319,6 @@ reserve x,X,X1,X2,Y,Z for set;
 definition
   let L;
   func F_primeSet(L) -> set equals
-
   { F: F <> the carrier of L & F is prime};
   coherence;
 end;
@@ -324,8 +326,8 @@ end;
 theorem Th12:
   F in F_primeSet(L) iff F <> the carrier of L & F is prime
 proof
-  F in F_primeSet(L) iff
-  ex F0 being Filter of L st F0=F & F0 <> the carrier of L & F0 is prime;
+  F in F_primeSet(L) iff ex F0 being Filter of L st F0=F & F0 <> the
+  carrier of L & F0 is prime;
   hence thesis;
 end;
 
@@ -333,14 +335,14 @@ definition
   let L;
   func StoneH(L) -> Function means
   :Def6:
-  dom it = the carrier of L &
-  it.a = { F :F in F_primeSet(L) & a in F};
+  dom it = the carrier of L & it.a = {
+F: F in F_primeSet(L) & a in F};
   existence
   proof
     deffunc F(set) = { F :F in F_primeSet(L) & $1 in F};
     consider f being Function such that
-A1: dom f = the carrier of L & for x st x in the carrier of L
-    holds f.x = F(x) from FUNCT_1:sch 3;
+A1: dom f = the carrier of L & for x st x in the carrier of L holds f.
+    x = F(x) from FUNCT_1:sch 3;
     take f;
     thus thesis by A1;
   end;
@@ -352,7 +354,8 @@ A2: dom f1 = the carrier of L & f1.a={ F :F in F_primeSet(L) & a in F} and
 A3: dom f2 = the carrier of L & f2.a={ F :F in F_primeSet(L) & a in F};
     now
       let x;
-      assume x in the carrier of L;
+      assume
+      x in the carrier of L;
       then reconsider a=x as Element of L;
       thus f1.x = { F :F in F_primeSet(L) & a in F} by A2
         .= f2.x by A3;
@@ -364,35 +367,43 @@ end;
 theorem Th13:
   F in StoneH(L).a iff F in F_primeSet(L) & a in F
 proof
-  StoneH(L).a = {F0 where F0 is Filter of L: F0 in F_primeSet(L) & a in F0 }
-  by Def6;
-  then F in StoneH(L).a iff
-  (ex F0 being Filter of L st F=F0 & F0 in F_primeSet(L) & a in F0);
+  StoneH(L).a = {F0 where F0 is Filter of L: F0 in F_primeSet(L) & a in F0
+  } by Def6;
+  then
+  F in StoneH(L).a iff ex F0 being Filter of L st F=F0 & F0 in F_primeSet(
+  L) & a in F0;
   hence thesis;
 end;
 
 theorem Th14:
-  x in StoneH(L).a iff
-  (ex F st F=x & F <> the carrier of L & F is prime & a in F)
+  x in StoneH(L).a iff ex F st F=x & F <> the carrier of L & F is
+  prime & a in F
 proof
 A1: StoneH(L).a = {F: F in F_primeSet(L) & a in F} by Def6;
   hereby
-    assume x in StoneH(L).a;
+    assume
+    x in StoneH(L).a;
     then consider F such that
-A2: x=F & F in F_primeSet(L) & a in F by A1;
-    F <> the carrier of L & F is prime by A2,Th12;
-    hence ex F st F=x & F <> the carrier of L & F is prime & a in F by A2;
+A2: x=F and
+A3: F in F_primeSet(L) and
+A4: a in F by A1;
+A5: F is prime by A3,Th12;
+    F <> the carrier of L by A3,Th12;
+    hence ex F st F=x & F <> the carrier of L & F is prime & a in F by A2,A4,
+    A5;
   end;
   given F such that
-A3: F=x & F <> the carrier of L & F is prime & a in F;
-  F in F_primeSet(L) by A3;
-  hence thesis by A1,A3;
+A6: F=x and
+A7: F <> the carrier of L and
+A8: F is prime and
+A9: a in F;
+  F in F_primeSet(L) by A7,A8;
+  hence thesis by A1,A6,A9;
 end;
 
 definition
   let L;
   func StoneS(L) -> set equals
-
   rng StoneH(L);
   coherence;
 end;
@@ -411,74 +422,99 @@ theorem Th15:
   x in StoneS(L) iff ex a st x=StoneH(L).a
 proof
   hereby
-    assume x in StoneS(L);
+    assume
+    x in StoneS(L);
     then consider y be set such that
-A1: y in dom StoneH(L) & x = StoneH(L).y by FUNCT_1:def 5;
+A1: y in dom StoneH(L) and
+A2: x = StoneH(L).y by FUNCT_1:def 5;
     reconsider y as Element of L by A1,Def6;
     take y;
-    thus x=StoneH(L).y by A1;
+    thus x=StoneH(L).y by A2;
   end;
   given b such that
-A2: x=StoneH(L).b;
+A3: x=StoneH(L).b;
   b in the carrier of L;
   then b in dom StoneH(L) by Def6;
-  hence thesis by A2,FUNCT_1:def 5;
+  hence thesis by A3,FUNCT_1:def 5;
 end;
 
 theorem Th16:
   StoneH(L).(a "\/" b) = StoneH(L).a \/ StoneH(L).b
 proof
+  set c = a "\/" b;
   hereby
-    let x;
     set c = a "\/" b;
-    assume x in StoneH(L).c;
+    let x;
+    assume
+    x in StoneH(L).c;
     then consider F such that
-A1: x=F & F <> the carrier of L & F is prime & c in F by Th14;
-    a in F or b in F by A1,FILTER_0:def 6;
-    then F in StoneH(L).a or F in StoneH(L).b by A1,Th14;
+A1: x=F and
+A2: F <> the carrier of L and
+A3: F is prime and
+A4: c in F by Th14;
+    a in F or b in F by A3,A4,FILTER_0:def 6;
+    then F in StoneH(L).a or F in StoneH(L).b by A2,A3,Th14;
     hence x in StoneH(L).a \/ StoneH(L).b by A1,XBOOLE_0:def 3;
   end;
   let x;
-  set c = a "\/" b;
-  assume x in StoneH(L).a \/ StoneH(L).b;
+  assume
+  x in StoneH(L).a \/ StoneH(L).b;
   then x in StoneH(L).a or x in StoneH(L).b by XBOOLE_0:def 3;
-  then (ex F st x=F & F <> the carrier of L & F is prime & a in F )
-  or (ex F st x=F & F <> the carrier of L & F is prime & b in F) by Th14;
+  then
+  (ex F st x=F & F <> the carrier of L & F is prime & a in F ) or ex F st
+  x=F & F <> the carrier of L & F is prime & b in F by Th14;
   then consider F such that
-A2: x=F & F <> the carrier of L & F is prime & (a in F or b in F);
-  c in F by A2,FILTER_0:def 6;
-  hence thesis by A2,Th14;
+A5: x=F and
+A6: F <> the carrier of L and
+A7: F is prime and
+A8: a in F or b in F;
+  c in F by A7,A8,FILTER_0:def 6;
+  hence thesis by A5,A6,A7,Th14;
 end;
 
 theorem Th17:
   StoneH(L).(a "/\" b) = StoneH(L).a /\ StoneH(L).b
 proof
+  set c = a "/\" b;
   hereby
-    let x;
     set c = a "/\" b;
-    assume x in StoneH(L).c;
+    let x;
+    assume
+    x in StoneH(L).c;
     then consider F such that
-A1: x=F & F <> the carrier of L & F is prime & c in F by Th14;
-    a in F & b in F by A1,FILTER_0:def 1;
-    then F in StoneH(L).a & F in StoneH(L).b by A1,Th14;
-    hence x in StoneH(L).a /\ StoneH(L).b by A1,XBOOLE_0:def 4;
+A1: x=F and
+A2: F <> the carrier of L and
+A3: F is prime and
+A4: c in F by Th14;
+    b in F by A4,FILTER_0:8;
+    then
+A5: F in StoneH(L).b by A2,A3,Th14;
+    a in F by A4,FILTER_0:8;
+    then F in StoneH(L).a by A2,A3,Th14;
+    hence x in StoneH(L).a /\ StoneH(L).b by A1,A5,XBOOLE_0:def 4;
   end;
   let x;
-  set c = a "/\" b;
-  assume x in StoneH(L).a /\ StoneH(L).b;
-  then x in StoneH(L).a & x in StoneH(L).b by XBOOLE_0:def 4;
-  then ( ex F st x=F & F <> the carrier of L & F is prime & a in F )
-  & ( ex F st x=F & F <> the carrier of L & F is prime & b in F ) by Th14;
+  assume
+A6: x in StoneH(L).a /\ StoneH(L).b;
+  then x in StoneH(L).b by XBOOLE_0:def 4;
+  then
+A7: ex F st x=F & F <> the carrier of L & F is prime & b in F by Th14;
+  x in StoneH(L).a by A6,XBOOLE_0:def 4;
+  then ex F st x=F & F <> the carrier of L & F is prime & a in F by
+  Th14;
   then consider F such that
-A2: x=F & F <> the carrier of L & F is prime & (a in F & b in F);
-  c in F by A2,FILTER_0:def 1;
-  hence thesis by A2,Th14;
+A8: x=F and
+A9: F <> the carrier of L and
+A10: F is prime and
+A11: a in F and
+A12: b in F by A7;
+  c in F by A11,A12,FILTER_0:8;
+  hence thesis by A8,A9,A10,Th14;
 end;
 
 definition
   let L, a;
   func SF_have a -> Subset-Family of L equals
-
   { F : a in F };
   coherence
   proof
@@ -486,7 +522,8 @@ definition
     A c= bool the carrier of L
     proof
       let x;
-      assume x in A;
+      assume
+      x in A;
       then ex F st x=F & a in F;
       hence thesis;
     end;
@@ -515,19 +552,24 @@ end;
 
 Lm1: F in SF_have b \ SF_have a iff b in F & not a in F
 proof
-  F in SF_have b \ SF_have a iff F in SF_have b & not F in SF_have a
-  by XBOOLE_0:def 5;
+
+  F in SF_have b \ SF_have a iff F in SF_have b & not F in SF_have a by
+  XBOOLE_0:def 5;
+
   hence thesis by Th18;
 end;
 
 theorem Th19:
-  x in SF_have b \ SF_have a implies x is Filter of L & b in x & not a in x
+  x in SF_have b \ SF_have a implies x is Filter of L & b in x &
+  not a in x
 proof
-  assume x in SF_have b \ SF_have a;
-  then x in SF_have b & not x in SF_have a by XBOOLE_0:def 5;
-  then x is Filter of L & b in x & (not x is Filter of L or not a in
-  x) by Th18;
-  hence thesis;
+  assume
+A1: x in SF_have b \ SF_have a;
+  then
+A2: not x in SF_have a by XBOOLE_0:def 5;
+A3: x in SF_have b by A1,XBOOLE_0:def 5;
+  then x is Filter of L by Th18;
+  hence thesis by A3,A2,Th18;
 end;
 
 theorem Th20:
@@ -535,51 +577,63 @@ theorem Th20:
   ex Y st Y in SF_have b \ SF_have a & for X1 st X1 in Z holds X1 c= Y
 proof
   let Z;
-  assume
-A1: Z <> {} & Z c= SF_have b \ SF_have a & Z is c=-linear;
-  then reconsider Z as Subset-Family of L by XBOOLE_1:1;
+  assume that
+A1: Z <> {} and
+A2: Z c= SF_have b \ SF_have a and
+A3: Z is c=-linear;
+  reconsider Z as Subset-Family of L by A2,XBOOLE_1:1;
   take Y = union Z;
   Y in SF_have b \ SF_have a
   proof
-A2: not a in Y
-    proof
-      assume a in Y;
-      then consider X such that
-A3:   a in X & X in Z by TARSKI:def 4;
-      thus contradiction by A1,A3,Th19;
-    end;
     consider X being Element of Z;
-    X in SF_have b \ SF_have a by A1,TARSKI:def 3;
-    then
-A4: b in X by Th19;
-    then
-A5: b in Y by A1,TARSKI:def 4;
-    reconsider Y as non empty Subset of L by A1,A4,TARSKI:def 4;
-    Y is Filter of L
+A4: not a in Y
     proof
+      assume
+      a in Y;
+      then ex X st a in X & X in Z by TARSKI:def 4;
+      hence contradiction by A2,Th19;
+    end;
+    X in SF_have b \ SF_have a by A1,A2,TARSKI:def 3;
+    then
+A5: b in X by Th19;
+    then
+A6: b in Y by A1,TARSKI:def 4;
+    reconsider Y as non empty Subset of L by A1,A5,TARSKI:def 4;
+    now
       let p,q be Element of L;
       thus p in Y & q in Y implies p "/\" q in Y
       proof
-        assume p in Y;
+        assume
+        p in Y;
         then consider X1 such that
-A6:     p in X1 & X1 in Z by TARSKI:def 4;
-        assume q in Y;
+A7:     p in X1 and
+A8:     X1 in Z by TARSKI:def 4;
+A9:     X1 is Filter of L by A2,A8,Th19;
+        assume
+        q in Y;
         then consider X2 such that
-A7:     q in X2 & X2 in Z by TARSKI:def 4;
-A8:     X1,X2 are_c=-comparable & X1 is Filter of L &
-        X2 is Filter of L by A1,A6,A7,Th19,ORDINAL1:def 9;
-        then X1 c= X2 or X2 c= X1 by XBOOLE_0:def 9;
-        then p "/\" q in X1 or p "/\" q in X2 by A6,A7,A8,FILTER_0:def 1;
-        hence thesis by A6,A7,TARSKI:def 4;
+A10:    q in X2 and
+A11:    X2 in Z by TARSKI:def 4;
+        X1,X2 are_c=-comparable by A3,A8,A11,ORDINAL1:def 9;
+        then
+A12:    X1 c= X2 or X2 c= X1 by XBOOLE_0:def 9;
+        X2 is Filter of L by A2,A11,Th19;
+        then p "/\" q in X1 or p "/\" q in X2 by A7,A10,A9,A12, FILTER_0:8;
+        hence thesis by A8,A11,TARSKI:def 4;
       end;
-      assume p "/\" q in Y;
+      assume
+      p "/\" q in Y;
       then consider X1 such that
-A9:   p "/\" q in X1 & X1 in Z by TARSKI:def 4;
-      X1 is Filter of L by A1,A9,Th19;
-      then p in X1 & q in X1 by A9,FILTER_0:def 1;
-      hence thesis by A9,TARSKI:def 4;
+A13:  p "/\" q in X1 and
+A14:  X1 in Z by TARSKI:def 4;
+A15:  X1 is Filter of L by A2,A14,Th19;
+      then
+A16:  q in X1 by A13,FILTER_0:8;
+      p in X1 by A13,A15,FILTER_0:8;
+      hence p in Y & q in Y by A14,A16,TARSKI:def 4;
     end;
-    hence thesis by A2,A5,Lm1;
+    then Y is Filter of L by FILTER_0:8;
+    hence thesis by A4,A6,Lm1;
   end;
   hence thesis by ZFMISC_1:92;
 end;
@@ -588,93 +642,111 @@ theorem Th21:
   not b [= a implies <.b.) in SF_have b \ SF_have a
 proof
   assume
-A1: not b [= a;
-  b in <.b.);
+  not b [= a;
+  then not a in <.b.) by FILTER_0:18;
   then
-A2: <.b.) in SF_have b;
-  not a in <.b.) by A1,FILTER_0:18;
-  then not <.b.) in SF_have a by Th18;
-  hence thesis by A2,XBOOLE_0:def 5;
+A1: not <.b.) in SF_have a by Th18;
+  b in <.b.);
+  then <.b.) in SF_have b;
+  hence thesis by A1,XBOOLE_0:def 5;
 end;
 
 theorem Th22:
-  not b [= a implies ex F st (F in F_primeSet(L) & not a in F & b in F )
+  not b [= a implies ex F st F in F_primeSet(L) & not a in F & b
+  in F
 proof
-  assume
-A1: not b [= a;
   set A = SF_have b \ SF_have a;
-A2: A <> {} by A1,Th21;
-  for Z st Z <> {} & Z c= SF_have b \ SF_have a & Z is c=-linear
-  ex Y st Y in SF_have b\ SF_have a & for X1 st X1 in Z holds X1 c= Y by Th20;
+  assume
+  not b [= a;
+  then
+A1: A <> {} by Th21;
+  for Z st Z <> {} & Z c= SF_have b \ SF_have a & Z is c=-linear ex Y st Y
+  in SF_have b\ SF_have a & for X1 st X1 in Z holds X1 c= Y by Th20;
   then consider Y such that
-A3: Y in A & for Z st Z in A & Z <> Y holds not Y c= Z by A2,LATTICE4:3;
-  reconsider Y as Filter of L by A3,Th19;
-A4: not a in Y & b in Y by A3,Th19;
-A5: Y <> the carrier of L by A3,Th19;
-  Y is prime
+A2: Y in A and
+A3: for Z st Z in A & Z <> Y holds not Y c= Z by A1,LATTICE4:3;
+  reconsider Y as Filter of L by A2,Th19;
+A4: b in Y by A2,Th19;
+A5: not a in Y by A2,Th19;
+A6: Y is prime
   proof
     let a1,a2 be Element of L;
     thus a1"\/"a2 in Y implies a1 in Y or a2 in Y
     proof
-      assume
-A6:   a1"\/"a2 in Y & not a1 in Y & not a2 in Y;
-      set F1=<.<.a1.) \/ Y.);
       set F2=<.<.a2.) \/ Y.);
-A7:   not a in F1 or not a in F2
-      proof
-        assume
-A8:     a in F1 & a in F2;
-        then consider c1 being Element of L such that
-A9:     c1 in Y & a1 "/\" c1 [= a by LATTICE4:6;
-        consider c2 being Element of L such that
-A10:    c2 in Y & a2 "/\" c2 [= a by A8,LATTICE4:6;
-        set c = c1 "/\" c2;
-A11:    c in Y by A9,A10,FILTER_0:def 1;
-        a1 "/\" c [= a1 "/\" c1 & a2 "/\" c [= a2 "/\" c2 by LATTICES:23,27;
-        then a1 "/\" c [= a & a2 "/\" c [= a by A9,A10,LATTICES:25;
-        then (a1 "/\" c) "\/"( a2 "/\" c) [= a by FILTER_0:6;
-        then
-A12:    (a1 "\/" a2) "/\" c [= a by LATTICES:def 11;
-        (a1 "\/" a2) "/\" c in Y by A6,A11,FILTER_0:def 1;
-        hence contradiction by A4,A12,FILTER_0:9;
-      end;
-A13:  a1 in <.a1.) & a2 in <.a2.);
-      <.a1.) c= F1 & <.a2.) c= F2 by LATTICE4:5;
+      set F1=<.<.a1.) \/ Y.);
+      assume that
+A7:   a1"\/"a2 in Y and
+A8:   not a1 in Y and
+A9:   not a2 in Y;
+A10:  <.a1.) c= F1 by LATTICE4:5;
+      a1 in <.a1.);
       then
-A14:  a1 in F1 & a2 in F2 by A13;
-A15:  Y c= F1 & Y c= F2 by LATTICE4:5;
-      then F1 in A or F2 in A by A4,A7,Lm1;
-      hence contradiction by A3,A6,A14,A15;
+A11:  a1 in F1 by A10;
+A12:  Y c= F1 by LATTICE4:5;
+A13:  <.a2.) c= F2 by LATTICE4:5;
+      a2 in <.a2.);
+      then
+A14:  a2 in F2 by A13;
+A15:  Y c= F2 by LATTICE4:5;
+      not a in F1 or not a in F2
+      proof
+        assume that
+A16:    a in F1 and
+A17:    a in F2;
+        consider c1 being Element of L such that
+A18:    c1 in Y and
+A19:    a1 "/\" c1 [= a by A16,LATTICE4:6;
+        consider c2 being Element of L such that
+A20:    c2 in Y and
+A21:    a2 "/\" c2 [= a by A17,LATTICE4:6;
+        set c = c1 "/\" c2;
+        a2 "/\" c [= a2 "/\" c2 by LATTICES:23,27;
+        then
+A22:    a2 "/\" c [= a by A21,LATTICES:25;
+        a1 "/\" c [= a1 "/\" c1 by LATTICES:23,27;
+        then a1 "/\" c [= a by A19,LATTICES:25;
+        then (a1 "/\" c) "\/"( a2 "/\" c) [= a by A22,FILTER_0:6;
+        then
+A23:    (a1 "\/" a2) "/\" c [= a by LATTICES:def 11;
+        c in Y by A18,A20,FILTER_0:8;
+        then (a1 "\/" a2) "/\" c in Y by A7,FILTER_0:8;
+        hence contradiction by A5,A23,FILTER_0:9;
+      end;
+      then F1 in A or F2 in A by A4,A12,A15,Lm1;
+      hence contradiction by A3,A8,A9,A11,A14,A12,A15;
     end;
     thus thesis by FILTER_0:10;
   end;
-  then Y in F_primeSet(L) by A5;
-  hence thesis by A4;
+  Y <> the carrier of L by A2,Th19;
+  then Y in F_primeSet(L) by A6;
+  hence thesis by A5,A4;
 end;
 
 theorem Th23:
   a <> b implies ex F st F in F_primeSet(L)
 proof
-  assume a <> b;
+  assume
+  a <> b;
   then not a [= b or not b [= a by LATTICES:26;
-  then (ex F st F in F_primeSet(L) & not b in F & a in F) or
-  ( ex F st F in F_primeSet(L) & not a in F & b in F) by Th22;
-  then consider F such that
-A1: F in F_primeSet(L) & ( b in F & not a in F or a in F);
-  thus thesis by A1;
+  then (ex F st F in F_primeSet(L) & not b in F & a in F) or ex F st F in
+  F_primeSet(L) & not a in F & b in F by Th22;
+  hence thesis;
 end;
 
 theorem Th24:
   a <> b implies StoneH(L).a <> StoneH(L).b
 proof
-  assume a <> b;
+  assume
+  a <> b;
   then not a [= b or not b [= a by LATTICES:26;
-  then (ex F st F in F_primeSet(L) & not b in F & a in F) or
-  ( ex F st F in F_primeSet(L) & not a in F & b in F ) by Th22;
+  then (ex F st F in F_primeSet(L) & not b in F & a in F) or ex F st F in
+  F_primeSet(L) & not a in F & b in F by Th22;
   then consider F such that
-A1: F in F_primeSet(L) & ( b in F & not a in F or a in F & not b in F);
-  F in StoneH(L).a & not F in StoneH(L).b or
-  F in StoneH(L).b & not F in StoneH(L).a by A1,Th13;
+A1: F in F_primeSet(L) and
+A2: b in F & not a in F or a in F & not b in F;
+  F in StoneH(L).a & not F in StoneH(L).b or F in StoneH(L).b & not F in
+  StoneH(L).a by A1,A2,Th13;
   hence thesis;
 end;
 
@@ -683,10 +755,11 @@ theorem Th25:
 proof
   let x1,x2 be set;
   assume that
-A1: x1 in dom StoneH(L) & x2 in dom StoneH(L) and
-A2: StoneH(L).x1 = StoneH(L).x2;
-  reconsider a1=x1,a2=x2 as Element of L by A1,Def6;
-  a1=a2 by A2,Th24;
+A1: x1 in dom StoneH(L) and
+A2: x2 in dom StoneH(L) and
+A3: StoneH(L).x1 = StoneH(L).x2;
+  reconsider a1=x1,a2=x2 as Element of L by A1,A2,Def6;
+  a1=a2 by A3,Th24;
   hence thesis;
 end;
 
@@ -696,21 +769,21 @@ definition
   redefine func A \/ B -> Element of StoneS(L);
   coherence
   proof
-    consider a such that
-A1: A = StoneH(L).a by Th15;
     consider b such that
-A2: B = StoneH(L).b by Th15;
-    A \/ B = StoneH(L).(a "\/" b) by A1,A2,Th16;
+A1: B = StoneH(L).b by Th15;
+    consider a such that
+A2: A = StoneH(L).a by Th15;
+    A \/ B = StoneH(L).(a "\/" b) by A2,A1,Th16;
     hence thesis by Th15;
   end;
   redefine func A /\ B -> Element of StoneS(L);
   coherence
   proof
-    consider a such that
-A3: A = StoneH(L).a by Th15;
     consider b such that
-A4: B = StoneH(L).b by Th15;
-    A /\ B = StoneH(L).(a "/\" b) by A3,A4,Th17;
+A3: B = StoneH(L).b by Th15;
+    consider a such that
+A4: A = StoneH(L).a by Th15;
+    A /\ B = StoneH(L).(a "/\" b) by A4,A3,Th17;
     hence thesis by Th15;
   end;
 end;
@@ -719,41 +792,39 @@ definition
   let L;
   func Set_Union L -> BinOp of StoneS(L) means
   :Def9:
-  for A,B being Element of StoneS(L) holds it.(A,B) = A \/ B;
+  for A,B being Element of
+  StoneS(L) holds it.(A,B) = A \/ B;
   existence
   proof
     deffunc F(Element of StoneS(L), Element of StoneS(L)) = $1 \/ $2;
-    thus ex F being BinOp of StoneS(L) st
-    for P,Q being Element of StoneS(L) holds
-    F.(P,Q) = F(P,Q) from BINOP_1:sch 4;
+    thus ex F being BinOp of StoneS(L) st for P,Q being Element of StoneS(L)
+    holds F.(P,Q) = F(P,Q) from BINOP_1:sch 4;
   end;
   uniqueness
   proof
     set A = StoneS(L);
     deffunc O(Element of A, Element of A) = $1 \/ $2;
-    thus for o1,o2 being BinOp of A st
-    (for a,b being Element of A holds o1.(a,b) = O(a,b)) &
-    (for a,b being Element of A holds o2.(a,b) = O(a,b))
-    holds o1 = o2 from BINOP_2:sch 2;
+    thus for o1,o2 being BinOp of A st (for a,b being Element of A holds o1.(a
+,b) = O(a,b)) & (for a,b being Element of A holds o2.(a,b) = O(a,b)) holds o1 =
+    o2 from BINOP_2:sch 2;
   end;
   func Set_Meet L -> BinOp of StoneS(L) means
   :Def10:
-  for A,B being Element of StoneS(L) holds it.(A,B) = A /\ B;
+  for A,B being Element of
+  StoneS(L) holds it.(A,B) = A /\ B;
   existence
   proof
     deffunc F(Element of StoneS(L), Element of StoneS(L)) = $1 /\ $2;
-    thus ex F being BinOp of StoneS(L) st
-    for P,Q being Element of StoneS(L) holds
-    F.(P,Q) = F(P,Q) from BINOP_1:sch 4;
+    thus ex F being BinOp of StoneS(L) st for P,Q being Element of StoneS(L)
+    holds F.(P,Q) = F(P,Q) from BINOP_1:sch 4;
   end;
   uniqueness
   proof
     set A = StoneS(L);
     deffunc O(Element of A, Element of A) = $1 /\ $2;
-    thus for o1,o2 being BinOp of A st
-    (for a,b being Element of A holds o1.(a,b) = O(a,b)) &
-    (for a,b being Element of A holds o2.(a,b) = O(a,b))
-    holds o1 = o2 from BINOP_2:sch 2;
+    thus for o1,o2 being BinOp of A st (for a,b being Element of A holds o1.(a
+,b) = O(a,b)) & (for a,b being Element of A holds o2.(a,b) = O(a,b)) holds o1 =
+    o2 from BINOP_2:sch 2;
   end;
 end;
 
@@ -767,25 +838,18 @@ A1: now
       .= q"\/"p by Def9;
   end;
 A2: now
-    let p,q,r be Element of SL;
-    thus p"\/"(q"\/"r) = p \/ (q "\/" r) by Def9
-      .= p \/ (q \/ r) by Def9
-      .= (p \/ q) \/ r by XBOOLE_1:4
-      .= (p "\/" q) \/ r by Def9
-      .= (p"\/"q)"\/"r by Def9;
-  end;
-A3: now
     let p,q be Element of SL;
     thus (p"/\"q)"\/"q = (p"/\"q) \/ q by Def9
       .= (p /\ q) \/ q by Def10
       .= q by XBOOLE_1:22;
   end;
-A4: now
+A3: now
     let p,q be Element of SL;
-    thus p "/\" q =q /\ p by Def10
-      .= q"/\"p by Def10;
+    thus p"/\"(p"\/"q) = p /\ (p"\/"q) by Def10
+      .= p /\ (p \/ q) by Def9
+      .= p by XBOOLE_1:21;
   end;
-A5: now
+A4: now
     let p,q,r be Element of SL;
     thus p"/\"(q"/\"r) = p /\ (q "/\" r) by Def10
       .= p /\ (q /\ r) by Def10
@@ -793,22 +857,31 @@ A5: now
       .= (p "/\" q) /\ r by Def10
       .= (p"/\"q)"/\"r by Def10;
   end;
-  now
+A5: now
     let p,q be Element of SL;
-    thus p"/\"(p"\/"q) = p /\ (p"\/"q) by Def10
-      .= p /\ (p \/ q) by Def9
-      .= p by XBOOLE_1:21;
+    thus p "/\" q =q /\ p by Def10
+      .= q"/\"p by Def10;
   end;
-  then SL is join-commutative join-associative meet-absorbing
-  meet-commutative meet-associative join-absorbing
-  by A1,A2,A3,A4,A5,LATTICES:def 4,def 5,def 6,def 7,def 8,def 9;
+  now
+    let p,q,r be Element of SL;
+    thus p"\/"(q"\/"r) = p \/ (q "\/" r) by Def9
+      .= p \/ (q \/ r) by Def9
+      .= (p \/ q) \/ r by XBOOLE_1:4
+      .= (p "\/" q) \/ r by Def9
+      .= (p"\/"q)"\/"r by Def9;
+  end;
+  then
+  SL is join-commutative join-associative meet-absorbing meet-commutative
+  meet-associative join-absorbing by A1,A2,A5,A4,A3,LATTICES:def 4,def 5,def 6
+  ,def 7,def 8,def 9;
   hence thesis;
 end;
 
 definition
   let L;
   func StoneLatt L -> Lattice equals
-  LattStr(#StoneS(L),Set_Union L,Set_Meet L#);
+  LattStr(#StoneS(L),Set_Union L,Set_Meet L
+  #);
   coherence by Th26;
 end;
 
@@ -823,8 +896,9 @@ theorem
 theorem
   p [= q iff p c= q
 proof
-  (p [= q iff p "\/" q = q) & p "\/" q = p \/ q by Def9,LATTICES:def 3;
-  hence thesis by XBOOLE_1:7,12;
+A1: p [= q iff p "\/" q = q by LATTICES:def 3;
+  p "\/" q = p \/ q by Def9;
+  hence thesis by A1,XBOOLE_1:7,12;
 end;
 
 definition
@@ -833,8 +907,9 @@ definition
   coherence
   proof
     dom StoneH(L) = the carrier of L by Def6;
-    then reconsider f=StoneH(L) as Function of the carrier of L,
-    the carrier of StoneLatt L by FUNCT_2:3;
+    then reconsider
+    f=StoneH(L) as Function of the carrier of L, the carrier of
+    StoneLatt L by FUNCT_2:3;
     now
       let a,b;
       thus f.(a "\/" b) = f.(a) \/ f.(b) by Th16
@@ -870,7 +945,8 @@ end;
 registration
   cluster non trivial H_Lattice;
   existence
-  proof consider T;
+  proof
+    consider T;
     set OL=Open_setLatt(T);
     the carrier of T = Top OL by Th11;
     then reconsider a= the carrier of T as Element of OL;
@@ -889,45 +965,53 @@ theorem Th33:
 proof
   hereby
     let x;
-    assume x in StoneH(H).(Top H);
-    then consider F being Filter of H such that
-A1: F=x & F <> the carrier of H & F is prime & Top H in F by Th14;
-    thus x in F_primeSet(H) by A1;
+    assume
+    x in StoneH(H).(Top H);
+    then
+    ex F being Filter of H st F=x & F <> the carrier of H & F is prime
+    & Top H in F by Th14;
+    hence x in F_primeSet(H);
   end;
   let x;
-  assume x in F_primeSet(H);
+  assume
+  x in F_primeSet(H);
   then consider F being Filter of H such that
-A2: F=x & F <> the carrier of H & F is prime;
+A1: F=x and
+A2: F <> the carrier of H and
+A3: F is prime;
   Top H in F by FILTER_0:12;
-  hence thesis by A2,Th14;
+  hence thesis by A1,A2,A3,Th14;
 end;
 
 theorem Th34:
   StoneH(H).(Bottom H) = {}
 proof
-  assume
-A1: StoneH(H).(Bottom H) <> {};
   consider x being Element of StoneH(H).(Bottom H);
-  consider F being Filter of H such that
-A2: F=x & F <> the carrier of H & F is prime & Bottom H in F by A1,Th14;
-  thus contradiction by A2,FILTER_0:32;
+  assume
+  StoneH(H).(Bottom H) <> {};
+  then
+  ex F being Filter of H st F=x & F <> the carrier of H & F is prime &
+  Bottom H in F by Th14;
+  hence contradiction by FILTER_0:32;
 end;
 
 theorem Th35:
   StoneS(H) c= bool F_primeSet(H)
 proof
   let x;
-  assume x in StoneS(H);
+  assume
+  x in StoneS(H);
   then consider p' such that
 A1: x=StoneH(H).p' by Th15;
 A2: x={F where F is Filter of H:F in F_primeSet(H) & p' in F} by A1,Def6;
   x c= F_primeSet(H)
   proof
     let y be set;
-    assume y in x;
-    then consider F being Filter of H such that
-A3: y=F & F in F_primeSet(H) & p' in F by A2;
-    thus thesis by A3;
+    assume
+    y in x;
+    then
+    ex F being Filter of H st y=F & F in F_primeSet(H) & p' in F by A2;
+    hence thesis;
   end;
   hence thesis;
 end;
@@ -937,9 +1021,8 @@ registration
   cluster F_primeSet(H) -> non empty;
   coherence
   proof
-    consider p',q' such that
-A1: p' <> q' by STRUCT_0:def 10;
-    ex F being Filter of H st F in F_primeSet(H) by A1,Th23;
+    ex p',q' st p' <> q' by STRUCT_0:def 10;
+    then ex F being Filter of H st F in F_primeSet(H) by Th23;
     hence thesis;
   end;
 end;
@@ -948,18 +1031,19 @@ definition
   let H;
   func HTopSpace H -> strict TopStruct means
   :Def12:
-  the carrier of it = F_primeSet(H) &
-  the topology of it ={union A where A is Subset of StoneS(H):not
+  the carrier of it =
+F_primeSet(H) & the topology of it ={union A where A is Subset of StoneS(H):not
   contradiction};
   existence
   proof
-    set top={union A where A is Subset of StoneS(H):not contradiction};
     set FS= F_primeSet(H);
+    set top={union A where A is Subset of StoneS(H):not contradiction};
 A1: StoneS(H) c= bool FS by Th35;
     top c= bool FS
     proof
       let x;
-      assume x in top;
+      assume
+      x in top;
       then consider A being Subset of StoneS(H) such that
 A2:   x=union A;
       A c= bool FS by A1,XBOOLE_1:1;
@@ -979,22 +1063,22 @@ registration
   cluster HTopSpace H -> non empty TopSpace-like;
   coherence
   proof
-    set TS = HTopSpace H;
-A1: the carrier of TS = F_primeSet(H) by Def12;
-A2: the topology of TS ={union A where A is Subset of StoneS(H):not
-    contradiction} by Def12;
-    thus HTopSpace H is non empty by A1;
     reconsider A1={StoneH(H).(Top H)} as Subset of StoneS(H);
+    set TS = HTopSpace H;
+A1: the topology of TS ={union A where A is Subset of StoneS(H):not
+    contradiction} by Def12;
+A2: the carrier of TS = F_primeSet(H) by Def12;
+    hence HTopSpace H is non empty;
     F_primeSet(H) = StoneH(H).(Top H) by Th33;
     then F_primeSet(H)=union A1 by ZFMISC_1:31;
-    hence the carrier of TS in the topology of TS by A1,A2;
+    hence the carrier of TS in the topology of TS by A2,A1;
     hereby
       let a be Subset-Family of TS;
       defpred P[set] means union $1 in a;
       set B= {A where A is Subset of StoneS(H) :P[A]};
+      set X= {union A where A is Subset of StoneS(H) : A in B};
       assume
 A3:   a c= the topology of TS;
-      set X= {union A where A is Subset of StoneS(H) : A in B};
 A4:   a = X
       proof
         hereby
@@ -1003,63 +1087,69 @@ A4:   a = X
 A5:       x in a;
           then x in the topology of TS by A3;
           then consider A be Subset of StoneS(H) such that
-A6:       x=union A by A2;
+A6:       x=union A by A1;
           A in B by A5,A6;
           hence x in X by A6;
         end;
         let x;
-        assume x in X;
+        assume
+        x in X;
         then consider A be Subset of StoneS(H) such that
-A7:     x=union A & A in B;
-        ex A' be Subset of StoneS(H) st A=A' & union A' in a by A7;
+A7:     x=union A and
+A8:     A in B;
+        ex A' be Subset of StoneS(H) st A=A' & union A' in a by A8;
         hence thesis by A7;
       end;
       reconsider B as Subset-Family of StoneS H from DOMAIN_1:sch 7;
       union union B = union a by A4,BORSUK_1:17;
-      hence union a in the topology of TS by A2;
+      hence union a in the topology of TS by A1;
     end;
     let a,b be Subset of TS;
-    assume
-A8: a in the topology of TS & b in the topology of TS;
-    then consider A being Subset of StoneS(H) such that
-A9: a = union A by A2;
+    assume that
+A9: a in the topology of TS and
+A10: b in the topology of TS;
+    consider A being Subset of StoneS(H) such that
+A11: a = union A by A1,A9;
     consider B being Subset of StoneS(H) such that
-A10: b = union B by A2,A8;
+A12: b = union B by A1,A10;
     INTERSECTION(A,B) c= StoneS(H)
     proof
       let x;
-      assume x in INTERSECTION(A,B);
+      assume
+      x in INTERSECTION(A,B);
       then consider X,Y being set such that
-A11:  X in A & Y in B & x = X /\ Y by SETFAM_1:def 5;
+A13:  X in A and
+A14:  Y in B and
+A15:  x = X /\ Y by SETFAM_1:def 5;
       consider p' such that
-A12:  X=StoneH(H).p' by A11,Th15;
+A16:  X=StoneH(H).p' by A13,Th15;
       consider q' such that
-A13:  Y=StoneH(H).q' by A11,Th15;
-      x = StoneH(H).(p' "/\" q') by A11,A12,A13,Th17;
+A17:  Y=StoneH(H).q' by A14,Th15;
+      x = StoneH(H).(p' "/\" q') by A15,A16,A17,Th17;
       hence thesis;
     end;
     then reconsider C=INTERSECTION(A,B) as Subset of StoneS(H);
     union A /\ union B = union C by SETFAM_1:39;
-    hence thesis by A2,A9,A10;
+    hence thesis by A1,A11,A12;
   end;
 end;
 
 theorem
-  the carrier of Open_setLatt(HTopSpace H) =
-  {union A where A is Subset of StoneS(H):not contradiction} by Def12;
+  the carrier of Open_setLatt(HTopSpace H) = {union A where A is Subset
+  of StoneS(H):not contradiction} by Def12;
 
 theorem Th37:
   StoneS(H) c= the carrier of Open_setLatt(HTopSpace H)
 proof
   let x;
-  assume
-A1: x in StoneS(H);
   set carrO = the carrier of Open_setLatt(HTopSpace H);
-A2: carrO = {union A where A is Subset of StoneS(H):not contradiction}
-  by Def12;
-  reconsider z={x} as Subset of StoneS(H) by A1,ZFMISC_1:37;
-  union z = x by ZFMISC_1:31;
-  hence thesis by A2;
+  assume
+  x in StoneS(H);
+  then reconsider z={x} as Subset of StoneS(H) by ZFMISC_1:37;
+A1: union z = x by ZFMISC_1:31;
+  carrO = {union A where A is Subset of StoneS(H):not contradiction} by
+  Def12;
+  hence thesis by A1;
 end;
 
 definition
@@ -1067,12 +1157,12 @@ definition
   redefine func StoneH(H) -> Homomorphism of H,Open_setLatt(HTopSpace H);
   coherence
   proof
-    reconsider g=StoneH(H) as Function of the carrier of H,
-    the carrier of StoneLatt(H);
     set LH=Open_setLatt(HTopSpace H);
+    reconsider g=StoneH(H) as Function of the carrier of H, the carrier of
+    StoneLatt(H);
     StoneS(H) c= the carrier of LH by Th37;
-    then reconsider f=g as Function of the carrier of H,
-    the carrier of LH by FUNCT_2:8;
+    then reconsider f=g as Function of the carrier of H, the carrier of LH by
+    FUNCT_2:8;
     now
       let p',q';
       thus f.(p' "\/" q') = StoneH(H).p' \/ StoneH(H).q' by Th16
@@ -1089,52 +1179,54 @@ canceled;
 theorem Th39:
   StoneH(H).(p' => q') = (StoneH(H).p') => (StoneH(H).q')
 proof
-A1: StoneH(H) is one-to-one by Th25;
-A2: the carrier of Open_setLatt(HTopSpace H) =
-  {union A where A is Subset of StoneS(H):not contradiction} by Def12;
-  p' "/\" (p' => q') [= q' by FILTER_0:def 8;
-  then StoneH(H).(p' "/\" (p' => q')) [= StoneH(H).q' by LATTICE4:7;
-  then
-A3: StoneH(H).p'"/\" StoneH(H).(p' => q') [= StoneH(H).q' by LATTICE4:def 1;
-  now
+A1: the carrier of Open_setLatt(HTopSpace H) = {union A where A is Subset of
+  StoneS(H):not contradiction} by Def12;
+A2: StoneH(H) is one-to-one by Th25;
+A3: now
     let r be Element of Open_setLatt(HTopSpace H);
-    assume
-A4: StoneH(H).p' "/\" r [= StoneH(H).q';
     r in the carrier of Open_setLatt(HTopSpace H);
     then consider A being Subset of StoneS(H) such that
-A5: r = union A by A2;
-    StoneH(H).p' "/\" r c= StoneH(H).q' by A4,Th7;
-    then StoneH(H).p' /\ union A c= StoneH(H).q' by A5,Def3;
+A4: r = union A by A1;
+    assume
+    StoneH(H).p' "/\" r [= StoneH(H).q';
+    then StoneH(H).p' "/\" r c= StoneH(H).q' by Th7;
+    then StoneH(H).p' /\ union A c= StoneH(H).q' by A4,Def3;
     then
-A6: union INTERSECTION ({StoneH(H).p'}, A) c= StoneH(H).q' by SETFAM_1:36;
+A5: union INTERSECTION ({StoneH(H).p'}, A) c= StoneH(H).q' by
+    SETFAM_1:36;
     now
       let x;
       assume
-A7:   x in A;
+A6:   x in A;
       then consider x' being Element of H such that
-A8:   x=StoneH(H).x' by Th15;
+A7:   x=StoneH(H).x' by Th15;
       StoneH(H).p' in {StoneH(H).p'} by TARSKI:def 1;
-      then StoneH(H).p' /\ x in INTERSECTION ({StoneH(H).p'}, A)
-      by A7,SETFAM_1:def 5;
-      then StoneH(H).p' /\ StoneH(H).x' c= StoneH(H).q' by A6,A8,SETFAM_1:56;
+      then StoneH(H).p' /\ x in INTERSECTION ({StoneH(H).p'}, A) by A6,
+      SETFAM_1:def 5;
+      then StoneH(H).p' /\ StoneH(H).x' c= StoneH(H).q' by A5,A7,
+      SETFAM_1:56;
       then StoneH(H).(p' "/\" x') c= StoneH(H).q' by Th17;
       then StoneH(H).(p' "/\" x') [= StoneH(H).q' by Th7;
-      then (p' "/\" x') [= q' by A1,LATTICE4:8;
+      then (p' "/\" x') [= q' by A2,LATTICE4:8;
       then x' [= p' => q' by FILTER_0:def 8;
       then StoneH(H).x' [= StoneH(H).(p' => q') by LATTICE4:7;
-      hence x c= StoneH(H).(p' => q') by A8,Th7;
+      hence x c= StoneH(H).(p' => q') by A7,Th7;
     end;
     then union A c= StoneH(H).(p' => q') by ZFMISC_1:94;
-    hence r [= StoneH(H).(p' => q') by A5,Th7;
+    hence r [= StoneH(H).(p' => q') by A4,Th7;
   end;
+  p' "/\" (p' => q') [= q' by FILTER_0:def 8;
+  then StoneH(H).(p' "/\" (p' => q')) [= StoneH(H).q' by LATTICE4:7;
+  then StoneH(H).p'"/\" StoneH(H).(p' => q') [= StoneH(H).q' by LATTICE4:
+  def 1;
   hence thesis by A3,FILTER_0:def 8;
 end;
 
 theorem
   StoneH(H) preserves_implication
 proof
-  for p',q' holds
-  StoneH(H).(p' => q') = (StoneH(H).p') => (StoneH(H).q') by Th39;
+  for p',q' holds StoneH(H).(p' => q') = (StoneH(H).p') => (StoneH(H).q')
+  by Th39;
   hence thesis by LATTICE4:def 6;
 end;
 

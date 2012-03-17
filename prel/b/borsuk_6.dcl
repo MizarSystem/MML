@@ -14,6 +14,7 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="MCART_1"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
@@ -22,7 +23,6 @@
 <ArticleID name="FUNCT_3"/>
 <ArticleID name="FUNCT_5"/>
 <ArticleID name="RELAT_2"/>
-<ArticleID name="PARTFUN1"/>
 <ArticleID name="EQREL_1"/>
 <ArticleID name="ENUMSET1"/>
 <ArticleID name="DOMAIN_1"/>
@@ -42,8 +42,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="31" value="false"/>
-<Adjective nr="90"/>
+<Adjective nr="32" value="false"/>
+<Adjective nr="89"/>
 </Cluster>
 </RCluster>
 <RCluster aid="BORSUK_6" nr="2">
@@ -52,9 +52,9 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="31" value="false"/>
+<Adjective nr="32" value="false"/>
 <Adjective nr="44"/>
-<Adjective nr="90"/>
+<Adjective nr="89"/>
 </Cluster>
 </RCluster>
 <RCluster aid="BORSUK_6" nr="3">
@@ -82,22 +82,22 @@
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="31" value="false"/>
+<Adjective nr="32" value="false"/>
 <Adjective nr="44"/>
-<Adjective nr="90"/>
+<Adjective nr="89"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="31" value="false"/>
+<Adjective nr="32" value="false"/>
 <Adjective nr="44"/>
-<Adjective nr="90"/>
+<Adjective nr="89"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="199">
+<Func kind="K" nr="200">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -115,22 +115,22 @@
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="31" value="false"/>
+<Adjective nr="32" value="false"/>
 <Adjective nr="44"/>
-<Adjective nr="90"/>
+<Adjective nr="89"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="31" value="false"/>
+<Adjective nr="32" value="false"/>
 <Adjective nr="44"/>
-<Adjective nr="90"/>
+<Adjective nr="89"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="199">
+<Func kind="K" nr="200">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -148,11 +148,11 @@
 <ArgTypes>
 <Typ kind="M" nr="6">
 <Cluster>
-<Adjective nr="31" value="false"/>
+<Adjective nr="32" value="false"/>
 </Cluster>
-<Func kind="K" nr="199">
-<Func kind="K" nr="221"/>
-<Func kind="K" nr="221"/>
+<Func kind="K" nr="200">
+<Func kind="K" nr="222"/>
+<Func kind="K" nr="222"/>
 </Func>
 </Typ>
 <Typ kind="M" nr="2">
@@ -173,11 +173,11 @@
 <ArgTypes>
 <Typ kind="M" nr="6">
 <Cluster>
-<Adjective nr="31" value="false"/>
+<Adjective nr="32" value="false"/>
 </Cluster>
-<Func kind="K" nr="199">
-<Func kind="K" nr="221"/>
-<Func kind="K" nr="221"/>
+<Func kind="K" nr="200">
+<Func kind="K" nr="222"/>
+<Func kind="K" nr="222"/>
 </Func>
 </Typ>
 <Typ kind="M" nr="2">
@@ -196,105 +196,105 @@
 </FCluster>
 <FCluster aid="BORSUK_6" nr="5">
 <ArgTypes/>
-<Func kind="K" nr="219"/>
+<Func kind="K" nr="220"/>
 <Cluster>
 <Adjective nr="43"/>
 <Adjective nr="44"/>
-<Adjective nr="90"/>
+<Adjective nr="89"/>
 </Cluster>
 </FCluster>
 <FCluster aid="BORSUK_6" nr="6">
 <ArgTypes/>
-<Func kind="K" nr="228"/>
+<Func kind="K" nr="229"/>
 <Cluster>
 <Adjective nr="6"/>
-<Adjective nr="27">
+<Adjective nr="28">
 <Func kind="U" nr="1">
-<Func kind="K" nr="221"/>
+<Func kind="K" nr="222"/>
 </Func>
 <Func kind="U" nr="1">
-<Func kind="K" nr="221"/>
+<Func kind="K" nr="222"/>
 </Func>
 </Adjective>
 <Adjective nr="47">
-<Func kind="K" nr="221"/>
-<Func kind="K" nr="221"/>
+<Func kind="K" nr="222"/>
+<Func kind="K" nr="222"/>
 </Adjective>
 </Cluster>
 </FCluster>
 <FCluster aid="BORSUK_6" nr="7">
 <ArgTypes/>
-<Func kind="K" nr="229"/>
+<Func kind="K" nr="230"/>
 <Cluster>
 <Adjective nr="6"/>
-<Adjective nr="27">
+<Adjective nr="28">
 <Func kind="U" nr="1">
-<Func kind="K" nr="221"/>
+<Func kind="K" nr="222"/>
 </Func>
 <Func kind="U" nr="1">
-<Func kind="K" nr="221"/>
+<Func kind="K" nr="222"/>
 </Func>
 </Adjective>
 <Adjective nr="47">
-<Func kind="K" nr="221"/>
-<Func kind="K" nr="221"/>
+<Func kind="K" nr="222"/>
+<Func kind="K" nr="222"/>
 </Adjective>
 </Cluster>
 </FCluster>
 <FCluster aid="BORSUK_6" nr="8">
 <ArgTypes/>
-<Func kind="K" nr="230"/>
+<Func kind="K" nr="231"/>
 <Cluster>
 <Adjective nr="6"/>
-<Adjective nr="27">
+<Adjective nr="28">
 <Func kind="U" nr="1">
-<Func kind="K" nr="221"/>
+<Func kind="K" nr="222"/>
 </Func>
 <Func kind="U" nr="1">
-<Func kind="K" nr="221"/>
+<Func kind="K" nr="222"/>
 </Func>
 </Adjective>
 <Adjective nr="47">
-<Func kind="K" nr="221"/>
-<Func kind="K" nr="221"/>
+<Func kind="K" nr="222"/>
+<Func kind="K" nr="222"/>
 </Adjective>
 </Cluster>
 </FCluster>
 <FCluster aid="BORSUK_6" nr="9">
 <ArgTypes/>
-<Func kind="K" nr="231"/>
+<Func kind="K" nr="232"/>
 <Cluster>
 <Adjective nr="10" value="false"/>
 <Adjective nr="46">
-<Func kind="K" nr="199">
-<Func kind="K" nr="221"/>
-<Func kind="K" nr="221"/>
+<Func kind="K" nr="200">
+<Func kind="K" nr="222"/>
+<Func kind="K" nr="222"/>
 </Func>
 </Adjective>
 </Cluster>
 </FCluster>
 <FCluster aid="BORSUK_6" nr="10">
 <ArgTypes/>
-<Func kind="K" nr="232"/>
+<Func kind="K" nr="233"/>
 <Cluster>
 <Adjective nr="10" value="false"/>
 <Adjective nr="46">
-<Func kind="K" nr="199">
-<Func kind="K" nr="221"/>
-<Func kind="K" nr="221"/>
+<Func kind="K" nr="200">
+<Func kind="K" nr="222"/>
+<Func kind="K" nr="222"/>
 </Func>
 </Adjective>
 </Cluster>
 </FCluster>
 <FCluster aid="BORSUK_6" nr="11">
 <ArgTypes/>
-<Func kind="K" nr="233"/>
+<Func kind="K" nr="234"/>
 <Cluster>
 <Adjective nr="10" value="false"/>
 <Adjective nr="46">
-<Func kind="K" nr="199">
-<Func kind="K" nr="221"/>
-<Func kind="K" nr="221"/>
+<Func kind="K" nr="200">
+<Func kind="K" nr="222"/>
+<Func kind="K" nr="222"/>
 </Func>
 </Adjective>
 </Cluster>
@@ -303,7 +303,7 @@
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
-<Adjective nr="90"/>
+<Adjective nr="89"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -322,7 +322,7 @@
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="90"/>
+<Adjective nr="89"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -332,7 +332,7 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="90"/>
+<Adjective nr="89"/>
 </Cluster>
 </CCluster>
 </Registrations>

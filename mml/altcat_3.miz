@@ -12,8 +12,7 @@ environ
  notations TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, REALSET1, FUNCT_1,
       FUNCT_2, FUNCOP_1, STRUCT_0, ALTCAT_1;
  constructors SETFAM_1, REALSET1, ALTCAT_1, RELSET_1;
- registrations XBOOLE_0, SETFAM_1, FUNCT_1, RELSET_1, TEX_2, ALTCAT_1,
-      REALSET1, ZFMISC_1;
+ registrations XBOOLE_0, SETFAM_1, FUNCT_1, RELSET_1, ALTCAT_1, ZFMISC_1;
  requirements SUBSET, BOOLE;
  definitions TARSKI;
  theorems FUNCOP_1, RELAT_1, FUNCT_2, ZFMISC_1, ALTCAT_1, TARSKI, FUNCT_1,
@@ -23,114 +22,123 @@ environ
 begin
 
 definition
-  let C be with_units (non empty AltCatStr), o1, o2 be object of C,
-  A be Morphism of o1,o2, B be Morphism of o2,o1;
+  let C be with_units (non empty AltCatStr), o1, o2 be object of C, A be
+  Morphism of o1,o2, B be Morphism of o2,o1;
   pred A is_left_inverse_of B means
   :Def1:
   A * B = idm o2;
 end;
 
 notation
-  let C be with_units (non empty AltCatStr), o1, o2 be object of C,
-  A be Morphism of o1,o2, B be Morphism of o2,o1;
+  let C be with_units (non empty AltCatStr), o1, o2 be object of C, A be
+  Morphism of o1,o2, B be Morphism of o2,o1;
   synonym B is_right_inverse_of A for A is_left_inverse_of B;
 end;
 
 definition
-  let C be with_units (non empty AltCatStr), o1, o2 be object of C,
-  A be Morphism of o1,o2;
+  let C be with_units (non empty AltCatStr), o1, o2 be object of C, A be
+  Morphism of o1,o2;
   attr A is retraction means
   :Def2:
-  ex B being Morphism of o2,o1 st B is_right_inverse_of A;
+  ex B being Morphism of o2,o1 st B
+  is_right_inverse_of A;
 end;
 
 definition
-  let C be with_units (non empty AltCatStr), o1, o2 be object of C,
-  A be Morphism of o1,o2;
+  let C be with_units (non empty AltCatStr), o1, o2 be object of C, A be
+  Morphism of o1,o2;
   attr A is coretraction means
   :Def3:
-  ex B being Morphism of o2,o1 st B is_left_inverse_of A;
+  ex B being Morphism of o2,o1 st B
+  is_left_inverse_of A;
 end;
 
 theorem Th1:
-  for C being with_units (non empty AltCatStr), o being object of C holds
-  idm o is retraction & idm o is coretraction
+  for C being with_units (non empty AltCatStr), o being object of C
+  holds idm o is retraction & idm o is coretraction
 proof
   let C be with_units (non empty AltCatStr), o be object of C;
   <^o,o^> <> {} by ALTCAT_1:23;
   then (idm o) * (idm o) = idm o by ALTCAT_1:def 19;
-
-then idm o is_left_inverse_of idm o & idm o is_right_inverse_of idm o by Def1;
+  then idm o is_left_inverse_of idm o by Def1;
   hence thesis by Def2,Def3;
 end;
 
 definition
   let C be category, o1, o2 be object of C such that
-A1: <^o1,o2^> <> {} & <^o2,o1^> <> {};
+A1: <^o1,o2^> <> {} and
+A2: <^o2,o1^> <> {};
   let A be Morphism of o1,o2 such that
-A2: A is retraction coretraction;
+A3: A is retraction coretraction;
   func A" -> Morphism of o2,o1 means
   :Def4:
-  it is_left_inverse_of A & it is_right_inverse_of A;
+  it is_left_inverse_of A & it
+  is_right_inverse_of A;
   existence
   proof
     consider B1 being Morphism of o2,o1 such that
-A3: B1 is_right_inverse_of A by A2,Def2;
-    consider B2 being Morphism of o2,o1 such that
-A4: B2 is_left_inverse_of A by A2,Def3;
-A5: B1 = idm o1 * B1 by A1,ALTCAT_1:24
-      .= B2 * A * B1 by A4,Def1
-      .= B2 * (A * B1) by A1,ALTCAT_1:25
-      .= B2 * idm o2 by A3,Def1
-      .= B2 by A1,ALTCAT_1:def 19;
+A4: B1 is_right_inverse_of A by A3,Def2;
     take B1;
-    thus thesis by A3,A4,A5;
+    consider B2 being Morphism of o2,o1 such that
+A5: B2 is_left_inverse_of A by A3,Def3;
+    B1 = idm o1 * B1 by A2,ALTCAT_1:24
+      .= B2 * A * B1 by A5,Def1
+      .= B2 * (A * B1) by A1,A2,ALTCAT_1:25
+      .= B2 * idm o2 by A4,Def1
+      .= B2 by A2,ALTCAT_1:def 19;
+    hence thesis by A4,A5;
   end;
   uniqueness
   proof
     let M1,M2 be Morphism of o2,o1 such that
-A6: M1 is_left_inverse_of A & M1 is_right_inverse_of A and
-A7: M2 is_left_inverse_of A & M2 is_right_inverse_of A;
-    thus M1 = M1 * idm o2 by A1,ALTCAT_1:def 19
+A6: M1 is_left_inverse_of A and
+    M1 is_right_inverse_of A and
+    M2 is_left_inverse_of A and
+A7: M2 is_right_inverse_of A;
+    thus M1 = M1 * idm o2 by A2,ALTCAT_1:def 19
       .= M1 * (A * M2) by A7,Def1
-      .= M1 * A * M2 by A1,ALTCAT_1:25
+      .= M1 * A * M2 by A1,A2,ALTCAT_1:25
       .= idm o1 * M2 by A6,Def1
-      .= M2 by A1,ALTCAT_1:24;
+      .= M2 by A2,ALTCAT_1:24;
   end;
 end;
 
 theorem Th2:
-  for C being category, o1,o2 being object of C st
-  <^o1,o2^> <> {} & <^o2,o1^> <> {} for A being Morphism of o1,o2 st
-  A is retraction & A is coretraction holds A" * A = idm o1 & A * A" = idm o2
+  for C being category, o1,o2 being object of C st <^o1,o2^> <> {}
+  & <^o2,o1^> <> {} for A being Morphism of o1,o2 st A is retraction & A is
+  coretraction holds A" * A = idm o1 & A * A" = idm o2
 proof
   let C be category, o1,o2 be object of C such that
 A1: <^o1,o2^> <> {} & <^o2,o1^> <> {};
   let A be Morphism of o1,o2;
-  assume A is retraction & A is coretraction;
+  assume
+  A is retraction & A is coretraction;
   then A" is_left_inverse_of A & A" is_right_inverse_of A by A1,Def4;
   hence thesis by Def1;
 end;
 
 theorem Th3:
-  for C being category, o1,o2 being object of C st
-  <^o1,o2^> <> {} & <^o2,o1^> <> {}
-  for A being Morphism of o1,o2 st A is retraction & A is coretraction
-  holds (A")" = A
+  for C being category, o1,o2 being object of C st <^o1,o2^> <> {}
+  & <^o2,o1^> <> {} for A being Morphism of o1,o2 st A is retraction & A is
+  coretraction holds (A")" = A
 proof
   let C be category, o1,o2 be object of C such that
-A1: <^o1,o2^> <> {} & <^o2,o1^> <> {};
+A1: <^o1,o2^> <> {} and
+A2: <^o2,o1^> <> {};
   let A be Morphism of o1,o2;
-  assume A is retraction & A is coretraction;
+  assume
+A3: A is retraction & A is coretraction;
+  then A" is_left_inverse_of A by A1,A2,Def4;
   then
-A2: A" is_left_inverse_of A & A" is_right_inverse_of A by A1,Def4;
-  then A" is retraction & A" is coretraction by Def2,Def3;
+A4: A" is retraction by Def2;
+A5: A" is_right_inverse_of A by A1,A2,A3,Def4;
+  then A" is coretraction by Def3;
   then
-A3: (A")" is_right_inverse_of A" by A1,Def4;
+A6: (A")" is_right_inverse_of A" by A1,A2,A4,Def4;
   thus (A")" = idm o2 * ((A")") by A1,ALTCAT_1:24
-    .= A * A" * (A")" by A2,Def1
-    .= A * (A" * (A")") by A1,ALTCAT_1:25
-    .= A * idm o1 by A3,Def1
+    .= A * A" * (A")" by A5,Def1
+    .= A * (A" * (A")") by A1,A2,ALTCAT_1:25
+    .= A * idm o1 by A6,Def1
     .= A by A1,ALTCAT_1:def 19;
 end;
 
@@ -154,92 +162,103 @@ definition
 end;
 
 theorem Th5:
-  for C being category, o1, o2 being object of C, A being Morphism of o1,o2 st
-  A is iso holds A is retraction coretraction
+  for C being category, o1, o2 being object of C, A being Morphism
+  of o1,o2 st A is iso holds A is retraction coretraction
 proof
   let C be category, o1, o2 be object of C, A be Morphism of o1,o2;
-  assume A is iso;
-  then
-A1: A * A" = idm o2 & A" * A = idm o1 by Def5;
+  assume
+A1: A is iso;
+  then A * A" = idm o2 by Def5;
   then A" is_right_inverse_of A by Def1;
   hence A is retraction by Def2;
-  A" is_left_inverse_of A by A1,Def1;
+  A" * A = idm o1 by A1,Def5;
+  then A" is_left_inverse_of A by Def1;
   hence thesis by Def3;
 end;
 
 theorem Th6:
-  for C being category, o1,o2 being object of C st
-  <^o1,o2^> <> {} & <^o2,o1^> <> {} for A being Morphism of o1,o2 holds
-  A is iso iff A is retraction & A is coretraction
+  for C being category, o1,o2 being object of C st <^o1,o2^> <> {}
+  & <^o2,o1^> <> {} for A being Morphism of o1,o2 holds A is iso iff A is
+  retraction & A is coretraction
 proof
   let C be category, o1,o2 be object of C such that
 A1: <^o1,o2^> <> {} & <^o2,o1^> <> {};
   let A be Morphism of o1,o2;
   thus A is iso implies A is retraction & A is coretraction by Th5;
-  assume that
-A2: A is retraction and
-A3: A is coretraction;
-  A" is_left_inverse_of A & A" is_right_inverse_of A by A1,A2,A3,Def4;
-  then A" * A = idm o1 & A * A" = idm o2 by Def1;
-  hence thesis by Def5;
+  assume
+A2: A is retraction & A is coretraction;
+  then A" is_right_inverse_of A by A1,Def4;
+  then
+A3: A * A" = idm o2 by Def1;
+  A" is_left_inverse_of A by A1,A2,Def4;
+  then A" * A = idm o1 by Def1;
+  hence thesis by A3,Def5;
 end;
 
 theorem Th7:
-  for C being category, o1,o2,o3 being object of C,
-  A being Morphism of o1,o2, B being Morphism of o2,o3 st
-  <^o1,o2^> <> {} & <^o2,o3^> <> {} & <^o3,o1^> <> {}
-  & A is iso & B is iso holds B * A is iso & (B * A)" = A" * B"
+  for C being category, o1,o2,o3 being object of C, A being
+Morphism of o1,o2, B being Morphism of o2,o3 st <^o1,o2^> <> {} & <^o2,o3^> <>
+{} & <^o3,o1^> <> {} & A is iso & B is iso holds B * A is iso & (B * A)" = A" *
+  B"
 proof
-  let C be category, o1,o2,o3 be object of C, A be Morphism of o1,o2,
-  B be Morphism of o2,o3;
-  assume
-A1: <^o1,o2^> <> {} & <^o2,o3^> <> {} & <^o3,o1^> <> {};
-  then
-A2: <^o2,o1^> <> {} & <^o3,o2^> <> {} & <^o1,o3^> <> {} by ALTCAT_1:def 4;
-  assume A is iso & B is iso;
-  then
-A3: A is retraction & A is coretraction &
-  B is retraction & B is coretraction by A1,A2,Th6;
+  let C be category, o1,o2,o3 be object of C, A be Morphism of o1,o2, B be
+  Morphism of o2,o3;
+  assume that
+A1: <^o1,o2^> <> {} and
+A2: <^o2,o3^> <> {} and
+A3: <^o3,o1^> <> {};
+  assume that
+A4: A is iso and
+A5: B is iso;
   consider A1 be Morphism of o2,o1 such that
-A4: A1 = A";
+A6: A1 = A";
+A7: <^o2,o1^> <> {} by A2,A3,ALTCAT_1:def 4;
+  then
+A8: A is retraction & A is coretraction by A1,A4,Th6;
   consider B1 be Morphism of o3,o2 such that
-A5: B1 = B";
-A6: (A1*B1)*(B*A) = A1*(B1*(B*A)) by A2,ALTCAT_1:25
-    .= A1*(B1*B*A) by A1,A2,ALTCAT_1:25
-    .= A1*((idm o2)*A) by A1,A2,A3,A5,Th2
+A9: B1 = B";
+A10: <^o3,o2^> <> {} by A1,A3,ALTCAT_1:def 4;
+  then
+A11: B is retraction & B is coretraction by A2,A5,Th6;
+A12: (B*A)*(A1*B1) = B*(A*(A1*B1)) by A1,A2,A3,ALTCAT_1:25
+    .= B*(A*A1*B1) by A1,A7,A10,ALTCAT_1:25
+    .= B*((idm o2)*B1) by A1,A7,A8,A6,Th2
+    .= B*B1 by A10,ALTCAT_1:24
+    .= idm o3 by A2,A10,A11,A9,Th2;
+  then
+A13: (A1*B1) is_right_inverse_of (B*A) by Def1;
+  then
+A14: (B*A) is retraction by Def2;
+A15: <^o1,o3^> <> {} by A1,A2,ALTCAT_1:def 4;
+  then
+A16: (A1*B1)*(B*A) = A1*(B1*(B*A)) by A7,A10,ALTCAT_1:25
+    .= A1*(B1*B*A) by A1,A2,A10,ALTCAT_1:25
+    .= A1*((idm o2)*A) by A2,A10,A11,A9,Th2
     .= A1*A by A1,ALTCAT_1:24
-    .= idm o1 by A1,A2,A3,A4,Th2;
+    .= idm o1 by A1,A7,A8,A6,Th2;
   then
-A7: (A1*B1) is_left_inverse_of (B*A) by Def1;
-  then
-A8: (B*A) is coretraction by Def3;
-A9: (B*A)*(A1*B1) = B*(A*(A1*B1)) by A1,ALTCAT_1:25
-    .= B*(A*A1*B1) by A1,A2,ALTCAT_1:25
-    .= B*((idm o2)*B1) by A1,A2,A3,A4,Th2
-    .= B*B1 by A2,ALTCAT_1:24
-    .= idm o3 by A1,A2,A3,A5,Th2;
-  then
-A10: (A1*B1) is_right_inverse_of (B*A) by Def1;
-  then (B*A) is retraction by Def2;
-  then A1*B1 = (B*A)" by A1,A2,A7,A8,A10,Def4;
-  hence thesis by A4,A5,A6,A9,Def5;
+A17: (A1*B1) is_left_inverse_of (B*A) by Def1;
+  then (B*A) is coretraction by Def3;
+  then A1*B1 = (B*A)" by A3,A15,A17,A13,A14,Def4;
+  hence thesis by A6,A9,A16,A12,Def5;
 end;
 
 definition
   let C be category, o1, o2 be object of C;
   pred o1,o2 are_iso means
   :Def6:
-  <^o1,o2^> <> {} & <^o2,o1^> <> {} &
-  ex A being Morphism of o1,o2 st A is iso;
+  <^o1,o2^> <> {} & <^o2,o1^> <> {} & ex A
+  being Morphism of o1,o2 st A is iso;
   reflexivity
   proof
-    let o be object of C; thus
+    let o be object of C;
+    thus
 A1: <^o,o^> <> {} & <^o,o^> <> {} by ALTCAT_1:23;
     take idm o;
     set A = idm o;
-A2: A*A" = A * A by Th4
+A2: A"*A = A * A by Th4
       .= idm o by A1,ALTCAT_1:def 19;
-    A"*A = A * A by Th4
+    A*A" = A * A by Th4
       .= idm o by A1,ALTCAT_1:def 19;
     hence thesis by A2,Def5;
   end;
@@ -249,115 +268,117 @@ A2: A*A" = A * A by Th4
     assume that
 A3: <^o1,o2^> <> {} & <^o2,o1^> <> {} and
 A4: ex A being Morphism of o1,o2 st A is iso;
+    thus <^o2,o1^> <> {} & <^o1,o2^> <> {} by A3;
     consider A being Morphism of o1,o2 such that
 A5: A is iso by A4;
-A6: A is retraction & A is coretraction by A5,Th5;
-    thus <^o2,o1^> <> {} & <^o1,o2^> <> {} by A3;
     take A1 = A";
-A7: A1*A1" = A" * A by A3,A6,Th3
-      .= idm o1 by A3,A6,Th2;
-    A1"*A1 = A * A" by A3,A6,Th3
+A6: A is retraction & A is coretraction by A5,Th5;
+    then
+A7: A1"*A1 = A * A" by A3,Th3
       .= idm o2 by A3,A6,Th2;
+    A1*A1" = A" * A by A3,A6,Th3
+      .= idm o1 by A3,A6,Th2;
     hence thesis by A7,Def5;
   end;
 end;
 
 theorem
-  for C being category, o1,o2,o3 being object of C st
-  o1,o2 are_iso & o2,o3 are_iso holds o1,o3 are_iso
+  for C being category, o1,o2,o3 being object of C st o1,o2 are_iso & o2
+  ,o3 are_iso holds o1,o3 are_iso
 proof
   let C be category, o1,o2,o3 be object of C such that
 A1: o1,o2 are_iso and
 A2: o2,o3 are_iso;
-A3: <^o1,o2^> <> {} & <^o2,o1^> <> {} & <^o2,o3^> <> {} & <^o3,o2^> <> {}
-  by A1,A2,Def6;
-  hence
-A4: <^o1,o3^> <> {} & <^o3,o1^> <> {} by ALTCAT_1:def 4;
+A3: <^o1,o2^> <> {} & <^o2,o3^> <> {} by A1,A2,Def6;
+  consider B being Morphism of o2,o3 such that
+A4: B is iso by A2,Def6;
   consider A being Morphism of o1,o2 such that
 A5: A is iso by A1,Def6;
-  consider B being Morphism of o2,o3 such that
-A6: B is iso by A2,Def6;
+  <^o2,o1^> <> {} & <^o3,o2^> <> {} by A1,A2,Def6;
+  hence
+A6: <^o1,o3^> <> {} & <^o3,o1^> <> {} by A3,ALTCAT_1:def 4;
   take B * A;
-  thus thesis by A3,A4,A5,A6,Th7;
+  thus thesis by A3,A6,A5,A4,Th7;
 end;
 
 definition
   let C be non empty AltCatStr, o1, o2 be object of C, A be Morphism of o1,o2;
   attr A is mono means
   :Def7:
-  for o being object of C st <^o,o1^> <> {}
-  for B,C being Morphism of o,o1 st A * B = A * C holds B = C;
+  for o being object of C st <^o,o1^> <> {} for B,
+  C being Morphism of o,o1 st A * B = A * C holds B = C;
 end;
 
 definition
   let C be non empty AltCatStr, o1, o2 be object of C, A be Morphism of o1,o2;
   attr A is epi means
   :Def8:
-  for o being object of C st <^o2,o^> <> {}
-  for B,C being Morphism of o2,o st B * A = C * A holds B = C;
+  for o being object of C st <^o2,o^> <> {} for B,C
+  being Morphism of o2,o st B * A = C * A holds B = C;
 end;
 
 theorem Th9:
-  for C being associative transitive (non empty AltCatStr),
-  o1,o2,o3 being object of C st <^o1,o2^> <> {} & <^o2,o3^> <> {}
-  for A being Morphism of o1,o2, B being Morphism of o2,o3 st
-  A is mono & B is mono holds B * A is mono
+  for C being associative transitive (non empty AltCatStr), o1,o2,
+o3 being object of C st <^o1,o2^> <> {} & <^o2,o3^> <> {} for A being Morphism
+  of o1,o2, B being Morphism of o2,o3 st A is mono & B is mono holds B * A is
+  mono
 proof
-  let C be associative transitive (non empty AltCatStr),
-  o1,o2,o3 be object of C;
-  assume
-A1: <^o1,o2^> <> {} & <^o2,o3^> <> {};
+  let C be associative transitive (non empty AltCatStr), o1,o2,o3 be object of
+  C;
+  assume that
+A1: <^o1,o2^> <> {} and
+A2: <^o2,o3^> <> {};
   let A be Morphism of o1,o2, B be Morphism of o2,o3;
-  assume
-A2: A is mono & B is mono;
+  assume that
+A3: A is mono and
+A4: B is mono;
   let o be object of C;
   assume
-A3: <^o,o1^> <> {};
+A5: <^o,o1^> <> {};
+  then
+A6: <^o,o2^> <> {} by A1,ALTCAT_1:def 4;
   let M1,M2 be Morphism of o,o1;
   assume
-A4: (B*A)*M1 = (B*A)*M2;
-A5: (B*A)*M1 = B*(A*M1) by A1,A3,ALTCAT_1:25;
-A6: (B*A)*M2 = B*(A*M2) by A1,A3,ALTCAT_1:25;
-  <^o,o2^> <> {} by A1,A3,ALTCAT_1:def 4;
-  then A*M1 = A*M2 by A2,A4,A5,A6,Def7;
-  hence thesis by A2,A3,Def7;
+A7: (B*A)*M1 = (B*A)*M2;
+  (B*A)*M1 = B*(A*M1) & (B*A)*M2 = B*(A*M2) by A1,A2,A5,ALTCAT_1:25;
+  then A*M1 = A*M2 by A4,A7,A6,Def7;
+  hence thesis by A3,A5,Def7;
 end;
 
 theorem Th10:
-  for C being associative transitive (non empty AltCatStr),
-  o1,o2,o3 being object of C st <^o1,o2^> <> {} & <^o2,o3^> <> {}
-
-for A being Morphism of o1,o2, B being Morphism of o2,o3 st A is epi & B is epi
-  holds B * A is epi
+  for C being associative transitive (non empty AltCatStr), o1,o2,
+o3 being object of C st <^o1,o2^> <> {} & <^o2,o3^> <> {} for A being Morphism
+  of o1,o2, B being Morphism of o2,o3 st A is epi & B is epi holds B * A is epi
 proof
-  let C be associative transitive (non empty AltCatStr),
-  o1,o2,o3 be object of C;
-  assume
-A1: <^o1,o2^> <> {} & <^o2,o3^> <> {};
+  let C be associative transitive (non empty AltCatStr), o1,o2,o3 be object of
+  C;
+  assume that
+A1: <^o1,o2^> <> {} and
+A2: <^o2,o3^> <> {};
   let A be Morphism of o1,o2, B be Morphism of o2,o3;
-  assume
-A2: A is epi & B is epi;
+  assume that
+A3: A is epi and
+A4: B is epi;
   let o be object of C;
   assume
-A3: <^o3,o^> <> {};
+A5: <^o3,o^> <> {};
+  then
+A6: <^o2,o^> <> {} by A2,ALTCAT_1:def 4;
   let M1,M2 be Morphism of o3,o;
   assume
-A4: M1*(B*A) = M2*(B*A);
-A5: M1*(B*A) = (M1*B)*A by A1,A3,ALTCAT_1:25;
-A6: M2*(B*A) = (M2*B)*A by A1,A3,ALTCAT_1:25;
-  <^o2,o^> <> {} by A1,A3,ALTCAT_1:def 4;
-  then M1*B = M2*B by A2,A4,A5,A6,Def8;
-  hence thesis by A2,A3,Def8;
+A7: M1*(B*A) = M2*(B*A);
+  M1*(B*A) = (M1*B)*A & M2*(B*A) = (M2*B)*A by A1,A2,A5,ALTCAT_1:25;
+  then M1*B = M2*B by A3,A7,A6,Def8;
+  hence thesis by A4,A5,Def8;
 end;
 
 theorem
-  for C being associative transitive (non empty AltCatStr),
-  o1,o2,o3 being object of C st <^o1,o2^> <> {} & <^o2,o3^> <> {}
-  for A being Morphism of o1,o2, B being Morphism of o2,o3 st B * A is mono
-  holds A is mono
+  for C being associative transitive (non empty AltCatStr), o1,o2,o3
+being object of C st <^o1,o2^> <> {} & <^o2,o3^> <> {} for A being Morphism of
+  o1,o2, B being Morphism of o2,o3 st B * A is mono holds A is mono
 proof
-  let C be associative transitive (non empty AltCatStr),
-  o1,o2,o3 be object of C;
+  let C be associative transitive (non empty AltCatStr), o1,o2,o3 be object of
+  C;
   assume
 A1: <^o1,o2^> <> {} & <^o2,o3^> <> {};
   let A be Morphism of o1,o2, B be Morphism of o2,o3;
@@ -369,19 +390,17 @@ A3: <^o,o1^> <> {};
   let M1,M2 be Morphism of o,o1;
   assume
 A4: A*M1 = A*M2;
-A5: (B*A)*M1 = B*(A*M1) by A1,A3,ALTCAT_1:25;
-  (B*A)*M2 = B*(A*M2) by A1,A3,ALTCAT_1:25;
-  hence thesis by A2,A3,A4,A5,Def7;
+  (B*A)*M1 = B*(A*M1) & (B*A)*M2 = B*(A*M2) by A1,A3,ALTCAT_1:25;
+  hence thesis by A2,A3,A4,Def7;
 end;
 
 theorem
-  for C being associative transitive (non empty AltCatStr),
-  o1,o2,o3 being object of C st <^o1,o2^> <> {} & <^o2,o3^> <> {}
-  for A being Morphism of o1,o2, B being Morphism of o2,o3 st B * A is epi
-  holds B is epi
+  for C being associative transitive (non empty AltCatStr), o1,o2,o3
+being object of C st <^o1,o2^> <> {} & <^o2,o3^> <> {} for A being Morphism of
+  o1,o2, B being Morphism of o2,o3 st B * A is epi holds B is epi
 proof
-  let C be associative transitive (non empty AltCatStr),
-  o1,o2,o3 be object of C;
+  let C be associative transitive (non empty AltCatStr), o1,o2,o3 be object of
+  C;
   assume
 A1: <^o1,o2^> <> {} & <^o2,o3^> <> {};
   let A be Morphism of o1,o2, B be Morphism of o2,o3;
@@ -393,9 +412,8 @@ A3: <^o3,o^> <> {};
   let M1,M2 be Morphism of o3,o;
   assume
 A4: M1*B = M2*B;
-A5: (M1*B)*A = M1*(B*A) by A1,A3,ALTCAT_1:25;
-  (M2*B)*A = M2*(B*A) by A1,A3,ALTCAT_1:25;
-  hence thesis by A2,A3,A4,A5,Def8;
+  (M1*B)*A = M1*(B*A) & (M2*B)*A = M2*(B*A) by A1,A3,ALTCAT_1:25;
+  hence thesis by A2,A3,A4,Def8;
 end;
 
 Lm1: now
@@ -421,10 +439,9 @@ A4: idm a * B = idm a * C;
 end;
 
 theorem
-  for X being non empty set
-  for o1,o2 being object of EnsCat X st <^o1,o2^> <> {}
-  for A being Morphism of o1,o2, F being Function of o1,o2 st F = A holds
-  A is mono iff F is one-to-one
+  for X being non empty set for o1,o2 being object of EnsCat X st <^o1,
+  o2^> <> {} for A being Morphism of o1,o2, F being Function of o1,o2 st F = A
+  holds A is mono iff F is one-to-one
 proof
   let X be non empty set, o1,o2 be object of EnsCat X;
   assume
@@ -433,142 +450,161 @@ A1: <^o1,o2^> <> {};
   assume
 A2: F = A;
   per cases;
-  suppose o2 <> {};
+  suppose
+    o2 <> {};
     then
 A3: dom F = o1 by FUNCT_2:def 1;
     thus A is mono implies F is one-to-one
     proof
+      set o = o1;
       assume
 A4:   A is mono;
-      assume not F is one-to-one;
+      assume
+      not F is one-to-one;
       then consider x1,x2 be set such that
-A5:   x1 in dom F & x2 in dom F and
-A6:   F.x1 = F.x2 and
-A7:   x1 <> x2 by FUNCT_1:def 8;
-      set o = o1;
-A8:   <^o,o1^> <> {} by ALTCAT_1:23;
-      set B = o --> x1;
-A9:   dom B = o by FUNCOP_1:19;
+A5:   x1 in dom F and
+A6:   x2 in dom F and
+A7:   F.x1 = F.x2 and
+A8:   x1 <> x2 by FUNCT_1:def 8;
       set C = o --> x2;
-A10:  dom C = o by FUNCOP_1:19;
+      set B = o --> x1;
+A9:   dom C = o by FUNCOP_1:19;
+A10:  rng C c= o1
+      proof
+        let y be set;
+        assume
+        y in rng C;
+        then ex x be set st x in dom C & C.x = y by FUNCT_1:def 5;
+        hence thesis by A3,A6,A9,FUNCOP_1:13;
+      end;
+      then
+A11:  dom (F * C) = o by A3,A9,RELAT_1:46;
+      C in Funcs(o,o1) by A9,A10,FUNCT_2:def 2;
+      then reconsider C1=C as Morphism of o,o1 by ALTCAT_1:def 16;
       consider o' be Element of o;
+A12:  <^o,o1^> <> {} by ALTCAT_1:23;
       B.o' = x1 by A3,A5,FUNCOP_1:13;
       then
-A11:  B.o' <> C.o' by A3,A5,A7,FUNCOP_1:13;
-A12:  rng B c= o1
+A13:  B.o' <> C.o' by A3,A5,A8,FUNCOP_1:13;
+A14:  dom B = o by FUNCOP_1:19;
+A15:  rng B c= o1
       proof
         let y be set;
-        assume y in rng B;
-        then consider x be set such that
-A13:    x in dom B & B.x = y by FUNCT_1:def 5;
-        thus thesis by A3,A5,A9,A13,FUNCOP_1:13;
+        assume
+        y in rng B;
+        then ex x be set st x in dom B & B.x = y by FUNCT_1:def 5;
+        hence thesis by A3,A5,A14,FUNCOP_1:13;
       end;
-      then B in Funcs(o,o1) by A9,FUNCT_2:def 2;
+      then B in Funcs(o,o1) by A14,FUNCT_2:def 2;
       then reconsider B1=B as Morphism of o,o1 by ALTCAT_1:def 16;
-A14:  rng C c= o1
-      proof
-        let y be set;
-        assume y in rng C;
-        then consider x be set such that
-A15:    x in dom C & C.x = y by FUNCT_1:def 5;
-        thus thesis by A3,A5,A10,A15,FUNCOP_1:13;
-      end;
-      then C in Funcs(o,o1) by A10,FUNCT_2:def 2;
-      then reconsider C1=C as Morphism of o,o1 by ALTCAT_1:def 16;
-A16:  dom (F * B) = o by A3,A9,A12,RELAT_1:46;
-A17:  dom (F * C) = o by A3,A10,A14,RELAT_1:46;
+A16:  dom (F * B) = o by A3,A14,A15,RELAT_1:46;
       now
         let z be set;
         assume
-A18:    z in o;
+A17:    z in o;
         hence (F * B).z = F.(B.z) by A16,FUNCT_1:22
-          .= F.x2 by A6,A18,FUNCOP_1:13
-          .= F.(C.z) by A18,FUNCOP_1:13
-          .= (F * C).z by A17,A18,FUNCT_1:22;
+          .= F.x2 by A7,A17,FUNCOP_1:13
+          .= F.(C.z) by A17,FUNCOP_1:13
+          .= (F * C).z by A11,A17,FUNCT_1:22;
       end;
-      then F * B = F * C by A16,A17,FUNCT_1:9;
-      then A * B1 = F * C by A1,A2,A8,ALTCAT_1:18
-        .= A * C1 by A1,A2,A8,ALTCAT_1:18;
-      hence contradiction by A4,A8,A11,Def7;
+      then F * B = F * C by A16,A11,FUNCT_1:9;
+      then A * B1 = F * C by A1,A2,A12,ALTCAT_1:18
+        .= A * C1 by A1,A2,A12,ALTCAT_1:18;
+      hence contradiction by A4,A12,A13,Def7;
     end;
     thus F is one-to-one implies A is mono
     proof
       assume
-A19:  F is one-to-one;
+A18:  F is one-to-one;
       let o be object of EnsCat X;
       assume
-A20:  <^o,o1^> <> {};
-      let B,C be Morphism of o,o1;
-      assume
-A21:  A * B = A * C;
-A22:  <^o,o1^> = Funcs(o,o1) by ALTCAT_1:def 16;
-      then consider B1 be Function such that
-A23:  B1 = B & dom B1 = o & rng B1 c= o1 by A20,FUNCT_2:def 2;
-      consider C1 be Function such that
-A24:  C1 = C & dom C1 = o & rng C1 c= o1 by A20,A22,FUNCT_2:def 2;
-A25:  <^o,o2^> <> {} by A1,A20,ALTCAT_1:def 4;
+A19:  <^o,o1^> <> {};
       then
-A26:  F * B1 = A * C by A1,A2,A20,A21,A23,ALTCAT_1:18
-        .= F * C1 by A1,A2,A20,A24,A25,ALTCAT_1:18;
+A20:  <^o,o2^> <> {} by A1,ALTCAT_1:def 4;
+      let B,C be Morphism of o,o1;
+A21:  <^o,o1^> = Funcs(o,o1) by ALTCAT_1:def 16;
+      then consider B1 be Function such that
+A22:  B1 = B and
+A23:  dom B1 = o and
+A24:  rng B1 c= o1 by A19,FUNCT_2:def 2;
+      consider C1 be Function such that
+A25:  C1 = C and
+A26:  dom C1 = o and
+A27:  rng C1 c= o1 by A19,A21,FUNCT_2:def 2;
+      assume
+      A * B = A * C;
+      then
+A28:  F * B1 = A * C by A1,A2,A19,A22,A20,ALTCAT_1:18
+        .= F * C1 by A1,A2,A19,A25,A20,ALTCAT_1:18;
       now
         let z be set;
         assume
-A27:    z in o;
+A29:    z in o;
+        then F.(B1.z) = (F*B1).z by A23,FUNCT_1:23;
         then
-A28:    B1.z in rng B1 & C1.z in rng C1 by A23,A24,FUNCT_1:def 5;
-        F.(B1.z) = (F*B1).z by A23,A27,FUNCT_1:23;
-        then F.(B1.z) = F.(C1.z) by A24,A26,A27,FUNCT_1:23;
-        hence B1.z = C1.z by A3,A19,A23,A24,A28,FUNCT_1:def 8;
+A30:    F.(B1.z) = F.(C1.z) by A26,A28,A29,FUNCT_1:23;
+        B1.z in rng B1 & C1.z in rng C1 by A23,A26,A29,FUNCT_1:def 5;
+        hence B1.z = C1.z by A3,A18,A24,A27,A30,FUNCT_1:def 8;
       end;
-      hence thesis by A23,A24,FUNCT_1:9;
+      hence thesis by A22,A23,A25,A26,FUNCT_1:9;
     end;
   end;
   suppose
-A29: o2 = {};
- now per cases;
-      suppose o1 = {};
+A31: o2 = {};
+    now
+      per cases;
+      suppose
+        o1 = {};
         hence F = {};
       end;
-      suppose o1 <> {};
-        thus F = {} by A29;
+      suppose
+        o1 <> {};
+        thus F = {} by A31;
       end;
     end;
     hence A is mono implies F is one-to-one;
     thus F is one-to-one implies A is mono
     proof
-      assume F is one-to-one;
+      consider x be Element of Funcs(o1,o2);
+      assume
+      F is one-to-one;
       let o be object of EnsCat X;
       assume
-A31:  <^o,o1^> <> {};
+A32:  <^o,o1^> <> {};
+      <^o1,o2^> = Funcs(o1,o2) by ALTCAT_1:def 16;
+      then consider f be Function such that
+      f = x and
+A33:  dom f = o1 and
+A34:  rng f c= o2 by A1,FUNCT_2:def 2;
       let B,C be Morphism of o,o1;
-      assume A * B = A * C;
-A32:  <^o,o1^> = Funcs(o,o1) by ALTCAT_1:def 16;
+A35:  <^o,o1^> = Funcs(o,o1) by ALTCAT_1:def 16;
       then consider B1 be Function such that
-A33:  B1 = B & dom B1 = o & rng B1 c= o1 by A31,FUNCT_2:def 2;
-      consider C1 be Function such that
-A34:  C1 = C & dom C1 = o & rng C1 c= o1 by A31,A32,FUNCT_2:def 2;
-A35:  <^o1,o2^> = Funcs(o1,o2) by ALTCAT_1:def 16;
-      consider x be Element of Funcs(o1,o2);
-      consider f be Function such that
-A36:  f = x & dom f = o1 & rng f c= o2 by A1,A35,FUNCT_2:def 2;
-      rng f = {} by A29,A36,XBOOLE_1:3;
+A36:  B1 = B and
+A37:  dom B1 = o and
+A38:  rng B1 c= o1 by A32,FUNCT_2:def 2;
+      rng f = {} by A31,A34,XBOOLE_1:3;
       then dom f = {} by RELAT_1:65;
       then
-A37:  rng B1 = {} by A33,A36,XBOOLE_1:3;
+A39:  rng B1 = {} by A38,A33,XBOOLE_1:3;
       then
-A38:  dom B1 = {} by RELAT_1:65;
-      B1 = {} by A37,RELAT_1:64
-        .= C1 by A33,A34,A38,RELAT_1:64;
-      hence thesis by A33,A34;
+A40:  dom B1 = {} by RELAT_1:65;
+      assume
+      A * B = A * C;
+      consider C1 be Function such that
+A41:  C1 = C and
+A42:  dom C1 = o and
+      rng C1 c= o1 by A32,A35,FUNCT_2:def 2;
+      B1 = {} by A39,RELAT_1:64
+        .= C1 by A37,A42,A40,RELAT_1:64;
+      hence thesis by A36,A41;
     end;
   end;
 end;
 
 theorem
-  for X being non empty with_non-empty_elements set
-  for o1,o2 being object of EnsCat X st <^o1,o2^> <> {}
-  for A being Morphism of o1,o2, F being Function of o1,o2 st F = A holds
-  A is epi iff F is onto
+  for X being non empty with_non-empty_elements set for o1,o2 being
+  object of EnsCat X st <^o1,o2^> <> {} for A being Morphism of o1,o2, F being
+  Function of o1,o2 st F = A holds A is epi iff F is onto
 proof
   let X be non empty with_non-empty_elements set, o1,o2 be object of EnsCat X;
   assume
@@ -581,15 +617,20 @@ A2: F = A;
 A3: for x be set st x in X holds x is trivial;
     thus A is epi implies F is onto
     proof
-      assume A is epi;
-      now per cases;
+      assume
+      A is epi;
+      now
+        per cases;
         suppose
 A4:       o2 = {};
-          now per cases;
-            suppose o1 = {};
+          now
+            per cases;
+            suppose
+              o1 = {};
               hence F = {};
             end;
-            suppose o1 <> {};
+            suppose
+              o1 <> {};
               thus F = {} by A4;
             end;
           end;
@@ -597,19 +638,20 @@ A4:       o2 = {};
         end;
         suppose
 A5:       o2 <> {};
+A6:       o1 is Element of X by ALTCAT_1:def 16;
+          then o1 is trivial by A3;
+          then consider z be set such that
+A7:       o1 = {z} by A6,REALSET1:def 4;
+          dom F = {z} by A5,A7,FUNCT_2:def 1;
+          then
+A8:       rng F <> {} by RELAT_1:65;
           o2 is Element of X by ALTCAT_1:def 16;
           then o2 is trivial by A3;
           then consider y be set such that
-A6:       o2 = {y} by A5,REALSET1:def 4;
-A7:       rng F c= {y} by A6,RELAT_1:def 19;
-A8:       o1 is Element of X by ALTCAT_1:def 16;
-          then o1 is trivial by A3;
-          then consider z be set such that
-A9:       o1 = {z} by A8,REALSET1:def 4;
-          dom F = {z} by A5,A9,FUNCT_2:def 1;
-          then rng F <> {} by RELAT_1:65;
-          then rng F = {y} by A7,ZFMISC_1:39;
-          hence thesis by A6,FUNCT_2:def 3;
+A9:       o2 = {y} by A5,REALSET1:def 4;
+          rng F c= {y} by A9,RELAT_1:def 19;
+          then rng F = {y} by A8,ZFMISC_1:39;
+          hence thesis by A9,FUNCT_2:def 3;
         end;
       end;
       hence thesis;
@@ -621,188 +663,216 @@ A10:  F is onto;
       let o be object of EnsCat X;
       assume
 A11:  <^o2,o^> <> {};
+      then
+A12:  <^o1,o^> <> {} by A1,ALTCAT_1:def 4;
       let B,C be Morphism of o2,o;
-      assume
-A12:  B * A = C * A;
 A13:  <^o2,o^> = Funcs(o2,o) by ALTCAT_1:def 16;
       then consider B1 be Function such that
-A14:  B1 = B & dom B1 = o2 & rng B1 c= o by A11,FUNCT_2:def 2;
+A14:  B1 = B and
+A15:  dom B1 = o2 and
+      rng B1 c= o by A11,FUNCT_2:def 2;
       consider C1 be Function such that
-A15:  C1 = C & dom C1 = o2 & rng C1 c= o by A11,A13,FUNCT_2:def 2;
-A16:  <^o1,o^> <> {} by A1,A11,ALTCAT_1:def 4;
+A16:  C1 = C and
+A17:  dom C1 = o2 and
+      rng C1 c= o by A11,A13,FUNCT_2:def 2;
+      assume
+      B * A = C * A;
       then
-A17:  B1 * F = C * A by A1,A2,A11,A12,A14,ALTCAT_1:18
-        .= C1 * F by A1,A2,A11,A15,A16,ALTCAT_1:18;
+A18:  B1 * F = C * A by A1,A2,A11,A14,A12,ALTCAT_1:18
+        .= C1 * F by A1,A2,A11,A16,A12,ALTCAT_1:18;
       now
-        assume B1 <> C1;
+        assume
+        B1 <> C1;
         then consider z be set such that
-A18:    z in o2 & B1.z <> C1.z by A14,A15,FUNCT_1:9;
-        z in rng F by A10,A18,FUNCT_2:def 3;
+A19:    z in o2 and
+A20:    B1.z <> C1.z by A15,A17,FUNCT_1:9;
+        z in rng F by A10,A19,FUNCT_2:def 3;
         then consider x be set such that
-A19:    x in dom F & F.x = z by FUNCT_1:def 5;
-        B1.(F.x) = (B1*F).x by A19,FUNCT_1:23;
-        hence contradiction by A17,A18,A19,FUNCT_1:23;
+A21:    x in dom F and
+A22:    F.x = z by FUNCT_1:def 5;
+        B1.(F.x) = (B1*F).x by A21,FUNCT_1:23;
+        hence contradiction by A18,A20,A21,A22,FUNCT_1:23;
       end;
-      hence thesis by A14,A15;
+      hence thesis by A14,A16;
     end;
   end;
   suppose
-A20: ex x be set st x in X & x is non trivial;
-    now per cases;
-      suppose o2 <> {};
-        then
-A21:    dom F = o1 by FUNCT_2:def 1;
+A23: ex x be set st x in X & x is non trivial;
+    now
+      per cases;
+      suppose
+A24:    o2 <> {};
         consider o be set such that
-A22:    o in X and
-A23:    o is non trivial by A20;
-        reconsider o as object of EnsCat X by A22,ALTCAT_1:def 16;
+A25:    o in X and
+A26:    o is non trivial by A23;
+        reconsider o as object of EnsCat X by A25,ALTCAT_1:def 16;
+A27:    dom F = o1 by A24,FUNCT_2:def 1;
         thus A is epi implies F is onto
         proof
-          assume that
-A24:      A is epi and
-A25:      not F is onto;
-A26:      rng F c= o2 by RELAT_1:def 19;
-          rng F <> o2 by A25,FUNCT_2:def 3;
-          then not o2 c= rng F by A26,XBOOLE_0:def 10;
-          then consider y be set such that
-A27:      y in o2 & not y in rng F by TARSKI:def 3;
-A28:      o <> {} by A22;
           consider k be Element of o;
-          reconsider ok = (o\{k}) as non empty set by A23,REALSET1:4;
-          consider l be Element of ok;
-A29:      l in o & not l in {k} by XBOOLE_0:def 5;
-          reconsider l as Element of o by XBOOLE_0:def 5;
-A30:      k <> l by A29,TARSKI:def 1;
-A31:      k in o & l in o by A28;
-          deffunc G(set) = IFEQ($1,y,l,k);
-          consider B be Function such that
-A32:      dom B = o2 and
-A33:      for x be set st x in o2 holds B.x = G(x) from FUNCT_1:sch 3;
+A28:      rng F c= o2 by RELAT_1:def 19;
+          reconsider ok = (o\{k}) as non empty set by A26,REALSET1:4;
+          assume that
+A29:      A is epi and
+A30:      not F is onto;
+          rng F <> o2 by A30,FUNCT_2:def 3;
+          then not o2 c= rng F by A28,XBOOLE_0:def 10;
+          then consider y be set such that
+A31:      y in o2 and
+A32:      not y in rng F by TARSKI:def 3;
           set C = o2 --> k;
-A34:      dom C = o2 by FUNCOP_1:19;
-          B.y = IFEQ(y,y,l,k) by A27,A33
-            .= l by FUNCOP_1:def 8;
+A33:      dom C = o2 by FUNCOP_1:19;
+A34:      o <> {} by A25;
           then
-A35:      not B = C by A27,A30,FUNCOP_1:13;
-A36:      rng B c= o
-          proof
-            let y1 be set;
-            assume y1 in rng B;
-            then consider x be set such that
-A37:        x in dom B & B.x = y1 by FUNCT_1:def 5;
-            per cases;
-            suppose
-A38:          x = y;
-              y1 = IFEQ(x,y,l,k) by A32,A33,A37
-                .= l by A38,FUNCOP_1:def 8;
-              hence thesis by A28;
-            end;
-            suppose
-A39:          x <> y;
-              y1 = IFEQ(x,y,l,k) by A32,A33,A37
-                .= k by A39,FUNCOP_1:def 8;
-              hence thesis by A28;
-            end;
-          end;
-          then
-A40:      B in Funcs(o2,o) by A32,FUNCT_2:def 2;
-          then
-A41:      B in <^o2,o^> by ALTCAT_1:def 16;
-          reconsider B1=B as Morphism of o2,o by A40,ALTCAT_1:def 16;
+A35:      k in o;
           rng C c= o
           proof
             let y be set;
-            assume y in rng C;
-            then consider x be set such that
-A42:        x in dom C & C.x = y by FUNCT_1:def 5;
-            thus thesis by A31,A34,A42,FUNCOP_1:13;
+            assume
+            y in rng C;
+            then ex x be set st x in dom C & C.x = y by FUNCT_1:def 5;
+            hence thesis by A35,A33,FUNCOP_1:13;
           end;
-          then C in Funcs(o2,o) by A34,FUNCT_2:def 2;
+          then C in Funcs(o2,o) by A33,FUNCT_2:def 2;
           then reconsider C1=C as Morphism of o2,o by ALTCAT_1:def 16;
-A43:      dom (B*F) = o1 by A21,A26,A32,RELAT_1:46;
-          for z be set holds z in rng(B*F) implies z in rng B by FUNCT_1:25;
-          then rng (B*F) c= rng B by TARSKI:def 3;
-          then rng (B*F) c= o by A36,XBOOLE_1:1;
-          then (B*F) in Funcs(o1,o) by A43,FUNCT_2:def 2;
+          consider l be Element of ok;
+A36:      not l in {k} by XBOOLE_0:def 5;
+          reconsider l as Element of o by XBOOLE_0:def 5;
+A37:      k <> l by A36,TARSKI:def 1;
+          deffunc G(set) = IFEQ($1,y,l,k);
+          consider B be Function such that
+A38:      dom B = o2 and
+A39:      for x be set st x in o2 holds B.x = G(x) from FUNCT_1:sch 3;
+A40:      dom (B*F) = o1 by A27,A28,A38,RELAT_1:46;
+A41:      rng B c= o
+          proof
+            let y1 be set;
+            assume
+            y1 in rng B;
+            then consider x be set such that
+A42:        x in dom B & B.x = y1 by FUNCT_1:def 5;
+            per cases;
+            suppose
+A43:          x = y;
+              y1 = IFEQ(x,y,l,k) by A38,A39,A42
+                .= l by A43,FUNCOP_1:def 8;
+              hence thesis by A34;
+            end;
+            suppose
+A44:          x <> y;
+              y1 = IFEQ(x,y,l,k) by A38,A39,A42
+                .= k by A44,FUNCOP_1:def 8;
+              hence thesis by A34;
+            end;
+          end;
           then
-A44:      (B*F) in <^o1,o^> by ALTCAT_1:def 16;
-A45:      dom (C*F) = o1 by A21,A26,A34,RELAT_1:46;
+A45:      B in Funcs(o2,o) by A38,FUNCT_2:def 2;
+          then
+A46:      B in <^o2,o^> by ALTCAT_1:def 16;
+          reconsider B1=B as Morphism of o2,o by A45,ALTCAT_1:def 16;
+          for z be set holds z in rng(B*F) implies z in rng B by FUNCT_1:
+          25;
+          then rng (B*F) c= rng B by TARSKI:def 3;
+          then rng (B*F) c= o by A41,XBOOLE_1:1;
+          then (B*F) in Funcs(o1,o) by A40,FUNCT_2:def 2;
+          then
+A47:      (B*F) in <^o1,o^> by ALTCAT_1:def 16;
+          B.y = IFEQ(y,y,l,k) by A31,A39
+            .= l by FUNCOP_1:def 8;
+          then
+A48:      not B = C by A31,A37,FUNCOP_1:13;
+A49:      dom (C*F) = o1 by A27,A28,A33,RELAT_1:46;
           now
             let z be set;
             assume
-A46:        z in o1;
+A50:        z in o1;
             then
-A47:        F.z in rng F by A21,FUNCT_1:def 5;
+A51:        F.z in rng F by A27,FUNCT_1:def 5;
             then
-A48:        B.(F.z) = IFEQ((F.z),y,l,k) by A26,A33
-              .= k by A27,A47,FUNCOP_1:def 8;
-            thus (B * F).z = B.(F.z) by A43,A46,FUNCT_1:22
-              .= C.(F.z) by A26,A47,A48,FUNCOP_1:13
-              .= (C * F).z by A45,A46,FUNCT_1:22;
+A52:        B.(F.z) = IFEQ((F.z),y,l,k) by A28,A39
+              .= k by A32,A51,FUNCOP_1:def 8;
+            thus (B * F).z = B.(F.z) by A40,A50,FUNCT_1:22
+              .= C.(F.z) by A28,A51,A52,FUNCOP_1:13
+              .= (C * F).z by A49,A50,FUNCT_1:22;
           end;
-          then B * F = C * F by A43,A45,FUNCT_1:9;
-          then B1 * A = C * F by A1,A2,A41,A44,ALTCAT_1:18
-            .= C1 * A by A1,A2,A41,A44,ALTCAT_1:18;
-          hence contradiction by A24,A35,A41,Def8;
+          then B * F = C * F by A40,A49,FUNCT_1:9;
+          then B1 * A = C * F by A1,A2,A46,A47,ALTCAT_1:18
+            .= C1 * A by A1,A2,A46,A47,ALTCAT_1:18;
+          hence contradiction by A29,A48,A46,Def8;
         end;
         thus F is onto implies A is epi
         proof
           assume
-A49:      F is onto;
+A53:      F is onto;
           let o be object of EnsCat X;
           assume
-A50:      <^o2,o^> <> {};
-          let B,C be Morphism of o2,o;
-          assume
-A51:      B * A = C * A;
-A52:      <^o2,o^> = Funcs(o2,o) by ALTCAT_1:def 16;
-          then consider B1 be Function such that
-A53:      B1 = B & dom B1 = o2 & rng B1 c= o by A50,FUNCT_2:def 2;
-          consider C1 be Function such that
-A54:      C1 = C & dom C1 = o2 & rng C1 c= o by A50,A52,FUNCT_2:def 2;
-A55:      <^o1,o^> <> {} by A1,A50,ALTCAT_1:def 4;
+A54:      <^o2,o^> <> {};
           then
-A56:      B1 * F = C * A by A1,A2,A50,A51,A53,ALTCAT_1:18
-            .= C1 * F by A1,A2,A50,A54,A55,ALTCAT_1:18;
+A55:      <^o1,o^> <> {} by A1,ALTCAT_1:def 4;
+          let B,C be Morphism of o2,o;
+A56:      <^o2,o^> = Funcs(o2,o) by ALTCAT_1:def 16;
+          then consider B1 be Function such that
+A57:      B1 = B and
+A58:      dom B1 = o2 and
+          rng B1 c= o by A54,FUNCT_2:def 2;
+          consider C1 be Function such that
+A59:      C1 = C and
+A60:      dom C1 = o2 and
+          rng C1 c= o by A54,A56,FUNCT_2:def 2;
+          assume
+          B * A = C * A;
+          then
+A61:      B1 * F = C * A by A1,A2,A54,A57,A55,ALTCAT_1:18
+            .= C1 * F by A1,A2,A54,A59,A55,ALTCAT_1:18;
           now
-            assume B1 <> C1;
+            assume
+            B1 <> C1;
             then consider z be set such that
-A57:        z in o2 & B1.z <> C1.z by A53,A54,FUNCT_1:9;
-            z in rng F by A49,A57,FUNCT_2:def 3;
+A62:        z in o2 and
+A63:        B1.z <> C1.z by A58,A60,FUNCT_1:9;
+            z in rng F by A53,A62,FUNCT_2:def 3;
             then consider x be set such that
-A58:        x in dom F & F.x = z by FUNCT_1:def 5;
-            B1.(F.x) = (B1*F).x by A58,FUNCT_1:23;
-            hence contradiction by A56,A57,A58,FUNCT_1:23;
+A64:        x in dom F and
+A65:        F.x = z by FUNCT_1:def 5;
+            B1.(F.x) = (B1*F).x by A64,FUNCT_1:23;
+            hence contradiction by A61,A63,A64,A65,FUNCT_1:23;
           end;
-          hence thesis by A53,A54;
+          hence thesis by A57,A59;
         end;
       end;
       suppose
-A59:    o2 = {};
-        now per cases;
-          suppose o1 = {};
+A66:    o2 = {};
+        now
+          per cases;
+          suppose
+            o1 = {};
             hence F = {};
           end;
-          suppose o1 <> {};
-            thus F = {} by A59;
+          suppose
+            o1 <> {};
+            thus F = {} by A66;
           end;
         end;
-        hence A is epi implies F is onto by A59,FUNCT_2:def 3,RELAT_1:60;
+        hence A is epi implies F is onto by A66,FUNCT_2:def 3,RELAT_1:60;
         thus F is onto implies A is epi
         proof
-          assume F is onto;
+          assume
+          F is onto;
           let o be object of EnsCat X;
           assume
-A60:      <^o2,o^> <> {};
+A67:      <^o2,o^> <> {};
           let B,C be Morphism of o2,o;
-          assume B * A = C * A;
-A61:      <^o2,o^> = Funcs(o2,o) by ALTCAT_1:def 16;
+A68:      <^o2,o^> = Funcs(o2,o) by ALTCAT_1:def 16;
           then consider B1 be Function such that
-A62:      B1 = B & dom B1 = o2 & rng B1 c= o by A60,FUNCT_2:def 2;
-          consider C1 be Function such that
-A63:      C1 = C & dom C1 = o2 & rng C1 c= o by A60,A61,FUNCT_2:def 2;
-          B1 = {} & C1 = {} by A59,A62,A63,RELAT_1:64;
-          hence thesis by A62,A63;
+A69:      B1 = B and
+A70:      dom B1 = o2 and
+          rng B1 c= o by A67,FUNCT_2:def 2;
+A71:      ex C1 be Function st C1 = C & dom C1 = o2 & rng C1 c= o by A67
+          ,A68,FUNCT_2:def 2;
+          assume
+          B * A = C * A;
+          B1 = {} by A66,A70,RELAT_1:64;
+          hence thesis by A66,A69,A71,RELAT_1:64;
         end;
       end;
     end;
@@ -811,15 +881,16 @@ A63:      C1 = C & dom C1 = o2 & rng C1 c= o by A60,A61,FUNCT_2:def 2;
 end;
 
 theorem Th15:
-  for C being category, o1,o2 being object of C st
-  <^o1,o2^> <> {} & <^o2,o1^> <> {}
-  for A being Morphism of o1,o2 st A is retraction holds A is epi
+  for C being category, o1,o2 being object of C st <^o1,o2^> <> {}
+  & <^o2,o1^> <> {} for A being Morphism of o1,o2 st A is retraction holds A is
+  epi
 proof
   let C be category, o1,o2 be object of C;
   assume
 A1: <^o1,o2^> <> {} & <^o2,o1^> <> {};
   let A be Morphism of o1,o2;
-  assume A is retraction;
+  assume
+  A is retraction;
   then consider R being Morphism of o2,o1 such that
 A2: R is_right_inverse_of A by Def2;
   let o be object of C;
@@ -837,15 +908,16 @@ A4: B * A = C * A;
 end;
 
 theorem Th16:
-  for C being category, o1,o2 being object of C st
-  <^o1,o2^> <> {} & <^o2,o1^> <> {}
-  for A being Morphism of o1,o2 st A is coretraction holds A is mono
+  for C being category, o1,o2 being object of C st <^o1,o2^> <> {}
+& <^o2,o1^> <> {} for A being Morphism of o1,o2 st A is coretraction holds A is
+  mono
 proof
   let C be category, o1,o2 be object of C;
   assume
 A1: <^o1,o2^> <> {} & <^o2,o1^> <> {};
   let A be Morphism of o1,o2;
-  assume A is coretraction;
+  assume
+  A is coretraction;
   then consider R being Morphism of o2,o1 such that
 A2: R is_left_inverse_of A by Def3;
   let o be object of C;
@@ -863,244 +935,250 @@ A4: A * B = A * C;
 end;
 
 theorem
-  for C being category, o1,o2 being object of C st
-  <^o1,o2^> <> {} & <^o2,o1^> <> {}
-  for A being Morphism of o1,o2 st A is iso holds A is mono epi
+  for C being category, o1,o2 being object of C st <^o1,o2^> <> {} & <^
+  o2,o1^> <> {} for A being Morphism of o1,o2 st A is iso holds A is mono epi
 proof
   let C be category;
   let o1, o2 be object of C such that
 A1: <^o1,o2^> <> {} & <^o2,o1^> <> {};
   let A be Morphism of o1, o2;
-  assume A is iso;
+  assume
+  A is iso;
   then
 A2: A is retraction & A is coretraction by A1,Th6;
-A3: for o being object of C st <^o,o1^> <> {}
-  for B, C being Morphism of o, o1 st A * B = A * C holds B = C
+A3: for o being object of C st <^o2,o^> <> {} for B, C being Morphism of o2
+  , o st B * A = C * A holds B = C
   proof
     let o be object of C such that
-A4: <^o,o1^> <> {};
-    let B, C be Morphism of o, o1;
-    assume A * B = A * C;
-    then (A" * A) * B = A" * (A * C) by A1,A4,ALTCAT_1:25;
-    then idm o1 * B = A" * (A * C) by A1,A2,Th2;
-    then idm o1 * B = (A" * A) * C by A1,A4,ALTCAT_1:25;
-    then idm o1 * B = idm o1 * C by A1,A2,Th2;
-    then B = idm o1 * C by A4,ALTCAT_1:24;
-    hence thesis by A4,ALTCAT_1:24;
-  end;
-  for o being object of C st <^o2,o^> <> {}
-  for B, C being Morphism of o2, o st B * A = C * A holds B = C
-  proof
-    let o be object of C such that
-A5: <^o2,o^> <> {};
+A4: <^o2,o^> <> {};
     let B, C be Morphism of o2, o;
-    assume B * A = C * A;
-    then B * (A * A") = (C * A) * A" by A1,A5,ALTCAT_1:25;
+    assume
+    B * A = C * A;
+    then B * (A * A") = (C * A) * A" by A1,A4,ALTCAT_1:25;
     then B * idm o2 = (C * A) * A" by A1,A2,Th2;
-    then B * idm o2 = C * (A * A") by A1,A5,ALTCAT_1:25;
+    then B * idm o2 = C * (A * A") by A1,A4,ALTCAT_1:25;
     then B * idm o2 = C * idm o2 by A1,A2,Th2;
-    then B = C * idm o2 by A5,ALTCAT_1:def 19;
-    hence thesis by A5,ALTCAT_1:def 19;
+    then B = C * idm o2 by A4,ALTCAT_1:def 19;
+    hence thesis by A4,ALTCAT_1:def 19;
+  end;
+  for o being object of C st <^o,o1^> <> {} for B, C being Morphism of o,
+  o1 st A * B = A * C holds B = C
+  proof
+    let o be object of C such that
+A5: <^o,o1^> <> {};
+    let B, C be Morphism of o, o1;
+    assume
+    A * B = A * C;
+    then (A" * A) * B = A" * (A * C) by A1,A5,ALTCAT_1:25;
+    then idm o1 * B = A" * (A * C) by A1,A2,Th2;
+    then idm o1 * B = (A" * A) * C by A1,A5,ALTCAT_1:25;
+    then idm o1 * B = idm o1 * C by A1,A2,Th2;
+    then B = idm o1 * C by A5,ALTCAT_1:24;
+    hence thesis by A5,ALTCAT_1:24;
   end;
   hence thesis by A3,Def7,Def8;
 end;
 
 theorem Th18:
-  for C being category, o1,o2,o3 being object of C st
-  <^o1,o2^> <> {} & <^o2,o3^> <> {} & <^o3,o1^> <> {}
-  for A being Morphism of o1,o2, B being Morphism of o2,o3 st
-  A is retraction & B is retraction holds B*A is retraction
+  for C being category, o1,o2,o3 being object of C st <^o1,o2^> <>
+  {} & <^o2,o3^> <> {} & <^o3,o1^> <> {} for A being Morphism of o1,o2, B being
+Morphism of o2,o3 st A is retraction & B is retraction holds B*A is retraction
 proof
   let C be category, o1,o2,o3 be object of C;
-  assume
-A1: <^o1,o2^> <> {} & <^o2,o3^> <> {} & <^o3,o1^> <> {};
-  then
-A2: <^o2,o1^> <> {} & <^o3,o2^> <> {} & <^o1,o3^> <> {} by ALTCAT_1:def 4;
+  assume that
+A1: <^o1,o2^> <> {} and
+A2: <^o2,o3^> <> {} and
+A3: <^o3,o1^> <> {};
+A4: <^o2,o1^> <> {} by A2,A3,ALTCAT_1:def 4;
+A5: <^o3,o2^> <> {} by A1,A3,ALTCAT_1:def 4;
   let A be Morphism of o1,o2, B be Morphism of o2,o3;
-  assume
-A3: A is retraction & B is retraction;
-  then consider A1 being Morphism of o2,o1 such that
-A4: A1 is_right_inverse_of A by Def2;
+  assume that
+A6: A is retraction and
+A7: B is retraction;
+  consider A1 being Morphism of o2,o1 such that
+A8: A1 is_right_inverse_of A by A6,Def2;
   consider B1 being Morphism of o3,o2 such that
-A5: B1 is_right_inverse_of B by A3,Def2;
+A9: B1 is_right_inverse_of B by A7,Def2;
   consider G being Morphism of o3,o1 such that
-A6: G = A1 * B1;
+A10: G = A1 * B1;
   take G;
-  (B * A) * G = B * (A * (A1 * B1)) by A1,A6,ALTCAT_1:25
-    .= B * ((A * A1) * B1) by A1,A2,ALTCAT_1:25
-    .= B * (idm o2 * B1) by A4,Def1
-    .= B * B1 by A2,ALTCAT_1:24
-    .= idm o3 by A5,Def1;
+  (B * A) * G = B * (A * (A1 * B1)) by A1,A2,A3,A10,ALTCAT_1:25
+    .= B * ((A * A1) * B1) by A1,A4,A5,ALTCAT_1:25
+    .= B * (idm o2 * B1) by A8,Def1
+    .= B * B1 by A5,ALTCAT_1:24
+    .= idm o3 by A9,Def1;
   hence thesis by Def1;
 end;
 
 theorem Th19:
-  for C being category, o1,o2,o3 being object of C st
-  <^o1,o2^> <> {} & <^o2,o3^> <> {} & <^o3,o1^> <> {}
-  for A being Morphism of o1,o2, B being Morphism of o2,o3 st
-  A is coretraction & B is coretraction holds B*A is coretraction
+  for C being category, o1,o2,o3 being object of C st <^o1,o2^> <>
+  {} & <^o2,o3^> <> {} & <^o3,o1^> <> {} for A being Morphism of o1,o2, B being
+  Morphism of o2,o3 st A is coretraction & B is coretraction holds B*A is
+  coretraction
 proof
   let C be category, o1,o2,o3 be object of C;
-  assume
-A1: <^o1,o2^> <> {} & <^o2,o3^> <> {} & <^o3,o1^> <> {};
-  then
-A2: <^o2,o1^> <> {} & <^o3,o2^> <> {} & <^o1,o3^> <> {} by ALTCAT_1:def 4;
+  assume that
+A1: <^o1,o2^> <> {} and
+A2: <^o2,o3^> <> {} and
+A3: <^o3,o1^> <> {};
+A4: <^o2,o1^> <> {} by A2,A3,ALTCAT_1:def 4;
+A5: <^o3,o2^> <> {} by A1,A3,ALTCAT_1:def 4;
   let A be Morphism of o1,o2, B be Morphism of o2,o3;
-  assume
-A3: A is coretraction & B is coretraction;
-  then consider A1 being Morphism of o2,o1 such that
-A4: A1 is_left_inverse_of A by Def3;
+  assume that
+A6: A is coretraction and
+A7: B is coretraction;
+  consider A1 being Morphism of o2,o1 such that
+A8: A1 is_left_inverse_of A by A6,Def3;
   consider B1 being Morphism of o3,o2 such that
-A5: B1 is_left_inverse_of B by A3,Def3;
+A9: B1 is_left_inverse_of B by A7,Def3;
   consider G being Morphism of o3,o1 such that
-A6: G = A1 * B1;
+A10: G = A1 * B1;
   take G;
-A7: <^o2,o2^> <> {} by ALTCAT_1:23;
-  G * (B * A) = ((A1 * B1) * B) * A by A1,A6,ALTCAT_1:25
-    .= (A1 * (B1 * B)) * A by A1,A2,ALTCAT_1:25
-    .= (A1 * idm o2) * A by A5,Def1
-    .= A1 * (idm o2 *A) by A1,A2,A7,ALTCAT_1:25
+A11: <^o2,o2^> <> {} by ALTCAT_1:23;
+  G * (B * A) = ((A1 * B1) * B) * A by A1,A2,A3,A10,ALTCAT_1:25
+    .= (A1 * (B1 * B)) * A by A2,A4,A5,ALTCAT_1:25
+    .= (A1 * idm o2) * A by A9,Def1
+    .= A1 * (idm o2 *A) by A1,A4,A11,ALTCAT_1:25
     .= A1 * A by A1,ALTCAT_1:24
-    .= idm o1 by A4,Def1;
+    .= idm o1 by A8,Def1;
   hence thesis by Def1;
 end;
 
 theorem Th20:
-  for C being category, o1, o2 being object of C, A being Morphism of o1,o2 st
-  A is retraction & A is mono & <^o1,o2^> <> {} & <^o2,o1^> <> {}
+  for C being category, o1, o2 being object of C, A being Morphism
+  of o1,o2 st A is retraction & A is mono & <^o1,o2^> <> {} & <^o2,o1^> <> {}
   holds A is iso
 proof
   let C be category, o1, o2 be object of C, A be Morphism of o1,o2;
   assume that
-A1: A is retraction & A is mono and
-A2: <^o1,o2^> <> {} & <^o2,o1^> <> {};
-A3: <^o1,o1^> <> {} by ALTCAT_1:23;
+A1: A is retraction and
+A2: A is mono and
+A3: <^o1,o2^> <> {} and
+A4: <^o2,o1^> <> {};
   consider B being Morphism of o2,o1 such that
-A4: B is_right_inverse_of A by A1,Def2;
-  A * B * A = (idm o2) * A by A4,Def1;
-  then A * (B * A) = (idm o2) * A by A2,ALTCAT_1:25;
-  then A * (B * A) = A by A2,ALTCAT_1:24;
+A5: B is_right_inverse_of A by A1,Def2;
+  A * B * A = (idm o2) * A by A5,Def1;
+  then A * (B * A) = (idm o2) * A by A3,A4,ALTCAT_1:25;
+  then A * (B * A) = A by A3,ALTCAT_1:24;
   then
-A5: A * (B * A) = A * idm o1 by A2,ALTCAT_1:def 19;
-  then B * A = idm o1 by A1,A3,Def7;
+A6: <^o1,o1^> <> {} & A * (B * A) = A * idm o1 by A3,
+  ALTCAT_1:23,def 19;
+  then B * A = idm o1 by A2,Def7;
   then
-A6: B is_left_inverse_of A by Def1;
+A7: B is_left_inverse_of A by Def1;
   then
-A7: A is coretraction by Def3;
+A8: A is coretraction by Def3;
   then
-A8: A*A" = A * B by A1,A2,A4,A6,Def4
-    .= idm o2 by A4,Def1;
-  A"*A = B * A by A1,A2,A4,A6,A7,Def4
-    .= idm o1 by A1,A3,A5,Def7;
-  hence thesis by A8,Def5;
+A9: A*A" = A * B by A1,A3,A4,A5,A7,Def4
+    .= idm o2 by A5,Def1;
+  A"*A = B * A by A1,A3,A4,A5,A7,A8,Def4
+    .= idm o1 by A2,A6,Def7;
+  hence thesis by A9,Def5;
 end;
 
 theorem
-  for C being category, o1, o2 being object of C, A being Morphism of o1, o2
-  st A is coretraction & A is epi & <^o1,o2^> <> {} & <^o2,o1^> <> {}
-  holds A is iso
+  for C being category, o1, o2 being object of C, A being Morphism of o1
+, o2 st A is coretraction & A is epi & <^o1,o2^> <> {} & <^o2,o1^> <> {} holds
+  A is iso
 proof
   let C be category, o1, o2 be object of C, A be Morphism of o1,o2;
   assume that
-A1: A is coretraction & A is epi and
-A2: <^o1,o2^> <> {} & <^o2,o1^> <> {};
-A3: <^o2,o2^> <> {} by ALTCAT_1:23;
+A1: A is coretraction and
+A2: A is epi and
+A3: <^o1,o2^> <> {} and
+A4: <^o2,o1^> <> {};
   consider B being Morphism of o2,o1 such that
-A4: B is_left_inverse_of A by A1,Def3;
-  A * (B * A) = A * (idm o1) by A4,Def1;
-  then A * (B * A) = A by A2,ALTCAT_1:def 19;
-  then A * (B * A) = idm o2 * A by A2,ALTCAT_1:24;
+A5: B is_left_inverse_of A by A1,Def3;
+  A * (B * A) = A * (idm o1) by A5,Def1;
+  then A * (B * A) = A by A3,ALTCAT_1:def 19;
+  then A * (B * A) = idm o2 * A by A3,ALTCAT_1:24;
   then
-A5: (A * B) * A = idm o2 * A by A2,ALTCAT_1:25;
-  then A * B = idm o2 by A1,A3,Def8;
+A6: <^o2,o2^> <> {} & (A * B) * A = idm o2 * A by A3,A4,
+  ALTCAT_1:23,25;
+  then A * B = idm o2 by A2,Def8;
   then
-A6: B is_right_inverse_of A by Def1;
+A7: B is_right_inverse_of A by Def1;
   then
-A7: A is retraction by Def2;
+A8: A is retraction by Def2;
   then
-A8: A*A" = A * B by A1,A2,A4,A6,Def4
-    .= idm o2 by A1,A3,A5,Def8;
-  A"*A = B * A by A1,A2,A4,A6,A7,Def4
-    .= idm o1 by A4,Def1;
-  hence thesis by A8,Def5;
+A9: A"*A = B * A by A1,A3,A4,A5,A7,Def4
+    .= idm o1 by A5,Def1;
+  A*A" = A * B by A1,A3,A4,A5,A7,A8,Def4
+    .= idm o2 by A2,A6,Def8;
+  hence thesis by A9,Def5;
 end;
 
 theorem
-  for C being category, o1,o2,o3 being object of C, A being Morphism of o1, o2
-  , B being Morphism of o2,o3 st
-  <^o1,o2^> <> {} & <^o2,o3^> <> {} & <^o3,o1^> <> {} & B * A is retraction
-  holds B is retraction
+  for C being category, o1,o2,o3 being object of C, A being Morphism of
+o1, o2, B being Morphism of o2,o3 st <^o1,o2^> <> {} & <^o2,o3^> <> {} & <^o3,
+  o1^> <> {} & B * A is retraction holds B is retraction
 proof
-  let C be category, o1,o2,o3 be object of C, A be Morphism of o1,o2,
-  B be Morphism of o2,o3;
+  let C be category, o1,o2,o3 be object of C, A be Morphism of o1,o2, B be
+  Morphism of o2,o3;
   assume
 A1: <^o1,o2^> <> {} & <^o2,o3^> <> {} & <^o3,o1^> <> {};
-  assume B * A is retraction;
+  assume
+  B * A is retraction;
   then consider G be Morphism of o3,o1 such that
 A2: G is_right_inverse_of (B*A) by Def2;
   (B * A) * G = idm o3 by A2,Def1;
   then B * (A * G) = idm o3 by A1,ALTCAT_1:25;
   then A * G is_right_inverse_of B by Def1;
-  then consider F be Morphism of o3,o2 such that
-A3: F = (A * G) & F is_right_inverse_of B;
-  thus thesis by A3,Def2;
+  hence thesis by Def2;
 end;
 
 theorem
-  for C being category, o1,o2,o3 being object of C, A being Morphism of o1, o2
-  , B being Morphism of o2,o3 st
-  <^o1,o2^> <> {} & <^o2,o3^> <> {} & <^o3,o1^> <> {} & B * A is coretraction
-  holds A is coretraction
+  for C being category, o1,o2,o3 being object of C, A being Morphism of
+o1, o2, B being Morphism of o2,o3 st <^o1,o2^> <> {} & <^o2,o3^> <> {} & <^o3,
+  o1^> <> {} & B * A is coretraction holds A is coretraction
 proof
-  let C be category, o1,o2,o3 be object of C, A be Morphism of o1,o2,
-  B be Morphism of o2,o3;
+  let C be category, o1,o2,o3 be object of C, A be Morphism of o1,o2, B be
+  Morphism of o2,o3;
   assume
 A1: <^o1,o2^> <> {} & <^o2,o3^> <> {} & <^o3,o1^> <> {};
-  assume B * A is coretraction;
+  assume
+  B * A is coretraction;
   then consider G be Morphism of o3,o1 such that
 A2: G is_left_inverse_of (B * A) by Def3;
 A3: (G * B) * A = G * (B * A) by A1,ALTCAT_1:25;
   G * (B * A) = idm o1 by A2,Def1;
   then G * B is_left_inverse_of A by A3,Def1;
-  then consider F be Morphism of o2,o1 such that
-A4: F = (G * B) & F is_left_inverse_of A;
-  thus thesis by A4,Def3;
+  hence thesis by Def3;
 end;
 
 theorem
-  for C being category st
-
-for o1,o2 being object of C, A1 being Morphism of o1,o2 holds A1 is retraction
-  holds for a,b being object of C,A being Morphism of a,b
-  st <^a,b^> <> {} & <^b,a^> <> {} holds A is iso
+  for C being category st for o1,o2 being object of C, A1 being Morphism
+  of o1,o2 holds A1 is retraction holds for a,b being object of C,A being
+  Morphism of a,b st <^a,b^> <> {} & <^b,a^> <> {} holds A is iso
 proof
   let C be category;
   assume
-A1: for o1,o2 being object of C, A1 being Morphism of o1,o2 holds
-  A1 is retraction;
-  thus for a,b being object of C, A being Morphism of a,b
-  st <^a,b^> <> {} & <^b,a^> <> {} holds A is iso
+A1: for o1,o2 being object of C, A1 being Morphism of o1,o2 holds A1 is
+  retraction;
+  thus for a,b being object of C, A being Morphism of a,b st <^a,b^> <> {} &
+  <^b,a^> <> {} holds A is iso
   proof
     let a,b be object of C;
     let A be Morphism of a,b;
-    assume
-A2: <^a,b^> <> {} & <^b,a^> <> {};
-A3: A is retraction by A1;
+    assume that
+A2: <^a,b^> <> {} and
+A3: <^b,a^> <> {};
+A4: A is retraction by A1;
     A is coretraction
     proof
       consider A1 be Morphism of b,a such that
-A4:   A1 is_right_inverse_of A by A3,Def2;
-A5:   A1 is epi by A1,A2,Th15;
-A6:   <^a,a^> <> {} by ALTCAT_1:23;
-      A1 * (A * A1) =A1 * idm b by A4,Def1;
-      then A1 * (A * A1) =A1 by A2,ALTCAT_1:def 19;
-      then (A1 * A) * A1 =A1 by A2,ALTCAT_1:25;
-      then (A1 * A) * A1 =idm a * A1 by A2,ALTCAT_1:24;
-      then (A1 * A) =idm a by A5,A6,Def8;
+A5:   A1 is_right_inverse_of A by A4,Def2;
+      A1 * (A * A1) =A1 * idm b by A5,Def1;
+      then A1 * (A * A1) =A1 by A3,ALTCAT_1:def 19;
+      then (A1 * A) * A1 =A1 by A2,A3,ALTCAT_1:25;
+      then
+A6:   (A1 * A) * A1 =idm a * A1 by A3,ALTCAT_1:24;
+      A1 is epi & <^a,a^> <> {} by A1,A2,A3,Th15,ALTCAT_1:23;
+      then (A1 * A) =idm a by A6,Def8;
       then A1 is_left_inverse_of A by Def1;
       hence thesis by Def3;
     end;
-    hence thesis by A2,A3,Th6;
+    hence thesis by A2,A3,A4,Th6;
   end;
 end;
 
@@ -1119,10 +1197,9 @@ registration
   cluster mono epi iso retraction coretraction Morphism of o,o;
   existence
   proof
-A1: <^o,o^> <> {} by ALTCAT_1:23;
     take I = idm o;
-    I is retraction coretraction by Th1;
-    hence thesis by A1,Th20,Th15,Th16;
+    <^o,o^> <> {} & I is retraction coretraction by Th1,ALTCAT_1:23;
+    hence thesis by Th15,Th16,Th20;
   end;
 end;
 
@@ -1180,37 +1257,35 @@ definition
   let C be AltGraph, o be object of C;
   attr o is initial means
   :Def9:
-  for o1 being object of C holds
-  ex M being Morphism of o,o1 st M in <^o,o1^> & <^o,o1^> is trivial;
+  for o1 being object of C holds ex M being
+  Morphism of o,o1 st M in <^o,o1^> & <^o,o1^> is trivial;
 end;
 
 theorem
-  for C being AltGraph, o being object of C holds o is initial iff
-  for o1 being object of C holds
-  ex M being Morphism of o,o1 st M in <^o,o1^> &
-  (for M1 being Morphism of o,o1 st M1 in <^o,o1^> holds M = M1)
+  for C being AltGraph, o being object of C holds o is initial iff for
+  o1 being object of C holds ex M being Morphism of o,o1 st M in <^o,o1^> & for
+  M1 being Morphism of o,o1 st M1 in <^o,o1^> holds M = M1
 proof
   let C be AltGraph, o be object of C;
-  thus o is initial implies (for o1 being object of C holds
-  ex M being Morphism of o,o1 st M in <^o,o1^> &
-  (for M1 being Morphism of o,o1 st M1 in <^o,o1^> holds M = M1))
+  thus o is initial implies for o1 being object of C holds ex M being Morphism
+  of o,o1 st M in <^o,o1^> & for M1 being Morphism of o,o1 st M1 in <^o,o1^>
+  holds M = M1
   proof
     assume
 A1: o is initial;
     let o1 be object of C;
     consider M being Morphism of o,o1 such that
-A2: M in <^o,o1^> & <^o,o1^> is trivial by A1,Def9;
-    consider i be set such that
-A3: <^o,o1^> = { i } by A2,REALSET1:def 4;
-    <^o,o1^> = {M} by A3,TARSKI:def 1;
-    then for M1 being Morphism of o,o1 st M1 in <^o,o1^>
-    holds M = M1 by TARSKI:def 1;
+A2: M in <^o,o1^> and
+A3: <^o,o1^> is trivial by A1,Def9;
+    ex i be set st <^o,o1^> = { i } by A2,A3,REALSET1:def 4;
+    then <^o,o1^> = {M} by TARSKI:def 1;
+    then for M1 being Morphism of o,o1 st M1 in <^o,o1^> holds M = M1 by
+    TARSKI:def 1;
     hence thesis by A2;
   end;
   assume
-A4: (for o1 being object of C holds
-  ex M being Morphism of o,o1 st M in <^o,o1^> &
-  (for M1 being Morphism of o,o1 st M1 in <^o,o1^> holds M = M1));
+A4: for o1 being object of C holds ex M being Morphism of o,o1 st M in
+  <^o,o1^> & for M1 being Morphism of o,o1 st M1 in <^o,o1^> holds M = M1;
   let o1 be object of C;
   consider M being Morphism of o,o1 such that
 A5: M in <^o,o1^> and
@@ -1227,7 +1302,8 @@ A8: x in <^o,o1^>;
   {M} c= <^o,o1^>
   proof
     let x be set;
-    assume x in {M};
+    assume
+    x in {M};
     hence thesis by A5,TARSKI:def 1;
   end;
   then <^o,o1^> = {M} by A7,XBOOLE_0:def 10;
@@ -1235,29 +1311,35 @@ A8: x in <^o,o1^>;
 end;
 
 theorem Th26:
-  for C being category, o1,o2 being object of C st
-  o1 is initial & o2 is initial holds o1,o2 are_iso
+  for C being category, o1,o2 being object of C st o1 is initial &
+  o2 is initial holds o1,o2 are_iso
 proof
   let C be category, o1,o2 be object of C such that
 A1: o1 is initial and
 A2: o2 is initial;
-  consider M1 being Morphism of o1,o2 such that
-A3: M1 in <^o1,o2^> & <^o1,o2^> is trivial by A1,Def9;
+  ex N being Morphism of o2,o2 st N in <^o2,o2^> & <^o2,o2^> is trivial by
+  A2,Def9;
+  then consider y being set such that
+A3: <^o2,o2^> = {y} by REALSET1:def 4;
   consider M2 being Morphism of o2,o1 such that
-A4: M2 in <^o2,o1^> & <^o2,o1^> is trivial by A2,Def9;
-  thus <^o1,o2^> <> {} & <^o2,o1^> <> {} by A3,A4;
-A5: (ex M being Morphism of o1,o1 st M in <^o1,o1^> & <^o1,o1^> is trivial) &
-  (ex N being Morphism of o2,o2 st N in <^o2,o2^> & <^o2,o2^> is trivial)
-  by A1,A2,Def9;
+A4: M2 in <^o2,o1^> and
+  <^o2,o1^> is trivial by A2,Def9;
+  consider M1 being Morphism of o1,o2 such that
+A5: M1 in <^o1,o2^> and
+  <^o1,o2^> is trivial by A1,Def9;
+  thus <^o1,o2^> <> {} & <^o2,o1^> <> {} by A5,A4;
+  M1 * M2 = y & idm o2 = y by A3,TARSKI:def 1;
+  then M2 is_right_inverse_of M1 by Def1;
+  then
+A6: M1 is retraction by Def2;
+  ex M being Morphism of o1,o1 st M in <^o1,o1^> & <^o1,o1^> is trivial by
+  A1,Def9;
   then consider x being set such that
-A6: <^o1,o1^> = {x} by REALSET1:def 4;
-  consider y being set such that
-A7: <^o2,o2^> = {y} by A5,REALSET1:def 4;
-A8: M1 * M2 = y & M2 * M1 = x by A6,A7,TARSKI:def 1;
-  idm o1 = x & idm o2 = y by A6,A7,TARSKI:def 1;
-  then M2 is_left_inverse_of M1 & M2 is_right_inverse_of M1 by A8,Def1;
-  then M1 is retraction & M1 is coretraction by Def2,Def3;
-  then M1 is iso by A3,A4,Th6;
+A7: <^o1,o1^> = {x} by REALSET1:def 4;
+  M2 * M1 = x & idm o1 = x by A7,TARSKI:def 1;
+  then M2 is_left_inverse_of M1 by Def1;
+  then M1 is coretraction by Def3;
+  then M1 is iso by A5,A4,A6,Th6;
   hence thesis;
 end;
 
@@ -1265,37 +1347,35 @@ definition
   let C be AltGraph, o be object of C;
   attr o is terminal means
   :Def10:
-  for o1 being object of C holds
-  ex M being Morphism of o1,o st M in <^o1,o^> & <^o1,o^> is trivial;
+  for o1 being object of C holds ex M being
+  Morphism of o1,o st M in <^o1,o^> & <^o1,o^> is trivial;
 end;
 
 theorem
-  for C being AltGraph, o being object of C holds o is terminal iff
-  for o1 being object of C holds
-  ex M being Morphism of o1,o st M in <^o1,o^> &
-  (for M1 being Morphism of o1,o st M1 in <^o1,o^> holds M = M1)
+  for C being AltGraph, o being object of C holds o is terminal iff for
+  o1 being object of C holds ex M being Morphism of o1,o st M in <^o1,o^> & for
+  M1 being Morphism of o1,o st M1 in <^o1,o^> holds M = M1
 proof
   let C be AltGraph, o be object of C;
-  thus o is terminal implies (for o1 being object of C holds
-  ex M being Morphism of o1,o st M in <^o1,o^> &
-  (for M1 being Morphism of o1,o st M1 in <^o1,o^> holds M = M1))
+  thus o is terminal implies for o1 being object of C holds ex M being
+Morphism of o1,o st M in <^o1,o^> & for M1 being Morphism of o1,o st M1 in <^o1
+  ,o^> holds M = M1
   proof
     assume
 A1: o is terminal;
     let o1 be object of C;
     consider M being Morphism of o1,o such that
-A2: M in <^o1,o^> & <^o1,o^> is trivial by A1,Def10;
-    consider i be set such that
-A3: <^o1,o^> = { i } by A2,REALSET1:def 4;
-    <^o1,o^> = {M} by A3,TARSKI:def 1;
-    then for M1 being Morphism of o1,o st M1 in <^o1,o^>
-    holds M = M1 by TARSKI:def 1;
+A2: M in <^o1,o^> and
+A3: <^o1,o^> is trivial by A1,Def10;
+    ex i be set st <^o1,o^> = { i } by A2,A3,REALSET1:def 4;
+    then <^o1,o^> = {M} by TARSKI:def 1;
+    then for M1 being Morphism of o1,o st M1 in <^o1,o^> holds M = M1 by
+    TARSKI:def 1;
     hence thesis by A2;
   end;
   assume
-A4: for o1 being object of C holds
-  ex M being Morphism of o1,o st M in <^o1,o^> &
-  (for M1 being Morphism of o1,o st M1 in <^o1,o^> holds M = M1);
+A4: for o1 being object of C holds ex M being Morphism of o1,o st M in
+  <^o1,o^> & for M1 being Morphism of o1,o st M1 in <^o1,o^> holds M = M1;
   let o1 be object of C;
   consider M being Morphism of o1,o such that
 A5: M in <^o1,o^> and
@@ -1312,7 +1392,8 @@ A8: x in <^o1,o^>;
   {M} c= <^o1,o^>
   proof
     let x be set;
-    assume x in {M};
+    assume
+    x in {M};
     hence thesis by A5,TARSKI:def 1;
   end;
   then <^o1,o^> = {M} by A7,XBOOLE_0:def 10;
@@ -1320,30 +1401,38 @@ A8: x in <^o1,o^>;
 end;
 
 theorem
-  for C being category, o1,o2 being object of C st
-  o1 is terminal & o2 is terminal holds o1,o2 are_iso
+  for C being category, o1,o2 being object of C st o1 is terminal & o2
+  is terminal holds o1,o2 are_iso
 proof
   let C be category, o1,o2 be object of C;
   assume that
 A1: o1 is terminal and
 A2: o2 is terminal;
-  consider M1 being Morphism of o1,o2 such that
-A3: M1 in <^o1,o2^> & <^o1,o2^> is trivial by A2,Def10;
-  consider M2 being Morphism of o2,o1 such that
-A4: M2 in <^o2,o1^> & <^o2,o1^> is trivial by A1,Def10;
-  thus <^o1,o2^> <> {} & <^o2,o1^> <> {} by A3,A4;
-A5: (ex M being Morphism of o1,o1 st M in <^o1,o1^> & <^o1,o1^> is trivial) &
-  (ex N being Morphism of o2,o2 st N in <^o2,o2^> & <^o2,o2^> is trivial)
-  by A1,A2,Def10;
+  ex M being Morphism of o1,o1 st M in <^o1,o1^> & <^o1,o1^> is trivial by
+  A1,Def10;
   then consider x being set such that
-A6: <^o1,o1^> = {x} by REALSET1:def 4;
-  consider y being set such that
-A7: <^o2,o2^> = {y} by A5,REALSET1:def 4;
-  M1 * M2 = y & M2 * M1 = x by A6,A7,TARSKI:def 1;
-  then M1 * M2 = idm o2 & M2 * M1 = idm o1 by A6,A7,TARSKI:def 1;
-  then M2 is_left_inverse_of M1 & M2 is_right_inverse_of M1 by Def1;
-  then M1 is retraction & M1 is coretraction by Def2,Def3;
-  then M1 is iso by A3,A4,Th6;
+A3: <^o1,o1^> = {x} by REALSET1:def 4;
+  consider M2 being Morphism of o2,o1 such that
+A4: M2 in <^o2,o1^> and
+  <^o2,o1^> is trivial by A1,Def10;
+  consider M1 being Morphism of o1,o2 such that
+A5: M1 in <^o1,o2^> and
+  <^o1,o2^> is trivial by A2,Def10;
+  thus <^o1,o2^> <> {} & <^o2,o1^> <> {} by A5,A4;
+  M2 * M1 = x by A3,TARSKI:def 1;
+  then M2 * M1 = idm o1 by A3,TARSKI:def 1;
+  then M2 is_left_inverse_of M1 by Def1;
+  then
+A6: M1 is coretraction by Def3;
+  ex N being Morphism of o2,o2 st N in <^o2,o2^> & <^o2,o2^> is trivial by
+  A2,Def10;
+  then consider y being set such that
+A7: <^o2,o2^> = {y} by REALSET1:def 4;
+  M1 * M2 = y by A7,TARSKI:def 1;
+  then M1 * M2 = idm o2 by A7,TARSKI:def 1;
+  then M2 is_right_inverse_of M1 by Def1;
+  then M1 is retraction by Def2;
+  then M1 is iso by A5,A4,A6,Th6;
   hence thesis;
 end;
 
@@ -1355,11 +1444,12 @@ definition
 end;
 
 theorem
-  for C being category, o1,o2 being object of C st
-  o1 is _zero & o2 is _zero holds o1,o2 are_iso
+  for C being category, o1,o2 being object of C st o1 is _zero & o2 is
+  _zero holds o1,o2 are_iso
 proof
   let C be category, o1,o2 be object of C;
-  assume o1 is _zero & o2 is _zero;
+  assume
+  o1 is _zero & o2 is _zero;
   then o1 is initial & o2 is initial by Def11;
   hence thesis by Th26;
 end;
@@ -1368,17 +1458,17 @@ definition
   let C be non empty AltCatStr, o1, o2 be object of C, M be Morphism of o1,o2;
   attr M is _zero means
   :Def12:
-  for o being object of C st o is _zero
-  for A being Morphism of o1,o, B being Morphism of o,o2 holds M = B*A;
+  for o being object of C st o is _zero for A
+  being Morphism of o1,o, B being Morphism of o,o2 holds M = B*A;
 end;
 
 theorem
-  for C being category, o1,o2,o3 being object of C
-  for M1 being Morphism of o1,o2, M2 being Morphism of o2,o3
-  st M1 is _zero & M2 is _zero holds M2 * M1 is _zero
+  for C being category, o1,o2,o3 being object of C for M1 being Morphism
+of o1,o2, M2 being Morphism of o2,o3 st M1 is _zero & M2 is _zero holds M2 * M1
+  is _zero
 proof
-  let C be category, o1,o2,o3 be object of C, M1 be Morphism of o1,o2,
-  M2 be Morphism of o2,o3;
+  let C be category, o1,o2,o3 be object of C, M1 be Morphism of o1,o2, M2 be
+  Morphism of o2,o3;
   assume that
 A1: M1 is _zero and
 A2: M2 is _zero;
@@ -1386,33 +1476,37 @@ A2: M2 is _zero;
   assume
 A3: o is _zero;
   then
-A4: o is initial & o is terminal by Def11;
+A4: o is initial by Def11;
+  then consider B1 being Morphism of o,o2 such that
+A5: B1 in <^o,o2^> and
+  <^o,o2^> is trivial by Def9;
   let A be Morphism of o1,o, B be Morphism of o,o3;
-  consider B1 being Morphism of o,o2 such that
-A5: B1 in <^o,o2^> & <^o,o2^> is trivial by A4,Def9;
   consider B2 being Morphism of o,o3 such that
-A6: B2 in <^o,o3^> & <^o,o3^> is trivial by A4,Def9;
-  consider A1 being Morphism of o1,o such that
-A7: A1 in <^o1,o^> & <^o1,o^> is trivial by A4,Def10;
-  consider A2 being Morphism of o2,o such that
-A8: A2 in <^o2,o^> & <^o2,o^> is trivial by A4,Def10;
-A9: M2 = B2 * A2 by A2,A3,Def12;
-  consider x being set such that
-A10: <^o1,o^> = {x} by A7,REALSET1:def 4;
-A11: A = x & A1 = x by A10,TARSKI:def 1;
+A6: B2 in <^o,o3^> and
+A7: <^o,o3^> is trivial by A4,Def9;
   consider y being set such that
-A12: <^o,o3^> = {y} by A6,REALSET1:def 4;
-A13: B = y & B2 = y by A12,TARSKI:def 1;
-  (ex M being Morphism of o,o st M in <^o,o^> & <^o,o^> is trivial)
-  by A4,Def10;
+A8: <^o,o3^> = {y} by A6,A7,REALSET1:def 4;
+A9: o is terminal by A3,Def11;
+  then consider A1 being Morphism of o1,o such that
+A10: A1 in <^o1,o^> and
+A11: <^o1,o^> is trivial by Def10;
+  consider x being set such that
+A12: <^o1,o^> = {x} by A10,A11,REALSET1:def 4;
+  ex M being Morphism of o,o st M in <^o,o^> & <^o,o^> is trivial by A9,
+  Def10;
   then consider z being set such that
-A14: <^o,o^> = {z} by REALSET1:def 4;
-A15: idm o = z & A2 * B1 = z by A14,TARSKI:def 1;
-A16: <^o,o2^> <> {} & <^o2,o^> <> {} & <^o1,o^> <> {} & <^o,o3^> <> {} &
-  <^o,o^> <> {} & <^o2,o3^> <> {} by A5,A6,A7,A8,ALTCAT_1:def 4;
-  thus M2 * M1 = (B2*A2) * (B1*A1) by A1,A3,A9,Def12
-    .= B2*A2 * B1*A1 by A16,ALTCAT_1:25
-    .= B*(idm o)*A by A5,A6,A8,A11,A13,A15,ALTCAT_1:25
+A13: <^o,o^> = {z} by REALSET1:def 4;
+  consider A2 being Morphism of o2,o such that
+A14: A2 in <^o2,o^> and
+  <^o2,o^> is trivial by A9,Def10;
+A15: idm o = z & A2 * B1 = z by A13,TARSKI:def 1;
+A16: B = y & B2 = y by A8,TARSKI:def 1;
+A17: A = x & A1 = x by A12,TARSKI:def 1;
+A18: <^o2,o3^> <> {} by A6,A14,ALTCAT_1:def 4;
+  M2 = B2 * A2 by A2,A3,Def12;
+  hence M2 * M1 = (B2*A2) * (B1*A1) by A1,A3,Def12
+    .= B2*A2 * B1*A1 by A5,A10,A18,ALTCAT_1:25
+    .= B*(idm o)*A by A5,A6,A14,A17,A16,A15,ALTCAT_1:25
     .= B*A by A6,ALTCAT_1:def 19;
 end;
 

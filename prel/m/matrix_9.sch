@@ -7,6 +7,7 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="TARSKI"/>
@@ -32,14 +33,14 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="82"/>
+<Func kind="K" nr="90"/>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="10" value="false"/>
 </Cluster>
-<Func kind="K" nr="72">
-<Func kind="K" nr="189">
+<Func kind="K" nr="80">
+<Func kind="K" nr="198">
 <Func kind="F" nr="1"/>
 </Func>
 </Func>
@@ -51,7 +52,7 @@
 <For>
 <Typ kind="M" nr="11">
 <Cluster/>
-<Func kind="K" nr="189">
+<Func kind="K" nr="198">
 <Func kind="F" nr="1"/>
 </Func>
 </Typ>
@@ -63,7 +64,7 @@
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="64">
+<Func kind="K" nr="72">
 <Var nr="1"/>
 </Func>
 </Pred>
@@ -74,7 +75,7 @@
 <For>
 <Typ kind="M" nr="11">
 <Cluster/>
-<Func kind="K" nr="189">
+<Func kind="K" nr="198">
 <Func kind="F" nr="1"/>
 </Func>
 </Typ>
@@ -83,8 +84,8 @@
 <Cluster>
 <Adjective nr="10" value="false"/>
 </Cluster>
-<Func kind="K" nr="72">
-<Func kind="K" nr="189">
+<Func kind="K" nr="80">
+<Func kind="K" nr="198">
 <Func kind="F" nr="1"/>
 </Func>
 </Func>
@@ -95,7 +96,7 @@
 <Var nr="1"/>
 <Func kind="F" nr="2"/>
 </Pred>
-<Pred kind="R" nr="15">
+<Pred kind="R" nr="16">
 <Var nr="2"/>
 <Func kind="F" nr="2"/>
 </Pred>
@@ -112,7 +113,7 @@
 <Pred kind="P" nr="1">
 <Func kind="K" nr="17">
 <Var nr="2"/>
-<Func kind="K" nr="64">
+<Func kind="K" nr="72">
 <Var nr="1"/>
 </Func>
 </Func>

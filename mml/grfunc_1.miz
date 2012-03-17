@@ -9,7 +9,7 @@ environ
  vocabularies FUNCT_1, RELAT_1, BOOLE;
  notations TARSKI, XBOOLE_0, ENUMSET1, RELAT_1, FUNCT_1;
  constructors TARSKI, SUBSET_1, FUNCT_1, ENUMSET1;
- registrations XBOOLE_0, FUNCT_1, RELAT_1;
+ registrations FUNCT_1, RELAT_1;
  requirements SUBSET, BOOLE;
  definitions TARSKI, FUNCT_1, RELAT_1, XBOOLE_0;
  theorems TARSKI, XBOOLE_0, ZFMISC_1, FUNCT_1, RELAT_1, XBOOLE_1, ENUMSET1;
@@ -27,26 +27,30 @@ theorem Th6:
 canceled;
 
 theorem Th8:
-  f c= g iff dom f c= dom g & (for x st x in dom f holds f.x = g.x)
+  f c= g iff dom f c= dom g & for x st x in dom f holds f.x = g.x
 proof
-  thus f c= g implies dom f c= dom g & (for x st x in dom f holds f.x = g.x)
+  thus f c= g implies dom f c= dom g & for x st x in dom f holds f.x = g.x
   proof
     assume
 A1: f c= g;
     hence dom f c= dom g by RELAT_1:25;
     let x;
-    assume x in dom f;
+    assume
+    x in dom f;
     then [x,f.x] in f by FUNCT_1:def 4;
     hence thesis by A1,FUNCT_1:8;
   end;
   assume that
 A2: dom f c= dom g and
-A3: (for x st x in dom f holds f.x = g.x);
+A3: for x st x in dom f holds f.x = g.x;
   let x,y;
-  assume [x,y] in f;
-  then y = f.x & x in dom f by FUNCT_1:8;
-  then y = g.x & x in dom g by A2,A3;
-  hence thesis by FUNCT_1:def 4;
+  assume
+A4: [x,y] in f;
+  then
+A5: x in dom f by FUNCT_1:8;
+  y = f.x by A4,FUNCT_1:8;
+  then y = g.x by A3,A5;
+  hence thesis by A2,A5,FUNCT_1:def 4;
 end;
 
 theorem
@@ -56,7 +60,8 @@ proof
 A1: dom f = dom g and
 A2: f c= g;
   [x,y] in f iff [x,y] in g
-  proof thus [x,y] in f implies [x,y] in g by A2;
+  proof
+    thus [x,y] in f implies [x,y] in g by A2;
     assume
 A3: [x,y] in g;
     then x in dom f by A1,RELAT_1:def 4;
@@ -70,7 +75,8 @@ Lm1: rng f /\ rng h = {} & x in dom f & y in dom h implies f.x <> h.y
 proof
   assume
 A1: rng f /\ rng h = {};
-  assume x in dom f & y in dom h;
+  assume
+  x in dom f & y in dom h;
   then f.x in rng f & h.y in rng h by FUNCT_1:def 5;
   hence thesis by A1,XBOOLE_0:def 4;
 end;
@@ -80,7 +86,8 @@ canceled 2;
 theorem
   [x,z] in (g*f) implies [x,f.x] in f & [f.x,z] in g
 proof
-  assume [x,z] in (g*f);
+  assume
+  [x,z] in (g*f);
   then ex y st [x,y] in f & [y,z] in g by RELAT_1:def 8;
   hence thesis by FUNCT_1:8;
 end;
@@ -92,7 +99,8 @@ theorem
 
 Lm2: [x,y] in {[x1,y1]} implies x = x1 & y = y1
 proof
-  assume [x,y] in {[x1,y1]};
+  assume
+  [x,y] in {[x1,y1]};
   then [x,y] = [x1,y1] by TARSKI:def 1;
   hence thesis by ZFMISC_1:33;
 end;
@@ -100,7 +108,8 @@ end;
 theorem
   f = {[x,y]} implies f.x = y
 proof
-  assume f = {[x,y]};
+  assume
+  f = {[x,y]};
   then [x,y] in f by TARSKI:def 1;
   hence thesis by FUNCT_1:8;
 end;
@@ -110,22 +119,29 @@ canceled;
 theorem Th18:
   dom f = {x} implies f = {[x,f.x]}
 proof
+  reconsider g = {[x,f.x]} as Function;
   assume
 A1: dom f = {x};
-  reconsider g = {[x,f.x]} as Function;
   [y,z] in f iff [y,z] in g
   proof
     thus [y,z] in f implies [y,z] in g
     proof
-      assume [y,z] in f;
-      then y in {x} & z in rng f & rng f = {f.x}
-      by A1,FUNCT_1:14,RELAT_1:def 4,def 5;
-      then y = x & z = f.x by TARSKI:def 1;
-      hence thesis by TARSKI:def 1;
+      assume
+A2:   [y,z] in f;
+      then y in {x} by A1,RELAT_1:def 4;
+      then
+A3:   y = x by TARSKI:def 1;
+A4:   rng f = {f.x} by A1,FUNCT_1:14;
+      z in rng f by A2,RELAT_1:def 5;
+      then z = f.x by A4,TARSKI:def 1;
+      hence thesis by A3,TARSKI:def 1;
     end;
-    assume [y,z] in g;
-    then y = x & z = f.x & x in dom f by A1,Lm2,TARSKI:def 1;
-    hence thesis by FUNCT_1:def 4;
+    assume
+    [y,z] in g;
+    then
+A5: y = x & z = f.x by Lm2;
+    x in dom f by A1,TARSKI:def 1;
+    hence thesis by A5,FUNCT_1:def 4;
   end;
   hence thesis by RELAT_1:def 2;
 end;
@@ -135,10 +151,10 @@ theorem
 proof
   thus {[x1,y1],[x2,y2]} is Function & x1 = x2 implies y1 = y2
   proof
+A1: [x1,y1] in {[x1,y1],[x2,y2]} & [x2,y2] in {[x1,y1],[x2,y2]} by TARSKI:
+    def 2;
     assume
-A1: {[x1,y1],[x2,y2]} is Function;
-    [x1,y1] in {[x1,y1],[x2,y2]} & [x2,y2] in
-    {[x1,y1],[x2,y2]} by TARSKI:def 2;
+    {[x1,y1],[x2,y2]} is Function;
     hence thesis by A1,FUNCT_1:def 1;
   end;
   assume
@@ -146,22 +162,23 @@ A2: x1 = x2 implies y1 = y2;
   now
     thus p in {[x1,y1],[x2,y2]} implies ex x,y st [x,y] = p
     proof
-      assume p in {[x1,y1],[x2,y2]};
+      assume
+      p in {[x1,y1],[x2,y2]};
       then p = [x1,y1] or p = [x2,y2] by TARSKI:def 2;
       hence thesis;
     end;
     let x,z1,z2;
-    assume
-A3: [x,z1] in {[x1,y1],[x2,y2]} & [x,z2] in {[x1,y1],[x2,y2]};
-A4: [x,z1] = [x1,y1] & [x,z2] = [x1,y1] or [x,z1] = [x2,y2] & [x,z2] = [x2,y2]
-    implies z1 = y1 & z2 = y1 or z1 = y2 & z2 = y2 by ZFMISC_1:33;
-    now
-      assume [x,z1] = [x1,y1] & [x,z2] = [x2,y2] or
-      [x,z1] = [x2,y2] & [x,z2] = [x1,y1];
-      then x = x1 & x = x2 & (z1 = y1 & z2 = y2 or z1 = y2 & z2 = y1)
-      by ZFMISC_1:33;
-      hence z1 = z2 by A2;
+A3: [x,z1] = [x1,y1] & [x,z2] = [x1,y1] or [x,z1] = [x2,y2] & [x,z2] = [
+    x2,y2] implies z1 = y1 & z2 = y1 or z1 = y2 & z2 = y2 by ZFMISC_1:33;
+A4: now
+      assume
+A5:   [x,z1] = [x1,y1] & [x,z2] = [x2,y2] or [x,z1] = [x2,y2] & [x,z2
+      ] = [x1,y1];
+      then x = x1 & x = x2 by ZFMISC_1:33;
+      hence z1 = z2 by A2,A5,ZFMISC_1:33;
     end;
+    assume
+    [x,z1] in {[x1,y1],[x2,y2]} & [x,z2] in {[x1,y1],[x2,y2]};
     hence z1 = z2 by A3,A4,TARSKI:def 2;
   end;
   hence thesis by FUNCT_1:def 1;
@@ -170,39 +187,44 @@ end;
 canceled 5;
 
 theorem Th25:
-  f is one-to-one iff for x1,x2,y st [x1,y] in f & [x2,y] in f holds x1 = x2
+  f is one-to-one iff for x1,x2,y st [x1,y] in f & [x2,y] in f
+  holds x1 = x2
 proof
-  thus f is one-to-one implies
-  for x1,x2,y st [x1,y] in f & [x2,y] in f holds x1 = x2
+  thus f is one-to-one implies for x1,x2,y st [x1,y] in f & [x2,y] in f holds
+  x1 = x2
   proof
     assume
 A1: f is one-to-one;
     let x1,x2,y;
-    assume [x1,y] in f & [x2,y] in f;
-    then x1 in dom f & x2 in dom f & f.x1 = y & f.x2 = y by FUNCT_1:8;
-    hence thesis by A1,FUNCT_1:def 8;
+    assume
+A2: [x1,y] in f & [x2,y] in f;
+    then
+A3: f.x1 = y & f.x2 = y by FUNCT_1:8;
+    x1 in dom f & x2 in dom f by A2,FUNCT_1:8;
+    hence thesis by A1,A3,FUNCT_1:def 8;
   end;
   assume
-A2: for x1,x2,y st [x1,y] in f & [x2,y] in f holds x1 = x2;
+A4: for x1,x2,y st [x1,y] in f & [x2,y] in f holds x1 = x2;
   let x1,x2;
-  assume x1 in dom f & x2 in dom f & f.x1 = f.x2;
+  assume
+  x1 in dom f & x2 in dom f & f.x1 = f.x2;
   then [x1,f.x1] in f & [x2,f.x1] in f by FUNCT_1:8;
-  hence thesis by A2;
+  hence thesis by A4;
 end;
 
 theorem Th26:
   g c= f & f is one-to-one implies g is one-to-one
 proof
-  assume that
-A1: g c= f and
-A2: f is one-to-one;
-  for x1,x2,y st [x1,y] in g & [x2,y] in g holds x1 = x2 by A1,A2,Th25;
+  assume
+  g c= f & f is one-to-one;
+  then for x1,x2,y st [x1,y] in g & [x2,y] in g holds x1 = x2 by Th25;
   hence thesis by Th25;
 end;
 
-registration let f,X;
- cluster f /\ X -> Function-like;
- coherence by Th6,XBOOLE_1:17;
+registration
+  let f,X;
+  cluster f /\ X -> Function-like;
+  coherence by Th6,XBOOLE_1:17;
 end;
 
 canceled 2;
@@ -211,14 +233,15 @@ theorem
   x in dom(f /\ g) implies (f /\ g).x = f.x
 proof
   set y = (f /\ g).x;
-  assume x in dom(f /\ g);
+  assume
+  x in dom(f /\ g);
   then [x,y] in (f /\ g) by FUNCT_1:def 4;
   then [x,y] in f by XBOOLE_0:def 4;
   hence thesis by FUNCT_1:8;
 end;
 
 theorem
-   f is one-to-one implies f /\ g is one-to-one by Th26,XBOOLE_1:17;
+  f is one-to-one implies f /\ g is one-to-one by Th26,XBOOLE_1:17;
 
 theorem
   dom f misses dom g implies f \/ g is Function
@@ -228,12 +251,15 @@ A1: dom f /\ dom g = {};
   now
     thus p in f \/ g implies ex x,y st [x,y] = p by RELAT_1:def 1;
     let x,y1,y2;
-A2: not (x in dom f & x in dom g) by A1,XBOOLE_0:def 4;
-    assume [x,y1] in f \/ g;
+    assume
+    [x,y1] in f \/ g;
     then
-A3: [x,y1] in f or [x,y1] in g by XBOOLE_0:def 3;
-    assume [x,y2] in f \/ g;
-    then [x,y2] in f or [x,y2] in g by XBOOLE_0:def 3;
+A2: [x,y1] in f or [x,y1] in g by XBOOLE_0:def 3;
+    assume
+    [x,y2] in f \/ g;
+    then
+A3: [x,y2] in f or [x,y2] in g by XBOOLE_0:def 3;
+    not (x in dom f & x in dom g) by A1,XBOOLE_0:def 4;
     hence y1 = y2 by A2,A3,FUNCT_1:def 1,RELAT_1:def 4;
   end;
   hence thesis by FUNCT_1:def 1;
@@ -248,12 +274,14 @@ proof
 A1: h = f \/ g;
   thus x in dom h implies x in dom f or x in dom g
   proof
-    assume x in dom h;
+    assume
+    x in dom h;
     then [x,h.x] in h by FUNCT_1:def 4;
     then [x,h.x] in f or [x,h.x] in g by A1,XBOOLE_0:def 3;
     hence thesis by RELAT_1:def 4;
   end;
-  assume x in dom f or x in dom g;
+  assume
+  x in dom f or x in dom g;
   then [x,f.x] in f or [x,g.x] in g by FUNCT_1:def 4;
   then [x,f.x] in h or [x,g.x] in h by A1,XBOOLE_0:def 3;
   hence thesis by RELAT_1:def 4;
@@ -264,7 +292,8 @@ canceled 2;
 theorem Th35:
   x in dom g & h = f \/ g implies h.x = g.x
 proof
-  assume x in dom g;
+  assume
+  x in dom g;
   then [x,g.x] in g by FUNCT_1:def 4;
   then h = f \/ g implies [x,g.x] in h by XBOOLE_0:def 3;
   hence thesis by FUNCT_1:8;
@@ -273,7 +302,8 @@ end;
 theorem
   x in dom h & h = f \/ g implies h.x = f.x or h.x = g.x
 proof
-  assume x in dom h;
+  assume
+  x in dom h;
   then [x,h.x] in h by FUNCT_1:def 4;
   then h = f \/ g implies [x,h.x] in f or [x,h.x] in g by XBOOLE_0:def 3;
   hence thesis by FUNCT_1:8;
@@ -292,17 +322,19 @@ A3: rng f /\ rng g = {};
     assume that
 A4: x1 in dom h & x2 in dom h and
 A5: h.x1 = h.x2;
-    (x1 in dom f & x2 in dom f implies h.x1 = f.x1 & h.x2 = f.x2) &
-    (x1 in dom g & x2 in dom g implies h.x1 = g.x1 & h.x2 = g.x2) by A2,Th35;
-    then
-A6: x1 in dom f & x2 in dom f or x1 in dom g & x2 in dom g implies x1 = x2
-    by A1,A5,FUNCT_1:def 8;
-    now
-      assume x1 in dom f & x2 in dom g or x1 in dom g & x2 in dom f;
-      then h.x1 = f.x1 & h.x2 = g.x2 & f.x1 <> g.x2 or
-      h.x1 = g.x1 & h.x2 = f.x2 & f.x2 <> g.x1 by A2,A3,Lm1,Th35;
+A6: now
+      assume
+      x1 in dom f & x2 in dom g or x1 in dom g & x2 in dom f;
+      then
+      h.x1 = f.x1 & h.x2 = g.x2 & f.x1 <> g.x2 or h.x1 = g.x1 & h.x2 = f.
+      x2 & f.x2 <> g.x1 by A2,A3,Lm1,Th35;
       hence x1 = x2 by A5;
     end;
+A7: x1 in dom g & x2 in dom g implies h.x1 = g.x1 & h.x2 = g.x2 by A2,
+    Th35;
+    x1 in dom f & x2 in dom f implies h.x1 = f.x1 & h.x2 = f.x2 by A2,Th35;
+    then x1 in dom f & x2 in dom f or x1 in dom g & x2 in dom g implies x1 =
+    x2 by A1,A5,A7,FUNCT_1:def 8;
     hence x1 = x2 by A2,A4,A6,Lm3;
   end;
   hence thesis by FUNCT_1:def 8;
@@ -323,7 +355,8 @@ proof
 A1: f is one-to-one;
   let x,y;
   dom(f") = rng(f) by A1,FUNCT_1:55;
-  then y in dom(f") & x = (f").y iff x in dom f & y = f.x by A1,FUNCT_1:54;
+  then y in dom(f") & x = (f").y iff x in dom f & y = f.x by A1,
+  FUNCT_1:54;
   hence thesis by FUNCT_1:8;
 end;
 
@@ -332,7 +365,8 @@ canceled;
 theorem
   f = {} implies f" = {}
 proof
-  assume f = {};
+  assume
+  f = {};
   then dom(f") = {} by FUNCT_1:55,RELAT_1:60;
   hence thesis;
 end;
@@ -341,7 +375,8 @@ canceled 2;
 
 theorem
   x in dom f & x in X iff [x,f.x] in f|X
-proof x in dom f iff [x,f.x] in f by FUNCT_1:def 4,RELAT_1:def 4;
+proof
+  x in dom f iff [x,f.x] in f by FUNCT_1:def 4,RELAT_1:def 4;
   hence thesis by RELAT_1:def 11;
 end;
 
@@ -352,28 +387,29 @@ theorem Th64:
 proof
   assume
 A1: g c= f;
-  then (g|dom g) c= (f|dom g) by RELAT_1:105;
-  then
-A2: g c= (f|dom g) by RELAT_1:97;
   [x,y] in (f|dom g) implies [x,y] in g
   proof
     assume
-A3: [x,y] in (f|dom g);
+A2: [x,y] in (f|dom g);
     then x in dom g by RELAT_1:def 11;
     then
-A4: [x,g.x] in g by FUNCT_1:def 4;
-    then [x,g.x] in f & [x,y] in f by A1,A3,RELAT_1:def 11;
-    hence thesis by A4,FUNCT_1:def 1;
+A3: [x,g.x] in g by FUNCT_1:def 4;
+    [x,y] in f by A2,RELAT_1:def 11;
+    hence thesis by A1,A3,FUNCT_1:def 1;
   end;
-  then (f|dom g) c= g by RELAT_1:def 3;
-  hence thesis by A2,XBOOLE_0:def 10;
+  then
+A4: (f|dom g) c= g by RELAT_1:def 3;
+  (g|dom g) c= (f|dom g) by A1,RELAT_1:105;
+  then g c= (f|dom g) by RELAT_1:97;
+  hence thesis by A4,XBOOLE_0:def 10;
 end;
 
 canceled 2;
 
 theorem
   x in dom f & f.x in Y iff [x,f.x] in Y|f
-proof x in dom f iff [x,f.x] in f by FUNCT_1:def 4,RELAT_1:def 4;
+proof
+  x in dom f iff [x,f.x] in f by FUNCT_1:def 4,RELAT_1:def 4;
   hence thesis by RELAT_1:def 12;
 end;
 
@@ -384,23 +420,23 @@ theorem
 proof
   assume
 A1: g c= f;
-  then (rng g|g) c= (rng g|f) by RELAT_1:132;
-  then
-A2: g c= (rng g|f) by RELAT_1:125;
   assume
-A3: f is one-to-one;
+A2: f is one-to-one;
   [x,y] in (rng g|f) implies [x,y] in g
   proof
     assume
-A4: [x,y] in (rng g|f);
+A3: [x,y] in (rng g|f);
     then y in rng g by RELAT_1:def 12;
-    then consider x1 such that
-A5: [x1,y] in g by RELAT_1:def 5;
-    [x1,y] in f & [x,y] in f by A1,A4,A5,RELAT_1:def 12;
-    hence thesis by A3,A5,Th25;
+    then
+A4: ex x1 st [x1,y] in g by RELAT_1:def 5;
+    [x,y] in f by A3,RELAT_1:def 12;
+    hence thesis by A1,A2,A4,Th25;
   end;
-  then (rng g|f) c= g by RELAT_1:def 3;
-  hence thesis by A2,XBOOLE_0:def 10;
+  then
+A5: (rng g|f) c= g by RELAT_1:def 3;
+  (rng g|g) c= (rng g|f) by A1,RELAT_1:132;
+  then g c= (rng g|f) by RELAT_1:125;
+  hence thesis by A5,XBOOLE_0:def 10;
 end;
 
 canceled 7;
@@ -410,7 +446,8 @@ theorem
 proof
   thus x in f"Y implies [x,f.x] in f & f.x in Y
   proof
-    assume x in f"Y;
+    assume
+    x in f"Y;
     then ex y st [x,y] in f & y in Y by RELAT_1:def 14;
     hence thesis by FUNCT_1:8;
   end;
@@ -422,20 +459,22 @@ begin :: Addenda
 :: from HAHNBAN
 
 theorem
-  for X being set, f,g being Function st X c= dom f & f c= g holds f|X = g|X
+  for X being set, f,g being Function st X c= dom f & f c= g holds f|X =
+  g|X
 proof
   let X be set, f,g be Function such that
 A1: X c= dom f;
-  assume f c= g;
+  assume
+  f c= g;
   hence f|X = g|(dom f)|X by Th64
     .= g|((dom f) /\ X) by RELAT_1:100
     .= g|X by A1,XBOOLE_1:28;
 end;
-
 :: from AMI_3
 
 theorem Th89:
-  for f being Function, x being set st x in dom f holds f|{x} = {[x,f.x]}
+  for f being Function, x being set st x in dom f holds f|{x} = {[
+  x,f.x]}
 proof
   let f be Function, x be set such that
 A1: x in dom f;
@@ -445,7 +484,6 @@ A2: x in {x} by TARSKI:def 1;
   hence f|{x} = {[x,(f|{x}).x]} by Th18
     .= {[x,f.x]} by A2,FUNCT_1:72;
 end;
-
 :: from AMI_3, 2007.06.14, A.T.
 
 theorem Th90:
@@ -461,7 +499,8 @@ A3: x in dom f;
     hence f|{x} = {[x,g.x]} by A2,Th89
       .= g|{x} by A1,A3,Th89;
   end;
-  suppose not x in dom f;
+  suppose
+    not x in dom f;
     then
 A4: {x} misses dom f by ZFMISC_1:56;
     hence f|{x} = {} by RELAT_1:95
@@ -470,31 +509,29 @@ A4: {x} misses dom f by ZFMISC_1:56;
 end;
 
 theorem Th91:
-  for f,g being Function, x,y being set st dom f = dom g
-  & f.x = g.x & f.y = g.y holds f|{x,y} = g|{x,y}
+  for f,g being Function, x,y being set st dom f = dom g & f.x = g
+  .x & f.y = g.y holds f|{x,y} = g|{x,y}
 proof
-  let f,g be Function, x,y be set such that
-A1: dom f = dom g and
-A2: f.x = g.x and
-A3: f.y = g.y;
-A4: f|{x} = g|{x} by A1,A2,Th90;
-A5: f|{y} = g|{y} by A1,A3,Th90;
+  let f,g be Function, x,y be set;
+  assume
+  dom f = dom g & f.x = g.x & f.y = g.y;
+  then
+A1: f|{x} = g|{x} & f|{y} = g|{y} by Th90;
   {x,y} = {x} \/ {y} by ENUMSET1:41;
-  hence thesis by A4,A5,RELAT_1:185;
+  hence thesis by A1,RELAT_1:185;
 end;
 
 theorem
-  for f,g being Function, x,y,z being set st dom f = dom g
-  & f.x = g.x & f.y = g.y & f.z = g.z holds f|{x,y,z} = g|{x,y,z}
+  for f,g being Function, x,y,z being set st dom f = dom g & f.x = g.x &
+  f.y = g.y & f.z = g.z holds f|{x,y,z} = g|{x,y,z}
 proof
-  let f,g be Function, x,y,z be set such that
-A1: dom f = dom g and
-A2: f.x = g.x & f.y = g.y and
-A3: f.z = g.z;
-A4: f|{x,y} = g|{x,y} by A1,A2,Th91;
-A5: f|{z} = g|{z} by A1,A3,Th90;
+  let f,g be Function, x,y,z be set;
+  assume
+  dom f = dom g & f.x = g.x & f.y = g.y & f.z = g.z;
+  then
+A1: f|{x,y} = g|{x,y} & f|{z} = g|{z} by Th90,Th91;
   {x,y,z} = {x,y} \/ {z} by ENUMSET1:43;
-  hence thesis by A4,A5,RELAT_1:185;
+  hence thesis by A1,RELAT_1:185;
 end;
 
 :: from AMISTD_2, 2007.07.26, A.T.
@@ -505,7 +542,8 @@ registration
   coherence
   proof
     let x,y1,y2;
-    assume [x,y1] in f \ A & [x,y2] in f \ A;
+    assume
+    [x,y1] in f \ A & [x,y2] in f \ A;
     then [x,y1] in f & [x,y2] in f by XBOOLE_0:def 5;
     hence thesis by FUNCT_1:def 1;
   end;
@@ -516,9 +554,8 @@ theorem
 proof
   let f, g be Function such that
 A1: x in dom f \ dom g;
-A2: f \ g c= f by XBOOLE_1:36;
-  dom f \ dom g c= dom (f \ g) by RELAT_1:15;
-  hence thesis by A1,A2,Th8;
+  f \ g c= f & dom f \ dom g c= dom (f \ g) by RELAT_1:15,XBOOLE_1:36;
+  hence thesis by A1,Th8;
 end;
 
 :: missing, 2007.06.19, A.T.
@@ -536,13 +573,15 @@ end;
 :: from WELLFND1, 2008.10.08, A.T
 
 theorem
-  for X being set, f, g being Function st f c= g & X c= dom f holds f|X = g|X
+  for X being set, f, g being Function st f c= g & X c= dom f holds f|X
+  = g|X
 proof
   let X be set, f, g be Function;
-  assume
-A1: f c= g & X c= dom f;
-  hence f|X = g|(dom f)|X by Th64
+  assume that
+A1: f c= g and
+A2: X c= dom f;
+  thus f|X = g|(dom f)|X by A1,Th64
     .= g|(X/\ dom f) by RELAT_1:100
-    .= g|X by A1,XBOOLE_1:28;
+    .= g|X by A2,XBOOLE_1:28;
 end;
 

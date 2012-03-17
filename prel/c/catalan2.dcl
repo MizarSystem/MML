@@ -12,6 +12,7 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="DOMAIN_1"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
@@ -37,19 +38,19 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="5">
-<Func kind="K" nr="102"/>
+<Func kind="K" nr="110"/>
 </Adjective>
 <Adjective nr="6"/>
 <Adjective nr="14"/>
 <Adjective nr="17"/>
-<Adjective nr="24"/>
-<Adjective nr="42"/>
-<Adjective nr="43"/>
+<Adjective nr="25"/>
 <Adjective nr="44"/>
 <Adjective nr="45"/>
 <Adjective nr="46"/>
 <Adjective nr="47"/>
-<Adjective nr="54"/>
+<Adjective nr="48"/>
+<Adjective nr="49"/>
+<Adjective nr="56"/>
 </Cluster>
 </RCluster>
 <RCluster aid="CATALAN2" nr="2">
@@ -60,38 +61,38 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="5">
-<Func kind="K" nr="102"/>
+<Func kind="K" nr="110"/>
 </Adjective>
 <Adjective nr="6"/>
 <Adjective nr="14"/>
 <Adjective nr="17" value="false"/>
-<Adjective nr="24"/>
-<Adjective nr="42"/>
-<Adjective nr="43"/>
+<Adjective nr="25"/>
 <Adjective nr="44"/>
 <Adjective nr="45"/>
 <Adjective nr="46"/>
 <Adjective nr="47"/>
-<Adjective nr="54"/>
+<Adjective nr="48"/>
+<Adjective nr="49"/>
+<Adjective nr="56"/>
 </Cluster>
 </RCluster>
 <FCluster aid="CATALAN2" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="102"/>
+<Func kind="K" nr="110"/>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="102"/>
+<Func kind="K" nr="110"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="235">
+<Func kind="K" nr="243">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="24"/>
+<Adjective nr="25"/>
 </Cluster>
 </FCluster>
 </Registrations>

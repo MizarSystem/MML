@@ -12,19 +12,19 @@ environ
       REALSET1, PROB_1, GROUP_1, CARD_1, FUNCT_2, TOPMETR, TMAP_1, FINSOP_1,
       PSCOMP_1, CARD_4, RLVECT_3, BINOP_1, SETWISEO, COH_SP, FUNCOP_1, CARD_5,
       GROUP_3;
- notations BINOP_1, SETWISEO, TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, REALSET1,
-      RELAT_1, FUNCT_1, ORDINAL1, COMPLEX1, RELSET_1, FUNCT_2, FINSEQ_1,
-      ZFMISC_1, PCOMPS_1, PRE_TOPC, FINSET_1, CARD_1, XCMPLX_0, NUMBERS,
-      XXREAL_0, XREAL_0, REAL_1, NAT_1, FINSOP_1, VALUED_1, STRUCT_0, TOPS_2,
-      COMPTS_1, METRIC_1, NEWTON, CARD_3, PROB_1, URYSOHN1, FUNCOP_1, CANTOR_1,
-      DOMAIN_1, TOPMETR, PSCOMP_1, BORSUK_1, TMAP_1;
+ notations BINOP_1, SETWISEO, TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1,
+      FUNCT_1, ORDINAL1, COMPLEX1, RELSET_1, FUNCT_2, FINSEQ_1, ZFMISC_1,
+      PCOMPS_1, PRE_TOPC, FINSET_1, CARD_1, XCMPLX_0, NUMBERS, XXREAL_0,
+      XREAL_0, REAL_1, NAT_1, FINSOP_1, VALUED_1, STRUCT_0, TOPS_2, COMPTS_1,
+      METRIC_1, NEWTON, CARD_3, PROB_1, FUNCOP_1, CANTOR_1, DOMAIN_1, TOPMETR,
+      PSCOMP_1, BORSUK_1, TMAP_1;
  constructors SETFAM_1, SETWISEO, REAL_1, SQUARE_1, NAT_1, PROB_1, FUNCOP_1,
       FINSOP_1, NEWTON, REALSET1, CARD_5, TOPS_2, COMPTS_1, TMAP_1, CANTOR_1,
       PSCOMP_1, URYSOHN3;
- registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, FINSET_1, FRAENKEL,
-      NUMBERS, XXREAL_0, XREAL_0, NAT_1, CARD_1, MEMBERED, FINSEQ_1, CARD_LAR,
-      STRUCT_0, TOPS_1, COMPTS_1, METRIC_1, BORSUK_1, TOPMETR, PSCOMP_1,
-      VALUED_0, VALUED_1, FUNCT_2, CARD_3, FUNCT_1, PRE_TOPC;
+ registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, FINSET_1, NUMBERS,
+      XXREAL_0, XREAL_0, NAT_1, MEMBERED, FINSEQ_1, CARD_LAR, STRUCT_0, TOPS_1,
+      COMPTS_1, METRIC_1, BORSUK_1, TOPMETR, PSCOMP_1, VALUED_0, VALUED_1,
+      FUNCT_2, CARD_3, FUNCT_1, PRE_TOPC;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions PCOMPS_1, TARSKI, BINOP_1, SUBSET_1, COMPTS_1, PRE_TOPC, STRUCT_0;
  theorems FUNCT_1, FUNCT_2, METRIC_1, XREAL_0, XCMPLX_1, ABSVALUE, TOPMETR,
@@ -43,21 +43,28 @@ reserve T, T1 for non empty TopSpace,
 Lm1: for r,s,t be Real st r>=0 & s>=0 & r+s<t holds r<t & s<t
 proof
   let r,s,t be Real such that
-A1: r>=0 & s>=0 & r+s<t;
-  assume r>=t or s>=t;
+A1: r>=0 & s>=0 and
+A2: r+s<t;
+  assume
+  r>=t or s>=t;
   then r+s>=t+0 or s+r>=t+0 by A1,XREAL_1:9;
-  hence thesis by A1;
+  hence thesis by A2;
 end;
 
-Lm2: for
-r1,r2,r3,r4 being Real holds abs(r1-r4)<=abs(r1-r2)+abs(r2-r3)+abs(r3-r4)
+Lm2: for r1,r2,r3,r4 being Real holds abs(r1-r4)<=abs(r1-r2)+abs(r2-r3)+abs(r3
+-r4)
+
 proof
   let r1,r2,r3,r4 be Real;
-  r1-r4=(r1-r2)+(r2-r4) & r2-r4=(r2-r3)+(r3-r4);
+  r2-r4=(r2-r3)+(r3-r4);
+  then abs(r2-r4)<=abs(r2-r3)+abs(r3-r4) by COMPLEX1:142;
+
   then
-A1: abs(r1-r4)<=abs(r1-r2)+abs(r2-r4) &
-  abs(r2-r4)<=abs(r2-r3)+abs(r3-r4) by COMPLEX1:142;
-  then abs(r1-r2)+abs(r2-r4)<=abs(r1-r2)+(abs(r2-r3)+abs(r3-r4))by XREAL_1:9;
+A1: abs(r1-r2)+abs(r2-r4)<=abs(r1-r2)+(abs(r2-r3)+abs(r3-r4))by
+  XREAL_1:9;
+
+  r1-r4=(r1-r2)+(r2-r4);
+  then abs(r1-r4)<=abs(r1-r2)+abs(r2-r4) by COMPLEX1:142;
   hence thesis by A1,XXREAL_0:2;
 end;
 
@@ -66,9 +73,9 @@ definition
   let F be Subset-Family of T;
   attr F is discrete means
   :Def1:
-  for p being Point of T ex O being open Subset of T st p in O &
-  (for A,B being Subset of T st A in F & B in F holds
-  O meets A & O meets B implies A=B);
+  for p being Point of T ex O being open
+  Subset of T st p in O & for A,B being Subset of T st A in F & B in F holds O
+  meets A & O meets B implies A=B;
 end;
 
 registration
@@ -80,7 +87,8 @@ registration
     F c= bool the carrier of T
     proof
       let f be set;
-      assume f in F;
+      assume
+      f in F;
       then f={} or f=the carrier of T by TARSKI:def 2;
       then f c= the carrier of T by XBOOLE_1:2;
       hence thesis;
@@ -90,20 +98,18 @@ registration
     let p be Point of T;
     take O= [#]T;
     thus p in O;
-    (for A,B being Subset of T st A in F & B in F holds
-    O meets A & O meets B implies A=B)
-    proof
-      now
-        let A,B be Subset of T;
-        assume A in F & B in F;
-        then
-A1:     (A={} or A=the carrier of T)&(B={} or B=the carrier of T)
-        by TARSKI:def 2;
-        assume O meets A & O meets B;
-        then O/\A<>{} & O/\B<>{} by XBOOLE_0:def 7;
-        hence A=B by A1;
-      end;
-      hence thesis;
+    now
+      let A,B be Subset of T;
+      assume that
+A1:   A in F and
+A2:   B in F;
+A3:   B={} or B=the carrier of T by A2,TARSKI:def 2;
+      assume
+      O meets A & O meets B;
+      then
+A4:   O/\A<>{} & O/\B<>{} by XBOOLE_0:def 7;
+      A={} or A=the carrier of T by A1,TARSKI:def 2;
+      hence A=B by A3,A4;
     end;
     hence thesis;
   end;
@@ -125,7 +131,8 @@ end;
 
 reserve F,G,H for Subset-Family of T,
   A,B,C,D for Subset of T,
-  O,U for open Subset of T,
+  O,U for open
+  Subset of T,
   p,q for Point of T,
   x,y,X for set;
 
@@ -133,7 +140,8 @@ theorem Th1:
   for F st (ex A st F={A}) holds F is discrete
 proof
   let F;
-  assume ex A st F={A};
+  assume
+  ex A st F={A};
   then consider A such that
 A1: F={A};
   now
@@ -142,10 +150,14 @@ A1: F={A};
     thus p in O;
     now
       let B,C;
-      assume B in F & C in F;
-      then {B}c={A} & {C}c={A} by A1,ZFMISC_1:37;
-      then B=A & C=A by ZFMISC_1:6;
-      hence B=C;
+      assume that
+A2:   B in F and
+A3:   C in F;
+      {B}c={A} by A1,A2,ZFMISC_1:37;
+      then
+A4:   B=A by ZFMISC_1:6;
+      {C}c={A} by A1,A3,ZFMISC_1:37;
+      hence B=C by A4,ZFMISC_1:6;
     end;
     hence for B,C st B in F & C in F holds O meets B & O meets C implies B=C;
   end;
@@ -156,21 +168,23 @@ theorem Th2:
   for F,G st F c= G & G is discrete holds F is discrete
 proof
   let F,G be Subset-Family of T;
-  assume
-A1: F c= G & G is discrete;
+  assume that
+A1: F c= G and
+A2: G is discrete;
   now
     let p;
-    thus ex O st p in O & (for C,D st C in F & D in F holds
-    O meets C & O meets D implies C=D)
+    thus ex O st p in O & for C,D st C in F & D in F holds O meets C & O
+    meets D implies C=D
     proof
       consider U such that
-A2:   p in U &(for C,D st C in G & D in G holds U meets C &
-      U meets D implies C=D) by A1,Def1;
+A3:   p in U & for C,D st C in G & D in G holds U meets C & U meets D
+      implies C=D by A2,Def1;
       take O=U;
-      thus thesis by A1,A2;
+      thus thesis by A1,A3;
     end;
-    hence ex O st p in O & (for C,D st C in F & D in F holds
-    O meets C & O meets D implies C=D);
+    hence
+    ex O st p in O & for C,D st C in F & D in F holds O meets C & O meets
+    D implies C=D;
   end;
   hence thesis by Def1;
 end;
@@ -182,119 +196,169 @@ theorem
   for F,G st F is discrete holds F\G is discrete by Th2,XBOOLE_1:36;
 
 theorem
-  for F,G,H st F is discrete & G is discrete & INTERSECTION(F,G)=H
-  holds H is discrete
+  for F,G,H st F is discrete & G is discrete & INTERSECTION(F,G)=H holds
+  H is discrete
 proof
   let F,G,H;
-  assume
-A1: F is discrete & G is discrete & INTERSECTION(F,G)=H;
+  assume that
+A1: F is discrete and
+A2: G is discrete and
+A3: INTERSECTION(F,G)=H;
   now
     let p;
     consider O such that
-A2: p in O & (for A,B being Subset of T st A in F & B in F holds
-    O meets A & O meets B implies A=B) by A1,Def1;
+A4: p in O and
+A5: for A,B being Subset of T st A in F & B in F holds O meets A & O
+    meets B implies A=B by A1,Def1;
     consider U such that
-A3: p in U &(for A,B being Subset of T st A in G & B in G holds
-    U meets A & U meets B implies A=B) by A1,Def1;
-    set Q=O/\U;
-A4: Q is open & p in Q by A2,A3,TOPS_1:38,XBOOLE_0:def 4;
-    now
+A6: p in U and
+A7: for A,B being Subset of T st A in G & B in G holds U meets A & U
+    meets B implies A=B by A2,Def1;
+A8: now
       let A,B;
-      assume
-A5:   A in INTERSECTION(F,G) & B in INTERSECTION(F,G);
-      then consider af,ag being set such that
-A6:   af in F & ag in G & A=af/\ag by SETFAM_1:def 5;
+      assume that
+A9:   A in INTERSECTION(F,G) and
+A10:  B in INTERSECTION(F,G);
+      consider af,ag being set such that
+A11:  af in F and
+A12:  ag in G and
+A13:  A=af/\ag by A9,SETFAM_1:def 5;
+      assume that
+A14:  (O/\U) meets A and
+A15:  (O/\U) meets B;
       consider bf,bg being set such that
-A7:   bf in F & bg in G & B=bf/\bg by A5,SETFAM_1:def 5;
-      assume (O/\U) meets A & (O/\U) meets B;
-      then (O/\U)/\(af/\ag)<>{}&(O/\U)/\(bf/\bg)<>{} by A6,A7,XBOOLE_0:def 7;
-      then (O/\U/\af)/\ag<>{} & (O/\U/\bf) /\bg <>{} by XBOOLE_1:16;
-      then (O/\af/\U)/\ag <> {} & (O/\bf/\U)/\bg<>{} by XBOOLE_1:16;
-      then (O/\af)/\(U/\ag) <> {} & (O/\bf)/\(U/\bg)<>{} by XBOOLE_1:16;
-      then O/\af <>{} & U/\ag <> {} & O/\bf <>{}& U/\bg <>{};
-      then O meets af & O meets bf & U meets ag & U meets bg by XBOOLE_0:def 7;
-      then af=bf & ag=bg by A2,A3,A6,A7;
-      hence A=B by A6,A7;
+A16:  bf in F and
+A17:  bg in G and
+A18:  B=bf/\bg by A10,SETFAM_1:def 5;
+      (O/\U)/\(bf/\bg)<>{} by A18,A15,XBOOLE_0:def 7;
+      then (O/\U/\bf) /\bg <>{} by XBOOLE_1:16;
+      then
+A19:  (O/\bf/\U)/\bg<>{} by XBOOLE_1:16;
+      then O/\bf <>{};
+      then
+A20:  O meets bf by XBOOLE_0:def 7;
+      (O/\U)/\(af/\ag)<>{} by A13,A14,XBOOLE_0:def 7;
+      then (O/\U/\af)/\ag<>{} by XBOOLE_1:16;
+      then
+A21:  (O/\af/\U)/\ag <> {} by XBOOLE_1:16;
+      then (O/\af)/\(U/\ag) <> {} by XBOOLE_1:16;
+      then U/\ag <> {};
+      then
+A22:  U meets ag by XBOOLE_0:def 7;
+      (O/\bf)/\(U/\bg)<>{} by A19,XBOOLE_1:16;
+      then U/\bg <>{};
+      then
+A23:  U meets bg by XBOOLE_0:def 7;
+      O/\af <>{} by A21;
+      then O meets af by XBOOLE_0:def 7;
+      then af=bf by A5,A11,A16,A20;
+      hence A=B by A7,A12,A13,A17,A18,A22,A23;
     end;
-    hence ex Q being open Subset of T st
-    p in Q &(for A,B being Subset of T st A in H & B in H holds
-    Q meets A & Q meets B implies A=B) by A1,A4;
+    set Q=O/\U;
+    p in Q by A4,A6,XBOOLE_0:def 4;
+    hence ex Q being open Subset of T st p in Q & for A,B being Subset of T st
+    A in H & B in H holds Q meets A & Q meets B implies A=B by A3,A8;
   end;
   hence thesis by Def1;
 end;
 
 theorem Th6:
-  for F,A,B st F is discrete & A in F & B in F holds A=B or A misses B
+  for F,A,B st F is discrete & A in F & B in F holds A=B or A
+  misses B
 proof
   let F,A,B;
-  assume
-A1: F is discrete & A in F & B in F;
-  assume
-A2: A<>B & A meets B;
-  then A/\B <> {}T by XBOOLE_0:def 7;
+  assume that
+A1: F is discrete and
+A2: A in F & B in F;
+  assume that
+A3: A<>B and
+A4: A meets B;
+  A/\B <> {}T by A4,XBOOLE_0:def 7;
   then consider p such that
-A3: p in (A /\ B) by PRE_TOPC:41;
-A4: p in A & p in B by A3,XBOOLE_0:def 4;
+A5: p in (A /\ B) by PRE_TOPC:41;
   consider O such that
-A5: p in O & (for C,D st C in F & D in F holds
-  O meets C & O meets D implies C=D) by A1,Def1;
-A6: O meets A & O meets B implies A=B by A1,A5;
-  {p}c=A & {p} c= B & {p}c=O by A4,A5,ZFMISC_1:37;
-  then {p}c=O/\A & {p} c=O/\B by XBOOLE_1:19;
-  then p in O/\A & p in O/\B by ZFMISC_1:37;
-  hence contradiction by A2,A6,XBOOLE_0:4;
+A6: p in O and
+A7: for C,D st C in F & D in F holds O meets C & O meets D implies C=D
+  by A1,Def1;
+A8: {p}c=O by A6,ZFMISC_1:37;
+  p in B by A5,XBOOLE_0:def 4;
+  then {p} c= B by ZFMISC_1:37;
+  then {p} c=O/\B by A8,XBOOLE_1:19;
+  then
+A9: p in O/\B by ZFMISC_1:37;
+  p in A by A5,XBOOLE_0:def 4;
+  then {p}c=A by ZFMISC_1:37;
+  then {p}c=O/\A by A8,XBOOLE_1:19;
+  then
+A10: p in O/\A by ZFMISC_1:37;
+  O meets A & O meets B implies A=B by A2,A7;
+  hence contradiction by A3,A10,A9,XBOOLE_0:4;
 end;
 
 theorem Th7:
-  F is discrete implies for p ex O st
-  p in O & INTERSECTION({O},F)\{{}} is trivial
+  F is discrete implies for p ex O st p in O & INTERSECTION({O},F)\
+  {{}} is trivial
 proof
   assume
 A1: F is discrete;
   let p;
   consider O such that
-A2: p in O & (for C,D st C in F & D in F holds
-  O meets C & O meets D implies C=D) by A1,Def1;
+A2: p in O and
+A3: for C,D st C in F & D in F holds O meets C & O meets D implies C=D
+  by A1,Def1;
   set I=INTERSECTION({O},F);
-A3: for f,g being set st f in I & g in I holds f=g or f={} or g={}
+A4: for f,g being set st f in I & g in I holds f=g or f={} or g={}
   proof
     let f,g be set;
-    assume
-A4: f in I & g in I;
-    then consider o1,f1 being set such that
-A5: o1 in {O} & f1 in F & f= o1 /\ f1 by SETFAM_1:def 5;
+    assume that
+A5: f in I and
+A6: g in I;
+    consider o1,f1 being set such that
+A7: o1 in {O} and
+A8: f1 in F and
+A9: f= o1 /\ f1 by A5,SETFAM_1:def 5;
     consider o2,g1 being set such that
-A6: o2 in {O} & g1 in F & g= o2 /\ g1 by A4,SETFAM_1:def 5;
-    {o1}c={O} & {o2}c={O} by A5,A6,ZFMISC_1:37;
+A10: o2 in {O} and
+A11: g1 in F and
+A12: g= o2 /\ g1 by A6,SETFAM_1:def 5;
+    {o2}c={O} by A10,ZFMISC_1:37;
     then
-A7: o1=O & o2=O by ZFMISC_1:6;
-    then (O meets f1 & O meets g1)or f={} or g={} by A5,A6,XBOOLE_0:def 7;
-    hence thesis by A2,A5,A6,A7;
+A13: o2=O by ZFMISC_1:6;
+    {o1}c={O} by A7,ZFMISC_1:37;
+    then
+A14: o1=O by ZFMISC_1:6;
+    then O meets f1 & O meets g1 or f={} or g={} by A9,A12,A13, XBOOLE_0:
+    def 7;
+    hence thesis by A3,A8,A9,A11,A12,A14,A13;
   end;
-A8: for f being set st f<>{} & f in I holds I c={{},f}
+A15: for f being set st f<>{} & f in I holds I c={{},f}
   proof
     let f be set;
     assume
-A9: f<>{} & f in I;
+A16: f<>{} & f in I;
     now
       let g be set;
-      assume g in I;
-      then f=g or g={} by A3,A9;
+      assume
+      g in I;
+      then f=g or g={} by A4,A16;
       hence g in {{},f} by TARSKI:def 2;
     end;
     hence thesis by TARSKI:def 3;
   end;
-  now per cases;
-    suppose I\{{}}<>{};
+  now
+    per cases;
+    suppose
+      I\{{}}<>{};
       then consider f being set such that
-A10:  f in I\{{}} by XBOOLE_0:def 1;
-      f in I & f <>{} by A10,ZFMISC_1:64;
+A17:  f in I\{{}} by XBOOLE_0:def 1;
+      f <>{} by A17,ZFMISC_1:64;
       then
-A11:  I c={{},f} by A8;
+A18:  I c={{},f} by A15,A17;
       now
         let g be set;
-        assume g in I;
-        then {g} c={{},f} by A11,ZFMISC_1:37;
+        assume
+        g in I;
+        then {g} c={{},f} by A18,ZFMISC_1:37;
         then g={} or g =f by ZFMISC_1:25;
         then g in {{}} or g in {f} by ZFMISC_1:37;
         hence g in {{}}\/{f} by XBOOLE_0:def 3;
@@ -304,7 +368,8 @@ A11:  I c={{},f} by A8;
       then I\{{}}={} or I\{{}}={f} by ZFMISC_1:39;
       hence I\{{}} is trivial by REALSET1:def 4;
     end;
-    suppose I\{{}}={};
+    suppose
+      I\{{}}={};
       hence I\{{}} is trivial by REALSET1:def 4;
     end;
   end;
@@ -312,45 +377,58 @@ A11:  I c={{},f} by A8;
 end;
 
 theorem
-  F is discrete iff (for p ex O st p in O & INTERSECTION({O},F)\{{}}
-  is trivial) & (for A,B st A in F & B in F holds A=B or A misses B)
+  F is discrete iff (for p ex O st p in O & INTERSECTION({O},F)\{{}} is
+  trivial) & for A,B st A in F & B in F holds A=B or A misses B
 proof
   now
     let F;
-    (for p ex O st p in O & INTERSECTION({O},F)\{{}} is trivial) &
-    (for A,B st A in F & B in F holds A=B or A misses B) implies F is discrete
+    (for p ex O st p in O & INTERSECTION({O},F)\{{}} is trivial) & (for A,
+    B st A in F & B in F holds A=B or A misses B) implies F is discrete
     proof
+      assume that
+A1:   for p ex O st p in O & INTERSECTION({O},F)\{{}} is trivial and
+A2:   for A,B st A in F & B in F holds A=B or A misses B;
       assume
-A1:   (for p ex O st p in O & INTERSECTION({O},F)\{{}} is trivial) &
-      (for A,B st A in F & B in F holds A=B or A misses B);
-      assume not F is discrete;
+      not F is discrete;
       then consider p such that
-A2:   for O holds not p in O or not (for A,B st A in F & B in F holds
+A3:   for O holds not p in O or not (for A,B st A in F & B in F holds
       O meets A & O meets B implies A=B) by Def1;
       consider O such that
-A3:   p in O & INTERSECTION({O},F)\{{}} is trivial by A1;
-      set I=INTERSECTION({O},F);
+A4:   p in O and
+A5:   INTERSECTION({O},F)\{{}} is trivial by A1;
       consider A,B such that
-A4:   A in F & B in F & O meets A & O meets B & A<>B by A2,A3;
-A5:   O/\A<>{} & O/\B<>{} by A4,XBOOLE_0:def 7;
-      O in {O} by ZFMISC_1:37;
-      then O/\A in I & O/\B in I by A4,SETFAM_1:def 5;
-      then
-A6:   O/\A in I\{{}} & O/\B in I\{{}} by A5,ZFMISC_1:64;
+A6:   A in F and
+A7:   B in F and
+A8:   O meets A and
+A9:   O meets B and
+A10:  A<>B by A3,A4;
+A11:  O/\B<>{} by A9,XBOOLE_0:def 7;
+      set I=INTERSECTION({O},F);
       consider a being set such that
-A7:   I\{{}}={} or I\{{}}={a} by A3,REALSET1:def 4;
-      {O/\A}c={a} & {O/\B} c= {a} by A6,A7,ZFMISC_1:37;
+A12:  I\{{}}={} or I\{{}}={a} by A5,REALSET1:def 4;
+A13:  O in {O} by ZFMISC_1:37;
+      then O/\B in I by A7,SETFAM_1:def 5;
+      then O/\B in I\{{}} by A11,ZFMISC_1:64;
+      then {O/\B} c= {a} by A12,ZFMISC_1:37;
       then
-A8:   O/\A=a & O/\B=a by ZFMISC_1:6;
-      consider f being set such that
-A9:   f in O/\A by A5,XBOOLE_0:def 1;
-      f in A & f in B by A8,A9,XBOOLE_0:def 4;
-      then f in A/\B & A misses B by A1,A4,XBOOLE_0:def 4;
-      hence thesis by XBOOLE_0:def 7;
+A14:  O/\B=a by ZFMISC_1:6;
+A15:  O/\A<>{} by A8,XBOOLE_0:def 7;
+      then consider f being set such that
+A16:  f in O/\A by XBOOLE_0:def 1;
+A17:  f in A by A16,XBOOLE_0:def 4;
+      O/\A in I by A6,A13,SETFAM_1:def 5;
+      then O/\A in I\{{}} by A15,ZFMISC_1:64;
+      then {O/\A}c={a} by A12,ZFMISC_1:37;
+      then O/\A=a by ZFMISC_1:6;
+      then f in B by A14,A16,XBOOLE_0:def 4;
+      then
+A18:  f in A/\B by A17,XBOOLE_0:def 4;
+      A misses B by A2,A6,A7,A10;
+      hence thesis by A18,XBOOLE_0:def 7;
     end;
-    hence F is discrete iff (for p ex O st p in O & INTERSECTION({O},F)\{{}}
-
-is trivial)&(for A,B st A in F & B in F holds A=B or A misses B) by Th6,Th7;
+    hence
+    F is discrete iff (for p ex O st p in O & INTERSECTION({O},F)\{{}} is
+    trivial)& for A,B st A in F & B in F holds A=B or A misses B by Th6,Th7;
   end;
   hence thesis;
 end;
@@ -360,7 +438,8 @@ proof
   let O,A;
   O misses A implies O misses Cl A
   proof
-    assume O misses A;
+    assume
+    O misses A;
     then A c= O` by SUBSET_1:43;
     then Cl A c=O` by TOPS_1:31;
     hence thesis by SUBSET_1:43;
@@ -378,19 +457,26 @@ registration
     proof
       let p;
       consider O such that
-A1:   p in O & (for A,B st A in F & B in F holds O meets A & O meets B
-      implies A=B) by Def1;
+A1:   p in O and
+A2:   for A,B st A in F & B in F holds O meets A & O meets B implies A
+      =B by Def1;
       now
         let A,B;
-        assume
-A2:     A in clf F & B in clf F;
-        then consider C such that
-A3:     A = Cl C & C in F by PCOMPS_1:def 3;
+        assume that
+A3:     A in clf F and
+A4:     B in clf F;
+        consider C such that
+A5:     A = Cl C and
+A6:     C in F by A3,PCOMPS_1:def 3;
+        assume that
+A7:     O meets A and
+A8:     O meets B;
         consider D such that
-A4:     B = Cl D & D in F by A2,PCOMPS_1:def 3;
-        assume O meets A & O meets B;
-        then O meets C &O meets D & C in F & D in F by A3,A4,Lm3;
-        hence A=B by A1,A3,A4;
+A9:     B = Cl D and
+A10:    D in F by A4,PCOMPS_1:def 3;
+A11:    O meets D by A9,A8,Lm3;
+        O meets C by A5,A7,Lm3;
+        hence A=B by A2,A5,A6,A9,A10,A11;
       end;
       hence thesis by A1;
     end;
@@ -401,40 +487,49 @@ Lm4: for F for A st A in F holds Cl A c= Cl union F
 proof
   let F;
   let A;
-  assume A in F;
+  assume
+  A in F;
   then for f being set st f in A holds f in union F by TARSKI:def 4;
   then A c= union F by TARSKI:def 3;
   hence thesis by PRE_TOPC:49;
 end;
 
 theorem
-  for F st F is discrete holds ( for A,B st A in F & B in F holds
-  Cl(A/\B)=Cl A /\ Cl B)
+  for F st F is discrete holds for A,B st A in F & B in F holds Cl(A/\B)
+  =Cl A /\ Cl B
 proof
   let F such that
 A1: F is discrete;
   let A,B such that
 A2: A in F & B in F;
-  now per cases by A1,A2,Th6;
-    suppose A misses B;
+  now
+    per cases by A1,A2,Th6;
+    suppose
+      A misses B;
       then
 A3:   A/\B ={}T by XBOOLE_0:def 7;
       (Cl A /\ Cl B)={}
       proof
-        assume (Cl A /\ Cl B)<>{};
+        assume
+        (Cl A /\ Cl B)<>{};
         then consider x such that
 A4:     x in (Cl A /\ Cl B) by XBOOLE_0:def 1;
         consider O such that
-A5:     x in O & (for A,B st A in F & B in F holds
-        O meets A & O meets B implies A=B) by A1,A4,Def1;
-        x in Cl A & x in Cl B by A4,XBOOLE_0:def 4;
-        then O meets A & O meets B by A5,PRE_TOPC:def 13;
-        then A=B & O meets A by A2,A5;
-        hence thesis by A3,XBOOLE_1:65;
+A5:     x in O and
+A6:     for A,B st A in F & B in F holds O meets A & O meets B
+        implies A=B by A1,A4,Def1;
+        x in Cl A by A4,XBOOLE_0:def 4;
+        then
+A7:     O meets A by A5,PRE_TOPC:def 13;
+        x in Cl B by A4,XBOOLE_0:def 4;
+        then O meets B by A5,PRE_TOPC:def 13;
+        then A=B by A2,A6,A7;
+        hence thesis by A3,A7,XBOOLE_1:65;
       end;
       hence thesis by A3,PRE_TOPC:52;
     end;
-    suppose A=B;
+    suppose
+      A=B;
       hence thesis;
     end;
   end;
@@ -447,51 +542,66 @@ proof
   let F;
   assume
 A1: F is discrete;
-A2: union (clf F)c=Cl union(F)
-  proof
-    let f be set;
-    assume f in union (clf F);
-    then consider Af being set such that
-A3: f in Af & Af in clf F by TARSKI:def 4;
-    reconsider Af as Subset of T by A3;
-    consider A such that
-A4: Cl A =Af & A in F by A3,PCOMPS_1:def 3;
-    Af c= Cl union F by A4,Lm4;
-    hence thesis by A3;
-  end;
-  Cl union(F) c= union (clf F)
+A2: Cl union(F) c= union (clf F)
   proof
     let x;
     assume
-A5: x in Cl union(F);
+A3: x in Cl union(F);
     then consider O such that
-A6: x in O &(for A,B st A in F & B in F holds
-    O meets A & O meets B implies A=B) by A1,Def1;
-    not (O misses union(F)) by A5,A6,PRE_TOPC:def 13;
+A4: x in O and
+A5: for A,B st A in F & B in F holds O meets A & O meets B implies A=
+    B by A1,Def1;
+    not O misses union(F) by A3,A4,PRE_TOPC:def 13;
     then consider f being set such that
-A7: f in O & f in union(F) by XBOOLE_0:3;
+A6: f in O and
+A7: f in union(F) by XBOOLE_0:3;
     consider AF being set such that
-A8: f in AF & AF in F by A7,TARSKI:def 4;
-    reconsider AF as Subset of T by A8;
-A9: x in O & O meets AF & AF in F by A6,A7,A8,XBOOLE_0:3;
-    for D st D is open & x in D holds not (D misses AF)
+A8: f in AF and
+A9: AF in F by A7,TARSKI:def 4;
+    reconsider AF as Subset of T by A9;
+A10: O meets AF by A6,A8,XBOOLE_0:3;
+    for D st D is open & x in D holds not D misses AF
     proof
-      assume ex D st D is open & x in D & D misses AF;
+      assume
+      ex D st D is open & x in D & D misses AF;
       then consider D such that
-A10:  D is open & x in D & D misses AF;
-      D/\O is open & x in D/\O by A6,A10,TOPS_1:38,XBOOLE_0:def 4;
-      then (D/\O) meets union(F) by A5,PRE_TOPC:def 13;
+A11:  D is open and
+A12:  x in D and
+A13:  D misses AF;
+      x in D/\O by A4,A12,XBOOLE_0:def 4;
+      then (D/\O) meets union(F) by A3,A11,PRE_TOPC:def 13;
       then consider y such that
-A11:  y in (D/\O) & y in union(F) by XBOOLE_0:3;
+A14:  y in (D/\O) and
+A15:  y in union(F) by XBOOLE_0:3;
       consider BF being set such that
-A12:  y in BF & BF in F by A11,TARSKI:def 4;
-      y in D & y in O by A11,XBOOLE_0:def 4;
-      then y in O/\BF & y in D/\BF & BF in F by A12,XBOOLE_0:def 4;
-      then O meets BF & D meets BF by XBOOLE_0:def 7;
-      hence contradiction by A6,A9,A10,A12;
+A16:  y in BF and
+A17:  BF in F by A15,TARSKI:def 4;
+      y in D by A14,XBOOLE_0:def 4;
+      then y in D/\BF by A16,XBOOLE_0:def 4;
+      then
+A18:  D meets BF by XBOOLE_0:def 7;
+      y in O by A14,XBOOLE_0:def 4;
+      then y in O/\BF by A16,XBOOLE_0:def 4;
+      then O meets BF by XBOOLE_0:def 7;
+      hence contradiction by A5,A9,A10,A13,A17,A18;
     end;
-    then x in Cl AF & Cl AF in clf F by A5,A8,PCOMPS_1:def 3,PRE_TOPC:def 13;
-    hence thesis by TARSKI:def 4;
+    then
+A19: x in Cl AF by A3,PRE_TOPC:def 13;
+    Cl AF in clf F by A9,PCOMPS_1:def 3;
+    hence thesis by A19,TARSKI:def 4;
+  end;
+  union (clf F)c=Cl union(F)
+  proof
+    let f be set;
+    assume
+    f in union (clf F);
+    then consider Af being set such that
+A20: f in Af and
+A21: Af in clf F by TARSKI:def 4;
+    reconsider Af as Subset of T by A21;
+    ex A st Cl A =Af & A in F by A21,PCOMPS_1:def 3;
+    then Af c= Cl union F by Lm4;
+    hence thesis by A20;
   end;
   hence thesis by A2,XBOOLE_0:def 10;
 end;
@@ -506,27 +616,32 @@ A1: F is discrete;
   proof
     let p;
     consider U such that
-A2: p in U & (for A,B st A in F & B in F holds
-    U meets A & U meets B implies A=B) by A1,Def1;
+A2: p in U and
+A3: for A,B st A in F & B in F holds U meets A & U meets B implies A=B
+    by A1,Def1;
+    set SF={ D: D in F & D meets U };
     take O=U;
-    set SF={ D: D in F & D meets U }; ::Subset-Family
     SF<>{} implies ex A st SF={A}
     proof
-      assume SF<>{};
+      assume
+      SF<>{};
       then consider a being set such that
-A3:   a in SF by XBOOLE_0:def 1;
+A4:   a in SF by XBOOLE_0:def 1;
       consider D such that
-A4:   a=D & D in F & D meets O by A3;
+A5:   a=D and
+A6:   D in F & D meets O by A4;
       now
         let b be set;
-        assume b in SF;
-        then consider C such that
-A5:     b=C & C in F & C meets O;
-        b=D by A2,A4,A5;
+        assume
+        b in SF;
+        then ex C st b=C & C in F & C meets O;
+        then b=D by A3,A6;
         hence b in {D} by TARSKI:def 1;
       end;
-      then SF c= {D} & {D} c=SF by A3,A4,TARSKI:def 3,ZFMISC_1:37;
-      then SF={D} by XBOOLE_0:def 10;
+      then
+A7:   SF c= {D} by TARSKI:def 3;
+      {D} c=SF by A4,A5,ZFMISC_1:37;
+      then SF={D} by A7,XBOOLE_0:def 10;
       hence thesis;
     end;
     hence thesis by A2;
@@ -568,7 +683,8 @@ definition
   let Un be FamilySequence of T;
   attr Un is sigma_discrete means
   :Def2:
-  for n being Element of NAT holds Un.n is discrete;
+  for n being Element of NAT holds Un.n
+  is discrete;
 end;
 
 Lm5: ex Un being FamilySequence of T st Un is sigma_discrete
@@ -576,14 +692,15 @@ proof
   set C={the carrier of T};
   the carrier of T in bool the carrier of T by ZFMISC_1:def 1;
   then C c= bool the carrier of T by ZFMISC_1:37;
-  then reconsider f = NAT --> C
-  as Function of NAT,bool bool the carrier of T by FUNCOP_1:57;
+
+  then reconsider
+  f = NAT --> C as Function of NAT,bool bool the carrier of T by FUNCOP_1:57;
+
   take f;
   now
     let n;
-    f.n={the carrier of T} & the carrier of T is Subset of T
-    by FUNCOP_1:13,ZFMISC_1:def 1;
-    hence f.n is discrete by Th1;
+    the carrier of T is Subset of T by ZFMISC_1:def 1;
+    hence f.n is discrete by Th1,FUNCOP_1:13;
   end;
   hence thesis by Def2;
 end;
@@ -599,7 +716,8 @@ definition
   let Un be FamilySequence of T;
   attr Un is sigma_locally_finite means
   :Def3:
-  for n being Element of NAT holds Un.n is locally_finite;
+  for n being Element of NAT
+  holds Un.n is locally_finite;
 end;
 
 definition
@@ -607,7 +725,8 @@ definition
   let F be Subset-Family of T;
   attr F is sigma_discrete means
   :Def4:
-  ex f being sigma_discrete FamilySequence of T st F = Union f;
+  ex f being sigma_discrete
+  FamilySequence of T st F = Union f;
 end;
 
 notation
@@ -652,8 +771,8 @@ A1: Un is sigma_discrete;
 end;
 
 theorem
-  for A being uncountable set ex F being Subset-Family of 1TopSp([:A,A:]) st
-  F is locally_finite & F is not sigma_discrete
+  for A being uncountable set ex F being Subset-Family of 1TopSp([:A,A:]
+  ) st F is locally_finite & F is not sigma_discrete
 proof
   let A be uncountable set;
   set TS=1TopSp([:A,A:]);
@@ -661,9 +780,11 @@ proof
   F c= bool [:A,A:]
   proof
     let f be set;
-    assume f in F;
+    assume
+    f in F;
     then consider a being Element of A such that
-A1: f = [:{a},A:] \/ [:A,{a}:] & a in A;
+A1: f = [:{a},A:] \/ [:A,{a}:] and
+    a in A;
     [:{a},A:] c=[:A,A:] & [:A,{a}:] c= [:A,A:] by ZFMISC_1:119;
     then [:{a},A:] \/ [:A,{a}:] c= [:A,A:] by XBOOLE_1:8;
     hence thesis by A1;
@@ -676,162 +797,194 @@ A1: f = [:{a},A:] \/ [:A,{a}:] & a in A;
     let z be Point of TS;
     set Z={z};
     reconsider Z as Subset of TS;
-A2: z in Z & Z is open by PRE_TOPC:def 5,ZFMISC_1:37;
     consider x,y such that
-A3: x in A & y in A & z=[x,y] by ZFMISC_1:def 2;
-    set UZ={O where O is Subset of TS: O in F & O meets Z };
-    set xAAx={[:{x},A:]\/[:A,{x}:]};
+    x in A and
+    y in A and
+A2: z=[x,y] by ZFMISC_1:def 2;
     set yAAy={[:{y},A:]\/[:A,{y}:]};
-    UZ c= xAAx \/ yAAy
+    set xAAx={[:{x},A:]\/[:A,{x}:]};
+    set UZ={O where O is Subset of TS: O in F & O meets Z };
+A3: UZ c= xAAx \/ yAAy
     proof
       let U be set;
-      assume U in UZ;
+      assume
+      U in UZ;
       then consider O being Subset of TS such that
-A4:   U=O & O in F & O meets Z;
-      consider a being Element of A such that
-A5:   O=[:{a},A:] \/ [:A,{a}:] & a in A by A4;
+A4:   U=O and
+A5:   O in F and
+A6:   O meets Z;
       consider u being set such that
-A6:   u in O & u in Z by A4,XBOOLE_0:3;
-      now per cases by A5,A6,XBOOLE_0:def 3;
-        suppose u in [:{a},A:];
-          then [x,y] in [:{a},A:] by A3,A6,TARSKI:def 1;
+A7:   u in O and
+A8:   u in Z by A6,XBOOLE_0:3;
+      consider a being Element of A such that
+A9:   O=[:{a},A:] \/ [:A,{a}:] and
+      a in A by A5;
+      now
+        per cases by A9,A7,XBOOLE_0:def 3;
+        suppose
+          u in [:{a},A:];
+          then [x,y] in [:{a},A:] by A2,A8,TARSKI:def 1;
           then x in {a} by ZFMISC_1:106;
           then x=a by TARSKI:def 1;
-          then O in xAAx by A5,TARSKI:def 1;
+          then O in xAAx by A9,TARSKI:def 1;
           hence O in xAAx \/ yAAy by XBOOLE_0:def 3;
         end;
-        suppose u in [:A,{a}:];
-          then [x,y] in [:A,{a}:] by A3,A6,TARSKI:def 1;
+        suppose
+          u in [:A,{a}:];
+          then [x,y] in [:A,{a}:] by A2,A8,TARSKI:def 1;
           then y in {a} by ZFMISC_1:106;
           then y=a by TARSKI:def 1;
-          then O in yAAy by A5,TARSKI:def 1;
+          then O in yAAy by A9,TARSKI:def 1;
           hence O in xAAx \/ yAAy by XBOOLE_0:def 3;
         end;
       end;
       hence thesis by A4;
     end;
-    hence thesis by A2;
+    z in Z & Z is open by PRE_TOPC:def 5,ZFMISC_1:37;
+    hence thesis by A3;
   end;
   hence F is locally_finite by PCOMPS_1:def 2;
   F is not sigma_discrete
   proof
-    assume F is sigma_discrete;
-    then consider f being sigma_discrete FamilySequence of TS such that
-A7: F = Union f by Def4;
     consider a being set such that
-A8: a in A by XBOOLE_0:def 1;
-    reconsider a as Element of A by A8;
+A10: a in A by XBOOLE_0:def 1;
+    reconsider a as Element of A by A10;
     set aAAa=[:{a},A:]\/[:A,{a}:];
-    defpred F1[set,set] means
-    ($2 in f.$1 & f.$1 is non empty )or($2=aAAa & f.$1 is empty);
-A9: for k being set st k in NAT ex f being set st f in F & F1[k,f]
+A11: card A c= card F
+    proof
+      deffunc D(set)=[:{$1},A:]\/[:A,{$1}:];
+      consider d being Function such that
+A12:  dom d = A & for x being set st x in A holds d.x = D(x) from
+      FUNCT_1:sch 3;
+      for a1,a2 being set st a1 in dom d & a2 in dom d & d.a1=d.a2 holds
+      a1= a2
+      proof
+        let a1,a2 be set;
+        assume that
+A13:    a1 in dom d and
+A14:    a2 in dom d and
+A15:    d.a1=d.a2;
+        a1 in {a1} by ZFMISC_1:37;
+        then
+A16:    [a1,a1] in [:{a1},A:] by A12,A13,ZFMISC_1:106;
+        D(a1)=d.a1 & D(a2)=d.a2 by A12,A13,A14;
+        then [a1,a1] in [:{a2},A:]\/[:A,{a2}:] by A15,A16,XBOOLE_0:def 3;
+        then [a1,a1] in [:{a2},A:] or [a1,a1] in [:A,{a2}:] by XBOOLE_0:
+        def 3;
+        then
+A17:    a1 in {a2} by ZFMISC_1:106;
+        assume
+        a1<>a2;
+        hence thesis by A17,TARSKI:def 1;
+      end;
+      then
+A18:  d is one-to-one by FUNCT_1:def 8;
+      rng d c= F
+      proof
+        let AA be set;
+        assume
+        AA in rng d;
+        then consider a being set such that
+A19:    a in dom d and
+A20:    AA = d.a by FUNCT_1:def 5;
+        reconsider a as Element of A by A12,A19;
+        AA=[:{a},A:]\/[:A,{a}:] by A12,A20;
+        hence thesis;
+      end;
+      hence thesis by A12,A18,CARD_1:26;
+    end;
+    assume
+    F is sigma_discrete;
+    then consider f being sigma_discrete FamilySequence of TS such that
+A21: F = Union f by Def4;
+    defpred F1[set,set] means ($2 in f.$1 & f.$1 is non empty )or($2=aAAa & f.
+    $1 is empty);
+A22: for k being set st k in NAT ex f being set st f in F & F1[k,f]
     proof
       let k be set;
-      assume k in NAT;
+      assume
+      k in NAT;
       then reconsider k as Element of NAT;
-      now per cases;
-        suppose f.k is empty;
-          then aAAa in F & F1[k,aAAa];
-          hence ex A being set st A in F & F1[k,A];
+      now
+        per cases;
+        suppose
+A23:      f.k is empty;
+          aAAa in F;
+          hence ex A being set st A in F & F1[k,A] by A23;
         end;
-        suppose f.k is non empty;
+        suppose
+          f.k is non empty;
           then consider A being set such that
-A10:      A in f.k by XBOOLE_0:def 1;
-          A in F & F1[k,A] by A7,A10,PROB_1:25;
-          hence ex A being set st A in F & F1[k,A];
+A24:      A in f.k by XBOOLE_0:def 1;
+          A in F by A21,A24,PROB_1:25;
+          hence ex A being set st A in F & F1[k,A] by A24;
         end;
       end;
       hence thesis;
     end;
     consider Df being Function of NAT, F such that
-A11: for k being set st k in NAT holds F1[k,Df.k] from FUNCT_2:sch 1(A9 );
-A12: for n being Element of NAT,AD,BD being Element of F st
-    F1[n,AD] & F1[n,BD] holds AD=BD
+A25: for k being set st k in NAT holds F1[k,Df.k] from FUNCT_2:sch 1(
+    A22 );
+A26: for n being Element of NAT,AD,BD being Element of F st F1[n,AD] & F1[
+    n,BD] holds AD=BD
     proof
       let n be Element of NAT,AD,BD be Element of F;
-      assume
-A13:  F1[n,AD] & F1[n,BD];
-      now per cases;
-        suppose f.n is empty;
-          hence thesis by A13;
+      assume that
+A27:  F1[n,AD] and
+A28:  F1[n,BD];
+      now
+        per cases;
+        suppose
+          f.n is empty;
+          hence thesis by A27,A28;
         end;
-        suppose f.n is non empty;
-          then
-A14:      AD in f.n & AD in F & BD in f.n & BD in F & f.n is discrete
-          by A7,A13,Def2,PROB_1:25;
+        suppose
+          f.n is non empty;
+A29:      f.n is discrete by Def2;
+          BD in F by A21,A28,PROB_1:25;
+          then consider b being Element of A such that
+A30:      BD=[:{b},A:] \/ [:A,{b}:] and
+          b in A;
+          AD in F by A21,A27,PROB_1:25;
           then consider a being Element of A such that
-A15:      AD=[:{a},A:] \/ [:A,{a}:] & a in A;
-          consider b being Element of A such that
-A16:      BD=[:{b},A:] \/ [:A,{b}:] & b in A by A14;
-          AD meets BD
-          proof
-            a in {a} & b in {b} by TARSKI:def 1;
-            then [a,b] in[:{a},A:] & [a,b] in [:A,{b}:] by ZFMISC_1:106;
-            then [a,b] in AD & [a,b] in BD by A15,A16,XBOOLE_0:def 3;
-            hence thesis by XBOOLE_0:3;
-          end;
-          hence thesis by A14,Th6;
+A31:      AD=[:{a},A:] \/ [:A,{a}:] and
+          a in A;
+          b in {b} by TARSKI:def 1;
+          then [a,b] in [:A,{b}:] by ZFMISC_1:106;
+          then
+A32:      [a,b] in BD by A30,XBOOLE_0:def 3;
+          a in {a} by TARSKI:def 1;
+          then [a,b] in[:{a},A:] by ZFMISC_1:106;
+          then [a,b] in AD by A31,XBOOLE_0:def 3;
+          then AD meets BD by A32,XBOOLE_0:3;
+          hence thesis by A27,A28,A29,Th6;
         end;
       end;
       hence thesis;
     end;
-A17: F c=Df.:NAT
+A33: F c=Df.:NAT
     proof
       let cAAc be set;
       assume
-A18:  cAAc in F;
+A34:  cAAc in F;
       then consider k being Element of NAT such that
-A19:  cAAc in f.k by A7,PROB_1:25;
-      F1[k,cAAc] & F1[k,Df.k] by A11,A19;
-      then cAAc =Df.k & dom Df = NAT by A12,A18,FUNCT_2:def 1;
-      hence thesis by FUNCT_1:def 12;
+A35:  cAAc in f.k by A21,PROB_1:25;
+      F1[k,Df.k] by A25;
+      then
+A36:  cAAc =Df.k by A26,A34,A35;
+      dom Df = NAT by A34,FUNCT_2:def 1;
+      hence thesis by A36,FUNCT_1:def 12;
     end;
-A20: card A c= card F
-    proof
-      deffunc D(set)=[:{$1},A:]\/[:A,{$1}:];
-      consider d being Function such that
-A21:  dom d = A & for x being set st
-      x in A holds d.x = D(x) from FUNCT_1:sch 3;
-A22:  rng d c= F
-      proof
-        let AA be set;
-        assume AA in rng d;
-        then consider a being set such that
-A23:    a in dom d & AA = d.a by FUNCT_1:def 5;
-        reconsider a as Element of A by A21,A23;
-        AA=[:{a},A:]\/[:A,{a}:] by A21,A23;
-        hence thesis;
-      end;
-      for a1,a2 being set st a1 in dom d & a2 in dom d & d.a1=d.a2 holds a1=
-      a2
-      proof
-        let a1,a2 be set;
-        assume
-A24:    a1 in dom d & a2 in dom d & d.a1=d.a2;
-        then
-A25:    D(a1)=d.a1 & D(a2)=d.a2 by A21;
-        assume
-A26:    a1<>a2;
-        a1 in {a1} & a1 in A by A21,A24,ZFMISC_1:37;
-        then [a1,a1] in [:{a1},A:] by ZFMISC_1:106;
-        then [a1,a1] in [:{a2},A:]\/[:A,{a2}:] by A24,A25,XBOOLE_0:def 3;
-        then [a1,a1] in [:{a2},A:] or [a1,a1] in [:A,{a2}:] by XBOOLE_0:def 3;
-        then a1 in {a2} by ZFMISC_1:106;
-        hence thesis by A26,TARSKI:def 1;
-      end;
-      then rng d c= F & d is one-to-one & dom d =A by A21,A22,FUNCT_1:def 8;
-      hence thesis by CARD_1:26;
-    end;
-    not card A c= omega by CARD_3:def 15;
+A37: not card A c= omega by CARD_3:def 15;
     then card NAT in card A by CARD_1:14,84;
-    then card NAT c= card F & card NAT <> card F by A20,CARD_1:13;
-    then card (Df.:NAT) c= card NAT & card NAT c< card F
-    by CARD_2:3,XBOOLE_0:def 8;
-    then card (Df.:NAT) c< card F by XBOOLE_1:59;
-    then card (Df.:NAT)c=card F & card (Df.:NAT)<>card F by XBOOLE_0:def 8;
-    then card (Df.:NAT) in card F by CARD_1:13;
+    then card NAT c= card F by A11,CARD_1:13;
+    then card NAT c< card F by A11,A37,CARD_1:84,XBOOLE_0:def 8;
+    then
+A38: card (Df.:NAT) c< card F by CARD_2:3,XBOOLE_1:59;
+    then card (Df.:NAT)c=card F by XBOOLE_0:def 8;
+    then card (Df.:NAT) in card F by A38,CARD_1:13;
     then F\(Df.:NAT)<>{} by CARD_2:4;
-    hence contradiction by A17,XBOOLE_1:37;
+    hence contradiction by A33,XBOOLE_1:37;
   end;
   hence thesis;
 end;
@@ -840,7 +993,8 @@ definition
   let T be non empty TopSpace;
   let Un be FamilySequence of T;
   attr Un is Basis_sigma_discrete means
-  Un is sigma_discrete & Union Un is Basis of T;
+  Un is sigma_discrete & Union Un is
+  Basis of T;
 end;
 
 definition
@@ -848,12 +1002,13 @@ definition
   let Un be FamilySequence of T;
   attr Un is Basis_sigma_locally_finite means
   :Def6:
-  Un is sigma_locally_finite & Union Un is Basis of T;
+  Un is
+  sigma_locally_finite & Union Un is Basis of T;
 end;
 
 theorem Th14:
-  for r being real number st PM is non empty MetrSpace
-  for x being Element of PM holds [#]PM\cl_Ball(x,r) in Family_open_set(PM)
+  for r being real number st PM is non empty MetrSpace for x being
+  Element of PM holds [#]PM\cl_Ball(x,r) in Family_open_set(PM)
 proof
   let r be real number;
   reconsider r'=r as Real by XREAL_0:def 1;
@@ -862,27 +1017,29 @@ A1: PM is non empty MetrSpace;
   let x be Element of PM;
   now
     let y be Element of PM;
-    assume y in [#]PM\cl_Ball(x,r);
-    then
-A2: not y in cl_Ball(x,r) by XBOOLE_0:def 5;
     set r1=dist(x,y)-r';
-    r'+0<r'+r1 by A2,METRIC_1:13;
-    then
-A3: r'-r'<r1-0 by XREAL_1:23;
-    Ball(y,r1) c= [#]PM\cl_Ball(x,r)
+A2: Ball(y,r1) c= [#]PM\cl_Ball(x,r)
     proof
-      assume not Ball(y,r1) c= [#]PM\cl_Ball(x,r);
+      assume
+      not Ball(y,r1) c= [#]PM\cl_Ball(x,r);
       then consider z being set such that
-A4:   z in Ball(y,r1) & not z in [#]PM\cl_Ball(x,r) by TARSKI:def 3;
-      reconsider z as Element of PM by A4;
-      z in the carrier of PM & z in Ball(y,r1) & not (z in [#]PM &
-      not z in cl_Ball(x,r)) by A4,XBOOLE_0:def 5;
-      then dist(y,z)<r1 & dist(x,z)<=r' by METRIC_1:12,13;
-      then dist(y,z) + dist(x,z)< r1 + r' by XREAL_1:10;
+A3:   z in Ball(y,r1) and
+A4:   not z in [#]PM\cl_Ball(x,r) by TARSKI:def 3;
+      reconsider z as Element of PM by A3;
+      not (z in [#]PM & not z in cl_Ball(x,r)) by A4,XBOOLE_0:def 5;
+      then
+A5:   dist(x,z)<=r' by METRIC_1:13;
+      dist(y,z)<r1 by A3,METRIC_1:12;
+      then dist(y,z) + dist(x,z)< r1 + r' by A5,XREAL_1:10;
       then dist(x,z)+dist(z,y)< r1 + r' by A1,METRIC_1:3;
       hence thesis by A1,METRIC_1:4;
     end;
-    hence ex r2 st r2>0 & Ball(y,r2) c= [#]PM\cl_Ball(x,r) by A3;
+    assume
+    y in [#]PM\cl_Ball(x,r);
+    then not y in cl_Ball(x,r) by XBOOLE_0:def 5;
+    then r'+0<r'+r1 by METRIC_1:13;
+    then r'-r'<r1-0 by XREAL_1:23;
+    hence ex r2 st r2>0 & Ball(y,r2) c= [#]PM\cl_Ball(x,r) by A2;
   end;
   hence thesis by PCOMPS_1:def 5;
 end;
@@ -891,282 +1048,305 @@ theorem
   for T st T is metrizable holds T is regular & T is T_1
 proof
   let T;
-  assume T is metrizable;
-  then consider metr being Function of
-  [:the carrier of T,the carrier of T:],REAL such that
-A1: metr is_metric_of (the carrier of T) &
-  Family_open_set( SpaceMetr (the carrier of T,metr)) =
-  the topology of T by PCOMPS_1:def 9;
+  assume
+  T is metrizable;
+  then consider
+  metr being Function of [:the carrier of T,the carrier of T:],REAL
+  such that
+A1: metr is_metric_of (the carrier of T) and
+A2: Family_open_set( SpaceMetr (the carrier of T,metr)) = the topology
+  of T by PCOMPS_1:def 9;
   set PM = SpaceMetr(the carrier of T,metr);
-  reconsider PM as non empty MetrSpace by PCOMPS_1:40,A1;
+  reconsider PM as non empty MetrSpace by A1,PCOMPS_1:40;
   set TPM = TopSpaceMetr PM;
-A4: for p being Element of T for D being Subset of T
-  st D <> {} & D is closed & p in D` ex A,B being Subset of T st
-  A is open & B is open & p in A & D c= B & A misses B
+A3: for p being Element of T for D being Subset of T st D <> {} & D is
+closed & p in D` ex A,B being Subset of T st A is open & B is open & p in A & D
+  c= B & A misses B
   proof
     let p be Element of T;
     let D be Subset of T;
-    assume
-A5: D<>{} & D is closed & p in D`;
+    assume that
+    D<>{} and
+A4: D is closed and
+A5: p in D`;
+A6: [#]T\D in the topology of T by A4,A5,PRE_TOPC:def 5;
     reconsider p as Element of PM by A1,PCOMPS_2:8;
-A6: D misses D`& D<>{} & D is closed & p in D` by A5,XBOOLE_1:79;
-    [#]T\D is open by A5;
-    then
-A7: [#]T\D in the topology of T by PRE_TOPC:def 5;
+A7: D misses D` by XBOOLE_1:79;
     reconsider D as Subset of TPM by A1,PCOMPS_2:8;
-    [#]TPM\D in Family_open_set(PM) by A1,A7,PCOMPS_2:8;
+    [#]TPM\D in Family_open_set(PM) by A1,A2,A6,PCOMPS_2:8;
     then [#]TPM\D is open by PRE_TOPC:def 5;
     then
-A8: [#]TPM\D is open & D<>{} & D is closed & not p in D by A6,PRE_TOPC:def 6
-,XBOOLE_0:3;
+A8: D is closed by PRE_TOPC:def 6;
+A9: not p in D by A5,A7,XBOOLE_0:3;
     ex r1 st r1>0 & Ball(p,r1) misses D
     proof
       assume
-A9:   for r1 st r1>0 holds Ball(p,r1) meets D;
+A10:  for r1 st r1>0 holds Ball(p,r1) meets D;
       now
         let A be Subset of TPM;
-        assume
-A10:    A is open & p in A;
-        then A in Family_open_set(PM) by PRE_TOPC:def 5;
+        assume that
+A11:    A is open and
+A12:    p in A;
+        A in Family_open_set(PM) by A11,PRE_TOPC:def 5;
         then consider r2 such that
-A11:    r2>0 & Ball(p,r2) c= A by A10,PCOMPS_1:def 5;
-        Ball(p,r2) meets D by A9,A11;
-        then consider x such that
-A12:    x in Ball(p,r2) & x in D by XBOOLE_0:3;
-        thus A meets D by A11,A12,XBOOLE_0:3;
+A13:    r2>0 and
+A14:    Ball(p,r2) c= A by A12,PCOMPS_1:def 5;
+        Ball(p,r2) meets D by A10,A13;
+        then ex x st x in Ball(p,r2) & x in D by XBOOLE_0:3;
+        hence A meets D by A14,XBOOLE_0:3;
       end;
       then p in Cl D by PRE_TOPC:def 13;
-      hence thesis by A8,PRE_TOPC:52;
+      hence thesis by A8,A9,PRE_TOPC:52;
     end;
     then consider r1 such that
-A13: r1>0 & Ball(p,r1) misses D;
+A15: r1>0 and
+A16: Ball(p,r1) misses D;
     set r2=r1/2;
-    set r4=r2/2;
-    r2 > 0 by A13,XREAL_1:141;
-    then r2>0 & r4>0 by XREAL_1:141;
-    then
-A14: 0<r4 & r4 < r4+r4 & r2<r2+r2 & dist(p,p)<r4 by METRIC_1:1,XREAL_1:31;
-A15: D c= [#]PM\cl_Ball(p,r2)
+A17: r2<r2+r2 by A15,XREAL_1:31;
+A18: D c= [#]PM\cl_Ball(p,r2)
     proof
-      assume not D c= [#]PM\cl_Ball(p,r2);
+      assume
+      not D c= [#]PM\cl_Ball(p,r2);
       then consider x such that
-A16:  x in D & not x in [#]PM\cl_Ball(p,r2) by TARSKI:def 3;
-      reconsider x as Element of PM by A16;
-      x in D & x in cl_Ball(p,r2) by A16,XBOOLE_0:def 5;
+A19:  x in D and
+A20:  not x in [#]PM\cl_Ball(p,r2) by TARSKI:def 3;
+      reconsider x as Element of PM by A19;
+      x in cl_Ball(p,r2) by A20,XBOOLE_0:def 5;
       then dist(p,x) <= r2 by METRIC_1:13;
-      then dist(p,x) < r1 by A14,XXREAL_0:2;
+      then dist(p,x) < r1 by A17,XXREAL_0:2;
       then x in Ball(p,r1) by METRIC_1:12;
-      hence thesis by A13,A16,XBOOLE_0:3;
+      hence thesis by A16,A19,XBOOLE_0:3;
     end;
-A17: Ball(p,r4) misses [#]PM\cl_Ball(p,r2)
+    set r4=r2/2;
+A21: r2 > 0 by A15,XREAL_1:141;
+    then
+A22: r4 < r4+r4 by XREAL_1:31;
+A23: Ball(p,r4) misses [#]PM\cl_Ball(p,r2)
     proof
-      assume Ball(p,r4) meets [#]PM\cl_Ball(p,r2);
+      assume
+      Ball(p,r4) meets [#]PM\cl_Ball(p,r2);
       then consider x such that
-A18:  x in Ball(p,r4) & x in [#]PM\cl_Ball(p,r2) by XBOOLE_0:3;
-      reconsider x as Element of PM by A18;
-      x in Ball(p,r4) & not x in cl_Ball(p,r2) by A18,XBOOLE_0:def 5;
-      then dist(p,x)<r4 & dist(p,x)>r2 by METRIC_1:12,13;
-      hence thesis by A14,XXREAL_0:2;
+A24:  x in Ball(p,r4) and
+A25:  x in [#]PM\cl_Ball(p,r2) by XBOOLE_0:3;
+      reconsider x as Element of PM by A24;
+      not x in cl_Ball(p,r2) by A25,XBOOLE_0:def 5;
+      then
+A26:  dist(p,x)>r2 by METRIC_1:13;
+      dist(p,x)<r4 by A24,METRIC_1:12;
+      hence thesis by A22,A26,XXREAL_0:2;
     end;
-    set B = [#]PM\cl_Ball(p,r2);
     set A=Ball(p,r4);
-A19: B in Family_open_set(PM) & A in Family_open_set(PM)
-    by Th14,PCOMPS_1:33;
-    then reconsider A,B as Subset of T by A1;
+    set B = [#]PM\cl_Ball(p,r2);
+A27: B in Family_open_set(PM) & A in Family_open_set(PM) by Th14,PCOMPS_1:
+    33;
+    then reconsider A,B as Subset of T by A2;
     take A,B;
-    thus thesis by A1,A14,A15,A17,A19,METRIC_1:12,PRE_TOPC:def 5;
+    r4>0 by A21,XREAL_1:141;
+    then dist(p,p)<r4 by METRIC_1:1;
+    hence thesis by A2,A18,A23,A27,METRIC_1:12,PRE_TOPC:def 5;
   end;
-  for p,q being Point of T st not p = q
-  ex A,B being Subset of T st A is open & B is open &
-  p in A & not q in A & q in B & not p in B
+  for p,q being Point of T st not p = q ex A,B being Subset of T st A is
+  open & B is open & p in A & not q in A & q in B & not p in B
   proof
     let p,q be Point of T;
     assume
-A20: not p=q;
+A28: not p=q;
     reconsider p,q as Element of TPM by A1,PCOMPS_2:8;
-    TPM is T_2 & p is Element of TPM & q is Element of TPM & not p=q
-    by A20,PCOMPS_1:38;
+    TPM is T_2 by PCOMPS_1:38;
     then consider A,B being Subset of TPM such that
-A21: A is open & B is open &p in A &q in B &A misses B by PRE_TOPC:def 16;
+A29: A is open and
+A30: B is open and
+A31: p in A & q in B and
+A32: A misses B by A28,PRE_TOPC:def 16;
     reconsider A,B as Subset of T by A1,PCOMPS_2:8;
-
-A in the topology of T & B in the topology of T by A1,A21,PRE_TOPC:def 5;
-    then A is Subset of T & B is Subset of T & A is open & B is open & p in A
-    & not q in A & q in B & not p in B by A21,PRE_TOPC:def 5,XBOOLE_0:3;
-    hence thesis;
+    A in the topology of T by A2,A29,PRE_TOPC:def 5;
+    then
+A33: A is open by PRE_TOPC:def 5;
+    B in the topology of T by A2,A30,PRE_TOPC:def 5;
+    then
+A34: B is open by PRE_TOPC:def 5;
+    ( not q in A)& not p in B by A31,A32,XBOOLE_0:3;
+    hence thesis by A31,A33,A34;
   end;
-  hence thesis by A4,COMPTS_1:def 5,URYSOHN1:def 9;
+  hence thesis by A3,COMPTS_1:def 5,URYSOHN1:def 9;
 end;
 
 theorem
-  for T st T is metrizable
-  ex Un being FamilySequence of T st Un is Basis_sigma_locally_finite
+  for T st T is metrizable ex Un being FamilySequence of T st Un is
+  Basis_sigma_locally_finite
 proof
   let T;
   assume
 A1: T is metrizable;
-  then consider metr being Function of
-  [:the carrier of T,the carrier of T:],REAL such that
-A2: metr is_metric_of (the carrier of T) &
-  Family_open_set( SpaceMetr (the carrier of T,metr)) =
-  the topology of T by PCOMPS_1:def 9;
+  then consider
+  metr being Function of [:the carrier of T,the carrier of T:],REAL
+  such that
+A2: metr is_metric_of (the carrier of T) and
+A3: Family_open_set( SpaceMetr (the carrier of T,metr)) = the topology
+  of T by PCOMPS_1:def 9;
   set PM = SpaceMetr(the carrier of T,metr);
-  reconsider PM as non empty MetrSpace by PCOMPS_1:40,A2;
-  set TPM = TopSpaceMetr PM;
-A4: [#]T=[#]TPM by A2,PCOMPS_2:8;
+  reconsider PM as non empty MetrSpace by A2,PCOMPS_1:40;
   deffunc BALL(Element of NAT)={Ball(x, 1/(2 |^ $1)) where x is Element of PM:
   x is Element of PM};
   defpred E[Element of NAT,set] means $2 = BALL($1);
-A5: for k being Element of NAT ex y being Subset-Family of T st E[k,y]
+A4: for k being Element of NAT ex y being Subset-Family of T st E[k,y]
   proof
     let k be Element of NAT;
     set Ak=BALL(k);
     Ak c= bool the carrier of T
     proof
       let B be set;
-      assume B in Ak;
-      then consider x being Element of PM such that
-A6:   B=Ball(x,1/(2 |^ k)) & x is Element of PM;
-      B in Family_open_set(PM) by A6,PCOMPS_1:33;
-      hence thesis by A2;
+      assume
+      B in Ak;
+      then
+      ex x being Element of PM st B=Ball(x,1/(2 |^ k)) & x is Element of PM;
+      then B in Family_open_set(PM) by PCOMPS_1:33;
+      hence thesis by A3;
     end;
     hence thesis;
   end;
   consider FB being Function of NAT,bool bool (the carrier of T) such that
-A7: for k being Element of NAT holds E[k,FB.k] from FUNCT_2:sch 3(A5);
-A8: for n ex PP being Subset-Family of T st
-  PP is_finer_than FB.n & PP is Cover of T &
-  PP is open & PP is locally_finite
+A5: for k being Element of NAT holds E[k,FB.k] from FUNCT_2:sch 3(A4);
+  defpred P[set,set] means ex W being Subset-Family of T st W = $2 & W is open
+  & W is Cover of T & W is_finer_than FB.$1 & W is locally_finite;
+  set TPM = TopSpaceMetr PM;
+A6: [#]T=[#]TPM by A2,PCOMPS_2:8;
+A7: for n ex PP being Subset-Family of T st PP is_finer_than FB.n & PP is
+  Cover of T & PP is open & PP is locally_finite
   proof
     let n;
     [#]TPM c= union (FB.n)
     proof
-        let x;
-        assume x in [#]TPM;
-        then reconsider x'=x as Element of PM;
-        dist(x',x') = 0 & 2|^n > 0 by METRIC_1:1,NEWTON:102;
-        then dist(x',x')<1/(2|^n) by XREAL_1:141;
-        then x' in Ball(x',1/(2|^ n)) &
-        Ball(x',1/(2|^ n)) in BALL(n) by METRIC_1:12;
-        then x' in Ball(x',1/(2|^ n))&Ball(x',1/(2|^ n)) in FB.n by A7;
-        hence thesis by TARSKI:def 4;
+      let x;
+      assume
+      x in [#]TPM;
+      then reconsider x'=x as Element of PM;
+      dist(x',x') = 0 & 2|^n > 0 by METRIC_1:1,NEWTON:102;
+      then dist(x',x')<1/(2|^n) by XREAL_1:141;
+      then
+A8:   x' in Ball(x',1/(2|^ n)) by METRIC_1:12;
+      Ball(x',1/(2|^ n)) in BALL(n);
+      then Ball(x',1/(2|^ n)) in FB.n by A5;
+      hence thesis by A8,TARSKI:def 4;
     end;
     then
-A13: FB.n is Cover of T by A4,SETFAM_1:def 12;
+A9: FB.n is Cover of T by A6,SETFAM_1:def 12;
     for U being Subset of T holds U in (FB.n) implies U is open
     proof
       let U be Subset of T;
-      assume U in (FB.n);
-      then U in BALL(n) by A7;
-      then consider x being Element of PM such that
-A14:  U = Ball(x,1/(2|^ n))& x is Element of PM;
-      U in the topology of T by A2,A14,PCOMPS_1:33;
+      assume
+      U in (FB.n);
+      then U in BALL(n) by A5;
+      then ex x being Element of PM st U = Ball(x,1/(2|^ n)) & x is Element of
+      PM;
+      then U in the topology of T by A3,PCOMPS_1:33;
       hence thesis by PRE_TOPC:def 5;
     end;
     then (FB.n) is open by TOPS_2:def 1;
-    then ex PP being Subset-Family of T st PP is open & PP is Cover of T
-    & PP is_finer_than (FB.n) & PP is locally_finite by A1,A13,PCOMPS_2:12;
+    then ex PP being Subset-Family of T st PP is open & PP is Cover of T & PP
+    is_finer_than (FB.n) & PP is locally_finite by A1,A9,PCOMPS_2:12;
     hence thesis;
   end;
-  defpred P[set,set] means ex W being Subset-Family of T st W = $2 &
-  W is open & W is Cover of T & W is_finer_than FB.$1 & W is locally_finite;
-A15: for k being set st k in NAT
-  ex y st y in bool bool the carrier of T & P[k,y]
+A10: for k being set st k in NAT ex y st y in bool bool the carrier of T & P
+  [k,y]
   proof
     let k be set;
-    assume k in NAT;
+    assume
+    k in NAT;
     then reconsider k as Element of NAT;
-    ex PP being Subset-Family of T st
-    PP is_finer_than FB.k & PP is Cover of T &
-    PP is open & PP is locally_finite by A8;
+    ex PP being Subset-Family of T st PP is_finer_than FB.k & PP is Cover
+    of T & PP is open & PP is locally_finite by A7;
     hence thesis;
   end;
   consider UC being FamilySequence of T such that
-A16: for x st x in NAT holds P[x,UC.x] from FUNCT_2:sch 1(A15);
-  for n holds UC.n is locally_finite
-  proof
-    let n;
-    P[n,UC.n] by A16;
-    hence thesis;
-  end;
-  then
-A17: UC is sigma_locally_finite by Def3;
-A18: Union UC c= the topology of T
-  proof
-    let u be set;
-    assume u in Union UC;
-    then consider k being Element of NAT such that
-A19: u in UC.k by PROB_1:25;
-    reconsider u'=u as Subset of T by A19;
-    P[k,UC.k] by A16;
-    then u' is open by A19,TOPS_2:def 1;
-    hence thesis by PRE_TOPC:def 5;
-  end;
-  for A being Subset of T st A is open for p being Point of T st p in A
+A11: for x st x in NAT holds P[x,UC.x] from FUNCT_2:sch 1(A10);
+A12: for A being Subset of T st A is open for p being Point of T st p in A
   ex B being Subset of T st B in Union UC & p in B & B c= A
   proof
     let A;
     assume
-A20: A is open;
+    A is open;
+    then
+A13: A in Family_open_set(PM) by A3,PRE_TOPC:def 5;
     let p;
     assume
-A21: p in A;
-A22: A in Family_open_set(PM) by A2,A20,PRE_TOPC:def 5;
-    then reconsider p as Element of PM by A21;
+A14: p in A;
+    then reconsider p as Element of PM by A13;
     consider r1 such that
-A23: r1>0 & Ball(p,r1) c=A by A21,A22,PCOMPS_1:def 5;
+A15: r1>0 and
+A16: Ball(p,r1) c=A by A14,A13,PCOMPS_1:def 5;
     consider n such that
-A24: 1/(2|^ n)<=r1 by A23,PREPOWER:106;
-A25: P[n+1,UC.(n+1)] by A16;
+A17: 1/(2|^ n)<=r1 by A15,PREPOWER:106;
+A18: P[n+1,UC.(n+1)] by A11;
     then union (UC.(n+1)) = the carrier of T by SETFAM_1:60;
     then consider B being set such that
-A26: p in B & B in (UC.(n+1)) by TARSKI:def 4;
-    reconsider B as Subset of PM by A2,A26,PCOMPS_2:8;
+A19: p in B and
+A20: B in (UC.(n+1)) by TARSKI:def 4;
+    reconsider B as Subset of PM by A2,A20,PCOMPS_2:8;
     consider B1 being set such that
-A27: B1 in FB.(n+1) & B c= B1 by A25,A26,SETFAM_1:def 2;
-    B1 in BALL(n+1) by A7,A27;
+A21: B1 in FB.(n+1) and
+A22: B c= B1 by A18,A20,SETFAM_1:def 2;
+    B1 in BALL(n+1) by A5,A21;
     then consider q being Element of PM such that
-A28: B1=Ball(q,(1/(2|^(n+1)))) & q is Element of PM;
-A29: dist(q,p)<1/(2|^(n+1)) by A26,A27,A28,METRIC_1:12;
-    B c= Ball(p,r1)
-    proof
-      now
-        let r be Element of PM;
-        assume r in B;
-        then
-A30:    dist(q,r)<1/(2|^(n+1)) by A27,A28,METRIC_1:12;
-A31:    dist(p,r)<=dist(q,p)+dist(q,r) by METRIC_1:4;
-        dist(q,p)+dist(q,r)<1/(2|^(n+1))+1/(2|^(n+1)) by A29,A30,XREAL_1:10;
-        then dist(p,r)<2*(1/(2|^(n+1))) by A31,XXREAL_0:2;
-        then dist(p,r)<(1/(2|^n * 2))*2 by NEWTON:11;
-        then dist(p,r)<(1/(2|^n)) by XCMPLX_1:93;
-        then dist(p,r)<r1 by A24,XXREAL_0:2;
-        hence r in Ball(p,r1) by METRIC_1:12;
-      end;
-      hence thesis by SUBSET_1:7;
+A23: B1=Ball(q,(1/(2|^(n+1)))) and
+    q is Element of PM;
+A24: dist(q,p)<1/(2|^(n+1)) by A19,A22,A23,METRIC_1:12;
+    now
+      let r be Element of PM;
+      assume
+      r in B;
+      then dist(q,r)<1/(2|^(n+1)) by A22,A23,METRIC_1:12;
+      then
+      dist(p,r)<=dist(q,p)+dist(q,r) & dist(q,p)+dist(q,r)<1/(2|^(n+1))+1
+      /(2|^(n+1 )) by A24,METRIC_1:4,XREAL_1:10;
+      then dist(p,r)<2*(1/(2|^(n+1))) by XXREAL_0:2;
+      then dist(p,r)<(1/(2|^n * 2))*2 by NEWTON:11;
+      then dist(p,r)<(1/(2|^n)) by XCMPLX_1:93;
+      then dist(p,r)<r1 by A17,XXREAL_0:2;
+      hence r in Ball(p,r1) by METRIC_1:12;
     end;
-    then B in Union UC & p in B & B c=A by A23,A26,PROB_1:25,XBOOLE_1:1;
+    then
+A25: B c= Ball(p,r1) by SUBSET_1:7;
+    B in Union UC by A20,PROB_1:25;
+    hence thesis by A16,A19,A25,XBOOLE_1:1;
+  end;
+  for n holds UC.n is locally_finite
+  proof
+    let n;
+    P[n,UC.n] by A11;
     hence thesis;
   end;
-  then Union UC is Basis of T by A18,YELLOW_9:32;
-  then UC is Basis_sigma_locally_finite by A17,Def6;
+  then
+A26: UC is sigma_locally_finite by Def3;
+  Union UC c= the topology of T
+  proof
+    let u be set;
+    assume
+    u in Union UC;
+    then consider k being Element of NAT such that
+A27: u in UC.k by PROB_1:25;
+    reconsider u'=u as Subset of T by A27;
+    P[k,UC.k] by A11;
+    then u' is open by A27,TOPS_2:def 1;
+    hence thesis by PRE_TOPC:def 5;
+  end;
+  then Union UC is Basis of T by A12,YELLOW_9:32;
+  then UC is Basis_sigma_locally_finite by A26,Def6;
   hence thesis;
 end;
 
-Lm6: for U,A st A is closed & U is open holds U\A is open
+Lm6: for U,A st A is closed holds U\A is open
 proof
   let U,A;
-  assume A is closed & U is open;
-  then [#]T\A is open by PRE_TOPC:def 6;
-  then
-A1: U/\([#]T\A) is open by TOPS_1:38;
-  U/\([#]T\A)=U/\A`;
+A1: U/\([#]T\A)=U/\A`;
+  assume
+  A is closed;
   hence thesis by A1,SUBSET_1:32;
 end;
 
 theorem Th17:
-  for U being Function of NAT, bool(the carrier of T) st
-  (for n holds U.n is open) holds Union U is open
+  for U being Function of NAT, bool(the carrier of T) st (for n
+  holds U.n is open) holds Union U is open
 proof
   let U be Function of NAT, bool(the carrier of T);
   assume
@@ -1174,12 +1354,14 @@ A1: for n holds U.n is open;
   rng U c= the topology of T
   proof
     let u be set;
-    assume u in rng U;
+    assume
+    u in rng U;
     then consider k being set such that
-A2: k in dom U & u = U.k by FUNCT_1:def 5;
+A2: k in dom U and
+A3: u = U.k by FUNCT_1:def 5;
     reconsider k as Element of NAT by A2;
     U.k is open by A1;
-    hence thesis by A2,PRE_TOPC:def 5;
+    hence thesis by A3,PRE_TOPC:def 5;
   end;
   then union(rng U) in the topology of T by PRE_TOPC:def 1;
   then Union U in the topology of T by CARD_3:def 4;
@@ -1187,249 +1369,255 @@ A2: k in dom U & u = U.k by FUNCT_1:def 5;
 end;
 
 theorem Th18:
-  (for A,U st A is closed & U is open & A c=U
-  ex W being Function of NAT, bool(the carrier of T) st
-  A c= Union W & Union W c= U & (for n holds Cl (W.n) c= U & W.n is open ))
-  implies T is normal
+  (for A,U st A is closed & U is open & A c=U ex W being Function
+of NAT, bool(the carrier of T) st A c= Union W & Union W c= U & (for n holds Cl
+  (W.n) c= U & W.n is open )) implies T is normal
 proof
   assume
-A1: for A,U st A is closed & U is open & A c=U
-  ex W being Function of NAT, bool(the carrier of T) st
-  A c= Union W & Union W c= U & (for n holds Cl (W.n) c= U & W.n is open );
-  for A, B being Subset of T st A <> {} & B <> {} &
-  A is closed & B is closed & A misses B ex UA,WB being Subset of T st
-  UA is open & WB is open & A c=UA & B c= WB & UA misses WB
+A1: for A,U st A is closed & U is open & A c=U ex W being Function of
+NAT, bool(the carrier of T) st A c= Union W & Union W c= U & for n holds Cl (W.
+  n) c= U & W.n is open;
+  for A, B being Subset of T st A <> {} & B <> {} & A is closed & B is
+  closed & A misses B ex UA,WB being Subset of T st UA is open & WB is open & A
+  c=UA & B c= WB & UA misses WB
   proof
     let A,B be Subset of T;
-    assume
-A2: A <> {} & B <> {} & A is closed & B is closed & A misses B;
-    set U= [#]T\A;
+    assume that
+    A <> {} and
+    B <> {} and
+A2: A is closed & B is closed and
+A3: A misses B;
     set W=[#]T\B;
-    A c=B` & B c= A` by A2,SUBSET_1:43;
-    then
-A3: B c= U & U is open & A c= W & W is open by A2;
+    A c=B` by A3,SUBSET_1:43;
+    then consider Wn being Function of NAT, bool(the carrier of T) such that
+A4: A c= Union Wn and
+    Union Wn c= W and
+A5: for n holds Cl (Wn.n) c= W & (Wn.n) is open by A1,A2;
+    set U= [#]T\A;
+    B c= A` by A3,SUBSET_1:43;
     then consider Un being Function of NAT, bool(the carrier of T) such that
-A4: B c= Union Un & Union Un c= U & (for n holds Cl (Un.n) c= U
-    & (Un.n) is open) by A1,A2;
-    consider Wn being Function of NAT, bool(the carrier of T) such that
-A5: A c= Union Wn & Union Wn c= W & (for n holds Cl (Wn.n) c= W
-    & (Wn.n) is open) by A1,A2,A3;
-A6: for n holds A misses Cl (Un.n)
+A6: B c= Union Un and
+    Union Un c= U and
+A7: for n holds Cl (Un.n) c= U & (Un.n) is open by A1,A2;
+    deffunc UW(Element of NAT) =Un.$1\union{Cl (Wn.k) where k is Element of
+    NAT: k in Seg $1\/{0}};
+    defpred E2[Element of NAT,set] means $2 = UW($1);
+A8: for k being Element of NAT ex y being Subset of T st E2[k,y];
+    consider FUW being Function of NAT, bool the carrier of T such that
+A9: for k being Element of NAT holds E2[k,FUW.k] from FUNCT_2:sch 3(
+    A8);
+    for n holds FUW.n is open
     proof
       let n;
-      Cl (Un.n) c= U by A4;
-      hence thesis by XBOOLE_1:63,79;
+      set CLn={Cl (Wn.k) where k is Element of NAT: k in Seg n\/{0}};
+      now
+        let C be set;
+        assume
+        C in CLn;
+        then ex k being Element of NAT st C=Cl (Wn.k) & k in Seg n\/{ 0};
+        hence C in bool the carrier of T;
+      end;
+      then reconsider CLn as Subset-Family of T by TARSKI:def 3;
+      deffunc CL(Element of NAT)=Cl(Wn.$1);
+A10:  Seg n\/{0} is finite;
+A11:  {CL(k) where k is Element of NAT: k in Seg n\/{0}} is finite from
+      FRAENKEL:sch 21(A10);
+      now
+        let A;
+        assume
+        A in CLn;
+        then ex k being Element of NAT st A=Cl(Wn.k) & k in Seg n\/{0 };
+        hence A is closed;
+      end;
+      then
+A12:  CLn is closed by TOPS_2:def 2;
+      Un.n is open by A7;
+      then Un.n\union CLn is open by A11,A12,Lm6,TOPS_2:28;
+      hence thesis by A9;
     end;
-A7: for n holds B misses Cl (Wn.n)
+    then
+A13: Union FUW is open by Th17;
+A14: for n holds B misses Cl (Wn.n)
     proof
       let n;
       Cl (Wn.n) c= W by A5;
       hence thesis by XBOOLE_1:63,79;
     end;
-    deffunc WU(Element of NAT)
-    =Wn.$1\union{Cl (Un.k) where k is Element of NAT: k in Seg $1\/{0}};
+    now
+      let b be set;
+      assume that
+A15:  b in B and
+A16:  not b in Union FUW;
+      consider k being Element of NAT such that
+A17:  b in Un.k by A6,A15,PROB_1:25;
+      not b in union{Cl (Wn.m) where m is Element of NAT: m in Seg k\/{0}
+      }
+      proof
+        assume
+        b in union{Cl (Wn.m) where m is Element of NAT: m in Seg k\/{
+        0}};
+        then consider CL being set such that
+A18:    b in CL and
+A19:    CL in {Cl (Wn.m) where m is Element of NAT: m in Seg k\/{0}}
+        by TARSKI:def 4;
+        consider m being Element of NAT such that
+A20:    CL=Cl(Wn.m) and
+        m in Seg k\/{0} by A19;
+        B meets Cl(Wn.m) by A15,A18,A20,XBOOLE_0:3;
+        hence contradiction by A14;
+      end;
+      then b in UW(k) by A17,XBOOLE_0:def 5;
+      then b in FUW.k by A9;
+      hence contradiction by A16,PROB_1:25;
+    end;
+    then
+A21: B c= Union FUW by TARSKI:def 3;
+    deffunc WU(Element of NAT) =Wn.$1\union{Cl (Un.k) where k is Element of
+    NAT: k in Seg $1\/{0}};
     defpred E1[Element of NAT,set] means $2=WU($1);
-A8: for k being Element of NAT ex y being Subset of T st E1[k,y];
+A22: for k being Element of NAT ex y being Subset of T st E1[k,y];
     consider FWU being Function of NAT, bool the carrier of T such that
-A9: for k being Element of NAT holds E1[k,FWU.k] from FUNCT_2:sch 3(A8);
-A10: for n holds FWU.n is open
+A23: for k being Element of NAT holds E1[k,FWU.k] from FUNCT_2:sch 3(
+    A22);
+A24: Union FUW misses Union FWU
+    proof
+      assume
+      Union FUW meets Union FWU;
+      then consider f being set such that
+A25:  f in Union FUW and
+A26:  f in Union FWU by XBOOLE_0:3;
+      consider n being Element of NAT such that
+A27:  f in FUW.n by A25,PROB_1:25;
+      consider k being Element of NAT such that
+A28:  f in FWU.k by A26,PROB_1:25;
+A29:  n>=k implies FUW.n misses FWU.k
+      proof
+        assume that
+A30:    n>=k and
+A31:    FUW.n meets FWU.k;
+        consider w being set such that
+A32:    w in FUW.n and
+A33:    w in FWU.k by A31,XBOOLE_0:3;
+        w in Wn.k\union{Cl(Un.l) where l is Element of NAT: l in Seg k\/{
+        0} } by A23,A33;
+        then
+A34:    w in Wn.k by XBOOLE_0:def 5;
+        k = 0 or k in Seg k by FINSEQ_1:5;
+        then k in {0} or k in Seg k & Seg k c= Seg n by A30,FINSEQ_1:7,
+        TARSKI:def 1;
+        then k in Seg n\/{0} by XBOOLE_0:def 3;
+        then
+A35:    Wn.k c= Cl(Wn.k) & Cl(Wn.k) in {Cl (Wn.l) where l is Element of
+        NAT: l in Seg n\/{0}} by PRE_TOPC:48;
+        w in Un.n\union{Cl(Wn.l) where l is Element of NAT: l in Seg n\/{
+        0} } by A9,A32;
+        then
+        not w in union{Cl(Wn.l) where l is Element of NAT: l in Seg n\/{0
+        }} by XBOOLE_0:def 5;
+        hence contradiction by A34,A35,TARSKI:def 4;
+      end;
+      n<=k implies FUW.n misses FWU.k
+      proof
+        assume that
+A36:    n<=k and
+A37:    FUW.n meets FWU.k;
+        consider u being set such that
+A38:    u in FUW.n and
+A39:    u in FWU.k by A37,XBOOLE_0:3;
+        u in Un.n\union{Cl(Wn.l) where l is Element of NAT: l in Seg n\/{
+        0} } by A9,A38;
+        then
+A40:    u in Un.n by XBOOLE_0:def 5;
+        n = 0 or n in Seg n by FINSEQ_1:5;
+        then n in {0} or n in Seg n & Seg n c= Seg k by A36,FINSEQ_1:7,
+        TARSKI:def 1;
+        then n in Seg k\/{0} by XBOOLE_0:def 3;
+        then
+A41:    Un.n c= Cl(Un.n) & Cl(Un.n) in {Cl (Un.l) where l is Element of
+        NAT: l in Seg k\/{0}} by PRE_TOPC:48;
+        u in Wn.k\union{Cl(Un.l) where l is Element of NAT: l in Seg k\/{
+        0} } by A23,A39;
+        then
+        not u in union{Cl(Un.l) where l is Element of NAT: l in Seg k\/{0
+        }} by XBOOLE_0:def 5;
+        hence contradiction by A40,A41,TARSKI:def 4;
+      end;
+      hence contradiction by A27,A28,A29,XBOOLE_0:3;
+    end;
+    for n holds FWU.n is open
     proof
       let n;
       set CLn={Cl (Un.k) where k is Element of NAT: k in Seg n\/{0}};
-      CLn c= bool the carrier of T
-      proof
-        now
-          let C be set;
-          assume C in CLn;
-          then consider k being Element of NAT such that
-A11:      C=Cl (Un.k) & k in Seg n\/{0};
-          thus C in bool the carrier of T by A11;
-        end;
-        hence thesis by TARSKI:def 3;
+      now
+        let C be set;
+        assume
+        C in CLn;
+        then ex k being Element of NAT st C=Cl (Un.k) & k in Seg n\/{ 0};
+        hence C in bool the carrier of T;
       end;
-      then reconsider CLn as Subset-Family of T;
-A12:  Seg n\/{0} is finite;
+      then reconsider CLn as Subset-Family of T by TARSKI:def 3;
       deffunc CL(Element of NAT)=Cl(Un.$1);
-A13:  {CL(k) where k is Element of NAT : k in Seg n\/{0}} is finite
-      from FRAENKEL:sch 21(A12);
-      CLn is closed
-      proof
-        now
-          let A;
-          assume A in CLn;
-          then consider k being Element of NAT such that
-A14:      A=Cl(Un.k) & k in Seg n\/{0};
-          thus A is closed by A14;
-        end;
-        hence thesis by TOPS_2:def 2;
+A42:  Seg n\/{0} is finite;
+A43:  {CL(k) where k is Element of NAT : k in Seg n\/{0}} is finite from
+      FRAENKEL:sch 21(A42);
+      now
+        let A;
+        assume
+        A in CLn;
+        then ex k being Element of NAT st A=Cl(Un.k) & k in Seg n\/{0 };
+        hence A is closed;
       end;
-      then union CLn is closed & Wn.n is open by A5,A13,TOPS_2:28;
-      then Wn.n\union CLn is open by Lm6;
-      hence thesis by A9;
+      then
+A44:  CLn is closed by TOPS_2:def 2;
+      Wn.n is open by A5;
+      then Wn.n\union CLn is open by A43,A44,Lm6,TOPS_2:28;
+      hence thesis by A23;
     end;
-    deffunc UW(Element of NAT)
-    =Un.$1\union{Cl (Wn.k) where k is Element of NAT: k in Seg $1\/{0}};
-    defpred E2[Element of NAT,set] means $2 = UW($1);
-A15: for k being Element of NAT ex y being Subset of T st E2[k,y];
-    consider FUW being Function of NAT, bool the carrier of T such that
-A16: for k being Element of NAT holds E2[k,FUW.k] from FUNCT_2:sch 3(A15);
-A17: for n holds FUW.n is open
+    then
+A45: Union FWU is open by Th17;
+A46: for n holds A misses Cl (Un.n)
     proof
       let n;
-      set CLn={Cl (Wn.k) where k is Element of NAT: k in Seg n\/{0}};
-      CLn c= bool the carrier of T
-      proof
-        now
-          let C be set;
-          assume C in CLn;
-          then consider k being Element of NAT such that
-A18:      C=Cl (Wn.k) & k in Seg n\/{0};
-          thus C in bool the carrier of T by A18;
-        end;
-        hence thesis by TARSKI:def 3;
-      end;
-      then reconsider CLn as Subset-Family of T;
-A19:  Seg n\/{0} is finite;
-      deffunc CL(Element of NAT)=Cl(Wn.$1);
-A20:  {CL(k) where k is Element of NAT: k in Seg n\/{0}} is finite
-      from FRAENKEL:sch 21(A19);
-      CLn is closed
-      proof
-        now
-          let A;
-          assume A in CLn;
-          then consider k being Element of NAT such that
-A21:      A=Cl(Wn.k) & k in Seg n\/{0};
-          thus A is closed by A21;
-        end;
-        hence thesis by TOPS_2:def 2;
-      end;
-      then union CLn is closed & Un.n is open by A4,A20,TOPS_2:28;
-      then Un.n\union CLn is open by Lm6;
-      hence thesis by A16;
+      Cl (Un.n) c= U by A7;
+      hence thesis by XBOOLE_1:63,79;
     end;
-A22: A c= Union FWU
-    proof
-      now
-        let a be set;
-        assume
-A23:    a in A & not a in Union FWU;
-        then consider k being Element of NAT such that
-A24:    a in Wn.k by A5,PROB_1:25;
-        not a in union{Cl (Un.m) where m is Element of NAT: m in Seg k\/{0}}
-        proof
-          assume a in
-          union{Cl (Un.m) where m is Element of NAT: m in Seg k\/{0}};
-          then consider CL being set such that
-A25:      a in CL &
-          CL in {Cl (Un.m) where m is Element of NAT: m in Seg k\/{0}}
-          by TARSKI:def 4;
-          consider m being Element of NAT such that
-A26:      CL=Cl(Un.m)& m in Seg k\/{0} by A25;
-          A meets Cl(Un.m) by A23,A25,A26,XBOOLE_0:3;
-          hence contradiction by A6;
-        end;
-        then a in WU(k) by A24,XBOOLE_0:def 5;
-        then a in FWU.k by A9;
-        hence contradiction by A23,PROB_1:25;
-      end;
-      hence thesis by TARSKI:def 3;
-    end;
-A27: B c= Union FUW
-    proof
-      now
-        let b be set;
-        assume
-A28:    b in B & not b in Union FUW;
-        then consider k being Element of NAT such that
-A29:    b in Un.k by A4,PROB_1:25;
-        not b in union{Cl (Wn.m) where m is Element of NAT: m in Seg k\/{0}}
-        proof
-          assume b in
-          union{Cl (Wn.m) where m is Element of NAT: m in Seg k\/{0}};
-          then consider CL being set such that
-A30:      b in CL &
-          CL in {Cl (Wn.m) where m is Element of NAT: m in Seg k\/{0}}
-          by TARSKI:def 4;
-          consider m being Element of NAT such that
-A31:      CL=Cl(Wn.m)& m in Seg k\/{0} by A30;
-          B meets Cl(Wn.m) by A28,A30,A31,XBOOLE_0:3;
-          hence contradiction by A7;
-        end;
-        then b in UW(k) by A29,XBOOLE_0:def 5;
-        then b in FUW.k by A16;
-        hence contradiction by A28,PROB_1:25;
-      end;
-      hence thesis by TARSKI:def 3;
-    end;
-A32: Union FUW misses Union FWU
-    proof
-      assume Union FUW meets Union FWU;
-      then consider f being set such that
-A33:  f in Union FUW & f in Union FWU by XBOOLE_0:3;
-      consider n being Element of NAT such that
-A34:  f in FUW.n by A33,PROB_1:25;
+    now
+      let a be set;
+      assume that
+A47:  a in A and
+A48:  not a in Union FWU;
       consider k being Element of NAT such that
-A35:  f in FWU.k by A33,PROB_1:25;
-A36:  n<=k implies FUW.n misses FWU.k
+A49:  a in Wn.k by A4,A47,PROB_1:25;
+      not a in union{Cl (Un.m) where m is Element of NAT: m in Seg k\/{0}
+      }
       proof
         assume
-A37:    n<=k & FUW.n meets FWU.k;
-        then consider u being set such that
-A38:    u in FUW.n & u in FWU.k by XBOOLE_0:3;
-        u in Wn.k\union{Cl(Un.l) where l is Element of NAT: l in Seg k\/{0} }
-        by A9,A38;
-        then
-A39:    not u in union{Cl(Un.l) where l is Element of NAT: l in Seg k\/{0}}
-        by XBOOLE_0:def 5;
-        u in Un.n\union{Cl(Wn.l) where l is Element of NAT: l in Seg n\/{0} }
-        by A16,A38;
-        then
-A40:    u in Un.n & Un.n c= Cl(Un.n) by PRE_TOPC:48,XBOOLE_0:def 5;
-        n = 0 or n in Seg n by FINSEQ_1:5;
-        then n in {0} or n in Seg n & Seg n c= Seg k
-        by A37,FINSEQ_1:7,TARSKI:def 1;
-        then n in Seg k\/{0} by XBOOLE_0:def 3;
-        then Cl(Un.n) in
-        {Cl (Un.l) where l is Element of NAT: l in Seg k\/{0}};
-        hence contradiction by A39,A40,TARSKI:def 4;
+        a in union{Cl (Un.m) where m is Element of NAT: m in Seg k\/{
+        0}};
+        then consider CL being set such that
+A50:    a in CL and
+A51:    CL in {Cl (Un.m) where m is Element of NAT: m in Seg k\/{0}}
+        by TARSKI:def 4;
+        consider m being Element of NAT such that
+A52:    CL=Cl(Un.m) and
+        m in Seg k\/{0} by A51;
+        A meets Cl(Un.m) by A47,A50,A52,XBOOLE_0:3;
+        hence contradiction by A46;
       end;
-      n>=k implies FUW.n misses FWU.k
-      proof
-        assume
-A41:    n>=k & FUW.n meets FWU.k;
-        then consider w being set such that
-A42:    w in FUW.n & w in FWU.k by XBOOLE_0:3;
-        w in Un.n\union{Cl(Wn.l) where l is Element of NAT: l in Seg n\/{0} }
-        by A16,A42;
-        then
-A43:    not w in union{Cl(Wn.l) where l is Element of NAT: l in Seg n\/{0}}
-        by XBOOLE_0:def 5;
-        w in Wn.k\union{Cl(Un.l) where l is Element of NAT: l in Seg k\/{0} }
-        by A9,A42;
-        then
-A44:    w in Wn.k & Wn.k c= Cl(Wn.k) by PRE_TOPC:48,XBOOLE_0:def 5;
-        k = 0 or k in Seg k by FINSEQ_1:5;
-        then k in {0} or k in Seg k & Seg k c= Seg n
-        by A41,FINSEQ_1:7,TARSKI:def 1;
-        then k in Seg n\/{0} by XBOOLE_0:def 3;
-        then Cl(Wn.k) in
-        {Cl (Wn.l) where l is Element of NAT: l in Seg n\/{0}};
-        hence contradiction by A43,A44,TARSKI:def 4;
-      end;
-      hence contradiction by A34,A35,A36,XBOOLE_0:3;
+      then a in WU(k) by A49,XBOOLE_0:def 5;
+      then a in FWU.k by A23;
+      hence contradiction by A48,PROB_1:25;
     end;
-    Union FUW is open & Union FWU is open by A10,A17,Th17;
-    hence thesis by A22,A27,A32;
+    then A c= Union FWU by TARSKI:def 3;
+    hence thesis by A21,A24,A13,A45;
   end;
   hence thesis by COMPTS_1:def 6;
 end;
 
 theorem Th19:
-  for T st T is regular
-  for Bn being FamilySequence of T st (Union Bn) is Basis of T holds
-  for U being Subset of T,p being Point of T st U is open & p in U
-  ex O being Subset of T st p in O & Cl O c= U & O in Union Bn
+  for T st T is regular for Bn being FamilySequence of T st (Union
+Bn) is Basis of T holds for U being Subset of T,p being Point of T st U is open
+  & p in U ex O being Subset of T st p in O & Cl O c= U & O in Union Bn
 proof
   let T;
   assume
@@ -1437,36 +1625,47 @@ A1: T is regular;
   let Bn be FamilySequence of T;
   assume
 A2: (Union Bn) is Basis of T;
-  for U,p st U is open & p in U ex O being Subset of T st
-  p in O & Cl O c= U & O in Union Bn
+  for U,p st U is open & p in U ex O being Subset of T st p in O & Cl O c=
+  U & O in Union Bn
   proof
     let U,p;
-    assume
-A3: U is open & p in U;
-    now per cases;
+    assume that
+    U is open and
+A3: p in U;
+    now
+      per cases;
       suppose
 A4:     U=the carrier of T;
         consider O being Subset of T such that
-A5:     O in Union Bn & p in O & O c= U by A2,A3,YELLOW_9:31;
+A5:     O in Union Bn & p in O and
+        O c= U by A2,A3,YELLOW_9:31;
         take O;
-        p in O & Cl O c= U & O in Union Bn by A4,A5;
-        hence thesis;
+        Cl O c= U by A4;
+        hence thesis by A5;
       end;
-      suppose U<>the carrier of T;
+      suppose
+        U<>the carrier of T;
         then U c< the carrier of T by XBOOLE_0:def 8;
-        then U`<>{} & p in U`` & U` is closed by A3,XBOOLE_1:105;
+        then
+A6:     U`<>{} by XBOOLE_1:105;
+        p in U`` by A3;
         then consider W,V being Subset of T such that
-A6:     W is open & V is open & p in W & U` c= V & W misses V
-        by A1,COMPTS_1:def 5;
-A7:     W c=V` & V` c= U & V` is closed by A6,SUBSET_1:36,43;
+A7:     W is open and
+A8:     V is open and
+A9:     p in W and
+A10:    U` c= V and
+A11:    W misses V by A1,A6,COMPTS_1:def 5;
         consider O being Subset of T such that
-A8:     O in Union Bn & p in O & O c= W by A2,A6,YELLOW_9:31;
-        take O;
-        O c=V` by A7,A8,XBOOLE_1:1;
+A12:    O in Union Bn & p in O and
+A13:    O c= W by A2,A7,A9,YELLOW_9:31;
+        W c=V` by A11,SUBSET_1:43;
+        then O c=V` by A13,XBOOLE_1:1;
         then Cl O c= Cl V` by PRE_TOPC:49;
-        then Cl O c= V` by A7,PRE_TOPC:52;
-        hence thesis by
-A7,A8,XBOOLE_1:1;
+        then
+A14:    Cl O c= V` by A8,PRE_TOPC:52;
+        take O;
+        V` c= U by A10,SUBSET_1:36;
+        hence thesis by A12,A14,XBOOLE_1:1;
       end;
     end;
     hence thesis;
@@ -1475,129 +1674,144 @@ A7,A8,XBOOLE_1:1;
 end;
 
 theorem
-  for T st T is regular & T is T_1 &
-  ex Bn being FamilySequence of T st Bn is Basis_sigma_locally_finite
-  holds T is normal
+  for T st T is regular & ex Bn being FamilySequence of T st Bn is
+  Basis_sigma_locally_finite holds T is normal
 proof
   let T;
-  assume
-A1: T is regular & T is T_1 &
-  ex Bn being FamilySequence of T st Bn is Basis_sigma_locally_finite;
-  then consider Bn being FamilySequence of T such that
-A2: Bn is Basis_sigma_locally_finite;
-A3: Union Bn is Basis of T & Bn is sigma_locally_finite by A2,Def6;
-  for A,U st A is closed & U is open & A c=U
-  ex W being Function of NAT, bool(the carrier of T) st
-  A c= Union W & Union W c= U & (for n holds Cl (W.n) c= U & W.n is open)
+  assume that
+A1: T is regular and
+A2: ex Bn being FamilySequence of T st Bn is Basis_sigma_locally_finite;
+  consider Bn being FamilySequence of T such that
+A3: Bn is Basis_sigma_locally_finite by A2;
+A4: Union Bn is Basis of T by A3,Def6;
+A5: Bn is sigma_locally_finite by A3,Def6;
+  for A,U st A is closed & U is open & A c=U ex W being Function of NAT,
+bool(the carrier of T) st A c= Union W & Union W c= U & for n holds Cl (W.n) c=
+  U & W.n is open
   proof
     let A,U;
-    assume
-A4: A is closed & U is open & A c=U;
+    assume that
+    A is closed and
+    U is open and
+A6: A c=U;
     deffunc B(set)=union{O where O is Subset of T: O in Bn.$1 & Cl O c=U};
-A5: for k being set st k in NAT holds B(k) in bool the carrier of T
+A7: for k being set st k in NAT holds B(k) in bool the carrier of T
     proof
       let k be set;
-      assume k in NAT;
+      assume
+      k in NAT;
       then reconsider k as Element of NAT;
       now
         let bu be set;
-        assume bu in B(k);
+        assume
+        bu in B(k);
         then consider b being set such that
-A6:     bu in b & b in {O where O is Subset of T: O in Bn.k & Cl O c=U}
-        by TARSKI:def 4;
-        consider O being Subset of T such that
-A7:     b=O & O in Bn.k & Cl O c=U by A6;
-        thus bu in the carrier of T by A6,A7;
+A8:     bu in b and
+A9:     b in {O where O is Subset of T: O in Bn.k & Cl O c=U} by
+        TARSKI:def 4;
+        ex O being Subset of T st b=O & O in Bn.k & Cl O c=U by A9;
+        hence bu in the carrier of T by A8;
       end;
       then B(k) c= the carrier of T by TARSKI:def 3;
       hence thesis;
     end;
     consider BU being Function of NAT, bool (the carrier of T) such that
-A8: for k being set st k in NAT holds BU.k= B(k) from FUNCT_2:sch 2(A5);
-A9: A c= Union BU
-    proof
-      for a being set st a in A holds a in Union BU
-      proof
-        let a be set;
-        assume a in A;
-        then consider Q being Subset of T such that
-A10:    a in Q & Cl Q c= U & Q in Union Bn by A1,A3,A4,Th19;
-        consider k being Element of NAT such that
-A11:    Q in Bn.k by A10,PROB_1:25;
-        Q in {O where O is Subset of T: O in Bn.k & Cl O c=U} by A10,A11;
-        then a in B(k) by A10,TARSKI:def 4;
-        then a in BU.k by A8;
-        hence thesis by PROB_1:25;
-      end;
-      hence thesis by TARSKI:def 3;
-    end;
-A12: Union BU c= U
-    proof
-      let bu be set;
-      assume bu in Union BU;
-      then consider k being Element of NAT such that
-A13:  bu in BU.k by PROB_1:25;
-      bu in union {O where O is Subset of T: O in Bn.k & Cl O c=U} by A8,A13;
-      then consider b being set such that
-A14:  bu in b &
-      b in {O where O is Subset of T: O in Bn.k & Cl O c=U} by TARSKI:def 4;
-      consider O being Subset of T such that
-A15:  b=O & O in Bn.k & Cl O c=U by A14;
-      O c= Cl O by PRE_TOPC:48;
-      then b c= U by A15,XBOOLE_1:1;
-      hence thesis by A14;
-    end;
-    now
+A10: for k being set st k in NAT holds BU.k= B(k) from FUNCT_2:sch 2(
+    A7);
+A11: now
       let n;
       set BUn={O where O is Subset of T: O in Bn.n & Cl O c=U};
-A16:  Bn.n is locally_finite by A3,Def3;
       BUn c= bool the carrier of T
       proof
         let b be set;
-        assume b in BUn;
-        then consider O being Subset of T such that
-A17:    b=O & O in Bn.n & Cl O c=U;
-        thus thesis by A17;
+        assume
+        b in BUn;
+        then ex O being Subset of T st b=O & O in Bn.n & Cl O c=U;
+        hence thesis;
       end;
       then reconsider BUn as Subset-Family of T;
-      BUn c=Bn.n
+A12:  BUn c=Bn.n
       proof
         let b be set;
-        assume b in BUn;
-        then consider O being Subset of T such that
-A18:    b=O & O in Bn.n & Cl O c=U;
-        thus thesis by A18;
+        assume
+        b in BUn;
+        then ex O being Subset of T st b=O & O in Bn.n & Cl O c=U;
+        hence thesis;
       end;
+      Bn.n is locally_finite by A5,Def3;
       then
-A19:  Cl union(BUn)= union(clf BUn) by A16,PCOMPS_1:12,23;
-A20:  Cl union(BUn)c=U
+A13:  Cl union(BUn)= union(clf BUn) by A12,PCOMPS_1:12,23;
+A14:  Cl union(BUn)c=U
       proof
         let ClBu be set;
-        assume ClBu in Cl union(BUn);
+        assume
+        ClBu in Cl union(BUn);
         then consider ClB being set such that
-A21:    ClBu in ClB & ClB in clf BUn by A19,TARSKI:def 4;
-        reconsider ClB as Subset of T by A21;
+A15:    ClBu in ClB and
+A16:    ClB in clf BUn by A13,TARSKI:def 4;
+        reconsider ClB as Subset of T by A16;
         consider B being Subset of T such that
-A22:    Cl B =ClB & B in BUn by A21,PCOMPS_1:def 3;
-        consider Q being Subset of T such that
-A23:    B=Q & Q in Bn.n & Cl Q c=U by A22;
-        thus thesis by A21,A22,A23;
+A17:    Cl B =ClB and
+A18:    B in BUn by A16,PCOMPS_1:def 3;
+        ex Q being Subset of T st B=Q & Q in Bn.n & Cl Q c=U by A18;
+        hence thesis by A15,A17;
       end;
       BUn c= the topology of T
       proof
         let B be set;
-        assume B in BUn;
+        assume
+        B in BUn;
         then consider Q being Subset of T such that
-A24:    B=Q & Q in Bn.n & Cl Q c=U;
-        Q in Union Bn & Union Bn c= the topology of T
-        by A3,A24,CANTOR_1:def 2,PROB_1:25;
-        hence thesis by A24;
+A19:    B=Q and
+A20:    Q in Bn.n and
+        Cl Q c=U;
+A21:    Union Bn c= the topology of T by A4,CANTOR_1:def 2;
+        Q in Union Bn by A20,PROB_1:25;
+        hence thesis by A19,A21;
       end;
       then union BUn in the topology of T by PRE_TOPC:def 1;
-      then union BUn is open & Cl union(BUn)c=U by A20,PRE_TOPC:def 5;
-      hence BU.n is open & Cl (BU.n) c=U by A8;
+      then union BUn is open by PRE_TOPC:def 5;
+      hence BU.n is open & Cl (BU.n) c=U by A10,A14;
     end;
-    hence thesis by A9,A12;
+A22: Union BU c= U
+    proof
+      let bu be set;
+      assume
+      bu in Union BU;
+      then consider k being Element of NAT such that
+A23:  bu in BU.k by PROB_1:25;
+      bu in union {O where O is Subset of T: O in Bn.k & Cl O c=U} by A10
+      ,A23;
+      then consider b being set such that
+A24:  bu in b and
+A25:  b in {O where O is Subset of T: O in Bn.k & Cl O c=U} by
+      TARSKI:def 4;
+      consider O being Subset of T such that
+A26:  b=O and
+      O in Bn.k and
+A27:  Cl O c=U by A25;
+      O c= Cl O by PRE_TOPC:48;
+      then b c= U by A26,A27,XBOOLE_1:1;
+      hence thesis by A24;
+    end;
+    for a being set st a in A holds a in Union BU
+    proof
+      let a be set;
+      assume
+      a in A;
+      then consider Q being Subset of T such that
+A28:  a in Q and
+A29:  Cl Q c= U and
+A30:  Q in Union Bn by A1,A4,A6,Th19;
+      consider k being Element of NAT such that
+A31:  Q in Bn.k by A30,PROB_1:25;
+      Q in {O where O is Subset of T: O in Bn.k & Cl O c=U} by A29,A31;
+      then a in B(k) by A28,TARSKI:def 4;
+      then a in BU.k by A10;
+      hence thesis by PROB_1:25;
+    end;
+    then A c= Union BU by TARSKI:def 3;
+    hence thesis by A22,A11;
   end;
   hence thesis by Th18;
 end;
@@ -1605,10 +1819,10 @@ end;
 Lm7: for r being Real,A being Point of RealSpace st r>0 holds A in Ball(A,r)
 proof
   let r be Real,A be Point of RealSpace;
-  assume
-A1: r>0;
   reconsider A'=A as Real by METRIC_1:def 14;
-  abs(A'-A')=0 by ABSVALUE:7;
+A1: abs(A'-A')=0 by ABSVALUE:7;
+  assume
+  r>0;
   then dist(A,A)<r by A1,TOPMETR:15;
   hence thesis by METRIC_1:12;
 end;
@@ -1618,7 +1832,8 @@ definition
   let F,G be RealMap of T;
   redefine func F+G -> RealMap of T means
   :Def7:
-  for t being Element of T holds it.t=F.t+G.t;
+  for t being Element of T
+  holds it.t=F.t+G.t;
   coherence
   proof
     F+G is Function of the carrier of T,REAL;
@@ -1627,114 +1842,128 @@ definition
   compatibility
   proof
     let m be RealMap of T;
-    thus m = F+G implies
-    for p being Element of T holds m.p = F.p+G.p by VALUED_1:1;
-    assume
-A1: for p being Element of T holds m.p = F.p+G.p;
-A2: dom m = the carrier of T by FUNCT_2:def 1;
-A3: dom (F+G) = dom F /\ dom G by VALUED_1:def 1
+    thus m = F+G implies for p being Element of T holds m.p = F.p+G.p by
+    VALUED_1:1;
+A1: dom (F+G) = dom F /\ dom G by VALUED_1:def 1
       .= (the carrier of T) /\ dom G by FUNCT_2:def 1
       .= (the carrier of T) /\ the carrier of T by FUNCT_2:def 1;
-    now
+    assume
+A2: for p being Element of T holds m.p = F.p+G.p;
+A3: now
       let x be set;
       assume
 A4:   x in dom m;
-      hence m.x = (F.x)+(G.x) by A1
-        .= (F+G).x by A3,A4,VALUED_1:def 1;
+      hence m.x = (F.x)+(G.x) by A2
+        .= (F+G).x by A1,A4,VALUED_1:def 1;
     end;
-    hence thesis by A2,A3,FUNCT_1:9;
+    dom m = the carrier of T by FUNCT_2:def 1;
+    hence thesis by A1,A3,FUNCT_1:9;
   end;
 end;
 
 theorem
-  for f being RealMap of T st f is continuous for F being RealMap of [:T,T:]
-  st for x,y being Element of T holds F.(x,y)=abs(f.x-f.y)
-  holds F is continuous
+  for f being RealMap of T st f is continuous for F being RealMap of [:T
+  ,T:] st for x,y being Element of T holds F.(x,y)=abs(f.x-f.y) holds F is
+  continuous
 proof
   let f be RealMap of T such that
 A1: f is continuous;
+  set TT= [:T,T:];
+  set cT= the carrier of T;
+  reconsider f'=f as Function of T,R^1 by TOPMETR:24;
   let F be RealMap of [:T,T:] such that
 A2: for x,y being Element of T holds F.(x,y)=abs(f.x-f.y);
-  reconsider f'=f as Function of T,R^1 by TOPMETR:24;
   reconsider F'=F as Function of [:T,T:],R^1 by TOPMETR:24;
 A3: f' is continuous by A1,TOPREAL6:83;
-  set cT= the carrier of T;
-  set TT= [:T,T:];
   now
     let tt be Point of TT;
     tt in the carrier of TT;
     then tt in [:cT,cT:] by BORSUK_1:def 5;
     then consider t1,t2 being set such that
-A4: t1 in cT & t2 in cT & [t1,t2]=tt by ZFMISC_1:def 2;
+A4: t1 in cT & t2 in cT and
+A5: [t1,t2]=tt by ZFMISC_1:def 2;
     reconsider t1,t2 as Point of T by A4;
-    for R being Subset of R^1 st R is open & F'.tt in R
-    ex H being Subset of TT st H is open & tt in H & F'.:H c= R
+    for R being Subset of R^1 st R is open & F'.tt in R ex H being Subset
+    of TT st H is open & tt in H & F'.:H c= R
     proof
-      let R be Subset of R^1;
-A5:   F.tt = F.(t1,t2) by A4;
-      assume
-A6:   R is open & F'.tt in R;
-      then
-A7:   R is open & F.tt in R & abs(f'.t1-f'.t2)=F.tt by A2,A5;
-      reconsider Ftt=F.tt as Point of RealSpace by METRIC_1:def 14;
       reconsider ft1=f.t1,ft2=f.t2 as Point of RealSpace by METRIC_1:def 14;
-      consider r being real number such that
-A8:   r>0 & Ball(Ftt,r) c= R by A6,TOPMETR:22,def 7;
+      reconsider Ftt=F.tt as Point of RealSpace by METRIC_1:def 14;
+      let R be Subset of R^1;
+      assume
+      R is open & F'.tt in R;
+      then consider r being real number such that
+A6:   r>0 and
+A7:   Ball(Ftt,r) c= R by TOPMETR:22,def 7;
       reconsider r'=r as Real by XREAL_0:def 1;
-A9:   r'/2 >0 by A8,XREAL_1:141;
-      reconsider A=Ball(ft1,r'/2),B=Ball(ft2,r'/2) as Subset of R^1
-      by METRIC_1:def 14,TOPMETR:24;
-A10:  f.t1 in A & A is open & A is Subset of R^1 &f.t2 in B & B is open
-      by A9,Lm7,TOPMETR:21,def 7;
-      f' is_continuous_at t1 by A3,TMAP_1:55;
+      reconsider A=Ball(ft1,r'/2),B=Ball(ft2,r'/2) as Subset of R^1 by
+      METRIC_1:def 14,TOPMETR:24;
+A8:   A is open & f' is_continuous_at t1 by A3,TMAP_1:55,TOPMETR:21,def 7;
+      f.t1 in A by A6,Lm7,XREAL_1:141;
       then consider T1 being Subset of T such that
-A11:  T1 is open & t1 in T1 & f'.:T1 c= A by A10,TMAP_1:48;
-      f' is_continuous_at t2 by A3,TMAP_1:55;
+A9:   T1 is open and
+A10:  t1 in T1 and
+A11:  f'.:T1 c= A by A8,TMAP_1:48;
+A12:  B is open & f' is_continuous_at t2 by A3,TMAP_1:55,TOPMETR:21,def 7;
+      f.t2 in B by A6,Lm7,XREAL_1:141;
       then consider T2 being Subset of T such that
-A12:  T2 is open & t2 in T2 & f'.:T2 c= B by A10,TMAP_1:48;
-A13:  [:T1,T2:] is open & tt in [:T1,T2:] by A4,A11,A12,BORSUK_1:46
-,ZFMISC_1:def 2;
-      F.:[:T1,T2:]c= R
+A13:  T2 is open and
+A14:  t2 in T2 and
+A15:  f'.:T2 c= B by A12,TMAP_1:48;
+      F.tt = F.(t1,t2) by A5;
+      then
+A16:  abs(f'.t1-f'.t2)=F.tt by A2;
+A17:  F.:[:T1,T2:]c= R
       proof
         let Fxy be set;
-        assume Fxy in F.:[:T1,T2:];
+        assume
+        Fxy in F.:[:T1,T2:];
         then consider xy being set such that
-A14:    xy in dom F & xy in [:T1,T2:] & Fxy = F.xy by FUNCT_1:def 12;
+        xy in dom F and
+A18:    xy in [:T1,T2:] and
+A19:    Fxy = F.xy by FUNCT_1:def 12;
         consider x,y such that
-A15:    x in T1 & y in T2 & xy=[x,y] by A14,ZFMISC_1:def 2;
-        reconsider x,y as Point of T by A15;
-        reconsider Fxy1=F.[x,y] as Point of RealSpace by METRIC_1:def 14;
-A16:    abs(f.x-f.y)=F.(x,y) by A2;
-        x in cT & y in cT;
-        then x in dom f & y in dom f by FUNCT_2:def 1;
-        then
-A17:    f.x in f.:T1 & f.y in f.:T2 by A15,FUNCT_1:def 12;
+A20:    x in T1 and
+A21:    y in T2 and
+A22:    xy=[x,y] by A18,ZFMISC_1:def 2;
+        reconsider x,y as Point of T by A20,A21;
         reconsider fx=f.x,fy=f.y as Point of RealSpace by METRIC_1:def 14;
-        dist(fx,ft1)<r'/2 & dist(fy,ft2)<r'/2 by A11,A12,A17,METRIC_1:12;
+        y in cT;
+        then y in dom f by FUNCT_2:def 1;
+        then f.y in f.:T2 by A21,FUNCT_1:def 12;
         then
-A18:    dist(fx,ft1)+dist(fy,ft2)<r'/2+r'/2 by XREAL_1:10;
-        F.[x,y]<=abs(f.x-f.t1)+F.tt+abs(f.t2-f.y) by A7,A16,Lm2;
+A23:    dist(fy,ft2)<r'/2 by A15,METRIC_1:12;
+        reconsider Fxy1=F.[x,y] as Point of RealSpace by METRIC_1:def 14;
+A24:    abs(f.x-f.y)=F.(x,y) by A2;
+        then F.[x,y]<=abs(f.x-f.t1)+F.tt+abs(f.t2-f.y) by A16,Lm2;
         then F.[x,y]<=abs(f.x-f.t1)+F.tt+dist(ft2,fy) by TOPMETR:15;
         then
-A19:    F.[x,y]+0<=F.tt+dist(fx,ft1)+dist(ft2,fy) by TOPMETR:15;
-        F.tt+(dist(fx,ft1)+dist(ft2,fy))<F.tt+r' by A18,XREAL_1:10;
-        then F.[x,y]+0<F.tt+r' by A19,XXREAL_0:2;
-        then
-A20:    F.[x,y]-F.tt < r'-0 by XREAL_1:23;
-        F.tt<=abs(f.t1-f.x)+F.[x,y]+abs(f.y-f.t2) by A7,A16,Lm2;
+A25:    F.[x,y]+0<=F.tt+dist(fx,ft1)+dist(ft2,fy) by TOPMETR:15;
+        F.tt<=abs(f.t1-f.x)+F.[x,y]+abs(f.y-f.t2) by A16,A24,Lm2;
         then F.tt<=dist(fx,ft1)+F.[x,y]+abs(f.y-f.t2) by TOPMETR:15;
         then
-A21:    F.tt<=F.[x,y]+dist(fx,ft1)+dist(fy,ft2) by TOPMETR:15;
-        F.[x,y]+(dist(fx,ft1)+dist(fy,ft2))<F.[x,y]+r' by A18,XREAL_1:10;
-        then F.tt < -(-F.[x,y]-r') by A21,XXREAL_0:2;
+A26:    F.tt<=F.[x,y]+dist(fx,ft1)+dist(fy,ft2) by TOPMETR:15;
+        x in cT;
+        then x in dom f by FUNCT_2:def 1;
+        then f.x in f.:T1 by A20,FUNCT_1:def 12;
+        then dist(fx,ft1)<r'/2 by A11,METRIC_1:12;
+        then
+A27:    dist(fx,ft1)+dist(fy,ft2)<r'/2+r'/2 by A23,XREAL_1:10;
+        then F.[x,y]+(dist(fx,ft1)+dist(fy,ft2))<F.[x,y]+r' by
+        XREAL_1:10;
+        then F.tt < -(-F.[x,y]-r') by A26,XXREAL_0:2;
         then -F.tt-0 > -r'-F.[x,y] by XREAL_1:28;
-        then -F.tt+F.[x,y] > -r'+0 by XREAL_1:23;
-        then abs(F.[x,y]-F.tt)<r' by A20,SEQ_2:9;
+        then
+A28:    -F.tt+F.[x,y] > -r'+0 by XREAL_1:23;
+        F.tt+(dist(fx,ft1)+dist(ft2,fy))<F.tt+r' by A27,XREAL_1:10;
+        then F.[x,y]+0<F.tt+r' by A25,XXREAL_0:2;
+        then F.[x,y]-F.tt < r'-0 by XREAL_1:23;
+        then abs(F.[x,y]-F.tt)<r' by A28,SEQ_2:9;
         then dist(Ftt,Fxy1)<r' by TOPMETR:15;
         then Fxy1 in Ball(Ftt,r) by METRIC_1:12;
-        hence thesis by A8,A14,A15;
+        hence thesis by A7,A19,A22;
       end;
-      hence thesis by A13;
+      tt in [:T1,T2:] by A5,A10,A14,ZFMISC_1:def 2;
+      hence thesis by A9,A13,A17,BORSUK_1:46;
     end;
     hence F' is_continuous_at tt by TMAP_1:48;
   end;
@@ -1747,59 +1976,81 @@ theorem Th22:
   holds F + G is continuous
 proof
   let F,G be RealMap of T such that
-A1: F is continuous & G is continuous;
+A1: F is continuous and
+A2: G is continuous;
   reconsider F'=F,G'=G,FG'=F+G as Function of T,R^1 by TOPMETR:24;
-A2: F' is continuous & G' is continuous by A1,TOPREAL6:83;
+A3: G' is continuous by A2,TOPREAL6:83;
+A4: F' is continuous by A1,TOPREAL6:83;
   now
     let t be Point of T;
-    for R being Subset of R^1 st R is open & FG'.t in R
-    ex H being Subset of T st H is open & t in H & FG'.:H c= R
+    for R being Subset of R^1 st R is open & FG'.t in R ex H being Subset
+    of T st H is open & t in H & FG'.:H c= R
     proof
-      let R be Subset of R^1 such that
-A3:   R is open & FG'.t in R;
-      reconsider Ft=F.t, Gt=G.t,FGt=(F+G).t as Point of RealSpace
-      by METRIC_1:def 14;
-      consider r being real number such that
-A4:   r>0 & Ball(FGt,r) c= R by A3,TOPMETR:22,def 7;
+      reconsider Ft=F.t, Gt=G.t,FGt=(F+G).t as Point of RealSpace by METRIC_1:
+      def 14;
+      let R be Subset of R^1;
+      assume
+      R is open & FG'.t in R;
+      then consider r being real number such that
+A5:   r>0 and
+A6:   Ball(FGt,r) c= R by TOPMETR:22,def 7;
       reconsider r'=r as Real by XREAL_0:def 1;
-A5:   r'/2 >0 by A4,XREAL_1:141;
-      reconsider A=Ball(Ft,r'/2),B=Ball(Gt,r'/2) as Subset of R^1
-      by METRIC_1:def 14,TOPMETR:24;
-A6:   F'.t in A & A is open & G.t in B & B is open by A5,Lm7,TOPMETR:21,def 7;
-      F' is_continuous_at t by A2,TMAP_1:55;
+      reconsider A=Ball(Ft,r'/2),B=Ball(Gt,r'/2) as Subset of R^1 by METRIC_1:
+      def 14,TOPMETR:24;
+A7:   A is open & F' is_continuous_at t by A4,TMAP_1:55,TOPMETR:21,def 7;
+      F'.t in A by A5,Lm7,XREAL_1:141;
       then consider AT being Subset of T such that
-A7:   AT is open & t in AT & F'.:AT c= A by A6,TMAP_1:48;
-      G' is_continuous_at t by A2,TMAP_1:55;
+A8:   AT is open and
+A9:   t in AT and
+A10:  F'.:AT c= A by A7,TMAP_1:48;
+A11:  B is open & G' is_continuous_at t by A3,TMAP_1:55,TOPMETR:21,def 7;
+      G.t in B by A5,Lm7,XREAL_1:141;
       then consider BT being Subset of T such that
-A8:   BT is open & t in BT & G'.:BT c= B by A6,TMAP_1:48;
-A9:   AT/\BT is open & t in AT/\BT by A7,A8,TOPS_1:38,XBOOLE_0:def 4;
-      (F+G).:(AT/\BT) c= R
+A12:  BT is open and
+A13:  t in BT and
+A14:  G'.:BT c= B by A11,TMAP_1:48;
+A15:  (F+G).:(AT/\BT) c= R
       proof
         let FGx be set;
-        assume FGx in (F+G).:(AT/\BT);
+        assume
+        FGx in (F+G).:(AT/\BT);
         then consider x such that
-A10:    x in dom (F+G) & x in AT/\BT & FGx=(F+G).x by FUNCT_1:def 12;
-        reconsider x as Point of T by A10;
-        reconsider Fx=F.x,Gx=G.x,FGx'=(F+G).x as Point of RealSpace
-        by METRIC_1:def 14;
-        dom F = the carrier of T & dom G = the carrier of T by FUNCT_2:def 1;
-        then x in dom F & x in AT & x in dom G & x in BT by A10,XBOOLE_0:def 4;
-        then F.x in F.:AT & G.x in G.:BT by FUNCT_1:def 12;
-        then dist(Fx,Ft)<r'/2 & dist(Gx,Gt)<r'/2 by A7,A8,METRIC_1:12;
-        then abs(F.x-F.t)<r'/2 & abs(G.x-G.t)<r'/2 by TOPMETR:15;
-        then -r'/2<F.x-F.t & -r'/2<G.x-G.t & F.x-F.t<r'/2 & G.x-G.t<r'/2
-        by SEQ_2:9;
-        then -r'/2 +(-r'/2)<(F.x-F.t)+(G.x-G.t) & (F.x-F.t)+(G.x-G.t)<r'/2+r'/
-        2 by XREAL_1:10;
-        then -r'<(F.x+G.x)-(F.t+G.t)& (F.x+G.x)-(F.t+G.t)<r';
-        then abs((F.x+G.x)-(F.t+G.t))< r' by SEQ_2:9;
+A16:    x in dom (F+G) and
+A17:    x in AT/\BT and
+A18:    FGx=(F+G).x by FUNCT_1:def 12;
+        reconsider x as Point of T by A16;
+        reconsider Fx=F.x,Gx=G.x,FGx'=(F+G).x as Point of RealSpace by
+        METRIC_1:def 14;
+        dom G = the carrier of T & x in BT by A17,FUNCT_2:def 1,XBOOLE_0:
+        def 4;
+        then G.x in G.:BT by FUNCT_1:def 12;
+        then dist(Gx,Gt)<r'/2 by A14,METRIC_1:12;
+        then
+A19:    abs(G.x-G.t)<r'/2 by TOPMETR:15;
+        then
+A20:    -r'/2<G.x-G.t by SEQ_2:9;
+        dom F = the carrier of T & x in AT by A17,FUNCT_2:def 1,XBOOLE_0:
+        def 4;
+        then F.x in F.:AT by FUNCT_1:def 12;
+        then dist(Fx,Ft)<r'/2 by A10,METRIC_1:12;
+        then
+A21:    abs(F.x-F.t)<r'/2 by TOPMETR:15;
+        then -r'/2<F.x-F.t by SEQ_2:9;
+        then -r'/2 +(-r'/2)<(F.x-F.t)+(G.x-G.t) by A20,XREAL_1:10;
+        then
+A22:    -r'<(F.x+G.x)-(F.t+G.t);
+A23:    G.x-G.t<r'/2 by A19,SEQ_2:9;
+        F.x-F.t<r'/2 by A21,SEQ_2:9;
+        then (F.x-F.t)+(G.x-G.t)<r'/2+r'/ 2 by A23,XREAL_1:10;
+        then abs((F.x+G.x)-(F.t+G.t))< r' by A22,SEQ_2:9;
         then abs((F+G).x-(F.t+G.t))< r' by Def7;
         then abs((F+G).x-(F+G).t)< r' by Def7;
         then dist(FGt,FGx')<r' by TOPMETR:15;
         then FGx' in Ball(FGt,r) by METRIC_1:12;
-        hence thesis by A4,A10;
+        hence thesis by A6,A18;
       end;
-      hence thesis by A9;
+      t in AT/\BT by A9,A13,XBOOLE_0:def 4;
+      hence thesis by A8,A12,A15;
     end;
     hence FG' is_continuous_at t by TMAP_1:48;
   end;
@@ -1808,84 +2059,63 @@ A10:    x in dom (F+G) & x in AT/\BT & FGx=(F+G).x by FUNCT_1:def 12;
 end;
 
 theorem Th23:
-  for ADD being BinOp of Funcs(the carrier of T,REAL) st
-  (for f1,f2 being RealMap of T holds ADD.(f1,f2)=f1+f2) holds
-  ADD is having_a_unity & ADD is commutative associative
+  for ADD being BinOp of Funcs(the carrier of T,REAL) st (for f1,
+  f2 being RealMap of T holds ADD.(f1,f2)=f1+f2) holds ADD is having_a_unity &
+  ADD is commutative associative
 proof
+  set F=Funcs(the carrier of T,REAL);
   let ADD be BinOp of Funcs(the carrier of T,REAL) such that
 A1: for f1,f2 being RealMap of T holds ADD.(f1,f2)=f1+f2;
-  set F=Funcs(the carrier of T,REAL);
-  thus ADD is having_a_unity
+  ex map' be Element of F st map' is_a_unity_wrt ADD
   proof
-    ex map' be Element of F st map' is_a_unity_wrt ADD
-    proof
-      reconsider map0 = (the carrier of T) --> 0 as RealMap of T
-      by FUNCOP_1:57;
-      reconsider map0'=map0 as Element of F by FUNCT_2:11;
-      take map0';
+    reconsider map0 = (the carrier of T) --> 0 as RealMap of T by FUNCOP_1:57;
+    reconsider map0'=map0 as Element of F by FUNCT_2:11;
+    take map0';
+    now
+      let f be Element of F;
       now
-        let f be Element of F;
-A2:     ADD.(map0',f)=f
-        proof
-          now
-            let x be Element of T;
-            (map0'+f).x=map0'.x+f.x by Def7;
-            then (map0'+f).x=0+f.x by FUNCOP_1:13;
-            hence (map0'+f).x=f.x;
-          end;
-          then map0'+f=f by FUNCT_2:113;
-          hence thesis by A1;
-        end;
-        ADD.(f,map0')=f
-        proof
-          now
-            let x be Element of T;
-            (f+map0').x=f.x+map0'.x by Def7;
-            then (f+map0').x=f.x+0 by FUNCOP_1:13;
-            hence (f+map0').x=f.x;
-          end;
-          then f+map0'=f by FUNCT_2:113;
-          hence thesis by A1;
-        end;
-        hence ADD.(map0,f)=f & ADD.(f,map0)=f by A2;
+        let x be Element of T;
+        (f+map0').x=f.x+map0'.x by Def7;
+        then (f+map0').x=f.x+0 by FUNCOP_1:13;
+        hence (f+map0').x=f.x;
       end;
-      hence thesis by BINOP_1:11;
+      then f+map0'=f by FUNCT_2:113;
+      hence ADD.(map0,f)=f & ADD.(f,map0)=f by A1;
     end;
-    hence thesis by SETWISEO:def 2;
+    hence thesis by BINOP_1:11;
   end;
+  hence ADD is having_a_unity by SETWISEO:def 2;
   thus ADD is commutative
   proof
     let f1,f2 be Element of F;
-    f1+f2=f2+f1 & ADD.(f1,f2)=f1+f2 by A1;
+    ADD.(f1,f2)=f1+f2 by A1;
     hence thesis by A1;
   end;
   thus ADD is associative
   proof
     let f1,f2,f3 be Element of F;
-    reconsider ADD12=ADD.(f1,f2),ADD23=ADD.(f2,f3) as RealMap of T
-    by FUNCT_2:121;
-A3: f1+(f2+f3)=(f1+f2)+f3
-    proof
-      now
-        let t be Element of T;
-        (f1+(f2+f3)).t=f1.t+(f2+f3).t & (f2+f3).t =f2.t+f3.t by Def7;
-        then (f1+(f2+f3)).t=(f1.t+f2.t)+f3.t;
-        then (f1+(f2+f3)).t=(f1+f2).t+f3.t by Def7;
-        hence (f1+(f2+f3)).t=((f1+f2)+f3).t by Def7;
-      end;
-      hence thesis by FUNCT_2:113;
+    reconsider ADD12=ADD.(f1,f2),ADD23=ADD.(f2,f3) as RealMap of T by FUNCT_2:
+    121;
+A2: ADD12+f3=ADD.(ADD12,f3) by A1;
+    now
+      let t be Element of T;
+      (f1+(f2+f3)).t=f1.t+(f2+f3).t & (f2+f3).t =f2.t+f3.t by Def7;
+      then (f1+(f2+f3)).t=(f1.t+f2.t)+f3.t;
+      then (f1+(f2+f3)).t=(f1+f2).t+f3.t by Def7;
+      hence (f1+(f2+f3)).t=((f1+f2)+f3).t by Def7;
     end;
-    f1+(f2+f3)=f1+ADD23 & (f1+f2)+f3=ADD12+f3 by A1;
-    then f1+ADD23=ADD12+f3 & ADD12+f3=ADD.(ADD12,f3) by A1,A3;
-    hence thesis by A1;
+    then
+A3: f1+(f2+f3)=(f1+f2)+f3 by FUNCT_2:113;
+    f1+(f2+f3)=f1+ADD23 by A1;
+    then f1+ADD23=ADD12+f3 by A1,A3;
+    hence thesis by A1,A2;
   end;
 end;
 
 theorem Th24:
-  for ADD being BinOp of Funcs(the carrier of T,REAL) st
-  (for f1,f2 being RealMap of T holds ADD.(f1,f2)=f1+f2)
-  for map' being Element of Funcs(the carrier of T,REAL) st
-  map' is_a_unity_wrt ADD holds map' is continuous
+  for ADD being BinOp of Funcs(the carrier of T,REAL) st (for f1,
+f2 being RealMap of T holds ADD.(f1,f2)=f1+f2) for map' being Element of Funcs(
+  the carrier of T,REAL) st map' is_a_unity_wrt ADD holds map' is continuous
 proof
   let ADD be BinOp of Funcs(the carrier of T,REAL) such that
 A1: for f1,f2 being RealMap of T holds ADD.(f1,f2)=f1+f2;
@@ -1894,7 +2124,8 @@ A1: for f1,f2 being RealMap of T holds ADD.(f1,f2)=f1+f2;
 A2: map' is_a_unity_wrt ADD;
 A3: for x be Point of T holds map'.x=0
   proof
-    assume ex x be Point of T st map'.x<>0;
+    assume
+    ex x be Point of T st map'.x<>0;
     then consider x be Point of T such that
 A4: map'.x<>0;
     ADD.(map',map')=map' by A2,BINOP_1:11;
@@ -1903,23 +2134,26 @@ A4: map'.x<>0;
     hence thesis by A4;
   end;
   reconsider map''=map' as Function of T,R^1 by TOPMETR:24;
-  for A being Subset of T holds map''.:(Cl A) c=
-  Cl(map''.:A qua Subset of R^1)
+  for A being Subset of T holds map''.:(Cl A) c= Cl(map''.:A qua Subset of
+  R^1)
   proof
     let A be Subset of T;
-    let mCla be set such that
-A5: mCla in map''.:(Cl A);
-    consider Cla being set such that
-A6: Cla in dom map'& Cla in Cl A & mCla=map''.Cla by A5,FUNCT_1:def 12;
-    A <>{}T by A6,PRE_TOPC:52;
+    let mCla be set;
+    assume
+    mCla in map''.:(Cl A);
+    then
+A5: ex Cla being set st Cla in dom map' & Cla in Cl A & mCla=map''.Cla by
+    FUNCT_1:def 12;
+    then A <>{}T by PRE_TOPC:52;
     then consider a being set such that
-A7: a in A by XBOOLE_0:def 1;
-    reconsider a as Element of T by A7;
-    dom map'=the carrier of T by FUNCT_2:def 1;
-    then a in dom map' & a in A & map'.a =0 by A3,A7;
-    then 0 in map'.:A & 0=mCla by A3,A6,FUNCT_1:def 12;
-    then mCla in map'.:A & map''.:A c= Cl(map''.:A) by PRE_TOPC:48;
-    hence thesis;
+A6: a in A by XBOOLE_0:def 1;
+    reconsider a as Element of T by A6;
+    dom map'=the carrier of T & map'.a =0 by A3,FUNCT_2:def 1;
+    then 0 in map'.:A by A6,FUNCT_1:def 12;
+    then
+A7: mCla in map'.:A by A3,A5;
+    map''.:A c= Cl(map''.:A) by PRE_TOPC:48;
+    hence thesis by A7;
   end;
   then map'' is continuous by TOPS_2:57;
   hence thesis by TOPREAL6:83;
@@ -1930,7 +2164,8 @@ definition
   let F be Function of A,Funcs(A,B);
   func F Toler -> Function of A,B means
   :Def8:
-  for p be Element of A holds it.p=F.p.p;
+  for p be Element of A holds it.
+  p=F.p.p;
   existence
   proof
     deffunc IT(Element of A)=F.$1.$1;
@@ -1944,18 +2179,19 @@ A1: for x being Element of A ex y being Element of B st P[x,y]
     end;
     consider F be Function of A,B such that
 A2: for x being Element of A holds P[x,F.x] from FUNCT_2:sch 3(A1);
-    take F;thus thesis by A2;
+    take F;
+    thus thesis by A2;
   end;
   uniqueness
   proof
     now
       let IT1,IT2 be Function of A,B such that
-A3:   for x being Element of A holds IT1.x=F.x.x &
-      for x being Element of A holds IT2.x=F.x.x;
+A3:   for x being Element of A holds IT1.x=F.x.x & for x being Element
+      of A holds IT2.x=F.x.x;
       now
         let x be Element of A;
-        IT1.x=F.x.x & IT2.x=F.x.x by A3;
-        hence IT1.x=IT2.x;
+        IT1.x=F.x.x by A3;
+        hence IT1.x=IT2.x by A3;
       end;
       hence IT1=IT2 by FUNCT_2:113;
     end;
@@ -1964,114 +2200,123 @@ A3:   for x being Element of A holds IT1.x=F.x.x &
 end;
 
 theorem
-  for ADD being BinOp of Funcs(the carrier of T,REAL) st
-  (for f1,f2 being RealMap of T holds ADD.(f1,f2)=f1+f2)
-  for F being FinSequence of Funcs(the carrier of T,REAL)
-  st for n st 0 <> n & n <= len F holds F.n is continuous RealMap of T
-  holds ADD "**" F is continuous RealMap of T
+  for ADD being BinOp of Funcs(the carrier of T,REAL) st (for f1,f2
+  being RealMap of T holds ADD.(f1,f2)=f1+f2) for F being FinSequence of Funcs(
+the carrier of T,REAL) st for n st 0 <> n & n <= len F holds F.n is continuous
+  RealMap of T holds ADD "**" F is continuous RealMap of T
 proof
   let ADD be BinOp of Funcs(the carrier of T,REAL) such that
 A1: for f1,f2 being RealMap of T holds ADD.(f1,f2)=f1+f2;
+  set Fu=Funcs(the carrier of T,REAL);
   let F be FinSequence of Funcs(the carrier of T,REAL) such that
 A2: for n st 0 <> n & n <= len F holds F.n is continuous RealMap of T;
   reconsider ADDF = ADD "**" F as RealMap of T by FUNCT_2:121;
-  set Fu=Funcs(the carrier of T,REAL);
-  now per cases;
-    suppose len F=0;
-      then ADD is having_a_unity & len F=0 by A1,Th23;
+  now
+    per cases;
+    suppose
+A3:   len F=0;
+A4:   ADD is having_a_unity by A1,Th23;
+      then ex x be Element of Fu st x is_a_unity_wrt ADD by
+      SETWISEO:def 2;
       then
-A3:   ADDF = the_unity_wrt ADD & ex x be Element of Fu
-      st x is_a_unity_wrt ADD by FINSOP_1:def 1,SETWISEO:def 2;
-      then the_unity_wrt ADD is_a_unity_wrt ADD by BINOP_1:def 8;
-      hence thesis by A1,A3,Th24;
+A5:   the_unity_wrt ADD is_a_unity_wrt ADD by BINOP_1:def 8;
+      ADDF = the_unity_wrt ADD by A3,A4,FINSOP_1:def 1;
+      hence thesis by A1,A5,Th24;
     end;
     suppose
-A4:   len F<>0;
-A5:   len F >=1
+A6:   len F<>0;
+A7:   len F >=1
       proof
-        assume len F < 1;
+        assume
+        len F < 1;
         then len F <1+0;
-        then len F <=0 & len F >=0 by NAT_1:13;
-        hence thesis by A4;
+        hence thesis by A6,NAT_1:13;
       end;
       then consider f be Function of NAT,Fu such that
-A6:   f.1 = F.1 & (for n st 0 <> n & n < len F holds
-      f.(n+1) = ADD.(f.n,F.(n+1))) & ADD "**" F = f.(len F) by FINSOP_1:2;
-      defpred Con[Nat] means
-      $1<=len F implies f.$1 is continuous RealMap of T;
-A7:   Con[1] by A2,A6;
-A8:   for n be Nat st n>=1 holds Con[n] implies Con[n+1]
+A8:   f.1 = F.1 and
+A9:   for n st 0 <> n & n < len F holds f.(n+1) = ADD.(f.n,F.(n+1)) and
+A10:  ADD "**" F = f.(len F) by FINSOP_1:2;
+      defpred Con[Nat] means $1<=len F implies f.$1 is continuous RealMap of T;
+A11:  for n be Nat st n>=1 holds Con[n] implies Con[n+1]
       proof
         let n be Nat such that
-A9:     n>=1 & Con[n];
+A12:    n>=1 and
+A13:    Con[n];
         assume
-A10:    n+1<=len F;
+A14:    n+1<=len F;
         reconsider n as Element of NAT by ORDINAL1:def 13;
-        n+0<n+1 by XREAL_1:10;
+A15:    n+0<n+1 by XREAL_1:10;
+        then n<len F by A14,XXREAL_0:2;
         then
-A11:    n<=len F & n<len F & n<>0 & n+1<>0 by A9,A10,XXREAL_0:2;
-        1+0<=n+1 by A9,XREAL_1:10;
-        then (n+1) in Seg len F by A10,FINSEQ_1:3;
+A16:    f.(n+1)=ADD.(f.n,F.(n+1)) by A9,A12;
+        1+0<=n+1 by A12,XREAL_1:10;
+        then (n+1) in Seg len F by A14,FINSEQ_1:3;
         then n+1 in dom F by FINSEQ_1:def 3;
         then F.(n+1) in rng F by FUNCT_1:def 5;
         then reconsider fn=f.n,Fn1=F.(n+1) as RealMap of T by FUNCT_2:121;
-        Fn1 is continuous & fn is continuous & f.(n+1)=ADD.(f.n,F.(n+1))
-        by A2,A6,A9,A10,A11;
-        then fn+Fn1 is continuous & f.(n+1)=fn+Fn1 by A1,Th22;
-        hence thesis;
+        Fn1 is continuous by A2,A14;
+        then fn+Fn1 is continuous by A13,A14,A15,Th22,XXREAL_0:2;
+        hence thesis by A1,A16;
       end;
-      for n be Nat st n>=1 holds Con[n] from NAT_1:sch 8(A7,A8);
-      hence thesis by A5,A6;
+A17:  Con[1] by A2,A8;
+      for n be Nat st n>=1 holds Con[n] from NAT_1:sch 8(A17,A11);
+      hence thesis by A7,A10;
     end;
   end;
   hence thesis;
 end;
 
 theorem
-  for F be Function of
-  the carrier of T,Funcs(the carrier of T,the carrier of T1) st
-  for p be Point of T holds F.p is continuous Function of T,T1
-  for S be Function of the carrier of T,bool the carrier of T st
-  for p be Point of T holds p in S.p & S.p is open &
-  for p,q be Point of T st p in S.q holds F.p.p=F.q.p
-  holds F Toler is continuous
+  for F be Function of the carrier of T,Funcs(the carrier of T,the
+carrier of T1) st for p be Point of T holds F.p is continuous Function of T,T1
+  for S be Function of the carrier of T,bool the carrier of T st for p be Point
+of T holds p in S.p & S.p is open & for p,q be Point of T st p in S.q holds F.p
+  .p=F.q.p holds F Toler is continuous
 proof
-  let F be Function of
-  the carrier of T,Funcs(the carrier of T,the carrier of T1) such that
+  let F be Function of the carrier of T,Funcs(the carrier of T,the carrier of
+  T1) such that
 A1: for p holds F.p is continuous Function of T,T1;
   let S be Function of the carrier of T,bool the carrier of T such that
-A2: for p holds p in S.p & S.p is open &
-  for p,q st p in S.q holds F.p.p=F.q.p;
+A2: for p holds p in S.p & S.p is open & for p,q st p in S.q holds F.p.p
+  =F.q.p;
   now
     let t be Point of T;
-    for R being Subset of T1 st R is open & (F Toler).t in R
-    ex H being Subset of T st H is open & t in H & (F Toler).:H c= R
+    for R being Subset of T1 st R is open & (F Toler).t in R ex H being
+    Subset of T st H is open & t in H & (F Toler).:H c= R
     proof
-      let R be Subset of T1 such that
-A3:   R is open & (F Toler).t in R;
       reconsider Ft=F.t as Function of T,T1 by A1;
+      let R be Subset of T1 such that
+A3:   R is open and
+A4:   (F Toler).t in R;
       Ft is continuous by A1;
-      then Ft is_continuous_at t & Ft.t in R by A3,Def8,TMAP_1:55;
+      then
+A5:   Ft is_continuous_at t by TMAP_1:55;
+      Ft.t in R by A4,Def8;
       then consider A being Subset of T such that
-A4:   A is open & t in A & Ft.:A c= R by A3,TMAP_1:48;
+A6:   A is open & t in A and
+A7:   Ft.:A c= R by A3,A5,TMAP_1:48;
       set H=A/\S.t;
-      take H;
-A5:   S.t is open & t in S.t by A2;
-      (F Toler).:H c= R
+A8:   (F Toler).:H c= R
       proof
-        let FSh be set such that
-A6:     FSh in (F Toler).:H;
-        consider h being set such that
-A7:     h in dom (F Toler) & h in H & FSh=(F Toler).h by A6,FUNCT_1:def 12;
-        reconsider h'=h as Point of T by A7;
-        h' in S.t & h' in A& FSh=F.h'.h' by A7,Def8,XBOOLE_0:def 4;
+        let FSh be set;
+        assume
+        FSh in (F Toler).:H;
+        then consider h being set such that
+A9:     h in dom (F Toler) and
+A10:    h in H and
+A11:    FSh=(F Toler).h by FUNCT_1:def 12;
+        reconsider h'=h as Point of T by A9;
+        h' in S.t & FSh=F.h'.h' by A10,A11,Def8,XBOOLE_0:def 4;
         then
-A8:     h' in A & FSh=Ft.h' by A2;
-        the carrier of T =dom Ft by FUNCT_2:def 1;
-        then FSh in Ft.:A by A8,FUNCT_1:def 12;
-        hence thesis by A4;
+A12:    FSh=Ft.h' by A2;
+A13:    the carrier of T =dom Ft by FUNCT_2:def 1;
+        h' in A by A10,XBOOLE_0:def 4;
+        then FSh in Ft.:A by A12,A13,FUNCT_1:def 12;
+        hence thesis by A7;
       end;
-      hence thesis by A4,A5,TOPS_1:38,XBOOLE_0:def 4;
+      take H;
+      S.t is open & t in S.t by A2;
+      hence thesis by A6,A8,XBOOLE_0:def 4;
     end;
     hence F Toler is_continuous_at t by TMAP_1:48;
   end;
@@ -2086,14 +2331,16 @@ definition
   deffunc M(Element of X)=min(r,f.$1);
   func min(r,f) -> Function of X,REAL means
   :Def9:
-  for x st x in X holds it.x = min(r,f.x);
+  for x st x in X holds it.x
+  = min(r,f.x);
   existence
   proof
     defpred P[set,set] means ex a being Element of X st a = $1 & $2 = M(a);
 A1: for x st x in X ex y being set st y in REAL & P[x,y]
     proof
       let x be set;
-      assume x in X;
+      assume
+      x in X;
       then reconsider x as Element of X;
       min(r,f.x) is Element of REAL by XREAL_0:def 1;
       hence thesis;
@@ -2102,7 +2349,8 @@ A1: for x st x in X ex y being set st y in REAL & P[x,y]
 A2: for x being set st x in X holds P[x,Min.x] from FUNCT_2:sch 1(A1);
     take Min;
     let x;
-    assume x in X;
+    assume
+    x in X;
     then P[x,Min.x] by A2;
     hence thesis;
   end;
@@ -2116,16 +2364,16 @@ A4: for x st x in X holds M2.x=min(r,f.x);
       let x such that
 A5:   x in X;
       reconsider y = x as Element of X by A5;
-      M1.x=M(y) & M2.x=M(y) by A3,A4,A5;
-      hence M1.x=M2.x;
+      M1.x=M(y) by A3,A5;
+      hence M1.x=M2.x by A4,A5;
     end;
     hence M1=M2 by FUNCT_2:18;
   end;
 end;
 
 theorem
-  for r be Real,f be RealMap of T st f is continuous holds
-  min(r,f) is continuous
+  for r be Real,f be RealMap of T st f is continuous holds min(r,f) is
+  continuous
 proof
   let r be Real,f be RealMap of T such that
 A1: f is continuous;
@@ -2133,99 +2381,127 @@ A1: f is continuous;
 A2: f' is continuous by A1,TOPREAL6:83;
   now
     let t be Point of T;
-    for R being Subset of R^1 st R is open & mf'.t in R
-    ex U being Subset of T st U is open & t in U & mf'.:U c= R
+    for R being Subset of R^1 st R is open & mf'.t in R ex U being Subset
+    of T st U is open & t in U & mf'.:U c= R
     proof
-      let R be Subset of R^1 such that
-A3:   R is open & mf'.t in R;
       reconsider ft=f.t as Point of RealSpace by METRIC_1:def 14;
-      now per cases;
+      let R be Subset of R^1 such that
+A3:   R is open and
+A4:   mf'.t in R;
+      now
+        per cases;
         suppose
-A4:       f.t <=r;
+A5:       f.t <=r;
           then f.t=min(r,f.t) by XXREAL_0:def 9;
-          then ft in R by A3,Def9;
+          then ft in R by A4,Def9;
           then consider s being real number such that
-A5:       s>0 & Ball(ft,s) c= R by A3,TOPMETR:22,def 7;
+A6:       s>0 and
+A7:       Ball(ft,s) c= R by A3,TOPMETR:22,def 7;
           reconsider s'=s as Real by XREAL_0:def 1;
-          reconsider B=Ball(ft,s') as Subset of R^1 by METRIC_1:def 14
-,TOPMETR:24;
-          dist(ft,ft)<s' by A5,METRIC_1:1;
-          then ft in B & B is open & f' is_continuous_at t by A2,METRIC_1:12
-,TMAP_1:55,TOPMETR:21,def 7;
+          reconsider B=Ball(ft,s') as Subset of R^1 by METRIC_1:def 14 ,
+          TOPMETR:24;
+          dist(ft,ft)<s' by A6,METRIC_1:1;
+          then
+A8:       ft in B by METRIC_1:12;
+          B is open & f' is_continuous_at t by A2,TMAP_1:55,TOPMETR:21,
+          def 7;
           then consider U being Subset of T such that
-A6:       U is open & t in U & f'.:U c= B by TMAP_1:48;
+A9:       U is open & t in U and
+A10:      f'.:U c= B by A8,TMAP_1:48;
           min(r,f).:U c= R
           proof
-            let mfx be set such that
-A7:         mfx in min(r,f).:U;
-            consider x such that
-A8:         x in dom min(r,f)& x in U& mfx=min(r,f).x by A7,FUNCT_1:def 12;
-            reconsider x as Point of T by A8;
+            let mfx be set;
+            assume
+            mfx in min(r,f).:U;
+            then consider x such that
+A11:        x in dom min(r,f) and
+A12:        x in U and
+A13:        mfx=min(r,f).x by FUNCT_1:def 12;
+            reconsider x as Point of T by A11;
             reconsider fx=f.x,r'=r as Point of RealSpace by METRIC_1:def 14;
             dom min(r,f)=the carrier of T by FUNCT_2:def 1;
-            then x in dom f by A8,FUNCT_2:def 1;
+            then x in dom f by A11,FUNCT_2:def 1;
             then
-A9:         f.x in f.:U by A8,FUNCT_1:def 12;
+A14:        f.x in f.:U by A12,FUNCT_1:def 12;
             then
-A10:        f.x in B by A6;
-            now per cases;
-              suppose f.x<=r;
+A15:        f.x in B by A10;
+            now
+              per cases;
+              suppose
+                f.x<=r;
                 then min(r,f.x)=f.x by XXREAL_0:def 9;
-                then mfx=f.x by A8,Def9;
-                hence thesis by A5,A10;
+                then mfx=f.x by A13,Def9;
+                hence thesis by A7,A15;
               end;
               suppose
-A11:            f.x>r;
-
-then f.x>=f.t & dist(fx,ft)<s by A4,A6,A9,METRIC_1:12,XXREAL_0:2;
-                then f.x-f.t>=0 & abs(f.x-f.t)<s by TOPMETR:15,XREAL_1:50;
-
-then f.x-f.t<s& r-f.t<=f.x-f.t by A11,ABSVALUE:def 1,XREAL_1:11;
-                then r-f.t<s & r-f.t>=0 by A4,XREAL_1:50,XXREAL_0:2;
-                then abs(r-f.t)<s by ABSVALUE:def 1;
-                then dist(ft,r')<s& min(r,f.x)=r by A11,TOPMETR:15
-,XXREAL_0:def 9;
-                then r in B & mfx=r by A8,Def9,METRIC_1:12;
-                hence thesis by A5;
+A16:            f.x>r;
+                dist(fx,ft)<s by A10,A14,METRIC_1:12;
+                then
+A17:            abs(f.x-f.t)<s by TOPMETR:15;
+A18:            r-f.t<=f.x-f.t by A16,XREAL_1:11;
+                f.x>=f.t by A5,A16,XXREAL_0:2;
+                then f.x-f.t>=0 by XREAL_1:50;
+                then f.x-f.t<s by A17,ABSVALUE:def 1;
+                then
+A19:            r-f.t<s by A18,XXREAL_0:2;
+                r-f.t>=0 by A5,XREAL_1:50;
+                then abs(r-f.t)<s by A19,ABSVALUE:def 1;
+                then dist(ft,r')<s by TOPMETR:15;
+                then
+A20:            r in B by METRIC_1:12;
+                min(r,f.x)=r by A16,XXREAL_0:def 9;
+                then mfx=r by A13,Def9;
+                hence thesis by A7,A20;
               end;
             end;
             hence thesis;
           end;
-          hence ex U being Subset of T st U is open & t in U &
-          min(r,f).:U c= R by A6;
+          hence
+          ex U being Subset of T st U is open & t in U & min(r,f).:U c= R
+          by A9;
         end;
         suppose
-A12:      f.t>r;
+A21:      f.t>r;
           set s=f.t-r;
-          reconsider B=Ball(ft,s) as Subset of R^1 by METRIC_1:def 14
-,TOPMETR:24;
-          s>0 by A12,XREAL_1:52;
+          reconsider B=Ball(ft,s) as Subset of R^1 by METRIC_1:def 14 ,TOPMETR
+          :24;
+          s>0 by A21,XREAL_1:52;
           then dist(ft,ft)<s by METRIC_1:1;
-          then ft in B & B is open & f' is_continuous_at t by A2,METRIC_1:12
-,TMAP_1:55,TOPMETR:21,def 7;
+          then
+A22:      ft in B by METRIC_1:12;
+          B is open & f' is_continuous_at t by A2,TMAP_1:55,TOPMETR:21,
+          def 7;
           then consider U being Subset of T such that
-A13:      U is open & t in U & f'.:U c= B by TMAP_1:48;
+A23:      U is open & t in U and
+A24:      f'.:U c= B by A22,TMAP_1:48;
           min(r,f).:U c= R
           proof
-            let mfx be set such that
-A14:        mfx in min(r,f).:U;
-            consider x such that
-A15:        x in dom min(r,f)& x in U& mfx=min(r,f).x by A14,FUNCT_1:def 12;
-            reconsider x as Point of T by A15;
+            let mfx be set;
+            assume
+            mfx in min(r,f).:U;
+            then consider x such that
+A25:        x in dom min(r,f) and
+A26:        x in U and
+A27:        mfx=min(r,f).x by FUNCT_1:def 12;
+            reconsider x as Point of T by A25;
             reconsider fx=f.x as Point of RealSpace by METRIC_1:def 14;
             dom min(r,f)=the carrier of T by FUNCT_2:def 1;
-            then x in dom f by A15,FUNCT_2:def 1;
-            then f.x in f.:U by A15,FUNCT_1:def 12;
-            then dist(ft,fx)<s by A13,METRIC_1:12;
+            then x in dom f by A25,FUNCT_2:def 1;
+            then f.x in f.:U by A26,FUNCT_1:def 12;
+            then dist(ft,fx)<s by A24,METRIC_1:12;
             then abs(f.t-f.x)<s by TOPMETR:15;
             then f.t+(-f.x) <=f.t+(-r) by ABSVALUE:12;
             then -f.x<=-r by XREAL_1:8;
-            then r<=f.x & min(r,f.t)=r by A12,XREAL_1:26,XXREAL_0:def 9;
-            then min(r,f.x)=r & min(r,f).t=r by Def9,XXREAL_0:def 9;
-            hence thesis by A3,A15,Def9;
+            then r<=f.x by XREAL_1:26;
+            then
+A28:        min(r,f.x)=r by XXREAL_0:def 9;
+            min(r,f.t)=r by A21,XXREAL_0:def 9;
+            then min(r,f).t=r by Def9;
+            hence thesis by A4,A27,A28,Def9;
           end;
-          hence ex U being Subset of T st U is open & t in U &
-          min(r,f).:U c= R by A13;
+          hence
+          ex U being Subset of T st U is open & t in U & min(r,f).:U c= R
+          by A23;
         end;
       end;
       hence thesis;
@@ -2240,12 +2516,14 @@ definition
   let X be set, f be Function of [:X,X:],REAL;
   pred f is_a_pseudometric_of X means
   :Def10:
-  f is Reflexive symmetric triangle;
+  f is Reflexive symmetric
+  triangle;
 end;
 
-Lm8: for f be Function of [:X,X:],REAL holds
-f is_a_pseudometric_of X iff for a,b,c be Element of X holds
-f.(a,a)=0 & f.(a,b)=f.(b,a) & f.(a,c)<=f.(a,b)+f.(b,c)
+Lm8: for f be Function of [:X,X:],REAL holds f is_a_pseudometric_of X iff for
+a,b,c be Element of X holds f.(a,a)=0 & f.(a,b)=f.(b,a) & f.(a,c)<=f.(a,b)+f.(b
+,c)
+
 proof
   let f be Function of [:X,X:],REAL;
   f is_a_pseudometric_of X iff f is Reflexive symmetric triangle by Def10;
@@ -2253,31 +2531,31 @@ proof
 end;
 
 theorem Th28:
-  for f be Function of [:X,X:],REAL holds
-  f is_a_pseudometric_of X iff for a,b,c be Element of X holds f.(a,a) = 0 &
-  f.(a,c)<=f.(a,b)+f.(c,b)
+  for f be Function of [:X,X:],REAL holds f is_a_pseudometric_of X
+  iff for a,b,c be Element of X holds f.(a,a) = 0 & f.(a,c)<=f.(a,b)+f.(c,b)
 proof
   let f be Function of [:X,X:],REAL;
-  thus f is_a_pseudometric_of X implies for a,b,c be Element of X holds
-  f.(a,a) = 0 & f.(a,c)<=f.(a,b)+f.(c,b)
+  thus f is_a_pseudometric_of X implies for a,b,c be Element of X holds f.(a,a
+  ) = 0 & f.(a,c)<=f.(a,b)+f.(c,b)
   proof
     assume
 A1: f is_a_pseudometric_of X;
     let a,b,c be Element of X;
-    f.(a,a)=0 & f.(a,c)<=f.(a,b)+f.(b,c) by A1,Lm8;
+    f.(a,c)<=f.(a,b)+f.(b,c) by A1,Lm8;
     hence thesis by A1,Lm8;
   end;
-  thus (for a,b,c be Element of X holds
-  f.(a,a) = 0 & f.(a,c)<=f.(a,b)+f.(c,b)) implies f is_a_pseudometric_of X
+  thus (for a,b,c be Element of X holds f.(a,a) = 0 & f.(a,c)<=f.(a,b)+f.(c,b)
+  ) implies f is_a_pseudometric_of X
   proof
     assume
-A2: for a,b,c be Element of X holds f.(a,a) = 0 & f.(a,c)<=f.(a,b)+f.(c,b);
+A2: for a,b,c be Element of X holds f.(a,a) = 0 & f.(a,c)<=f.(a,b)+f.(
+    c,b);
 A3: for a,b being Element of X holds f.(a,b) = f.(b,a)
     proof
       let a,b be Element of X;
-      f.(a,b)<=f.(a,a)+f.(b,a) & f.(a,a)=0 & f.(b,a)<=f.(b,b)+f.(a,b) &
-      f.(b,b)=0 by A2;
-      hence thesis by XXREAL_0:1;
+A4:   f.(b,a)<=f.(b,b)+f.(a,b) & f.(b,b)=0 by A2;
+      f.(a,b)<=f.(a,a)+f.(b,a) & f.(a,a)=0 by A2;
+      hence thesis by A4,XXREAL_0:1;
     end;
     for a, b, c being Element of X holds f.(a,c) <= f.(a,b) + f.(b,c)
     proof
@@ -2285,13 +2563,15 @@ A3: for a,b being Element of X holds f.(a,b) = f.(b,a)
       f.(x,z)<=f.(x,y)+f.(z,y) by A2;
       hence thesis by A3;
     end;
-    then f is Reflexive symmetric triangle by A2,A3,METRIC_1:def 3,def 5,def 6;
+    then f is Reflexive symmetric triangle by A2,A3,METRIC_1:def 3,def 5 ,
+    def 6;
     hence thesis by Def10;
   end;
 end;
 
-Lm9: for r be Real,X be non empty set,f be Function of [:X,X:],REAL
-for x,y be Element of X holds min(r,f).(x,y)=min(r,f.(x,y))
+Lm9: for r be Real,X be non empty set,f be Function of [:X,X:],REAL for x,y be
+Element of X holds min(r,f).(x,y)=min(r,f.(x,y))
+
 proof
   let r be Real,X be non empty set,f be Function of [:X,X:],REAL;
   let x,y be Element of X;
@@ -2307,8 +2587,7 @@ proof
 A1: f is_a_pseudometric_of X;
   let x,y be Element of X;
   f.(x,x)<=f.(x,y)+f.(y,x) & f.(x,x)=0 by A1,Lm8;
-  then 0<=f.(x,y)+f.(x,y) by A1,Lm8;
-  then 0<=(f.(x,y)+f.(x,y))/2;
+  then 0<=(f.(x,y)+f.(x,y))/2 by A1,Lm8;
   hence thesis;
 end;
 
@@ -2321,15 +2600,13 @@ A1: r>0 and
 A2: m is_a_pseudometric_of (the carrier of T);
   now
     let a,b,c be Element of T;
-    thus min(r,m).(a,a)=0
-    proof
-      m.(a,a)=0 & m.(a,a)<r by A1,A2,Th28;
-      then min(r,m.(a,a))=0 by XXREAL_0:def 9;
-      hence thesis by Lm9;
-    end;
+    m.(a,a)=0 by A2,Th28;
+    then min(r,m.(a,a))=0 by A1,XXREAL_0:def 9;
+    hence min(r,m).(a,a)=0 by Lm9;
     thus min(r,m).(a,c) <= min(r,m).(a,b)+min(r,m).(c,b)
     proof
-      now per cases;
+      now
+        per cases;
         suppose
 A3:       min(r,m).(a,b)+min(r,m).(c,b)>=r;
           min(r,m.(a,c))<=r by XXREAL_0:17;
@@ -2338,18 +2615,28 @@ A3:       min(r,m).(a,b)+min(r,m).(c,b)>=r;
         end;
         suppose
 A4:       min(r,m).(a,b)+min(r,m).(c,b)<r;
-          m.(a,b)>=0 & m.(c,b)>=0 & r >0 by A1,A2,Th29;
-          then 0<=min(r,m.(a,b)) & 0<=min(r,m.(c,b)) by XXREAL_0:20;
-          then 0<=min(r,m).(a,b) & 0<=min(r,m).(c,b) by Lm9;
-          then min(r,m).(a,b)<r & min(r,m).(c,b)<r by A4,Lm1;
-          then min(r,m.(a,b))<r & min(r,m.(c,b))<r by Lm9;
-          then min(r,m.(a,b))=m.(a,b)&min(r,m.(c,b))=m.(c,b) by XXREAL_0:def 9;
+          m.(c,b)>=0 by A2,Th29;
+          then 0<=min(r,m.(c,b)) by A1,XXREAL_0:20;
           then
-A5:       min(r,m).(a,b)=m.(a,b) & min(r,m).(c,b)=m.(c,b) by Lm9;
-          min(r,m.(a,c))<=m.(a,c) & m.(a,c)<=m.(a,b)+m.(c,b)
-          by A2,Th28,XXREAL_0:17;
+A5:       0<=min(r,m).(c,b) by Lm9;
+          m.(a,b)>=0 by A2,Th29;
+          then 0<=min(r,m.(a,b)) by A1,XXREAL_0:20;
+          then
+A6:       0<=min(r,m).(a,b) by Lm9;
+          then min(r,m).(a,b)<r by A4,A5,Lm1;
+          then min(r,m.(a,b))<r by Lm9;
+          then min(r,m.(a,b))=m.(a,b) by XXREAL_0:def 9;
+          then
+A7:       min(r,m).(a,b)=m.(a,b) by Lm9;
+          min(r,m).(c,b)<r by A4,A6,A5,Lm1;
+          then min(r,m.(c,b))<r by Lm9;
+          then min(r,m.(c,b))=m.(c,b) by XXREAL_0:def 9;
+          then
+A8:       min(r,m).(c,b)=m.(c,b) by Lm9;
+          min(r,m.(a,c))<=m.(a,c) & m.(a,c)<=m.(a,b)+m.(c,b) by A2,Th28,
+          XXREAL_0:17;
           then min(r,m.(a,c))<=m.(a,b)+m.(c,b) by XXREAL_0:2;
-          hence thesis by A5,Lm9;
+          hence thesis by A7,A8,Lm9;
         end;
       end;
       hence thesis;
@@ -2359,29 +2646,27 @@ A5:       min(r,m).(a,b)=m.(a,b) & min(r,m).(c,b)=m.(c,b) by Lm9;
 end;
 
 theorem
-  for r,m st r>0 & m is_metric_of (the carrier of T) holds
-  min(r,m) is_metric_of (the carrier of T)
+  for r,m st r>0 & m is_metric_of (the carrier of T) holds min(r,m)
+  is_metric_of (the carrier of T)
 proof
   let r,m such that
 A1: r>0 and
 A2: m is_metric_of (the carrier of T);
-  for a,b,c be Element of T holds
-  m.(a,a)=0& m.(a,b)=m.(b,a)& m.(a,c)<=m.(a,b)+m.(b,c) by A2,PCOMPS_1:def 7;
+  let a,b,c be Element of T;
+  for a,b,c be Element of T holds m.(a,a)=0& m.(a,b)=m.(b,a)& m.(a,c)<=m.(
+  a,b)+m.(b,c) by A2,PCOMPS_1:def 7;
   then m is_a_pseudometric_of (the carrier of T) by Lm8;
   then
 A3: min(r,m) is_a_pseudometric_of (the carrier of T) by A1,Th30;
-  let a,b,c be Element of T;
-  thus min(r,m).(a,b)=0 iff a=b
+  min(r,m).(a,b)=0 implies a=b
   proof
-    min(r,m).(a,b)=0 implies a=b
-    proof
-      assume min(r,m).(a,b)=0;
-      then min(r,m.(a,b))=0 by Lm9;
-      then m.(a,b)=0 by A1,XXREAL_0:def 9;
-      hence thesis by A2,PCOMPS_1:def 7;
-    end;
-    hence thesis by A3,Lm8;
+    assume
+    min(r,m).(a,b)=0;
+    then min(r,m.(a,b))=0 by Lm9;
+    then m.(a,b)=0 by A1,XXREAL_0:def 9;
+    hence thesis by A2,PCOMPS_1:def 7;
   end;
+  hence min(r,m).(a,b)=0 iff a=b by A3,Lm8;
   thus thesis by A3,Lm8;
 end;
 

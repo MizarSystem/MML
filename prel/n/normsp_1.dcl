@@ -7,6 +7,7 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="TARSKI"/>
@@ -27,7 +28,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="88"/>
+<Adjective nr="89"/>
 </Cluster>
 </RCluster>
 <RCluster aid="NORMSP_1" nr="2">
@@ -36,8 +37,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="34" value="false"/>
-<Adjective nr="88"/>
+<Adjective nr="36" value="false"/>
+<Adjective nr="89"/>
 </Cluster>
 </RCluster>
 <RCluster aid="NORMSP_1" nr="3">
@@ -46,33 +47,33 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="34" value="false"/>
-<Adjective nr="58"/>
-<Adjective nr="83"/>
+<Adjective nr="36" value="false"/>
+<Adjective nr="59"/>
 <Adjective nr="84"/>
 <Adjective nr="85"/>
 <Adjective nr="86"/>
-<Adjective nr="88"/>
+<Adjective nr="87"/>
 <Adjective nr="89"/>
+<Adjective nr="90"/>
 </Cluster>
 </RCluster>
 <FCluster aid="NORMSP_1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="13">
 <Cluster>
-<Adjective nr="34" value="false"/>
-<Adjective nr="58"/>
-<Adjective nr="83"/>
+<Adjective nr="36" value="false"/>
+<Adjective nr="59"/>
 <Adjective nr="84"/>
 <Adjective nr="85"/>
 <Adjective nr="86"/>
-<Adjective nr="89"/>
+<Adjective nr="87"/>
+<Adjective nr="90"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="133">
+<Func kind="K" nr="141">
 <LocusVar nr="1"/>
-<Func kind="K" nr="109">
+<Func kind="K" nr="117">
 <LocusVar nr="1"/>
 </Func>
 </Func>

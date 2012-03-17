@@ -8,6 +8,7 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="MCART_1"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="PETRI"/>
 <ArticleID name="FINSET_1"/>
@@ -19,7 +20,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="25"/>
+<Adjective nr="26"/>
 </Cluster>
 </RCluster>
 <RCluster aid="PETRI_2" nr="2">
@@ -28,8 +29,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="25"/>
-<Adjective nr="27"/>
+<Adjective nr="26"/>
+<Adjective nr="28"/>
 </Cluster>
 </RCluster>
 </Registrations>

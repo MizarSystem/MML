@@ -9,12 +9,12 @@ environ
  vocabularies MONOID_0, FUNCT_1, RELAT_1, MIDSP_3, FINSEQ_1, MARGREL1, ZF_LANG,
       ARYTM_1, CQC_LANG, POWER, SETWISEO, BOOLE, FINSEQ_2, BINARITH, FINSEQ_4,
       ARYTM, XREAL_0;
- notations XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, REAL_1, XBOOLEAN,
-      MARGREL1, FUNCT_1, PARTFUN1, FUNCT_2, BINOP_1, BINOP_2, SETWISEO,
-      FUNCOP_1, SETWOP_2, SERIES_1, FINSEQ_1, FINSEQ_2, SEQ_1, XXREAL_0, NAT_1,
-      NAT_D;
+ notations XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, REAL_1, XBOOLEAN, MARGREL1,
+      FUNCT_1, PARTFUN1, FUNCT_2, BINOP_1, BINOP_2, SETWISEO, FUNCOP_1,
+      SETWOP_2, SERIES_1, FINSEQ_1, FINSEQ_2, XXREAL_0, NAT_1, NAT_D;
  constructors BINOP_1, SETWISEO, XXREAL_0, NAT_1, INT_1, BINOP_2, MARGREL1,
-      PARTFUN1, FINSOP_1, SERIES_1, RFINSEQ, SEQ_1, REAL_1, NAT_D, RELSET_1;
+      PARTFUN1, FINSOP_1, SERIES_1, RFINSEQ, SEQ_1, REAL_1, NAT_D, RELSET_1,
+      FINSEQ_2;
  registrations ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1,
       BINOP_2, XBOOLEAN, MARGREL1, FINSEQ_2, XBOOLE_0, REAL_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
@@ -22,20 +22,15 @@ environ
 
 begin
 
-definition
-  let i be Nat, D be non empty set;
-  mode Tuple of i,D is Element of i-tuples_on D;
-end;
-
 canceled;
 
 theorem :: BINARITH:2
-  for i,n being Nat, D being non empty set, d being Element of D,
-  z being Tuple of n,D st i in Seg n holds (z^<*d*>)/.i=z/.i;
+  for i,n being Nat, D being non empty set, d being Element of D, z
+  being Tuple of n,D st i in Seg n holds (z^<*d*>)/.i=z/.i;
 
 theorem :: BINARITH:3
-  for n being Nat, D being non empty set, d being Element of D,
-  z being Tuple of n,D holds (z^<*d*>)/.(n+1)=d;
+  for n being Nat, D being non empty set, d being Element of D, z
+  being Tuple of n,D holds (z^<*d*>)/.(n+1)=d;
 
 definition
   let x, y be Element of BOOLEAN;
@@ -97,11 +92,12 @@ reserve n for non zero Nat;
 reserve x,y,z1,z2 for Tuple of n, BOOLEAN;
 
 definition
- canceled 3;
+  canceled 3;
   let n be Nat, x be Tuple of n, BOOLEAN;
   func 'not' x -> Tuple of n, BOOLEAN means
 :: BINARITH:def 4
-  for i st i in Seg n holds it/.i = 'not' (x/.i);
+  for i st i in Seg n holds it/.i =
+  'not' (x/.i);
 end;
 
 definition
@@ -109,10 +105,9 @@ definition
   func carry(x, y) -> Tuple of n, BOOLEAN means
 :: BINARITH:def 5
 
-  it/.1 = FALSE &
-  for i being Nat st 1 <= i & i < n
-   holds it/.(i+1) = (x/.i) '&' (y/.i) 'or'
-  (x/.i) '&' (it/.i) 'or' (y/.i) '&' (it/.i);
+  it/.1 = FALSE & for i
+being Nat st 1 <= i & i < n holds it/.(i+1) = (x/.i) '&' (y/.i) 'or' (x/.i) '&'
+  (it/.i) 'or' (y/.i) '&' (it/.i);
 end;
 
 definition
@@ -120,15 +115,14 @@ definition
   func Binary(x) -> Tuple of n, NAT means
 :: BINARITH:def 6
 
-  for i st i in Seg n holds
-  it/.i = IFEQ(x/.i,FALSE,0,2 to_power(i-'1));
+  for i st i in Seg n holds it
+  /.i = IFEQ(x/.i,FALSE,0,2 to_power(i-'1));
 end;
 
 definition
   let n be Nat, x be Tuple of n, BOOLEAN;
   func Absval (x) -> Element of NAT equals
 :: BINARITH:def 7
-
   addnat $$ Binary (x);
 end;
 
@@ -137,17 +131,16 @@ definition
   func x + y -> Tuple of n, BOOLEAN means
 :: BINARITH:def 8
 
-  for i st i in Seg n holds
-  it/.i = (x/.i) 'xor' (y/.i) 'xor' (carry(x,y)/.i);
+  for i st i in Seg n holds it
+  /.i = (x/.i) 'xor' (y/.i) 'xor' (carry(x,y)/.i);
 end;
 
 definition
   let n,z1,z2;
   func add_ovfl(z1,z2) -> Element of BOOLEAN equals
 :: BINARITH:def 9
-
-  (z1/.n) '&' (z2/.n) 'or'
-  (z1/.n) '&' (carry(z1,z2)/.n) 'or' (z2/.n) '&' (carry(z1,z2)/.n);
+  (z1/.n) '&' (z2/.n) 'or' (
+  z1/.n) '&' (carry(z1,z2)/.n) 'or' (z2/.n) '&' (carry(z1,z2)/.n);
 end;
 
 definition
@@ -159,13 +152,16 @@ definition
 end;
 
 theorem :: BINARITH:40
-  for z1 being Tuple of 1,BOOLEAN holds z1= <*FALSE*> or z1=<*TRUE*>;
+  for z1 being Tuple of 1,BOOLEAN holds z1= <*FALSE*> or z1=<*TRUE
+  *>;
 
 theorem :: BINARITH:41
-  for z1 being Tuple of 1,BOOLEAN holds z1=<*FALSE*> implies Absval(z1) = 0;
+  for z1 being Tuple of 1,BOOLEAN holds z1=<*FALSE*> implies
+  Absval(z1) = 0;
 
 theorem :: BINARITH:42
-  for z1 being Tuple of 1,BOOLEAN st z1=<*TRUE*> holds Absval(z1)=1;
+  for z1 being Tuple of 1,BOOLEAN st z1=<*TRUE*> holds Absval(z1)=
+  1;
 
 definition
   let n1,n2 be Nat;
@@ -182,28 +178,28 @@ definition
 end;
 
 theorem :: BINARITH:43
-  for z1,z2 being Tuple of n,BOOLEAN holds
-  for d1,d2 being Element of BOOLEAN holds for i being Nat holds
-  i in Seg n implies carry(z1^<*d1*>,z2^<*d2*>)/.i = carry(z1,z2)/.i;
+  for z1,z2 being Tuple of n,BOOLEAN holds for d1,d2 being Element
+of BOOLEAN holds for i being Nat holds i in Seg n implies carry(z1^<*d1*>,z2^<*
+  d2*>)/.i = carry(z1,z2)/.i;
 
 theorem :: BINARITH:44
-  for z1,z2 being Tuple of n,BOOLEAN, d1,d2 being Element of BOOLEAN holds
-  add_ovfl(z1,z2) = carry(z1^<*d1*>,z2^<*d2*>)/.(n+1);
+  for z1,z2 being Tuple of n,BOOLEAN, d1,d2 being Element of
+  BOOLEAN holds add_ovfl(z1,z2) = carry(z1^<*d1*>,z2^<*d2*>)/.(n+1);
 
 theorem :: BINARITH:45
-  for z1,z2 being Tuple of n,BOOLEAN, d1,d2 being Element of BOOLEAN holds
-  z1^<*d1*> + z2^<*d2*> = (z1+z2)^<*d1 'xor' d2 'xor' add_ovfl(z1,z2)*>;
+  for z1,z2 being Tuple of n,BOOLEAN, d1,d2 being Element of
+BOOLEAN holds z1^<*d1*> + z2^<*d2*> = (z1+z2)^<*d1 'xor' d2 'xor' add_ovfl(z1,
+  z2)*>;
 
 theorem :: BINARITH:46
   for z being Tuple of n,BOOLEAN, d being Element of BOOLEAN holds
   Absval(z^<*d*>) = Absval(z)+IFEQ(d,FALSE,0,2 to_power n);
 
 theorem :: BINARITH:47
-  for n for z1,z2 being Tuple of n,BOOLEAN holds
-  Absval(z1+z2) + IFEQ(add_ovfl(z1,z2),FALSE,0,2 to_power (n)) =
-  Absval(z1) + Absval(z2);
+  for n for z1,z2 being Tuple of n,BOOLEAN holds Absval(z1+z2) +
+  IFEQ(add_ovfl(z1,z2),FALSE,0,2 to_power (n)) = Absval(z1) + Absval(z2);
 
 theorem :: BINARITH:48
-  for z1,z2 being Tuple of n,BOOLEAN st z1,z2 are_summable holds
-  Absval(z1+z2) = Absval(z1) + Absval(z2);
+  for z1,z2 being Tuple of n,BOOLEAN st z1,z2 are_summable holds Absval(
+  z1+z2) = Absval(z1) + Absval(z2);
 

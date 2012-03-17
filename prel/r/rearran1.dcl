@@ -12,6 +12,7 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="NAT_1"/>
@@ -24,7 +25,6 @@
 <ArticleID name="VALUED_0"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_1"/>
-<ArticleID name="PARTFUN1"/>
 <ArticleID name="XXREAL_0"/>
 <ArticleID name="FUNCT_3"/>
 <ArticleID name="RFUNCT_1"/>
@@ -36,7 +36,7 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="10" value="false"/>
-<Adjective nr="26"/>
+<Adjective nr="27"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -57,11 +57,12 @@
 </Func>
 </Adjective>
 <Adjective nr="6"/>
-<Adjective nr="26"/>
-<Adjective nr="32"/>
-<Adjective nr="63"/>
+<Adjective nr="27"/>
+<Adjective nr="33"/>
+<Adjective nr="34"/>
 <Adjective nr="64"/>
-<Adjective nr="65">
+<Adjective nr="65"/>
+<Adjective nr="66">
 <Func kind="K" nr="21">
 <LocusVar nr="1"/>
 </Func>

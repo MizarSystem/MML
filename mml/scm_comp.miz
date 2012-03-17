@@ -11,12 +11,13 @@ environ
       CAT_1, NAT_1, TREES_2, MCART_1, FUNCT_2, SQUARE_1, SCM_COMP, ARYTM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0,
       NAT_1, INT_1, MCART_1, FUNCT_1, FUNCT_2, TREES_2, TREES_3, TREES_4,
-      STRUCT_0, AMI_1, AMI_2, AMI_3, SCM_1, FINSEQ_1, FINSEQ_2,
-      LANG1, BINTREE1, DTCONSTR, LIMFUNC1, PARTFUN1;
- constructors PARTFUN1, NAT_1, LIMFUNC1, DTCONSTR, BINTREE1, SCM_1, DOMAIN_1;
+      STRUCT_0, AMI_1, AMI_2, AMI_3, SCM_1, FINSEQ_1, FINSEQ_2, LANG1,
+      BINTREE1, DTCONSTR, LIMFUNC1, PARTFUN1, PRE_POLY;
+ constructors PARTFUN1, NAT_1, LIMFUNC1, DTCONSTR, BINTREE1, SCM_1, DOMAIN_1,
+      PRE_POLY;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1,
-      FUNCT_2, FRAENKEL, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, CARD_3,
-      TREES_3, STRUCT_0, DTCONSTR, BINTREE1, AMI_2, AMI_3;
+      FUNCT_2, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, CARD_3, TREES_3,
+      STRUCT_0, DTCONSTR, BINTREE1, AMI_2, AMI_3;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, XBOOLE_0, RELAT_1, AMI_2, AMI_3, AMI_1;
  theorems AXIOMS, TARSKI, ZFMISC_1, NAT_1, INT_1, FINSEQ_1, FINSEQ_2, MCART_1,
@@ -29,86 +30,86 @@ begin
 :: Auxiliary theorems about SCM
 
 theorem Th1:
-  for I1, I2 being FinSequence of the Instructions of SCM,
-  D being FinSequence of INT, il, ps, ds being Element of NAT,
-  s being State-consisting of il, ps, ds, I1^I2, D
-  holds s is State-consisting of il, ps, ds, I1, D &
-  s is State-consisting of il, (ps+len I1), ds, I2, D
+  for I1, I2 being FinSequence of the Instructions of SCM, D being
+  FinSequence of INT, il, ps, ds being Element of NAT, s being State-consisting
+of il, ps, ds, I1^I2, D holds s is State-consisting of il, ps, ds, I1, D & s is
+  State-consisting of il, (ps+len I1), ds, I2, D
 proof
-  let I1, I2 be FinSequence of the Instructions of SCM,
-  D be FinSequence of INT, il, ps, ds be Element of NAT,
-  s be State-consisting of il, ps, ds, I1^I2, D;
+  let I1, I2 be FinSequence of the Instructions of SCM, D be FinSequence of
+INT, il, ps, ds be Element of NAT, s be State-consisting of il, ps, ds, I1^I2,
+  D;
 A1: IC s = il.il by SCM_1:def 1;
 A2: len (I1^I2) = len I1 + len I2 by FINSEQ_1:35;
 A3: now
     let k be Element of NAT;
-    assume
-A4: k < len I1;
-    len I1 <= len I1 + len I2 by NAT_1:11;
-    then k < len (I1^I2) by A2,A4,XXREAL_0:2;
+    len I1 <= len I1 + k by NAT_1:11;
     then
-A5: s.il.(ps+k) = (I1^I2).(k+1) by SCM_1:def 1;
-A6: 1 <= k+1 by NAT_1:11;
-    k+1 <= len I1 by A4,NAT_1:13;
-    then k+1 in dom I1 & dom I1 = dom I1 by A6,FINSEQ_3:27;
-    hence s.il.(ps+k) = I1.(k+1) by A5,FINSEQ_1:def 7;
+A4: len I1 + 1 <= len I1 + k + 1 by XREAL_1:8;
+    assume
+    k < len I2;
+    then
+A5: len I1 + k < len (I1^I2) by A2,XREAL_1:8;
+A6: s.il.(ps + len I1 + k) = s.il.(ps+(len I1 + k))
+      .= (I1^I2).(len I1 + k + 1) by A5,SCM_1:def 1;
+    len I1 + k + 1 <= len (I1^I2) by A5,NAT_1:13;
+    then (I1^I2).(len I1+k+1) = I2.(len I1+(k+1)-len I1) by A2,A4,
+    FINSEQ_1:36
+      .= I2.(k+1);
+    hence s.il.((ps+len I1)+k) = I2.(k+1) by A6;
   end;
-  for k be Element of NAT st k < len D holds s.dl.(ds+k) = D.(k+1)
-  by SCM_1:def 1;
-  hence s is State-consisting of il, ps, ds, I1, D by A1,A3,SCM_1:def 1;
 A7: now
     let k be Element of NAT;
-    assume k < len I2;
+    assume
+A8: k < len I1;
+    len I1 <= len I1 + len I2 by NAT_1:11;
+    then k < len (I1^I2) by A2,A8,XXREAL_0:2;
     then
-A8: len I1 + k < len (I1^I2) by A2,XREAL_1:8;
-    then
-A9: len I1 + k + 1 <= len (I1^I2) by NAT_1:13;
-A10: s.il.(ps + len I1 + k) = s.il.(ps+(len I1 + k))
-      .= (I1^I2).(len I1 + k + 1) by A8,SCM_1:def 1;
-    len I1 <= len I1 + k by NAT_1:11;
-    then len I1 + 1 <= len I1 + k + 1 by XREAL_1:8;
-    then (I1^I2).(len I1+k+1) = I2.(len I1+(k+1)-len I1) by A2,A9,FINSEQ_1:36
-      .= I2.(k+1);
-    hence s.il.((ps+len I1)+k) = I2.(k+1) by A10;
+A9: s.il.(ps+k) = (I1^I2).(k+1) by SCM_1:def 1;
+    1 <= k+1 & k+1 <= len I1 by A8,NAT_1:11,13;
+    then k+1 in dom I1 by FINSEQ_3:27;
+    hence s.il.(ps+k) = I1.(k+1) by A9,FINSEQ_1:def 7;
   end;
-  for k be Element of NAT st k < len D holds s.dl.(ds+k) = D.(k+1)
-  by SCM_1:def 1;
-  hence thesis
-  by A1,A7,SCM_1:def 1;
+  for k be Element of NAT st k < len D holds s.dl.(ds+k) = D.(k+1) by
+  SCM_1:def 1;
+  hence s is State-consisting of il, ps, ds, I1, D by A1,A7,SCM_1:def 1;
+  for k be Element of NAT st k < len D holds s.dl.(ds+k) = D.(k+1) by
+  SCM_1:def 1;
+  hence thesis by A1,A3,SCM_1:def 1;
 end;
 
 theorem Th2:
-  for I1, I2 being FinSequence of the Instructions of SCM,
-  il, ps, ds, k, il1 being Element of NAT,
-  s being State-consisting of il, ps, ds, I1^I2, <*>INT,
-  u being State of SCM st u =  Computation(s,k) & il.il1 = IC u
-  holds u is State-consisting of il1, (ps + len I1), ds, I2, <*>INT
+  for I1, I2 being FinSequence of the Instructions of SCM, il, ps,
+ds, k, il1 being Element of NAT, s being State-consisting of il, ps, ds, I1^I2,
+<*>INT, u being State of SCM st u = Computation(s,k) & il.il1 = IC u holds u is
+  State-consisting of il1, (ps + len I1), ds, I2, <*>INT
 proof
-  let I1, I2 be FinSequence of the Instructions of SCM,
-  il, ps, ds, k1, il1 be Element of NAT,
-  s be State-consisting of il, ps, ds, I1^I2, <*>INT, u be State of SCM;
-  assume
-A1: u =   Computation(s,k1) & il.il1 = IC u;
-A2: len (I1^I2) = len I1 + len I2 by FINSEQ_1:35;
-A3: now
+  let I1, I2 be FinSequence of the Instructions of SCM, il, ps, ds, k1, il1 be
+Element of NAT, s be State-consisting of il, ps, ds, I1^I2, <*>INT, u be State
+  of SCM;
+  assume that
+A1: u = Computation(s,k1) and
+A2: il.il1 = IC u;
+A3: len (I1^I2) = len I1 + len I2 by FINSEQ_1:35;
+A4: now
     let k be Element of NAT;
-    assume k < len I2;
-    then
-A4: len I1 + k < len (I1^I2) by A2,XREAL_1:8;
-    then
-A5: len I1 + k + 1 <= len (I1^I2) by NAT_1:13;
-A6: s.il.(ps + len I1 + k) = s.il.(ps+(len I1 + k))
-      .= (I1^I2).(len I1 + k + 1) by A4,SCM_1:def 1;
     len I1 <= len I1 + k by NAT_1:11;
-    then len I1 + 1 <= len I1 + k + 1 by XREAL_1:8;
-    then (I1^I2).(len I1+k+1) = I2.(len I1+(k+1)-len I1) by A2,A5,FINSEQ_1:36
+    then
+A5: len I1 + 1 <= len I1 + k + 1 by XREAL_1:8;
+    assume
+    k < len I2;
+    then
+A6: len I1 + k < len (I1^I2) by A3,XREAL_1:8;
+A7: s.il.(ps + len I1 + k) = s.il.(ps+(len I1 + k))
+      .= (I1^I2).(len I1 + k + 1) by A6,SCM_1:def 1;
+    len I1 + k + 1 <= len (I1^I2) by A6,NAT_1:13;
+    then (I1^I2).(len I1+k+1) = I2.(len I1+(k+1)-len I1) by A3,A5,
+    FINSEQ_1:36
       .= I2.(k+1);
-    hence u.il.((ps+len I1)+k) = I2.(k+1) by A1,A6,AMI_1:54;
+    hence u.il.((ps+len I1)+k) = I2.(k+1) by A1,A7,AMI_1:54;
   end;
-  for k be Element of NAT st k < len <*>INT
-  holds u.dl.(ds+k) = <*>INT.(k+1) by CARD_1:47;
-  hence thesis
-  by A1,A3,SCM_1:def 1;
+  for k be Element of NAT st k < len <*>INT holds u.dl.(ds+k) = <*>INT.(k
+  +1) by CARD_1:47;
+  hence thesis by A2,A4,SCM_1:def 1;
 end;
 
 :: Arithmetic Expressions over a set of variables X with binary operators
@@ -124,8 +125,9 @@ definition
   func SCM-AE -> binary with_terminals with_nonterminals
   with_useful_nonterminals strict (non empty DTConstrStr) means
   :Def1:
-  Terminals it = SCM-Data-Loc & NonTerminals it = [:1, 5:] &
-  for x, y, z being Symbol of it holds x ==> <*y, z*> iff x in [:1, 5:];
+  Terminals
+it = SCM-Data-Loc & NonTerminals it = [:1, 5:] & for x, y, z being Symbol of it
+  holds x ==> <*y, z*> iff x in [:1, 5:];
   existence
   proof
     defpred X[set,set,set] means $1 in [:1, 5:];
@@ -133,126 +135,142 @@ definition
 A1: the carrier of G = SCM-Data-Loc \/ [:1, 5:] and
 A2: for x, y, z being Symbol of G holds x ==> <*y, z*> iff X[x,y,z]
     from BINTREE1:sch 1;
-A3: Terminals G = { t where t is Symbol of G :
-    not ex tnt being FinSequence st t ==> tnt } by LANG1:def 2;
-A4: Terminals G = SCM-Data-Loc
-    proof
-      thus Terminals G c= SCM-Data-Loc
-      proof
-        let x be set;
-        assume x in Terminals G;
-        then consider t be Symbol of G such that
-A5:     x = t & not ex tnt being FinSequence st t ==> tnt by A3;
-        assume not x in SCM-Data-Loc;
-        then t in [:1, 5:] by A1,A5,XBOOLE_0:def 3;
-        then t ==> <*t, t*> by A2;
-        hence contradiction by A5;
-      end;
-      let x be set;
-      assume
-A6:   x in SCM-Data-Loc;
-      then reconsider t = x as Symbol of G by A1,XBOOLE_0:def 3;
-      assume not x in Terminals G;
-      then consider tnt being FinSequence such that
-A7:   t ==> tnt by A3;
-      consider x1, x2 being Symbol of G such that
-A8:   tnt = <*x1, x2*> by A7,BINTREE1:def 4;
-      consider y,z being set such that
-A9:   y in {1} and z in NAT and
-A11:  x = [y,z] by A6,ZFMISC_1:103;
-A12:  y = 1 by A9,TARSKI:def 1;
-      x in [:1, 5:] by A2,A7,A8;
-      then consider x1, x2 being set such that
-A13:  x1 in 1 & x2 in 5 & x = [x1,x2] by ZFMISC_1:103;
-      x = [0,x2] by A13,CARD_1:87,TARSKI:def 1;
-      hence contradiction by A11,A12,ZFMISC_1:33;
-    end;
-A14: NonTerminals G = { t where t is Symbol of G :
-    ex tnt being FinSequence st t ==> tnt } by LANG1:def 3;
-A15: NonTerminals G = [:1, 5:]
+A3: NonTerminals G = { t where t is Symbol of G : ex tnt being
+    FinSequence st t ==> tnt } by LANG1:def 3;
+A4: NonTerminals G = [:1, 5:]
     proof
       thus NonTerminals G c= [:1, 5:]
       proof
         let x be set;
-        assume x in NonTerminals G;
+        assume
+        x in NonTerminals G;
         then consider t being Symbol of G such that
-A16:    x = t & ex tnt being FinSequence st t ==> tnt by A14;
+A5:     x = t and
+A6:     ex tnt being FinSequence st t ==> tnt by A3;
         consider tnt being FinSequence such that
-A17:    t ==> tnt by A16;
-        consider x1, x2 being Symbol of G such that
-A18:    tnt = <*x1,x2*> by A17,BINTREE1:def 4;
-        thus thesis by A2,A16,A17,A18;
+A7:     t ==> tnt by A6;
+        ex x1, x2 being Symbol of G st tnt = <*x1,x2*> by A7,BINTREE1:def
+        4;
+        hence thesis by A2,A5,A7;
       end;
       let x be set;
       assume
-A19:  x in [:1, 5:];
+A8:   x in [:1, 5:];
       then reconsider t = x as Symbol of G by A1,XBOOLE_0:def 3;
-      t ==> <*t, t*> by A2,A19;
-      hence thesis by A14;
+      t ==> <*t, t*> by A2,A8;
+      hence thesis by A3;
     end;
-A20: G is with_terminals by A4,DTCONSTR:def 6;
-A21: G is with_nonterminals by A15,DTCONSTR:def 7;
+    then
+A9: G is with_nonterminals by DTCONSTR:def 7;
+A10: Terminals G = { t where t is Symbol of G : not ex tnt being
+    FinSequence st t ==> tnt } by LANG1:def 2;
+A11: Terminals G = SCM-Data-Loc
+    proof
+      thus Terminals G c= SCM-Data-Loc
+      proof
+        let x be set;
+        assume
+        x in Terminals G;
+        then consider t be Symbol of G such that
+A12:    x = t and
+A13:    not ex tnt being FinSequence st t ==> tnt by A10;
+        assume
+        not x in SCM-Data-Loc;
+        then t in [:1, 5:] by A1,A12,XBOOLE_0:def 3;
+        then t ==> <*t, t*> by A2;
+        hence contradiction by A13;
+      end;
+      let x be set;
+      assume
+A14:  x in SCM-Data-Loc;
+      then
+A15:  ex y,z being set st y in {1} & z in NAT & x = [y,z] by
+      ZFMISC_1
+      :103;
+      reconsider t = x as Symbol of G by A1,A14,XBOOLE_0:def 3;
+      assume
+      not x in Terminals G;
+      then consider tnt being FinSequence such that
+A16:  t ==> tnt by A10;
+      ex x1, x2 being Symbol of G st tnt = <*x1, x2*> by A16,BINTREE1:def
+      4;
+      then x in [:1, 5:] by A2,A16;
+      then consider x1, x2 being set such that
+A17:  x1 in 1 and
+      x2 in 5 and
+A18:  x = [x1,x2] by ZFMISC_1:103;
+      x = [0,x2] by A17,A18,CARD_1:87,TARSKI:def 1;
+      hence contradiction by A15,ZFMISC_1:33;
+    end;
     now
+A19:  dl.1 in SCM-Data-Loc by AMI_3:def 2;
+A20:  dl.0 in SCM-Data-Loc by AMI_3:def 2;
+      then reconsider d0 = dl.0, d1 = dl.1 as Symbol of G by A1,A19, XBOOLE_0:
+      def 3;
+A21:  root-tree d1 in TS G by A11,A19,DTCONSTR:def 4;
+      root-tree d0 in TS G by A11,A20,DTCONSTR:def 4;
+      then reconsider
+      p = <* root-tree d0, root-tree d1*> as FinSequence of TS G by
+      A21,FINSEQ_2:15;
       let nt be Symbol of G;
       assume
 A22:  nt in NonTerminals G;
-A23:  dl.0 in SCM-Data-Loc & dl.1 in SCM-Data-Loc by AMI_3:def 2;
-      then reconsider d0 = dl.0, d1 = dl.1 as Symbol of G by A1,XBOOLE_0:def 3;
-      root-tree d0 in TS G & root-tree d1 in TS G by A4,A23,DTCONSTR:def 4;
-      then reconsider p = <* root-tree d0, root-tree d1*>
-      as FinSequence of TS G by FINSEQ_2:15;
-A24:  roots p = <* (root-tree d0).{}, (root-tree d1).{} *> by DTCONSTR:6
+      take p;
+      roots p = <* (root-tree d0).{}, (root-tree d1).{} *> by DTCONSTR:6
         .= <* (root-tree d0).{}, d1 *> by TREES_4:3
         .= <* d0, d1 *> by TREES_4:3;
-      take p;
-      thus nt ==> roots p by A2,A15,A22,A24;
+      hence nt ==> roots p by A2,A4,A22;
     end;
-    then G is with_useful_nonterminals by DTCONSTR:def 8;
-    hence thesis by A2,A4,A15,A20,A21;
+    then
+A23: G is with_useful_nonterminals by DTCONSTR:def 8;
+    G is with_terminals by A11,DTCONSTR:def 6;
+    hence thesis by A2,A11,A4,A9,A23;
   end;
   uniqueness
   proof
     let S1, S2 be binary with_terminals with_nonterminals
     with_useful_nonterminals strict (non empty DTConstrStr);
-    assume
-A25: Terminals S1 = SCM-Data-Loc & NonTerminals S1 = [:1, 5:] &
-    for x, y, z being Symbol of S1 holds x ==> <*y, z*> iff x in [:1, 5:];
-    assume
-A26: Terminals S2 = SCM-Data-Loc & NonTerminals S2 = [:1, 5:] &
-    for x, y, z being Symbol of S2 holds x ==> <*y, z*> iff x in [:1, 5:];
-A27: the carrier of S1 = Terminals S1 \/ NonTerminals S1 by LANG1:1
-      .= the carrier of S2 by A25,A26,LANG1:1;
+    assume that
+A24: Terminals S1 = SCM-Data-Loc & NonTerminals S1 = [:1, 5:] and
+A25: for x, y, z being Symbol of S1 holds x ==> <*y, z*> iff x in [:1,
+    5 :];
+    assume that
+A26: Terminals S2 = SCM-Data-Loc & NonTerminals S2 = [:1, 5:] and
+A27: for x, y, z being Symbol of S2 holds x ==> <*y, z*> iff x in [:1,
+    5 :];
+A28: the carrier of S1 = Terminals S1 \/ NonTerminals S1 by LANG1:1
+      .= the carrier of S2 by A24,A26,LANG1:1;
     the Rules of S1 = the Rules of S2
     proof
-      let a, b be set;
       set p1 = the Rules of S1, p2 = the Rules of S2;
+      let a, b be set;
       hereby
         assume
-A28:    [a,b] in p1;
+A29:    [a,b] in p1;
         then reconsider l = a as Symbol of S1 by ZFMISC_1:106;
-
-reconsider r = b as Element of (the carrier of S1)* by A28,ZFMISC_1:106;
-A29:    l ==> r by A28,LANG1:def 1;
+        reconsider r = b as Element of (the carrier of S1)* by A29,ZFMISC_1:
+        106;
+A30:    l ==> r by A29,LANG1:def 1;
         then consider x1, x2 being Symbol of S1 such that
-A30:    r = <* x1, x2 *> by BINTREE1:def 4;
-        reconsider l, x1, x2 as Symbol of S2 by A27;
-        l in [:1, 5:] by A25,A29,A30;
-        then l ==> <* x1, x2 *> by A26;
-        hence [a,b] in p2 by A30,LANG1:def 1;
+A31:    r = <* x1, x2 *> by BINTREE1:def 4;
+        reconsider l, x1, x2 as Symbol of S2 by A28;
+        l in [:1, 5:] by A25,A30,A31;
+        then l ==> <* x1, x2 *> by A27;
+        hence [a,b] in p2 by A31,LANG1:def 1;
       end;
       assume
-A31:  [a,b] in p2;
+A32:  [a,b] in p2;
       then reconsider l = a as Symbol of S2 by ZFMISC_1:106;
-      reconsider r = b as Element of (the carrier of S2)* by A31,ZFMISC_1:106;
-A32:  l ==> r by A31,LANG1:def 1;
+      reconsider r = b as Element of (the carrier of S2)* by A32,ZFMISC_1:106;
+A33:  l ==> r by A32,LANG1:def 1;
       then consider x1, x2 being Symbol of S2 such that
-A33:  r = <* x1, x2 *> by BINTREE1:def 4;
-      reconsider l, x1, x2 as Symbol of S1 by A27;
-      l in [:1, 5:] by A26,A32,A33;
+A34:  r = <* x1, x2 *> by BINTREE1:def 4;
+      reconsider l, x1, x2 as Symbol of S1 by A28;
+      l in [:1, 5:] by A27,A33,A34;
       then l ==> <* x1, x2 *> by A25;
-      hence thesis by A33,LANG1:def 1;
+      hence thesis by A34,LANG1:def 1;
     end;
-    hence thesis by A27;
+    hence thesis by A28;
   end;
 end;
 
@@ -284,7 +302,6 @@ end;
 definition
   let t be Terminal of SCM-AE;
   func @t -> Data-Location equals
-
   t;
   coherence
   proof
@@ -296,74 +313,80 @@ definition
 end;
 
 theorem Th3:
-  for nt being NonTerminal of SCM-AE holds
-  nt = [0,0] or nt = [0,1] or nt = [0,2] or nt = [0,3] or nt = [0,4]
+  for nt being NonTerminal of SCM-AE holds nt = [0,0] or nt = [0,1]
+  or nt = [0,2] or nt = [0,3] or nt = [0,4]
 proof
   let nt be NonTerminal of SCM-AE;
   consider x, y being set such that
-A1: x in 1 & y in 5 & nt = [x,y] by Lm3,ZFMISC_1:103;
-A2: x = 0 by A1,CARD_1:87,TARSKI:def 1;
+A1: x in 1 and
+A2: y in 5 and
+A3: nt = [x,y] by Lm3,ZFMISC_1:103;
+A4: x = 0 by A1,CARD_1:87,TARSKI:def 1;
   consider n being Element of NAT such that
-A3: y = n & n < 5 by A1,Lm2;
+A5: y = n and
+A6: n < 5 by A2,Lm2;
   5 = 4+1;
-  then n <= 4 by A3,NAT_1:13;
-  hence thesis by A1,A2,A3,NAT_1:29;
+  then n <= 4 by A6,NAT_1:13;
+  hence thesis by A3,A4,A5,NAT_1:29;
 end;
 
 theorem
   [0,0] is NonTerminal of SCM-AE & [0,1] is NonTerminal of SCM-AE &
-  [0,2] is NonTerminal of SCM-AE & [0,3] is NonTerminal of SCM-AE &
-  [0,4] is NonTerminal of SCM-AE
+  [0,2] is NonTerminal of SCM-AE & [0,3] is NonTerminal of SCM-AE & [0,4] is
+  NonTerminal of SCM-AE
 proof
-  0 in 1 & 0 in 5 & 1 in 5 & 2 in 5 & 3 in 5 & 4 in 5 by Lm1,Lm2;
-  hence thesis by Lm3,ZFMISC_1:106;
+A1: 3 in 5 & 4 in 5 by Lm2;
+A2: 1 in 5 & 2 in 5 by Lm2;
+  0 in 1 & 0 in 5 by Lm1,Lm2;
+  hence thesis by A2,A1,Lm3,ZFMISC_1:106;
 end;
-then reconsider nt0 = [0,0], nt1 = [0,1], nt2 = [0,2], nt3 = [0,3], nt4 = [0,4]
-as NonTerminal of SCM-AE;
+
+then reconsider
+nt0 = [0,0], nt1 = [0,1], nt2 = [0,2], nt3 = [0,3], nt4 = [0,4] as
+NonTerminal of SCM-AE;
 
 definition
   let t1, t2 be bin-term;
   func t1+t2 -> bin-term equals
-
   [0,0]-tree(t1, t2);
   coherence
-  proof nt0-tree(t1, t2) in TS SCM-AE;
+  proof
+    nt0-tree(t1, t2) in TS SCM-AE;
     hence thesis;
   end;
   func t1-t2 -> bin-term equals
-
   [0,1]-tree(t1, t2);
   coherence
-  proof nt1-tree(t1, t2) in TS SCM-AE;
+  proof
+    nt1-tree(t1, t2) in TS SCM-AE;
     hence thesis;
   end;
   func t1*t2 -> bin-term equals
-
   [0,2]-tree(t1, t2);
   coherence
-  proof nt2-tree(t1, t2) in TS SCM-AE;
+  proof
+    nt2-tree(t1, t2) in TS SCM-AE;
     hence thesis;
   end;
   func t1 div t2 -> bin-term equals
-
   [0,3]-tree(t1, t2);
   coherence
-  proof nt3-tree(t1, t2) in TS SCM-AE;
+  proof
+    nt3-tree(t1, t2) in TS SCM-AE;
     hence thesis;
   end;
   func t1 mod t2 -> bin-term equals
-
   [0,4]-tree(t1, t2);
   coherence
-  proof nt4-tree(t1, t2) in TS SCM-AE;
+  proof
+    nt4-tree(t1, t2) in TS SCM-AE;
     hence thesis;
   end;
 end;
 
 theorem :: PRE_COMP_5:
-  for term being bin-term holds
-  (ex t being Terminal of SCM-AE st term = root-tree t) or
-  ex tl, tr being bin-term st term = tl+tr or term = tl-tr or
+  for term being bin-term holds (ex t being Terminal of SCM-AE st term =
+  root-tree t) or ex tl, tr being bin-term st term = tl+tr or term = tl-tr or
   term = tl*tr or term = tl div tr or term = tl mod tr
 proof
   let term be bin-term;
@@ -372,32 +395,35 @@ proof
   then
 A1: term.{} in (Terminals SCM-AE) \/ (NonTerminals SCM-AE) by LANG1:1;
   per cases by A1,XBOOLE_0:def 3;
-  suppose term.{} in (Terminals SCM-AE);
+  suppose
+    term.{} in (Terminals SCM-AE);
     then reconsider t = term.{} as Terminal of SCM-AE;
     term = root-tree t by DTCONSTR:9;
     hence thesis;
   end;
-  suppose term.{} in (NonTerminals SCM-AE);
+  suppose
+    term.{} in (NonTerminals SCM-AE);
     then reconsider nt = term.{} as NonTerminal of SCM-AE;
     consider ts being FinSequence of TS SCM-AE such that
-A2: term = nt-tree ts & nt ==> roots ts by DTCONSTR:10;
-    consider x1, x2 being Symbol of SCM-AE such that
-A3: roots ts = <* x1, x2*> by A2,BINTREE1:def 4;
-A4: dom roots ts = dom ts & for i being Element of NAT st i in dom ts
-    ex T being DecoratedTree st T = ts.i & (roots ts).i = T.{}
-    by TREES_3:def 18;
-    len roots ts = 2 by A3,FINSEQ_1:61;
+A2: term = nt-tree ts and
+A3: nt ==> roots ts by DTCONSTR:10;
+    ex x1, x2 being Symbol of SCM-AE st roots ts = <* x1, x2*> by A3,
+    BINTREE1:def 4;
+    then len roots ts = 2 by FINSEQ_1:61;
     then
-A5: dom roots ts = Seg 2 by FINSEQ_1:def 3;
-    then
-A6: len ts = 2 by A4,FINSEQ_1:def 3;
-A7: 1 in Seg 2 & 2 in Seg 2 by FINSEQ_1:4,TARSKI:def 2;
+A4: dom roots ts = dom ts & dom roots ts = Seg 2 by FINSEQ_1:def 3 ,
+    TREES_3:def 18;
+A5: 2 in Seg 2 by FINSEQ_1:4,TARSKI:def 2;
+    then consider tr being DecoratedTree such that
+A6: tr = ts.2 and
+    (roots ts).2 = tr.{} by A4,TREES_3:def 18;
+A7: 1 in Seg 2 by FINSEQ_1:4,TARSKI:def 2;
     then consider tl being DecoratedTree such that
-A8: tl = ts.1 & (roots ts).1 = tl.{} by A4,A5;
-    consider tr being DecoratedTree such that
-A9: tr = ts.2 & (roots ts).2 = tr.{} by A4,A5,A7;
-    reconsider tl, tr as bin-term by A4,A5,A7,A8,A9,FINSEQ_2:13;
-    ts = <*tl, tr*> by A6,A8,A9,FINSEQ_1:61;
+A8: tl = ts.1 and
+    (roots ts).1 = tl.{} by A4,TREES_3:def 18;
+    reconsider tl, tr as bin-term by A4,A7,A5,A8,A6,FINSEQ_2:13;
+    len ts = 2 by A4,FINSEQ_1:def 3;
+    then ts = <*tl, tr*> by A8,A6,FINSEQ_1:61;
     then term = nt-tree (tl, tr) by A2,TREES_4:def 6;
     then term = tl+tr or term = tl-tr or term = tl*tr or term = tl div tr or
     term = tl mod tr by Th3;
@@ -409,15 +435,14 @@ definition
   let o be NonTerminal of SCM-AE, i, j be Integer;
   func o-Meaning_on (i, j) -> Integer equals
   :Def8:
-  i+j if o = [0,0],
-  i-j if o = [0,1], i*j if o = [0,2], i div j if o = [0,3],
-  i mod j if o = [0,4];
+  i+j if o = [0,0], i-j if o
+  = [0,1], i*j if o = [0,2], i div j if o = [0,3], i mod j if o = [0,4];
   coherence;
   consistency
   proof
-    [0,0]`2 = 0 & [0,1]`2 = 1 & [0,2]`2 = 2 & [0,3]`2 = 3 & [0,4]`2 = 4
-    by MCART_1:7;
-    hence thesis;
+A1: [0,2]`2 = 2 & [0,3]`2 = 3 by MCART_1:7;
+    [0,0]`2 = 0 & [0,1]`2 = 1 by MCART_1:7;
+    hence thesis by A1,MCART_1:7;
   end;
 end;
 
@@ -438,7 +463,8 @@ definition
   let x be Integer;
   redefine func f.x -> Element of D;
   coherence
-  proof reconsider x as Element of INT by INT_1:def 2;
+  proof
+    reconsider x as Element of INT by INT_1:def 2;
     f.x is Element of D;
     hence thesis;
   end;
@@ -446,140 +472,139 @@ end;
 set i2i = id INT;
 
 definition
+  deffunc U(NonTerminal of SCM-AE,set,set,Integer,Integer) = i2i.($1
+  -Meaning_on ($4, $5));
   let s be State of SCM;
   let term be bin-term;
-  deffunc U(NonTerminal of SCM-AE,set,set,Integer,Integer)
-  = i2i.($1-Meaning_on ($4, $5));
   deffunc V(Terminal of SCM-AE) = i2i.(s.$1);
   func term @ s -> Integer means
   :Def9:
-  ex f being Function of TS SCM-AE, INT st it = f.term &
-  (for t being Terminal of SCM-AE holds f.(root-tree t) = s.t) &
-  (for nt being NonTerminal of SCM-AE, tl, tr being bin-term,
-  rtl, rtr being Symbol of SCM-AE
-  st rtl = root-label tl & rtr = root-label tr & nt ==> <* rtl, rtr *>
-  for xl, xr being Element of INT st xl = f.tl & xr = f.tr
-  holds f.(nt-tree (tl, tr)) = nt-Meaning_on (xl, xr));
+  ex f being Function of TS SCM-AE, INT
+st it = f.term & (for t being Terminal of SCM-AE holds f.(root-tree t) = s.t) &
+  for nt being NonTerminal of SCM-AE, tl, tr being bin-term, rtl, rtr being
+Symbol of SCM-AE st rtl = root-label tl & rtr = root-label tr & nt ==> <* rtl,
+  rtr *> for xl, xr being Element of INT st xl = f.tl & xr = f.tr holds f.(nt
+  -tree (tl, tr)) = nt-Meaning_on (xl, xr);
   existence
   proof
     consider f being Function of TS SCM-AE, INT such that
 A1: (for t being Terminal of SCM-AE holds f.(root-tree t) = V(t)) &
-    (for nt being NonTerminal of SCM-AE, tl, tr being bin-term,
-    rtl, rtr being Symbol of SCM-AE
-    st rtl = root-label tl & rtr = root-label tr & nt ==> <* rtl, rtr *>
-    for xl, xr being Element of INT st xl = f.tl & xr = f.tr
-    holds f.(nt-tree (tl, tr)) = U(nt,rtl,rtr,xl, xr)) from BINTREE1:sch 3;
+    for nt being NonTerminal of SCM-AE, tl, tr being bin-term, rtl, rtr being
+Symbol of SCM-AE st rtl = root-label tl & rtr = root-label tr & nt ==> <* rtl,
+    rtr *> for xl, xr being Element of INT st xl = f.tl & xr = f.tr holds f.(nt
+    -tree (tl, tr)) = U(nt,rtl,rtr,xl, xr) from BINTREE1:sch 3;
     reconsider IT = f.term as Element of INT;
-    take IT, f; thus IT = f.term;
+    take IT, f;
+    thus IT = f.term;
     hereby
       let t be Terminal of SCM-AE;
       s.t in INT by INT_1:def 2;
       then i2i.(s.t) = s.t by FUNCT_1:35;
       hence f.(root-tree t) = s.t by A1;
     end;
-    let nt be NonTerminal of SCM-AE,
-    tl, tr be bin-term, rtl, rtr be Symbol of SCM-AE;
+    let nt be NonTerminal of SCM-AE, tl, tr be bin-term, rtl, rtr be Symbol of
+    SCM-AE;
     assume
 A2: rtl = root-label tl & rtr = root-label tr & nt ==> <*rtl, rtr*>;
     let xl, xr be Element of INT;
     nt-Meaning_on (xl, xr) in INT by INT_1:def 2;
-    then i2i.(nt-Meaning_on (xl, xr)) = nt-Meaning_on (xl, xr) by FUNCT_1:35;
+    then i2i.(nt-Meaning_on (xl, xr)) = nt-Meaning_on (xl, xr) by
+    FUNCT_1:35;
     hence thesis by A1,A2;
   end;
   uniqueness
   proof
     let it1, it2 be Integer;
     given f1 being Function of TS SCM-AE, INT such that
-A3: it1 = f1.term &
-    (for t being Terminal of SCM-AE holds f1.(root-tree t) = s.t) &
-    (for nt being NonTerminal of SCM-AE, tl, tr being bin-term,
-    rtl, rtr being Symbol of SCM-AE
-    st rtl = root-label tl & rtr = root-label tr & nt ==> <* rtl, rtr *>
-    for xl, xr being Element of INT st xl = f1.tl & xr = f1.tr
-    holds f1.(nt-tree (tl, tr)) = nt-Meaning_on (xl, xr));
-A4: now
+A3: it1 = f1.term and
+A4: for t being Terminal of SCM-AE holds f1.(root-tree t) = s.t and
+A5: for nt being NonTerminal of SCM-AE, tl, tr being bin-term, rtl,
+rtr being Symbol of SCM-AE st rtl = root-label tl & rtr = root-label tr & nt
+==> <* rtl, rtr *> for xl, xr being Element of INT st xl = f1.tl & xr = f1.tr
+    holds f1.(nt-tree (tl, tr)) = nt-Meaning_on (xl, xr);
+A6: now
       hereby
         let t be Terminal of SCM-AE;
         s.t in INT by INT_1:def 2;
         then i2i.(s.t) = s.t by FUNCT_1:35;
-        hence f1.(root-tree t) = V(t) by A3;
+        hence f1.(root-tree t) = V(t) by A4;
       end;
-      let nt be NonTerminal of SCM-AE, tl, tr be bin-term,
-      rtl, rtr be Symbol of SCM-AE such that
-A5:   rtl = root-label tl & rtr = root-label tr & nt ==> <* rtl, rtr *>;
+      let nt be NonTerminal of SCM-AE, tl, tr be bin-term, rtl, rtr be Symbol
+      of SCM-AE such that
+A7:   rtl = root-label tl & rtr = root-label tr & nt ==> <* rtl, rtr
+      *>;
       let xl, xr be Element of INT such that
-A6:   xl = f1.tl & xr = f1.tr;
+A8:   xl = f1.tl & xr = f1.tr;
       nt-Meaning_on (xl, xr) in INT by INT_1:def 2;
-      then i2i.(nt-Meaning_on (xl, xr)) = nt-Meaning_on (xl, xr) by FUNCT_1:35;
-      hence f1.(nt-tree (tl, tr)) = U(nt,rtl, rtr,xl, xr) by A3,A5,A6;
+      then i2i.(nt-Meaning_on (xl, xr)) = nt-Meaning_on (xl, xr) by
+      FUNCT_1:35;
+      hence f1.(nt-tree (tl, tr)) = U(nt,rtl, rtr,xl, xr) by A5,A7,A8;
     end;
     given f2 being Function of TS SCM-AE, INT such that
-A7: it2 = f2.term &
-    (for t being Terminal of SCM-AE holds f2.(root-tree t) = s.t) &
-    (for nt being NonTerminal of SCM-AE, tl, tr being bin-term,
-    rtl, rtr being Symbol of SCM-AE
-    st rtl = root-label tl & rtr = root-label tr & nt ==> <* rtl, rtr *>
-    for xl, xr being Element of INT st xl = f2.tl & xr = f2.tr
-    holds f2.(nt-tree (tl, tr)) = nt-Meaning_on (xl, xr));
-A8: now
+A9: it2 = f2.term and
+A10: for t being Terminal of SCM-AE holds f2.(root-tree t) = s.t and
+A11: for nt being NonTerminal of SCM-AE, tl, tr being bin-term, rtl,
+rtr being Symbol of SCM-AE st rtl = root-label tl & rtr = root-label tr & nt
+==> <* rtl, rtr *> for xl, xr being Element of INT st xl = f2.tl & xr = f2.tr
+    holds f2.(nt-tree (tl, tr)) = nt-Meaning_on (xl, xr);
+A12: now
       hereby
         let t be Terminal of SCM-AE;
         s.t in INT by INT_1:def 2;
         then i2i.(s.t) = s.t by FUNCT_1:35;
-        hence f2.(root-tree t) = V(t) by A7;
+        hence f2.(root-tree t) = V(t) by A10;
       end;
-      let nt be NonTerminal of SCM-AE, tl, tr be bin-term,
-      rtl, rtr be Symbol of SCM-AE such that
-A9:   rtl = root-label tl & rtr = root-label tr & nt ==> <* rtl, rtr *>;
+      let nt be NonTerminal of SCM-AE, tl, tr be bin-term, rtl, rtr be Symbol
+      of SCM-AE such that
+A13:  rtl = root-label tl & rtr = root-label tr & nt ==> <* rtl, rtr
+      *>;
       let xl, xr be Element of INT such that
-A10:  xl = f2.tl & xr = f2.tr;
+A14:  xl = f2.tl & xr = f2.tr;
       nt-Meaning_on (xl, xr) in INT by INT_1:def 2;
-      then i2i.(nt-Meaning_on (xl, xr)) = nt-Meaning_on (xl, xr) by FUNCT_1:35;
-      hence f2.(nt-tree (tl, tr)) = U(nt,rtl, rtr,xl, xr) by A7,A9,A10;
+      then i2i.(nt-Meaning_on (xl, xr)) = nt-Meaning_on (xl, xr) by
+      FUNCT_1:35;
+      hence f2.(nt-tree (tl, tr)) = U(nt,rtl, rtr,xl, xr) by A11,A13,A14;
     end;
-    f1 = f2 from BINTREE1:sch 4 (A4, A8);
-    hence thesis by A3,A7;
+    f1 = f2 from BINTREE1:sch 4 (A6, A12);
+    hence thesis by A3,A9;
   end;
 end;
 
 theorem Th6:
-  for s being State of SCM, t being Terminal of SCM-AE holds
-  (root-tree t)@s = s.t
+  for s being State of SCM, t being Terminal of SCM-AE holds (
+  root-tree t)@s = s.t
 proof
   let s be State of SCM, t be Terminal of SCM-AE;
-  ex f being Function of TS SCM-AE, INT st (root-tree t)@s = f.(root-tree t) &
-  (for t being Terminal of SCM-AE holds f.(root-tree t) = s.t) &
-  (for nt being NonTerminal of SCM-AE, tl, tr being bin-term,
-  rtl, rtr being Symbol of SCM-AE
-  st rtl = root-label tl & rtr = root-label tr & nt ==> <* rtl, rtr *>
-  for xl, xr being Element of INT st xl = f.tl & xr = f.tr
-  holds f.(nt-tree (tl, tr)) = nt-Meaning_on (xl, xr)) by Def9;
+  ex f being Function of TS SCM-AE, INT st (root-tree t)@s = f.(root-tree
+  t) & (for t being Terminal of SCM-AE holds f.(root-tree t) = s.t) & for nt
+  being NonTerminal of SCM-AE, tl, tr being bin-term, rtl, rtr being Symbol of
+SCM-AE st rtl = root-label tl & rtr = root-label tr & nt ==> <* rtl, rtr *> for
+xl, xr being Element of INT st xl = f.tl & xr = f.tr holds f.(nt-tree (tl, tr))
+  = nt-Meaning_on (xl, xr) by Def9;
   hence thesis;
 end;
 
 theorem Th7:
-  for s being State of SCM, nt being NonTerminal of SCM-AE,
-  tl, tr being bin-term holds (nt-tree(tl, tr))@s = nt-Meaning_on(tl@s, tr@s)
+  for s being State of SCM, nt being NonTerminal of SCM-AE, tl, tr
+  being bin-term holds (nt-tree(tl, tr))@s = nt-Meaning_on(tl@s, tr@s)
 proof
   let s be State of SCM, nt be NonTerminal of SCM-AE, tl, tr be bin-term;
   consider f being Function of TS SCM-AE, INT such that
-A1: (nt-tree(tl, tr))@s = f.(nt-tree(tl,tr)) &
-  (for t being Terminal of SCM-AE holds f.(root-tree t) = s.t) &
-  (for nt being NonTerminal of SCM-AE, tl, tr being bin-term,
-  rtl, rtr being Symbol of SCM-AE
-  st rtl = root-label tl & rtr = root-label tr & nt ==> <* rtl, rtr *>
-  for xl, xr being Element of INT st xl = f.tl & xr = f.tr
-  holds f.(nt-tree (tl, tr)) = nt-Meaning_on (xl, xr)) by Def9;
-  tl@s = f.tl & tr@s = f.tr & nt ==> <* root-label tl, root-label tr *>
-  by A1,Def1,Def9,Lm3;
-  hence thesis by A1;
+A1: (nt-tree(tl, tr))@s = f.(nt-tree(tl,tr)) and
+A2: for t being Terminal of SCM-AE holds f.(root-tree t) = s.t and
+A3: for nt being NonTerminal of SCM-AE, tl, tr being bin-term, rtl, rtr
+being Symbol of SCM-AE st rtl = root-label tl & rtr = root-label tr & nt ==> <*
+rtl, rtr *> for xl, xr being Element of INT st xl = f.tl & xr = f.tr holds f.(
+  nt-tree (tl, tr)) = nt-Meaning_on (xl, xr) by Def9;
+A4: nt ==> <* root-label tl, root-label tr *> by Def1,Lm3;
+  tl@s = f.tl & tr@s = f.tr by A2,A3,Def9;
+  hence thesis by A1,A3,A4;
 end;
 
 theorem :: PRE_COMP_8:
-  for s being State of SCM, tl, tr being bin-term holds
-  (tl+tr)@s = (tl@s)+(tr@s) & (tl-tr)@s = (tl@s)-(tr@s) &
-  (tl*tr)@s = (tl@s)*(tr@s) &
-  (tl div tr)@s = (tl@s) div (tr@s) & (tl mod tr)@s = (tl@s) mod (tr@s)
+  for s being State of SCM, tl, tr being bin-term holds (tl+tr)@s = (tl@
+s)+(tr@s) & (tl-tr)@s = (tl@s)-(tr@s) & (tl*tr)@s = (tl@s)*(tr@s) & (tl div tr)
+  @s = (tl@s) div (tr@s) & (tl mod tr)@s = (tl@s) mod (tr@s)
 proof
   let s be State of SCM, tl, tr be bin-term;
   thus (tl+tr)@s = nt0-Meaning_on (tl@s, tr@s) by Th7
@@ -599,145 +624,136 @@ definition
   func Selfwork(nt, n) -> Element of ((the Instructions of SCM) qua set)*
   equals
   :Def10:
-  <*AddTo(dl.n, dl.(n+1))*> if nt = [0,0],
-  <*SubFrom(dl.n, dl.(n+1))*> if nt = [0,1],
-  <*MultBy(dl.n, dl.(n+1))*> if nt = [0,2],
-  <*Divide(dl.n, dl.(n+1))*> if nt = [0,3],
-  <*Divide(dl.n, dl.(n+1)), dl.n:=dl.(n+1)*> if nt = [0,4];
+  <*AddTo(dl.n, dl.(n+1))*> if nt = [0,0], <*SubFrom(dl.n, dl.(n+1
+  ))*> if nt = [0,1], <*MultBy(dl.n, dl.(n+1))*> if nt = [0,2], <*Divide(dl.n,
+dl.(n+1))*> if nt = [0,3], <*Divide(dl.n, dl.(n+1)), dl.n:=dl.(n+1)*> if nt = [
+  0,4];
   coherence;
   consistency
   proof
-    [0,0]`2 = 0 & [0,1]`2 = 1 & [0,2]`2 = 2 & [0,3]`2 = 3 & [0,4]`2 = 4
-    by MCART_1:7;
-    hence thesis;
+A1: [0,2]`2 = 2 & [0,3]`2 = 3 by MCART_1:7;
+    [0,0]`2 = 0 & [0,1]`2 = 1 by MCART_1:7;
+    hence thesis by A1,MCART_1:7;
   end;
 end;
 
 definition
-  let term be bin-term, aux be Element of NAT;
+  deffunc V(NonTerminal of SCM-AE, Function of NAT, ((the Instructions of SCM)
+  qua set)*, Function of NAT, ((the Instructions of SCM) qua set)*, Element of
+  NAT) = ($2.$4)^($3.($4+1))^Selfwork($1, $4);
   deffunc U(Terminal of SCM-AE,Element of NAT) = <*dl.$2:=@$1*>;
-  deffunc V(NonTerminal of SCM-AE,
-  Function of NAT, ((the Instructions of SCM) qua set)*,
-  Function of NAT, ((the Instructions of SCM) qua set)*, Element of NAT)
-  = ($2.$4)^($3.($4+1))^Selfwork($1, $4);
+  let term be bin-term, aux be Element of NAT;
   func SCM-Compile(term, aux) -> FinSequence of the Instructions of SCM means
   :Def11:
-  ex f being Function of TS SCM-AE,
-  Funcs(NAT, ((the Instructions of SCM) qua set)*) st it = (f.term qua
-  Element of Funcs(NAT, ((the Instructions of SCM) qua set)*)).aux &
-  (for t being Terminal of SCM-AE
-  ex g being Function of NAT, ((the Instructions of SCM) qua set)*
-  st g = f.(root-tree t) &
-  for n being Element of NAT holds g.n = <*dl.n:=@t*>) &
-  for nt being NonTerminal of SCM-AE, t1, t2 being bin-term,
-  rtl, rtr being Symbol of SCM-AE
-  st rtl = root-label t1 & rtr = root-label t2 & nt ==> <*rtl, rtr*>
-  ex g, f1, f2 being Function of NAT, ((the Instructions of SCM) qua set) *
-  st g = f.(nt-tree (t1, t2)) & f1 = f.t1 & f2 = f.t2 &
-  for n being Element of NAT holds g.n = (f1.n)^(f2.(n+1))^Selfwork(nt, n);
+  ex f being Function of TS SCM-AE, Funcs(NAT, ((the Instructions of SCM)
+qua set)*) st it = (f.term qua Element of Funcs(NAT, ((the Instructions of SCM)
+qua set)*)).aux & (for t being Terminal of SCM-AE ex g being Function of NAT, (
+  (the Instructions of SCM) qua set)* st g = f.(root-tree t) & for n being
+Element of NAT holds g.n = <*dl.n:=@t*>) & for nt being NonTerminal of SCM-AE,
+t1, t2 being bin-term, rtl, rtr being Symbol of SCM-AE st rtl = root-label t1 &
+rtr = root-label t2 & nt ==> <*rtl, rtr*> ex g, f1, f2 being Function of NAT, (
+(the Instructions of SCM) qua set) * st g = f.(nt-tree (t1, t2)) & f1 = f.t1 &
+f2 = f.t2 & for n being Element of NAT holds g.n = (f1.n)^(f2.(n+1))^Selfwork(
+  nt, n);
   existence
   proof
-    consider f being Function of TS SCM-AE,
-    Funcs(NAT, ((the Instructions of SCM) qua set)*) such that
-A1: (for t being Terminal of SCM-AE
-    ex g being Function of NAT, ((the Instructions of SCM) qua set)*
-    st g = f.(root-tree t) & for n being Element of NAT holds g.n = U(t,n)) &
-    for nt being NonTerminal of SCM-AE, t1, t2 being bin-term,
-    rtl, rtr being Symbol of SCM-AE
-    st rtl = root-label t1 & rtr = root-label t2 & nt ==> <*rtl, rtr*>
-    ex g, f1, f2 being Function of NAT, ((the Instructions of SCM) qua set)*
-    st g = f.(nt-tree (t1, t2)) & f1 = f.t1 & f2 = f.t2 &
-    for n being Element of NAT holds g.n = V(nt,f1,f2,n) from BINTREE1:sch 5;
-    reconsider IT = (f.term qua Element of
-    Funcs(NAT, ((the Instructions of SCM) qua set)*)).aux
-    as Element of ((the Instructions of SCM) qua set)*;
-    take IT, f; thus thesis by A1;
+    consider f being Function of TS SCM-AE, Funcs(NAT, ((the Instructions of
+    SCM) qua set)*) such that
+A1: (for t being Terminal of SCM-AE ex g being Function of NAT, ((the
+Instructions of SCM) qua set)* st g = f.(root-tree t) & for n being Element of
+    NAT holds g.n = U(t,n)) & for nt being NonTerminal of SCM-AE, t1, t2 being
+    bin-term, rtl, rtr being Symbol of SCM-AE st rtl = root-label t1 & rtr =
+root-label t2 & nt ==> <*rtl, rtr*> ex g, f1, f2 being Function of NAT, ((the
+Instructions of SCM) qua set)* st g = f.(nt-tree (t1, t2)) & f1 = f.t1 & f2 = f
+.t2 & for n being Element of NAT holds g.n = V(nt,f1,f2,n) from BINTREE1:sch 5;
+    reconsider IT = (f.term qua Element of Funcs(NAT, ((the Instructions of
+    SCM) qua set)*)).aux as Element of ((the Instructions of SCM) qua set)*;
+    take IT, f;
+    thus thesis by A1;
   end;
   uniqueness
   proof
     let it1, it2 be FinSequence of the Instructions of SCM;
-    given f1 being Function of TS SCM-AE,
-    Funcs(NAT, ((the Instructions of SCM) qua set)*) such that
-A2: it1 = (f1.term
-    qua Element of Funcs(NAT, ((the Instructions of SCM) qua set)* )).aux and
-A3: (for t being Terminal of SCM-AE
-    ex g being Function of NAT, ((the Instructions of SCM) qua set)*
-    st g = f1.(root-tree t) & for n being Element of NAT holds g.n = U(t,n)) &
-    for nt being NonTerminal of SCM-AE, t1, t2 being bin-term,
-    rtl, rtr being Symbol of SCM-AE
-    st rtl = root-label t1 & rtr = root-label t2 & nt ==> <* rtl, rtr *>
-    ex g, g1, g2 being Function of NAT, ((the Instructions of SCM) qua set)*
-    st g = f1.(nt-tree (t1, t2)) & g1 = f1.t1 & g2 = f1.t2 &
-    for n being Element of NAT holds g.n = V(nt,g1,g2,n);
-    given f2 being Function of TS SCM-AE,
-    Funcs(NAT, ((the Instructions of SCM) qua set)*) such that
-A4: it2 = (f2.term
-    qua Element of Funcs(NAT, ((the Instructions of SCM) qua set)*)).aux and
-A5: (for t being Terminal of SCM-AE
-    ex g being Function of NAT, ((the Instructions of SCM) qua set)*
-    st g = f2.(root-tree t) & for n being Element of NAT holds g.n = U(t,n)) &
-    for nt being NonTerminal of SCM-AE, t1, t2 being bin-term,
-    rtl, rtr being Symbol of SCM-AE
-    st rtl = root-label t1 & rtr = root-label t2 & nt ==> <* rtl, rtr *>
-    ex g, g1, g2 being Function of NAT, ((the Instructions of SCM) qua set)*
-    st g = f2.(nt-tree (t1, t2)) & g1 = f2.t1 & g2 = f2.t2 &
-    for n being Element of NAT holds g.n = V(nt,g1,g2,n);
+    given f1 being Function of TS SCM-AE, Funcs(NAT, ((the Instructions of SCM
+    ) qua set)*) such that
+A2: it1 = (f1.term qua Element of Funcs(NAT, ((the Instructions of SCM
+    ) qua set)* )).aux and
+A3: (for t being Terminal of SCM-AE ex g being Function of NAT, ((the
+Instructions of SCM) qua set)* st g = f1.(root-tree t) & for n being Element of
+    NAT holds g.n = U(t,n)) & for nt being NonTerminal of SCM-AE, t1, t2 being
+    bin-term, rtl, rtr being Symbol of SCM-AE st rtl = root-label t1 & rtr =
+root-label t2 & nt ==> <* rtl, rtr *> ex g, g1, g2 being Function of NAT, ((the
+Instructions of SCM) qua set)* st g = f1.(nt-tree (t1, t2)) & g1 = f1.t1 & g2 =
+    f1.t2 & for n being Element of NAT holds g.n = V(nt,g1,g2,n);
+    given f2 being Function of TS SCM-AE, Funcs(NAT, ((the Instructions of SCM
+    ) qua set)*) such that
+A4: it2 = (f2.term qua Element of Funcs(NAT, ((the Instructions of SCM
+    ) qua set)*)).aux and
+A5: (for t being Terminal of SCM-AE ex g being Function of NAT, ((the
+Instructions of SCM) qua set)* st g = f2.(root-tree t) & for n being Element of
+    NAT holds g.n = U(t,n)) & for nt being NonTerminal of SCM-AE, t1, t2 being
+    bin-term, rtl, rtr being Symbol of SCM-AE st rtl = root-label t1 & rtr =
+root-label t2 & nt ==> <* rtl, rtr *> ex g, g1, g2 being Function of NAT, ((the
+Instructions of SCM) qua set)* st g = f2.(nt-tree (t1, t2)) & g1 = f2.t1 & g2 =
+    f2.t2 & for n being Element of NAT holds g.n = V(nt,g1,g2,n);
     f1 = f2 from BINTREE1:sch 6 (A3, A5);
     hence thesis by A2,A4;
   end;
 end;
 consider term' being bin-term;
-consider f being Function of TS SCM-AE,
-Funcs(NAT, ((the Instructions of SCM) qua set)*) such that
-SCM-Compile(term', 0) =
-(f.term' qua Element of Funcs(NAT, ((the Instructions of SCM) qua set)*
-)).0 and
 
-Lm4: (for t being Terminal of SCM-AE
-ex g being Function of NAT, ((the Instructions of SCM) qua set)*
-st g = f.(root-tree t) &
-for n being Element of NAT holds g.n = <*dl.n:=@t*>) &
-for nt being NonTerminal of SCM-AE, t1, t2 being bin-term,
-rtl, rtr being Symbol of SCM-AE
-st rtl = root-label t1 & rtr = root-label t2 & nt ==> <*rtl, rtr*>
-ex g, f1, f2 being Function of NAT, ((the Instructions of SCM) qua set)*
-st g = f.(nt-tree (t1, t2)) & f1 = f.t1 & f2 = f.t2 &
-for n being Element of NAT holds g.n = (f1.n)^(f2.(n+1))^Selfwork(nt, n)
-by Def11;
+consider f being Function of TS SCM-AE, Funcs(NAT, ((the Instructions of SCM)
+qua set)*) such that
+
+SCM-Compile(term', 0) = (f.term' qua Element of Funcs(NAT, ((the
+Instructions of SCM) qua set)* )).0 and
+
+Lm4: for t being Terminal of SCM-AE ex g being Function of NAT, ((the
+Instructions of SCM) qua set)* st g = f.(root-tree t) & for n being Element of
+NAT holds g.n = <*dl.n:=@t*> and
+
+Lm5: for nt being NonTerminal of SCM-AE, t1, t2 being bin-term, rtl, rtr
+being Symbol of SCM-AE st rtl = root-label t1 & rtr = root-label t2 & nt ==> <*
+rtl, rtr*> ex g, f1, f2 being Function of NAT, ((the Instructions of SCM) qua
+set)* st g = f.(nt-tree (t1, t2)) & f1 = f.t1 & f2 = f.t2 & for n being Element
+of NAT holds g.n = (f1.n)^(f2.(n+1))^Selfwork(nt, n) by Def11;
 
 theorem Th9:
   for t being Terminal of SCM-AE, n being Element of NAT holds
   SCM-Compile(root-tree t, n) = <* dl.n:=@t *>
 proof
   let t be Terminal of SCM-AE, n be Element of NAT;
-  consider g being Function of NAT, ((the Instructions of SCM) qua set)*
-  such that
-A1: g = f.root-tree t & for n being Element of NAT holds g.n = <*dl.n:=@t*>
-  by Lm4;
-  g.n = <*dl.n:=@t*> by A1;
-  hence thesis by A1,Def11,Lm4;
+  consider g being Function of NAT, ((the Instructions of SCM) qua set)* such
+  that
+A1: g = f.root-tree t and
+A2: for n being Element of NAT holds g.n = <*dl.n:=@t*> by Lm4;
+  g.n = <*dl.n:=@t*> by A2;
+  hence thesis by A1,Def11,Lm4,Lm5;
 end;
 
 theorem Th10:
-  for nt being NonTerminal of SCM-AE, t1, t2 being bin-term,
-  n being Element of NAT, rtl, rtr being Symbol of SCM-AE
-  st rtl = root-label t1 & rtr = root-label t2 & nt ==> <*rtl, rtr*>
-  holds SCM-Compile(nt-tree(t1,t2), n) =
-  SCM-Compile(t1, n)^SCM-Compile(t2, n+1)^Selfwork(nt, n)
+  for nt being NonTerminal of SCM-AE, t1, t2 being bin-term, n
+being Element of NAT, rtl, rtr being Symbol of SCM-AE st rtl = root-label t1 &
+rtr = root-label t2 & nt ==> <*rtl, rtr*> holds SCM-Compile(nt-tree(t1,t2), n)
+  = SCM-Compile(t1, n)^SCM-Compile(t2, n+1)^Selfwork(nt, n)
 proof
   let nt be NonTerminal of SCM-AE, t1, t2 be bin-term, n be Element of NAT,
   rtl, rtr be Symbol of SCM-AE;
-  assume rtl = root-label t1 & rtr = root-label t2 & nt ==> <*rtl, rtr*>;
-  then consider g,f1,f2 being Function of NAT, ((the Instructions of SCM) qua
-  set)* such that
-A1: g = f.(nt-tree (t1, t2)) & f1 = f.t1 & f2 = f.t2 &
-  for n being Element of NAT holds g.n = (f1.n)^(f2.(n+1))^Selfwork(nt, n)
-  by Lm4;
-  reconsider f1n = f1.n, f2n = f2.(n+1) as
-  Element of ((the Instructions of SCM) qua set)*;
-  SCM-Compile(t1, n) = f1n & SCM-Compile(t2, n+1) = f2n by A1,Def11,Lm4;
-  then g.n = SCM-Compile(t1, n)^SCM-Compile(t2, n+1)^Selfwork(nt, n) by A1;
-  hence thesis by A1,Def11,Lm4;
+  assume
+  rtl = root-label t1 & rtr = root-label t2 & nt ==> <*rtl, rtr*>;
+  then consider
+  g,f1,f2 being Function of NAT, ((the Instructions of SCM) qua set)*
+  such that
+A1: g = f.(nt-tree (t1, t2)) and
+A2: f1 = f.t1 & f2 = f.t2 and
+A3: for n being Element of NAT holds g.n = (f1.n)^(f2.(n+1))^Selfwork(nt
+  , n) by Lm5;
+  reconsider f1n = f1.n, f2n = f2.(n+1) as Element of ((the Instructions of
+  SCM) qua set)*;
+  SCM-Compile(t1, n) = f1n & SCM-Compile(t2, n+1) = f2n by A2,Def11,Lm4,
+  Lm5;
+  then g.n = SCM-Compile(t1, n)^SCM-Compile(t2, n+1)^Selfwork(nt, n) by A3;
+  hence thesis by A1,Def11,Lm4,Lm5;
 end;
 
 definition
@@ -753,35 +769,33 @@ A1: x in {1} and
 A2: y in NAT and
 A3: t = [x,y] by ZFMISC_1:103;
     reconsider k = y as Element of NAT by A2;
-A4: x = 1 by A1,TARSKI:def 1;
-    take k; thus thesis by A3,A4;
+    take k;
+    thus thesis by A1,A3,TARSKI:def 1;
   end;
   uniqueness by AMI_3:52;
 end;
 
 definition
-  let term be bin-term;
-  deffunc U(NonTerminal of SCM-AE,set,set,Element of NAT,Element of NAT)
-  = max($4, $5);
   deffunc V(Terminal of SCM-AE) = d".$1;
+  deffunc U(NonTerminal of SCM-AE,set,set,Element of NAT,Element of NAT) = max
+  ($4, $5);
+  let term be bin-term;
   func max_Data-Loc_in term -> Element of NAT means
   :Def13:
-  ex f being Function of TS SCM-AE, NAT st it = f.term &
-  (for t being Terminal of SCM-AE holds f.(root-tree t) = d".t) &
-  (for nt being NonTerminal of SCM-AE, tl, tr being bin-term,
-  rtl, rtr being Symbol of SCM-AE
-  st rtl = root-label tl & rtr = root-label tr & nt ==> <* rtl, rtr *>
-  for xl, xr being Element of NAT st xl = f.tl & xr = f.tr
-  holds f.(nt-tree (tl, tr)) = max(xl, xr));
+  ex f being
+  Function of TS SCM-AE, NAT st it = f.term & (for t being Terminal of SCM-AE
+  holds f.(root-tree t) = d".t) & for nt being NonTerminal of SCM-AE, tl, tr
+being bin-term, rtl, rtr being Symbol of SCM-AE st rtl = root-label tl & rtr =
+root-label tr & nt ==> <* rtl, rtr *> for xl, xr being Element of NAT st xl = f
+  .tl & xr = f.tr holds f.(nt-tree (tl, tr)) = max(xl, xr);
   existence
   proof
     consider f being Function of TS SCM-AE, NAT such that
 A1: (for t being Terminal of SCM-AE holds f.(root-tree t) = V(t)) &
-    (for nt being NonTerminal of SCM-AE, tl, tr being bin-term,
-    rtl, rtr being Symbol of SCM-AE
-    st rtl = root-label tl & rtr = root-label tr & nt ==> <* rtl, rtr *>
-    for xl, xr being Element of NAT st xl = f.tl & xr = f.tr
-    holds f.(nt-tree (tl, tr)) = U(nt,rtl,rtr,xl,xr)) from BINTREE1:sch 3;
+    for nt being NonTerminal of SCM-AE, tl, tr being bin-term, rtl, rtr being
+Symbol of SCM-AE st rtl = root-label tl & rtr = root-label tr & nt ==> <* rtl,
+    rtr *> for xl, xr being Element of NAT st xl = f.tl & xr = f.tr holds f.(nt
+    -tree (tl, tr)) = U(nt,rtl,rtr,xl,xr) from BINTREE1:sch 3;
     reconsider fterm = f.term as Element of NAT;
     take fterm, f;
     thus thesis by A1;
@@ -792,19 +806,17 @@ A1: (for t being Terminal of SCM-AE holds f.(root-tree t) = V(t)) &
     given f1 being Function of TS SCM-AE, NAT such that
 A2: it1 = f1.term and
 A3: (for t being Terminal of SCM-AE holds f1.(root-tree t) = V(t)) &
-    (for nt being NonTerminal of SCM-AE, tl, tr being bin-term,
-    rtl, rtr being Symbol of SCM-AE
-    st rtl = root-label tl & rtr = root-label tr & nt ==> <* rtl, rtr *>
-    for xl, xr being Element of NAT st xl = f1.tl & xr = f1.tr
-    holds f1.(nt-tree (tl, tr)) = U(nt,rtl,rtr,xl, xr));
+    for nt being NonTerminal of SCM-AE, tl, tr being bin-term, rtl, rtr being
+Symbol of SCM-AE st rtl = root-label tl & rtr = root-label tr & nt ==> <* rtl,
+rtr *> for xl, xr being Element of NAT st xl = f1.tl & xr = f1.tr holds f1.(nt
+    -tree (tl, tr)) = U(nt,rtl,rtr,xl, xr);
     given f2 being Function of TS SCM-AE, NAT such that
 A4: it2 = f2.term and
 A5: (for t being Terminal of SCM-AE holds f2.(root-tree t) = V(t)) &
-    (for nt being NonTerminal of SCM-AE, tl, tr being bin-term,
-    rtl, rtr being Symbol of SCM-AE
-    st rtl = root-label tl & rtr = root-label tr & nt ==> <* rtl, rtr *>
-    for xl, xr being Element of NAT st xl = f2.tl & xr = f2.tr
-    holds f2.(nt-tree (tl, tr)) = U(nt,rtl,rtr,xl, xr));
+    for nt being NonTerminal of SCM-AE, tl, tr being bin-term, rtl, rtr being
+Symbol of SCM-AE st rtl = root-label tl & rtr = root-label tr & nt ==> <* rtl,
+rtr *> for xl, xr being Element of NAT st xl = f2.tl & xr = f2.tr holds f2.(nt
+    -tree (tl, tr)) = U(nt,rtl,rtr,xl, xr);
     f1 = f2 from BINTREE1:sch 4 (A3, A5);
     hence thesis by A2,A4;
   end;
@@ -812,416 +824,454 @@ end;
 consider Term being bin-term;
 consider f being Function of TS SCM-AE, NAT such that
 max_Data-Loc_in Term = f.Term and
+Lm6: for t being Terminal of SCM-AE holds f.(root-tree t) = d".t and
 
-Lm5: (for t being Terminal of SCM-AE holds f.(root-tree t) = d".t) &
-(for nt being NonTerminal of SCM-AE, tl, tr being bin-term,
-rtl, rtr being Symbol of SCM-AE
-st rtl = root-label tl & rtr = root-label tr & nt ==> <* rtl, rtr *>
-for xl, xr being Element of NAT st xl = f.tl & xr = f.tr
-holds f.(nt-tree (tl, tr)) = max(xl, xr)) by Def13;
+Lm7: for nt being NonTerminal of SCM-AE, tl, tr being bin-term, rtl, rtr
+being Symbol of SCM-AE st rtl = root-label tl & rtr = root-label tr & nt ==> <*
+rtl, rtr *> for xl, xr being Element of NAT st xl = f.tl & xr = f.tr holds f.(
+nt-tree (tl, tr)) = max(xl, xr) by Def13;
 
 theorem Th11:
-  for t being Terminal of SCM-AE holds max_Data-Loc_in root-tree t = d".t
+  for t being Terminal of SCM-AE holds max_Data-Loc_in root-tree t
+  = d".t
 proof
   let t be Terminal of SCM-AE;
-  max_Data-Loc_in (root-tree t) = f.(root-tree t) qua Element of NAT
-  by Def13,Lm5;
-  hence thesis by Lm5;
+  max_Data-Loc_in (root-tree t) = f.(root-tree t) qua Element of NAT by
+  Def13,Lm6,Lm7;
+  hence thesis by Lm6;
 end;
 
-Lm6: NonTerminals SCM-AE = [:1, 5:] by Def1;
+Lm8: NonTerminals SCM-AE = [:1, 5:] by Def1;
 
 theorem Th12:
   for nt being NonTerminal of SCM-AE, tl, tr being bin-term holds
-  max_Data-Loc_in(nt-tree(tl, tr)) =
-  max(max_Data-Loc_in tl, max_Data-Loc_in tr)
+max_Data-Loc_in(nt-tree(tl, tr)) = max(max_Data-Loc_in tl, max_Data-Loc_in tr)
 proof
   let nt be NonTerminal of SCM-AE, tl, tr be bin-term;
-  max_Data-Loc_in tl = f.tl &
-  max_Data-Loc_in tr = f.tr & nt ==> <*root-label tl, root-label tr*> &
-  max_Data-Loc_in(nt-tree(tl, tr)) = f.(nt-tree(tl, tr))
-  by Def1,Def13,Lm5,Lm6;
-  hence thesis by Lm5;
+A1: max_Data-Loc_in tl = f.tl & max_Data-Loc_in tr = f.tr by Def13,Lm6,Lm7;
+  nt ==> <*root-label tl, root-label tr*> & max_Data-Loc_in(nt-tree(tl, tr
+  )) = f.(nt-tree(tl, tr)) by Def1,Def13,Lm6,Lm7,Lm8;
+  hence thesis by A1,Lm7;
 end;
-defpred X[bin-term] means for s1, s2 being State of SCM
-st for dn being Element of NAT st dn <= max_Data-Loc_in $1
-holds s1.dl.dn = s2.dl.dn holds $1 @ s1 = $1 @ s2;
 
-Lm7: now
+defpred X[bin-term] means for s1, s2 being State of SCM st for dn being
+Element of NAT st dn <= max_Data-Loc_in $1 holds s1.dl.dn = s2.dl.dn holds $1 @
+s1 = $1 @ s2;
+
+Lm9: now
   let s be Terminal of SCM-AE;
   thus X[root-tree s]
   proof
     let s1, s2 be State of SCM;
     assume
+
 A1: for dn being Element of NAT st dn <= max_Data-Loc_in root-tree s
     holds s1.dl.dn = s2.dl.dn;
+
     d".s <= max_Data-Loc_in root-tree s by Th11;
     then
-A2: s1.dl.d".s=s2.dl.d".s & s1.s = s1.dl.d".s & s2.s = s2.dl.d".s by A1,Def12;
-    (root-tree s) @ s1 = s1.s by Th6;
-    hence thesis by A2,Th6;
+A2: s1.dl.d".s=s2.dl.d".s by A1;
+A3: (root-tree s) @ s1 = s1.s by Th6;
+    s1.s = s1.dl.d".s & s2.s = s2.dl.d".s by Def12;
+    hence thesis by A2,A3,Th6;
   end;
 end;
 
-Lm8: now
+Lm10: now
   let nt be NonTerminal of SCM-AE, tl, tr be Element of TS SCM-AE;
-  assume
-A1: nt ==> <* root-label tl, root-label tr *> & X[tl] & X[tr];
+  assume that
+  nt ==> <* root-label tl, root-label tr *> and
+A1: X[tl] and
+A2: X[tr];
   thus X[nt-tree(tl, tr)]
   proof
     let s1, s2 be State of SCM;
     assume
-A2: for dn being Element of NAT st dn <= max_Data-Loc_in (nt-tree (tl, tr))
-    holds s1.dl.dn = s2.dl.dn;
+
+A3: for dn being Element of NAT st dn <= max_Data-Loc_in (nt-tree (tl,
+    tr)) holds s1.dl.dn = s2.dl.dn;
+
     now
-      let dn be Element of NAT;
-      assume
-A3:   dn <= max_Data-Loc_in tl;
       set ml = max_Data-Loc_in tl, mr = max_Data-Loc_in tr;
-      ml <= max(ml, mr) by XXREAL_0:25;
-      then dn <= max(ml, mr) by A3,XXREAL_0:2;
+      let dn be Element of NAT;
+A4:   ml <= max(ml, mr) by XXREAL_0:25;
+      assume
+      dn <= max_Data-Loc_in tl;
+      then dn <= max(ml, mr) by A4,XXREAL_0:2;
       then dn <= max_Data-Loc_in (nt-tree (tl, tr)) by Th12;
-      hence s1.dl.dn = s2.dl.dn by A2;
+      hence s1.dl.dn = s2.dl.dn by A3;
     end;
     then
-A4: tl@s1 = tl@s2 by A1;
+A5: tl@s1 = tl@s2 by A1;
     now
-      let dn be Element of NAT;
-      assume
-A5:   dn <= max_Data-Loc_in tr;
       set ml = max_Data-Loc_in tl, mr = max_Data-Loc_in tr;
-      mr <= max(ml, mr) by XXREAL_0:25;
-      then dn <= max(ml, mr) by A5,XXREAL_0:2;
+      let dn be Element of NAT;
+A6:   mr <= max(ml, mr) by XXREAL_0:25;
+      assume
+      dn <= max_Data-Loc_in tr;
+      then dn <= max(ml, mr) by A6,XXREAL_0:2;
       then dn <= max_Data-Loc_in (nt-tree (tl, tr)) by Th12;
-      hence s1.dl.dn = s2.dl.dn by A2;
+      hence s1.dl.dn = s2.dl.dn by A3;
     end;
     then
-A6: tr@s1 = tr@s2 by A1;
+A7: tr@s1 = tr@s2 by A2;
     nt-tree (tl, tr) @ s1 = nt-Meaning_on (tl@s1, tr@s1) by Th7;
-    hence thesis by A4,A6,Th7;
+    hence thesis by A5,A7,Th7;
   end;
 end;
 
 theorem Th13:
-  for term being bin-term, s1, s2 being State of SCM
-  st for dn being Element of NAT st dn <= max_Data-Loc_in term
-  holds s1.dl.dn = s2.dl.dn holds term @ s1 = term @ s2
-proof thus for t being bin-term holds X[t] from BINTREE1:sch 2 (Lm7, Lm8);
+  for term being bin-term, s1, s2 being State of SCM st for dn
+  being Element of NAT st dn <= max_Data-Loc_in term holds s1.dl.dn = s2.dl.dn
+  holds term @ s1 = term @ s2
+proof
+  thus for t being bin-term holds X[t] from BINTREE1:sch 2 (Lm9, Lm10);
 end;
 set D = <*>INT;
-defpred P[bin-term] means for aux, n, k being Element of NAT,
-s being State-consisting of n, n, k, SCM-Compile($1, aux), D
-st aux > max_Data-Loc_in $1 ex i being Element of NAT, u being State of SCM st
-u =  Computation(s,i+1) & i+1 = len SCM-Compile($1, aux) &
-IC  Computation(s,i)=il.(n+i) & IC u = il.(n+(i+1)) & u.dl.aux = $1@s &
-for dn being Element of NAT st dn < aux holds s.dl.dn = u.dl.dn;
+
+defpred P[bin-term] means for aux, n, k being Element of NAT, s being
+State-consisting of n, n, k, SCM-Compile($1, aux), D st aux > max_Data-Loc_in
+$1 ex i being Element of NAT, u being State of SCM st u = Computation(s,i+1) &
+i+1 = len SCM-Compile($1, aux) & IC Computation(s,i)=il.(n+i) & IC u = il.(n+(i
++1)) & u.dl.aux = $1@s & for dn being Element of NAT st dn < aux holds s.dl.dn
+= u.dl.dn;
 
 theorem Th14:
-  for term being bin-term for aux, n, k being Element of NAT,
-  s being State-consisting of n, n, k, SCM-Compile(term, aux), <*>INT
-  st aux > max_Data-Loc_in term
-  ex i being Element of NAT, u being State of SCM st
-  u =  Computation(s,i+1) & i+1 = len SCM-Compile(term, aux) &
-  IC  Computation(s,i) = il.(n+i) & IC u = il.(n+(i+1)) & u.dl.aux = term@s &
-  for dn being Element of NAT st dn < aux holds s.dl.dn = u.dl.dn
+  for term being bin-term for aux, n, k being Element of NAT, s
+  being State-consisting of n, n, k, SCM-Compile(term, aux), <*>INT st aux >
+  max_Data-Loc_in term ex i being Element of NAT, u being State of SCM st u =
+  Computation(s,i+1) & i+1 = len SCM-Compile(term, aux) & IC Computation(s,i) =
+  il.(n+i) & IC u = il.(n+(i+1)) & u.dl.aux = term@s & for dn being Element of
+  NAT st dn < aux holds s.dl.dn = u.dl.dn
 proof
-A1: for t being Terminal of SCM-AE holds P[root-tree t]
-  proof
-    let t be Terminal of SCM-AE, aux, n, k be Element of NAT,
-    s be State-consisting of n, n, k, SCM-Compile(root-tree t, aux), D;
-    assume aux > max_Data-Loc_in root-tree t;
-    take i = 0, u =  Computation(s,1);
-    thus u =  Computation(s,i+1);
-A2: SCM-Compile(root-tree t, aux) = <*dl.aux:=@t*> by Th9;
-    hence i+1 = len SCM-Compile(root-tree t, aux)
-     by FINSEQ_1:57;
-A3: len <*dl.aux:=@t*> = 1 & 0 < 1 & n+0 = n &
-    <*dl.aux:=@t*>.(0+1) = dl.aux:=@t by FINSEQ_1:57;
-    then
-A4: s =  Computation(s,0) & IC s = il.n & s.il.n = dl.aux:=@t
-    by A2,AMI_1:13,SCM_1:def 1;
-    hence IC  Computation(s,i) = il.(n+i);
-    thus IC u = il.(n+(i+1)) by A4,SCM_1:18;
-    thus u.dl.aux = s.t by A3,A4,SCM_1:18
-      .= (root-tree t)@s by Th6;
-    let dn be Element of NAT;
-    assume dn < aux;
-    then dl.dn <> dl.aux by AMI_3:52;
-    hence thesis by A3,A4,SCM_1:18;
-  end;
-A5: for nt being NonTerminal of SCM-AE, tl, tr being bin-term
-  st nt ==> <*root-label tl, root-label tr*> & P[tl] & P[tr]
-  holds P[nt-tree(tl, tr)]
+A1: for nt being NonTerminal of SCM-AE, tl, tr being bin-term st nt ==> <*
+  root-label tl, root-label tr*> & P[tl] & P[tr] holds P[nt-tree(tl, tr)]
   proof
     let nt be NonTerminal of SCM-AE, tl, tr be bin-term;
+    assume that
+A2: nt ==> <*root-label tl, root-label tr*> and
+A3: P[tl] and
+A4: P[tr];
+    let aux, n, k be Element of NAT, s be State-consisting of n, n, k,
+    SCM-Compile(nt-tree(tl, tr), aux), D;
     assume
-A6: nt ==> <*root-label tl, root-label tr*> & P[tl] & P[tr];
-    let aux, n, k be Element of NAT,
-    s be State-consisting of n, n, k, SCM-Compile(nt-tree(tl, tr), aux), D;
-    assume
-A7: aux > max_Data-Loc_in (nt-tree(tl, tr));
-A8: SCM-Compile(nt-tree(tl, tr), aux) =
-    SCM-Compile(tl, aux)^SCM-Compile(tr, aux+1)^Selfwork(nt, aux) by A6,Th10;
+A5: aux > max_Data-Loc_in (nt-tree(tl, tr));
+A6: max_Data-Loc_in (nt-tree(tl, tr)) = max(max_Data-Loc_in tl,
+    max_Data-Loc_in tr) by Th12;
+    then max_Data-Loc_in tl <= max_Data-Loc_in (nt-tree(tl, tr)) by
+    XXREAL_0:25;
     then
-A9: SCM-Compile(nt-tree(tl, tr), aux) =
-    SCM-Compile(tl, aux)^(SCM-Compile(tr, aux+1)^Selfwork(nt, aux))
-    by FINSEQ_1:45;
-    max_Data-Loc_in (nt-tree(tl, tr)) =
-    max(max_Data-Loc_in tl, max_Data-Loc_in tr) by Th12;
-    then max_Data-Loc_in tl <= max_Data-Loc_in (nt-tree(tl, tr)) &
-    max_Data-Loc_in tr <= max_Data-Loc_in (nt-tree(tl, tr)) by XXREAL_0:25;
+A7: max_Data-Loc_in tl < aux by A5,XXREAL_0:2;
+    max_Data-Loc_in tr <= max_Data-Loc_in (nt-tree(tl, tr)) by A6,
+    XXREAL_0:25;
     then
-A10: max_Data-Loc_in tl < aux & max_Data-Loc_in tr < aux by A7,XXREAL_0:2;
+A8: max_Data-Loc_in tr < aux by A5,XXREAL_0:2;
     then
-A11: max_Data-Loc_in tr < aux+1 by NAT_1:13;
-    s is State-consisting of n, n, k, SCM-Compile(tl, aux), D by A9,Th1;
+A9: max_Data-Loc_in tr < aux+1 by NAT_1:13;
+A10: SCM-Compile(nt-tree(tl, tr), aux) = SCM-Compile(tl, aux)^SCM-Compile(
+    tr, aux+1)^Selfwork(nt, aux) by A2,Th10;
+    then
+A11: SCM-Compile(nt-tree(tl, tr), aux) = SCM-Compile(tl, aux)^(SCM-Compile
+    (tr, aux+1)^Selfwork(nt, aux)) by FINSEQ_1:45;
+    then s is State-consisting of n, n, k, SCM-Compile(tl, aux), D by
+    Th1;
     then consider i1 being Element of NAT, u1 being State of SCM such that
-A12: u1 =  Computation(s,i1+1) & i1+1 = len SCM-Compile(tl, aux) &
-    IC   Computation(s,i1) = il.(n+i1) & IC u1 = il.(n+(i1+1)) &
-    u1.dl.aux = tl@s &
-    for dn being Element of NAT st dn < aux holds s.dl.dn = u1.dl.dn by A6,A10;
-    u1 is State-consisting of n+(i1+1), n+(i1+1), k,
-    SCM-Compile(tr, aux+1)^Selfwork(nt, aux), D by A9,A12,Th2;
-    then u1 is State-consisting of n+(i1+1), n+(i1+1), k,
-    SCM-Compile(tr, aux+1), D by Th1;
+A12: u1 = Computation(s,i1+1) and
+A13: i1+1 = len SCM-Compile(tl, aux) and
+    IC Computation(s,i1) = il.(n+i1) and
+A14: IC u1 = il.(n+(i1+1)) and
+A15: u1.dl.aux = tl@s and
+A16: for dn being Element of NAT st dn < aux holds s.dl.dn = u1.dl.dn
+    by A3,A7;
+    u1 is State-consisting of n+(i1+1), n+(i1+1), k, SCM-Compile(tr, aux+
+    1)^Selfwork(nt, aux), D by A11,A12,A13,A14,Th2;
+    then
+    u1 is State-consisting of n+(i1+1), n+(i1+1), k, SCM-Compile(tr, aux+
+    1), D by Th1;
     then consider i2 being Element of NAT, u2 being State of SCM such that
-A13: u2 =  Computation(u1,i2+1) & i2+1 = len SCM-Compile(tr, aux+1) &
-    IC  Computation(u1,i2) = il.(n+(i1+1)+i2) &
-    IC u2 = il.(n+(i1+1)+(i2+1)) & u2.dl.(aux+1) = tr@u1 &
-    for dn being Element of NAT st dn < aux+1 holds u1.dl.dn = u2.dl.dn
-    by A6,A11;
-A14: u2 = Computation(s,((i1+1)+(i2+1))) by A12,A13,AMI_1:51;
-A15: (nt-tree(tl, tr))@s = nt-Meaning_on(tl@s, tr@s) by Th7;
-A16: now
+A17: u2 = Computation(u1,i2+1) and
+A18: i2+1 = len SCM-Compile(tr, aux+1) and
+    IC Computation(u1,i2) = il.(n+(i1+1)+i2) and
+A19: IC u2 = il.(n+(i1+1)+(i2+1)) and
+A20: u2.dl.(aux+1) = tr@u1 and
+A21: for dn being Element of NAT st dn < aux+1 holds u1.dl.dn = u2.dl.
+    dn by A4,A9;
+A22: u2 = Computation(s,((i1+1)+(i2+1))) by A12,A17,AMI_1:51;
+A23: now
       let n be Element of NAT;
-      assume n <= max_Data-Loc_in tr;
-      then n < aux by A10,XXREAL_0:2;
-      hence s.dl.n = u1.dl.n by A12;
+      assume
+      n <= max_Data-Loc_in tr;
+      then n < aux by A8,XXREAL_0:2;
+      hence s.dl.n = u1.dl.n by A16;
     end;
-A17: aux < aux+1 by NAT_1:13;
-A18: len (SCM-Compile(tl, aux)^SCM-Compile(tr, aux+1)) = i1+1+(i2+1)
-    by A12,A13,FINSEQ_1:35;
+A24: aux < aux+1 by NAT_1:13;
+A25: (nt-tree(tl, tr))@s = nt-Meaning_on(tl@s, tr@s) by Th7;
+A26: len (SCM-Compile(tl, aux)^SCM-Compile(tr, aux+1)) = i1+1+(i2+1) by
+    A13,A18,FINSEQ_1:35;
     per cases by Th3;
-    suppose nt = [0, 0];
+    suppose
+A27:  nt = [0, 0];
       then
-A19:  Selfwork(nt, aux) = <*AddTo(dl.aux, dl.(aux+1))*> &
-      nt-Meaning_on(tl@s, tr@s) = tl@s + tr@s by Def8,Def10;
-      take i = (i1+1)+(i2+1), u =  Computation(s,i+1);
-      thus u =  Computation(s,i+1);
-A20:  len Selfwork(nt, aux) = 1 by A19,FINSEQ_1:57;
-      then len SCM-Compile(nt-tree(tl, tr), aux) = (i1+1)+(i2+1)+1
-      by A8,A18,FINSEQ_1:35;
+A28:  nt-Meaning_on(tl@s, tr@s) = tl@s + tr@s by Def8;
+      take i = (i1+1)+(i2+1), u = Computation(s,i+1);
+      thus u = Computation(s,i+1);
+A29:  Selfwork(nt, aux) = <*AddTo(dl.aux, dl.(aux+1))*> by A27,Def10;
+      then
+A30:  len Selfwork(nt, aux) = 1 by FINSEQ_1:57;
+      hence i+1 = len SCM-Compile(nt-tree(tl, tr), aux) by A10,A26,FINSEQ_1
+      :35;
+      thus IC Computation(s,i) = il.(n+i) by A12,A17,A19,AMI_1:51;
+      len SCM-Compile(nt-tree(tl, tr), aux) = (i1+1)+(i2+1)+1 by A10,A26,
+      A30,FINSEQ_1:35;
       then i < len SCM-Compile(nt-tree(tl, tr), aux) by NAT_1:13;
       then
-A21:  s.il.(n+i) = SCM-Compile(nt-tree(tl, tr), aux).(i+1) by SCM_1:def 1
-        .= AddTo(dl.aux, dl.(aux+1)) by A8,A18,A19,FINSEQ_1:59;
-
-thus i+1 = len SCM-Compile(nt-tree(tl, tr), aux)
- by A8,A18,A20,FINSEQ_1:35;
-      thus IC  Computation(s,i) = il.(n+i) by A12,A13,AMI_1:51;
-      thus IC u = il.((n+i)+1) by A13,A14,A21,SCM_1:19
+A31:  s.il.(n+i) = SCM-Compile(nt-tree(tl, tr), aux).(i+1) by
+      SCM_1:
+      def 1
+        .= AddTo(dl.aux, dl.(aux+1)) by A10,A26,A29,FINSEQ_1:59;
+      hence IC u = il.((n+i)+1) by A19,A22,SCM_1:19
         .= il.(n+(i+1));
-      thus u.dl.aux = u2.dl.aux + u2.dl.(aux+1) by A13,A14,A21,SCM_1:19
-        .= u1.dl.aux + tr@u1 by A13,A17
-        .= (nt-tree(tl, tr))@s by A12,A15,A16,A19,Th13;
-      let dn be Element of NAT;
-      assume
-A22:  dn < aux;
-      then dl.dn <> dl.aux by AMI_3:52;
-      then
-A23:  u.dl.dn = u2.dl.dn by A13,A14,A21,SCM_1:19;
-      dn < aux+1 by A22,NAT_1:13;
-      then u1.dl.dn = u2.dl.dn by A13;
-      hence thesis by A12,A22,A23;
-    end;
-    suppose nt = [0, 1];
-      then
-A24:  Selfwork(nt, aux) = <*SubFrom(dl.aux, dl.(aux+1))*> &
-      nt-Meaning_on(tl@s, tr@s) = tl@s - tr@s by Def8,Def10;
-      take i = (i1+1)+(i2+1), u =  Computation(s,i+1);
-      thus u =  Computation(s,i+1);
-A25:  len Selfwork(nt, aux) = 1 by A24,FINSEQ_1:57;
-      then len SCM-Compile(nt-tree(tl, tr), aux) = (i1+1)+(i2+1)+1
-      by A8,A18,FINSEQ_1:35;
-      then i < len SCM-Compile(nt-tree(tl, tr), aux) by NAT_1:13;
-      then
-A26:  s.il.(n+i) = SCM-Compile(nt-tree(tl, tr), aux).(i+1) by SCM_1:def 1
-        .= SubFrom(dl.aux, dl.(aux+1))
-         by A8,A18,A24,FINSEQ_1:59;
-
-thus i+1 = len SCM-Compile(nt-tree(tl, tr), aux)
- by A8,A18,A25,FINSEQ_1:35;
-      thus IC  Computation(s,i) = il.(n+i) by A12,A13,AMI_1:51;
-      thus IC u = il.((n+i)+1) by A13,A14,A26,SCM_1:20
-        .= il.(n+(i+1));
-      thus u.dl.aux = u2.dl.aux - u2.dl.(aux+1) by A13,A14,A26,SCM_1:20
-        .= u1.dl.aux - tr@u1 by A13,A17
-        .= (nt-tree(tl, tr))@s by A12,A15,A16,A24,Th13;
-      let dn be Element of NAT;
-      assume
-A27:  dn < aux;
-      then dl.dn <> dl.aux by AMI_3:52;
-      then
-A28:  u.dl.dn = u2.dl.dn by A13,A14,A26,SCM_1:20;
-      dn < aux+1 by A27,NAT_1:13;
-      then u1.dl.dn = u2.dl.dn by A13;
-      hence thesis by A12,A27,A28;
-    end;
-    suppose nt = [0, 2];
-      then
-A29:  Selfwork(nt, aux) = <*MultBy(dl.aux, dl.(aux+1))*> &
-      nt-Meaning_on(tl@s, tr@s) = tl@s * tr@s by Def8,Def10;
-      take i = (i1+1)+(i2+1), u =  Computation(s,i+1);
-      thus u =  Computation(s,i+1);
-A30:  len Selfwork(nt, aux) = 1 by A29,FINSEQ_1:57;
-      then len SCM-Compile(nt-tree(tl, tr), aux) = (i1+1)+(i2+1)+1
-      by A8,A18,FINSEQ_1:35;
-      then i < len SCM-Compile(nt-tree(tl, tr), aux) by NAT_1:13;
-      then
-A31:  s.il.(n+i) = SCM-Compile(nt-tree(tl, tr), aux).(i+1) by SCM_1:def 1
-        .= MultBy(dl.aux, dl.(aux+1))
-         by A8,A18,A29,FINSEQ_1:59;
-
-thus i+1 = len SCM-Compile(nt-tree(tl, tr), aux)
- by A8,A18,A30,FINSEQ_1:35;
-      thus IC  Computation(s,i) = il.(n+i) by A12,A13,AMI_1:51;
-      thus IC u = il.((n+i)+1) by A13,A14,A31,SCM_1:21
-        .= il.(n+(i+1));
-      thus u.dl.aux = u2.dl.aux * u2.dl.(aux+1) by A13,A14,A31,SCM_1:21
-        .= u1.dl.aux * tr@u1 by A13,A17
-        .= (nt-tree(tl, tr))@s by A12,A15,A16,A29,Th13;
+      thus u.dl.aux = u2.dl.aux + u2.dl.(aux+1) by A19,A22,A31,SCM_1:19
+        .= u1.dl.aux + tr@u1 by A20,A21,A24
+        .= (nt-tree(tl, tr))@s by A15,A25,A23,A28,Th13;
       let dn be Element of NAT;
       assume
 A32:  dn < aux;
-      then dl.dn <> dl.aux by AMI_3:52;
+      then dn < aux+1 by NAT_1:13;
       then
-A33:  u.dl.dn = u2.dl.dn by A13,A14,A31,SCM_1:21;
-      dn < aux+1 by A32,NAT_1:13;
-      then u1.dl.dn = u2.dl.dn by A13;
-      hence thesis by A12,A32,A33;
+A33:  u1.dl.dn = u2.dl.dn by A21;
+      dl.dn <> dl.aux by A32,AMI_3:52;
+      then u.dl.dn = u2.dl.dn by A19,A22,A31,SCM_1:19;
+      hence thesis by A16,A32,A33;
     end;
-    suppose nt = [0, 3];
+    suppose
+A34:  nt = [0, 1];
       then
-A34:  Selfwork(nt, aux) = <*Divide(dl.aux, dl.(aux+1))*> &
-      nt-Meaning_on(tl@s, tr@s) = tl@s div tr@s by Def8,Def10;
-      take i = (i1+1)+(i2+1), u =  Computation(s,i+1);
-      thus u =  Computation(s,i+1);
-A35:  len Selfwork(nt, aux) = 1 by A34,FINSEQ_1:57;
-      then len SCM-Compile(nt-tree(tl, tr), aux) = (i1+1)+(i2+1)+1
-      by A8,A18,FINSEQ_1:35;
+A35:  nt-Meaning_on(tl@s, tr@s) = tl@s - tr@s by Def8;
+      take i = (i1+1)+(i2+1), u = Computation(s,i+1);
+      thus u = Computation(s,i+1);
+A36:  Selfwork(nt, aux) = <*SubFrom(dl.aux, dl.(aux+1))*> by A34,Def10;
+      then
+A37:  len Selfwork(nt, aux) = 1 by FINSEQ_1:57;
+      hence i+1 = len SCM-Compile(nt-tree(tl, tr), aux) by A10,A26,FINSEQ_1
+      :35;
+      thus IC Computation(s,i) = il.(n+i) by A12,A17,A19,AMI_1:51;
+      len SCM-Compile(nt-tree(tl, tr), aux) = (i1+1)+(i2+1)+1 by A10,A26,
+      A37,FINSEQ_1:35;
       then i < len SCM-Compile(nt-tree(tl, tr), aux) by NAT_1:13;
       then
-A36:  s.il.(n+i) = SCM-Compile(nt-tree(tl, tr), aux).(i+1) by SCM_1:def 1
-        .= Divide(dl.aux, dl.(aux+1))
-         by A8,A18,A34,FINSEQ_1:59;
-      aux <> aux+1;
-      then
-A37:  dl.aux <> dl.(aux+1) by AMI_3:52;
-
-thus i+1 = len SCM-Compile(nt-tree(tl, tr), aux)
- by A8,A18,A35,FINSEQ_1:35;
-      thus IC  Computation(s,i) = il.(n+i) by A12,A13,AMI_1:51;
-      thus IC u = il.((n+i)+1) by A13,A14,A36,A37,SCM_1:22
+A38:  s.il.(n+i) = SCM-Compile(nt-tree(tl, tr), aux).(i+1) by
+      SCM_1:
+      def 1
+        .= SubFrom(dl.aux, dl.(aux+1)) by A10,A26,A36,FINSEQ_1:59;
+      hence IC u = il.((n+i)+1) by A19,A22,SCM_1:20
         .= il.(n+(i+1));
-      thus u.dl.aux = u2.dl.aux div u2.dl.(aux+1) by A13,A14,A36,A37,SCM_1:22
-        .= u1.dl.aux div tr@u1 by A13,A17
-        .= (nt-tree(tl, tr))@s by A12,A15,A16,A34,Th13;
+      thus u.dl.aux = u2.dl.aux - u2.dl.(aux+1) by A19,A22,A38,SCM_1:20
+        .= u1.dl.aux - tr@u1 by A20,A21,A24
+        .= (nt-tree(tl, tr))@s by A15,A25,A23,A35,Th13;
       let dn be Element of NAT;
       assume
-A38:  dn < aux;
+A39:  dn < aux;
+      then dn < aux+1 by NAT_1:13;
       then
-A39:  dl.dn <> dl.aux by AMI_3:52;
-A40:  dn < aux+1 by A38,NAT_1:13;
-      then dl.dn <> dl.(aux+1) by AMI_3:52;
-      then
-A41:  u.dl.dn = u2.dl.dn by A13,A14,A36,A37,A39,SCM_1:22;
-      u1.dl.dn = u2.dl.dn by A13,A40;
-      hence thesis by A12,A38,A41;
+A40:  u1.dl.dn = u2.dl.dn by A21;
+      dl.dn <> dl.aux by A39,AMI_3:52;
+      then u.dl.dn = u2.dl.dn by A19,A22,A38,SCM_1:20;
+      hence thesis by A16,A39,A40;
     end;
-    suppose nt = [0, 4];
+    suppose
+A41:  nt = [0, 2];
       then
-A42:  Selfwork(nt, aux) = <*Divide(dl.aux, dl.(aux+1)), dl.aux:=dl.( aux+1)
-      *> & nt-Meaning_on(tl@s, tr@s) = tl@s mod tr@s by Def8,Def10;
-      set i = (i1+1)+(i2+1), u =  Computation(s,i+1);
-      take k = i+1, v =  Computation(s,k+1);
-      thus v =  Computation(s,k+1);
-A43:  len Selfwork(nt, aux) = 2 by A42,FINSEQ_1:61;
+A42:  nt-Meaning_on(tl@s, tr@s) = tl@s * tr@s by Def8;
+      take i = (i1+1)+(i2+1), u = Computation(s,i+1);
+      thus u = Computation(s,i+1);
+A43:  Selfwork(nt, aux) = <*MultBy(dl.aux, dl.(aux+1))*> by A41,Def10;
       then
-A44:  len SCM-Compile(nt-tree(tl, tr), aux) = (i1+1)+(i2+1)+(1+1)
-      by A8,A18,FINSEQ_1:35;
-      hence k+1 = len SCM-Compile(nt-tree(tl, tr), aux);
-A45:  dom Selfwork(nt, aux) = Seg 2 by A43,FINSEQ_1:def 3;
-A46:  1 in Seg 2 & 2 in Seg 2 by FINSEQ_1:4,TARSKI:def 2;
-      0<2 & i+0 = i;
-      then i < len SCM-Compile(nt-tree(tl, tr), aux) by A44,XREAL_1:8;
+A44:  len Selfwork(nt, aux) = 1 by FINSEQ_1:57;
+      hence i+1 = len SCM-Compile(nt-tree(tl, tr), aux) by A10,A26,FINSEQ_1
+      :35;
+      thus IC Computation(s,i) = il.(n+i) by A12,A17,A19,AMI_1:51;
+      len SCM-Compile(nt-tree(tl, tr), aux) = (i1+1)+(i2+1)+1 by A10,A26,
+      A44,FINSEQ_1:35;
+      then i < len SCM-Compile(nt-tree(tl, tr), aux) by NAT_1:13;
       then
-A47:  s.il.(n+i) = SCM-Compile(nt-tree(tl, tr), aux).(i+1) by SCM_1:def 1
-        .= <*Divide(dl.aux, dl.(aux+1)), dl.aux:=dl.(aux+1)*>.1
-      by A8,A18,A42,A45,A46,FINSEQ_1:def 7
-        .= Divide(dl.aux, dl.(aux+1)) by FINSEQ_1:61;
-      k < len SCM-Compile(nt-tree(tl, tr), aux) by A44,XREAL_1:8;
+A45:  s.il.(n+i) = SCM-Compile(nt-tree(tl, tr), aux).(i+1) by
+      SCM_1:
+      def 1
+        .= MultBy(dl.aux, dl.(aux+1)) by A10,A26,A43,FINSEQ_1:59;
+      hence IC u = il.((n+i)+1) by A19,A22,SCM_1:21
+        .= il.(n+(i+1));
+      thus u.dl.aux = u2.dl.aux * u2.dl.(aux+1) by A19,A22,A45,SCM_1:21
+        .= u1.dl.aux * tr@u1 by A20,A21,A24
+        .= (nt-tree(tl, tr))@s by A15,A25,A23,A42,Th13;
+      let dn be Element of NAT;
+      assume
+A46:  dn < aux;
+      then dn < aux+1 by NAT_1:13;
       then
-A48:  s.il.(n+k) = SCM-Compile(nt-tree(tl, tr), aux).(k+1) by SCM_1:def 1
-        .= SCM-Compile(nt-tree(tl, tr), aux).(i+(1+1))
-        .= <*Divide(dl.aux, dl.(aux+1)), dl.aux:=dl.(aux+1)*>.2
-      by A8,A18,A42,A45,A46,FINSEQ_1:def 7
-        .= dl.aux:=dl.(aux+1) by FINSEQ_1:61;
+A47:  u1.dl.dn = u2.dl.dn by A21;
+      dl.dn <> dl.aux by A46,AMI_3:52;
+      then u.dl.dn = u2.dl.dn by A19,A22,A45,SCM_1:21;
+      hence thesis by A16,A46,A47;
+    end;
+    suppose
+A48:  nt = [0, 3];
+      take i = (i1+1)+(i2+1), u = Computation(s,i+1);
+      thus u = Computation(s,i+1);
+A49:  Selfwork(nt, aux) = <*Divide(dl.aux, dl.(aux+1))*> by A48,Def10;
+      then
+A50:  len Selfwork(nt, aux) = 1 by FINSEQ_1:57;
+      hence i+1 = len SCM-Compile(nt-tree(tl, tr), aux) by A10,A26,FINSEQ_1
+      :35;
+      len SCM-Compile(nt-tree(tl, tr), aux) = (i1+1)+(i2+1)+1 by A10,A26,
+      A50,FINSEQ_1:35;
+      then i < len SCM-Compile(nt-tree(tl, tr), aux) by NAT_1:13;
+      then
+A51:  s.il.(n+i) = SCM-Compile(nt-tree(tl, tr), aux).(i+1) by
+      SCM_1:
+      def 1
+        .= Divide(dl.aux, dl.(aux+1)) by A10,A26,A49,FINSEQ_1:59;
+      thus IC Computation(s,i) = il.(n+i) by A12,A17,A19,AMI_1:51;
+A52:  nt-Meaning_on(tl@s, tr@s) = tl@s div tr@s by A48,Def8;
       aux <> aux+1;
       then
-A49:  dl.aux <> dl.(aux+1) by AMI_3:52;
-      hence
-A50:  IC  Computation(s,k) = il.(n+i+1) by A13,A14,A47,SCM_1:22
-        .= il.(n+k);
-      hence IC v = il.((n+k)+1) by A48,SCM_1:18
-        .= il.(n+(k+1));
-      thus v.dl.aux = u.dl.(aux+1) by A48,A50,SCM_1:18
-        .= u2.dl.aux mod u2.dl.(aux+1) by A13,A14,A47,A49,SCM_1:22
-        .= u1.dl.aux mod tr@u1 by A13,A17
-        .= (nt-tree(tl, tr))@s by A12,A15,A16,A42,Th13;
+A53:  dl.aux <> dl.(aux+1) by AMI_3:52;
+      hence IC u = il.((n+i)+1) by A19,A22,A51,SCM_1:22
+        .= il.(n+(i+1));
+      thus u.dl.aux = u2.dl.aux div u2.dl.(aux+1) by A19,A22,A51,A53,SCM_1:22
+        .= u1.dl.aux div tr@u1 by A20,A21,A24
+        .= (nt-tree(tl, tr))@s by A15,A25,A23,A52,Th13;
       let dn be Element of NAT;
       assume
-A51:  dn < aux;
+A54:  dn < aux;
       then
-A52:  dl.dn <> dl.aux by AMI_3:52;
-A53:  dn < aux+1 by A51,NAT_1:13;
-      then dl.dn <> dl.(aux+1) by AMI_3:52;
+A55:  dn < aux+1 by NAT_1:13;
       then
-A54:  u.dl.dn = u2.dl.dn by A13,A14,A47,A49,A52,SCM_1:22;
-      u1.dl.dn = u2.dl.dn by A13,A53;
-      then s.dl.dn = u.dl.dn by A12,A51,A54;
-      hence thesis by A48,A50,A52,SCM_1:18;
+A56:  dl.dn <> dl.(aux+1) by AMI_3:52;
+A57:  u1.dl.dn = u2.dl.dn by A21,A55;
+      dl.dn <> dl.aux by A54,AMI_3:52;
+      then u.dl.dn = u2.dl.dn by A19,A22,A51,A53,A56,SCM_1:22;
+      hence thesis by A16,A54,A57;
+    end;
+    suppose
+A58:  nt = [0, 4];
+      then
+A59:  nt-Meaning_on(tl@s, tr@s) = tl@s mod tr@s by Def8;
+      set i = (i1+1)+(i2+1), u = Computation(s,i+1);
+      take k = i+1, v = Computation(s,k+1);
+      thus v = Computation(s,k+1);
+A60:  1 in Seg 2 by FINSEQ_1:4,TARSKI:def 2;
+A61:  Selfwork(nt, aux) = <*Divide(dl.aux, dl.(aux+1)), dl.aux:=dl.( aux+
+      1) *> by A58,Def10;
+      then
+A62:  len Selfwork(nt, aux) = 2 by FINSEQ_1:61;
+      then
+A63:  dom Selfwork(nt, aux) = Seg 2 by FINSEQ_1:def 3;
+A64:  len SCM-Compile(nt-tree(tl, tr), aux) = (i1+1)+(i2+1)+(1+1) by A10,
+      A26,A62,FINSEQ_1:35;
+      hence k+1 = len SCM-Compile(nt-tree(tl, tr), aux);
+A65:  2 in Seg 2 by FINSEQ_1:4,TARSKI:def 2;
+      k < len SCM-Compile(nt-tree(tl, tr), aux) by A64,XREAL_1:8;
+      then
+A66:  s.il.(n+k) = SCM-Compile(nt-tree(tl, tr), aux).(k+1) by
+      SCM_1:def 1
+        .= SCM-Compile(nt-tree(tl, tr), aux).(i+(1+1))
+        .= <*Divide(dl.aux, dl.(aux+1)), dl.aux:=dl.(aux+1)*>.2 by A10,A26,
+      A61,A63,A65,FINSEQ_1:def 7
+        .= dl.aux:=dl.(aux+1) by FINSEQ_1:61;
+      i+0 = i;
+      then i < len SCM-Compile(nt-tree(tl, tr), aux) by A64,XREAL_1:8;
+      then
+A67:  s.il.(n+i) = SCM-Compile(nt-tree(tl, tr), aux).(i+1) by
+      SCM_1:def 1
+        .= <*Divide(dl.aux, dl.(aux+1)), dl.aux:=dl.(aux+1)*>.1 by A10,A26,
+      A61,A63,A60,FINSEQ_1:def 7
+        .= Divide(dl.aux, dl.(aux+1)) by FINSEQ_1:61;
+      aux <> aux+1;
+      then
+A68:  dl.aux <> dl.(aux+1) by AMI_3:52;
+      hence
+A69:  IC Computation(s,k) = il.(n+i+1) by A19,A22,A67,SCM_1:
+      22
+        .= il.(n+k);
+      hence IC v = il.((n+k)+1) by A66,SCM_1:18
+        .= il.(n+(k+1));
+      thus v.dl.aux = u.dl.(aux+1) by A66,A69,SCM_1:18
+        .= u2.dl.aux mod u2.dl.(aux+1) by A19,A22,A67,A68,SCM_1:22
+        .= u1.dl.aux mod tr@u1 by A20,A21,A24
+        .= (nt-tree(tl, tr))@s by A15,A25,A23,A59,Th13;
+      let dn be Element of NAT;
+      assume
+A70:  dn < aux;
+      then
+A71:  dl.dn <> dl.aux by AMI_3:52;
+A72:  dn < aux+1 by A70,NAT_1:13;
+      then
+A73:  u1.dl.dn = u2.dl.dn by A21;
+      dl.dn <> dl.(aux+1) by A72,AMI_3:52;
+      then u.dl.dn = u2.dl.dn by A19,A22,A67,A68,A71,SCM_1:22;
+      then s.dl.dn = u.dl.dn by A16,A70,A73;
+      hence thesis by A66,A69,A71,SCM_1:18;
     end;
   end;
-  thus for term being bin-term holds P[term] from BINTREE1:sch 2(A1, A5);
+A74: for t being Terminal of SCM-AE holds P[root-tree t]
+  proof
+    let t be Terminal of SCM-AE, aux, n, k be Element of NAT, s be
+    State-consisting of n, n, k, SCM-Compile(root-tree t, aux), D;
+    assume
+    aux > max_Data-Loc_in root-tree t;
+    take i = 0, u = Computation(s,1);
+    thus u = Computation(s,i+1);
+A75: <*dl.aux:=@t*>.(0+1) = dl.aux:=@t by FINSEQ_1:57;
+A76: SCM-Compile(root-tree t, aux) = <*dl.aux:=@t*> by Th9;
+    hence i+1 = len SCM-Compile(root-tree t, aux) by FINSEQ_1:57;
+A77: s = Computation(s,0) by AMI_1:13;
+    hence IC Computation(s,i) = il.(n+i) by SCM_1:def 1;
+    len <*dl.aux:=@t*> = 1 & n+0 = n by FINSEQ_1:57;
+    then
+A78: IC s = il.n & s.il.n = dl.aux:=@t by A76,A75,SCM_1:def 1;
+    hence IC u = il.(n+(i+1)) by A77,SCM_1:18;
+    thus u.dl.aux = s.t by A75,A77,A78,SCM_1:18
+      .= (root-tree t)@s by Th6;
+    let dn be Element of NAT;
+    assume
+    dn < aux;
+    then dl.dn <> dl.aux by AMI_3:52;
+    hence thesis by A75,A77,A78,SCM_1:18;
+  end;
+  thus for term being bin-term holds P[term] from BINTREE1:sch 2(A74, A1);
 end;
 
 theorem
-  for term being bin-term, aux, n, k being Element of NAT,
-  s being State-consisting of n, n, k, SCM-Compile(term, aux)^<*halt SCM*>,
-  <*>INT st aux > max_Data-Loc_in term holds s is halting &
-  (Result s).dl.aux = term@s & LifeSpan s = len SCM-Compile(term, aux)
+  for term being bin-term, aux, n, k being Element of NAT, s being
+State-consisting of n, n, k, SCM-Compile(term, aux)^<*halt SCM*>, <*>INT st aux
+  > max_Data-Loc_in term holds s is halting & (Result s).dl.aux = term@s &
+  LifeSpan s = len SCM-Compile(term, aux)
 proof
-  let term be bin-term, aux, n, k be Element of NAT,
-  s be State-consisting of n, n, k, SCM-Compile(term, aux)^<*halt SCM*>,
-  <*>INT;
+  let term be bin-term, aux, n, k be Element of NAT, s be State-consisting of
+  n, n, k, SCM-Compile(term, aux)^<*halt SCM*>, <*>INT;
   assume
 A1: aux > max_Data-Loc_in term;
   s is State-consisting of n, n, k, SCM-Compile(term, aux), <*>INT by Th1;
   then consider i being Element of NAT, u being State of SCM such that
-A2: u =  Computation(s,i+1) & i+1 = len SCM-Compile(term, aux) &
-  IC  Computation(s,i)=il.(n+i) & IC u = il.(n+(i+1)) & u.dl.aux = term@s &
-  for dn being Element of NAT st dn < aux holds s.dl.dn = u.dl.dn by A1,Th14;
+A2: u = Computation(s,i+1) and
+A3: i+1 = len SCM-Compile(term, aux) and
+A4: IC Computation(s,i)=il.(n+i) and
+A5: IC u = il.(n+(i+1)) and
+A6: u.dl.aux = term@s and
+  for dn being Element of NAT st dn < aux holds s.dl.dn = u.dl.dn by A1,
+  Th14;
   len <*halt SCM*> = 1 by FINSEQ_1:57;
-  then len (SCM-Compile(term, aux)^<*halt SCM*>) = i+1+1
-   by A2,FINSEQ_1:35;
+  then len (SCM-Compile(term, aux)^<*halt SCM*>) = i+1+1 by A3,
+  FINSEQ_1:35;
   then i+1 < len (SCM-Compile(term, aux)^<*halt SCM*>) by NAT_1:13;
   then
-A3: s.il.(n+(i+1))=(SCM-Compile(term, aux)^<*halt SCM*>).(i+1+1)
-  by SCM_1:def 1
-    .= halt SCM by A2,FINSEQ_1:59;
-  hence s is halting by A2,SCM_1:3;
-  thus (Result s).dl.aux = term@s by A2,A3,SCM_1:4;
-   il.(n+i) <> il.(n+(i+1)) & n+i+1 = n+(i+1);
-  hence thesis by A2,A3,SCM_1:17;
+A7: s.il.(n+(i+1))=(SCM-Compile(term, aux)^<*halt SCM*>).(i+1+1) by
+  SCM_1:def 1
+    .= halt SCM by A3,FINSEQ_1:59;
+  hence s is halting by A2,A5,SCM_1:3;
+  thus (Result s).dl.aux = term@s by A2,A5,A6,A7,SCM_1:4;
+  il.(n+i) <> il.(n+(i+1));
+  hence thesis by A2,A3,A4,A5,A7,SCM_1:17;
 end;
 

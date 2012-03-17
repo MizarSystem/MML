@@ -10,8 +10,11 @@
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="XCMPLX_0"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="NAT_1"/>
 </Signature>
 <Scheme>
 <ArgTypes>
@@ -32,7 +35,7 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="9"/>
-<Adjective nr="20">
+<Adjective nr="22">
 <Func kind="K" nr="48"/>
 <Func kind="F" nr="2"/>
 </Adjective>
@@ -47,8 +50,7 @@
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="73">
-<Func kind="K" nr="48"/>
+<Func kind="K" nr="100">
 <Func kind="F" nr="2"/>
 <Var nr="1"/>
 <Func kind="K" nr="49"/>
@@ -64,8 +66,7 @@
 <Func kind="K" nr="48"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="73">
-<Func kind="K" nr="48"/>
+<Func kind="K" nr="100">
 <Func kind="F" nr="2"/>
 <Var nr="1"/>
 <Var nr="2"/>

@@ -7,11 +7,11 @@
 environ
 
  vocabularies FUNCOP_1, FUNCT_2, RELAT_1, FINSEQ_1, BOOLE, QC_LANG1, ZF_LANG,
-      MARGREL1, FUNCT_1, VALUAT_1, ARYTM;
+      MARGREL1, FUNCT_1, VALUAT_1, ARYTM, PRALG_2;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, FUNCT_1, FINSEQ_1,
-      RELAT_1, FUNCT_2, FUNCOP_1, XBOOLEAN;
- constructors FUNCOP_1, XCMPLX_0, FINSEQ_1, XBOOLEAN, RELSET_1;
- registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, XBOOLEAN;
+      RELAT_1, FUNCT_2, FUNCOP_1, XBOOLEAN, CARD_3;
+ constructors FUNCOP_1, XCMPLX_0, FINSEQ_1, XBOOLEAN, RELSET_1, CARD_3;
+ registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, XBOOLEAN, FINSEQ_1;
  requirements SUBSET, BOOLE, ARITHM;
 
 
@@ -27,20 +27,19 @@ definition
 end;
 
 definition
-  let IT be set;
-  attr IT is relation-like means
+  let IT be FinSequence-membered set;
+  redefine attr IT is with_common_domain means
 :: MARGREL1:def 1
 
-  (for x being set st x in IT holds x is FinSequence) &
-  for a,b being FinSequence st a in IT & b in IT holds len a = len b;
+   for a,b being FinSequence st a in IT & b in IT holds len a = len b;
 end;
 
 registration
-  cluster relation-like set;
+  cluster FinSequence-membered with_common_domain set;
 end;
 
 definition
-  mode relation is relation-like set;
+  mode relation is FinSequence-membered with_common_domain set;
 end;
 
 reserve X for set;
@@ -50,14 +49,15 @@ reserve a,a1,a2,b for FinSequence;
 canceled 6;
 
 theorem :: MARGREL1:7
-  X c= p implies X is relation-like;
+  X c= p implies X is relation;
 
 theorem :: MARGREL1:8
-  {a} is relation-like;
+  {a} is relation;
 
 scheme :: MARGREL1:sch 1
- relexist{A() -> set, P[FinSequence]}:
-  ex r st for a holds a in r iff a in A() & P[a]
+
+  relexist{A() -> set, P[FinSequence]}: ex r st for a holds a in r iff a in A(
+  ) & P[a]
 provided
  for a,b st P[a] & P[b] holds len a = len b;
 
@@ -65,12 +65,11 @@ definition
   let p,r;
   redefine pred p = r means
 :: MARGREL1:def 2
-
   for a holds a in p iff a in r;
 end;
 
 registration
-  cluster empty -> relation-like set;
+  cluster empty -> with_common_domain set;
 end;
 
 theorem :: MARGREL1:9
@@ -97,7 +96,6 @@ definition
   let X be set;
   mode relation of X -> relation means
 :: MARGREL1:def 6
-
     for a st a in it holds rng a c= X;
 end;
 
@@ -113,7 +111,8 @@ definition
   let X, k;
   mode relation of X,k -> relation means
 :: MARGREL1:def 7
-    it is relation of X & it is relation_length of k;
+    it is relation of X & it is
+    relation_length of k;
 end;
 
 definition
@@ -147,7 +146,8 @@ theorem :: MARGREL1:27
   {a} is Element of relations_on D;
 
 theorem :: MARGREL1:28
-  for x,y being Element of D holds {<*x,y*>} is Element of relations_on D;
+  for x,y being Element of D holds {<*x,y*>} is Element of relations_on
+  D;
 
 definition
   let D,p,r;
@@ -158,9 +158,9 @@ definition
 end;
 
 scheme :: MARGREL1:sch 2
- relDexist{D() -> non empty set, P[FinSequence of D()]}:
-  ex r being Element of relations_on D() st
-  for a being FinSequence of D() holds a in r iff P[a]
+
+  relDexist{D() -> non empty set, P[FinSequence of D()]}: ex r being Element
+  of relations_on D() st for a being FinSequence of D() holds a in r iff P[a]
 provided
  for a,b being FinSequence of D() st P[a] & P[b] holds len a = len b;
 
@@ -183,19 +183,18 @@ definition
  p <> empty_rel(D);
   func the_arity_of p -> Element of NAT means
 :: MARGREL1:def 11
-
   a in p implies it = len a;
 end;
 
 scheme :: MARGREL1:sch 3
- relDexist2{D() -> non empty set, k() -> Element of NAT,
-  P[FinSequence of D()]}: ex r being Element of relations_on D() st
-  for a being FinSequence of D() st len a = k() holds a in r iff P[a];
+
+  relDexist2{D() -> non empty set, k() -> Element of NAT, P[FinSequence of D()
+]}: ex r being Element of relations_on D() st for a being FinSequence of D() st
+  len a = k() holds a in r iff P[a];
 
 definition
   func BOOLEAN -> set equals
 :: MARGREL1:def 12
-
   {0,1};
 end;
 
@@ -204,8 +203,7 @@ registration
 end;
 
 definition
-  redefine
-  func FALSE -> Element of BOOLEAN;
+  redefine func FALSE -> Element of BOOLEAN;
   func TRUE -> Element of BOOLEAN;
 end;
 
@@ -228,12 +226,10 @@ definition
   let v be boolean set;
   func 'not' v equals
 :: MARGREL1:def 14
-
   TRUE if v = FALSE otherwise FALSE;
   let w be boolean set;
   func v '&' w equals
 :: MARGREL1:def 15
-
   TRUE if v = TRUE & w =TRUE otherwise FALSE;
 end;
 
@@ -255,8 +251,8 @@ theorem :: MARGREL1:41
 canceled 3;
 
 theorem :: MARGREL1:45
-  (v '&' w = TRUE iff v = TRUE & w = TRUE) &
-  (v '&' w = FALSE iff v = FALSE or w = FALSE);
+  (v '&' w = TRUE iff v = TRUE & w = TRUE) & (v '&' w = FALSE iff v =
+  FALSE or w = FALSE);
 
 canceled 3;
 
@@ -291,8 +287,7 @@ definition
 end;
 
 theorem :: MARGREL1:53
-  (not FALSE in X iff ALL(X) = TRUE) &
-  (FALSE in X iff ALL(X) = FALSE);
+  (not FALSE in X iff ALL(X) = TRUE) & (FALSE in X iff ALL(X) = FALSE);
 
 begin :: Addenda
 
@@ -320,15 +315,15 @@ definition
   func 'not' p -> boolean-valued Function means
 :: MARGREL1:def 18
 
-  dom it = dom p &
-  for x being set st x in dom p holds it.x = 'not'(p.x);
+  dom it = dom p & for x
+  being set st x in dom p holds it.x = 'not'(p.x);
   involutiveness;
   let q be boolean-valued Function;
   func p '&' q -> boolean-valued Function means
 :: MARGREL1:def 19
 
-  dom it = dom p /\ dom q &
-  for x being set st x in dom it holds it.x = (p.x) '&' (q.x);
+  dom it = dom p /\ dom
+  q & for x being set st x in dom it holds it.x = (p.x) '&' (q.x);
   commutativity;
   idempotence;
 end;
@@ -344,10 +339,12 @@ definition
   let p be Element of Funcs(A,BOOLEAN);
   func 'not' p -> Element of Funcs(A,BOOLEAN) means
 :: MARGREL1:def 20
-  for x being Element of A holds it.x = 'not'(p.x);
+  for x being Element of A
+  holds it.x = 'not'(p.x);
   let q be Element of Funcs(A,BOOLEAN);
   func p '&' q -> Element of Funcs(A,BOOLEAN) means
 :: MARGREL1:def 21
-  for x being Element of A holds it.x = (p.x) '&' (q.x);
+  for x being Element of A
+  holds it.x = (p.x) '&' (q.x);
 end;
 

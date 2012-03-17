@@ -22,7 +22,7 @@
 <Cluster>
 <Adjective nr="17" value="false"/>
 <Adjective nr="20"/>
-<Adjective nr="29"/>
+<Adjective nr="30"/>
 </Cluster>
 </Typ>
 <Pred kind="P" nr="1">
@@ -34,7 +34,7 @@
 <Cluster>
 <Adjective nr="17" value="false"/>
 <Adjective nr="20"/>
-<Adjective nr="29"/>
+<Adjective nr="30"/>
 </Cluster>
 </Typ>
 <Not>

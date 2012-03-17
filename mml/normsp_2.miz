@@ -13,11 +13,10 @@ environ
       METRIC_1, METRIC_6, PCOMPS_1, NORMSP_2, RLTOPSP1, TMAP_1, SQUARE_1,
       PROB_1, BHSP_3, MCART_1, GROUP_1, SEQ_1, FUNCT_3, ALGSTR_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FUNCT_1, ORDINAL1, NUMBERS,
-      XCMPLX_0,
-      XREAL_0, XXREAL_0, SETFAM_1, RELSET_1, PARTFUN1, FUNCT_2, COMPLEX1,
-      REAL_1, NAT_1, STRUCT_0, ALGSTR_0, PRE_TOPC, FRECHET, NEWTON, FRECHET2,
-      YELLOW_8, DOMAIN_1, WAYBEL_3, RLVECT_1, CONVEX1, COMPTS_1, TBSP_1,
-      TMAP_1, CONNSP_2, CARD_3, METRIC_1, METRIC_6, PCOMPS_1, NORMSP_1,
+      XCMPLX_0, XREAL_0, XXREAL_0, SETFAM_1, RELSET_1, PARTFUN1, FUNCT_2,
+      COMPLEX1, REAL_1, NAT_1, STRUCT_0, ALGSTR_0, PRE_TOPC, FRECHET, NEWTON,
+      FRECHET2, YELLOW_8, DOMAIN_1, WAYBEL_3, RLVECT_1, CONVEX1, COMPTS_1,
+      TBSP_1, TMAP_1, CONNSP_2, CARD_3, METRIC_1, METRIC_6, PCOMPS_1, NORMSP_1,
       RUSUB_4, RLTOPSP1, SQUARE_1, NFCONT_1, SEQ_1, KURATO_2;
  constructors SETFAM_1, DOMAIN_1, REAL_1, SQUARE_1, NAT_1, NEWTON, CARD_3,
       COMPTS_1, CONNSP_2, PCOMPS_1, TBSP_1, RUSUB_4, CONVEX1, TMAP_1, METRIC_6,
@@ -38,11 +37,10 @@ environ
 
 begin :: Baire's Category Theorem
 
-theorem :: Baire's category theorem Copy to evolution
-  for X be non empty MetrSpace, Y be SetSequence of X st
-  X is complete & union rng Y = the carrier of X &
-  for n be Element of NAT holds (Y.n)` in Family_open_set X holds
-  ex n0 be Element of NAT, r be Real, x0 be Point of X st
+theorem
+  for X be non empty MetrSpace, Y be SetSequence of X st X is complete &
+  union rng Y = the carrier of X & for n be Element of NAT holds (Y.n)` in
+Family_open_set X holds ex n0 be Element of NAT, r be Real, x0 be Point of X st
   0 < r & Ball(x0,r) c= Y.n0
 proof
   let X be non empty MetrSpace, Y be SetSequence of X;
@@ -50,323 +48,329 @@ proof
 A1: X is complete and
 A2: union rng Y = the carrier of X and
 A3: for n be Element of NAT holds (Y.n)` in Family_open_set X;
+  defpred P[Element of NAT,Point of X,Real,Point of X,Real] means ( 0 < $3 &
+$3 < 1/(2|^$1) & Ball($2,$3) /\ Y.($1) = {}) implies ( 0 < $5 & $5 < 1/(2|^($1+
+  1)) & Ball($4,$5) c= Ball($2,($3)/2) & Ball($4,$5) /\ Y.($1+1) = {} );
   assume
-A4: not ex n0 be Element of NAT, r be Real,x0 be Point of X st
-  0 < r & Ball(x0,r) c= Y.n0;
+A4: not ex n0 be Element of NAT, r be Real,x0 be Point of X st 0 < r &
+  Ball(x0,r) c= Y.n0;
   now
-    assume
-A5: (Y.0)` = {};
-A6: (Y.0)`` = (the carrier of X) \ ((Y.0)`);
     consider x0 be Point of X;
-    Ball(x0,1) c= the carrier of X;
-    hence contradiction by A4,A5,A6;
+A5: (Y.0)`` = (the carrier of X) \ ((Y.0)`) & Ball(x0,1) c= the carrier of
+    X;
+    assume
+    (Y.0)` = {};
+    hence contradiction by A4,A5;
   end;
   then consider z0 be set such that
-A7: z0 in (Y.0)` by XBOOLE_0:def 1;
-  reconsider z0 as Element of X by A7;
+A6: z0 in (Y.0)` by XBOOLE_0:def 1;
+  reconsider z0 as Element of X by A6;
   (Y.0)` in Family_open_set X by A3;
   then consider t01 be Real such that
-A8: 0 < t01 & Ball(z0,t01) c= (Y.0)` by A7,PCOMPS_1:def 5;
+A7: 0 < t01 and
+A8: Ball(z0,t01) c= (Y.0)` by A6,PCOMPS_1:def 5;
   reconsider t0=min(t01,1/2) as Real;
   t0 <= 1/2 by XXREAL_0:17;
+  then t0 < 1/1 by XXREAL_0:2;
   then
-A9: t0 < 1/1 by XXREAL_0:2;
-A10: 0 < 1/2;
+A9: t0 < 1/(2 |^0) by NEWTON:9;
   Ball(z0,t0) c= Ball(z0,t01) by PCOMPS_1:1,XXREAL_0:17;
   then Ball(z0,t0) c= (Y.0)` by A8,XBOOLE_1:1;
   then Ball(z0,t0) misses (Y.0) by SUBSET_1:43;
   then
-A11: 0 < t0 & t0 < 1/(2 |^0) & Ball(z0,t0) /\ Y.0 ={}
-  by A8,A9,A10,NEWTON:9,XBOOLE_0:def 7,XXREAL_0:15;
-  defpred P[Element of NAT,Point of X,Real,Point of X,Real] means
-  ( 0 < $3 & $3 < 1/(2|^$1) & Ball($2,$3) /\ Y.($1) = {}) implies
-  ( 0 < $5 & $5 < 1/(2|^($1+1)) & Ball($4,$5) c= Ball($2,($3)/2) &
-  Ball($4,$5) /\ Y.($1+1) = {} );
-A12: for n being Element of NAT, x be Point of X, r be Real
-  ex x1 be Point of X,r1 be Real st
-  ( 0 < r & r < 1/(2|^n) & Ball(x,r) /\ Y.n = {}) implies
-  ( 0 < r1 & r1 < 1/(2|^(n+1)) & Ball(x1,r1) c= Ball(x,r/2) &
-  Ball(x1,r1) /\ Y.(n+1) = {} )
+A10: Ball(z0,t0) /\ Y.0 ={} by XBOOLE_0:def 7;
+A11: for n being Element of NAT, x be Point of X, r be Real ex x1 be Point
+of X,r1 be Real st 0 < r & r < 1/(2|^n) & Ball(x,r) /\ Y.n = {} implies 0 < r1
+& r1 < 1/(2|^(n+1)) & Ball(x1,r1) c= Ball(x,r/2) & Ball(x1,r1) /\ Y.(n+1) = {}
   proof
     let n be Element of NAT, x be Point of X, r be Real;
     now
-      assume 0 < r & r < 1/(2|^n) & Ball(x,r) /\ Y.n ={};
-      then not Ball(x,r/2) c= Y.(n+1) by A4,XREAL_1:217;
-      then Ball(x,r/2) meets (Y.(n+1))` by SUBSET_1:44;
-      then consider z0 be set such that
-A13:  z0 in Ball(x,r/2) /\ (Y.(n+1))` by XBOOLE_0:4;
-      reconsider x1=z0 as Point of X by A13;
-      x1 in (Y.(n+1))` & (Y.(n+1))` in Family_open_set X
-      by A3,A13,XBOOLE_0:def 4;
-      then consider t01 be Real such that
-A14:  0 < t01 & Ball(x1,t01) c= (Y.(n+1))` by PCOMPS_1:def 5;
-      Ball(x,r/2) in Family_open_set X &
-      (Y.(n+1))` in Family_open_set X by A3,PCOMPS_1:33;
-      then Ball(x,r/2) /\ (Y.(n+1))` in Family_open_set X by PCOMPS_1:35;
-      then consider t02 be Real such that
-A15:  0 < t02 & Ball(x1,t02) c= Ball(x,r/2) /\ (Y.(n+1))`
-      by A13,PCOMPS_1:def 5;
-A16:  Ball(x1,t02) c= Ball(x,r/2) by A15,XBOOLE_1:18;
-      reconsider r1=min(min(t01,t02),1/(2|^(n+2))) as Real;
+      0 < 2|^(n+2) by NEWTON:102;
+      then
+A12:  0 < 1/(2|^(n+2)) by XREAL_1:141;
+      0 < 2|^(n+1) by NEWTON:102;
+      then
+A13:  1/(2|^(n+1))/2 < 1/(2|^(n+1)) by XREAL_1:141,218;
       2|^(n+2) = 2|^((n+1)+1)
         .= 2|^(n+1)*2 by NEWTON:11;
       then
-A17:  1/(2|^(n+2)) = 1/(2|^(n+1))/2 by XCMPLX_1:79;
-A18:  0 < 2|^(n+1) & 0 < 2|^(n+2) by NEWTON:102;
+A14:  1/(2|^(n+2)) = 1/(2|^(n+1))/2 by XCMPLX_1:79;
+      assume that
+A15:  0 < r and
+      r < 1/(2|^n) and
+      Ball(x,r) /\ Y.n ={};
+      not Ball(x,r/2) c= Y.(n+1) by A4,A15,XREAL_1:217;
+      then Ball(x,r/2) meets (Y.(n+1))` by SUBSET_1:44;
+      then consider z0 be set such that
+A16:  z0 in Ball(x,r/2) /\ (Y.(n+1))` by XBOOLE_0:4;
+      reconsider x1=z0 as Point of X by A16;
+A17:  (Y.(n+1))` in Family_open_set X by A3;
+      Ball(x,r/2) in Family_open_set X & (Y.(n+1))` in Family_open_set X
+      by A3, PCOMPS_1:33;
+      then Ball(x,r/2) /\ (Y.(n+1))` in Family_open_set X by PCOMPS_1:35;
+      then consider t02 be Real such that
+A18:  0 < t02 and
+A19:  Ball(x1,t02) c= Ball(x,r/2) /\ (Y.(n+1))` by A16,PCOMPS_1:
+      def 5;
+A20:  Ball(x1,t02) c= Ball(x,r/2) by A19,XBOOLE_1:18;
+      x1 in (Y.(n+1))` by A16,XBOOLE_0:def 4;
+      then consider t01 be Real such that
+A21:  0 < t01 and
+A22:  Ball(x1,t01) c= (Y.(n+1))` by A17,PCOMPS_1:def 5;
+      reconsider r1=min(min(t01,t02),1/(2|^(n+2))) as Real;
+A23:  r1 <= min(t01,t02) by XXREAL_0:17;
+      min(t01,t02) <= t02 by XXREAL_0:17;
       then
-A19:  0 < 1/(2|^(n+1)) & 0 < 1/(2|^(n+2)) by XREAL_1:141;
-A20:  1/(2|^(n+1))/2 < 1/(2|^(n+1)) by A18,XREAL_1:141,218;
-A21:  0 < min(t01,t02) by A14,A15,XXREAL_0:15;
-      r1 <= min(t01,t02) & min(t01,t02) <= t01 & min(t01,t02) <= t02
-      by XXREAL_0:17;
+A24:  Ball(x1,r1) c= Ball(x1,t02) by A23,PCOMPS_1:1,XXREAL_0:2;
+      min(t01,t02) <= t01 by XXREAL_0:17;
+      then Ball(x1,r1) c= Ball(x1,t01) by A23,PCOMPS_1:1,XXREAL_0:2;
+      then Ball(x1,r1) c= (Y.(n+1))` by A22,XBOOLE_1:1;
       then
-A22:  Ball(x1,r1) c= Ball(x1,t01) & Ball(x1,r1) c= Ball(x1,t02)
-      by PCOMPS_1:1,XXREAL_0:2;
-      then Ball(x1,r1) c= (Y.(n+1))` & Ball(x1,r1) c= Ball(x,r/2)
-      by A14,A16,XBOOLE_1:1;
-      then
-A23:  Ball(x1,r1) misses (Y.(n+1)) by SUBSET_1:43;
+A25:  Ball(x1,r1) misses (Y.(n+1)) by SUBSET_1:43;
       take x1,r1;
-      r1 <= 1/(2|^(n+2)) by XXREAL_0:17;
-      hence P[n,x,r,x1,r1] by A16,A17,A19,A20,A21,A22,A23,XBOOLE_0:def 7
-,XBOOLE_1:1,XXREAL_0:2,15;
+A26:  r1 <= 1/(2|^(n+2)) by XXREAL_0:17;
+      0 < min(t01,t02) by A21,A18,XXREAL_0:15;
+      hence P[n,x,r,x1,r1] by A20,A14,A12,A13,A24,A25,A26,XBOOLE_0:def 7 ,
+      XBOOLE_1:1,XXREAL_0:2,15;
     end;
     hence thesis;
   end;
-  ex x0 be sequence of X, r0 be Real_Sequence st x0.0=z0 & r0.0=t0 &
-  for n be Element of NAT holds
-  (( 0 < r0.n & r0.n < 1/(2|^n) & Ball(x0.n,r0.n) /\ Y.n = {}) implies
-  ( 0 < r0.(n+1) & r0.(n+1) < 1/(2|^(n+1)) &
-  Ball(x0.(n+1),r0.(n+1)) c= Ball(x0.n,(r0.n)/2) &
-  Ball(x0.(n+1),r0.(n+1)) /\ Y.(n+1) = {} ))
+  ex x0 be sequence of X, r0 be Real_Sequence st x0.0=z0 & r0.0=t0 & for
+n be Element of NAT holds ( 0 < r0.n & r0.n < 1/(2|^n) & Ball(x0.n,r0.n) /\ Y.n
+  = {} implies 0 < r0.(n+1) & r0.(n+1) < 1/(2|^(n+1)) & Ball(x0.(n+1),r0.(n+1))
+  c= Ball(x0.n,(r0.n)/2) & Ball(x0.(n+1),r0.(n+1)) /\ Y.(n+1) = {} )
   proof
-    defpred P1[Element of NAT,Element of [:the carrier of X,REAL:],
-    Element of [:the carrier of X,REAL:]] means
-    ( 0 < $2`2 & $2`2 < 1/(2|^$1) & Ball($2`1,$2`2) /\ Y.($1) = {}) implies
-    ( 0 < $3`2 & $3`2 < 1/(2|^($1+1)) &
-    Ball($3`1,$3`2) c= Ball($2`1,($2`2)/2) &
-    Ball($3`1,$3`2) /\ Y.($1+1) = {} );
-A24: for n being Element of NAT for u being Element of
-    [:the carrier of X,REAL:]
-    ex v being Element of [:the carrier of X,REAL:] st P1[n,u,v]
+    defpred P1[Element of NAT,Element of [:the carrier of X,REAL:], Element of
+[:the carrier of X,REAL:]] means ( 0 < $2`2 & $2`2 < 1/(2|^$1) & Ball($2`1,$2`2
+) /\ Y.($1) = {}) implies ( 0 < $3`2 & $3`2 < 1/(2|^($1+1)) & Ball($3`1,$3`2)
+    c= Ball($2`1,($2`2)/2) & Ball($3`1,$3`2) /\ Y.($1+1) = {} );
+A27: for n being Element of NAT for u being Element of [:the carrier of X,
+    REAL:] ex v being Element of [:the carrier of X,REAL:] st P1[n,u,v]
     proof
       let n be Element of NAT, u be Element of [:the carrier of X,REAL:];
       consider v1 being Element of X, v2 being Element of REAL such that
-A25:  P[n,u`1,u`2,v1,v2] by A12;
+A28:  P[n,u`1,u`2,v1,v2] by A11;
       take [v1,v2];
-      [v1,v2]`1 = v1 & [v1,v2]`2 = v2 by MCART_1:7;
-      hence thesis by A25;
+      [v1,v2]`1 = v1 by MCART_1:7;
+      hence thesis by A28,MCART_1:7;
     end;
     consider f being Function of NAT,[:the carrier of X,REAL:] such that
-A26: f.0 = [z0,t0] & for n being Element of NAT holds P1[n,f.n,f.(n+1)]
-    from RECDEF_1:sch 2(A24);
+A29: f.0 = [z0,t0] & for n being Element of NAT holds P1[n,f.n,f.(n+1)
+    ] from RECDEF_1:sch 2(A27);
     take pr1 f, pr2 f;
     thus (pr1 f).0 = (f.0)`1 by FUNCT_2:def 6
-      .= z0 by A26,MCART_1:7;
+      .= z0 by A29,MCART_1:7;
     thus (pr2 f).0 = (f.0)`2 by FUNCT_2:def 7
-      .= t0 by A26,MCART_1:7;
+      .= t0 by A29,MCART_1:7;
     hereby
       let i be Element of NAT;
-A27:  (f.i)`1 = (pr1 f).i & (f.i)`2 = (pr2 f).i by FUNCT_2:def 6,def 7;
-      (f.(i+1))`1 = (pr1 f).(i+1) & (f.(i+1))`2 = (pr2 f).(i+1)
-      by FUNCT_2:def 6,def 7;
-      hence P[i,(pr1 f).i,(pr2 f).i,(pr1 f).(i+1),(pr2 f).(i+1)] by A26,A27;
+A30:  (f.(i+1))`1 = (pr1 f).(i+1) & (f.(i+1))`2 = (pr2 f).(i+1) by
+      FUNCT_2:def 6 ,def 7;
+      (f.i)`1 = (pr1 f).i & (f.i)`2 = (pr2 f).i by FUNCT_2:def 6,def 7;
+      hence P[i,(pr1 f).i,(pr2 f).i,(pr1 f).(i+1),(pr2 f).(i+1)] by A29,A30;
     end;
   end;
   then consider x0 be sequence of X, r0 be Real_Sequence such that
-A28: x0.0=z0 & r0.0=t0 & for n be Element of NAT holds
-  (( 0 < r0.n & r0.n < 1/(2|^n) & Ball(x0.n,r0.n) /\ Y.n = {}) implies
-  ( 0 < r0.(n+1) & r0.(n+1) < 1/(2|^(n+1)) &
-  Ball(x0.(n+1),r0.(n+1)) c= Ball(x0.n,(r0.n)/2) &
-  Ball(x0.(n+1),r0.(n+1)) /\ Y.(n+1) = {} ));
-A29: for n be Element of NAT holds 0 < r0.n & r0.n < 1/(2|^n) &
-  Ball(x0.(n+1),r0.(n+1)) c= Ball(x0.n,(r0.n)/2) & Ball(x0.n,r0.n) /\ Y.n ={}
-  proof
-    defpred PN[Element of NAT] means 0 < r0.$1 & r0.$1 < 1/(2|^$1) &
-    Ball(x0.($1+1),r0.($1+1)) c= Ball(x0.$1,(r0.$1)/2) &
-    Ball(x0.$1,r0.$1) /\ Y.$1 = {};
-A30: PN[0] by A11,A28;
-A31: now
-      let n be Element of NAT;
-      assume PN[n];
-      then 0 < r0.(n+1) & r0.(n+1) < 1/(2|^(n+1)) &
-      Ball(x0.(n+1),r0.(n+1)) c= Ball(x0.n,(r0.n)/2) &
-      Ball(x0.(n+1),r0.(n+1)) /\ Y.(n+1) = {} by A28;
-      hence PN[n+1] by A28;
-    end;
-    thus for n be Element of NAT holds PN[n] from NAT_1:sch 1(A30,A31);
-  end;
-  x0 is Cauchy
-  proof
-A32: for m,k be Element of NAT holds
-    dist(x0.(m+k),x0.m) <= 1/(2|^m)*(1-1/(2|^k))
-    proof
-      let m be Element of NAT;
-      defpred PN[Element of NAT] means
-      dist(x0.(m+$1),x0.m) <= 1/(2|^m)*(1-1/(2|^$1));
-      2|^0 = 1 by NEWTON:9;
-      then
-A33:  PN[0] by METRIC_1:1;
-A34:  now
-        let k be Element of NAT;
-        assume PN[k];
-        then
-A35:    dist(x0.((m+k)+1),x0.(m+k)) + dist(x0.(m+k),x0.m)
-        <= dist(x0.((m+k)+1),x0.(m+k)) + 1/(2|^m)*(1-1/(2|^k)) by XREAL_1:8;
-        dist(x0.((m+k)+1),x0.m)
-        <= dist(x0.((m+k)+1),x0.(m+k)) + dist(x0.(m+k),x0.m) by METRIC_1:4;
-        then
-A36:    dist(x0.(m+(k+1)),x0.m)
-        <= dist(x0.((m+k)+1),x0.(m+k)) + 1/(2|^m)*(1-1/(2|^k))
-        by A35,XXREAL_0:2;
-A37:    0 < r0.(m+k+1) & r0.(m+k+1) < 1/(2|^(m+k+1)) &
-        Ball(x0.(m+k+1),r0.(m+k+1)) c= Ball(x0.(m+k),r0.(m+k)/2) &
-        Ball(x0.(m+k+1),r0.(m+k+1)) /\ Y.(m+k+1) = {} by A29;
-        dist(x0.(m+k+1),x0.(m+k+1)) = 0 by METRIC_1:1;
-        then x0.(m+k+1) in Ball(x0.(m+k+1),r0.(m+k+1)) by A37,METRIC_1:12;
-        then
-A38:    dist(x0.(m+k+1),x0.(m+k)) < r0.(m+k)/2 by A37,METRIC_1:12;
-        r0.(m+k) < 1/(2|^(m+k)) by A29;
-        then r0.(m+k)/2 < 1/(2|^(m+k))/2 by XREAL_1:76;
-        then r0.(m+k)/2 < 1/(2|^(m+k)*2) by XCMPLX_1:79;
-        then r0.(m+k)/2 < 1/(2|^(m+k+1)) by NEWTON:11;
-        then dist(x0.(m+k+1),x0.(m+k)) <= 1/(2|^(m+k+1)) by A38,XXREAL_0:2;
-        then dist(x0.((m+k)+1),x0.(m+k)) + 1/(2|^m)*(1-1/(2|^k))
-        <= 1/(2|^(m+k+1)) + 1/(2|^m)*(1-1/(2|^k)) by XREAL_1:8;
-        then
-A39:    dist(x0.(m+(k+1)),x0.m)
-        <= 1/(2|^(m+k+1) ) + 1/(2|^m)*(1-1/(2|^k)) by A36,XXREAL_0:2;
-        2|^(m+(k+1)) = 2|^m * 2|^(k+1) by NEWTON:13;
-        then 1/(2|^(m+k+1)) = 1/(2|^m)/((2|^(k+1))/1) by XCMPLX_1:79
-          .= 1/(2|^m)*(1/(2|^(k+1))) by XCMPLX_1:80;
-        then 1/(2|^(m+k+1)) + 1/(2|^m)*(1-1/(2|^k))
-        = 1/(2|^m)*( 1 + ( 1/(2|^(k+1)) - 1/(2|^k) ) )
-          .= 1/(2|^m)*( 1 + ( 1/((2|^k)*2) - 1/(2|^k) ) ) by NEWTON:11
-          .= 1/(2|^m)*( 1 + ( 1/(2|^k)/2 - 1/(2|^k) ) ) by XCMPLX_1:79
-          .= 1/(2|^m)*( 1 - 1/(2|^k)/2 )
-          .= 1/(2|^m)*( 1 - 1/((2|^k)*2) ) by XCMPLX_1:79;
-        hence PN[k+1] by A39,NEWTON:11;
-      end;
-      for k be Element of NAT holds PN[k] from NAT_1:sch 1(A33,A34);
-      hence thesis;
-    end;
-A40: now
-      let m be Element of NAT;
-      hereby
-        let k be Element of NAT;
-A41:    dist(x0.(m+k),x0.m) <= 1/(2|^m)*(1-1/(2|^k)) by A32;
-        0 < 2|^m & 0 < 2|^k by NEWTON:102;
-        then
-A42:    0 < 1/(2|^m) & 0 < 1/(2|^k) by XREAL_1:141;
-        then 1-1/(2|^k) < 1-0 by XREAL_1:12;
-        then 1/(2|^m)*(1-1/(2|^k)) < 1/(2|^m)*1 by A42,XREAL_1:70;
-        hence dist(x0.(m+k),x0.m) < 1/(2|^m) by A41,XXREAL_0:2;
-      end;
-    end;
-    now
-      let r be Real;
-      assume 0 < r;
-      then consider p1 be Element of NAT such that
-A43:  1/(2|^p1) <= r by PREPOWER:106;
-      take p=p1+1;
-      hereby
-        let n,m be Element of NAT;
-        assume
-A44:    n >= p & m >= p;
-        then consider k1 be Nat such that
-A45:    n = p + k1 by NAT_1:10;
-        reconsider k1 as Element of NAT by ORDINAL1:def 13;
-A46:    n = p + k1 by A45;
-        consider k2 be Nat such that
-A47:    m = p + k2 by A44,NAT_1:10;
-        reconsider k2 as Element of NAT by ORDINAL1:def 13;
-        m = p + k2 by A47;
-
-then dist(x0.n,x0.p) < 1/(2|^p) & dist(x0.p,x0.m) < 1/(2|^p) by A40,A46;
-        then
-A48:    dist(x0.n,x0.p) + dist(x0.p,x0.m) < 1/(2|^p) + 1/(2|^p) by XREAL_1:10;
-A49:    dist(x0.n,x0.m) <= dist(x0.n,x0.p) + dist(x0.p,x0.m) by METRIC_1:4;
-        1/(2|^p) = 1/((2|^p1)*2) by NEWTON:11
-          .= 1/(2|^p1)/2 by XCMPLX_1:79;
-        then dist(x0.n,x0.m) < 1/(2|^p1) by A48,A49,XXREAL_0:2;
-        hence dist(x0.n,x0.m)<r by A43,XXREAL_0:2;
-      end;
-    end;
-    hence thesis by TBSP_1:def 5;
-  end;
+A31: x0.0=z0 & r0.0=t0 and
+A32: for n be Element of NAT holds ( 0 < r0.n & r0.n < 1/(2|^n) & Ball(
+x0.n,r0.n) /\ Y.n = {} implies 0 < r0.(n+1) & r0.(n+1) < 1/(2|^(n+1)) & Ball (
+x0.(n+1),r0.(n+1)) c= Ball(x0.n,(r0.n)/2) & Ball(x0.(n+1),r0.(n+1)) /\ Y.(n+1)
+  = {} );
+  0 < 1/2;
   then
-A50: x0 is convergent by A1,TBSP_1:def 6;
-A51: for m,k be Element of NAT holds
-  Ball(x0.(m+1+k),r0.(m+1+k)) c= Ball(x0.m,(r0.m)/2)
+A33: 0 < t0 by A7,XXREAL_0:15;
+A34: for n be Element of NAT holds 0 < r0.n & r0.n < 1/(2|^n) & Ball(x0.(n+1
+  ),r0.(n+1)) c= Ball(x0.n,(r0.n)/2) & Ball(x0.n,r0.n) /\ Y.n ={}
+  proof
+    defpred PN[Element of NAT] means 0 < r0.$1 & r0.$1 < 1/(2|^$1) & Ball(x0.(
+    $1+1),r0.($1+1)) c= Ball(x0.$1,(r0.$1)/2) & Ball(x0.$1,r0.$1) /\ Y.$1 = {};
+A35: now
+      let n be Element of NAT;
+      assume
+A36:  PN[n];
+      then
+A37:  Ball(x0.(n+1),r0.(n+1)) /\ Y.(n+1) = {} by A32;
+      0 < r0.(n+1) & r0.(n+1) < 1/(2|^(n+1)) by A32,A36;
+      hence PN[n+1] by A32,A37;
+    end;
+A38: PN[0] by A33,A9,A10,A31,A32;
+    thus for n be Element of NAT holds PN[n] from NAT_1:sch 1(A38,A35);
+  end;
+A39: for m,k be Element of NAT holds dist(x0.(m+k),x0.m) <= 1/(2|^m)*(1-1/(2
+  |^k))
   proof
     let m be Element of NAT;
-    defpred PN[Element of NAT] means
-    Ball(x0.(m+1+$1),r0.(m+1+$1)) c= Ball(x0.m,(r0.m)/2);
-A52: PN[0] by A29;
-A53: now
+    defpred PN[Element of NAT] means dist(x0.(m+$1),x0.m) <= 1/(2|^m)*(1-1/(2
+    |^$1));
+A40: now
       let k be Element of NAT;
       assume
-A54:  PN[k];
-      Ball(x0.(m+1+(k+1)),r0.(m+1+(k+1)))=Ball(x0.(m+1+k+1),r0.(m+1+k+1));
+      PN[k];
       then
-A55:  Ball(x0.(m+1+(k+1)),r0.(m+1+(k+1))) c= Ball(x0.(m+1+k),(r0.(m+ 1+k))/ 2)
-      by A29;
-      0 < r0.(m+1+k) by A29;
-      then (r0.(m+1+k))/2 < r0.(m+1+k) by XREAL_1:218;
-      then Ball(x0.(m+1+k),(r0.(m+1+k))/2) c=Ball(x0.(m+1+k),r0.(m+1+k))
-      by PCOMPS_1:1;
-      then Ball(x0.(m+1+(k+1)),r0.(m+1+(k+1))) c= Ball(x0.(m+1+k),r0.(m+1+k))
-      by A55,XBOOLE_1:1;
-      hence PN[k+1] by A54,XBOOLE_1:1;
+A41:  dist(x0.((m+k)+1),x0.(m+k)) + dist(x0.(m+k),x0.m) <= dist(x0.((m+k)
+      +1),x0.(m+k)) + 1/(2|^m)*(1-1/(2|^k)) by XREAL_1:8;
+      0 < r0.(m+k+1) & dist(x0.(m+k+1),x0.(m+k+1)) = 0 by A34,METRIC_1:1;
+      then
+A42:  x0.(m+k+1) in Ball(x0.(m+k+1),r0.(m+k+1)) by METRIC_1:12;
+      r0.(m+k) < 1/(2|^(m+k)) by A34;
+      then r0.(m+k)/2 < 1/(2|^(m+k))/2 by XREAL_1:76;
+      then r0.(m+k)/2 < 1/(2|^(m+k)*2) by XCMPLX_1:79;
+      then
+A43:  r0.(m+k)/2 < 1/(2|^(m+k+1)) by NEWTON:11;
+      Ball(x0.(m+k+1),r0.(m+k+1)) c= Ball(x0.(m+k),r0.(m+k)/2) by A34;
+      then dist(x0.(m+k+1),x0.(m+k)) < r0.(m+k)/2 by A42,METRIC_1:12;
+      then dist(x0.(m+k+1),x0.(m+k)) <= 1/(2|^(m+k+1)) by A43,XXREAL_0:2;
+      then
+A44:  dist(x0.((m+k)+1),x0.(m+k)) + 1/(2|^m)*(1-1/(2|^k)) <= 1/(2|^(m+k+1
+      )) + 1/(2|^m)*(1-1/(2|^k)) by XREAL_1:8;
+      2|^(m+(k+1)) = 2|^m * 2|^(k+1) by NEWTON:13;
+      then 1/(2|^(m+k+1)) = 1/(2|^m)/((2|^(k+1))/1) by XCMPLX_1:79
+        .= 1/(2|^m)*(1/(2|^(k+1))) by XCMPLX_1:80;
+      then
+A45:  1/(2|^(m+k+1)) + 1/(2|^m)*(1-1/(2|^k)) = 1/(2|^m)*( 1 + ( 1/(2|^(k+
+      1)) - 1/(2|^k) ) )
+        .= 1/(2|^m)*( 1 + ( 1/((2|^k)*2) - 1/(2|^k) ) ) by NEWTON:11
+        .= 1/(2|^m)*( 1 + ( 1/(2|^k)/2 - 1/(2|^k) ) ) by XCMPLX_1:79
+        .= 1/(2|^m)*( 1 - 1/(2|^k)/2 )
+        .= 1/(2|^m)*( 1 - 1/((2|^k)*2) ) by XCMPLX_1:79;
+      dist(x0.((m+k)+1),x0.m) <= dist(x0.((m+k)+1),x0.(m+k)) + dist(x0.(m
+      +k),x0.m) by METRIC_1:4;
+      then
+      dist(x0.(m+(k+1)),x0.m) <= dist(x0.((m+k)+1),x0.(m+k)) + 1/(2|^m)*(
+      1-1/(2|^k)) by A41,XXREAL_0:2;
+      then dist(x0.(m+(k+1)),x0.m) <= 1/(2|^(m+k+1) ) + 1/(2|^m)*(1-1/(2|^k))
+      by A44,XXREAL_0:2;
+      hence PN[k+1] by A45,NEWTON:11;
     end;
-    thus for k be Element of NAT holds PN[k] from NAT_1:sch 1(A52,A53);
+    2|^0 = 1 by NEWTON:9;
+    then
+A46: PN[0] by METRIC_1:1;
+    for k be Element of NAT holds PN[k] from NAT_1:sch 1(A46,A40);
+    hence thesis;
   end;
-A56: now
+A47: now
     let m be Element of NAT;
-    0 < r0.m by A29;
+    hereby
+      let k be Element of NAT;
+A48:  dist(x0.(m+k),x0.m) <= 1/(2|^m)*(1-1/(2|^k)) by A39;
+      0 < 2|^k by NEWTON:102;
+      then 0 < 1/(2|^k) by XREAL_1:141;
+      then
+A49:  1-1/(2|^k) < 1-0 by XREAL_1:12;
+      0 < 2|^m by NEWTON:102;
+      then 0 < 1/(2|^m) by XREAL_1:141;
+      then 1/(2|^m)*(1-1/(2|^k)) < 1/(2|^m)*1 by A49,XREAL_1:70;
+      hence dist(x0.(m+k),x0.m) < 1/(2|^m) by A48,XXREAL_0:2;
+    end;
+  end;
+  now
+    let r be Real;
+    assume
+    0 < r;
+    then consider p1 be Element of NAT such that
+A50: 1/(2|^p1) <= r by PREPOWER:106;
+    take p=p1+1;
+    hereby
+      let n,m be Element of NAT;
+      assume that
+A51:  n >= p and
+A52:  m >= p;
+      consider k1 be Nat such that
+A53:  n = p + k1 by A51,NAT_1:10;
+      reconsider k1 as Element of NAT by ORDINAL1:def 13;
+      n = p + k1 by A53;
+      then
+A54:  dist(x0.n,x0.p) < 1/(2|^p) by A47;
+      consider k2 be Nat such that
+A55:  m = p + k2 by A52,NAT_1:10;
+      reconsider k2 as Element of NAT by ORDINAL1:def 13;
+A56:  1/(2|^p) = 1/((2|^p1)*2) by NEWTON:11
+        .= 1/(2|^p1)/2 by XCMPLX_1:79;
+      m = p + k2 by A55;
+      then
+A57:  dist(x0.n,x0.p) + dist(x0.p,x0.m) < 1/(2|^p) + 1/(2|^p) by A47,
+      A54,XREAL_1:10;
+      dist(x0.n,x0.m) <= dist(x0.n,x0.p) + dist(x0.p,x0.m) by METRIC_1:4;
+      then dist(x0.n,x0.m) < 1/(2|^p1) by A57,A56,XXREAL_0:2;
+      hence dist(x0.n,x0.m)<r by A50,XXREAL_0:2;
+    end;
+  end;
+  then x0 is Cauchy by TBSP_1:def 5;
+  then
+A58: x0 is convergent by A1,TBSP_1:def 6;
+A59: for m,k be Element of NAT holds Ball(x0.(m+1+k),r0.(m+1+k)) c= Ball(x0
+  .m,(r0.m)/2)
+  proof
+    let m be Element of NAT;
+    defpred PN[Element of NAT] means Ball(x0.(m+1+$1),r0.(m+1+$1)) c= Ball(x0.
+    m,(r0.m)/2);
+A60: now
+      let k be Element of NAT;
+      assume
+A61:  PN[k];
+      0 < r0.(m+1+k) by A34;
+      then (r0.(m+1+k))/2 < r0.(m+1+k) by XREAL_1:218;
+      then
+A62:  Ball(x0.(m+1+k),(r0.(m+1+k))/2) c=Ball(x0.(m+1+k),r0.(m+1+k)) by
+      PCOMPS_1:1;
+      Ball(x0.(m+1+(k+1)),r0.(m+1+(k+1)))=Ball(x0.(m+1+k+1),r0.(m+1+k+1)
+      );
+      then Ball(x0.(m+1+(k+1)),r0.(m+1+(k+1))) c= Ball(x0.(m+1+k),(r0.(m+ 1+k
+      ))/ 2) by A34;
+      then Ball(x0.(m+1+(k+1)),r0.(m+1+(k+1))) c= Ball(x0.(m+1+k),r0.(m+1+k))
+      by A62,XBOOLE_1:1;
+      hence PN[k+1] by A61,XBOOLE_1:1;
+    end;
+A63: PN[0] by A34;
+    thus for k be Element of NAT holds PN[k] from NAT_1:sch 1(A63,A60);
+  end;
+A64: now
+    let m be Element of NAT;
+    set m1 = m+1;
+    0 < r0.m by A34;
     then 0 < (r0.m)/2 by XREAL_1:217;
     then consider n1 be Element of NAT such that
-A57: for l be Element of NAT st n1 <= l holds dist(x0.l,lim x0) < (r0.m)/2
-    by A50,TBSP_1:def 4;
+A65: for l be Element of NAT st n1 <= l holds dist(x0.l,lim x0) < (r0
+    .m)/2 by A58,TBSP_1:def 4;
     reconsider n = max(n1,m+1) as Element of NAT by XXREAL_0:16;
-A58: dist(x0.n,lim x0) < (r0.m)/2 by A57,XXREAL_0:25;
-    set m1 = m+1;
-    m+1 <= n by XXREAL_0:25;
-    then consider k be Nat such that
-A59: n = m1 + k by NAT_1:10;
+A66: dist(x0.n,lim x0) < (r0.m)/2 by A65,XXREAL_0:25;
+    consider k be Nat such that
+A67: n = m1 + k by NAT_1:10,XXREAL_0:25;
+    dist(x0.n,x0.n) = 0 & 0 < r0.n by A34,METRIC_1:1;
+    then
+A68: x0.n in Ball(x0.n,r0.n) by METRIC_1:12;
     reconsider k as Element of NAT by ORDINAL1:def 13;
-    n = m1 + k by A59;
+    n = m1 + k by A67;
+    then Ball(x0.n,r0.n) c= Ball(x0.m,(r0.m)/2) by A59;
+    then dist(x0.n,x0.m) < (r0.m)/2 by A68,METRIC_1:12;
     then
-A60: Ball(x0.n,r0.n) c= Ball(x0.m,(r0.m)/2) by A51;
-    dist(x0.n,x0.n) = 0 & 0 < r0.n by A29,METRIC_1:1;
-    then x0.n in Ball(x0.n,r0.n) by METRIC_1:12;
-    then dist(x0.n,x0.m) < (r0.m)/2 by A60,METRIC_1:12;
-    then
-A61: dist(lim x0,x0.n) + dist(x0.n,x0.m) < (r0.m)/2 + (r0.m)/2 by A58,
-XREAL_1:10;
-    dist(lim x0,x0.m) <= dist(lim x0,x0.n) +dist(x0.n,x0.m) by METRIC_1:4;
-    then dist(lim x0,x0.m) < (r0.m)/2 + (r0.m)/2 by A61,XXREAL_0:2;
+A69: dist(lim x0,x0.n) + dist(x0.n,x0.m) < (r0.m)/2 + (r0.m)/2 by A66,
+    XREAL_1:10;
+    dist(lim x0,x0.m) <= dist(lim x0,x0.n) +dist(x0.n,x0.m) by METRIC_1:
+    4;
+    then dist(lim x0,x0.m) < (r0.m)/2 + (r0.m)/2 by A69,XXREAL_0:2;
     hence lim x0 in Ball(x0.m,r0.m) by METRIC_1:12;
   end;
-A62: now
+A70: now
     let n be Element of NAT;
     thus not lim x0 in Y.n
     proof
       assume
-A63:  lim x0 in Y.n;
-      lim x0 in Ball(x0.n,r0.n) by A56;
-      then lim x0 in Ball(x0.n,r0.n) /\ Y.n by A63,XBOOLE_0:def 4;
-      hence contradiction by A29;
+A71:  lim x0 in Y.n;
+      lim x0 in Ball(x0.n,r0.n) by A64;
+      then lim x0 in Ball(x0.n,r0.n) /\ Y.n by A71,XBOOLE_0:def 4;
+      hence contradiction by A34;
     end;
   end;
   not lim x0 in union rng Y
   proof
-    assume lim x0 in union rng Y;
+    assume
+    lim x0 in union rng Y;
     then consider A be set such that
-A64: lim x0 in A & A in rng Y by TARSKI:def 4;
-    consider k be set such that
-A65: k in dom Y & A = Y.k by A64,FUNCT_1:def 5;
-    thus contradiction by A62,A64,A65;
+A72: lim x0 in A and
+A73: A in rng Y by TARSKI:def 4;
+    ex k be set st k in dom Y & A = Y.k by A73,FUNCT_1:def 5;
+    hence contradiction by A70,A72;
   end;
   hence contradiction by A2;
 end;
@@ -377,16 +381,16 @@ reserve X for RealNormSpace;
 
 definition
   let X be RealNormSpace;
-  func distance_by_norm_of X ->
-  Function of [:the carrier of X,the carrier of X:],REAL means
+  func distance_by_norm_of X -> Function of [:the carrier of X,the carrier of
+  X:],REAL means
   :Def1:
   for x, y be Point of X holds it.(x,y) = ||.x-y.||;
   existence
   proof
     set CX = the carrier of X;
     deffunc F(Element of CX,Element of CX) = ||.$1-$2.||;
-    ex f be Function of [:CX,CX:],REAL st for x being Element of CX
-    for y being Element of CX holds f.(x,y)=F(x,y) from BINOP_1:sch 4;
+    ex f be Function of [:CX,CX:],REAL st for x being Element of CX for y
+    being Element of CX holds f.(x,y)=F(x,y) from BINOP_1:sch 4;
     hence thesis;
   end;
   uniqueness
@@ -404,8 +408,9 @@ A2: for x,y be Point of X holds dist2.(x,y) = ||.x-y.||;
   end;
 end;
 
-Lm1: the distance of MetrStruct(# the carrier of X,distance_by_norm_of X #)
-is Reflexive
+Lm1: the distance of MetrStruct(# the carrier of X,distance_by_norm_of X #) is
+Reflexive
+
 proof
   now
     let a be Element of X;
@@ -415,8 +420,9 @@ proof
   hence thesis by METRIC_1:def 3;
 end;
 
-Lm2: the distance of MetrStruct(# the carrier of X,distance_by_norm_of X #)
-is discerning
+Lm2: the distance of MetrStruct(# the carrier of X,distance_by_norm_of X #) is
+discerning
+
 proof
   now
     let a,b be Element of X;
@@ -428,8 +434,9 @@ A1: (distance_by_norm_of X).(a,b) = 0;
   hence thesis by METRIC_1:def 4;
 end;
 
-Lm3: the distance of MetrStruct(# the carrier of X,distance_by_norm_of X #)
-is symmetric
+Lm3: the distance of MetrStruct(# the carrier of X,distance_by_norm_of X #) is
+symmetric
+
 proof
   now
     let a,b be Element of X;
@@ -440,17 +447,23 @@ proof
   hence thesis by METRIC_1:def 5;
 end;
 
-Lm4: the distance of MetrStruct(# the carrier of X,distance_by_norm_of X #)
-is triangle
+Lm4: the distance of MetrStruct(# the carrier of X,distance_by_norm_of X #) is
+triangle
+
 proof
   now
-    let a,b,c be Element of the carrier of X;
+    let a,b,c be Element of X;
 A1: ||.a-c.|| <= ||.a-b.|| + ||.b-c.|| by NORMSP_1:14;
-    ||.a-b.|| + ||.b-c.|| = ||.a-b.|| + (distance_by_norm_of X).(b,c) by Def1
-      .= (distance_by_norm_of X).(a,b) + (distance_by_norm_of X).(b,c) by Def1;
-    hence (distance_by_norm_of X).(a,c)
-    <= (distance_by_norm_of X).(a,b) + (distance_by_norm_of X).(b,c)
-    by A1,Def1;
+
+    ||.a-b.|| + ||.b-c.|| = ||.a-b.|| + (distance_by_norm_of X).(b,c) by
+    Def1
+
+      .= (distance_by_norm_of X).(a,b) + (distance_by_norm_of X).(b,c) by
+    Def1;
+
+    hence (distance_by_norm_of X).(a,c) <= (distance_by_norm_of X).(a,b) + (
+    distance_by_norm_of X).(b,c) by A1,Def1;
+
   end;
   hence thesis by METRIC_1:def 6;
 end;
@@ -458,7 +471,8 @@ end;
 definition
   let X be RealNormSpace;
   func MetricSpaceNorm X -> non empty MetrSpace equals
-  MetrStruct(# the carrier of X,distance_by_norm_of X #);
+  MetrStruct(# the
+    carrier of X,distance_by_norm_of X #);
   coherence
   proof
     the distance of MetrStruct(# the carrier of X,distance_by_norm_of X #)
@@ -468,182 +482,187 @@ definition
 end;
 
 theorem Th2:
-  for X be RealNormSpace, z be Element of MetricSpaceNorm X,
-  r be real number holds ex x be Point of X st
-  x = z & Ball(z,r) = {y where y is Point of X:||.x-y.|| < r}
+  for X be RealNormSpace, z be Element of MetricSpaceNorm X, r be
+real number holds ex x be Point of X st x = z & Ball(z,r) = {y where y is Point
+  of X:||.x-y.|| < r}
 proof
   let X be RealNormSpace, z be Element of MetricSpaceNorm X, r be real number;
   reconsider x=z as Point of X;
   consider M' being non empty MetrStruct, z' being Element of M' such that
-A1: M' = MetricSpaceNorm X & z' = z &
-  Ball(z,r) = {q where q is Element of M':dist(z',q) < r} by METRIC_1:def 15;
-  {q where q is Element of M':dist(z',q) < r}
-  = {y where y is Point of X:||.x-y.|| < r}
-  proof
-    now
-      let a be set;
-      assume a in {q where q is Element of M':dist(z',q) < r};
-      then consider q be Element of M' such that
-A2:   a=q & dist(z',q) < r;
-      reconsider t=q as Point of X by A1;
-      ||.x-t.|| = dist(z',q) by A1,Def1;
-      hence a in {y where y is Point of X: ||.x-y.|| < r} by A2;
-    end;
-    then
-A3: {q where q is Element of M' : dist(z',q) < r}
-    c= {y where y is Point of X: ||.x-y.|| < r} by TARSKI:def 3;
-    now
-      let a be set;
-      assume a in {y where y is Point of X: ||.x-y.|| < r};
-      then consider y be Point of X such that
-A4:   a=y & ||.x-y.|| < r;
-      reconsider t=y as Element of M' by A1;
-      ||.x-y.|| = dist(z',t) by A1,Def1;
-      hence a in {q where q is Element of M' : dist(z',q) < r} by A4;
-    end;
-    then {y where y is Point of X: ||.x-y.|| < r}
-    c= {q where q is Element of M' : dist(z',q) < r} by TARSKI:def 3;
-    hence thesis by A3,XBOOLE_0:def 10;
+A1: M' = MetricSpaceNorm X and
+A2: z' = z and
+A3: Ball(z,r) = {q where q is Element of M':dist(z',q) < r} by METRIC_1:
+  def 15;
+  now
+    let a be set;
+    assume
+    a in {y where y is Point of X: ||.x-y.|| < r};
+    then consider y be Point of X such that
+A4: a=y & ||.x-y.|| < r;
+    reconsider t=y as Element of M' by A1;
+    ||.x-y.|| = dist(z',t) by A1,A2,Def1;
+    hence a in {q where q is Element of M' : dist(z',q) < r} by A4;
   end;
-  hence thesis by A1;
+  then
+A5: {y where y is Point of X: ||.x-y.|| < r} c= {q where q is Element of M'
+  : dist(z',q) < r} by TARSKI:def 3;
+  now
+    let a be set;
+    assume
+    a in {q where q is Element of M':dist(z',q) < r};
+    then consider q be Element of M' such that
+A6: a=q & dist(z',q) < r;
+    reconsider t=q as Point of X by A1;
+    ||.x-t.|| = dist(z',q) by A1,A2,Def1;
+    hence a in {y where y is Point of X: ||.x-y.|| < r} by A6;
+  end;
+  then
+  {q where q is Element of M' : dist(z',q) < r} c= {y where y is Point of
+X: ||.x-y.|| < r} by TARSKI:def 3;
+  then {q where q is Element of M':dist(z',q) < r} = {y where y is Point of X
+  :||.x -y.|| < r} by A5,XBOOLE_0:def 10;
+  hence thesis by A3;
 end;
 
 theorem Th3:
-  for X be RealNormSpace, z be Element of MetricSpaceNorm X,
-  r be real number holds ex x be Point of X st
-  x = z & cl_Ball(z,r) = {y where y is Point of X: ||.x-y.|| <= r}
+  for X be RealNormSpace, z be Element of MetricSpaceNorm X, r be
+  real number holds ex x be Point of X st x = z & cl_Ball(z,r) = {y where y is
+  Point of X: ||.x-y.|| <= r}
 proof
   let X be RealNormSpace, z be Element of MetricSpaceNorm X, r be real number;
   reconsider x=z as Point of X;
   consider M' being non empty MetrStruct, z' being Element of M' such that
-A1: M' = MetricSpaceNorm X & z' = z &
-  cl_Ball(z,r) = {q where q is Element of M' : dist(z',q) <= r}
-  by METRIC_1:def 16;
-  {q where q is Element of M' : dist(z',q) <= r}
-  = {y where y is Point of X: ||.x-y.|| <= r}
-  proof
-    now
-      let a be set;
-      assume a in {q where q is Element of M' : dist(z',q) <= r};
-      then consider q be Element of M' such that
-A2:   a=q & dist(z',q) <= r;
-      reconsider t=q as Point of X by A1;
-      ||.x-t.|| = dist(z',q) by A1,Def1;
-      hence a in {y where y is Point of X: ||.x-y.|| <= r} by A2;
-    end;
-    then
-A3: {q where q is Element of M' : dist(z',q) <= r}
-    c= {y where y is Point of X: ||.x-y.|| <= r} by TARSKI:def 3;
-    now
-      let a be set;
-      assume a in {y where y is Point of X: ||.x-y.|| <= r};
-      then consider y be Point of X such that
-A4:   a=y & ||.x-y.|| <= r;
-      reconsider t=y as Element of M' by A1;
-      ||.x-y.|| = dist(z',t) by A1,Def1;
-      hence a in {q where q is Element of M' : dist(z',q) <= r} by A4;
-    end;
-    then {y where y is Point of X: ||.x-y.|| <= r}
-    c= {q where q is Element of M' : dist(z',q) <= r} by TARSKI:def 3;
-    hence thesis by A3,XBOOLE_0:def 10;
+A1: M' = MetricSpaceNorm X and
+A2: z' = z and
+A3: cl_Ball(z,r) = {q where q is Element of M' : dist(z',q) <= r} by
+  METRIC_1:def 16;
+  now
+    let a be set;
+    assume
+    a in {y where y is Point of X: ||.x-y.|| <= r};
+    then consider y be Point of X such that
+A4: a=y & ||.x-y.|| <= r;
+    reconsider t=y as Element of M' by A1;
+    ||.x-y.|| = dist(z',t) by A1,A2,Def1;
+    hence a in {q where q is Element of M' : dist(z',q) <= r} by A4;
   end;
-  hence thesis by A1;
+  then
+A5: {y where y is Point of X: ||.x-y.|| <= r} c= {q where q is Element of
+M': dist(z',q) <= r} by TARSKI:def 3;
+  now
+    let a be set;
+    assume
+    a in {q where q is Element of M' : dist(z',q) <= r};
+    then consider q be Element of M' such that
+A6: a=q & dist(z',q) <= r;
+    reconsider t=q as Point of X by A1;
+    ||.x-t.|| = dist(z',q) by A1,A2,Def1;
+    hence a in {y where y is Point of X: ||.x-y.|| <= r} by A6;
+  end;
+  then
+  {q where q is Element of M' : dist(z',q) <= r} c= {y where y is Point of
+X: ||.x-y.|| <= r} by TARSKI:def 3;
+  then
+  {q where q is Element of M' : dist(z',q) <= r} = {y where y is Point of
+X: ||.x-y.|| <= r} by A5,XBOOLE_0:def 10;
+  hence thesis by A3;
 end;
 
 theorem Th4:
-  for X be RealNormSpace, S be sequence of X,
-  St be sequence of MetricSpaceNorm X, x be Point of X,
-  xt be Point of MetricSpaceNorm X st S = St & x = xt holds
-  St is_convergent_in_metrspace_to xt iff for r be Real st 0 < r
-  ex m be Element of NAT st
-  for n be Element of NAT st m <= n holds ||. S.n - x .|| < r
+  for X be RealNormSpace, S be sequence of X, St be sequence of
+MetricSpaceNorm X, x be Point of X, xt be Point of MetricSpaceNorm X st S = St
+  & x = xt holds St is_convergent_in_metrspace_to xt iff for r be Real st 0 < r
+  ex m be Element of NAT st for n be Element of NAT st m <= n holds ||. S.n - x
+  .|| < r
 proof
-  let X be RealNormSpace, S be sequence of X,
-  St be sequence of MetricSpaceNorm X, x be Point of X,
-  xt be Point of MetricSpaceNorm X;
+  let X be RealNormSpace, S be sequence of X, St be sequence of
+  MetricSpaceNorm X, x be Point of X, xt be Point of MetricSpaceNorm X;
   assume
 A1: S=St & x=xt;
 A2: now
     assume
-A3: St is_convergent_in_metrspace_to xt;
-    let r be Real;
-    assume 0 < r;
-    then consider m be Element of NAT such that
-A4: for n being Element of NAT st m <= n holds dist(St.n,xt) < r
-    by A3,METRIC_6:def 8;
-    take m;
-    let n be Element of NAT;
-    assume m <= n;
-    then dist(St.n,xt) < r by A4;
-    hence ||. S.n - x.|| < r by A1,Def1;
-  end;
-  now
-    assume
-A5: for r be Real st 0 < r
-    ex m be Element of NAT st for n be Element of NAT st m <= n holds
-    ||. S.n - x.|| < r;
+A3: for r be Real st 0 < r ex m be Element of NAT st for n be Element
+    of NAT st m <= n holds ||. S.n - x.|| < r;
     now
       let r be Real;
-      assume r>0;
+      assume
+      r>0;
       then consider m be Element of NAT such that
-A6:   for n be Element of NAT st m <= n holds ||. S.n - x.|| < r by A5;
+A4:   for n be Element of NAT st m <= n holds ||. S.n - x.|| < r by
+      A3;
       take m;
       let n be Element of NAT;
-      assume m <= n;
-      then ||. S.n - x.|| < r by A6;
+      assume
+      m <= n;
+      then ||. S.n - x.|| < r by A4;
       hence dist(St.n,xt) < r by A1,Def1;
     end;
     hence St is_convergent_in_metrspace_to xt by METRIC_6:def 8;
+  end;
+  now
+    assume
+A5: St is_convergent_in_metrspace_to xt;
+    let r be Real;
+    assume
+    0 < r;
+    then consider m be Element of NAT such that
+A6: for n being Element of NAT st m <= n holds dist(St.n,xt) < r by A5
+    ,METRIC_6:def 8;
+    take m;
+    let n be Element of NAT;
+    assume
+    m <= n;
+    then dist(St.n,xt) < r by A6;
+    hence ||. S.n - x.|| < r by A1,Def1;
   end;
   hence thesis by A2;
 end;
 
 theorem Th5:
-  for X be RealNormSpace, S be sequence of X,
-  St be sequence of MetricSpaceNorm X st
-  S = St holds St is convergent iff S is convergent
+  for X be RealNormSpace, S be sequence of X, St be sequence of
+  MetricSpaceNorm X st S = St holds St is convergent iff S is convergent
 proof
-  let X be RealNormSpace, S be sequence of X,
-  St be sequence of MetricSpaceNorm X;
+  let X be RealNormSpace, S be sequence of X, St be sequence of
+  MetricSpaceNorm X;
   assume
 A1: S=St;
 A2: now
-    assume St is convergent;
-    then consider xt be Point of MetricSpaceNorm X such that
-A3: St is_convergent_in_metrspace_to xt by METRIC_6:22;
-    reconsider x=xt as Point of X;
-    for r be Real st 0 < r
-    ex m be Element of NAT st for n be Element of NAT st
-    m <= n holds ||. S.n - x.|| < r by A1,A3,Th4;
-    hence S is convergent by NORMSP_1:def 9;
+    assume
+    S is convergent;
+    then consider x be Point of X such that
+A3: for r be Real st 0 < r ex m be Element of NAT st for n be Element
+    of NAT st m <= n holds ||. S.n - x.|| < r by NORMSP_1:def 9;
+    reconsider xt=x as Point of MetricSpaceNorm X;
+    St is_convergent_in_metrspace_to xt by A1,A3,Th4;
+    hence St is convergent by METRIC_6:21;
   end;
   now
-    assume S is convergent;
-    then consider x be Point of X such that
-A4: for r be Real st 0 < r
-    ex m be Element of NAT st for n be Element of NAT st
-    m <= n holds ||. S.n - x.|| < r by NORMSP_1:def 9;
-    reconsider xt=x as Point of MetricSpaceNorm X;
-    St is_convergent_in_metrspace_to xt by A1,A4,Th4;
-    hence St is convergent by METRIC_6:21;
+    assume
+    St is convergent;
+    then consider xt be Point of MetricSpaceNorm X such that
+A4: St is_convergent_in_metrspace_to xt by METRIC_6:22;
+    reconsider x=xt as Point of X;
+    for r be Real st 0 < r ex m be Element of NAT st for n be Element of
+    NAT st m <= n holds ||. S.n - x.|| < r by A1,A4,Th4;
+    hence S is convergent by NORMSP_1:def 9;
   end;
   hence thesis by A2;
 end;
 
 theorem Th6:
-  for X be RealNormSpace, S be sequence of X,
-  St be sequence of MetricSpaceNorm X st
-  S = St & St is convergent holds lim St = lim S
+  for X be RealNormSpace, S be sequence of X, St be sequence of
+  MetricSpaceNorm X st S = St & St is convergent holds lim St = lim S
 proof
-  let X be RealNormSpace, S be sequence of X,
-  St be sequence of MetricSpaceNorm X;
-  assume
-A1: S=St & St is convergent;
+  let X be RealNormSpace, S be sequence of X, St be sequence of
+  MetricSpaceNorm X;
+  assume that
+A1: S=St and
+A2: St is convergent;
   reconsider xt=lim S as Point of MetricSpaceNorm X;
-  S is convergent by A1,Th5;
-  then for r be Real st 0 < r ex m be Element of NAT st
-  for n be Element of NAT st m <= n holds ||. S.n - lim S.|| < r
-  by NORMSP_1:def 11;
+  S is convergent by A1,A2,Th5;
+  then
+  for r be Real st 0 < r ex m be Element of NAT st for n be Element of NAT
+  st m <= n holds ||. S.n - lim S.|| < r by NORMSP_1:def 11;
   then St is_convergent_in_metrspace_to xt by A1,Th4;
   hence thesis by METRIC_6:26;
 end;
@@ -653,91 +672,94 @@ begin :: Topological Space generated from Real Normed Space
 definition
   let X be RealNormSpace;
   func TopSpaceNorm X -> non empty TopSpace equals
-  TopSpaceMetr MetricSpaceNorm X;
+  TopSpaceMetr
+  MetricSpaceNorm X;
   coherence;
 end;
 
 theorem Th7:
-  for X be RealNormSpace, V be Subset of TopSpaceNorm X holds V is open iff
-  for x be Point of X st x in V holds
-  ex r be Real st r>0 & {y where y is Point of X: ||.x-y.|| < r} c= V
+  for X be RealNormSpace, V be Subset of TopSpaceNorm X holds V is
+  open iff for x be Point of X st x in V holds ex r be Real st r>0 & {y where y
+  is Point of X: ||.x-y.|| < r} c= V
 proof
   let X be RealNormSpace, V be Subset of TopSpaceNorm X;
 A1: now
     assume
-A2: V is open;
-    hereby
-      let x be Point of X such that
-A3:   x in V;
-      reconsider z=x as Element of MetricSpaceNorm X;
-      V in the topology of TopSpaceNorm X by A2,PRE_TOPC:def 5;
-      then consider r be Real such that
-A4:   r > 0 & Ball(z,r) c= V by A3,PCOMPS_1:def 5;
-      take r;
-      ex t be Point of X st
-      t = z & Ball(z,r) = {y where y is Point of X: ||.t-y.|| < r} by Th2;
-      hence r > 0 & {y where y is Point of X: ||.x-y.|| < r} c= V by A4;
-    end;
-  end;
-  now
-    assume
-A5: for x be Point of X st x in V holds
-    ex r be Real st r>0 & {y where y is Point of X: ||.x-y.|| < r} c= V;
+A2: for x be Point of X st x in V holds ex r be Real st r>0 & {y where
+    y is Point of X: ||.x-y.|| < r} c= V;
     now
       let z be Element of MetricSpaceNorm X;
-      assume
-A6:   z in V;
       reconsider x = z as Point of X;
-      consider r be Real such that
-A7:   r > 0 & {y where y is Point of X: ||.x-y.|| < r} c= V by A5,A6;
+      assume
+      z in V;
+      then consider r be Real such that
+A3:   r > 0 & {y where y is Point of X: ||.x-y.|| < r} c= V by A2;
       take r;
-      ex t be Point of X st
-      t = z & Ball(z,r) = {y where y is Point of X: ||.t-y.|| < r} by Th2;
-      hence r > 0 & Ball(z,r) c= V by A7;
+      ex t be Point of X st t = z & Ball(z,r) = {y where y is Point of X:
+      ||.t-y.|| < r} by Th2;
+      hence r > 0 & Ball(z,r) c= V by A3;
     end;
     hence V in the topology of TopSpaceNorm X by PCOMPS_1:def 5;
     hence V is open by PRE_TOPC:def 5;
+  end;
+  now
+    assume
+A4: V is open;
+    hereby
+      let x be Point of X such that
+A5:   x in V;
+      reconsider z=x as Element of MetricSpaceNorm X;
+      V in the topology of TopSpaceNorm X by A4,PRE_TOPC:def 5;
+      then consider r be Real such that
+A6:   r > 0 & Ball(z,r) c= V by A5,PCOMPS_1:def 5;
+      take r;
+      ex t be Point of X st t = z & Ball(z,r) = {y where y is Point of X:
+      ||.t-y.|| < r} by Th2;
+      hence r > 0 & {y where y is Point of X: ||.x-y.|| < r} c= V by A6;
+    end;
   end;
   hence thesis by A1;
 end;
 
 theorem Th8:
-  for X be RealNormSpace, x be Point of X, r be Real holds
-  {y where y is Point of X:||.x-y.|| < r} is open Subset of TopSpaceNorm X
+  for X be RealNormSpace, x be Point of X, r be Real holds {y where
+  y is Point of X:||.x-y.|| < r} is open Subset of TopSpaceNorm X
 proof
   let X be RealNormSpace, x be Point of X, r be Real;
   set V = {y where y is Point of X: ||.x-y.|| < r};
   reconsider z=x as Element of MetricSpaceNorm X;
-A1: ex t be Point of X st
-  t=x & Ball(z,r) = {y where y is Point of X: ||.t-y.|| < r} by Th2;
-  Ball(z,r) in Family_open_set(MetricSpaceNorm X) by PCOMPS_1:33;
-  hence thesis by A1,PRE_TOPC:def 5;
+  ( ex t be Point of X st t=x & Ball(z,r) = {y where y is Point of X: ||.t
+-y.|| < r})& Ball(z,r) in Family_open_set(MetricSpaceNorm X) by Th2,PCOMPS_1:33
+  ;
+  hence thesis by PRE_TOPC:def 5;
 end;
 
 theorem
-  for X be RealNormSpace, x be Point of X, r be Real holds
-  {y where y is Point of X: ||.x-y.|| <= r} is closed Subset of TopSpaceNorm X
+  for X be RealNormSpace, x be Point of X, r be Real holds {y where y is
+  Point of X: ||.x-y.|| <= r} is closed Subset of TopSpaceNorm X
 proof
   let X be RealNormSpace, x be Point of X, r be Real;
   set V = {y where y is Point of X: ||.x-y.|| <= r};
   reconsider z=x as Element of MetricSpaceNorm X;
-  ex t be Point of X st
-  t = x & cl_Ball(z,r) = {y where y is Point of X: ||.t-y.|| <= r} by Th3;
+  ex t be Point of X st t = x & cl_Ball(z,r) = {y where y is Point of X:
+  ||.t-y.|| <= r} by Th3;
   hence thesis by TOPREAL6:65;
 end;
 
 theorem
-  for X be Hausdorff non empty TopSpace st
-  X is locally-compact holds X is Baire
+  for X be Hausdorff non empty TopSpace st X is locally-compact holds X
+  is Baire
 proof
   let X be Hausdorff non empty TopSpace;
-  assume X is locally-compact;
+  assume
+  X is locally-compact;
   then X is sober locally-compact by YELLOW_8:31;
   hence thesis by WAYBEL12:48;
 end;
 
 theorem
-  for X be RealNormSpace holds TopSpaceNorm(X) is sequential by FRECHET:24,28;
+  for X be RealNormSpace holds TopSpaceNorm(X) is sequential by FRECHET:
+  24,28;
 
 registration
   let X be RealNormSpace;
@@ -746,63 +768,60 @@ registration
 end;
 
 theorem Th12:
-  for X be RealNormSpace, S be sequence of X,
-  St be sequence of TopSpaceNorm X, x be Point of X,
-  xt be Point of TopSpaceNorm X st S = St & x = xt holds
-  St is_convergent_to xt iff for r be Real st 0 < r ex m be Element of NAT st
-  for n be Element of NAT st m <= n holds ||. S.n - x.|| < r
+  for X be RealNormSpace, S be sequence of X, St be sequence of
+TopSpaceNorm X, x be Point of X, xt be Point of TopSpaceNorm X st S = St & x =
+  xt holds St is_convergent_to xt iff for r be Real st 0 < r ex m be Element of
+  NAT st for n be Element of NAT st m <= n holds ||. S.n - x.|| < r
 proof
-  let X be RealNormSpace,
-  S be sequence of X, St be sequence of TopSpaceNorm X,
-  x be Point of X, xt be Point of TopSpaceNorm X;
-  assume
-A1: S=St & x=xt;
-  reconsider xm=x as Point of MetricSpaceNorm X;
+  let X be RealNormSpace, S be sequence of X, St be sequence of TopSpaceNorm X
+  , x be Point of X, xt be Point of TopSpaceNorm X;
+  assume that
+A1: S=St and
+A2: x=xt;
   reconsider Sm=St as sequence of MetricSpaceNorm X;
-  St is_convergent_to xt iff Sm is_convergent_in_metrspace_to xm
-  by A1,FRECHET2:31;
+  reconsider xm=x as Point of MetricSpaceNorm X;
+  St is_convergent_to xt iff Sm is_convergent_in_metrspace_to xm by A2,
+  FRECHET2:31;
   hence thesis by A1,Th4;
 end;
 
 theorem Th13:
-  for X be RealNormSpace, S be sequence of X,
-  St be sequence of TopSpaceNorm X st S = St holds
-  St is convergent iff S is convergent
+  for X be RealNormSpace, S be sequence of X, St be sequence of
+  TopSpaceNorm X st S = St holds St is convergent iff S is convergent
 proof
-  let X be RealNormSpace,
-  S be sequence of X, St be sequence of TopSpaceNorm X;
-  assume
-A1: S = St;
+  let X be RealNormSpace, S be sequence of X, St be sequence of TopSpaceNorm X;
   reconsider Sm=St as sequence of MetricSpaceNorm X;
-  St is convergent iff Sm is convergent by FRECHET2:32;
+A1: St is convergent iff Sm is convergent by FRECHET2:32;
+  assume
+  S = St;
   hence thesis by A1,Th5;
 end;
 
 theorem Th14:
-  for X be RealNormSpace, S be sequence of X,
-  St be sequence of TopSpaceNorm X st
-  S = St & St is convergent holds Lim St = {lim S} & lim St=lim S
+  for X be RealNormSpace, S be sequence of X, St be sequence of
+TopSpaceNorm X st S = St & St is convergent holds Lim St = {lim S} & lim St=lim
+  S
 proof
-  let X be RealNormSpace,
-  S be sequence of X, St be sequence of TopSpaceNorm X;
-  assume
-A1: S = St & St is convergent;
-  reconsider Sm=St as sequence of MetricSpaceNorm X;
-A2: Sm is convergent by A1,FRECHET2:32;
-  then
-A3: lim St=lim Sm by FRECHET2:33
-    .=lim S by A1,A2,Th6;
+  let X be RealNormSpace, S be sequence of X, St be sequence of TopSpaceNorm X;
+  assume that
+A1: S = St and
+A2: St is convergent;
   consider x being Point of TopSpaceNorm X such that
-A4: Lim St = {x} by A1,FRECHET2:27;
-  x in Lim St by A4,TARSKI:def 1;
+A3: Lim St = {x} by A2,FRECHET2:27;
+  reconsider Sm=St as sequence of MetricSpaceNorm X;
+A4: Sm is convergent by A2,FRECHET2:32;
+  then
+A5: lim St=lim Sm by FRECHET2:33
+    .=lim S by A1,A4,Th6;
+  x in Lim St by A3,TARSKI:def 1;
   then St is_convergent_to x by FRECHET:def 4;
-  hence Lim St = {lim S} by A3,A4,FRECHET2:28;
-  thus thesis by A3;
+  hence Lim St = {lim S} by A5,A3,FRECHET2:28;
+  thus thesis by A5;
 end;
 
 theorem Th15:
-  for X be RealNormSpace, V be Subset of X, Vt be Subset of TopSpaceNorm X st
-  V = Vt holds V is closed iff Vt is closed
+  for X be RealNormSpace, V be Subset of X, Vt be Subset of
+  TopSpaceNorm X st V = Vt holds V is closed iff Vt is closed
 proof
   let X be RealNormSpace, V be Subset of X, Vt be Subset of TopSpaceNorm X;
   assume
@@ -812,197 +831,210 @@ A1: V = Vt;
 A2: V is closed;
     now
       let St be sequence of TopSpaceNorm X;
-      assume
-A3:   St is convergent & rng St c= Vt;
+      assume that
+A3:   St is convergent and
+A4:   rng St c= Vt;
       reconsider S = St as sequence of X;
       S is convergent by A3,Th13;
-      then lim S in V by A1,A2,A3,NFCONT_1:def 5;
+      then lim S in V by A1,A2,A4,NFCONT_1:def 5;
       then {lim S} c= V by ZFMISC_1:37;
       hence Lim St c= Vt by A1,A3,Th14;
     end;
     hence Vt is closed by FRECHET:def 6;
   end;
   assume
-A4: Vt is closed;
+A5: Vt is closed;
   now
     let S be sequence of X;
-    assume
-A5: rng S c= V & S is convergent;
+    assume that
+A6: rng S c= V and
+A7: S is convergent;
     reconsider St = S as sequence of TopSpaceNorm X;
-A6: St is convergent by A5,Th13;
-    then Lim St c= Vt by A1,A4,A5,FRECHET:def 6;
-    then {lim S} c= V by A1,A6,Th14;
+A8: St is convergent by A7,Th13;
+    then Lim St c= Vt by A1,A5,A6,FRECHET:def 6;
+    then {lim S} c= V by A1,A8,Th14;
     hence lim S in V by ZFMISC_1:37;
   end;
   hence thesis by NFCONT_1:def 5;
 end;
 
 theorem Th16:
-  for X be RealNormSpace, V be Subset of X, Vt be Subset of TopSpaceNorm X st
-  V = Vt holds V is open iff Vt is open
+  for X be RealNormSpace, V be Subset of X, Vt be Subset of
+  TopSpaceNorm X st V = Vt holds V is open iff Vt is open
 proof
   let X be RealNormSpace, V be Subset of X, Vt be Subset of TopSpaceNorm X;
+A1: V is open iff V` is closed by NFCONT_1:def 6;
   assume
-A1: V = Vt;
-  V is open iff V` is closed by NFCONT_1:def 6;
+  V = Vt;
   then V is open iff Vt` is closed by A1,Th15;
   hence thesis by TOPS_1:30;
 end;
 
-Lm5: for X be RealNormSpace, r be Real, x be Point of X holds
-{y where y is Point of X: ||.x-y.|| < r}
-= {y where y is Point of X: ||.y-x.|| < r}
+Lm5: for X be RealNormSpace, r be Real, x be Point of X holds {y where y is
+Point of X: ||.x-y.|| < r} = {y where y is Point of X: ||.y-x.|| < r}
+
 proof
   let X be RealNormSpace, r be Real, x be Point of X;
   now
     let s be set;
-    assume s in {y where y is Point of X: ||.x-y.|| < r};
+    assume
+    s in {y where y is Point of X: ||.y-x.|| < r};
     then consider z be Point of X such that
-A1: s = z & ||.x-z.|| < r;
-    ||.z-x.|| < r by A1,NORMSP_1:11;
-    hence s in {y where y is Point of X: ||.y-x.|| < r} by A1;
+A1: s = z and
+A2: ||.z-x.|| < r;
+    ||.x-z.|| < r by A2,NORMSP_1:11;
+    hence s in {y where y is Point of X: ||.x-y.|| < r} by A1;
   end;
+
   then
-A2: {y where y is Point of X: ||.x-y.|| < r}
-  c= {y where y is Point of X: ||.y-x.|| < r} by TARSKI:def 3;
+A3: {y where y is Point of X: ||.y-x.|| < r} c= {y where y is Point of X:
+  ||.x-y.|| < r} by TARSKI:def 3;
+
   now
     let s be set;
-    assume s in {y where y is Point of X: ||.y-x.|| < r};
+    assume
+    s in {y where y is Point of X: ||.x-y.|| < r};
     then consider z be Point of X such that
-A3: s = z & ||.z-x.|| < r;
-    ||.x-z.|| < r by A3,NORMSP_1:11;
-    hence s in {y where y is Point of X: ||.x-y.|| < r} by A3;
+A4: s = z and
+A5: ||.x-z.|| < r;
+    ||.z-x.|| < r by A5,NORMSP_1:11;
+    hence s in {y where y is Point of X: ||.y-x.|| < r} by A4;
   end;
-  then {y where y is Point of X: ||.y-x.|| < r}
-  c= {y where y is Point of X: ||.x-y.|| < r} by TARSKI:def 3;
-  hence thesis by A2,XBOOLE_0:def 10;
+
+  then {y where y is Point of X: ||.x-y.|| < r} c= {y where y is Point of X:
+  ||.y-x.|| < r} by TARSKI:def 3;
+
+  hence thesis by A3,XBOOLE_0:def 10;
 end;
 
 theorem Th17:
-  for X be RealNormSpace, U be Subset of X, Ut be Subset of TopSpaceNorm X,
-  x be Point of X, xt be Point of TopSpaceNorm X st U = Ut & x = xt holds
-  U is Neighbourhood of x iff Ut is a_neighborhood of xt
+  for X be RealNormSpace, U be Subset of X, Ut be Subset of
+TopSpaceNorm X, x be Point of X, xt be Point of TopSpaceNorm X st U = Ut & x =
+  xt holds U is Neighbourhood of x iff Ut is a_neighborhood of xt
 proof
-  let X be RealNormSpace, U be Subset of X, Ut be Subset of TopSpaceNorm X,
-  x be Point of X, xt be Point of TopSpaceNorm X;
-  assume
-A1: U=Ut & x=xt;
-A2: now
-    assume Ut is a_neighborhood of xt;
-    then consider Vt being Subset of TopSpaceNorm X such that
-A3: Vt is open & Vt c= Ut & xt in Vt by CONNSP_2:8;
-    consider r be Real such that
-A4: r > 0 & {y where y is Point of X: ||.x-y.|| < r} c= Vt by A1,A3,Th7;
-A5: {y where y is Point of X: ||.x-y.|| < r} c=U by A1,A3,A4,XBOOLE_1:1;
-    {y where y is Point of X: ||.x-y.|| < r}
-    = {y where y is Point of X: ||.y-x.|| < r} by Lm5;
-    hence U is Neighbourhood of x by A4,A5,NFCONT_1:def 3;
-  end;
-  now
-    assume U is Neighbourhood of x;
+  let X be RealNormSpace, U be Subset of X, Ut be Subset of TopSpaceNorm X, x
+  be Point of X, xt be Point of TopSpaceNorm X;
+  assume that
+A1: U=Ut and
+A2: x=xt;
+A3: now
+    assume
+    U is Neighbourhood of x;
     then consider r be Real such that
-A6: r > 0 & {y where y is Point of X: ||.y-x.|| < r} c= U by NFCONT_1:def 3;
-    {y where y is Point of X: ||.y-x.|| < r} c= the carrier of X
-    proof
-      now
-        let s be set;
-        assume s in {y where y is Point of X: ||.y-x.|| < r};
-        then ex z be Point of X st s = z & ||.z-x.|| < r;
-        hence s in the carrier of X;
-      end;
-      hence thesis by TARSKI:def 3;
+A4: r > 0 and
+A5: {y where y is Point of X: ||.y-x.|| < r} c= U by NFCONT_1:def
+    3;
+    now
+      let s be set;
+      assume
+      s in {y where y is Point of X: ||.y-x.|| < r};
+      then ex z be Point of X st s = z & ||.z-x.|| < r;
+      hence s in the carrier of X;
     end;
-    then reconsider Vt={y where y is Point of X: ||.y-x.|| < r}
-    as Subset of TopSpaceNorm X;
+    then reconsider Vt={y where y is Point of X: ||.y-x.|| < r} as Subset of
+    TopSpaceNorm X by TARSKI:def 3;
     Vt={y where y is Point of X: ||.x-y.|| < r} by Lm5;
     then
-A7: Vt is open by Th8;
+A6: Vt is open by Th8;
     ||.x-x.|| =0 by NORMSP_1:10;
-    then xt in Vt by A1,A6;
-    hence Ut is a_neighborhood of xt by A1,A6,A7,CONNSP_2:8;
+    then xt in Vt by A2,A4;
+    hence Ut is a_neighborhood of xt by A1,A5,A6,CONNSP_2:8;
   end;
-  hence thesis by A2;
+  now
+    assume
+    Ut is a_neighborhood of xt;
+    then consider Vt being Subset of TopSpaceNorm X such that
+A7: Vt is open and
+A8: Vt c= Ut and
+A9: xt in Vt by CONNSP_2:8;
+    consider r be Real such that
+A10: r > 0 and
+A11: {y where y is Point of X: ||.x-y.|| < r} c= Vt by A2,A7,A9,Th7;
+A12: {y where y is Point of X: ||.x-y.|| < r} = {y where y is Point of X:
+    ||.y-x.|| < r} by Lm5;
+    {y where y is Point of X: ||.x-y.|| < r} c=U by A1,A8,A11,XBOOLE_1:1;
+    hence U is Neighbourhood of x by A10,A12,NFCONT_1:def 3;
+  end;
+  hence thesis by A3;
 end;
 
 theorem Th18:
-  for X,Y be RealNormSpace, f be PartFunc of X,Y,
-  ft be Function of TopSpaceNorm X,TopSpaceNorm Y, x be Point of X,
-  xt be Point of TopSpaceNorm X st f = ft & x = xt holds
-  f is_continuous_in x iff ft is_continuous_at xt
+  for X,Y be RealNormSpace, f be PartFunc of X,Y, ft be Function
+of TopSpaceNorm X,TopSpaceNorm Y, x be Point of X, xt be Point of TopSpaceNorm
+  X st f = ft & x = xt holds f is_continuous_in x iff ft is_continuous_at xt
 proof
-  let X,Y be RealNormSpace, f be PartFunc of X,Y,
-  ft be Function of TopSpaceNorm X,TopSpaceNorm Y,
-  x be Point of X, xt be Point of TopSpaceNorm X;
-  assume
-A1: f = ft & x = xt;
+  let X,Y be RealNormSpace, f be PartFunc of X,Y, ft be Function of
+TopSpaceNorm X,TopSpaceNorm Y, x be Point of X, xt be Point of TopSpaceNorm X;
+  assume that
+A1: f = ft and
+A2: x = xt;
+A3: dom f = the carrier of X by A1,FUNCT_2:def 1;
   then
-A2: dom f = the carrier of X by FUNCT_2:def 1;
-  then
-A3: ft.xt = f/.x by A1,PARTFUN1:def 8;
+A4: ft.xt = f/.x by A1,A2,PARTFUN1:def 8;
   hereby
     assume
-A4: f is_continuous_in x;
+A5: f is_continuous_in x;
     now
       let G be a_neighborhood of ft.xt;
       reconsider N1 = G as Subset of Y;
-      N1 is Neighbourhood of f/.x by A3,Th17;
+      N1 is Neighbourhood of f/.x by A4,Th17;
       then consider N being Neighbourhood of x such that
-A5:   f.:N c= N1 by A4,NFCONT_1:17;
-      reconsider H=N as a_neighborhood of xt by A1,Th17;
+A6:   f.:N c= N1 by A5,NFCONT_1:17;
+      reconsider H=N as a_neighborhood of xt by A2,Th17;
       take H;
-      thus ft.:H c= G by A1,A5;
+      thus ft.:H c= G by A1,A6;
     end;
     hence ft is_continuous_at xt by TMAP_1:def 2;
   end;
   assume
-A6: ft is_continuous_at xt;
+A7: ft is_continuous_at xt;
   now
     let N1 be Neighbourhood of f/.x;
     reconsider G=N1 as Subset of Y;
-    G is a_neighborhood of ft.xt by A3,Th17;
+    G is a_neighborhood of ft.xt by A4,Th17;
     then consider H being a_neighborhood of xt such that
-A7: ft.:H c= G by A6,TMAP_1:def 2;
+A8: ft.:H c= G by A7,TMAP_1:def 2;
     reconsider N=H as Subset of X;
-    reconsider N as Neighbourhood of x by A1,Th17;
+    reconsider N as Neighbourhood of x by A2,Th17;
     take N;
-    thus f.:N c= N1 by A1,A7;
+    thus f.:N c= N1 by A1,A8;
   end;
-  hence thesis by A2,NFCONT_1:17;
+  hence thesis by A3,NFCONT_1:17;
 end;
 
 theorem
-  for X,Y be RealNormSpace, f be PartFunc of X,Y,
-  ft be Function of TopSpaceNorm X,TopSpaceNorm Y st f = ft holds
-  f is_continuous_on the carrier of X iff ft is continuous
+  for X,Y be RealNormSpace, f be PartFunc of X,Y, ft be Function of
+TopSpaceNorm X,TopSpaceNorm Y st f = ft holds f is_continuous_on the carrier of
+  X iff ft is continuous
 proof
-  let X,Y be RealNormSpace, f be PartFunc of X,Y,
-  ft be Function of TopSpaceNorm X,TopSpaceNorm Y;
+  let X,Y be RealNormSpace, f be PartFunc of X,Y, ft be Function of
+  TopSpaceNorm X,TopSpaceNorm Y;
   assume
 A1: f=ft;
-  then
-A2: dom f =the carrier of X by FUNCT_2:def 1;
-A3: f|(the carrier of X)=f by RELSET_1:34;
+A2: f|(the carrier of X)=f by RELSET_1:34;
   hereby
     assume
-A4: f is_continuous_on the carrier of X;
+A3: f is_continuous_on the carrier of X;
     now
       let xt be Point of TopSpaceNorm X;
       reconsider x=xt as Point of X;
-      f|(the carrier of X) is_continuous_in x by A4,NFCONT_1:def 11;
-      hence ft is_continuous_at xt by A1,A3,Th18;
+      f|(the carrier of X) is_continuous_in x by A3,NFCONT_1:def 11;
+      hence ft is_continuous_at xt by A1,A2,Th18;
     end;
     hence ft is continuous by TMAP_1:49;
   end;
   assume
-A5: ft is continuous;
-  now
+A4: ft is continuous;
+A5: now
     let x be Point of X;
-    assume x in the carrier of X;
+    assume
+    x in the carrier of X;
     reconsider xt=x as Point of TopSpaceNorm X;
-    ft is_continuous_at xt by A5,TMAP_1:49;
-    hence f|(the carrier of X) is_continuous_in x by A1,A3,Th18;
+    ft is_continuous_at xt by A4,TMAP_1:49;
+    hence f|(the carrier of X) is_continuous_in x by A1,A2,Th18;
   end;
-  hence thesis by A2,NFCONT_1:def 11;
+  dom f =the carrier of X by A1,FUNCT_2:def 1;
+  hence thesis by A5,NFCONT_1:def 11;
 end;
 
 begin :: Linear Topological Space generated from Real Normed Space
@@ -1011,14 +1043,14 @@ definition
   let X be RealNormSpace;
   func LinearTopSpaceNorm X -> strict non empty RLTopStruct means
   :Def4:
-  the carrier of it = the carrier of X & 0.it = 0.X &
-  the addF of it = the addF of X & the Mult of it = the Mult of X &
-  the topology of it = the topology of TopSpaceNorm X;
+  the
+carrier of it = the carrier of X & 0.it = 0.X & the addF of it = the addF of X
+  & the Mult of it = the Mult of X & the topology of it = the topology of
+  TopSpaceNorm X;
   existence
   proof
     reconsider TP = the topology of TopSpaceNorm X as Subset-Family of X;
-    take RLTopStruct(# the carrier of X,0.X,
-      the addF of X,the Mult of X,TP #);
+    take RLTopStruct(# the carrier of X,0.X, the addF of X,the Mult of X,TP #);
     thus thesis;
   end;
   uniqueness;
@@ -1026,201 +1058,225 @@ end;
 
 registration
   let X be RealNormSpace;
-  cluster LinearTopSpaceNorm X -> add-continuous Mult-continuous
-    TopSpace-like Abelian add-associative right_zeroed
-    right_complementable RealLinearSpace-like;
+  cluster LinearTopSpaceNorm X -> add-continuous Mult-continuous TopSpace-like
+Abelian add-associative right_zeroed right_complementable RealLinearSpace-like;
   correctness
   proof
     thus LinearTopSpaceNorm X is add-continuous
     proof
       let x1,x2 be Point of LinearTopSpaceNorm X;
-      let V be Subset of LinearTopSpaceNorm X;
-      assume
-A1:   V is open & x1+x2 in V;
-      reconsider z12=x1+x2 as Element of MetricSpaceNorm X by Def4;
-      reconsider z1=x1 as Element of MetricSpaceNorm X by Def4;
       reconsider z2=x2 as Element of MetricSpaceNorm X by Def4;
+      reconsider z1=x1 as Element of MetricSpaceNorm X by Def4;
+      reconsider z12=x1+x2 as Element of MetricSpaceNorm X by Def4;
+      let V be Subset of LinearTopSpaceNorm X;
+      assume that
+A1:   V is open and
+A2:   x1+x2 in V;
       V in the topology of LinearTopSpaceNorm X by A1,PRE_TOPC:def 5;
       then V in the topology of TopSpaceNorm X by Def4;
       then consider r be Real such that
-A2:   r>0 & Ball(z12,r) c= V by A1,PCOMPS_1:def 5;
-      reconsider V1= Ball(z1,r/2), V2= Ball(z2,r/2)
-      as Subset of LinearTopSpaceNorm X by Def4;
-      Ball(z1,r/2) in the topology of TopSpaceNorm X &
-      Ball(z2,r/2) in the topology of TopSpaceNorm X by PCOMPS_1:33;
-      then Ball(z1,r/2) in the topology of LinearTopSpaceNorm X &
-      Ball(z2,r/2) in the topology of LinearTopSpaceNorm X by Def4;
-      then
-A3:   V1 is open & V2 is open by PRE_TOPC:def 5;
+A3:   r>0 and
+A4:   Ball(z12,r) c= V by A2,PCOMPS_1:def 5;
       set r2=r/2;
-A4:   0 < r2 by A2,XREAL_1:217;
-      dist(z1,z1) = 0 & dist(z2,z2) = 0 by METRIC_1:1;
-      then
-A5:   x1 in V1 & x2 in V2 by A4,METRIC_1:12;
-      V1+V2 c= V
+A5:   0 < r2 by A3,XREAL_1:217;
+      reconsider V1= Ball(z1,r/2), V2= Ball(z2,r/2) as Subset of
+      LinearTopSpaceNorm X by Def4;
+A6:   V1+V2 c= V
       proof
         let w be set;
-        assume w in V1+V2;
+        assume
+        w in V1+V2;
         then consider v,u be VECTOR of LinearTopSpaceNorm X such that
-A6:     w=v+u & v in V1 & u in V2;
+A7:     w=v+u and
+A8:     v in V1 & u in V2;
         reconsider v1=v, u1=u as Element of MetricSpaceNorm X by Def4;
-        reconsider w1=w as Element of MetricSpaceNorm X by A6,Def4;
-        reconsider zz12=x1+x2, zz1=x1, zz2=x2, vv1=v, uu1=u as Point of X
-        by Def4;
-        reconsider ww1=w as Point of X by A6,Def4;
-A7:     dist(z12,w1) = ||.zz12-ww1.|| by Def1
+        reconsider w1=w as Element of MetricSpaceNorm X by A7,Def4;
+        reconsider zz12=x1+x2, zz1=x1, zz2=x2, vv1=v, uu1=u as Point of X by
+        Def4;
+A9:     ||.(zz1-vv1)+(zz2-uu1).|| <= ||.zz1-vv1.|| + ||.zz2-uu1.|| & ||.
+        zz1-vv1.|| = dist(z1,v1) by Def1,NORMSP_1:def 2;
+        dist(z1,v1) < r/2 & dist(z2,u1) < r/2 by A8,METRIC_1:12;
+        then
+A10:    dist(z1,v1) + dist(z2,u1) < r/2 + r/2 by XREAL_1:10;
+        reconsider ww1=w as Point of X by A7,Def4;
+A11:    ||.zz2-uu1.|| = dist(z2,u1) by Def1;
+        dist(z12,w1) = ||.zz12-ww1.|| by Def1
           .= ||.(zz1+zz2)-ww1.|| by Def4
-          .= ||.(zz1+zz2)-(vv1+uu1).|| by A6,Def4
+          .= ||.(zz1+zz2)-(vv1+uu1).|| by A7,Def4
           .= ||.(zz1+zz2)+(-uu1+-vv1).|| by RLVECT_1:45
           .= ||.(zz1+zz2+-vv1)+ -uu1.|| by RLVECT_1:def 6
           .= ||.(zz1+-vv1+zz2)+ -uu1.|| by RLVECT_1:def 6
           .= ||.(zz1+-vv1)+(zz2+ -uu1).|| by RLVECT_1:def 6;
-A8:     ||.(zz1-vv1)+(zz2-uu1).|| <= ||.zz1-vv1.|| + ||.zz2-uu1.||
-        by NORMSP_1:def 2;
-A9:     ||.zz1-vv1.|| = dist(z1,v1) & ||.zz2-uu1.|| = dist(z2,u1) by Def1;
-        dist(z1,v1) < r/2 & dist(z2,u1) < r/2 by A6,METRIC_1:12;
-        then dist(z1,v1) + dist(z2,u1) < r/2 + r/2 by XREAL_1:10;
-        then dist(z12,w1) < r by A7,A8,A9,XXREAL_0:2;
+        then dist(z12,w1) < r by A9,A11,A10,XXREAL_0:2;
         then w1 in Ball(z12,r) by METRIC_1:12;
-        hence thesis by A2;
+        hence thesis by A4;
       end;
-      hence thesis by A3,A5;
+      dist(z2,z2) = 0 by METRIC_1:1;
+      then
+A12:  x2 in V2 by A5,METRIC_1:12;
+      Ball(z2,r/2) in the topology of TopSpaceNorm X by PCOMPS_1:33;
+      then Ball(z2,r/2) in the topology of LinearTopSpaceNorm X by Def4;
+      then
+A13:  V2 is open by PRE_TOPC:def 5;
+      Ball(z1,r/2) in the topology of TopSpaceNorm X by PCOMPS_1:33;
+      then Ball(z1,r/2) in the topology of LinearTopSpaceNorm X by Def4;
+      then
+A14:  V1 is open by PRE_TOPC:def 5;
+      dist(z1,z1) = 0 by METRIC_1:1;
+      then x1 in V1 by A5,METRIC_1:12;
+      hence thesis by A14,A13,A12,A6;
+    end;
+A15: now
+      let a,b be real number;
+      let v be VECTOR of LinearTopSpaceNorm X;
+      reconsider v1=v as VECTOR of X by Def4;
+      a * v=a*v1 & b * v=b*v1 by Def4;
+      then
+A16:  a * v1 + b * v1 = a*v +b*v by Def4;
+      (a+b) * v =(a+b) * v1 by Def4;
+      hence (a+b) * v = a*v +b*v by A16,RLVECT_1:def 9;
     end;
     thus LinearTopSpaceNorm X is Mult-continuous
     proof
-      let a be Real, x be Point of LinearTopSpaceNorm X,
-      V be Subset of LinearTopSpaceNorm X such that
-A10:  V is open & a*x in V;
+      let a be Real, x be Point of LinearTopSpaceNorm X, V be Subset of
+      LinearTopSpaceNorm X such that
+A17:  V is open and
+A18:  a*x in V;
       reconsider z=x, az=a*x as Element of MetricSpaceNorm X by Def4;
-      reconsider z1=z as Point of X;
-      V in the topology of LinearTopSpaceNorm X by A10,PRE_TOPC:def 5;
+      V in the topology of LinearTopSpaceNorm X by A17,PRE_TOPC:def 5;
       then V in the topology of TopSpaceNorm X by Def4;
       then consider r0 be Real such that
-A11:  r0>0 & Ball(az,r0) c= V by A10,PCOMPS_1:def 5;
+A19:  r0>0 and
+A20:  Ball(az,r0) c= V by A18,PCOMPS_1:def 5;
       set r=r0/2;
+      r > 0 by A19,XREAL_1:217;
+      then
+A21:  0 < r/2 by XREAL_1:217;
+      reconsider z1=z as Point of X;
       set r2 = min((r/2)/(1+||.z1.||+abs a),1);
       reconsider W= Ball(z,r2) as Subset of LinearTopSpaceNorm X by Def4;
-      Ball(z,r2) in the topology of TopSpaceNorm X by PCOMPS_1:33;
-      then Ball(z,r2) in the topology of LinearTopSpaceNorm X by Def4;
-      then
-A12:  W is open by PRE_TOPC:def 5;
-      0 <= ||.z1.|| & 0 <= abs a by COMPLEX1:132,NORMSP_1:8;
-      then 0 <= ||.z1.|| + abs a;
-      then
-A13:  0 < 1+(||.z1.||+abs a);
-A14:  r0/2 < r0/1 by A11,XREAL_1:78;
-      then r > 0 & r < r0 by A11,XREAL_1:217;
-      then
-A15:  0 < r/2 by XREAL_1:217;
-      then 0/(1+||.z1.||+abs a) < (r/2)/(1+||.z1.||+abs a) by A13,XREAL_1:76;
-      then
-A16:  0 < r2 by XXREAL_0:15;
-      dist(z,z) = 0 by METRIC_1:1;
-      then
-A17:  x in W by A16,METRIC_1:12;
-      for s being Real st abs(s-a) < r2 holds s*W c= V
+A22:  r0/2 < r0/1 by A19,XREAL_1:78;
+A23:  for s being Real st abs(s-a) < r2 holds s*W c= V
       proof
         let s be Real;
-        assume abs(s-a) < r2;
+        assume
+        abs(s-a) < r2;
         then
-A18:    abs(a-s) <= r2 by COMPLEX1:146;
+A24:    abs(a-s) <= r2 by COMPLEX1:146;
         thus s*W c= V
         proof
           let w be set;
-          assume w in s*W;
+          assume
+          w in s*W;
           then consider v be VECTOR of LinearTopSpaceNorm X such that
-A19:      w=s*v & v in W;
+A25:      w=s*v and
+A26:      v in W;
           reconsider v1=v as Element of MetricSpaceNorm X by Def4;
-          reconsider w1=w as Element of MetricSpaceNorm X by A19,Def4;
+A27:      dist(z,v1) < r2 by A26,METRIC_1:12;
+          reconsider w1=w as Element of MetricSpaceNorm X by A25,Def4;
           reconsider zza=a*x, zz=x, vv1=v as Point of X by Def4;
-          reconsider ww1=w as Point of X by A19,Def4;
-A20:      dist(az,w1) = ||.zza-ww1.|| by Def1
-            .= ||.(a*zz)-ww1.|| by Def4
-            .= ||.(a*zz)-(s*vv1).|| by A19,Def4;
+A28:      ||.zz-vv1.|| = dist(z,v1) by Def1;
+          r2 <= 1 by XXREAL_0:17;
+          then ||. zz-vv1 .|| <= 1 by A28,A27,XXREAL_0:2;
+          then ||.vv1-zz .|| <= 1 by NORMSP_1:11;
+          then
+A29:      ||.zz.|| + ||.vv1-zz .|| <= ||.zz.|| + 1 by XREAL_1:8;
+          zz+(vv1-zz) = vv1-(zz-zz) by RLVECT_1:43
+            .=vv1-0.X by RLVECT_1:28
+            .=vv1 by RLVECT_1:26;
+          then ||. vv1 .|| <= ||.zz.|| + ||.vv1-zz .|| by
+          NORMSP_1:def 2;
+          then
+A30:      ||.vv1.|| <= ||.zz.|| +1 by A29,XXREAL_0:2;
+A31:      0 <= 1+||.z1.|| by NORMSP_1:8,XREAL_1:41;
+          then
+A32:      r2*(||.zz.|| +1) <= (r/2/(1+||.z1.||+abs a))*(||.zz.||+1) by
+          XREAL_1:66,XXREAL_0:17;
+          0 <= abs(a-s) & 0 <= ||.vv1.|| by COMPLEX1:132,NORMSP_1:8;
+          then abs(a-s) * ||.vv1.|| <= r2 * (||.zz.|| + 1) by A24,A30,
+          XREAL_1:68;
+          then abs(a-s)*||.vv1.|| <= r/2/(1+||.z1.||+abs a)*(||.z1.||+1) by
+          A32,XXREAL_0:2;
+          then
+A33:      abs(a-s)*||.vv1.|| <= (||.z1.||+1)/(1+||.z1.||+abs a)* (r/2) by
+          XCMPLX_1:76;
+          0 <= abs a by COMPLEX1:132;
+          then 0 + (1+||.z1.||) <= abs a + (1+||.z1.||) by XREAL_1:8;
+          then (||.z1.||+1)/(1+||.z1.||+abs a) <= 1 by A31,XREAL_1:185;
+          then (||.z1.||+1)/(1+||.z1.||+abs a)*(r/2) <=1*(r/2) by A19,
+          XREAL_1:66;
+          then
+A34:      abs(a-s) * ||.vv1.|| <= r/2 by A33,XXREAL_0:2;
+          reconsider ww1=w as Point of X by A25,Def4;
           a*(zz-vv1)-(s-a)*vv1 = a*zz-a*vv1-(s-a)*vv1 by RLVECT_1:48
             .= a*zz-a*vv1-(s*vv1-a*vv1) by RLVECT_1:49
             .= a*zz-(s*vv1-a*vv1 + a*vv1) by RLVECT_1:41
             .= a*zz-(s*vv1-(a*vv1 - a*vv1)) by RLVECT_1:43
             .= a*zz-(s*vv1-0.X) by RLVECT_1:28
             .= a*zz-s*vv1 by RLVECT_1:26;
-
-then ||.a*zz-s*vv1.|| <= ||.a*(zz-vv1).|| + ||.(s-a)*vv1.|| by NORMSP_1:7;
-          then ||.a*zz-s*vv1.|| <= abs a * ||.zz-vv1.|| + ||.(s-a)*vv1.||
-          by NORMSP_1:def 2;
+          then ||.a*zz-s*vv1.|| <= ||.a*(zz-vv1).|| + ||.(s-a)*vv1.|| by
+          NORMSP_1:7;
+          then ||.a*zz-s*vv1.|| <= abs a * ||.zz-vv1.|| + ||.(s-a)*vv1.|| by
+          NORMSP_1:def 2;
           then ||.a*zz-s*vv1.|| <= abs a * ||.zz-vv1.|| + abs(s-a)*||.vv1.||
           by NORMSP_1:def 2;
           then
-A21:      ||.a*zz-s*vv1.|| <= abs a * ||.zz-vv1.|| + abs(a-s)* ||.vv1.||
+A35:      ||.a*zz-s*vv1.|| <= abs a * ||.zz-vv1.|| + abs(a-s)* ||.vv1.||
           by COMPLEX1:146;
-A22:      ||.zz-vv1.|| = dist(z,v1) by Def1;
-A23:      dist(z,v1) < r2 by A19,METRIC_1:12;
-A24:      0 <= abs a by COMPLEX1:132;
+A36:      0 <= abs a by COMPLEX1:132;
           then
-A25:      ||.zz-vv1.||*abs a <= r2*abs a by A22,A23,XREAL_1:66;
-
-r2*abs a <= r/2/(1+||.z1.||+abs a)*abs a by A24,XREAL_1:66,XXREAL_0:17;
-          then abs a * ||.zz-vv1.|| <= abs a*(r/2/(1+||.z1.||+abs a))
-          by A25,XXREAL_0:2;
-          then
-A26:      abs a* ||.zz-vv1.|| <= abs a/(1+||.z1.||+abs a)*(r/2)
-          by XCMPLX_1:76;
+A37:      r2*abs a <= r/2/(1+||.z1.||+abs a)*abs a by XREAL_1:66,
+          XXREAL_0:17;
           0 <= 1+||.z1.|| by NORMSP_1:8,XREAL_1:41;
           then 0 + abs a <=1+||.z1.||+abs a by XREAL_1:8;
-          then abs a/(1+||.z1.||+abs a) <= 1 by A24,XREAL_1:185;
-          then abs a/(1+||.z1.||+abs a)*(r/2) <= 1*(r/2) by A15,XREAL_1:66;
+          then abs a/(1+||.z1.||+abs a) <= 1 by A36,XREAL_1:185;
           then
-A27:      abs a * ||.zz-vv1.|| <= r/2 by A26,XXREAL_0:2;
-          zz+(vv1-zz) = vv1-(zz-zz) by RLVECT_1:43
-            .=vv1-0.X by RLVECT_1:28
-            .=vv1 by RLVECT_1:26;
+A38:      abs a/(1+||.z1.||+abs a)*(r/2) <= 1*(r/2) by A19,
+          XREAL_1:66;
+          ||.zz-vv1.||*abs a <= r2*abs a by A28,A27,A36,XREAL_1:66;
+          then abs a * ||.zz-vv1.|| <= abs a*(r/2/(1+||.z1.||+abs a)) by
+          A37,XXREAL_0:2;
+          then abs a* ||.zz-vv1.|| <= abs a/(1+||.z1.||+abs a)*(r/2) by
+          XCMPLX_1:76;
+          then abs a * ||.zz-vv1.|| <= r/2 by A38,XXREAL_0:2;
           then
-A28:      ||. vv1 .|| <= ||.zz.|| + ||.vv1-zz .|| by NORMSP_1:def 2;
-          r2 <= 1 by XXREAL_0:17;
-          then ||. zz-vv1 .|| <= 1 by A22,A23,XXREAL_0:2;
-          then ||.vv1-zz .|| <= 1 by NORMSP_1:11;
-          then ||.zz.|| + ||.vv1-zz .|| <= ||.zz.|| + 1 by XREAL_1:8;
-          then
-A29:      ||.vv1.|| <= ||.zz.|| +1 by A28,XXREAL_0:2;
-          0 <= abs(a-s) & 0 <= ||.vv1.|| by COMPLEX1:132,NORMSP_1:8;
-          then
-A30:      abs(a-s) * ||.vv1.|| <= r2 * (||.zz.|| + 1) by A18,A29,XREAL_1:68;
-A31:      0 <= 1+||.z1.|| by NORMSP_1:8,XREAL_1:41;
-          then r2*(||.zz.|| +1) <= (r/2/(1+||.z1.||+abs a))*(||.zz.||+1)
-          by XREAL_1:66,XXREAL_0:17;
-          then abs(a-s)*||.vv1.|| <= r/2/(1+||.z1.||+abs a)*(||.z1.||+1)
-          by A30,XXREAL_0:2;
-          then
-A32:      abs(a-s)*||.vv1.|| <= (||.z1.||+1)/(1+||.z1.||+abs a)* (r/2)
-          by XCMPLX_1:76;
-          0 <= abs a by COMPLEX1:132;
-          then 0 + (1+||.z1.||) <= abs a + (1+||.z1.||) by XREAL_1:8;
-          then (||.z1.||+1)/(1+||.z1.||+abs a) <= 1 by A31,XREAL_1:185;
-
-then (||.z1.||+1)/(1+||.z1.||+abs a)*(r/2) <=1*(r/2) by A15,XREAL_1:66;
-          then abs(a-s) * ||.vv1.|| <= r/2 by A32,XXREAL_0:2;
-          then abs a * ||.zz-vv1.|| + abs(a-s) * ||.vv1.||<= r/2 + r/2
-          by A27,XREAL_1:9;
-          then dist(az,w1) <= r by A20,A21,XXREAL_0:2;
-          then dist(az,w1) < r0 by A14,XXREAL_0:2;
+A39:      abs a * ||.zz-vv1.|| + abs(a-s) * ||.vv1.||<= r/2 + r/2 by
+          A34,XREAL_1:9;
+          dist(az,w1) = ||.zza-ww1.|| by Def1
+            .= ||.(a*zz)-ww1.|| by Def4
+            .= ||.(a*zz)-(s*vv1).|| by A25,Def4;
+          then dist(az,w1) <= r by A35,A39,XXREAL_0:2;
+          then dist(az,w1) < r0 by A22,XXREAL_0:2;
           then w1 in Ball(az,r0) by METRIC_1:12;
-          hence thesis by A11;
+          hence thesis by A20;
         end;
       end;
-      hence thesis by A12,A16,A17;
+      0 <= ||.z1.|| & 0 <= abs a by COMPLEX1:132,NORMSP_1:8;
+      then 0/(1+||.z1.||+abs a) < (r/2)/(1+||.z1.||+abs a) by
+      A21, XREAL_1
+      :76;
+      then
+A40:  0 < r2 by XXREAL_0:15;
+      Ball(z,r2) in the topology of TopSpaceNorm X by PCOMPS_1:33;
+      then Ball(z,r2) in the topology of LinearTopSpaceNorm X by Def4;
+      then
+A41:  W is open by PRE_TOPC:def 5;
+      dist(z,z) = 0 by METRIC_1:1;
+      then x in W by A40,METRIC_1:12;
+      hence thesis by A41,A40,A23;
     end;
     thus LinearTopSpaceNorm X is TopSpace-like
     proof
       set LTSN=LinearTopSpaceNorm X;
-A33:  the carrier of LTSN = the carrier of TopSpaceNorm X by Def4;
-A34:  the topology of LTSN = the topology of TopSpaceNorm X by Def4;
+A42:  the topology of LTSN = the topology of TopSpaceNorm X by Def4;
       then
-A35:  the carrier of LTSN in the topology of LTSN by A33,PRE_TOPC:def 1;
-A36:  for a being Subset-Family of LTSN st a c= the topology of LTSN holds
-      union a in the topology of LTSN by A33,A34,PRE_TOPC:def 1;
-      for a,b being Subset of LTSN st
-      a in the topology of LTSN & b in the topology of LTSN holds
-      a /\ b in the topology of LTSN by A34,PRE_TOPC:def 1;
-      hence thesis by A35,A36,PRE_TOPC:def 1;
+A43:  for a,b being Subset of LTSN st a in the topology of LTSN & b in
+the topology of LTSN holds a /\ b in the topology of LTSN by PRE_TOPC:def 1;
+      the carrier of LTSN = the carrier of TopSpaceNorm X by Def4;
+      then the carrier of LTSN in the topology of LTSN & for a being
+      Subset-Family of LTSN st a c= the topology of LTSN holds union a in the
+      topology of LTSN by A42,PRE_TOPC:def 1;
+      hence thesis by A43,PRE_TOPC:def 1;
     end;
     thus LinearTopSpaceNorm X is Abelian
     proof
@@ -1234,10 +1290,11 @@ A36:  for a being Subset-Family of LTSN st a c= the topology of LTSN holds
     proof
       let v,w,x be VECTOR of LinearTopSpaceNorm X;
       reconsider v1=v,w1=w,x1=x as VECTOR of X by Def4;
-A37:  v+w = v1+w1 & w+x = w1+x1 by Def4;
+A44:  w+x = w1+x1 by Def4;
+      v+w = v1+w1 by Def4;
       hence v+w+x = v1+w1+x1 by Def4
         .=v1+(w1+x1) by RLVECT_1:def 6
-        .=v+(w+x) by A37,Def4;
+        .=v+(w+x) by A44,Def4;
     end;
     thus LinearTopSpaceNorm X is right_zeroed
     proof
@@ -1257,76 +1314,71 @@ A37:  v+w = v1+w1 & w+x = w1+x1 by Def4;
         .= 0.X by RLVECT_1:28
         .=0.LinearTopSpaceNorm X by Def4;
     end;
-    thus LinearTopSpaceNorm X is RealLinearSpace-like
-    proof
-A38:  now
-        let a be real number;
-        let v,w be VECTOR of LinearTopSpaceNorm X;
-        reconsider v1=v,w1=w as VECTOR of X by Def4;
-        v+w =v1+w1 & a * v=a*v1 & a * w=a*w1 by Def4;
-        then a * (v + w) =a * (v1 + w1) & a * v1 + a * w1 = a*v +a*w by Def4;
-        hence a * (v + w) = a*v +a*w by RLVECT_1:def 9;
-      end;
-A39:  now
-        let a,b be real number;
-        let v be VECTOR of LinearTopSpaceNorm X;
-        reconsider v1=v as VECTOR of X by Def4;
-        a * v=a*v1 & b * v=b*v1 by Def4;
-        then (a+b) * v =(a+b) * v1 & a * v1 + b * v1 = a*v +b*v by Def4;
-        hence (a+b) * v = a*v +b*v by RLVECT_1:def 9;
-      end;
-A40:  now
-        let a,b be real number;
-        let v be VECTOR of LinearTopSpaceNorm X;
-        reconsider v1=v as VECTOR of X by Def4;
-        b * v=b*v1 by Def4;
-        then a * (b * v1) = a*(b*v) by Def4;
-        then a*b * v1 = a*(b*v) by RLVECT_1:def 9;
-        hence a*b * v = a*(b*v) by Def4;
-      end;
-      now
-        let v be VECTOR of LinearTopSpaceNorm X;
-        reconsider v1=v as VECTOR of X by Def4;
-        thus 1 * v =1 * v1 by Def4
-          .= v by RLVECT_1:def 9;
-      end;
-      hence thesis by A38,A39,A40,RLVECT_1:def 9;
+A45: now
+      let a,b be real number;
+      let v be VECTOR of LinearTopSpaceNorm X;
+      reconsider v1=v as VECTOR of X by Def4;
+      b * v=b*v1 by Def4;
+      then a * (b * v1) = a*(b*v) by Def4;
+      then a*b * v1 = a*(b*v) by RLVECT_1:def 9;
+      hence a*b * v = a*(b*v) by Def4;
     end;
+A46: now
+      let a be real number;
+      let v,w be VECTOR of LinearTopSpaceNorm X;
+      reconsider v1=v,w1=w as VECTOR of X by Def4;
+      a * v=a*v1 & a * w=a*w1 by Def4;
+      then
+A47:  a * v1 + a * w1 = a*v +a*w by Def4;
+      v+w =v1+w1 by Def4;
+      then a * (v + w) =a * (v1 + w1) by Def4;
+      hence a * (v + w) = a*v +a*w by A47,RLVECT_1:def 9;
+    end;
+    now
+      let v be VECTOR of LinearTopSpaceNorm X;
+      reconsider v1=v as VECTOR of X by Def4;
+      thus 1 * v =1 * v1 by Def4
+        .= v by RLVECT_1:def 9;
+    end;
+    hence LinearTopSpaceNorm X is RealLinearSpace-like by A46,A15,A45,
+    RLVECT_1:def 9;
   end;
 end;
 
 theorem Th20:
-  for X be RealNormSpace, V be Subset of TopSpaceNorm X,
-  Vt be Subset of LinearTopSpaceNorm X st V=Vt holds V is open iff Vt is open
+  for X be RealNormSpace, V be Subset of TopSpaceNorm X, Vt be
+  Subset of LinearTopSpaceNorm X st V=Vt holds V is open iff Vt is open
 proof
-  let X be RealNormSpace, V be Subset of TopSpaceNorm X,
-  Vt be Subset of LinearTopSpaceNorm X;
+  let X be RealNormSpace, V be Subset of TopSpaceNorm X, Vt be Subset of
+  LinearTopSpaceNorm X;
+  Vt is open iff Vt in the topology of LinearTopSpaceNorm X by PRE_TOPC:
+  def 5;
+  then
+A1: Vt is open iff Vt in the topology of TopSpaceNorm X by Def4;
   assume
-A1: V=Vt;
-  Vt is open iff Vt in the topology of LinearTopSpaceNorm X by PRE_TOPC:def 5;
-  then Vt is open iff Vt in the topology of TopSpaceNorm X by Def4;
+  V=Vt;
   hence thesis by A1,PRE_TOPC:def 5;
 end;
 
 theorem Th21:
-  for X be RealNormSpace, V be Subset of TopSpaceNorm X,
-  Vt be Subset of LinearTopSpaceNorm X st
-  V=Vt holds V is closed iff Vt is closed
+  for X be RealNormSpace, V be Subset of TopSpaceNorm X, Vt be
+  Subset of LinearTopSpaceNorm X st V=Vt holds V is closed iff Vt is closed
 proof
-  let X be RealNormSpace, V be Subset of TopSpaceNorm X,
-  Vt be Subset of LinearTopSpaceNorm X;
+  let X be RealNormSpace, V be Subset of TopSpaceNorm X, Vt be Subset of
+  LinearTopSpaceNorm X;
   assume
-A1: V=Vt;
-A2: Vt` =V` by A1,Def4;
+  V=Vt;
+  then
+A1: Vt` =V` by Def4;
   Vt is closed iff Vt` is open by TOPS_1:29;
-  then Vt is closed iff V` is open by A2,Th20;
+  then Vt is closed iff V` is open by A1,Th20;
   hence thesis by TOPS_1:29;
 end;
 
 theorem
-  for X be RealNormSpace, V be Subset of LinearTopSpaceNorm X holds V is open
-  iff (for x be Point of X st x in V holds
-  ex r be Real st r>0 & {y where y is Point of X:||.x-y.|| < r} c= V)
+  for X be RealNormSpace, V be Subset of LinearTopSpaceNorm X holds V is
+  open iff for x be Point of X st x in V holds ex r be Real st r>0 & {y where y
+  is Point of X:||.x-y.|| < r} c= V
 proof
   let X be RealNormSpace, V be Subset of LinearTopSpaceNorm X;
   reconsider V0 = V as Subset of TopSpaceNorm X by Def4;
@@ -1335,31 +1387,31 @@ proof
 end;
 
 theorem
-  for X be RealNormSpace, x be Point of X, r be Real,
-  V be Subset of LinearTopSpaceNorm X st
-  V = {y where y is Point of X:||.x-y.|| < r} holds V is open
+  for X be RealNormSpace, x be Point of X, r be Real, V be Subset of
+LinearTopSpaceNorm X st V = {y where y is Point of X:||.x-y.|| < r} holds V is
+  open
 proof
-  let X be RealNormSpace, x be Point of X, r be Real,
-  V be Subset of LinearTopSpaceNorm X;
-  assume
-A1: V = {y where y is Point of X:||.x-y.|| < r};
+  let X be RealNormSpace, x be Point of X, r be Real, V be Subset of
+  LinearTopSpaceNorm X;
   reconsider V0 = V as Subset of TopSpaceNorm X by Def4;
-  V0 is open by A1,Th8;
+  assume
+  V = {y where y is Point of X:||.x-y.|| < r};
+  then V0 is open by Th8;
   hence thesis by Th20;
 end;
 
 theorem
-  for X be RealNormSpace, x be Point of X, r be Real,
-  V be Subset of TopSpaceNorm X st
-  V = {y where y is Point of X:||.x-y.|| <= r} holds V is closed
+  for X be RealNormSpace, x be Point of X, r be Real, V be Subset of
+  TopSpaceNorm X st V = {y where y is Point of X:||.x-y.|| <= r} holds V is
+  closed
 proof
-  let X be RealNormSpace,
-  x be Point of X, r be Real, V be Subset of TopSpaceNorm X;
+  let X be RealNormSpace, x be Point of X, r be Real, V be Subset of
+  TopSpaceNorm X;
   assume
 A1: V = {y where y is Point of X:||.x-y.|| <= r};
   reconsider z=x as Element of MetricSpaceNorm X;
-  ex t be Point of X st
-  t=x & cl_Ball(z,r) = {y where y is Point of X: ||.t-y.|| <= r} by Th3;
+  ex t be Point of X st t=x & cl_Ball(z,r) = {y where y is Point of X: ||.
+  t-y.|| <= r} by Th3;
   hence thesis by A1,TOPREAL6:65;
 end;
 
@@ -1369,73 +1421,78 @@ registration
   coherence
   proof
     let p,q be Point of LinearTopSpaceNorm X;
-    assume
-A1: p <> q;
+A1: the topology of LinearTopSpaceNorm X = the topology of TopSpaceNorm X
+    by Def4;
     reconsider p1=p, q1=q as Point of TopSpaceNorm X by Def4;
-    consider W1,V1 being Subset of TopSpaceNorm X such that
-A2: W1 is open & V1 is open &
-    p1 in W1 & q1 in V1 & W1 misses V1 by A1,PRE_TOPC:def 16;
+    assume
+    p <> q;
+    then consider W1,V1 being Subset of TopSpaceNorm X such that
+A2: W1 is open and
+A3: V1 is open and
+A4: p1 in W1 & q1 in V1 & W1 misses V1 by PRE_TOPC:def 16;
     reconsider W=W1, V=V1 as Subset of LinearTopSpaceNorm X by Def4;
-A3: the topology of LinearTopSpaceNorm X
-    = the topology of TopSpaceNorm X by Def4;
-    W1 in the topology of TopSpaceNorm X &
-    V1 in the topology of TopSpaceNorm X by A2,PRE_TOPC:def 5;
-    then W is open & V is open by A3,PRE_TOPC:def 5;
-    hence thesis by A2;
+    V1 in the topology of TopSpaceNorm X by A3,PRE_TOPC:def 5;
+    then
+A5: V is open by A1,PRE_TOPC:def 5;
+    W1 in the topology of TopSpaceNorm X by A2,PRE_TOPC:def 5;
+    then W is open by A1,PRE_TOPC:def 5;
+    hence thesis by A4,A5;
   end;
   cluster LinearTopSpaceNorm X -> sober;
   coherence by YELLOW_8:31;
 end;
 
 theorem Th25:
-  for X be RealNormSpace, S be Subset-Family of TopSpaceNorm X,
-  St be Subset-Family of LinearTopSpaceNorm X, x be Point of TopSpaceNorm X,
-  xt be Point of LinearTopSpaceNorm X st S=St & x=xt holds
-  St is Basis of xt iff S is Basis of x
+  for X be RealNormSpace, S be Subset-Family of TopSpaceNorm X, St
+  be Subset-Family of LinearTopSpaceNorm X, x be Point of TopSpaceNorm X, xt be
+  Point of LinearTopSpaceNorm X st S=St & x=xt holds St is Basis of xt iff S is
+  Basis of x
 proof
-  let X be RealNormSpace, S be Subset-Family of TopSpaceNorm X,
-  St be Subset-Family of LinearTopSpaceNorm X, x be Point of TopSpaceNorm X,
-  xt be Point of LinearTopSpaceNorm X;
-  assume
-A1: S=St & x=xt;
-  then
-A2: Intersect S = Intersect St by Def4;
+  let X be RealNormSpace, S be Subset-Family of TopSpaceNorm X, St be
+  Subset-Family of LinearTopSpaceNorm X, x be Point of TopSpaceNorm X, xt be
+  Point of LinearTopSpaceNorm X;
+  assume that
+A1: S=St and
+A2: x=xt;
+A3: Intersect S = Intersect St by A1,Def4;
   hereby
     assume
-A3: St is Basis of xt;
+A4: St is Basis of xt;
     then St c= the topology of LinearTopSpaceNorm X by YELLOW_8:def 2;
     then
-A4: S c= the topology of TopSpaceNorm X by A1,Def4;
-A5: x in Intersect S by A1,A2,A3,YELLOW_8:def 2;
-    now
+A5: S c= the topology of TopSpaceNorm X by A1,Def4;
+A6: now
       let U be Subset of TopSpaceNorm X such that
-A6:   U is open & x in U;
-      reconsider Ut=U as open Subset of LinearTopSpaceNorm X by A6,Def4,Th20;
+A7:   U is open and
+A8:   x in U;
+      reconsider Ut=U as open Subset of LinearTopSpaceNorm X by A7,Def4,Th20;
       consider Vt being Subset of LinearTopSpaceNorm X such that
-A7:   Vt in St & Vt c= Ut by A1,A3,A6,YELLOW_8:def 2;
+A9:   Vt in St & Vt c= Ut by A2,A4,A8,YELLOW_8:def 2;
       reconsider V=Vt as Subset of TopSpaceNorm X by Def4;
       take V;
-      thus V in S & V c= U by A1,A7;
+      thus V in S & V c= U by A1,A9;
     end;
-    hence S is Basis of x by A4,A5,YELLOW_8:def 2;
+    x in Intersect S by A2,A3,A4,YELLOW_8:def 2;
+    hence S is Basis of x by A5,A6,YELLOW_8:def 2;
   end;
   assume
-A8: S is Basis of x;
+A10: S is Basis of x;
   then S c= the topology of TopSpaceNorm X by YELLOW_8:def 2;
   then
-A9: St c= the topology of LinearTopSpaceNorm X by A1,Def4;
-A10: xt in Intersect St by A1,A2,A8,YELLOW_8:def 2;
-  now
+A11: St c= the topology of LinearTopSpaceNorm X by A1,Def4;
+A12: now
     let Ut be Subset of LinearTopSpaceNorm X such that
-A11: Ut is open & xt in Ut;
-    reconsider U=Ut as open Subset of TopSpaceNorm X by A11,Def4,Th20;
+A13: Ut is open and
+A14: xt in Ut;
+    reconsider U=Ut as open Subset of TopSpaceNorm X by A13,Def4,Th20;
     consider V being Subset of TopSpaceNorm X such that
-A12: V in S & V c= U by A1,A8,A11,YELLOW_8:def 2;
+A15: V in S & V c= U by A2,A10,A14,YELLOW_8:def 2;
     reconsider Vt=V as Subset of LinearTopSpaceNorm X by Def4;
     take Vt;
-    thus Vt in St & Vt c= Ut by A1,A12;
+    thus Vt in St & Vt c= Ut by A1,A15;
   end;
-  hence thesis by A9,A10,YELLOW_8:def 2;
+  xt in Intersect St by A2,A3,A10,YELLOW_8:def 2;
+  hence thesis by A11,A12,YELLOW_8:def 2;
 end;
 
 registration
@@ -1462,266 +1519,280 @@ A1:   B is countable by FRECHET:def 1;
 end;
 
 theorem Th26:
-  for X be RealNormSpace, S be sequence of TopSpaceNorm X,
-  St be sequence of LinearTopSpaceNorm X, x be Point of TopSpaceNorm X,
-  xt be Point of LinearTopSpaceNorm X st S=St & x=xt holds
-  St is_convergent_to xt iff S is_convergent_to x
+  for X be RealNormSpace, S be sequence of TopSpaceNorm X, St be
+sequence of LinearTopSpaceNorm X, x be Point of TopSpaceNorm X, xt be Point of
+  LinearTopSpaceNorm X st S=St & x=xt holds St is_convergent_to xt iff S
+  is_convergent_to x
 proof
-  let X be RealNormSpace, S be sequence of TopSpaceNorm X,
-  St be sequence of LinearTopSpaceNorm X, x be Point of TopSpaceNorm X,
-  xt be Point of LinearTopSpaceNorm X;
-  assume
-A1: S=St & x=xt;
-A2: now
+  let X be RealNormSpace, S be sequence of TopSpaceNorm X, St be sequence of
+  LinearTopSpaceNorm X, x be Point of TopSpaceNorm X, xt be Point of
+  LinearTopSpaceNorm X;
+  assume that
+A1: S=St and
+A2: x=xt;
+A3: now
     assume
-A3: St is_convergent_to xt;
-    now
-      let U1 be Subset of TopSpaceNorm X such that
-A4:   U1 is open & x in U1;
-      reconsider U1t=U1 as open Subset of LinearTopSpaceNorm X
-      by A4,Def4,Th20;
-      consider n being Element of NAT such that
-A5:   for m being Element of NAT st
-      n <= m holds St.m in U1t by A1,A3,A4,FRECHET:def 2;
-      take n;
-      let m be Element of NAT;
-      assume n <= m;
-      hence S.m in U1 by A1,A5;
-    end;
-    hence S is_convergent_to x by FRECHET:def 2;
-  end;
-  now
-    assume
-A6: S is_convergent_to x;
+A4: S is_convergent_to x;
     now
       let U1t be Subset of LinearTopSpaceNorm X such that
-A7:   U1t is open & xt in U1t;
-      reconsider U1=U1t as open Subset of TopSpaceNorm X by A7,Def4,Th20;
+A5:   U1t is open and
+A6:   xt in U1t;
+      reconsider U1=U1t as open Subset of TopSpaceNorm X by A5,Def4,Th20;
       consider n being Element of NAT such that
-A8:   for m being Element of NAT st
-      n <= m holds S.m in U1 by A1,A6,A7,FRECHET:def 2;
+A7:   for m being Element of NAT st n <= m holds S.m in U1 by A2,A4,
+      A6,FRECHET:def 2;
       take n;
       let m be Element of NAT;
-      assume n <= m;
-      hence St.m in U1t by A1,A8;
+      assume
+      n <= m;
+      hence St.m in U1t by A1,A7;
     end;
     hence St is_convergent_to xt by FRECHET:def 2;
   end;
-  hence thesis by A2;
+  now
+    assume
+A8: St is_convergent_to xt;
+    now
+      let U1 be Subset of TopSpaceNorm X such that
+A9:   U1 is open and
+A10:  x in U1;
+      reconsider U1t=U1 as open Subset of LinearTopSpaceNorm X by A9,Def4,Th20;
+      consider n being Element of NAT such that
+A11:  for m being Element of NAT st n <= m holds St.m in U1t by A2,A8
+      ,
+      A10,FRECHET:def 2;
+      take n;
+      let m be Element of NAT;
+      assume
+      n <= m;
+      hence S.m in U1 by A1,A11;
+    end;
+    hence S is_convergent_to x by FRECHET:def 2;
+  end;
+  hence thesis by A3;
 end;
 
 theorem Th27:
-  for X be RealNormSpace, S be sequence of TopSpaceNorm X,
-  St be sequence of LinearTopSpaceNorm X st S=St holds
-  St is convergent iff S is convergent
+  for X be RealNormSpace, S be sequence of TopSpaceNorm X, St be
+  sequence of LinearTopSpaceNorm X st S=St holds St is convergent iff S is
+  convergent
 proof
-  let X be RealNormSpace, S be sequence of TopSpaceNorm X,
-  St be sequence of LinearTopSpaceNorm X;
+  let X be RealNormSpace, S be sequence of TopSpaceNorm X, St be sequence of
+  LinearTopSpaceNorm X;
   assume
 A1: S=St;
 A2: now
-    assume St is convergent;
-    then consider xt be Point of LinearTopSpaceNorm X such that
-A3: St is_convergent_to xt by FRECHET:def 3;
-    reconsider x=xt as Point of TopSpaceNorm X by Def4;
-    S is_convergent_to x by A1,A3,Th26;
-    hence S is convergent by FRECHET:def 3;
+    assume
+    S is convergent;
+    then consider x be Point of TopSpaceNorm X such that
+A3: S is_convergent_to x by FRECHET:def 3;
+    reconsider xt=x as Point of LinearTopSpaceNorm X by Def4;
+    St is_convergent_to xt by A1,A3,Th26;
+    hence St is convergent by FRECHET:def 3;
   end;
   now
-    assume S is convergent;
-    then consider x be Point of TopSpaceNorm X such that
-A4: S is_convergent_to x by FRECHET:def 3;
-    reconsider xt=x as Point of LinearTopSpaceNorm X by Def4;
-    St is_convergent_to xt by A1,A4,Th26;
-    hence St is convergent by FRECHET:def 3;
+    assume
+    St is convergent;
+    then consider xt be Point of LinearTopSpaceNorm X such that
+A4: St is_convergent_to xt by FRECHET:def 3;
+    reconsider x=xt as Point of TopSpaceNorm X by Def4;
+    S is_convergent_to x by A1,A4,Th26;
+    hence S is convergent by FRECHET:def 3;
   end;
   hence thesis by A2;
 end;
 
 theorem Th28:
-  for X be RealNormSpace, S be sequence of TopSpaceNorm X,
-  St be sequence of LinearTopSpaceNorm X st
-  S=St & St is convergent holds Lim S = Lim St & lim S = lim St
+  for X be RealNormSpace, S be sequence of TopSpaceNorm X, St be
+  sequence of LinearTopSpaceNorm X st S=St & St is convergent holds Lim S = Lim
+  St & lim S = lim St
 proof
-  let X be RealNormSpace, S be sequence of TopSpaceNorm X,
-  St be sequence of LinearTopSpaceNorm X;
-  assume
-A1: S=St & St is convergent;
-  then
-A2: S is convergent by Th27;
-  reconsider Sn=S as sequence of X;
-  consider x be Point of TopSpaceNorm X such that
-A3: S is_convergent_to x by A2,FRECHET:def 3;
+  let X be RealNormSpace, S be sequence of TopSpaceNorm X, St be sequence of
+  LinearTopSpaceNorm X;
+  assume that
+A1: S=St and
+A2: St is convergent;
+A3: S is convergent by A1,A2,Th27;
+  then consider x be Point of TopSpaceNorm X such that
+A4: S is_convergent_to x by FRECHET:def 3;
   reconsider xxt=x as Point of LinearTopSpaceNorm X by Def4;
-  St is_convergent_to xxt by A1,A3,Th26;
+  St is_convergent_to xxt by A1,A4,Th26;
   then
-A4: lim St = xxt by FRECHET2:28
-    .=lim S by A3,FRECHET2:28;
+A5: lim St = xxt by FRECHET2:28
+    .=lim S by A4,FRECHET2:28;
+  reconsider Sn=S as sequence of X;
   consider xt be Point of LinearTopSpaceNorm X such that
-A5: Lim St = {xt} by A1,FRECHET2:27;
+A6: Lim St = {xt} by A2,FRECHET2:27;
   xt in {xt} by TARSKI:def 1;
-  then St is_convergent_to xt by A5,FRECHET:def 4;
-  then Lim St = {lim St} by A5,FRECHET2:28
-    .= {lim Sn} by A2,A4,Th14
-    .= Lim S by A2,Th14;
-  hence thesis by A4;
+  then St is_convergent_to xt by A6,FRECHET:def 4;
+  then Lim St = {lim St} by A6,FRECHET2:28
+    .= {lim Sn} by A3,A5,Th14
+    .= Lim S by A3,Th14;
+  hence thesis by A5;
 end;
 
 theorem
-  for X be RealNormSpace, S be sequence of X,
-  St be sequence of LinearTopSpaceNorm X,
-  x be Point of X, xt be Point of LinearTopSpaceNorm X st S=St & x=xt holds
-  St is_convergent_to xt iff for r be Real st 0 < r ex m be Element of NAT st
-  for n be Element of NAT st m <= n holds ||.(S.n) - x.|| < r
+  for X be RealNormSpace, S be sequence of X, St be sequence of
+LinearTopSpaceNorm X, x be Point of X, xt be Point of LinearTopSpaceNorm X st S
+  =St & x=xt holds St is_convergent_to xt iff for r be Real st 0 < r ex m be
+  Element of NAT st for n be Element of NAT st m <= n holds ||.(S.n) - x.|| < r
 proof
-  let X be RealNormSpace, S be sequence of X,
-  St be sequence of LinearTopSpaceNorm X, x be Point of X,
-  xt be Point of LinearTopSpaceNorm X;
+  let X be RealNormSpace, S be sequence of X, St be sequence of
+  LinearTopSpaceNorm X, x be Point of X, xt be Point of LinearTopSpaceNorm X;
+  reconsider xxt=xt as Point of TopSpaceNorm X by Def4;
   assume
 A1: S=St & x=xt;
-  reconsider xxt=xt as Point of TopSpaceNorm X by Def4;
-  the carrier of LinearTopSpaceNorm X = the carrier of TopSpaceNorm X by Def4;
+  the carrier of LinearTopSpaceNorm X = the carrier of TopSpaceNorm X by
+  Def4;
   then reconsider SSt = St as sequence of TopSpaceNorm X;
   St is_convergent_to xt iff SSt is_convergent_to xxt by Th26;
   hence thesis by A1,Th12;
 end;
 
 theorem
-  for X be RealNormSpace, S be sequence of X,
-  St be sequence of LinearTopSpaceNorm X st
-  S=St holds St is convergent iff S is convergent
+  for X be RealNormSpace, S be sequence of X, St be sequence of
+  LinearTopSpaceNorm X st S=St holds St is convergent iff S is convergent
 proof
-  let X be RealNormSpace, S be sequence of X,
-  St be sequence of LinearTopSpaceNorm X;
+  let X be RealNormSpace, S be sequence of X, St be sequence of
+  LinearTopSpaceNorm X;
   assume
 A1: S=St;
-  the carrier of LinearTopSpaceNorm X = the carrier of TopSpaceNorm X by Def4;
+  the carrier of LinearTopSpaceNorm X = the carrier of TopSpaceNorm X by
+  Def4;
   then reconsider SSt = St as sequence of TopSpaceNorm X;
   St is convergent iff SSt is convergent by Th27;
   hence thesis by A1,Th13;
 end;
 
 theorem
-  for X be RealNormSpace, S be sequence of X,
-  St be sequence of LinearTopSpaceNorm X st
-  S=St & St is convergent holds Lim St = {lim S} & lim St=lim S
+  for X be RealNormSpace, S be sequence of X, St be sequence of
+LinearTopSpaceNorm X st S=St & St is convergent holds Lim St = {lim S} & lim St
+  =lim S
 proof
-  let X be RealNormSpace, S be sequence of X,
-  St be sequence of LinearTopSpaceNorm X;
-  assume
-A1: S=St & St is convergent;
-  the carrier of LinearTopSpaceNorm X = the carrier of TopSpaceNorm X by Def4;
+  let X be RealNormSpace, S be sequence of X, St be sequence of
+  LinearTopSpaceNorm X;
+  assume that
+A1: S=St and
+A2: St is convergent;
+  the carrier of LinearTopSpaceNorm X = the carrier of TopSpaceNorm X by
+  Def4;
   then reconsider SSt = St as sequence of TopSpaceNorm X;
-  SSt is convergent by A1,Th27;
+  SSt is convergent by A2,Th27;
   then Lim SSt = {lim S} & lim SSt=lim S by A1,Th14;
-  hence thesis by A1,Th28;
+  hence thesis by A2,Th28;
 end;
 
 theorem
-  for X be RealNormSpace,
-  V be Subset of X, Vt be Subset of LinearTopSpaceNorm X st
-  V=Vt holds V is closed iff Vt is closed
+  for X be RealNormSpace, V be Subset of X, Vt be Subset of
+  LinearTopSpaceNorm X st V=Vt holds V is closed iff Vt is closed
 proof
-  let X be RealNormSpace, V be Subset of X,
-  Vt be Subset of LinearTopSpaceNorm X;
+  let X be RealNormSpace, V be Subset of X, Vt be Subset of LinearTopSpaceNorm
+  X;
+  reconsider VVt = Vt as Subset of TopSpaceNorm X by Def4;
   assume
 A1: V=Vt;
-  reconsider VVt = Vt as Subset of TopSpaceNorm X by Def4;
   Vt is closed iff VVt is closed by Th21;
   hence thesis by A1,Th15;
 end;
 
 theorem
-  for X be RealNormSpace,
-  V be Subset of X, Vt be Subset of LinearTopSpaceNorm X st
-  V=Vt holds V is open iff Vt is open
+  for X be RealNormSpace, V be Subset of X, Vt be Subset of
+  LinearTopSpaceNorm X st V=Vt holds V is open iff Vt is open
 proof
-  let X be RealNormSpace, V be Subset of X,
-  Vt be Subset of LinearTopSpaceNorm X;
+  let X be RealNormSpace, V be Subset of X, Vt be Subset of LinearTopSpaceNorm
+  X;
+  reconsider VVt = Vt as Subset of TopSpaceNorm X by Def4;
   assume
 A1: V=Vt;
-  reconsider VVt = Vt as Subset of TopSpaceNorm X by Def4;
   Vt is open iff VVt is open by Th20;
   hence thesis by A1,Th16;
 end;
 
 theorem Th34:
-  for X be RealNormSpace,
-  U be Subset of TopSpaceNorm X, Ut be Subset of LinearTopSpaceNorm X,
-  x be Point of TopSpaceNorm X, xt be Point of LinearTopSpaceNorm X st
-  U=Ut & x=xt holds U is a_neighborhood of x iff Ut is a_neighborhood of xt
+  for X be RealNormSpace, U be Subset of TopSpaceNorm X, Ut be
+  Subset of LinearTopSpaceNorm X, x be Point of TopSpaceNorm X, xt be Point of
+  LinearTopSpaceNorm X st U=Ut & x=xt holds U is a_neighborhood of x iff Ut is
+  a_neighborhood of xt
 proof
-  let X be RealNormSpace, U be Subset of TopSpaceNorm X,
-  Ut be Subset of LinearTopSpaceNorm X, x be Point of TopSpaceNorm X,
-  xt be Point of LinearTopSpaceNorm X;
-  assume
-A1: U=Ut & x=xt;
+  let X be RealNormSpace, U be Subset of TopSpaceNorm X, Ut be Subset of
+  LinearTopSpaceNorm X, x be Point of TopSpaceNorm X, xt be Point of
+  LinearTopSpaceNorm X;
+  assume that
+A1: U=Ut and
+A2: x=xt;
   hereby
-    assume U is a_neighborhood of x;
+    assume
+    U is a_neighborhood of x;
     then consider V be Subset of TopSpaceNorm X such that
-A2: V is open & V c= U & x in V by CONNSP_2:8;
-    reconsider Vt=V as open Subset of LinearTopSpaceNorm X by A2,Def4,Th20;
-    Vt is open & Vt c= Ut & xt in Vt by A1,A2;
-    hence Ut is a_neighborhood of xt by CONNSP_2:8;
+A3: V is open and
+A4: V c= U and
+A5: x in V by CONNSP_2:8;
+    reconsider Vt=V as open Subset of LinearTopSpaceNorm X by A3,Def4,Th20;
+    Vt c= Ut by A1,A4;
+    hence Ut is a_neighborhood of xt by A2,A5,CONNSP_2:8;
   end;
-  assume Ut is a_neighborhood of xt;
+  assume
+  Ut is a_neighborhood of xt;
   then consider Vt be Subset of LinearTopSpaceNorm X such that
-A3: Vt is open & Vt c= Ut & xt in Vt by CONNSP_2:8;
-  reconsider V=Vt as open Subset of TopSpaceNorm X by A3,Def4,Th20;
-  V is open & V c= U & x in V by A1,A3;
-  hence thesis by CONNSP_2:8;
+A6: Vt is open and
+A7: Vt c= Ut and
+A8: xt in Vt by CONNSP_2:8;
+  reconsider V=Vt as open Subset of TopSpaceNorm X by A6,Def4,Th20;
+  V c= U by A1,A7;
+  hence thesis by A2,A8,CONNSP_2:8;
 end;
 
 theorem Th35:
-  for X,Y be RealNormSpace, f be Function of TopSpaceNorm X,TopSpaceNorm Y,
-  ft be Function of LinearTopSpaceNorm X,LinearTopSpaceNorm Y,
-  x be Point of TopSpaceNorm X, xt be Point of LinearTopSpaceNorm X st
-  f=ft & x=xt holds f is_continuous_at x iff ft is_continuous_at xt
+  for X,Y be RealNormSpace, f be Function of TopSpaceNorm X,
+TopSpaceNorm Y, ft be Function of LinearTopSpaceNorm X,LinearTopSpaceNorm Y, x
+be Point of TopSpaceNorm X, xt be Point of LinearTopSpaceNorm X st f=ft & x=xt
+  holds f is_continuous_at x iff ft is_continuous_at xt
 proof
-  let X,Y be RealNormSpace, f be Function of TopSpaceNorm X,TopSpaceNorm Y,
-  ft be Function of LinearTopSpaceNorm X,LinearTopSpaceNorm Y,
-  x be Point of TopSpaceNorm X, xt be Point of LinearTopSpaceNorm X;
-  assume
-A1: f=ft & x=xt;
+  let X,Y be RealNormSpace, f be Function of TopSpaceNorm X,TopSpaceNorm Y, ft
+  be Function of LinearTopSpaceNorm X,LinearTopSpaceNorm Y, x be Point of
+  TopSpaceNorm X, xt be Point of LinearTopSpaceNorm X;
+  assume that
+A1: f=ft and
+A2: x=xt;
   hereby
     assume
-A2: f is_continuous_at x;
+A3: f is_continuous_at x;
     now
       let Gt be a_neighborhood of ft.xt;
       Gt is Subset of TopSpaceNorm Y by Def4;
-      then reconsider G=Gt as a_neighborhood of f.x by A1,Th34;
+      then reconsider G=Gt as a_neighborhood of f.x by A1,A2,Th34;
       consider H being a_neighborhood of x such that
-A3:   f.:H c= G by A2,TMAP_1:def 2;
+A4:   f.:H c= G by A3,TMAP_1:def 2;
       H is Subset of LinearTopSpaceNorm X by Def4;
-      then reconsider Ht=H as a_neighborhood of xt by A1,Th34;
+      then reconsider Ht=H as a_neighborhood of xt by A2,Th34;
       take Ht;
-      thus ft.:Ht c= Gt by A1,A3;
+      thus ft.:Ht c= Gt by A1,A4;
     end;
     hence ft is_continuous_at xt by TMAP_1:def 2;
   end;
   assume
-A4: ft is_continuous_at xt;
+A5: ft is_continuous_at xt;
   now
     let G be a_neighborhood of f.x;
     G is Subset of LinearTopSpaceNorm Y by Def4;
-    then reconsider Gt=G as a_neighborhood of ft.xt by A1,Th34;
+    then reconsider Gt=G as a_neighborhood of ft.xt by A1,A2,Th34;
     consider Ht being a_neighborhood of xt such that
-A5: ft.:Ht c= Gt by A4,TMAP_1:def 2;
+A6: ft.:Ht c= Gt by A5,TMAP_1:def 2;
     Ht is Subset of TopSpaceNorm X by Def4;
-    then reconsider H=Ht as a_neighborhood of x by A1,Th34;
+    then reconsider H=Ht as a_neighborhood of x by A2,Th34;
     take H;
-    thus f.:H c= G by A1,A5;
+    thus f.:H c= G by A1,A6;
   end;
   hence thesis by TMAP_1:def 2;
 end;
 
 theorem
-  for X,Y be RealNormSpace, f be Function of TopSpaceNorm X,TopSpaceNorm Y,
-  ft be Function of LinearTopSpaceNorm X,LinearTopSpaceNorm Y st
-  f=ft holds f is continuous iff ft is continuous
+  for X,Y be RealNormSpace, f be Function of TopSpaceNorm X,TopSpaceNorm
+Y, ft be Function of LinearTopSpaceNorm X,LinearTopSpaceNorm Y st f=ft holds f
+  is continuous iff ft is continuous
 proof
-  let X,Y be RealNormSpace, f be Function of TopSpaceNorm X,TopSpaceNorm Y,
-  ft be Function of LinearTopSpaceNorm X,LinearTopSpaceNorm Y;
+  let X,Y be RealNormSpace, f be Function of TopSpaceNorm X,TopSpaceNorm Y, ft
+  be Function of LinearTopSpaceNorm X,LinearTopSpaceNorm Y;
   assume
 A1: f=ft;
   hereby

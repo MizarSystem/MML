@@ -16,21 +16,21 @@ environ
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, NAT_1,
       MCART_1, STRUCT_0, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, RFINSEQ,
       FINSET_1, TREES_1, TREES_2, TREES_3, TREES_4, CARD_3, GRAPH_1, GRAPH_2,
-      PBOOLE, MSUALG_1, MSUALG_2, MSAFREE, MSAFREE2, XXREAL_2,
-      CIRCUIT1, TREES_9, MSATERM, MSSCYC_1, FINSEQ_1, XXREAL_0;
+      PBOOLE, MSUALG_1, MSUALG_2, MSAFREE, MSAFREE2, XXREAL_2, CIRCUIT1,
+      TREES_9, MSATERM, MSSCYC_1, FINSEQ_1, XXREAL_0;
  constructors WELLORD2, XXREAL_0, REAL_1, NAT_1, RFINSEQ, TREES_9, MSUALG_2,
       MSATERM, CIRCUIT1, GRAPH_2, MSSCYC_1, XXREAL_2, RELSET_1;
- registrations XBOOLE_0, RELAT_1, ORDINAL1, FINSET_1, FRAENKEL, XXREAL_0,
-      XREAL_0, NAT_1, MEMBERED, FINSEQ_1, TREES_2, TREES_3, PRE_CIRC, TREES_9,
-      STRUCT_0, GRAPH_1, DTCONSTR, MSUALG_1, MSAFREE, MSATERM, MSAFREE2,
-      MSSCYC_1, XXREAL_2, PBOOLE, RELSET_1, FUNCT_1;
+ registrations XBOOLE_0, RELAT_1, ORDINAL1, FINSET_1, XXREAL_0, XREAL_0, NAT_1,
+      MEMBERED, FINSEQ_1, TREES_2, TREES_3, PRE_CIRC, STRUCT_0, GRAPH_1,
+      MSUALG_1, MSAFREE, MSATERM, MSAFREE2, MSSCYC_1, XXREAL_2, PBOOLE,
+      RELSET_1, FUNCT_1, TREES_1, PRE_POLY;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, MSAFREE2;
  theorems TARSKI, NAT_1, MCART_1, ZFMISC_1, MSSCYC_1, FUNCT_6, CARD_1, CARD_3,
       FUNCT_1, FUNCT_2, FINSEQ_1, FINSEQ_2, FINSEQ_3, FINSEQ_4, FINSEQ_5,
       RFINSEQ, TREES_1, TREES_2, TREES_3, TREES_4, DTCONSTR, MSUALG_1, MSAFREE,
-      MSAFREE2, PRE_CIRC, CIRCUIT1, TREES_9, MSATERM, XBOOLE_1, ORDINAL1,
-      XREAL_1, XXREAL_0, PARTFUN1, XXREAL_2, FINSET_1;
+      MSAFREE2, CIRCUIT1, TREES_9, MSATERM, XBOOLE_1, ORDINAL1, XREAL_1,
+      XXREAL_0, PARTFUN1, XXREAL_2, FINSET_1;
  schemes NAT_1, FINSEQ_1, FUNCT_2, RECDEF_1, FRAENKEL, TOPREAL1, PBOOLE,
       XBOOLE_0;
 
@@ -40,63 +40,57 @@ reserve k, n for Nat;
 
 definition
   let S be ManySortedSign;
-  defpred P[set] means ex op, v being set
-  st $1 = [op, v] & op in the carrier' of S & v in the carrier of S &
-  ex n being Nat, args being Element of (the carrier of S)*
-  st (the Arity of S).op = args & n in dom args & args.n = v;
+  defpred P[set] means ex op, v being set st $1 = [op, v] & op in the carrier'
+  of S & v in the carrier of S & ex n being Nat, args being Element of (the
+  carrier of S)* st (the Arity of S).op = args & n in dom args & args.n = v;
   func InducedEdges S -> set means
   :Def1:
-  for x being set holds x in it iff
-  ex op, v being set
-  st x = [op, v] & op in the carrier' of S & v in the carrier of S &
-  ex n being Nat, args being Element of (the carrier of S)*
-  st (the Arity of S).op = args & n in dom args & args.n = v;
+  for x being set holds x in it iff ex
+op, v being set st x = [op, v] & op in the carrier' of S & v in the carrier of
+S & ex n being Nat, args being Element of (the carrier of S)* st (the Arity of
+  S).op = args & n in dom args & args.n = v;
   existence
   proof
     set XX = [:the carrier' of S, the carrier of S:];
     consider X being set such that
-A1: for x being set holds x in X iff x in XX & P[x] from XBOOLE_0:sch 1;
+A1: for x being set holds x in X iff x in XX & P[x] from XBOOLE_0:sch
+    1;
     take X;
     let x be set;
     thus x in X implies P[x] by A1;
     assume
 A2: P[x];
-    then consider op, v being set such that
-A3: x = [op, v] & op in the carrier' of S & v in the carrier of S and
-    ex n being Nat, args being Element of (the carrier of S)*
-    st (the Arity of S).op = args & n in dom args & args.n = v;
-    x in XX by A3,ZFMISC_1:def 2;
+    then x in XX by ZFMISC_1:def 2;
     hence thesis by A1,A2;
   end;
   uniqueness
   proof
-    for X1,X2 being set st (for x being set holds x in X1 iff P[x]) &
-    (for x being set holds x in X2 iff P[x]) holds X1 = X2 from
-    XBOOLE_0:sch 3;
+    for X1,X2 being set st (for x being set holds x in X1 iff P[x]) & (for
+    x being set holds x in X2 iff P[x]) holds X1 = X2 from XBOOLE_0:sch 3;
     hence thesis;
   end;
 end;
 
 theorem Th1:
-  for S being ManySortedSign
-  holds InducedEdges S c= [: the carrier' of S, the carrier of S :]
+  for S being ManySortedSign holds InducedEdges S c= [: the
+  carrier' of S, the carrier of S :]
 proof
   let S be ManySortedSign;
   let x be set;
-  assume x in InducedEdges S;
-  then consider op, v being set such that
-A1: x = [op, v] & op in the carrier' of S & v in the carrier of S and
-  ex n being Nat, args being Element of (the carrier of S)*
-  st (the Arity of S).op = args & n in dom args & args.n = v by Def1;
-  thus thesis by A1,ZFMISC_1:def 2;
+  assume
+  x in InducedEdges S;
+  then ex op, v being set st x = [op, v] & op in the carrier' of S & v in the
+  carrier of S & ex n being Nat, args being Element of (the carrier of S)* st (
+  the Arity of S).op = args & n in dom args & args.n = v by Def1;
+  hence thesis by ZFMISC_1:def 2;
 end;
 
 definition
   let S be ManySortedSign;
   set IE = InducedEdges S, IV = the carrier of S;
   func InducedSource S -> Function of InducedEdges S, the carrier of S means
-  :Def2:
-  for e being set st e in InducedEdges S holds it.e = e`2;
+  :
+  Def2: for e being set st e in InducedEdges S holds it.e = e`2;
   existence
   proof
     deffunc F(set)= $1 `2;
@@ -108,9 +102,8 @@ A2:   x in IE;
       IE c= [: the carrier' of S, IV :] by Th1;
       hence thesis by A2,MCART_1:10;
     end;
-    ex f being Function of InducedEdges S,the carrier of S st
-    for x be set st x in InducedEdges S holds f.x = F(x) from FUNCT_2:sch 2
-    (A1);
+    ex f being Function of InducedEdges S,the carrier of S st for x be set
+    st x in InducedEdges S holds f.x = F(x) from FUNCT_2:sch 2 (A1);
     hence thesis;
   end;
   uniqueness
@@ -118,989 +111,1026 @@ A2:   x in IE;
     let F1, F2 be Function of IE, IV such that
 A3: for e being set st e in IE holds F1.e = e`2 and
 A4: for e being set st e in IE holds F2.e = e`2;
-    now
-      assume IV is empty;
-
-then [:the carrier' of S, IV:] is empty & IE c= [:the carrier' of S,
-      IV:] by Th1,ZFMISC_1:113;
-      hence IE is empty by XBOOLE_1:3;
-    end;
-    then
-A5: dom F1 = IE & dom F2 = IE by FUNCT_2:def 1;
-    now
+A5: now
       let x be set;
-      assume x in IE;
-      then F1.x = x`2 & F2.x = x`2 by A3,A4;
-      hence F1.x = F2.x;
+      assume
+A6:   x in IE;
+      then F1.x = x`2 by A3;
+      hence F1.x = F2.x by A4,A6;
     end;
+    now
+      assume
+      IV is empty;
+      then [:the carrier' of S, IV:] is empty by ZFMISC_1:113;
+      hence IE is empty by Th1,XBOOLE_1:3;
+    end;
+    then dom F1 = IE & dom F2 = IE by FUNCT_2:def 1;
     hence F1 = F2 by A5,FUNCT_1:9;
   end;
   set OS = the carrier' of S, RS = the ResultSort of S;
   func InducedTarget S -> Function of InducedEdges S, the carrier of S means
-  :Def3:
-
-for e being set st e in InducedEdges S holds it.e = (the ResultSort of S).e`1;
+  :
+  Def3: for
+ e being set st e in InducedEdges S holds it.e = (the ResultSort of S)
+  .e`1;
   existence
   proof
     deffunc F(set) = RS.($1)`1;
-A6: for x being set st x in IE holds F(x) in IV
+A7: for x being set st x in IE holds F(x) in IV
     proof
       let x be set;
       assume
-A7:   x in IE;
+A8:   x in IE;
       IE c= [: OS, IV :] by Th1;
-      then x`1 in OS & x`2 in IV by A7,MCART_1:10;
+      then x`1 in OS & x`2 in IV by A8,MCART_1:10;
       hence thesis by FUNCT_2:7;
     end;
-    ex f being Function of InducedEdges S, the carrier of S st
-    for x be set st x in InducedEdges S holds f.x = F(x) from FUNCT_2:sch 2
-    (A6);
+    ex f being Function of InducedEdges S, the carrier of S st for x be
+    set st x in InducedEdges S holds f.x = F(x) from FUNCT_2:sch 2 (A7);
     hence thesis;
   end;
   uniqueness
   proof
     let F1, F2 be Function of IE, IV such that
-A8: for e being set st e in IE holds F1.e = RS.e`1 and
-A9: for e being set st e in IE holds F2.e = RS.e`1;
-    now
-      assume IV is empty;
-
-then [:the carrier' of S, IV:] is empty & IE c= [:the carrier' of S,
-      IV:] by Th1,ZFMISC_1:113;
-      hence IE is empty by XBOOLE_1:3;
-    end;
-    then
-A10: dom F1 = IE & dom F2 = IE by FUNCT_2:def 1;
-    now
+A9: for e being set st e in IE holds F1.e = RS.e`1 and
+A10: for e being set st e in IE holds F2.e = RS.e`1;
+A11: now
       let x be set;
-      assume x in IE;
-      then F1.x = RS.x`1 & F2.x = RS.x`1 by A8,A9;
-      hence F1.x = F2.x;
+      assume
+A12:  x in IE;
+      then F1.x = RS.x`1 by A9;
+      hence F1.x = F2.x by A10,A12;
     end;
-    hence F1 = F2 by A10,FUNCT_1:9;
+    now
+      assume
+      IV is empty;
+      then [:the carrier' of S, IV:] is empty by ZFMISC_1:113;
+      hence IE is empty by Th1,XBOOLE_1:3;
+    end;
+    then dom F1 = IE & dom F2 = IE by FUNCT_2:def 1;
+    hence F1 = F2 by A11,FUNCT_1:9;
   end;
 end;
 
 definition
   let S be non empty ManySortedSign;
   func InducedGraph S -> Graph equals
-  MultiGraphStruct (# the carrier of S, InducedEdges S,
-    InducedSource S, InducedTarget S #);
+  MultiGraphStruct (# the carrier of S,
+    InducedEdges S, InducedSource S, InducedTarget S #);
   coherence;
 end;
 
 theorem Th2:
-  for S being non void (non empty ManySortedSign),
-  X being non-empty ManySortedSet of the carrier of S,
-  v being SortSymbol of S, n st 1<=n holds
-  (ex t being Element of (the Sorts of FreeMSA X).v st depth t = n) iff
-  (ex c being directed Chain of InducedGraph S st
-  len c = n & (vertex-seq c).(len c +1) = v)
+  for S being non void (non empty ManySortedSign), X being
+non-empty ManySortedSet of the carrier of S, v being SortSymbol of S, n st 1<=n
+holds (ex t being Element of (the Sorts of FreeMSA X).v st depth t = n) iff (ex
+c being directed Chain of InducedGraph S st len c = n & (vertex-seq c).(len c +
+  1) = v)
 proof
-  let S be non void (non empty ManySortedSign),
-  X be non-empty ManySortedSet of the carrier of S, v be SortSymbol of S, n;
+  let S be non void (non empty ManySortedSign), X be non-empty ManySortedSet
+  of the carrier of S, v be SortSymbol of S, n;
   assume
 A1: 1<=n;
   set G = InducedGraph S;
-A2: FreeSort(X,v) c= S-Terms X by MSATERM:12;
   FreeMSA X = MSAlgebra(#FreeSort(X),FreeOper(X)#)by MSAFREE:def 16;
   then
-A3: (the Sorts of FreeMSA X).v = FreeSort(X,v) by MSAFREE:def 13;
+A2: (the Sorts of FreeMSA X).v = FreeSort(X,v) by MSAFREE:def 13;
+A3: FreeSort(X,v) c= S-Terms X by MSATERM:12;
   thus (ex t being Element of (the Sorts of FreeMSA X).v st depth t = n)
-  implies (ex c being directed Chain of InducedGraph S st
-  len c = n & (vertex-seq c).(len c +1) = v)
+implies ex c being directed Chain of InducedGraph S st len c = n & (vertex-seq
+  c).(len c +1) = v
   proof
+    reconsider n1=n as Element of NAT by ORDINAL1:def 13;
+    set D = (the carrier' of G)*;
     given t being Element of (the Sorts of FreeMSA X).v such that
 A4: depth t = n;
-    t in FreeSort(X,v) by A3;
-    then reconsider t' = t as Term of S, X by A2;
+    t in FreeSort(X,v) by A2;
+    then reconsider t' = t as Term of S, X by A3;
     consider dt being finite DecoratedTree, tr being finite Tree such that
-A5: dt = t & tr = dom dt & depth t = height tr by MSAFREE2:def 14;
+A5: dt = t & tr = dom dt and
+A6: depth t = height tr by MSAFREE2:def 14;
+    not t is root by A1,A4,A5,A6,TREES_1:79,TREES_9:def 1;
+    then consider o being OperSymbol of S such that
+A7: t'.{} =[o, the carrier of S] by MSSCYC_1:20;
+    consider a being ArgumentSeq of Sym(o,X) such that
+A8: t = [o,the carrier of S]-tree a by A7,MSATERM:10;
+    set args = the_arity_of o;
+A9: dom a = dom args by MSATERM:22;
     consider p being FinSequence of NAT such that
-A6: p in tr & len p = height tr by TREES_1:def 15;
-    set D = (the carrier' of G)*;
-    defpred P[Nat, set, set] means
-    ex t1, t2 being Term of S, X st t1 = t|(p|$1) & t2 = t|(p|($1+1)) &
-    ex o being OperSymbol of S, rs1 being SortSymbol of S,
-    Ck being Element of D
-    st Ck = $2 & $3 = <*[o,rs1]*>^Ck & [o,the carrier of S] = t1.{} &
-    rs1 = the_sort_of t2 & [o,rs1] in the carrier' of G;
-    reconsider n1=n as Element of NAT by ORDINAL1:def 13;
-A7: for k being Element of NAT st 1 <= k & k < n1
-    for x being Element of D ex y being Element of D st P[k,x,y]
+A10: p in tr and
+A11: len p = height tr by TREES_1:def 15;
+    consider i being Element of NAT, T being DecoratedTree, q being Node of T
+    such that
+A12: i < len a and
+    T = a.(i+1) and
+A13: p = <*i*>^q by A1,A4,A5,A6,A10,A11,A8,CARD_1:47,TREES_4:11;
+    defpred P[Nat, set, set] means ex t1, t2 being Term of S, X st t1 = t|(p|
+$1) & t2 = t|(p|($1+1)) & ex o being OperSymbol of S, rs1 being SortSymbol of S
+, Ck being Element of D st Ck = $2 & $3 = <*[o,rs1]*>^Ck & [o,the carrier of S]
+    = t1.{} & rs1 = the_sort_of t2 & [o,rs1] in the carrier' of G;
+    1<=i+1 & i+1<=len a by A12,NAT_1:11,13;
+    then
+A14: i+1 in dom args by A9,FINSEQ_3:27;
+    then reconsider rs1 = args.(i+1) as SortSymbol of S by DTCONSTR:2;
+    set e1 = [o,rs1];
+A15: (the Arity of S).o = the_arity_of o by MSUALG_1:def 6;
+    then
+A16: [o,rs1] in InducedEdges S by A14,Def1;
+    then reconsider E' = the carrier' of G as non empty set;
+    reconsider e1' = e1 as Element of E' by A14,A15,Def1;
+    reconsider C1' = <*e1'*> as Element of D by FINSEQ_1:def 11;
+A17: for k being Element of NAT st 1 <= k & k < n1 for x being Element of
+    D ex y being Element of D st P[k,x,y]
     proof
       let k be Element of NAT;
-      assume
-A8:   1 <= k & k < n1;
-      then
-A9:   k<=k+1 & k+1<=n by NAT_1:13;
-      let x be Element of D;
-      reconsider pk = p|k, pk1 = p|(k+1) as Node of t by A5,A6,MSSCYC_1:19;
-      reconsider t1 = t'|pk, t2 = t'|pk1 as Term of S, X by MSATERM:29;
       set pk' = p/^k;
-A10:  len pk' = n - k by A4,A5,A6,A8,RFINSEQ:def 2;
-A11:  1<=n-k by A9,XREAL_1:21;
-      len pk' <> 0 by A8,A10;
+      k<=k+1 by NAT_1:13;
       then
-A12:  pk' is non empty by CARD_1:47;
+A18:  Seg k c= Seg (k+1) by FINSEQ_1:7;
+      reconsider pk = p|k, pk1 = p|(k+1) as Node of t by A5,A10,MSSCYC_1:19;
+      assume that
+      1 <= k and
+A19:  k < n1;
+A20:  len pk' = n - k by A4,A6,A11,A19,RFINSEQ:def 2;
+      then
+A21:  len pk' <> 0 by A19;
+      then
+A22:  1 in dom pk' by CARD_1:47,FINSEQ_5:6;
+      reconsider t1 = t'|pk, t2 = t'|pk1 as Term of S, X by MSATERM:29;
       p = pk^pk' by RFINSEQ:21;
       then
-A13:  pk' in tr|pk by A5,A6,TREES_1:def 9;
+A23:  pk' in tr|pk by A5,A10,TREES_1:def 9;
       then
-A14:  pk' in dom t1 by A5,TREES_2:def 11;
+A24:  pk' in dom t1 by A5,TREES_2:def 11;
+A25:  k+1<=n by A19,NAT_1:13;
+      then
+A26:  1<=n-k by XREAL_1:21;
       now
-        assume t1 is root;
+        assume
+        t1 is root;
         then dom t1 = elementary_tree 0 by TREES_9:def 1;
-        hence contradiction by A10,A11,A14,TREES_1:79,def 15;
+        hence contradiction by A20,A26,A24,TREES_1:79,def 15;
       end;
       then consider o being OperSymbol of S such that
-A15:  t1.{} =[o, the carrier of S] by MSSCYC_1:20;
+A27:  t1.{} =[o, the carrier of S] by MSSCYC_1:20;
       consider a being ArgumentSeq of Sym(o,X) such that
-A16:  t1 = [o,the carrier of S]-tree a by A15,MSATERM:10;
-      consider i being Element of NAT,
-      T being DecoratedTree, q being Node of T such that
-A17:  i < len a & T = a.(i+1) & pk' = <*i*>^q by A12,A14,A16,TREES_4:11;
+A28:  t1 = [o,the carrier of S]-tree a by A27,MSATERM:10;
+A29:  pk'|1 = <*pk'/.1*> by A21,CARD_1:47,FINSEQ_5:23
+        .= <*pk'.1*> by A22,PARTFUN1:def 8;
+      consider i being Element of NAT, T being DecoratedTree, q being Node of
+      T such that
+A30:  i < len a and
+      T = a.(i+1) and
+A31:  pk' = <*i*>^q by A21,A24,A28,CARD_1:47,TREES_4:11;
+      reconsider pk' as Node of t1 by A5,A23,TREES_2:def 11;
+      reconsider p1 = pk'|(0+1) as Node of t1 by MSSCYC_1:19;
+      reconsider t2' = t1|p1 as Term of S, X;
+A32:  p|(k+1)|k = p|(k+1)|Seg k by FINSEQ_1:def 15
+        .= p|Seg (k+1)|Seg k by FINSEQ_1:def 15
+        .= p|Seg k by A18,FUNCT_1:82
+        .= pk by FINSEQ_1:def 15;
       set args = the_arity_of o;
-A18:  dom a = dom args by MSATERM:22;
-      1<=i+1 & i+1<=len a by A17,NAT_1:11,13;
+      let x be Element of D;
+A33:  dom a = dom args by MSATERM:22;
+A34:  1<=k+1 by NAT_1:11;
       then
-A19:  i+1 in dom args by A18,FINSEQ_3:27;
+A35:  k+1 in dom p by A4,A6,A11,A25,FINSEQ_3:27;
+A36:  len pk1 = k+1 by A4,A6,A11,A25,FINSEQ_1:80;
+      then
+A37:  k+1 in dom pk1 by A34,FINSEQ_3:27;
+      p1 = <*p.(k+1)*> by A4,A6,A11,A19,A22,A29,RFINSEQ:def 2
+        .= <*p/.(k+1)*> by A35,PARTFUN1:def 8
+        .= <*(p|(k+1))/.(k+1)*> by A37,FINSEQ_4:85
+        .= <*pk1.(k+1)*> by A37,PARTFUN1:def 8;
+      then pk1 = pk^p1 by A36,A32,RFINSEQ:20;
+      then
+A38:  t2' = t2 by TREES_9:3;
+      1<=i+1 & i+1<=len a by A30,NAT_1:11,13;
+      then
+A39:  i+1 in dom args by A33,FINSEQ_3:27;
       then reconsider rs1 = args.(i+1) as SortSymbol of S by DTCONSTR:2;
       set e1 = [o,rs1];
-A20:  (the Arity of S).o = the_arity_of o by MSUALG_1:def 6;
-      then [o,rs1] in InducedEdges S by A19,Def1;
+A40:  (the Arity of S).o = the_arity_of o by MSUALG_1:def 6;
+      then [o,rs1] in InducedEdges S by A39,Def1;
       then reconsider E' = the carrier' of G as non empty set;
-      reconsider x' = x as FinSequence of E'
-       by FINSEQ_1:def 11;
-      reconsider e1' = e1 as Element of E' by A19,A20,Def1;
-      reconsider y = <*e1'*>^x' as Element of D
-       by FINSEQ_1:def 11;
+      reconsider e1' = e1 as Element of E' by A39,A40,Def1;
+      reconsider x' = x as FinSequence of E' by FINSEQ_1:def 11;
+      reconsider y = <*e1'*>^x' as Element of D by FINSEQ_1:def 11;
       take y;
       take t1, t2;
       thus t1 = t|(p|k) & t2 = t|(p|(k+1));
       take o, rs1, x;
       thus x = x & y = <*[o,rs1]*>^x;
-      thus [o,the carrier of S] = t1.{} by A15;
-A21:  1 in dom pk' by A12,FINSEQ_5:6;
-A22:  pk'|1 = <*pk'/.1*> by A12,FINSEQ_5:23
-        .= <*pk'.1*> by A21,PARTFUN1:def 8;
-      reconsider pk' as Node of t1 by A5,A13,TREES_2:def 11;
-      reconsider p1 = pk'|(0+1) as Node of t1 by MSSCYC_1:19;
-      reconsider t2' = t1|p1 as Term of S, X;
-      pk'|1 = <*i*> by A17,A22,FINSEQ_1:58;
-      then
-A23:  t2' = a.(i+1) by A16,A17,TREES_4:def 4;
-A24:  len pk1 = k+1 by A4,A5,A6,A9,FINSEQ_1:80;
-A25:  1<=k+1 by NAT_1:11;
-      then
-A26:  k+1 in dom pk1 by A24,FINSEQ_3:27;
-A27:  k+1 in dom p by A4,A5,A6,A9,A25,FINSEQ_3:27;
-A28:  Seg k c= Seg (k+1) by A9,FINSEQ_1:7;
-A29:  p|(k+1)|k = p|(k+1)|Seg k by FINSEQ_1:def 15
-        .= p|Seg (k+1)|Seg k by FINSEQ_1:def 15
-        .= p|Seg k by A28,FUNCT_1:82
-        .= pk by FINSEQ_1:def 15;
-      p1 = <*p.(k+1)*> by A4,A5,A6,A8,A21,A22,RFINSEQ:def 2
-        .= <*p/.(k+1)*> by A27,PARTFUN1:def 8
-        .= <*(p|(k+1))/.(k+1)*> by A26,FINSEQ_4:85
-        .= <*pk1.(k+1)*> by A26,PARTFUN1:def 8;
-      then pk1 = pk^p1 by A24,A29,RFINSEQ:20;
-      then t2' = t2 by TREES_9:3;
-      hence rs1 = the_sort_of t2 by A18,A19,A23,MSATERM:23;
-      thus thesis by A19,A20,Def1;
+      thus [o,the carrier of S] = t1.{} by A27;
+      pk'|1 = <*i*> by A31,A29,FINSEQ_1:58;
+      then t2' = a.(i+1) by A28,A30,TREES_4:def 4;
+      hence rs1 = the_sort_of t2 by A33,A39,A38,MSATERM:23;
+      thus thesis by A39,A40,Def1;
     end;
-    not t is root by A1,A4,A5,TREES_1:79,TREES_9:def 1;
-    then consider o being OperSymbol of S such that
-A30: t'.{} =[o, the carrier of S] by MSSCYC_1:20;
-    consider a being ArgumentSeq of Sym(o,X) such that
-A31: t = [o,the carrier of S]-tree a by A30,MSATERM:10;
-A32: p <> {} by A1,A4,A5,A6,CARD_1:47;
-    then consider i being Element of NAT,
-    T being DecoratedTree, q being Node of T such that
-A33: i < len a & T = a.(i+1) & p = <*i*>^q by A5,A6,A31,TREES_4:11;
-    set args = the_arity_of o;
-A34: dom a = dom args by MSATERM:22;
-    1<=i+1 & i+1<=len a by A33,NAT_1:11,13;
-    then
-A35: i+1 in dom args by A34,FINSEQ_3:27;
-    then reconsider rs1 = args.(i+1) as SortSymbol of S by DTCONSTR:2;
-    set e1 = [o,rs1];
-A36: (the Arity of S).o = the_arity_of o by MSUALG_1:def 6;
-    then
-A37: [o,rs1] in InducedEdges S by A35,Def1;
-    then reconsider E' = the carrier' of G as non empty set;
-    reconsider e1' = e1 as Element of E' by A35,A36,Def1;
-    reconsider C1' = <*e1'*> as Element of D
-     by FINSEQ_1:def 11;
     consider C being FinSequence of D such that
-A38: len C = n1 & (C.1 = C1' or n1 = 0) &
-    for k being Element of NAT st 1 <= k & k < n1 holds P[k,C.k,C.(k+1)]
-    from RECDEF_1:sch 4(A7);
-    defpred Z[Nat] means 1<=$1 & $1<=n implies
-    ex Ck being directed Chain of G, t1 being Term of S, X
-    st Ck = C.$1 & len Ck = $1 & t1 = t|(p|$1) &
-    (vertex-seq Ck).(len Ck +1) = v & (vertex-seq Ck).1 = the_sort_of t1;
-A39: Z[0];
-A40: for i be Nat st Z[i] holds Z[i+1]
+A41: len C = n1 & (C.1 = C1' or n1 = 0) & for k being Element of NAT
+    st 1 <= k & k < n1 holds P[k,C.k,C.(k+1)] from RECDEF_1:sch 4(A17);
+    defpred Z[Nat] means 1<=$1 & $1<=n implies ex Ck being directed Chain of G
+    , t1 being Term of S, X st Ck = C.$1 & len Ck = $1 & t1 = t|(p|$1) & (
+    vertex-seq Ck).(len Ck +1) = v & (vertex-seq Ck).1 = the_sort_of t1;
+A42: for i be Nat st Z[i] holds Z[i+1]
     proof
       let k;
       assume
-A41:  1<=k & k<=n implies
-      ex Ck being directed Chain of G, t1 being Term of S, X
-      st Ck = C.k & len Ck = k & t1 = t|(p|k) &
-      (vertex-seq Ck).(len Ck +1) = v & (vertex-seq Ck).1 = the_sort_of t1;
-      assume
-A42:  1<=k+1 & k+1<=n;
-A43:  k<=k+1 by NAT_1:11;
-A44:  k<n by A42,NAT_1:13;
+A43:  1<=k & k<=n implies ex Ck being directed Chain of G, t1 being
+Term of S, X st Ck = C.k & len Ck = k & t1 = t|(p|k) & (vertex-seq Ck).(len Ck
+      +1) = v & (vertex-seq Ck).1 = the_sort_of t1;
+A44:  k<=k+1 by NAT_1:11;
+      assume that
+      1<=k+1 and
+A45:  k+1<=n;
+A46:  k<n by A45,NAT_1:13;
       per cases;
       suppose
-A45:    k=0;
-        reconsider C1 = <*e1*> as directed Chain of G by A37,MSSCYC_1:5;
-A46:    vertex-seq C1 = <*(the Source of G).e1, (the Target of G).e1*>
-        by A37,MSSCYC_1:7;
-A47:    (vertex-seq C1).(len C1 +1) = (vertex-seq C1).(1+1)
- by FINSEQ_1:56
-          .= (the Target of G).e1 by A46,FINSEQ_1:61
-          .= (the ResultSort of S).e1`1 by A37,Def3
+A47:    k=0;
+        reconsider C1 = <*e1*> as directed Chain of G by A16,MSSCYC_1:5;
+        reconsider p1 = p|(0+1) as Node of t by A5,A10,MSSCYC_1:19;
+        reconsider t2 = t'|p1 as Term of S, X by MSATERM:29;
+        take C1, t2;
+        thus C1 = C.(k+1) by A1,A41,A47;
+        thus len C1 = k+1 by A47,FINSEQ_1:56;
+        thus t2 = t|(p|(k+1)) by A47;
+        reconsider p'=p as PartFunc of NAT, NAT;
+A48:    vertex-seq C1 = <*(the Source of G).e1, (the Target of G).e1*> by
+        A16,MSSCYC_1:7;
+        (vertex-seq C1).(len C1 +1) = (vertex-seq C1).(1+1) by FINSEQ_1:
+        56
+          .= (the Target of G).e1 by A48,FINSEQ_1:61
+          .= (the ResultSort of S).e1`1 by A16,Def3
           .= (the ResultSort of S).o by MCART_1:7
           .= the_result_sort_of o by MSUALG_1:def 7
-          .= the_sort_of t' by A30,MSATERM:17
-          .= v by A3,MSATERM:def 5;
-        reconsider p1 = p|(0+1) as Node of t by A5,A6,MSSCYC_1:19;
-        reconsider t2 = t'|p1 as Term of S, X by MSATERM:29;
-A48:    1 in dom p by A32,FINSEQ_5:6;
-        reconsider p'=p as PartFunc of NAT, NAT;
-        p|1 = <*p'/.1*> by A32,FINSEQ_5:23
-          .= <*p.1*> by A48,PARTFUN1:def 8
-          .= <*i*> by A33,FINSEQ_1:58;
+          .= the_sort_of t' by A7,MSATERM:17
+          .= v by A2,MSATERM:def 5;
+        hence (vertex-seq C1).(len C1 +1) = v;
+A49:    1 in dom p by A1,A4,A6,A11,CARD_1:47,FINSEQ_5:6;
+        p|1 = <*p'/.1*> by A1,A4,A6,A11,CARD_1:47,FINSEQ_5:23
+          .= <*p.1*> by A49,PARTFUN1:def 8
+          .= <*i*> by A13,FINSEQ_1:58;
         then
-A49:    t2 = a.(i+1) by A31,A33,TREES_4:def 4;
-A50:    (vertex-seq C1).1 = (the Source of G).e1
- by A46,FINSEQ_1:61
-          .= e1`2 by A37,Def2
+A50:    t2 = a.(i+1) by A8,A12,TREES_4:def 4;
+        (vertex-seq C1).1 = (the Source of G).e1 by A48,FINSEQ_1:61
+          .= e1`2 by A16,Def2
           .= rs1 by MCART_1:7
-          .= the_sort_of t2 by A34,A35,A49,MSATERM:23;
-        take C1, t2;
-        thus C1 = C.(k+1) by A1,A38,A45;
-        thus len C1 = k+1 by A45,FINSEQ_1:56;
-        thus t2 = t|(p|(k+1)) by A45;
-        thus (vertex-seq C1).(len C1 +1) = v by A47;
-        thus thesis by A50;
+          .= the_sort_of t2 by A9,A14,A50,MSATERM:23;
+        hence thesis;
       end;
       suppose
 A51:    k<>0;
-        then
-A52:    1<=k by NAT_1:14;
-        consider Ck being directed Chain of G, t1' being Term of S, X such that
-A53:    Ck = C.k & len Ck = k & t1' = t|(p|k) &
-
-(vertex-seq Ck).(len Ck +1)=v & (vertex-seq Ck).1=the_sort_of t1' by A41,A42
-,A43,A51,NAT_1:14,XXREAL_0:2;
         k in NAT by ORDINAL1:def 13;
         then consider t1, t2 being Term of S, X such that
-A54:    t1 = t|(p|k) & t2 = t|(p|(k+1)) and
-A55:    ex
-        o being OperSymbol of S,rs1 being SortSymbol of S,Ck being Element of D
-        st Ck = C.k & C.(k+1) = <*[o,rs1]*>^Ck & [o,the carrier of S] = t1.{}&
-        rs1 = the_sort_of t2 & [o,rs1] in the carrier' of G by A38,A44,A52;
-        consider o being OperSymbol of S, rs1 being SortSymbol of S,
-        Ck' being Element of D such that
-A56:    Ck' = C.k & C.(k+1) = <*[o,rs1]*>^Ck' & [o,the carrier of S] = t1.{} &
-        rs1 = the_sort_of t2 & [o,rs1] in the carrier' of G by A55;
+A52:    t1 = t|(p|k) and
+A53:    t2 = t|(p|(k+1)) and
+A54:    ex o being OperSymbol of S,rs1 being SortSymbol of S,Ck being
+Element of D st Ck = C.k & C.(k+1) = <*[o,rs1]*>^Ck & [o,the carrier of S] = t1
+.{}& rs1 = the_sort_of t2 & [o,rs1] in the carrier' of G by A41,A46,A51,
+        NAT_1:14;
+        consider o being OperSymbol of S, rs1 being SortSymbol of S, Ck' being
+        Element of D such that
+A55:    Ck' = C.k & C.(k+1) = <*[o,rs1]*>^Ck' and
+A56:    [o,the carrier of S] = t1.{} and
+A57:    rs1 = the_sort_of t2 and
+A58:    [o,rs1] in the carrier' of G by A54;
+A59:    G is non void by A58;
+        reconsider C1 = <*[o,rs1]*> as directed Chain of G by A58,MSSCYC_1:5;
         set e1 = [o,rs1];
-        reconsider C1 = <*[o,rs1]*> as directed Chain of G by A56,MSSCYC_1:5;
-A57:    Ck is non empty by A51,A53,CARD_1:47;
-A58:    G is non void by A56;
-A59:    vertex-seq C1 = <*(the Source of G).e1, (the Target of G).e1*>
-        by A56,MSSCYC_1:7;
-        (vertex-seq C1).(len C1 +1) = (vertex-seq C1).(1+1)
-         by FINSEQ_1:56
-          .= (the Target of G).e1 by A59,FINSEQ_1:61
-          .= (the ResultSort of S).e1`1 by A56,Def3
+A60:    vertex-seq C1 = <*(the Source of G).e1, (the Target of G).e1*> by
+        A58,MSSCYC_1:7;
+        consider Ck being directed Chain of G, t1' being Term of S, X such
+        that
+A61:    Ck = C.k and
+A62:    len Ck = k and
+A63:    t1' = t|(p|k) and
+A64:    (vertex-seq Ck).(len Ck +1)=v and
+A65:    (vertex-seq Ck).1=the_sort_of t1' by A43,A45,A44,A51,NAT_1:14
+        ,XXREAL_0:2;
+        (vertex-seq C1).(len C1 +1) = (vertex-seq C1).(1+1) by FINSEQ_1:
+        56
+          .= (the Target of G).e1 by A60,FINSEQ_1:61
+          .= (the ResultSort of S).e1`1 by A58,Def3
           .= (the ResultSort of S).o by MCART_1:7
           .= the_result_sort_of o by MSUALG_1:def 7
           .= the_sort_of t1 by A56,MSATERM:17;
-        then reconsider d = C1^Ck as directed Chain of G by A53,A54,A57,A58,
-MSSCYC_1:15;
+        then reconsider
+        d = C1^Ck as directed Chain of G by A51,A62,A63,A65,A52,A59
+        ,CARD_1:47,MSSCYC_1:15;
         take d, t2;
-        thus d = C.(k+1) by A53,A56;
-        thus len d = len C1 + k by A53,FINSEQ_1:35
+        thus d = C.(k+1) by A61,A55;
+        thus len d = len C1 + k by A62,FINSEQ_1:35
           .= k+1 by FINSEQ_1:56;
-        thus t2 = t|(p|(k+1)) by A54;
-        thus (vertex-seq d).(len d +1) = v by A53,A57,A58,MSSCYC_1:16;
-        (vertex-seq C1).1 = (the Source of G).e1
-         by A59,FINSEQ_1:61
-          .= e1`2 by A56,Def2
-          .= the_sort_of t2 by A56,MCART_1:7;
-        hence thesis by A57,A58,MSSCYC_1:16;
+        thus t2 = t|(p|(k+1)) by A53;
+        thus (vertex-seq d).(len d +1) = v by A51,A62,A64,A59,CARD_1:47 ,
+        MSSCYC_1:16;
+        (vertex-seq C1).1 = (the Source of G).e1 by A60,FINSEQ_1:61
+          .= e1`2 by A58,Def2
+          .= the_sort_of t2 by A57,MCART_1:7;
+        hence thesis by A51,A62,A59,CARD_1:47,MSSCYC_1:16;
       end;
     end;
-    for k holds Z[k] from NAT_1:sch 2(A39, A40);
-    then consider c being directed Chain of G, t1 being Term of S, X such that
-A60: c = C.n & len c = n & t1 = t|(p|n) &
-    (vertex-seq c).(len c +1) = v & (vertex-seq c).1 = the_sort_of t1 by A1;
-    thus thesis by A60;
+A66: Z[0];
+    for k holds Z[k] from NAT_1:sch 2(A66, A42);
+    then
+    ex c being directed Chain of G, t1 being Term of S, X st c = C.n & len
+    c = n & t1 = t|(p|n) & (vertex-seq c).(len c +1) = v & ( vertex-seq c).1 =
+    the_sort_of t1 by A1;
+    hence thesis;
   end;
   given c being directed Chain of InducedGraph S such that
-A61: len c = n & (vertex-seq c).(len c +1) = v;
-  set cS = the carrier of S;
+A67: len c = n and
+A68: (vertex-seq c).(len c +1) = v;
   set EG = the carrier' of G;
-  set D = S-Terms X;
-  set SG = the Source of G;
-  set TG = the Target of G;
-A62: c is FinSequence of the carrier' of InducedGraph S by MSSCYC_1:def 1;
-A63: 1 in dom c by A1,A61,FINSEQ_3:27;
-  then
-A64: c.1 in InducedEdges S by A62,DTCONSTR:2;
-  reconsider EG as non empty set by A62,A63,DTCONSTR:2;
-A65: G is non void by A64;
-A66: c is non empty by A1,A61,CARD_1:47;
-  deffunc F(set) = X.$1;
-A67: for e being set st e in cS holds F(e) <> {};
-  consider cX being ManySortedSet of cS such that
-A68: for e being set st e in cS holds cX.e in F(e) from PBOOLE:sch 1 (A67);
-  defpred P[Nat, set, set] means
-  ex o being OperSymbol of S, rs1 being SortSymbol of S,
-  Ck, Ck1 being Term of S, X, a being ArgumentSeq of Sym(o,X)
-  st Ck = $2 & $3 = Ck1 & c.($1+1) = [o, rs1] & Ck1 = [o,cS]-tree a &
-  (for i being Nat st i in dom a ex t being Term of S,X
-  st t = a.i & the_sort_of t = (the_arity_of o).i &
-  (the_sort_of t = rs1 & the_sort_of Ck = rs1 implies t = Ck) &
-  (the_sort_of t <> rs1 or the_sort_of Ck <> rs1 implies
-  t = root-tree [cX.(the_sort_of t), the_sort_of t]));
   reconsider n1=n as Element of NAT by ORDINAL1:def 13;
-A69: for k being Element of NAT st 1 <= k & k < n1
-  for x being Element of D ex y being Element of D st P[k,x,y]
-  proof
-    let k be Element of NAT;
-    assume 1 <= k & k < n1;
-    then
-A70: k<=k+1 & k+1<=n by NAT_1:13;
-    let x be Element of D;
-    1<=k+1 by NAT_1:11;
-    then k+1 in dom c by A61,A70,FINSEQ_3:27;
-    then reconsider ck1 = c.(k+1) as Element of EG by A62,DTCONSTR:2;
-    consider o, rs1 being set such that
-A71: ck1 = [o,rs1] & o in the carrier' of S & rs1 in cS and
-    ex n being Nat, args being Element of (the carrier of S)*
-    st (the Arity of S).o = args & n in dom args & args.n = rs1 by Def1;
-    reconsider o as OperSymbol of S by A71;
-    reconsider rs1 as SortSymbol of S by A71;
-    set DA = dom the_arity_of o;
-    set ar = the_arity_of o;
-    defpred P[set, set] means
-    (ar.$1 = rs1 & the_sort_of x = rs1 implies $2 = x) &
-    (ar.$1 <> rs1 or the_sort_of x <> rs1 implies
-    $2 = root-tree [cX.(ar.$1), ar.$1]);
-A72: for e being set st e in DA ex u being set st u in D & P[e,u]
-    proof
-      let e be set;
-      assume
-A73:  e in DA;
-      per cases;
-      suppose
-A74:    ar.e = rs1 & the_sort_of x = rs1;
-        take x;
-        thus thesis by A74;
-      end;
-      suppose
-A75:    ar.e <> rs1 or the_sort_of x <> rs1;
-        reconsider s = (the_arity_of o).e as SortSymbol of S by A73,DTCONSTR:2;
-        reconsider x = cX.((the_arity_of o).e) as Element of X.s by A68;
-        reconsider t = root-tree [x,s] as Term of S,X by MSATERM:4;
-        take t;
-        thus thesis by A75;
-      end;
-    end;
-    consider a being Function of DA,D such that
-A76: for e being set st e in DA holds P[e,a.e] from FUNCT_2:sch 1 (A72);
-    DA = Seg len ar by FINSEQ_1:def 3;
-    then reconsider a as FinSequence of D by FINSEQ_2:28;
-A77: dom a = DA by FUNCT_2:def 1;
-    now
-      let i be Nat;
-      assume
-A78:  i in dom a;
-      then reconsider t = a.i as Term of S,X by DTCONSTR:2;
-      take t;
-      thus t = a.i;
-      per cases;
-      suppose ar.i = rs1 & the_sort_of x = rs1;
-        hence the_sort_of t = ar.i by A76,A77,A78;
-      end;
-      suppose ar.i <> rs1 or the_sort_of x <> rs1;
-        then
-A79:    t = root-tree [cX.(ar.i),ar.i] by A76,A77,A78;
-        reconsider s = (the_arity_of o).i as SortSymbol of S
-        by A77,A78,DTCONSTR:2;
-        cX.((the_arity_of o).i) is Element of X.s by A68;
-        hence the_sort_of t = ar.i by A79,MSATERM:14;
-      end;
-    end;
-    then reconsider a as ArgumentSeq of Sym(o,X) by A77,MSATERM:24;
-    reconsider y = [o,cS]-tree a as Term of S,X by MSATERM:1;
-    take y, o, rs1, x, y, a;
-    thus x = x & y = y;
-    thus c.(k+1) = [o, rs1] by A71;
-    thus y = [o,cS]-tree a;
-    let i be Nat;
-    assume
-A80: i in dom a;
-    then reconsider t = a.i as Term of S,X by DTCONSTR:2;
-    take t;
-    thus t = a.i;
-    thus the_sort_of t = (the_arity_of o).i by A80,MSATERM:23;
-    hence thesis by A76,A77,A80;
-  end;
-  consider o, rs1 being set such that
-A81: c.1 = [o, rs1] & o in the carrier' of S & rs1 in the carrier of S &
-  ex n being Nat, args being Element of (the carrier of S)*
-  st (the Arity of S).o = args & n in dom args & args.n = rs1 by A64,Def1;
-  reconsider o as OperSymbol of S by A81;
-  reconsider rs1 as SortSymbol of S by A81;
+  deffunc F(set) = X.$1;
+  set TG = the Target of G;
+  set SG = the Source of G;
+  set D = S-Terms X;
+  set cS = the carrier of S;
+A69: for e being set st e in cS holds F(e) <> {};
+  consider cX being ManySortedSet of cS such that
+A70: for e being set st e in cS holds cX.e in F(e) from PBOOLE:sch 1 (
+  A69);
+  defpred P[Nat, set, set] means ex o being OperSymbol of S, rs1 being
+SortSymbol of S, Ck, Ck1 being Term of S, X, a being ArgumentSeq of Sym(o,X) st
+  Ck = $2 & $3 = Ck1 & c.($1+1) = [o, rs1] & Ck1 = [o,cS]-tree a & (for i being
+  Nat st i in dom a ex t being Term of S,X st t = a.i & the_sort_of t = (
+the_arity_of o).i & (the_sort_of t = rs1 & the_sort_of Ck = rs1 implies t = Ck)
+  & (the_sort_of t <> rs1 or the_sort_of Ck <> rs1 implies t = root-tree [cX.(
+  the_sort_of t), the_sort_of t]));
+A71: c is FinSequence of the carrier' of InducedGraph S by MSSCYC_1:def 1;
+A72: 1 in dom c by A1,A67,FINSEQ_3:27;
+  then reconsider EG as non empty set by A71;
+  c.1 in InducedEdges S by A71,A72,DTCONSTR:2;
+  then consider o, rs1 being set such that
+A73: c.1 = [o, rs1] and
+A74: o in the carrier' of S and
+A75: rs1 in the carrier of S and
+A76: ex n being Nat, args being Element of (the carrier of S)* st (the
+  Arity of S).o = args & n in dom args & args.n = rs1 by Def1;
+  reconsider rs1 as SortSymbol of S by A75;
+  reconsider o as OperSymbol of S by A74;
   deffunc F(Nat) = root-tree [cX.((the_arity_of o).$1),(the_arity_of o).$1];
   consider a being FinSequence such that
-A82: len a = len the_arity_of o & for k be Nat st k in dom a
-  holds a.k = F(k) from FINSEQ_1:sch 2;
-A83: dom a = Seg len the_arity_of o by A82,FINSEQ_1:def 3;
-A84: dom a = Seg len a by FINSEQ_1:def 3;
-  for i being Nat st i in dom a ex t being Term of S,X st t = a.i &
+A77: len a = len the_arity_of o & for k be Nat st k in dom a holds a.k
+  = F(k) from FINSEQ_1:sch 2;
+A78: dom a = Seg len a by FINSEQ_1:def 3;
+A79: for i being Nat st i in dom a ex t being Term of S,X st t = a.i &
   the_sort_of t = (the_arity_of o).i
   proof
     let i be Nat;
     assume
-A85: i in dom a;
+A80: i in dom a;
     set s = (the_arity_of o).i;
+    dom the_arity_of o = Seg len the_arity_of o by FINSEQ_1:def 3;
+    then reconsider s as SortSymbol of S by A77,A78,A80,DTCONSTR:2;
     set x = cX.((the_arity_of o).i);
-    dom the_arity_of o = Seg len the_arity_of o
-     by FINSEQ_1:def 3;
-    then reconsider s as SortSymbol of S by A82,A84,A85,DTCONSTR:2;
-    reconsider x as Element of X.s by A68;
+    reconsider x as Element of X.s by A70;
     reconsider t = root-tree [x,s] as Term of S,X by MSATERM:4;
     take t;
-    thus t = a.i by A82,A85;
+    thus t = a.i by A77,A80;
     thus thesis by MSATERM:14;
   end;
-  then reconsider a as ArgumentSeq of Sym(o,X) by A82,MSATERM:24;
+A81: dom a = Seg len the_arity_of o by A77,FINSEQ_1:def 3;
+  reconsider a as ArgumentSeq of Sym(o,X) by A77,A79,MSATERM:24;
   set C1 = [o,the carrier of S]-tree a;
   reconsider C1 as Term of S, X by MSATERM:1;
+A82: for k being Element of NAT st 1 <= k & k < n1 for x being Element of D
+  ex y being Element of D st P[k,x,y]
+  proof
+    let k be Element of NAT;
+    assume that
+    1 <= k and
+A83: k < n1;
+A84: 1<=k+1 by NAT_1:11;
+    k+1<=n by A83,NAT_1:13;
+    then k+1 in dom c by A67,A84,FINSEQ_3:27;
+    then reconsider ck1 = c.(k+1) as Element of EG by A71,DTCONSTR:2;
+    let x be Element of D;
+    consider o, rs1 being set such that
+A85: ck1 = [o,rs1] and
+A86: o in the carrier' of S and
+A87: rs1 in cS and
+    ex n being Nat, args being Element of (the carrier of S)* st (the
+    Arity of S).o = args & n in dom args & args.n = rs1 by Def1;
+    reconsider rs1 as SortSymbol of S by A87;
+    reconsider o as OperSymbol of S by A86;
+    set DA = dom the_arity_of o;
+    set ar = the_arity_of o;
+    defpred P[set, set] means (ar.$1 = rs1 & the_sort_of x = rs1 implies $2 =
+x) & (ar.$1 <> rs1 or the_sort_of x <> rs1 implies $2 = root-tree [cX.(ar.$1),
+    ar.$1]);
+A88: for e being set st e in DA ex u being set st u in D & P[e,u]
+    proof
+      let e be set;
+      assume
+A89:  e in DA;
+      per cases;
+      suppose
+A90:    ar.e = rs1 & the_sort_of x = rs1;
+        take x;
+        thus thesis by A90;
+      end;
+      suppose
+A91:    ar.e <> rs1 or the_sort_of x <> rs1;
+        reconsider s = (the_arity_of o).e as SortSymbol of S by A89,DTCONSTR:
+        2;
+        reconsider x = cX.((the_arity_of o).e) as Element of X.s by A70;
+        reconsider t = root-tree [x,s] as Term of S,X by MSATERM:4;
+        take t;
+        thus thesis by A91;
+      end;
+    end;
+    consider a being Function of DA,D such that
+A92: for e being set st e in DA holds P[e,a.e] from FUNCT_2:sch 1 (
+    A88);
+    DA = Seg len ar by FINSEQ_1:def 3;
+    then reconsider a as FinSequence of D by FINSEQ_2:28;
+A93: dom a = DA by FUNCT_2:def 1;
+    now
+      let i be Nat;
+      assume
+A94:  i in dom a;
+      then reconsider t = a.i as Term of S,X by DTCONSTR:2;
+      take t;
+      thus t = a.i;
+      per cases;
+      suppose
+        ar.i = rs1 & the_sort_of x = rs1;
+        hence the_sort_of t = ar.i by A92,A93,A94;
+      end;
+      suppose
+A95:    ar.i <> rs1 or the_sort_of x <> rs1;
+        reconsider s = (the_arity_of o).i as SortSymbol of S by A93,A94,
+        DTCONSTR:2;
+A96:    cX.((the_arity_of o).i) is Element of X.s by A70;
+        t = root-tree [cX.(ar.i),ar.i] by A92,A93,A94,A95;
+        hence the_sort_of t = ar.i by A96,MSATERM:14;
+      end;
+    end;
+    then reconsider a as ArgumentSeq of Sym(o,X) by A93,MSATERM:24;
+    reconsider y = [o,cS]-tree a as Term of S,X by MSATERM:1;
+    take y, o, rs1, x, y, a;
+    thus x = x & y = y;
+    thus c.(k+1) = [o, rs1] by A85;
+    thus y = [o,cS]-tree a;
+    let i be Nat;
+    assume
+A97: i in dom a;
+    then reconsider t = a.i as Term of S,X by DTCONSTR:2;
+    take t;
+    thus t = a.i;
+    thus the_sort_of t = (the_arity_of o).i by A97,MSATERM:23;
+    hence thesis by A92,A93,A97;
+  end;
   consider C being FinSequence of D such that
-A86: len C = n1 & (C.1 = C1 or n1 = 0) &
-  for k be Element of NAT st 1 <= k & k < n1 holds P[k,C.k,C.(k+1)]
-  from RECDEF_1:sch 4(A69);
-  defpred P[Nat] means 1<=$1 & $1<=n implies
-  ex C0 being Term of S, X, o being OperSymbol of S
-  st C0 = C.$1 & o = (c.$1)`1 & the_sort_of C0 = the_result_sort_of o &
-  height dom C0 = $1;
-A87: P[0];
-A88: for k be Nat st P[k] holds P[k+1]
+A98: len C = n1 & (C.1 = C1 or n1 = 0) & for k be Element of NAT st 1
+  <= k & k < n1 holds P[k,C.k,C.(k+1)] from RECDEF_1:sch 4(A82);
+  defpred P[Nat] means 1<=$1 & $1<=n implies ex C0 being Term of S, X, o being
+  OperSymbol of S st C0 = C.$1 & o = (c.$1)`1 & the_sort_of C0 =
+  the_result_sort_of o & height dom C0 = $1;
+A99: G is non void by A72;
+A100: for k be Nat st P[k] holds P[k+1]
   proof
     let k;
     assume
-A89: 1<=k & k<=n implies ex Ck being Term of S, X, o being OperSymbol of S
-    st Ck = C.k & o = (c.k)`1 & the_sort_of Ck = the_result_sort_of o &
-    height dom Ck = k;
-    assume
-A90: 1<=k+1 & k+1<=n;
-A91: k<=k+1 by NAT_1:11;
+A101: 1<=k & k<=n implies ex Ck being Term of S, X, o being OperSymbol
+of S st Ck = C.k & o = (c.k)`1 & the_sort_of Ck = the_result_sort_of o & height
+    dom Ck = k;
+    assume that
+A102: 1<=k+1 and
+A103: k+1<=n;
+A104: k<n by A103,NAT_1:13;
+A105: k<=k+1 by NAT_1:11;
     then
-A92: k<=n by A90,XXREAL_0:2;
-A93: k<n by A90,NAT_1:13;
+A106: k<=n by A103,XXREAL_0:2;
     per cases;
     suppose
-A94:  k = 0;
+A107: k = 0;
       take C1, o;
-      thus C1 = C.(k+1) by A1,A86,A94;
-      thus o = (c.(k+1))`1 by A81,A94,MCART_1:7;
+      thus C1 = C.(k+1) by A1,A98,A107;
+      thus o = (c.(k+1))`1 by A73,A107,MCART_1:7;
+      reconsider w = doms a as FinTree-yielding FinSequence;
+A108: dom doms a = dom a by TREES_3:39;
       C1.{} = [o, cS] by TREES_4:def 4;
       hence the_sort_of C1 = the_result_sort_of o by MSATERM:17;
-A95:  dom C1 = tree doms a by TREES_4:10;
-A96:  dom doms a = dom a by TREES_3:39;
-      consider i being Nat, args being Element of (the carrier of S)* such that
-A97:  (the Arity of S).o = args & i in dom args & args.i = rs1 by A81;
-A98:  args = the_arity_of o by A97,MSUALG_1:def 6;
-A99:  dom args = Seg len args by FINSEQ_1:def 3;
-      then reconsider t = a.i as Term of S, X by A82,A84,A97,A98,MSATERM:22;
-      reconsider w = doms a as FinTree-yielding FinSequence;
+      consider i being Nat, args being Element of (the carrier of S)* such
+      that
+A109: (the Arity of S).o = args and
+A110: i in dom args and
+      args.i = rs1 by A76;
+A111: dom args = Seg len args by FINSEQ_1:def 3;
+A112: args = the_arity_of o by A109,MSUALG_1:def 6;
+      then reconsider t = a.i as Term of S, X by A77,A78,A110,A111,MSATERM:
+      22;
+      (doms a).i = dom t by A77,A78,A110,A112,A111,FUNCT_6:31;
+      then
+A113: dom C1 = tree doms a & dom t in rng w by A77,A78,A108,A110,A112,
+      A111,FUNCT_1:def 5,TREES_4:10;
       reconsider dt = dom t as finite Tree;
-      (doms a).i = dom t by A82,A84,A97,A98,A99,FUNCT_6:31;
-      then
-A100:  dom t in rng w by A82,A84,A96,A97,A98,A99,FUNCT_1:def 5;
-A101: a.i = root-tree [cX.((the_arity_of o).i),(the_arity_of o).i] by A82,A97
-,A98,A99,A83;
-      then
-A102: dom t = elementary_tree 0 by TREES_4:3;
-      now
+A114: a.i = root-tree [cX.((the_arity_of o).i),(the_arity_of o).i] by
+      A77,A81,A110,A112,A111;
+A115: now
         let t' be finite Tree;
-        assume t' in rng w;
+        assume
+        t' in rng w;
         then consider j being Nat such that
-A103:   j in dom w & w.j = t' by FINSEQ_2:11;
-A104:   a.j = root-tree [cX.((the_arity_of o).j),(the_arity_of o).j] by A82,A96
-,A103;
-        reconsider t'' = a.j as Term of S, X by A96,A103,MSATERM:22;
-A105:   w.j = dom t'' by A96,A103,FUNCT_6:31;
-        dom t'' = elementary_tree 0 by A104,TREES_4:3;
-        hence height t' <= height dt by A101,A103,A105,TREES_4:3;
+A116:   j in dom w and
+A117:   w.j = t' by FINSEQ_2:11;
+        reconsider t'' = a.j as Term of S, X by A108,A116,MSATERM:22;
+        a.j = root-tree [cX.((the_arity_of o).j),(the_arity_of o).j] by
+        A77,A108,A116;
+        then
+A118:   dom t'' = elementary_tree 0 by TREES_4:3;
+        w.j = dom t'' by A108,A116,FUNCT_6:31;
+        hence height t' <= height dt by A114,A117,A118,TREES_4:3;
       end;
-      hence thesis by A94,A95,A100,A102,TREES_1:79,TREES_3:82;
+      dom t = elementary_tree 0 by A114,TREES_4:3;
+      hence thesis by A107,A113,A115,TREES_1:79,TREES_3:82;
     end;
     suppose
-A106: k <> 0;
+A119: k <> 0;
       then
-A107: 1<=k by NAT_1:14;
+A120: 1<=k by NAT_1:14;
+      then k in dom c by A67,A106,FINSEQ_3:27;
+      then reconsider ck = c.k as Element of EG by A71,DTCONSTR:2;
       consider Ck being Term of S, X, o being OperSymbol of S such that
-A108: Ck = C.k & o = (c.k)`1 & the_sort_of Ck = the_result_sort_of o &
-      height dom Ck = k by A89,A90,A91,A106,NAT_1:14,XXREAL_0:2;
+A121: Ck = C.k and
+A122: o = (c.k)`1 & the_sort_of Ck = the_result_sort_of o and
+A123: height dom Ck = k by A101,A103,A105,A119,NAT_1:14,XXREAL_0:2;
       reconsider kk=k as Element of NAT by ORDINAL1:def 13;
-      consider o1 being OperSymbol of S, rs1 being SortSymbol of S,
-      Ck', Ck1 being Term of S, X, a being ArgumentSeq of Sym(o1,X) such that
-A109: Ck' = C.k & C.(kk+1) = Ck1 & c.(k+1) = [o1, rs1] and
-A110: Ck1 = [o1,cS]-tree a and
-A111: (for i being Nat st i in dom a ex t being Term of S,X
-      st t = a.i & the_sort_of t = (the_arity_of o1).i &
-      (the_sort_of t = rs1 & the_sort_of Ck' = rs1 implies t = Ck') &
-      (the_sort_of t <> rs1 or the_sort_of Ck' <> rs1 implies
-      t = root-tree [cX.(the_sort_of t), the_sort_of t])) by A86,A93,A107;
-A112: len a = len the_arity_of o1 by MSATERM:22;
-A113: dom Ck1 = tree doms a by A110,TREES_4:10;
-A114: dom doms a = dom a by TREES_3:39;
-A115: dom a = Seg len a by FINSEQ_1:def 3;
+      consider o1 being OperSymbol of S, rs1 being SortSymbol of S, Ck', Ck1
+      being Term of S, X, a being ArgumentSeq of Sym(o1,X) such that
+A124: Ck' = C.k and
+A125: C.(kk+1) = Ck1 and
+A126: c.(k+1) = [o1, rs1] and
+A127: Ck1 = [o1,cS]-tree a and
+A128: for i being Nat st i in dom a ex t being Term of S,X st t = a.
+i & the_sort_of t = (the_arity_of o1).i & (the_sort_of t = rs1 & the_sort_of
+Ck' = rs1 implies t = Ck') & (the_sort_of t <> rs1 or the_sort_of Ck' <> rs1
+implies t = root-tree [cX.(the_sort_of t), the_sort_of t]) by A98,A104,A119,
+      NAT_1:14;
       set ck1 = c.(kk+1);
-A116: k+1 in dom c by A61,A90,FINSEQ_3:27;
-      then ck1 in EG by A62,DTCONSTR:2;
+A129: k+1 in dom c by A67,A102,A103,FINSEQ_3:27;
+      then ck1 in EG by A71,DTCONSTR:2;
       then consider o', rs1' being set such that
-A117: ck1=[o', rs1'] & o' in the carrier' of S & rs1' in the carrier of S &
-      ex n being Nat, args being Element of (the carrier of S)*
-      st (the Arity of S).o' = args & n in dom args & args.n = rs1' by Def1;
-      k in dom c by A61,A92,A107,FINSEQ_3:27;
-      then reconsider ck = c.k as Element of EG by A62,DTCONSTR:2;
-      reconsider ck1 as Element of EG by A62,A116,DTCONSTR:2;
-A118: the_sort_of Ck                             ::    the_result_sort_of o
-      = (the ResultSort of S).(ck`1) by A108,MSUALG_1:def 7
-        .= TG.ck by Def3
-        .= (vertex-seq c).(kk+1) by A61,A65,A66,A92,A107,MSSCYC_1:11
-        .= SG.ck1 by A61,A65,A66,A90,MSSCYC_1:11
-        .= ck1`2 by Def2
-        .= rs1 by A109,MCART_1:7;
-A119: o1 = o' & rs1 = rs1' by A109,A117,ZFMISC_1:33;
-      then consider i being Nat, args being Element of (the carrier of S)* such
-      that
-A120: (the Arity of S).o' = args & i in dom args & args.i = rs1 by A117;
-      reconsider o' as OperSymbol of S by A117;
-A121: args = the_arity_of o' by A120,MSUALG_1:def 6;
-A122: dom args = Seg len args by FINSEQ_1:def 3;
-      then consider t being Term of S, X such that
-A123: t = a.i & the_sort_of t = (the_arity_of o1).i &
-      (the_sort_of t = rs1 & the_sort_of Ck' = rs1 implies t = Ck') &
-      (the_sort_of t <> rs1 or the_sort_of Ck' <> rs1 implies
-      t = root-tree [cX.(the_sort_of t), the_sort_of t]) by A111,A112,A115,A119
-,A120,A121;
+A130: ck1=[o', rs1'] and
+A131: o' in the carrier' of S and
+      rs1' in the carrier of S and
+A132: ex n being Nat, args being Element of (the carrier of S)* st (
+      the Arity of S).o' = args & n in dom args & args.n = rs1' by Def1;
+A133: o1 = o' by A126,A130,ZFMISC_1:33;
+      take Ck1, o1;
+      thus Ck1 = C.(k+1) by A125;
+      thus o1 = (c.(k+1))`1 by A126,MCART_1:7;
+      Ck1.{} = [o1,cS] by A127,TREES_4:def 4;
+      hence the_sort_of Ck1 = the_result_sort_of o1 by MSATERM:17;
+A134: dom Ck1 = tree doms a by A127,TREES_4:10;
+      reconsider ck1 as Element of EG by A71,A129,DTCONSTR:2;
       reconsider w = doms a as FinTree-yielding FinSequence;
+A135: len a = len the_arity_of o1 & dom a = Seg len a by FINSEQ_1:def 3
+      ,MSATERM:22;
+      rs1 = rs1' by A126,A130,ZFMISC_1:33;
+      then consider
+      i being Nat, args being Element of (the carrier of S)* such
+      that
+A136: (the Arity of S).o' = args and
+A137: i in dom args and
+A138: args.i = rs1 by A132;
+      reconsider o' as OperSymbol of S by A131;
+A139: dom args = Seg len args by FINSEQ_1:def 3;
+A140: args = the_arity_of o' by A136,MSUALG_1:def 6;
+      then consider t being Term of S, X such that
+A141: t = a.i and
+A142: the_sort_of t = (the_arity_of o1).i &( the_sort_of t = rs1 &
+      the_sort_of Ck' = rs1 implies t = Ck') and
+      the_sort_of t <> rs1 or the_sort_of Ck' <> rs1 implies t = root-tree
+      [cX.(the_sort_of t), the_sort_of t] by A128,A135,A133,A137,A139;
       reconsider dt = dom t as finite Tree;
-      (doms a).i = dom t by A112,A115,A119,A120,A121,A122,A123,FUNCT_6:31;
-      then
-A124: dom t in rng w by A112,A114,A115,A119,A120,A121,A122,FUNCT_1:def 5;
-A125: now
+A143: dom doms a = dom a by TREES_3:39;
+A144: now
         let t' be finite Tree;
-        assume t' in rng w;
+        assume
+        t' in rng w;
         then consider j being Nat such that
-A126:   j in dom w & w.j = t' by FINSEQ_2:11;
+A145:   j in dom w and
+A146:   w.j = t' by FINSEQ_2:11;
         consider t'' being Term of S, X such that
-A127:   t'' = a.j & the_sort_of t'' = (the_arity_of o1).j &
-        (the_sort_of t'' = rs1 & the_sort_of Ck' = rs1 implies t'' = Ck') &
-        (the_sort_of t'' <> rs1 or the_sort_of Ck' <> rs1 implies
-        t'' = root-tree [cX.(the_sort_of t''), the_sort_of t'']) by A111,A114
-,A126;
-A128:   w.j = dom t'' by A114,A126,A127,FUNCT_6:31;
+A147:   t'' = a.j and
+        the_sort_of t'' = (the_arity_of o1).j and
+A148:   the_sort_of t'' = rs1 & the_sort_of Ck' = rs1 implies t'' =
+        Ck' and
+A149:   the_sort_of t'' <> rs1 or the_sort_of Ck' <> rs1 implies t''
+        = root-tree [cX.(the_sort_of t''), the_sort_of t''] by A128,A143,A145;
+A150:   w.j = dom t'' by A143,A145,A147,FUNCT_6:31;
         per cases;
-        suppose the_sort_of t'' = rs1 & the_sort_of Ck' = rs1;
-
-hence height t' <= height dt by A114,A119,A120,A123,A126,A127,FUNCT_6:31
-,MSUALG_1:def 6;
+        suppose
+          the_sort_of t'' = rs1 & the_sort_of Ck' = rs1;
+          hence height t' <= height dt by A143,A133,A136,A138,A142,A145,A146,
+          A147,A148,FUNCT_6:31,MSUALG_1:def 6;
         end;
-        suppose the_sort_of t'' <> rs1 or the_sort_of Ck' <> rs1;
-          hence height t' <= height dt by A126,A127,A128,TREES_1:79,TREES_4:3;
+        suppose
+          the_sort_of t'' <> rs1 or the_sort_of Ck' <> rs1;
+          hence height t' <= height dt by A146,A149,A150,TREES_1:79 ,
+          TREES_4:3;
         end;
       end;
-      take Ck1, o1;
-      thus Ck1 = C.(k+1) by A109;
-      thus o1 = (c.(k+1))`1 by A109,MCART_1:7;
-      Ck1.{} = [o1,cS] by A110,TREES_4:def 4;
-      hence the_sort_of Ck1 = the_result_sort_of o1 by MSATERM:17;
-
-thus thesis by A108,A109,A113,A118,A119,A120,A123,A124,A125,
-MSUALG_1:def 6,TREES_3:82;
+      (doms a).i = dom t by A135,A133,A137,A140,A139,A141,FUNCT_6:31;
+      then
+A151: dom t in rng w by A143,A135,A133,A137,A140,A139,FUNCT_1:def 5;
+      the_sort_of Ck = (the ResultSort of S).(ck`1) by A122,MSUALG_1:def
+      7
+        .= TG.ck by Def3
+        .= (vertex-seq c).(kk+1) by A67,A99,A106,A120,CARD_1:47,MSSCYC_1:11
+        .= SG.ck1 by A67,A99,A102,A103,CARD_1:47,MSSCYC_1:11
+        .= ck1`2 by Def2
+        .= rs1 by A126,MCART_1:7;
+      hence thesis by A121,A123,A124,A134,A133,A136,A138,A142,A151,A144,
+      MSUALG_1:def 6,TREES_3:82;
     end;
   end;
-  for k holds P[k] from NAT_1:sch 2(A87, A88);
-  then consider Cn being Term of S, X, o being OperSymbol of S such that
-A129: Cn = C.n & o = (c.n)`1 & the_sort_of Cn = the_result_sort_of o &
-  height dom Cn = n by A1;
-A130: c is non empty by A1,A61,CARD_1:47;
-A131: G is non void by A64;
   set cn = c.len c;
-  n in dom c by A61,A130,FINSEQ_5:6;
+  n in dom c by A1,A67,CARD_1:47,FINSEQ_5:6;
   then
-A132: cn in InducedEdges S by A61,A62,DTCONSTR:2;
-  (vertex-seq c).(len c +1) = (the Target of G).(c.len c)
-  by A130,A131,MSSCYC_1:14
-    .= (the ResultSort of S).cn`1 by A132,Def3
-    .= the_result_sort_of o by A61,A129,MSUALG_1:def 7;
-  then reconsider Cn as Element of (the Sorts of FreeMSA X).v by A3,A61,A129,
-MSATERM:def 5;
+A152: cn in InducedEdges S by A67,A71,DTCONSTR:2;
+A153: P[0];
+  for k holds P[k] from NAT_1:sch 2(A153, A100);
+  then consider Cn being Term of S, X, o being OperSymbol of S such that
+  Cn = C.n and
+A154: o = (c.n)`1 and
+A155: the_sort_of Cn = the_result_sort_of o and
+A156: height dom Cn = n by A1;
+  G is non void by A72;
+  then (vertex-seq c).(len c +1) = (the Target of G).(c.len c) by A1,A67,
+  CARD_1:47,MSSCYC_1:14
+    .= (the ResultSort of S).cn`1 by A152,Def3
+    .= the_result_sort_of o by A67,A154,MSUALG_1:def 7;
+  then reconsider Cn as Element of (the Sorts of FreeMSA X).v by A2,A68,A155,
+  MSATERM:def 5;
   take Cn;
-  thus thesis by A129,MSAFREE2:def 14;
+  thus thesis by A156,MSAFREE2:def 14;
 end;
 
 theorem
-  for S being void non empty ManySortedSign
-  holds S is monotonic iff InducedGraph S is well-founded
+  for S being void non empty ManySortedSign holds S is monotonic iff
+  InducedGraph S is well-founded
 proof
   let S be void non empty ManySortedSign;
-  set G = InducedGraph S,
-  OS = the carrier' of S, CA = the carrier of S, AR = the Arity of S;
+  set G = InducedGraph S, OS = the carrier' of S, CA = the carrier of S, AR =
+  the Arity of S;
   hereby
-    assume S is monotonic;
-    assume not G is well-founded;
+    assume
+    S is monotonic;
+    assume
+    not G is well-founded;
     then consider v being Element of the carrier of G such that
-A1: for n being Element of NAT
-    ex c being directed Chain of G st c is non empty &
-    (vertex-seq c).(len c +1) = v & len c > n by MSSCYC_1:def 5;
+A1: for n being Element of NAT ex c being directed Chain of G st c is
+    non empty & (vertex-seq c).(len c +1) = v & len c > n by MSSCYC_1:def 5;
     consider e being directed Chain of G such that
-A2: e is non empty & (vertex-seq e).(len e +1) = v & len e>0 by A1;
-A3: e is FinSequence of the carrier' of G by MSSCYC_1:def 1;
+A2: e is non empty and
+    (vertex-seq e).(len e +1) = v and
+    len e>0 by A1;
+    e is FinSequence of the carrier' of G by MSSCYC_1:def 1;
+    then
+A3: rng e c= the carrier' of G by FINSEQ_1:def 4;
     1 in dom e by A2,FINSEQ_5:6;
-    then e.1 in rng e & rng e c= the carrier' of G
-     by A3,FINSEQ_1:def 4,FUNCT_1:def 5;
-    then ex op, v being set st e.1 = [op, v] & op in OS & v in CA &
-    ex n being Nat, args being Element of CA*
-    st AR.op=args & n in dom args & args.n = v by Def1;
+    then e.1 in rng e by FUNCT_1:def 5;
+    then
+    ex op, v being set st e.1 = [op, v] & op in OS & v in CA & ex n being
+Nat, args being Element of CA* st AR.op=args & n in dom args & args.n = v by
+    A3,Def1;
     hence contradiction;
   end;
-  assume G is well-founded;
+  assume
+  G is well-founded;
   let A be finitely-generated (non-empty MSAlgebra over S);
   thus the Sorts of A is finite-yielding by MSAFREE2:def 10;
 end;
 
 theorem
-  for S being non void (non empty ManySortedSign)
-  st S is monotonic holds InducedGraph S is well-founded
+  for S being non void (non empty ManySortedSign) st S is monotonic
+  holds InducedGraph S is well-founded
 proof
   let S be non void (non empty ManySortedSign);
   set G = InducedGraph S;
   assume
-A1: S is monotonic;
-  assume G is non well-founded;
-  then consider v being Element of the carrier of G such that
-A2: for n being Element of NAT ex c being directed Chain of G
-  st c is non empty & (vertex-seq c).(len c +1)=v & len c>n by MSSCYC_1:def 5;
-  reconsider S as monotonic non void (non empty ManySortedSign) by A1;
-  reconsider v as SortSymbol of S;
+  S is monotonic;
+  then reconsider S as monotonic non void (non empty ManySortedSign);
   consider A being finite-yielding non-empty MSAlgebra over S;
+  assume
+  G is non well-founded;
+  then consider v being Element of the carrier of G such that
+A1: for n being Element of NAT ex c being directed Chain of G st c is
+  non empty & (vertex-seq c).(len c +1)=v & len c>n by MSSCYC_1:def 5;
+  reconsider v as SortSymbol of S;
   consider s being finite non empty Subset of NAT such that
-A3: s = { depth t where t is Element of (the Sorts of FreeEnv A).v :
-  not contradiction } & depth(v,A) = max s by CIRCUIT1:def 6;
+A2: s = { depth t where t is Element of (the Sorts of FreeEnv A).v : not
+  contradiction } and
+  depth(v,A) = max s by CIRCUIT1:def 6;
   max s in NAT by ORDINAL1:def 13;
   then consider c being directed Chain of G such that
-A4: c is non empty & (vertex-seq c).(len c +1) = v & len c>max s by A2;
+  c is non empty and
+A3: (vertex-seq c).(len c +1) = v and
+A4: len c>max s by A1;
   1<=len c by A4,NAT_1:14;
-  then consider t being Element of (the Sorts of FreeMSA the Sorts of A).v
-  such that
-A5: depth t = len c by A4,Th2;
+  then consider
+  t being Element of (the Sorts of FreeMSA the Sorts of A).v such
+  that
+A5: depth t = len c by A3,Th2;
   reconsider t' = t as Element of (the Sorts of FreeEnv A).v;
-  consider t'' being Element of (the Sorts of FreeMSA the Sorts of A).v
-  such that
-A6: t' = t'' & depth t' = depth t'' by CIRCUIT1:def 5;
-  depth t' in s by A3;
-  hence contradiction by A4,A5,A6,XXREAL_2:def 8;
+  (ex t'' being Element of (the Sorts of FreeMSA the Sorts of A ).v st t'
+  = t'' & depth t' = depth t'' )& depth t' in s by A2,CIRCUIT1:def 5;
+  hence contradiction by A4,A5,XXREAL_2:def 8;
 end;
 
 theorem Th5:
-  for S being non void non empty ManySortedSign,
-  X being non-empty finite-yielding ManySortedSet of the carrier of S
-  st S is finitely_operated for n being Nat, v being SortSymbol of S holds
-  {t where t is Element of (the Sorts of FreeMSA X).v: depth t <= n} is finite
+  for S being non void non empty ManySortedSign, X being non-empty
+finite-yielding ManySortedSet of the carrier of S st S is finitely_operated for
+n being Nat, v being SortSymbol of S holds {t where t is Element of (the Sorts
+  of FreeMSA X).v: depth t <= n} is finite
 proof
-  let S be non void non empty ManySortedSign,
-  X be non-empty finite-yielding ManySortedSet of the carrier of S such that
+  let S be non void non empty ManySortedSign, X be non-empty finite-yielding
+  ManySortedSet of the carrier of S such that
 A1: S is finitely_operated;
   set SF = the Sorts of FreeMSA X;
+  defpred P[Nat] means for v being SortSymbol of S holds {t where t is Element
+  of SF.v: depth t <= $1} is finite;
 A2: FreeMSA X = MSAlgebra (#FreeSort(X), FreeOper(X)#) by MSAFREE:def 16;
-  defpred P[Nat] means for v being SortSymbol of S holds
-  {t where t is Element of SF.v: depth t <= $1} is finite;
-A3: P[0]
+A3: for k be Nat st P[k] holds P[k+1]
+  proof
+    deffunc F(set) = $1;
+    let n be Nat;
+    assume
+A4: for v being SortSymbol of S holds {t where t is Element of SF.v:
+    depth t <= n} is finite;
+    let v be SortSymbol of S;
+    defpred QZ[Element of SF.v] means depth $1 = n+1;
+    defpred P[Element of SF.v] means depth $1 <= n+1;
+    defpred Q[Element of SF.v] means depth $1 <= n or depth $1 = n+1;
+    set dn1 = {F(t) where t is Element of SF.v: P[t]};
+    set dn11 = {F(t) where t is Element of SF.v: Q[t]};
+    set den1 = {t where t is Element of SF.v: QZ[t]};
+    set ov = {o where o is OperSymbol of S: the_result_sort_of o = v};
+A5: SF.v = FreeSort(X,v) by A2,MSAFREE:def 13;
+    ov is finite by A1,MSSCYC_1:def 6;
+    then consider ovs being FinSequence such that
+A6: rng ovs = ov by FINSEQ_1:73;
+    deffunc F(set) = {t where t is Element of SF.v: depth t = n+1 & t.{} = [
+    ovs.$1,the carrier of S]};
+    consider dvs being FinSequence such that
+A7: len dvs = len ovs & for k being Nat st k in dom dvs holds dvs.k =
+    F(k) from FINSEQ_1:sch 2;
+A8: dom ovs = Seg len ovs & dom dvs = Seg len dvs by FINSEQ_1:def 3;
+A9: FreeSort(X,v) c= S-Terms X by MSATERM:12;
+A10: den1 c= Union dvs
+    proof
+      let x be set;
+      assume
+      x in den1;
+      then consider t being Element of SF.v such that
+A11:  x = t and
+A12:  depth t = n+1;
+      t in FreeSort(X,v) by A5;
+      then reconsider t' = t as Term of S, X by A9;
+      now
+A13:    ex dt being finite DecoratedTree, tt being finite Tree st dt = t &
+        tt = dom dt & depth t = height tt by MSAFREE2:def 14;
+        assume
+        t' is root;
+        hence contradiction by A12,A13,TREES_1:79,TREES_9:def 1;
+      end;
+      then consider o being OperSymbol of S such that
+A14:  t'.{} = [o,the carrier of S] by MSSCYC_1:20;
+      the_result_sort_of o = the_sort_of t' by A14,MSATERM:17
+        .= v by A5,MSATERM:def 5;
+      then o in rng ovs by A6;
+      then consider k being set such that
+A15:  k in dom ovs and
+A16:  o = ovs.k by FUNCT_1:def 5;
+      dvs.k = {t1 where t1 is Element of SF.v: depth t1 = n+1 & t1.{} = [
+      ovs.k,the carrier of S]} by A7,A8,A15;
+      then
+A17:  t in dvs.k by A12,A14,A16;
+      dvs.k in rng dvs by A7,A8,A15,FUNCT_1:def 5;
+      then t in union rng dvs by A17,TARSKI:def 4;
+      hence thesis by A11,CARD_3:def 4;
+    end;
+    for k being set st k in dom dvs holds dvs.k is finite
+    proof
+      let k be set;
+      set dvsk = {t where t is Element of SF.v: depth t = n+1 & t.{} = [ovs.k,
+      the carrier of S]};
+      assume
+A18:  k in dom dvs;
+      then ovs.k in rng ovs by A7,A8,FUNCT_1:def 5;
+      then consider o being OperSymbol of S such that
+A19:  o = ovs.k and
+      the_result_sort_of o = v by A6;
+      set davsk = {[o,the carrier of S]-tree a where a is Element of (S-Terms
+X)* : a is ArgumentSeq of Sym(o,X) & ex t being Element of SF.v st depth t = n+
+      1 & t = [o,the carrier of S]-tree a};
+A20:  dvsk c= davsk
+      proof
+        let x be set;
+        assume
+        x in dvsk;
+        then consider t being Element of SF.v such that
+A21:    x = t and
+A22:    depth t = n+1 and
+A23:    t.{} = [o,the carrier of S] by A19;
+        t in FreeSort(X,v) by A5;
+        then reconsider t' = t as Term of S, X by A9;
+        consider a being ArgumentSeq of Sym(o,X) such that
+A24:    t' = [o,the carrier of S]-tree a by A23,MSATERM:10;
+        reconsider a' = a as Element of (S-Terms X)* by FINSEQ_1:def 11;
+        [o,the carrier of S]-tree a' in davsk by A22,A24;
+        hence thesis by A21,A24;
+      end;
+      deffunc F(Nat)= {t where t is Element of SF.((the_arity_of o)/.$1):
+      depth t <=n};
+      set avsk = {a where a is Element of (S-Terms X)* : a is ArgumentSeq of
+Sym(o,X) & ex t being Element of SF.v st depth t = n+1 & t = [o,the carrier of
+      S]-tree a};
+A25:  avsk,davsk are_equipotent
+      proof
+        set Z = {[a,[o,the carrier of S]-tree a] where a is Element of (S
+-Terms X)* : a is ArgumentSeq of Sym(o,X) & ex t being Element of SF.v st depth
+        t = n+1 & t = [o,the carrier of S]-tree a};
+        take Z;
+        hereby
+          let x be set;
+          assume
+          x in avsk;
+          then consider a being Element of (S-Terms X)* such that
+A26:      x = a and
+A27:      a is ArgumentSeq of Sym(o,X) & ex t being Element of SF.v
+          st depth t = n+1 & t = [o,the carrier of S]-tree a;
+          reconsider y' = [o,the carrier of S]-tree a as set;
+          take y';
+          thus y' in davsk by A27;
+          thus [x,y'] in Z by A26,A27;
+        end;
+        hereby
+          let y be set;
+          assume
+          y in davsk;
+          then consider a being Element of (S-Terms X)* such that
+A28:      y = [o,the carrier of S]-tree a and
+A29:      a is ArgumentSeq of Sym(o,X) & ex t being Element of SF.v
+          st depth t = n+1 & t = [o,the carrier of S]-tree a;
+          reconsider a' = a as set;
+          take a';
+          thus a' in avsk by A29;
+          thus [a',y] in Z by A28,A29;
+        end;
+        let x,y,z,u be set;
+        assume
+        [x,y] in Z;
+        then consider xa being Element of (S-Terms X)* such that
+A30:    [x,y] = [xa,[o,the carrier of S]-tree xa] and
+A31:    xa is ArgumentSeq of Sym(o,X) and
+        ex t being Element of SF.v st depth t = n+1 & t = [o,the carrier
+        of S]-tree xa;
+A32:    x = xa by A30,ZFMISC_1:33;
+        assume
+        [z,u] in Z;
+        then consider za being Element of (S-Terms X)* such that
+A33:    [z,u] = [za,[o,the carrier of S]-tree za] and
+A34:    za is ArgumentSeq of Sym(o,X) and
+        ex t being Element of SF.v st depth t = n+1 & t = [o,the carrier
+        of S]-tree za;
+A35:    z = za by A33,ZFMISC_1:33;
+        hence x = z implies y = u by A30,A33,A32,ZFMISC_1:33;
+A36:    u = [o,the carrier of S]-tree za by A33,ZFMISC_1:33;
+A37:    y = [o,the carrier of S]-tree xa by A30,ZFMISC_1:33;
+        assume
+        y = u;
+        hence thesis by A31,A34,A32,A37,A35,A36,TREES_4:15;
+      end;
+      consider nS being FinSequence such that
+A38:  len nS = len the_arity_of o & for k being Nat st k in dom nS
+      holds nS.k = F(k) from FINSEQ_1:sch 2;
+A39:  dom nS = Seg len nS by FINSEQ_1:def 3;
+A40:  dom nS = Seg len the_arity_of o by A38,FINSEQ_1:def 3;
+A41:  avsk c= product nS
+      proof
+        let x be set;
+        assume
+        x in avsk;
+        then consider a being Element of (S-Terms X)* such that
+A42:    x = a and
+A43:    a is ArgumentSeq of Sym(o,X) and
+A44:    ex t being Element of SF.v st depth t = n+1 & t = [o,the
+        carrier of S]-tree a;
+        reconsider a as ArgumentSeq of Sym(o,X) by A43;
+A45:    len a = len the_arity_of o & dom a = Seg len a by FINSEQ_1:def 3,
+        MSATERM:22;
+        now
+          let x be set;
+          assume
+A46:      x in dom a;
+          then reconsider k = x as Element of NAT;
+          reconsider ak = a.k as Term of S, X by A46,MSATERM:22;
+A47:      the_sort_of ak = (the_arity_of o)/.k by A46,MSATERM:23;
+          SF.(the_sort_of ak) = FreeSort(X,the_sort_of ak) by A2,MSAFREE:
+          def 13;
+          then reconsider ak as Element of SF.((the_arity_of o)/.k) by A47,
+          MSATERM:def 5;
+          depth ak < n+1 by A44,A46,MSSCYC_1:28;
+          then
+A48:      depth ak <= n by NAT_1:13;
+          set nSk = {tk where tk is Element of SF.((the_arity_of o)/.k): depth
+          tk <=n};
+          nSk = nS.x by A38,A40,A45,A46;
+          hence a.x in nS.x by A48;
+        end;
+        hence thesis by A38,A39,A42,A45,CARD_3:def 5;
+      end;
+      now
+        let x be set;
+        assume
+A49:    x in dom nS;
+        then reconsider k = x as Nat;
+        set nSk = {t where t is Element of SF.((the_arity_of o)/.k): depth t
+        <=n};
+        nS.k = nSk by A38,A49;
+        hence nS.x is finite by A4;
+      end;
+      then product nS is finite by MSSCYC_1:1;
+      then davsk is finite by A25,A41,CARD_1:68;
+      hence thesis by A7,A18,A20;
+    end;
+    then
+A50: Union dvs is finite by CARD_3:134;
+    defpred Z[Element of SF.v] means depth $1 <= n;
+    set dln = {t where t is Element of SF.v: Z[t]};
+A51: {t where t is Element of SF.v: Z[t] or QZ[t]} = dln \/ den1 from
+    TOPREAL1:sch 1;
+A52: for t being Element of SF.v holds P[t] iff Q[t] by NAT_1:8,12;
+A53: dn1 = dn11 from FRAENKEL:sch 3(A52);
+    dln is finite by A4;
+    hence thesis by A53,A51,A50,A10;
+  end;
+A54: P[0]
   proof
     let v be SortSymbol of S;
     set dle0 = {t where t is Element of SF.v: depth t <= 0};
     set d0 = {t where t is Element of SF.v: depth t = 0};
-    Constants(FreeMSA X, v) is finite by A1,MSSCYC_1:26;
-    then
-A4: FreeGen(v, X) \/ Constants(FreeMSA X, v) is finite;
-A5: d0 = FreeGen(v, X) \/ Constants(FreeMSA X, v) by MSSCYC_1:27;
-    dle0 c= d0
+A55: dle0 c= d0
     proof
       let x be set;
-      assume x in dle0;
-      then consider t being Element of SF.v such that
-A6:   x = t & depth t <= 0;
-      depth t = 0 by A6;
-      hence thesis by A6;
-    end;
-    hence thesis by A4,A5;
-  end;
-A7: for k be Nat st P[k] holds P[k+1]
-  proof
-    let n be Nat;
-    assume
-A8: for v being SortSymbol of S holds
-    {t where t is Element of SF.v: depth t <= n} is finite;
-    let v be SortSymbol of S;
-A9: SF.v = FreeSort(X,v) by A2,MSAFREE:def 13;
-A10: FreeSort(X,v) c= S-Terms X by MSATERM:12;
-    defpred Z[Element of SF.v] means depth $1 <= n;
-    defpred QZ[Element of SF.v] means depth $1 = n+1;
-    defpred P[Element of SF.v] means depth $1 <= n+1;
-    defpred Q[Element of SF.v] means depth $1 <= n or depth $1 = n+1;
-    deffunc F(set) = $1;
-    set dn1 = {F(t) where t is Element of SF.v: P[t]};
-    set dn11 = {F(t) where t is Element of SF.v: Q[t]};
-A11: for t being Element of SF.v holds P[t] iff Q[t] by NAT_1:8,12;
-A12: dn1 = dn11 from FRAENKEL:sch 3(A11);
-    set dln = {t where t is Element of SF.v: Z[t]};
-    set den1 = {t where t is Element of SF.v: QZ[t]};
-A13: {t where t is Element of SF.v: Z[t] or QZ[t]}
-    = dln \/ den1 from TOPREAL1:sch 1;
-    set ov = {o where o is OperSymbol of S: the_result_sort_of o = v};
-    ov is finite by A1,MSSCYC_1:def 6;
-    then consider ovs being FinSequence such that
-A14: rng ovs = ov by FINSEQ_1:73;
-    deffunc F(set) = {t where t is Element of SF.v: depth t = n+1 &
-    t.{} = [ovs.$1,the carrier of S]};
-    consider dvs being FinSequence such that
-A15: len dvs = len ovs & for k being Nat st k in dom dvs
-    holds dvs.k =F(k) from FINSEQ_1:sch 2;
-A17: dom ovs = Seg len ovs & dom dvs = Seg len dvs
- by FINSEQ_1:def 3;
-    for k being set st k in dom dvs holds dvs.k is finite
-    proof
-      let k be set;
-      set dvsk = {t where t is Element of SF.v: depth t = n+1 &
-      t.{} = [ovs.k,the carrier of S]};
       assume
-A18:  k in dom dvs;
-A19:  dvs.k = dvsk by A15,A18;
-      ovs.k in rng ovs by A15,A17,A18,FUNCT_1:def 5;
-      then consider o being OperSymbol of S such that
-A20:  o = ovs.k & the_result_sort_of o = v by A14;
-      set davsk = {[o,the carrier of S]-tree a
-      where a is Element of (S-Terms X)* : a is ArgumentSeq of Sym(o,X) &
-      ex t being Element of SF.v st depth t = n+1
-      & t = [o,the carrier of S]-tree a};
-A21:  dvsk c= davsk
-      proof
-        let x be set;
-        assume x in dvsk;
-        then consider t being Element of SF.v such that
-A22:    x = t & depth t = n+1 & t.{} = [o,the carrier of S] by A20;
-        t in FreeSort(X,v) by A9;
-        then reconsider t' = t as Term of S, X by A10;
-        consider a being ArgumentSeq of Sym(o,X) such that
-A23:    t' = [o,the carrier of S]-tree a by A22,MSATERM:10;
-        reconsider a' = a as Element of (S-Terms X)*
-         by FINSEQ_1:def 11;
-        [o,the carrier of S]-tree a' in davsk by A22,A23;
-        hence thesis by A22,A23;
-      end;
-      set avsk = {a where a is Element of (S-Terms X)* :
-      a is ArgumentSeq of Sym(o,X) &
-      ex t being Element of SF.v st depth t = n+1
-      & t = [o,the carrier of S]-tree a};
-A24:  avsk,davsk are_equipotent
-      proof
-        set Z = {[a,[o,the carrier of S]-tree a]
-        where a is Element of (S-Terms X)* : a is ArgumentSeq of Sym(o,X) &
-        ex t being Element of SF.v st depth t = n+1
-        & t = [o,the carrier of S]-tree a};
-        take Z;
-        hereby
-          let x be set;
-          assume x in avsk;
-          then consider a being Element of (S-Terms X)* such that
-A25:      x = a & a is ArgumentSeq of Sym(o,X) &
-          ex t being Element of SF.v st depth t = n+1
-          & t = [o,the carrier of S]-tree a;
-          reconsider y' = [o,the carrier of S]-tree a as set;
-          take y';
-          thus y' in davsk by A25;
-          thus [x,y'] in Z by A25;
-        end;
-        hereby
-          let y be set;
-          assume y in davsk;
-          then consider a being Element of (S-Terms X)* such that
-A26:      y = [o,the carrier of S]-tree a & a is ArgumentSeq of Sym(o,X) &
-          ex t being Element of SF.v st depth t = n+1
-          & t = [o,the carrier of S]-tree a;
-          reconsider a' = a as set;
-          take a';
-          thus a' in avsk by A26;
-          thus [a',y] in Z by A26;
-        end;
-        let x,y,z,u be set;
-        assume [x,y] in Z;
-        then consider xa being Element of (S-Terms X)* such that
-A27:    [x,y] = [xa,[o,the carrier of S]-tree xa] &
-        xa is ArgumentSeq of Sym(o,X) &
-        ex t being Element of SF.v st depth t = n+1
-        & t = [o,the carrier of S]-tree xa;
-        assume [z,u] in Z;
-        then consider za being Element of (S-Terms X)* such that
-A28:    [z,u] = [za,[o,the carrier of S]-tree za] &
-        za is ArgumentSeq of Sym(o,X) &
-        ex t being Element of SF.v st depth t = n+1
-        & t = [o,the carrier of S]-tree za;
-A29:    x = xa & y = [o,the carrier of S]-tree xa &
-        z = za & u = [o,the carrier of S]-tree za by A27,A28,ZFMISC_1:33;
-        hence x = z implies y = u;
-        assume y = u;
-        hence thesis by A27,A28,A29,TREES_4:15;
-      end;
-      deffunc F(Nat)= {t where t is Element of SF.((the_arity_of o)/.$1):
-      depth t <=n};
-      consider nS being FinSequence such that
-A30:  len nS = len the_arity_of o
-      & for k being Nat st k in dom nS
-      holds nS.k = F(k) from FINSEQ_1:sch 2;
-A31: dom nS = Seg len the_arity_of o by A30,FINSEQ_1:def 3;
-A32:  dom nS = Seg len nS by FINSEQ_1:def 3;
-      now
-        let x be set;
-        assume
-A33:    x in dom nS;
-        then reconsider k = x as Nat;
-        set nSk = {t where t is Element of SF.((the_arity_of o)/.k):
-        depth t <=n};
-        nS.k = nSk by A30,A33;
-        hence nS.x is finite by A8;
-      end;
-      then
-A34:  product nS is finite by MSSCYC_1:1;
-      avsk c= product nS
-      proof
-        let x be set;
-        assume x in avsk;
-        then consider a being Element of (S-Terms X)* such that
-A35:    x = a & a is ArgumentSeq of Sym(o,X) &
-        ex t being Element of SF.v st depth t = n+1
-        & t = [o,the carrier of S]-tree a;
-        reconsider a as ArgumentSeq of Sym(o,X) by A35;
-        consider t being Element of SF.v such that
-A36:    depth t = n+1 & t = [o,the carrier of S]-tree a by A35;
-A37:    len a = len the_arity_of o & dom a = dom the_arity_of o by MSATERM:22;
-A38:    dom a = Seg len a by FINSEQ_1:def 3;
-        now
-          let x be set;
-          assume
-A39:      x in dom a;
-          then reconsider k = x as Element of NAT;
-          reconsider ak = a.k as Term of S, X by A39,MSATERM:22;
-A40:      ak = (a qua FinSequence of S-Terms X)/.k &
-          the_sort_of ak = (the_arity_of o).k &
-          the_sort_of ak = (the_arity_of o)/.k by A39,MSATERM:23;
-
-SF.(the_sort_of ak) = FreeSort(X,the_sort_of ak) by A2,MSAFREE:def 13;
-          then reconsider ak as Element of SF.((the_arity_of o)/.k) by A40,
-MSATERM:def 5;
-          set nSk = {tk where tk is Element of SF.((the_arity_of o)/.k):
-          depth tk <=n};
-A41:      nSk = nS.x by A30,A37,A38,A39,A31;
-          depth ak < n+1 by A36,A39,MSSCYC_1:28;
-          then depth ak <= n by NAT_1:13;
-          hence a.x in nS.x by A41;
-        end;
-        hence thesis by A30,A32,A35,A37,A38,CARD_3:def 5;
-      end;
-      then avsk is finite by A34;
-      then davsk is finite by A24,CARD_1:68;
-      hence thesis by A19,A21;
-    end;
-    then
-A42: Union dvs is finite by CARD_3:134;
-    den1 c= Union dvs
-    proof
-      let x be set;
-      assume x in den1;
+      x in dle0;
       then consider t being Element of SF.v such that
-A43:  x = t & depth t = n+1;
-      t in FreeSort(X,v) by A9;
-      then reconsider t' = t as Term of S, X by A10;
-      now
-        assume
-A44:    t' is root;
-        consider dt being finite DecoratedTree, tt being finite Tree such that
-A45:    dt = t & tt = dom dt & depth t = height tt by MSAFREE2:def 14;
-        thus contradiction by A43,A44,A45,TREES_1:79,TREES_9:def 1;
-      end;
-      then consider o being OperSymbol of S such that
-A46:  t'.{} = [o,the carrier of S] by MSSCYC_1:20;
-      the_result_sort_of o = the_sort_of t' by A46,MSATERM:17
-        .= v by A9,MSATERM:def 5;
-      then o in rng ovs by A14;
-      then consider k being set such that
-A47:  k in dom ovs & o = ovs.k by FUNCT_1:def 5;
-      dvs.k = {t1 where t1 is Element of SF.v: depth t1 = n+1 &
-      t1.{} = [ovs.k,the carrier of S]} by A15,A17,A47;
-      then
-A48:  t in dvs.k by A43,A46,A47;
-      dvs.k in rng dvs by A15,A17,A47,FUNCT_1:def 5;
-      then t in union rng dvs by A48,TARSKI:def 4;
-      hence thesis by A43,CARD_3:def 4;
+A56:  x = t and
+A57:  depth t <= 0;
+      depth t = 0 by A57;
+      hence thesis by A56;
     end;
-    then
-A49: den1 is finite by A42;
-    dln is finite by A8;
-    hence thesis by A12,A13,A49;
+    Constants(FreeMSA X, v) is finite & d0 = FreeGen(v, X) \/ Constants(
+    FreeMSA X, v) by A1,MSSCYC_1:26,27;
+    hence thesis by A55;
   end;
-  thus for n being Nat holds P[n] from NAT_1:sch 2(A3, A7);
+  thus for n being Nat holds P[n] from NAT_1:sch 2(A54, A3);
 end;
 
 theorem
-  for S being non void non empty ManySortedSign
-  st S is finitely_operated & InducedGraph S is well-founded
-  holds S is monotonic
+  for S being non void non empty ManySortedSign st S is
+  finitely_operated & InducedGraph S is well-founded holds S is monotonic
 proof
   let S be non void non empty ManySortedSign;
   set G = InducedGraph S;
-  assume
-A1: S is finitely_operated & G is well-founded;
+  assume that
+A1: S is finitely_operated and
+A2: G is well-founded;
   given A being finitely-generated (non-empty MSAlgebra over S) such that
-A2: A is non finite-yielding;
+A3: A is non finite-yielding;
   consider GS being non-empty finite-yielding GeneratorSet of A;
-  reconsider gs = GS as non-empty finite-yielding
-  ManySortedSet of the carrier of S;
-  FreeMSA gs is non finite-yielding by A2,MSSCYC_1:23;
+  reconsider gs = GS as non-empty finite-yielding ManySortedSet of the carrier
+  of S;
+  FreeMSA gs is non finite-yielding by A3,MSSCYC_1:23;
   then the Sorts of FreeMSA gs is non finite-yielding by MSAFREE2:def 11;
   then consider v being set such that
-A3: v in the carrier of S & (the Sorts of FreeMSA gs).v is non finite
-  by FINSET_1:def 4;
-  reconsider v as SortSymbol of S by A3;
+A4: v in the carrier of S and
+A5: (the Sorts of FreeMSA gs).v is non finite by FINSET_1:def 4;
+  reconsider v as SortSymbol of S by A4;
   consider n being Element of NAT such that
-A4: for c being directed Chain of G
-  st c is non empty & (vertex-seq c).(len c +1) = v holds len c <= n
-  by A1,MSSCYC_1:def 5;
+A6: for c being directed Chain of G st c is non empty & (vertex-seq c).(
+  len c +1) = v holds len c <= n by A2,MSSCYC_1:def 5;
   set V = (the Sorts of FreeMSA gs).v;
   set Vn = {t where t is Element of V : depth t<=n};
-A5: Vn is finite by A1,Th5;
-  not V c= Vn by A3,A5;
+  Vn is finite by A1,Th5;
+  then not V c= Vn by A5;
   then consider t being set such that
-A6: t in V & not t in Vn by TARSKI:def 3;
-  reconsider t as Element of V by A6;
-A7: not depth t<=n by A6;
+A7: t in V and
+A8: not t in Vn by TARSKI:def 3;
+  reconsider t as Element of V by A7;
+A9: not depth t<=n by A8;
   then 1 <=depth t by NAT_1:14;
-  then consider d being directed Chain of InducedGraph S such that
-A8: len d = depth t & (vertex-seq d).(len d +1) = v by Th2;
-  d is non empty by A7,A8,CARD_1:47;
-  hence contradiction by A4,A7,A8;
+  then ex d being directed Chain of InducedGraph S st len d = depth t & (
+  vertex-seq d).(len d +1) = v by Th2;
+  hence contradiction by A6,A9,CARD_1:47;
 end;
 

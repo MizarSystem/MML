@@ -12,6 +12,7 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="NAT_1"/>
@@ -51,14 +52,14 @@
 <Func kind="F" nr="1">
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="132">
+<Func kind="K" nr="140">
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>
 </Func>
 </Pred>
 <Pred kind="R" nr="1">
 <Func kind="F" nr="1">
-<Func kind="K" nr="93">
+<Func kind="K" nr="101">
 <Var nr="1"/>
 <Num nr="1"/>
 </Func>
@@ -104,17 +105,17 @@
 </Typ>
 <Pred kind="R" nr="1">
 <Func kind="F" nr="1">
-<Func kind="K" nr="93">
+<Func kind="K" nr="101">
 <Var nr="1"/>
 <Num nr="2"/>
 </Func>
 </Func>
-<Func kind="K" nr="130">
+<Func kind="K" nr="138">
 <Func kind="F" nr="1">
 <Var nr="1"/>
 </Func>
 <Func kind="F" nr="1">
-<Func kind="K" nr="93">
+<Func kind="K" nr="101">
 <Var nr="1"/>
 <Num nr="1"/>
 </Func>
@@ -161,7 +162,7 @@
 <Not>
 <And>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="95">
+<Func kind="K" nr="103">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 </Func>
@@ -178,8 +179,8 @@
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="93">
-<Func kind="K" nr="95">
+<Func kind="K" nr="101">
+<Func kind="K" nr="103">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 </Func>

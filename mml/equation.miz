@@ -15,19 +15,19 @@ environ
       ARYTM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, RELAT_1, FUNCT_1,
       PBOOLE, RELSET_1, PARTFUN1, STRUCT_0, FUNCT_2, MCART_1, FINSET_1, NAT_1,
-      FINSEQ_1, FUNCT_4, FUNCT_6, PZFMISC1, CARD_3, MSSUBFAM, MSUALG_1,
-      PRALG_2, FUNCOP_1, MSUALG_2, PRALG_3, MSUALG_3, MSUALG_4,
-      MSAFREE, MSAFREE2, CLOSURE2, MSUALG_6;
- constructors FUNCT_4, PZFMISC1, MSSUBFAM, MSUALG_3, MSAFREE2,
-      CLOSURE2, MSUALG_6, PRALG_3, RELSET_1;
+      FINSEQ_1, FUNCT_4, FUNCT_6, PZFMISC1, CARD_3, MSUALG_1, PRALG_2,
+      FUNCOP_1, MSUALG_2, PRALG_3, MSUALG_3, MSUALG_4, MSAFREE, MSAFREE2,
+      CLOSURE2, MSUALG_6;
+ constructors FUNCT_4, PZFMISC1, MSSUBFAM, MSUALG_3, MSAFREE2, CLOSURE2,
+      MSUALG_6, PRALG_3, RELSET_1;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, FUNCT_2, FUNCOP_1,
-      FINSET_1, FRAENKEL, FINSEQ_1, STRUCT_0, MSUALG_1, MSUALG_2, RELAT_1,
-      FUNCT_1, PRALG_2, MSUALG_3, MSAFREE, MSUALG_4, EXTENS_1, CLOSURE2,
-      MSUALG_6, PRALG_3, MSUALG_9, PRE_CIRC, MSSUBFAM, PBOOLE;
+      FINSET_1, FINSEQ_1, STRUCT_0, MSUALG_1, MSUALG_2, RELAT_1, FUNCT_1,
+      PRALG_2, MSUALG_3, MSAFREE, MSUALG_4, EXTENS_1, CLOSURE2, MSUALG_6,
+      PRALG_3, MSUALG_9, MSSUBFAM, PBOOLE;
  requirements SUBSET, BOOLE;
  definitions TARSKI, PBOOLE, PRALG_2, MSUALG_2, MSUALG_3, FINSET_1, MSAFREE,
       MSAFREE2, MSUALG_1, XBOOLE_0, PZFMISC1;
- theorems EXTENS_1, MSAFREE2, MSSCYC_1, PRE_CIRC, CARD_3, FUNCT_4, FUNCOP_1,
+ theorems MSUALG_1, EXTENS_1, MSAFREE2, MSSCYC_1, CARD_3, FUNCT_4, FUNCOP_1,
       FUNCT_1, FUNCT_2, MCART_1, MSAFREE, FINSEQ_1, CLOSURE2, FINSET_1,
       MSUALG_2, MSUALG_3, MSUALG_4, MSUALG_9, PBOOLE, PARTFUN1, MSUALG_6,
       AUTALG_1, MSSUBFAM, INSTALG1, PRALG_2, PRALG_3, RELAT_1, TARSKI,
@@ -39,52 +39,53 @@ begin  :: On the Functions and Many Sorted Functions
 reserve I for set;
 
 theorem Th1:
-  for A being set, B, C being non empty set
-  for f being Function of A, B, g being Function of B, C st rng (g * f) = C
-  holds rng g = C
+  for A being set, B, C being non empty set for f being Function of
+  A, B, g being Function of B, C st rng (g * f) = C holds rng g = C
 proof
-  let A be set, B, C be non empty set, f be Function of A, B,
-  g be Function of B, C such that
+  let A be set, B, C be non empty set, f be Function of A, B, g be Function of
+  B, C such that
 A1: rng (g * f) = C;
   thus rng g c= C;
   let q be set;
-  assume q in C;
+  assume
+  q in C;
   then consider x being set such that
 A2: x in dom (g * f) and
 A3: q = (g * f).x by A1,FUNCT_1:def 5;
-A4: q = g.(f.x) by A2,A3,FUNCT_1:22;
-A5: dom (g * f) = A by FUNCT_2:def 1;
-A6: dom f = A by FUNCT_2:def 1;
+A4: dom f = A by FUNCT_2:def 1;
   then
-A7: rng f c= dom g by A5,FUNCT_1:27;
-  f.x in rng f by A2,A6,FUNCT_1:def 5;
-  hence thesis by A4,A7,FUNCT_1:def 5;
+A5: f.x in rng f by A2,FUNCT_1:def 5;
+  dom (g * f) = A by FUNCT_2:def 1;
+  then
+A6: rng f c= dom g by A4,FUNCT_1:27;
+  q = g.(f.x) by A2,A3,FUNCT_1:22;
+  hence thesis by A6,A5,FUNCT_1:def 5;
 end;
 
 theorem
-  for A being ManySortedSet of I, B, C being non-empty ManySortedSet of I
-  for f being ManySortedFunction of A, B, g being ManySortedFunction of B, C
-  st g ** f is "onto" holds g is "onto"
+  for A being ManySortedSet of I, B, C being non-empty ManySortedSet of
+I for f being ManySortedFunction of A, B, g being ManySortedFunction of B, C st
+  g ** f is "onto" holds g is "onto"
 proof
-  let A be ManySortedSet of I, B, C be non-empty ManySortedSet of I,
-  f be ManySortedFunction of A, B, g be ManySortedFunction of B, C such that
+  let A be ManySortedSet of I, B, C be non-empty ManySortedSet of I, f be
+  ManySortedFunction of A, B, g be ManySortedFunction of B, C such that
 A1: g ** f is "onto";
   let i be set;
   assume
 A2: i in I;
   then
-A3: B.i is non empty & C.i is non empty;
-A4: f.i is Function of A.i, B.i & g.i is Function of B.i, C.i
-  by A2,PBOOLE:def 18;
+A3: f.i is Function of A.i, B.i & g.i is Function of B.i, C.i by
+  PBOOLE:
+  def 18;
   rng (g.i * f.i) = rng ((g ** f).i) by A2,MSUALG_3:2
     .= C.i by A1,A2,MSUALG_3:def 3;
-  hence thesis by A3,A4,Th1;
+  hence thesis by A2,A3,Th1;
 end;
 
-theorem Th3:   :: see PRALG_2:5
-  for A, B being non empty set, C, y being set
-  for f being Function st f in Funcs(A,Funcs(B,C)) & y in B
-  holds dom ((commute f).y) = A & rng ((commute f).y) c= C
+theorem Th3: :: see PRALG_2:5
+  for A, B being non empty set, C, y being set for f being Function
+  st f in Funcs(A,Funcs(B,C)) & y in B holds dom ((commute f).y) = A & rng ((
+  commute f).y) c= C
 proof
   let A, B be non empty set, C, y be set, f be Function such that
 A1: f in Funcs(A,Funcs(B,C)) and
@@ -92,20 +93,20 @@ A2: y in B;
   set cf = commute f;
   cf in Funcs(B,Funcs(A,C)) by A1,FUNCT_6:85;
   then
-A3: ex g being Function st g = cf & dom g = B & rng g c= Funcs(A,C)
-  by FUNCT_2:def 2;
+A3: ex g being Function st g = cf & dom g = B & rng g c= Funcs(A,C) by
+  FUNCT_2:def 2;
   then cf.y in rng cf by A2,FUNCT_1:def 5;
-  then ex t being Function st t = ((commute f).y) & dom t = A & rng t c= C
-  by A3,FUNCT_2:def 2;
+  then ex t being Function st t = ((commute f).y) & dom t = A & rng t c= C by
+  A3,FUNCT_2:def 2;
   hence thesis;
 end;
 
 canceled;
 
 theorem
-  for A, B being ManySortedSet of I st A is_transformable_to B
-  for f being ManySortedFunction of I st doms f = A & rngs f c= B
-  holds f is ManySortedFunction of A, B
+  for A, B being ManySortedSet of I st A is_transformable_to B for f
+  being ManySortedFunction of I st doms f = A & rngs f c= B holds f is
+  ManySortedFunction of A, B
 proof
   let A, B be ManySortedSet of I such that
 A1: for i being set st i in I holds B.i = {} implies A.i = {};
@@ -117,113 +118,112 @@ A3: rngs f c= B;
 A4: i in I;
   then reconsider J = I as non empty set;
   reconsider s = i as Element of J by A4;
-A5: B.s = {} implies A.s = {} by A1;
-A6: dom (f.s) = A.s by A2,MSSUBFAM:14;
+A5: dom (f.s) = A.s by A2,MSSUBFAM:14;
   rng (f.s) = (rngs f).s by MSSUBFAM:13;
-  then rng (f.s) c= B.s by A3,PBOOLE:def 5;
+  then
+A6: rng (f.s) c= B.s by A3,PBOOLE:def 5;
+  B.s = {} implies A.s = {} by A1;
   hence thesis by A5,A6,FUNCT_2:def 1,RELSET_1:11;
 end;
 
 theorem Th6:
-  for A, B being ManySortedSet of I, F being ManySortedFunction of A, B
-  for C, E being ManySortedSubset of A, D being ManySortedSubset of C st E = D
-  holds (F || C) || D = F || E
+  for A, B being ManySortedSet of I, F being ManySortedFunction of
+A, B for C, E being ManySortedSubset of A, D being ManySortedSubset of C st E =
+  D holds (F || C) || D = F || E
 proof
-  let A, B be ManySortedSet of I, F be ManySortedFunction of A, B,
-  C, E be ManySortedSubset of A, D be ManySortedSubset of C such that
+  let A, B be ManySortedSet of I, F be ManySortedFunction of A, B, C, E be
+  ManySortedSubset of A, D be ManySortedSubset of C such that
 A1: E = D;
   now
     let i be set such that
 A2: i in I;
+A3: F.i is Function of A.i, B.i by A2,PBOOLE:def 18;
     D c= C by PBOOLE:def 23;
     then
-A3: D.i c= C.i by A2,PBOOLE:def 5;
-A4: F.i is Function of A.i, B.i by A2,PBOOLE:def 18;
+A4: D.i c= C.i by A2,PBOOLE:def 5;
 A5: (F||C).i is Function of C.i, B.i by A2,PBOOLE:def 18;
-    then reconsider fc = (F.i) | (C.i) as Function of C.i, B.i
-    by A2,A4,MSAFREE:def 1;
+    then reconsider fc = (F.i) | (C.i) as Function of C.i, B.i by A2,A3,
+    MSAFREE:
+    def 1;
     thus ((F || C) || D).i = (F || C).i | (D.i) by A2,A5,MSAFREE:def 1
-      .= fc | (D.i) by A2,A4,MSAFREE:def 1
-      .= F.i | (D.i) by A3,RELAT_1:103
-      .= (F || E).i by A1,A2,A4,MSAFREE:def 1;
+      .= fc | (D.i) by A2,A3,MSAFREE:def 1
+      .= F.i | (D.i) by A4,RELAT_1:103
+      .= (F || E).i by A1,A2,A3,MSAFREE:def 1;
   end;
   hence thesis by PBOOLE:3;
 end;
 
 theorem Th7:
-  for B being non-empty ManySortedSet of I, C being ManySortedSet of I
-  for A being ManySortedSubset of C, F being ManySortedFunction of A, B
-  ex G being ManySortedFunction of C, B st G || A = F
+  for B being non-empty ManySortedSet of I, C being ManySortedSet
+of I for A being ManySortedSubset of C, F being ManySortedFunction of A, B ex G
+  being ManySortedFunction of C, B st G || A = F
 proof
-  let B be non-empty ManySortedSet of I, C be ManySortedSet of I,
-  A be ManySortedSubset of C, F be ManySortedFunction of A, B;
+  let B be non-empty ManySortedSet of I, C be ManySortedSet of I, A be
+  ManySortedSubset of C, F be ManySortedFunction of A, B;
   defpred P[set,set,set] means ex f being Function of A.$3, B.$3 st f = F.$3 &
   ($2 in A.$3 implies $1 = f.$2) & (not $2 in A.$3 implies not contradiction);
-A1: for i being set st i in I holds
-  for x being set st x in C.i ex y being set st y in B.i & P[y,x,i]
+A1: for i being set st i in I holds for x being set st x in C.i ex y being
+  set st y in B.i & P[y,x,i]
   proof
     let i be set;
     assume
 A2: i in I;
-    then
-A3: B.i <> {};
-    let x be set such that x in C.i;
-    reconsider f = F.i as Function of A.i, B.i by A2,PBOOLE:def 18;
+    then reconsider f = F.i as Function of A.i, B.i by PBOOLE:def 18;
+    let x be set such that
+    x in C.i;
     per cases;
     suppose
-A4:   x in A.i;
+A3:   x in A.i;
       take f.x;
-      thus f.x in B.i by A3,A4,FUNCT_2:7;
+      thus f.x in B.i by A2,A3,FUNCT_2:7;
       take f;
       thus thesis;
     end;
     suppose
-A5:   not x in A.i;
+A4:   not x in A.i;
       consider y being set such that
-A6:   y in B.i by A3,XBOOLE_0:def 1;
+A5:   y in B.i by A2,XBOOLE_0:def 1;
       take y;
-      thus y in B.i by A6;
+      thus y in B.i by A5;
       take f;
       thus f = F.i;
-      thus x in A.i implies y = f.x by A5;
-      assume not x in A.i;
+      thus x in A.i implies y = f.x by A4;
+      assume
+      not x in A.i;
       thus thesis;
     end;
   end;
   consider G being ManySortedFunction of C, B such that
-A7: for i being set st i in I holds
-  ex g being Function of C.i, B.i st g = G.i &
-  for x being set st x in C.i holds P[g.x,x,i] from MSSUBFAM:sch 1(A1);
+A6: for i being set st i in I holds ex g being Function of C.i, B.i st g
+  = G.i & for x being set st x in C.i holds P[g.x,x,i] from MSSUBFAM:sch 1(A1);
   take G;
   now
     let i be set;
     assume
-A8: i in I;
-    then
-A9: B.i <> {};
-    reconsider f = F.i as Function of A.i, B.i by A8,PBOOLE:def 18;
+A7: i in I;
+    then reconsider f = F.i as Function of A.i, B.i by PBOOLE:def 18;
+A8: dom f = A.i by A7,FUNCT_2:def 1;
     consider g being Function of C.i, B.i such that
-A10: g = G.i and
-A11: for x being set st x in C.i holds P[g.x,x,i] by A7,A8;
-A12: dom f = A.i by A9,FUNCT_2:def 1;
+A9: g = G.i and
+A10: for x being set st x in C.i holds P[g.x,x,i] by A6,A7;
     A c= C by PBOOLE:def 23;
     then
-A13: A.i c= C.i by A8,PBOOLE:def 5;
-    dom g = C.i by A9,FUNCT_2:def 1;
-    then
-A14: dom (g|(A.i)) = A.i by A13,RELAT_1:91;
-A15: for x being set st x in A.i holds f.x = (g|(A.i)).x
+A11: A.i c= C.i by A7,PBOOLE:def 5;
+A12: for x being set st x in A.i holds f.x = (g|(A.i)).x
     proof
       let x be set;
       assume
-A16:  x in A.i;
-      then consider h being Function of A.i, B.i such that
-A17:  h = F.i & (x in A.i implies g.x = h.x) and
-      not x in A.i implies not contradiction by A11,A13;
-      thus thesis by A16,A17,FUNCT_1:72;
+A13:  x in A.i;
+      then
+      ex h being Function of A.i, B.i st h = F.i &( x in A.i implies g.x =
+      h.x)&( not x in A.i implies not contradiction) by A10,A11;
+      hence thesis by A13,FUNCT_1:72;
     end;
-    thus (G || A).i = g|(A.i) by A8,A10,MSAFREE:def 1
-      .= F.i by A12,A14,A15,FUNCT_1:9;
+    dom g = C.i by A7,FUNCT_2:def 1;
+    then
+A14: dom (g|(A.i)) = A.i by A11,RELAT_1:91;
+    thus (G || A).i = g|(A.i) by A7,A9,MSAFREE:def 1
+      .= F.i by A8,A14,A12,FUNCT_1:9;
   end;
   hence thesis by PBOOLE:3;
 end;
@@ -232,12 +232,13 @@ definition
   let I be set, A be ManySortedSet of I, F be ManySortedFunction of I;
   func F""A -> ManySortedSet of I means
   :Def1:
-  for i being set st i in I holds it.i = (F.i)"(A.i);
+  for i being set st i in I holds
+  it.i = (F.i)"(A.i);
   existence
   proof
     deffunc F(set) = (F.$1)"(A.$1);
-    ex f being ManySortedSet of I st
-    for i being set st i in I holds f.i = F(i) from PBOOLE:sch 4;
+    ex f being ManySortedSet of I st for i being set st i in I holds f.i =
+    F(i) from PBOOLE:sch 4;
     hence thesis;
   end;
   uniqueness
@@ -257,8 +258,8 @@ A3:   i in I;
 end;
 
 theorem
-  for A, B, C being ManySortedSet of I, F being ManySortedFunction of A, B
-  holds F.:.:C is ManySortedSubset of B
+  for A, B, C being ManySortedSet of I, F being ManySortedFunction of A,
+  B holds F.:.:C is ManySortedSubset of B
 proof
   let A, B, C be ManySortedSet of I, F be ManySortedFunction of A, B;
   let i be set;
@@ -273,8 +274,8 @@ A1: i in I;
 end;
 
 theorem
-  for A, B, C being ManySortedSet of I, F being ManySortedFunction of A, B
-  holds F""C is ManySortedSubset of A
+  for A, B, C being ManySortedSet of I, F being ManySortedFunction of A,
+  B holds F""C is ManySortedSubset of A
 proof
   let A, B, C be ManySortedSet of I, F be ManySortedFunction of A, B;
   let i be set;
@@ -329,17 +330,17 @@ A1: A is_transformable_to B;
     assume
 A2: i in I;
     then
-A3: B.i = {} implies A.i = {} by A1,PZFMISC1:def 3;
-A4: F.i is Function of A.i, B.i by A2,PBOOLE:def 18;
+A3: F.i is Function of A.i, B.i by PBOOLE:def 18;
+A4: B.i = {} implies A.i = {} by A1,A2,PZFMISC1:def 3;
     thus (F""B).i = (F.i)"(B.i) by A2,Def1
-      .= A.i by A3,A4,FUNCT_2:48;
+      .= A.i by A4,A3,FUNCT_2:48;
   end;
   hence thesis by PBOOLE:3;
 end;
 
 theorem
-  for A being ManySortedSet of I, F being ManySortedFunction of I
-  st A c= rngs F holds F.:.:(F""A) = A
+  for A being ManySortedSet of I, F being ManySortedFunction of I st A
+  c= rngs F holds F.:.:(F""A) = A
 proof
   let A be ManySortedSet of I, F be ManySortedFunction of I such that
 A1: A c= rngs F;
@@ -428,12 +429,14 @@ end;
 begin  :: On the Many Sorted Algebras
 
 reserve S for non empty non void ManySortedSign,
-  U0, U1 for non-empty MSAlgebra over S;
+  U0, U1 for non-empty
+  MSAlgebra over S;
 
 canceled;
 
 theorem Th19:
-  for A being MSAlgebra over S holds A is MSSubAlgebra of the MSAlgebra of A
+  for A being MSAlgebra over S holds A is MSSubAlgebra of the
+  MSAlgebra of A
 proof
   let A be MSAlgebra over S;
   set IT = the MSAlgebra of A;
@@ -447,28 +450,29 @@ A2: C = the Sorts of A;
 end;
 
 theorem Th20:
-  for U0 being MSAlgebra over S, A being MSSubAlgebra of U0
-  for o being OperSymbol of S, x being set st x in Args(o,A)
-  holds x in Args(o,U0)
+  for U0 being MSAlgebra over S, A being MSSubAlgebra of U0 for o
+  being OperSymbol of S, x being set st x in Args(o,A) holds x in Args(o,U0)
 proof
-  let U0 be MSAlgebra over S, A be MSSubAlgebra of U0, o be OperSymbol of S,
-  x be set such that
+  let U0 be MSAlgebra over S, A be MSSubAlgebra of U0, o be OperSymbol of S, x
+  be set such that
 A1: x in Args(o,A);
   reconsider B0 = the Sorts of A as MSSubset of U0 by MSUALG_2:def 10;
   U0 is MSSubAlgebra of U0 by MSUALG_2:6;
   then reconsider B1 = the Sorts of U0 as MSSubset of U0 by MSUALG_2:def 10;
   B0 c= B1 by PBOOLE:def 23;
-  then ((B0# * the Arity of S).o) c= ((B1# * the Arity of S).o) by MSUALG_2:3;
+  then ((B0# * the Arity of S).o) c= ((B1# * the Arity of S).o) by
+  MSUALG_2:
+  3;
   hence thesis by A1;
 end;
 
 theorem Th21:
-  for U0 being MSAlgebra over S, A being MSSubAlgebra of U0
-  for o being OperSymbol of S, x being set st x in Args(o,A)
-  holds Den(o,A).x = Den(o,U0).x
+  for U0 being MSAlgebra over S, A being MSSubAlgebra of U0 for o
+being OperSymbol of S, x being set st x in Args(o,A) holds Den(o,A).x = Den(o,
+  U0).x
 proof
-  let U0 be MSAlgebra over S, A be MSSubAlgebra of U0, o be OperSymbol of S,
-  x be set such that
+  let U0 be MSAlgebra over S, A be MSSubAlgebra of U0, o be OperSymbol of S, x
+  be set such that
 A1: x in Args(o,A);
   reconsider B = the Sorts of A as MSSubset of U0 by MSUALG_2:def 10;
   B is opers_closed by MSUALG_2:def 10;
@@ -481,66 +485,68 @@ A2: B is_closed_on o by MSUALG_2:def 7;
 end;
 
 theorem Th22:
-  for F being MSAlgebra-Family of I, S, B being MSSubAlgebra of product F
-  for o being OperSymbol of S, x being set st x in Args(o,B)
-  holds Den(o,B).x is Function & Den(o,product F).x is Function
+  for F being MSAlgebra-Family of I, S, B being MSSubAlgebra of
+product F for o being OperSymbol of S, x being set st x in Args(o,B) holds Den(
+  o,B).x is Function & Den(o,product F).x is Function
 proof
-  let F be MSAlgebra-Family of I, S, B be MSSubAlgebra of product F,
-  o be OperSymbol of S, x be set;
+  let F be MSAlgebra-Family of I, S, B be MSSubAlgebra of product F, o be
+  OperSymbol of S, x be set;
+  set r = the_result_sort_of o;
   assume
 A1: x in Args(o,B);
-  then
-A2: x in Args(o,product F) by Th20;
-  set r = the_result_sort_of o;
-  Den(o,product F).x in product Carrier(F,r) by A2,PRALG_3:20;
+  then x in Args(o,product F) by Th20;
+  then Den(o,product F).x in product Carrier(F,r) by PRALG_3:20;
   then Den(o,B).x in product Carrier(F,r) by A1,Th21;
   then reconsider p = Den(o,B).x as Element of (SORTS F).r by PRALG_2:def 17;
-A3: p is Function;
+A2: p is Function;
   hence Den(o,B).x is Function;
-  thus thesis by A1,A3,Th21;
+  thus thesis by A1,A2,Th21;
 end;
 
 definition
-  let S be non void non empty ManySortedSign, A be MSAlgebra over S,
-  B be MSSubAlgebra of A;
+  let S be non void non empty ManySortedSign, A be MSAlgebra over S, B be
+  MSSubAlgebra of A;
   func SuperAlgebraSet B means
   :Def2:
-  for x being set holds x in it iff
-  ex C being strict MSSubAlgebra of A st x = C & B is MSSubAlgebra of C;
+  for x being set holds x in it iff ex C
+  being strict MSSubAlgebra of A st x = C & B is MSSubAlgebra of C;
   existence
   proof
-    defpred P[set] means ex C being strict MSSubAlgebra of A st $1 = C &
-    B is MSSubAlgebra of C;
+    defpred P[set] means ex C being strict MSSubAlgebra of A st $1 = C & B is
+    MSSubAlgebra of C;
     consider IT being set such that
-A1: for x being set holds x in IT iff x in MSSub A & P[x] from XBOOLE_0:sch 1;
+A1: for x being set holds x in IT iff x in MSSub A & P[x] from
+    XBOOLE_0:sch 1;
     take IT;
     let x be set;
-    thus x in IT implies ex C being strict MSSubAlgebra of A st x = C &
-    B is MSSubAlgebra of C by A1;
+    thus x in IT implies ex C being strict MSSubAlgebra of A st x = C & B is
+    MSSubAlgebra of C by A1;
     given C being strict MSSubAlgebra of A such that
-A2: x = C & B is MSSubAlgebra of C;
+A2: x = C and
+A3: B is MSSubAlgebra of C;
     x in MSSub A by A2,MSUALG_2:def 20;
-    hence thesis by A1,A2;
+    hence thesis by A1,A2,A3;
   end;
   uniqueness
   proof
-    defpred P[set] means
-    ex C being strict MSSubAlgebra of A st $1 = C & B is MSSubAlgebra of C;
-    for X1,X2 being set st (for x being set holds x in X1 iff P[x]) &
-    (for x being set holds x in X2 iff P[x]) holds X1 = X2 from XBOOLE_0:sch 3;
+    defpred P[set] means ex C being strict MSSubAlgebra of A st $1 = C & B is
+    MSSubAlgebra of C;
+    for X1,X2 being set st (for x being set holds x in X1 iff P[x]) & (for
+    x being set holds x in X2 iff P[x]) holds X1 = X2 from XBOOLE_0:sch 3;
     hence thesis;
   end;
 end;
 
 registration
-  let S be non void non empty ManySortedSign, A be MSAlgebra over S,
-  B be MSSubAlgebra of A;
+  let S be non void non empty ManySortedSign, A be MSAlgebra over S, B be
+  MSSubAlgebra of A;
   cluster SuperAlgebraSet B -> non empty;
   coherence
   proof
-A1: B is MSSubAlgebra of the MSAlgebra of B by Th19;
     the MSAlgebra of B is MSSubAlgebra of B by MSUALG_2:38;
-    then the MSAlgebra of B is MSSubAlgebra of A by MSUALG_2:7;
+    then
+A1: the MSAlgebra of B is MSSubAlgebra of A by MSUALG_2:7;
+    B is MSSubAlgebra of the MSAlgebra of B by Th19;
     hence thesis by A1,Def2;
   end;
 end;
@@ -563,7 +569,8 @@ registration
   coherence
   proof
     per cases;
-    case S is non void;
+    case
+      S is non void;
       let S' be non void non empty ManySortedSign such that
 A1:   S' = S;
       let H be MSAlgebra over S';
@@ -575,7 +582,8 @@ A2:   H = GenMSAlg X;
       take T;
       thus thesis;
     end;
-    case S is void;
+    case
+      S is void;
       hence thesis;
     end;
   end;
@@ -586,8 +594,8 @@ registration
   cluster strict non-empty finitely-generated MSSubAlgebra of A;
   existence
   proof
-    consider G being non-empty finite-yielding ManySortedSubset of
-    the Sorts of A;
+    consider G being non-empty finite-yielding ManySortedSubset of the Sorts
+    of A;
     take GenMSAlg G;
     thus thesis;
   end;
@@ -605,64 +613,63 @@ registration
 end;
 
 theorem Th23:
-  for A being MSAlgebra over S, C being MSSubAlgebra of A
-  for D being ManySortedSubset of the Sorts of A st D = the Sorts of C
-  for h being ManySortedFunction of A, U0
-  for g being ManySortedFunction of C, U0 st g = h || D
-  for o being OperSymbol of S, x being Element of Args(o,A)
-  for y being Element of Args(o,C) st Args(o,C) <> {} & x = y holds h#x = g#y
+  for A being MSAlgebra over S, C being MSSubAlgebra of A for D
+  being ManySortedSubset of the Sorts of A st D = the Sorts of C for h being
+ManySortedFunction of A, U0 for g being ManySortedFunction of C, U0 st g = h ||
+D for o being OperSymbol of S, x being Element of Args(o,A) for y being Element
+  of Args(o,C) st Args(o,C) <> {} & x = y holds h#x = g#y
 proof
-  let A be MSAlgebra over S, C be MSSubAlgebra of A,
-  D be ManySortedSubset of the Sorts of A such that
+  let A be MSAlgebra over S, C be MSSubAlgebra of A, D be ManySortedSubset of
+  the Sorts of A such that
 A1: D = the Sorts of C;
-  let h be ManySortedFunction of A, U0,
-  g be ManySortedFunction of C, U0 such that
+  let h be ManySortedFunction of A, U0, g be ManySortedFunction of C, U0 such
+  that
 A2: g = h || D;
   let o be OperSymbol of S, x be Element of Args(o,A);
   let y be Element of Args(o,C) such that
 A3: Args(o,C) <> {} and
 A4: x = y;
+  set hx = h#x, gy = g#y;
   set ar = the_arity_of o;
 A5: y in Args(o,A) by A3,Th20;
-  set hx = h#x, gy = g#y;
-  reconsider xx = x, yy = y as Function by A5,MSUALG_6:1;
-A6: dom xx = dom ar & dom yy = dom ar by A5,MSUALG_3:6;
-A7: dom hx = dom ar & dom gy = dom ar by MSUALG_3:6;
-  now
+  then reconsider xx = x, yy = y as Function by MSUALG_6:1;
+A6: dom yy = dom ar by A3,MSUALG_3:6;
+A7: dom xx = dom ar by A5,MSUALG_3:6;
+A8: now
     let n be set;
     assume
-A8: n in dom ar;
+A9: n in dom ar;
     then reconsider n'=n as Nat;
-A9: ar.n in the carrier of S by A8,PARTFUN1:27;
-    then reconsider hn = h.(ar.n) as
-    Function of (the Sorts of A).(ar.n), (the Sorts of U0).(ar.n)
-    by PBOOLE:def 18;
-A10: g.(ar.n') = hn | (D.(ar.n)) by A2,A9,MSAFREE:def 1;
-    dom ((the Sorts of C)*(the_arity_of o))
-               = dom ar by PARTFUN1:def 4;
-    then xx.n in ((the Sorts of C) * ar).n by A3,A4,A8,MSUALG_3:6;
+    reconsider hn = h.(ar.n) as Function of (the Sorts of A).(ar.n), (the
+    Sorts of U0).(ar.n) by A9,PARTFUN1:27,PBOOLE:def 18;
+    ar.n in the carrier of S by A9,PARTFUN1:27;
     then
-A11: xx.n in D.(ar.n) by A1,A8,FUNCT_1:23;
+A10: g.(ar.n') = hn | (D.(ar.n)) by A2,MSAFREE:def 1;
+    dom ((the Sorts of C)*(the_arity_of o)) = dom ar by PARTFUN1:def 4;
+    then xx.n in ((the Sorts of C) * ar).n by A3,A4,A9,MSUALG_3:6;
+    then
+A11: xx.n in D.(ar.n) by A1,A9,FUNCT_1:23;
     thus hx.n = hx.n'
-      .= (h.(ar/.n)).(xx.n) by A5,A6,A8,MSUALG_3:24
-      .= (h.(ar.n)).(xx.n) by A8,PARTFUN1:def 8
+      .= (h.(ar/.n)).(xx.n) by A5,A7,A9,MSUALG_3:24
+      .= (h.(ar.n)).(xx.n) by A9,PARTFUN1:def 8
       .= (g.(ar.n)).(xx.n) by A10,A11,FUNCT_1:72
-      .= (g.(ar/.n)).(yy.n) by A4,A8,PARTFUN1:def 8
-      .= gy.n' by A3,A6,A8,MSUALG_3:24
+      .= (g.(ar/.n)).(yy.n) by A4,A9,PARTFUN1:def 8
+      .= gy.n' by A3,A6,A9,MSUALG_3:24
       .= gy.n;
   end;
-  hence thesis by A7,FUNCT_1:9;
+  dom hx = dom ar & dom gy = dom ar by MSUALG_3:6;
+  hence thesis by A8,FUNCT_1:9;
 end;
 
 theorem Th24:
-  for A being feasible MSAlgebra over S, C being feasible MSSubAlgebra of A
-  for D being ManySortedSubset of the Sorts of A st D = the Sorts of C
-  for h being ManySortedFunction of A, U0 st h is_homomorphism A, U0
-  for g being ManySortedFunction of C, U0 st g = h || D
-  holds g is_homomorphism C, U0
+  for A being feasible MSAlgebra over S, C being feasible
+  MSSubAlgebra of A for D being ManySortedSubset of the Sorts of A st D = the
+  Sorts of C for h being ManySortedFunction of A, U0 st h is_homomorphism A, U0
+for g being ManySortedFunction of C, U0 st g = h || D holds g is_homomorphism C
+  , U0
 proof
-  let A be feasible MSAlgebra over S, C be feasible MSSubAlgebra of A,
-  D be ManySortedSubset of the Sorts of A such that
+  let A be feasible MSAlgebra over S, C be feasible MSSubAlgebra of A, D be
+  ManySortedSubset of the Sorts of A such that
 A1: D = the Sorts of C;
   let h be ManySortedFunction of A, U0 such that
 A2: h is_homomorphism A, U0;
@@ -671,410 +678,394 @@ A3: g = h || D;
   let o be OperSymbol of S such that
 A4: Args(o,C) <> {};
   let x be Element of Args(o,C);
-A5: x in Args(o,A) by A4,Th20;
-  set r = the_result_sort_of o;
   reconsider y = x as Element of Args(o,A) by A4,Th20;
-A6: Den(o,A).x = Den(o,C).x by A4,Th21;
+  set r = the_result_sort_of o;
+A5: x in Args(o,A) by A4,Th20;
   Result(o,C) <> {} by A4,MSUALG_6:def 1;
   then Den(o,C).x in Result(o,C) by A4,FUNCT_2:7;
-  then Den(o,C).x in (the Sorts of C).((the ResultSort of S).o) by FUNCT_2:21;
-  hence (g.(the_result_sort_of o)).(Den(o,C).x)
-  = (h.r).(Den(o,A).x) by A1,A3,A6,INSTALG1:40
+  then
+A6: Den(o,C).x in (the Sorts of C).((the ResultSort of S).o) by
+  FUNCT_2:
+  21;
+  Den(o,A).x = Den(o,C).x by A4,Th21;
+  hence (g.(the_result_sort_of o)).(Den(o,C).x) = (h.r).(Den(o,A).x) by A1,A3,
+  A6,INSTALG1:40
     .= Den(o,U0).(h#y) by A2,A5,MSUALG_3:def 9
     .= Den(o,U0).(g#x) by A1,A3,A4,Th23;
 end;
 
 theorem
-  for B being strict non-empty MSAlgebra over S
-  for G being GeneratorSet of U0, H being non-empty GeneratorSet of B
-  for f being ManySortedFunction of U0, B st H c= f.:.:G &
-  f is_homomorphism U0, B holds f is_epimorphism U0, B
+  for B being strict non-empty MSAlgebra over S for G being GeneratorSet
+of U0, H being non-empty GeneratorSet of B for f being ManySortedFunction of U0
+  , B st H c= f.:.:G & f is_homomorphism U0, B holds f is_epimorphism U0, B
 proof
-  let B be strict non-empty MSAlgebra over S, G be GeneratorSet of U0,
-  H be non-empty GeneratorSet of B, f be ManySortedFunction of U0, B such that
+  let B be strict non-empty MSAlgebra over S, G be GeneratorSet of U0, H be
+  non-empty GeneratorSet of B, f be ManySortedFunction of U0, B such that
 A1: H c= f.:.:G and
 A2: f is_homomorphism U0, B;
-  reconsider I = the Sorts of Image f as non-empty MSSubset of B
-  by MSUALG_2:def 10;
-  the Sorts of Image f is ManySortedSubset of the Sorts of Image f
-  proof
-    thus the Sorts of Image f c= the Sorts of Image f;
-  end;
-  then reconsider I1 = the Sorts of Image f as non-empty MSSubset of Image f;
-A3: I is GeneratorSet of Image f by MSAFREE2:9;
-  GenMSAlg I = GenMSAlg I1 by EXTENS_1:22;
+  reconsider I = the Sorts of Image f as non-empty MSSubset of B by MSUALG_2:
+  def 10;
+  f.:.:G c= f.:.:the Sorts of U0 by EXTENS_1:6;
+  then H c= f.:.:the Sorts of U0 by A1,PBOOLE:15;
+  then H c= the Sorts of Image f by A2,MSUALG_3:def 14;
+  then H is ManySortedSubset of the Sorts of Image f by PBOOLE:def 23;
   then
-A4: GenMSAlg I = Image f by A3,MSAFREE:3;
-  H is ManySortedSubset of the Sorts of Image f
-  proof
-    f.:.:G c= f.:.:the Sorts of U0 by EXTENS_1:6;
-    then H c= f.:.:the Sorts of U0 by A1,PBOOLE:15;
-    hence H c= the Sorts of Image f by A2,MSUALG_3:def 14;
-  end;
-  then GenMSAlg H is MSSubAlgebra of GenMSAlg I by EXTENS_1:21;
-  then B is MSSubAlgebra of Image f by A4,MSAFREE:3;
+A3: GenMSAlg H is MSSubAlgebra of GenMSAlg I by EXTENS_1:21;
+  reconsider I1 = the Sorts of Image f as non-empty MSSubset of Image f by
+  PBOOLE:def 23;
+  I is GeneratorSet of Image f & GenMSAlg I = GenMSAlg I1 by EXTENS_1:22 ,
+  MSAFREE2:9;
+  then GenMSAlg I = Image f by MSAFREE:3;
+  then B is MSSubAlgebra of Image f by A3,MSAFREE:3;
   then Image f = B by MSUALG_2:8;
   hence thesis by A2,MSUALG_3:19;
 end;
 
 theorem Th26:
-  for W being strict free non-empty MSAlgebra over S
-  for F being ManySortedFunction of U0, U1 st F is_epimorphism U0, U1
-  for G being ManySortedFunction of W, U1 st G is_homomorphism W, U1 holds
-  ex H being ManySortedFunction of W, U0 st
-  H is_homomorphism W, U0 & G = F ** H
+  for W being strict free non-empty MSAlgebra over S for F being
+  ManySortedFunction of U0, U1 st F is_epimorphism U0, U1 for G being
+  ManySortedFunction of W, U1 st G is_homomorphism W, U1 holds ex H being
+  ManySortedFunction of W, U0 st H is_homomorphism W, U0 & G = F ** H
 proof
-  let W be strict free non-empty MSAlgebra over S,
-  F be ManySortedFunction of U0, U1 such that
+  let W be strict free non-empty MSAlgebra over S, F be ManySortedFunction of
+  U0, U1 such that
 A1: F is_epimorphism U0, U1;
+  set sU0 = the Sorts of U0, sU1 = the Sorts of U1, I = the carrier of S;
   let G be ManySortedFunction of W, U1 such that
 A2: G is_homomorphism W, U1;
   consider Gen be GeneratorSet of W such that
 A3: Gen is free by MSAFREE:def 6;
-  set sU0 = the Sorts of U0, sU1 = the Sorts of U1, I = the carrier of S;
-  defpred P[set,set,set] means ex f be Function of sU0.$3, sU1.$3 st
-  ex g be Function of Gen.$3, sU1.$3 st
-  f = F.$3 & g = (G || Gen).$3 & $1 in f"{g.$2};
-A4: for i being set st i in I for x be set st x in Gen.i
-  ex y be set st y in sU0.i & P[y,x,i]
+  defpred P[set,set,set] means ex f be Function of sU0.$3, sU1.$3 st ex g be
+  Function of Gen.$3, sU1.$3 st f = F.$3 & g = (G || Gen).$3 & $1 in f"{g.$2};
+A4: for i being set st i in I for x be set st x in Gen.i ex y be set st y in
+  sU0.i & P[y,x,i]
   proof
     let i be set such that
 A5: i in I;
-    let x be set such that
-A6: x in Gen.i;
+    reconsider g = (G || Gen).i as Function of Gen.i, sU1.i by A5,PBOOLE:def
+    18;
     reconsider f = F.i as Function of sU0.i, sU1.i by A5,PBOOLE:def 18;
-    reconsider g = (G || Gen).i as Function of Gen.i, sU1.i
-    by A5,PBOOLE:def 18;
-    sU1.i <> {} by A5;
+    let x be set;
+    assume
+    x in Gen.i;
     then
-A7: g.x in sU1.i by A6,FUNCT_2:7;
+A6: g.x in sU1.i by A5,FUNCT_2:7;
     F is "onto" by A1,MSUALG_3:def 10;
     then rng (F.i) = sU1.i by A5,MSUALG_3:def 3;
-    then f"{g.x} <> {} by A7,FUNCT_2:49;
+    then f"{g.x} <> {} by A6,FUNCT_2:49;
     then consider y be set such that
-A8: y in f"{g.x} by XBOOLE_0:def 1;
+A7: y in f"{g.x} by XBOOLE_0:def 1;
     take y;
-    thus y in sU0.i by A8;
-    thus thesis by A8;
+    thus y in sU0.i by A7;
+    thus thesis by A7;
   end;
   consider H be ManySortedFunction of Gen, sU0 such that
-A9: for i be set st i in I ex h be Function of Gen.i, sU0.i st h = H.i &
-  for x be set st x in Gen.i holds P[h.x,x,i] from MSSUBFAM:sch 1(A4);
+A8: for i be set st i in I ex h be Function of Gen.i, sU0.i st h = H.i
+  & for x be set st x in Gen.i holds P[h.x,x,i] from MSSUBFAM:sch 1(A4);
   consider H1 be ManySortedFunction of W, U0 such that
-A10: H1 is_homomorphism W, U0 and
-A11: H1 || Gen = H by A3,MSAFREE:def 5;
-  take H1;
-  thus H1 is_homomorphism W, U0 by A10;
+A9: H1 is_homomorphism W, U0 and
+A10: H1 || Gen = H by A3,MSAFREE:def 5;
   now
     let i be set;
     assume
-A12: i in I;
-    then
-A13: sU0.i = {} implies Gen.i = {};
-    reconsider f' = F.i as Function of sU0.i, sU1.i by A12,PBOOLE:def 18;
-    reconsider g' = (G || Gen).i as Function of Gen.i, sU1.i
-    by A12,PBOOLE:def 18;
+A11: i in I;
+    then reconsider f' = F.i as Function of sU0.i, sU1.i by PBOOLE:def 18;
+    reconsider g' = (G || Gen).i as Function of Gen.i, sU1.i by A11,PBOOLE:def
+    18;
     consider h be Function of Gen.i, sU0.i such that
-A14: h = H.i and
-A15: for x be set st x in Gen.i holds ex f be Function of sU0.i, sU1.i st
-    ex g be Function of Gen.i, sU1.i st
-    f = F.i & g = (G || Gen).i & h.x in f"{g.x} by A9,A12;
-A16: sU1.i <> {} by A12;
-    then
-A17: Gen.i = dom g' by FUNCT_2:def 1;
-    f'*h is Function of Gen.i, sU1.i by A13,FUNCT_2:19;
-    then
-A18: Gen.i = dom (f'*h) by A16,FUNCT_2:def 1;
-    now
+A12: h = H.i and
+A13: for x be set st x in Gen.i holds ex f be Function of sU0.i, sU1.i
+st ex g be Function of Gen.i, sU1.i st f = F.i & g = (G || Gen).i & h.x in f"{g
+    .x} by A8,A11;
+A14: now
       let x be set;
       assume
-A19:  x in Gen.i;
-      then consider f be Function of sU0.i, sU1.i,
-      g be Function of Gen.i, sU1.i such that
-A20:  f = F.i & g = (G || Gen).i & h.x in f"{g.x} by A15;
-      f.(h.x) in {g.x} by A16,A20,FUNCT_2:46;
+A15:  x in Gen.i;
+      then consider
+      f be Function of sU0.i, sU1.i, g be Function of Gen.i, sU1.i
+      such that
+A16:  f = F.i & g = (G || Gen).i and
+A17:  h.x in f"{g.x} by A13;
+      f.(h.x) in {g.x} by A11,A17,FUNCT_2:46;
       then f.(h.x) = g.x by TARSKI:def 1;
-      hence (f'*h).x = g'.x by A19,A20,FUNCT_2:21;
+      hence (f'*h).x = g'.x by A15,A16,A17,FUNCT_2:21;
     end;
-    then g' = f' * h by A17,A18,FUNCT_1:9;
-    hence (G || Gen).i = (F ** H).i by A12,A14,MSUALG_3:2;
+    Gen.i = dom g' & Gen.i = dom (f'*h) by A11,FUNCT_2:def 1;
+    then g' = f' * h by A14,FUNCT_1:9;
+    hence (G || Gen).i = (F ** H).i by A11,A12,MSUALG_3:2;
   end;
-  then G || Gen = F ** (H1 || Gen) by A11,PBOOLE:3;
+  then G || Gen = F ** (H1 || Gen) by A10,PBOOLE:3;
   then
-A21: G || Gen = (F ** H1) || Gen by EXTENS_1:8;
+A18: G || Gen = (F ** H1) || Gen by EXTENS_1:8;
+  take H1;
+  thus H1 is_homomorphism W, U0 by A9;
   F is_homomorphism U0, U1 by A1,MSUALG_3:def 10;
-  then F ** H1 is_homomorphism W, U1 by A10,MSUALG_3:10;
-  hence thesis by A2,A21,EXTENS_1:23;
+  then F ** H1 is_homomorphism W, U1 by A9,MSUALG_3:10;
+  hence thesis by A2,A18,EXTENS_1:23;
 end;
 
 theorem Th27:
-  for I being non empty finite set, A being non-empty MSAlgebra over S
-  for F being MSAlgebra-Family of I, S st
-  for i being Element of I ex C being strict non-empty finitely-generated
-  MSSubAlgebra of A st C = F.i
-  ex B being strict non-empty finitely-generated MSSubAlgebra of A st
-  for i being Element of I holds F.i is MSSubAlgebra of B
+  for I being non empty finite set, A being non-empty MSAlgebra
+  over S for F being MSAlgebra-Family of I, S st for i being Element of I ex C
+  being strict non-empty finitely-generated MSSubAlgebra of A st C = F.i ex B
+  being strict non-empty finitely-generated MSSubAlgebra of A st for i being
+  Element of I holds F.i is MSSubAlgebra of B
 proof
-  let I be non empty finite set, A be non-empty MSAlgebra over S,
-  F be MSAlgebra-Family of I, S such that
-A1: for i being Element of I
-  ex C being strict non-empty finitely-generated MSSubAlgebra of A st C = F.i;
+  let I be non empty finite set, A be non-empty MSAlgebra over S, F be
+  MSAlgebra-Family of I, S such that
+A1: for i being Element of I ex C being strict non-empty
+  finitely-generated MSSubAlgebra of A st C = F.i;
+  set Z = { C where C is Element of MSSub A : ex i being (Element of I), D
+being strict non-empty finitely-generated MSSubAlgebra of A st C = F.i & C = D
+  };
   set J = the carrier of S;
-  set Z = { C where C is Element of MSSub A : ex i being (Element of I),
-  D being strict non-empty finitely-generated MSSubAlgebra of A
-  st C = F.i & C = D };
   consider m being Element of I;
-  consider W being strict non-empty finitely-generated MSSubAlgebra of A
-  such that
+  consider W being strict non-empty finitely-generated MSSubAlgebra of A such
+  that
 A2: W = F.m by A1;
   W is Element of MSSub A by MSUALG_2:def 20;
   then W in Z by A2;
   then reconsider Z as non empty set;
-  defpred P[set,set] means
-  ex Q being strict non-empty MSSubAlgebra of A, G being GeneratorSet of Q
-  st $1 = Q & $2 = G & G is non-empty finite-yielding;
-A3: for a being Element of Z ex b being Element of Bool the Sorts of A
-  st P[a,b]
+  defpred P[set,set] means ex Q being strict non-empty MSSubAlgebra of A, G
+  being GeneratorSet of Q st $1 = Q & $2 = G & G is non-empty finite-yielding;
+A3: for a being Element of Z ex b being Element of Bool the Sorts of A st P[
+  a,b]
   proof
     let a be Element of Z;
     a in Z;
     then consider C being Element of MSSub A such that
 A4: a = C and
-A5: ex i being (Element of I), D being strict non-empty finitely-generated
-    MSSubAlgebra of A st C = F.i & C = D;
-    consider i being (Element of I),
-    D being strict non-empty finitely-generated MSSubAlgebra of A such that
-A6: C = F.i & C = D by A5;
+A5: ex i being (Element of I), D being strict non-empty
+    finitely-generated MSSubAlgebra of A st C = F.i & C = D;
+    consider i being (Element of I), D being strict non-empty
+    finitely-generated MSSubAlgebra of A such that
+    C = F.i and
+A6: C = D by A5;
     consider G being GeneratorSet of D such that
 A7: G is finite-yielding by MSAFREE2:def 10;
-    consider S being non-empty finite-yielding
-    ManySortedSubset of the Sorts of D such that
+    consider S being non-empty finite-yielding ManySortedSubset of the Sorts
+    of D such that
 A8: G c= S by A7,MSUALG_9:8;
-    S is ManySortedSubset of the Sorts of A
-    proof
-A9:   S c= the Sorts of D by PBOOLE:def 23;
-      the Sorts of D is MSSubset of A by MSUALG_2:def 10;
-      then the Sorts of D c= the Sorts of A by PBOOLE:def 23;
-      hence S c= the Sorts of A by A9,PBOOLE:15;
-    end;
+    the Sorts of D is MSSubset of A by MSUALG_2:def 10;
+    then S c= the Sorts of D & the Sorts of D c= the Sorts of A by
+    PBOOLE:
+    def 23;
+    then S c= the Sorts of A by PBOOLE:15;
+    then S is ManySortedSubset of the Sorts of A by PBOOLE:def 23;
     then reconsider b = S as Element of Bool the Sorts of A by CLOSURE2:def 1;
-    take b, D;
     reconsider S as GeneratorSet of D by A8,MSSCYC_1:21;
+    take b, D;
     take S;
     thus a = D by A4,A6;
     thus thesis;
   end;
   consider f being Function of Z, Bool the Sorts of A such that
-A10: for B being Element of Z holds P[B,f.B] from FUNCT_2:sch 3(A3);
-  deffunc F(set) =
-  union { a where a is Element of bool ((the Sorts of A).$1) :
-  ex i being (Element of I), K being ManySortedSet of J
-  st K = f.(F.i) & a = K.$1 };
+A9: for B being Element of Z holds P[B,f.B] from FUNCT_2:sch 3(A3);
+  deffunc F(set) = union { a where a is Element of bool ((the Sorts of A).$1)
+: ex i being (Element of I), K being ManySortedSet of J st K = f.(F.i) & a = K.
+  $1 };
   consider SOR being ManySortedSet of J such that
-A11: for j being set st j in J holds SOR.j = F(j) from PBOOLE:sch 4;
+A10: for j being set st j in J holds SOR.j = F(j) from PBOOLE:sch 4;
   SOR is ManySortedSubset of the Sorts of A
   proof
     let j be set such that
-A12: j in J;
-    set UU = { a where a is Element of bool ((the Sorts of A).j) :
-    ex i being (Element of I), K being ManySortedSet of J
-    st K = f.(F.i) & a = K.j };
+A11: j in J;
     let q be set;
-    assume q in SOR.j;
-    then q in union UU by A11,A12;
+    set UU = { a where a is Element of bool ((the Sorts of A).j) : ex i being
+    (Element of I), K being ManySortedSet of J st K = f.(F.i) & a = K.j };
+    assume
+    q in SOR.j;
+    then q in union UU by A10,A11;
     then consider w being set such that
-A13: q in w and
-A14: w in UU by TARSKI:def 4;
+A12: q in w and
+A13: w in UU by TARSKI:def 4;
     consider a being Element of bool ((the Sorts of A).j) such that
-A15: w = a and ex i being (Element of I), K being ManySortedSet of J st
-    K = f.(F.i) & a = K.j by A14;
-    thus thesis by A13,A15;
+A14: w = a and
+    ex i being (Element of I), K being ManySortedSet of J st K = f.(F.i) &
+    a = K.j by A13;
+    thus thesis by A12,A14;
   end;
   then reconsider SOR as MSSubset of A;
-A16: now
-    let j be set such that
-A17: j in J;
-    set UU = { a where a is Element of bool ((the Sorts of A).j) :
-    ex i being (Element of I), K being ManySortedSet of J
-    st K = f.(F.i) & a = K.j };
+  SOR is non-empty
+  proof
     consider i being Element of I;
     consider C being strict non-empty finitely-generated MSSubAlgebra of A
     such that
-A18: C = F.i by A1;
+A15: C = F.i by A1;
     C is Element of MSSub A by MSUALG_2:def 20;
     then
-A19: F.i in Z by A18;
-    then consider Q being strict non-empty MSSubAlgebra of A such that
-A20: ex G being GeneratorSet of Q st F.i = Q & f.(F.i) = G &
-    G is non-empty finite-yielding by A10;
-    reconsider G1 = f.(F.i) as finite-yielding
-    Element of Bool the Sorts of A by A19,A20,FUNCT_2:7;
+A16: F.i in Z by A15;
+    then
+A17: ex Q being strict non-empty MSSubAlgebra of A st ex G being
+GeneratorSet of Q st F.i = Q & f.(F.i) = G & G is non-empty finite-yielding by
+    A9;
+    then reconsider
+    G1 = f.(F.i) as finite-yielding Element of Bool the Sorts of A
+    by A16,FUNCT_2:7;
+    let j be set such that
+A18: j in J;
+    consider q be set such that
+A19: q in G1.j by A18,A17,XBOOLE_0:def 1;
+    set UU = { a where a is Element of bool ((the Sorts of A).j) : ex i being
+    (Element of I), K being ManySortedSet of J st K = f.(F.i) & a = K.j };
     G1 c= the Sorts of A by PBOOLE:def 23;
-    then G1.j c= (the Sorts of A).j by A17,PBOOLE:def 5;
+    then G1.j c= (the Sorts of A).j by A18,PBOOLE:def 5;
     then G1.j in UU;
-    hence UU is non empty;
+    then q in union UU by A19,TARSKI:def 4;
+    hence thesis by A10,A18;
   end;
-  SOR is non-empty
-  proof
+  then reconsider SOR as non-empty MSSubset of A;
+A20: now
+    consider i being Element of I;
     let j be set such that
 A21: j in J;
-    set UU = { a where a is Element of bool ((the Sorts of A).j) :
-    ex i being (Element of I), K being ManySortedSet of J
-    st K = f.(F.i) & a = K.j };
-    consider i being Element of I;
+    set UU = { a where a is Element of bool ((the Sorts of A).j) : ex i being
+    (Element of I), K being ManySortedSet of J st K = f.(F.i) & a = K.j };
     consider C being strict non-empty finitely-generated MSSubAlgebra of A
     such that
 A22: C = F.i by A1;
     C is Element of MSSub A by MSUALG_2:def 20;
     then
 A23: F.i in Z by A22;
-    then consider Q being strict non-empty MSSubAlgebra of A such that
-A24: ex G being GeneratorSet of Q st F.i = Q & f.(F.i) = G &
-    G is non-empty finite-yielding by A10;
-    reconsider G1 = f.(F.i) as finite-yielding
-    Element of Bool the Sorts of A by A23,A24,FUNCT_2:7;
+    then ex Q being strict non-empty MSSubAlgebra of A st ex G being
+GeneratorSet of Q st F.i = Q & f.(F.i) = G & G is non-empty finite-yielding by
+    A9;
+    then reconsider
+    G1 = f.(F.i) as finite-yielding Element of Bool the Sorts of A
+    by A23,FUNCT_2:7;
     G1 c= the Sorts of A by PBOOLE:def 23;
     then G1.j c= (the Sorts of A).j by A21,PBOOLE:def 5;
-    then
-A25: G1.j in UU;
-    G1.j is non empty by A21,A24;
-    then consider q be set such that
-A26: q in G1.j by XBOOLE_0:def 1;
-    q in union UU by A25,A26,TARSKI:def 4;
-    hence thesis by A11,A21;
+    then G1.j in UU;
+    hence UU is non empty;
   end;
-  then reconsider SOR as non-empty MSSubset of A;
   SOR is finite-yielding
   proof
     let j be set such that
-A27: j in J;
-    set UU = { a where a is Element of bool ((the Sorts of A).j) :
-    ex i being (Element of I), K being ManySortedSet of J
-    st K = f.(F.i) & a = K.j };
-    reconsider VV = UU as non empty set by A16,A27;
-A28: now
+A24: j in J;
+    set UU = { a where a is Element of bool ((the Sorts of A).j) : ex i being
+    (Element of I), K being ManySortedSet of J st K = f.(F.i) & a = K.j };
+    reconsider VV = UU as non empty set by A20,A24;
+A25: now
+      defpred P[set,set] means ex L being ManySortedSet of J st f.(F.$1) = L &
+      $2 = L.j;
       consider r being FinSequence such that
-A29:  rng r = I by FINSEQ_1:73;
-      defpred P[set,set] means
-      ex L being ManySortedSet of J st f.(F.$1) = L & $2 = L.j;
-A30:  for a being Element of I ex b being Element of VV st P[a,b]
+A26:  rng r = I by FINSEQ_1:73;
+A27:  for a being Element of I ex b being Element of VV st P[a,b]
       proof
         let a be Element of I;
-        consider W being strict non-empty finitely-generated
-        MSSubAlgebra of A such that
-A31:    W = F.a by A1;
+        consider W being strict non-empty finitely-generated MSSubAlgebra of A
+        such that
+A28:    W = F.a by A1;
         W is Element of MSSub A by MSUALG_2:def 20;
         then
-A32:    W in Z by A31;
-        then consider Q being strict non-empty MSSubAlgebra of A such that
-A33:    ex G being GeneratorSet of Q st W = Q & f.W = G &
-        G is non-empty finite-yielding by A10;
-        reconsider G1 = f.(F.a) as finite-yielding
-        Element of Bool the Sorts of A by A31,A32,A33,FUNCT_2:7;
+A29:    W in Z by A28;
+        then ex Q being strict non-empty MSSubAlgebra of A st ex G being
+GeneratorSet of Q st W = Q & f.W = G & G is non-empty finite-yielding by A9;
+        then reconsider
+        G1 = f.(F.a) as finite-yielding Element of Bool the Sorts
+        of A by A28,A29,FUNCT_2:7;
         G1 c= the Sorts of A by PBOOLE:def 23;
-        then G1.j c= (the Sorts of A).j by A27,PBOOLE:def 5;
+        then G1.j c= (the Sorts of A).j by A24,PBOOLE:def 5;
         then G1.j in UU;
         then reconsider b = G1.j as Element of VV;
         take b, G1;
         thus thesis;
       end;
       consider h being Function of I, VV such that
-A34:  for i being Element of I holds P[i,h.i] from FUNCT_2:sch 3(A30);
-A35:  rng r = dom h by A29,FUNCT_2:def 1;
+A30:  for i being Element of I holds P[i,h.i] from FUNCT_2:sch 3(A27);
+A31:  rng r = dom h by A26,FUNCT_2:def 1;
       then reconsider p = h*r as FinSequence by FINSEQ_1:20;
-      take p;
-      thus rng p = VV
+A32:  VV c= rng p
       proof
-        rng p c= rng h
-        proof
-          let q be set;
-          assume q in rng p;
-          hence thesis by FUNCT_1:25;
-        end;
-        hence rng p c= VV by XBOOLE_1:1;
-        thus VV c= rng p
-        proof
-          let q be set;
-          assume q in VV;
-          then consider a being Element of bool ((the Sorts of A).j) such that
-A36:      q = a and
-A37:      ex i being (Element of I), K being ManySortedSet of J
-          st K = f.(F.i) & a = K.j;
-          consider i being (Element of I),
-          K being ManySortedSet of J such that
-A38:      K = f.(F.i) & a = K.j by A37;
-A39:      rng p = rng h by A35,RELAT_1:47;
-A40:      dom h = I by FUNCT_2:def 1;
-          ex L being ManySortedSet of J st f.(F.i) = L & h.i = L.j by A34;
-          hence thesis by A36,A38,A39,A40,FUNCT_1:def 5;
-        end;
+        let q be set;
+        assume
+        q in VV;
+        then consider a being Element of bool ((the Sorts of A).j) such that
+A33:    q = a and
+A34:    ex i being (Element of I), K being ManySortedSet of J st K =
+        f.(F.i) & a = K.j;
+        consider i being (Element of I), K being ManySortedSet of J such that
+A35:    K = f.(F.i) & a = K.j by A34;
+A36:    rng p = rng h & dom h = I by A31,FUNCT_2:def 1,RELAT_1:47;
+        ex L being ManySortedSet of J st f.(F.i) = L & h.i = L.j by A30;
+        hence thesis by A33,A35,A36,FUNCT_1:def 5;
       end;
+      take p;
+      rng p c= rng h
+      proof
+        let q be set;
+        assume
+        q in rng p;
+        hence thesis by FUNCT_1:25;
+      end;
+      then rng p c= VV by XBOOLE_1:1;
+      hence rng p = VV by A32,XBOOLE_0:def 10;
     end;
     for x being set st x in UU holds x is finite
     proof
       let x be set;
-      assume x in UU;
+      assume
+      x in UU;
       then consider a being Element of bool ((the Sorts of A).j) such that
-A41:  x = a and
-A42:  ex w being (Element of I), K being ManySortedSet of J
-      st K = f.(F.w) & a = K.j;
+A37:  x = a and
+A38:  ex w being (Element of I), K being ManySortedSet of J st K = f.
+      (F.w) & a = K.j;
       consider w being (Element of I), K being ManySortedSet of J such that
-A43:  K = f.(F.w) & a = K.j by A42;
-      consider E being strict non-empty finitely-generated
-      MSSubAlgebra of A such that
-A44:  E = F.w by A1;
-      F.w is Element of MSSub A by A44,MSUALG_2:def 20;
-      then F.w in Z by A44;
-      then P[F.w,f.(F.w)] by A10;
-      then consider Q being strict non-empty MSSubAlgebra of A such that
-      F.w = Q and
-A45:  ex G being GeneratorSet of Q st f.(F.w) = G & G is finite-yielding;
-      thus thesis by A27,A41,A43,A45,FINSET_1:def 4;
+A39:  K = f.(F.w) & a = K.j by A38;
+A40:  ex E being strict non-empty finitely-generated MSSubAlgebra of A st
+      E = F.w by A1;
+      then F.w is Element of MSSub A by MSUALG_2:def 20;
+      then F.w in Z by A40;
+      then P[F.w,f.(F.w)] by A9;
+      hence thesis by A24,A37,A39,FINSET_1:def 4;
     end;
-    then union UU is finite by A28,FINSET_1:25;
-    hence thesis by A11,A27;
+    then union UU is finite by A25,FINSET_1:25;
+    hence thesis by A10,A24;
   end;
   then reconsider SOR as non-empty finite-yielding MSSubset of A;
   take B = GenMSAlg SOR;
   let i be Element of I;
-  consider C being strict non-empty finitely-generated MSSubAlgebra of A
-  such that
-A46: C = F.i by A1;
+  consider C being strict non-empty finitely-generated MSSubAlgebra of A such
+  that
+A41: C = F.i by A1;
   C is Element of MSSub A by MSUALG_2:def 20;
-  then F.i in Z by A46;
-  then consider Q being strict non-empty MSSubAlgebra of A,
-  G being GeneratorSet of Q such that
-A47: F.i = Q and
-A48: f.(F.i) = G & G is non-empty finite-yielding by A10;
-A49: G c= the Sorts of Q by PBOOLE:def 23;
+  then F.i in Z by A41;
+  then consider
+  Q being strict non-empty MSSubAlgebra of A, G being GeneratorSet of
+  Q such that
+A42: F.i = Q and
+A43: f.(F.i) = G and
+A44: G is non-empty finite-yielding by A9;
   the Sorts of Q is MSSubset of A by MSUALG_2:def 10;
-  then the Sorts of Q c= the Sorts of A by PBOOLE:def 23;
+  then G c= the Sorts of Q & the Sorts of Q c= the Sorts of A by PBOOLE:
+  def 23;
   then
-A50: G c= the Sorts of A by A49,PBOOLE:15;
-  then reconsider G1 = G as non-empty MSSubset of A by A48,PBOOLE:def 23;
-A51: G1 is ManySortedSubset of SOR
+A45: G c= the Sorts of A by PBOOLE:15;
+  then reconsider G1 = G as non-empty MSSubset of A by A44,PBOOLE:def 23;
+A46: G1 is ManySortedSubset of SOR
   proof
     let j be set such that
-A52: j in J;
-    set UU = { a where a is Element of bool ((the Sorts of A).j) :
-    ex i being (Element of I), K being ManySortedSet of J
-    st K = f.(F.i) & a = K.j };
-    let q be set such that
-A53: q in G1.j;
-    G1.j c= (the Sorts of A).j by A50,A52,PBOOLE:def 5;
-    then G1.j in UU by A48;
-    then q in union UU by A53,TARSKI:def 4;
-    hence thesis by A11,A52;
+A47: j in J;
+    set UU = { a where a is Element of bool ((the Sorts of A).j) : ex i being
+    (Element of I), K being ManySortedSet of J st K = f.(F.i) & a = K.j };
+    G1.j c= (the Sorts of A).j by A45,A47,PBOOLE:def 5;
+    then
+A48: G1.j in UU by A43;
+    let q be set;
+    assume
+    q in G1.j;
+    then q in union UU by A48,TARSKI:def 4;
+    hence thesis by A10,A47;
   end;
-  C = GenMSAlg G by A46,A47,MSAFREE:3
+  C = GenMSAlg G by A41,A42,MSAFREE:3
     .= GenMSAlg G1 by EXTENS_1:22;
-  hence thesis by A46,A51,EXTENS_1:21;
+  hence thesis by A41,A46,EXTENS_1:21;
 end;
 
 theorem Th28:
-  for A, B being strict non-empty finitely-generated MSSubAlgebra of U0
-  ex M being strict non-empty finitely-generated MSSubAlgebra of U0 st
-  A is MSSubAlgebra of M & B is MSSubAlgebra of M
+  for A, B being strict non-empty finitely-generated MSSubAlgebra
+of U0 ex M being strict non-empty finitely-generated MSSubAlgebra of U0 st A is
+  MSSubAlgebra of M & B is MSSubAlgebra of M
 proof
   let A, B be strict non-empty finitely-generated MSSubAlgebra of U0;
   defpred S[set,set] means ($1 = 0 implies $2 = A) & ($1 = 1 implies $2 = B);
@@ -1101,252 +1092,257 @@ A5: for i being set st i in {0,1} holds S[i,F.i] from PBOOLE:sch 3(A1);
     let i be set;
     assume
 A6: i in {0,1};
-    then (i = 0 implies F.i = A) & (i = 1 implies F.i = B) by A5;
-    hence thesis by A6,TARSKI:def 2;
+    then
+A7: i = 1 implies F.i = B by A5;
+    i = 0 implies F.i = A by A5,A6;
+    hence thesis by A6,A7,TARSKI:def 2;
   end;
   then reconsider F as MSAlgebra-Family of {0,1}, S;
-  for i being Element of {0,1}
-  ex C being strict non-empty finitely-generated MSSubAlgebra of U0 st C = F.i
+  for i being Element of {0,1} ex C being strict non-empty
+  finitely-generated MSSubAlgebra of U0 st C = F.i
   proof
     let i be Element of {0,1};
     per cases by TARSKI:def 2;
     suppose
-A7:   i = 0;
+A8:   i = 0;
       take A;
-      thus thesis by A5,A7;
-    end;
-    suppose
-A8:   i = 1;
-      take B;
       thus thesis by A5,A8;
     end;
+    suppose
+A9:   i = 1;
+      take B;
+      thus thesis by A5,A9;
+    end;
   end;
-  then consider M being strict non-empty finitely-generated
-  MSSubAlgebra of U0 such that
-A9: for i being Element of {0,1} holds F.i is MSSubAlgebra of M by Th27;
+  then consider
+  M being strict non-empty finitely-generated MSSubAlgebra of U0 such
+  that
+A10: for i being Element of {0,1} holds F.i is MSSubAlgebra of M by
+  Th27;
   take M;
-A10: 0 in {0,1} by TARSKI:def 2;
+A11: 0 in {0,1} by TARSKI:def 2;
   then F.0 = A by A5;
-  hence A is MSSubAlgebra of M by A9,A10;
-A11: 1 in {0,1} by TARSKI:def 2;
+  hence A is MSSubAlgebra of M by A10,A11;
+A12: 1 in {0,1} by TARSKI:def 2;
   then F.1 = B by A5;
-  hence thesis by A9,A11;
+  hence thesis by A10,A12;
 end;
 
 theorem
-  for SG being non empty non void ManySortedSign
-  for AG being non-empty MSAlgebra over SG for C being set st
-  C = { A where A is Element of MSSub AG :
+  for SG being non empty non void ManySortedSign for AG being non-empty
+  MSAlgebra over SG for C being set st C = { A where A is Element of MSSub AG :
   ex R being strict non-empty finitely-generated MSSubAlgebra of AG st R = A }
-  for F being MSAlgebra-Family of C, SG st
-  for c being set st c in C holds c = F.c
-  ex PS being strict non-empty MSSubAlgebra of product F,
-  BA being ManySortedFunction of PS, AG st BA is_epimorphism PS, AG
+for F being MSAlgebra-Family of C, SG st for c being set st c in C holds c = F.
+  c ex PS being strict non-empty MSSubAlgebra of product F, BA being
+  ManySortedFunction of PS, AG st BA is_epimorphism PS, AG
 proof
-  let SG be non empty non void ManySortedSign,
-  AG be non-empty MSAlgebra over SG, C be set such that
-A1: C = { A where A is Element of MSSub AG :
-  ex R being strict non-empty finitely-generated MSSubAlgebra of AG
-  st R = A };
-  let F be MSAlgebra-Family of C, SG such that
-A2: for c being set st c in C holds c = F.c;
-  set I = the carrier of SG;
-A3: now
+  let SG be non empty non void ManySortedSign, AG be non-empty MSAlgebra over
+  SG, C be set such that
+A1: C = { A where A is Element of MSSub AG : ex R being strict non-empty
+  finitely-generated MSSubAlgebra of AG st R = A };
+A2: now
     let A be strict non-empty finitely-generated MSSubAlgebra of AG;
     A in MSSub AG by MSUALG_2:def 20;
     hence A in C by A1;
   end;
   then reconsider CC = C as non empty set;
   consider T being strict non-empty finitely-generated MSSubAlgebra of AG;
+  set I = the carrier of SG;
+  let F be MSAlgebra-Family of C, SG such that
+A3: for c being set st c in C holds c = F.c;
   reconsider FF = F as MSAlgebra-Family of CC, SG;
   set pr = product FF;
-
-::::  TU  ZACZYNA  SIE  PODALGEBRA
-  defpred T[set,set] means
-  ex t being SortSymbol of SG, f being Element of (SORTS FF).t st
-  ex A being strict non-empty finitely-generated MSSubAlgebra of AG
-  st t = $1 & f = $2 &
-  for B being strict non-empty finitely-generated MSSubAlgebra of AG
-  st A is MSSubAlgebra of B holds f.A = f.B;
+  defpred T[set,set] means ex t being SortSymbol of SG, f being Element of (
+  SORTS FF).t st ex A being strict non-empty finitely-generated MSSubAlgebra of
+  AG st t = $1 & f = $2 & for B being strict non-empty finitely-generated
+  MSSubAlgebra of AG st A is MSSubAlgebra of B holds f.A = f.B;
   consider SOR being ManySortedSet of I such that
-A4: for i being set st i in I
-  for e being set holds e in SOR.i iff e in (SORTS FF).i & T[i,e]
-  from PBOOLE:sch 2;
+A4: for i being set st i in I for e being set holds e in SOR.i iff e in
+  (SORTS FF).i & T[i,e] from PBOOLE:sch 2;
   SOR is MSSubset of pr
   proof
     let i be set such that
 A5: i in I;
     let e be set;
-    assume e in SOR.i;
+    assume
+    e in SOR.i;
     hence thesis by A4,A5;
   end;
   then reconsider SOR as MSSubset of pr;
   SOR is opers_closed
   proof
     let o be OperSymbol of SG;
-    let q be set such that
-A6: q in rng ( (Den(o,pr)) | ((SOR# * the Arity of SG).o) );
     set r = the_result_sort_of o;
     set ar = the_arity_of o;
-A7: SOR c= the Sorts of pr by PBOOLE:def 23;
-    the Sorts of pr is MSSubset of pr by PBOOLE:def 23;
-    then (SOR# * the Arity of SG).o c= ((the Sorts of pr)# * the Arity of SG).
-    o by A7,MSUALG_2:3;
-    then
-A8: (Den(o,pr)) | ((SOR# * the Arity of SG).o) is Function of
-    ((SOR# * the Arity of SG).o), Result(o,pr) by FUNCT_2:38;
+    let q be set such that
+A6: q in rng ( (Den(o,pr)) | ((SOR# * the Arity of SG).o) );
     reconsider q1 = q as Element of (SORTS FF).r by A6,PRALG_2:10;
     consider g being set such that
-A9: g in dom ((Den(o,pr)) | ((SOR# * the Arity of SG).o)) &
-    q = ((Den(o,pr)) | ((SOR# * the Arity of SG).o)).g by A6,FUNCT_1:def 5;
-A10: q = Den(o,pr).g by A9,FUNCT_1:70;
-A11: g in (SOR# * the Arity of SG).o by A8,A9,FUNCT_2:def 1;
-    reconsider g as Element of Args(o,pr) by A9;
+A7: g in dom ((Den(o,pr)) | ((SOR# * the Arity of SG).o)) and
+A8: q = ((Den(o,pr)) | ((SOR# * the Arity of SG).o)).g by A6,FUNCT_1
+    :def 5;
+A9: q = Den(o,pr).g by A7,A8,FUNCT_1:70;
+    SOR c= the Sorts of pr & the Sorts of pr is MSSubset of pr by PBOOLE:
+    def 23;
+    then
+    (SOR# * the Arity of SG).o c= ((the Sorts of pr)# * the Arity of SG).
+    o by MSUALG_2:3;
+    then (Den(o,pr)) | ((SOR# * the Arity of SG).o) is Function of ((SOR# *
+    the Arity of SG).o), Result(o,pr) by FUNCT_2:38;
+    then
+A10: g in (SOR# * the Arity of SG).o by A7,FUNCT_2:def 1;
+    reconsider g as Element of Args(o,pr) by A7;
     T[r,q]
     proof
       take r;
       take q1;
       per cases;
       suppose
-A12:    the_arity_of o = {};
-        consider A being strict non-empty finitely-generated
-        MSSubAlgebra of AG;
+A11:    the_arity_of o = {};
+        consider A being strict non-empty finitely-generated MSSubAlgebra of
+        AG;
+        Args(o,A) = {{}} by A11,PRALG_2:11;
+        then
+A12:    {} in Args(o,A) by TARSKI:def 1;
         take A;
         thus r = r;
         thus q1 = q;
-        let B be strict non-empty finitely-generated MSSubAlgebra of AG
-        such that A is MSSubAlgebra of B;
-        A in MSSub AG & B in MSSub AG by MSUALG_2:def 20;
-        then A in CC & B in CC by A1;
-        then reconsider iA = A, iB = B as Element of CC;
-A13:    iA = FF.iA & iB = FF.iB by A2;
-        Args(o,A) = {{}} by A12,PRALG_2:11;
+        let B be strict non-empty finitely-generated MSSubAlgebra of AG such
+        that
+        A is MSSubAlgebra of B;
+        Args(o,B) = {{}} by A11,PRALG_2:11;
         then
-A14:    {} in Args(o,A) by TARSKI:def 1;
-        Args(o,B) = {{}} by A12,PRALG_2:11;
+A13:    {} in Args(o,B) by TARSKI:def 1;
+        B in MSSub AG by MSUALG_2:def 20;
         then
-A15:    {} in Args(o,B) by TARSKI:def 1;
-        Args(o,pr) = {{}} by A12,PRALG_2:11;
+A14:    B in CC by A1;
+        A in MSSub AG by MSUALG_2:def 20;
+        then A in CC by A1;
+        then reconsider iA = A, iB = B as Element of CC by A14;
+A15:    iA = FF.iA by A3;
+A16:    iB = FF.iB by A3;
+        Args(o,pr) = {{}} by A11,PRALG_2:11;
         then
-A16:    g = {} by TARSKI:def 1;
-        hence q1.A = const(o,pr).iA by A10,PRALG_3:def 1
-          .= const(o,FF.iA) by A12,PRALG_3:10
+A17:    g = {} by TARSKI:def 1;
+        hence q1.A = const(o,pr).iA by A9,PRALG_3:def 1
+          .= const(o,FF.iA) by A11,PRALG_3:10
           .= Den(o,FF.iA).{} by PRALG_3:def 1
-          .= Den(o,AG).{} by A13,A14,Th21
-          .= Den(o,FF.iB).{} by A13,A15,Th21
+          .= Den(o,AG).{} by A15,A12,Th21
+          .= Den(o,FF.iB).{} by A16,A13,Th21
           .= const(o,FF.iB) by PRALG_3:def 1
-          .= const(o,pr).iB by A12,PRALG_3:10
-          .= q1.B by A10,A16,PRALG_3:def 1;
+          .= const(o,pr).iB by A11,PRALG_3:10
+          .= q1.B by A9,A17,PRALG_3:def 1;
       end;
       suppose
-A17:    the_arity_of o <> {};
+A18:    the_arity_of o <> {};
         then reconsider domar = dom ar as non empty finite set;
-        g in SOR#.((the Arity of SG).o) by A11,FUNCT_2:21;
+        defpred P[set,set] means ex gn being Function, A being strict
+non-empty finitely-generated MSSubAlgebra of AG st gn = g.$1 & (for B being
+strict non-empty finitely-generated MSSubAlgebra of AG st A is MSSubAlgebra of
+        B holds gn.A = gn.B) & $2 = A;
+        g in SOR#.((the Arity of SG).o) by A10,FUNCT_2:21;
         then
-A18:    g in product(SOR*ar) by PBOOLE:def 19;
+A19:    g in product(SOR*ar) by PBOOLE:def 19;
         then
-A19:    dom (SOR*ar) = dom g by CARD_3:18
+A20:    dom (SOR*ar) = dom g by CARD_3:18
           .= domar by MSUALG_3:6;
-        defpred P[set,set] means
-        ex gn being Function, A being strict non-empty finitely-generated
-        MSSubAlgebra of AG st gn = g.$1 &
-        (for B being strict non-empty finitely-generated
-        MSSubAlgebra of AG st A is MSSubAlgebra of B holds
-        gn.A = gn.B) & $2 = A;
-A20:    for a being Element of domar ex b being Element of MSSub AG st P[a,b]
+A21:    for a being Element of domar ex b being Element of MSSub AG st P[
+        a,b]
         proof
           let n be Element of domar;
-A21:      ar.n in I by PARTFUN1:27;
-          g.n in (SOR*ar).n by A18,A19,CARD_3:18;
-          then g.n in SOR.(ar.n) by FUNCT_1:23;
-          then consider s being SortSymbol of SG,
-          f being (Element of (SORTS FF).s),
-          A being strict non-empty finitely-generated
-          MSSubAlgebra of AG such that s = ar.n and
+          g.n in (SOR*ar).n by A19,A20,CARD_3:18;
+          then ar.n in I & g.n in SOR.(ar.n) by FUNCT_1:23,PARTFUN1:27;
+          then consider
+          s being SortSymbol of SG, f being (Element of (SORTS FF).s)
+, A being strict non-empty finitely-generated MSSubAlgebra of AG such that
+          s = ar.n and
 A22:      f = g.n and
 A23:      for B being strict non-empty finitely-generated
-          MSSubAlgebra of AG st A is MSSubAlgebra of B holds f.A = f.B
-          by A4,A21;
+          MSSubAlgebra of AG st A is MSSubAlgebra of B holds f.A = f.B by A4;
           reconsider b = A as Element of MSSub AG by MSUALG_2:def 20;
           take b, f;
           take A;
           thus f = g.n by A22;
-          thus for B being strict non-empty finitely-generated
-          MSSubAlgebra of AG st A is MSSubAlgebra of B holds f.A = f.B by A23;
+          thus for B being strict non-empty finitely-generated MSSubAlgebra of
+          AG st A is MSSubAlgebra of B holds f.A = f.B by A23;
           thus thesis;
         end;
         consider KK being Function of domar, MSSub AG such that
-A24:    for n being Element of domar holds P[n,KK.n] from FUNCT_2:sch 3(A20);
+A24:    for n being Element of domar holds P[n,KK.n] from FUNCT_2:sch
+        3(A21);
         reconsider KK as ManySortedSet of domar;
         KK is MSAlgebra-Family of domar, SG
         proof
           let n be set;
-          assume n in domar;
-          then consider gn being Function such that
-A25:      ex A being strict non-empty finitely-generated MSSubAlgebra of AG
-          st gn = g.n & (for B being strict non-empty finitely-generated
-          MSSubAlgebra of AG st A is MSSubAlgebra of B holds gn.A = gn.B)
-          & KK.n = A by A24;
-          thus thesis by A25;
-        end;
-        then reconsider KK as MSAlgebra-Family of domar, SG;
-        for n being Element of domar
-        ex C being strict non-empty finitely-generated MSSubAlgebra of AG
-        st C = KK.n
-        proof
-          let n be Element of domar;
-          ex gn being Function,
-          A being strict non-empty finitely-generated MSSubAlgebra of AG
-          st gn = g.n & (for B being strict non-empty finitely-generated
-          MSSubAlgebra of AG st A is MSSubAlgebra of B
-          holds gn.A = gn.B) & KK.n = A by A24;
+          assume
+          n in domar;
+          then ex gn being Function st ex A being strict non-empty
+finitely-generated MSSubAlgebra of AG st gn = g.n & (for B being strict
+non-empty finitely-generated MSSubAlgebra of AG st A is MSSubAlgebra of B holds
+          gn.A = gn.B) & KK.n = A by A24;
           hence thesis;
         end;
-        then consider K being strict non-empty finitely-generated
-        MSSubAlgebra of AG such that
-A26:    for n being Element of domar holds KK.n is MSSubAlgebra of K by Th27;
+        then reconsider KK as MSAlgebra-Family of domar, SG;
+        for n being Element of domar ex C being strict non-empty
+        finitely-generated MSSubAlgebra of AG st C = KK.n
+        proof
+          let n be Element of domar;
+          ex gn being Function, A being strict non-empty
+finitely-generated MSSubAlgebra of AG st gn = g.n & (for B being strict
+non-empty finitely-generated MSSubAlgebra of AG st A is MSSubAlgebra of B holds
+          gn.A = gn.B) & KK.n = A by A24;
+          hence thesis;
+        end;
+        then consider
+        K being strict non-empty finitely-generated MSSubAlgebra of
+        AG such that
+A25:    for n being Element of domar holds KK.n is MSSubAlgebra of K
+        by Th27;
         take K;
         thus r = r;
         thus q1 = q;
-        let B be strict non-empty finitely-generated MSSubAlgebra of AG
-        such that
-A27:    K is MSSubAlgebra of B;
-        K in MSSub AG & B in MSSub AG by MSUALG_2:def 20;
-        then B in CC & K in CC by A1;
-        then reconsider iB = B, iK = K as Element of CC;
-A28:    iK = FF.iK & iB = FF.iB by A2;
-A29:    g in Funcs (dom ar, Funcs (CC, union { (the Sorts of FF.i).s
-        where i is (Element of CC), s is (Element of (the carrier of SG)) :
-        not contradiction })) by PRALG_3:15;
+        let B be strict non-empty finitely-generated MSSubAlgebra of AG such
+        that
+A26:    K is MSSubAlgebra of B;
+        K in MSSub AG by MSUALG_2:def 20;
         then
-A30:    dom ((commute g).iB) = domar by Th3;
-A31:    dom ((commute g).iK) = domar by A29,Th3;
-A32:    for n being set st n in dom ((commute g).iK)
-        holds ((commute g).iB).n = ((commute g).iK).n
+A27:    K in CC by A1;
+        B in MSSub AG by MSUALG_2:def 20;
+        then B in CC by A1;
+        then reconsider iB = B, iK = K as Element of CC by A27;
+A28:    g in Funcs (dom ar, Funcs (CC, union { (the Sorts of FF.i).s
+        where i is (Element of CC), s is (Element of (the carrier of SG)) : not
+        contradiction })) by PRALG_3:15;
+        then
+A29:    dom ((commute g).iB) = domar by Th3;
+A30:    dom ((commute g).iK) = domar by A28,Th3;
+A31:    for n being set st n in dom ((commute g).iK) holds ((commute g).
+        iB).n = ((commute g).iK).n
         proof
           let x be set;
           assume
-A33:      x in dom ((commute g).iK);
-          then consider gn being Function,
-          A being strict non-empty finitely-generated
-          MSSubAlgebra of AG such that
-A34:      gn = g.x and
-A35:      for B being strict non-empty finitely-generated
-          MSSubAlgebra of AG st A is MSSubAlgebra of B holds gn.A = gn.B and
-A36:      KK.x = A by A24,A31;
-A37:      KK.x is MSSubAlgebra of K by A26,A31,A33;
-          thus ((commute g).iB).x = gn.iB by A31,A33,A34,PRALG_3:22
-            .= gn.A by A27,A35,A36,A37,MSUALG_2:7
-            .= gn.iK by A26,A31,A33,A35,A36
-            .= ((commute g).iK).x by A31,A33,A34,PRALG_3:22;
+A32:      x in dom ((commute g).iK);
+          then consider gn being Function, A being strict non-empty
+          finitely-generated MSSubAlgebra of AG such that
+A33:      gn = g.x and
+A34:      ( for B being strict non-empty finitely-generated
+MSSubAlgebra of AG st A is MSSubAlgebra of B holds gn.A = gn.B)& KK.x = A by
+          A24,A30;
+A35:      KK.x is MSSubAlgebra of K by A25,A30,A32;
+          thus ((commute g).iB).x = gn.iB by A30,A32,A33,PRALG_3:22
+            .= gn.A by A26,A34,A35,MSUALG_2:7
+            .= gn.iK by A25,A30,A32,A34
+            .= ((commute g).iK).x by A30,A32,A33,PRALG_3:22;
         end;
-A38:    (commute g).iB is Element of Args(o,FF.iB) by A17,PRALG_3:21;
-A39:    (commute g).iK is Element of Args(o,FF.iK) by A17,PRALG_3:21;
-        thus q1.K = Den(o,FF.iK).((commute g).iK) by A10,A17,PRALG_3:23
-          .= Den(o,AG).((commute g).iK) by A28,A39,Th21
-          .= Den(o,AG).((commute g).iB) by A30,A31,A32,FUNCT_1:9
-          .= Den(o,FF.iB).((commute g).iB) by A28,A38,Th21
-          .= q1.B by A10,A17,PRALG_3:23;
+A36:    iK = FF.iK by A3;
+A37:    (commute g).iK is Element of Args(o,FF.iK) by A18,PRALG_3:21;
+A38:    (commute g).iB is Element of Args(o,FF.iB) by A18,PRALG_3:21;
+A39:    iB = FF.iB by A3;
+        thus q1.K = Den(o,FF.iK).((commute g).iK) by A9,A18,PRALG_3:23
+          .= Den(o,AG).((commute g).iK) by A36,A37,Th21
+          .= Den(o,AG).((commute g).iB) by A28,A29,A31,Th3,FUNCT_1:9
+          .= Den(o,FF.iB).((commute g).iB) by A39,A38,Th21
+          .= q1.B by A9,A18,PRALG_3:23;
       end;
     end;
     then q in SOR.r by A4;
@@ -1354,478 +1350,498 @@ A39:    (commute g).iK is Element of Args(o,FF.iK) by A17,PRALG_3:21;
   end;
   then
 A40: pr|SOR = MSAlgebra (#SOR, Opers(pr,SOR)#) by MSUALG_2:def 16;
-  pr|SOR is non-empty
+  defpred Z[set,set,set] means ex s being SortSymbol of SG, f being Element of
+(SORTS FF).s st ex A being strict non-empty finitely-generated MSSubAlgebra of
+  AG st s = $3 & f = $2 & (for B being strict non-empty finitely-generated
+  MSSubAlgebra of AG st A is MSSubAlgebra of B holds f.A = f.B) & $1 = f.A;
+  SOR is non-empty
   proof
-    SOR is non-empty
+    defpred P[set] means ex C being strict non-empty MSSubAlgebra of AG st $1
+    = C & C is finitely-generated;
+    let i be set;
+    consider ST1 being set such that
+A41: for x being set holds x in ST1 iff x in SuperAlgebraSet T & P[x]
+    from XBOOLE_0:sch 1;
+A42: ST1 c= CC
     proof
-      let i be set;
+      let q be set;
       assume
-A41:  i in I;
-      then (the Sorts of T).i <> {};
-      then consider x being set such that
-A42:  x in (the Sorts of T).i by XBOOLE_0:def 1;
-      defpred P[set] means
-      ex C being strict non-empty MSSubAlgebra of AG st $1 = C &
-      C is finitely-generated;
-      consider ST1 being set such that
-A43:  for x being set holds x in ST1 iff x in SuperAlgebraSet T & P[x]
-      from XBOOLE_0:sch 1;
-      defpred A[set,set] means ex K being MSSubAlgebra of AG st
-      ex t being set st $1 = K & t in (the Sorts of K).i & $2 = t;
-A44:  for c being set st c in CC ex j being set st A[c,j]
-      proof
-        let c be set;
-        assume c in CC;
-        then consider C being Element of MSSub AG such that
-A45:    c = C and
-A46:    ex R being strict non-empty finitely-generated MSSubAlgebra of AG
-        st R = C by A1;
-        consider R being strict non-empty finitely-generated
-        MSSubAlgebra of AG such that
-A47:    R = C by A46;
-        (the Sorts of R).i <> {} by A41;
-        then consider t being set such that
-A48:    t in (the Sorts of R).i by XBOOLE_0:def 1;
-        take t, R, t;
-        thus c = R by A45,A47;
-        thus thesis by A48;
-      end;
-      consider f being ManySortedSet of CC such that
-A49:  for c being set st c in CC holds A[c,f.c] from PBOOLE:sch 3(A44);
-      set g = f +* (ST1 --> x);
-A50:  dom (ST1 --> x) = ST1 by FUNCOP_1:19;
-A51:  ST1 c= CC
-      proof
-        let q be set;
-        assume q in ST1;
-        then consider C being strict non-empty MSSubAlgebra of AG such that
-A52:    q = C & C is finitely-generated by A43;
-        q in MSSub AG by A52,MSUALG_2:def 20;
-        hence thesis by A1,A52;
-      end;
-      reconsider s = i as SortSymbol of SG by A41;
-A53:  dom g = dom f \/ dom (ST1 --> x) by FUNCT_4:def 1
-        .= CC \/ dom (ST1 --> x) by PARTFUN1:def 4
-        .= CC \/ ST1 by FUNCOP_1:19
-        .= CC by A51,XBOOLE_1:12
-        .= dom (Carrier(FF,s)) by PARTFUN1:def 4;
-      for a being set st a in dom (Carrier(FF,s))
-      holds g.a in (Carrier(FF,s)).a
-      proof
-        let a be set;
-        assume a in dom (Carrier(FF,s));
-        then
-A54:    a in CC by PARTFUN1:def 4;
-        then consider U0 being MSAlgebra over SG such that
-A55:    U0 = FF.a & (Carrier(FF,s)).a = (the Sorts of U0).s by PRALG_2:def 16;
-        consider K being MSSubAlgebra of AG, t being set such that
-A56:    a = K & t in (the Sorts of K).i & f.a = t by A49,A54;
-        per cases;
-        suppose
-A57:      a in ST1;
-          then a in dom (ST1 --> x) by FUNCOP_1:19;
-          then g.a = (ST1 --> x).a by FUNCT_4:14;
-          then
-A58:      g.a = x by A57,FUNCOP_1:13;
-          a in SuperAlgebraSet T by A43,A57;
-          then consider M being strict MSSubAlgebra of AG such that
-A59:      a = M & T is MSSubAlgebra of M by Def2;
-          the Sorts of T is ManySortedSubset of the Sorts of M
-          by A59,MSUALG_2:def 10;
-          then the Sorts of T c= the Sorts of M by PBOOLE:def 23;
-          then (the Sorts of T).i c= (the Sorts of M).i by A41,PBOOLE:def 5;
-          then x in (the Sorts of M).i by A42;
-          hence thesis by A2,A54,A55,A58,A59;
-        end;
-        suppose not a in ST1;
-          then g.a = t by A50,A56,FUNCT_4:12;
-          hence thesis by A2,A54,A55,A56;
-        end;
-      end;
+      q in ST1;
       then
-A60:  g in product Carrier(FF,s) by A53,CARD_3:18;
-      T[i,g]
-      proof
-        take s;
-        reconsider g1 = g as Element of (SORTS FF).s by A60,PRALG_2:def 17;
-        take g1;
-        take T;
-        thus s = i;
-        thus g1 = g;
-        let B be strict non-empty finitely-generated MSSubAlgebra of AG
-        such that
-A61:    T is MSSubAlgebra of B;
-        T is MSSubAlgebra of T by MSUALG_2:6;
-        then T in SuperAlgebraSet T by Def2;
-        then
-A62:    T in ST1 by A43;
-        B in SuperAlgebraSet T by A61,Def2;
-        then
-A63:    B in ST1 by A43;
-        thus g1.T = (ST1 --> x).T by A50,A62,FUNCT_4:14
-          .= x by A62,FUNCOP_1:13
-          .= (ST1 --> x).B by A63,FUNCOP_1:13
-          .= g1.B by A50,A63,FUNCT_4:14;
-      end;
-      hence thesis by A4;
+A43:  ex C being strict non-empty MSSubAlgebra of AG st q = C & C is
+      finitely-generated by A41;
+      then q in MSSub AG by MSUALG_2:def 20;
+      hence thesis by A1,A43;
     end;
-    hence the Sorts of (pr|SOR) is non-empty by A40;
-  end;
-  then reconsider PS = pr|SOR as strict non-empty MSSubAlgebra of product F;
-  take PS;
-A64: now :: EPIMORPHISM
-    let s be SortSymbol of SG, f be (Element of (SORTS FF).s),
-    A be strict non-empty finitely-generated MSSubAlgebra of AG;
-A65: A in MSSub AG by MSUALG_2:def 20;
-A66: dom Carrier(FF,s) = CC by PARTFUN1:def 4;
+    defpred A[set,set] means ex K being MSSubAlgebra of AG st ex t being set
+    st $1 = K & t in (the Sorts of K).i & $2 = t;
+    assume
+A44: i in I;
+    then consider x being set such that
+A45: x in (the Sorts of T).i by XBOOLE_0:def 1;
+    reconsider s = i as SortSymbol of SG by A44;
+A46: for c being set st c in CC ex j being set st A[c,j]
+    proof
+      let c be set;
+      assume
+      c in CC;
+      then consider C being Element of MSSub AG such that
+A47:  c = C and
+A48:  ex R being strict non-empty finitely-generated MSSubAlgebra of
+      AG st R = C by A1;
+      consider R being strict non-empty finitely-generated MSSubAlgebra of AG
+      such that
+A49:  R = C by A48;
+      consider t being set such that
+A50:  t in (the Sorts of R).i by A44,XBOOLE_0:def 1;
+      take t, R, t;
+      thus c = R by A47,A49;
+      thus thesis by A50;
+    end;
+    consider f being ManySortedSet of CC such that
+A51: for c being set st c in CC holds A[c,f.c] from PBOOLE:sch 3(A46);
+    set g = f +* (ST1 --> x);
+A52: dom (ST1 --> x) = ST1 by FUNCOP_1:19;
+A53: for a being set st a in dom (Carrier(FF,s)) holds g.a in (Carrier(FF,
+    s)).a
+    proof
+      let a be set;
+      assume
+      a in dom (Carrier(FF,s));
+      then
+A54:  a in CC by PARTFUN1:def 4;
+      then
+A55:  ex U0 being MSAlgebra over SG st U0 = FF.a & (Carrier(FF,s)).a = (
+      the Sorts of U0).s by PRALG_2:def 16;
+      consider K being MSSubAlgebra of AG, t being set such that
+A56:  a = K & t in (the Sorts of K).i and
+A57:  f.a = t by A51,A54;
+      per cases;
+      suppose
+A58:    a in ST1;
+        then a in dom (ST1 --> x) by FUNCOP_1:19;
+        then g.a = (ST1 --> x).a by FUNCT_4:14;
+        then
+A59:    g.a = x by A58,FUNCOP_1:13;
+        a in SuperAlgebraSet T by A41,A58;
+        then consider M being strict MSSubAlgebra of AG such that
+A60:    a = M and
+A61:    T is MSSubAlgebra of M by Def2;
+        the Sorts of T is ManySortedSubset of the Sorts of M by A61,
+        MSUALG_2:def 10;
+        then the Sorts of T c= the Sorts of M by PBOOLE:def 23;
+        then (the Sorts of T).i c= (the Sorts of M).i by A44,PBOOLE:def 5;
+        then x in (the Sorts of M).i by A45;
+        hence thesis by A3,A54,A55,A59,A60;
+      end;
+      suppose
+        not a in ST1;
+        then g.a = t by A52,A57,FUNCT_4:12;
+        hence thesis by A3,A54,A55,A56;
+      end;
+    end;
+    dom g = dom f \/ dom (ST1 --> x) by FUNCT_4:def 1
+      .= CC \/ dom (ST1 --> x) by PARTFUN1:def 4
+      .= CC \/ ST1 by FUNCOP_1:19
+      .= CC by A42,XBOOLE_1:12
+      .= dom (Carrier(FF,s)) by PARTFUN1:def 4;
     then
-A67: A in dom Carrier(FF,s) by A1,A65;
+A62: g in product Carrier(FF,s) by A53,CARD_3:18;
+    T[i,g]
+    proof
+      reconsider g1 = g as Element of (SORTS FF).s by A62,PRALG_2:def 17;
+      take s;
+      take g1;
+      take T;
+      thus s = i;
+      thus g1 = g;
+      let B be strict non-empty finitely-generated MSSubAlgebra of AG;
+      assume
+      T is MSSubAlgebra of B;
+      then B in SuperAlgebraSet T by Def2;
+      then
+A63:  B in ST1 by A41;
+      T is MSSubAlgebra of T by MSUALG_2:6;
+      then T in SuperAlgebraSet T by Def2;
+      then
+A64:  T in ST1 by A41;
+      hence g1.T = (ST1 --> x).T by A52,FUNCT_4:14
+        .= x by A64,FUNCOP_1:13
+        .= (ST1 --> x).B by A63,FUNCOP_1:13
+        .= g1.B by A52,A63,FUNCT_4:14;
+    end;
+    hence thesis by A4;
+  end;
+  then reconsider
+  PS = pr|SOR as strict non-empty MSSubAlgebra of product F by A40
+  ,MSUALG_1:def 8;
+A65: now
+    let s be SortSymbol of SG, f be (Element of (SORTS FF).s), A be strict
+    non-empty finitely-generated MSSubAlgebra of AG;
+A66: dom Carrier(FF,s) = CC by PARTFUN1:def 4;
+    A in MSSub AG by MSUALG_2:def 20;
+    then
+A67: A in dom Carrier(FF,s) by A1,A66;
     then consider U0 being MSAlgebra over SG such that
 A68: U0 = FF.A and
-A69: Carrier(FF,s).A = (the Sorts of U0).s by A66,PRALG_2:def 16;
-    FF.A = A by A2,A66,A67;
-    then the Sorts of U0 is ManySortedSubset of the Sorts of AG
-    by A68,MSUALG_2:def 10;
-    then the Sorts of U0 c= the Sorts of AG by PBOOLE:def 23;
-    then
-A70: (the Sorts of U0).s c= (the Sorts of AG).s by PBOOLE:def 5;
+A69: Carrier(FF,s).A = (the Sorts of U0).s by A66,PRALG_2:def
+    16;
     (SORTS FF).s = product Carrier(FF,s) by PRALG_2:def 17;
-    then f.A in Carrier(FF,s).A by A67,CARD_3:18;
+    then
+A70: f.A in Carrier(FF,s).A by A67,CARD_3:18;
+    FF.A = A by A3,A66,A67;
+    then the Sorts of U0 is ManySortedSubset of the Sorts of AG by A68,
+    MSUALG_2:def 10;
+    then the Sorts of U0 c= the Sorts of AG by PBOOLE:def 23;
+    then (the Sorts of U0).s c= (the Sorts of AG).s by PBOOLE:def 5;
     hence f.A in (the Sorts of AG).s by A69,A70;
   end;
-  defpred Z[set,set,set] means
-  ex s being SortSymbol of SG, f being Element of (SORTS FF).s st
-  ex A being strict non-empty finitely-generated MSSubAlgebra of AG
-  st s = $3 & f = $2 &
-  (for B being strict non-empty finitely-generated MSSubAlgebra of AG
-  st A is MSSubAlgebra of B holds f.A = f.B) & $1 = f.A;
 A71: now
     let i be set such that
 A72: i in I;
     let x be set;
-    assume x in (the Sorts of PS).i;
-    then consider s being SortSymbol of SG, f being (Element of (SORTS FF).s),
-    A being strict non-empty finitely-generated MSSubAlgebra of AG such that
+    assume
+    x in (the Sorts of PS).i;
+    then consider
+    s being SortSymbol of SG, f being (Element of (SORTS FF).s), A
+    being strict non-empty finitely-generated MSSubAlgebra of AG such that
 A73: s = i and
-A74: f = x and
-A75: for B being strict non-empty finitely-generated MSSubAlgebra of AG
-    st A is MSSubAlgebra of B holds f.A = f.B by A4,A40,A72;
+A74: f = x & for B being strict non-empty finitely-generated
+    MSSubAlgebra of AG st A is MSSubAlgebra of B holds f.A = f.B by A4,A40,A72;
     take y = f.A;
-    thus y in (the Sorts of AG).i by A64,A73;
-    thus Z[y,x,i] by A73,A74,A75;
+    thus y in (the Sorts of AG).i by A65,A73;
+    thus Z[y,x,i] by A73,A74;
   end;
   consider BA being ManySortedFunction of PS, AG such that
-A76: for i being set st i in I holds
-  ex g being Function of (the Sorts of PS).i, (the Sorts of AG).i
-  st g = BA.i & for x being set st x in (the Sorts of PS).i holds Z[g.x,x,i]
-  from MSSUBFAM:sch 1(A71);
+A75: for i being set st i in I holds ex g being Function of (the Sorts
+of PS).i, (the Sorts of AG).i st g = BA.i & for x being set st x in (the Sorts
+  of PS).i holds Z[g.x,x,i] from MSSUBFAM:sch 1(A71);
+  take PS;
   take BA;
   thus BA is_homomorphism PS, AG
   proof
-    let o be OperSymbol of SG such that Args(o,PS) <> {};
+    let o be OperSymbol of SG such that
+    Args(o,PS) <> {};
     let k be Element of Args(o,PS);
     set r = the_result_sort_of o, ar = the_arity_of o;
-    consider g being Function of (the Sorts of PS).r,
-    (the Sorts of AG).r such that
-A77: g = BA.r and
-A78: for k being set st k in (the Sorts of PS).r holds Z[g.k,k,r] by A76;
-    Den(o,PS).k in (the Sorts of PS).r by MSUALG_9:19;
-    then consider s being SortSymbol of SG, f being (Element of (SORTS FF).s),
-    A being strict non-empty finitely-generated MSSubAlgebra of AG such that
+    consider g being Function of (the Sorts of PS).r, (the Sorts of AG).r such
+    that
+A76: g = BA.r and
+A77: for k being set st k in (the Sorts of PS).r holds Z[g.k,k,r] by
+    A75;
+    consider s being SortSymbol of SG, f being (Element of (SORTS FF).s), A
+    being strict non-empty finitely-generated MSSubAlgebra of AG such that
     s = r and
-A79: f = Den(o,PS).k and
-A80: (for B being strict non-empty finitely-generated MSSubAlgebra of AG
-    st A is MSSubAlgebra of B holds f.A = f.B) and
-A81: g.(Den(o,PS).k) = f.A by A78;
+A78: f = Den(o,PS).k and
+A79: for B being strict non-empty finitely-generated MSSubAlgebra of
+    AG st A is MSSubAlgebra of B holds f.A = f.B and
+A80: g.(Den(o,PS).k) = f.A by A77,MSUALG_9:19;
     per cases;
     suppose
-A82:  the_arity_of o = {};
+A81:  the_arity_of o = {};
       A in MSSub AG by MSUALG_2:def 20;
       then A in CC by A1;
       then reconsider iA = A as Element of CC;
       reconsider ff1 = Den(o,pr).k as Function by Th22;
-A83:  Args(o,PS) = {{}} by A82,PRALG_2:11;
+A82:  Den(o,pr).{} = const(o,pr) by PRALG_3:def 1;
+      Args(o,A) = {{}} by A81,PRALG_2:11;
       then
-A84:  k = {} by TARSKI:def 1;
-      Args(o,A) = {{}} by A82,PRALG_2:11;
+A83:  {} in Args(o,A) by TARSKI:def 1;
+A84:  Args(o,PS) = {{}} by A81,PRALG_2:11;
       then
-A85:  {} in Args(o,A) by TARSKI:def 1;
-A86:  Den(o,pr).{} = const(o,pr) by PRALG_3:def 1;
-      thus BA.(the_result_sort_of o).(Den(o,PS).k) = ff1.A by A77,A79,A81,Th21
-        .= const(o,pr).iA by A83,A86,TARSKI:def 1
-        .= const(o,FF.iA) by A82,PRALG_3:10
+A85:  k = {} by TARSKI:def 1;
+      thus BA.(the_result_sort_of o).(Den(o,PS).k) = ff1.A by A76,A78,A80,
+      Th21
+        .= const(o,pr).iA by A84,A82,TARSKI:def 1
+        .= const(o,FF.iA) by A81,PRALG_3:10
         .= Den(o,FF.iA).{} by PRALG_3:def 1
-        .= Den(o,A).{} by A2
-        .= Den(o,AG).{} by A85,Th21
-        .= Den(o,AG).(BA#k) by A82,A84,PRALG_3:12;
+        .= Den(o,A).{} by A3
+        .= Den(o,AG).{} by A83,Th21
+        .= Den(o,AG).(BA#k) by A81,A85,PRALG_3:12;
     end;
     suppose
-A87:  the_arity_of o <> {};
+A86:  the_arity_of o <> {};
       then reconsider domar = dom ar as non empty finite set;
-      defpred P[set,set] means ex kn being Function st
-      ex A being strict non-empty finitely-generated MSSubAlgebra of AG
-      st kn = k.$1 &
-      (for B being strict non-empty finitely-generated MSSubAlgebra of AG
-      st A is MSSubAlgebra of B holds
-      kn.A = kn.B) & BA.(ar.$1).kn = kn.A & $2 = A;
-A88:  for n being Element of domar ex b being Element of MSSub AG st P[n,b]
+      defpred P[set,set] means ex kn being Function st ex A being strict
+non-empty finitely-generated MSSubAlgebra of AG st kn = k.$1 & (for B being
+strict non-empty finitely-generated MSSubAlgebra of AG st A is MSSubAlgebra of
+      B holds kn.A = kn.B) & BA.(ar.$1).kn = kn.A & $2 = A;
+A87:  for n being Element of domar ex b being Element of MSSub AG st P[n
+      ,b]
       proof
         let n be Element of domar;
-        ar.n in I by PARTFUN1:27;
-        then consider g being Function of (the Sorts of PS).(ar.n),
-        (the Sorts of AG).(ar.n) such that
-A89:    g = BA.(ar.n) & for x being set st x in (the Sorts of PS).(ar.n)
-        holds Z[g.x,x,ar.n] by A76;
+        consider g being Function of (the Sorts of PS).(ar.n), (the Sorts of
+        AG).(ar.n) such that
+A88:    g = BA.(ar.n) and
+A89:    for x being set st x in (the Sorts of PS).(ar.n) holds Z[g.x
+        ,x,ar. n] by A75,PARTFUN1:27;
         k.n in (the Sorts of PS).(ar/.n) by MSUALG_6:2;
         then k.n in (the Sorts of PS).(ar.n) by PARTFUN1:def 8;
-        then consider s being SortSymbol of SG,
-        f being (Element of (SORTS FF).s),
-        A being strict non-empty finitely-generated
-        MSSubAlgebra of AG such that s = ar.n and
+        then consider
+        s being SortSymbol of SG, f being (Element of (SORTS FF).s),
+A being strict non-empty finitely-generated MSSubAlgebra of AG such that
+        s = ar.n and
 A90:    f = k.n and
-A91:    (for B being strict non-empty finitely-generated MSSubAlgebra of AG
-        st A is MSSubAlgebra of B holds f.A = f.B) & g.(k.n) = f.A by A89;
+A91:    for B being strict non-empty finitely-generated MSSubAlgebra
+        of AG st A is MSSubAlgebra of B holds f.A = f.B and
+A92:    g.(k.n) = f.A by A89;
         reconsider b = A as Element of MSSub AG by MSUALG_2:def 20;
         take b, f;
         take A;
         thus f = k.n by A90;
-        thus for B being strict non-empty finitely-generated
-        MSSubAlgebra of AG st A is MSSubAlgebra of B holds f.A = f.B by A91;
-        thus BA.(ar.n).f = f.A by A89,A90,A91;
+        thus for B being strict non-empty finitely-generated MSSubAlgebra of
+        AG st A is MSSubAlgebra of B holds f.A = f.B by A91;
+        thus BA.(ar.n).f = f.A by A88,A90,A92;
         thus thesis;
       end;
       consider KK being Function of domar, MSSub AG such that
-A92:  for n being Element of domar holds P[n,KK.n] from FUNCT_2:sch 3 (A88);
+A93:  for n being Element of domar holds P[n,KK.n] from FUNCT_2:sch
+      3 (A87);
       reconsider KK as ManySortedSet of domar;
       KK is MSAlgebra-Family of domar, SG
       proof
         let n be set;
-        assume n in domar;
-        then ex kn being Function st
-        ex A being strict non-empty finitely-generated MSSubAlgebra of AG
-        st kn = k.n & (for B being strict non-empty finitely-generated
-        MSSubAlgebra of AG st A is MSSubAlgebra of B
-        holds kn.A = kn.B) & BA.(ar.n).kn = kn.A & KK.n = A by A92;
+        assume
+        n in domar;
+        then ex kn being Function st ex A being strict non-empty
+        finitely-generated MSSubAlgebra of AG st kn = k.n & (for B being strict
+non-empty finitely-generated MSSubAlgebra of AG st A is MSSubAlgebra of B holds
+        kn.A = kn.B) & BA.(ar.n).kn = kn.A & KK.n = A by A93;
         hence thesis;
       end;
       then reconsider KK as MSAlgebra-Family of domar, SG;
-      for n being Element of domar
-      ex C being strict non-empty finitely-generated MSSubAlgebra of AG st
-      C = KK.n
+      for n being Element of domar ex C being strict non-empty
+      finitely-generated MSSubAlgebra of AG st C = KK.n
       proof
         let n be Element of domar;
-        ex kn being Function st
-        ex A being strict non-empty finitely-generated MSSubAlgebra of AG
-        st kn = k.n & (for B being strict non-empty finitely-generated
-        MSSubAlgebra of AG st A is MSSubAlgebra of B
-        holds kn.A = kn.B) & BA.(ar.n).kn = kn.A & KK.n = A by A92;
+        ex kn being Function st ex A being strict non-empty
+        finitely-generated MSSubAlgebra of AG st kn = k.n & (for B being strict
+non-empty finitely-generated MSSubAlgebra of AG st A is MSSubAlgebra of B holds
+        kn.A = kn.B) & BA.(ar.n).kn = kn.A & KK.n = A by A93;
         hence thesis;
       end;
-      then consider K being strict non-empty finitely-generated
-      MSSubAlgebra of AG such that
-A93:  for n being Element of domar holds KK.n is MSSubAlgebra of K by Th27;
-      consider MAX being strict non-empty finitely-generated
-      MSSubAlgebra of AG such that
-A94:  A is MSSubAlgebra of MAX and
-A95:  K is MSSubAlgebra of MAX by Th28;
-A96:  k in Args(o,pr) by Th20;
+      then consider
+      K being strict non-empty finitely-generated MSSubAlgebra of AG
+      such that
+A94:  for n being Element of domar holds KK.n is MSSubAlgebra of K
+      by Th27;
+      consider MAX being strict non-empty finitely-generated MSSubAlgebra of
+      AG such that
+A95:  A is MSSubAlgebra of MAX and
+A96:  K is MSSubAlgebra of MAX by Th28;
       MAX in MSSub AG by MSUALG_2:def 20;
       then MAX in CC by A1;
       then reconsider iA = MAX as Element of CC;
-      reconsider ff1 = Den(o,pr).k as Function by Th22;
-A97:  (commute k).iA is Element of Args(o,FF.iA) by A87,A96,PRALG_3:21;
+A97:  k in Args(o,pr) by Th20;
+      then
+A98:  (commute k).iA is Element of Args(o,FF.iA) by A86,PRALG_3:21;
       then (commute k).iA in Args(o,FF.iA);
       then
-A98:  (commute k).iA in Args(o,MAX) by A2;
-A99:  k in Funcs (dom ar, Funcs (CC, union { (the Sorts of FF.i).m
-      where i is (Element of CC), m is (Element of (the carrier of SG)) :
-      not contradiction })) by A96,PRALG_3:15;
+A99:  (commute k).iA in Args(o,MAX) by A3;
+A100: k in Funcs (dom ar, Funcs (CC, union { (the Sorts of FF.i).m where
+i is (Element of CC), m is (Element of (the carrier of SG)) : not contradiction
+      })) by A97,PRALG_3:15;
       then
-A100: dom ((commute k).iA) = domar by Th3;
-A101: dom (BA#k) = domar by MSUALG_6:2;
-A102: for n being set st n in dom ((commute k).iA)
-      holds (BA#k).n = ((commute k).iA).n
+A101: dom ((commute k).iA) = domar by Th3;
+A102: for n being set st n in dom ((commute k).iA) holds (BA#k).n = ((
+      commute k).iA).n
       proof
+        set fs = ((commute k).iA);
+        reconsider fs as Element of Args(o,MAX) by A3,A98;
         let n be set;
         assume
 A103:   n in dom ((commute k).iA);
-        then reconsider arn = ar.n as SortSymbol of SG by A100,PARTFUN1:27;
-        set fs = ((commute k).iA);
-        reconsider fs as Element of Args(o,MAX) by A2,A97;
+        then reconsider arn = ar.n as SortSymbol of SG by A101,PARTFUN1:27;
         n in Seg len fs by A103,FINSEQ_1:def 3;
         then reconsider n'=n as Nat;
-        consider kn being Function,
-        Ki being strict non-empty finitely-generated
-        MSSubAlgebra of AG such that
+        consider kn being Function, Ki being strict non-empty
+        finitely-generated MSSubAlgebra of AG such that
 A104:   kn = k.n and
-A105:   for B being strict non-empty finitely-generated MSSubAlgebra of AG
-        st Ki is MSSubAlgebra of B holds kn.Ki = kn.B and
+A105:   for B being strict non-empty finitely-generated MSSubAlgebra
+        of AG st Ki is MSSubAlgebra of B holds kn.Ki = kn.B and
 A106:   BA.arn.kn = kn.Ki and
-A107:   KK.n = Ki by A92,A100,A103;
-A108:   Ki is MSSubAlgebra of K by A93,A100,A103,A107;
-        dom k = domar by A99,FUNCT_2:169;
-        hence (BA#k).n = (BA.(ar/.n')).(k.n) by A100,A103,MSUALG_3:def 8
-          .= kn.(KK.n) by A100,A103,A104,A106,A107,PARTFUN1:def 8
-          .= kn.iA by A95,A105,A107,A108,MSUALG_2:7
-          .= ((commute k).iA).n by A96,A100,A103,A104,PRALG_3:22;
+A107:   KK.n = Ki by A93,A101,A103;
+A108:   Ki is MSSubAlgebra of K by A94,A101,A103,A107;
+        dom k = domar by A100,FUNCT_2:169;
+        hence (BA#k).n = (BA.(ar/.n')).(k.n) by A101,A103,MSUALG_3:def 8
+          .= kn.(KK.n) by A101,A103,A104,A106,A107,PARTFUN1:def 8
+          .= kn.iA by A96,A105,A107,A108,MSUALG_2:7
+          .= ((commute k).iA).n by A97,A101,A103,A104,PRALG_3:22;
       end;
-      thus (BA.(the_result_sort_of o)).(Den(o,PS).k)
-      = f.MAX by A77,A80,A81,A94
-        .= ff1.MAX by A79,Th21
-        .= Den(o,FF.iA).((commute k).iA) by A87,A96,PRALG_3:23
-        .= Den(o,MAX).((commute k).iA) by A2
-        .= Den(o,AG).((commute k).iA) by A98,Th21
-        .= Den(o,AG).(BA#k) by A100,A101,A102,FUNCT_1:9;
+      reconsider ff1 = Den(o,pr).k as Function by Th22;
+A109: dom (BA#k) = domar by MSUALG_6:2;
+      thus (BA.(the_result_sort_of o)).(Den(o,PS).k) = f.MAX by A76,A79,A80
+      ,A95
+        .= ff1.MAX by A78,Th21
+        .= Den(o,FF.iA).((commute k).iA) by A86,A97,PRALG_3:23
+        .= Den(o,MAX).((commute k).iA) by A3
+        .= Den(o,AG).((commute k).iA) by A99,Th21
+        .= Den(o,AG).(BA#k) by A100,A109,A102,Th3,FUNCT_1:9;
     end;
   end;
   let i be set;
-  assume i in I;
+  assume
+  i in I;
   then reconsider s = i as SortSymbol of SG;
-A109: (SORTS FF).s = product Carrier(FF,s) by PRALG_2:def 17;
+  consider ff being set such that
+A110: ff in (the Sorts of PS).s by XBOOLE_0:def 1;
   rng (BA.s) c= (the Sorts of AG).s;
   hence rng (BA.i) c= (the Sorts of AG).i;
   let y be set such that
-A110: y in (the Sorts of AG).i;
-A111: dom (BA.s) = (the Sorts of PS).s by FUNCT_2:def 1;
-  consider ff being set such that
-A112: ff in (the Sorts of PS).s by XBOOLE_0:def 1;
-  ff in product Carrier(FF,s) by A4,A40,A109,A112;
+A111: y in (the Sorts of AG).i;
+A112: (SORTS FF).s = product Carrier(FF,s) by PRALG_2:def 17;
+  then ff in product Carrier(FF,s) by A4,A40,A110;
   then consider aa being Function such that
-A113: ff = aa & dom aa = dom Carrier(FF,s) &
-  for x being set st x in dom Carrier(FF,s) holds aa.x in Carrier(FF,s).x
-  by CARD_3:def 5;
+  ff = aa and
+A113: dom aa = dom Carrier(FF,s) and
+A114: for x being set st x in dom Carrier(FF,s) holds aa.x in Carrier(FF
+  ,s).x by CARD_3:def 5;
+  defpred KK[set] means ex Axx being MSSubAlgebra of AG st Axx = $1 & y in (
+  the Sorts of Axx).s;
+  consider WW being set such that
+A115: for a being set holds a in WW iff a in CC & KK[a] from XBOOLE_0:
+  sch 1;
+  set XX = aa +* (WW --> y);
+A116: dom (WW --> y) = WW by FUNCOP_1:19;
+A117: for xx being Element of CC st KK[xx] holds XX.xx = y
+  proof
+    let xx be Element of CC;
+    assume
+    KK[xx];
+    then
+A118: xx in WW by A115;
+    hence XX.xx = (WW --> y).xx by A116,FUNCT_4:14
+      .= y by A118,FUNCOP_1:13;
+  end;
+A119: dom Carrier(FF,s) = CC by PARTFUN1:def 4;
+A120: for x being set st x in dom Carrier(FF,s) holds XX.x in (Carrier(FF,s)
+  ).x
+  proof
+    let x be set;
+    assume
+A121: x in dom Carrier(FF,s);
+    then consider C being Element of MSSub AG such that
+A122: x = C and
+A123: ex R being strict non-empty finitely-generated MSSubAlgebra of
+    AG st R = C by A1,A119;
+    consider R being strict non-empty finitely-generated MSSubAlgebra of AG
+    such that
+A124: R = C by A123;
+A125: R in CC by A1,A124;
+    then
+A126: (ex U0 being MSAlgebra over SG st U0 = FF.R & Carrier(FF, s).R = (
+    the Sorts of U0).s )& FF.R = R by A3,PRALG_2:def 16;
+    per cases;
+    suppose
+      KK[x];
+      hence thesis by A117,A122,A124,A125,A126;
+    end;
+    suppose
+      not KK[x];
+      then not x in WW by A115;
+      then XX.x = aa.x by A116,FUNCT_4:12;
+      hence thesis by A114,A121;
+    end;
+  end;
+A127: WW c= CC
+  proof
+    let w be set;
+    assume
+    w in WW;
+    hence thesis by A115;
+  end;
   consider L being non-empty finite-yielding MSSubset of AG;
+A128: dom (BA.s) = (the Sorts of PS).s by FUNCT_2:def 1;
   set SY = {s} --> {y};
-A114: s in {s} by TARSKI:def 1;
-A115: dom SY = {s} by FUNCOP_1:19;
-A116: dom (L +* SY) = dom L \/ dom SY by FUNCT_4:def 1
+  dom (L +* SY) = dom L \/ dom SY by FUNCT_4:def 1
     .= I \/ dom SY by PARTFUN1:def 4
     .= I \/ {s} by FUNCOP_1:19
     .= I by ZFMISC_1:46;
-  L +* SY is ManySortedSet of I by A116,PARTFUN1:def 4,RELAT_1:def 18;
-  then reconsider Y = L +* SY as ManySortedSet of I;
-A117: Y.s = SY.s by A114,A115,FUNCT_4:14
-    .= {y} by A114,FUNCOP_1:13;
-A118: now
+  then reconsider Y = L +* SY as ManySortedSet of I by PARTFUN1:def 4 ,RELAT_1
+  :def 18;
+A129: s in {s} by TARSKI:def 1;
+  dom SY = {s} by FUNCOP_1:19;
+  then
+A130: Y.s = SY.s by A129,FUNCT_4:14
+    .= {y} by A129,FUNCOP_1:13;
+A131: now
     let k be set;
-    assume k in I & k <> s;
-    then not k in dom SY by TARSKI:def 1;
+    assume that
+    k in I and
+A132: k <> s;
+    not k in dom SY by A132,TARSKI:def 1;
     hence Y.k = L.k by FUNCT_4:12;
   end;
   Y is ManySortedSubset of the Sorts of AG
   proof
     let j be set such that
-A119: j in I;
+A133: j in I;
     let x be set such that
-A120: x in Y.j;
+A134: x in Y.j;
     per cases;
-    suppose j <> s;
-      then
-A121: x in L.j by A118,A119,A120;
+    suppose
+A135: j <> s;
       L c= the Sorts of AG by PBOOLE:def 23;
-      then L.j c= (the Sorts of AG).j by A119,PBOOLE:def 5;
-      hence thesis by A121;
+      then
+A136: L.j c= (the Sorts of AG).j by A133,PBOOLE:def 5;
+      x in L.j by A131,A133,A134,A135;
+      hence thesis by A136;
     end;
-    suppose j = s;
-      hence thesis by A110,A117,A120,TARSKI:def 1;
+    suppose
+      j = s;
+      hence thesis by A111,A130,A134,TARSKI:def 1;
     end;
   end;
   then reconsider Y as MSSubset of AG;
   Y is non-empty
   proof
     let j be set such that
-A122: j in I;
+A137: j in I;
     per cases;
-    suppose j <> s;
-      then Y.j = L.j by A118,A122;
-      hence thesis by A122;
+    suppose
+      j <> s;
+      then Y.j = L.j by A131,A137;
+      hence thesis by A137;
     end;
-    suppose j = s;
-      hence thesis by A117;
+    suppose
+      j = s;
+      hence thesis by A130;
     end;
   end;
   then reconsider Y as non-empty MSSubset of AG;
   Y is finite-yielding
   proof
     let j be set such that
-A123: j in I;
+A138: j in I;
     per cases;
-    suppose j <> s;
-      then Y.j = L.j by A118,A123;
-      hence thesis by A123,FINSET_1:def 4;
+    suppose
+      j <> s;
+      then Y.j = L.j by A131,A138;
+      hence thesis by A138,FINSET_1:def 4;
     end;
-    suppose j = s;
-      hence thesis by A117;
+    suppose
+      j = s;
+      hence thesis by A130;
     end;
   end;
   then reconsider Y as non-empty finite-yielding MSSubset of AG;
   Y is MSSubset of GenMSAlg Y by MSUALG_2:def 18;
   then Y c= the Sorts of GenMSAlg Y by PBOOLE:def 23;
   then
-A124: Y.s c= (the Sorts of GenMSAlg Y).s by PBOOLE:def 5;
-A125: y in Y.s by A117,TARSKI:def 1;
-  then
-A126: y in (the Sorts of GenMSAlg Y).s by A124;
-  defpred KK[set] means ex Axx being MSSubAlgebra of AG st Axx = $1 &
-  y in (the Sorts of Axx).s;
-  consider WW being set such that
-A127: for a being set holds a in WW iff a in CC & KK[a] from XBOOLE_0:sch 1;
-A128: WW c= CC
-  proof
-    let w be set;
-    assume w in WW;
-    hence thesis by A127;
-  end;
-  set XX = aa +* (WW --> y);
-A129: dom (WW --> y) = WW by FUNCOP_1:19;
-A130: dom XX = dom aa \/ dom (WW --> y) by FUNCT_4:def 1
+A139: Y.s c= (the Sorts of GenMSAlg Y).s by PBOOLE:def 5;
+  dom XX = dom aa \/ dom (WW --> y) by FUNCT_4:def 1
     .= CC \/ dom (WW --> y) by A113,PARTFUN1:def 4
     .= CC \/ WW by FUNCOP_1:19
-    .= CC by A128,XBOOLE_1:12;
-A131: for xx being Element of CC st KK[xx] holds XX.xx = y
-  proof
-    let xx be Element of CC;
-    assume KK[xx];
-    then
-A132: xx in WW by A127;
-    hence XX.xx = (WW --> y).xx by A129,FUNCT_4:14
-      .= y by A132,FUNCOP_1:13;
-  end;
-A133: dom Carrier(FF,s) = CC by PARTFUN1:def 4;
-  for x being set st x in dom Carrier(FF,s) holds XX.x in (Carrier(FF,s)).x
-  proof
-    let x be set;
-    assume
-A134: x in dom Carrier(FF,s);
-    then consider C being Element of MSSub AG such that
-A135: x = C and
-A136: ex R being strict non-empty finitely-generated MSSubAlgebra of AG
-    st R = C by A1,A133;
-    consider R being strict non-empty finitely-generated
-    MSSubAlgebra of AG such that
-A137: R = C by A136;
-A138: R in CC by A1,A137;
-    then consider U0 being MSAlgebra over SG such that
-A139: U0 = FF.R and
-A140: Carrier(FF,s).R = (the Sorts of U0).s by PRALG_2:def 16;
-A141: FF.R = R by A2,A138;
-    per cases;
-    suppose KK[x];
-      then consider Axx being MSSubAlgebra of AG such that
-A142: Axx = x & y in (the Sorts of Axx).s;
-      thus thesis by A131,A135,A137,A138,A139,A140,A141,A142;
-    end;
-    suppose not KK[x];
-      then not x in WW by A127;
-      then XX.x = aa.x by A129,FUNCT_4:12;
-      hence thesis by A113,A134;
-    end;
-  end;
-  then reconsider XX as Element of (SORTS FF).s by A109,A130,A133,CARD_3:18;
-  consider h being Function of (the Sorts of PS).s,
-  (the Sorts of AG).s such that
-A143: h = BA.s and
-A144: for x being set st x in (the Sorts of PS).s holds Z[h.x,x,s] by A76;
+    .= CC by A127,XBOOLE_1:12;
+  then reconsider XX as Element of (SORTS FF).s by A112,A119,A120,CARD_3:18;
+  consider h being Function of (the Sorts of PS).s, (the Sorts of AG).s such
+  that
+A140: h = BA.s and
+A141: for x being set st x in (the Sorts of PS).s holds Z[h.x,x,s] by
+  A75;
+A142: y in Y.s by A130,TARSKI:def 1;
+  then
+A143: y in (the Sorts of GenMSAlg Y).s by A139;
   T[s,XX]
   proof
     take s;
@@ -1833,74 +1849,68 @@ A144: for x being set st x in (the Sorts of PS).s holds Z[h.x,x,s] by A76;
     take TT = GenMSAlg Y;
     thus s = s;
     thus XX = XX;
-    let B be strict non-empty finitely-generated MSSubAlgebra of AG such that
-A145: TT is MSSubAlgebra of B;
-A146: TT in CC & B in CC by A3;
-    the Sorts of TT is ManySortedSubset of the Sorts of B
-    by A145,MSUALG_2:def 10;
+    let B be strict non-empty finitely-generated MSSubAlgebra of AG;
+    assume
+    TT is MSSubAlgebra of B;
+    then the Sorts of TT is ManySortedSubset of the Sorts of B by
+    MSUALG_2:def 10;
     then the Sorts of TT c= the Sorts of B by PBOOLE:def 23;
     then
-A147: (the Sorts of TT).s c= (the Sorts of B).s by PBOOLE:def 5;
-    thus XX.TT = y by A124,A125,A131,A146
-      .= XX.B by A126,A131,A146,A147;
+A144: (the Sorts of TT).s c= (the Sorts of B).s by PBOOLE:def 5;
+A145: B in CC by A2;
+    TT in CC by A2;
+    hence XX.TT = y by A139,A142,A117
+      .= XX.B by A143,A117,A145,A144;
   end;
   then
-A148: XX in SOR.s by A4;
-  then Z[h.XX,XX,s] by A40,A144;
-  then consider t being SortSymbol of SG, f being (Element of (SORTS FF).s),
-  A being strict non-empty finitely-generated MSSubAlgebra of AG such that
+A146: XX in SOR.s by A4;
+  then Z[h.XX,XX,s] by A40,A141;
+  then consider t being SortSymbol of SG, f being (Element of (SORTS FF).s), A
+  being strict non-empty finitely-generated MSSubAlgebra of AG such that
   s = t and
-A149: f = XX and
-A150: for B being strict non-empty finitely-generated MSSubAlgebra of AG
-  st A is MSSubAlgebra of B holds f.A = f.B and
-A151: h.XX = f.A;
-  consider MAX being strict non-empty finitely-generated
-  MSSubAlgebra of AG such that
-A152: A is MSSubAlgebra of MAX and
-A153: GenMSAlg Y is MSSubAlgebra of MAX by Th28;
-  the Sorts of GenMSAlg Y is
-  ManySortedSubset of the Sorts of MAX by A153,MSUALG_2:def 10;
+A147: ( f = XX & for B being strict non-empty finitely-generated
+  MSSubAlgebra of AG st A is MSSubAlgebra of B holds f.A = f.B )& h.XX = f.A;
+  consider MAX being strict non-empty finitely-generated MSSubAlgebra of AG
+  such that
+A148: A is MSSubAlgebra of MAX and
+A149: GenMSAlg Y is MSSubAlgebra of MAX by Th28;
+A150: MAX in CC by A2;
+  the Sorts of GenMSAlg Y is ManySortedSubset of the Sorts of MAX by
+  A149,MSUALG_2:def 10;
   then the Sorts of GenMSAlg Y c= the Sorts of MAX by PBOOLE:def 23;
   then
-A154: (the Sorts of GenMSAlg Y).s c= (the Sorts of MAX).s by PBOOLE:def 5;
-A155: MAX in CC by A3;
-  h.XX = XX.MAX by A149,A150,A151,A152
-    .= y by A126,A131,A154,A155;
-  hence thesis by A40,A111,A143,A148,FUNCT_1:def 5;
+A151: (the Sorts of GenMSAlg Y).s c= (the Sorts of MAX).s by PBOOLE:
+  def 5;
+  h.XX = XX.MAX by A147,A148
+    .= y by A143,A117,A151,A150;
+  hence thesis by A40,A128,A140,A146,FUNCT_1:def 5;
 end;
 
 theorem
-  for U0 being feasible free MSAlgebra over S, A being free GeneratorSet of U0
-  for Z being MSSubset of U0 st Z c= A & GenMSAlg Z is feasible
-  holds GenMSAlg Z is free
+  for U0 being feasible free MSAlgebra over S, A being free GeneratorSet
+  of U0 for Z being MSSubset of U0 st Z c= A & GenMSAlg Z is feasible holds
+  GenMSAlg Z is free
 proof
-  let U0 be feasible free MSAlgebra over S, A be free GeneratorSet of U0,
-  Z be MSSubset of U0 such that
+  let U0 be feasible free MSAlgebra over S, A be free GeneratorSet of U0, Z be
+  MSSubset of U0 such that
 A1: Z c= A and
 A2: GenMSAlg Z is feasible;
   reconsider Z1 = Z as MSSubset of GenMSAlg Z by MSUALG_2:def 18;
-  Z1 is GeneratorSet of GenMSAlg Z
-  proof
-    thus the Sorts of GenMSAlg Z1 = the Sorts of GenMSAlg Z by EXTENS_1:22;
-  end;
-  then reconsider z = Z as GeneratorSet of GenMSAlg Z;
-  Z is ManySortedSubset of A
-  proof
-    thus Z c= A by A1;
-  end;
-  then reconsider z1 = z as ManySortedSubset of A;
+  the Sorts of GenMSAlg Z1 = the Sorts of GenMSAlg Z by EXTENS_1:22;
+  then reconsider z = Z as GeneratorSet of GenMSAlg Z by MSAFREE:def 4;
+  reconsider z1 = z as ManySortedSubset of A by A1,PBOOLE:def 23;
   take z;
   z is free
   proof
-    let U1 be non-empty MSAlgebra over S,
-    g be ManySortedFunction of z, the Sorts of U1;
+    reconsider D = the Sorts of GenMSAlg Z as MSSubset of U0 by MSUALG_2:def
+    10;
+    let U1 be non-empty MSAlgebra over S, g be ManySortedFunction of z, the
+    Sorts of U1;
     consider G being ManySortedFunction of A, the Sorts of U1 such that
 A3: G||z1 = g by Th7;
     consider h being ManySortedFunction of U0, U1 such that
 A4: h is_homomorphism U0, U1 and
 A5: h || A = G by MSAFREE:def 5;
-    reconsider D = the Sorts of GenMSAlg Z as MSSubset of U0
-    by MSUALG_2:def 10;
     reconsider H = h || D as ManySortedFunction of GenMSAlg Z, U1;
     take H;
     thus H is_homomorphism GenMSAlg Z, U1 by A2,A4,Th24;
@@ -1915,7 +1925,8 @@ begin  :: Equations in Many Sorted Algebras
 definition
   let S be non empty non void ManySortedSign;
   func TermAlg S -> MSAlgebra over S equals
-  FreeMSA ((the carrier of S) --> NAT);
+  FreeMSA ((the carrier of S) -->
+  NAT);
   correctness;
 end;
 
@@ -1928,7 +1939,8 @@ end;
 definition
   let S be non empty non void ManySortedSign;
   func Equations S -> ManySortedSet of the carrier of S equals
-  [|the Sorts of TermAlg S, the Sorts of TermAlg S|];
+  [|the Sorts of
+  TermAlg S, the Sorts of TermAlg S|];
   correctness;
 end;
 
@@ -1948,19 +1960,19 @@ reserve e for Element of (Equations S).s;
 reserve E for EqualSet of S;
 
 notation
-  let S be non empty non void ManySortedSign, s be SortSymbol of S,
-  x, y be Element of (the Sorts of TermAlg S).s;
+  let S be non empty non void ManySortedSign, s be SortSymbol of S, x, y be
+  Element of (the Sorts of TermAlg S).s;
   synonym x '=' y for [x,y];
 end;
 
 definition
-  let S be non empty non void ManySortedSign, s be SortSymbol of S,
-  x, y be Element of (the Sorts of TermAlg S).s;
+  let S be non empty non void ManySortedSign, s be SortSymbol of S, x, y be
+  Element of (the Sorts of TermAlg S).s;
   redefine func x '=' y -> Element of (Equations S).s;
   coherence
   proof
-    [x,y] in [:(the Sorts of TermAlg S).s, (the Sorts of TermAlg S).s:]
-    by ZFMISC_1:106;
+    [x,y] in [:(the Sorts of TermAlg S).s, (the Sorts of TermAlg S).s:] by
+    ZFMISC_1:106;
     hence thesis by PBOOLE:def 21;
   end;
 end;
@@ -1982,25 +1994,26 @@ proof
 end;
 
 definition
-  let S be non empty non void ManySortedSign, A be MSAlgebra over S,
-  s be SortSymbol of S, e be Element of (Equations S).s;
+  let S be non empty non void ManySortedSign, A be MSAlgebra over S, s be
+  SortSymbol of S, e be Element of (Equations S).s;
   pred A |= e means
   : Def5:
-  for h being ManySortedFunction of TermAlg S, A
-  st h is_homomorphism TermAlg S, A holds h.s.(e`1) = h.s.(e`2);
+  for h being ManySortedFunction of TermAlg S, A st
+  h is_homomorphism TermAlg S, A holds h.s.(e`1) = h.s.(e`2);
 end;
 
 definition
-  let S be non empty non void ManySortedSign, A be MSAlgebra over S,
-  E be EqualSet of S;
+  let S be non empty non void ManySortedSign, A be MSAlgebra over S, E be
+  EqualSet of S;
   pred A |= E means
   :Def6:
-  for s being SortSymbol of S
-  for e being Element of (Equations S).s st e in E.s holds A |= e;
+  for s being SortSymbol of S for e being Element of
+  (Equations S).s st e in E.s holds A |= e;
 end;
 
 theorem Th33:
-  for U2 being strict non-empty MSSubAlgebra of U0 st U0 |= e holds U2 |= e
+  for U2 being strict non-empty MSSubAlgebra of U0 st U0 |= e
+  holds U2 |= e
 proof
   let U2 be strict non-empty MSSubAlgebra of U0 such that
 A1: U0 |= e;
@@ -2009,23 +2022,26 @@ A2: h is_homomorphism TermAlg S, U2;
 A3: the Sorts of TermAlg S is_transformable_to the Sorts of U2
   proof
     let i be set;
-    assume i in the carrier of S;
+    assume
+    i in the carrier of S;
     hence thesis;
   end;
   the Sorts of U2 is MSSubset of U0 by MSUALG_2:def 10;
-  then reconsider f1 = h as ManySortedFunction of TermAlg S, U0
-  by A3,EXTENS_1:9;
+  then reconsider f1 = h as ManySortedFunction of TermAlg S, U0 by A3,
+  EXTENS_1:9;
   f1 is_homomorphism TermAlg S, U0 by A2,MSUALG_9:16;
   hence thesis by A1,Def5;
 end;
 
 theorem
-  for U2 being strict non-empty MSSubAlgebra of U0 st U0 |= E holds U2 |= E
+  for U2 being strict non-empty MSSubAlgebra of U0 st U0 |= E holds U2
+  |= E
 proof
   let U2 be strict non-empty MSSubAlgebra of U0 such that
 A1: U0 |= E;
   let s be SortSymbol of S, e be Element of (Equations S).s;
-  assume e in E.s;
+  assume
+  e in E.s;
   then U0 |= e by A1,Def6;
   hence thesis by Th33;
 end;
@@ -2036,34 +2052,34 @@ proof
   assume that
 A1: U0, U1 are_isomorphic and
 A2: U0 |= e;
-  let h1 be ManySortedFunction of TermAlg S, U1 such that
-A3: h1 is_homomorphism TermAlg S, U1;
   consider F be ManySortedFunction of U0, U1 such that
-A4: F is_isomorphism U0, U1 by A1,MSUALG_3:def 13;
+A3: F is_isomorphism U0, U1 by A1,MSUALG_3:def 13;
   consider G be ManySortedFunction of U1, U0 such that
-A5: G = F"";
+A4: G = F"";
+  F is "1-1" & F is "onto" by A3,MSUALG_3:13;
+  then
+A5: (G.s) = (F.s)" by A4,MSUALG_3:def 5;
+  F is "onto" by A3,MSUALG_3:13;
+  then
+A6: rng (F.s) = (the Sorts of U1).s by MSUALG_3:def 3;
+  let h1 be ManySortedFunction of TermAlg S, U1 such that
+A7: h1 is_homomorphism TermAlg S, U1;
   set F1 = G ** h1;
-  G is_isomorphism U1, U0 by A4,A5,MSUALG_3:14;
+  G is_isomorphism U1, U0 by A3,A4,MSUALG_3:14;
   then G is_homomorphism U1, U0 by MSUALG_3:13;
   then
-A6: F1 is_homomorphism TermAlg S, U0 by A3,MSUALG_3:10;
-  F is "1-1" & F is "onto" by A4,MSUALG_3:13;
-  then
-A7: (G.s) = (F.s)" by A5,MSUALG_3:def 5;
-  F is "onto" by A4,MSUALG_3:13;
-  then
-A8: rng (F.s) = (the Sorts of U1).s by MSUALG_3:def 3;
-  F is "1-1" by A4,MSUALG_3:13;
+A8: F1 is_homomorphism TermAlg S, U0 by A7,MSUALG_3:10;
+  F is "1-1" by A3,MSUALG_3:13;
   then
 A9: (F.s) is one-to-one by MSUALG_3:1;
   (F1.s) = (G.s) * (h1.s) by MSUALG_3:2;
   then
 A10: (F.s) * (F1.s) = (F.s) * (G.s) * (h1.s) by RELAT_1:55
-    .= id ((the Sorts of U1).s) * (h1.s) by A7,A8,A9,FUNCT_2:35
+    .= id ((the Sorts of U1).s) * (h1.s) by A5,A6,A9,FUNCT_2:35
     .= h1.s by FUNCT_2:23;
 A11: dom (F1.s) = (the Sorts of TermAlg S).s by FUNCT_2:def 1;
   hence h1.s.(e`1) = (F.s).((F1.s).(e`1)) by A10,Th31,FUNCT_1:23
-    .= (F.s).((F1.s).(e`2)) by A2,A6,Def5
+    .= (F.s).((F1.s).(e`2)) by A2,A8,Def5
     .= h1.s.(e`2) by A10,A11,Th32,FUNCT_1:23;
 end;
 
@@ -2074,29 +2090,31 @@ proof
 A1: U0, U1 are_isomorphic and
 A2: U0 |= E;
   let s be SortSymbol of S, e be Element of (Equations S).s;
-  assume e in E.s;
+  assume
+  e in E.s;
   then U0 |= e by A2,Def6;
   hence thesis by A1,Th35;
 end;
 
 theorem Th37:
-  for R being MSCongruence of U0 st U0 |= e holds QuotMSAlg (U0,R) |= e
+  for R being MSCongruence of U0 st U0 |= e holds QuotMSAlg (U0,R)
+  |= e
 proof
   let R be MSCongruence of U0 such that
 A1: U0 |= e;
-  let h be ManySortedFunction of TermAlg S, QuotMSAlg (U0,R) such that
-A2: h is_homomorphism TermAlg S, QuotMSAlg (U0,R);
-  MSNat_Hom(U0,R) is_epimorphism U0, QuotMSAlg (U0,R) by MSUALG_4:3;
-  then consider h0 be ManySortedFunction of TermAlg S, U0 such that
-A3: h0 is_homomorphism TermAlg S, U0 and
-A4: h = (MSNat_Hom(U0,R)) ** h0 by A2,Th26;
   set n = (MSNat_Hom(U0,R)).s;
-A5: dom (h0.s) = (the Sorts of TermAlg S).s by FUNCT_2:def 1;
-  thus h.s.(e`1) = (n*(h0.s)).(e`1) by A4,MSUALG_3:2
-    .= n.((h0.s).(e`1)) by A5,Th31,FUNCT_1:23
-    .= n.((h0.s).(e`2)) by A1,A3,Def5
-    .= (n*(h0.s)).(e`2) by A5,Th32,FUNCT_1:23
-    .= h.s.(e`2) by A4,MSUALG_3:2;
+  let h be ManySortedFunction of TermAlg S, QuotMSAlg (U0,R);
+  assume
+  h is_homomorphism TermAlg S, QuotMSAlg (U0,R);
+  then consider h0 be ManySortedFunction of TermAlg S, U0 such that
+A2: h0 is_homomorphism TermAlg S, U0 and
+A3: h = (MSNat_Hom(U0,R)) ** h0 by Th26,MSUALG_4:3;
+A4: dom (h0.s) = (the Sorts of TermAlg S).s by FUNCT_2:def 1;
+  thus h.s.(e`1) = (n*(h0.s)).(e`1) by A3,MSUALG_3:2
+    .= n.((h0.s).(e`1)) by A4,Th31,FUNCT_1:23
+    .= n.((h0.s).(e`2)) by A1,A2,Def5
+    .= (n*(h0.s)).(e`2) by A4,Th32,FUNCT_1:23
+    .= h.s.(e`2) by A3,MSUALG_3:2;
 end;
 
 theorem
@@ -2105,31 +2123,34 @@ proof
   let R be MSCongruence of U0 such that
 A1: U0 |= E;
   let s be SortSymbol of S, e be Element of (Equations S).s;
-  assume e in E.s;
+  assume
+  e in E.s;
   then U0 |= e by A1,Def6;
   hence thesis by Th37;
 end;
 
-Lm1: for I being non empty set, A being MSAlgebra-Family of I,S st
-for i being Element of I holds A.i |= e holds product A |= e
+Lm1: for I being non empty set, A being MSAlgebra-Family of I,S st for i being
+Element of I holds A.i |= e holds product A |= e
+
 proof
+  reconsider e2 = e`2 as Element of (the Sorts of TermAlg S).s by Th32;
+  reconsider e1 = e`1 as Element of (the Sorts of TermAlg S).s by Th31;
   let I be non empty set, A be MSAlgebra-Family of I,S such that
 A1: for i be Element of I holds A.i |= e;
   let h be ManySortedFunction of TermAlg S, product A such that
 A2: h is_homomorphism TermAlg S, product A;
 A3: dom (h.s) = (the Sorts of TermAlg S).s by FUNCT_2:def 1;
-  reconsider e1 = e`1 as Element of (the Sorts of TermAlg S).s by Th31;
-  reconsider e2 = e`2 as Element of (the Sorts of TermAlg S).s by Th32;
-A4: (the Sorts of product A).s = product Carrier(A,s) by PRALG_2:def 17;
-  now
+A4: now
     let i be Element of I;
     set Z = proj(A,i) ** h;
 A5: A.i |= e by A1;
     proj(A,i) is_homomorphism product A, A.i by PRALG_3:25;
     then
 A6: proj(A,i) ** h is_homomorphism TermAlg S, A.i by A2,MSUALG_3:10;
-    thus (proj (Carrier(A,s), i)).((h.s).(e1))
-    = (proj(A,i).s).((h.s).(e1)) by PRALG_3:def 3
+
+    thus (proj (Carrier(A,s), i)).((h.s).(e1)) = (proj(A,i).s).((h.s).(e1)) by
+    PRALG_3:def 3
+
       .= ((proj(A,i).s)*(h.s)).(e1) by A3,FUNCT_1:23
       .= Z.s.e1 by MSUALG_3:2
       .= Z.s.e2 by A5,A6,Def5
@@ -2137,25 +2158,28 @@ A6: proj(A,i) ** h is_homomorphism TermAlg S, A.i by A2,MSUALG_3:10;
       .= (proj(A,i).s).((h.s).(e2)) by A3,FUNCT_1:23
       .= (proj (Carrier(A,s), i)).((h.s).(e2)) by PRALG_3:def 3;
   end;
+  (the Sorts of product A).s = product Carrier(A,s) by PRALG_2:def 17;
   hence thesis by A4,MSUALG_9:15;
 end;
 
 theorem Th39:
-  for F being MSAlgebra-Family of I, S st
-  (for i being set st i in I ex A being MSAlgebra over S st A = F.i & A |= e)
-  holds product F |= e
+  for F being MSAlgebra-Family of I, S st (for i being set st i in
+  I ex A being MSAlgebra over S st A = F.i & A |= e) holds product F |= e
 proof
   let F be MSAlgebra-Family of I, S such that
-A1: for i being set st i in I ex A being MSAlgebra over S st A = F.i & A |= e;
+A1: for i being set st i in I ex A being MSAlgebra over S st A = F.i & A
+  |= e;
   per cases;
-  suppose I = {};
+  suppose
+    I = {};
     then reconsider J = I as empty set;
     reconsider FJ = F as MSAlgebra-Family of J, S;
     thus product F |= e
     proof
       let h be ManySortedFunction of TermAlg S, product F such that
       h is_homomorphism TermAlg S, product F;
-A2:   (the Sorts of product FJ).s = product Carrier(FJ,s) by PRALG_2:def 17
+A2:   (the Sorts of product FJ).s = product Carrier(FJ,s) by PRALG_2:def
+      17
         .= {{}} by CARD_3:19,PRALG_2:def 16;
 A3:   h.s.(e`2) in (the Sorts of product FJ).s by Th32,FUNCT_2:7;
       h.s.(e`1) in (the Sorts of product FJ).s by Th31,FUNCT_2:7;
@@ -2163,7 +2187,8 @@ A3:   h.s.(e`2) in (the Sorts of product FJ).s by Th32,FUNCT_2:7;
         .= h.s.(e`2) by A2,A3,TARSKI:def 1;
     end;
   end;
-  suppose I <> {};
+  suppose
+    I <> {};
     then reconsider J = I as non empty set;
     reconsider F1 = F as MSAlgebra-Family of J, S;
     now
@@ -2176,18 +2201,18 @@ A3:   h.s.(e`2) in (the Sorts of product FJ).s by Th32,FUNCT_2:7;
 end;
 
 theorem
-  for F being MSAlgebra-Family of I, S st
-  (for i being set st i in I ex A being MSAlgebra over S st A = F.i & A |= E)
-  holds product F |= E
+  for F being MSAlgebra-Family of I, S st (for i being set st i in I ex
+  A being MSAlgebra over S st A = F.i & A |= E) holds product F |= E
 proof
   let F be MSAlgebra-Family of I, S such that
-A1: (for i being set st i in
-  I ex A being MSAlgebra over S st A = F.i & A |= E);
+A1: for i being set st i in I ex A being MSAlgebra over S st A = F.i & A
+  |= E;
   let s be SortSymbol of S, e be Element of (Equations S).s such that
 A2: e in E.s;
   now
     let i be set;
-    assume i in I;
+    assume
+    i in I;
     then consider A being MSAlgebra over S such that
 A3: A = F.i & A |= E by A1;
     take A;

@@ -21,7 +21,8 @@ environ
 begin
 
 reserve p, q, r, s, p1, q1 for Element of CQC-WFF,
-  X, Y, Z, X1, X2 for Subset of CQC-WFF,
+  X, Y, Z, X1, X2 for Subset
+  of CQC-WFF,
   h for QC-formula,
   x, y for bound_QC-variable,
   n for Element of NAT;
@@ -29,9 +30,9 @@ reserve p, q, r, s, p1, q1 for Element of CQC-WFF,
 theorem Th1:
   p in X implies X |- p
 proof
+A1: X c= Cn(X) by CQC_THE1:38;
   assume
-A1: p in X;
-  X c= Cn(X) by CQC_THE1:38;
+  p in X;
   hence thesis by A1,CQC_THE1:def 9;
 end;
 
@@ -58,8 +59,8 @@ proof
   assume that
 A1: X |- p and
 A2: X c= Y;
-A3: Cn(X) c= Cn(Y) by A2,CQC_THE1:39;
-  p in Cn(X) by A1,CQC_THE1:def 9;
+A3: p in Cn(X) by A1,CQC_THE1:def 9;
+  Cn(X) c= Cn(Y) by A2,CQC_THE1:39;
   hence thesis by A3,CQC_THE1:def 9;
 end;
 
@@ -83,8 +84,8 @@ proof
   assume that
 A1: p |- q and
 A2: q |- r;
-A3: {p} |- q by A1,Def1;
-  {q} |- r by A2,Def1;
+A3: {q} |- r by A2,Def1;
+  {p} |- q by A1,Def1;
   then {p} |- r by A3,Th3;
   hence thesis by Def1;
 end;
@@ -93,8 +94,8 @@ definition
   let X, Y be Subset of CQC-WFF;
   pred X |- Y means
   :Def2:
-  for p being Element of CQC-WFF
-  st p in Y holds X |- p;
+  for p being Element of CQC-WFF st p in Y holds X |-
+  p;
 end;
 
 theorem Th7:
@@ -114,7 +115,8 @@ A3:   p in Y;
     hence Y c= Cn(X) by TARSKI:def 3;
   end;
   now
-    assume Y c= Cn(X);
+    assume
+    Y c= Cn(X);
     then for p st p in Y holds X |- p by CQC_THE1:def 9;
     hence X |- Y by Def2;
   end;
@@ -137,7 +139,8 @@ A2: Y |- Z;
   for p st p in Z holds X |- p
   proof
     let p;
-    assume p in Z;
+    assume
+    p in Z;
     then Y |- p by A2,Def2;
     then
 A3: p in Cn(Y) by CQC_THE1:def 9;
@@ -153,14 +156,15 @@ theorem Th10:
 proof
 A1: now
     assume
-A2: X |- {p};
-    p in {p} by TARSKI:def 1;
-    hence X |- p by A2,Def2;
-  end;
-  now
-    assume X |- p;
+    X |- p;
     then for q st q in {p} holds X |- q by TARSKI:def 1;
     hence X |- {p} by Def2;
+  end;
+  now
+A2: p in {p} by TARSKI:def 1;
+    assume
+    X |- {p};
+    hence X |- p by A2,Def2;
   end;
   hence thesis by A1;
 end;
@@ -169,14 +173,16 @@ theorem Th11:
   {p} |- {q} iff p |- q
 proof
 A1: now
-    assume {p} |- {q};
-    then {p} |- q by Th10;
-    hence p |- q by Def1;
-  end;
-  now
-    assume p |- q;
+    assume
+    p |- q;
     then {p} |- q by Def1;
     hence {p} |- {q} by Th10;
+  end;
+  now
+    assume
+    {p} |- {q};
+    then {p} |- q by Th10;
+    hence p |- q by Def1;
   end;
   hence thesis by A1;
 end;
@@ -184,7 +190,8 @@ end;
 theorem
   X c= Y implies Y |- X
 proof
-  assume X c= Y;
+  assume
+  X c= Y;
   then for p st p in X holds Y |- p by Th1;
   hence thesis by Def2;
 end;
@@ -203,7 +210,8 @@ definition
   let X be Subset of CQC-WFF;
   pred |- X means
   :Def3:
-  for p being Element of CQC-WFF st p in X holds p is valid;
+  for p being Element of CQC-WFF st p in X holds p is
+  valid;
 end;
 
 theorem Th15:
@@ -211,25 +219,27 @@ theorem Th15:
 proof
 A1: now
     assume
-A2: |- X;
+A2: {}(CQC-WFF) |- X;
     now
       let p;
-      assume p in X;
-      then p is valid by A2,Def3;
-      hence {}(CQC-WFF) |- p by CQC_THE1:def 10;
-    end;
-    hence {}(CQC-WFF) |- X by Def2;
-  end;
-  now
-    assume
-A3: {}(CQC-WFF) |- X;
-    now
-      let p;
-      assume p in X;
-      then {}(CQC-WFF) |- p by A3,Def2;
+      assume
+      p in X;
+      then {}(CQC-WFF) |- p by A2,Def2;
       hence p is valid by CQC_THE1:def 10;
     end;
     hence |- X by Def3;
+  end;
+  now
+    assume
+A3: |- X;
+    now
+      let p;
+      assume
+      p in X;
+      then p is valid by A3,Def3;
+      hence {}(CQC-WFF) |- p by CQC_THE1:def 10;
+    end;
+    hence {}(CQC-WFF) |- X by Def2;
   end;
   hence thesis by A1;
 end;
@@ -245,14 +255,16 @@ A1: now
 A2: |- X;
     now
       let p;
-      assume p in X;
+      assume
+      p in X;
       then p is valid by A2,Def3;
       hence p in TAUT by CQC_THE1:def 11;
     end;
     hence X c= TAUT by SUBSET_1:7;
   end;
   now
-    assume X c= TAUT;
+    assume
+    X c= TAUT;
     then for p st p in X holds p is valid by CQC_THE1:def 11;
     hence |- X by Def3;
   end;
@@ -269,47 +281,51 @@ definition
 end;
 
 theorem Th18:
-  X |-| Y iff (X |- Y & Y |- X)
+  X |-| Y iff X |- Y & Y |- X
 proof
 A1: now
-    assume
-A2: X |-| Y;
+    assume that
+A2: X |- Y and
+A3: Y |- X;
     now
       let p;
-      assume p in Y;
+A4:   now
+        assume
+        Y |- p;
+        then Y |- {p} by Th10;
+        then X |- {p} by A2,Th9;
+        hence X |- p by Th10;
+      end;
+      now
+        assume
+        X |- p;
+        then X |- {p} by Th10;
+        then Y |- {p} by A3,Th9;
+        hence Y |- p by Th10;
+      end;
+      hence X |- p iff Y |- p by A4;
+    end;
+    hence X |-| Y by Def4;
+  end;
+  now
+    assume
+A5: X |-| Y;
+    now
+      let p;
+      assume
+      p in Y;
       then Y |- p by Th1;
-      hence X |- p by A2,Def4;
+      hence X |- p by A5,Def4;
     end;
     hence X |- Y by Def2;
     now
       let p;
-      assume p in X;
+      assume
+      p in X;
       then X |- p by Th1;
-      hence Y |- p by A2,Def4;
+      hence Y |- p by A5,Def4;
     end;
     hence Y |- X by Def2;
-  end;
-  now
-    assume that
-A3: X |- Y and
-A4: Y |- X;
-    now
-      let p;
-A5:   now
-        assume X |- p;
-        then X |- {p} by Th10;
-        then Y |- {p} by A4,Th9;
-        hence Y |- p by Th10;
-      end;
-      now
-        assume Y |- p;
-        then Y |- {p} by Th10;
-        then X |- {p} by A3,Th9;
-        hence X |- p by Th10;
-      end;
-      hence X |- p iff Y |- p by A5;
-    end;
-    hence X |-| Y by Def4;
   end;
   hence thesis by A1;
 end;
@@ -320,13 +336,13 @@ proof
   assume that
 A1: X |-| Y and
 A2: Y |-| Z;
-A3: X |- Y by A1,Th18;
-  Y |- Z by A2,Th18;
+A3: Z |- Y by A2,Th18;
+  Y |- X by A1,Th18;
   then
-A4: X |- Z by A3,Th9;
-A5: Y |- X by A1,Th18;
-  Z |- Y by A2,Th18;
-  then Z |- X by A5,Th9;
+A4: Z |- X by A3,Th9;
+A5: Y |- Z by A2,Th18;
+  X |- Y by A1,Th18;
+  then X |- Z by A5,Th9;
   hence thesis by A4,Th18;
 end;
 
@@ -334,33 +350,43 @@ theorem Th20:
   X |-| Y iff Cn(X) = Cn(Y)
 proof
 A1: now
-    assume X |-| Y;
-    then X |- Y & Y |- X by Th18;
-    then Y c= Cn(X) & X c= Cn(Y) by Th7;
-    then Cn(Y) c= Cn(X) & Cn(X) c= Cn(Y) by CQC_THE1:36,37;
-    hence Cn(X) = Cn(Y) by XBOOLE_0:def 10;
+    assume
+A2: X |-| Y;
+    then Y |- X by Th18;
+    then X c= Cn(Y) by Th7;
+    then
+A3: Cn(X) c= Cn(Y) by CQC_THE1:36,37;
+    X |- Y by A2,Th18;
+    then Y c= Cn(X) by Th7;
+    then Cn(Y) c= Cn(X) by CQC_THE1:36,37;
+    hence Cn(X) = Cn(Y) by A3,XBOOLE_0:def 10;
   end;
   now
     assume
-A2: Cn(X) = Cn(Y);
-    Y c= Cn(Y) & X c= Cn(X) by CQC_THE1:38;
-    then X |- Y & Y |- X by A2,Th7;
-    hence X |-| Y by Th18;
+A4: Cn(X) = Cn(Y);
+    X c= Cn(X) by CQC_THE1:38;
+    then
+A5: Y |- X by A4,Th7;
+    Y c= Cn(Y) by CQC_THE1:38;
+    then X |- Y by A4,Th7;
+    hence X |-| Y by A5,Th18;
   end;
   hence thesis by A1;
 end;
 
 Lm1: X \/ Y c= Cn(X) \/ Cn(Y)
 proof
-  X c= Cn(X) & Y c= Cn(Y) by CQC_THE1:38;
-  hence thesis by XBOOLE_1:13;
+A1: Y c= Cn(Y) by CQC_THE1:38;
+  X c= Cn(X) by CQC_THE1:38;
+  hence thesis by A1,XBOOLE_1:13;
 end;
 
 theorem Th21:
   Cn(X) \/ Cn(Y) c= Cn(X \/ Y)
 proof
-  Cn(X) c= Cn(X \/ Y) & Cn(Y) c= Cn(X \/ Y) by CQC_THE1:39,XBOOLE_1:7;
-  hence thesis by XBOOLE_1:8;
+A1: Cn(Y) c= Cn(X \/ Y) by CQC_THE1:39,XBOOLE_1:7;
+  Cn(X) c= Cn(X \/ Y) by CQC_THE1:39,XBOOLE_1:7;
+  hence thesis by A1,XBOOLE_1:8;
 end;
 
 theorem Th22:
@@ -388,7 +414,8 @@ end;
 theorem Th25:
   X1 |-| X2 implies X1 \/ Y |-| X2 \/ Y
 proof
-  assume X1 |-| X2;
+  assume
+  X1 |-| X2;
   then Cn(X1) = Cn(X2) by Th20;
   then Cn(X1 \/ Y) = Cn(Cn(X2) \/ Cn(Y)) by Th22
     .= Cn(X2 \/ Y) by Th22;
@@ -432,13 +459,13 @@ proof
   assume that
 A1: p |-| q and
 A2: q |-| r;
-A3: p |- q by A1,Def5;
-  q |- r by A2,Def5;
+A3: r |- q by A2,Def5;
+  q |- p by A1,Def5;
   then
-A4: p |- r by A3,Th6;
-A5: q |- p by A1,Def5;
-  r |- q by A2,Def5;
-  then r |- p by A5,Th6;
+A4: r |- p by A3,Th6;
+A5: q |- r by A2,Def5;
+  p |- q by A1,Def5;
+  then p |- r by A5,Th6;
   hence thesis by A4,Def5;
 end;
 
@@ -446,16 +473,24 @@ theorem Th29:
   p |-| q iff {p} |-| {q}
 proof
 A1: now
-    assume p |-| q;
-    then p |- q & q |- p by Def5;
-    then {p} |- {q} & {q} |- {p} by Th11;
-    hence {p} |-| {q} by Th18;
+    assume
+A2: {p} |-| {q};
+    then {q} |- {p} by Th18;
+    then
+A3: q |- p by Th11;
+    {p} |- {q} by A2,Th18;
+    then p |- q by Th11;
+    hence p |-| q by A3,Def5;
   end;
   now
-    assume {p} |-| {q};
-    then {p} |- {q} & {q} |- {p} by Th18;
-    then p |- q & q |- p by Th11;
-    hence p |-| q by Def5;
+    assume
+A4: p |-| q;
+    then q |- p by Def5;
+    then
+A5: {q} |- {p} by Th11;
+    p |- q by A4,Def5;
+    then {p} |- {q} by Th11;
+    hence {p} |-| {q} by A5,Th18;
   end;
   hence thesis by A1;
 end;
@@ -466,8 +501,8 @@ proof
   assume that
 A1: p |-| q and
 A2: X |- p;
-A3: {p} |-| {q} by A1,Th29;
-  X |- {p} by A2,Th10;
+A3: X |- {p} by A2,Th10;
+  {p} |-| {q} by A1,Th29;
   then X |- {q} by A3,Th27;
   hence thesis by Th10;
 end;
@@ -482,8 +517,8 @@ end;
 theorem
   p '&' q |-| q '&' p
 proof
-A1: {p '&' q} |-| {q,p} by Th31;
-  {q,p} |-| {q '&' p} by Th31;
+A1: {q,p} |-| {q '&' p} by Th31;
+  {p '&' q} |-| {q,p} by Th31;
   then {p '&' q} |-| {q '&' p} by A1,Th19;
   hence thesis by Th29;
 end;
@@ -499,9 +534,10 @@ A2: X |- q;
   hence thesis by Th10;
 end;
 
-Lm3: X |- p '&' q implies (X |- p & X |- q)
+Lm3: X |- p '&' q implies X |- p & X |- q
 proof
-  assume X |- p '&' q;
+  assume
+  X |- p '&' q;
   then
 A1: X |- {p '&' q} by Th10;
   {p,q} |-| {p '&' q} by Th31;
@@ -514,25 +550,25 @@ A2: X |- {p,q} by A1,Th27;
 end;
 
 theorem
-  X |- p '&' q iff (X |- p & X |- q) by Lm2,Lm3;
+  X |- p '&' q iff X |- p & X |- q by Lm2,Lm3;
 
 Lm4: p |-| q & r |-| s implies p '&' r |- q '&' s
 proof
   assume that
 A1: p |-| q and
 A2: r |-| s;
-  p |- q by A1,Def5;
-  then {p} |- q by Def1;
-  then
-A3: {p,r} |- q by Th4,ZFMISC_1:12;
   r |- s by A2,Def5;
   then {r} |- s by Def1;
-  then {p,r} |- s by Th4,ZFMISC_1:12;
-  then {p,r} |- q '&' s by A3,Lm2;
   then
-A4: {p,r} |- {q '&' s} by Th10;
+A3: {p,r} |- s by Th4,ZFMISC_1:12;
   {p,r} |-| {p '&' r} by Th31;
-  then {p '&' r} |- {p,r} by Th18;
+  then
+A4: {p '&' r} |- {p,r} by Th18;
+  p |- q by A1,Def5;
+  then {p} |- q by Def1;
+  then {p,r} |- q by Th4,ZFMISC_1:12;
+  then {p,r} |- q '&' s by A3,Lm2;
+  then {p,r} |- {q '&' s} by Th10;
   then {p '&' r} |- {q '&' s} by A4,Th9;
   hence thesis by Th11;
 end;
@@ -543,8 +579,8 @@ proof
   assume that
 A1: p |-| q and
 A2: r |-| s;
-A3: p '&' r |- q '&' s by A1,A2,Lm4;
-  q '&' s |- p '&' r by A1,A2,Lm4;
+A3: q '&' s |- p '&' r by A1,A2,Lm4;
+  p '&' r |- q '&' s by A1,A2,Lm4;
   hence thesis by A3,Def5;
 end;
 
@@ -553,9 +589,9 @@ theorem Th35:
 proof
   thus X |- All(x,p) implies X |- p
   proof
+A1: X |- All(x,p) => p by CQC_THE1:93;
     assume
-A1: X |- All(x,p);
-    X |- All(x,p) => p by CQC_THE1:93;
+    X |- All(x,p);
     hence thesis by A1,CQC_THE1:92;
   end;
   thus thesis by CQC_THE2:94;
@@ -577,10 +613,9 @@ theorem
 proof
   assume
 A1: p |-| q;
+A2: q |-| All(y,q) by Th36;
   All(x,p) |-| p by Th36;
-  then
-A2: All(x,p) |-| q by A1,Th28;
-  q |-| All(y,q) by Th36;
+  then All(x,p) |-| q by A1,Th28;
   hence thesis by A2,Th28;
 end;
 
@@ -588,68 +623,72 @@ definition
   let p, q be Element of CQC-WFF;
   pred p is_an_universal_closure_of q means
   :Def6:
-  p is closed &
-  ex n being Element of NAT st 1 <= n &
-  ex L being FinSequence st len L = n & L.1 = q & L.n = p &
-  for k being Element of NAT st 1 <= k & k < n holds
-  ex x being bound_QC-variable st
-  ex r being Element of CQC-WFF st r = L.k & L.(k+1) = All(x,r);
+  p is closed & ex n being
+Element of NAT st 1 <= n & ex L being FinSequence st len L = n & L.1 = q & L.n
+  = p & for k being Element of NAT st 1 <= k & k < n holds ex x being
+bound_QC-variable st ex r being Element of CQC-WFF st r = L.k & L.(k+1) = All(x
+  ,r);
 end;
 
 theorem Th38:
   p is_an_universal_closure_of q implies p |-| q
 proof
-  assume p is_an_universal_closure_of q;
+  assume
+  p is_an_universal_closure_of q;
   then consider n being Element of NAT such that
-A1: 1 <= n & ex L being FinSequence st len L = n & L.1 = q & L.n = p &
-  for k being Element of NAT st 1 <= k & k < n holds
-  ex x, r st r = L.k & L.(k+1) = All(x,r) by Def6;
-  consider L being FinSequence such that len L = n and
-A2: L.1 = q and
-A3: L.n = p and
-A4: for k being Element of NAT st 1 <= k & k < n holds
-  ex x, r st r = L.k & L.(k+1) = All(x,r) by A1;
+A1: 1 <= n and
+A2: ex L being FinSequence st len L = n & L.1 = q & L.n = p & for k
+being Element of NAT st 1 <= k & k < n holds ex x, r st r = L.k & L.(k+1) = All
+  (x,r) by Def6;
+  consider L being FinSequence such that
+  len L = n and
+A3: L.1 = q and
+A4: L.n = p and
+A5: for k being Element of NAT st 1 <= k & k < n holds ex x, r st r = L.
+  k & L.(k+1) = All(x,r) by A2;
   for k being Element of NAT st 1 <= k & k <= n ex r st r = L.k & q |-| r
   proof
-    defpred P[Element of NAT] means
-    1 <= $1 & $1 <= n implies ex r st r = L.$1 & q |-| r;
-A5: P[0];
+    defpred P[Element of NAT] means 1 <= $1 & $1 <= n implies ex r st r = L.$1
+    & q |-| r;
 A6: for k being Element of NAT st P[k] holds P[k+1]
     proof
       let k be Element of NAT such that
 A7:   P[k];
       now
-        assume that 1 <= k+1 and
+        assume that
+        1 <= k+1 and
 A8:     k+1 <= n;
         per cases by A8,NAT_1:13,14;
         case
 A9:       k = 0;
           take p=q;
-          thus ex r st r = L.(k+1) & q |-| r by A2,A9;
+          thus ex r st r = L.(k+1) & q |-| r by A3,A9;
         end;
         case
 A10:      1 <= k & k < n;
           then consider x, r such that
 A11:      r = L.k and
-A12:      L.(k+1) = All(x,r) by A4;
+A12:      L.(k+1) = All(x,r) by A5;
           consider s such that
 A13:      s = All(x,r);
           s |-| r by A13,Th36;
-          hence ex s st s = L.(k+1) & q |-| s by A7,A10,A11,A12,A13,Th28;
+          hence ex s st s = L.(k+1) & q |-| s by A7,A10,A11,A12,A13, Th28;
         end;
       end;
       hence thesis;
     end;
-    thus for k being Element of NAT holds P[k] from NAT_1:sch 1(A5,A6);
+A14: P[0];
+    thus for k being Element of NAT holds P[k] from NAT_1:sch 1(A14,A6 );
   end;
   then ex r st r = L.n & q |-| r by A1;
-  hence thesis by A3;
+  hence thesis by A4;
 end;
 
 theorem Th39:
   p => q is valid implies p |- q
 proof
-  assume p => q is valid;
+  assume
+  p => q is valid;
   then {p} |- p => q by CQC_THE1:98;
   then {p} |- q by CQC_THE1:92,CQC_THE2:91;
   hence thesis by Def1;
@@ -658,12 +697,13 @@ end;
 theorem Th40:
   X |- p => q implies X \/ {p} |- q
 proof
-  assume X |- p => q;
-  then
-A1: X \/ {p} |- p => q by Th4,XBOOLE_1:7;
   p in {p} by TARSKI:def 1;
   then p in X \/ {p} by XBOOLE_0:def 3;
-  then X \/ {p} |- p by Th1;
+  then
+A1: X \/ {p} |- p by Th1;
+  assume
+  X |- p => q;
+  then X \/ {p} |- p => q by Th4,XBOOLE_1:7;
   hence thesis by A1,CQC_THE1:92;
 end;
 
@@ -679,32 +719,34 @@ A2: p |- q;
 end;
 
 theorem
-  p1 is_an_universal_closure_of p implies (X \/ {p} |- q iff X |- p1 => q)
+  p1 is_an_universal_closure_of p implies (X \/ {p} |- q iff X |- p1 =>
+  q)
 proof
   assume
 A1: p1 is_an_universal_closure_of p;
   now
     assume
-A2: X \/ {p} |- q;
+    X \/ {p} |- q;
+    then
+A2: X \/ {p} |- {q} by Th10;
     p |-| p1 by A1,Th38;
+    then {p} |-| {p1} by Th29;
+    then X \/ {p1} |- {q} by A2,Th26;
     then
-A3: {p} |-| {p1} by Th29;
-    X \/ {p} |- {q} by A2,Th10;
-    then X \/ {p1} |- {q} by A3,Th26;
-    then
-A4: X \/ {p1} |- q by Th10;
+A3: X \/ {p1} |- q by Th10;
     p1 is closed by A1,Def6;
-    hence X |- p1 => q by A4,CQC_THE2:96;
+    hence X |- p1 => q by A3,CQC_THE2:96;
   end;
   hence X \/ {p} |- q implies X |- p1 => q;
   now
-    assume X |- p1 => q;
+    assume
+    X |- p1 => q;
     then X \/ {p1} |- q by Th40;
     then
-A5: X \/ {p1} |- {q} by Th10;
+A4: X \/ {p1} |- {q} by Th10;
     p |-| p1 by A1,Th38;
     then {p} |-| {p1} by Th29;
-    then X \/ {p} |- {q} by A5,Th26;
+    then X \/ {p} |- {q} by A4,Th26;
     hence X \/ {p} |- q by Th10;
   end;
   hence thesis;
@@ -757,50 +799,52 @@ A2: X \/ {'not' p} |- 'not' q;
 end;
 
 theorem
-  p is closed & q is closed implies (p |- q iff 'not' q |- 'not' p)
-  by Th43,Th45;
+  p is closed & q is closed implies (p |- q iff 'not' q |- 'not' p) by
+  Th43,Th45;
 
 theorem Th48:
-  p1 is_an_universal_closure_of p & q1 is_an_universal_closure_of q implies
-  (p |- q iff 'not' q1 |- 'not' p1)
+  p1 is_an_universal_closure_of p & q1 is_an_universal_closure_of
+  q implies (p |- q iff 'not' q1 |- 'not' p1)
 proof
   assume that
 A1: p1 is_an_universal_closure_of p and
 A2: q1 is_an_universal_closure_of q;
   now
-    assume
-A3: p |- q;
-A4: p1 is closed by A1,Def6;
-    p1 |-| p by A1,Th38;
-    then p1 |- p by Def5;
-    then
-A5: p1 |- q by A3,Th6;
     q |-| q1 by A2,Th38;
-    then q |- q1 by Def5;
-    then p1 |- q1 by A5,Th6;
-    hence 'not' q1 |- 'not' p1 by A4,Th43;
+    then
+A3: q |- q1 by Def5;
+    p1 |-| p by A1,Th38;
+    then
+A4: p1 |- p by Def5;
+    assume
+    p |- q;
+    then p1 |- q by A4,Th6;
+    then
+A5: p1 |- q1 by A3,Th6;
+    p1 is closed by A1,Def6;
+    hence 'not' q1 |- 'not' p1 by A5,Th43;
   end;
   hence p |- q implies 'not' q1 |- 'not' p1;
   now
-    assume
-A6: 'not' q1 |- 'not' p1;
-    q1 is closed by A2,Def6;
-    then
-A7: p1 |- q1 by A6,Th45;
-    p1 |-| p by A1,Th38;
-    then p |- p1 by Def5;
-    then
-A8: p |- q1 by A7,Th6;
     q1 |-| q by A2,Th38;
-    then q1 |- q by Def5;
-    hence p |- q by A8,Th6;
+    then
+A6: q1 |- q by Def5;
+    p1 |-| p by A1,Th38;
+    then
+A7: p |- p1 by Def5;
+    assume
+A8: 'not' q1 |- 'not' p1;
+    q1 is closed by A2,Def6;
+    then p1 |- q1 by A8,Th45;
+    then p |- q1 by A7,Th6;
+    hence p |- q by A6,Th6;
   end;
   hence thesis;
 end;
 
 theorem
-  p1 is_an_universal_closure_of p & q1 is_an_universal_closure_of q implies
-  (p |-| q iff 'not' p1 |-| 'not' q1)
+  p1 is_an_universal_closure_of p & q1 is_an_universal_closure_of q
+  implies (p |-| q iff 'not' p1 |-| 'not' q1)
 proof
   assume that
 A1: p1 is_an_universal_closure_of p and
@@ -808,22 +852,22 @@ A2: q1 is_an_universal_closure_of q;
   now
     assume
 A3: p |-| q;
-    then q |- p by Def5;
+    then p |- q by Def5;
     then
-A4: 'not' p1 |- 'not' q1 by A1,A2,Th48;
-    p |- q by A3,Def5;
-    then 'not' q1 |- 'not' p1 by A1,A2,Th48;
+A4: 'not' q1 |- 'not' p1 by A1,A2,Th48;
+    q |- p by A3,Def5;
+    then 'not' p1 |- 'not' q1 by A1,A2,Th48;
     hence 'not' p1 |-| 'not' q1 by A4,Def5;
   end;
   hence p |-| q implies 'not' p1 |-| 'not' q1;
   now
     assume
 A5: 'not' p1 |-| 'not' q1;
-    then 'not' p1 |- 'not' q1 by Def5;
+    then 'not' q1 |- 'not' p1 by Def5;
     then
-A6: q |- p by A1,A2,Th48;
-    'not' q1 |- 'not' p1 by A5,Def5;
-    then p |- q by A1,A2,Th48;
+A6: p |- q by A1,A2,Th48;
+    'not' p1 |- 'not' q1 by A5,Def5;
+    then q |- p by A1,A2,Th48;
     hence p |-| q by A6,Def5;
   end;
   hence thesis;
@@ -833,7 +877,7 @@ definition
   let p, q be Element of CQC-WFF;
   pred p <==> q means
   :Def7:
-   p <=> q is valid;
+  p <=> q is valid;
   reflexivity
   proof
     let p;
@@ -846,34 +890,45 @@ definition
   symmetry
   proof
     let p, q;
-    assume p <=> q is valid;
+    assume
+    p <=> q is valid;
     then (p => q) '&' (q => p) is valid by QC_LANG2:def 4;
-    then {}(CQC-WFF) |- (p => q) '&' (q => p) by CQC_THE1:def 10;
-    then {}(CQC-WFF) |- p => q & {}(CQC-WFF) |- q => p by Lm3;
-    then {}(CQC-WFF) |- (q => p) '&' (p => q) by Lm2;
+    then
+A1: {}(CQC-WFF) |- (p => q) '&' (q => p) by CQC_THE1:def 10;
+    then
+A2: {}(CQC-WFF) |- q => p by Lm3;
+    {}(CQC-WFF) |- p => q by A1,Lm3;
+    then {}(CQC-WFF) |- (q => p) '&' (p => q) by A2,Lm2;
     then (q => p) '&' (p => q) is valid by CQC_THE1:def 10;
     hence thesis by QC_LANG2:def 4;
   end;
 end;
 
 theorem Th50:
-  p <==> q iff (p => q is valid & q => p is valid)
+  p <==> q iff p => q is valid & q => p is valid
 proof
 A1: now
-    assume p <==> q;
-    then p <=> q is valid by Def7;
-    then (p => q) '&' (q => p) is valid by QC_LANG2:def 4;
-    then {}(CQC-WFF) |- (p => q) '&' (q => p) by CQC_THE1:def 10;
-    then {}(CQC-WFF) |- p => q & {}(CQC-WFF) |- q => p by Lm3;
-    hence p => q is valid & q => p is valid by CQC_THE1:def 10;
-  end;
-  now
-    assume p => q is valid & q => p is valid;
-    then {}(CQC-WFF) |- p => q & {}(CQC-WFF) |- q => p by CQC_THE1:def 10;
-    then {}(CQC-WFF) |- (p => q) '&' (q => p) by Lm2;
+    assume that
+A2: p => q is valid and
+A3: q => p is valid;
+A4: {}(CQC-WFF) |- q => p by A3,CQC_THE1:def 10;
+    {}(CQC-WFF) |- p => q by A2,CQC_THE1:def 10;
+    then {}(CQC-WFF) |- (p => q) '&' (q => p) by A4,Lm2;
     then (p => q) '&' (q => p) is valid by CQC_THE1:def 10;
     then p <=> q is valid by QC_LANG2:def 4;
     hence p <==> q by Def7;
+  end;
+  now
+    assume
+    p <==> q;
+    then p <=> q is valid by Def7;
+    then (p => q) '&' (q => p) is valid by QC_LANG2:def 4;
+    then
+A5: {}(CQC-WFF) |- (p => q) '&' (q => p) by CQC_THE1:def 10;
+    then
+A6: {}(CQC-WFF) |- q => p by Lm3;
+    {}(CQC-WFF) |- p => q by A5,Lm3;
+    hence p => q is valid & q => p is valid by A6,CQC_THE1:def 10;
   end;
   hence thesis by A1;
 end;
@@ -884,42 +939,55 @@ proof
   assume that
 A1: p <==> q and
 A2: q <==> r;
-A3: p => q is valid by A1,Th50;
-A4: q => p is valid by A1,Th50;
+A3: r => q is valid by A2,Th50;
+  q => p is valid by A1,Th50;
+  then
+A4: r => p is valid by A3,LUKASI_1:43;
 A5: q => r is valid by A2,Th50;
-A6: r => q is valid by A2,Th50;
-A7: p => r is valid by A3,A5,LUKASI_1:43;
-  r => p is valid by A4,A6,LUKASI_1:43;
-  hence thesis by A7,Th50;
+  p => q is valid by A1,Th50;
+  then p => r is valid by A5,LUKASI_1:43;
+  hence thesis by A4,Th50;
 end;
 
 theorem
   p <==> q implies p |-| q
 proof
-  assume p <==> q;
+  assume
+  p <==> q;
   then p <=> q is valid by Def7;
   then (p => q) '&' (q => p) is valid by QC_LANG2:def 4;
-  then {}(CQC-WFF) |- (p => q) '&' (q => p) by CQC_THE1:def 10;
-  then {}(CQC-WFF) |- p => q & {}(CQC-WFF) |- q => p by Lm3;
-  then  p => q is valid & q => p is valid by CQC_THE1:def 10;
-  hence p |- q & q |- p by Th39;
+  then
+A1: {}(CQC-WFF) |- (p => q) '&' (q => p) by CQC_THE1:def 10;
+  then {}(CQC-WFF) |- q => p by Lm3;
+  then
+A2: q => p is valid by CQC_THE1:def 10;
+  {}(CQC-WFF) |- p => q by A1,Lm3;
+  then p => q is valid by CQC_THE1:def 10;
+  hence p |- q & q |- p by A2,Th39;
 end;
 
 Lm5: p <==> q implies 'not' p <==> 'not' q
 proof
-  assume p <==> q;
-  then p => q is valid & q => p is valid by Th50;
-  then 'not' p => 'not' q is valid & 'not' q => 'not' p is valid
-         by LUKASI_1:63;
-  hence thesis by Th50;
+  assume
+A1: p <==> q;
+  then q => p is valid by Th50;
+  then
+A2: 'not' p => 'not' q is valid by LUKASI_1:63;
+  p => q is valid by A1,Th50;
+  then 'not' q => 'not' p is valid by LUKASI_1:63;
+  hence thesis by A2,Th50;
 end;
 
 Lm6: 'not' p <==> 'not' q implies p <==> q
 proof
-  assume 'not' p <==> 'not' q;
-  then 'not' p => 'not' q is valid & 'not' q => 'not' p is valid by Th50;
-  then p => q is valid & q => p is valid by LUKASI_1:63;
-  hence thesis by Th50;
+  assume
+A1: 'not' p <==> 'not' q;
+  then 'not' q => 'not' p is valid by Th50;
+  then
+A2: p => q is valid by LUKASI_1:63;
+  'not' p => 'not' q is valid by A1,Th50;
+  then q => p is valid by LUKASI_1:63;
+  hence thesis by A2,Th50;
 end;
 
 theorem
@@ -931,16 +999,22 @@ proof
   assume that
 A1: p <==> q and
 A2: r <==> s;
-  p => q is valid & q => p is valid by A1,Th50;
+  s => r is valid by A2,Th50;
   then
-A3: p => q in TAUT & q => p in TAUT by CQC_THE1:def 11;
-  r => s is valid & s => r is valid by A2,Th50;
-  then r => s in TAUT & s => r in TAUT by CQC_THE1:def 11;
-  then p '&' r => q '&' s in TAUT &
-  q '&' s => p '&' r in TAUT by A3,PROCAL_1:56;
-  then p '&' r => q '&' s is valid & q '&' s => p '&' r is valid
-  by CQC_THE1:def 11;
-  hence thesis by Th50;
+A3: s => r in TAUT by CQC_THE1:def 11;
+  q => p is valid by A1,Th50;
+  then q => p in TAUT by CQC_THE1:def 11;
+  then q '&' s => p '&' r in TAUT by A3,PROCAL_1:56;
+  then
+A4: q '&' s => p '&' r is valid by CQC_THE1:def 11;
+  r => s is valid by A2,Th50;
+  then
+A5: r => s in TAUT by CQC_THE1:def 11;
+  p => q is valid by A1,Th50;
+  then p => q in TAUT by CQC_THE1:def 11;
+  then p '&' r => q '&' s in TAUT by A5,PROCAL_1:56;
+  then p '&' r => q '&' s is valid by CQC_THE1:def 11;
+  hence thesis by A4,Th50;
 end;
 
 theorem Th55:
@@ -963,16 +1037,22 @@ proof
   assume that
 A1: p <==> q and
 A2: r <==> s;
-  p => q is valid & q => p is valid by A1,Th50;
+  s => r is valid by A2,Th50;
   then
-A3: p => q in TAUT & q => p in TAUT by CQC_THE1:def 11;
-  r => s is valid & s => r is valid by A2,Th50;
-  then r => s in TAUT & s => r in TAUT by CQC_THE1:def 11;
-  then p 'or' r => q 'or' s in TAUT &
-  q 'or' s => p 'or' r in TAUT by A3,PROCAL_1:57;
-  then p 'or' r => q 'or' s is valid &
-   q 'or' s => p 'or' r is valid by CQC_THE1:def 11;
-  hence thesis by Th50;
+A3: s => r in TAUT by CQC_THE1:def 11;
+  q => p is valid by A1,Th50;
+  then q => p in TAUT by CQC_THE1:def 11;
+  then q 'or' s => p 'or' r in TAUT by A3,PROCAL_1:57;
+  then
+A4: q 'or' s => p 'or' r is valid by CQC_THE1:def 11;
+  r => s is valid by A2,Th50;
+  then
+A5: r => s in TAUT by CQC_THE1:def 11;
+  p => q is valid by A1,Th50;
+  then p => q in TAUT by CQC_THE1:def 11;
+  then p 'or' r => q 'or' s in TAUT by A5,PROCAL_1:57;
+  then p 'or' r => q 'or' s is valid by CQC_THE1:def 11;
+  hence thesis by A4,Th50;
 end;
 
 theorem
@@ -981,29 +1061,33 @@ proof
   assume that
 A1: p <==> q and
 A2: r <==> s;
-A3: p => r <==> q => s by A1,A2,Th55;
-  r => p <==> s => q by A1,A2,Th55;
-  then
-A4: (p => r) '&' (r => p) <==> (q => s) '&' (s => q) by A3,Th54;
-  p <=> r = (p => r) '&' (r => p) by QC_LANG2:def 4;
+A3: r => p <==> s => q by A1,A2,Th55;
+A4: p <=> r = (p => r) '&' (r => p) by QC_LANG2:def 4;
+  p => r <==> q => s by A1,A2,Th55;
+  then (p => r) '&' (r => p) <==> (q => s) '&' (s => q) by A3,Th54;
   hence thesis by A4,QC_LANG2:def 4;
 end;
 
 theorem Th58:
   p <==> q implies All(x,p) <==> All(x,q)
 proof
-  assume p <==> q;
-  then p => q is valid & q => p is valid by Th50;
-  then All(x,p => q) is valid & All(x,q => p) is valid by CQC_THE2:26;
-  then All(x,p) => All(x,q) is valid & All(x,q) => All(x,p) is valid
-  by CQC_THE2:35;
-  hence thesis by Th50;
+  assume
+A1: p <==> q;
+  then q => p is valid by Th50;
+  then All(x,q => p) is valid by CQC_THE2:26;
+  then
+A2: All(x,q) => All(x,p) is valid by CQC_THE2:35;
+  p => q is valid by A1,Th50;
+  then All(x,p => q) is valid by CQC_THE2:26;
+  then All(x,p) => All(x,q) is valid by CQC_THE2:35;
+  hence thesis by A2,Th50;
 end;
 
 theorem
   p <==> q implies Ex(x,p) <==> Ex(x,q)
 proof
-  assume p <==> q;
+  assume
+  p <==> q;
   then 'not' p <==> 'not' q by Lm5;
   then All(x,'not' p) <==> All(x,'not' q) by Th58;
   then
@@ -1015,69 +1099,69 @@ end;
 canceled;
 
 theorem Th61:
-  for k being Element of NAT, l being QC-variable_list of k,
-  a being free_QC-variable, x being bound_QC-variable holds
-  still_not-bound_in l c= still_not-bound_in Subst(l,a .--> x)
+  for k being Element of NAT, l being QC-variable_list of k, a
+being free_QC-variable, x being bound_QC-variable holds still_not-bound_in l c=
+  still_not-bound_in Subst(l,a .--> x)
 proof
-  let k be Element of NAT, l be QC-variable_list of k,
-  a be free_QC-variable, x be bound_QC-variable;
+  let k be Element of NAT, l be QC-variable_list of k, a be free_QC-variable,
+  x be bound_QC-variable;
   now
     let y be set;
-A1: still_not-bound_in l
-    = { l.n : 1 <= n & n <= len l & l.n in bound_QC-variables }
-    by QC_LANG1:def 28;
-A2: still_not-bound_in Subst(l,a .--> x) = { Subst(l,a .--> x).n :
-    1 <= n & n <= len Subst(l,a .--> x) &
-    Subst(l,a .--> x).n in bound_QC-variables } by QC_LANG1:def 28;
+A1: still_not-bound_in l = { l.n : 1 <= n & n <= len l & l.n in
+    bound_QC-variables } by QC_LANG1:def 28;
     assume
-A3: y in still_not-bound_in l;
+A2: y in still_not-bound_in l;
     then reconsider y' = y as Element of still_not-bound_in l;
+A3: still_not-bound_in Subst(l,a .--> x) = { Subst(l,a .--> x).n : 1 <= n
+& n <= len Subst(l,a .--> x) & Subst(l,a .--> x).n in bound_QC-variables } by
+    QC_LANG1:def 28;
     consider n such that
 A4: y' = l.n and
 A5: 1 <= n and
 A6: n <= len l and
-A7: l.n in bound_QC-variables by A1,A3;
+A7: l.n in bound_QC-variables by A1,A2;
     l.n <> a by A7,QC_LANG3:42;
     then
 A8: l.n = Subst(l,a .--> x).n by A5,A6,CQC_LANG:11;
     n <= len Subst(l,a .--> x) by A6,CQC_LANG:def 3;
-    hence y in still_not-bound_in Subst(l,a .--> x) by A2,A4,A5,A7,A8;
+    hence y in still_not-bound_in Subst(l,a .--> x) by A3,A4,A5,A7,A8;
   end;
   hence thesis by TARSKI:def 3;
 end;
 
 theorem Th62:
-  for k being Element of NAT, l being QC-variable_list of k,
-  a being free_QC-variable, x being bound_QC-variable holds
-  still_not-bound_in Subst(l,a .--> x) c= still_not-bound_in l \/ {x}
+  for k being Element of NAT, l being QC-variable_list of k, a
+  being free_QC-variable, x being bound_QC-variable holds still_not-bound_in
+  Subst(l,a .--> x) c= still_not-bound_in l \/ {x}
 proof
-  let k be Element of NAT, l be QC-variable_list of k,
-  a be free_QC-variable, x be bound_QC-variable;
+  let k be Element of NAT, l be QC-variable_list of k, a be free_QC-variable,
+  x be bound_QC-variable;
   let y be set;
-A1: still_not-bound_in l
-  = { l.n : 1 <= n & n <= len l & l.n in bound_QC-variables }
-  by QC_LANG1:def 28;
-A2: still_not-bound_in Subst(l,a .--> x) = { Subst(l,a .--> x).n :
-  1 <= n & n <= len Subst(l,a .--> x) &
-  Subst(l,a .--> x).n in bound_QC-variables } by QC_LANG1:def 28;
+A1: still_not-bound_in l = { l.n : 1 <= n & n <= len l & l.n in
+  bound_QC-variables } by QC_LANG1:def 28;
   assume
-A3: y in still_not-bound_in Subst(l,a .--> x);
+A2: y in still_not-bound_in Subst(l,a .--> x);
   then reconsider y' = y as Element of still_not-bound_in Subst(l,a .--> x);
-  consider n such that
-A4: y' = Subst(l,a .--> x).n and
-A5: 1 <= n and
-A6: n <= len Subst(l,a .--> x) and
-A7: Subst(l,a .--> x).n in bound_QC-variables by A2,A3;
-A8: n <= len l by A6,CQC_LANG:def 3;
+  still_not-bound_in Subst(l,a .--> x) = { Subst(l,a .--> x).n : 1 <= n &
+  n <= len Subst(l,a .--> x) & Subst(l,a .--> x).n in bound_QC-variables } by
+  QC_LANG1:def 28;
+  then consider n such that
+A3: y' = Subst(l,a .--> x).n and
+A4: 1 <= n and
+A5: n <= len Subst(l,a .--> x) and
+A6: Subst(l,a .--> x).n in bound_QC-variables by A2;
+A7: n <= len l by A5,CQC_LANG:def 3;
   per cases;
-  suppose l.n = a;
-    then y' = x by A4,A5,A8,CQC_LANG:11;
+  suppose
+    l.n = a;
+    then y' = x by A3,A4,A7,CQC_LANG:11;
     then y' in {x} by TARSKI:def 1;
     hence thesis by XBOOLE_0:def 3;
   end;
-  suppose l.n <> a;
-    then l.n = Subst(l,a .--> x).n by A5,A8,CQC_LANG:11;
-    then y' in still_not-bound_in l by A1,A4,A5,A7,A8;
+  suppose
+    l.n <> a;
+    then l.n = Subst(l,a .--> x).n by A4,A7,CQC_LANG:11;
+    then y' in still_not-bound_in l by A1,A3,A4,A6,A7;
     hence thesis by XBOOLE_0:def 3;
   end;
 end;
@@ -1085,150 +1169,153 @@ end;
 theorem Th63:
   for h holds still_not-bound_in h c= still_not-bound_in (h.x)
 proof
-  defpred P[QC-formula] means
-  still_not-bound_in $1 c= still_not-bound_in ($1.x);
-A1: for k being Element of NAT, P being (QC-pred_symbol of k),
-  ll being QC-variable_list of k holds P[P!ll]
-  proof
-    let k be Element of NAT, P be (QC-pred_symbol of k),
-    ll be QC-variable_list of k;
-A2: still_not-bound_in ll c= still_not-bound_in Subst(ll,a.0.-->x) by Th61;
-    still_not-bound_in ((P!ll).x)
-    = still_not-bound_in (P!Subst(ll,a.0.-->x)) by CQC_LANG:30
-      .= still_not-bound_in Subst(ll,a.0.-->x) by QC_LANG3:9;
-    hence thesis by A2,QC_LANG3:9;
-  end;
-A3: P[VERUM] by CQC_LANG:28;
-A4: for p being Element of QC-WFF st P[p] holds P['not' p]
+  defpred P[QC-formula] means still_not-bound_in $1 c= still_not-bound_in ($1.
+  x);
+A1: for p being Element of QC-WFF st P[p] holds P['not' p]
   proof
     let p be Element of QC-WFF;
-    still_not-bound_in (('not' p).x) = still_not-bound_in 'not' (p.x)
-    by CQC_LANG:32
+    still_not-bound_in (('not' p).x) = still_not-bound_in 'not' (p.x) by
+    CQC_LANG:32
       .= still_not-bound_in(p.x) by QC_LANG3:11;
     hence thesis by QC_LANG3:11;
   end;
-A5: for p, q being Element of QC-WFF st P[p] & P[q] holds P[p '&' q]
+A2: for p, q being Element of QC-WFF st P[p] & P[q] holds P[p '&' q]
   proof
     let p, q be Element of QC-WFF such that
-A6: P[p] and
-A7: P[q];
-A8: still_not-bound_in (p '&' q)
-    = still_not-bound_in p \/ still_not-bound_in q by QC_LANG3:14;
-    still_not-bound_in ((p '&' q).x)
-    = still_not-bound_in ((p.x) '&' (q.x)) by CQC_LANG:34
+A3: P[p] and
+A4: P[q];
+A5: still_not-bound_in ((p '&' q).x) = still_not-bound_in ((p.x) '&' (q.x
+    )) by CQC_LANG:34
       .= still_not-bound_in (p.x) \/ still_not-bound_in (q.x) by QC_LANG3:14;
-    hence thesis by A6,A7,A8,XBOOLE_1:13;
+    still_not-bound_in (p '&' q) = still_not-bound_in p \/
+    still_not-bound_in q by QC_LANG3:14;
+    hence thesis by A3,A4,A5,XBOOLE_1:13;
   end;
-A9: for x being bound_QC-variable, p being Element of QC-WFF st P[p]
-  holds P[All(x, p)]
+A6: for x being bound_QC-variable, p being Element of QC-WFF st P[p] holds
+  P[All(x, p)]
   proof
     let y be bound_QC-variable, p be Element of QC-WFF such that
-A10: P[p];
+A7: P[p];
     per cases;
-    suppose y = x;
+    suppose
+      y = x;
       hence thesis by CQC_LANG:37;
     end;
-    suppose y <> x;
-      then
-A11:  still_not-bound_in (All(y,p).x)
-      = still_not-bound_in All(y,p.x) by CQC_LANG:38
+    suppose
+A8:   y <> x;
+A9:   still_not-bound_in All(y,p) = still_not-bound_in p \ {y} by
+      QC_LANG3:16;
+      still_not-bound_in (All(y,p).x) = still_not-bound_in All(y,p.x) by
+      A8,CQC_LANG:38
         .= still_not-bound_in (p.x) \ {y} by QC_LANG3:16;
-      still_not-bound_in All(y,p) = still_not-bound_in p \ {y} by QC_LANG3:16;
-      hence thesis by A10,A11,XBOOLE_1:33;
+      hence thesis by A7,A9,XBOOLE_1:33;
     end;
   end;
-  thus for h holds P[h] from QC_LANG1:sch 1(A1,A3,A4,A5,A9);
+A10: for k being Element of NAT, P being (QC-pred_symbol of k), ll being
+  QC-variable_list of k holds P[P!ll]
+  proof
+    let k be Element of NAT, P be (QC-pred_symbol of k), ll be
+    QC-variable_list of k;
+A11: still_not-bound_in ((P!ll).x) = still_not-bound_in (P!Subst(ll,a.0.-->
+    x)) by CQC_LANG:30
+      .= still_not-bound_in Subst(ll,a.0.-->x) by QC_LANG3:9;
+    still_not-bound_in ll c= still_not-bound_in Subst(ll,a.0.-->x) by Th61;
+    hence thesis by A11,QC_LANG3:9;
+  end;
+A12: P[VERUM] by CQC_LANG:28;
+  thus for h holds P[h] from QC_LANG1:sch 1(A10,A12,A1,A2,A6);
 end;
 
 theorem Th64:
-  for h holds still_not-bound_in (h.x) c= still_not-bound_in h \/ {x}
+  for h holds still_not-bound_in (h.x) c= still_not-bound_in h \/
+  {x}
 proof
-  defpred P[QC-formula] means
-  still_not-bound_in ($1.x) c= still_not-bound_in $1 \/ {x};
-A1: for k being Element of NAT, P being (QC-pred_symbol of k),
-  ll being QC-variable_list of k holds P[P!ll]
-  proof
-    let k be Element of NAT, P be (QC-pred_symbol of k),
-    ll be QC-variable_list of k;
-A2: still_not-bound_in ((P!ll).x)
-    = still_not-bound_in (P!Subst(ll,a.0.-->x)) by CQC_LANG:30
-      .= still_not-bound_in Subst(ll,a.0.-->x) by QC_LANG3:9;
-    still_not-bound_in Subst(ll,a.0.-->x)
-    c= still_not-bound_in ll \/ {x} by Th62;
-    hence thesis by A2,QC_LANG3:9;
-  end;
-  VERUM.x = VERUM by CQC_LANG:28;
-  then
-A3: P[VERUM] by QC_LANG3:7,XBOOLE_1:2;
-A4: for p being Element of QC-WFF st P[p] holds P['not' p]
+  defpred P[QC-formula] means still_not-bound_in ($1.x) c= still_not-bound_in
+  $1 \/ {x};
+A1: for p being Element of QC-WFF st P[p] holds P['not' p]
   proof
     let p be Element of QC-WFF;
-    still_not-bound_in (('not' p).x) = still_not-bound_in 'not' (p.x)
-    by CQC_LANG:32
+    still_not-bound_in (('not' p).x) = still_not-bound_in 'not' (p.x) by
+    CQC_LANG:32
       .= still_not-bound_in(p.x) by QC_LANG3:11;
     hence thesis by QC_LANG3:11;
   end;
-A5: for p, q being Element of QC-WFF st P[p] & P[q] holds P[p '&' q]
+A2: for p, q being Element of QC-WFF st P[p] & P[q] holds P[p '&' q]
   proof
     let p, q be Element of QC-WFF such that
-A6: P[p] and
-A7: P[q];
-A8: still_not-bound_in ((p '&' q).x)
-    = still_not-bound_in ((p.x) '&' (q.x)) by CQC_LANG:34
+A3: P[p] and
+A4: P[q];
+A5: still_not-bound_in ((p '&' q).x) = still_not-bound_in ((p.x) '&' (q.x
+    )) by CQC_LANG:34
       .= still_not-bound_in (p.x) \/ still_not-bound_in (q.x) by QC_LANG3:14;
-A9: still_not-bound_in (p.x) \/ still_not-bound_in (q.x)
-    c= still_not-bound_in p \/ {x}
-    \/ (still_not-bound_in q \/ {x}) by A6,A7,XBOOLE_1:13;
-    still_not-bound_in p \/ {x} \/ (still_not-bound_in q \/ {x})
-    = still_not-bound_in p \/ ({x} \/ still_not-bound_in q) \/ {x}
-    by XBOOLE_1:4
-      .= still_not-bound_in p \/ still_not-bound_in q \/ {x} \/ {x}
-    by XBOOLE_1:4
-      .= still_not-bound_in p \/ still_not-bound_in q \/ ({x} \/ {x})
-    by XBOOLE_1:4
+A6: still_not-bound_in p \/ {x} \/ (still_not-bound_in q \/ {x}) =
+    still_not-bound_in p \/ ({x} \/ still_not-bound_in q) \/ {x} by XBOOLE_1:4
+      .= still_not-bound_in p \/ still_not-bound_in q \/ {x} \/ {x} by
+    XBOOLE_1:4
+      .= still_not-bound_in p \/ still_not-bound_in q \/ ({x} \/ {x}) by
+    XBOOLE_1:4
       .= still_not-bound_in p \/ still_not-bound_in q \/ {x};
-    hence thesis by A8,A9,QC_LANG3:14;
+    still_not-bound_in (p.x) \/ still_not-bound_in (q.x) c=
+    still_not-bound_in p \/ {x} \/ (still_not-bound_in q \/ {x}) by A3,A4,
+    XBOOLE_1:13;
+    hence thesis by A5,A6,QC_LANG3:14;
   end;
-A10: for x being bound_QC-variable, p being Element of QC-WFF st P[p]
-  holds P[All(x, p)]
+A7: for x being bound_QC-variable, p being Element of QC-WFF st P[p] holds
+  P[All(x, p)]
   proof
     let y be bound_QC-variable, p be Element of QC-WFF such that
-A11: P[p];
+A8: P[p];
     per cases;
     suppose
-A12:  y = x;
-A13:  still_not-bound_in All(x,p)
-      = (still_not-bound_in p) \ {x} by QC_LANG3:16;
-A14:  (still_not-bound_in p) \ {x} c= still_not-bound_in p by XBOOLE_1:36;
+A9:   y = x;
+A10:  (still_not-bound_in p) \ {x} c= still_not-bound_in p by XBOOLE_1:36;
+A11:  still_not-bound_in All(x,p) = (still_not-bound_in p) \ {x} by
+      QC_LANG3:16;
       still_not-bound_in p c= still_not-bound_in (p.x) by Th63;
-      then still_not-bound_in All(x,p)
-      c= still_not-bound_in (p.x) by A13,A14,XBOOLE_1:1;
       then
-A15:  still_not-bound_in All(x,p)
-      c= still_not-bound_in p \/ {x} by A11,XBOOLE_1:1;
-      still_not-bound_in All(y,p) \/ {x}
-      = ((still_not-bound_in p) \ {x}) \/ {x} by A12,QC_LANG3:16
+      still_not-bound_in All(x,p) c= still_not-bound_in (p.x) by A11,A10,
+      XBOOLE_1:1;
+      then
+A12:  still_not-bound_in All(x,p) c= still_not-bound_in p \/ {x} by A8,
+      XBOOLE_1:1;
+      still_not-bound_in All(y,p) \/ {x} = ((still_not-bound_in p) \ {x})
+      \/ {x} by A9,QC_LANG3:16
         .= still_not-bound_in p \/ {x} by XBOOLE_1:39;
-      hence thesis by A12,A15,CQC_LANG:37;
+      hence thesis by A9,A12,CQC_LANG:37;
     end;
     suppose
-A16:  y <> x;
-      then
-A17:  still_not-bound_in (All(y,p).x)
-      = still_not-bound_in All(y,p.x) by CQC_LANG:38
+A13:  y <> x;
+A14:  still_not-bound_in All(y,p) \/ {x} = (still_not-bound_in p \ {y})
+      \/ {x} by QC_LANG3:16
+        .= (still_not-bound_in p \/ {x}) \ {y} by A13,XBOOLE_1:87,ZFMISC_1:
+      17;
+      still_not-bound_in (All(y,p).x) = still_not-bound_in All(y,p.x) by
+      A13,CQC_LANG:38
         .= still_not-bound_in (p.x) \ {y} by QC_LANG3:16;
-      still_not-bound_in All(y,p) \/ {x}
-      = (still_not-bound_in p \ {y}) \/ {x} by QC_LANG3:16
-        .= (still_not-bound_in p \/ {x}) \ {y} by A16,XBOOLE_1:87,ZFMISC_1:17;
-      hence thesis by A11,A17,XBOOLE_1:33;
+      hence thesis by A8,A14,XBOOLE_1:33;
     end;
   end;
-  thus for h holds P[h] from QC_LANG1:sch 1(A1,A3,A4,A5,A10);
+A15: for k being Element of NAT, P being (QC-pred_symbol of k), ll being
+  QC-variable_list of k holds P[P!ll]
+  proof
+    let k be Element of NAT, P be (QC-pred_symbol of k), ll be
+    QC-variable_list of k;
+A16: still_not-bound_in ((P!ll).x) = still_not-bound_in (P!Subst(ll,a.0.-->
+    x)) by CQC_LANG:30
+      .= still_not-bound_in Subst(ll,a.0.-->x) by QC_LANG3:9;
+    still_not-bound_in Subst(ll,a.0.-->x) c= still_not-bound_in ll \/ {x}
+    by Th62;
+    hence thesis by A16,QC_LANG3:9;
+  end;
+  VERUM.x = VERUM by CQC_LANG:28;
+  then
+A17: P[VERUM] by QC_LANG3:7,XBOOLE_1:2;
+  thus for h holds P[h] from QC_LANG1:sch 1(A15,A17,A1,A2,A7);
 end;
 
 theorem Th65:
-  p = h.x & x <> y & not y in still_not-bound_in h
-  implies not y in still_not-bound_in p
+  p = h.x & x <> y & not y in still_not-bound_in h implies not y
+  in still_not-bound_in p
 proof
   assume that
 A1: p = h.x and
@@ -1237,18 +1324,19 @@ A3: not y in still_not-bound_in h and
 A4: y in still_not-bound_in p;
 A5: still_not-bound_in p c= still_not-bound_in h \/ {x} by A1,Th64;
   per cases by A4,A5,XBOOLE_0:def 3;
-  suppose y in still_not-bound_in h;
+  suppose
+    y in still_not-bound_in h;
     hence contradiction by A3;
   end;
-  suppose y in {x};
+  suppose
+    y in {x};
     hence contradiction by A2,TARSKI:def 1;
   end;
 end;
 
 theorem
-  p = h.x & q = h.y &
-  not x in still_not-bound_in h & not y in still_not-bound_in h
-  implies All(x,p) <==> All(y,q)
+  p = h.x & q = h.y & not x in still_not-bound_in h & not y in
+  still_not-bound_in h implies All(x,p) <==> All(y,q)
 proof
   assume that
 A1: p = h.x and
@@ -1256,17 +1344,18 @@ A2: q = h.y and
 A3: not x in still_not-bound_in h and
 A4: not y in still_not-bound_in h;
   per cases;
-  suppose x = y;
+  suppose
+    x = y;
     hence thesis by A1,A2;
   end;
   suppose
 A5: x <> y;
+    then not x in still_not-bound_in q by A2,A3,Th65;
     then
-A6: not y in still_not-bound_in p by A1,A4,Th65;
-    not x in still_not-bound_in q by A2,A3,A5,Th65;
-    then All(x,p) => All(y,q) is valid &
-     All(y,q) => All(x,p) is valid by A1,A2,A3,A4,A6,CQC_THE2:30;
-    hence thesis by Th50;
+A6: All(y,q) => All(x,p) is valid by A1,A2,A4,CQC_THE2:30;
+    not y in still_not-bound_in p by A1,A4,A5,Th65;
+    then All(x,p) => All(y,q) is valid by A1,A2,A3,CQC_THE2:30;
+    hence thesis by A6,Th50;
   end;
 end;
 

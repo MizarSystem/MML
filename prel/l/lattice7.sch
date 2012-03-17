@@ -10,10 +10,10 @@
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="ORDINAL1"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
-<ArticleID name="PARTFUN1"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="ORDERS_1"/>
@@ -21,7 +21,6 @@
 <ArticleID name="LATTICES"/>
 <ArticleID name="FUNCT_4"/>
 <ArticleID name="EQREL_1"/>
-<ArticleID name="FILTER_0"/>
 <ArticleID name="FILTER_1"/>
 <ArticleID name="LATTICE3"/>
 </Signature>
@@ -30,9 +29,9 @@
 <Typ kind="G" nr="6">
 <Cluster>
 <Adjective nr="45"/>
+<Adjective nr="55"/>
 <Adjective nr="56"/>
 <Adjective nr="57"/>
-<Adjective nr="58"/>
 <Adjective nr="81"/>
 <Adjective nr="82"/>
 </Cluster>

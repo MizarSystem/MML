@@ -12,7 +12,7 @@ environ
  notations TARSKI, XBOOLE_0, ZFMISC_1, MCART_1, SUBSET_1, RELAT_1, RELAT_2,
       FUNCT_1, WELLORD1, ORDINAL1;
  constructors RELAT_2, ORDINAL1, WELLORD1, MCART_1;
- registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1;
+ registrations RELAT_1, FUNCT_1, ORDINAL1;
  requirements SUBSET, BOOLE;
  definitions TARSKI, XBOOLE_0, FUNCT_1, RELAT_1, RELAT_2, WELLORD1;
  theorems TARSKI, FUNCT_1, RELAT_1, RELAT_2, ZFMISC_1, WELLORD1, ORDINAL1,
@@ -24,13 +24,15 @@ begin
 reserve X,Y,Z for set,
   a,b,c,d,x,y,z,u for set,
   R for Relation,
-  A,B,C for Ordinal;
+  A,B,C for
+  Ordinal;
 
 definition
   let X;
   func RelIncl X -> Relation means
   :Def1:
-  field it = X & for Y,Z st Y in X & Z in X holds [Y,Z] in it iff Y c= Z;
+  field it = X & for Y,Z st Y in X & Z
+  in X holds [Y,Z] in it iff Y c= Z;
   existence
   proof
     defpred P[set,set] means ex Y,Z st $1 = Y & $2 = Z & Y c= Z;
@@ -41,22 +43,25 @@ A1: [x,y] in R iff x in X & y in X & P[x,y] from RELAT_1:sch 1;
     proof
       thus x in field R implies x in X
       proof
-        assume
-A2:     x in field R;
-A3:     now
-          assume x in dom R;
+A2:     now
+          assume
+          x in dom R;
           then ex y st [x,y] in R by RELAT_1:def 4;
           hence thesis by A1;
         end;
-        now
-          assume x in rng R;
+A3:     now
+          assume
+          x in rng R;
           then ex y st [y,x] in R by RELAT_1:def 5;
           hence thesis by A1;
         end;
+        assume
+        x in field R;
         hence thesis by A2,A3,XBOOLE_0:def 3;
       end;
       let x;
-      assume x in X;
+      assume
+      x in X;
       then [x,x] in R by A1;
       hence thesis by RELAT_1:30;
     end;
@@ -64,34 +69,38 @@ A3:     now
 A4: Y in X & Z in X;
     thus [Y,Z] in R implies Y c= Z
     proof
-      assume [Y,Z] in R;
+      assume
+      [Y,Z] in R;
       then ex V1,V2 being set st V1 = Y & V2 = Z & V1 c= V2 by A1;
       hence thesis;
     end;
-    assume Y c= Z;
+    assume
+    Y c= Z;
     hence thesis by A1,A4;
   end;
   uniqueness
   proof
     let R1,R2 be Relation such that
-A5: field R1 = X & for Y,Z st Y in X & Z in X holds [Y,Z] in R1 iff Y c= Z and
-A6: field R2 = X & for Y,Z st Y in X & Z in X holds [Y,Z] in R2 iff Y c= Z;
+A5: field R1 = X and
+A6: for Y,Z st Y in X & Z in X holds [Y,Z] in R1 iff Y c= Z and
+A7: field R2 = X and
+A8: for Y,Z st Y in X & Z in X holds [Y,Z] in R2 iff Y c= Z;
     let x,y;
     thus [x,y] in R1 implies [x,y] in R2
     proof
       assume
-A7:   [x,y] in R1;
+A9:   [x,y] in R1;
       then
-A8:   x in field R1 & y in field R1 by RELAT_1:30;
-      then x c= y by A5,A7;
-      hence thesis by A5,A6,A8;
+A10:  x in field R1 & y in field R1 by RELAT_1:30;
+      then x c= y by A5,A6,A9;
+      hence thesis by A5,A8,A10;
     end;
     assume
-A9: [x,y] in R2;
+A11: [x,y] in R2;
     then
-A10: x in field R2 & y in field R2 by RELAT_1:30;
-    then x c= y by A6,A9;
-    hence thesis by A5,A6,A10;
+A12: x in field R2 & y in field R2 by RELAT_1:30;
+    then x c= y by A7,A8,A11;
+    hence thesis by A6,A7,A12;
   end;
 end;
 
@@ -100,47 +109,50 @@ canceled;
 theorem Th2:
   RelIncl X is reflexive
 proof
-  let a such that
-A1: a in field RelIncl X;
-  field RelIncl X = X &
-  for Y,Z st Y in X & Z in X holds [Y,Z] in RelIncl X iff Y c= Z by Def1;
-  hence thesis by A1;
+A1: field RelIncl X = X by Def1;
+  let a;
+  assume
+  a in field RelIncl X;
+  hence thesis by A1,Def1;
 end;
 
 theorem Th3:
   RelIncl X is transitive
 proof
   let a,b,c such that
-A1: a in field RelIncl X & b in field RelIncl X & c in field RelIncl X &
-  [a,b] in RelIncl X & [b,c] in RelIncl X;
-  field RelIncl X = X &
-  for Y,Z st Y in X & Z in X holds [Y,Z] in RelIncl X iff Y c= Z by Def1;
-  then a c= b & b c= c by A1;
-  then a in X & c in X & a c= c by A1,Def1,XBOOLE_1:1;
-  hence thesis by Def1;
+A1: a in field RelIncl X and
+A2: b in field RelIncl X and
+A3: c in field RelIncl X and
+A4: [a,b] in RelIncl X & [b,c] in RelIncl X;
+  field RelIncl X = X by Def1;
+  then a c= b & b c= c by A1,A2,A3,A4,Def1;
+  then
+A5: a c= c by XBOOLE_1:1;
+  a in X & c in X by A1,A3,Def1;
+  hence thesis by A5,Def1;
 end;
 
 theorem Th4:
   RelIncl A is connected
 proof
   let a,b such that
-A1: a in field RelIncl A & b in field RelIncl A & a <> b;
-A2: field RelIncl A = A &
-  for Y,Z st Y in A & Z in A holds [Y,Z] in RelIncl A iff Y c= Z by Def1;
+A1: a in field RelIncl A & b in field RelIncl A and
+  a <> b;
+A2: field RelIncl A = A by Def1;
   then reconsider Y = a, Z = b as Ordinal by A1;
   Y c= Z or Z c= Y;
-  hence thesis by A1,A2;
+  hence thesis by A1,A2,Def1;
 end;
 
 theorem Th5:
   RelIncl X is antisymmetric
 proof
-  let a,b such that
-A1: a in field RelIncl X & b in field RelIncl X &
-  [a,b] in RelIncl X & [b,a] in RelIncl X;
-  field RelIncl X = X &
-  for Y,Z st Y in X & Z in X holds [Y,Z] in RelIncl X iff Y c= Z by Def1;
-  then a c= b & b c= a by A1;
+A1: field RelIncl X = X by Def1;
+  let a,b;
+  assume
+  a in field RelIncl X & b in field RelIncl X & [a,b] in RelIncl X & [
+  b,a ] in RelIncl X;
+  then a c= b & b c= a by A1,Def1;
   hence thesis by XBOOLE_0:def 10;
 end;
 
@@ -148,38 +160,43 @@ theorem Th6:
   RelIncl A is well_founded
 proof
   let Y;
-  assume
-A1: Y c= field RelIncl A & Y <> {};
-  consider x being Element of Y;
-A2: field RelIncl A = A by Def1;
-  then x in A by A1,TARSKI:def 3;
-  then reconsider x as Ordinal;
+  assume that
+A1: Y c= field RelIncl A and
+A2: Y <> {};
   defpred P[Ordinal] means $1 in Y;
-  x in Y by A1;
+  consider x being Element of Y;
+A3: field RelIncl A = A by Def1;
+  then x in A by A1,A2,TARSKI:def 3;
+  then reconsider x as Ordinal;
+  x in Y by A2;
   then
-A3: ex B st P[B];
+A4: ex B st P[B];
   consider B such that
-A4: P[B] & for C st P[C] holds B c= C from ORDINAL1:sch 1(A3);
+A5: P[B] & for C st P[C] holds B c= C from ORDINAL1:sch 1(A4);
   reconsider x = B as set;
   take x;
-  thus x in Y by A4;
-  assume
-A5: (RelIncl A)-Seg(x) /\ Y <> {};
+  thus x in Y by A5;
   consider y being Element of (RelIncl A)-Seg(x) /\ Y;
-A6: y in (RelIncl A)-Seg(x) & y in Y by A5,XBOOLE_0:def 4;
+  assume
+A6: (RelIncl A)-Seg(x) /\ Y <> {};
   then
-A7: y <> x & [y,x] in RelIncl A & y in A by A1,A2,WELLORD1:def 1;
-  reconsider C = y as Ordinal by A1,A2,A6;
-  C c= B & B c= C by A1,A2,A4,A6,A7,Def1;
-  hence contradiction by A7,XBOOLE_0:def 10;
+A7: y in Y by XBOOLE_0:def 4;
+  then reconsider C = y as Ordinal by A1,A3;
+A8: y in (RelIncl A)-Seg(x) by A6,XBOOLE_0:def 4;
+  then [y,x] in RelIncl A by WELLORD1:def 1;
+  then
+A9: C c= B by A1,A3,A5,A7,Def1;
+A10: y <> x by A8,WELLORD1:def 1;
+  B c= C by A5,A7;
+  hence contradiction by A10,A9,XBOOLE_0:def 10;
 end;
 
 theorem Th7:
   RelIncl A is well-ordering
 proof
-  thus RelIncl A is reflexive & RelIncl A is transitive &
-  RelIncl A is antisymmetric & RelIncl A is connected &
-  RelIncl A is well_founded by Th2,Th3,Th4,Th5,Th6;
+  thus RelIncl A is reflexive & RelIncl A is transitive & RelIncl A is
+antisymmetric & RelIncl A is connected & RelIncl A is well_founded by Th2,Th3,
+  Th4,Th5,Th6;
 end;
 
 theorem Th8:
@@ -190,22 +207,25 @@ A1: Y c= X;
   let a,b;
   thus [a,b] in (RelIncl X) |_2 Y implies [a,b] in RelIncl Y
   proof
-    assume [a,b] in (RelIncl X) |_2 Y;
-    then
-A2: [a,b] in [:Y,Y:] & [a,b] in RelIncl X by XBOOLE_0:def 4;
+    assume
+A2: [a,b] in (RelIncl X) |_2 Y;
+    then [a,b] in [:Y,Y:] by XBOOLE_0:def 4;
     then
 A3: a in Y & b in Y by ZFMISC_1:106;
-    then a c= b by A1,A2,Def1;
+    [a,b] in RelIncl X by A2,XBOOLE_0:def 4;
+    then a c= b by A1,A3,Def1;
     hence thesis by A3,Def1;
   end;
   assume
 A4: [a,b] in RelIncl Y;
   then
-A5: a in field RelIncl Y & b in field RelIncl Y & field RelIncl Y = Y
-  by Def1,RELAT_1:30;
-  then a c= b by A4,Def1;
-  then [a,b] in RelIncl X & [a,b] in [:Y,Y:] by A1,A5,Def1,ZFMISC_1:106;
-  hence thesis by XBOOLE_0:def 4;
+A5: a in field RelIncl Y & b in field RelIncl Y by RELAT_1:30;
+A6: field RelIncl Y = Y by Def1;
+  then a c= b by A4,A5,Def1;
+  then
+A7: [a,b] in RelIncl X by A1,A5,A6,Def1;
+  [a,b] in [:Y,Y:] by A5,A6,ZFMISC_1:106;
+  hence thesis by A7,XBOOLE_0:def 4;
 end;
 
 theorem Th9:
@@ -229,53 +249,56 @@ A1: A in B;
     assume
 A2: a in A;
     then reconsider C = a as Ordinal;
-A3: C c= A by A2,ORDINAL1:def 2;
-    A c= B by A1,ORDINAL1:def 2;
-    then
-A4: [C,A] in RelIncl B by A1,A2,A3,Def1;
-    a <> A by A2;
-    hence thesis by A4,WELLORD1:def 1;
+A3: a <> A by A2;
+A4: A c= B by A1,ORDINAL1:def 2;
+    C c= A by A2,ORDINAL1:def 2;
+    then [C,A] in RelIncl B by A1,A2,A4,Def1;
+    hence thesis by A3,WELLORD1:def 1;
   end;
   let a;
-  assume a in (RelIncl B)-Seg(A);
+  assume
+A5: a in (RelIncl B)-Seg(A);
   then
-A5: [a,A] in RelIncl B & a <> A by WELLORD1:def 1;
+A6: a <> A by WELLORD1:def 1;
+A7: [a,A] in RelIncl B by A5,WELLORD1:def 1;
   then
-A6: a in field RelIncl B & field RelIncl B = B by Def1,RELAT_1:30;
-  then reconsider C = a as Ordinal;
-  C c= A by A1,A5,A6,Def1;
-  then C c< A by A5,XBOOLE_0:def 8;
+A8: a in field RelIncl B by RELAT_1:30;
+A9: field RelIncl B = B by Def1;
+  then reconsider C = a as Ordinal by A8;
+  C c= A by A1,A7,A8,A9,Def1;
+  then C c< A by A6,XBOOLE_0:def 8;
   hence thesis by ORDINAL1:21;
 end;
 
 theorem Th11:
   RelIncl A,RelIncl B are_isomorphic implies A = B
 proof
+A1: field RelIncl A = A by Def1;
   assume
-A1: RelIncl A,RelIncl B are_isomorphic;
-  assume A <> B;
-  then
-A2: A in B or B in A by ORDINAL1:24;
+A2: RelIncl A,RelIncl B are_isomorphic;
 A3: now
+A4: RelIncl B is well-ordering by Th7;
+A5: field RelIncl B = B by Def1;
     assume
-A4: A in B;
-    then
-A5: A = (RelIncl B)-Seg(A) by Th10;
-A6: field RelIncl B = B by Def1;
-    then
-A7: RelIncl A = (RelIncl B) |_2 ((RelIncl B)-Seg(A)) by A5,Th8,WELLORD1:13;
-    RelIncl B is well-ordering by Th7;
-    hence contradiction by A1,A4,A6,A7,WELLORD1:50,57;
+A6: A in B;
+    then A = (RelIncl B)-Seg(A) by Th10;
+    then RelIncl A = (RelIncl B) |_2 ((RelIncl B)-Seg(A)) by A5,Th8,
+    WELLORD1:13;
+    hence contradiction by A2,A6,A5,A4,WELLORD1:50,57;
   end;
+  assume
+  A <> B;
   then
-A8: B = (RelIncl A)-Seg(B) by A2,Th10;
-A9: field RelIncl A = A by Def1;
-  then RelIncl B = (RelIncl A) |_2 ((RelIncl A)-Seg(B)) by A8,Th8,WELLORD1:13;
-  hence contradiction by A1,A2,A3,A9,Th7,WELLORD1:57;
+A7: A in B or B in A by ORDINAL1:24;
+  then B = (RelIncl A)-Seg(B) by A3,Th10;
+  then RelIncl B = (RelIncl A) |_2 ((RelIncl A)-Seg(B)) by A1,Th8,
+  WELLORD1:13;
+  hence contradiction by A2,A7,A3,A1,Th7,WELLORD1:57;
 end;
 
 theorem Th12:
-  R,RelIncl A are_isomorphic & R,RelIncl B are_isomorphic implies A = B
+  R,RelIncl A are_isomorphic & R,RelIncl B are_isomorphic implies
+  A = B
 proof
   assume that
 A1: R,RelIncl A are_isomorphic and
@@ -285,210 +308,235 @@ A2: R,RelIncl B are_isomorphic;
 end;
 
 theorem Th13:
-  for R st R is well-ordering &
-  for a st a in field R ex A st R |_2 (R-Seg(a)),RelIncl A are_isomorphic
-  ex A st R,RelIncl A are_isomorphic
+  for R st R is well-ordering & for a st a in field R ex A st R
+  |_2 (R-Seg(a)),RelIncl A are_isomorphic ex A st R,RelIncl A are_isomorphic
 proof
   let R such that
 A1: R is well-ordering;
+  defpred P[set,set] means for A holds A = $2 iff R |_2 (R-Seg $1),RelIncl A
+  are_isomorphic;
   assume
-A2: for a st a in field R ex A st R |_2 (R-Seg(a)),RelIncl A are_isomorphic;
-  defpred P[set,set] means
-  for A holds A = $2 iff R |_2 (R-Seg $1),RelIncl A are_isomorphic;
-A3: for b,c,d st b in field R & P[b,c] & P[b,d] holds c = d
-  proof
-    let b,c,d such that
-A4: b in field R and
-A5: A = c iff R |_2 (R-Seg(b)),RelIncl A are_isomorphic and
-A6: B = d iff R |_2 (R-Seg(b)),RelIncl B are_isomorphic;
-    consider A such that
-A7: R |_2 (R-Seg(b)),RelIncl A are_isomorphic by A2,A4;
-    A = c & A = d by A5,A6,A7;
-    hence thesis;
-  end;
-A8: for a st a in field R ex b st P[a,b]
+A2: for a st a in field R ex A st R |_2 (R-Seg(a)),RelIncl A
+  are_isomorphic;
+A3: for a st a in field R ex b st P[a,b]
   proof
     let a;
-    assume a in field R;
+    assume
+    a in field R;
     then consider A such that
-A9: R |_2 (R-Seg(a)),RelIncl A are_isomorphic by A2;
+A4: R |_2 (R-Seg(a)),RelIncl A are_isomorphic by A2;
     reconsider b = A as set;
     take b;
     let B;
-    thus B = b implies R |_2 (R-Seg(a)),RelIncl B are_isomorphic by A9;
-    assume R |_2 (R-Seg(a)),RelIncl B are_isomorphic;
-    hence thesis by A9,Th12;
+    thus B = b implies R |_2 (R-Seg(a)),RelIncl B are_isomorphic by A4;
+    assume
+    R |_2 (R-Seg(a)),RelIncl B are_isomorphic;
+    hence thesis by A4,Th12;
+  end;
+A5: for b,c,d st b in field R & P[b,c] & P[b,d] holds c = d
+  proof
+    let b,c,d such that
+A6: b in field R and
+A7: A = c iff R |_2 (R-Seg(b)),RelIncl A are_isomorphic and
+A8: B = d iff R |_2 (R-Seg(b)),RelIncl B are_isomorphic;
+    consider A such that
+A9: R |_2 (R-Seg(b)),RelIncl A are_isomorphic by A2,A6;
+    A = c by A7,A9;
+    hence thesis by A8,A9;
   end;
   consider H such that
-A10: dom H = field R & for b st b in field R holds P[b, H.b]
-  from FUNCT_1:sch 2(A3,A8);
+A10: dom H = field R & for b st b in field R holds P[b, H.b] from
+  FUNCT_1:sch 2(A5,A3);
   for a st a in rng H holds a is Ordinal
   proof
     let b;
-    assume b in rng H;
+    assume
+    b in rng H;
     then consider c such that
-A11: c in dom H & b = H.c by FUNCT_1:def 5;
-    consider A such that
-A12: R |_2 (R-Seg(c)),RelIncl A are_isomorphic by A2,A10,A11;
-    thus thesis by A10,A11,A12;
+A11: c in dom H and
+A12: b = H.c by FUNCT_1:def 5;
+    ex A st R |_2 (R-Seg(c)),RelIncl A are_isomorphic by A2,A10,A11;
+    hence thesis by A10,A11,A12;
   end;
   then consider C such that
 A13: rng H c= C by ORDINAL1:36;
-A14: C = field RelIncl C by Def1;
-A15: RelIncl C is well-ordering by Th7;
-A16: now
+A14: now
     let b;
     assume
-A17: b in rng H;
+A15: b in rng H;
     then consider b' being set such that
-A18: b' in dom H & b = H.b' by FUNCT_1:def 5;
+A16: b' in dom H and
+A17: b = H.b' by FUNCT_1:def 5;
     set V = R-Seg(b');
     set P = R |_2 V;
     consider A such that
-A19: P,RelIncl A are_isomorphic by A2,A10,A18;
-A20: A = b by A10,A18,A19;
+A18: P,RelIncl A are_isomorphic by A2,A10,A16;
     let c such that
-A21: [c,b] in RelIncl C;
+A19: [c,b] in RelIncl C;
+A20: A = b by A10,A16,A17,A18;
     now
-      assume
-A22:  c <> b;
-      C = field RelIncl C by Def1;
+A21:  C = field RelIncl C by Def1;
       then
-A23:  c in C & b in C by A21,RELAT_1:30;
+A22:  c in C by A19,RELAT_1:30;
       then reconsider B = c as Ordinal;
-A24:  B c= A by A20,A21,A23,Def1;
-      then B c< A by A20,A22,XBOOLE_0:def 8;
+      b in C by A19,A21,RELAT_1:30;
       then
-A25:  B in A & A = field RelIncl A by Def1,ORDINAL1:21;
-A26:  RelIncl A is well-ordering by Th7;
-      RelIncl A,P are_isomorphic by A19,WELLORD1:50;
-      then canonical_isomorphism_of(RelIncl A,P)
-      is_isomorphism_of RelIncl A,P by A26,WELLORD1:def 9;
+A23:  B c= A by A20,A19,A22,Def1;
+      then
+A24:  (RelIncl A) |_2 B = RelIncl B by Th8;
+      assume
+      c <> b;
+      then
+A25:  B c< A by A20,A23,XBOOLE_0:def 8;
+      then
+A26:  B = (RelIncl A)-Seg(B) by Th10,ORDINAL1:21;
+A27:  A = field RelIncl A by Def1;
+A28:  RelIncl A is well-ordering by Th7;
+      RelIncl A,P are_isomorphic by A18,WELLORD1:50;
+      then
+      canonical_isomorphism_of(RelIncl A,P) is_isomorphism_of RelIncl A,P
+      by A28,WELLORD1:def 9;
       then consider d such that
-A27:  d in field P &
-      (RelIncl A) |_2 ((RelIncl A)-Seg(B)),P |_2 (P-Seg(d)) are_isomorphic
-      by A25,A26,WELLORD1:61;
-A28:  d in V & d in field R by A27,WELLORD1:19;
-      then
-A29:  [d,b'] in R by WELLORD1:def 1;
-A30:  B = (RelIncl A)-Seg(B) by A25,Th10;
-A31:  (RelIncl A) |_2 B = RelIncl B by A24,Th8;
-A32:  P-Seg(d) = R-Seg(d) by A1,A10,A18,A28,WELLORD1:35;
-      R-Seg(d) c= R-Seg(b') by A1,A10,A18,A28,A29,WELLORD1:37;
-      then RelIncl B,R |_2
-      (R-Seg(d)) are_isomorphic by A27,A30,A31,A32,WELLORD1:29;
+A29:  d in field P and
+A30:  (RelIncl A) |_2 ((RelIncl A)-Seg(B)),P |_2 (P-Seg(d))
+      are_isomorphic by A25,A27,A28,ORDINAL1:21,WELLORD1:61;
+A31:  d in field R by A29,WELLORD1:19;
+A32:  P-Seg(d) = R-Seg(d) by A1,A29,WELLORD1:19,35;
+      d in V by A29,WELLORD1:19;
+      then [d,b'] in R by WELLORD1:def 1;
+      then R-Seg(d) c= R-Seg(b') by A1,A10,A16,A31,WELLORD1:37;
+      then RelIncl B,R |_2 (R-Seg(d)) are_isomorphic by A30,A26,A24,A32,
+      WELLORD1:29;
       then R |_2 (R-Seg(d)),RelIncl B are_isomorphic by WELLORD1:50;
-      then B = H.d by A10,A28;
-      hence c in rng H by A10,A28,FUNCT_1:def 5;
+      then B = H.d by A10,A31;
+      hence c in rng H by A10,A31,FUNCT_1:def 5;
     end;
-    hence c in rng H by A17;
+    hence c in rng H by A15;
   end;
-  rng H is Ordinal
-  proof
-    (ex a st a in C & rng H = (RelIncl C)-Seg(a)) implies thesis
-                      by Th10;
-    hence thesis by A13,A14,A15,A16,WELLORD1:36;
-  end;
-  then reconsider A = rng H as Ordinal;
-A34: a in dom H implies H.a is Ordinal
-  proof
-    assume a in dom H;
-    then H.a in A by FUNCT_1:def 5;
-    hence thesis;
-  end;
+A33: (ex a st a in C & rng H = (RelIncl C)-Seg(a)) implies rng H is Ordinal
+  by Th10;
+  C = field RelIncl C & RelIncl C is well-ordering by Def1,Th7;
+  then reconsider A = rng H as Ordinal by A13,A14,A33,WELLORD1:36;
   take A;
   take H;
   thus dom H = field R by A10;
-  thus rng H = field RelIncl A by Def1; thus
+  thus rng H = field RelIncl A by Def1;
+A34: a in dom H implies H.a is Ordinal
+  proof
+    assume
+    a in dom H;
+    then H.a in A by FUNCT_1:def 5;
+    hence thesis;
+  end;
+  thus
 A35: H is one-to-one
   proof
     let a,b;
-    assume
-A36: a in dom H & b in dom H & H.a = H.b;
-    then reconsider B = H.a as Ordinal by A34;
-A37: R |_2 (R-Seg(a)),RelIncl B are_isomorphic &
-    R |_2 (R-Seg(b)),RelIncl B are_isomorphic by A10,A36;
-    then RelIncl B,R |_2 (R-Seg(b)) are_isomorphic by WELLORD1:50;
-    then R |_2 (R-Seg(a)),R |_2 (R-Seg(b)) are_isomorphic by A37,WELLORD1:52;
-    hence thesis by A1,A10,A36,WELLORD1:58;
+    assume that
+A36: a in dom H and
+A37: b in dom H and
+A38: H.a = H.b;
+    reconsider B = H.a as Ordinal by A34,A36;
+    R |_2 (R-Seg(b)),RelIncl B are_isomorphic by A10,A37,A38;
+    then
+A39: RelIncl B,R |_2 (R-Seg(b)) are_isomorphic by WELLORD1:50;
+    R |_2 (R-Seg(a)),RelIncl B are_isomorphic by A10,A36;
+    then R |_2 (R-Seg(a)),R |_2 (R-Seg(b)) are_isomorphic by
+    A39, WELLORD1
+    :52;
+    hence thesis by A1,A10,A36,A37,WELLORD1:58;
   end;
   let a,b;
   thus [a,b] in R implies a in field R & b in field R & [H.a,H.b] in RelIncl A
   proof
-    assume
-A38: [a,b] in R;
-    hence
-A39: a in field R & b in field R by RELAT_1:30;
-    then reconsider A' = H.a, B' = H.b as Ordinal by A10,A34;
-A40: R |_2 (R-Seg(a)),RelIncl A' are_isomorphic &
-    R |_2 (R-Seg(b)),RelIncl B' are_isomorphic by A10,A39;
-A41: A' in A & B' in A & A = field RelIncl A by A10,A39,Def1,FUNCT_1:def 5;
     set Z = R-Seg(b);
     set P = R |_2 Z;
-A42: P is well-ordering by A1,WELLORD1:32;
+A40: A = field RelIncl A & P is well-ordering by A1,Def1,WELLORD1:32;
+    assume
+A41: [a,b] in R;
+    hence
+A42: a in field R & b in field R by RELAT_1:30;
+    then reconsider A' = H.a, B' = H.b as Ordinal by A10,A34;
+A43: R |_2 (R-Seg(b)),RelIncl B' are_isomorphic by A10,A42;
+A44: A' in A by A10,A42,FUNCT_1:def 5;
+A45: B' in A by A10,A42,FUNCT_1:def 5;
+A46: R |_2 (R-Seg(a)),RelIncl A' are_isomorphic by A10,A42;
     now
-      assume a <> b;
+      assume
+      a <> b;
       then
-A43:  a in Z & Z c= field R by A38,WELLORD1:13,def 1;
+A47:  a in Z by A41,WELLORD1:def 1;
       then
-A44:  a in field P by A1,WELLORD1:39;
-A45:  RelIncl A is well-ordering by Th7;
-A46:  A' = (RelIncl A)-Seg(A') & B' = (RelIncl A)-Seg(B') by A41,Th10;
-A47:  A' c= A & B' c= A by A41,ORDINAL1:def 2;
+A48:  P-Seg(a) = R-Seg(a) by A1,WELLORD1:35;
+      Z c= field R by WELLORD1:13;
       then
-A48:  (RelIncl A) |_2 A' = RelIncl A' & (RelIncl A) |_2 B' = RelIncl
-      B' by Th8;
-A49:  P,(RelIncl A) |_2
-      ((RelIncl A)-Seg(B')) are_isomorphic by A40,A46,A47,Th8;
-A50:  P-Seg(a) = R-Seg(a) by A1,A39,A43,WELLORD1:35;
-      R-Seg(a) c= R-Seg(b) by A1,A38,A39,WELLORD1:37;
-      then P |_2 (P-Seg(a)),(RelIncl A) |_2 ((RelIncl A)-Seg(A'))
-      are_isomorphic by A40,A46,A48,A50,WELLORD1:29;
-      hence [A',B'] in RelIncl A by A41,A42,A44,A45,A49,WELLORD1:62;
+A49:  a in field P by A1,A47,WELLORD1:39;
+      A' c= A by A44,ORDINAL1:def 2;
+      then
+A50:  (RelIncl A) |_2 A' = RelIncl A' by Th8;
+      A' = (RelIncl A)-Seg(A') & R-Seg(a) c= R-Seg(b) by A1,A41,A42,A44,
+      Th10, WELLORD1:37;
+      then
+A51:  P |_2 (P-Seg(a)),(RelIncl A) |_2 ((RelIncl A)-Seg(A'))
+      are_isomorphic by A46,A50,A48,WELLORD1:29;
+      B' = (RelIncl A)-Seg(B') & B' c= A by A45,Th10,ORDINAL1:def 2;
+      then
+A52:  P,(RelIncl A) |_2 ((RelIncl A)-Seg(B')) are_isomorphic by A43,
+      Th8;
+      RelIncl A is well-ordering by Th7;
+      hence [A',B'] in RelIncl A by A44,A45,A40,A49,A52,A51,WELLORD1:62;
     end;
-    hence thesis by A41,Def1;
+    hence thesis by A44,Def1;
   end;
+  assume that
+A53: a in field R and
+A54: b in field R and
+A55: [H.a,H.b] in RelIncl A;
   assume
-A51: a in field R & b in field R & [H.a,H.b] in RelIncl A;
-  R is connected by A1,WELLORD1:def 4;
-  then
-A52: R is_connected_in field R by RELAT_2:def 14;
+A56: not [a,b] in R;
   R is reflexive by A1,WELLORD1:def 4;
+  then R is_reflexive_in field R by RELAT_2:def 9;
   then
-A53: R is_reflexive_in field R by RELAT_2:def 9;
+A57: a <> b by A53,A56,RELAT_2:def 1;
+  R is connected by A1,WELLORD1:def 4;
+  then R is_connected_in field R by RELAT_2:def 14;
+  then
+A58: [b,a] in R by A53,A54,A56,A57,RELAT_2:def 6;
+  then
+A59: R-Seg(b) c= R-Seg(a) by A1,A53,A54,WELLORD1:37;
   RelIncl A is antisymmetric by Th5;
   then
-A54: RelIncl A is_antisymmetric_in field RelIncl A by RELAT_2:def 12;
-  assume
-A55: not [a,b] in R;
+A60: RelIncl A is_antisymmetric_in field RelIncl A by RELAT_2:def 12;
+A61: A = field RelIncl A by Def1;
+  reconsider A' = H.a, B' = H.b as Ordinal by A10,A34,A53,A54;
+A62: R |_2 (R-Seg(a)),RelIncl A' are_isomorphic by A10,A53;
+A63: R |_2 (R-Seg(b)),RelIncl B' are_isomorphic by A10,A54;
+A64: B' in A by A10,A54,FUNCT_1:def 5;
+  then B' c= A by ORDINAL1:def 2;
   then
-A56: a <> b by A51,A53,RELAT_2:def 1;
-  then
-A57: [b,a] in R by A51,A52,A55,RELAT_2:def 6;
-  reconsider A' = H.a, B' = H.b as Ordinal by A10,A34,A51;
-A58: R |_2 (R-Seg(a)),RelIncl A' are_isomorphic &
-  R |_2 (R-Seg(b)),RelIncl B' are_isomorphic by A10,A51;
+A65: (RelIncl A) |_2 B' = RelIncl B' by Th8;
   set Z = R-Seg(a);
   set P = R |_2 Z;
-A59: P is well-ordering by A1,WELLORD1:32;
-A60: b in Z & Z c= field R by A55,A57,WELLORD1:13,def 1;
+A66: RelIncl A is well-ordering by Th7;
+A67: A' in A by A10,A53,FUNCT_1:def 5;
+  then A' = (RelIncl A)-Seg(A') & A' c= A by Th10,ORDINAL1:def 2;
   then
-A61: b in field P by A1,WELLORD1:39;
-A62: RelIncl A is well-ordering by Th7;
-A63: A' in A & B' in A & A = field RelIncl A by A10,A51,Def1,FUNCT_1:def 5;
+A68: P,(RelIncl A) |_2 ((RelIncl A)-Seg(A')) are_isomorphic by A62,Th8;
+A69: b in Z by A56,A58,WELLORD1:def 1;
   then
-A64: A' = (RelIncl A)-Seg(A') & B' = (RelIncl A)-Seg(B') by Th10;
-A65: A' c= A & B' c= A by A63,ORDINAL1:def 2;
+A70: P-Seg(b) = R-Seg(b) by A1,WELLORD1:35;
+  B' = (RelIncl A)-Seg(B') by A64,Th10;
   then
-A66: (RelIncl A) |_2 A' = RelIncl A' & (RelIncl A) |_2 B' = RelIncl B' by Th8;
-A67: P,(RelIncl A) |_2 ((RelIncl A)-Seg(A')) are_isomorphic by A58,A64,A65,Th8;
-A68: P-Seg(b) = R-Seg(b) by A1,A51,A60,WELLORD1:35;
-  R-Seg(b) c= R-Seg(a) by A1,A51,A57,WELLORD1:37;
-  then P |_2 (P-Seg(b)),(RelIncl A) |_2 ((RelIncl A)-Seg(B')) are_isomorphic
-  by A58,A64,A66,A68,WELLORD1:29;
-  then [B',A'] in RelIncl A by A59,A61,A62,A63,A67,WELLORD1:62;
-  then H.a = H.b by A51,A54,A63,RELAT_2:def 4;
-  hence contradiction by A10,A35,A51,A56,FUNCT_1:def 8;
+A71: P |_2 (P-Seg(b)),(RelIncl A) |_2 ((RelIncl A)-Seg(B')) are_isomorphic
+  by A63,A65,A70,A59,WELLORD1:29;
+  Z c= field R by WELLORD1:13;
+  then
+A72: b in field P by A1,A69,WELLORD1:39;
+  P is well-ordering by A1,WELLORD1:32;
+  then [B',A'] in RelIncl A by A72,A66,A67,A64,A61,A68,A71,
+  WELLORD1:62;
+  then H.a = H.b by A55,A60,A67,A64,A61,RELAT_2:def 4;
+  hence contradiction by A10,A35,A53,A54,A57,FUNCT_1:def 8;
 end;
 
 theorem Th14:
@@ -501,28 +549,34 @@ A1: R is well-ordering;
 A2: a in Z iff a in field R & P[a] from XBOOLE_0:sch 1;
   now
     let a such that
-A3: a in field R & R-Seg(a) c= Z;
+A3: a in field R and
+A4: R-Seg(a) c= Z;
     set P = R |_2 (R-Seg(a));
-A4: P is well-ordering by A1,WELLORD1:32;
     now
       let b;
-      assume b in field P;
+      assume
+A5:   b in field P;
       then
-A5:   b in R-Seg(a) & b in field R by WELLORD1:19;
-      then consider A such that
-A6:   R |_2 (R-Seg(b)),RelIncl A are_isomorphic by A2,A3;
+A6:   b in R-Seg(a) by WELLORD1:19;
+      then
+A7:   [b,a] in R by WELLORD1:def 1;
+      b in field R by A5,WELLORD1:19;
+      then
+A8:   R-Seg(b) c= R-Seg(a) by A1,A3,A7,WELLORD1:37;
+      consider A such that
+A9:   R |_2 (R-Seg(b)),RelIncl A are_isomorphic by A2,A4,A6;
       take A;
-A7:   P-Seg(b) = R-Seg(b) by A1,A3,A5,WELLORD1:35;
-      [b,a] in R by A5,WELLORD1:def 1;
-      then R-Seg(b) c= R-Seg(a) by A1,A3,A5,WELLORD1:37;
-      hence P |_2 (P-Seg(b)),RelIncl A are_isomorphic by A6,A7,WELLORD1:29;
+      P-Seg(b) = R-Seg(b) by A1,A5,WELLORD1:19,35;
+      hence P |_2 (P-Seg(b)),RelIncl A are_isomorphic by A9,A8, WELLORD1:
+      29;
     end;
-    then ex A st P,RelIncl A are_isomorphic by A4,Th13;
+    then ex A st P,RelIncl A are_isomorphic by A1,Th13,WELLORD1:32;
     hence a in Z by A2,A3;
   end;
   then field R c= Z by A1,WELLORD1:41;
-  then for a st a in field R
-  ex A st R |_2 (R-Seg(a)),RelIncl A are_isomorphic by A2;
+  then
+  for a st a in field R ex A st R |_2 (R-Seg(a)),RelIncl A are_isomorphic
+  by A2;
   hence thesis by A1,Th13;
 end;
 
@@ -540,7 +594,6 @@ end;
 definition
   let A,R;
   pred A is_order_type_of R means
-
   A = order_type_of R;
 end;
 
@@ -552,27 +605,28 @@ proof
   assume
 A1: X c= A;
   then
-A2: RelIncl X is well-ordering by Th9;
-A3: RelIncl A is well-ordering by Th7;
-A4: field RelIncl A = A by Def1;
-A5: (RelIncl A) |_2 X = RelIncl X by A1,Th8;
-A6: now
-    assume RelIncl A,(RelIncl A) |_2 X are_isomorphic;
-    then RelIncl X,RelIncl A are_isomorphic by A5,WELLORD1:50;
-    hence thesis by A2,Def2;
+A2: (RelIncl A) |_2 X = RelIncl X by Th8;
+A3: RelIncl X is well-ordering by A1,Th9;
+A4: now
+    assume
+    RelIncl A,(RelIncl A) |_2 X are_isomorphic;
+    then RelIncl X,RelIncl A are_isomorphic by A2,WELLORD1:50;
+    hence thesis by A3,Def2;
   end;
-  now
+A5: now
     given a such that
-A7: a in A &
-    (RelIncl A) |_2 ((RelIncl A)-Seg(a)),(RelIncl A) |_2 X are_isomorphic;
-    reconsider a as Ordinal by A7;
-A8: (RelIncl A)-Seg(a) = a by A7,Th10;
-A9: a c= A by A7,ORDINAL1:def 2;
+A6: a in A and
+A7: (RelIncl A) |_2 ((RelIncl A)-Seg(a)),(RelIncl A) |_2 X
+    are_isomorphic;
+    reconsider a as Ordinal by A6;
+A8: (RelIncl A)-Seg(a) = a by A6,Th10;
+A9: a c= A by A6,ORDINAL1:def 2;
     then (RelIncl A) |_2 a = RelIncl a by Th8;
-    then RelIncl X,RelIncl a are_isomorphic by A5,A7,A8,WELLORD1:50;
-    hence thesis by A2,A9,Def2;
+    then RelIncl X,RelIncl a are_isomorphic by A2,A7,A8,WELLORD1:50;
+    hence thesis by A3,A9,Def2;
   end;
-  hence thesis by A1,A3,A4,A6,WELLORD1:64;
+  field RelIncl A = A by Def1;
+  hence thesis by A1,A4,A5,Th7,WELLORD1:64;
 end;
 
 reserve f,g for Function;
@@ -580,46 +634,50 @@ reserve f,g for Function;
 definition
   let X,Y;
   redefine pred X,Y are_equipotent means
-  ex f st f is one-to-one & dom f = X & rng f = Y;
+  ex f st f is one-to-one & dom f = X &
+  rng f = Y;
   compatibility
   proof
-    thus X,Y are_equipotent implies ex f st
-    f is one-to-one & dom f = X & rng f = Y
+    thus X,Y are_equipotent implies ex f st f is one-to-one & dom f = X & rng
+    f = Y
     proof
-      assume X,Y are_equipotent;
+      assume
+      X,Y are_equipotent;
       then consider Z such that
 A1:   for x st x in X ex y st y in Y & [x,y] in Z and
 A2:   for y st y in Y ex x st x in X & [x,y] in Z and
 A3:   for x,y,z,u st [x,y] in Z & [z,u] in Z holds x = z iff y = u by
-TARSKI:def 6;
+      TARSKI:def 6;
       set F = Z /\ [:X,Y:];
-      F is Relation-like Function-like
+      for x,y,z st [x,y] in F & [x,z] in F holds y = z
       proof
-        thus for z st z in F ex x,y st [x,y] = z
-         by RELAT_1:def 1;
-        thus for x,y,z st [x,y] in F & [x,z] in F holds y = z
-        proof
-          let x,y,z;
-          assume [x,y] in F & [x,z] in F;
-          then [x,y] in Z & [x,z] in Z by XBOOLE_0:def 4;
-          hence thesis by A3;
-        end;
+        let x,y,z;
+        assume
+        [x,y] in F & [x,z] in F;
+        then [x,y] in Z & [x,z] in Z by XBOOLE_0:def 4;
+        hence thesis by A3;
       end;
-      then reconsider F as Function;
+      then reconsider F as Function by FUNCT_1:def 1;
       take f = F;
       thus f is one-to-one
       proof
         let x,y;
-        assume
-A4:     x in dom f & y in dom f & f.x = f.y;
-        then [x,f.x] in f & [y,f.y] in f by FUNCT_1:8;
-        then [x,f.x] in Z & [y,f.y] in Z by XBOOLE_0:def 4;
-        hence thesis by A3,A4;
+        assume that
+A4:     x in dom f and
+A5:     y in dom f and
+A6:     f.x = f.y;
+        [y,f.y] in f by A5,FUNCT_1:8;
+        then
+A7:     [y,f.y] in Z by XBOOLE_0:def 4;
+        [x,f.x] in f by A4,FUNCT_1:8;
+        then [x,f.x] in Z by XBOOLE_0:def 4;
+        hence thesis by A3,A6,A7;
       end;
       thus dom f c= X
       proof
         let x;
-        assume x in dom f;
+        assume
+        x in dom f;
         then [x,f.x] in f by FUNCT_1:8;
         then [x,f.x] in [:X,Y:] by XBOOLE_0:def 4;
         hence thesis by ZFMISC_1:106;
@@ -628,20 +686,22 @@ A4:     x in dom f & y in dom f & f.x = f.y;
       proof
         let x;
         assume
-A5:     x in X;
+A8:     x in X;
         then consider y such that
-A6:     y in Y & [x,y] in Z by A1;
-        [x,y] in [:X,Y:] by A5,A6,ZFMISC_1:106;
-        then [x,y] in f by A6,XBOOLE_0:def 4;
+A9:     y in Y and
+A10:    [x,y] in Z by A1;
+        [x,y] in [:X,Y:] by A8,A9,ZFMISC_1:106;
+        then [x,y] in f by A10,XBOOLE_0:def 4;
         hence thesis by FUNCT_1:8;
       end;
       thus rng f c= Y
       proof
         let y;
-        assume y in rng f;
+        assume
+        y in rng f;
         then consider x such that
-A7:     x in dom f & y = f.x by FUNCT_1:def 5;
-        [x,y] in f by A7,FUNCT_1:8;
+A11:    x in dom f & y = f.x by FUNCT_1:def 5;
+        [x,y] in f by A11,FUNCT_1:8;
         then [x,y] in [:X,Y:] by XBOOLE_0:def 4;
         hence thesis by ZFMISC_1:106;
       end;
@@ -649,46 +709,53 @@ A7:     x in dom f & y = f.x by FUNCT_1:def 5;
       proof
         let y;
         assume
-A8:     y in Y;
+A12:    y in Y;
         then consider x such that
-A9:     x in X & [x,y] in Z by A2;
-        [x,y] in [:X,Y:] by A8,A9,ZFMISC_1:106;
-        then [x,y] in f by A9,XBOOLE_0:def 4;
+A13:    x in X and
+A14:    [x,y] in Z by A2;
+        [x,y] in [:X,Y:] by A12,A13,ZFMISC_1:106;
+        then [x,y] in f by A14,XBOOLE_0:def 4;
         then x in dom f & y = f.x by FUNCT_1:8;
         hence thesis by FUNCT_1:def 5;
       end;
     end;
-    (ex f st f is one-to-one & dom f = X & rng f = Y) implies ex Z st
-    (for x st x in X ex y st y in Y & [x,y] in Z) &
-    (for y st y in Y ex x st x in X & [x,y] in Z) &
-    for x,y,z,u st [x,y] in Z & [z,u] in Z holds x = z iff y = u
+    (ex f st f is one-to-one & dom f = X & rng f = Y) implies ex Z st (
+for x st x in X ex y st y in Y & [x,y] in Z) & (for y st y in Y ex x st x in X
+& [x,y] in Z) & for x,y,z,u st [x,y] in Z & [z,u] in Z holds x = z iff y = u
     proof
       given f such that
-A10:  f is one-to-one & dom f = X & rng f = Y;
+A15:  f is one-to-one and
+A16:  dom f = X and
+A17:  rng f = Y;
       take Z = f;
       thus x in X implies ex y st y in Y & [x,y] in Z
       proof
         assume
-A11:    x in X;
+A18:    x in X;
         take f.x;
-        thus f.x in Y by A10,A11,FUNCT_1:def 5;
-        thus thesis by A10,A11,FUNCT_1:8;
+        thus f.x in Y by A16,A17,A18,FUNCT_1:def 5;
+        thus thesis by A16,A18,FUNCT_1:8;
       end;
       thus for y st y in Y ex x st x in X & [x,y] in Z
       proof
         let y such that
-A12:    y in Y;
+A19:    y in Y;
         take f".y;
-A13:    dom(f") = rng f & rng(f") = dom f by A10,FUNCT_1:55;
-        hence f".y in X by A10,A12,FUNCT_1:def 5;
-A14:    y = f.(f".y) by A10,A12,FUNCT_1:57;
-        f".y in rng(f") by A10,A12,A13,FUNCT_1:def 5;
-        hence thesis by A13,A14,FUNCT_1:8;
+A20:    dom(f") = rng f by A15,FUNCT_1:55;
+        then
+A21:    f".y in rng(f") by A17,A19,FUNCT_1:def 5;
+A22:    rng(f") = dom f by A15,FUNCT_1:55;
+        hence f".y in X by A16,A17,A19,A20,FUNCT_1:def 5;
+        y = f.(f".y) by A15,A17,A19,FUNCT_1:57;
+        hence thesis by A22,A21,FUNCT_1:8;
       end;
       let x,y,z,u;
-      assume [x,y] in Z & [z,u] in Z;
-      then y = f.x & u = f.z & x in dom f & z in dom f by FUNCT_1:8;
-      hence thesis by A10,FUNCT_1:def 8;
+      assume
+A23:  [x,y] in Z & [z,u] in Z;
+      then
+A24:  x in dom f & z in dom f by FUNCT_1:8;
+      y = f.x & u = f.z by A23,FUNCT_1:8;
+      hence thesis by A15,A24,FUNCT_1:def 8;
     end;
     hence thesis by TARSKI:def 6;
   end;
@@ -702,9 +769,9 @@ A14:    y = f.(f".y) by A10,A12,FUNCT_1:57;
   proof
     let X,Y;
     given f such that
-A15: f is one-to-one & dom f = X & rng f = Y;
+A25: f is one-to-one & dom f = X & rng f = Y;
     take f";
-    thus thesis by A15,FUNCT_1:55;
+    thus thesis by A25,FUNCT_1:55;
   end;
 end;
 
@@ -724,136 +791,166 @@ end;
 canceled 2;
 
 theorem Th25:
-  R well_orders X implies field(R|_2 X) = X & R|_2 X is well-ordering
+  R well_orders X implies field(R|_2 X) = X & R|_2 X is
+  well-ordering
 proof
-  assume
-A1: R is_reflexive_in X & R is_transitive_in X & R is_antisymmetric_in X &
-  R is_connected_in X & R is_well_founded_in X; thus
-A2: field(R|_2 X) = X
+  assume that
+A1: R is_reflexive_in X and
+A2: R is_transitive_in X and
+A3: R is_antisymmetric_in X and
+A4: R is_connected_in X and
+A5: R is_well_founded_in X;
+A6: R|_2 X is_antisymmetric_in X
+  proof
+    let x,y;
+    assume that
+A7: x in X & y in X and
+A8: [x,y] in R|_2 X & [y,x] in R|_2 X;
+    [x,y] in R & [y,x] in R by A8,XBOOLE_0:def 4;
+    hence thesis by A3,A7,RELAT_2:def 4;
+  end;
+A9: R|_2 X is_well_founded_in X
+  proof
+    let Y;
+    assume
+    Y c= X & Y <> {};
+    then consider a such that
+A10: a in Y and
+A11: R-Seg(a) misses Y by A5,WELLORD1:def 3;
+    take a;
+    thus a in Y by A10;
+    assume
+    not thesis;
+    then consider x being set such that
+A12: x in (R|_2 X)-Seg(a) and
+A13: x in Y by XBOOLE_0:3;
+    [x,a] in R|_2 X by A12,WELLORD1:def 1;
+    then
+A14: [x,a] in R by XBOOLE_0:def 4;
+    x <> a by A12,WELLORD1:def 1;
+    then x in R-Seg(a) by A14,WELLORD1:def 1;
+    hence contradiction by A11,A13,XBOOLE_0:3;
+  end;
+A15: R|_2 X is_transitive_in X
+  proof
+    let x,y,z;
+    assume that
+A16: x in X and
+A17: y in X and
+A18: z in X and
+A19: [x,y] in R|_2 X & [y,z] in R|_2 X;
+    [x,y] in R & [y,z] in R by A19,XBOOLE_0:def 4;
+    then
+A20: [x,z] in R by A2,A16,A17,A18,RELAT_2:def 8;
+    [x,z] in [:X,X:] by A16,A18,ZFMISC_1:106;
+    hence thesis by A20,XBOOLE_0:def 4;
+  end;
+A21: R|_2 X is_connected_in X
+  proof
+    let x,y;
+    assume that
+A22: x in X & y in X and
+A23: x <> y;
+A24: [x,y] in [:X,X:] & [y,x] in [:X,X :] by A22,ZFMISC_1:106;
+    [x,y] in R or [y,x] in R by A4,A22,A23,RELAT_2:def 6;
+    hence thesis by A24,XBOOLE_0:def 4;
+  end;
+  thus
+A25: field(R|_2 X) = X
   proof
     thus field(R|_2 X) c= X by WELLORD1:20;
     let x;
-    assume x in X;
+    assume
+    x in X;
     then [x,x] in R & [x,x] in [:X,X:] by A1,RELAT_2:def 1,ZFMISC_1:106;
     then [x,x] in R|_2 X by XBOOLE_0:def 4;
     hence thesis by RELAT_1:30;
   end;
-  R|_2 X well_orders X
+  R|_2 X is_reflexive_in X
   proof
-    thus R|_2 X is_reflexive_in X
-    proof
-      let x;
-      assume x in X;
-      then [x,x] in R & [x,x] in [:X,X:] by A1,RELAT_2:def 1,ZFMISC_1:106;
-      hence thesis by XBOOLE_0:def 4;
-    end;
-    thus R|_2 X is_transitive_in X
-    proof
-      let x,y,z;
-      assume
-A3:   x in X & y in X & z in X & [x,y] in R|_2 X & [y,z] in R|_2 X;
-      then [x,y] in R & [y,z] in R by XBOOLE_0:def 4;
-      then [x,z] in R & [x,z] in [:X,X:] by A1,A3,RELAT_2:def 8,ZFMISC_1:106;
-      hence thesis by XBOOLE_0:def 4;
-    end;
-    thus R|_2 X is_antisymmetric_in X
-    proof
-      let x,y;
-      assume
-A4:   x in X & y in X & [x,y] in R|_2 X & [y,x] in R|_2 X;
-      then [x,y] in R & [y,x] in R by XBOOLE_0:def 4;
-      hence thesis by A1,A4,RELAT_2:def 4;
-    end;
-    thus R|_2 X is_connected_in X
-    proof
-      let x,y;
-      assume x in X & y in X & x <> y;
-      then ([x,y] in R or [y,x] in R) & [x,y] in [:X,X:] & [y,x] in [:X,X :]
-      by A1,RELAT_2:def 6,ZFMISC_1:106;
-      hence thesis by XBOOLE_0:def 4;
-    end;
-    thus R|_2 X is_well_founded_in X
-    proof
-      let Y;
-      assume Y c= X & Y <> {};
-      then consider a such that
-A5:   a in Y & R-Seg(a) misses Y by A1,WELLORD1:def 3;
-      take a;
-      thus a in Y by A5;
-      assume not thesis;
-      then consider x being set such that
-A6:   x in (R|_2 X)-Seg(a) & x in Y by XBOOLE_0:3;
-A7:   x <> a & [x,a] in R|_2 X by A6,WELLORD1:def 1;
-      then [x,a] in R by XBOOLE_0:def 4;
-      then x in R-Seg(a) by A7,WELLORD1:def 1;
-      hence contradiction by A5,A6,XBOOLE_0:3;
-    end;
+    let x;
+    assume
+    x in X;
+    then [x,x] in R & [x,x] in [:X,X:] by A1,RELAT_2:def 1,ZFMISC_1:106;
+    hence thesis by XBOOLE_0:def 4;
   end;
-  hence thesis by A2,WELLORD1:8;
+  then R|_2 X well_orders X by A15,A6,A21,A9,WELLORD1:def 5;
+  hence thesis by A25,WELLORD1:8;
 end;
 
 ::
 ::                  Zermelo theorem
 ::
 
-Lm1: R is well-ordering & X,field R are_equipotent implies
-ex R st R well_orders X
+Lm1: R is well-ordering & X,field R are_equipotent implies ex R st R
+well_orders X
+
 proof
   assume
 A1: R is well-ordering;
-  then R is reflexive by WELLORD1:def 4;
-  then
-A2: R is_reflexive_in field R by RELAT_2:def 9;
   given f such that
-A3: f is one-to-one & dom f = X & rng f = field R;
+A2: f is one-to-one and
+A3: dom f = X and
+A4: rng f = field R;
   defpred P[set,set] means [f.$1,f.$2] in R;
   consider Q being Relation such that
-A4: [x,y] in Q iff x in X & y in X & P[x,y] from RELAT_1:sch 1;
-A5: field Q = X
+A5: [x,y] in Q iff x in X & y in X & P[x,y] from RELAT_1:sch 1;
+  take Q;
+  R is reflexive by A1,WELLORD1:def 4;
+  then
+A6: R is_reflexive_in field R by RELAT_2:def 9;
+A7: field Q = X
   proof
     thus field Q c= X
     proof
       let x;
-      assume
-A6:   x in field Q & not x in X;
-      then (for y holds not [x,y] in Q) & (for y holds not [y,x] in Q) by A4;
-      then not x in dom Q & not x in rng Q by RELAT_1:def 4,def 5;
-      hence contradiction by A6,XBOOLE_0:def 3;
+      assume that
+A8:   x in field Q and
+A9:   not x in X;
+      for y holds not [y,x] in Q by A5,A9;
+      then
+A10:  not x in rng Q by RELAT_1:def 5;
+      for y holds not [x,y] in Q by A5,A9;
+      then not x in dom Q by RELAT_1:def 4;
+      hence contradiction by A8,A10,XBOOLE_0:def 3;
     end;
     let x;
     assume
-A7: x in X;
+A11: x in X;
     then f.x in rng f by A3,FUNCT_1:def 5;
-    then [f.x,f.x] in R by A2,A3,RELAT_2:def 1;
-    then [x,x] in Q by A4,A7;
+    then [f.x,f.x] in R by A6,A4,RELAT_2:def 1;
+    then [x,x] in Q by A5,A11;
     hence thesis by RELAT_1:30;
   end;
   f is_isomorphism_of Q,R
   proof
-    thus dom f = field Q & rng f = field R & f is one-to-one by A3,A5;
+    thus dom f = field Q & rng f = field R & f is one-to-one by A2,A3,A4,A7;
     let x,y;
-    thus [x,y] in Q implies x in field Q & y in field Q & [f.x,f.y] in
-    R by A4,A5;
-    assume x in field Q & y in field Q & [f.x,f.y] in R;
-    hence thesis by A4,A5;
+
+    thus [x,y] in Q implies x in field Q & y in field Q & [f.x,f.y] in R by A5
+    ,A7;
+
+    assume
+    x in field Q & y in field Q & [f.x,f.y] in R;
+    hence thesis by A5,A7;
   end;
   then f" is_isomorphism_of R,Q by WELLORD1:49;
-  then
-A8: Q is well-ordering by A1,WELLORD1:54;
-  take Q;
-  thus thesis by A5,A8,WELLORD1:8;
+  then Q is well-ordering by A1,WELLORD1:54;
+  hence thesis by A7,WELLORD1:8;
 end;
 
 theorem Th26:
   for X ex R st R well_orders X
 proof
+  deffunc F(set) = {$1};
+  defpred P[set] means $1 is Ordinal;
   let X;
   consider Class being set such that
 A1: X in Class and
 A2: Y in Class & Z c= Y implies Z in Class and
   Y in Class implies bool Y in Class and
-A3: Y c= Class implies Y,Class are_equipotent or Y in Class by ZFMISC_1:136;
-  defpred P[set] means $1 is Ordinal;
+A3: Y c= Class implies Y,Class are_equipotent or Y in Class by ZFMISC_1:
+  136;
   consider ON being set such that
 A4: x in ON iff x in Class & P[x] from XBOOLE_0:sch 1;
   for Y st Y in ON holds Y is Ordinal & Y c= ON
@@ -868,61 +965,68 @@ A5: Y in ON;
 A6: x in Y;
     then x in A;
     then reconsider B = x as Ordinal;
-    B c= A & A in Class by A4,A5,A6,ORDINAL1:def 2;
-    then B in Class by A2;
+A7: B c= A by A6,ORDINAL1:def 2;
+    A in Class by A4,A5;
+    then B in Class by A2,A7;
     hence thesis by A4;
   end;
   then reconsider ON as Ordinal by ORDINAL1:31;
-A7: ON c= Class
+A8: ON c= Class
   proof
-    let x; thus thesis by A4;
+    let x;
+    thus thesis by A4;
   end;
-A8: ON,Class are_equipotent
+A9: ON,Class are_equipotent
   proof
-    assume not thesis;
-    then ON in Class by A3,A7;
+    assume
+    not thesis;
+    then ON in Class by A3,A8;
     then ON in ON by A4;
     hence contradiction;
   end;
-  field RelIncl ON = ON & RelIncl ON is well-ordering by Def1,Th7;
+  field RelIncl ON = ON by Def1;
   then consider R such that
-A9: R well_orders Class by A8,Lm1;
-  set Q = R|_2 Class;
-A10: field Q = Class & Q is well-ordering by A9,Th25;
-  deffunc F(set) = {$1};
+A10: R well_orders Class by A9,Lm1,Th7;
   consider f such that
 A11: dom f = X & for x st x in X holds f.x = F(x) from FUNCT_1:sch 3;
 A12: rng f c= Class
   proof
     let x;
-    assume x in rng f;
+    assume
+    x in rng f;
     then consider y such that
-A13: y in dom f & x = f.y by FUNCT_1:def 5;
-A14: f.y = { y } by A11,A13;
-    { y } c= X
+A13: y in dom f and
+A14: x = f.y by FUNCT_1:def 5;
+A15: { y } c= X
     proof
       let z;
-      assume z in { y };
+      assume
+      z in { y };
       hence thesis by A11,A13,TARSKI:def 1;
     end;
-    hence thesis by A1,A2,A13,A14;
+    f.y = { y } by A11,A13;
+    hence thesis by A1,A2,A14,A15;
   end;
-A15: X,rng f are_equipotent
+A16: X,rng f are_equipotent
   proof
     take f;
     thus f is one-to-one
     proof
       let x,y;
-      assume
-A16:  x in dom f & y in dom f & f.x = f.y;
-      then f.x = { x } & f.y = { y } by A11;
-      hence thesis by A16,ZFMISC_1:6;
+      assume that
+A17:  x in dom f & y in dom f and
+A18:  f.x = f.y;
+      f.x = { x } & f.y = { y } by A11,A17;
+      hence thesis by A18,ZFMISC_1:6;
     end;
     thus thesis by A11;
   end;
-A17: Q|_2 rng f is well-ordering by A10,WELLORD1:32;
-  field(Q|_2 rng f) = rng f by A10,A12,WELLORD1:39;
-  hence thesis by A15,A17,Lm1;
+  set Q = R|_2 Class;
+  field Q = Class by A10,Th25;
+  then
+A19: field(Q|_2 rng f) = rng f by A10,A12,Th25,WELLORD1:39;
+  Q is well-ordering by A10,Th25;
+  hence thesis by A16,A19,Lm1,WELLORD1:32;
 end;
 
 reserve M for non empty set;
@@ -932,140 +1036,165 @@ reserve M for non empty set;
 ::
 
 theorem
-  (for X st X in M holds X <> {}) &
-  (for X,Y st X in M & Y in M & X <> Y holds X misses Y) implies
-  ex Choice being set st for X st X in M ex x st Choice /\ X = { x }
+  (for X st X in M holds X <> {}) & (for X,Y st X in M & Y in M & X <> Y
+holds X misses Y) implies ex Choice being set st for X st X in M ex x st Choice
+  /\ X = { x }
 proof
   assume that
 A1: for X st X in M holds X <> {} and
 A2: for X,Y st X in M & Y in M & X <> Y holds X misses Y;
   consider R such that
 A3: R well_orders union M by Th26;
-A4: R is_antisymmetric_in union M by A3,WELLORD1:def 5;
-A5: R is_well_founded_in union M by A3,WELLORD1:def 5;
-A6: R is_connected_in union M by A3,WELLORD1:def 5;
-A7: R is_reflexive_in union M by A3,WELLORD1:def 5;
-  defpred Ch[set,set] means
-  ex X st $1 = X & $2 in X & for z st z in X holds [$2,z] in R;
-A8: for x,y,z st x in M & Ch[x,y] & Ch[x,z] holds y = z
-  proof
-    let x,y,z such that
-A9: x in M;
-    given Y such that
-A10: x = Y & y in Y & for u st u in Y holds [y,u] in R;
-    given Z such that
-A11: x = Z & z in Z & for u st u in Z holds [z,u] in R;
-    y in union M & z in union M & [y,z] in R & [z,y] in
-    R by A9,A10,A11,TARSKI:def 4;
-    hence thesis by A4,RELAT_2:def 4;
-  end;
-A12: for x st x in M ex y st Ch[x,y]
-  proof
-    let x;
-    assume x in M;
-    then
-A13: x c= union M & x <> {} by A1,ZFMISC_1:92;
-    then consider y such that
-A14: y in x & R-Seg(y) misses x by A5,WELLORD1:def 3;
-    take y,x;
-    thus x = x & y in x by A14;
-    let z;
-    assume
-A15: z in x;
-    then
-A16: y <> z implies [y,z] in R or [z,y] in R by A6,A13,A14,RELAT_2:def 6;
-    not z in R-Seg(y) by A14,A15,XBOOLE_0:3;
-    hence thesis by A7,A13,A15,A16,RELAT_2:def 1,WELLORD1:def 1;
-  end;
-  consider f such that
-A17: dom f = M & for x st x in M holds Ch[x,f.x] from FUNCT_1:sch 2(A8,A12);
-  take Choice = rng f;
-  let X such that
-A18: X in M;
-  take x = f.X;
-A19: for X st X in M holds f.X in X
-  proof
-    let X;
-    assume X in M;
-    then ex Y st X = Y & f.X in Y & for z st z in Y holds [f.X,z] in R by A17;
-    hence thesis;
-  end;
-  thus Choice /\ X c= { x }
-  proof
-    let y;
-    assume y in Choice /\ X;
-    then
-A20: y in Choice & y in X by XBOOLE_0:def 4;
-    then consider z such that
-A21: z in dom f & y = f.z by FUNCT_1:def 5;
-    assume not y in { x };
-    then X <> z by A21,TARSKI:def 1;
-    then X misses z by A2,A17,A18,A21;
-    then
-A22: X /\ z = {} by XBOOLE_0:def 7;
-    f.z in z by A17,A19,A21;
-    hence contradiction by A20,A21,A22,XBOOLE_0:def 4;
-  end;
-  let y;
-  assume y in { x };
-  then y = x by TARSKI:def 1;
-  then y in Choice & y in X by A17,A18,A19,FUNCT_1:def 5;
-  hence thesis by XBOOLE_0:def 4;
-end;
-
-theorem Th28:
-  (for X st X in M holds X <> {}) implies
-  ex Choice being Function st dom Choice = M &
-  for X st X in M holds Choice.X in X
-proof
-  assume
-A1: for X st X in M holds X <> {};
-  consider R such that
-A2: R well_orders union M by Th26;
-A3: R is_antisymmetric_in union M by A2,WELLORD1:def 5;
-A4: R is_well_founded_in union M by A2,WELLORD1:def 5;
-A5: R is_connected_in union M by A2,WELLORD1:def 5;
-A6: R is_reflexive_in union M by A2,WELLORD1:def 5;
-  defpred Ch[set,set] means
-  ex X st $1 = X & $2 in X & for z st z in X holds [$2,z] in R;
+A4: R is_reflexive_in union M by A3,WELLORD1:def 5;
+A5: R is_connected_in union M by A3,WELLORD1:def 5;
+  defpred Ch[set,set] means ex X st $1 = X & $2 in X & for z st z in X holds [
+  $2,z] in R;
+A6: R is_antisymmetric_in union M by A3,WELLORD1:def 5;
 A7: for x,y,z st x in M & Ch[x,y] & Ch[x,z] holds y = z
   proof
     let x,y,z such that
 A8: x in M;
     given Y such that
-A9: x = Y & y in Y & for u st u in Y holds [y,u] in R;
+A9: x = Y & y in Y and
+A10: for u st u in Y holds [y,u] in R;
+A11: y in union M by A8,A9,TARSKI:def 4;
     given Z such that
-A10: x = Z & z in Z & for u st u in Z holds [z,u] in R;
-    y in union M & z in union M & [y,z] in R & [z,y] in
-    R by A8,A9,A10,TARSKI:def 4;
-    hence thesis by A3,RELAT_2:def 4;
+A12: x = Z & z in Z and
+A13: for u st u in Z holds [z,u] in R;
+A14: z in union M by A8,A12,TARSKI:def 4;
+    [y,z] in R & [z,y] in R by A9,A10,A12,A13;
+    hence thesis by A6,A11,A14,RELAT_2:def 4;
   end;
-A11: for x st x in M ex y st Ch[x,y]
+A15: R is_well_founded_in union M by A3,WELLORD1:def 5;
+A16: for x st x in M ex y st Ch[x,y]
   proof
     let x;
-    assume x in M;
+    assume
+A17: x in M;
     then
-A12: x c= union M & x <> {} by A1,ZFMISC_1:92;
+A18: x c= union M by ZFMISC_1:92;
+    x <> {} by A1,A17;
     then consider y such that
-A13: y in x & R-Seg(y) misses x by A4,WELLORD1:def 3;
-A14: R-Seg(y) /\ x = {} by A13,XBOOLE_0:def 7;
+A19: y in x and
+A20: R-Seg(y) misses x by A15,A18,WELLORD1:def 3;
     take y,x;
-    thus x = x & y in x by A13;
+    thus x = x & y in x by A19;
     let z;
     assume
-A15: z in x;
+A21: z in x;
     then
-A16: y <> z implies [y,z] in R or [z,y] in R by A5,A12,A13,RELAT_2:def 6;
-    not z in R-Seg(y) by A14,A15,XBOOLE_0:def 4;
-    hence thesis by A6,A12,A15,A16,RELAT_2:def 1,WELLORD1:def 1;
+A22: not z in R-Seg(y) by A20,XBOOLE_0:3;
+    y <> z implies [y,z] in R or [z,y] in R by A5,A18,A19,A21, RELAT_2:
+    def 6;
+    hence thesis by A4,A18,A21,A22,RELAT_2:def 1,WELLORD1:def 1;
   end;
   consider f such that
-A17: dom f = M & for x st x in M holds Ch[x,f.x] from FUNCT_1:sch 2(A7,A11);
+A23: dom f = M & for x st x in M holds Ch[x,f.x] from FUNCT_1:sch 2(A7,
+  A16 );
+  take Choice = rng f;
+  let X such that
+A24: X in M;
+  take x = f.X;
+A25: for X st X in M holds f.X in X
+  proof
+    let X;
+    assume
+    X in M;
+    then ex Y st X = Y & f.X in Y & for z st z in Y holds [f.X,z] in R by A23;
+    hence thesis;
+  end;
+  thus Choice /\ X c= { x }
+  proof
+    let y;
+    assume
+A26: y in Choice /\ X;
+    then
+A27: y in X by XBOOLE_0:def 4;
+    y in Choice by A26,XBOOLE_0:def 4;
+    then consider z such that
+A28: z in dom f and
+A29: y = f.z by FUNCT_1:def 5;
+    assume
+    not y in { x };
+    then X <> z by A29,TARSKI:def 1;
+    then X misses z by A2,A23,A24,A28;
+    then
+A30: X /\ z = {} by XBOOLE_0:def 7;
+    f.z in z by A23,A25,A28;
+    hence contradiction by A27,A29,A30,XBOOLE_0:def 4;
+  end;
+  let y;
+  assume
+  y in { x };
+  then
+A31: y = x by TARSKI:def 1;
+  then
+A32: y in X by A24,A25;
+  y in Choice by A23,A24,A31,FUNCT_1:def 5;
+  hence thesis by A32,XBOOLE_0:def 4;
+end;
+
+theorem Th28:
+  (for X st X in M holds X <> {}) implies ex Choice being Function
+  st dom Choice = M & for X st X in M holds Choice.X in X
+proof
+  assume
+A1: for X st X in M holds X <> {};
+  consider R such that
+A2: R well_orders union M by Th26;
+  defpred Ch[set,set] means ex X st $1 = X & $2 in X & for z st z in X holds [
+  $2,z] in R;
+A3: R is_connected_in union M by A2,WELLORD1:def 5;
+A4: R is_reflexive_in union M by A2,WELLORD1:def 5;
+A5: R is_well_founded_in union M by A2,WELLORD1:def 5;
+A6: for x st x in M ex y st Ch[x,y]
+  proof
+    let x;
+    assume
+A7: x in M;
+    then
+A8: x c= union M by ZFMISC_1:92;
+    x <> {} by A1,A7;
+    then consider y such that
+A9: y in x and
+A10: R-Seg(y) misses x by A5,A8,WELLORD1:def 3;
+    take y,x;
+    thus x = x & y in x by A9;
+    let z;
+    assume
+A11: z in x;
+    R-Seg(y) /\ x = {} by A10,XBOOLE_0:def 7;
+    then
+A12: not z in R-Seg(y) by A11,XBOOLE_0:def 4;
+    y <> z implies [y,z] in R or [z,y] in R by A3,A8,A9,A11, RELAT_2:
+    def 6;
+    hence thesis by A4,A8,A11,A12,RELAT_2:def 1,WELLORD1:def 1;
+  end;
+A13: R is_antisymmetric_in union M by A2,WELLORD1:def 5;
+A14: for x,y,z st x in M & Ch[x,y] & Ch[x,z] holds y = z
+  proof
+    let x,y,z such that
+A15: x in M;
+    given Y such that
+A16: x = Y & y in Y and
+A17: for u st u in Y holds [y,u] in R;
+A18: y in union M by A15,A16,TARSKI:def 4;
+    given Z such that
+A19: x = Z & z in Z and
+A20: for u st u in Z holds [z,u] in R;
+A21: z in union M by A15,A19,TARSKI:def 4;
+    [y,z] in R & [z,y] in R by A16,A17,A19,A20;
+    hence thesis by A13,A18,A21,RELAT_2:def 4;
+  end;
+  consider f such that
+A22: dom f = M & for x st x in M holds Ch[x,f.x] from FUNCT_1:sch 2(A14,
+  A6 );
   take Choice = f;
-  thus dom Choice = M by A17;
+  thus dom Choice = M by A22;
   let X;
-  assume X in M;
-  then ex Y st X = Y & f.X in Y & for z st z in Y holds [f.X,z] in R by A17;
+  assume
+  X in M;
+  then ex Y st X = Y & f.X in Y & for z st z in Y holds [f.X,z] in R by A22;
   hence thesis;
 end;
 
@@ -1073,137 +1202,153 @@ begin :: Addenda
 
 :: from COMPTS_1
 
-scheme NonUniqBoundFuncEx { X() -> set, Y() -> set, P[set,set] }:
-  ex f being Function st dom f = X() & rng f c= Y() &
-  for x st x in X() holds P[x,f.x]
+scheme
+  NonUniqBoundFuncEx { X() -> set, Y() -> set, P[set,set] }: ex f being
+  Function st dom f = X() & rng f c= Y() & for x st x in X() holds P[x,f.x]
 provided
 A1: for x st x in X() ex y st y in Y() & P[x,y]
 proof
-  defpred Q[set,set] means
-  ex X st $2 = X & for y holds y in X iff y in Y() & P[$1,y];
+  defpred Q[set,set] means ex X st $2 = X & for y holds y in X iff y in Y() &
+  P[$1,y];
 A2: for e,u1,u2 being set st e in X() & Q[e,u1] & Q[e,u2] holds u1 = u2
   proof
-    let e,u1,u2 be set such that e in X();
+    let e,u1,u2 be set such that
+    e in X();
     given X such that
 A3: u1 = X and
 A4: for y holds y in X iff y in Y() & P[e,y];
-    given Y such that
-A5: u2 = Y and
-A6: for y holds y in Y iff y in Y() & P[e,y];
     defpred A[set] means $1 in Y() & P[e,$1];
-A7: for x be set holds x in X iff A[x] by A4;
-A8: for x be set holds x in Y iff A[x] by A6;
-    X = Y from XBOOLE_0:sch 2(A7,A8);
-    hence thesis by A3,A5;
+A5: for x be set holds x in X iff A[x] by A4;
+    given Y such that
+A6: u2 = Y and
+A7: for y holds y in Y iff y in Y() & P[e,y];
+A8: for x be set holds x in Y iff A[x] by A7;
+    X = Y from XBOOLE_0:sch 2(A5,A8);
+    hence thesis by A3,A6;
   end;
 A9: for x st x in X() ex y st Q[x,y]
   proof
-    let x such that x in X();
+    let x such that
+    x in X();
     defpred R[set] means P[x,$1];
     consider X such that
 A10: y in X iff y in Y() & R[y] from XBOOLE_0:sch 1;
-    take X,X; thus thesis by A10;
+    take X,X;
+    thus thesis by A10;
   end;
   consider G being Function such that
-A11: dom G = X() & for x st x in X() holds Q[x,G.x] from FUNCT_1:sch 2(A2,A9);
+A11: dom G = X() & for x st x in X() holds Q[x,G.x] from FUNCT_1:sch 2(
+  A2, A9);
 A12: now
     assume
-A13: X() = {};
-    reconsider F = {} as Function;
-    thus thesis
-    proof
-      take F; thus dom F = X() by A13;
-      thus thesis by A13,RELAT_1:60,XBOOLE_1:2;
-    end;
-  end;
-  now
-    assume X() <> {};
+    X() <> {};
     then reconsider D = rng G as non empty set by A11,RELAT_1:65;
     now
       let X;
-      assume X in D;
+      assume
+      X in D;
       then consider x such that
-A14:  x in dom G & X = G.x by FUNCT_1:def 5;
-A15:  ex Y st X = Y & for y holds y in Y iff y in Y() & P[x,y] by A11,A14;
-      consider y such that
-A16:  y in Y() & P[x,y] by A1,A11,A14;
-      thus X <> {} by A15,A16;
+A13:  x in dom G & X = G.x by FUNCT_1:def 5;
+      ( ex Y st X = Y & for y holds y in Y iff y in Y() & P[x,y])& ex y
+      st y in Y() & P[x,y] by A1,A11,A13;
+      hence X <> {};
     end;
     then consider F be Function such that
-A17: dom F = D and
-A18: for X st X in D holds F.X in X by Th28;
-A19: dom (F*G) = X() & rng (F*G) = rng F by A11,A17,RELAT_1:46,47;
+A14: dom F = D and
+A15: for X st X in D holds F.X in X by Th28;
+A16: dom (F*G) = X() by A11,A14,RELAT_1:46;
     thus thesis
     proof
-      take f = F*G; thus dom f = X() by A11,A17,RELAT_1:46;
+      take f = F*G;
+      thus dom f = X() by A11,A14,RELAT_1:46;
       rng F c= Y()
       proof
         let x;
-        assume x in rng F;
+        assume
+        x in rng F;
         then consider y such that
-A20:    y in dom F & x = F.y by FUNCT_1:def 5;
+A17:    y in dom F and
+A18:    x = F.y by FUNCT_1:def 5;
         consider z such that
-A21:    z in dom G & y = G.z by A17,A20,FUNCT_1:def 5;
+A19:    z in dom G & y = G.z by A14,A17,FUNCT_1:def 5;
         consider X such that
-A22:    y = X & for x holds x in X iff x in Y() & P[z,x] by A11,A21;
-        x in X by A17,A18,A20,A22;
-        hence thesis by A22;
+A20:    y = X and
+A21:    for x holds x in X iff x in Y() & P[z,x] by A11,A19;
+        x in X by A14,A15,A17,A18,A20;
+        hence thesis by A21;
       end;
-      hence rng f c= Y() by A17,RELAT_1:47;
+      hence rng f c= Y() by A14,RELAT_1:47;
       let x;
       assume
-A23:  x in X();
+A22:  x in X();
       then consider X such that
-A24:  G.x = X & for y holds y in X iff y in Y() & P[x,y] by A11;
-      f.x = F.X & X in D by A11,A19,A23,A24,FUNCT_1:22,def 5;
-      then f.x in X by A18;
+A23:  G.x = X and
+A24:  for y holds y in X iff y in Y() & P[x,y] by A11;
+      f.x = F.X & X in D by A11,A16,A22,A23,FUNCT_1:22,def 5;
+      then f.x in X by A15;
       hence thesis by A24;
+    end;
+  end;
+  now
+    reconsider F = {} as Function;
+    assume
+A25: X() = {};
+    thus thesis
+    proof
+      take F;
+      thus dom F = X() by A25;
+      thus thesis by A25,RELAT_1:60,XBOOLE_1:2;
     end;
   end;
   hence thesis by A12;
 end;
 
-scheme BiFuncEx{A()->set,B()->set,C()->set,P[set,set,set]}:
-  ex f,g being Function st dom f = A() & dom g = A() &
-  for x st x in A() holds P[x,f.x,g.x]
+scheme
+  BiFuncEx{A()->set,B()->set,C()->set,P[set,set,set]}: ex f,g being Function
+  st dom f = A() & dom g = A() & for x st x in A() holds P[x,f.x,g.x]
 provided
 A1: x in A() implies ex y,z st y in B() & z in C() & P[x,y,z]
 proof
   defpred H[set,set] means for y,z st $2`1 = y & $2`2 = z holds P[$1,y,z];
 A2: x in A() implies ex p being set st p in [:B(),C():] & H[x,p]
   proof
-    assume x in A();
+    assume
+    x in A();
     then consider y,z such that
-A3: y in B() & z in C() & P[x,y,z] by A1;
+A3: y in B() & z in C() and
+A4: P[x,y,z] by A1;
     take p=[y,z];
     thus p in [:B(),C():] by A3,ZFMISC_1:106;
     thus for y,z st p`1 = y & p`2 = z holds P[x,y,z]
     proof
       let x1,x2 be set;
-      assume p`1 = x1 & p`2 = x2;
-      then x1=y & x2=z by MCART_1:7;
-      hence thesis by A3;
+      assume that
+A5:   p`1 = x1 and
+A6:   p`2 = x2;
+      x1=y by A5,MCART_1:7;
+      hence thesis by A4,A6,MCART_1:7;
     end;
   end;
-  consider h being Function such that dom h = A() & rng h c= [:B(),C():] and
-A4: for x st x in A() holds H[x,h.x] from NonUniqBoundFuncEx(A2);
+  consider h being Function such that
+  dom h = A() & rng h c= [:B(),C():] and
+A7: for x st x in A() holds H[x,h.x] from NonUniqBoundFuncEx(A2);
+  deffunc g(set) = (h.$1)`2;
   deffunc f(set) = (h.$1)`1;
   consider f being Function such that
-A5: dom f = A() and
-A6: for x st x in A() holds f.x = f(x) from FUNCT_1:sch 3;
-  deffunc g(set) = (h.$1)`2;
+A8: dom f = A() and
+A9: for x st x in A() holds f.x = f(x) from FUNCT_1:sch 3;
   consider g being Function such that
-A7: dom g = A() and
-A8: for x st x in A() holds g.x = g(x) from FUNCT_1:sch 3;
+A10: dom g = A() and
+A11: for x st x in A() holds g.x = g(x) from FUNCT_1:sch 3;
   take f,g;
-  thus dom f = A() & dom g = A() by A5,A7;
+  thus dom f = A() & dom g = A() by A8,A10;
   thus for x st x in A() holds P[x,f.x,g.x]
   proof
     let x;
     assume
-A9: x in A();
-    then f.x = (h.x)`1 & g.x = (h.x)`2 by A6,A8;
-    hence thesis by A4,A9;
+A12: x in A();
+    then f.x = (h.x)`1 & g.x = (h.x)`2 by A9,A11;
+    hence thesis by A7,A12;
   end;
 end;
 
@@ -1211,26 +1356,23 @@ theorem :: WAYBEL35:1, AK, 21.02.2006
   for X being set holds RelIncl X is_reflexive_in X
 proof
   let X be set;
-A1: RelIncl X is reflexive by Th2;
-  field RelIncl X = X by Def1;
-  hence thesis by A1,RELAT_2:def 9;
+  RelIncl X is reflexive & field RelIncl X = X by Def1,Th2;
+  hence thesis by RELAT_2:def 9;
 end;
 
 theorem :: WAYBEL35:1, AK, 21.02.2006
   for X being set holds RelIncl X is_transitive_in X
 proof
   let X be set;
-A1: RelIncl X is transitive by Th3;
-  field RelIncl X = X by Def1;
-  hence thesis by A1,RELAT_2:def 16;
+  RelIncl X is transitive & field RelIncl X = X by Def1,Th3;
+  hence thesis by RELAT_2:def 16;
 end;
 
 theorem :: WAYBEL35:1, AK, 21.02.2006
   for X being set holds RelIncl X is_antisymmetric_in X
 proof
   let X be set;
-A1: RelIncl X is antisymmetric by Th5;
-  field RelIncl X = X by Def1;
-  hence thesis by A1,RELAT_2:def 12;
+  RelIncl X is antisymmetric & field RelIncl X = X by Def1,Th5;
+  hence thesis by RELAT_2:def 12;
 end;
 

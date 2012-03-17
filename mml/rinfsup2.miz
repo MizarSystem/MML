@@ -10,10 +10,10 @@ environ
  vocabularies RELAT_1, ABSVALUE, FUNCT_1, ORDINAL2, LATTICES, COMPLEX1, SEQ_1,
       SEQ_2, SEQM_3, MEASURE6, ARYTM, ARYTM_1, PROB_1, SQUARE_1, RLVECT_1,
       GROUP_1, MESFUNC5, SUPINF_1, RINFSUP1, XXREAL_2, VALUED_0, SEQ_4;
- notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
-      COMPLEX1, REAL_1, XXREAL_0, RELSET_1, FUNCT_2, PARTFUN1, NAT_1, XXREAL_2,
-      SUPINF_1, VALUED_0, SUPINF_2, PSCOMP_1, SEQ_1, SEQ_2, SEQM_3, SEQ_4,
-      KURATO_2, LIMFUNC1, RINFSUP1, MEASURE6, EXTREAL1, MESFUNC1, MESFUNC5;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XREAL_0, COMPLEX1,
+      REAL_1, XXREAL_0, RELSET_1, FUNCT_2, NAT_1, XXREAL_2, SUPINF_1, VALUED_0,
+      SUPINF_2, PSCOMP_1, SEQ_1, SEQ_2, SEQ_4, LIMFUNC1, RINFSUP1, MEASURE6,
+      EXTREAL1, MESFUNC1, MESFUNC5;
  constructors REAL_1, NAT_1, DOMAIN_1, EXTREAL1, COMPLEX1, MEASURE6, MESFUNC1,
       PARTFUN3, LIMFUNC1, KURATO_2, RINFSUP1, MESFUNC5, SEQ_1, SUPINF_1, SEQ_4,
       RELSET_1;
@@ -36,64 +36,63 @@ reserve X for non empty Subset of ExtREAL;
 reserve Y for non empty Subset of REAL;
 
 theorem Th1:
-  X = Y & Y is bounded_above implies X is bounded_above & sup X = sup Y
+  X = Y & Y is bounded_above implies X is bounded_above & sup X =
+  sup Y
 proof
   assume that
 A1: X=Y and
 A2: Y is bounded_above;
-  for r be ext-real number st r in X holds r <= sup Y
-   by A1,A2,SEQ_4:def 4;
-  then
-A4: upper_bound Y is UpperBound of X by XXREAL_2:def 1;
-  hence
-A5: X is bounded_above by SUPINF_1:def 11;
-A6: sup X <= sup Y by A4,XXREAL_2:def 3;
+A3: for s be real number st s in Y holds s <= sup X by A1,XXREAL_2:4;
   not -infty in X by A1;
-  then X <> {-infty} by TARSKI:def 1;
   then
-B7: sup X in REAL by A5,XXREAL_2:57;
-  for s be real number st s in Y holds s <= sup X by A1,XXREAL_2:4;
-  then sup Y <= sup X by B7,SEQ_4:62;
+A4: X <> {-infty} by TARSKI:def 1;
+  for r be ext-real number st r in X holds r <= sup Y by A1,A2,SEQ_4:def 4;
+  then
+A5: upper_bound Y is UpperBound of X by XXREAL_2:def 1;
+  hence X is bounded_above by SUPINF_1:def 11;
+  then sup X in REAL by A4,XXREAL_2:57;
+  then
+A6: sup Y <= sup X by A3,SEQ_4:62;
+  sup X <= sup Y by A5,XXREAL_2:def 3;
   hence thesis by A6,XXREAL_0:1;
 end;
 
 theorem
   X = Y & X is bounded_above implies Y is bounded_above & sup X = sup Y
-   by Th1;
+  by Th1;
 
 theorem Th3:
-  X = Y & Y is bounded_below implies X is bounded_below & inf X = inf Y
+  X = Y & Y is bounded_below implies X is bounded_below & inf X =
+  inf Y
 proof
-  assume
-A1: X=Y & Y is bounded_below;
-  for r be ext-real number st r in X holds inf Y <= r
-   by A1,SEQ_4:def 5;
-  then
-A3: lower_bound Y is LowerBound of X by XXREAL_2:def 2;
-  hence
-A4: X is bounded_below by SUPINF_1:def 12;
-A5: inf Y <= inf X by A3,XXREAL_2:def 4;
+  assume that
+A1: X=Y and
+A2: Y is bounded_below;
+A3: for s be real number st s in Y holds inf X <= s by A1,XXREAL_2:3;
   not +infty in X by A1;
-  then X <> {+infty} by TARSKI:def 1;
   then
-B6: inf X in REAL by A4,XXREAL_2:58;
-  for s be real number st s in Y holds inf X <= s by A1,XXREAL_2:3;
-  then inf X <= inf Y by B6,SEQ_4:60;
-  hence thesis by A5,XXREAL_0:1;
+A4: X <> {+infty} by TARSKI:def 1;
+  for r be ext-real number st r in X holds inf Y <= r by A1,A2,SEQ_4:def 5;
+  then
+A5: lower_bound Y is LowerBound of X by XXREAL_2:def 2;
+  hence X is bounded_below by SUPINF_1:def 12;
+  then inf X in REAL by A4,XXREAL_2:58;
+  then
+A6: inf X <= inf Y by A3,SEQ_4:60;
+  inf Y <= inf X by A5,XXREAL_2:def 4;
+  hence thesis by A6,XXREAL_0:1;
 end;
 
 theorem
   X = Y & X is bounded_below implies Y is bounded_below & inf X = inf Y
-        by Th3;
+  by Th3;
 
 definition
   let seq be ExtREAL_sequence;
   func sup seq -> Element of ExtREAL equals
-
   sup rng seq;
   coherence;
   func inf seq -> Element of ExtREAL equals
-
   inf rng seq;
   coherence;
 end;
@@ -118,15 +117,15 @@ end;
 reserve seq for ExtREAL_sequence;
 
 theorem Th5:
-  for seq,n holds
-  {seq.k where k is Element of NAT: n <= k} is non empty Subset of ExtREAL
+  for seq,n holds {seq.k where k is Element of NAT: n <= k} is non
+  empty Subset of ExtREAL
 proof
   let seq,n;
   deffunc F(Element of NAT) = seq.$1;
   defpred P[Element of NAT] means n <= $1;
   set Y = {F(k) where k is Element of NAT: P[k]};
-A1: Y is Subset of ExtREAL from DOMAIN_1:sch 8;
-  seq.n in Y;
+A1: seq.n in Y;
+  Y is Subset of ExtREAL from DOMAIN_1:sch 8;
   hence thesis by A1;
 end;
 
@@ -134,24 +133,25 @@ definition
   let seq be ExtREAL_sequence;
   func inferior_realsequence seq -> ExtREAL_sequence means
   :Def6:
-  for n be Element of NAT ex Y being non empty Subset of ExtREAL st
-  Y = {seq.k where k is Element of NAT : n <= k} & it.n = inf Y;
+  for n be
+Element of NAT ex Y being non empty Subset of ExtREAL st Y = {seq.k where k is
+  Element of NAT : n <= k} & it.n = inf Y;
   existence
   proof
-    defpred P[Element of NAT, Element of ExtREAL] means
-    ex Y being non empty Subset of ExtREAL st
-    Y = {seq.k where k is Element of NAT : $1 <= k} & $2 = inf Y;
+    defpred P[Element of NAT, Element of ExtREAL] means ex Y being non empty
+Subset of ExtREAL st Y = {seq.k where k is Element of NAT : $1 <= k} & $2 = inf
+    Y;
 A1: for n being Element of NAT ex y being Element of ExtREAL st P[n,y]
     proof
       let n be Element of NAT;
-      reconsider Y={seq.k where k is Element of NAT : n <= k}
-      as non empty Subset of ExtREAL by Th5;
+      reconsider Y={seq.k where k is Element of NAT : n <= k} as non empty
+      Subset of ExtREAL by Th5;
       reconsider y = inf Y as Element of ExtREAL;
       take y;
       thus thesis;
     end;
-    thus ex f being Function of NAT,ExtREAL st
-    for n being Element of NAT holds P[n, f.n] from FUNCT_2:sch 3(A1);
+    thus ex f being Function of NAT,ExtREAL st for n being Element of NAT
+    holds P[n, f.n] from FUNCT_2:sch 3(A1);
   end;
   uniqueness
   proof
@@ -163,16 +163,18 @@ A3: for n be Element of NAT ex Y being non empty Subset of ExtREAL st
 A4: for y be set st y in NAT holds seq1.y = seq2.y
     proof
       let y be set;
-      assume y in NAT;
+      assume
+      y in NAT;
       then reconsider n=y as Element of NAT;
-      (ex Y be non empty Subset of ExtREAL st
-      Y = {seq.k where k is Element of NAT: n <= k} & seq1.n=inf Y) &
-      (ex Z be non empty Subset of ExtREAL st
-      Z = {seq.k where k is Element of NAT: n <= k} & seq2.n=inf Z) by A2,A3;
-      hence thesis;
+A5:   ex Z be non empty Subset of ExtREAL st Z = {seq.k where k is Element
+      of NAT: n <= k} & seq2.n=inf Z by A3;
+      ex Y be non empty Subset of ExtREAL st Y = {seq.k where k is Element
+      of NAT: n <= k} & seq1.n=inf Y by A2;
+      hence thesis by A5;
     end;
-    NAT = dom seq1 & NAT = dom seq2 by FUNCT_2:def 1;
-    hence thesis by A4,FUNCT_1:9;
+A6: NAT = dom seq2 by FUNCT_2:def 1;
+    NAT = dom seq1 by FUNCT_2:def 1;
+    hence thesis by A4,A6,FUNCT_1:9;
   end;
 end;
 
@@ -180,24 +182,25 @@ definition
   let seq be ExtREAL_sequence;
   func superior_realsequence seq -> ExtREAL_sequence means
   :Def7:
-  for n be Element of NAT ex Y being non empty Subset of ExtREAL st
-  Y = {seq.k where k is Element of NAT: n <= k} & it.n = sup Y;
+  for n be
+Element of NAT ex Y being non empty Subset of ExtREAL st Y = {seq.k where k is
+  Element of NAT: n <= k} & it.n = sup Y;
   existence
   proof
-    defpred P[Element of NAT, Element of ExtREAL] means
-    ex Y being non empty Subset of ExtREAL st
-    Y = {seq.k where k is Element of NAT : $1 <= k} & $2 = sup Y;
+    defpred P[Element of NAT, Element of ExtREAL] means ex Y being non empty
+Subset of ExtREAL st Y = {seq.k where k is Element of NAT : $1 <= k} & $2 = sup
+    Y;
 A1: for n being Element of NAT ex y being Element of ExtREAL st P[n,y]
     proof
       let n be Element of NAT;
-      reconsider Y={seq.k where k is Element of NAT : n <= k}
-      as non empty Subset of ExtREAL by Th5;
+      reconsider Y={seq.k where k is Element of NAT : n <= k} as non empty
+      Subset of ExtREAL by Th5;
       reconsider y = sup Y as Element of ExtREAL;
       take y;
       thus thesis;
     end;
-    thus ex f being Function of NAT,ExtREAL st
-    for n being Element of NAT holds P[n, f.n] from FUNCT_2:sch 3(A1);
+    thus ex f being Function of NAT,ExtREAL st for n being Element of NAT
+    holds P[n, f.n] from FUNCT_2:sch 3(A1);
   end;
   uniqueness
   proof
@@ -209,23 +212,26 @@ A3: for m be Element of NAT ex Y being non empty Subset of ExtREAL st
 A4: for y be set st y in NAT holds seq1.y = seq2.y
     proof
       let y be set;
-      assume y in NAT;
+      assume
+      y in NAT;
       then reconsider n=y as Element of NAT;
-      (ex Y be non empty Subset of ExtREAL st
-      Y = {seq.k where k is Element of NAT: n <= k} & seq1.n=sup Y) &
-      (ex Z be non empty Subset of ExtREAL st
-      Z = {seq.k where k is Element of NAT: n <= k} & seq2.n=sup Z) by A2,A3;
-      hence thesis;
+A5:   ex Z be non empty Subset of ExtREAL st Z = {seq.k where k is Element
+      of NAT: n <= k} & seq2.n=sup Z by A3;
+      ex Y be non empty Subset of ExtREAL st Y = {seq.k where k is Element
+      of NAT: n <= k} & seq1.n=sup Y by A2;
+      hence thesis by A5;
     end;
-    NAT = dom seq1 & NAT = dom seq2 by FUNCT_2:def 1;
-    hence thesis by A4,FUNCT_1:9;
+A6: NAT = dom seq2 by FUNCT_2:def 1;
+    NAT = dom seq1 by FUNCT_2:def 1;
+    hence thesis by A4,A6,FUNCT_1:9;
   end;
 end;
 
 theorem
   seq is real-valued implies seq is Real_Sequence
 proof
-  assume seq is real-valued;
+  assume
+  seq is real-valued;
   then rng seq is Subset of REAL by MESFUNC2:35;
   hence thesis by FUNCT_2:8;
 end;
@@ -233,92 +239,94 @@ end;
 reserve e1,e2 for ext-real number;
 
 theorem Th7:
-  (seq is increasing iff for n,m be Element of NAT st m<n holds seq.m<seq.n) &
-  (seq is decreasing iff for n,m be Element of NAT st m<n holds seq.n<seq.m) &
-  (seq is non-decreasing iff
-  for n,m be Element of NAT st m<=n holds seq.m<=seq.n) &
-  (seq is non-increasing iff
-  for n,m be Element of NAT st m<=n holds seq.n<=seq.m)
+  (seq is increasing iff for n,m be Element of NAT st m<n holds seq
+.m<seq.n) & (seq is decreasing iff for n,m be Element of NAT st m<n holds seq.n
+  <seq.m) & (seq is non-decreasing iff for n,m be Element of NAT st m<=n holds
+  seq.m<=seq.n) & (seq is non-increasing iff for n,m be Element of NAT st m<=n
+  holds seq.n<=seq.m)
 proof
-A1: dom seq = NAT by FUNCT_2:def 1;
-X:  (seq is increasing implies
-  for m, n st m in dom seq & n in dom seq & m < n holds seq.m < seq.n) &
-  (seq is decreasing implies
-  for m,n st m in dom seq & n in dom seq & m < n holds seq.n < seq.m) &
-  (seq is non-decreasing implies
-  for m,n st m in dom seq & n in dom seq & m <= n holds seq.m <= seq.n) &
-  (seq is non-increasing implies
-  for m,n st m in dom seq & n in dom seq & m <= n holds seq.n <= seq.m)
-  by VALUED_0:def 13,def 14,def 15,def 16;
-X1:  (for m, n st m in dom seq & n in dom seq & m < n holds seq.m < seq.n)
-       implies seq is increasing
-   proof assume
-Z:  for m, n st m in dom seq & n in dom seq & m < n holds seq.m < seq.n;
+A1: (for m, n st m in dom seq & n in dom seq & m < n holds seq.m < seq.n)
+  implies seq is increasing
+  proof
+    assume
+A2: for m, n st m in dom seq & n in dom seq & m < n holds seq.m < seq.
+    n;
     let e1,e2;
-    thus thesis by Z;
-   end;
-X2:  (for m, n st m in dom seq & n in dom seq & m < n holds seq.m > seq.n)
-       implies seq is decreasing
-   proof assume
-Z:  for m, n st m in dom seq & n in dom seq & m < n holds seq.m > seq.n;
+    thus thesis by A2;
+  end;
+A3: (for m, n st m in dom seq & n in dom seq & m < n holds seq.m > seq.n)
+  implies seq is decreasing
+  proof
+    assume
+A4: for m, n st m in dom seq & n in dom seq & m < n holds seq.m > seq.
+    n;
     let e1,e2;
-    thus thesis by Z;
-   end;
-X3:  (for m, n st m in dom seq & n in dom seq & m <= n holds seq.m >= seq.n)
-       implies seq is non-increasing
-   proof assume
-Z:  for m, n st m in dom seq & n in dom seq & m <= n holds seq.m >= seq.n;
+    thus thesis by A4;
+  end;
+A5: (for m, n st m in dom seq & n in dom seq & m <= n holds seq.m <= seq.n)
+  implies seq is non-decreasing
+  proof
+    assume
+A6: for m, n st m in dom seq & n in dom seq & m <= n holds seq.m <=
+    seq.n;
     let e1,e2;
-    thus thesis by Z;
-   end;
-  (for m, n st m in dom seq & n in dom seq & m <= n holds seq.m <= seq.n)
-       implies seq is non-decreasing
-   proof assume
-Z:  for m, n st m in dom seq & n in dom seq & m <= n holds seq.m <= seq.n;
+    thus thesis by A6;
+  end;
+A7: (for m, n st m in dom seq & n in dom seq & m <= n holds seq.m >= seq.n)
+  implies seq is non-increasing
+  proof
+    assume
+A8: for m, n st m in dom seq & n in dom seq & m <= n holds seq.m >=
+    seq.n;
     let e1,e2;
-    thus thesis by Z;
-   end;
-  hence thesis by A1,X,X1,X2,X3;
+    thus thesis by A8;
+  end;
+  dom seq = NAT by FUNCT_2:def 1;
+  hence thesis by A1,A3,A7,A5,VALUED_0:def 13,def 14,def 15,def 16;
 end;
 
 theorem Th8:
-  (inferior_realsequence seq).n <= seq.n &
-  seq.n <= (superior_realsequence seq).n
+  (inferior_realsequence seq).n <= seq.n & seq.n <= (
+  superior_realsequence seq).n
 proof
   consider Y being non empty Subset of ExtREAL such that
-A1: Y = {seq.k where k is Element of NAT: n <= k} &
-  (inferior_realsequence seq).n = inf Y by Def6;
-A2: seq.n in Y by A1;
-  hence (inferior_realsequence seq).n <= seq.n by A1,XXREAL_2:3;
-  ex Z being non empty Subset of ExtREAL st
-  Z = {seq.k where k is Element of NAT: n <= k} &
-  (superior_realsequence seq).n = sup Z by Def7;
-  hence thesis by A1,A2,XXREAL_2:4;
+A1: Y = {seq.k where k is Element of NAT: n <= k} and
+A2: (inferior_realsequence seq).n = inf Y by Def6;
+A3: seq.n in Y by A1;
+  hence (inferior_realsequence seq).n <= seq.n by A2,XXREAL_2:3;
+  ex Z being non empty Subset of ExtREAL st Z = {seq.k where k is Element
+  of NAT: n <= k} & (superior_realsequence seq).n = sup Z by Def7;
+  hence thesis by A1,A3,XXREAL_2:4;
 end;
 
 Lm1: superior_realsequence seq is non-increasing
 proof
   now
     let n,m be Element of NAT;
-    assume
-A1: m<=n;
     consider Y being non empty Subset of ExtREAL such that
-A2: Y = {seq.k where k is Element of NAT: m <= k} &
-    (superior_realsequence seq).m = sup Y by Def7;
+A1: Y = {seq.k where k is Element of NAT: m <= k} and
+A2: (superior_realsequence seq).m = sup Y by Def7;
     consider Z being non empty Subset of ExtREAL such that
-A3: Z = {seq.k where k is Element of NAT: n <= k} &
-    (superior_realsequence seq).n = sup Z by Def7;
+A3: Z = {seq.k where k is Element of NAT: n <= k} and
+A4: (superior_realsequence seq).n = sup Z by Def7;
+    assume
+A5: m<=n;
     Z c= Y
     proof
       let z be set;
-      assume z in Z;
+      assume
+      z in Z;
       then consider k be Element of NAT such that
-A4:   z=seq.k & n <= k by A3;
-      m <= k by A1,A4,XXREAL_0:2;
-      hence thesis by A2,A4;
+A6:   z=seq.k and
+A7:   n <= k by A3;
+      m <= k by A5,A7,XXREAL_0:2;
+      hence thesis by A1,A6;
     end;
-    hence (superior_realsequence seq).n <= (superior_realsequence seq).m
-    by A2,A3,XXREAL_2:59;
+
+    hence
+    (superior_realsequence seq).n <= (superior_realsequence seq).m by A2,
+    A4,XXREAL_2:59;
+
   end;
   hence thesis by Th7;
 end;
@@ -327,25 +335,30 @@ Lm2: inferior_realsequence seq is non-decreasing
 proof
   now
     let n,m be Element of NAT;
-    assume
-A1: m<=n;
     consider Y being non empty Subset of ExtREAL such that
-A2: Y = {seq.k where k is Element of NAT: m <= k} &
-    (inferior_realsequence seq).m = inf Y by Def6;
+A1: Y = {seq.k where k is Element of NAT: m <= k} and
+A2: (inferior_realsequence seq).m = inf Y by Def6;
     consider Z being non empty Subset of ExtREAL such that
-A3: Z = {seq.k where k is Element of NAT: n <= k} &
-    (inferior_realsequence seq).n = inf Z by Def6;
+A3: Z = {seq.k where k is Element of NAT: n <= k} and
+A4: (inferior_realsequence seq).n = inf Z by Def6;
+    assume
+A5: m<=n;
     Z c= Y
     proof
       let z be set;
-      assume z in Z;
+      assume
+      z in Z;
       then consider k be Element of NAT such that
-A4:   z=seq.k & n <= k by A3;
-      m <= k by A1,A4,XXREAL_0:2;
-      hence thesis by A2,A4;
+A6:   z=seq.k and
+A7:   n <= k by A3;
+      m <= k by A5,A7,XXREAL_0:2;
+      hence thesis by A1,A6;
     end;
-    hence (inferior_realsequence seq).m <= (inferior_realsequence seq).n
-    by A2,A3,XXREAL_2:60;
+
+    hence
+    (inferior_realsequence seq).m <= (inferior_realsequence seq).n by A2,
+    A4,XXREAL_2:60;
+
   end;
   hence thesis by Th7;
 end;
@@ -359,14 +372,12 @@ registration
 end;
 
 definition
- canceled 4;
+  canceled 4;
   let seq be ExtREAL_sequence;
   func lim_sup seq -> Element of ExtREAL equals
-
   inf superior_realsequence seq;
   coherence;
   func lim_inf seq -> Element of ExtREAL equals
-
   sup inferior_realsequence seq;
   coherence;
 end;
@@ -374,87 +385,83 @@ end;
 reserve rseq for Real_Sequence;
 
 theorem Th9:
-  seq = rseq & rseq is bounded implies
-  superior_realsequence seq = superior_realsequence rseq &
-  lim_sup seq = lim_sup rseq
+  seq = rseq & rseq is bounded implies superior_realsequence seq =
+  superior_realsequence rseq & lim_sup seq = lim_sup rseq
 proof
-  assume
-A1: seq=rseq & rseq is bounded;
-A2: now
+  assume that
+A1: seq=rseq and
+A2: rseq is bounded;
+A3: NAT = dom superior_realsequence rseq by FUNCT_2:def 1;
+A4: now
     let x be set;
-    assume x in NAT;
+    assume
+    x in NAT;
     then reconsider n = x as Element of NAT;
-A3: ex Y1 being non empty Subset of ExtREAL st
-    Y1 = {seq.k where k is Element of NAT: n <= k} &
-    (superior_realsequence seq).n = sup Y1 by Def7;
-    {rseq.k where k is Element of NAT: n <= k} is Subset of REAL
-    proof
-      now
-        let x be set;
-        assume x in {rseq.k where k is Element of NAT: n <= k};
-        then ex k be Element of NAT st x=rseq.k & n<= k;
-        hence x in REAL;
-      end;
-      hence thesis by TARSKI:def 3;
+    now
+      let x be set;
+      assume
+      x in {rseq.k where k is Element of NAT: n <= k};
+      then ex k be Element of NAT st x=rseq.k & n<= k;
+      hence x in REAL;
     end;
-    then reconsider Y2={rseq.k where k is Element of NAT: n <= k} as Subset of
-    REAL;
-    rseq is bounded_above by A1;
-    then Y2 is bounded_above by RINFSUP1:31;
-    then (superior_realsequence seq).x =upper_bound Y2 by A1,A3,Th1;
-    hence (superior_realsequence seq).x =(superior_realsequence rseq).x
-    by RINFSUP1:def 5;
+    then reconsider
+    Y2={rseq.k where k is Element of NAT: n <= k} as Subset of REAL
+    by TARSKI:def 3;
+A5: Y2 is bounded_above by A2,RINFSUP1:31;
+    ex Y1 being non empty Subset of ExtREAL st Y1 = {seq.k where k is
+    Element of NAT: n <= k} & (superior_realsequence seq).n = sup Y1 by Def7;
+    then (superior_realsequence seq).x =upper_bound Y2 by A1,A5,Th1;
+    hence (superior_realsequence seq).x =(superior_realsequence rseq).x by
+    RINFSUP1:def 5;
   end;
-  NAT = dom superior_realsequence seq &
-  NAT = dom superior_realsequence rseq by FUNCT_2:def 1;
+  superior_realsequence rseq is bounded by A2,RINFSUP1:58;
   then
-A4: superior_realsequence seq = superior_realsequence rseq by A2,FUNCT_1:9;
-  superior_realsequence rseq is bounded by A1,RINFSUP1:58;
-  then superior_realsequence rseq is bounded_below;
-  then rng superior_realsequence rseq is bounded_below by RINFSUP1:6;
-  hence thesis by A4,Th3;
+A6: rng superior_realsequence rseq is bounded_below by RINFSUP1:6;
+  NAT = dom superior_realsequence seq by FUNCT_2:def 1;
+  then superior_realsequence seq = superior_realsequence rseq by A4,A3,
+  FUNCT_1:9;
+  hence thesis by A6,Th3;
 end;
 
 theorem Th10:
-  seq = rseq & rseq is bounded implies
-  inferior_realsequence seq = inferior_realsequence rseq &
-  lim_inf seq=lim_inf rseq
+  seq = rseq & rseq is bounded implies inferior_realsequence seq =
+  inferior_realsequence rseq & lim_inf seq=lim_inf rseq
 proof
-  assume
-A1: seq=rseq & rseq is bounded;
-A2: now
+  assume that
+A1: seq=rseq and
+A2: rseq is bounded;
+A3: NAT = dom (inferior_realsequence rseq) by FUNCT_2:def 1;
+A4: now
     let x be set;
-    assume x in NAT;
+    assume
+    x in NAT;
     then reconsider n = x as Element of NAT;
     consider Y1 being non empty Subset of ExtREAL such that
-A3: Y1 = {seq.k where k is Element of NAT: n <= k} &
-    (inferior_realsequence seq).n = inf Y1 by Def6;
-    {rseq.k where k is Element of NAT: n <= k} is Subset of REAL
-    proof
-      now
-        let x be set;
-        assume x in {rseq.k where k is Element of NAT: n <= k};
-        then ex k be Element of NAT st x=rseq.k & n<= k;
-        hence x in REAL;
-      end;
-      hence thesis by TARSKI:def 3;
+A5: Y1 = {seq.k where k is Element of NAT: n <= k} and
+A6: (inferior_realsequence seq).n = inf Y1 by Def6;
+    now
+      let x be set;
+      assume
+      x in {rseq.k where k is Element of NAT: n <= k};
+      then ex k be Element of NAT st x=rseq.k & n<= k;
+      hence x in REAL;
     end;
-    then reconsider Y2={rseq.k where k is Element of NAT: n <= k} as Subset of
-    REAL;
-    rseq is bounded_below by A1;
-    then Y2 is bounded_below by RINFSUP1:32;
-    then inf Y1= lower_bound Y2 by A1,A3,Th3;
-    hence (inferior_realsequence seq).x = (inferior_realsequence rseq).x
-    by A3,RINFSUP1:def 4;
+    then reconsider
+    Y2={rseq.k where k is Element of NAT: n <= k} as Subset of REAL
+    by TARSKI:def 3;
+    Y2 is bounded_below by A2,RINFSUP1:32;
+    then inf Y1= lower_bound Y2 by A1,A5,Th3;
+    hence
+    (inferior_realsequence seq).x = (inferior_realsequence rseq).x by A6,
+    RINFSUP1:def 4;
   end;
-  NAT = dom (inferior_realsequence seq) &
-  NAT = dom (inferior_realsequence rseq) by FUNCT_2:def 1;
+  inferior_realsequence rseq is bounded by A2,RINFSUP1:58;
   then
-A4: inferior_realsequence seq = inferior_realsequence rseq by A2,FUNCT_1:9;
-  inferior_realsequence rseq is bounded by A1,RINFSUP1:58;
-  then inferior_realsequence rseq is bounded_above;
-  then rng inferior_realsequence rseq is bounded_above by RINFSUP1:5;
-  hence thesis by A4,Th1;
+A7: rng inferior_realsequence rseq is bounded_above by RINFSUP1:5;
+  NAT = dom (inferior_realsequence seq) by FUNCT_2:def 1;
+  then inferior_realsequence seq = inferior_realsequence rseq by A4,A3,
+  FUNCT_1:9;
+  hence thesis by A7,Th1;
 end;
 
 theorem Th11:
@@ -462,38 +469,44 @@ theorem Th11:
 proof
   assume
 A1: seq is bounded;
-  then seq is bounded_above by Def5;
-  then rng seq is bounded_above by Def4;
-  then consider UB being UpperBound of rng seq such that
-A2: UB in REAL by SUPINF_1:def 11;
-  seq is bounded_below by A1,Def5;
+  then seq is bounded_below by Def5;
   then rng seq is bounded_below by Def3;
-  then consider UL being LowerBound of rng seq such that
-A3: UL in REAL by SUPINF_1:def 12;
-A4: dom seq =NAT by FUNCT_2:def 1;
-  now
+  then
+A2: ex UL being LowerBound of rng seq st UL in REAL by
+  SUPINF_1:def 12;
+  seq is bounded_above by A1,Def5;
+  then rng seq is bounded_above by Def4;
+  then
+A3: ex UB being UpperBound of rng seq st UB in REAL by
+  SUPINF_1:def 11;
+A4: now
     let x be set;
-    assume x in NAT;
+    assume
+    x in NAT;
     then
 A5: seq.x in rng seq by FUNCT_2:6;
-    UB < +infty & -infty < UL by A2,A3,XXREAL_0:9,12;
-    then seq.x <> +infty & seq.x <> -infty by A5,XXREAL_2:def 1,def 2;
-    then seq.x is Real by XXREAL_0:14;
-    hence seq.x in REAL;
+    then
+A6: seq.x <> -infty by A2,XXREAL_0:12,XXREAL_2:def 2;
+    seq.x <> +infty by A3,A5,XXREAL_0:9,XXREAL_2:def 1;
+    hence seq.x in REAL by A6,XXREAL_0:14;
   end;
+  dom seq =NAT by FUNCT_2:def 1;
   hence thesis by A4,FUNCT_2:5;
 end;
 
 theorem Th12:
-  seq = rseq implies (seq is bounded_above iff rseq is bounded_above)
+  seq = rseq implies (seq is bounded_above iff rseq is
+  bounded_above)
 proof
   assume
 A1: seq=rseq;
   hereby
-    assume seq is bounded_above;
+    assume
+    seq is bounded_above;
     then rng rseq is bounded_above by A1,Def4;
     then consider p be real number such that
-A2: for y be real number st y in rng rseq holds y <= p by SEQ_4:def 1;
+A2: for y be real number st y in rng rseq holds y <= p by SEQ_4:def
+    1;
     now
       let n be Element of NAT;
       rseq.n in rng rseq by FUNCT_2:6;
@@ -502,30 +515,36 @@ A2: for y be real number st y in rng rseq holds y <= p by SEQ_4:def 1;
     end;
     hence rseq is bounded_above by SEQ_2:def 3;
   end;
-  assume rseq is bounded_above;
+  assume
+  rseq is bounded_above;
   then consider q be real number such that
 A3: for n be Element of NAT holds rseq.n < q by SEQ_2:def 3;
-A4: q in REAL by XREAL_0:def 1;
   now
     let r be ext-real number;
-    assume r in rng seq;
+    assume
+    r in rng seq;
     then ex x be set st x in dom rseq & r=rseq.x by A1,FUNCT_1:def 5;
     hence r <= q by A3;
   end;
-  then q is UpperBound of rng seq by XXREAL_2:def 1;
+  then
+A4: q is UpperBound of rng seq by XXREAL_2:def 1;
+  q in REAL by XREAL_0:def 1;
   hence rng seq is bounded_above by A4,SUPINF_1:def 11;
 end;
 
 theorem Th13:
-  seq = rseq implies (seq is bounded_below iff rseq is bounded_below)
+  seq = rseq implies (seq is bounded_below iff rseq is
+  bounded_below)
 proof
   assume
 A1: seq=rseq;
   hereby
-    assume seq is bounded_below;
+    assume
+    seq is bounded_below;
     then rng rseq is bounded_below by A1,Def3;
     then consider p be real number such that
-A2: for y be real number st y in rng rseq holds p <= y by SEQ_4:def 2;
+A2: for y be real number st y in rng rseq holds p <= y by SEQ_4:def
+    2;
     now
       let n be Element of NAT;
       rseq.n in rng rseq by FUNCT_2:6;
@@ -534,398 +553,431 @@ A2: for y be real number st y in rng rseq holds p <= y by SEQ_4:def 2;
     end;
     hence rseq is bounded_below by SEQ_2:def 4;
   end;
-  assume rseq is bounded_below;
+  assume
+  rseq is bounded_below;
   then consider q be real number such that
 A3: for n be Element of NAT holds q < rseq.n by SEQ_2:def 4;
-A4: q in REAL by XREAL_0:def 1;
   now
     let r be ext-real number;
-    assume r in rng seq;
+    assume
+    r in rng seq;
     then ex x be set st x in dom rseq & r = rseq.x by A1,FUNCT_1:def 5;
     hence q<=r by A3;
   end;
-  then q is LowerBound of rng seq by XXREAL_2:def 2;
+  then
+A4: q is LowerBound of rng seq by XXREAL_2:def 2;
+  q in REAL by XREAL_0:def 1;
   hence rng seq is bounded_below by A4,SUPINF_1:def 12;
 end;
 
 theorem Th14:
-  seq=rseq & rseq is convergent implies
-  seq is convergent_to_finite_number & seq is convergent & lim seq = lim rseq
+  seq=rseq & rseq is convergent implies seq is
+  convergent_to_finite_number & seq is convergent & lim seq = lim rseq
 proof
-  assume
-A1: seq = rseq & rseq is convergent;
-A2: now
+  assume that
+A1: seq = rseq and
+A2: rseq is convergent;
+A3: now
     let e be real number;
-    assume 0 < e;
+    assume
+    0 < e;
     then consider n be Element of NAT such that
-A3: for m be Element of NAT st n <= m holds abs(rseq.m-lim rseq) < e
-    by A1,SEQ_2:def 7;
+A4: for m be Element of NAT st n <= m holds abs(rseq.m-lim rseq) < e
+    by A2,SEQ_2:def 7;
     set N=n;
     now
       let m be Nat;
+A5:   m is Element of NAT by ORDINAL1:def 13;
+A6:   rseq.m - lim rseq = seq.m - R_EAL(lim rseq) by A1,SUPINF_2:5;
       assume
-A4:   N <= m;
-      m is Element of NAT by ORDINAL1:def 13;
-      then
-A5:   abs(rseq.m-lim rseq) < e by A3,A4;
-      rseq.m - lim rseq = seq.m - R_EAL(lim rseq) by A1,SUPINF_2:5;
-      hence |. seq.m - R_EAL(lim rseq) .| < e by A5,EXTREAL2:49;
+      N <= m;
+      then abs(rseq.m-lim rseq) < e by A4,A5;
+      hence |. seq.m - R_EAL(lim rseq) .| < e by A6,EXTREAL2:49;
     end;
-    hence ex N be Nat st
-    for m be Nat st N <= m holds |. seq.m - R_EAL(lim rseq) .| < e;
+    hence
+    ex N be Nat st for m be Nat st N <= m holds |. seq.m - R_EAL(lim rseq
+    ) .| < e;
   end;
   then
-A6: seq is convergent_to_finite_number by MESFUNC5:def 8;
+A7: seq is convergent_to_finite_number by MESFUNC5:def 8;
   then seq is convergent by MESFUNC5:def 11;
-  hence thesis by A2,A6,MESFUNC5:def 12;
+  hence thesis by A3,A7,MESFUNC5:def 12;
 end;
 
 theorem Th15:
-  seq=rseq & seq is convergent_to_finite_number implies
-  rseq is convergent & lim seq = lim rseq
+  seq=rseq & seq is convergent_to_finite_number implies rseq is
+  convergent & lim seq = lim rseq
 proof
-  assume
-A1: seq=rseq & seq is convergent_to_finite_number;
-  then
-A2: seq is convergent by MESFUNC5:def 11;
-  not (lim seq = +infty & seq is convergent_to_+infty) &
-  not (lim seq = -infty & seq is convergent_to_-infty) by A1,MESFUNC5:56,57;
+  assume that
+A1: seq=rseq and
+A2: seq is convergent_to_finite_number;
+A3: not (lim seq = +infty & seq is convergent_to_+infty) by A2,MESFUNC5:56;
+A4: not (lim seq = -infty & seq is convergent_to_-infty) by A2,MESFUNC5:57;
+  seq is convergent by A2,MESFUNC5:def 11;
   then consider g be real number such that
-A3: lim seq = g & (for p be real number st 0<p ex n be Nat st
-  for m be Nat st n<=m holds |.seq.m-lim seq.| < p) &
-  seq is convergent_to_finite_number by A2,MESFUNC5:def 12;
-A4: for p be real number st 0<p ex n be Element of NAT st
-  for m be Element of NAT st n<=m holds abs(rseq.m-g) < p
+A5: lim seq = g and
+A6: for p be real number st 0<p ex n be Nat st for m be Nat st n<=m
+  holds |.seq.m-lim seq.| < p and
+  seq is convergent_to_finite_number by A3,A4,MESFUNC5:def 12;
+A7: for p be real number st 0<p ex n be Element of NAT st for m be Element
+  of NAT st n<=m holds abs(rseq.m-g) < p
   proof
     let p be real number;
-    assume 0 < p;
+    assume
+    0 < p;
     then consider n be Nat such that
-A5: for m be Nat st n <= m holds |.seq.m-lim seq .| < p by A3;
+A8: for m be Nat st n <= m holds |.seq.m-lim seq .| < p by A6;
     reconsider N=n as Element of NAT by ORDINAL1:def 13;
     take N;
     hereby
       let m be Element of NAT;
-      assume N <= m;
+      assume
+      N <= m;
       then
-A6:   |.seq.m-lim seq .| < p by A5;
-      rseq.m is Real & g is Real by XREAL_0:def 1;
-      then rseq.m - g = seq.m - lim seq by A1,A3,SUPINF_2:5;
-      hence abs(rseq.m - g) < p by A6,EXTREAL2:49;
+A9:   |.seq.m-lim seq .| < p by A8;
+      g is Real by XREAL_0:def 1;
+      then rseq.m - g = seq.m - lim seq by A1,A5,SUPINF_2:5;
+      hence abs(rseq.m - g) < p by A9,EXTREAL2:49;
     end;
   end;
   then rseq is convergent by SEQ_2:def 6;
-  hence thesis by A3,A4,SEQ_2:def 7;
+  hence thesis by A5,A7,SEQ_2:def 7;
 end;
 
 theorem Th16:
-  seq^\k is convergent_to_finite_number implies
-  seq is convergent_to_finite_number &
-  seq is convergent & lim seq = lim(seq^\k)
+  seq^\k is convergent_to_finite_number implies seq is
+  convergent_to_finite_number & seq is convergent & lim seq = lim(seq^\k)
 proof
+  set seq0=seq^\k;
   assume
 A1: seq^\k is convergent_to_finite_number;
-  set seq0=seq^\k;
-A2: seq0 is convergent by A1,MESFUNC5:def 11;
-  not(lim seq0 = +infty & seq0 is convergent_to_+infty) &
-  not(lim seq0 = -infty & seq0 is convergent_to_-infty) by A1,MESFUNC5:56,57;
   then
-A3: ex g be real number st lim seq0 = g & (for p be real number st 0<p
-  ex n be Nat st for m be Nat st n<=m holds |.seq0.m-lim seq0 .| < p) &
-  seq0 is convergent_to_finite_number by A2,MESFUNC5:def 12;
+A2: not(lim seq0 = +infty & seq0 is convergent_to_+infty) by
+  MESFUNC5:56;
+A3: not(lim seq0 = -infty & seq0 is convergent_to_-infty) by A1,MESFUNC5:57;
+  seq0 is convergent by A1,MESFUNC5:def 11;
+  then
+A4: ex g be real number st lim seq0 = g & (for p be real number st 0<p ex n
+  be Nat st for m be Nat st n<=m holds |.seq0.m-lim seq0 .| < p) & seq0 is
+  convergent_to_finite_number by A2,A3,MESFUNC5:def 12;
   then consider g be real number such that
-A4: lim seq0 = g;
-A5: for p be real number st 0<p
-  ex n be Nat st for m be Nat st n<=m holds |.seq.m-lim seq0 .| < p
+A5: lim seq0 = g;
+A6: for p be real number st 0<p ex n be Nat st for m be Nat st n<=m holds |.
+  seq.m-lim seq0 .| < p
   proof
     let p be real number;
-    assume 0 < p;
+    assume
+    0 < p;
     then consider n be Nat such that
-A6: for m be Nat st n<=m holds |.seq0.m-lim seq0 .| < p by A3;
+A7: for m be Nat st n<=m holds |.seq0.m-lim seq0 .| < p by A4;
     take n1 = n+k;
     hereby
       let m be Nat;
       assume
-A7:   n1 <= m;
-      then
-A8:   n+k-k <= m-k by XREAL_1:11;
+A8:   n1 <= m;
       k <= n+k by NAT_1:11;
-      then reconsider mk = m-k as Element of NAT by A7,INT_1:18,XXREAL_0:2;
-      seq0.(m-k) = seq.(mk+k) by NAT_1:def 3;
-      hence |.seq.m -lim seq0 .| < p by A6,A8;
+      then reconsider mk = m-k as Element of NAT by A8,INT_1:18,XXREAL_0:2;
+A9:   seq0.(m-k) = seq.(mk+k) by NAT_1:def 3;
+      n+k-k <= m-k by A8,XREAL_1:11;
+      hence |.seq.m -lim seq0 .| < p by A7,A9;
     end;
   end;
-  lim seq0 = R_EAL g by A4;
+  lim seq0 = R_EAL g by A5;
   hence
-A9: seq is convergent_to_finite_number by A5,MESFUNC5:def 8;
+A10: seq is convergent_to_finite_number by A6,MESFUNC5:def 8;
   hence seq is convergent by MESFUNC5:def 11;
-  hence thesis by A4,A5,A9,MESFUNC5:def 12;
+  hence thesis by A5,A6,A10,MESFUNC5:def 12;
 end;
 
 theorem Th17:
-  seq^\k is convergent implies seq is convergent & lim seq = lim(seq^\k)
+  seq^\k is convergent implies seq is convergent & lim seq = lim(
+  seq^\k)
 proof
   set seq0=seq^\k;
   assume
 A1: seq^\k is convergent;
   per cases by A1,MESFUNC5:def 11;
-  suppose seq0 is convergent_to_finite_number;
+  suppose
+    seq0 is convergent_to_finite_number;
     hence thesis by Th16;
   end;
   suppose
 A2: seq0 is convergent_to_+infty;
-    then
-A3: lim seq0 = +infty & seq0 is convergent_to_+infty by A1,MESFUNC5:def 12;
-    for g be real number st 0 < g
-    ex n be Nat st for m be Nat st n<=m holds g <= seq.m
+    for g be real number st 0 < g ex n be Nat st for m be Nat st n<=m
+    holds g <= seq.m
     proof
       let g be real number;
-      assume 0<g;
+      assume
+      0<g;
       then consider n be Nat such that
-A4:   for m be Nat st n<=m holds g <= seq0.m by A2,MESFUNC5:def 9;
+A3:   for m be Nat st n<=m holds g <= seq0.m by A2,MESFUNC5:def 9;
       take n1=n+k;
       hereby
         let m be Nat;
         assume
-A5:     n1 <= m;
-        then
-A6:     n+k-k <= m-k by XREAL_1:11;
+A4:     n1 <= m;
         k <= n+k by NAT_1:11;
-        then reconsider mk = m-k as Element of NAT by A5,INT_1:18,XXREAL_0:2;
-        seq0.(m-k) = seq.(mk+k) by NAT_1:def 3;
-        hence g <= seq.m by A4,A6;
+        then reconsider mk = m-k as Element of NAT by A4,INT_1:18,XXREAL_0:2;
+A5:     seq0.(m-k) = seq.(mk+k) by NAT_1:def 3;
+        n+k-k <= m-k by A4,XREAL_1:11;
+        hence g <= seq.m by A3,A5;
       end;
     end;
     then
-A7: seq is convergent_to_+infty by MESFUNC5:def 9;
-    hence seq is convergent by MESFUNC5:def 11;
-    hence thesis by A3,A7,MESFUNC5:def 12;
+A6: seq is convergent_to_+infty by MESFUNC5:def 9;
+    hence
+A7: seq is convergent by MESFUNC5:def 11;
+    lim seq0 = +infty by A1,A2,MESFUNC5:def 12;
+    hence thesis by A6,A7,MESFUNC5:def 12;
   end;
   suppose
 A8: seq0 is convergent_to_-infty;
-    then
-A9: lim seq0=-infty & seq0 is convergent_to_-infty by A1,MESFUNC5:def 12;
-    for g be real number st
-    g<0 ex n be Nat st for m be Nat st n<=m holds seq.m <= g
+    for g be real number st g<0 ex n be Nat st for m be Nat st n<=m holds
+    seq.m <= g
     proof
       let g be real number;
-      assume g < 0;
+      assume
+      g < 0;
       then consider n be Nat such that
-A10:  for m be Nat st n<=m holds seq0.m <= g by A8,MESFUNC5:def 10;
+A9:   for m be Nat st n<=m holds seq0.m <= g by A8,MESFUNC5:def
+      10;
       take n1=n+k;
       hereby
         let m be Nat;
         assume
-A11:    n1 <= m;
-        then
-A12:    n+k-k <= m-k by XREAL_1:11;
+A10:    n1 <= m;
         k <= n+k by NAT_1:11;
-        then reconsider mk = m-k as Element of NAT by A11,INT_1:18,XXREAL_0:2;
-        seq0.(m-k) = seq.(mk+k) by NAT_1:def 3;
-        hence seq.m <= g by A10,A12;
+        then reconsider mk = m-k as Element of NAT by A10,INT_1:18,XXREAL_0:2;
+A11:    seq0.(m-k) = seq.(mk+k) by NAT_1:def 3;
+        n+k-k <= m-k by A10,XREAL_1:11;
+        hence seq.m <= g by A9,A11;
       end;
     end;
     then
-A13: seq is convergent_to_-infty by MESFUNC5:def 10;
-    hence seq is convergent by MESFUNC5:def 11;
-    hence thesis by A9,A13,MESFUNC5:def 12;
+A12: seq is convergent_to_-infty by MESFUNC5:def 10;
+    hence
+A13: seq is convergent by MESFUNC5:def 11;
+    lim seq0=-infty by A1,A8,MESFUNC5:def 12;
+    hence thesis by A12,A13,MESFUNC5:def 12;
   end;
 end;
 
 theorem Th18:
-  lim_sup seq = lim_inf seq & lim_inf seq in REAL implies
-  ex k st seq^\k is bounded
+  lim_sup seq = lim_inf seq & lim_inf seq in REAL implies ex k st
+  seq^\k is bounded
 proof
-  assume
-A1: lim_sup seq = lim_inf seq & lim_inf seq in REAL;
-  then reconsider a=lim_inf seq as Real;
+  assume that
+A1: lim_sup seq = lim_inf seq and
+A2: lim_inf seq in REAL;
+  reconsider a=lim_inf seq as Real by A2;
   set K1=a+1;
-  set K2=a-1;
   ex k1 be Element of NAT st (superior_realsequence seq).k1 <= K1
   proof
     assume
-A2: not ex k1 be Element of NAT st (superior_realsequence seq).k1 <= K1;
+A3: not ex k1 be Element of NAT st (superior_realsequence seq).k1 <=
+    K1;
     now
       let x be ext-real number;
-      assume x in rng (superior_realsequence seq);
-      then ex n be set st n in dom (superior_realsequence seq) &
-      x = (superior_realsequence seq).n by FUNCT_1:def 5;
-      hence K1 <= x by A2;
+      assume
+      x in rng (superior_realsequence seq);
+      then ex n be set st n in dom (superior_realsequence seq) & x = (
+      superior_realsequence seq).n by FUNCT_1:def 5;
+      hence K1 <= x by A3;
     end;
-    then K1 is LowerBound of rng superior_realsequence seq by XXREAL_2:def 2;
+    then K1 is LowerBound of rng superior_realsequence seq by
+    XXREAL_2:def 2;
     then a+1 <= a by A1,XXREAL_2:def 4;
     hence contradiction by XREAL_1:31;
   end;
   then consider k1 be Element of NAT such that
-A3: (superior_realsequence seq).k1 <= K1;
+A4: (superior_realsequence seq).k1 <= K1;
+  set K2=a-1;
   ex k2 be Element of NAT st K2 <= (inferior_realsequence seq).k2
   proof
     assume
-A4: not (ex k2 be Element of NAT st K2 <= (inferior_realsequence seq).k2);
+A5: not (ex k2 be Element of NAT st K2 <= (inferior_realsequence seq)
+    .k2);
     now
       let x be ext-real number;
-      assume x in rng (inferior_realsequence seq);
-      then ex n be set st n in dom (inferior_realsequence seq) &
-      x = (inferior_realsequence seq).n by FUNCT_1:def 5;
-      hence x <= K2 by A4;
+      assume
+      x in rng (inferior_realsequence seq);
+      then ex n be set st n in dom (inferior_realsequence seq) & x = (
+      inferior_realsequence seq).n by FUNCT_1:def 5;
+      hence x <= K2 by A5;
     end;
-    then K2 is UpperBound of rng inferior_realsequence seq by XXREAL_2:def 1;
+    then K2 is UpperBound of rng inferior_realsequence seq by XXREAL_2:
+    def 1;
     then a <= a-1 by XXREAL_2:def 3;
     then a+0 < a-1+1 by XREAL_1:10;
     hence contradiction;
   end;
   then consider k2 be Element of NAT such that
-A5: K2 <= (inferior_realsequence seq).k2;
+A6: K2 <= (inferior_realsequence seq).k2;
   take k=max(k1,k2);
-  k1<=k & k2<=k by XXREAL_0:25;
-  then (superior_realsequence seq).k <= (superior_realsequence seq).k1 &
-  (inferior_realsequence seq).k2 <= (inferior_realsequence seq).k by Th7;
+  k2<=k by XXREAL_0:25;
+  then (inferior_realsequence seq).k2 <= (inferior_realsequence seq).k by
+  Th7;
   then
-A6: (superior_realsequence seq).k <= K1 &
-  K2<=(inferior_realsequence seq).k by A3,A5,XXREAL_0:2;
-A7: for n be Element of NAT st k <=n holds seq.n <= K1 & K2 <= seq.n
+A7: K2<=(inferior_realsequence seq).k by A6,XXREAL_0:2;
+  k1<=k by XXREAL_0:25;
+  then (superior_realsequence seq).k <= (superior_realsequence seq).k1 by
+  Th7;
+  then
+A8: (superior_realsequence seq).k <= K1 by A4,XXREAL_0:2;
+A9: for n be Element of NAT st k <=n holds seq.n <= K1 & K2 <= seq.n
   proof
     let n be Element of NAT;
-    assume k <= n;
-    then (superior_realsequence seq).n <= (superior_realsequence seq).k &
-    (inferior_realsequence seq).k <= (inferior_realsequence seq).n by Th7;
+A10: (inferior_realsequence seq).n <= seq.n by Th8;
+    assume
+A11: k <= n;
     then
-A8: (superior_realsequence seq).n <= K1 &
-    K2<= (inferior_realsequence seq).n by A6,XXREAL_0:2;
-    seq.n <= (superior_realsequence seq).n &
-    (inferior_realsequence seq).n <= seq.n by Th8;
-    hence thesis by A8,XXREAL_0:2;
+    (superior_realsequence seq).n <= (superior_realsequence seq).k by Th7;
+    then
+A12: (superior_realsequence seq).n <= K1 by A8,XXREAL_0:2;
+    (inferior_realsequence seq).k <= (inferior_realsequence seq).n by A11
+    , Th7;
+    then
+A13: K2<= (inferior_realsequence seq).n by A7,XXREAL_0:2;
+    seq.n <= (superior_realsequence seq).n by Th8;
+    hence thesis by A12,A13,A10,XXREAL_0:2;
   end;
   now
     let x be ext-real number;
-    assume x in rng (seq^\k);
+    assume
+    x in rng (seq^\k);
     then consider n be set such that
-A9: n in dom (seq^\k) & x=(seq^\k).n by FUNCT_1:def 5;
-    reconsider n as Element of NAT by A9;
-A10: x=seq.(n+k) by A9,NAT_1:def 3;
-    k <= n+k by NAT_1:11;
-    hence x <= K1 by A7,A10;
+A14: n in dom (seq^\k) and
+A15: x=(seq^\k).n by FUNCT_1:def 5;
+    reconsider n as Element of NAT by A14;
+A16: k <= n+k by NAT_1:11;
+    x=seq.(n+k) by A15,NAT_1:def 3;
+    hence x <= K1 by A9,A16;
   end;
   then K1 is UpperBound of rng (seq^\k) by XXREAL_2:def 1;
   hence rng (seq^\k) is bounded_above by SUPINF_1:def 11;
   now
     let x be ext-real number;
-    assume x in rng(seq^\k);
+    assume
+    x in rng(seq^\k);
     then consider n be set such that
-A11: n in dom(seq^\k) & x = (seq^\k).n by FUNCT_1:def 5;
-    reconsider n as Element of NAT by A11;
-A12: x=seq.(n+k) by A11,NAT_1:def 3;
-    k <= n+k by NAT_1:11;
-    hence K2 <= x by A7,A12;
+A17: n in dom(seq^\k) and
+A18: x = (seq^\k).n by FUNCT_1:def 5;
+    reconsider n as Element of NAT by A17;
+A19: k <= n+k by NAT_1:11;
+    x=seq.(n+k) by A18,NAT_1:def 3;
+    hence K2 <= x by A9,A19;
   end;
   then K2 is LowerBound of rng (seq^\k) by XXREAL_2:def 2;
   hence rng (seq^\k) is bounded_below by SUPINF_1:def 12;
 end;
 
 theorem Th19:
-  seq is convergent_to_finite_number implies ex k st seq^\k is bounded
+  seq is convergent_to_finite_number implies ex k st seq^\k is
+  bounded
 proof
   assume
 A1: seq is convergent_to_finite_number;
   then
-A2: seq is convergent by MESFUNC5:def 11;
-  not (lim seq = +infty & seq is convergent_to_+infty) &
-  not (lim seq = -infty & seq is convergent_to_-infty) by A1,MESFUNC5:56,57;
+A2: not (lim seq = +infty & seq is convergent_to_+infty) by
+  MESFUNC5:56;
+A3: not (lim seq = -infty & seq is convergent_to_-infty) by A1,MESFUNC5:57;
+  seq is convergent by A1,MESFUNC5:def 11;
   then
-A3: ex g be real number st lim seq =g &
-  (for p be real number st 0<p ex n be Nat st for m be Nat st n<=m
-  holds |.seq.m-lim seq .| < p) &
-  seq is convergent_to_finite_number by A2,MESFUNC5:def 12;
+A4: ex g be real number st lim seq =g & (for p be real number st 0<p ex n be
+  Nat st for m be Nat st n<=m holds |.seq.m-lim seq .| < p) & seq is
+  convergent_to_finite_number by A2,A3,MESFUNC5:def 12;
   then consider g be real number such that
-A4: lim seq = g;
+A5: lim seq = g;
+  set UB = g+1;
   consider k be Nat such that
-A5: for m be Nat st k<=m holds |.seq.m-lim seq .| < 1 by A3;
-A6: g is Real by XREAL_0:def 1;
-  then
-A7: - lim seq = -g by A4,SUPINF_2:3;
+A6: for m be Nat st k<=m holds |.seq.m-lim seq .| < 1 by A4;
   reconsider K = k as Element of NAT by ORDINAL1:def 13;
   take K;
-  set UB = g+1;
-  set UL = g-1;
+A7: g is Real by XREAL_0:def 1;
   now
     let r be ext-real number;
-    assume r in rng (seq^\K);
+    assume
+    r in rng (seq^\K);
     then consider n be set such that
-A8: n in dom(seq^\K) & r=(seq^\K).n by FUNCT_1:def 5;
+A8: n in dom(seq^\K) and
+A9: r=(seq^\K).n by FUNCT_1:def 5;
     reconsider n as Element of NAT by A8;
-    |.seq.(n+k)-lim seq .| <= 1. by A5,NAT_1:11;
+    |.seq.(n+k)-lim seq .| <= 1. by A6,NAT_1:11;
     then seq.(n+k)-lim seq <= 1. by EXTREAL2:60;
     then seq.(n+k)+-lim seq +lim seq <= 1. +lim seq by XXREAL_3:38;
-    then seq.(n+k)+(-lim seq +lim seq) <= 1. +lim seq by A4,A7,XXREAL_3:30;
+    then seq.(n+k)+(-lim seq +lim seq) <= 1. +lim seq by A5,XXREAL_3:30;
     then seq.(n+k)+0. <= 1. +lim seq by XXREAL_3:7;
     then seq.(n+k) <= 1. +lim seq by XXREAL_3:4;
-    then seq.(n+k) <= UB by A4,A6,SUPINF_2:1;
-    hence r <= UB by A8,NAT_1:def 3;
+    then seq.(n+k) <= UB by A5,A7,SUPINF_2:1;
+    hence r <= UB by A9,NAT_1:def 3;
   end;
   then UB is UpperBound of rng(seq^\K) by XXREAL_2:def 1;
   hence rng (seq^\K) is bounded_above by SUPINF_1:def 11;
+  set UL = g-1;
   now
     let r be ext-real number;
-    assume r in rng (seq^\K);
+    assume
+    r in rng (seq^\K);
     then consider n be set such that
-A9: n in dom (seq^\K) & r=(seq^\K).n by FUNCT_1:def 5;
-    reconsider n as Element of NAT by A9;
-    |.seq.(n+k)-lim seq .| < 1 by A5,NAT_1:11;
+A10: n in dom (seq^\K) and
+A11: r=(seq^\K).n by FUNCT_1:def 5;
+    reconsider n as Element of NAT by A10;
+    |.seq.(n+k)-lim seq .| < 1 by A6,NAT_1:11;
     then -1. <=seq.(n+k)-lim seq by EXTREAL2:60;
     then -1. +lim seq <= seq.(n+k)+-lim seq +lim seq by XXREAL_3:38;
-    then -1. +lim seq <= seq.(n+k)+(-lim seq +lim seq) by A4,A7,XXREAL_3:30;
+    then -1. +lim seq <= seq.(n+k)+(-lim seq +lim seq) by A5,XXREAL_3:30;
     then
-A10: -1. +lim seq <= seq.(n+k)+0. by XXREAL_3:7;
+A12: -1. +lim seq <= seq.(n+k)+0. by XXREAL_3:7;
     -1.= -1 by SUPINF_2:3;
-    then -1+ g = -1.+ lim seq by A4,A6,SUPINF_2:1;
-    then UL <= seq.(n+k) by A10,XXREAL_3:4;
-    hence UL <= r by A9,NAT_1:def 3;
+    then -1+ g = -1.+ lim seq by A5,A7,SUPINF_2:1;
+    then UL <= seq.(n+k) by A12,XXREAL_3:4;
+    hence UL <= r by A11,NAT_1:def 3;
   end;
   then UL is LowerBound of rng (seq^\K) by XXREAL_2:def 2;
   hence rng (seq^\K) is bounded_below by SUPINF_1:def 12;
 end;
 
 theorem Th20:
-  seq is convergent_to_finite_number implies
-  seq^\k is convergent_to_finite_number &
-  seq^\k is convergent & lim seq = lim(seq^\k)
+  seq is convergent_to_finite_number implies seq^\k is
+  convergent_to_finite_number & seq^\k is convergent & lim seq = lim(seq^\k)
 proof
   set seq0=seq^\k;
   assume
 A1: seq is convergent_to_finite_number;
   then
-A2: seq is convergent by MESFUNC5:def 11;
-  not (lim seq = +infty & seq is convergent_to_+infty) &
-  not (lim seq = -infty & seq is convergent_to_-infty) by A1,MESFUNC5:56,57;
+A2: not (lim seq = +infty & seq is convergent_to_+infty) by
+  MESFUNC5:56;
+A3: not (lim seq = -infty & seq is convergent_to_-infty) by A1,MESFUNC5:57;
+  seq is convergent by A1,MESFUNC5:def 11;
   then
-A3: ex g be real number st lim seq = g & (for p be real number st 0<p
-  ex n be Nat st for m be Nat st n<=m holds |.seq.m-lim seq .| < p ) &
-  seq is convergent_to_finite_number by A2,MESFUNC5:def 12;
+A4: ex g be real number st lim seq = g & (for p be real number st 0<p ex n
+  be Nat st for m be Nat st n<=m holds |.seq.m-lim seq .| < p ) & seq is
+  convergent_to_finite_number by A2,A3,MESFUNC5:def 12;
   then consider g be real number such that
-A4: lim seq = g;
-A5: for p be real number st 0<p
-  ex n be Nat st for m be Nat st n<=m holds |.seq0.m-lim seq .| < p
+A5: lim seq = g;
+A6: for p be real number st 0<p ex n be Nat st for m be Nat st n<=m holds |.
+  seq0.m-lim seq .| < p
   proof
     let p be real number;
-    assume 0<p;
+    assume
+    0<p;
     then consider n be Nat such that
-A6: for m be Nat st n<=m holds |.seq.m-lim seq .| < p by A3;
+A7: for m be Nat st n<=m holds |.seq.m-lim seq .| < p by A4;
     take n;
     hereby
       let m be Nat such that
-A7:   n <= m;
+A8:   n <= m;
       m <= m+k by NAT_1:11;
-      then n <= m+k by A7,XXREAL_0:2;
-      then
-A8:   |.seq.(m+k) -lim seq .| < p by A6;
-      m is Element of NAT by ORDINAL1:def 13;
-      hence |.seq0.m -lim seq .| < p by A8,NAT_1:def 3;
+      then n <= m+k by A8,XXREAL_0:2;
+      then |.seq.(m+k) -lim seq .| < p by A7;
+      hence |.seq0.m -lim seq .| < p by NAT_1:def 3;
     end;
   end;
-  lim seq = R_EAL g by A4;
+  lim seq = R_EAL g by A5;
   hence
-A9: seq0 is convergent_to_finite_number by A5,MESFUNC5:def 8;
+A9: seq0 is convergent_to_finite_number by A6,MESFUNC5:def 8;
   hence seq0 is convergent by MESFUNC5:def 11;
-  hence thesis by A4,A5,A9,MESFUNC5:def 12;
+  hence thesis by A5,A6,A9,MESFUNC5:def 12;
 end;
 
 theorem
@@ -935,105 +987,111 @@ proof
   assume
 A1: seq is convergent;
   per cases by A1,MESFUNC5:def 11;
-  suppose seq is convergent_to_finite_number;
+  suppose
+    seq is convergent_to_finite_number;
     hence thesis by Th20;
   end;
   suppose
 A2: seq is convergent_to_+infty;
-    then
-A3: lim seq = +infty & seq is convergent_to_+infty by A1,MESFUNC5:def 12;
-    for g be real number st 0 < g
-    ex n be Nat st for m be Nat st n<=m holds g <= seq0.m
+    for g be real number st 0 < g ex n be Nat st for m be Nat st n<=m
+    holds g <= seq0.m
     proof
       let g be real number;
-      assume 0<g;
+      assume
+      0<g;
       then consider n be Nat such that
-A4:   for m be Nat st n <= m holds g <= seq.m by A2,MESFUNC5:def 9;
+A3:   for m be Nat st n <= m holds g <= seq.m by A2,MESFUNC5:def 9;
       take n;
       hereby
         let m be Nat such that
-A5:     n <= m;
+A4:     n <= m;
         m <= m+k by NAT_1:11;
-        then n <= m+k by A5,XXREAL_0:2;
-        then
-A6:     g <=seq.(m+k) by A4;
-        m is Element of NAT by ORDINAL1:def 13;
-        hence g <= seq0.m by A6,NAT_1:def 3;
+        then n <= m+k by A4,XXREAL_0:2;
+        then g <=seq.(m+k) by A3;
+        hence g <= seq0.m by NAT_1:def 3;
       end;
     end;
     then
-A7: seq0 is convergent_to_+infty by MESFUNC5:def 9;
-    hence seq0 is convergent by MESFUNC5:def 11;
-    hence thesis by A3,A7,MESFUNC5:def 12;
+A5: seq0 is convergent_to_+infty by MESFUNC5:def 9;
+    hence
+A6: seq0 is convergent by MESFUNC5:def 11;
+    lim seq = +infty by A1,A2,MESFUNC5:def 12;
+    hence thesis by A5,A6,MESFUNC5:def 12;
   end;
   suppose
-A8: seq is convergent_to_-infty;
-    then
-A9: lim seq = -infty & seq is convergent_to_-infty by A1,MESFUNC5:def 12;
-    for g be real number st g < 0
-    ex n be Nat st for m be Nat st n <= m holds seq0.m <= g
+A7: seq is convergent_to_-infty;
+    for g be real number st g < 0 ex n be Nat st for m be Nat st n <= m
+    holds seq0.m <= g
     proof
       let g be real number;
-      assume g < 0;
+      assume
+      g < 0;
       then consider n be Nat such that
-A10:  for m be Nat st n <= m holds seq.m <= g by A8,MESFUNC5:def 10;
+A8:   for m be Nat st n <= m holds seq.m <= g by A7,MESFUNC5:def
+      10;
       take n;
       hereby
         let m be Nat such that
-A11:    n <= m;
+A9:     n <= m;
         m <= m+k by NAT_1:11;
-        then n <= m+k by A11,XXREAL_0:2;
-        then
-A12:    seq.(m+k) <= g by A10;
-        m is Element of NAT by ORDINAL1:def 13;
-        hence seq0.m <= g by A12,NAT_1:def 3;
+        then n <= m+k by A9,XXREAL_0:2;
+        then seq.(m+k) <= g by A8;
+        hence seq0.m <= g by NAT_1:def 3;
       end;
     end;
     then
-A13: seq0 is convergent_to_-infty by MESFUNC5:def 10;
-    hence seq0 is convergent by MESFUNC5:def 11;
-    hence thesis by A9,A13,MESFUNC5:def 12;
+A10: seq0 is convergent_to_-infty by MESFUNC5:def 10;
+    hence
+A11: seq0 is convergent by MESFUNC5:def 11;
+    lim seq = -infty by A1,A7,MESFUNC5:def 12;
+    hence thesis by A10,A11,MESFUNC5:def 12;
   end;
 end;
 
 theorem
-  (seq is bounded_above implies seq^\k is bounded_above) &
-  (seq is bounded_below implies seq^\k is bounded_below)
+  (seq is bounded_above implies seq^\k is bounded_above) & (seq is
+  bounded_below implies seq^\k is bounded_below)
 proof
   hereby
-    assume seq is bounded_above;
+    assume
+    seq is bounded_above;
     then rng seq is bounded_above by Def4;
     then consider UB being UpperBound of rng seq such that
 A1: UB in REAL by SUPINF_1:def 11;
     now
       let r be ext-real number;
-      assume r in rng (seq^\k);
+      assume
+      r in rng (seq^\k);
       then consider n be set such that
-A2:   n in dom (seq^\k) & r = (seq^\k).n by FUNCT_1:def 5;
+A2:   n in dom (seq^\k) and
+A3:   r = (seq^\k).n by FUNCT_1:def 5;
       reconsider n as Element of NAT by A2;
       seq.(n+k) <= UB by FUNCT_2:6,XXREAL_2:def 1;
-      hence r <= UB by A2,NAT_1:def 3;
+      hence r <= UB by A3,NAT_1:def 3;
     end;
     then UB is UpperBound of rng (seq^\k) by XXREAL_2:def 1;
     then rng (seq^\k) is bounded_above by A1,SUPINF_1:def 11;
     hence seq^\k is bounded_above by Def4;
   end;
   hereby
-    assume seq is bounded_below;
+    assume
+    seq is bounded_below;
     then rng seq is bounded_below by Def3;
     then consider UB being LowerBound of rng seq such that
-A3: UB in REAL by SUPINF_1:def 12;
+A4: UB in REAL by SUPINF_1:def 12;
     now
       let r be ext-real number;
-      assume r in rng (seq^\k);
+      assume
+      r in rng (seq^\k);
       then consider n be set such that
-A4:   n in dom (seq^\k) & r=(seq^\k).n by FUNCT_1:def 5;
-      reconsider n as Element of NAT by A4;
+A5:   n in dom (seq^\k) and
+A6:   r=(seq^\k).n by FUNCT_1:def 5;
+      reconsider n as Element of NAT by A5;
       UB <= seq.(n+k) by FUNCT_2:6,XXREAL_2:def 2;
-      hence UB <= r by A4,NAT_1:def 3;
+      hence UB <= r by A6,NAT_1:def 3;
     end;
     then UB is LowerBound of rng (seq^\k) by XXREAL_2:def 2;
-    then rng (seq^\k) is bounded_below by A3,SUPINF_1:def 12;
+    then rng (seq^\k) is bounded_below by A4,SUPINF_1:def 12;
     hence seq^\k is bounded_below by Def3;
   end;
 end;
@@ -1041,29 +1099,31 @@ end;
 theorem Th23:
   inf seq <= seq.n & seq.n <= sup seq
 proof
-A1: seq.n in rng seq by FUNCT_2:6;
-  inf rng seq is LowerBound of rng seq &
-  sup rng seq is UpperBound of rng seq by XXREAL_2:def 3,def 4;
-  hence thesis by A1,XXREAL_2:def 1,def 2;
+A1: inf rng seq is LowerBound of rng seq by XXREAL_2:def 4;
+A2: sup rng seq is UpperBound of rng seq by XXREAL_2:def 3;
+  seq.n in rng seq by FUNCT_2:6;
+  hence thesis by A1,A2,XXREAL_2:def 1,def 2;
 end;
 
 theorem Th24:
   inf seq <= sup seq
 proof
-  inf seq <= seq.0 & seq.0 <= sup seq by Th23;
-  hence thesis by XXREAL_0:2;
+A1: seq.0 <= sup seq by Th23;
+  inf seq <= seq.0 by Th23;
+  hence thesis by A1,XXREAL_0:2;
 end;
 
 theorem Th25:
-  seq is non-increasing implies
-  seq^\k is non-increasing & inf seq = inf(seq^\k)
+  seq is non-increasing implies seq^\k is non-increasing & inf seq
+  = inf(seq^\k)
 proof
+  set seq0 = seq^\k;
   assume
 A1: seq is non-increasing;
-  set seq0 = seq^\k;
   now
     let n,m be Element of NAT;
-    assume m<=n;
+    assume
+    m<=n;
     then k+m <= k+n by XREAL_1:8;
     then seq.(k+n) <=seq.(k+m) by A1,Th7;
     then seq0.n <= seq.(k+m) by NAT_1:def 3;
@@ -1072,45 +1132,50 @@ A1: seq is non-increasing;
   hence seq^\k is non-increasing by Th7;
   now
     let y be ext-real number;
-    assume y in rng seq0;
+    assume
+    y in rng seq;
     then consider n be set such that
-A2: n in dom seq0 & y=seq0.n by FUNCT_1:def 5;
+A2: n in dom seq and
+A3: y=seq.n by FUNCT_1:def 5;
     reconsider n as Element of NAT by A2;
-    seq0.n= seq.(n+k) by NAT_1:def 3;
-    then inf seq <= seq0.n by Th23;
-    hence inf rng seq <= y by A2;
-  end;
-  then inf rng seq is LowerBound of rng seq0 by XXREAL_2:def 2;
-  then
-A3: inf rng seq <= inf rng seq0 by XXREAL_2:def 4;
-  now
-    let y be ext-real number;
-    assume y in rng seq;
-    then consider n be set such that
-A4: n in dom seq & y=seq.n by FUNCT_1:def 5;
-    reconsider n as Element of NAT by A4;
-    n <= n+k by NAT_1:11;
-    then
-A5: seq.(n+k) <= seq.n by A1,Th7;
     seq0.n = seq.(n+k) by NAT_1:def 3;
-    then inf seq0 <= seq.(n+k) by Th23;
-    hence inf rng seq0 <= y by A4,A5,XXREAL_0:2;
+    then
+A4: inf seq0 <= seq.(n+k) by Th23;
+    n <= n+k by NAT_1:11;
+    then seq.(n+k) <= seq.n by A1,Th7;
+    hence inf rng seq0 <= y by A3,A4,XXREAL_0:2;
   end;
   then inf rng seq0 is LowerBound of rng seq by XXREAL_2:def 2;
-  then inf rng seq0 <= inf rng seq by XXREAL_2:def 4;
-  hence thesis by A3,XXREAL_0:1;
+  then
+A5: inf rng seq0 <= inf rng seq by XXREAL_2:def 4;
+  now
+    let y be ext-real number;
+    assume
+    y in rng seq0;
+    then consider n be set such that
+A6: n in dom seq0 and
+A7: y=seq0.n by FUNCT_1:def 5;
+    reconsider n as Element of NAT by A6;
+    seq0.n= seq.(n+k) by NAT_1:def 3;
+    then inf seq <= seq0.n by Th23;
+    hence inf rng seq <= y by A7;
+  end;
+  then inf rng seq is LowerBound of rng seq0 by XXREAL_2:def 2;
+  then inf rng seq <= inf rng seq0 by XXREAL_2:def 4;
+  hence thesis by A5,XXREAL_0:1;
 end;
 
 theorem Th26:
-  seq is non-decreasing implies
-  seq^\k is non-decreasing & sup seq = sup(seq^\k)
+  seq is non-decreasing implies seq^\k is non-decreasing & sup seq
+  = sup(seq^\k)
 proof
+  set seq0 = seq^\k;
   assume
 A1: seq is non-decreasing;
-  set seq0 = seq^\k;
   now
     let n,m be Element of NAT;
-    assume m <= n;
+    assume
+    m <= n;
     then k+m <= k+n by XREAL_1:8;
     then seq.(k+m) <=seq.(k+n) by A1,Th7;
     then seq0.m <= seq.(k+n) by NAT_1:def 3;
@@ -1119,338 +1184,369 @@ A1: seq is non-decreasing;
   hence seq^\k is non-decreasing by Th7;
   now
     let y be ext-real number;
-    assume y in rng seq0;
+    assume
+    y in rng seq;
     then consider n be set such that
-A2: n in dom seq0 & y=seq0.n by FUNCT_1:def 5;
+A2: n in dom seq and
+A3: y=seq.n by FUNCT_1:def 5;
     reconsider n as Element of NAT by A2;
     seq0.n= seq.(n+k) by NAT_1:def 3;
-    then seq0.n <=sup seq by Th23;
-    hence y <= sup rng seq by A2;
-  end;
-  then sup rng seq is UpperBound of rng seq0 by XXREAL_2:def 1;
-  then
-A3: sup rng seq0 <= sup rng seq by XXREAL_2:def 3;
-  now
-    let y be ext-real number;
-    assume y in rng seq;
-    then consider n be set such that
-A4: n in dom seq & y=seq.n by FUNCT_1:def 5;
-    reconsider n as Element of NAT by A4;
-    n <=n+k by NAT_1:11;
     then
-A5: seq.n <= seq.(n+k) by A1,Th7;
-    seq0.n= seq.(n+k) by NAT_1:def 3;
-    then seq.(n+k) <= sup seq0 by Th23;
-    hence y <= sup rng seq0 by A4,A5,XXREAL_0:2;
+A4: seq.(n+k) <= sup seq0 by Th23;
+    n <=n+k by NAT_1:11;
+    then seq.n <= seq.(n+k) by A1,Th7;
+    hence y <= sup rng seq0 by A3,A4,XXREAL_0:2;
   end;
   then sup rng seq0 is UpperBound of rng seq by XXREAL_2:def 1;
-  then sup rng seq <= sup rng seq0 by XXREAL_2:def 3;
-  hence thesis by A3,XXREAL_0:1;
+  then
+A5: sup rng seq <= sup rng seq0 by XXREAL_2:def 3;
+  now
+    let y be ext-real number;
+    assume
+    y in rng seq0;
+    then consider n be set such that
+A6: n in dom seq0 and
+A7: y=seq0.n by FUNCT_1:def 5;
+    reconsider n as Element of NAT by A6;
+    seq0.n= seq.(n+k) by NAT_1:def 3;
+    then seq0.n <=sup seq by Th23;
+    hence y <= sup rng seq by A7;
+  end;
+  then sup rng seq is UpperBound of rng seq0 by XXREAL_2:def 1;
+  then sup rng seq0 <= sup rng seq by XXREAL_2:def 3;
+  hence thesis by A5,XXREAL_0:1;
 end;
 
 theorem
-  (superior_realsequence seq).n = sup(seq^\n) &
-  (inferior_realsequence seq).n = inf(seq^\n)
+  (superior_realsequence seq).n = sup(seq^\n) & (inferior_realsequence
+  seq).n = inf(seq^\n)
 proof
   set rseq=seq^\n;
-A1: ex Y being non empty Subset of ExtREAL st
-  Y = {seq.k where k is Element of NAT: n <= k} &
-  (superior_realsequence seq).n = sup Y by Def7;
-A2: ex Z being non empty Subset of ExtREAL st
-  Z = {seq.k where k is Element of NAT: n <= k} &
-  (inferior_realsequence seq).n = inf Z by Def6;
-  {seq.k where k is Element of NAT: n <= k} = rng rseq
-  proof
-    now
-      let x be set;
-      assume x in {seq.k where k is Element of NAT: n <= k};
-      then consider k be Element of NAT such that
-A3:   x=seq.k & n <= k;
-      reconsider k1=k-n as Element of NAT by A3,INT_1:18;
-      x = seq.(n+k1) by A3;
-      then x = rseq.k1 by NAT_1:def 3;
-      hence x in rng rseq by FUNCT_2:6;
-    end;
-    then
-A4: {seq.k where k is Element of NAT: n <= k} c= rng rseq by TARSKI:def 3;
-    now
-      let x be set;
-      assume x in rng rseq;
-      then consider z be set such that
-A5:   z in dom rseq & x=rseq.z by FUNCT_1:def 5;
-      reconsider k0=z as Element of NAT by A5;
-A6:   x = seq.(n+k0) by A5,NAT_1:def 3;
-      n <=n+k0 by NAT_1:11;
-      hence x in {seq.k where k is Element of NAT: n <= k} by A6;
-    end;
-
-then rng rseq c= { seq.k where k is Element of NAT: n <= k} by TARSKI:def 3;
-    hence thesis by A4,XBOOLE_0:def 10;
+A1: ex Z being non empty Subset of ExtREAL st Z = {seq.k where k is Element
+  of NAT: n <= k} & (inferior_realsequence seq).n = inf Z by Def6;
+  now
+    let x be set;
+    assume
+    x in {seq.k where k is Element of NAT: n <= k};
+    then consider k be Element of NAT such that
+A2: x=seq.k and
+A3: n <= k;
+    reconsider k1=k-n as Element of NAT by A3,INT_1:18;
+    x = seq.(n+k1) by A2;
+    then x = rseq.k1 by NAT_1:def 3;
+    hence x in rng rseq by FUNCT_2:6;
   end;
-  hence thesis by A1,A2;
+  then
+A4: {seq.k where k is Element of NAT: n <= k} c= rng rseq by
+  TARSKI:def
+  3;
+  now
+    let x be set;
+    assume
+    x in rng rseq;
+    then consider z be set such that
+A5: z in dom rseq and
+A6: x=rseq.z by FUNCT_1:def 5;
+    reconsider k0=z as Element of NAT by A5;
+A7: n <=n+k0 by NAT_1:11;
+    x = seq.(n+k0) by A6,NAT_1:def 3;
+    hence x in {seq.k where k is Element of NAT: n <= k} by A7;
+  end;
+  then
+A8: rng rseq c= { seq.k where k is Element of NAT: n <= k} by TARSKI:
+  def 3;
+  ex Y being non empty Subset of ExtREAL st Y = {seq.k where k is Element
+  of NAT: n <= k} & (superior_realsequence seq).n = sup Y by Def7;
+  hence thesis by A1,A4,A8,XBOOLE_0:def 10;
 end;
 
 theorem Th28:
   for seq be ExtREAL_sequence,j be Element of NAT holds
-  superior_realsequence (seq^\j) = (superior_realsequence seq)^\j &
-  lim_sup (seq^\j) = lim_sup seq
+superior_realsequence (seq^\j) = (superior_realsequence seq)^\j & lim_sup (seq
+  ^\j) = lim_sup seq
 proof
   let seq be ExtREAL_sequence,j be Element of NAT;
   set rseq=seq^\j;
   now
     let n be Element of NAT;
-A1: ex Y2 being non empty Subset of ExtREAL st
-    Y2 = {rseq.k where k is Element of NAT: n <= k} &
-    (superior_realsequence rseq).n = sup Y2 by Def7;
-A2: ex Y3 being non empty Subset of ExtREAL st
-    Y3 = { seq.k where k is Element of NAT: (j+n) <= k} &
-    (superior_realsequence seq).(j+n) = sup Y3 by Def7;
+A1: ex Y2 being non empty Subset of ExtREAL st Y2 = {rseq.k where k is
+    Element of NAT: n <= k} & (superior_realsequence rseq).n = sup Y2 by Def7;
+A2: ex Y3 being non empty Subset of ExtREAL st Y3 = { seq.k where k is
+    Element of NAT: (j+n) <= k} & (superior_realsequence seq).(j+n) = sup Y3 by
+    Def7;
     now
       let x be set;
-      assume x in {rseq.k where k is Element of NAT: n <= k};
+      assume
+      x in {seq.k where k is Element of NAT: j+n <= k};
       then consider k be Element of NAT such that
-A3:   x=rseq.k & n <= k;
-      x = seq.(j+k) & n <= k by A3,NAT_1:def 3;
-      hence x in { seq.(j+k1) where k1 is Element of NAT: n <= k1};
-    end;
-    then
-A4: {rseq.k where k is Element of NAT: n <= k}
-    c= { seq.(j+k) where k is Element of NAT: n <= k} by TARSKI:def 3;
-    now
-      let x be set;
-      assume x in {seq.(j+k) where k is Element of NAT: n <= k};
-      then consider k be Element of NAT such that
-A5:   x=seq.(j+k) & n <= k;
-      x = rseq.k & n <= k by A5,NAT_1:def 3;
-      hence x in { rseq.k1 where k1 is Element of NAT: n<= k1};
-    end;
-    then {seq.(j+k) where k is Element of NAT: n <= k}
-    c= {rseq.k where k is Element of NAT: n <= k} by TARSKI:def 3;
-    then
-A6: {rseq.k where k is Element of NAT: n <= k}
-    = {seq.(j+k) where k is Element of NAT: n <= k} by A4,XBOOLE_0:def 10;
-    now
-      let x be set;
-      assume x in {seq.(j+k) where k is Element of NAT: n <= k};
-      then consider k be Element of NAT such that
-A7:   x=seq.(j+k) & n <= k;
-      x=seq.(j+k) & j+n <= j+k by A7,XREAL_1:8;
-      hence x in { seq.k1 where k1 is Element of NAT: j+n <= k1};
-    end;
-    then
-A8: {seq.(j+k) where k is Element of NAT: n <= k}
-    c= {seq.k where k is Element of NAT: j+n <= k} by TARSKI:def 3;
-    now
-      let x be set;
-      assume x in {seq.k where k is Element of NAT: j+n <= k};
-      then consider k be Element of NAT such that
-A9:   x=seq.k & j+n <= k;
+A3:   x=seq.k and
+A4:   j+n <= k;
       j <= j+n by NAT_1:11;
-      then reconsider k1=k-j as Element of NAT by A9,INT_1:18,XXREAL_0:2;
-      j+n - j <= k - j by A9,XREAL_1:11;
-      then x = seq.(j+k1) & n <= k1 by A9;
-      hence x in {seq.(j+k2) where k2 is Element of NAT: n<= k2};
+      then reconsider k1=k-j as Element of NAT by A4,INT_1:18,XXREAL_0:2;
+A5:   x = seq.(j+k1) by A3;
+      j+n - j <= k - j by A4,XREAL_1:11;
+      hence x in {seq.(j+k2) where k2 is Element of NAT: n<= k2} by A5;
     end;
-    then {seq.k where k is Element of NAT: j+n <= k}
-    c= {seq.(j+k) where k is Element of NAT: n <= k} by TARSKI:def 3;
-    then {seq.(j+k) where k is Element of NAT: n <= k}
-    = { seq.k where k is Element of NAT: (j+n) <= k} by A8,XBOOLE_0:def 10;
+    then
+A6: {seq.k where k is Element of NAT: j+n <= k} c= {seq.(j+k) where k is
+    Element of NAT: n <= k} by TARSKI:def 3;
+    now
+      let x be set;
+      assume
+      x in {seq.(j+k) where k is Element of NAT: n <= k};
+      then consider k be Element of NAT such that
+A7:   x=seq.(j+k) and
+A8:   n <= k;
+      j+n <= j+k by A8,XREAL_1:8;
+      hence x in { seq.k1 where k1 is Element of NAT: j+n <= k1} by A7;
+    end;
+    then {seq.(j+k) where k is Element of NAT: n <= k} c= {seq.k where k is
+    Element of NAT: j+n <= k} by TARSKI:def 3;
+    then
+A9: {seq.(j+k) where k is Element of NAT: n <= k} = { seq.k where k is
+    Element of NAT: (j+n) <= k} by A6,XBOOLE_0:def 10;
+    now
+      let x be set;
+      assume
+      x in {seq.(j+k) where k is Element of NAT: n <= k};
+      then consider k be Element of NAT such that
+A10:  x=seq.(j+k) and
+A11:  n <= k;
+      x = rseq.k by A10,NAT_1:def 3;
+      hence x in { rseq.k1 where k1 is Element of NAT: n<= k1} by A11;
+    end;
+    then
+A12: {seq.(j+k) where k is Element of NAT: n <= k} c= {rseq.k where k is
+    Element of NAT: n <= k} by TARSKI:def 3;
+    now
+      let x be set;
+      assume
+      x in {rseq.k where k is Element of NAT: n <= k};
+      then consider k be Element of NAT such that
+A13:  x=rseq.k and
+A14:  n <= k;
+      x = seq.(j+k) by A13,NAT_1:def 3;
+      hence x in { seq.(j+k1) where k1 is Element of NAT: n <= k1} by A14;
+    end;
+    then {rseq.k where k is Element of NAT: n <= k} c= { seq.(j+k) where k is
+    Element of NAT: n <= k} by TARSKI:def 3;
+    then {rseq.k where k is Element of NAT: n <= k} = {seq.(j+k) where k is
+    Element of NAT: n <= k} by A12,XBOOLE_0:def 10;
     hence (superior_realsequence rseq).n = ((superior_realsequence seq)^\j).n
-    by A1,A2,A6,NAT_1:def 3;
+    by A1,A2,A9,NAT_1:def 3;
   end;
   then (superior_realsequence seq)^\j = superior_realsequence rseq by
-FUNCT_2:113;
+  FUNCT_2:113;
   hence thesis by Th25;
 end;
 
 theorem Th29:
   for seq be ExtREAL_sequence,j be Element of NAT holds
-  inferior_realsequence (seq^\j) = (inferior_realsequence seq)^\j &
-  lim_inf (seq^\j) = lim_inf seq
+inferior_realsequence (seq^\j) = (inferior_realsequence seq)^\j & lim_inf (seq
+  ^\j) = lim_inf seq
 proof
   let seq be ExtREAL_sequence,j be Element of NAT;
   set rseq=seq^\j;
   now
     let n be Element of NAT;
-A1: ex Y2 being non empty Subset of ExtREAL st
-    Y2 = {rseq.k where k is Element of NAT: n <= k} &
-    (inferior_realsequence rseq).n = inf Y2 by Def6;
-A2: ex Y3 being non empty Subset of ExtREAL st
-    Y3 = { seq.k where k is Element of NAT: (j+n) <= k} &
-    (inferior_realsequence seq).(j+n) = inf Y3 by Def6;
+A1: ex Y2 being non empty Subset of ExtREAL st Y2 = {rseq.k where k is
+    Element of NAT: n <= k} & (inferior_realsequence rseq).n = inf Y2 by Def6;
+A2: ex Y3 being non empty Subset of ExtREAL st Y3 = { seq.k where k is
+    Element of NAT: (j+n) <= k} & (inferior_realsequence seq).(j+n) = inf Y3 by
+    Def6;
     now
       let x be set;
-      assume x in {rseq.k where k is Element of NAT: n <= k};
+      assume
+      x in {seq.k where k is Element of NAT: j+n <= k};
       then consider k be Element of NAT such that
-A3:   x=rseq.k & n <= k;
-      x = seq.(j+k) & n <= k by A3,NAT_1:def 3;
-      hence x in {seq.(j+k1) where k1 is Element of NAT: n <= k1};
-    end;
-    then
-A4: {rseq.k where k is Element of NAT: n <= k}
-    c= {seq.(j+k) where k is Element of NAT: n <= k} by TARSKI:def 3;
-    now
-      let x be set;
-      assume x in {seq.(j+k) where k is Element of NAT: n <= k};
-      then consider k be Element of NAT such that
-A5:   x=seq.(j+k) & n <= k;
-      x = rseq.k & n <= k by A5,NAT_1:def 3;
-      hence x in { rseq.k1 where k1 is Element of NAT: n<= k1};
-    end;
-    then {seq.(j+k) where k is Element of NAT: n <= k}
-    c= {rseq.k where k is Element of NAT: n <= k} by TARSKI:def 3;
-    then
-A6: {rseq.k where k is Element of NAT: n <= k}
-    = {seq.(j+k) where k is Element of NAT: n <= k} by A4,XBOOLE_0:def 10;
-    now
-      let x be set;
-      assume x in {seq.(j+k) where k is Element of NAT: n <= k};
-      then consider k be Element of NAT such that
-A7:   x=seq.(j+k) & n <= k;
-      x = seq.(j+k) & j+n <= j+k by A7,XREAL_1:8;
-      hence x in { seq.k1 where k1 is Element of NAT: j+n <= k1};
-    end;
-    then
-A8: {seq.(j+k) where k is Element of NAT: n <= k}
-    c= {seq.k where k is Element of NAT: j+n <= k} by TARSKI:def 3;
-    now
-      let x be set;
-      assume x in {seq.k where k is Element of NAT: j+n <= k};
-      then consider k be Element of NAT such that
-A9:   x=seq.k & j+n <= k;
+A3:   x=seq.k and
+A4:   j+n <= k;
       j <= j+n by NAT_1:11;
-      then reconsider k1=k-j as Element of NAT by A9,INT_1:18,XXREAL_0:2;
-      j+n - j <=k - j by A9,XREAL_1:11;
-      then x=seq.(j+k1) & n <= k1 by A9;
-      hence x in { seq.(j+k2) where k2 is Element of NAT: n<= k2};
+      then reconsider k1=k-j as Element of NAT by A4,INT_1:18,XXREAL_0:2;
+A5:   x=seq.(j+k1) by A3;
+      j+n - j <=k - j by A4,XREAL_1:11;
+      hence x in { seq.(j+k2) where k2 is Element of NAT: n<= k2} by A5;
     end;
-    then {seq.k where k is Element of NAT: j+n <= k} c=
-    {seq.(j+k) where k is Element of NAT: n <= k} by TARSKI:def 3;
-    then {seq.(j+k) where k is Element of NAT: n <= k}
-    = {seq.k where k is Element of NAT: (j+n) <= k} by A8,XBOOLE_0:def 10;
+    then
+A6: {seq.k where k is Element of NAT: j+n <= k} c= {seq.(j+k) where k is
+    Element of NAT: n <= k} by TARSKI:def 3;
+    now
+      let x be set;
+      assume
+      x in {seq.(j+k) where k is Element of NAT: n <= k};
+      then consider k be Element of NAT such that
+A7:   x=seq.(j+k) and
+A8:   n <= k;
+      j+n <= j+k by A8,XREAL_1:8;
+      hence x in { seq.k1 where k1 is Element of NAT: j+n <= k1} by A7;
+    end;
+    then {seq.(j+k) where k is Element of NAT: n <= k} c= {seq.k where k is
+    Element of NAT: j+n <= k} by TARSKI:def 3;
+    then
+A9: {seq.(j+k) where k is Element of NAT: n <= k} = {seq.k where k is
+    Element of NAT: (j+n) <= k} by A6,XBOOLE_0:def 10;
+    now
+      let x be set;
+      assume
+      x in {seq.(j+k) where k is Element of NAT: n <= k};
+      then consider k be Element of NAT such that
+A10:  x=seq.(j+k) and
+A11:  n <= k;
+      x = rseq.k by A10,NAT_1:def 3;
+      hence x in { rseq.k1 where k1 is Element of NAT: n<= k1} by A11;
+    end;
+    then
+A12: {seq.(j+k) where k is Element of NAT: n <= k} c= {rseq.k where k is
+    Element of NAT: n <= k} by TARSKI:def 3;
+    now
+      let x be set;
+      assume
+      x in {rseq.k where k is Element of NAT: n <= k};
+      then consider k be Element of NAT such that
+A13:  x=rseq.k and
+A14:  n <= k;
+      x = seq.(j+k) by A13,NAT_1:def 3;
+      hence x in {seq.(j+k1) where k1 is Element of NAT: n <= k1} by A14;
+    end;
+    then {rseq.k where k is Element of NAT: n <= k} c= {seq.(j+k) where k is
+    Element of NAT: n <= k} by TARSKI:def 3;
+    then {rseq.k where k is Element of NAT: n <= k} = {seq.(j+k) where k is
+    Element of NAT: n <= k} by A12,XBOOLE_0:def 10;
     hence (inferior_realsequence rseq).n = ((inferior_realsequence seq)^\j).n
-    by A1,A2,A6,NAT_1:def 3;
+    by A1,A2,A9,NAT_1:def 3;
   end;
   then (inferior_realsequence seq)^\j = inferior_realsequence rseq by
-FUNCT_2:113;
+  FUNCT_2:113;
   hence thesis by Th26;
 end;
 
 theorem Th30:
-  for seq be ExtREAL_sequence, k be Element of NAT st
-  seq is non-increasing & -infty < seq.k & seq.k < +infty holds
-  seq^\k is bounded_above & sup(seq^\k) = seq.k
+  for seq be ExtREAL_sequence, k be Element of NAT st seq is
+non-increasing & -infty < seq.k & seq.k < +infty holds seq^\k is bounded_above
+  & sup(seq^\k) = seq.k
 proof
   let seq be ExtREAL_sequence, k be Element of NAT;
-  assume
-A1: seq is non-increasing & -infty < seq.k & seq.k < +infty;
+  assume that
+A1: seq is non-increasing and
+A2: -infty < seq.k and
+A3: seq.k < +infty;
   set seq0=seq^\k;
   now
     let y be ext-real number;
-    assume y in rng seq0;
+    assume
+    y in rng seq0;
     then consider n be set such that
-A2: n in dom seq0 & y=seq0.n by FUNCT_1:def 5;
-    reconsider n as Element of NAT by A2;
+A4: n in dom seq0 and
+A5: y=seq0.n by FUNCT_1:def 5;
+    reconsider n as Element of NAT by A4;
     k <= n+k by NAT_1:11;
     then seq.(n+k) <= seq.k by A1,Th7;
-    hence y <= seq.k by A2,NAT_1:def 3;
+    hence y <= seq.k by A5,NAT_1:def 3;
   end;
   then
-A3: seq.k is UpperBound of rng seq0 by XXREAL_2:def 1;
-  seq.k in REAL by A1,XXREAL_0:14;
-  then
-A4: rng seq0 is bounded_above by A3,SUPINF_1:def 11;
+A6: seq.k is UpperBound of rng seq0 by XXREAL_2:def 1;
   seq0.0= seq.(0+k) by NAT_1:def 3;
-  then seq.k in rng seq0 by FUNCT_2:6;
-  hence thesis by A3,A4,Def4,XXREAL_2:55;
+  then
+A7: seq.k in rng seq0 by FUNCT_2:6;
+  seq.k in REAL by A2,A3,XXREAL_0:14;
+  then rng seq0 is bounded_above by A6,SUPINF_1:def 11;
+  hence thesis by A6,A7,Def4,XXREAL_2:55;
 end;
 
 theorem Th31:
-  for seq be ExtREAL_sequence, k be Element of NAT st
-  seq is non-decreasing & -infty < seq.k & seq.k < +infty holds
-  seq^\k is bounded_below & inf (seq^\k) = seq.k
+  for seq be ExtREAL_sequence, k be Element of NAT st seq is
+non-decreasing & -infty < seq.k & seq.k < +infty holds seq^\k is bounded_below
+  & inf (seq^\k) = seq.k
 proof
   let seq be ExtREAL_sequence, k be Element of NAT;
-  assume
-A1: seq is non-decreasing & -infty < seq.k & seq.k < +infty;
+  assume that
+A1: seq is non-decreasing and
+A2: -infty < seq.k and
+A3: seq.k < +infty;
   set seq0=seq^\k;
   now
     let y be ext-real number;
-    assume y in rng seq0;
+    assume
+    y in rng seq0;
     then consider n be set such that
-A2: n in dom seq0 & y=seq0.n by FUNCT_1:def 5;
-    reconsider n as Element of NAT by A2;
+A4: n in dom seq0 and
+A5: y=seq0.n by FUNCT_1:def 5;
+    reconsider n as Element of NAT by A4;
     k <= n+k by NAT_1:11;
     then seq.k <= seq.(n+k) by A1,Th7;
-    hence seq.k <= y by A2,NAT_1:def 3;
+    hence seq.k <= y by A5,NAT_1:def 3;
   end;
   then
-A3: seq.k is LowerBound of rng seq0 by XXREAL_2:def 2;
-  seq.k in REAL by A1,XXREAL_0:14;
-  then
-A4: rng seq0 is bounded_below by A3,SUPINF_1:def 12;
+A6: seq.k is LowerBound of rng seq0 by XXREAL_2:def 2;
   seq0.0 = seq.(0+k) by NAT_1:def 3;
-  then seq.k in rng seq0 by FUNCT_2:6;
-  hence thesis by A3,A4,Def3,XXREAL_2:56;
+  then
+A7: seq.k in rng seq0 by FUNCT_2:6;
+  seq.k in REAL by A2,A3,XXREAL_0:14;
+  then rng seq0 is bounded_below by A6,SUPINF_1:def 12;
+  hence thesis by A6,A7,Def3,XXREAL_2:56;
 end;
 
-Lm4: for
-seq be ExtREAL_sequence st seq is bounded & seq is non-increasing holds
-seq is convergent_to_finite_number & seq is convergent & lim seq = inf seq
+Lm3: for seq be ExtREAL_sequence st seq is bounded & seq is non-increasing
+holds seq is convergent_to_finite_number & seq is convergent & lim seq = inf
+seq
+
 proof
   let seq be ExtREAL_sequence;
-  assume
-A1: seq is bounded & seq is non-increasing;
-  then reconsider rseq=seq as Real_Sequence by Th11;
-A2: seq is bounded_below by A1,Def5;
+  assume that
+A1: seq is bounded and
+A2: seq is non-increasing;
+  reconsider rseq=seq as Real_Sequence by A1,Th11;
+A3: seq is bounded_below by A1,Def5;
   then
-A3: rseq is bounded_below by Th13;
-A5: rseq is convergent by A3,A1;
-  then lim rseq = lim_sup rseq by RINFSUP1:91;
-  then lim rseq = inf rseq by A1,RINFSUP1:72;
+A4: rseq is bounded_below by Th13;
+  then lim rseq = lim_sup rseq by A2,RINFSUP1:91;
+  then lim rseq = inf rseq by A2,RINFSUP1:72;
   then
-A6: lim seq = inf rseq by A5,Th14;
-  rng seq is bounded_below by A2,Def3;
-  hence thesis by A5,A6,Th3,Th14;
+A5: lim seq = inf rseq by A2,A4,Th14;
+  rng seq is bounded_below by A3,Def3;
+  hence thesis by A2,A4,A5,Th3,Th14;
 end;
 
-Lm5: for
-seq be ExtREAL_sequence st seq is bounded & seq is non-decreasing holds
-seq is convergent_to_finite_number & seq is convergent & lim seq = sup seq
+Lm4: for seq be ExtREAL_sequence st seq is bounded & seq is non-decreasing
+holds seq is convergent_to_finite_number & seq is convergent & lim seq = sup
+seq
+
 proof
   let seq be ExtREAL_sequence;
-  assume
-A1: seq is bounded & seq is non-decreasing;
-  then reconsider rseq = seq as Real_Sequence by Th11;
-A2: seq is bounded_above by A1,Def5;
+  assume that
+A1: seq is bounded and
+A2: seq is non-decreasing;
+  reconsider rseq = seq as Real_Sequence by A1,Th11;
+A3: seq is bounded_above by A1,Def5;
   then
-A3: rseq is bounded_above by Th12;
-A5: rseq is convergent by A3,A1;
-  then lim rseq = lim_inf rseq by RINFSUP1:91;
-  then lim rseq = sup rseq by A1,RINFSUP1:66;
+A4: rseq is bounded_above by Th12;
+  then lim rseq = lim_inf rseq by A2,RINFSUP1:91;
+  then lim rseq = sup rseq by A2,RINFSUP1:66;
   then
-A6: lim seq = sup rseq by A5,Th14;
-  rng seq is bounded_above by A2,Def4;
-  hence thesis by A5,A6,Th1,Th14;
+A5: lim seq = sup rseq by A2,A4,Th14;
+  rng seq is bounded_above by A3,Def4;
+  hence thesis by A2,A4,A5,Th1,Th14;
 end;
 
 theorem Th32:
-  for seq be ExtREAL_sequence st
-  (for n be Element of NAT holds +infty <= seq.n) holds
-  seq is convergent_to_+infty
+  for seq be ExtREAL_sequence st (for n be Element of NAT holds
+  +infty <= seq.n) holds seq is convergent_to_+infty
 proof
   let seq be ExtREAL_sequence;
   assume
 A1: for n be Element of NAT holds +infty <= seq.n;
   now
     let g be real number;
-    assume 0 < g;
+    assume
+    0 < g;
     now
       let m be Nat;
-      assume 0 <= m;
-A2:   g <= +infty by XXREAL_0:3;
+      assume
+      0 <= m;
       m is Element of NAT by ORDINAL1:def 13;
-      then +infty <= seq.m by A1;
+      then
+A2:   +infty <= seq.m by A1;
+      g <= +infty by XXREAL_0:3;
       hence g <= seq.m by A2,XXREAL_0:2;
     end;
     hence ex n be Nat st for m be Nat st n <= m holds g <= seq.m;
@@ -1459,22 +1555,24 @@ A2:   g <= +infty by XXREAL_0:3;
 end;
 
 theorem Th33:
-  for seq be ExtREAL_sequence st
-  (for n be Element of NAT holds seq.n <= -infty) holds
-  seq is convergent_to_-infty
+  for seq be ExtREAL_sequence st (for n be Element of NAT holds
+  seq.n <= -infty) holds seq is convergent_to_-infty
 proof
   let seq be ExtREAL_sequence;
   assume
 A1: for n be Element of NAT holds seq.n <= -infty;
   now
     let g be real number;
-    assume g < 0;
+    assume
+    g < 0;
     now
       let m be Nat;
-      assume 0 <= m;
-A2:   -infty <= g by XXREAL_0:5;
+      assume
+      0 <= m;
       m is Element of NAT by ORDINAL1:def 13;
-      then seq.m <= -infty by A1;
+      then
+A2:   seq.m <= -infty by A1;
+      -infty <= g by XXREAL_0:5;
       hence seq.m <= g by A2,XXREAL_0:2;
     end;
     hence ex n be Nat st for m be Nat st n <=m holds seq.m <= g;
@@ -1483,79 +1581,90 @@ A2:   -infty <= g by XXREAL_0:5;
 end;
 
 theorem Th34:
-  for seq be ExtREAL_sequence st seq is non-increasing & -infty = inf seq holds
-  seq is convergent_to_-infty & lim seq = -infty
+  for seq be ExtREAL_sequence st seq is non-increasing & -infty =
+  inf seq holds seq is convergent_to_-infty & lim seq = -infty
 proof
   let seq be ExtREAL_sequence;
-  assume
-A1: seq is non-increasing & -infty = inf seq;
-A2: seq is convergent_to_-infty
+  assume that
+A1: seq is non-increasing and
+A2: -infty = inf seq;
+A3: seq is convergent_to_-infty
   proof
-    assume not seq is convergent_to_-infty;
+    assume
+    not seq is convergent_to_-infty;
     then consider g be real number such that
-A3: g < 0 & for n be Nat ex m be Nat st n<=m & g < seq.m by MESFUNC5:def 10;
+    g < 0 and
+A4: for n be Nat ex m be Nat st n<=m & g < seq.m by MESFUNC5:def 10;
     for y be ext-real number st y in rng seq holds g <= y
     proof
       let y be ext-real number;
-      assume y in rng seq;
+      assume
+      y in rng seq;
       then consider n be set such that
-A4:   n in NAT & y=seq.n by FUNCT_2:17;
-      reconsider n as Element of NAT by A4;
+A5:   n in NAT and
+A6:   y=seq.n by FUNCT_2:17;
+      reconsider n as Element of NAT by A5;
       consider m be Nat such that
-A5:   n<=m & g < seq.m by A3;
+A7:   n<=m and
+A8:   g < seq.m by A4;
       m is Element of NAT by ORDINAL1:def 13;
-      then seq.m <= seq.n by A1,A5,Th7;
-      hence thesis by A4,A5,XXREAL_0:2;
+      then seq.m <= seq.n by A1,A7,Th7;
+      hence thesis by A6,A8,XXREAL_0:2;
     end;
     then g is LowerBound of rng seq by XXREAL_2:def 2;
     then
-A6: g <= inf rng seq by XXREAL_2:def 4;
+A9: g <= inf rng seq by XXREAL_2:def 4;
     g in REAL by XREAL_0:def 1;
-    hence contradiction by A1,A6,XXREAL_0:12;
+    hence contradiction by A2,A9,XXREAL_0:12;
   end;
   then seq is convergent by MESFUNC5:def 11;
-  hence thesis by A2,MESFUNC5:def 12;
+  hence thesis by A3,MESFUNC5:def 12;
 end;
 
 theorem Th35:
-  for seq be ExtREAL_sequence st
-  seq is non-decreasing & +infty = sup seq holds
-  seq is convergent_to_+infty & lim seq = +infty
+  for seq be ExtREAL_sequence st seq is non-decreasing & +infty =
+  sup seq holds seq is convergent_to_+infty & lim seq = +infty
 proof
   let seq be ExtREAL_sequence;
-  assume
-A1: seq is non-decreasing & +infty = sup seq;
-A2: seq is convergent_to_+infty
+  assume that
+A1: seq is non-decreasing and
+A2: +infty = sup seq;
+A3: seq is convergent_to_+infty
   proof
-    assume not (seq is convergent_to_+infty);
+    assume
+    not seq is convergent_to_+infty;
     then consider g be real number such that
-A3: 0 < g & for n be Nat ex m be Nat st n<=m & seq.m < g by MESFUNC5:def 9;
+    0 < g and
+A4: for n be Nat ex m be Nat st n<=m & seq.m < g by MESFUNC5:def 9;
     for y be ext-real number st y in rng seq holds y <= g
     proof
       let y be ext-real number;
-      assume y in rng seq;
+      assume
+      y in rng seq;
       then consider n be set such that
-A4:   n in NAT & y=seq.n by FUNCT_2:17;
-      reconsider n as Element of NAT by A4;
+A5:   n in NAT and
+A6:   y=seq.n by FUNCT_2:17;
+      reconsider n as Element of NAT by A5;
       consider m be Nat such that
-A5:   n<=m & seq.m < g by A3;
+A7:   n<=m and
+A8:   seq.m < g by A4;
       m is Element of NAT by ORDINAL1:def 13;
-      then seq.n <= seq.m by A1,A5,Th7;
-      hence thesis by A4,A5,XXREAL_0:2;
+      then seq.n <= seq.m by A1,A7,Th7;
+      hence thesis by A6,A8,XXREAL_0:2;
     end;
     then g is UpperBound of rng seq by XXREAL_2:def 1;
     then
-A6: sup rng seq <= g by XXREAL_2:def 3;
+A9: sup rng seq <= g by XXREAL_2:def 3;
     g in REAL by XREAL_0:def 1;
-    hence contradiction by A1,A6,XXREAL_0:9;
+    hence contradiction by A2,A9,XXREAL_0:9;
   end;
   then seq is convergent by MESFUNC5:def 11;
-  hence thesis by A2,MESFUNC5:def 12;
+  hence thesis by A3,MESFUNC5:def 12;
 end;
 
 theorem Th36:
-  for seq be ExtREAL_sequence st seq is non-increasing holds
-  seq is convergent & lim seq = inf seq
+  for seq be ExtREAL_sequence st seq is non-increasing holds seq
+  is convergent & lim seq = inf seq
 proof
   let seq be ExtREAL_sequence;
   assume
@@ -1563,91 +1672,92 @@ A1: seq is non-increasing;
   per cases;
   suppose
 A2: for n be Element of NAT holds +infty <= seq.n;
-    then
-A3: seq is convergent_to_+infty by Th32;
-    hence
-A4: seq is convergent by MESFUNC5:def 11;
-    rng seq = {+infty}
-    proof
-      now
-        let y be set;
-        assume y in rng seq;
-        then ex x be set st x in dom seq & seq.x=y by FUNCT_1:def 5;
-        then y = +infty by A2,XXREAL_0:4;
-        hence y in {+infty} by TARSKI:def 1;
-      end;
+    now
+      let y be set;
+      assume
+      y in {+infty};
       then
-A5:   rng seq c={+infty} by TARSKI:def 3;
+A3:   y=+infty by TARSKI:def 1;
       now
-        let y be set;
-        assume y in {+infty};
-        then
-A6:     y=+infty by TARSKI:def 1;
+        assume
+A4:     not y in rng seq;
         now
-          assume
-A7:       not y in rng seq;
-          now
-            let n be Element of NAT;
-            n in NAT;
-            then n in dom seq by FUNCT_2:def 1;
-            then seq.n<>+infty by A6,A7,FUNCT_1:def 5;
-            hence contradiction by A2,XXREAL_0:4;
-          end;
-          hence contradiction;
+          let n be Element of NAT;
+          n in NAT;
+          then n in dom seq by FUNCT_2:def 1;
+          then seq.n<>+infty by A3,A4,FUNCT_1:def 5;
+          hence contradiction by A2,XXREAL_0:4;
         end;
-        hence y in rng seq;
+        hence contradiction;
       end;
-      then {+infty} c= rng seq by TARSKI:def 3;
-      hence thesis by A5,XBOOLE_0:def 10;
+      hence y in rng seq;
     end;
+    then
+A5: {+infty} c= rng seq by TARSKI:def 3;
+A6: seq is convergent_to_+infty by A2,Th32;
+    hence
+A7: seq is convergent by MESFUNC5:def 11;
+    now
+      let y be set;
+      assume
+      y in rng seq;
+      then ex x be set st x in dom seq & seq.x=y by FUNCT_1:def 5;
+      then y = +infty by A2,XXREAL_0:4;
+      hence y in {+infty} by TARSKI:def 1;
+    end;
+    then rng seq c={+infty} by TARSKI:def 3;
+    then rng seq = {+infty} by A5,XBOOLE_0:def 10;
     then inf seq = +infty by XXREAL_2:13;
-    hence thesis by A3,A4,MESFUNC5:def 12;
+    hence thesis by A6,A7,MESFUNC5:def 12;
   end;
-  suppose not (for n be Element of NAT holds +infty <= seq.n);
+  suppose
+    not (for n be Element of NAT holds +infty <= seq.n);
     then consider k be Element of NAT such that
 A8: seq.k < +infty;
     per cases;
     suppose
 A9:   -infty <> inf seq;
       set seq0=seq^\k;
-A10:  inf seq = inf seq0 & seq0 is non-increasing by A1,Th25;
+A10:  inf seq = inf seq0 by A1,Th25;
+A11:  now
+        assume
+        rng seq0 ={-infty};
+        then
+A12:    -infty in rng seq0 by TARSKI:def 1;
+        -infty is LowerBound of rng seq0 by XXREAL_2:42;
+        hence contradiction by A9,A10,A12,XXREAL_2:56;
+      end;
+A13:  inf seq0 <= sup seq0 by Th24;
+A14:  inf rng seq0 is LowerBound of rng seq0 by XXREAL_2:def 4;
       inf seq <= seq.k by Th23;
       then -infty < seq.k by A9,XXREAL_0:2,6;
       then
-A11:  seq0 is bounded_above by A1,A8,Th30;
-      then
-A12:  rng seq0 is bounded_above by Def4;
-      now
-        assume
-A13:    rng seq0 ={-infty};
-A14:    -infty is LowerBound of rng seq0 by XXREAL_2:42;
-        -infty in rng seq0 by A13,TARSKI:def 1;
-        hence contradiction by A9,A10,A14,XXREAL_2:56;
-      end;
-      then
-A15:  sup rng seq0 < +infty by A12,XXREAL_0:9,XXREAL_2:57;
-      inf seq0 <= sup seq0 by Th24;
-      then
-A16:  inf rng seq0 in REAL by A9,A10,A15,XXREAL_0:14;
-      inf rng seq0 is LowerBound of rng seq0 by XXREAL_2:def 4;
-      then rng seq0 is bounded_below by A16,SUPINF_1:def 12;
+A15:  seq0 is bounded_above by A1,A8,Th30;
+      then rng seq0 is bounded_above by Def4;
+      then sup rng seq0 < +infty by A11,XXREAL_0:9,XXREAL_2:57;
+      then inf rng seq0 in REAL by A9,A10,A13,XXREAL_0:14;
+      then rng seq0 is bounded_below by A14,SUPINF_1:def 12;
       then seq0 is bounded_below by Def3;
-      then seq0 is bounded by A11,Def5;
-      then seq0 is convergent & lim seq0 = inf seq0 by A10,Lm4;
-      hence thesis by A10,Th17;
+      then
+A16:  seq0 is bounded by A15,Def5;
+A17:  seq0 is non-increasing by A1,Th25;
+      then
+A18:  lim seq0 = inf seq0 by A16,Lm3;
+      seq0 is convergent by A17,A16,Lm3;
+      hence thesis by A10,A18,Th17;
     end;
     suppose
-A17:  -infty = inf seq;
-      then seq is convergent_to_-infty & lim seq = -infty by A1,Th34;
+A19:  -infty = inf seq;
+      then seq is convergent_to_-infty by A1,Th34;
       hence seq is convergent by MESFUNC5:def 11;
-      thus thesis by A1,A17,Th34;
+      thus thesis by A1,A19,Th34;
     end;
   end;
 end;
 
 theorem Th37:
-  for seq be ExtREAL_sequence st seq is non-decreasing holds
-  seq is convergent & lim seq = sup seq
+  for seq be ExtREAL_sequence st seq is non-decreasing holds seq
+  is convergent & lim seq = sup seq
 proof
   let seq be ExtREAL_sequence;
   assume
@@ -1655,47 +1765,46 @@ A1: seq is non-decreasing;
   per cases;
   suppose
 A2: for n be Element of NAT holds seq.n <= -infty;
-    then
-A3: seq is convergent_to_-infty by Th33;
-    hence
-A4: seq is convergent by MESFUNC5:def 11;
-    rng seq = {-infty}
-    proof
-      now
-        let y be set;
-        assume y in rng seq;
-        then ex x be set st x in dom seq & seq.x=y by FUNCT_1:def 5;
-        then y = -infty by A2,XXREAL_0:6;
-        hence y in {-infty} by TARSKI:def 1;
-      end;
+    now
+      let y be set;
+      assume
+      y in {-infty};
       then
-A5:   rng seq c={-infty} by TARSKI:def 3;
+A3:   y = -infty by TARSKI:def 1;
       now
-        let y be set;
-        assume y in {-infty};
-        then
-A6:     y = -infty by TARSKI:def 1;
+        assume
+A4:     not y in rng seq;
         now
-          assume
-A7:       not y in rng seq;
-          now
-            let n be Element of NAT;
-            n in NAT;
-            then n in dom seq by FUNCT_2:def 1;
-            then seq.n <> -infty by A6,A7,FUNCT_1:def 5;
-            hence contradiction by A2,XXREAL_0:6;
-          end;
-          hence contradiction;
+          let n be Element of NAT;
+          n in NAT;
+          then n in dom seq by FUNCT_2:def 1;
+          then seq.n <> -infty by A3,A4,FUNCT_1:def 5;
+          hence contradiction by A2,XXREAL_0:6;
         end;
-        hence y in rng seq;
+        hence contradiction;
       end;
-      then {-infty} c= rng seq by TARSKI:def 3;
-      hence thesis by A5,XBOOLE_0:def 10;
+      hence y in rng seq;
     end;
+    then
+A5: {-infty} c= rng seq by TARSKI:def 3;
+A6: seq is convergent_to_-infty by A2,Th33;
+    hence
+A7: seq is convergent by MESFUNC5:def 11;
+    now
+      let y be set;
+      assume
+      y in rng seq;
+      then ex x be set st x in dom seq & seq.x=y by FUNCT_1:def 5;
+      then y = -infty by A2,XXREAL_0:6;
+      hence y in {-infty} by TARSKI:def 1;
+    end;
+    then rng seq c={-infty} by TARSKI:def 3;
+    then rng seq = {-infty} by A5,XBOOLE_0:def 10;
     then sup seq = -infty by XXREAL_2:11;
-    hence thesis by A3,A4,MESFUNC5:def 12;
+    hence thesis by A6,A7,MESFUNC5:def 12;
   end;
-  suppose not (for n be Element of NAT holds seq.n <= -infty);
+  suppose
+    not (for n be Element of NAT holds seq.n <= -infty);
     then consider k be Element of NAT such that
 A8: -infty < seq.k;
     per cases;
@@ -1703,191 +1812,214 @@ A8: -infty < seq.k;
 A9:   +infty <> sup seq;
       set seq0=seq^\k;
 A10:  sup seq = sup seq0 by A1,Th26;
-A11:  seq0 is non-decreasing by A1,Th26;
+A11:  now
+        assume
+        rng seq0 ={+infty};
+        then
+A12:    +infty in rng seq0 by TARSKI:def 1;
+        +infty is UpperBound of rng seq0 by XXREAL_2:41;
+        hence contradiction by A9,A10,A12,XXREAL_2:55;
+      end;
+A13:  inf seq0 <= sup seq0 by Th24;
+A14:  sup rng seq0 is UpperBound of rng seq0 by XXREAL_2:def 3;
       seq.k <= sup seq by Th23;
       then seq.k < +infty by A9,XXREAL_0:2,4;
       then
-A12:  seq0 is bounded_below by A1,A8,Th31;
-      then
-A13:  rng seq0 is bounded_below by Def3;
-      now
-        assume rng seq0 ={+infty};
-        then
-A14:    +infty in rng seq0 by TARSKI:def 1;
-        +infty is UpperBound of rng seq0 by XXREAL_2:41;
-        hence contradiction by A9,A10,A14,XXREAL_2:55;
-      end;
-      then
-A15:  -infty < inf rng seq0 by A13,XXREAL_0:12,XXREAL_2:58;
-      inf seq0 <= sup seq0 by Th24;
-      then
-A16:  sup rng seq0 in REAL by A9,A10,A15,XXREAL_0:14;
-      sup rng seq0 is UpperBound of rng seq0 by XXREAL_2:def 3;
-      then rng seq0 is bounded_above by A16,SUPINF_1:def 11;
+A15:  seq0 is bounded_below by A1,A8,Th31;
+      then rng seq0 is bounded_below by Def3;
+      then -infty < inf rng seq0 by A11,XXREAL_0:12,XXREAL_2:58;
+      then sup rng seq0 in REAL by A9,A10,A13,XXREAL_0:14;
+      then rng seq0 is bounded_above by A14,SUPINF_1:def 11;
       then seq0 is bounded_above by Def4;
-      then seq0 is bounded by A12,Def5;
-      then seq0 is convergent & lim seq0 = sup seq0 by A11,Lm5;
-      hence thesis by A10,Th17;
+      then
+A16:  seq0 is bounded by A15,Def5;
+A17:  seq0 is non-decreasing by A1,Th26;
+      then
+A18:  lim seq0 = sup seq0 by A16,Lm4;
+      seq0 is convergent by A17,A16,Lm4;
+      hence thesis by A10,A18,Th17;
     end;
     suppose
-A17:  +infty = sup seq;
-      then seq is convergent_to_+infty & lim seq = +infty by A1,Th35;
+A19:  +infty = sup seq;
+      then seq is convergent_to_+infty by A1,Th35;
       hence seq is convergent by MESFUNC5:def 11;
-      thus thesis by A1,A17,Th35;
+      thus thesis by A1,A19,Th35;
     end;
   end;
 end;
 
 theorem Th38:
-  for seq1,seq2 be ExtREAL_sequence st
-  seq1 is convergent & seq2 is convergent &
-  (for n be Element of NAT holds seq1.n <=seq2.n) holds lim seq1 <= lim seq2
+  for seq1,seq2 be ExtREAL_sequence st seq1 is convergent & seq2
+is convergent & (for n be Element of NAT holds seq1.n <=seq2.n) holds lim seq1
+  <= lim seq2
 proof
   let seq1,seq2 be ExtREAL_sequence;
-  assume
-A1: seq1 is convergent & seq2 is convergent &
-  (for n be Element of NAT holds seq1.n <=seq2.n);
+  assume that
+A1: seq1 is convergent and
+A2: seq2 is convergent and
+A3: for n be Element of NAT holds seq1.n <=seq2.n;
   per cases by A1,MESFUNC5:def 11;
   suppose
-A2: seq1 is convergent_to_finite_number;
-A3: not seq2 is convergent_to_-infty
+A4: seq1 is convergent_to_finite_number;
+A5: not seq2 is convergent_to_-infty
     proof
       assume
-A4:   seq2 is convergent_to_-infty;
+A6:   seq2 is convergent_to_-infty;
       now
         let g be real number;
-        assume g < 0;
+        assume
+        g < 0;
         then consider n be Nat such that
-A5:     for m be Nat st n<=m holds seq2.m <= g by A4,MESFUNC5:def 10;
+A7:     for m be Nat st n<=m holds seq2.m <= g by A6,MESFUNC5:def
+        10;
         now
           let m be Nat;
-          assume n <= m;
-          then
-A6:       seq2.m <= g by A5;
           m is Element of NAT by ORDINAL1:def 13;
-          then seq1.m <= seq2.m by A1;
-          hence seq1.m <= g by A6,XXREAL_0:2;
+          then
+A8:       seq1.m <= seq2.m by A3;
+          assume
+          n <= m;
+          then seq2.m <= g by A7;
+          hence seq1.m <= g by A8,XXREAL_0:2;
         end;
         hence ex n be Nat st for m be Nat st n<=m holds seq1.m <= g;
       end;
       then seq1 is convergent_to_-infty by MESFUNC5:def 10;
-      hence contradiction by A2,MESFUNC5:57;
+      hence contradiction by A4,MESFUNC5:57;
     end;
-    per cases by A1,A3,MESFUNC5:def 11;
+    per cases by A2,A5,MESFUNC5:def 11;
     suppose
-A7:   seq2 is convergent_to_finite_number;
+A9:   seq2 is convergent_to_finite_number;
       consider k1 be Element of NAT such that
-A8:   seq1^\k1 is bounded by A2,Th19;
+A10:  seq1^\k1 is bounded by A4,Th19;
+      seq1^\k1 is bounded_above by A10,Def5;
+      then rng(seq1^\k1) is bounded_above by Def4;
+      then consider UB being UpperBound of rng (seq1^\k1) such that
+A11:  UB in REAL by SUPINF_1:def 11;
       consider k2 be Element of NAT such that
-A9:   seq2^\k2 is bounded by A7,Th19;
+A12:  seq2^\k2 is bounded by A9,Th19;
       reconsider k = max(k1,k2) as Element of NAT;
-      seq1^\k1 is bounded_below & seq1^\k1 is bounded_above by A8,Def5;
-      then
-A10:  rng(seq1^\k1) is bounded_below & rng(seq1^\k1) is bounded_above
-      by Def3,Def4;
-      then consider LB being LowerBound of rng (seq1^\k1) such that
-A11:  LB in REAL by SUPINF_1:def 12;
-      consider UB being UpperBound of rng (seq1^\k1) such that
-A12:  UB in REAL by A10,SUPINF_1:def 11;
-A13:  dom(seq1^\k1) = NAT by FUNCT_2:def 1;
+A13:  lim seq2 = lim(seq2^\k) by A9,Th20;
+A14:  dom(seq1^\k1) = NAT by FUNCT_2:def 1;
       now
-        let y be set;
-        assume y in rng (seq1^\k);
-        then consider n be set such that
-A14:    n in dom (seq1^\k) & (seq1^\k).n=y by FUNCT_1:def 5;
-        reconsider n as Element of NAT by A14;
-A15:    y=seq1.(k+n) by A14,NAT_1:def 3;
         reconsider k2=k-k1 as Element of NAT by INT_1:18,XXREAL_0:25;
-        y = seq1.(k1 +(k2+n)) by A15;
-        then y = (seq1^\k1).(k2+n) by NAT_1:def 3;
-        hence y in rng(seq1^\k1) by A13,FUNCT_1:def 5;
-      end;
-      then rng (seq1^\k) c=rng (seq1^\k1) by TARSKI:def 3;
-      then LB is LowerBound of rng (seq1^\k) &
-      UB is UpperBound of rng (seq1^\k) by XXREAL_2:5,6;
-      then rng (seq1^\k)is bounded_below &
-      rng (seq1^\k)is bounded_above by A11,A12,SUPINF_1:def 11,def 12;
-      then seq1^\k is bounded_below & seq1^\k is bounded_above by Def3,Def4;
-      then seq1^\k is bounded by Def5;
-      then reconsider rseq1=seq1^\k as Real_Sequence by Th11;
-      seq2^\k2 is bounded_below & seq2^\k2 is bounded_above by A9,Def5;
-      then
-A16:  rng(seq2^\k2)is bounded_below & rng(seq2^\k2) is bounded_above
-      by Def3,Def4;
-      then consider LB being LowerBound of rng (seq2^\k2) such that
-A17:  LB in REAL by SUPINF_1:def 12;
-      consider UB being UpperBound of rng (seq2^\k2) such that
-A18:  UB in REAL by A16,SUPINF_1:def 11;
-A19:  dom(seq2^\k2) = NAT by FUNCT_2:def 1;
-      now
         let y be set;
-        assume y in rng (seq2^\k);
+        assume
+        y in rng (seq1^\k);
         then consider n be set such that
-A20:    n in dom (seq2^\k) & (seq2^\k).n=y by FUNCT_1:def 5;
-        reconsider n as Element of NAT by A20;
-A21:    y=seq2.(k+n) by A20,NAT_1:def 3;
-        reconsider k3=k-k2 as Element of NAT by INT_1:18,XXREAL_0:25;
-        y=seq2.(k2 +(k3+n)) by A21;
-        then y=(seq2^\k2).(k3+n) by NAT_1:def 3;
-        hence y in rng(seq2^\k2) by A19,FUNCT_1:def 5;
+A15:    n in dom (seq1^\k) and
+A16:    (seq1^\k).n=y by FUNCT_1:def 5;
+        reconsider n as Element of NAT by A15;
+        y=seq1.(k+n) by A16,NAT_1:def 3;
+        then y = seq1.(k1 +(k2+n));
+        then y = (seq1^\k1).(k2+n) by NAT_1:def 3;
+        hence y in rng(seq1^\k1) by A14,FUNCT_1:def 5;
       end;
-      then rng (seq2^\k) c= rng (seq2^\k2) by TARSKI:def 3;
-      then LB is LowerBound of rng (seq2^\k) &
-      UB is UpperBound of rng (seq2^\k) by XXREAL_2:5,6;
-      then rng (seq2^\k)is bounded_below & rng (seq2^\k ) is bounded_above
-      by A17,A18,SUPINF_1:def 11,def 12;
-      then seq2^\k is bounded_below & seq2^\k is bounded_above by Def3,Def4;
-      then seq2^\k is bounded by Def5;
-      then reconsider rseq2=seq2^\k as Real_Sequence by Th11;
-      seq1^\k is convergent_to_finite_number &
-      seq2^\k is convergent_to_finite_number by A2,A7,Th20;
       then
-A22:  rseq1 is convergent & rseq2 is convergent &
-      lim(seq1^\k) = lim rseq1 & lim(seq2^\k) = lim rseq2 by Th15;
-A23:  for n be Element of NAT holds rseq1.n <= rseq2.n
+A17:  rng (seq1^\k) c=rng (seq1^\k1) by TARSKI:def 3;
+      then UB is UpperBound of rng (seq1^\k) by XXREAL_2:6;
+      then rng (seq1^\k)is bounded_above by A11,SUPINF_1:def 11;
+      then
+A18:  seq1^\k is bounded_above by Def4;
+      seq1^\k1 is bounded_below by A10,Def5;
+      then rng(seq1^\k1) is bounded_below by Def3;
+      then consider LB being LowerBound of rng (seq1^\k1) such that
+A19:  LB in REAL by SUPINF_1:def 12;
+      LB is LowerBound of rng (seq1^\k) by A17,XXREAL_2:5;
+      then rng (seq1^\k)is bounded_below by A19,SUPINF_1:def 12;
+      then seq1^\k is bounded_below by Def3;
+      then seq1^\k is bounded by A18,Def5;
+      then reconsider rseq1=seq1^\k as Real_Sequence by Th11;
+      seq2^\k2 is bounded_below by A12,Def5;
+      then rng(seq2^\k2)is bounded_below by Def3;
+      then consider LB being LowerBound of rng (seq2^\k2) such that
+A20:  LB in REAL by SUPINF_1:def 12;
+A21:  lim seq1 = lim(seq1^\k) by A4,Th20;
+      seq2^\k2 is bounded_above by A12,Def5;
+      then rng(seq2^\k2) is bounded_above by Def4;
+      then consider UB being UpperBound of rng (seq2^\k2) such that
+A22:  UB in REAL by SUPINF_1:def 11;
+A23:  dom(seq2^\k2) = NAT by FUNCT_2:def 1;
+      now
+        reconsider k3=k-k2 as Element of NAT by INT_1:18,XXREAL_0:25;
+        let y be set;
+        assume
+        y in rng (seq2^\k);
+        then consider n be set such that
+A24:    n in dom (seq2^\k) and
+A25:    (seq2^\k).n=y by FUNCT_1:def 5;
+        reconsider n as Element of NAT by A24;
+        y=seq2.(k+n) by A25,NAT_1:def 3;
+        then y=seq2.(k2 +(k3+n));
+        then y=(seq2^\k2).(k3+n) by NAT_1:def 3;
+        hence y in rng(seq2^\k2) by A23,FUNCT_1:def 5;
+      end;
+      then
+A26:  rng (seq2^\k) c= rng (seq2^\k2) by TARSKI:def 3;
+      then UB is UpperBound of rng (seq2^\k) by XXREAL_2:6;
+      then rng (seq2^\k ) is bounded_above by A22,SUPINF_1:def 11;
+      then
+A27:  seq2^\k is bounded_above by Def4;
+      LB is LowerBound of rng (seq2^\k) by A26,XXREAL_2:5;
+      then rng (seq2^\k)is bounded_below by A20,SUPINF_1:def 12;
+      then seq2^\k is bounded_below by Def3;
+      then seq2^\k is bounded by A27,Def5;
+      then reconsider rseq2=seq2^\k as Real_Sequence by Th11;
+A28:  seq2^\k is convergent_to_finite_number by A9,Th20;
+      then
+A29:  rseq2 is convergent by Th15;
+A30:  for n be Element of NAT holds rseq1.n <= rseq2.n
       proof
         let n be Element of NAT;
-        (seq1^\k).n =seq1.(k+n) & (seq2^\k).n =seq2.(k+n) by NAT_1:def 3;
-        hence thesis by A1;
+A31:    (seq2^\k).n =seq2.(k+n) by NAT_1:def 3;
+        (seq1^\k).n =seq1.(k+n) by NAT_1:def 3;
+        hence thesis by A3,A31;
       end;
-      lim seq1 = lim(seq1^\k) & lim seq2 = lim(seq2^\k) by A2,A7,Th20;
-      hence thesis by A22,A23,SEQ_2:32;
+A32:  seq1^\k is convergent_to_finite_number by A4,Th20;
+      then
+A33:  lim(seq1^\k) = lim rseq1 by Th15;
+A34:  lim(seq2^\k) = lim rseq2 by A28,Th15;
+      rseq1 is convergent by A32,Th15;
+      hence thesis by A29,A33,A34,A30,A21,A13,SEQ_2:32;
     end;
     suppose
-A24:  seq2 is convergent_to_+infty;
+A35:  seq2 is convergent_to_+infty;
       then seq2 is convergent by MESFUNC5:def 11;
-      then lim seq2=+infty by A24,MESFUNC5:def 12;
+      then lim seq2=+infty by A35,MESFUNC5:def 12;
       hence thesis by XXREAL_0:3;
     end;
   end;
   suppose
-A25: seq1 is convergent_to_+infty;
+A36: seq1 is convergent_to_+infty;
     now
       let g be real number;
-      assume 0 < g;
+      assume
+      0 < g;
       then consider n be Nat such that
-A26:  for m be Nat st n<=m holds g <= seq1.m by A25,MESFUNC5:def 9;
+A37:  for m be Nat st n<=m holds g <= seq1.m by A36,MESFUNC5:def
+      9;
       now
         let m be Nat;
-        assume n<=m;
-        then
-A27:    g <= seq1.m by A26;
         m is Element of NAT by ORDINAL1:def 13;
-        then seq1.m <= seq2.m by A1;
-        hence g <= seq2.m by A27,XXREAL_0:2;
+        then
+A38:    seq1.m <= seq2.m by A3;
+        assume
+        n<=m;
+        then g <= seq1.m by A37;
+        hence g <= seq2.m by A38,XXREAL_0:2;
       end;
       hence ex n be Nat st for m be Nat st n<=m holds g <= seq2.m;
     end;
     then
-A28: seq2 is convergent_to_+infty by MESFUNC5:def 9;
+A39: seq2 is convergent_to_+infty by MESFUNC5:def 9;
     then seq2 is convergent by MESFUNC5:def 11;
-    then lim seq2=+infty by A28,MESFUNC5:def 12;
+    then lim seq2=+infty by A39,MESFUNC5:def 12;
     hence thesis by XXREAL_0:3;
   end;
   suppose
-A29: seq1 is convergent_to_-infty;
+A40: seq1 is convergent_to_-infty;
     then seq1 is convergent by MESFUNC5:def 11;
-    then lim seq1 = -infty by A29,MESFUNC5:def 12;
+    then lim seq1 = -infty by A40,MESFUNC5:def 12;
     hence thesis by XXREAL_0:5;
   end;
 end;
@@ -1896,115 +2028,131 @@ theorem
   for seq be ExtREAL_sequence holds lim_inf seq <= lim_sup seq
 proof
   let seq be ExtREAL_sequence;
-A1: superior_realsequence seq is convergent &
-  lim superior_realsequence seq = lim_sup seq &
-  inferior_realsequence seq is convergent &
-  lim inferior_realsequence seq = lim_inf seq by Th36,Th37;
-  now
+A1: lim superior_realsequence seq = lim_sup seq by Th36;
+A2: inferior_realsequence seq is convergent by Th37;
+A3: now
     let n be Element of NAT;
-    (inferior_realsequence seq).n <=seq.n &
-    seq.n <= (superior_realsequence seq).n by Th8;
-    hence (inferior_realsequence seq).n <= (superior_realsequence seq).n
-    by XXREAL_0:2;
+A4: seq.n <= (superior_realsequence seq).n by Th8;
+    (inferior_realsequence seq).n <=seq.n by Th8;
+    hence (inferior_realsequence seq).n <= (superior_realsequence seq).n by
+    A4,XXREAL_0:2;
   end;
-  hence thesis by A1,Th38;
+A5: lim inferior_realsequence seq = lim_inf seq by Th37;
+  superior_realsequence seq is convergent by Th36;
+  hence thesis by A1,A2,A5,A3,Th38;
 end;
 
-Lm6: for seq be ExtREAL_sequence st
-lim_inf seq = lim_sup seq & lim_inf seq = +infty holds
-seq is convergent & lim seq = lim_inf seq & lim seq = lim_sup seq
+Lm5: for seq be ExtREAL_sequence st lim_inf seq = lim_sup seq & lim_inf seq =
++infty holds seq is convergent & lim seq = lim_inf seq & lim seq = lim_sup seq
+
 proof
   let seq be ExtREAL_sequence;
-  assume
-A1: lim_inf seq = lim_sup seq & lim_inf seq = +infty;
-  then
-A2: inferior_realsequence seq is convergent_to_+infty &
-  lim inferior_realsequence seq = +infty by Th35;
+  assume that
+A1: lim_inf seq = lim_sup seq and
+A2: lim_inf seq = +infty;
+A3: inferior_realsequence seq is convergent_to_+infty by A2,Th35;
   now
     let g be real number;
-    assume 0 < g;
+    assume
+    0 < g;
     then consider n be Nat such that
-A3: for m be Nat st n<=m holds g <= (inferior_realsequence seq).m
-    by A2,MESFUNC5:def 9;
+
+A4: for m be Nat st n<=m holds g <= (inferior_realsequence seq).m by
+    A3,MESFUNC5:def 9;
+
     now
       let m be Nat;
-      assume n<=m;
-      then
-A4:   g <= (inferior_realsequence seq).m by A3;
       m is Element of NAT by ORDINAL1:def 13;
-      then (inferior_realsequence seq).m <= seq.m by Th8;
-      hence g <= seq.m by A4,XXREAL_0:2;
+      then
+A5:   (inferior_realsequence seq).m <= seq.m by Th8;
+      assume
+      n<=m;
+      then g <= (inferior_realsequence seq).m by A4;
+      hence g <= seq.m by A5,XXREAL_0:2;
     end;
     hence ex n be Nat st for m be Nat st n<=m holds g <= seq.m;
   end;
   then
-A5: seq is convergent_to_+infty by MESFUNC5:def 9;
+A6: seq is convergent_to_+infty by MESFUNC5:def 9;
   then seq is convergent by MESFUNC5:def 11;
-  hence thesis by A1,A5,MESFUNC5:def 12;
+  hence thesis by A1,A2,A6,MESFUNC5:def 12;
 end;
 
-Lm7: for seq be ExtREAL_sequence st
-lim_inf seq = lim_sup seq & lim_inf seq = -infty holds
-seq is convergent & lim seq = lim_inf seq & lim seq = lim_sup seq
+Lm6: for seq be ExtREAL_sequence st lim_inf seq = lim_sup seq & lim_inf seq =
+-infty holds seq is convergent & lim seq = lim_inf seq & lim seq = lim_sup seq
+
 proof
   let seq be ExtREAL_sequence;
-  assume
-A1: lim_inf seq = lim_sup seq & lim_inf seq = -infty;
-  then
-A2: superior_realsequence seq is convergent_to_-infty &
-  lim superior_realsequence seq = -infty by Th34;
+  assume that
+A1: lim_inf seq = lim_sup seq and
+A2: lim_inf seq = -infty;
+A3: superior_realsequence seq is convergent_to_-infty by A1,A2,Th34;
   now
     let g be real number;
-    assume g < 0;
+    assume
+    g < 0;
     then consider n be Nat such that
-A3: for m be Nat st n<=m holds (superior_realsequence seq).m <= g
-    by A2,MESFUNC5:def 10;
+
+A4: for m be Nat st n<=m holds (superior_realsequence seq).m <= g by
+    A3,MESFUNC5:def 10;
+
     now
       let m be Nat;
-      assume n<=m;
-      then
-A4:   (superior_realsequence seq).m <= g by A3;
       m is Element of NAT by ORDINAL1:def 13;
-      then seq.m <=(superior_realsequence seq).m by Th8;
-      hence seq.m <= g by A4,XXREAL_0:2;
+      then
+A5:   seq.m <=(superior_realsequence seq).m by Th8;
+      assume
+      n<=m;
+      then (superior_realsequence seq).m <= g by A4;
+      hence seq.m <= g by A5,XXREAL_0:2;
     end;
     hence ex n be Nat st for m be Nat st n<=m holds seq.m <= g;
   end;
   then
-A5: seq is convergent_to_-infty by MESFUNC5:def 10;
+A6: seq is convergent_to_-infty by MESFUNC5:def 10;
   then seq is convergent by MESFUNC5:def 11;
-  hence thesis by A1,A5,MESFUNC5:def 12;
+  hence thesis by A1,A2,A6,MESFUNC5:def 12;
 end;
 
-Lm8: for seq be ExtREAL_sequence st
-lim_inf seq = lim_sup seq & lim_inf seq in REAL holds
-seq is convergent & lim seq = lim_inf seq & lim seq = lim_sup seq
+Lm7: for seq be ExtREAL_sequence st lim_inf seq = lim_sup seq & lim_inf seq in
+REAL holds seq is convergent & lim seq = lim_inf seq & lim seq = lim_sup seq
+
 proof
   let seq be ExtREAL_sequence;
-  assume
-A1: lim_inf seq = lim_sup seq & lim_inf seq in REAL;
+  assume that
+A1: lim_inf seq = lim_sup seq and
+A2: lim_inf seq in REAL;
   consider k be Element of NAT such that
-A2: seq^\k is bounded by A1,Th18;
-  reconsider rseq0=seq^\k as Real_Sequence by A2,Th11;
-  seq^\k is bounded_above & seq^\k is bounded_below by A2,Def5;
-  then rseq0 is bounded_above & rseq0 is bounded_below by Th12,Th13;
+A3: seq^\k is bounded by A1,A2,Th18;
+  reconsider rseq0=seq^\k as Real_Sequence by A3,Th11;
+  seq^\k is bounded_below by A3,Def5;
   then
-A3: rseq0 is bounded;
-  then lim_inf rseq0 = lim_inf (seq^\k) &
-  lim_sup rseq0 = lim_sup (seq^\k) by Th9,Th10;
+A4: rseq0 is bounded_below by Th13;
+  seq^\k is bounded_above by A3,Def5;
   then
-A4: lim_inf rseq0 = lim_inf seq & lim_sup rseq0 = lim_sup seq by Th28,Th29;
-  then rseq0 is convergent by A1,A3,RINFSUP1:90;
-  then lim rseq0 = lim_sup seq & lim rseq0 = lim_inf seq &
-  lim rseq0 = lim (seq^\k) & seq^\k is convergent by A4,Th14,RINFSUP1:91;
-  hence thesis by Th17;
+A5: rseq0 is bounded_above by Th12;
+  then lim_sup rseq0 = lim_sup (seq^\k) by A4,Th9;
+  then
+A6: lim_sup rseq0 = lim_sup seq by Th28;
+  lim_inf rseq0 = lim_inf (seq^\k) by A5,A4,Th10;
+  then
+A7: lim_inf rseq0 = lim_inf seq by Th29;
+  then
+A8: rseq0 is convergent by A1,A5,A4,A6,RINFSUP1:90;
+  then
+A9: lim rseq0 = lim_inf seq by A7,RINFSUP1:91;
+A10: seq^\k is convergent by A8,Th14;
+A11: lim rseq0 = lim (seq^\k) by A8,Th14;
+  lim rseq0 = lim_sup seq by A6,A8,RINFSUP1:91;
+  hence thesis by A9,A11,A10,Th17;
 end;
 
 theorem Th40:
-  for seq be ExtREAL_sequence holds
-  seq is convergent iff lim_inf seq = lim_sup seq
+  for seq be ExtREAL_sequence holds seq is convergent iff lim_inf
+  seq = lim_sup seq
 proof
   let seq be ExtREAL_sequence;
+  set a=lim_inf seq;
   thus seq is convergent implies lim_inf seq = lim_sup seq
   proof
     assume
@@ -2018,165 +2166,193 @@ A3:   seq^\k is bounded by Th19;
       seq^\k is convergent_to_finite_number by A2,Th20;
       then
 A4:   rseq0 is convergent by Th15;
-      then rseq0 is bounded by RINFSUP1:90;
-      then lim_inf rseq0 = lim_inf (seq^\k) &
-      lim_sup rseq0 = lim_sup (seq^\k) by Th9,Th10;
-      then lim_inf rseq0 = lim_inf seq & lim_sup rseq0 = lim_sup seq
-      by Th28,Th29;
-      hence thesis by A4,RINFSUP1:90;
+      then
+A5:   rseq0 is bounded by RINFSUP1:90;
+      then lim_sup rseq0 = lim_sup (seq^\k) by Th9;
+      then
+A6:   lim_sup rseq0 = lim_sup seq by Th28;
+      lim_inf rseq0 = lim_inf (seq^\k) by A5,Th10;
+      then lim_inf rseq0 = lim_inf seq by Th29;
+      hence thesis by A4,A6,RINFSUP1:90;
     end;
     suppose
-A5:   seq is convergent_to_-infty;
+A7:   seq is convergent_to_-infty;
       now
         let g be real number;
-        assume g < 0;
+        assume
+        g < 0;
         then consider n be Nat such that
-A6:     for m be Nat st n<=m holds seq.m <= g by A5,MESFUNC5:def 10;
+A8:     for m be Nat st n<=m holds seq.m <= g by A7,MESFUNC5:def
+        10;
         now
           let m be Nat;
-          assume n<=m;
-          then
-A7:       seq.m <= g by A6;
           m is Element of NAT by ORDINAL1:def 13;
-          then (inferior_realsequence seq).m <= seq.m by Th8;
-          hence (inferior_realsequence seq).m <= g by A7,XXREAL_0:2;
+          then
+A9:       (inferior_realsequence seq).m <= seq.m by Th8;
+          assume
+          n<=m;
+          then seq.m <= g by A8;
+          hence (inferior_realsequence seq).m <= g by A9,XXREAL_0:2;
         end;
-        hence ex n be Nat st
-        for m be Nat st n<=m holds (inferior_realsequence seq).m <= g;
+        hence ex n be Nat st for m be Nat st n<=m holds (inferior_realsequence
+        seq).m <= g;
       end;
       then
-A8:   inferior_realsequence seq is convergent_to_-infty by MESFUNC5:def 10;
+A10:  inferior_realsequence seq is convergent_to_-infty by
+      MESFUNC5:
+      def 10;
       then inferior_realsequence seq is convergent by MESFUNC5:def 11;
-      then lim inferior_realsequence seq = -infty by A8,MESFUNC5:def 12;
+      then lim inferior_realsequence seq = -infty by A10,MESFUNC5:def 12;
       then
-A9:   lim_inf seq =-infty by Th37;
-A10:  superior_realsequence seq is convergent_to_-infty
+A11:  lim_inf seq =-infty by Th37;
+A12:  superior_realsequence seq is convergent_to_-infty
       proof
         set iseq=superior_realsequence seq;
-        assume not iseq is convergent_to_-infty;
+        assume
+        not iseq is convergent_to_-infty;
         then consider g be real number such that
-A11:    g < 0 &
-        for n be Nat ex m be Nat st n<=m & g < iseq.m by MESFUNC5:def 10;
+A13:    g < 0 and
+A14:    for n be Nat ex m be Nat st n<=m & g < iseq.m by MESFUNC5
+        :def 10;
         consider N be Nat such that
-A12:    for m be Nat st N<=m holds seq.m <= g by A5,A11,MESFUNC5:def 10;
+A15:    for m be Nat st N<=m holds seq.m <= g by A7,A13,MESFUNC5:def
+        10;
         now
           let m be Nat;
           m is Element of NAT by ORDINAL1:def 13;
           then consider Y being non empty Subset of ExtREAL such that
-A13:      Y = {seq.k where k is Element of NAT: m <= k} &
-          (superior_realsequence seq).m = sup Y by Def7;
+A16:      Y = {seq.k where k is Element of NAT: m <= k} and
+A17:      (superior_realsequence seq).m = sup Y by Def7;
           assume
-A14:      N <= m;
+A18:      N <= m;
           now
             let x be ext-real number;
-            assume x in Y;
+            assume
+            x in Y;
             then consider k be Element of NAT such that
-A15:        x=seq.k & m <= k by A13;
-            N <= k by A14,A15,XXREAL_0:2;
-            hence x <= g by A12,A15;
+A19:        x=seq.k and
+A20:        m <= k by A16;
+            N <= k by A18,A20,XXREAL_0:2;
+            hence x <= g by A15,A19;
           end;
           then g is UpperBound of Y by XXREAL_2:def 1;
-          hence iseq.m <= g by A13,XXREAL_2:def 3;
+          hence iseq.m <= g by A17,XXREAL_2:def 3;
         end;
-        hence contradiction by A11;
+        hence contradiction by A14;
       end;
       then superior_realsequence seq is convergent by MESFUNC5:def 11;
-      then lim superior_realsequence seq = -infty by A10,MESFUNC5:def 12;
-      hence thesis by A9,Th36;
+      then lim superior_realsequence seq = -infty by A12,MESFUNC5:def 12;
+      hence thesis by A11,Th36;
     end;
     suppose
-A16:  seq is convergent_to_+infty;
+A21:  seq is convergent_to_+infty;
       now
         let g be real number;
-        assume 0 < g;
+        assume
+        0 < g;
         then consider n be Nat such that
-A17:    for m be Nat st n<=m holds g <= seq.m by A16,MESFUNC5:def 9;
+A22:    for m be Nat st n<=m holds g <= seq.m by A21,MESFUNC5:def
+        9;
         now
           let m be Nat;
-          assume n <= m;
-          then
-A18:      g <= seq.m by A17;
           m is Element of NAT by ORDINAL1:def 13;
-          then seq.m <= (superior_realsequence seq).m by Th8;
-          hence g <= (superior_realsequence seq).m by A18,XXREAL_0:2;
+          then
+A23:      seq.m <= (superior_realsequence seq).m by Th8;
+          assume
+          n <= m;
+          then g <= seq.m by A22;
+          hence g <= (superior_realsequence seq).m by A23,XXREAL_0:2;
         end;
-        hence ex n be Nat st for m be Nat st n<=m holds
-        g <= (superior_realsequence seq).m;
+        hence ex n be Nat st for m be Nat st n<=m holds g <= (
+        superior_realsequence seq).m;
       end;
       then
-A19:  superior_realsequence seq is convergent_to_+infty by MESFUNC5:def 9;
+A24:  superior_realsequence seq is convergent_to_+infty by
+      MESFUNC5:
+      def 9;
       then superior_realsequence seq is convergent by MESFUNC5:def 11;
-      then lim superior_realsequence seq = +infty by A19,MESFUNC5:def 12;
+      then lim superior_realsequence seq = +infty by A24,MESFUNC5:def 12;
       then
-A20:  lim_sup seq =+infty by Th36;
-A21:  inferior_realsequence seq is convergent_to_+infty
+A25:  lim_sup seq =+infty by Th36;
+A26:  inferior_realsequence seq is convergent_to_+infty
       proof
         set iseq=inferior_realsequence seq;
-        assume not iseq is convergent_to_+infty;
+        assume
+        not iseq is convergent_to_+infty;
         then consider g be real number such that
-A22:    0 < g & for n be Nat ex m be Nat st n<=m & iseq.m < g
-        by MESFUNC5:def 9;
+A27:    0 < g and
+A28:    for n be Nat ex m be Nat st n<=m & iseq.m < g by MESFUNC5
+        :def 9;
         consider N be Nat such that
-A23:    for m be Nat st N<=m holds g <= seq.m by A16,A22,MESFUNC5:def 9;
+A29:    for m be Nat st N<=m holds g <= seq.m by A21,A27,MESFUNC5:def
+        9;
         now
           let m be Nat;
-          assume
-A24:      N <= m;
           m is Element of NAT by ORDINAL1:def 13;
           then consider Y being non empty Subset of ExtREAL such that
-A25:      Y = {seq.k where k is Element of NAT: m <= k} &
-          (inferior_realsequence seq).m = inf Y by Def6;
+A30:      Y = {seq.k where k is Element of NAT: m <= k} and
+A31:      (inferior_realsequence seq).m = inf Y by Def6;
+          assume
+A32:      N <= m;
           now
             let x be ext-real number;
-            assume x in Y;
+            assume
+            x in Y;
             then consider k be Element of NAT such that
-A26:        x = seq.k & m <= k by A25;
-            N <= k by A24,A26,XXREAL_0:2;
-            hence g <= x by A23,A26;
+A33:        x = seq.k and
+A34:        m <= k by A30;
+            N <= k by A32,A34,XXREAL_0:2;
+            hence g <= x by A29,A33;
           end;
           then g is LowerBound of Y by XXREAL_2:def 2;
-          hence g<=iseq.m by A25,XXREAL_2:def 4;
+          hence g<=iseq.m by A31,XXREAL_2:def 4;
         end;
-        hence contradiction by A22;
+        hence contradiction by A28;
       end;
       then inferior_realsequence seq is convergent by MESFUNC5:def 11;
-      then lim inferior_realsequence seq = +infty by A21,MESFUNC5:def 12;
-      hence thesis by A20,Th37;
+      then lim inferior_realsequence seq = +infty by A26,MESFUNC5:def 12;
+      hence thesis by A25,Th37;
     end;
   end;
   assume
-A27: lim_inf seq = lim_sup seq;
-  set a=lim_inf seq;
+A35: lim_inf seq = lim_sup seq;
   per cases by XXREAL_0:14;
-  suppose a in REAL;
-    hence thesis by A27,Lm8;
+  suppose
+    a in REAL;
+    hence thesis by A35,Lm7;
   end;
-  suppose a = +infty;
-    hence thesis by A27,Lm6;
+  suppose
+    a = +infty;
+    hence thesis by A35,Lm5;
   end;
-  suppose a = -infty;
-    hence thesis by A27,Lm7;
+  suppose
+    a = -infty;
+    hence thesis by A35,Lm6;
   end;
 end;
 
 theorem
-  for seq be ExtREAL_sequence st seq is convergent holds
-  lim seq = lim_inf seq & lim seq = lim_sup seq
+  for seq be ExtREAL_sequence st seq is convergent holds lim seq =
+  lim_inf seq & lim seq = lim_sup seq
 proof
   let seq be ExtREAL_sequence;
-  assume seq is convergent;
+  set a = lim_inf seq;
+  assume
+  seq is convergent;
   then
 A1: lim_inf seq = lim_sup seq by Th40;
-  set a = lim_inf seq;
   per cases by XXREAL_0:14;
-  suppose a in REAL;
-    hence thesis by A1,Lm8;
-  end;
-  suppose a = +infty;
-    hence thesis by A1,Lm6;
-  end;
-  suppose a = -infty;
+  suppose
+    a in REAL;
     hence thesis by A1,Lm7;
+  end;
+  suppose
+    a = +infty;
+    hence thesis by A1,Lm5;
+  end;
+  suppose
+    a = -infty;
+    hence thesis by A1,Lm6;
   end;
 end;
 

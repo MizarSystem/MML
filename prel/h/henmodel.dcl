@@ -11,6 +11,7 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -20,6 +21,7 @@
 <ArticleID name="QC_LANG2"/>
 <ArticleID name="CQC_LANG"/>
 <ArticleID name="XBOOLEAN"/>
+<ArticleID name="CARD_3"/>
 <ArticleID name="MARGREL1"/>
 <ArticleID name="VALUAT_1"/>
 <ArticleID name="HENMODEL"/>
@@ -29,11 +31,11 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="10">
-<Func kind="K" nr="164"/>
+<Func kind="K" nr="172"/>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="46"/>
+<Adjective nr="52"/>
 </Cluster>
 </RCluster>
 </Registrations>

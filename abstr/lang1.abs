@@ -10,11 +10,11 @@ environ
       MONOID_0, ORDINAL1, ARYTM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, NAT_1,
       DOMAIN_1, RELAT_1, STRUCT_0, FUNCT_1, FINSEQ_1, FINSET_1, RELSET_1,
-      PARTFUN1, FUNCT_2, FINSEQ_2, XXREAL_0;
+      PARTFUN1, FUNCT_2, FINSEQ_2, XXREAL_0, PRE_POLY;
  constructors PARTFUN1, DOMAIN_1, XXREAL_0, XREAL_0, NAT_1, FINSEQ_2, STRUCT_0,
-      RELSET_1;
+      RELSET_1, PRE_POLY;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2, FINSET_1,
-      XXREAL_0, XREAL_0, FINSEQ_1, STRUCT_0, ORDINAL1, CARD_1, RELSET_1;
+      XXREAL_0, XREAL_0, FINSEQ_1, STRUCT_0, ORDINAL1, CARD_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
 
 
@@ -25,8 +25,8 @@ begin
 :: and R is a set of rules (ordered pairs).
 
 definition
-  struct(1-sorted) DTConstrStr (# carrier -> set,
-    Rules -> Relation of the carrier, (the carrier)* #);
+  struct(1-sorted) DTConstrStr (# carrier -> set, Rules -> Relation of the
+    carrier, (the carrier)* #);
 end;
 
 registration
@@ -34,9 +34,8 @@ registration
 end;
 
 definition
-  struct(DTConstrStr) GrammarStr (# carrier -> set,
-    InitialSym -> Element of the carrier,
-    Rules -> Relation of the carrier, (the carrier)* #);
+  struct(DTConstrStr) GrammarStr (# carrier -> set, InitialSym -> Element of
+    the carrier, Rules -> Relation of the carrier, (the carrier)* #);
 end;
 
 registration
@@ -47,30 +46,6 @@ definition
   let G be DTConstrStr;
   mode Symbol of G is Element of G;
   mode String of G is Element of (the carrier of G)*;
-end;
-
-definition
-  let D be set;
-  let p, q be Element of D*;
-  redefine func p^q -> Element of D*;
-end;
-
-registration
-  let D be set;
-  cluster empty Element of D*;
-end;
-
-definition
-  let D be set;
-  redefine func <*> D -> empty Element of D*;
-end;
-
-definition
-  let D be non empty set;
-  let d be Element of D;
-  redefine func <*d*> -> Element of D*;
-  let e be Element of D;
-  func <*d,e*> -> Element of D*;
 end;
 
 reserve G for non empty DTConstrStr,
@@ -90,11 +65,9 @@ definition
   let G;
   func Terminals G equals
 :: LANG1:def 2
-
   { s : not ex n being FinSequence st s ==> n};
   func NonTerminals G equals
 :: LANG1:def 3
-
   { s : ex n being FinSequence st s ==> n};
 end;
 
@@ -105,9 +78,8 @@ definition
   let G,n,m;
   pred n ==> m means
 :: LANG1:def 4
-
-  ex n1,n2,n3 being String of G, s st n = n1^<*s*>^n2
-  & m = n1^n3^n2 & s ==> n3;
+  ex n1,n2,n3 being String of G, s st n = n1^<*s*>^n2 & m =
+  n1^n3^n2 & s ==> n3;
 end;
 
 reserve n1,n2,n3 for String of G;
@@ -129,10 +101,9 @@ definition
   pred m is_derivable_from n means
 :: LANG1:def 5
 
-  ex p being FinSequence st
-  len p >= 1 & p.1 = n & p.len p = m &
-  for i being Element of NAT st i >= 1 & i < len p
-  ex a,b being String of G st p.i = a & p.(i+1) = b & a ==> b;
+  ex p being FinSequence st len p >= 1
+& p.1 = n & p.len p = m & for i being Element of NAT st i >= 1 & i < len p ex a
+  ,b being String of G st p.i = a & p.(i+1) = b & a ==> b;
 end;
 
 theorem :: LANG1:6
@@ -142,8 +113,8 @@ theorem :: LANG1:7
   n ==> m implies m is_derivable_from n;
 
 theorem :: LANG1:8
-  n1 is_derivable_from n2 & n2 is_derivable_from n3 implies
-  n1 is_derivable_from n3;
+  n1 is_derivable_from n2 & n2 is_derivable_from n3 implies n1
+  is_derivable_from n3;
 
 :: Define language
 
@@ -151,14 +122,13 @@ definition
   let G be non empty GrammarStr;
   func Lang(G) equals
 :: LANG1:def 6
-
-  {a where a is Element of (the carrier of G)*:
-  rng a c= Terminals(G) & a is_derivable_from <*the InitialSym of G*>};
+  {a where a is Element of (the carrier of G)*: rng a c=
+  Terminals(G) & a is_derivable_from <*the InitialSym of G*>};
 end;
 
 theorem :: LANG1:9
-  for G being non empty GrammarStr, n being String of G holds n in Lang(G) iff
-  rng n c= Terminals(G) & n is_derivable_from <*the InitialSym of G*>;
+  for G being non empty GrammarStr, n being String of G holds n in Lang(
+  G) iff rng n c= Terminals(G) & n is_derivable_from <*the InitialSym of G*>;
 
 :: GrammarStr(#{a},a,{[a,{}{a}]}#)             -> Lang = {{}}
 :: GrammarStr(#{a,b},a,{[a,<*b*>]}#)            -> Lang = {b}
@@ -177,18 +147,19 @@ definition
   func EmptyGrammar a -> strict GrammarStr means
 :: LANG1:def 7
 
-  the carrier of it = {a} & the Rules of it = {[a,{}]};
+  the carrier of it = {a
+  } & the Rules of it = {[a,{}]};
   let b be set;
   func SingleGrammar(a,b) -> strict GrammarStr means
 :: LANG1:def 8
 
-  the carrier of it = {a,b} & the InitialSym of it = a &
-  the Rules of it = {[a,<*b*>]};
+  the carrier of it
+  = {a,b} & the InitialSym of it = a & the Rules of it = {[a,<*b*>]};
   func IterGrammar(a,b) -> strict GrammarStr means
 :: LANG1:def 9
 
-  the carrier of it = {a,b} & the InitialSym of it = a &
-  the Rules of it = {[a,<*b,a*>],[a,{}]};
+  the carrier of it =
+  {a,b} & the InitialSym of it = a & the Rules of it = {[a,<*b,a*>],[a,{}]};
 end;
 
 registration
@@ -204,8 +175,9 @@ definition
   func TotalGrammar D -> strict GrammarStr means
 :: LANG1:def 10
 
-   the carrier of it = succ D & the InitialSym of it = D &
-  the Rules of it = {[D,<*d,D*>] where d is Element of D: d = d} \/ {[D,{}]};
+  the carrier of it =
+  succ D & the InitialSym of it = D & the Rules of it = {[D,<*d,D*>] where d is
+  Element of D: d = d} \/ {[D,{}]};
 end;
 
 registration
@@ -246,16 +218,15 @@ definition
   attr IT is efective means
 :: LANG1:def 11
 
-  Lang IT is non empty & the InitialSym of IT in NonTerminals IT &
-  for s being Symbol of IT st s in Terminals IT
-  ex p being String of IT st p in Lang(IT) & s in rng p;
+  Lang IT is non empty & the InitialSym of
+  IT in NonTerminals IT & for s being Symbol of IT st s in Terminals IT ex p
+  being String of IT st p in Lang(IT) & s in rng p;
 end;
 
 definition
   let IT be GrammarStr;
   attr IT is finite means
 :: LANG1:def 12
-
   the Rules of IT is finite;
 end;
 
@@ -279,7 +250,8 @@ definition
   canceled;
   func f* -> Function of X*,Y* means
 :: LANG1:def 14
-  for p being Element of X* holds it.p = f*p;
+  for p being Element of X* holds it.p = f*
+  p;
 end;
 
 reserve R for Relation,
@@ -299,11 +271,10 @@ definition
   let f be Function of the carrier of G, X;
   func G.f -> strict GrammarStr equals
 :: LANG1:def 15
-
   GrammarStr (#X, f.the InitialSym of G,
     (f)~*(the Rules of G)*(f*) #);
 end;
 
-:: The goal is to show: 
+:: The goal is to show:
 ::   f is_one-to-one implies f*.:Lang(G) = Lang(G.f) 
 

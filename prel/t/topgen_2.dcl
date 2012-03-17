@@ -13,13 +13,13 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="CARD_3"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="TOPS_2"/>
 <ArticleID name="CANTOR_1"/>
 <ArticleID name="YELLOW_8"/>
-<ArticleID name="PARTFUN1"/>
 <ArticleID name="TOPGEN_2"/>
 </Signature>
 <RCluster aid="TOPGEN_2" nr="1">
@@ -53,19 +53,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="35" value="false"/>
-<Adjective nr="41"/>
 <Adjective nr="48"/>
-</Cluster>
-</RCluster>
-<RCluster aid="TOPGEN_2" nr="3">
-<ArgTypes/>
-<Typ kind="G" nr="6">
-<Cluster/>
-</Typ>
-<Cluster>
-<Adjective nr="48"/>
-<Adjective nr="66" value="false"/>
+<Adjective nr="65" value="false"/>
 </Cluster>
 </RCluster>
 <FCluster aid="TOPGEN_2" nr="1">
@@ -77,7 +66,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="119">
+<Func kind="K" nr="120">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -97,37 +86,37 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="119">
+<Func kind="K" nr="120">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="35" value="false"/>
+<Adjective nr="36" value="false"/>
 <Adjective nr="47"/>
 </Cluster>
 </FCluster>
 <CCluster aid="TOPGEN_2" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="41"/>
+<Adjective nr="42"/>
 </Cluster>
 <Typ kind="G" nr="6">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="66"/>
+<Adjective nr="65"/>
 </Cluster>
 </CCluster>
 <CCluster aid="TOPGEN_2" nr="2">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="66" value="false"/>
+<Adjective nr="65" value="false"/>
 </Cluster>
 <Typ kind="G" nr="6">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="41" value="false"/>
+<Adjective nr="42" value="false"/>
 </Cluster>
 </CCluster>
 </Registrations>

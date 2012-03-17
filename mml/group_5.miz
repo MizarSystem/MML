@@ -14,7 +14,7 @@ environ
       PARTFUN1, CARD_1, FINSEQ_1, FINSET_1, FINSEQ_4, INT_1, DOMAIN_1,
       STRUCT_0, ALGSTR_0, GROUP_1, GROUP_2, GROUP_3, GROUP_4;
  constructors PARTFUN1, SETFAM_1, NAT_1, FINSEQ_4, FINSOP_1, REALSET1, GROUP_4,
-      RELSET_1;
+      RELSET_1, BINOP_2;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, NUMBERS, XREAL_0, INT_1, STRUCT_0,
       GROUP_1, GROUP_2, GROUP_3, ORDINAL1, FINSEQ_1, CARD_1;
  requirements NUMERALS, BOOLE, SUBSET;
@@ -26,19 +26,20 @@ environ
 
 begin :: Preliminaries.
 
-scheme SubsetFD3{C,D,E() -> non empty set,
-  F(set,set,set) -> Element of D(), P[set,set,set]}:
-  {F(c,d,e) where c is Element of C(),d is Element of D(),
-  e is Element of E() : P[c,d,e]} is Subset of D()
-proof
-  set A = {F(a,b,c) where a is Element of C(), b is Element of D(),
-  c is Element of E() : P[a,b,c]};
+scheme
+  SubsetFD3{C,D,E() -> non empty set, F(set,set,set) -> Element of D(), P[set,
+  set,set]}: {F(c,d,e) where c is Element of C(),d is Element of D(), e is
+  Element of E() : P[c,d,e]} is Subset of D() proof
+  set A = {F(a,b,c) where a is Element of C(), b is Element of D(), c is
+  Element of E() : P[a,b,c]};
   A c= D()
   proof
     let x be set;
-    assume x in A;
-    then ex a being Element of C(), b being Element of D(),
-    c being Element of E() st x = F(a,b,c) & P[a,b,c];
+    assume
+    x in A;
+    then
+    ex a being Element of C(), b being Element of D(), c being Element of
+    E() st x = F(a,b,c) & P[a,b,c];
     hence thesis;
   end;
   hence thesis;
@@ -48,9 +49,11 @@ reserve x,y for set,
   k,n for Element of NAT,
   i for Integer,
   G for Group,
-  a,b,c,d,e for Element of G,
+  a,b,c
+  ,d,e for Element of G,
   A,B,C,D for Subset of G,
-  H,H1,H2,H3,H4 for Subgroup of G,
+  H,H1,H2,H3,H4 for Subgroup of G
+  ,
   N1,N2 for normal Subgroup of G,
   F,F1,F2 for FinSequence of the carrier of G,
   I,I1,I2 for FinSequence of INT;
@@ -60,7 +63,8 @@ theorem Th1:
 proof
   thus x in (1).G implies x = 1_G
   proof
-    assume x in (1).G;
+    assume
+    x in (1).G;
     then x in the carrier of (1).G by STRUCT_0:def 5;
     then x in {1_G} by GROUP_2:def 7;
     hence thesis by TARSKI:def 1;
@@ -71,17 +75,20 @@ end;
 theorem
   a in H & b in H implies a |^ b in H
 proof
-  assume a in H & b in H;
+  assume
+  a in H & b in H;
   then b" in H & a * b in H by GROUP_2:59,60;
   then b " * (a * b) in H by GROUP_2:59;
   hence thesis by GROUP_1:def 4;
 end;
 
 theorem Th3:
-  for N being strict normal Subgroup of G holds a in N implies a |^ b in N
+  for N being strict normal Subgroup of G holds a in N implies a |^
+  b in N
 proof
   let N be strict normal Subgroup of G;
-  assume a in N;
+  assume
+  a in N;
   then a |^ b in N |^ b by GROUP_3:70;
   hence thesis by GROUP_3:def 13;
 end;
@@ -91,29 +98,34 @@ theorem Th4:
 proof
   thus x in H1 * H2 implies ex a,b st x = a * b & a in H1 & b in H2
   proof
-    assume x in H1 * H2;
+    assume
+    x in H1 * H2;
     then x in carr H1 * H2;
     then consider a,b such that
-A1: x = a * b & a in carr H1 & b in H2 by GROUP_2:114;
-    a in H1 by A1,STRUCT_0:def 5;
-    hence thesis by A1;
+A1: x = a * b and
+A2: a in carr H1 and
+A3: b in H2 by GROUP_2:114;
+    a in H1 by A2,STRUCT_0:def 5;
+    hence thesis by A1,A3;
   end;
   given a,b such that
-A2: x = a * b & a in H1 & b in H2;
-  b in carr H2 by A2,STRUCT_0:def 5;
-  then x in H1 * carr H2 by A2,GROUP_2:115;
+A4: x = a * b & a in H1 and
+A5: b in H2;
+  b in carr H2 by A5,STRUCT_0:def 5;
+  then x in H1 * carr H2 by A4,GROUP_2:115;
   hence thesis;
 end;
 
 theorem Th5:
-  H1 * H2 = H2 * H1 implies
-  (x in H1 "\/" H2 iff ex a,b st x = a * b & a in H1 & b in H2)
+  H1 * H2 = H2 * H1 implies (x in H1 "\/" H2 iff ex a,b st x = a *
+  b & a in H1 & b in H2)
 proof
   assume
 A1: H1 * H2 = H2 * H1;
   thus x in H1 "\/" H2 implies ex a,b st x = a * b & a in H1 & b in H2
   proof
-    assume x in H1 "\/" H2;
+    assume
+    x in H1 "\/" H2;
     then x in the carrier of H1 "\/" H2 by STRUCT_0:def 5;
     then x in H1 * H2 by A1,GROUP_4:69;
     hence thesis by Th4;
@@ -126,17 +138,18 @@ A2: x = a * b & a in H1 & b in H2;
 end;
 
 theorem
-  G is commutative Group implies
-  (x in H1 "\/" H2 iff ex a,b st x = a * b & a in H1 & b in H2)
+  G is commutative Group implies (x in H1 "\/" H2 iff ex a,b st x = a *
+  b & a in H1 & b in H2)
 proof
-  assume G is commutative Group;
+  assume
+  G is commutative Group;
   then H1 * H2 = H2 * H1 by GROUP_2:29;
   hence thesis by Th5;
 end;
 
 theorem Th7:
-  for N1,N2 being strict normal Subgroup of G
-  holds x in N1 "\/" N2 iff ex a,b st x = a * b & a in N1 & b in N2
+  for N1,N2 being strict normal Subgroup of G holds x in N1 "\/" N2
+  iff ex a,b st x = a * b & a in N1 & b in N2
 proof
   let N1,N2 be strict normal Subgroup of G;
   N1 * N2 = N2 * N1 by GROUP_3:148;
@@ -161,30 +174,31 @@ definition
   existence
   proof
     deffunc F(Nat) = (F/.$1) |^ a;
-   consider F1 such that
-A2:    len F1 = len F &
-    for k be Nat st k in dom F1 holds F1.k = F(k) from FINSEQ_2:sch 1;
-     dom F1 = dom F by A2,FINSEQ_3:31;
-    hence thesis by A2;
+    consider F1 such that
+A1: len F1 = len F & for k be Nat st k in dom F1 holds F1.k = F(k)
+    from FINSEQ_2:sch 1;
+    dom F1 = dom F by A1,FINSEQ_3:31;
+    hence thesis by A1;
   end;
   correctness
   proof
     let F1,F2;
     assume that
-A3: len F1 = len F and
-A4: for k be Nat st k in dom F holds F1.k = (F/.k) |^ a and
-A5: len F2 = len F and
-A6: for k be Nat st k in dom F holds F2.k = (F/.k) |^ a;
-X: dom F1 = Seg len F by A3,FINSEQ_1:def 3;
+A2: len F1 = len F and
+A3: for k be Nat st k in dom F holds F1.k = (F/.k) |^ a and
+A4: len F2 = len F and
+A5: for k be Nat st k in dom F holds F2.k = (F/.k) |^ a;
+A6: dom F1 = Seg len F by A2,FINSEQ_1:def 3;
     now
       let k be Nat;
-      assume k in dom F1;
+      assume
+      k in dom F1;
       then
-A7:   k in dom F by X,FINSEQ_1:def 3;
-      hence F1.k = (F/.k) |^ a by A4
-        .= F2.k by A6,A7;
+A7:   k in dom F by A6,FINSEQ_1:def 3;
+      hence F1.k = (F/.k) |^ a by A3
+        .= F2.k by A5,A7;
     end;
-    hence thesis by A3,A5,FINSEQ_2:10;
+    hence thesis by A2,A4,FINSEQ_2:10;
   end;
 end;
 
@@ -193,43 +207,47 @@ canceled 3;
 theorem Th12:
   (F1 |^ a) ^ (F2 |^ a) = (F1 ^ F2) |^ a
 proof
-A1: len(F1 |^ a) + len(F2 |^ a) = len F1 + len(F2 |^ a) by Def1
-    .= len F1 + len F2 by Def1
-    .= len(F1 ^ F2) by FINSEQ_1:35
-    .= len((F1 ^ F2) |^ a) by Def1;
-A2: now
+A1: now
     let k;
-    assume k in dom(F1 |^ a);
+    assume
+    k in dom(F1 |^ a);
     then k in Seg len(F1 |^ a) by FINSEQ_1:def 3;
     then k in Seg len F1 by Def1;
     then
-A3: k in dom F1 by FINSEQ_1:def 3;
+A2: k in dom F1 by FINSEQ_1:def 3;
     then
-A4: F1/.k = (F1 ^ F2)/.k & k in dom(F1 ^ F2) by FINSEQ_3:24,FINSEQ_4:83;
-    thus (F1 |^ a).k = (F1/.k) |^ a by A3,Def1
-      .= ((F1 ^ F2) |^ a).k by A4,Def1;
+A3: F1/.k = (F1 ^ F2)/.k & k in dom(F1 ^ F2) by
+    FINSEQ_3:24,FINSEQ_4:83;
+    thus (F1 |^ a).k = (F1/.k) |^ a by A2,Def1
+      .= ((F1 ^ F2) |^ a).k by A3,Def1;
   end;
-  now
+A4: now
     let k;
     assume
 A5: k in dom(F2 |^ a);
     len F2 = len(F2 |^ a) by Def1;
     then
 A6: k in dom F2 by A5,FINSEQ_3:31;
-    then len F1 + k in dom(F1 ^ F2) & k in dom F2 by FINSEQ_1:41;
+    then len F1 + k in dom(F1 ^ F2) by FINSEQ_1:41;
     then len(F1 |^ a) + k in dom(F1 ^ F2) by Def1;
-    hence ((F1 ^ F2) |^ a).(len(F1 |^ a) + k) =
-    ((F1 ^ F2)/.(len(F1 |^ a) + k)) |^ a by Def1
+    hence
+    ((F1 ^ F2) |^ a).(len(F1 |^ a) + k) = ((F1 ^ F2)/.(len(F1 |^ a) + k))
+    |^ a by Def1
       .= ((F1 ^ F2)/.(len F1 + k)) |^ a by Def1
       .= (F2/.k) |^ a by A6,FINSEQ_4:84
       .= (F2 |^ a).k by A6,Def1;
   end;
-  hence thesis by A1,A2,FINSEQ_3:43;
+  len(F1 |^ a) + len(F2 |^ a) = len F1 + len(F2 |^ a) by Def1
+    .= len F1 + len F2 by Def1
+    .= len(F1 ^ F2) by FINSEQ_1:35
+    .= len((F1 ^ F2) |^ a) by Def1;
+  hence thesis by A1,A4,FINSEQ_3:43;
 end;
 
 theorem Th13:
   (<*> the carrier of G) |^ a = {}
-proof len((<*> the carrier of G) |^ a) = len <*> the carrier of G by Def1
+proof
+  len((<*> the carrier of G) |^ a) = len <*> the carrier of G by Def1
     .= 0;
   hence thesis;
 end;
@@ -237,17 +255,18 @@ end;
 theorem Th14:
   <* a *> |^ b = <* a |^ b *>
 proof
-A1: len<* a |^ b *> = 1 by FINSEQ_1:57
-    .= len<* a *> by FINSEQ_1:56;
-  now
+A1: now
     let k be Nat;
-    assume k in dom<* a *>;
+    assume
+    k in dom<* a *>;
     then k in {1} by FINSEQ_1:4,55;
     then
 A2: k = 1 by TARSKI:def 1;
     hence <* a |^ b *>.k = a |^ b by FINSEQ_1:57
       .= (<* a *>/.k) |^ b by A2,FINSEQ_4:25;
   end;
+  len<* a |^ b *> = 1 by FINSEQ_1:57
+    .= len<* a *> by FINSEQ_1:56;
   hence thesis by A1,Def1;
 end;
 
@@ -274,9 +293,22 @@ end;
 theorem Th17:
   Product(F |^ a) = Product(F) |^ a
 proof
-  defpred P[FinSequence of the carrier of G]
-  means Product($1 |^ a) = Product($1) |^ a;
-A1: P[<*> the carrier of G]
+  defpred P[FinSequence of the carrier of G] means Product($1 |^ a) = Product(
+  $1) |^ a;
+A1: now
+    let F,b;
+    assume
+A2: P[F];
+    Product((F ^ <* b *>) |^ a) = Product((F |^ a) ^ (<* b *> |^ a)) by
+    Th12
+      .= Product(F) |^ a * Product(<* b *> |^ a) by A2,GROUP_4:8
+      .= Product(F) |^ a * Product<* b |^ a *> by Th14
+      .= Product(F) |^ a * (b |^ a) by FINSOP_1:12
+      .= (Product(F) * b) |^ a by GROUP_3:28
+      .= Product(F ^ <* b *>) |^ a by GROUP_4:9;
+    hence P[F^<*b*>];
+  end;
+A3: P[<*> the carrier of G]
   proof
     set p = <*> the carrier of G;
     thus Product(p |^ a) = Product p by Th13
@@ -284,53 +316,40 @@ A1: P[<*> the carrier of G]
       .= (1_G) |^ a by GROUP_3:22
       .= Product p |^ a by GROUP_4:11;
   end;
-A2: now
-    let F,b;
-    assume
-A3: P[F];
-    thus P[F^<*b*>]
-    proof
-      thus Product((F ^ <* b *>) |^ a) = Product((F |^ a) ^ (<* b *> |^ a))
-      by Th12
-        .= Product(F) |^ a * Product(<* b *> |^ a) by A3,GROUP_4:8
-        .= Product(F) |^ a * Product<* b |^ a *> by Th14
-        .= Product(F) |^ a * (b |^ a) by FINSOP_1:12
-        .= (Product(F) * b) |^ a by GROUP_3:28
-        .= Product(F ^ <* b *>) |^ a by GROUP_4:9;
-    end;
-  end;
-  for F holds P[F] from FINSEQ_2:sch 2(A1,A2);
+  for F holds P[F] from FINSEQ_2:sch 2(A3,A1);
   hence thesis;
 end;
 
 theorem Th18:
   (F |^ a) |^ I = (F |^ I) |^ a
 proof
-A1: len(F |^ a) = len F by Def1;
-  then
-A2: dom(F |^ a) = dom F by FINSEQ_3:31;
-A3: len((F |^ a) |^ I) = len(F |^ a) by GROUP_4:def 4;
-A4: len(F |^ I |^ a) = len(F |^ I) by Def1
-    .= len F by GROUP_4:def 4;
   len(F |^ I) = len F by GROUP_4:def 4;
   then
-A5: dom(F |^ I) = dom F by FINSEQ_3:31;
-X: dom ((F |^ a) |^ I) = Seg len F by A3,A1,FINSEQ_1:def 3;
-  now
+A1: dom(F |^ I) = dom F by FINSEQ_3:31;
+A2: len(F |^ a) = len F by Def1;
+  then
+A3: dom(F |^ a) = dom F by FINSEQ_3:31;
+A4: len((F |^ a) |^ I) = len(F |^ a) by GROUP_4:def 4;
+  then
+A5: dom ((F |^ a) |^ I) = Seg len F by A2,FINSEQ_1:def 3;
+A6: now
     let k be Nat;
-    assume k in dom ((F |^ a) |^ I);
+    assume
+    k in dom ((F |^ a) |^ I);
     then
-A6: k in dom F by X,FINSEQ_1:def 3;
+A7: k in dom F by A5,FINSEQ_1:def 3;
     then
-A7: (F |^ a)/.k = (F |^ a).k & (F |^ I)/.k = (F |^ I).k
-    by A2,A5,PARTFUN1:def 8;
-    thus ((F |^ a) |^ I).k = ((F |^ a)/.k) |^ @(I/.k) by A2,A6,GROUP_4:def 4
-      .= ((F/.k) |^ a) |^ @(I/.k) by A6,A7,Def1
+A8: (F |^ a)/.k = (F |^ a).k by A3,PARTFUN1:def 8;
+A9: (F |^ I)/.k = (F |^ I).k by A1,A7,PARTFUN1:def 8;
+    thus ((F |^ a) |^ I).k = ((F |^ a)/.k) |^ @(I/.k) by A3,A7,GROUP_4:def 4
+      .= ((F/.k) |^ a) |^ @(I/.k) by A7,A8,Def1
       .= ((F/.k) |^ @(I/.k)) |^ a by GROUP_3:34
-      .= ((F |^ I)/.k) |^ a by A6,A7,GROUP_4:def 4
-      .= ((F |^ I) |^ a).k by A5,A6,Def1;
+      .= ((F |^ I)/.k) |^ a by A7,A9,GROUP_4:def 4
+      .= ((F |^ I) |^ a).k by A1,A7,Def1;
   end;
-  hence thesis by A1,A3,A4,FINSEQ_2:10;
+  len(F |^ I |^ a) = len(F |^ I) by Def1
+    .= len F by GROUP_4:def 4;
+  hence thesis by A2,A4,A6,FINSEQ_2:10;
 end;
 
 begin :: Commutators.
@@ -338,15 +357,14 @@ begin :: Commutators.
 definition
   let G,a,b;
   func [.a,b.] -> Element of G equals
-
   a" * b" * a * b;
   correctness;
 end;
 
 theorem Th19:
-  [.a,b.] = a" * b" * a * b & [.a,b.] = a" * (b" * a) * b &
-  [.a,b.] = a" * (b" * a * b) & [.a,b.] = a" * (b" * (a * b)) &
-  [.a,b.] = (a" * b") * (a * b)
+  [.a,b.] = a" * b" * a * b & [.a,b.] = a" * (b" * a) * b & [.a,b
+.] = a" * (b" * a * b) & [.a,b.] = a" * (b" * (a * b)) & [.a,b.] = (a" * b") *
+  (a * b)
 proof
   thus [.a,b.] = a" * b" * a * b;
   thus [.a,b.] = a" * (b" * a) * b by GROUP_1:def 4;
@@ -430,16 +448,19 @@ proof
     .= (a |^ c)" * ((b" |^ c) * (c" * (a * b))) * c by GROUP_1:def 4
     .= (a |^ c)" * ((b |^ c)" * (c" * (a * b))) * c by GROUP_3:32
     .= (a |^ c)" * ((b |^ c)" * (c" * (a * 1_G * b))) * c by GROUP_1:def 5
-    .= (a |^ c)" * ((b |^ c)" * (c" * (a * (c * c") * b))) * c
-  by GROUP_1:def 6
-    .= (a |^ c)" * ((b |^ c)" * (c" * (a * ((c * c") * b)))) * c
-  by GROUP_1:def 4
-    .= (a |^ c)" * ((b |^ c)" * (c" * a * ((c * c") * b))) * c
-  by GROUP_1:def 4
-    .= (a |^ c)" * ((b |^ c)" * (c" * a * (c * (c" * b)))) * c by GROUP_1:def 4
+    .= (a |^ c)" * ((b |^ c)" * (c" * (a * (c * c") * b))) * c by GROUP_1:
+  def 6
+    .= (a |^ c)" * ((b |^ c)" * (c" * (a * ((c * c") * b)))) * c by GROUP_1:
+  def 4
+    .= (a |^ c)" * ((b |^ c)" * (c" * a * ((c * c") * b))) * c by GROUP_1:
+  def 4
+    .= (a |^ c)" * ((b |^ c)" * (c" * a * (c * (c" * b)))) * c by GROUP_1:
+  def 4
     .= (a |^ c)" * ((b |^ c)" * ((a |^ c) * (c" * b))) * c by GROUP_1:def 4
-    .= (a |^ c)" * (((b |^ c)" * ((a |^ c) * (c" * b))) * c) by GROUP_1:def 4
-    .= (a |^ c)" * (((b |^ c)" * ((a |^ c) * (c" * b) * c))) by GROUP_1:def 4
+    .= (a |^ c)" * (((b |^ c)" * ((a |^ c) * (c" * b))) * c) by GROUP_1:def
+  4
+    .= (a |^ c)" * (((b |^ c)" * ((a |^ c) * (c" * b) * c))) by GROUP_1:def
+  4
     .= (a |^ c)" * (((b |^ c)" * ((a |^ c) * (b |^ c)))) by GROUP_1:def 4
     .= [.a |^ c,b |^ c.] by Th19;
 end;
@@ -478,15 +499,19 @@ proof
     .= b" * (a" * c") * (a * (c * (b * b") * c") * (b * c)) by GROUP_1:def 4
     .= b" * (a" * c") * (a * (c * b * b" * c") * (b * c)) by GROUP_1:def 4
     .= b" * (a" * c") * (a * (c * b * (b" * c")) * (b * c)) by GROUP_1:def 4
-    .= b" * (a" * c") * (a * (c * (b * (b" * c"))) * (b * c)) by GROUP_1:def 4
+    .= b" * (a" * c") * (a * (c * (b * (b" * c"))) * (b * c)) by GROUP_1:def
+  4
     .= b" * (a" * c") * (a * c * (b * (b" * c")) * (b * c)) by GROUP_1:def 4
-    .= b" * (a" * c") * (a * c * ((b * (b" * c")) * (b * c))) by GROUP_1:def 4
-    .= b" * (a" * c") * (a * c) * ((b * (b" * c")) * (b * c)) by GROUP_1:def 4
-    .= b" * ((a" * c") * (a * c)) * ((b * (b" * c")) * (b * c)) by
-GROUP_1:def 4
-    .= b" * ((a" * c") * (a * c)) * (b * ((b" * c") * (b * c))) by
-GROUP_1:def 4
-    .= b" * ((a" * c") * (a * c)) * b * ((b" * c") * (b * c)) by GROUP_1:def 4
+    .= b" * (a" * c") * (a * c * ((b * (b" * c")) * (b * c))) by GROUP_1:def
+  4
+    .= b" * (a" * c") * (a * c) * ((b * (b" * c")) * (b * c)) by GROUP_1:def
+  4
+    .= b" * ((a" * c") * (a * c)) * ((b * (b" * c")) * (b * c)) by GROUP_1:
+  def 4
+    .= b" * ((a" * c") * (a * c)) * (b * ((b" * c") * (b * c))) by GROUP_1:
+  def 4
+    .= b" * ((a" * c") * (a * c)) * b * ((b" * c") * (b * c)) by GROUP_1:def
+  4
     .= [.a,c.] |^ b * ((b" * c") * (b * c)) by Th19
     .= [.a,c.] |^ b * [.b,c.] by Th19;
 end;
@@ -499,30 +524,33 @@ proof
     .= (a" * (c" * 1_G * b")) * (a * (b * c)) by GROUP_1:def 5
     .= (a" * (c" * (a * a") * b")) * (a * (b * c)) by GROUP_1:def 6
     .= (a" * (c" * (a * 1_G * a") * b")) * (a * (b * c)) by GROUP_1:def 5
-    .= (a" * (c" * (a * (c * c") * a") * b")) * (a * (b * c)) by GROUP_1:def 6
+    .= (a" * (c" * (a * (c * c") * a") * b")) * (a * (b * c)) by GROUP_1:def
+  6
     .= (a" * (c" * (a * c * c" * a") * b")) * (a * (b * c)) by GROUP_1:def 4
-    .= (a" * (c" * ((a * c) * (c" * a")) * b")) * (a * (b * c)) by
-GROUP_1:def 4
-    .= (a" * (c" * (((a * c) * (c" * a")) * b"))) * (a * (b * c)) by
-GROUP_1:def 4
-    .= ((a" * c") * (a * c * (c" * a") * b")) * (a * (b * c)) by GROUP_1:def 4
-    .= ((a" * c") * ((a * c) * (c" * a")) * b") * (a * (b * c)) by
-GROUP_1:def 4
-    .= ((a" * c") * (a * c)) * (c" * a") * b" * (a * (b * c)) by GROUP_1:def 4
-    .= ((a" * c") * (a * c)) * ((c" * a") * b") * (a * (b * c)) by
-GROUP_1:def 4
-    .= ((a" * c") * (a * c)) * (((c" * a") * b") * (a * (b * c))) by
-GROUP_1:def 4
-    .= ((a" * c") * (a * c)) * (((c" * a") * b") * ((a * b) * c)) by
-GROUP_1:def 4
-    .= ((a" * c") * (a * c)) * ((c" * (a" * b")) * ((a * b) * c)) by
-GROUP_1:def 4
-    .= ((a" * c") * (a * c)) * (c" * ((a" * b") * ((a * b) * c))) by
-GROUP_1:def 4
-    .= ((a" * c") * (a * c)) * (c" * ((a" * b") * (a * b) * c)) by
-GROUP_1:def 4
-    .= ((a" * c") * (a * c)) * (c" * ((a" * b") * (a * b)) * c) by
-GROUP_1:def 4
+    .= (a" * (c" * ((a * c) * (c" * a")) * b")) * (a * (b * c)) by GROUP_1:
+  def 4
+    .= (a" * (c" * (((a * c) * (c" * a")) * b"))) * (a * (b * c)) by GROUP_1
+  :def 4
+    .= ((a" * c") * (a * c * (c" * a") * b")) * (a * (b * c)) by GROUP_1:def
+  4
+    .= ((a" * c") * ((a * c) * (c" * a")) * b") * (a * (b * c)) by GROUP_1:
+  def 4
+    .= ((a" * c") * (a * c)) * (c" * a") * b" * (a * (b * c)) by GROUP_1:def
+  4
+    .= ((a" * c") * (a * c)) * ((c" * a") * b") * (a * (b * c)) by GROUP_1:
+  def 4
+    .= ((a" * c") * (a * c)) * (((c" * a") * b") * (a * (b * c))) by GROUP_1
+  :def 4
+    .= ((a" * c") * (a * c)) * (((c" * a") * b") * ((a * b) * c)) by GROUP_1
+  :def 4
+    .= ((a" * c") * (a * c)) * ((c" * (a" * b")) * ((a * b) * c)) by GROUP_1
+  :def 4
+    .= ((a" * c") * (a * c)) * (c" * ((a" * b") * ((a * b) * c))) by GROUP_1
+  :def 4
+    .= ((a" * c") * (a * c)) * (c" * ((a" * b") * (a * b) * c)) by GROUP_1:
+  def 4
+    .= ((a" * c") * (a * c)) * (c" * ((a" * b") * (a * b)) * c) by GROUP_1:
+  def 4
     .= [.a,c.] * (c" * ((a" * b") * (a * b)) * c) by Th19
     .= [.a,c.] * ([.a,b.] |^ c) by Th19;
 end;
@@ -618,20 +646,24 @@ theorem Th39:
 proof
   thus [.a,b.] = 1_G implies a * b = b * a
   proof
-    assume [.a,b.] = 1_G;
+    assume
+    [.a,b.] = 1_G;
     then (b * a)" * (a * b) = 1_G by Th20;
     then a * b = (b * a)"" by GROUP_1:20;
     hence thesis;
   end;
-  assume a * b = b * a;
-  then (b * a)" = b" * a" & [.a,b.] = (b * a)" * (a * b) by Th20,GROUP_1:26;
-  hence [.a,b.] = (b" * a") * a * b by GROUP_1:def 4
+  assume
+  a * b = b * a;
+  then
+A1: (b * a)" = b" * a" by GROUP_1:26;
+  [.a,b.] = (b * a)" * (a * b) by Th20;
+  hence [.a,b.] = (b" * a") * a * b by A1,GROUP_1:def 4
     .= b" * b by GROUP_3:1
     .= 1_G by GROUP_1:def 6;
 end;
 
-Lm1: for G being commutative Group
-for a,b being Element of G holds a * b = b * a;
+Lm1: for G being commutative Group for a,b being Element of G holds a * b = b
+* a;
 
 theorem
   G is commutative Group iff for a,b holds [.a,b.] = 1_G
@@ -658,17 +690,19 @@ end;
 theorem Th41:
   a in H & b in H implies [.a,b.] in H
 proof
-  assume a in H & b in H;
-  then a" in H & b" in H & a * b in H by GROUP_2:59,60;
-  then a" * b" in H & a * b in H by GROUP_2:59;
-  then (a" * b") * (a * b) in H by GROUP_2:59;
+  assume
+A1: a in H & b in H;
+  then a" in H & b" in H by GROUP_2:60;
+  then
+A2: a" * b" in H by GROUP_2:59;
+  a * b in H by A1,GROUP_2:59;
+  then (a" * b") * (a * b) in H by A2,GROUP_2:59;
   hence thesis by Th19;
 end;
 
 definition
   let G,a,b,c;
   func [.a,b,c.] -> Element of G equals
-
   [.[.a,b.],c.];
   correctness;
 end;
@@ -720,9 +754,10 @@ theorem
 proof
   thus [.a,b,b |^ a.] = [.b,a.] * (b |^ a)" * [.a,b.] * (b |^ a) by Th25
     .= (b" * a" * b * a) * (b" |^ a) * [.a,b.] * (b |^ a) by GROUP_3:32
-    .= (b" * a" * b * a) * (a" * (b" * a)) * [.a,b.] * (b |^ a) by
-GROUP_1:def 4
-    .= (b" * a" * b * a) * a" * (b" * a) * [.a,b.] * (b |^ a) by GROUP_1:def 4
+    .= (b" * a" * b * a) * (a" * (b" * a)) * [.a,b.] * (b |^ a) by GROUP_1:
+  def 4
+    .= (b" * a" * b * a) * a" * (b" * a) * [.a,b.] * (b |^ a) by GROUP_1:def
+  4
     .= (b" * a" * b) * (b" * a) * [.a,b.] * (b |^ a) by GROUP_3:1
     .= b" * a" * (b * (b" * a)) * [.a,b.] * (b |^ a) by GROUP_1:def 4
     .= b" * a" * a * [.a,b.] * (b |^ a) by GROUP_3:1
@@ -738,26 +773,27 @@ end;
 
 theorem
   [.a * b,c.] = [.a,c.] * [.a,c,b.] * [.b,c.]
-proof [.a,c.] * [.a,c,b.] * [.b,c.] =
-  a" * c" * a * c * ([.c,a.] * b" * [.a,c.] * b) * [.b,c.] by Th25
+proof
+  [.a,c.] * [.a,c,b.] * [.b,c.] = a" * c" * a * c * ([.c,a.] * b" * [.a,c
+  .] * b) * [.b,c.] by Th25
     .= a" * c" * a * c * ((c" * a") * (c * a) * b" * [.a,c.] * b) * [.b,c.]
   by Th19
     .= a" * c" * a * c * ((a * c)" * (c * a) * b" * [.a,c.] * b) * [.b,c.]
   by GROUP_1:25
     .= a" * c" * (a * c) * ((a * c)" * (c * a) * b" * [.a,c.] * b) * [.b,c.]
   by GROUP_1:def 4
-    .= a" * c" * ((a * c) * ((a * c)" * (c * a) * b" * [.a,c.] * b)) * [.b,c.]
-  by GROUP_1:def 4
-    .= a" * c" * ((a * c) * ((a * c)" * (c * a) *
-  b" * ([.a,c.] * b))) * [.b,c.] by GROUP_1:def 4
-    .= a" * c" * ((a * c) * ((a * c)" * (c * a) *
-  (b" * ([.a,c.] * b)))) * [.b,c.] by GROUP_1:def 4
-    .= a" * c" * ((a * c) * ((a * c)" * ((c * a) *
-  (b" * ([.a,c.] * b))))) * [.b,c.] by GROUP_1:def 4
-    .= a" * c" * ((a * c) * (a * c)" * ((c * a) *
-  (b" * ([.a,c.] * b)))) * [.b,c.] by GROUP_1:def 4
-    .= a" * c" * (1_G * ((c * a) * (b" * ([.a,c.] * b)))) * [.b,c.]
-  by GROUP_1:def 6
+    .= a" * c" * ((a * c) * ((a * c)" * (c * a) * b" * [.a,c.] * b)) * [.b,c
+  .] by GROUP_1:def 4
+    .= a" * c" * ((a * c) * ((a * c)" * (c * a) * b" * ([.a,c.] * b))) * [.b
+  ,c.] by GROUP_1:def 4
+    .= a" * c" * ((a * c) * ((a * c)" * (c * a) * (b" * ([.a,c.] * b)))) *
+  [.b,c.] by GROUP_1:def 4
+    .= a" * c" * ((a * c) * ((a * c)" * ((c * a) * (b" * ([.a,c.] * b))))) *
+  [.b,c.] by GROUP_1:def 4
+    .= a" * c" * ((a * c) * (a * c)" * ((c * a) * (b" * ([.a,c.] * b)))) *
+  [.b,c.] by GROUP_1:def 4
+    .= a" * c" * (1_G * ((c * a) * (b" * ([.a,c.] * b)))) * [.b,c.] by
+  GROUP_1:def 6
     .= a" * c" * ((c * a) * (b" * ([.a,c.] * b))) * [.b,c.] by GROUP_1:def 5
     .= a" * c" * (c * a) * (b" * ([.a,c.] * b)) * [.b,c.] by GROUP_1:def 4
     .= (c * a)" * (c * a) * (b" * ([.a,c.] * b)) * [.b,c.] by GROUP_1:25
@@ -766,7 +802,8 @@ proof [.a,c.] * [.a,c,b.] * [.b,c.] =
     .= b" * ((a" * c" * a * c) * b) * ((b" * c") * (b * c)) by Th19
     .= b" * ((a" * c" * a) * c) * b * ((b" * c") * (b * c)) by GROUP_1:def 4
     .= b" * (a" * c" * (a * c)) * b * ((b" * c") * (b * c)) by GROUP_1:def 4
-    .= b" * (a" * (c" * (a * c))) * b * ((b" * c") * (b * c)) by GROUP_1:def 4
+    .= b" * (a" * (c" * (a * c))) * b * ((b" * c") * (b * c)) by GROUP_1:def
+  4
     .= b" * a" * (c" * (a * c)) * b * ((b" * c") * (b * c)) by GROUP_1:def 4
     .= b" * a" * c" * (a * c) * b * ((b" * c") * (b * c)) by GROUP_1:def 4
     .= b" * a" * c" * a * c * b * ((b" * c") * (b * c)) by GROUP_1:def 4
@@ -784,29 +821,33 @@ end;
 
 theorem
   [.a,b * c.] = [.a,c.] * [.a,b.] * [.a,b,c.]
-proof [.a,c.] * [.a,b.] * [.a,b,c.] = [.a,c.] * ([.a,b.] * [.[.a,b.],c.]) by
-GROUP_1:def 4
-    .= [.a,c.] * ((a" * b") * (a * b) * ([.a,b.]" * c" * [.a,b.] * c)) by Th19
-    .= [.a,c.] * ((a" * b") * (a * b) * ([.b,a.] * c" * [.a,b.] * c)) by Th25
-    .= [.a,c.] * ((a" * b") * (a * b) *
-  ((b" * a" * (b * a)) * c" * [.a,b.] * c)) by Th19
-    .= [.a,c.] * ((a" * b") * ((a * b) *
-  (((b" * a") * (b * a)) * c" * [.a,b.] * c))) by GROUP_1:def 4
-    .= [.a,c.] * ((a" * b") * ((a * b) *
-  (((b" * a") * (b * a)) * c" * ([.a,b.] * c)))) by GROUP_1:def 4
-    .= [.a,c.] * ((a" * b") * ((a * b) *
-  (((b" * a") * (b * a)) * (c" * ([.a,b.] * c))))) by GROUP_1:def 4
-    .= [.a,c.] * ((a" * b") * ((a * b) *
-  ((b" * a") * (b * a)) * (c" * ([.a,b.] * c)))) by GROUP_1:def 4
-    .= [.a,c.] * ((a" * b") * ((a * b) *
-  (b" * a") * (b * a) * (c" * ([.a,b.] * c)))) by GROUP_1:def 4
-    .= [.a,c.] * ((a" * b") * ((a * b) *
-  (a * b)" * (b * a) * (c" * ([.a,b.] * c)))) by GROUP_1:25
-    .= [.a,c.] * ((a" * b") * (1_G *
-  (b * a) * (c" * ([.a,b.] * c)))) by GROUP_1:def 6
-    .= [.a,c.] * ((a" * b") * ((b * a) * (c" * ([.a,b.] * c)))) by
-GROUP_1:def 5
-    .= [.a,c.] * ((a" * b") * (b * a) * (c" * ([.a,b.] * c))) by GROUP_1:def 4
+proof
+  [.a,c.] * [.a,b.] * [.a,b,c.] = [.a,c.] * ([.a,b.] * [.[.a,b.],c.]) by
+  GROUP_1:def 4
+    .= [.a,c.] * ((a" * b") * (a * b) * ([.a,b.]" * c" * [.a,b.] * c)) by
+  Th19
+    .= [.a,c.] * ((a" * b") * (a * b) * ([.b,a.] * c" * [.a,b.] * c)) by
+  Th25
+    .= [.a,c.] * ((a" * b") * (a * b) * ((b" * a" * (b * a)) * c" * [.a,b.]
+  * c)) by Th19
+    .= [.a,c.] * ((a" * b") * ((a * b) * (((b" * a") * (b * a)) * c" * [.a,b
+  .] * c))) by GROUP_1:def 4
+    .= [.a,c.] * ((a" * b") * ((a * b) * (((b" * a") * (b * a)) * c" * ([.a,
+  b.] * c)))) by GROUP_1:def 4
+    .= [.a,c.] * ((a" * b") * ((a * b) * (((b" * a") * (b * a)) * (c" * ([.a
+  ,b.] * c))))) by GROUP_1:def 4
+    .= [.a,c.] * ((a" * b") * ((a * b) * ((b" * a") * (b * a)) * (c" * ([.a,
+  b.] * c)))) by GROUP_1:def 4
+    .= [.a,c.] * ((a" * b") * ((a * b) * (b" * a") * (b * a) * (c" * ([.a,b
+  .] * c)))) by GROUP_1:def 4
+    .= [.a,c.] * ((a" * b") * ((a * b) * (a * b)" * (b * a) * (c" * ([.a,b.]
+  * c)))) by GROUP_1:25
+    .= [.a,c.] * ((a" * b") * (1_G * (b * a) * (c" * ([.a,b.] * c)))) by
+  GROUP_1:def 6
+    .= [.a,c.] * ((a" * b") * ((b * a) * (c" * ([.a,b.] * c)))) by GROUP_1:
+  def 5
+    .= [.a,c.] * ((a" * b") * (b * a) * (c" * ([.a,b.] * c))) by GROUP_1:def
+  4
     .= [.a,c.] * ((b * a)" * (b * a) * (c" * ([.a,b.] * c))) by GROUP_1:25
     .= [.a,c.] * (1_G * (c" * ([.a,b.] * c))) by GROUP_1:def 6
     .= [.a,c.] * (c" * ([.a,b.] * c)) by GROUP_1:def 5
@@ -814,9 +855,11 @@ GROUP_1:def 5
     .= (a" * c") * (a * c) * (c" * ((a" * (b" * a * b)) * c)) by Th19
     .= (a" * c") * (a * c) * (c" * (a" * (b" * a * b)) * c) by GROUP_1:def 4
     .= (a" * c") * (a * c) * ((c" * a") * (b" * a * b) * c) by GROUP_1:def 4
-    .= (a" * c") * (a * c) * ((c" * a") * ((b" * a * b) * c)) by GROUP_1:def 4
+    .= (a" * c") * (a * c) * ((c" * a") * ((b" * a * b) * c)) by GROUP_1:def
+  4
     .= (a" * c") * (a * c) * (c" * a") * ((b" * a * b) * c) by GROUP_1:def 4
-    .= (a" * c") * ((a * c) * (c" * a")) * ((b" * a * b) * c) by GROUP_1:def 4
+    .= (a" * c") * ((a * c) * (c" * a")) * ((b" * a * b) * c) by GROUP_1:def
+  4
     .= (a" * c") * ((a * c) * (a * c)") * ((b" * a * b) * c) by GROUP_1:25
     .= (a" * c") * 1_G * ((b" * a * b) * c) by GROUP_1:def 6
     .= (a" * c") * ((b" * a * b) * c) by GROUP_1:def 5
@@ -843,102 +886,110 @@ proof
   set x = [.a,b",c.] |^ b;
   set y = [.b,c",a.] |^ c;
   set z = [.c,a",b.] |^ a;
-A1: [.b,c",a.] = [.b,c".]" * (a" * [.b,c".] * a) by Th19
-    .= [.c",b.] * (a" * [.b,c".] * a) by Th25;
-  [.c",b.] = c"" * (b" * c" * b) by Th19;
+A1: [.c",b.] = c"" * (b" * c" * b) by Th19;
+A2: [.a",c.] = a"" * (c" * a" * c) by Th19;
+A3: [.b",a.] = b"" * (a" * b" * a) by Th19;
+  [.a,b",c.] = [.a,b".]" * e by Th19
+    .= [.b",a.] * e by Th25;
   then
-A2: [.b,c",a.] |^ c = c" * (c"" * ((b" * c" * b) * d)) * c by A1,GROUP_1:def 4
+A4: [.a,b",c.] |^ b = b" * (b"" * ((a" * b" * a) * e)) * b by
+  A3, GROUP_1
+  :def 4
+    .= (a" * b" * a) * e * b by GROUP_3:1;
+  [.c,a",b.] = [.c,a".]" * f by Th19
+    .= [.a",c.] * f by Th25;
+  then
+A5: z = a" * (a"" * ((c" * a" * c) * f)) * a by A2,GROUP_1:def 4
+    .= (c" * a" * c) * f * a by GROUP_3:1;
+  [.b,c",a.] = [.b,c".]" * (a" * [.b,c".] * a) by Th19
+    .= [.c",b.] * (a" * [.b,c".] * a) by Th25;
+  then [.b,c",a.] |^ c = c" * (c"" * ((b" * c" * b) * d)) * c by
+  A1, GROUP_1
+  :def 4
     .= (b" * c" * b) * d * c by GROUP_3:1
     .= (b" * c" * b) * (d * c) by GROUP_1:def 4
     .= b" * (c" * b) * (d * c) by GROUP_1:def 4
     .= b" * ((c" * b) * (d * c)) by GROUP_1:def 4;
-A3: [.c,a",b.] = [.c,a".]" * f by Th19
-    .= [.a",c.] * f by Th25;
-A4: [.a",c.] = a"" * (c" * a" * c) by Th19;
-A5: [.a,b",c.] = [.a,b".]" * e by Th19
-    .= [.b",a.] * e by Th25;
-A6: [.b",a.] = b"" * (a" * b" * a) by Th19;
-A7: z = a" * (a"" * ((c" * a" * c) * f)) * a by A3,A4,GROUP_1:def 4
-    .= (c" * a" * c) * f * a by GROUP_3:1;
-  [.a,b",c.] |^ b = b" * (b"" * ((a" * b" * a) * e)) * b by A5,A6,GROUP_1:def 4
-    .= (a" * b" * a) * e * b by GROUP_3:1;
-  then x * y = (a" * b" * a) * e * (b * (b" * ((c" * b) * (d * c))))
-  by A2,GROUP_1:def 4
+  then x * y = (a" * b" * a) * e * (b * (b" * ((c" * b) * (d * c)))) by
+  A4,
+  GROUP_1:def 4
     .= (a" * b" * a) * e * ((c" * b) * (d * c)) by GROUP_3:1
-    .= (a" * b" * a) * (c" * ([.a,b".] * c)) * ((c" * b) * (d * c))
-  by GROUP_1:def 4
-    .= (a" * b" * a) * c" * ([.a,b".] * c) * ((c" * b) * (d * c))
-  by GROUP_1:def 4
-    .= (a" * b" * a) * c" * (([.a,b".] * c) * ((c" * b) * (d * c)))
-  by GROUP_1:def 4
-    .= (a" * b" * a) * c" * (([.a,b".] * c) * (c" * b) * (d * c))
-  by GROUP_1:def 4
-    .= (a" * b" * a) * c" * (([.a,b".] * c) * c" * b * (d * c)) by
-GROUP_1:def 4
+    .= (a" * b" * a) * (c" * ([.a,b".] * c)) * ((c" * b) * (d * c)) by
+  GROUP_1:def 4
+    .= (a" * b" * a) * c" * ([.a,b".] * c) * ((c" * b) * (d * c)) by GROUP_1
+  :def 4
+    .= (a" * b" * a) * c" * (([.a,b".] * c) * ((c" * b) * (d * c))) by
+  GROUP_1:def 4
+    .= (a" * b" * a) * c" * (([.a,b".] * c) * (c" * b) * (d * c)) by GROUP_1
+  :def 4
+    .= (a" * b" * a) * c" * (([.a,b".] * c) * c" * b * (d * c)) by GROUP_1:
+  def 4
     .= (a" * b" * a) * c" * ((a" * b"" * a) * b" * b * (d * c)) by GROUP_3:1
     .= (a" * b" * a) * c" * ((a" * b"" * a) * (d * c)) by GROUP_3:1
-    .= (a" * b" * a) * c" * ((a" * b"" * a) * (a" * [.b,c".] * (a * c)))
-  by GROUP_1:def 4
+    .= (a" * b" * a) * c" * ((a" * b"" * a) * (a" * [.b,c".] * (a * c))) by
+  GROUP_1:def 4
     .= (a" * b" * a) * c" * ((a" * b"" * a) * (a" * ([.b,c".] * (a * c))))
   by GROUP_1:def 4
-    .= (a" * b" * a) * c" * ((a" * b"" * a) * a" * ([.b,c".] * (a * c)))
-  by GROUP_1:def 4
+    .= (a" * b" * a) * c" * ((a" * b"" * a) * a" * ([.b,c".] * (a * c))) by
+  GROUP_1:def 4
     .= (a" * b" * a) * c" * ((a" * b"") * ([.b,c".] * (a * c))) by GROUP_3:1
-    .= (a" * b" * a) * c" * ((a" * b"") * [.b,c".] * (a * c)) by GROUP_1:def 4
+    .= (a" * b" * a) * c" * ((a" * b"") * [.b,c".] * (a * c)) by GROUP_1:def
+  4
     .= (a" * b" * a) * c" * ((a" * b"") * (b" * (c"" * b * c")) * (a * c))
   by Th19
     .= (a" * b" * a) * c" * ((a" * b"") * ((b" * (c"" * b * c")) * (a * c)))
   by GROUP_1:def 4
     .= (a" * b" * a) * c" * ((a" * b"") * (b" * ((c"" * b * c") * (a * c))))
   by GROUP_1:def 4
-    .= (a" * b" * a) * c" * ((a" * b"") * b" * ((c"" * b * c") * (a * c))) by
-GROUP_1:def 4
+    .= (a" * b" * a) * c" * ((a" * b"") * b" * ((c"" * b * c") * (a * c)))
+  by GROUP_1:def 4
     .= (a" * b" * a) * c" * (a" * ((c"" * b * c") * (a * c))) by GROUP_3:1;
-  then x * y * z = ((a" * b" * a) * c" * (a" * (c"" * b * c") * (a * c))) *
-  ((c" * a" * c) * f * a) by A7,GROUP_1:def 4
-    .= ((a" * b" * a) * (c" * (a" * (c"" * b * c") * (a * c)))) *
-  ((c" * a" * c) * f * a) by GROUP_1:def 4
-    .= ((a" * b" * a) * (c" * (a" * ((c"" * b * c") * (a * c))))) *
-  ((c" * a" * c) * f * a) by GROUP_1:def 4
-    .= ((a" * b" * a) * c" * (a" * ((c"" * b * c") * (a * c)))) *
-  ((c" * a" * c) * f * a) by GROUP_1:def 4
-    .= ((a" * b" * a) * c" * (a" * (c"" * (b * c") * (a * c)))) *
-  ((c" * a" * c) * f * a) by GROUP_1:def 4
-    .= ((a" * b" * a) * c" * (a" * (c"" * (b * c" * (a * c))))) *
-  ((c" * a" * c) * f * a) by GROUP_1:def 4
-    .= ((a" * b" * a) * c" * a" * (c"" * (b * c" * (a * c)))) *
-  ((c" * a" * c) * f * a) by GROUP_1:def 4
-    .= ((a" * b" * a) * c" * a" * c"" * (b * c" * (a * c))) *
-  (c" * a" * c * f * a) by GROUP_1:def 4
-    .= ((a" * b" * a) * c" * a" * c"" * (b * (c" * (a * c)))) *
-  (c" * a" * c * f * a) by GROUP_1:def 4
-    .= ((a" * b" * a) * c" * a" * c"" * b * (c" * (a * c))) *
-  (c" * a" * c * f * a) by GROUP_1:def 4
-    .= (((a" * b" * a) * c" * a" * c"") * b * c" * (a * c)) *
-  (c" * a" * c * f * a) by GROUP_1:def 4
-    .= (((a" * b") * a * c") * a" * c"" * b * c") * ((a * c) *
-  (c" * a" * c * f * a)) by GROUP_1:def 4
-    .= (((a" * b") * a * c") * a" * c"" * b * c") * ((a * c) *
-  (c" * a" * c * (f * a))) by GROUP_1:def 4
-    .= (((a" * b") * a * c") * a" * c"" * b * c") * ((a * c) *
-  (c" * a" * (c * (f * a)))) by GROUP_1:def 4
-    .= (((a" * b") * a * c") * a" * c"" * b * c") * ((a * c) *
-  (c" * a") * (c * (f * a))) by GROUP_1:def 4
-    .= (((a" * b") * a * c") * a" * c"" * b * c") * ((a * c) *
-  (a * c)" * (c * (f * a))) by GROUP_1:25
-    .= (((a" * b") * a * c") * a" * c"" * b * c") * (1_G *
-  (c * (f * a))) by GROUP_1:def 6
-    .= (((a" * b") * a * c") * a" * c"" * b * c") * ((c * (f * a)))
-  by GROUP_1:def 5
-    .= (((a" * b") * a * c") * a" * c"" * b * c") * c * (f * a)
-  by GROUP_1:def 4
+  then
+  x * y * z = ((a" * b" * a) * c" * (a" * (c"" * b * c") * (a * c))) * ((
+  c" * a" * c) * f * a) by A5,GROUP_1:def 4
+    .= ((a" * b" * a) * (c" * (a" * (c"" * b * c") * (a * c)))) * ((c" * a"
+  * c) * f * a) by GROUP_1:def 4
+    .= ((a" * b" * a) * (c" * (a" * ((c"" * b * c") * (a * c))))) * ((c" * a
+  " * c) * f * a) by GROUP_1:def 4
+    .= ((a" * b" * a) * c" * (a" * ((c"" * b * c") * (a * c)))) * ((c" * a"
+  * c) * f * a) by GROUP_1:def 4
+    .= ((a" * b" * a) * c" * (a" * (c"" * (b * c") * (a * c)))) * ((c" * a"
+  * c) * f * a) by GROUP_1:def 4
+    .= ((a" * b" * a) * c" * (a" * (c"" * (b * c" * (a * c))))) * ((c" * a"
+  * c) * f * a) by GROUP_1:def 4
+    .= ((a" * b" * a) * c" * a" * (c"" * (b * c" * (a * c)))) * ((c" * a" *
+  c) * f * a) by GROUP_1:def 4
+    .= ((a" * b" * a) * c" * a" * c"" * (b * c" * (a * c))) * (c" * a" * c *
+  f * a) by GROUP_1:def 4
+    .= ((a" * b" * a) * c" * a" * c"" * (b * (c" * (a * c)))) * (c" * a" * c
+  * f * a) by GROUP_1:def 4
+    .= ((a" * b" * a) * c" * a" * c"" * b * (c" * (a * c))) * (c" * a" * c *
+  f * a) by GROUP_1:def 4
+    .= (((a" * b" * a) * c" * a" * c"") * b * c" * (a * c)) * (c" * a" * c *
+  f * a) by GROUP_1:def 4
+    .= (((a" * b") * a * c") * a" * c"" * b * c") * ((a * c) * (c" * a" * c
+  * f * a)) by GROUP_1:def 4
+    .= (((a" * b") * a * c") * a" * c"" * b * c") * ((a * c) * (c" * a" * c
+  * (f * a))) by GROUP_1:def 4
+    .= (((a" * b") * a * c") * a" * c"" * b * c") * ((a * c) * (c" * a" * (c
+  * (f * a)))) by GROUP_1:def 4
+    .= (((a" * b") * a * c") * a" * c"" * b * c") * ((a * c) * (c" * a") * (
+  c * (f * a))) by GROUP_1:def 4
+    .= (((a" * b") * a * c") * a" * c"" * b * c") * ((a * c) * (a * c)" * (c
+  * (f * a))) by GROUP_1:25
+    .= (((a" * b") * a * c") * a" * c"" * b * c") * (1_G * (c * (f * a))) by
+  GROUP_1:def 6
+    .= (((a" * b") * a * c") * a" * c"" * b * c") * ((c * (f * a))) by
+  GROUP_1:def 5
+    .= (((a" * b") * a * c") * a" * c"" * b * c") * c * (f * a) by GROUP_1:
+  def 4
     .= (((a" * b") * a * c") * a" * c"" * b) * (f * a) by GROUP_3:1
-    .= (((a" * b") * a * c") * a" * c"" * b) * (b" * [.c,a".] * (b * a))
-  by GROUP_1:def 4
+    .= (((a" * b") * a * c") * a" * c"" * b) * (b" * [.c,a".] * (b * a)) by
+  GROUP_1:def 4
     .= (((a" * b") * a * c") * a" * c"" * b) * (b" * ([.c,a".] * (b * a)))
   by GROUP_1:def 4
-    .= (((a" * b") * a * c") * a" * c"" * b) * b" * ([.c,a".] * (b * a))
-  by GROUP_1:def 4
+    .= (((a" * b") * a * c") * a" * c"" * b) * b" * ([.c,a".] * (b * a)) by
+  GROUP_1:def 4
     .= (((a" * b") * a * c") * a" * c"") * ([.c,a".] * (b * a)) by GROUP_3:1
     .= (((a" * b") * a * c") * a" * c"") * (c" * (a"" * c * a") * (b * a))
   by Th19
@@ -947,12 +998,12 @@ GROUP_1:def 4
     .= (((a" * b") * a * c") * a" * c"") * c" * ((a"" * c * a") * (b * a))
   by GROUP_1:def 4
     .= (((a" * b") * a * c") * a") * ((a"" * c * a") * (b * a)) by GROUP_3:1
-    .= (((a" * b") * a * c") * a") * (a"" * (c * a") * (b * a))
-  by GROUP_1:def 4
-    .= (((a" * b") * a * c") * a") * (a"" * ((c * a") * (b * a)))
-  by GROUP_1:def 4
-    .= (((a" * b") * a * c") * a") * a"" * ((c * a") * (b * a))
-  by GROUP_1:def 4
+    .= (((a" * b") * a * c") * a") * (a"" * (c * a") * (b * a)) by GROUP_1:
+  def 4
+    .= (((a" * b") * a * c") * a") * (a"" * ((c * a") * (b * a))) by GROUP_1
+  :def 4
+    .= (((a" * b") * a * c") * a") * a"" * ((c * a") * (b * a)) by GROUP_1:
+  def 4
     .= ((a" * b") * a * c") * ((c * a") * (b * a)) by GROUP_3:1
     .= ((a" * b") * a * c") * (c * a") * (b * a) by GROUP_1:def 4
     .= (a" * b") * (a * c") * (c * a") * (b * a) by GROUP_1:def 4
@@ -968,12 +1019,11 @@ end;
 definition
   let G,A,B;
   func commutators(A,B) -> Subset of G equals
-
   {[.a,b.] : a in A & b in B};
   coherence
   proof
-    deffunc F(Element of G,Element of G) = [.$1,$2.];
     defpred P[Element of G,Element of G] means $1 in A & $2 in B;
+    deffunc F(Element of G,Element of G) = [.$1,$2.];
     {F(a,b) : P[a,b]} is Subset of G from DOMAIN_1:sch 9;
     hence thesis;
   end;
@@ -982,31 +1032,29 @@ end;
 canceled;
 
 theorem Th52:
-  x in commutators(A,B) iff ex a,b st x = [.a,b.] & a in A & b in B;
+  x in commutators(A,B) iff ex a,b st x = [.a,b.] & a in A & b in
+  B;
 
 theorem
-  commutators({} the carrier of G,A) = {} & commutators(A,{}
-  the carrier of G) = {}
+  commutators({} the carrier of G,A) = {} & commutators(A,{} the carrier
+  of G) = {}
 proof
-  thus commutators({} the carrier of G,A) = {}
+  commutators({} the carrier of G,A) c= {}
   proof
-    thus commutators({} the carrier of G,A) c= {}
-    proof
-      let x;
-      assume x in commutators({} the carrier of G,A);
-      then consider a,b such that x = [.a,b.] and
-A1:   a in {} the carrier of G and b in A;
-      thus thesis by A1;
-    end;
-    thus thesis by XBOOLE_1:2;
+    let x;
+    assume
+    x in commutators({} the carrier of G,A);
+    then ex a,b st x = [.a,b.] & a in {} the carrier of G & b in A;
+    hence thesis;
   end;
+  hence commutators({} the carrier of G,A) = {};
   thus commutators(A,{} the carrier of G) c= {}
   proof
     let x;
-    assume x in commutators(A,{} the carrier of G);
-    then consider a,b such that x = [.a,b.] & a in A and
-A2: b in {} the carrier of G;
-    thus thesis by A2;
+    assume
+    x in commutators(A,{} the carrier of G);
+    then ex a,b st x = [.a,b.] & a in A & b in {} the carrier of G;
+    hence thesis;
   end;
   thus thesis by XBOOLE_1:2;
 end;
@@ -1017,7 +1065,8 @@ proof
   thus commutators({a},{b}) c= {[.a,b.]}
   proof
     let x;
-    assume x in commutators({a},{b});
+    assume
+    x in commutators({a},{b});
     then consider c,d such that
 A1: x = [.c,d.] and
 A2: c in {a} & d in {b};
@@ -1025,9 +1074,12 @@ A2: c in {a} & d in {b};
     hence thesis by A1,TARSKI:def 1;
   end;
   let x;
-  assume x in {[.a,b.]};
-  then x = [.a,b.] & a in {a} & b in {b} by TARSKI:def 1;
-  hence thesis;
+  assume
+  x in {[.a,b.]};
+  then
+A3: x = [.a,b.] by TARSKI:def 1;
+  a in {a} & b in {b} by TARSKI:def 1;
+  hence thesis by A3;
 end;
 
 theorem Th55:
@@ -1036,16 +1088,15 @@ proof
   assume
 A1: A c= B & C c= D;
   let x;
-  assume x in commutators(A,C);
-  then consider a,c such that
-A2: x = [.a,c.] and
-A3: a in A & c in C;
-  thus thesis by A1,A2,A3;
+  assume
+  x in commutators(A,C);
+  then ex a,c st x = [.a,c.] & a in A & c in C;
+  hence thesis by A1;
 end;
 
 theorem Th56:
-  G is commutative Group iff
-  for A,B st A <> {} & B <> {} holds commutators(A,B) = {1_G}
+  G is commutative Group iff for A,B st A <> {} & B <> {} holds
+  commutators(A,B) = {1_G}
 proof
   thus G is commutative Group implies for A,B st A <> {} & B <> {} holds
   commutators(A,B) = {1_G}
@@ -1058,22 +1109,26 @@ A2: A <> {} & B <> {};
     thus commutators(A,B) c= {1_G}
     proof
       let x;
-      assume x in commutators(A,B);
+      assume
+      x in commutators(A,B);
       then consider a,b such that
-A3:   x = [.a,b.] and a in A & b in B;
+A3:   x = [.a,b.] and
+      a in A and
+      b in B;
       x = a" * (b" * a) * b by A3,Th19
         .= a" * (a * b") * b by A1,Lm1
         .= b" * b by GROUP_3:1
         .= 1_G by GROUP_1:def 6;
       hence thesis by TARSKI:def 1;
     end;
+    consider b being Element of B;
+    consider a being Element of A;
+    reconsider a,b as Element of G by A2,TARSKI:def 3;
     let x;
-    assume x in {1_G};
+    assume
+    x in {1_G};
     then
 A4: x = 1_G by TARSKI:def 1;
-    consider a being Element of A;
-    consider b being Element of B;
-    reconsider a,b as Element of G by A2,TARSKI:def 3;
     [.a,b.] = a" * (b" * a) * b by Th19
       .= a" * (a * b") * b by A1,Lm1
       .= b" * b by GROUP_3:1
@@ -1085,9 +1140,11 @@ A5: for A,B st A <> {} & B <> {} holds commutators(A,B) = {1_G};
   G is commutative
   proof
     let a,b;
-    a in {a} & b in {b} & {a} <> {} & {b} <> {} by TARSKI:def 1;
-    then [.a,b.] in commutators({a},{b}) & commutators({a},{b}) ={1_G} by A5;
-    then [.a,b.] = 1_G by TARSKI:def 1;
+    a in {a} & b in {b} by TARSKI:def 1;
+    then
+A6: [.a,b.] in commutators({a},{b});
+    commutators({a},{b}) ={1_G} by A5;
+    then [.a,b.] = 1_G by A6,TARSKI:def 1;
     then (a" * b") * (a * b) = 1_G by Th19;
     then (b * a)" * (a * b) = 1_G by GROUP_1:25;
     then a * b = (b * a)"" by GROUP_1:20;
@@ -1099,7 +1156,6 @@ end;
 definition
   let G,H1,H2;
   func commutators(H1,H2) -> Subset of G equals
-
   commutators(carr H1,carr H2);
   correctness;
 end;
@@ -1107,12 +1163,14 @@ end;
 canceled;
 
 theorem Th58:
-  x in commutators(H1,H2) iff ex a,b st x = [.a,b.] & a in H1 & b in H2
+  x in commutators(H1,H2) iff ex a,b st x = [.a,b.] & a in H1 & b
+  in H2
 proof
   thus x in commutators(H1,H2) implies ex a,b st x = [.a,b.] & a in H1 & b in
   H2
   proof
-    assume x in commutators(H1,H2);
+    assume
+    x in commutators(H1,H2);
     then consider a,b such that
 A1: x = [.a,b.] and
 A2: a in carr H1 & b in carr H2;
@@ -1128,36 +1186,41 @@ end;
 
 theorem Th59:
   1_G in commutators(H1,H2)
-proof [.1_G,1_G.] = 1_G & 1_G in H1 & 1_G in H2 by Th22,GROUP_2:55;
-  hence thesis by Th58;
+proof
+A1: 1_G in H2 by GROUP_2:55;
+  [.1_G,1_G.] = 1_G & 1_G in H1 by Th22,GROUP_2:55;
+  hence thesis by A1,Th58;
 end;
 
 theorem
   commutators((1).G,H) = {1_G} & commutators(H,(1).G) = {1_G}
 proof
-  thus commutators((1).G,H) = {1_G}
+A1: commutators((1).G,H) c= {1_G}
   proof
-    thus commutators((1).G,H) c= {1_G}
-    proof
-      let x;
-      assume x in commutators((1).G,H);
-      then consider a,b such that
-A1:   x = [.a,b.] & a in (1).G & b in H by Th58;
-      a = 1_G by A1,Th1;
-      then x = 1_G by A1,Th22;
-      hence thesis by TARSKI:def 1;
-    end;
-    1_G in commutators((1).G,H) by Th59;
-    hence thesis by ZFMISC_1:37;
+    let x;
+    assume
+    x in commutators((1).G,H);
+    then consider a,b such that
+A2: x = [.a,b.] and
+A3: a in (1).G and
+    b in H by Th58;
+    a = 1_G by A3,Th1;
+    then x = 1_G by A2,Th22;
+    hence thesis by TARSKI:def 1;
   end;
+  1_G in commutators((1).G,H) by Th59;
+  hence commutators((1).G,H) = {1_G} by A1,ZFMISC_1:39;
   thus commutators(H,(1).G) c= {1_G}
   proof
     let x;
-    assume x in commutators(H,(1).G);
+    assume
+    x in commutators(H,(1).G);
     then consider a,b such that
-A2: x = [.a,b.] & a in H & b in (1).G by Th58;
-    b = 1_G by A2,Th1;
-    then x = 1_G by A2,Th22;
+A4: x = [.a,b.] and
+    a in H and
+A5: b in (1).G by Th58;
+    b = 1_G by A5,Th1;
+    then x = 1_G by A4,Th22;
     hence thesis by TARSKI:def 1;
   end;
   1_G in commutators(H,(1).G) by Th59;
@@ -1165,62 +1228,68 @@ A2: x = [.a,b.] & a in H & b in (1).G by Th58;
 end;
 
 theorem Th61:
-  for N being strict normal Subgroup of G
-  holds commutators(H,N) c= carr N & commutators(N,H) c= carr N
+  for N being strict normal Subgroup of G holds commutators(H,N)
+  c= carr N & commutators(N,H) c= carr N
 proof
   let N be strict normal Subgroup of G;
   thus commutators(H,N) c= carr N
   proof
     let x;
-    assume x in commutators(H,N);
+    assume
+    x in commutators(H,N);
     then consider a,b such that
-A1: x = [.a,b.] and a in H and
+A1: x = [.a,b.] and
+    a in H and
 A2: b in N by Th58;
     b" in N by A2,GROUP_2:60;
     then b" |^ a in N |^ a by GROUP_3:70;
-    then x = (b" |^ a) * b & b" |^ a in N by A1,GROUP_3:def 13;
-    then x in N by A2,GROUP_2:59;
+    then b" |^ a in N by GROUP_3:def 13;
+    then x in N by A1,A2,GROUP_2:59;
     hence thesis by STRUCT_0:def 5;
   end;
   let x;
-  assume x in commutators(N,H);
+  assume
+  x in commutators(N,H);
   then consider a,b such that
 A3: x = [.a,b.] and
-A4: a in N and b in H by Th58;
+A4: a in N and
+  b in H by Th58;
   a |^ b in N |^ b by A4,GROUP_3:70;
-  then x = a" * (a |^ b) & a |^ b in N & a" in N
-  by A3,A4,Th19,GROUP_2:60,GROUP_3:def 13;
-  then x in N by GROUP_2:59;
+  then
+A5: a |^ b in N by GROUP_3:def 13;
+  x = a" * (a |^ b) & a" in N by A3,A4,Th19,GROUP_2:60;
+  then x in N by A5,GROUP_2:59;
   hence thesis by STRUCT_0:def 5;
 end;
 
 theorem Th62:
-  H1 is Subgroup of H2 & H3 is Subgroup of H4 implies
-  commutators(H1,H3) c= commutators(H2,H4)
+  H1 is Subgroup of H2 & H3 is Subgroup of H4 implies commutators(
+  H1,H3) c= commutators(H2,H4)
 proof
-  assume H1 is Subgroup of H2 & H3 is Subgroup of H4;
-  then the carrier of H1 c= the carrier of H2 &
-  the carrier of H3 c= the carrier of H4 & the carrier of H1 = carr H1 &
-  the carrier of H2 = carr H2 & the carrier of H3 = carr H3 &
-  the carrier of H4 = carr H4 &
-  commutators(H1,H3) = commutators(carr H1,carr H3) &
-  commutators(H2,H4) = commutators(carr H2,carr H4) by GROUP_2:def 5;
+  assume
+  H1 is Subgroup of H2 & H3 is Subgroup of H4;
+  then the carrier of H1 c= the carrier of H2 & the carrier of H3 c= the
+  carrier of H4 by GROUP_2:def 5;
   hence thesis by Th55;
 end;
 
 theorem Th63:
-  G is commutative Group iff for H1,H2 holds commutators(H1,H2) = {1_G}
+  G is commutative Group iff for H1,H2 holds commutators(H1,H2) =
+  {1_G}
 proof
-  thus G is commutative Group
-  implies for H1,H2 holds commutators(H1,H2) = {1_G} by Th56;
+  thus G is commutative Group implies for H1,H2 holds commutators(H1,H2) = {
+  1_G} by Th56;
   assume
 A1: for H1,H2 holds commutators(H1,H2) = {1_G};
   G is commutative
   proof
     let a,b;
-    a in {a} & b in {b} by TARSKI:def 1;
-    then a in gr{a} & b in gr{b} by GROUP_4:38;
-    then [.a,b.] in commutators(gr{a},gr{b}) by Th58;
+    b in {b} by TARSKI:def 1;
+    then
+A2: b in gr{b} by GROUP_4:38;
+    a in {a} by TARSKI:def 1;
+    then a in gr{a} by GROUP_4:38;
+    then [.a,b.] in commutators(gr{a},gr{b}) by A2,Th58;
     then [.a,b.] in {1_G} by A1;
     then [.a,b.] = 1_G by TARSKI:def 1;
     hence thesis by Th39;
@@ -1231,7 +1300,6 @@ end;
 definition
   let G;
   func commutators G -> Subset of G equals
-
   commutators((Omega).G,(Omega).G);
   correctness;
 end;
@@ -1243,7 +1311,8 @@ theorem Th65:
 proof
   thus x in commutators G implies ex a,b st x = [.a,b.]
   proof
-    assume x in commutators G;
+    assume
+    x in commutators G;
     then ex a,b st x = [.a,b.] & a in (Omega).G & b in (Omega).G by Th58;
     hence thesis;
   end;
@@ -1271,7 +1340,6 @@ end;
 definition
   let G,A,B;
   func [.A,B.] -> strict Subgroup of G equals
-
   gr commutators(A,B);
   correctness;
 end;
@@ -1281,17 +1349,18 @@ canceled;
 theorem Th68:
   a in A & b in B implies [.a,b.] in [.A,B.]
 proof
-  assume a in A & b in B;
+  assume
+  a in A & b in B;
   then [.a,b.] in commutators(A,B);
   hence thesis by GROUP_4:38;
 end;
 
 theorem Th69:
-  x in [.A,B.] iff
-  ex F,I st len F = len I & rng F c= commutators(A,B) & x = Product(F |^ I)
+  x in [.A,B.] iff ex F,I st len F = len I & rng F c= commutators(
+  A,B) & x = Product(F |^ I)
 proof
-  thus x in [.A,B.] implies
-  ex F,I st len F = len I & rng F c= commutators(A,B) & x = Product(F |^ I)
+  thus x in [.A,B.] implies ex F,I st len F = len I & rng F c= commutators(A,B
+  ) & x = Product(F |^ I)
   proof
     assume
 A1: x in [.A,B.];
@@ -1304,12 +1373,12 @@ A1: x in [.A,B.];
 end;
 
 theorem
-  A c= C & B c= D implies [.A,B.] is Subgroup of [.C,D.] by Th55,GROUP_4:41;
+  A c= C & B c= D implies [.A,B.] is Subgroup of [.C,D.] by Th55,GROUP_4
+  :41;
 
 definition
   let G,H1,H2;
   func [.H1,H2.] -> strict Subgroup of G equals
-
   [.carr H1,carr H2.];
   correctness;
 end;
@@ -1320,35 +1389,37 @@ theorem
   [.H1,H2.] = gr commutators(H1,H2);
 
 theorem
-  x in [.H1,H2.] iff
-  ex F,I st len F = len I & rng F c= commutators(H1,H2) & x = Product(F |^ I)
-  by Th69;
+  x in [.H1,H2.] iff ex F,I st len F = len I & rng F c= commutators(H1,
+  H2) & x = Product(F |^ I) by Th69;
 
 theorem Th74:
   a in H1 & b in H2 implies [.a,b.] in [.H1,H2.]
 proof
-  assume a in H1 & b in H2;
+  assume
+  a in H1 & b in H2;
   then a in carr H1 & b in carr H2 by STRUCT_0:def 5;
   hence thesis by Th68;
 end;
 
 theorem
-  H1 is Subgroup of H2 & H3 is Subgroup of H4 implies
-  [.H1,H3.] is Subgroup of [.H2,H4.]
+  H1 is Subgroup of H2 & H3 is Subgroup of H4 implies [.H1,H3.] is
+  Subgroup of [.H2,H4.]
 proof
-  assume H1 is Subgroup of H2 & H3 is Subgroup of H4;
+  assume
+  H1 is Subgroup of H2 & H3 is Subgroup of H4;
   then commutators(H1,H3) c= commutators(H2,H4) by Th62;
   hence thesis by GROUP_4:41;
 end;
 
 theorem
-  for N being strict normal Subgroup of G holds
-  [.N,H.] is Subgroup of N & [.H,N.] is Subgroup of N
+  for N being strict normal Subgroup of G holds [.N,H.] is Subgroup of N
+  & [.H,N.] is Subgroup of N
 proof
   let N be strict normal Subgroup of G;
   now
     let a;
-    assume a in [.N,H.];
+    assume
+    a in [.N,H.];
     then consider F,I such that
 A1: len F = len I and
 A2: rng F c= commutators(N,H) and
@@ -1361,7 +1432,8 @@ A3: a = Product(F |^ I) by Th69;
   hence [.N,H.] is Subgroup of N by GROUP_2:67;
   now
     let a;
-    assume a in [.H,N.];
+    assume
+    a in [.H,N.];
     then consider F,I such that
 A4: len F = len I and
 A5: rng F c= commutators(H,N) and
@@ -1375,15 +1447,16 @@ A6: a = Product(F |^ I) by Th69;
 end;
 
 theorem Th77:
-  for N1,N2 being strict normal Subgroup of G
-  holds [.N1,N2.] is normal Subgroup of G
+  for N1,N2 being strict normal Subgroup of G holds [.N1,N2.] is
+  normal Subgroup of G
 proof
   let N1,N2 be strict normal Subgroup of G;
   now
     let a;
     now
       let b;
-      assume b in [.N1,N2.] |^ a;
+      assume
+      b in [.N1,N2.] |^ a;
       then consider c such that
 A1:   b = c |^ a and
 A2:   c in [.N1,N2.] by GROUP_3:70;
@@ -1391,32 +1464,41 @@ A2:   c in [.N1,N2.] by GROUP_3:70;
 A3:   len F = len I and
 A4:   rng F c= commutators(carr N1,carr N2) and
 A5:   c = Product(F |^ I) by A2,GROUP_4:37;
-A6:   b = Product(F |^ I |^ a) by A1,A5,Th17
-        .= Product((F |^ a) |^ I) by Th18;
-A7:   len(F |^ a) = len F by Def1;
-      rng(F |^ a) c= commutators(carr N1,carr N2)
+A6:   len(F |^ a) = len F by Def1;
+A7:   rng(F |^ a) c= commutators(carr N1,carr N2)
       proof
         let x;
-        assume x in rng(F |^ a);
+        assume
+        x in rng(F |^ a);
         then consider y such that
 A8:     y in dom(F |^ a) and
 A9:     (F |^ a).y = x by FUNCT_1:def 5;
         reconsider y as Element of NAT by A8;
-        y in dom F by A7,A8,FINSEQ_3:31;
+A10:    y in dom F by A6,A8,FINSEQ_3:31;
+        then
+A11:    F.y = (F/.y) by PARTFUN1:def 8;
+        y in dom F by A6,A8,FINSEQ_3:31;
         then F.y in rng F by FUNCT_1:def 5;
         then consider d,e such that
-A10:    F.y = [.d,e.] and
-A11:    d in carr N1 & e in carr N2 by A4,Th52;
-        y in dom F by A7,A8,FINSEQ_3:31;
-        then x = (F/.y) |^ a & F.y = (F/.y) by A9,Def1,PARTFUN1:def 8;
+A12:    F.y = [.d,e.] and
+A13:    d in carr N1 and
+A14:    e in carr N2 by A4,Th52;
+        d in N1 by A13,STRUCT_0:def 5;
+        then d |^ a in N1 |^ a by GROUP_3:70;
+        then d |^ a in N1 by GROUP_3:def 13;
         then
-A12:    x = [.d |^ a,e |^ a.] by A10,Th26;
-        d in N1 & e in N2 by A11,STRUCT_0:def 5;
-        then d |^ a in N1 |^ a & e |^ a in N2 |^ a by GROUP_3:70;
-        then d |^ a in N1 & e |^ a in N2 by GROUP_3:def 13;
-        then d |^ a in carr N1 & e |^ a in carr N2 by STRUCT_0:def 5;
-        hence thesis by A12;
+A15:    d |^ a in carr N1 by STRUCT_0:def 5;
+        e in N2 by A14,STRUCT_0:def 5;
+        then e |^ a in N2 |^ a by GROUP_3:70;
+        then e |^ a in N2 by GROUP_3:def 13;
+        then
+A16:    e |^ a in carr N2 by STRUCT_0:def 5;
+        x = (F/.y) |^ a by A9,A10,Def1;
+        then x = [.d |^ a,e |^ a.] by A12,A11,Th26;
+        hence thesis by A15,A16;
       end;
+      b = Product(F |^ I |^ a) by A1,A5,Th17
+        .= Product((F |^ a) |^ I) by Th18;
       hence b in [.N1,N2.] by A3,A6,A7,GROUP_4:37;
     end;
     hence [.N1,N2.] |^ a is Subgroup of [.N1,N2.] by GROUP_2:67;
@@ -1428,145 +1510,163 @@ Lm2: [.N1,N2.] is Subgroup of [.N2,N1.]
 proof
   now
     let a;
-    assume a in [.N1,N2.];
-    then consider F,I such that len F = len I and
+    assume
+    a in [.N1,N2.];
+    then consider F,I such that
+    len F = len I and
 A1: rng F c= commutators(N1,N2) and
 A2: a = Product(F |^ I) by Th69;
     deffunc F(Nat) = (F/.$1)";
     consider F1 such that
 A3: len F1 = len F and
 A4: for k be Nat st k in dom F1 holds F1.k = F(k) from FINSEQ_2:sch 1;
-A5: dom F1 = Seg len F by A3,FINSEQ_1:def 3;
-    deffunc F(Nat) = @(- @(I/.$1));
-    consider I1 such that
-A6: len I1 = len F and
-A7: for k be Nat st k in dom I1 holds I1.k = F(k) from FINSEQ_2:sch 1;
-A9: dom F = Seg len F by FINSEQ_1:def 3;
-A10: dom F1 = dom F by A3,FINSEQ_3:31;
-A11: dom I1 = dom F by A6,FINSEQ_3:31;
-    set J = F1 |^ I1;
-A12: len J = len F & len(F |^ I) = len F by A3,GROUP_4:def 4;
-then
-X: dom(F |^ I)  = Seg len F by FINSEQ_1:def 3;
-    now
-      let k be Nat;
-      assume
-A13:  k in dom(F |^ I);
-      then
-A14:  k in dom F by X,FINSEQ_1:def 3;
-      J.k = (F1/.k) |^ @(I1/.k) & F1/.k = F1.k & F1.k = (F/.k)" &
-      I1.k = (I1/.k) & @(I1/.k) = I1/.k &
-      I1.k = @(- @(I/.k)) & @(- @(I/.k)) = - @(I/.k)
-      by A4,A7,A9,A10,A11,A13,X,GROUP_4:def 4,PARTFUN1:def 8;
-      then J.k = ((F/.k)" |^ @(I/.k))" by GROUP_1:70
-        .= ((F/.k) |^ @(I/.k))"" by GROUP_1:72
-        .= (F/.k) |^ @(I/.k);
-      hence (F |^ I).k = J.k by A14,GROUP_4:def 4;
-    end;
-    then
-A15: J = F |^ I by A12,FINSEQ_2:10;
-    rng F1 c= commutators(N2,N1)
+A5: dom F = Seg len F by FINSEQ_1:def 3;
+A6: rng F1 c= commutators(N2,N1)
     proof
       let x;
-      assume x in rng F1;
+      assume
+      x in rng F1;
       then consider y such that
-A16:  y in dom F1 and
-A17:  F1.y = x by FUNCT_1:def 5;
-      reconsider y as Element of NAT by A16;
-      y in dom F by A3,A16,FINSEQ_3:31;
+A7:   y in dom F1 and
+A8:   F1.y = x by FUNCT_1:def 5;
+      reconsider y as Element of NAT by A7;
+      y in dom F by A3,A7,FINSEQ_3:31;
+      then
+A9:   F/.y = F.y by PARTFUN1:def 8;
+      y in dom F by A3,A7,FINSEQ_3:31;
       then F.y in rng F by FUNCT_1:def 5;
       then consider b,c such that
-A18:  F.y = [.b,c.] and
-A19:  b in N1 & c in N2 by A1,Th58;
-      y in dom F by A3,A16,FINSEQ_3:31;
-      then x = (F/.y)" & F/.y = F.y by A4,A9,A17,A5,PARTFUN1:def 8;
-      then x = [.c,b.] by A18,Th25;
-      hence thesis by A19,Th58;
+A10:  F.y = [.b,c.] and
+A11:  b in N1 & c in N2 by A1,Th58;
+      x = (F/.y)" by A4,A7,A8;
+      then x = [.c,b.] by A10,A9,Th25;
+      hence thesis by A11,Th58;
     end;
-    hence a in [.N2,N1.] by A2,A3,A6,A15,Th69;
+A12: len(F |^ I) = len F by GROUP_4:def 4;
+    then
+A13: dom(F |^ I) = Seg len F by FINSEQ_1:def 3;
+    deffunc F(Nat) = @(- @(I/.$1));
+    consider I1 such that
+A14: len I1 = len F and
+A15: for k be Nat st k in dom I1 holds I1.k = F(k) from FINSEQ_2:sch 1;
+    set J = F1 |^ I1;
+A16: dom F1 = dom F by A3,FINSEQ_3:31;
+A17: dom I1 = dom F by A14,FINSEQ_3:31;
+A18: now
+      let k be Nat;
+      assume
+A19:  k in dom(F |^ I);
+      then
+A20:  k in dom F by A13,FINSEQ_1:def 3;
+
+A21:  J.k = (F1/.k) |^ @(I1/.k) & F1/.k = F1.k by A5,A16,A13,A19,GROUP_4:
+      def 4 ,PARTFUN1:def 8;
+
+A22:  I1.k = @(- @(I/.k)) by A15,A5,A17,A13,A19;
+
+      F1.k = (F/.k)" & I1.k = (I1/.k) by A4,A5,A16,A17,A13,A19,PARTFUN1:
+      def 8;
+
+      then J.k = ((F/.k)" |^ @(I/.k))" by A21,A22,GROUP_1:70
+        .= ((F/.k) |^ @(I/.k))"" by GROUP_1:72
+        .= (F/.k) |^ @(I/.k);
+      hence (F |^ I).k = J.k by A20,GROUP_4:def 4;
+    end;
+    len J = len F by A3,GROUP_4:def 4;
+    then J = F |^ I by A12,A18,FINSEQ_2:10;
+    hence a in [.N2,N1.] by A2,A3,A14,A6,Th69;
   end;
   hence thesis by GROUP_2:67;
 end;
 
 theorem Th78:
   [.N1,N2.] = [.N2,N1.]
-proof [.N1,N2.] is Subgroup of [.N2,N1.] &
-  [.N2,N1.] is Subgroup of [.N1,N2.] by Lm2;
+proof
+  [.N1,N2.] is Subgroup of [.N2,N1.] & [.N2,N1.] is Subgroup of [.N1,N2.]
+  by Lm2;
   hence thesis by GROUP_2:64;
 end;
 
 theorem Th79:
-  for N1,N2,N3 being strict normal Subgroup of G
-  holds [.N1 "\/" N2,N3.] = [.N1,N3.] "\/" [.N2,N3.]
+  for N1,N2,N3 being strict normal Subgroup of G holds [.N1 "\/"
+  N2,N3.] = [.N1,N3.] "\/" [.N2,N3.]
 proof
   let N1,N2,N3 be strict normal Subgroup of G;
-A1: [.N1,N3.] is normal Subgroup of G &
-  [.N2,N3.] is normal Subgroup of G by Th77;
+A1: [.N1,N3.] is normal Subgroup of G by Th77;
+A2: [.N2,N3.] is normal Subgroup of G by Th77;
+  now
+    let a;
+A3: N3 is Subgroup of N3 by GROUP_2:63;
+    N2 is Subgroup of N1 "\/" N2 by GROUP_4:78;
+    then
+A4: commutators(N2,N3) c= commutators(N1 "\/" N2,N3) by A3,Th62;
+    assume
+    a in [.N1,N3.] "\/" [.N2,N3.];
+    then consider b,c such that
+A5: a = b * c and
+A6: b in [.N1,N3.] and
+A7: c in [.N2,N3.] by A1,A2,Th7;
+    consider F1,I1 such that
+A8: len F1 = len I1 and
+A9: rng F1 c= commutators(N1,N3) and
+A10: b = Product (F1 |^ I1) by A6,Th69;
+    consider F2,I2 such that
+A11: len F2 = len I2 and
+A12: rng F2 c= commutators(N2,N3) and
+A13: c = Product (F2 |^ I2) by A7,Th69;
+A14: len(F1 ^ F2) = len I1 + len I2 by A8,A11,FINSEQ_1:35
+      .= len(I1 ^ I2) by FINSEQ_1:35;
+    rng(F1 ^ F2) = rng F1 \/ rng F2 by FINSEQ_1:44;
+    then
+A15: rng(F1 ^ F2) c= commutators(N1,N3) \/ commutators(N2,N3) by A9,A12,
+    XBOOLE_1:13;
+    N1 is Subgroup of N1 "\/" N2 by GROUP_4:78;
+    then commutators(N1,N3) c= commutators(N1 "\/" N2,N3) by A3,Th62;
+    then
+    commutators(N1,N3) \/ commutators(N2,N3) c= commutators(N1 "\/" N2,N3
+    ) by A4,XBOOLE_1:8;
+    then
+A16: rng(F1 ^ F2) c= commutators(N1 "\/" N2,N3) by A15,XBOOLE_1:1;
+    Product((F1 ^ F2) |^ (I1 ^ I2)) = Product((F1 |^ I1) ^ (F2 |^ I2)) by
+    A8,A11,GROUP_4:25
+      .= a by A5,A10,A13,GROUP_4:8;
+    hence a in [.N1 "\/" N2,N3.] by A16,A14,Th69;
+  end;
+  then
+A17: [.N1,N3.] "\/" [.N2,N3.] is Subgroup of [.N1 "\/" N2,N3.] by
+  GROUP_2:67;
   commutators(N1 "\/" N2,N3) c= [.N1,N3.] * [.N2,N3.]
   proof
     let x;
-    assume x in commutators(N1 "\/" N2,N3);
+    assume
+    x in commutators(N1 "\/" N2,N3);
     then consider a,b such that
-A2: x = [.a,b.] and
-A3: a in N1 "\/" N2 and
-A4: b in N3 by Th58;
+A18: x = [.a,b.] and
+A19: a in N1 "\/" N2 and
+A20: b in N3 by Th58;
     consider c,d such that
-A5: a = c * d and
-A6: c in N1 and
-A7: d in N2 by A3,Th7;
-A8: x = [.c,b.] |^ d * [.d,b.] by A2,A5,Th28;
-    [.c,b.] in [.N1,N3.] by A4,A6,Th74;
+A21: a = c * d and
+A22: c in N1 and
+A23: d in N2 by A19,Th7;
+    [.c,b.] in [.N1,N3.] by A20,A22,Th74;
     then [.c,b.] |^ d in [.N1,N3.] |^ d by GROUP_3:70;
-    then [.c,b.] |^ d in [.N1,N3.] & [.d,b.] in [.N2,N3.]
-    by A1,A4,A7,Th74,GROUP_3:def 13;
-    hence thesis by A8,Th4;
+    then
+A24: [.c,b.] |^ d in [.N1,N3.] by A1,GROUP_3:def 13;
+    x = [.c,b.] |^ d * [.d,b.] & [.d,b.] in [.N2,N3.] by A18,A20,A21,A23,
+    Th28,Th74;
+    hence thesis by A24,Th4;
   end;
-  then gr commutators(N1 "\/"
-  N2,N3) is Subgroup of gr ([.N1,N3.] * [.N2,N3.]) by GROUP_4:41;
   then
-A9: [.N1 "\/" N2,N3.] is Subgroup of [.N1,N3.] "\/" [.N2,N3.] by GROUP_4:68;
-  now
-    let a;
-    assume a in [.N1,N3.] "\/" [.N2,N3.];
-    then consider b,c such that
-A10: a = b * c and
-A11: b in [.N1,N3.] and
-A12: c in [.N2,N3.] by A1,Th7;
-    consider F1,I1 such that
-A13: len F1 = len I1 and
-A14: rng F1 c= commutators(N1,N3) and
-A15: b = Product (F1 |^ I1) by A11,Th69;
-    consider F2,I2 such that
-A16: len F2 = len I2 and
-A17: rng F2 c= commutators(N2,N3) and
-A18: c = Product (F2 |^ I2) by A12,Th69;
-A19: Product((F1 ^ F2) |^ (I1 ^ I2)) =
-    Product((F1 |^ I1) ^ (F2 |^ I2)) by A13,A16,GROUP_4:25
-      .= a by A10,A15,A18,GROUP_4:8;
-    rng(F1 ^ F2) = rng F1 \/ rng F2 by FINSEQ_1:44;
-    then
-A20: rng(F1 ^ F2) c= commutators(N1,N3) \/ commutators(N2,N3) by A14,A17,
-XBOOLE_1:13;
-    N1 is Subgroup of N1 "\/" N2 & N2 is Subgroup of N1 "\/" N2 &
-    N3 is Subgroup of N3 by GROUP_2:63,GROUP_4:78;
-    then commutators(N1,N3) c= commutators(N1 "\/" N2,N3) &
-    commutators(N2,N3) c= commutators(N1 "\/" N2,N3) by Th62;
-    then commutators(N1,N3) \/ commutators(N2,N3) c=
-    commutators(N1 "\/" N2,N3) by XBOOLE_1:8;
-    then
-A21: rng(F1 ^ F2) c= commutators(N1 "\/" N2,N3) by A20,XBOOLE_1:1;
-    len(F1 ^ F2) = len I1 + len I2 by A13,A16,FINSEQ_1:35
-      .= len(I1 ^ I2) by FINSEQ_1:35;
-    hence a in [.N1 "\/" N2,N3.] by A19,A21,Th69;
-  end;
-  then [.N1,N3.] "\/" [.N2,N3.] is Subgroup of [.N1 "\/"
-  N2,N3.] by GROUP_2:67;
-  hence thesis by A9,GROUP_2:64;
+  gr commutators(N1 "\/" N2,N3) is Subgroup of gr ([.N1,N3.] * [.N2,N3.])
+  by GROUP_4:41;
+  then [.N1 "\/" N2,N3.] is Subgroup of [.N1,N3.] "\/" [.N2,N3.] by
+  GROUP_4:68;
+  hence thesis by A17,GROUP_2:64;
 end;
 
 theorem
-  for N1,N2,N3 being strict normal Subgroup of G holds
-  [.N1,N2 "\/" N3.] = [.N1,N2.] "\/" [.N1,N3.]
+  for N1,N2,N3 being strict normal Subgroup of G holds [.N1,N2 "\/" N3.]
+  = [.N1,N2.] "\/" [.N1,N3.]
 proof
   let N1,N2,N3 be strict normal Subgroup of G;
   N2 "\/" N3 is normal Subgroup of G by GROUP_4:72;
@@ -1579,10 +1679,10 @@ end;
 definition
   let G be Group;
   func G` -> strict normal Subgroup of G equals
-
   [.(Omega).G,(Omega).G.];
   coherence
-  proof (Omega).G is normal Subgroup of G by GROUP_3:137;
+  proof
+    (Omega).G is normal Subgroup of G by GROUP_3:137;
     hence thesis by Th77;
   end;
 end;
@@ -1593,21 +1693,20 @@ theorem
   for G being Group holds G` = gr commutators G;
 
 theorem Th83:
-  for G being Group holds x in G` iff
-  ex F being FinSequence of the carrier of G,I
-  st len F = len I & rng F c= commutators G & x = Product(F |^ I)
+  for G being Group holds x in G` iff ex F being FinSequence of
+the carrier of G,I st len F = len I & rng F c= commutators G & x = Product(F |^
+  I)
 proof
   let G be Group;
-  thus x in G` implies ex F being FinSequence of the carrier of G,I
-  st len F = len I & rng F c= commutators G & x = Product(F |^ I)
+  thus x in G` implies ex F being FinSequence of the carrier of G,I st len F =
+  len I & rng F c= commutators G & x = Product(F |^ I)
   proof
     assume
 A1: x in G`;
     then x in G by GROUP_2:49;
     then reconsider a = x as Element of G by STRUCT_0:def 5;
-    ex F being FinSequence of the carrier of G,I st
-    len F = len I & rng F c= commutators G & a = Product(F |^ I)
-    by A1,GROUP_4:37;
+    ex F being FinSequence of the carrier of G,I st len F = len I & rng F
+    c= commutators G & a = Product(F |^ I) by A1,GROUP_4:37;
     hence thesis;
   end;
   given F being FinSequence of the carrier of G,I such that
@@ -1616,7 +1715,8 @@ A2: len F = len I & rng F c= commutators G & x = Product(F |^ I);
 end;
 
 theorem Th84:
-  for G being strict Group, a,b be Element of G holds [.a,b.] in G`
+  for G being strict Group, a,b be Element of G holds [.a,b.] in G
+  `
 proof
   let G be strict Group, a,b be Element of G;
   a in (Omega).G & b in (Omega).G by STRUCT_0:def 5;
@@ -1633,30 +1733,33 @@ proof
 A1: G is commutative Group;
     now
       let a be Element of G;
-      assume a in G`;
+      assume
+      a in G`;
       then a in gr {1_G} by A1,Th56;
-      then a in gr({1_G} \ {1_G}) & {} = {} the carrier of G by GROUP_4:44;
+      then a in gr({1_G} \ {1_G}) by GROUP_4:44;
       then a in gr {} the carrier of G by XBOOLE_1:37;
       hence a in (1).G by GROUP_4:39;
     end;
-    then G` is Subgroup of (1).G & (1).G is Subgroup of G` by GROUP_2:67,77;
-    hence thesis by GROUP_2:64;
+    then
+A2: G` is Subgroup of (1).G by GROUP_2:67;
+    (1).G is Subgroup of G` by GROUP_2:77;
+    hence thesis by A2,GROUP_2:64;
   end;
   assume
-A2: G` = (1).G;
+A3: G` = (1).G;
   G is commutative
   proof
     let a,b be Element of G;
     [.a,b.] in G` by Th84;
-    then [.a,b.] = 1_G by A2,Th1;
+    then [.a,b.] = 1_G by A3,Th1;
     hence thesis by Th39;
   end;
   hence thesis;
 end;
 
 theorem
-  for G being Group, H being strict Subgroup of G holds
-  Left_Cosets H is finite & index H = 2 implies G` is Subgroup of H
+  for G being Group, H being strict Subgroup of G holds Left_Cosets H is
+  finite & index H = 2 implies G` is Subgroup of H
 proof
   let G be Group, H be strict Subgroup of G;
   assume that
@@ -1665,66 +1768,89 @@ A2: index H = 2;
 A3: H is normal Subgroup of G by A1,A2,GROUP_3:151;
   now
     let a be Element of G;
-    assume a in G`;
+    assume
+    a in G`;
     then consider F being FinSequence of the carrier of G,I such that
 A4: len F = len I and
 A5: rng F c= commutators G and
 A6: a = Product(F |^ I) by Th83;
     rng F c= carr H
     proof
-      let X be set;
-      assume X in rng F;
-      then consider a,b being Element of G such that
-A7:   X = [.a,b.] by A5,Th65;
-      ex B being finite set st
-      B = Left_Cosets H & index H = card B by A1,GROUP_2:176;
-      then consider x,y such that x <> y and
-A8:   Left_Cosets H = {x,y} by A2,CARD_2:79;
-      x in Left_Cosets H by A8,TARSKI:def 2;
+      ex B being finite set st B = Left_Cosets H & index H = card B by A1
+      ,GROUP_2:176;
+      then consider x,y such that
+      x <> y and
+A7:   Left_Cosets H = {x,y} by A2,CARD_2:79;
+      x in Left_Cosets H by A7,TARSKI:def 2;
       then consider d being Element of G such that
-A9:   x = d * H by GROUP_2:def 15;
-      y in Left_Cosets H by A8,TARSKI:def 2;
+A8:   x = d * H by GROUP_2:def 15;
+      y in Left_Cosets H by A7,TARSKI:def 2;
       then consider e being Element of G such that
-A10:  y = e * H by GROUP_2:def 15;
+A9:   y = e * H by GROUP_2:def 15;
       carr H in Left_Cosets H by GROUP_2:165;
-      then Left_Cosets H = {carr H,e * H} or
-      Left_Cosets H = {d * H,carr H} by A8,A9,A10,TARSKI:def 2;
-      then consider c being Element of G such that
-A11:  Left_Cosets H = {carr H,c * H};
-      a in the carrier of G & b in the carrier of G;
-      then a in union Left_Cosets H & b in union Left_Cosets H by GROUP_2:167;
       then
-A12:  a in carr H \/ c * H & b in carr H \/ c * H by A11,ZFMISC_1:93;
-      now per cases by A12,XBOOLE_0:def 3;
-        suppose a in carr H & b in carr H;
+      Left_Cosets H = {carr H,e * H} or Left_Cosets H = {d * H,carr H} by
+      A7,A8,A9,TARSKI:def 2;
+      then consider c being Element of G such that
+A10:  Left_Cosets H = {carr H,c * H};
+      let X be set;
+      assume
+      X in rng F;
+      then consider a,b being Element of G such that
+A11:  X = [.a,b.] by A5,Th65;
+      b in the carrier of G;
+      then b in union Left_Cosets H by GROUP_2:167;
+      then
+A12:  b in carr H \/ c * H by A10,ZFMISC_1:93;
+      a in the carrier of G;
+      then a in union Left_Cosets H by GROUP_2:167;
+      then
+A13:  a in carr H \/ c * H by A10,ZFMISC_1:93;
+      now
+        per cases by A13,A12,XBOOLE_0:def 3;
+        suppose
+          a in carr H & b in carr H;
           then a in H & b in H by STRUCT_0:def 5;
-          then X in H by A7,Th41;
+          then X in H by A11,Th41;
           hence thesis by STRUCT_0:def 5;
         end;
-        suppose a in carr H & b in c * H;
+        suppose
+          a in carr H & b in c * H;
           then a in H by STRUCT_0:def 5;
           then a |^ b in H & a" in H by A3,Th3,GROUP_2:60;
           then a" * (a |^ b) in H by GROUP_2:59;
-          then X in H by A7,Th19;
+          then X in H by A11,Th19;
           hence thesis by STRUCT_0:def 5;
         end;
-        suppose a in c * H & b in carr H;
+        suppose
+          a in c * H & b in carr H;
           then
-A13:      b in H by STRUCT_0:def 5;
+A14:      b in H by STRUCT_0:def 5;
           then b" in H by GROUP_2:60;
           then b" |^ a in H by A3,Th3;
-          then b" |^ a * b in H by A13,GROUP_2:59;
-          hence thesis by A7,STRUCT_0:def 5;
+          then b" |^ a * b in H by A14,GROUP_2:59;
+          hence thesis by A11,STRUCT_0:def 5;
         end;
         suppose
-A14:      a in c * H & b in c * H;
+A15:      a in c * H & b in c * H;
           then consider d being Element of G such that
-A15:      a = c * d & d in H by GROUP_2:125;
+A16:      a = c * d and
+A17:      d in H by GROUP_2:125;
           consider e being Element of G such that
-A16:      b = c * e & e in H by A14,GROUP_2:125;
-A17:      [.a,b.] = (a" * b") * (a * b) by Th19
-            .= (d" * c" * b") * (c * d * (c * e)) by A15,A16,GROUP_1:25
-            .= (d" * c" * (e" * c")) * (c * d * (c * e)) by A16,GROUP_1:25
+A18:      b = c * e and
+A19:      e in H by A15,GROUP_2:125;
+          e" in H by A19,GROUP_2:60;
+          then
+A20:      e" |^ c in H by A3,Th3;
+          d" in H by A17,GROUP_2:60;
+          then
+A21:      d" * (e" |^ c) in H by A20,GROUP_2:59;
+          d |^ c in H by A3,A17,Th3;
+          then
+A22:      d |^ c * e in H by A19,GROUP_2:59;
+          [.a,b.] = (a" * b") * (a * b) by Th19
+            .= (d" * c" * b") * (c * d * (c * e)) by A16,A18,GROUP_1:25
+            .= (d" * c" * (e" * c")) * (c * d * (c * e)) by A18,GROUP_1:25
             .= (d" * c" * e" * c") * (c * d * (c * e)) by GROUP_1:def 4
             .= (d" * c" * e" * c") * (c * (d * (c * e))) by GROUP_1:def 4
             .= ((d" * c" * e") * c") * c * (d * (c * e)) by GROUP_1:def 4
@@ -1739,10 +1865,7 @@ A17:      [.a,b.] = (a" * b") * (a * b) by Th19
             .= d" * (e" |^ c) * (c" * (d * (c * e))) by GROUP_1:def 4
             .= d" * (e" |^ c) * (c" * d * (c * e)) by GROUP_1:def 4
             .= d" * (e" |^ c) * (d |^ c * e) by GROUP_1:def 4;
-          e" in H by A16,GROUP_2:60;
-          then d" in H & e" |^ c in H & d |^ c in H by A3,A15,Th3,GROUP_2:60;
-          then d" * (e" |^ c) in H & d |^ c * e in H by A16,GROUP_2:59;
-          then X in H by A7,A17,GROUP_2:59;
+          then X in H by A11,A21,A22,GROUP_2:59;
           hence thesis by STRUCT_0:def 5;
         end;
       end;
@@ -1760,55 +1883,59 @@ definition
   let G;
   func center G -> strict Subgroup of G means
   :Def10:
-  the carrier of it = {a : for b holds a * b = b * a};
+  the carrier of it = {a :
+  for b holds a * b = b * a};
   existence
   proof
     defpred P[Element of G] means for b holds $1 * b = b * $1;
     reconsider A = {a : P[a]} as Subset of G from DOMAIN_1:sch 7;
-    now
-      let b;
-      1_G * b = b & b * 1_G = b by GROUP_1:def 5;
-      hence 1_G * b = b * 1_G;
-    end;
-    then
-A1: 1_G in A;
-A2: now
+A1: now
       let a,b;
       assume that
-A3:   a in A and
-A4:   b in A;
+A2:   a in A and
+A3:   b in A;
       consider c such that
-A5:   c = a & for b holds c * b = b * c by A3;
+A4:   c = a and
+A5:   for b holds c * b = b * c by A2;
       consider d such that
-A6:   d = b & for a holds d * a = a * d by A4;
+A6:   d = b and
+A7:   for a holds d * a = a * d by A3;
       now
         let e;
         thus a * b * e = a * (b * e) by GROUP_1:def 4
-          .= a * (e * d) by A6
+          .= a * (e * d) by A6,A7
           .= a * e * b by A6,GROUP_1:def 4
-          .= e * c * b by A5
-          .= e * (a * b) by A5,GROUP_1:def 4;
+          .= e * c * b by A4,A5
+          .= e * (a * b) by A4,GROUP_1:def 4;
       end;
       hence a * b in A;
     end;
-    now
+A8: now
       let a;
-      assume a in A;
+      assume
+      a in A;
       then consider b such that
-A7:   b = a & for c holds b * c = c * b;
+A9:   b = a and
+A10:  for c holds b * c = c * b;
       now
         let c;
         thus a" * c = (a" * c)""
           .= (c" * a"")" by GROUP_1:25
-          .= (c" * b)" by A7
-          .= (b * c")" by A7
-          .= (a"" * c")" by A7
+          .= (c" * b)" by A9
+          .= (b * c")" by A10
+          .= (a"" * c")" by A9
           .= (c * a")"" by GROUP_1:25
           .= c * a";
       end;
       hence a" in A;
     end;
-    hence thesis by A1,A2,GROUP_2:61;
+    now
+      let b;
+      1_G * b = b by GROUP_1:def 5;
+      hence 1_G * b = b * 1_G by GROUP_1:def 5;
+    end;
+    then 1_G in A;
+    hence thesis by A1,A8,GROUP_2:61;
   end;
   uniqueness by GROUP_2:68;
 end;
@@ -1820,13 +1947,15 @@ theorem Th89:
 proof
   thus a in center G implies for b holds a * b = b * a
   proof
-    assume a in center G;
+    assume
+    a in center G;
     then a in the carrier of center G by STRUCT_0:def 5;
     then a in {b : for c holds b * c = c * b} by Def10;
     then ex b st a = b & for c holds b * c = c * b;
     hence thesis;
   end;
-  assume for b holds a * b = b * a;
+  assume
+  for b holds a * b = b * a;
   then a in {c : for b holds c * b = b * c};
   then a in the carrier of center G by Def10;
   hence thesis by STRUCT_0:def 5;
@@ -1840,7 +1969,8 @@ proof
     thus a * center G c= center G * a
     proof
       let x;
-      assume x in a * center G;
+      assume
+      x in a * center G;
       then consider b such that
 A1:   x = a * b and
 A2:   b in center G by GROUP_2:125;
@@ -1852,8 +1982,8 @@ A2:   b in center G by GROUP_2:125;
 end;
 
 theorem
-  for H being Subgroup of G holds
-  H is Subgroup of center G implies H is normal Subgroup of G
+  for H being Subgroup of G holds H is Subgroup of center G implies H is
+  normal Subgroup of G
 proof
   let H be Subgroup of G;
   assume
@@ -1863,7 +1993,8 @@ A1: H is Subgroup of center G;
     thus H * a c= a * H
     proof
       let x;
-      assume x in H * a;
+      assume
+      x in H * a;
       then consider b such that
 A2:   x = b * a and
 A3:   b in H by GROUP_2:126;
@@ -1896,7 +2027,8 @@ A1: a in center G;
     thus con_class a c= {a}
     proof
       let x;
-      assume x in con_class a;
+      assume
+      x in con_class a;
       then consider b such that
 A2:   b = x and
 A3:   a,b are_conjugated by GROUP_3:95;

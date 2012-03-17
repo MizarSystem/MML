@@ -8,17 +8,16 @@ environ
 
  vocabularies PRE_TOPC, FUNCT_1, RELAT_1, SUBSET_1, RELAT_2, ORDINAL2, BOOLE,
       RCOMP_1, BORSUK_1, FUNCOP_1, CONNSP_1, EUCLID, TOPREAL1, TOPS_2, ARYTM_1,
-      MCART_1, ARYTM_3, SQUARE_1, METRIC_1, JORDAN1, ARYTM, JORDAN1A,
-      PCOMPS_1, RLVECT_1;
+      MCART_1, ARYTM_3, SQUARE_1, METRIC_1, JORDAN1, ARYTM, JORDAN1A, PCOMPS_1,
+      RLVECT_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, XXREAL_0, XREAL_0, REAL_1,
-      FUNCT_1, RELSET_1, FUNCT_2, BINOP_1, NUMBERS, FUNCOP_1, PRE_TOPC, TOPS_2,
-      CONNSP_1, SQUARE_1, RCOMP_1, STRUCT_0, METRIC_1,
-      PCOMPS_1, BORSUK_1, TOPREAL1,
+      FUNCT_1, RELSET_1, FUNCT_2, BINOP_1, NUMBERS, PRE_TOPC, TOPS_2, CONNSP_1,
+      SQUARE_1, RCOMP_1, STRUCT_0, METRIC_1, PCOMPS_1, BORSUK_1, TOPREAL1,
       RLVECT_1, RLTOPSP1, EUCLID;
  constructors REAL_1, SQUARE_1, RCOMP_1, CONNSP_1, TOPS_2, TOPMETR, TOPREAL1,
-      FUNCOP_1, FUNCSDOM, CONVEX1;
+      FUNCOP_1, FUNCSDOM, CONVEX1, BINOP_2;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, XREAL_0, MEMBERED, STRUCT_0,
-      PRE_TOPC, BORSUK_1, EUCLID, TOPREAL1, RLTOPSP1, RLVECT_1;
+      PRE_TOPC, BORSUK_1, EUCLID, RLTOPSP1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, CONNSP_1, XBOOLE_0, EUCLID, SQUARE_1, SUBSET_1, STRUCT_0,
       PCOMPS_1, RLTOPSP1;
@@ -39,8 +38,9 @@ reserve GX,GY for non empty TopSpace,
 
 Lm1: 0 in [.0,1.] & 1 in [.0,1.]
 proof
-  0 in {r:0<=r & r<=1} & 1 in {s:0<=s & s<=1};
-  hence thesis by RCOMP_1:def 1;
+A1: 0 in {r:0<=r & r<=1};
+  1 in {s:0<=s & s<=1};
+  hence thesis by A1,RCOMP_1:def 1;
 end;
 
 canceled 3;
@@ -61,10 +61,13 @@ A1: for x,y being Point of GX
     now
       consider h being Function of I[01],GX such that
 A2:   h is continuous and
-A3:   x=h.0 & y=h.1 by A1;
-      0 in dom h & 1 in dom h by Lm1,BORSUK_1:83,FUNCT_2:def 1;
-      then x in rng h & y in rng h by A3,FUNCT_1:def 5;
-      hence thesis by A2,TREAL_1:22;
+A3:   x=h.0 and
+A4:   y=h.1 by A1;
+A5:   0 in dom h by Lm1,BORSUK_1:83,FUNCT_2:def 1;
+A6:   1 in dom h by Lm1,BORSUK_1:83,FUNCT_2:def 1;
+A7:   x in rng h by A3,A5,FUNCT_1:def 5;
+      y in rng h by A4,A6,FUNCT_1:def 5;
+      hence thesis by A2,A7,TREAL_1:22;
     end;
     hence thesis;
   end;
@@ -88,27 +91,29 @@ A2: for xa,ya being Point of GX st xa in A & ya in A & xa = ya
     ex h being Function of I[01],GX|A st h is continuous & xa=h.0 & ya=h.1
     proof
       let xa,ya be Point of GX;
-      assume
-A3:   xa in A & ya in A & xa = ya;
-      then reconsider xa' = xa as Element of GX|A by PRE_TOPC:29;
+      assume that
+A3:   xa in A
+      and ya in A and
+A4:   xa = ya;
+      reconsider xa' = xa as Element of GX|A by A3,PRE_TOPC:29;
       reconsider h = I[01] --> xa' as Function of I[01], GX|A;
       take h;
-      h = (the carrier of I[01]) --> xa';
-      hence thesis by A3,Lm1,BORSUK_1:83,FUNCOP_1:13;
+      thus thesis by A4,Lm1,BORSUK_1:83,FUNCOP_1:13;
     end;
     for xb,yb being Point of GX|A
     ex ha being Function of I[01],GX|A st ha is continuous & xb=ha.0 & yb=ha.1
     proof
       let xb,yb be Point of GX|A;
-      xb in [#](GX|A) & yb in [#](GX|A);
-      then
-A4:   xb in A & yb in A by PRE_TOPC:def 10;
+A5:   xb in [#](GX|A);
+A6:   yb in [#](GX|A);
+A7:   xb in A by A5,PRE_TOPC:def 10;
+A8:   yb in A by A6,PRE_TOPC:def 10;
       per cases;
       suppose xb<>yb;
-        hence thesis by A1,A4;
+        hence thesis by A1,A7,A8;
       end;
       suppose xb = yb;
-        hence thesis by A2,A4;
+        hence thesis by A2,A7;
       end;
     end;
     then GX|A is connected by Th4;
@@ -117,8 +122,8 @@ A4:   xb in A & yb in A by PRE_TOPC:def 10;
   suppose A is empty;
     then reconsider D = A as empty Subset of GX;
     let A1, B1 be Subset of GX|A such that
- [#](GX|A) = A1 \/ B1 and A1,B1 are_separated;
-    [#](GX|D) = D by PRE_TOPC:def 10;
+    [#](GX|A) = A1 \/ B1 and A1,B1 are_separated;
+    [#](GX|D) = D;
     hence thesis;
   end;
 end;
@@ -135,14 +140,16 @@ theorem Th7:
 proof
   let A0,A1,A2 be Subset of GX;
   assume that
-A1: A0 is connected & A1 is connected & A2 is connected and
-A2: A0 meets A1 & A1 meets A2;
-A3: A0 /\ A1 <> {} & A1 /\ A2 <> {} by A2,XBOOLE_0:def 7;
-A4: A0 \/ A1 is connected by A1,A2,CONNSP_1:2,18;
+A1: A0 is connected and
+A2: A1 is connected and
+A3: A2 is connected and
+A4: A0 meets A1 and
+A5: A1 meets A2;
+A6: A1 /\ A2 <> {} by A5,XBOOLE_0:def 7;
+A7: A0 \/ A1 is connected by A1,A2,A4,CONNSP_1:2,18;
   (A0 \/ A1)/\ A2= A0 /\ A2 \/ A1 /\ A2 by XBOOLE_1:23;
-  then (A0 \/ A1) /\ A2 <> {} by A3;
-  then (A0 \/ A1) meets A2 by XBOOLE_0:def 7;
-  hence thesis by A1,A4,CONNSP_1:2,18;
+  then (A0 \/ A1) meets A2 by A6,XBOOLE_0:def 7;
+  hence thesis by A3,A7,CONNSP_1:2,18;
 end;
 
 theorem Th8:
@@ -152,14 +159,18 @@ theorem Th8:
 proof
   let A0,A1,A2,A3 be Subset of GX;
   assume that
-A1: A0 is connected & A1 is connected & A2 is connected & A3 is connected and
-A2: A0 meets A1 & A1 meets A2 & A2 meets A3;
-A3: A0 /\ A1 <> {} & A1 /\ A2 <> {} & A2 /\ A3 <> {} by A2,XBOOLE_0:def 7;
-A4: A0 \/ A1 \/ A2 is connected by A1,A2,Th7;
+A1: A0 is connected and
+A2: A1 is connected and
+A3: A2 is connected and
+A4: A3 is connected and
+A5: A0 meets A1 and
+A6: A1 meets A2 and
+A7: A2 meets A3;
+A8: A2 /\ A3 <> {} by A7,XBOOLE_0:def 7;
+A9: A0 \/ A1 \/ A2 is connected by A1,A2,A3,A5,A6,Th7;
   (A0 \/ A1 \/ A2)/\ A3= (A0 \/ A1) /\ A3 \/ A2 /\ A3 by XBOOLE_1:23;
-  then (A0 \/ A1 \/ A2) /\ A3 <> {} by A3;
-  then (A0 \/ A1 \/ A2) meets A3 by XBOOLE_0:def 7;
-  hence thesis by A1,A4,CONNSP_1:2,18;
+  then (A0 \/ A1 \/ A2) meets A3 by A8,XBOOLE_0:def 7;
+  hence thesis by A4,A9,CONNSP_1:2,18;
 end;
 
 begin
@@ -193,33 +204,32 @@ A1: for w3,w4 being Point of TOP-REAL n st w3 in P & w4 in P holds
   & w1=h.0 & w2=h.1
   proof
     let w1,w2 be Point of TOP-REAL n;
-    assume
-A2: w1 in P & w2 in P & w1<>w2;
-    then
-A3: LSeg(w1,w2) c= P by A1;
-    LSeg(w1,w2) is_an_arc_of w1,w2 by A2,TOPREAL1:15;
+    assume that
+A2: w1 in P and
+A3: w2 in P and
+A4: w1<>w2;
+A5: LSeg(w1,w2) c= P by A1,A2,A3;
+    LSeg(w1,w2) is_an_arc_of w1,w2 by A4,TOPREAL1:15;
     then consider f being Function of I[01], (TOP-REAL n)|LSeg(w1,w2) such that
-A4: f is being_homeomorphism & f.0 = w1 & f.1 = w2 by TOPREAL1:def 2;
-A5: f is continuous by A4,TOPS_2:def 5;
-A6: rng f = [#]((TOP-REAL n)|LSeg(w1,w2)) by A4,TOPS_2:def 5;
+A6: f is being_homeomorphism and
+A7: f.0 = w1 and
+A8: f.1 = w2 by TOPREAL1:def 2;
+A9: f is continuous by A6,TOPS_2:def 5;
+A10: rng f = [#]((TOP-REAL n)|LSeg(w1,w2)) by A6,TOPS_2:def 5;
     then
-A7: rng f c= P by A3,PRE_TOPC:def 10;
+A11: rng f c= P by A5,PRE_TOPC:def 10;
     then [#]((TOP-REAL n)|LSeg(w1,w2)) c= [#]((TOP-REAL n)|P)
-    by A6,PRE_TOPC:def 10;
+    by A10,PRE_TOPC:def 10;
     then
-A8: (TOP-REAL n)|LSeg(w1,w2) is SubSpace of (TOP-REAL n)|P by TOPMETR:4;
-    LSeg(w1,w2) is not empty;
-    then (TOP-REAL n)|LSeg(w1,w2) is not empty;
-    then
-X:  the carrier of (TOP-REAL n)|LSeg(w1,w2) <> {};
-    the carrier of I[01] = [.0,1.] by BORSUK_1:83;
-    then dom f=[.0,1.] by FUNCT_2:def 1,X;
-    then reconsider g=f as Function of [.0,1.],P by A7,FUNCT_2:4;
+A12: (TOP-REAL n)|LSeg(w1,w2) is SubSpace of (TOP-REAL n)|P by
+    TOPMETR:4;
+    dom f=[.0,1.] by BORSUK_1:83,FUNCT_2:def 1;
+    then reconsider g=f as Function of [.0,1.],P by A11,FUNCT_2:4;
     the carrier of (TOP-REAL n)|P = [#]((TOP-REAL n)|P)
       .= P by PRE_TOPC:def 10;
     then reconsider gt=g as Function of I[01],(TOP-REAL n)|P by BORSUK_1:83;
-    gt is continuous by A5,A8,PRE_TOPC:56;
-    hence thesis by A4;
+    gt is continuous by A9,A12,PRE_TOPC:56;
+    hence thesis by A7,A8;
   end;
   hence thesis by Th5;
 end;
@@ -235,9 +245,9 @@ reserve pa,pb for Point of TOP-REAL 2,
 
 reserve s1a,t1a,s2a,t2a,s3a,t3a,sb,tb,sc,tc for Real;
 
-XX: the carrier of TOP-REAL 2 = REAL 2 by EUCLID:25;
+Lm2: the carrier of TOP-REAL 2 = REAL 2 by EUCLID:25;
 
-Lm2: for s1 holds { |[ sb,tb ]|:sb<s1} is Subset of REAL 2
+Lm3: for s1 holds { |[ sb,tb ]|:sb<s1} is Subset of REAL 2
 proof
   let s1;
   { |[ sb,tb ]|:sb<s1} c= REAL 2
@@ -245,15 +255,14 @@ proof
     let y be set;
     assume y in { |[ sb,tb ]|:sb<s1};
     then consider s7,t7 being Real such that
-W:   |[ s7,t7 ]|=y and s7<s1;
-     |[ s7,t7 ]| in the carrier of TOP-REAL 2;
-     then |[ s7,t7 ]| in REAL 2 by EUCLID:25;
-    hence thesis by W;
+A1: |[ s7,t7 ]|=y and s7<s1;
+    |[ s7,t7 ]| in the carrier of TOP-REAL 2;
+    hence thesis by A1,EUCLID:25;
   end;
   hence thesis;
 end;
 
-Lm3: for t1 holds { |[ sb,tb ]| :tb<t1} is Subset of REAL 2
+Lm4: for t1 holds { |[ sb,tb ]| :tb<t1} is Subset of REAL 2
 proof
   let t1;
   { |[ sd,td ]|:td<t1} c= REAL 2
@@ -261,15 +270,14 @@ proof
     let y be set;
     assume y in { |[ sd,td ]|:td<t1};
     then consider s7,t7 being Real such that
-W:   |[ s7,t7 ]|=y and t7<t1;
-     |[ s7,t7 ]| in the carrier of TOP-REAL 2;
-     then |[ s7,t7 ]| in REAL 2 by EUCLID:25;
-    hence thesis by W;
+A1: |[ s7,t7 ]|=y and t7<t1;
+    |[ s7,t7 ]| in the carrier of TOP-REAL 2;
+    hence thesis by A1,EUCLID:25;
   end;
   hence thesis;
 end;
 
-Lm4: for s2 holds { |[ sb,tb ]| :s2<sb} is Subset of REAL 2
+Lm5: for s2 holds { |[ sb,tb ]| :s2<sb} is Subset of REAL 2
 proof
   let s2;
   { |[ sb,tb ]|:s2<sb} c= REAL 2
@@ -277,15 +285,15 @@ proof
     let y be set;
     assume y in { |[ sb,tb ]|:s2<sb};
     then consider s7,t7 being Real such that
-W:   |[ s7,t7 ]|=y & s2<s7;
-     |[ s7,t7 ]| in the carrier of TOP-REAL 2;
-     then |[ s7,t7 ]| in REAL 2 by EUCLID:25;
-    hence thesis by W;
+A1: |[ s7,t7 ]|=y
+    and s2<s7;
+    |[ s7,t7 ]| in the carrier of TOP-REAL 2;
+    hence thesis by A1,EUCLID:25;
   end;
   hence thesis;
 end;
 
-Lm5: for t2 holds { |[ sb,tb ]|:t2<tb} is Subset of REAL 2
+Lm6: for t2 holds { |[ sb,tb ]|:t2<tb} is Subset of REAL 2
 proof
   let t2;
   { |[ sb,tb ]|:t2<tb} c= REAL 2
@@ -293,15 +301,15 @@ proof
     let y be set;
     assume y in { |[ sb,tb ]|:t2<tb};
     then consider s7,t7 being Real such that
-W:   |[ s7,t7 ]|=y & t2<t7;
-     |[ s7,t7 ]| in the carrier of TOP-REAL 2;
-     then |[ s7,t7 ]| in REAL 2 by EUCLID:25;
-    hence thesis by W;
+A1: |[ s7,t7 ]|=y
+    and t2<t7;
+    |[ s7,t7 ]| in the carrier of TOP-REAL 2;
+    hence thesis by A1,EUCLID:25;
   end;
   hence thesis;
 end;
 
-Lm6: for s1,s2,t1,t2 holds { |[ s,t ]| where s is Real,t is Real:
+Lm7: for s1,s2,t1,t2 holds { |[ s,t ]| where s is Real,t is Real:
 s1<s & s<s2 & t1<t & t<t2} is Subset of REAL 2
 proof
   let s1,s2,t1,t2;
@@ -312,15 +320,18 @@ proof
     assume y in { |[ sb,tb ]| where sb is Real,tb is Real:
     s1<sb & sb<s2 & t1<tb & tb<t2};
     then consider s7,t7 being Real such that
-W:     |[ s7,t7 ]|=y & s1<s7 & s7<s2 & t1<t7 & t7<t2;
-     |[ s7,t7 ]| in the carrier of TOP-REAL 2;
-     then |[ s7,t7 ]| in REAL 2 by EUCLID:25;
-    hence thesis by W;
+A1: |[ s7,t7 ]|=y
+    and s1<s7
+    and s7<s2
+    and t1<t7
+    and t7<t2;
+    |[ s7,t7 ]| in the carrier of TOP-REAL 2;
+    hence thesis by A1,EUCLID:25;
   end;
   hence thesis;
 end;
 
-Lm7: for s1,s2,t1,t2 holds
+Lm8: for s1,s2,t1,t2 holds
 { |[ s,t ]|:not (s1<=s & s<=s2 & t1<=t & t<=t2)} is Subset of REAL 2
 proof
   let s1,s2,t1,t2;
@@ -331,11 +342,10 @@ proof
     assume y in { |[ sb,tb ]| where sb is Real,tb is Real:
     not (s1<=sb & sb<=s2 & t1<=tb & tb<=t2)};
     then consider s7,t7 being Real such that
-W:     |[ s7,t7 ]|=y &
-    not (s1<=s7 & s7<=s2 & t1<=t7 & t7<=t2);
+A1: |[ s7,t7 ]|=y
+    and not (s1<=s7 & s7<=s2 & t1<=t7 & t7<=t2);
     |[ s7,t7 ]| in the carrier of TOP-REAL 2;
-     then |[ s7,t7 ]| in REAL 2 by EUCLID:25;
-    hence thesis by W;
+    hence thesis by A1,EUCLID:25;
   end;
   hence thesis;
 end;
@@ -350,45 +360,59 @@ proof
   now
     let x be set;
     assume x in { |[ s,t ]|: s1<s & s<s2 & t1<t & t<t2};
-    then ex s,t st |[s,t]|=x & (s1<s & s<s2 & t1<t & t<t2);
-    then x in { |[ s3,t3 ]|:s1<s3} & x in { |[ s4,t4 ]|:s4<s2}
-    & x in { |[ s5,t5 ]|:t1<t5} & x in { |[ s6,t6 ]|:t6<t2};
-    then x in { |[ s3,t3 ]|:s1<s3} /\ { |[ s4,t4 ]|:s4<s2}
-    & x in { |[ s5,t5 ]|:t1<t5} & x in { |[ s6,t6 ]|:t6<t2} by XBOOLE_0:def 4;
-    then x in { |[ s3,t3 ]|:s1<s3} /\ {|[s4,t4]|:s4<s2}/\ {|[s5,t5]|:t1<t5}
-    & x in { |[ s6,t6 ]|:t6<t2} by XBOOLE_0:def 4;
-    hence x in { |[ s3,t3 ]|:s1<s3} /\ {|[s4,t4]|:s4<s2}/\ {|[s5,t5]|:t1<t5}
-    /\ {|[s6,t6]|:t6<t2} by XBOOLE_0:def 4;
+    then
+A1: ex s,t st |[s,t]|=x & s1<s & s<s2 & t1<t & t<t2;
+    then
+A2: x in { |[ s3,t3 ]|:s1<s3};
+    x in { |[ s4,t4 ]|:s4<s2} by A1;
+    then
+A3: x in { |[ s3,t3 ]|:s1<s3} /\ { |[ s4,t4 ]|:s4<s2} by A2,
+    XBOOLE_0:def 4;
+A4: x in { |[ s5,t5 ]|:t1<t5} by A1;
+A5: x in { |[ s6,t6 ]|:t6<t2} by A1;
+    x in { |[ s3,t3 ]|:s1<s3} /\ {|[s4,t4]|:s4<s2}/\ {|[s5,t5]|:t1<t5} by A3
+    ,A4,XBOOLE_0:def 4;
+    hence
+    x in { |[ s3,t3 ]|:s1<s3} /\ {|[s4,t4]|:s4<s2}/\ {|[s5,t5]|:t1<t5}
+    /\ {|[s6,t6]|:t6<t2} by A5,XBOOLE_0:def 4;
   end;
   then
-A1: { |[ s,t ]|: s1<s & s<s2 & t1<t & t<t2} c=
+A6: { |[ s,t ]|: s1<s & s<s2 & t1<t & t<t2} c=
   { |[ s3,t3 ]|:s1<s3} /\ {|[s4,t4]|:s4<s2}/\ {|[s5,t5]|:t1<t5}
   /\ {|[s6,t6]|:t6<t2} by TARSKI:def 3;
   now
     let x be set;
-    assume x in { |[ s3,t3 ]|:s1<s3} /\ {|[s4,t4]|:s4<s2}/\ {|[s5,t5]|:t1<t5 }
+    assume
+    A7: x in { |[ s3,t3 ]|:s1<s3} /\ {|[s4,t4]|:s4<s2}/\ {|[s5,t5]|:t1<t5 }
     /\ {|[s6,t6]|:t6<t2};
-    then x in { |[ s3,t3 ]|:s1<s3} /\ {|[s4,t4]|:s4<s2}/\ {|[s5,t5]|:t1<t5}
-    & x in { |[ s6,t6 ]|:t6<t2} by XBOOLE_0:def 4;
-    then x in { |[ s3,t3 ]|:s1<s3} /\ { |[ s4,t4]|:s4<s2}
-    & x in { |[ s5,t5 ]|:t1<t5} & x in { |[ s6,t6 ]|:t6<t2} by XBOOLE_0:def 4;
     then
-A2: x in { |[ s3,t3 ]|:s1<s3} & x in { |[ s4,t4 ]|:s4<s2}
-    & x in { |[ s5,t5 ]|:t1<t5} & x in { |[ s6,t6 ]|:t6<t2} by XBOOLE_0:def 4;
+A8: x in { |[ s3,t3 ]|:s1<s3} /\ {|[s4,t4]|:s4<s2}/\ {|[s5,t5]|:t1<t5} by
+    XBOOLE_0:def 4;
     then
-A3: (ex sa,ta st |[sa,ta]|=x & s1<sa) & (ex sb,tb st |[sb,tb]|=x & sb< s2)
-    & (ex sc,tc st |[sc,tc]|=x & t1<tc) & (ex sd,td st |[sd,td]|=x & td<t2);
+A9: x in { |[ s3,t3 ]|:s1<s3} /\ { |[ s4,t4]|:s4<s2} by XBOOLE_0:def 4;
+A10: x in { |[ s6,t6 ]|:t6<t2} by A7,XBOOLE_0:def 4;
+A11: x in { |[ s3,t3 ]|:s1<s3} by A9,XBOOLE_0:def 4;
+A12: x in { |[ s4,t4 ]|:s4<s2} by A9,XBOOLE_0:def 4;
+A13: x in { |[ s5,t5 ]|:t1<t5} by A8,XBOOLE_0:def 4;
+A14: ex sa,ta st |[sa,ta]|=x & s1<sa by A11;
+A15: ex sb,tb st |[sb,tb]|=x & sb< s2 by A12;
+A16: ex sc,tc st |[sc,tc]|=x & t1<tc by A13;
+A17: ex sd,td st |[sd,td]|=x & td<t2 by A10;
     consider sa,ta such that
-A4: |[sa,ta]|=x & s1<sa by A2;
-    reconsider p=x as Point of TOP-REAL 2 by A3;
-    p`1=sa & p`2=ta by A4,EUCLID:56;
-    then |[sa,ta]|=x & s1<sa & sa<s2 & t1<ta & ta<t2 by A3,A4,EUCLID:56;
-    hence x in { |[ s,t ]|:s1<s & s<s2 & t1<t & t<t2};
+A18: |[sa,ta]|=x and
+A19: s1<sa by A11;
+    reconsider p=x as Point of TOP-REAL 2 by A14;
+A20: p`1=sa by A18,EUCLID:56;
+A21: p`2=ta by A18,EUCLID:56;
+A22: sa<s2 by A15,A20,EUCLID:56;
+A23: t1<ta by A16,A21,EUCLID:56;
+    ta<t2 by A17,A21,EUCLID:56;
+    hence x in { |[ s,t ]|:s1<s & s<s2 & t1<t & t<t2} by A18,A19,A22,A23;
   end;
   then { |[ s3,t3 ]|:s1<s3} /\ {|[s4,t4]|:s4<s2}/\ {|[s5,t5]|:t1<t5}
   /\ {|[s6,t6]|:t6<t2}c={ |[ s,t ]|:s1<s & s<s2 & t1<t & t<t2}
   by TARSKI:def 3;
-  hence thesis by A1,XBOOLE_0:def 10;
+  hence thesis by A6,XBOOLE_0:def 10;
 end;
 
 theorem Th13:
@@ -403,11 +427,11 @@ proof
     then x in { |[ s3,t3 ]|:s3<s1}or x in { |[ s4,t4 ]|:t4<t1}
     or x in { |[ s5,t5 ]|:s2<s5} or x in { |[ s6,t6 ]|:t2<t6};
     then x in { |[ s3,t3 ]|:s3<s1} \/ { |[ s4,t4 ]|:t4<t1}
-
 or x in { |[ s5,t5 ]|:s2<s5} or x in { |[ s6,t6 ]|:t2<t6} by XBOOLE_0:def 3;
     then x in { |[ s3,t3 ]|:s3<s1} \/ {|[s4,t4]|:t4<t1}\/ {|[s5,t5]|:s2<s5}
     or x in { |[ s6,t6 ]|:t2<t6} by XBOOLE_0:def 3;
-    hence x in { |[ s3,t3 ]|:s3<s1} \/ {|[s4,t4]|:t4<t1}\/ {|[s5,t5]|:s2<s5}
+    hence
+    x in { |[ s3,t3 ]|:s3<s1} \/ {|[s4,t4]|:t4<t1}\/ {|[s5,t5]|:s2<s5}
     \/ {|[s6,t6]|:t2<t6} by XBOOLE_0:def 3;
   end;
   then
@@ -416,19 +440,20 @@ A1: { |[ s,t ]|:not (s1<=s & s<=s2 & t1<=t & t<=t2)} c=
   \/ {|[s6,t6]|:t2<t6} by TARSKI:def 3;
   now
     let x be set;
-    assume x in { |[ s3,t3 ]|:s3<s1} \/ {|[s4,t4]|:t4<t1}\/ {|[s5,t5]|:s2< s5
+    assume
+    x in { |[ s3,t3 ]|:s3<s1} \/ {|[s4,t4]|:t4<t1}\/ {|[s5,t5]|:s2< s5
     } \/ {|[s6,t6]|:t2<t6};
     then x in { |[ s3,t3 ]|:s3<s1} \/ {|[s4,t4]|:t4<t1}\/ {|[s5,t5]|:s2<s5}
     or x in { |[ s6,t6 ]|:t2<t6} by XBOOLE_0:def 3;
     then x in { |[ s3,t3 ]|:s3<s1} \/ { |[ s4,t4]|:t4<t1}
-
-or x in { |[ s5,t5 ]|:s2<s5} or x in { |[ s6,t6 ]|:t2<t6} by XBOOLE_0:def 3;
+    or x in { |[ s5,t5 ]|:s2<s5} or x in { |[ s6,t6 ]|:t2<t6} by XBOOLE_0:def 3
+    ;
     then x in { |[ s3,t3 ]|:s3<s1} or x in { |[ s4,t4 ]|:t4<t1}
-
-or x in { |[ s5,t5 ]|:s2<s5} or x in { |[ s6,t6 ]|:t2<t6} by XBOOLE_0:def 3;
+    or x in { |[ s5,t5 ]|:s2<s5} or x in { |[ s6,t6 ]|:t2<t6} by XBOOLE_0:def 3
+    ;
     then (ex sa,ta st |[sa,ta]|=x & sa<s1)
     or (ex sc,tc st |[sc,tc]|=x & tc<t1) or (ex sb,tb st |[sb,tb]|=x & s2<sb)
-    or (ex sd,td st |[sd,td]|=x & t2<td);
+    or ex sd,td st |[sd,td]|=x & t2<td;
     hence x in { |[ s,t ]|:not (s1<=s & s<=s2 & t1<=t & t<=t2)};
   end;
   then { |[ s3,t3 ]|:s3<s1} \/ {|[s4,t4]|:t4<t1}\/ {|[s5,t5]|:s2<s5}
@@ -445,29 +470,46 @@ proof
   assume
 A1: P = { |[ s,t ]|:s1<s & s<s2 & t1<t & t<t2};
   let w1,w2 such that
-A2: w1 in P & w2 in P;
+A2: w1 in P and
+A3: w2 in P;
   let x be set such that
-A3: x in LSeg(w1,w2);
+A4: x in LSeg(w1,w2);
   consider s3,t3 such that
-A4: |[ s3,t3 ]|=w1 & (s1<s3 & s3<s2 & t1<t3 & t3<t2) by A1,A2;
-A5: w1`1=s3 & w1`2=t3 by A4,EUCLID:56;
+A5: |[ s3,t3 ]|=w1 and
+A6: s1<s3 and
+A7: s3<s2 and
+A8: t1<t3 and
+A9: t3<t2 by A1,A2;
+A10: w1`1=s3 by A5,EUCLID:56;
+A11: w1`2=t3 by A5,EUCLID:56;
   consider s4,t4 such that
-A6: |[ s4,t4 ]|=w2 & (s1<s4 & s4<s2 & t1<t4 & t4<t2) by A1,A2;
-A7: w2`1=s4 & w2`2=t4 by A6,EUCLID:56;
-  x in {(1-lambda)*w1 + lambda*w2: 0 <= lambda & lambda <=
-  1} by A3;
-  then consider l such that
-A8: x = (1-l)*w1 + l*w2 & 0 <= l & l <= 1;
+A12: |[ s4,t4 ]|=w2 and
+A13: s1<s4 and
+A14: s4<s2 and
+A15: t1<t4 and
+A16: t4<t2 by A1,A3;
+A17: w2`1=s4 by A12,EUCLID:56;
+A18: w2`2=t4 by A12,EUCLID:56;
+  consider l such that
+A19: x = (1-l)*w1 + l*w2 and
+A20: 0 <= l and
+A21: l <= 1 by A4;
   set w = (1-l)*w1 + l*w2;
-A9: w = |[((1-l)*w1)`1+(l*w2)`1,((1-l)*w1)`2+ (l*w2)`2]| by EUCLID:59;
-  (1-l)*w1=|[ (1-l)*w1`1 ,(1-l)*w1`2 ]| & l*w2=|[ l*w2`1 ,l*w2`2 ]|
-  by EUCLID:61;
-  then ((1-l)*w1)`1= (1-l)*w1`1 & ((1-l)*w1)`2= (1-l)*w1`2
-  & (l*w2)`1=l*w2`1 & (l*w2)`2=l*w2`2 by EUCLID:56;
-  then w`1=(1-l)* w1`1+ l* w2`1 & w`2=(1-l)* w1`2+ l* w2`2 by A9,EUCLID:56;
-  then s1< w`1 & w`1<s2 & t1< w`2 & w`2<t2 &
-  w = |[w`1, w`2]| by A4,A5,A6,A7,A8,EUCLID:57,XREAL_1:177,178;
-  hence thesis by A1,A8;
+A22: w = |[((1-l)*w1)`1+(l*w2)`1,((1-l)*w1)`2+ (l*w2)`2]| by EUCLID:59;
+A23: (1-l)*w1=|[ (1-l)*w1`1 ,(1-l)*w1`2 ]| by EUCLID:61;
+A24: l*w2=|[ l*w2`1 ,l*w2`2 ]| by EUCLID:61;
+A25: ((1-l)*w1)`1= (1-l)*w1`1 by A23,EUCLID:56;
+A26: ((1-l)*w1)`2= (1-l)*w1`2 by A23,EUCLID:56;
+A27: (l*w2)`1=l*w2`1 by A24,EUCLID:56;
+A28: (l*w2)`2=l*w2`2 by A24,EUCLID:56;
+A29: w`1=(1-l)* w1`1+ l* w2`1 by A22,A25,A27,EUCLID:56;
+A30: w`2=(1-l)* w1`2+ l* w2`2 by A22,A26,A28,EUCLID:56;
+A31: s1< w`1 by A6,A10,A13,A17,A20,A21,A29,XREAL_1:177;
+A32: w`1<s2 by A7,A10,A14,A17,A20,A21,A29,XREAL_1:178;
+A33: t1< w`2 by A8,A11,A15,A18,A20,A21,A30,XREAL_1:177;
+A34: w`2<t2 by A9,A11,A16,A18,A20,A21,A30,XREAL_1:178;
+  w = |[w`1, w`2]| by EUCLID:57;
+  hence thesis by A1,A19,A31,A32,A33,A34;
 end;
 
 theorem
@@ -481,28 +523,33 @@ proof
   assume
 A1: P = { |[ s,t ]|:s1<s };
   let w1,w2 such that
-A2: w1 in P & w2 in P;
+A2: w1 in P and
+A3: w2 in P;
   let x be set such that
-A3: x in LSeg(w1,w2);
+A4: x in LSeg(w1,w2);
   consider s3,t3 such that
-A4: |[ s3,t3 ]|=w1 & s1<s3 by A1,A2;
-A5: w1`1=s3 & w1`2=t3 by A4,EUCLID:56;
+A5: |[ s3,t3 ]|=w1 and
+A6: s1<s3 by A1,A2;
+A7: w1`1=s3 by A5,EUCLID:56;
   consider s4,t4 such that
-A6: |[ s4,t4 ]|=w2 & s1<s4 by A1,A2;
-A7: w2`1=s4 & w2`2=t4 by A6,EUCLID:56;
-  x in {(1-lambda)*w1 + lambda*w2: 0 <= lambda & lambda <=
-  1} by A3;
-  then consider l such that
-A8: x = (1-l)*w1 + l*w2& 0 <= l & l <= 1;
+A8: |[ s4,t4 ]|=w2 and
+A9: s1<s4 by A1,A3;
+A10: w2`1=s4 by A8,EUCLID:56;
+  consider l such that
+A11: x = (1-l)*w1 + l*w2 and
+A12: 0 <= l and
+A13: l <= 1 by A4;
   set w = (1-l)*w1 + l*w2;
-A9: w= |[((1-l)*w1)`1+(l*w2)`1,((1-l)*w1)`2+ (l*w2)`2]| by EUCLID:59;
-  (1-l)*w1=|[ (1-l)*w1`1 ,(1-l)*w1`2 ]| & l*w2=|[ l*w2`1 ,l*w2`2 ]|
-  by EUCLID:61;
-  then ((1-l)*w1)`1= (1-l)*w1`1 & ((1-l)*w1)`2= (1-l)*w1`2
-  & (l*w2)`1=l*w2`1 & (l*w2)`2=l*w2`2 by EUCLID:56;
-  then w`1=(1-l)* w1`1+ l* w2`1 & w`2=(1-l)* w1`2+ l* w2`2 by A9,EUCLID:56;
-  then s1< w`1 & w = |[w`1, w`2]| by A4,A5,A6,A7,A8,EUCLID:57,XREAL_1:177;
-  hence thesis by A1,A8;
+A14: w= |[((1-l)*w1)`1+(l*w2)`1,((1-l)*w1)`2+ (l*w2)`2]| by EUCLID:59;
+A15: (1-l)*w1=|[ (1-l)*w1`1 ,(1-l)*w1`2 ]| by EUCLID:61;
+A16: l*w2=|[ l*w2`1 ,l*w2`2 ]| by EUCLID:61;
+A17: ((1-l)*w1)`1= (1-l)*w1`1 by A15,EUCLID:56;
+  (l*w2)`1=l*w2`1 by A16,EUCLID:56;
+  then w`1=(1-l)* w1`1+ l* w2`1 by A14,A17,EUCLID:56;
+  then
+A18: s1< w`1 by A6,A7,A9,A10,A12,A13,XREAL_1:177;
+  w = |[w`1, w`2]| by EUCLID:57;
+  hence thesis by A1,A11,A18;
 end;
 
 theorem
@@ -515,28 +562,33 @@ proof
   assume
 A1: P = { |[ s,t ]|:s<s2 };
   let w1,w2 such that
-A2: w1 in P & w2 in P;
+A2: w1 in P and
+A3: w2 in P;
   let x be set such that
-A3: x in LSeg(w1,w2);
+A4: x in LSeg(w1,w2);
   consider s3,t3 such that
-A4: |[ s3,t3 ]|=w1 & s3<s2 by A1,A2;
-A5: w1`1=s3 & w1`2=t3 by A4,EUCLID:56;
+A5: |[ s3,t3 ]|=w1 and
+A6: s3<s2 by A1,A2;
+A7: w1`1=s3 by A5,EUCLID:56;
   consider s4,t4 such that
-A6: |[ s4,t4 ]|=w2 & s4<s2 by A1,A2;
-A7: w2`1=s4 & w2`2=t4 by A6,EUCLID:56;
-  x in {(1-lambda)*w1 + lambda*w2: 0 <= lambda & lambda <=
-  1} by A3;
-  then consider l such that
-A8: x = (1-l)*w1 + l*w2& 0 <= l & l <= 1;
+A8: |[ s4,t4 ]|=w2 and
+A9: s4<s2 by A1,A3;
+A10: w2`1=s4 by A8,EUCLID:56;
+  consider l such that
+A11: x = (1-l)*w1 + l*w2 and
+A12: 0 <= l and
+A13: l <= 1 by A4;
   set w = (1-l)*w1 + l*w2;
-A9: w= |[((1-l)*w1)`1+(l*w2)`1,((1-l)*w1)`2+ (l*w2)`2]| by EUCLID:59;
-  (1-l)*w1=|[ (1-l)*w1`1 ,(1-l)*w1`2 ]| & l*w2=|[ l*w2`1 ,l*w2`2 ]|
-  by EUCLID:61;
-  then ((1-l)*w1)`1= (1-l)*w1`1 & ((1-l)*w1)`2= (1-l)*w1`2
-  & (l*w2)`1=l*w2`1 & (l*w2)`2=l*w2`2 by EUCLID:56;
-  then w`1=(1-l)* w1`1+ l* w2`1 & w`2=(1-l)* w1`2+ l* w2`2 by A9,EUCLID:56;
-  then s2> w`1 & w = |[w`1, w`2]| by A4,A5,A6,A7,A8,EUCLID:57,XREAL_1:178;
-  hence thesis by A1,A8;
+A14: w= |[((1-l)*w1)`1+(l*w2)`1,((1-l)*w1)`2+ (l*w2)`2]| by EUCLID:59;
+A15: (1-l)*w1=|[ (1-l)*w1`1 ,(1-l)*w1`2 ]| by EUCLID:61;
+A16: l*w2=|[ l*w2`1 ,l*w2`2 ]| by EUCLID:61;
+A17: ((1-l)*w1)`1= (1-l)*w1`1 by A15,EUCLID:56;
+  (l*w2)`1=l*w2`1 by A16,EUCLID:56;
+  then w`1=(1-l)* w1`1+ l* w2`1 by A14,A17,EUCLID:56;
+  then
+A18: s2> w`1 by A6,A7,A9,A10,A12,A13,XREAL_1:178;
+  w = |[w`1, w`2]| by EUCLID:57;
+  hence thesis by A1,A11,A18;
 end;
 
 theorem
@@ -549,28 +601,33 @@ proof
   assume
 A1: P = { |[ s,t ]|:t1<t };
   let w1,w2 such that
-A2: w1 in P & w2 in P;
+A2: w1 in P and
+A3: w2 in P;
   let x be set such that
-A3: x in LSeg(w1,w2);
+A4: x in LSeg(w1,w2);
   consider s3,t3 such that
-A4: |[ s3,t3 ]|=w1 & t1<t3 by A1,A2;
-A5: w1`1=s3 & w1`2=t3 by A4,EUCLID:56;
+A5: |[ s3,t3 ]|=w1 and
+A6: t1<t3 by A1,A2;
+A7: w1`2=t3 by A5,EUCLID:56;
   consider s4,t4 such that
-A6: |[ s4,t4 ]|=w2 & t1<t4 by A1,A2;
-A7: w2`1=s4 & w2`2=t4 by A6,EUCLID:56;
-  x in {(1-lambda)*w1 + lambda*w2: 0 <= lambda & lambda <=
-  1} by A3;
-  then consider l such that
-A8: x = (1-l)*w1 + l*w2& 0 <= l & l <= 1;
+A8: |[ s4,t4 ]|=w2 and
+A9: t1<t4 by A1,A3;
+A10: w2`2=t4 by A8,EUCLID:56;
+  consider l such that
+A11: x = (1-l)*w1 + l*w2 and
+A12: 0 <= l and
+A13: l <= 1 by A4;
   set w = (1-l)*w1 + l*w2;
-A9: w= |[((1-l)*w1)`1+(l*w2)`1,((1-l)*w1)`2+ (l*w2)`2]| by EUCLID:59;
-  (1-l)*w1=|[ (1-l)*w1`1 ,(1-l)*w1`2 ]| & l*w2=|[ l*w2`1 ,l*w2`2 ]|
-  by EUCLID:61;
-  then ((1-l)*w1)`1= (1-l)*w1`1 & ((1-l)*w1)`2= (1-l)*w1`2
-  & (l*w2)`1=l*w2`1 & (l*w2)`2=l*w2`2 by EUCLID:56;
-  then w`1=(1-l)* w1`1+ l* w2`1 & w`2=(1-l)* w1`2+ l* w2`2 by A9,EUCLID:56;
-  then t1< w`2 & w = |[w`1, w`2]| by A4,A5,A6,A7,A8,EUCLID:57,XREAL_1:177;
-  hence thesis by A1,A8;
+A14: w= |[((1-l)*w1)`1+(l*w2)`1,((1-l)*w1)`2+ (l*w2)`2]| by EUCLID:59;
+A15: (1-l)*w1=|[ (1-l)*w1`1 ,(1-l)*w1`2 ]| by EUCLID:61;
+A16: l*w2=|[ l*w2`1 ,l*w2`2 ]| by EUCLID:61;
+A17: ((1-l)*w1)`2= (1-l)*w1`2 by A15,EUCLID:56;
+  (l*w2)`2=l*w2`2 by A16,EUCLID:56;
+  then w`2=(1-l)* w1`2+ l* w2`2 by A14,A17,EUCLID:56;
+  then
+A18: t1< w`2 by A6,A7,A9,A10,A12,A13,XREAL_1:177;
+  w = |[w`1, w`2]| by EUCLID:57;
+  hence thesis by A1,A11,A18;
 end;
 
 theorem
@@ -583,28 +640,33 @@ proof
   assume
 A1: P = { |[ s,t ]|:t<t2 };
   let w1,w2 such that
-A2: w1 in P & w2 in P;
+A2: w1 in P and
+A3: w2 in P;
   let x be set such that
-A3: x in LSeg(w1,w2);
+A4: x in LSeg(w1,w2);
   consider s3,t3 such that
-A4: |[ s3,t3 ]|=w1 & t3<t2 by A1,A2;
-A5: w1`1=s3 & w1`2=t3 by A4,EUCLID:56;
+A5: |[ s3,t3 ]|=w1 and
+A6: t3<t2 by A1,A2;
+A7: w1`2=t3 by A5,EUCLID:56;
   consider s4,t4 such that
-A6: |[ s4,t4 ]|=w2 & t4<t2 by A1,A2;
-A7: w2`1=s4 & w2`2=t4 by A6,EUCLID:56;
-  x in {(1-lambda)*w1 + lambda*w2: 0 <= lambda & lambda <=
-  1} by A3;
-  then consider l such that
-A8: x = (1-l)*w1 + l*w2& 0 <= l & l <= 1;
+A8: |[ s4,t4 ]|=w2 and
+A9: t4<t2 by A1,A3;
+A10: w2`2=t4 by A8,EUCLID:56;
+  consider l such that
+A11: x = (1-l)*w1 + l*w2 and
+A12: 0 <= l and
+A13: l <= 1 by A4;
   set w = (1-l)*w1 + l*w2;
-A9: w= |[((1-l)*w1)`1+(l*w2)`1,((1-l)*w1)`2+ (l*w2)`2]| by EUCLID:59;
-  (1-l)*w1=|[ (1-l)*w1`1 ,(1-l)*w1`2 ]| & l*w2=|[ l*w2`1 ,l*w2`2 ]|
-  by EUCLID:61;
-  then ((1-l)*w1)`1= (1-l)*w1`1 & ((1-l)*w1)`2= (1-l)*w1`2
-  & (l*w2)`1=l*w2`1 & (l*w2)`2=l*w2`2 by EUCLID:56;
-  then w`1=(1-l)* w1`1+ l* w2`1 & w`2=(1-l)* w1`2+ l* w2`2 by A9,EUCLID:56;
-  then t2> w`2 & w = |[w`1, w`2]| by A4,A5,A6,A7,A8,EUCLID:57,XREAL_1:178;
-  hence thesis by A1,A8;
+A14: w= |[((1-l)*w1)`1+(l*w2)`1,((1-l)*w1)`2+ (l*w2)`2]| by EUCLID:59;
+A15: (1-l)*w1=|[ (1-l)*w1`1 ,(1-l)*w1`2 ]| by EUCLID:61;
+A16: l*w2=|[ l*w2`1 ,l*w2`2 ]| by EUCLID:61;
+A17: ((1-l)*w1)`2= (1-l)*w1`2 by A15,EUCLID:56;
+  (l*w2)`2=l*w2`2 by A16,EUCLID:56;
+  then w`2=(1-l)* w1`2+ l* w2`2 by A14,A17,EUCLID:56;
+  then
+A18: t2> w`2 by A6,A7,A9,A10,A12,A13,XREAL_1:178;
+  w = |[w`1, w`2]| by EUCLID:57;
+  hence thesis by A1,A11,A18;
 end;
 
 theorem
@@ -621,7 +683,7 @@ A1: P={ |[ s3,t3 ]|:s3<s1} \/ {|[s4,t4]|:t4<t1}\/ {|[s5,t5]|:s2<s5}
   \/ {|[s6,t6]|:t2<t6} by Th13;
   reconsider A0={ |[ s,t ]|:s<s1}, A1={ |[ s,t ]|:t<t1},
   A2={ |[ s,t ]|:s2<s}, A3={ |[ s,t ]|:t2<t}
-  as Subset of TOP-REAL 2 by Lm2,Lm3,Lm4,Lm5,XX;
+  as Subset of TOP-REAL 2 by Lm2,Lm3,Lm4,Lm5,Lm6;
 A2: s1-1<s1 by XREAL_1:46;
 A3: t1-1<t1 by XREAL_1:46;
 A4: |[s1-1,t1-1]| in A0 by A2;
@@ -648,7 +710,7 @@ A14: A2 is connected by Th9,Th16;
   hence thesis by A1,A5,A8,A11,A12,A13,A14,Th8;
 end;
 
-YY: the TopStruct of TOP-REAL 2 = TopSpaceMetr Euclid 2 by EUCLID:def 8;
+Lm9: the TopStruct of TOP-REAL 2 = TopSpaceMetr Euclid 2 by EUCLID:def 8;
 
 theorem Th25:
   for s1 for P being Subset of TOP-REAL 2 st P = { |[ s,t ]|:s1<s } holds
@@ -657,18 +719,19 @@ proof
   let s1;
   let P be Subset of TOP-REAL 2 such that
 A1: P= { |[ s,t ]|:s1<s };
-  reconsider PP=P as Subset of TopSpaceMetr Euclid 2 by YY;
+  reconsider PP=P as Subset of TopSpaceMetr Euclid 2 by Lm9;
   for pe being Point of Euclid 2 st pe in P ex r being real number st r>0 &
   Ball(pe,r) c= P
   proof
     let pe be Point of Euclid 2;
     assume pe in P;
     then consider s,t such that
-A2: |[ s,t ]|=pe & s1<s by A1;
+A2: |[ s,t ]|=pe and
+A3: s1<s by A1;
     set r=(s-s1)/2;
-    s-s1>0 by A2,XREAL_1:52;
+A4: s-s1>0 by A3,XREAL_1:52;
     then
-A3: r>0 by XREAL_1:141;
+A5: r>0 by XREAL_1:141;
     Ball(pe,r) c= P
     proof
       let x be set;
@@ -676,36 +739,43 @@ A3: r>0 by XREAL_1:141;
       then x in {q where q is Element of Euclid 2:dist(pe,q)<r}
       by METRIC_1:18;
       then consider q being Element of Euclid 2 such that
-A4:   q=x and
-A5:   dist(pe,q)<r;
-      reconsider ppe=pe, pq=q as Point of TOP-REAL 2 by XX;
+A6:   q=x and
+A7:   dist(pe,q)<r;
+      reconsider ppe=pe, pq=q as Point of TOP-REAL 2 by EUCLID:25;
       (Pitag_dist 2).(pe,q)=dist(pe,q) by METRIC_1:def 1;
       then
-A6:   sqrt ((ppe`1 - pq`1)^2 + (ppe`2 - pq`2)^2)<r by A5,TOPREAL3:12;
-A7:   0 <= (ppe`1 - pq`1)^2 & 0 <= (ppe`2 - pq`2)^2 by XREAL_1:65;
+A8:   sqrt ((ppe`1 - pq`1)^2 + (ppe`2 - pq`2)^2)<r by A7,
+      TOPREAL3:12;
+A9:   0 <= (ppe`1 - pq`1)^2 by XREAL_1:65;
+      0 <= (ppe`2 - pq`2)^2 by XREAL_1:65;
       then
-A8:   0+0 <= (ppe`1 - pq`1)^2 + (ppe`2 - pq`2)^2 by XREAL_1:9;
-      then 0 <=sqrt ( (ppe`1 - pq`1)^2 + (ppe`2 - pq`2)^2) by SQUARE_1:def 4;
+A10:  0+0 <= (ppe`1 - pq`1)^2 + (ppe`2 - pq`2)^2 by A9,XREAL_1:9;
+      then 0 <=sqrt ( (ppe`1 - pq`1)^2 + (ppe`2 - pq`2)^2) by
+      SQUARE_1:def 4;
       then (sqrt ((ppe`1 - pq`1)^2 + (ppe`2 - pq`2)^2))^2<r^2
-      by A6,SQUARE_1:78;
+      by A8,SQUARE_1:78;
       then
-A9:   (ppe`1 - pq`1)^2 + (ppe`2 - pq`2)^2 < r^2 by A8,SQUARE_1:def 4;
-      (ppe`1 - pq`1)^2 <= (ppe`1 - pq`1)^2 + (ppe`2 - pq`2)^2 by A7,XREAL_1:33;
-      then (ppe`1 - pq`1)^2 <r^2 by A9,XXREAL_0:2;
-      then ppe`1 - pq`1 < r by A3,SQUARE_1:77;
+A11:  (ppe`1 - pq`1)^2 + (ppe`2 - pq`2)^2 < r^2 by A10,
+      SQUARE_1:def 4;
+      (ppe`1 - pq`1)^2 <= (ppe`1 - pq`1)^2 + (ppe`2 - pq`2)^2 by
+      XREAL_1:33,65;
+      then (ppe`1 - pq`1)^2 <r^2 by A11,XXREAL_0:2;
+      then ppe`1 - pq`1 < r by A5,SQUARE_1:77;
       then ppe`1 <pq`1+r by XREAL_1:21;
       then ppe`1 - r < pq`1 by XREAL_1:21;
       then
-A10:  s-(s-s1)/2 < pq`1 by A2,EUCLID:56;
+A12:  s-(s-s1)/2 < pq`1 by A2,EUCLID:56;
       s-(s-s1)/2 =r+s1;
-      then s1< s-(s-s1)/2 by A3,XREAL_1:31;
-      then |[pq`1,pq`2]|=x & s1<pq`1 by A4,A10,EUCLID:57,XXREAL_0:2;
-      hence thesis by A1;
+      then
+A13:  s1< s-(s-s1)/2 by A4,XREAL_1:31,141;
+A14:  |[pq`1,pq`2]|=x by A6,EUCLID:57;
+      s1<pq`1 by A12,A13,XXREAL_0:2;
+      hence thesis by A1,A14;
     end;
-    hence thesis by A3;
+    hence thesis by A4,XREAL_1:141;
   end;
-   then PP is open by TOPMETR:22;
-  hence thesis by YY,PRE_TOPC:60;
+  then PP is open by TOPMETR:22;
+  hence thesis by Lm9,PRE_TOPC:60;
 end;
 
 theorem Th26:
@@ -715,18 +785,19 @@ proof
   let s1;
   let P be Subset of TOP-REAL 2 such that
 A1: P= { |[ s,t ]|:s1>s };
-  reconsider PP=P as Subset of TopSpaceMetr Euclid 2 by YY;
+  reconsider PP=P as Subset of TopSpaceMetr Euclid 2 by Lm9;
   for pe being Point of Euclid 2 st pe in P ex r being real number st
   r>0 & Ball(pe,r) c= P
   proof
     let pe be Point of Euclid 2;
     assume pe in P;
     then consider s,t such that
-A2: |[ s,t ]|=pe & s1>s by A1;
+A2: |[ s,t ]|=pe and
+A3: s1>s by A1;
     set r=(s1-s)/2;
-    s1-s>0 by A2,XREAL_1:52;
+A4: s1-s>0 by A3,XREAL_1:52;
     then
-A3: r>0 by XREAL_1:141;
+A5: r>0 by XREAL_1:141;
     Ball(pe,r) c= P
     proof
       let x be set;
@@ -734,35 +805,42 @@ A3: r>0 by XREAL_1:141;
       then x in {q where q is Element of Euclid 2:dist(pe,q)<r}
       by METRIC_1:18;
       then consider q being Element of Euclid 2 such that
-A4:   q=x and
-A5:   dist(pe,q)<r;
-      reconsider ppe=pe, pq=q as Point of TOP-REAL 2 by XX;
+A6:   q=x and
+A7:   dist(pe,q)<r;
+      reconsider ppe=pe, pq=q as Point of TOP-REAL 2 by EUCLID:25;
       (Pitag_dist 2).(pe,q)=dist(pe,q) by METRIC_1:def 1;
       then
-A6:   sqrt ((ppe`1 - pq`1)^2 + (ppe`2 - pq`2)^2)<r by A5,TOPREAL3:12;
-A7:   0 <= (ppe`1 - pq`1)^2 & 0 <= (ppe`2 - pq`2)^2 by XREAL_1:65;
+A8:   sqrt ((ppe`1 - pq`1)^2 + (ppe`2 - pq`2)^2)<r by A7,
+      TOPREAL3:12;
+A9:   0 <= (ppe`1 - pq`1)^2 by XREAL_1:65;
+      0 <= (ppe`2 - pq`2)^2 by XREAL_1:65;
       then
-A8:   0+0 <= (ppe`1 - pq`1)^2 + (ppe`2 - pq`2)^2 by XREAL_1:9;
-      then 0 <=sqrt ( (ppe`1 - pq`1)^2 + (ppe`2 - pq`2)^2) by SQUARE_1:def 4;
+A10:  0+0 <= (ppe`1 - pq`1)^2 + (ppe`2 - pq`2)^2 by A9,XREAL_1:9;
+      then 0 <=sqrt ( (ppe`1 - pq`1)^2 + (ppe`2 - pq`2)^2) by
+      SQUARE_1:def 4;
       then (sqrt ((ppe`1 - pq`1)^2 + (ppe`2 - pq`2)^2))^2<r^2
-      by A6,SQUARE_1:78;
+      by A8,SQUARE_1:78;
       then
-A9:   (ppe`1 - pq`1)^2 + (ppe`2 - pq`2)^2 < r^2 by A8,SQUARE_1:def 4;
-      (ppe`1 - pq`1)^2 <= (ppe`1 - pq`1)^2 + (ppe`2 - pq`2)^2 by A7,XREAL_1:33;
-      then (pq`1-ppe`1)^2 <r^2 by A9,XXREAL_0:2;
-      then pq`1-ppe`1 < r by A3,SQUARE_1:77;
+A11:  (ppe`1 - pq`1)^2 + (ppe`2 - pq`2)^2 < r^2 by A10,
+      SQUARE_1:def 4;
+      (ppe`1 - pq`1)^2 <= (ppe`1 - pq`1)^2 + (ppe`2 - pq`2)^2 by
+      XREAL_1:33,65;
+      then (pq`1-ppe`1)^2 <r^2 by A11,XXREAL_0:2;
+      then pq`1-ppe`1 < r by A5,SQUARE_1:77;
       then ppe`1 + r > pq`1 by XREAL_1:21;
       then
-A10:  s+(s1-s)/2 > pq`1 by A2,EUCLID:56;
+A12:  s+(s1-s)/2 > pq`1 by A2,EUCLID:56;
       s+(s1-s)/2 =s1-r;
-      then s1> s+(s1-s)/2 by A3,XREAL_1:46;
-      then |[pq`1,pq`2]|=x & s1>pq`1 by A4,A10,EUCLID:57,XXREAL_0:2;
-      hence thesis by A1;
+      then
+A13:  s1> s+(s1-s)/2 by A4,XREAL_1:46,141;
+A14:  |[pq`1,pq`2]|=x by A6,EUCLID:57;
+      s1>pq`1 by A12,A13,XXREAL_0:2;
+      hence thesis by A1,A14;
     end;
-    hence thesis by A3;
+    hence thesis by A4,XREAL_1:141;
   end;
-   then PP is open by TOPMETR:22;
-  hence thesis by YY,PRE_TOPC:60;
+  then PP is open by TOPMETR:22;
+  hence thesis by Lm9,PRE_TOPC:60;
 end;
 
 theorem Th27:
@@ -772,18 +850,19 @@ proof
   let s1;
   let P be Subset of TOP-REAL 2 such that
 A1: P= { |[ s,t ]|:s1<t };
-  reconsider PP=P as Subset of TopSpaceMetr Euclid 2 by YY;
+  reconsider PP=P as Subset of TopSpaceMetr Euclid 2 by Lm9;
   for pe being Point of Euclid 2 st pe in P ex r being real number
   st r>0 & Ball(pe,r) c= P
   proof
     let pe be Point of Euclid 2;
     assume pe in P;
     then consider s,t such that
-A2: |[ s,t ]|=pe & s1<t by A1;
+A2: |[ s,t ]|=pe and
+A3: s1<t by A1;
     set r=(t-s1)/2;
-    t-s1>0 by A2,XREAL_1:52;
+A4: t-s1>0 by A3,XREAL_1:52;
     then
-A3: r>0 by XREAL_1:141;
+A5: r>0 by XREAL_1:141;
     Ball(pe,r) c= P
     proof
       let x be set;
@@ -791,37 +870,43 @@ A3: r>0 by XREAL_1:141;
       then x in {q where q is Element of Euclid 2:dist(pe,q)<r}
       by METRIC_1:18;
       then consider q being Element of Euclid 2 such that
-A4:   q=x and
-A5:   dist(pe,q)<r;
-      reconsider ppe=pe, pq=q as Point of TOP-REAL 2 by XX;
+A6:   q=x and
+A7:   dist(pe,q)<r;
+      reconsider ppe=pe, pq=q as Point of TOP-REAL 2 by EUCLID:25;
       (Pitag_dist 2).(pe,q)=dist(pe,q) by METRIC_1:def 1;
       then
-A6:   sqrt ((ppe`1 - pq`1)^2 + (ppe`2 - pq`2)^2)<r by A5,TOPREAL3:12;
-A7:   0 <= (ppe`1 - pq`1)^2 & 0 <= (ppe`2 - pq`2)^2 by XREAL_1:65;
+A8:   sqrt ((ppe`1 - pq`1)^2 + (ppe`2 - pq`2)^2)<r by A7,
+      TOPREAL3:12;
+A9:   0 <= (ppe`1 - pq`1)^2 by XREAL_1:65;
+      0 <= (ppe`2 - pq`2)^2 by XREAL_1:65;
       then
-A8:   0+0 <= (ppe`1 - pq`1)^2 + (ppe`2 - pq`2)^2 by XREAL_1:9;
-      then 0 <=sqrt ( (ppe`1 - pq`1)^2 + (ppe`2 - pq`2)^2) by SQUARE_1:def 4;
+A10:  0+0 <= (ppe`1 - pq`1)^2 + (ppe`2 - pq`2)^2 by A9,XREAL_1:9;
+      then 0 <=sqrt ( (ppe`1 - pq`1)^2 + (ppe`2 - pq`2)^2) by
+      SQUARE_1:def 4;
       then (sqrt ((ppe`1 - pq`1)^2 + (ppe`2 - pq`2)^2))^2<r^2
-      by A6,SQUARE_1:78;
+      by A8,SQUARE_1:78;
       then
-A9:   (ppe`1 - pq`1)^2 + (ppe`2 - pq`2)^2 < r^2 by A8,SQUARE_1:def 4;
-      (ppe`2 - pq`2)^2 <= (ppe`2 - pq`2)^2+(ppe`1 - pq`1)^2 by A7,XREAL_1:33
-;
-      then (ppe`2 - pq`2)^2 <r^2 by A9,XXREAL_0:2;
-      then ppe`2 - pq`2 < r by A3,SQUARE_1:77;
+A11:  (ppe`1 - pq`1)^2 + (ppe`2 - pq`2)^2 < r^2 by A10,
+      SQUARE_1:def 4;
+      (ppe`2 - pq`2)^2 <= (ppe`2 - pq`2)^2+(ppe`1 - pq`1)^2 by XREAL_1:33
+      ,65;
+      then (ppe`2 - pq`2)^2 <r^2 by A11,XXREAL_0:2;
+      then ppe`2 - pq`2 < r by A5,SQUARE_1:77;
       then ppe`2 <pq`2+r by XREAL_1:21;
       then ppe`2 - r < pq`2 by XREAL_1:21;
       then
-A10:  t-(t-s1)/2 < pq`2 by A2,EUCLID:56;
+A12:  t-(t-s1)/2 < pq`2 by A2,EUCLID:56;
       t-(t-s1)/2 =r+s1;
-      then s1< t-(t-s1)/2 by A3,XREAL_1:31;
-      then |[pq`1,pq`2]|=x & s1<pq`2 by A4,A10,EUCLID:57,XXREAL_0:2;
-      hence thesis by A1;
+      then
+A13:  s1< t-(t-s1)/2 by A4,XREAL_1:31,141;
+A14:  |[pq`1,pq`2]|=x by A6,EUCLID:57;
+      s1<pq`2 by A12,A13,XXREAL_0:2;
+      hence thesis by A1,A14;
     end;
-    hence thesis by A3;
+    hence thesis by A4,XREAL_1:141;
   end;
-   then PP is open by TOPMETR:22;
-  hence thesis by YY,PRE_TOPC:60;
+  then PP is open by TOPMETR:22;
+  hence thesis by Lm9,PRE_TOPC:60;
 end;
 
 theorem Th28:
@@ -831,18 +916,19 @@ proof
   let s1;
   let P be Subset of TOP-REAL 2 such that
 A1: P= { |[ s,t ]|:s1>t };
-  reconsider PP=P as Subset of TopSpaceMetr Euclid 2 by YY;
+  reconsider PP=P as Subset of TopSpaceMetr Euclid 2 by Lm9;
   for pe being Point of Euclid 2 st pe in P ex r being real number st r>0 &
   Ball(pe,r) c= P
   proof
     let pe be Point of Euclid 2;
     assume pe in P;
     then consider s,t such that
-A2: |[ s,t ]|=pe & s1>t by A1;
+A2: |[ s,t ]|=pe and
+A3: s1>t by A1;
     set r=(s1-t)/2;
-    s1-t>0 by A2,XREAL_1:52;
+A4: s1-t>0 by A3,XREAL_1:52;
     then
-A3: r>0 by XREAL_1:141;
+A5: r>0 by XREAL_1:141;
     Ball(pe,r) c= P
     proof
       let x be set;
@@ -850,35 +936,42 @@ A3: r>0 by XREAL_1:141;
       then x in {q where q is Element of Euclid 2:dist(pe,q)<r}
       by METRIC_1:18;
       then consider q being Element of Euclid 2 such that
-A4:   q=x and
-A5:   dist(pe,q)<r;
-      reconsider ppe=pe, pq=q as Point of TOP-REAL 2 by XX;
+A6:   q=x and
+A7:   dist(pe,q)<r;
+      reconsider ppe=pe, pq=q as Point of TOP-REAL 2 by EUCLID:25;
       (Pitag_dist 2).(pe,q)=dist(pe,q) by METRIC_1:def 1;
       then
-A6:   sqrt ((ppe`1 - pq`1)^2 + (ppe`2 - pq`2)^2)<r by A5,TOPREAL3:12;
-A7:   0 <= (ppe`1 - pq`1)^2 & 0 <= (ppe`2 - pq`2)^2 by XREAL_1:65;
+A8:   sqrt ((ppe`1 - pq`1)^2 + (ppe`2 - pq`2)^2)<r by A7,
+      TOPREAL3:12;
+A9:   0 <= (ppe`1 - pq`1)^2 by XREAL_1:65;
+      0 <= (ppe`2 - pq`2)^2 by XREAL_1:65;
       then
-A8:   0+0 <= (ppe`1 - pq`1)^2 + (ppe`2 - pq`2)^2 by XREAL_1:9;
-      then 0 <=sqrt ( (ppe`1 - pq`1)^2 + (ppe`2 - pq`2)^2) by SQUARE_1:def 4;
+A10:  0+0 <= (ppe`1 - pq`1)^2 + (ppe`2 - pq`2)^2 by A9,XREAL_1:9;
+      then 0 <=sqrt ( (ppe`1 - pq`1)^2 + (ppe`2 - pq`2)^2) by
+      SQUARE_1:def 4;
       then (sqrt ((ppe`1 - pq`1)^2 + (ppe`2 - pq`2)^2))^2<r^2
-      by A6,SQUARE_1:78;
+      by A8,SQUARE_1:78;
       then
-A9:   (ppe`1 - pq`1)^2 + (ppe`2 - pq`2)^2 < r^2 by A8,SQUARE_1:def 4;
-      (ppe`2 - pq`2)^2 <= (ppe`1 - pq`1)^2 + (ppe`2 - pq`2)^2 by A7,XREAL_1:33;
-      then (pq`2-ppe`2)^2 <r^2 by A9,XXREAL_0:2;
-      then pq`2-ppe`2 < r by A3,SQUARE_1:77;
+A11:  (ppe`1 - pq`1)^2 + (ppe`2 - pq`2)^2 < r^2 by A10,
+      SQUARE_1:def 4;
+      (ppe`2 - pq`2)^2 <= (ppe`1 - pq`1)^2 + (ppe`2 - pq`2)^2 by
+      XREAL_1:33,65;
+      then (pq`2-ppe`2)^2 <r^2 by A11,XXREAL_0:2;
+      then pq`2-ppe`2 < r by A5,SQUARE_1:77;
       then ppe`2 + r > pq`2 by XREAL_1:21;
       then
-A10:  t+(s1-t)/2 > pq`2 by A2,EUCLID:56;
+A12:  t+(s1-t)/2 > pq`2 by A2,EUCLID:56;
       t+(s1-t)/2 =s1-r;
-      then s1> t+(s1-t)/2 by A3,XREAL_1:46;
-      then |[pq`1,pq`2]|=x & s1>pq`2 by A4,A10,EUCLID:57,XXREAL_0:2;
-      hence thesis by A1;
+      then
+A13:  s1> t+(s1-t)/2 by A4,XREAL_1:46,141;
+A14:  |[pq`1,pq`2]|=x by A6,EUCLID:57;
+      s1>pq`2 by A12,A13,XXREAL_0:2;
+      hence thesis by A1,A14;
     end;
-    hence thesis by A3;
+    hence thesis by A4,XREAL_1:141;
   end;
-   then PP is open by TOPMETR:22;
-  hence thesis by YY,PRE_TOPC:60;
+  then PP is open by TOPMETR:22;
+  hence thesis by Lm9,PRE_TOPC:60;
 end;
 
 theorem Th29:
@@ -889,17 +982,19 @@ proof
   let P be Subset of TOP-REAL 2;
   assume
 A1: P = { |[ s,t ]|:s1<s & s<s2 & t1<t & t<t2};
-  reconsider P1={|[s,t]|:s1<s} as Subset of TOP-REAL 2 by Lm4,XX;
-  reconsider P2={|[s,t]|:s<s2} as Subset of TOP-REAL 2 by Lm2,XX;
-  reconsider P3={|[s,t]|:t1<t} as Subset of TOP-REAL 2 by Lm5,XX;
-  reconsider P4={|[s,t]|:t<t2} as Subset of TOP-REAL 2 by Lm3,XX;
+  reconsider P1={|[s,t]|:s1<s} as Subset of TOP-REAL 2 by Lm2,Lm5;
+  reconsider P2={|[s,t]|:s<s2} as Subset of TOP-REAL 2 by Lm2,Lm3;
+  reconsider P3={|[s,t]|:t1<t} as Subset of TOP-REAL 2 by Lm2,Lm6;
+  reconsider P4={|[s,t]|:t<t2} as Subset of TOP-REAL 2 by Lm2,Lm4;
 A2: P=P1 /\ P2 /\ P3 /\ P4 by A1,Th12;
-  P1 is open & P2 is open by Th25,Th26;
+A3: P1 is open by Th25;
+  P2 is open by Th26;
   then
-A3: P1 /\ P2 is open by TOPS_1:38;
-A4: P3 is open & P4 is open by Th27,Th28;
-  then P1 /\ P2 /\ P3 is open by A3,TOPS_1:38;
-  hence thesis by A2,A4,TOPS_1:38;
+A4: P1 /\ P2 is open by A3,TOPS_1:38;
+A5: P3 is open by Th27;
+A6: P4 is open by Th28;
+  P1 /\ P2 /\ P3 is open by A4,A5,TOPS_1:38;
+  hence thesis by A2,A6,TOPS_1:38;
 end;
 
 theorem Th30:
@@ -912,18 +1007,19 @@ proof
   then
 A1: P={ |[ s3,t3 ]|:s3<s1} \/ {|[s4,t4]|:t4<t1}\/ {|[s5,t5]|:s2<s5}
   \/ {|[s6,t6]|:t2<t6} by Th13;
-  reconsider A0={ |[ s,t ]|:s<s1} as Subset of TOP-REAL 2 by Lm2,XX;
-  reconsider A1={ |[ s,t ]|:t<t1} as Subset of TOP-REAL 2 by Lm3,XX;
-  reconsider A2={ |[ s,t ]|:s2<s} as Subset of TOP-REAL 2 by Lm4,XX;
-  reconsider A3={ |[ s,t ]|:t2<t} as Subset of TOP-REAL 2 by Lm5,XX;
-  A0 is open & A1 is open by Th26,Th28;
+  reconsider A0={ |[ s,t ]|:s<s1} as Subset of TOP-REAL 2 by Lm2,Lm3;
+  reconsider A1={ |[ s,t ]|:t<t1} as Subset of TOP-REAL 2 by Lm2,Lm4;
+  reconsider A2={ |[ s,t ]|:s2<s} as Subset of TOP-REAL 2 by Lm2,Lm5;
+  reconsider A3={ |[ s,t ]|:t2<t} as Subset of TOP-REAL 2 by Lm2,Lm6;
+A2: A0 is open by Th26;
+  A1 is open by Th28;
   then
-A2: A0 \/ A1 is open by TOPS_1:37;
+A3: A0 \/ A1 is open by A2,TOPS_1:37;
   A2 is open by Th25;
   then
-A3: A0 \/ A1 \/ A2 is open by A2,TOPS_1:37;
+A4: A0 \/ A1 \/ A2 is open by A3,TOPS_1:37;
   A3 is open by Th27;
-  hence thesis by A1,A3,TOPS_1:37;
+  hence thesis by A1,A4,TOPS_1:37;
 end;
 
 theorem Th31:
@@ -936,16 +1032,20 @@ A1: P = { |[ sa,ta ]|:s1<sa & sa<s2 & t1<ta & ta<t2} and
 A2: Q = { |[ sb,tb ]|:not (s1<=sb & sb<=s2 & t1<=tb & tb<=t2)};
   assume not thesis;
   then consider x be set such that
-A3: x in P & x in Q by XBOOLE_0:3;
+A3: x in P and
+A4: x in Q by XBOOLE_0:3;
   consider sa,ta such that
-A4: |[sa,ta]|=x and
-A5: (s1<sa & sa<s2 & t1<ta & ta<t2) by A1,A3;
-  consider sb,tb such that
-A6: |[sb,tb]|=x and
-A7: not (s1<=sb & sb<=s2 & t1<=tb & tb<=t2) by A2,A3;
+A5: |[sa,ta]|=x and
+A6: s1<sa and
+A7: sa<s2 and
+A8: t1<ta and
+A9: ta<t2 by A1,A3;
+A10: ex sb,tb st ( |[sb,tb]|=x)&( not (s1<=sb & sb<=s2 & t1<=tb
+  & tb<=t2)) by A2,A4;
   set p= |[sa,ta]|;
-  p`1=sa & p`1=sb & p`2=ta & p`2=tb by A4,A6,EUCLID:56;
-  hence contradiction by A5,A7;
+A11: p`1=sa by EUCLID:56;
+  p`2=ta by EUCLID:56;
+  hence contradiction by A5,A6,A7,A8,A9,A10,A11,EUCLID:56;
 end;
 
 theorem Th32:
@@ -960,18 +1060,31 @@ A1: now
       assume x in
       {p where p is Point of TOP-REAL 2:s1<p`1 & p`1<s2 & t1<p`2 & p`2<t2};
       then consider pp being Point of TOP-REAL 2 such that
-A2:   pp=x & s1<pp`1 & pp`1<s2 & t1<pp`2 & pp`2<t2;
-      |[pp`1,pp`2]|=x & s1<pp`1 & pp`1<s2 & t1<pp`2 & pp`2<t2 by A2,EUCLID:57;
-      hence x in {|[s1a,t1a]|:s1<s1a & s1a<s2 & t1<t1a & t1a<t2};
+A2:   pp=x and
+A3:   s1<pp`1 and
+A4:   pp`1<s2 and
+A5:   t1<pp`2 and
+A6:   pp`2<t2;
+      |[pp`1,pp`2]|=x by A2,EUCLID:57;
+      hence
+      x in {|[s1a,t1a]|:s1<s1a & s1a<s2 & t1<t1a & t1a<t2} by A3,A4,A5,A6;
     end;
     now
       assume x in {|[sa,ta]|:s1<sa & sa<s2 & t1<ta & ta<t2};
       then consider sa,ta being Real such that
-A3:   |[sa,ta]|=x & (s1<sa & sa<s2 & t1<ta & ta<t2);
+A7:   |[sa,ta]|=x and
+A8:   s1<sa and
+A9:   sa<s2 and
+A10:  t1<ta and
+A11:  ta<t2;
       set pa=|[sa,ta]|;
-      pa=x & (s1<pa`1 & pa`1<s2 & t1<pa`2 & pa`2<t2) by A3,EUCLID:56;
+A12:  s1<pa`1 by A8,EUCLID:56;
+A13:  pa`1<s2 by A9,EUCLID:56;
+A14:  t1<pa`2 by A10,EUCLID:56;
+      pa`2<t2 by A11,EUCLID:56;
       hence x in
-      {p where p is Point of TOP-REAL 2:s1<p`1 & p`1<s2 & t1<p`2 & p`2<t2};
+      {p where p is Point of TOP-REAL 2:s1<p`1 & p`1<s2 & t1<p`2 & p`2<t2}
+      by A7,A12,A13,A14;
     end;
     hence x in
     {p where p is Point of TOP-REAL 2:s1<p`1 & p`1<s2 & t1<p`2 & p`2<t2}
@@ -992,19 +1105,21 @@ A1: now
       assume x in {qc where qc is Point of TOP-REAL 2:
       not (s1<=qc`1 & qc`1<=s2 & t1<=qc`2 & qc`2<=t2)};
       then consider q being Point of TOP-REAL 2 such that
-A2:   q=x & not (s1<=q`1 & q`1<=s2 & t1<=q`2 & q`2<=t2);
-      |[q`1,q`2]|=x & not (s1<=q`1 & q`1<=s2 & t1<=q`2 & q`2<=t2)
-      by A2,EUCLID:57;
-      hence x in {|[s2a,t2a]| : not (s1<=s2a & s2a<=s2 & t1<=t2a & t2a<=t2)};
+A2:   q=x and
+A3:   not (s1<=q`1 & q`1<=s2 & t1<=q`2 & q`2<=t2);
+      |[q`1,q`2]|=x by A2,EUCLID:57;
+      hence
+      x in {|[s2a,t2a]| : not (s1<=s2a & s2a<=s2 & t1<=t2a & t2a<=t2)} by A3;
     end;
     now
       assume x in {|[sb,tb]| : not (s1<=sb & sb<=s2 & t1<=tb & tb<=t2)};
       then consider sb,tb being Real such that
-A3:   |[sb,tb]|=x & not (s1<=sb & sb<=s2 & t1<=tb & tb<=t2);
+A4:   |[sb,tb]|=x and
+A5:   not (s1<=sb & sb<=s2 & t1<=tb & tb<=t2);
       set qa=|[sb,tb]|;
-      qa=x & not (s1<=qa`1 & qa`1<=s2 & t1<=qa`2 & qa`2<=t2) by A3,EUCLID:56;
+      not (s1<=qa`1 & qa`1<=s2 & t1<=qa`2 & qa`2<=t2) by A5,EUCLID:56;
       hence x in {qc where qc is Point of TOP-REAL 2:
-      not (s1<=qc`1 & qc`1<=s2 & t1<=qc`2 & qc`2<=t2)};
+      not (s1<=qc`1 & qc`1<=s2 & t1<=qc`2 & qc`2<=t2)} by A4;
     end;
     hence x in {qc where qc is Point of TOP-REAL 2:
     not (s1<=qc`1 & qc`1<=s2 & t1<=qc`2 & qc`2<=t2)} iff x in {|[sb,tb]| :
@@ -1020,7 +1135,7 @@ theorem Th34:
 proof
   let s1,s2,t1,t2;
   { |[ sc,tc ]|: s1<sc & sc<s2 & t1<tc & tc<t2}
-  is Subset of TOP-REAL 2 by Lm6,XX;
+  is Subset of TOP-REAL 2 by Lm2,Lm7;
   hence thesis by Th32;
 end;
 
@@ -1030,7 +1145,7 @@ theorem Th35:
 proof
   let s1,s2,t1,t2;
   { |[ sb,tb ]|:not (s1<=sb & sb<=s2 & t1<=tb & tb<=t2)}
-  is Subset of TOP-REAL 2 by Lm7,XX;
+  is Subset of TOP-REAL 2 by Lm2,Lm8;
   hence thesis by Th33;
 end;
 
@@ -1116,236 +1231,237 @@ proof
   let s1,t1,s2,t2;
   let P,P1,P2 be Subset of TOP-REAL 2;
   assume that
-A1: s1<s2 & t1<t2 and
-A2: P ={p where p is Point of TOP-REAL 2:p`1 = s1 & p`2 <= t2 & p`2 >= t1 or
+A1: s1<s2 and
+A2: t1<t2 and
+A3: P ={p where p is Point of TOP-REAL 2:p`1 = s1 & p`2 <= t2 & p`2 >= t1 or
   p`1 <= s2 & p`1 >= s1 & p`2 = t2 or p`1 <= s2 & p`1 >= s1 & p`2 = t1 or
   p`1 = s2 & p`2 <= t2 & p`2 >= t1} and
-A3: P1 = {pa where pa is Point of TOP-REAL 2:
+A4: P1 = {pa where pa is Point of TOP-REAL 2:
   s1<pa`1 & pa`1<s2 & t1 <pa`2 & pa`2 < t2} and
-A4: P2 = {pc where pc is Point of TOP-REAL 2:
+A5: P2 = {pc where pc is Point of TOP-REAL 2:
   not( s1<=pc`1 & pc`1<=s2 & t1<=pc`2 & pc`2<=t2)};
   now
     let x be set;
     assume
-A5: x in P`;
+A6: x in P`;
     then
-A6: x in [#](TOP-REAL 2) & not x in P by XBOOLE_0:def 5;
-    reconsider pd=x as Point of TOP-REAL 2 by A5;
+A7: not x in P by XBOOLE_0:def 5;
+    reconsider pd=x as Point of TOP-REAL 2 by A6;
     not (pd`1 = s1 & pd`2 <= t2 & pd`2 >= t1 or
     pd`1 <= s2 & pd`1 >= s1 & pd`2 = t2 or
     pd`1 <= s2 & pd`1 >= s1 & pd`2 = t1 or
-    pd`1 = s2 & pd`2 <= t2 & pd`2 >= t1)by A2,A6;
+    pd`1 = s2 & pd`2 <= t2 & pd`2 >= t1)by A3,A7;
     then s1<pd`1 & pd`1<s2 & t1 <pd`2 & pd`2 < t2
     or not( s1<=pd`1 & pd`1<=s2 & t1<=pd`2 & pd`2<=t2) by XXREAL_0:1;
-    then x in P1 or x in P2 by A3,A4;
+    then x in P1 or x in P2 by A4,A5;
     hence x in P1 \/ P2 by XBOOLE_0:def 3;
   end;
   then
-A7: P` c= P1 \/ P2 by TARSKI:def 3;
+A8: P` c= P1 \/ P2 by TARSKI:def 3;
   now
     let x be set such that
-A8: x in P1 \/ P2;
-    now per cases by A8,XBOOLE_0:def 3;
+A9: x in P1 \/ P2;
+    now per cases by A9,XBOOLE_0:def 3;
       suppose
-A9:     x in P1;
+A10:    x in P1;
         then
-A10:    ex pa st pa=x & s1<pa`1 & pa`1<s2 & t1 <pa`2 & pa`2 < t2 by A3;
+A11:    ex pa st pa=x & s1<pa`1 & pa`1<s2 & t1 <pa`2 & pa`2 < t2 by A4;
         now
           assume x in P;
           then ex pb st pb=x &(pb`1 = s1 & pb`2 <= t2 & pb`2 >= t1 or
           pb`1 <= s2 & pb`1 >= s1 & pb`2 = t2 or
           pb`1 <= s2 & pb`1 >= s1 & pb`2 = t1 or
-          pb`1 = s2 & pb`2 <= t2 & pb`2 >= t1) by A2;
-          hence contradiction by A10;
+          pb`1 = s2 & pb`2 <= t2 & pb`2 >= t1) by A3;
+          hence contradiction by A11;
         end;
-        hence x in P` by A9,SUBSET_1:50;
+        hence x in P` by A10,SUBSET_1:50;
       end;
       suppose x in P2;
         then consider pc being Point of TOP-REAL 2 such that
-A11:    pc=x and
-A12:    not( s1<=pc`1 & pc`1<=s2 & t1<=pc`2 & pc`2<=t2) by A4;
+A12:    pc=x and
+A13:    not( s1<=pc`1 & pc`1<=s2 & t1<=pc`2 & pc`2<=t2) by A5;
         now
           assume pc in P;
           then ex p being Point of TOP-REAL 2 st p=pc & (
           p`1 = s1 & p`2 <= t2 & p`2 >= t1 or
           p`1 <= s2 & p`1 >= s1 & p`2 = t2 or
           p`1 <= s2 & p`1 >= s1 & p`2 = t1 or
-          p`1 = s2 & p`2 <= t2 & p`2 >= t1) by A2;
-          hence contradiction by A1,A12;
+          p`1 = s2 & p`2 <= t2 & p`2 >= t1) by A3;
+          hence contradiction by A1,A2,A13;
         end;
-        hence x in P`by A11,SUBSET_1:50;
+        hence x in P`by A12,SUBSET_1:50;
       end;
     end;
     hence x in P`;
   end;
-  then P1 \/ P2 c= P` by TARSKI:def 3;
+  then
+A14: P1 \/ P2 c= P` by TARSKI:def 3;
   hence
-A13: P`=P1 \/ P2 by A7,XBOOLE_0:def 10;
+A15: P`=P1 \/ P2 by A8,XBOOLE_0:def 10;
   set s3 =(s1+s2)/2, t3=(t1+t2)/2;
-  s1+s1<s1+s2 & t1+t1<t1+t2 by A1,XREAL_1:8;
-  then
-A14: (s1+s1)/2<s3 & (t1+t1)/2<t3 by XREAL_1:76;
-  s1+s2<s2+s2 & t1+t2<t2+t2 by A1,XREAL_1:8;
-  then
-A15: s3<(s2+s2)/2 & t3<(t2+t2)/2 by XREAL_1:76;
+A16: s1+s1<s1+s2 by A1,XREAL_1:8;
+A17: t1+t1<t1+t2 by A2,XREAL_1:8;
+A18: (s1+s1)/2<s3 by A16,XREAL_1:76;
+A19: (t1+t1)/2<t3 by A17,XREAL_1:76;
+A20: s1+s2<s2+s2 by A1,XREAL_1:8;
+A21: t1+t2<t2+t2 by A2,XREAL_1:8;
+A22: s3<(s2+s2)/2 by A20,XREAL_1:76;
+A23: t3<(t2+t2)/2 by A21,XREAL_1:76;
   set pp=|[s3,t3]|;
-  pp`1=s3 & pp`2=t3 by EUCLID:56;
+A24: pp`1=s3 by EUCLID:56;
+  pp`2=t3 by EUCLID:56;
   then
-A16: |[ s3,t3 ]| in { pp2 where pp2 is Point of TOP-REAL 2:
-  s1<pp2`1 & pp2`1<s2 & t1<pp2`2 & pp2`2<t2} by A14,A15;
-  then consider x be set such that
-A17: x in P1 by A3; thus
-  P`<>{} by A13,A17;
-  set P' = P`;
-  P1 misses P2 by A3,A4,Th40;
+A25: |[ s3,t3 ]| in { pp2 where pp2 is Point of TOP-REAL 2:
+  s1<pp2`1 & pp2`1<s2 & t1<pp2`2 & pp2`2<t2} by A18,A19,A22,A23,A24;
   hence
-A18: P1 /\ P2 = {} by XBOOLE_0:def 7;
+  P`<>{} by A4,A14;
+  set P' = P`;
+  P1 misses P2 by A4,A5,Th40;
+  hence
+A26: P1 /\ P2 = {} by XBOOLE_0:def 7;
   now
     let P1A,P2B be Subset of (TOP-REAL 2)|P';
-    assume
-A19: P1A=P1 & P2B=P2;
-    P1 is connected by A3,Th36;
+    assume that
+A27: P1A=P1 and
+A28: P2B=P2;
+    P1 is connected by A4,Th36;
     then
-A20: P1A is connected by A19,CONNSP_1:24;
-A21: P2 is connected by A4,Th37;
-A22: P2={ |[ sa,ta ]|:not (s1<=sa & sa<=s2 & t1<=ta & ta<=t2)} by A4,Th33;
-    reconsider A0={ |[ s3a,t3a ]|:s3a<s1} as Subset of TOP-REAL 2 by Lm2,XX;
-    reconsider A1={ |[ s4,t4 ]|:t4<t1} as Subset of TOP-REAL 2 by Lm3,XX;
-    reconsider A2={ |[ s5,t5 ]|:s2<s5} as Subset of TOP-REAL 2 by Lm4,XX;
-    reconsider A3={ |[ s6,t6 ]|:t2<t6} as Subset of TOP-REAL 2 by Lm5,XX;
-A23: P2=A0 \/ A1 \/ A2 \/ A3 by A22,Th13;
+A29: P1A is connected by A27,CONNSP_1:24;
+A30: P2 is connected by A5,Th37;
+A31: P2={ |[ sa,ta ]|:not (s1<=sa & sa<=s2 & t1<=ta & ta<=t2)} by A5,Th33;
+    reconsider A0={ |[ s3a,t3a ]|:s3a<s1} as Subset of TOP-REAL 2 by Lm2,Lm3;
+    reconsider A1={ |[ s4,t4 ]|:t4<t1} as Subset of TOP-REAL 2 by Lm2,Lm4;
+    reconsider A2={ |[ s5,t5 ]|:s2<s5} as Subset of TOP-REAL 2 by Lm2,Lm5;
+    reconsider A3={ |[ s6,t6 ]|:t2<t6} as Subset of TOP-REAL 2 by Lm2,Lm6;
+A32: P2=A0 \/ A1 \/ A2 \/ A3 by A31,Th13;
     t2+1>t2 by XREAL_1:31;
-    then |[s2+1,t2+1]| in A3;
     then
-A24: P2B <>{} by A19,A23;
-A25: P2B is connected by A19,A21,CONNSP_1:24;
-A26: for CP being Subset of (TOP-REAL 2)|(P') st
+A33: |[s2+1,t2+1]| in A3;
+A34: P2B is connected by A28,A30,CONNSP_1:24;
+A35: for CP being Subset of (TOP-REAL 2)|(P') st
     CP is connected holds P1A c= CP implies P1A = CP
     proof
       let CP be Subset of (TOP-REAL 2)|(P');
       assume CP is connected;
       then
-A27:  ((TOP-REAL 2)|P')|CP is connected by CONNSP_1:def 3;
+A36:  ((TOP-REAL 2)|P')|CP is connected by CONNSP_1:def 3;
       now
         assume
-A28:    P1A c= CP;
-        P1A /\ CP c= the carrier of ((TOP-REAL 2)|P')|CP
-        proof P1A /\ CP c= CP by XBOOLE_1:17;
-          hence thesis by PRE_TOPC:29;
-        end;
-        then reconsider AP=P1A /\ CP as Subset of ((TOP-REAL 2)|P')|CP;
-A29:    P1 /\ P` =P1A by A13,A19,XBOOLE_1:21;
-        P1 is open by A3,Th38;
+A37:    P1A c= CP;
+        P1A /\ CP c= CP by XBOOLE_1:17;
+        then reconsider AP=P1A /\ CP as Subset of ((TOP-REAL 2)|P')|CP by
+        PRE_TOPC:29;
+A38:    P1 /\ P` =P1A by A15,A27,XBOOLE_1:21;
+        P1 is open by A4,Th38;
         then
-A30:    P1 in the topology of TOP-REAL 2 by PRE_TOPC:def 5;
-A31:    P`= [#]((TOP-REAL 2)|P') by PRE_TOPC:def 10;
-        P1 /\ [#]((TOP-REAL 2)|P')=P1A by A29,PRE_TOPC:def 10;
+A39:    P1 in the topology of TOP-REAL 2 by PRE_TOPC:def 5;
+A40:    P`= [#]((TOP-REAL 2)|P') by PRE_TOPC:def 10;
+        P1 /\ [#]((TOP-REAL 2)|P')=P1A by A38,PRE_TOPC:def 10;
         then
-A32:    P1A in the topology of (TOP-REAL 2)|P' by A30,PRE_TOPC:def 9;
-A33:    CP=[#](((TOP-REAL 2)|P')|CP) by PRE_TOPC:def 10;
-A34:    AP<>{}(((TOP-REAL 2)|P')|CP) by A3,A16,A19,A28,XBOOLE_1:28;
-        AP in the topology of ((TOP-REAL 2)|P')|CP by A32,A33,PRE_TOPC:def 9;
+A41:    P1A in the topology of (TOP-REAL 2)|P' by A39,
+        PRE_TOPC:def 9;
+A42:    CP=[#](((TOP-REAL 2)|P')|CP) by PRE_TOPC:def 10;
+A43:    AP<>{}(((TOP-REAL 2)|P')|CP) by A4,A25,A27,A37,XBOOLE_1:28;
+        AP in the topology of ((TOP-REAL 2)|P')|CP by A41,A42,
+        PRE_TOPC:def 9;
         then
-A35:    AP is open by PRE_TOPC:def 5;
-        P2B /\ CP c= the carrier of ((TOP-REAL 2)|P')|CP
-        proof P2B /\ CP c= CP by XBOOLE_1:17;
-          hence thesis by PRE_TOPC:29;
-        end;
-        then reconsider BP=P2B /\ CP as Subset of ((TOP-REAL 2)|P')|CP;
-A36:    P2 /\ P` =P2B by A13,A19,XBOOLE_1:21;
-        P2 is open by A4,Th39;
+A44:    AP is open by PRE_TOPC:def 5;
+        P2B /\ CP c= CP by XBOOLE_1:17;
+        then reconsider BP=P2B /\ CP as Subset of ((TOP-REAL 2)|P')|CP by
+        PRE_TOPC:29;
+A45:    P2 /\ P` =P2B by A15,A28,XBOOLE_1:21;
+        P2 is open by A5,Th39;
         then
-A37:    P2 in the topology of TOP-REAL 2 by PRE_TOPC:def 5;
-        P2 /\ [#]((TOP-REAL 2)|P')=P2B by A36,PRE_TOPC:def 10;
+A46:    P2 in the topology of TOP-REAL 2 by PRE_TOPC:def 5;
+        P2 /\ [#]((TOP-REAL 2)|P')=P2B by A45,PRE_TOPC:def 10;
         then
-A38:    P2B in the topology of (TOP-REAL 2)|P' by A37,PRE_TOPC:def 9;
+A47:    P2B in the topology of (TOP-REAL 2)|P' by A46,
+        PRE_TOPC:def 9;
         CP=[#](((TOP-REAL 2)|P')|CP) by PRE_TOPC:def 10;
-        then BP in the topology of ((TOP-REAL 2)|P')|CP by A38,PRE_TOPC:def 9;
+        then BP in the topology of ((TOP-REAL 2)|P')|CP by A47,
+        PRE_TOPC:def 9;
         then
-A39:    BP is open by PRE_TOPC:def 5;
-A40:    CP=(P1A \/ P2B) /\ CP by A13,A19,A31,XBOOLE_1:28
+A48:    BP is open by PRE_TOPC:def 5;
+A49:    CP=(P1A \/ P2B) /\ CP by A15,A27,A28,A40,XBOOLE_1:28
           .=AP \/ BP by XBOOLE_1:23;
         now
           assume
-A41:      BP<>{};
-A42:      AP /\ BP = P1A /\ (P2B /\ CP) /\ CP by XBOOLE_1:16
+A50:      BP<>{};
+A51:      AP /\ BP = P1A /\ (P2B /\ CP) /\ CP by XBOOLE_1:16
             .= P1A /\ P2B /\ CP /\ CP by XBOOLE_1:16
             .= P1A /\ P2B /\ (CP /\ CP) by XBOOLE_1:16
             .= P1A /\ P2B /\ CP;
-          P1 misses P2 by A3,A4,Th40;
+          P1 misses P2 by A4,A5,Th40;
           then P1 /\ P2 = {} by XBOOLE_0:def 7;
-          then AP misses BP by A19,A42,XBOOLE_0:def 7;
-          hence contradiction by A27,A33,A34,A35,A39,A40,A41,CONNSP_1:12;
+          then AP misses BP by A27,A28,A51,XBOOLE_0:def 7;
+          hence contradiction by A36,A42,A43,A44,A48,A49,A50,CONNSP_1:12;
         end;
-        hence thesis by A40,XBOOLE_1:28;
+        hence thesis by A49,XBOOLE_1:28;
       end;
       hence thesis;
     end;
-    hence P1A is_a_component_of (TOP-REAL 2)|P' by A20,CONNSP_1:def 5;
+    hence P1A is_a_component_of (TOP-REAL 2)|P' by A29,CONNSP_1:def 5;
     for CP being Subset of (TOP-REAL 2)|(P') st
     CP is connected holds P2B c= CP implies P2B = CP
     proof
       let CP be Subset of (TOP-REAL 2)|(P');
       assume CP is connected;
       then
-A43:  ((TOP-REAL 2)|P')|CP is connected by CONNSP_1:def 3;
+A52:  ((TOP-REAL 2)|P')|CP is connected by CONNSP_1:def 3;
       assume
-A44:  P2B c= CP;
-      P2B /\ CP c= the carrier of ((TOP-REAL 2)|P')|CP
-      proof P2B /\ CP c= CP by XBOOLE_1:17;
-        hence thesis by PRE_TOPC:29;
-      end;
-      then reconsider BP=P2B /\ CP as Subset of ((TOP-REAL 2)|P')|CP;
-A45:  P2 /\ P` =P2B by A13,A19,XBOOLE_1:21;
-      P2 is open by A4,Th39;
+A53:  P2B c= CP;
+      P2B /\ CP c= CP by XBOOLE_1:17;
+      then reconsider BP=P2B /\ CP as Subset of ((TOP-REAL 2)|P')|CP by
+      PRE_TOPC:29;
+A54:  P2 /\ P` =P2B by A15,A28,XBOOLE_1:21;
+      P2 is open by A5,Th39;
       then
-A46:  P2 in the topology of TOP-REAL 2 by PRE_TOPC:def 5;
-A47:  P`= [#]((TOP-REAL 2)|P') by PRE_TOPC:def 10;
-      P2 /\ [#]((TOP-REAL 2)|P')=P2B by A45,PRE_TOPC:def 10;
+A55:  P2 in the topology of TOP-REAL 2 by PRE_TOPC:def 5;
+A56:  P`= [#]((TOP-REAL 2)|P') by PRE_TOPC:def 10;
+      P2 /\ [#]((TOP-REAL 2)|P')=P2B by A54,PRE_TOPC:def 10;
       then
-A48:  P2B in the topology of (TOP-REAL 2)|P' by A46,PRE_TOPC:def 9;
-A49:  CP=[#](((TOP-REAL 2)|P')|CP) by PRE_TOPC:def 10;
-A50:  BP<>{}(((TOP-REAL 2)|P')|CP) by A24,A44,XBOOLE_1:28;
-      BP in the topology of ((TOP-REAL 2)|P')|CP by A48,A49,PRE_TOPC:def 9;
+A57:  P2B in the topology of (TOP-REAL 2)|P' by A55,PRE_TOPC:def 9;
+A58:  CP=[#](((TOP-REAL 2)|P')|CP) by PRE_TOPC:def 10;
+A59:  BP<>{}(((TOP-REAL 2)|P')|CP) by A28,A32,A33,A53,XBOOLE_1:28;
+      BP in the topology of ((TOP-REAL 2)|P')|CP by A57,A58,PRE_TOPC:def 9;
       then
-A51:  BP is open by PRE_TOPC:def 5;
-      P1A /\ CP c= the carrier of ((TOP-REAL 2)|P')|CP
-      proof P1A /\ CP c= CP by XBOOLE_1:17;
-        hence thesis by PRE_TOPC:29;
-      end;
-      then reconsider AP=P1A /\ CP as Subset of ((TOP-REAL 2)|P')|CP;
-A52:  P1 /\ P` =P1A by A13,A19,XBOOLE_1:21;
-      P1 is open by A3,Th38;
+A60:  BP is open by PRE_TOPC:def 5;
+      P1A /\ CP c= CP by XBOOLE_1:17;
+      then reconsider AP=P1A /\ CP as Subset of ((TOP-REAL 2)|P')|CP by
+      PRE_TOPC:29;
+A61:  P1 /\ P` =P1A by A15,A27,XBOOLE_1:21;
+      P1 is open by A4,Th38;
       then
-A53:  P1 in the topology of TOP-REAL 2 by PRE_TOPC:def 5;
-      P1 /\ [#]((TOP-REAL 2)|P')=P1A by A52,PRE_TOPC:def 10;
+A62:  P1 in the topology of TOP-REAL 2 by PRE_TOPC:def 5;
+      P1 /\ [#]((TOP-REAL 2)|P')=P1A by A61,PRE_TOPC:def 10;
       then
-A54:  P1A in the topology of (TOP-REAL 2)|P' by A53,PRE_TOPC:def 9;
+A63:  P1A in the topology of (TOP-REAL 2)|P' by A62,PRE_TOPC:def 9;
       CP=[#](((TOP-REAL 2)|P')|CP) by PRE_TOPC:def 10;
-      then AP in the topology of ((TOP-REAL 2)|P')|CP by A54,PRE_TOPC:def 9;
+      then AP in the topology of ((TOP-REAL 2)|P')|CP by A63,
+      PRE_TOPC:def 9;
       then
-A55:  AP is open by PRE_TOPC:def 5;
-A56:  CP=(P1A \/ P2B) /\ CP by A13,A19,A47,XBOOLE_1:28
+A64:  AP is open by PRE_TOPC:def 5;
+A65:  CP=(P1A \/ P2B) /\ CP by A15,A27,A28,A56,XBOOLE_1:28
         .=AP \/ BP by XBOOLE_1:23;
       now
         assume
-A57:    AP<>{};
+A66:    AP<>{};
         AP /\ BP = P1A /\ (P2B /\ CP) /\ CP by XBOOLE_1:16
           .= P1A /\ P2B /\ CP /\ CP by XBOOLE_1:16
           .= P1A /\ P2B /\ (CP /\ CP) by XBOOLE_1:16
           .= P1A /\ P2B /\ CP;
-        then AP misses BP by A18,A19,XBOOLE_0:def 7;
-        hence contradiction by A43,A49,A50,A51,A55,A56,A57,CONNSP_1:12;
+        then AP misses BP by A26,A27,A28,XBOOLE_0:def 7;
+        hence contradiction by A52,A58,A59,A60,A64,A65,A66,CONNSP_1:12;
       end;
-      hence thesis by A44,A56,XBOOLE_1:28;
+      hence thesis by A53,A65,XBOOLE_1:28;
     end;
     hence P1A is_a_component_of (TOP-REAL 2)|P' &
-    P2B is_a_component_of (TOP-REAL 2)|P' by A20,A25,A26,CONNSP_1:def 5;
+    P2B is_a_component_of (TOP-REAL 2)|P' by A29,A34,A35,CONNSP_1:def 5;
   end;
   hence thesis;
 end;
 
-Lm8: for s1,t1,s2,t2 for P,P1 being Subset of TOP-REAL 2 st s1<s2 & t1<t2 &
+Lm10: for s1,t1,s2,t2 for P,P1 being Subset of TOP-REAL 2 st s1<s2 & t1<t2 &
 P = { p where p is Point of TOP-REAL 2: p`1 = s1 & p`2 <= t2 & p`2 >= t1 or
 p`1 <= s2 & p`1 >= s1 & p`2 = t2 or p`1 <= s2 & p`1 >= s1 & p`2 = t1 or
 p`1 = s2 & p`2 <= t2 & p`2 >= t1} & P1 = {pa where pa is Point of TOP-REAL 2:
@@ -1354,836 +1470,908 @@ proof
   let s1,t1,s2,t2;
   let P,P1 be Subset of TOP-REAL 2;
   assume that
-A1: s1<s2 & t1<t2 and
-A2: P = { p where p is Point of TOP-REAL 2:
-  p`1 = s1 & p`2 <= t2 & p`2 >= t1 or p`1 <= s2 & p`1 >= s1 & p`2 = t2 or
-  p`1 <= s2 & p`1 >= s1 & p`2 = t1 or p`1 = s2 & p`2 <= t2 & p`2 >= t1}
-  & P1 = {pa where pa is Point of TOP-REAL 2:
-  s1<pa`1 & pa`1<s2 & t1 <pa`2 & pa`2 < t2};
+A1: s1<s2 and
+A2: t1<t2 and
+A3: P = { p where p is Point of TOP-REAL 2: p`1 = s1 & p`2 <= t2 & p`2
+  >= t1 or p`1 <= s2 & p`1 >= s1 & p`2 = t2 or p`1 <= s2 & p`1 >= s1 & p`2 = t1
+  or p`1 = s2 & p`2 <= t2 & p`2 >= t1} and
+A4: P1 = {pa where pa is Point of TOP-REAL 2: s1<pa`1 & pa`1<s2 & t1 <pa
+  `2 & pa`2 < t2};
   reconsider P2 = {pb where pb is Point of TOP-REAL 2:
   not( s1<=pb`1 & pb`1<=s2 & t1<=pb`2 & pb`2<=t2)} as Subset of TOP-REAL 2
   by Th35;
-A3: P1 c= Cl P1 by PRE_TOPC:48;
+A5: P1 c= Cl P1 by PRE_TOPC:48;
   reconsider PP = P` as Subset of TOP-REAL 2;
-  P2 = {pb where pb is Point of TOP-REAL 2:
-  not( s1<=pb`1 & pb`1<=s2 & t1<=pb`2 & pb`2<=t2)};
+A6: PP=P1 \/ P2 by A1,A2,A3,A4,Th41;
+  P1 misses P2 by A1,A2,A3,A4,Th41;
   then
-A4: PP=P1 \/ P2 & PP <> {} & P1 misses P2 by A1,A2,Th41;
+A7: P1 c= P2` by SUBSET_1:43;
+  P= (P1 \/ P2)` by A6;
   then
-A5: P2 c= P1` & P1 c= P2` by SUBSET_1:43;
-  P= (P1 \/ P2)` by A4;
+A8: P=([#](TOP-REAL 2)\P1) /\ ([#](TOP-REAL 2)\P2) by XBOOLE_1:53;
+  [#](TOP-REAL 2)=P \/ (P1 \/ P2) by A6,PRE_TOPC:18;
   then
-A6: P=([#](TOP-REAL 2)\P1) /\ ([#](TOP-REAL 2)\P2) by XBOOLE_1:53;
-  [#](TOP-REAL 2)=P \/ (P1 \/ P2) by A4,PRE_TOPC:18;
-  then
-A7: [#](TOP-REAL 2)=P \/ P1 \/ P2 by XBOOLE_1:4;
-A8: P2`= P \/ P1
-  proof
-    now
-      let x be set;
-      assume x in P2`;
-      then x in [#](TOP-REAL 2) & not x in P2 by XBOOLE_0:def 5;
-      hence x in P \/ P1 by A7,XBOOLE_0:def 3;
-    end;
-    then
-A9: P2` c=P \/ P1 by TARSKI:def 3;
-    now
-      let x be set;
-      assume x in P \/ P1;
-      then x in P or x in P1 by XBOOLE_0:def 3;
-      hence x in P2` by A5,A6,XBOOLE_0:def 4;
-    end;
-    then P \/ P1 c=P2` by TARSKI:def 3;
-    hence thesis by A9,XBOOLE_0:def 10;
+A9: [#](TOP-REAL 2)=P \/ P1 \/ P2 by XBOOLE_1:4;
+
+  now
+    let x be set;
+    assume
+A10: x in P2`;
+    then not x in P2 by XBOOLE_0:def 5;
+    hence x in P \/ P1 by A9,A10,XBOOLE_0:def 3;
   end;
-A10: P2 is open by Th39;
+  then
+A11: P2` c=P \/ P1 by TARSKI:def 3;
+  now
+    let x be set;
+    assume x in P \/ P1;
+    then x in P or x in P1 by XBOOLE_0:def 3;
+    hence x in P2` by A7,A8,XBOOLE_0:def 4;
+  end;
+  then P \/ P1 c=P2` by TARSKI:def 3;
+
+  then
+A12: P2`= P \/ P1 by A11,XBOOLE_0:def 10;
+A13: P2 is open by Th39;
   [#](TOP-REAL 2) \ P2` = P2``
     .=P2;
   then
-A11: P \/ P1 is closed by A8,A10,PRE_TOPC:def 6;
-A12: P1 c= P \/ P1 by XBOOLE_1:7;
+A14: P \/ P1 is closed by A12,A13,PRE_TOPC:def 6;
+A15: P1 c= P \/ P1 by XBOOLE_1:7;
   thus Cl P1 c= P \/ P1
   proof
     let x be set;
     assume x in Cl P1;
-    hence thesis by A11,A12,PRE_TOPC:45;
+    hence thesis by A14,A15,PRE_TOPC:45;
   end;
   P c= Cl P1
   proof
     let x be set;
     assume x in P;
     then consider p being Point of TOP-REAL 2 such that
-A13: p=x and
-A14: p`1 = s1 & p`2 <= t2 & p`2 >= t1 or p`1 <= s2 & p`1 >= s1 & p`2 = t2 or
+A16: p=x and
+A17: p`1 = s1 & p`2 <= t2 & p`2 >= t1 or p`1 <= s2 & p`1 >= s1 & p`2 = t2 or
     p`1 <= s2 & p`1 >= s1 & p`2 = t1 or
-    p`1 = s2 & p`2 <= t2 & p`2 >= t1 by A2;
-    reconsider q=p as Point of Euclid 2 by XX;
-    now per cases by A14;
+    p`1 = s2 & p`2 <= t2 & p`2 >= t1 by A3;
+    reconsider q=p as Point of Euclid 2 by EUCLID:25;
+    now per cases by A17;
       suppose
-A15:    p`1 = s1 & p`2 <= t2 & p`2 >= t1;
-        now per cases by A15,XXREAL_0:1;
+A18:    p`1 = s1 & p`2 <= t2 & p`2 >= t1;
+        now per cases by A18,XXREAL_0:1;
           suppose
-A16:        p`1 = s1 & p`2 < t2 & p`2 > t1;
+A19:        p`1 = s1 & p`2 < t2 & p`2 > t1;
             for Q being Subset of TOP-REAL 2 st Q is open holds
             p in Q implies P1 meets Q
             proof
               let Q be Subset of TOP-REAL 2;
               assume that
-A17:          Q is open and
-A18:          p in Q;
-              reconsider QQ = Q as Subset of TopSpaceMetr Euclid 2 by YY;
-              QQ is open by A17,YY,PRE_TOPC:60;
+A20:          Q is open and
+A21:          p in Q;
+              reconsider QQ = Q as Subset of TopSpaceMetr Euclid 2 by Lm9;
+              QQ is open by A20,Lm9,PRE_TOPC:60;
               then consider r be real number such that
-A19:          r>0 and
-A20:          Ball(q,r) c= Q by A17,A18,TOPMETR:22;
+A22:          r>0 and
+A23:          Ball(q,r) c= Q by A21,TOPMETR:22;
               reconsider r as Real by XREAL_0:def 1;
-A21:          r/2>0 by A19,XREAL_1:217;
-A22:          r/2<r by A19,XREAL_1:218;
+A24:          r/2>0 by A22,XREAL_1:217;
+A25:          r/2<r by A22,XREAL_1:218;
               set r2=min(r/2,min((s2-s1)/2,(t2-t1)/2));
-A23:          r2 <= r/2 & r2<=min((s2-s1)/2,(t2-t1)/2) by XXREAL_0:17;
-              r2 <= r/2 & ( min((s2-s1)/2,(t2-t1)/2) <=(s2-s1)/2
-              & min((s2-s1)/2,(t2-t1)/2)<= (t2-t1)/2) by XXREAL_0:17;
+A26:          r2 <= r/2 by XXREAL_0:17;
+A27:          r2<=min((s2-s1)/2,(t2-t1)/2) by XXREAL_0:17;
+              min((s2-s1)/2,(t2-t1)/2) <=(s2-s1)/2 by XXREAL_0:17;
               then
-A24:          r2<= r/2 & r2<=(s2-s1)/2 & r2<=(t2-t1)/2 by A23,XXREAL_0:2;
-A25:          r2<r by A22,A23,XXREAL_0:2;
-A26:          s2-s1>0 & t2-t1>0 by A1,XREAL_1:52;
-              then (s2-s1)/2 >0 & (t2-t1)/2>0 by XREAL_1:217;
-              then 0<min((s2-s1)/2,(t2-t1)/2) by XXREAL_0:15;
+A28:          r2<=(s2-s1)/2 by A27,XXREAL_0:2;
+A29:          r2<r by A25,A26,XXREAL_0:2;
+A30:          s2-s1>0 by A1,XREAL_1:52;
+A31:          t2-t1>0 by A2,XREAL_1:52;
+A32:          (s2-s1)/2 >0 by A30,XREAL_1:217;
+              (t2-t1)/2>0 by A31,XREAL_1:217;
+              then 0<min((s2-s1)/2,(t2-t1)/2) by A32,XXREAL_0:15;
               then
-A27:          0<r2 by A21,XXREAL_0:15;
+A33:          0<r2 by A24,XXREAL_0:15;
               set pa=|[p`1+r2,p`2]|;
-A28:          pa`1=p`1+r2 & pa`2=p`2 by EUCLID:56;
-              (s2-s1)/2<s2-s1 by A26,XREAL_1:218;
-              then r2<s2-p`1 by A16,A24,XXREAL_0:2;
-              then s1<pa`1 & pa`1<s2 & t1 <pa`2 & pa`2 < t2 by A16,A27,A28,
-XREAL_1:22,31;
+A34:          pa`1=p`1+r2 by EUCLID:56;
+A35:          pa`2=p`2 by EUCLID:56;
+              (s2-s1)/2<s2-s1 by A30,XREAL_1:218;
               then
-A29:          pa in P1 by A2;
-              reconsider qa=pa as Point of Euclid 2 by XX;
-              0 <= (p`1 - pa`1)^2 & 0 <= (p`2 - pa`2)^2 by XREAL_1:65;
+A36:          r2<s2-p`1 by A19,A28,XXREAL_0:2;
+A37:          s1<pa`1 by A19,A33,A34,XREAL_1:31;
+              pa`1<s2 by A34,A36,XREAL_1:22;
               then
-A30:          0+0 <= (p`1 - pa`1)^2 + (p`2 - pa`2)^2 by XREAL_1:9;
+A38:          pa in P1 by A4,A19,A35,A37;
+              reconsider qa=pa as Point of Euclid 2 by EUCLID:25;
+A39:          0 <= (p`1 - pa`1)^2 by XREAL_1:65;
+              0 <= (p`2 - pa`2)^2 by XREAL_1:65;
+              then
+A40:          0+0 <= (p`1 - pa`1)^2 + (p`2 - pa`2)^2 by A39,
+              XREAL_1:9;
               (pa`1-p`1)^2=(p`1-pa`1)^2;
               then (p`1 - pa`1)^2 + (p`2 - pa`2)^2 < r^2
-              by A25,A27,A28,SQUARE_1:78;
+              by A29,A33,A34,A35,SQUARE_1:78;
               then (sqrt ((p`1 - pa`1)^2 + (p`2 - pa`2)^2))^2<r^2
-              by A30,SQUARE_1:def 4;
+              by A40,SQUARE_1:def 4;
               then
-A31:          sqrt ((p`1 - pa`1)^2 + (p`2 - pa`2)^2) <r by A19,SQUARE_1:77;
+A41:          sqrt ((p`1 - pa`1)^2 + (p`2 - pa`2)^2) <r by A22
+              ,SQUARE_1:77;
               (Pitag_dist 2).(q,qa)=dist(q,qa) by METRIC_1:def 1;
-              then dist(q,qa)<r by A31,TOPREAL3:12;
+              then dist(q,qa)<r by A41,TOPREAL3:12;
               then pa in Ball(q,r) by METRIC_1:12;
-              hence thesis by A20,A29,XBOOLE_0:3;
+              hence thesis by A23,A38,XBOOLE_0:3;
             end;
             hence p in Cl P1 by PRE_TOPC:def 13;
           end;
           suppose
-A32:        p`1 = s1 & p`2 = t1;
+A42:        p`1 = s1 & p`2 = t1;
             for Q being Subset of TOP-REAL 2 st Q is open holds
             p in Q implies P1 meets Q
             proof
               let Q be Subset of TOP-REAL 2;
               assume that
-A33:          Q is open and
-A34:          p in Q;
-              reconsider QQ = Q as Subset of TopSpaceMetr Euclid 2 by YY;
-              QQ is open by A33,YY,PRE_TOPC:60;
+A43:          Q is open and
+A44:          p in Q;
+              reconsider QQ = Q as Subset of TopSpaceMetr Euclid 2 by Lm9;
+              QQ is open by A43,Lm9,PRE_TOPC:60;
               then consider r be real number such that
-A35:          r>0 and
-A36:          Ball(q,r) c= Q by A33,A34,TOPMETR:22;
+A45:          r>0 and
+A46:          Ball(q,r) c= Q by A44,TOPMETR:22;
               reconsider r as Real by XREAL_0:def 1;
-A37:          r/2>0 by A35,XREAL_1:217;
+A47:          r/2>0 by A45,XREAL_1:217;
               set r2=min(r/2,min((s2-s1)/2,(t2-t1)/2));
-A38:          r2 <= r/2 & r2<=min((s2-s1)/2,(t2-t1)/2) by XXREAL_0:17;
-              r2 <= r/2 & ( min((s2-s1)/2,(t2-t1)/2) <=(s2-s1)/2
-              & min((s2-s1)/2,(t2-t1)/2)<= (t2-t1)/2) by XXREAL_0:17;
+A48:          r2<=min((s2-s1)/2,(t2-t1)/2) by XXREAL_0:17;
+A49:          min((s2-s1)/2,(t2-t1)/2) <=(s2-s1)/2 by XXREAL_0:17;
+A50:          min((s2-s1)/2,(t2-t1)/2)<= (t2-t1)/2 by XXREAL_0:17;
+A51:          r2<=(s2-s1)/2 by A48,A49,XXREAL_0:2;
+A52:          r2<= (t2-t1)/2 by A48,A50,XXREAL_0:2;
+A53:          s2-s1>0 by A1,XREAL_1:52;
+A54:          t2-t1>0 by A2,XREAL_1:52;
+A55:          (s2-s1)/2 >0 by A53,XREAL_1:217;
+              (t2-t1)/2>0 by A54,XREAL_1:217;
+              then 0<min((s2-s1)/2,(t2-t1)/2) by A55,XXREAL_0:15;
               then
-A39:          r2<= r/2 & r2<=(s2-s1)/2 & r2<= (t2-t1)/2 by A38,XXREAL_0:2;
-A40:          s2-s1>0 & t2-t1>0 by A1,XREAL_1:52;
-              then (s2-s1)/2 >0 & (t2-t1)/2>0 by XREAL_1:217;
-              then 0<min((s2-s1)/2,(t2-t1)/2) by XXREAL_0:15;
-              then
-A41:          0<r2 by A37,XXREAL_0:15;
+A56:          0<r2 by A47,XXREAL_0:15;
               set pa=|[p`1+r2,p`2+r2]|;
-A42:          pa`1=p`1+r2 & pa`2=p`2+r2 by EUCLID:56;
+A57:          pa`1=p`1+r2 by EUCLID:56;
+A58:          pa`2=p`2+r2 by EUCLID:56;
+A59:          pa`1> s1 by A42,A56,A57,XREAL_1:31;
+A60:          pa`2> t1 by A42,A56,A58,XREAL_1:31;
+              (s2-s1)/2<s2-s1 by A53,XREAL_1:218;
+              then r2<s2-p`1 by A42,A51,XXREAL_0:2;
               then
-A43:          pa`1> s1 by A32,A41,XREAL_1:31;
-A44:          pa`2> t1 by A32,A41,A42,XREAL_1:31;
-              (s2-s1)/2<s2-s1 by A40,XREAL_1:218;
-              then r2<s2-p`1 by A32,A39,XXREAL_0:2;
+A61:          pa`1<s2 by A57,XREAL_1:22;
+              (t2-t1)/2<t2-t1 by A54,XREAL_1:218;
+              then r2<t2-p`2 by A42,A52,XXREAL_0:2;
+              then pa`2<t2 by A58,XREAL_1:22;
               then
-A45:          pa`1<s2 by A42,XREAL_1:22;
-              (t2-t1)/2<t2-t1 by A40,XREAL_1:218;
-              then r2<t2-p`2 by A32,A39,XXREAL_0:2;
-              then pa`2<t2 by A42,XREAL_1:22;
+A62:          pa in P1 by A4,A59,A60,A61;
+              reconsider qa=pa as Point of Euclid 2 by EUCLID:25;
+A63:          0 <= (p`1 - pa`1)^2 by XREAL_1:65;
+              0 <= (p`2 - pa`2)^2 by XREAL_1:65;
               then
-A46:          pa in P1 by A2,A43,A44,A45;
-              reconsider qa=pa as Point of Euclid 2 by XX;
-              0 <= (p`1 - pa`1)^2 & 0 <= (p`2 - pa`2)^2 by XREAL_1:65;
-              then
-A47:          0+0 <= (p`1 - pa`1)^2 + (p`2 - pa`2)^2 by XREAL_1:9;
+A64:          0+0 <= (p`1 - pa`1)^2 + (p`2 - pa`2)^2 by A63
+              ,XREAL_1:9;
               (pa`1-p`1)^2=(p`1-pa`1)^2;
 
-then (p`1 - pa`1)^2 <= (r/2)^2 by A41,A42,SQUARE_1:77,XXREAL_0:17;
+then (p`1 - pa`1)^2 <= (r/2)^2 by A56,A57,SQUARE_1:77,XXREAL_0:17;
               then
-A48:          (p`1 - pa`1)^2 + (p`2 - pa`2)^2 <= (r/2)^2 +(r /2)^2
-              by A42,XREAL_1:9;
-A49:          r^2=(r/2)^2+(r/2)^2+2*(r/2)*(r/2);
-              2*(r/2)*(r/2)>0 by A35,A37,XREAL_1:131;
-              then r^2>(r/2)^2+(r/2)^2 by A49,XREAL_1:31;
-              then (p`1 - pa`1)^2 + (p`2 - pa`2)^2 < r^2 by A48,XXREAL_0:2;
+              A65:          (
+p`1 - pa`1)^2 + (p`2 - pa`2)^2 <= (r/2)^2 +(r /2)^2
+              by A57,A58,XREAL_1:9;
+              r^2=(r/2)^2+(r/2)^2+2*(r/2)*(r/2);
+              then r^2>(r/2)^2+(r/2)^2 by A45,A47,XREAL_1:31,131;
+              then (p`1 - pa`1)^2 + (p`2 - pa`2)^2 < r^2 by A65,
+              XXREAL_0:2;
               then (sqrt ((p`1 - pa`1)^2 + (p`2 - pa`2)^2))^2<r^2
-              by A47,SQUARE_1:def 4;
+              by A64,SQUARE_1:def 4;
               then
-A50:          sqrt ((p`1 - pa`1)^2 + (p`2 - pa`2)^2) <r by A35,SQUARE_1:77;
+A66:          sqrt ((p`1 - pa`1)^2 + (p`2 - pa`2)^2) <r by A45
+              ,SQUARE_1:77;
               (Pitag_dist 2).(q,qa)=dist(q,qa) by METRIC_1:def 1;
-              then dist(q,qa)<r by A50,TOPREAL3:12;
+              then dist(q,qa)<r by A66,TOPREAL3:12;
               then pa in Ball(q,r) by METRIC_1:12;
-              hence thesis by A36,A46,XBOOLE_0:3;
+              hence thesis by A46,A62,XBOOLE_0:3;
             end;
             hence p in Cl P1 by PRE_TOPC:def 13;
           end;
           suppose
-A51:        p`1 = s1 & p`2 = t2;
+A67:        p`1 = s1 & p`2 = t2;
             for Q being Subset of TOP-REAL 2 st Q is open holds
             p in Q implies P1 meets Q
             proof
               let Q be Subset of TOP-REAL 2;
               assume that
-A52:          Q is open and
-A53:          p in Q;
-              reconsider QQ = Q as Subset of TopSpaceMetr Euclid 2 by YY;
-              QQ is open by A52,YY,PRE_TOPC:60;
+A68:          Q is open and
+A69:          p in Q;
+              reconsider QQ = Q as Subset of TopSpaceMetr Euclid 2 by Lm9;
+              QQ is open by A68,Lm9,PRE_TOPC:60;
               then consider r be real number such that
-A54:          r>0 and
-A55:          Ball(q,r) c= Q by A52,A53,TOPMETR:22;
+A70:          r>0 and
+A71:          Ball(q,r) c= Q by A69,TOPMETR:22;
               reconsider r as Real by XREAL_0:def 1;
-A56:          r/2>0 by A54,XREAL_1:217;
+A72:          r/2>0 by A70,XREAL_1:217;
               set r2=min(r/2,min((s2-s1)/2,(t2-t1)/2));
-A57:          r2 <= r/2 & r2<=min((s2-s1)/2,(t2-t1)/2) by XXREAL_0:17;
-              r2 <= r/2 & ( min((s2-s1)/2,(t2-t1)/2) <=(s2-s1)/2
-              & min((s2-s1)/2,(t2-t1)/2)<= (t2-t1)/2) by XXREAL_0:17;
+A73:          r2<=min((s2-s1)/2,(t2-t1)/2) by XXREAL_0:17;
+A74:          min((s2-s1)/2,(t2-t1)/2) <=(s2-s1)/2 by XXREAL_0:17;
+A75:          min((s2-s1)/2,(t2-t1)/2)<= (t2-t1)/2 by XXREAL_0:17;
+A76:          r2<=(s2-s1)/2 by A73,A74,XXREAL_0:2;
+A77:          r2<= (t2-t1)/2 by A73,A75,XXREAL_0:2;
+A78:          s2-s1>0 by A1,XREAL_1:52;
+A79:          t2-t1>0 by A2,XREAL_1:52;
+A80:          (s2-s1)/2 >0 by A78,XREAL_1:217;
+              (t2-t1)/2>0 by A79,XREAL_1:217;
+              then 0<min((s2-s1)/2,(t2-t1)/2) by A80,XXREAL_0:15;
               then
-A58:          r2<= r/2 & r2<=(s2-s1)/2 & r2<= (t2-t1)/2 by A57,XXREAL_0:2;
-A59:          s2-s1>0 & t2-t1>0 by A1,XREAL_1:52;
-              then (s2-s1)/2 >0 & (t2-t1)/2>0 by XREAL_1:217;
-              then 0<min((s2-s1)/2,(t2-t1)/2) by XXREAL_0:15;
-              then
-A60:          0<r2 by A56,XXREAL_0:15;
+A81:          0<r2 by A72,XXREAL_0:15;
               set pa=|[p`1+r2,p`2-r2]|;
-A61:          pa`1=p`1+r2 & pa`2=p`2-r2 by EUCLID:56;
+A82:          pa`1=p`1+r2 by EUCLID:56;
+A83:          pa`2=p`2-r2 by EUCLID:56;
+A84:          pa`1> s1 by A67,A81,A82,XREAL_1:31;
+A85:          pa`2< t2 by A67,A81,A83,XREAL_1:46;
+              (s2-s1)/2<s2-s1 by A78,XREAL_1:218;
+              then r2<s2-p`1 by A67,A76,XXREAL_0:2;
               then
-A62:          pa`1> s1 by A51,A60,XREAL_1:31;
-A63:          pa`2< t2 by A51,A60,A61,XREAL_1:46;
-              (s2-s1)/2<s2-s1 by A59,XREAL_1:218;
-              then r2<s2-p`1 by A51,A58,XXREAL_0:2;
+A86:          pa`1<s2 by A82,XREAL_1:22;
+              (t2-t1)/2<t2-t1 by A79,XREAL_1:218;
+              then r2<p`2-t1 by A67,A77,XXREAL_0:2;
+              then pa`2>t1 by A83,XREAL_1:14;
               then
-A64:          pa`1<s2 by A61,XREAL_1:22;
-              (t2-t1)/2<t2-t1 by A59,XREAL_1:218;
-              then r2<p`2-t1 by A51,A58,XXREAL_0:2;
-              then pa`2>t1 by A61,XREAL_1:14;
+A87:          pa in P1 by A4,A84,A85,A86;
+              reconsider qa=pa as Point of Euclid 2 by EUCLID:25;
+A88:          0 <= (p`1 - pa`1)^2 by XREAL_1:65;
+              0 <= (p`2 - pa`2)^2 by XREAL_1:65;
               then
-A65:          pa in P1 by A2,A62,A63,A64;
-              reconsider qa=pa as Point of Euclid 2 by XX;
-              0 <= (p`1 - pa`1)^2 & 0 <= (p`2 - pa`2)^2 by XREAL_1:65;
+A89:          0+0 <= (p`1 - pa`1)^2 + (p`2 - pa`2)^2 by A88
+              ,XREAL_1:9;
+              r2^2<= (r/2)^2 by A81,SQUARE_1:77,XXREAL_0:17;
               then
-A66:          0+0 <= (p`1 - pa`1)^2 + (p`2 - pa`2)^2 by XREAL_1:9;
-              r2^2<= (r/2)^2 by A60,SQUARE_1:77,XXREAL_0:17;
-              then
-A67:          (p`1 - pa`1)^2 + (p`2 - pa`2)^2 <= (r/2)^2 +(r /2)^2
-              by A61,XREAL_1:9;
-A68:          r^2=(r/2)^2+(r/2)^2+2*(r/2)*(r/2);
-              2*(r/2)*(r/2)>0 by A54,A56,XREAL_1:131;
-              then r^2>(r/2)^2+(r/2)^2 by A68,XREAL_1:31;
-              then (p`1 - pa`1)^2 + (p`2 - pa`2)^2 < r^2 by A67,XXREAL_0:2;
+              A90:          (
+p`1 - pa`1)^2 + (p`2 - pa`2)^2 <= (r/2)^2 +(r /2)^2
+              by A82,A83,XREAL_1:9;
+              r^2=(r/2)^2+(r/2)^2+2*(r/2)*(r/2);
+              then r^2>(r/2)^2+(r/2)^2 by A70,A72,XREAL_1:31,131;
+              then (p`1 - pa`1)^2 + (p`2 - pa`2)^2 < r^2 by A90,
+              XXREAL_0:2;
               then (sqrt ((p`1 - pa`1)^2 + (p`2 - pa`2)^2))^2<r^2
-              by A66,SQUARE_1:def 4;
+              by A89,SQUARE_1:def 4;
               then
-A69:          sqrt ((p`1 - pa`1)^2 + (p`2 - pa`2)^2) <r by A54,SQUARE_1:77;
+A91:          sqrt ((p`1 - pa`1)^2 + (p`2 - pa`2)^2) <r by A70
+              ,SQUARE_1:77;
               (Pitag_dist 2).(q,qa)=dist(q,qa) by METRIC_1:def 1;
-              then dist(q,qa)<r by A69,TOPREAL3:12;
+              then dist(q,qa)<r by A91,TOPREAL3:12;
               then pa in Ball(q,r) by METRIC_1:12;
-              hence thesis by A55,A65,XBOOLE_0:3;
+              hence thesis by A71,A87,XBOOLE_0:3;
             end;
             hence p in Cl P1 by PRE_TOPC:def 13;
           end;
         end;
-        hence thesis by A13;
+        hence thesis by A16;
       end;
       suppose
-A70:    p`1 <= s2 & p`1 >= s1 & p`2 = t2;
-        now per cases by A70,XXREAL_0:1;
+A92:    p`1 <= s2 & p`1 >= s1 & p`2 = t2;
+        now per cases by A92,XXREAL_0:1;
           suppose
-A71:        p`2 = t2 & p`1 < s2 & p`1 > s1;
+A93:        p`2 = t2 & p`1 < s2 & p`1 > s1;
             for Q being Subset of TOP-REAL 2 st Q is open holds
             p in Q implies P1 meets Q
             proof
               let Q be Subset of TOP-REAL 2;
               assume that
-A72:          Q is open and
-A73:          p in Q;
-              reconsider QQ = Q as Subset of TopSpaceMetr Euclid 2 by YY;
-              QQ is open by A72,YY,PRE_TOPC:60;
+A94:          Q is open and
+A95:          p in Q;
+              reconsider QQ = Q as Subset of TopSpaceMetr Euclid 2 by Lm9;
+              QQ is open by A94,Lm9,PRE_TOPC:60;
               then consider r be real number such that
-A74:          r>0 and
-A75:          Ball(q,r) c= Q by A72,A73,TOPMETR:22;
+A96:          r>0 and
+A97:          Ball(q,r) c= Q by A95,TOPMETR:22;
               reconsider r as Real by XREAL_0:def 1;
-A76:          r/2>0 by A74,XREAL_1:217;
-A77:          r/2<r by A74,XREAL_1:218;
+A98:          r/2>0 by A96,XREAL_1:217;
+A99:          r/2<r by A96,XREAL_1:218;
               set r2=min(r/2,min((s2-s1)/2,(t2-t1)/2));
-A78:          r2 <= r/2 & r2<=min((s2-s1)/2,(t2-t1)/2) by XXREAL_0:17;
-              r2 <= r/2 & ( min((s2-s1)/2,(t2-t1)/2) <=(s2-s1)/2
-              & min((s2-s1)/2,(t2-t1)/2)<= (t2-t1)/2) by XXREAL_0:17;
+A100:         r2 <= r/2 by XXREAL_0:17;
+A101:         r2<=min((s2-s1)/2,(t2-t1)/2) by XXREAL_0:17;
+              min((s2-s1)/2,(t2-t1)/2)<= (t2-t1)/2 by XXREAL_0:17;
               then
-A79:          r2<= r/2 & r2<=(s2-s1)/2 & r2<= (t2-t1)/2 by A78,XXREAL_0:2;
-A80:          r2<r by A77,A78,XXREAL_0:2;
-A81:          s2-s1>0 & t2-t1>0 by A1,XREAL_1:52;
-              then (s2-s1)/2 >0 & (t2-t1)/2>0 by XREAL_1:217;
-              then 0<min((s2-s1)/2,(t2-t1)/2) by XXREAL_0:15;
+A102:         r2<= (t2-t1)/2 by A101,XXREAL_0:2;
+A103:         r2<r by A99,A100,XXREAL_0:2;
+A104:         s2-s1>0 by A1,XREAL_1:52;
+A105:         t2-t1>0 by A2,XREAL_1:52;
+A106:         (s2-s1)/2 >0 by A104,XREAL_1:217;
+              (t2-t1)/2>0 by A105,XREAL_1:217;
+              then 0<min((s2-s1)/2,(t2-t1)/2) by A106,XXREAL_0:15;
               then
-A82:          0<r2 by A76,XXREAL_0:15;
+A107:         0<r2 by A98,XXREAL_0:15;
               set pa=|[p`1,p`2-r2]|;
-A83:          pa`1=p`1 & pa`2=p`2-r2 by EUCLID:56;
-              (t2-t1)/2<t2-t1 by A81,XREAL_1:218;
-              then r2<p`2-t1 by A71,A79,XXREAL_0:2;
-              then s1<pa`1 & pa`1<s2 & t1 <pa`2 & pa`2 < t2 by A71,A82,A83,
-XREAL_1:14,46;
+A108:         pa`1=p`1 by EUCLID:56;
+A109:         pa`2=p`2-r2 by EUCLID:56;
+              (t2-t1)/2<t2-t1 by A105,XREAL_1:218;
+              then r2<p`2-t1 by A93,A102,XXREAL_0:2;
               then
-A84:          pa in P1 by A2;
-              reconsider qa=pa as Point of Euclid 2 by XX;
-              0 <= (p`1 - pa`1)^2 & 0 <= (p`2 - pa`2)^2 by XREAL_1:65;
+A110:         t1 <pa`2 by A109,XREAL_1:14;
+              pa`2 < t2 by A93,A107,A109,XREAL_1:46;
               then
-A85:          0+0 <= (p`1 - pa`1)^2 + (p`2 - pa`2)^2 by XREAL_1:9;
+A111:         pa in P1 by A4,A93,A108,A110;
+              reconsider qa=pa as Point of Euclid 2 by EUCLID:25;
+A112:         0 <= (p`1 - pa`1)^2 by XREAL_1:65;
+              0 <= (p`2 - pa`2)^2 by XREAL_1:65;
+              then
+A113:         0+0 <= (p`1 - pa`1)^2 + (p`2 - pa`2)^2 by A112
+              ,XREAL_1:9;
               (p`1 - pa`1)^2 + (p`2 - pa`2)^2 < r^2
-              by A80,A82,A83,SQUARE_1:78;
+              by A103,A107,A108,A109,SQUARE_1:78;
               then (sqrt ((p`1 - pa`1)^2 + (p`2 - pa`2)^2))^2<r^2
-              by A85,SQUARE_1:def 4;
+              by A113,SQUARE_1:def 4;
               then
-A86:          sqrt ((p`1 - pa`1)^2 + (p`2 - pa`2)^2) <r by A74,SQUARE_1:77;
+A114:         sqrt ((p`1 - pa`1)^2 + (p`2 - pa`2)^2) <r by A96
+              ,SQUARE_1:77;
               (Pitag_dist 2).(q,qa)=dist(q,qa) by METRIC_1:def 1;
-              then dist(q,qa)<r by A86,TOPREAL3:12;
+              then dist(q,qa)<r by A114,TOPREAL3:12;
               then pa in Ball(q,r) by METRIC_1:12;
-              hence thesis by A75,A84,XBOOLE_0:3;
+              hence thesis by A97,A111,XBOOLE_0:3;
             end;
             hence p in Cl P1 by PRE_TOPC:def 13;
           end;
           suppose
-A87:        p`2 = t2 & p`1 = s1;
+A115:       p`2 = t2 & p`1 = s1;
             for Q being Subset of TOP-REAL 2 st Q is open holds
             p in Q implies P1 meets Q
             proof
               let Q be Subset of TOP-REAL 2;
               assume that
-A88:          Q is open and
-A89:          p in Q;
-              reconsider QQ = Q as Subset of TopSpaceMetr Euclid 2 by YY;
-              QQ is open by A88,YY,PRE_TOPC:60;
+A116:         Q is open and
+A117:         p in Q;
+              reconsider QQ = Q as Subset of TopSpaceMetr Euclid 2 by Lm9;
+              QQ is open by A116,Lm9,PRE_TOPC:60;
               then consider r be real number such that
-A90:          r>0 and
-A91:          Ball(q,r) c= Q by A88,A89,TOPMETR:22;
+A118:         r>0 and
+A119:         Ball(q,r) c= Q by A117,TOPMETR:22;
               reconsider r as Real by XREAL_0:def 1;
-A92:          r/2>0 by A90,XREAL_1:217;
+A120:         r/2>0 by A118,XREAL_1:217;
               set r2=min(r/2,min((s2-s1)/2,(t2-t1)/2));
-A93:          r2 <= r/2 & r2<=min((s2-s1)/2,(t2-t1)/2) by XXREAL_0:17;
-              r2 <= r/2 & ( min((s2-s1)/2,(t2-t1)/2) <=(s2-s1)/2
-              & min((s2-s1)/2,(t2-t1)/2)<= (t2-t1)/2) by XXREAL_0:17;
+A121:         r2<=min((s2-s1)/2,(t2-t1)/2) by XXREAL_0:17;
+A122:         min((s2-s1)/2,(t2-t1)/2) <=(s2-s1)/2 by XXREAL_0:17;
+A123:         min((s2-s1)/2,(t2-t1)/2)<= (t2-t1)/2 by XXREAL_0:17;
+A124:         r2<=(s2-s1)/2 by A121,A122,XXREAL_0:2;
+A125:         r2<= (t2-t1)/2 by A121,A123,XXREAL_0:2;
+A126:         s2-s1>0 by A1,XREAL_1:52;
+A127:         t2-t1>0 by A2,XREAL_1:52;
+A128:         (s2-s1)/2 >0 by A126,XREAL_1:217;
+              (t2-t1)/2>0 by A127,XREAL_1:217;
+              then 0<min((s2-s1)/2,(t2-t1)/2) by A128,XXREAL_0:15;
               then
-A94:          r2<= r/2 & r2<=(s2-s1)/2 & r2<= (t2-t1)/2 by A93,XXREAL_0:2;
-A95:          s2-s1>0 & t2-t1>0 by A1,XREAL_1:52;
-              then (s2-s1)/2 >0 & (t2-t1)/2>0 by XREAL_1:217;
-              then 0<min((s2-s1)/2,(t2-t1)/2) by XXREAL_0:15;
-              then
-A96:          0<r2 by A92,XXREAL_0:15;
+A129:         0<r2 by A120,XXREAL_0:15;
               set pa=|[p`1+r2,p`2-r2]|;
-A97:          pa`1=p`1+r2 & pa`2=p`2-r2 by EUCLID:56;
+A130:         pa`1=p`1+r2 by EUCLID:56;
+A131:         pa`2=p`2-r2 by EUCLID:56;
+A132:         pa`1> s1 by A115,A129,A130,XREAL_1:31;
+A133:         pa`2< t2 by A115,A129,A131,XREAL_1:46;
+              (t2-t1)/2<t2-t1 by A127,XREAL_1:218;
+              then r2<p`2-t1 by A115,A125,XXREAL_0:2;
               then
-A98:          pa`1> s1 by A87,A96,XREAL_1:31;
-A99:          pa`2< t2 by A87,A96,A97,XREAL_1:46;
-              (t2-t1)/2<t2-t1 by A95,XREAL_1:218;
-              then r2<p`2-t1 by A87,A94,XXREAL_0:2;
+A134:         pa`2>t1 by A131,XREAL_1:14;
+              (s2-s1)/2<s2-s1 by A126,XREAL_1:218;
+              then r2<s2-p`1 by A115,A124,XXREAL_0:2;
+              then pa`1<s2 by A130,XREAL_1:22;
               then
-A100:         pa`2>t1 by A97,XREAL_1:14;
-              (s2-s1)/2<s2-s1 by A95,XREAL_1:218;
-              then r2<s2-p`1 by A87,A94,XXREAL_0:2;
-              then pa`1<s2 by A97,XREAL_1:22;
+A135:         pa in P1 by A4,A132,A133,A134;
+              reconsider qa=pa as Point of Euclid 2 by EUCLID:25;
+A136:         0 <= (p`1 - pa`1)^2 by XREAL_1:65;
+              0 <= (p`2 - pa`2)^2 by XREAL_1:65;
               then
-A101:         pa in P1 by A2,A98,A99,A100;
-              reconsider qa=pa as Point of Euclid 2 by XX;
-              0 <= (p`1 - pa`1)^2 & 0 <= (p`2 - pa`2)^2 by XREAL_1:65;
+A137:         0+0 <= (p`1 - pa`1)^2 + (p`2 - pa`2)^2 by A136,XREAL_1:9;
+              (p`2 - pa`2)^2 <= (r/2)^2 by A129,A131,SQUARE_1:77
+              ,XXREAL_0:17;
               then
-A102:         0+0 <= (p`1 - pa`1)^2 + (p`2 - pa`2)^2 by XREAL_1:9;
-              (p`2 - pa`2)^2 <= (r/2)^2 by A96,A97,SQUARE_1:77,XXREAL_0:17;
-              then
-A103:         (p`1 - pa`1)^2 + (p`2 - pa`2)^2 <= (r/2)^2 +(r /2)^2
-              by A97,XREAL_1:9;
-A104:         r^2=(r/2)^2+(r/2)^2+2*(r/2)*(r/2);
-              2*(r/2)*(r/2)>0 by A90,A92,XREAL_1:131;
-              then r^2>(r/2)^2+(r/2)^2 by A104,XREAL_1:31;
-              then (p`1 - pa`1)^2 + (p`2 - pa`2)^2 < r^2 by A103,XXREAL_0:2;
+              A138:         (
+p`1 - pa`1)^2 + (p`2 - pa`2)^2 <= (r/2)^2 +(r /2)^2
+              by A130,A131,XREAL_1:9;
+              r^2=(r/2)^2+(r/2)^2+2*(r/2)*(r/2);
+              then r^2>(r/2)^2+(r/2)^2 by A118,A120,XREAL_1:31,131;
+              then (p`1 - pa`1)^2 + (p`2 - pa`2)^2 < r^2 by A138,
+              XXREAL_0:2;
               then (sqrt ((p`1 - pa`1)^2 + (p`2 - pa`2)^2))^2<r^2
-              by A102,SQUARE_1:def 4;
+              by A137,SQUARE_1:def 4;
               then
-A105:         sqrt ((p`1 - pa`1)^2 + (p`2 - pa`2)^2) <r by A90,SQUARE_1:77;
+A139:         sqrt ((p`1 - pa`1)^2 + (p`2 - pa`2)^2) <r by A118
+              ,SQUARE_1:77;
               (Pitag_dist 2).(q,qa)=dist(q,qa) by METRIC_1:def 1;
-              then dist(q,qa)<r by A105,TOPREAL3:12;
+              then dist(q,qa)<r by A139,TOPREAL3:12;
               then pa in Ball(q,r) by METRIC_1:12;
-              hence thesis by A91,A101,XBOOLE_0:3;
+              hence thesis by A119,A135,XBOOLE_0:3;
             end;
             hence p in Cl P1 by PRE_TOPC:def 13;
           end;
           suppose
-A106:       p`2 = t2 & p`1 = s2;
+A140:       p`2 = t2 & p`1 = s2;
             for Q being Subset of TOP-REAL 2 st Q is open holds
             p in Q implies P1 meets Q
             proof
               let Q be Subset of TOP-REAL 2;
               assume that
-A107:         Q is open and
-A108:         p in Q;
-              reconsider QQ = Q as Subset of TopSpaceMetr Euclid 2 by YY;
-              QQ is open by A107,YY,PRE_TOPC:60;
+A141:         Q is open and
+A142:         p in Q;
+              reconsider QQ = Q as Subset of TopSpaceMetr Euclid 2 by Lm9;
+              QQ is open by A141,Lm9,PRE_TOPC:60;
               then consider r be real number such that
-A109:         r>0 and
-A110:         Ball(q,r) c= Q by A107,A108,TOPMETR:22;
+A143:         r>0 and
+A144:         Ball(q,r) c= Q by A142,TOPMETR:22;
               reconsider r as Real by XREAL_0:def 1;
-A111:         r/2>0 by A109,XREAL_1:217;
+A145:         r/2>0 by A143,XREAL_1:217;
               set r2=min(r/2,min((s2-s1)/2,(t2-t1)/2));
-A112:         r2 <= r/2 & r2<=min((s2-s1)/2,(t2-t1)/2) by XXREAL_0:17;
-              r2 <= r/2 & ( min((s2-s1)/2,(t2-t1)/2) <=(s2-s1)/2
-              & min((s2-s1)/2,(t2-t1)/2)<= (t2-t1)/2) by XXREAL_0:17;
+A146:         r2<=min((s2-s1)/2,(t2-t1)/2) by XXREAL_0:17;
+A147:         min((s2-s1)/2,(t2-t1)/2) <=(s2-s1)/2 by XXREAL_0:17;
+A148:         min((s2-s1)/2,(t2-t1)/2)<= (t2-t1)/2 by XXREAL_0:17;
+A149:         r2<=(s2-s1)/2 by A146,A147,XXREAL_0:2;
+A150:         r2<= (t2-t1)/2 by A146,A148,XXREAL_0:2;
+A151:         s2-s1>0 by A1,XREAL_1:52;
+A152:         t2-t1>0 by A2,XREAL_1:52;
+A153:         (s2-s1)/2 >0 by A151,XREAL_1:217;
+              (t2-t1)/2>0 by A152,XREAL_1:217;
+              then 0<min((s2-s1)/2,(t2-t1)/2) by A153,XXREAL_0:15;
               then
-A113:         r2<= r/2 & r2<=(s2-s1)/2 & r2<= (t2-t1)/2 by A112,XXREAL_0:2;
-A114:         s2-s1>0 & t2-t1>0 by A1,XREAL_1:52;
-              then (s2-s1)/2 >0 & (t2-t1)/2>0 by XREAL_1:217;
-              then 0<min((s2-s1)/2,(t2-t1)/2) by XXREAL_0:15;
-              then
-A115:         0<r2 by A111,XXREAL_0:15;
+A154:         0<r2 by A145,XXREAL_0:15;
               set pa=|[p`1-r2,p`2-r2]|;
-A116:         pa`1=p`1-r2 & pa`2=p`2-r2 by EUCLID:56;
+A155:         pa`1=p`1-r2 by EUCLID:56;
+A156:         pa`2=p`2-r2 by EUCLID:56;
+A157:         pa`1< s2 by A140,A154,A155,XREAL_1:46;
+A158:         pa`2< t2 by A140,A154,A156,XREAL_1:46;
+              (s2-s1)/2<s2-s1 by A151,XREAL_1:218;
+              then r2<p`1-s1 by A140,A149,XXREAL_0:2;
               then
-A117:         pa`1< s2 by A106,A115,XREAL_1:46;
-A118:         pa`2< t2 by A106,A115,A116,XREAL_1:46;
-              (s2-s1)/2<s2-s1 by A114,XREAL_1:218;
-              then r2<p`1-s1 by A106,A113,XXREAL_0:2;
+A159:         pa`1>s1 by A155,XREAL_1:14;
+              (t2-t1)/2<t2-t1 by A152,XREAL_1:218;
+              then r2<p`2-t1 by A140,A150,XXREAL_0:2;
+              then pa`2>t1 by A156,XREAL_1:14;
               then
-A119:         pa`1>s1 by A116,XREAL_1:14;
-              (t2-t1)/2<t2-t1 by A114,XREAL_1:218;
-              then r2<p`2-t1 by A106,A113,XXREAL_0:2;
-              then pa`2>t1 by A116,XREAL_1:14;
+A160:         pa in P1 by A4,A157,A158,A159;
+              reconsider qa=pa as Point of Euclid 2 by EUCLID:25;
+A161:         0 <= (p`1 - pa`1)^2 by XREAL_1:65;
+              0 <= (p`2 - pa`2)^2 by XREAL_1:65;
               then
-A120:         pa in P1 by A2,A117,A118,A119;
-              reconsider qa=pa as Point of Euclid 2 by XX;
-              0 <= (p`1 - pa`1)^2 & 0 <= (p`2 - pa`2)^2 by XREAL_1:65;
+A162:         0+0 <= (p`1 - pa`1)^2 + (p`2 - pa`2)^2 by A161,XREAL_1:9;
+              r2^2<= (r/2)^2 by A154,SQUARE_1:77,XXREAL_0:17;
               then
-A121:         0+0 <= (p`1 - pa`1)^2 + (p`2 - pa`2)^2 by XREAL_1:9;
-              r2^2<= (r/2)^2 by A115,SQUARE_1:77,XXREAL_0:17;
-              then
-A122:         (p`1 - pa`1)^2 + (p`2 - pa`2)^2 <= (r/2)^2 +(r /2)^2
-              by A116,XREAL_1:9;
-A123:         r^2=(r/2)^2+(r/2)^2+2*(r/2)*(r/2);
-              2*(r/2)*(r/2)>0 by A109,A111,XREAL_1:131;
-              then r^2>(r/2)^2+(r/2)^2 by A123,XREAL_1:31;
-              then (p`1 - pa`1)^2 + (p`2 - pa`2)^2 < r^2 by A122,XXREAL_0:2;
+              A163:         (
+p`1 - pa`1)^2 + (p`2 - pa`2)^2 <= (r/2)^2 +(r /2)^2
+              by A155,A156,XREAL_1:9;
+              r^2=(r/2)^2+(r/2)^2+2*(r/2)*(r/2);
+              then r^2>(r/2)^2+(r/2)^2 by A143,A145,XREAL_1:31,131;
+              then (p`1 - pa`1)^2 + (p`2 - pa`2)^2 < r^2 by A163,
+              XXREAL_0:2;
               then (sqrt ((p`1 - pa`1)^2 + (p`2 - pa`2)^2))^2<r^2
-              by A121,SQUARE_1:def 4;
+              by A162,SQUARE_1:def 4;
               then
-A124:         sqrt ((p`1 - pa`1)^2 + (p`2 - pa`2)^2) <r by A109,SQUARE_1:77;
+A164:         sqrt ((p`1 - pa`1)^2 + (p`2 - pa`2)^2) <r by A143
+              ,SQUARE_1:77;
               (Pitag_dist 2).(q,qa)=dist(q,qa) by METRIC_1:def 1;
-              then dist(q,qa)<r by A124,TOPREAL3:12;
+              then dist(q,qa)<r by A164,TOPREAL3:12;
               then pa in Ball(q,r) by METRIC_1:12;
-              hence thesis by A110,A120,XBOOLE_0:3;
+              hence thesis by A144,A160,XBOOLE_0:3;
             end;
             hence p in Cl P1 by PRE_TOPC:def 13;
           end;
         end;
-        hence thesis by A13;
+        hence thesis by A16;
       end;
       suppose
-A125:   p`1 <= s2 & p`1 >= s1 & p`2 = t1;
-        now per cases by A125,XXREAL_0:1;
+A165:   p`1 <= s2 & p`1 >= s1 & p`2 = t1;
+        now per cases by A165,XXREAL_0:1;
           suppose
-A126:       p`2 = t1 & p`1 < s2 & p`1 > s1;
+A166:       p`2 = t1 & p`1 < s2 & p`1 > s1;
             for Q being Subset of TOP-REAL 2 st Q is open holds
             p in Q implies P1 meets Q
             proof
               let Q be Subset of TOP-REAL 2;
               assume that
-A127:         Q is open and
-A128:         p in Q;
-              reconsider QQ = Q as Subset of TopSpaceMetr Euclid 2 by YY;
-              QQ is open by A127,YY,PRE_TOPC:60;
+A167:         Q is open and
+A168:         p in Q;
+              reconsider QQ = Q as Subset of TopSpaceMetr Euclid 2 by Lm9;
+              QQ is open by A167,Lm9,PRE_TOPC:60;
               then consider r be real number such that
-A129:         r>0 and
-A130:         Ball(q,r) c= Q by A127,A128,TOPMETR:22;
+A169:         r>0 and
+A170:         Ball(q,r) c= Q by A168,TOPMETR:22;
               reconsider r as Real by XREAL_0:def 1;
-A131:         r/2>0 by A129,XREAL_1:217;
-A132:         r/2<r by A129,XREAL_1:218;
+A171:         r/2>0 by A169,XREAL_1:217;
+A172:         r/2<r by A169,XREAL_1:218;
               set r2=min(r/2,min((s2-s1)/2,(t2-t1)/2));
-A133:         r2 <= r/2 & r2<=min((s2-s1)/2,(t2-t1)/2) by XXREAL_0:17;
-              r2 <= r/2 & ( min((s2-s1)/2,(t2-t1)/2) <=(s2-s1)/2
-              & min((s2-s1)/2,(t2-t1)/2)<= (t2-t1)/2) by XXREAL_0:17;
+A173:         r2 <= r/2 by XXREAL_0:17;
+A174:         r2<=min((s2-s1)/2,(t2-t1)/2) by XXREAL_0:17;
+              min((s2-s1)/2,(t2-t1)/2)<= (t2-t1)/2 by XXREAL_0:17;
               then
-A134:         r2<= r/2 & r2<=(s2-s1)/2 & r2<= (t2-t1)/2 by A133,XXREAL_0:2;
-A135:         r2<r by A132,A133,XXREAL_0:2;
-A136:         s2-s1>0 & t2-t1>0 by A1,XREAL_1:52;
-              then (s2-s1)/2 >0 & (t2-t1)/2>0 by XREAL_1:217;
-              then 0<min((s2-s1)/2,(t2-t1)/2) by XXREAL_0:15;
+A175:         r2<= (t2-t1)/2 by A174,XXREAL_0:2;
+A176:         r2<r by A172,A173,XXREAL_0:2;
+A177:         s2-s1>0 by A1,XREAL_1:52;
+A178:         t2-t1>0 by A2,XREAL_1:52;
+A179:         (s2-s1)/2 >0 by A177,XREAL_1:217;
+              (t2-t1)/2>0 by A178,XREAL_1:217;
+              then 0<min((s2-s1)/2,(t2-t1)/2) by A179,XXREAL_0:15;
               then
-A137:         0<r2 by A131,XXREAL_0:15;
+A180:         0<r2 by A171,XXREAL_0:15;
               set pa=|[p`1,p`2+r2]|;
-A138:         pa`2=p`2+r2 & pa`1=p`1 by EUCLID:56;
-              (t2-t1)/2<t2-t1 by A136,XREAL_1:218;
-              then r2<t2-p`2 by A126,A134,XXREAL_0:2;
-              then s1<pa`1 & pa`1<s2 & t1 <pa`2 & pa`2 < t2 by A126,A137,A138,
-XREAL_1:22,31;
+A181:         pa`2=p`2+r2 by EUCLID:56;
+A182:         pa`1=p`1 by EUCLID:56;
+              (t2-t1)/2<t2-t1 by A178,XREAL_1:218;
               then
-A139:         pa in P1 by A2;
-              reconsider qa=pa as Point of Euclid 2 by XX;
-              0 <= (p`1 - pa`1)^2 & 0 <= (p`2 - pa`2)^2 by XREAL_1:65;
+A183:         r2<t2-p`2 by A166,A175,XXREAL_0:2;
+A184:         t1 <pa`2 by A166,A180,A181,XREAL_1:31;
+              pa`2 < t2 by A181,A183,XREAL_1:22;
               then
-A140:         0+0 <= (p`1 - pa`1)^2 + (p`2 - pa`2)^2 by XREAL_1:9;
+A185:         pa in P1 by A4,A166,A182,A184;
+              reconsider qa=pa as Point of Euclid 2 by EUCLID:25;
+A186:         0 <= (p`1 - pa`1)^2 by XREAL_1:65;
+              0 <= (p`2 - pa`2)^2 by XREAL_1:65;
+              then
+A187:         0+0 <= (p`1 - pa`1)^2 + (p`2 - pa`2)^2 by A186,XREAL_1:9;
               (pa`2-p`2)^2=(p`2-pa`2)^2;
-              then (p`1 - pa`1)^2 + (p`2 - pa`2)^2 < r^2 by A135,A137,A138,
-SQUARE_1:78;
+              then (p`1 - pa`1)^2 + (p`2 - pa`2)^2 < r^2 by A176,A180,A181
+              ,A182,SQUARE_1:78;
               then (sqrt ((p`1 - pa`1)^2 + (p`2 - pa`2)^2))^2<r^2
-              by A140,SQUARE_1:def 4;
+              by A187,SQUARE_1:def 4;
               then
-A141:         sqrt ((p`1 - pa`1)^2 + (p`2 - pa`2)^2) <r by A129,SQUARE_1:77;
+A188:         sqrt ((p`1 - pa`1)^2 + (p`2 - pa`2)^2) <r by A169
+              ,SQUARE_1:77;
               (Pitag_dist 2).(q,qa)=dist(q,qa) by METRIC_1:def 1;
-              then dist(q,qa)<r by A141,TOPREAL3:12;
+              then dist(q,qa)<r by A188,TOPREAL3:12;
               then pa in Ball(q,r) by METRIC_1:12;
-              hence thesis by A130,A139,XBOOLE_0:3;
+              hence thesis by A170,A185,XBOOLE_0:3;
             end;
             hence p in Cl P1 by PRE_TOPC:def 13;
           end;
           suppose
-A142:       p`2 = t1 & p`1 = s1;
+A189:       p`2 = t1 & p`1 = s1;
             for Q being Subset of TOP-REAL 2 st Q is open holds
             p in Q implies P1 meets Q
             proof
               let Q be Subset of TOP-REAL 2;
               assume that
-A143:         Q is open and
-A144:         p in Q;
-              reconsider QQ = Q as Subset of TopSpaceMetr Euclid 2 by YY;
-              QQ is open by A143,YY,PRE_TOPC:60;
+A190:         Q is open and
+A191:         p in Q;
+              reconsider QQ = Q as Subset of TopSpaceMetr Euclid 2 by Lm9;
+              QQ is open by A190,Lm9,PRE_TOPC:60;
               then consider r be real number such that
-A145:         r>0 and
-A146:         Ball(q,r) c= Q by A143,A144,TOPMETR:22;
+A192:         r>0 and
+A193:         Ball(q,r) c= Q by A191,TOPMETR:22;
               reconsider r as Real by XREAL_0:def 1;
-A147:         r/2>0 by A145,XREAL_1:217;
+A194:         r/2>0 by A192,XREAL_1:217;
               set r2=min(r/2,min((s2-s1)/2,(t2-t1)/2));
-A148:         r2 <= r/2 & r2<=min((s2-s1)/2,(t2-t1)/2) by XXREAL_0:17;
-              r2 <= r/2 & ( min((s2-s1)/2,(t2-t1)/2) <=(s2-s1)/2
-              & min((s2-s1)/2,(t2-t1)/2)<= (t2-t1)/2) by XXREAL_0:17;
+A195:         r2<=min((s2-s1)/2,(t2-t1)/2) by XXREAL_0:17;
+A196:         min((s2-s1)/2,(t2-t1)/2) <=(s2-s1)/2 by XXREAL_0:17;
+A197:         min((s2-s1)/2,(t2-t1)/2)<= (t2-t1)/2 by XXREAL_0:17;
+A198:         r2<=(s2-s1)/2 by A195,A196,XXREAL_0:2;
+A199:         r2<= (t2-t1)/2 by A195,A197,XXREAL_0:2;
+A200:         s2-s1>0 by A1,XREAL_1:52;
+A201:         t2-t1>0 by A2,XREAL_1:52;
+A202:         (s2-s1)/2 >0 by A200,XREAL_1:217;
+              (t2-t1)/2>0 by A201,XREAL_1:217;
+              then 0<min((s2-s1)/2,(t2-t1)/2) by A202,XXREAL_0:15;
               then
-A149:         r2<= r/2 & r2<=(s2-s1)/2 & r2<= (t2-t1)/2 by A148,XXREAL_0:2;
-A150:         s2-s1>0 & t2-t1>0 by A1,XREAL_1:52;
-              then (s2-s1)/2 >0 & (t2-t1)/2>0 by XREAL_1:217;
-              then 0<min((s2-s1)/2,(t2-t1)/2) by XXREAL_0:15;
-              then
-A151:         0<r2 by A147,XXREAL_0:15;
+A203:         0<r2 by A194,XXREAL_0:15;
               set pa=|[p`1+r2,p`2+r2]|;
-A152:         pa`1=p`1+r2 & pa`2=p`2+r2 by EUCLID:56;
+A204:         pa`1=p`1+r2 by EUCLID:56;
+A205:         pa`2=p`2+r2 by EUCLID:56;
+A206:         pa`1> s1 by A189,A203,A204,XREAL_1:31;
+A207:         pa`2> t1 by A189,A203,A205,XREAL_1:31;
+              (s2-s1)/2<s2-s1 by A200,XREAL_1:218;
+              then r2<s2-p`1 by A189,A198,XXREAL_0:2;
               then
-A153:         pa`1> s1 by A142,A151,XREAL_1:31;
-A154:         pa`2> t1 by A142,A151,A152,XREAL_1:31;
-              (s2-s1)/2<s2-s1 by A150,XREAL_1:218;
-              then r2<s2-p`1 by A142,A149,XXREAL_0:2;
+A208:         pa`1<s2 by A204,XREAL_1:22;
+              (t2-t1)/2<t2-t1 by A201,XREAL_1:218;
+              then r2<t2-p`2 by A189,A199,XXREAL_0:2;
+              then pa`2<t2 by A205,XREAL_1:22;
               then
-A155:         pa`1<s2 by A152,XREAL_1:22;
-              (t2-t1)/2<t2-t1 by A150,XREAL_1:218;
-              then r2<t2-p`2 by A142,A149,XXREAL_0:2;
-              then pa`2<t2 by A152,XREAL_1:22;
+A209:         pa in P1 by A4,A206,A207,A208;
+              reconsider qa=pa as Point of Euclid 2 by EUCLID:25;
+A210:         0 <= (p`1 - pa`1)^2 by XREAL_1:65;
+              0 <= (p`2 - pa`2)^2 by XREAL_1:65;
               then
-A156:         pa in P1 by A2,A153,A154,A155;
-              reconsider qa=pa as Point of Euclid 2 by XX;
-              0 <= (p`1 - pa`1)^2 & 0 <= (p`2 - pa`2)^2 by XREAL_1:65;
-              then
-A157:         0+0 <= (p`1 - pa`1)^2 + (p`2 - pa`2)^2 by XREAL_1:9;
+A211:         0+0 <= (p`1 - pa`1)^2 + (p`2 - pa`2)^2 by A210,XREAL_1:9;
               (pa`1-p`1)^2=(p`1-pa`1)^2;
 
-then (p`1 - pa`1)^2 <= (r/2)^2 by A151,A152,SQUARE_1:77,XXREAL_0:17;
+then (p`1 - pa`1)^2 <= (r/2)^2 by A203,A204,SQUARE_1:77,XXREAL_0:17;
               then
-A158:         (p`1 - pa`1)^2 + (p`2 - pa`2)^2 <= (r/2)^2 +(r /2)^2
-              by A152,XREAL_1:9;
-A159:         r^2=(r/2)^2+(r/2)^2+2*(r/2)*(r/2);
-              2*(r/2)*(r/2)>0 by A145,A147,XREAL_1:131;
-              then r^2>(r/2)^2+(r/2)^2 by A159,XREAL_1:31;
-              then (p`1 - pa`1)^2 + (p`2 - pa`2)^2 < r^2 by A158,XXREAL_0:2;
+              A212:         (
+p`1 - pa`1)^2 + (p`2 - pa`2)^2 <= (r/2)^2 +(r /2)^2
+              by A204,A205,XREAL_1:9;
+              r^2=(r/2)^2+(r/2)^2+2*(r/2)*(r/2);
+              then r^2>(r/2)^2+(r/2)^2 by A192,A194,XREAL_1:31,131;
+              then (p`1 - pa`1)^2 + (p`2 - pa`2)^2 < r^2 by A212,
+              XXREAL_0:2;
               then (sqrt ((p`1 - pa`1)^2 + (p`2 - pa`2)^2))^2<r^2
-              by A157,SQUARE_1:def 4;
+              by A211,SQUARE_1:def 4;
               then
-A160:         sqrt ((p`1 - pa`1)^2 + (p`2 - pa`2)^2) <r by A145,SQUARE_1:77;
+A213:         sqrt ((p`1 - pa`1)^2 + (p`2 - pa`2)^2) <r by A192
+              ,SQUARE_1:77;
               (Pitag_dist 2).(q,qa)=dist(q,qa) by METRIC_1:def 1;
-              then dist(q,qa)<r by A160,TOPREAL3:12;
+              then dist(q,qa)<r by A213,TOPREAL3:12;
               then pa in Ball(q,r) by METRIC_1:12;
-              hence thesis by A146,A156,XBOOLE_0:3;
+              hence thesis by A193,A209,XBOOLE_0:3;
             end;
             hence p in Cl P1 by PRE_TOPC:def 13;
           end;
           suppose
-A161:       p`2 = t1 & p`1 = s2;
+A214:       p`2 = t1 & p`1 = s2;
             for Q being Subset of TOP-REAL 2 st Q is open holds
             p in Q implies P1 meets Q
             proof
               let Q be Subset of TOP-REAL 2;
               assume that
-A162:         Q is open and
-A163:         p in Q;
-              reconsider QQ = Q as Subset of TopSpaceMetr Euclid 2 by YY;
-              QQ is open by A162,YY,PRE_TOPC:60;
+A215:         Q is open and
+A216:         p in Q;
+              reconsider QQ = Q as Subset of TopSpaceMetr Euclid 2 by Lm9;
+              QQ is open by A215,Lm9,PRE_TOPC:60;
               then consider r be real number such that
-A164:         r>0 and
-A165:         Ball(q,r) c= Q by A162,A163,TOPMETR:22;
+A217:         r>0 and
+A218:         Ball(q,r) c= Q by A216,TOPMETR:22;
               reconsider r as Real by XREAL_0:def 1;
-A166:         r/2>0 by A164,XREAL_1:217;
+A219:         r/2>0 by A217,XREAL_1:217;
               set r2=min(r/2,min((s2-s1)/2,(t2-t1)/2));
-A167:         r2 <= r/2 & r2<=min((s2-s1)/2,(t2-t1)/2) by XXREAL_0:17;
-              r2 <= r/2 & ( min((s2-s1)/2,(t2-t1)/2) <=(s2-s1)/2
-              & min((s2-s1)/2,(t2-t1)/2)<= (t2-t1)/2) by XXREAL_0:17;
+A220:         r2<=min((s2-s1)/2,(t2-t1)/2) by XXREAL_0:17;
+A221:         min((s2-s1)/2,(t2-t1)/2) <=(s2-s1)/2 by XXREAL_0:17;
+A222:         min((s2-s1)/2,(t2-t1)/2)<= (t2-t1)/2 by XXREAL_0:17;
+A223:         r2<=(s2-s1)/2 by A220,A221,XXREAL_0:2;
+A224:         r2<= (t2-t1)/2 by A220,A222,XXREAL_0:2;
+A225:         s2-s1>0 by A1,XREAL_1:52;
+A226:         t2-t1>0 by A2,XREAL_1:52;
+A227:         (s2-s1)/2 >0 by A225,XREAL_1:217;
+              (t2-t1)/2>0 by A226,XREAL_1:217;
+              then 0<min((s2-s1)/2,(t2-t1)/2) by A227,XXREAL_0:15;
               then
-A168:         r2<= r/2 & r2<=(s2-s1)/2 & r2<= (t2-t1)/2 by A167,XXREAL_0:2;
-A169:         s2-s1>0 & t2-t1>0 by A1,XREAL_1:52;
-              then (s2-s1)/2 >0 & (t2-t1)/2>0 by XREAL_1:217;
-              then 0<min((s2-s1)/2,(t2-t1)/2) by XXREAL_0:15;
-              then
-A170:         0<r2 by A166,XXREAL_0:15;
+A228:         0<r2 by A219,XXREAL_0:15;
               set pa=|[p`1-r2,p`2+r2]|;
-A171:         pa`1=p`1-r2 & pa`2=p`2+r2 by EUCLID:56;
+A229:         pa`1=p`1-r2 by EUCLID:56;
+A230:         pa`2=p`2+r2 by EUCLID:56;
               then
-A172:         pa`2> t1 by A161,A170,XREAL_1:31;
-A173:         pa`1< s2 by A161,A170,A171,XREAL_1:46;
-              (t2-t1)/2<t2-t1 by A169,XREAL_1:218;
-              then r2<t2-p`2 by A161,A168,XXREAL_0:2;
+A231:         pa`2> t1 by A214,A228,XREAL_1:31;
+A232:         pa`1< s2 by A214,A228,A229,XREAL_1:46;
+              (t2-t1)/2<t2-t1 by A226,XREAL_1:218;
+              then r2<t2-p`2 by A214,A224,XXREAL_0:2;
               then
-A174:         pa`2<t2 by A171,XREAL_1:22;
-              (s2-s1)/2<s2-s1 by A169,XREAL_1:218;
-              then r2<p`1-s1 by A161,A168,XXREAL_0:2;
-              then pa`1>s1 by A171,XREAL_1:14;
+A233:         pa`2<t2 by A230,XREAL_1:22;
+              (s2-s1)/2<s2-s1 by A225,XREAL_1:218;
+              then r2<p`1-s1 by A214,A223,XXREAL_0:2;
+              then pa`1>s1 by A229,XREAL_1:14;
               then
-A175:         pa in P1 by A2,A172,A173,A174;
-              reconsider qa=pa as Point of Euclid 2 by XX;
-              0 <= (p`1 - pa`1)^2 & 0 <= (p`2 - pa`2)^2 by XREAL_1:65;
+A234:         pa in P1 by A4,A231,A232,A233;
+              reconsider qa=pa as Point of Euclid 2 by EUCLID:25;
+A235:         0 <= (p`1 - pa`1)^2 by XREAL_1:65;
+              0 <= (p`2 - pa`2)^2 by XREAL_1:65;
               then
-A176:         0+0 <= (p`1 - pa`1)^2 + (p`2 - pa`2)^2 by XREAL_1:9;
-              r2^2<= (r/2)^2 by A170,SQUARE_1:77,XXREAL_0:17;
+A236:         0+0 <= (p`1 - pa`1)^2 + (p`2 - pa`2)^2 by A235,XREAL_1:9;
+              r2^2<= (r/2)^2 by A228,SQUARE_1:77,XXREAL_0:17;
               then
-A177:         (p`1 - pa`1)^2 + (p`2 - pa`2)^2 <= (r/2)^2 +(r /2)^2
-              by A171,XREAL_1:9;
-A178:         r^2=(r/2)^2+(r/2)^2+2*(r/2)*(r/2);
-              2*(r/2)*(r/2)>0 by A164,A166,XREAL_1:131;
-              then r^2>(r/2)^2+(r/2)^2 by A178,XREAL_1:31;
-              then (p`1 - pa`1)^2 + (p`2 - pa`2)^2 < r^2 by A177,XXREAL_0:2;
+              A237:         (
+p`1 - pa`1)^2 + (p`2 - pa`2)^2 <= (r/2)^2 +(r /2)^2
+              by A229,A230,XREAL_1:9;
+              r^2=(r/2)^2+(r/2)^2+2*(r/2)*(r/2);
+              then r^2>(r/2)^2+(r/2)^2 by A217,A219,XREAL_1:31,131;
+              then (p`1 - pa`1)^2 + (p`2 - pa`2)^2 < r^2 by A237,
+              XXREAL_0:2;
               then (sqrt ((p`1 - pa`1)^2 + (p`2 - pa`2)^2))^2<r^2
-              by A176,SQUARE_1:def 4;
+              by A236,SQUARE_1:def 4;
               then
-A179:         sqrt ((p`1 - pa`1)^2 + (p`2 - pa`2)^2) <r by A164,SQUARE_1:77;
+A238:         sqrt ((p`1 - pa`1)^2 + (p`2 - pa`2)^2) <r by A217
+              ,SQUARE_1:77;
               (Pitag_dist 2).(q,qa)=dist(q,qa) by METRIC_1:def 1;
-              then dist(q,qa)<r by A179,TOPREAL3:12;
+              then dist(q,qa)<r by A238,TOPREAL3:12;
               then pa in Ball(q,r) by METRIC_1:12;
-              hence thesis by A165,A175,XBOOLE_0:3;
+              hence thesis by A218,A234,XBOOLE_0:3;
             end;
             hence p in Cl P1 by PRE_TOPC:def 13;
           end;
         end;
-        hence thesis by A13;
+        hence thesis by A16;
       end;
       suppose
-A180:   p`1 = s2 & p`2 <= t2 & p`2 >= t1;
-        now per cases by A180,XXREAL_0:1;
+A239:   p`1 = s2 & p`2 <= t2 & p`2 >= t1;
+        now per cases by A239,XXREAL_0:1;
           suppose
-A181:       p`1 = s2 & p`2 < t2 & p`2 > t1;
+A240:       p`1 = s2 & p`2 < t2 & p`2 > t1;
             for Q being Subset of TOP-REAL 2 st Q is open holds
             p in Q implies P1 meets Q
             proof
               let Q be Subset of TOP-REAL 2;
               assume that
-A182:         Q is open and
-A183:         p in Q;
-              reconsider QQ = Q as Subset of TopSpaceMetr Euclid 2 by YY;
-              QQ is open by A182,YY,PRE_TOPC:60;
+A241:         Q is open and
+A242:         p in Q;
+              reconsider QQ = Q as Subset of TopSpaceMetr Euclid 2 by Lm9;
+              QQ is open by A241,Lm9,PRE_TOPC:60;
               then consider r being real number such that
-A184:         r>0 and
-A185:         Ball(q,r) c= Q by A182,A183,TOPMETR:22;
+A243:         r>0 and
+A244:         Ball(q,r) c= Q by A242,TOPMETR:22;
               reconsider r as Real by XREAL_0:def 1;
-A186:         r/2>0 by A184,XREAL_1:217;
-A187:         r/2<r by A184,XREAL_1:218;
+A245:         r/2>0 by A243,XREAL_1:217;
+A246:         r/2<r by A243,XREAL_1:218;
               set r2=min(r/2,min((s2-s1)/2,(t2-t1)/2));
-A188:         r2 <= r/2 & r2<=min((s2-s1)/2,(t2-t1)/2) by XXREAL_0:17;
-              r2 <= r/2 & ( min((s2-s1)/2,(t2-t1)/2) <=(s2-s1)/2
-              & min((s2-s1)/2,(t2-t1)/2)<= (t2-t1)/2) by XXREAL_0:17;
+A247:         r2 <= r/2 by XXREAL_0:17;
+A248:         r2<=min((s2-s1)/2,(t2-t1)/2) by XXREAL_0:17;
+              min((s2-s1)/2,(t2-t1)/2) <=(s2-s1)/2 by XXREAL_0:17;
               then
-A189:         r2<= r/2 & r2<=(s2-s1)/2 & r2<= (t2-t1)/2 by A188,XXREAL_0:2;
-A190:         r2<r by A187,A188,XXREAL_0:2;
-A191:         s2-s1>0 & t2-t1>0 by A1,XREAL_1:52;
-              then (s2-s1)/2 >0 & (t2-t1)/2>0 by XREAL_1:217;
-              then 0<min((s2-s1)/2,(t2-t1)/2) by XXREAL_0:15;
+A249:         r2<=(s2-s1)/2 by A248,XXREAL_0:2;
+A250:         r2<r by A246,A247,XXREAL_0:2;
+A251:         s2-s1>0 by A1,XREAL_1:52;
+A252:         t2-t1>0 by A2,XREAL_1:52;
+A253:         (s2-s1)/2 >0 by A251,XREAL_1:217;
+              (t2-t1)/2>0 by A252,XREAL_1:217;
+              then 0<min((s2-s1)/2,(t2-t1)/2) by A253,XXREAL_0:15;
               then
-A192:         0<r2 by A186,XXREAL_0:15;
+A254:         0<r2 by A245,XXREAL_0:15;
               set pa=|[p`1-r2,p`2]|;
-A193:         pa`2=p`2 & pa`1=p`1-r2 by EUCLID:56;
-              (s2-s1)/2<s2-s1 by A191,XREAL_1:218;
-              then r2<p`1-s1 by A181,A189,XXREAL_0:2;
-              then s1<pa`1 & pa`1<s2 & t1 <pa`2 & pa`2 < t2 by A181,A192,A193,
-XREAL_1:14,46;
+A255:         pa`2=p`2 by EUCLID:56;
+A256:         pa`1=p`1-r2 by EUCLID:56;
+              (s2-s1)/2<s2-s1 by A251,XREAL_1:218;
+              then r2<p`1-s1 by A240,A249,XXREAL_0:2;
+
               then
-A194:         pa in P1 by A2;
-              reconsider qa=pa as Point of Euclid 2 by XX;
-              0 <= (p`1 - pa`1)^2 & 0 <= (p`2 - pa`2)^2 by XREAL_1:65;
+A257:         s1<pa`1 by A256,XREAL_1:14;
+              pa`1<s2 by A240,A254,A256,XREAL_1:46;
               then
-A195:         0+0 <= (p`1 - pa`1)^2 + (p`2 - pa`2)^2 by XREAL_1:9;
+A258:         pa in P1 by A4,A240,A255,A257;
+              reconsider qa=pa as Point of Euclid 2 by EUCLID:25;
+A259:         0 <= (p`1 - pa`1)^2 by XREAL_1:65;
+              0 <= (p`2 - pa`2)^2 by XREAL_1:65;
+              then
+A260:         0+0 <= (p`1 - pa`1)^2 + (p`2 - pa`2)^2 by A259,XREAL_1:9;
               (p`1 - pa`1)^2 + (p`2 - pa`2)^2 < r^2
-              by A190,A192,A193,SQUARE_1:78;
+              by A250,A254,A255,A256,SQUARE_1:78;
               then (sqrt ((p`1 - pa`1)^2 + (p`2 - pa`2)^2))^2<r^2
-              by A195,SQUARE_1:def 4;
+              by A260,SQUARE_1:def 4;
               then
-A196:         sqrt ((p`1 - pa`1)^2 + (p`2 - pa`2)^2) <r by A184,SQUARE_1:77;
+A261:         sqrt ((p`1 - pa`1)^2 + (p`2 - pa`2)^2) <r by A243
+              ,SQUARE_1:77;
               (Pitag_dist 2).(q,qa)=dist(q,qa) by METRIC_1:def 1;
-              then dist(q,qa)<r by A196,TOPREAL3:12;
+              then dist(q,qa)<r by A261,TOPREAL3:12;
               then pa in Ball(q,r) by METRIC_1:12;
-              hence thesis by A185,A194,XBOOLE_0:3;
+              hence thesis by A244,A258,XBOOLE_0:3;
             end;
             hence p in Cl P1 by PRE_TOPC:def 13;
           end;
           suppose
-A197:       p`1 = s2 & p`2 = t1;
+A262:       p`1 = s2 & p`2 = t1;
             for Q being Subset of TOP-REAL 2 st Q is open holds
             p in Q implies P1 meets Q
             proof
               let Q be Subset of TOP-REAL 2;
               assume that
-A198:         Q is open and
-A199:         p in Q;
-              reconsider QQ = Q as Subset of TopSpaceMetr Euclid 2 by YY;
-              QQ is open by A198,YY,PRE_TOPC:60;
+A263:         Q is open and
+A264:         p in Q;
+              reconsider QQ = Q as Subset of TopSpaceMetr Euclid 2 by Lm9;
+              QQ is open by A263,Lm9,PRE_TOPC:60;
               then consider r being real number such that
-A200:         r>0 and
-A201:         Ball(q,r) c= Q by A198,A199,TOPMETR:22;
+A265:         r>0 and
+A266:         Ball(q,r) c= Q by A264,TOPMETR:22;
               reconsider r as Real by XREAL_0:def 1;
-A202:         r/2>0 by A200,XREAL_1:217;
+A267:         r/2>0 by A265,XREAL_1:217;
               set r2=min(r/2,min((s2-s1)/2,(t2-t1)/2));
-A203:         r2 <= r/2 & r2<=min((s2-s1)/2,(t2-t1)/2) by XXREAL_0:17;
-              r2 <= r/2 & ( min((s2-s1)/2,(t2-t1)/2) <=(s2-s1)/2
-              & min((s2-s1)/2,(t2-t1)/2)<= (t2-t1)/2) by XXREAL_0:17;
+A268:         r2<=min((s2-s1)/2,(t2-t1)/2) by XXREAL_0:17;
+A269:         min((s2-s1)/2,(t2-t1)/2) <=(s2-s1)/2 by XXREAL_0:17;
+A270:         min((s2-s1)/2,(t2-t1)/2)<= (t2-t1)/2 by XXREAL_0:17;
+A271:         r2<=(s2-s1)/2 by A268,A269,XXREAL_0:2;
+A272:         r2<= (t2-t1)/2 by A268,A270,XXREAL_0:2;
+A273:         s2-s1>0 by A1,XREAL_1:52;
+A274:         t2-t1>0 by A2,XREAL_1:52;
+A275:         (s2-s1)/2 >0 by A273,XREAL_1:217;
+              (t2-t1)/2>0 by A274,XREAL_1:217;
+              then 0<min((s2-s1)/2,(t2-t1)/2) by A275,XXREAL_0:15;
               then
-A204:         r2<= r/2 & r2<=(s2-s1)/2 & r2<= (t2-t1)/2 by A203,XXREAL_0:2;
-A205:         s2-s1>0 & t2-t1>0 by A1,XREAL_1:52;
-              then (s2-s1)/2 >0 & (t2-t1)/2>0 by XREAL_1:217;
-              then 0<min((s2-s1)/2,(t2-t1)/2) by XXREAL_0:15;
-              then
-A206:         0<r2 by A202,XXREAL_0:15;
+A276:         0<r2 by A267,XXREAL_0:15;
               set pa=|[p`1-r2,p`2+r2]|;
-A207:         pa`2=p`2+r2 & pa`1=p`1-r2 by EUCLID:56;
+A277:         pa`2=p`2+r2 by EUCLID:56;
+A278:         pa`1=p`1-r2 by EUCLID:56;
+A279:         pa`2> t1 by A262,A276,A277,XREAL_1:31;
+A280:         pa`1< s2 by A262,A276,A278,XREAL_1:46;
+              (s2-s1)/2<s2-s1 by A273,XREAL_1:218;
+              then r2<p`1-s1 by A262,A271,XXREAL_0:2;
               then
-A208:         pa`2> t1 by A197,A206,XREAL_1:31;
-A209:         pa`1< s2 by A197,A206,A207,XREAL_1:46;
-              (s2-s1)/2<s2-s1 by A205,XREAL_1:218;
-              then r2<p`1-s1 by A197,A204,XXREAL_0:2;
+A281:         pa`1>s1 by A278,XREAL_1:14;
+              (t2-t1)/2<t2-t1 by A274,XREAL_1:218;
+              then r2<t2-p`2 by A262,A272,XXREAL_0:2;
+              then pa`2<t2 by A277,XREAL_1:22;
               then
-A210:         pa`1>s1 by A207,XREAL_1:14;
-              (t2-t1)/2<t2-t1 by A205,XREAL_1:218;
-              then r2<t2-p`2 by A197,A204,XXREAL_0:2;
-              then pa`2<t2 by A207,XREAL_1:22;
+A282:         pa in P1 by A4,A279,A280,A281;
+              reconsider qa=pa as Point of Euclid 2 by EUCLID:25;
+A283:         0 <= (p`1 - pa`1)^2 by XREAL_1:65;
+              0 <= (p`2 - pa`2)^2 by XREAL_1:65;
               then
-A211:         pa in P1 by A2,A208,A209,A210;
-              reconsider qa=pa as Point of Euclid 2 by XX;
-              0 <= (p`1 - pa`1)^2 & 0 <= (p`2 - pa`2)^2 by XREAL_1:65;
+A284:         0+0 <= (p`1 - pa`1)^2 + (p`2 - pa`2)^2 by A283,XREAL_1:9;
+              (p`1 - pa`1)^2 <= (r/2)^2 by A276,A278,SQUARE_1:77
+              ,XXREAL_0:17;
               then
-A212:         0+0 <= (p`1 - pa`1)^2 + (p`2 - pa`2)^2 by XREAL_1:9;
-              (p`1 - pa`1)^2 <= (r/2)^2 by A206,A207,SQUARE_1:77,XXREAL_0:17;
-              then
-A213:         (p`1 - pa`1)^2 + (p`2 - pa`2)^2 <= (r/2)^2 +(r /2)^2
-              by A207,XREAL_1:9;
-A214:         r^2=(r/2)^2+(r/2)^2+2*(r/2)*(r/2);
-              2*(r/2)*(r/2)>0 by A200,A202,XREAL_1:131;
-              then r^2>(r/2)^2+(r/2)^2 by A214,XREAL_1:31;
-              then (p`1 - pa`1)^2 + (p`2 - pa`2)^2 < r^2 by A213,XXREAL_0:2;
+              A285:         (
+p`1 - pa`1)^2 + (p`2 - pa`2)^2 <= (r/2)^2 +(r /2)^2
+              by A277,A278,XREAL_1:9;
+              r^2=(r/2)^2+(r/2)^2+2*(r/2)*(r/2);
+              then r^2>(r/2)^2+(r/2)^2 by A265,A267,XREAL_1:31,131;
+              then (p`1 - pa`1)^2 + (p`2 - pa`2)^2 < r^2 by A285,
+              XXREAL_0:2;
               then (sqrt ((p`1 - pa`1)^2 + (p`2 - pa`2)^2))^2<r^2
-              by A212,SQUARE_1:def 4;
+              by A284,SQUARE_1:def 4;
               then
-A215:         sqrt ((p`1 - pa`1)^2 + (p`2 - pa`2)^2) <r by A200,SQUARE_1:77;
+A286:         sqrt ((p`1 - pa`1)^2 + (p`2 - pa`2)^2) <r by A265
+              ,SQUARE_1:77;
               (Pitag_dist 2).(q,qa)=dist(q,qa) by METRIC_1:def 1;
-              then dist(q,qa)<r by A215,TOPREAL3:12;
+              then dist(q,qa)<r by A286,TOPREAL3:12;
               then pa in Ball(q,r) by METRIC_1:12;
-              hence thesis by A201,A211,XBOOLE_0:3;
+              hence thesis by A266,A282,XBOOLE_0:3;
             end;
             hence p in Cl P1 by PRE_TOPC:def 13;
           end;
           suppose
-A216:       p`1 = s2 & p`2 = t2;
+A287:       p`1 = s2 & p`2 = t2;
             for Q being Subset of TOP-REAL 2 st Q is open holds
             p in Q implies P1 meets Q
             proof
               let Q be Subset of TOP-REAL 2;
               assume that
-A217:         Q is open and
-A218:         p in Q;
-              reconsider QQ = Q as Subset of TopSpaceMetr Euclid 2 by YY;
-              QQ is open by A217,YY,PRE_TOPC:60;
+A288:         Q is open and
+A289:         p in Q;
+              reconsider QQ = Q as Subset of TopSpaceMetr Euclid 2 by Lm9;
+              QQ is open by A288,Lm9,PRE_TOPC:60;
               then consider r being real number such that
-A219:         r>0 and
-A220:         Ball(q,r) c= Q by A217,A218,TOPMETR:22;
+A290:         r>0 and
+A291:         Ball(q,r) c= Q by A289,TOPMETR:22;
               reconsider r as Real by XREAL_0:def 1;
-A221:         r/2>0 by A219,XREAL_1:217;
+A292:         r/2>0 by A290,XREAL_1:217;
               set r2=min(r/2,min((s2-s1)/2,(t2-t1)/2));
-A222:         r2 <= r/2 & r2<=min((s2-s1)/2,(t2-t1)/2) by XXREAL_0:17;
-              r2 <= r/2 & ( min((s2-s1)/2,(t2-t1)/2) <=(s2-s1)/2
-              & min((s2-s1)/2,(t2-t1)/2)<= (t2-t1)/2) by XXREAL_0:17;
+A293:         r2<=min((s2-s1)/2,(t2-t1)/2) by XXREAL_0:17;
+A294:         min((s2-s1)/2,(t2-t1)/2) <=(s2-s1)/2 by XXREAL_0:17;
+A295:         min((s2-s1)/2,(t2-t1)/2)<= (t2-t1)/2 by XXREAL_0:17;
+A296:         r2<=(s2-s1)/2 by A293,A294,XXREAL_0:2;
+A297:         r2<= (t2-t1)/2 by A293,A295,XXREAL_0:2;
+A298:         s2-s1>0 by A1,XREAL_1:52;
+A299:         t2-t1>0 by A2,XREAL_1:52;
+A300:         (s2-s1)/2 >0 by A298,XREAL_1:217;
+              (t2-t1)/2>0 by A299,XREAL_1:217;
+              then 0<min((s2-s1)/2,(t2-t1)/2) by A300,XXREAL_0:15;
               then
-A223:         r2<= r/2 & r2<=(s2-s1)/2 & r2<= (t2-t1)/2 by A222,XXREAL_0:2;
-A224:         s2-s1>0 & t2-t1>0 by A1,XREAL_1:52;
-              then (s2-s1)/2 >0 & (t2-t1)/2>0 by XREAL_1:217;
-              then 0<min((s2-s1)/2,(t2-t1)/2) by XXREAL_0:15;
-              then
-A225:         0<r2 by A221,XXREAL_0:15;
+A301:         0<r2 by A292,XXREAL_0:15;
               set pa=|[p`1-r2,p`2-r2]|;
-A226:         pa`1=p`1-r2 & pa`2=p`2-r2 by EUCLID:56;
+A302:         pa`1=p`1-r2 by EUCLID:56;
+A303:         pa`2=p`2-r2 by EUCLID:56;
+A304:         pa`1< s2 by A287,A301,A302,XREAL_1:46;
+A305:         pa`2< t2 by A287,A301,A303,XREAL_1:46;
+              (s2-s1)/2<s2-s1 by A298,XREAL_1:218;
+              then r2<p`1-s1 by A287,A296,XXREAL_0:2;
               then
-A227:         pa`1< s2 by A216,A225,XREAL_1:46;
-A228:         pa`2< t2 by A216,A225,A226,XREAL_1:46;
-              (s2-s1)/2<s2-s1 by A224,XREAL_1:218;
-              then r2<p`1-s1 by A216,A223,XXREAL_0:2;
+A306:         pa`1>s1 by A302,XREAL_1:14;
+              (t2-t1)/2<t2-t1 by A299,XREAL_1:218;
+              then r2<p`2-t1 by A287,A297,XXREAL_0:2;
+              then pa`2>t1 by A303,XREAL_1:14;
               then
-A229:         pa`1>s1 by A226,XREAL_1:14;
-              (t2-t1)/2<t2-t1 by A224,XREAL_1:218;
-              then r2<p`2-t1 by A216,A223,XXREAL_0:2;
-              then pa`2>t1 by A226,XREAL_1:14;
+A307:         pa in P1 by A4,A304,A305,A306;
+              reconsider qa=pa as Point of Euclid 2 by EUCLID:25;
+A308:         0 <= (p`1 - pa`1)^2 by XREAL_1:65;
+              0 <= (p`2 - pa`2)^2 by XREAL_1:65;
               then
-A230:         pa in P1 by A2,A227,A228,A229;
-              reconsider qa=pa as Point of Euclid 2 by XX;
-              0 <= (p`1 - pa`1)^2 & 0 <= (p`2 - pa`2)^2 by XREAL_1:65;
+A309:         0+0 <= (p`1 - pa`1)^2 + (p`2 - pa`2)^2 by A308,XREAL_1:9;
+              r2^2<= (r/2)^2 by A301,SQUARE_1:77,XXREAL_0:17;
               then
-A231:         0+0 <= (p`1 - pa`1)^2 + (p`2 - pa`2)^2 by XREAL_1:9;
-              r2^2<= (r/2)^2 by A225,SQUARE_1:77,XXREAL_0:17;
-              then
-A232:         (p`1 - pa`1)^2 + (p`2 - pa`2)^2 <= (r/2)^2 +(r /2)^2
-              by A226,XREAL_1:9;
-A233:         r^2=(r/2)^2+(r/2)^2+2*(r/2)*(r/2);
-              2*(r/2)*(r/2)>0 by A219,A221,XREAL_1:131;
-              then r^2>(r/2)^2+(r/2)^2 by A233,XREAL_1:31;
-              then (p`1 - pa`1)^2 + (p`2 - pa`2)^2 < r^2 by A232,XXREAL_0:2;
+              A310:         (
+p`1 - pa`1)^2 + (p`2 - pa`2)^2 <= (r/2)^2 +(r /2)^2
+              by A302,A303,XREAL_1:9;
+              r^2=(r/2)^2+(r/2)^2+2*(r/2)*(r/2);
+              then r^2>(r/2)^2+(r/2)^2 by A290,A292,XREAL_1:31,131;
+              then (p`1 - pa`1)^2 + (p`2 - pa`2)^2 < r^2 by A310,
+              XXREAL_0:2;
               then (sqrt ((p`1 - pa`1)^2 + (p`2 - pa`2)^2))^2<r^2
-              by A231,SQUARE_1:def 4;
+              by A309,SQUARE_1:def 4;
               then
-A234:         sqrt ((p`1 - pa`1)^2 + (p`2 - pa`2)^2) <r by A219,SQUARE_1:77;
+A311:         sqrt ((p`1 - pa`1)^2 + (p`2 - pa`2)^2) <r by A290
+              ,SQUARE_1:77;
               (Pitag_dist 2).(q,qa)=dist(q,qa) by METRIC_1:def 1;
-              then dist(q,qa)<r by A234,TOPREAL3:12;
+              then dist(q,qa)<r by A311,TOPREAL3:12;
               then pa in Ball(q,r) by METRIC_1:12;
-              hence thesis by A220,A230,XBOOLE_0:3;
+              hence thesis by A291,A307,XBOOLE_0:3;
             end;
             hence p in Cl P1 by PRE_TOPC:def 13;
           end;
         end;
-        hence thesis by A13;
+        hence thesis by A16;
       end;
     end;
     hence thesis;
   end;
-  hence thesis by A3,XBOOLE_1:8;
+  hence thesis by A5,XBOOLE_1:8;
 end;
 
-Lm9: for s1,t1,s2,t2 for P,P2 being Subset of TOP-REAL 2 st s1<s2 & t1<t2 &
+Lm11: for s1,t1,s2,t2 for P,P2 being Subset of TOP-REAL 2 st s1<s2 & t1<t2 &
 P = { p where p is Point of TOP-REAL 2: p`1 = s1 & p`2 <= t2 & p`2 >= t1 or
 p`1 <= s2 & p`1 >= s1 & p`2 = t2 or p`1 <= s2 & p`1 >= s1 & p`2 = t1 or
 p`1 = s2 & p`2 <= t2 & p`2 >= t1} & P2 = {pb where pb is Point of TOP-REAL 2:
@@ -2192,235 +2380,253 @@ proof
   let s1,t1,s2,t2;
   let P,P2 be Subset of TOP-REAL 2;
   assume that
-A1: s1<s2 & t1<t2 and
-A2: P = { p where p is Point of TOP-REAL 2:
-  p`1 = s1 & p`2 <= t2 & p`2 >= t1 or p`1 <= s2 & p`1 >= s1 & p`2 = t2 or
-  p`1 <= s2 & p`1 >= s1 & p`2 = t1 or p`1 = s2 & p`2 <= t2 & p`2 >= t1}
-  & P2 = {pb where pb is Point of TOP-REAL 2:
-  not( s1<=pb`1 & pb`1<=s2 & t1<=pb`2 & pb`2<=t2)};
-A3: P2 c= Cl P2 by PRE_TOPC:48;
+A1: s1<s2 and
+A2: t1<t2 and
+A3: P = { p where p is Point of TOP-REAL 2: p`1 = s1 & p`2 <= t2 & p`2
+  >= t1 or p`1 <= s2 & p`1 >= s1 & p`2 = t2 or p`1 <= s2 & p`1 >= s1 & p`2 = t1
+  or p`1 = s2 & p`2 <= t2 & p`2 >= t1} and
+A4: P2 = {pb where pb is Point of TOP-REAL 2: not( s1<=pb`1 & pb`1<=s2 &
+  t1<=pb`2 & pb`2<=t2)};
+A5: P2 c= Cl P2 by PRE_TOPC:48;
   reconsider P1 = {pa where pa is Point of TOP-REAL 2:
   s1<pa`1 & pa`1<s2 & t1 <pa`2 & pa`2 < t2} as Subset of TOP-REAL 2 by Th34;
   reconsider PP = P` as Subset of TOP-REAL 2;
-  P1 = {pa where pa is Point of TOP-REAL 2:
-  s1<pa`1 & pa`1<s2 & t1 <pa`2 & pa`2 < t2};
+A6: PP=P1 \/ P2 by A1,A2,A3,A4,Th41;
+  P1 misses P2 by A1,A2,A3,A4,Th41;
   then
-A4: PP=P1 \/ P2 & PP <> {} & P1 misses P2 by A1,A2,Th41;
+A7: P2 c= P1` by SUBSET_1:43;
+  P= (P1 \/ P2)` by A6;
   then
-A5: P2 c= P1` & P1 c= P2` by SUBSET_1:43;
-  P= (P1 \/ P2)` by A4;
-  then
-A6: P=([#](TOP-REAL 2)\P1) /\ ([#](TOP-REAL 2)\P2) by XBOOLE_1:53;
-A7: [#](TOP-REAL 2)=P \/ (P2 \/ P1) by A4,PRE_TOPC:18
+A8: P=([#](TOP-REAL 2)\P1) /\ ([#](TOP-REAL 2)\P2) by XBOOLE_1:53;
+A9: [#](TOP-REAL 2)=P \/ (P2 \/ P1) by A6,PRE_TOPC:18
     .=P \/ P2 \/ P1 by XBOOLE_1:4;
-A8: P1`= P \/ P2
-  proof
-    now
-      let x be set;
-      assume x in P1`;
-      then x in [#](TOP-REAL 2) & not x in P1 by XBOOLE_0:def 5;
-      hence x in P \/ P2 by A7,XBOOLE_0:def 3;
-    end;
-    then
-A9: P1` c=P \/ P2 by TARSKI:def 3;
-    now
-      let x be set;
-      assume x in P \/ P2;
-      then x in P or x in P2 by XBOOLE_0:def 3;
-      hence x in P1` by A5,A6,XBOOLE_0:def 4;
-    end;
-    then P \/ P2 c=P1` by TARSKI:def 3;
-    hence thesis by A9,XBOOLE_0:def 10;
+
+  now
+    let x be set;
+    assume
+A10: x in P1`;
+    then not x in P1 by XBOOLE_0:def 5;
+    hence x in P \/ P2 by A9,A10,XBOOLE_0:def 3;
   end;
-A10: P1 is open by Th38;
+  then
+A11: P1` c=P \/ P2 by TARSKI:def 3;
+  now
+    let x be set;
+    assume x in P \/ P2;
+    then x in P or x in P2 by XBOOLE_0:def 3;
+    hence x in P1` by A7,A8,XBOOLE_0:def 4;
+  end;
+  then P \/ P2 c=P1` by TARSKI:def 3;
+
+  then
+A12: P1`= P \/ P2 by A11,XBOOLE_0:def 10;
+A13: P1 is open by Th38;
   [#](TOP-REAL 2) \ P1` = P1``
     .=P1;
   then
-A11: P \/ P2 is closed by A8,A10,PRE_TOPC:def 6;
-A12: P2 c= P \/ P2 by XBOOLE_1:7;
+A14: P \/ P2 is closed by A12,A13,PRE_TOPC:def 6;
+A15: P2 c= P \/ P2 by XBOOLE_1:7;
   thus Cl P2 c= P \/ P2
   proof
     let x be set;
     assume x in Cl P2;
-    hence thesis by A11,A12,PRE_TOPC:45;
+    hence thesis by A14,A15,PRE_TOPC:45;
   end;
   P c= Cl P2
   proof
     let x be set;
     assume x in P;
     then consider p being Point of TOP-REAL 2 such that
-A13: p=x and
-A14: p`1 = s1 & p`2 <= t2 & p`2 >= t1 or p`1 <= s2 & p`1 >= s1 & p`2 = t2 or
+A16: p=x and
+A17: p`1 = s1 & p`2 <= t2 & p`2 >= t1 or p`1 <= s2 & p`1 >= s1 & p`2 = t2 or
     p`1 <= s2 & p`1 >= s1 & p`2 = t1 or
-    p`1 = s2 & p`2 <= t2 & p`2 >= t1 by A2;
-    reconsider q=p as Point of Euclid 2 by XX;
-    now per cases by A14;
+    p`1 = s2 & p`2 <= t2 & p`2 >= t1 by A3;
+    reconsider q=p as Point of Euclid 2 by EUCLID:25;
+    now per cases by A17;
       suppose
-A15:    p`1 = s1 & p`2 <= t2 & p`2 >= t1;
+A18:    p`1 = s1 & p`2 <= t2 & p`2 >= t1;
         for Q being Subset of TOP-REAL 2 st Q is open holds
         p in Q implies P2 meets Q
         proof
           let Q be Subset of TOP-REAL 2;
           assume that
-A16:      Q is open and
-A17:      p in Q;
-              reconsider QQ = Q as Subset of TopSpaceMetr Euclid 2 by YY;
-              QQ is open by A16,YY,PRE_TOPC:60;
+A19:      Q is open and
+A20:      p in Q;
+          reconsider QQ = Q as Subset of TopSpaceMetr Euclid 2 by Lm9;
+          QQ is open by A19,Lm9,PRE_TOPC:60;
           then consider r be real number such that
-A18:      r>0 and
-A19:      Ball(q,r) c= Q by A16,A17,TOPMETR:22;
+A21:      r>0 and
+A22:      Ball(q,r) c= Q by A20,TOPMETR:22;
           reconsider r as Real by XREAL_0:def 1;
           set pa=|[p`1-r/2,p`2]|;
-A20:      pa`1=p`1-r/2 & pa`2=p`2 by EUCLID:56;
-A21:      r/2>0 by A18,XREAL_1:217;
-          then not( s1<=pa`1 & pa`1<=s2 & t1<=pa`2 & pa`2<=t2) by A15,A20,
-XREAL_1:46;
+A23:      pa`1=p`1-r/2 by EUCLID:56;
+A24:      pa`2=p`2 by EUCLID:56;
+A25:      r/2>0 by A21,XREAL_1:217;
+          not( s1<=pa`1 & pa`1<=s2 & t1<=pa`2 & pa`2<=t2) by A18,A21,A23,
+          XREAL_1:46,217;
           then
-A22:      pa in P2 by A2;
-          reconsider qa=pa as Point of Euclid 2 by XX;
-          0 <= (p`1 - pa`1)^2 & 0 <= (p`2 - pa`2)^2 by XREAL_1:65;
+A26:      pa in P2 by A4;
+          reconsider qa=pa as Point of Euclid 2 by EUCLID:25;
+A27:      0 <= (p`1 - pa`1)^2 by XREAL_1:65;
+          0 <= (p`2 - pa`2)^2 by XREAL_1:65;
           then
-A23:      0+0 <= (p`1 - pa`1)^2 + (p`2 - pa`2)^2 by XREAL_1:9;
-          p`1 - pa`1 < r by A18,A20,XREAL_1:218;
-          then (p`1 - pa`1)^2 + (p`2 - pa`2)^2 < r^2 by A20,A21,SQUARE_1:78;
+A28:      0+0 <= (p`1 - pa`1)^2 + (p`2 - pa`2)^2 by A27,
+          XREAL_1:9;
+          p`1 - pa`1 < r by A21,A23,XREAL_1:218;
+          then (p`1 - pa`1)^2 + (p`2 - pa`2)^2 < r^2 by A23,A24,A25,
+          SQUARE_1:78;
           then (sqrt ((p`1 - pa`1)^2 + (p`2 - pa`2)^2))^2<r^2
-          by A23,SQUARE_1:def 4;
+          by A28,SQUARE_1:def 4;
           then
-A24:      sqrt ((p`1 - pa`1)^2 + (p`2 - pa`2)^2) <r by A18,SQUARE_1:77;
+A29:      sqrt ((p`1 - pa`1)^2 + (p`2 - pa`2)^2) <r by A21,
+          SQUARE_1:77;
           (Pitag_dist 2).(q,qa)=dist(q,qa) by METRIC_1:def 1;
-          then dist(q,qa)<r by A24,TOPREAL3:12;
+          then dist(q,qa)<r by A29,TOPREAL3:12;
           then pa in Ball(q,r) by METRIC_1:12;
-          then P2 /\ Q <> {} by A19,A22,XBOOLE_0:def 4;
+          then P2 /\ Q <> {} by A22,A26,XBOOLE_0:def 4;
           hence thesis by XBOOLE_0:def 7;
         end;
-        hence thesis by A13,PRE_TOPC:def 13;
+        hence thesis by A16,PRE_TOPC:def 13;
       end;
       suppose
-A25:    p`1 <= s2 & p`1 >= s1 & p`2 = t2;
+A30:    p`1 <= s2 & p`1 >= s1 & p`2 = t2;
         for Q being Subset of TOP-REAL 2 st Q is open holds
         p in Q implies P2 meets Q
         proof
           let Q be Subset of TOP-REAL 2;
           assume that
-A26:      Q is open and
-A27:      p in Q;
-              reconsider QQ = Q as Subset of TopSpaceMetr Euclid 2 by YY;
-              QQ is open by A26,YY,PRE_TOPC:60;
+A31:      Q is open and
+A32:      p in Q;
+          reconsider QQ = Q as Subset of TopSpaceMetr Euclid 2 by Lm9;
+          QQ is open by A31,Lm9,PRE_TOPC:60;
           then consider r being real number such that
-A28:      r>0 and
-A29:      Ball(q,r) c= Q by A26,A27,TOPMETR:22;
+A33:      r>0 and
+A34:      Ball(q,r) c= Q by A32,TOPMETR:22;
           reconsider r as Real by XREAL_0:def 1;
           set pa=|[p`1,p`2+r/2]|;
-A30:      pa`1=p`1 & pa`2=p`2+r/2 by EUCLID:56;
-A31:      r/2>0 by A28,XREAL_1:217;
-          then not( s1<=pa`1 & pa`1<=s2 & t1<=pa`2 & pa`2<=t2) by A25,A30,
-XREAL_1:31;
+A35:      pa`1=p`1 by EUCLID:56;
+A36:      pa`2=p`2+r/2 by EUCLID:56;
+A37:      r/2>0 by A33,XREAL_1:217;
+          not( s1<=pa`1 & pa`1<=s2 & t1<=pa`2 & pa`2<=t2) by A30,A33,A36,
+          XREAL_1:31,217;
           then
-A32:      pa in P2 by A2;
-          reconsider qa=pa as Point of Euclid 2 by XX;
-          0 <= (p`1 - pa`1)^2 & 0 <= (p`2 - pa`2)^2 by XREAL_1:65;
+A38:      pa in P2 by A4;
+          reconsider qa=pa as Point of Euclid 2 by EUCLID:25;
+A39:      0 <= (p`1 - pa`1)^2 by XREAL_1:65;
+          0 <= (p`2 - pa`2)^2 by XREAL_1:65;
           then
-A33:      0+0 <= (p`1 - pa`1)^2 + (p`2 - pa`2)^2 by XREAL_1:9;
-A34:      pa`2 - p`2 < r by A28,A30,XREAL_1:218;
+A40:      0+0 <= (p`1 - pa`1)^2 + (p`2 - pa`2)^2 by A39,
+          XREAL_1:9;
+A41:      pa`2 - p`2 < r by A33,A36,XREAL_1:218;
           (pa`2-p`2)^2=(p`2-pa`2)^2;
           then (p`1 - pa`1)^2 + (p`2 - pa`2)^2 < r^2
-          by A30,A31,A34,SQUARE_1:78;
+          by A35,A36,A37,A41,SQUARE_1:78;
           then (sqrt ((p`1 - pa`1)^2 + (p`2 - pa`2)^2))^2<r^2
-          by A33,SQUARE_1:def 4;
+          by A40,SQUARE_1:def 4;
           then
-A35:      sqrt ((p`1 - pa`1)^2 + (p`2 - pa`2)^2) <r by A28,SQUARE_1:77;
+A42:      sqrt ((p`1 - pa`1)^2 + (p`2 - pa`2)^2) <r by A33,
+          SQUARE_1:77;
           (Pitag_dist 2).(q,qa)=dist(q,qa) by METRIC_1:def 1;
-          then dist(q,qa)<r by A35,TOPREAL3:12;
+          then dist(q,qa)<r by A42,TOPREAL3:12;
           then pa in Ball(q,r) by METRIC_1:12;
-          then P2 /\ Q <> {} by A29,A32,XBOOLE_0:def 4;
+          then P2 /\ Q <> {} by A34,A38,XBOOLE_0:def 4;
           hence thesis by XBOOLE_0:def 7;
         end;
-        hence thesis by A13,PRE_TOPC:def 13;
+        hence thesis by A16,PRE_TOPC:def 13;
       end;
       suppose
-A36:    p`1 <= s2 & p`1 >= s1 & p`2 = t1;
+A43:    p`1 <= s2 & p`1 >= s1 & p`2 = t1;
         for Q being Subset of TOP-REAL 2 st Q is open holds
         p in Q implies P2 meets Q
         proof
           let Q be Subset of TOP-REAL 2;
           assume that
-A37:      Q is open and
-A38:      p in Q;
-              reconsider QQ = Q as Subset of TopSpaceMetr Euclid 2 by YY;
-              QQ is open by A37,YY,PRE_TOPC:60;
+A44:      Q is open and
+A45:      p in Q;
+          reconsider QQ = Q as Subset of TopSpaceMetr Euclid 2 by Lm9;
+          QQ is open by A44,Lm9,PRE_TOPC:60;
           then consider r being real number such that
-A39:      r>0 and
-A40:      Ball(q,r) c= Q by A37,A38,TOPMETR:22;
+A46:      r>0 and
+A47:      Ball(q,r) c= Q by A45,TOPMETR:22;
           reconsider r as Real by XREAL_0:def 1;
           set pa=|[p`1,p`2-r/2]|;
-A41:      pa`1=p`1 & pa`2=p`2-r/2 by EUCLID:56;
-A42:      r/2>0 by A39,XREAL_1:217;
-          then not( s1<=pa`1 & pa`1<=s2 & t1<=pa`2 & pa`2<=t2)
-          by A36,A41,XREAL_1:46;
+A48:      pa`1=p`1 by EUCLID:56;
+A49:      pa`2=p`2-r/2 by EUCLID:56;
+A50:      r/2>0 by A46,XREAL_1:217;
+          not( s1<=pa`1 & pa`1<=s2 & t1<=pa`2 & pa`2<=t2)
+          by A43,A46,A49,XREAL_1:46,217;
           then
-A43:      pa in P2 by A2;
-          reconsider qa=pa as Point of Euclid 2 by XX;
-          0 <= (p`1 - pa`1)^2 & 0 <= (p`2 - pa`2)^2 by XREAL_1:65;
+A51:      pa in P2 by A4;
+          reconsider qa=pa as Point of Euclid 2 by EUCLID:25;
+A52:      0 <= (p`1 - pa`1)^2 by XREAL_1:65;
+          0 <= (p`2 - pa`2)^2 by XREAL_1:65;
           then
-A44:      0+0 <= (p`1 - pa`1)^2 + (p`2 - pa`2)^2 by XREAL_1:9;
-          p`2 - pa`2 < r by A39,A41,XREAL_1:218;
-          then (p`1 - pa`1)^2 + (p`2 - pa`2)^2 < r^2 by A41,A42,SQUARE_1:78;
+A53:      0+0 <= (p`1 - pa`1)^2 + (p`2 - pa`2)^2 by A52,
+          XREAL_1:9;
+          p`2 - pa`2 < r by A46,A49,XREAL_1:218;
+          then (p`1 - pa`1)^2 + (p`2 - pa`2)^2 < r^2 by A48,A49,A50,
+          SQUARE_1:78;
           then (sqrt ((p`1 - pa`1)^2 + (p`2 - pa`2)^2))^2<r^2
-          by A44,SQUARE_1:def 4;
+          by A53,SQUARE_1:def 4;
           then
-A45:      sqrt ((p`1 - pa`1)^2 + (p`2 - pa`2)^2) <r by A39,SQUARE_1:77;
+A54:      sqrt ((p`1 - pa`1)^2 + (p`2 - pa`2)^2) <r by A46,
+          SQUARE_1:77;
           (Pitag_dist 2).(q,qa)=dist(q,qa) by METRIC_1:def 1;
-          then dist(q,qa)<r by A45,TOPREAL3:12;
+          then dist(q,qa)<r by A54,TOPREAL3:12;
           then pa in Ball(q,r) by METRIC_1:12;
-          hence thesis by A40,A43,XBOOLE_0:3;
+          hence thesis by A47,A51,XBOOLE_0:3;
         end;
-        hence thesis by A13,PRE_TOPC:def 13;
+        hence thesis by A16,PRE_TOPC:def 13;
       end;
       suppose
-A46:    p`1 = s2 & p`2 <= t2 & p`2 >= t1;
+A55:    p`1 = s2 & p`2 <= t2 & p`2 >= t1;
         for Q being Subset of TOP-REAL 2 st Q is open holds
         p in Q implies P2 meets Q
         proof
           let Q be Subset of TOP-REAL 2;
           assume that
-A47:      Q is open and
-A48:      p in Q;
-              reconsider QQ = Q as Subset of TopSpaceMetr Euclid 2 by YY;
-              QQ is open by A47,YY,PRE_TOPC:60;
+A56:      Q is open and
+A57:      p in Q;
+          reconsider QQ = Q as Subset of TopSpaceMetr Euclid 2 by Lm9;
+          QQ is open by A56,Lm9,PRE_TOPC:60;
           then consider r being real number such that
-A49:      r>0 and
-A50:      Ball(q,r) c= Q by A47,A48,TOPMETR:22;
+A58:      r>0 and
+A59:      Ball(q,r) c= Q by A57,TOPMETR:22;
           reconsider r as Real by XREAL_0:def 1;
           set pa=|[p`1+r/2,p`2]|;
-A51:      pa`1=p`1+r/2 & pa`2=p`2 by EUCLID:56;
-A52:      r/2>0 by A49,XREAL_1:217;
-          then not( s1<=pa`1 & pa`1<=s2 & t1<=pa`2 & pa`2<=t2)
-          by A46,A51,XREAL_1:31;
+A60:      pa`1=p`1+r/2 by EUCLID:56;
+A61:      pa`2=p`2 by EUCLID:56;
+A62:      r/2>0 by A58,XREAL_1:217;
+          not( s1<=pa`1 & pa`1<=s2 & t1<=pa`2 & pa`2<=t2)
+          by A55,A58,A60,XREAL_1:31,217;
           then
-A53:      pa in P2 by A2;
-          reconsider qa=pa as Point of Euclid 2 by XX;
-          0 <= (p`1 - pa`1)^2 & 0 <= (p`2 - pa`2)^2 by XREAL_1:65;
+A63:      pa in P2 by A4;
+          reconsider qa=pa as Point of Euclid 2 by EUCLID:25;
+A64:      0 <= (p`1 - pa`1)^2 by XREAL_1:65;
+          0 <= (p`2 - pa`2)^2 by XREAL_1:65;
           then
-A54:      0+0 <= (p`1 - pa`1)^2 + (p`2 - pa`2)^2 by XREAL_1:9;
-A55:      pa`1 - p`1 < r by A49,A51,XREAL_1:218;
+A65:      0+0 <= (p`1 - pa`1)^2 + (p`2 - pa`2)^2 by A64,
+          XREAL_1:9;
+A66:      pa`1 - p`1 < r by A58,A60,XREAL_1:218;
           (pa`1-p`1)^2=(p`1-pa`1)^2;
           then (p`1 - pa`1)^2 + (p`2 - pa`2)^2 < r^2
-          by A51,A52,A55,SQUARE_1:78;
+          by A60,A61,A62,A66,SQUARE_1:78;
           then (sqrt ((p`1 - pa`1)^2 + (p`2 - pa`2)^2))^2<r^2
-          by A54,SQUARE_1:def 4;
+          by A65,SQUARE_1:def 4;
           then
-A56:      sqrt ((p`1 - pa`1)^2 + (p`2 - pa`2)^2) <r by A49,SQUARE_1:77;
+A67:      sqrt ((p`1 - pa`1)^2 + (p`2 - pa`2)^2) <r by A58,
+          SQUARE_1:77;
           (Pitag_dist 2).(q,qa)=dist(q,qa) by METRIC_1:def 1;
-          then dist(q,qa)<r by A56,TOPREAL3:12;
+          then dist(q,qa)<r by A67,TOPREAL3:12;
           then pa in Ball(q,r) by METRIC_1:12;
-          hence thesis by A50,A53,XBOOLE_0:3;
+          hence thesis by A59,A63,XBOOLE_0:3;
         end;
-        hence thesis by A13,PRE_TOPC:def 13;
+        hence thesis by A16,PRE_TOPC:def 13;
       end;
     end;
     hence thesis;
   end;
-  hence thesis by A3,XBOOLE_1:8;
+  hence thesis by A5,XBOOLE_1:8;
 end;
 
 theorem Th42:
@@ -2437,51 +2643,53 @@ proof
   let s1,t1,s2,t2;
   let P,P1,P2 be Subset of TOP-REAL 2;
   assume that
-A1: s1<s2 & t1<t2 and
-A2: P = { p where p is Point of TOP-REAL 2:
-  p`1 = s1 & p`2 <= t2 & p`2 >= t1 or p`1 <= s2 & p`1 >= s1 & p`2 = t2 or
-  p`1 <= s2 & p`1 >= s1 & p`2 = t1 or p`1 = s2 & p`2 <= t2 & p`2 >= t1}
-  & P1 = {pa where pa is Point of TOP-REAL 2:
-  s1<pa`1 & pa`1<s2 & t1 <pa`2 & pa`2 < t2}
-  & P2 = {pb where pb is Point of TOP-REAL 2:
-  not( s1<=pb`1 & pb`1<=s2 & t1<=pb`2 & pb`2<=t2)};
+A1: s1<s2 and
+A2: t1<t2 and
+A3: P = { p where p is Point of TOP-REAL 2: p`1 = s1 & p`2 <= t2 & p`2
+  >= t1 or p`1 <= s2 & p`1 >= s1 & p`2 = t2 or p`1 <= s2 & p`1 >= s1 & p`2 = t1
+  or p`1 = s2 & p`2 <= t2 & p`2 >= t1} and
+A4: P1 = {pa where pa is Point of TOP-REAL 2: s1<pa`1 & pa`1<s2 & t1 <pa
+  `2 & pa`2 < t2} and
+A5: P2 = {pb where pb is Point of TOP-REAL 2: not( s1<=pb`1 & pb`1<=s2 &
+  t1<=pb`2 & pb`2<=t2)};
   reconsider PP = P` as Subset of TOP-REAL 2;
-  PP=P1 \/ P2 & PP <> {} & P1 misses P2 by A1,A2,Th41;
+  PP=P1 \/ P2 by A1,A2,A3,A4,A5,Th41;
   then P= (P1 \/ P2)`;
   then
-A3: P=([#](TOP-REAL 2)\P1) /\ ([#](TOP-REAL 2)\P2) by XBOOLE_1:53;
+A6: P=([#](TOP-REAL 2)\P1) /\ ([#](TOP-REAL 2)\P2) by XBOOLE_1:53;
   then
-A4: P c=[#](TOP-REAL 2)\P2 by XBOOLE_1:17;
-A5: Cl P2 = P \/ P2 by A1,A2,Lm9;
-A6: (P \/ P2) \ P2 c= P
+A7: P c=[#](TOP-REAL 2)\P2 by XBOOLE_1:17;
+A8: Cl P2 = P \/ P2 by A1,A2,A3,A5,Lm11;
+A9: (P \/ P2) \ P2 c= P
   proof
     let x be set;
-    assume x in (P \/ P2) \ P2;
-    then x in P \/ P2 & not x in P2 by XBOOLE_0:def 5;
-    hence thesis by XBOOLE_0:def 3;
+    assume
+A10: x in (P \/ P2) \ P2;
+    then
+A11: x in P \/ P2 by XBOOLE_0:def 5;
+    not x in P2 by A10,XBOOLE_0:def 5;
+    hence thesis by A11,XBOOLE_0:def 3;
   end;
-A7: P c= (Cl P2)\P2
-  proof
-    P c= Cl P2 by A5,XBOOLE_1:7;
-    then P c= Cl P2 /\ P2` by A4,XBOOLE_1:19;
-    hence thesis by SUBSET_1:32;
-  end;
-A8: P c=[#](TOP-REAL 2)\P1 by A3,XBOOLE_1:17;
-A9: Cl P1 = P \/ P1 by A1,A2,Lm8;
-A10: (P \/ P1) \ P1 c= P
+  P c= Cl P2 by A8,XBOOLE_1:7;
+  then P c= Cl P2 /\ P2` by A7,XBOOLE_1:19;
+  then
+A12: P c= (Cl P2)\P2 by SUBSET_1:32;
+A13: P c=[#](TOP-REAL 2)\P1 by A6,XBOOLE_1:17;
+A14: Cl P1 = P \/ P1 by A1,A2,A3,A4,Lm10;
+A15: (P \/ P1) \ P1 c= P
   proof
     let x be set;
-    assume x in (P \/ P1) \ P1;
-    then x in P \/ P1 & not x in P1 by XBOOLE_0:def 5;
-    hence thesis by XBOOLE_0:def 3;
+    assume
+A16: x in (P \/ P1) \ P1;
+    then
+A17: x in P \/ P1 by XBOOLE_0:def 5;
+    not x in P1 by A16,XBOOLE_0:def 5;
+    hence thesis by A17,XBOOLE_0:def 3;
   end;
-  P c= (Cl P1)\P1
-  proof
-    P c= Cl P1 by A9,XBOOLE_1:7;
-    then P c= Cl P1 /\ P1` by A8,XBOOLE_1:19;
-    hence thesis by SUBSET_1:32;
-  end;
-  hence thesis by A5,A6,A7,A9,A10,XBOOLE_0:def 10;
+  P c= Cl P1 by A14,XBOOLE_1:7;
+  then P c= Cl P1 /\ P1` by A13,XBOOLE_1:19;
+  then P c= (Cl P1)\P1 by SUBSET_1:32;
+  hence thesis by A8,A9,A12,A14,A15,XBOOLE_0:def 10;
 end;
 
 theorem Th43:
@@ -2493,17 +2701,17 @@ theorem Th43:
 proof
   let s1,s2,t1,t2,P,P1;
   assume that
-A1: P = { p where p is Point of TOP-REAL 2:
-  p`1 = s1 & p`2 <= t2 & p`2 >= t1 or p`1 <= s2 & p`1 >= s1 & p`2 = t2 or
-  p`1 <= s2 & p`1 >= s1 & p`2 = t1 or p`1 = s2 & p`2 <= t2 & p`2 >= t1}
-  & P1 = {pa where pa is Point of TOP-REAL 2:
-  s1<pa`1 & pa`1<s2 & t1 <pa`2 & pa`2 < t2};
+A1: P = { p where p is Point of TOP-REAL 2: p`1 = s1 & p`2 <= t2 & p`2 >= t1
+or p`1 <= s2 & p`1 >= s1 & p`2 = t2 or p`1 <= s2 & p`1 >= s1 & p`2 = t1 or p`1
+  = s2 & p`2 <= t2 & p`2 >= t1} and
+A2: P1 = {pa where pa is Point of TOP-REAL 2: s1<pa`1 & pa`1<s2 & t1 <pa
+  `2 & pa`2 < t2};
   let x be set;
   assume
-A2: x in P1;
+A3: x in P1;
   then
-A3: ex pa being Point of TOP-REAL 2 st pa=x &
-  s1<pa`1 & pa`1<s2 & t1 <pa`2 & pa`2 < t2 by A1;
+A4: ex pa being Point of TOP-REAL 2 st pa=x &
+  s1<pa`1 & pa`1<s2 & t1 <pa`2 & pa`2 < t2 by A2;
   now
     assume x in { p where p is Point of TOP-REAL 2:
     p`1 = s1 & p`2 <= t2 & p`2 >= t1 or p`1 <= s2 & p`1 >= s1 & p`2 = t2 or
@@ -2511,9 +2719,9 @@ A3: ex pa being Point of TOP-REAL 2 st pa=x &
     then ex p being Point of TOP-REAL 2 st p=x & (
     p`1 = s1 & p`2 <= t2 & p`2 >= t1 or p`1 <= s2 & p`1 >= s1 & p`2 = t2 or
     p`1 <= s2 & p`1 >= s1 & p`2 = t1 or p`1 = s2 & p`2 <= t2 & p`2 >= t1);
-    hence contradiction by A3;
+    hence contradiction by A4;
   end;
-  then x in P` by A1,A2,SUBSET_1:50;
+  then x in P` by A1,A3,SUBSET_1:50;
   hence thesis by PRE_TOPC:def 10;
 end;
 
@@ -2527,12 +2735,12 @@ theorem
 proof
   let s1,s2,t1,t2,P,P1;
   assume that
-A1: P = { p where p is Point of TOP-REAL 2:
-  p`1 = s1 & p`2 <= t2 & p`2 >= t1 or p`1 <= s2 & p`1 >= s1 & p`2 = t2 or
-  p`1 <= s2 & p`1 >= s1 & p`2 = t1 or p`1 = s2 & p`2 <= t2 & p`2 >= t1}
-  & P1 = {pa where pa is Point of TOP-REAL 2:
-  s1<pa`1 & pa`1<s2 & t1 <pa`2 & pa`2 < t2};
-  P1 c= [#]((TOP-REAL 2)|P`)by A1,Th43;
+A1: P = { p where p is Point of TOP-REAL 2: p`1 = s1 & p`2 <= t2 & p`2 >= t1
+or p`1 <= s2 & p`1 >= s1 & p`2 = t2 or p`1 <= s2 & p`1 >= s1 & p`2 = t1 or p`1
+  = s2 & p`2 <= t2 & p`2 >= t1} and
+A2: P1 = {pa where pa is Point of TOP-REAL 2: s1<pa`1 & pa`1<s2 & t1 <pa
+  `2 & pa`2 < t2};
+  P1 c= [#]((TOP-REAL 2)|P`)by A1,A2,Th43;
   hence thesis;
 end;
 
@@ -2547,19 +2755,19 @@ theorem Th45:
 proof
   let s1,s2,t1,t2,P,P2;
   assume that
-A1: s1<s2 & t1<t2 and
-A2: P
-  = { p where p is Point of TOP-REAL 2: p`1 = s1 & p`2 <= t2 & p`2 >= t1 or
-  p`1 <= s2 & p`1 >= s1 & p`2 = t2 or p`1 <= s2 & p`1 >= s1 & p`2 = t1 or
-  p`1 = s2 & p`2 <= t2 & p`2 >= t1}
-  & P2 = {pb where pb is Point of TOP-REAL 2:
-  not( s1<=pb`1 & pb`1<=s2 & t1<=pb`2 & pb`2<=t2)};
+A1: s1<s2 and
+A2: t1<t2 and
+A3: P = { p where p is Point of TOP-REAL 2: p`1 = s1 & p`2 <= t2 & p`2
+  >= t1 or p`1 <= s2 & p`1 >= s1 & p`2 = t2 or p`1 <= s2 & p`1 >= s1 & p`2 = t1
+  or p`1 = s2 & p`2 <= t2 & p`2 >= t1} and
+A4: P2 = {pb where pb is Point of TOP-REAL 2: not( s1<=pb`1 & pb`1<=s2 &
+  t1<=pb`2 & pb`2<=t2)};
   let x be set;
   assume
-A3: x in P2;
+A5: x in P2;
   then
-A4: ex pa being Point of TOP-REAL 2 st pa=x &
-  not( s1<=pa`1 & pa`1<=s2 & t1<=pa`2 & pa`2<=t2) by A2;
+A6: ex pa being Point of TOP-REAL 2 st pa=x &
+  not( s1<=pa`1 & pa`1<=s2 & t1<=pa`2 & pa`2<=t2) by A4;
   now
     assume x in { p where p is Point of TOP-REAL 2:
     p`1 = s1 & p`2 <= t2 & p`2 >= t1 or p`1 <= s2 & p`1 >= s1 & p`2 = t2 or
@@ -2567,9 +2775,9 @@ A4: ex pa being Point of TOP-REAL 2 st pa=x &
     then ex p being Point of TOP-REAL 2 st p=x & (
     p`1 = s1 & p`2 <= t2 & p`2 >= t1 or p`1 <= s2 & p`1 >= s1 & p`2 = t2 or
     p`1 <= s2 & p`1 >= s1 & p`2 = t1 or p`1 = s2 & p`2 <= t2 & p`2 >= t1);
-    hence contradiction by A1,A4;
+    hence contradiction by A1,A2,A6;
   end;
-  then x in P` by A2,A3,SUBSET_1:50;
+  then x in P` by A3,A5,SUBSET_1:50;
   hence thesis by PRE_TOPC:def 10;
 end;
 
@@ -2584,13 +2792,14 @@ theorem
 proof
   let s1,s2,t1,t2,P,P2;
   assume that
-A1: s1<s2 & t1<t2 and
-A2: P = { p where p is Point of TOP-REAL 2:
-  p`1 = s1 & p`2 <= t2 & p`2 >= t1 or p`1 <= s2 & p`1 >= s1 & p`2 = t2 or
-  p`1 <= s2 & p`1 >= s1 & p`2 = t1 or p`1 = s2 & p`2 <= t2 & p`2 >= t1}
-  & P2 = {pb where pb is Point of TOP-REAL 2:
-  not( s1<=pb`1 & pb`1<=s2 & t1<=pb`2 & pb`2<=t2)};
-  P2 c= [#]((TOP-REAL 2)|P`) by A1,A2,Th45;
+A1: s1<s2 and
+A2: t1<t2 and
+A3: P = { p where p is Point of TOP-REAL 2: p`1 = s1 & p`2 <= t2 & p`2
+  >= t1 or p`1 <= s2 & p`1 >= s1 & p`2 = t2 or p`1 <= s2 & p`1 >= s1 & p`2 = t1
+  or p`1 = s2 & p`2 <= t2 & p`2 >= t1} and
+A4: P2 = {pb where pb is Point of TOP-REAL 2: not( s1<=pb`1 & pb`1<=s2 &
+  t1<=pb`2 & pb`2<=t2)};
+  P2 c= [#]((TOP-REAL 2)|P`) by A1,A2,A3,A4,Th45;
   hence thesis;
 end;
 
@@ -2629,54 +2838,58 @@ A1: S is Jordan;
 A2: S`=A1 \/ A2 and
 A3: A1 misses A2 and
 A4: (Cl A1)\A1=(Cl A2)\A2 and
-A5: (for C1,C2 being Subset of (TOP-REAL 2)|S`
+A5: for C1,C2 being Subset of (TOP-REAL 2)|S`
   st C1=A1 & C2=A2 holds C1 is_a_component_of (TOP-REAL 2)|S`
-  & C2 is_a_component_of (TOP-REAL 2)|S`) by A1,Def2;
-A6: A1 c= S` & A2 c= S` by A2,XBOOLE_1:7;
-A7: [#]((TOP-REAL 2)|S`)=S` by PRE_TOPC:def 10;
-  A1 c= [#]((TOP-REAL 2)|S`) & A2 c= [#]
-  ((TOP-REAL 2)|S`) by A6,PRE_TOPC:def 10;
-  then reconsider G0A=A1,G0B=A2 as Subset of (TOP-REAL 2)|S';
-  G0A=A1 & G0B=A2;
+  & C2 is_a_component_of (TOP-REAL 2)|S` by A1,Def2;
+A6: A1 c= S` by A2,XBOOLE_1:7;
+A7: A2 c= S` by A2,XBOOLE_1:7;
+A8: [#]((TOP-REAL 2)|S`)=S` by PRE_TOPC:def 10;
+  A1 c= [#]((TOP-REAL 2)|S`) by A6,PRE_TOPC:def 10;
+  then reconsider G0A=A1,G0B=A2 as Subset of (TOP-REAL 2)|S' by A7,
+  PRE_TOPC:def 10;
+A9: G0A=A1;
+  G0B=A2;
   then
-A8: G0A is_a_component_of (TOP-REAL 2)|S'
-  & G0B is_a_component_of (TOP-REAL 2)|S' by A5;
+A10: G0A is_a_component_of (TOP-REAL 2)|S' by A5;
+A11: G0B is_a_component_of (TOP-REAL 2)|S' by A5,A9;
   now
     let C3 be Subset of (TOP-REAL 2)|S';
     assume
-A9: C3 is_a_component_of (TOP-REAL 2)|S';
+A12: C3 is_a_component_of (TOP-REAL 2)|S';
     then
-A10: C3 <>{}((TOP-REAL 2)|S') by CONNSP_1:34;
-    C3 /\(G0A \/ G0B)=C3 by A2,A7,XBOOLE_1:28;
+A13: C3 <>{}((TOP-REAL 2)|S') by CONNSP_1:34;
+    C3 /\(G0A \/ G0B)=C3 by A2,A8,XBOOLE_1:28;
     then
-A11: (C3 /\ G0A) \/ (C3 /\ G0B) <>{} by A10,XBOOLE_1:23;
-    now per cases by A11;
+A14: (C3 /\ G0A) \/ (C3 /\ G0B) <>{} by A13,XBOOLE_1:23;
+    now per cases by A14;
       suppose C3 /\ G0A<>{};
         then
-A12:    C3 meets G0A by XBOOLE_0:def 7;
-A13:    C3 is connected & G0A is connected by A8,A9,CONNSP_1:def 5;
+A15:    C3 meets G0A by XBOOLE_0:def 7;
+A16:    C3 is connected by A12,CONNSP_1:def 5;
+A17:    G0A is connected by A10,CONNSP_1:def 5;
         then
-A14:    C3 \/ G0A is connected by A12,CONNSP_1:2,18;
+A18:    C3 \/ G0A is connected by A15,A16,CONNSP_1:2,18;
         G0A c= C3 \/ G0A by XBOOLE_1:7;
-        then G0A=C3 \/ G0A by A8,A14,CONNSP_1:def 5;
+        then G0A=C3 \/ G0A by A10,A18,CONNSP_1:def 5;
         then C3 c= G0A by XBOOLE_1:7;
-        hence C3=G0A or C3=G0B by A9,A13,CONNSP_1:def 5;
+        hence C3=G0A or C3=G0B by A12,A17,CONNSP_1:def 5;
       end;
       suppose C3 /\ A2<>{};
         then
-A15:    C3 meets G0B by XBOOLE_0:def 7;
-A16:    C3 is connected & G0B is connected by A8,A9,CONNSP_1:def 5;
+A19:    C3 meets G0B by XBOOLE_0:def 7;
+A20:    C3 is connected by A12,CONNSP_1:def 5;
+A21:    G0B is connected by A11,CONNSP_1:def 5;
         then
-A17:    C3 \/ G0B is connected by A15,CONNSP_1:2,18;
+A22:    C3 \/ G0B is connected by A19,A20,CONNSP_1:2,18;
         G0B c= C3 \/ G0B by XBOOLE_1:7;
-        then G0B=C3 \/ G0B by A8,A17,CONNSP_1:def 5;
+        then G0B=C3 \/ G0B by A11,A22,CONNSP_1:def 5;
         then C3 c= G0B by XBOOLE_1:7;
-        hence C3=G0A or C3=G0B by A9,A16,CONNSP_1:def 5;
+        hence C3=G0A or C3=G0B by A12,A21,CONNSP_1:def 5;
       end;
     end;
     hence C3=G0A or C3=G0B;
   end;
-  hence thesis by A2,A3,A4,A8;
+  hence thesis by A2,A3,A4,A10,A11;
 end;
 
 theorem
@@ -2688,8 +2901,9 @@ proof
   let s1,s2,t1,t2;
   let P be Subset of TOP-REAL 2;
   assume that
-A1: s1<s2 & t1<t2 and
-A2: P = { p where p is Point of TOP-REAL 2:
+A1: s1<s2 and
+A2: t1<t2 and
+A3: P = { p where p is Point of TOP-REAL 2:
   p`1 = s1 & p`2 <= t2 & p`2 >= t1 or p`1 <= s2 & p`1 >= s1 & p`2 = t2 or
   p`1 <= s2 & p`1 >= s1 & p`2 = t1 or p`1 = s2 & p`2 <= t2 & p`2 >= t1};
   reconsider P1= {pa where pa is Point of TOP-REAL 2:
@@ -2698,17 +2912,19 @@ A2: P = { p where p is Point of TOP-REAL 2:
   not( s1<=pc`1 & pc`1<=s2 & t1<=pc`2 & pc`2<=t2)}
   as Subset of TOP-REAL 2 by Th34,Th35;
   reconsider PC = P` as Subset of TOP-REAL 2;
-A3: P1= {pa where pa is Point of TOP-REAL 2:
-  s1<pa`1 & pa`1<s2 & t1 <pa`2 & pa`2 < t2}&
-  P2= {pc where pc is Point of TOP-REAL 2:
-  not( s1<=pc`1 & pc`1<=s2 & t1<=pc`2 & pc`2<=t2)};
-  then
-A4: PC=P1 \/ P2 & PC<>{} & P1 misses P2 by A1,A2,Th41;
-A5: P=(Cl P1)\P1 & P=(Cl P2)\P2 by A1,A2,A3,Th42;
+A4: P1= {pa where pa is Point of TOP-REAL 2: s1<pa`1 & pa`1<s2 & t1 <pa`2 &
+  pa`2 < t2};
+A5: P2= {pc where pc is Point of TOP-REAL 2: not( s1<=pc`1 & pc`1<=s2 & t1<=
+  pc`2 & pc`2<=t2)};
+A6: PC=P1 \/ P2 by A1,A2,A3,Th41;
+A7: PC<>{} by A1,A2,A3,A4,A5,Th41;
+A8: P1 misses P2 by A1,A2,A3,Th41;
+A9: P=(Cl P1)\P1 by A1,A2,A3,A5,Th42;
+A10: P=(Cl P2)\P2 by A1,A2,A3,A4,Th42;
   for P1A,P2B be Subset of (TOP-REAL 2)|P` holds P1A=P1 & P2B=P2 implies
   P1A is_a_component_of (TOP-REAL 2)|P`
-  & P2B is_a_component_of (TOP-REAL 2)|P` by A1,A2,Th41;
-  hence thesis by A4,A5,Def2;
+  & P2B is_a_component_of (TOP-REAL 2)|P` by A1,A2,A3,Th41;
+  hence thesis by A6,A7,A8,A9,A10,Def2;
 end;
 
 theorem
@@ -2718,7 +2934,7 @@ theorem
   p`1 = s2 & p`2 <= t2 & p`2 >= t1} &
   P2 = {pb where pb is Point of TOP-REAL 2:
   not( s1<=pb`1 & pb`1<=s2 & t1<=pb`2 & pb`2<=t2)}
-  holds Cl P2 = P \/ P2 by Lm9;
+  holds Cl P2 = P \/ P2 by Lm11;
 
 theorem
   for s1,t1,s2,t2 for P,P1 being Subset of TOP-REAL 2 st s1<s2 & t1<t2 &
@@ -2726,7 +2942,7 @@ theorem
   p`1 <= s2 & p`1 >= s1 & p`2 = t2 or p`1 <= s2 & p`1 >= s1 & p`2 = t1 or
   p`1 = s2 & p`2 <= t2 & p`2 >= t1} &
   P1 = {pa where pa is Point of TOP-REAL 2:
-  s1<pa`1 & pa`1<s2 & t1 <pa`2 & pa`2 < t2} holds Cl P1 = P \/ P1 by Lm8;
+  s1<pa`1 & pa`1<s2 & t1 <pa`2 & pa`2 < t2} holds Cl P1 = P \/ P1 by Lm10;
 
 :: Moved from JORDAN1H, AK, 22.02.2006
 
@@ -2735,16 +2951,21 @@ theorem Th51:
 proof
   let p,q,w1,w2 be Point of TOP-REAL 2;
   set P = LSeg(p,q) \ {p,q};
-  assume
-A1: w1 in P & w2 in P;
-  then
-A2: w1 in LSeg(p,q) & w2 in LSeg(p,q) by XBOOLE_0:def 5;
-  not w1 in {p,q} & not w2 in {p,q} by A1,XBOOLE_0:def 5;
-  then w1 <> p & w2 <> p & w1 <> q & w2 <> q by TARSKI:def 2;
-
-then not p in LSeg(w1,w2) & not q in LSeg(w1,w2) by A2,SPPOL_1:24,TOPREAL1:12;
-  then LSeg(w1,w2) misses {p,q} by ZFMISC_1:57;
-  hence thesis by A2,TOPREAL1:12,XBOOLE_1:86;
+  assume that
+A1: w1 in P and
+A2: w2 in P;
+A3: w1 in LSeg(p,q) by A1,XBOOLE_0:def 5;
+A4: w2 in LSeg(p,q) by A2,XBOOLE_0:def 5;
+A5: not w1 in {p,q} by A1,XBOOLE_0:def 5;
+A6: not w2 in {p,q} by A2,XBOOLE_0:def 5;
+A7: w1 <> p by A5,TARSKI:def 2;
+A8: w2 <> p by A6,TARSKI:def 2;
+A9: w1 <> q by A5,TARSKI:def 2;
+A10: w2 <> q by A6,TARSKI:def 2;
+A11: not p in LSeg(w1,w2) by A3,A4,A7,A8,SPPOL_1:24,TOPREAL1:12;
+  not q in LSeg(w1,w2) by A3,A4,A9,A10,SPPOL_1:24,TOPREAL1:12;
+  then LSeg(w1,w2) misses {p,q} by A11,ZFMISC_1:57;
+  hence thesis by A3,A4,TOPREAL1:12,XBOOLE_1:86;
 end;
 
 theorem
@@ -2753,7 +2974,7 @@ theorem
 
 :: Moved from JORDAN1A, AK, 22.02.2006
 
-Lm10: for x0,y0 being Real for P being Subset of TOP-REAL 2 st
+Lm12: for x0,y0 being Real for P being Subset of TOP-REAL 2 st
 P = {|[ x,y0 ]| where x is Real : x <= x0 } holds P is convex
 proof
   let x0,y0 be Real;
@@ -2774,12 +2995,10 @@ A7: x2 <= x0 by A1,A3;
   assume
 A8: v in LSeg(w1,w2);
   then reconsider v1 = v as Point of TOP-REAL 2;
-  v1 in { (1-l)*w1 + l*w2 where l is Real : 0 <= l & l <= 1 }
-  by A8;
-  then consider l being Real such that
+  consider l being Real such that
 A9: v1 = (1-l)*w1 + l*w2 and
 A10: 0 <= l and
-A11: l <= 1;
+A11: l <= 1 by A8;
 A12: v1 = |[ (1-l)*x1,(1-l)*y0 ]| + l*|[ x2,y0 ]| by A4,A6,A9,EUCLID:62
     .= |[ (1-l)*x1,(1-l)*y0 ]| + |[ l*x2,l*y0 ]| by EUCLID:62
     .= |[ (1-l)*x1+l*x2,(1-l)*y0+l*y0 ]| by EUCLID:60
@@ -2788,7 +3007,7 @@ A12: v1 = |[ (1-l)*x1,(1-l)*y0 ]| + l*|[ x2,y0 ]| by A4,A6,A9,EUCLID:62
   hence thesis by A1,A12;
 end;
 
-Lm11: for x0,y0 being Real for P being Subset of TOP-REAL 2 st
+Lm13: for x0,y0 being Real for P being Subset of TOP-REAL 2 st
 P = {|[ x0,y ]| where y is Real : y <= y0 } holds P is convex
 proof
   let x0,y0 be Real;
@@ -2809,12 +3028,10 @@ A7: y2 <= y0 by A1,A3;
   assume
 A8: v in LSeg(w1,w2);
   then reconsider v1 = v as Point of TOP-REAL 2;
-  v1 in { (1-l)*w1 + l*w2 where l is Real : 0 <= l & l <= 1 }
-  by A8;
-  then consider l being Real such that
+  consider l being Real such that
 A9: v1 = (1-l)*w1 + l*w2 and
 A10: 0 <= l and
-A11: l <= 1;
+A11: l <= 1 by A8;
 A12: v1 = |[ (1-l)*x0,(1-l)*y1 ]| + l*|[ x0,y2 ]| by A4,A6,A9,EUCLID:62
     .= |[ (1-l)*x0,(1-l)*y1 ]| + |[ l*x0,l*y2 ]| by EUCLID:62
     .= |[ (1-l)*x0+l*x0,(1-l)*y1+l*y2 ]| by EUCLID:60
@@ -2823,7 +3040,7 @@ A12: v1 = |[ (1-l)*x0,(1-l)*y1 ]| + l*|[ x0,y2 ]| by A4,A6,A9,EUCLID:62
   hence thesis by A1,A12;
 end;
 
-Lm12: for x0,y0 being Real for P being Subset of TOP-REAL 2 st
+Lm14: for x0,y0 being Real for P being Subset of TOP-REAL 2 st
 P = {|[ x,y0 ]| where x is Real : x >= x0 } holds P is convex
 proof
   let x0,y0 be Real;
@@ -2845,7 +3062,7 @@ A7: x2 >= x0 by A1,A3;
 A8: v in LSeg(w1,w2);
   then reconsider v1 = v as Point of TOP-REAL 2;
   v1 in { (1-l)*w2 + l*w1 where l is Real : 0 <= l & l <= 1 }
-  by A8, RLTOPSP1:def 2;
+  by A8,RLTOPSP1:def 2;
   then consider l being Real such that
 A9: v1 = (1-l)*w2 + l*w1 and
 A10: 0 <= l and
@@ -2858,7 +3075,7 @@ A12: v1 = |[ (1-l)*x2,(1-l)*y0 ]| + l*|[ x1,y0 ]| by A4,A6,A9,EUCLID:62
   hence thesis by A1,A12;
 end;
 
-Lm13: for x0,y0 being Real for P being Subset of TOP-REAL 2 st
+Lm15: for x0,y0 being Real for P being Subset of TOP-REAL 2 st
 P = {|[ x0,y ]| where y is Real : y >= y0 } holds P is convex
 proof
   let x0,y0 be Real;
@@ -2880,7 +3097,7 @@ A7: x2 >= y0 by A1,A3;
 A8: v in LSeg(w1,w2);
   then reconsider v1 = v as Point of TOP-REAL 2;
   v1 in { (1-l)*w2 + l*w1 where l is Real : 0 <= l & l <= 1 }
-  by A8, RLTOPSP1:def 2;
+  by A8,RLTOPSP1:def 2;
   then consider l being Real such that
 A9: v1 = (1-l)*w2 + l*w1 and
 A10: 0 <= l and
@@ -2900,28 +3117,28 @@ registration
   proof
     north_halfline p =
     { |[ p`1,r ]| where r is Element of REAL: r >= p`2 } by TOPREAL1:38;
-    hence thesis by Lm13;
+    hence thesis by Lm15;
   end;
   cluster east_halfline p -> convex;
   coherence
   proof
     east_halfline p =
     { |[ r,p`2 ]| where r is Element of REAL: r >= p`1 } by TOPREAL1:40;
-    hence thesis by Lm12;
+    hence thesis by Lm14;
   end;
   cluster south_halfline p -> convex;
   coherence
   proof
     south_halfline p =
     { |[ p`1,r ]| where r is Element of REAL: r <= p`2 } by TOPREAL1:42;
-    hence thesis by Lm11;
+    hence thesis by Lm13;
   end;
   cluster west_halfline p -> convex;
   coherence
   proof
     west_halfline p =
     { |[ r,p`2 ]| where r is Element of REAL: r <= p`1 } by TOPREAL1:44;
-    hence thesis by Lm10;
+    hence thesis by Lm12;
   end;
 end;
 

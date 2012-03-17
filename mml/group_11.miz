@@ -1,0 +1,1690 @@
+:: On Rough Subgroup of a Group
+::  by Xiquan Liang and Dailu Li
+:: 
+:: Received August 7, 2009
+:: Copyright (c) 2009 Association of Mizar Users
+
+environ
+
+ vocabularies REALSET1, GROUP_2, GROUP_3, BOOLE, RELAT_1, SUBSET_1, VECTSP_1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, STRUCT_0, ALGSTR_0, GROUP_1, GROUP_2,
+      GROUP_3, GROUP_4;
+ constructors RELAT_2, PARTFUN1, BINOP_1, FUNCOP_1, FINSUB_1, XXREAL_0, NAT_1,
+      GROUP_8, TARSKI, INT_2, REALSET2, GROUP_2, GROUP_4, GROUP_5;
+ registrations XBOOLE_0, STRUCT_0, GROUP_1, GROUP_2, GROUP_3;
+ requirements NUMERALS, SUBSET, BOOLE;
+ definitions XBOOLE_0, FUNCT_1, GROUP_1, GROUP_2, GROUP_3, TARSKI, BINOP_1,
+      GROUP_8, REALSET1, GROUP_4, ALGSTR_0;
+ theorems GROUP_1, GROUP_8, GROUP_2, GROUP_3, XBOOLE_0, XBOOLE_1, GROUP_4,
+      STRUCT_0;
+
+begin :: Preliminaries
+
+reserve G for Group;
+reserve A,B for non empty Subset of G;
+reserve N,H,H1,H2 for Subgroup of G;
+reserve x,a,b for Element of G;
+
+theorem Th1:
+  for N be normal Subgroup of G,x1,x2 be Element of G holds
+  (x1 * N) * (x2 * N) = (x1 * x2) * N
+proof
+  let N be normal Subgroup of G,x1,x2 be Element of G;
+  (x1 * N) * (x2 * N) = x1 * N * x2 * N by GROUP_2:14
+                     .= x1 * (N * x2) * N by GROUP_2:35
+                     .= x1 * (x2 * N) * N by GROUP_3:140
+                     .= (x1 * x2) * N * N by GROUP_2:127
+                     .= (x1 * x2) * (N * N) by GROUP_2:35;
+  hence thesis by GROUP_2:91;
+end;
+
+theorem Th2:
+  for G being Group,N being Subgroup of G, x, y being Element of G
+   st y in x * N holds x * N = y * N
+proof
+  let G be Group,N be Subgroup of G,x,y be Element of G;
+  assume
+A1:y in x * N;
+  y in y * N by GROUP_2:130;
+  then x * N meets y * N by A1,XBOOLE_0:3;
+  hence thesis by GROUP_2:138;
+end;
+
+theorem Th3:
+  for N being Subgroup of G,H being Subgroup of G,
+      x being Element of G st x * N meets carr(H)
+   ex y being Element of G st y in x * N & y in H
+proof
+  let N be Subgroup of G,H being Subgroup of G, x being Element of G;
+  assume x * N meets carr(H);
+  then consider y be set such that
+A1: y in x * N & y in carr(H) by XBOOLE_0:3;
+  reconsider y as Element of G by A1;
+  y in H by A1,STRUCT_0:def 5;
+  hence thesis by A1;
+end;
+
+theorem Th4:
+  for x,y being Element of G, N be normal Subgroup of G
+  st y in N holds x * y * x" in N
+proof
+  let x,y be Element of G, N be normal Subgroup of G;
+  assume
+A1: y in N;
+A2:x * y in x * N by A1,GROUP_2:125;
+  x * y in N * x by A2,GROUP_3:140;
+  then consider y1 be Element of G such that
+A3: x * y = y1 * x & y1 in N by GROUP_2:126;
+   x * y * x" = y1 * (x * x") by A3,GROUP_1:def 4
+             .= y1 * 1_G  by GROUP_1:def 6
+             .= y1 by GROUP_1:def 5;
+  hence thesis by A3;
+end;
+
+theorem Th5:
+  for N be Subgroup of G
+   st for x,y being Element of G st y in N holds x * y * x" in N
+   holds N is normal
+proof
+  let N be Subgroup of G such that
+A1:for x,y being Element of G st y in N holds x * y * x" in N;
+  for x be Element of G holds x * N c= N * x
+  proof
+    let x be Element of G;
+    let z be set;
+    assume
+A2:z in x * N;
+    then reconsider z as Element of G;
+    consider z1 be Element of G such that
+A3: z = x * z1 & z1 in N by A2,GROUP_2:125;
+A4: x * z1 * x" in N by A1,A3;
+    (x * z1 * x") * x = z by GROUP_3:1,A3;
+    hence thesis by A4,GROUP_2:126;
+  end;
+  hence thesis by GROUP_3:141;
+end;
+
+theorem Th6:
+  x in H1 * H2 iff ex a,b st x = a * b & a in H1 & b in H2
+proof
+  thus x in H1 * H2 implies ex a,b st x = a * b & a in H1 & b in H2
+  proof
+    assume x in H1 * H2;
+    then consider a,b such that
+A1: x = a * b & a in carr(H1) & b in carr(H2);
+    a in H1 & b in H2 by A1,STRUCT_0:def 5;
+    hence thesis by A1;
+  end;
+  given a,b such that
+A2: x = a * b & a in H1 & b in H2;
+  a in carr(H1) & b in carr(H2) by A2,STRUCT_0:def 5;
+  hence thesis by A2;
+end;
+
+theorem Th7:
+  for G being Group, N1,N2 being strict normal Subgroup of G
+   ex M being strict Subgroup of G st the carrier of M = N1 * N2
+proof
+  let G be Group, N1,N2 be strict normal Subgroup of G;
+A1:1_G in N1 * N2
+  proof
+    reconsider y = 1_G as Element of G;
+A2: 1_G in N1 & 1_G in N2 by GROUP_2:55;
+    1_G * 1_G = 1_G by GROUP_1:def 5;
+    hence thesis by A2,Th6;
+  end;
+A3:for x,y being Element of G holds x in N1 * N2 & y in N1 * N2
+   implies x * y in N1 * N2
+   proof
+     let x,y be Element of G;
+     assume that
+A4:  x in N1 * N2 and
+A5:  y in N1 * N2;
+     consider a,b be Element of G such that
+A6:  x = a * b & a in N1 & b in N2 by A4,Th6;
+     consider c,d be Element of G such that
+A7:  y = c * d & c in N1 & d in N2 by A5,Th6;
+A8:  x * y = ((a * b) * c) * d by A6,A7,GROUP_1:def 4
+          .= a * (b * c) * d by GROUP_1:def 4;
+     b * c in N2 * N1 by A6,A7,Th6;
+     then b * c in N1 * N2 by GROUP_3:148;
+     then consider b',c' be Element of G such that
+A9:  b * c = b' * c' & b' in N1 & c' in N2 by Th6;
+A10: x * y = ((a * b') * c') * d by A8,A9,GROUP_1:def 4
+          .= (a * b') * (c' * d) by GROUP_1:def 4;
+A11: a * b' in N1 by A6,A9,GROUP_2:59;
+     c'* d in N2 by A7,A9,GROUP_2:59;
+     hence thesis by A10,A11,Th6;
+   end;
+A12:for x being Element of G holds x in N1 * N2 implies x" in N1 * N2
+  proof
+    let x be Element of G;
+    assume x in N1 * N2;
+    then consider a,b be Element of G such that
+A13: x = a * b & a in N1 & b in N2 by Th6;
+A14: x" = b" * a" by A13,GROUP_1:25;
+    b" in N2 & a" in N1 by A13,GROUP_2:60;
+     then
+    x" in N2 * N1 by A14,Th6;
+    hence thesis by GROUP_3:148;
+  end;
+  thus thesis by A1,A3,A12,GROUP_2:61;
+end;
+
+theorem Th8:
+  for G being Group, N1,N2 being strict normal Subgroup of G
+  ex M being strict normal Subgroup of G st the carrier of M = N1 * N2
+proof
+  let G be Group, N1,N2 be strict normal Subgroup of G;
+  consider M being strict Subgroup of G such that
+A1:the carrier of M = N1 * N2 by Th7;
+  for x,y be Element of G st y in M holds x * y * x" in M
+  proof
+    let x,y be Element of G;
+    assume y in M;
+    then y in the carrier of M by STRUCT_0:def 5;
+    then consider a,b be Element of G such that
+A2: y = a * b & a in N1 & b in N2 by A1,Th6;
+A3: x * y * x" =((x * a) * b) * x" by A2,GROUP_1:def 4
+              .=(x * a) * (b * x") by GROUP_1:def 4
+              .=(x * a) * 1_G * (b * x") by GROUP_1:def 5
+              .=(x * a) * (x" * x) * (b * x") by GROUP_1:def 6
+              .=(x * a) * x" * x * (b * x") by GROUP_1:def 4
+              .=((x * a) * x") * (x * (b * x")) by GROUP_1:def 4
+              .=(x * a * x") * (x * b * x") by GROUP_1:def 4;
+    x * a * x" in N1 & x * b * x" in N2 by A2,Th4;
+    then x * y * x" in N1 * N2 by A3,Th6;
+    hence thesis by A1,STRUCT_0:def 5;
+  end;
+  then M is normal Subgroup of G by Th5;
+  hence thesis by A1;
+end;
+
+theorem Th9:
+  for G being Group, N,N1,N2 being Subgroup of G st
+  the carrier of N = N1 * N2 holds N1 is Subgroup of N & N2 is Subgroup of N
+proof
+  let G be Group, N,N1,N2 be Subgroup of G;
+  assume
+A1:the carrier of N = N1 * N2;
+  for x be Element of G st x in N1 holds x in N
+  proof
+    let x be Element of G;
+    assume
+A2: x in N1;
+A3: 1_ G in N2 by GROUP_2:55;
+    x = x * 1_ G by GROUP_1:def 5;
+    then x in N1 * N2 by A2,A3,Th6;
+    hence thesis by A1,STRUCT_0:def 5;
+  end;
+  hence N1 is Subgroup of N  by GROUP_2:67;
+  for y be Element of G st y in N2 holds y in N
+  proof
+    let y be Element of G;
+    assume
+A4: y in N2;
+A5: 1_ G in N1 by GROUP_2:55;
+    y = 1_ G * y by GROUP_1:def 5;
+    then y in N1 * N2 by A4,A5,Th6;
+    hence thesis by A1,STRUCT_0:def 5;
+  end;
+  hence N2 is Subgroup of N  by GROUP_2:67;
+end;
+
+theorem Th10:
+  for N,N1,N2 be normal Subgroup of G,a,b be Element of G st
+  the carrier of N = N1 * N2 holds (a * N1) * (b * N2) = (a * b) * N
+proof
+  let N,N1,N2 be normal Subgroup of G;
+  let a,b be Element of G;
+  assume
+A1: the carrier of N = N1 * N2;
+  (a * N1) * (b * N2) = a * N1 * b * N2 by GROUP_2:14
+                     .= a * (N1 * b) * N2 by GROUP_2:35
+                     .= a * (b * N1) * N2 by GROUP_3:140
+                     .= (a * b) * N1 * N2 by GROUP_2:127
+                     .= (a * b) * (N1 * N2) by GROUP_4:60;
+  hence thesis by A1;
+end;
+
+theorem
+  for N being normal Subgroup of G for x holds x * N * x" c= carr(N)
+proof
+  let N be normal Subgroup of G;
+  let x;
+  x * N c= N * x by GROUP_3:141; then
+A1: x * N * x" c= N * x * x" by GROUP_3:5;
+  N * x * x" = N * (x * x") by GROUP_2:129
+            .= N * 1_G by GROUP_1:def 6;
+  hence thesis by A1,GROUP_2:132;
+end;
+
+definition
+  let G be Group, A be Subset of G;
+  let N be Subgroup of G;
+  func N ` A -> Subset of G equals
+  {x where x is Element of G: x * N c= A};
+  correctness
+  proof
+    {x where x is Element of G : x * N c= A} c= the carrier of G
+    proof
+      let y be set;
+      assume y in {x where x is Element of G: x * N c= A};
+      then ex x being Element of G st y = x & x * N c= A;
+      hence thesis;
+    end;
+    hence thesis;
+  end;
+  func N ~ A -> Subset of G equals
+  {x where x is Element of G : x * N meets A};
+  correctness
+  proof
+    {x where x is Element of G :  x * N meets A} c= the carrier of G
+    proof
+      let y be set;
+      assume y in {x where x is Element of G : x * N meets A};
+      then ex x being Element of G st y = x & x * N meets A;
+      hence thesis;
+    end;
+    hence thesis;
+  end;
+end;
+
+theorem Th12:
+  for x being Element of G st x in N ` A holds x * N c= A
+proof
+  let x be Element of G;
+  assume x in N ` A;
+  then ex x1 being Element of G st x1 = x & x1 * N c= A;
+  hence thesis;
+end;
+
+theorem
+  for x being Element of G st  x * N c= A holds x in N ` A;
+
+theorem Th14:
+  for x being Element of G st x in N ~ A holds x * N meets A
+proof
+  let x be Element of G;
+  assume x in N ~ A;
+  then ex x1 being Element of G st x = x1 & x1 * N meets A;
+  hence thesis;
+end;
+
+theorem
+  for x being Element of G st x * N meets A holds x in N ~ A;
+
+theorem Th16:
+  N ` A c= A
+proof
+  let x be set;
+  assume x in N ` A;
+  then consider y being Element of G such that
+A1: y = x & y * N c= A;
+  y in y * N by GROUP_2:130;
+  hence thesis by A1;
+end;
+
+theorem Th17:
+  A c= N ~ A
+proof
+  let x be set;
+  assume
+A1: x in A;
+  then reconsider x' = x as Element of G;
+  x' in x' * N  by GROUP_2:130;
+  then x' * N meets A by A1, XBOOLE_0:3;
+  hence thesis;
+end;
+
+theorem Th18:
+  N ` A c= N ~ A
+proof
+A1: N ` A c= A by Th16;
+  A c= N ~ A by Th17;
+  hence thesis by A1, XBOOLE_1:1;
+end;
+
+theorem
+  N ~ (A \/ B) = N ~ A \/ N ~ B
+proof
+  thus N ~ (A \/ B) c= N ~ A \/ N ~ B
+  proof
+    let x be set;
+    assume
+A1: x in N ~ (A \/ B);
+    then reconsider x as Element of G;
+    x * N meets (A \/ B) by A1,Th14;
+    then x * N meets A or x * N meets B by XBOOLE_1:70;
+    then x in N ~ A or x in N ~ B;
+    hence thesis by XBOOLE_0:def 3;
+  end;
+  let x be set;
+  assume
+A2:x in N ~ A \/ N ~ B;
+  then reconsider x as Element of G;
+  x in N ~ A or x in N ~ B by A2,XBOOLE_0:def 3;
+  then
+  x * N meets A or x * N meets B by Th14;
+  then x * N meets (A \/ B) by XBOOLE_1:70;
+  hence thesis;
+end;
+
+theorem
+  N ` (A /\ B) = N ` A /\ N ` B
+proof
+  thus N ` (A /\ B) c= N ` A /\ N ` B
+  proof
+    let x be set;
+    assume
+A1: x in N ` (A /\ B);
+    then reconsider x as Element of G;
+    consider x1 being Element of G such that
+A2: x1 = x & x1 * N c= A /\ B by A1;
+    x * N c= A & x * N c= B by A2,XBOOLE_1:18;
+    then x in N ` A & x in N ` B;
+    hence thesis by XBOOLE_0:def 4;
+  end;
+  let x be set;
+  assume
+A3: x in N ` A /\ N ` B;
+  then reconsider x as Element of G;
+  x in N ` A & x in N ` B by A3, XBOOLE_0:def 4;
+  then x * N c= A & x * N c= B by Th12;
+  then x * N c= A /\ B by XBOOLE_1:19;
+  hence thesis;
+end;
+
+theorem
+  A c= B implies N ` A c= N ` B
+proof
+  assume
+A1: A c= B;
+  let x be set;
+  assume
+A2: x in N ` A;
+  then reconsider x as Element of G;
+  x * N c= A by A2,Th12;
+  then x * N c= B by A1,XBOOLE_1:1;
+  hence thesis;
+end;
+
+theorem
+  A c= B implies N ~ A c= N ~ B
+proof
+  assume
+A1: A c= B;
+  let x be set;
+  assume
+A2: x in N ~ A;
+  then reconsider x as Element of G;
+  x * N meets A by A2,Th14;
+  then x * N meets B by A1,XBOOLE_1:63;
+  hence thesis;
+end;
+
+theorem
+  N ` A \/ N ` B c= N ` (A \/ B)
+proof
+  let x be set;
+  assume
+A1: x in N ` A \/  N ` B;
+  then reconsider x as Element of G;
+  per cases by A1,XBOOLE_0:def 3;
+  suppose x in N ` A;
+    then x * N c= A \/ B by Th12,XBOOLE_1:10;
+    hence thesis;
+  end;
+  suppose x in N ` B;
+    then x * N c= A \/ B by Th12,XBOOLE_1:10;
+    hence thesis;
+  end;
+end;
+
+theorem
+  N ~ (A \/ B)= N ~ A \/ N ~ B
+proof
+  thus  N ~ (A \/ B) c= N ~ A \/ N ~ B
+  proof
+    let x be set;
+    assume
+A1: x in N ~ (A \/ B);
+    then reconsider x as Element of G;
+     x * N meets (A \/ B) by A1, Th14;
+    then x * N meets A or x * N meets B by XBOOLE_1:70;
+    then x in N ~ A or x in N ~ B;
+    hence thesis by XBOOLE_0:def 3;
+  end;
+  let x be set;
+  assume
+A2: x in N ~ A \/ N ~ B;
+  then reconsider x as Element of G;
+  x in N ~ A or x in N ~ B by A2, XBOOLE_0:def 3;
+  then x * N meets A or x * N meets B by Th14;
+  then x * N meets (A \/ B) by XBOOLE_1:70;
+  hence thesis;
+end;
+
+theorem Th25:
+  N is Subgroup of H implies H ` A c= N ` A
+proof
+  assume
+A1: N is Subgroup of H;
+  let x be set;
+  assume
+A2: x in H ` A;
+  then reconsider x as Element of G;
+A3: x * N c= x * H by A1,GROUP_3:6;
+  x * H c= A by A2,Th12;
+  then x * N c= A by A3,XBOOLE_1:1;
+  hence thesis;
+end;
+
+theorem Th26:
+   N is Subgroup of H implies N ~ A c= H ~ A
+proof
+  assume
+A1: N is Subgroup of H;
+  let x be set;
+  assume
+A2: x in N ~ A;
+  then reconsider x as Element of G;
+  x * N meets A by A2,Th14;
+  then x * H meets A by A1,GROUP_3:6,XBOOLE_1:63;
+  hence thesis;
+end;
+
+theorem
+  for G be Group, A,B be non empty Subset of G, N be normal Subgroup of G
+   holds N ` A * N ` B c= N ` (A * B)
+proof
+  let G be Group, A,B be non empty Subset of G,
+  N be normal Subgroup of G;
+  let x be set;
+  assume
+A1: x in N ` A * N ` B;
+  then reconsider x as Element of G;
+  consider x1, x2 be Element of G such that
+A2: x = x1 * x2 & x1 in N ` A & x2 in N ` B by A1;
+A3: x1 * N c= A & x2 * N c= B by A2,Th12;
+  (x1 * N) * (x2 * N) c= A * B by A3,GROUP_3:4;
+  then (x1 * x2) * N c= A * B by Th1;
+  hence thesis by A2;
+end;
+
+theorem Th28:
+  for x being Element of G st x in N ~ (A * B) holds x * N meets A * B
+proof
+  let x be Element of G;
+  assume x in N ~ (A * B);
+  then consider x1 being Element of G such that
+A1: x = x1 & x1 * N meets A * B;
+  thus thesis by A1;
+end;
+
+theorem
+  for G be Group, A,B be non empty Subset of G, N be normal Subgroup of G
+  holds N ~ A * N ~ B = N ~ (A * B)
+proof
+  let G be Group, A,B be non empty Subset of G,
+  N be normal Subgroup of G;
+  thus N ~ A * N ~ B c= N ~ (A * B)
+  proof
+    let x be set;
+    assume
+A1: x in N ~ A * N ~ B;
+    then reconsider x as Element of G;
+    consider x1, x2 be Element of G such that
+A2: x = x1 * x2 & x1 in N ~ A & x2 in N ~ B by A1;
+A3: x1 * N meets A by A2,Th14;
+A4: x2 * N meets B by A2,Th14;
+     consider x1' be set such that
+A5: x1' in x1 * N & x1' in A by A3,XBOOLE_0:3;
+    consider x2' be set such that
+A6: x2' in x2 * N & x2' in B by A4,XBOOLE_0:3;
+    reconsider x1' as Element of G by A5;
+    reconsider x2' as Element of G by A6;
+A7: x1' * x2' in A * B  by A5,A6;
+A8: x1' * x2' in (x1 * N) * (x2 * N) by A5,A6;
+    (x1 * N) * (x2 * N) meets A * B by A7,A8,XBOOLE_0:3;
+    then (x1 * x2) * N meets A * B by Th1;
+    hence thesis by A2;
+  end;
+    let x be set;
+    assume
+A9: x in N ~ (A * B);
+    then reconsider x as Element of G;
+A10: x * N meets A * B by A9,Th28;
+    consider x1 be set such that
+A11: x1 in x * N & x1 in A * B by A10,XBOOLE_0:3;
+    reconsider x1 as Element of G by A11;
+    consider y1, y2 be Element of G such that
+A12: x1 = y1 * y2 & y1 in A & y2 in B by A11;
+A13: x * N = (y1 * y2) * N by A11,A12,Th2
+          .= (y1 * N) * (y2 * N) by Th1;
+    x in (y1 * N) * (y2 * N) by GROUP_2:130,A13;
+    then consider g1, g2 be Element of G such that
+A14: x = g1 * g2 & g1 in y1 * N & g2 in y2 * N;
+    y1 * N = g1 * N & y2 * N = g2 * N by A14,Th2;
+    then y1 in g1 * N & y2 in g2 * N by GROUP_2:130;
+    then g1 * N meets A & g2 * N meets B by A12,XBOOLE_0:3;
+    then g1 in N ~ A & g2 in N ~ B;
+    hence thesis by A14;
+end;
+
+theorem Th30:
+  for x being Element of G st x in N ~ (N ` (N ~ A))
+  holds x * N meets N ` (N ~ A)
+proof
+  let x be Element of G;
+  assume x in N ~ (N ` (N ~ A));
+  then ex x1 being Element of G st x = x1 & x1 * N meets N ` (N ~ A);
+  hence thesis;
+end;
+
+theorem Th31:
+  for x being Element of G st x in N ` (N ~ A) holds x * N c= N ~ A
+proof
+  let x be Element of G;
+  assume x in N ` (N ~ A);
+  then ex x1 being Element of G st x1 = x & x1 * N c= N ~ A;
+  hence thesis;
+end;
+
+theorem Th32:
+  for x being Element of G st x in N ~ (N ~ A) holds x * N meets N ~ A
+proof
+  let x be Element of G;
+  assume x in N ~ (N ~ A);
+  then ex x1 being Element of G st x = x1 & x1 * N meets N ~ A;
+  hence thesis;
+end;
+
+theorem Th33:
+  for x being Element of G st x in N ~ (N ` A) holds x * N meets N ` A
+proof
+  let x be Element of G;
+  assume x in N ~ (N ` A);
+  then ex x1 being Element of G st x = x1 & x1 * N meets N ` A;
+  hence thesis;
+end;
+
+theorem Th34:
+  N ` (N ` A) = N ` A
+proof
+  thus N ` (N ` A) c= N ` A
+  proof
+    let x be set;
+    assume x in N ` (N ` A);
+    then consider y being Element of G such that
+A1: y = x & y * N c= N ` A;
+    y in y * N  by GROUP_2:130;
+    hence thesis by A1;
+  end;
+  let x be set;
+  assume
+A2: x in N ` A;
+  then reconsider x' = x as Element of G;
+A3: x' * N c= A by A2,Th12;
+  x' * N c= N ` A
+  proof
+    let y be set;
+    assume
+A4: y in x' * N;
+    then reconsider y' = y as Element of G;
+    x' * N = y' * N by A4,Th2;
+    hence thesis by A3;
+  end;
+  hence thesis;
+end;
+
+theorem Th35:
+  N ~ A = N ~ (N ~ A)
+proof
+  thus N ~ A c= N ~ (N ~ A)
+  proof
+    let x be set;
+    assume
+A1: x in N ~ A;
+    then reconsider x as Element of G;
+    x in x * N by GROUP_2:130;
+    then x * N meets N ~ A by A1,XBOOLE_0:3;
+    hence thesis;
+  end;
+  let x be set;
+  assume
+A2:x in N ~ (N ~ A);
+  then reconsider x' = x as Element of G;
+  x' * N meets N ~ A by A2, Th32;
+  then consider y be set such that
+A3:y in x' * N & y in N ~ A by XBOOLE_0:3;
+   reconsider y' = y as Element of G by A3;
+A4:y' * N meets A by A3,Th14;
+  y' * N = x' * N by A3,Th2;
+  hence thesis by A4;
+end;
+
+theorem
+  N ` (N ` A) c= N ~ (N ~ A)
+proof
+  N ` A c= N ~ A by Th18;
+  then N ` (N ` A) c= N ~ A by Th34;
+  hence thesis by Th35;
+end;
+
+theorem
+  N ~ (N ` A) c= A
+proof
+  let x be set;
+  assume
+A1:x in N ~ (N ` A);
+  then reconsider x' = x as Element of G;
+  x' * N meets N ` A by A1,Th33;
+  then consider y being set such that
+A2:y in x' * N & y in N ` A by XBOOLE_0:3;
+  reconsider y' = y as Element of G by A2;
+  y' * N c= A by A2,Th12; then
+A3:x' * N c= A by A2,Th2;
+  x' in x' * N by GROUP_2:130;
+  hence thesis by A3;
+end;
+
+theorem
+  N ` (N ~ (N ` A)) = N ` A
+proof
+  thus  N ` (N ~ (N ` A)) c= N ` A
+  proof
+    let x be set;
+    assume x in N ` (N ~ (N ` A));
+    then consider x1 being Element of G such that
+A1: x1 = x & x1 * N c= N ~ (N ` A);
+    x1 in x1 * N by GROUP_2:130;
+    then x1 * N meets N ` A by A1,Th33;
+    then consider y be set such that
+A2: y in x1 * N & y in N ` A by XBOOLE_0:3;
+    reconsider y as Element of G by A2;
+    y * N c= A by A2,Th12;
+    then x1 * N c= A by A2,Th2;
+    hence thesis by A1;
+  end;
+  let x be set;
+  assume
+A3: x in N ` A;
+  then reconsider x as Element of G;
+  x * N c= N ~ (N ` A)
+  proof
+    let y be set;
+    assume
+A4: y in x * N;
+    then reconsider y as Element of G;
+    y * N = x * N by A4,Th2;
+    then x in y * N by GROUP_2:130;
+    then y * N meets N ` A by A3,XBOOLE_0:3;
+    hence thesis;
+  end;
+  hence thesis;
+end;
+
+theorem Th39:
+  A c= N ` (N ~ A) implies N ~ A c= N ~ (N `(N ~ A))
+proof
+  assume
+A1: A c= N ` (N ~ A);
+  let x be set;
+  assume
+A2: x in N ~ A;
+  then reconsider x as Element of G;
+  x * N meets A by A2,Th14;
+  then x * N meets N ` (N ~ A) by A1,XBOOLE_1:63;
+  hence thesis;
+end;
+
+theorem
+  N ~ (N `(N ~ A)) = N ~ A
+proof
+  thus N ~ (N `(N ~ A)) c= N ~ A
+  proof
+    let x be set;
+    assume
+A1: x in N ~ (N ` (N ~ A));
+    then reconsider x as Element of G;
+    x * N meets N ` (N ~ A) by A1,Th30;
+    then consider y being set such that
+A2: y in x * N & y in N ` (N ~ A) by XBOOLE_0:3;
+    reconsider y as Element of G by A2;
+    y * N c= N ~ A by A2,Th31;
+    then
+A3: x * N c= N ~ A by A2,Th2;
+    x in x * N by GROUP_2:130;
+    hence thesis by A3;
+  end;
+  thus N ~ A c= N ~ (N `(N ~ A))
+  proof
+    A c= N ` (N ~ A)
+    proof
+      let x be set;
+      assume
+A4:   x in A;
+      then reconsider x as Element of G;
+      x * N c= N ~ A
+      proof
+        let y be set;
+        assume
+A5:     y in x * N;
+        then reconsider y as Element of G;
+        y * N = x * N by A5,Th2;
+        then x in y * N by GROUP_2:130;
+        then y * N meets A by A4,XBOOLE_0:3;
+        hence thesis;
+      end;
+      hence thesis;
+    end;
+    hence thesis by Th39;
+  end;
+end;
+
+theorem Th41:
+  for x being Element of G st x in N ` (N ` A) holds x * N c= N ` A
+proof
+  let x be Element of G;
+  assume x in N ` (N ` A);
+  then ex x1 being Element of G st x1 = x & x1 * N c= N ` A;
+  hence thesis;
+end;
+
+theorem
+  N `(N ` A) = N ~ (N ` A)
+proof
+  thus N `(N ` A) c= N ~ (N ` A)
+  proof
+    let x be set;
+    assume
+A1: x in N `(N ` A);
+    then reconsider x as Element of G;
+A2: x * N c= N ` A by A1,Th41;
+    x in x * N by GROUP_2:130;
+    then x * N meets N ` A by A2,XBOOLE_0:3;
+    hence thesis;
+  end;
+  let x be set;
+  assume
+A3:x in N ~ (N ` A);
+  then reconsider x as Element of G;
+  x * N meets N ` A by A3,Th33;
+  then consider z being set such that
+A4:z in x * N & z in N ` A by XBOOLE_0:3;
+   reconsider z as Element of G by A4;
+   z * N c= A by A4,Th12;
+  then
+A5: x * N c= A by A4,Th2;
+  x * N c= N ` A
+  proof
+    let y be set;
+    assume
+A6: y in x * N;
+    then reconsider y as Element of G;
+    x * N = y * N by A6,Th2;
+    hence thesis by A5;
+  end;
+  hence thesis;
+end;
+
+theorem
+  N ~ (N ~ A) = N `(N ~ A)
+proof
+  thus N ~ (N ~ A) c= N `(N ~ A)
+  proof
+    let x be set;
+    assume
+A1: x in N ~ (N ~ A);
+    then reconsider x as Element of G;
+    x * N meets N ~ A by A1,Th32;
+    then consider z being set such that
+A2: z in x * N & z in N ~ A by XBOOLE_0:3;
+    reconsider z as Element of G by A2;
+    z * N meets A by A2,Th14;
+    then
+A4: x * N meets A by A2,Th2;
+  x * N c= N ~ A
+  proof
+    let y be set;
+    assume
+A5: y in x * N;
+    then reconsider y as Element of G;
+    x * N = y * N by A5,Th2;
+    hence thesis by A4;
+  end;
+  hence thesis;
+end;
+    let x be set;
+    assume
+A6: x in N ` (N ~ A);
+    then reconsider x as Element of G;
+A7: x * N c= N ~ A by A6,Th31;
+    x in x * N by GROUP_2:130;
+    then x * N meets N ~ A by A7,XBOOLE_0:3;
+    hence thesis;
+end;
+
+theorem
+  for N,N1,N2 be Subgroup of G st N = N1 /\ N2
+    holds N ~ A c= N1 ~ A /\ N2 ~ A
+proof
+  let N, N1,N2 be Subgroup of G;
+  assume N = N1 /\ N2; then
+A1:N is Subgroup of N1 & N is Subgroup of N2 by GROUP_2:106;
+  let x be set;
+  assume
+A2: x in N ~ A;
+  N ~ A c= N1 ~ A & N ~ A c= N2 ~ A by A1,Th26;
+  hence thesis by A2,XBOOLE_0:def 4;
+end;
+
+theorem
+  for N,N1,N2 be Subgroup of G st N = N1 /\ N2
+    holds N1 ` A /\ N2 ` A c= N ` A
+proof
+  let N,N1,N2 be Subgroup of G;
+  assume N = N1 /\ N2; then
+A1:N is Subgroup of N1 & N is Subgroup of N2 by GROUP_2:106;
+  let x be set;
+  assume x in N1 ` A /\ N2 ` A; then
+A2: x in N1 ` A & x in N2 ` A by XBOOLE_0:def 4;
+  N1 ` A c= N ` A & N2 ` A c= N ` A by A1,Th25;
+  hence thesis by A2;
+end;
+
+theorem
+  for N1,N2 be strict normal Subgroup of G
+  ex N being strict normal Subgroup of G
+   st the carrier of N = N1 * N2 & N ` A c= N1 ` A /\ N2 ` A
+proof
+  let N1,N2 be strict normal Subgroup of G;
+  consider N be strict normal Subgroup of G such that
+A1:the carrier of N = N1 * N2 by Th8;
+   N1 is Subgroup of N & N2 is Subgroup of N by A1,Th9; then
+A2: N ` A c= N1 ` A & N ` A c= N2 ` A by Th25;
+  N ` A c= N1 ` A /\ N2 ` A
+  proof
+    let x be set;
+    assume x in N ` A;
+    hence thesis by A2,XBOOLE_0:def 4;
+  end;
+  hence thesis by A1;
+end;
+
+theorem
+  for N1,N2 be strict normal Subgroup of G ex N being strict normal
+  Subgroup of G st the carrier of N = N1 * N2 & N1 ~ A \/ N2 ~ A c= N ~ A
+proof
+  let N1,N2 be strict normal Subgroup of G;
+  consider N be strict normal Subgroup of G such that
+A1:the carrier of N = N1 * N2 by Th8;
+   N1 is Subgroup of N & N2 is Subgroup of N by A1,Th9; then
+A2: N1 ~ A c= N ~ A & N2 ~ A c= N ~ A by Th26;
+  N1 ~ A \/ N2 ~ A c= N ~ A
+  proof
+    let x be set;
+    assume x in N1 ~ A \/ N2 ~ A;
+    then x in N1 ~ A or x in N2 ~ A by XBOOLE_0:def 3;
+    hence thesis by A2;
+  end;
+  hence thesis by A1;
+end;
+
+theorem
+  for N1,N2 be strict normal Subgroup of G
+  ex N being strict normal Subgroup of G st the carrier of N = N1 * N2 &
+  N ~ A c= ((N1 ~ A) * N2) /\ ((N2 ~ A) * N1)
+proof
+  let N1,N2 be strict normal Subgroup of G;
+  consider N be strict normal Subgroup of G such that
+A1:the carrier of N = N1 * N2 by Th8;
+  N ~ A c= ((N1 ~ A) * N2) /\ ((N2 ~ A) * N1)
+  proof
+    let x be set;
+    assume
+A2: x in N ~ A;
+    then reconsider x as Element of G;
+A3: x * N meets A by A2,Th14;
+    consider x1 be set such that
+A4: x1 in x * N & x1 in A by A3,XBOOLE_0:3;
+    reconsider x1 as Element of G by A4;
+    consider y be Element of G such that
+A5: x1 = x * y & y in N by A4,GROUP_2:125;
+A6: y in N1 * N2 by A1,A5,STRUCT_0:def 5;
+    then consider a,b be Element of G such that
+A7: y = a * b & a in N1 & b in N2 by Th6;
+A8: x1 = x * a * b by A5,A7,GROUP_1:def 4;
+    a in carr(N1) by A7,STRUCT_0:def 5;
+    then
+A9: x * a * b in x * N1 * b by GROUP_8:15;
+    x * N1 * b = x * (N1 * b) by GROUP_2:128
+            .= x * (b * N1) by GROUP_3:140
+            .= (x * b) * N1 by GROUP_2:127;
+    then (x * b) * N1 meets A by A4,A8,A9,XBOOLE_0:3;
+    then
+A10: x * b in N1 ~ A;
+A11:(x * b) * b" = x * (b * b") by GROUP_1:def 4
+            .= x * 1_G by GROUP_1:def 6
+            .= x by GROUP_1:def 5;
+    b" in N2 by A7,GROUP_2:60;
+    then
+A12:x in (N1 ~ A) * N2 by A10,A11,GROUP_2:114;
+    y in N2 * N1 by A6,GROUP_3:148;
+    then consider a,b be Element of G such that
+A13: y = a * b & a in N2 & b in N1 by Th6;
+A14: x1 = x * a * b by A5,A13,GROUP_1:def 4;
+    a in carr(N2) by A13,STRUCT_0:def 5;
+    then
+A15: x * a * b in x * N2 * b by GROUP_8:15;
+    x * N2 * b = x * (N2 * b) by GROUP_2:128
+              .= x * (b * N2) by GROUP_3:140
+              .= (x * b) * N2 by GROUP_2:127;
+    then (x * b) * N2 meets A by A4,A14,A15,XBOOLE_0:3;
+    then
+A16: x * b in N2 ~ A;
+A17:(x * b) * b" = x * (b * b") by GROUP_1:def 4
+            .= x * 1_G by GROUP_1:def 6
+            .= x by GROUP_1:def 5;
+    b" in N1 by A13,GROUP_2:60;
+    then x in (N2 ~ A) * N1 by A16,A17,GROUP_2:114;
+    hence thesis by A12,XBOOLE_0:def 4;
+  end;
+  hence thesis by A1;
+end;
+
+reserve N1,N2 for Subgroup of G;
+
+definition
+  let G be Group, H, N be Subgroup of G;
+  func N ` H -> Subset of G equals
+  {x where x is Element of G: x * N c= carr(H)};
+  coherence
+  proof
+    {x where x is Element of G : x * N c= carr(H)} c= the carrier of G
+    proof
+      let y be set;
+      assume y in {x where x is Element of G : x * N c= carr(H)};
+      then ex x being Element of G st y = x & x * N c= carr(H);
+      hence thesis;
+    end;
+    hence thesis;
+  end;
+  func N ~ H -> Subset of G equals
+  {x where x is Element of G : x * N meets carr(H)};
+  coherence
+  proof
+    {x where x is Element of G : x * N meets carr(H)}
+    c= the carrier of G
+    proof
+      let y be set;
+      assume y in {x where x is Element of G : x * N meets carr(H)};
+      then ex x being Element of G st y = x & x * N meets carr(H);
+      hence thesis;
+    end;
+    hence thesis;
+  end;
+end;
+
+theorem Th49:
+  for x being Element of G st x in N ` H holds x * N c= carr(H)
+proof
+  let x be Element of G;
+  assume x in N ` H;
+  then ex x1 being Element of G st x1 = x & x1 * N c= carr(H);
+  hence thesis;
+end;
+
+theorem
+  for x being Element of G st x * N c= carr(H) holds x in N ` H;
+
+theorem Th51:
+  for x being Element of G st x in N ~ H holds x * N meets carr(H)
+proof
+  let x be Element of G;
+  assume x in N ~ H;
+  then ex x1 being Element of G st x = x1 & x1 * N meets carr(H);
+  hence thesis;
+end;
+
+theorem
+  for x being Element of G st x * N meets carr(H) holds x in N ~ H;
+
+theorem Th53:
+  N ` H c= carr(H)
+proof
+  let x be set;
+  assume x in N ` H;
+  then consider y1 being Element of G such that
+A1: y1 = x & y1 * N c= carr(H);
+  y1 in y1 * N  by GROUP_2:130;
+  hence thesis by A1;
+end;
+
+theorem Th54:
+  carr(H) c= N ~ H
+proof
+  let x be set;
+  assume x in carr(H);
+  then reconsider x as Element of H;
+  reconsider x as Element of G by GROUP_2:51;
+  x in x * N by GROUP_2:130;
+  then x * N meets carr(H) by XBOOLE_0:3;
+  hence thesis;
+end;
+
+theorem Th55:
+  N ` H c= N ~ H
+proof
+A1: N ` H c= carr(H) by Th53;
+  carr(H) c= N ~ H by Th54;
+  hence thesis by A1, XBOOLE_1:1;
+end;
+
+theorem Th56:
+   H1 is Subgroup of H2 implies N ~ H1 c= N ~ H2
+proof
+  assume H1 is Subgroup of H2; then
+A1: carr(H1) c= carr(H2) by GROUP_2:def 5;
+  let x be set;
+  assume
+A2: x in N ~ H1;
+  then reconsider x as Element of G;
+  x * N meets carr(H1) by A2,Th51;
+  then x * N meets carr(H2) by A1,XBOOLE_1:63;
+  hence thesis;
+end;
+
+theorem Th57:
+  N1 is Subgroup of N2 implies N1 ~ H c= N2 ~ H
+proof
+  assume
+A1:N1 is Subgroup of N2;
+  let x be set;
+  assume
+A2: x in N1 ~ H;
+  then reconsider x as Element of G;
+  x * N1 meets carr(H) by A2,Th51;
+  then x * N2 meets carr(H) by A1,GROUP_3:6,XBOOLE_1:63;
+  hence thesis;
+end;
+
+theorem
+  N1 is Subgroup of N2 implies N1 ~ N1 c= N2 ~ N2
+proof
+  assume
+A1: N1 is Subgroup of N2; then
+A2: N2 ~ N1 c= N2 ~ N2 by Th56;
+    N1 ~ N1 c= N2 ~ N1 by A1,Th57;
+  hence thesis by A2,XBOOLE_1:1;
+end;
+
+theorem Th59:
+  H1 is Subgroup of H2 implies N ` H1 c= N ` H2
+proof
+  assume H1 is Subgroup of H2; then
+A1: carr(H1) c= carr(H2) by GROUP_2:def 5;
+  let x be set;
+  assume
+A2: x in N ` H1;
+  then reconsider x as Element of G;
+  x * N c= carr(H1) by A2,Th49;
+  then x * N c= carr(H2) by A1,XBOOLE_1:1;
+  hence thesis;
+end;
+
+theorem Th60:
+  N1 is Subgroup of N2 implies N2 ` H c= N1 ` H
+proof
+  assume
+A1: N1 is Subgroup of N2;
+  let x be set;
+  assume
+A2: x in N2 ` H;
+  then reconsider x as Element of G;
+A3: x * N1 c= x * N2 by A1,GROUP_3:6;
+  x * N2 c= carr(H) by A2,Th49;
+  then x * N1 c= carr(H) by A3,XBOOLE_1:1;
+  hence thesis;
+end;
+
+theorem
+  N1 is Subgroup of N2 implies N2 ` N1 c= N1 ` N2
+proof
+  assume
+A1: N1 is Subgroup of N2; then
+A2: N2 ` N1 c= N2 ` N2 by Th59;
+    N2 ` N2 c= N1 ` N2 by A1,Th60;
+  hence thesis by A2,XBOOLE_1:1;
+end;
+
+theorem
+  for N be normal Subgroup of G holds N ` H1 * N ` H2 c= N ` (H1 * H2)
+proof
+  let N be normal Subgroup of G;
+  let x be set;
+  assume
+A1: x in N ` H1 * N ` H2;
+  then reconsider x as Element of G;
+  consider x1, x2 be Element of G such that
+A2: x = x1 * x2 & x1 in N ` H1 & x2 in N ` H2 by A1;
+A3: x1 * N c= carr(H1) & x2 * N c= carr(H2) by A2,Th49;
+  (x1 * N) * (x2 * N) c= carr(H1) * carr(H2) by A3,GROUP_3:4;
+  then (x1 * x2) * N c= carr(H1) * carr(H2) by Th1;
+  hence thesis by A2;
+end;
+
+theorem
+  for N be normal Subgroup of G holds N ~ H1 * N ~ H2 = N ~ (H1 * H2)
+proof
+  let N be normal Subgroup of G;
+  thus N ~ H1 * N ~ H2 c= N ~ (H1 * H2)
+  proof
+    let x be set;
+    assume
+A1: x in N ~ H1 * N ~ H2;
+    then reconsider x as Element of G;
+    consider x1, x2 be Element of G such that
+A2: x = x1 * x2 & x1 in N ~ H1 & x2 in N ~ H2 by A1;
+A3: x1 * N meets carr(H1) by A2,Th51;
+A4: x2 * N meets carr(H2) by A2,Th51;
+     consider x1' be set such that
+A5: x1' in x1 * N & x1' in carr(H1) by A3,XBOOLE_0:3;
+    consider x2' be set such that
+A6: x2' in x2 * N & x2' in carr(H2) by A4,XBOOLE_0:3;
+    reconsider x1' as Element of G by A5;
+    reconsider x2' as Element of G by A6;
+A7: x1' * x2' in carr(H1) * carr(H2)  by A5,A6;
+A8: x1' * x2' in (x1 * N) * (x2 * N) by A5,A6;
+    (x1 * N) * (x2 * N) meets carr(H1) * carr(H2) by A7,A8,XBOOLE_0:3;
+    then (x1 * x2) * N meets carr(H1) * carr(H2) by Th1;
+    hence thesis by A2;
+  end;
+    let x be set;
+    assume
+A9: x in N ~ (H1 * H2);
+    then reconsider x as Element of G;
+A10: x * N meets carr(H1) * carr(H2) by A9,Th28;
+    consider x1 be set such that
+A11: x1 in x * N & x1 in carr(H1) * carr(H2) by A10,XBOOLE_0:3;
+    reconsider x1 as Element of G by A11;
+    consider y1, y2 be Element of G such that
+A12: x1 = y1 * y2 & y1 in carr(H1) & y2 in carr(H2) by A11;
+A13: x * N = (y1 * y2) * N by A11,A12,Th2
+          .= (y1 * N) * (y2 * N) by Th1;
+    x in (y1 * N) * (y2 * N) by GROUP_2:130,A13;
+    then consider g1, g2 be Element of G such that
+A14: x = g1 * g2 & g1 in y1 * N & g2 in y2 * N;
+    y1 * N = g1 * N & y2 * N = g2 * N by A14,Th2;
+    then y1 in g1 * N & y2 in g2 * N by GROUP_2:130;
+    then g1 * N meets carr(H1) & g2 * N meets carr(H2) by A12,XBOOLE_0:3;
+    then g1 in N ~ H1 & g2 in N ~ H2;
+    hence thesis by A14;
+end;
+
+theorem
+  for N,N1,N2 be Subgroup of G st N = N1 /\ N2
+    holds N ~ H c= N1 ~ H /\ N2 ~ H
+proof
+  let N,N1,N2 be Subgroup of G;
+  assume N = N1 /\ N2; then
+A1:N is Subgroup of N1 & N is Subgroup of N2 by GROUP_2:106;
+  let x be set;
+  assume
+A2: x in N ~ H;
+  N ~ H c= N1 ~ H & N ~ H c= N2 ~ H by A1,Th57;
+  hence thesis by A2,XBOOLE_0:def 4;
+end;
+
+theorem
+  for N,N1,N2 be Subgroup of G st N = N1 /\ N2
+    holds N1 ` H /\ N2 ` H c= N ` H
+proof
+  let N,N1,N2 be Subgroup of G;
+  assume N = N1 /\ N2; then
+A1:N is Subgroup of N1 & N is Subgroup of N2 by GROUP_2:106;
+  let x be set;
+  assume x in N1 ` H /\ N2 ` H; then
+A2: x in N1 ` H & x in N2 ` H by XBOOLE_0:def 4;
+  N1 ` H c= N ` H & N2 ` H c= N ` H by A1,Th60;
+  hence thesis by A2;
+end;
+
+theorem
+  for N1,N2 be strict normal Subgroup of G holds ex N being strict normal
+  Subgroup of G st the carrier of N = N1 * N2 & N ` H c= N1 ` H /\ N2 ` H
+proof
+  let N1,N2 be strict normal Subgroup of G;
+  consider N be strict normal Subgroup of G such that
+A1:the carrier of N = N1 * N2 by Th8;
+  N1 is Subgroup of N & N2 is Subgroup of N by A1,Th9; then
+A2: N ` H c= N1 ` H & N ` H c= N2 ` H by Th60;
+  N ` H c= N1 ` H /\ N2 ` H
+  proof
+    let x be set;
+    assume x in N ` H;
+    hence thesis by A2,XBOOLE_0:def 4;
+  end;
+  hence thesis by A1;
+end;
+
+theorem
+  for N1,N2 be strict normal Subgroup of G ex N being strict normal
+  Subgroup of G st the carrier of N = N1 * N2 & N1 ~ H \/ N2 ~ H c= N ~ H
+proof
+  let N1,N2 be strict normal Subgroup of G;
+  consider N be strict normal Subgroup of G such that
+A1:the carrier of N = N1 * N2 by Th8;
+  N1 is Subgroup of N & N2 is Subgroup of N by A1,Th9; then
+A2: N1 ~ H c= N ~ H & N2 ~ H c= N ~ H by Th57;
+  N1 ~ H \/ N2 ~ H c= N ~ H
+  proof
+    let x be set;
+    assume x in N1 ~ H \/ N2 ~ H;
+    then x in N1 ~ H or x in N2 ~ H by XBOOLE_0:def 3;
+    hence thesis by A2;
+  end;
+  hence thesis by A1;
+end;
+
+theorem
+  for N1,N2 be strict normal Subgroup of G
+  ex N being strict normal Subgroup of G st
+    the carrier of N = N1 * N2 & N1 ` H * N2 ` H c= N ` H
+proof
+  let N1,N2 be strict normal Subgroup of G;
+  consider N be strict normal Subgroup of G such that
+A1:the carrier of N = N1 * N2 by Th8;
+  N1 ` H * N2 ` H c= N ` H
+  proof
+    let x be set;
+    assume
+A2: x in N1 ` H * N2 ` H;
+    then reconsider x as Element of G;
+    consider a,b be Element of G such that
+A3: x = a * b & a in N1 ` H & b in N2 ` H by A2;
+    a * N1 c= carr(H) & b * N2 c= carr(H) by A3,Th49;
+    then (a * N1) * (b * N2) c= carr(H) * carr(H) by GROUP_3:4; then
+A4: (a * N1) * (b * N2) c= carr(H) by GROUP_2:91;
+    (a * N1) * (b * N2) = (a * b) * N by A1,Th10;
+    hence thesis by A3,A4;
+  end;
+  hence thesis by A1;
+end;
+
+theorem
+  for N1,N2 be strict normal Subgroup of G
+  ex N being strict normal Subgroup of G st
+  the carrier of N = N1 * N2 & N1 ~ H * N2 ~ H c= N ~ H
+proof
+  let N1,N2 be strict normal Subgroup of G;
+  consider N be strict normal Subgroup of G such that
+A1:the carrier of N = N1 * N2 by Th8;
+  N1 ~ H * N2 ~ H c= N ~ H
+  proof
+    let x be set;
+    assume
+A2: x in N1 ~ H * N2 ~ H;
+    then reconsider x as Element of G;
+    consider a,b be Element of G such that
+A3: x = a * b & a in N1 ~ H & b in N2 ~ H by A2;
+A4: a * N1 meets carr(H) by A3,Th51;
+A5: b * N2 meets carr(H) by A3,Th51;
+    consider x1 be set such that
+A6: x1 in a * N1 & x1 in carr(H) by A4,XBOOLE_0:3;
+    consider x2 be set such that
+A7: x2 in b * N2 & x2 in carr(H) by A5,XBOOLE_0:3;
+    reconsider x1 as Element of G by A6;
+    reconsider x2 as Element of G by A7;
+A8: x1 * x2 in carr(H) * carr(H)  by A6,A7;
+A9: x1 * x2 in (a * N1) * (b * N2) by A6,A7;
+    carr(H) * carr(H) = carr(H) by GROUP_2:91; then
+A10:(a * N1) * (b * N2) meets carr(H) by A8,A9,XBOOLE_0:3;
+    (a * N1) * (b * N2) = (a * b) * N by A1,Th10;
+    hence thesis by A3,A10;
+  end;
+  hence thesis by A1;
+end;
+
+theorem
+  for N1,N2 be strict normal Subgroup of G
+  ex N being strict normal Subgroup of G st the carrier of N = N1 * N2 &
+  N ~ H c= ((N1 ~ H) * N2) /\ ((N2 ~ H) * N1)
+proof
+  let N1,N2 be strict normal Subgroup of G;
+  consider N be strict normal Subgroup of G such that
+A1:the carrier of N = N1 * N2 by Th8;
+  N ~ H c= ((N1 ~ H) * N2) /\ ((N2 ~ H) * N1)
+  proof
+    let x be set;
+    assume
+A2: x in N ~ H;
+    then reconsider x as Element of G;
+A3: x * N meets carr(H) by A2,Th51;
+    consider x1 be set such that
+A4: x1 in x * N & x1 in carr(H) by A3,XBOOLE_0:3;
+    reconsider x1 as Element of G by A4;
+    consider y be Element of G such that
+A5: x1 = x * y & y in N by A4,GROUP_2:125;
+A6: y in N1 * N2 by A1,A5,STRUCT_0:def 5;
+    then consider a,b be Element of G such that
+A7: y = a * b & a in N1 & b in N2 by Th6;
+A8: x1 = x * a * b by A5,A7,GROUP_1:def 4;
+    a in carr(N1) by A7,STRUCT_0:def 5; then
+A9: x * a * b in x * N1 * b by GROUP_8:15;
+    x * N1 * b = x * (N1 * b) by GROUP_2:128
+              .= x * (b * N1) by GROUP_3:140
+              .= (x * b) * N1 by GROUP_2:127;
+    then (x * b) * N1 meets carr(H) by A4,A8,A9,XBOOLE_0:3;
+    then
+A10: x * b in N1 ~ H;
+A11:(x * b) * b" = x * (b * b") by GROUP_1:def 4
+                .= x * 1_G by GROUP_1:def 6
+                .= x by GROUP_1:def 5;
+    b" in N2 by A7,GROUP_2:60; then
+A12:x in (N1 ~ H) * N2 by A10,A11,GROUP_2:114;
+    y in N2 * N1 by A6,GROUP_3:148;
+    then consider a,b be Element of G such that
+A13: y = a * b & a in N2 & b in N1 by Th6;
+A14: x1 = x * a * b by A5,A13,GROUP_1:def 4;
+    a in carr(N2) by A13,STRUCT_0:def 5; then
+A15: x * a * b in x * N2 * b by GROUP_8:15;
+    x * N2 * b = x * (N2 * b) by GROUP_2:128
+              .= x * (b * N2) by GROUP_3:140
+              .= (x * b) * N2 by GROUP_2:127;
+    then (x * b) * N2 meets carr(H) by A4,A14,A15,XBOOLE_0:3;
+    then
+A16: x * b in N2 ~ H;
+A17:(x * b) * b" = x * (b * b") by GROUP_1:def 4
+                .= x * 1_G by GROUP_1:def 6
+                .= x by GROUP_1:def 5;
+    b" in N1 by A13,GROUP_2:60;
+    then x in (N2 ~ H) * N1 by A16,A17,GROUP_2:114;
+    hence thesis by A12,XBOOLE_0:def 4;
+  end;
+  hence thesis by A1;
+end;
+
+theorem Th71:
+  for H being Subgroup of G, N being normal Subgroup of G
+  ex M being strict Subgroup of G st the carrier of M = N ~ H
+proof
+  let H be Subgroup of G, N be normal Subgroup of G;
+A1:1_G in N ~ H
+  proof
+    reconsider y = 1_G as Element of G;
+    1_G in H by GROUP_2:55; then
+A2: 1_G in carr(H) by STRUCT_0:def 5;
+    1_G in 1_G * N by GROUP_2:130;
+    then 1_G * N meets carr(H) by A2,XBOOLE_0:3;
+    hence thesis;
+  end;
+A3:for x,y being Element of G holds x in N ~ H & y in N ~ H
+   implies x * y in N ~ H
+   proof
+     let x,y be Element of G;
+     assume that
+A4:  x in N ~ H and
+A5:  y in N ~ H;
+     consider a be Element of G such that
+A6:  a in x * N & a in H by A4,Th51,Th3;
+     consider b be Element of G such that
+A7:  b in y * N & b in H by A5,Th51,Th3;
+     (x * N) * (y * N) = (x * y) * N & (a * N) * (b * N) = (a * b) * N by Th1;
+     then
+A8: a * b in (x * y) * N by A6,A7;
+     a * b in H by A6,A7,GROUP_2:59;
+     then a * b in carr(H) by STRUCT_0:def 5;
+     then (x * y) * N meets carr(H) by A8,XBOOLE_0:3;
+     hence thesis;
+   end;
+A9:for x being Element of G holds x in N ~ H implies x" in N ~ H
+  proof
+    let x be Element of G;
+    assume x in N ~ H;
+    then consider a be Element of G such that
+A10:a in x * N & a in H by Th3,Th51;
+    consider a1 be Element of G such that
+A11:a = x * a1 & a1 in N by A10,GROUP_2:125;
+A12:a1" in N by A11,GROUP_2:60;
+    a" = a1" * x" by A11,GROUP_1:25;
+    then a" in N * x" by A12,GROUP_2:126; then
+A13:a" in x" * N by GROUP_3:140;
+    a" in H by A10,GROUP_2:60;
+    then a" in carr(H) by STRUCT_0:def 5;
+    then x" * N meets carr(H) by A13,XBOOLE_0:3;
+    hence thesis;
+  end;
+  thus thesis by A1,A3,A9,GROUP_2:61;
+end;
+
+theorem Th72:
+  for H being Subgroup of G, N being normal Subgroup of G
+   st N is Subgroup of H
+  ex M being strict Subgroup of G st the carrier of M = N ` H
+proof
+   let H be Subgroup of G, N be normal Subgroup of G;
+   assume
+A1: N is Subgroup of H;
+A2: 1_G in N ` H
+   proof
+     1_G in N by GROUP_2:55; then
+A3:  1_G * N = carr(N) by GROUP_2:136;
+     carr(N) c= carr(H) by A1,GROUP_2:def 5;
+     hence thesis by A3;
+   end;
+A4:for x,y being Element of G holds x in N ` H & y in N ` H
+   implies x * y in N ` H
+   proof
+     let x,y be Element of G;
+     assume x in N ` H & y in N ` H;
+     then x * N c= carr(H) & y * N c= carr(H) by Th49; then
+A5:  (x * N) * (y * N) c= carr(H) * carr(H) by GROUP_3:4;
+A6:  (x * N) * (y * N) = (x * y) * N by Th1;
+     carr(H) * carr(H) = carr(H) by GROUP_2:91;
+     hence thesis by A5,A6;
+   end;
+A7:for x being Element of G holds x in N ` H implies x" in N ` H
+   proof
+     let x be Element of G;
+     assume x in N ` H; then
+A8:  x * N c= carr(H) by Th49;
+     x in x * N by GROUP_2:130;
+     then x in H by A8,STRUCT_0:def 5; then
+A9:  x" in H by GROUP_2:60;
+A10: x" * H = carr(H) by A9,GROUP_2:136;
+     x" * N c= x" * H by A1,GROUP_3:6;
+     hence thesis by A10;
+   end;
+  thus thesis by A2,A4,A7,GROUP_2:61;
+end;
+
+theorem Th73:
+  for H,N be normal Subgroup of G
+   ex M being strict normal Subgroup of G st the carrier of M = N ~ H
+proof
+  let H,N be normal Subgroup of G;
+  consider M being strict Subgroup of G such that
+A1: the carrier of M = N ~ H by Th71;
+  for x be Element of G holds x * M c= M * x
+  proof
+    let x be Element of G;
+    let y be set;
+    assume
+A2: y in x * M;
+    then reconsider y as Element of G;
+    consider z be Element of G such that
+A3: y = x * z & z in M by A2,GROUP_2:125;
+     z in the carrier of M by A3,STRUCT_0:def 5;
+    then consider z' be Element of G such that
+A4: z' in z * N & z' in H by Th3,A1,Th51;
+    x * z' * x" in H by A4,Th4;
+    then
+A5: x * z' * x" in carr(H) by STRUCT_0:def 5;
+A6: x * z' * x" in x * (z * N) * x" by A4,GROUP_8:15;
+    x * (z * N) * x" = x * ((z * N) * x") by GROUP_2:39
+                    .= x * (z * (N * x")) by GROUP_2:39
+                    .= x * (z * (x" * N)) by GROUP_3:140
+                    .= x * (z * x" * N) by GROUP_2:38
+                    .= x * (z * x") * N by GROUP_2:38
+                    .= (x * z * x") * N by GROUP_1:def 4;
+     then (x * z * x") * N meets carr(H) by A5,A6,XBOOLE_0:3;
+     then x * z * x" in N ~ H;
+     then
+A7:  x * z * x" in M by A1,STRUCT_0:def 5;
+     (x * z * x") * x = y by A3,GROUP_3:1;
+    hence thesis by A7,GROUP_2:126;
+  end;
+  then M is normal Subgroup of G by GROUP_3:141;
+  hence thesis by A1;
+end;
+
+theorem Th74:
+  for H,N being normal Subgroup of G st N is Subgroup of H
+  ex M being strict normal Subgroup of G st the carrier of M = N ` H
+proof
+  let H,N be normal Subgroup of G;
+  assume
+A1: N is Subgroup of H;
+  then consider M being strict Subgroup of G such that
+A2: the carrier of M = N ` H by Th72;
+  for x be Element of G holds x * M c= M * x
+  proof
+    let x be Element of G;
+    let y be set;
+    assume
+A3: y in x * M;
+    then reconsider y as Element of G;
+    consider z be Element of G such that
+A4: y = x * z & z in M by A3,GROUP_2:125;
+    z in the carrier of M by A4,STRUCT_0:def 5;
+    then
+A5: z * N c= carr(H) by A2,Th49;
+    z in z * N by GROUP_2:130;
+    then z in H by A5,STRUCT_0:def 5;
+    then x * z * x" in H by Th4;
+    then
+A6: (x * z * x") * H = carr(H) by GROUP_2:136;
+    (x * z * x") * N c= (x * z * x") * H by A1,GROUP_3:6;
+    then x * z * x" in N ` H by A6; then
+A7: x * z * x" in M by A2,STRUCT_0:def 5;
+    (x * z * x") * x = y by A4,GROUP_3:1;
+    hence thesis by A7,GROUP_2:126;
+  end;
+  then M is normal Subgroup of G by GROUP_3:141;
+  hence thesis by A2;
+end;
+
+theorem Th75:
+  for N,N1 be normal Subgroup of G st N1 is Subgroup of N
+  ex N2,N3 being strict normal Subgroup of G st
+  the carrier of N2 = N1 ~ N & the carrier of N3 = N1 ` N &
+  N2 ` N c= N3 ` N
+proof
+  let N,N1 be normal Subgroup of G;
+  assume
+A1:N1 is Subgroup of N;
+   consider N2 be strict normal Subgroup of G such that
+A2:the carrier of N2 = N1 ~ N by Th73;
+   consider N3 be strict normal Subgroup of G such that
+A3:the carrier of N3 = N1 ` N by A1,Th74;
+   N3 is Subgroup of N2 by A2,A3,Th55,GROUP_2:66;
+  then N2 ` N c= N3 ` N by Th60;
+  hence thesis by A2,A3;
+end;
+
+theorem Th76:
+  for N,N1 be normal Subgroup of G st N1 is Subgroup of N
+  ex N2,N3 being strict normal Subgroup of G st
+  the carrier of N2 = N1 ~ N & the carrier of N3 = N1 ` N &
+  N3 ~ N c= N2 ~ N
+proof
+  let N,N1 be normal Subgroup of G;
+  assume
+A1:N1 is Subgroup of N;
+   consider N2 be strict normal Subgroup of G such that
+A2:the carrier of N2 = N1 ~ N by Th73;
+   consider N3 be strict normal Subgroup of G such that
+A3:the carrier of N3 = N1 ` N by A1,Th74;
+   N3 is Subgroup of N2 by A2,A3,Th55,GROUP_2:66;
+  then N3 ~ N c= N2 ~ N by Th57;
+  hence thesis by A2,A3;
+end;
+
+theorem
+  for N,N1 be normal Subgroup of G st N1 is Subgroup of N
+  ex N2,N3 being strict normal Subgroup of G
+  st the carrier of N2 = N1 ~ N & the carrier of N3 = N1 ` N &
+  N2 ` N c= N3 ~ N
+proof
+  let N,N1 be normal Subgroup of G;
+  assume N1 is Subgroup of N;
+  then consider N2,N3 be strict normal Subgroup of G such that
+A1:the carrier of N2 = N1 ~ N and
+A2:the carrier of N3 = N1 ` N and
+A3: N2 ` N c= N3 ` N by Th75;
+  N3 ` N c= N3 ~ N by Th55;
+  hence thesis by A1,A2,A3,XBOOLE_1:1;
+end;
+
+theorem
+  for N,N1 be normal Subgroup of G st N1 is Subgroup of N
+  ex N2,N3 being strict normal Subgroup of G st
+  the carrier of N2 = N1 ~ N & the carrier of N3 = N1 ` N &
+  N3 ` N c= N2 ~ N
+proof
+  let N,N1 be normal Subgroup of G;
+  assume N1 is Subgroup of N;
+  then consider N2,N3 be strict normal Subgroup of G such that
+A1:the carrier of N2 = N1 ~ N and
+A2:the carrier of N3 = N1 ` N and
+A3: N3 ~ N c= N2 ~ N by Th76;
+   N3 ` N c= N3 ~ N by Th55;
+  hence thesis by A1,A2,A3,XBOOLE_1:1;
+end;
+
+theorem
+  for N,N1,N2 be normal Subgroup of G st N1 is Subgroup of N2
+  ex N3,N4 being strict normal Subgroup of G st
+  the carrier of N3 = N ~ N1 & the carrier of N4 = N ~ N2 &
+  N3 ~ N1 c= N4 ~ N1
+proof
+  let N,N1,N2 be normal Subgroup of G;
+  assume
+A1:N1 is Subgroup of N2;
+  consider N3 be strict normal Subgroup of G such that
+A2:the carrier of N3 = N ~ N1 by Th73;
+  consider N4 be strict normal Subgroup of G such that
+A3:the carrier of N4 = N ~ N2 by Th73;
+  N3 is Subgroup of N4 by A1,A2,A3,Th56,GROUP_2:66;
+  then N3 ~ N1 c= N4 ~ N1 by Th57;
+  hence thesis by A2,A3;
+end;
+
+theorem
+  for N,N1 be normal Subgroup of G
+  ex N2 being strict normal Subgroup of G st
+  the carrier of N2 = N ` N & N ` N1 c= N2 ` N1
+proof
+  let N,N1 be normal Subgroup of G;
+  N is Subgroup of N by GROUP_2:63;
+  then consider N2 be strict normal Subgroup of G such that
+A1:the carrier of N2 = N ` N by Th74;
+  N2 is Subgroup of N by A1,Th53,GROUP_2:66;
+  then N ` N1 c= N2 ` N1 by Th60;
+  hence thesis by A1;
+end;
+
+theorem
+  for N,N1 be normal Subgroup of G
+  ex N2 being strict normal Subgroup of G st
+  the carrier of N2 = N ~ N & N ~ N1 c= N2 ~ N1
+proof
+  let N,N1 be normal Subgroup of G;
+  consider N2 be strict normal Subgroup of G such that
+A1:the carrier of N2 = N ~ N by Th73;
+  N is Subgroup of N2 by A1,Th54,GROUP_2:66;
+  then N ~ N1 c= N2 ~ N1 by Th57;
+  hence thesis by A1;
+end;

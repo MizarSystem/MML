@@ -12,16 +12,15 @@ environ
       LOPBAN_3, SUPINF_2, LOPBAN_4, CLOPBAN2, COMPLEX1, CFUNCT_1, XCMPLX_0,
       RELOC;
  notations RELAT_1, FUNCT_1, SUBSET_1, FUNCT_2, PRE_TOPC, XCMPLX_0, XXREAL_0,
-      XREAL_0, ORDINAL1, ARYTM_0, NUMBERS, CLOPBAN3, COMPLEX1, REAL_1, NAT_1,
-      STRUCT_0, ALGSTR_0, NEWTON, RLVECT_1, SQUARE_1, SEQ_1, SEQ_2, SEQM_3,
-      SERIES_1, LOPBAN_4, NAT_D, SIN_COS, BHSP_4, CFUNCT_1, CLVECT_1, CSSPACE3,
-      CLOPBAN2, LOPBAN_3, NORMSP_1;
+      XREAL_0, ORDINAL1, NUMBERS, CLOPBAN3, COMPLEX1, REAL_1, NAT_1, STRUCT_0,
+      ALGSTR_0, NEWTON, RLVECT_1, SQUARE_1, SEQ_1, SEQ_2, SEQM_3, SERIES_1,
+      LOPBAN_4, NAT_D, SIN_COS, BHSP_4, CFUNCT_1, CLVECT_1, CSSPACE3, CLOPBAN2,
+      LOPBAN_3, NORMSP_1;
  constructors ARYTM_0, REAL_1, SQUARE_1, NAT_1, SEQ_2, COMSEQ_3, NAT_D,
       SIN_COS, BHSP_4, LOPBAN_4, CSSPACE3, CLOPBAN3, SEQ_1, SERIES_1, SEQ_4,
       NORMSP_1, RELSET_1;
  registrations ORDINAL1, RELSET_1, NUMBERS, XCMPLX_0, XXREAL_0, XREAL_0,
-      MEMBERED, COMPLEX1, STRUCT_0, CLOPBAN2, CLOPBAN3, VALUED_0, SEQ_2,
-      XBOOLE_0, SEQ_4;
+      MEMBERED, STRUCT_0, CLOPBAN2, CLOPBAN3, VALUED_0, SEQ_2, XBOOLE_0, SEQ_4;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
  definitions CLVECT_1;
  theorems ABSVALUE, RLVECT_1, XCMPLX_0, XCMPLX_1, XREAL_0, SEQ_2, SEQM_3,
@@ -34,40 +33,43 @@ begin :: Basic Properties of Exponential Function on Complex Banach Algebra
 
 reserve X for Complex_Banach_Algebra,
   w,z,z1,z2 for Element of X,
-  k,l,m,n,n1,n2 for Element of NAT,
+  k,l,m,n,n1,
+  n2 for Element of NAT,
   seq,seq1,seq2,s,s' for sequence of X,
-  rseq for Real_Sequence;
+  rseq for
+  Real_Sequence;
 
 definition
   canceled;
 end;
 
-Lm1: z* (z #N n) =z #N (n+1) & (z #N n) *z= z #N (n+1) &
-z* (z #N n) =(z #N n) *z
+Lm1: z* (z #N n) =z #N (n+1) & (z #N n) *z= z #N (n+1) & z* (z #N n) =(z #N n)
+*z
+
 proof
   defpred P[Element of NAT] means z* (z #N $1)=z #N ($1 +1);
-A1: z*(z #N0 ) =z * (z GeoSeq.0) by CLOPBAN3:def 13
-    .=z * 1.X by CLOPBAN3:def 12
-    .=z by CLOPBAN3:42;
-  z #N (0+1) =z GeoSeq.(0+1) by CLOPBAN3:def 13
+A1: z #N (0+1) =z GeoSeq.(0+1) by CLOPBAN3:def 13
     .=z GeoSeq.0 * z by CLOPBAN3:def 12
     .=1.X * z by CLOPBAN3:def 12
     .=z by CLOPBAN3:42;
-  then
-A2: P[0] by A1;
-A3: for k be Element of NAT st P[k] holds P[k+1]
+A2: for k be Element of NAT st P[k] holds P[k+1]
   proof
     let k be Element of NAT such that
-A4: P[k];
+A3: P[k];
     thus z* (z #N (k+1)) =z * (z GeoSeq.(k+1)) by CLOPBAN3:def 13
       .= z* (z GeoSeq.(k)*z) by CLOPBAN3:def 12
       .=z* (z #N k *z ) by CLOPBAN3:def 13
       .=(z * z #N k) *z by CLOPBAN3:42
-      .=z GeoSeq.(k+1) * z by A4,CLOPBAN3:def 13
+      .=z GeoSeq.(k+1) * z by A3,CLOPBAN3:def 13
       .=z GeoSeq.((k+1)+1) by CLOPBAN3:def 12
       .=z #N ((k+1)+1) by CLOPBAN3:def 13;
   end;
-A5: for n be Element of NAT holds P[n] from NAT_1:sch 1(A2,A3);
+  z*(z #N0 ) =z * (z GeoSeq.0) by CLOPBAN3:def 13
+    .=z * 1.X by CLOPBAN3:def 12
+    .=z by CLOPBAN3:42;
+  then
+A4: P[0] by A1;
+A5: for n be Element of NAT holds P[n] from NAT_1:sch 1(A4,A2);
   now
     let n;
     thus z * z #N n =z #N (n+1) by A5;
@@ -79,48 +81,52 @@ A5: for n be Element of NAT holds P[n] from NAT_1:sch 1(A2,A3);
   hence thesis;
 end;
 
-Lm2: for z,w st z,w are_commutative holds
-w* (z #N n) = (z #N n)*w & z* (w #N n) = (w #N n)*z
+Lm2: for z,w st z,w are_commutative holds w* (z #N n) = (z #N n)*w & z* (w #N
+n) = (w #N n)*z
+
 proof
   let z,w such that
 A1: z,w are_commutative;
-  defpred P[Element of NAT] means
-  w* (z #N $1) =(z #N $1)*w & z* (w #N $1) = (w #N $1)*z;
-A2: (z #N0 ) = (z GeoSeq.0) by CLOPBAN3:def 13
-    .= 1.X by CLOPBAN3:def 12;
-A3: (w #N0 ) = (w GeoSeq.0) by CLOPBAN3:def 13
-    .= 1.X by CLOPBAN3:def 12;
-A4: w*(z #N0 )=w by A2,CLOPBAN3:42
-    .=(z #N0 ) *w by A2,CLOPBAN3:42;
-  z*(w #N0 )=z by A3,CLOPBAN3:42
-    .=(w #N0 ) *z by A3,CLOPBAN3:42;
-  then
-A5: P[0] by A4;
-A6: for k be Element of NAT st P[k] holds P[k+1]
+
+  defpred P[Element of NAT] means w* (z #N $1) =(z #N $1)*w & z* (w #N $1) = (
+  w #N $1)*z;
+
+A2: for k be Element of NAT st P[k] holds P[k+1]
   proof
     let k be Element of NAT such that
-A7: P[k];
-A8: w*(z #N (k+1) )=w*( (z #N k) *z) by Lm1
-      .=(w*(z #N k)) *z by CLOPBAN3:42
-      .=(z #N k)*(w *z) by A7,CLOPBAN3:42
-      .=(z #N k)*(z *w) by A1,LOPBAN_4:def 1
-      .=((z #N k))*z *w by CLOPBAN3:42
-      .=(z #N (k+1) ) *w by Lm1;
-    z*(w #N (k+1) )=z*( (w #N k) *w) by Lm1
+A3: P[k];
+A4: z*(w #N (k+1) )=z*( (w #N k) *w) by Lm1
       .=(z*(w #N k)) *w by CLOPBAN3:42
-      .=(w #N k)*(z *w) by A7,CLOPBAN3:42
+      .=(w #N k)*(z *w) by A3,CLOPBAN3:42
       .=(w #N k)*(w *z) by A1,LOPBAN_4:def 1
       .=(w #N k)*w *z by CLOPBAN3:42
       .=(w #N (k+1) ) *z by Lm1;
-    hence thesis by A8;
+    w*(z #N (k+1) )=w*( (z #N k) *z) by Lm1
+      .=(w*(z #N k)) *z by CLOPBAN3:42
+      .=(z #N k)*(w *z) by A3,CLOPBAN3:42
+      .=(z #N k)*(z *w) by A1,LOPBAN_4:def 1
+      .=((z #N k))*z *w by CLOPBAN3:42
+      .=(z #N (k+1) ) *w by Lm1;
+    hence thesis by A4;
   end;
-  for n be Element of NAT holds P[n] from NAT_1:sch 1(A5,A6);
+A5: (w #N0 ) = (w GeoSeq.0) by CLOPBAN3:def 13
+    .= 1.X by CLOPBAN3:def 12;
+  then
+A6: z*(w #N0 )=z by CLOPBAN3:42
+    .=(w #N0 ) *z by A5,CLOPBAN3:42;
+A7: (z #N0 ) = (z GeoSeq.0) by CLOPBAN3:def 13
+    .= 1.X by CLOPBAN3:def 12;
+  then w*(z #N0 )=w by CLOPBAN3:42
+    .=(z #N0 ) *w by A7,CLOPBAN3:42;
+  then
+A8: P[0] by A6;
+  for n be Element of NAT holds P[n] from NAT_1:sch 1(A8,A2);
   hence thesis;
 end;
 
 theorem Th1:
-  seq1 is convergent & seq2 is convergent & lim(seq1-seq2)=0.X implies
-  lim seq1 = lim seq2
+  seq1 is convergent & seq2 is convergent & lim(seq1-seq2)=0.X
+  implies lim seq1 = lim seq2
 proof
   assume that
 A1: seq1 is convergent and
@@ -143,7 +149,8 @@ A2: now
     let p be Real such that
 A3: 0<p;
     take k = 0;
-    let n such that k<=n;
+    let n such that
+    k<=n;
     s.n = z by A1;
     hence ||.s.n - z.|| < p by A3,CLVECT_1:108;
   end;
@@ -160,140 +167,144 @@ A2: s' is convergent;
   consider g1 be Point of X such that
 A3: for p being Real st 0<p ex n st for m st n<=m holds ||.s.m-g1.||<p
   by A1,CLVECT_1:def 16;
-  consider g2 be Point of X such that
-A4: for p being Real st 0<p ex n st for m st n<=m holds ||.s'.m-g2.||<p
-  by A2,CLVECT_1:def 16;
-  take g=g1*g2;
   ||.s.|| is bounded by A1,CLVECT_1:119,SEQ_2:27;
-  then ||.s.|| is bounded_above;
   then consider R be real number such that
-A5: for n holds ||.s.||.n < R by SEQ_2:def 3;
+A4: for n holds ||.s.||.n < R by SEQ_2:def 3;
+A5: now
+    let n;
+    ||.s.n.||= ||.s.||.n by CLVECT_1:def 17;
+    hence ||.s.n.|| < R by A4;
+  end;
   ||. s.1 .|| = ||. s .||.1 by CLVECT_1:def 17;
   then 0<= ||.s.||.1 by CLVECT_1:106;
   then
-A6: 0 < R by A5;
-A7: now
-    let n;
-    ||.s.n.||= ||.s.||.n by CLVECT_1:def 17;
-    hence ||.s.n.|| < R by A5;
-  end;
-  reconsider R as Real by XREAL_0:def 1;
-A8: 0<=||.g2.|| by CLVECT_1:106;
-A9: 0+0<||.g2.||+R by A6,CLVECT_1:106,XREAL_1:10;
+A6: 0 < R by A4;
+  consider g2 be Point of X such that
+A7: for p being Real st 0<p ex n st for m st n<=m holds ||.s'.m-g2.||<p
+  by A2,CLVECT_1:def 16;
+  take g=g1*g2;
   let p be Real;
-  assume 0<p;
-  then
-A10: 0<p/(||.g2.||+R) by A9;
+  reconsider R as Real by XREAL_0:def 1;
+A8: 0+0<||.g2.||+R by A6,CLVECT_1:106,XREAL_1:10;
+  assume
+A9: 0<p;
   then consider n1 such that
-A11: for m st n1<=m holds ||.s.m-g1.||<p/(||.g2.||+R) by A3;
+A10: for m st n1<=m holds ||.s.m-g1.||<p/(||.g2.||+R) by A3,A8;
   consider n2 such that
-A12: for m st n2<=m holds ||.s'.m-g2.||<p/(||.g2.||+R) by A4,A10;
+A11: for m st n2<=m holds ||.s'.m-g2.||<p/(||.g2.||+R) by A7,A8,A9;
   take n=n1+n2;
   let m such that
-A13: n<=m;
-A14: 0<=||.s.m.|| by CLVECT_1:106;
-A15: 0<=||.s'.m-g2.|| by CLVECT_1:106;
+A12: n<=m;
   n2<=n by NAT_1:12;
-  then n2<=m by A13,XXREAL_0:2;
+  then n2<=m by A12,XXREAL_0:2;
   then
-A16: ||.s'.m-g2.||<p/(||.g2.||+R) by A12;
+A13: ||.s'.m-g2.||<p/(||.g2.||+R) by A11;
+A14: 0<=||.s.m.|| by CLVECT_1:106;
+A15: ||.s.m*(s'.m-g2).|| <= ||.s.m.||*||.s'.m-g2.|| by CLOPBAN3:42;
+A16: 0<=||.s'.m-g2.|| by CLVECT_1:106;
   n1<=n1+n2 by NAT_1:12;
-  then n1<=m by A13,XXREAL_0:2;
+  then n1<=m by A12,XXREAL_0:2;
   then
-A17: ||.s.m-g1.||<=p/(||.g2.||+R) by A11;
+A17: ||.s.m-g1.||<=p/(||.g2.||+R) by A10;
   ||.((s*s').m)-g.|| =||.s.m*s'.m-g1*g2.|| by CLOPBAN3:def 10
     .=||.(s.m*s'.m-s.m*g2)+(s.m*g2-g1*g2).|| by CLOPBAN3:42
     .=||.s.m*(s'.m-g2)+(s.m*g2-g1*g2).|| by CLOPBAN3:42
     .=||.s.m*(s'.m-g2)+(s.m-g1)*g2.|| by CLOPBAN3:42;
   then
-A18: ||.((s*s').m)-g.||<=
-  ||.s.m*(s'.m-g2).||+||.(s.m-g1)*g2.|| by CLVECT_1:def 11;
-  ||.s.m.||<R by A7;
+A18: ||.((s*s').m)-g.||<= ||.s.m*(s'.m-g2).||+||.(s.m-g1)*g2.|| by
+  CLVECT_1:def 11;
+  ||.s.m.||<R by A5;
+  then ||.s.m.||*||.s'.m-g2.||<R*(p/(||.g2.||+R)) by A14,A16,A13,XREAL_1:
+  98;
   then
-A19: ||.s.m.||*||.s'.m-g2.||<R*(p/(||.g2.||+R)) by A14,A15,A16,XREAL_1:98;
-  ||.s.m*(s'.m-g2).|| <= ||.s.m.||*||.s'.m-g2.|| by CLOPBAN3:42;
+A19: ||.s.m*(s'.m-g2).||<R*(p/(||.g2.||+R)) by A15,XXREAL_0:2;
+A20: ||.(s.m-g1)*g2.||<=||.g2.||*||.s.m-g1.|| by CLOPBAN3:42;
+  0<=||.g2.|| by CLVECT_1:106;
+  then ||.g2.||*||.s.m-g1.|| <=||.g2.||*(p/(||.g2.||+R)) by
+  A17,XREAL_1:66;
   then
-A20: ||.s.m*(s'.m-g2).||<R*(p/(||.g2.||+R)) by A19,XXREAL_0:2;
-A21: ||.(s.m-g1)*g2.||<=||.g2.||*||.s.m-g1.|| by CLOPBAN3:42;
-  ||.g2.||*||.s.m-g1.|| <=||.g2.||*(p/(||.g2.||+R)) by A8,A17,XREAL_1:66;
-  then
-A22: ||.(s.m-g1)*g2.||<=||.g2.||*(p/(||.g2.||+R)) by A21,XXREAL_0:2;
-  R*(p/(||.g2.||+R))+||.g2.||*(p/(||.g2.||+R)) =(p/(||.g2.||+R))*(||.g2.||+R)
-    .=p by A9,XCMPLX_1:88;
-  then ||.s.m*(s'.m-g2).||+||.(s.m-g1)*g2.||<p by A20,A22,XREAL_1:10;
+A21: ||.(s.m-g1)*g2.||<=||.g2.||*(p/(||.g2.||+R)) by A20,XXREAL_0:2;
+  R*(p/(||.g2.||+R))+||.g2.||*(p/(||.g2.||+R)) =(p/(||.g2.||+R))*(||.g2
+  .||+R)
+    .=p by A8,XCMPLX_1:88;
+  then ||.s.m*(s'.m-g2).||+||.(s.m-g1)*g2.||<p by A19,A21,XREAL_1:10;
   hence thesis by A18,XXREAL_0:2;
 end;
 
 theorem Th4:
   s is convergent implies z * s is convergent
 proof
-  assume that
-A1: s is convergent;
-  consider g1 be Point of X such that
+A1: 0<=||.z.|| by CLVECT_1:106;
+  assume
+  s is convergent;
+  then consider g1 be Point of X such that
 A2: for p being Real st 0<p ex n st for m st n<=m holds ||.s.m-g1.||<p
-  by A1,CLVECT_1:def 16;
+  by CLVECT_1:def 16;
   take g=z*g1;
-A3: 0<=||.z.|| by CLVECT_1:106;
-A4: 0+0< ||.z.||+1 by CLVECT_1:106,XREAL_1:10;
   let p be Real;
-  assume 0<p;
-  then
-A5: 0<p/(||.z.||+1) by A4;
+  assume
+A3: 0<p;
+A4: 0+0< ||.z.||+1 by CLVECT_1:106,XREAL_1:10;
   then consider n such that
-A6: for m st n<=m holds ||.s.m-g1.||<p/(||.z.||+1) by A2;
+A5: for m st n<=m holds ||.s.m-g1.||<p/(||.z.||+1) by A2,A3;
   take n;
-  let m such that
-A7: n<=m;
-A8: ||.s.m-g1.||< p/(||.z.||+1) by A6,A7;
+  let m;
+  assume
+  n<=m;
+  then
+A6: ||.s.m-g1.||< p/(||.z.||+1) by A5;
+A7: ||.z*(s.m-g1).|| <= ||.z.||*||.s.m-g1.|| by CLOPBAN3:42;
+  0<=||.s.m-g1.|| by CLVECT_1:106;
+  then ||.z.||*||.s.m-g1.||<= ||.z.||*(p/(||.z.||+1)) by A1,A6,
+  XREAL_1:68;
+  then
+A8: ||.z*(s.m-g1).||<=||.z.||*(p/(||.z.||+1)) by A7,XXREAL_0:2;
 A9: ||.((z*s).m)-g.|| =||.z*s.m-z*g1.|| by CLOPBAN3:def 8
     .=||.z*(s.m-g1).|| by CLOPBAN3:42;
-A10: ||.z*(s.m-g1).|| <= ||.z.||*||.s.m-g1.|| by CLOPBAN3:42;
-  0<=||.s.m-g1.|| by CLVECT_1:106;
-  then ||.z.||*||.s.m-g1.||<= ||.z.||*(p/(||.z.||+1)) by A3,A8,XREAL_1:68;
-  then
-A11: ||.z*(s.m-g1).||<=||.z.||*(p/(||.z.||+1)) by A10,XXREAL_0:2;
   0+ ||.z.|| < ||.z.||+1 by XREAL_1:10;
   then
-A12: ||.z.||*(p/(||.z.||+1)) < ( ||.z.||+1) *(p/(||.z.||+1)) by A3,A5,
-XREAL_1:99;
+A10: ||.z.||*(p/(||.z.||+1)) < ( ||.z.||+1) *(p/(||.z.||+1)) by A1,A3,
+  XREAL_1:99;
   ( ||.z.||+1) *(p/(||.z.||+1)) =p by A4,XCMPLX_1:88;
-  hence thesis by A9,A11,A12,XXREAL_0:2;
+  hence thesis by A9,A8,A10,XXREAL_0:2;
 end;
 
 theorem Th5:
   s is convergent implies s*z is convergent
 proof
-  assume that
-A1: s is convergent;
-  consider g1 be Point of X such that
+A1: 0<=||.z.|| by CLVECT_1:106;
+  assume
+  s is convergent;
+  then consider g1 be Point of X such that
 A2: for p being Real st 0<p ex n st for m st n<=m holds ||.s.m-g1.||<p
-  by A1,CLVECT_1:def 16;
+  by CLVECT_1:def 16;
   take g=g1*z;
-A3: 0<=||.z.|| by CLVECT_1:106;
-A4: 0+0< ||.z.||+1 by CLVECT_1:106,XREAL_1:10;
   let p be Real;
-  assume 0<p;
-  then
-A5: 0<p/(||.z.||+1) by A4;
+  assume
+A3: 0<p;
+A4: 0+0< ||.z.||+1 by CLVECT_1:106,XREAL_1:10;
   then consider n such that
-A6: for m st n<=m holds ||.s.m-g1.||<p/(||.z.||+1) by A2;
+A5: for m st n<=m holds ||.s.m-g1.||<p/(||.z.||+1) by A2,A3;
   take n;
-  let m such that
-A7: n<=m;
-A8: ||.s.m-g1.||< p/(||.z.||+1) by A6,A7;
+  let m;
+  assume
+  n<=m;
+  then
+A6: ||.s.m-g1.||< p/(||.z.||+1) by A5;
+A7: ||.(s.m-g1)*z.|| <=||.s.m-g1.||* ||.z.|| by CLOPBAN3:42;
+  0<=||.s.m-g1.|| by CLVECT_1:106;
+  then ||.s.m-g1.||* ||.z.||<=(p/(||.z.||+1))* ||.z.|| by A1,A6,
+  XREAL_1:68;
+  then
+A8: ||.(s.m-g1)*z.||<=(p/(||.z.||+1))*||.z.|| by A7,XXREAL_0:2;
 A9: ||.((s*z).m)-g.|| =||.s.m*z-g1*z.|| by CLOPBAN3:def 9
     .=||.(s.m-g1)*z.|| by CLOPBAN3:42;
-A10: ||.(s.m-g1)*z.|| <=||.s.m-g1.||* ||.z.|| by CLOPBAN3:42;
-  0<=||.s.m-g1.|| by CLVECT_1:106;
-  then ||.s.m-g1.||* ||.z.||<=(p/(||.z.||+1))* ||.z.|| by A3,A8,XREAL_1:68;
-  then
-A11: ||.(s.m-g1)*z.||<=(p/(||.z.||+1))*||.z.|| by A10,XXREAL_0:2;
   0+ ||.z.|| < ||.z.||+1 by XREAL_1:10;
   then
-A12: (p/(||.z.||+1))*||.z.||< (p/(||.z.||+1)) * ( ||.z.||+1) by A3,A5,
-XREAL_1:99;
+A10: (p/(||.z.||+1))*||.z.||< (p/(||.z.||+1)) * ( ||.z.||+1) by A1,A3,
+  XREAL_1:99;
   (p/(||.z.||+1))* ( ||.z.||+1) = p by A4,XCMPLX_1:88;
-  hence thesis by A9,A11,A12,XXREAL_0:2;
+  hence thesis by A9,A8,A10,XXREAL_0:2;
 end;
 
 theorem Th6:
@@ -301,38 +312,41 @@ theorem Th6:
 proof
   assume
 A1: s is convergent;
-  then
-A2: z*s is convergent by Th4;
   set g1=lim(s);
   set g=z*g1;
+A2: 0+0< ||.z.||+1 by CLVECT_1:106,XREAL_1:10;
 A3: 0<=||.z.|| by CLVECT_1:106;
-A4: 0+0< ||.z.||+1 by CLVECT_1:106,XREAL_1:10;
-  now
+A4: now
     let p be Real;
-    assume 0<p;
-    then
-A5: 0<p/(||.z.||+1) by A4;
+    assume
+A5: 0<p;
     then consider n such that
-A6: for m st n<=m holds ||.s.m-g1.||<p/(||.z.||+1) by A1,CLVECT_1:def 18;
+A6: for m st n<=m holds ||.s.m-g1.||<p/(||.z.||+1) by A1,A2,
+    CLVECT_1:def 18;
     take n;
-    let m such that
-A7: n<=m;
-A8: ||.s.m-g1.||< p/(||.z.||+1) by A6,A7;
-A9: ||.((z*s).m)-g.|| =||.z*s.m-z*g1.|| by CLOPBAN3:def 8
-      .=||.z*(s.m-g1).|| by CLOPBAN3:42;
-A10: ||.z*(s.m-g1).|| <= ||.z.||*||.s.m-g1.|| by CLOPBAN3:42;
-    0<=||.s.m-g1.|| by CLVECT_1:106;
-    then ||.z.||*||.s.m-g1.||<= ||.z.||*(p/(||.z.||+1)) by A3,A8,XREAL_1:68;
+    let m;
+    assume
+    n<=m;
     then
-A11: ||.z*(s.m-g1).||<=||.z.||*(p/(||.z.||+1)) by A10,XXREAL_0:2;
+A7: ||.s.m-g1.||< p/(||.z.||+1) by A6;
+    0<=||.s.m-g1.|| by CLVECT_1:106;
+    then
+A8: ||.z.||*||.s.m-g1.||<= ||.z.||*(p/(||.z.||+1)) by A3,A7,XREAL_1:
+    68;
+    ||.z*(s.m-g1).|| <= ||.z.||*||.s.m-g1.|| by CLOPBAN3:42;
+    then
+A9: ||.z*(s.m-g1).||<=||.z.||*(p/(||.z.||+1)) by A8,XXREAL_0:2;
+A10: ||.((z*s).m)-g.|| =||.z*s.m-z*g1.|| by CLOPBAN3:def 8
+      .=||.z*(s.m-g1).|| by CLOPBAN3:42;
     0+ ||.z.|| < ||.z.||+1 by XREAL_1:10;
     then
-A12: ||.z.||*(p/(||.z.||+1)) < ( ||.z.||+1) *(p/(||.z.||+1)) by A3,A5,
-XREAL_1:99;
-    ( ||.z.||+1) *(p/(||.z.||+1)) = p by A4,XCMPLX_1:88;
-    hence ||.((z*s).m)-g.|| < p by A9,A11,A12,XXREAL_0:2;
+A11: ||.z.||*(p/(||.z.||+1)) < ( ||.z.||+1) *(p/(||.z.||+1)) by A3,A5,
+    XREAL_1:99;
+    ( ||.z.||+1) *(p/(||.z.||+1)) = p by A2,XCMPLX_1:88;
+    hence ||.((z*s).m)-g.|| < p by A10,A9,A11,XXREAL_0:2;
   end;
-  hence thesis by A2,CLVECT_1:def 18;
+  z*s is convergent by A1,Th4;
+  hence thesis by A4,CLVECT_1:def 18;
 end;
 
 theorem Th7:
@@ -340,175 +354,175 @@ theorem Th7:
 proof
   assume
 A1: s is convergent;
-  then
-A2: s*z is convergent by Th5;
   set g1=lim(s);
   set g=g1*z;
+A2: 0+0< ||.z.||+1 by CLVECT_1:106,XREAL_1:10;
 A3: 0<=||.z.|| by CLVECT_1:106;
-A4: 0+0< ||.z.||+1 by CLVECT_1:106,XREAL_1:10;
-  now
+A4: now
     let p be Real;
-    assume 0<p;
-    then
-A5: 0<p/(||.z.||+1) by A4;
+    assume
+A5: 0<p;
     then consider n such that
-A6: for m st n<=m holds ||.s.m-g1.||<p/(||.z.||+1) by A1,CLVECT_1:def 18;
+A6: for m st n<=m holds ||.s.m-g1.||<p/(||.z.||+1) by A1,A2,
+    CLVECT_1:def 18;
     take n;
-    let m such that
-A7: n<=m;
-A8: ||.s.m-g1.||< p/(||.z.||+1) by A6,A7;
-A9: ||.((s*z).m)-g.|| =||.s.m*z-g1*z.|| by CLOPBAN3:def 9
-      .=||.(s.m-g1)*z.|| by CLOPBAN3:42;
-A10: ||.(s.m-g1)*z.|| <=||.s.m-g1.||* ||.z.|| by CLOPBAN3:42;
-    0<=||.s.m-g1.|| by CLVECT_1:106;
-    then ||.s.m-g1.||* ||.z.||<=(p/(||.z.||+1))* ||.z.|| by A3,A8,XREAL_1:68;
+    let m;
+    assume
+    n<=m;
     then
-A11: ||.(s.m-g1)*z.||<=(p/(||.z.||+1))*||.z.|| by A10,XXREAL_0:2;
+A7: ||.s.m-g1.||< p/(||.z.||+1) by A6;
+    0<=||.s.m-g1.|| by CLVECT_1:106;
+    then
+A8: ||.s.m-g1.||* ||.z.||<=(p/(||.z.||+1))* ||.z.|| by A3,A7,
+    XREAL_1
+    :68;
+    ||.(s.m-g1)*z.|| <=||.s.m-g1.||* ||.z.|| by CLOPBAN3:42;
+    then
+A9: ||.(s.m-g1)*z.||<=(p/(||.z.||+1))*||.z.|| by A8,XXREAL_0:2;
+A10: ||.((s*z).m)-g.|| =||.s.m*z-g1*z.|| by CLOPBAN3:def 9
+      .=||.(s.m-g1)*z.|| by CLOPBAN3:42;
     0+ ||.z.|| < ||.z.||+1 by XREAL_1:10;
     then
-A12: (p/(||.z.||+1))*||.z.||< (p/(||.z.||+1)) * ( ||.z.||+1) by A3,A5,
-XREAL_1:99;
-    (p/(||.z.||+1))* ( ||.z.||+1) =p by A4,XCMPLX_1:88;
-    hence ||.((s*z).m)-g.|| < p by A9,A11,A12,XXREAL_0:2;
+A11: (p/(||.z.||+1))*||.z.||< (p/(||.z.||+1)) * ( ||.z.||+1) by A3,A5,
+    XREAL_1:99;
+    (p/(||.z.||+1))* ( ||.z.||+1) =p by A2,XCMPLX_1:88;
+    hence ||.((s*z).m)-g.|| < p by A10,A9,A11,XXREAL_0:2;
   end;
-  hence thesis by A2,CLVECT_1:def 18;
+  s*z is convergent by A1,Th5;
+  hence thesis by A4,CLVECT_1:def 18;
 end;
 
 theorem Th8:
-  s is convergent & s' is convergent implies lim(s*s')=(lim s)*(lim s')
+  s is convergent & s' is convergent implies lim(s*s')=(lim s)*(lim
+  s')
 proof
   assume that
 A1: s is convergent and
 A2: s' is convergent;
-A3: s*s' is convergent by A1,A2,Th3;
-  set g1=lim s;
-  set g2=lim s';
-  set g=g1*g2;
   ||.s.|| is bounded by A1,CLVECT_1:119,SEQ_2:27;
-  then ||.s.|| is bounded_above;
   then consider R be real number such that
-A4: for n holds ||.s.||.n < R by SEQ_2:def 3;
+A3: for n holds ||.s.||.n < R by SEQ_2:def 3;
+  set g2=lim s';
+  set g1=lim s;
+  set g=g1*g2;
+A4: now
+    let n;
+    ||.s.n.||= ||.s.||.n by CLVECT_1:def 17;
+    hence ||.s.n.|| < R by A3;
+  end;
   ||. s.1 .|| = ||. s .||.1 by CLVECT_1:def 17;
   then 0<= ||.s.||.1 by CLVECT_1:106;
   then
-A5: 0 < R by A4;
-A6: now
-    let n;
-    ||.s.n.||= ||.s.||.n by CLVECT_1:def 17;
-    hence ||.s.n.|| < R by A4;
-  end;
+A5: 0 < R by A3;
   reconsider R as Real by XREAL_0:def 1;
+A6: 0+0<||.g2.||+R by A5,CLVECT_1:106,XREAL_1:10;
 A7: 0<=||.g2.|| by CLVECT_1:106;
-A8: 0+0<||.g2.||+R by A5,CLVECT_1:106,XREAL_1:10;
-  now
+A8: now
     let p be Real;
-    assume 0<p;
-    then
-A9: 0<p/(||.g2.||+R) by A8;
+    assume
+A9: 0<p;
     then consider n1 such that
-A10: for m st n1<=m holds ||.s.m-g1.||<p/(||.g2.||+R) by A1,CLVECT_1:def 18;
+A10: for m st n1<=m holds ||.s.m-g1.||<p/(||.g2.||+R) by A1,A6,
+    CLVECT_1:def 18;
     consider n2 such that
-A11: for m st n2<=m holds ||.s'.m-g2.||<p/(||.g2.||+R)
-    by A2,A9,CLVECT_1:def 18;
+A11: for m st n2<=m holds ||.s'.m-g2.||<p/(||.g2.||+R) by A2,A6,A9,
+    CLVECT_1:def 18;
     take n=n1+n2;
     let m such that
 A12: n<=m;
-A13: 0<=||.s.m.|| by CLVECT_1:106;
-A14: 0<=||.s'.m-g2.|| by CLVECT_1:106;
-    n2<=n by NAT_1:12;
-    then n2<=m by A12,XXREAL_0:2;
-    then
-A15: ||.s'.m-g2.||<p/(||.g2.||+R) by A11;
     n1<=n1+n2 by NAT_1:12;
     then n1<=m by A12,XXREAL_0:2;
+    then ||.s.m-g1.||<=p/(||.g2.||+R) by A10;
     then
-A16: ||.s.m-g1.||<=p/(||.g2.||+R) by A10;
+A13: ||.g2.||*||.s.m-g1.|| <=||.g2.||*(p/(||.g2.||+R)) by A7,
+    XREAL_1
+    :66;
+    ||.(s.m-g1)*g2.||<=||.g2.||*||.s.m-g1.|| by CLOPBAN3:42;
+    then
+A14: ||.(s.m-g1)*g2.||<=||.g2.||*(p/(||.g2.||+R)) by A13,XXREAL_0:2;
+A15: 0<=||.s.m.|| by CLVECT_1:106;
     ||.((s*s').m)-g.|| =||.s.m*s'.m-g1*g2.|| by CLOPBAN3:def 10
       .=||.(s.m*s'.m-s.m*g2)+(s.m*g2-g1*g2).|| by CLOPBAN3:42
       .=||.s.m*(s'.m-g2)+(s.m*g2-g1*g2).|| by CLOPBAN3:42
       .=||.s.m*(s'.m-g2)+(s.m-g1)*g2.|| by CLOPBAN3:42;
     then
-A17: ||.((s*s').m)-g.||<=
-    ||.s.m*(s'.m-g2).||+||.(s.m-g1)*g2.|| by CLVECT_1:def 11;
-    ||.s.m.||<R by A6;
+A16: ||.((s*s').m)-g.||<= ||.s.m*(s'.m-g2).||+||.(s.m-g1)*g2.|| by
+    CLVECT_1:def 11;
+A17: ||.s.m*(s'.m-g2).|| <= ||.s.m.||*||.s'.m-g2.|| by CLOPBAN3:42;
+    n2<=n by NAT_1:12;
+    then n2<=m by A12,XXREAL_0:2;
     then
-A18: ||.s.m.||*||.s'.m-g2.||<R*(p/(||.g2.||+R)) by A13,A14,A15,XREAL_1:98;
-    ||.s.m*(s'.m-g2).|| <= ||.s.m.||*||.s'.m-g2.|| by CLOPBAN3:42;
+A18: ||.s'.m-g2.||<p/(||.g2.||+R) by A11;
+A19: 0<=||.s'.m-g2.|| by CLVECT_1:106;
+    ||.s.m.||<R by A4;
+    then ||.s.m.||*||.s'.m-g2.||<R*(p/(||.g2.||+R)) by A15,A19,A18,
+    XREAL_1:98;
     then
-A19: ||.s.m*(s'.m-g2).||<R*(p/(||.g2.||+R)) by A18,XXREAL_0:2;
-A20: ||.(s.m-g1)*g2.||<=||.g2.||*||.s.m-g1.|| by CLOPBAN3:42;
-    ||.g2.||*||.s.m-g1.|| <=||.g2.||*(p/(||.g2.||+R)) by A7,A16,XREAL_1:66;
-    then
-A21: ||.(s.m-g1)*g2.||<=||.g2.||*(p/(||.g2.||+R)) by A20,XXREAL_0:2;
-    R*(p/(||.g2.||+R))+||.g2.||*(p/(||.g2.||+R))
-    =(p/(||.g2.||+R))*(||.g2.||+R)
-      .=p by A8,XCMPLX_1:88;
-    then ||.s.m*(s'.m-g2).||+||.(s.m-g1)*g2.||<p by A19,A21,XREAL_1:10;
-    hence ||.((s*s').m)-g.||<p by A17,XXREAL_0:2;
+A20: ||.s.m*(s'.m-g2).||<R*(p/(||.g2.||+R)) by A17,XXREAL_0:2;
+    R*(p/(||.g2.||+R))+||.g2.||*(p/(||.g2.||+R)) =(p/(||.g2.||+R))*(||.g2
+    .||+R)
+      .=p by A6,XCMPLX_1:88;
+    then ||.s.m*(s'.m-g2).||+||.(s.m-g1)*g2.||<p by A20,A14,XREAL_1:10;
+    hence ||.((s*s').m)-g.||<p by A16,XXREAL_0:2;
   end;
-  hence thesis by A3,CLVECT_1:def 18;
+  s*s' is convergent by A1,A2,Th3;
+  hence thesis by A8,CLVECT_1:def 18;
 end;
 
 theorem Th9:
-  Partial_Sums(z * seq) = z * Partial_Sums(seq) &
-  Partial_Sums(seq *z ) = Partial_Sums(seq) *z
+  Partial_Sums(z * seq) = z * Partial_Sums(seq) & Partial_Sums(seq
+  *z ) = Partial_Sums(seq) *z
 proof
-A1: Partial_Sums(z * seq) = z * Partial_Sums(seq)
+A1: Partial_Sums(seq *z ) = Partial_Sums(seq) *z
   proof
-    defpred P[Element of NAT] means
-    Partial_Sums(z *seq).$1= (z * Partial_Sums(seq)).$1;
-A2: P[0]
-    proof
-      thus Partial_Sums(z*seq).0 =(z * seq).0 by BHSP_4:def 1
-        .=z * seq.0 by CLOPBAN3:def 8
-        .=z * Partial_Sums(seq).0 by BHSP_4:def 1
-        .=(z * Partial_Sums(seq)).0 by CLOPBAN3:def 8;
-    end;
-A3: now
+    defpred P[Element of NAT] means Partial_Sums(seq*z).$1= (Partial_Sums(seq)
+    *z).$1;
+A2: now
       let n;
       assume
-A4:   P[n];
-      thus P[n+1]
-      proof
-        thus Partial_Sums(z * seq).(n+1)
-        =Partial_Sums(z * seq).n + (z * seq).(n+1) by BHSP_4:def 1
-          .=(z * Partial_Sums(seq).n )+ (z * seq).(n+1) by A4,CLOPBAN3:def 8
-          .=(z * Partial_Sums(seq).n )+ (z * seq.(n+1)) by CLOPBAN3:def 8
-          .= z * ( Partial_Sums(seq).n + seq.(n+1)) by CLOPBAN3:42
-          .= z * ( Partial_Sums(seq).(n+1)) by BHSP_4:def 1
-          .= (z * Partial_Sums(seq)).(n+1) by CLOPBAN3:def 8;
-      end;
+A3:   P[n];
+      Partial_Sums( seq*z).(n+1) =Partial_Sums( seq*z).n + (seq*z).(n+1)
+      by BHSP_4:def 1
+        .=(Partial_Sums(seq).n *z )+ (seq*z).(n+1) by A3,CLOPBAN3:def 9
+        .=(Partial_Sums(seq).n*z)+ (seq.(n+1)*z) by CLOPBAN3:def 9
+        .= ( Partial_Sums(seq).n + seq.(n+1))*z by CLOPBAN3:42
+        .= ( Partial_Sums(seq).(n+1))*z by BHSP_4:def 1
+        .= (Partial_Sums(seq)*z ).(n+1) by CLOPBAN3:def 9;
+      hence P[n+1];
     end;
-    for n holds P[n] from NAT_1:sch 1(A2,A3);
+    Partial_Sums(seq*z).0 = (seq*z).0 by BHSP_4:def 1
+      .= seq.0*z by CLOPBAN3:def 9
+      .=Partial_Sums(seq).0 *z by BHSP_4:def 1
+      .=(Partial_Sums(seq)*z).0 by CLOPBAN3:def 9;
+    then
+A4: P[0];
+    for n holds P[n] from NAT_1:sch 1(A4,A2);
     hence thesis by FUNCT_2:113;
   end;
-  Partial_Sums(seq *z ) = Partial_Sums(seq) *z
+  Partial_Sums(z * seq) = z * Partial_Sums(seq)
   proof
-    defpred P[Element of NAT] means
-    Partial_Sums(seq*z).$1= (Partial_Sums(seq)*z).$1;
-A5: P[0]
-    proof
-      thus Partial_Sums(seq*z).0 = (seq*z).0 by BHSP_4:def 1
-        .= seq.0*z by CLOPBAN3:def 9
-        .=Partial_Sums(seq).0 *z by BHSP_4:def 1
-        .=(Partial_Sums(seq)*z).0 by CLOPBAN3:def 9;
-    end;
-A6: now
+    defpred P[Element of NAT] means Partial_Sums(z *seq).$1= (z * Partial_Sums
+    (seq)).$1;
+A5: now
       let n;
       assume
-A7:   P[n];
-      thus P[n+1]
-      proof
-        thus Partial_Sums( seq*z).(n+1)
-        =Partial_Sums( seq*z).n + (seq*z).(n+1) by BHSP_4:def 1
-          .=(Partial_Sums(seq).n *z )+ (seq*z).(n+1) by A7,CLOPBAN3:def 9
-          .=(Partial_Sums(seq).n*z)+ (seq.(n+1)*z) by CLOPBAN3:def 9
-          .= ( Partial_Sums(seq).n + seq.(n+1))*z by CLOPBAN3:42
-          .= ( Partial_Sums(seq).(n+1))*z by BHSP_4:def 1
-          .= (Partial_Sums(seq)*z ).(n+1) by CLOPBAN3:def 9;
-      end;
+A6:   P[n];
+      Partial_Sums(z * seq).(n+1) =Partial_Sums(z * seq).n + (z * seq).(n+
+      1) by BHSP_4:def 1
+        .=(z * Partial_Sums(seq).n )+ (z * seq).(n+1) by A6,CLOPBAN3:def 8
+        .=(z * Partial_Sums(seq).n )+ (z * seq.(n+1)) by CLOPBAN3:def 8
+        .= z * ( Partial_Sums(seq).n + seq.(n+1)) by CLOPBAN3:42
+        .= z * ( Partial_Sums(seq).(n+1)) by BHSP_4:def 1
+        .= (z * Partial_Sums(seq)).(n+1) by CLOPBAN3:def 8;
+      hence P[n+1];
     end;
-    for n holds P[n] from NAT_1:sch 1(A5,A6);
+    Partial_Sums(z*seq).0 =(z * seq).0 by BHSP_4:def 1
+      .=z * seq.0 by CLOPBAN3:def 8
+      .=z * Partial_Sums(seq).0 by BHSP_4:def 1
+      .=(z * Partial_Sums(seq)).0 by CLOPBAN3:def 8;
+    then
+A7: P[0];
+    for n holds P[n] from NAT_1:sch 1(A7,A5);
     hence thesis by FUNCT_2:113;
   end;
   hence thesis by A1;
@@ -517,111 +531,119 @@ end;
 theorem Th10:
   ||.Partial_Sums(seq).k.|| <= Partial_Sums(||.seq.||).k
 proof
-  defpred P[Element of NAT] means ||. Partial_Sums(seq).$1 .||
-  <= Partial_Sums(||.seq.||).$1;
+  defpred P[Element of NAT] means ||. Partial_Sums(seq).$1 .|| <= Partial_Sums
+  (||.seq.||).$1;
+A1: now
+    let k;
+    assume
+    P[k];
+    then
+A2: ||. Partial_Sums(seq).k.|| + ||.(seq).(k+1).|| <= Partial_Sums(||.seq
+    .|| ).k + ||.(seq).(k+1).|| by XREAL_1:8;
+A3: ||. Partial_Sums(seq).k + (seq).(k+1) .|| <= ||. Partial_Sums(seq).k
+    .|| + ||. (seq).(k+1) .|| by CLVECT_1:def 11;
+    ||. Partial_Sums(seq).(k+1) .|| =||. Partial_Sums(seq).k + (seq).(k+1)
+    .|| by BHSP_4:def 1;
+    then
+    ||. Partial_Sums(seq).(k+1) .|| <= Partial_Sums(||.seq.||).k + ||.seq.
+    (k+1).|| by A3,A2,XXREAL_0:2;
+    then
+    ||. Partial_Sums(seq).(k+1) .|| <= Partial_Sums(||.seq.||).k+||.seq.||
+    .(k+1) by CLVECT_1:def 17;
+    hence P[k+1] by SERIES_1:def 1;
+  end;
   Partial_Sums(||.seq.||).0 = (||.seq.||).0 by SERIES_1:def 1
     .= ||. seq.0 .|| by CLVECT_1:def 17;
   then
-A1: P[0] by BHSP_4:def 1;
-A2: now
-    let k such that
-A3: P[k];
-A4: ||. Partial_Sums(seq).(k+1) .||
-    =||. Partial_Sums(seq).k + (seq).(k+1) .|| by BHSP_4:def 1;
-A5: ||. Partial_Sums(seq).k + (seq).(k+1) .||
-    <= ||. Partial_Sums(seq).k.|| + ||. (seq).(k+1) .|| by CLVECT_1:def 11;
-    ||. Partial_Sums(seq).k.|| + ||.(seq).(k+1).||
-    <= Partial_Sums(||.seq.|| ).k + ||.(seq).(k+1).|| by A3,XREAL_1:8;
-    then ||. Partial_Sums(seq).(k+1) .||
-    <= Partial_Sums(||.seq.||).k + ||.seq.(k+1).|| by A4,A5,XXREAL_0:2;
-    then ||. Partial_Sums(seq).(k+1) .||
-    <= Partial_Sums(||.seq.||).k+||.seq.||.(k+1) by CLVECT_1:def 17;
-    hence P[k+1] by SERIES_1:def 1;
-  end;
-  for k holds P[k] from NAT_1:sch 1(A1,A2);
+A4: P[0] by BHSP_4:def 1;
+  for k holds P[k] from NAT_1:sch 1(A4,A1);
   hence thesis;
 end;
 
 theorem Th11:
-  (for n st n <= m holds seq1.n = seq2.n) implies
-  Partial_Sums(seq1).m =Partial_Sums(seq2).m
+  (for n st n <= m holds seq1.n = seq2.n) implies Partial_Sums(
+  seq1).m =Partial_Sums(seq2).m
 proof
+  defpred P[Element of NAT] means $1 <= m implies Partial_Sums(seq1).$1=
+  Partial_Sums(seq2).$1;
   assume
 A1: for n st n <= m holds seq1.n = seq2.n;
-  defpred P[Element of NAT] means $1 <= m implies
-  Partial_Sums(seq1).$1=Partial_Sums(seq2).$1;
-A2: P[0]
-  proof
-    assume
-A3: 0 <= m;
-    thus Partial_Sums(seq1).0=seq1.0 by BHSP_4:def 1
-      .=seq2.0 by A1,A3
-      .=Partial_Sums(seq2).0 by BHSP_4:def 1;
-  end;
-A4: for k be Element of NAT st P[k] holds P[k+1]
+A2: for k be Element of NAT st P[k] holds P[k+1]
   proof
     let k be Element of NAT such that
-A5: P[k];
+A3: P[k];
     assume
-A6: k+1 <= m;
+A4: k+1 <= m;
     k < k+1 by XREAL_1:31;
-    hence Partial_Sums(seq1).(k+1)
-    =Partial_Sums(seq2).k+seq1.(k+1) by A5,A6,BHSP_4:def 1,XXREAL_0:2
-      .=Partial_Sums(seq2).k+seq2.(k+1) by A1,A6
+    hence Partial_Sums(seq1).(k+1) =Partial_Sums(seq2).k+seq1.(k+1) by A3,A4,
+    BHSP_4:def 1,XXREAL_0:2
+      .=Partial_Sums(seq2).k+seq2.(k+1) by A1,A4
       .=Partial_Sums(seq2).(k+1) by BHSP_4:def 1;
   end;
-  for k holds P[k] from NAT_1:sch 1(A2,A4);
+A5: P[0]
+  proof
+    assume
+A6: 0 <= m;
+    thus Partial_Sums(seq1).0=seq1.0 by BHSP_4:def 1
+      .=seq2.0 by A1,A6
+      .=Partial_Sums(seq2).0 by BHSP_4:def 1;
+  end;
+  for k holds P[k] from NAT_1:sch 1(A5,A2);
   hence thesis;
 end;
 
 theorem Th12:
-  ((for n holds ||. seq.n .|| <= rseq.n) & rseq is convergent & lim(rseq)=0)
-  implies seq is convergent & lim(seq)=0.X
+  (for n holds ||. seq.n .|| <= rseq.n) & rseq is convergent & lim
+  (rseq)=0 implies seq is convergent & lim(seq)=0.X
 proof
   assume that
-A1: (for n holds ||. seq.n .|| <= rseq.n) and
+A1: for n holds ||. seq.n .|| <= rseq.n and
 A2: rseq is convergent and
 A3: lim(rseq)=0;
   now
-    let p be real number such that
-A4: 0<p;
-    consider n such that
-A5: for m st n<=m holds abs(rseq.m-0)<p by A2,A3,A4,SEQ_2:def 7;
+    let p be real number;
+    assume
+    0<p;
+    then consider n such that
+A4: for m st n<=m holds abs(rseq.m-0)<p by A2,A3,SEQ_2:def 7;
     now
-      let m such that
-A6:   n<=m;
-A7:   abs(rseq.m-0)<p by A5,A6;
-A8:   ||. seq.m-0.X .|| = ||. seq.m .|| by RLVECT_1:26;
-A9:   ||. seq.m .|| <= rseq.m by A1;
-      rseq.m <= abs(rseq.m) by ABSVALUE:11;
-      then ||. seq.m - 0.X .|| <= abs(rseq.m) by A8,A9,XXREAL_0:2;
-      hence ||. seq.m - 0.X .|| < p by A7,XXREAL_0:2;
+      let m;
+      assume
+      n<=m;
+      then
+A5:   abs(rseq.m-0)<p by A4;
+A6:   ||. seq.m-0.X .|| = ||. seq.m .|| by RLVECT_1:26;
+A7:   rseq.m <= abs(rseq.m) by ABSVALUE:11;
+      ||. seq.m .|| <= rseq.m by A1;
+      then ||. seq.m - 0.X .|| <= abs(rseq.m) by A6,A7,XXREAL_0:2;
+      hence ||. seq.m - 0.X .|| < p by A5,XXREAL_0:2;
     end;
     hence ex n st for m st n<=m holds ||. seq.m - (0.X) .|| < p;
   end;
   then
-A10: for p be Real st 0<p ex n st for m st n<=m holds ||. seq.m - 0.X .|| < p;
+A8: for p be Real st 0<p ex n st for m st n<=m holds ||. seq.m - 0.X .|| <
+  p;
   hence seq is convergent by CLVECT_1:def 16;
-  hence thesis by A10,CLVECT_1:def 18;
+  hence thesis by A8,CLVECT_1:def 18;
 end;
 
 definition
   let X,z;
   func z ExpSeq -> sequence of X means
   :Def2:
-  for n holds it.n = 1r/(n!c) * (z #N n);
+  for n holds it.n = 1r/(n!c) * (z
+  #N n);
   existence
   proof
     deffunc U(Element of NAT) = 1r/(($1)!c) *(z #N $1);
-    thus ex s being sequence of X st
-    for n holds s.n = U(n) from FUNCT_2:sch 4;
+    thus ex s being sequence of X st for n holds s.n = U(n) from FUNCT_2:sch 4;
   end;
   uniqueness
   proof
     let S1,S2 be sequence of X;
     assume that
-A1: ( for n be Element of NAT holds S1.n = 1r/(n!c) *(z #N n) ) and
-A2: ( for n be Element of NAT holds S2.n = 1r/(n!c) *(z #N n) );
+A1: for n be Element of NAT holds S1.n = 1r/(n!c) *(z #N n) and
+A2: for n be Element of NAT holds S2.n = 1r/(n!c) *(z #N n);
     for n be Element of NAT holds S1.n = S2.n
     proof
       let n be Element of NAT;
@@ -632,48 +654,52 @@ A2: ( for n be Element of NAT holds S2.n = 1r/(n!c) *(z #N n) );
   end;
 end;
 
-scheme ExNormSpaceCASE {CNS()->non empty Complex_Banach_Algebra,
-  F(Element of NAT,Element of NAT)-> Point of CNS() }: for k holds
-  ex seq be sequence of CNS() st for n holds ((n <= k implies seq.n=F(k,n)) &
-  (n > k implies seq.n=0.CNS()))
-proof
+scheme
+  ExNormSpaceCASE {CNS()->non empty Complex_Banach_Algebra, F(Element of NAT,
+Element of NAT)-> Point of CNS() }: for k holds ex seq be sequence of CNS() st
+for n holds (n <= k implies seq.n=F(k,n)) & (n > k implies seq.n=0.CNS()) proof
   let k;
-  defpred P[set,set] means ex n st (n=$1 & (n <= k implies $2=F(k,n )) &
-  (n > k implies $2=0.CNS()));
+  defpred P[set,set] means ex n st (n=$1 & (n <= k implies $2=F(k,n )) & (n >
+  k implies $2=0.CNS()));
 A1: now
     let x be set;
-    assume x in NAT;
+    assume
+    x in NAT;
     then consider n such that
 A2: n=x;
+    reconsider y=CHK(n,k) * F (k,n) as set;
 A3: now
-      assume n <= k;
-      hence CHK(n,k ) * F (k,n) =1r * F(k,n) by COMPLEX1:def 7,SIN_COS:def 2
-        .=F(k,n) by CLVECT_1:def 2;
-    end;
-A4: now
-      assume n > k;
+      assume
+      n > k;
       hence CHK(n,k) * F (k,n) =0c * F(k,n) by SIN_COS:def 2
         .=0.CNS() by CLVECT_1:2;
     end;
-    reconsider y=CHK(n,k) * F (k,n) as set;
     take y;
-    thus P[x,y] by A2,A3,A4;
+    now
+      assume
+      n <= k;
+      hence CHK(n,k ) * F (k,n) =1r * F(k,n) by COMPLEX1:def 7,SIN_COS:def 2
+        .=F(k,n) by CLVECT_1:def 2;
+    end;
+    hence P[x,y] by A2,A3;
   end;
   consider f be Function such that
-A6: dom f =NAT and
-A7: for x be set st x in NAT holds P[x,f.x] from CLASSES1:sch 1(A1);
+A4: dom f =NAT and
+A5: for x be set st x in NAT holds P[x,f.x] from CLASSES1:sch 1(A1);
   now
     let x be set;
-    assume x in NAT;
-    then ex n st (n=x & (n <= k implies f.x=F(k,n)) &
-    (n > k implies f.x=0.CNS())) by A7;
+    assume
+    x in NAT;
+    then
+    ex n st n=x & (n <= k implies f.x=F(k,n)) & (n > k implies f.x=0.CNS(
+    )) by A5;
     hence f.x in the carrier of CNS();
   end;
-  then reconsider f as sequence of CNS() by A6,FUNCT_2:5;
+  then reconsider f as sequence of CNS() by A4,FUNCT_2:5;
   take seq=f;
   let n;
-  ex l be Element of NAT st l=n &
-  (l <= k implies seq.n=F(k,l)) & (l > k implies seq.n=0.CNS()) by A7;
+  ex l be Element of NAT st l=n & (l <= k implies seq.n=F(k,l)) & (l > k
+  implies seq.n=0.CNS()) by A5;
   hence thesis;
 end;
 
@@ -682,27 +708,25 @@ definition
   canceled;
   func Expan(n,z,w) -> sequence of X means
   :Def4:
-  for k be Element of NAT holds
-  ( k <= n implies it.k=((Coef(n)).k) * (z #N k) * (w #N (n-' k)) ) &
-  (n < k implies it.k=0.X);
+  for k be Element of NAT
+holds ( k <= n implies it.k=((Coef(n)).k) * (z #N k) * (w #N (n-' k)) ) & (n <
+  k implies it.k=0.X);
   existence
   proof
-    deffunc U(Element of NAT,Element of NAT)
-    = ((Coef($1)).$2) * (z #N $2) * (w #N ($1 -' $2));
-    for n holds ex seq st for k holds (k <= n implies seq.k = U(n,k)) &
-    (k > n implies seq.k=0.X) from ExNormSpaceCASE;
+    deffunc U(Element of NAT,Element of NAT) = ((Coef($1)).$2) * (z #N $2) * (
+    w #N ($1 -' $2));
+    for n holds ex seq st for k holds (k <= n implies seq.k = U(n,k)) & (k
+    > n implies seq.k=0.X) from ExNormSpaceCASE;
     hence thesis;
   end;
   uniqueness
   proof
     let seq1,seq2;
     assume that
-A1: for k holds
-    (k <= n implies seq1.k =((Coef(n)).k) * (z #N k) * (w #N (n-' k)))&
-    (k > n implies seq1.k=0.X) and
-A2: for k holds
-    (k <= n implies seq2.k = ((Coef(n)).k) * (z #N k) * (w #N (n-' k)) )&
-    (k > n implies seq2.k=0.X);
+A1: for k holds (k <= n implies seq1.k =((Coef(n)).k) * (z #N k) * (w
+    #N (n-' k)))& (k > n implies seq1.k=0.X) and
+A2: for k holds (k <= n implies seq2.k = ((Coef(n)).k) * (z #N k) * (w
+    #N (n-' k)) )& (k > n implies seq2.k=0.X);
     now
       let k;
       per cases;
@@ -725,27 +749,25 @@ definition
   let n,X,z,w;
   func Expan_e(n,z,w) -> sequence of X means
   :Def5:
-  for k be Element of NAT holds
-  ( k <= n implies it.k=((Coef_e(n)).k) * (z #N k) * (w #N (n-' k)) ) &
-  ( n < k implies it.k=0.X );
+  for k be Element of NAT
+holds ( k <= n implies it.k=((Coef_e(n)).k) * (z #N k) * (w #N (n-' k)) ) & ( n
+  < k implies it.k=0.X );
   existence
   proof
-    deffunc U(Element of NAT,Element of NAT)
-    = ((Coef_e($1)).$2) * (z #N $2) * (w #N ($1-'$2));
-    for n holds ex seq st for k holds (k <= n implies seq.k = U(n,k)) &
-    (k > n implies seq.k=0.X ) from ExNormSpaceCASE;
+    deffunc U(Element of NAT,Element of NAT) = ((Coef_e($1)).$2) * (z #N $2) *
+    (w #N ($1-'$2));
+    for n holds ex seq st for k holds (k <= n implies seq.k = U(n,k)) & (k
+    > n implies seq.k=0.X ) from ExNormSpaceCASE;
     hence thesis;
   end;
   uniqueness
   proof
     let seq1,seq2;
     assume that
-A1: for k holds
-    (k <= n implies seq1.k =((Coef_e(n)).k) * (z #N k) * (w #N (n-' k)) ) &
-    (k > n implies seq1.k=0.X ) and
-A2: for k holds
-    (k <= n implies seq2.k = ((Coef_e(n)).k) * (z #N k) * (w #N (n-' k)) ) &
-    (k > n implies seq2.k=0.X );
+A1: for k holds (k <= n implies seq1.k =((Coef_e(n)).k) * (z #N k) * (
+    w #N (n-' k)) ) & (k > n implies seq1.k=0.X ) and
+A2: for k holds (k <= n implies seq2.k = ((Coef_e(n)).k) * (z #N k) *
+    (w #N (n-' k)) ) & (k > n implies seq2.k=0.X );
     now
       let k;
       per cases;
@@ -769,26 +791,24 @@ definition
   func Alfa(n,z,w) -> sequence of X means
   :Def6:
   for k be Element of NAT holds
-  ( k <= n implies it.k= (z ExpSeq).k * Partial_Sums(w ExpSeq).(n-'k) ) &
-  ( n < k implies it.k=0.X);
+( k <= n implies it.k= (z ExpSeq).k * Partial_Sums(w ExpSeq).(n-'k) ) & ( n < k
+  implies it.k=0.X);
   existence
   proof
-    deffunc U(Element of NAT,Element of NAT)
-    = (z ExpSeq).$2 * Partial_Sums(w ExpSeq).($1 -' $2);
-    for n holds ex seq st for k holds (k <= n implies seq.k = U(n,k)) &
-    (k > n implies seq.k=0.X ) from ExNormSpaceCASE;
+    deffunc U(Element of NAT,Element of NAT) = (z ExpSeq).$2 * Partial_Sums(w
+    ExpSeq).($1 -' $2);
+    for n holds ex seq st for k holds (k <= n implies seq.k = U(n,k)) & (k
+    > n implies seq.k=0.X ) from ExNormSpaceCASE;
     hence thesis;
   end;
   uniqueness
   proof
     let seq1,seq2;
     assume that
-A1: for k holds
-    (k <= n implies seq1.k = (z ExpSeq).k * Partial_Sums(w ExpSeq).(n-'k) ) &
-    (k > n implies seq1.k=0.X ) and
-A2: for k holds
-    (k <= n implies seq2.k = (z ExpSeq).k * Partial_Sums(w ExpSeq).(n-'k) ) &
-    (k > n implies seq2.k=0.X );
+A1: for k holds (k <= n implies seq1.k = (z ExpSeq).k * Partial_Sums(w
+    ExpSeq).(n-'k) ) & (k > n implies seq1.k=0.X ) and
+A2: for k holds (k <= n implies seq2.k = (z ExpSeq).k * Partial_Sums(w
+    ExpSeq).(n-'k) ) & (k > n implies seq2.k=0.X );
     now
       let k;
       per cases;
@@ -812,34 +832,32 @@ definition
   func Conj(n,z,w) -> sequence of X means
   :Def7:
   for k be Element of NAT holds
-  ( k <= n implies it.k= (z ExpSeq).k * (Partial_Sums(w ExpSeq).n
-  -Partial_Sums(w ExpSeq).(n-'k))) & ( n < k implies it.k=0.X );
+( k <= n implies it.k= (z ExpSeq).k * (Partial_Sums(w ExpSeq).n -Partial_Sums(w
+  ExpSeq).(n-'k))) & ( n < k implies it.k=0.X );
   existence
   proof
-    deffunc U(Element of NAT,Element of NAT)
-    = (z ExpSeq).$2 * (Partial_Sums(w ExpSeq).$1
-    -Partial_Sums(w ExpSeq).($1-'$2));
-    for n holds ex seq st for k holds (k <= n implies seq.k = U(n,k) ) &
-    (k > n implies seq.k=0.X) from ExNormSpaceCASE;
+    deffunc U(Element of NAT,Element of NAT) = (z ExpSeq).$2 * (Partial_Sums(w
+    ExpSeq).$1 -Partial_Sums(w ExpSeq).($1-'$2));
+    for n holds ex seq st for k holds (k <= n implies seq.k = U(n,k) ) & (
+    k > n implies seq.k=0.X) from ExNormSpaceCASE;
     hence thesis;
   end;
   uniqueness
   proof
     let seq1,seq2;
     assume that
-A1: for k holds
-    (k <= n implies seq1.k =(z ExpSeq).k * (Partial_Sums(w ExpSeq).n
-    -Partial_Sums(w ExpSeq).(n-'k)) ) & (k > n implies seq1.k=0.X) and
-A2: for k holds
-    (k <= n implies seq2.k = (z ExpSeq).k * (Partial_Sums(w ExpSeq).n
-    -Partial_Sums(w ExpSeq).(n-'k)) )& (k > n implies seq2.k=0.X);
+A1: for k holds (k <= n implies seq1.k =(z ExpSeq).k * (Partial_Sums(w
+    ExpSeq).n -Partial_Sums(w ExpSeq).(n-'k)) ) & (k > n implies seq1.k=0.X)
+    and
+A2: for k holds (k <= n implies seq2.k = (z ExpSeq).k * (Partial_Sums(
+    w ExpSeq).n -Partial_Sums(w ExpSeq).(n-'k)) )& (k > n implies seq2.k=0.X);
     now
       let k;
       per cases;
       suppose
 A3:     k <= n;
-        hence seq1.k =(z ExpSeq).k * (Partial_Sums(w ExpSeq).n
-        -Partial_Sums(w ExpSeq).(n-'k)) by A1
+        hence seq1.k =(z ExpSeq).k * (Partial_Sums(w ExpSeq).n -Partial_Sums(w
+        ExpSeq).(n-'k)) by A1
           .= seq2.k by A2,A3;
       end;
       suppose
@@ -853,10 +871,15 @@ A4:     k > n;
 end;
 
 theorem Th13:
-  z ExpSeq.(n+1) = (1r/(n+1) * z) * (z ExpSeq.n) & z ExpSeq.0=1.X &
-  ||.(z ExpSeq).n.|| <= (||.z.|| rExpSeq ).n
+  z ExpSeq.(n+1) = (1r/(n+1) * z) * (z ExpSeq.n) & z ExpSeq.0=1.X
+  & ||.(z ExpSeq).n.|| <= (||.z.|| rExpSeq ).n
 proof
-A1: now
+  defpred X[Nat] means ||. ((z ExpSeq)).$1 .|| <=( ||.z.|| rExpSeq ).$1;
+A1: (z ExpSeq).0=1r/(0!c) * z #N 0 by Def2
+    .=1r/(0!c)*(z GeoSeq).0 by CLOPBAN3:def 13
+    .=1r * 1.X by CLOPBAN3:def 12,SIN_COS:1
+    .=1.X by CLVECT_1:def 2;
+A2: now
     let n be Element of NAT;
     thus (z ExpSeq).(n+1)=1r/((n+1)!c) * z #N (n+1) by Def2
       .=1r/((n+1)!c) * (z GeoSeq).(n+1) by CLOPBAN3:def 13
@@ -868,49 +891,42 @@ A1: now
       .=((1r/(n+1))*z)*((1r/(n!c)) * z #N n ) by CLOPBAN3:42
       .=((1r/(n+1))*z)*(z ExpSeq.n) by Def2;
   end;
-A3: (z ExpSeq).0=1r/(0!c) * z #N 0 by Def2
-    .=1r/(0!c)*(z GeoSeq).0 by CLOPBAN3:def 13
-    .=1r * 1.X by CLOPBAN3:def 12,SIN_COS:1
-    .=1.X by CLVECT_1:def 2;
-  defpred X[Nat] means
-  ||. ((z ExpSeq)).$1 .|| <=( ||.z.|| rExpSeq ).$1;
-  ( ||.z.|| rExpSeq ).0 = ((||.z.||) |^ 0) / (0!) by SIN_COS:def 9
-    .= 1/(0!) by NEWTON:9
-    .= 1/((Prod_real_n).0) by SIN_COS:def 7
-    .= 1/1 by SIN_COS:def 5
-    .= 1;
-  then
-A4: X[0] by A3,CLOPBAN3:42;
-A5: for n be Element of NAT st X[n] holds X[n+1]
+A3: for n be Element of NAT st X[n] holds X[n+1]
   proof
     let n such that
-A6: X[n];
-A7: 0 <= n+1 by NAT_1:2;
-    (n+1) = n+1+0*<i>;
-    |.(n+1).| = n+1 by A7,ABSVALUE:def 1;
-    then
-A8: |. 1r/(n+1) .| = 1/(n+1) by COMPLEX1:134,153;
-A9: ||. ((z ExpSeq)).(n+1) .||
-    = ||. (1r/(n+1) *z )*(z ExpSeq.n) .|| by A1;
-A10: ||. (1r/(n+1) *z)*(z ExpSeq.n ) .||
-    <= ||. (1r/(n+1) *z) .|| * ||. (z ExpSeq.n ) .|| by CLOPBAN3:42;
-A11: ||. (1r/(n+1) *z) .|| = 1/(n+1) * ||.z.|| by A8,CLVECT_1:def 11;
+A4: X[n];
     0<= ||. (1r/(n+1) *z) .|| by CLVECT_1:106;
     then
-A12: ||.(1r/(n+1) *z).|| * ||.(z ExpSeq.n).||
-    <= ||.(1r/(n+1) *z).|| * (||.z.|| rExpSeq).n by A6,XREAL_1:66;
-    1/(n+1) * ||.z.|| * (||.z.|| rExpSeq).n
-    = 1/(n+1) * ( (||.z.|| rExpSeq).n * ||.z.|| )
+A5: ||.(1r/(n+1) *z).|| * ||.(z ExpSeq.n).|| <= ||.(1r/(n+1) *z).|| * (
+    ||.z.|| rExpSeq).n by A4,XREAL_1:66;
+A6: ||. (1r/(n+1) *z)*(z ExpSeq.n ) .|| <= ||. (1r/(n+1) *z) .|| * ||. (z
+    ExpSeq.n ) .|| by CLOPBAN3:42;
+    0 <= n+1 by NAT_1:2;
+    then |.(n+1).| = n+1 by ABSVALUE:def 1;
+    then |. 1r/(n+1) .| = 1/(n+1) by COMPLEX1:134,153;
+    then
+A7: ||. (1r/(n+1) *z) .|| = 1/(n+1) * ||.z.|| by CLVECT_1:def 11;
+A8: 1/(n+1) * ||.z.|| * (||.z.|| rExpSeq).n = 1/(n+1) * ( (||.z.||
+    rExpSeq).n * ||.z.|| )
       .= 1/(n+1) * ( ((||.z.||)|^n)/(n!)*||.z.|| ) by SIN_COS:def 9
       .= 1/(n+1) * ( ((||.z.||)|^n)*||.z.||/(n!) ) by XCMPLX_1:75
       .= 1/(n+1) * ( (||.z.||)|^(n+1)/(n!) ) by NEWTON:11
       .= ((||.z.||)|^ (n+1)) /((n)!*(n+1)) by XCMPLX_1:104
       .= ((||.z.||)|^ (n+1)) /((n+1)!) by NEWTON:21
       .= ( ||.z.|| rExpSeq ).(n+1) by SIN_COS:def 9;
-    hence thesis by A9,A10,A11,A12,XXREAL_0:2;
+    ||. ((z ExpSeq)).(n+1) .|| = ||. (1r/(n+1) *z )*(z ExpSeq.n) .|| by
+    A2;
+    hence thesis by A6,A7,A5,A8,XXREAL_0:2;
   end;
-  for n holds X[n] from NAT_1:sch 1(A4,A5);
-  hence thesis by A1,A3;
+  ( ||.z.|| rExpSeq ).0 = ((||.z.||) |^ 0) / (0!) by SIN_COS:def 9
+    .= 1/(0!) by NEWTON:9
+    .= 1/((Prod_real_n).0) by SIN_COS:def 7
+    .= 1/1 by SIN_COS:def 5
+    .= 1;
+  then
+A9: X[0] by A1,CLOPBAN3:42;
+  for n holds X[n] from NAT_1:sch 1(A9,A3);
+  hence thesis by A2,A1;
 end;
 
 theorem
@@ -919,43 +935,313 @@ theorem
 theorem Th15:
   Partial_Sums(seq).k=Partial_Sums(Shift seq).k+seq.k
 proof
-  defpred X[Element of NAT] means
-  Partial_Sums(seq).$1=Partial_Sums(Shift seq).$1+seq.$1;
+  defpred X[Element of NAT] means Partial_Sums(seq).$1=Partial_Sums(Shift seq)
+  .$1+seq.$1;
+A1: for k st X[k] holds X[k+1]
+  proof
+    let k;
+    assume
+    Partial_Sums(seq).k=Partial_Sums(Shift(seq)).k+seq.k;
+    hence
+    Partial_Sums(seq).(k+1) = (Partial_Sums(Shift(seq)).k+seq.k) + seq.(k
+    +1) by BHSP_4:def 1
+      .=(Partial_Sums(Shift(seq)).k+(Shift(seq)).(k+1)) + seq.(k+1) by
+    LOPBAN_4:def 5
+      .=Partial_Sums(Shift(seq)).(k+1)+seq.(k+1) by BHSP_4:def 1;
+  end;
   Partial_Sums(seq).0 = seq.0 by BHSP_4:def 1
     .= 0.X + seq.0 by RLVECT_1:10
     .= (Shift(seq)).0 + seq.0 by LOPBAN_4:def 5
     .= Partial_Sums(Shift(seq)).0+seq.0 by BHSP_4:def 1;
   then
-A1: X[0];
-A2: for k st X[k] holds X[k+1]
-  proof
-    let k such that
-A3: Partial_Sums(seq).k=Partial_Sums(Shift(seq)).k+seq.k;
-    thus Partial_Sums(seq).(k+1)
-    = (Partial_Sums(Shift(seq)).k+seq.k) + seq.(k+1) by A3,BHSP_4:def 1
-      .=(Partial_Sums(Shift(seq)).k+(Shift(seq)).(k+1)) + seq.(k+1)
-    by LOPBAN_4:def 5
-      .=Partial_Sums(Shift(seq)).(k+1)+seq.(k+1) by BHSP_4:def 1;
-  end;
-  for k holds X[k] from NAT_1:sch 1(A1,A2);
+A2: X[0];
+  for k holds X[k] from NAT_1:sch 1(A2,A1);
   hence thesis;
 end;
 
 theorem Th16:
-  for z,w st z,w are_commutative holds
-  (z+w) #N n = Partial_Sums(Expan(n,z,w)).n
+  for z,w st z,w are_commutative holds (z+w) #N n = Partial_Sums(
+  Expan(n,z,w)).n
 proof
   let z,w such that
 A1: z,w are_commutative;
-A2: (z+w) #N 0 =((z+w) GeoSeq).0 by CLOPBAN3:def 13
+  defpred X[Element of NAT] means (z+w) #N $1 = Partial_Sums(Expan($1,z,w)).$1;
+A2: for n st X[n] holds X[n+1]
+  proof
+    let n such that
+A3: (z+w) #N n = Partial_Sums(Expan(n,z,w)).n;
+A4: n < n+1 by XREAL_1:31;
+    now
+      let k be Element of NAT;
+A5:   now
+A6:     now
+          assume
+A7:       k < n+1;
+A8:       now
+A9:         k+1-1 <= n+1-1 by A7,INT_1:20;
+            then
+A10:        (n-'k)+1=n-k+1 by XREAL_1:235
+              .=n+1-k
+              .=(n+1-'k) by A7,XREAL_1:235;
+            (n+1-k) <> 0 by A7;
+            then
+A11:        n!c /( (k!c) * ((n-'k)!c) ) =(n!c * (n+1-k))/(((k!c) * ((n-'k
+            )!c)) * (n+1-k+0*<i>)) by XCMPLX_1:92
+              .=(n!c * (n+1-k))/((k!c) * (((n-'k)!c) * (n+1-k+0*<i>)))
+              .=(n!c * (n+1-k))/((k!c) * ((n+1-'k)!c)) by A9,SIN_COS:3;
+            assume
+A12:        k<>0;
+            then
+A13:        0<k by NAT_1:3;
+            then
+A14:        0+1 <= k by INT_1:20;
+            then
+A15:        (k-'1)+1 =k-1+1 by XREAL_1:235
+              .=k;
+            k < k+1 by XREAL_1:31;
+            then k-1 <= k+1-1 by XREAL_1:11;
+            then k-1 <= n by A9,XXREAL_0:2;
+            then
+A16:        k-'1 <= n by A14,XREAL_1:235;
+            then
+A17:        (n-'(k-'1)) =n-(k-'1) by XREAL_1:235
+              .=n-(k-1) by A14,XREAL_1:235
+              .=n+1-k
+              .=n+1-'k by A7,XREAL_1:235;
+            (((k-'1)!c) * (((n-'(k-'1)))!c)) * k = k * ((k-'1)!c) * (((n
+            -'(k-'1)))!c)
+              .=(k+0*<i>) * ((k-'1)!c) * (((n-'(k-'1)))!c)
+              .=(k!c ) * ((n+1-'k)!c ) by A13,A17,SIN_COS:3;
+            then
+A18:        n!c / (((k-'1)!c) * (((n-'(k-'1)))!c)) =(n!c * k)/((k!c ) * (
+            (n+1-'k)!c )) by A12,XCMPLX_1:92;
+            (Coef(n)).k +(Coef(n)).(k -' 1) =n!c /( (k!c) * ((n-'k)!c) )
+            +(Coef(n)).(k-'1) by A9,SIN_COS:def 10
+              .=n!c /( (k!c) * ((n-'k)!c) ) +n!c /(((k-'1)!c)*(((n-'(k-'1)))
+            !c)) by A16,SIN_COS:def 10;
+            then
+A19:        (Coef(n)).k +(Coef(n)).(k-'1) =((n!c * (n+1-k))+(n!c * k)) /
+            ((k!c) * ((n+1-'k)!c)) by A11,A18,XCMPLX_1:63
+              .= ( n!c * (n+1-k+k) ) / ((k!c) * ((n+1-'k)!c))
+              .= ( n!c * (n+1-k+k+(0+0)*<i>) ) / ((k!c) * ((n+1-'k)!c))
+              .=((n+1)!c ) / ((k!c ) * ((n+1-'k)!c )) by SIN_COS:1
+              .=(Coef(n+1)).k by A7,SIN_COS:def 10;
+A20:        (n-'(k-'1))=n-(k-'1) by A16,XREAL_1:235
+              .=n-(k-1) by A14,XREAL_1:235
+              .=n+1-k
+              .=(n+1-'k) by A7,XREAL_1:235;
+            (( Expan(n,z,w)*w )+Shift(( Expan(n,z,w)*z))).k =( Expan(n,z,
+            w)*w).k+(Shift((Expan(n,z,w)*z))).k by NORMSP_1:def 5
+              .=(Expan(n,z,w).k)*w + (Shift(( Expan(n,z,w)*z))).k by
+            CLOPBAN3:def 9
+              .=(Expan(n,z,w).k)*w + (Expan(n,z,w)*z).( k-'1) by A12,
+            LOPBAN_4:15,NAT_1:3
+              .=(Expan(n,z,w).k)*w + ( Expan(n,z,w).(k-'1))*z by CLOPBAN3:
+            def 9
+              .=( (Coef(n)).k * (z #N k) * (w #N (n-' k)) ) *w + ( Expan(n,z
+            ,w).(k-'1))*z by A9,Def4
+              .=(((Coef(n)).k * (z #N k) * (w #N (n-' k)))) *w + ( ((Coef(n)
+            ).(k -' 1) * (z #N (k-'1)) * (w #N (n-' (k -' 1)))))*z by A16,Def4
+              .=((Coef(n)).k * ((z #N k)) * ((w #N (n-' k))*w)) + ( ((Coef(n
+)).(k -' 1)) * (z #N (k -' 1)) * (w #N (n-' (k-'1)))) *z by CLOPBAN3:42
+              .=((Coef(n)).k * ((z #N k)) * ((w #N ((n-' k)+1)))) + ( ((Coef
+            (n)).(k -' 1)) * (z #N (k -' 1)) * (w #N (n-' (k-'1)))) *z by Lm1
+              .=((Coef(n)).k * ((z #N k)) * ((w #N ((n-' k)+1)))) + ((Coef(n
+)).(k -' 1)) * (z #N (k -' 1)) *((w #N (n-' (k-'1))) *z) by CLOPBAN3:42
+              .=((Coef(n)).k * ((z #N k)) * ((w #N ((n-' k)+1)))) + ((Coef(n
+            )).(k -' 1)) * (z #N (k -' 1)) *(z*(w #N (n-' (k-'1)))) by A1,Lm2
+              .=((Coef(n)).k * ((z #N k)) * ((w #N ((n-' k)+1)))) + ((Coef(n
+)).(k -' 1)) * (z #N (k -' 1)) *z*(w #N (n-' (k-'1))) by CLOPBAN3:42
+              .=((Coef(n)).k * ((z #N k)) * ((w #N ((n-' k)+1)))) + ((Coef(n
+            )).(k -'1))*((z #N (k -'1))*z)*(w #N (n-'(k-'1))) by CLOPBAN3:42
+              .=((Coef(n)).k * ((z #N k)) * ((w #N ((n-' k)+1)))) + ((Coef(n
+            )).(k -'1))*(z #N ((k -'1)+1))*(w #N (n-'(k-'1))) by Lm1;
+            then ((Expan(n,z,w)*w)+Shift((Expan(n,z,w)*z))) .k =(Coef(n)).k *
+((z #N k) * (w #N (n+1-'k))) + (Coef(n)).((k -' 1)) *(z #N k) *(w #N (n+1-'k))
+            by A10,A20,A15,CLOPBAN3:42
+              .=(Coef(n)).k * ((z #N k) * (w #N (n+1-'k))) + (Coef(n)).((k
+            -' 1)) *((z #N k) *(w #N (n+1-'k))) by CLOPBAN3:42
+              .= ((Coef(n)).k +(Coef(n)).(k -' 1) ) * ((z #N k) * (w #N ((n+
+            1) -' k) )) by CLOPBAN3:42;
+            then
+            ((Expan(n,z,w)*w)+Shift((Expan(n,z,w)*z))).k =(Coef(n+1)).k *
+            (z #N k) * (w #N (n+1-'k) ) by A19,CLOPBAN3:42
+              .=Expan(n+1,z,w).k by A7,Def4;
+            hence
+            (( Expan(n,z,w)*w)+Shift((Expan(n,z,w)*z))).k = Expan(n+1,z,w
+            ) . k;
+          end;
+          now
+A21:        n+1-'0 =n+1-0 by NAT_1:2,XREAL_1:235;
+            then
+A22:        (Coef(n+1)).0 = (n+1)!c /(1 * ((n+1)!c)) by SIN_COS:1 ,
+            def 10
+              .= 1 by SIN_COS:1,XCMPLX_1:60;
+A23:        n-'0 =n-0 by NAT_1:2,XREAL_1:235;
+            then
+A24:        (Coef(n)).0 = n!c /(1 * (n!c)) by SIN_COS:1,def 10
+              .= 1 by SIN_COS:1,XCMPLX_1:60;
+A25:        0 <= n+1 by NAT_1:2;
+A26:        0 <= n by NAT_1:2;
+            assume
+A27:        k=0;
+            then
+            (( Expan(n,z,w)*w)+Shift(( Expan(n,z,w)*z))).k = ( Expan(n,z,
+            w)*w).0+(Shift((Expan(n,z,w)*z))).0 by NORMSP_1:def 5
+              .=(Expan(n,z,w).0 *w) + (Shift(( Expan(n,z,w)*z))).0 by
+            CLOPBAN3:def 9
+              .=( Expan(n,z,w).0 *w ) + 0.X by LOPBAN_4:def 5
+              .=( Expan(n,z,w).0 *w) by CLOPBAN3:42
+              .= ((Coef(n)).0 * (z #N 0) * (w #N (n-'0)))*w by A26,Def4
+              .= (Coef(n)).0 *(z #N 0) *((w #N (n-' 0))*w) by CLOPBAN3:42
+              .= (Coef(n+1)).0 *(z #N 0)* (w #N ((n+1)-'0)) by A23,A21,A24,
+            A22,Lm1
+              .= Expan(n+1,z,w).k by A27,A25,Def4;
+            hence
+            ((Expan(n,z,w)*w)+Shift(( Expan(n,z,w)*z))).k = Expan(n+1,z,w
+            ) . k;
+          end;
+          hence ((Expan(n,z,w)*w)+Shift((Expan(n,z,w)*z))).k =Expan(n+1,z,w).k
+          by A8;
+        end;
+A28:    now
+A29:      n+1-'(n+1)= n+1-(n+1) by XREAL_1:235
+            .= 0;
+          then
+A30:      (Coef(n+1)).(n+1) = (n+1)!c /(((n+1)!c) * 1) by SIN_COS:1,
+          def 10
+            .= 1 by SIN_COS:1,XCMPLX_1:60;
+A31:      n < n+1 by XREAL_1:31;
+A32:      n-'n= n-n by XREAL_1:235
+            .= 0;
+          then
+A33:      (Coef(n)).n = n!c /((n!c) * 1) by SIN_COS:1,def 10
+            .= 1 by SIN_COS:1,XCMPLX_1:60;
+          assume
+A34:      k=n+1;
+          then
+          (( Expan(n,z,w)*w)+Shift((Expan(n,z,w)*z))).k = (Expan(n,z,w)*w
+          ).(n+1)+(Shift((Expan(n,z,w)*z ))).(n+1) by NORMSP_1:def 5
+            .= (Expan(n,z,w).(n+1) *w) + (Shift((Expan(n,z,w)*z))).(n+1) by
+          CLOPBAN3:def 9
+            .= (0.X*w) + (Shift(( Expan(n,z,w)*z))).(n+1) by A31,Def4
+            .= (0.X) + (Shift(( Expan(n,z,w)*z))).(n+1) by CLOPBAN3:42
+            .= (Shift((Expan(n,z,w)*z ))).(n+1) by CLOPBAN3:42
+            .= (( Expan(n,z,w)*z)).(n) by LOPBAN_4:def 5
+            .= (Expan(n,z,w)).n *z by CLOPBAN3:def 9
+            .=((Coef(n)).n * (z #N n) * (w #N (n-' n))) *z by Def4
+            .=(Coef(n)).n * (z #N n) * ((w #N (n-' n)) *z) by CLOPBAN3:42
+            .=(Coef(n)).n * (z #N n) * ( z*(w #N (n-' n))) by A1,Lm2
+            .=(Coef(n)).n * (z #N n) * z*(w #N (n-' n)) by CLOPBAN3:42
+            .=(Coef(n)).n *( (z #N n) * z)*(w #N (n-' n)) by CLOPBAN3:42
+            .= ((Coef(n+1)).(n+1) * (z #N (n+1)) * (w #N (n-' n))) by A33,
+          A30,Lm1
+            .= Expan(n+1,z,w).k by A34,A32,A29,Def4;
+          hence
+          ((Expan(n,z,w)*w) +Shift((Expan(n,z,w)*z))).k= Expan(n+1,z,w).k;
+        end;
+        assume
+        k <= (n+1);
+        hence
+        ((Expan(n,z,w)*w)+Shift((Expan(n,z,w)*z))).k =Expan(n+1,z,w).k by
+        A28,A6,XXREAL_0:1;
+      end;
+      now
+        assume
+A35:    n+1 < k;
+        then
+A36:    n+1-1 < k -1 by XREAL_1:11;
+        then
+A37:    n+0 < k-1+1 by XREAL_1:10;
+        0 <= n by NAT_1:2;
+        then
+A38:    0+1 <= n+1 by XREAL_1:8;
+        then
+A39:    k-1 =k-'1 by A35,XREAL_1:235,XXREAL_0:2;
+        (( Expan(n,z,w)*w)+Shift(( Expan(n,z,w)*z))).k =(Expan(n,z,w)*w).
+        k + (Shift((Expan(n,z,w)*z))).k by NORMSP_1:def 5
+          .=(Expan(n,z,w).k*w) + (Shift(( Expan(n,z,w)*z))).k by CLOPBAN3:
+        def 9
+          .=(Expan(n,z,w).k*w) + ((Expan(n,z,w)*z)).(k -' 1) by A35,A38,
+        LOPBAN_4:15
+          .=(Expan(n,z,w).k*w) + ((Expan(n,z,w).(k -' 1)*z)) by CLOPBAN3:def
+        9
+          .=( 0.X*w )+ ((Expan(n,z,w).(k -' 1))*z) by A37,Def4
+          .= 0.X+ ((Expan(n,z,w).(k -' 1))*z) by CLOPBAN3:42
+          .=0.X + ( 0.X*z) by A36,A39,Def4
+          .=0.X + 0.X by CLOPBAN3:42
+          .=0.X by CLOPBAN3:42;
+        hence (( Expan(n,z,w)*w)+Shift((Expan(n,z,w)*z))).k =Expan(n+1,z,w).k
+        by A35,Def4;
+      end;
+      hence ((Expan(n,z,w)*w)+Shift((Expan(n,z,w)*z))).k =Expan(n+1,z,w).k by
+      A5;
+    end;
+    then
+A40: ( Expan(n,z,w)*w)+Shift(( Expan(n,z,w)*z)) =Expan(n+1,z,w) by
+    FUNCT_2:113;
+A41: n < n+1 by XREAL_1:31;
+    Partial_Sums((Expan(n,z,w)*w)).(n+1) =Partial_Sums((Expan(n,z,w)*w)).
+    n+(Expan(n,z,w)*w).(n+1) by BHSP_4:def 1
+      .=Partial_Sums((Expan(n,z,w)*w)).n + Expan(n,z,w).(n+1) *w by CLOPBAN3
+    :def 9;
+    then
+A42: Partial_Sums(( Expan(n,z,w)*w)).(n+1) =Partial_Sums((Expan(n,z,w)*w))
+    .n +0.X *w by A41,Def4
+      .=Partial_Sums((Expan(n,z,w)*w)).n +0.X by CLOPBAN3:42
+      .=Partial_Sums((Expan(n,z,w)*w)).n by CLOPBAN3:42;
+    Partial_Sums((Expan(n,z,w)*z)).(n+1) = Partial_Sums((Expan(n,z,w)*z))
+    .n+(Expan(n,z,w)*z).(n+1) by BHSP_4:def 1
+      .= Partial_Sums((Expan(n,z,w)*z)).n + Expan(n,z,w).(n+1) *z by
+    CLOPBAN3:def 9;
+    then
+A43: Partial_Sums(( Expan(n,z,w)*z)).(n+1) =Partial_Sums((Expan(n,z,w)*z))
+    .n +0.X *z by A4,Def4
+      .=Partial_Sums((Expan(n,z,w)*z)).n +0.X by CLOPBAN3:42
+      .=Partial_Sums((Expan(n,z,w)*z)).n by CLOPBAN3:42;
+    0 +n < n+1 by XREAL_1:31;
+    then
+A44: Expan(n,z,w).(n+1)=0.X by Def4;
+    Partial_Sums(( Expan(n,z,w)*z)).(n+1) =Partial_Sums(Shift(( Expan(n,z
+    ,w)*z))).(n+1) +( Expan(n,z,w)*z).(n+1) by Th15;
+    then
+A45: Partial_Sums(( Expan(n,z,w)*z)).(n+1) =Partial_Sums(Shift(( Expan(n,z
+    ,w)*z))).(n+1) + Expan(n,z,w).(n+1)*z by CLOPBAN3:def 9
+      .=Partial_Sums(Shift(( Expan(n,z,w)*z))).(n+1) +0.X by A44,CLOPBAN3:42
+      .= Partial_Sums(Shift((Expan(n,z,w)*z))).(n+1) by CLOPBAN3:42;
+    now
+      let k be Element of NAT;
+      thus ( Expan(n,z,w)*(z+w) ).k= Expan(n,z,w).k *(z+w) by CLOPBAN3:def 9
+        .= Expan(n,z,w).k * z + Expan(n,z,w).k *w by CLOPBAN3:42
+        .=( Expan(n,z,w)*z).k+ Expan(n,z,w).k *w by CLOPBAN3:def 9
+        .=(Expan(n,z,w)*z).k+(Expan(n,z,w)*w).k by CLOPBAN3:def 9
+        .=( (Expan(n,z,w)*z)+(Expan(n,z,w)*w)).k by NORMSP_1:def 5;
+    end;
+    then
+A46: Expan(n,z,w)*(z+w) =( Expan(n,z,w)*z)+(Expan(n,z,w)*w) by
+    FUNCT_2:
+    113;
+    (z+w) #N (n+1) =((z+w) GeoSeq ).(n+1) by CLOPBAN3:def 13
+      .=((z+w) GeoSeq ).n * (z+w) by CLOPBAN3:def 12
+      .=(Partial_Sums(Expan(n,z,w)).n) * (z+w) by A3,CLOPBAN3:def 13
+      .=(Partial_Sums(Expan(n,z,w))*(z+w)) .n by CLOPBAN3:def 9
+      .=(Partial_Sums(Expan(n,z,w)*(z+w))).n by Th9;
+    then (z+w) #N (n+1) =( Partial_Sums( (Expan(n,z,w)*z)) +Partial_Sums(( (
+    Expan(n,z,w)*w)))).n by A46,CLOPBAN3:19
+      .= Partial_Sums((Expan(n,z,w)*z)).n +Partial_Sums((Expan(n,z,w)*w)).n
+    by NORMSP_1:def 5;
+    hence
+    (z+w) #N (n+1) =(Partial_Sums(( Expan(n,z,w)*w)) + Partial_Sums(Shift
+    (( Expan(n,z,w)*z)))).(n+1) by A43,A42,A45,NORMSP_1:def 5
+      .=Partial_Sums(Expan(n+1,z,w)).(n+1) by A40,CLOPBAN3:19;
+  end;
+A47: (z+w) #N 0 =((z+w) GeoSeq).0 by CLOPBAN3:def 13
     .=1.X by CLOPBAN3:def 12;
-A3: 0-'0=0-0 by XREAL_0:def 2
+A48: 0-'0=0-0 by XREAL_0:def 2
     .=0;
-  defpred X[Element of NAT] means
-  (z+w) #N $1 = Partial_Sums(Expan($1,z,w)).$1;
   Partial_Sums(Expan(0,z,w)).0 = Expan(0,z,w).0 by BHSP_4:def 1
-    .= (Coef(0)).0 * (z #N 0) * (w #N 0) by A3,Def4
-    .= 1r/(1r * 1r) * z #N 0 * w #N 0 by A3,COMPLEX1:def 7,SIN_COS:1,def 10
+    .= (Coef(0)).0 * (z #N 0) * (w #N 0) by A48,Def4
+    .= 1r/(1r * 1r) * z #N 0 * w #N 0 by A48,COMPLEX1:def 7,SIN_COS:1,def 10
     .= z #N 0 * w #N 0 by CLVECT_1:def 2,COMPLEX1:def 7
     .= (z GeoSeq).0 * w #N 0 by CLOPBAN3:def 13
     .= (z GeoSeq).0 * (w GeoSeq).0 by CLOPBAN3:def 13
@@ -963,317 +1249,8 @@ A3: 0-'0=0-0 by XREAL_0:def 2
     .= 1.X * 1.X by CLOPBAN3:def 12
     .= 1.X by CLOPBAN3:42;
   then
-A4: X[0] by A2;
-A5: for n st X[n] holds X[n+1]
-  proof
-    let n such that
-A6: (z+w) #N n = Partial_Sums(Expan(n,z,w)).n;
-A7: (z+w) #N (n+1) =((z+w) GeoSeq ).(n+1) by CLOPBAN3:def 13
-      .=((z+w) GeoSeq ).n * (z+w) by CLOPBAN3:def 12
-      .=(Partial_Sums(Expan(n,z,w)).n) * (z+w) by A6,CLOPBAN3:def 13
-      .=(Partial_Sums(Expan(n,z,w))*(z+w)) .n by CLOPBAN3:def 9
-      .=(Partial_Sums(Expan(n,z,w)*(z+w))).n by Th9;
-    Expan(n,z,w)*(z+w) =( Expan(n,z,w)*z)+(Expan(n,z,w)*w)
-    proof
-      now
-        let k be Element of NAT;
-        thus ( Expan(n,z,w)*(z+w) ).k= Expan(n,z,w).k *(z+w) by CLOPBAN3:def 9
-          .= Expan(n,z,w).k * z + Expan(n,z,w).k *w by CLOPBAN3:42
-          .=( Expan(n,z,w)*z).k+ Expan(n,z,w).k *w by CLOPBAN3:def 9
-          .=(Expan(n,z,w)*z).k+(Expan(n,z,w)*w).k by CLOPBAN3:def 9
-          .=( (Expan(n,z,w)*z)+(Expan(n,z,w)*w)).k by NORMSP_1:def 5;
-      end;
-      hence thesis by FUNCT_2:113;
-    end;
-    then
-A8: (z+w) #N (n+1) =( Partial_Sums( (Expan(n,z,w)*z))
-    +Partial_Sums(( (Expan(n,z,w)*w)))).n by A7,CLOPBAN3:19
-      .= Partial_Sums((Expan(n,z,w)*z)).n
-    +Partial_Sums((Expan(n,z,w)*w)).n by NORMSP_1:def 5;
-A9: Partial_Sums(( Expan(n,z,w)*z)).n = Partial_Sums((Expan(n,z,w)*z)).(n+1)
-    proof
-A10:  Partial_Sums((Expan(n,z,w)*z)).(n+1)
-      = Partial_Sums((Expan(n,z,w)*z)).n+(Expan(n,z,w)*z).(n+1)
-      by BHSP_4:def 1
-        .= Partial_Sums((Expan(n,z,w)*z)).n
-      + Expan(n,z,w).(n+1) *z by CLOPBAN3:def 9;
-      n < n+1 & n+1 is Element of NAT by XREAL_1:31;
-      hence Partial_Sums(( Expan(n,z,w)*z)).(n+1)
-      =Partial_Sums((Expan(n,z,w)*z)).n +0.X *z by A10,Def4
-        .=Partial_Sums((Expan(n,z,w)*z)).n +0.X by CLOPBAN3:42
-        .=Partial_Sums((Expan(n,z,w)*z)).n by CLOPBAN3:42;
-    end;
-A11: Partial_Sums(( Expan(n,z,w)*w )).n
-    =Partial_Sums(( Expan(n,z,w)*w )).(n+1)
-    proof
-A12:  Partial_Sums((Expan(n,z,w)*w)).(n+1)
-      =Partial_Sums((Expan(n,z,w)*w)).n+(Expan(n,z,w)*w).(n+1) by BHSP_4:def 1
-        .=Partial_Sums((Expan(n,z,w)*w)).n
-      + Expan(n,z,w).(n+1) *w by CLOPBAN3:def 9;
-      n < n+1 & n+1 is Element of NAT by XREAL_1:31;
-      hence Partial_Sums(( Expan(n,z,w)*w)).(n+1)
-      =Partial_Sums((Expan(n,z,w)*w)).n +0.X *w by A12,Def4
-        .=Partial_Sums((Expan(n,z,w)*w)).n +0.X by CLOPBAN3:42
-        .=Partial_Sums((Expan(n,z,w)*w)).n by CLOPBAN3:42;
-    end;
-A13: Partial_Sums(( Expan(n,z,w)*z)).(n+1)
-    =Partial_Sums(Shift(( Expan(n,z,w)*z))).(n+1)
-    proof
-A14:  Partial_Sums(( Expan(n,z,w)*z)).(n+1)
-      =Partial_Sums(Shift(( Expan(n,z,w)*z))).(n+1) +( Expan(n,z,w)*z).(n+1)
-      by Th15;
-      0 +n < n+1 by XREAL_1:31;
-      then
-A15:  Expan(n,z,w).(n+1)=0.X by Def4;
-      thus Partial_Sums(( Expan(n,z,w)*z)).(n+1)
-      =Partial_Sums(Shift(( Expan(n,z,w)*z))).(n+1)
-      + Expan(n,z,w).(n+1)*z by A14,CLOPBAN3:def 9
-        .=Partial_Sums(Shift(( Expan(n,z,w)*z))).(n+1) +0.X by A15,CLOPBAN3:42
-        .= Partial_Sums(Shift((Expan(n,z,w)*z))).(n+1) by CLOPBAN3:42;
-    end;
-A16: ( Expan(n,z,w)*w)+Shift(( Expan(n,z,w)*z)) =Expan(n+1,z,w)
-    proof
-      now
-        let k be Element of NAT;
-A17:    now
-          assume
-A18:      n+1 < k;
-A19:      n < k & 1 <= k & 1 <k & 0 <k & n <k-1 & n < k-'1
-          proof
-            0 <= n by NAT_1:2;
-            then
-A20:        0+1 <= n+1 by XREAL_1:8;
-A21:        n+1-1 < k -1 by A18,XREAL_1:11;
-            then n+0 < k-1+1 by XREAL_1:10;
-            hence thesis by A18,A20,A21,XREAL_1:235,XXREAL_0:2;
-          end;
-          (( Expan(n,z,w)*w)+Shift(( Expan(n,z,w)*z))).k
-          =(Expan(n,z,w)*w).k + (Shift((Expan(n,z,w)*z))).k by NORMSP_1:def 5
-            .=(Expan(n,z,w).k*w) + (Shift(( Expan(n,z,w)*z))).k
-          by CLOPBAN3:def 9
-            .=(Expan(n,z,w).k*w) + ((Expan(n,z,w)*z)).(k -' 1) by A19,
-LOPBAN_4:15
-
-.=(Expan(n,z,w).k*w) + ((Expan(n,z,w).(k -' 1)*z)) by CLOPBAN3:def 9
-            .=( 0.X*w )+ ((Expan(n,z,w).(k -' 1))*z) by A19,Def4
-            .= 0.X+ ((Expan(n,z,w).(k -' 1))*z) by CLOPBAN3:42
-            .=0.X + ( 0.X*z) by A19,Def4
-            .=0.X + 0.X by CLOPBAN3:42
-            .=0.X by CLOPBAN3:42;
-          hence (( Expan(n,z,w)*w)+Shift((Expan(n,z,w)*z))).k
-          =Expan(n+1,z,w).k by A18,Def4;
-        end;
-        now
-          assume
-A22:      k <= (n+1);
-A23:      now
-            assume
-A24:        k=n+1;
-            thus ((Expan(n,z,w)*w) +Shift((Expan(n,z,w)*z))).k=
-            Expan(n+1,z,w).k
-            proof
-A25:          n < n+1 by XREAL_1:31;
-A26:          n-'n= n-n by XREAL_1:235
-                .= 0;
-A27:          n+1-'(n+1)= n+1-(n+1) by XREAL_1:235
-                .= 0;
-A28:          n!c <>0 & (n+1)!c <>0 by SIN_COS:1;
-A29:          (Coef(n)).n = n!c /((n!c) * 1) by A26,SIN_COS:1,def 10
-                .= 1 by A28,XCMPLX_1:60;
-A30:          (Coef(n+1)).(n+1)
-              = (n+1)!c /(((n+1)!c) * 1) by A27,SIN_COS:1,def 10
-                .= 1 by A28,XCMPLX_1:60; thus
-              (( Expan(n,z,w)*w)+Shift((Expan(n,z,w)*z))).k
-              = (Expan(n,z,w)*w).(n+1)+(Shift((Expan(n,z,w)*z ))).(n+1)
-              by A24,NORMSP_1:def 5
-                .= (Expan(n,z,w).(n+1) *w) + (Shift((Expan(n,z,w)*z))).(n+1)
-              by CLOPBAN3:def 9
-                .= (0.X*w) + (Shift(( Expan(n,z,w)*z))).(n+1) by A25,Def4
-                .= (0.X) + (Shift(( Expan(n,z,w)*z))).(n+1) by CLOPBAN3:42
-                .= (Shift((Expan(n,z,w)*z ))).(n+1) by CLOPBAN3:42
-                .= (( Expan(n,z,w)*z)).(n) by LOPBAN_4:def 5
-                .= (Expan(n,z,w)).n *z by CLOPBAN3:def 9
-                .=((Coef(n)).n * (z #N n) * (w #N (n-' n))) *z by Def4
-                .=(Coef(n)).n * (z #N n) * ((w #N (n-' n)) *z) by CLOPBAN3:42
-                .=(Coef(n)).n * (z #N n) * ( z*(w #N (n-' n))) by A1,Lm2
-                .=(Coef(n)).n * (z #N n) * z*(w #N (n-' n)) by CLOPBAN3:42
-                .=(Coef(n)).n *( (z #N n) * z)*(w #N (n-' n)) by CLOPBAN3:42
-                .= ((Coef(n+1)).(n+1) * (z #N (n+1)) * (w #N (n-' n)))
-              by A29,A30,Lm1
-                .= Expan(n+1,z,w).k by A24,A26,A27,Def4;
-            end;
-          end;
-          now
-            assume
-A31:        k < n+1;
-A32:        now
-              assume
-A33:          k=0; thus
-              ((Expan(n,z,w)*w)+Shift(( Expan(n,z,w)*z))).k = Expan(n+1,z,w) .
-              k
-              proof
-A34:            0 <= n by NAT_1:2;
-A35:            0 <= n+1 by NAT_1:2;
-A36:            n-'0 =n-0 by NAT_1:2,XREAL_1:235;
-A37:            n+1-'0 =n+1-0 by NAT_1:2,XREAL_1:235;
-A38:            n!c <>0 & (n+1)!c <>0 by SIN_COS:1;
-A39:            (Coef(n)).0 = n!c /(1 * (n!c)) by A36,SIN_COS:1,def 10
-                  .= 1 by A38,XCMPLX_1:60;
-A40:            (Coef(n+1)).0 = (n+1)!c /(1 * ((n+1)!c)) by A37,SIN_COS:1
-,def 10
-                  .= 1 by A38,XCMPLX_1:60; thus
-                (( Expan(n,z,w)*w)+Shift(( Expan(n,z,w)*z))).k
-                = ( Expan(n,z,w)*w).0+(Shift((Expan(n,z,w)*z))).0
-                by A33,NORMSP_1:def 5
-                  .=(Expan(n,z,w).0 *w) + (Shift(( Expan(n,z,w)*z))).0
-                by CLOPBAN3:def 9
-                  .=( Expan(n,z,w).0 *w ) + 0.X by LOPBAN_4:def 5
-                  .=( Expan(n,z,w).0 *w) by CLOPBAN3:42
-                  .= ((Coef(n)).0 * (z #N 0) * (w #N (n-'0)))*w by A34,Def4
-                  .= (Coef(n)).0 *(z #N 0) *((w #N (n-' 0))*w) by CLOPBAN3:42
-                  .= (Coef(n+1)).0 *(z #N 0)* (w #N ((n+1)-'0))
-                by A36,A37,A39,A40,Lm1
-                  .= Expan(n+1,z,w).k by A33,A35,Def4;
-              end;
-            end;
-            now
-              assume
-A41:          k<>0;
-              then
-A42:          0<k by NAT_1:3;
-              then
-A43:          0+1 <= k by INT_1:20;
-A44:          k+1-1 <= n+1-1 by A31,INT_1:20;
-              k < k+1 by XREAL_1:31;
-              then k-1 <= k+1-1 by XREAL_1:11;
-              then k-1 <= n by A44,XXREAL_0:2;
-              then
-A45:          k-'1 <= n by A43,XREAL_1:235; thus
-              (( Expan(n,z,w)*w)+Shift((Expan(n,z,w)*z))).k = Expan(n+1,z,w) .
-              k
-              proof
-A46:            (( Expan(n,z,w)*w )+Shift(( Expan(n,z,w)*z))).k
-                =( Expan(n,z,w)*w).k+(Shift((Expan(n,z,w)*z))).k
-                by NORMSP_1:def 5
-                  .=(Expan(n,z,w).k)*w + (Shift(( Expan(n,z,w)*z))).k
-                by CLOPBAN3:def 9
-                  .=(Expan(n,z,w).k)*w + (Expan(n,z,w)*z).( k-'1) by A41,
-LOPBAN_4:15,NAT_1:3
-                  .=(Expan(n,z,w).k)*w + ( Expan(n,z,w).(k-'1))*z
-                by CLOPBAN3:def 9
-                  .=( (Coef(n)).k * (z #N k) * (w #N (n-' k)) ) *w
-                + ( Expan(n,z,w).(k-'1))*z by A44,Def4
-                  .=(((Coef(n)).k * (z #N k) * (w #N (n-' k)))) *w
-                + ( ((Coef(n)).(k -' 1) * (z #N (k-'1))
-                * (w #N (n-' (k -' 1)))))*z by A45,Def4
-                  .=((Coef(n)).k * ((z #N k)) * ((w #N (n-' k))*w))
-                + ( ((Coef(n)).(k -' 1)) * (z #N (k -' 1))
-                * (w #N (n-' (k-'1)))) *z by CLOPBAN3:42
-                  .=((Coef(n)).k * ((z #N k)) * ((w #N ((n-' k)+1))))
-                + ( ((Coef(n)).(k -' 1)) * (z #N (k -' 1))
-                * (w #N (n-' (k-'1)))) *z by Lm1
-                  .=((Coef(n)).k * ((z #N k)) * ((w #N ((n-' k)+1))))
-                + ((Coef(n)).(k -' 1)) * (z #N (k -' 1))
-                *((w #N (n-' (k-'1))) *z) by CLOPBAN3:42
-                  .=((Coef(n)).k * ((z #N k)) * ((w #N ((n-' k)+1))))
-                + ((Coef(n)).(k -' 1)) * (z #N (k -' 1))
-                *(z*(w #N (n-' (k-'1)))) by A1,Lm2
-                  .=((Coef(n)).k * ((z #N k)) * ((w #N ((n-' k)+1))))
-                + ((Coef(n)).(k -' 1)) * (z #N (k -' 1))
-                *z*(w #N (n-' (k-'1))) by CLOPBAN3:42
-                  .=((Coef(n)).k * ((z #N k)) * ((w #N ((n-' k)+1))))
-                + ((Coef(n)).(k -'1))*((z #N (k -'1))*z)*(w #N (n-'(k-'1)))
-                by CLOPBAN3:42
-                  .=((Coef(n)).k * ((z #N k)) * ((w #N ((n-' k)+1))))
-                + ((Coef(n)).(k -'1))*(z #N ((k -'1)+1))*(w #N (n-'(k-'1)))
-                by Lm1;
-A47:            w #N ((n-' k)+1) = w #N (n+1-'k)
-                proof
-                  (n-'k)+1=n-k+1 by A44,XREAL_1:235
-                    .=n+1-k
-                    .=(n+1-'k) by A31,XREAL_1:235;
-                  hence thesis;
-                end;
-A48:            w #N (n-' (k-'1)) =w #N (n+1-'k)
-                proof
-                  (n-'(k-'1))=n-(k-'1) by A45,XREAL_1:235
-                    .=n-(k-1) by A43,XREAL_1:235
-                    .=n+1-k
-                    .=(n+1-'k) by A31,XREAL_1:235;
-                  hence thesis;
-                end;
-                z #N ((k -' 1)+1)= z #N k
-                proof
-                  (k-'1)+1 =k-1+1 by A43,XREAL_1:235
-                    .=k;
-                  hence thesis;
-                end;
-                then
-A49:            ((Expan(n,z,w)*w)+Shift((Expan(n,z,w)*z))) .k
-                =(Coef(n)).k * ((z #N k) * (w #N (n+1-'k)))
-                + (Coef(n)).((k -' 1)) *(z #N k) *(w #N (n+1-'k))
-                by A46,A47,A48,CLOPBAN3:42
-                  .=(Coef(n)).k * ((z #N k) * (w #N (n+1-'k)))
-                + (Coef(n)).((k -' 1)) *((z #N k) *(w #N (n+1-'k)))
-                by CLOPBAN3:42
-                  .= ((Coef(n)).k +(Coef(n)).(k -' 1) )
-                * ((z #N k) * (w #N ((n+1) -' k) )) by CLOPBAN3:42;
-A50:            (Coef(n)).k +(Coef(n)).(k -' 1)
-                =n!c /( (k!c) * ((n-'k)!c) ) +(Coef(n)).(k-'1)
-                by A44,SIN_COS:def 10
-                  .=n!c /( (k!c) * ((n-'k)!c) )
-                +n!c /(((k-'1)!c)*(((n-'(k-'1)))!c)) by A45,SIN_COS:def 10;
-A51:            (n-'(k-'1)) =n-(k-'1) by A45,XREAL_1:235
-                  .=n-(k-1) by A43,XREAL_1:235
-                  .=n+1-k
-                  .=n+1-'k by A31,XREAL_1:235;
-A52:            (((k-'1)!c) * (((n-'(k-'1)))!c)) * k
-                = k * ((k-'1)!c) * (((n-'(k-'1)))!c)
-                  .=(k+0*<i>) * ((k-'1)!c) * (((n-'(k-'1)))!c)
-                  .=(k!c ) * ((n+1-'k)!c ) by A42,A51,SIN_COS:3;
-A53:            (k!c) <> 0c & (n-'k)!c <>0c & (k-'1)!c <>0c &
-                ((n-'(k-'1)))!c <>0c & ((n+1-'k))!c <>0c &
-                (n+1-k) <> 0 by A31,SIN_COS:1;
-A56:            n!c /( (k!c) * ((n-'k)!c) )
-                =(n!c * (n+1-k))/(((k!c) * ((n-'k)!c)) * (n+1-k+0*<i>))
-                by A53,XCMPLX_1:92
-
-.=(n!c * (n+1-k))/((k!c) * (((n-'k)!c) * (n+1-k+0*<i>)))
-                  .=(n!c * (n+1-k))/((k!c) * ((n+1-'k)!c))
-                by A44,SIN_COS:3;
-                n!c / (((k-'1)!c) * (((n-'(k-'1)))!c))
-                =(n!c * k)/((k!c ) * ((n+1-'k)!c ))
-                by A41,A52,XCMPLX_1:92;
-                then (Coef(n)).k +(Coef(n)).(k-'1)
-                =((n!c * (n+1-k))+(n!c * k))
-                / ((k!c) * ((n+1-'k)!c)) by A50,A56,XCMPLX_1:63
-                  .= ( n!c * (n+1-k+k) ) / ((k!c) * ((n+1-'k)!c))
-                  .= ( n!c * (n+1-k+k+(0+0)*<i>) ) / ((k!c) * ((n+1-'k)!c))
-                  .=((n+1)!c ) / ((k!c ) * ((n+1-'k)!c )) by SIN_COS:1
-                  .=(Coef(n+1)).k by A31,SIN_COS:def 10;
-                hence ((Expan(n,z,w)*w)+Shift((Expan(n,z,w)*z))).k
-                =(Coef(n+1)).k * (z #N k) * (w #N (n+1-'k) )
-                by A49,CLOPBAN3:42
-                  .=Expan(n+1,z,w).k by A31,Def4;
-              end;
-            end;
-            hence ((Expan(n,z,w)*w)+Shift((Expan(n,z,w)*z))).k
-            =Expan(n+1,z,w).k by A32;
-          end;
-          hence ((Expan(n,z,w)*w)+Shift((Expan(n,z,w)*z))).k =Expan(n+1,z,w).k
-          by A22,A23,XXREAL_0:1;
-        end;
-        hence ((Expan(n,z,w)*w)+Shift((Expan(n,z,w)*z))).k =Expan(n+1,z,w).k
-        by A17;
-      end;
-      hence thesis by FUNCT_2:113;
-    end;
-    thus (z+w) #N (n+1) =(Partial_Sums(( Expan(n,z,w)*w)) +
-    Partial_Sums(Shift(( Expan(n,z,w)*z)))).(n+1)
-    by A8,A9,A11,A13,NORMSP_1:def 5
-      .=Partial_Sums(Expan(n+1,z,w)).(n+1) by A16,CLOPBAN3:19;
-  end;
-  for n holds X[n] from NAT_1:sch 1(A4,A5);
+A49: X[0] by A47;
+  for n holds X[n] from NAT_1:sch 1(A49,A2);
   hence thesis;
 end;
 
@@ -1283,36 +1260,35 @@ proof
   now
     let k be Element of NAT;
 A1: now
+A2:   1r/((k!c) * ((n-'k)!c)) =(((n!c) * 1r)/(n!c)) /((k!c) * ((n-'k)!c))
+      by COMPLEX1:def 7,SIN_COS:1 ,XCMPLX_1:60
+        .= (1r/(n!c)) * (n!c) /((k!c) * ((n-'k)!c)) by XCMPLX_1:75;
       assume
-A2:   n <k;
-      hence Expan_e(n,z,w).k = 0.X by Def5
-        .=(1r/(n!c)) * 0.X by CLOPBAN3:42
-        .=(1r/(n!c)) * Expan(n,z,w).k by A2,Def4
-        .=((1r/(n!c)) * Expan(n,z,w)).k by CLVECT_1:def 15;
+A3:   k <= n;
+      hence Expan_e(n,z,w).k = (Coef_e(n)).k * (z #N k) * (w #N (n -' k))
+      by Def5
+        .= 1r/((k!c) * ((n-'k)!c)) * (z #N k) * (w #N (n-'k)) by A3,SIN_COS:
+      def 11;
+      hence Expan_e(n,z,w).k = (1r/(n!c)) * (n!c) /((k!c) * ((n-'k)!c)) * ((z
+      #N k) * (w #N (n-'k))) by A2,CLOPBAN3:42
+        .= (1r/(n!c)) * ((n!c) /((k!c) * ((n-'k)!c))) * ((z #N k) * (w #N (n
+      -'k))) by XCMPLX_1:75
+        .= (1r/(n!c)) * (((n!c) /((k!c) * ((n-'k)!c))) * ((z #N k) * (w #N (
+      n-'k)))) by CLOPBAN3:42
+        .= (1r/(n!c)) * ((n!c) /((k!c) * ((n-'k)!c)) * (z #N k) * (w #N (n-'
+      k))) by CLOPBAN3:42
+        .= (1r/(n!c)) * ((Coef(n)).k * ((z #N k)) * (w #N (n-'k))) by A3,
+      SIN_COS:def 10
+        .= (1r/(n!c)) * Expan(n,z,w).k by A3,Def4
+        .= ( (1r/(n!c)) * Expan(n,z,w) ).k by CLVECT_1:def 15;
     end;
     now
       assume
-A3:   k <= n;
-A4:   n!c <> 0c by SIN_COS:1; thus
-A5:   Expan_e(n,z,w).k = (Coef_e(n)).k * (z #N k) * (w #N (n -' k)) by A3,Def5
-        .= 1r/((k!c) * ((n-'k)!c)) * (z #N k) * (w #N (n-'k))
-      by A3,SIN_COS:def 11;
-      1r/((k!c) * ((n-'k)!c))
-      =(((n!c) * 1r)/(n!c)) /((k!c) * ((n-'k)!c)) by A4,COMPLEX1:def 7
-,XCMPLX_1:60
-        .= (1r/(n!c)) * (n!c) /((k!c) * ((n-'k)!c)) by XCMPLX_1:75;
-      hence Expan_e(n,z,w).k = (1r/(n!c)) * (n!c) /((k!c) * ((n-'k)!c))
-      * ((z #N k) * (w #N (n-'k))) by A5,CLOPBAN3:42
-        .= (1r/(n!c)) * ((n!c) /((k!c) * ((n-'k)!c)))
-      * ((z #N k) * (w #N (n-'k))) by XCMPLX_1:75
-        .= (1r/(n!c)) * (((n!c) /((k!c) * ((n-'k)!c)))
-      * ((z #N k) * (w #N (n-'k)))) by CLOPBAN3:42
-        .= (1r/(n!c)) * ((n!c) /((k!c) * ((n-'k)!c))
-      * (z #N k) * (w #N (n-'k))) by CLOPBAN3:42
-        .= (1r/(n!c)) * ((Coef(n)).k * ((z #N k))
-      * (w #N (n-'k))) by A3,SIN_COS:def 10
-        .= (1r/(n!c)) * Expan(n,z,w).k by A3,Def4
-        .= ( (1r/(n!c)) * Expan(n,z,w) ).k by CLVECT_1:def 15;
+A4:   n <k;
+      hence Expan_e(n,z,w).k = 0.X by Def5
+        .=(1r/(n!c)) * 0.X by CLOPBAN3:42
+        .=(1r/(n!c)) * Expan(n,z,w).k by A4,Def4
+        .=((1r/(n!c)) * Expan(n,z,w)).k by CLVECT_1:def 15;
     end;
     hence Expan_e(n,z,w).k = ( (1r/(n!c)) * Expan(n,z,w) ).k by A1;
   end;
@@ -1320,12 +1296,14 @@ A5:   Expan_e(n,z,w).k = (Coef_e(n)).k * (z #N k) * (w #N (n -' k)) by A3,Def5
 end;
 
 theorem Th18:
-  for z,w st z,w are_commutative holds
-  1r/(n!c) *((z+w) #N n) = Partial_Sums(Expan_e(n,z,w)).n
+  for z,w st z,w are_commutative holds 1r/(n!c) *((z+w) #N n) =
+  Partial_Sums(Expan_e(n,z,w)).n
 proof
-  let z,w such that
-A1: z,w are_commutative; thus
-  1r/(n!c)*((z+w) #N n) = 1r/(n!c)*(Partial_Sums(Expan(n,z,w)).n) by A1,Th16
+  let z,w;
+  assume
+  z,w are_commutative;
+  hence 1r/(n!c)*((z+w) #N n) = 1r/(n!c)*(Partial_Sums(Expan(n,z,w)).n) by
+  Th16
     .= ((1r/(n!c)) * (Partial_Sums(Expan(n,z,w)))).n by CLVECT_1:def 15
     .= Partial_Sums((1r/(n!c)) * Expan(n,z,w)).n by CLOPBAN3:23
     .= Partial_Sums(Expan_e(n,z,w)).n by Th17;
@@ -1335,53 +1313,52 @@ theorem Th19:
   0.X ExpSeq is norm_summable & Sum(0.X ExpSeq)=1.X
 proof
   defpred X[set] means Partial_Sums( ||. 0.X ExpSeq.||).$1=1;
-  Partial_Sums(||.(0.X ExpSeq).||).0 =||. (0.X ExpSeq) .||.0 by SERIES_1:def 1
-    .=||. (0.X ExpSeq).0 .|| by CLVECT_1:def 17
-    .=||. 1.X .|| by Th13
-    .=1 by CLOPBAN3:42;
-  then
-A1: X[0];
-A2: for n being Nat st X[n] holds X[n+1]
+A1: for n being Nat st X[n] holds X[n+1]
   proof
     let n be Nat such that
-A3: Partial_Sums(||.0.X ExpSeq .||).n=1;
-X:   n in NAT by ORDINAL1:def 13;
-    thus Partial_Sums(||.0.X ExpSeq .||).(n+1)
-    =1 + ||.0.X ExpSeq .||.(n+1) by A3,X,SERIES_1:def 1
+A2: Partial_Sums(||.0.X ExpSeq .||).n=1;
+A3: n in NAT by ORDINAL1:def 13;
+    hence
+    Partial_Sums(||.0.X ExpSeq .||).(n+1) =1 + ||.0.X ExpSeq .||.(n+1) by
+    A2,SERIES_1:def 1
       .=1 + ||.(0.X ExpSeq ).(n+1).|| by CLVECT_1:def 17
-      .=1 + ||.(1r/(n+1) * 0.X)*(0.X ExpSeq .n) .|| by Th13,X
+      .=1 + ||.(1r/(n+1) * 0.X)*(0.X ExpSeq .n) .|| by A3,Th13
       .=1 + ||.(0.X)*(0.X ExpSeq .n) .|| by CLOPBAN3:42
       .=1 + ||.0.X.|| by CLOPBAN3:42
       .=1 + 0 by CLOPBAN3:42
       .=1;
   end;
-A4: 0.X ExpSeq is norm_summable
-  proof
-    for n being Nat holds X[n] from NAT_1:sch 2(A1,A2);
-    then Partial_Sums(||.0.X ExpSeq .||) is constant by VALUED_0:def 18;
-    then Partial_Sums(||.0.X ExpSeq .||) is convergent;
-    then ||.0.X ExpSeq .|| is summable by SERIES_1:def 2;
-    hence thesis by CLOPBAN3:def 4;
-  end;
-  defpred X[set] means Partial_Sums(0.X ExpSeq ).$1=1.X;
-  Partial_Sums(0.X ExpSeq ).0 =(0.X ExpSeq ).0 by BHSP_4:def 1
-    .=1.X by Th13;
+  Partial_Sums(||.(0.X ExpSeq).||).0 =||. (0.X ExpSeq) .||.0 by SERIES_1:
+  def 1
+    .=||. (0.X ExpSeq).0 .|| by CLVECT_1:def 17
+    .=||. 1.X .|| by Th13
+    .=1 by CLOPBAN3:42;
   then
-A5: X[0];
+A4: X[0];
+  for n being Nat holds X[n] from NAT_1:sch 2(A4,A1);
+  then Partial_Sums(||.0.X ExpSeq .||) is constant by VALUED_0:def 18;
+  then
+A5: ||.0.X ExpSeq .|| is summable by SERIES_1:def 2;
+  defpred X[set] means Partial_Sums(0.X ExpSeq ).$1=1.X;
 A6: for n st X[n] holds X[n+1]
   proof
-    let n such that
-A7: Partial_Sums(0.X ExpSeq ).n=1.X;
-    thus Partial_Sums(0.X ExpSeq ).(n+1)
-    =1.X + (0.X ExpSeq ).(n+1) by A7,BHSP_4:def 1
+    let n;
+    assume
+    Partial_Sums(0.X ExpSeq ).n=1.X;
+    hence Partial_Sums(0.X ExpSeq ).(n+1) =1.X + (0.X ExpSeq ).(n+1) by
+    BHSP_4:def 1
       .=1.X + (1r/(n+1) *0.X)*(0.X ExpSeq .n) by Th13
       .=1.X + (0.X)*(0.X ExpSeq .n) by CLOPBAN3:42
       .=1.X + 0.X by CLOPBAN3:42
       .=1.X by CLOPBAN3:42;
   end;
-  for n holds X[n] from NAT_1:sch 1(A5,A6);
+  Partial_Sums(0.X ExpSeq ).0 =(0.X ExpSeq ).0 by BHSP_4:def 1
+    .=1.X by Th13;
+  then
+A7: X[0];
+  for n holds X[n] from NAT_1:sch 1(A7,A6);
   then lim(Partial_Sums(0.X ExpSeq ))=1.X by Th2;
-  hence thesis by A4,CLOPBAN3:def 3;
+  hence thesis by A5,CLOPBAN3:def 3,def 4;
 end;
 
 registration
@@ -1390,14 +1367,13 @@ registration
   cluster z ExpSeq -> norm_summable;
   coherence
   proof
-A1: ex m be Element of NAT st for n be Element of NAT st m<=n
-    holds ||.(z ExpSeq).n.|| <= (||.z.|| rExpSeq ).n
+    ex m be Element of NAT st for n be Element of NAT st m<=n holds ||.(z
+    ExpSeq).n.|| <= (||.z.|| rExpSeq ).n
     proof
-      take 0; thus
-      thesis by Th13;
+      take 0;
+      thus thesis by Th13;
     end;
-    ||.z.|| rExpSeq is summable by SIN_COS:49;
-    hence thesis by A1,CLOPBAN3:31;
+    hence thesis by CLOPBAN3:31,SIN_COS:49;
   end;
 end;
 
@@ -1420,56 +1396,58 @@ A1: 0-'0=0 by XREAL_1:234;
 end;
 
 theorem Th21:
-  l <= k implies (Alfa(k+1,z,w)).l = (Alfa(k,z,w)).l + Expan_e(k+1,z,w).l
+  l <= k implies (Alfa(k+1,z,w)).l = (Alfa(k,z,w)).l + Expan_e(k+1
+  ,z,w).l
 proof
   assume
 A1: l <= k;
 A2: k < k+1 by XREAL_1:31;
   then
 A3: l <= k+1 by A1,XXREAL_0:2;
-  (k+1-'l)=k+1-l by A1,A2,XREAL_1:235,XXREAL_0:2;
-  then
-A4: (k+1-'l)=k-l+1
-    .=(k-'l)+1 by A1,XREAL_1:235;
-  then
-A5: (Alfa(k+1,z,w)).l
-  =((z ExpSeq).l )* (Partial_Sums(w ExpSeq).((k -' l)+1)) by A3,Def6
-    .=(z ExpSeq).l * (Partial_Sums(w ExpSeq).((k -' l))
-  +(w ExpSeq).(((k+1)-'l))) by A4,BHSP_4:def 1
-    .=((z ExpSeq).l * (Partial_Sums(w ExpSeq).((k -' l)))
-  +((z ExpSeq).l * (w ExpSeq).(( (k+1) -' l)))) by CLOPBAN3:42
-    .=(Alfa(k,z,w)).l+((z ExpSeq).l * (w ExpSeq).(( (k+1) -' l))) by A1,Def6;
-  (z ExpSeq).l * (w ExpSeq).(((k+1)-' l))
-  =1r/(l!c)*(z #N l) * (w ExpSeq).(((k+1)-' l)) by Def2
+A4: (z ExpSeq).l * (w ExpSeq).(((k+1)-' l)) =1r/(l!c)*(z #N l) * (w ExpSeq).
+  (((k+1)-' l)) by Def2
     .=1r/(l!c)*(z #N l) * (1r/(((k+1)-'l )!c)*(w #N (((k+1)-'l)))) by Def2
-    .=(1r/(l!c)* (1r/(((k+1)-'l)!c))*((z #N l) *(w #N (((k+1)-'l)))))
-  by CLOPBAN3:42
-    .=((1r*1r)/((l!c) * (((k+1)-'l)!c) )*((z #N l) *(w #N (((k+1)-'l)))))
-  by XCMPLX_1:77
-
-.= ((Coef_e(k+1)).l) * ((z #N l) * (w #N (((k+1)-'l)))) by A3,COMPLEX1:def 7
-,SIN_COS:def 11
+    .=(1r/(l!c)* (1r/(((k+1)-'l)!c))*((z #N l) *(w #N (((k+1)-'l))))) by
+  CLOPBAN3:42
+    .=((1r*1r)/((l!c) * (((k+1)-'l)!c) )*((z #N l) *(w #N (((k+1)-'l))))) by
+  XCMPLX_1:77
+    .= ((Coef_e(k+1)).l) * ((z #N l) * (w #N (((k+1)-'l)))) by A3,COMPLEX1:
+  def 7 ,SIN_COS:def 11
     .= ((Coef_e(k+1)).l) * (z #N l) * (w #N (((k+1)-'l))) by CLOPBAN3:42
     .=Expan_e(k+1,z,w).l by A3,Def5;
-  hence thesis by A5;
+  (k+1-'l)=k+1-l by A1,A2,XREAL_1:235,XXREAL_0:2;
+  then
+A5: (k+1-'l)=k-l+1
+    .=(k-'l)+1 by A1,XREAL_1:235;
+  then
+  (Alfa(k+1,z,w)).l =((z ExpSeq).l )* (Partial_Sums(w ExpSeq).((k -' l)+1)
+  ) by A3,Def6
+    .=(z ExpSeq).l * (Partial_Sums(w ExpSeq).((k -' l)) +(w ExpSeq).(((k+1)
+  -'l))) by A5,BHSP_4:def 1
+    .=((z ExpSeq).l * (Partial_Sums(w ExpSeq).((k -' l))) +((z ExpSeq).l * (
+  w ExpSeq).(( (k+1) -' l)))) by CLOPBAN3:42
+    .=(Alfa(k,z,w)).l+((z ExpSeq).l * (w ExpSeq).(( (k+1) -' l))) by A1,Def6;
+  hence thesis by A4;
 end;
 
 theorem Th22:
-  Partial_Sums((Alfa(k+1,z,w))).k
-  = (Partial_Sums( Alfa(k,z,w) )).k + (Partial_Sums( Expan_e(k+1,z,w) )).k
+  Partial_Sums((Alfa(k+1,z,w))).k = (Partial_Sums( Alfa(k,z,w) )).
+  k + (Partial_Sums( Expan_e(k+1,z,w) )).k
 proof
   now
     let l be Element of NAT;
-    assume l <= k;
+    assume
+    l <= k;
     hence (Alfa(k+1,z,w)).l = (Alfa(k,z,w)).l + Expan_e(k+1,z,w).l by Th21
       .= ( (Alfa(k,z,w)) + Expan_e(k+1,z,w)).l by NORMSP_1:def 5;
   end;
-  hence Partial_Sums((Alfa(k+1,z,w))).k
-  =Partial_Sums(((Alfa(k,z,w)) + Expan_e(k+1,z,w))).k by Th11
-    .=(Partial_Sums(( Alfa(k,z,w)))
-  +Partial_Sums(( Expan_e(k+1,z,w )))).k by CLOPBAN3:19
-    .= (Partial_Sums(( Alfa(k,z,w)))).k
-  + (Partial_Sums(( Expan_e(k+1,z,w) ))).k by NORMSP_1:def 5;
+  hence
+  Partial_Sums((Alfa(k+1,z,w))).k =Partial_Sums(((Alfa(k,z,w)) + Expan_e(
+  k+1,z,w))).k by Th11
+    .=(Partial_Sums(( Alfa(k,z,w))) +Partial_Sums(( Expan_e(k+1,z,w )))).k
+  by CLOPBAN3:19
+    .= (Partial_Sums(( Alfa(k,z,w)))).k + (Partial_Sums(( Expan_e(k+1,z,w) )
+  )).k by NORMSP_1:def 5;
 end;
 
 theorem Th23:
@@ -1486,184 +1464,182 @@ A1: k-'k=0 by XREAL_1:235;
 end;
 
 theorem Th24:
-  for z,w st z,w are_commutative holds
-  Partial_Sums((z+w) ExpSeq).n = Partial_Sums(Alfa(n,z,w)).n
+  for z,w st z,w are_commutative holds Partial_Sums((z+w) ExpSeq).
+  n = Partial_Sums(Alfa(n,z,w)).n
 proof
   let z,w such that
 A1: z,w are_commutative;
-A2: Partial_Sums((z+w) ExpSeq).0 =((z+w) ExpSeq).0 by BHSP_4:def 1
+  defpred X[Element of NAT] means Partial_Sums((z+w) ExpSeq).$1=Partial_Sums(
+  Alfa($1,z,w)).$1;
+A2: for k st X[k] holds X[k+1]
+  proof
+    let k such that
+A3: Partial_Sums((z+w) ExpSeq).k=Partial_Sums(Alfa(k,z,w)).k;
+    k+1-'(k+1)=0 by XREAL_1:234;
+    then
+    (Alfa(k+1,z,w)).(k+1) =(z ExpSeq).(k+1) * Partial_Sums(w ExpSeq).0 by
+    Def6
+      .=(z ExpSeq).(k+1) * ((w ExpSeq).0) by BHSP_4:def 1
+      .=(z ExpSeq).(k+1) * 1.X by Th20
+      .=(z ExpSeq).(k+1) by CLOPBAN3:42
+      .=(Expan_e(k+1,z,w)).(k+1) by Th23;
+    then
+A4: (Partial_Sums(( Expan_e(k+1,z,w) ))).k + (Alfa(k+1,z,w)).(k+1) =(
+    Partial_Sums(( Expan_e(k+1,z,w) ))).(k+1) by BHSP_4:def 1
+      .=1r/((k+1)!c) * (z+w) #N (k+1) by A1,Th18;
+    Partial_Sums((Alfa(k+1,z,w))).(k+1) =Partial_Sums((Alfa(k+1,z,w))).k+(
+    Alfa(k+1,z,w)).(k+1) by BHSP_4:def 1
+      .=((Partial_Sums(Alfa(k,z,w))).k + (Partial_Sums(Expan_e(k+1,z,w))).k)
+    + (Alfa(k+1,z,w)).(k+1) by Th22
+      .= Partial_Sums((z+w) ExpSeq).k + ((Partial_Sums(Expan_e(k+1,z,w))).k
+    + (Alfa(k+1,z,w)).(k+1)) by A3,CLOPBAN3:42;
+    then Partial_Sums((Alfa(k+1,z,w))).(k+1) = Partial_Sums((z+w) ExpSeq).k +
+    (z+w) ExpSeq.(k+1) by A4,Def2
+      .= Partial_Sums((z+w) ExpSeq).(k+1) by BHSP_4:def 1;
+    hence Partial_Sums((z+w) ExpSeq).(k+1)=Partial_Sums(Alfa(k+1,z,w)).(k+1);
+  end;
+A5: Partial_Sums((z+w) ExpSeq).0 =((z+w) ExpSeq).0 by BHSP_4:def 1
     .=1.X by Th20;
-  defpred X[Element of NAT] means
-  Partial_Sums((z+w) ExpSeq).$1=Partial_Sums(Alfa($1,z,w)).$1;
-A3: 0-'0=0 by XREAL_1:234;
+A6: 0-'0=0 by XREAL_1:234;
   Partial_Sums(Alfa(0,z,w)).0 = Alfa(0,z,w).0 by BHSP_4:def 1
-    .= (z ExpSeq).0 * Partial_Sums(w ExpSeq).0 by A3,Def6
+    .= (z ExpSeq).0 * Partial_Sums(w ExpSeq).0 by A6,Def6
     .= (z ExpSeq).0 * (w ExpSeq).0 by BHSP_4:def 1
     .=1.X * (w ExpSeq).0 by Th20
     .=1.X * 1.X by Th20
     .= 1.X by CLOPBAN3:42;
   then
-A4: X[0] by A2;
-A5: for k st X[k] holds X[k+1]
-  proof
-    let k such that
-A6: Partial_Sums((z+w) ExpSeq).k=Partial_Sums(Alfa(k,z,w)).k;
-    thus Partial_Sums((z+w) ExpSeq).(k+1)=Partial_Sums(Alfa(k+1,z,w)).(k+1)
-    proof
-A7:   Partial_Sums((Alfa(k+1,z,w))).(k+1)
-      =Partial_Sums((Alfa(k+1,z,w))).k+(Alfa(k+1,z,w)).(k+1) by BHSP_4:def 1
-        .=((Partial_Sums(Alfa(k,z,w))).k + (Partial_Sums(Expan_e(k+1,z,w))).k)
-      + (Alfa(k+1,z,w)).(k+1) by Th22
-        .= Partial_Sums((z+w) ExpSeq).k + ((Partial_Sums(Expan_e(k+1,z,w))).k
-      + (Alfa(k+1,z,w)).(k+1)) by A6,CLOPBAN3:42;
-      k+1-'(k+1)=0 by XREAL_1:234;
-      then (Alfa(k+1,z,w)).(k+1)
-      =(z ExpSeq).(k+1) * Partial_Sums(w ExpSeq).0 by Def6
-        .=(z ExpSeq).(k+1) * ((w ExpSeq).0) by BHSP_4:def 1
-        .=(z ExpSeq).(k+1) * 1.X by Th20
-        .=(z ExpSeq).(k+1) by CLOPBAN3:42
-        .=(Expan_e(k+1,z,w)).(k+1) by Th23;
-      then (Partial_Sums(( Expan_e(k+1,z,w) ))).k + (Alfa(k+1,z,w)).(k+1)
-      =(Partial_Sums(( Expan_e(k+1,z,w) ))).(k+1) by BHSP_4:def 1
-        .=1r/((k+1)!c) * (z+w) #N (k+1) by A1,Th18;
-      hence Partial_Sums((Alfa(k+1,z,w))).(k+1)
-      = Partial_Sums((z+w) ExpSeq).k + (z+w) ExpSeq.(k+1) by A7,Def2
-        .= Partial_Sums((z+w) ExpSeq).(k+1) by BHSP_4:def 1;
-    end;
-  end;
-  for n holds X[n] from NAT_1:sch 1(A4,A5);
+A7: X[0] by A5;
+  for n holds X[n] from NAT_1:sch 1(A7,A2);
   hence thesis;
 end;
 
 theorem Th25:
-  for z,w st z,w are_commutative holds
-  Partial_Sums(z ExpSeq).k * Partial_Sums(w ExpSeq).k
-  - Partial_Sums((z+w) ExpSeq).k = Partial_Sums(Conj(k,z,w)).k
+  for z,w st z,w are_commutative holds Partial_Sums(z ExpSeq).k *
+Partial_Sums(w ExpSeq).k - Partial_Sums((z+w) ExpSeq).k = Partial_Sums(Conj(k,z
+  ,w)).k
 proof
-  let z,w such that
-A1: z,w are_commutative;
-A2: (Partial_Sums(z ExpSeq).k) * (Partial_Sums(w ExpSeq).k)
-  -Partial_Sums((z+w) ExpSeq).k
-  =Partial_Sums(z ExpSeq).k * Partial_Sums(w ExpSeq).k
-  -Partial_Sums(Alfa(k,z,w)).k by A1,Th24
-    .=( Partial_Sums(z ExpSeq)* (Partial_Sums(w ExpSeq).k) ).k
-  -Partial_Sums(Alfa(k,z,w)).k by CLOPBAN3:def 9
-    .=(Partial_Sums((z ExpSeq)*(Partial_Sums(w ExpSeq).k))) .k
-  -Partial_Sums(Alfa(k,z,w)).k by Th9
-    .=(Partial_Sums( (z ExpSeq)*(Partial_Sums(w ExpSeq).k) )
-  -Partial_Sums(Alfa(k,z,w))).k by NORMSP_1:def 6
-    .=Partial_Sums((( (z ExpSeq)*(Partial_Sums(w ExpSeq).k)))
-  -(Alfa(k,z,w))).k by CLOPBAN3:20;
-  for l be Element of NAT st l <= k holds
-  ((z ExpSeq)*(Partial_Sums(w ExpSeq).k) - (Alfa(k,z,w))).l =Conj(k,z,w).l
+  let z,w;
+  assume
+  z,w are_commutative;
+  then
+A1: (Partial_Sums(z ExpSeq).k) * (Partial_Sums(w ExpSeq).k) -Partial_Sums((z
+  +w) ExpSeq).k =Partial_Sums(z ExpSeq).k * Partial_Sums(w ExpSeq).k -
+  Partial_Sums(Alfa(k,z,w)).k by Th24
+    .=( Partial_Sums(z ExpSeq)* (Partial_Sums(w ExpSeq).k) ).k -Partial_Sums
+  (Alfa(k,z,w)).k by CLOPBAN3:def 9
+    .=(Partial_Sums((z ExpSeq)*(Partial_Sums(w ExpSeq).k))) .k -Partial_Sums
+  (Alfa(k,z,w)).k by Th9
+    .=(Partial_Sums( (z ExpSeq)*(Partial_Sums(w ExpSeq).k) ) -Partial_Sums(
+  Alfa(k,z,w))).k by NORMSP_1:def 6
+    .=Partial_Sums((( (z ExpSeq)*(Partial_Sums(w ExpSeq).k))) -(Alfa(k,z,w))
+  ).k by CLOPBAN3:20;
+  for l be Element of NAT st l <= k holds ((z ExpSeq)*(Partial_Sums(w
+  ExpSeq).k) - (Alfa(k,z,w))).l =Conj(k,z,w).l
   proof
     let l be Element of NAT such that
-A3: l <= k; thus
-    ((z ExpSeq)*( Partial_Sums(w ExpSeq).k) - (Alfa(k,z,w))).l
-    = ((z ExpSeq)*(Partial_Sums(w ExpSeq).k) ).l - (Alfa(k,z,w)).l
-    by NORMSP_1:def 6
-      .= ( (z ExpSeq).l )*( Partial_Sums(w ExpSeq).k) - Alfa(k,z,w).l
-    by CLOPBAN3:def 9
-      .=((z ExpSeq).l) * ( Partial_Sums(w ExpSeq).k)
-    -((z ExpSeq).l) * ( Partial_Sums(w ExpSeq).(k-'l)) by A3,Def6
-      .=((z ExpSeq).l) * ( Partial_Sums(w ExpSeq).k
-    -Partial_Sums(w ExpSeq).(k-'l) ) by CLOPBAN3:42
-      .=Conj(k,z,w).l by A3,Def7;
+A2: l <= k;
+    thus ((z ExpSeq)*( Partial_Sums(w ExpSeq).k) - (Alfa(k,z,w))).l = ((z
+    ExpSeq)*(Partial_Sums(w ExpSeq).k) ).l - (Alfa(k,z,w)).l by NORMSP_1:def 6
+      .= ( (z ExpSeq).l )*( Partial_Sums(w ExpSeq).k) - Alfa(k,z,w).l by
+    CLOPBAN3:def 9
+      .=((z ExpSeq).l) * ( Partial_Sums(w ExpSeq).k) -((z ExpSeq).l) * (
+    Partial_Sums(w ExpSeq).(k-'l)) by A2,Def6
+      .=((z ExpSeq).l) * ( Partial_Sums(w ExpSeq).k -Partial_Sums(w ExpSeq).
+    (k-'l) ) by CLOPBAN3:42
+      .=Conj(k,z,w).l by A2,Def7;
   end;
-  hence thesis by A2,Th11;
+  hence thesis by A1,Th11;
 end;
 
 theorem Th26:
   0 <= (||. z .|| rExpSeq).n
 proof
   defpred P[Element of NAT] means 0 <= ||.z.|| |^$1;
-A1: (n!) >0 by NEWTON:23;
-A2: P[0] by NEWTON:9;
-A3: for k st P[k] holds P[k+1]
+A1: for k st P[k] holds P[k+1]
   proof
     let k such that
-A4: P[k];
-A5: ||.z.|| |^ (k+1) = ||.z.|| |^ k * ||.z.|| by NEWTON:11;
-    0 <= ||.z.|| by CLVECT_1:106;
-    hence thesis by A4,A5;
+A2: P[k];
+A3: 0 <= ||.z.|| by CLVECT_1:106;
+    ||.z.|| |^ (k+1) = ||.z.|| |^ k * ||.z.|| by NEWTON:11;
+    hence thesis by A2,A3;
   end;
-  for k holds P[k] from NAT_1:sch 1(A2,A3);
+A4: P[0] by NEWTON:9;
+  for k holds P[k] from NAT_1:sch 1(A4,A1);
   then
-A6: 0 <= ||.z.|| |^n;
-A7: ||.z.|| |^n/(n!) = ||.z.|| |^n *((n!))" by XCMPLX_0:def 9;
-  0 < ((n!))" by A1;
-  then 0<= ||.z.|| |^n *((n!))" by A6;
-  hence thesis by A7,SIN_COS:def 9;
+A5: 0 <= ||.z.|| |^n;
+A6: ||.z.|| |^n/(n!) = ||.z.|| |^n *((n!))" by XCMPLX_0:def 9;
+  (n!) >0 by NEWTON:23;
+  hence thesis by A5,A6,SIN_COS:def 9;
 end;
 
 theorem Th27:
-  ||. Partial_Sums((z ExpSeq)).k .|| <= Partial_Sums(||.z.|| rExpSeq).k &
-  Partial_Sums((||.z.|| rExpSeq)).k <= Sum(||.z.|| rExpSeq) &
-  ||. Partial_Sums(( z ExpSeq)).k .|| <= Sum(||.z.|| rExpSeq)
+  ||. Partial_Sums((z ExpSeq)).k .|| <= Partial_Sums(||.z.||
+  rExpSeq).k & Partial_Sums((||.z.|| rExpSeq)).k <= Sum(||.z.|| rExpSeq) & ||.
+  Partial_Sums(( z ExpSeq)).k .|| <= Sum(||.z.|| rExpSeq)
 proof
-  defpred X[Element of NAT] means
-  ||. Partial_Sums(( z ExpSeq)).$1 .|| <= Partial_Sums((||.z.|| rExpSeq)).$1;
-A1: ||. Partial_Sums(( z ExpSeq)).0 .||
-  = ||. ((z ExpSeq)).0 .|| by BHSP_4:def 1
+  defpred X[Element of NAT] means ||. Partial_Sums(( z ExpSeq)).$1 .|| <=
+  Partial_Sums((||.z.|| rExpSeq)).$1;
+A1: Partial_Sums((||.z.|| rExpSeq)).0 = ((||.z.|| rExpSeq)).0 by SERIES_1:
+  def 1
+    .= ((||.z.|| ) |^ 0 ) / (0!) by SIN_COS:def 9
+    .= 1 by NEWTON:9,18;
+A2: for k st X[k] holds X[k+1]
+  proof
+    let k;
+    assume
+    ||. Partial_Sums(( z ExpSeq)).k .|| <= Partial_Sums((||.z.||
+    rExpSeq)).k;
+    then
+A3: ||. Partial_Sums(( z ExpSeq)).k.|| + (||.z.|| rExpSeq).(k+1) <=
+    Partial_Sums((||.z.|| rExpSeq)).k + (||.z.|| rExpSeq).(k+1) by XREAL_1:8;
+A4: ||. Partial_Sums(( z ExpSeq)).k + ((z ExpSeq)).(k+1) .|| <= ||.
+    Partial_Sums(( z ExpSeq)).k.|| + ||. ((z ExpSeq)).(k+1) .|| by CLOPBAN3:42;
+    ||. ((z ExpSeq)).(k+1) .|| <=(||.z.|| rExpSeq).(k+1) by Th13;
+    then
+A5: ||. Partial_Sums(( z ExpSeq)).k.|| + ||. ((z ExpSeq)).(k+1) .|| <= ||.
+    Partial_Sums(( z ExpSeq)).k.|| + (||.z.|| rExpSeq).(k+1) by XREAL_1:9;
+A6: Partial_Sums((||.z.|| rExpSeq)).k + (||.z.|| rExpSeq).(k+1) =
+    Partial_Sums((||.z.|| rExpSeq)).(k+1) by SERIES_1:def 1;
+    ||. Partial_Sums(( z ExpSeq)).(k+1) .|| =||. Partial_Sums(( z ExpSeq))
+    .k + ((z ExpSeq)).(k+1) .|| by BHSP_4:def 1;
+    then ||. Partial_Sums(( z ExpSeq)).(k+1) .|| <= ||. Partial_Sums(( z
+    ExpSeq)).k.|| + (||.z.|| rExpSeq).(k+1) by A4,A5,XXREAL_0:2;
+    hence thesis by A3,A6,XXREAL_0:2;
+  end;
+  ||. Partial_Sums(( z ExpSeq)).0 .|| = ||. ((z ExpSeq)).0 .|| by BHSP_4:
+  def 1
     .= ||. 1r/ (0!c)*(z #N 0).|| by Def2
     .= ||. 1r/(0!c)*((z GeoSeq)).0 .|| by CLOPBAN3:def 13
     .= ||. 1r * 1.X.|| by CLOPBAN3:def 12,SIN_COS:1
     .= ||. 1.X.|| by CLOPBAN3:42
     .= 1 by CLOPBAN3:42;
-  Partial_Sums((||.z.|| rExpSeq)).0 = ((||.z.|| rExpSeq)).0 by SERIES_1:def 1
-    .= ((||.z.|| ) |^ 0 ) / (0!) by SIN_COS:def 9
-    .= 1 by NEWTON:9,18;
   then
-A2: X[0] by A1;
-A3: for k st X[k] holds X[k+1]
-  proof
-    let k such that
-A4: ||. Partial_Sums(( z ExpSeq)).k .|| <= Partial_Sums((||.z.|| rExpSeq)).k;
-A5: ||. Partial_Sums(( z ExpSeq)).(k+1) .||
-    =||. Partial_Sums(( z ExpSeq)).k + ((z ExpSeq)).(k+1) .|| by BHSP_4:def 1;
-A6: ||. Partial_Sums(( z ExpSeq)).k + ((z ExpSeq)).(k+1) .||
-    <= ||. Partial_Sums(( z ExpSeq)).k.|| + ||. ((z ExpSeq)).(k+1) .||
-    by CLOPBAN3:42;
-    ||. ((z ExpSeq)).(k+1) .|| <=(||.z.|| rExpSeq).(k+1) by Th13;
-    then ||. Partial_Sums(( z ExpSeq)).k.|| + ||. ((z ExpSeq)).(k+1) .||
-    <= ||. Partial_Sums(( z ExpSeq)).k.|| + (||.z.|| rExpSeq).(k+1)
-    by XREAL_1:9;
-    then
-A7: ||. Partial_Sums(( z ExpSeq)).(k+1) .||
-    <= ||. Partial_Sums(( z ExpSeq)).k.|| + (||.z.|| rExpSeq).(k+1)
-    by A5,A6,XXREAL_0:2;
-A8: ||. Partial_Sums(( z ExpSeq)).k.|| + (||.z.|| rExpSeq).(k+1)
-    <= Partial_Sums((||.z.|| rExpSeq)).k + (||.z.|| rExpSeq).(k+1)
-    by A4,XREAL_1:8;
-    Partial_Sums((||.z.|| rExpSeq)).k + (||.z.|| rExpSeq).(k+1)
-    =Partial_Sums((||.z.|| rExpSeq)).(k+1) by SERIES_1:def 1;
-    hence thesis by A7,A8,XXREAL_0:2;
-  end;
-A9: for k holds X[k] from NAT_1:sch 1(A2,A3);
-  hence ||. Partial_Sums(( z ExpSeq)).k .||
-  <= Partial_Sums((||.z.|| rExpSeq)).k;
-A10: for n holds 0 <= (||.z.|| rExpSeq).n by Th26;
-  then
-A11: Partial_Sums((||.z.|| rExpSeq )) is non-decreasing by SERIES_1:19;
+A7: X[0] by A1;
+A8: for k holds X[k] from NAT_1:sch 1(A7,A2);
+  hence
+  ||. Partial_Sums(( z ExpSeq)).k .|| <= Partial_Sums((||.z.|| rExpSeq)).
+  k;
+A9: for n holds 0 <= (||.z.|| rExpSeq).n by Th26;
   ||.z.|| rExpSeq is summable by SIN_COS:49;
   then
-A12: Partial_Sums(||.z.|| rExpSeq) is bounded_above by A10,SERIES_1:20;
-  then Partial_Sums((||.z.|| rExpSeq)).k <= lim(Partial_Sums((||.z.|| rExpSeq )
-  )) by A11,SEQ_4:54;
-  hence Partial_Sums((||.z.|| rExpSeq)).k <= Sum(||.z.|| rExpSeq)
-  by SERIES_1:def 3;
-A13: now
+A10: Partial_Sums(||.z.|| rExpSeq) is bounded_above by A9,SERIES_1:20;
+  then Partial_Sums((||.z.|| rExpSeq)).k <= lim(Partial_Sums((||.z.|| rExpSeq
+  ) )) by A9,SEQ_4:54,SERIES_1:19;
+  hence Partial_Sums((||.z.|| rExpSeq)).k <= Sum(||.z.|| rExpSeq) by
+  SERIES_1:def 3;
+  now
     let k;
-    lim(Partial_Sums((||.z.|| rExpSeq)))=Sum(||.z.|| rExpSeq)
-    by SERIES_1:def 3;
-    hence Partial_Sums((||.z.|| rExpSeq)).k <= Sum(||.z.|| rExpSeq)
-    by A11,A12,SEQ_4:54;
+    lim(Partial_Sums((||.z.|| rExpSeq)))=Sum(||.z.|| rExpSeq) by SERIES_1
+    :def 3;
+    hence
+    Partial_Sums((||.z.|| rExpSeq)).k <= Sum(||.z.|| rExpSeq) by A9,A10,
+    SEQ_4:54,SERIES_1:19;
   end;
-A14: ||. Partial_Sums(( z ExpSeq)).k .||
-  <= Partial_Sums((||.z.|| rExpSeq)).k by A9;
-  Partial_Sums((||.z.|| rExpSeq)).k <= Sum(||.z.|| rExpSeq) by A13;
-  hence thesis
-  by A14,XXREAL_0:2;
+  then
+A11: Partial_Sums((||.z.|| rExpSeq)).k <= Sum(||.z.|| rExpSeq);
+  ||. Partial_Sums(( z ExpSeq)).k .|| <= Partial_Sums((||.z.|| rExpSeq)).
+  k by A8;
+  hence thesis by A11,XXREAL_0:2;
 end;
 
 theorem Th28:
@@ -1676,243 +1652,226 @@ proof
 end;
 
 theorem Th29:
-  abs((Partial_Sums(||.z.|| rExpSeq)).n) = Partial_Sums(||.z.|| rExpSeq).n &
-  ( n <= m implies
-  abs((Partial_Sums(||.z.|| rExpSeq).m-Partial_Sums(||.z.|| rExpSeq).n))
-  = Partial_Sums(||.z.|| rExpSeq).m-Partial_Sums(||.z.|| rExpSeq).n )
+  abs((Partial_Sums(||.z.|| rExpSeq)).n) = Partial_Sums(||.z.||
+rExpSeq).n & ( n <= m implies abs((Partial_Sums(||.z.|| rExpSeq).m-Partial_Sums
+  (||.z.|| rExpSeq).n)) = Partial_Sums(||.z.|| rExpSeq).m-Partial_Sums(||.z.||
+  rExpSeq).n )
 proof
   for n holds 0 <= (||. z .|| rExpSeq).n by Th26;
   hence thesis by COMSEQ_3:9;
 end;
 
 theorem Th30:
-  abs(Partial_Sums(||.Conj(k,z,w).||).n)=Partial_Sums(||.Conj(k,z,w).||).n
+  abs(Partial_Sums(||.Conj(k,z,w).||).n)=Partial_Sums(||.Conj(k,z,
+  w).||).n
 proof
-A1: now
+A1: 0 <= n by NAT_1:2;
+A2: now
     let n;
     ||.Conj(k,z,w).||.n=||.(Conj(k,z,w)).n.|| by CLVECT_1:def 17;
     hence 0 <= ||.Conj(k,z,w).||.n by CLVECT_1:106;
   end;
+  then Partial_Sums(||.Conj(k,z,w).||) is non-decreasing by SERIES_1:19;
   then
-A2: Partial_Sums(||.Conj(k,z,w).||) is non-decreasing by SERIES_1:19;
-  0 <= n by NAT_1:2;
-  then
-A3: Partial_Sums(||.Conj(k,z,w).||).0
-  <= Partial_Sums(||.Conj(k,z,w).||).n by A2,SEQM_3:12;
-A4: Partial_Sums(||.Conj(k,z,w).||).0=(||.Conj(k,z,w).||).0 by SERIES_1:def 1;
-  0 <= (||.Conj(k,z,w).||).0 by A1;
+A3: Partial_Sums(||.Conj(k,z,w).||).0 <= Partial_Sums(||.Conj(k,z,w).||).n
+  by A1,SEQM_3:12;
+A4: Partial_Sums(||.Conj(k,z,w).||).0=(||.Conj(k,z,w).||).0 by SERIES_1:def
+  1;
+  0 <= (||.Conj(k,z,w).||).0 by A2;
   hence thesis by A3,A4,ABSVALUE:def 1;
 end;
 
 theorem Th31:
-  for p being real number st p>0 ex n st
-  for k st n <= k holds abs(Partial_Sums(||.Conj(k,z,w).||).k) < p
+  for p being real number st p>0 ex n st for k st n <= k holds abs
+  (Partial_Sums(||.Conj(k,z,w).||).k) < p
 proof
   let p be real number such that
 A1: p>0;
   reconsider pp = p as Real by XREAL_0:def 1;
-A2: 1 <= Sum(||.z.|| rExpSeq) by Th28;
-  then 0 * Sum(||.z.|| rExpSeq) < 4 * Sum(||.z.|| rExpSeq);
-  then
-A3: 0/(4 * Sum(||.z.|| rExpSeq)) < p/(4 * Sum(||.z.|| rExpSeq)) by A1;
-A4: 1 <= Sum(||.w.|| rExpSeq) by Th28;
-  then 0 * Sum(||.w.|| rExpSeq) < 4 * Sum(||.w.|| rExpSeq);
-  then
-A5: 0/(4 * Sum(||.w.|| rExpSeq)) < p/(4 * Sum(||.w.|| rExpSeq)) by A1;
   set p1=min((pp/(4 * Sum(||.z.|| rExpSeq))),(pp/(4 * Sum(||.w.|| rExpSeq))));
-A6: p1 > 0 by A3,A5,XXREAL_0:15;
-A7: p1>0 & p1 <= p/(4 * Sum(||.z.|| rExpSeq)) &
-  p1 <= p/(4 * Sum(||.w.|| rExpSeq)) by A3,A5,XXREAL_0:15,17;
+A2: 1 <= Sum(||.w.|| rExpSeq) by Th28;
+A3: 1 <= Sum(||.z.|| rExpSeq) by Th28;
+  then
+A4: p1 > 0 by A1,A2,XXREAL_0:15;
+  Partial_Sums(( w ExpSeq )) is convergent by CLOPBAN3:def 2;
+  then for s be Real st 0<s ex n be Element of NAT st for m be Element of NAT
+st n<=m holds ||.Partial_Sums(( w ExpSeq )).m -Partial_Sums(( w ExpSeq )).n.||<
+  s by CLOPBAN3:4;
+  then Partial_Sums(( w ExpSeq )) is Cauchy_sequence_by_Norm by
+  CLOPBAN3:5;
+  then consider n2 such that
+A5: for k,l be Element of NAT st n2 <= k & n2 <= l holds ||.
+  Partial_Sums(( w ExpSeq )).k - Partial_Sums(( w ExpSeq )).l.|| < p1 by A4,
+  CSSPACE3:10;
   ( ||.z.|| rExpSeq ) is summable by SIN_COS:49;
   then Partial_Sums(( ||.z.|| rExpSeq )) is convergent by SERIES_1:def 2;
   then consider n1 such that
-A8: for k,l be Element of NAT st n1 <= k & n1 <= l holds
-  abs(Partial_Sums(( ||.z.|| rExpSeq )).k
-  - Partial_Sums(( ||.z.|| rExpSeq )).l)
-  < p1 by A6,COMSEQ_3:4;
-  Partial_Sums(( w ExpSeq )) is convergent by CLOPBAN3:def 2;
-  then for s be Real st 0<s ex n be Element of NAT
-  st for m be Element of NAT st n<=m holds
-  ||.Partial_Sums(( w ExpSeq )).m -Partial_Sums(( w ExpSeq )).n.||<s
-  by CLOPBAN3:4;
-  then Partial_Sums(( w ExpSeq )) is Cauchy_sequence_by_Norm by CLOPBAN3:5;
-  then consider n2 such that
-A9: for k,l be Element of NAT st n2 <= k & n2 <= l holds
-  ||.Partial_Sums(( w ExpSeq )).k - Partial_Sums(( w ExpSeq )).l.||
-  < p1 by A6,CSSPACE3:10;
+A6: for k,l be Element of NAT st n1 <= k & n1 <= l holds abs(
+Partial_Sums(( ||.z.|| rExpSeq )).k - Partial_Sums(( ||.z.|| rExpSeq )).l) < p1
+  by A4,COMSEQ_3:4;
   set n3=n1+n2;
   take n4 = n3+n3;
-A10: now
+A7: now
     let n;
     let k;
     now
       let l be Element of NAT such that
-A11:  l <= k;
-A12:  ||.(z ExpSeq).l * (Partial_Sums(w ExpSeq).k
-      -Partial_Sums(w ExpSeq).(k-'l)) .||
-      <=||.(z ExpSeq).l.|| * ||.(Partial_Sums(w ExpSeq).k
-      -Partial_Sums(w ExpSeq).(k-'l)).|| by CLOPBAN3:42;
-A13:  0 <=||.(Partial_Sums(w ExpSeq).k
-      -Partial_Sums(w ExpSeq).(k-'l)).|| by CLVECT_1:106;
-      ||.(z ExpSeq).l.|| <= (||.z.|| rExpSeq).l by Th13;
+A8:   l <= k;
+A9:   ||.(z ExpSeq).l * (Partial_Sums(w ExpSeq).k -Partial_Sums(w ExpSeq)
+.(k-'l)) .|| <=||.(z ExpSeq).l.|| * ||.(Partial_Sums(w ExpSeq).k -Partial_Sums(
+      w ExpSeq).(k-'l)).|| by CLOPBAN3:42;
+      0 <=||.(Partial_Sums(w ExpSeq).k -Partial_Sums(w ExpSeq).(k-'l)).||
+      by CLVECT_1:106;
       then
-A14:  ||.(z ExpSeq).l.|| * ||.(Partial_Sums(w ExpSeq).k
-      -Partial_Sums(w ExpSeq).(k-'l)).||
-      <=(||.z.|| rExpSeq).l * ||.(Partial_Sums(w ExpSeq).k
-      -Partial_Sums(w ExpSeq).(k-'l)).|| by A13,XREAL_1:66;
+A10:  ||.(z ExpSeq).l.|| * ||.(Partial_Sums(w ExpSeq).k -Partial_Sums(w
+      ExpSeq).(k-'l)).|| <=(||.z.|| rExpSeq).l * ||.(Partial_Sums(w ExpSeq).k -
+      Partial_Sums(w ExpSeq).(k-'l)).|| by Th13,XREAL_1:66;
       ||.Conj(k,z,w).||.l =||.( Conj(k,z,w).l) .|| by CLVECT_1:def 17
-        .=||.(z ExpSeq).l * (Partial_Sums(w ExpSeq).k
-      -Partial_Sums(w ExpSeq).(k-'l)) .|| by A11,Def7;
-      hence ||.Conj(k,z,w).||.l
-      <=(||.z.|| rExpSeq).l * ||.(Partial_Sums(w ExpSeq).k
-      -Partial_Sums(w ExpSeq).(k-'l)).|| by A12,A14,XXREAL_0:2;
+        .=||.(z ExpSeq).l * (Partial_Sums(w ExpSeq).k -Partial_Sums(w ExpSeq
+      ).(k-'l)) .|| by A8,Def7;
+      hence ||.Conj(k,z,w).||.l <=(||.z.|| rExpSeq).l * ||.(Partial_Sums(w
+      ExpSeq).k -Partial_Sums(w ExpSeq).(k-'l)).|| by A9,A10,XXREAL_0:2;
     end;
-    hence for l be Element of NAT st l <= k holds
-    ||.Conj(k,z,w).||.l <=(||.z.|| rExpSeq).l * ||.(Partial_Sums(w ExpSeq).k
-    -Partial_Sums(w ExpSeq).(k-'l)).||;
+    hence for l be Element of NAT st l <= k holds ||.Conj(k,z,w).||.l <=(||.z
+.|| rExpSeq).l * ||.(Partial_Sums(w ExpSeq).k -Partial_Sums(w ExpSeq).(k-'l))
+    .||;
   end;
-A15: now
+A11: now
     let k;
     now
       let l be Element of NAT;
-      assume l <= k;
+A12:  ||.Partial_Sums(w ExpSeq).k -Partial_Sums(w ExpSeq).(k-'l).|| <=
+      ||.Partial_Sums(w ExpSeq).k .|| + ||.Partial_Sums(w ExpSeq).(k-'l).|| by
+      CLVECT_1:105;
+      ||.Partial_Sums(w ExpSeq).(k-'l).|| <= Sum(||.w.|| rExpSeq) by Th27;
       then
-A16:  ||.Conj(k,z,w).||.l <= (||.z.|| rExpSeq).l * ||.Partial_Sums(w ExpSeq).k
-      -Partial_Sums(w ExpSeq).(k-'l).|| by A10;
-A17:  ||.Partial_Sums(w ExpSeq).k -Partial_Sums(w ExpSeq).(k-'l).||
-      <= ||.Partial_Sums(w ExpSeq).k .||
-      + ||.Partial_Sums(w ExpSeq).(k-'l).|| by CLVECT_1:105;
+A13:  Sum(||.w.|| rExpSeq) + ||.Partial_Sums(w ExpSeq).(k-'l).|| <= Sum(
+      ||.w.|| rExpSeq)+ Sum(||.w.|| rExpSeq) by XREAL_1:8;
       ||.Partial_Sums(w ExpSeq).k .|| <= Sum(||.w.|| rExpSeq) by Th27;
       then
-A18:  ||.Partial_Sums(w ExpSeq).k .|| + ||.Partial_Sums(w ExpSeq).(k -'l) .||
-      <= Sum(||.w.|| rExpSeq) + ||.Partial_Sums(w ExpSeq).(k-'l).||
-      by XREAL_1:8;
-      ||.Partial_Sums(w ExpSeq).(k-'l).|| <= Sum(||.w.|| rExpSeq) by Th27;
-      then Sum(||.w.|| rExpSeq) + ||.Partial_Sums(w ExpSeq).(k-'l).||
-      <= Sum(||.w.|| rExpSeq)+ Sum(||.w.|| rExpSeq) by XREAL_1:8;
+      ||.Partial_Sums(w ExpSeq).k .|| + ||.Partial_Sums(w ExpSeq).(k -'l)
+      .|| <= Sum(||.w.|| rExpSeq) + ||.Partial_Sums(w ExpSeq).(k-'l).|| by
+      XREAL_1:8;
       then ||.Partial_Sums(w ExpSeq).k .|| + ||.Partial_Sums(w ExpSeq).(k-'l)
-      .|| <= 2 * Sum(||.w.|| rExpSeq) by A18,XXREAL_0:2;
+      .|| <= 2 * Sum(||.w.|| rExpSeq) by A13,XXREAL_0:2;
       then
-A19:  ||.Partial_Sums(w ExpSeq).k -Partial_Sums(w ExpSeq).(k-'l).||
-      <= 2 * Sum(||.w.|| rExpSeq) by A17,XXREAL_0:2;
+A14:  ||.Partial_Sums(w ExpSeq).k -Partial_Sums(w ExpSeq).(k-'l).|| <= 2
+      * Sum(||.w.|| rExpSeq) by A12,XXREAL_0:2;
+      assume
+      l <= k;
+      then
+A15:  ||.Conj(k,z,w).||.l <= (||.z.|| rExpSeq).l * ||.Partial_Sums(w
+      ExpSeq).k -Partial_Sums(w ExpSeq).(k-'l).|| by A7;
       0 <= (||.z.|| rExpSeq).l by Th26;
-      then (||.z.|| rExpSeq).l * ||.Partial_Sums(w ExpSeq).k
-      -Partial_Sums(w ExpSeq).(k-'l).||
-      <= (||.z.|| rExpSeq).l * (2 * Sum(||.w.|| rExpSeq)) by A19,XREAL_1:66;
+      then (||.z.|| rExpSeq).l * ||.Partial_Sums(w ExpSeq).k -Partial_Sums(w
+ExpSeq).(k-'l).|| <= (||.z.|| rExpSeq).l * (2 * Sum(||.w.|| rExpSeq)) by A14,
+      XREAL_1:66;
       hence ||.Conj(k,z,w).||.l <= (||.z.|| rExpSeq).l * (2 * Sum(||.w.||
-      rExpSeq)) by A16,XXREAL_0:2;
+      rExpSeq)) by A15,XXREAL_0:2;
     end;
-    hence for l be Element of NAT st l <= k holds
-    ||.Conj(k,z,w).||.l <= (||.z.|| rExpSeq).l * (2 * Sum(||.w.|| rExpSeq));
+    hence for l be Element of NAT st l <= k holds ||.Conj(k,z,w).||.l <= (||.z
+    .|| rExpSeq).l * (2 * Sum(||.w.|| rExpSeq));
   end;
   now
+A16: 0 <> Sum(||.w.|| rExpSeq) by Th28;
+A17: (2 * Sum(||.w.|| rExpSeq) ) * (p/(4 * Sum(||.w.|| rExpSeq))) =(2 *
+Sum(||.w.|| rExpSeq) ) * (p * (4 * Sum (||.w.|| rExpSeq))") by XCMPLX_0:def 9
+      .=((2 * Sum(||.w.|| rExpSeq) ) * p ) * (4 * Sum(||.w.|| rExpSeq))"
+      .=((2 * p ) * Sum(||.w.|| rExpSeq) ) /(4 * Sum(||.w.|| rExpSeq)) by
+    XCMPLX_0:def 9
+      .= (2 * p )/4 by A16,XCMPLX_1:92
+      .= p/2;
+A18: 0 <> Sum(||.z.|| rExpSeq) by Th28;
+A19: Sum(||.z.|| rExpSeq) * (p/(4 * Sum(||.z.|| rExpSeq))) =Sum(||.z.||
+    rExpSeq) * (p*(4*Sum(||.z.|| rExpSeq))") by XCMPLX_0:def 9
+      .=(Sum(||.z.|| rExpSeq) * p) * (4 * Sum(||.z.|| rExpSeq))"
+      .=(Sum(||.z.|| rExpSeq) * p)/(4 * Sum(||.z.|| rExpSeq)) by XCMPLX_0:
+    def 9
+      .=p/4 by A18,XCMPLX_1:92;
     let k such that
 A20: n4 <= k;
     0 <= n3 by NAT_1:2;
     then
 A21: 0+n3 <= n3+n3 by XREAL_1:8;
+    then k-'n3=k-n3 by A20,XREAL_1:235,XXREAL_0:2;
     then
-A22: n3 <= k by A20,XXREAL_0:2;
-    0 <= n2 by NAT_1:2;
-    then
-A23: n1+0 <= n1+n2 by XREAL_1:8;
-    then
-A24: n1 <= k by A22,XXREAL_0:2;
+A22: k=(k-'n3)+n3;
+A23: n3 <= k by A20,A21,XXREAL_0:2;
     now
       let l be Element of NAT;
       assume
-A25:  l <= n3;
+A24:  l <= n3;
       then
-A26:  l <= k by A22,XXREAL_0:2;
-A27:  k-'l=k-l by A22,A25,XREAL_1:235,XXREAL_0:2;
+A25:  n3+n3-n3 <= n3+n3-l by XREAL_1:12;
+      n4-l <= k-l by A20,XREAL_1:11;
+      then
+A26:  n3 <= k-l by A25,XXREAL_0:2;
       0 <= n1 by NAT_1:2;
       then
-A28:  0+n2 <= n1+n2 by XREAL_1:8;
-A29:  n4-l <= k-l by A20,XREAL_1:11;
-      n3+n3-n3 <= n3+n3-l by A25,XREAL_1:12;
-      then n3 <= k-l by A29,XXREAL_0:2;
+A27:  0+n2 <= n1+n2 by XREAL_1:8;
+      l <= k by A23,A24,XXREAL_0:2;
       then
-A30:  n2 <= k-'l by A27,A28,XXREAL_0:2;
+A28:  ||.Conj(k,z,w).||.l <=(||.z.|| rExpSeq).l * ||.(Partial_Sums(w
+      ExpSeq).k -Partial_Sums(w ExpSeq).(k-'l)).|| by A7;
+A29:  0 <= (||.z.|| rExpSeq).l by Th26;
       0 <= n3 by NAT_1:2;
       then 0+n3 <= n3+n3 by XREAL_1:8;
-      then n2 <= n4 by A28,XXREAL_0:2;
-      then n2 <= k by A20,XXREAL_0:2;
+      then n2 <= n4 by A27,XXREAL_0:2;
       then
-A31:  ||.Partial_Sums(( w ExpSeq )).k - Partial_Sums(( w ExpSeq )).( k-'l) .||
-      < p1 by A9,A30;
-      0 <= (||.z.|| rExpSeq).l by Th26;
+A30:  n2 <= k by A20,XXREAL_0:2;
+      k-'l=k-l by A23,A24,XREAL_1:235,XXREAL_0:2;
+      then n2 <= k-'l by A27,A26,XXREAL_0:2;
       then
-A32:  (||.z.|| rExpSeq).l * ||.Partial_Sums(( w ExpSeq )).k
-      - Partial_Sums(( w ExpSeq )).(k-'l).||
-      <= (||.z.|| rExpSeq).l * p1 by A31,XREAL_1:66;
-      ||.Conj(k,z,w).||.l <=(||.z.|| rExpSeq).l * ||.(Partial_Sums(w ExpSeq).k
-      -Partial_Sums(w ExpSeq).(k-'l)).|| by A10,A26;
-      hence ||.Conj(k,z,w).||.l <= p1 * (||.z.|| rExpSeq).l by A32,XXREAL_0:2;
+      ||.Partial_Sums(( w ExpSeq )).k - Partial_Sums(( w ExpSeq )).( k-'l
+      ) .|| < p1 by A5,A30;
+      then (||.z.|| rExpSeq).l * ||.Partial_Sums(( w ExpSeq )).k -
+      Partial_Sums(( w ExpSeq )).(k-'l).|| <= (||.z.|| rExpSeq).l * p1 by A29,
+      XREAL_1:66;
+      hence ||.Conj(k,z,w).||.l <= p1 * (||.z.|| rExpSeq).l by A28,
+      XXREAL_0:2;
     end;
     then
-A33: Partial_Sums(||.Conj(k,z,w).||).n3
-    <= Partial_Sums(||.z.|| rExpSeq).n3 * p1 by COMSEQ_3:7;
-    Partial_Sums(||.z.|| rExpSeq).n3 <= Sum(||.z.|| rExpSeq) by Th27;
-    then Partial_Sums(||.z.|| rExpSeq).n3 * p1
-    <= Sum(||.z.|| rExpSeq) * p1 by A6,XREAL_1:66;
+A31: Partial_Sums(||.Conj(k,z,w).||).n3 <= Partial_Sums(||.z.|| rExpSeq).
+    n3 * p1 by COMSEQ_3:7;
+    0 <= n2 by NAT_1:2;
     then
-A34: Partial_Sums(||.Conj(k,z,w).||).n3
-    <= Sum(||.z.|| rExpSeq) * p1 by A33,XXREAL_0:2;
-A35: Sum(||.z.|| rExpSeq) * p1
-    <= Sum(||.z.|| rExpSeq) * (p/(4 * Sum(||.z.|| rExpSeq)))
-    by A2,A7,XREAL_1:66;
-A36: 0 <> Sum(||.z.|| rExpSeq) & 4 <>0 by Th28;
-    Sum(||.z.|| rExpSeq) * (p/(4 * Sum(||.z.|| rExpSeq)))
-    =Sum(||.z.|| rExpSeq) * (p*(4*Sum(||.z.|| rExpSeq))") by XCMPLX_0:def 9
-      .=(Sum(||.z.|| rExpSeq) * p) * (4 * Sum(||.z.|| rExpSeq))"
-      .=(Sum(||.z.|| rExpSeq) * p)/(4 * Sum(||.z.|| rExpSeq)) by XCMPLX_0:def 9
-      .=p/4 by A36,XCMPLX_1:92;
+A32: n1+0 <= n1+n2 by XREAL_1:8;
+    then n1 <= k by A23,XXREAL_0:2;
     then
-A37: Partial_Sums(||.Conj(k,z,w).||).n3 <= p/4 by A34,A35,XXREAL_0:2;
-    0 < p/4 & 0 < p/2 by A1;
-    then 0+p/4 < p/4 + p/4 by XREAL_1:8;
+    abs((Partial_Sums(||.z.|| rExpSeq).k-Partial_Sums(||.z.|| rExpSeq).n3
+    )) <= p1 by A6,A32;
+    then Partial_Sums(||.z.|| rExpSeq).k-Partial_Sums(||.z.|| rExpSeq).n3 <=
+    p1 by A20,A21,Th29,XXREAL_0:2;
     then
-A38: Partial_Sums(||.Conj(k,z,w).||).n3 < p/2 by A37,XXREAL_0:2;
-    k-'n3=k-n3 by A20,A21,XREAL_1:235,XXREAL_0:2;
+A33: (Partial_Sums(||.z.|| rExpSeq).k -Partial_Sums(||.z.|| rExpSeq).n3) *
+    (2 * Sum(||.w.|| rExpSeq)) <= p1 * (2 * Sum(||.w.|| rExpSeq)) by A2,XREAL_1
+    :66;
+    for l be Element of NAT st l <= k holds ||.Conj(k,z,w).||.l <= (2 *
+    Sum(||.w.|| rExpSeq)) * (||.z.|| rExpSeq).l by A11;
     then
-A39: k=(k-'n3)+n3;
-    for l be Element of NAT st l <= k holds
-    ||.Conj(k,z,w).||.l <= (2 * Sum(||.w.|| rExpSeq)) * (||.z.|| rExpSeq).l
-    by A15;
+    Partial_Sums(||.Conj(k,z,w).||).(k) -Partial_Sums(||.Conj(k,z,w) .||)
+. n3 <= (Partial_Sums(||.z.|| rExpSeq).(k) -Partial_Sums(||.z.|| rExpSeq).n3) *
+    (2 * Sum(||.w.|| rExpSeq)) by A22,COMSEQ_3:8;
     then
-A40: Partial_Sums(||.Conj(k,z,w).||).(k) -Partial_Sums(||.Conj(k,z,w) .||). n3
-    <= (Partial_Sums(||.z.|| rExpSeq).(k)
-    -Partial_Sums(||.z.|| rExpSeq).n3) *(2 * Sum(||.w.|| rExpSeq))
-    by A22,A39,COMSEQ_3:8;
-    abs((Partial_Sums(||.z.|| rExpSeq).k-Partial_Sums(||.z.|| rExpSeq).n3))
-    <= p1 by A8,A23,A24;
+A34: Partial_Sums(||.Conj(k,z,w).||).k-Partial_Sums(||.Conj(k,z,w).||) .n3
+    <= p1 * (2 * Sum(||.w.|| rExpSeq)) by A33,XXREAL_0:2;
+A35: 0+p/4 < p/4 + p/4 by A1,XREAL_1:8;
+    Partial_Sums(||.z.|| rExpSeq).n3 * p1 <= Sum(||.z.|| rExpSeq) * p1 by
+    A4,Th27,XREAL_1:66;
     then
-A41: Partial_Sums(||.z.|| rExpSeq).k-Partial_Sums(||.z.|| rExpSeq).n3
-    <= p1 by A22,Th29;
-A42: 0 * Sum(||.w.|| rExpSeq) < 2 * Sum(||.w.|| rExpSeq) by A4;
-    then (Partial_Sums(||.z.|| rExpSeq).k -Partial_Sums(||.z.|| rExpSeq).n3)
-    * (2 * Sum(||.w.|| rExpSeq))
-    <= p1 * (2 * Sum(||.w.|| rExpSeq)) by A41,XREAL_1:66;
+A36: Partial_Sums(||.Conj(k,z,w).||).n3 <= Sum(||.z.|| rExpSeq) * p1 by
+    A31,XXREAL_0:2;
+    Sum(||.z.|| rExpSeq) * p1 <= Sum(||.z.|| rExpSeq) * (p/(4 * Sum(||.z
+    .|| rExpSeq))) by A3,XREAL_1:66,XXREAL_0:17;
+    then Partial_Sums(||.Conj(k,z,w).||).n3 <= p/4 by A36,A19,XXREAL_0:2;
     then
-A43: Partial_Sums(||.Conj(k,z,w).||).k-Partial_Sums(||.Conj(k,z,w).||) .n3
-    <= p1 * (2 * Sum(||.w.|| rExpSeq)) by A40,XXREAL_0:2;
-A44: (2 * Sum(||.w.|| rExpSeq)) * p1
-    <= (2 * Sum(||.w.|| rExpSeq)) * (p/(4 * Sum(||.w.|| rExpSeq)))
-    by A7,A42,XREAL_1:66;
-A45: 0 <> Sum(||.w.|| rExpSeq) & 4 <>0 by Th28;
-    (2 * Sum(||.w.|| rExpSeq) ) * (p/(4 * Sum(||.w.|| rExpSeq)))
-    =(2 * Sum(||.w.|| rExpSeq) ) * (p * (4 * Sum
-    (||.w.|| rExpSeq))") by XCMPLX_0:def 9
-      .=((2 * Sum(||.w.|| rExpSeq) ) * p ) * (4 * Sum(||.w.|| rExpSeq))"
-      .=((2 * p ) * Sum(||.w.|| rExpSeq) ) /(4 * Sum(||.w.|| rExpSeq))
-    by XCMPLX_0:def 9
-      .= (2 * p )/4 by A45,XCMPLX_1:92
-      .= p/2;
+A37: Partial_Sums(||.Conj(k,z,w).||).n3 < p/2 by A35,XXREAL_0:2;
+    (2 * Sum(||.w.|| rExpSeq)) * p1 <= (2 * Sum(||.w.|| rExpSeq)) * (p/(4
+    * Sum(||.w.|| rExpSeq))) by A2,XREAL_1:66,XXREAL_0:17;
     then Partial_Sums(||.Conj(k,z,w).||).k -Partial_Sums(||.Conj(k,z,w).||).
-    n3 <= p/2 by A43,A44,XXREAL_0:2;
-    then (Partial_Sums(||.Conj(k,z,w).||).k
-    -Partial_Sums(||.Conj(k,z,w).||).n3)
-    +Partial_Sums(||.Conj(k,z,w).||).n3 < (p/2)+(p/2) by A38,XREAL_1:10;
+    n3 <= p/2 by A34,A17,XXREAL_0:2;
+    then (Partial_Sums(||.Conj(k,z,w).||).k -Partial_Sums(||.Conj(k,z,w).||).
+    n3) +Partial_Sums(||.Conj(k,z,w).||).n3 < (p/2)+(p/2) by A37,XREAL_1:10;
     hence abs(Partial_Sums(||.Conj(k,z,w).||).k) < p by Th30;
   end;
   hence thesis;
@@ -1922,47 +1881,47 @@ theorem Th32:
   for seq st for k holds seq.k=Partial_Sums((Conj(k,z,w))).k holds
   seq is convergent & lim(seq)=0.X
 proof
-  let seq such that
-A1: for k holds seq.k=Partial_Sums((Conj(k,z,w))).k;
-A2: now
-    let k;
-    ||.seq.k.||=||.Partial_Sums((Conj(k,z,w))).k.|| by A1;
-    hence ||.seq.k.|| <= Partial_Sums(||.Conj(k,z,w).||).k by Th10;
-  end;
   deffunc U(Element of NAT) = Partial_Sums(||.Conj($1,z,w).||).$1;
   ex rseq be Real_Sequence st for k holds rseq.k = U(k) from SEQ_1:sch 1;
   then consider rseq be Real_Sequence such that
-A3: for k holds rseq.k=Partial_Sums(||.Conj(k,z,w).||).k;
+A1: for k holds rseq.k=Partial_Sums(||.Conj(k,z,w).||).k;
+  let seq such that
+A2: for k holds seq.k=Partial_Sums((Conj(k,z,w))).k;
+A3: now
+    let k;
+    ||.seq.k.||=||.Partial_Sums((Conj(k,z,w))).k.|| by A2;
+    hence ||.seq.k.|| <= Partial_Sums(||.Conj(k,z,w).||).k by Th10;
+  end;
 A4: now
     let k;
-    ||.seq.k.|| <= Partial_Sums(||.Conj(k,z,w).||).k by A2;
-    hence ||.seq.k.|| <= rseq.k by A3;
+    ||.seq.k.|| <= Partial_Sums(||.Conj(k,z,w).||).k by A3;
+    hence ||.seq.k.|| <= rseq.k by A1;
   end;
-  rseq is convergent & lim(rseq) =0
-  proof
 A5: now
-      let p be real number;
-      assume p>0;
-      then consider n such that
-A6:   for k st n <= k holds abs(Partial_Sums(||.Conj(k,z,w).||).k) < p
-      by Th31;
-      take n;
-      now
-        let k such that
-A7:     n <= k;
-        abs(rseq.k-0)=abs(Partial_Sums(||.Conj(k,z,w).||).k) by A3;
-        hence abs(rseq.k-0) < p by A6,A7;
-      end;
-      hence for k st n <= k holds abs(rseq.k-0) < p;
+    let p be real number;
+    assume
+    p>0;
+    then consider n such that
+A6: for k st n <= k holds abs(Partial_Sums(||.Conj(k,z,w).||).k) < p
+    by Th31;
+    take n;
+    now
+      let k such that
+A7:   n <= k;
+      abs(rseq.k-0)=abs(Partial_Sums(||.Conj(k,z,w).||).k) by A1;
+      hence abs(rseq.k-0) < p by A6,A7;
     end;
-    hence rseq is convergent by SEQ_2:def 6;
-    hence thesis by A5,SEQ_2:def 7;
+    hence for k st n <= k holds abs(rseq.k-0) < p;
   end;
-  hence thesis by A4,Th12;
+  then
+A8: rseq is convergent by SEQ_2:def 6;
+  then lim(rseq) =0 by A5,SEQ_2:def 7;
+  hence thesis by A4,A8,Th12;
 end;
 
-Lm3: for z,w st z,w are_commutative holds
-Sum(z ExpSeq) * Sum(w ExpSeq) = Sum((z+w) ExpSeq)
+Lm3: for z,w st z,w are_commutative holds Sum(z ExpSeq) * Sum(w ExpSeq) = Sum(
+(z+w) ExpSeq)
+
 proof
   let z,w such that
 A1: z,w are_commutative;
@@ -1973,26 +1932,40 @@ A2: for k holds seq.k=Partial_Sums(Conj(k,z,w)).k;
   now
     let k be Element of NAT;
     thus seq.k=Partial_Sums(Conj(k,z,w)).k by A2
-      .=Partial_Sums(z ExpSeq).k * Partial_Sums(w ExpSeq).k
-    -Partial_Sums((z+w) ExpSeq).k by A1,Th25
-      .=(Partial_Sums(z ExpSeq) * Partial_Sums(w ExpSeq)).k
-    -Partial_Sums((z+w) ExpSeq).k by CLOPBAN3:def 10
-      .=(Partial_Sums(z ExpSeq) * Partial_Sums(w ExpSeq)
-    -Partial_Sums((z+w) ExpSeq) ).k by NORMSP_1:def 6;
+
+      .=Partial_Sums(z ExpSeq).k * Partial_Sums(w ExpSeq).k -Partial_Sums((z
+    +w) ExpSeq).k by A1,Th25
+
+      .=(Partial_Sums(z ExpSeq) * Partial_Sums(w ExpSeq)).k -Partial_Sums((z
+    +w) ExpSeq).k by CLOPBAN3:def 10
+
+      .=(Partial_Sums(z ExpSeq) * Partial_Sums(w ExpSeq) -Partial_Sums((z+w)
+    ExpSeq) ).k by NORMSP_1:def 6;
+
   end;
+
   then
-A3: seq=Partial_Sums(z ExpSeq) * Partial_Sums(w ExpSeq)
-  -Partial_Sums((z+w) ExpSeq) by FUNCT_2:113;
-A4: Partial_Sums(z ExpSeq) is convergent by CLOPBAN3:def 2;
-A5: Partial_Sums(w ExpSeq) is convergent by CLOPBAN3:def 2;
+A3: seq=Partial_Sums(z ExpSeq) * Partial_Sums(w ExpSeq) -Partial_Sums((z+w)
+  ExpSeq) by FUNCT_2:113;
+
+A4: Partial_Sums(w ExpSeq) is convergent by CLOPBAN3:def 2;
+A5: lim(seq)=0.X by A2,Th32;
 A6: Partial_Sums((z+w) ExpSeq) is convergent by CLOPBAN3:def 2;
-A7: Partial_Sums(z ExpSeq) * Partial_Sums(w ExpSeq) is convergent &
-  lim(Partial_Sums(z ExpSeq) * Partial_Sums(w ExpSeq))
-  =lim(Partial_Sums(z ExpSeq)) * lim(Partial_Sums(w ExpSeq)) by A4,A5,Th3,Th8;
-A8: seq is convergent & lim(seq)=0.X by A2,Th32;
+A7: Partial_Sums(z ExpSeq) is convergent by CLOPBAN3:def 2;
+
+  then
+A8: Partial_Sums(z ExpSeq) * Partial_Sums(w ExpSeq) is convergent by
+  A4,
+  Th3;
+
+A9: lim(Partial_Sums(z ExpSeq) * Partial_Sums(w ExpSeq)) =lim(Partial_Sums(
+  z ExpSeq)) * lim(Partial_Sums(w ExpSeq)) by A7,A4,Th8;
+
   thus Sum((z+w) ExpSeq) =lim(Partial_Sums((z+w) ExpSeq)) by CLOPBAN3:def 3
-    .=lim(Partial_Sums(z ExpSeq)) * lim(Partial_Sums(w ExpSeq))
-  by A3,A6,A7,A8,Th1
+
+    .=lim(Partial_Sums(z ExpSeq)) * lim(Partial_Sums(w ExpSeq)) by A3,A6,A8,
+  A9,A5,Th1
+
     .=Sum(z ExpSeq) * lim(Partial_Sums(w ExpSeq)) by CLOPBAN3:def 3
     .=Sum(z ExpSeq) * Sum(w ExpSeq) by CLOPBAN3:def 3;
 end;
@@ -2005,21 +1978,21 @@ definition
   existence
   proof
     deffunc U(Element of X ) = Sum($1 ExpSeq);
-    consider f being Function of the carrier of X, the carrier of X such that
-A1: for z be Element of X holds f.z = U(z) from FUNCT_2:sch 4;
-    thus thesis by A1;
+    ex f being Function of the carrier of X, the carrier of X st for z be
+    Element of X holds f.z = U(z) from FUNCT_2:sch 4;
+    hence thesis;
   end;
   uniqueness
   proof
     let f1,f2 be Function of the carrier of X, the carrier of X;
     assume that
-A2: for z be Element of X holds f1.z=Sum(z ExpSeq) and
-A3: for z be Element of X holds f2.z=Sum(z ExpSeq);
+A1: for z be Element of X holds f1.z=Sum(z ExpSeq) and
+A2: for z be Element of X holds f2.z=Sum(z ExpSeq);
     for z be Element of X holds f1.z = f2.z
     proof
       let z be Element of X;
-      thus f1.z=Sum(z ExpSeq) by A2
-        .=f2.z by A3;
+      thus f1.z=Sum(z ExpSeq) by A1
+        .=f2.z by A2;
     end;
     hence f1=f2 by FUNCT_2:113;
   end;
@@ -2028,7 +2001,6 @@ end;
 definition
   let X,z;
   func exp z -> Element of X equals
-
   (exp_ X).z;
   correctness;
 end;
@@ -2037,20 +2009,20 @@ theorem
   for z holds exp(z)=Sum(z ExpSeq) by Def8;
 
 theorem Th34:
-  for z1,z2 st z1,z2 are_commutative holds exp(z1+z2)=exp(z1) *exp(z2) &
-  exp(z2+z1)=exp(z2) *exp(z1) & exp(z1+z2)=exp(z2+z1) &
-  exp(z1),exp(z2) are_commutative
+  for z1,z2 st z1,z2 are_commutative holds exp(z1+z2)=exp(z1) *exp
+  (z2) & exp(z2+z1)=exp(z2) *exp(z1) & exp(z1+z2)=exp(z2+z1) & exp(z1),exp(z2)
+  are_commutative
 proof
   let z1,z2 such that
 A1: z1,z2 are_commutative;
-A2: exp(z1+z2)=Sum((z1+z2) ExpSeq) by Def8
-    .=Sum(z1 ExpSeq)*Sum(z2 ExpSeq) by A1,Lm3
-    .=exp(z1)*Sum(z2 ExpSeq) by Def8
-    .=exp(z1) *exp(z2) by Def8;
-  exp(z2+z1)=Sum((z2+z1) ExpSeq) by Def8
+A2: exp(z2+z1)=Sum((z2+z1) ExpSeq) by Def8
     .=Sum(z2 ExpSeq)*Sum(z1 ExpSeq) by A1,Lm3
     .=exp(z2)*Sum(z1 ExpSeq) by Def8
     .=exp(z2) *exp(z1) by Def8;
+  exp(z1+z2)=Sum((z1+z2) ExpSeq) by Def8
+    .=Sum(z1 ExpSeq)*Sum(z2 ExpSeq) by A1,Lm3
+    .=exp(z1)*Sum(z2 ExpSeq) by Def8
+    .=exp(z1) *exp(z2) by Def8;
   hence thesis by A2,LOPBAN_4:def 1;
 end;
 
@@ -2059,27 +2031,25 @@ theorem
 proof
   let z1,z2 such that
 A1: z1,z2 are_commutative;
-A2: Partial_Sums( z2 ExpSeq) is convergent by CLOPBAN3:def 2;
-A3: z1*(z2 ExpSeq) = (z2 ExpSeq) *z1
-  proof
-    now
-      let n be Element of NAT;
-      thus (z1*(z2 ExpSeq)).n =z1*(z2 ExpSeq).n by CLOPBAN3:def 8
-        .=z1*(1r/(n!c)*(z2 #N n)) by Def2
-        .=(1r/(n!c))*(z1*(z2 #N n)) by CLOPBAN3:42
-        .=(1r/(n!c))*((z2 #N n)*z1) by A1,Lm2
-        .=(1r/(n!c)*(z2 #N n))*z1 by CLOPBAN3:42
-        .=((z2 ExpSeq).n)*z1 by Def2
-        .=((z2 ExpSeq)*z1).n by CLOPBAN3:def 9;
-    end;
-    hence thesis by FUNCT_2:113;
+  now
+    let n be Element of NAT;
+    thus (z1*(z2 ExpSeq)).n =z1*(z2 ExpSeq).n by CLOPBAN3:def 8
+      .=z1*(1r/(n!c)*(z2 #N n)) by Def2
+      .=(1r/(n!c))*(z1*(z2 #N n)) by CLOPBAN3:42
+      .=(1r/(n!c))*((z2 #N n)*z1) by A1,Lm2
+      .=(1r/(n!c)*(z2 #N n))*z1 by CLOPBAN3:42
+      .=((z2 ExpSeq).n)*z1 by Def2
+      .=((z2 ExpSeq)*z1).n by CLOPBAN3:def 9;
   end;
+  then
+A2: z1*(z2 ExpSeq) = (z2 ExpSeq) *z1 by FUNCT_2:113;
+A3: Partial_Sums( z2 ExpSeq) is convergent by CLOPBAN3:def 2;
   thus z1*exp(z2) =z1*Sum(z2 ExpSeq) by Def8
     .=z1*lim (Partial_Sums(z2 ExpSeq)) by CLOPBAN3:def 3
-    .=lim(z1*Partial_Sums(z2 ExpSeq)) by A2,Th6
+    .=lim(z1*Partial_Sums(z2 ExpSeq)) by A3,Th6
     .=lim(Partial_Sums(z1*(z2 ExpSeq))) by Th9
-    .=lim(Partial_Sums(z2 ExpSeq)*z1) by A3,Th9
-    .=lim(Partial_Sums(z2 ExpSeq))*z1 by A2,Th7
+    .=lim(Partial_Sums(z2 ExpSeq)*z1) by A2,Th9
+    .=lim(Partial_Sums(z2 ExpSeq))*z1 by A3,Th7
     .=Sum(z2 ExpSeq) *z1 by CLOPBAN3:def 3
     .=exp(z2) *z1 by Def8;
 end;
@@ -2110,14 +2080,15 @@ A1: z,(-z) are_commutative by LOPBAN_4:def 1;
 end;
 
 theorem
-  exp(z) is invertible & (exp(z))" = exp(-z) &
-  exp(-z) is invertible & (exp(-z))" = exp(z)
+  exp(z) is invertible & (exp(z))" = exp(-z) & exp(-z) is invertible & (
+  exp(-z))" = exp(z)
 proof
-A1: exp(z)*exp(-z)= 1.X & exp(-z)*exp(z)= 1.X by Th37;
-  hence exp(z) is invertible by LOPBAN_3:def 8;
-  hence (exp(z))" = exp(-z) by A1,LOPBAN_3:def 12;
-  thus exp(-z) is invertible by A1,LOPBAN_3:def 8;
-  hence thesis by A1,LOPBAN_3:def 12;
+A1: exp(-z)*exp(z)= 1.X by Th37;
+A2: exp(z)*exp(-z)= 1.X by Th37;
+  hence exp(z) is invertible by A1,LOPBAN_3:def 8;
+  hence (exp(z))" = exp(-z) by A2,A1,LOPBAN_3:def 12;
+  thus exp(-z) is invertible by A2,A1,LOPBAN_3:def 8;
+  hence thesis by A2,A1,LOPBAN_3:def 12;
 end;
 
 theorem Th39:
@@ -2131,9 +2102,9 @@ proof
 end;
 
 theorem
-  for z for s,t be Complex holds exp(s*z)*exp(t*z) = exp((s+t)*z) &
-  exp(t*z)*exp(s*z) = exp((t+s)*z) & exp((s+t)*z) = exp((t+s)*z) &
-  exp(s*z),exp(t*z) are_commutative
+  for z for s,t be Complex holds exp(s*z)*exp(t*z) = exp((s+t)*z) & exp(
+t*z)*exp(s*z) = exp((t+s)*z) & exp((s+t)*z) = exp((t+s)*z) & exp(s*z),exp(t*z)
+  are_commutative
 proof
   let z;
   let s,t be Complex;

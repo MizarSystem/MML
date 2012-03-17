@@ -10,12 +10,10 @@ environ
       MCART_1, CAT_4, CAT_1, RELAT_2, BINOP_1, REALSET1, CQC_LANG, ALTCAT_1,
       ARYTM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, MCART_1, DOMAIN_1, RELAT_1,
-      NUMBERS, REALSET1, STRUCT_0, FUNCT_1, FUNCT_2, BINOP_1, MULTOP_1,
-      FUNCOP_1, PBOOLE;
- constructors PARTFUN1, BINOP_1, MULTOP_1, PBOOLE, REALSET2,
-      RELSET_1;
+      NUMBERS, STRUCT_0, FUNCT_1, FUNCT_2, BINOP_1, MULTOP_1, FUNCOP_1, PBOOLE;
+ constructors PARTFUN1, BINOP_1, MULTOP_1, PBOOLE, REALSET2, RELSET_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2, FUNCOP_1,
-      FRAENKEL, STRUCT_0, TEX_2, REALSET1, RELSET_1, ZFMISC_1;
+      STRUCT_0, RELSET_1, ZFMISC_1;
  requirements BOOLE, SUBSET;
  definitions TARSKI, STRUCT_0, XBOOLE_0, FUNCOP_1, BINOP_1;
  theorems FUNCT_1, ZFMISC_1, PBOOLE, DOMAIN_1, MULTOP_1, MCART_1, FUNCT_2,
@@ -54,7 +52,8 @@ theorem Th3:
 proof
   hereby
     let f be set;
-    assume f in Funcs({},{});
+    assume
+    f in Funcs({},{});
     then reconsider f' = f as Function of {},{} by FUNCT_2:121;
     for x,y being set holds [x,y] in f' iff x in {} & x = y;
     then f' = id {} by RELAT_1:def 10;
@@ -65,122 +64,131 @@ proof
 end;
 
 theorem Th4:
-  for A,B,C being set, f,g being Function st f in Funcs(A,B) & g in Funcs(B,C)
-  holds g*f in Funcs(A,C)
+  for A,B,C being set, f,g being Function st f in Funcs(A,B) & g in
+  Funcs(B,C) holds g*f in Funcs(A,C)
 proof
   let A,B,C be set, f,g be Function;
-A1: rng(g*f) c= rng g by RELAT_1:45;
-  assume f in Funcs(A,B) & g in Funcs(B,C);
-  then (ex f' being Function st f' = f & dom f' = A & rng f' c= B) &
-  ex g' being Function st g' = g & dom g' = B & rng g' c= C by FUNCT_2:def 2;
-  then dom(g*f) = A & rng(g*f) c= C by A1,RELAT_1:46,XBOOLE_1:1;
-  hence thesis by FUNCT_2:def 2;
+  assume that
+A1: f in Funcs(A,B) and
+A2: g in Funcs(B,C);
+A3: ex g' being Function st g' = g & dom g' = B & rng g' c= C by A2, FUNCT_2
+  :def 2;
+  rng(g*f) c= rng g by RELAT_1:45;
+  then
+A4: rng(g*f) c= C by A3,XBOOLE_1:1;
+  ex f' being Function st f' = f & dom f' = A & rng f' c= B by A1, FUNCT_2
+  :def 2;
+  then dom(g*f) = A by A3,RELAT_1:46;
+  hence thesis by A4,FUNCT_2:def 2;
 end;
 
 theorem Th5:
-  for A,B,C being set st Funcs(A,B) <> {} & Funcs(B,C) <> {}
-  holds Funcs(A,C) <> {}
+  for A,B,C being set st Funcs(A,B) <> {} & Funcs(B,C) <> {} holds
+  Funcs(A,C) <> {}
 proof
   let A,B,C be set such that
 A1: Funcs(A,B) <> {} and
 A2: Funcs(B,C) <> {};
-  consider f being set such that
-A3: f in Funcs(A,B) by A1,XBOOLE_0:def 1;
   consider g being set such that
-A4: g in Funcs(B,C) by A2,XBOOLE_0:def 1;
-  reconsider f as Function of A,B by A3,FUNCT_2:121;
-  reconsider g as Function of B,C by A4,FUNCT_2:121;
-  g*f in Funcs(A,C) by A3,A4,Th4;
-  hence thesis;
+A3: g in Funcs(B,C) by A2,XBOOLE_0:def 1;
+  reconsider g as Function of B,C by A3,FUNCT_2:121;
+  consider f being set such that
+A4: f in Funcs(A,B) by A1,XBOOLE_0:def 1;
+  thus thesis by A4,A3,Th4;
+  reconsider f as Function of A,B by A4,FUNCT_2:121;
 end;
 
 canceled;
 
 theorem
-  for A,B being set, F being ManySortedSet of [:B,A:],
-  C being Subset of A, D being Subset of B,
-  x,y being set st x in C & y in D holds F.(y,x) = (F|([:D,C:] qua set)).(y,x)
+  for A,B being set, F being ManySortedSet of [:B,A:], C being Subset of
+A, D being Subset of B, x,y being set st x in C & y in D holds F.(y,x) = (F|([:
+  D,C:] qua set)).(y,x)
 proof
-  let A,B be set, F be ManySortedSet of [:B,A:],
-  C be Subset of A, D be Subset of B, x,y be set;
-  assume x in C & y in D;
+  let A,B be set, F be ManySortedSet of [:B,A:], C be Subset of A, D be Subset
+  of B, x,y be set;
+  assume
+  x in C & y in D;
   then [y,x] in [:D,C:] by ZFMISC_1:106;
   hence thesis by FUNCT_1:72;
 end;
 
-scheme MSSLambda2{ A,B() -> set, F(set,set) -> set }:
-  ex M being ManySortedSet of [:A(),B():] st
-  for i,j st i in A() & j in B() holds M.(i,j) = F(i,j)
-proof
+scheme
+  MSSLambda2{ A,B() -> set, F(set,set) -> set }: ex M being ManySortedSet of
+  [:A(),B():] st for i,j st i in A() & j in B() holds M.(i,j) = F(i,j) proof
   deffunc F(set) = F($1`1,$1`2);
   consider f being Function such that
 A1: dom f = [:A(),B():] and
 A2: for x st x in [:A(),B():] holds f.x = F(x) from FUNCT_1:sch 3;
-  reconsider f as ManySortedSet of [:A(),B():] by A1,PARTFUN1:def 4
-,RELAT_1:def 18;
+  reconsider f as ManySortedSet of [:A(),B():] by A1,PARTFUN1:def 4 ,RELAT_1:
+  def 18;
   take f;
   let i,j;
-  assume i in A() & j in B();
+  assume
+  i in A() & j in B();
   then
 A3: [i,j] in [:A(),B():] by ZFMISC_1:106;
   [i,j]`1 = i & [i,j]`2 = j by MCART_1:7;
   hence thesis by A2,A3;
 end;
 
-scheme MSSLambda2D{ A,B() -> non empty set, F(set,set) -> set }:
-  ex M being ManySortedSet of [:A(),B():] st
-  for i being Element of A(), j being Element of B() holds M.(i,j) = F(i,j)
-proof
+scheme
+  MSSLambda2D{ A,B() -> non empty set, F(set,set) -> set }: ex M being
+ManySortedSet of [:A(),B():] st for i being Element of A(), j being Element of
+  B() holds M.(i,j) = F(i,j) proof
   consider M being ManySortedSet of [:A(),B():] such that
-A1: for i,j st i in A() & j in B() holds M.(i,j) = F(i,j) from MSSLambda2;
+A1: for i,j st i in A() & j in B() holds M.(i,j) = F(i,j) from
+  MSSLambda2;
   take M;
   thus thesis by A1;
 end;
 
-scheme MSSLambda3{ A,B,C() -> set, F(set,set,set) -> set }:
-  ex M being ManySortedSet of [:A(),B(),C():] st
-  for i,j,k st i in A() & j in B() & k in C() holds M.(i,j,k) = F(i,j,k)
-proof
+scheme
+  MSSLambda3{ A,B,C() -> set, F(set,set,set) -> set }: ex M being
+ManySortedSet of [:A(),B(),C():] st for i,j,k st i in A() & j in B() & k in C()
+  holds M.(i,j,k) = F(i,j,k) proof
   deffunc F(set) = F($1`1`1,$1`1`2,$1`2);
   consider f being Function such that
 A1: dom f = [:A(),B(),C():] and
 A2: for x st x in [:A(),B(),C():] holds f.x = F(x) from FUNCT_1:sch 3;
-  reconsider f as ManySortedSet of [:A(),B(),C():] by A1,PARTFUN1:def 4
-,RELAT_1:def 18;
+  reconsider f as ManySortedSet of [:A(),B(),C():] by A1,PARTFUN1:def 4 ,
+  RELAT_1:def 18;
   take f;
   let i,j,k;
-  assume i in A() & j in B() & k in C();
+A3: [[i,j],k]`2 = k & [i,j,k] = [[i,j],k] by MCART_1:7,def 3;
+  [i,j]`2 = j by MCART_1:7;
   then
-A3: [i,j,k] in [:A(),B(),C():] by MCART_1:73;
-  [i,j]`1 = i & [i,j]`2 = j by MCART_1:7;
+A4: [[i,j],k]`1`2 = j by MCART_1:7;
+  [i,j]`1 = i by MCART_1:7;
   then
-A4: [[i,j],k]`1`1 = i & [[i,j],k]`1`2 = j & [[i,j],k]`2 = k by MCART_1:7;
-A5: [i,j,k] = [[i,j],k] by MCART_1:def 3;
+A5: [[i,j],k]`1`1 = i by MCART_1:7;
+  assume
+  i in A() & j in B() & k in C();
+  then
+A6: [i,j,k] in [:A(),B(),C():] by MCART_1:73;
   thus f.(i,j,k) = f.[i,j,k] by MULTOP_1:def 1
-    .= F(i,j,k) by A2,A3,A4,A5;
+    .= F(i,j,k) by A2,A6,A5,A4,A3;
 end;
 
-scheme MSSLambda3D{ A,B,C() -> non empty set, F(set,set,set) -> set }:
-  ex M being ManySortedSet of [:A(),B(),C():] st
-  for i being Element of A(), j being Element of B(), k being Element of C()
-  holds M.(i,j,k) = F(i,j,k)
-proof
+scheme
+  MSSLambda3D{ A,B,C() -> non empty set, F(set,set,set) -> set }: ex M being
+ManySortedSet of [:A(),B(),C():] st for i being Element of A(), j being Element
+  of B(), k being Element of C() holds M.(i,j,k) = F(i,j,k) proof
   consider M being ManySortedSet of [:A(),B(),C():] such that
-A1: for i,j,k st i in A() & j in B() & k in C() holds M.(i,j,k) = F(i,j,k)
-  from MSSLambda3;
+A1: for i,j,k st i in A() & j in B() & k in C() holds M.(i,j,k) = F(i,j,
+  k) from MSSLambda3;
   take M;
   thus thesis by A1;
 end;
 
 theorem Th8:
-  for A,B being set, N,M being ManySortedSet of [:A,B:]
-  st for i,j st i in A & j in B holds N.(i,j) = M.(i,j) holds M = N
+  for A,B being set, N,M being ManySortedSet of [:A,B:] st for i,j
+  st i in A & j in B holds N.(i,j) = M.(i,j) holds M = N
 proof
   let A,B be set, N,M be ManySortedSet of [:A,B:];
   assume
 A1: for i,j st i in A & j in B holds N.(i,j) = M.(i,j);
-A2: dom M = [:A,B:] & dom N = [:A,B:] by PARTFUN1:def 4;
-  now
+A2: now
     let x;
     assume
 A3: x in [:A,B:];
@@ -191,31 +199,31 @@ A4: x = [i,j] by A3,DOMAIN_1:9;
       .= M.(i,j) by A1
       .= M.x by A4;
   end;
+  dom M = [:A,B:] & dom N = [:A,B:] by PARTFUN1:def 4;
   hence thesis by A2,FUNCT_1:9;
 end;
 
 theorem Th9:
   for A,B being non empty set, N,M being ManySortedSet of [:A,B:]
-  st for i being Element of A, j being Element of B holds N.(i,j) = M.(i,j)
-  holds M = N
+st for i being Element of A, j being Element of B holds N.(i,j) = M.(i,j) holds
+  M = N
 proof
   let A,B be non empty set, N,M be ManySortedSet of [:A,B:];
-  assume for i being Element of A, j being Element of B
-  holds N.(i,j) = M.(i,j);
+  assume
+  for i being Element of A, j being Element of B holds N.(i,j) = M.(i,
+  j);
   then for i,j st i in A & j in B holds N.(i,j) = M.(i,j);
   hence thesis by Th8;
 end;
 
 theorem Th10:
-  for A being set, N,M being ManySortedSet of [:A,A,A:]
-  st for i,j,k st i in A & j in A & k in A holds N.(i,j,k) = M.(i,j,k)
-  holds M = N
+  for A being set, N,M being ManySortedSet of [:A,A,A:] st for i,j
+  ,k st i in A & j in A & k in A holds N.(i,j,k) = M.(i,j,k) holds M = N
 proof
   let A be set, N,M be ManySortedSet of [:A,A,A:];
   assume
 A1: for i,j,k st i in A & j in A & k in A holds N.(i,j,k) = M.(i,j,k);
-A2: dom M = [:A,A,A:] & dom N = [:A,A,A:] by PARTFUN1:def 4;
-  now
+A2: now
     let x;
     assume
 A3: x in [:A,A,A:];
@@ -226,6 +234,7 @@ A4: x = [i,j,k] by A3,DOMAIN_1:15;
       .= N.(i,j,k) by A1
       .= N.x by A4,MULTOP_1:def 1;
   end;
+  dom M = [:A,A,A:] & dom N = [:A,A,A:] by PARTFUN1:def 4;
   hence thesis by A2,FUNCT_1:9;
 end;
 
@@ -242,8 +251,8 @@ end;
 begin :: Alternative Graphs
 
 definition
-  struct(1-sorted) AltGraph (# carrier -> set,
-    Arrows -> ManySortedSet of [:the carrier, the carrier:] #);
+  struct(1-sorted) AltGraph (# carrier -> set, Arrows -> ManySortedSet of [:
+    the carrier, the carrier:] #);
 end;
 
 definition
@@ -256,7 +265,6 @@ definition
   let o1,o2 be object of G;
   canceled;
   func <^o1,o2^> equals
-
   (the Arrows of G).(o1,o2);
   correctness;
 end;
@@ -272,8 +280,8 @@ definition
   canceled;
   attr G is transitive means
   :Def4:
-  for o1,o2,o3 being object of G st <^o1,o2^> <> {} & <^o2,o3^> <> {}
-  holds <^o1,o3^> <> {};
+  for o1,o2,o3 being object of G st <^o1,o2
+  ^> <> {} & <^o2,o3^> <> {} holds <^o1,o3^> <> {};
 end;
 
 begin :: Binary Compositions
@@ -283,13 +291,13 @@ definition
   let G be ManySortedSet of [:I,I:];
   func {|G|} -> ManySortedSet of [:I,I,I:] means
   :Def5:
-  for i,j,k st i in I & j in I & k in I holds it.(i,j,k) = G.(i,k);
+  for i,j,k st i in I &
+  j in I & k in I holds it.(i,j,k) = G.(i,k);
   existence
   proof
     deffunc F(set,set,set) = G.($1,$3);
-    ex M being ManySortedSet of [:I,I,I:] st
-    for i,j,k st i in I & j in I & k in I holds M.(i,j,k) = F(i,j,k)
-    from MSSLambda3;
+    ex M being ManySortedSet of [:I,I,I:] st for i,j,k st i in I & j in I
+    & k in I holds M.(i,j,k) = F(i,j,k) from MSSLambda3;
     hence thesis;
   end;
   uniqueness
@@ -309,23 +317,22 @@ A3:   i in I & j in I & k in I;
   let H be ManySortedSet of [:I,I:];
   func {|G,H|} -> ManySortedSet of [:I,I,I:] means
   :Def6:
-  for i,j,k st i in I & j in I & k in I holds
-  it.(i,j,k) = [:H.(j,k),G.(i,j):];
+  for i,j,k st i in I
+  & j in I & k in I holds it.(i,j,k) = [:H.(j,k),G.(i,j):];
   existence
   proof
     deffunc F(set,set,set) = [:H.($2,$3),G.($1,$2):];
-    ex M being ManySortedSet of [:I,I,I:] st
-    for i,j,k st i in I & j in I & k in I holds M.(i,j,k) = F(i,j,k)
-    from MSSLambda3;
+    ex M being ManySortedSet of [:I,I,I:] st for i,j,k st i in I & j in I
+    & k in I holds M.(i,j,k) = F(i,j,k) from MSSLambda3;
     hence thesis;
   end;
   uniqueness
   proof
     let M1,M2 be ManySortedSet of [:I,I,I:] such that
-A4: for i,j,k st i in I & j in I & k in I holds
-    M1.(i,j,k) = [:H.(j,k),G.(i,j):] and
-A5: for i,j,k st i in I & j in I & k in I holds
-    M2.(i,j,k) = [:H.(j,k),G.(i,j):];
+A4: for i,j,k st i in I & j in I & k in I holds M1.(i,j,k) = [:H.(j,k)
+    ,G.(i,j):] and
+A5: for i,j,k st i in I & j in I & k in I holds M2.(i,j,k) = [:H.(j,k)
+    ,G.(i,j):];
     now
       let i,j,k;
       assume
@@ -351,13 +358,12 @@ definition
   redefine func o.(i,j,k) -> Function of [:G.(j,k),G.(i,j):], G.(i,k);
   coherence
   proof
-A1: o.[i,j,k] = o.(i,j,k) by MULTOP_1:def 1;
-A2: {|G,G|}.[i,j,k] = {|G,G|}.(i,j,k) by MULTOP_1:def 1
-      .= [:G.(j,k),G.(i,j):] by Def6;
-    {|G|}.[i,j,k] = {|G|}.(i,j,k) by MULTOP_1:def 1
+A1: {|G|}.[i,j,k] = {|G|}.(i,j,k) by MULTOP_1:def 1
       .= G.(i,k) by Def5;
-    hence thesis
-    by A1,A2,PBOOLE:def 18;
+A2: o.[i,j,k] = o.(i,j,k) by MULTOP_1:def 1;
+    {|G,G|}.[i,j,k] = {|G,G|}.(i,j,k) by MULTOP_1:def 1
+      .= [:G.(j,k),G.(i,j):] by Def6;
+    hence thesis by A2,A1,PBOOLE:def 18;
   end;
 end;
 
@@ -367,35 +373,34 @@ definition
   let IT be BinComp of G;
   attr IT is associative means
   :Def7:
-  for i,j,k,l being Element of I
-  for f,g,h being set st f in G.(i,j) & g in G.(j,k) & h in G.(k,l)
-  holds IT.(i,k,l).(h,IT.(i,j,k).(g,f)) = IT.(i,j,l).(IT.(j,k,l).(h,g),f);
+  for i,j,k,l being Element of I for f,g,h
+being set st f in G.(i,j) & g in G.(j,k) & h in G.(k,l) holds IT.(i,k,l).(h,IT.
+  (i,j,k).(g,f)) = IT.(i,j,l).(IT.(j,k,l).(h,g),f);
   attr IT is with_right_units means
   :Def8:
-  for i being Element of I ex e being set st e in G.(i,i) &
-  for j being Element of I, f be set st f in G.(i,j)
-  holds IT.(i,i,j).(f,e) = f;
+  for i being Element of I ex e being
+set st e in G.(i,i) & for j being Element of I, f be set st f in G.(i,j) holds
+  IT.(i,i,j).(f,e) = f;
   attr IT is with_left_units means
   :Def9:
-  for j being Element of I ex e being set st e in G.(j,j) &
-  for i being Element of I, f be set st f in G.(i,j)
-  holds IT.(i,j,j).(e,f) = f;
+  for j being Element of I ex e being
+set st e in G.(j,j) & for i being Element of I, f be set st f in G.(i,j) holds
+  IT.(i,j,j).(e,f) = f;
 end;
 
 begin :: Alternative categories
 
 definition
-  struct(AltGraph) AltCatStr (# carrier -> set,
-    Arrows -> ManySortedSet of [:the carrier, the carrier:],
-    Comp -> BinComp of the Arrows #);
+  struct(AltGraph) AltCatStr (# carrier -> set, Arrows -> ManySortedSet of [:
+    the carrier, the carrier:], Comp -> BinComp of the Arrows #);
 end;
 
 registration
   cluster strict non empty AltCatStr;
   existence
   proof
-    consider X being non empty set, A being ManySortedSet of [:X,X:],
-    C being BinComp of A;
+    consider X being non empty set, A being ManySortedSet of [:X,X:], C being
+    BinComp of A;
     take AltCatStr(#X,A,C#);
     thus AltCatStr(#X,A,C#) is strict;
     thus the carrier of AltCatStr(#X,A,C#) is non empty;
@@ -409,12 +414,13 @@ A1: <^o1,o2^> <> {} & <^o2,o3^> <> {};
   let f be Morphism of o1,o2, g be Morphism of o2,o3;
   func g*f -> Morphism of o1,o3 equals
   :Def10:
-  (the Comp of C).(o1,o2,o3).(g,f);
+  (the Comp of C).(o1,o2,o3).(g,f
+  );
   coherence
   proof
     reconsider H1 = <^o1,o2^>, H2 = <^o2,o3^> as non empty set by A1;
-    reconsider F = (the Comp of C).(o1,o2,o3)
-    as Function of [:H2, H1:], <^o1,o3^>;
+    reconsider F = (the Comp of C).(o1,o2,o3) as Function of [:H2, H1:], <^o1,
+    o3^>;
     reconsider y = g as Element of H2;
     reconsider x = f as Element of H1;
     F.(y,x) is Element of <^o1,o3^>;
@@ -427,8 +433,8 @@ definition
   let IT be Function;
   attr IT is compositional means
   :Def11:
-  x in dom IT implies
-  ex f,g being Function st x = [g,f] & IT.x = g*f;
+  x in dom IT implies ex f,g being
+  Function st x = [g,f] & IT.x = g*f;
 end;
 
 registration
@@ -440,56 +446,59 @@ registration
     suppose
 A1:   A = {} or B = {};
       set M = [0][:A,B:];
-A2:   dom M = [:A,B:] by PARTFUN1:def 4;
       M is Function-yielding
       proof
-        let x; thus thesis by A1,A2;
+        let x;
+        thus thesis by A1,PARTFUN1:def 4;
       end;
       then reconsider M as ManySortedFunction of [:A,B:];
       take M;
       let x;
-      thus thesis by A1,A2;
+      thus thesis by A1,PARTFUN1:def 4;
     end;
-    suppose A <> {} & B <> {};
+    suppose
+      A <> {} & B <> {};
       then reconsider A1=A, B1=B as non empty functional set;
       deffunc F(Element of A1,Element of B1) = $1*$2;
       consider M being ManySortedSet of [:A1,B1:] such that
-A3:   for i being Element of A1, j being Element of B1
-      holds M.(i,j) = F(i,j) from MSSLambda2D;
+A2:   for i being Element of A1, j being Element of B1 holds M.(i,j) =
+      F(i,j) from MSSLambda2D;
       M is Function-yielding
       proof
         let x;
-        assume x in dom M;
+        assume
+        x in dom M;
         then
-A4:     x in [:A1,B1:] by PARTFUN1:def 4;
+A3:     x in [:A1,B1:] by PARTFUN1:def 4;
         then
-A5:     x`1 in A1 & x `2 in B1 by MCART_1:10;
+A4:     x`1 in A1 & x `2 in B1 by MCART_1:10;
         then reconsider f = x`1, g = x`2 as Function;
-        M.x = M.(f,g) by A4,MCART_1:24
-          .= f*g by A3,A5;
+        M.x = M.(f,g) by A3,MCART_1:24
+          .= f*g by A2,A4;
         hence thesis;
       end;
       then reconsider M as ManySortedFunction of [:A,B:];
       take M;
       let x;
-      assume x in dom M;
+      assume
+      x in dom M;
       then
-A6:   x in [:A1,B1:] by PARTFUN1:def 4;
+A5:   x in [:A1,B1:] by PARTFUN1:def 4;
       then
-A7:   x`1 in A1 & x `2 in B1 by MCART_1:10;
+A6:   x`1 in A1 & x `2 in B1 by MCART_1:10;
       then reconsider f = x`1, g = x`2 as Function;
       take g,f;
-      thus x = [f,g] by A6,MCART_1:24;
-      thus M.x = M.(f,g) by A6,MCART_1:24
-        .= f*g by A3,A7;
+      thus x = [f,g] by A5,MCART_1:24;
+      thus M.x = M.(f,g) by A5,MCART_1:24
+        .= f*g by A2,A6;
     end;
   end;
 end;
 
 theorem Th13:
-  for A,B being functional set
-  for F being compositional ManySortedSet of [:A,B:],
-  g,f being Function st g in A & f in B holds F.(g,f) = g*f
+  for A,B being functional set for F being compositional
+ManySortedSet of [:A,B:], g,f being Function st g in A & f in B holds F.(g,f) =
+  g*f
 proof
   let A,B be functional set;
   let F be compositional ManySortedSet of [:A,B:], g,f be Function such that
@@ -499,21 +508,22 @@ A1: g in A & f in B;
   then consider ff,gg being Function such that
 A2: [g,f] = [gg,ff] and
 A3: F.[g,f] = gg*ff by Def11;
-  g = gg & f = ff by A2,ZFMISC_1:33;
-  hence thesis by A3;
+  g = gg by A2,ZFMISC_1:33;
+  hence thesis by A2,A3,ZFMISC_1:33;
 end;
 
 definition
   let A,B be functional set;
   func FuncComp(A,B) -> compositional ManySortedFunction of [:B,A:] means
-  :Def12:
-  not contradiction;
+  :
+  Def12: not contradiction;
   uniqueness
   proof
     let M1,M2 be compositional ManySortedFunction of [:B,A:];
     now
       let i,j;
-      assume i in B & j in A;
+      assume
+      i in B & j in A;
       then
 A1:   [i,j] in [:B,A:] by ZFMISC_1:106;
       then [i,j] in dom M1 by PARTFUN1:def 4;
@@ -524,8 +534,8 @@ A3:   M1.[i,j] = g1*f1 by Def11;
       then consider f2,g2 being Function such that
 A4:   [i,j] = [g2,f2] and
 A5:   M2.[i,j] = g2*f2 by Def11;
-      g1 = g2 & f1 = f2 by A2,A4,ZFMISC_1:33;
-      hence M1.(i,j) = M2.(i,j) by A3,A5;
+      g1 = g2 by A2,A4,ZFMISC_1:33;
+      hence M1.(i,j) = M2.(i,j) by A2,A3,A4,A5,ZFMISC_1:33;
     end;
     hence M1 = M2 by Th8;
   end;
@@ -533,12 +543,14 @@ A5:   M2.[i,j] = g2*f2 by Def11;
 end;
 
 theorem Th14:
-  for A,B,C being set holds rng FuncComp(Funcs(A,B),Funcs(B,C)) c= Funcs(A,C)
+  for A,B,C being set holds rng FuncComp(Funcs(A,B),Funcs(B,C)) c=
+  Funcs(A,C)
 proof
   let A,B,C be set;
   let i;
   set F = FuncComp(Funcs(A,B),Funcs(B,C));
-  assume i in rng F;
+  assume
+  i in rng F;
   then consider j such that
 A1: j in dom F and
 A2: i = F.j by FUNCT_1:def 5;
@@ -551,42 +563,45 @@ A4: F.j = g*f by A1,Def11;
 end;
 
 theorem Th15:
-  for o be set holds FuncComp({id o},{id o}) = (id o,id o) :-> id o
+  for o be set holds FuncComp({id o},{id o}) = (id o,id o) :-> id
+  o
 proof
   let o be set;
-A1: dom FuncComp({id o},{id o}) = [:{id o},{id o}:] by PARTFUN1:def 4
-;
+A1: dom FuncComp({id o},{id o}) = [:{id o},{id o}:] by PARTFUN1:def 4;
   rng FuncComp({id o},{id o}) c= {id o}
   proof
     let i;
-A2: o /\ o = o;
-    assume i in rng FuncComp({id o},{id o});
+    assume
+    i in rng FuncComp({id o},{id o});
     then consider j such that
-A3: j in
-    [:{id o},{id o}:] & i = FuncComp({id o},{id o}).j by A1,FUNCT_1:def 5;
+A2: j in [:{id o},{id o}:] and
+A3: i = FuncComp({id o},{id o}).j by A1,FUNCT_1:def 5;
     consider f,g being Function such that
-A4: j = [g,f] & FuncComp({id o},{id o}).j = g*f by A1,A3,Def11;
-    g in {id o} & f in {id o} by A3,A4,ZFMISC_1:106;
-    then g = id o & f = id o & i = g*f by A3,A4,TARSKI:def 1;
-    then i = id o by A2,FUNCT_1:43;
+A4: j = [g,f] and
+A5: FuncComp({id o},{id o}).j = g*f by A1,A2,Def11;
+    f in {id o} by A2,A4,ZFMISC_1:106;
+    then
+A6: f = id o by TARSKI:def 1;
+    g in {id o} by A2,A4,ZFMISC_1:106;
+    then o /\ o = o & g = id o by TARSKI:def 1;
+    then i = id o by A3,A5,A6,FUNCT_1:43;
     hence thesis by TARSKI:def 1;
   end;
-  then FuncComp({id o},{id o}) is Function of [:{id o},{id o}:],{id o}
-  by A1,RELSET_1:11;
+  then FuncComp({id o},{id o}) is Function of [:{id o},{id o}:],{id o} by A1,
+  RELSET_1:11;
   hence thesis by FUNCOP_1:def 10;
 end;
 
 theorem Th16:
-  for A,B being functional set, A1 being Subset of A, B1 being Subset of B
-  holds FuncComp(A1,B1) = FuncComp(A,B)|([:B1,A1:] qua set)
+  for A,B being functional set, A1 being Subset of A, B1 being
+  Subset of B holds FuncComp(A1,B1) = FuncComp(A,B)|([:B1,A1:] qua set)
 proof
   let A,B be functional set, A1 be Subset of A, B1 be Subset of B;
   set f = FuncComp(A,B)|([:B1,A1:] qua set);
 A1: dom FuncComp(A,B) = [:B,A:] by PARTFUN1:def 4;
   then
 A2: dom f = [:B1,A1:] by RELAT_1:91;
-  then reconsider f as ManySortedFunction of [:B1,A1:] by PARTFUN1:def 4
-;
+  then reconsider f as ManySortedFunction of [:B1,A1:] by PARTFUN1:def 4;
   f is compositional
   proof
     let i;
@@ -604,17 +619,19 @@ definition
   let C be non empty AltCatStr;
   attr C is quasi-functional means
   :Def13:
-  for a1,a2 being object of C holds <^a1,a2^> c= Funcs(a1,a2);
+  for a1,a2 being object of C holds
+  <^a1,a2^> c= Funcs(a1,a2);
   attr C is semi-functional means
   :Def14:
-  for a1,a2,a3 being object of C st
-  <^a1,a2^> <> {} & <^a2,a3^> <> {} & <^a1,a3^> <> {}
-  for f being Morphism of a1,a2, g being Morphism of a2,a3,
-  f',g' being Function st f = f' & g = g' holds g*f =g'*f';
+  for a1,a2,a3 being object of C st <^
+a1,a2^> <> {} & <^a2,a3^> <> {} & <^a1,a3^> <> {} for f being Morphism of a1,a2
+, g being Morphism of a2,a3, f',g' being Function st f = f' & g = g' holds g*f
+  =g'*f';
   attr C is pseudo-functional means
   :Def15:
-  for o1,o2,o3 being object of C holds (the Comp of C).(o1,o2,o3) =
-  FuncComp(Funcs(o1,o2),Funcs(o2,o3))|([:<^o2,o3^>,<^o1,o2^>:] qua set);
+  for o1,o2,o3 being object of C
+holds (the Comp of C).(o1,o2,o3) = FuncComp(Funcs(o1,o2),Funcs(o2,o3))|([:<^o2,
+  o3^>,<^o1,o2^>:] qua set);
 end;
 
 registration
@@ -627,80 +644,82 @@ registration
   cluster strict pseudo-functional (non empty AltCatStr);
   existence
   proof
-A1: 0 in 1 by CARD_1:87,TARSKI:def 1;
+A1: {[0,0,0]} = [: 1,1,1 :] by CARD_1:87,MCART_1:39;
+    then reconsider c = [0,0,0] .--> FuncComp(Funcs(0,0),Funcs(0,0)) as
+    ManySortedSet of [: 1,1,1 :];
+    reconsider c as ManySortedFunction of [: 1,1,1 :];
     dom([0,0] .--> Funcs(0,0)) = {[0,0]} by FUNCOP_1:19
       .= [: 1,1 :] by CARD_1:87,ZFMISC_1:35;
-    then reconsider m = [0,0] .--> Funcs(0,0) as ManySortedSet of [: 1,1 :]
-    by PARTFUN1:def 4,RELAT_1:def 18;
-A3: {[0,0,0]} = [: 1,1,1 :] by CARD_1:87,MCART_1:39;
-    then reconsider c = [0,0,0] .--> FuncComp(Funcs(0,0),Funcs(0,0))
-    as ManySortedSet of [: 1,1,1 :];
-    reconsider c as ManySortedFunction of [: 1,1,1 :];
-A4: m.(0,0) = Funcs(0,0) by FUNCOP_1:87;
+    then reconsider
+    m = [0,0] .--> Funcs(0,0) as ManySortedSet of [: 1,1 :] by
+    PARTFUN1:def 4,RELAT_1:def 18;
+A2: m.(0,0) = Funcs(0,0) by FUNCOP_1:87;
+A3: 0 in 1 by CARD_1:87,TARSKI:def 1;
     now
       let i;
-      assume i in [: 1,1,1 :];
-      then
-A5:   i = [0,0,0] by A3,TARSKI:def 1;
-      then
-A6:   c.i = FuncComp(Funcs(0,0),Funcs(0,0)) by FUNCOP_1:87;
       reconsider ci = c.i as Function;
-A7:   dom ci = [:m.(0,0),m.(0,0):] by A4,A6,PARTFUN1:def 4
-        .= {|m,m|}.(0,0,0) by A1,Def6
-        .= {|m,m|}.i by A5,MULTOP_1:def 1;
-A8:   {|m|}.i = {|m|}.(0,0,0) by A5,MULTOP_1:def 1
-        .= m.(0,0) by A1,Def5;
-      then rng ci c= {|m|}.i by A4,A6,Th14;
-      hence c.i is Function of {|m,m|}.i, {|m|}.i by A4,A7,A8,FUNCT_2:def 1
-,RELSET_1:11;
+      assume
+      i in [: 1,1,1 :];
+      then
+A4:   i = [0,0,0] by A1,TARSKI:def 1;
+      then
+A5:   c.i = FuncComp(Funcs(0,0),Funcs(0,0)) by FUNCOP_1:87;
+      then
+A6:   dom ci = [:m.(0,0),m.(0,0):] by A2,PARTFUN1:def 4
+        .= {|m,m|}.(0,0,0) by A3,Def6
+        .= {|m,m|}.i by A4,MULTOP_1:def 1;
+A7:   {|m|}.i = {|m|}.(0,0,0) by A4,MULTOP_1:def 1
+        .= m.(0,0) by A3,Def5;
+      then rng ci c= {|m|}.i by A2,A5,Th14;
+      hence c.i is Function of {|m,m|}.i, {|m|}.i by A2,A6,A7, FUNCT_2:def
+      1,RELSET_1:11;
     end;
     then reconsider c as BinComp of m by PBOOLE:def 18;
     take C = AltCatStr(#1,m,c#);
     thus C is strict;
     let o1,o2,o3 be object of C;
-A9: o1 = 0 & o2 = 0 & o3 = 0 by CARD_1:87,TARSKI:def 1;
+A8: o3 = 0 by CARD_1:87,TARSKI:def 1;
+A9: o1 = 0 & o2 = 0 by CARD_1:87,TARSKI:def 1;
     then
-A10: dom FuncComp(Funcs(0,0),Funcs(0,0)) = [:<^o2,o3^>,<^o1,o2^>:]
-    by A4,PARTFUN1:def 4;
+A10: dom FuncComp(Funcs(0,0),Funcs(0,0)) = [:<^o2,o3^>,<^o1,o2^>:] by A2,
+    A8,PARTFUN1:def 4;
     thus (the Comp of C).(o1,o2,o3) = c.[o1,o2,o3] by MULTOP_1:def 1
-      .= FuncComp(Funcs(0,0),Funcs(0,0)) by A9,FUNCOP_1:87
-      .= FuncComp(Funcs(o1,o2),Funcs(o2,o3))|([:<^o2,o3^>,<^o1,o2^>:] qua set)
-    by A9,A10,RELAT_1:97;
+      .= FuncComp(Funcs(0,0),Funcs(0,0)) by A9,A8,FUNCOP_1:87
+      .= FuncComp(Funcs(o1,o2),Funcs(o2,o3))|([:<^o2,o3^>,<^o1,o2^>:] qua
+    set) by A9,A8,A10,RELAT_1:97;
   end;
 end;
 
 theorem
-  for C being non empty AltCatStr, a1,a2,a3 being object of C
-  holds (the Comp of C).(a1,a2,a3)
-  is Function of [:<^a2,a3^>,<^a1,a2^>:],<^a1,a3^>;
+  for C being non empty AltCatStr, a1,a2,a3 being object of C holds (the
+  Comp of C).(a1,a2,a3) is Function of [:<^a2,a3^>,<^a1,a2^>:],<^a1,a3^>;
 
 theorem Th18:
-  for C being pseudo-functional (non empty AltCatStr)
-  for a1,a2,a3 being object of C st
-  <^a1,a2^> <> {} & <^a2,a3^> <> {} & <^a1,a3^> <> {}
-  for f being Morphism of a1,a2, g being Morphism of a2,a3,
-  f',g' being Function st f = f' & g = g' holds g*f =g'*f'
+  for C being pseudo-functional (non empty AltCatStr) for a1,a2,a3
+being object of C st <^a1,a2^> <> {} & <^a2,a3^> <> {} & <^a1,a3^> <> {} for f
+being Morphism of a1,a2, g being Morphism of a2,a3, f',g' being Function st f =
+  f' & g = g' holds g*f =g'*f'
 proof
   let C be pseudo-functional (non empty AltCatStr);
   let a1,a2,a3 be object of C such that
-A1: <^a1,a2^> <> {} & <^a2,a3^> <> {} & <^a1,a3^> <> {};
-A2: (the Comp of C).(a1,a2,a3)
-  = FuncComp(Funcs(a1,a2),Funcs(a2,a3))|([:<^a2,a3^>,<^a1,a2^>:] qua set)
-  by Def15;
-A3: dom(FuncComp(Funcs(a1,a2),Funcs(a2,a3))|([:<^a2,a3^>,<^a1,a2^>:] qua set))
-  c= dom(FuncComp(Funcs(a1,a2),Funcs(a2,a3))) by RELAT_1:89;
-  let f be Morphism of a1,a2, g be Morphism of a2,a3,
-  f',g' be Function such that
-A4: f = f' & g = g';
-A5: dom((the Comp of C).(a1,a2,a3)) = [:<^a2,a3^>,<^a1,a2^>:]
-  by A1,FUNCT_2:def 1;
-A6: [g,f] in [:<^a2,a3^>,<^a1,a2^>:] by A1,ZFMISC_1:106;
+A1: <^a1,a2^> <> {} & <^a2,a3^> <> {} and
+A2: <^a1,a3^> <> {};
+  let f be Morphism of a1,a2, g be Morphism of a2,a3, f',g' be Function such
+  that
+A3: f = f' & g = g';
+A4: [g,f] in [:<^a2,a3^>,<^a1,a2^>:] by A1,ZFMISC_1:106;
+A5: (the Comp of C).(a1,a2,a3) = FuncComp(Funcs(a1,a2),Funcs(a2,a3))|([:<^a2
+  ,a3^>,<^a1,a2^>:] qua set) by Def15;
+  dom(FuncComp(Funcs(a1,a2),Funcs(a2,a3))|([:<^a2,a3^>,<^a1,a2^>:] qua set
+)) c= dom(FuncComp(Funcs(a1,a2),Funcs(a2,a3))) & dom((the Comp of C).(a1,a2,a3)
+  ) = [:<^a2,a3^>,<^a1,a2^>:] by A2,FUNCT_2:def 1,RELAT_1:89;
   then consider f'',g'' being Function such that
-A7: [g,f] = [g'',f''] and
-A8: FuncComp(Funcs(a1,a2),Funcs(a2,a3)).[g,f] = g''*f'' by A2,A3,A5,Def11;
-A9: g = g'' & f = f'' by A7,ZFMISC_1:33;
+A6: [g,f] = [g'',f''] and
+A7: FuncComp(Funcs(a1,a2),Funcs(a2,a3)).[g,f] = g''*f'' by A5,A4,
+  Def11;
+A8: g = g'' & f = f'' by A6,ZFMISC_1:33;
   thus g*f = (the Comp of C).(a1,a2,a3).(g,f) by A1,Def10
-    .= g'*f' by A2,A4,A6,A8,A9,FUNCT_1:72;
+    .= g'*f' by A5,A3,A4,A7,A8,FUNCT_1:72;
 end;
 
 :: Kategorie EnsCat(A), Semadeni Wiweger 1.2.3, str. 15
@@ -709,21 +728,24 @@ end;
 definition
   let A be non empty set;
   func EnsCat A -> strict pseudo-functional (non empty AltCatStr) means
-  :Def16:
-  the carrier of it = A &
-  for a1,a2 being object of it holds <^a1,a2^> = Funcs(a1,a2);
+  :Def16
+  :
+  the carrier of it = A & for a1,a2 being object of it holds <^a1,a2^> = Funcs(
+  a1,a2);
   existence
   proof
-    consider M being ManySortedSet of [:A,A:] such that
-A1: for i,j st i in A & j in A holds M.(i,j) = Funcs(i,j) from MSSLambda2;
     deffunc F(set,set,set) = FuncComp(Funcs($1,$2),Funcs($2,$3));
+    consider M being ManySortedSet of [:A,A:] such that
+A1: for i,j st i in A & j in A holds M.(i,j) = Funcs(i,j) from
+    MSSLambda2;
     consider c being ManySortedSet of [:A,A,A:] such that
-A2: for i,j,k st i in A & j in A & k in A holds
-    c.(i,j,k) = F(i,j,k) from MSSLambda3;
+A2: for i,j,k st i in A & j in A & k in A holds c.(i,j,k) = F(i,j,k)
+    from MSSLambda3;
     c is Function-yielding
     proof
       let i;
-      assume i in dom c;
+      assume
+      i in dom c;
       then i in [:A,A,A:] by PARTFUN1:def 4;
       then consider x1,x2,x3 being set such that
 A3:   x1 in A & x2 in A & x3 in A and
@@ -735,54 +757,58 @@ A4:   i = [x1,x2,x3] by MCART_1:72;
     then reconsider c as ManySortedFunction of [:A,A,A:];
     now
       let i;
-      assume i in [:A,A,A:];
-      then consider x1,x2,x3 being set such that
-A5:   x1 in A & x2 in A & x3 in A and
-A6:   i = [x1,x2,x3] by MCART_1:72;
-A7:   M.(x1,x2) = Funcs(x1,x2) by A1,A5;
-A8:   M.(x2,x3) = Funcs(x2,x3) by A1,A5;
-A9:   M.(x1,x3) = Funcs(x1,x3) by A1,A5;
-A10:  c.i = c.(x1,x2,x3) by A6,MULTOP_1:def 1
-        .= FuncComp(Funcs(x1,x2),Funcs(x2,x3)) by A2,A5;
       reconsider ci = c.i as Function;
-A11:  dom ci = [:Funcs(x2,x3),Funcs(x1,x2):] by A10,PARTFUN1:def 4
-;
-A12:  [:Funcs(x2,x3),Funcs(x1,x2):] = {|M,M|}.(x1,x2,x3) by A5,A7,A8,Def6
-        .= {|M,M|}.i by A6,MULTOP_1:def 1;
-A13:  {|M|}.i = {|M|}.(x1,x2,x3) by A6,MULTOP_1:def 1
-        .= M.(x1,x3) by A5,Def5;
+      assume
+      i in [:A,A,A:];
+      then consider x1,x2,x3 being set such that
+A5:   x1 in A and
+A6:   x2 in A and
+A7:   x3 in A and
+A8:   i = [x1,x2,x3] by MCART_1:72;
+A9:   {|M|}.i = {|M|}.(x1,x2,x3) by A8,MULTOP_1:def 1
+        .= M.(x1,x3) by A5,A6,A7,Def5;
+A10:  c.i = c.(x1,x2,x3) by A8,MULTOP_1:def 1
+        .= FuncComp(Funcs(x1,x2),Funcs(x2,x3)) by A2,A5,A6,A7;
+      M.(x1,x2) = Funcs(x1,x2) & M.(x2,x3) = Funcs(x2,x3) by A1,A5,A6,
+      A7;
       then
-A14:  rng ci c= {|M|}.i by A9,A10,Th14;
-      now
-        assume {|M,M|}.i <> {};
+A11:  [:Funcs(x2,x3),Funcs(x1,x2):] = {|M,M|}.(x1,x2,x3) by A5,A6,A7,
+      Def6
+        .= {|M,M|}.i by A8,MULTOP_1:def 1;
+A12:  now
+        assume
+        {|M,M|}.i <> {};
         then consider j such that
-A15:    j in [:Funcs(x2,x3),Funcs(x1,x2):] by A12,XBOOLE_0:def 1;
+A13:    j in [:Funcs(x2,x3),Funcs(x1,x2):] by A11,XBOOLE_0:def 1;
         consider j1,j2 being set such that
-A16:    j1 in Funcs(x2,x3) and
-A17:    j2 in Funcs(x1,x2) and j = [j1,j2] by A15,ZFMISC_1:103;
-        reconsider j1 as Function of x2,x3 by A16,FUNCT_2:121;
-        reconsider j2 as Function of x1,x2 by A17,FUNCT_2:121;
-        j1*j2 in Funcs(x1,x3) by A16,A17,Th4;
-        hence {|M|}.i <> {} by A1,A5,A13;
+A14:    j1 in Funcs(x2,x3) and
+A15:    j2 in Funcs(x1,x2) and
+        j = [j1,j2] by A13,ZFMISC_1:103;
+        reconsider j2 as Function of x1,x2 by A15,FUNCT_2:121;
+        reconsider j1 as Function of x2,x3 by A14,FUNCT_2:121;
+        j1*j2 in Funcs(x1,x3) by A14,A15,Th4;
+        hence {|M|}.i <> {} by A1,A5,A7,A9;
       end;
-      hence c.i is Function of {|M,M|}.i, {|M|}.i by A11,A12,A14,FUNCT_2:def 1
-,RELSET_1:11;
+      M.(x1,x3) = Funcs(x1,x3) by A1,A5,A7;
+      then
+A16:  rng ci c= {|M|}.i by A10,A9,Th14;
+      dom ci = [:Funcs(x2,x3),Funcs(x1,x2):] by A10,PARTFUN1:def 4;
+      hence c.i is Function of {|M,M|}.i, {|M|}.i by A11,A16,A12, FUNCT_2:
+      def 1,RELSET_1:11;
     end;
     then reconsider c as BinComp of M by PBOOLE:def 18;
     set C = AltCatStr(#A,M,c#);
     C is pseudo-functional
     proof
       let o1,o2,o3 be object of C;
-A18:  <^o1,o2^> = Funcs(o1,o2) by A1;
-      <^o2,o3^> = Funcs(o2,o3) by A1;
+      <^o1,o2^> = Funcs(o1,o2) & <^o2,o3^> = Funcs(o2,o3) by A1;
       then
-A19:  dom FuncComp(Funcs(o1,o2),Funcs(o2,o3)) = [:<^o2,o3^>,<^o1,o2 ^> :]
-      by A18,PARTFUN1:def 4;
-      thus (the Comp of C).(o1,o2,o3)
-      = FuncComp(Funcs(o1,o2),Funcs(o2,o3)) by A2
-
-.= FuncComp(Funcs(o1,o2),Funcs(o2,o3))|([:<^o2,o3^>,<^o1,o2^>:] qua set)
-      by A19,RELAT_1:97;
+A17:  dom FuncComp(Funcs(o1,o2),Funcs(o2,o3)) = [:<^o2,o3^>,<^o1,o2 ^> :]
+      by PARTFUN1:def 4;
+      thus (the Comp of C).(o1,o2,o3) = FuncComp(Funcs(o1,o2),Funcs(o2,o3)) by
+      A2
+        .= FuncComp(Funcs(o1,o2),Funcs(o2,o3))|([:<^o2,o3^>,<^o1,o2^>:] qua
+      set) by A17,RELAT_1:97;
     end;
     then reconsider C as strict pseudo-functional (non empty AltCatStr);
     take C;
@@ -793,37 +819,34 @@ A19:  dom FuncComp(Funcs(o1,o2),Funcs(o2,o3)) = [:<^o2,o3^>,<^o1,o2 ^> :]
   uniqueness
   proof
     let C1,C2 be strict pseudo-functional (non empty AltCatStr) such that
-A20: the carrier of C1 = A and
-A21: for a1,a2 being object of C1 holds <^a1,a2^> = Funcs(a1,a2) and
-A22: the carrier of C2 = A and
-A23: for a1,a2 being object of C2 holds <^a1,a2^> = Funcs(a1,a2);
-A24: now
+A18: the carrier of C1 = A and
+A19: for a1,a2 being object of C1 holds <^a1,a2^> = Funcs(a1,a2) and
+A20: the carrier of C2 = A and
+A21: for a1,a2 being object of C2 holds <^a1,a2^> = Funcs(a1,a2);
+A22: now
       let i,j;
       assume
-A25:  i in A & j in A;
-      then reconsider a1 = i, a2 = j as object of C1 by A20;
-      reconsider b1 = i, b2 = j as object of C2 by A22,A25;
+A23:  i in A & j in A;
+      then reconsider a1 = i, a2 = j as object of C1 by A18;
+      reconsider b1 = i, b2 = j as object of C2 by A20,A23;
       thus (the Arrows of C1).(i,j) = <^a1,a2^>
-        .= Funcs(a1,a2) by A21
-        .= <^b1,b2^> by A23
+        .= Funcs(a1,a2) by A19
+        .= <^b1,b2^> by A21
         .= (the Arrows of C2).(i,j);
     end;
-    then
-A26: the Arrows of C1 = the Arrows of C2 by A20,A22,Th8;
-    now
+A24: now
       let i,j,k;
       assume
-A27:  i in A & j in A & k in A;
-      then reconsider a1 = i, a2 = j, a3 = k as object of C1 by A20;
-      reconsider b1 = i, b2 = j, b3 = k as object of C2 by A22,A27;
-A28:  <^a2,a3^> = <^b2,b3^> by A20,A24;
-      <^a1,a2^> = <^b1,b2^> by A20,A24;
-      hence (the Comp of C1).(i,j,k)
-      = FuncComp(Funcs(b1,b2),Funcs(b2,b3))|([:<^b2,b3^>,<^b1,b2^>:] qua set)
-      by A28,Def15
+A25:  i in A & j in A & k in A;
+      then reconsider a1 = i, a2 = j, a3 = k as object of C1 by A18;
+      reconsider b1 = i, b2 = j, b3 = k as object of C2 by A20,A25;
+      <^a2,a3^> = <^b2,b3^> & <^a1,a2^> = <^b1,b2^> by A18,A22;
+      hence (the Comp of C1).(i,j,k) = FuncComp(Funcs(b1,b2),Funcs(b2,b3))|([:
+      <^b2,b3^>,<^b1,b2^>:] qua set) by Def15
         .= (the Comp of C2).(i,j,k) by Def15;
     end;
-    hence thesis by A20,A22,A26,Th10;
+    the Arrows of C1 = the Arrows of C2 by A18,A20,A22,Th8;
+    hence thesis by A18,A20,A24,Th10;
   end;
 end;
 
@@ -834,22 +857,26 @@ definition
   the Comp of C is associative;
   attr C is with_units means
   :Def18:
-  the Comp of C is with_left_units with_right_units;
+  the Comp of C is with_left_units
+  with_right_units;
 end;
 
-Lm1: for A being non empty set
-holds EnsCat A is transitive associative with_units
+Lm1: for A being non empty set holds EnsCat A is transitive associative
+with_units
+
 proof
-  let A be non empty set; thus
+  let A be non empty set;
+  set G = the Arrows of EnsCat A, C = the Comp of EnsCat A;
+  thus
 A1: EnsCat A is transitive
   proof
     let o1,o2,o3 be object of EnsCat A;
-    assume <^o1,o2^> <> {} & <^o2,o3^> <> {};
+    assume
+    <^o1,o2^> <> {} & <^o2,o3^> <> {};
     then Funcs(o1,o2) <> {} & Funcs(o2,o3) <> {} by Def16;
     then Funcs(o1,o3) <> {} by Th5;
     hence thesis by Def16;
   end;
-  set G = the Arrows of EnsCat A, C = the Comp of EnsCat A;
   thus EnsCat A is associative
   proof
     let i,j,k,l be Element of EnsCat A;
@@ -858,65 +885,66 @@ A1: EnsCat A is transitive
 A2: f in G.(i,j) and
 A3: g in G.(j,k) and
 A4: h in G.(k,l);
-A5: G.(i,j) = <^i',j'^>;
-A6: <^i',j'^> = Funcs(i,j) by Def16;
-A7: <^j',k'^> = Funcs(j,k) by Def16;
-A8: G.(k,l) = <^k',l'^>;
-A9: <^k',l'^> = Funcs(k,l) by Def16;
-A10: <^j',k'^> <> {} by A3;
-    then
-A11: <^i',k'^> <> {} by A1,A2,A5,Def4;
-A12: <^j',l'^> <> {} by A1,A4,A8,A10,Def4;
-A13: <^i',l'^> <> {} by A1,A4,A8,A11,Def4;
-    reconsider f' = f, g' = g, h' = h as Function
-    by A2,A3,A4,A6,A7,A9;
-    reconsider f'' = f as Morphism of i',j' by A2;
-    reconsider g'' = g as Morphism of j',k' by A3;
     reconsider h'' = h as Morphism of k',l' by A4;
-A14: C.(i,j,k).(g,f) = g'' * f'' by A2,A3,Def10;
-A15: g'' * f'' = g' * f' by A2,A3,A11,Th18;
-A16: C.(j,k,l).(h,g) = h'' * g'' by A3,A4,Def10;
-A17: h'' * g'' = h' * g' by A3,A4,A12,Th18;
-    thus C.(i,k,l).(h,C.(i,j,k).(g,f)) = h''*(g''*f'') by A4,A11,A14,Def10
-      .= h'*(g'*f') by A4,A11,A13,A15,Th18
+    reconsider g'' = g as Morphism of j',k' by A3;
+A5: <^k',l'^> = Funcs(k,l) by Def16;
+    <^i',j'^> = Funcs(i,j) & <^j',k'^> = Funcs(j,k) by Def16;
+    then reconsider f' = f, g' = g, h' = h as Function by A2,A3,A4,A5;
+A6: G.(k,l) = <^k',l'^>;
+A7: <^j',k'^> <> {} by A3;
+    then
+A8: <^j',l'^> <> {} by A1,A4,A6,Def4;
+    then
+A9: h'' * g'' = h' * g' by A3,A4,Th18;
+    reconsider f'' = f as Morphism of i',j' by A2;
+    G.(i,j) = <^i',j'^>;
+    then
+A10: <^i',k'^> <> {} by A1,A2,A7,Def4;
+    then
+A11: g'' * f'' = g' * f' by A2,A3,Th18;
+A12: <^i',l'^> <> {} by A1,A4,A6,A10,Def4;
+A13: C.(j,k,l).(h,g) = h'' * g'' by A3,A4,Def10;
+    C.(i,j,k).(g,f) = g'' * f'' by A2,A3,Def10;
+    hence C.(i,k,l).(h,C.(i,j,k).(g,f)) = h''*(g''*f'') by A4,A10,Def10
+      .= h'*(g'*f') by A4,A10,A12,A11,Th18
       .= h'*g'*f' by RELAT_1:55
-      .= h''*g''*f'' by A2,A12,A13,A17,Th18
-      .= C.(i,j,l).(C.(j,k,l).(h,g),f) by A2,A12,A16,Def10;
+      .= h''*g''*f'' by A2,A8,A12,A9,Th18
+      .= C.(i,j,l).(C.(j,k,l).(h,g),f) by A2,A8,A13,Def10;
   end;
   thus the Comp of EnsCat A is with_left_units
   proof
     let i be Element of EnsCat A;
     reconsider i' = i as object of EnsCat A;
     take id i;
-A18: <^i',i'^> = Funcs(i,i) by Def16;
+A14: <^i',i'^> = Funcs(i,i) by Def16;
     hence id i in G.(i,i) by Th2;
+    reconsider I = id i as Morphism of i',i' by A14,Th2;
     let j be Element of EnsCat A, f be set;
     reconsider j' = j as object of EnsCat A;
     assume
-A19: f in G.(j,i);
+A15: f in G.(j,i);
+    then reconsider f'' = f as Morphism of j',i';
     <^j',i'^> = Funcs(j,i) by Def16;
-    then reconsider f' = f as Function of j,i by A19,FUNCT_2:121;
-    reconsider f'' = f as Morphism of j',i' by A19;
-    reconsider I = id i as Morphism of i',i' by A18,Th2;
-    thus C.(j,i,i).(id i,f) = I*f'' by A18,A19,Def10
-      .= (id i)*f' by A18,A19,Th18
+    then reconsider f' = f as Function of j,i by A15,FUNCT_2:121;
+    thus C.(j,i,i).(id i,f) = I*f'' by A14,A15,Def10
+      .= (id i)*f' by A14,A15,Th18
       .= f by FUNCT_2:23;
   end;
   let i be Element of EnsCat A;
   reconsider i' = i as object of EnsCat A;
   take id i;
-A20: <^i',i'^> = Funcs(i,i) by Def16;
+A16: <^i',i'^> = Funcs(i,i) by Def16;
   hence id i in G.(i,i) by Th2;
+  reconsider I = id i as Morphism of i',i' by A16,Th2;
   let j be Element of EnsCat A, f be set;
   reconsider j' = j as object of EnsCat A;
   assume
-A21: f in G.(i,j);
+A17: f in G.(i,j);
+  then reconsider f'' = f as Morphism of i',j';
   <^i',j'^> = Funcs(i,j) by Def16;
-  then reconsider f' = f as Function of i,j by A21,FUNCT_2:121;
-  reconsider f'' = f as Morphism of i',j' by A21;
-  reconsider I = id i as Morphism of i',i' by A20,Th2;
-  thus C.(i,i,j).(f,id i) = f''*I by A20,A21,Def10
-    .= f'*id i by A20,A21,Th18
+  then reconsider f' = f as Function of i,j by A17,FUNCT_2:121;
+  thus C.(i,i,j).(f,id i) = f''*I by A16,A17,Def10
+    .= f'*id i by A16,A17,Th18
     .= f by FUNCT_2:23;
 end;
 
@@ -924,7 +952,8 @@ registration
   cluster transitive associative with_units strict (non empty AltCatStr);
   existence
   proof
-    take EnsCat {{}}; thus thesis by Lm1;
+    take EnsCat {{}};
+    thus thesis by Lm1;
   end;
 end;
 
@@ -932,8 +961,8 @@ canceled;
 
 theorem
   for C being transitive non empty AltCatStr, a1,a2,a3 being object of C
-  holds dom((the Comp of C).(a1,a2,a3)) = [:<^a2,a3^>,<^a1,a2^>:]
-  & rng((the Comp of C).(a1,a2,a3)) c= <^a1,a3^>
+holds dom((the Comp of C).(a1,a2,a3)) = [:<^a2,a3^>,<^a1,a2^>:] & rng((the Comp
+  of C).(a1,a2,a3)) c= <^a1,a3^>
 proof
   let C be transitive non empty AltCatStr, a1,a2,a3 be object of C;
   <^a1,a3^> = {} implies <^a1,a2^> = {} or <^a2,a3^> = {} by Def4;
@@ -942,17 +971,17 @@ proof
 end;
 
 theorem Th21:
-  for C being with_units (non empty AltCatStr)
-  for o being object of C holds <^o,o^> <> {}
+  for C being with_units (non empty AltCatStr) for o being object
+  of C holds <^o,o^> <> {}
 proof
   let C be with_units (non empty AltCatStr);
   let o be object of C;
   the Comp of C is with_left_units by Def18;
-  then consider e being set such that
-A1: e in (the Arrows of C).(o,o) and for o' being Element of C, f be set
-  st f in (the Arrows of C).(o',o)
-  holds (the Comp of C).(o',o,o).(e,f) = f by Def9;
-  thus thesis by A1;
+  then
+  ex e being set st e in (the Arrows of C).(o,o) & for o' being Element of
+C, f be set st f in (the Arrows of C).(o',o) holds (the Comp of C).(o',o,o).(e,
+  f) = f by Def9;
+  hence thesis;
 end;
 
 registration
@@ -962,86 +991,86 @@ registration
 end;
 
 registration
-  cluster quasi-functional semi-functional transitive
-    -> pseudo-functional (non empty AltCatStr);
+  cluster quasi-functional semi-functional transitive -> pseudo-functional (
+    non empty AltCatStr);
   coherence
   proof
     let C be non empty AltCatStr;
     assume
 A1: C is quasi-functional semi-functional transitive;
     let o1,o2,o3 be object of C;
-    set c = (the Comp of C).(o1,o2,o3), f =
-    FuncComp(Funcs(o1,o2),Funcs(o2,o3))|([:<^o2,o3^>,<^o1,o2^>:] qua set);
+    set c = (the Comp of C).(o1,o2,o3), f = FuncComp(Funcs(o1,o2),Funcs(o2,o3)
+    )|([:<^o2,o3^>,<^o1,o2^>:] qua set);
     per cases;
-    suppose <^o2,o3^> = {} or <^o1,o2^> = {};
-      then
-A3:   [:<^o2,o3^>,<^o1,o2^>:] = {};
+    suppose
+A2:   <^o2,o3^> = {} or <^o1,o2^> = {};
       hence c = {}
-        .= f by A3;
+        .= f by A2;
     end;
     suppose
-A4:   <^o2,o3^> <> {} & <^o1,o2^> <> {};
+A3:   <^o2,o3^> <> {} & <^o1,o2^> <> {};
       then
-A5:   <^o1,o3^> <> {} by A1,Def4;
-      dom FuncComp(Funcs(o1,o2),Funcs(o2,o3)) = [:Funcs(o2,o3),Funcs(o1,o2 )
-      :] by PARTFUN1:def 4;
+A4:   <^o1,o3^> <> {} by A1,Def4;
       then
-A6:   dom f = [:Funcs(o2,o3),Funcs(o1,o2):] /\ [:<^o2,o3^>,<^o1,o2^> :]
-      by RELAT_1:90;
-A7:   <^o2,o3^> c= Funcs(o2,o3) & <^o1,o2^> c= Funcs(o1,o2) by A1,Def13;
-A8:   dom c = [:<^o2,o3^>,<^o1,o2^>:] by A5,FUNCT_2:def 1;
+A5:   dom c = [:<^o2,o3^>,<^o1,o2^>:] by FUNCT_2:def 1;
+A6:   <^o2,o3^> c= Funcs(o2,o3) & <^o1,o2^> c= Funcs(o1,o2) by A1,Def13;
+      dom FuncComp(Funcs(o1,o2),Funcs(o2,o3)) = [:Funcs(o2,o3),Funcs(o1,o2
+      ) :] by PARTFUN1:def 4;
       then
-A9:   dom c = dom f by A6,A7,XBOOLE_1:28,ZFMISC_1:119;
+      dom f = [:Funcs(o2,o3),Funcs(o1,o2):] /\ [:<^o2,o3^>,<^o1,o2^> :] by
+      RELAT_1:90;
+      then
+A7:   dom c = dom f by A6,A5,XBOOLE_1:28,ZFMISC_1:119;
       now
         let i;
         assume
-A10:    i in dom c;
+A8:     i in dom c;
         then consider i1,i2 being set such that
-A11:    i1 in <^o2,o3^> & i2 in <^o1,o2^> and
-A12:    i = [i1,i2] by A8,ZFMISC_1:103;
-        reconsider g = i1, h = i2 as Function by A7,A11;
-        reconsider a1 = i1 as Morphism of o2,o3 by A11;
-        reconsider a2 = i2 as Morphism of o1,o2 by A11;
-        thus c.i = (the Comp of C).(o1,o2,o3).(a1,a2) by A12
-          .= a1*a2 by A4,Def10
-          .= g*h by A1,A4,A5,Def14
-          .= FuncComp(Funcs(o1,o2),Funcs(o2,o3)).(g,h) by A7,A11,Th13
-          .= f.i by A9,A10,A12,FUNCT_1:70;
+A9:     i1 in <^o2,o3^> and
+A10:    i2 in <^o1,o2^> and
+A11:    i = [i1,i2] by A5,ZFMISC_1:103;
+        reconsider a2 = i2 as Morphism of o1,o2 by A10;
+        reconsider a1 = i1 as Morphism of o2,o3 by A9;
+        reconsider g = i1, h = i2 as Function by A6,A9,A10;
+        thus c.i = (the Comp of C).(o1,o2,o3).(a1,a2) by A11
+          .= a1*a2 by A3,Def10
+          .= g*h by A1,A3,A4,Def14
+          .= FuncComp(Funcs(o1,o2),Funcs(o2,o3)).(g,h) by A6,A9,A10,Th13
+          .= f.i by A7,A8,A11,FUNCT_1:70;
       end;
-      hence thesis
-      by A9,FUNCT_1:9;
+      hence thesis by A7,FUNCT_1:9;
     end;
   end;
-  cluster with_units pseudo-functional transitive
-    -> quasi-functional semi-functional (non empty AltCatStr);
+  cluster with_units pseudo-functional transitive -> quasi-functional
+    semi-functional (non empty AltCatStr);
   coherence
   proof
     let C be non empty AltCatStr such that
-A13: C is with_units pseudo-functional transitive;
+A12: C is with_units pseudo-functional transitive;
     thus C is quasi-functional
     proof
       let a1,a2 be object of C;
       per cases;
-      suppose <^a1,a2^> = {};
+      suppose
+        <^a1,a2^> = {};
         hence thesis by XBOOLE_1:2;
       end;
       suppose
-A14:    <^a1,a2^> <> {};
-        <^a1,a1^> <> {} by A13,Th21;
+A13:    <^a1,a2^> <> {};
+        set c = (the Comp of C).(a1,a1,a2), f = FuncComp(Funcs(a1,a1),Funcs(a1
+        ,a2));
+A14:    dom c = [:<^a1,a2^>,<^a1,a1^>:] by A13,FUNCT_2:def 1;
+        dom f = [:Funcs(a1,a2),Funcs(a1,a1):] & c = f|([:<^a1,a2^>,<^a1,
+        a1^>:] qua set) by A12,Def15,PARTFUN1:def 4;
         then
-A15:    [:<^a1,a2^>,<^a1,a1^>:] <> {} by A14;
-        set c = (the Comp of C).(a1,a1,a2),
-        f = FuncComp(Funcs(a1,a1),Funcs(a1,a2));
-A16:    dom c = [:<^a1,a2^>,<^a1,a1^>:] by A14,FUNCT_2:def 1;
-A17:    dom f = [:Funcs(a1,a2),Funcs(a1,a1):] by PARTFUN1:def 4;
-        c = f|([:<^a1,a2^>,<^a1,a1^>:] qua set) by A13,Def15;
-        then [:<^a1,a2^>,<^a1,a1^>:] c= [:Funcs(a1,a2),Funcs(a1,a1):]
-        by A16,A17,RELAT_1:89;
-        hence thesis by A15,ZFMISC_1:138;
+A15:    [:<^a1,a2^>,<^a1,a1^>:] c= [:Funcs(a1,a2),Funcs(a1,a1):] by A14,
+        RELAT_1:89;
+        <^a1,a1^> <> {} by A12,Th21;
+        hence thesis by A13,A15,ZFMISC_1:138;
       end;
     end;
     let a1,a2,a3 be object of C;
-    thus thesis by A13,Th18;
+    thus thesis by A12,Th18;
   end;
 end;
 
@@ -1058,16 +1087,15 @@ definition
   let o be object of C;
   func idm o -> Morphism of o,o means
   :Def19:
-  for o' being object of C st <^o,o'^> <> {}
-  for a being Morphism of o,o' holds a*it = a;
+  for o' being object of C st <^o,
+  o'^> <> {} for a being Morphism of o,o' holds a*it = a;
   existence
   proof
     the Comp of C is with_right_units by Def18;
     then consider e being set such that
 A1: e in (the Arrows of C).(o,o) and
-A2: for o' being Element of C, f be set st f in (the Arrows of C).(o,o')
-    holds (the Comp of C).(o,o,o').(f,e) = f by Def8
-    ; :: ??? dlaczego nie wystarczy R
+A2: for o' being Element of C, f be set st f in (the Arrows of C).(o,
+    o') holds (the Comp of C).(o,o,o').(f,e) = f by Def8;
     reconsider e as Morphism of o,o by A1;
     take e;
     let o' be object of C such that
@@ -1078,32 +1106,32 @@ A3: <^o,o'^> <> {};
   end;
   uniqueness
   proof
-    let a1,a2 be Morphism of o,o such that
-A4: for o' being object of C st <^o,o'^> <> {}
-    for a being Morphism of o,o' holds a*a1 = a and
-A5: for o' being object of C st <^o,o'^> <> {}
-    for a being Morphism of o,o' holds a*a2 = a;
     the Comp of C is with_left_units by Def18;
     then consider d being set such that
-A6: d in (the Arrows of C).(o,o) and
-A7: for o' being Element of C, f be set st f in (the Arrows of C).(o',o)
-    holds (the Comp of C).(o',o,o).(d,f) = f by Def9;
+A4: d in (the Arrows of C).(o,o) and
+A5: for o' being Element of C, f be set st f in (the Arrows of C).(o',
+    o) holds (the Comp of C).(o',o,o).(d,f) = f by Def9;
+    reconsider d as Morphism of o,o by A4;
+    let a1,a2 be Morphism of o,o such that
+A6: for o' being object of C st <^o,o'^> <> {} for a being Morphism of
+    o,o' holds a*a1 = a and
+A7: for o' being object of C st <^o,o'^> <> {} for a being Morphism of
+    o,o' holds a*a2 = a;
 A8: <^o,o^> <> {} by Th21;
-    reconsider d as Morphism of o,o by A6;
-    thus a1 = (the Comp of C).(o,o,o).(d,a1) by A7,A8
+    hence a1 = (the Comp of C).(o,o,o).(d,a1) by A5
       .= d*a1 by A8,Def10
-      .= d by A4,Th21
-      .= d*a2 by A5,Th21
+      .= d by A6,Th21
+      .= d*a2 by A7,Th21
       .= (the Comp of C).(o,o,o).(d,a2) by A8,Def10
-      .= a2 by A7,A8;
+      .= a2 by A5,A8;
   end;
 end;
 
 canceled;
 
 theorem Th23:
-  for C being with_units (non empty AltCatStr)
-  for o being object of C holds idm o in <^o,o^>
+  for C being with_units (non empty AltCatStr) for o being object
+  of C holds idm o in <^o,o^>
 proof
   let C be with_units (non empty AltCatStr);
   let o be object of C;
@@ -1112,35 +1140,32 @@ proof
 end;
 
 theorem
-  for C being with_units (non empty AltCatStr)
-  for o1,o2 being object of C st <^o1,o2^> <> {}
-  for a being Morphism of o1,o2 holds (idm o2)*a = a
+  for C being with_units (non empty AltCatStr) for o1,o2 being object of
+  C st <^o1,o2^> <> {} for a being Morphism of o1,o2 holds (idm o2)*a = a
 proof
   let C be with_units (non empty AltCatStr);
   let o1,o2 be object of C such that
 A1: <^o1,o2^> <> {};
+  let a be Morphism of o1,o2;
   the Comp of C is with_left_units by Def18;
   then consider d being set such that
 A2: d in (the Arrows of C).(o2,o2) and
-A3: for o' being Element of C, f be set st f in (the Arrows of C).(o',o2)
-  holds (the Comp of C).(o',o2,o2).(d,f) = f by Def9;
+A3: for o' being Element of C, f be set st f in (the Arrows of C).(o',o2
+  ) holds (the Comp of C).(o',o2,o2).(d,f) = f by Def9;
   reconsider d as Morphism of o2,o2 by A2;
   idm o2 in <^o2,o2^> by Th23;
-  then
-A4: d = d*idm o2 by Def19
+  then d = d*idm o2 by Def19
     .= (the Comp of C).(o2,o2,o2).(d,idm o2) by A2,Def10
     .= idm o2 by A3,Th23;
-  let a be Morphism of o1,o2;
-  thus (idm o2)*a = (the Comp of C).(o1,o2,o2).(d,a) by A1,A2,A4,Def10
+  hence (idm o2)*a = (the Comp of C).(o1,o2,o2).(d,a) by A1,A2,Def10
     .= a by A1,A3;
 end;
 
 theorem
-  for C being associative transitive (non empty AltCatStr)
-  for o1,o2,o3,o4 being object of C st
-  <^o1,o2^> <> {} & <^o2,o3^> <> {} & <^o3,o4^> <> {}
-  for a being Morphism of o1,o2,
-  b being Morphism of o2,o3, c being Morphism of o3,o4 holds c*(b*a) = (c*b)*a
+  for C being associative transitive (non empty AltCatStr) for o1,o2,o3,
+o4 being object of C st <^o1,o2^> <> {} & <^o2,o3^> <> {} & <^o3,o4^> <> {} for
+a being Morphism of o1,o2, b being Morphism of o2,o3, c being Morphism of o3,o4
+  holds c*(b*a) = (c*b)*a
 proof
   let C be associative transitive (non empty AltCatStr);
   let o1,o2,o3,o4 be object of C such that
@@ -1148,17 +1173,17 @@ A1: <^o1,o2^> <> {} and
 A2: <^o2,o3^> <> {} and
 A3: <^o3,o4^> <> {};
   let a be Morphism of o1,o2, b be Morphism of o2,o3, c be Morphism of o3,o4;
-A4: the Comp of C is associative by Def17;
-A5: <^o1,o3^> <> {} by A1,A2,Def4;
-A6: b*a = (the Comp of C).(o1,o2,o3).(b,a) by A1,A2,Def10;
-A7: <^o2,o4^> <> {} by A2,A3,Def4;
-A8: c*b = (the Comp of C).(o2,o3,o4).(c,b) by A2,A3,Def10;
-  thus c*(b*a)
-  = (the Comp of C).(o1,o3,o4).(c,(the Comp of C).(o1,o2,o3).(b,a))
-  by A3,A5,A6,Def10
-    .= (the Comp of C).(o1,o2,o4).((the Comp of C).(o2,o3,o4).(c,b),a)
-  by A1,A2,A3,A4,Def7
-    .= (c*b)*a by A1,A7,A8,Def10;
+A4: <^o2,o4^> <> {} & c*b = (the Comp of C).(o2,o3,o4).(c,b) by A2,A3,Def4,
+  Def10;
+A5: the Comp of C is associative by Def17;
+  <^o1,o3^> <> {} & b*a = (the Comp of C).(o1,o2,o3).(b,a) by A1,A2,Def4,
+  Def10;
+  hence
+  c*(b*a) = (the Comp of C).(o1,o3,o4).(c,(the Comp of C).(o1,o2,o3).(b,a
+  )) by A3,Def10
+    .= (the Comp of C).(o1,o2,o4).((the Comp of C).(o2,o3,o4).(c,b),a) by A1
+  ,A2,A3,A5,Def7
+    .= (c*b)*a by A1,A4,Def10;
 end;
 
 begin
@@ -1169,17 +1194,18 @@ definition
   let C be AltCatStr;
   attr C is quasi-discrete means
   :Def20:
-  for i,j being object of C st <^i,j^> <> {} holds i = j;
-
+  for i,j being object of C st <^i,j^>
+  <> {} holds i = j;
 :: to sa po prostu zbiory monoidow
   attr C is pseudo-discrete means
   :Def21:
-  for i being object of C holds <^i,i^> is trivial;
+  for i being object of C holds <^i,i
+  ^> is trivial;
 end;
 
 theorem
-  for C being with_units (non empty AltCatStr) holds C is pseudo-discrete iff
-  for o being object of C holds <^o,o^> = { idm o }
+  for C being with_units (non empty AltCatStr) holds C is
+  pseudo-discrete iff for o being object of C holds <^o,o^> = { idm o }
 proof
   let C be with_units (non empty AltCatStr);
   hereby
@@ -1189,23 +1215,22 @@ A1: C is pseudo-discrete;
     now
       let j;
       hereby
-        assume
-A2:     j in <^o,o^>;
-A3:     idm o in <^o,o^> by Th23;
-        <^o,o^> is trivial by A1,Def21;
+        idm o in <^o,o^> & <^o,o^> is trivial by A1,Def21,Th23;
         then consider i such that
-A4:     <^o,o^> = { i } by A3,REALSET1:def 4;
-        j = i & idm o = i by A2,A4,TARSKI:def 1;
-        hence j = idm o;
+A2:     <^o,o^> = { i } by REALSET1:def 4;
+        assume
+        j in <^o,o^>;
+        then j = i by A2,TARSKI:def 1;
+        hence j = idm o by A2,TARSKI:def 1;
       end;
       thus j = idm o implies j in <^o,o^> by Th23;
     end;
     hence <^o,o^> = { idm o } by TARSKI:def 1;
   end;
   assume
-A5: for o be object of C holds <^o,o^> = { idm o };
+A3: for o be object of C holds <^o,o^> = { idm o };
   let o be object of C;
-  <^o,o^> = { idm o } by A5;
+  <^o,o^> = { idm o } by A3;
   hence thesis;
 end;
 
@@ -1216,7 +1241,8 @@ registration
     let C be AltCatStr;
     assume
 A1: C is trivial non empty;
-    let i,j be object of C such that <^i,j^> <> {};
+    let i,j be object of C such that
+    <^i,j^> <> {};
     thus thesis by A1,STRUCT_0:def 10;
   end;
 end;
@@ -1231,8 +1257,8 @@ A1: the carrier of EnsCat 1 = { {} } by Def16,CARD_1:87;
     hence <^i,i^> is trivial by Def16,Th3;
   end;
   let o1,o2 be Element of EnsCat 1;
-  o1 = {} & o2 = {} by A1,TARSKI:def 1;
-  hence thesis;
+  o1 = {} by A1,TARSKI:def 1;
+  hence thesis by A1,TARSKI:def 1;
 end;
 
 registration
@@ -1256,16 +1282,18 @@ definition
   the carrier of it = A & for i being object of it holds <^i,i^> = { id i };
   existence
   proof
+    deffunc F(Element of A,set,set) = IFEQ($1,$2,IFEQ($2,$3,[id $1,id $1].-->
+    id $1,{}),{});
     deffunc F(Element of A,set) = IFEQ($1,$2,{ id $1 },{});
     consider M being ManySortedSet of [:A,A:] such that
 A1: for i,j being Element of A holds M.(i,j) = F(i,j) from MSSLambda2D;
-    deffunc F(Element of A,set,set) =
-    IFEQ($1,$2,IFEQ($2,$3,[id $1,id $1].-->id $1,{}),{});
     consider c being ManySortedSet of [:A,A,A:] such that
-A2: for i,j,k being Element of A holds c.(i,j,k) = F(i,j,k) from MSSLambda3D;
+A2: for i,j,k being Element of A holds c.(i,j,k) = F(i,j,k) from
+    MSSLambda3D;
 A3: now
       let i;
-      assume i in [:A,A,A:];
+      assume
+      i in [:A,A,A:];
       then consider i1,i2,i3 being set such that
 A4:   i1 in A & i2 in A & i3 in A and
 A5:   i = [i1,i2,i3] by MCART_1:72;
@@ -1274,55 +1302,55 @@ A5:   i = [i1,i2,i3] by MCART_1:72;
       suppose that
 A6:     i1 = i2 and
 A7:     i2 = i3;
-A8:     c.i = c.(i1,i2,i3) by A5,MULTOP_1:def 1
+A8:     M.(i1,i1) = IFEQ(i1,i1,{ id i1 },{}) by A1
+          .= {id i1} by FUNCOP_1:def 8;
+A9:     c.i = c.(i1,i2,i3) by A5,MULTOP_1:def 1
           .= IFEQ(i1,i2,IFEQ(i2,i3,[id i1,id i1].-->id i1,{}),{}) by A2
           .= IFEQ(i2,i3,[id i1,id i1].-->id i1,{}) by A6,FUNCOP_1:def 8
           .= [id i1,id i1].-->id i1 by A7,FUNCOP_1:def 8;
-A9:     M.(i1,i1) = IFEQ(i1,i1,{ id i1 },{}) by A1
-          .= {id i1} by FUNCOP_1:def 8;
-A10:    {|M,M|}.i = {|M,M|}.(i1,i1,i1) by A5,A6,A7,MULTOP_1:def 1
-          .= [:{id i1},{id i1}:] by A9,Def6
+A10:    {|M|}.i = {|M|}.(i1,i1,i1) by A5,A6,A7,MULTOP_1:def 1
+          .= {id i1} by A8,Def5;
+        {|M,M|}.i = {|M,M|}.(i1,i1,i1) by A5,A6,A7,MULTOP_1:def 1
+          .= [:{id i1},{id i1}:] by A8,Def6
           .= {[id i1,id i1]} by ZFMISC_1:35
           .= dom([id i1,id i1].-->id i1) by FUNCOP_1:19;
-A11:    {|M|}.i = {|M|}.(i1,i1,i1) by A5,A6,A7,MULTOP_1:def 1
-          .= {id i1} by A9,Def5;
-        thus c.i is Function of {|M,M|}.i, {|M|}.i
-        by A8,A10,A11,FUNCT_2:def 1;
+        hence c.i is Function of {|M,M|}.i, {|M|}.i by A9,A10,FUNCT_2:def 1;
       end;
       suppose
-A12:    i1 <> i2 or i2 <> i3;
-A13:    now per cases by A12;
+A11:    i1 <> i2 or i2 <> i3;
+A12:    now
+          per cases by A11;
           suppose
-A14:        i1 <> i2;
+A13:        i1 <> i2;
             thus c.i = c.(i1,i2,i3) by A5,MULTOP_1:def 1
               .= IFEQ(i1,i2,IFEQ(i2,i3,[id i1,id i1].-->id i1,{}),{}) by A2
-              .= {} by A14,FUNCOP_1:def 8;
+              .= {} by A13,FUNCOP_1:def 8;
           end;
           suppose that
-A15:        i1 = i2 and
-A16:        i2 <> i3;
+A14:        i1 = i2 and
+A15:        i2 <> i3;
             thus c.i = c.(i1,i2,i3) by A5,MULTOP_1:def 1
               .= IFEQ(i1,i2,IFEQ(i2,i3,[id i1,id i1].-->id i1,{}),{}) by A2
-              .= IFEQ(i2,i3,[id i1,id i1].-->id i1,{}) by A15,FUNCOP_1:def 8
-              .= {} by A16,FUNCOP_1:def 8;
+              .= IFEQ(i2,i3,[id i1,id i1].-->id i1,{}) by A14,FUNCOP_1:def 8
+              .= {} by A15,FUNCOP_1:def 8;
           end;
         end;
-A17:    M.(i1,i2) = IFEQ(i1,i2,{ id i1 },{}) by A1;
-        M.(i2,i3) = IFEQ(i2,i3,{ id i2 },{}) by A1;
+        M.(i1,i2) = IFEQ(i1,i2,{ id i1 },{}) & M.(i2,i3) = IFEQ(i2,i3,{
+        id i2 },{}) by A1;
         then
-A18:    M.(i1,i2) = {} or M.(i2,i3) = {} by A12,A17,FUNCOP_1:def 8;
-A19:    {|M,M|}.i = {|M,M|}.(i1,i2,i3) by A5,MULTOP_1:def 1
+A16:    M.(i1,i2) = {} or M.(i2,i3) = {} by A11,FUNCOP_1:def 8;
+        {|M,M|}.i = {|M,M|}.(i1,i2,i3) by A5,MULTOP_1:def 1
           .= [:M.(i2,i3),M.(i1,i2):] by Def6
-          .= {} by A18;
-        {} c= {|M|}.i by XBOOLE_1:2;
-        hence c.i is Function of {|M,M|}.i, {|M|}.i by A13,A19,FUNCT_2:def 1
-,RELAT_1:60,RELSET_1:11;
+          .= {} by A16;
+        hence c.i is Function of {|M,M|}.i, {|M|}.i by A12,FUNCT_2:def 1 ,
+        RELAT_1:60,XBOOLE_1:2;
       end;
     end;
     c is Function-yielding
     proof
       let i;
-      assume i in dom c;
+      assume
+      i in dom c;
       then i in [:A,A,A:] by PARTFUN1:def 4;
       hence thesis by A3;
     end;
@@ -1333,14 +1361,14 @@ A19:    {|M,M|}.i = {|M,M|}.(i1,i2,i3) by A5,MULTOP_1:def 1
     proof
       let o1,o2 be object of C;
       assume that
-A20:  <^o1,o2^> <> {} and
-A21:  o1 <> o2;
+A17:  <^o1,o2^> <> {} and
+A18:  o1 <> o2;
       <^o1,o2^> = IFEQ(o1,o2,{ id o1 },{}) by A1
-        .= {} by A21,FUNCOP_1:def 8;
-      hence contradiction by A20;
+        .= {} by A18,FUNCOP_1:def 8;
+      hence contradiction by A17;
     end;
-    then reconsider C = AltCatStr(#A,M,c#) as quasi-discrete strict
-    non empty AltCatStr;
+    then reconsider C = AltCatStr(#A,M,c#) as quasi-discrete strict non empty
+    AltCatStr;
     take C;
     thus the carrier of C = A;
     let i be object of C;
@@ -1350,72 +1378,65 @@ A21:  o1 <> o2;
   correctness
   proof
     let C1,C2 be quasi-discrete strict non empty AltCatStr such that
-A22: the carrier of C1 = A and
-A23: for i being object of C1 holds <^i,i^> = { id i } and
-A24: the carrier of C2 = A and
-A25: for i being object of C2 holds <^i,i^> = { id i };
-    now
-      let i,j be Element of A;
-      reconsider i1 = i as object of C1 by A22;
-      reconsider i2 = i as object of C2 by A24;
+A19: the carrier of C1 = A and
+A20: for i being object of C1 holds <^i,i^> = { id i } and
+A21: the carrier of C2 = A and
+A22: for i being object of C2 holds <^i,i^> = { id i };
+A23: now
+      let i,j,k;
+      assume that
+A24:  i in A and
+A25:  j in A & k in A;
+      reconsider i2 = i as object of C2 by A21,A24;
+      reconsider i1 = i as object of C1 by A19,A24;
       per cases;
       suppose
-A26:    i = j;
-        hence (the Arrows of C1).(i,j) = <^i1,i1^>
-          .= { id i } by A23
-          .= <^i2,i2^> by A25
-          .= (the Arrows of C2).(i,j) by A26;
+A26:    i = j & j = k;
+A27:    <^i2,i2^> = { id i2 } & (the Comp of C2).(i2,i2,i2) is Function
+        of [:<^i2,i2 ^>,<^i2,i2^>:],<^i2,i2^> by A22;
+        <^i1,i1^> = { id i1 } & (the Comp of C1).(i1,i1,i1) is Function
+        of [:<^i1,i1 ^>,<^i1,i1^>:],<^i1,i1^> by A20;
+        hence (the Comp of C1).(i,j,k) = (id i,id i) :->id i by A26,
+        FUNCOP_1:def 10
+          .= (the Comp of C2).(i,j,k) by A26,A27,FUNCOP_1:def 10;
       end;
       suppose
-A27:    i <> j;
-        reconsider j1 = j as object of C1 by A22;
-        reconsider j2 = j as object of C2 by A24;
+A28:    i <> j or j <> k;
+        reconsider j1 = j, k1 = k as object of C1 by A19,A25;
+A29:    <^i1,j1^> = {} or <^j1,k1^> = {} by A28,Def20;
+        reconsider j2 = j, k2 = k as object of C2 by A21,A25;
+A30:    (the Comp of C2).(i2,j2,k2) is Function of [:<^j2,k2^>,<^i2,j2^>
+:],<^i2,k2^> & (the Comp of C1).(i1,j1,k1) is Function of [:<^j1,k1^>,<^i1,j1^>
+        :],<^i1,k1^>;
+        <^i2,j2^> = {} or <^j2,k2^> = {} by A28,Def20;
+        hence (the Comp of C1).(i,j,k) = (the Comp of C2).(i,j,k) by A29,
+        A30;
+      end;
+    end;
+    now
+      let i,j be Element of A;
+      reconsider i2 = i as object of C2 by A21;
+      reconsider i1 = i as object of C1 by A19;
+      per cases;
+      suppose
+A31:    i = j;
+        hence (the Arrows of C1).(i,j) = <^i1,i1^>
+          .= { id i } by A20
+          .= <^i2,i2^> by A22
+          .= (the Arrows of C2).(i,j) by A31;
+      end;
+      suppose
+A32:    i <> j;
+        reconsider j2 = j as object of C2 by A21;
+        reconsider j1 = j as object of C1 by A19;
         thus (the Arrows of C1).(i,j) = <^i1,j1^>
-          .= {} by A27,Def20
-          .= <^i2,j2^> by A27,Def20
+          .= {} by A32,Def20
+          .= <^i2,j2^> by A32,Def20
           .= (the Arrows of C2).(i,j);
       end;
     end;
-    then
-A28: the Arrows of C1 = the Arrows of C2 by A22,A24,Th9;
-    now
-      let i,j,k;
-      assume
-A29:  i in A & j in A & k in A;
-      then reconsider i1 = i as object of C1 by A22;
-      reconsider i2 = i as object of C2 by A24,A29;
-      per cases;
-      suppose
-A30:    i = j & j = k;
-A31:    <^i2,i2^> = { id i2 } by A25;
-A32:    (the Comp of C2).(i2,i2,i2) is Function of
-        [:<^i2,i2^>,<^i2,i2^>:],<^i2,i2^>;
-A33:    <^i1,i1^> = { id i1 } by A23;
-        (the Comp of C1).(i1,i1,i1) is Function of
-        [:<^i1,i1^>,<^i1,i1^>:],<^i1,i1^>;
-        hence (the Comp of C1).(i,j,k)
-        = (id i,id i) :->id i by A30,A33,FUNCOP_1:def 10
-          .= (the Comp of C2).(i,j,k) by A30,A31,A32,FUNCOP_1:def 10;
-      end;
-      suppose
-A34:    i <> j or j <> k;
-        reconsider j1 = j, k1 = k as object of C1 by A22,A29;
-        reconsider j2 = j, k2 = k as object of C2 by A24,A29;
-        <^i2,j2^> = {} or <^j2,k2^> = {} by A34,Def20;
-        then
-A35:    [:<^j2,k2^>,<^i2,j2^>:] = {};
-A36:    (the Comp of C2).(i2,j2,k2) is Function of
-        [:<^j2,k2^>,<^i2,j2^>:],<^i2,k2^>;
-        <^i1,j1^> = {} or <^j1,k1^> = {} by A34,Def20;
-        then
-A37:    [:<^j1,k1^>,<^i1,j1^>:] = {};
-        (the Comp of C1).(i1,j1,k1) is Function of
-        [:<^j1,k1^>,<^i1,j1^>:],<^i1,k1^>;
-        hence (the Comp of C1).(i,j,k) = (the Comp of C2).(i,j,k)
-        by A35,A36,A37;
-      end;
-    end;
-    hence thesis by A22,A24,A28,Th10;
+    then the Arrows of C1 = the Arrows of C2 by A19,A21,Th9;
+    hence thesis by A19,A21,A23,Th10;
   end;
 end;
 
@@ -1427,7 +1448,8 @@ registration
     assume
 A1: C is quasi-discrete;
     let o1,o2,o3 be object of C;
-    assume <^o1,o2^> <> {} & <^o2,o3^> <> {};
+    assume
+    <^o1,o2^> <> {} & <^o2,o3^> <> {};
     hence thesis by A1,Def20;
   end;
 end;
@@ -1437,27 +1459,25 @@ theorem Th28:
   st o1 <> o2 or o2 <> o3 holds (the Comp of DiscrCat A).(o1,o2,o3) = {}
 proof
   let A be non empty set, o1,o2,o3 be object of DiscrCat A;
-  assume o1 <> o2 or o2 <> o3;
+  assume
+  o1 <> o2 or o2 <> o3;
   then <^o1,o2^> = {} or <^o2,o3^> = {} by Def20;
-  then
-A1: [:<^o2,o3^>,<^o1,o2^>:] = {};
-  thus thesis by A1;
+  hence thesis;
 end;
 
 theorem Th29:
-  for A being non empty set, o being object of DiscrCat A
-  holds (the Comp of DiscrCat A).(o,o,o) = (id o,id o) :-> id o
+  for A being non empty set, o being object of DiscrCat A holds (
+  the Comp of DiscrCat A).(o,o,o) = (id o,id o) :-> id o
 proof
   let A be non empty set, o be object of DiscrCat A;
   <^o,o^> = {id o} by Def22;
-  hence thesis
-  by FUNCOP_1:def 10;
+  hence thesis by FUNCOP_1:def 10;
 end;
 
 registration
   let A be non empty set;
-  cluster DiscrCat A ->
-    pseudo-functional pseudo-discrete with_units associative;
+  cluster DiscrCat A -> pseudo-functional pseudo-discrete with_units
+    associative;
   coherence
   proof
     set C = DiscrCat A;
@@ -1469,25 +1489,21 @@ A1:   id o1 in Funcs(o1,o1) by Th2;
       suppose
 A2:     o1 = o2 & o2 = o3;
         then
-A3:     <^o2,o3^> = {id o1} & <^o1,o2^> = {id o1} by Def22;
+A3:     <^o2,o3^> = {id o1} by Def22;
         then
-A4:     <^o1,o2^> c= Funcs(o1,o2) & <^o2,o3^> c= Funcs(o2,o3) by A1,A2,
-ZFMISC_1:37;
+A4:     <^o1,o2^> c= Funcs(o1,o2) by A1,A2,ZFMISC_1:37;
         thus (the Comp of C).(o1,o2,o3) = (id o1,id o1) :-> id o1 by A2,Th29
           .= FuncComp({id o1},{id o1}) by Th15
-
-.= FuncComp(Funcs(o1,o2),Funcs(o2,o3))|([:<^o2,o3^>,<^o1,o2^>:] qua set)
-        by A3,A4,Th16;
+          .= FuncComp(Funcs(o1,o2),Funcs(o2,o3))|([:<^o2,o3^>,<^o1,o2^>:]
+        qua set) by A2,A3,A4,Th16;
       end;
       suppose
 A5:     o1 <> o2 or o2 <> o3;
-        then <^o2,o3^> = {} or <^o1,o2^> = {} by Def20;
         then
-A6:     [:<^o2,o3^>,<^o1,o2^>:] = {};
+A6:     <^o2,o3^> = {} or <^o1,o2^> = {} by Def20;
         thus (the Comp of C).(o1,o2,o3) = {} by A5,Th28
-
-.= FuncComp(Funcs(o1,o2),Funcs(o2,o3))|([:<^o2,o3^>,<^o1,o2^>:] qua set)
-        by A6;
+          .= FuncComp(Funcs(o1,o2),Funcs(o2,o3))|([:<^o2,o3^>,<^o1,o2^>:]
+        qua set) by A6;
       end;
     end;
     thus C is pseudo-discrete
@@ -1515,8 +1531,8 @@ A9:     i' = j' by A7,Def20;
         then f in { id i'} by A7,A8,Def22;
         then
 A10:    f = id i' by TARSKI:def 1;
-        thus (the Comp of C).(i,j,j).(id j',f)
-        = ((id i',id i'):->id i').(id j',f) by A9,Th29
+        thus (the Comp of C).(i,j,j).(id j',f) = ((id i',id i'):->id i').(id
+        j',f) by A9,Th29
           .= f by A9,A10,Th12;
       end;
       let j be Element of C;
@@ -1534,27 +1550,37 @@ A13:  i' = j' by A11,Def20;
       then f in { id i'} by A11,A12,Def22;
       then
 A14:  f = id i' by TARSKI:def 1;
-      thus (the Comp of C).(j,j,i).(f,id j')
-      = ((id i',id i'):->id i').(f,id j') by A13,Th29
+      thus (the Comp of C).(j,j,i).(f,id j') = ((id i',id i'):->id i').(f,id
+      j') by A13,Th29
         .= f by A13,A14,Th12;
     end;
     thus C is associative
     proof
-      set G = the Arrows of C, c = the Comp of C;
       let i,j,k,l be Element of C;
+      set G = the Arrows of C, c = the Comp of C;
       reconsider i'=i, j'=j, k'=k, l'=l as object of C;
       let f,g,h be set;
-      assume
-A15:  f in G.(i,j) & g in G.(j,k) & h in G.(k,l);
-      then f in <^i',j'^> & g in <^j',k'^> & h in <^k',l'^>;
+      assume that
+A15:  f in G.(i,j) and
+A16:  g in G.(j,k) and
+A17:  h in G.(k,l);
+      f in <^i',j'^> by A15;
       then
-A16:  i' = j' & j' = k' & k' = l' by Def20;
-      <^i',i'^> = { id i' } by Def22;
+A18:  i' = j' by Def20;
+A19:  <^i',i'^> = { id i' } by Def22;
       then
-A17:  f = id i' & g = id i' & h = id i' by A15,A16,TARSKI:def 1;
-      c.(i',i',i') = (id i',id i') :-> id i' by Th29;
-      hence thesis
-      by A16,A17,Th12;
+A20:  f = id i' by A15,A18,TARSKI:def 1;
+      g in <^j',k'^> by A16;
+      then
+A21:  j' = k' by Def20;
+      then
+A22:  g = id i' by A16,A18,A19,TARSKI:def 1;
+A23:  c.(i',i',i') = (id i',id i') :-> id i' by Th29;
+      h in <^k',l'^> by A17;
+      then
+A24:  k' = l' by Def20;
+      then h = id i' by A17,A18,A21,A19,TARSKI:def 1;
+      hence thesis by A18,A21,A24,A20,A22,A23,Th12;
     end;
   end;
 end;

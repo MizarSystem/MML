@@ -9,28 +9,27 @@ environ
  vocabularies ORDERS_1, SETFAM_1, WAYBEL_0, SUBSET_1, BOOLE, PRE_TOPC, FUNCT_1,
       RELAT_1, TARSKI, CANTOR_1, WAYBEL_9, REALSET1, RELAT_2, NATTRA_1,
       FINSET_1, BHSP_3, LATTICES, FUNCOP_1, YELLOW_0, ORDINAL2, FUNCT_3,
-      SEQM_3, CAT_1, WELLORD1, OPPCAT_1, QUANTAL1, FUNCT_2, FRAENKEL, CONNSP_2,
-      TOPS_1, LATTICE3, BORSUK_1, PRELAMB, WAYBEL11, PROB_1, YELLOW_6,
-      YELLOW_9, RLVECT_3, ARYTM;
+      SEQM_3, CAT_1, WELLORD1, OPPCAT_1, QUANTAL1, FUNCT_2, CONNSP_2, TOPS_1,
+      LATTICE3, BORSUK_1, PRELAMB, WAYBEL11, PROB_1, YELLOW_6, YELLOW_9,
+      RLVECT_3, ARYTM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1,
-      FINSET_1, MCART_1, RELAT_2, RELSET_1, PARTFUN1, FUNCT_2,
-      NUMBERS, DOMAIN_1, FUNCOP_1, YELLOW_6, STRUCT_0, WELLORD1, ORDERS_2,
-      LATTICE3,
-      ORDERS_3, YELLOW_0, WAYBEL_0, TDLAT_3, PRE_TOPC, TOPS_1, TOPS_2,
-      CONNSP_2, YELLOW_7, WAYBEL_9, WAYBEL11, CANTOR_1, BORSUK_1;
+      FINSET_1, MCART_1, RELAT_2, RELSET_1, PARTFUN1, FUNCT_2, NUMBERS,
+      DOMAIN_1, STRUCT_0, WELLORD1, ORDERS_2, LATTICE3, ORDERS_3, YELLOW_0,
+      WAYBEL_0, TDLAT_3, PRE_TOPC, TOPS_1, TOPS_2, CONNSP_2, YELLOW_6,
+      YELLOW_7, WAYBEL_9, WAYBEL11, CANTOR_1, BORSUK_1;
  constructors SETFAM_1, TOLER_1, TOPS_1, TOPS_2, BORSUK_1, LATTICE3, TDLAT_3,
       CANTOR_1, ORDERS_3, WAYBEL11, RELSET_1;
- registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, FINSET_1, FRAENKEL,
-      STRUCT_0, BORSUK_1, LATTICE3, YELLOW_0, TDLAT_3, TEX_1, WAYBEL_0,
-      YELLOW_2, YELLOW_6, WAYBEL_9, WAYBEL11, RELSET_1, FUNCT_2;
+ registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, FINSET_1, STRUCT_0,
+      BORSUK_1, LATTICE3, YELLOW_0, TDLAT_3, TEX_1, WAYBEL_0, YELLOW_2,
+      YELLOW_6, WAYBEL_9, WAYBEL11, FUNCT_2;
  requirements BOOLE, SUBSET;
  definitions TARSKI, STRUCT_0, PRE_TOPC, CANTOR_1, ORDERS_2, YELLOW_0,
       WAYBEL_0, WAYBEL_1, TOPS_2, WAYBEL11, XBOOLE_0, WELLORD1;
- theorems STRUCT_0, SETFAM_1, FRAENKEL, ENUMSET1, PRE_TOPC, CANTOR_1, YELLOW_0,
-      WAYBEL_0, FUNCT_1, RELAT_1, FUNCT_2, TEX_1, ORDERS_2, ZFMISC_1, TARSKI,
-      FINSET_1, FUNCOP_1, RELSET_1, TDLAT_3, BORSUK_1, YELLOW_6, YELLOW_8,
-      TOPS_1, CONNSP_2, WAYBEL_9, WAYBEL11, TOPS_2, LATTICE3, ORDERS_1,
-      XBOOLE_0, XBOOLE_1, SUBSET_1;
+ theorems STRUCT_0, SETFAM_1, ENUMSET1, PRE_TOPC, CANTOR_1, YELLOW_0, WAYBEL_0,
+      FUNCT_1, RELAT_1, FUNCT_2, TEX_1, ORDERS_2, ZFMISC_1, TARSKI, FINSET_1,
+      FUNCOP_1, TDLAT_3, BORSUK_1, YELLOW_6, YELLOW_8, TOPS_1, CONNSP_2,
+      WAYBEL_9, WAYBEL11, TOPS_2, LATTICE3, ORDERS_1, XBOOLE_0, XBOOLE_1,
+      SUBSET_1;
  schemes FRAENKEL, WELLORD2;
 
 begin :: Subsets as nets
@@ -39,8 +38,7 @@ scheme FraenkelInvolution
   {A() -> non empty set, X,Y() -> Subset of A(), F(set) -> Element of A()}:
   X() = {F(a) where a is Element of A(): a in Y()}
 provided
-A1: Y() = {F(a) where a is Element of A(): a in X()}
-and
+A1: Y() = {F(a) where a is Element of A(): a in X()} and
 A2: for a being Element of A() holds F(F(a)) = a
 proof
   hereby
@@ -48,16 +46,17 @@ proof
     assume
 A3: x in X();
     then reconsider a = x as Element of A();
-    F(a) in Y() & F(F(a)) = a by A1,A2,A3;
-    hence x in {F(b) where b is Element of A(): b in Y()};
+A4: F(a) in Y() by A1,A3;
+    F(F(a)) = a by A2;
+    hence x in {F(b) where b is Element of A(): b in Y()} by A4;
   end;
   let x be set;
   assume x in {F(b) where b is Element of A(): b in Y()};
   then consider b being Element of A() such that
-A4: x = F(b) & b in Y();
-  consider a being Element of A() such that
-A5: b = F(a) & a in X() by A1,A4;
-  thus thesis by A2,A4,A5;
+A5: x = F(b) and
+A6: b in Y();
+  ex a being Element of A() st ( b = F(a))&( a in X()) by A1,A6;
+  hence thesis by A2,A5;
 end;
 
 scheme FraenkelComplement1
@@ -73,16 +72,17 @@ proof
 A2: x in COMPLEMENT X();
     then reconsider y = x as Subset of A();
     y` in X() by A2,SETFAM_1:def 8;
-    then consider b being Element of A() such that
-A3: y` = F(b) & b in Y() by A1;
-    x = y`` & F(b) = F(b)``;
+    then
+A3: ex b being Element of A() st ( y` = F(b))&( b in Y()) by A1;
+    x = y``;
     hence x in {F(a)` where a is Element of A(): a in Y()} by A3;
   end;
   let x be set;
   assume x in {F(a)` where a is Element of A(): a in Y()};
   then consider a being Element of A() such that
-A4: x = F(a)` & a in Y();
-  F(a) in X() by A1,A4;
+A4: x = F(a)` and
+A5: a in Y();
+  F(a) in X() by A1,A5;
   hence thesis by A4,YELLOW_8:14;
 end;
 
@@ -99,16 +99,17 @@ proof
 A2: x in COMPLEMENT X();
     then reconsider y = x as Subset of A();
     y` in X() by A2,SETFAM_1:def 8;
-    then consider b being Element of A() such that
-A3: y` = F(b)` & b in Y() by A1;
-    x = y`` & F(b) = F(b)``;
+    then
+A3: ex b being Element of A() st ( y` = F(b)`)&( b in Y()) by A1;
+    x = y``;
     hence x in {F(a) where a is Element of A(): a in Y()} by A3;
   end;
   let x be set;
   assume x in {F(a) where a is Element of A(): a in Y()};
   then consider a being Element of A() such that
-A4: x = F(a) & a in Y();
-  F(a)` in X() by A1,A4;
+A4: x = F(a) and
+A5: a in Y();
+  F(a)` in X() by A1,A5;
   hence thesis by A4,SETFAM_1:def 8;
 end;
 
@@ -130,25 +131,35 @@ proof
   set Y = {f()"(F(y)) where y is Subset of A(): P[y]};
   hereby
     let x be set;
-    assume x in f()"union X;
+    assume
+A1: x in f()"union X;
     then
-A1: x in dom f() & f().x in union X by FUNCT_1:def 13;
+A2: x in dom f() by FUNCT_1:def 13;
+    f().x in union X by A1,FUNCT_1:def 13;
     then consider y being set such that
-A2: f().x in y & y in X by TARSKI:def 4;
+A3: f().x in y and
+A4: y in X by TARSKI:def 4;
     consider a being Subset of A() such that
-A3: y = F(a) & P[a] by A2;
-    x in f()"F(a) & f()"F(a) in Y by A1,A2,A3,FUNCT_1:def 13;
-    hence x in union Y by TARSKI:def 4;
+A5: y = F(a) and
+A6: P[a] by A4;
+A7: x in f()"F(a) by A2,A3,A5,FUNCT_1:def 13;
+    f()"F(a) in Y by A6;
+    hence x in union Y by A7,TARSKI:def 4;
   end;
   let x be set;
   assume x in union Y;
   then consider y being set such that
-A4: x in y & y in Y by TARSKI:def 4;
+A8: x in y and
+A9: y in Y by TARSKI:def 4;
   consider a being Subset of A() such that
-A5: y = f()"F(a) & P[a] by A4;
-  f().x in F(a) & F(a) in X by A4,A5,FUNCT_1:def 13;
-  then f().x in union X & x in dom f() by A4,A5,FUNCT_1:def 13,TARSKI:def 4;
-  hence thesis by FUNCT_1:def 13;
+A10: y = f()"F(a) and
+A11: P[a] by A9;
+A12: f().x in F(a) by A8,A10,FUNCT_1:def 13;
+  F(a) in X by A11;
+  then
+A13: f().x in union X by A12,TARSKI:def 4;
+  x in dom f() by A8,A10,FUNCT_1:def 13;
+  hence thesis by A13,FUNCT_1:def 13;
 end;
 
 theorem Th2:
@@ -174,8 +185,9 @@ proof
     assume
 A1: x in COMPLEMENT F;
     then reconsider P = x as Subset of T;
-    P` in F & P`` = P by A1,SETFAM_1:def 8;
-    hence x in X;
+A2: P` in F by A1,SETFAM_1:def 8;
+    P`` = P;
+    hence x in X by A2;
   end;
   let x be set;
   assume x in X;
@@ -197,48 +209,56 @@ A2: downarrow F = {x where x is Element of R:
     let a be set;
     assume a in uparrow F;
     then consider x being Element of R such that
-A3: a = x & ex y being Element of R st x >= y & y in F by A1;
+A3: a = x and
+A4: ex y being Element of R st x >= y & y in F by A1;
     consider y being Element of R such that
-A4: x >= y & y in F by A3;
-    uparrow y in {uparrow z where z is Element of R: z in F} &
-    x in uparrow y by A4,WAYBEL_0:18;
+A5: x >= y and
+A6: y in F by A4;
+A7: uparrow y in {uparrow z where z is Element of R: z in F} by A6;
+    x in uparrow y by A5,WAYBEL_0:18;
     hence a in union {uparrow z where z is Element of R: z in F}
-    by A3,TARSKI:def 4;
+    by A3,A7,TARSKI:def 4;
   end;
   hereby
     let a be set;
     assume a in union {uparrow x where x is Element of R: x in F};
     then consider X being set such that
-A5: a in X & X in {uparrow x where x is Element of R: x in F} by TARSKI:def 4;
+A8: a in X and
+A9: X in {uparrow x where x is Element of R: x in F} by TARSKI:def 4;
     consider x being Element of R such that
-A6: X = uparrow x & x in F by A5;
-    reconsider y = a as Element of R by A5,A6;
-    y >= x by A5,A6,WAYBEL_0:18;
-    hence a in uparrow F by A1,A6;
+A10: X = uparrow x and
+A11: x in F by A9;
+    reconsider y = a as Element of R by A8,A10;
+    y >= x by A8,A10,WAYBEL_0:18;
+    hence a in uparrow F by A1,A11;
   end;
   hereby
     let a be set;
     assume a in downarrow F;
     then consider x being Element of R such that
-A7: a = x & ex y being Element of R st x <= y & y in F by A2;
+A12: a = x and
+A13: ex y being Element of R st x <= y & y in F by A2;
     consider y being Element of R such that
-A8: x <= y & y in F by A7;
-    downarrow y in {downarrow z where z is Element of R: z in F} &
-    x in downarrow y by A8,WAYBEL_0:17;
+A14: x <= y and
+A15: y in F by A13;
+A16: downarrow y in {downarrow z where z is Element of R: z in F} by A15;
+    x in downarrow y by A14,WAYBEL_0:17;
     hence a in union {downarrow z where z is Element of R: z in F}
-    by A7,TARSKI:def 4;
+    by A12,A16,TARSKI:def 4;
   end;
   hereby
     let a be set;
     assume a in union {downarrow x where x is Element of R: x in F};
     then consider X being set such that
-A9: a in X & X in {downarrow x where x is Element of R: x in
-    F} by TARSKI:def 4;
+A17: a in X and
+A18: X in {downarrow x where x is Element of R: x in F}
+    by TARSKI:def 4;
     consider x being Element of R such that
-A10: X = downarrow x & x in F by A9;
-    reconsider y = a as Element of R by A9,A10;
-    y <= x by A9,A10,WAYBEL_0:17;
-    hence a in downarrow F by A2,A10;
+A19: X = downarrow x and
+A20: x in F by A18;
+    reconsider y = a as Element of R by A17,A19;
+    y <= x by A17,A19,WAYBEL_0:17;
+    hence a in downarrow F by A2,A20;
   end;
 end;
 
@@ -283,26 +303,13 @@ A2: r = {[0,0]};
 end;
 
 registration
-  cluster strict trivial reflexive non empty discrete finite TopRelStr;
-  existence
-  proof
-    {{},{0}} = bool {0} & bool {0} c= bool {0} by ZFMISC_1:30;
-    then reconsider tau = {{},{0}} as Subset-Family of {0};
-    reconsider tau as Subset-Family of {0};
-    0 in {0} by TARSKI:def 1;
-    then reconsider r = {[0,0]} as Relation of {0} by RELSET_1:8;
-    take TopRelStr (#{0},r,tau#);
-    thus thesis by Lm1;
-  end;
-end;
-
-registration
   cluster strict complete trivial TopLattice;
   existence
   proof
     consider T being
     strict trivial reflexive non empty discrete finite TopRelStr;
-    take T; thus thesis;
+    take T;
+    thus thesis;
   end;
 end;
 
@@ -315,13 +322,13 @@ registration
     take f = S --> Top T;
     let A be Subset of S;
     assume ex_inf_of A,S;
-A1: f = (the carrier of S) --> Top T;
-    then rng f = {Top T} & f.:A c= rng f by FUNCOP_1:14,RELAT_1:144;
+A1: rng f = {Top T} by FUNCOP_1:14;
+    f.:A c= rng f by RELAT_1:144;
     then
-A2: f.:A = {} or f.:A = {Top T} by ZFMISC_1:39;
+A2: f.:A = {} or f.:A = {Top T} by A1,ZFMISC_1:39;
     hence ex_inf_of f.:A,T by YELLOW_0:38,43;
     thus inf (f.:A) = Top T by A2,YELLOW_0:39
-      .= f.inf A by A1,FUNCOP_1:13;
+      .= f.inf A by FUNCOP_1:13;
   end;
 end;
 
@@ -334,13 +341,13 @@ registration
     take f = S --> Bottom T;
     let A be Subset of S;
     assume ex_sup_of A,S;
-A1: f = (the carrier of S) --> Bottom T;
-    then rng f = {Bottom T} & f.:A c= rng f by FUNCOP_1:14,RELAT_1:144;
+A1: rng f = {Bottom T} by FUNCOP_1:14;
+    f.:A c= rng f by RELAT_1:144;
     then
-A2: f.:A = {} or f.:A = {Bottom T} by ZFMISC_1:39;
+A2: f.:A = {} or f.:A = {Bottom T} by A1,ZFMISC_1:39;
     hence ex_sup_of f.:A,T by YELLOW_0:38,42;
     thus sup (f.:A) = Bottom T by A2,YELLOW_0:39
-      .= f.sup A by A1,FUNCOP_1:13;
+      .= f.sup A by FUNCOP_1:13;
   end;
 end;
 
@@ -348,12 +355,12 @@ definition
   let R,S be 1-sorted;
   assume
 A1: the carrier of S c= the carrier of R;
-A2: dom id the carrier of S = the carrier of S &
-  rng id the carrier of S = the carrier of S by RELAT_1:71;
+A2: dom id the carrier of S = the carrier of S by RELAT_1:71;
+A3: rng id the carrier of S = the carrier of S by RELAT_1:71;
   func incl(S,R) -> Function of S,R equals
   : Def1:
   id the carrier of S;
-  coherence by A1,A2,FUNCT_2:4;
+  coherence by A1,A2,A3,FUNCT_2:4;
 end;
 
 registration
@@ -365,21 +372,22 @@ registration
     let x,y be Element of S;
     reconsider a = x, b = y as Element of R by YELLOW_0:59;
     the carrier of S c= the carrier of R by YELLOW_0:def 13;
-    then incl(S,R) = id the carrier of S by Def1;
-    then incl(S,R).x = a & incl(S,R).y = b by FUNCT_1:35;
-    hence thesis by YELLOW_0:60;
+    then
+A1: incl(S,R) = id the carrier of S by Def1;
+    then
+A2: incl(S,R).x = a by FUNCT_1:35;
+    incl(S,R).y = b by A1,FUNCT_1:35;
+    hence thesis by A2,YELLOW_0:60;
   end;
 end;
 
 definition
   let R be non empty RelStr, X be non empty Subset of R;
   func X+id -> strict non empty NetStr over R equals
-
   (incl(subrelstr X, R))* (
   ( subrelstr X)+id);
   coherence;
   func X opp+id -> strict non empty NetStr over R equals
-
   (incl(subrelstr X, R
   ) )*((subrelstr X)opp+id);
   coherence;
@@ -391,27 +399,26 @@ theorem
   for x being Element of X+id holds X+id.x = x
 proof
   let R be non empty RelStr, X be non empty Subset of R;
-A1: the RelStr of X+id = the RelStr of (subrelstr X)+id &
-  the mapping of X+id = incl(subrelstr X, R)*the mapping of (subrelstr X)+id
-  by WAYBEL_9:def 8;
-A2: the carrier of subrelstr X = X by YELLOW_0:def 15;
+A1: the RelStr of X+id = the RelStr of (subrelstr X)+id by WAYBEL_9:def 8;
+A2: the mapping of X+id = incl(subrelstr X, R)*the mapping of (subrelstr X)
+  +id by WAYBEL_9:def 8;
+A3: the carrier of subrelstr X = X by YELLOW_0:def 15;
   hence
-A3: the carrier of X+id = X by A1,WAYBEL_9:def 5;
-A4: the RelStr of (subrelstr X)+id = subrelstr X by WAYBEL_9:def 5;
+A4: the carrier of X+id = X by A1,WAYBEL_9:def 5;
+A5: the RelStr of (subrelstr X)+id = subrelstr X by WAYBEL_9:def 5;
   the InternalRel of subrelstr X c= the InternalRel of R by YELLOW_0:def 13;
-  then reconsider S = X+id as SubRelStr of R by A1,A2,A4,YELLOW_0:def 13;
-  S is full
-  proof
-    thus the InternalRel of S = (the InternalRel of R)|_2 the carrier of S
-    by A1,A4,YELLOW_0:def 14;
-  end;
-  hence X+id is full SubRelStr of R;
+  then reconsider S = X+id as SubRelStr of R by A1,A3,A5,YELLOW_0:def 13;
+  the InternalRel of S = (the InternalRel of R)|_2 the carrier of S
+  by A1,A5,YELLOW_0:def 14;
+  hence X+id is full SubRelStr of R by YELLOW_0:def 14;
   let x be Element of X+id;
   id subrelstr X = id X by YELLOW_0:def 15;
-  then the mapping of (subrelstr X)+id = id X & dom id X = X &
-  incl(subrelstr X, R) = id X by A2,Def1,RELAT_1:71,WAYBEL_9:def 5;
-  then the mapping of X+id = id X by A1,RELAT_1:78;
-  hence thesis by A3,FUNCT_1:35;
+  then
+A6: the mapping of (subrelstr X)+id = id X by WAYBEL_9:def 5;
+A7: dom id X = X by RELAT_1:71;
+  incl(subrelstr X, R) = id X by A3,Def1;
+  then the mapping of X+id = id X by A2,A6,A7,RELAT_1:78;
+  hence thesis by A4,FUNCT_1:35;
 end;
 
 theorem
@@ -420,40 +427,40 @@ theorem
   for x being Element of X opp+id holds X opp+id.x = x
 proof
   let R be non empty RelStr, X be non empty Subset of R;
-A1: the RelStr of X opp+id = the RelStr of (subrelstr X)opp+id &
-  the mapping of X opp+id
-  = incl(subrelstr X, R)*the mapping of (subrelstr X) opp+id
-  by WAYBEL_9:def 8;
-A2: the carrier of subrelstr X = X by YELLOW_0:def 15;
-A3: the carrier of (subrelstr X) opp+id = the carrier of subrelstr X &
-  the RelStr of (subrelstr X) opp+id = (subrelstr X) opp &
-  the InternalRel of (subrelstr X) opp+id = (the InternalRel of subrelstr X)~
-  by WAYBEL_9:11,def 6; thus
-  the carrier of X opp+id = X by A1,A2,WAYBEL_9:def 6;
-A4: R opp = RelStr(#the carrier of R, (the InternalRel of R)~#)
+A1: the RelStr of X opp+id = the RelStr of (subrelstr X)opp+id by
+  WAYBEL_9:def 8;
+A2: the mapping of X opp+id = incl(subrelstr X, R)*the mapping of (subrelstr
+  X) opp+id by WAYBEL_9:def 8;
+A3: the carrier of subrelstr X = X by YELLOW_0:def 15;
+A4: the carrier of (subrelstr X) opp+id = the carrier of subrelstr X by
+  WAYBEL_9:def 6;
+A5: the InternalRel of (subrelstr X) opp+id = (the InternalRel of subrelstr
+  X)~ by WAYBEL_9:def 6;
+  thus
+  the carrier of X opp+id = X by A1,A3,WAYBEL_9:def 6;
+A6: R opp = RelStr(#the carrier of R, (the InternalRel of R)~#)
   by LATTICE3:def 5;
   the InternalRel of subrelstr X = (the InternalRel of R)|_2 X
-  by A2,YELLOW_0:def 14;
+  by A3,YELLOW_0:def 14;
   then
-A5: the InternalRel of (subrelstr X)opp+id = (the InternalRel of R)~|_2 X
-  by A3,ORDERS_1:193;
+A7: the InternalRel of (subrelstr X)opp+id = (the InternalRel of R)~|_2 X
+  by A5,ORDERS_1:193;
   then the InternalRel of (subrelstr X)opp+id c= the InternalRel of R opp
-  by A4,XBOOLE_1:17;
-  then reconsider S = X opp+id as SubRelStr of R opp by A1,A2,A3,A4,
-YELLOW_0:def 13;
-  S is full
-  proof
-    thus the InternalRel of S
-    = (the InternalRel of R opp)|_2 the carrier of S by A1,A3,A4,A5,
-YELLOW_0:def 15;
-  end;
-  hence X opp+id is full SubRelStr of R opp;
+  by A6,XBOOLE_1:17;
+  then reconsider S = X opp+id as SubRelStr of R opp by A1,A3,A4,A6,
+  YELLOW_0:def 13;
+  the InternalRel of S
+  = (the InternalRel of R opp)|_2 the carrier of S by A1,A4,A6,A7,
+  YELLOW_0:def 15;
+  hence X opp+id is full SubRelStr of R opp by YELLOW_0:def 14;
   let x be Element of X opp+id;
   id subrelstr X = id X by YELLOW_0:def 15;
-  then the mapping of (subrelstr X)opp+id = id X & dom id X = X &
-  incl(subrelstr X, R) = id X by A2,Def1,RELAT_1:71,WAYBEL_9:def 6;
-  then the mapping of X opp+id = id X by A1,RELAT_1:78;
-  hence thesis by A1,A2,A3,FUNCT_1:35;
+  then
+A8: the mapping of (subrelstr X)opp+id = id X by WAYBEL_9:def 6;
+A9: dom id X = X by RELAT_1:71;
+  incl(subrelstr X, R) = id X by A3,Def1;
+  then the mapping of X opp+id = id X by A2,A8,A9,RELAT_1:78;
+  hence thesis by A1,A3,A4,FUNCT_1:35;
 end;
 
 registration
@@ -482,13 +489,17 @@ registration
   proof
     let x,y be Element of subrelstr I;
 A1: the carrier of subrelstr I = I by YELLOW_0:def 15;
-    assume
-A2: x in [#]subrelstr I & y in [#]subrelstr I;
-    then reconsider a = x, b = y as Element of R by A1;
+    assume that
+A2: x in [#]subrelstr I and
+A3: y in [#]subrelstr I;
+    reconsider a = x, b = y as Element of R by A1,A2,A3;
     consider c being Element of R such that
-A3: c in I & a <= c & b <= c by A1,A2,WAYBEL_0:def 1;
-    reconsider z = c as Element of subrelstr I by A3,YELLOW_0:def 15;
-    take z; thus thesis by A2,A3,YELLOW_0:61;
+A4: c in I and
+A5: a <= c and
+A6: b <= c by A1,A2,WAYBEL_0:def 1;
+    reconsider z = c as Element of subrelstr I by A4,YELLOW_0:def 15;
+    take z;
+    thus thesis by A2,A5,A6,YELLOW_0:61;
   end;
 end;
 
@@ -509,19 +520,27 @@ registration
     let x,y be Element of (subrelstr I)opp+id;
 A1: the carrier of subrelstr I = I by YELLOW_0:def 15;
 A2: the carrier of A = the carrier of subrelstr F by WAYBEL_9:def 6;
-    assume x in [#]A & y in [#]A;
-    then reconsider a = x, b = y as Element of R by A1,A2;
-A3: the RelStr of A = the RelStr of (subrelstr F) opp by WAYBEL_9:11;
+    assume that
+A3: x in [#]A and
+A4: y in [#]A;
+    reconsider a = x, b = y as Element of R by A1,A2,A3,A4;
+A5: the RelStr of A = the RelStr of (subrelstr F) opp by WAYBEL_9:11;
     consider c being Element of R such that
-A4: c in I & a >= c & b >= c by A1,A2,WAYBEL_0:def 2;
+A6: c in I and
+A7: a >= c and
+A8: b >= c by A1,A2,WAYBEL_0:def 2;
     reconsider a1 = x, b1 = y, c1 = c as Element of subrelstr F
-    by A4,WAYBEL_9:def 6,YELLOW_0:def 15;
-    reconsider z = c as Element of A by A2,A4,YELLOW_0:def 15;
+    by A6,WAYBEL_9:def 6,YELLOW_0:def 15;
+    reconsider z = c as Element of A by A2,A6,YELLOW_0:def 15;
     take z;
-A5: a1~ = a1 & b1~ = b1 & c1~ = c1 by LATTICE3:def 6;
-    a1 >= c1 & b1 >= c1 by A4,YELLOW_0:61;
-    then a1~ <= c1~ & b1~ <= c1~ by LATTICE3:9;
-    hence thesis by A3,A5,YELLOW_0:1;
+A9: a1~ = a1 by LATTICE3:def 6;
+A10: b1~ = b1 by LATTICE3:def 6;
+A11: c1~ = c1 by LATTICE3:def 6;
+A12: a1 >= c1 by A7,YELLOW_0:61;
+A13: b1 >= c1 by A8,YELLOW_0:61;
+A14: a1~ <= c1~ by A12,LATTICE3:9;
+    b1~ <= c1~ by A13,LATTICE3:9;
+    hence thesis by A5,A9,A10,A11,A14,YELLOW_0:1;
   end;
 end;
 
@@ -539,10 +558,10 @@ theorem Th8:
 proof
   let T1 be TopSpace;
   assume T1 is empty;
-  then the carrier of T1 = {};
-  then the topology of T1 c= {{}} & {} in the topology of T1
-  by PRE_TOPC:def 1,ZFMISC_1:1;
-  hence thesis by ZFMISC_1:39;
+  then
+A1: the carrier of T1 = {};
+  then {} in the topology of T1 by PRE_TOPC:def 1;
+  hence thesis by A1,ZFMISC_1:1,39;
 end;
 
 theorem Th9:
@@ -554,16 +573,14 @@ proof
   thus the topology of T c= bool the carrier of T;
   consider x being Point of T such that
 A1: the carrier of T = {x} by TEX_1:def 1;
-  {} in the topology of T & the carrier of T in the topology of T
-  by PRE_TOPC:5,def 1;
-  then
-A2: {{},the carrier of T} c= the topology of T & bool {x} = {{},{x}}
-  by ZFMISC_1:30,38;
-  hence bool the carrier of T c= the topology of T by A1;
+A2: {} in the topology of T by PRE_TOPC:5;
+A3: the carrier of T in the topology of T by PRE_TOPC:def 1;
+A4: bool {x} = {{},{x}} by ZFMISC_1:30;
+  hence bool the carrier of T c= the topology of T by A1,A2,A3,ZFMISC_1:38;
   let a be Point of T;
   a = x by STRUCT_0:def 10;
   hence the carrier of T = {a} & the topology of T c= {{},{a}} &
-  {{},{a}} c= the topology of T by A1,A2;
+  {{},{a}} c= the topology of T by A1,A2,A3,A4,ZFMISC_1:38;
 end;
 
 theorem
@@ -574,14 +591,14 @@ proof
   let T be trivial non empty TopSpace;
   set BB = {the carrier of T};
 A1: the carrier of T c= the carrier of T;
-  then
-A2: the topology of T = bool the carrier of T &
-  the carrier of T in bool the carrier of T by Th9;
+A2: the topology of T = bool the carrier of T by Th9;
   reconsider BB as Subset-Family of T by A1,ZFMISC_1:37;
   consider x being Element of T;
-A3: the topology of T = {{}, {x}} & the carrier of T = {x} by Th9;
-A4: {} c= bool the carrier of T & {} c= BB & {}
-  c= the carrier of T by XBOOLE_1:2;
+A3: the topology of T = {{}, {x}} by Th9;
+A4: the carrier of T = {x} by Th9;
+A5: {} c= bool the carrier of T by XBOOLE_1:2;
+A6: {} c= BB by XBOOLE_1:2;
+A7: {} c= the carrier of T by XBOOLE_1:2;
   reconsider C = {} as Subset-Family of T by XBOOLE_1:2;
   the topology of T c= UniCl BB
   proof
@@ -589,11 +606,11 @@ A4: {} c= bool the carrier of T & {} c= BB & {}
     assume a in the topology of T;
     then a = {x} & union {{x}} = {x} & BB c= BB & BB c= bool the carrier of
     T or a = {} by A3,TARSKI:def 2,ZFMISC_1:31;
-    hence thesis by A3,A4,CANTOR_1:def 1,ZFMISC_1:2;
+    hence thesis by A4,A5,A6,A7,CANTOR_1:def 1,ZFMISC_1:2;
   end;
   hence
-A5: {the carrier of T} is Basis of T by A2,CANTOR_1:def 2;
-A6: {} c= the topology of T & C c= C & C is finite by XBOOLE_1:2;
+A8: {the carrier of T} is Basis of T by A2,CANTOR_1:def 2;
+A9: {} c= the topology of T by XBOOLE_1:2;
   BB c= FinMeetCl C
   proof
     let x be set;
@@ -602,19 +619,21 @@ A6: {} c= the topology of T & C c= C & C is finite by XBOOLE_1:2;
     then Intersect C = x by SETFAM_1:def 10;
     hence thesis by CANTOR_1:def 4;
   end;
-  hence {} is prebasis of T by A5,A6,CANTOR_1:def 5;
+  hence {} is prebasis of T by A8,A9,CANTOR_1:def 5;
   {} c= the carrier of T by XBOOLE_1:2;
   then reconsider D = {{}} as Subset-Family of T by ZFMISC_1:37;
-A7: D c= the topology of T by A3,ZFMISC_1:12;
+A10: D c= the topology of T by A3,ZFMISC_1:12;
   BB c= FinMeetCl D
   proof
     let x be set;
     assume x in BB;
-    then x = the carrier of T & Intersect C = the carrier of T &
-    C c= D by SETFAM_1:def 10,TARSKI:def 1,XBOOLE_1:2;
-    hence thesis by CANTOR_1:def 4;
+    then
+A11: x = the carrier of T by TARSKI:def 1;
+A12: Intersect C = the carrier of T by SETFAM_1:def 10;
+    C c= D by XBOOLE_1:2;
+    hence thesis by A11,A12,CANTOR_1:def 4;
   end;
-  hence thesis by A5,A7,CANTOR_1:def 5;
+  hence thesis by A8,A10,CANTOR_1:def 5;
 end;
 
 theorem Th11:
@@ -628,9 +647,11 @@ A1: A = {Z};
     let x be set;
     assume x in FinMeetCl A;
     then consider Y being Subset-Family of X such that
-A2: Y c= A & Y is finite & x = Intersect Y by CANTOR_1:def 4;
+A2: Y c= A
+    and Y is finite and
+A3: x = Intersect Y by CANTOR_1:def 4;
     Y = {} or Y = {Z} by A1,A2,ZFMISC_1:39;
-    then x = X or x = meet {Z} by A2,SETFAM_1:def 10;
+    then x = X or x = meet {Z} by A3,SETFAM_1:def 10;
     then x = X or x = Z by SETFAM_1:11;
     hence thesis by TARSKI:def 2;
   end;
@@ -649,16 +670,17 @@ A2: Y c= A & Y is finite & x = Intersect Y by CANTOR_1:def 4;
     let x be set;
     assume x in UniCl A;
     then consider Y being Subset-Family of X such that
-A3: Y c= A & x = union Y by CANTOR_1:def 1;
-    Y = {} or Y = {Z} by A1,A3,ZFMISC_1:39;
-    then x = {} or x = Z by A3,ZFMISC_1:2,31;
+A4: Y c= A and
+A5: x = union Y by CANTOR_1:def 1;
+    Y = {} or Y = {Z} by A1,A4,ZFMISC_1:39;
+    then x = {} or x = Z by A5,ZFMISC_1:2,31;
     hence x in {Z,{}} by TARSKI:def 2;
   end;
   let x be set;
   assume x in {Z,{}};
   then x = {} or x = Z by TARSKI:def 2;
-  then x = union E & E c= A or x = union A & A c= A by A1,XBOOLE_1:2,ZFMISC_1:2
-,31;
+  then x = union E & E c= A or x = union A & A c= A by A1,XBOOLE_1:2
+  ,ZFMISC_1:2,31;
   hence thesis by CANTOR_1:def 1;
 end;
 
@@ -702,14 +724,17 @@ proof
   assume
 A1: A = B \/ {X} or B = A \ {X};
   X in FinMeetCl B by CANTOR_1:8;
-  then {X} c= FinMeetCl B & B c= FinMeetCl B & (A \ {X}) \/ {X} = A \/ {X}
-  by CANTOR_1:4,XBOOLE_1:39,ZFMISC_1:37;
-  then A c= B \/ {X} & B \/ {X} c= FinMeetCl B by A1,XBOOLE_1:7,8;
-  then A c= FinMeetCl B by XBOOLE_1:1;
+  then
+A2: {X} c= FinMeetCl B by ZFMISC_1:37;
+A3: B c= FinMeetCl B by CANTOR_1:4;
+  (A \ {X}) \/ {X} = A \/ {X} by XBOOLE_1:39;
+  then
+A4: A c= B \/ {X} by A1,XBOOLE_1:7;
+  B \/ {X} c= FinMeetCl B by A2,A3,XBOOLE_1:8;
+  then A c= FinMeetCl B by A4,XBOOLE_1:1;
   then FinMeetCl A c= FinMeetCl FinMeetCl B by CANTOR_1:16;
   hence FinMeetCl A c= FinMeetCl B by CANTOR_1:13;
-  B c= A by A1,XBOOLE_1:7,36;
-  hence thesis by CANTOR_1:16;
+  thus thesis by A1,CANTOR_1:16,XBOOLE_1:7,36;
 end;
 
 theorem Th14:
@@ -730,16 +755,18 @@ A3: Intersect Z = meet Z by SETFAM_1:def 10
   hereby
     assume x in FinMeetCl A;
     then consider Y being Subset-Family of X such that
-A4: Y c= A & Y is finite & x = Intersect Y by CANTOR_1:def 4;
+A4: Y c= A and
+A5: Y is finite and
+A6: x = Intersect Y by CANTOR_1:def 4;
     per cases;
     suppose Y = {};
-      then x = X by A4,SETFAM_1:def 10;
+      then x = X by A6,SETFAM_1:def 10;
       hence ex Y being finite non empty Subset-Family of X st
       Y c= A & x = Intersect Y by A2,A3;
     end;
     suppose Y <> {};
       hence ex Y being finite non empty Subset-Family of X st
-      Y c= A & x = Intersect Y by A4;
+      Y c= A & x = Intersect Y by A4,A5,A6;
     end;
   end;
   thus thesis by CANTOR_1:def 4;
@@ -753,7 +780,8 @@ proof
     let x be set;
     assume x in UniCl UniCl A;
     then consider Y being Subset-Family of X such that
-A1: Y c= UniCl A & x = union Y by CANTOR_1:def 1;
+A1: Y c= UniCl A and
+A2: x = union Y by CANTOR_1:def 1;
     set Z = {y where y is Subset of X: y in A & y c= x};
     Z c= bool X
     proof
@@ -763,29 +791,34 @@ A1: Y c= UniCl A & x = union Y by CANTOR_1:def 1;
       hence thesis;
     end;
     then reconsider Z as Subset-Family of X;
-A2: x = union Z
+A3: x = union Z
     proof
       hereby
         let a be set;
         assume a in x;
         then consider s being set such that
-A3:     a in s & s in Y by A1,TARSKI:def 4;
+A4:     a in s and
+A5:     s in Y by A2,TARSKI:def 4;
         consider t being Subset-Family of X such that
-A4:     t c= A & s = union t by A1,A3,CANTOR_1:def 1;
+A6:     t c= A and
+A7:     s = union t by A1,A5,CANTOR_1:def 1;
         consider u being set such that
-A5:     a in u & u in t by A3,A4,TARSKI:def 4;
-        reconsider u as Subset of X by A5;
-        u c= s & s c= x by A1,A3,A4,A5,ZFMISC_1:92;
-        then u c= x by XBOOLE_1:1;
-        then u in Z by A4,A5;
-        hence a in union Z by A5,TARSKI:def 4;
+A8:     a in u and
+A9:     u in t by A4,A7,TARSKI:def 4;
+        reconsider u as Subset of X by A9;
+A10:    u c= s by A7,A9,ZFMISC_1:92;
+        s c= x by A2,A5,ZFMISC_1:92;
+        then u c= x by A10,XBOOLE_1:1;
+        then u in Z by A6,A9;
+        hence a in union Z by A8,TARSKI:def 4;
       end;
       let a be set;
       assume a in union Z;
       then consider u being set such that
-A6:   a in u & u in Z by TARSKI:def 4;
-      ex y being Subset of X st u = y & y in A & y c= x by A6;
-      hence thesis by A6;
+A11:  a in u and
+A12:  u in Z by TARSKI:def 4;
+      ex y being Subset of X st u = y & y in A & y c= x by A12;
+      hence thesis by A11;
     end;
     Z c= A
     proof
@@ -794,7 +827,7 @@ A6:   a in u & u in Z by TARSKI:def 4;
       then ex y being Subset of X st a = y & y in A & y c= x;
       hence thesis;
     end;
-    hence x in UniCl A by A2,CANTOR_1:def 1;
+    hence x in UniCl A by A3,CANTOR_1:def 1;
   end;
   thus thesis by CANTOR_1:1;
 end;
@@ -807,15 +840,18 @@ proof
     let x be set;
     assume x in UniCl A;
     then consider B being Subset-Family of X such that
-A1: B c= A & x = union B by CANTOR_1:def 1;
+A1: B c= A and
+A2: x = union B by CANTOR_1:def 1;
     B = {} by A1;
-    hence x in {{}} by A1,TARSKI:def 1,ZFMISC_1:2;
+    hence x in {{}} by A2,TARSKI:def 1,ZFMISC_1:2;
   end;
   consider B being empty Subset-Family of X;
   let x be set;
   assume x in {{}};
-  then x = {} & B c= A & union B = {} by TARSKI:def 1,ZFMISC_1:2;
-  hence thesis by CANTOR_1:def 1;
+  then
+A3: x = {} by TARSKI:def 1;
+  union B = {} by ZFMISC_1:2;
+  hence thesis by A3,CANTOR_1:def 1;
 end;
 
 theorem Th17:
@@ -826,16 +862,20 @@ proof
     let x be set;
     assume x in FinMeetCl A;
     then consider B being Subset-Family of X such that
-A1: B c= A & B is finite & x = Intersect B by CANTOR_1:def 4;
+A1: B c= A
+    and B is finite and
+A2: x = Intersect B by CANTOR_1:def 4;
     B = {} by A1;
-    then x = X by A1,SETFAM_1:def 10;
+    then x = X by A2,SETFAM_1:def 10;
     hence x in {X} by TARSKI:def 1;
   end;
   consider B being empty Subset-Family of X;
   let x be set;
   assume x in {X};
-  then x = X & B c= A & Intersect B = X by SETFAM_1:def 10,TARSKI:def 1;
-  hence thesis by CANTOR_1:def 4;
+  then
+A3: x = X by TARSKI:def 1;
+  Intersect B = X by SETFAM_1:def 10;
+  hence thesis by A3,CANTOR_1:def 4;
 end;
 
 theorem Th18:
@@ -848,9 +888,11 @@ A1: A = {{},X};
     let a be set;
     assume a in UniCl A;
     then consider y being Subset-Family of X such that
-A2: y c= A & a = union y by CANTOR_1:def 1;
+A2: y c= A and
+A3: a = union y by CANTOR_1:def 1;
     y = {} or y = {{}} or y = {X} or y = {{},X} by A1,A2,ZFMISC_1:42;
-    then a = {} or a = X or a = {} \/ X & {} \/ X = X by A2,ZFMISC_1:2,31,93;
+    then a = {} or a = X or a = {} \/ X & {} \/ X = X by A3,
+    ZFMISC_1:2,31,93;
     hence a in A by A1,TARSKI:def 2;
   end;
   thus A c= UniCl A by CANTOR_1:1;
@@ -858,10 +900,12 @@ A2: y c= A & a = union y by CANTOR_1:def 1;
     let a be set;
     assume a in FinMeetCl A;
     then consider y being Subset-Family of X such that
-A3: y c= A & y is finite & a = Intersect y by CANTOR_1:def 4;
-    y = {} or y = {{}} or y = {X} or y = {{},X} by A1,A3,ZFMISC_1:42;
+A4: y c= A
+    and y is finite and
+A5: a = Intersect y by CANTOR_1:def 4;
+    y = {} or y = {{}} or y = {X} or y = {{},X} by A1,A4,ZFMISC_1:42;
     then a = X or a = meet {{}} or a = meet {X} or a = meet {{},X}
-    by A3,SETFAM_1:def 10;
+    by A5,SETFAM_1:def 10;
     then a = X or a = {} or a = {} /\ X & {} /\ X = {} by SETFAM_1:11,12;
     hence a in A by A1,TARSKI:def 2;
   end;
@@ -883,11 +927,12 @@ A2: A c= B;
       let x be set;
       assume x in UniCl A;
       then consider y being Subset-Family of X such that
-A3:   y c= A & x = union y by CANTOR_1:def 1;
+A3:   y c= A and
+A4:   x = union y by CANTOR_1:def 1;
       y c= B by A2,A3,XBOOLE_1:1;
       then y is Subset-Family of Y by XBOOLE_1:1;
-      then ex y being Subset-Family of Y st y c= B & x = union y by A2,A3,
-XBOOLE_1:1;
+      then ex y being Subset-Family of Y st y c= B & x = union y by A2,A3,A4,
+      XBOOLE_1:1;
       hence thesis by CANTOR_1:def 1;
     end;
   end;
@@ -898,48 +943,58 @@ end;
 
 theorem Th20:
   for X,Y being set, A being Subset-Family of X, B being Subset-Family of Y
-  st A = B & X in A & X c= Y holds FinMeetCl B = {Y} \/ FinMeetCl A
+  st A = B & X in A
+  holds FinMeetCl B = {Y} \/ FinMeetCl A
 proof
   let X,Y be set, A be Subset-Family of X, B be Subset-Family of Y such that
-A1: A = B & X in A & X c= Y;
+A1: A = B and
+A2: X in A;
   thus FinMeetCl B c= {Y} \/ FinMeetCl A
   proof
     let x be set;
     assume x in FinMeetCl B;
     then consider y being Subset-Family of Y such that
-A2: y c= B & y is finite & x = Intersect y by CANTOR_1:def 4;
-    reconsider z = y as Subset-Family of X by A1,A2,XBOOLE_1:1;
+A3: y c= B and
+A4: y is finite and
+A5: x = Intersect y by CANTOR_1:def 4;
+    reconsider z = y as Subset-Family of X by A1,A3,XBOOLE_1:1;
     reconsider z as Subset-Family of X;
     per cases;
     suppose y = {};
-      then x = Y by A2,SETFAM_1:def 10;
+      then x = Y by A5,SETFAM_1:def 10;
       then x in {Y} by TARSKI:def 1;
       hence thesis by XBOOLE_0:def 3;
     end;
-    suppose y <> {};
-      then Intersect y = meet y & Intersect z = meet y by SETFAM_1:def 10;
-      then x in FinMeetCl A by A1,A2,CANTOR_1:def 4;
+    suppose
+A6:   y <> {};
+      then
+A7:   Intersect y = meet y by SETFAM_1:def 10;
+      Intersect z = meet y by A6,SETFAM_1:def 10;
+      then x in FinMeetCl A by A1,A3,A4,A5,A7,CANTOR_1:def 4;
       hence thesis by XBOOLE_0:def 3;
     end;
   end;
   let x be set;
   assume
-A3: x in {Y} \/ FinMeetCl A;
+A8: x in {Y} \/ FinMeetCl A;
   consider E being empty Subset-Family of Y;
-  per cases by A3,XBOOLE_0:def 3;
+  per cases by A8,XBOOLE_0:def 3;
   suppose x in {Y};
-    then x = Y & Intersect E = Y & E c= B by SETFAM_1:def 10,TARSKI:def 1
-,XBOOLE_1:2;
-    hence thesis by CANTOR_1:def 4;
+    then
+A9: x = Y by TARSKI:def 1;
+A10: Intersect E = Y by SETFAM_1:def 10;
+    E c= B by XBOOLE_1:2;
+    hence thesis by A9,A10,CANTOR_1:def 4;
   end;
   suppose x in FinMeetCl A;
     then consider y being non empty finite Subset-Family of X such that
-A4: y c= A & x = Intersect y by A1,Th14;
-    reconsider z = y as Subset-Family of Y by A1,A4,XBOOLE_1:1;
+A11: y c= A and
+A12: x = Intersect y by A2,Th14;
+    reconsider z = y as Subset-Family of Y by A1,A11,XBOOLE_1:1;
     reconsider z as Subset-Family of Y;
-    x = meet z by A4,SETFAM_1:def 10
+    x = meet z by A12,SETFAM_1:def 10
       .= Intersect z by SETFAM_1:def 10;
-    hence thesis by A1,A4,CANTOR_1:def 4;
+    hence thesis by A1,A11,CANTOR_1:def 4;
   end;
 end;
 
@@ -949,53 +1004,57 @@ theorem Th21:
 proof
   let X be set, A be Subset-Family of X;
   per cases;
-  suppose A = {};
-    then FinMeetCl A = {X} & UniCl A = {{}} by Th16,Th17;
-    then FinMeetCl UniCl A = {{},X} & UniCl FinMeetCl A = {X,{}} by Th11;
-    hence thesis by Th18;
+  suppose
+A1: A = {};
+    then
+A2: FinMeetCl A = {X} by Th17;
+    UniCl A = {{}} by A1,Th16;
+    then
+A3: FinMeetCl UniCl A = {{},X} by Th11;
+    UniCl FinMeetCl A = {X,{}} by A2,Th11;
+    hence thesis by A3,Th18;
   end;
   suppose A <> {};
     then reconsider A as non empty Subset-Family of X;
-A1: UniCl FinMeetCl UniCl A c= UniCl UniCl FinMeetCl A
+A4: UniCl FinMeetCl UniCl A c= UniCl UniCl FinMeetCl A
     proof
       let x be set;
       assume x in UniCl FinMeetCl UniCl A;
       then consider Y being Subset-Family of X such that
-A2:   Y c= FinMeetCl UniCl A & x = union Y by CANTOR_1:def 1;
+A5:   Y c= FinMeetCl UniCl A and
+A6:   x = union Y by CANTOR_1:def 1;
       Y c= UniCl FinMeetCl A
       proof
         let y be set;
         assume y in Y;
         then consider Z being Subset-Family of X such that
-A3:     Z c= UniCl A & Z is finite & y = Intersect Z by A2,CANTOR_1:def 4;
+A7:     Z c= UniCl A and
+A8:     Z is finite and
+A9:     y = Intersect Z by A5,CANTOR_1:def 4;
         per cases;
         suppose Z = {};
-          then y = X by A3,SETFAM_1:def 10;
-          then y in
-          FinMeetCl A & FinMeetCl A c= UniCl FinMeetCl A by CANTOR_1:1,8;
-          hence thesis;
+          then y = X by A9,SETFAM_1:def 10;
+          then
+A10:      y in FinMeetCl A by CANTOR_1:8;
+          FinMeetCl A c= UniCl FinMeetCl A by CANTOR_1:1;
+          hence thesis by A10;
         end;
         suppose
-A4:       Z <> {};
+A11:      Z <> {};
           then
-A5:       y = meet Z by A3,SETFAM_1:def 10;
+A12:      y = meet Z by A9,SETFAM_1:def 10;
           set G = {meet rng f where f is Element of Funcs(Z,A):
           for z being set st z in Z holds f.z c= z};
-A6:       G c= FinMeetCl A
+A13:      G c= FinMeetCl A
           proof
             let a be set;
             assume a in G;
             then consider f being Element of Funcs(Z,A) such that
-A7:         a = meet rng f & for z being set st z in Z holds f.z c= z;
-            Funcs(Z,A) is FUNCTION_DOMAIN of Z,A;
-            then f is Function of Z,A by FUNCT_2:def 13;
-            then
-A8:         dom f = Z & rng f c= A by FUNCT_2:def 1,RELAT_1:def 19;
-            then reconsider B = rng f as Subset-Family of X by XBOOLE_1:1;
+A14:        a = meet rng f
+            and for z being set st z in Z holds f.z c= z;
+            reconsider B = rng f as Subset-Family of X by XBOOLE_1:1;
             reconsider B as Subset-Family of X;
-            B <> {} by A4,A8,RELAT_1:65;
-            then Intersect B = a & B is finite
-            by A3,A7,A8,FINSET_1:26,SETFAM_1:def 10;
+            Intersect B = a by A11,A14,SETFAM_1:def 10;
             hence thesis by A8,CANTOR_1:def 4;
           end;
           then reconsider G as Subset-Family of X by XBOOLE_1:1;
@@ -1006,76 +1065,83 @@ A8:         dom f = Z & rng f c= A by FUNCT_2:def 1,RELAT_1:def 19;
               let a be set;
               assume a in union G;
               then consider b being set such that
-A9:           a in b & b in G by TARSKI:def 4;
+A15:          a in b and
+A16:          b in G by TARSKI:def 4;
               consider f being Element of Funcs(Z,A) such that
-A10:          b = meet rng f & for z being set st z in Z holds f.z c= z by A9;
-              Funcs(Z,A) is FUNCTION_DOMAIN of Z,A;
-              then f is Function of Z,A by FUNCT_2:def 13;
-              then
-A11:          dom f = Z & rng f c= A by FUNCT_2:def 1,RELAT_1:def 19;
-              then reconsider B = rng f as Subset-Family of X by XBOOLE_1:1;
+A17:          b = meet rng f and
+A18:          for z being set st z in Z holds f.z c= z by A16;
+A19:          dom f = Z by FUNCT_2:def 1;
+              reconsider B = rng f as Subset-Family of X by XBOOLE_1:1;
               reconsider B as Subset-Family of X;
               b c= y
               proof
                 let c be set;
                 assume
-A12:            c in b;
+A20:            c in b;
                 now
                   let d be set;
                   assume
-A13:              d in Z;
-                  then f.d in B by A11,FUNCT_1:def 5;
-                  then b c= f.d by A10,SETFAM_1:4;
-                  then f.d c= d & c in f.d by A10,A12,A13;
-                  hence c in d;
+A21:              d in Z;
+                  then f.d in B by A19,FUNCT_1:def 5;
+                  then
+A22:              b c= f.d by A17,SETFAM_1:4;
+A23:              f.d c= d by A18,A21;
+                  c in f.d by A20,A22;
+                  hence c in d by A23;
                 end;
-                hence thesis by A4,A5,SETFAM_1:def 1;
+                hence thesis by A11,A12,SETFAM_1:def 1;
               end;
-              hence a in y by A9;
+              hence a in y by A15;
             end;
             let a be set;
             assume
-A14:        a in y;
+A24:        a in y;
             defpred P[set,set] means a in $2 & $2 c= $1;
-A15:        now
+A25:        now
               let z be set;
               assume
-A16:          z in Z;
+A26:          z in Z;
               then
-A17:          a in z & z in UniCl A by A3,A5,A14,SETFAM_1:def 1;
+A27:          a in z by A12,A24,SETFAM_1:def 1;
               consider C being Subset-Family of X such that
-A18:          C c= A & z = union C by A3,A16,CANTOR_1:def 1;
+A28:          C c= A and
+A29:          z = union C by A7,A26,CANTOR_1:def 1;
               consider w being set such that
-A19:          a in w & w in C by A17,A18,TARSKI:def 4;
-              take w; thus w in A by A18,A19;
-              thus P[z, w] by A18,A19,ZFMISC_1:92;
+A30:          a in w and
+A31:          w in C by A27,A29,TARSKI:def 4;
+              take w;
+              thus w in A by A28,A31;
+              thus P[z, w] by A29,A30,A31,ZFMISC_1:92;
             end;
             consider f being Function such that
-A20:        dom f = Z & rng f c= A and
-A21:        for z being set st z in Z holds P[z, f.z]
-            from WELLORD2:sch 1(A15);
-            reconsider f as Element of Funcs(Z,A) by A20,FUNCT_2:def 2;
-            for z being set st z in Z holds f.z c= z by A21;
+A32:        dom f = Z & rng f c= A and
+A33:        for z being set st z in Z holds P[z, f.z]
+            from WELLORD2:sch 1(A25);
+            reconsider f as Element of Funcs(Z,A) by A32,FUNCT_2:def 2;
+            for z being set st z in Z holds f.z c= z by A33;
             then
-A22:        meet rng f in G;
-            now thus rng f <> {} by A4,A20,RELAT_1:65;
+A34:        meet rng f in G;
+            now
+              thus rng f <> {} by A11;
               let y be set;
               assume y in rng f;
-              then ex z being set st z in Z & y = f.z by A20,FUNCT_1:def 5;
-              hence a in y by A21;
+              then ex z being set st z in Z & y = f.z by A32,
+              FUNCT_1:def 5;
+              hence a in y by A33;
             end;
             then a in meet rng f by SETFAM_1:def 1;
-            hence thesis by A22,TARSKI:def 4;
+            hence thesis by A34,TARSKI:def 4;
           end;
-          hence thesis by A6,CANTOR_1:def 1;
+          hence thesis by A13,CANTOR_1:def 1;
         end;
       end;
-      hence thesis by A2,CANTOR_1:def 1;
+      hence thesis by A6,CANTOR_1:def 1;
     end;
     FinMeetCl A c= FinMeetCl UniCl A by CANTOR_1:1,16;
-    then UniCl FinMeetCl A c= UniCl FinMeetCl UniCl A &
-    UniCl UniCl FinMeetCl A = UniCl FinMeetCl A by Th15,CANTOR_1:9;
-    hence thesis by A1,XBOOLE_0:def 10;
+    then
+A35: UniCl FinMeetCl A c= UniCl FinMeetCl UniCl A by CANTOR_1:9;
+    UniCl UniCl FinMeetCl A = UniCl FinMeetCl A by Th15;
+    hence thesis by A4,A35,XBOOLE_0:def 10;
   end;
 end;
 
@@ -1089,7 +1155,8 @@ proof
   thus the topology of T = UniCl K implies K is Basis of T
   proof
     assume the topology of T = UniCl K;
-    hence K c= the topology of T & the topology of T c= UniCl K by CANTOR_1:1;
+    hence K c= the topology of T & the topology of T c= UniCl K by
+    CANTOR_1:1;
   end;
   assume K c= the topology of T;
   then
@@ -1105,32 +1172,32 @@ theorem Th23:
 proof
   let T be TopSpace, BB be Subset-Family of T;
 A1: now
-    assume T is empty;
-
-then the topology of T = {{}} & the carrier of T = {} by Th8;
-    hence the topology of T = bool the carrier of T by ZFMISC_1:1;
+    assume
+A2: T is empty;
+    then the topology of T = {{}} by Th8;
+    hence the topology of T = bool the carrier of T by A2,ZFMISC_1:1;
   end;
   thus BB is prebasis of T implies FinMeetCl BB is Basis of T
   proof
     assume
-A2: BB is prebasis of T;
+A3: BB is prebasis of T;
     then BB c= the topology of T by CANTOR_1:def 5;
     then FinMeetCl BB c= FinMeetCl the topology of T by CANTOR_1:16;
     then
-A3: FinMeetCl BB c= the topology of T by A1,CANTOR_1:5;
+A4: FinMeetCl BB c= the topology of T by A1,CANTOR_1:5;
     consider A being Basis of T such that
-A4: A c= FinMeetCl BB by A2,CANTOR_1:def 5;
-    the topology of T c= UniCl A &
-    UniCl A c= UniCl FinMeetCl BB by A4,CANTOR_1:9,def 2;
-    then the topology of T c= UniCl FinMeetCl BB by XBOOLE_1:1;
-    hence thesis by A3,CANTOR_1:def 2;
+A5: A c= FinMeetCl BB by A3,CANTOR_1:def 5;
+A6: the topology of T c= UniCl A by CANTOR_1:def 2;
+    UniCl A c= UniCl FinMeetCl BB by A5,CANTOR_1:9;
+    then the topology of T c= UniCl FinMeetCl BB by A6,XBOOLE_1:1;
+    hence thesis by A4,CANTOR_1:def 2;
   end;
   assume
-A5: FinMeetCl BB is Basis of T;
-  then BB c= FinMeetCl BB & FinMeetCl BB c= the topology of T
-  by CANTOR_1:4,def 2;
-  then BB c= the topology of T by XBOOLE_1:1;
-  hence thesis by A5,CANTOR_1:def 5;
+A7: FinMeetCl BB is Basis of T;
+A8: BB c= FinMeetCl BB by CANTOR_1:4;
+  FinMeetCl BB c= the topology of T by A7,CANTOR_1:def 2;
+  then BB c= the topology of T by A8,XBOOLE_1:1;
+  hence thesis by A7,CANTOR_1:def 5;
 end;
 
 theorem Th24:
@@ -1152,9 +1219,10 @@ theorem Th25:
   holds the topology of T1 = the topology of T2
 proof
   let T1, T2 be TopSpace, B be Basis of T1;
-  assume
-A1: the carrier of T1 = the carrier of T2 & B is Basis of T2;
-  then reconsider C = B as Basis of T2;
+  assume that
+A1: the carrier of T1 = the carrier of T2 and
+A2: B is Basis of T2;
+  reconsider C = B as Basis of T2 by A2;
   thus the topology of T1 = UniCl C by A1,Th22
     .= the topology of T2 by Th22;
 end;
@@ -1165,11 +1233,13 @@ theorem Th26:
   holds the topology of T1 = the topology of T2
 proof
   let T1, T2 be TopSpace, P be prebasis of T1;
-  assume
-A1: the carrier of T1 = the carrier of T2 & P is prebasis of T2;
-  then reconsider C = P as prebasis of T2;
-  FinMeetCl P is Basis of T1 & FinMeetCl C is Basis of T2 by Th23;
-  hence thesis by A1,Th25;
+  assume that
+A1: the carrier of T1 = the carrier of T2 and
+A2: P is prebasis of T2;
+  reconsider C = P as prebasis of T2 by A2;
+A3: FinMeetCl P is Basis of T1 by Th23;
+  FinMeetCl C is Basis of T2 by Th23;
+  hence thesis by A1,A3,Th25;
 end;
 
 theorem
@@ -1180,7 +1250,8 @@ proof
   K c= the topology of T by CANTOR_1:def 2;
   hence for P be Subset of T st P in K holds P is open by PRE_TOPC:def 5;
   thus K c= the topology of T by CANTOR_1:def 2;
-  take K; thus thesis by CANTOR_1:4;
+  take K;
+  thus thesis by CANTOR_1:4;
 end;
 
 theorem
@@ -1199,20 +1270,15 @@ theorem Th29:
 proof
   let T be non empty TopSpace, B be prebasis of T;
   set C = B \/ {the carrier of T};
-  the carrier of T in the topology of T by PRE_TOPC:def 1;
-  then
-A1: B c= the topology of T & {the carrier of T} c= the topology of T
-  by CANTOR_1:def 5,ZFMISC_1:37;
-  then C c= the topology of T by XBOOLE_1:8;
+A1: the carrier of T in the topology of T by PRE_TOPC:def 1;
+A2: B c= the topology of T by CANTOR_1:def 5;
+A3: {the carrier of T} c= the topology of T by A1,ZFMISC_1:37;
+  then C c= the topology of T by A2,XBOOLE_1:8;
   then reconsider C as Subset-Family of T by XBOOLE_1:1;
-  C is prebasis of T
-  proof thus C c= the topology of T by A1,XBOOLE_1:8;
-    B c= C by XBOOLE_1:7;
-    then FinMeetCl B c= FinMeetCl C & FinMeetCl B is Basis of T
-    by Th23,CANTOR_1:16;
-    hence thesis;
-  end;
-  hence thesis;
+A4: C c= the topology of T by A2,A3,XBOOLE_1:8;
+A5: FinMeetCl B c= FinMeetCl C by CANTOR_1:16,XBOOLE_1:7;
+  FinMeetCl B is Basis of T by Th23;
+  hence thesis by A4,A5,CANTOR_1:def 5;
 end;
 
 theorem
@@ -1221,19 +1287,16 @@ theorem
 proof
   let T be TopSpace, B be Basis of T;
   set C = B \/ {the carrier of T};
-  the carrier of T in the topology of T by PRE_TOPC:def 1;
-  then
-A1: B c= the topology of T & {the carrier of T} c= the topology of T
-  by CANTOR_1:def 2,ZFMISC_1:37;
-  then C c= the topology of T by XBOOLE_1:8;
+A1: the carrier of T in the topology of T by PRE_TOPC:def 1;
+A2: B c= the topology of T by CANTOR_1:def 2;
+A3: {the carrier of T} c= the topology of T by A1,ZFMISC_1:37;
+  then C c= the topology of T by A2,XBOOLE_1:8;
   then reconsider C as Subset-Family of T by XBOOLE_1:1;
-  C is Basis of T
-  proof thus C c= the topology of T by A1,XBOOLE_1:8;
-    B c= C by XBOOLE_1:7;
-    then UniCl B c= UniCl C & the topology of T c= UniCl B by CANTOR_1:9,def 2;
-    hence thesis by XBOOLE_1:1;
-  end;
-  hence thesis;
+A4: C c= the topology of T by A2,A3,XBOOLE_1:8;
+A5: UniCl B c= UniCl C by CANTOR_1:9,XBOOLE_1:7;
+  the topology of T c= UniCl B by CANTOR_1:def 2;
+  then the topology of T c= UniCl C by A5,XBOOLE_1:1;
+  hence thesis by A4,CANTOR_1:def 2;
 end;
 
 theorem Th31:
@@ -1245,17 +1308,19 @@ proof
   hereby
     assume A is open;
     then
-A1: A = union {G where G is Subset of T: G in K & G c= A} by YELLOW_8:18;
+A1: A = union {G where G is Subset of T: G in K & G c= A} by
+    YELLOW_8:18;
     let p be Point of T;
     assume p in A;
     then consider Z being set such that
-A2: p in Z & Z in {G where G is Subset of T: G in K & G c= A}
+A2: p in Z and
+A3: Z in {G where G is Subset of T: G in K & G c= A}
     by A1,TARSKI:def 4;
-    ex a being Subset of T st Z = a & a in K & a c= A by A2;
+    ex a being Subset of T st Z = a & a in K & a c= A by A3;
     hence ex a being Subset of T st a in K & p in a & a c= A by A2;
   end;
   assume
-A3: for p being Point of T st p in A
+A4: for p being Point of T st p in A
   ex a being Subset of T st a in K & p in a & a c= A;
   set F = {G where G is Subset of T: G in K & G c= A};
   F c= bool the carrier of T
@@ -1267,25 +1332,28 @@ A3: for p being Point of T st p in A
   end;
   then reconsider F as Subset-Family of T;
   reconsider F as Subset-Family of T;
-A4: F is open
+A5: F is open
   proof
     let x be Subset of T;
     assume x in F;
-    then ex G being Subset of T st x = G & G in K & G c= A;
-    then x in K & K c= the topology of T by CANTOR_1:def 2;
-    hence x in the topology of T;
+    then
+A6: ex G being Subset of T st x = G & G in K & G c= A;
+    K c= the topology of T by CANTOR_1:def 2;
+    hence x in the topology of T by A6;
   end;
   A = union F
   proof
     hereby
       let x be set;
       assume
-A5:   x in A;
+A7:   x in A;
       then reconsider p = x as Point of T;
       consider a being Subset of T such that
-A6:   a in K & p in a & a c= A by A3,A5;
-      a in F by A6;
-      hence x in union F by A6,TARSKI:def 4;
+A8:   a in K and
+A9:   p in a and
+A10:  a c= A by A4,A7;
+      a in F by A8,A10;
+      hence x in union F by A9,TARSKI:def 4;
     end;
     F c= bool A
     proof
@@ -1297,7 +1365,7 @@ A6:   a in K & p in a & a c= A by A3,A5;
     then union F c= union bool A by ZFMISC_1:95;
     hence thesis by ZFMISC_1:99;
   end;
-  hence thesis by A4,TOPS_2:26;
+  hence thesis by A5,TOPS_2:26;
 end;
 
 theorem Th32:
@@ -1341,16 +1409,19 @@ A5:   p in x;
       then reconsider q = p as Point of T;
       A is open by A3,PRE_TOPC:def 5;
       then consider a being Subset of T such that
-A6:   a in B & q in a & a c= A by A2,A5;
-      a in Y by A6;
-      hence p in union Y by A6,TARSKI:def 4;
+A6:   a in B and
+A7:   q in a and
+A8:   a c= A by A2,A5;
+      a in Y by A6,A8;
+      hence p in union Y by A7,TARSKI:def 4;
     end;
     let p be set;
     assume p in union Y;
     then consider a being set such that
-A7: p in a & a in Y by TARSKI:def 4;
-    ex V being Subset of T st a = V & V in B & V c= A by A7;
-    hence thesis by A7;
+A9: p in a and
+A10: a in Y by TARSKI:def 4;
+    ex V being Subset of T st a = V & V in B & V c= A by A10;
+    hence thesis by A9;
   end;
   hence thesis by A4,CANTOR_1:def 1;
 end;
@@ -1378,7 +1449,8 @@ A3: for A being Subset of T st A in BB holds f"A` is closed;
   assume A is closed;
   then A` is open by TOPS_1:29;
   then
-A4: A` = union {G where G is Subset of T: G in BB & G c= A`} by YELLOW_8:18;
+A4: A` = union {G where G is Subset of T: G in BB & G c= A`} by
+  YELLOW_8:18;
   set F = {f"G where G is Subset of T: G in BB & G c= A`};
   F c= bool the carrier of S
   proof
@@ -1394,18 +1466,21 @@ A4: A` = union {G where G is Subset of T: G in BB & G c= A`} by YELLOW_8:18;
     let a be set;
     assume a in F;
     then consider G being Subset of T such that
-A5: a = f"G & G in BB & G c= A`;
-    f"G` is closed & (f"G)` = f"G` by A3,A5,Th2;
-    then f"G is open by TOPS_1:30;
+A5: a = f"G and
+A6: G in BB
+    and G c= A`;
+A7: f"G` is closed by A3,A6;
+    (f"G)` = f"G` by Th2;
+    then f"G is open by A7,TOPS_1:30;
     hence thesis by A5,PRE_TOPC:def 5;
   end;
   then
-A6: union F in the topology of S by PRE_TOPC:def 1;
+A8: union F in the topology of S by PRE_TOPC:def 1;
   defpred P[Subset of T] means $1 in BB & $1 c= A`;
   deffunc F(Subset of T) = $1;
   f"union {F(G) where G is Subset of T: P[G]}
   = union {f"F(G) where G is Subset of T: P[G]} from ABC;
-  then f"A` is open by A4,A6,PRE_TOPC:def 5;
+  then f"A` is open by A4,A8,PRE_TOPC:def 5;
   then (f"A)` is open by Th2;
   hence thesis by TOPS_1:29;
 end;
@@ -1462,12 +1537,14 @@ A3: for A being Subset of T st A in BB holds f"A` is closed;
     let A be Subset of T;
     assume A in C;
     then consider Y being Subset-Family of T such that
-A4: Y c= BB & Y is finite & A = Intersect Y by CANTOR_1:def 4;
+A4: Y c= BB and
+A5: Y is finite and
+A6: A = Intersect Y by CANTOR_1:def 4;
     reconsider Y as Subset-Family of T;
     reconsider CY = COMPLEMENT Y as Subset-Family of T;
     defpred P[set] means $1 in Y;
     deffunc F(Subset of T) = $1`;
-A5: f"A` = f"union CY by A4,YELLOW_8:16
+A7: f"A` = f"union CY by A6,YELLOW_8:16
       .= f"union {F(a) where a is Subset of T: P[a]} by Th3
       .= union {f"F(y) where y is Subset of T: P[y]} from ABC;
     set X = {f"y` where y is Subset of T: y in Y};
@@ -1480,17 +1557,18 @@ A5: f"A` = f"union CY by A4,YELLOW_8:16
     end;
     then reconsider X as Subset-Family of S;
     reconsider X as Subset-Family of S;
-A6: X is closed
+A8: X is closed
     proof
       let a be Subset of S;
       assume a in X;
       then ex y being Subset of T st a = f"y` & y in Y;
       hence thesis by A3,A4;
     end;
-A7: Y is finite by A4;
+A9: Y is finite by A5;
     deffunc F(Subset of T) = f"$1`;
-    {F(y) where y is Subset of T: y in Y} is finite from FRAENKEL:sch 21(A7);
-    hence f"A` is closed by A5,A6,TOPS_2:28;
+    {F(y) where y is Subset of T: y in Y} is finite from FRAENKEL:sch 21(
+    A9);
+    hence f"A` is closed by A7,A8,TOPS_2:28;
   end;
   hence thesis by Th33;
 end;
@@ -1534,14 +1612,15 @@ proof
 A1: for A being Subset of T st A in BB & x in A holds A meets X;
   now
     let G be a_neighborhood of x;
-A2: Int G = union {A where A is Subset of T: A in BB & A c= G} by YELLOW_8:20;
+    A2: Int
+ G = union {A where A is Subset of T: A in BB & A c= G} by YELLOW_8:20;
     x in Int G by CONNSP_2:def 1;
     then consider Z being set such that
-A3: x in Z & Z in {A where A is Subset of T: A in BB & A c= G}
+A3: x in Z and
+A4: Z in {A where A is Subset of T: A in BB & A c= G}
     by A2,TARSKI:def 4;
-    consider A being Subset of T such that
-A4: Z = A & A in BB & A c= G by A3;
-    thus G meets X by A1,A3,A4,XBOOLE_1:63;
+    ex A being Subset of T st ( Z = A)&( A in BB)&( A c= G) by A4;
+    hence G meets X by A1,A3,XBOOLE_1:63;
   end;
   hence thesis by CONNSP_2:34;
 end;
@@ -1560,8 +1639,9 @@ A1: for Z being finite Subset-Family of T st Z c= BB & x in Intersect Z
   now
     let A be Subset of T;
     assume A in BB';
-    then consider Y being Subset-Family of T such that
-A2: Y c= BB & Y is finite & A = Intersect Y by CANTOR_1:def 4;
+    then
+A2: ex Y being Subset-Family of T st ( Y c= BB)&( Y is finite)&
+    ( A = Intersect Y) by CANTOR_1:def 4;
     assume x in A;
     hence A meets X by A1,A2;
   end;
@@ -1579,55 +1659,58 @@ proof
 A1: for A being Subset of T st A in BB & x in A holds N is_eventually_in A;
   let S be Subset of T such that
 A2: rng netmap(N,T) c= S;
-A3: the carrier of N = [#]N & [#]N is directed by WAYBEL_0:def 6;
+A3: [#]N is directed by WAYBEL_0:def 6;
   now
     let Z be finite Subset-Family of T;
-    assume
-A4: Z c= BB & x in Intersect Z;
+    assume that
+A4: Z c= BB and
+A5: x in Intersect Z;
     defpred P[set,set] means
     for i,j being Element of N st $2 = i & i <= j holds N.j in $1;
-A5: now
+A6: now
       let a be set;
       assume
-A6:   a in Z;
+A7:   a in Z;
       then reconsider A = a as Subset of T;
-      A in BB & x in A by A4,A6,SETFAM_1:58;
-      then N is_eventually_in A by A1;
+      x in A by A5,A7,SETFAM_1:58;
+      then N is_eventually_in A by A1,A4,A7;
       then consider i being Element of N such that
-A7:   for j being Element of N st i <= j holds N.j in A by WAYBEL_0:def 11;
+A8:   for j being Element of N st i <= j holds N.j in A by WAYBEL_0:def 11;
       reconsider b = i as set;
-      take b; thus b in the carrier of N & P[a, b] by A7;
+      take b;
+      thus b in the carrier of N & P[a, b] by A8;
     end;
     consider f being Function such that
-A8: dom f = Z & rng f c= the carrier of N &
-    for a being set st a in Z holds P[a, f.a] from WELLORD2:sch 1(A5);
+A9: dom f = Z & rng f c= the carrier of N &
+    for a being set st a in Z holds P[a, f.a] from WELLORD2:sch 1(A6);
     consider k being Element of N;
-    per cases by A8,RELAT_1:65;
+    per cases by A9,RELAT_1:65;
     suppose Z = {};
       then
-A9:   Intersect Z = the carrier of T by SETFAM_1:def 10;
+A10:  Intersect Z = the carrier of T by SETFAM_1:def 10;
       N.k in rng netmap(N,T) by FUNCT_2:6;
-      hence Intersect Z meets S by A2,A9,XBOOLE_0:3;
+      hence Intersect Z meets S by A2,A10,XBOOLE_0:3;
     end;
     suppose rng f <> {};
       then reconsider Y = rng f as finite non empty Subset of N
-      by A8,FINSET_1:26;
+      by A9,FINSET_1:26;
       consider i being Element of N such that
-A10:  i in the carrier of N & i is_>=_than Y by A3,WAYBEL_0:1;
+      i in the carrier of N and
+A11:  i is_>=_than Y by A3,WAYBEL_0:1;
       now
         let y be set;
         assume
-A11:    y in Z;
+A12:    y in Z;
         then
-A12:    f.y in Y by A8,FUNCT_1:def 5;
+A13:    f.y in Y by A9,FUNCT_1:def 5;
         then reconsider j = f.y as Element of N;
-        j <= i by A10,A12,LATTICE3:def 9;
-        hence N.i in y by A8,A11;
+        j <= i by A11,A13,LATTICE3:def 9;
+        hence N.i in y by A9,A12;
       end;
       then
-A13:  N.i in Intersect Z by SETFAM_1:58;
+A14:  N.i in Intersect Z by SETFAM_1:58;
       N.i in rng netmap(N,T) by FUNCT_2:6;
-      hence Intersect Z meets S by A2,A13,XBOOLE_0:3;
+      hence Intersect Z meets S by A2,A14,XBOOLE_0:3;
     end;
   end;
   hence thesis by Th38;
@@ -1658,59 +1741,79 @@ A1: the carrier of T = [:the carrier of T1, the carrier of T2:]
   end;
   then reconsider BB as Subset-Family of T;
   reconsider BB as Subset-Family of T;
-A2: B1 c= the topology of T1 & B2 c= the topology of T2 by CANTOR_1:def 2;
+A2: B1 c= the topology of T1 by CANTOR_1:def 2;
+A3: B2 c= the topology of T2 by CANTOR_1:def 2;
   BB is Basis of T
   proof
     hereby
       let x be set;
       assume x in BB;
       then consider a being Subset of T1, b being Subset of T2 such that
-A3:   x = [:a,b:] & a in B1 & b in B2;
-      a is open & b is open by A2,A3,PRE_TOPC:def 5;
-      then [:a,b:] is open by BORSUK_1:46;
-      hence x in the topology of T by A3,PRE_TOPC:def 5;
+A4:   x = [:a,b:] and
+A5:   a in B1 and
+A6:   b in B2;
+A7:   a is open by A2,A5,PRE_TOPC:def 5;
+      b is open by A3,A6,PRE_TOPC:def 5;
+      then [:a,b:] is open by A7,BORSUK_1:46;
+      hence x in the topology of T by A4,PRE_TOPC:def 5;
     end;
     let x be set;
     assume
-A4: x in the topology of T;
+A8: x in the topology of T;
     then reconsider X = x as Subset of T;
-    X is open by A4,PRE_TOPC:def 5;
+    X is open by A8,PRE_TOPC:def 5;
     then
-A5: X = union Base-Appr X by BORSUK_1:54;
+A9: X = union Base-Appr X by BORSUK_1:54;
     set Y = BB /\ Base-Appr X;
-A6: Y c= BB & Y c= Base-Appr X by XBOOLE_1:17;
+A10: Y c= BB by XBOOLE_1:17;
     reconsider Y as Subset-Family of T;
     union Y = X
-    proof thus union Y c= X by A5,XBOOLE_1:17,ZFMISC_1:95;
+    proof
+      thus union Y c= X by A9,XBOOLE_1:17,ZFMISC_1:95;
       let z be set;
       assume
-A7:   z in X;
+A11:  z in X;
       then reconsider p = z as Point of T;
       consider z1,z2 being set such that
-A8:   z1 in the carrier of T1 & z2 in the carrier of T2 & p = [z1,z2]
+A12:  z1 in the carrier of T1 and
+A13:  z2 in the carrier of T2 and
+A14:  p = [z1,z2]
       by A1,ZFMISC_1:def 2;
-      reconsider z1 as Point of T1 by A8;
-      reconsider z2 as Point of T2 by A8;
+      reconsider z1 as Point of T1 by A12;
+      reconsider z2 as Point of T2 by A13;
       consider Z being set such that
-A9:   z in Z & Z in Base-Appr X by A5,A7,TARSKI:def 4;
-A10:  Base-Appr X = {[:a,b:] where a is Subset of T1, b is Subset of T2:
+A15:  z in Z and
+A16:  Z in Base-Appr X by A9,A11,TARSKI:def 4;
+A17:  Base-Appr X = {[:a,b:] where a is Subset of T1, b is Subset of T2:
       [:a,b:] c= X & a is open & b is open} by BORSUK_1:def 6;
       then consider a being Subset of T1, b being Subset of T2 such that
-A11:  Z = [:a,b:] & [:a,b:] c= X & a is open & b is open by A9;
-A12:  z1 in a & z2 in b by A8,A9,A11,ZFMISC_1:106;
-      then consider a' being Subset of T1 such that
-A13:  a' in B1 & z1 in a' & a' c= a by A11,Th31;
+A18:  Z = [:a,b:] and
+A19:  [:a,b:] c= X and
+A20:  a is open and
+A21:  b is open by A16;
+A22:  z1 in a by A14,A15,A18,ZFMISC_1:106;
+A23:  z2 in b by A14,A15,A18,ZFMISC_1:106;
+      consider a' being Subset of T1 such that
+A24:  a' in B1 and
+A25:  z1 in a' and
+A26:  a' c= a by A20,A22,Th31;
       consider b' being Subset of T2 such that
-A14:  b' in B2 & z2 in b' & b' c= b by A11,A12,Th31;
-      [:a',b':] c= [:a,b:] by A13,A14,ZFMISC_1:119;
-      then [:a',b':] c= X & a' is open & b' is open
-      by A2,A11,A13,A14,PRE_TOPC:def 5,XBOOLE_1:1;
-      then [:a',b':] in Base-Appr X & [:a',b':] in BB by A10,A13,A14;
-      then p in [:a',b':] & [:a',b':] in
-      Y by A8,A13,A14,XBOOLE_0:def 4,ZFMISC_1:106;
-      hence thesis by TARSKI:def 4;
+A27:  b' in B2 and
+A28:  z2 in b' and
+A29:  b' c= b by A21,A23,Th31;
+      [:a',b':] c= [:a,b:] by A26,A29,ZFMISC_1:119;
+      then
+A30:  [:a',b':] c= X by A19,XBOOLE_1:1;
+A31:  a' is open by A2,A24,PRE_TOPC:def 5;
+      b' is open by A3,A27,PRE_TOPC:def 5;
+      then
+A32:  [:a',b':] in Base-Appr X by A17,A30,A31;
+A33:  [:a',b':] in BB by A24,A27;
+A34:  p in [:a',b':] by A14,A25,A28,ZFMISC_1:106;
+      [:a',b':] in Y by A32,A33,XBOOLE_0:def 4;
+      hence thesis by A34,TARSKI:def 4;
     end;
-    hence thesis by A6,CANTOR_1:def 1;
+    hence thesis by A10,CANTOR_1:def 1;
   end;
   hence thesis;
 end;
@@ -1735,8 +1838,10 @@ proof
   then reconsider cT1 = the carrier of T1 as Subset of T1;
   the carrier of T2 c= the carrier of T2;
   then reconsider cT2 = the carrier of T2 as Subset of T2;
-A1: cT1 in the topology of T1 & cT2 in the topology of T2 by PRE_TOPC:def 1;
-A2: B1 c= the topology of T1 & B2 c= the topology of T2 by CANTOR_1:def 5;
+A1: cT1 in the topology of T1 by PRE_TOPC:def 1;
+A2: cT2 in the topology of T2 by PRE_TOPC:def 1;
+A3: B1 c= the topology of T1 by CANTOR_1:def 5;
+A4: B2 c= the topology of T2 by CANTOR_1:def 5;
   C1 c= bool the carrier of T
   proof
     let x be set;
@@ -1763,117 +1868,122 @@ A2: B1 c= the topology of T1 & B2 c= the topology of T2 by CANTOR_1:def 5;
       assume x in C;
       then x in C1 or x in C2 by XBOOLE_0:def 3;
       then (ex a being Subset of T1 st x = [:a, cT2:] & a in B1) or
-      (ex a being Subset of T2 st x = [:cT1, a:] & a in B2);
+      ex a being Subset of T2 st x = [:cT1, a:] & a in B2;
       then consider a being Subset of T1, b being Subset of T2 such that
-A3:   x = [:a,b:] & a in the topology of T1 & b in
-      the topology of T2 by A1,A2;
-      a is open & b is open by A3,PRE_TOPC:def 5;
-      then [:a,b:] is open by BORSUK_1:46;
-      hence x in the topology of T by A3,PRE_TOPC:def 5;
+A5:   x = [:a,b:] and
+A6:   a in the topology of T1 and
+A7:   b in the topology of T2 by A1,A2,A3,A4;
+A8:   a is open by A6,PRE_TOPC:def 5;
+      b is open by A7,PRE_TOPC:def 5;
+      then [:a,b:] is open by A8,BORSUK_1:46;
+      hence x in the topology of T by A5,PRE_TOPC:def 5;
     end;
     take D;
     let d be set;
     assume d in D;
     then consider a being Subset of T1, b being Subset of T2 such that
-A4: d = [:a,b:] & a in D1 & b in D2;
+A9: d = [:a,b:] and
+A10: a in D1 and
+A11: b in D2;
     consider aY being Subset-Family of T1 such that
-A5: aY c= B1 and
-A6: aY is finite and
-A7: a = Intersect aY by A4,CANTOR_1:def 4;
+A12: aY c= B1 and
+A13: aY is finite and
+A14: a = Intersect aY by A10,CANTOR_1:def 4;
     consider bY being Subset-Family of T2 such that
-A8: bY c= B2 and
-A9: bY is finite and
-A10: b = Intersect bY by A4,CANTOR_1:def 4;
+A15: bY c= B2 and
+A16: bY is finite and
+A17: b = Intersect bY by A11,CANTOR_1:def 4;
     deffunc F(Subset of T1) = [:$1, cT2:];
-A11: {F(s) where s is Subset of T1: s in aY} is finite
-    from FRAENKEL:sch 21(A6);
+A18: {F(s) where s is Subset of T1: s in aY} is finite
+    from FRAENKEL:sch 21(A13);
     deffunc G(Subset of T2) = [:cT1, $1:];
-A12: {G(s) where s is Subset of T2: s in bY} is finite
-    from FRAENKEL:sch 21(A9);
+A19: {G(s) where s is Subset of T2: s in bY} is finite
+    from FRAENKEL:sch 21(A16);
     set Y1 = {[:s, cT2:] where s is Subset of T1: s in aY};
     set Y2 = {[:cT1, s:] where s is Subset of T2: s in bY};
-A13: Y1 c= C
+A20: Y1 c= C
     proof
       let x be set;
       assume x in Y1;
-      then consider s being Subset of T1 such that
-A14:  x = [:s, cT2:] & s in aY;
-      x in C1 by A5,A14;
+      then ex s being Subset of T1 st ( x = [:s, cT2:])&( s in aY);
+      then x in C1 by A12;
       hence thesis by XBOOLE_0:def 3;
     end;
-A15: Y2 c= C
+A21: Y2 c= C
     proof
       let x be set;
       assume x in Y2;
-      then consider s being Subset of T2 such that
-A16:  x = [:cT1, s:] & s in bY;
-      x in C2 by A8,A16;
+      then ex s being Subset of T2 st ( x = [:cT1, s:])&( s in bY);
+      then x in C2 by A15;
       hence thesis by XBOOLE_0:def 3;
     end;
     set Y = Y1 \/ Y2;
-A17: Y c= C by A13,A15,XBOOLE_1:8;
+A22: Y c= C by A20,A21,XBOOLE_1:8;
     then reconsider Y as Subset-Family of T by XBOOLE_1:1;
-A18: Y is finite by A11,A12;
     Intersect Y = d
     proof
       hereby
         let p be set;
         assume
-A19:    p in Intersect Y;
+A23:    p in Intersect Y;
         then consider p1 being Point of T1, p2 being Point of T2 such that
-A20:    p = [p1,p2] by BORSUK_1:50;
+A24:    p = [p1,p2] by BORSUK_1:50;
         now
           let z be set;
           assume
-A21:      z in aY;
+A25:      z in aY;
           then reconsider z' = z as Subset of T1;
-          [:z', cT2:] in Y1 by A21;
+          [:z', cT2:] in Y1 by A25;
           then [:z', cT2:] in Y by XBOOLE_0:def 3;
-          then p in [:z', cT2:] by A19,SETFAM_1:58;
-          hence p1 in z by A20,ZFMISC_1:106;
+          then p in [:z', cT2:] by A23,SETFAM_1:58;
+          hence p1 in z by A24,ZFMISC_1:106;
         end;
         then
-A22:    p1 in a by A7,SETFAM_1:58;
+A26:    p1 in a by A14,SETFAM_1:58;
         now
           let z be set;
           assume
-A23:      z in bY;
+A27:      z in bY;
           then reconsider z' = z as Subset of T2;
-          [:cT1, z':] in Y2 by A23;
+          [:cT1, z':] in Y2 by A27;
           then [:cT1, z':] in Y by XBOOLE_0:def 3;
-          then p in [:cT1, z':] by A19,SETFAM_1:58;
-          hence p2 in z by A20,ZFMISC_1:106;
+          then p in [:cT1, z':] by A23,SETFAM_1:58;
+          hence p2 in z by A24,ZFMISC_1:106;
         end;
-        then p2 in b by A10,SETFAM_1:58;
-        hence p in d by A4,A20,A22,ZFMISC_1:106;
+        then p2 in b by A17,SETFAM_1:58;
+        hence p in d by A9,A24,A26,ZFMISC_1:106;
       end;
       let p be set;
       assume p in d;
       then consider p1,p2 being set such that
-A24:  p1 in a & p2 in b & [p1,p2] = p by A4,ZFMISC_1:def 2;
-      reconsider p1 as Point of T1 by A24;
-      reconsider p2 as Point of T2 by A24;
+A28:  p1 in a and
+A29:  p2 in b and
+A30:  [p1,p2] = p by A9,ZFMISC_1:def 2;
+      reconsider p1 as Point of T1 by A28;
+      reconsider p2 as Point of T2 by A29;
       now
         let z be set;
         assume
-A25:    z in Y;
-        per cases by A25,XBOOLE_0:def 3;
+A31:    z in Y;
+        per cases by A31,XBOOLE_0:def 3;
         suppose z in Y1;
           then consider s being Subset of T1 such that
-A26:      z = [:s, cT2:] & s in aY;
-          p1 in s by A7,A24,A26,SETFAM_1:58;
-          hence [p1,p2] in z by A26,ZFMISC_1:106;
+A32:      z = [:s, cT2:] and
+A33:      s in aY;
+          p1 in s by A14,A28,A33,SETFAM_1:58;
+          hence [p1,p2] in z by A32,ZFMISC_1:106;
         end;
         suppose z in Y2;
           then consider s being Subset of T2 such that
-A27:      z = [:cT1, s:] & s in bY;
-          p2 in s by A10,A24,A27,SETFAM_1:58;
-          hence [p1,p2] in z by A27,ZFMISC_1:106;
+A34:      z = [:cT1, s:] and
+A35:      s in bY;
+          p2 in s by A17,A29,A35,SETFAM_1:58;
+          hence [p1,p2] in z by A34,ZFMISC_1:106;
         end;
       end;
-      hence thesis by A24,SETFAM_1:58;
+      hence thesis by A30,SETFAM_1:58;
     end;
-    hence thesis by A17,A18,CANTOR_1:def 4;
+    hence thesis by A18,A19,A22,CANTOR_1:def 4;
   end;
   hence thesis;
 end;
@@ -1895,7 +2005,9 @@ A1: A = {[:a,b:] where a is Subset of X1, b is Subset of X2: a in A1 & b in
     assume
 A2: x in Intersect A;
     then consider x1,x2 being set such that
-A3: x1 in X1 & x2 in X2 & [x1,x2] = x by ZFMISC_1:def 2;
+A3: x1 in X1 and
+A4: x2 in X2 and
+A5: [x1,x2] = x by ZFMISC_1:def 2;
     consider a1 being Element of A1, a2 being Element of A2;
     reconsider a1 as Subset of X1;
     reconsider a2 as Subset of X2;
@@ -1904,34 +2016,39 @@ A3: x1 in X1 & x2 in X2 & [x1,x2] = x by ZFMISC_1:def 2;
       assume a in A1;
       then [:a,a2:] in A by A1;
       then x in [:a,a2:] by A2,SETFAM_1:58;
-      hence x1 in a by A3,ZFMISC_1:106;
+      hence x1 in a by A5,ZFMISC_1:106;
     end;
     then
-A4: x1 in Intersect A1 by A3,SETFAM_1:58;
+A6: x1 in Intersect A1 by A3,SETFAM_1:58;
     now
       let a be set;
       assume a in A2;
       then [:a1,a:] in A by A1;
       then x in [:a1,a:] by A2,SETFAM_1:58;
-      hence x2 in a by A3,ZFMISC_1:106;
+      hence x2 in a by A5,ZFMISC_1:106;
     end;
-    then x2 in Intersect A2 by A3,SETFAM_1:58;
-    hence x in [:Intersect A1, Intersect A2:] by A3,A4,ZFMISC_1:106;
+    then x2 in Intersect A2 by A4,SETFAM_1:58;
+    hence x in [:Intersect A1, Intersect A2:] by A5,A6,ZFMISC_1:106;
   end;
   let x be set;
   assume
-A5: x in [:Intersect A1, Intersect A2:];
+A7: x in [:Intersect A1, Intersect A2:];
   then consider x1,x2 being set such that
-A6: x1 in Intersect A1 & x2 in Intersect A2 & [x1,x2] = x by ZFMISC_1:def 2;
+A8: x1 in Intersect A1 and
+A9: x2 in Intersect A2 and
+A10: [x1,x2] = x by ZFMISC_1:def 2;
   now
     let c be set;
     assume c in A;
     then consider a being Subset of X1, b being Subset of X2 such that
-A7: c = [:a,b:] & a in A1 & b in A2 by A1;
-    x1 in a & x2 in b by A6,A7,SETFAM_1:58;
-    hence x in c by A6,A7,ZFMISC_1:106;
+A11: c = [:a,b:] and
+A12: a in A1 and
+A13: b in A2 by A1;
+A14: x1 in a by A8,A12,SETFAM_1:58;
+    x2 in b by A9,A13,SETFAM_1:58;
+    hence x in c by A10,A11,A14,ZFMISC_1:106;
   end;
-  hence thesis by A5,SETFAM_1:58;
+  hence thesis by A7,SETFAM_1:58;
 end;
 
 theorem
@@ -1943,7 +2060,8 @@ theorem
 proof
   let T1,T2 be non empty TopSpace;
   let B1 be prebasis of T1, B2 be prebasis of T2 such that
-A1: union B1 = the carrier of T1 & union B2 = the carrier of T2;
+A1: union B1 = the carrier of T1 and
+A2: union B2 = the carrier of T2;
   set cT1 = the carrier of T1, cT2 = the carrier of T2;
   set BB1 = {[:the carrier of T1, b:] where b is Subset of T2: b in B2},
   BB2 = {[:a, the carrier of T2:] where a is Subset of T1: a in B1};
@@ -1951,7 +2069,7 @@ A1: union B1 = the carrier of T1 & union B2 = the carrier of T2;
   a in B1 & b in B2};
   set T = [:T1,T2:];
   reconsider BB=BB1 \/ BB2 as prebasis of [:T1,T2:] by Th41;
-A2: FinMeetCl BB is Basis of T by Th23;
+A3: FinMeetCl BB is Basis of T by Th23;
   CC c= bool the carrier of [:T1,T2:]
   proof
     let x be set;
@@ -1967,24 +2085,29 @@ A2: FinMeetCl BB is Basis of T by Th23;
     let x be set;
     assume x in CC;
     then consider a being Subset of T1, b being Subset of T2 such that
-A3: x = [:a,b:] & a in B1 & b in B2;
-    B1 c= the topology of T1 & B2 c= the topology of T2 by CANTOR_1:def 5;
-    then a is open & b is open by A3,PRE_TOPC:def 5;
-    then [:a,b:] is open by BORSUK_1:46;
-    hence thesis by A3,PRE_TOPC:def 5;
+A4: x = [:a,b:] and
+A5: a in B1 and
+A6: b in B2;
+A7: B1 c= the topology of T1 by CANTOR_1:def 5;
+A8: B2 c= the topology of T2 by CANTOR_1:def 5;
+A9: a is open by A5,A7,PRE_TOPC:def 5;
+    b is open by A6,A8,PRE_TOPC:def 5;
+    then [:a,b:] is open by A9,BORSUK_1:46;
+    hence thesis by A4,PRE_TOPC:def 5;
   end;
   then UniCl CC c= UniCl the topology of T by CANTOR_1:9;
   then
-A4: UniCl CC c= the topology of T by CANTOR_1:6;
+A10: UniCl CC c= the topology of T by CANTOR_1:6;
   BB c= UniCl CC
   proof
     let x be set;
     assume
-A5: x in BB;
-    per cases by A5,XBOOLE_0:def 3;
+A11: x in BB;
+    per cases by A11,XBOOLE_0:def 3;
     suppose x in BB1;
       then consider b being Subset of T2 such that
-A6:   x = [:cT1,b:] & b in B2;
+A12:  x = [:cT1,b:] and
+A13:  b in B2;
       set Y = {[:a,b:] where a is Subset of T1: a in B1};
       Y c= bool the carrier of T
       proof
@@ -1995,12 +2118,12 @@ A6:   x = [:cT1,b:] & b in B2;
       end;
       then reconsider Y as Subset-Family of T;
       reconsider Y as Subset-Family of T;
-A7:   Y c= CC
+A14:  Y c= CC
       proof
         let y be set;
         assume y in Y;
         then ex a being Subset of T1 st y = [:a,b:] & a in B1;
-        hence thesis by A6;
+        hence thesis by A13;
       end;
       x = union Y
       proof
@@ -2008,26 +2131,32 @@ A7:   Y c= CC
           let z be set;
           assume z in x;
           then consider p1, p2 being set such that
-A8:       p1 in cT1 & p2 in b & [p1,p2] = z by A6,ZFMISC_1:def 2;
+A15:      p1 in cT1 and
+A16:      p2 in b and
+A17:      [p1,p2] = z by A12,ZFMISC_1:def 2;
           consider a being set such that
-A9:       p1 in a & a in B1 by A1,A8,TARSKI:def 4;
-          reconsider a as Subset of T1 by A9;
-          [:a,b:] in Y & z in [:a,b:] by A8,A9,ZFMISC_1:def 2;
-          hence z in union Y by TARSKI:def 4;
+A18:      p1 in a and
+A19:      a in B1 by A1,A15,TARSKI:def 4;
+          reconsider a as Subset of T1 by A19;
+A20:      [:a,b:] in Y by A19;
+          z in [:a,b:] by A16,A17,A18,ZFMISC_1:def 2;
+          hence z in union Y by A20,TARSKI:def 4;
         end;
         let z be set;
         assume z in union Y;
         then consider y being set such that
-A10:    z in y & y in Y by TARSKI:def 4;
-        ex a being Subset of T1 st y = [:a,b:] & a in B1 by A10;
-        then y c= x by A6,ZFMISC_1:118;
-        hence thesis by A10;
+A21:    z in y and
+A22:    y in Y by TARSKI:def 4;
+        ex a being Subset of T1 st y = [:a,b:] & a in B1 by A22;
+        then y c= x by A12,ZFMISC_1:118;
+        hence thesis by A21;
       end;
-      hence thesis by A7,CANTOR_1:def 1;
+      hence thesis by A14,CANTOR_1:def 1;
     end;
     suppose x in BB2;
       then consider a being Subset of T1 such that
-A11:  x = [:a,cT2:] & a in B1;
+A23:  x = [:a,cT2:] and
+A24:  a in B1;
       set Y = {[:a,b:] where b is Subset of T2: b in B2};
       Y c= bool the carrier of T
       proof
@@ -2038,12 +2167,12 @@ A11:  x = [:a,cT2:] & a in B1;
       end;
       then reconsider Y as Subset-Family of T;
       reconsider Y as Subset-Family of T;
-A12:  Y c= CC
+A25:  Y c= CC
       proof
         let y be set;
         assume y in Y;
         then ex b being Subset of T2 st y = [:a,b:] & b in B2;
-        hence thesis by A11;
+        hence thesis by A24;
       end;
       x = union Y
       proof
@@ -2051,26 +2180,31 @@ A12:  Y c= CC
           let z be set;
           assume z in x;
           then consider p1, p2 being set such that
-A13:      p1 in a & p2 in cT2 & [p1,p2] = z by A11,ZFMISC_1:def 2;
+A26:      p1 in a and
+A27:      p2 in cT2 and
+A28:      [p1,p2] = z by A23,ZFMISC_1:def 2;
           consider b being set such that
-A14:      p2 in b & b in B2 by A1,A13,TARSKI:def 4;
-          reconsider b as Subset of T2 by A14;
-          [:a,b:] in Y & z in [:a,b:] by A13,A14,ZFMISC_1:def 2;
-          hence z in union Y by TARSKI:def 4;
+A29:      p2 in b and
+A30:      b in B2 by A2,A27,TARSKI:def 4;
+          reconsider b as Subset of T2 by A30;
+A31:      [:a,b:] in Y by A30;
+          z in [:a,b:] by A26,A28,A29,ZFMISC_1:def 2;
+          hence z in union Y by A31,TARSKI:def 4;
         end;
         let z be set;
         assume z in union Y;
         then consider y being set such that
-A15:    z in y & y in Y by TARSKI:def 4;
-        ex b being Subset of T2 st y = [:a,b:] & b in B2 by A15;
-        then y c= x by A11,ZFMISC_1:118;
-        hence thesis by A15;
+A32:    z in y and
+A33:    y in Y by TARSKI:def 4;
+        ex b being Subset of T2 st y = [:a,b:] & b in B2 by A33;
+        then y c= x by A23,ZFMISC_1:118;
+        hence thesis by A32;
       end;
-      hence thesis by A12,CANTOR_1:def 1;
+      hence thesis by A25,CANTOR_1:def 1;
     end;
   end;
   then FinMeetCl BB c= FinMeetCl UniCl CC by CANTOR_1:16;
-  then UniCl CC is prebasis of T by A2,A4,CANTOR_1:def 5;
+  then UniCl CC is prebasis of T by A3,A10,CANTOR_1:def 5;
   hence thesis by Th24;
 end;
 
@@ -2084,7 +2218,7 @@ definition
   existence
   proof
     take TopRelStr(#the carrier of R, the InternalRel of R,
-          {}bool the carrier of R#);
+      {}bool the carrier of R#);
     thus thesis;
   end;
 end;
@@ -2224,14 +2358,14 @@ proof
 A1: the topology of T = sigma R;
 A2: the RelStr of T = the RelStr of R by Def4;
   set IT = ConvergenceSpace Scott-Convergence R;
-  the carrier of IT = the carrier of R &
-  sigma R = the topology of IT by YELLOW_6:def 27;
-  then the carrier of T in sigma R & (for a being Subset-Family of T
-  st a c= the topology of T holds union a in the topology of T) &
-  (for a,b being Subset of T st
-  a in the topology of T & b in the topology of T
-  holds a /\ b in the topology of T) by A1,A2,PRE_TOPC:def 1;
-  hence thesis by A1,PRE_TOPC:def 1;
+A3: the carrier of IT = the carrier of R by YELLOW_6:def 27;
+  then
+A4: the carrier of T in sigma R by A2,PRE_TOPC:def 1;
+A5: for a being Subset-Family of T st a c= the topology of T holds union a
+  in the topology of T by A1,A2,A3,PRE_TOPC:def 1;
+  for a,b being Subset of T st a in the topology of T & b in the topology
+  of T holds a /\ b in the topology of T by A1,PRE_TOPC:def 1;
+  hence thesis by A1,A4,A5,PRE_TOPC:def 1;
 end;
 
 theorem Th49:
@@ -2267,7 +2401,8 @@ registration
     set T = TopRelStr(#the carrier of R, the InternalRel of R, sigma R#);
     the RelStr of T = the RelStr of R;
     then reconsider T as TopAugmentation of R by Def4;
-    take T; thus thesis by Th48,Th49;
+    take T;
+    thus thesis by Th48,Th49;
   end;
 end;
 
@@ -2282,9 +2417,10 @@ proof
   Scott (non empty reflexive transitive antisymmetric TopRelStr) such that
 A1: the RelStr of S = the RelStr of T;
   let F be Subset of S, G be Subset of T;
-  assume
-A2: F = G & F is open;
-  then F is upper inaccessible by WAYBEL11:def 4;
+  assume that
+A2: F = G and
+A3: F is open;
+  F is upper inaccessible by A3,WAYBEL11:def 4;
   then G is upper inaccessible by A1,A2,Th47,WAYBEL_0:25;
   hence thesis by WAYBEL11:def 4;
 end;
@@ -2356,19 +2492,20 @@ A1: {{},{}} = {{}} by ENUMSET1:69;
   now
     assume
 A2: the carrier of S = {};
-    then the topology of S = {} or the topology of S = {{}} by ZFMISC_1:1,39;
+    then the topology of S = {} or the topology of S = {{}} by
+    ZFMISC_1:1,39;
     then FinMeetCl the topology of S = {{}} by A1,A2,Th11,Th17;
     then UniCl FinMeetCl the topology of S = {{}} by A1,Th11;
     hence T is discrete TopStruct by A2,TDLAT_3:def 1,ZFMISC_1:1;
   end;
   then reconsider T as strict TopSpace by CANTOR_1:17;
   take T;
-  the topology of S c= FinMeetCl the topology of S &
-  FinMeetCl the topology of S c= the topology of T by CANTOR_1:1,4;
+A3: the topology of S c= FinMeetCl the topology of S by CANTOR_1:4;
+  FinMeetCl the topology of S c= the topology of T by CANTOR_1:1;
   then
-A3: the topology of S c= the topology of T by XBOOLE_1:1;
+A4: the topology of S c= the topology of T by A3,XBOOLE_1:1;
   FinMeetCl the topology of S is Basis of T by Th22;
-  hence thesis by A3,CANTOR_1:def 5;
+  hence thesis by A4,CANTOR_1:def 5;
 end;
 
 begin :: Refinements
@@ -2381,9 +2518,10 @@ definition
     the topology of T c= the topology of it;
   existence
   proof consider R being strict TopSpace such that
-A1: the carrier of R = the carrier of T &
-    the topology of T is prebasis of R by Lm2;
-    take R; thus thesis by A1,CANTOR_1:def 5;
+A1: the carrier of R = the carrier of T and
+A2: the topology of T is prebasis of R by Lm2;
+    take R;
+    thus thesis by A1,A2,CANTOR_1:def 5;
   end;
 end;
 
@@ -2393,11 +2531,12 @@ theorem Th53:
 proof
   let S be TopStruct;
   consider T being strict TopSpace such that
-A1: the carrier of T = the carrier of S &
-  the topology of S is prebasis of T by Lm2;
-  the topology of S c= the topology of T by A1,CANTOR_1:def 5;
+A1: the carrier of T = the carrier of S and
+A2: the topology of S is prebasis of T by Lm2;
+  the topology of S c= the topology of T by A2,CANTOR_1:def 5;
   then reconsider T as TopExtension of S by A1,Def5;
-  take T; thus thesis by A1;
+  take T;
+  thus thesis by A2;
 end;
 
 registration
@@ -2426,17 +2565,20 @@ definition
   proof
     set c1 = the carrier of T1, c2 = the carrier of T2;
     set t1 = the topology of T1, t2 = the topology of T2;
-    bool c1 c= bool (c1 \/ c2) & bool c2 c= bool (c1 \/
-    c2) by XBOOLE_1:7,ZFMISC_1:79;
-    then t1 c= bool (c1 \/ c2) & t2 c= bool (c1 \/ c2) by XBOOLE_1:1;
-    then reconsider t = t1 \/ t2 as Subset-Family of (c1 \/ c2) by XBOOLE_1:8;
+A1: bool c1 c= bool (c1 \/ c2) by XBOOLE_1:7,ZFMISC_1:79;
+A2: bool c2 c= bool (c1 \/ c2) by XBOOLE_1:7,ZFMISC_1:79;
+A3: t1 c= bool (c1 \/ c2) by A1,XBOOLE_1:1;
+    t2 c= bool (c1 \/ c2) by A2,XBOOLE_1:1;
+    then reconsider t = t1 \/ t2 as Subset-Family of (c1 \/ c2) by A3,
+    XBOOLE_1:8;
     reconsider t as Subset-Family of c1 \/ c2;
     set S = TopStruct(#c1 \/ c2, t#);
     consider T being TopExtension of S such that
-A1: T is strict & t is prebasis of T by Th53;
-    reconsider T as strict TopExtension of S by A1;
+A4: T is strict and
+A5: t is prebasis of T by Th53;
+    reconsider T as strict TopExtension of S by A4;
     take T;
-    thus thesis by A1,Def5;
+    thus thesis by A5,Def5;
   end;
 end;
 
@@ -2463,11 +2605,11 @@ theorem
   the TopStruct of T = the TopStruct of T'
 proof
   let T1, T2 be TopStruct, T,T' be Refinement of T1,T2;
-  the carrier of T = (the carrier of T1) \/ (the carrier of T2) &
-  (the topology of T1) \/ (the topology of T2) is prebasis of T &
-  the carrier of T' = (the carrier of T1) \/ (the carrier of T2) &
+A1: the carrier of T = (the carrier of T1) \/ (the carrier of T2) by Def6;
+A2: (the topology of T1) \/ (the topology of T2) is prebasis of T by Def6;
+A3: the carrier of T' = (the carrier of T1) \/ (the carrier of T2) by Def6;
   (the topology of T1) \/ (the topology of T2) is prebasis of T' by Def6;
-  hence thesis by Th26;
+  hence thesis by A1,A2,A3,Th26;
 end;
 
 theorem
@@ -2475,9 +2617,9 @@ theorem
   holds T is Refinement of T2,T1
 proof
   let T1, T2 be TopStruct, T be Refinement of T1,T2;
-  the carrier of T = (the carrier of T1) \/ (the carrier of T2) &
+A1: the carrier of T = (the carrier of T1) \/ (the carrier of T2) by Def6;
   (the topology of T1) \/ (the topology of T2) is prebasis of T by Def6;
-  hence thesis by Def6;
+  hence thesis by A1,Def6;
 end;
 
 theorem
@@ -2504,14 +2646,17 @@ A1: the carrier of T1 = the carrier of T2;
   let T be Refinement of T1, T2;
 A2: the carrier of T = (the carrier of T1) \/ the carrier of T2 by Def6
     .= the carrier of T1 by A1;
-  (the topology of T1) \/ the topology of T2 is prebasis of T by Def6;
-  then the topology of T1 c= (the topology of T1) \/ the topology of T2 &
-  the topology of T2 c= (the topology of T1) \/ the topology of T2 &
-  (the topology of T1) \/ the topology of T2 c= the topology of T
-  by CANTOR_1:def 5,XBOOLE_1:7;
-  then the topology of T1 c= the topology of T &
-  the topology of T2 c= the topology of T by XBOOLE_1:1;
-  hence thesis by A1,A2,Def5;
+A3: (the topology of T1) \/ the topology of T2 is prebasis of T by Def6;
+A4: the topology of T1 c= (the topology of T1) \/ the topology of T2 by
+  XBOOLE_1:7;
+A5: the topology of T2 c= (the topology of T1) \/ the topology of T2 by
+  XBOOLE_1:7;
+A6: (the topology of T1) \/ the topology of T2 c= the topology of T by A3,
+  CANTOR_1:def 5;
+  then
+A7: the topology of T1 c= the topology of T by A4,XBOOLE_1:1;
+  the topology of T2 c= the topology of T by A5,A6,XBOOLE_1:1;
+  hence thesis by A1,A2,A7,Def5;
 end;
 
 theorem
@@ -2526,56 +2671,65 @@ proof
   set cT1 = the carrier of T1, cT2 = the carrier of T2;
   reconsider C1 = B1 \/ {cT1} as prebasis of T1 by Th29;
   reconsider C2 = B2 \/ {cT2} as prebasis of T2 by Th29;
-A1: B1 c= the topology of T1 & C1 c= the topology of T1 &
-  B2 c= the topology of T2 & C2 c= the topology of T2 &
-  cT1 in the topology of T1 & cT2 in the topology of T2
-  by CANTOR_1:def 5,PRE_TOPC:def 1;
-  then
-A2: B1 \/ B2 c= B & B c= the topology of T & cT1 in B & cT2 in B
-  by CANTOR_1:def 5,XBOOLE_0:def 3,XBOOLE_1:13;
-  then
-A3: B1 \/ B2 c= the topology of T & {cT1,cT2} c= the topology of T &
-  {cT1,cT2} c= B by XBOOLE_1:1,ZFMISC_1:38;
-  then B1 \/ B2 \/ {cT1,cT2} c= the topology of T by XBOOLE_1:8;
+A1: B1 c= the topology of T1 by CANTOR_1:def 5;
+A2: C1 c= the topology of T1 by CANTOR_1:def 5;
+A3: B2 c= the topology of T2 by CANTOR_1:def 5;
+A4: C2 c= the topology of T2 by CANTOR_1:def 5;
+A5: cT1 in the topology of T1 by PRE_TOPC:def 1;
+A6: cT2 in the topology of T2 by PRE_TOPC:def 1;
+A7: B1 \/ B2 c= B by A1,A3,XBOOLE_1:13;
+A8: B c= the topology of T by CANTOR_1:def 5;
+A9: cT1 in B by A5,XBOOLE_0:def 3;
+A10: cT2 in B by A6,XBOOLE_0:def 3;
+A11: B1 \/ B2 c= the topology of T by A7,A8,XBOOLE_1:1;
+A12: {cT1,cT2} c= the topology of T by A8,A9,A10,ZFMISC_1:38;
+A13: {cT1,cT2} c= B by A9,A10,ZFMISC_1:38;
+  B1 \/ B2 \/ {cT1,cT2} c= the topology of T by A11,A12,XBOOLE_1:8;
   then reconsider BB = B1 \/ B2 \/
   {cT1, cT2} as Subset-Family of T by XBOOLE_1:1;
-  the topology of T1 c= B & the topology of T2 c= B by XBOOLE_1:7;
-  then C1 c= B & C2 c= B by A1,XBOOLE_1:1;
-  then reconsider D1 = C1, D2 = C2 as Subset-Family of T by XBOOLE_1:1;
+A14: the topology of T1 c= B by XBOOLE_1:7;
+A15: the topology of T2 c= B by XBOOLE_1:7;
+A16: C1 c= B by A2,A14,XBOOLE_1:1;
+  C2 c= B by A4,A15,XBOOLE_1:1;
+  then reconsider D1 = C1, D2 = C2 as Subset-Family of T by A16,XBOOLE_1:1;
   reconsider D1, D2 as Subset-Family of T;
   reconsider D1, D2 as Subset-Family of T;
-A4: UniCl FinMeetCl BB = UniCl FinMeetCl FinMeetCl BB by CANTOR_1:13
+A17: UniCl FinMeetCl BB = UniCl FinMeetCl FinMeetCl BB by CANTOR_1:13
     .= UniCl FinMeetCl UniCl FinMeetCl BB by Th21;
-  FinMeetCl B is Basis of T & FinMeetCl C1 is Basis of T1 &
-  FinMeetCl C2 is Basis of T2 by Th23;
+A18: FinMeetCl B is Basis of T by Th23;
+A19: FinMeetCl C1 is Basis of T1 by Th23;
+A20: FinMeetCl C2 is Basis of T2 by Th23;
+A21: UniCl FinMeetCl B = the topology of T by A18,Th22;
+A22: UniCl FinMeetCl C1 = the topology of T1 by A19,Th22;
+A23: UniCl FinMeetCl C2 = the topology of T2 by A20,Th22;
+A24: B1 c= B1 \/ B2 by XBOOLE_1:7;
+A25: B2 c= B1 \/ B2 by XBOOLE_1:7;
+A26: {cT1} c= {cT1,cT2} by ZFMISC_1:12;
+A27: {cT2} c= {cT1, cT2 } by ZFMISC_1:12;
+A28: D1 c= BB by A24,A26,XBOOLE_1:13;
+A29: D2 c= BB by A25,A27,XBOOLE_1:13;
+  BB c= B by A7,A13,XBOOLE_1:8;
   then
-A5: UniCl FinMeetCl B = the topology of T &
-  UniCl FinMeetCl C1 = the topology of T1 &
-  UniCl FinMeetCl C2 = the topology of T2 by Th22;
-  B1 c= B1 \/ B2 & B2 c= B1 \/ B2 & {cT1} c= {cT1,cT2} & {cT2} c= {cT1, cT2 }
-  by XBOOLE_1:7,ZFMISC_1:12;
-  then D1 c= BB & D2 c= BB & BB c= B by A2,A3,XBOOLE_1:8,13;
-  then
-A6: FinMeetCl BB c= FinMeetCl B &
-  FinMeetCl D1 c= FinMeetCl BB & FinMeetCl D2 c= FinMeetCl BB by CANTOR_1:16;
-  then
-A7: UniCl FinMeetCl BB c= the topology of T &
-  UniCl FinMeetCl D1 c= UniCl FinMeetCl BB &
-  UniCl FinMeetCl D2 c= UniCl FinMeetCl BB by A5,CANTOR_1:9;
-  cT1 in {cT1} & cT2 in {cT2} by TARSKI:def 1;
-  then cT1 in C1 & cT2 in C2 by XBOOLE_0:def 3;
-  then FinMeetCl D1 = {the carrier of T} \/ FinMeetCl C1 &
-  FinMeetCl D2 = {the carrier of T} \/ FinMeetCl C2 by Th20;
-  then FinMeetCl C1 c= FinMeetCl D1 & FinMeetCl C2 c= FinMeetCl D2
-  by XBOOLE_1:7;
-  then FinMeetCl C1 c= FinMeetCl BB & FinMeetCl C2 c= FinMeetCl BB
-  by A6,XBOOLE_1:1;
-  then the topology of T1 c= UniCl FinMeetCl BB &
-  the topology of T2 c= UniCl FinMeetCl BB by A5,Th19;
-  then B c= UniCl FinMeetCl BB by XBOOLE_1:8;
+A30: FinMeetCl BB c= FinMeetCl B by CANTOR_1:16;
+A31: FinMeetCl D1 c= FinMeetCl BB by A28,CANTOR_1:16;
+A32: FinMeetCl D2 c= FinMeetCl BB by A29,CANTOR_1:16;
+A33: UniCl FinMeetCl BB c= the topology of T by A21,A30,CANTOR_1:9;
+A34: cT1 in {cT1} by TARSKI:def 1;
+A35: cT2 in {cT2} by TARSKI:def 1;
+A36: cT1 in C1 by A34,XBOOLE_0:def 3;
+A37: cT2 in C2 by A35,XBOOLE_0:def 3;
+A38: FinMeetCl D1 = {the carrier of T} \/ FinMeetCl C1 by A36,Th20;
+A39: FinMeetCl D2 = {the carrier of T} \/ FinMeetCl C2 by A37,Th20;
+A40: FinMeetCl C1 c= FinMeetCl D1 by A38,XBOOLE_1:7;
+A41: FinMeetCl C2 c= FinMeetCl D2 by A39,XBOOLE_1:7;
+A42: FinMeetCl C1 c= FinMeetCl BB by A31,A40,XBOOLE_1:1;
+A43: FinMeetCl C2 c= FinMeetCl BB by A32,A41,XBOOLE_1:1;
+A44: the topology of T1 c= UniCl FinMeetCl BB by A22,A42,Th19;
+  the topology of T2 c= UniCl FinMeetCl BB by A23,A43,Th19;
+  then B c= UniCl FinMeetCl BB by A44,XBOOLE_1:8;
   then FinMeetCl B c= FinMeetCl UniCl FinMeetCl BB by CANTOR_1:16;
-  then the topology of T c= UniCl FinMeetCl BB by A4,A5,CANTOR_1:9;
-  then the topology of T = UniCl FinMeetCl BB by A7,XBOOLE_0:def 10;
+  then the topology of T c= UniCl FinMeetCl BB by A17,A21,CANTOR_1:9;
+  then the topology of T = UniCl FinMeetCl BB by A33,XBOOLE_0:def 10;
   then FinMeetCl BB is Basis of T by Th22;
   hence thesis by Th23;
 end;
@@ -2594,137 +2748,157 @@ proof
   by Def6;
 A1: FinMeetCl B is Basis of T by Th23;
 A2: (the carrier of T1) \/ the carrier of T2 = the carrier of T by Def6;
-A3: B1 c= the topology of T1 & B2 c= the topology of T2 &
-  B c= the topology of T by CANTOR_1:def 2,def 5;
-  the topology of T1 c= B & the topology of T2 c= B by XBOOLE_1:7;
+A3: B1 c= the topology of T1 by CANTOR_1:def 2;
+A4: B2 c= the topology of T2 by CANTOR_1:def 2;
+A5: the topology of T1 c= B by XBOOLE_1:7;
+A6: the topology of T2 c= B by XBOOLE_1:7;
+A7: B1 c= B by A3,A5,XBOOLE_1:1;
+A8: B2 c= B by A4,A6,XBOOLE_1:1;
+A9: B c= FinMeetCl B by CANTOR_1:4;
   then
-A4: B1 c= B & B2 c= B & B c= FinMeetCl B by A3,CANTOR_1:4,XBOOLE_1:1;
-  then B1 c= FinMeetCl B & B2 c= FinMeetCl B & B1 \/ B2 c= B
-  by A3,XBOOLE_1:1,13;
-  then INTERSECTION(B1,B2) c= FinMeetCl B & B1 \/ B2 c= FinMeetCl B
-  by A4,CANTOR_1:15,XBOOLE_1:1;
+A10: B1 c= FinMeetCl B by A7,XBOOLE_1:1;
+A11: B2 c= FinMeetCl B by A8,A9,XBOOLE_1:1;
+A12: B1 \/ B2 c= B by A3,A4,XBOOLE_1:13;
+A13: INTERSECTION(B1,B2) c= FinMeetCl B by A10,A11,CANTOR_1:15;
+  B1 \/ B2 c= FinMeetCl B by A9,A12,XBOOLE_1:1;
   then
-A5: BB c= FinMeetCl B & FinMeetCl B c= the topology of T
-  by A1,CANTOR_1:def 2,XBOOLE_1:8;
-  then
-A6: BB c= the topology of T by XBOOLE_1:1;
-  reconsider BB as Subset-Family of T by A5,XBOOLE_1:1;
+A14: BB c= FinMeetCl B by A13,XBOOLE_1:8;
+A15: FinMeetCl B c= the topology of T by A1,CANTOR_1:def 2;
+  reconsider BB as Subset-Family of T by A14,XBOOLE_1:1;
   now
     let A be Subset of T such that
-A7: A is open;
+A16: A is open;
     let p be Point of T;
     assume p in A;
     then consider a being Subset of T such that
-A8: a in FinMeetCl B & p in a & a c= A by A1,A7,Th31;
+A17: a in FinMeetCl B and
+A18: p in a and
+A19: a c= A by A1,A16,Th31;
     consider Y being Subset-Family of T such that
-A9: Y c= B & Y is finite & a = Intersect Y by A8,CANTOR_1:def 4;
+A20: Y c= B and
+A21: Y is finite and
+A22: a = Intersect Y by A17,CANTOR_1:def 4;
     reconsider Y1 = Y /\ the topology of T1 as Subset-Family of T1;
     reconsider Y2 = Y /\ the topology of T2 as Subset-Family of T2;
-A10: Y = B /\ Y by A9,XBOOLE_1:28
+A23: Y = B /\ Y by A20,XBOOLE_1:28
       .= Y1 \/ Y2 by XBOOLE_1:23;
     the carrier of T1 c= the carrier of T1;
     then reconsider cT1 = the carrier of T1 as Subset of T1;
     the carrier of T2 c= the carrier of T2;
     then reconsider cT2 = the carrier of T2 as Subset of T2;
-    cT1 in the topology of T1 & cT2 in the topology of T2 by PRE_TOPC:def 1;
-    then
-A11: cT1 is open & cT2 is open & cT1 in B & cT2 in B
-    by PRE_TOPC:def 5,XBOOLE_0:def 3;
+A24: cT1 in the topology of T1 by PRE_TOPC:def 1;
+A25: cT2 in the topology of T2 by PRE_TOPC:def 1;
+A26: cT1 is open by A24,PRE_TOPC:def 5;
+A27: cT2 is open by A25,PRE_TOPC:def 5;
     thus ex a being Subset of T st a in BB & p in a & a c= A
     proof per cases by A2,XBOOLE_0:def 3;
       suppose
-A12:    Y1 \/ Y2 = {} & p in cT1;
+A28:    Y1 \/ Y2 = {} & p in cT1;
         then consider b1 being Subset of T1 such that
-A13:    b1 in B1 & p in b1 & b1 c= cT1 by A11,Th31;
-        b1 in B1 \/ B2 & b1 in B & a = the carrier of T
-        by A3,A9,A10,A12,A13,SETFAM_1:def 10,XBOOLE_0:def 3;
-        then b1 in BB & b1 is Subset of T & b1 c= A
-        by A8,XBOOLE_0:def 3,XBOOLE_1:1;
-        hence thesis by A13;
+A29:    b1 in B1 and
+A30:    p in b1
+        and b1 c= cT1 by A26,Th31;
+A31:    b1 in B1 \/ B2 by A29,XBOOLE_0:def 3;
+A32:    a = the carrier of T by A22,A23,A28,SETFAM_1:def 10;
+        b1 in BB by A31,XBOOLE_0:def 3;
+        hence thesis by A19,A30,A32,XBOOLE_1:1;
       end;
       suppose
-A14:    Y1 \/ Y2 = {} & p in cT2;
+A33:    Y1 \/ Y2 = {} & p in cT2;
         then consider b2 being Subset of T2 such that
-A15:    b2 in B2 & p in b2 & b2 c= cT2 by A11,Th31;
-        b2 in B1 \/ B2 & b2 in B & a = the carrier of T
-        by A3,A9,A10,A14,A15,SETFAM_1:def 10,XBOOLE_0:def 3;
-        then b2 in BB & b2 is Subset of T & b2 c= A
-        by A8,XBOOLE_0:def 3,XBOOLE_1:1;
-        hence thesis by A15;
+A34:    b2 in B2 and
+A35:    p in b2
+        and b2 c= cT2 by A27,Th31;
+A36:    b2 in B1 \/ B2 by A34,XBOOLE_0:def 3;
+A37:    a = the carrier of T by A22,A23,A33,SETFAM_1:def 10;
+        b2 in BB by A36,XBOOLE_0:def 3;
+        hence thesis by A19,A35,A37,XBOOLE_1:1;
       end;
       suppose
-A16:    Y1 = {} & Y2 <> {} & Y <> {};
+A38:    Y1 = {} & Y2 <> {} & Y <> {};
         then
-A17:    a = meet Y2 by A9,A10,SETFAM_1:def 10
-          .= Intersect Y2 by A16,SETFAM_1:def 10;
-        Y2 is finite & Y2 c= the topology of T2 by A9,XBOOLE_1:17;
-        then a in FinMeetCl the topology of T2 by A17,CANTOR_1:def 4;
-        then a in the topology of T2 & the topology of T2 = UniCl B2
-        by Th22,CANTOR_1:5;
+A39:    a = meet Y2 by A22,A23,SETFAM_1:def 10
+          .= Intersect Y2 by A38,SETFAM_1:def 10;
+        Y2 c= the topology of T2 by XBOOLE_1:17;
+        then a in FinMeetCl the topology of T2 by A21,A39,CANTOR_1:def 4;
+        then
+A40:    a in the topology of T2 by CANTOR_1:5;
+        the topology of T2 = UniCl B2 by Th22;
         then consider Z being Subset-Family of T2 such that
-A18:    Z c= B2 & a = union Z by CANTOR_1:def 1;
+A41:    Z c= B2 and
+A42:    a = union Z by A40,CANTOR_1:def 1;
         consider z being set such that
-A19:    p in z & z in Z by A8,A18,TARSKI:def 4;
-        z in B1 \/ B2 by A18,A19,XBOOLE_0:def 3;
-        then z in BB & z c= a by A18,A19,XBOOLE_0:def 3,ZFMISC_1:92;
-        hence thesis by A8,A19,XBOOLE_1:1;
+A43:    p in z and
+A44:    z in Z by A18,A42,TARSKI:def 4;
+        z in B1 \/ B2 by A41,A44,XBOOLE_0:def 3;
+        then
+A45:    z in BB by XBOOLE_0:def 3;
+        z c= a by A42,A44,ZFMISC_1:92;
+        hence thesis by A19,A43,A45,XBOOLE_1:1;
       end;
       suppose
-A20:    Y1 <> {} & Y2 = {} & Y <> {};
+A46:    Y1 <> {} & Y2 = {} & Y <> {};
         then
-A21:    a = meet Y1 by A9,A10,SETFAM_1:def 10
-          .= Intersect Y1 by A20,SETFAM_1:def 10;
-        Y1 is finite & Y1 c= the topology of T1 by A9,XBOOLE_1:17;
-        then a in FinMeetCl the topology of T1 by A21,CANTOR_1:def 4;
-        then a in the topology of T1 & the topology of T1 = UniCl B1
-        by Th22,CANTOR_1:5;
+A47:    a = meet Y1 by A22,A23,SETFAM_1:def 10
+          .= Intersect Y1 by A46,SETFAM_1:def 10;
+        Y1 c= the topology of T1 by XBOOLE_1:17;
+        then a in FinMeetCl the topology of T1 by A21,A47,CANTOR_1:def 4;
+        then
+A48:    a in the topology of T1 by CANTOR_1:5;
+        the topology of T1 = UniCl B1 by Th22;
         then consider Z being Subset-Family of T1 such that
-A22:    Z c= B1 & a = union Z by CANTOR_1:def 1;
+A49:    Z c= B1 and
+A50:    a = union Z by A48,CANTOR_1:def 1;
         consider z being set such that
-A23:    p in z & z in Z by A8,A22,TARSKI:def 4;
-        z in B1 \/ B2 by A22,A23,XBOOLE_0:def 3;
-        then z in BB & z c= a by A22,A23,XBOOLE_0:def 3,ZFMISC_1:92;
-        hence thesis by A8,A23,XBOOLE_1:1;
+A51:    p in z and
+A52:    z in Z by A18,A50,TARSKI:def 4;
+        z in B1 \/ B2 by A49,A52,XBOOLE_0:def 3;
+        then
+A53:    z in BB by XBOOLE_0:def 3;
+        z c= a by A50,A52,ZFMISC_1:92;
+        hence thesis by A19,A51,A53,XBOOLE_1:1;
         thus thesis;
       end;
       suppose
-A24:    Y1 <> {} & Y2 <> {} & Y <> {};
+A54:    Y1 <> {} & Y2 <> {} & Y <> {};
         then
-A25:    a = meet Y by A9,SETFAM_1:def 10
-          .= (meet Y1)/\meet Y2 by A10,A24,SETFAM_1:10
-          .= (meet Y1)/\Intersect Y2 by A24,SETFAM_1:def 10
-          .= (Intersect Y1)/\Intersect Y2 by A24,SETFAM_1:def 10;
-        Y1 is finite & Y2 is finite &
-        Y1 c= the topology of T1 & Y2 c= the topology of T2
-        by A9,XBOOLE_1:17;
-        then Intersect Y1 in FinMeetCl the topology of T1 &
-        Intersect Y2 in FinMeetCl the topology of T2 by CANTOR_1:def 4;
-        then
-A26:    Intersect Y1 in the topology of T1 & the topology of T1 = UniCl B1 &
-        Intersect Y2 in the topology of T2 & the topology of T2 = UniCl B2
-        by Th22,CANTOR_1:5;
-        then consider Z1 being Subset-Family of T1 such that
-A27:    Z1 c= B1 & Intersect Y1 = union Z1 by CANTOR_1:def 1;
-        p in Intersect Y1 by A8,A25,XBOOLE_0:def 4;
+A55:    a = meet Y by A22,SETFAM_1:def 10
+          .= (meet Y1)/\meet Y2 by A23,A54,SETFAM_1:10
+          .= (meet Y1)/\Intersect Y2 by A54,SETFAM_1:def 10
+          .= (Intersect Y1)/\Intersect Y2 by A54,SETFAM_1:def 10;
+A56:    Y1 c= the topology of T1 by XBOOLE_1:17;
+A57:    Y2 c= the topology of T2 by XBOOLE_1:17;
+A58:    Intersect Y1 in FinMeetCl the topology of T1 by A21,A56,CANTOR_1:def 4;
+A59:    Intersect Y2 in FinMeetCl the topology of T2 by A21,A57,CANTOR_1:def 4;
+A60:    Intersect Y1 in the topology of T1 by A58,CANTOR_1:5;
+A61:    the topology of T1 = UniCl B1 by Th22;
+A62:    Intersect Y2 in the topology of T2 by A59,CANTOR_1:5;
+A63:    the topology of T2 = UniCl B2 by Th22;
+        consider Z1 being Subset-Family of T1 such that
+A64:    Z1 c= B1 and
+A65:    Intersect Y1 = union Z1 by A60,A61,CANTOR_1:def 1;
+        p in Intersect Y1 by A18,A55,XBOOLE_0:def 4;
         then consider z1 being set such that
-A28:    p in z1 & z1 in Z1 by A27,TARSKI:def 4;
+A66:    p in z1 and
+A67:    z1 in Z1 by A65,TARSKI:def 4;
         consider Z2 being Subset-Family of T2 such that
-A29:    Z2 c= B2 & Intersect Y2 = union Z2 by A26,CANTOR_1:def 1;
-        p in Intersect Y2 by A8,A25,XBOOLE_0:def 4;
+A68:    Z2 c= B2 and
+A69:    Intersect Y2 = union Z2 by A62,A63,CANTOR_1:def 1;
+        p in Intersect Y2 by A18,A55,XBOOLE_0:def 4;
         then consider z2 being set such that
-A30:    p in z2 & z2 in Z2 by A29,TARSKI:def 4;
-        z1 /\ z2 in INTERSECTION(B1,B2) & z1 c= union Z1 & z2 c= union Z2
-        by A27,A28,A29,A30,SETFAM_1:def 5,ZFMISC_1:92;
-        then
-A31:    z1 /\ z2 in BB & z1 /\ z2 c= a by A25,A27,A29,XBOOLE_0:def 3
-,XBOOLE_1:27;
-        then z1 /\ z2 is Subset of T & z1 /\ z2 c= A & p in z1 /\ z2
-        by A8,A28,A30,XBOOLE_0:def 4,XBOOLE_1:1;
-        hence thesis by A31;
+A70:    p in z2 and
+A71:    z2 in Z2 by A69,TARSKI:def 4;
+A72:    z1 /\ z2 in INTERSECTION(B1,B2) by A64,A67,A68,A71,SETFAM_1:def 5;
+A73:    z1 c= union Z1 by A67,ZFMISC_1:92;
+A74:    z2 c= union Z2 by A71,ZFMISC_1:92;
+A75:    z1 /\ z2 in BB by A72,XBOOLE_0:def 3;
+A76:    z1 /\ z2 c= a by A55,A65,A69,A73,A74,XBOOLE_1:27;
+        p in z1 /\ z2 by A66,A70,XBOOLE_0:def 4;
+        hence thesis by A19,A75,A76,XBOOLE_1:1;
       end;
     end;
   end;
-  hence thesis by A6,Th32;
+  hence thesis by A14,A15,Th32,XBOOLE_1:1;
 end;
 
 theorem Th60:
@@ -2741,25 +2915,28 @@ A1: the carrier of T1 = the carrier of T2;
   UniCl B2 = B2 by CANTOR_1:6;
   then reconsider B2 as Basis of T2 by Th22;
 A2: B1 \/ B2 \/ INTERSECTION(B1,B2) is Basis of T by Th59;
-A3: the carrier of T1 in B1 & the carrier of T2 in B2 by PRE_TOPC:def 1;
-A4: B1 c= INTERSECTION(B1,B2)
+A3: the carrier of T1 in B1 by PRE_TOPC:def 1;
+A4: the carrier of T2 in B2 by PRE_TOPC:def 1;
+A5: B1 c= INTERSECTION(B1,B2)
   proof
     let a be set;
-    assume a in B1;
-    then a /\ the carrier of T1 in INTERSECTION(B1,B2) &
-    a c= the carrier of T1 by A1,A3,SETFAM_1:def 5;
-    hence thesis by XBOOLE_1:28;
+    assume
+A6: a in B1;
+    then a /\ the carrier of T1 in INTERSECTION(B1,B2) by A1,A4,
+    SETFAM_1:def 5;
+    hence thesis by A6,XBOOLE_1:28;
   end;
   B2 c= INTERSECTION(B1,B2)
   proof
     let a be set;
-    assume a in B2;
-    then a /\ the carrier of T2 in INTERSECTION(B1,B2) &
-    a c= the carrier of T2 by A1,A3,SETFAM_1:def 5;
-    hence thesis by XBOOLE_1:28;
+    assume
+A7: a in B2;
+    then a /\ the carrier of T2 in INTERSECTION(B1,B2) by A1,A3,
+    SETFAM_1:def 5;
+    hence thesis by A7,XBOOLE_1:28;
   end;
   hence thesis
-  by A2,A4,XBOOLE_1:8,12;
+  by A2,A5,XBOOLE_1:8,12;
 end;
 
 theorem
@@ -2769,8 +2946,8 @@ theorem
 proof
   let L be non empty RelStr;
   let T1,T2 be correct TopAugmentation of L;
-  the RelStr of T1 = the RelStr of L &
+A1: the RelStr of T1 = the RelStr of L by Def4;
   the RelStr of T2 = the RelStr of L by Def4;
-  hence thesis by Th60;
+  hence thesis by A1,Th60;
 end;
 

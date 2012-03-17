@@ -11,12 +11,12 @@ environ
       PETRI, FRAENKEL, NET_1, MARGREL1, FUNCT_2, ARYTM_3, ARYTM_1, BOOLMARK,
       FINSEQ_4, ARYTM;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, NAT_1, RELAT_1,
-      FUNCT_1, PARTFUN1, FUNCT_2, DOMAIN_1, FUNCOP_1, FINSEQ_1,
-      FUNCT_4, MARGREL1, PETRI, XXREAL_0;
+      FUNCT_1, PARTFUN1, FUNCT_2, DOMAIN_1, FUNCOP_1, FINSEQ_1, FUNCT_4,
+      MARGREL1, PETRI, XXREAL_0;
  constructors PARTFUN1, DOMAIN_1, FUNCT_4, XXREAL_0, XREAL_0, NAT_1, MARGREL1,
       FINSEQ_4, PETRI, RELSET_1;
- registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, XXREAL_0, XREAL_0,
-      FINSEQ_1, MARGREL1, ORDINAL1, CARD_1, RELSET_1;
+ registrations SUBSET_1, XXREAL_0, XREAL_0, FINSEQ_1, MARGREL1, ORDINAL1,
+      CARD_1, RELSET_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions PETRI, XBOOLE_0, XBOOLEAN, SUBSET_1;
  theorems SUBSET_1, TARSKI, ZFMISC_1, PETRI, FUNCT_1, FUNCOP_1, FUNCT_2,
@@ -28,46 +28,50 @@ environ
 begin
 
 theorem Th1:
-  for A, B being non empty set, f being Function of A,B, C being Subset of A,
-  v being Element of B holds f +* (C-->v) is Function of A,B
+  for A, B being non empty set, f being Function of A,B, C being
+  Subset of A, v being Element of B holds f +* (C-->v) is Function of A,B
 proof
   let A, B be non empty set;
   let f be Function of A,B;
   let C be Subset of A;
   let v be Element of B;
 A1: dom f = A by FUNCT_2:def 1;
-A2: dom(f +* (C-->v)) = (dom f) \/ dom(C-->v) by FUNCT_4:def 1
+  rng f c= B & rng(C-->v) c= {v} by FUNCOP_1:19,RELAT_1:def 19;
+  then
+A2: rng f \/ rng(C-->v) c= B \/ {v} by XBOOLE_1:13;
+  rng(f +* (C-->v)) c= rng f \/ rng(C-->v) by FUNCT_4:18;
+  then rng(f +* (C-->v)) c= B \/ {v} by A2,XBOOLE_1:1;
+  then
+A3: rng(f +* (C-->v)) c= B by ZFMISC_1:46;
+  dom(f +* (C-->v)) = (dom f) \/ dom(C-->v) by FUNCT_4:def 1
     .= [#]A \/ C by A1,FUNCOP_1:19
     .= A by SUBSET_1:28;
-A3: rng f c= B by RELAT_1:def 19;
-  rng(C-->v) c= {v} by FUNCOP_1:19;
-  then
-A4: rng f \/ rng(C-->v) c= B \/ {v} by A3,XBOOLE_1:13;
-  rng(f +* (C-->v)) c= rng f \/ rng(C-->v) by FUNCT_4:18;
-  then rng(f +* (C-->v)) c= B \/ {v} by A4,XBOOLE_1:1;
-  then rng(f +* (C-->v)) c= B by ZFMISC_1:46;
-  hence thesis by A2,FUNCT_2:def 1,RELSET_1:11;
+  hence thesis by A3,FUNCT_2:def 1,RELSET_1:11;
 end;
 
 theorem Th2:
-  for X, Y being non empty set, A, B being Subset of X,
-  f being Function of X,Y st f.:A misses f.:B holds A misses B
+  for X, Y being non empty set, A, B being Subset of X, f being
+  Function of X,Y st f.:A misses f.:B holds A misses B
 proof
   let X, Y be non empty set;
   let A, B be Subset of X;
   let f be Function of X,Y such that
 A1: f.:A /\ f.:B = {};
-  assume A /\ B <> {};
+  assume
+  A /\ B <> {};
   then consider x being Element of X such that
 A2: x in A /\ B by SUBSET_1:10;
-  x in A & x in B by A2,XBOOLE_0:def 4;
-  then f.x in f.:A & f.x in f.:B by FUNCT_2:43;
-  hence contradiction by A1,XBOOLE_0:def 4;
+  x in B by A2,XBOOLE_0:def 4;
+  then
+A3: f.x in f.:B by FUNCT_2:43;
+  x in A by A2,XBOOLE_0:def 4;
+  then f.x in f.:A by FUNCT_2:43;
+  hence contradiction by A1,A3,XBOOLE_0:def 4;
 end;
 
 theorem Th3:
-  for A, B being set, f being Function, x being set
-  holds A misses B implies (f +* (A --> x)).:B = f.:B
+  for A, B being set, f being Function, x being set holds A misses
+  B implies (f +* (A --> x)).:B = f.:B
 proof
   let A, B be set, f be Function, x be set;
   assume that
@@ -75,10 +79,12 @@ A1: A /\ B = {} and
 A2: (f +* (A --> x)).:B <> f.:B;
 A3: dom(f +* (A --> x)) = dom f \/ dom(A --> x) by FUNCT_4:def 1;
 A4: dom(A --> x) = A by FUNCOP_1:19;
-A5: not (for y being set holds y in (f +* (A --> x)).:B iff y in f.:B)
-  by A2,TARSKI:2;
-  now per cases by A5;
-    case ex y being set st y in (f +* (A --> x)).:B & not y in f.:B;
+A5: not (for y being set holds y in (f +* (A --> x)).:B iff y in f.:B) by A2
+  ,TARSKI:2;
+  now
+    per cases by A5;
+    case
+      ex y being set st y in (f +* (A --> x)).:B & not y in f.:B;
       then consider y being set such that
 A6:   y in (f +* (A --> x)).:B and
 A7:   not y in f.:B;
@@ -86,24 +92,25 @@ A7:   not y in f.:B;
 A8:   z in dom(f +* (A --> x)) and
 A9:   z in B and
 A10:  y = (f +* (A --> x)).z by A6,FUNCT_1:def 12;
-A11:  not z in A by A1,A9,XBOOLE_0:def 4;
-      then
-A12:  z in dom f by A3,A4,A8,XBOOLE_0:def 3;
-      y = f.z by A4,A10,A11,FUNCT_4:12;
-      hence contradiction by A7,A9,A12,FUNCT_1:def 12;
+      not z in A by A1,A9,XBOOLE_0:def 4;
+      then z in dom f & y = f.z by A3,A4,A8,A10,
+      FUNCT_4:12,XBOOLE_0:def 3;
+      hence contradiction by A7,A9,FUNCT_1:def 12;
     end;
-    case ex y being set st not y in (f +* (A --> x)).:B & y in f.:B;
+    case
+      ex y being set st not y in (f +* (A --> x)).:B & y in f.:B;
       then consider y being set such that
-A13:  not y in (f +* (A --> x)).:B and
-A14:  y in f.:B;
+A11:  not y in (f +* (A --> x)).:B and
+A12:  y in f.:B;
       consider z being set such that
-A15:  z in dom f and
-A16:  z in B and
-A17:  y = f.z by A14,FUNCT_1:def 12;
-A18:  not z in A by A1,A16,XBOOLE_0:def 4;
-A19:  z in dom(f +* (A --> x)) by A3,A15,XBOOLE_0:def 3;
-      y = (f +* (A --> x)).z by A4,A17,A18,FUNCT_4:12;
-      hence contradiction by A13,A16,A19,FUNCT_1:def 12;
+A13:  z in dom f and
+A14:  z in B and
+A15:  y = f.z by A12,FUNCT_1:def 12;
+      not z in A by A1,A14,XBOOLE_0:def 4;
+      then
+A16:  y = (f +* (A --> x)).z by A4,A15,FUNCT_4:12;
+      z in dom(f +* (A --> x)) by A3,A13,XBOOLE_0:def 3;
+      hence contradiction by A11,A14,A16,FUNCT_1:def 12;
     end;
   end;
   hence thesis;
@@ -119,7 +126,6 @@ definition
   let PTN be PT_net_Str;
   func Bool_marks_of PTN -> FUNCTION_DOMAIN of the Places of PTN, BOOLEAN
   equals
-
   Funcs(the Places of PTN, BOOLEAN);
   correctness;
 end;
@@ -152,7 +158,8 @@ definition
   let M0 be Boolean_marking of PTN;
   let t be transition of PTN;
   func Firing(t,M0) -> Boolean_marking of PTN equals
-  M0 +* (*'{t}-->FALSE) +* ({t}*'-->TRUE);
+  M0 +* (*'{t}-->FALSE) +*
+  ({t}*'-->TRUE);
   coherence
   proof
     set M1 = M0 +* (*'{t}-->FALSE) +* ({t}*'-->TRUE);
@@ -171,11 +178,10 @@ definition
   let Q be FinSequence of the Transitions of PTN;
   pred Q is_firable_on M0 means
   :Def4:
-  Q = {} or
-  ex M being FinSequence of Bool_marks_of PTN st len Q = len M
-  & Q/.1 is_firable_on M0 & M/.1 = Firing(Q/.1,M0)
-  & for i being Element of NAT st i < len Q & i > 0
-  holds Q/.(i+1) is_firable_on M/.i & M/.(i+1) = Firing(Q/.(i+1),M/.i);
+  Q = {} or ex M being FinSequence of
+Bool_marks_of PTN st len Q = len M & Q/.1 is_firable_on M0 & M/.1 = Firing(Q/.1
+  ,M0) & for i being Element of NAT st i < len Q & i > 0 holds Q/.(i+1)
+  is_firable_on M/.i & M/.(i+1) = Firing(Q/.(i+1),M/.i);
 end;
 
 notation
@@ -192,197 +198,193 @@ definition
   func Firing(Q,M0) -> Boolean_marking of PTN means
   :Def5:
   it = M0 if Q = {}
-  otherwise ex M being FinSequence of Bool_marks_of PTN st len Q = len M
-  & it = M/.len M & M/.1 = Firing(Q/.1,M0)
-  & for i being Element of NAT st i < len Q & i > 0
-  holds M/.(i+1) = Firing(Q/.(i+1),M/.i);
+otherwise ex M being FinSequence of Bool_marks_of PTN st len Q = len M & it = M
+/.len M & M/.1 = Firing(Q/.1,M0) & for i being Element of NAT st i < len Q & i
+  > 0 holds M/.(i+1) = Firing(Q/.(i+1),M/.i);
   existence
   proof
-    defpred P2[Element of NAT] means
-    for Q being FinSequence of the Transitions of PTN st $1 = len Q
-    holds (Q = {} implies ex M1 being Boolean_marking of PTN st M1 = M0)
-    & (Q <> {} implies ex M2 being Boolean_marking of PTN
-    st ex M being FinSequence of Bool_marks_of PTN st len Q = len M
-    & M2 = M/.len M & M/.1 = Firing(Q/.1,M0)
-    & for i being Element of NAT st i < len Q & i > 0
-    holds M/.(i+1) = Firing(Q/.(i+1),M/.i));
-A1: P2[0];
-A2: now
+    defpred P2[Element of NAT] means for Q being FinSequence of the
+    Transitions of PTN st $1 = len Q holds (Q = {} implies ex M1 being
+    Boolean_marking of PTN st M1 = M0) & (Q <> {} implies ex M2 being
+Boolean_marking of PTN st ex M being FinSequence of Bool_marks_of PTN st len Q
+= len M & M2 = M/.len M & M/.1 = Firing(Q/.1,M0) & for i being Element of NAT
+    st i < len Q & i > 0 holds M/.(i+1) = Firing(Q/.(i+1),M/.i));
+A1: now
       let n be Element of NAT;
       assume
-A3:   P2[n];
+A2:   P2[n];
       thus P2[n+1]
       proof
         let Q be FinSequence of the Transitions of PTN such that
-A4:     n+1=len Q;
+A3:     n+1=len Q;
         thus Q = {} implies ex M1 being Boolean_marking of PTN st M1 = M0;
-        thus Q <> {} implies ex M2 being Boolean_marking of PTN,
-        M being FinSequence of Bool_marks_of PTN st len Q = len M
-        & M2 = M/.len M & M/.1 = Firing(Q/.1,M0)
-        & for i being Element of NAT st i < len Q & i > 0
-        holds M/.(i+1) = Firing(Q/.(i+1),M/.i)
+        thus Q <> {} implies ex M2 being Boolean_marking of PTN, M being
+FinSequence of Bool_marks_of PTN st len Q = len M & M2 = M/.len M & M/.1 =
+Firing(Q/.1,M0) & for i being Element of NAT st i < len Q & i > 0 holds M/.(i+1
+        ) = Firing(Q/.(i+1),M/.i)
         proof
-          assume Q <> {};
+          assume
+          Q <> {};
           then len Q<>0;
-          then consider Q1 being FinSequence of the Transitions of PTN,
-          t being transition of PTN such that
-A5:       Q=Q1^<*t*> by FINSEQ_2:22;
-A6:       n+1=len Q1+ 1 by A4,A5,FINSEQ_2:19;
+          then consider
+          Q1 being FinSequence of the Transitions of PTN, t being
+          transition of PTN such that
+A4:       Q=Q1^<*t*> by FINSEQ_2:22;
+A5:       n+1=len Q1+ 1 by A3,A4,FINSEQ_2:19;
           per cases;
           suppose
-A7:         Q1={};
+A6:         Q1={};
             take M2 = Firing(t,M0);
             take M = <*M2*>;
-A8:         len Q = len Q1 + len <*t*> by A5,FINSEQ_1:35
-              .= 0 + len <*t*> by A7
+A7:         len Q = len Q1 + len <*t*> by A4,FINSEQ_1:35
+              .= 0 + len <*t*> by A6
               .= 0 + 1 by FINSEQ_1:56;
             hence len Q = len M by FINSEQ_1:56;
-            hence M2 = M/.len M by A8,FINSEQ_4:25;
-            Q = <*t*> by A5,A7,FINSEQ_1:47;
+            hence M2 = M/.len M by A7,FINSEQ_4:25;
+            Q = <*t*> by A4,A6,FINSEQ_1:47;
             then Q/.1 = t by FINSEQ_4:25;
             hence M/.1 = Firing(Q/.1,M0) by FINSEQ_4:25;
             let i be Element of NAT;
-            assume i < len Q & i > 0;
-            hence thesis by A8,NAT_1:13;
+            assume
+            i < len Q & i > 0;
+            hence thesis by A7,NAT_1:13;
           end;
           suppose
-A9:         Q1<> {};
-            then consider B2 being Boolean_marking of PTN,
-            B being FinSequence of Bool_marks_of PTN such that
-A10:        len Q1 = len B and
-A11:        B2 = B/.len B and
-A12:        B/.1 = Firing(Q1/.1,M0) and
-A13:        for i being Element of NAT st i < len Q1 & i > 0
-            holds B/.(i+1) = Firing(Q1/.(i+1),B/.i) by A3,A6;
-            take M2 = Firing(t,B2);
-            take M = B^<*M2*>;
-A14:        len M =len B + len<*M2*> by FINSEQ_1:35
-              .=len B + 1 by FINSEQ_1:57;
-A15:        len Q = len Q1 + len<*t*> by A5,FINSEQ_1:35
-              .=len Q1 + 1 by FINSEQ_1:57;
-            hence len Q = len M by A10,A14;
-            thus M2 = M/.len M by A14,FINSEQ_4:82;
-            len Q1 <> 0 by A9;
+A8:         Q1<> {};
             then
-A16:        len Q1 > 0 by NAT_1:3;
-            then 0 + 1 < len B + 1 by A10,XREAL_1:8;
-            then
-A17:        1<= len B by NAT_1:13;
-            then
-A18:        1 in dom B by FINSEQ_3:27;
-            0 + 1 < len Q1 + 1 by A16,XREAL_1:8;
+A9:         len Q1 > 0 by NAT_1:3;
+            then 0 + 1 < len Q1 + 1 by XREAL_1:8;
             then 1<= len Q1 by NAT_1:13;
             then
-A19:        1 in dom Q1 by FINSEQ_3:27;
-            thus M/.1 = B/.1 by A18,FINSEQ_4:83
-              .= Firing(Q/.1,M0) by A5,A12,A19,FINSEQ_4:83;
+A10:        1 in dom Q1 by FINSEQ_3:27;
+A11:        len Q = len Q1 + len<*t*> by A4,FINSEQ_1:35
+              .=len Q1 + 1 by FINSEQ_1:57;
+            consider B2 being Boolean_marking of PTN, B being FinSequence of
+            Bool_marks_of PTN such that
+A12:        len Q1 = len B and
+A13:        B2 = B/.len B and
+A14:        B/.1 = Firing(Q1/.1,M0) and
+A15:        for i being Element of NAT st i < len Q1 & i > 0 holds B
+            /.(i+1) = Firing(Q1/.(i+1),B/.i) by A2,A5,A8;
+            take M2 = Firing(t,B2);
+            take M = B^<*M2*>;
+A16:        len M =len B + len<*M2*> by FINSEQ_1:35
+              .=len B + 1 by FINSEQ_1:57;
+            hence len Q = len M by A12,A11;
+            thus M2 = M/.len M by A16,FINSEQ_4:82;
+            0 + 1 < len B + 1 by A12,A9,XREAL_1:8;
+            then
+A17:        1<= len B by NAT_1:13;
+            then 1 in dom B by FINSEQ_3:27;
+            hence M/.1 = B/.1 by FINSEQ_4:83
+              .= Firing(Q/.1,M0) by A4,A14,A10,FINSEQ_4:83;
             let i be Element of NAT such that
-A20:        i < len Q and
-A21:        i > 0;
+A18:        i < len Q and
+A19:        i > 0;
             thus M/.(i+1) = Firing(Q/.(i+1),M/.i)
             proof
-A22:          Seg (len Q1 + 1) = Seg (len Q1) \/ {len Q1 + 1} by FINSEQ_1:11;
-A23:          1<=i+1 by NAT_1:12;
-              i+1<=len Q1+1 by A15,A20,NAT_1:13;
+              1<=i+1 & i+1<=len Q1+1 by A11,A18,NAT_1:12,13;
               then
-A24:          i+1 in Seg (len Q1 + 1) by A23,FINSEQ_1:3;
-              per cases by A22,A24,XBOOLE_0:def 3;
+A20:          Seg (len Q1 + 1) = Seg (len Q1) \/ {len Q1 + 1} & i+1 in
+              Seg (len Q1 + 1) by FINSEQ_1:3,11;
+              per cases by A20,XBOOLE_0:def 3;
               suppose
-A25:            i+1 in Seg (len Q1);
-                then i + 1 <= len Q1 by FINSEQ_1:3;
+A21:            i+1 in Seg (len Q1);
+                then i + 1 <= len B by A12,FINSEQ_1:3;
+                then i + 1 <= len B + 1 by NAT_1:12;
+                then
+A22:            i <= len B by XREAL_1:8;
+                0 + 1 < i + 1 by A19,XREAL_1:8;
+                then 1<=i by NAT_1:13;
+                then
+A23:            i in dom B by A22,FINSEQ_3:27;
+                i + 1 <= len Q1 by A21,FINSEQ_1:3;
                 then i < len Q1 by NAT_1:13;
                 then
-A26:            B/.(i+1) = Firing(Q1/.(i+1),B/.i) by A13,A21;
-                0 + 1 < i + 1 by A21,XREAL_1:8;
+A24:            B/.(i+1) = Firing(Q1/.(i+1),B/.i) by A15,A19;
+                i+1 in dom Q1 by A21,FINSEQ_1:def 3;
                 then
-A27:            1<=i by NAT_1:13;
-                i+1 in dom B by A10,A25,FINSEQ_1:def 3;
-                then
-A28:            B/.(i+1)=M/.(i+1) by FINSEQ_4:83;
-A29:            i + 1 <= len B by A10,A25,FINSEQ_1:3;
-                i+1 in dom Q1 by A25,FINSEQ_1:def 3;
-                then
-A30:            Q1/.(i+1)=Q/.(i+1) by A5,FINSEQ_4:83;
-                i + 1 <= len B + 1 by A29,NAT_1:12;
-                then i <= len B by XREAL_1:8;
-                then i in dom B by A27,FINSEQ_3:27;
-                hence thesis
-                by A26,A28,A30,FINSEQ_4:83;
+A25:            Q1/.(i+1)=Q/.(i+1) by A4,FINSEQ_4:83;
+                i+1 in dom B by A12,A21,FINSEQ_1:def 3;
+                then B/.(i+1)=M/.(i+1) by FINSEQ_4:83;
+                hence thesis by A24,A25,A23,FINSEQ_4:83;
               end;
-              suppose i+1 in {len Q1 + 1};
-                then
-A31:            i + 1 = len Q1 + 1 by TARSKI:def 1;
-                then
-A32:            M/.(i+1)=M2 by A10,FINSEQ_4:82;
-A33:            Q/.(i+1)=t by A5,A31,FINSEQ_4:82;
-                len B in dom B by A17,FINSEQ_3:27;
-                hence thesis
-                by A10,A11,A31,A32,A33,FINSEQ_4:83;
+              suppose
+A26:            i+1 in {len Q1 + 1};
+A27:            len B in dom B by A17,FINSEQ_3:27;
+A28:            i + 1 = len Q1 + 1 by A26,TARSKI:def 1;
+                then M/.(i+1)=M2 & Q/.(i+1)=t by A4,A12,FINSEQ_4:82;
+                hence thesis by A12,A13,A28,A27,FINSEQ_4:83;
               end;
             end;
           end;
         end;
       end;
     end;
-    for n being Element of NAT holds P2[n] from NAT_1:sch 1(A1,A2);
+A29: P2[0];
+    for n being Element of NAT holds P2[n] from NAT_1:sch 1(A29,A1);
     hence thesis;
   end;
   uniqueness
   proof
     let B1,B2 be Boolean_marking of PTN;
     thus Q = {} & B1 = M0 & B2 = M0 implies B1 = B2;
-    assume Q <> {};
+    assume
+    Q <> {};
     given M1 being FinSequence of Bool_marks_of PTN such that
-A34: len Q = len M1 and
-A35: B1 = M1/.len M1 and
-A36: M1/.1 = Firing(Q/.1,M0) and
-A37: for i being Element of NAT st i < len Q & i > 0
-    holds M1/.(i+1) = Firing(Q/.(i+1),M1/.i);
+A30: len Q = len M1 and
+A31: B1 = M1/.len M1 and
+A32: M1/.1 = Firing(Q/.1,M0) and
+A33: for i being Element of NAT st i < len Q & i > 0 holds M1/.(i+1) =
+    Firing(Q/.(i+1),M1/.i);
+A34: dom M1 = Seg len Q by A30,FINSEQ_1:def 3;
     given M2 being FinSequence of Bool_marks_of PTN such that
-A38: len Q = len M2 and
-A39: B2 = M2/.len M2 and
-A40: M2/.1 = Firing(Q/.1,M0) and
-A41: for i being Element of NAT st i < len Q & i > 0
-    holds M2/.(i+1) = Firing(Q/.(i+1),M2/.i);
+A35: len Q = len M2 and
+A36: B2 = M2/.len M2 and
+A37: M2/.1 = Firing(Q/.1,M0) and
+A38: for i being Element of NAT st i < len Q & i > 0 holds M2/.(i+1) =
+    Firing(Q/.(i+1),M2/.i);
     defpred P2[Element of NAT] means $1 in Seg len Q implies M1/.$1 = M2/.$1;
-A42: P2[0] by FINSEQ_1:3;
-A43: now
+A39: now
       let j be Element of NAT;
       assume
-A44:  P2[j];
+A40:  P2[j];
       now
         assume
-A45:    j + 1 in Seg len Q;
+A41:    j + 1 in Seg len Q;
         per cases;
-        suppose j = 0;
-          hence M1/.(j+1) = M2/.(j+1) by A36,A40;
+        suppose
+          j = 0;
+          hence M1/.(j+1) = M2/.(j+1) by A32,A37;
         end;
         suppose
-A46:      j <> 0;
-A47:      j + 1 <= len Q by A45,FINSEQ_1:3;
-A48:      j < j + 1 by XREAL_1:31;
+A42:      j <> 0;
           then
-A49:      j > 0 & j < len Q by A46,A47,NAT_1:3,XXREAL_0:2;
-          1 <= j & j <= len Q by A46,A47,A48,NAT_1:14,XXREAL_0:2;
-          hence M1/.(j+1) = Firing(Q/.(j+1),M2/.j) by A37,A44,A49,FINSEQ_1:3
-            .= M2/.(j+1) by A41,A49;
+A43:      j > 0 by NAT_1:3;
+          j + 1 <= len Q & j < j + 1 by A41,FINSEQ_1:3,XREAL_1:31;
+          then
+A44:      j < len Q by XXREAL_0:2;
+          1 <= j by A42,NAT_1:14;
+          hence M1/.(j+1) = Firing(Q/.(j+1),M2/.j) by A33,A40,A44, FINSEQ_1
+          :3
+            .= M2/.(j+1) by A38,A43,A44;
         end;
       end;
       hence P2[j+1];
     end;
-A50: for j being Element of NAT holds P2[j] from NAT_1:sch 1(A42,A43);
-X: dom M1 = Seg len Q by A34,FINSEQ_1:def 3;
+A45: P2[0] by FINSEQ_1:3;
+A46: for j being Element of NAT holds P2[j] from NAT_1:sch 1(A45,A39);
     now
       let j be Nat;
       assume
-A51:  j in dom M1;
+A47:  j in dom M1;
       then
-A52:  j in dom M1 & j in dom M2 by A38,X,FINSEQ_1:def 3;
-      hence M1.j = M1/.j by PARTFUN1:def 8
-        .= M2/.j by A50,A51,X
-        .= M2.j by A52,PARTFUN1:def 8;
+A48:  j in dom M2 by A35,A34,FINSEQ_1:def 3;
+      thus M1.j = M1/.j by A47,PARTFUN1:def 8
+        .= M2/.j by A46,A34,A47
+        .= M2.j by A48,PARTFUN1:def 8;
     end;
-    hence B1 = B2 by A34,A35,A38,A39,FINSEQ_2:10;
+    hence B1 = B2 by A30,A31,A35,A36,FINSEQ_2:10;
   end;
   correctness;
 end;
@@ -390,124 +392,145 @@ end;
 canceled;
 
 theorem Th5:
-  for A being non empty set, y being set, f being Function
-  holds (f+*(A --> y)).:A = {y}
+  for A being non empty set, y being set, f being Function holds (f
+  +*(A --> y)).:A = {y}
 proof
   let A be non empty set, y be set, f be Function;
   now
     let u be set;
     thus u in (f+*(A --> y)).:A implies u = y
     proof
-      assume u in (f+*(A --> y)).:A;
+      assume
+      u in (f+*(A --> y)).:A;
       then consider z being set such that
-A1:   z in dom(f+*(A --> y)) & z in A & u = (f+*(A --> y)).z
-      by FUNCT_1:def 12;
+      z in dom(f+*(A --> y)) and
+A1:   z in A and
+A2:   u = (f+*(A --> y)).z by FUNCT_1:def 12;
       z in dom(A --> y) by A1,FUNCOP_1:19;
-      then u = (A --> y).z by A1,FUNCT_4:14;
+      then u = (A --> y).z by A2,FUNCT_4:14;
       hence thesis by A1,FUNCOP_1:13;
     end;
     consider x being set such that
-A2: x in A by XBOOLE_0:def 1;
-    x in dom(A --> y) & (A --> y).x = y by A2,FUNCOP_1:13,19;
-    then x in dom(f+*(A --> y)) & y = (f+*(A --> y)).x by FUNCT_4:13,14;
-    hence u = y implies u in (f+*(A --> y)).:A by A2,FUNCT_1:def 12;
+A3: x in A by XBOOLE_0:def 1;
+A4: x in dom(A --> y) by A3,FUNCOP_1:19;
+    then
+A5: x in dom(f+*(A --> y)) by FUNCT_4:13;
+    (A --> y).x = y by A3,FUNCOP_1:13;
+    then y = (f+*(A --> y)).x by A4,FUNCT_4:14;
+    hence u = y implies u in (f+*(A --> y)).:A by A3,A5,FUNCT_1:def 12;
   end;
   hence thesis by TARSKI:def 1;
 end;
 
 theorem Th6:
-  for PTN being PT_net_Str, M0 being Boolean_marking of PTN,
-  t being transition of PTN, s being place of PTN st s in {t}*'
-  holds Firing(t,M0).s = TRUE
+  for PTN being PT_net_Str, M0 being Boolean_marking of PTN, t
+being transition of PTN, s being place of PTN st s in {t}*' holds Firing(t,M0).
+  s = TRUE
 proof
   let PTN be PT_net_Str, M0 be Boolean_marking of PTN, t be transition of PTN,
   s be place of PTN;
-  assume
-A1: s in {t}*';
-  then
-A2: ((M0 +* (*'{t}-->FALSE)) +* ({t}*'-->TRUE)).:({t}*') = {TRUE} by Th5;
   set M = M0 +* (*'{t}-->FALSE) +* ({t}*'-->TRUE);
-A3: [#]the Places of PTN = the Places of PTN;
-A4: dom M0 = the Places of PTN & dom (*'{t}-->FALSE) = (*'{t})
-  & dom ({t}*'-->TRUE) = ({t}*') by FUNCT_2:def 1;
-  then dom M = dom(M0 +* (*'{t}-->FALSE)) \/ {t}*' by FUNCT_4:def 1
-    .= (the Places of PTN) \/ (*'{t}) \/ ({t}*') by A4,FUNCT_4:def 1
+A1: [#]the Places of PTN = the Places of PTN;
+A2: dom M0 = the Places of PTN & dom (*'{t}-->FALSE) = (*'{t}) by FUNCT_2:
+  def 1;
+  dom ({t}*'-->TRUE) = ({t}*') by FUNCT_2:def 1;
+  then
+A3: dom M = dom(M0 +* (*'{t}-->FALSE)) \/ {t}*' by FUNCT_4:def 1
+    .= (the Places of PTN) \/ (*'{t}) \/ ({t}*') by A2,FUNCT_4:def 1
     .= (the Places of PTN) \/ ((*'{t}) \/ ({t}*')) by XBOOLE_1:4
-    .= the Places of PTN by A3,SUBSET_1:28;
-  then M.s in {TRUE} by A1,A2,FUNCT_1:def 12;
+    .= the Places of PTN by A1,SUBSET_1:28;
+  assume
+A4: s in {t}*';
+  then ((M0 +* (*'{t}-->FALSE)) +* ({t}*'-->TRUE)).:({t}*') = {TRUE} by
+  Th5;
+  then M.s in {TRUE} by A4,A3,FUNCT_1:def 12;
   hence thesis by TARSKI:def 1;
 end;
 
 Lm1: now
   let PTN be PT_net_Str;
   let Sd be non empty Subset of the Places of PTN;
+  set M0 = ((the Places of PTN)-->TRUE qua Function) +* (Sd-->FALSE);
+A1: [#]the Places of PTN = the Places of PTN;
+
+  dom ((the Places of PTN)-->TRUE qua Function) = the Places of PTN & dom
+  (Sd -->FALSE) = Sd by FUNCOP_1:19;
+
+  then
+A2: dom M0 = (the Places of PTN) \/ Sd by FUNCT_4:def 1
+    .= the Places of PTN by A1,SUBSET_1:28;
+
+A3: rng M0 c= rng ((the Places of PTN)-->TRUE) \/ rng (Sd-->FALSE) by
+  FUNCT_4:18;
+
+  rng (Sd-->FALSE) c= {FALSE} by FUNCOP_1:19;
+  then
+A4: rng (Sd-->FALSE) c= BOOLEAN by XBOOLE_1:1;
+  rng ((the Places of PTN)-->TRUE) c= {TRUE} by FUNCOP_1:19;
+  then rng ((the Places of PTN)-->TRUE) c= BOOLEAN by XBOOLE_1:1;
+
+  then rng ((the Places of PTN)-->TRUE) \/ rng (Sd-->FALSE) c= BOOLEAN by
+  A4,XBOOLE_1:8;
+
+  then rng M0 c= BOOLEAN by A3,XBOOLE_1:1;
+  then reconsider M0 as Boolean_marking of PTN by A2,FUNCT_2:def 2;
   assume
-A1: for M0 being Boolean_marking of PTN st M0.:Sd = {FALSE}
-  for t being transition of PTN st t is_firable_on M0
-  holds Firing(t,M0).:Sd = {FALSE};
-  assume Sd is not Deadlock-like;
+
+A5: for M0 being Boolean_marking of PTN st M0.:Sd = {FALSE} for t being
+  transition of PTN st t is_firable_on M0 holds Firing(t,M0).:Sd = {FALSE};
+
+  assume
+  Sd is not Deadlock-like;
   then not *'Sd c= Sd*' by PETRI:def 5;
   then consider t being transition of PTN such that
-A2: t in *'Sd and
-A3: not t in Sd*' by SUBSET_1:7;
-  set M0 = ((the Places of PTN)-->TRUE qua Function) +* (Sd-->FALSE);
-A4: [#]the Places of PTN = the Places of PTN;
-  dom ((the Places of PTN)-->TRUE qua Function) = the Places of PTN
-  & dom (Sd-->FALSE) = Sd by FUNCOP_1:19;
-  then
-A5: dom M0 = (the Places of PTN) \/ Sd by FUNCT_4:def 1
-    .= the Places of PTN by A4,SUBSET_1:28;
-  rng ((the Places of PTN)-->TRUE) c= {TRUE}
-  & rng (Sd-->FALSE) c= {FALSE} by FUNCOP_1:19;
-  then rng ((the Places of PTN)-->TRUE) c= BOOLEAN
-  & rng (Sd-->FALSE) c= BOOLEAN by XBOOLE_1:1;
-  then
-A6: rng ((the Places of PTN)-->TRUE) \/ rng (Sd-->FALSE) c= BOOLEAN
-  by XBOOLE_1:8;
-  rng M0 c= rng ((the Places of PTN)-->TRUE) \/ rng (Sd-->FALSE)
-  by FUNCT_4:18;
-  then rng M0 c= BOOLEAN by A6,XBOOLE_1:1;
-  then reconsider M0 as Boolean_marking of PTN by A5,FUNCT_2:def 2;
-A7: (M0).:(Sd) = {FALSE qua set} by Th5;
-  Sd misses *'{t} by A3,PETRI:19;
-  then
-A8: ((the Places of PTN)-->TRUE qua Function).:*'{t} = M0.:*'{t} by Th3;
-A9: rng ((the Places of PTN)-->TRUE) c= {TRUE} by FUNCOP_1:19;
-  ((the Places of PTN)-->TRUE).:*'{t} c= rng ((the Places of PTN)-->TRUE)
-  by RELAT_1:144;
-  then M0.:*'{t} c= {TRUE} by A8,A9,XBOOLE_1:1;
-  then
-A10: t is_firable_on M0 by Def2;
-  {t}*' meets Sd by A2,PETRI:20;
+A6: t in *'Sd and
+A7: not t in Sd*' by SUBSET_1:7;
+  {t}*' meets Sd by A6,PETRI:20;
   then consider s being set such that
-A11: s in {t}*' /\ Sd by XBOOLE_0:4;
-A12: s in {t}*' & s in Sd by A11,XBOOLE_0:def 4;
-  then Firing(t,M0).s = TRUE by Th6;
-  then TRUE in Firing(t,M0).:Sd by A12,FUNCT_2:43;
-  then Firing(t,M0).:Sd <> {FALSE} by TARSKI:def 1;
-  hence contradiction by A1,A7,A10;
+A8: s in {t}*' /\ Sd by XBOOLE_0:4;
+  s in {t}*' by A8,XBOOLE_0:def 4;
+  then
+A9: Firing(t,M0).s = TRUE by Th6;
+  s in Sd by A8,XBOOLE_0:def 4;
+  then TRUE in Firing(t,M0).:Sd by A9,FUNCT_2:43;
+  then
+A10: Firing(t,M0).:Sd <> {FALSE} by TARSKI:def 1;
+  Sd misses *'{t} by A7,PETRI:19;
+
+  then
+A11: ((the Places of PTN)-->TRUE qua Function).:*'{t} = M0.:*'{t} by
+  Th3;
+
+  rng ((the Places of PTN)-->TRUE) c= {TRUE} & ((the Places of PTN)-->
+  TRUE).: *'{t} c= rng ((the Places of PTN)-->TRUE) by FUNCOP_1:19,RELAT_1:144;
+
+  then M0.:*'{t} c= {TRUE} by A11,XBOOLE_1:1;
+  then
+A12: t is_firable_on M0 by Def2;
+  (M0).:(Sd) = {FALSE qua set} by Th5;
+  hence contradiction by A5,A12,A10;
 end;
 
 theorem
-  for PTN being PT_net_Str, Sd being non empty Subset of the Places of PTN
-  holds Sd is Deadlock-like iff
-  for M0 being Boolean_marking of PTN st M0.:Sd = {FALSE}
-  for t being transition of PTN st t is_firable_on M0
-  holds Firing(t,M0).:Sd = {FALSE}
+  for PTN being PT_net_Str, Sd being non empty Subset of the Places of
+PTN holds Sd is Deadlock-like iff for M0 being Boolean_marking of PTN st M0.:Sd
+= {FALSE} for t being transition of PTN st t is_firable_on M0 holds Firing(t,M0
+  ).:Sd = {FALSE}
 proof
   let PTN be PT_net_Str, Sd be non empty Subset of the Places of PTN;
-  thus Sd is Deadlock-like implies
-  for M0 being Boolean_marking of PTN st M0.:Sd = {FALSE}
-  for t being transition of PTN st t is_firable_on M0
-  holds Firing(t,M0).:Sd = {FALSE}
+  thus Sd is Deadlock-like implies for M0 being Boolean_marking of PTN st M0.:
+Sd = {FALSE} for t being transition of PTN st t is_firable_on M0 holds Firing(t
+  ,M0).:Sd = {FALSE}
   proof
-    assume Sd is Deadlock-like;
+    assume
+    Sd is Deadlock-like;
     then
 A1: *'Sd is Subset of Sd*' by PETRI:def 5;
     let M0 be Boolean_marking of PTN such that
 A2: M0.:Sd = {FALSE};
     let t be transition of PTN;
-    assume t is_firable_on M0;
+    assume
+    t is_firable_on M0;
     then M0.:*'{t} c= {TRUE} by Def2;
     then
 A3: M0.:*'{t} misses {FALSE} by XBOOLE_1:63,ZFMISC_1:17;
@@ -521,9 +544,8 @@ A3: M0.:*'{t} misses {FALSE} by XBOOLE_1:63,ZFMISC_1:17;
 end;
 
 theorem Th8:
-  for D being non empty set
-  for Q0,Q1 being FinSequence of D, i being Element of NAT st 1<=i & i<=len Q0
-  holds (Q0^Q1)/.i=Q0/.i
+  for D being non empty set for Q0,Q1 being FinSequence of D, i
+  being Element of NAT st 1<=i & i<=len Q0 holds (Q0^Q1)/.i=Q0/.i
 proof
   let D be non empty set;
   let Q0,Q1 be FinSequence of D, i be Element of NAT;
@@ -544,14 +566,15 @@ end;
 canceled;
 
 theorem Th10:
-  for PTN being PT_net_Str, M0 being Boolean_marking of PTN,
-  Q0, Q1 being FinSequence of the Transitions of PTN
-  holds Firing(Q0^Q1,M0) = Firing(Q1,Firing(Q0,M0))
+  for PTN being PT_net_Str, M0 being Boolean_marking of PTN, Q0,
+Q1 being FinSequence of the Transitions of PTN holds Firing(Q0^Q1,M0) = Firing(
+  Q1,Firing(Q0,M0))
 proof
   let PTN be PT_net_Str;
   let M0 be Boolean_marking of PTN;
   let Q0, Q1 be FinSequence of the Transitions of PTN;
-  now per cases;
+  now
+    per cases;
     case
 A1:   Q0 = {} & Q1 = {};
       then
@@ -572,126 +595,120 @@ A4:   Q0 <> {} & Q1 = {};
     end;
     case
 A5:   Q0 <> {} & Q1 <> {};
-      let i be Element of NAT;
-A6:   len Q0 <> 0 by A5;
-A7:   len Q1 <> 0 by A5;
-      then len Q0 + len Q1 <> 0 by NAT_1:7;
-      then len(Q0^Q1) <> 0 by FINSEQ_1:35;
-      then Q0^Q1 <> {};
-      then consider M being FinSequence of Bool_marks_of PTN such that
-A8:   len (Q0^Q1) = len M and
-A9:   Firing(Q0^Q1,M0) = M/.len M and
-A10:  M/.1 = Firing((Q0^Q1)/.1,M0) and
-A11:  for i being Element of NAT st i < len (Q0^Q1) & i > 0
-      holds M/.(i+1) = Firing((Q0^Q1)/.(i+1),M/.i) by Def5;
-      consider M3 being FinSequence of Bool_marks_of PTN such that
-A12:  len Q0 = len M3 and
-A13:  Firing(Q0,M0) = M3/.len M3 and
-A14:  M3/.1 = Firing(Q0/.1,M0) and
-A15:  for i being Element of NAT st i < len Q0 & i > 0
-      holds M3/.(i+1) = Firing(Q0/.(i+1),M3/.i) by A5,Def5;
-      consider M4 being FinSequence of Bool_marks_of PTN such that
-A16:  len Q1 = len M4 and
-A17:  Firing(Q1,Firing(Q0,M0)) = M4/.len M4 and
-A18:  M4/.1 = Firing(Q1/.1,Firing(Q0,M0)) and
-A19:  for i being Element of NAT st i < len Q1 & i > 0
-      holds M4/.(i+1) = Firing(Q1/.(i+1),M4/.i) by A5,Def5;
-A20:  len Q0 > 0 by A6,NAT_1:3;
-A21:  len Q1 > 0 by A7,NAT_1:3;
-      defpred P2[Element of NAT] means
-      1+$1<=len Q0 implies M/.(1+$1)=M3/.(1+$1);
-A22:  P2[0] by A10,A14,Th8;
-      0<len Q1 by A7,NAT_1:3;
+      then consider M3 being FinSequence of Bool_marks_of PTN such that
+A6:   len Q0 = len M3 & Firing(Q0,M0) = M3/.len M3 and
+A7:   M3/.1 = Firing(Q0/.1,M0) and
+A8:   for i being Element of NAT st i < len Q0 & i > 0 holds M3/.(i+1
+      ) = Firing(Q0/.(i+1),M3/.i) by Def5;
+      consider M being FinSequence of Bool_marks_of PTN such that
+A9:   len (Q0^Q1) = len M and
+A10:  Firing(Q0^Q1,M0) = M/.len M and
+A11:  M/.1 = Firing((Q0^Q1)/.1,M0) and
+A12:  for i being Element of NAT st i < len (Q0^Q1) & i > 0 holds M/.
+      (i+1) = Firing((Q0^Q1)/.(i+1),M/.i) by A5,Def5;
+      defpred P2[Element of NAT] means 1+$1<=len Q0 implies M/.(1+$1)=M3/.(1+
+      $1);
+      0<len Q1 by A5,NAT_1:3;
       then 0+len Q0<len Q0 + len Q1 by XREAL_1:8;
       then
-A23:  len Q0<len (Q0^Q1) by FINSEQ_1:35;
-A24:  now
+A13:  len Q0<len (Q0^Q1) by FINSEQ_1:35;
+A14:  now
         let k be Element of NAT;
-A25:    0<=k by NAT_1:2;
-        then
-A26:    0<1+k;
+A15:    0<=k by NAT_1:2;
         assume
-A27:    P2[k];
+A16:    P2[k];
         now
           assume
-A28:      1+(k+1)<=len Q0;
+A17:      1+(k+1)<=len Q0;
           then
-A29:      (Q0^Q1)/.(1+(k+1))=Q0/.(1+(k+1)) by Th8,NAT_1:11;
-A30:      1+k<len Q0 by A28,NAT_1:13;
-          then 0<1+k & 1+k<len (Q0^Q1) by A23,A25,XXREAL_0:2;
-          then M/.(1+(k+1)) =
-          Firing(Q0/.(1+(k+1)),M3/.(1+k)) by A11,A27,A28,A29,NAT_1:13;
-          hence M/.(1+(k+1)) = M3/.(1+(k+1)) by A15,A26,A30;
+A18:      (Q0^Q1)/.(1+(k+1))=Q0/.(1+(k+1)) by Th8,NAT_1:11;
+A19:      1+k<len Q0 by A17,NAT_1:13;
+          then 1+k<len (Q0^Q1) by A13,XXREAL_0:2;
+          then M/.(1+(k+1)) = Firing(Q0/.(1+(k+1)),M3/.(1+k)) by A12,A15,A16,
+          A17,A18,NAT_1:13;
+          hence M/.(1+(k+1)) = M3/.(1+(k+1)) by A8,A15,A19;
         end;
         hence P2[k+1];
       end;
-A31:  for k being Element of NAT holds P2[k] from NAT_1:sch 1(A22,A24);
-A32:  0+1<=len Q1 by A21,NAT_1:13;
-      reconsider m = len Q0 - 1 as Element of NAT by A6,NAT_1:3,20;
-      defpred P2[Element of NAT] means
-      1+$1<=len Q1 implies M/.(len Q0+1+$1)=M4/.(1+$1);
-      M/.(len Q0+1+0)= Firing((Q0^Q1)/.(len Q0+1),M/.(1+m)) by A11,A20,A23
-        .=Firing((Q0^Q1)/.(len Q0+1),Firing(Q0,M0)) by A12,A13,A31
-        .=M4/.(1+0) by A18,A32,GOBOARD2:5;
+      reconsider m = len Q0 - 1 as Element of NAT by A5,NAT_1:3,20;
+      let i be Element of NAT;
+      len Q1 > 0 by A5,NAT_1:3;
       then
-A33:  P2[0];
-A34:  now
+A20:  0+1<=len Q1 by NAT_1:13;
+      consider M4 being FinSequence of Bool_marks_of PTN such that
+A21:  len Q1 = len M4 and
+A22:  Firing(Q1,Firing(Q0,M0)) = M4/.len M4 and
+A23:  M4/.1 = Firing(Q1/.1,Firing(Q0,M0)) and
+A24:  for i being Element of NAT st i < len Q1 & i > 0 holds M4/.(i+1
+      ) = Firing(Q1/.(i+1),M4/.i) by A5,Def5;
+      consider k being Nat such that
+A25:  len M4 = k + 1 by A5,A21,NAT_1:6;
+A26:  P2[0] by A11,A7,Th8;
+A27:  for k being Element of NAT holds P2[k] from NAT_1:sch 1(A26,A14);
+      defpred P2[Element of NAT] means 1+$1<=len Q1 implies M/.(len Q0+1+$1)=
+      M4/.(1+$1);
+A28:  now
         let k be Element of NAT;
-A35:    len Q0 + 1+k+1 = len Q0 + 1 + (k+1);
-        0<=k by NAT_1:2;
-        then
-A36:    0<1+k;
+        assume
+A29:    P2[k];
         0<=k + len Q0 by NAT_1:2;
         then
-A37:    0<len Q0 + k + 1;
-        assume
-A38:    P2[k];
+A30:    len Q0 + 1+k+1 = len Q0 + 1 + (k+1) & 0<len Q0 + k + 1;
+A31:    0<=k by NAT_1:2;
         now
           assume
-A39:      1+(k+1)<=len Q1;
+A32:      1+(k+1)<=len Q1;
           then
-A40:      (Q0^Q1)/.(len Q0+(1+(k+1)))=Q1/.(1+(k+1)) by GOBOARD2:5,NAT_1:11;
-A41:      1+k<len Q1 by A39,NAT_1:13;
+A33:      (Q0^Q1)/.(len Q0+(1+(k+1)))=Q1/.(1+(k+1)) by GOBOARD2:5 ,
+          NAT_1:11;
+A34:      1+k<len Q1 by A32,NAT_1:13;
           then len Q0+(1+k) < len Q0+ len Q1 by XREAL_1:8;
           then len Q0+1+k < len (Q0^Q1) by FINSEQ_1:35;
-          then M/.(len Q0+1+(k+1)) =
-          Firing(Q1/.(1+(k+1)),M4/.(1+k)) by A11,A35,A37,A38,A39,A40,NAT_1:13;
-          hence M/.(len Q0+1+(k+1)) = M4/.(1+(k+1)) by A19,A36,A41;
+          then M/.(len Q0+1+(k+1)) = Firing(Q1/.(1+(k+1)),M4/.(1+k)) by A12,
+          A30,A29,A32,A33,NAT_1:13;
+          hence M/.(len Q0+1+(k+1)) = M4/.(1+(k+1)) by A24,A31,A34;
         end;
         hence P2[k+1];
       end;
-A42:  for k being Element of NAT holds P2[k] from NAT_1:sch 1(A33,A34);
-      consider k being Nat such that
-A43:  len M4 = k + 1 by A7,A16,NAT_1:6;
+      len Q0 > 0 by A5,NAT_1:3;
+      then M/.(len Q0+1+0)= Firing((Q0^Q1)/.(len Q0+1),M/.(1+m)) by A12,
+      A13
+        .=Firing((Q0^Q1)/.(len Q0+1),Firing(Q0,M0)) by A6,A27
+        .=M4/.(1+0) by A23,A20,GOBOARD2:5;
+      then
+A35:  P2[0];
+A36:  for k being Element of NAT holds P2[k] from NAT_1:sch 1(A35,A28);
       reconsider k as Element of NAT by ORDINAL1:def 13;
-      M/.len M = M/.(len Q0 +(1+k)) by A8,A16,A43,FINSEQ_1:35
+      M/.len M = M/.(len Q0 +(1+k)) by A9,A21,A25,FINSEQ_1:35
         .= M/.(len Q0 +1+k)
-        .= M4/.len M4 by A16,A42,A43;
-      hence thesis by A9,A17;
+        .= M4/.len M4 by A21,A36,A25;
+      hence thesis by A10,A22;
     end;
   end;
   hence thesis;
 end;
 
 theorem Th11:
-  for PTN being PT_net_Str, M0 being Boolean_marking of PTN,
-  Q0, Q1 being FinSequence of the Transitions of PTN st Q0^Q1 is_firable_on M0
-  holds Q1 is_firable_on Firing(Q0,M0) & Q0 is_firable_on M0
+  for PTN being PT_net_Str, M0 being Boolean_marking of PTN, Q0,
+Q1 being FinSequence of the Transitions of PTN st Q0^Q1 is_firable_on M0 holds
+  Q1 is_firable_on Firing(Q0,M0) & Q0 is_firable_on M0
 proof
   let PTN be PT_net_Str;
   let M0 be Boolean_marking of PTN;
   let Q0, Q1 be FinSequence of the Transitions of PTN;
   assume
 A1: Q0^Q1 is_firable_on M0;
-  now per cases;
-    case Q0 = {} & Q1 = {};
+  now
+    per cases;
+    case
+      Q0 = {} & Q1 = {};
       hence thesis by Def4;
     end;
     case
 A2:   Q0 = {} & Q1 <> {};
       hence Q0 is_firable_on M0 by Def4;
-      Q0^Q1 = Q1 & Firing(Q0,M0) = M0 by A2,Def5,FINSEQ_1:47;
-      hence Q1 is_firable_on Firing(Q0,M0) by A1;
+      Q0^Q1 = Q1 by A2,FINSEQ_1:47;
+      hence Q1 is_firable_on Firing(Q0,M0) by A1,A2,Def5;
     end;
     case
 A3:   Q0 <> {} & Q1 = {};
@@ -701,319 +718,313 @@ A3:   Q0 <> {} & Q1 = {};
     case
 A4:   Q0 <> {} & Q1 <> {};
       let i be Element of NAT;
-A5:   len Q0 <> 0 by A4;
-A6:   len Q1 <> 0 by A4;
-      then len Q0 + len Q1 <> 0 by NAT_1:7;
-      then len(Q0^Q1) <> 0 by FINSEQ_1:35;
-      then Q0^Q1 <> {};
-      then consider M being FinSequence of Bool_marks_of PTN
-      such that len (Q0^Q1) = len M and
-A7:   (Q0^Q1)/.1 is_firable_on M0 and
-A8:   M/.1 = Firing((Q0^Q1)/.1,M0) and
-A9:   for i being Element of NAT st i < len (Q0^Q1) & i > 0 holds
-      (Q0^Q1)/.(i+1) is_firable_on M/.i &
-      M/.(i+1) = Firing((Q0^Q1)/.(i+1),M/.i) by A1,Def4;
+      len Q1 > 0 by A4,NAT_1:3;
+      then
+A5:   0+1<=len Q1 by NAT_1:13;
+      then
+A6:   Q1/.1 = (Q0^Q1)/.(len Q0 + 1) by GOBOARD2:5;
+      reconsider m = len Q0 - 1 as Element of NAT by A4,NAT_1:3,20;
+      consider M4 being FinSequence of Bool_marks_of PTN such that
+A7:   len Q1 = len M4 and
+      Firing(Q1,Firing(Q0,M0)) = M4/.len M4 and
+A8:   M4/.1 = Firing(Q1/.1,Firing(Q0,M0)) and
+A9:   for i being Element of NAT st i < len Q1 & i > 0 holds M4/.(i+1
+      ) = Firing(Q1/.(i+1),M4/.i) by A4,Def5;
       consider M3 being FinSequence of Bool_marks_of PTN such that
 A10:  len Q0 = len M3 and
 A11:  Firing(Q0,M0) = M3/.len M3 and
 A12:  M3/.1 = Firing(Q0/.1,M0) and
-A13:  for i being Element of NAT st i < len Q0 & i > 0
-      holds M3/.(i+1) = Firing(Q0/.(i+1),M3/.i) by A4,Def5;
-      consider M4 being FinSequence of Bool_marks_of PTN such that
-A14:  len Q1 = len M4 and Firing(Q1,Firing(Q0,M0)) = M4/.len M4 and
-A15:  M4/.1 = Firing(Q1/.1,Firing(Q0,M0)) and
-A16:  for i being Element of NAT st i < len Q1 & i > 0
-      holds M4/.(i+1) = Firing(Q1/.(i+1),M4/.i) by A4,Def5;
-A17:  len Q0 > 0 by A5,NAT_1:3;
-A18:  len Q1 > 0 by A6,NAT_1:3;
-A19:  0+1<=len Q0 by A17,NAT_1:13;
-      defpred P2[Element of NAT] means
-      1+$1<=len Q0 implies M/.(1+$1)=M3/.(1+$1);
-A20:  P2[0] by A8,A12,Th8;
-      0<len Q1 by A6,NAT_1:3;
+A13:  for i being Element of NAT st i < len Q0 & i > 0 holds M3/.(i+1
+      ) = Firing(Q0/.(i+1),M3/.i) by A4,Def5;
+      consider j being Nat such that
+A14:  len M3 = j + 1 by A4,A10,NAT_1:6;
+      reconsider j as Element of NAT by ORDINAL1:def 13;
+      consider M being FinSequence of Bool_marks_of PTN such that
+      len (Q0^Q1) = len M and
+A15:  (Q0^Q1)/.1 is_firable_on M0 and
+A16:  M/.1 = Firing((Q0^Q1)/.1,M0) and
+A17:  for i being Element of NAT st i < len (Q0^Q1) & i > 0 holds (Q0
+^Q1)/.(i+1) is_firable_on M/.i & M/.(i+1) = Firing((Q0^Q1)/.(i+1),M/.i) by A1,
+      A4,Def4;
+      defpred P2[Element of NAT] means 1+$1<=len Q0 implies M/.(1+$1)=M3/.(1+
+      $1);
+      0<len Q1 by A4,NAT_1:3;
       then 0+len Q0<len Q0 + len Q1 by XREAL_1:8;
       then
-A21:  len Q0<len (Q0^Q1) by FINSEQ_1:35;
-A22:  now
+A18:  len Q0<len (Q0^Q1) by FINSEQ_1:35;
+A19:  now
         let k be Element of NAT;
-A23:    0<=k by NAT_1:2;
-        then
-A24:    0<1+k;
+A20:    0<=k by NAT_1:2;
         assume
-A25:    P2[k];
+A21:    P2[k];
         now
           assume
-A26:      1+(k+1)<=len Q0;
+A22:      1+(k+1)<=len Q0;
           then
-A27:      (Q0^Q1)/.(1+(k+1))=Q0/.(1+(k+1)) by Th8,NAT_1:11;
-A28:      1+k<len Q0 by A26,NAT_1:13;
-          then 0<1+k & 1+k<len (Q0^Q1) by A21,A23,XXREAL_0:2;
-          then M/.(1+(k+1)) =
-          Firing(Q0/.(1+(k+1)),M3/.(1+k)) by A9,A25,A26,A27,NAT_1:13;
-          hence M/.(1+(k+1)) = M3/.(1+(k+1)) by A13,A24,A28;
+A23:      (Q0^Q1)/.(1+(k+1))=Q0/.(1+(k+1)) by Th8,NAT_1:11;
+A24:      1+k<len Q0 by A22,NAT_1:13;
+          then 1+k<len (Q0^Q1) by A18,XXREAL_0:2;
+          then M/.(1+(k+1)) = Firing(Q0/.(1+(k+1)),M3/.(1+k)) by A17,A20,A21,
+          A22,A23,NAT_1:13;
+          hence M/.(1+(k+1)) = M3/.(1+(k+1)) by A13,A20,A24;
         end;
         hence P2[k+1];
       end;
-A29:  for k being Element of NAT holds P2[k] from NAT_1:sch 1(A20,A22);
-A30:  0+1<=len Q1 by A18,NAT_1:13;
-      reconsider m = len Q0 - 1 as Element of NAT by A5,NAT_1:3,20;
-      defpred P2[Element of NAT] means 1+$1<=len Q1 implies
-      M/.(len Q0+1+$1)=M4/.(1+$1);
-      M/.(len Q0+1+0)= Firing((Q0^Q1)/.(len Q0+1),M/.(1+m)) by A9,A17,A21
-        .=Firing((Q0^Q1)/.(len Q0+1),Firing(Q0,M0)) by A10,A11,A29
-        .=M4/.(1+0) by A15,A30,GOBOARD2:5;
-      then
-A31:  P2[0];
-A32:  now
+A25:  P2[0] by A16,A12,Th8;
+A26:  for k being Element of NAT holds P2[k] from NAT_1:sch 1(A25,A19);
+A27:  now
+        let i be Element of NAT;
+        assume that
+A28:    i < len Q0 and
+A29:    i > 0;
+        consider j being Nat such that
+A30:    i = j + 1 by A29,NAT_1:6;
+        i + 1 >= 1 & i + 1 <= len Q0 by A28,NAT_1:11,13;
+        then i + 1 in dom Q0 by FINSEQ_3:27;
+        then
+A31:    (Q0^Q1)/.(i+1) = Q0/.(i+1) by FINSEQ_4:83;
+        reconsider j as Element of NAT by ORDINAL1:def 13;
+        i = j+1 by A30;
+        then
+A32:    M/.i = M3/.i by A26,A28;
+A33:    i + 1 <= len Q0 by A28,NAT_1:13;
+A34:    i < len (Q0^Q1) by A18,A28,XXREAL_0:2;
+        then M/.(i+1) = Firing((Q0^Q1)/.(i+1),M/.i) by A17,A29;
+        hence
+        Q0/.(i+1) is_firable_on M3/.i & M3/.(i+1) = Firing(Q0/.(i+1),M3/.
+        i) by A17,A26,A29,A34,A31,A32,A33;
+      end;
+      defpred P2[Element of NAT] means 1+$1<=len Q1 implies M/.(len Q0+1+$1)=
+      M4/.(1+$1);
+A35:  now
         let k be Element of NAT;
-A33:    len Q0 + 1+k+1 = len Q0 + 1 + (k+1);
-        0<=k by NAT_1:2;
-        then
-A34:    0<1+k;
-        0<=k + len Q0 by NAT_1:2;
-        then
-A35:    0<len Q0 + k + 1;
         assume
 A36:    P2[k];
+        0<=k + len Q0 by NAT_1:2;
+        then
+A37:    len Q0 + 1+k+1 = len Q0 + 1 + (k+1) & 0<len Q0 + k + 1;
+A38:    0<=k by NAT_1:2;
         now
           assume
-A37:      1+(k+1)<=len Q1;
+A39:      1+(k+1)<=len Q1;
           then
-A38:      (Q0^Q1)/.(len Q0+(1+(k+1)))=Q1/.(1+(k+1)) by GOBOARD2:5,NAT_1:11;
-A39:      1+k<len Q1 by A37,NAT_1:13;
+A40:      (Q0^Q1)/.(len Q0+(1+(k+1)))=Q1/.(1+(k+1)) by GOBOARD2:5 ,
+          NAT_1:11;
+A41:      1+k<len Q1 by A39,NAT_1:13;
           then len Q0+(1+k) < len Q0+ len Q1 by XREAL_1:8;
           then len Q0+1+k < len (Q0^Q1) by FINSEQ_1:35;
-          then M/.(len Q0+1+(k+1)) = Firing(Q1/.(1+(k+1)),M4/.(1+k))
-          by A9,A33,A35,A36,A37,A38,NAT_1:13;
-          hence M/.(len Q0+1+(k+1)) = M4/.(1+(k+1)) by A16,A34,A39;
+          then M/.(len Q0+1+(k+1)) = Firing(Q1/.(1+(k+1)),M4/.(1+k)) by A17,
+          A37,A36,A39,A40,NAT_1:13;
+          hence M/.(len Q0+1+(k+1)) = M4/.(1+(k+1)) by A9,A38,A41;
         end;
         hence P2[k+1];
       end;
-A40:  for k being Element of NAT holds P2[k] from NAT_1:sch 1(A31,A32);
-      consider j being Nat such that
-A41:  len M3 = j + 1 by A5,A10,NAT_1:6;
-      reconsider j as Element of NAT by ORDINAL1:def 13;
-      len M3 = j + 1 by A41;
+A42:  len Q0 > 0 by A4,NAT_1:3;
+      then M/.(len Q0+1+0)= Firing((Q0^Q1)/.(len Q0+1),M/.(1+m)) by A17,
+      A18
+        .=Firing((Q0^Q1)/.(len Q0+1),Firing(Q0,M0)) by A10,A11,A26
+        .=M4/.(1+0) by A8,A5,GOBOARD2:5;
       then
-A42:  M/.len M3 = M3/.len M3 by A10,A29;
-      Q1/.1 = (Q0^Q1)/.(len Q0 + 1) by A30,GOBOARD2:5;
-      then
-A43:  Q1/.1 is_firable_on M3/.len M3 by A9,A10,A17,A21,A42;
-      now
+A43:  P2[0];
+A44:  for k being Element of NAT holds P2[k] from NAT_1:sch 1(A43,A35);
+A45:  now
         let i be Element of NAT such that
-A44:    i < len Q1 & i > 0;
-        len (Q0^Q1) = len Q0 + len Q1 by FINSEQ_1:35;
-        then
-A45:    len Q0 + i < len (Q0^Q1) by A44,XREAL_1:8;
-        i < len Q0 + i by A5,NAT_1:3,XREAL_1:31;
-        then
-A46:    (Q0^Q1)/.(len Q0 +i+1) is_firable_on M/.(len Q0+i)
-        & M/.(len Q0+i+1) = Firing((Q0^Q1)/.(len Q0+i+1),M/.(len Q0+i))
-        by A9,A44,A45;
-        i + 1 >= 1 & i + 1 <= len Q1 by A44,NAT_1:11,13;
-        then
-A47:    i + 1 in dom Q1 by FINSEQ_3:27;
-A48:    (Q0^Q1)/.(len Q0+i+1) = (Q0^Q1)/.(len Q0+(i+1))
-          .= Q1/.(i+1) by A47,FINSEQ_4:84;
+A46:    i < len Q1 and
+A47:    i > 0;
         consider j being Nat such that
-A49:    i = j + 1 by A44,NAT_1:6;
+A48:    i = j + 1 by A47,NAT_1:6;
         reconsider j as Element of NAT by ORDINAL1:def 13;
         len Q0 + 1 + j = len Q0 + (j + 1);
         then
-A50:    M/.(len Q0 + i) = M4/.i by A40,A44,A49;
-A51:    len Q0 + 1 + i = len Q0 + i + 1;
-        i + 1 <= len Q1 by A44,NAT_1:13;
-        hence Q1/.(i+1) is_firable_on M4/.i & M4/.(i+1)
-        = Firing(Q1/.(i+1),M4/.i) by A40,A46,A48,A50,A51;
+A49:    M/.(len Q0 + i) = M4/.i by A44,A46,A48;
+        i + 1 >= 1 & i + 1 <= len Q1 by A46,NAT_1:11,13;
+        then
+A50:    i + 1 in dom Q1 by FINSEQ_3:27;
+A51:    (Q0^Q1)/.(len Q0+i+1) = (Q0^Q1)/.(len Q0+(i+1))
+          .= Q1/.(i+1) by A50,FINSEQ_4:84;
+A52:    len Q0 + 1 + i = len Q0 + i + 1 & i + 1 <= len Q1 by A46,NAT_1:13;
+        len (Q0^Q1) = len Q0 + len Q1 by FINSEQ_1:35;
+        then
+A53:    len Q0 + i < len (Q0^Q1) by A46,XREAL_1:8;
+A54:    i < len Q0 + i by A4,NAT_1:3,XREAL_1:31;
+        then M/.(len Q0+i+1) = Firing((Q0^Q1)/.(len Q0+i+1),M/.(len Q0+i)) by
+        A17,A47,A53;
+        hence
+        Q1/.(i+1) is_firable_on M4/.i & M4/.(i+1) = Firing(Q1/.(i+1),M4/.
+        i) by A17,A44,A47,A53,A54,A51,A49,A52;
       end;
-      hence Q1 is_firable_on Firing(Q0,M0) by A11,A14,A15,A43,Def4;
-A52:  Q0/.1 is_firable_on M0 by A7,A19,Th8;
-      now
-        let i be Element of NAT;
-        assume
-A53:    i < len Q0 & i > 0;
-        then i < len (Q0^Q1) by A21,XXREAL_0:2;
-        then
-A54:    (Q0^Q1)/.(i+1) is_firable_on M/.i &
-        M/.(i+1) = Firing((Q0^Q1)/.(i+1),M/.i) by A9,A53;
-        i + 1 >= 1 & i + 1 <= len Q0 by A53,NAT_1:11,13;
-        then i + 1 in dom Q0 by FINSEQ_3:27;
-        then
-A55:    (Q0^Q1)/.(i+1) = Q0/.(i+1) by FINSEQ_4:83;
-        consider j being Nat such that
-A56:    i = j + 1 by A53,NAT_1:6;
-        reconsider j as Element of NAT by ORDINAL1:def 13;
-        i = j+1 by A56;
-        then
-A57:    M/.i = M3/.i by A29,A53;
-        i + 1 <= len Q0 by A53,NAT_1:13;
-        hence Q0/.(i+1) is_firable_on M3/.i & M3/.(i+1)
-        = Firing(Q0/.(i+1),M3/.i) by A29,A54,A55,A57;
-      end;
-      hence Q0 is_firable_on M0 by A10,A12,A52,Def4;
+      len M3 = j + 1 by A14;
+      then M/.len M3 = M3/.len M3 by A10,A26;
+      then Q1/.1 is_firable_on M3/.len M3 by A17,A10,A42,A18,A6;
+      hence Q1 is_firable_on Firing(Q0,M0) by A11,A7,A8,A45,Def4;
+      0+1<=len Q0 by A42,NAT_1:13;
+      then Q0/.1 is_firable_on M0 by A15,Th8;
+      hence Q0 is_firable_on M0 by A10,A12,A27,Def4;
     end;
   end;
   hence thesis;
 end;
 
 theorem Th12:
-  for PTN being PT_net_Str, M0 being Boolean_marking of PTN,
-  t being transition of PTN
-  holds t is_firable_on M0 iff <*t*> is_firable_on M0
+  for PTN being PT_net_Str, M0 being Boolean_marking of PTN, t
+  being transition of PTN holds t is_firable_on M0 iff <*t*> is_firable_on M0
 proof
   let PTN be PT_net_Str, M0 be Boolean_marking of PTN, t be transition of PTN;
   hereby
-    assume
-A1: t is_firable_on M0;
     set M = <*Firing(<*t*>/.1,M0)*>;
-A2: len <*t*> = 1 by FINSEQ_1:56
-      .= len M by FINSEQ_1:56;
-A3: <*t*>/.1 is_firable_on M0 by A1,FINSEQ_4:25;
-A4: M/.1 = Firing(<*t*>/.1,M0) by FINSEQ_4:25;
-    now
-      let i be Element of NAT such that
-A5:   i < len <*t*> & i > 0;
-      len <*t*> = 0 + 1 by FINSEQ_1:56;
-      hence <*t*>/.(i+1) is_firable_on M/.i & M/.(i+1)
-      = Firing(<*t*>/.(i+1),M/.i) by A5,NAT_1:13;
+A1: M/.1 = Firing(<*t*>/.1,M0) by FINSEQ_4:25;
+A2: now
+A3:   len <*t*> = 0 + 1 by FINSEQ_1:56;
+      let i be Element of NAT;
+      assume
+      i < len <*t*> & i > 0;
+      hence <*t*>/.(i+1) is_firable_on M/.i & M/.(i+1) = Firing(<*t*>/.(i+1),M
+      /.i) by A3,NAT_1:13;
     end;
-    hence <*t*> is_firable_on M0 by A2,A3,A4,Def4;
+    assume
+    t is_firable_on M0;
+    then
+A4: <*t*>/.1 is_firable_on M0 by FINSEQ_4:25;
+    len <*t*> = 1 by FINSEQ_1:56
+      .= len M by FINSEQ_1:56;
+    hence <*t*> is_firable_on M0 by A4,A1,A2,Def4;
   end;
-  assume <*t*> is_firable_on M0;
-  then consider M being FinSequence of Bool_marks_of PTN
-  such that len <*t*> = len M and
-A6: <*t*>/.1 is_firable_on M0 and M/.1 = Firing(<*t*>/.1,M0)
-  & for i being Element of NAT st i < len <*t*> & i > 0
-  holds <*t*>/.(i+1) is_firable_on M/.i
-  & M/.(i+1) = Firing(<*t*>/.(i+1),M/.i) by Def4;
-  thus thesis by A6,FINSEQ_4:25;
+  assume
+  <*t*> is_firable_on M0;
+  then
+  ex M being FinSequence of Bool_marks_of PTN st len <*t*> = len M & <*t*>
+/.1 is_firable_on M0 & M/.1 = Firing(<*t*>/.1,M0) & for i being Element of NAT
+  st i < len <*t*> & i > 0 holds <*t*>/.(i +1) is_firable_on M/.i & M/.(i+1) =
+  Firing(<*t*>/.(i+1),M/.i) by Def4;
+  hence thesis by FINSEQ_4:25;
 end;
 
 theorem Th13:
-  for PTN being PT_net_Str, M0 being Boolean_marking of PTN,
-  t being transition of PTN holds Firing(t,M0) = Firing(<*t*>,M0)
+  for PTN being PT_net_Str, M0 being Boolean_marking of PTN, t
+  being transition of PTN holds Firing(t,M0) = Firing(<*t*>,M0)
 proof
   let PTN be PT_net_Str, M0 be Boolean_marking of PTN, t be transition of PTN;
-A1: len <*t*> = 1 & len {} = 0 by FINSEQ_1:56;
   set M = <*Firing(<*t*>/.1,M0)*>;
-A2: len <*t*> = 1 by FINSEQ_1:56
-    .= len M by FINSEQ_1:56;
-A3: <*t*>/.1 = t by FINSEQ_4:25;
-A4: M/.1 = Firing(<*t*>/.1,M0) by FINSEQ_4:25;
-  now
-    let i be Element of NAT such that
-A5: i < len <*t*> & i > 0;
-    len <*t*> = 0 + 1 by FINSEQ_1:56;
-    hence M/.(i+1) = Firing(<*t*>/.(i+1),M/.i) by A5,NAT_1:13;
+A1: len <*t*> = 1 & <*t*>/.1 = t by FINSEQ_1:56,FINSEQ_4:25;
+A2: M/.1 = Firing(<*t*>/.1,M0) by FINSEQ_4:25;
+A3: now
+A4: len <*t*> = 0 + 1 by FINSEQ_1:56;
+    let i be Element of NAT;
+    assume
+    i < len <*t*> & i > 0;
+    hence M/.(i+1) = Firing(<*t*>/.(i+1),M/.i) by A4,NAT_1:13;
   end;
-  hence thesis by A1,A2,A3,A4,Def5;
+  len <*t*> = 1 by FINSEQ_1:56
+    .= len M by FINSEQ_1:56;
+  hence thesis by A1,A2,A3,Def5;
 end;
 
 theorem
-  for PTN being PT_net_Str, Sd being non empty Subset of the Places of PTN
-  holds Sd is Deadlock-like iff
-  for M0 being Boolean_marking of PTN st M0.:Sd = {FALSE}
-  for Q being FinSequence of the Transitions of PTN st Q is_firable_on M0
-  holds Firing(Q,M0).:Sd = {FALSE}
+  for PTN being PT_net_Str, Sd being non empty Subset of the Places of
+PTN holds Sd is Deadlock-like iff for M0 being Boolean_marking of PTN st M0.:Sd
+= {FALSE} for Q being FinSequence of the Transitions of PTN st Q is_firable_on
+  M0 holds Firing(Q,M0).:Sd = {FALSE}
 proof
   let PTN be PT_net_Str, Sd be non empty Subset of the Places of PTN;
-  thus Sd is Deadlock-like implies
-  for M0 being Boolean_marking of PTN st M0.:Sd = {FALSE}
-  for Q being FinSequence of the Transitions of PTN st Q is_firable_on M0
-  holds Firing(Q,M0).:Sd = {FALSE}
+  set M0 = ((the Places of PTN)-->TRUE qua Function) +* (Sd-->FALSE);
+A1: [#]the Places of PTN = the Places of PTN;
+  dom ((the Places of PTN)-->TRUE qua Function) = the Places of PTN & dom
+  (Sd -->FALSE) = Sd by FUNCOP_1:19;
+  then
+A2: dom M0 = (the Places of PTN) \/ Sd by FUNCT_4:def 1
+    .= the Places of PTN by A1,SUBSET_1:28;
+  rng (Sd-->FALSE) c= {FALSE} by FUNCOP_1:19;
+  then
+A3: rng (Sd-->FALSE) c= BOOLEAN by XBOOLE_1:1;
+  thus Sd is Deadlock-like implies for M0 being Boolean_marking of PTN st M0.:
+  Sd = {FALSE} for Q being FinSequence of the Transitions of PTN st Q
+  is_firable_on M0 holds Firing(Q,M0).:Sd = {FALSE}
   proof
-    assume Sd is Deadlock-like;
-    then
-A1: *'Sd is Subset of Sd*' by PETRI:def 5;
+    assume
+A4: Sd is Deadlock-like;
     let M0 be Boolean_marking of PTN such that
-A2: M0.:Sd = {FALSE};
-    defpred P[FinSequence of the Transitions of PTN] means
-    $1 is_firable_on M0 implies Firing($1,M0).:Sd = {FALSE};
-A3: P[<*> the Transitions of PTN] by A2,Def5;
-A4: now
+A5: M0.:Sd = {FALSE};
+    defpred P[FinSequence of the Transitions of PTN] means $1 is_firable_on M0
+    implies Firing($1,M0).:Sd = {FALSE};
+A6: *'Sd is Subset of Sd*' by A4,PETRI:def 5;
+A7: now
       let Q be FinSequence of the Transitions of PTN;
       let x be transition of PTN;
       assume
-A5:   P[Q];
+A8:   P[Q];
       thus P[ Q^<*x*>]
       proof
-        assume
-A6:     Q^<*x*> is_firable_on M0;
-        then
-A7:     <*x*> is_firable_on Firing(Q,M0) by Th11;
         Firing(Q^<*x*>,M0) = Firing(<*x*>,Firing(Q,M0)) by Th10;
-        then consider M being FinSequence of Bool_marks_of PTN such that
-A8:     len <*x*> = len M and
-A9:     Firing(Q^<*x*>,M0) = M/.len M and
-A10:    M/.1 = Firing(<*x*>/.1,Firing(Q,M0))
-        and for i being Element of NAT st i < len <*x*> & i > 0
-        holds M/.(i+1) = Firing(<*x*>/.(i+1),M/.i) by Def5;
+        then
+A9:     ex M being FinSequence of Bool_marks_of PTN st len <*x*> = len M &
+Firing(Q^<*x*>,M0) = M/.len M & M/.1 = Firing(<*x*>/.1,Firing(Q,M0) ) & for i
+being Element of NAT st i < len <*x*> & i > 0 holds M/.(i+1) = Firing(<*x*>/.(i
+        +1),M/.i) by Def5;
         <*x*>/.1 = x by FINSEQ_4:25;
         then
-A11:    Firing(Q^<*x*>, M0) =
-
-Firing(Q,M0) +* (*'{x}-->FALSE) +* ({x}*'-->TRUE) by A8,A9,A10,FINSEQ_1:56;
-        x is_firable_on Firing(Q,M0) by A7,Th12;
+A10:    Firing(Q^<*x*>, M0) = Firing(Q,M0) +* (*'{x}-->FALSE) +* ({x}*'
+        -->TRUE) by A9,FINSEQ_1:56;
+        assume
+A11:    Q^<*x*> is_firable_on M0;
+        then <*x*> is_firable_on Firing(Q,M0) by Th11;
+        then x is_firable_on Firing(Q,M0) by Th12;
         then Firing(Q,M0).:*'{x} c= {TRUE} by Def2;
-        then Firing(Q,M0).:*'{x} misses {FALSE} by XBOOLE_1:63,ZFMISC_1:17;
         then
-A12:    *'{x} misses Sd by A5,A6,Th2,Th11;
-        then not x in *'Sd by A1,PETRI:19;
+A12:    Firing(Q,M0).:*'{x} misses {FALSE} by
+        XBOOLE_1:63,ZFMISC_1:17;
+        then *'{x} misses Sd by A8,A11,Th2,Th11;
+        then not x in *'Sd by A6,PETRI:19;
         then {x}*' misses Sd by PETRI:20;
-        hence Firing(Q^<*x*>,M0).:Sd
-        = (Firing(Q,M0) +* (*'{x}-->FALSE)).:Sd by A11,Th3
-          .= {FALSE} by A5,A6,A12,Th3,Th11;
+        hence
+        Firing(Q^<*x*>,M0).:Sd = (Firing(Q,M0) +* (*'{x}-->FALSE)).:Sd by
+        A10,Th3
+          .= {FALSE} by A8,A11,A12,Th2,Th3,Th11;
       end;
     end;
-    thus for Q0 being FinSequence of the Transitions of PTN
-    holds P[Q0] from FINSEQ_2:sch 2(A3,A4);
+A13: P[<*> the Transitions of PTN] by A5,Def5;
+    thus for Q0 being FinSequence of the Transitions of PTN holds P[Q0] from
+    FINSEQ_2:sch 2(A13,A7);
   end;
+A14: rng M0 c= rng ((the Places of PTN)-->TRUE) \/ rng (Sd-->FALSE) by
+  FUNCT_4:18;
+  rng ((the Places of PTN)-->TRUE) c= {TRUE} by FUNCOP_1:19;
+  then rng ((the Places of PTN)-->TRUE) c= BOOLEAN by XBOOLE_1:1;
+  then rng ((the Places of PTN)-->TRUE) \/ rng (Sd-->FALSE) c= BOOLEAN by
+  A3,XBOOLE_1:8;
+  then rng M0 c= BOOLEAN by A14,XBOOLE_1:1;
+  then reconsider M0 as Boolean_marking of PTN by A2,FUNCT_2:def 2;
   assume
-A13: for M0 being Boolean_marking of PTN st M0.:Sd = {FALSE}
-  for Q being FinSequence of the Transitions of PTN st Q is_firable_on M0
-  holds Firing(Q,M0).:Sd = {FALSE};
-  assume *'Sd is not Subset of Sd*';
+A15: for M0 being Boolean_marking of PTN st M0.:Sd = {FALSE} for Q being
+FinSequence of the Transitions of PTN st Q is_firable_on M0 holds Firing(Q,M0)
+  .:Sd = {FALSE};
+  assume
+  *'Sd is not Subset of Sd*';
   then consider t being transition of PTN such that
-A14: t in *'Sd and
-A15: not t in Sd*' by SUBSET_1:7;
-  set M0 = ((the Places of PTN)-->TRUE qua Function) +* (Sd-->FALSE);
-A16: [#]the Places of PTN = the Places of PTN;
-  dom ((the Places of PTN)-->TRUE qua Function) = the Places of PTN
-  & dom (Sd-->FALSE) = Sd by FUNCOP_1:19;
+A16: t in *'Sd and
+A17: not t in Sd*' by SUBSET_1:7;
+  Sd misses *'{t} by A17,PETRI:19;
   then
-A17: dom M0 = (the Places of PTN) \/ Sd by FUNCT_4:def 1
-    .= the Places of PTN by A16,SUBSET_1:28;
-  rng ((the Places of PTN)-->TRUE) c= {TRUE}
-  & rng (Sd-->FALSE) c= {FALSE} by FUNCOP_1:19;
-  then rng ((the Places of PTN)-->TRUE) c= BOOLEAN
-  & rng (Sd-->FALSE) c= BOOLEAN by XBOOLE_1:1;
-  then
-A18: rng ((the Places of PTN)-->TRUE) \/ rng (Sd-->FALSE) c= BOOLEAN
-  by XBOOLE_1:8;
-  rng M0 c= rng ((the Places of PTN)-->TRUE) \/ rng (Sd-->FALSE)
-  by FUNCT_4:18;
-  then rng M0 c= BOOLEAN by A18,XBOOLE_1:1;
-  then reconsider M0 as Boolean_marking of PTN by A17,FUNCT_2:def 2;
-A19: (M0).:(Sd) = {FALSE qua set} by Th5;
+A18: ((the Places of PTN)-->TRUE qua Function).:*'{t} = M0.:*'{t} by
+  Th3;
   reconsider Q = <*t*> as FinSequence of the Transitions of PTN;
-  Sd misses *'{t} by A15,PETRI:19;
+  {t}*' meets Sd by A16,PETRI:20;
+  then consider s being set such that
+A19: s in {t}*' /\ Sd by XBOOLE_0:4;
+  s in {t}*' by A19,XBOOLE_0:def 4;
   then
-A20: ((the Places of PTN)-->TRUE qua Function).:*'{t} = M0.:*'{t} by Th3;
-A21: rng ((the Places of PTN)-->TRUE) c= {TRUE} by FUNCOP_1:19;
-  ((the Places of PTN)-->TRUE).:*'{t} c= rng ((the Places of PTN)--> TRUE )
-  by RELAT_1:144;
-  then M0.:*'{t} c= {TRUE} by A20,A21,XBOOLE_1:1;
+A20: Firing(t,M0).s = TRUE by Th6;
+  s in Sd by A19,XBOOLE_0:def 4;
+  then TRUE in Firing(t,M0).:Sd by A20,FUNCT_2:43;
+  then Firing(t,M0).:Sd <> {FALSE} by TARSKI:def 1;
+  then
+A21: Firing(Q,M0).:Sd <> {FALSE} by Th13;
+  rng ((the Places of PTN)-->TRUE) c= {TRUE} & ((the Places of PTN)-->
+TRUE).: *'{t} c= rng ((the Places of PTN)--> TRUE ) by FUNCOP_1:19,RELAT_1:144;
+  then M0.:*'{t} c= {TRUE} by A18,XBOOLE_1:1;
   then t is_firable_on M0 by Def2;
   then
 A22: Q is_firable_on M0 by Th12;
-  {t}*' meets Sd by A14,PETRI:20;
-  then consider s being set such that
-A23: s in {t}*' /\ Sd by XBOOLE_0:4;
-A24: s in {t}*' & s in Sd by A23,XBOOLE_0:def 4;
-  then Firing(t,M0).s = TRUE by Th6;
-  then TRUE in Firing(t,M0).:Sd by A24,FUNCT_2:43;
-  then Firing(t,M0).:Sd <> {FALSE} by TARSKI:def 1;
-  then Firing(Q,M0).:Sd <> {FALSE} by Th13;
-  hence contradiction by A13,A19,A22;
+  (M0).:(Sd) = {FALSE qua set} by Th5;
+  hence contradiction by A15,A22,A21;
 end;
 

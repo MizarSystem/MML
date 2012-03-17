@@ -19,20 +19,20 @@ environ
  requirements ARITHM, BOOLE, NUMERALS, REAL, SUBSET;
  definitions FUNCOP_1, RELAT_1;
  theorems CARD_1, CARD_2, FUNCOP_1, ENUMSET1, FINSEQ_1, FINSET_1, FUNCT_1,
-      FUNCT_2, FUNCT_4, NAT_1, RELAT_1, FINSEQ_4, TARSKI, XBOOLE_0,
-      XBOOLE_1, ZFMISC_1, XREAL_1, XXREAL_0, ORDINAL1, RELSET_1;
+      FUNCT_2, FUNCT_4, NAT_1, RELAT_1, FINSEQ_4, TARSKI, XBOOLE_0, XBOOLE_1,
+      ZFMISC_1, XREAL_1, XXREAL_0, ORDINAL1, RELSET_1;
  schemes NAT_1, SUBSET_1;
 
 begin :: Definitions
 
 registration
- cluster finite NAT-defined Function;
+  cluster finite NAT-defined Function;
   existence
   proof
     consider IT being empty Function;
     take IT;
     thus IT is finite;
-    thus dom IT c= NAT by XBOOLE_1:2;
+    thus dom IT c= NAT;
   end;
 end;
 
@@ -41,39 +41,40 @@ definition
 end;
 
 definition
- canceled;
-  func VertexSelector -> Element of NAT equals  ::dSELV
+  canceled;
+  func VertexSelector -> Element of NAT equals
   1;
   coherence;
-  func EdgeSelector -> Element of NAT equals  ::dSELV
+  func EdgeSelector -> Element of NAT equals
   2;
   coherence;
-  func SourceSelector -> Element of NAT equals  ::dSELS
+  func SourceSelector -> Element of NAT equals
   3;
   coherence;
-  func TargetSelector -> Element of NAT equals  ::dSELT
+  func TargetSelector -> Element of NAT equals
   4;
   coherence;
 end;
 
 definition
-  func _GraphSelectors -> non empty Subset of NAT equals  ::dGRAPHSEL
-  {VertexSelector, EdgeSelector, SourceSelector, TargetSelector};
+  func _GraphSelectors -> non empty Subset of NAT equals
+  {VertexSelector,
+  EdgeSelector, SourceSelector, TargetSelector};
   coherence;
 end;
 
 definition
   let G be GraphStruct;
-  func the_Vertices_of G equals  ::dVERTICES
+  func the_Vertices_of G equals
   G.VertexSelector;
   coherence;
-  func the_Edges_of G equals  ::dEDGES
+  func the_Edges_of G equals
   G.EdgeSelector;
   coherence;
-  func the_Source_of G equals  ::dSOURCE
+  func the_Source_of G equals
   G.SourceSelector;
   coherence;
-  func the_Target_of G equals  ::dTARGET
+  func the_Target_of G equals
   G.TargetSelector;
   coherence;
 end;
@@ -81,12 +82,12 @@ end;
 definition
   let G be GraphStruct;
   attr G is [Graph-like] means
-  :Def11: ::dGRAPHLIKE
-  VertexSelector in dom G & EdgeSelector in dom G &
-  SourceSelector in dom G & TargetSelector in dom G &
-  the_Vertices_of G is non empty set &
-  the_Source_of G is Function of the_Edges_of G, the_Vertices_of G &
-  the_Target_of G is Function of the_Edges_of G, the_Vertices_of G;
+  :Def11:
+  VertexSelector in dom G & EdgeSelector
+in dom G & SourceSelector in dom G & TargetSelector in dom G & the_Vertices_of
+  G is non empty set & the_Source_of G is Function of the_Edges_of G,
+  the_Vertices_of G & the_Target_of G is Function of the_Edges_of G,
+  the_Vertices_of G;
 end;
 
 registration
@@ -96,16 +97,15 @@ registration
     set V = {1}, E = {};
     reconsider S = {} as Function of E,V by RELSET_1:25;
     set G = <*V,E,S,S*>;
-    len G=4 & G.VertexSelector = V & G.EdgeSelector = E &
-    G.SourceSelector = S & G.TargetSelector = S by FINSEQ_4:91;
+    len G=4 by FINSEQ_4:91;
     then
 A1: dom G = Seg 4 by FINSEQ_1:def 3;
     then reconsider G as GraphStruct by RELAT_1:def 18;
-A2: the_Vertices_of G = V & the_Edges_of G = E & the_Source_of G = S &
-    the_Target_of G = S by FINSEQ_4:91;
-    VertexSelector in dom G & EdgeSelector in dom G & SourceSelector in dom G
-    & TargetSelector in dom G by A1,FINSEQ_1:3;
-    then G is [Graph-like] by A2,Def11;
+A2: SourceSelector in dom G & TargetSelector in dom G by A1,FINSEQ_1:3;
+A3: the_Vertices_of G = V & the_Edges_of G = E by FINSEQ_4:91;
+A4: the_Source_of G = S & the_Target_of G = S by FINSEQ_4:91;
+    VertexSelector in dom G & EdgeSelector in dom G by A1,FINSEQ_1:3;
+    then G is [Graph-like] by A3,A4,A2,Def11;
     hence thesis;
   end;
 end;
@@ -122,88 +122,91 @@ end;
 
 definition
   let G be _Graph;
-  redefine func the_Source_of G ->
-  Function of the_Edges_of G,the_Vertices_of G;
+  redefine func the_Source_of G -> Function of the_Edges_of G,the_Vertices_of
+  G;
   coherence by Def11;
-  redefine func the_Target_of G ->
-  Function of the_Edges_of G,the_Vertices_of G;
+  redefine func the_Target_of G -> Function of the_Edges_of G,the_Vertices_of
+  G;
   coherence by Def11;
 end;
 
 definition
   let V be non empty set,E be set, S,T be Function of E,V;
-  func createGraph(V,E,S,T) -> _Graph equals  ::dCREATEG
+  func createGraph(V,E,S,T) -> _Graph equals
   <* V, E, S, T *>;
   coherence
   proof
     set G = <*V,E,S,T*>;
-    len G = 4 & G.VertexSelector = V & G.EdgeSelector = E &
-    G.SourceSelector = S & G.TargetSelector = T by FINSEQ_4:91;
+    len G = 4 by FINSEQ_4:91;
     then
 A1: dom G = Seg 4 by FINSEQ_1:def 3;
     then reconsider G as GraphStruct by RELAT_1:def 18;
-A2: the_Vertices_of G = V & the_Edges_of G = E &
-    the_Source_of G = S & the_Target_of G = T by FINSEQ_4:91;
-    VertexSelector in dom G & EdgeSelector in dom G &
-    SourceSelector in dom G & TargetSelector in dom G by A1,FINSEQ_1:3;
-    hence thesis by A2,Def11;
+A2: SourceSelector in dom G & TargetSelector in dom G by A1,FINSEQ_1:3;
+A3: the_Vertices_of G = V & the_Edges_of G = E by FINSEQ_4:91;
+A4: the_Source_of G = S & the_Target_of G = T by FINSEQ_4:91;
+    VertexSelector in dom G & EdgeSelector in dom G by A1,FINSEQ_1:3;
+    hence thesis by A3,A4,A2,Def11;
   end;
 end;
 
 definition
   let G be GraphStruct, n be Nat, x be set;
-  func G.set(n,x) -> GraphStruct equals  ::dGSET
+  func G.set(n,x) -> GraphStruct equals
   G +* (n .--> x);
   coherence
   proof
     set IT = G +* (n .--> x);
-A1: dom IT = dom G \/ dom (n .--> x) by FUNCT_4:def 1;
-A2: dom G c= NAT by RELAT_1:def 18;
+A1: dom (n .--> x) = {n} by FUNCOP_1:19;
     n in NAT by ORDINAL1:def 13;
     then
-A3: {n} c= NAT by ZFMISC_1:37;
-    dom (n .--> x) = {n} by FUNCOP_1:19;
-    then dom IT c= NAT by A1,A2,A3,XBOOLE_1:8;
+A2: {n} c= NAT by ZFMISC_1:37;
+    dom IT = dom G \/ dom (n .--> x) & dom G c= NAT by FUNCT_4:def 1 ,
+    RELAT_1:def 18;
+    then dom IT c= NAT by A2,A1,XBOOLE_1:8;
     hence thesis by RELAT_1:def 18;
   end;
 end;
 
 definition
   let G be GraphStruct, X be set;
-  func G.strict(X) -> GraphStruct equals  ::dGSELECT
+  func G.strict(X) -> GraphStruct equals
   G | X;
-  coherence
-  proof
-A1: dom G c= NAT by RELAT_1:def 18;
-    dom (G | X) c= dom G by RELAT_1:89;
-    then
-A2: dom (G | X) c= NAT by A1,XBOOLE_1:1;
-    G | X is finite by FINSET_1:13,RELAT_1:88;
-    hence thesis by A2,RELAT_1:def 18;
-  end;
+  coherence by FINSET_1:13,RELAT_1:88;
 end;
 
-Lm1: for GS being GraphStruct holds GS is [Graph-like] iff
-_GraphSelectors c= dom GS & the_Vertices_of GS is non empty &
-the_Source_of GS is Function of the_Edges_of GS,the_Vertices_of GS &
-the_Target_of GS is Function of the_Edges_of GS,the_Vertices_of GS
+Lm1: for GS being GraphStruct holds GS is [Graph-like] iff _GraphSelectors c=
+dom GS & the_Vertices_of GS is non empty & the_Source_of GS is Function of
+the_Edges_of GS,the_Vertices_of GS & the_Target_of GS is Function of
+the_Edges_of GS,the_Vertices_of GS
+
 proof
   let GS be GraphStruct;
   now
     hereby
-      assume VertexSelector in dom GS & EdgeSelector in dom GS &
+      assume
+
+      VertexSelector in dom GS & EdgeSelector in dom GS &
       SourceSelector in dom GS & TargetSelector in dom GS;
-      then for x being set st x in _GraphSelectors holds x in dom GS
-      by ENUMSET1:def 2;
+
+      then for x being set st x in _GraphSelectors holds x in dom GS by
+      ENUMSET1:def 2;
+
       hence _GraphSelectors c= dom GS by TARSKI:def 3;
     end;
-    assume
-A1: _GraphSelectors c= dom GS;
-    VertexSelector in _GraphSelectors & EdgeSelector in _GraphSelectors &
-    SourceSelector in _GraphSelectors & TargetSelector in _GraphSelectors
+
+A1: VertexSelector in _GraphSelectors & EdgeSelector in _GraphSelectors by
+    ENUMSET1:def 2;
+
+A2: SourceSelector in _GraphSelectors & TargetSelector in _GraphSelectors
     by ENUMSET1:def 2;
-    hence VertexSelector in dom GS & EdgeSelector in dom GS &
-    SourceSelector in dom GS & TargetSelector in dom GS by A1;
+
+    assume
+    _GraphSelectors c= dom GS;
+
+    hence
+    VertexSelector in dom GS & EdgeSelector in dom GS & SourceSelector in
+    dom GS & TargetSelector in dom GS by A1,A2;
+
   end;
   hence thesis by Def11;
 end;
@@ -213,107 +216,123 @@ registration
   cluster G.strict(_GraphSelectors) -> [Graph-like];
   coherence
   proof
-    set G2 = G.strict(_GraphSelectors);
     now
       let x be set;
-      assume x in _GraphSelectors;
-      then (x = VertexSelector or x = EdgeSelector or
-      x = SourceSelector or x = TargetSelector) by ENUMSET1:def 2;
+      assume
+      x in _GraphSelectors;
+      then
+      x = VertexSelector or x = EdgeSelector or x = SourceSelector or x =
+      TargetSelector by ENUMSET1:def 2;
       hence x in dom G by Def11;
     end;
     then
 A1: _GraphSelectors c= dom G by TARSKI:def 3;
-A2: dom G2 = dom G /\ _GraphSelectors by RELAT_1:90
-      .= _GraphSelectors by A1,XBOOLE_1:28;
-A3: VertexSelector in _GraphSelectors & EdgeSelector in _GraphSelectors &
-    SourceSelector in _GraphSelectors &
+    set G2 = G.strict(_GraphSelectors);
+    VertexSelector in _GraphSelectors by ENUMSET1:def 2;
+    then
+A2: the_Vertices_of G2 = the_Vertices_of G by FUNCT_1:72;
+    EdgeSelector in _GraphSelectors by ENUMSET1:def 2;
+    then
+A3: the_Edges_of G2 = the_Edges_of G by FUNCT_1:72;
     TargetSelector in _GraphSelectors by ENUMSET1:def 2;
     then
-A4: the_Vertices_of G2 = the_Vertices_of G by FUNCT_1:72;
-A5: the_Edges_of G2 = the_Edges_of G by A3,FUNCT_1:72;
-A6: the_Source_of G2 = the_Source_of G by A3,FUNCT_1:72;
-    the_Target_of G2 = the_Target_of G by A3,FUNCT_1:72;
-    hence thesis by A2,A4,A5,A6,Lm1;
+A4: the_Target_of G2 = the_Target_of G by FUNCT_1:72;
+    SourceSelector in _GraphSelectors by ENUMSET1:def 2;
+    then
+A5: the_Source_of G2 = the_Source_of G by FUNCT_1:72;
+    dom G2 = dom G /\ _GraphSelectors by RELAT_1:90
+      .= _GraphSelectors by A1,XBOOLE_1:28;
+    hence thesis by A2,A3,A5,A4,Lm1;
   end;
 end;
 
 definition
   let G be _Graph, x,y,e be set;
   pred e Joins x,y,G means
-  :Def15: ::dJOIN
-  e in the_Edges_of G &
-  (((the_Source_of G).e = x & (the_Target_of G).e = y) or
-  ((the_Source_of G).e = y & (the_Target_of G).e = x));
+  :Def15:
+  e in the_Edges_of G & ( (the_Source_of G).e
+= x & (the_Target_of G).e = y or (the_Source_of G).e = y & (the_Target_of G).e
+  = x );
 end;
 
 definition
   let G be _Graph, x, y, e be set;
   pred e DJoins x,y,G means
-  :Def16: ::dDJOIN
-  e in the_Edges_of G & (the_Source_of G).e = x & (the_Target_of G).e = y;
+  :Def16:
+  e in the_Edges_of G & (the_Source_of G).e
+  = x & (the_Target_of G).e = y;
 end;
 
 definition
   let G be _Graph, X,Y,e be set;
   pred e SJoins X,Y,G means
-  :Def17: ::dSJOIN
-  e in the_Edges_of G &
-  (((the_Source_of G).e in X & (the_Target_of G).e in Y) or
-  ((the_Source_of G).e in Y & (the_Target_of G).e in X));
+  :Def17:
+  e in the_Edges_of G & ( (the_Source_of G).
+e in X & (the_Target_of G).e in Y or (the_Source_of G).e in Y & (the_Target_of
+  G).e in X );
   pred e DSJoins X,Y,G means
-  :Def18: ::dDSJOIN
-  e in the_Edges_of G & (the_Source_of G).e in X & (the_Target_of G).e in Y;
+  :Def18:
+  e in the_Edges_of G & (the_Source_of G).e
+  in X & (the_Target_of G).e in Y;
 end;
 
-Lm2: for G being _Graph, e,x,y being set holds
-e Joins x,y,G iff (e DJoins x,y,G or e DJoins y,x,G)
+Lm2: for G being _Graph, e,x,y being set holds e Joins x,y,G iff (e DJoins x,y
+,G or e DJoins y,x,G)
+
 proof
   let G be _Graph, e,x,y be set;
   hereby
-    assume e Joins x,y,G;
-    then e in the_Edges_of G &
-    (((the_Source_of G).e = x & (the_Target_of G).e = y) or
-    ((the_Source_of G).e = y & (the_Target_of G).e = x)) by Def15;
-    hence e DJoins x,y,G or e DJoins y,x,G by Def16;
-  end;
-  assume e DJoins x,y,G or e DJoins y,x,G;
-  then e in the_Edges_of G &
-  (((the_Source_of G).e = x & (the_Target_of G).e = y) or
-  ((the_Source_of G).e = y & (the_Target_of G).e = x)) by Def16;
-  hence thesis by Def15;
-end;
+    assume
+A1: e Joins x,y,G;
 
-:: Graph Attributes
+    then
+A2: (the_Source_of G).e = x & (the_Target_of G).e = y or (the_Source_of G)
+    .e = y & (the_Target_of G).e = x by Def15;
+
+    e in the_Edges_of G by A1,Def15;
+    hence e DJoins x,y,G or e DJoins y,x,G by A2,Def16;
+  end;
+  assume
+A3: e DJoins x,y,G or e DJoins y,x,G;
+
+  then
+A4: (the_Source_of G).e = x & (the_Target_of G).e = y or (the_Source_of G).e
+  = y & (the_Target_of G).e = x by Def16;
+
+  e in the_Edges_of G by A3,Def16;
+  hence thesis by A4,Def15;
+end;
 
 definition
   let G be _Graph;
   attr G is finite means
-  :Def19: ::dGFINITE
-  the_Vertices_of G is finite & the_Edges_of G is finite;
+  :Def19:
+  the_Vertices_of G is finite & the_Edges_of G
+  is finite;
   attr G is loopless means
-  :Def20: ::dGLOOPLESS
+  :Def20:
   not ex e being set st e in the_Edges_of G &
   (the_Source_of G).e = (the_Target_of G).e;
   attr G is trivial means
-  :Def21: ::dGTRIVIAL
+  :Def21:
   card the_Vertices_of G = 1;
   attr G is non-multi means
-  :Def22: ::dGNONMULTI
-  for e1,e2,v1,v2 being set holds
-  e1 Joins v1,v2,G & e2 Joins v1,v2,G implies e1 = e2;
+  :Def22:
+  for e1,e2,v1,v2 being set holds e1 Joins
+  v1,v2,G & e2 Joins v1,v2,G implies e1 = e2;
   attr G is non-Dmulti means
-  :Def23: ::dGNONDMULTI
-  for e1,e2,v1,v2 being set holds
-  e1 DJoins v1,v2,G & e2 DJoins v1,v2,G implies e1 = e2;
+  :Def23:
+  for e1,e2,v1,v2 being set holds e1 DJoins
+  v1,v2,G & e2 DJoins v1,v2,G implies e1 = e2;
 end;
 
 definition
   let G be _Graph;
   attr G is simple means
-  :Def24: ::dGSIMPLE
+  :Def24:
   G is loopless & G is non-multi;
   attr G is Dsimple means
-  :Def25: ::dGDSIMPLE
+  :Def25:
   G is loopless & G is non-Dmulti;
 end;
 
@@ -322,12 +341,16 @@ proof
   let G be _Graph;
   assume
 A1: the_Edges_of G = {};
-  then not ex e being set st e in the_Edges_of G &
-  (the_Source_of G).e = (the_Target_of G).e;
+
+  then not ex e being set st e in the_Edges_of G & (the_Source_of G).e = (
+  the_Target_of G).e;
+
   then
 A2: G is loopless by Def20;
-  for e1,e2,v1,v2 being set holds
-  e1 Joins v1,v2,G & e2 Joins v1,v2,G implies e1 = e2 by A1,Def15;
+
+  for e1,e2,v1,v2 being set holds e1 Joins v1,v2,G & e2 Joins v1,v2,G
+  implies e1 = e2 by A1,Def15;
+
   then G is non-multi by Def22;
   hence thesis by A2,Def24;
 end;
@@ -341,7 +364,8 @@ registration
 A1: G is non-multi;
     now
       let e1,e2,v1,v2 be set;
-      assume e1 DJoins v1,v2,G & e2 DJoins v1,v2,G;
+      assume
+      e1 DJoins v1,v2,G & e2 DJoins v1,v2,G;
       then e1 Joins v1,v2,G & e2 Joins v1,v2,G by Lm2;
       hence e1 = e2 by A1,Def22;
     end;
@@ -359,65 +383,79 @@ A1: G is non-multi;
   coherence
   proof
     let G be _Graph;
-    assume
-A2: G is trivial & G is loopless;
-    then card the_Vertices_of G = 1 by Def21;
+    assume that
+A2: G is trivial and
+A3: G is loopless;
+    card the_Vertices_of G = 1 by A2,Def21;
     then consider v being set such that
-A3: the_Vertices_of G = {v} by CARD_2:60;
-    now per cases;
-      suppose the_Edges_of G is empty;
+A4: the_Vertices_of G = {v} by CARD_2:60;
+    now
+      per cases;
+      suppose
+        the_Edges_of G is empty;
         hence the_Edges_of G is finite;
       end;
-      suppose the_Edges_of G is non empty;
+      suppose
+        the_Edges_of G is non empty;
         then consider e being set such that
-A4:     e in the_Edges_of G by XBOOLE_0:def 1;
-        (the_Source_of G).e in the_Vertices_of G &
-        (the_Target_of G).e in the_Vertices_of G by A4,FUNCT_2:7;
-        then (the_Source_of G).e = v & (the_Target_of G).e = v by A3,
-TARSKI:def 1;
-        hence the_Edges_of G is finite by A2,A4,Def20;
+A5:     e in the_Edges_of G by XBOOLE_0:def 1;
+        (the_Target_of G).e in the_Vertices_of G by A5,FUNCT_2:7;
+        then
+A6:     (the_Target_of G).e = v by A4,TARSKI:def 1;
+        (the_Source_of G).e in the_Vertices_of G by A5,FUNCT_2:7;
+        then (the_Source_of G).e = v by A4,TARSKI:def 1;
+        hence the_Edges_of G is finite by A3,A5,A6,Def20;
       end;
     end;
-    hence thesis by A3,Def19;
+    hence thesis by A4,Def19;
   end;
   cluster trivial non-Dmulti -> finite _Graph;
   coherence
   proof
     let G be _Graph;
-    assume
-A5: G is trivial & G is non-Dmulti;
-    then card the_Vertices_of G = 1 by Def21;
+    assume that
+A7: G is trivial and
+A8: G is non-Dmulti;
+    card the_Vertices_of G = 1 by A7,Def21;
     then consider v being set such that
-A6: the_Vertices_of G = {v} by CARD_2:60;
+A9: the_Vertices_of G = {v} by CARD_2:60;
     now
-      assume
-A7:   not the_Edges_of G is finite;
       set e1 = choose the_Edges_of G;
       set v1 = (the_Source_of G).e1, v2 = (the_Target_of G).e1;
-A8:   the_Edges_of G <> {} by A7;
-      v1 in the_Vertices_of G & v2 in the_Vertices_of G by A7,FUNCT_2:7;
-      then v1 = v & v2 = v by A6,TARSKI:def 1;
+      assume
+A10:  not the_Edges_of G is finite;
       then
-A9:   e1 DJoins v,v,G by A8,Def16;
+A11:  the_Edges_of G <> {};
+      v2 in the_Vertices_of G by A10,FUNCT_2:7;
+      then
+A12:  v2 = v by A9,TARSKI:def 1;
+      v1 in the_Vertices_of G by A10,FUNCT_2:7;
+      then v1 = v by A9,TARSKI:def 1;
+      then
+A13:  e1 DJoins v,v,G by A11,A12,Def16;
       now
         let x be set;
+        set v1 = (the_Source_of G).x, v2 = (the_Target_of G).x;
         hereby
-          assume x in {e1};
+          assume
+          x in {e1};
           then x = e1 by TARSKI:def 1;
-          hence x in the_Edges_of G by A8;
+          hence x in the_Edges_of G by A11;
         end;
         assume
-A10:    x in the_Edges_of G;
-        set v1 = (the_Source_of G).x, v2 = (the_Target_of G).x;
-        v1 in the_Vertices_of G & v2 in the_Vertices_of G by A10,FUNCT_2:7;
-        then v1 = v & v2 = v by A6,TARSKI:def 1;
-        then x DJoins v,v,G by A10,Def16;
-        then x = e1 by A5,A9,Def23;
+A14:    x in the_Edges_of G;
+        then v2 in the_Vertices_of G by FUNCT_2:7;
+        then
+A15:    v2 = v by A9,TARSKI:def 1;
+        v1 in the_Vertices_of G by A14,FUNCT_2:7;
+        then v1 = v by A9,TARSKI:def 1;
+        then x DJoins v,v,G by A14,A15,Def16;
+        then x = e1 by A8,A13,Def23;
         hence x in {e1} by TARSKI:def 1;
       end;
-      hence contradiction by A7,TARSKI:2;
+      hence contradiction by A10,TARSKI:2;
     end;
-    hence thesis by A6,Def19;
+    hence thesis by A9,Def19;
   end;
 end;
 
@@ -429,17 +467,19 @@ registration
     reconsider S = {} as Function of E,V by RELSET_1:25;
     set G = createGraph(V,E,S,S);
     take G;
-A1: the_Vertices_of G = {1} & the_Edges_of G = {} by FINSEQ_4:91;
-    not ex e being set st e in the_Edges_of G &
-    (the_Source_of G).e = (the_Target_of G).e by FINSEQ_4:91;
-    then
-A2: G is loopless by Def20;
-    card the_Vertices_of G = 1 by A1,CARD_1:50;
+    the_Vertices_of G = {1} by FINSEQ_4:91;
+    then card the_Vertices_of G = 1 by CARD_1:50;
     hence G is trivial by Def21;
-    for e1,e2,v1,v2 being set st e1 Joins v1,v2,G & e2 Joins v1,v2,G
-    holds e1 = e2 by A1,Def15;
-    then G is non-multi by Def22;
-    hence thesis by A2;
+    the_Edges_of G = {} by FINSEQ_4:91;
+    then
+    for e1,e2,v1,v2 being set st e1 Joins v1,v2,G & e2 Joins v1,v2,G holds
+    e1 = e2 by Def15;
+    then
+A1: G is non-multi by Def22;
+    not ex e being set st e in the_Edges_of G & (the_Source_of G).e = (
+    the_Target_of G).e by FINSEQ_4:91;
+    then G is loopless by Def20;
+    hence thesis by A1;
   end;
   cluster finite non trivial simple _Graph;
   existence
@@ -448,16 +488,17 @@ A2: G is loopless by Def20;
     reconsider S = {} as Function of E,V by RELSET_1:25;
     set G = createGraph(V,E,S,S);
     take G;
-A3: the_Vertices_of G = {1,2} & the_Edges_of G = {} by FINSEQ_4:91;
-    hence G is finite by Def19;
-    not ex e being set st e in the_Edges_of G &
-    (the_Source_of G).e = (the_Target_of G).e by FINSEQ_4:91;
-    then
-A4: G is loopless by Def20;
+A2: the_Edges_of G = {} by FINSEQ_4:91;
+A3: the_Vertices_of G = {1,2} by FINSEQ_4:91;
+    hence G is finite by A2,Def19;
     card the_Vertices_of G <> 1 by A3,CARD_2:76;
     hence G is non trivial by Def21;
+    not ex e being set st e in the_Edges_of G & (the_Source_of G).e = (
+    the_Target_of G).e by FINSEQ_4:91;
+    then
+A4: G is loopless by Def20;
     for e1,e2,v1,v2 being set st e1 Joins v1,v2,G & e2 Joins v1,v2,G
-    holds e1 = e2 by A3,Def15;
+    holds e1 = e2 by A2,Def15;
     then G is non-multi by Def22;
     hence thesis by A4;
   end;
@@ -477,9 +518,7 @@ registration
   coherence
   proof
     card the_Vertices_of G = 1 by Def21;
-    then consider v being set such that
-A1: the_Vertices_of G = {v} by CARD_2:60;
-    thus thesis by A1;
+    hence thesis;
   end;
 end;
 
@@ -500,15 +539,16 @@ registration
   coherence
   proof
     set G = createGraph(V,E,S,T);
-A1: the_Vertices_of G = V & the_Edges_of G = E by FINSEQ_4:91;
-    not ex e being set st e in the_Edges_of G &
-    (the_Source_of G).e = (the_Target_of G).e by FINSEQ_4:91;
+    the_Edges_of G = E by FINSEQ_4:91;
     then
-A2: G is loopless by Def20;
-    for e1,e2,v1,v2 be set st e1 Joins v1,v2,G & e2 Joins v1,v2,G
-    holds e1 = e2 by A1,Def15;
-    then G is non-multi by Def22;
-    hence thesis by A2;
+    for e1,e2,v1,v2 be set st e1 Joins v1,v2,G & e2 Joins v1,v2,G holds e1
+    = e2 by Def15;
+    then
+A1: G is non-multi by Def22;
+    not ex e being set st e in the_Edges_of G & (the_Source_of G).e = (
+    the_Target_of G).e by FINSEQ_4:91;
+    then G is loopless by Def20;
+    hence thesis by A1;
   end;
 end;
 
@@ -526,7 +566,7 @@ end;
 
 definition
   let G be _Graph;
-  func G.order() -> Cardinal equals  ::dGORDER
+  func G.order() -> Cardinal equals
   card the_Vertices_of G;
   coherence;
 end;
@@ -543,7 +583,7 @@ end;
 
 definition
   let G be _Graph;
-  func G.size() -> Cardinal equals  ::dGSIZE
+  func G.size() -> Cardinal equals
   card the_Edges_of G;
   coherence;
 end;
@@ -561,68 +601,72 @@ end;
 definition
   let G be _Graph, X be set;
   func G.edgesInto(X) -> Subset of the_Edges_of G means
-  :Def28: ::dGEINTOV
-  for e being set holds e in it iff
-  e in the_Edges_of G & (the_Target_of G).e in X;
+  :Def28:
+  for e being
+  set holds e in it iff e in the_Edges_of G & (the_Target_of G).e in X;
   existence
   proof
     defpred P[set] means (the_Target_of G).$1 in X;
     consider IT being Subset of the_Edges_of G such that
-A1: for e being set holds e in IT iff e in the_Edges_of G & P[e]
-    from SUBSET_1:sch 1;
+A1: for e being set holds e in IT iff e in the_Edges_of G & P[e] from
+    SUBSET_1:sch 1;
     take IT;
     thus thesis by A1;
   end;
   uniqueness
   proof
     let IT1, IT2 be Subset of the_Edges_of G such that
-A2: for e being set holds e in IT1 iff
-    e in the_Edges_of G & (the_Target_of G).e in X and
-A3: for e being set holds e in IT2 iff
-    e in the_Edges_of G & (the_Target_of G).e in X;
+A2: for e being set holds e in IT1 iff e in the_Edges_of G & (
+    the_Target_of G).e in X and
+A3: for e being set holds e in IT2 iff e in the_Edges_of G & (
+    the_Target_of G).e in X;
     now
       let e be set;
       hereby
-        assume e in IT1;
-        then e in the_Edges_of G & (the_Target_of G).e in X by A2;
-        hence e in IT2 by A3;
+        assume
+A4:     e in IT1;
+        then (the_Target_of G).e in X by A2;
+        hence e in IT2 by A3,A4;
       end;
-      assume e in IT2;
-      then e in the_Edges_of G & (the_Target_of G).e in X by A3;
-      hence e in IT1 by A2;
+      assume
+A5:   e in IT2;
+      then (the_Target_of G).e in X by A3;
+      hence e in IT1 by A2,A5;
     end;
     hence thesis by TARSKI:2;
   end;
   func G.edgesOutOf(X) -> Subset of the_Edges_of G means
-  :Def29: ::dGEOUTOFV
-  for e being set holds e in it iff
-  e in the_Edges_of G & (the_Source_of G).e in X;
+  :Def29:
+  for e being
+  set holds e in it iff e in the_Edges_of G & (the_Source_of G).e in X;
   existence
   proof
     defpred P[set] means (the_Source_of G).$1 in X;
     consider IT being Subset of the_Edges_of G such that
-A4: for e being set holds e in IT iff e in the_Edges_of G & P[e]
-    from SUBSET_1:sch 1;
+A6: for e being set holds e in IT iff e in the_Edges_of G & P[e] from
+    SUBSET_1:sch 1;
     take IT;
-    thus thesis by A4;
+    thus thesis by A6;
   end;
   uniqueness
   proof
     let IT1, IT2 be Subset of the_Edges_of G such that
-A5: for e being set holds e in IT1 iff
-    e in the_Edges_of G & (the_Source_of G).e in X and
-A6: for e being set holds e in IT2 iff
-    e in the_Edges_of G & (the_Source_of G).e in X;
+A7: for e being set holds e in IT1 iff e in the_Edges_of G & (
+    the_Source_of G).e in X and
+A8: for e being set holds e in IT2 iff e in the_Edges_of G & (
+    the_Source_of G).e in X;
     now
       let e be set;
       hereby
-        assume e in IT1;
-        then e in the_Edges_of G & (the_Source_of G).e in X by A5;
-        hence e in IT2 by A6;
+        assume
+A9:     e in IT1;
+        then (the_Source_of G).e in X by A7;
+        hence e in IT2 by A8,A9;
       end;
-      assume e in IT2;
-      then e in the_Edges_of G & (the_Source_of G).e in X by A6;
-      hence e in IT1 by A5;
+      assume
+A10:  e in IT2;
+      then (the_Source_of G).e in X by A8;
+      hence e in IT1 by A7,A10;
     end;
     hence thesis by TARSKI:2;
   end;
@@ -630,25 +674,28 @@ end;
 
 definition
   let G be _Graph, X be set;
-  func G.edgesInOut(X) -> Subset of the_Edges_of G equals  ::dGEINOUTV
-  G.edgesInto(X) \/ G.edgesOutOf(X);
+  func G.edgesInOut(X) -> Subset of the_Edges_of G equals
+  G.edgesInto(X) \/ G
+  .edgesOutOf(X);
   coherence;
-  func G.edgesBetween(X) -> Subset of the_Edges_of G equals  ::dGBETV
-  G.edgesInto(X) /\ G.edgesOutOf(X);
+  func G.edgesBetween(X) -> Subset of the_Edges_of G equals
+  G.edgesInto(X) /\
+  G.edgesOutOf(X);
   coherence;
 end;
 
 definition
   let G be _Graph, X,Y be set;
   func G.edgesBetween(X,Y) -> Subset of the_Edges_of G means
-  :Def32: ::dGEBETXY
-  for e being set holds e in it iff e SJoins X,Y,G;
+  :Def32:
+  for e
+  being set holds e in it iff e SJoins X,Y,G;
   existence
   proof
     defpred P[set] means $1 SJoins X,Y,G;
     consider IT being Subset of the_Edges_of G such that
-A1: for e being set holds e in IT iff e in the_Edges_of G & P[e]
-    from SUBSET_1:sch 1;
+A1: for e being set holds e in IT iff e in the_Edges_of G & P[e] from
+    SUBSET_1:sch 1;
     take IT;
     let e be set;
     thus e in IT implies P[e] by A1;
@@ -670,14 +717,15 @@ A4: for e being set holds e in IT2 iff e SJoins X,Y,G;
     hence thesis by TARSKI:2;
   end;
   func G.edgesDBetween(X,Y) -> Subset of the_Edges_of G means
-  :Def33: ::dGEDBETXY
-  for e being set holds e in it iff e DSJoins X,Y,G;
+  :Def33:
+  for e
+  being set holds e in it iff e DSJoins X,Y,G;
   existence
   proof
     defpred P[set] means $1 DSJoins X,Y,G;
     consider IT being Subset of the_Edges_of G such that
-A5: for e being set holds e in IT iff e in the_Edges_of G & P[e]
-    from SUBSET_1:sch 1;
+A5: for e being set holds e in IT iff e in the_Edges_of G & P[e] from
+    SUBSET_1:sch 1;
     take IT;
     let e be set;
     thus e in IT implies P[e] by A5;
@@ -700,53 +748,49 @@ A8: for e being set holds e in IT2 iff e DSJoins X,Y,G;
   end;
 end;
 
-scheme FinGraphOrderInd{P[finite _Graph]}:
-  for G being finite _Graph holds P[G]
+scheme
+  FinGraphOrderInd{P[finite _Graph]}: for G being finite _Graph holds P[G]
 provided
-A1: for G being finite _Graph st G.order() = 1 holds P[G]
-and
-A2: for k being non empty Nat st
-(for Gk being finite _Graph st Gk.order() = k holds P[Gk]) holds
-(for Gk1 being finite _Graph st Gk1.order() = k+1 holds P[Gk1])
+A1: for G being finite _Graph st G.order() = 1 holds P[G] and
+A2: for k being non empty Nat st (for Gk being finite _Graph st Gk
+.order() = k holds P[Gk]) holds for Gk1 being finite _Graph st Gk1.order() = k+
+1 holds P[Gk1]
 proof
-  defpred P2[Nat] means for G being finite _Graph st G.order()=$1
-  holds P[G];
-A3: P2[1] by A1;
-A4: for k being non empty Nat st P2[k] holds P2[k+1] by A2;
-A5: for k being non empty Nat holds P2[k]
-  from NAT_1:sch 10(A3,A4);
+  defpred P2[Nat] means for G being finite _Graph st G.order()=$1 holds P[G];
+A3: for k being non empty Nat st P2[k] holds P2[k+1] by A2;
   let G be finite _Graph;
-  G.order() = G.order();
-  hence thesis by A5;
+A4: G.order() = G.order();
+A5: P2[1] by A1;
+  for k being non empty Nat holds P2[k] from NAT_1:sch 10(A5,A3);
+  hence thesis by A4;
 end;
 
-scheme FinGraphSizeInd{P[finite _Graph]}: for G being finite _Graph holds P[G]
+scheme
+  FinGraphSizeInd{P[finite _Graph]}: for G being finite _Graph holds P[G]
 provided
-A1: for G being finite _Graph st G.size() = 0 holds P[G]
-and
-A2: for k being Element of NAT st
-(for Gk being finite _Graph st Gk.size() = k holds P[Gk]) holds
-(for Gk1 being finite _Graph st Gk1.size() = k+1 holds P[Gk1])
+A1: for G being finite _Graph st G.size() = 0 holds P[G] and
+A2: for k being Element of NAT st (for Gk being finite _Graph st Gk
+.size() = k holds P[Gk]) holds for Gk1 being finite _Graph st Gk1.size() = k+1
+holds P[Gk1]
 proof
   defpred P2[Element of NAT] means for G being finite _Graph st G.size()=$1
   holds P[G];
-A3: P2[0] by A1;
-A4: for k being Element of NAT st P2[k] holds P2[k+1] by A2;
-A5: for k being Element of NAT holds P2[k] from NAT_1:sch 1(A3,A4);
+A3: for k being Element of NAT st P2[k] holds P2[k+1] by A2;
   let G be finite _Graph;
-  G.size() = G.size();
-  hence thesis by A5;
+A4: G.size() = G.size();
+A5: P2[0] by A1;
+  for k being Element of NAT holds P2[k] from NAT_1:sch 1(A5,A3);
+  hence thesis by A4;
 end;
 
 definition
   let G be _Graph;
   mode Subgraph of G -> _Graph means
-    :Def34: ::dSUBG
-    the_Vertices_of it c= the_Vertices_of G &
-    the_Edges_of it c= the_Edges_of G &
-    for e being set st e in the_Edges_of it holds
-    (the_Source_of it).e = (the_Source_of G).e &
-    (the_Target_of it).e = (the_Target_of G).e;
+    :Def34:
+    the_Vertices_of it c=
+the_Vertices_of G & the_Edges_of it c= the_Edges_of G & for e being set st e in
+    the_Edges_of it holds (the_Source_of it).e = (the_Source_of G).e & (
+    the_Target_of it).e = (the_Target_of G).e;
   existence
   proof
     take G;
@@ -771,13 +815,11 @@ registration
     set V = {v}, E = {};
     reconsider S = {} as Function of E,V by RELSET_1:25;
     set IT = createGraph(V,E,S,S);
-    the_Vertices_of IT = {v} & the_Edges_of IT = {} by FINSEQ_4:91;
-    then
-A1: the_Vertices_of IT c= the_Vertices_of G &
-    the_Edges_of IT c= the_Edges_of G by XBOOLE_1:2;
-    for e being set st e in the_Edges_of IT holds
-    (the_Source_of IT).e = (the_Source_of G).e &
-    (the_Target_of IT).e = (the_Target_of G).e by FINSEQ_4:91;
+A1: the_Vertices_of IT = {v} & for e being set st e in the_Edges_of IT
+holds ( the_Source_of IT).e = (the_Source_of G).e & (the_Target_of IT).e = (
+    the_Target_of G).e by FINSEQ_4:91;
+    the_Edges_of IT = {} by FINSEQ_4:91;
+    then the_Edges_of IT c= the_Edges_of G by XBOOLE_1:2;
     then reconsider IT as Subgraph of G by A1,Def34;
     take IT;
     thus thesis;
@@ -787,25 +829,30 @@ end;
 Lm4: for G being _Graph holds G is Subgraph of G
 proof
   let G be _Graph;
-  the_Vertices_of G c= the_Vertices_of G & the_Edges_of G c= the_Edges_of G &
-  for e being set st e in the_Edges_of G holds
-  (the_Source_of G).e = (the_Source_of G).e &
-  (the_Target_of G).e = (the_Target_of G).e;
+
+  for e being set st e in the_Edges_of G holds (the_Source_of G).e = (
+  the_Source_of G).e & (the_Target_of G).e = (the_Target_of G).e;
+
   hence thesis by Def34;
 end;
 
-Lm5: for G1 being _Graph, G2 being Subgraph of G1, x,y,e being set holds
-e Joins x,y,G2 implies e Joins x,y,G1
+Lm5: for G1 being _Graph, G2 being Subgraph of G1, x,y,e being set holds e
+Joins x,y,G2 implies e Joins x,y,G1
+
 proof
   let G1 be _Graph, G2 be Subgraph of G1, x,y,e be set;
-  assume e Joins x,y,G2;
-  then e in the_Edges_of G2 &
-  (((the_Source_of G2).e = x & (the_Target_of G2).e = y) or
-  ((the_Source_of G2).e = y & (the_Target_of G2).e = x)) by Def15;
-  then e in the_Edges_of G1 &
-  (((the_Source_of G1).e = x & (the_Target_of G1).e = y) or
-  ((the_Source_of G1).e = y & (the_Target_of G1).e = x)) by Def34;
-  hence thesis by Def15;
+  assume
+A1: e Joins x,y,G2;
+  then
+A2: e in the_Edges_of G2 by Def15;
+
+  (the_Source_of G2).e = x & (the_Target_of G2).e = y or ( the_Source_of
+  G2).e = y & (the_Target_of G2).e = x by A1,Def15;
+
+  then (the_Source_of G1).e = x & (the_Target_of G1).e = y or ( the_Source_of
+  G1).e = y & (the_Target_of G1).e = x by A2,Def34;
+
+  hence thesis by A2,Def15;
 end;
 
 registration
@@ -827,10 +874,11 @@ registration
     let G2 be Subgraph of G;
     now
       given e being set such that
-A1:   e in the_Edges_of G2 & (the_Source_of G2).e = (the_Target_of G2).e;
-      (the_Source_of G2).e = (the_Source_of G).e &
-      (the_Target_of G2).e = (the_Target_of G).e by A1,Def34;
-      hence contradiction by A1,Def20;
+A1:   e in the_Edges_of G2 and
+A2:   (the_Source_of G2).e = (the_Target_of G2).e;
+      (the_Source_of G2).e = (the_Source_of G).e & (the_Target_of G2).e =
+      ( the_Target_of G).e by A1,Def34;
+      hence contradiction by A1,A2,Def20;
     end;
     hence thesis by Def20;
   end;
@@ -859,7 +907,8 @@ registration
     let G2 be Subgraph of G;
     now
       let e1,e2,v1,v2 be set;
-      assume e1 Joins v1,v2,G2 & e2 Joins v1,v2,G2;
+      assume
+      e1 Joins v1,v2,G2 & e2 Joins v1,v2,G2;
       then e1 Joins v1,v2,G & e2 Joins v1,v2,G by Lm5;
       hence e1 = e2 by Def22;
     end;
@@ -870,7 +919,7 @@ end;
 definition
   let G1 be _Graph, G2 be Subgraph of G1;
   attr G2 is spanning means
-  :Def35: ::dGSPANNING
+  :Def35:
   the_Vertices_of G2 = the_Vertices_of G1;
 end;
 
@@ -889,7 +938,7 @@ end;
 definition
   let G1, G2 be _Graph;
   pred G1 == G2 means
-  :Def36: ::dGPEQ
+  :Def36:
   the_Vertices_of G1 = the_Vertices_of G2 &
   the_Edges_of G1 = the_Edges_of G2 & the_Source_of G1 = the_Source_of G2 &
   the_Target_of G1 = the_Target_of G2;
@@ -905,7 +954,7 @@ end;
 definition
   let G1,G2 be _Graph;
   pred G1 c= G2 means
-  :Def37: ::dGPSUBG
+  :Def37:
   G1 is Subgraph of G2;
   reflexivity by Lm4;
 end;
@@ -913,7 +962,7 @@ end;
 definition
   let G1,G2 be _Graph;
   pred G1 c< G2 means
-  :Def38: ::dGPSSUBG
+  :Def38:
   G1 c= G2 & G1 != G2;
   irreflexivity;
 end;
@@ -921,47 +970,50 @@ end;
 definition
   let G be _Graph, V, E be set;
   mode inducedSubgraph of G,V,E -> Subgraph of G means
-    :Def39: ::dINDSUBVE
-    the_Vertices_of it = V & the_Edges_of it = E if
-    V is non empty Subset of the_Vertices_of G & E c= G.edgesBetween(V)
-    otherwise it == G;
+    :Def39:
+    the_Vertices_of
+it = V & the_Edges_of it = E if V is non empty Subset of the_Vertices_of G & E
+    c= G.edgesBetween(V) otherwise it == G;
   existence
   proof
     hereby
-      assume
-A1:   V is non empty Subset of the_Vertices_of G & E c= G.edgesBetween(V);
-      then reconsider V' = V as non empty Subset of the_Vertices_of G;
-      reconsider E' = E as Subset of the_Edges_of G by A1,XBOOLE_1:1;
+      assume that
+A1:   V is non empty Subset of the_Vertices_of G and
+A2:   E c= G.edgesBetween(V);
+      reconsider E' = E as Subset of the_Edges_of G by A2,XBOOLE_1:1;
       set S = (the_Source_of G) | E', T = (the_Target_of G) | E';
-      dom the_Source_of G = the_Edges_of G &
+      reconsider V' = V as non empty Subset of the_Vertices_of G by A1;
       dom the_Target_of G = the_Edges_of G by FUNCT_2:def 1;
       then
-A2:   dom S = E' & dom T = E' by RELAT_1:91;
-      now
-        let e be set;
-        assume
-A3:     e in E';
-        then e in G.edgesOutOf(V) by A1,XBOOLE_0:def 4;
-        then (the_Source_of G).e in V by Def29;
-        hence S.e in V by A3,FUNCT_1:72;
-      end;
-      then reconsider S as Function of E',V' by A2,FUNCT_2:5;
+A3:   dom T = E' by RELAT_1:91;
       now
         let e be set;
         assume
 A4:     e in E';
-        then e in G.edgesInto(V) by A1,XBOOLE_0:def 4;
+        then e in G.edgesInto(V) by A2,XBOOLE_0:def 4;
         then (the_Target_of G).e in V by Def28;
         hence T.e in V by A4,FUNCT_1:72;
       end;
-      then reconsider T as Function of E',V' by A2,FUNCT_2:5;
+      then reconsider T as Function of E',V' by A3,FUNCT_2:5;
+      dom the_Source_of G = the_Edges_of G by FUNCT_2:def 1;
+      then
+A5:   dom S = E' by RELAT_1:91;
+      now
+        let e be set;
+        assume
+A6:     e in E';
+        then e in G.edgesOutOf(V) by A2,XBOOLE_0:def 4;
+        then (the_Source_of G).e in V by Def29;
+        hence S.e in V by A6,FUNCT_1:72;
+      end;
+      then reconsider S as Function of E',V' by A5,FUNCT_2:5;
       set IT = createGraph(V',E',S,T);
-A5:   the_Vertices_of IT = V & the_Edges_of IT = E &
+A7:   the_Edges_of IT = E by FINSEQ_4:91;
       the_Source_of IT = S & the_Target_of IT = T by FINSEQ_4:91;
-      then for e being set st e in the_Edges_of IT holds
-      (the_Source_of IT).e = (the_Source_of G).e &
-      (the_Target_of IT).e = (the_Target_of G).e by FUNCT_1:72;
-      then reconsider IT as Subgraph of G by A5,Def34;
+      then the_Vertices_of IT = V & for e being set st e in the_Edges_of IT
+holds ( the_Source_of IT).e = (the_Source_of G).e & (the_Target_of IT).e = (
+      the_Target_of G).e by A7,FINSEQ_4:91,FUNCT_1:72;
+      then reconsider IT as Subgraph of G by A7,Def34;
       take IT;
       thus the_Vertices_of IT = V & the_Edges_of IT = E by FINSEQ_4:91;
     end;
@@ -977,8 +1029,8 @@ definition
 end;
 
 registration
-  let G be _Graph, V be finite non empty Subset of the_Vertices_of G,
-  E be finite Subset of G.edgesBetween(V);
+  let G be _Graph, V be finite non empty Subset of the_Vertices_of G, E be
+  finite Subset of G.edgesBetween(V);
   cluster -> finite inducedSubgraph of G,V,E;
   coherence
   proof
@@ -989,8 +1041,8 @@ registration
 end;
 
 registration
-  let G be _Graph, v be Element of the_Vertices_of G,
-  E be Subset of G.edgesBetween({v});
+  let G be _Graph, v be Element of the_Vertices_of G, E be Subset of G
+  .edgesBetween({v});
   cluster -> trivial inducedSubgraph of G,{v},E;
   coherence
   proof
@@ -1006,8 +1058,8 @@ registration
   cluster -> finite trivial inducedSubgraph of G,{v},{};
   coherence
   proof
-    let IT be inducedSubgraph of G,{v},{};
     reconsider E = {} as finite Subset of G.edgesBetween({v}) by XBOOLE_1:2;
+    let IT be inducedSubgraph of G,{v},{};
     IT is inducedSubgraph of G,{v},E;
     hence thesis;
   end;
@@ -1018,32 +1070,37 @@ registration
   cluster -> simple inducedSubgraph of G,V,{};
   coherence
   proof
-    reconsider E = {} as Subset of G.edgesBetween(V) by XBOOLE_1:2;
     let IT be inducedSubgraph of G,V,{};
+    reconsider E = {} as Subset of G.edgesBetween(V) by XBOOLE_1:2;
     IT is inducedSubgraph of G,V,E;
-    then the_Vertices_of IT = V & the_Edges_of IT = {} by Def39;
+    then the_Edges_of IT = {} by Def39;
     hence thesis by Lm3;
   end;
 end;
 
-Lm6: for G being _Graph, e,X being set holds
-e in the_Edges_of G & (the_Source_of G).e in X & (the_Target_of G).e in X iff
-e in G.edgesBetween(X)
+Lm6: for G being _Graph, e,X being set holds e in the_Edges_of G & (
+the_Source_of G).e in X & (the_Target_of G).e in X iff e in G.edgesBetween(X)
+
 proof
   let G be _Graph, e,X be set;
   hereby
-    assume e in the_Edges_of G & (the_Source_of G).e in X &
-    (the_Target_of G).e in X;
+    assume
+
+    e in the_Edges_of G & (the_Source_of G).e in X & (the_Target_of G)
+    .e in X;
+
     then e in G.edgesInto(X) & e in G.edgesOutOf(X) by Def28,Def29;
     hence e in G.edgesBetween(X) by XBOOLE_0:def 4;
   end;
-  assume e in G.edgesBetween(X);
+  assume
+  e in G.edgesBetween(X);
   then e in G.edgesInto(X) & e in G.edgesOutOf(X) by XBOOLE_0:def 4;
   hence thesis by Def28,Def29;
 end;
 
-Lm7: for G being _Graph holds
-the_Edges_of G = G.edgesBetween(the_Vertices_of G)
+Lm7: for G being _Graph holds the_Edges_of G = G.edgesBetween(the_Vertices_of
+G)
+
 proof
   let G be _Graph;
   set EG = the_Edges_of G, SG = the_Source_of G, TG = the_Target_of G;
@@ -1052,10 +1109,15 @@ proof
     hereby
       assume
 A1:   x in EG;
-      then SG.x in the_Vertices_of G & TG.x in the_Vertices_of G by FUNCT_2:7;
+
+      then SG.x in the_Vertices_of G & TG.x in the_Vertices_of G by
+      FUNCT_2:
+      7;
+
       hence x in G.edgesBetween(the_Vertices_of G) by A1,Lm6;
     end;
-    assume x in G.edgesBetween(the_Vertices_of G);
+    assume
+    x in G.edgesBetween(the_Vertices_of G);
     hence x in EG;
   end;
   hence thesis by TARSKI:2;
@@ -1067,9 +1129,8 @@ registration
   coherence
   proof
     let G1 be inducedSubgraph of G,the_Vertices_of G, E;
-    G.edgesBetween(the_Vertices_of G) = the_Edges_of G by Lm7;
-    then the_Vertices_of G c= the_Vertices_of G &
-    E c= G.edgesBetween(the_Vertices_of G);
+    G.edgesBetween(the_Vertices_of G) = the_Edges_of G & the_Vertices_of G
+    c= the_Vertices_of G by Lm7;
     then the_Vertices_of G1 = the_Vertices_of G by Def39;
     hence thesis by Def35;
   end;
@@ -1081,8 +1142,8 @@ registration
   coherence
   proof
     let G1 be inducedSubgraph of G,the_Vertices_of G,{};
-    the_Vertices_of G c= the_Vertices_of G &
-    {} c= G.edgesBetween(the_Vertices_of G) by XBOOLE_1:2;
+    the_Vertices_of G c= the_Vertices_of G & {} c= G.edgesBetween(
+    the_Vertices_of G) by XBOOLE_1:2;
     then the_Vertices_of G1 = the_Vertices_of G by Def39;
     hence thesis by Def35;
   end;
@@ -1100,14 +1161,14 @@ end;
 
 definition
   let G be _Graph, e be set;
-  mode removeEdge of G,e is inducedSubgraph of
-    G, the_Vertices_of G, the_Edges_of G \ {e};
+  mode removeEdge of G,e is inducedSubgraph of G, the_Vertices_of G,
+    the_Edges_of G \ {e};
 end;
 
 definition
   let G be _Graph, E be set;
-  mode removeEdges of G,E is inducedSubgraph of
-    G, the_Vertices_of G, the_Edges_of G \ E;
+  mode removeEdges of G,E is inducedSubgraph of G, the_Vertices_of G,
+    the_Edges_of G \ E;
 end;
 
 registration
@@ -1129,64 +1190,71 @@ end;
 
 definition
   let G be _Graph, v be Vertex of G;
-  func v.edgesIn() -> Subset of the_Edges_of G equals  ::dVEIN
+  func v.edgesIn() -> Subset of the_Edges_of G equals
   G.edgesInto( {v} );
   coherence;
-  func v.edgesOut() -> Subset of the_Edges_of G equals  ::dVEOUT
+  func v.edgesOut() -> Subset of the_Edges_of G equals
   G.edgesOutOf( {v} );
   coherence;
-  func v.edgesInOut() -> Subset of the_Edges_of G equals  ::dVEINOUT
+  func v.edgesInOut() -> Subset of the_Edges_of G equals
   G.edgesInOut( {v} );
   coherence;
 end;
 
-Lm8: for G being _Graph, v being Vertex of G, e being set holds
-e in v.edgesIn() iff e in the_Edges_of G & (the_Target_of G).e = v
+Lm8: for G being _Graph, v being Vertex of G, e being set holds e in v
+.edgesIn() iff e in the_Edges_of G & (the_Target_of G).e = v
+
 proof
   let G be _Graph, v be Vertex of G, e be set;
   hereby
-    assume e in v.edgesIn();
-    then e in the_Edges_of G & (the_Target_of G).e in {v} by Def28;
-    hence e in the_Edges_of G & (the_Target_of G).e = v by TARSKI:def 1;
+    assume
+A1: e in v.edgesIn();
+    then (the_Target_of G).e in {v} by Def28;
+    hence e in the_Edges_of G & (the_Target_of G).e = v by A1,TARSKI:def 1;
   end;
-  assume
-A1: e in the_Edges_of G & (the_Target_of G).e = v;
-  then (the_Target_of G).e in {v} by TARSKI:def 1;
-  hence thesis by A1,Def28;
+  assume that
+A2: e in the_Edges_of G and
+A3: (the_Target_of G).e = v;
+  (the_Target_of G).e in {v} by A3,TARSKI:def 1;
+  hence thesis by A2,Def28;
 end;
 
-Lm9: for G being _Graph, v being Vertex of G, e being set holds
-e in v.edgesOut() iff e in the_Edges_of G & (the_Source_of G).e = v
+Lm9: for G being _Graph, v being Vertex of G, e being set holds e in v
+.edgesOut() iff e in the_Edges_of G & (the_Source_of G).e = v
+
 proof
   let G be _Graph, v be Vertex of G, e be set;
   hereby
-    assume e in v.edgesOut();
-    then e in the_Edges_of G & (the_Source_of G).e in {v} by Def29;
-    hence e in the_Edges_of G & (the_Source_of G).e = v by TARSKI:def 1;
+    assume
+A1: e in v.edgesOut();
+    then (the_Source_of G).e in {v} by Def29;
+    hence e in the_Edges_of G & (the_Source_of G).e = v by A1,TARSKI:def 1;
   end;
-  assume
-A1: e in the_Edges_of G & (the_Source_of G).e = v;
-  then (the_Source_of G).e in {v} by TARSKI:def 1;
-  hence thesis by A1,Def29;
+  assume that
+A2: e in the_Edges_of G and
+A3: (the_Source_of G).e = v;
+  (the_Source_of G).e in {v} by A3,TARSKI:def 1;
+  hence thesis by A2,Def29;
 end;
 
 definition
   let G be _Graph, v be Vertex of G, e be set;
   func v.adj(e) -> Vertex of G equals
-  :Def43: ::dVADJ
-  (the_Source_of G).e if (e in the_Edges_of G & (the_Target_of G).e = v),
-  (the_Target_of G).e if (e in the_Edges_of G & (the_Source_of G).e = v &
-  not (the_Target_of G).e = v) otherwise v;
+  :Def43:
+  (the_Source_of G).e if e in
+  the_Edges_of G & (the_Target_of G).e = v, (the_Target_of G).e if e in
+  the_Edges_of G & (the_Source_of G).e = v & not (the_Target_of G).e = v
+  otherwise v;
   coherence by FUNCT_2:7;
   consistency;
 end;
 
 definition
   let G be _Graph, v be Vertex of G;
-  func v.inDegree() -> Cardinal equals  ::dVINDEG
+  func v.inDegree() -> Cardinal equals
   card v.edgesIn();
   coherence;
-  func v.outDegree() -> Cardinal equals  ::dVOUTDEG
+  func v.outDegree() -> Cardinal equals
   card v.edgesOut();
   coherence;
 end;
@@ -1209,15 +1277,16 @@ end;
 
 definition
   let G be _Graph, v be Vertex of G;
-  func v.degree() -> Cardinal equals  ::dVDEGREE1
+  func v.degree() -> Cardinal equals
   v.inDegree() +` v.outDegree();
   coherence;
 end;
 
 definition
   let G be finite _Graph, v be Vertex of G;
-  redefine func v.degree() -> Element of NAT equals  ::dVDEGREE2
-  v.inDegree() + v.outDegree();
+  redefine func v.degree() -> Element of NAT equals
+  v.inDegree() + v
+  .outDegree();
   correctness
   proof
     v.degree() = card (v.inDegree() +^ v.outDegree()) by CARD_2:def 1
@@ -1229,44 +1298,49 @@ end;
 
 definition
   let G be _Graph, v be Vertex of G;
-  func v.inNeighbors() -> Subset of the_Vertices_of G equals  ::dVINN
-  (the_Source_of G).:v.edgesIn();
+  func v.inNeighbors() -> Subset of the_Vertices_of G equals
+  (the_Source_of G)
+  .:v.edgesIn();
   coherence;
-  func v.outNeighbors() -> Subset of the_Vertices_of G equals  ::dVOUTN
-  (the_Target_of G).:v.edgesOut();
+  func v.outNeighbors() -> Subset of the_Vertices_of G equals
+  (the_Target_of G
+  ).:v.edgesOut();
   coherence;
 end;
 
 definition
   let G be _Graph, v be Vertex of G;
-  func v.allNeighbors() -> Subset of the_Vertices_of G equals  ::dVALLN
-  v.inNeighbors() \/ v.outNeighbors();
+  func v.allNeighbors() -> Subset of the_Vertices_of G equals
+  v.inNeighbors()
+  \/ v.outNeighbors();
   coherence;
 end;
 
 definition
   let G be _Graph, v being Vertex of G;
   attr v is isolated means
-  :Def51: ::dVISOLATED1
+  :Def51:
   v.edgesInOut() = {};
 end;
 
 definition
   let G be finite _Graph, v be Vertex of G;
-  redefine attr v is isolated means ::dVISOLATED2
+  redefine attr v is isolated means
   v.degree() = 0;
   compatibility
   proof
     hereby
-      assume v is isolated;
-      then v.edgesInOut() = {} by Def51;
-      then v.inDegree() = 0 & v.outDegree() = 0 by CARD_1:47,XBOOLE_1:15;
-      hence v.degree() = 0;
+      assume
+      v is isolated;
+      then
+A1:   v.edgesInOut() = {} by Def51;
+      then v.inDegree() = 0 by CARD_1:47,XBOOLE_1:15;
+      hence v.degree() = 0 by A1,CARD_1:47,XBOOLE_1:15;
     end;
-    assume v.degree() = 0;
-    then v.inDegree() = 0 & v.outDegree() = 0;
-    then v.edgesIn() = {} & v.edgesOut() = {};
-    then v.edgesInOut() = {};
+    assume
+A2: v.degree() = 0;
+    then v.edgesIn() = {};
+    then v.edgesInOut() = {} by A2;
     hence thesis by Def51;
   end;
 end;
@@ -1274,75 +1348,82 @@ end;
 definition
   let G be _Graph, v be Vertex of G;
   attr v is endvertex means
-  :Def53: ::dVENDV1
-  ex e being set st v.edgesInOut() = {e} & not e Joins v,v,G;
+  :Def53:
+  ex e being set st v.edgesInOut() = {e} &
+  not e Joins v,v,G;
 end;
 
 definition
   let G be finite _Graph, v be Vertex of G;
-  redefine attr v is endvertex means ::dVENDV2
+  redefine attr v is endvertex means
   v.degree() = 1;
   compatibility
   proof
     hereby
-      assume v is endvertex;
+      assume
+      v is endvertex;
       then consider e being set such that
-A1:   v.edgesInOut() = {e} & not e Joins v,v,G by Def53;
-      now per cases by A1,ZFMISC_1:43;
-        suppose v.edgesIn() = {e} & v.edgesOut() = {e};
+A1:   v.edgesInOut() = {e} and
+A2:   not e Joins v,v,G by Def53;
+      now
+        per cases by A1,ZFMISC_1:43;
+        suppose
+A3:       v.edgesIn() = {e} & v.edgesOut() = {e};
+          then e in v.edgesOut() by TARSKI:def 1;
           then
-A2:       e in v.edgesIn() & e in v.edgesOut() by TARSKI:def 1;
-          then
-A3:       e in the_Edges_of G & (the_Target_of G).e = v by Lm8;
-          (the_Source_of G).e = v by A2,Lm9;
-          hence v.degree() = 1 by A1,A3,Def15;
+A4:       (the_Source_of G).e = v by Lm9;
+A5:       e in v.edgesIn() by A3,TARSKI:def 1;
+          then (the_Target_of G).e = v by Lm8;
+          hence v.degree() = 1 by A2,A5,A4,Def15;
         end;
-        suppose v.edgesIn() = {} & v.edgesOut() = {e};
+        suppose
+          v.edgesIn() = {} & v.edgesOut() = {e};
           hence v.degree() = 1 by CARD_1:47,50;
         end;
-        suppose v.edgesIn() = {e} & v.edgesOut() = {};
+        suppose
+          v.edgesIn() = {e} & v.edgesOut() = {};
           hence v.degree() = 1 by CARD_1:47,50;
         end;
       end;
       hence v.degree() = 1;
     end;
     assume
-A4: v.degree() = 1;
-    now per cases;
+A6: v.degree() = 1;
+    now
+      per cases;
       suppose
-A5:     card v.edgesIn() = 0;
-        then
-A6:     v.edgesIn() = {};
-        consider e being set such that
-A7:     v.edgesOut() = {e} by A4,A5,CARD_2:60;
-A8:     v.edgesInOut() = {e} by A6,A7;
-        now
-          assume e Joins v,v,G;
-          then e in the_Edges_of G &
-          ((the_Source_of G).e = v & (the_Target_of G).e = v) by Def15;
-          hence contradiction by A6,Lm8;
+A7:     card v.edgesIn() = 0;
+        then consider e being set such that
+A8:     v.edgesOut() = {e} by A6,CARD_2:60;
+A9:     v.edgesIn() = {} by A7;
+A10:    now
+          assume
+          e Joins v,v,G;
+          then e in the_Edges_of G & (the_Target_of G).e = v by Def15;
+          hence contradiction by A9,Lm8;
         end;
-        hence thesis by A8,Def53;
+        v.edgesInOut() = {e} by A9,A8;
+        hence thesis by A10,Def53;
       end;
-      suppose card v.edgesIn() <> 0;
+      suppose
+        card v.edgesIn() <> 0;
         then 0 < card v.edgesIn() by NAT_1:3;
         then
-A9:     0+1 <= card v.edgesIn() by NAT_1:13;
-        card v.edgesIn() <= 1 by A4,NAT_1:11;
+A11:    0+1 <= card v.edgesIn() by NAT_1:13;
+        card v.edgesIn() <= 1 by A6,NAT_1:11;
         then
-A10:    card v.edgesIn() = 1 by A9,XXREAL_0:1;
+A12:    card v.edgesIn() = 1 by A11,XXREAL_0:1;
         then consider e being set such that
-A11:    v.edgesIn() = {e} by CARD_2:60;
-A12:    v.edgesOut() = {} by A4,A10;
-        then
-A13:    v.edgesInOut() = {e} by A11;
-        now
-          assume e Joins v,v,G;
-          then e in the_Edges_of G &
-          ((the_Source_of G).e = v & (the_Target_of G).e = v) by Def15;
-          hence contradiction by A12,Lm9;
+A13:    v.edgesIn() = {e} by CARD_2:60;
+A14:    v.edgesOut() = {} by A6,A12;
+A15:    now
+          assume
+          e Joins v,v,G;
+          then e in the_Edges_of G & (the_Source_of G).e = v by Def15;
+          hence contradiction by A14,Lm9;
         end;
-        hence thesis by A13,Def53;
+        v.edgesInOut() = {e} by A13,A14;
+        hence thesis by A15,Def53;
       end;
     end;
     hence thesis;
@@ -1352,32 +1433,34 @@ end;
 definition
   let F be ManySortedSet of NAT;
   attr F is Graph-yielding means
-  :Def55: ::dGYIELD
+  :Def55:
   for n being Nat holds F.n is _Graph;
   attr F is halting means
-  :Def56: ::dHALTING
+  :Def56:
   ex n being Nat st F.n = F.(n+1);
 end;
 
 definition
   let F be ManySortedSet of NAT;
-  func F.Lifespan() -> Element of NAT means ::dLIFESPAN
-  F.it = F.(it+1) & for n being Nat st F.n = F.(n+1) holds it <= n
-  if F is halting otherwise it = 0;
+  func F.Lifespan() -> Element of NAT means
+  F.it = F.(it+1) & for n being Nat
+  st F.n = F.(n+1) holds it <= n if F is halting otherwise it = 0;
   existence
   proof
     defpred P[Nat] means F.$1 = F.($1+1);
     hereby
-      assume F is halting;
+      assume
+      F is halting;
       then
 A1:   ex n being Nat st P[n] by Def56;
       ex IT being Nat st P[IT] & for n being Nat st P[n] holds IT <= n
       from NAT_1:sch 5(A1);
       then consider IT being Nat such that
-A2:   P[IT] & for n being Nat st P[n] holds IT <= n;
+A2:   ( P[IT])& for n being Nat st P[n] holds IT <= n;
       IT in NAT by ORDINAL1:def 13;
-      hence ex IT being Element of NAT st P[IT] &
-      for n being Nat st P[n] holds IT <= n by A2;
+      hence
+      ex IT being Element of NAT st P[IT] & for n being Nat st P[n] holds
+      IT <= n by A2;
     end;
     thus thesis;
   end;
@@ -1385,11 +1468,14 @@ A2:   P[IT] & for n being Nat st P[n] holds IT <= n;
   proof
     let IT1, IT2 be Element of NAT;
     hereby
-      assume F is halting;
       assume
-A3:   F.IT1 = F.(IT1+1) & for n being Nat st F.n = F.(n+1) holds IT1 <= n;
-      assume F.IT2 = F.(IT2+1) & for n being Nat st F.n = F.(n+1)
-      holds IT2 <= n;
+      F is halting;
+      assume
+A3:   F.IT1 = F.(IT1+1) & for n being Nat st F.n = F.(n+1) holds IT1
+      <= n;
+      assume
+      F.IT2 = F.(IT2+1) & for n being Nat st F.n = F.(n+1) holds IT2
+      <= n;
       then IT1 <= IT2 & IT2 <= IT1 by A3;
       hence IT1 = IT2 by XXREAL_0:1;
     end;
@@ -1400,7 +1486,7 @@ end;
 
 definition
   let F be ManySortedSet of NAT;
-  func F.Result() -> set equals ::dRESULT
+  func F.Result() -> set equals
   F.(F.Lifespan());
   coherence;
 end;
@@ -1436,45 +1522,47 @@ definition
   let GSq be GraphSeq;
   canceled;
   attr GSq is finite means
-  :Def60:   ::dGSEQFINITE
+  :Def60:
   for x being Nat holds GSq.x is finite;
   attr GSq is loopless means
-  :Def61: ::dGSEQLOOPLESS
+  :Def61:
   for x being Nat holds GSq.x is loopless;
   attr GSq is trivial means
-  :Def62: ::dGSEQTRIVIAL
+  :Def62:
   for x being Nat holds GSq.x is trivial;
   attr GSq is non-trivial means
-  :Def63: ::dGSEQNONTRIVIAL
-  for x being Nat holds GSq.x is non trivial;
+  :Def63:
+  for x being Nat holds GSq.x is non
+  trivial;
   attr GSq is non-multi means
-  :Def64: ::dGSEQNONMULTI
+  :Def64:
   for x being Nat holds GSq.x is non-multi;
   attr GSq is non-Dmulti means
-  :Def65: ::dGSEQNONDMULTI
-  for x being Nat holds GSq.x is non-Dmulti;
+  :Def65:
+  for x being Nat holds GSq.x is
+  non-Dmulti;
   attr GSq is simple means
-  :Def66: ::dGSEQSIMPLE
+  :Def66:
   for x being Nat holds GSq.x is simple;
   attr GSq is Dsimple means
-  :Def67: ::dGSEQDSIMPLE
+  :Def67:
   for x being Nat holds GSq.x is Dsimple;
 end;
 
 definition
   let GSq be GraphSeq;
-  redefine attr GSq is halting means ::dGSQHALTING
+  redefine attr GSq is halting means
   ex n being Nat st GSq.n = GSq.(n+1);
   compatibility by Def56;
 end;
 
 registration
-  cluster halting finite loopless trivial non-multi non-Dmulti
-    simple Dsimple GraphSeq;
+  cluster halting finite loopless trivial non-multi non-Dmulti simple Dsimple
+    GraphSeq;
   existence
   proof
-    consider G being finite loopless trivial non-multi non-Dmulti
-    simple Dsimple _Graph;
+    consider G being finite loopless trivial non-multi non-Dmulti simple
+    Dsimple _Graph;
     set F = NAT --> G;
 A1: dom F = NAT by FUNCOP_1:19;
     reconsider F as ManySortedSet of NAT;
@@ -1486,52 +1574,60 @@ A1: dom F = NAT by FUNCOP_1:19;
       hence F.x is _Graph by TARSKI:def 1;
     end;
     then reconsider F as GraphSeq by Def55;
+    F.(1+1) in rng F by A1,FUNCT_1:12;
+    then F.(1+1) in {G} by FUNCOP_1:14;
+    then
+A2: F.(1+1) = G by TARSKI:def 1;
     take F;
-    F.1 in rng F & F.(1+1) in rng F by A1,FUNCT_1:12;
-    then F.1 in {G} & F.(1+1) in {G} by FUNCOP_1:14;
-    then F.1 = G & F.(1+1) = G by TARSKI:def 1;
-    hence F is halting by Def56;
+    F.1 in rng F by A1,FUNCT_1:12;
+    then F.1 in {G} by FUNCOP_1:14;
+    then F.1 = G by TARSKI:def 1;
+    hence F is halting by A2,Def56;
     now
       let x be Nat;
       x in NAT by ORDINAL1:def 13;
       then F.x in rng F by A1,FUNCT_1:12;
       then F.x in {G} by FUNCOP_1:14;
-      hence F.x is finite & F.x is loopless & F.x is trivial &
-      F.x is non-multi & F.x is non-Dmulti & F.x is simple &
-      F.x is Dsimple by TARSKI:def 1;
+      hence
+      F.x is finite & F.x is loopless & F.x is trivial & F.x is non-multi
+      & F.x is non-Dmulti & F.x is simple & F.x is Dsimple by TARSKI:def 1;
     end;
     hence thesis by Def60,Def61,Def62,Def64,Def65,Def66,Def67;
   end;
-  cluster halting finite loopless non-trivial non-multi non-Dmulti
-    simple Dsimple GraphSeq;
+  cluster halting finite loopless non-trivial non-multi non-Dmulti simple
+    Dsimple GraphSeq;
   existence
   proof
-    consider G being finite loopless non trivial non-multi non-Dmulti
-    simple Dsimple _Graph;
+    consider G being finite loopless non trivial non-multi non-Dmulti simple
+    Dsimple _Graph;
     set F = NAT --> G;
-A2: dom F = NAT by FUNCOP_1:19;
+A3: dom F = NAT by FUNCOP_1:19;
     reconsider F as ManySortedSet of NAT;
     now
       let x be Nat;
       x in NAT by ORDINAL1:def 13;
-      then F.x in rng F by A2,FUNCT_1:12;
+      then F.x in rng F by A3,FUNCT_1:12;
       then F.x in {G} by FUNCOP_1:14;
       hence F.x is _Graph by TARSKI:def 1;
     end;
     then reconsider F as GraphSeq by Def55;
+    F.(1+1) in rng F by A3,FUNCT_1:12;
+    then F.(1+1) in {G} by FUNCOP_1:14;
+    then
+A4: F.(1+1) = G by TARSKI:def 1;
     take F;
-    F.1 in rng F & F.(1+1) in rng F by A2,FUNCT_1:12;
-    then F.1 in {G} & F.(1+1) in {G} by FUNCOP_1:14;
-    then F.1 = G & F.(1+1) = G by TARSKI:def 1;
-    hence F is halting by Def56;
+    F.1 in rng F by A3,FUNCT_1:12;
+    then F.1 in {G} by FUNCOP_1:14;
+    then F.1 = G by TARSKI:def 1;
+    hence F is halting by A4,Def56;
     now
       let x be Nat;
       x in NAT by ORDINAL1:def 13;
-      then F.x in rng F by A2,FUNCT_1:12;
+      then F.x in rng F by A3,FUNCT_1:12;
       then F.x in {G} by FUNCOP_1:14;
-      hence F.x is finite & F.x is loopless & F.x is non trivial &
-      F.x is non-multi & F.x is non-Dmulti & F.x is simple &
-      F.x is Dsimple by TARSKI:def 1;
+      hence F.x is finite & F.x is loopless & F.x is non trivial & F.x is
+      non-multi & F.x is non-Dmulti & F.x is simple & F.x is Dsimple by TARSKI:
+      def 1;
     end;
     hence thesis by Def60,Def61,Def63,Def64,Def65,Def66,Def67;
   end;
@@ -1590,7 +1686,8 @@ registration
   coherence
   proof
     let GS be GraphSeq;
-    assume GS is non-multi;
+    assume
+    GS is non-multi;
     then reconsider GS' = GS as non-multi GraphSeq;
     for x being Nat holds GS'.x is non-Dmulti;
     hence thesis by Def65;
@@ -1602,7 +1699,8 @@ registration
   coherence
   proof
     let GS be GraphSeq;
-    assume GS is simple;
+    assume
+    GS is simple;
     then reconsider GS' = GS as simple GraphSeq;
     for x being Nat holds GS'.x is loopless;
     hence GS is loopless by Def61;
@@ -1616,7 +1714,8 @@ registration
   coherence
   proof
     let GS be GraphSeq;
-    assume GS is loopless & GS is non-multi;
+    assume
+    GS is loopless & GS is non-multi;
     then reconsider GS' = GS as loopless non-multi GraphSeq;
     for x being Nat holds GS'.x is simple;
     hence thesis by Def66;
@@ -1628,7 +1727,8 @@ registration
   coherence
   proof
     let GS be GraphSeq;
-    assume GS is loopless & GS is non-Dmulti;
+    assume
+    GS is loopless & GS is non-Dmulti;
     then reconsider GS'=GS as loopless non-Dmulti GraphSeq;
     for x being Nat holds GS'.x is Dsimple;
     hence thesis by Def67;
@@ -1640,7 +1740,8 @@ registration
   coherence
   proof
     let GS be GraphSeq;
-    assume GS is Dsimple;
+    assume
+    GS is Dsimple;
     then reconsider GS'=GS as Dsimple GraphSeq;
     for x being Nat holds GS'.x is loopless;
     hence GS is loopless by Def61;
@@ -1654,7 +1755,8 @@ registration
   coherence
   proof
     let GS be GraphSeq;
-    assume GS is trivial & GS is loopless;
+    assume
+    GS is trivial & GS is loopless;
     then reconsider GS'=GS as trivial loopless GraphSeq;
     for x being Nat holds GS'.x is finite;
     hence thesis by Def60;
@@ -1666,7 +1768,8 @@ registration
   coherence
   proof
     let GS be GraphSeq;
-    assume GS is trivial & GS is non-Dmulti;
+    assume
+    GS is trivial & GS is non-Dmulti;
     then reconsider GS'=GS as trivial non-Dmulti GraphSeq;
     for x being Nat holds GS'.x is finite;
     hence thesis by Def60;
@@ -1681,51 +1784,50 @@ reserve e,x,x1,x2,y,y1,y2,E,V,X,Y for set;
 reserve n,n1,n2 for Nat;
 reserve v,v1,v2 for Vertex of G;
 
-theorem ::tSELECT01
-  VertexSelector = 1 & EdgeSelector = 2 &
-  SourceSelector = 3 & TargetSelector = 4;
+theorem
+  VertexSelector = 1 & EdgeSelector = 2 & SourceSelector = 3 &
+  TargetSelector = 4;
 
 canceled;
 
-theorem ::tGRAPHSEL02
+theorem
   _GraphSelectors c= dom G
 proof
   now
     let x be set;
-    assume x in _GraphSelectors;
-    then (x = VertexSelector or x = EdgeSelector or
-    x = SourceSelector or x = TargetSelector) by ENUMSET1:def 2;
+    assume
+    x in _GraphSelectors;
+    then x = VertexSelector or x = EdgeSelector or x = SourceSelector or x =
+    TargetSelector by ENUMSET1:def 2;
     hence x in dom G by Def11;
   end;
   hence thesis by TARSKI:def 3;
 end;
 
-theorem ::tGNAMES01
-  the_Vertices_of GS = GS.VertexSelector & the_Edges_of GS = GS.EdgeSelector &
-  the_Source_of GS = GS.SourceSelector & the_Target_of GS = GS.TargetSelector;
+theorem
+  the_Vertices_of GS = GS.VertexSelector & the_Edges_of GS = GS.
+  EdgeSelector & the_Source_of GS = GS.SourceSelector & the_Target_of GS = GS.
+  TargetSelector;
 
-theorem ::tGRAPH01
-  dom (the_Source_of G) = the_Edges_of G &
-  dom (the_Target_of G) = the_Edges_of G &
-  rng (the_Source_of G) c= the_Vertices_of G &
-  rng (the_Target_of G) c= the_Vertices_of G by FUNCT_2:def 1;
+theorem
+  dom (the_Source_of G) = the_Edges_of G & dom (the_Target_of G) =
+  the_Edges_of G & rng (the_Source_of G) c= the_Vertices_of G & rng (
+  the_Target_of G) c= the_Vertices_of G by FUNCT_2:def 1;
 
 canceled;
 
-theorem ::tGRAPH03
-  GS is [Graph-like] iff _GraphSelectors c= dom GS &
-  the_Vertices_of GS is non empty &
-  the_Source_of GS is Function of the_Edges_of GS,the_Vertices_of GS &
-  the_Target_of GS is Function of the_Edges_of GS,the_Vertices_of GS by Lm1;
+theorem
+  GS is [Graph-like] iff _GraphSelectors c= dom GS & the_Vertices_of GS
+is non empty & the_Source_of GS is Function of the_Edges_of GS,the_Vertices_of
+GS & the_Target_of GS is Function of the_Edges_of GS,the_Vertices_of GS by Lm1;
 
-theorem ::tCREATEG01
-  for V being non empty set, E being set, S,T being Function of E,V holds
-  the_Vertices_of createGraph(V,E,S,T) = V &
-  the_Edges_of createGraph(V,E,S,T) = E &
-  the_Source_of createGraph(V,E,S,T) = S &
-  the_Target_of createGraph(V,E,S,T) = T by FINSEQ_4:91;
+theorem
+  for V being non empty set, E being set, S,T being Function of E,V
+holds the_Vertices_of createGraph(V,E,S,T) = V & the_Edges_of createGraph(V,E,S
+,T) = E & the_Source_of createGraph(V,E,S,T) = S & the_Target_of createGraph(V,
+  E,S,T) = T by FINSEQ_4:91;
 
-theorem Th9: ::tGSET01
+theorem Th9:
   dom GS.set(n,x) = dom GS \/ {n}
 proof
   set G2 = GS.set(n,x);
@@ -1735,7 +1837,7 @@ end;
 
 canceled;
 
-theorem Th11: ::tGSET03
+theorem Th11:
   GS.set(n,x).n = x
 proof
   set G2 = GS.set(n,x);
@@ -1745,61 +1847,63 @@ proof
     .= x by FUNCOP_1:87;
 end;
 
-theorem Th12: ::tGSET04
+theorem Th12:
   n1 <> n2 implies GS.n2 = GS.set(n1,x).n2
 proof
   set G2 = GS.set(n1,x);
+A1: dom (n1.-->x) = {n1} by FUNCOP_1:19;
   assume
-A1: n1 <> n2;
-  dom (n1.-->x) = {n1} by FUNCOP_1:19;
+  n1 <> n2;
   then not n2 in dom (n1.-->x) by A1,TARSKI:def 1;
   hence thesis by FUNCT_4:12;
 end;
 
-theorem ::tGSET05
-  not n in _GraphSelectors implies
-  the_Vertices_of G = the_Vertices_of G.set(n,x) &
-  the_Edges_of G = the_Edges_of G.set(n,x) &
-  the_Source_of G = the_Source_of G.set(n,x) &
-  the_Target_of G = the_Target_of G.set(n,x) & G.set(n,x) is _Graph
+theorem
+  not n in _GraphSelectors implies the_Vertices_of G = the_Vertices_of G
+  .set(n,x) & the_Edges_of G = the_Edges_of G.set(n,x) & the_Source_of G =
+the_Source_of G.set(n,x) & the_Target_of G = the_Target_of G.set(n,x) & G.set(n
+  ,x) is _Graph
 proof
-  assume
-A1: not n in _GraphSelectors;
   set G2 = G.set(n,x);
-A2: VertexSelector in dom G & EdgeSelector in dom G &
-  SourceSelector in dom G & TargetSelector in dom G by Def11;
-A3: dom G c= dom G2 by FUNCT_4:11;
-A4: VertexSelector <> n & EdgeSelector <> n & SourceSelector <> n &
-  TargetSelector <> n by A1,ENUMSET1:def 2;
-  dom (n .--> x) = {n} by FUNCOP_1:19;
-  then not VertexSelector in dom (n .--> x) & not EdgeSelector in dom (n
-  .--> x) & not SourceSelector in dom (n .--> x) &
-  not TargetSelector in dom (n .--> x) by A4,TARSKI:def 1;
-  hence the_Vertices_of G2 = the_Vertices_of G &
-  the_Edges_of G2 = the_Edges_of G &
-  the_Source_of G2 = the_Source_of G & the_Target_of G2 = the_Target_of G
-  by FUNCT_4:12;
-  hence thesis by A2,A3,Def11;
+A1: dom G c= dom G2 by FUNCT_4:11;
+A2: dom (n .--> x) = {n} by FUNCOP_1:19;
+  assume
+A3: not n in _GraphSelectors;
+  then EdgeSelector <> n by ENUMSET1:def 2;
+  then
+A4: not EdgeSelector in dom (n .--> x) by A2,TARSKI:def 1;
+  TargetSelector <> n by A3,ENUMSET1:def 2;
+  then
+A5: not TargetSelector in dom (n .--> x) by A2,TARSKI:def 1;
+  SourceSelector <> n by A3,ENUMSET1:def 2;
+  then
+A6: not SourceSelector in dom (n .--> x) by A2,TARSKI:def 1;
+  VertexSelector <> n by A3,ENUMSET1:def 2;
+  then not VertexSelector in dom (n .--> x) by A2,TARSKI:def 1;
+  hence
+A7: the_Vertices_of G2 = the_Vertices_of G & the_Edges_of G2 =
+  the_Edges_of G & the_Source_of G2 = the_Source_of G & the_Target_of G2 =
+  the_Target_of G by A4,A6,A5,FUNCT_4:12;
+A8: SourceSelector in dom G & TargetSelector in dom G by Def11;
+  VertexSelector in dom G & EdgeSelector in dom G by Def11;
+  hence thesis by A8,A1,A7,Def11;
 end;
 
-theorem ::tGSET06
-  the_Vertices_of GS.set(VertexSelector,x) = x &
-  the_Edges_of GS.set(EdgeSelector,x) = x &
-  the_Source_of GS.set(SourceSelector,x) = x &
+theorem
+  the_Vertices_of GS.set(VertexSelector,x) = x & the_Edges_of GS.set(
+  EdgeSelector,x) = x & the_Source_of GS.set(SourceSelector,x) = x &
   the_Target_of GS.set(TargetSelector,x) = x by Th11;
 
-theorem ::tGSET07
-  n1 <> n2 implies n1 in dom GS.set(n1,x).set(n2,y) &
-  n2 in dom GS.set(n1,x).set(n2,y) & GS.set(n1,x).set(n2,y).n1 = x &
-  GS.set(n1,x).set(n2,y).n2 = y
+theorem
+  n1 <> n2 implies n1 in dom GS.set(n1,x).set(n2,y) & n2 in dom GS.set(
+n1,x).set(n2,y) & GS.set(n1,x).set(n2,y).n1 = x & GS.set(n1,x).set(n2,y).n2 = y
 proof
   assume
 A1: n1 <> n2;
   set G2 = GS.set(n1,x), G3 = G2.set(n2,y);
 A2: dom G3 = dom G2 \/ {n2} by Th9;
-A3: dom G2 = dom GS \/ {n1} by Th9;
-  n1 in {n1} by TARSKI:def 1;
-  then n1 in dom G2 by A3,XBOOLE_0:def 3;
+  dom G2 = dom GS \/ {n1} & n1 in {n1} by Th9,TARSKI:def 1;
+  then n1 in dom G2 by XBOOLE_0:def 3;
   hence n1 in dom GS.set(n1,x).set(n2,y) by A2,XBOOLE_0:def 3;
   n2 in {n2} by TARSKI:def 1;
   hence n2 in dom GS.set(n1,x).set(n2,y) by A2,XBOOLE_0:def 3;
@@ -1808,54 +1912,66 @@ A3: dom G2 = dom GS \/ {n1} by Th9;
   thus thesis by Th11;
 end;
 
-theorem ::tJOIN01
+theorem
   e Joins x,y,G implies x in the_Vertices_of G & y in the_Vertices_of G
 proof
-  assume e Joins x,y,G;
-  then e in the_Edges_of G &
-  (((the_Source_of G).e = x & (the_Target_of G).e = y) or
-  ((the_Source_of G).e = y & (the_Target_of G).e = x)) by Def15;
-  hence thesis by FUNCT_2:7;
+  assume
+A1: e Joins x,y,G;
+  then
+A2: (the_Source_of G).e = x & (the_Target_of G).e = y or (the_Source_of G).e
+  = y & (the_Target_of G).e = x by Def15;
+  e in the_Edges_of G by A1,Def15;
+  hence thesis by A2,FUNCT_2:7;
 end;
 
-theorem ::tJOIN02
+theorem
   e Joins x,y,G implies e Joins y,x,G
 proof
-  assume e Joins x,y,G;
-  then e in the_Edges_of G &
-  (((the_Source_of G).e = x & (the_Target_of G).e = y) or
-  ((the_Source_of G).e = y & (the_Target_of G).e = x)) by Def15;
-  hence thesis by Def15;
+  assume
+A1: e Joins x,y,G;
+  then
+A2: (the_Source_of G).e = x & (the_Target_of G).e = y or (the_Source_of G).e
+  = y & (the_Target_of G).e = x by Def15;
+  e in the_Edges_of G by A1,Def15;
+  hence thesis by A2,Def15;
 end;
 
-theorem ::tJOIN03
-  e Joins x1,y1,G & e Joins x2,y2,G implies
-  (x1 = x2 & y1 = y2) or (x1 = y2 & y1 = x2)
+theorem
+  e Joins x1,y1,G & e Joins x2,y2,G implies x1 = x2 & y1 = y2 or x1 = y2
+  & y1 = x2
 proof
-  assume
-A1: e Joins x1,y1,G & e Joins x2,y2,G;
+  assume that
+A1: e Joins x1,y1,G and
+A2: e Joins x2,y2,G;
   set S = (the_Source_of G).e, T = (the_Target_of G).e;
-  now per cases by A1,Def15;
+  now
+    per cases by A1,Def15;
     suppose
-A2:   S = x1 & T = y1;
-      now per cases by A1,Def15;
-        suppose S = x2 & T = y2;
-          hence thesis by A2;
+A3:   S = x1 & T = y1;
+      now
+        per cases by A2,Def15;
+        suppose
+          S = x2 & T = y2;
+          hence thesis by A3;
         end;
-        suppose S = y2 & T = x2;
-          hence thesis by A2;
+        suppose
+          S = y2 & T = x2;
+          hence thesis by A3;
         end;
       end;
       hence thesis;
     end;
     suppose
-A3:   S = y1 & T = x1;
-      now per cases by A1,Def15;
-        suppose S = x2 & T = y2;
-          hence thesis by A3;
+A4:   S = y1 & T = x1;
+      now
+        per cases by A2,Def15;
+        suppose
+          S = x2 & T = y2;
+          hence thesis by A4;
         end;
-        suppose S = y2 & T = x2;
-          hence thesis by A3;
+        suppose
+          S = y2 & T = x2;
+          hence thesis by A4;
         end;
       end;
       hence thesis;
@@ -1864,23 +1980,25 @@ A3:   S = y1 & T = x1;
   hence thesis;
 end;
 
-theorem ::tDJOIN01
+theorem
   e Joins x,y,G iff (e DJoins x,y,G or e DJoins y,x,G) by Lm2;
 
-theorem ::tSJOIN01
-  e Joins x,y,G & ((x in X & y in Y) or (x in Y & y in X)) implies
-  e SJoins X,Y,G
+theorem
+  e Joins x,y,G & ( x in X & y in Y or x in Y & y in X ) implies e
+  SJoins X,Y,G
 proof
-  assume
-A1: e Joins x,y,G & ((x in X & y in Y) or (x in Y & y in X));
-  then e in the_Edges_of G &
-  (((the_Source_of G).e=x & (the_Target_of G).e=y) or
-  ((the_Source_of G).e=y & (the_Target_of G).e=x)) by Def15;
-  hence thesis by A1,Def17;
+  assume that
+A1: e Joins x,y,G and
+A2: x in X & y in Y or x in Y & y in X;
+A3: (the_Source_of G).e=x & (the_Target_of G).e=y or (the_Source_of G).e =y
+  & (the_Target_of G).e=x by A1,Def15;
+  e in the_Edges_of G by A1,Def15;
+  hence thesis by A2,A3,Def17;
 end;
 
-theorem ::tGLOOPLESS01
-  G is loopless iff for v being set holds not ex e being set st e Joins v,v,G
+theorem
+  G is loopless iff for v being set holds not ex e being set st e Joins
+  v,v,G
 proof
   hereby
     assume
@@ -1889,51 +2007,54 @@ A1: G is loopless;
     now
       given e being set such that
 A2:   e Joins v, v, G;
-      e in the_Edges_of G & (the_Source_of G).e = v &
-      (the_Target_of G).e = v by A2,Def15;
-      hence contradiction by A1,Def20;
+A3:   (the_Target_of G).e = v by A2,Def15;
+      e in the_Edges_of G & (the_Source_of G).e = v by A2,Def15;
+      hence contradiction by A1,A3,Def20;
     end;
     hence not ex e being set st e Joins v,v,G;
   end;
   assume
-A3: for v being set holds not ex e being set st e Joins v,v,G;
+A4: for v being set holds not ex e being set st e Joins v,v,G;
   now
     given e being set such that
-A4: e in the_Edges_of G & (the_Source_of G).e = (the_Target_of G).e;
+A5: e in the_Edges_of G & (the_Source_of G).e = (the_Target_of G).e;
     set v = (the_Source_of G).e;
-    e Joins v,v,G by A4,Def15;
-    hence contradiction by A3;
+    e Joins v,v,G by A5,Def15;
+    hence contradiction by A4;
   end;
   hence thesis by Def20;
 end;
 
-theorem ::tGLOOPLESS02
-  for G being finite loopless _Graph, v being Vertex of G holds
-  v.degree() = card v.edgesInOut()
+theorem
+  for G being finite loopless _Graph, v being Vertex of G holds v
+  .degree() = card v.edgesInOut()
 proof
   let G be finite loopless _Graph, v be Vertex of G;
   set In = v.edgesIn(), Out = v.edgesOut();
   now
     given e such that
 A1: e in In /\ Out;
-    e in In & e in Out by A1,XBOOLE_0:def 4;
-    then e in the_Edges_of G & (the_Source_of G).e = v &
-    (the_Target_of G).e = v by Lm8,Lm9;
-    hence contradiction by Def20;
+    e in Out by A1,XBOOLE_0:def 4;
+    then
+A2: (the_Source_of G).e = v by Lm9;
+    e in In by A1,XBOOLE_0:def 4;
+    then (the_Target_of G).e = v by Lm8;
+    hence contradiction by A1,A2,Def20;
   end;
   then In /\ Out = {} by XBOOLE_0:def 1;
   then In misses Out by XBOOLE_0:def 7;
   hence thesis by CARD_2:53;
 end;
 
-theorem ::tGTRIVIAL01
-  for G being non trivial _Graph, v being Vertex of G holds
-  (the_Vertices_of G) \ {v} is non empty
+theorem
+  for G being non trivial _Graph, v being Vertex of G holds (
+  the_Vertices_of G) \ {v} is non empty
 proof
   let G be non trivial _Graph, v be Vertex of G;
   set VG = the_Vertices_of G;
   now
-    assume VG \ {v} = {};
+    assume
+    VG \ {v} = {};
     then VG c= {v} by XBOOLE_1:37;
     then VG = {v} by ZFMISC_1:39;
     then card VG = 1 by CARD_1:50;
@@ -1942,8 +2063,9 @@ proof
   hence thesis;
 end;
 
-theorem ::tGTRIVIAL02
-  for G being non trivial _Graph holds ex v1, v2 being Vertex of G st v1 <> v2
+theorem
+  for G being non trivial _Graph holds ex v1, v2 being Vertex of G st v1
+  <> v2
 proof
   let G be non trivial _Graph;
   set VG = the_Vertices_of G;
@@ -1962,15 +2084,15 @@ A1: VG2 = {};
   end;
   then reconsider VG2 as non empty set;
   set v2 = choose VG2;
-A2: v2 in VG & not v2 in {v1} by XBOOLE_0:def 5;
+A2: not v2 in {v1} by XBOOLE_0:def 5;
   reconsider v2 as Vertex of G by XBOOLE_0:def 5;
   take v2;
   thus thesis by A2,TARSKI:def 1;
 end;
 
-theorem Th25: ::tGTRIVIAL03
-  for G being trivial _Graph holds
-  ex v being Vertex of G st the_Vertices_of G = {v}
+theorem Th25:
+  for G being trivial _Graph holds ex v being Vertex of G st
+  the_Vertices_of G = {v}
 proof
   let G be trivial _Graph;
   card (the_Vertices_of G) = 1 by Def21;
@@ -1981,40 +2103,43 @@ A1: the_Vertices_of G = {v} by CARD_2:60;
   thus thesis by A1;
 end;
 
-theorem ::tGTRIVIAL04
+theorem
   for G being trivial loopless _Graph holds the_Edges_of G = {}
 proof
   let G be trivial loopless _Graph;
   consider v being Vertex of G such that
 A1: the_Vertices_of G = {v} by Th25;
   now
-    assume the_Edges_of G <> {};
+    assume
+    the_Edges_of G <> {};
     then consider e being set such that
 A2: e in the_Edges_of G by XBOOLE_0:def 1;
-    (the_Source_of G).e in {v} & (the_Target_of G).e in {v}
-    by A1,A2,FUNCT_2:7;
-    then (the_Source_of G).e = v & (the_Target_of G).e = v by TARSKI:def 1;
-    hence contradiction by A2,Def20;
+    (the_Target_of G).e in {v} by A1,A2,FUNCT_2:7;
+    then
+A3: (the_Target_of G).e = v by TARSKI:def 1;
+    (the_Source_of G).e in {v} by A1,A2,FUNCT_2:7;
+    then (the_Source_of G).e = v by TARSKI:def 1;
+    hence contradiction by A2,A3,Def20;
   end;
   hence thesis;
 end;
 
-theorem ::tGSIMPLE01
+theorem
   the_Edges_of G = {} implies G is simple
 proof
   assume
 A1: the_Edges_of G = {};
-  then not ex e being set st e in the_Edges_of G &
-  (the_Source_of G).e = (the_Target_of G).e;
+  then not ex e being set st e in the_Edges_of G & (the_Source_of G).e = (
+  the_Target_of G).e;
   then
 A2: G is loopless by Def20;
-  for e1,e2,v1,v2 being set holds
-  e1 Joins v1,v2,G & e2 Joins v1,v2,G implies e1 = e2 by A1,Def15;
+  for e1,e2,v1,v2 being set holds e1 Joins v1,v2,G & e2 Joins v1,v2,G
+  implies e1 = e2 by A1,Def15;
   then G is non-multi by Def22;
   hence thesis by A2;
 end;
 
-theorem ::tGORDER01
+theorem
   for G being finite _Graph holds G.order() >= 1
 proof
   let G be finite _Graph;
@@ -2022,16 +2147,18 @@ proof
   hence thesis by NAT_1:13;
 end;
 
-theorem ::tGORDER02
-  for G being finite _Graph holds G.order() = 1 iff G is trivial by Def21;
+theorem
+  for G being finite _Graph holds G.order() = 1 iff G is trivial by
+  Def21;
 
-theorem ::tGORDER03
-  for G being finite _Graph holds
-  G.order() = 1 iff ex v being Vertex of G st the_Vertices_of G = {v}
+theorem
+  for G being finite _Graph holds G.order() = 1 iff ex v being Vertex of
+  G st the_Vertices_of G = {v}
 proof
   let G be finite _Graph;
   hereby
-    assume G.order() = 1;
+    assume
+    G.order() = 1;
     then consider v being set such that
 A1: the_Vertices_of G = {v} by CARD_2:60;
     reconsider v as Vertex of G by A1,TARSKI:def 1;
@@ -2043,43 +2170,47 @@ A2: the_Vertices_of G = {v};
   thus thesis by A2,CARD_1:50;
 end;
 
-theorem Th31: ::tGEINOUTV01
-  e in the_Edges_of G & ((the_Source_of G).e in X or (the_Target_of G).e in X)
-  iff e in G.edgesInOut(X)
+theorem Th31:
+  e in the_Edges_of G & ((the_Source_of G).e in X or (
+  the_Target_of G).e in X) iff e in G.edgesInOut(X)
 proof
   hereby
-    assume
-A1: e in the_Edges_of G &
-    ((the_Source_of G).e in X or (the_Target_of G).e in X);
-    now per cases by A1;
-      suppose (the_Source_of G).e in X;
+    assume that
+A1: e in the_Edges_of G and
+A2: (the_Source_of G).e in X or (the_Target_of G).e in X;
+    now
+      per cases by A2;
+      suppose
+        (the_Source_of G).e in X;
         then e in G.edgesOutOf(X) by A1,Def29;
         hence e in G.edgesInOut(X) by XBOOLE_0:def 3;
       end;
-      suppose (the_Target_of G).e in X;
+      suppose
+        (the_Target_of G).e in X;
         then e in G.edgesInto(X) by A1,Def28;
         hence e in G.edgesInOut(X) by XBOOLE_0:def 3;
       end;
     end;
     hence e in G.edgesInOut(X);
   end;
-  assume e in G.edgesInOut(X);
+  assume
+  e in G.edgesInOut(X);
   then e in G.edgesInto(X) or e in G.edgesOutOf(X) by XBOOLE_0:def 3;
   hence thesis by Def28,Def29;
 end;
 
-theorem ::tGEINOUTV02
+theorem
   G.edgesInto(X) c= G.edgesInOut(X) & G.edgesOutOf(X) c= G.edgesInOut(X)
 proof
-  for z being set st z in G.edgesInto(X)
-  holds z in G.edgesInOut(X) by XBOOLE_0:def 3;
+  for z being set st z in G.edgesInto(X) holds z in G.edgesInOut(X) by
+  XBOOLE_0:def 3;
   hence G.edgesInto(X) c= G.edgesInOut(X) by TARSKI:def 3;
-  for z being set st z in G.edgesOutOf(X)
-  holds z in G.edgesInOut(X) by XBOOLE_0:def 3;
+  for z being set st z in G.edgesOutOf(X) holds z in G.edgesInOut(X) by
+  XBOOLE_0:def 3;
   hence thesis by TARSKI:def 3;
 end;
 
-theorem ::tGEINOUTV03
+theorem
   the_Edges_of G = G.edgesInOut(the_Vertices_of G)
 proof
   set EG = the_Edges_of G, SG = the_Source_of G;
@@ -2091,40 +2222,43 @@ A1:   x in EG;
       then SG.x in the_Vertices_of G by FUNCT_2:7;
       hence x in G.edgesInOut(the_Vertices_of G) by A1,Th31;
     end;
-    assume x in G.edgesInOut(the_Vertices_of G);
+    assume
+    x in G.edgesInOut(the_Vertices_of G);
     hence x in EG;
   end;
   hence thesis by TARSKI:2;
 end;
 
-theorem ::tGEBETV01
-  e in the_Edges_of G & (the_Source_of G).e in X & (the_Target_of G).e in X
-  iff e in G.edgesBetween(X) by Lm6;
+theorem
+  e in the_Edges_of G & (the_Source_of G).e in X & (the_Target_of G).e
+  in X iff e in G.edgesBetween(X) by Lm6;
 
-theorem ::tGEBETV02
+theorem
   x in X & y in X & e Joins x,y,G implies e in G.edgesBetween(X)
 proof
-  assume
-A1: x in X & y in X & e Joins x,y,G;
-  then e in the_Edges_of G &
-  (((the_Source_of G).e = x & (the_Target_of G).e = y) or
-  ((the_Source_of G).e = y & (the_Target_of G).e = x)) by Def15;
-  hence thesis by A1,Lm6;
+  assume that
+A1: x in X & y in X and
+A2: e Joins x,y,G;
+A3: (the_Source_of G).e = x & (the_Target_of G).e = y or (the_Source_of G).e
+  = y & (the_Target_of G).e = x by A2,Def15;
+  e in the_Edges_of G by A2,Def15;
+  hence thesis by A1,A3,Lm6;
 end;
 
-theorem ::tGEBETV03
+theorem
   G.edgesBetween(X) c= G.edgesInOut(X)
 proof
   now
     let z be set;
-    assume z in G.edgesBetween(X);
+    assume
+    z in G.edgesBetween(X);
     then z in G.edgesInto(X) by XBOOLE_0:def 4;
     hence z in G.edgesInOut(X) by XBOOLE_0:def 3;
   end;
   hence thesis by TARSKI:def 3;
 end;
 
-theorem Th37: ::tGEBETV04:
+theorem Th37:
   the_Edges_of G = G.edgesBetween(the_Vertices_of G)
 proof
   set EG = the_Edges_of G, SG = the_Source_of G, TG = the_Target_of G;
@@ -2133,18 +2267,21 @@ proof
     hereby
       assume
 A1:   x in EG;
-      then SG.x in the_Vertices_of G & TG.x in the_Vertices_of G by FUNCT_2:7;
+      then SG.x in the_Vertices_of G & TG.x in the_Vertices_of G by
+      FUNCT_2:
+      7;
       hence x in G.edgesBetween(the_Vertices_of G) by A1,Lm6;
     end;
-    assume x in G.edgesBetween(the_Vertices_of G);
+    assume
+    x in G.edgesBetween(the_Vertices_of G);
     hence x in EG;
   end;
   hence thesis by TARSKI:2;
 end;
 
-theorem Th38: ::tGEBETV05
-  (the_Edges_of G) \ (G.edgesInOut(X)) =
-  G.edgesBetween( (the_Vertices_of G) \ X)
+theorem Th38:
+  (the_Edges_of G) \ (G.edgesInOut(X)) = G.edgesBetween( (
+  the_Vertices_of G) \ X)
 proof
   set EG = the_Edges_of G, VG = the_Vertices_of G;
   set EIO = G.edgesInOut(X), EB = G.edgesBetween(VG\X);
@@ -2153,43 +2290,46 @@ proof
     hereby
       assume
 A1:   x in EG \ EIO;
-      then x in EG & not x in EIO by XBOOLE_0:def 5;
       then
-A2:   not (the_Source_of G).x in X & not (the_Target_of G).x in X by Th31;
-      (the_Source_of G).x in VG & (the_Target_of G).x in VG by A1,FUNCT_2:7;
-      then (the_Source_of G).x in VG \ X &
-      (the_Target_of G).x in VG \ X by A2,XBOOLE_0:def 5;
-      hence x in EB by A1,Lm6;
+A2:   (the_Target_of G).x in VG by FUNCT_2:7;
+A3:   not x in EIO by A1,XBOOLE_0:def 5;
+      then not (the_Target_of G).x in X by A1,Th31;
+      then
+A4:   (the_Target_of G).x in VG \ X by A2,XBOOLE_0:def 5;
+A5:   (the_Source_of G).x in VG by A1,FUNCT_2:7;
+      not (the_Source_of G).x in X by A1,A3,Th31;
+      then (the_Source_of G).x in VG \ X by A5,XBOOLE_0:def 5;
+      hence x in EB by A1,A4,Lm6;
     end;
     assume
-A3: x in EB;
-    then x in EG & (the_Source_of G).x in VG \ X &
-    (the_Target_of G).x in VG \ X by Lm6;
-    then (the_Source_of G).x in VG & not (the_Source_of G).x in X &
-    (the_Target_of G).x in VG & not (the_Target_of G).x in X
-    by XBOOLE_0:def 5;
-    then not x in EIO by Th31;
-    hence x in EG\EIO by A3,XBOOLE_0:def 5;
+A6: x in EB;
+    then (the_Target_of G).x in VG \ X by Lm6;
+    then
+A7: not (the_Target_of G).x in X by XBOOLE_0:def 5;
+    (the_Source_of G).x in VG \ X by A6,Lm6;
+    then not (the_Source_of G).x in X by XBOOLE_0:def 5;
+    then not x in EIO by A7,Th31;
+    hence x in EG\EIO by A6,XBOOLE_0:def 5;
   end;
   hence thesis by TARSKI:2;
 end;
 
-theorem ::tGEBETV06
+theorem
   X c= Y implies G.edgesBetween(X) c= G.edgesBetween(Y)
 proof
   assume
 A1: X c= Y;
   now
     let x be set;
-    assume x in G.edgesBetween(X);
-    then x in the_Edges_of G & (the_Source_of G).x in X &
-    (the_Target_of G).x in X by Lm6;
-    hence x in G.edgesBetween(Y) by A1,Lm6;
+    assume
+A2: x in G.edgesBetween(X);
+    then (the_Source_of G).x in X & (the_Target_of G).x in X by Lm6;
+    hence x in G.edgesBetween(Y) by A1,A2,Lm6;
   end;
   hence thesis by TARSKI:def 3;
 end;
 
-theorem ::tGEBETXY01
+theorem
   for G being _Graph, X1,X2,Y1,Y2 being set st X1 c= X2 & Y1 c= Y2 holds
   G.edgesBetween(X1,Y1) c= G.edgesBetween(X2,Y2)
 proof
@@ -2198,18 +2338,18 @@ proof
 A1: X1 c= X2 & Y1 c= Y2;
   now
     let e be set;
-    assume e in G.edgesBetween(X1,Y1);
+    assume
+A2: e in G.edgesBetween(X1,Y1);
     then e SJoins X1,Y1,G by Def32;
-    then e in the_Edges_of G & (((the_Source_of G).e in X1 &
-    (the_Target_of G).e in Y1) or ((the_Source_of G).e in
-    Y1 & (the_Target_of G).e in X1)) by Def17;
-    then e SJoins X2,Y2,G by A1,Def17;
+    then (the_Source_of G).e in X1 & (the_Target_of G).e in Y1 or (
+    the_Source_of G).e in Y1 & (the_Target_of G).e in X1 by Def17;
+    then e SJoins X2,Y2,G by A1,A2,Def17;
     hence e in G.edgesBetween(X2,Y2) by Def32;
   end;
   hence thesis by TARSKI:def 3;
 end;
 
-theorem ::tGEDBETXY01
+theorem
   for G being _Graph, X1,X2,Y1,Y2 being set st X1 c= X2 & Y1 c= Y2 holds
   G.edgesDBetween(X1,Y1) c= G.edgesDBetween(X2,Y2)
 proof
@@ -2218,20 +2358,20 @@ proof
 A1: X1 c= X2 & Y1 c= Y2;
   now
     let e be set;
-    assume e in G.edgesDBetween(X1,Y1);
+    assume
+A2: e in G.edgesDBetween(X1,Y1);
     then e DSJoins X1,Y1,G by Def33;
-    then e in the_Edges_of G & (the_Source_of G).e in X1 &
-    (the_Target_of G).e in Y1 by Def18;
-    then e DSJoins X2,Y2,G by A1,Def18;
+    then (the_Source_of G).e in X1 & (the_Target_of G).e in Y1 by Def18;
+    then e DSJoins X2,Y2,G by A1,A2,Def18;
     hence e in G.edgesDBetween(X2,Y2) by Def33;
   end;
   hence thesis by TARSKI:def 3;
 end;
 
-theorem ::tGEDBETXY02
-  for G being _Graph, v being Vertex of G holds
-  v.edgesIn() = G.edgesDBetween(the_Vertices_of G, {v}) &
-  v.edgesOut() = G.edgesDBetween({v}, the_Vertices_of G)
+theorem
+  for G being _Graph, v being Vertex of G holds v.edgesIn() = G
+  .edgesDBetween(the_Vertices_of G, {v}) & v.edgesOut() = G.edgesDBetween({v},
+  the_Vertices_of G)
 proof
   let G be _Graph, v be Vertex of G;
   now
@@ -2239,210 +2379,206 @@ proof
     hereby
       assume
 A1:   e in v.edgesIn();
-      then e in the_Edges_of G & (the_Target_of G).e = v by Lm8;
-      then (the_Source_of G).e in the_Vertices_of G &
-      (the_Target_of G).e in {v} by FUNCT_2:7,TARSKI:def 1;
-      then e DSJoins the_Vertices_of G,{v},G by A1,Def18;
+      then (the_Target_of G).e = v by Lm8;
+      then
+A2:   (the_Target_of G).e in {v} by TARSKI:def 1;
+      (the_Source_of G).e in the_Vertices_of G by A1,FUNCT_2:7;
+      then e DSJoins the_Vertices_of G,{v},G by A1,A2,Def18;
       hence e in G.edgesDBetween(the_Vertices_of G, {v}) by Def33;
     end;
-    assume e in G.edgesDBetween(the_Vertices_of G, {v});
+    assume
+A3: e in G.edgesDBetween(the_Vertices_of G, {v});
     then e DSJoins the_Vertices_of G, {v}, G by Def33;
-    then
-A2: e in the_Edges_of G & (the_Target_of G).e in {v} by Def18;
+    then (the_Target_of G).e in {v} by Def18;
     then (the_Target_of G).e = v by TARSKI:def 1;
-    hence e in v.edgesIn() by A2,Lm8;
+    hence e in v.edgesIn() by A3,Lm8;
   end;
   hence v.edgesIn() = G.edgesDBetween(the_Vertices_of G, {v}) by TARSKI:2;
   now
     let e be set;
     hereby
       assume
-A3:   e in v.edgesOut();
-      then e in the_Edges_of G & (the_Source_of G).e = v by Lm9;
-      then (the_Target_of G).e in the_Vertices_of G &
-      (the_Source_of G).e in {v} by FUNCT_2:7,TARSKI:def 1;
-      then e DSJoins {v},the_Vertices_of G,G by A3,Def18;
+A4:   e in v.edgesOut();
+      then (the_Source_of G).e = v by Lm9;
+      then
+A5:   (the_Source_of G).e in {v} by TARSKI:def 1;
+      (the_Target_of G).e in the_Vertices_of G by A4,FUNCT_2:7;
+      then e DSJoins {v},the_Vertices_of G,G by A4,A5,Def18;
       hence e in G.edgesDBetween({v},the_Vertices_of G) by Def33;
     end;
-    assume e in G.edgesDBetween({v},the_Vertices_of G);
+    assume
+A6: e in G.edgesDBetween({v},the_Vertices_of G);
     then e DSJoins {v},the_Vertices_of G, G by Def33;
-    then
-A4: e in the_Edges_of G & (the_Source_of G).e in {v} by Def18;
+    then (the_Source_of G).e in {v} by Def18;
     then (the_Source_of G).e = v by TARSKI:def 1;
-    hence e in v.edgesOut() by A4,Lm9;
+    hence e in v.edgesOut() by A6,Lm9;
   end;
   hence thesis by TARSKI:2;
 end;
 
-theorem ::tSUBGRAPH01;
+theorem
   G is Subgraph of G by Lm4;
 
-theorem Th44: ::tSUBGRAPH02:
-  G1 is Subgraph of G2 & G2 is Subgraph of G1 iff
-  the_Vertices_of G1 = the_Vertices_of G2 &
-  the_Edges_of G1 = the_Edges_of G2 & the_Source_of G1 = the_Source_of G2 &
-  the_Target_of G1 = the_Target_of G2
+theorem Th44:
+  G1 is Subgraph of G2 & G2 is Subgraph of G1 iff the_Vertices_of
+G1 = the_Vertices_of G2 & the_Edges_of G1 = the_Edges_of G2 & the_Source_of G1
+  = the_Source_of G2 & the_Target_of G1 = the_Target_of G2
 proof
   hereby
-    assume
-A1: G1 is Subgraph of G2 & G2 is Subgraph of G1;
-    then the_Vertices_of G1 c= the_Vertices_of G2 &
-    the_Edges_of G1 c= the_Edges_of G2 &
-    the_Vertices_of G2 c= the_Vertices_of G1 &
-    the_Edges_of G2 c= the_Edges_of G1 &
-    for e being set st e in the_Edges_of G1 holds
-    (the_Source_of G1).e = (the_Source_of G2).e &
-    (the_Target_of G1).e = (the_Target_of G2).e by Def34;
-    hence the_Vertices_of G1 = the_Vertices_of G2 &
-    the_Edges_of G1 = the_Edges_of G2 by XBOOLE_0:def 10;
+    assume that
+A1: G1 is Subgraph of G2 and
+A2: G2 is Subgraph of G1;
+A3: the_Vertices_of G2 c= the_Vertices_of G1 & the_Edges_of G2 c=
+    the_Edges_of G1 by A2,Def34;
+    the_Vertices_of G1 c= the_Vertices_of G2 & the_Edges_of G1 c=
+    the_Edges_of G2 by A1,Def34;
+    hence
+A4: the_Vertices_of G1 = the_Vertices_of G2 & the_Edges_of G1 =
+    the_Edges_of G2 by A3,XBOOLE_0:def 10;
     then
-A2: dom the_Source_of G1 = the_Edges_of G1 &
-    dom the_Source_of G2 = the_Edges_of G1 &
-    dom the_Target_of G1 = the_Edges_of G1 &
-    dom the_Target_of G2 = the_Edges_of G1 by FUNCT_2:def 1;
-    for e being set st e in dom the_Source_of G1 holds
-    (the_Source_of G1).e = (the_Source_of G2).e by A1,Def34;
-    hence the_Source_of G1 = the_Source_of G2 by A2,FUNCT_1:9;
-    for e being set st e in dom the_Target_of G1 holds
-    (the_Target_of G1).e = (the_Target_of G2).e by A1,Def34;
-    hence the_Target_of G1 = the_Target_of G2 by A2,FUNCT_1:9;
+A5: dom the_Source_of G1 = the_Edges_of G1 & dom the_Source_of G2 =
+    the_Edges_of G1 by FUNCT_2:def 1;
+    for e being set st e in dom the_Source_of G1 holds (the_Source_of G1)
+    .e = (the_Source_of G2).e by A1,Def34;
+    hence the_Source_of G1 = the_Source_of G2 by A5,FUNCT_1:9;
+A6: dom the_Target_of G1 = the_Edges_of G1 & dom the_Target_of G2 =
+    the_Edges_of G1 by A4,FUNCT_2:def 1;
+    for e being set st e in dom the_Target_of G1 holds (the_Target_of G1)
+    .e = (the_Target_of G2).e by A1,Def34;
+    hence the_Target_of G1 = the_Target_of G2 by A6,FUNCT_1:9;
   end;
-  assume
-A3: the_Vertices_of G1 = the_Vertices_of G2 &
-  the_Edges_of G1 = the_Edges_of G2 & the_Source_of G1 = the_Source_of G2 &
-  the_Target_of G1 = the_Target_of G2;
-  then for e being set st e in the_Edges_of G1 holds
-  (the_Source_of G1).e = (the_Source_of G2).e &
-  (the_Target_of G1).e = (the_Target_of G2).e;
-  hence thesis by A3,Def34;
+  assume that
+A7: the_Vertices_of G1 = the_Vertices_of G2 & the_Edges_of G1 =
+  the_Edges_of G2 and
+A8: the_Source_of G1 = the_Source_of G2 & the_Target_of G1 =
+  the_Target_of G2;
+  for e being set st e in the_Edges_of G1 holds (the_Source_of G1).e = (
+  the_Source_of G2).e & (the_Target_of G1).e = (the_Target_of G2).e by A8;
+  hence thesis by A7,Def34;
 end;
 
-theorem ::tSUBGRAPH03
-  for G1 being _Graph, G2 being Subgraph of G1, x being set holds
-  (x in the_Vertices_of G2 implies x in the_Vertices_of G1) &
-  (x in the_Edges_of G2 implies x in the_Edges_of G1);
+theorem
+  for G1 being _Graph, G2 being Subgraph of G1, x being set holds (x in
+  the_Vertices_of G2 implies x in the_Vertices_of G1) & (x in the_Edges_of G2
+  implies x in the_Edges_of G1);
 
-theorem Th46: ::tSUBGRAPH04
-  for G1 being _Graph, G2 being Subgraph of G1, G3 being Subgraph of G2 holds
-  G3 is Subgraph of G1
+theorem Th46:
+  for G1 being _Graph, G2 being Subgraph of G1, G3 being Subgraph
+  of G2 holds G3 is Subgraph of G1
 proof
   let G1 be _Graph, G2 be Subgraph of G1, G3 be Subgraph of G2;
-A1: the_Vertices_of G3 c= the_Vertices_of G2 &
-  the_Edges_of G3 c= the_Edges_of G2 &
-  for v being set st v in the_Edges_of G3 holds
-  (the_Source_of G3).v = (the_Source_of G2).v &
-  (the_Target_of G3).v = (the_Target_of G2).v by Def34;
-A2: the_Vertices_of G2 c= the_Vertices_of G1&
-  the_Edges_of G2 c= the_Edges_of G1 &
-  for v being set st v in the_Edges_of G2 holds
-  (the_Source_of G2).v = (the_Source_of G1).v &
-  (the_Target_of G2).v = (the_Target_of G1).v by Def34;
-  now thus the_Vertices_of G3 c= the_Vertices_of G1 by A1,XBOOLE_1:1;
-    thus the_Edges_of G3 c= the_Edges_of G1 by A2,XBOOLE_1:1;
+A1: the_Edges_of G2 c= the_Edges_of G1;
+A2: the_Vertices_of G3 c= the_Vertices_of G2;
+  now
+    thus the_Vertices_of G3 c= the_Vertices_of G1 by A2,XBOOLE_1:1;
+    thus the_Edges_of G3 c= the_Edges_of G1 by A1,XBOOLE_1:1;
     let e be set;
     assume
 A3: e in the_Edges_of G3;
     hence (the_Source_of G3).e = (the_Source_of G2).e by Def34
-      .= (the_Source_of G1).e by A3,Def34; thus
-    (the_Target_of G3).e = (the_Target_of G2).e by A3,Def34
+      .= (the_Source_of G1).e by A3,Def34;
+    thus (the_Target_of G3).e = (the_Target_of G2).e by A3,Def34
       .= (the_Target_of G1).e by A3,Def34;
   end;
   hence thesis by Def34;
 end;
 
-theorem Th47: ::tSUBGRAPH05
-  for G being _Graph, G1, G2 being Subgraph of G
-  st the_Vertices_of G1 c= the_Vertices_of G2 &
-  the_Edges_of G1 c= the_Edges_of G2 holds G1 is Subgraph of G2
+theorem Th47:
+  for G being _Graph, G1, G2 being Subgraph of G st
+  the_Vertices_of G1 c= the_Vertices_of G2 & the_Edges_of G1 c= the_Edges_of G2
+  holds G1 is Subgraph of G2
 proof
   let G be _Graph, G1, G2 be Subgraph of G;
-  assume
-A1: the_Vertices_of G1 c= the_Vertices_of G2 &
-  the_Edges_of G1 c= the_Edges_of G2;
+  assume that
+A1: the_Vertices_of G1 c= the_Vertices_of G2 and
+A2: the_Edges_of G1 c= the_Edges_of G2;
   now
     let e be set;
     assume
-A2: e in the_Edges_of G1;
+A3: e in the_Edges_of G1;
     hence (the_Source_of G1).e = (the_Source_of G).e by Def34
-      .= (the_Source_of G2).e by A1,A2,Def34; thus
-    (the_Target_of G1).e = (the_Target_of G).e by A2,Def34
-      .= (the_Target_of G2).e by A1,A2,Def34;
+      .= (the_Source_of G2).e by A2,A3,Def34;
+    thus (the_Target_of G1).e = (the_Target_of G).e by A3,Def34
+      .= (the_Target_of G2).e by A2,A3,Def34;
   end;
-  hence thesis by A1,Def34;
+  hence thesis by A1,A2,Def34;
 end;
 
-theorem Th48: ::tSUBGRAPH06
-  for G1 being _Graph, G2 being Subgraph of G1 holds
-  the_Source_of G2 = (the_Source_of G1) | the_Edges_of G2 &
-  the_Target_of G2 = (the_Target_of G1) | the_Edges_of G2
+theorem Th48:
+  for G1 being _Graph, G2 being Subgraph of G1 holds the_Source_of
+  G2 = (the_Source_of G1) | the_Edges_of G2 & the_Target_of G2 = (the_Target_of
+  G1) | the_Edges_of G2
 proof
   let G1 be _Graph, G2 be Subgraph of G1;
   set S2 = (the_Source_of G1) | the_Edges_of G2;
   set T2 = (the_Target_of G1) | the_Edges_of G2;
-A1: dom the_Source_of G1 = the_Edges_of G1 &
-  dom the_Target_of G1 = the_Edges_of G1 &
-  dom the_Source_of G2 = the_Edges_of G2 &
-  dom the_Target_of G2 = the_Edges_of G2 by FUNCT_2:def 1;
-  then
-A2: dom S2 = the_Edges_of G2 & dom T2 = the_Edges_of G2 by RELAT_1:91;
-  now
+A1: now
     let x be set;
     assume
-A3: x in dom the_Source_of G2;
+A2: x in dom the_Source_of G2;
     hence (the_Source_of G2).x = (the_Source_of G1).x by Def34
-      .= S2.x by A3,FUNCT_1:72;
+      .= S2.x by A2,FUNCT_1:72;
   end;
-  hence the_Source_of G2 = S2 by A1,A2,FUNCT_1:9;
-  now
+  dom the_Source_of G1 = the_Edges_of G1 by FUNCT_2:def 1;
+  then dom the_Source_of G2 = the_Edges_of G2 & dom S2 = the_Edges_of G2 by
+  FUNCT_2:def 1,RELAT_1:91;
+  hence the_Source_of G2 = S2 by A1,FUNCT_1:9;
+A3: now
     let x be set;
     assume
 A4: x in dom the_Target_of G2;
     hence (the_Target_of G2).x = (the_Target_of G1).x by Def34
       .= T2.x by A4,FUNCT_1:72;
   end;
-  hence thesis by A1,A2,FUNCT_1:9;
+  dom the_Target_of G1 = the_Edges_of G1 by FUNCT_2:def 1;
+  then dom the_Target_of G2 = the_Edges_of G2 & dom T2 = the_Edges_of G2 by
+  FUNCT_2:def 1,RELAT_1:91;
+  hence thesis by A3,FUNCT_1:9;
 end;
 
-theorem ::tINDSUBVE01
-  for G being _Graph, V1,V2,E1,E2 being set,
-  G1 being inducedSubgraph of G,V1,E1, G2 being inducedSubgraph of G,V2,E2
-  st V2 c= V1 & E2 c= E1 & V2 is non empty Subset of the_Vertices_of G &
-  E2 c= G.edgesBetween(V2) holds G2 is Subgraph of G1
+theorem
+  for G being _Graph, V1,V2,E1,E2 being set, G1 being inducedSubgraph of
+G,V1,E1, G2 being inducedSubgraph of G,V2,E2 st V2 c= V1 & E2 c= E1 & V2 is non
+  empty Subset of the_Vertices_of G & E2 c= G.edgesBetween(V2) holds G2 is
+  Subgraph of G1
 proof
-  let G be _Graph, V1,V2,E1,E2 be set, G1 be inducedSubgraph of G,V1,E1,
-  G2 be inducedSubgraph of G,V2,E2;
-  assume
-A1: V2 c= V1 & E2 c= E1 & V2 is non empty Subset of the_Vertices_of G &
-  E2 c= G.edgesBetween(V2);
-  then
-A2: the_Vertices_of G2 = V2 & the_Edges_of G2 = E2 by Def39;
-  now per cases;
-    suppose V1 is non empty Subset of the_Vertices_of G &
-      E1 c= G.edgesBetween(V1);
+  let G be _Graph, V1,V2,E1,E2 be set, G1 be inducedSubgraph of G,V1,E1, G2 be
+  inducedSubgraph of G,V2,E2;
+  assume that
+A1: V2 c= V1 & E2 c= E1 and
+A2: V2 is non empty Subset of the_Vertices_of G & E2 c= G.edgesBetween(
+  V2);
+A3: the_Vertices_of G2 = V2 & the_Edges_of G2 = E2 by A2,Def39;
+  now
+    per cases;
+    suppose
+      V1 is non empty Subset of the_Vertices_of G & E1 c= G
+      .edgesBetween(V1);
       then the_Vertices_of G1 = V1 & the_Edges_of G1 = E1 by Def39;
-      hence thesis by A1,A2,Th47;
+      hence thesis by A1,A3,Th47;
     end;
-    suppose not (V1 is non empty Subset of the_Vertices_of G &
-      E1 c= G.edgesBetween(V1));
+    suppose
+      not (V1 is non empty Subset of the_Vertices_of G & E1 c= G
+      .edgesBetween(V1));
       then G1 == G by Def39;
-      then the_Vertices_of G1 = the_Vertices_of G &
-      the_Edges_of G1 = the_Edges_of G by Def36;
-      hence thesis by A2,Th47;
+      then the_Vertices_of G1 = the_Vertices_of G & the_Edges_of G1 =
+      the_Edges_of G by Def36;
+      hence thesis by A3,Th47;
     end;
   end;
   hence thesis;
 end;
 
-theorem Th50: ::tGREMOVEV01
-  for G1 being non trivial _Graph, v being Vertex of G1,
-  G2 being removeVertex of G1,v holds
-  the_Vertices_of G2 = the_Vertices_of G1 \ {v} &
+theorem Th50:
+  for G1 being non trivial _Graph, v being Vertex of G1, G2 being
+  removeVertex of G1,v holds the_Vertices_of G2 = the_Vertices_of G1 \ {v} &
   the_Edges_of G2 = G1.edgesBetween(the_Vertices_of G1 \ {v})
 proof
   let G1 be non trivial _Graph,v be Vertex of G1, G2 be removeVertex of G1,v;
   set VG = the_Vertices_of G1, V = VG \ {v};
   now
-    assume V is empty;
+    assume
+    V is empty;
     then VG c= {v} by XBOOLE_1:37;
     then VG = {v} by ZFMISC_1:39;
     then card VG = 1 by CARD_1:50;
@@ -2453,37 +2589,38 @@ proof
   hence thesis by Def39;
 end;
 
-theorem ::tGREMOVEV02
-  for G1 being finite non trivial _Graph, v being Vertex of G1,
-  G2 being removeVertex of G1,v holds G2.order() + 1 = G1.order() &
-  G2.size() + card v.edgesInOut() = G1.size()
+theorem
+  for G1 being finite non trivial _Graph, v being Vertex of G1, G2 being
+  removeVertex of G1,v holds G2.order() + 1 = G1.order() & G2.size() + card v
+  .edgesInOut() = G1.size()
 proof
-  let G1 be finite non trivial _Graph, v be Vertex of G1,
-  G2 be removeVertex of G1,v;
+  let G1 be finite non trivial _Graph, v be Vertex of G1, G2 be removeVertex
+  of G1,v;
   set VG1 = the_Vertices_of G1, VG2 = the_Vertices_of G2;
   set EG1 = the_Edges_of G1, EG2 = the_Edges_of G2, EV = v.edgesInOut();
-A1: EG2 = G1.edgesBetween(VG1 \ {v}) & VG2 = VG1 \ {v} by Th50;
+A1: VG2 = VG1 \ {v} by Th50;
   v in {v} by TARSKI:def 1;
   then not v in VG2 by A1,XBOOLE_0:def 5;
   then card (( VG1 \ {v}) \/ {v}) = G2.order() + 1 by A1,CARD_2:54;
   hence G2.order() + 1 = G1.order() by XBOOLE_1:45;
-A2: G1.edgesBetween(VG1 \ {v}) = EG1 \ EV by Th38;
-  then EG1 = EG2 \/ EV by A1,XBOOLE_1:45;
-  hence thesis by A1,A2,CARD_2:53,XBOOLE_1:79;
+A2: EG2 = G1.edgesBetween(VG1 \ {v}) & G1.edgesBetween(VG1 \ {v}) = EG1 \ EV
+  by Th38,Th50;
+  then EG1 = EG2 \/ EV by XBOOLE_1:45;
+  hence thesis by A2,CARD_2:53,XBOOLE_1:79;
 end;
 
-theorem Th52: ::tGREMOVEVS01
-  for G1 being _Graph, V being set, G2 being removeVertices of G1,V
-  st V c< the_Vertices_of G1 holds
-  the_Vertices_of G2 = the_Vertices_of G1 \ V &
-  the_Edges_of G2 = G1.edgesBetween(the_Vertices_of G1 \ V)
+theorem Th52:
+  for G1 being _Graph, V being set, G2 being removeVertices of G1,
+V st V c< the_Vertices_of G1 holds the_Vertices_of G2 = the_Vertices_of G1 \ V
+  & the_Edges_of G2 = G1.edgesBetween(the_Vertices_of G1 \ V)
 proof
   let G1 be _Graph, V be set, G2 be removeVertices of G1,V;
+  set VG2 = the_Vertices_of G1 \ V;
   assume
 A1: V c< the_Vertices_of G1;
-  set VG2 = the_Vertices_of G1 \ V;
   now
-    assume VG2 is empty;
+    assume
+    VG2 is empty;
     then the_Vertices_of G1 c= V by XBOOLE_1:37;
     hence contradiction by A1,XBOOLE_0:def 8;
   end;
@@ -2492,31 +2629,33 @@ A1: V c< the_Vertices_of G1;
   hence thesis by Def39;
 end;
 
-theorem ::tGREMOVEVS02
-  for G1 being finite _Graph, V being Subset of the_Vertices_of G1,
-  G2 being removeVertices of G1,V st V <> the_Vertices_of G1 holds
-  G2.order() + card V = G1.order() &
-  G2.size() + card G1.edgesInOut(V) = G1.size()
+theorem
+  for G1 being finite _Graph, V being Subset of the_Vertices_of G1, G2
+being removeVertices of G1,V st V <> the_Vertices_of G1 holds G2.order() + card
+  V = G1.order() & G2.size() + card G1.edgesInOut(V) = G1.size()
 proof
-  let G1 be finite _Graph, V be Subset of the_Vertices_of G1,
-  G2 be removeVertices of G1,V;
+  let G1 be finite _Graph, V be Subset of the_Vertices_of G1, G2 be
+  removeVertices of G1,V;
   set VG1 = the_Vertices_of G1, VG2 = the_Vertices_of G2;
   set EG1 = the_Edges_of G1, EG2 = the_Edges_of G2;
-  assume V <> VG1;
-  then V c< VG1 by XBOOLE_0:def 8;
+A1: G1.edgesBetween(VG1 \ V) = EG1 \ G1.edgesInOut(V) by Th38;
+  assume
+  V <> VG1;
   then
-A1: VG2 = VG1 \ V & EG2 = G1.edgesBetween(VG1 \ V) by Th52;
+A2: V c< VG1 by XBOOLE_0:def 8;
+  then
+A3: VG2 = VG1 \ V by Th52;
   then card (VG2 \/ V) = card VG2 + card V by CARD_2:53,XBOOLE_1:79;
-  hence G2.order() + card V = G1.order() by A1,XBOOLE_1:45;
-A2: G1.edgesBetween(VG1 \ V) = EG1 \ G1.edgesInOut(V) by Th38;
+  hence G2.order() + card V = G1.order() by A3,XBOOLE_1:45;
+A4: EG2 = G1.edgesBetween(VG1 \ V) by A2,Th52;
   then EG1 = EG2 \/ G1.edgesInOut(V) by A1,XBOOLE_1:45;
-  hence thesis by A1,A2,CARD_2:53,XBOOLE_1:79;
+  hence thesis by A4,A1,CARD_2:53,XBOOLE_1:79;
 end;
 
-theorem Th54: ::tGREMOVEE01
-  for G1 being _Graph, e being set, G2 being removeEdge of G1,e holds
-  the_Vertices_of G2 = the_Vertices_of G1 &
-  the_Edges_of G2 = the_Edges_of G1 \ {e}
+theorem Th54:
+  for G1 being _Graph, e being set, G2 being removeEdge of G1,e
+holds the_Vertices_of G2 = the_Vertices_of G1 & the_Edges_of G2 = the_Edges_of
+  G1 \ {e}
 proof
   let G1 be _Graph, e be set, G2 be removeEdge of G1,e;
   set V = the_Vertices_of G1;
@@ -2528,30 +2667,31 @@ proof
   hence thesis by Def39;
 end;
 
-theorem ::tGREMOVEE02
-  for G1 being finite _Graph, e being set, G2 being removeEdge of G1,e holds
-  G1.order() = G2.order() &
-  (e in the_Edges_of G1 implies G2.size() + 1 = G1.size())
+theorem
+  for G1 being finite _Graph, e being set, G2 being removeEdge of G1,e
+  holds G1.order() = G2.order() & (e in the_Edges_of G1 implies G2.size() + 1 =
+  G1.size())
 proof
   let G1 be finite _Graph, e be set, G2 be removeEdge of G1,e;
-A1: the_Vertices_of G1 = the_Vertices_of G2 &
-  the_Edges_of G2 = the_Edges_of G1 \ {e} by Th54;
+A1: the_Edges_of G2 = the_Edges_of G1 \ {e} by Th54;
   thus G1.order() = G2.order() by Th54;
   assume
-A2: e in the_Edges_of G1;
-  e in {e} by TARSKI:def 1;
-  then
-A3: not e in the_Edges_of G2 by A1,XBOOLE_0:def 5;
-  for x being set st x in {e} holds x in the_Edges_of G1 by A2,TARSKI:def 1;
+  e in the_Edges_of G1;
+  then for x being set st x in {e} holds x in the_Edges_of G1 by
+  TARSKI:def
+  1;
   then {e} c= the_Edges_of G1 by TARSKI:def 3;
-  then the_Edges_of G1 = the_Edges_of G2 \/ {e} by A1,XBOOLE_1:45;
-  hence thesis by A3,CARD_2:54;
+  then
+A2: the_Edges_of G1 = the_Edges_of G2 \/ {e} by A1,XBOOLE_1:45;
+  e in {e} by TARSKI:def 1;
+  then not e in the_Edges_of G2 by A1,XBOOLE_0:def 5;
+  hence thesis by A2,CARD_2:54;
 end;
 
-theorem Th56: ::tGREMOVEES01
-  for G1 being _Graph, E being set, G2 being removeEdges of G1,E holds
-  the_Vertices_of G2 = the_Vertices_of G1 &
-  the_Edges_of G2 = the_Edges_of G1 \ E
+theorem Th56:
+  for G1 being _Graph, E being set, G2 being removeEdges of G1,E
+holds the_Vertices_of G2 = the_Vertices_of G1 & the_Edges_of G2 = the_Edges_of
+  G1 \ E
 proof
   let G1 be _Graph, E be set, G2 be removeEdges of G1,E;
   set V = the_Vertices_of G1;
@@ -2563,34 +2703,35 @@ proof
   hence thesis by Def39;
 end;
 
-theorem ::tGREMOVEES02
-  for G1 being finite _Graph, E being set, G2 being removeEdges of G1,E holds
-  G1.order() = G2.order() by Th56;
+theorem
+  for G1 being finite _Graph, E being set, G2 being removeEdges of G1,E
+  holds G1.order() = G2.order() by Th56;
 
-theorem ::tGREMOVEES03
-  for G1 being finite _Graph, E being Subset of the_Edges_of G1,
-  G2 being removeEdges of G1,E holds G2.size() + card E = G1.size()
+theorem
+  for G1 being finite _Graph, E being Subset of the_Edges_of G1, G2
+  being removeEdges of G1,E holds G2.size() + card E = G1.size()
 proof
-  let G1 be finite _Graph, E be Subset of the_Edges_of G1,
-  G2 be removeEdges of G1,E;
+  let G1 be finite _Graph, E be Subset of the_Edges_of G1, G2 be removeEdges
+  of G1,E;
 A1: the_Edges_of G2 = the_Edges_of G1 \ E by Th56;
   then the_Edges_of G1 = the_Edges_of G2 \/ E by XBOOLE_1:45;
   hence thesis by A1,CARD_2:53,XBOOLE_1:79;
 end;
 
-theorem ::tVEIN01
-  e in v.edgesIn() iff e in the_Edges_of G & (the_Target_of G).e = v by Lm8;
+theorem
+  e in v.edgesIn() iff e in the_Edges_of G & (the_Target_of G).e = v by
+  Lm8;
 
-theorem ::tVEIN02
+theorem
   e in v.edgesIn() iff ex x being set st e DJoins x,v,G
 proof
   hereby
-    assume e in v.edgesIn();
-    then
-A1: e in the_Edges_of G & (the_Target_of G).e = v by Lm8;
     set x = (the_Source_of G).e;
+    assume
+A1: e in v.edgesIn();
     take x;
-    thus e DJoins x,v,G by A1,Def16;
+    (the_Target_of G).e = v by A1,Lm8;
+    hence e DJoins x,v,G by A1,Def16;
   end;
   given x being set such that
 A2: e DJoins x,v,G;
@@ -2598,19 +2739,20 @@ A2: e DJoins x,v,G;
   hence thesis by Lm8;
 end;
 
-theorem ::tVEOUT01
-  e in v.edgesOut() iff e in the_Edges_of G & (the_Source_of G).e = v by Lm9;
+theorem
+  e in v.edgesOut() iff e in the_Edges_of G & (the_Source_of G).e = v by
+  Lm9;
 
-theorem ::tVEOUT02
+theorem
   e in v.edgesOut() iff ex x being set st e DJoins v,x,G
 proof
   hereby
-    assume e in v.edgesOut();
-    then
-A1: e in the_Edges_of G & (the_Source_of G).e = v by Lm9;
     set x = (the_Target_of G).e;
+    assume
+A1: e in v.edgesOut();
     take x;
-    thus e DJoins v,x,G by A1,Def16;
+    (the_Source_of G).e = v by A1,Lm9;
+    hence e DJoins v,x,G by A1,Def16;
   end;
   given x being set such that
 A2: e DJoins v,x,G;
@@ -2618,12 +2760,12 @@ A2: e DJoins v,x,G;
   hence thesis by Lm9;
 end;
 
-theorem ::tVEINOUT01
+theorem
   v.edgesInOut() = v.edgesIn() \/ v.edgesOut();
 
-theorem Th64: ::tVEINOUT02
-  e in v.edgesInOut() iff e in the_Edges_of G &
-  ((the_Source_of G).e = v or (the_Target_of G).e = v)
+theorem Th64:
+  e in v.edgesInOut() iff e in the_Edges_of G & ((the_Source_of G)
+  .e = v or (the_Target_of G).e = v)
 proof
   hereby
     assume
@@ -2632,48 +2774,55 @@ A1: e in v.edgesInOut();
     e in v.edgesIn() or e in v.edgesOut() by A1,XBOOLE_0:def 3;
     hence (the_Source_of G).e=v or (the_Target_of G).e=v by Lm8,Lm9;
   end;
-  assume e in the_Edges_of G &
-  ((the_Source_of G).e=v or (the_Target_of G).e=v);
+  assume
+  e in the_Edges_of G &( (the_Source_of G).e=v or (the_Target_of G).e=
+  v);
   then e in v.edgesIn() or e in v.edgesOut() by Lm8,Lm9;
   hence thesis by XBOOLE_0:def 3;
 end;
 
-theorem Th65: ::tVEINOUT03
+theorem Th65:
   e Joins v1,x,G implies e in v1.edgesInOut()
 proof
-  assume e Joins v1,x,G;
-  then e in the_Edges_of G &
-  (((the_Source_of G).e = v1 & (the_Target_of G).e = x) or
-  ((the_Source_of G).e = x & (the_Target_of G).e = v1)) by Def15;
-  hence thesis by Th64;
+  assume
+A1: e Joins v1,x,G;
+  then
+A2: (the_Source_of G).e = v1 & (the_Target_of G).e = x or (the_Source_of G).
+  e = x & (the_Target_of G).e = v1 by Def15;
+  e in the_Edges_of G by A1,Def15;
+  hence thesis by A2,Th64;
 end;
 
-theorem Th66: ::tVEINOUT04
-  e Joins v1,v2,G implies (e in v1.edgesIn() & e in v2.edgesOut()) or
-  (e in v2.edgesIn() & e in v1.edgesOut())
+theorem Th66:
+  e Joins v1,v2,G implies e in v1.edgesIn() & e in v2.edgesOut()
+  or e in v2.edgesIn() & e in v1.edgesOut()
 proof
   assume
 A1: e Joins v1,v2,G;
   then
 A2: e in the_Edges_of G by Def15;
-  now per cases by A1,Def15;
-    suppose (the_Source_of G).e = v1 & (the_Target_of G).e = v2;
+  now
+    per cases by A1,Def15;
+    suppose
+      (the_Source_of G).e = v1 & (the_Target_of G).e = v2;
       hence thesis by A2,Lm8,Lm9;
     end;
-    suppose (the_Source_of G).e = v2 & (the_Target_of G).e = v1;
+    suppose
+      (the_Source_of G).e = v2 & (the_Target_of G).e = v1;
       hence thesis by A2,Lm8,Lm9;
     end;
   end;
   hence thesis;
 end;
 
-theorem ::tVEINOUT05
+theorem
   e in v1.edgesInOut() iff ex v2 being Vertex of G st e Joins v1,v2,G
 proof
   hereby
     assume
 A1: e in v1.edgesInOut();
-    now per cases by A1,Th64;
+    now
+      per cases by A1,Th64;
       suppose
 A2:     (the_Source_of G).e = v1;
         set v2 = (the_Target_of G).e;
@@ -2696,20 +2845,24 @@ A4: e Joins v1,v2,G;
   thus thesis by A4,Th65;
 end;
 
-theorem ::tVEINOUT06
+theorem
   e in v.edgesInOut() & e Joins x,y,G implies v = x or v = y
 proof
-  assume
-A1: e in v.edgesInOut() & e Joins x,y,G;
+  assume that
+A1: e in v.edgesInOut() and
+A2: e Joins x,y,G;
   now
     assume
-A2: v <> x;
-    now per cases by A1,Th64;
-      suppose (the_Source_of G).e = v;
-        hence v = y by A1,A2,Def15;
+A3: v <> x;
+    now
+      per cases by A1,Th64;
+      suppose
+        (the_Source_of G).e = v;
+        hence v = y by A2,A3,Def15;
       end;
-      suppose (the_Target_of G).e = v;
-        hence v = y by A1,A2,Def15;
+      suppose
+        (the_Target_of G).e = v;
+        hence v = y by A2,A3,Def15;
       end;
     end;
     hence v = y;
@@ -2717,22 +2870,26 @@ A2: v <> x;
   hence thesis;
 end;
 
-theorem ::tVADJ01
+theorem
   e Joins v1,v2,G implies v1.adj(e) = v2 & v2.adj(e) = v1
 proof
   assume
 A1: e Joins v1, v2,G;
   then
 A2: e in v1.edgesInOut() by Th65;
-  now per cases by A1,Def15;
+  now
+    per cases by A1,Def15;
     suppose
 A3:   (the_Source_of G).e = v2 & (the_Target_of G).e = v1;
       hence v1.adj(e) = v2 by A2,Def43;
-      now per cases;
-        suppose v1 = v2;
+      now
+        per cases;
+        suppose
+          v1 = v2;
           hence v2.adj(e) = v1 by A2,A3,Def43;
         end;
-        suppose v1 <> v2;
+        suppose
+          v1 <> v2;
           hence v2.adj(e) = v1 by A2,A3,Def43;
         end;
       end;
@@ -2740,11 +2897,14 @@ A3:   (the_Source_of G).e = v2 & (the_Target_of G).e = v1;
     end;
     suppose
 A4:   (the_Source_of G).e = v1 & (the_Target_of G).e = v2;
-      now per cases;
-        suppose v1 = v2;
+      now
+        per cases;
+        suppose
+          v1 = v2;
           hence v1.adj(e) = v2 by A2,A4,Def43;
         end;
-        suppose v1 <> v2;
+        suppose
+          v1 <> v2;
           hence v1.adj(e) = v2 by A2,A4,Def43;
         end;
       end;
@@ -2755,16 +2915,16 @@ A4:   (the_Source_of G).e = v1 & (the_Target_of G).e = v2;
   hence thesis;
 end;
 
-theorem ::tVADJ02
+theorem
   e in v.edgesInOut() iff e Joins v,v.adj(e),G
 proof
   hereby
     assume
 A1: e in v.edgesInOut();
     then
-A2: e in the_Edges_of G & ((the_Source_of G).e = v or
-    (the_Target_of G).e = v) by Th64;
-    now per cases;
+A2: (the_Source_of G).e = v or (the_Target_of G).e = v by Th64;
+    now
+      per cases;
       suppose
 A3:     (the_Target_of G).e = v;
         then v.adj(e) = (the_Source_of G).e by A1,Def43;
@@ -2772,33 +2932,37 @@ A3:     (the_Target_of G).e = v;
       end;
       suppose
 A4:     (the_Target_of G).e <> v;
-        then v.adj(e) = (the_Target_of G).e by A2,Def43;
-        hence e Joins v,v.adj(e),G by A2,A4,Def15;
+        then v.adj(e) = (the_Target_of G).e by A1,A2,Def43;
+        hence e Joins v,v.adj(e),G by A1,A2,A4,Def15;
       end;
     end;
     hence e Joins v,v.adj(e),G;
   end;
-  assume e Joins v,v.adj(e),G;
+  assume
+  e Joins v,v.adj(e),G;
   hence thesis by Th65;
 end;
 
-theorem ::tVDEGREE01
+theorem
   for G being finite _Graph, e being set, v1,v2 being Vertex of G holds
   e Joins v1,v2,G implies 1 <= v1.degree() & 1 <= v2.degree()
 proof
   let G be finite _Graph, e be set, v1, v2 be Vertex of G;
   assume
 A1: e Joins v1, v2,G;
-  now per cases by A1,Th66;
+  now
+    per cases by A1,Th66;
     suppose
 A2:   e in v1.edgesIn() & e in v2.edgesOut();
-      then for x being set st x in {e} holds x in v1.edgesIn()
-      by TARSKI:def 1;
+      then for x being set st x in {e} holds x in v1.edgesIn() by
+      TARSKI:def
+      1;
       then {e} c= v1.edgesIn() by TARSKI:def 3;
       then card {e} <= card v1.edgesIn() by NAT_1:44;
       then 1 <= v1.inDegree() by CARD_1:50;
       hence 1 <= v1.degree() by NAT_1:12;
-      for x being set st x in {e} holds x in v2.edgesOut() by A2,TARSKI:def 1;
+      for x being set st x in {e} holds x in v2.edgesOut() by A2, TARSKI:
+      def 1;
       then {e} c= v2.edgesOut() by TARSKI:def 3;
       then card {e} <= card v2.edgesOut() by NAT_1:44;
       then 1 <= v2.outDegree() by CARD_1:50;
@@ -2806,13 +2970,15 @@ A2:   e in v1.edgesIn() & e in v2.edgesOut();
     end;
     suppose
 A3:   e in v2.edgesIn() & e in v1.edgesOut();
-      then for x being set st x in {e} holds x in v1.edgesOut()
-      by TARSKI:def 1;
+      then for x being set st x in {e} holds x in v1.edgesOut() by
+      TARSKI:
+      def 1;
       then {e} c= v1.edgesOut() by TARSKI:def 3;
       then card {e} <= card v1.edgesOut() by NAT_1:44;
       then 1 <= v1.outDegree() by CARD_1:50;
       hence 1 <= v1.degree() by NAT_1:12;
-      for x being set st x in {e} holds x in v2.edgesIn() by A3,TARSKI:def 1;
+      for x being set st x in {e} holds x in v2.edgesIn() by A3, TARSKI:
+      def 1;
       then {e} c= v2.edgesIn() by TARSKI:def 3;
       then card {e} <= card v2.edgesIn() by NAT_1:44;
       then 1 <= v2.inDegree() by CARD_1:50;
@@ -2822,64 +2988,75 @@ A3:   e in v2.edgesIn() & e in v1.edgesOut();
   hence thesis;
 end;
 
-theorem Th72: ::tVINN01
+theorem Th72:
   x in v.inNeighbors() iff ex e being set st e DJoins x,v,G
 proof
   hereby
-    assume x in v.inNeighbors();
+    assume
+    x in v.inNeighbors();
     then consider e being set such that
-A1: e in dom (the_Source_of G) & e in v.edgesIn() &
-    x = (the_Source_of G).e by FUNCT_1:def 12;
+A1: e in dom (the_Source_of G) and
+A2: e in v.edgesIn() and
+A3: x = (the_Source_of G).e by FUNCT_1:def 12;
     take e;
-    e in the_Edges_of G & (the_Target_of G).e = v by A1,Lm8;
-    hence e DJoins x,v,G by A1,Def16;
+    (the_Target_of G).e = v by A2,Lm8;
+    hence e DJoins x,v,G by A1,A3,Def16;
   end;
   given e being set such that
-A2: e DJoins x,v,G;
-A3: e in the_Edges_of G & (the_Source_of G).e = x & (the_Target_of G).e = v
-  by A2,Def16;
+A4: e DJoins x,v,G;
+A5: e in the_Edges_of G by A4,Def16;
   then
-A4: e in v.edgesIn() by Lm8;
-  e in dom (the_Source_of G) by A3,FUNCT_2:def 1;
-  hence thesis by A3,A4,FUNCT_1:def 12;
+A6: e in dom (the_Source_of G) by FUNCT_2:def 1;
+  (the_Target_of G).e = v by A4,Def16;
+  then
+A7: e in v.edgesIn() by A5,Lm8;
+  (the_Source_of G).e = x by A4,Def16;
+  hence thesis by A7,A6,FUNCT_1:def 12;
 end;
 
-theorem Th73: ::tVOUTN01
+theorem Th73:
   x in v.outNeighbors() iff ex e being set st e DJoins v,x,G
 proof
   hereby
-    assume x in v.outNeighbors();
+    assume
+    x in v.outNeighbors();
     then consider e being set such that
-A1: e in dom (the_Target_of G) & e in v.edgesOut() &
-    x = (the_Target_of G).e by FUNCT_1:def 12;
+A1: e in dom (the_Target_of G) and
+A2: e in v.edgesOut() and
+A3: x = (the_Target_of G).e by FUNCT_1:def 12;
     take e;
-    e in the_Edges_of G & (the_Source_of G).e = v by A1,Lm9;
-    hence e DJoins v,x,G by A1,Def16;
+    (the_Source_of G).e = v by A2,Lm9;
+    hence e DJoins v,x,G by A1,A3,Def16;
   end;
   given e being set such that
-A2: e DJoins v,x,G;
-A3: e in the_Edges_of G & (the_Source_of G).e = v & (the_Target_of G).e = x
-  by A2,Def16;
+A4: e DJoins v,x,G;
+A5: e in the_Edges_of G by A4,Def16;
   then
-A4: e in v.edgesOut() by Lm9;
-  e in dom (the_Target_of G) by A3,FUNCT_2:def 1;
-  hence thesis by A3,A4,FUNCT_1:def 12;
+A6: e in dom (the_Target_of G) by FUNCT_2:def 1;
+  (the_Source_of G).e = v by A4,Def16;
+  then
+A7: e in v.edgesOut() by A5,Lm9;
+  (the_Target_of G).e = x by A4,Def16;
+  hence thesis by A7,A6,FUNCT_1:def 12;
 end;
 
-theorem Th74: ::tVALLN01
+theorem Th74:
   x in v.allNeighbors() iff ex e being set st e Joins v,x,G
 proof
   hereby
     assume
 A1: x in v.allNeighbors();
-    now per cases by A1,XBOOLE_0:def 3;
-      suppose x in v.inNeighbors();
+    now
+      per cases by A1,XBOOLE_0:def 3;
+      suppose
+        x in v.inNeighbors();
         then consider e being set such that
 A2:     e DJoins x,v,G by Th72;
         take e;
         thus e Joins v,x,G by A2,Lm2;
       end;
-      suppose x in v.outNeighbors();
+      suppose
+        x in v.outNeighbors();
         then consider e being set such that
 A3:     e DJoins v,x,G by Th73;
         take e;
@@ -2888,15 +3065,19 @@ A3:     e DJoins v,x,G by Th73;
     end;
     hence ex e being set st e Joins v,x,G;
   end;
-  assume ex e being set st e Joins v,x,G;
+  assume
+  ex e being set st e Joins v,x,G;
   then consider e being set such that
 A4: e Joins v,x,G;
-  now per cases by A4,Lm2;
-    suppose e DJoins x,v,G;
+  now
+    per cases by A4,Lm2;
+    suppose
+      e DJoins x,v,G;
       then x in v.inNeighbors() by Th72;
       hence x in v.inNeighbors() \/ v.outNeighbors() by XBOOLE_0:def 3;
     end;
-    suppose e DJoins v,x,G;
+    suppose
+      e DJoins v,x,G;
       then x in v.outNeighbors() by Th73;
       hence x in v.inNeighbors() \/ v.outNeighbors() by XBOOLE_0:def 3;
     end;
@@ -2904,102 +3085,115 @@ A4: e Joins v,x,G;
   hence thesis;
 end;
 
-theorem Th75: ::tSUBGRAPH_JOIN01
-  for G1 being _Graph, G2 being Subgraph of G1, x,y,e being set holds
-  (e Joins x,y,G2 implies e Joins x,y,G1) &
-  (e DJoins x,y,G2 implies e DJoins x,y,G1) &
-  (e SJoins x,y,G2 implies e SJoins x,y,G1) &
-  (e DSJoins x,y,G2 implies e DSJoins x,y,G1)
+theorem Th75:
+  for G1 being _Graph, G2 being Subgraph of G1, x,y,e being set
+  holds (e Joins x,y,G2 implies e Joins x,y,G1) & (e DJoins x,y,G2 implies e
+DJoins x,y,G1) & (e SJoins x,y,G2 implies e SJoins x,y,G1) & (e DSJoins x,y,G2
+  implies e DSJoins x,y,G1)
 proof
   let G1 be _Graph, G2 be Subgraph of G1, x,y,e be set;
   thus e Joins x,y,G2 implies e Joins x,y,G1 by Lm5;
   hereby
-    assume e DJoins x,y,G2;
+    assume
+A1: e DJoins x,y,G2;
     then
-A1: e in the_Edges_of G2 & (the_Source_of G2).e=x & (the_Target_of G2) .e=y
-    by Def16;
-    then (the_Source_of G1).e = x & (the_Target_of G1).e = y by Def34;
-    hence e DJoins x,y,G1 by A1,Def16;
+A2: e in the_Edges_of G2 by Def16;
+    (the_Target_of G2) .e=y by A1,Def16;
+    then
+A3: (the_Target_of G1).e = y by A2,Def34;
+    (the_Source_of G2).e=x by A1,Def16;
+    then (the_Source_of G1).e = x by A2,Def34;
+    hence e DJoins x,y,G1 by A2,A3,Def16;
   end;
   hereby
-    assume e SJoins x,y,G2;
+    assume
+A4: e SJoins x,y,G2;
     then
-A2: e in the_Edges_of G2 &
-    (((the_Source_of G2).e in x & (the_Target_of G2).e in y) or
-    ((the_Source_of G2).e in y & (the_Target_of G2).e in x)) by Def17;
-    then (the_Source_of G2).e = (the_Source_of G1).e &
-    (the_Target_of G2).e = (the_Target_of G1).e by Def34;
-    hence e SJoins x,y,G1 by A2,Def17;
+A5: (the_Source_of G2).e in x & (the_Target_of G2).e in y or (
+    the_Source_of G2).e in y & (the_Target_of G2).e in x by Def17;
+A6: e in the_Edges_of G2 by A4,Def17;
+    then (the_Source_of G2).e = (the_Source_of G1).e & (the_Target_of G2).e =
+    ( the_Target_of G1).e by Def34;
+    hence e SJoins x,y,G1 by A6,A5,Def17;
   end;
-  assume e DSJoins x,y,G2;
+  assume
+A7: e DSJoins x,y,G2;
   then
-A3: e in the_Edges_of G2 &
-  (((the_Source_of G2).e in x & (the_Target_of G2).e in y)) by Def18;
-  then (the_Source_of G2).e = (the_Source_of G1).e &
-  (the_Target_of G2).e = (the_Target_of G1).e by Def34;
-  hence thesis by A3,Def18;
+A8: (the_Source_of G2).e in x & (the_Target_of G2).e in y by Def18;
+A9: e in the_Edges_of G2 by A7,Def18;
+  then (the_Source_of G2).e = (the_Source_of G1).e & (the_Target_of G2).e = (
+  the_Target_of G1).e by Def34;
+  hence thesis by A9,A8,Def18;
 end;
 
-theorem ::tSUBGRAPH_JOIN02
-  for G1 being _Graph, G2 being Subgraph of G1, x,y,e being set
-  st e in the_Edges_of G2 holds (e Joins x,y,G1 implies e Joins x,y,G2) &
-  (e DJoins x,y,G1 implies e DJoins x,y,G2) &
-  (e SJoins x,y,G1 implies e SJoins x,y,G2) &
-  (e DSJoins x,y,G1 implies e DSJoins x,y,G2)
+theorem
+  for G1 being _Graph, G2 being Subgraph of G1, x,y,e being set st e in
+the_Edges_of G2 holds (e Joins x,y,G1 implies e Joins x,y,G2) & (e DJoins x,y,
+  G1 implies e DJoins x,y,G2) & (e SJoins x,y,G1 implies e SJoins x,y,G2) & (e
+  DSJoins x,y,G1 implies e DSJoins x,y,G2)
 proof
   let G1 be _Graph, G2 be Subgraph of G1, x,y,e be set;
   assume
 A1: e in the_Edges_of G2;
   hereby
-    assume e Joins x,y,G1;
+    assume
+    e Joins x,y,G1;
     then
-A2: (((the_Source_of G1).e = x & (the_Target_of G1).e = y) or
-    ((the_Source_of G1).e = y & (the_Target_of G1).e = x)) by Def15;
-    (the_Source_of G2).e = (the_Source_of G1).e &
-    (the_Target_of G2).e = (the_Target_of G1).e by A1,Def34;
+A2: (the_Source_of G1).e = x & (the_Target_of G1).e = y or (the_Source_of
+    G1).e = y & (the_Target_of G1).e = x by Def15;
+    (the_Source_of G2).e = (the_Source_of G1).e & (the_Target_of G2).e = (
+    the_Target_of G1).e by A1,Def34;
     hence e Joins x,y,G2 by A1,A2,Def15;
   end;
-  hereby
-    assume e DJoins x,y,G1;
-    then (the_Source_of G1).e = x & (the_Target_of G1).e = y by Def16;
-    then (the_Source_of G2).e = x & (the_Target_of G2).e = y by A1,Def34;
-    hence e DJoins x,y,G2 by A1,Def16;
-  end;
-  hereby
-    assume e SJoins x,y,G1;
-    then
-A3: (((the_Source_of G1).e in x & (the_Target_of G1).e in y) or
-    ((the_Source_of G1).e in y & (the_Target_of G1).e in x)) by Def17;
-    (the_Source_of G2).e = ((the_Source_of G1)|the_Edges_of G2).e &
-    (the_Target_of G2).e = ((the_Target_of G1)|the_Edges_of G2).e by Th48;
-    then (the_Source_of G2).e = (the_Source_of G1).e &
-    (the_Target_of G2).e = (the_Target_of G1).e by A1,FUNCT_1:72;
-    hence e SJoins x,y,G2 by A1,A3,Def17;
-  end;
-  assume e DSJoins x,y,G1;
-  then
-A4: (((the_Source_of G1).e in x & (the_Target_of G1).e in y)) by Def18;
-  (the_Source_of G2).e = ((the_Source_of G1)|the_Edges_of G2).e &
   (the_Target_of G2).e = ((the_Target_of G1)|the_Edges_of G2).e by Th48;
-  then (the_Source_of G2).e = (the_Source_of G1).e &
-  (the_Target_of G2).e = (the_Target_of G1).e by A1,FUNCT_1:72;
-  hence thesis by A1,A4,Def18;
+  then
+A3: (the_Target_of G2).e = (the_Target_of G1).e by A1,FUNCT_1:72;
+  hereby
+    assume
+A4: e DJoins x,y,G1;
+    then (the_Target_of G1).e = y by Def16;
+    then
+A5: (the_Target_of G2).e = y by A1,Def34;
+    (the_Source_of G1).e = x by A4,Def16;
+    then (the_Source_of G2).e = x by A1,Def34;
+    hence e DJoins x,y,G2 by A1,A5,Def16;
+  end;
+  hereby
+    (the_Target_of G2).e = ((the_Target_of G1)|the_Edges_of G2).e by Th48;
+    then
+A6: (the_Target_of G2).e = (the_Target_of G1).e by A1,FUNCT_1:72;
+    assume
+    e SJoins x,y,G1;
+    then
+A7: (the_Source_of G1).e in x & (the_Target_of G1).e in y or (
+    the_Source_of G1).e in y & (the_Target_of G1).e in x by Def17;
+    (the_Source_of G2).e = ((the_Source_of G1)|the_Edges_of G2).e by Th48;
+    then (the_Source_of G2).e = (the_Source_of G1).e by A1,FUNCT_1:72;
+    hence e SJoins x,y,G2 by A1,A7,A6,Def17;
+  end;
+  assume
+  e DSJoins x,y,G1;
+  then
+A8: (the_Source_of G1).e in x & (the_Target_of G1).e in y by Def18;
+  (the_Source_of G2).e = ((the_Source_of G1)|the_Edges_of G2).e by Th48;
+  then (the_Source_of G2).e = (the_Source_of G1).e by A1,FUNCT_1:72;
+  hence thesis by A1,A8,A3,Def18;
 end;
 
-theorem ::tSUBGRAPH_SGA01
-  for G1 being _Graph, G2 being spanning Subgraph of G1,
-  G3 being spanning Subgraph of G2 holds G3 is spanning Subgraph of G1
+theorem
+  for G1 being _Graph, G2 being spanning Subgraph of G1, G3 being
+  spanning Subgraph of G2 holds G3 is spanning Subgraph of G1
 proof
-  let G1 be _Graph, G2 be spanning Subgraph of G1,
-  G3 be spanning Subgraph of G2;
+  let G1 be _Graph, G2 be spanning Subgraph of G1, G3 be spanning Subgraph of
+  G2;
   the_Vertices_of G3 = the_Vertices_of G2 by Def35
     .= the_Vertices_of G1 by Def35;
   hence thesis by Def35,Th46;
 end;
 
-theorem ::tSUBGRAPH_GF01
-  for G1 being finite _Graph, G2 being Subgraph of G1 holds
-  G2.order() <= G1.order() & G2.size() <= G1.size()
+theorem
+  for G1 being finite _Graph, G2 being Subgraph of G1 holds G2.order()
+  <= G1.order() & G2.size() <= G1.size()
 proof
   let G1 be finite _Graph, G2 be Subgraph of G1;
   card the_Vertices_of G2 <= card the_Vertices_of G1 by NAT_1:44;
@@ -3008,11 +3202,10 @@ proof
   hence thesis;
 end;
 
-theorem ::tSUBGRAPH_GF02
-  for G1 being _Graph, G2 being Subgraph of G1, X being set holds
-  G2.edgesInto(X) c= G1.edgesInto(X) & G2.edgesOutOf(X) c= G1.edgesOutOf(X) &
-  G2.edgesInOut(X) c= G1.edgesInOut(X) &
-  G2.edgesBetween(X) c= G1.edgesBetween(X)
+theorem
+  for G1 being _Graph, G2 being Subgraph of G1, X being set holds G2
+  .edgesInto(X) c= G1.edgesInto(X) & G2.edgesOutOf(X) c= G1.edgesOutOf(X) & G2
+  .edgesInOut(X) c= G1.edgesInOut(X) & G2.edgesBetween(X) c= G1.edgesBetween(X)
 proof
   let G1 be _Graph, G2 be Subgraph of G1, X be set;
   now
@@ -3020,38 +3213,40 @@ proof
     assume
 A1: e in G2.edgesInto(X);
     then
-A2: e in the_Edges_of G2 & (the_Target_of G2).e in X by Def28;
-    (the_Target_of G2).e = (the_Target_of G1).e by A1,Def34;
+A2: (the_Target_of G2).e = (the_Target_of G1).e by Def34;
+    e in the_Edges_of G2 & (the_Target_of G2).e in X by A1,Def28;
     hence e in G1.edgesInto(X) by A2,Def28;
   end;
   hence
 A3: G2.edgesInto(X) c= G1.edgesInto(X) by TARSKI:def 3;
+  then
+A4: G2.edgesInto(X) c= G1.edgesInOut(X) by XBOOLE_1:10;
   now
     let e be set;
     assume
-A4: e in G2.edgesOutOf(X);
+A5: e in G2.edgesOutOf(X);
     then
-A5: e in the_Edges_of G2 & (the_Source_of G2).e in X by Def29;
-    (the_Source_of G2).e = (the_Source_of G1).e by A4,Def34;
-    hence e in G1.edgesOutOf(X) by A5,Def29;
+A6: (the_Source_of G2).e = (the_Source_of G1).e by Def34;
+    e in the_Edges_of G2 & (the_Source_of G2).e in X by A5,Def29;
+    hence e in G1.edgesOutOf(X) by A6,Def29;
   end;
   hence
-A6: G2.edgesOutOf(X) c= G1.edgesOutOf(X) by TARSKI:def 3;
-A7: G2.edgesInto(X) c= G1.edgesInOut(X) by A3,XBOOLE_1:10;
-  G2.edgesOutOf(X) c= G1.edgesInOut(X) by A6,XBOOLE_1:10;
-  hence G2.edgesInOut(X) c= G1.edgesInOut(X) by A7,XBOOLE_1:8;
-  thus thesis by A3,A6,XBOOLE_1:27;
+A7: G2.edgesOutOf(X) c= G1.edgesOutOf(X) by TARSKI:def 3;
+  then G2.edgesOutOf(X) c= G1.edgesInOut(X) by XBOOLE_1:10;
+  hence G2.edgesInOut(X) c= G1.edgesInOut(X) by A4,XBOOLE_1:8;
+  thus thesis by A3,A7,XBOOLE_1:27;
 end;
 
-theorem ::tSUBGRAPH_GF03
-  for G1 being _Graph, G2 being Subgraph of G1, X,Y being set holds
-  G2.edgesBetween(X,Y) c= G1.edgesBetween(X,Y) &
-  G2.edgesDBetween(X,Y) c= G1.edgesDBetween(X,Y)
+theorem
+  for G1 being _Graph, G2 being Subgraph of G1, X,Y being set holds G2
+  .edgesBetween(X,Y) c= G1.edgesBetween(X,Y) & G2.edgesDBetween(X,Y) c= G1
+  .edgesDBetween(X,Y)
 proof
   let G1 be _Graph, G2 be Subgraph of G1, X,Y be set;
   now
     let x be set;
-    assume x in G2.edgesBetween(X,Y);
+    assume
+    x in G2.edgesBetween(X,Y);
     then x SJoins X,Y,G2 by Def32;
     then x SJoins X,Y,G1 by Th75;
     hence x in G1.edgesBetween(X,Y) by Def32;
@@ -3059,7 +3254,8 @@ proof
   hence G2.edgesBetween(X,Y) c= G1.edgesBetween(X,Y) by TARSKI:def 3;
   now
     let x be set;
-    assume x in G2.edgesDBetween(X,Y);
+    assume
+    x in G2.edgesDBetween(X,Y);
     then x DSJoins X,Y,G2 by Def33;
     then x DSJoins X,Y,G1 by Th75;
     hence x in G1.edgesDBetween(X,Y) by Def33;
@@ -3067,54 +3263,59 @@ proof
   hence thesis by TARSKI:def 3;
 end;
 
-theorem Th81: ::tSUBGRAPH_VF01;
-  for G1 being _Graph, G2 being Subgraph of G1, v1 being Vertex of G1,
-  v2 being Vertex of G2 st v1 = v2 holds v2.edgesIn() c= v1.edgesIn() &
-  v2.edgesOut() c= v1.edgesOut() & v2.edgesInOut() c= v1.edgesInOut()
+theorem Th81:
+  for G1 being _Graph, G2 being Subgraph of G1, v1 being Vertex of
+  G1, v2 being Vertex of G2 st v1 = v2 holds v2.edgesIn() c= v1.edgesIn() & v2
+  .edgesOut() c= v1.edgesOut() & v2.edgesInOut() c= v1.edgesInOut()
 proof
-  let G1 be _Graph, G2 be Subgraph of G1, v1 be Vertex of G1,
-  v2 be Vertex of G2;
+  let G1 be _Graph, G2 be Subgraph of G1, v1 be Vertex of G1, v2 be Vertex of
+  G2;
   assume
 A1: v1 = v2;
   now
     let x be set;
-    assume x in v2.edgesIn();
+    assume
+A2: x in v2.edgesIn();
+    then (the_Target_of G2).x = v2 by Lm8;
     then
-A2: (x in the_Edges_of G2 & (the_Target_of G2).x = v2) by Lm8;
-    then (the_Target_of G1).x = v1 by A1,Def34;
-    hence x in v1.edgesIn() by A2,Lm8;
+A3: (the_Target_of G1).x = v1 by A1,A2,Def34;
+    x in the_Edges_of G2 by A2;
+    hence x in v1.edgesIn() by A3,Lm8;
   end;
   hence v2.edgesIn() c= v1.edgesIn() by TARSKI:def 3;
   now
     let x be set;
-    assume x in v2.edgesOut();
+    assume
+A4: x in v2.edgesOut();
+    then (the_Source_of G2).x = v2 by Lm9;
     then
-A3: x in the_Edges_of G2 & (the_Source_of G2).x = v2 by Lm9;
-    then (the_Source_of G1).x = v1 by A1,Def34;
-    hence x in v1.edgesOut() by A3,Lm9;
+A5: (the_Source_of G1).x = v1 by A1,A4,Def34;
+    x in the_Edges_of G2 by A4;
+    hence x in v1.edgesOut() by A5,Lm9;
   end;
   hence v2.edgesOut() c= v1.edgesOut() by TARSKI:def 3;
   now
     let x be set;
-    assume x in v2.edgesInOut();
+    assume
+A6: x in v2.edgesInOut();
+    then (the_Source_of G2).x = v2 or (the_Target_of G2).x = v2 by Th64;
     then
-A4: x in the_Edges_of G2 & ((the_Source_of G2).x = v2 or
-    (the_Target_of G2).x = v2) by Th64;
-    then ((the_Source_of G1).x = v1 or (the_Target_of G1).x=v1) by A1,Def34;
-    hence x in v1.edgesInOut() by A4,Th64;
+A7: (the_Source_of G1).x = v1 or (the_Target_of G1).x=v1 by A1,A6,
+    Def34;
+    x in the_Edges_of G2 by A6;
+    hence x in v1.edgesInOut() by A7,Th64;
   end;
   hence thesis by TARSKI:def 3;
 end;
 
-theorem Th82: ::tSUBGRAPH_VF02
-  for G1 being _Graph, G2 being Subgraph of G1, v1 being Vertex of G1,
-  v2 being Vertex of G2 st v1 = v2 holds
-  v2.edgesIn() = v1.edgesIn() /\ (the_Edges_of G2) &
-  v2.edgesOut() = v1.edgesOut() /\ (the_Edges_of G2) &
-  v2.edgesInOut() = v1.edgesInOut() /\ (the_Edges_of G2)
+theorem Th82:
+  for G1 being _Graph, G2 being Subgraph of G1, v1 being Vertex of
+  G1, v2 being Vertex of G2 st v1 = v2 holds v2.edgesIn() = v1.edgesIn() /\ (
+  the_Edges_of G2) & v2.edgesOut() = v1.edgesOut() /\ (the_Edges_of G2) & v2
+  .edgesInOut() = v1.edgesInOut() /\ (the_Edges_of G2)
 proof
-  let G1 be _Graph, G2 be Subgraph of G1, v1 be Vertex of G1,
-  v2 be Vertex of G2;
+  let G1 be _Graph, G2 be Subgraph of G1, v1 be Vertex of G1, v2 be Vertex of
+  G2;
   assume
 A1: v1 = v2;
   now
@@ -3125,64 +3326,82 @@ A2:   x in v2.edgesIn();
       v2.edgesIn() c= v1.edgesIn() by A1,Th81;
       hence x in v1.edgesIn()/\(the_Edges_of G2) by A2,XBOOLE_0:def 4;
     end;
-    assume x in v1.edgesIn() /\ (the_Edges_of G2);
+    assume
+A3: x in v1.edgesIn() /\ (the_Edges_of G2);
     then
-A3: x in v1.edgesIn() & x in the_Edges_of G2 by XBOOLE_0:def 4;
+A4: x in the_Edges_of G2 by XBOOLE_0:def 4;
+    x in v1.edgesIn() by A3,XBOOLE_0:def 4;
     then (the_Target_of G1).x = v1 by Lm8;
-    then (the_Target_of G2).x = v2 by A1,A3,Def34;
-    hence x in v2.edgesIn() by A3,Lm8;
+    then (the_Target_of G2).x = v2 by A1,A4,Def34;
+    hence x in v2.edgesIn() by A4,Lm8;
   end;
   hence
-A4: v2.edgesIn() = v1.edgesIn() /\ (the_Edges_of G2) by TARSKI:2;
+A5: v2.edgesIn() = v1.edgesIn() /\ (the_Edges_of G2) by TARSKI:2;
   now
     let x be set;
     hereby
       assume
-A5:   x in v2.edgesOut();
+A6:   x in v2.edgesOut();
       v2.edgesOut() c= v1.edgesOut() by A1,Th81;
-      hence x in v1.edgesOut() /\ (the_Edges_of G2) by A5,XBOOLE_0:def 4;
+      hence x in v1.edgesOut() /\ (the_Edges_of G2) by A6,XBOOLE_0:def 4;
     end;
-    assume x in v1.edgesOut() /\ (the_Edges_of G2);
+    assume
+A7: x in v1.edgesOut() /\ (the_Edges_of G2);
     then
-A6: x in v1.edgesOut() & x in the_Edges_of G2 by XBOOLE_0:def 4;
+A8: x in the_Edges_of G2 by XBOOLE_0:def 4;
+    x in v1.edgesOut() by A7,XBOOLE_0:def 4;
     then (the_Source_of G1).x = v1 by Lm9;
-    then (the_Source_of G2).x = v2 by A1,A6,Def34;
-    hence x in v2.edgesOut() by A6,Lm9;
+    then (the_Source_of G2).x = v2 by A1,A8,Def34;
+    hence x in v2.edgesOut() by A8,Lm9;
   end;
   hence
-A7: v2.edgesOut() = v1.edgesOut() /\ (the_Edges_of G2) by TARSKI:2;
+A9: v2.edgesOut() = v1.edgesOut() /\ (the_Edges_of G2) by TARSKI:2;
   now
     let x be set;
     hereby
-      assume x in v1.edgesInOut() /\ (the_Edges_of G2);
+      assume
+A10:  x in v1.edgesInOut() /\ (the_Edges_of G2);
       then
-A8:   x in v1.edgesInOut() & x in the_Edges_of G2 by XBOOLE_0:def 4;
-      now per cases by A8,XBOOLE_0:def 3;
-        suppose x in v1.edgesIn();
-          then x in v1.edgesIn()/\(the_Edges_of G2) by A8,XBOOLE_0:def 4;
-          hence x in v2.edgesInOut() by A4,XBOOLE_0:def 3;
+A11:  x in the_Edges_of G2 by XBOOLE_0:def 4;
+A12:  x in v1.edgesInOut() by A10,XBOOLE_0:def 4;
+      now
+        per cases by A12,XBOOLE_0:def 3;
+        suppose
+          x in v1.edgesIn();
+          then x in v1.edgesIn()/\(the_Edges_of G2) by A11,
+          XBOOLE_0:def 4;
+          hence x in v2.edgesInOut() by A5,XBOOLE_0:def 3;
         end;
-        suppose x in v1.edgesOut();
-          then x in v1.edgesOut()/\(the_Edges_of G2) by A8,XBOOLE_0:def 4;
-          hence x in v2.edgesInOut() by A7,XBOOLE_0:def 3;
+        suppose
+          x in v1.edgesOut();
+          then x in v1.edgesOut()/\(the_Edges_of G2) by A11,
+          XBOOLE_0:def 4;
+          hence x in v2.edgesInOut() by A9,XBOOLE_0:def 3;
         end;
       end;
       hence x in v2.edgesInOut();
     end;
     assume
-A9: x in v2.edgesInOut();
-    now per cases by A4,A7,A9,XBOOLE_0:def 3;
-      suppose x in v1.edgesIn() /\ (the_Edges_of G2);
+A13: x in v2.edgesInOut();
+    now
+      per cases by A5,A9,A13,XBOOLE_0:def 3;
+      suppose
+A14:    x in v1.edgesIn() /\ (the_Edges_of G2);
+        then x in v1.edgesIn() by XBOOLE_0:def 4;
         then
-A10:    x in v1.edgesIn() & x in the_Edges_of G2 by XBOOLE_0:def 4;
-        then x in v1.edgesIn() \/ v1.edgesOut() by XBOOLE_0:def 3;
-        hence x in v1.edgesInOut() /\ (the_Edges_of G2) by A10,XBOOLE_0:def 4;
+A15:    x in v1.edgesIn() \/ v1.edgesOut() by XBOOLE_0:def 3;
+        x in the_Edges_of G2 by A14,XBOOLE_0:def 4;
+        hence x in v1.edgesInOut() /\ (the_Edges_of G2) by A15, XBOOLE_0:
+        def 4;
       end;
-      suppose x in v1.edgesOut() /\ (the_Edges_of G2);
+      suppose
+A16:    x in v1.edgesOut() /\ (the_Edges_of G2);
+        then x in v1.edgesOut() by XBOOLE_0:def 4;
         then
-A11:    x in v1.edgesOut() & x in (the_Edges_of G2) by XBOOLE_0:def 4;
-        then x in v1.edgesIn() \/ v1.edgesOut() by XBOOLE_0:def 3;
-        hence x in v1.edgesInOut() /\ (the_Edges_of G2) by A11,XBOOLE_0:def 4;
+A17:    x in v1.edgesIn() \/ v1.edgesOut() by XBOOLE_0:def 3;
+        x in (the_Edges_of G2) by A16,XBOOLE_0:def 4;
+        hence x in v1.edgesInOut() /\ (the_Edges_of G2) by A17, XBOOLE_0:
+        def 4;
       end;
     end;
     hence x in v1.edgesInOut() /\ (the_Edges_of G2);
@@ -3190,72 +3409,70 @@ A11:    x in v1.edgesOut() & x in (the_Edges_of G2) by XBOOLE_0:def 4;
   hence thesis by TARSKI:2;
 end;
 
-theorem ::tSUBGRAPH_VF03
+theorem
   for G1 being _Graph, G2 being Subgraph of G1, v1 being Vertex of G1,
-  v2 being Vertex of G2, e being set st v1 = v2 & e in the_Edges_of G2
-  holds v1.adj(e) = v2.adj(e)
+  v2 being Vertex of G2, e being set st v1 = v2 & e in the_Edges_of G2 holds v1
+  .adj(e) = v2.adj(e)
 proof
-  let G1 be _Graph, G2 be Subgraph of G1, v1 be Vertex of G1,
-  v2 be Vertex of G2, e be set;
-  assume
-A1: v1 = v2 & e in the_Edges_of G2;
-  then
-A2: the_Edges_of G2 c= the_Edges_of G1 &
-  (the_Source_of G2).e = (the_Source_of G1).e &
-  (the_Target_of G2).e = (the_Target_of G1).e by Def34;
-  now per cases;
+  let G1 be _Graph, G2 be Subgraph of G1, v1 be Vertex of G1, v2 be Vertex of
+  G2, e be set;
+  assume that
+A1: v1 = v2 and
+A2: e in the_Edges_of G2;
+A3: (the_Source_of G2).e = (the_Source_of G1).e & (the_Target_of G2).e = (
+  the_Target_of G1).e by A2,Def34;
+  now
+    per cases;
     suppose
-A3:   (the_Target_of G1).e = v1;
-      hence v1.adj(e) = (the_Source_of G1).e by A1,Def43
-        .= v2.adj(e) by A1,A2,A3,Def43;
+A4:   (the_Target_of G1).e = v1;
+      hence v1.adj(e) = (the_Source_of G1).e by A2,Def43
+        .= v2.adj(e) by A1,A2,A3,A4,Def43;
     end;
     suppose
-A4:   (the_Source_of G1).e = v1 & (the_Target_of G1).e <> v1;
-      hence v1.adj(e) = (the_Target_of G1).e by A1,Def43
-        .= v2.adj(e) by A1,A2,A4,Def43;
+A5:   (the_Source_of G1).e = v1 & (the_Target_of G1).e <> v1;
+      hence v1.adj(e) = (the_Target_of G1).e by A2,Def43
+        .= v2.adj(e) by A1,A2,A3,A5,Def43;
     end;
     suppose
-A5:   (the_Source_of G1).e <> v1 & (the_Target_of G1).e <> v1;
+A6:   (the_Source_of G1).e <> v1 & (the_Target_of G1).e <> v1;
       hence v1.adj(e) = v2 by A1,Def43
-        .= v2.adj(e) by A1,A2,A5,Def43;
+        .= v2.adj(e) by A1,A3,A6,Def43;
     end;
   end;
   hence thesis;
 end;
 
-theorem ::tSUBGRAPH_VF04
-  for G1 being finite _Graph, G2 being Subgraph of G1, v1 being Vertex of G1,
-  v2 being Vertex of G2 st v1 = v2 holds v2.inDegree() <= v1.inDegree() &
+theorem
+  for G1 being finite _Graph, G2 being Subgraph of G1, v1 being Vertex
+of G1, v2 being Vertex of G2 st v1 = v2 holds v2.inDegree() <= v1.inDegree() &
   v2.outDegree() <= v1.outDegree() & v2.degree() <= v1.degree()
 proof
-  let G1 be finite _Graph, G2 be Subgraph of G1, v1 be Vertex of G1,
-  v2 be Vertex of G2;
+  let G1 be finite _Graph, G2 be Subgraph of G1, v1 be Vertex of G1, v2 be
+  Vertex of G2;
   assume
 A1: v1 = v2;
   then v2.edgesIn() = v1.edgesIn() /\ (the_Edges_of G2) by Th82;
   hence
 A2: v2.inDegree() <= v1.inDegree() by NAT_1:44,XBOOLE_1:17;
 A3: v2.edgesOut() = v1.edgesOut()/\(the_Edges_of G2) by A1,Th82;
-  then
-A4: v2.outDegree() <= card v1.edgesOut() by NAT_1:44,XBOOLE_1:17;
-  thus v2.outDegree() <= v1.outDegree() by A3,NAT_1:44,XBOOLE_1:17;
-  thus thesis by A2,A4,XREAL_1:9;
+  hence v2.outDegree() <= v1.outDegree() by NAT_1:44,XBOOLE_1:17;
+  v2.outDegree() <= card v1.edgesOut() by A3,NAT_1:44,XBOOLE_1:17;
+  hence thesis by A2,XREAL_1:9;
 end;
 
-theorem ::tSUBGRAPH_VF05
+theorem
   for G1 being _Graph, G2 being Subgraph of G1, v1 being Vertex of G1,
-  v2 being Vertex of G2 st v1 = v2 holds
-  v2.inNeighbors() c= v1.inNeighbors() &
-  v2.outNeighbors() c= v1.outNeighbors() &
-  v2.allNeighbors() c= v1.allNeighbors()
+  v2 being Vertex of G2 st v1 = v2 holds v2.inNeighbors() c= v1.inNeighbors() &
+v2.outNeighbors() c= v1.outNeighbors() & v2.allNeighbors() c= v1.allNeighbors()
 proof
-  let G1 be _Graph, G2 be Subgraph of G1, v1 be Vertex of G1,
-  v2 be Vertex of G2;
+  let G1 be _Graph, G2 be Subgraph of G1, v1 be Vertex of G1, v2 be Vertex of
+  G2;
   assume
 A1: v1 = v2;
   now
     let v be set;
-    assume v in v2.inNeighbors();
+    assume
+    v in v2.inNeighbors();
     then consider e being set such that
 A2: e DJoins v,v2,G2 by Th72;
     e DJoins v,v1,G1 by A1,A2,Th75;
@@ -3264,7 +3481,8 @@ A2: e DJoins v,v2,G2 by Th72;
   hence v2.inNeighbors() c= v1.inNeighbors() by TARSKI:def 3;
   now
     let v be set;
-    assume v in v2.outNeighbors();
+    assume
+    v in v2.outNeighbors();
     then consider e being set such that
 A3: e DJoins v2,v,G2 by Th73;
     e DJoins v1,v,G1 by A1,A3,Th75;
@@ -3273,7 +3491,8 @@ A3: e DJoins v2,v,G2 by Th73;
   hence v2.outNeighbors() c= v1.outNeighbors() by TARSKI:def 3;
   now
     let v be set;
-    assume v in v2.allNeighbors();
+    assume
+    v in v2.allNeighbors();
     then consider e being set such that
 A4: e Joins v2,v,G2 by Th74;
     e Joins v1,v,G1 by A1,A4,Lm5;
@@ -3282,252 +3501,268 @@ A4: e Joins v2,v,G2 by Th74;
   hence thesis by TARSKI:def 3;
 end;
 
-theorem ::tSUBGRAPH_VA01
+theorem
   for G1 being _Graph, G2 being Subgraph of G1, v1 being Vertex of G1,
   v2 being Vertex of G2 st v1 = v2 & v1 is isolated holds v2 is isolated
 proof
-  let G1 be _Graph, G2 be Subgraph of G1, v1 be Vertex of G1,
-  v2 be Vertex of G2;
-  assume v1 = v2 & v1 is isolated;
-  then v1.edgesInOut() = {} & v2.edgesInOut() c= v1.edgesInOut()
-  by Def51,Th81;
+  let G1 be _Graph, G2 be Subgraph of G1, v1 be Vertex of G1, v2 be Vertex of
+  G2;
+  assume
+  v1 = v2 & v1 is isolated;
+  then v1.edgesInOut() = {} & v2.edgesInOut() c= v1.edgesInOut() by Def51,
+  Th81;
   then v2.edgesInOut() = {};
   hence thesis by Def51;
 end;
 
-theorem ::tSUBGRAPH_VA02
+theorem
   for G1 being _Graph, G2 being Subgraph of G1, v1 being Vertex of G1,
-  v2 being Vertex of G2 st v1 = v2 & v1 is endvertex holds
-  v2 is endvertex or v2 is isolated
+v2 being Vertex of G2 st v1 = v2 & v1 is endvertex holds v2 is endvertex or v2
+  is isolated
 proof
-  let G1 be _Graph, G2 be Subgraph of G1, v1 be Vertex of G1,
-  v2 be Vertex of G2;
-  assume
-A1: v1 = v2 & v1 is endvertex;
-  then
-A2: v2.edgesInOut() c= v1.edgesInOut() by Th81;
+  let G1 be _Graph, G2 be Subgraph of G1, v1 be Vertex of G1, v2 be Vertex of
+  G2;
+  assume that
+A1: v1 = v2 and
+A2: v1 is endvertex;
   consider e being set such that
-A3: v1.edgesInOut() = {e} & not e Joins v1,v1,G1 by A1,Def53;
-A4: v2.edgesInOut() = {} or v2.edgesInOut() = {e} by A2,A3,ZFMISC_1:39;
+A3: v1.edgesInOut() = {e} and
+A4: not e Joins v1,v1,G1 by A2,Def53;
+  v2.edgesInOut() c= v1.edgesInOut() by A1,Th81;
+  then
+A5: v2.edgesInOut() = {} or v2.edgesInOut() = {e} by A3,ZFMISC_1:39;
   now
     assume
-A5: not v2 is isolated;
-    not e Joins v2,v2,G2 by A1,A3,Lm5;
-    hence v2 is endvertex by A4,A5,Def51,Def53;
+A6: not v2 is isolated;
+    not e Joins v2,v2,G2 by A1,A4,Lm5;
+    hence v2 is endvertex by A5,A6,Def51,Def53;
   end;
   hence thesis;
 end;
 
-theorem Th88: ::tGPEQ01
+theorem Th88:
   G1 == G2 & G2 == G3 implies G1 == G3
 proof
-  assume G1 == G2 & G2 == G3;
-  then the_Vertices_of G1 = the_Vertices_of G2 &
-  the_Edges_of G1 = the_Edges_of G2 & the_Source_of G1 = the_Source_of G2 &
-  the_Target_of G1 = the_Target_of G2 &
-  the_Vertices_of G2 = the_Vertices_of G3 &
-  the_Edges_of G2 = the_Edges_of G3 & the_Source_of G2 = the_Source_of G3 &
-  the_Target_of G2 = the_Target_of G3 by Def36;
-  hence thesis by Def36;
+  assume that
+A1: G1 == G2 and
+A2: G2 == G3;
+A3: the_Source_of G1 = the_Source_of G2 & the_Target_of G1 = the_Target_of
+  G2 by A1,Def36;
+A4: the_Source_of G2 = the_Source_of G3 & the_Target_of G2 = the_Target_of
+  G3 by A2,Def36;
+A5: the_Vertices_of G2 = the_Vertices_of G3 & the_Edges_of G2 = the_Edges_of
+  G3 by A2,Def36;
+  the_Vertices_of G1 = the_Vertices_of G2 & the_Edges_of G1 = the_Edges_of
+  G2 by A1,Def36;
+  hence thesis by A3,A5,A4,Def36;
 end;
 
-theorem Th89: ::tGPEQ02
-  for G being _Graph, G1,G2 being Subgraph of G st
-  the_Vertices_of G1 = the_Vertices_of G2 &
-  the_Edges_of G1 = the_Edges_of G2 holds G1 == G2
+theorem Th89:
+  for G being _Graph, G1,G2 being Subgraph of G st the_Vertices_of
+  G1 = the_Vertices_of G2 & the_Edges_of G1 = the_Edges_of G2 holds G1 == G2
 proof
   let G be _Graph, G1,G2 be Subgraph of G;
-  assume
-A1: the_Vertices_of G1 = the_Vertices_of G2 &
-  the_Edges_of G1 = the_Edges_of G2;
-A2: dom (the_Source_of G1) = the_Edges_of G1 &
-  dom (the_Source_of G2) = the_Edges_of G2 &
-  dom (the_Target_of G1) = the_Edges_of G1 &
-  dom (the_Target_of G2) = the_Edges_of G2 by FUNCT_2:def 1;
+  assume that
+A1: the_Vertices_of G1 = the_Vertices_of G2 and
+A2: the_Edges_of G1 = the_Edges_of G2;
+A3: dom (the_Target_of G1) = the_Edges_of G1 & dom (the_Target_of G2) =
+  the_Edges_of G2 by FUNCT_2:def 1;
   now
     let e be set;
     assume
-A3: e in the_Edges_of G1;
-    then (the_Source_of G1).e = (the_Source_of G).e by Def34;
-    hence (the_Source_of G1).e = (the_Source_of G2).e by A1,A3,Def34;
+A4: e in the_Edges_of G1;
+    then (the_Target_of G1).e = (the_Target_of G).e by Def34;
+    hence (the_Target_of G1).e = (the_Target_of G2).e by A2,A4,Def34;
   end;
   then
-A4: the_Source_of G1 = the_Source_of G2 by A1,A2,FUNCT_1:9;
-  now
+A5: the_Target_of G1 = the_Target_of G2 by A2,A3,FUNCT_1:9;
+A6: now
     let e be set;
     assume
-A5: e in the_Edges_of G1;
-    then (the_Target_of G1).e = (the_Target_of G).e by Def34;
-    hence (the_Target_of G1).e = (the_Target_of G2).e by A1,A5,Def34;
+A7: e in the_Edges_of G1;
+    then (the_Source_of G1).e = (the_Source_of G).e by Def34;
+    hence (the_Source_of G1).e = (the_Source_of G2).e by A2,A7,Def34;
   end;
-  then the_Target_of G1 = the_Target_of G2 by A1,A2,FUNCT_1:9;
-  hence thesis by A1,A4,Def36;
+  dom (the_Source_of G1) = the_Edges_of G1 & dom (the_Source_of G2) =
+  the_Edges_of G2 by FUNCT_2:def 1;
+  then the_Source_of G1 = the_Source_of G2 by A2,A6,FUNCT_1:9;
+  hence thesis by A1,A2,A5,Def36;
 end;
 
-theorem Th90: ::tGPEQ03
+theorem Th90:
   G1 == G2 iff G1 is Subgraph of G2 & G2 is Subgraph of G1
 proof
-  G1 is Subgraph of G2 & G2 is Subgraph of G1 iff
-  the_Vertices_of G1 = the_Vertices_of G2 &
-  the_Edges_of G1 = the_Edges_of G2 & the_Source_of G1 = the_Source_of G2 &
-  the_Target_of G1 = the_Target_of G2 by Th44;
+  G1 is Subgraph of G2 & G2 is Subgraph of G1 iff the_Vertices_of G1 =
+  the_Vertices_of G2 & the_Edges_of G1 = the_Edges_of G2 & the_Source_of G1 =
+  the_Source_of G2 & the_Target_of G1 = the_Target_of G2 by Th44;
   hence thesis by Def36;
 end;
 
-theorem Th91: ::tGPEQ_JOIN01
-  G1 == G2 implies (e Joins x,y,G1 implies e Joins x,y,G2) &
-  (e DJoins x,y,G1 implies e DJoins x,y,G2) &
-  (e SJoins X,Y,G1 implies e SJoins X,Y,G2) &
-  (e DSJoins X,Y,G1 implies e DSJoins X,Y,G2)
+theorem Th91:
+  G1 == G2 implies (e Joins x,y,G1 implies e Joins x,y,G2) & (e
+DJoins x,y,G1 implies e DJoins x,y,G2) & (e SJoins X,Y,G1 implies e SJoins X,Y,
+  G2) & (e DSJoins X,Y,G1 implies e DSJoins X,Y,G2)
 proof
-  assume G1 == G2;
+  assume
+  G1 == G2;
   then G1 is Subgraph of G2 by Th90;
   hence thesis by Th75;
 end;
 
-theorem ::tGPEQ_GA01
-  G1 == G2 implies (G1 is finite implies G2 is finite) &
-  (G1 is loopless implies G2 is loopless) &
-  (G1 is trivial implies G2 is trivial) &
-  (G1 is non-multi implies G2 is non-multi) &
-  (G1 is non-Dmulti implies G2 is non-Dmulti) &
-  (G1 is simple implies G2 is simple) & (G1 is Dsimple implies G2 is Dsimple)
+theorem
+  G1 == G2 implies (G1 is finite implies G2 is finite) & (G1 is loopless
+  implies G2 is loopless) & (G1 is trivial implies G2 is trivial) & (G1 is
+non-multi implies G2 is non-multi) & (G1 is non-Dmulti implies G2 is non-Dmulti
+) & (G1 is simple implies G2 is simple) & (G1 is Dsimple implies G2 is Dsimple)
 proof
   assume
 A1: G1 == G2;
   then
-A2: the_Vertices_of G1 = the_Vertices_of G2 &
-  the_Edges_of G1 = the_Edges_of G2 & the_Source_of G1 = the_Source_of G2 &
-  the_Target_of G1 = the_Target_of G2 by Def36;
-  thus G1 is finite implies G2 is finite by A2,Def19;
-A3: now
-    assume G1 is loopless;
-    then not ex e being set st e in the_Edges_of G2 &
-    (the_Source_of G2).e = (the_Target_of G2).e by A2,Def20;
+A2: the_Edges_of G1 = the_Edges_of G2 by Def36;
+A3: the_Vertices_of G1 = the_Vertices_of G2 by A1,Def36;
+  hence G1 is finite implies G2 is finite by A2,Def19;
+A4: the_Source_of G1 = the_Source_of G2 & the_Target_of G1 = the_Target_of
+  G2 by A1,Def36;
+A5: now
+    assume
+    G1 is loopless;
+    then
+    not ex e being set st e in the_Edges_of G2 & (the_Source_of G2).e = (
+    the_Target_of G2).e by A2,A4,Def20;
     hence G2 is loopless by Def20;
   end;
   hence G1 is loopless implies G2 is loopless;
   hereby
-    assume G1 is trivial;
-    then card the_Vertices_of G2 = 1 by A2,Def21;
+    assume
+    G1 is trivial;
+    then card the_Vertices_of G2 = 1 by A3,Def21;
     hence G2 is trivial by Def21;
   end;
-A4: now
+A6: now
     assume
-A5: G1 is non-multi;
+A7: G1 is non-multi;
     now
       let e1,e2,v1,v2 be set;
-      assume e1 Joins v1,v2,G2 & e2 Joins v1,v2,G2;
+      assume
+      e1 Joins v1,v2,G2 & e2 Joins v1,v2,G2;
       then e1 Joins v1,v2,G1 & e2 Joins v1,v2,G1 by A1,Th91;
-      hence e1 = e2 by A5,Def22;
+      hence e1 = e2 by A7,Def22;
     end;
     hence G2 is non-multi by Def22;
   end;
   hence G1 is non-multi implies G2 is non-multi;
-A6: now
+A8: now
     assume
-A7: G1 is non-Dmulti;
+A9: G1 is non-Dmulti;
     now
       let e1,e2,v1,v2 be set;
-      assume e1 DJoins v1,v2,G2 & e2 DJoins v1,v2,G2;
+      assume
+      e1 DJoins v1,v2,G2 & e2 DJoins v1,v2,G2;
       then e1 DJoins v1,v2,G1 & e2 DJoins v1,v2,G1 by A1,Th91;
-      hence e1 = e2 by A7,Def23;
+      hence e1 = e2 by A9,Def23;
     end;
     hence G2 is non-Dmulti by Def23;
   end;
   hence G1 is non-Dmulti implies G2 is non-Dmulti;
-  thus G1 is simple implies G2 is simple by A3,A4;
-  thus thesis by A3,A6;
+  thus G1 is simple implies G2 is simple by A5,A6;
+  thus thesis by A5,A8;
 end;
 
-theorem Th93: ::tGPEQ_GF01
-  G1 == G2 implies G1.order() = G2.order() & G1.size() = G2.size() &
-  G1.edgesInto(X) = G2.edgesInto(X) & G1.edgesOutOf(X) = G2.edgesOutOf(X) &
-  G1.edgesInOut(X) = G2.edgesInOut(X) &
-  G1.edgesBetween(X) = G2.edgesBetween(X) &
+theorem Th93:
+  G1 == G2 implies G1.order() = G2.order() & G1.size() = G2.size()
+& G1.edgesInto(X) = G2.edgesInto(X) & G1.edgesOutOf(X) = G2.edgesOutOf(X) & G1
+  .edgesInOut(X) = G2.edgesInOut(X) & G1.edgesBetween(X) = G2.edgesBetween(X) &
   G1.edgesDBetween(X,Y) = G2.edgesDBetween(X,Y)
 proof
   assume
 A1: G1 == G2;
   hence G1.order() = G2.order() by Def36;
   thus G1.size() = G2.size() by A1,Def36;
-A2: the_Vertices_of G1 = the_Vertices_of G2 &
-  the_Edges_of G1 = the_Edges_of G2 & the_Source_of G1 = the_Source_of G2 &
-  the_Target_of G1 = the_Target_of G2 by A1,Def36;
-A3: now
+A2: the_Edges_of G1 = the_Edges_of G2 by A1,Def36;
+A3: the_Target_of G1 = the_Target_of G2 by A1,Def36;
+A4: now
     let e be set;
-    e in G1.edgesInto(X) iff e in the_Edges_of G2 &
-    (the_Target_of G2).e in X by A2,Def28;
+    e in G1.edgesInto(X) iff e in the_Edges_of G2 & (the_Target_of G2).e
+    in X by A2,A3,Def28;
     hence e in G1.edgesInto(X) iff e in G2.edgesInto(X) by Def28;
   end;
   hence
-A4: G1.edgesInto(X) = G2.edgesInto(X) by TARSKI:2;
-A5: now
+A5: G1.edgesInto(X) = G2.edgesInto(X) by TARSKI:2;
+A6: the_Source_of G1 = the_Source_of G2 by A1,Def36;
+A7: now
     let e be set;
-    e in G1.edgesOutOf(X) iff e in the_Edges_of G2 &
-    (the_Source_of G2).e in X by A2,Def29;
+    e in G1.edgesOutOf(X) iff e in the_Edges_of G2 & (the_Source_of G2).e
+    in X by A2,A6,Def29;
     hence e in G1.edgesOutOf(X) iff e in G2.edgesOutOf(X) by Def29;
   end;
   hence
-A6: G1.edgesOutOf(X) = G2.edgesOutOf(X) by TARSKI:2;
-  thus G1.edgesInOut(X)= G2.edgesInOut(X) by A4,A5,TARSKI:2;
-  thus G1.edgesBetween(X)=G2.edgesBetween(X) by A3,A6,TARSKI:2;
+A8: G1.edgesOutOf(X) = G2.edgesOutOf(X) by TARSKI:2;
+  thus G1.edgesInOut(X)= G2.edgesInOut(X) by A5,A7,TARSKI:2;
+  thus G1.edgesBetween(X)=G2.edgesBetween(X) by A4,A8,TARSKI:2;
   now
     let e be set;
     e in G1.edgesDBetween(X,Y) iff e DSJoins X,Y,G1 by Def33;
     then e in G1.edgesDBetween(X,Y) iff e DSJoins X,Y,G2 by A1,Th91;
-    hence e in G2.edgesDBetween(X,Y) iff e in G1.edgesDBetween(X,Y) by Def33;
+    hence e in G2.edgesDBetween(X,Y) iff e in G1.edgesDBetween(X,Y) by
+    Def33;
   end;
   hence thesis by TARSKI:2;
 end;
 
-theorem Th94: ::tGPEQ_SUBG01
+theorem Th94:
   G1 == G2 & G3 is Subgraph of G1 implies G3 is Subgraph of G2
 proof
-  assume
-A1: G1 == G2 & G3 is Subgraph of G1;
-  then the_Vertices_of G3 c= the_Vertices_of G1 by Def34;
+  assume that
+A1: G1 == G2 and
+A2: G3 is Subgraph of G1;
+  the_Vertices_of G3 c= the_Vertices_of G1 by A2,Def34;
   hence the_Vertices_of G3 c= the_Vertices_of G2 by A1,Def36;
-  the_Edges_of G3 c= the_Edges_of G1 by A1,Def34;
+  the_Edges_of G3 c= the_Edges_of G1 by A2,Def34;
   hence the_Edges_of G3 c= the_Edges_of G2 by A1,Def36;
   let e be set;
   assume
-A2: e in the_Edges_of G3;
-  hence (the_Source_of G3).e = (the_Source_of G1).e by A1,Def34
+A3: e in the_Edges_of G3;
+  hence (the_Source_of G3).e = (the_Source_of G1).e by A2,Def34
     .= (the_Source_of G2).e by A1,Def36;
-  thus (the_Target_of G3).e = (the_Target_of G1).e by A1,A2,Def34
+  thus (the_Target_of G3).e = (the_Target_of G1).e by A2,A3,Def34
     .= (the_Target_of G2).e by A1,Def36;
 end;
 
-theorem ::tGPEQ_SUBG02
+theorem
   G1 == G2 & G1 is Subgraph of G3 implies G2 is Subgraph of G3
 proof
-  assume
-A1: G1 == G2 & G1 is Subgraph of G3;
-  then
-A2: the_Vertices_of G1 = the_Vertices_of G2 &
-  the_Edges_of G1 = the_Edges_of G2 & the_Source_of G1 = the_Source_of G2 &
-  the_Target_of G1 = the_Target_of G2 by Def36;
-  hence the_Vertices_of G2 c= the_Vertices_of G3 &
-  the_Edges_of G2 c= the_Edges_of G3 by A1,Def34;
+  assume that
+A1: G1 == G2 and
+A2: G1 is Subgraph of G3;
+A3: the_Edges_of G1 = the_Edges_of G2 by A1,Def36;
+A4: the_Source_of G1 = the_Source_of G2 & the_Target_of G1 = the_Target_of
+  G2 by A1,Def36;
+  the_Vertices_of G1 = the_Vertices_of G2 by A1,Def36;
+  hence the_Vertices_of G2 c= the_Vertices_of G3 & the_Edges_of G2 c=
+  the_Edges_of G3 by A2,A3,Def34;
   let e be set;
-  assume e in the_Edges_of G2;
-  hence thesis by A1,A2,Def34;
+  assume
+  e in the_Edges_of G2;
+  hence thesis by A2,A3,A4,Def34;
 end;
 
-theorem ::tGPEQ_INDSUB01
+theorem
   for G1,G2 being inducedSubgraph of G,V,E holds G1 == G2
 proof
   let G1,G2 be inducedSubgraph of G,V,E;
-  now per cases;
-    suppose V is non empty Subset of the_Vertices_of G &
-      E c= G.edgesBetween(V);
-      then the_Vertices_of G1 = V & the_Vertices_of G2 = V &
-      the_Edges_of G1 = E & the_Edges_of G2 = E by Def39;
-      hence thesis by Th89;
+  now
+    per cases;
+    suppose
+A1:   V is non empty Subset of the_Vertices_of G & E c= G.edgesBetween
+      (V);
+      then
+A2:   the_Edges_of G1 = E & the_Edges_of G2 = E by Def39;
+      the_Vertices_of G1 = V & the_Vertices_of G2 = V by A1,Def39;
+      hence thesis by A2,Th89;
     end;
-    suppose not (V is non empty Subset of the_Vertices_of G &
-      E c= G.edgesBetween(V));
+    suppose
+      not (V is non empty Subset of the_Vertices_of G & E c= G
+      .edgesBetween(V));
       then G1 == G & G2 == G by Def39;
       hence thesis by Th88;
     end;
@@ -3535,51 +3770,54 @@ proof
   hence thesis;
 end;
 
-theorem ::tGPEQ_INDSUB02
-  for G1 being _Graph, G2 being inducedSubgraph of G1,the_Vertices_of G1 holds
-  G1 == G2
+theorem
+  for G1 being _Graph, G2 being inducedSubgraph of G1,the_Vertices_of G1
+  holds G1 == G2
 proof
   let G1 be _Graph, G2 be inducedSubgraph of G1, the_Vertices_of G1;
-  the_Vertices_of G1 c= the_Vertices_of G1;
-  then
-A1: the_Vertices_of G2 = the_Vertices_of G1 &
-  the_Edges_of G2 = G1.edgesBetween(the_Vertices_of G1) by Def39;
+A1: the_Vertices_of G1 c= the_Vertices_of G1;
+  then the_Edges_of G2 = G1.edgesBetween(the_Vertices_of G1) by Def39;
   then
 A2: the_Edges_of G2 = the_Edges_of G1 by Th37;
-  then the_Source_of G2 = (the_Source_of G1)|the_Edges_of G1 &
-  the_Target_of G2 = (the_Target_of G1)|the_Edges_of G1 by Th48;
-  then the_Source_of G2 = (the_Source_of G1)|(dom the_Source_of G1) &
-  the_Target_of G2 = (the_Target_of G1)|(dom the_Target_of G1)
-  by FUNCT_2:def 1;
-  then the_Source_of G2 = the_Source_of G1 & the_Target_of G2 =
-  the_Target_of G1 by RELAT_1:98;
-  hence thesis by A1,A2,Def36;
+  then the_Source_of G2 = (the_Source_of G1)|the_Edges_of G1 by Th48;
+  then the_Source_of G2 = (the_Source_of G1)|(dom the_Source_of G1) by
+  FUNCT_2:def 1;
+  then
+A3: the_Source_of G2 = the_Source_of G1 by RELAT_1:98;
+  the_Target_of G2 = (the_Target_of G1)|the_Edges_of G1 by A2,Th48;
+  then the_Target_of G2 = (the_Target_of G1)|(dom the_Target_of G1) by
+  FUNCT_2:def 1;
+  then
+A4: the_Target_of G2 = the_Target_of G1 by RELAT_1:98;
+  the_Vertices_of G2 = the_Vertices_of G1 by A1,Def39;
+  hence thesis by A2,A3,A4,Def36;
 end;
 
-theorem ::tGPEQ_INDSUB03
-  for G1,G2 being _Graph, V,E being set,
-  G3 being inducedSubgraph of G1,V,E st G1 == G2 holds
-  G3 is inducedSubgraph of G2,V,E
+theorem
+  for G1,G2 being _Graph, V,E being set, G3 being inducedSubgraph of G1,
+  V,E st G1 == G2 holds G3 is inducedSubgraph of G2,V,E
 proof
   let G1,G2 be _Graph, V,E be set, G3 be inducedSubgraph of G1,V,E;
   assume
 A1: G1 == G2;
-  now per cases;
+  now
+    per cases;
     suppose
-A2:   V is non empty Subset of the_Vertices_of G1 & E c= G1.edgesBetween(V);
+A2:   V is non empty Subset of the_Vertices_of G1 & E c= G1
+      .edgesBetween(V);
       then
-A3:   V is non empty Subset of the_Vertices_of G2 &
-      E c= G2.edgesBetween(V) by A1,Def36,Th93;
-A4:   the_Vertices_of G3 = V & the_Edges_of G3 = E by A2,Def39;
-      G3 is Subgraph of G2 by A1,Th94;
+A3:   the_Vertices_of G3 = V & the_Edges_of G3 = E by Def39;
+A4:   G3 is Subgraph of G2 by A1,Th94;
+      V is non empty Subset of the_Vertices_of G2 & E c= G2.edgesBetween(V
+      ) by A1,A2,Def36,Th93;
       hence thesis by A3,A4,Def39;
     end;
     suppose
-A5:   not (V is non empty Subset of the_Vertices_of G1 &
-      E c= G1.edgesBetween(V));
+A5:   not (V is non empty Subset of the_Vertices_of G1 & E c= G1
+      .edgesBetween(V));
       then
-A6:   not (V is non empty Subset of the_Vertices_of G2 &
-      E c= G2.edgesBetween(V)) by A1,Def36,Th93;
+A6:   not (V is non empty Subset of the_Vertices_of G2 & E c= G2
+      .edgesBetween(V)) by A1,Def36,Th93;
       G3 == G1 by A5,Def39;
       then
 A7:   G3 == G2 by A1,Th88;
@@ -3590,116 +3828,127 @@ A7:   G3 == G2 by A1,Th88;
   hence thesis;
 end;
 
-theorem Th99: ::tGPEQ_VF01
-  for v1 being Vertex of G1, v2 being Vertex of G2 st v1 = v2 & G1 == G2 holds
-  v1.edgesIn() = v2.edgesIn() & v1.edgesOut() = v2.edgesOut() &
-  v1.edgesInOut() = v2.edgesInOut() & v1.adj(e) = v2.adj(e) &
-  v1.inDegree() = v2.inDegree() & v1.outDegree() = v2.outDegree() &
-  v1.degree() = v2.degree() & v1.inNeighbors() = v2.inNeighbors() &
-  v1.outNeighbors() = v2.outNeighbors() &
-  v1.allNeighbors() = v2.allNeighbors()
+theorem Th99:
+  for v1 being Vertex of G1, v2 being Vertex of G2 st v1 = v2 & G1
+  == G2 holds v1.edgesIn() = v2.edgesIn() & v1.edgesOut() = v2.edgesOut() & v1
+  .edgesInOut() = v2.edgesInOut() & v1.adj(e) = v2.adj(e) & v1.inDegree() = v2
+.inDegree() & v1.outDegree() = v2.outDegree() & v1.degree() = v2.degree() & v1
+.inNeighbors() = v2.inNeighbors() & v1.outNeighbors() = v2.outNeighbors() & v1
+  .allNeighbors() = v2.allNeighbors()
 proof
   let v1 be Vertex of G1, v2 be Vertex of G2;
-  assume
-A1: v1 = v2 & G1 == G2;
-  hence
-A2: v1.edgesIn() = v2.edgesIn() by Th93; thus
-A3: v1.edgesOut() = v2.edgesOut() by A1,Th93;
-  thus v1.edgesInOut() = v2.edgesInOut() by A1,Th93;
-  now per cases;
+  assume that
+A1: v1 = v2 and
+A2: G1 == G2;
+  thus
+A3: v1.edgesIn() = v2.edgesIn() by A1,A2,Th93;
+  thus
+A4: v1.edgesOut() = v2.edgesOut() by A1,A2,Th93;
+  thus v1.edgesInOut() = v2.edgesInOut() by A1,A2,Th93;
+  now
+    per cases;
     suppose
-A4:   e in the_Edges_of G1 & (the_Target_of G1).e = v1;
+A5:   e in the_Edges_of G1 & (the_Target_of G1).e = v1;
       then
-A5:   e in the_Edges_of G2 & (the_Target_of G2).e = v2 by A1,Def36;
-      thus v1.adj(e) = (the_Source_of G1).e by A4,Def43
-        .= (the_Source_of G2).e by A1,Def36
-        .= v2.adj(e) by A5,Def43;
+A6:   e in the_Edges_of G2 & (the_Target_of G2).e = v2 by A1,A2,
+      Def36;
+      thus v1.adj(e) = (the_Source_of G1).e by A5,Def43
+        .= (the_Source_of G2).e by A2,Def36
+        .= v2.adj(e) by A6,Def43;
     end;
     suppose
-A6:   e in the_Edges_of G1 & (the_Source_of G1).e = v1 &
-      not (the_Target_of G1).e = v1;
+A7:   e in the_Edges_of G1 & (the_Source_of G1).e = v1 & not (
+      the_Target_of G1).e = v1;
       then
-A7:   e in the_Edges_of G2 & (the_Source_of G2).e = v2 &
-      not (the_Target_of G2).e = v2 by A1,Def36;
-      thus v1.adj(e) = (the_Target_of G1).e by A6,Def43
-        .= (the_Target_of G2).e by A1,Def36
-        .= v2.adj(e) by A7,Def43;
+A8:   not (the_Target_of G2).e = v2 by A1,A2,Def36;
+A9:   e in the_Edges_of G2 & (the_Source_of G2).e = v2 by A1,A2,A7,Def36;
+      thus v1.adj(e) = (the_Target_of G1).e by A7,Def43
+        .= (the_Target_of G2).e by A2,Def36
+        .= v2.adj(e) by A9,A8,Def43;
     end;
     suppose
-A8:   not (e in the_Edges_of G1 & (the_Target_of G1).e = v1) &
-      not (e in the_Edges_of G1 & (the_Source_of G1).e = v1 &
-      not (the_Target_of G1).e = v1);
+A10:  not (e in the_Edges_of G1 & (the_Target_of G1).e = v1) & not (e
+in the_Edges_of G1 & (the_Source_of G1).e = v1 & not (the_Target_of G1).e = v1)
+      ;
       then
-A9:   not (e in the_Edges_of G2 & (the_Target_of G2).e = v2) &
-      not (e in the_Edges_of G2 & (the_Source_of G2).e = v2 &
-      not (the_Target_of G2).e = v2) by A1,Def36;
-      thus v1.adj(e) = v2 by A1,A8,Def43
-        .= v2.adj(e) by A9,Def43;
+A11:  ( not (e in the_Edges_of G2 & (the_Target_of G2).e = v2))& not (e
+in the_Edges_of G2 & (the_Source_of G2).e = v2 & not ( the_Target_of G2).e = v2
+      ) by A1,A2,Def36;
+      thus v1.adj(e) = v2 by A1,A10,Def43
+        .= v2.adj(e) by A11,Def43;
     end;
   end;
-  hence v1.adj(e) = v2.adj(e); thus
-  v1.inDegree() = v2.inDegree() by A1,Th93; thus
-  v1.outDegree() = v2.outDegree() by A1,Th93;
-  hence v1.degree() = v2.degree() by A1,Th93; thus
-  v1.inNeighbors() = v2.inNeighbors() by A1,A2,Def36; thus
-  v1.outNeighbors() = v2.outNeighbors() by A1,A3,Def36;
-  hence thesis by A1,A2,Def36;
+  hence v1.adj(e) = v2.adj(e);
+  thus v1.inDegree() = v2.inDegree() by A1,A2,Th93;
+  thus v1.outDegree() = v2.outDegree() by A1,A2,Th93;
+  hence v1.degree() = v2.degree() by A1,A2,Th93;
+  thus v1.inNeighbors() = v2.inNeighbors() by A2,A3,Def36;
+  thus v1.outNeighbors() = v2.outNeighbors() by A2,A4,Def36;
+  hence thesis by A2,A3,Def36;
 end;
 
-theorem ::tGPEQ_VA01
-  for v1 being Vertex of G1, v2 being Vertex of G2 st v1 = v2 & G1 == G2 holds
-  (v1 is isolated implies v2 is isolated) &
-  (v1 is endvertex implies v2 is endvertex)
+theorem
+  for v1 being Vertex of G1, v2 being Vertex of G2 st v1 = v2 & G1 == G2
+holds (v1 is isolated implies v2 is isolated) & (v1 is endvertex implies v2 is
+  endvertex)
 proof
   let v1 be Vertex of G1, v2 be Vertex of G2;
   assume
 A1: v1 = v2 & G1 == G2;
   hereby
-    assume v1 is isolated;
+    assume
+    v1 is isolated;
     then v1.edgesInOut() = {} by Def51;
     then v2.edgesInOut() = {} by A1,Th99;
     hence v2 is isolated by Def51;
   end;
-  assume v1 is endvertex;
+  assume
+  v1 is endvertex;
   then consider e being set such that
 A2: v1.edgesInOut() = {e} & not e Joins v1,v1,G1 by Def53;
   v2.edgesInOut() = {e} & not e Joins v2,v2,G2 by A1,A2,Th91,Th99;
   hence thesis by Def53;
 end;
 
-theorem Th101: ::tGPSSUBG01
+theorem Th101:
   for G being _Graph, G1,G2 being Subgraph of G st G1 c< G2 holds
-  (the_Vertices_of G1 c< the_Vertices_of G2 or
-  the_Edges_of G1 c< the_Edges_of G2)
+(the_Vertices_of G1 c< the_Vertices_of G2 or the_Edges_of G1 c< the_Edges_of G2
+  )
 proof
   let G be _Graph, G1,G2 be Subgraph of G;
-  assume G1 c< G2;
+  assume
+A1: G1 c< G2;
+  then G1 c= G2 by Def38;
   then
-A1: G1 c= G2 & not G1 == G2 by Def38;
-  then G1 is Subgraph of G2 by Def37;
+A2: G1 is Subgraph of G2 by Def37;
   then
-A2: the_Vertices_of G1 c= the_Vertices_of G2 &
-  the_Edges_of G1 c= the_Edges_of G2 by Def34;
-  now per cases by A1,Th89;
-    suppose the_Vertices_of G1 <> the_Vertices_of G2;
-      hence thesis by A2,XBOOLE_0:def 8;
+A3: the_Vertices_of G1 c= the_Vertices_of G2 by Def34;
+A4: the_Edges_of G1 c= the_Edges_of G2 by A2,Def34;
+A5: not G1 == G2 by A1,Def38;
+  now
+    per cases by A5,Th89;
+    suppose
+      the_Vertices_of G1 <> the_Vertices_of G2;
+      hence thesis by A3,XBOOLE_0:def 8;
     end;
-    suppose the_Edges_of G1 <> the_Edges_of G2;
-      hence thesis by A2,XBOOLE_0:def 8;
+    suppose
+      the_Edges_of G1 <> the_Edges_of G2;
+      hence thesis by A4,XBOOLE_0:def 8;
     end;
   end;
   hence thesis;
 end;
 
-theorem ::tGPSUBG01
-  for G being _Graph, G1,G2 being Subgraph of G st G1 c< G2 holds
-  (ex v being set st v in the_Vertices_of G2 & not v in the_Vertices_of G1) or
-  (ex e being set st e in the_Edges_of G2 & not e in the_Edges_of G1)
+theorem
+  for G being _Graph, G1,G2 being Subgraph of G st G1 c< G2 holds (ex v
+  being set st v in the_Vertices_of G2 & not v in the_Vertices_of G1) or ex e
+  being set st e in the_Edges_of G2 & not e in the_Edges_of G1
 proof
   let G be _Graph, G1,G2 be Subgraph of G;
-  assume G1 c< G2;
-  then the_Vertices_of G1 c< the_Vertices_of G2 or
-  the_Edges_of G1 c< the_Edges_of G2 by Th101;
+  assume
+  G1 c< G2;
+  then the_Vertices_of G1 c< the_Vertices_of G2 or the_Edges_of G1 c<
+  the_Edges_of G2 by Th101;
   hence thesis by XBOOLE_0:6;
 end;
 

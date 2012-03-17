@@ -27,8 +27,8 @@ definition
 :: REWRITE1:def 1
 
   it = p^q if p = {} or q = {} otherwise
-  ex i being Element of NAT, r being FinSequence st len p = i+1 & r = p|Seg i
-  & it = r^q;
+  ex i being Element of NAT, r being FinSequence st len p = i+1 & r = p|Seg i &
+  it = r^q;
 end;
 
 reserve p,q,r for FinSequence,
@@ -50,16 +50,15 @@ theorem :: REWRITE1:5
   p <> {} implies ex x,q st p = <*x*>^q & len p = len q+1;
 
 scheme :: REWRITE1:sch 1
- PathCatenation {P[set,set], p,q() -> FinSequence}:
-  for i being Element of NAT st i in dom (p()$^q()) & i+1 in dom (p()$^q())
-  for x,y being set st x = (p()$^q()).i & y = (p()$^q()).(i+1) holds P[x,y]
+
+  PathCatenation {P[set,set], p,q() -> FinSequence}: for i being Element of
+NAT st i in dom (p()$^q()) & i+1 in dom (p()$^q()) for x,y being set st x = (p(
+  )$^q()).i & y = (p()$^q()).(i+1) holds P[x,y]
 provided
- for i being Element of NAT st i in dom p() & i+1 in dom p()
-holds P[p().i, p().(i+1)]
-and
- for i being Element of NAT st i in dom q() & i+1 in dom q()
-holds P[q().i, q().(i+1)]
-and
+ for i being Element of NAT st i in dom p() & i+1 in dom p() holds P[
+p().i, p().(i+1)] and
+ for i being Element of NAT st i in dom q() & i+1 in dom q() holds P[
+q().i, q().(i+1)] and
  len p() > 0 & len q() > 0 & p().len p() = q().1;
 
 definition
@@ -67,9 +66,8 @@ definition
   mode RedSequence of R -> FinSequence means
 :: REWRITE1:def 2
 
-    len it > 0 &
-    for i being Element of NAT st i in dom it & i+1 in dom it
-    holds [it.i, it.(i+1)] in R;
+    len it > 0 & for i being
+    Element of NAT st i in dom it & i+1 in dom it holds [it.i, it.(i+1)] in R;
 end;
 
 registration
@@ -83,16 +81,16 @@ theorem :: REWRITE1:7
   for R being Relation, a being set holds <*a*> is RedSequence of R;
 
 theorem :: REWRITE1:8
-  for R being Relation, a,b being set st [a,b] in R holds
-  <*a,b*> is RedSequence of R;
+  for R being Relation, a,b being set st [a,b] in R holds <*a,b*>
+  is RedSequence of R;
 
 theorem :: REWRITE1:9
-  for R being Relation, p,q being RedSequence of R st p.len p = q.1 holds
-  p$^q is RedSequence of R;
+  for R being Relation, p,q being RedSequence of R st p.len p = q.1
+  holds p$^q is RedSequence of R;
 
 theorem :: REWRITE1:10
-  for R being Relation, p being RedSequence of R holds
-  Rev p is RedSequence of R~;
+  for R being Relation, p being RedSequence of R holds Rev p is
+  RedSequence of R~;
 
 theorem :: REWRITE1:11
   for R,Q being Relation st R c= Q for p being RedSequence of R
@@ -106,7 +104,8 @@ definition
   pred R reduces a,b means
 :: REWRITE1:def 3
 
-   ex p being RedSequence of R st p.1 = a & p.len p = b;
+  ex p being RedSequence of R st p.1 = a & p.
+  len p = b;
 end;
 
 definition
@@ -119,10 +118,9 @@ definition
 end;
 
 theorem :: REWRITE1:12
-  for R being Relation, a,b being set holds R reduces a,b iff
-  ex p being FinSequence st len p > 0 & p.1 = a & p.len p = b &
-  for i being Element of NAT st i in dom p & i+1 in dom p
-  holds [p.i, p.(i+1)] in R;
+  for R being Relation, a,b being set holds R reduces a,b iff ex p
+being FinSequence st len p > 0 & p.1 = a & p.len p = b & for i being Element of
+  NAT st i in dom p & i+1 in dom p holds [p.i, p.(i+1)] in R;
 
 theorem :: REWRITE1:13
   for R being Relation, a being set holds R reduces a,a;
@@ -131,93 +129,95 @@ theorem :: REWRITE1:14
   for a,b being set st {} reduces a,b holds a = b;
 
 theorem :: REWRITE1:15
-  for R being Relation, a,b being set st R reduces a,b & not a in field R
-  holds a = b;
+  for R being Relation, a,b being set st R reduces a,b & not a in
+  field R holds a = b;
 
 theorem :: REWRITE1:16
-  for R being Relation, a,b being set st [a,b] in R holds R reduces a,b;
+  for R being Relation, a,b being set st [a,b] in R holds R
+  reduces a,b;
 
 theorem :: REWRITE1:17
-  for R being Relation, a,b,c being set st R reduces a,b & R reduces b,c
-  holds R reduces a,c;
+  for R being Relation, a,b,c being set st R reduces a,b & R
+  reduces b,c holds R reduces a,c;
 
 theorem :: REWRITE1:18
-  for R being Relation, p being RedSequence of R, i,j being Element of NAT st
-  i in dom p & j in dom p & i <= j holds R reduces p.i,p.j;
+  for R being Relation, p being RedSequence of R, i,j being
+  Element of NAT st i in dom p & j in dom p & i <= j holds R reduces p.i,p.j;
 
 theorem :: REWRITE1:19
   for R being Relation, a,b being set st R reduces a,b & a <> b
   holds a in field R & b in field R;
 
 theorem :: REWRITE1:20
-  for R being Relation, a,b being set st R reduces a,b holds
-  a in field R iff b in field R;
+  for R being Relation, a,b being set st R reduces a,b holds a in field
+  R iff b in field R;
 
 theorem :: REWRITE1:21
-  for R being Relation, a,b being set holds
-  R reduces a,b iff a = b or [a,b] in R[*];
+  for R being Relation, a,b being set holds R reduces a,b iff a =
+  b or [a,b] in R[*];
 
 theorem :: REWRITE1:22
-  for R being Relation, a,b being set holds R reduces a,b iff R[*] reduces a,b;
+  for R being Relation, a,b being set holds R reduces a,b iff R[*]
+  reduces a,b;
 
 theorem :: REWRITE1:23
-  for R,Q being Relation st R c= Q for a,b being set st R reduces a,b
-  holds Q reduces a,b;
+  for R,Q being Relation st R c= Q for a,b being set st R reduces
+  a,b holds Q reduces a,b;
 
 theorem :: REWRITE1:24
-  for R being Relation, X being set, a,b being set holds
-  R reduces a,b iff R \/ id X reduces a,b;
+  for R being Relation, X being set, a,b being set holds R reduces a,b
+  iff R \/ id X reduces a,b;
 
 theorem :: REWRITE1:25
-  for R being Relation, a,b being set st R reduces a,b holds R~ reduces b,a;
+  for R being Relation, a,b being set st R reduces a,b holds R~
+  reduces b,a;
 
 theorem :: REWRITE1:26
-  for R being Relation, a,b being set st R reduces a,b
-  holds a,b are_convertible_wrt R & b,a are_convertible_wrt R;
+  for R being Relation, a,b being set st R reduces a,b holds a,b
+  are_convertible_wrt R & b,a are_convertible_wrt R;
 
 theorem :: REWRITE1:27
-  for R being Relation, a being set holds a,a are_convertible_wrt R;
+  for R being Relation, a being set holds a,a are_convertible_wrt
+  R;
 
 theorem :: REWRITE1:28
   for a,b being set st a,b are_convertible_wrt {} holds a = b;
 
 theorem :: REWRITE1:29
-  for R being Relation, a,b being set st a,b are_convertible_wrt R &
-  not a in field R holds a = b;
+  for R being Relation, a,b being set st a,b are_convertible_wrt R & not
+  a in field R holds a = b;
 
 theorem :: REWRITE1:30
-  for R being Relation, a,b being set st [a,b] in R
-  holds a,b are_convertible_wrt R;
+  for R being Relation, a,b being set st [a,b] in R holds a,b
+  are_convertible_wrt R;
 
 theorem :: REWRITE1:31
-  for R being Relation, a,b,c being set st
-  a,b are_convertible_wrt R & b,c are_convertible_wrt R
-  holds a,c are_convertible_wrt R;
+  for R being Relation, a,b,c being set st a,b are_convertible_wrt
+  R & b,c are_convertible_wrt R holds a,c are_convertible_wrt R;
 
 theorem :: REWRITE1:32
-  for R being Relation, a,b being set st a,b are_convertible_wrt R
-  holds b,a are_convertible_wrt R;
+  for R being Relation, a,b being set st a,b are_convertible_wrt R holds
+  b,a are_convertible_wrt R;
 
 theorem :: REWRITE1:33
-  for R being Relation, a,b being set st a,b are_convertible_wrt R & a <> b
-  holds a in field R & b in field R;
+  for R being Relation, a,b being set st a,b are_convertible_wrt R
+  & a <> b holds a in field R & b in field R;
 
 definition
   let R be Relation;
   let a be set;
   pred a is_a_normal_form_wrt R means
 :: REWRITE1:def 5
-
   not ex b being set st [a,b] in R;
 end;
 
 theorem :: REWRITE1:34
-  for R being Relation, a,b being set st
-  a is_a_normal_form_wrt R & R reduces a,b holds a = b;
+  for R being Relation, a,b being set st a is_a_normal_form_wrt R
+  & R reduces a,b holds a = b;
 
 theorem :: REWRITE1:35
-  for R being Relation, a being set st not a in field R
-  holds a is_a_normal_form_wrt R;
+  for R being Relation, a being set st not a in field R holds a
+  is_a_normal_form_wrt R;
 
 definition
   let R be Relation;
@@ -225,72 +225,76 @@ definition
   pred b is_a_normal_form_of a,R means
 :: REWRITE1:def 6
 
-   b is_a_normal_form_wrt R & R reduces a,b;
+  b is_a_normal_form_wrt R & R
+  reduces a,b;
   pred a,b are_convergent_wrt R means
 :: REWRITE1:def 7
 
-   ex c being set st R reduces a,c & R reduces b,c;
+  ex c being set st R reduces a,c
+  & R reduces b,c;
   pred a,b are_divergent_wrt R means
 :: REWRITE1:def 8
 
-   ex c being set st R reduces c,a & R reduces c,b;
+  ex c being set st R reduces c,a &
+  R reduces c,b;
   pred a,b are_convergent<=1_wrt R means
 :: REWRITE1:def 9
 
-   ex c being set st ([a,c] in R or a = c) & ([b,c] in R or b = c);
+  ex c being set st ([a,c] in R
+  or a = c) & ([b,c] in R or b = c);
   pred a,b are_divergent<=1_wrt R means
 :: REWRITE1:def 10
 
-   ex c being set st ([c,a] in R or a = c) & ([c,b] in R or b = c);
+  ex c being set st ([c,a] in R
+  or a = c) & ([c,b] in R or b = c);
 end;
 
 theorem :: REWRITE1:36
-  for R being Relation, a being set st not a in field R
-  holds a is_a_normal_form_of a,R;
+  for R being Relation, a being set st not a in field R holds a
+  is_a_normal_form_of a,R;
 
 theorem :: REWRITE1:37
-  for R being Relation, a,b being set st R reduces a,b
-  holds a,b are_convergent_wrt R & a,b are_divergent_wrt R &
-  b,a are_convergent_wrt R & b,a are_divergent_wrt R;
+  for R being Relation, a,b being set st R reduces a,b holds a,b
+are_convergent_wrt R & a,b are_divergent_wrt R & b,a are_convergent_wrt R & b,a
+  are_divergent_wrt R;
 
 theorem :: REWRITE1:38
-  for R being Relation, a,b being set st
-  a,b are_convergent_wrt R or a,b are_divergent_wrt R
-  holds a,b are_convertible_wrt R;
+  for R being Relation, a,b being set st a,b are_convergent_wrt R
+  or a,b are_divergent_wrt R holds a,b are_convertible_wrt R;
 
 theorem :: REWRITE1:39
-  for R being Relation, a being set holds
-  a,a are_convergent_wrt R & a,a are_divergent_wrt R;
+  for R being Relation, a being set holds a,a are_convergent_wrt R
+  & a,a are_divergent_wrt R;
 
 theorem :: REWRITE1:40
-  for a,b being set st a,b are_convergent_wrt {} or a,b are_divergent_wrt {}
-  holds a = b;
+  for a,b being set st a,b are_convergent_wrt {} or a,b
+  are_divergent_wrt {} holds a = b;
 
 theorem :: REWRITE1:41
-  for R being Relation, a,b being set st a,b are_convergent_wrt R
-  holds b,a are_convergent_wrt R;
+  for R being Relation, a,b being set st a,b are_convergent_wrt R holds
+  b,a are_convergent_wrt R;
 
 theorem :: REWRITE1:42
-  for R being Relation, a,b being set st a,b are_divergent_wrt R
-  holds b,a are_divergent_wrt R;
+  for R being Relation, a,b being set st a,b are_divergent_wrt R holds b
+  ,a are_divergent_wrt R;
 
 theorem :: REWRITE1:43
-  for R being Relation, a,b,c being set st
-  R reduces a,b & b,c are_convergent_wrt R or
-  a,b are_convergent_wrt R & R reduces c,b holds a,c are_convergent_wrt R;
+  for R being Relation, a,b,c being set st R reduces a,b & b,c
+  are_convergent_wrt R or a,b are_convergent_wrt R & R reduces c,b holds a,c
+  are_convergent_wrt R;
 
 theorem :: REWRITE1:44
-  for R being Relation, a,b,c being set st
-  R reduces b,a & b,c are_divergent_wrt R or
-  a,b are_divergent_wrt R & R reduces b,c holds a,c are_divergent_wrt R;
+  for R being Relation, a,b,c being set st R reduces b,a & b,c
+  are_divergent_wrt R or a,b are_divergent_wrt R & R reduces b,c holds a,c
+  are_divergent_wrt R;
 
 theorem :: REWRITE1:45
-  for R being Relation, a,b being set st a,b are_convergent<=1_wrt R
-  holds a,b are_convergent_wrt R;
+  for R being Relation, a,b being set st a,b are_convergent<=1_wrt
+  R holds a,b are_convergent_wrt R;
 
 theorem :: REWRITE1:46
-  for R being Relation, a,b being set st a,b are_divergent<=1_wrt R
-  holds a,b are_divergent_wrt R;
+  for R being Relation, a,b being set st a,b are_divergent<=1_wrt
+  R holds a,b are_divergent_wrt R;
 
 definition
   let R be Relation;
@@ -298,19 +302,20 @@ definition
   pred a has_a_normal_form_wrt R means
 :: REWRITE1:def 11
 
-   ex b being set st b is_a_normal_form_of a,R;
+  ex b being set st b
+  is_a_normal_form_of a,R;
 end;
 
 theorem :: REWRITE1:47
-  for R being Relation, a being set st not a in field R
-  holds a has_a_normal_form_wrt R;
+  for R being Relation, a being set st not a in field R holds a
+  has_a_normal_form_wrt R;
 
 definition
   let R be Relation, a be set;
   assume that
  a has_a_normal_form_wrt R and
- for b,c being set st b is_a_normal_form_of a,R &
-  c is_a_normal_form_of a,R holds b = c;
+ for b,c being set st b is_a_normal_form_of a,R & c
+  is_a_normal_form_of a,R holds b = c;
   func nf(a,R) means
 :: REWRITE1:def 12
 
@@ -328,11 +333,12 @@ definition
   attr R is weakly-normalizing means
 :: REWRITE1:def 14
 
-   for a being set st a in field R holds a has_a_normal_form_wrt R;
+  for a being set st a in field R
+  holds a has_a_normal_form_wrt R;
   attr R is strongly-normalizing means
 :: REWRITE1:def 15 :: terminating, Noetherian
-  for f being ManySortedSet of NAT ex i being Element of NAT
-  st not [f.i,f.(i+1)] in R;
+  for f being ManySortedSet of NAT ex i
+  being Element of NAT st not [f.i,f.(i+1)] in R;
 end;
 
 definition
@@ -340,18 +346,19 @@ definition
   redefine attr R is co-well_founded means
 :: REWRITE1:def 16
 
-   for Y being set st Y c= field R & Y <> {} ex a being set st a in Y &
-  for b being set st b in Y & a <> b holds not [a,b] in R;
+  for Y being set st Y c=
+field R & Y <> {} ex a being set st a in Y & for b being set st b in Y & a <> b
+  holds not [a,b] in R;
 end;
 
 scheme :: REWRITE1:sch 2
- coNoetherianInduction{R() -> Relation, P[set]}:
-  for a being set st a in field R() holds P[a]
+
+  coNoetherianInduction{R() -> Relation, P[set]}: for a being set st a in
+  field R() holds P[a]
 provided
- R() is co-well_founded
-and
- for a being set st for b being set st [a,b] in R() & a <> b holds P[b]
-holds P[a];
+ R() is co-well_founded and
+ for a being set st for b being set st [a,b] in R() & a <> b holds P[
+b] holds P[a];
 
 registration
   cluster strongly-normalizing -> irreflexive co-well_founded Relation;
@@ -363,8 +370,8 @@ registration
 end;
 
 theorem :: REWRITE1:48
-  for Q being co-well_founded Relation, R being Relation st R c= Q
-  holds R is co-well_founded;
+  for Q being co-well_founded Relation, R being Relation st R c= Q holds
+  R is co-well_founded;
 
 registration
   cluster strongly-normalizing -> weakly-normalizing Relation;
@@ -376,68 +383,69 @@ definition
   let R,Q be Relation;
   pred R commutes-weakly_with Q means
 :: REWRITE1:def 17
-  for a,b,c being set st [a,b] in R & [a,c] in Q
-  ex d being set st Q reduces b,d & R reduces c,d;
+  for a,b,c being set st [a,b] in R & [a,c
+  ] in Q ex d being set st Q reduces b,d & R reduces c,d;
   symmetry;
   pred R commutes_with Q means
 :: REWRITE1:def 18
 
-   for a,b,c being set st R reduces a,b & Q reduces a,c
-  ex d being set st Q reduces b,d & R reduces c,d;
+  for a,b,c being set st R reduces a,b &
+  Q reduces a,c ex d being set st Q reduces b,d & R reduces c,d;
   symmetry;
 end;
 
 theorem :: REWRITE1:49
-  for R,Q being Relation st R commutes_with Q holds R commutes-weakly_with Q;
+  for R,Q being Relation st R commutes_with Q holds R
+  commutes-weakly_with Q;
 
 definition
   let R be Relation;
   attr R is with_UN_property means
 :: REWRITE1:def 19
 
-  for
-  a,b being set st a is_a_normal_form_wrt R & b is_a_normal_form_wrt R &
-  a,b are_convertible_wrt R holds a = b;
+  for a,b being set st a
+  is_a_normal_form_wrt R & b is_a_normal_form_wrt R & a,b are_convertible_wrt R
+  holds a = b;
   attr R is with_NF_property means
 :: REWRITE1:def 20
-  for a,b being set st a is_a_normal_form_wrt R & a,b are_convertible_wrt R
-  holds R reduces b,a;
+  for a,b being set st a is_a_normal_form_wrt
+  R & a,b are_convertible_wrt R holds R reduces b,a;
   attr R is subcommutative means
 :: REWRITE1:def 21
 
-   for a,b,c being set st [a,b] in R & [a,c] in R
-  holds b,c are_convergent<=1_wrt R;
+  for a,b,c being set st [a,b] in R &
+  [a,c] in R holds b,c are_convergent<=1_wrt R;
   attr R is confluent means
 :: REWRITE1:def 22
 
-  for
-  a,b being set st a,b are_divergent_wrt R holds a,b are_convergent_wrt R;
+  for a,b being set st a,b
+  are_divergent_wrt R holds a,b are_convergent_wrt R;
   attr R is with_Church-Rosser_property means
 :: REWRITE1:def 23
 
-   for a,b being set st a,b are_convertible_wrt R
-  holds a,b are_convergent_wrt R;
+  for a,b being set st a,
+  b are_convertible_wrt R holds a,b are_convergent_wrt R;
   attr R is locally-confluent means
 :: REWRITE1:def 24
 
-   for a,b,c being set st [a,b] in R & [a,c] in R
-  holds b,c are_convergent_wrt R;
+  for a,b,c being set st [a,b] in R
+  & [a,c] in R holds b,c are_convergent_wrt R;
 end;
 
 theorem :: REWRITE1:50
-  for R being Relation st R is subcommutative for a,b,c being set st
-  R reduces a,b & [a,c] in R holds b,c are_convergent_wrt R;
+  for R being Relation st R is subcommutative for a,b,c being set
+  st R reduces a,b & [a,c] in R holds b,c are_convergent_wrt R;
 
 theorem :: REWRITE1:51
   for R being Relation holds R is confluent iff R commutes_with R;
 
 theorem :: REWRITE1:52
-  for R being Relation holds R is confluent iff for a,b,c being set st
-  R reduces a,b & [a,c] in R holds b,c are_convergent_wrt R;
+  for R being Relation holds R is confluent iff for a,b,c being
+  set st R reduces a,b & [a,c] in R holds b,c are_convergent_wrt R;
 
 theorem :: REWRITE1:53
-  for R being Relation holds
-  R is locally-confluent iff R commutes-weakly_with R;
+  for R being Relation holds R is locally-confluent iff R
+  commutes-weakly_with R;
 
 registration
   cluster with_Church-Rosser_property -> confluent Relation;
@@ -454,17 +462,16 @@ registration
 end;
 
 theorem :: REWRITE1:54
-  for R being with_UN_property Relation
-  for a,b,c being set st b is_a_normal_form_of a,R & c is_a_normal_form_of a,R
-  holds b = c;
+  for R being with_UN_property Relation for a,b,c being set st b
+  is_a_normal_form_of a,R & c is_a_normal_form_of a,R holds b = c;
 
 theorem :: REWRITE1:55
-  for R being with_UN_property weakly-normalizing Relation
-  for a being set holds nf(a,R) is_a_normal_form_of a,R;
+  for R being with_UN_property weakly-normalizing Relation for a
+  being set holds nf(a,R) is_a_normal_form_of a,R;
 
 theorem :: REWRITE1:56
-  for R being with_UN_property weakly-normalizing Relation
-  for a,b being set st a,b are_convertible_wrt R holds nf(a,R) = nf(b,R);
+  for R being with_UN_property weakly-normalizing Relation for a,b
+  being set st a,b are_convertible_wrt R holds nf(a,R) = nf(b,R);
 
 registration
   cluster strongly-normalizing locally-confluent -> confluent Relation;
@@ -474,7 +481,6 @@ definition
   let R be Relation;
   attr R is complete means
 :: REWRITE1:def 25
-
   R is confluent strongly-normalizing;
 end;
 
@@ -488,12 +494,12 @@ registration
 end;
 
 theorem :: REWRITE1:57
-  for R,Q being with_Church-Rosser_property Relation st
-  R commutes_with Q holds R \/ Q is with_Church-Rosser_property;
+  for R,Q being with_Church-Rosser_property Relation st R commutes_with
+  Q holds R \/ Q is with_Church-Rosser_property;
 
 theorem :: REWRITE1:58
-  for R being Relation holds
-  R is confluent iff R[*] is locally-confluent;
+  for R being Relation holds R is confluent iff R[*] is
+  locally-confluent;
 
 theorem :: REWRITE1:59
   for R being Relation holds R is confluent iff R[*] is subcommutative;
@@ -504,9 +510,8 @@ definition
   let R,Q be Relation;
   pred R,Q are_equivalent means
 :: REWRITE1:def 26
-
-  for a,b being set holds
-  a,b are_convertible_wrt R iff a,b are_convertible_wrt Q;
+  for a,b being set holds a,b
+  are_convertible_wrt R iff a,b are_convertible_wrt Q;
   symmetry;
 end;
 
@@ -516,7 +521,8 @@ definition
   pred a,b are_critical_wrt R means
 :: REWRITE1:def 27
 
-   a,b are_divergent<=1_wrt R & not a,b are_convergent_wrt R;
+  a,b are_divergent<=1_wrt R & not
+  a,b are_convergent_wrt R;
 end;
 
 theorem :: REWRITE1:60
@@ -528,22 +534,21 @@ theorem :: REWRITE1:61
   holds R is locally-confluent;
 
 theorem :: REWRITE1:62
-  for R,Q being Relation st
-  for a,b being set st [a,b] in Q holds a,b are_critical_wrt R
-  holds R, R \/ Q are_equivalent;
+  for R,Q being Relation st for a,b being set st [a,b] in Q holds a,b
+  are_critical_wrt R holds R, R \/ Q are_equivalent;
 
 theorem :: REWRITE1:63
-  for R being Relation ex Q being complete Relation st field Q c= field R &
-  for a,b being set holds
-  a,b are_convertible_wrt R iff a,b are_convergent_wrt Q;
+  for R being Relation ex Q being complete Relation st field Q c=
+  field R & for a,b being set holds a,b are_convertible_wrt R iff a,b
+  are_convergent_wrt Q;
 
 definition
   let R be Relation;
   mode Completion of R -> complete Relation means
 :: REWRITE1:def 28
 
-     for a,b being set holds
-    a,b are_convertible_wrt R iff a,b are_convergent_wrt it;
+    for a,b being set
+    holds a,b are_convertible_wrt R iff a,b are_convergent_wrt it;
 end;
 
 theorem :: REWRITE1:64
@@ -554,6 +559,6 @@ theorem :: REWRITE1:65
   holds Q is Completion of R;
 
 theorem :: REWRITE1:66
-  for R being Relation, C being Completion of R, a,b being set holds
-  a,b are_convertible_wrt R iff nf(a,C) = nf(b,C);
+  for R being Relation, C being Completion of R, a,b being set holds a,b
+  are_convertible_wrt R iff nf(a,C) = nf(b,C);
 

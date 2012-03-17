@@ -7,6 +7,7 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="TARSKI"/>
@@ -31,11 +32,11 @@
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="77"/>
+<Func kind="K" nr="85"/>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="77"/>
+<Func kind="K" nr="85"/>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -54,29 +55,29 @@
 <For>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="22"/>
+<Adjective nr="23"/>
 </Cluster>
 </Typ>
 <For>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="22"/>
+<Adjective nr="23"/>
 </Cluster>
 </Typ>
 <Not>
 <And>
 <Pred kind="R" nr="2">
-<Func kind="K" nr="67">
+<Func kind="K" nr="75">
 <Var nr="2"/>
 <Var nr="3"/>
 </Func>
-<Func kind="K" nr="138">
+<Func kind="K" nr="147">
 <Var nr="1"/>
 </Func>
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="139">
+<Func kind="K" nr="148">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Var nr="2"/>
@@ -105,11 +106,11 @@
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="77"/>
+<Func kind="K" nr="85"/>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="77"/>
+<Func kind="K" nr="85"/>
 </Typ>
 </ArgTypes>
 <Not>
@@ -124,23 +125,23 @@
 <For>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="22"/>
+<Adjective nr="23"/>
 </Cluster>
 </Typ>
 <For>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="22"/>
+<Adjective nr="23"/>
 </Cluster>
 </Typ>
 <Not>
 <And>
 <Pred kind="R" nr="2">
-<Func kind="K" nr="67">
+<Func kind="K" nr="75">
 <Var nr="2"/>
 <Var nr="3"/>
 </Func>
-<Func kind="K" nr="138">
+<Func kind="K" nr="147">
 <Var nr="1"/>
 </Func>
 </Pred>
@@ -148,7 +149,7 @@
 <Pred kind="P" nr="1">
 <Var nr="2"/>
 <Var nr="3"/>
-<Func kind="K" nr="139">
+<Func kind="K" nr="148">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Var nr="2"/>
@@ -166,27 +167,27 @@
 <For>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="22"/>
+<Adjective nr="23"/>
 </Cluster>
 </Typ>
 <For>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="22"/>
+<Adjective nr="23"/>
 </Cluster>
 </Typ>
 <Not>
 <And>
 <Pred kind="R" nr="2">
-<Func kind="K" nr="67">
+<Func kind="K" nr="75">
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>
 <Func kind="K" nr="22">
-<Func kind="K" nr="88">
+<Func kind="K" nr="96">
 <Func kind="F" nr="2"/>
 </Func>
-<Func kind="K" nr="88">
+<Func kind="K" nr="96">
 <Func kind="F" nr="3"/>
 </Func>
 </Func>
@@ -232,27 +233,27 @@
 <For>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="22"/>
+<Adjective nr="23"/>
 </Cluster>
 </Typ>
 <For>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="22"/>
+<Adjective nr="23"/>
 </Cluster>
 </Typ>
 <Not>
 <And>
 <Pred kind="R" nr="2">
-<Func kind="K" nr="67">
+<Func kind="K" nr="75">
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>
 <Func kind="K" nr="22">
-<Func kind="K" nr="88">
+<Func kind="K" nr="96">
 <Func kind="F" nr="2"/>
 </Func>
-<Func kind="K" nr="88">
+<Func kind="K" nr="96">
 <Func kind="F" nr="3"/>
 </Func>
 </Func>

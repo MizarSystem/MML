@@ -69,10 +69,8 @@ A7: Y = {};
     suppose
 A8:   -infty in B;
       take -infty;
-      thus for r st P[r] holds r <= -infty
-      proof ex a st a = -infty & Q[a] by A8;
-        hence thesis by A1;
-      end;
+      ex a st a = -infty & Q[a] by A8;
+      hence for r st P[r] holds r <= -infty by A1;
       thus thesis by XXREAL_0:5;
     end;
     suppose
@@ -101,16 +99,15 @@ A13: Y <> {};
       let x,y be real number;
       assume x in X;
       then x in A by XBOOLE_0:def 4;
-      then consider a such that
-A14:  a = x and
-A15:  P[a];
+      then
+A14:  ex a st ( a = x)&( P[a]);
       assume y in Y;
       then y in B by XBOOLE_0:def 4;
       then ex a st a = y & Q[a];
-      hence thesis by A1,A14,A15;
+      hence thesis by A1,A14;
     end;
     then consider s being real number such that
-A16: for x,y being real number st x in X & y in Y holds x <= s & s <= y
+A15: for x,y being real number st x in X & y in Y holds x <= s & s <= y
     by AXIOMS:26;
     reconsider s as ext-real number;
     take s;
@@ -118,20 +115,20 @@ A16: for x,y being real number st x in X & y in Y holds x <= s & s <= y
     proof
       let r;
       consider x being Element of REAL such that
-A17:  x in Y by A13,SUBSET_1:10;
-      x in B by A17,XBOOLE_0:def 4;
+A16:  x in Y by A13,SUBSET_1:10;
+      x in B by A16,XBOOLE_0:def 4;
       then
-A18:  ex a st x = a & Q[a];
+A17:  ex a st x = a & Q[a];
       assume
-A19:  P[r];
-      per cases by A1,A18,A19,XXREAL_0:13;
+A18:  P[r];
+      per cases by A1,A17,A18,XXREAL_0:13;
       suppose
-A20:    r in REAL;
+A19:    r in REAL;
         then reconsider r as real number;
         r is Element of ExtREAL by XXREAL_0:def 1;
-        then r in A by A19;
-        then r in X by A20,XBOOLE_0:def 4;
-        hence thesis by A16,A17;
+        then r in A by A18;
+        then r in X by A19,XBOOLE_0:def 4;
+        hence thesis by A15,A16;
       end;
       suppose r = -infty;
         hence thesis by XXREAL_0:5;
@@ -139,20 +136,20 @@ A20:    r in REAL;
     end;
     let r;
     consider x being Element of REAL such that
-A21: x in X by A12,SUBSET_1:10;
-    x in A by A21,XBOOLE_0:def 4;
+A20: x in X by A12,SUBSET_1:10;
+    x in A by A20,XBOOLE_0:def 4;
     then
-A22: ex a st x = a & P[a];
+A21: ex a st x = a & P[a];
     assume
-A23: Q[r];
-    per cases by A1,A22,A23,XXREAL_0:10;
+A22: Q[r];
+    per cases by A1,A21,A22,XXREAL_0:10;
     suppose
-A24:  r in REAL;
+A23:  r in REAL;
       then reconsider r as real number;
       r is Element of ExtREAL by XXREAL_0:def 1;
-      then r in B by A23;
-      then r in Y by A24,XBOOLE_0:def 4;
-      hence thesis by A16,A21;
+      then r in B by A22;
+      then r in Y by A23,XBOOLE_0:def 4;
+      hence thesis by A15,A20;
     end;
     suppose r = +infty;
       hence thesis by XXREAL_0:3;
@@ -165,19 +162,15 @@ begin :: Intervals
 definition
   let r,s;
   func [.r,s.] equals
-
   { a : r <= a & a <= s };
   correctness;
   func [.r,s.[ equals
-
   { a : r <= a & a < s };
   correctness;
   func ].r,s.] equals
-
   { a : r < a & a <= s };
   correctness;
   func ].r,s.[ equals
-
   { a : r < a & a < s };
   correctness;
 end;
@@ -272,9 +265,11 @@ proof
   assume
 A1: x in [. p, q .];
   then reconsider s = x as ext-real number;
-  p <= s & s <= q by A1,Th1;
-  then (p = s or p < s) & (s = q or s < q) by XXREAL_0:1;
-  hence thesis by Th4;
+A2: p <= s by A1,Th1;
+A3: s <= q by A1,Th1;
+A4: p = s or p < s by A2,XXREAL_0:1;
+  s = q or s < q by A3,XXREAL_0:1;
+  hence thesis by A4,Th4;
 end;
 
 theorem Th6:
@@ -283,9 +278,10 @@ proof
   assume
 A1: x in [.p,q.];
   then reconsider s = x as ext-real number;
-A2: p <= s & s <= q by A1,Th1;
-  then p = s or p < s by XXREAL_0:1;
-  hence thesis by A2,Th2;
+A2: p <= s by A1,Th1;
+A3: s <= q by A1,Th1;
+  p = s or p < s by A2,XXREAL_0:1;
+  hence thesis by A3,Th2;
 end;
 
 theorem Th7:
@@ -294,7 +290,8 @@ proof
   assume
 A1: x in [.p,q.];
   then reconsider s = x as ext-real number;
-A2: p <= s & s <= q by A1,Th1;
+A2: p <= s by A1,Th1;
+  s <= q by A1,Th1;
   then q = s or s < q by XXREAL_0:1;
   hence thesis by A2,Th3;
 end;
@@ -305,9 +302,10 @@ proof
   assume
 A1: x in [.p,q.[;
   then reconsider s = x as ext-real number;
-A2: p <= s & s < q by A1,Th3;
-  then p = s or p < s by XXREAL_0:1;
-  hence thesis by A2,Th4;
+A2: p <= s by A1,Th3;
+A3: s < q by A1,Th3;
+  p = s or p < s by A2,XXREAL_0:1;
+  hence thesis by A3,Th4;
 end;
 
 theorem Th9:
@@ -316,7 +314,8 @@ proof
   assume
 A1: x in ].p,q.];
   then reconsider s = x as ext-real number;
-A2: p < s & s <= q by A1,Th2;
+A2: p < s by A1,Th2;
+  s <= q by A1,Th2;
   then q = s or s < q by XXREAL_0:1;
   hence thesis by A2,Th4;
 end;
@@ -327,9 +326,10 @@ proof
   assume
 A1: x in [.p,q.[;
   then reconsider s = x as ext-real number;
-A2: p <= s & s < q by A1,Th3;
-  then p = s or p < s by XXREAL_0:1;
-  hence thesis by A2,Th2;
+A2: p <= s by A1,Th3;
+A3: s < q by A1,Th3;
+  p = s or p < s by A2,XXREAL_0:1;
+  hence thesis by A3,Th2;
 end;
 
 theorem
@@ -338,7 +338,8 @@ proof
   assume
 A1: x in ].p,q.];
   then reconsider s = x as ext-real number;
-A2: p < s & s <= q by A1,Th2;
+A2: p < s by A1,Th2;
+  s <= q by A1,Th2;
   then q = s or s < q by XXREAL_0:1;
   hence thesis by A2,Th3;
 end;
@@ -349,8 +350,9 @@ proof
   assume
 A1: x in ].p,q.];
   then reconsider s = x as ext-real number;
-  p < s & s <= q by A1,Th2;
-  hence thesis by Th1;
+A2: p < s by A1,Th2;
+  s <= q by A1,Th2;
+  hence thesis by A2,Th1;
 end;
 
 theorem Th13:
@@ -359,8 +361,9 @@ proof
   assume
 A1: x in [.p,q.[;
   then reconsider s = x as ext-real number;
-  p <= s & s < q by A1,Th3;
-  hence thesis by Th1;
+A2: p <= s by A1,Th3;
+  s < q by A1,Th3;
+  hence thesis by A2,Th1;
 end;
 
 theorem Th14:
@@ -369,8 +372,9 @@ proof
   assume
 A1: x in ].p,q.[;
   then reconsider s = x as ext-real number;
-  p < s & s < q by A1,Th4;
-  hence thesis by Th3;
+A2: p < s by A1,Th4;
+  s < q by A1,Th4;
+  hence thesis by A2,Th3;
 end;
 
 theorem Th15:
@@ -379,16 +383,18 @@ proof
   assume
 A1: x in ].p,q.[;
   then reconsider s = x as ext-real number;
-  p < s & s < q by A1,Th4;
-  hence thesis by Th2;
+A2: p < s by A1,Th4;
+  s < q by A1,Th4;
+  hence thesis by A2,Th2;
 end;
 
 theorem Th16:
   x in ].p,q.[ implies x in [.p,q.] & x <> p & x <> q
 proof
-  assume x in ].p,q.[;
-  then x in ].p,q.] & x <> q by Th15;
-  hence thesis by Th12;
+  assume
+A1: x in ].p,q.[;
+  then x in ].p,q.] by Th15;
+  hence thesis by A1,Th12,Th15;
 end;
 
 theorem Th17: :: MEASURE5:14
@@ -470,43 +476,56 @@ theorem Th21:
   ].p,q.[ c= ].p,q.]
 proof
   let s;
-  assume s in ].p,q.[;
-  then p < s & s < q by Th4;
-  hence thesis by Th2;
+  assume
+A1: s in ].p,q.[;
+  then
+A2: p < s by Th4;
+  s < q by A1,Th4;
+  hence thesis by A2,Th2;
 end;
 
 theorem Th22:
   ].p,q.[ c= [.p,q.[
 proof
   let s;
-  assume s in ].p,q.[;
-  then p < s & s < q by Th4;
-  hence thesis by Th3;
+  assume
+A1: s in ].p,q.[;
+  then
+A2: p < s by Th4;
+  s < q by A1,Th4;
+  hence thesis by A2,Th3;
 end;
 
 theorem Th23:
   ].p,q.] c= [.p,q.]
 proof
   let s;
-  assume s in ].p,q.];
-  then p < s & s <= q by Th2;
-  hence thesis by Th1;
+  assume
+A1: s in ].p,q.];
+  then
+A2: p < s by Th2;
+  s <= q by A1,Th2;
+  hence thesis by A2,Th1;
 end;
 
 theorem Th24:
   [.p,q.[ c= [.p,q.]
 proof
   let s;
-  assume s in [.p,q.[;
-  then p <= s & s < q by Th3;
-  hence thesis by Th1;
+  assume
+A1: s in [.p,q.[;
+  then
+A2: p <= s by Th3;
+  s < q by A1,Th3;
+  hence thesis by A2,Th1;
 end;
 
 theorem Th25:
   ].p,q.[ c= [.p,q.]
 proof
-  ].p,q.[ c= [.p,q.[ & [.p,q.[ c= [.p,q.] by Th22,Th24;
-  hence thesis by XBOOLE_1:1;
+A1: ].p,q.[ c= [.p,q.[ by Th22;
+  [.p,q.[ c= [.p,q.] by Th24;
+  hence thesis by A1,XBOOLE_1:1;
 end;
 
 theorem :: MEASURE5:12,15
@@ -517,8 +536,9 @@ A1: p <= q;
   assume ].q,p.] <> {};
   then consider r such that
 A2: r in ].q,p.] by MEMBERED:8;
-  q < r & r <= p by A2,Th2;
-  hence contradiction by A1,XXREAL_0:2;
+A3: q < r by A2,Th2;
+  r <= p by A2,Th2;
+  hence contradiction by A1,A3,XXREAL_0:2;
 end;
 
 theorem Th27: :: MEASURE5:12,15
@@ -529,8 +549,9 @@ A1: p <= q;
   assume [.q,p.[ <> {};
   then consider r such that
 A2: r in [.q,p.[ by MEMBERED:8;
-  q <= r & r < p by A2,Th3;
-  hence contradiction by A1,XXREAL_0:2;
+A3: q <= r by A2,Th3;
+  r < p by A2,Th3;
+  hence contradiction by A1,A3,XXREAL_0:2;
 end;
 
 theorem Th28: :: MEASURE5:12,15
@@ -549,8 +570,9 @@ A1: p < q;
   assume [.q,p.] <> {};
   then consider r such that
 A2: r in [.q,p.] by MEMBERED:8;
-  q <= r & r <= p by A2,Th1;
-  hence contradiction by A1,XXREAL_0:2;
+A3: q <= r by A2,Th1;
+  r <= p by A2,Th1;
+  hence contradiction by A1,A3,XXREAL_0:2;
 end;
 
 theorem
@@ -573,21 +595,28 @@ end;
 theorem Th34:
   p <= r & s <= q implies [.r,s.] c= [.p,q.]
 proof
-  assume
-A1: p <= r & s <= q;
+  assume that
+A1: p <= r and
+A2: s <= q;
   let t;
-  assume t in [.r,s.];
-  then r <= t & t <= s by Th1;
-  then p <= t & t <= q by A1,XXREAL_0:2;
-  hence thesis by Th1;
+  assume
+A3: t in [.r,s.];
+  then
+A4: r <= t by Th1;
+A5: t <= s by A3,Th1;
+A6: p <= t by A1,A4,XXREAL_0:2;
+  t <= q by A2,A5,XXREAL_0:2;
+  hence thesis by A6,Th1;
 end;
 
 theorem Th35:
   p <= r & s <= q implies [.r,s.[ c= [.p,q.]
 proof
 A1: [.r,s.[ c= [.r,s.] by Th24;
-  assume p <= r & s <= q;
-  then [.r,s.] c= [.p,q.] by Th34;
+  assume that
+A2: p <= r and
+A3: s <= q;
+  [.r,s.] c= [.p,q.] by A2,A3,Th34;
   hence thesis by A1,XBOOLE_1:1;
 end;
 
@@ -595,8 +624,10 @@ theorem Th36:
   p <= r & s <= q implies ].r,s.] c= [.p,q.]
 proof
 A1: ].r,s.] c= [.r,s.] by Th23;
-  assume p <= r & s <= q;
-  then [.r,s.] c= [.p,q.] by Th34;
+  assume that
+A2: p <= r and
+A3: s <= q;
+  [.r,s.] c= [.p,q.] by A2,A3,Th34;
   hence thesis by A1,XBOOLE_1:1;
 end;
 
@@ -604,155 +635,214 @@ theorem Th37:
   p <= r & s <= q implies ].r,s.[ c= [.p,q.]
 proof
 A1: ].r,s.[ c= [.r,s.] by Th25;
-  assume p <= r & s <= q;
-  then [.r,s.] c= [.p,q.] by Th34;
+  assume that
+A2: p <= r and
+A3: s <= q;
+  [.r,s.] c= [.p,q.] by A2,A3,Th34;
   hence thesis by A1,XBOOLE_1:1;
 end;
 
 theorem Th38:
   p <= r & s <= q implies [.r,s.[ c= [.p,q.[
 proof
-  assume
-A1: p <= r & s <= q;
+  assume that
+A1: p <= r and
+A2: s <= q;
   let t;
-  assume t in [.r,s.[;
-  then r <= t & t < s by Th3;
-  then p <= t & t < q by A1,XXREAL_0:2;
-  hence thesis by Th3;
+  assume
+A3: t in [.r,s.[;
+  then
+A4: r <= t by Th3;
+A5: t < s by A3,Th3;
+A6: p <= t by A1,A4,XXREAL_0:2;
+  t < q by A2,A5,XXREAL_0:2;
+  hence thesis by A6,Th3;
 end;
 
 theorem Th39:
   p < r & s <= q implies [.r,s.] c= ].p,q.]
 proof
-  assume
-A1: p < r & s <= q;
+  assume that
+A1: p < r and
+A2: s <= q;
   let t;
-  assume t in [.r,s.];
-  then r <= t & t <= s by Th1;
-  then p <t & t <= q by A1,XXREAL_0:2;
-  hence thesis by Th2;
+  assume
+A3: t in [.r,s.];
+  then
+A4: r <= t by Th1;
+A5: t <= s by A3,Th1;
+A6: p <t by A1,A4,XXREAL_0:2;
+  t <= q by A2,A5,XXREAL_0:2;
+  hence thesis by A6,Th2;
 end;
 
 theorem Th40:
   p < r & s <= q implies [.r,s.[ c= ].p,q.]
 proof
 A1: [.r,s.[ c= [.r,s.] by Th24;
-  assume p < r & s <= q;
-  then [.r,s.] c= ].p,q.] by Th39;
+  assume that
+A2: p < r and
+A3: s <= q;
+  [.r,s.] c= ].p,q.] by A2,A3,Th39;
   hence thesis by A1,XBOOLE_1:1;
 end;
 
 theorem Th41:
   p <= r & s <= q implies ].r,s.[ c= ].p,q.]
 proof
-  assume
-A1: p <= r & s <= q;
+  assume that
+A1: p <= r and
+A2: s <= q;
   let t;
-  assume t in ].r,s.[;
-  then r < t & t < s by Th4;
-  then p < t & t < q by A1,XXREAL_0:2;
-  hence thesis by Th2;
+  assume
+A3: t in ].r,s.[;
+  then
+A4: r < t by Th4;
+A5: t < s by A3,Th4;
+A6: p < t by A1,A4,XXREAL_0:2;
+  t < q by A2,A5,XXREAL_0:2;
+  hence thesis by A6,Th2;
 end;
 
 theorem Th42:
   p <= r & s <= q implies ].r,s.] c= ].p,q.]
 proof
-  assume
-A1: p <= r & s <= q;
+  assume that
+A1: p <= r and
+A2: s <= q;
   let t;
-  assume t in ].r,s.];
-  then r < t & t <= s by Th2;
-  then p < t & t <= q by A1,XXREAL_0:2;
-  hence thesis by Th2;
+  assume
+A3: t in ].r,s.];
+  then
+A4: r < t by Th2;
+A5: t <= s by A3,Th2;
+A6: p < t by A1,A4,XXREAL_0:2;
+  t <= q by A2,A5,XXREAL_0:2;
+  hence thesis by A6,Th2;
 end;
 
 theorem Th43:
   p <= r & s < q implies [.r,s.] c= [.p,q.[
 proof
-  assume
-A1: p <= r & s < q;
+  assume that
+A1: p <= r and
+A2: s < q;
   let t;
-  assume t in [.r,s.];
-  then r <= t & t <= s by Th1;
-  then p <= t & t < q by A1,XXREAL_0:2;
-  hence thesis by Th3;
+  assume
+A3: t in [.r,s.];
+  then
+A4: r <= t by Th1;
+A5: t <= s by A3,Th1;
+A6: p <= t by A1,A4,XXREAL_0:2;
+  t < q by A2,A5,XXREAL_0:2;
+  hence thesis by A6,Th3;
 end;
 
 theorem Th44:
   p <= r & s < q implies ].r,s.] c= [.p,q.[
 proof
 A1: ].r,s.] c= [.r,s.] by Th23;
-  assume p <= r & s < q;
-  then [.r,s.] c= [.p,q.[ by Th43;
+  assume that
+A2: p <= r and
+A3: s < q;
+  [.r,s.] c= [.p,q.[ by A2,A3,Th43;
   hence thesis by A1,XBOOLE_1:1;
 end;
 
 theorem Th45:
   p <= r & s <= q implies ].r,s.[ c= [.p,q.[
 proof
-  assume
-A1: p <= r & s <= q;
+  assume that
+A1: p <= r and
+A2: s <= q;
   let t;
-  assume t in ].r,s.[;
-  then r < t & t < s by Th4;
-  then p <= t & t < q by A1,XXREAL_0:2;
-  hence thesis by Th3;
+  assume
+A3: t in ].r,s.[;
+  then
+A4: r < t by Th4;
+A5: t < s by A3,Th4;
+A6: p <= t by A1,A4,XXREAL_0:2;
+  t < q by A2,A5,XXREAL_0:2;
+  hence thesis by A6,Th3;
 end;
 
 theorem Th46:
   p <= r & s <= q implies ].r,s.[ c= ].p,q.[
 proof
-  assume
-A1: p <= r & s <= q;
+  assume that
+A1: p <= r and
+A2: s <= q;
   let t;
-  assume t in ].r,s.[;
-  then r < t & t < s by Th4;
-  then p < t & t < q by A1,XXREAL_0:2;
-  hence thesis by Th4;
+  assume
+A3: t in ].r,s.[;
+  then
+A4: r < t by Th4;
+A5: t < s by A3,Th4;
+A6: p < t by A1,A4,XXREAL_0:2;
+  t < q by A2,A5,XXREAL_0:2;
+  hence thesis by A6,Th4;
 end;
 
 theorem Th47:
   p < r & s < q implies [.r,s.] c= ].p,q.[
 proof
-  assume
-A1: p < r & s < q;
+  assume that
+A1: p < r and
+A2: s < q;
   let t;
-  assume t in [.r,s.];
-  then r <= t & t <= s by Th1;
-  then p < t & t < q by A1,XXREAL_0:2;
-  hence thesis by Th4;
+  assume
+A3: t in [.r,s.];
+  then
+A4: r <= t by Th1;
+A5: t <= s by A3,Th1;
+A6: p < t by A1,A4,XXREAL_0:2;
+  t < q by A2,A5,XXREAL_0:2;
+  hence thesis by A6,Th4;
 end;
 
 theorem Th48:
   p < r & s <= q implies [.r,s.[ c= ].p,q.[
 proof
-  assume
-A1: p < r & s <= q;
+  assume that
+A1: p < r and
+A2: s <= q;
   let t;
-  assume t in [.r,s.[;
-  then r <= t & t < s by Th3;
-  then p < t & t < q by A1,XXREAL_0:2;
-  hence thesis by Th4;
+  assume
+A3: t in [.r,s.[;
+  then
+A4: r <= t by Th3;
+A5: t < s by A3,Th3;
+A6: p < t by A1,A4,XXREAL_0:2;
+  t < q by A2,A5,XXREAL_0:2;
+  hence thesis by A6,Th4;
 end;
 
 theorem Th49:
   p <= r & s < q implies ].r,s.] c= ].p,q.[
 proof
-  assume
-A1: p <= r & s < q;
+  assume that
+A1: p <= r and
+A2: s < q;
   let t;
-  assume t in ].r,s.];
-  then r < t & t <= s by Th2;
-  then p < t & t < q by A1,XXREAL_0:2;
-  hence thesis by Th4;
+  assume
+A3: t in ].r,s.];
+  then
+A4: r < t by Th2;
+A5: t <= s by A3,Th2;
+A6: p < t by A1,A4,XXREAL_0:2;
+  t < q by A2,A5,XXREAL_0:2;
+  hence thesis by A6,Th4;
 end;
 
 theorem Th50:
   r <= s & [.r,s.] c= [.p,q.] implies p <= r & s <= q
 proof
-  assume r <= s;
-  then r in [.r,s.] & s in [.r,s.] by Th1;
-  hence thesis by Th1;
+  assume
+A1: r <= s;
+  then
+A2: r in [.r,s.] by Th1;
+  s in [.r,s.] by A1,Th1;
+  hence thesis by A2,Th1;
 end;
 
 theorem Th51:
@@ -763,15 +853,19 @@ A1: r < s and
 A2: ].r,s.[ c= [.p,q.];
   now
     let t;
-    assume r < t & t < s;
-    then t in ].r,s.[ by Th4;
+    assume that
+A3: r < t and
+A4: t < s;
+    t in ].r,s.[ by A3,A4,Th4;
     hence p <= t by A2,Th1;
   end;
   hence p <= r by A1,XREAL_1:230;
   now
     let t;
-    assume r < t & t < s;
-    then t in ].r,s.[ by Th4;
+    assume that
+A5: r < t and
+A6: t < s;
+    t in ].r,s.[ by A5,A6,Th4;
     hence t <= q by A2,Th1;
   end;
   hence thesis by A1,XREAL_1:231;
@@ -959,11 +1053,15 @@ proof
   assume that
 A1: p <= q and
 A2: [.p,q.] = [.r,s.];
-A3: r <= p & q <= s by A1,A2,Th50;
-  then r <= q by A1,XXREAL_0:2;
-  then r <= s by A3,XXREAL_0:2;
-  then p <= r & s <= q by A2,Th50;
-  hence thesis by A3,XXREAL_0:1;
+A3: r <= p by A1,A2,Th50;
+A4: q <= s by A1,A2,Th50;
+  r <= q by A1,A3,XXREAL_0:2;
+  then
+A5: r <= s by A4,XXREAL_0:2;
+  then
+A6: p <= r by A2,Th50;
+  s <= q by A2,A5,Th50;
+  hence thesis by A3,A4,A6,XXREAL_0:1;
 end;
 
 theorem
@@ -972,11 +1070,15 @@ proof
   assume that
 A1: p < q and
 A2: ].p,q.[ = ].r,s.[;
-A3: r <= p & q <= s by A1,A2,Th63;
-  then r < q by A1,XXREAL_0:2;
-  then r < s by A3,XXREAL_0:2;
-  then p <= r & s <= q by A2,Th63;
-  hence thesis by A3,XXREAL_0:1;
+A3: r <= p by A1,A2,Th63;
+A4: q <= s by A1,A2,Th63;
+  r < q by A1,A3,XXREAL_0:2;
+  then
+A5: r < s by A4,XXREAL_0:2;
+  then
+A6: p <= r by A2,Th63;
+  s <= q by A2,A5,Th63;
+  hence thesis by A3,A4,A6,XXREAL_0:1;
 end;
 
 theorem
@@ -985,11 +1087,15 @@ proof
   assume that
 A1: p < q and
 A2: ].p,q.] = ].r,s.];
-A3: r <= p & q <= s by A1,A2,Th61;
-  then r < q by A1,XXREAL_0:2;
-  then r < s by A3,XXREAL_0:2;
-  then p <= r & s <= q by A2,Th61;
-  hence thesis by A3,XXREAL_0:1;
+A3: r <= p by A1,A2,Th61;
+A4: q <= s by A1,A2,Th61;
+  r < q by A1,A3,XXREAL_0:2;
+  then
+A5: r < s by A4,XXREAL_0:2;
+  then
+A6: p <= r by A2,Th61;
+  s <= q by A2,A5,Th61;
+  hence thesis by A3,A4,A6,XXREAL_0:1;
 end;
 
 theorem
@@ -998,11 +1104,15 @@ proof
   assume that
 A1: p < q and
 A2: [.p,q.[ = [.r,s.[;
-A3: r <= p & q <= s by A1,A2,Th55;
-  then r < q by A1,XXREAL_0:2;
-  then r < s by A3,XXREAL_0:2;
-  then p <= r & s <= q by A2,Th55;
-  hence thesis by A3,XXREAL_0:1;
+A3: r <= p by A1,A2,Th55;
+A4: q <= s by A1,A2,Th55;
+  r < q by A1,A3,XXREAL_0:2;
+  then
+A5: r < s by A4,XXREAL_0:2;
+  then
+A6: p <= r by A2,Th55;
+  s <= q by A2,A5,Th55;
+  hence thesis by A3,A4,A6,XXREAL_0:1;
 end;
 
 theorem
@@ -1196,11 +1306,13 @@ proof
 A1: r <= s;
   assume
 A2: [.r,s.] c< [.p,q.];
-  then [.r,s.] c= [.p,q.] by XBOOLE_0:def 8;
   then
-A3: p <= r & s <= q by A1,Th50;
+A3: [.r,s.] c= [.p,q.] by XBOOLE_0:def 8;
+  then
+A4: p <= r by A1,Th50;
+A5: s <= q by A1,A3,Th50;
   p <> r or s <> q by A2;
-  hence thesis by A3,XXREAL_0:1;
+  hence thesis by A4,A5,XXREAL_0:1;
 end;
 
 theorem
@@ -1239,10 +1351,13 @@ proof
   assume
 A1: r < s;
   let t;
-  assume t in [.s,p.[;
-  then s <= t & t < p by Th3;
-  then r < t & t < p by A1,XXREAL_0:2;
-  hence thesis by Th4;
+  assume
+A2: t in [.s,p.[;
+  then s <= t by Th3;
+  then
+A3: r < t by A1,XXREAL_0:2;
+  t < p by A2,Th3;
+  hence thesis by A3,Th4;
 end;
 
 theorem Th85: :: MEASURE5:15
@@ -1253,17 +1368,23 @@ A1: s <= r;
   thus [.r,s.] c= {r}
   proof
     let t;
-    assume t in [.r,s.];
-    then r <= t & t <= s by Th1;
-    then r <= t & t <= r by A1,XXREAL_0:2;
-    then r = t by XXREAL_0:1;
+    assume
+A2: t in [.r,s.];
+    then
+A3: t <= s by Th1;
+A4: r <= t by A2,Th1;
+    t <= r by A1,A3,XXREAL_0:2;
+    then r = t by A4,XXREAL_0:1;
     hence thesis by TARSKI:def 1;
   end;
   let t;
-  assume t in [.r,s.];
-  then r <= t & t <= s by Th1;
-  then s <= t & t <= s by A1,XXREAL_0:2;
-  then s = t by XXREAL_0:1;
+  assume
+A5: t in [.r,s.];
+  then r <= t by Th1;
+  then
+A6: s <= t by A1,XXREAL_0:2;
+  t <= s by A5,Th1;
+  then s = t by A6,XXREAL_0:1;
   hence thesis by TARSKI:def 1;
 end;
 
@@ -1271,9 +1392,12 @@ theorem
   ].r,s.[ misses {r,s}
 proof
   let t;
-  assume t in ].r,s.[;
-  then r < t & t < s by Th4;
-  hence thesis by TARSKI:def 2;
+  assume
+A1: t in ].r,s.[;
+  then
+A2: r < t by Th4;
+  t < s by A1,Th4;
+  hence thesis by A2,TARSKI:def 2;
 end;
 
 theorem
@@ -2208,8 +2332,9 @@ proof
   assume r <= s;
   then
 A1: [.r,s.] = ].r,s.[ \/ {r,s} by Th128;
-  not r in ].r,s.[ & not s in ].r,s.[ by Th4;
-  hence thesis by A1,ZFMISC_1:145;
+A2: not r in ].r,s.[ by Th4;
+  not s in ].r,s.[ by Th4;
+  hence thesis by A1,A2,ZFMISC_1:145;
 end;
 
 theorem
@@ -2264,14 +2389,18 @@ A2: s < t;
       assume
 A3:   x in ].r,s.] /\ [.s,t.[;
       then reconsider p = x as ext-real number;
-      p in ].r,s.] & p in [.s,t.[ by A3,XBOOLE_0:def 4;
-      then s <= p & p <= s by Th2,Th3;
-      hence x = s by XXREAL_0:1;
+A4:   p in ].r,s.] by A3,XBOOLE_0:def 4;
+      p in [.s,t.[ by A3,XBOOLE_0:def 4;
+      then
+A5:   s <= p by Th3;
+      p <= s by A4,Th2;
+      hence x = s by A5,XXREAL_0:1;
     end;
     assume
-A4: x = s;
-    s in ].r,s.] & s in [.s,t.[ by A1,A2,Th2,Th3;
-    hence x in ].r,s.] /\ [.s,t.[ by A4,XBOOLE_0:def 4;
+A6: x = s;
+A7: s in ].r,s.] by A1,Th2;
+    s in [.s,t.[ by A2,Th3;
+    hence x in ].r,s.] /\ [.s,t.[ by A6,A7,XBOOLE_0:def 4;
   end;
   hence thesis by TARSKI:def 1;
 end;
@@ -2282,17 +2411,31 @@ proof
   let t;
   thus t in [.r,s.[ /\ [.p,q.[ implies t in [.max(r,p),min(s,q).[
   proof
-    assume t in [.r,s.[ /\ [.p,q.[;
-    then t in [.r,s.[ & t in [.p,q.[ by XBOOLE_0:def 4;
-    then r <= t & t < s & p <= t & t < q by Th3;
-    then max(r,p) <= t & t < min(s,q) by XXREAL_0:21,28;
-    hence thesis by Th3;
+    assume
+A1: t in [.r,s.[ /\ [.p,q.[;
+    then
+A2: t in [.r,s.[ by XBOOLE_0:def 4;
+A3: t in [.p,q.[ by A1,XBOOLE_0:def 4;
+A4: r <= t by A2,Th3;
+A5: t < s by A2,Th3;
+A6: p <= t by A3,Th3;
+A7: t < q by A3,Th3;
+A8: max(r,p) <= t by A4,A6,XXREAL_0:28;
+    t < min(s,q) by A5,A7,XXREAL_0:21;
+    hence thesis by A8,Th3;
   end;
-  assume t in [.max(r,p),min(s,q).[;
-  then max(r,p) <= t & t < min(s,q) by Th3;
-  then r <= t & p <= t & t < s & t < q by XXREAL_0:23,30;
-  then t in [.r,s.[ & t in [.p,q.[ by Th3;
-  hence thesis by XBOOLE_0:def 4;
+  assume
+A9: t in [.max(r,p),min(s,q).[;
+  then
+A10: max(r,p) <= t by Th3;
+A11: t < min(s,q) by A9,Th3;
+A12: r <= t by A10,XXREAL_0:30;
+A13: p <= t by A10,XXREAL_0:30;
+A14: t < s by A11,XXREAL_0:23;
+A15: t < q by A11,XXREAL_0:23;
+A16: t in [.r,s.[ by A12,A14,Th3;
+  t in [.p,q.[ by A13,A15,Th3;
+  hence thesis by A16,XBOOLE_0:def 4;
 end;
 
 theorem
@@ -2301,17 +2444,31 @@ proof
   let t;
   thus t in [.r,s.] /\ [.p,q.] implies t in [.max(r,p),min(s,q).]
   proof
-    assume t in [.r,s.] /\ [.p,q.];
-    then t in [.r,s.] & t in [.p,q.] by XBOOLE_0:def 4;
-    then r <= t & t <= s & p <= t & t <= q by Th1;
-    then max(r,p) <= t & t <= min(s,q) by XXREAL_0:20,28;
-    hence thesis by Th1;
+    assume
+A1: t in [.r,s.] /\ [.p,q.];
+    then
+A2: t in [.r,s.] by XBOOLE_0:def 4;
+A3: t in [.p,q.] by A1,XBOOLE_0:def 4;
+A4: r <= t by A2,Th1;
+A5: t <= s by A2,Th1;
+A6: p <= t by A3,Th1;
+A7: t <= q by A3,Th1;
+A8: max(r,p) <= t by A4,A6,XXREAL_0:28;
+    t <= min(s,q) by A5,A7,XXREAL_0:20;
+    hence thesis by A8,Th1;
   end;
-  assume t in [.max(r,p),min(s,q).];
-  then max(r,p) <= t & t <= min(s,q) by Th1;
-  then r <= t & p <= t & t <= s & t <= q by XXREAL_0:22,30;
-  then t in [.r,s.] & t in [.p,q.] by Th1;
-  hence thesis by XBOOLE_0:def 4;
+  assume
+A9: t in [.max(r,p),min(s,q).];
+  then
+A10: max(r,p) <= t by Th1;
+A11: t <= min(s,q) by A9,Th1;
+A12: r <= t by A10,XXREAL_0:30;
+A13: p <= t by A10,XXREAL_0:30;
+A14: t <= s by A11,XXREAL_0:22;
+A15: t <= q by A11,XXREAL_0:22;
+A16: t in [.r,s.] by A12,A14,Th1;
+  t in [.p,q.] by A13,A15,Th1;
+  hence thesis by A16,XBOOLE_0:def 4;
 end;
 
 theorem
@@ -2320,17 +2477,31 @@ proof
   let t;
   thus t in ].r,s.] /\ ].p,q.] implies t in ].max(r,p),min(s,q).]
   proof
-    assume t in ].r,s.] /\ ].p,q.];
-    then t in ].r,s.] & t in ].p,q.] by XBOOLE_0:def 4;
-    then r < t & t <= s & p < t & t <= q by Th2;
-    then max(r,p) < t & t <= min(s,q) by XXREAL_0:20,29;
-    hence thesis by Th2;
+    assume
+A1: t in ].r,s.] /\ ].p,q.];
+    then
+A2: t in ].r,s.] by XBOOLE_0:def 4;
+A3: t in ].p,q.] by A1,XBOOLE_0:def 4;
+A4: r < t by A2,Th2;
+A5: t <= s by A2,Th2;
+A6: p < t by A3,Th2;
+A7: t <= q by A3,Th2;
+A8: max(r,p) < t by A4,A6,XXREAL_0:29;
+    t <= min(s,q) by A5,A7,XXREAL_0:20;
+    hence thesis by A8,Th2;
   end;
-  assume t in ].max(r,p),min(s,q).];
-  then max(r,p) < t & t <= min(s,q) by Th2;
-  then r < t & p < t & t <= s & t <= q by XXREAL_0:22,31;
-  then t in ].r,s.] & t in ].p,q.] by Th2;
-  hence thesis by XBOOLE_0:def 4;
+  assume
+A9: t in ].max(r,p),min(s,q).];
+  then
+A10: max(r,p) < t by Th2;
+A11: t <= min(s,q) by A9,Th2;
+A12: r < t by A10,XXREAL_0:31;
+A13: p < t by A10,XXREAL_0:31;
+A14: t <= s by A11,XXREAL_0:22;
+A15: t <= q by A11,XXREAL_0:22;
+A16: t in ].r,s.] by A12,A14,Th2;
+  t in ].p,q.] by A13,A15,Th2;
+  hence thesis by A16,XBOOLE_0:def 4;
 end;
 
 theorem
@@ -2339,17 +2510,31 @@ proof
   let t;
   thus t in ].r,s.[ /\ ].p,q.[ implies t in ].max(r,p),min(s,q).[
   proof
-    assume t in ].r,s.[ /\ ].p,q.[;
-    then t in ].r,s.[ & t in ].p,q.[ by XBOOLE_0:def 4;
-    then r < t & t < s & p < t & t < q by Th4;
-    then max(r,p) < t & t < min(s,q) by XXREAL_0:21,29;
-    hence thesis by Th4;
+    assume
+A1: t in ].r,s.[ /\ ].p,q.[;
+    then
+A2: t in ].r,s.[ by XBOOLE_0:def 4;
+A3: t in ].p,q.[ by A1,XBOOLE_0:def 4;
+A4: r < t by A2,Th4;
+A5: t < s by A2,Th4;
+A6: p < t by A3,Th4;
+A7: t < q by A3,Th4;
+A8: max(r,p) < t by A4,A6,XXREAL_0:29;
+    t < min(s,q) by A5,A7,XXREAL_0:21;
+    hence thesis by A8,Th4;
   end;
-  assume t in ].max(r,p),min(s,q).[;
-  then max(r,p) < t & t < min(s,q) by Th4;
-  then r < t & p < t & t < s & t < q by XXREAL_0:23,31;
-  then t in ].r,s.[ & t in ].p,q.[ by Th4;
-  hence thesis by XBOOLE_0:def 4;
+  assume
+A9: t in ].max(r,p),min(s,q).[;
+  then
+A10: max(r,p) < t by Th4;
+A11: t < min(s,q) by A9,Th4;
+A12: r < t by A10,XXREAL_0:31;
+A13: p < t by A10,XXREAL_0:31;
+A14: t < s by A11,XXREAL_0:23;
+A15: t < q by A11,XXREAL_0:23;
+A16: t in ].r,s.[ by A12,A14,Th4;
+  t in ].p,q.[ by A13,A15,Th4;
+  hence thesis by A16,XBOOLE_0:def 4;
 end;
 
 theorem
@@ -2361,17 +2546,25 @@ A2: s <= q;
   let t;
   thus t in [.r,s.] /\ [.p,q.] implies t in [.p,s.]
   proof
-    assume t in [.r,s.] /\ [.p,q.];
-    then t in [.r,s.] & t in [.p,q.] by XBOOLE_0:def 4;
-    then t <= s & p <= t by Th1;
-    hence thesis by Th1;
+    assume
+A3: t in [.r,s.] /\ [.p,q.];
+    then
+A4: t in [.r,s.] by XBOOLE_0:def 4;
+A5: t in [.p,q.] by A3,XBOOLE_0:def 4;
+A6: t <= s by A4,Th1;
+    p <= t by A5,Th1;
+    hence thesis by A6,Th1;
   end;
-  assume t in [.p,s.];
+  assume
+A7: t in [.p,s.];
   then
-A3: p <= t & t <= s by Th1;
-  then r <= t & t <= q by A1,A2,XXREAL_0:2;
-  then t in [.r,s.] & t in [.p,q.] by A3,Th1;
-  hence thesis by XBOOLE_0:def 4;
+A8: p <= t by Th1;
+A9: t <= s by A7,Th1;
+A10: r <= t by A1,A8,XXREAL_0:2;
+A11: t <= q by A2,A9,XXREAL_0:2;
+A12: t in [.r,s.] by A9,A10,Th1;
+  t in [.p,q.] by A8,A11,Th1;
+  hence thesis by A12,XBOOLE_0:def 4;
 end;
 
 theorem
@@ -2383,17 +2576,25 @@ A2: s <= q;
   let t;
   thus t in [.r,s.[ /\ [.p,q.] implies t in [.p,s.[
   proof
-    assume t in [.r,s.[ /\ [.p,q.];
-    then t in [.r,s.[ & t in [.p,q.] by XBOOLE_0:def 4;
-    then t < s & p <= t by Th1,Th3;
-    hence thesis by Th3;
+    assume
+A3: t in [.r,s.[ /\ [.p,q.];
+    then
+A4: t in [.r,s.[ by XBOOLE_0:def 4;
+A5: t in [.p,q.] by A3,XBOOLE_0:def 4;
+A6: t < s by A4,Th3;
+    p <= t by A5,Th1;
+    hence thesis by A6,Th3;
   end;
-  assume t in [.p,s.[;
+  assume
+A7: t in [.p,s.[;
   then
-A3: p <= t & t < s by Th3;
-  then r <= t & t <= q by A1,A2,XXREAL_0:2;
-  then t in [.r,s.[ & t in [.p,q.] by A3,Th1,Th3;
-  hence thesis by XBOOLE_0:def 4;
+A8: p <= t by Th3;
+A9: t < s by A7,Th3;
+A10: r <= t by A1,A8,XXREAL_0:2;
+A11: t <= q by A2,A9,XXREAL_0:2;
+A12: t in [.r,s.[ by A9,A10,Th3;
+  t in [.p,q.] by A8,A11,Th1;
+  hence thesis by A12,XBOOLE_0:def 4;
 end;
 
 theorem
@@ -2405,17 +2606,26 @@ A2: s > q;
   let t;
   thus t in [.r,s.[ /\ [.p,q.] implies t in [.r,q.]
   proof
-    assume t in [.r,s.[ /\ [.p,q.];
-    then t in [.r,s.[ & t in [.p,q.] by XBOOLE_0:def 4;
-    then r <= t & t <= q by Th1,Th3;
-    hence thesis by Th1;
+    assume
+A3: t in [.r,s.[ /\ [.p,q.];
+    then
+A4: t in [.r,s.[ by XBOOLE_0:def 4;
+A5: t in [.p,q.] by A3,XBOOLE_0:def 4;
+A6: r <= t by A4,Th3;
+    t <= q by A5,Th1;
+    hence thesis by A6,Th1;
   end;
-  assume t in [.r,q.];
+  assume
+A7: t in [.r,q.];
   then
-A3: r <= t & t <= q by Th1;
-  then t < s & p <= t by A1,A2,XXREAL_0:2;
-  then t in [.r,s.[ & t in [.p,q.] by A3,Th1,Th3;
-  hence thesis by XBOOLE_0:def 4;
+A8: r <= t by Th1;
+A9: t <= q by A7,Th1;
+  then
+A10: t < s by A2,XXREAL_0:2;
+A11: p <= t by A1,A8,XXREAL_0:2;
+A12: t in [.r,s.[ by A8,A10,Th3;
+  t in [.p,q.] by A9,A11,Th1;
+  hence thesis by A12,XBOOLE_0:def 4;
 end;
 
 theorem
@@ -2427,17 +2637,25 @@ A2: s <= q;
   let t;
   thus t in ].r,s.] /\ [.p,q.] implies t in [.p,s.]
   proof
-    assume t in ].r,s.] /\ [.p,q.];
-    then t in ].r,s.] & t in [.p,q.] by XBOOLE_0:def 4;
-    then t <= s & p <= t by Th1,Th2;
-    hence thesis by Th1;
+    assume
+A3: t in ].r,s.] /\ [.p,q.];
+    then
+A4: t in ].r,s.] by XBOOLE_0:def 4;
+A5: t in [.p,q.] by A3,XBOOLE_0:def 4;
+A6: t <= s by A4,Th2;
+    p <= t by A5,Th1;
+    hence thesis by A6,Th1;
   end;
-  assume t in [.p,s.];
+  assume
+A7: t in [.p,s.];
   then
-A3: p <= t & t <= s by Th1;
-  then r < t & t <= q by A1,A2,XXREAL_0:2;
-  then t in ].r,s.] & t in [.p,q.] by A3,Th1,Th2;
-  hence thesis by XBOOLE_0:def 4;
+A8: p <= t by Th1;
+A9: t <= s by A7,Th1;
+A10: r < t by A1,A8,XXREAL_0:2;
+A11: t <= q by A2,A9,XXREAL_0:2;
+A12: t in ].r,s.] by A9,A10,Th2;
+  t in [.p,q.] by A8,A11,Th1;
+  hence thesis by A12,XBOOLE_0:def 4;
 end;
 
 theorem
@@ -2449,17 +2667,26 @@ A2: s >= q;
   let t;
   thus t in ].r,s.] /\ [.p,q.] implies t in ].r,q.]
   proof
-    assume t in ].r,s.] /\ [.p,q.];
-    then t in ].r,s.] & t in [.p,q.] by XBOOLE_0:def 4;
-    then r < t & t <= q by Th1,Th2;
-    hence thesis by Th2;
+    assume
+A3: t in ].r,s.] /\ [.p,q.];
+    then
+A4: t in ].r,s.] by XBOOLE_0:def 4;
+A5: t in [.p,q.] by A3,XBOOLE_0:def 4;
+A6: r < t by A4,Th2;
+    t <= q by A5,Th1;
+    hence thesis by A6,Th2;
   end;
-  assume t in ].r,q.];
+  assume
+A7: t in ].r,q.];
   then
-A3: r < t & t <= q by Th2;
-  then t <= s & p <= t by A1,A2,XXREAL_0:2;
-  then t in ].r,s.] & t in [.p,q.] by A3,Th1,Th2;
-  hence thesis by XBOOLE_0:def 4;
+A8: r < t by Th2;
+A9: t <= q by A7,Th2;
+  then
+A10: t <= s by A2,XXREAL_0:2;
+A11: p <= t by A1,A8,XXREAL_0:2;
+A12: t in ].r,s.] by A8,A10,Th2;
+  t in [.p,q.] by A9,A11,Th1;
+  hence thesis by A12,XBOOLE_0:def 4;
 end;
 
 theorem
@@ -2471,17 +2698,25 @@ A2: s <= q;
   let t;
   thus t in ].r,s.[ /\ [.p,q.] implies t in [.p,s.[
   proof
-    assume t in ].r,s.[ /\ [.p,q.];
-    then t in ].r,s.[ & t in [.p,q.] by XBOOLE_0:def 4;
-    then t < s & p <= t by Th1,Th4;
-    hence thesis by Th3;
+    assume
+A3: t in ].r,s.[ /\ [.p,q.];
+    then
+A4: t in ].r,s.[ by XBOOLE_0:def 4;
+A5: t in [.p,q.] by A3,XBOOLE_0:def 4;
+A6: t < s by A4,Th4;
+    p <= t by A5,Th1;
+    hence thesis by A6,Th3;
   end;
-  assume t in [.p,s.[;
+  assume
+A7: t in [.p,s.[;
   then
-A3: p <= t & t < s by Th3;
-  then r < t & t <= q by A1,A2,XXREAL_0:2;
-  then t in ].r,s.[ & t in [.p,q.] by A3,Th1,Th4;
-  hence thesis by XBOOLE_0:def 4;
+A8: p <= t by Th3;
+A9: t < s by A7,Th3;
+A10: r < t by A1,A8,XXREAL_0:2;
+A11: t <= q by A2,A9,XXREAL_0:2;
+A12: t in ].r,s.[ by A9,A10,Th4;
+  t in [.p,q.] by A8,A11,Th1;
+  hence thesis by A12,XBOOLE_0:def 4;
 end;
 
 theorem
@@ -2493,17 +2728,26 @@ A2: s > q;
   let t;
   thus t in ].r,s.[ /\ [.p,q.] implies t in ].r,q.]
   proof
-    assume t in ].r,s.[ /\ [.p,q.];
-    then t in ].r,s.[ & t in [.p,q.] by XBOOLE_0:def 4;
-    then r < t & t <= q by Th1,Th4;
-    hence thesis by Th2;
+    assume
+A3: t in ].r,s.[ /\ [.p,q.];
+    then
+A4: t in ].r,s.[ by XBOOLE_0:def 4;
+A5: t in [.p,q.] by A3,XBOOLE_0:def 4;
+A6: r < t by A4,Th4;
+    t <= q by A5,Th1;
+    hence thesis by A6,Th2;
   end;
-  assume t in ].r,q.];
+  assume
+A7: t in ].r,q.];
   then
-A3: r < t & t <= q by Th2;
-  then t < s & p <= t by A1,A2,XXREAL_0:2;
-  then t in ].r,s.[ & t in [.p,q.] by A3,Th1,Th4;
-  hence thesis by XBOOLE_0:def 4;
+A8: r < t by Th2;
+A9: t <= q by A7,Th2;
+  then
+A10: t < s by A2,XXREAL_0:2;
+A11: p <= t by A1,A8,XXREAL_0:2;
+A12: t in ].r,s.[ by A8,A10,Th4;
+  t in [.p,q.] by A9,A11,Th1;
+  hence thesis by A12,XBOOLE_0:def 4;
 end;
 
 theorem
@@ -2515,17 +2759,25 @@ A2: s <= q;
   let t;
   thus t in [.r,s.[ /\ [.p,q.[ implies t in [.p,s.[
   proof
-    assume t in [.r,s.[ /\ [.p,q.[;
-    then t in [.r,s.[ & t in [.p,q.[ by XBOOLE_0:def 4;
-    then t < s & p <= t by Th3;
-    hence thesis by Th3;
+    assume
+A3: t in [.r,s.[ /\ [.p,q.[;
+    then
+A4: t in [.r,s.[ by XBOOLE_0:def 4;
+A5: t in [.p,q.[ by A3,XBOOLE_0:def 4;
+A6: t < s by A4,Th3;
+    p <= t by A5,Th3;
+    hence thesis by A6,Th3;
   end;
-  assume t in [.p,s.[;
+  assume
+A7: t in [.p,s.[;
   then
-A3: p <= t & t < s by Th3;
-  then r <= t & t < q by A1,A2,XXREAL_0:2;
-  then t in [.r,s.[ & t in [.p,q.[ by A3,Th3;
-  hence thesis by XBOOLE_0:def 4;
+A8: p <= t by Th3;
+A9: t < s by A7,Th3;
+A10: r <= t by A1,A8,XXREAL_0:2;
+A11: t < q by A2,A9,XXREAL_0:2;
+A12: t in [.r,s.[ by A9,A10,Th3;
+  t in [.p,q.[ by A8,A11,Th3;
+  hence thesis by A12,XBOOLE_0:def 4;
 end;
 
 theorem
@@ -2537,17 +2789,26 @@ A2: s >= q;
   let t;
   thus t in [.r,s.[ /\ [.p,q.[ implies t in [.r,q.[
   proof
-    assume t in [.r,s.[ /\ [.p,q.[;
-    then t in [.r,s.[ & t in [.p,q.[ by XBOOLE_0:def 4;
-    then r <= t & t < q by Th3;
-    hence thesis by Th3;
+    assume
+A3: t in [.r,s.[ /\ [.p,q.[;
+    then
+A4: t in [.r,s.[ by XBOOLE_0:def 4;
+A5: t in [.p,q.[ by A3,XBOOLE_0:def 4;
+A6: r <= t by A4,Th3;
+    t < q by A5,Th3;
+    hence thesis by A6,Th3;
   end;
-  assume t in [.r,q.[;
+  assume
+A7: t in [.r,q.[;
   then
-A3: r <= t & t < q by Th3;
-  then t < s & p <= t by A1,A2,XXREAL_0:2;
-  then t in [.r,s.[ & t in [.p,q.[ by A3,Th3;
-  hence thesis by XBOOLE_0:def 4;
+A8: r <= t by Th3;
+A9: t < q by A7,Th3;
+  then
+A10: t < s by A2,XXREAL_0:2;
+A11: p <= t by A1,A8,XXREAL_0:2;
+A12: t in [.r,s.[ by A8,A10,Th3;
+  t in [.p,q.[ by A9,A11,Th3;
+  hence thesis by A12,XBOOLE_0:def 4;
 end;
 
 theorem Th152:
@@ -2559,17 +2820,25 @@ A2: s < q;
   let t;
   thus t in ].r,s.] /\ [.p,q.[ implies t in [.p,s.]
   proof
-    assume t in ].r,s.] /\ [.p,q.[;
-    then t in ].r,s.] & t in [.p,q.[ by XBOOLE_0:def 4;
-    then t <= s & p <= t by Th2,Th3;
-    hence thesis by Th1;
+    assume
+A3: t in ].r,s.] /\ [.p,q.[;
+    then
+A4: t in ].r,s.] by XBOOLE_0:def 4;
+A5: t in [.p,q.[ by A3,XBOOLE_0:def 4;
+A6: t <= s by A4,Th2;
+    p <= t by A5,Th3;
+    hence thesis by A6,Th1;
   end;
-  assume t in [.p,s.];
+  assume
+A7: t in [.p,s.];
   then
-A3: p <= t & t <= s by Th1;
-  then r < t & t < q by A1,A2,XXREAL_0:2;
-  then t in ].r,s.] & t in [.p,q.[ by A3,Th2,Th3;
-  hence thesis by XBOOLE_0:def 4;
+A8: p <= t by Th1;
+A9: t <= s by A7,Th1;
+A10: r < t by A1,A8,XXREAL_0:2;
+A11: t < q by A2,A9,XXREAL_0:2;
+A12: t in ].r,s.] by A9,A10,Th2;
+  t in [.p,q.[ by A8,A11,Th3;
+  hence thesis by A12,XBOOLE_0:def 4;
 end;
 
 theorem
@@ -2581,17 +2850,26 @@ A2: s >= q;
   let t;
   thus t in ].r,s.] /\ [.p,q.[ implies t in ].r,q.[
   proof
-    assume t in ].r,s.] /\ [.p,q.[;
-    then t in ].r,s.] & t in [.p,q.[ by XBOOLE_0:def 4;
-    then r < t & t < q by Th2,Th3;
-    hence thesis by Th4;
+    assume
+A3: t in ].r,s.] /\ [.p,q.[;
+    then
+A4: t in ].r,s.] by XBOOLE_0:def 4;
+A5: t in [.p,q.[ by A3,XBOOLE_0:def 4;
+A6: r < t by A4,Th2;
+    t < q by A5,Th3;
+    hence thesis by A6,Th4;
   end;
-  assume t in ].r,q.[;
+  assume
+A7: t in ].r,q.[;
   then
-A3: r < t & t < q by Th4;
-  then t <= s & p <= t by A1,A2,XXREAL_0:2;
-  then t in ].r,s.] & t in [.p,q.[ by A3,Th2,Th3;
-  hence thesis by XBOOLE_0:def 4;
+A8: r < t by Th4;
+A9: t < q by A7,Th4;
+  then
+A10: t <= s by A2,XXREAL_0:2;
+A11: p <= t by A1,A8,XXREAL_0:2;
+A12: t in ].r,s.] by A8,A10,Th2;
+  t in [.p,q.[ by A9,A11,Th3;
+  hence thesis by A12,XBOOLE_0:def 4;
 end;
 
 theorem Th154:
@@ -2603,17 +2881,25 @@ A2: s <= q;
   let t;
   thus t in ].r,s.[ /\ [.p,q.[ implies t in [.p,s.[
   proof
-    assume t in ].r,s.[ /\ [.p,q.[;
-    then t in ].r,s.[ & t in [.p,q.[ by XBOOLE_0:def 4;
-    then t < s & p <= t by Th3,Th4;
-    hence thesis by Th3;
+    assume
+A3: t in ].r,s.[ /\ [.p,q.[;
+    then
+A4: t in ].r,s.[ by XBOOLE_0:def 4;
+A5: t in [.p,q.[ by A3,XBOOLE_0:def 4;
+A6: t < s by A4,Th4;
+    p <= t by A5,Th3;
+    hence thesis by A6,Th3;
   end;
-  assume t in [.p,s.[;
+  assume
+A7: t in [.p,s.[;
   then
-A3: p <= t & t < s by Th3;
-  then r < t & t < q by A1,A2,XXREAL_0:2;
-  then t in ].r,s.[ & t in [.p,q.[ by A3,Th3,Th4;
-  hence thesis by XBOOLE_0:def 4;
+A8: p <= t by Th3;
+A9: t < s by A7,Th3;
+A10: r < t by A1,A8,XXREAL_0:2;
+A11: t < q by A2,A9,XXREAL_0:2;
+A12: t in ].r,s.[ by A9,A10,Th4;
+  t in [.p,q.[ by A8,A11,Th3;
+  hence thesis by A12,XBOOLE_0:def 4;
 end;
 
 theorem
@@ -2625,17 +2911,26 @@ A2: s >= q;
   let t;
   thus t in ].r,s.[ /\ [.p,q.[ implies t in ].r,q.[
   proof
-    assume t in ].r,s.[ /\ [.p,q.[;
-    then t in ].r,s.[ & t in [.p,q.[ by XBOOLE_0:def 4;
-    then r < t & t < q by Th3,Th4;
-    hence thesis by Th4;
+    assume
+A3: t in ].r,s.[ /\ [.p,q.[;
+    then
+A4: t in ].r,s.[ by XBOOLE_0:def 4;
+A5: t in [.p,q.[ by A3,XBOOLE_0:def 4;
+A6: r < t by A4,Th4;
+    t < q by A5,Th3;
+    hence thesis by A6,Th4;
   end;
-  assume t in ].r,q.[;
+  assume
+A7: t in ].r,q.[;
   then
-A3: r < t & t < q by Th4;
-  then t < s & p <= t by A1,A2,XXREAL_0:2;
-  then t in ].r,s.[ & t in [.p,q.[ by A3,Th3,Th4;
-  hence thesis by XBOOLE_0:def 4;
+A8: r < t by Th4;
+A9: t < q by A7,Th4;
+  then
+A10: t < s by A2,XXREAL_0:2;
+A11: p <= t by A1,A8,XXREAL_0:2;
+A12: t in ].r,s.[ by A8,A10,Th4;
+  t in [.p,q.[ by A9,A11,Th3;
+  hence thesis by A12,XBOOLE_0:def 4;
 end;
 
 theorem
@@ -2647,17 +2942,25 @@ A2: s <= q;
   let t;
   thus t in ].r,s.] /\ ].p,q.] implies t in ].p,s.]
   proof
-    assume t in ].r,s.] /\ ].p,q.];
-    then t in ].r,s.] & t in ].p,q.] by XBOOLE_0:def 4;
-    then t <= s & p < t by Th2;
-    hence thesis by Th2;
+    assume
+A3: t in ].r,s.] /\ ].p,q.];
+    then
+A4: t in ].r,s.] by XBOOLE_0:def 4;
+A5: t in ].p,q.] by A3,XBOOLE_0:def 4;
+A6: t <= s by A4,Th2;
+    p < t by A5,Th2;
+    hence thesis by A6,Th2;
   end;
-  assume t in ].p,s.];
+  assume
+A7: t in ].p,s.];
   then
-A3: p < t & t <= s by Th2;
-  then r < t & t <= q by A1,A2,XXREAL_0:2;
-  then t in ].r,s.] & t in ].p,q.] by A3,Th2;
-  hence thesis by XBOOLE_0:def 4;
+A8: p < t by Th2;
+A9: t <= s by A7,Th2;
+A10: r < t by A1,A8,XXREAL_0:2;
+A11: t <= q by A2,A9,XXREAL_0:2;
+A12: t in ].r,s.] by A9,A10,Th2;
+  t in ].p,q.] by A8,A11,Th2;
+  hence thesis by A12,XBOOLE_0:def 4;
 end;
 
 theorem
@@ -2669,17 +2972,26 @@ A2: s >= q;
   let t;
   thus t in ].r,s.] /\ ].p,q.] implies t in ].r,q.]
   proof
-    assume t in ].r,s.] /\ ].p,q.];
-    then t in ].r,s.] & t in ].p,q.] by XBOOLE_0:def 4;
-    then r < t & t <= q by Th2;
-    hence thesis by Th2;
+    assume
+A3: t in ].r,s.] /\ ].p,q.];
+    then
+A4: t in ].r,s.] by XBOOLE_0:def 4;
+A5: t in ].p,q.] by A3,XBOOLE_0:def 4;
+A6: r < t by A4,Th2;
+    t <= q by A5,Th2;
+    hence thesis by A6,Th2;
   end;
-  assume t in ].r,q.];
+  assume
+A7: t in ].r,q.];
   then
-A3: r < t & t <= q by Th2;
-  then t <= s & p < t by A1,A2,XXREAL_0:2;
-  then t in ].r,s.] & t in ].p,q.] by A3,Th2;
-  hence thesis by XBOOLE_0:def 4;
+A8: r < t by Th2;
+A9: t <= q by A7,Th2;
+  then
+A10: t <= s by A2,XXREAL_0:2;
+A11: p < t by A1,A8,XXREAL_0:2;
+A12: t in ].r,s.] by A8,A10,Th2;
+  t in ].p,q.] by A9,A11,Th2;
+  hence thesis by A12,XBOOLE_0:def 4;
 end;
 
 theorem
@@ -2691,17 +3003,25 @@ A2: s <= q;
   let t;
   thus t in ].r,s.[ /\ ].p,q.] implies t in ].p,s.[
   proof
-    assume t in ].r,s.[ /\ ].p,q.];
-    then t in ].r,s.[ & t in ].p,q.] by XBOOLE_0:def 4;
-    then t < s & p < t by Th2,Th4;
-    hence thesis by Th4;
+    assume
+A3: t in ].r,s.[ /\ ].p,q.];
+    then
+A4: t in ].r,s.[ by XBOOLE_0:def 4;
+A5: t in ].p,q.] by A3,XBOOLE_0:def 4;
+A6: t < s by A4,Th4;
+    p < t by A5,Th2;
+    hence thesis by A6,Th4;
   end;
-  assume t in ].p,s.[;
+  assume
+A7: t in ].p,s.[;
   then
-A3: p < t & t < s by Th4;
-  then r < t & t <= q by A1,A2,XXREAL_0:2;
-  then t in ].r,s.[ & t in ].p,q.] by A3,Th2,Th4;
-  hence thesis by XBOOLE_0:def 4;
+A8: p < t by Th4;
+A9: t < s by A7,Th4;
+A10: r < t by A1,A8,XXREAL_0:2;
+A11: t <= q by A2,A9,XXREAL_0:2;
+A12: t in ].r,s.[ by A9,A10,Th4;
+  t in ].p,q.] by A8,A11,Th2;
+  hence thesis by A12,XBOOLE_0:def 4;
 end;
 
 theorem Th159:
@@ -2713,17 +3033,26 @@ A2: s > q;
   let t;
   thus t in ].r,s.[ /\ ].p,q.] implies t in ].r,q.]
   proof
-    assume t in ].r,s.[ /\ ].p,q.];
-    then t in ].r,s.[ & t in ].p,q.] by XBOOLE_0:def 4;
-    then r < t & t <= q by Th2,Th4;
-    hence thesis by Th2;
+    assume
+A3: t in ].r,s.[ /\ ].p,q.];
+    then
+A4: t in ].r,s.[ by XBOOLE_0:def 4;
+A5: t in ].p,q.] by A3,XBOOLE_0:def 4;
+A6: r < t by A4,Th4;
+    t <= q by A5,Th2;
+    hence thesis by A6,Th2;
   end;
-  assume t in ].r,q.];
+  assume
+A7: t in ].r,q.];
   then
-A3: r < t & t <= q by Th2;
-  then t < s & p < t by A1,A2,XXREAL_0:2;
-  then t in ].r,s.[ & t in ].p,q.] by A3,Th2,Th4;
-  hence thesis by XBOOLE_0:def 4;
+A8: r < t by Th2;
+A9: t <= q by A7,Th2;
+  then
+A10: t < s by A2,XXREAL_0:2;
+A11: p < t by A1,A8,XXREAL_0:2;
+A12: t in ].r,s.[ by A8,A10,Th4;
+  t in ].p,q.] by A9,A11,Th2;
+  hence thesis by A12,XBOOLE_0:def 4;
 end;
 
 theorem Th160:
@@ -2735,17 +3064,25 @@ A2: s <= q;
   let t;
   thus t in ].r,s.[ /\ ].p,q.[ implies t in ].p,s.[
   proof
-    assume t in ].r,s.[ /\ ].p,q.[;
-    then t in ].r,s.[ & t in ].p,q.[ by XBOOLE_0:def 4;
-    then t < s & p < t by Th4;
-    hence thesis by Th4;
+    assume
+A3: t in ].r,s.[ /\ ].p,q.[;
+    then
+A4: t in ].r,s.[ by XBOOLE_0:def 4;
+A5: t in ].p,q.[ by A3,XBOOLE_0:def 4;
+A6: t < s by A4,Th4;
+    p < t by A5,Th4;
+    hence thesis by A6,Th4;
   end;
-  assume t in ].p,s.[;
+  assume
+A7: t in ].p,s.[;
   then
-A3: p < t & t < s by Th4;
-  then r < t & t < q by A1,A2,XXREAL_0:2;
-  then t in ].r,s.[ & t in ].p,q.[ by A3,Th4;
-  hence thesis by XBOOLE_0:def 4;
+A8: p < t by Th4;
+A9: t < s by A7,Th4;
+A10: r < t by A1,A8,XXREAL_0:2;
+A11: t < q by A2,A9,XXREAL_0:2;
+A12: t in ].r,s.[ by A9,A10,Th4;
+  t in ].p,q.[ by A8,A11,Th4;
+  hence thesis by A12,XBOOLE_0:def 4;
 end;
 
 theorem
@@ -2754,9 +3091,12 @@ proof
   let t;
   assume t in [.r,s.[ \/ [.p,q.[;
   then t in [.r,s.[ or t in [.p,q.[ by XBOOLE_0:def 3;
-  then r <= t & t < s or p <= t & t < q by Th3;
-  then min(r,p) <= t & t < max(s,q) by XXREAL_0:23,30;
-  hence thesis by Th3;
+  then
+A1: r <= t & t < s or p <= t & t < q by Th3;
+  then
+A2: min(r,p) <= t by XXREAL_0:23;
+  t < max(s,q) by A1,XXREAL_0:30;
+  hence thesis by A2,Th3;
 end;
 
 theorem
@@ -2771,34 +3111,41 @@ A2: u in [.p,q.[ by MEMBERED:def 20;
   proof
     assume t in [.r,s.[ \/ [.p,q.[;
     then t in [.r,s.[ or t in [.p,q.[ by XBOOLE_0:def 3;
-    then r <= t & t < s or p <= t & t < q by Th3;
-    then min(r,p) <= t & t < max(s,q) by XXREAL_0:23,30;
-    hence thesis by Th3;
+    then
+A3: r <= t & t < s or p <= t & t < q by Th3;
+    then
+A4: min(r,p) <= t by XXREAL_0:23;
+    t < max(s,q) by A3,XXREAL_0:30;
+    hence thesis by A4,Th3;
   end;
-A3: r <= u & u < s by A1,Th3;
-A4: p <= u & u < q by A2,Th3;
-  assume t in [.min(r,p),max(s,q).[;
+A5: r <= u by A1,Th3;
+A6: u < s by A1,Th3;
+A7: p <= u by A2,Th3;
+A8: u < q by A2,Th3;
+  assume
+A9: t in [.min(r,p),max(s,q).[;
   then
-A5: min(r,p) <= t & t < max(s,q) by Th3;
-  per cases by A5,XXREAL_0:21,28;
+A10: min(r,p) <= t by Th3;
+A11: t < max(s,q) by A9,Th3;
+  per cases by A10,A11,XXREAL_0:21,28;
   suppose r <= t & t < s or p <= t & t < q;
     then t in [.r,s.[ or t in [.p,q.[ by Th3;
     hence thesis by XBOOLE_0:def 3;
   end;
   suppose that
-A6: p <= t and
-A7: t < s;
+A12: p <= t and
+A13: t < s;
     u <= t or t <= u;
-    then r <= t or t < q by A3,A4,XXREAL_0:2;
-    then t in [.r,s.[ or t in [.p,q.[ by A6,A7,Th3;
+    then r <= t or t < q by A5,A8,XXREAL_0:2;
+    then t in [.r,s.[ or t in [.p,q.[ by A12,A13,Th3;
     hence thesis by XBOOLE_0:def 3;
   end;
   suppose that
-A8: r <= t and
-A9: t < q;
+A14: r <= t and
+A15: t < q;
     u <= t or t <= u;
-    then t < s or p <= t by A3,A4,XXREAL_0:2;
-    then t in [.r,s.[ or t in [.p,q.[ by A8,A9,Th3;
+    then t < s or p <= t by A6,A7,XXREAL_0:2;
+    then t in [.r,s.[ or t in [.p,q.[ by A14,A15,Th3;
     hence thesis by XBOOLE_0:def 3;
   end;
 end;
@@ -2809,9 +3156,12 @@ proof
   let t;
   assume t in ].r,s.] \/ ].p,q.];
   then t in ].r,s.] or t in ].p,q.] by XBOOLE_0:def 3;
-  then r < t & t <= s or p < t & t <= q by Th2;
-  then min(r,p) < t & t <= max(s,q) by XXREAL_0:22,31;
-  hence thesis by Th2;
+  then
+A1: r < t & t <= s or p < t & t <= q by Th2;
+  then
+A2: min(r,p) < t by XXREAL_0:22;
+  t <= max(s,q) by A1,XXREAL_0:31;
+  hence thesis by A2,Th2;
 end;
 
 theorem
@@ -2826,34 +3176,41 @@ A2: u in ].p,q.] by MEMBERED:def 20;
   proof
     assume t in ].r,s.] \/ ].p,q.];
     then t in ].r,s.] or t in ].p,q.] by XBOOLE_0:def 3;
-    then r < t & t <= s or p < t & t <= q by Th2;
-    then min(r,p) < t & t <= max(s,q) by XXREAL_0:22,31;
-    hence thesis by Th2;
+    then
+A3: r < t & t <= s or p < t & t <= q by Th2;
+    then
+A4: min(r,p) < t by XXREAL_0:22;
+    t <= max(s,q) by A3,XXREAL_0:31;
+    hence thesis by A4,Th2;
   end;
-A3: r < u & u <= s by A1,Th2;
-A4: p < u & u <= q by A2,Th2;
-  assume t in ].min(r,p),max(s,q).];
+A5: r < u by A1,Th2;
+A6: u <= s by A1,Th2;
+A7: p < u by A2,Th2;
+A8: u <= q by A2,Th2;
+  assume
+A9: t in ].min(r,p),max(s,q).];
   then
-A5: min(r,p) < t & t <= max(s,q) by Th2;
-  per cases by A5,XXREAL_0:20,29;
+A10: min(r,p) < t by Th2;
+A11: t <= max(s,q) by A9,Th2;
+  per cases by A10,A11,XXREAL_0:20,29;
   suppose r < t & t <= s or p < t & t <= q;
     then t in ].r,s.] or t in ].p,q.] by Th2;
     hence thesis by XBOOLE_0:def 3;
   end;
   suppose that
-A6: p < t and
-A7: t <= s;
+A12: p < t and
+A13: t <= s;
     u <= t or t <= u;
-    then r < t or t <= q by A3,A4,XXREAL_0:2;
-    then t in ].r,s.] or t in ].p,q.] by A6,A7,Th2;
+    then r < t or t <= q by A5,A8,XXREAL_0:2;
+    then t in ].r,s.] or t in ].p,q.] by A12,A13,Th2;
     hence thesis by XBOOLE_0:def 3;
   end;
   suppose that
-A8: r < t and
-A9: t <= q;
+A14: r < t and
+A15: t <= q;
     u <= t or t <= u;
-    then t <= s or p < t by A3,A4,XXREAL_0:2;
-    then t in ].r,s.] or t in ].p,q.] by A8,A9,Th2;
+    then t <= s or p < t by A6,A7,XXREAL_0:2;
+    then t in ].r,s.] or t in ].p,q.] by A14,A15,Th2;
     hence thesis by XBOOLE_0:def 3;
   end;
 end;
@@ -2869,9 +3226,12 @@ A2: s <= t;
   proof
     assume p in [.r,s.] \/ [.s,t.];
     then p in [.r,s.] or p in [.s,t.] by XBOOLE_0:def 3;
-    then r <= p & p <= s or s <= p & p <= t by Th1;
-    then r <= p & p <= t by A1,A2,XXREAL_0:2;
-    hence thesis by Th1;
+    then
+A3: r <= p & p <= s or s <= p & p <= t by Th1;
+    then
+A4: r <= p by A1,XXREAL_0:2;
+    p <= t by A2,A3,XXREAL_0:2;
+    hence thesis by A4,Th1;
   end;
   assume p in [.r,t.];
   then r <= p & p <= s or s <= p & p <= t by Th1;
@@ -2890,9 +3250,12 @@ A2: s <= t;
   proof
     assume p in [.r,s.[ \/ [.s,t.];
     then p in [.r,s.[ or p in [.s,t.] by XBOOLE_0:def 3;
-    then r <= p & p < s or s <= p & p <= t by Th1,Th3;
-    then r <= p & p <= t by A1,A2,XXREAL_0:2;
-    hence thesis by Th1;
+    then
+A3: r <= p & p < s or s <= p & p <= t by Th1,Th3;
+    then
+A4: r <= p by A1,XXREAL_0:2;
+    p <= t by A2,A3,XXREAL_0:2;
+    hence thesis by A4,Th1;
   end;
   assume p in [.r,t.];
   then r <= p & p < s or s <= p & p <= t by Th1;
@@ -2911,9 +3274,12 @@ A2: s <= t;
   proof
     assume p in [.r,s.] \/ ].s,t.];
     then p in [.r,s.] or p in ].s,t.] by XBOOLE_0:def 3;
-    then r <= p & p <= s or s < p & p <= t by Th1,Th2;
-    then r <= p & p <= t by A1,A2,XXREAL_0:2;
-    hence thesis by Th1;
+    then
+A3: r <= p & p <= s or s < p & p <= t by Th1,Th2;
+    then
+A4: r <= p by A1,XXREAL_0:2;
+    p <= t by A2,A3,XXREAL_0:2;
+    hence thesis by A4,Th1;
   end;
   assume p in [.r,t.];
   then r <= p & p <= s or s < p & p <= t by Th1;
@@ -2932,9 +3298,12 @@ A2: s <= t;
   proof
     assume p in [.r,s.[ \/ [.s,t.[;
     then p in [.r,s.[ or p in [.s,t.[ by XBOOLE_0:def 3;
-    then r <= p & p < s or s <= p & p < t by Th3;
-    then r <= p & p < t by A1,A2,XXREAL_0:2;
-    hence thesis by Th3;
+    then
+A3: r <= p & p < s or s <= p & p < t by Th3;
+    then
+A4: r <= p by A1,XXREAL_0:2;
+    p < t by A2,A3,XXREAL_0:2;
+    hence thesis by A4,Th3;
   end;
   assume p in [.r,t.[;
   then r <= p & p < s or s <= p & p < t by Th3;
@@ -2953,9 +3322,12 @@ A2: s < t;
   proof
     assume p in [.r,s.] \/ ].s,t.[;
     then p in [.r,s.] or p in ].s,t.[ by XBOOLE_0:def 3;
-    then r <= p & p <= s or s < p & p < t by Th1,Th4;
-    then r <= p & p < t by A1,A2,XXREAL_0:2;
-    hence thesis by Th3;
+    then
+A3: r <= p & p <= s or s < p & p < t by Th1,Th4;
+    then
+A4: r <= p by A1,XXREAL_0:2;
+    p < t by A2,A3,XXREAL_0:2;
+    hence thesis by A4,Th3;
   end;
   assume p in [.r,t.[;
   then r <= p & p <= s or s < p & p < t by Th3;
@@ -2974,9 +3346,12 @@ A2: s <= t;
   proof
     assume p in ].r,s.] \/ ].s,t.];
     then p in ].r,s.] or p in ].s,t.] by XBOOLE_0:def 3;
-    then r < p & p <= s or s < p & p <= t by Th2;
-    then r < p & p <= t by A1,A2,XXREAL_0:2;
-    hence thesis by Th2;
+    then
+A3: r < p & p <= s or s < p & p <= t by Th2;
+    then
+A4: r < p by A1,XXREAL_0:2;
+    p <= t by A2,A3,XXREAL_0:2;
+    hence thesis by A4,Th2;
   end;
   assume p in ].r,t.];
   then r < p & p <= s or s < p & p <= t by Th2;
@@ -2995,9 +3370,12 @@ A2: s < t;
   proof
     assume p in ].r,s.] \/ ].s,t.[;
     then p in ].r,s.] or p in ].s,t.[ by XBOOLE_0:def 3;
-    then r < p & p <= s or s < p & p < t by Th2,Th4;
-    then r < p & p < t by A1,A2,XXREAL_0:2;
-    hence thesis by Th4;
+    then
+A3: r < p & p <= s or s < p & p < t by Th2,Th4;
+    then
+A4: r < p by A1,XXREAL_0:2;
+    p < t by A2,A3,XXREAL_0:2;
+    hence thesis by A4,Th4;
   end;
   assume p in ].r,t.[;
   then r < p & p <= s or s < p & p < t by Th4;
@@ -3016,9 +3394,12 @@ A2: s < t;
   proof
     assume p in ].r,s.] \/ [.s,t.[;
     then p in ].r,s.] or p in [.s,t.[ by XBOOLE_0:def 3;
-    then r < p & p <= s or s <= p & p < t by Th2,Th3;
-    then r < p & p < t by A1,A2,XXREAL_0:2;
-    hence thesis by Th4;
+    then
+A3: r < p & p <= s or s <= p & p < t by Th2,Th3;
+    then
+A4: r < p by A1,XXREAL_0:2;
+    p < t by A2,A3,XXREAL_0:2;
+    hence thesis by A4,Th4;
   end;
   assume p in ].r,t.[;
   then r < p & p <= s or s < p & p < t by Th4;
@@ -3037,9 +3418,12 @@ A2: s < t;
   proof
     assume p in ].r,s.[ \/ [.s,t.[;
     then p in ].r,s.[ or p in [.s,t.[ by XBOOLE_0:def 3;
-    then r < p & p < s or s <= p & p < t by Th3,Th4;
-    then r < p & p < t by A1,A2,XXREAL_0:2;
-    hence thesis by Th4;
+    then
+A3: r < p & p < s or s <= p & p < t by Th3,Th4;
+    then
+A4: r < p by A1,XXREAL_0:2;
+    p < t by A2,A3,XXREAL_0:2;
+    hence thesis by A4,Th4;
   end;
   assume p in ].r,t.[;
   then r < p & p < s or s <= p & p < t by Th4;
@@ -3059,9 +3443,12 @@ A3: s <= r;
   proof
     assume t in [.p,r.] \/ [.s,q.];
     then t in [.p,r.] or t in [.s,q.] by XBOOLE_0:def 3;
-    then p <= t & t <= r or s <= t & t <= q by Th1;
-    then p <= t & t <= q by A1,A2,XXREAL_0:2;
-    hence thesis by Th1;
+    then
+A4: p <= t & t <= r or s <= t & t <= q by Th1;
+    then
+A5: p <= t by A1,XXREAL_0:2;
+    t <= q by A2,A4,XXREAL_0:2;
+    hence thesis by A5,Th1;
   end;
   assume t in [.p,q.];
   then p <= t & t <= r or s <= t & t <= q by A3,Th1,XXREAL_0:2;
@@ -3081,9 +3468,12 @@ A3: s < r;
   proof
     assume t in [.p,r.[ \/ ].s,q.];
     then t in [.p,r.[ or t in ].s,q.] by XBOOLE_0:def 3;
-    then p <= t & t <= r or s <= t & t <= q by Th2,Th3;
-    then p <= t & t <= q by A1,A2,XXREAL_0:2;
-    hence thesis by Th1;
+    then
+A4: p <= t & t <= r or s <= t & t <= q by Th2,Th3;
+    then
+A5: p <= t by A1,XXREAL_0:2;
+    t <= q by A2,A4,XXREAL_0:2;
+    hence thesis by A5,Th1;
   end;
   assume t in [.p,q.];
   then p <= t & t < r or s < t & t <= q by A3,Th1,XXREAL_0:2;
@@ -3103,9 +3493,12 @@ A3: r < q;
   proof
     assume t in [.p,r.] \/ [.s,q.[;
     then t in [.p,r.] or t in [.s,q.[ by XBOOLE_0:def 3;
-    then p <= t & t <= r or s <= t & t < q by Th1,Th3;
-    then p <= t & t < q by A1,A3,XXREAL_0:2;
-    hence thesis by Th3;
+    then
+A4: p <= t & t <= r or s <= t & t < q by Th1,Th3;
+    then
+A5: p <= t by A1,XXREAL_0:2;
+    t < q by A3,A4,XXREAL_0:2;
+    hence thesis by A5,Th3;
   end;
   assume t in [.p,q.[;
   then p <= t & t <= r or s <= t & t < q by A2,Th3,XXREAL_0:2;
@@ -3125,9 +3518,12 @@ A3: s <= r;
   proof
     assume t in ].p,r.] \/ [.s,q.];
     then t in ].p,r.] or t in [.s,q.] by XBOOLE_0:def 3;
-    then p < t & t <= r or s <= t & t <= q by Th1,Th2;
-    then p < t & t <= q by A1,A2,XXREAL_0:2;
-    hence thesis by Th2;
+    then
+A4: p < t & t <= r or s <= t & t <= q by Th1,Th2;
+    then
+A5: p < t by A1,XXREAL_0:2;
+    t <= q by A2,A4,XXREAL_0:2;
+    hence thesis by A5,Th2;
   end;
   assume t in ].p,q.];
   then p < t & t <= r or s <= t & t <= q by A3,Th2,XXREAL_0:2;
@@ -3147,9 +3543,12 @@ A3: s <= r;
   proof
     assume t in ].p,r.] \/ [.s,q.[;
     then t in ].p,r.] or t in [.s,q.[ by XBOOLE_0:def 3;
-    then p < t & t <= r or s <= t & t < q by Th2,Th3;
-    then p < t & t < q by A1,A2,XXREAL_0:2;
-    hence thesis by Th4;
+    then
+A4: p < t & t <= r or s <= t & t < q by Th2,Th3;
+    then
+A5: p < t by A1,XXREAL_0:2;
+    t < q by A2,A4,XXREAL_0:2;
+    hence thesis by A5,Th4;
   end;
   assume t in ].p,q.[;
   then p < t & t <= r or s <= t & t < q by A3,Th4,XXREAL_0:2;
@@ -3226,16 +3625,25 @@ A1: r <= s;
   let p;
   thus p in [.r,t.] \ [.r,s.] implies p in ].s,t.]
   proof
-    assume p in [.r,t.] \ [.r,s.];
-    then p in [.r,t.] & not p in [.r,s.] by XBOOLE_0:def 5;
-    then r <= p & p <= t & (p < r or s < p) by Th1;
-    hence thesis by Th2;
+    assume
+A2: p in [.r,t.] \ [.r,s.];
+    then
+A3: not p in [.r,s.] by XBOOLE_0:def 5;
+A4: p <= t by A2,Th1;
+    p < r or s < p by A3,Th1;
+    hence thesis by A2,A4,Th1,Th2;
   end;
-  assume p in ].s,t.];
-  then s < p & p <= t by Th2;
-  then r <= p & p <= t & (p < r or s < p) by A1,XXREAL_0:2;
-  then p in [.r,t.] & not p in [.r,s.] by Th1;
-  hence thesis by XBOOLE_0:def 5;
+  assume
+A5: p in ].s,t.];
+  then
+A6: s < p by Th2;
+  then
+A7: r <= p by A1,XXREAL_0:2;
+  p <= t by A5,Th2;
+  then
+A8: p in [.r,t.] by A7,Th1;
+  not p in [.r,s.] by A6,Th1;
+  hence thesis by A8,XBOOLE_0:def 5;
 end;
 
 theorem Th183:
@@ -3246,16 +3654,25 @@ A1: r <= s;
   let p;
   thus p in [.r,t.[ \ [.r,s.] implies p in ].s,t.[
   proof
-    assume p in [.r,t.[ \ [.r,s.];
-    then p in [.r,t.[ & not p in [.r,s.] by XBOOLE_0:def 5;
-    then r <= p & p < t & (p < r or s < p) by Th1,Th3;
-    hence thesis by Th4;
+    assume
+A2: p in [.r,t.[ \ [.r,s.];
+    then
+A3: not p in [.r,s.] by XBOOLE_0:def 5;
+A4: p < t by A2,Th3;
+    p < r or s < p by A3,Th1;
+    hence thesis by A2,A4,Th3,Th4;
   end;
-  assume p in ].s,t.[;
-  then s < p & p < t by Th4;
-  then r <= p & p < t & (p < r or s < p) by A1,XXREAL_0:2;
-  then p in [.r,t.[ & not p in [.r,s.] by Th1,Th3;
-  hence thesis by XBOOLE_0:def 5;
+  assume
+A5: p in ].s,t.[;
+  then
+A6: s < p by Th4;
+  then
+A7: r <= p by A1,XXREAL_0:2;
+  p < t by A5,Th4;
+  then
+A8: p in [.r,t.[ by A7,Th3;
+  not p in [.r,s.] by A6,Th1;
+  hence thesis by A8,XBOOLE_0:def 5;
 end;
 
 theorem Th184:
@@ -3266,16 +3683,25 @@ A1: r < s;
   let p;
   thus p in [.r,t.] \ [.r,s.[ implies p in [.s,t.]
   proof
-    assume p in [.r,t.] \ [.r,s.[;
-    then p in [.r,t.] & not p in [.r,s.[ by XBOOLE_0:def 5;
-    then r <= p & p <= t & (p < r or s <= p) by Th1,Th3;
-    hence thesis by Th1;
+    assume
+A2: p in [.r,t.] \ [.r,s.[;
+    then
+A3: not p in [.r,s.[ by XBOOLE_0:def 5;
+A4: p <= t by A2,Th1;
+    p < r or s <= p by A3,Th3;
+    hence thesis by A2,A4,Th1;
   end;
-  assume p in [.s,t.];
-  then s <= p & p <= t by Th1;
-  then r <= p & p <= t & (p < r or s <= p) by A1,XXREAL_0:2;
-  then p in [.r,t.] & not p in [.r,s.[ by Th1,Th3;
-  hence thesis by XBOOLE_0:def 5;
+  assume
+A5: p in [.s,t.];
+  then
+A6: s <= p by Th1;
+  then
+A7: r <= p by A1,XXREAL_0:2;
+  p <= t by A5,Th1;
+  then
+A8: p in [.r,t.] by A7,Th1;
+  not p in [.r,s.[ by A6,Th3;
+  hence thesis by A8,XBOOLE_0:def 5;
 end;
 
 theorem Th185:
@@ -3286,16 +3712,25 @@ A1: r < s;
   let p;
   thus p in [.r,t.[ \ [.r,s.[ implies p in [.s,t.[
   proof
-    assume p in [.r,t.[ \ [.r,s.[;
-    then p in [.r,t.[ & not p in [.r,s.[ by XBOOLE_0:def 5;
-    then r <= p & p < t & (p < r or s <= p) by Th3;
-    hence thesis by Th3;
+    assume
+A2: p in [.r,t.[ \ [.r,s.[;
+    then
+A3: not p in [.r,s.[ by XBOOLE_0:def 5;
+A4: p < t by A2,Th3;
+    p < r or s <= p by A3,Th3;
+    hence thesis by A2,A4,Th3;
   end;
-  assume p in [.s,t.[;
-  then s <= p & p < t by Th3;
-  then r <= p & p < t & (p < r or s <= p) by A1,XXREAL_0:2;
-  then p in [.r,t.[ & not p in [.r,s.[ by Th3;
-  hence thesis by XBOOLE_0:def 5;
+  assume
+A5: p in [.s,t.[;
+  then
+A6: s <= p by Th3;
+  then
+A7: r <= p by A1,XXREAL_0:2;
+  p < t by A5,Th3;
+  then
+A8: p in [.r,t.[ by A7,Th3;
+  not p in [.r,s.[ by A6,Th3;
+  hence thesis by A8,XBOOLE_0:def 5;
 end;
 
 theorem Th186:
@@ -3306,16 +3741,25 @@ A1: r <= s;
   let p;
   thus p in [.r,t.] \ [.r,s.] implies p in ].s,t.]
   proof
-    assume p in [.r,t.] \ [.r,s.];
-    then p in [.r,t.] & not p in [.r,s.] by XBOOLE_0:def 5;
-    then r <= p & p <= t & (p < r or s < p) by Th1;
-    hence thesis by Th2;
+    assume
+A2: p in [.r,t.] \ [.r,s.];
+    then
+A3: not p in [.r,s.] by XBOOLE_0:def 5;
+A4: p <= t by A2,Th1;
+    p < r or s < p by A3,Th1;
+    hence thesis by A2,A4,Th1,Th2;
   end;
-  assume p in ].s,t.];
-  then s < p & p <= t by Th2;
-  then r <= p & p <= t & (p < r or s < p) by A1,XXREAL_0:2;
-  then p in [.r,t.] & not p in [.r,s.] by Th1;
-  hence thesis by XBOOLE_0:def 5;
+  assume
+A5: p in ].s,t.];
+  then
+A6: s < p by Th2;
+  then
+A7: r <= p by A1,XXREAL_0:2;
+  p <= t by A5,Th2;
+  then
+A8: p in [.r,t.] by A7,Th1;
+  not p in [.r,s.] by A6,Th1;
+  hence thesis by A8,XBOOLE_0:def 5;
 end;
 
 theorem Th187:
@@ -3326,16 +3770,25 @@ A1: r < s;
   let p;
   thus p in ].r,t.[ \ ].r,s.] implies p in ].s,t.[
   proof
-    assume p in ].r,t.[ \ ].r,s.];
-    then p in ].r,t.[ & not p in ].r,s.] by XBOOLE_0:def 5;
-    then r < p & p < t & (p <= r or s < p) by Th2,Th4;
-    hence thesis by Th4;
+    assume
+A2: p in ].r,t.[ \ ].r,s.];
+    then
+A3: not p in ].r,s.] by XBOOLE_0:def 5;
+A4: p < t by A2,Th4;
+    p <= r or s < p by A3,Th2;
+    hence thesis by A2,A4,Th4;
   end;
-  assume p in ].s,t.[;
-  then s < p & p < t by Th4;
-  then r < p & p < t & (p <= r or s < p) by A1,XXREAL_0:2;
-  then p in ].r,t.[ & not p in ].r,s.] by Th2,Th4;
-  hence thesis by XBOOLE_0:def 5;
+  assume
+A5: p in ].s,t.[;
+  then
+A6: s < p by Th4;
+  then
+A7: r < p by A1,XXREAL_0:2;
+  p < t by A5,Th4;
+  then
+A8: p in ].r,t.[ by A7,Th4;
+  not p in ].r,s.] by A6,Th2;
+  hence thesis by A8,XBOOLE_0:def 5;
 end;
 
 theorem Th188:
@@ -3346,16 +3799,25 @@ A1: r < s;
   let p;
   thus p in ].r,t.] \ ].r,s.[ implies p in [.s,t.]
   proof
-    assume p in ].r,t.] \ ].r,s.[;
-    then p in ].r,t.] & not p in ].r,s.[ by XBOOLE_0:def 5;
-    then r < p & p <= t & (p <= r or s <= p) by Th2,Th4;
-    hence thesis by Th1;
+    assume
+A2: p in ].r,t.] \ ].r,s.[;
+    then
+A3: not p in ].r,s.[ by XBOOLE_0:def 5;
+A4: p <= t by A2,Th2;
+    p <= r or s <= p by A3,Th4;
+    hence thesis by A2,A4,Th1,Th2;
   end;
-  assume p in [.s,t.];
-  then s <= p & p <= t by Th1;
-  then r < p & p <= t & (p <= r or s <= p) by A1,XXREAL_0:2;
-  then p in ].r,t.] & not p in ].r,s.[ by Th2,Th4;
-  hence thesis by XBOOLE_0:def 5;
+  assume
+A5: p in [.s,t.];
+  then
+A6: s <= p by Th1;
+  then
+A7: r < p by A1,XXREAL_0:2;
+  p <= t by A5,Th1;
+  then
+A8: p in ].r,t.] by A7,Th2;
+  not p in ].r,s.[ by A6,Th4;
+  hence thesis by A8,XBOOLE_0:def 5;
 end;
 
 theorem Th189:
@@ -3366,16 +3828,25 @@ A1: r < s;
   let p;
   thus p in ].r,t.[ \ ].r,s.[ implies p in [.s,t.[
   proof
-    assume p in ].r,t.[ \ ].r,s.[;
-    then p in ].r,t.[ & not p in ].r,s.[ by XBOOLE_0:def 5;
-    then r < p & p < t & (p <= r or s <= p) by Th4;
-    hence thesis by Th3;
+    assume
+A2: p in ].r,t.[ \ ].r,s.[;
+    then
+A3: not p in ].r,s.[ by XBOOLE_0:def 5;
+A4: p < t by A2,Th4;
+    p <= r or s <= p by A3,Th4;
+    hence thesis by A2,A4,Th3,Th4;
   end;
-  assume p in [.s,t.[;
-  then s <= p & p < t by Th3;
-  then r < p & p < t & (p <= r or s <= p) by A1,XXREAL_0:2;
-  then p in ].r,t.[ & not p in ].r,s.[ by Th4;
-  hence thesis by XBOOLE_0:def 5;
+  assume
+A5: p in [.s,t.[;
+  then
+A6: s <= p by Th3;
+  then
+A7: r < p by A1,XXREAL_0:2;
+  p < t by A5,Th3;
+  then
+A8: p in ].r,t.[ by A7,Th4;
+  not p in ].r,s.[ by A6,Th4;
+  hence thesis by A8,XBOOLE_0:def 5;
 end;
 
 theorem Th190:
@@ -3386,16 +3857,24 @@ A1: s <= t;
   let p;
   thus p in [.r,t.] \ [.s,t.] implies p in [.r,s.[
   proof
-    assume p in [.r,t.] \ [.s,t.];
-    then p in [.r,t.] & not p in [.s,t.] by XBOOLE_0:def 5;
-    then r <= p & p <= t & (p < s or t < p) by Th1;
-    hence thesis by Th3;
+    assume
+A2: p in [.r,t.] \ [.s,t.];
+    then
+A3: not p in [.s,t.] by XBOOLE_0:def 5;
+A4: r <= p by A2,Th1;
+    p < s or t < p by A3,Th1;
+    hence thesis by A2,A4,Th1,Th3;
   end;
-  assume p in [.r,s.[;
-  then r <= p & p < s by Th3;
-  then r <= p & p <= t & (p < s or t < p) by A1,XXREAL_0:2;
-  then p in [.r,t.] & not p in [.s,t.] by Th1;
-  hence thesis by XBOOLE_0:def 5;
+  assume
+A5: p in [.r,s.[;
+  then
+A6: p < s by Th3;
+A7: r <= p by A5,Th3;
+  p <= t by A1,A6,XXREAL_0:2;
+  then
+A8: p in [.r,t.] by A7,Th1;
+  not p in [.s,t.] by A6,Th1;
+  hence thesis by A8,XBOOLE_0:def 5;
 end;
 
 theorem Th191:
@@ -3406,16 +3885,24 @@ A1: s <= t;
   let p;
   thus p in ].r,t.] \ [.s,t.] implies p in ].r,s.[
   proof
-    assume p in ].r,t.] \ [.s,t.];
-    then p in ].r,t.] & not p in [.s,t.] by XBOOLE_0:def 5;
-    then r < p & p <= t & (p < s or t < p) by Th1,Th2;
-    hence thesis by Th4;
+    assume
+A2: p in ].r,t.] \ [.s,t.];
+    then
+A3: not p in [.s,t.] by XBOOLE_0:def 5;
+A4: r < p by A2,Th2;
+    p < s or t < p by A3,Th1;
+    hence thesis by A2,A4,Th2,Th4;
   end;
-  assume p in ].r,s.[;
-  then r < p & p < s by Th4;
-  then r < p & p <= t & (p < s or t < p) by A1,XXREAL_0:2;
-  then p in ].r,t.] & not p in [.s,t.] by Th1,Th2;
-  hence thesis by XBOOLE_0:def 5;
+  assume
+A5: p in ].r,s.[;
+  then
+A6: p < s by Th4;
+A7: r < p by A5,Th4;
+  p <= t by A1,A6,XXREAL_0:2;
+  then
+A8: p in ].r,t.] by A7,Th2;
+  not p in [.s,t.] by A6,Th1;
+  hence thesis by A8,XBOOLE_0:def 5;
 end;
 
 theorem Th192:
@@ -3426,16 +3913,24 @@ A1: s < t;
   let p;
   thus p in [.r,t.] \ ].s,t.] implies p in [.r,s.]
   proof
-    assume p in [.r,t.] \ ].s,t.];
-    then p in [.r,t.] & not p in ].s,t.] by XBOOLE_0:def 5;
-    then r <= p & p <= t & (p <= s or t < p) by Th1,Th2;
-    hence thesis by Th1;
+    assume
+A2: p in [.r,t.] \ ].s,t.];
+    then
+A3: not p in ].s,t.] by XBOOLE_0:def 5;
+A4: r <= p by A2,Th1;
+    p <= s or t < p by A3,Th2;
+    hence thesis by A2,A4,Th1;
   end;
-  assume p in [.r,s.];
-  then r <= p & p <= s by Th1;
-  then r <= p & p <= t & (p <= s or t < p) by A1,XXREAL_0:2;
-  then p in [.r,t.] & not p in ].s,t.] by Th1,Th2;
-  hence thesis by XBOOLE_0:def 5;
+  assume
+A5: p in [.r,s.];
+  then
+A6: p <= s by Th1;
+A7: r <= p by A5,Th1;
+  p <= t by A1,A6,XXREAL_0:2;
+  then
+A8: p in [.r,t.] by A7,Th1;
+  not p in ].s,t.] by A6,Th2;
+  hence thesis by A8,XBOOLE_0:def 5;
 end;
 
 theorem Th193:
@@ -3446,16 +3941,24 @@ A1: s < t;
   let p;
   thus p in ].r,t.] \ ].s,t.] implies p in ].r,s.]
   proof
-    assume p in ].r,t.] \ ].s,t.];
-    then p in ].r,t.] & not p in ].s,t.] by XBOOLE_0:def 5;
-    then r < p & p <= t & (p <= s or t < p) by Th2;
-    hence thesis by Th2;
+    assume
+A2: p in ].r,t.] \ ].s,t.];
+    then
+A3: not p in ].s,t.] by XBOOLE_0:def 5;
+A4: r < p by A2,Th2;
+    p <= s or t < p by A3,Th2;
+    hence thesis by A2,A4,Th2;
   end;
-  assume p in ].r,s.];
-  then r < p & p <= s by Th2;
-  then r < p & p <= t & (p <= s or t < p) by A1,XXREAL_0:2;
-  then p in ].r,t.] & not p in ].s,t.] by Th2;
-  hence thesis by XBOOLE_0:def 5;
+  assume
+A5: p in ].r,s.];
+  then
+A6: p <= s by Th2;
+A7: r < p by A5,Th2;
+  p <= t by A1,A6,XXREAL_0:2;
+  then
+A8: p in ].r,t.] by A7,Th2;
+  not p in ].s,t.] by A6,Th2;
+  hence thesis by A8,XBOOLE_0:def 5;
 end;
 
 theorem Th194:
@@ -3466,16 +3969,24 @@ A1: s < t;
   let p;
   thus p in [.r,t.[ \ [.s,t.[ implies p in [.r,s.[
   proof
-    assume p in [.r,t.[ \ [.s,t.[;
-    then p in [.r,t.[ & not p in [.s,t.[ by XBOOLE_0:def 5;
-    then r <= p & p < t & (p < s or t <= p) by Th3;
-    hence thesis by Th3;
+    assume
+A2: p in [.r,t.[ \ [.s,t.[;
+    then
+A3: not p in [.s,t.[ by XBOOLE_0:def 5;
+A4: r <= p by A2,Th3;
+    p < s or t <= p by A3,Th3;
+    hence thesis by A2,A4,Th3;
   end;
-  assume p in [.r,s.[;
-  then r <= p & p < s by Th3;
-  then r <= p & p < t & (p < s or t <= p) by A1,XXREAL_0:2;
-  then p in [.r,t.[ & not p in [.s,t.[ by Th3;
-  hence thesis by XBOOLE_0:def 5;
+  assume
+A5: p in [.r,s.[;
+  then
+A6: p < s by Th3;
+A7: r <= p by A5,Th3;
+  p < t by A1,A6,XXREAL_0:2;
+  then
+A8: p in [.r,t.[ by A7,Th3;
+  not p in [.s,t.[ by A6,Th3;
+  hence thesis by A8,XBOOLE_0:def 5;
 end;
 
 theorem Th195:
@@ -3486,16 +3997,24 @@ A1: s < t;
   let p;
   thus p in ].r,t.[ \ [.s,t.[ implies p in ].r,s.[
   proof
-    assume p in ].r,t.[ \ [.s,t.[;
-    then p in ].r,t.[ & not p in [.s,t.[ by XBOOLE_0:def 5;
-    then r < p & p < t & (p < s or t <= p) by Th3,Th4;
-    hence thesis by Th4;
+    assume
+A2: p in ].r,t.[ \ [.s,t.[;
+    then
+A3: not p in [.s,t.[ by XBOOLE_0:def 5;
+A4: r < p by A2,Th4;
+    p < s or t <= p by A3,Th3;
+    hence thesis by A2,A4,Th4;
   end;
-  assume p in ].r,s.[;
-  then r < p & p < s by Th4;
-  then r < p & p < t & (p < s or t <= p) by A1,XXREAL_0:2;
-  then p in ].r,t.[ & not p in [.s,t.[ by Th3,Th4;
-  hence thesis by XBOOLE_0:def 5;
+  assume
+A5: p in ].r,s.[;
+  then
+A6: p < s by Th4;
+A7: r < p by A5,Th4;
+  p < t by A1,A6,XXREAL_0:2;
+  then
+A8: p in ].r,t.[ by A7,Th4;
+  not p in [.s,t.[ by A6,Th3;
+  hence thesis by A8,XBOOLE_0:def 5;
 end;
 
 theorem Th196:
@@ -3506,16 +4025,24 @@ A1: s < t;
   let p;
   thus p in [.r,t.[ \ ].s,t.[ implies p in [.r,s.]
   proof
-    assume p in [.r,t.[ \ ].s,t.[;
-    then p in [.r,t.[ & not p in ].s,t.[ by XBOOLE_0:def 5;
-    then r <= p & p < t & (p <= s or t <= p) by Th3,Th4;
-    hence thesis by Th1;
+    assume
+A2: p in [.r,t.[ \ ].s,t.[;
+    then
+A3: not p in ].s,t.[ by XBOOLE_0:def 5;
+A4: r <= p by A2,Th3;
+    p <= s or t <= p by A3,Th4;
+    hence thesis by A2,A4,Th1,Th3;
   end;
-  assume p in [.r,s.];
-  then r <= p & p <= s by Th1;
-  then r <= p & p < t & (p <= s or t <= p) by A1,XXREAL_0:2;
-  then p in [.r,t.[ & not p in ].s,t.[ by Th3,Th4;
-  hence thesis by XBOOLE_0:def 5;
+  assume
+A5: p in [.r,s.];
+  then
+A6: p <= s by Th1;
+A7: r <= p by A5,Th1;
+  p < t by A1,A6,XXREAL_0:2;
+  then
+A8: p in [.r,t.[ by A7,Th3;
+  not p in ].s,t.[ by A6,Th4;
+  hence thesis by A8,XBOOLE_0:def 5;
 end;
 
 theorem Th197:
@@ -3526,16 +4053,24 @@ A1: s < t;
   let p;
   thus p in ].r,t.[ \ ].s,t.[ implies p in ].r,s.]
   proof
-    assume p in ].r,t.[ \ ].s,t.[;
-    then p in ].r,t.[ & not p in ].s,t.[ by XBOOLE_0:def 5;
-    then r < p & p < t & (p <= s or t <= p) by Th4;
-    hence thesis by Th2;
+    assume
+A2: p in ].r,t.[ \ ].s,t.[;
+    then
+A3: not p in ].s,t.[ by XBOOLE_0:def 5;
+A4: r < p by A2,Th4;
+    p <= s or t <= p by A3,Th4;
+    hence thesis by A2,A4,Th2,Th4;
   end;
-  assume p in ].r,s.];
-  then r < p & p <= s by Th2;
-  then r < p & p < t & (p <= s or t <= p) by A1,XXREAL_0:2;
-  then p in ].r,t.[ & not p in ].s,t.[ by Th4;
-  hence thesis by XBOOLE_0:def 5;
+  assume
+A5: p in ].r,s.];
+  then
+A6: p <= s by Th2;
+A7: r < p by A5,Th2;
+  p < t by A1,A6,XXREAL_0:2;
+  then
+A8: p in ].r,t.[ by A7,Th4;
+  not p in ].s,t.[ by A6,Th4;
+  hence thesis by A8,XBOOLE_0:def 5;
 end;
 
 theorem
@@ -3545,26 +4080,37 @@ proof
   then consider u such that
 A1: u in [.r,s.[ and
 A2: u in [.p,q.[ by MEMBERED:def 20;
-A3: r <= u & u <= s by A1,Th3;
-A4: p <= u & u <= q by A2,Th3;
+A3: r <= u by A1,Th3;
+A4: u <= s by A1,Th3;
+A5: p <= u by A2,Th3;
+  u <= q by A2,Th3;
   then
-A5: r <= q by A3,XXREAL_0:2;
-A6: p <= s by A3,A4,XXREAL_0:2;
+A6: r <= q by A3,XXREAL_0:2;
+A7: p <= s by A4,A5,XXREAL_0:2;
   let t;
   thus t in [.p,q.[ \ [.r,s.[ implies t in [.p,r.[ \/ [.s,q.[
   proof
-    assume t in [.p,q.[ \ [.r,s.[;
-    then t in [.p,q.[ & not(t in [.r,s.[) by XBOOLE_0:def 5;
-    then p <= t & t < q & (t < r or s <= t) by Th3;
-    then t in [.p,r.[ or t in [.s,q.[ by Th3;
+    assume
+A8: t in [.p,q.[ \ [.r,s.[;
+    then
+A9: not t in [.r,s.[ by XBOOLE_0:def 5;
+A10: p <= t by A8,Th3;
+A11: t < q by A8,Th3;
+    t < r or s <= t by A9,Th3;
+    then t in [.p,r.[ or t in [.s,q.[ by A10,A11,Th3;
     hence thesis by XBOOLE_0:def 3;
   end;
   assume t in [.p,r.[ \/ [.s,q.[;
   then t in [.p,r.[ or t in [.s,q.[ by XBOOLE_0:def 3;
-  then p <= t & t < r or s <= t & t < q by Th3;
-  then p <= t & t < q & (t < r or s <= t) by A5,A6,XXREAL_0:2;
-  then t in [.p,q.[ & not(t in [.r,s.[) by Th3;
-  hence thesis by XBOOLE_0:def 5;
+  then
+A12: p <= t & t < r or s <= t & t < q by Th3;
+  then
+A13: p <= t by A7,XXREAL_0:2;
+  t < q by A6,A12,XXREAL_0:2;
+  then
+A14: t in [.p,q.[ by A13,Th3;
+  not t in [.r,s.[ by A12,Th3;
+  hence thesis by A14,XBOOLE_0:def 5;
 end;
 
 theorem
@@ -3574,26 +4120,37 @@ proof
   then consider u such that
 A1: u in ].r,s.] and
 A2: u in ].p,q.] by MEMBERED:def 20;
-A3: r < u & u <= s by A1,Th2;
-A4: p < u & u <= q by A2,Th2;
+A3: r < u by A1,Th2;
+A4: u <= s by A1,Th2;
+A5: p < u by A2,Th2;
+  u <= q by A2,Th2;
   then
-A5: r <= q by A3,XXREAL_0:2;
-A6: p <= s by A3,A4,XXREAL_0:2;
+A6: r <= q by A3,XXREAL_0:2;
+A7: p <= s by A4,A5,XXREAL_0:2;
   let t;
   thus t in ].p,q.] \ ].r,s.] implies t in ].p,r.] \/ ].s,q.]
   proof
-    assume t in ].p,q.] \ ].r,s.];
-    then t in ].p,q.] & not(t in ].r,s.]) by XBOOLE_0:def 5;
-    then p < t & t <= q & (t <= r or s < t) by Th2;
-    then t in ].p,r.] or t in ].s,q.] by Th2;
+    assume
+A8: t in ].p,q.] \ ].r,s.];
+    then
+A9: not t in ].r,s.] by XBOOLE_0:def 5;
+A10: p < t by A8,Th2;
+A11: t <= q by A8,Th2;
+    t <= r or s < t by A9,Th2;
+    then t in ].p,r.] or t in ].s,q.] by A10,A11,Th2;
     hence thesis by XBOOLE_0:def 3;
   end;
   assume t in ].p,r.] \/ ].s,q.];
   then t in ].p,r.] or t in ].s,q.] by XBOOLE_0:def 3;
-  then p < t & t <= r or s < t & t <= q by Th2;
-  then p < t & t <= q & (t <= r or s < t) by A5,A6,XXREAL_0:2;
-  then t in ].p,q.] & not(t in ].r,s.]) by Th2;
-  hence thesis by XBOOLE_0:def 5;
+  then
+A12: p < t & t <= r or s < t & t <= q by Th2;
+  then
+A13: p < t by A7,XXREAL_0:2;
+  t <= q by A6,A12,XXREAL_0:2;
+  then
+A14: t in ].p,q.] by A13,Th2;
+  not t in ].r,s.] by A12,Th2;
+  hence thesis by A14,XBOOLE_0:def 5;
 end;
 
 theorem
@@ -3627,10 +4184,15 @@ A3: p in [.r,t.] \ {s};
   end;
   assume p in [.r,s.[ \/ ].s,t.];
   then p in [.r,s.[ or p in ].s,t.] by XBOOLE_0:def 3;
-  then r <= p & p < s or s < p & p <= t by Th2,Th3;
-  then r <= p & p <= t & p <> s by A1,A2,XXREAL_0:2;
-  then p in [.r,t.] & not p in {s} by Th1,TARSKI:def 1;
-  hence thesis by XBOOLE_0:def 5;
+  then
+A4: r <= p & p < s or s < p & p <= t by Th2,Th3;
+  then
+A5: r <= p by A1,XXREAL_0:2;
+  p <= t by A2,A4,XXREAL_0:2;
+  then
+A6: p in [.r,t.] by A5,Th1;
+  not p in {s} by A4,TARSKI:def 1;
+  hence thesis by A6,XBOOLE_0:def 5;
 end;
 
 theorem
@@ -3652,10 +4214,15 @@ A3: p in [.r,t.[ \ {s};
   end;
   assume p in [.r,s.[ \/ ].s,t.[;
   then p in [.r,s.[ or p in ].s,t.[ by XBOOLE_0:def 3;
-  then r <= p & p < s or s < p & p < t by Th3,Th4;
-  then r <= p & p < t & p <> s by A1,A2,XXREAL_0:2;
-  then p in [.r,t.[ & not p in {s} by Th3,TARSKI:def 1;
-  hence thesis by XBOOLE_0:def 5;
+  then
+A4: r <= p & p < s or s < p & p < t by Th3,Th4;
+  then
+A5: r <= p by A1,XXREAL_0:2;
+  p < t by A2,A4,XXREAL_0:2;
+  then
+A6: p in [.r,t.[ by A5,Th3;
+  not p in {s} by A4,TARSKI:def 1;
+  hence thesis by A6,XBOOLE_0:def 5;
 end;
 
 theorem
@@ -3677,10 +4244,15 @@ A3: p in ].r,t.] \ {s};
   end;
   assume p in ].r,s.[ \/ ].s,t.];
   then p in ].r,s.[ or p in ].s,t.] by XBOOLE_0:def 3;
-  then r < p & p < s or s < p & p <= t by Th2,Th4;
-  then r < p & p <= t & p <> s by A1,A2,XXREAL_0:2;
-  then p in ].r,t.] & not p in {s} by Th2,TARSKI:def 1;
-  hence thesis by XBOOLE_0:def 5;
+  then
+A4: r < p & p < s or s < p & p <= t by Th2,Th4;
+  then
+A5: r < p by A1,XXREAL_0:2;
+  p <= t by A2,A4,XXREAL_0:2;
+  then
+A6: p in ].r,t.] by A5,Th2;
+  not p in {s} by A4,TARSKI:def 1;
+  hence thesis by A6,XBOOLE_0:def 5;
 end;
 
 theorem
@@ -3702,10 +4274,15 @@ A3: p in ].r,t.[ \ {s};
   end;
   assume p in ].r,s.[ \/ ].s,t.[;
   then p in ].r,s.[ or p in ].s,t.[ by XBOOLE_0:def 3;
-  then r < p & p < s or s < p & p < t by Th4;
-  then r < p & p < t & p <> s by A1,A2,XXREAL_0:2;
-  then p in ].r,t.[ & not p in {s} by Th4,TARSKI:def 1;
-  hence thesis by XBOOLE_0:def 5;
+  then
+A4: r < p & p < s or s < p & p < t by Th4;
+  then
+A5: r < p by A1,XXREAL_0:2;
+  p < t by A2,A4,XXREAL_0:2;
+  then
+A6: p in ].r,t.[ by A5,Th4;
+  not p in {s} by A4,TARSKI:def 1;
+  hence thesis by A6,XBOOLE_0:def 5;
 end;
 
 theorem
@@ -3748,8 +4325,9 @@ proof
   let r;
   thus r in [.-infty,+infty.] implies r in ExtREAL by XXREAL_0:def 1;
   assume r in ExtREAL;
-  -infty <= r & r <= +infty by XXREAL_0:3,5;
-  hence thesis by Th1;
+A1: -infty <= r by XXREAL_0:5;
+  r <= +infty by XXREAL_0:3;
+  hence thesis by A1,Th1;
 end;
 
 theorem :: MEASURE6:36
@@ -3760,7 +4338,7 @@ proof
     given x such that
 A1: x in ].p,-infty.[;
     reconsider s = x as ext-real number by A1;
-    p < s & s < -infty by A1,Th4;
+    s < -infty by A1,Th4;
     hence contradiction by XXREAL_0:5;
   end;
   hence thesis by XBOOLE_0:def 1;
@@ -3774,7 +4352,7 @@ proof
     given x such that
 A1: x in [.p,-infty.[;
     reconsider s = x as ext-real number by A1;
-    p <= s & s < -infty by A1,Th3;
+    s < -infty by A1,Th3;
     hence contradiction by XXREAL_0:5;
   end;
   hence thesis by XBOOLE_0:def 1;
@@ -3788,8 +4366,9 @@ proof
     given x such that
 A1: x in ].p,-infty.];
     reconsider s = x as ext-real number by A1;
-    p < s & s <= -infty by A1,Th2;
-    then p < -infty by XXREAL_0:2;
+A2: p < s by A1,Th2;
+    s <= -infty by A1,Th2;
+    then p < -infty by A2,XXREAL_0:2;
     hence contradiction by XXREAL_0:5;
   end;
   hence thesis by XBOOLE_0:def 1;
@@ -3805,8 +4384,9 @@ A1: p <> -infty;
     given x such that
 A2: x in [.p,-infty.];
     reconsider s = x as ext-real number by A2;
-    p <= s & s <= -infty by A2,Th1;
-    hence contradiction by A1,XXREAL_0:2,6;
+A3: p <= s by A2,Th1;
+    s <= -infty by A2,Th1;
+    hence contradiction by A1,A3,XXREAL_0:2,6;
   end;
   hence thesis by XBOOLE_0:def 1;
 end;
@@ -3819,7 +4399,7 @@ proof
     given x such that
 A1: x in ].+infty,p.[;
     reconsider s = x as ext-real number by A1;
-    +infty < s & s < p by A1,Th4;
+    +infty < s by A1,Th4;
     hence contradiction by XXREAL_0:3;
   end;
   hence thesis by XBOOLE_0:def 1;
@@ -3833,8 +4413,9 @@ proof
     given x such that
 A1: x in [.+infty,p.[;
     reconsider s = x as ext-real number by A1;
-    +infty <= s & s < p by A1,Th3;
-    then p > +infty by XXREAL_0:2;
+A2: +infty <= s by A1,Th3;
+    s < p by A1,Th3;
+    then p > +infty by A2,XXREAL_0:2;
     hence contradiction by XXREAL_0:3;
   end;
   hence thesis by XBOOLE_0:def 1;
@@ -3848,7 +4429,7 @@ proof
     given x such that
 A1: x in ].+infty,p.];
     reconsider s = x as ext-real number by A1;
-    +infty < s & s <= p by A1,Th2;
+    +infty < s by A1,Th2;
     hence contradiction by XXREAL_0:3;
   end;
   hence thesis by XBOOLE_0:def 1;
@@ -3864,8 +4445,9 @@ A1: p <> +infty;
     given x such that
 A2: x in [.+infty,p.];
     reconsider s = x as ext-real number by A2;
-    +infty <= s & s <= p by A2,Th1;
-    hence contradiction by A1,XXREAL_0:2,4;
+A3: +infty <= s by A2,Th1;
+    s <= p by A2,Th1;
+    hence contradiction by A1,A3,XXREAL_0:2,4;
   end;
   hence thesis by XBOOLE_0:def 1;
 end;
@@ -3927,253 +4509,290 @@ end;
 :: from LIMFUNC1, 2008.06.12, A.T.
 
 theorem Th224:
- REAL = ].-infty,+infty.[
+  REAL = ].-infty,+infty.[
 proof
   let x be ext-real number;
   thus x in REAL implies x in ].-infty,+infty.[
   proof
-    assume x in REAL;
-    then -infty < x & x < +infty by XXREAL_0:9,12;
-    hence thesis by Th4;
+    assume
+A1: x in REAL;
+    then
+A2: -infty < x by XXREAL_0:12;
+    x < +infty by A1,XXREAL_0:9;
+    hence thesis by A2,Th4;
   end;
-  assume x in ].-infty,+infty.[;
-  then -infty < x & x < +infty by Th4;
-  hence thesis by XXREAL_0:14;
+  assume
+A3: x in ].-infty,+infty.[;
+  then
+A4: -infty < x by Th4;
+  x < +infty by A3,Th4;
+  hence thesis by A4,XXREAL_0:14;
 end;
 
 theorem Th225:
- ].p,q.[ c= REAL
- proof let x be ext-real number;
-  assume x in ].p,q.[;
-   then p < x & x < q by Th4;
-  hence thesis by XXREAL_0:48;
- end;
-
-theorem Th226:
- p in REAL implies [.p,q.[ c= REAL
- proof assume
-Z: p in REAL;
+  ].p,q.[ c= REAL
+proof
   let x be ext-real number;
-  assume x in [.p,q.[;
-   then p <= x & x < q by Th3;
-  hence thesis by Z,XXREAL_0:46;
- end;
-
-theorem Th227:
- q in REAL implies ].p,q.] c= REAL
- proof assume
-Z: q in REAL;
-  let x be ext-real number;
-  assume x in ].p,q.];
-   then p < x & x <= q by Th2;
-  hence thesis by Z,XXREAL_0:47;
- end;
-
-theorem Th228:
- p in REAL & q in REAL implies [.p,q.] c= REAL
- proof assume
-Z: p in REAL & q in REAL;
-  let x be ext-real number;
-  assume x in [.p,q.];
-   then p <= x & x <= q by Th1;
-  hence thesis by Z,XXREAL_0:45;
- end;
-
-registration let p,q;
- cluster ].p,q.[ -> real-membered;
- coherence by Th225,MEMBERED:21;
+  assume
+A1: x in ].p,q.[;
+  then
+A2: p < x by Th4;
+  x < q by A1,Th4;
+  hence thesis by A2,XXREAL_0:48;
 end;
 
-registration let p be real number, q;
- cluster [.p,q.[ -> real-membered;
- coherence
+theorem Th226:
+  p in REAL implies [.p,q.[ c= REAL
+proof
+  assume
+A1: p in REAL;
+  let x be ext-real number;
+  assume
+A2: x in [.p,q.[;
+  then
+A3: p <= x by Th3;
+  x < q by A2,Th3;
+  hence thesis by A1,A3,XXREAL_0:46;
+end;
+
+theorem Th227:
+  q in REAL implies ].p,q.] c= REAL
+proof
+  assume
+A1: q in REAL;
+  let x be ext-real number;
+  assume
+A2: x in ].p,q.];
+  then
+A3: p < x by Th2;
+  x <= q by A2,Th2;
+  hence thesis by A1,A3,XXREAL_0:47;
+end;
+
+theorem Th228:
+  p in REAL & q in REAL implies [.p,q.] c= REAL
+proof
+  assume that
+A1: p in REAL and
+A2: q in REAL;
+  let x be ext-real number;
+  assume
+A3: x in [.p,q.];
+  then
+A4: p <= x by Th1;
+  x <= q by A3,Th1;
+  hence thesis by A1,A2,A4,XXREAL_0:45;
+end;
+
+registration
+  let p,q;
+  cluster ].p,q.[ -> real-membered;
+  coherence by Th225,MEMBERED:21;
+end;
+
+registration
+  let p be real number, q;
+  cluster [.p,q.[ -> real-membered;
+  coherence
   proof
     p in REAL by XREAL_0:def 1;
     then [.p,q.[ c= REAL by Th226;
-   hence thesis;
+    hence thesis;
   end;
 end;
 
-registration let q be real number, p;
- cluster ].p,q.] -> real-membered;
- coherence
+registration
+  let q be real number, p;
+  cluster ].p,q.] -> real-membered;
+  coherence
   proof
     q in REAL by XREAL_0:def 1;
     then ].p,q.] c= REAL by Th227;
-   hence thesis;
+    hence thesis;
   end;
 end;
 
-registration let p,q be real number;
- cluster [.p,q.] -> real-membered;
- coherence
+registration
+  let p,q be real number;
+  cluster [.p,q.] -> real-membered;
+  coherence
   proof
-    p in REAL & q in REAL by XREAL_0:def 1;
-    then [.p,q.] c= REAL by Th228;
-   hence thesis;
+A1: p in REAL by XREAL_0:def 1;
+    q in REAL by XREAL_0:def 1;
+    then [.p,q.] c= REAL by A1,Th228;
+    hence thesis;
   end;
 end;
 
 :: from LIMFUNC1,2008.06.13, A.T.
 
 theorem
- ].-infty,s.[ = {g where g is Real : g<s}
+  ].-infty,s.[ = {g where g is Real : g<s}
 proof
   thus ].-infty,s.[ c= {g where g is Real : g<s}
   proof
     let x be real number;
     assume
- x in ].-infty,s.[;
+A1: x in ].-infty,s.[;
     then
-B1:  -infty < x & x < s by Th4;
-    then x in REAL by XXREAL_0:48;
-    hence thesis by B1;
+A2: -infty < x by Th4;
+A3: x < s by A1,Th4;
+    then x in REAL by A2,XXREAL_0:48;
+    hence thesis by A3;
   end;
   let x be set;
   assume x in {g where g is Real : g<s};
   then consider g being Real such that
-A2: x = g & g < s;
+A4: x = g and
+A5: g < s;
   -infty < g by XXREAL_0:12;
-  hence thesis by A2,Th4;
+  hence thesis by A4,A5,Th4;
 end;
 
 theorem
- ].s,+infty.[ = {g where g is Real : s<g}
+  ].s,+infty.[ = {g where g is Real : s<g}
 proof
   thus ].s,+infty.[ c= {g where g is Real : s<g}
   proof
     let x be real number;
     assume
- x in ].s,+infty.[;
+A1: x in ].s,+infty.[;
     then
-B1:   s < x & x < +infty by Th4;
-    then x in REAL by XXREAL_0:48;
-    hence thesis by B1;
+A2: s < x by Th4;
+    x < +infty by A1,Th4;
+    then x in REAL by A2,XXREAL_0:48;
+    hence thesis by A2;
   end;
   let x;
   assume x in {g where g is Real : s<g};
   then consider g being Real such that
-A2: x = g & s < g;
+A3: x = g and
+A4: s < g;
   g < +infty by XXREAL_0:9;
-  hence thesis by A2,Th4;
+  hence thesis by A3,A4,Th4;
 end;
 
 theorem
- for s being real number
+  for s being real number
   holds ].-infty,s.] = {g where g is Real : g<=s}
-proof let s be real number;
-F: s in REAL by XREAL_0:def 1;
+proof
+  let s be real number;
   thus ].-infty,s.] c= {g where g is Real : g<=s}
   proof
     let x be real number;
     assume
- x in ].-infty,s.];
-    then x in ].-infty,s.];
+    x in ].-infty,s.];
     then
-B1:  -infty < x & x <= s by Th2;
-    then x in REAL by F,XXREAL_0:47;
-    hence thesis by B1;
+A1: x <= s by Th2;
+    x in REAL by XREAL_0:def 1;
+    hence thesis by A1;
   end;
   let x;
   assume x in {g where g is Real : g<=s};
   then consider g being Real such that
-A2: x = g & g <= s;
+A2: x = g and
+A3: g <= s;
   -infty < g by XXREAL_0:12;
-  hence thesis by A2,Th2;
+  hence thesis by A2,A3,Th2;
 end;
 
 theorem
- for s being real number
- holds [.s,+infty.[ = {g where g is Real : s<=g}
-proof let s be real number;
-F: s in REAL by XREAL_0:def 1;
+  for s being real number
+  holds [.s,+infty.[ = {g where g is Real : s<=g}
+proof
+  let s be real number;
   thus [.s,+infty.[ c= {g where g is Real : s<=g}
   proof
     let x be real number;
     assume
- x in [.s,+infty.[;
+    x in [.s,+infty.[;
     then
-B1:   s <= x & x < +infty by Th3;
-    then x in REAL by F,XXREAL_0:46;
-    hence thesis by B1;
+A1: s <= x by Th3;
+    x in REAL by XREAL_0:def 1;
+    hence thesis by A1;
   end;
   let x;
   assume x in {g where g is Real : s<=g};
   then consider g being Real such that
-A2: x = g & s <= g;
+A2: x = g and
+A3: s <= g;
   g < +infty by XXREAL_0:9;
-  hence thesis by A2,Th3;
+  hence thesis by A2,A3,Th3;
 end;
 
 theorem
- for x being real number holds
-   x in ].-infty,u.[ iff x < u
- proof let x be real number;
-    x in REAL by XREAL_0:def 1;
-    then -infty < x by XXREAL_0:12;
-   hence thesis by Th4;
- end;
+  for x being real number holds
+  x in ].-infty,u.[ iff x < u
+proof
+  let x be real number;
+  x in REAL by XREAL_0:def 1;
+  then -infty < x by XXREAL_0:12;
+  hence thesis by Th4;
+end;
 
 theorem
- for x being real number holds
-   x in ].-infty,u.] iff x <= u
- proof let x be real number;
-    x in REAL by XREAL_0:def 1;
-    then -infty < x by XXREAL_0:12;
-   hence thesis by Th2;
- end;
+  for x being real number holds
+  x in ].-infty,u.] iff x <= u
+proof
+  let x be real number;
+  x in REAL by XREAL_0:def 1;
+  then -infty < x by XXREAL_0:12;
+  hence thesis by Th2;
+end;
 
 theorem
- for x being real number holds
-   x in ].u,+infty.[ iff u < x
- proof let x be real number;
-    x in REAL by XREAL_0:def 1;
-    then x < +infty by XXREAL_0:9;
-   hence thesis by Th4;
- end;
+  for x being real number holds
+  x in ].u,+infty.[ iff u < x
+proof
+  let x be real number;
+  x in REAL by XREAL_0:def 1;
+  then x < +infty by XXREAL_0:9;
+  hence thesis by Th4;
+end;
 
 theorem
- for x being real number holds
-   x in [.u,+infty.[ iff u <= x
- proof let x be real number;
-    x in REAL by XREAL_0:def 1;
-    then x < +infty by XXREAL_0:9;
-   hence thesis by Th3;
- end;
+  for x being real number holds
+  x in [.u,+infty.[ iff u <= x
+proof
+  let x be real number;
+  x in REAL by XREAL_0:def 1;
+  then x < +infty by XXREAL_0:9;
+  hence thesis by Th3;
+end;
 
 theorem
   p <= r implies [.r,s.] c= [.p,+infty.]
 proof
- s <= +infty by XXREAL_0:3;
- hence thesis by Th34;
+  s <= +infty by XXREAL_0:3;
+  hence thesis by Th34;
 end;
 
 theorem
   p <= r implies [.r,s.[ c= [.p,+infty.]
 proof
- s <= +infty by XXREAL_0:3;
- hence thesis by Th35;
+  s <= +infty by XXREAL_0:3;
+  hence thesis by Th35;
 end;
 
 theorem
   p <= r implies ].r,s.] c= [.p,+infty.]
 proof
- s <= +infty by XXREAL_0:3;
- hence thesis by Th36;
+  s <= +infty by XXREAL_0:3;
+  hence thesis by Th36;
 end;
 
 theorem
   p <= r implies ].r,s.[ c= [.p,+infty.]
 proof
- s <= +infty by XXREAL_0:3;
- hence thesis by Th37;
+  s <= +infty by XXREAL_0:3;
+  hence thesis by Th37;
 end;
 
 theorem
   p <= r implies [.r,s.[ c= [.p,+infty.[
 proof
- s <= +infty by XXREAL_0:3;
- hence thesis by Th38;
+  s <= +infty by XXREAL_0:3;
+  hence thesis by Th38;
 end;
 
 theorem
@@ -4185,216 +4804,222 @@ theorem
 theorem
   p <= r implies ].r,s.[ c= ].p,+infty.]
 proof
- s <= +infty by XXREAL_0:3;
- hence thesis by Th41;
+  s <= +infty by XXREAL_0:3;
+  hence thesis by Th41;
 end;
 
 theorem
   p <= r implies ].r,s.] c= ].p,+infty.]
 proof
- s <= +infty by XXREAL_0:3;
- hence thesis by Th42;
+  s <= +infty by XXREAL_0:3;
+  hence thesis by Th42;
 end;
 
 theorem
   p <= r implies ].r,s.[ c= [.p,+infty.[
 proof
- s <= +infty by XXREAL_0:3;
- hence thesis by Th45;
+  s <= +infty by XXREAL_0:3;
+  hence thesis by Th45;
 end;
 
 theorem
   p <= r implies ].r,s.[ c= ].p,+infty.[
 proof
- s <= +infty by XXREAL_0:3;
- hence thesis by Th46;
+  s <= +infty by XXREAL_0:3;
+  hence thesis by Th46;
 end;
 
 theorem
   p < r implies [.r,s.[ c= ].p,+infty.[ by Th48,XXREAL_0:3;
 
 theorem
- for s being real number st
+  for s being real number st
   p < r holds [.r,s.] c= ].p,+infty.[
-proof let s be real number;
- s in REAL by XREAL_0:def 1;
- then s < +infty by XXREAL_0:9;
- hence thesis by Th47;
+proof
+  let s be real number;
+  s in REAL by XREAL_0:def 1;
+  then s < +infty by XXREAL_0:9;
+  hence thesis by Th47;
 end;
 
 theorem
- for s being real number st
+  for s being real number st
   p <= r holds ].r,s.] c= ].p,+infty.[
-proof let s be real number;
- s in REAL by XREAL_0:def 1;
- then s < +infty by XXREAL_0:9;
- hence thesis by Th49;
+proof
+  let s be real number;
+  s in REAL by XREAL_0:def 1;
+  hence thesis by Th49,XXREAL_0:9;
 end;
 
 theorem
- for s being real number st
+  for s being real number st
   p <= r holds [.r,s.] c= [.p,+infty.[
-proof let s be real number;
- s in REAL by XREAL_0:def 1;
- then s < +infty by XXREAL_0:9;
- hence thesis by Th43;
+proof
+  let s be real number;
+  s in REAL by XREAL_0:def 1;
+  hence thesis by Th43,XXREAL_0:9;
 end;
 
 theorem
- for s being real number st
+  for s being real number st
   p <= r holds ].r,s.] c= [.p,+infty.[
-proof let s be real number;
- s in REAL by XREAL_0:def 1;
- then s < +infty by XXREAL_0:9;
- hence thesis by Th44;
+proof
+  let s be real number;
+  s in REAL by XREAL_0:def 1;
+  hence thesis by Th44,XXREAL_0:9;
 end;
 
 theorem
-   s <= q implies [.r,s.] c= [.-infty,q.]
+  s <= q implies [.r,s.] c= [.-infty,q.]
 proof
   -infty <= r by XXREAL_0:5;
- hence thesis by Th34;
+  hence thesis by Th34;
 end;
 
 theorem
-   s <= q implies [.r,s.[ c= [.-infty,q.]
+  s <= q implies [.r,s.[ c= [.-infty,q.]
 proof
   -infty <= r by XXREAL_0:5;
- hence thesis by Th35;
+  hence thesis by Th35;
 end;
 
 theorem
-   s <= q implies ].r,s.] c= [.-infty,q.]
+  s <= q implies ].r,s.] c= [.-infty,q.]
 proof
   -infty <= r by XXREAL_0:5;
- hence thesis by Th36;
+  hence thesis by Th36;
 end;
 
 theorem
-   s <= q implies ].r,s.[ c= [.-infty,q.]
+  s <= q implies ].r,s.[ c= [.-infty,q.]
 proof
   -infty <= r by XXREAL_0:5;
- hence thesis by Th37;
+  hence thesis by Th37;
 end;
 
 theorem
-   s <= q implies [.r,s.[ c= [.-infty,q.[
+  s <= q implies [.r,s.[ c= [.-infty,q.[
 proof
   -infty <= r by XXREAL_0:5;
- hence thesis by Th38;
+  hence thesis by Th38;
 end;
 
 theorem
-   s <= q implies ].r,s.[ c= ].-infty,q.]
+  s <= q implies ].r,s.[ c= ].-infty,q.]
 proof
   -infty <= r by XXREAL_0:5;
- hence thesis by Th41;
+  hence thesis by Th41;
 end;
 
 theorem
-   s <= q implies ].r,s.] c= ].-infty,q.]
+  s <= q implies ].r,s.] c= ].-infty,q.]
 proof
   -infty <= r by XXREAL_0:5;
- hence thesis by Th42;
+  hence thesis by Th42;
 end;
 
 theorem
-   s < q implies [.r,s.] c= [.-infty,q.[ by Th43,XXREAL_0:5;
+  s < q implies [.r,s.] c= [.-infty,q.[ by Th43,XXREAL_0:5;
 
 theorem
-   s < q implies ].r,s.] c= [.-infty,q.[ by Th44,XXREAL_0:5;
+  s < q implies ].r,s.] c= [.-infty,q.[ by Th44,XXREAL_0:5;
 
 theorem
-   s <= q implies ].r,s.[ c= [.-infty,q.[
+  s <= q implies ].r,s.[ c= [.-infty,q.[
 proof
   -infty <= r by XXREAL_0:5;
- hence thesis by Th45;
+  hence thesis by Th45;
 end;
 
 theorem
-   s <= q implies ].r,s.[ c= ].-infty,q.[
+  s <= q implies ].r,s.[ c= ].-infty,q.[
 proof
   -infty <= r by XXREAL_0:5;
- hence thesis by Th46;
+  hence thesis by Th46;
 end;
 
 theorem
-   s < q implies ].r,s.] c= ].-infty,q.[ by Th49,XXREAL_0:5;
+  s < q implies ].r,s.] c= ].-infty,q.[ by Th49,XXREAL_0:5;
 
 theorem
- for r being real number st
-   s <= q holds [.r,s.] c= ].-infty,q.]
-proof let r be real number;
- r in REAL by XREAL_0:def 1;
- then -infty < r by XXREAL_0:12;
- hence thesis by Th39;
+  for r being real number st
+  s <= q holds [.r,s.] c= ].-infty,q.]
+proof
+  let r be real number;
+  r in REAL by XREAL_0:def 1;
+  hence thesis by Th39,XXREAL_0:12;
 end;
 
 theorem
- for r being real number st
-   s <= q holds [.r,s.[ c= ].-infty,q.]
-proof let r be real number;
- r in REAL by XREAL_0:def 1;
- then -infty < r by XXREAL_0:12;
- hence thesis by Th40;
+  for r being real number st
+  s <= q holds [.r,s.[ c= ].-infty,q.]
+proof
+  let r be real number;
+  r in REAL by XREAL_0:def 1;
+  hence thesis by Th40,XXREAL_0:12;
 end;
 
 theorem
- for r being real number st
-   s < q holds [.r,s.] c= ].-infty,q.[
-proof let r be real number;
- r in REAL by XREAL_0:def 1;
- then -infty < r by XXREAL_0:12;
- hence thesis by Th47;
+  for r being real number st
+  s < q holds [.r,s.] c= ].-infty,q.[
+proof
+  let r be real number;
+  r in REAL by XREAL_0:def 1;
+  then -infty < r by XXREAL_0:12;
+  hence thesis by Th47;
 end;
 
 theorem
- for r being real number st
-   s <= q holds [.r,s.[ c= ].-infty,q.[
-proof let r be real number;
- r in REAL by XREAL_0:def 1;
- then -infty < r by XXREAL_0:12;
- hence thesis by Th48;
+  for r being real number st
+  s <= q holds [.r,s.[ c= ].-infty,q.[
+proof
+  let r be real number;
+  r in REAL by XREAL_0:def 1;
+  hence thesis by Th48,XXREAL_0:12;
 end;
 
 theorem  :: LIMFUNC1:18
- for a,b being ext-real number holds
- ].-infty,b.[ /\ ].a,+infty.[ = ].a,b.[
- proof
+  for a,b being ext-real number holds
+  ].-infty,b.[ /\ ].a,+infty.[ = ].a,b.[
+proof
   let a,b be ext-real number;
-   -infty <= a & b <= +infty by XXREAL_0:3,5;
-  hence thesis by Th160;
- end;
+A1: -infty <= a by XXREAL_0:5;
+  b <= +infty by XXREAL_0:3;
+  hence thesis by A1,Th160;
+end;
 
 theorem :: BORSUK_5:91
- for b being real number holds
- ].-infty,b.] /\ ].p,+infty.[ = ].p,b.]
- proof
+  for b being real number holds
+  ].-infty,b.] /\ ].p,+infty.[ = ].p,b.]
+proof
   let b be real number;
-   b in REAL by XREAL_0:def 1;
-  then -infty <= p & b < +infty by XXREAL_0:5,9;
-  hence thesis by Th159;
- end;
+A1: b in REAL by XREAL_0:def 1;
+  -infty <= p by XXREAL_0:5;
+  hence thesis by A1,Th159,XXREAL_0:9;
+end;
 
 theorem
- for a being real number holds
- ].-infty,p.[ /\ [.a,+infty.[ = [.a,p.[
- proof
+  for a being real number holds
+  ].-infty,p.[ /\ [.a,+infty.[ = [.a,p.[
+proof
   let a be real number;
-   a in REAL by XREAL_0:def 1;
-  then -infty < a & p <= +infty by XXREAL_0:3,12;
-  hence thesis by Th154;
- end;
+  a in REAL by XREAL_0:def 1;
+  then -infty < a by XXREAL_0:12;
+  hence thesis by Th154,XXREAL_0:3;
+end;
 
 theorem :: LIMFUNC1:19
- for a,b being real number holds
- ].-infty,a.] /\ [.b,+infty.[ = [.b,a.]
- proof
+  for a,b being real number holds
+  ].-infty,a.] /\ [.b,+infty.[ = [.b,a.]
+proof
   let a,b be real number;
-  a in REAL & b in REAL by XREAL_0:def 1;
-  then -infty < b & a < +infty by XXREAL_0:9,12;
-  hence thesis by Th152;
- end;
+A1: a in REAL by XREAL_0:def 1;
+  b in REAL by XREAL_0:def 1;
+  then
+A2: -infty < b by XXREAL_0:12;
+  a < +infty by A1,XXREAL_0:9;
+  hence thesis by A2,Th152;
+end;
 
 theorem
   s <= p implies [.r,s.[ misses ].p,q.[
@@ -4508,1255 +5133,1366 @@ theorem
   ].r,+infty.] \ [.s,+infty.] = ].r,s.[ by Th191,XXREAL_0:3;
 
 theorem
- for s being real number holds
+  for s being real number holds
   [.-infty,t.] \ [.-infty,s.[ = [.s,t.]
 proof
- let s be real number;
+  let s be real number;
   s in REAL by XREAL_0:def 1;
-  then -infty < s by XXREAL_0:12;
- hence thesis by Th184;
+  hence thesis by Th184,XXREAL_0:12;
 end;
 
 theorem
- for s being real number holds
- [.-infty,t.[ \ [.-infty,s.[ = [.s,t.[
+  for s being real number holds
+  [.-infty,t.[ \ [.-infty,s.[ = [.s,t.[
 proof
- let s be real number;
+  let s be real number;
   s in REAL by XREAL_0:def 1;
-  then -infty < s by XXREAL_0:12;
- hence thesis by Th185;
+  hence thesis by Th185,XXREAL_0:12;
 end;
 
 theorem
- for s being real number holds
+  for s being real number holds
   ].-infty,t.[ \ ].-infty,s.] = ].s,t.[
 proof
- let s be real number;
+  let s be real number;
   s in REAL by XREAL_0:def 1;
-  then -infty < s by XXREAL_0:12;
- hence thesis by Th187;
+  hence thesis by Th187,XXREAL_0:12;
 end;
 
 theorem
- for s being real number holds
+  for s being real number holds
   ].-infty,t.] \ ].-infty,s.[ = [.s,t.]
 proof
- let s be real number;
+  let s be real number;
   s in REAL by XREAL_0:def 1;
-  then -infty < s by XXREAL_0:12;
- hence thesis by Th188;
+  hence thesis by Th188,XXREAL_0:12;
 end;
 
 theorem
- for s being real number holds
- ].-infty,t.[ \ ].-infty,s.[ = [.s,t.[
+  for s being real number holds
+  ].-infty,t.[ \ ].-infty,s.[ = [.s,t.[
 proof
- let s be real number;
+  let s be real number;
   s in REAL by XREAL_0:def 1;
-  then -infty < s by XXREAL_0:12;
- hence thesis by Th189;
+  hence thesis by Th189,XXREAL_0:12;
 end;
 
 theorem
- for s being real number holds
+  for s being real number holds
   [.r,+infty.] \ ].s,+infty.] = [.r,s.]
 proof
- let s be real number;
+  let s be real number;
   s in REAL by XREAL_0:def 1;
-  then s < +infty by XXREAL_0:9;
- hence thesis by Th192;
+  hence thesis by Th192,XXREAL_0:9;
 end;
 
 theorem
- for s being real number holds
+  for s being real number holds
   ].r,+infty.] \ ].s,+infty.] = ].r,s.]
 proof
- let s be real number;
+  let s be real number;
   s in REAL by XREAL_0:def 1;
-  then s < +infty by XXREAL_0:9;
- hence thesis by Th193;
+  hence thesis by Th193,XXREAL_0:9;
 end;
 
 theorem
- for s being real number holds
+  for s being real number holds
   [.r,+infty.[ \ [.s,+infty.[ = [.r,s.[
 proof
- let s be real number;
+  let s be real number;
   s in REAL by XREAL_0:def 1;
-  then s < +infty by XXREAL_0:9;
- hence thesis by Th194;
+  hence thesis by Th194,XXREAL_0:9;
 end;
 
 theorem
- for s being real number holds
+  for s being real number holds
   ].r,+infty.[ \ [.s,+infty.[ = ].r,s.[
 proof
- let s be real number;
+  let s be real number;
   s in REAL by XREAL_0:def 1;
-  then s < +infty by XXREAL_0:9;
- hence thesis by Th195;
+  hence thesis by Th195,XXREAL_0:9;
 end;
 
 theorem
- for s being real number holds
+  for s being real number holds
   [.r,+infty.[ \ ].s,+infty.[ = [.r,s.]
 proof
- let s be real number;
+  let s be real number;
   s in REAL by XREAL_0:def 1;
-  then s < +infty by XXREAL_0:9;
- hence thesis by Th196;
+  hence thesis by Th196,XXREAL_0:9;
 end;
 
 theorem
- for s being real number holds
+  for s being real number holds
   ].r,+infty.[ \ ].s,+infty.[ = ].r,s.]
 proof
- let s be real number;
+  let s be real number;
   s in REAL by XREAL_0:def 1;
-  then s < +infty by XXREAL_0:9;
- hence thesis by Th197;
+  hence thesis by Th197,XXREAL_0:9;
 end;
 
 theorem Th297:
- r < s & p < q
-   implies ].r,q.[ \ ].p,s.[ = ].r,p.] \/ [.s,q.[
+  r < s & p < q
+  implies ].r,q.[ \ ].p,s.[ = ].r,p.] \/ [.s,q.[
 proof
- assume that
-Z1: r < s and
-Z3: p < q;
- let x be ext-real number;
- thus x in ].r,q.[ \ ].p,s.[ implies x in ].r,p.] \/ [.s,q.[
+  assume that
+A1: r < s and
+A2: p < q;
+  let x be ext-real number;
+  thus x in ].r,q.[ \ ].p,s.[ implies x in ].r,p.] \/ [.s,q.[
   proof
-   assume x in ].r,q.[ \ ].p,s.[;
-    then x in ].r,q.[ & not x in ].p,s.[ by XBOOLE_0:def 5;
-    then r < x & x < q & not(p < x & x < s) by Th4;
-    then x in ].r,p.] or x in [.s,q.[ by Th2,Th3;
-   hence thesis by XBOOLE_0:def 3;
+    assume
+A3: x in ].r,q.[ \ ].p,s.[;
+    then
+A4: not x in ].p,s.[ by XBOOLE_0:def 5;
+A5: r < x by A3,Th4;
+A6: x < q by A3,Th4;
+    not(p < x & x < s) by A4,Th4;
+    then x in ].r,p.] or x in [.s,q.[ by A5,A6,Th2,Th3;
+    hence thesis by XBOOLE_0:def 3;
   end;
- assume x in ].r,p.] \/ [.s,q.[;
+  assume x in ].r,p.] \/ [.s,q.[;
   then x in ].r,p.] or x in [.s,q.[ by XBOOLE_0:def 3;
-  then r < x & x <= p or s <= x & x < q by Th2,Th3;
-  then r < x & x < q & (x <= p or s <= x) by Z1,Z3,XXREAL_0:2;
-  then x in ].r,q.[ & not x in ].p,s.[ by Th4;
- hence thesis by XBOOLE_0:def 5;
+  then
+A7: r < x & x <= p or s <= x & x < q by Th2,Th3;
+  then
+A8: r < x by A1,XXREAL_0:2;
+  x < q by A2,A7,XXREAL_0:2;
+  then
+A9: x in ].r,q.[ by A8,Th4;
+  not x in ].p,s.[ by A7,Th4;
+  hence thesis by A9,XBOOLE_0:def 5;
 end;
 
 theorem Th298:
- r <= s & p < q
-   implies [.r,q.[ \ ].p,s.[ = [.r,p.] \/ [.s,q.[
+  r <= s & p < q
+  implies [.r,q.[ \ ].p,s.[ = [.r,p.] \/ [.s,q.[
 proof
- assume that
-Z1: r <= s and
-Z3: p < q;
- let x be ext-real number;
- thus x in [.r,q.[ \ ].p,s.[ implies x in [.r,p.] \/ [.s,q.[
+  assume that
+A1: r <= s and
+A2: p < q;
+  let x be ext-real number;
+  thus x in [.r,q.[ \ ].p,s.[ implies x in [.r,p.] \/ [.s,q.[
   proof
-   assume x in [.r,q.[ \ ].p,s.[;
-    then x in [.r,q.[ & not x in ].p,s.[ by XBOOLE_0:def 5;
-    then r <= x & x < q & not(p < x & x < s) by Th4,Th3;
-    then x in [.r,p.] or x in [.s,q.[ by Th3,Th1;
-   hence thesis by XBOOLE_0:def 3;
+    assume
+A3: x in [.r,q.[ \ ].p,s.[;
+    then
+A4: not x in ].p,s.[ by XBOOLE_0:def 5;
+A5: r <= x by A3,Th3;
+A6: x < q by A3,Th3;
+    not(p < x & x < s) by A4,Th4;
+    then x in [.r,p.] or x in [.s,q.[ by A5,A6,Th1,Th3;
+    hence thesis by XBOOLE_0:def 3;
   end;
- assume x in [.r,p.] \/ [.s,q.[;
+  assume x in [.r,p.] \/ [.s,q.[;
   then x in [.r,p.] or x in [.s,q.[ by XBOOLE_0:def 3;
-  then r <= x & x <= p or s <= x & x < q by Th3,Th1;
-  then r <= x & x < q & (x <= p or s <= x) by Z1,Z3,XXREAL_0:2;
-  then x in [.r,q.[ & not x in ].p,s.[ by Th4,Th3;
- hence thesis by XBOOLE_0:def 5;
+  then
+A7: r <= x & x <= p or s <= x & x < q by Th1,Th3;
+  then
+A8: r <= x by A1,XXREAL_0:2;
+  x < q by A2,A7,XXREAL_0:2;
+  then
+A9: x in [.r,q.[ by A8,Th3;
+  not x in ].p,s.[ by A7,Th4;
+  hence thesis by A9,XBOOLE_0:def 5;
 end;
 
 theorem Th299:
- r < s & p <= q
-   implies ].r,q.] \ ].p,s.[ = ].r,p.] \/ [.s,q.]
+  r < s & p <= q
+  implies ].r,q.] \ ].p,s.[ = ].r,p.] \/ [.s,q.]
 proof
- assume that
-Z1: r < s and
-Z3: p <= q;
- let x be ext-real number;
- thus x in ].r,q.] \ ].p,s.[ implies x in ].r,p.] \/ [.s,q.]
+  assume that
+A1: r < s and
+A2: p <= q;
+  let x be ext-real number;
+  thus x in ].r,q.] \ ].p,s.[ implies x in ].r,p.] \/ [.s,q.]
   proof
-   assume x in ].r,q.] \ ].p,s.[;
-    then x in ].r,q.] & not x in ].p,s.[ by XBOOLE_0:def 5;
-    then r < x & x <= q & not(p < x & x < s) by Th2,Th4;
-    then x in ].r,p.] or x in [.s,q.] by Th2,Th1;
-   hence thesis by XBOOLE_0:def 3;
+    assume
+A3: x in ].r,q.] \ ].p,s.[;
+    then
+A4: not x in ].p,s.[ by XBOOLE_0:def 5;
+A5: r < x by A3,Th2;
+A6: x <= q by A3,Th2;
+    not(p < x & x < s) by A4,Th4;
+    then x in ].r,p.] or x in [.s,q.] by A5,A6,Th1,Th2;
+    hence thesis by XBOOLE_0:def 3;
   end;
- assume x in ].r,p.] \/ [.s,q.];
+  assume x in ].r,p.] \/ [.s,q.];
   then x in ].r,p.] or x in [.s,q.] by XBOOLE_0:def 3;
-  then r < x & x <= p or s <= x & x <= q by Th2,Th1;
-  then r < x & x <= q & (x <= p or s <= x) by Z1,Z3,XXREAL_0:2;
-  then x in ].r,q.] & not x in ].p,s.[ by Th4,Th2;
- hence thesis by XBOOLE_0:def 5;
+  then
+A7: r < x & x <= p or s <= x & x <= q by Th1,Th2;
+  then
+A8: r < x by A1,XXREAL_0:2;
+  x <= q by A2,A7,XXREAL_0:2;
+  then
+A9: x in ].r,q.] by A8,Th2;
+  not x in ].p,s.[ by A7,Th4;
+  hence thesis by A9,XBOOLE_0:def 5;
 end;
 
 theorem Th300:
- r <= s & p <= q
-   implies [.r,q.] \ ].p,s.[ = [.r,p.] \/ [.s,q.]
+  r <= s & p <= q
+  implies [.r,q.] \ ].p,s.[ = [.r,p.] \/ [.s,q.]
 proof
- assume that
-Z1: r <= s and
-Z3: p <= q;
- let x be ext-real number;
- thus x in [.r,q.] \ ].p,s.[ implies x in [.r,p.] \/ [.s,q.]
+  assume that
+A1: r <= s and
+A2: p <= q;
+  let x be ext-real number;
+  thus x in [.r,q.] \ ].p,s.[ implies x in [.r,p.] \/ [.s,q.]
   proof
-   assume x in [.r,q.] \ ].p,s.[;
-    then x in [.r,q.] & not x in ].p,s.[ by XBOOLE_0:def 5;
-    then r <= x & x <= q & not(p < x & x < s) by Th4,Th1;
-    then x in [.r,p.] or x in [.s,q.] by Th1;
-   hence thesis by XBOOLE_0:def 3;
+    assume
+A3: x in [.r,q.] \ ].p,s.[;
+    then
+A4: not x in ].p,s.[ by XBOOLE_0:def 5;
+A5: r <= x by A3,Th1;
+A6: x <= q by A3,Th1;
+    not(p < x & x < s) by A4,Th4;
+    then x in [.r,p.] or x in [.s,q.] by A5,A6,Th1;
+    hence thesis by XBOOLE_0:def 3;
   end;
- assume x in [.r,p.] \/ [.s,q.];
+  assume x in [.r,p.] \/ [.s,q.];
   then x in [.r,p.] or x in [.s,q.] by XBOOLE_0:def 3;
-  then r <= x & x <= p or s <= x & x <= q by Th1;
-  then r <= x & x <= q & (x <= p or s <= x) by Z1,Z3,XXREAL_0:2;
-  then x in [.r,q.] & not x in ].p,s.[ by Th4,Th1;
- hence thesis by XBOOLE_0:def 5;
+  then
+A7: r <= x & x <= p or s <= x & x <= q by Th1;
+  then
+A8: r <= x by A1,XXREAL_0:2;
+  x <= q by A2,A7,XXREAL_0:2;
+  then
+A9: x in [.r,q.] by A8,Th1;
+  not x in ].p,s.[ by A7,Th4;
+  hence thesis by A9,XBOOLE_0:def 5;
 end;
 
 theorem Th301:
- r < s & p <= q
-   implies ].r,q.[ \ [.p,s.[ = ].r,p.[ \/ [.s,q.[
+  r < s & p <= q
+  implies ].r,q.[ \ [.p,s.[ = ].r,p.[ \/ [.s,q.[
 proof
- assume that
-Z1: r < s and
-Z3: p <= q;
- let x be ext-real number;
- thus x in ].r,q.[ \ [.p,s.[ implies x in ].r,p.[ \/ [.s,q.[
+  assume that
+A1: r < s and
+A2: p <= q;
+  let x be ext-real number;
+  thus x in ].r,q.[ \ [.p,s.[ implies x in ].r,p.[ \/ [.s,q.[
   proof
-   assume x in ].r,q.[ \ [.p,s.[;
-    then x in ].r,q.[ & not x in [.p,s.[ by XBOOLE_0:def 5;
-    then r < x & x < q & not(p <= x & x < s) by Th4,Th3;
-    then x in ].r,p.[ or x in [.s,q.[ by Th3,Th4;
-   hence thesis by XBOOLE_0:def 3;
+    assume
+A3: x in ].r,q.[ \ [.p,s.[;
+    then
+A4: not x in [.p,s.[ by XBOOLE_0:def 5;
+A5: r < x by A3,Th4;
+A6: x < q by A3,Th4;
+    not(p <= x & x < s) by A4,Th3;
+    then x in ].r,p.[ or x in [.s,q.[ by A5,A6,Th3,Th4;
+    hence thesis by XBOOLE_0:def 3;
   end;
- assume x in ].r,p.[ \/ [.s,q.[;
+  assume x in ].r,p.[ \/ [.s,q.[;
   then x in ].r,p.[ or x in [.s,q.[ by XBOOLE_0:def 3;
-  then r < x & x < p or s <= x & x < q by Th3,Th4;
-  then r < x & x < q & (x < p or s <= x) by Z1,Z3,XXREAL_0:2;
-  then x in ].r,q.[ & not x in [.p,s.[ by Th4,Th3;
- hence thesis by XBOOLE_0:def 5;
+  then
+A7: r < x & x < p or s <= x & x < q by Th3,Th4;
+  then
+A8: r < x by A1,XXREAL_0:2;
+  x < q by A2,A7,XXREAL_0:2;
+  then
+A9: x in ].r,q.[ by A8,Th4;
+  not x in [.p,s.[ by A7,Th3;
+  hence thesis by A9,XBOOLE_0:def 5;
 end;
 
 theorem Th302:
- r <= s & p <= q
-   implies [.r,q.[ \ [.p,s.[ = [.r,p.[ \/ [.s,q.[
+  r <= s & p <= q
+  implies [.r,q.[ \ [.p,s.[ = [.r,p.[ \/ [.s,q.[
 proof
- assume that
-Z1: r <= s and
-Z3: p <= q;
- let x be ext-real number;
- thus x in [.r,q.[ \ [.p,s.[ implies x in [.r,p.[ \/ [.s,q.[
+  assume that
+A1: r <= s and
+A2: p <= q;
+  let x be ext-real number;
+  thus x in [.r,q.[ \ [.p,s.[ implies x in [.r,p.[ \/ [.s,q.[
   proof
-   assume x in [.r,q.[ \ [.p,s.[;
-    then x in [.r,q.[ & not x in [.p,s.[ by XBOOLE_0:def 5;
-    then r <= x & x < q & not(p <= x & x < s) by Th3;
-    then x in [.r,p.[ or x in [.s,q.[ by Th3;
-   hence thesis by XBOOLE_0:def 3;
+    assume
+A3: x in [.r,q.[ \ [.p,s.[;
+    then
+A4: not x in [.p,s.[ by XBOOLE_0:def 5;
+A5: r <= x by A3,Th3;
+A6: x < q by A3,Th3;
+    not(p <= x & x < s) by A4,Th3;
+    then x in [.r,p.[ or x in [.s,q.[ by A5,A6,Th3;
+    hence thesis by XBOOLE_0:def 3;
   end;
- assume x in [.r,p.[ \/ [.s,q.[;
+  assume x in [.r,p.[ \/ [.s,q.[;
   then x in [.r,p.[ or x in [.s,q.[ by XBOOLE_0:def 3;
-  then r <= x & x < p or s <= x & x < q by Th3;
-  then r <= x & x < q & (x < p or s <= x) by Z1,Z3,XXREAL_0:2;
-  then x in [.r,q.[ & not x in [.p,s.[ by Th3;
- hence thesis by XBOOLE_0:def 5;
+  then
+A7: r <= x & x < p or s <= x & x < q by Th3;
+  then
+A8: r <= x by A1,XXREAL_0:2;
+  x < q by A2,A7,XXREAL_0:2;
+  then
+A9: x in [.r,q.[ by A8,Th3;
+  not x in [.p,s.[ by A7,Th3;
+  hence thesis by A9,XBOOLE_0:def 5;
 end;
 
 theorem Th303:
- r < s & p <= q
-   implies ].r,q.] \ [.p,s.[ = ].r,p.[ \/ [.s,q.]
+  r < s & p <= q
+  implies ].r,q.] \ [.p,s.[ = ].r,p.[ \/ [.s,q.]
 proof
- assume that
-Z1: r < s and
-Z3: p <= q;
- let x be ext-real number;
- thus x in ].r,q.] \ [.p,s.[ implies x in ].r,p.[ \/ [.s,q.]
+  assume that
+A1: r < s and
+A2: p <= q;
+  let x be ext-real number;
+  thus x in ].r,q.] \ [.p,s.[ implies x in ].r,p.[ \/ [.s,q.]
   proof
-   assume x in ].r,q.] \ [.p,s.[;
-    then x in ].r,q.] & not x in [.p,s.[ by XBOOLE_0:def 5;
-    then r < x & x <= q & not(p <= x & x < s) by Th2,Th3;
-    then x in ].r,p.[ or x in [.s,q.] by Th1,Th4;
-   hence thesis by XBOOLE_0:def 3;
+    assume
+A3: x in ].r,q.] \ [.p,s.[;
+    then
+A4: not x in [.p,s.[ by XBOOLE_0:def 5;
+A5: r < x by A3,Th2;
+A6: x <= q by A3,Th2;
+    not(p <= x & x < s) by A4,Th3;
+    then x in ].r,p.[ or x in [.s,q.] by A5,A6,Th1,Th4;
+    hence thesis by XBOOLE_0:def 3;
   end;
- assume x in ].r,p.[ \/ [.s,q.];
+  assume x in ].r,p.[ \/ [.s,q.];
   then x in ].r,p.[ or x in [.s,q.] by XBOOLE_0:def 3;
-  then r < x & x < p or s <= x & x <= q by Th1,Th4;
-  then r < x & x <= q & (x < p or s <= x) by Z1,Z3,XXREAL_0:2;
-  then x in ].r,q.] & not x in [.p,s.[ by Th2,Th3;
- hence thesis by XBOOLE_0:def 5;
+  then
+A7: r < x & x < p or s <= x & x <= q by Th1,Th4;
+  then
+A8: r < x by A1,XXREAL_0:2;
+  x <= q by A2,A7,XXREAL_0:2;
+  then
+A9: x in ].r,q.] by A8,Th2;
+  not x in [.p,s.[ by A7,Th3;
+  hence thesis by A9,XBOOLE_0:def 5;
 end;
 
 theorem Th304:
- r <= s & p <= q
-   implies [.r,q.] \ [.p,s.[ = [.r,p.[ \/ [.s,q.]
+  r <= s & p <= q
+  implies [.r,q.] \ [.p,s.[ = [.r,p.[ \/ [.s,q.]
 proof
- assume that
-Z1: r <= s and
-Z3: p <= q;
- let x be ext-real number;
- thus x in [.r,q.] \ [.p,s.[ implies x in [.r,p.[ \/ [.s,q.]
+  assume that
+A1: r <= s and
+A2: p <= q;
+  let x be ext-real number;
+  thus x in [.r,q.] \ [.p,s.[ implies x in [.r,p.[ \/ [.s,q.]
   proof
-   assume x in [.r,q.] \ [.p,s.[;
-    then x in [.r,q.] & not x in [.p,s.[ by XBOOLE_0:def 5;
-    then r <= x & x <= q & not(p <= x & x < s) by Th3,Th1;
-    then x in [.r,p.[ or x in [.s,q.] by Th3,Th1;
-   hence thesis by XBOOLE_0:def 3;
+    assume
+A3: x in [.r,q.] \ [.p,s.[;
+    then
+A4: not x in [.p,s.[ by XBOOLE_0:def 5;
+A5: r <= x by A3,Th1;
+A6: x <= q by A3,Th1;
+    not(p <= x & x < s) by A4,Th3;
+    then x in [.r,p.[ or x in [.s,q.] by A5,A6,Th1,Th3;
+    hence thesis by XBOOLE_0:def 3;
   end;
- assume x in [.r,p.[ \/ [.s,q.];
+  assume x in [.r,p.[ \/ [.s,q.];
   then x in [.r,p.[ or x in [.s,q.] by XBOOLE_0:def 3;
-  then r <= x & x < p or s <= x & x <= q by Th3,Th1;
-  then r <= x & x <= q & (x < p or s <= x) by Z1,Z3,XXREAL_0:2;
-  then x in [.r,q.] & not x in [.p,s.[ by Th3,Th1;
- hence thesis by XBOOLE_0:def 5;
+  then
+A7: r <= x & x < p or s <= x & x <= q by Th1,Th3;
+  then
+A8: r <= x by A1,XXREAL_0:2;
+  x <= q by A2,A7,XXREAL_0:2;
+  then
+A9: x in [.r,q.] by A8,Th1;
+  not x in [.p,s.[ by A7,Th3;
+  hence thesis by A9,XBOOLE_0:def 5;
 end;
 
 theorem Th305:
- r < s & p < q
-   implies ].r,q.[ \ ].p,s.] = ].r,p.] \/ ].s,q.[
+  r < s & p < q
+  implies ].r,q.[ \ ].p,s.] = ].r,p.] \/ ].s,q.[
 proof
- assume that
-Z1: r < s and
-Z3: p < q;
- let x be ext-real number;
- thus x in ].r,q.[ \ ].p,s.] implies x in ].r,p.] \/ ].s,q.[
+  assume that
+A1: r < s and
+A2: p < q;
+  let x be ext-real number;
+  thus x in ].r,q.[ \ ].p,s.] implies x in ].r,p.] \/ ].s,q.[
   proof
-   assume x in ].r,q.[ \ ].p,s.];
-    then x in ].r,q.[ & not x in ].p,s.] by XBOOLE_0:def 5;
-    then r < x & x < q & not(p < x & x <= s) by Th4,Th2;
-    then x in ].r,p.] or x in ].s,q.[ by Th2,Th4;
-   hence thesis by XBOOLE_0:def 3;
+    assume
+A3: x in ].r,q.[ \ ].p,s.];
+    then
+A4: not x in ].p,s.] by XBOOLE_0:def 5;
+A5: r < x by A3,Th4;
+A6: x < q by A3,Th4;
+    not(p < x & x <= s) by A4,Th2;
+    then x in ].r,p.] or x in ].s,q.[ by A5,A6,Th2,Th4;
+    hence thesis by XBOOLE_0:def 3;
   end;
- assume x in ].r,p.] \/ ].s,q.[;
+  assume x in ].r,p.] \/ ].s,q.[;
   then x in ].r,p.] or x in ].s,q.[ by XBOOLE_0:def 3;
-  then r < x & x <= p or s < x & x < q by Th2,Th4;
-  then r < x & x < q & (x <= p or s < x) by Z1,Z3,XXREAL_0:2;
-  then x in ].r,q.[ & not x in ].p,s.] by Th4,Th2;
- hence thesis by XBOOLE_0:def 5;
+  then
+A7: r < x & x <= p or s < x & x < q by Th2,Th4;
+  then
+A8: r < x by A1,XXREAL_0:2;
+  x < q by A2,A7,XXREAL_0:2;
+  then
+A9: x in ].r,q.[ by A8,Th4;
+  not x in ].p,s.] by A7,Th2;
+  hence thesis by A9,XBOOLE_0:def 5;
 end;
 
 theorem Th306:
- r <= s & p < q
-   implies [.r,q.[ \ ].p,s.] = [.r,p.] \/ ].s,q.[
+  r <= s & p < q
+  implies [.r,q.[ \ ].p,s.] = [.r,p.] \/ ].s,q.[
 proof
- assume that
-Z1: r <= s and
-Z3: p < q;
- let x be ext-real number;
- thus x in [.r,q.[ \ ].p,s.] implies x in [.r,p.] \/ ].s,q.[
+  assume that
+A1: r <= s and
+A2: p < q;
+  let x be ext-real number;
+  thus x in [.r,q.[ \ ].p,s.] implies x in [.r,p.] \/ ].s,q.[
   proof
-   assume x in [.r,q.[ \ ].p,s.];
-    then x in [.r,q.[ & not x in ].p,s.] by XBOOLE_0:def 5;
-    then r <= x & x < q & not(p < x & x <= s) by Th3,Th2;
-    then x in [.r,p.] or x in ].s,q.[ by Th1,Th4;
-   hence thesis by XBOOLE_0:def 3;
+    assume
+A3: x in [.r,q.[ \ ].p,s.];
+    then
+A4: not x in ].p,s.] by XBOOLE_0:def 5;
+A5: r <= x by A3,Th3;
+A6: x < q by A3,Th3;
+    not(p < x & x <= s) by A4,Th2;
+    then x in [.r,p.] or x in ].s,q.[ by A5,A6,Th1,Th4;
+    hence thesis by XBOOLE_0:def 3;
   end;
- assume x in [.r,p.] \/ ].s,q.[;
+  assume x in [.r,p.] \/ ].s,q.[;
   then x in [.r,p.] or x in ].s,q.[ by XBOOLE_0:def 3;
-  then r <= x & x <= p or s < x & x < q by Th1,Th4;
-  then r <= x & x < q & (x <= p or s < x) by Z1,Z3,XXREAL_0:2;
-  then x in [.r,q.[ & not x in ].p,s.] by Th3,Th2;
- hence thesis by XBOOLE_0:def 5;
+  then
+A7: r <= x & x <= p or s < x & x < q by Th1,Th4;
+  then
+A8: r <= x by A1,XXREAL_0:2;
+  x < q by A2,A7,XXREAL_0:2;
+  then
+A9: x in [.r,q.[ by A8,Th3;
+  not x in ].p,s.] by A7,Th2;
+  hence thesis by A9,XBOOLE_0:def 5;
 end;
 
 theorem Th307:
- r < s & p <= q
-   implies ].r,q.] \ ].p,s.] = ].r,p.] \/ ].s,q.]
+  r < s & p <= q
+  implies ].r,q.] \ ].p,s.] = ].r,p.] \/ ].s,q.]
 proof
- assume that
-Z1: r < s and
-Z3: p <= q;
- let x be ext-real number;
- thus x in ].r,q.] \ ].p,s.] implies x in ].r,p.] \/ ].s,q.]
+  assume that
+A1: r < s and
+A2: p <= q;
+  let x be ext-real number;
+  thus x in ].r,q.] \ ].p,s.] implies x in ].r,p.] \/ ].s,q.]
   proof
-   assume x in ].r,q.] \ ].p,s.];
-    then x in ].r,q.] & not x in ].p,s.] by XBOOLE_0:def 5;
-    then r < x & x <= q & not(p < x & x <= s) by Th2;
-    then x in ].r,p.] or x in ].s,q.] by Th2;
-   hence thesis by XBOOLE_0:def 3;
+    assume
+A3: x in ].r,q.] \ ].p,s.];
+    then
+A4: not x in ].p,s.] by XBOOLE_0:def 5;
+A5: r < x by A3,Th2;
+A6: x <= q by A3,Th2;
+    not(p < x & x <= s) by A4,Th2;
+    then x in ].r,p.] or x in ].s,q.] by A5,A6,Th2;
+    hence thesis by XBOOLE_0:def 3;
   end;
- assume x in ].r,p.] \/ ].s,q.];
+  assume x in ].r,p.] \/ ].s,q.];
   then x in ].r,p.] or x in ].s,q.] by XBOOLE_0:def 3;
-  then r < x & x <= p or s < x & x <= q by Th2;
-  then r < x & x <= q & (x <= p or s < x) by Z1,Z3,XXREAL_0:2;
-  then x in ].r,q.] & not x in ].p,s.] by Th2;
- hence thesis by XBOOLE_0:def 5;
+  then
+A7: r < x & x <= p or s < x & x <= q by Th2;
+  then
+A8: r < x by A1,XXREAL_0:2;
+  x <= q by A2,A7,XXREAL_0:2;
+  then
+A9: x in ].r,q.] by A8,Th2;
+  not x in ].p,s.] by A7,Th2;
+  hence thesis by A9,XBOOLE_0:def 5;
 end;
 
 theorem Th308:
- r <= s & p <= q
-   implies [.r,q.] \ ].p,s.] = [.r,p.] \/ ].s,q.]
+  r <= s & p <= q
+  implies [.r,q.] \ ].p,s.] = [.r,p.] \/ ].s,q.]
 proof
- assume that
-Z1: r <= s and
-Z3: p <= q;
- let x be ext-real number;
- thus x in [.r,q.] \ ].p,s.] implies x in [.r,p.] \/ ].s,q.]
+  assume that
+A1: r <= s and
+A2: p <= q;
+  let x be ext-real number;
+  thus x in [.r,q.] \ ].p,s.] implies x in [.r,p.] \/ ].s,q.]
   proof
-   assume x in [.r,q.] \ ].p,s.];
-    then x in [.r,q.] & not x in ].p,s.] by XBOOLE_0:def 5;
-    then r <= x & x <= q & not(p < x & x <= s) by Th1,Th2;
-    then x in [.r,p.] or x in ].s,q.] by Th1,Th2;
-   hence thesis by XBOOLE_0:def 3;
+    assume
+A3: x in [.r,q.] \ ].p,s.];
+    then
+A4: not x in ].p,s.] by XBOOLE_0:def 5;
+A5: r <= x by A3,Th1;
+A6: x <= q by A3,Th1;
+    not(p < x & x <= s) by A4,Th2;
+    then x in [.r,p.] or x in ].s,q.] by A5,A6,Th1,Th2;
+    hence thesis by XBOOLE_0:def 3;
   end;
- assume x in [.r,p.] \/ ].s,q.];
+  assume x in [.r,p.] \/ ].s,q.];
   then x in [.r,p.] or x in ].s,q.] by XBOOLE_0:def 3;
-  then r <= x & x <= p or s < x & x <= q by Th1,Th2;
-  then r <= x & x <= q & (x <= p or s < x) by Z1,Z3,XXREAL_0:2;
-  then x in [.r,q.] & not x in ].p,s.] by Th1,Th2;
- hence thesis by XBOOLE_0:def 5;
+  then
+A7: r <= x & x <= p or s < x & x <= q by Th1,Th2;
+  then
+A8: r <= x by A1,XXREAL_0:2;
+  x <= q by A2,A7,XXREAL_0:2;
+  then
+A9: x in [.r,q.] by A8,Th1;
+  not x in ].p,s.] by A7,Th2;
+  hence thesis by A9,XBOOLE_0:def 5;
 end;
 
 theorem Th309:
- r <= s & p <= q
-   implies ].r,q.[ \ [.p,s.] = ].r,p.[ \/ ].s,q.[
+  r <= s & p <= q
+  implies ].r,q.[ \ [.p,s.] = ].r,p.[ \/ ].s,q.[
 proof
- assume that
-Z1: r <= s and
-Z3: p <= q;
- let x be real number;
- thus x in ].r,q.[ \ [.p,s.] implies x in ].r,p.[ \/ ].s,q.[
+  assume that
+A1: r <= s and
+A2: p <= q;
+  let x be real number;
+  thus x in ].r,q.[ \ [.p,s.] implies x in ].r,p.[ \/ ].s,q.[
   proof
-   assume x in ].r,q.[ \ [.p,s.];
-    then x in ].r,q.[ & not x in [.p,s.] by XBOOLE_0:def 5;
-    then r < x & x < q & not(p <= x & x <= s) by Th4,Th1;
-    then x in ].r,p.[ or x in ].s,q.[ by Th4;
-   hence thesis by XBOOLE_0:def 3;
+    assume
+A3: x in ].r,q.[ \ [.p,s.];
+    then
+A4: not x in [.p,s.] by XBOOLE_0:def 5;
+A5: r < x by A3,Th4;
+A6: x < q by A3,Th4;
+    not(p <= x & x <= s) by A4,Th1;
+    then x in ].r,p.[ or x in ].s,q.[ by A5,A6,Th4;
+    hence thesis by XBOOLE_0:def 3;
   end;
- assume x in ].r,p.[ \/ ].s,q.[;
+  assume x in ].r,p.[ \/ ].s,q.[;
   then x in ].r,p.[ or x in ].s,q.[ by XBOOLE_0:def 3;
-  then r < x & x < p or s < x & x < q by Th4;
-  then r < x & x < q & (x < p or s < x) by Z1,Z3,XXREAL_0:2;
-  then x in ].r,q.[ & not x in [.p,s.] by Th4,Th1;
- hence thesis by XBOOLE_0:def 5;
+  then
+A7: r < x & x < p or s < x & x < q by Th4;
+  then
+A8: r < x by A1,XXREAL_0:2;
+  x < q by A2,A7,XXREAL_0:2;
+  then
+A9: x in ].r,q.[ by A8,Th4;
+  not x in [.p,s.] by A7,Th1;
+  hence thesis by A9,XBOOLE_0:def 5;
 end;
 
 theorem Th310:
- r <= s & p <= q
-   implies [.r,q.[ \ [.p,s.] = [.r,p.[ \/ ].s,q.[
+  r <= s & p <= q
+  implies [.r,q.[ \ [.p,s.] = [.r,p.[ \/ ].s,q.[
 proof
- assume that
-Z1: r <= s and
-Z3: p <= q;
- let x be ext-real number;
- thus x in [.r,q.[ \ [.p,s.] implies x in [.r,p.[ \/ ].s,q.[
+  assume that
+A1: r <= s and
+A2: p <= q;
+  let x be ext-real number;
+  thus x in [.r,q.[ \ [.p,s.] implies x in [.r,p.[ \/ ].s,q.[
   proof
-   assume x in [.r,q.[ \ [.p,s.];
-    then x in [.r,q.[ & not x in [.p,s.] by XBOOLE_0:def 5;
-    then r <= x & x < q & not(p <= x & x <= s) by Th3,Th1;
-    then x in [.r,p.[ or x in ].s,q.[ by Th3,Th4;
-   hence thesis by XBOOLE_0:def 3;
+    assume
+A3: x in [.r,q.[ \ [.p,s.];
+    then
+A4: not x in [.p,s.] by XBOOLE_0:def 5;
+A5: r <= x by A3,Th3;
+A6: x < q by A3,Th3;
+    not(p <= x & x <= s) by A4,Th1;
+    then x in [.r,p.[ or x in ].s,q.[ by A5,A6,Th3,Th4;
+    hence thesis by XBOOLE_0:def 3;
   end;
- assume x in [.r,p.[ \/ ].s,q.[;
+  assume x in [.r,p.[ \/ ].s,q.[;
   then x in [.r,p.[ or x in ].s,q.[ by XBOOLE_0:def 3;
-  then r <= x & x < p or s < x & x < q by Th3,Th4;
-  then r <= x & x < q & (x < p or s < x) by Z1,Z3,XXREAL_0:2;
-  then x in [.r,q.[ & not x in [.p,s.] by Th3,Th1;
- hence thesis by XBOOLE_0:def 5;
+  then
+A7: r <= x & x < p or s < x & x < q by Th3,Th4;
+  then
+A8: r <= x by A1,XXREAL_0:2;
+  x < q by A2,A7,XXREAL_0:2;
+  then
+A9: x in [.r,q.[ by A8,Th3;
+  not x in [.p,s.] by A7,Th1;
+  hence thesis by A9,XBOOLE_0:def 5;
 end;
 
 theorem Th311:
- r < s & p <= q
-   implies ].r,q.] \ [.p,s.] = ].r,p.[ \/ ].s,q.]
+  r < s & p <= q
+  implies ].r,q.] \ [.p,s.] = ].r,p.[ \/ ].s,q.]
 proof
- assume that
-Z1: r < s and
-Z3: p <= q;
- let x be ext-real number;
- thus x in ].r,q.] \ [.p,s.] implies x in ].r,p.[ \/ ].s,q.]
+  assume that
+A1: r < s and
+A2: p <= q;
+  let x be ext-real number;
+  thus x in ].r,q.] \ [.p,s.] implies x in ].r,p.[ \/ ].s,q.]
   proof
-   assume x in ].r,q.] \ [.p,s.];
-    then x in ].r,q.] & not x in [.p,s.] by XBOOLE_0:def 5;
-    then r < x & x <= q & not(p <= x & x <= s) by Th2,Th1;
-    then x in ].r,p.[ or x in ].s,q.] by Th2,Th4;
-   hence thesis by XBOOLE_0:def 3;
+    assume
+A3: x in ].r,q.] \ [.p,s.];
+    then
+A4: not x in [.p,s.] by XBOOLE_0:def 5;
+A5: r < x by A3,Th2;
+A6: x <= q by A3,Th2;
+    not(p <= x & x <= s) by A4,Th1;
+    then x in ].r,p.[ or x in ].s,q.] by A5,A6,Th2,Th4;
+    hence thesis by XBOOLE_0:def 3;
   end;
- assume x in ].r,p.[ \/ ].s,q.];
+  assume x in ].r,p.[ \/ ].s,q.];
   then x in ].r,p.[ or x in ].s,q.] by XBOOLE_0:def 3;
-  then r < x & x < p or s < x & x <= q by Th2,Th4;
-  then r < x & x <= q & (x < p or s < x) by Z1,Z3,XXREAL_0:2;
-  then x in ].r,q.] & not x in [.p,s.] by Th2,Th1;
- hence thesis by XBOOLE_0:def 5;
+  then
+A7: r < x & x < p or s < x & x <= q by Th2,Th4;
+  then
+A8: r < x by A1,XXREAL_0:2;
+  x <= q by A2,A7,XXREAL_0:2;
+  then
+A9: x in ].r,q.] by A8,Th2;
+  not x in [.p,s.] by A7,Th1;
+  hence thesis by A9,XBOOLE_0:def 5;
 end;
 
 theorem Th312:
- r <= s & p <= q
-   implies [.r,q.] \ [.p,s.] = [.r,p.[ \/ ].s,q.]
+  r <= s & p <= q
+  implies [.r,q.] \ [.p,s.] = [.r,p.[ \/ ].s,q.]
 proof
- assume that
-Z1: r <= s and
-Z3: p <= q;
- let x be ext-real number;
- thus x in [.r,q.] \ [.p,s.] implies x in [.r,p.[ \/ ].s,q.]
+  assume that
+A1: r <= s and
+A2: p <= q;
+  let x be ext-real number;
+  thus x in [.r,q.] \ [.p,s.] implies x in [.r,p.[ \/ ].s,q.]
   proof
-   assume x in [.r,q.] \ [.p,s.];
-    then x in [.r,q.] & not x in [.p,s.] by XBOOLE_0:def 5;
-    then r <= x & x <= q & not(p <= x & x <= s) by Th1;
-    then x in [.r,p.[ or x in ].s,q.] by Th3,Th2;
-   hence thesis by XBOOLE_0:def 3;
+    assume
+A3: x in [.r,q.] \ [.p,s.];
+    then
+A4: not x in [.p,s.] by XBOOLE_0:def 5;
+A5: r <= x by A3,Th1;
+A6: x <= q by A3,Th1;
+    not(p <= x & x <= s) by A4,Th1;
+    then x in [.r,p.[ or x in ].s,q.] by A5,A6,Th2,Th3;
+    hence thesis by XBOOLE_0:def 3;
   end;
- assume x in [.r,p.[ \/ ].s,q.];
+  assume x in [.r,p.[ \/ ].s,q.];
   then x in [.r,p.[ or x in ].s,q.] by XBOOLE_0:def 3;
-  then r <= x & x < p or s < x & x <= q by Th3,Th2;
-  then r <= x & x <= q & (x < p or s < x) by Z1,Z3,XXREAL_0:2;
-  then x in [.r,q.] & not x in [.p,s.] by Th1;
- hence thesis by XBOOLE_0:def 5;
+  then
+A7: r <= x & x < p or s < x & x <= q by Th2,Th3;
+  then
+A8: r <= x by A1,XXREAL_0:2;
+  x <= q by A2,A7,XXREAL_0:2;
+  then
+A9: x in [.r,q.] by A8,Th1;
+  not x in [.p,s.] by A7,Th1;
+  hence thesis by A9,XBOOLE_0:def 5;
 end;
 
 theorem Th313:
- r <= p & p <= q
-   implies ].r,q.[ \ {p} = ].r,p.[ \/ ].p,q.[
+  r <= p & p <= q
+  implies ].r,q.[ \ {p} = ].r,p.[ \/ ].p,q.[
 proof
- [.p,p.] = {p} by Th17;
- hence thesis by Th309;
+  [.p,p.] = {p} by Th17;
+  hence thesis by Th309;
 end;
 
 theorem Th314:
- r <= p & p <= q
-   implies [.r,q.[ \ {p} = [.r,p.[ \/ ].p,q.[
+  r <= p & p <= q
+  implies [.r,q.[ \ {p} = [.r,p.[ \/ ].p,q.[
 proof
- [.p,p.] = {p} by Th17;
- hence thesis by Th310;
+  [.p,p.] = {p} by Th17;
+  hence thesis by Th310;
 end;
 
 theorem Th315:
- r < p & p <= q
-   implies ].r,q.] \ {p} = ].r,p.[ \/ ].p,q.]
+  r < p & p <= q
+  implies ].r,q.] \ {p} = ].r,p.[ \/ ].p,q.]
 proof
- [.p,p.] = {p} by Th17;
- hence thesis by Th311;
+  [.p,p.] = {p} by Th17;
+  hence thesis by Th311;
 end;
 
 theorem Th316:
- r <= p & p <= q
-   implies [.r,q.] \ {p} = [.r,p.[ \/ ].p,q.]
+  r <= p & p <= q
+  implies [.r,q.] \ {p} = [.r,p.[ \/ ].p,q.]
 proof
- [.p,p.] = {p} by Th17;
- hence thesis by Th312;
+  [.p,p.] = {p} by Th17;
+  hence thesis by Th312;
 end;
 
 theorem Th317:
- r < q & p <= q
-   implies ].r,q.] \ ].p,q.[ = ].r,p.] \/ {q}
+  r < q & p <= q
+  implies ].r,q.] \ ].p,q.[ = ].r,p.] \/ {q}
 proof
- [.q,q.] = {q} by Th17;
- hence thesis by Th299;
+  [.q,q.] = {q} by Th17;
+  hence thesis by Th299;
 end;
 
 theorem Th318:
- r <= q & p <= q
-   implies [.r,q.] \ ].p,q.[ = [.r,p.] \/ {q}
+  r <= q & p <= q
+  implies [.r,q.] \ ].p,q.[ = [.r,p.] \/ {q}
 proof
- [.q,q.] = {q} by Th17;
- hence thesis by Th300;
+  [.q,q.] = {q} by Th17;
+  hence thesis by Th300;
 end;
 
 theorem Th319:
- r < q & p <= q
-   implies ].r,q.] \ [.p,q.[ = ].r,p.[ \/ {q}
+  r < q & p <= q
+  implies ].r,q.] \ [.p,q.[ = ].r,p.[ \/ {q}
 proof
- [.q,q.] = {q} by Th17;
- hence thesis by Th303;
+  [.q,q.] = {q} by Th17;
+  hence thesis by Th303;
 end;
 
 theorem Th320:
- r <= q & p <= q
-   implies [.r,q.] \ [.p,q.[ = [.r,p.[ \/ {q}
+  r <= q & p <= q
+  implies [.r,q.] \ [.p,q.[ = [.r,p.[ \/ {q}
 proof
- [.q,q.] = {q} by Th17;
- hence thesis by Th304;
+  [.q,q.] = {q} by Th17;
+  hence thesis by Th304;
 end;
 
 theorem Th321:
- p <= s & p < q
-   implies [.p,q.[ \ ].p,s.[ = {p} \/ [.s,q.[
+  p <= s & p < q
+  implies [.p,q.[ \ ].p,s.[ = {p} \/ [.s,q.[
 proof
- [.p,p.] = {p} by Th17;
- hence thesis by Th298;
+  [.p,p.] = {p} by Th17;
+  hence thesis by Th298;
 end;
 
 theorem Th322:
- p <= s & p <= q
-   implies [.p,q.] \ ].p,s.[ = {p} \/ [.s,q.]
+  p <= s & p <= q
+  implies [.p,q.] \ ].p,s.[ = {p} \/ [.s,q.]
 proof
- [.p,p.] = {p} by Th17;
- hence thesis by Th300;
+  [.p,p.] = {p} by Th17;
+  hence thesis by Th300;
 end;
 
 theorem Th323:
- p <= s & p < q
-   implies [.p,q.[ \ ].p,s.] = {p} \/ ].s,q.[
+  p <= s & p < q
+  implies [.p,q.[ \ ].p,s.] = {p} \/ ].s,q.[
 proof
- [.p,p.] = {p} by Th17;
- hence thesis by Th306;
+  [.p,p.] = {p} by Th17;
+  hence thesis by Th306;
 end;
 
 theorem Th324:
- p <= s & p <= q
-   implies [.p,q.] \ ].p,s.] = {p} \/ ].s,q.]
+  p <= s & p <= q
+  implies [.p,q.] \ ].p,s.] = {p} \/ ].s,q.]
 proof
- [.p,p.] = {p} by Th17;
- hence thesis by Th308;
+  [.p,p.] = {p} by Th17;
+  hence thesis by Th308;
 end;
 
 theorem Th325:
   p < q implies [.-infty,q.[ \ ].p,s.[ = [.-infty,p.] \/ [.s,q.[
-                    by Th298,XXREAL_0:5;
+  by Th298,XXREAL_0:5;
 
 theorem Th326:
- p <= q implies [.-infty,q.] \ ].p,s.[ = [.-infty,p.] \/ [.s,q.]
+  p <= q implies [.-infty,q.] \ ].p,s.[ = [.-infty,p.] \/ [.s,q.]
 proof
   -infty <= s by XXREAL_0:5;
- hence thesis by Th300;
+  hence thesis by Th300;
 end;
 
 theorem Th327:
- p <= q implies [.-infty,q.[ \ [.p,s.[ = [.-infty,p.[ \/ [.s,q.[
+  p <= q implies [.-infty,q.[ \ [.p,s.[ = [.-infty,p.[ \/ [.s,q.[
 proof
   -infty <= s by XXREAL_0:5;
- hence thesis by Th302;
+  hence thesis by Th302;
 end;
 
 theorem Th328:
- p <= q implies [.-infty,q.] \ [.p,s.[ = [.-infty,p.[ \/ [.s,q.]
+  p <= q implies [.-infty,q.] \ [.p,s.[ = [.-infty,p.[ \/ [.s,q.]
 proof
   -infty <= s by XXREAL_0:5;
- hence thesis by Th304;
+  hence thesis by Th304;
 end;
 
 theorem Th329:
- p < q  implies [.-infty,q.[ \ ].p,s.] = [.-infty,p.] \/ ].s,q.[
-                 by Th306,XXREAL_0:5;
+  p < q implies [.-infty,q.[ \ ].p,s.] = [.-infty,p.] \/ ].s,q.[
+  by Th306,XXREAL_0:5;
 
 theorem Th330:
- p <= q implies [.-infty,q.] \ ].p,s.] = [.-infty,p.] \/ ].s,q.]
+  p <= q implies [.-infty,q.] \ ].p,s.] = [.-infty,p.] \/ ].s,q.]
 proof
   -infty <= s by XXREAL_0:5;
- hence thesis by Th308;
+  hence thesis by Th308;
 end;
 
 theorem Th331:
- p <= q implies [.-infty,q.[ \ [.p,s.] = [.-infty,p.[ \/ ].s,q.[
+  p <= q implies [.-infty,q.[ \ [.p,s.] = [.-infty,p.[ \/ ].s,q.[
 proof
   -infty <= s by XXREAL_0:5;
- hence thesis by Th310;
+  hence thesis by Th310;
 end;
 
 theorem Th332:
- p <= q implies [.-infty,q.] \ [.p,s.] = [.-infty,p.[ \/ ].s,q.]
+  p <= q implies [.-infty,q.] \ [.p,s.] = [.-infty,p.[ \/ ].s,q.]
 proof
   -infty <= s by XXREAL_0:5;
- hence thesis by Th312;
+  hence thesis by Th312;
 end;
 
 theorem Th333:
- for s being real number holds p < q
-   implies ].-infty,q.[ \ ].p,s.[ = ].-infty,p.] \/ [.s,q.[
+  for s being real number holds p < q
+  implies ].-infty,q.[ \ ].p,s.[ = ].-infty,p.] \/ [.s,q.[
 proof
- let s be real number;
+  let s be real number;
   s in REAL by XREAL_0:def 1;
   then -infty < s by XXREAL_0:12;
- hence thesis by Th297;
+  hence thesis by Th297;
 end;
 
 theorem Th334:
- for s being real number holds p <= q
-   implies ].-infty,q.] \ ].p,s.[ = ].-infty,p.] \/ [.s,q.]
+  for s being real number holds p <= q
+  implies ].-infty,q.] \ ].p,s.[ = ].-infty,p.] \/ [.s,q.]
 proof
- let s be real number;
+  let s be real number;
   s in REAL by XREAL_0:def 1;
-  then -infty < s by XXREAL_0:12;
- hence thesis by Th299;
+  hence thesis by Th299,XXREAL_0:12;
 end;
 
 theorem Th335:
- for s being real number holds p <= q
-   implies ].-infty,q.[ \ [.p,s.[ = ].-infty,p.[ \/ [.s,q.[
+  for s being real number holds p <= q
+  implies ].-infty,q.[ \ [.p,s.[ = ].-infty,p.[ \/ [.s,q.[
 proof
- let s be real number;
+  let s be real number;
   s in REAL by XREAL_0:def 1;
-  then -infty < s by XXREAL_0:12;
- hence thesis by Th301;
+  hence thesis by Th301,XXREAL_0:12;
 end;
 
 theorem Th336:
- for s being real number holds p <= q
-   implies ].-infty,q.] \ [.p,s.[ = ].-infty,p.[ \/ [.s,q.]
+  for s being real number holds p <= q
+  implies ].-infty,q.] \ [.p,s.[ = ].-infty,p.[ \/ [.s,q.]
 proof
- let s be real number;
+  let s be real number;
   s in REAL by XREAL_0:def 1;
-  then -infty < s by XXREAL_0:12;
- hence thesis by Th303;
+  hence thesis by Th303,XXREAL_0:12;
 end;
 
 theorem Th337:
- for s being real number holds p < q
-   implies ].-infty,q.[ \ ].p,s.] = ].-infty,p.] \/ ].s,q.[
+  for s being real number holds p < q
+  implies ].-infty,q.[ \ ].p,s.] = ].-infty,p.] \/ ].s,q.[
 proof
- let s be real number;
+  let s be real number;
   s in REAL by XREAL_0:def 1;
   then -infty < s by XXREAL_0:12;
- hence thesis by Th305;
+  hence thesis by Th305;
 end;
 
 theorem Th338:
- for s being real number holds p <= q
-   implies ].-infty,q.] \ ].p,s.] = ].-infty,p.] \/ ].s,q.]
+  for s being real number holds p <= q
+  implies ].-infty,q.] \ ].p,s.] = ].-infty,p.] \/ ].s,q.]
 proof
- let s be real number;
+  let s be real number;
   s in REAL by XREAL_0:def 1;
-  then -infty < s by XXREAL_0:12;
- hence thesis by Th307;
+  hence thesis by Th307,XXREAL_0:12;
 end;
 
 theorem Th339:
- p <= q implies ].-infty,q.[ \ [.p,s.] = ].-infty,p.[ \/ ].s,q.[
+  p <= q implies ].-infty,q.[ \ [.p,s.] = ].-infty,p.[ \/ ].s,q.[
 proof
   -infty <= s by XXREAL_0:5;
- hence thesis by Th309;
+  hence thesis by Th309;
 end;
 
 theorem Th340:
- for s being real number holds p <= q
-   implies ].-infty,q.] \ [.p,s.] = ].-infty,p.[ \/ ].s,q.]
+  for s being real number holds p <= q
+  implies ].-infty,q.] \ [.p,s.] = ].-infty,p.[ \/ ].s,q.]
 proof
- let s be real number;
+  let s be real number;
   s in REAL by XREAL_0:def 1;
-  then -infty < s by XXREAL_0:12;
- hence thesis by Th311;
+  hence thesis by Th311,XXREAL_0:12;
 end;
 
 theorem Th341:
- p <= q implies [.-infty,q.[ \ {p} = [.-infty,p.[ \/ ].p,q.[
+  p <= q implies [.-infty,q.[ \ {p} = [.-infty,p.[ \/ ].p,q.[
 proof
- -infty <= p by XXREAL_0:5;
- hence thesis by Th314;
+  -infty <= p by XXREAL_0:5;
+  hence thesis by Th314;
 end;
 
 theorem Th342:
- p <= q implies [.-infty,q.] \ {p} = [.-infty,p.[ \/ ].p,q.]
+  p <= q implies [.-infty,q.] \ {p} = [.-infty,p.[ \/ ].p,q.]
 proof
- -infty <= p by XXREAL_0:5;
- hence thesis by Th316;
+  -infty <= p by XXREAL_0:5;
+  hence thesis by Th316;
 end;
 
 theorem
- p <= q implies [.-infty,q.] \ ].p,q.[ = [.-infty,p.] \/ {q}
+  p <= q implies [.-infty,q.] \ ].p,q.[ = [.-infty,p.] \/ {q}
 proof
- -infty <= q by XXREAL_0:5;
- hence thesis by Th318;
+  -infty <= q by XXREAL_0:5;
+  hence thesis by Th318;
 end;
 
 theorem
- p <= q implies [.-infty,q.] \ [.p,q.[ = [.-infty,p.[ \/ {q}
+  p <= q implies [.-infty,q.] \ [.p,q.[ = [.-infty,p.[ \/ {q}
 proof
- -infty <= q by XXREAL_0:5;
- hence thesis by Th320;
+  -infty <= q by XXREAL_0:5;
+  hence thesis by Th320;
 end;
 
 theorem
   [.-infty,q.] \ ].-infty,s.[ = {-infty} \/ [.s,q.]
 proof
- -infty <= s & -infty <= q by XXREAL_0:5;
- hence thesis by Th322;
+A1: -infty <= s by XXREAL_0:5;
+  -infty <= q by XXREAL_0:5;
+  hence thesis by A1,Th322;
 end;
 
 theorem
   [.-infty,q.] \ ].-infty,s.] = {-infty} \/ ].s,q.]
 proof
- -infty <= s & -infty <= q by XXREAL_0:5;
- hence thesis by Th324;
+A1: -infty <= s by XXREAL_0:5;
+  -infty <= q by XXREAL_0:5;
+  hence thesis by A1,Th324;
 end;
 
 theorem
- for q being real number holds
+  for q being real number holds
   [.-infty,q.[ \ ].-infty,s.[ = {-infty} \/ [.s,q.[
 proof
- let q be real number;
-  q in REAL by XREAL_0:def 1;
-  then -infty <= s & -infty < q by XXREAL_0:5,12;
- hence thesis by Th321;
+  let q be real number;
+A1: q in REAL by XREAL_0:def 1;
+  -infty <= s by XXREAL_0:5;
+  hence thesis by A1,Th321,XXREAL_0:12;
 end;
 
 theorem
- for q being real number holds
+  for q being real number holds
   [.-infty,q.[ \ ].-infty,s.] = {-infty} \/ ].s,q.[
 proof
- let q be real number;
-  q in REAL by XREAL_0:def 1;
-  then -infty <= s & -infty < q by XXREAL_0:5,12;
- hence thesis by Th323;
+  let q be real number;
+A1: q in REAL by XREAL_0:def 1;
+  -infty <= s by XXREAL_0:5;
+  hence thesis by A1,Th323,XXREAL_0:12;
 end;
 
 theorem Th349:
- p <= q implies ].-infty,q.[ \ {p} = ].-infty,p.[ \/ ].p,q.[
+  p <= q implies ].-infty,q.[ \ {p} = ].-infty,p.[ \/ ].p,q.[
 proof
   -infty <= p by XXREAL_0:5;
- hence thesis by Th313;
+  hence thesis by Th313;
 end;
 
 theorem Th350:
- for p being real number holds p <= q
-   implies ].-infty,q.] \ {p} = ].-infty,p.[ \/ ].p,q.]
+  for p being real number holds p <= q
+  implies ].-infty,q.] \ {p} = ].-infty,p.[ \/ ].p,q.]
 proof
- let p be real number;
+  let p be real number;
   p in REAL by XREAL_0:def 1;
-  then -infty < p by XXREAL_0:12;
- hence thesis by Th315;
+  hence thesis by Th315,XXREAL_0:12;
 end;
 
 theorem
- for q being real number holds p <= q
-   implies ].-infty,q.] \ ].p,q.[ = ].-infty,p.] \/ {q}
+  for q being real number holds p <= q
+  implies ].-infty,q.] \ ].p,q.[ = ].-infty,p.] \/ {q}
 proof
- let q be real number;
+  let q be real number;
   q in REAL by XREAL_0:def 1;
-  then -infty < q by XXREAL_0:12;
- hence thesis by Th317;
+  hence thesis by Th317,XXREAL_0:12;
 end;
 
 theorem
- for q being real number holds p <= q
-   implies ].-infty,q.] \ [.p,q.[ = ].-infty,p.[ \/ {q}
+  for q being real number holds p <= q
+  implies ].-infty,q.] \ [.p,q.[ = ].-infty,p.[ \/ {q}
 proof
- let q be real number;
+  let q be real number;
   q in REAL by XREAL_0:def 1;
-  then -infty < q by XXREAL_0:12;
- hence thesis by Th319;
+  hence thesis by Th319,XXREAL_0:12;
 end;
 
 theorem
- r < s implies ].r,+infty.] \ ].p,s.[ = ].r,p.] \/ [.s,+infty.]
-                   by Th299,XXREAL_0:3;
+  r < s implies ].r,+infty.] \ ].p,s.[ = ].r,p.] \/ [.s,+infty.]
+  by Th299,XXREAL_0:3;
 
 theorem
- r <= s implies [.r,+infty.] \ ].p,s.[ = [.r,p.] \/ [.s,+infty.]
+  r <= s implies [.r,+infty.] \ ].p,s.[ = [.r,p.] \/ [.s,+infty.]
 proof
- p <= +infty by XXREAL_0:3;
- hence thesis by Th300;
+  p <= +infty by XXREAL_0:3;
+  hence thesis by Th300;
 end;
 
 theorem
- r < s
-   implies ].r,+infty.[ \ [.p,s.[ = ].r,p.[ \/ [.s,+infty.[
-             by Th301,XXREAL_0:3;
+  r < s
+  implies ].r,+infty.[ \ [.p,s.[ = ].r,p.[ \/ [.s,+infty.[
+  by Th301,XXREAL_0:3;
 
 theorem
- r <= s
-   implies [.r,+infty.[ \ [.p,s.[ = [.r,p.[ \/ [.s,+infty.[
+  r <= s
+  implies [.r,+infty.[ \ [.p,s.[ = [.r,p.[ \/ [.s,+infty.[
 proof
- p <= +infty by XXREAL_0:3;
- hence thesis by Th302;
+  p <= +infty by XXREAL_0:3;
+  hence thesis by Th302;
 end;
 
 theorem
- r < s
-   implies ].r,+infty.] \ [.p,s.[ = ].r,p.[ \/ [.s,+infty.]
-          by Th303,XXREAL_0:3;
+  r < s
+  implies ].r,+infty.] \ [.p,s.[ = ].r,p.[ \/ [.s,+infty.]
+  by Th303,XXREAL_0:3;
 
 theorem
- r <= s
-   implies [.r,+infty.] \ [.p,s.[ = [.r,p.[ \/ [.s,+infty.]
+  r <= s
+  implies [.r,+infty.] \ [.p,s.[ = [.r,p.[ \/ [.s,+infty.]
 proof
- p <= +infty by XXREAL_0:3;
- hence thesis by Th304;
+  p <= +infty by XXREAL_0:3;
+  hence thesis by Th304;
 end;
 
 theorem
- r < s
-   implies ].r,+infty.] \ ].p,s.] = ].r,p.] \/ ].s,+infty.]
-              by Th307,XXREAL_0:3;
+  r < s
+  implies ].r,+infty.] \ ].p,s.] = ].r,p.] \/ ].s,+infty.]
+  by Th307,XXREAL_0:3;
 
 theorem
- r <= s
-   implies [.r,+infty.] \ ].p,s.] = [.r,p.] \/ ].s,+infty.]
+  r <= s
+  implies [.r,+infty.] \ ].p,s.] = [.r,p.] \/ ].s,+infty.]
 proof
- p <= +infty by XXREAL_0:3;
- hence thesis by Th308;
+  p <= +infty by XXREAL_0:3;
+  hence thesis by Th308;
 end;
 
 theorem
- r <= s
-   implies ].r,+infty.[ \ [.p,s.] = ].r,p.[ \/ ].s,+infty.[
+  r <= s
+  implies ].r,+infty.[ \ [.p,s.] = ].r,p.[ \/ ].s,+infty.[
 proof
- p <= +infty by XXREAL_0:3;
- hence thesis by Th309;
+  p <= +infty by XXREAL_0:3;
+  hence thesis by Th309;
 end;
 
 theorem
- r <= s
-   implies [.r,+infty.[ \ [.p,s.] = [.r,p.[ \/ ].s,+infty.[
+  r <= s
+  implies [.r,+infty.[ \ [.p,s.] = [.r,p.[ \/ ].s,+infty.[
 proof
- p <= +infty by XXREAL_0:3;
- hence thesis by Th310;
+  p <= +infty by XXREAL_0:3;
+  hence thesis by Th310;
 end;
 
 theorem
- r < s
-   implies ].r,+infty.] \ [.p,s.] = ].r,p.[ \/ ].s,+infty.]
-      by Th311,XXREAL_0:3;
+  r < s
+  implies ].r,+infty.] \ [.p,s.] = ].r,p.[ \/ ].s,+infty.]
+  by Th311,XXREAL_0:3;
 
 theorem
- r <= s
-   implies [.r,+infty.] \ [.p,s.] = [.r,p.[ \/ ].s,+infty.]
+  r <= s
+  implies [.r,+infty.] \ [.p,s.] = [.r,p.[ \/ ].s,+infty.]
 proof
- p <= +infty by XXREAL_0:3;
- hence thesis by Th312;
+  p <= +infty by XXREAL_0:3;
+  hence thesis by Th312;
 end;
 
 theorem
- r <= p
-   implies ].r,+infty.[ \ {p} = ].r,p.[ \/ ].p,+infty.[
+  r <= p
+  implies ].r,+infty.[ \ {p} = ].r,p.[ \/ ].p,+infty.[
 proof
- p <= +infty by XXREAL_0:3;
- hence thesis by Th313;
+  p <= +infty by XXREAL_0:3;
+  hence thesis by Th313;
 end;
 
 theorem
- r <= p
-   implies [.r,+infty.[ \ {p} = [.r,p.[ \/ ].p,+infty.[
+  r <= p
+  implies [.r,+infty.[ \ {p} = [.r,p.[ \/ ].p,+infty.[
 proof
- p <= +infty by XXREAL_0:3;
- hence thesis by Th314;
+  p <= +infty by XXREAL_0:3;
+  hence thesis by Th314;
 end;
 
 theorem
- r < p
-   implies ].r,+infty.] \ {p} = ].r,p.[ \/ ].p,+infty.]
-                by Th315,XXREAL_0:3;
+  r < p
+  implies ].r,+infty.] \ {p} = ].r,p.[ \/ ].p,+infty.]
+  by Th315,XXREAL_0:3;
 
 theorem
- r <= p
-   implies [.r,+infty.] \ {p} = [.r,p.[ \/ ].p,+infty.]
+  r <= p
+  implies [.r,+infty.] \ {p} = [.r,p.[ \/ ].p,+infty.]
 proof
- p <= +infty by XXREAL_0:3;
- hence thesis by Th316;
+  p <= +infty by XXREAL_0:3;
+  hence thesis by Th316;
 end;
 
 theorem
   [.r,+infty.] \ ].p,+infty.[ = [.r,p.] \/ {+infty}
 proof
-A: r <= +infty & p <= +infty by XXREAL_0:3;
- thus thesis by Th318,A;
+A1: r <= +infty by XXREAL_0:3;
+  p <= +infty by XXREAL_0:3;
+  hence thesis by A1,Th318;
 end;
 
 theorem
   [.r,+infty.] \ [.p,+infty.[ = [.r,p.[ \/ {+infty}
 proof
-A: r <= +infty & p <= +infty by XXREAL_0:3;
- thus thesis by Th320,A;
+A1: r <= +infty by XXREAL_0:3;
+  p <= +infty by XXREAL_0:3;
+  hence thesis by A1,Th320;
 end;
 
 theorem
- for r being real number
- holds ].r,+infty.] \ ].p,+infty.[ = ].r,p.] \/ {+infty}
+  for r being real number
+  holds ].r,+infty.] \ ].p,+infty.[ = ].r,p.] \/ {+infty}
 proof
- let r be real number;
- r in REAL by XREAL_0:def 1;
- then
-A:  r < +infty & p <= +infty by XXREAL_0:3,9;
- thus thesis by A,Th317;
+  let r be real number;
+  r in REAL by XREAL_0:def 1;
+  then r < +infty by XXREAL_0:9;
+  hence thesis by Th317,XXREAL_0:3;
 end;
 
 theorem
- for r being real number
-   holds ].r,+infty.] \ [.p,+infty.[ = ].r,p.[ \/ {+infty}
+  for r being real number
+  holds ].r,+infty.] \ [.p,+infty.[ = ].r,p.[ \/ {+infty}
 proof
- let r be real number;
- r in REAL by XREAL_0:def 1;
- then
-A:  r < +infty & p <= +infty by XXREAL_0:3,9;
- thus thesis by Th319,A;
+  let r be real number;
+  r in REAL by XREAL_0:def 1;
+  then r < +infty by XXREAL_0:9;
+  hence thesis by Th319,XXREAL_0:3;
 end;
 
 theorem
- p <= s
-   implies [.p,+infty.] \ ].p,s.[ = {p} \/ [.s,+infty.]
+  p <= s
+  implies [.p,+infty.] \ ].p,s.[ = {p} \/ [.s,+infty.]
 proof
- p <= +infty by XXREAL_0:3;
- hence thesis by Th322;
+  p <= +infty by XXREAL_0:3;
+  hence thesis by Th322;
 end;
 
 theorem
- p <= s
-   implies [.p,+infty.] \ ].p,s.] = {p} \/ ].s,+infty.]
+  p <= s
+  implies [.p,+infty.] \ ].p,s.] = {p} \/ ].s,+infty.]
 proof
- p <= +infty by XXREAL_0:3;
- hence thesis by Th324;
+  p <= +infty by XXREAL_0:3;
+  hence thesis by Th324;
 end;
 
 theorem
   [.-infty,+infty.] \ ].p,s.[ = [.-infty,p.] \/ [.s,+infty.]
-             by Th326,XXREAL_0:3;
+  by Th326,XXREAL_0:3;
 
 theorem
   [.-infty,+infty.[ \ [.p,s.[ = [.-infty,p.[ \/ [.s,+infty.[
-               by Th327,XXREAL_0:3;
+  by Th327,XXREAL_0:3;
 
 theorem
   [.-infty,+infty.] \ [.p,s.[ = [.-infty,p.[ \/ [.s,+infty.]
-     by Th328,XXREAL_0:3;
+  by Th328,XXREAL_0:3;
 
 theorem
   [.-infty,+infty.] \ ].p,s.] = [.-infty,p.] \/ ].s,+infty.]
-             by Th330,XXREAL_0:3;
+  by Th330,XXREAL_0:3;
 
 theorem
   [.-infty,+infty.[ \ [.p,s.] = [.-infty,p.[ \/ ].s,+infty.[
-   by Th331,XXREAL_0:3;
+  by Th331,XXREAL_0:3;
 
 theorem
   [.-infty,+infty.] \ [.p,s.] = [.-infty,p.[ \/ ].s,+infty.]
-   by Th332,XXREAL_0:3;
+  by Th332,XXREAL_0:3;
 
 theorem
- for s being real number holds
+  for s being real number holds
   ].-infty,+infty.] \ ].p,s.[ = ].-infty,p.] \/ [.s,+infty.]
-                by Th334,XXREAL_0:3;
+  by Th334,XXREAL_0:3;
 
 theorem
- for s being real number holds
-   REAL \ [.p,s.[ = ].-infty,p.[ \/ [.s,+infty.[
-                 by Th335,Th224,XXREAL_0:3;
+  for s being real number holds
+  REAL \ [.p,s.[ = ].-infty,p.[ \/ [.s,+infty.[
+  by Th224,Th335,XXREAL_0:3;
 
 theorem
- for s being real number holds
-   ].-infty,+infty.] \ [.p,s.[ = ].-infty,p.[ \/ [.s,+infty.]
-               by Th336,XXREAL_0:3;
+  for s being real number holds
+  ].-infty,+infty.] \ [.p,s.[ = ].-infty,p.[ \/ [.s,+infty.]
+  by Th336,XXREAL_0:3;
 
 theorem
- for s being real number holds
-   ].-infty,+infty.] \ ].p,s.] = ].-infty,p.] \/ ].s,+infty.]
-    by Th338,XXREAL_0:3;
+  for s being real number holds
+  ].-infty,+infty.] \ ].p,s.] = ].-infty,p.] \/ ].s,+infty.]
+  by Th338,XXREAL_0:3;
 
 theorem
-   REAL \ [.p,s.] = ].-infty,p.[ \/ ].s,+infty.[ by Th339,Th224,XXREAL_0:3;
+  REAL \ [.p,s.] = ].-infty,p.[ \/ ].s,+infty.[ by Th224,Th339,XXREAL_0:3;
 
 theorem
- for s being real number holds
-   ].-infty,+infty.] \ [.p,s.] = ].-infty,p.[ \/ ].s,+infty.]
-    by Th340,XXREAL_0:3;
+  for s being real number holds
+  ].-infty,+infty.] \ [.p,s.] = ].-infty,p.[ \/ ].s,+infty.]
+  by Th340,XXREAL_0:3;
 
 theorem
   [.-infty,+infty.[ \ {p} = [.-infty,p.[ \/ ].p,+infty.[
-   by Th341,XXREAL_0:3;
+  by Th341,XXREAL_0:3;
 
 theorem
   [.-infty,+infty.] \ {p} = [.-infty,p.[ \/ ].p,+infty.]
-   by Th342,XXREAL_0:3;
+  by Th342,XXREAL_0:3;
 
 theorem
-  REAL \ {p} = ].-infty,p.[ \/ ].p,+infty.[ by Th349,Th224,XXREAL_0:3;
+  REAL \ {p} = ].-infty,p.[ \/ ].p,+infty.[ by Th224,Th349,XXREAL_0:3;
 
 theorem
- for p being real number holds
+  for p being real number holds
   ].-infty,+infty.] \ {p} = ].-infty,p.[ \/ ].p,+infty.]
-   by Th350,XXREAL_0:3;
+  by Th350,XXREAL_0:3;
 
 theorem
- for p being real number holds
- r < s implies ].r,+infty.[ \ ].p,s.[ = ].r,p.] \/ [.s,+infty.[
+  for p being real number holds
+  r < s implies ].r,+infty.[ \ ].p,s.[ = ].r,p.] \/ [.s,+infty.[
 proof
- let p be real number;
- p in REAL by XREAL_0:def 1;
- then p < +infty by XXREAL_0:9;
- hence thesis by Th297;
+  let p be real number;
+  p in REAL by XREAL_0:def 1;
+  then p < +infty by XXREAL_0:9;
+  hence thesis by Th297;
 end;
 
 theorem
- for p being real number holds
- r <= s implies [.r,+infty.[ \ ].p,s.[ = [.r,p.] \/ [.s,+infty.[
+  for p being real number holds
+  r <= s implies [.r,+infty.[ \ ].p,s.[ = [.r,p.] \/ [.s,+infty.[
 proof
- let p be real number;
- p in REAL by XREAL_0:def 1;
- then p < +infty by XXREAL_0:9;
- hence thesis by Th298;
+  let p be real number;
+  p in REAL by XREAL_0:def 1;
+  hence thesis by Th298,XXREAL_0:9;
 end;
 
 theorem
- for p being real number holds
- r < s implies ].r,+infty.[ \ ].p,s.] = ].r,p.] \/ ].s,+infty.[
+  for p being real number holds
+  r < s implies ].r,+infty.[ \ ].p,s.] = ].r,p.] \/ ].s,+infty.[
 proof
- let p be real number;
- p in REAL by XREAL_0:def 1;
- then p < +infty by XXREAL_0:9;
- hence thesis by Th305;
+  let p be real number;
+  p in REAL by XREAL_0:def 1;
+  then p < +infty by XXREAL_0:9;
+  hence thesis by Th305;
 end;
 
 theorem
- for p being real number holds
- r <= s implies [.r,+infty.[ \ ].p,s.] = [.r,p.] \/ ].s,+infty.[
+  for p being real number holds
+  r <= s implies [.r,+infty.[ \ ].p,s.] = [.r,p.] \/ ].s,+infty.[
 proof
- let p be real number;
- p in REAL by XREAL_0:def 1;
- then p < +infty by XXREAL_0:9;
- hence thesis by Th306;
+  let p be real number;
+  p in REAL by XREAL_0:def 1;
+  hence thesis by Th306,XXREAL_0:9;
 end;
 
 theorem
- for p being real number holds
- p <= s implies [.p,+infty.[ \ ].p,s.] = {p} \/ ].s,+infty.[
+  for p being real number holds
+  p <= s implies [.p,+infty.[ \ ].p,s.] = {p} \/ ].s,+infty.[
 proof
- let p be real number;
- p in REAL by XREAL_0:def 1;
- then p < +infty by XXREAL_0:9;
- hence thesis by Th323;
+  let p be real number;
+  p in REAL by XREAL_0:def 1;
+  hence thesis by Th323,XXREAL_0:9;
 end;
 
 theorem
- for p being real number holds
-   [.-infty,+infty.[ \ ].p,s.[ = [.-infty,p.] \/ [.s,+infty.[
+  for p being real number holds
+  [.-infty,+infty.[ \ ].p,s.[ = [.-infty,p.] \/ [.s,+infty.[
 proof
- let p be real number;
- p in REAL by XREAL_0:def 1;
- then p < +infty by XXREAL_0:9;
- hence thesis by Th325;
+  let p be real number;
+  p in REAL by XREAL_0:def 1;
+  hence thesis by Th325,XXREAL_0:9;
 end;
 
 theorem
- for p being real number holds
+  for p being real number holds
   [.-infty,+infty.[ \ ].p,s.] = [.-infty,p.] \/ ].s,+infty.[
 proof
- let p be real number;
- p in REAL by XREAL_0:def 1;
- then p < +infty by XXREAL_0:9;
- hence thesis by Th329;
+  let p be real number;
+  p in REAL by XREAL_0:def 1;
+  hence thesis by Th329,XXREAL_0:9;
 end;
 
 theorem
- for s,p being real number holds
+  for s,p being real number holds
   REAL \ ].p,s.[ = ].-infty,p.] \/ [.s,+infty.[
 proof
- let s,p be real number;
- p in REAL by XREAL_0:def 1;
- then p < +infty by XXREAL_0:9;
- hence thesis by Th333,Th224;
+  let s,p be real number;
+  p in REAL by XREAL_0:def 1;
+  hence thesis by Th224,Th333,XXREAL_0:9;
 end;
 
 theorem
- for s,p being real number holds
+  for s,p being real number holds
   REAL \ ].p,s.] = ].-infty,p.] \/ ].s,+infty.[
 proof
- let s,p be real number;
- p in REAL by XREAL_0:def 1;
- then p < +infty by XXREAL_0:9;
- hence thesis by Th337,Th224;
+  let s,p be real number;
+  p in REAL by XREAL_0:def 1;
+  hence thesis by Th224,Th337,XXREAL_0:9;
 end;
 
 theorem
- for p being real number holds
- p <= s implies [.p,+infty.[ \ ].p,s.[ = {p} \/ [.s,+infty.[
+  for p being real number holds
+  p <= s implies [.p,+infty.[ \ ].p,s.[ = {p} \/ [.s,+infty.[
 proof
- let p be real number;
- p in REAL by XREAL_0:def 1;
- then p < +infty by XXREAL_0:9;
- hence thesis by Th321;
+  let p be real number;
+  p in REAL by XREAL_0:def 1;
+  hence thesis by Th321,XXREAL_0:9;
 end;
 
 theorem Th401:
   r < s implies [.r,s.] \ [.r,s.[ = {s}
-  proof
-   [.s,s.] = {s} by Th17;
-   hence thesis by Th184;
-  end;
+proof
+  [.s,s.] = {s} by Th17;
+  hence thesis by Th184;
+end;
 
 theorem Th402:
   r < s implies ].r,s.] \ ].r,s.[ = {s}
-  proof
-   [.s,s.] = {s} by Th17;
-   hence thesis by Th188;
-  end;
+proof
+  [.s,s.] = {s} by Th17;
+  hence thesis by Th188;
+end;
 
 theorem Th403:
   r < t implies [.r,t.] \ ].r,t.] = {r}
-  proof
-   [.r,r.] = {r} by Th17;
-   hence thesis by Th192;
-  end;
+proof
+  [.r,r.] = {r} by Th17;
+  hence thesis by Th192;
+end;
 
 theorem Th404:
   r < t implies [.r,t.[ \ ].r,t.[ = {r}
-  proof
-   [.r,r.] = {r} by Th17;
-   hence thesis by Th196;
-  end;
+proof
+  [.r,r.] = {r} by Th17;
+  hence thesis by Th196;
+end;
 
 theorem
- for s being real number holds
+  for s being real number holds
   [.-infty,s.] \ [.-infty,s.[ = {s}
 proof
- let s be real number;
+  let s be real number;
   s in REAL by XREAL_0:def 1;
-  then -infty < s by XXREAL_0:12;
- hence thesis by Th401;
+  hence thesis by Th401,XXREAL_0:12;
 end;
 
 theorem
- for s being real number holds
+  for s being real number holds
   ].-infty,s.] \ ].-infty,s.[ = {s}
 proof
- let s be real number;
+  let s be real number;
   s in REAL by XREAL_0:def 1;
-  then -infty < s by XXREAL_0:12;
- hence thesis by Th402;
+  hence thesis by Th402,XXREAL_0:12;
 end;
 
 theorem
- for s being real number holds
+  for s being real number holds
   [.-infty,s.] \ ].-infty,s.] = {-infty}
 proof
- let s be real number;
+  let s be real number;
   s in REAL by XREAL_0:def 1;
-  then -infty < s by XXREAL_0:12;
- hence thesis by Th403;
+  hence thesis by Th403,XXREAL_0:12;
 end;
 
 theorem
- for s being real number holds
-   [.-infty,s.[ \ ].-infty,s.[ = {-infty}
+  for s being real number holds
+  [.-infty,s.[ \ ].-infty,s.[ = {-infty}
 proof
- let s be real number;
+  let s be real number;
   s in REAL by XREAL_0:def 1;
-  then -infty < s by XXREAL_0:12;
- hence thesis by Th404;
+  hence thesis by Th404,XXREAL_0:12;
 end;
 
 theorem
- for s being real number holds
+  for s being real number holds
   [.s,+infty.] \ [.s,+infty.[ = {+infty}
 proof
- let s be real number;
+  let s be real number;
   s in REAL by XREAL_0:def 1;
-  then s < +infty by XXREAL_0:9;
- hence thesis by Th401;
+  hence thesis by Th401,XXREAL_0:9;
 end;
 
 theorem
- for s being real number holds
+  for s being real number holds
   ].s,+infty.] \ ].s,+infty.[ = {+infty}
 proof
- let s be real number;
+  let s be real number;
   s in REAL by XREAL_0:def 1;
-  then s < +infty by XXREAL_0:9;
- hence thesis by Th402;
+  hence thesis by Th402,XXREAL_0:9;
 end;
 
 theorem
- for s being real number holds
+  for s being real number holds
   [.s,+infty.] \ ].s,+infty.] = {s}
 proof
- let s be real number;
+  let s be real number;
   s in REAL by XREAL_0:def 1;
-  then s < +infty by XXREAL_0:9;
- hence thesis by Th403;
+  hence thesis by Th403,XXREAL_0:9;
 end;
 
 theorem
- for s being real number holds
+  for s being real number holds
   [.s,+infty.[ \ ].s,+infty.[ = {s}
 proof
- let s be real number;
+  let s be real number;
   s in REAL by XREAL_0:def 1;
-  then s < +infty by XXREAL_0:9;
- hence thesis by Th404;
+  hence thesis by Th404,XXREAL_0:9;
 end;
 
 :: analogous to Th165
@@ -5772,9 +6508,12 @@ A2: s < t;
   proof
     assume p in [.r,s.] \/ [.s,t.[;
     then p in [.r,s.] or p in [.s,t.[ by XBOOLE_0:def 3;
-    then r <= p & p <= s or s <= p & p < t by Th1,Th3;
-    then r <= p & p < t by A1,A2,XXREAL_0:2;
-    hence thesis by Th3;
+    then
+A3: r <= p & p <= s or s <= p & p < t by Th1,Th3;
+    then
+A4: r <= p by A1,XXREAL_0:2;
+    p < t by A2,A3,XXREAL_0:2;
+    hence thesis by A4,Th3;
   end;
   assume p in [.r,t.[;
   then r <= p & p <= s or s <= p & p < t by Th3;
@@ -5793,9 +6532,12 @@ A2: s <= t;
   proof
     assume p in ].r,s.] \/ [.s,t.];
     then p in ].r,s.] or p in [.s,t.] by XBOOLE_0:def 3;
-    then r < p & p <= s or s <= p & p <= t by Th1,Th2;
-    then r < p & p <= t by A1,A2,XXREAL_0:2;
-    hence thesis by Th2;
+    then
+A3: r < p & p <= s or s <= p & p <= t by Th1,Th2;
+    then
+A4: r < p by A1,XXREAL_0:2;
+    p <= t by A2,A3,XXREAL_0:2;
+    hence thesis by A4,Th2;
   end;
   assume p in ].r,t.];
   then r < p & p <= s or s <= p & p <= t by Th2;
@@ -5814,13 +6556,16 @@ A2: s < t;
   proof
     assume p in ].r,s.] \/ [.s,t.[;
     then p in ].r,s.] or p in [.s,t.[ by XBOOLE_0:def 3;
-    then r < p & p <= s or s <= p & p < t by Th2,Th3;
-    then r < p & p < t by A1,A2,XXREAL_0:2;
-    hence thesis by Th4;
+    then
+A3: r < p & p <= s or s <= p & p < t by Th2,Th3;
+    then
+A4: r < p by A1,XXREAL_0:2;
+    p < t by A2,A3,XXREAL_0:2;
+    hence thesis by A4,Th4;
   end;
   assume p in ].r,t.[;
   then r < p & p <= s or s <= p & p < t by Th4;
-  then p in ].r,s.] or p in [.s,t.[ by Th3,Th2;
+  then p in ].r,s.] or p in [.s,t.[ by Th2,Th3;
   hence thesis by XBOOLE_0:def 3;
 end;
 
@@ -5838,14 +6583,18 @@ A2: s < t;
       assume
 A3:   x in [.r,s.] /\ [.s,t.[;
       then reconsider p = x as ext-real number;
-      p in [.r,s.] & p in [.s,t.[ by A3,XBOOLE_0:def 4;
-      then s <= p & p <= s by Th3,Th1;
-      hence x = s by XXREAL_0:1;
+A4:   p in [.r,s.] by A3,XBOOLE_0:def 4;
+      p in [.s,t.[ by A3,XBOOLE_0:def 4;
+      then
+A5:   s <= p by Th3;
+      p <= s by A4,Th1;
+      hence x = s by A5,XXREAL_0:1;
     end;
     assume
-A4: x = s;
-    s in [.r,s.] & s in [.s,t.[ by A1,A2,Th3,Th1;
-    hence x in [.r,s.] /\ [.s,t.[ by A4,XBOOLE_0:def 4;
+A6: x = s;
+A7: s in [.r,s.] by A1,Th1;
+    s in [.s,t.[ by A2,Th3;
+    hence x in [.r,s.] /\ [.s,t.[ by A6,A7,XBOOLE_0:def 4;
   end;
   hence thesis by TARSKI:def 1;
 end;
@@ -5862,14 +6611,18 @@ A2: s <= t;
       assume
 A3:   x in ].r,s.] /\ [.s,t.];
       then reconsider p = x as ext-real number;
-      p in ].r,s.] & p in [.s,t.] by A3,XBOOLE_0:def 4;
-      then s <= p & p <= s by Th2,Th1;
-      hence x = s by XXREAL_0:1;
+A4:   p in ].r,s.] by A3,XBOOLE_0:def 4;
+      p in [.s,t.] by A3,XBOOLE_0:def 4;
+      then
+A5:   s <= p by Th1;
+      p <= s by A4,Th2;
+      hence x = s by A5,XXREAL_0:1;
     end;
     assume
-A4: x = s;
-    s in ].r,s.] & s in [.s,t.] by A1,A2,Th2,Th1;
-    hence x in ].r,s.] /\ [.s,t.] by A4,XBOOLE_0:def 4;
+A6: x = s;
+A7: s in ].r,s.] by A1,Th2;
+    s in [.s,t.] by A2,Th1;
+    hence x in ].r,s.] /\ [.s,t.] by A6,A7,XBOOLE_0:def 4;
   end;
   hence thesis by TARSKI:def 1;
 end;
@@ -5886,14 +6639,18 @@ A2: s <= t;
       assume
 A3:   x in [.r,s.] /\ [.s,t.];
       then reconsider p = x as ext-real number;
-      p in [.r,s.] & p in [.s,t.] by A3,XBOOLE_0:def 4;
-      then s <= p & p <= s by Th1;
-      hence x = s by XXREAL_0:1;
+A4:   p in [.r,s.] by A3,XBOOLE_0:def 4;
+      p in [.s,t.] by A3,XBOOLE_0:def 4;
+      then
+A5:   s <= p by Th1;
+      p <= s by A4,Th1;
+      hence x = s by A5,XXREAL_0:1;
     end;
     assume
-A4: x = s;
-    s in [.r,s.] & s in [.s,t.] by A1,A2,Th1;
-    hence x in [.r,s.] /\ [.s,t.] by A4,XBOOLE_0:def 4;
+A6: x = s;
+A7: s in [.r,s.] by A1,Th1;
+    s in [.s,t.] by A2,Th1;
+    hence x in [.r,s.] /\ [.s,t.] by A6,A7,XBOOLE_0:def 4;
   end;
   hence thesis by TARSKI:def 1;
 end;
@@ -5904,53 +6661,53 @@ theorem
   [.-infty,s.] = ].-infty,s.[ \/ {-infty,s} by Th128,XXREAL_0:5;
 
 theorem
- [.-infty,s.] = [.-infty,s.[ \/ {s} by Th129,XXREAL_0:5;
+  [.-infty,s.] = [.-infty,s.[ \/ {s} by Th129,XXREAL_0:5;
 
 theorem
- [.-infty,s.] = {-infty} \/ ].-infty,s.] by Th130,XXREAL_0:5;
+  [.-infty,s.] = {-infty} \/ ].-infty,s.] by Th130,XXREAL_0:5;
 
 theorem
- for s being real number holds
- [.-infty,s.[ = {-infty} \/ ].-infty,s.[
-proof let s be real number;
+  for s being real number holds
+  [.-infty,s.[ = {-infty} \/ ].-infty,s.[
+proof
+  let s be real number;
   s in REAL by XREAL_0:def 1;
-  then -infty < s by XXREAL_0:12;
- hence thesis by Th131;
+  hence thesis by Th131,XXREAL_0:12;
 end;
 
 theorem
- for s being real number holds
+  for s being real number holds
   ].-infty,s.] = ].-infty,s.[ \/ {s}
-proof let s be real number;
+proof
+  let s be real number;
   s in REAL by XREAL_0:def 1;
-  then -infty < s by XXREAL_0:12;
- hence thesis by Th132;
+  hence thesis by Th132,XXREAL_0:12;
 end;
 
 theorem
- [.r,+infty.] = ].r,+infty.[ \/ {r,+infty} by Th128,XXREAL_0:3;
+  [.r,+infty.] = ].r,+infty.[ \/ {r,+infty} by Th128,XXREAL_0:3;
 
 theorem
   [.r,+infty.] = [.r,+infty.[ \/ {+infty} by Th129,XXREAL_0:3;
 
 theorem
- [.r,+infty.] = {r} \/ ].r,+infty.] by Th130,XXREAL_0:3;
+  [.r,+infty.] = {r} \/ ].r,+infty.] by Th130,XXREAL_0:3;
 
 theorem
- for r being real number holds
+  for r being real number holds
   [.r,+infty.[ = {r} \/ ].r,+infty.[
-proof let r be real number;
+proof
+  let r be real number;
   r in REAL by XREAL_0:def 1;
-  then r < +infty by XXREAL_0:9;
- hence thesis by Th131;
+  hence thesis by Th131,XXREAL_0:9;
 end;
 
 theorem
- for r being real number holds
+  for r being real number holds
   ].r,+infty.] = ].r,+infty.[ \/ {+infty}
-proof let r be real number;
+proof
+  let r be real number;
   r in REAL by XREAL_0:def 1;
-  then r < +infty by XXREAL_0:9;
- hence thesis by Th132;
+  hence thesis by Th132,XXREAL_0:9;
 end;
 

@@ -16,6 +16,8 @@
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="NAT_1"/>
+<ArticleID name="INT_1"/>
+<ArticleID name="RAT_1"/>
 <ArticleID name="XXREAL_0"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -25,8 +27,6 @@
 <ArticleID name="FUNCT_3"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="RFUNCT_1"/>
-<ArticleID name="INT_1"/>
-<ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_1"/>
 <ArticleID name="RFUNCT_3"/>
 </Signature>
@@ -48,36 +48,6 @@
 <Adjective nr="10" value="false"/>
 </Cluster>
 </RCluster>
-<RCluster aid="RFUNCT_3" nr="2">
-<ArgTypes>
-<Typ kind="M" nr="1">
-<Cluster/>
-</Typ>
-<Typ kind="M" nr="1">
-<Cluster/>
-</Typ>
-</ArgTypes>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="K" nr="21">
-<Func kind="K" nr="22">
-<LocusVar nr="1"/>
-<LocusVar nr="2"/>
-</Func>
-</Func>
-</Typ>
-<Cluster>
-<Adjective nr="1"/>
-<Adjective nr="4">
-<LocusVar nr="1"/>
-</Adjective>
-<Adjective nr="5">
-<LocusVar nr="2"/>
-</Adjective>
-<Adjective nr="6"/>
-<Adjective nr="29"/>
-</Cluster>
-</RCluster>
 <FCluster aid="RFUNCT_3" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
@@ -88,23 +58,23 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="6"/>
-<Adjective nr="29"/>
+<Adjective nr="31"/>
 </Cluster>
 <Func kind="K" nr="21">
 <Func kind="K" nr="22">
 <LocusVar nr="1"/>
-<Func kind="K" nr="80"/>
+<Func kind="K" nr="81"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="262">
+<Func kind="K" nr="263">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="6"/>
-<Adjective nr="29"/>
+<Adjective nr="31"/>
 </Cluster>
 </FCluster>
 <FCluster aid="RFUNCT_3" nr="2">
@@ -117,23 +87,23 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="6"/>
-<Adjective nr="29"/>
+<Adjective nr="31"/>
 </Cluster>
 <Func kind="K" nr="21">
 <Func kind="K" nr="22">
 <LocusVar nr="1"/>
-<Func kind="K" nr="80"/>
+<Func kind="K" nr="81"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="263">
+<Func kind="K" nr="264">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="6"/>
-<Adjective nr="29"/>
+<Adjective nr="31"/>
 </Cluster>
 </FCluster>
 <CCluster aid="RFUNCT_3" nr="1">
@@ -145,20 +115,20 @@
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="37"/>
+<Adjective nr="39"/>
 </Cluster>
 </Typ>
 </ArgTypes>
 <Cluster/>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="247">
+<Func kind="K" nr="248">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="47"/>
+<Adjective nr="50"/>
 </Cluster>
 </CCluster>
 </Registrations>

@@ -10,17 +10,16 @@ environ
       SEQM_3, ARYTM_3, ARYTM_1, ABSVALUE, RELAT_1, ORDINAL2, SEQ_1, BOOLE,
       ARYTM;
  notations TARSKI, ORDINAL1, SUBSET_1, NUMBERS, XREAL_0, COMPLEX1, REAL_1,
-      NAT_1, SEQ_1, SEQ_2, RELAT_1,
-      VALUED_0, STRUCT_0, PRE_TOPC, RLVECT_1, BHSP_1,
-      NORMSP_1, XXREAL_0;
+      NAT_1, SEQ_1, SEQ_2, RELAT_1, VALUED_0, STRUCT_0, PRE_TOPC, RLVECT_1,
+      BHSP_1, NORMSP_1, XXREAL_0;
  constructors DOMAIN_1, XXREAL_0, REAL_1, NAT_1, COMPLEX1, SEQ_2, BHSP_1,
       SEQ_1, VALUED_1, RELSET_1;
  registrations ORDINAL1, RELSET_1, XXREAL_0, XREAL_0, MEMBERED, STRUCT_0,
       XBOOLE_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- theorems TARSKI, NAT_1, FUNCT_1, SEQ_2, ABSVALUE, SUBSET_1, RLVECT_1,
-      BHSP_1, NORMSP_1, FUNCT_2, XREAL_0, XBOOLE_0, XBOOLE_1, XCMPLX_0,
-      XREAL_1, COMPLEX1, XXREAL_0, VALUED_0;
+ theorems TARSKI, NAT_1, FUNCT_1, SEQ_2, ABSVALUE, SUBSET_1, RLVECT_1, BHSP_1,
+      NORMSP_1, FUNCT_2, XREAL_0, XBOOLE_0, XBOOLE_1, XCMPLX_0, XREAL_1,
+      COMPLEX1, XXREAL_0, VALUED_0;
  schemes SEQ_1, FRAENKEL;
 
 begin
@@ -36,200 +35,215 @@ definition
   let X, seq;
   attr seq is convergent means
   :Def1:
-  ex g st for r st r > 0 ex m st for n st n >= m holds dist(seq.n, g) < r;
+  ex g st for r st r > 0 ex m st for n st
+  n >= m holds dist(seq.n, g) < r;
 end;
 
 theorem Th1:
   seq is constant implies seq is convergent
 proof
-  assume seq is constant;
+  assume
+  seq is constant;
   then consider x such that
 A1: for n being Nat holds seq.n = x by VALUED_0:def 18;
   take g = x;
   let r such that
 A2: r > 0;
   take m = 0;
-  let n such that n >= m;
+  let n such that
+  n >= m;
   dist(seq.n, g) = dist(x, g) by A1
     .= 0 by BHSP_1:41;
   hence thesis by A2;
 end;
 
 theorem Th2:
-  seq is convergent & (ex k st for n st k <= n holds seq'.n = seq.n)
-  implies seq' is convergent
+  seq is convergent & (ex k st for n st k <= n holds seq'.n = seq.n
+  ) implies seq' is convergent
 proof
   assume that
 A1: seq is convergent and
 A2: ex k st for n st k <= n holds seq'.n = seq.n;
-  consider g such that
-A3: for r st r > 0 ex m st for n st n >= m holds
-  dist((seq.n) , g) < r by A1,Def1;
   consider k such that
-A4: for n st n >= k holds seq'.n = seq.n by A2;
+A3: for n st n >= k holds seq'.n = seq.n by A2;
+  consider g such that
+A4: for r st r > 0 ex m st for n st n >= m holds dist((seq.n) , g) < r
+  by A1,Def1;
   take h = g;
   let r;
-  assume r > 0;
+  assume
+  r > 0;
   then consider m1 such that
-A5: for n st n >= m1 holds dist((seq.n) , h) < r by A3;
+A5: for n st n >= m1 holds dist((seq.n) , h) < r by A4;
 A6: now
     assume
-A7: k <= m1;
-    take m = m1;
-    let n;
-    assume
-A8: n >= m;
-    then seq'.n = seq.n by A4,A7,XXREAL_0:2;
-    hence dist((seq'.n) , h) < r by A5,A8;
-  end;
-  now
-    assume
-A9: m1 <= k;
+A7: m1 <= k;
     take m = k;
     let n;
     assume
-A10: n >= m;
-    then n >= m1 by A9,XXREAL_0:2;
+A8: n >= m;
+    then n >= m1 by A7,XXREAL_0:2;
     then dist((seq.n) , g) < r by A5;
-    hence dist((seq'.n) , h) < r by A4,A10;
+    hence dist((seq'.n) , h) < r by A3,A8;
+  end;
+  now
+    assume
+A9: k <= m1;
+    take m = m1;
+    let n;
+    assume
+A10: n >= m;
+    then seq'.n = seq.n by A3,A9,XXREAL_0:2;
+    hence dist((seq'.n) , h) < r by A5,A10;
   end;
   hence thesis by A6;
 end;
 
 theorem Th3:
-  seq1 is convergent & seq2 is convergent implies seq1 + seq2 is convergent
+  seq1 is convergent & seq2 is convergent implies seq1 + seq2 is
+  convergent
 proof
   assume that
 A1: seq1 is convergent and
 A2: seq2 is convergent;
   consider g1 such that
-A3: for r st r > 0 ex m st for n st n >= m holds
-  dist((seq1.n) , g1) < r by A1,Def1;
+A3: for r st r > 0 ex m st for n st n >= m holds dist((seq1.n) , g1) < r
+  by A1,Def1;
   consider g2 such that
-A4: for r st r > 0 ex m st for n st n >= m holds
-  dist((seq2.n) , g2) < r by A2,Def1;
+A4: for r st r > 0 ex m st for n st n >= m holds dist((seq2.n) , g2) < r
+  by A2,Def1;
   take g = g1 + g2;
   let r;
   assume
-   r > 0;
-  then
-X: r/2 > 0 by XREAL_1:217;
+A5: r > 0;
   then consider m1 such that
-A6: for n st n >= m1 holds dist((seq1.n) , g1) < r/2 by A3;
+A6: for n st n >= m1 holds dist((seq1.n) , g1) < r/2 by A3,XREAL_1:
+  217;
   consider m2 such that
-A7: for n st n >= m2 holds dist((seq2.n) , g2) < r/2 by A4,X;
+A7: for n st n >= m2 holds dist((seq2.n) , g2) < r/2 by A4,A5,XREAL_1:
+  217;
   take k = m1 + m2;
   let n such that
 A8: n >= k;
-  m1 + m2 >= m1 by NAT_1:12;
-  then n >= m1 by A8,XXREAL_0:2;
-  then
-A9: dist((seq1.n) , g1) < r/2 by A6;
   k >= m2 by NAT_1:12;
   then n >= m2 by A8,XXREAL_0:2;
-  then dist((seq2.n) , g2) < r/2 by A7;
   then
-A10: dist((seq1.n) , g1) + dist((seq2.n) , g2) < r/2 + r/2 by A9,XREAL_1:10;
-  dist((seq1 + seq2).n, g) =
-  dist((seq1.n) + (seq2.n) , (g1 + g2)) by NORMSP_1:def 5;
-  then dist((seq1 + seq2).n, g) <= dist((seq1.n) , g1) +
-  dist((seq2.n) , g2) by BHSP_1:47;
+A9: dist((seq2.n) , g2) < r/2 by A7;
+  dist((seq1 + seq2).n, g) = dist((seq1.n) + (seq2.n) , (g1 + g2)) by
+  NORMSP_1:def 5;
+  then
+A10: dist((seq1 + seq2).n, g) <= dist((seq1.n) , g1) + dist((seq2.n) , g2)
+  by BHSP_1:47;
+  m1 + m2 >= m1 by NAT_1:12;
+  then n >= m1 by A8,XXREAL_0:2;
+  then dist((seq1.n) , g1) < r/2 by A6;
+  then dist((seq1.n) , g1) + dist((seq2.n) , g2) < r/2 + r/2 by A9,
+  XREAL_1:10;
   hence thesis by A10,XXREAL_0:2;
 end;
 
 theorem Th4:
-  seq1 is convergent & seq2 is convergent implies seq1 - seq2 is convergent
+  seq1 is convergent & seq2 is convergent implies seq1 - seq2 is
+  convergent
 proof
   assume that
 A1: seq1 is convergent and
 A2: seq2 is convergent;
   consider g1 such that
-A3: for r st r > 0 ex m st for n st n >= m holds
-  dist((seq1.n) , g1) < r by A1,Def1;
+A3: for r st r > 0 ex m st for n st n >= m holds dist((seq1.n) , g1) < r
+  by A1,Def1;
   consider g2 such that
-A4: for r st r > 0 ex m st for n st n >= m holds
-  dist((seq2.n) , g2) < r by A2,Def1;
+A4: for r st r > 0 ex m st for n st n >= m holds dist((seq2.n) , g2) < r
+  by A2,Def1;
   take g = g1 - g2;
   let r;
   assume
-A5:  r > 0;
-  then
- r/2 > 0 by XREAL_1:217;
+A5: r > 0;
   then consider m1 such that
-A6: for n st n >= m1 holds dist((seq1.n) , g1) < r/2 by A3;
+A6: for n st n >= m1 holds dist((seq1.n) , g1) < r/2 by A3,XREAL_1:
+  217;
   consider m2 such that
-A7: for n st n >= m2 holds dist((seq2.n) , g2) < r/2 by A4,A5,XREAL_1:217;
+A7: for n st n >= m2 holds dist((seq2.n) , g2) < r/2 by A4,A5,XREAL_1:
+  217;
   take k = m1 + m2;
   let n such that
 A8: n >= k;
-  m1 + m2 >= m1 by NAT_1:12;
-  then n >= m1 by A8,XXREAL_0:2;
-  then
-A9: dist((seq1.n) , g1) < r/2 by A6;
   k >= m2 by NAT_1:12;
   then n >= m2 by A8,XXREAL_0:2;
-  then dist((seq2.n) , g2) < r/2 by A7;
   then
-A10: dist((seq1.n) , g1) + dist((seq2.n) , g2) < r/2 + r/2 by A9,XREAL_1:10;
-  dist((seq1 - seq2).n, g) =
-  dist((seq1.n) - (seq2.n) , (g1 - g2)) by NORMSP_1:def 6;
-  then dist((seq1 - seq2).n, g) <= dist((seq1.n) , g1) +
-  dist((seq2.n) , g2) by BHSP_1:48;
+A9: dist((seq2.n) , g2) < r/2 by A7;
+  dist((seq1 - seq2).n, g) = dist((seq1.n) - (seq2.n) , (g1 - g2)) by
+  NORMSP_1:def 6;
+  then
+A10: dist((seq1 - seq2).n, g) <= dist((seq1.n) , g1) + dist((seq2.n) , g2)
+  by BHSP_1:48;
+  m1 + m2 >= m1 by NAT_1:12;
+  then n >= m1 by A8,XXREAL_0:2;
+  then dist((seq1.n) , g1) < r/2 by A6;
+  then dist((seq1.n) , g1) + dist((seq2.n) , g2) < r/2 + r/2 by A9,
+  XREAL_1:10;
   hence thesis by A10,XXREAL_0:2;
 end;
 
 theorem Th5:
   seq is convergent implies a * seq is convergent
 proof
-  assume seq is convergent;
+  assume
+  seq is convergent;
   then consider g such that
-A1: for r st r > 0 ex m st for n
-  st n >= m holds dist((seq.n) , g) < r by Def1;
+A1: for r st r > 0 ex m st for n st n >= m holds dist((seq.n) , g) < r
+  by Def1;
   take h = a * g;
 A2: now
+A3: 0/abs(a) = 0;
     assume
-A3: a = 0;
+A4: a <> 0;
+    then
+A5: abs(a) > 0 by COMPLEX1:133;
     let r;
-    assume r > 0;
+    assume
+    r > 0;
     then consider m1 such that
-A4: for n st n >= m1 holds dist((seq.n) , g) < r by A1;
+A6: for n st n >= m1 holds dist(seq.n, g) < r/abs(a) by A1,A5,
+    A3, XREAL_1:76;
     take k = m1;
     let n;
-    assume n >= k;
+    assume
+    n >= k;
     then
-A5: dist((seq.n) , g) < r by A4;
-    dist(a * (seq.n) , a * g) = dist(0 * (seq.n) , 0'(X)) by A3,RLVECT_1:23
-      .= dist(0'(X) , 0'(X)) by RLVECT_1:23
-      .= 0 by BHSP_1:41;
-    then dist(a * (seq.n) , h) < r by A5,BHSP_1:44;
+A7: dist((seq.n) , g) < r/abs(a) by A6;
+A8: abs(a) <> 0 by A4,COMPLEX1:133;
+A9: abs(a) * (r/abs(a)) = abs(a) * (abs(a)" * r) by XCMPLX_0:def 9
+      .= abs(a) *abs(a)" * r
+      .= 1 * r by A8,XCMPLX_0:def 7
+      .= r;
+    dist(a * (seq.n) , a * g) = ||.(a * (seq.n)) - (a * g).|| by BHSP_1:
+    def 5
+      .= ||.a * ((seq.n) - g).|| by RLVECT_1:48
+      .= abs(a) * ||.(seq.n) - g.|| by BHSP_1:33
+      .= abs(a) * dist((seq.n) , g) by BHSP_1:def 5;
+    then dist((a *(seq.n)) , h) < r by A5,A7,A9,XREAL_1:70;
     hence dist((a * seq).n, h) < r by NORMSP_1:def 8;
   end;
   now
     assume
-A6: a <> 0;
-    then
-A7: abs(a) > 0 by COMPLEX1:133;
-    let r such that
-A8: r > 0;
-A9: abs(a) <> 0 by A6,COMPLEX1:133;
-    0/abs(a) = 0;
-    then r/abs(a) > 0 by A7,A8,XREAL_1:76;
+A10: a = 0;
+    let r;
+    assume
+    r > 0;
     then consider m1 such that
-A10: for n st n >= m1 holds dist(seq.n, g) < r/abs(a) by A1;
+A11: for n st n >= m1 holds dist((seq.n) , g) < r by A1;
     take k = m1;
     let n;
-    assume n >= k;
+    assume
+    n >= k;
     then
-A11: dist((seq.n) , g) < r/abs(a) by A10;
-A12: dist(a * (seq.n) , a * g) = ||.(a * (seq.n)) - (a * g).|| by BHSP_1:def 5
-      .= ||.a * ((seq.n) - g).|| by RLVECT_1:48
-      .= abs(a) * ||.(seq.n) - g.|| by BHSP_1:33
-      .= abs(a) * dist((seq.n) , g) by BHSP_1:def 5;
-    abs(a) * (r/abs(a)) = abs(a) * (abs(a)" * r) by XCMPLX_0:def 9
-      .= abs(a) *abs(a)" * r
-      .= 1 * r by A9,XCMPLX_0:def 7
-      .= r;
-    then dist((a *(seq.n)) , h) < r by A7,A11,A12,XREAL_1:70;
+A12: dist((seq.n) , g) < r by A11;
+    dist(a * (seq.n) , a * g) = dist(0 * (seq.n) , 0'(X)) by A10,RLVECT_1:
+    23
+      .= dist(0'(X) , 0'(X)) by RLVECT_1:23
+      .= 0 by BHSP_1:41;
+    then dist(a * (seq.n) , h) < r by A12,BHSP_1:44;
     hence dist((a * seq).n, h) < r by NORMSP_1:def 8;
   end;
   hence thesis by A2;
@@ -238,7 +252,8 @@ end;
 theorem Th6:
   seq is convergent implies - seq is convergent
 proof
-  assume seq is convergent;
+  assume
+  seq is convergent;
   then (-1) * seq is convergent by Th5;
   hence thesis by BHSP_1:77;
 end;
@@ -246,22 +261,25 @@ end;
 theorem Th7:
   seq is convergent implies seq + x is convergent
 proof
-  assume seq is convergent;
+  assume
+  seq is convergent;
   then consider g such that
-A1: for r st r > 0 ex m st for n
-  st n >= m holds dist((seq.n) , g) < r by Def1;
+A1: for r st r > 0 ex m st for n st n >= m holds dist((seq.n) , g) < r
+  by Def1;
   take g + x;
   let r;
-  assume r > 0;
+  assume
+  r > 0;
   then consider m1 such that
 A2: for n st n >= m1 holds dist((seq.n) , g) < r by A1;
   take k = m1;
   let n;
-  assume n >= k;
-  then
-A3: dist((seq.n) , g) < r by A2;
   dist((seq.n) + x, g + x) <= dist((seq.n) , g) + dist(x, x) by BHSP_1:47;
-  then dist((seq.n) + x, g + x) <= dist((seq.n) , g) + 0 by BHSP_1:41;
+  then
+A3: dist((seq.n) + x, g + x) <= dist((seq.n) , g) + 0 by BHSP_1:41;
+  assume
+  n >= k;
+  then dist((seq.n) , g) < r by A2;
   then dist((seq.n) + x, g + x) < r by A3,XXREAL_0:2;
   hence thesis by BHSP_1:def 12;
 end;
@@ -269,46 +287,53 @@ end;
 theorem Th8:
   seq is convergent implies seq - x is convergent
 proof
-  assume seq is convergent;
+  assume
+  seq is convergent;
   then seq + (-x) is convergent by Th7;
   hence thesis by BHSP_1:78;
 end;
 
 theorem Th9:
-  seq is convergent iff ex g st for r st r > 0 ex m st for n
-  st n >= m holds ||.(seq.n) - g.|| < r
+  seq is convergent iff ex g st for r st r > 0 ex m st for n st n
+  >= m holds ||.(seq.n) - g.|| < r
 proof
-  thus seq is convergent implies ex g st for r st r > 0 ex m st for n
-  st n >= m holds ||.(seq.n) - g.|| < r
+  thus seq is convergent implies ex g st for r st r > 0 ex m st for n st n >=
+  m holds ||.(seq.n) - g.|| < r
   proof
-    assume seq is convergent;
+    assume
+    seq is convergent;
     then consider g such that
-A1: for r st r > 0 ex m st for n
-    st n >= m holds dist((seq.n) , g) < r by Def1;
+A1: for r st r > 0 ex m st for n st n >= m holds dist((seq.n) , g) < r
+    by Def1;
     take g;
     let r;
-    assume r > 0;
+    assume
+    r > 0;
     then consider m1 such that
 A2: for n st n >= m1 holds dist((seq.n) , g) < r by A1;
     take k = m1;
     let n;
-    assume n >= k;
+    assume
+    n >= k;
     then dist((seq.n) , g) < r by A2;
     hence thesis by BHSP_1:def 5;
   end;
-  ( ex g st for r st r > 0 ex m st for n
-  st n >= m holds ||.(seq.n) - g.|| < r ) implies seq is convergent
+  ( ex g st for r st r > 0 ex m st for n st n >= m holds ||.(seq.n) - g.||
+  < r ) implies seq is convergent
   proof
     given g such that
-A3: for r st r > 0 ex m st for n st n >= m holds ||.(seq.n) - g.|| < r;
+A3: for r st r > 0 ex m st for n st n >= m holds ||.(seq.n) - g.|| <
+    r;
     take g;
     let r;
-    assume r > 0;
+    assume
+    r > 0;
     then consider m1 such that
 A4: for n st n >= m1 holds ||.(seq.n) - g.|| < r by A3;
     take k = m1;
     let n;
-    assume n >= k;
+    assume
+    n >= k;
     then ||.(seq.n) - g.|| < r by A4;
     hence thesis by BHSP_1:def 5;
   end;
@@ -321,18 +346,20 @@ definition
 A1: seq is convergent;
   func lim seq -> Point of X means
   :Def2:
-  for r st r > 0 ex m st for n st n >= m holds dist((seq.n) , it) < r;
+  for r st r > 0 ex m st for n st n >=
+  m holds dist((seq.n) , it) < r;
   existence by A1,Def1;
   uniqueness
   proof
-    for x, y st
-    ( for r st r > 0 ex m st for n st n >= m holds dist((seq.n) , x) < r ) &
-    ( for r st r > 0 ex m st for n st n >= m holds dist((seq.n) , y) < r )
-    holds x = y
+    for x, y st ( for r st r > 0 ex m st for n st n >= m holds dist((seq.n
+) , x) < r ) & ( for r st r > 0 ex m st for n st n >= m holds dist((seq.n) , y)
+    < r ) holds x = y
     proof
       given x, y such that
-A2:   for r st r > 0 ex m st for n st n >= m holds dist((seq.n) , x) < r and
-A3:   for r st r > 0 ex m st for n st n >= m holds dist((seq.n) , y) < r and
+A2:   for r st r > 0 ex m st for n st n >= m holds dist((seq.n) , x) <
+      r and
+A3:   for r st r > 0 ex m st for n st n >= m holds dist((seq.n) , y) <
+      r and
 A4:   x <> y;
 A5:   dist(x, y) > 0 by A4,BHSP_1:45;
       then
@@ -342,30 +369,32 @@ A7:   for n st n >= m1 holds dist((seq.n) , x) < dist(x, y)/4 by A2;
       consider m2 such that
 A8:   for n st n >= m2 holds dist((seq.n) , y) < dist(x, y)/4 by A3,A6;
 A9:   now
-        assume m1 <= m2;
+        assume
+        m1 >= m2;
         then
-A10:    dist((seq.m2) , x) < dist(x, y)/4 by A7;
-        dist((seq.m2) , y) < dist(x, y)/4 by A8;
+A10:    dist((seq.m1) , y) < dist(x, y)/4 by A8;
+        dist(x, y) = dist(x - (seq.m1) , y - (seq.m1)) by BHSP_1:49;
         then
-A11:    dist((seq.m2) , x) + dist((seq.m2) , y) <
-        dist(x, y)/4 + dist(x, y)/4 by A10,XREAL_1:10;
-        dist(x, y) = dist(x - (seq.m2) , y - (seq.m2)) by BHSP_1:49;
-
-then dist(x, y) <= dist((seq.m2) , x) + dist((seq.m2) , y) by BHSP_1:50;
+A11:    dist(x, y) <= dist((seq.m1) , x) + dist((seq.m1) , y) by
+        BHSP_1:50;
+        dist((seq.m1) , x) < dist(x, y)/4 by A7;
+        then dist((seq.m1) , x) + dist((seq.m1) , y) < dist(x, y)/4 + dist(x,
+        y) /4 by A10,XREAL_1:10;
         then dist(x, y) <= dist(x, y)/2 by A11,XXREAL_0:2;
         hence contradiction by A5,XREAL_1:218;
       end;
       now
-        assume m1 >= m2;
+        assume
+        m1 <= m2;
         then
-A12:    dist((seq.m1) , y) < dist(x, y)/4 by A8;
-        dist((seq.m1) , x) < dist(x, y)/4 by A7;
+A12:    dist((seq.m2) , x) < dist(x, y)/4 by A7;
+        dist(x, y) = dist(x - (seq.m2) , y - (seq.m2)) by BHSP_1:49;
         then
-A13:    dist((seq.m1) , x) + dist((seq.m1) , y) < dist(x, y)/4 + dist(x, y)
-        /4 by A12,XREAL_1:10;
-        dist(x, y) = dist(x - (seq.m1) , y - (seq.m1)) by BHSP_1:49;
-
-then dist(x, y) <= dist((seq.m1) , x) + dist((seq.m1) , y) by BHSP_1:50;
+A13:    dist(x, y) <= dist((seq.m2) , x) + dist((seq.m2) , y) by
+        BHSP_1:50;
+        dist((seq.m2) , y) < dist(x, y)/4 by A8;
+        then dist((seq.m2) , x) + dist((seq.m2) , y) < dist(x, y)/4 + dist(x,
+        y)/4 by A12,XREAL_1:10;
         then dist(x, y) <= dist(x, y)/2 by A13,XXREAL_0:2;
         hence contradiction by A5,XREAL_1:218;
       end;
@@ -386,12 +415,12 @@ A3: rng seq = {y} by A1,FUNCT_2:188;
   consider z such that
 A4: for n being Nat holds seq.n = z by A1,VALUED_0:def 18;
 A5: x = y by A2,A3,TARSKI:def 1;
-A6: seq is convergent by A1,Th1;
-  now
+A6: now
     let r such that
 A7: r > 0;
     take m = 0;
-    let n such that n >= m;
+    let n such that
+    n >= m;
     n in NAT;
     then n in dom seq by NORMSP_1:17;
     then seq.n in rng seq by FUNCT_1:def 5;
@@ -400,6 +429,7 @@ A7: r > 0;
     then seq.n = x by A4;
     hence dist((seq.n) , x) < r by A7,BHSP_1:41;
   end;
+  seq is convergent by A1,Th1;
   hence thesis by A6,Def2;
 end;
 
@@ -424,54 +454,56 @@ proof
   assume that
 A1: seq is convergent and
 A2: ex k st for n st n >= k holds seq'.n = seq.n;
-A3: seq' is convergent by A1,A2,Th2;
   consider k such that
-A4: for n st n >= k holds seq'.n = seq.n by A2;
-  now
+A3: for n st n >= k holds seq'.n = seq.n by A2;
+A4: now
     let r;
-    assume r > 0;
+    assume
+    r > 0;
     then consider m1 such that
 A5: for n st n >= m1 holds dist((seq.n) , (lim seq)) < r by A1,Def2;
 A6: now
       assume
-A7:   k <= m1;
-      take m = m1;
-      let n;
-      assume
-A8:   n >= m;
-      then seq'.n = seq.n by A4,A7,XXREAL_0:2;
-      hence dist((seq'.n) , (lim seq)) < r by A5,A8;
-    end;
-    now
-      assume
-A9:   m1 <= k;
+A7:   m1 <= k;
       take m = k;
       let n;
       assume
-A10:  n >= m;
-      then n >= m1 by A9,XXREAL_0:2;
+A8:   n >= m;
+      then n >= m1 by A7,XXREAL_0:2;
       then dist((seq.n) , (lim seq)) < r by A5;
-      hence dist((seq'.n) , (lim seq)) < r by A4,A10;
+      hence dist((seq'.n) , (lim seq)) < r by A3,A8;
     end;
-    hence ex m st for n st n >= m holds dist((seq'.n) , (lim seq)) < r by A6;
+    now
+      assume
+A9:   k <= m1;
+      take m = m1;
+      let n;
+      assume
+A10:  n >= m;
+      then seq'.n = seq.n by A3,A9,XXREAL_0:2;
+      hence dist((seq'.n) , (lim seq)) < r by A5,A10;
+    end;
+    hence ex m st for n st n >= m holds dist((seq'.n) , (lim seq)) < r by
+    A6;
   end;
-  hence thesis by A3,Def2;
+  seq' is convergent by A1,A2,Th2;
+  hence thesis by A4,Def2;
 end;
 
 theorem Th13:
-  seq1 is convergent & seq2 is convergent implies
-  lim (seq1 + seq2) = (lim seq1) + (lim seq2)
+  seq1 is convergent & seq2 is convergent implies lim (seq1 + seq2
+  ) = (lim seq1) + (lim seq2)
 proof
   assume that
 A1: seq1 is convergent and
 A2: seq2 is convergent;
-A3: seq1 + seq2 is convergent by A1,A2,Th3;
-  set g1 = lim seq1;
   set g2 = lim seq2;
+  set g1 = lim seq1;
   set g = g1 + g2;
-  now
+A3: now
     let r;
-    assume r > 0;
+    assume
+    r > 0;
     then
 A4: r/2 > 0 by XREAL_1:217;
     then consider m1 such that
@@ -481,38 +513,40 @@ A6: for n st n >= m2 holds dist((seq2.n) , g2) < r/2 by A2,A4,Def2;
     take k = m1 + m2;
     let n such that
 A7: n >= k;
-    m1 + m2 >= m1 by NAT_1:12;
-    then n >= m1 by A7,XXREAL_0:2;
-    then
-A8: dist((seq1.n) , g1) < r/2 by A5;
     k >= m2 by NAT_1:12;
     then n >= m2 by A7,XXREAL_0:2;
-    then dist((seq2.n) , g2) < r/2 by A6;
     then
-A9: dist((seq1.n) , g1) + dist((seq2.n) , g2) < r/2 + r/2 by A8,XREAL_1:10;
-    dist((seq1 + seq2).n, g)
-    = dist((seq1.n) + (seq2.n) , g1 + g2) by NORMSP_1:def 5;
-    then dist((seq1 + seq2).n, g)
-    <= dist((seq1.n) , g1) + dist((seq2.n) , g2) by BHSP_1:47;
+A8: dist((seq2.n) , g2) < r/2 by A6;
+    dist((seq1 + seq2).n, g) = dist((seq1.n) + (seq2.n) , g1 + g2) by
+    NORMSP_1:def 5;
+    then
+A9: dist((seq1 + seq2).n, g) <= dist((seq1.n) , g1) + dist((seq2.n) , g2)
+    by BHSP_1:47;
+    m1 + m2 >= m1 by NAT_1:12;
+    then n >= m1 by A7,XXREAL_0:2;
+    then dist((seq1.n) , g1) < r/2 by A5;
+    then dist((seq1.n) , g1) + dist((seq2.n) , g2) < r/2 + r/2 by A8,
+    XREAL_1:10;
     hence dist((seq1 + seq2).n, g) < r by A9,XXREAL_0:2;
   end;
+  seq1 + seq2 is convergent by A1,A2,Th3;
   hence thesis by A3,Def2;
 end;
 
 theorem Th14:
-  seq1 is convergent & seq2 is convergent implies
-  lim (seq1 - seq2) = (lim seq1) - (lim seq2)
+  seq1 is convergent & seq2 is convergent implies lim (seq1 - seq2
+  ) = (lim seq1) - (lim seq2)
 proof
   assume that
 A1: seq1 is convergent and
 A2: seq2 is convergent;
-A3: seq1 - seq2 is convergent by A1,A2,Th4;
-  set g1 = lim seq1;
   set g2 = lim seq2;
+  set g1 = lim seq1;
   set g = g1 - g2;
-  now
+A3: now
     let r;
-    assume r > 0;
+    assume
+    r > 0;
     then
 A4: r/2 > 0 by XREAL_1:217;
     then consider m1 such that
@@ -522,86 +556,95 @@ A6: for n st n >= m2 holds dist((seq2.n) , g2) < r/2 by A2,A4,Def2;
     take k = m1 + m2;
     let n such that
 A7: n >= k;
-    m1 + m2 >= m1 by NAT_1:12;
-    then n >= m1 by A7,XXREAL_0:2;
-    then
-A8: dist((seq1.n) , g1) < r/2 by A5;
     k >= m2 by NAT_1:12;
     then n >= m2 by A7,XXREAL_0:2;
-    then dist((seq2.n) , g2) < r/2 by A6;
     then
-A9: dist((seq1.n) , g1) + dist((seq2.n) , g2) < r/2 + r/2 by A8,XREAL_1:10;
-    dist((seq1 - seq2).n, g)
-    = dist((seq1.n) - (seq2.n) , g1 - g2) by NORMSP_1:def 6;
-    then dist((seq1 - seq2).n, g)
-    <= dist((seq1.n) , g1) + dist((seq2.n) , g2) by BHSP_1:48;
+A8: dist((seq2.n) , g2) < r/2 by A6;
+    dist((seq1 - seq2).n, g) = dist((seq1.n) - (seq2.n) , g1 - g2) by
+    NORMSP_1:def 6;
+    then
+A9: dist((seq1 - seq2).n, g) <= dist((seq1.n) , g1) + dist((seq2.n) , g2)
+    by BHSP_1:48;
+    m1 + m2 >= m1 by NAT_1:12;
+    then n >= m1 by A7,XXREAL_0:2;
+    then dist((seq1.n) , g1) < r/2 by A5;
+    then dist((seq1.n) , g1) + dist((seq2.n) , g2) < r/2 + r/2 by A8,
+    XREAL_1:10;
     hence dist((seq1 - seq2).n, g) < r by A9,XXREAL_0:2;
   end;
+  seq1 - seq2 is convergent by A1,A2,Th4;
   hence thesis by A3,Def2;
 end;
 
 theorem Th15:
   seq is convergent implies lim (a * seq) = a * (lim seq)
 proof
-  assume
-A1: seq is convergent;
-  then
-A2: a * seq is convergent by Th5;
   set g = lim seq;
   set h = a * g;
-A3: now
+  assume
+A1: seq is convergent;
+A2: now
     assume
-A4: a = 0;
+A3: a = 0;
     let r;
-    assume r > 0;
+    assume
+    r > 0;
     then consider m1 such that
-A5: for n st n >= m1 holds dist((seq.n) , g) < r by A1,Def2;
+A4: for n st n >= m1 holds dist((seq.n) , g) < r by A1,Def2;
     take k = m1;
     let n;
-    assume n >= k;
+    assume
+    n >= k;
     then
-A6: dist((seq.n) , g) < r by A5;
-    dist(a * (seq.n) , a * g) = dist(0 * (seq.n) , 0'(X)) by A4,RLVECT_1:23
+A5: dist((seq.n) , g) < r by A4;
+    dist(a * (seq.n) , a * g) = dist(0 * (seq.n) , 0'(X)) by A3,RLVECT_1:
+    23
       .= dist(0'(X) , 0'(X)) by RLVECT_1:23
       .= 0 by BHSP_1:41;
-    then dist(a * (seq.n) , h) < r by A6,BHSP_1:44;
+    then dist(a * (seq.n) , h) < r by A5,BHSP_1:44;
     hence dist((a * seq).n, h) < r by NORMSP_1:def 8;
   end;
-  now
+A6: now
+A7: 0/abs(a) =0;
     assume
-A7: a <> 0;
+A8: a <> 0;
     then
-A8: abs(a) > 0 by COMPLEX1:133;
-    let r such that
-A9: r > 0;
-A10: abs(a) <> 0 by A7,COMPLEX1:133;
-    0/abs(a) =0;
-    then r/abs(a) > 0 by A8,A9,XREAL_1:76;
+A9: abs(a) > 0 by COMPLEX1:133;
+    let r;
+    assume
+    r > 0;
+    then r/abs(a) > 0 by A9,A7,XREAL_1:76;
     then consider m1 such that
-A11: for n st n >= m1 holds dist((seq.n) , g) < r/abs(a) by A1,Def2;
+A10: for n st n >= m1 holds dist((seq.n) , g) < r/abs(a) by A1,
+    Def2;
     take k = m1;
     let n;
-    assume n >= k;
+    assume
+    n >= k;
     then
-A12: dist((seq.n) , g) < r/abs(a) by A11;
-A13: dist(a * (seq.n) , a * g) = ||.(a * (seq.n)) - (a * g).|| by BHSP_1:def 5
+A11: dist((seq.n) , g) < r/abs(a) by A10;
+A12: abs(a) <> 0 by A8,COMPLEX1:133;
+A13: abs(a) * (r/abs(a)) = abs(a) * (abs(a)" * r) by XCMPLX_0:def 9
+      .= abs(a) *abs(a)" * r
+      .= 1 * r by A12,XCMPLX_0:def 7
+      .= r;
+    dist(a * (seq.n) , a * g) = ||.(a * (seq.n)) - (a * g).|| by BHSP_1:
+    def 5
       .= ||.a * ((seq.n) - g).|| by RLVECT_1:48
       .= abs(a) * ||.(seq.n) - g.|| by BHSP_1:33
       .= abs(a) * dist((seq.n) , g) by BHSP_1:def 5;
-    abs(a) * (r/abs(a)) = abs(a) * (abs(a)" * r) by XCMPLX_0:def 9
-      .= abs(a) *abs(a)" * r
-      .= 1 * r by A10,XCMPLX_0:def 7
-      .= r;
-    then dist(a * (seq.n) , h) < r by A8,A12,A13,XREAL_1:70;
+    then dist(a * (seq.n) , h) < r by A9,A11,A13,XREAL_1:70;
     hence dist((a * seq).n, h) < r by NORMSP_1:def 8;
   end;
-  hence thesis by A2,A3,Def2;
+  a * seq is convergent by A1,Th5;
+  hence thesis by A2,A6,Def2;
 end;
 
 theorem Th16:
   seq is convergent implies lim (- seq) = - (lim seq)
 proof
-  assume seq is convergent;
+  assume
+  seq is convergent;
   then lim ((-1) * seq) = (-1) * (lim seq) by Th15;
   then lim (- seq) = (-1) * (lim seq) by BHSP_1:77;
   hence thesis by RLVECT_1:29;
@@ -610,19 +653,19 @@ end;
 theorem Th17:
   seq is convergent implies lim (seq + x) = (lim seq) + x
 proof
+  set g = lim seq;
   assume
 A1: seq is convergent;
-  then
-A2: seq + x is convergent by Th7;
-  set g = lim seq;
-  now
+A2: now
     let r;
-    assume r > 0;
+    assume
+    r > 0;
     then consider m1 such that
 A3: for n st n >= m1 holds dist((seq.n) , g) < r by A1,Def2;
     take k = m1;
     let n;
-    assume n >= k;
+    assume
+    n >= k;
     then
 A4: dist((seq.n) , g) < r by A3;
     dist((seq.n) , g) = dist((seq.n) - (-x) , g - (-x)) by BHSP_1:49
@@ -632,37 +675,40 @@ A4: dist((seq.n) , g) < r by A3;
       .= dist((seq.n) + x, g + x) by RLVECT_1:30;
     hence dist((seq + x).n, (g + x)) < r by A4,BHSP_1:def 12;
   end;
+  seq + x is convergent by A1,Th7;
   hence thesis by A2,Def2;
 end;
 
 theorem
   seq is convergent implies lim (seq - x) = (lim seq) - x
 proof
-  assume seq is convergent;
+  assume
+  seq is convergent;
   then lim (seq + (-x)) = (lim seq) + (-x) by Th17;
   then lim (seq - x) = (lim seq) + (-x) by BHSP_1:78;
   hence thesis by RLVECT_1:def 12;
 end;
 
 theorem Th19:
-  seq is convergent implies
-  ( lim seq = g iff for r st r > 0 ex m st for n st n >= m
-  holds ||.(seq.n) - g.|| < r )
+  seq is convergent implies ( lim seq = g iff for r st r > 0 ex m
+  st for n st n >= m holds ||.(seq.n) - g.|| < r )
 proof
   assume
-A1: seq is convergent; thus
-  lim seq = g implies ( for r st r > 0 ex m st for n st n >= m
-  holds ||.(seq.n) - g.|| < r )
+A1: seq is convergent;
+  thus lim seq = g implies for r st r > 0 ex m st for n st n >= m holds ||.(
+  seq.n) - g.|| < r
   proof
     assume
 A2: lim seq = g;
     let r;
-    assume r > 0;
+    assume
+    r > 0;
     then consider m1 such that
 A3: for n st n >= m1 holds dist((seq.n) , g) < r by A1,A2,Def2;
     take k = m1;
     let n;
-    assume n >= k;
+    assume
+    n >= k;
     then dist((seq.n) , g) < r by A3;
     hence thesis by BHSP_1:def 5;
   end;
@@ -670,15 +716,18 @@ A3: for n st n >= m1 holds dist((seq.n) , g) < r by A1,A2,Def2;
   implies lim seq = g
   proof
     assume
-A4: ( for r st r > 0 ex m st for n st n >= m holds ||.(seq.n) - g.|| < r );
+A4: for r st r > 0 ex m st for n st n >= m holds ||.(seq.n) - g.|| <
+    r;
     now
       let r;
-      assume r > 0;
+      assume
+      r > 0;
       then consider m1 such that
 A5:   for n st n >= m1 holds ||.(seq.n) - g.|| < r by A4;
       take k = m1;
       let n;
-      assume n >= k;
+      assume
+      n >= k;
       then ||.(seq.n) - g.|| < r by A5;
       hence dist((seq.n) , g) < r by BHSP_1:def 5;
     end;
@@ -703,12 +752,13 @@ A1: for n holds s.n = F(n) from SEQ_1:sch 1;
   uniqueness
   proof
     let s,t be Real_Sequence;
-    assume
-A2: ( for n holds s.n = ||.(seq.n).|| ) & ( for n holds t.n = ||.(seq.n).|| );
+    assume that
+A2: for n holds s.n = ||.(seq.n).|| and
+A3: for n holds t.n = ||.(seq.n).||;
     now
       let n;
       s.n = ||.(seq.n).|| by A2;
-      hence s.n = t.n by A2;
+      hence s.n = t.n by A3;
     end;
     hence thesis by FUNCT_2:113;
   end;
@@ -717,19 +767,23 @@ end;
 theorem Th20:
   seq is convergent implies ||.seq.|| is convergent
 proof
-  assume seq is convergent;
+  assume
+  seq is convergent;
   then consider g such that
-A1: for r st r > 0 ex m st for n st n >= m holds ||.(seq.n) - g.|| < r by Th9;
+A1: for r st r > 0 ex m st for n st n >= m holds ||.(seq.n) - g.|| < r
+  by Th9;
   now
     let r be real number;
-A2: r is Real by XREAL_0:def 1;
-    assume r > 0;
+    assume
+A2: r > 0;
+    r is Real by XREAL_0:def 1;
     then consider m1 such that
 A3: for n st n >= m1 holds ||.(seq.n) - g.|| < r by A1,A2;
     take k = m1;
     now
       let n;
-      assume n >= k;
+      assume
+      n >= k;
       then
 A4:   ||.(seq.n) - g.|| < r by A3;
       abs(||.(seq.n).|| - ||.g.||) <= ||.(seq.n) - g.|| by BHSP_1:39;
@@ -742,23 +796,24 @@ A4:   ||.(seq.n) - g.|| < r by A3;
 end;
 
 theorem Th21:
-  seq is convergent & lim seq = g implies
-  ||.seq.|| is convergent & lim ||.seq.|| = ||.g.||
+  seq is convergent & lim seq = g implies ||.seq.|| is convergent
+  & lim ||.seq.|| = ||.g.||
 proof
   assume that
 A1: seq is convergent and
 A2: lim seq = g;
-A3: ||.seq.|| is convergent by A1,Th20;
-  now
+A3: now
     let r be real number;
-A4: r is Real by XREAL_0:def 1;
-    assume r > 0;
+    assume
+A4: r > 0;
+    r is Real by XREAL_0:def 1;
     then consider m1 such that
 A5: for n st n >= m1 holds ||.(seq.n) - g.|| < r by A1,A2,A4,Th19;
     take k = m1;
     now
       let n;
-      assume n >= k;
+      assume
+      n >= k;
       then
 A6:   ||.(seq.n) - g.|| < r by A5;
       abs(||.(seq.n).|| - ||.g.||) <= ||.(seq.n) - g.|| by BHSP_1:39;
@@ -767,36 +822,39 @@ A6:   ||.(seq.n) - g.|| < r by A5;
     end;
     hence for n st k <= n holds abs(||.seq.||.n - ||.g.||) < r;
   end;
+  ||.seq.|| is convergent by A1,Th20;
   hence thesis by A3,SEQ_2:def 7;
 end;
 
 theorem Th22:
-  seq is convergent & lim seq = g implies
-  ( ||.seq - g.|| is convergent & lim ||.seq - g.|| = 0 )
+  seq is convergent & lim seq = g implies ||.seq - g.|| is
+  convergent & lim ||.seq - g.|| = 0
 proof
   assume that
 A1: seq is convergent and
 A2: lim seq = g;
-A3: ||.seq - g.|| is convergent by A1,Th8,Th20;
-  now
+A3: now
     let r be real number;
-A4: r is Real by XREAL_0:def 1;
-    assume r > 0;
+    assume
+A4: r > 0;
+    r is Real by XREAL_0:def 1;
     then consider m1 such that
 A5: for n st n >= m1 holds ||.(seq.n) - g.|| < r by A1,A2,A4,Th19;
     take k = m1;
     let n;
-    assume n >= k;
+    assume
+    n >= k;
     then ||.(seq.n) - g.|| < r by A5;
     then
 A6: ||.((seq.n) - g ) - 0'(X).|| < r by RLVECT_1:26;
-    abs(||.(seq.n) - g.|| - ||.0'(X).||) <= ||.((seq.n) - g ) - 0'( X ) .||
-    by BHSP_1:39;
+    abs(||.(seq.n) - g.|| - ||.0'(X).||) <= ||.((seq.n) - g ) - 0'( X )
+    .|| by BHSP_1:39;
     then abs(||.(seq.n) - g.|| - ||.0'(X).||) < r by A6,XXREAL_0:2;
     then abs((||.(seq.n) - g.|| - 0)) < r by BHSP_1:32;
     then abs((||.(seq - g).n.|| - 0)) < r by NORMSP_1:def 7;
     hence abs((||.seq - g.||.n - 0)) < r by Def3;
   end;
+  ||.seq - g.|| is convergent by A1,Th8,Th20;
   hence thesis by A3,SEQ_2:def 7;
 end;
 
@@ -806,7 +864,8 @@ definition
   let x;
   func dist(seq, x) -> Real_Sequence means
   :Def4:
-  for n holds it.n =dist((seq.n) , x);
+  for n holds it.n =dist((seq.
+  n) , x);
   existence
   proof
     deffunc F(Element of NAT) = dist((seq.$1) , x);
@@ -818,39 +877,42 @@ A1: for n holds s.n = F(n) from SEQ_1:sch 1;
   uniqueness
   proof
     let s,t be Real_Sequence;
-    assume
-A2: ( for n holds s.n = dist((seq.n) , x) ) &
-    ( for n holds t.n = dist((seq.n) , x) );
+    assume that
+A2: for n holds s.n = dist((seq.n) , x) and
+A3: for n holds t.n = dist((seq.n) , x);
     now
       let n;
       s.n = dist((seq.n) , x) by A2;
-      hence s.n = t.n by A2;
+      hence s.n = t.n by A3;
     end;
     hence thesis by FUNCT_2:113;
   end;
 end;
 
 theorem Th23:
-  ( seq is convergent & lim seq = g ) implies dist(seq, g) is convergent
+  seq is convergent & lim seq = g implies dist(seq, g) is
+  convergent
 proof
-  assume that
-A1: seq is convergent and
-A2: lim seq = g;
+  assume
+A1: seq is convergent & lim seq = g;
   now
     let r be real number;
-A3: r is Real by XREAL_0:def 1;
-    assume r > 0;
+    assume
+A2: r > 0;
+    r is Real by XREAL_0:def 1;
     then consider m1 such that
-A4: for n st n >= m1 holds dist((seq.n) , g) < r by A1,A2,A3,Def2;
+A3: for n st n >= m1 holds dist((seq.n) , g) < r by A1,A2,Def2;
     take k = m1;
     now
       let n;
-      assume n >= k;
-      then
-A5:   dist((seq.n) , g) < r by A4;
       dist((seq.n) , g) >= 0 by BHSP_1:44;
-      then abs((dist((seq.n) , g) - 0)) = dist((seq.n) , g) by ABSVALUE:def 1;
-      hence abs((dist(seq, g).n - 0)) < r by A5,Def4;
+      then
+A4:   abs((dist((seq.n) , g) - 0)) = dist((seq.n) , g) by ABSVALUE:
+      def 1;
+      assume
+      n >= k;
+      then dist((seq.n) , g) < r by A3;
+      hence abs((dist(seq, g).n - 0)) < r by A4,Def4;
     end;
     hence for n st k <= n holds abs((dist(seq, g).n - 0)) < r;
   end;
@@ -858,268 +920,248 @@ A5:   dist((seq.n) , g) < r by A4;
 end;
 
 theorem Th24:
-  seq is convergent & lim seq = g implies
-  ( dist(seq, g) is convergent & lim dist(seq, g) = 0 )
+  seq is convergent & lim seq = g implies dist(seq, g) is
+  convergent & lim dist(seq, g) = 0
 proof
-  assume that
-A1: seq is convergent and
-A2: lim seq = g;
-A3: dist(seq, g) is convergent by A1,A2,Th23;
-  now
+  assume
+A1: seq is convergent & lim seq = g;
+A2: now
     let r be real number;
-A4: r is Real by XREAL_0:def 1;
-    assume r > 0;
+    assume
+A3: r > 0;
+    r is Real by XREAL_0:def 1;
     then consider m1 such that
-A5: for n st n >= m1 holds dist((seq.n) , g) < r by A1,A2,A4,Def2;
+A4: for n st n >= m1 holds dist((seq.n) , g) < r by A1,A3,Def2;
     take k = m1;
     let n;
-    assume n >= k;
-    then
-A6: dist((seq.n) , g) < r by A5;
     dist((seq.n) , g) >= 0 by BHSP_1:44;
-    then abs((dist((seq.n) , g) - 0)) = dist((seq.n) , g) by ABSVALUE:def 1;
-    hence abs((dist(seq, g).n - 0)) < r by A6,Def4;
+    then
+A5: abs((dist((seq.n) , g) - 0)) = dist((seq.n) , g) by ABSVALUE:def
+    1;
+    assume
+    n >= k;
+    then dist((seq.n) , g) < r by A4;
+    hence abs((dist(seq, g).n - 0)) < r by A5,Def4;
   end;
-  hence thesis by A3,SEQ_2:def 7;
+  dist(seq, g) is convergent by A1,Th23;
+  hence thesis by A2,SEQ_2:def 7;
 end;
 
 theorem
-  seq1 is convergent & lim seq1 = g1 &
-  seq2 is convergent & lim seq2 = g2 implies ||.seq1 + seq2.|| is convergent &
-  lim ||.seq1 + seq2.|| = ||.g1 + g2.||
+  seq1 is convergent & lim seq1 = g1 & seq2 is convergent & lim seq2 =
+g2 implies ||.seq1 + seq2.|| is convergent & lim ||.seq1 + seq2.|| = ||.g1 + g2
+  .||
 proof
-  assume that
-A1: seq1 is convergent and
-A2: lim seq1 = g1 and
-A3: seq2 is convergent and
-A4: lim seq2 = g2;
-A5: seq1 + seq2 is convergent by A1,A3,Th3;
-  lim (seq1 + seq2) = g1 + g2 by A1,A2,A3,A4,Th13;
-  hence thesis by A5,Th21;
+  assume
+  seq1 is convergent & lim seq1 = g1 & seq2 is convergent & lim seq2 =
+  g2;
+  then seq1 + seq2 is convergent & lim (seq1 + seq2) = g1 + g2 by
+  Th3,Th13;
+  hence thesis by Th21;
 end;
 
 theorem
-  seq1 is convergent & lim seq1 = g1 &
-  seq2 is convergent & lim seq2 = g2 implies
-  ||.(seq1 + seq2) - (g1 + g2).|| is convergent
-  & lim ||.(seq1 + seq2) - (g1 + g2).|| = 0
+  seq1 is convergent & lim seq1 = g1 & seq2 is convergent & lim seq2 =
+g2 implies ||.(seq1 + seq2) - (g1 + g2).|| is convergent & lim ||.(seq1 + seq2)
+  - (g1 + g2).|| = 0
 proof
-  assume that
-A1: seq1 is convergent and
-A2: lim seq1 = g1 and
-A3: seq2 is convergent and
-A4: lim seq2 = g2;
-A5: seq1 + seq2 is convergent by A1,A3,Th3;
-  lim (seq1 + seq2) = g1 + g2 by A1,A2,A3,A4,Th13;
-  hence thesis by A5,Th22;
+  assume
+  seq1 is convergent & lim seq1 = g1 & seq2 is convergent & lim seq2 =
+  g2;
+  then seq1 + seq2 is convergent & lim (seq1 + seq2) = g1 + g2 by
+  Th3,Th13;
+  hence thesis by Th22;
 end;
 
 theorem
-  seq1 is convergent & lim seq1 = g1 &
-  seq2 is convergent & lim seq2 = g2 implies ||.seq1 - seq2.|| is convergent &
-  lim ||.seq1 - seq2.|| = ||.g1 - g2.||
+  seq1 is convergent & lim seq1 = g1 & seq2 is convergent & lim seq2 =
+g2 implies ||.seq1 - seq2.|| is convergent & lim ||.seq1 - seq2.|| = ||.g1 - g2
+  .||
 proof
-  assume that
-A1: seq1 is convergent and
-A2: lim seq1 = g1 and
-A3: seq2 is convergent and
-A4: lim seq2 = g2;
-A5: seq1 - seq2 is convergent by A1,A3,Th4;
-  lim (seq1 - seq2) = g1 - g2 by A1,A2,A3,A4,Th14;
-  hence thesis by A5,Th21;
+  assume
+  seq1 is convergent & lim seq1 = g1 & seq2 is convergent & lim seq2 =
+  g2;
+  then seq1 - seq2 is convergent & lim (seq1 - seq2) = g1 - g2 by
+  Th4,Th14;
+  hence thesis by Th21;
 end;
 
 theorem
-  seq1 is convergent & lim seq1 = g1 &
-  seq2 is convergent & lim seq2 = g2 implies
-  ||.(seq1 - seq2) - (g1 - g2).|| is convergent
-  & lim ||.(seq1 - seq2) - (g1 - g2).|| = 0
+  seq1 is convergent & lim seq1 = g1 & seq2 is convergent & lim seq2 =
+g2 implies ||.(seq1 - seq2) - (g1 - g2).|| is convergent & lim ||.(seq1 - seq2)
+  - (g1 - g2).|| = 0
 proof
-  assume that
-A1: seq1 is convergent and
-A2: lim seq1 = g1 and
-A3: seq2 is convergent and
-A4: lim seq2 = g2;
-A5: seq1 - seq2 is convergent by A1,A3,Th4;
-  lim (seq1 - seq2) = g1 - g2 by A1,A2,A3,A4,Th14;
-  hence thesis by A5,Th22;
+  assume
+  seq1 is convergent & lim seq1 = g1 & seq2 is convergent & lim seq2 =
+  g2;
+  then seq1 - seq2 is convergent & lim (seq1 - seq2) = g1 - g2 by
+  Th4,Th14;
+  hence thesis by Th22;
 end;
 
 theorem
   seq is convergent & lim seq = g implies ||.a * seq.|| is convergent &
   lim ||.a * seq.|| = ||.a * g.||
 proof
-  assume that
-A1: seq is convergent and
-A2: lim seq = g;
-A3: a * seq is convergent by A1,Th5;
-  lim (a * seq) = a * g by A1,A2,Th15;
-  hence thesis by A3,Th21;
+  assume
+  seq is convergent & lim seq = g;
+  then a * seq is convergent & lim (a * seq) = a * g by Th5,Th15;
+  hence thesis by Th21;
 end;
 
 theorem
-  seq is convergent & lim seq = g implies
-  ||.(a * seq) - (a * g).|| is convergent & lim ||.(a * seq) - (a * g).|| = 0
+  seq is convergent & lim seq = g implies ||.(a * seq) - (a * g).|| is
+  convergent & lim ||.(a * seq) - (a * g).|| = 0
 proof
-  assume that
-A1: seq is convergent and
-A2: lim seq = g;
-A3: a * seq is convergent by A1,Th5;
-  lim (a * seq) = a * g by A1,A2,Th15;
-  hence thesis by A3,Th22;
+  assume
+  seq is convergent & lim seq = g;
+  then a * seq is convergent & lim (a * seq) = a * g by Th5,Th15;
+  hence thesis by Th22;
 end;
 
 theorem
   seq is convergent & lim seq = g implies ||.- seq.|| is convergent &
   lim ||.- seq.|| = ||.- g.||
 proof
-  assume that
-A1: seq is convergent and
-A2: lim seq = g;
-A3: - seq is convergent by A1,Th6;
-  lim (- seq) = - g by A1,A2,Th16;
-  hence thesis by A3,Th21;
+  assume
+  seq is convergent & lim seq = g;
+  then - seq is convergent & lim (- seq) = - g by Th6,Th16;
+  hence thesis by Th21;
 end;
 
 theorem
-  seq is convergent & lim seq = g implies ||.(- seq) - (- g).|| is convergent
-  & lim ||.(- seq) - (- g).|| = 0
+  seq is convergent & lim seq = g implies ||.(- seq) - (- g).|| is
+  convergent & lim ||.(- seq) - (- g).|| = 0
 proof
-  assume that
-A1: seq is convergent and
-A2: lim seq = g;
-A3: - seq is convergent by A1,Th6;
-  lim (- seq) = - g by A1,A2,Th16;
-  hence thesis by A3,Th22;
+  assume
+  seq is convergent & lim seq = g;
+  then - seq is convergent & lim (- seq) = - g by Th6,Th16;
+  hence thesis by Th22;
 end;
 
-Lm1: seq is convergent & lim seq = g implies ||.seq + x.|| is convergent &
-lim ||.seq + x.|| = ||.g + x.||
+Lm1: seq is convergent & lim seq = g implies ||.seq + x.|| is convergent & lim
+||.seq + x.|| = ||.g + x.||
+
 proof
-  assume that
-A1: seq is convergent and
-A2: lim seq = g;
-A3: seq + x is convergent by A1,Th7;
-  lim (seq + x) = g + x by A1,A2,Th17;
-  hence thesis by A3,Th21;
+  assume
+  seq is convergent & lim seq = g;
+  then seq + x is convergent & lim (seq + x) = g + x by Th7,Th17;
+  hence thesis by Th21;
 end;
 
 theorem Th33:
-  seq is convergent & lim seq = g implies
-  ||.(seq + x) - (g + x).|| is convergent & lim ||.(seq + x) - (g + x).|| = 0
+  seq is convergent & lim seq = g implies ||.(seq + x) - (g + x)
+  .|| is convergent & lim ||.(seq + x) - (g + x).|| = 0
 proof
-  assume that
-A1: seq is convergent and
-A2: lim seq = g;
-A3: seq + x is convergent by A1,Th7;
-  lim (seq + x) = g + x by A1,A2,Th17;
-  hence thesis by A3,Th22;
+  assume
+  seq is convergent & lim seq = g;
+  then seq + x is convergent & lim (seq + x) = g + x by Th7,Th17;
+  hence thesis by Th22;
 end;
 
 theorem
   seq is convergent & lim seq = g implies ||.seq - x.|| is convergent &
   lim ||.seq - x.|| = ||.g - x.||
 proof
-  assume seq is convergent & lim seq = g;
-  then ||.seq + (-x).|| is convergent &
-  lim ||.seq + (-x).|| = ||.g + (-x).|| by Lm1;
-  then ||.seq - x.|| is convergent &
-  lim ||.seq - x.|| = ||.g + (-x).|| by BHSP_1:78;
-  hence thesis by RLVECT_1:def 12;
+  assume
+A1: seq is convergent & lim seq = g;
+  then lim ||.seq + (-x).|| = ||.g + (-x).|| by Lm1;
+  then
+A2: lim ||.seq - x.|| = ||.g + (-x).|| by BHSP_1:78;
+  ||.seq + (-x).|| is convergent by A1,Lm1;
+  hence thesis by A2,BHSP_1:78,RLVECT_1:def 12;
 end;
 
 theorem
-  seq is convergent & lim seq = g implies
-  ||.(seq - x) - (g - x).|| is convergent & lim ||.(seq - x) - (g - x).|| = 0
+  seq is convergent & lim seq = g implies ||.(seq - x) - (g - x).|| is
+  convergent & lim ||.(seq - x) - (g - x).|| = 0
 proof
-  assume seq is convergent & lim seq = g;
-  then ||.(seq + (-x)) - (g + (-x)).|| is convergent &
-  lim ||.(seq + (-x)) - (g + (-x)).|| = 0 by Th33;
-  then ||.(seq - x) - (g + (-x)).|| is convergent &
-  lim ||.(seq - x) - (g + (-x)).|| = 0 by BHSP_1:78;
-  hence thesis by RLVECT_1:def 12;
+  assume
+A1: seq is convergent & lim seq = g;
+  then lim ||.(seq + (-x)) - (g + (-x)).|| = 0 by Th33;
+  then
+A2: lim ||.(seq - x) - (g + (-x)).|| = 0 by BHSP_1:78;
+  ||.(seq + (-x)) - (g + (-x)).|| is convergent by A1,Th33;
+  then ||.(seq - x) - (g + (-x)).|| is convergent by BHSP_1:78;
+  hence thesis by A2,RLVECT_1:def 12;
 end;
 
 theorem
-  seq1 is convergent & lim seq1 = g1 &
-  seq2 is convergent & lim seq2 = g2 implies
-  dist((seq1 + seq2) , (g1 + g2)) is convergent &
-  lim dist((seq1 + seq2) , (g1 + g2)) = 0
+  seq1 is convergent & lim seq1 = g1 & seq2 is convergent & lim seq2 =
+  g2 implies dist((seq1 + seq2) , (g1 + g2)) is convergent & lim dist((seq1 +
+  seq2) , (g1 + g2)) = 0
 proof
-  assume that
-A1: seq1 is convergent and
-A2: lim seq1 = g1 and
-A3: seq2 is convergent and
-A4: lim seq2 = g2;
-A5: seq1 + seq2 is convergent by A1,A3,Th3;
-  lim (seq1 + seq2) = g1 + g2 by A1,A2,A3,A4,Th13;
-  hence thesis by A5,Th24;
+  assume
+  seq1 is convergent & lim seq1 = g1 & seq2 is convergent & lim seq2 =
+  g2;
+  then seq1 + seq2 is convergent & lim (seq1 + seq2) = g1 + g2 by
+  Th3,Th13;
+  hence thesis by Th24;
 end;
 
 theorem
-  seq1 is convergent & lim seq1 = g1 &
-  seq2 is convergent & lim seq2 = g2 implies
-  dist((seq1 - seq2) , (g1 - g2)) is convergent &
-  lim dist((seq1 - seq2) , (g1 - g2)) = 0
+  seq1 is convergent & lim seq1 = g1 & seq2 is convergent & lim seq2 =
+  g2 implies dist((seq1 - seq2) , (g1 - g2)) is convergent & lim dist((seq1 -
+  seq2) , (g1 - g2)) = 0
 proof
-  assume that
-A1: seq1 is convergent and
-A2: lim seq1 = g1 and
-A3: seq2 is convergent and
-A4: lim seq2 = g2;
-A5: seq1 - seq2 is convergent by A1,A3,Th4;
-  lim (seq1 - seq2) = g1 - g2 by A1,A2,A3,A4,Th14;
-  hence thesis by A5,Th24;
+  assume
+  seq1 is convergent & lim seq1 = g1 & seq2 is convergent & lim seq2 =
+  g2;
+  then seq1 - seq2 is convergent & lim (seq1 - seq2) = g1 - g2 by
+  Th4,Th14;
+  hence thesis by Th24;
 end;
 
 theorem
-  seq is convergent & lim seq = g implies
-  dist((a * seq) , (a * g)) is convergent & lim dist((a * seq) , (a * g)) = 0
+  seq is convergent & lim seq = g implies dist((a * seq) , (a * g)) is
+  convergent & lim dist((a * seq) , (a * g)) = 0
 proof
-  assume that
-A1: seq is convergent and
-A2: lim seq = g;
-A3: a * seq is convergent by A1,Th5;
-  lim (a * seq) = a * g by A1,A2,Th15;
-  hence thesis by A3,Th24;
+  assume
+  seq is convergent & lim seq = g;
+  then a * seq is convergent & lim (a * seq) = a * g by Th5,Th15;
+  hence thesis by Th24;
 end;
 
 theorem
-  seq is convergent & lim seq = g implies
-  dist((seq + x) , (g + x)) is convergent & lim dist((seq + x) , (g + x)) = 0
+  seq is convergent & lim seq = g implies dist((seq + x) , (g + x)) is
+  convergent & lim dist((seq + x) , (g + x)) = 0
 proof
-  assume that
-A1: seq is convergent and
-A2: lim seq = g;
-A3: seq + x is convergent by A1,Th7;
-  lim (seq + x) = g + x by A1,A2,Th17;
-  hence thesis by A3,Th24;
+  assume
+  seq is convergent & lim seq = g;
+  then seq + x is convergent & lim (seq + x) = g + x by Th7,Th17;
+  hence thesis by Th24;
 end;
 
 definition
   let X, x, r;
   func Ball(x,r) -> Subset of X equals
-  {y where y is Point of X : ||.x - y.|| < r};
+  {y where y is Point of X : ||.x - y.||
+  < r};
   coherence
   proof
     defpred P[Point of X] means ||.x - $1.|| < r;
-    {y where y is Point of X : P[y]} c= the carrier of X from FRAENKEL:sch 10;
+    {y where y is Point of X : P[y]} c= the carrier of X from FRAENKEL:sch
+    10;
     hence thesis;
   end;
   func cl_Ball(x,r) -> Subset of X equals
-  {y where y is Point of X : ||.x - y.|| <= r};
+  {y where y is Point of X : ||.x - y
+  .|| <= r};
   coherence
   proof
     defpred P[Point of X] means ||.x - $1.|| <= r;
-    {y where y is Point of X : P[y]} c= the carrier of X from FRAENKEL:sch 10;
+    {y where y is Point of X : P[y]} c= the carrier of X from FRAENKEL:sch
+    10;
     hence thesis;
   end;
   func Sphere(x,r) -> Subset of X equals
-  {y where y is Point of X : ||.x - y.|| = r};
+  {y where y is Point of X : ||.x - y
+  .|| = r};
   coherence
   proof
     defpred P[Point of X] means ||.x - $1.|| = r;
-    {y where y is Point of X : P[y]} c= the carrier of X from FRAENKEL:sch 10;
+    {y where y is Point of X : P[y]} c= the carrier of X from FRAENKEL:sch
+    10;
     hence thesis;
   end;
 end;
@@ -1129,7 +1171,8 @@ theorem Th40:
 proof
   thus z in Ball(x,r) implies ||.x - z.|| < r
   proof
-    assume z in Ball(x,r);
+    assume
+    z in Ball(x,r);
     then ex y be Point of X st z = y & ||.x - y.|| < r;
     hence thesis;
   end;
@@ -1141,11 +1184,13 @@ theorem Th41:
 proof
   thus z in Ball(x,r) implies dist(x,z) < r
   proof
-    assume z in Ball(x,r);
+    assume
+    z in Ball(x,r);
     then ||.x - z.|| < r by Th40;
     hence thesis by BHSP_1:def 5;
   end;
-  assume dist(x,z) < r;
+  assume
+  dist(x,z) < r;
   then ||.x - z.|| < r by BHSP_1:def 5;
   hence thesis;
 end;
@@ -1153,9 +1198,9 @@ end;
 theorem
   r > 0 implies x in Ball(x,r)
 proof
+A1: dist(x,x) = 0 by BHSP_1:41;
   assume
-A1: r > 0;
-  dist(x,x) = 0 by BHSP_1:41;
+  r > 0;
   hence thesis by A1,Th41;
 end;
 
@@ -1165,20 +1210,21 @@ proof
   assume that
 A1: y in Ball(x,r) and
 A2: z in Ball(x,r);
-A3: dist(x,y) < r by A1,Th41;
-A4: dist(x,z) < r by A2,Th41;
-A5: dist(x,y) + dist(x,z) < r + dist(x,z) by A3,XREAL_1:8;
-  r + dist(x,z) < r + r by A4,XREAL_1:8;
+  dist(x,z) < r by A2,Th41;
   then
-A6: dist(x,y) + dist(x,z) < 2 * r by A5,XXREAL_0:2;
-  dist(y,z) <= dist(y,x) + dist(x,z) by BHSP_1:42;
-  hence thesis by A6,XXREAL_0:2;
+A3: r + dist(x,z) < r + r by XREAL_1:8;
+A4: dist(y,z) <= dist(y,x) + dist(x,z) by BHSP_1:42;
+  dist(x,y) < r by A1,Th41;
+  then dist(x,y) + dist(x,z) < r + dist(x,z) by XREAL_1:8;
+  then dist(x,y) + dist(x,z) < 2 * r by A3,XXREAL_0:2;
+  hence thesis by A4,XXREAL_0:2;
 end;
 
 theorem
   y in Ball(x,r) implies y - z in Ball(x - z,r)
 proof
-  assume y in Ball(x,r);
+  assume
+  y in Ball(x,r);
   then
 A1: dist(x,y) < r by Th41;
   dist(x - z,y - z) = dist(x,y) by BHSP_1:49;
@@ -1188,7 +1234,8 @@ end;
 theorem
   y in Ball(x,r) implies (y - x) in Ball (0.(X),r)
 proof
-  assume y in Ball(x,r);
+  assume
+  y in Ball(x,r);
   then ||.x - y.|| < r by Th40;
   then ||.(-y) + x.|| < r by RLVECT_1:def 12;
   then ||.-(y - x).|| < r by RLVECT_1:47;
@@ -1212,11 +1259,13 @@ theorem Th47:
 proof
   thus z in cl_Ball(x,r) implies ||.x - z.|| <= r
   proof
-    assume z in cl_Ball(x,r);
+    assume
+    z in cl_Ball(x,r);
     then ex y be Point of X st z = y & ||.x - y.|| <= r;
     hence thesis;
   end;
-  assume ||.x - z.|| <= r;
+  assume
+  ||.x - z.|| <= r;
   hence thesis;
 end;
 
@@ -1225,11 +1274,13 @@ theorem Th48:
 proof
   thus z in cl_Ball(x,r) implies dist(x,z) <= r
   proof
-    assume z in cl_Ball(x,r);
+    assume
+    z in cl_Ball(x,r);
     then ||.x - z.|| <= r by Th47;
     hence thesis by BHSP_1:def 5;
   end;
-  assume dist(x,z) <= r;
+  assume
+  dist(x,z) <= r;
   then ||.x - z.|| <= r by BHSP_1:def 5;
   hence thesis;
 end;
@@ -1237,7 +1288,8 @@ end;
 theorem
   r >= 0 implies x in cl_Ball(x,r)
 proof
-  assume r >= 0;
+  assume
+  r >= 0;
   then dist(x,x) <= r by BHSP_1:41;
   hence thesis by Th48;
 end;
@@ -1245,7 +1297,8 @@ end;
 theorem Th50:
   y in Ball(x,r) implies y in cl_Ball(x,r)
 proof
-  assume y in Ball(x,r);
+  assume
+  y in Ball(x,r);
   then ||.x - y.|| <= r by Th40;
   hence thesis;
 end;
@@ -1255,11 +1308,13 @@ theorem Th51:
 proof
   thus z in Sphere(x,r) implies ||.x - z.|| = r
   proof
-    assume z in Sphere(x,r);
+    assume
+    z in Sphere(x,r);
     then ex y be Point of X st z = y & ||.x - y.|| = r;
     hence thesis;
   end;
-  assume ||.x - z.|| = r;
+  assume
+  ||.x - z.|| = r;
   hence thesis;
 end;
 
@@ -1268,11 +1323,13 @@ theorem
 proof
   thus z in Sphere(x,r) implies dist(x,z) = r
   proof
-    assume z in Sphere(x,r);
+    assume
+    z in Sphere(x,r);
     then ||.x - z.|| = r by Th51;
     hence thesis by BHSP_1:def 5;
   end;
-  assume dist(x,z) = r;
+  assume
+  dist(x,z) = r;
   then ||.x - z.|| = r by BHSP_1:def 5;
   hence thesis;
 end;
@@ -1280,7 +1337,8 @@ end;
 theorem
   y in Sphere(x,r) implies y in cl_Ball(x,r)
 proof
-  assume y in Sphere(x,r);
+  assume
+  y in Sphere(x,r);
   then ||.x - y.|| = r by Th51;
   hence thesis;
 end;
@@ -1297,7 +1355,8 @@ theorem Th55:
 proof
   now
     let y;
-    assume y in Sphere(x,r);
+    assume
+    y in Sphere(x,r);
     then ||.x - y.|| = r by Th51;
     hence y in cl_Ball(x,r);
   end;
@@ -1307,27 +1366,29 @@ end;
 theorem
   Ball(x,r) \/ Sphere(x,r) = cl_Ball(x,r)
 proof
-A1: Ball(x,r) \/ Sphere(x,r) c= cl_Ball(x,r)
-  proof
-    Ball(x,r) c= cl_Ball(x,r) & Sphere(x,r) c= cl_Ball(x,r) by Th54,Th55;
-    hence thesis by XBOOLE_1:8;
-  end;
   now
     let y;
-    assume y in cl_Ball(x,r);
+    assume
+    y in cl_Ball(x,r);
     then
-A2: ||.x - y.|| <= r by Th47;
-    now per cases by A2,XXREAL_0:1;
-      case ||.x - y.|| < r;
+A1: ||.x - y.|| <= r by Th47;
+    now
+      per cases by A1,XXREAL_0:1;
+      case
+        ||.x - y.|| < r;
         hence y in Ball(x,r);
       end;
-      case ||.x - y.|| = r;
+      case
+        ||.x - y.|| = r;
         hence y in Sphere(x,r);
       end;
     end;
     hence y in Ball(x,r) \/ Sphere(x,r) by XBOOLE_0:def 3;
   end;
-  then cl_Ball(x,r) c= Ball(x,r) \/ Sphere(x,r) by SUBSET_1:7;
-  hence thesis by A1,XBOOLE_0:def 10;
+  then
+A2: cl_Ball(x,r) c= Ball(x,r) \/ Sphere(x,r) by SUBSET_1:7;
+  Ball(x,r) c= cl_Ball(x,r) & Sphere(x,r) c= cl_Ball(x,r) by Th54,Th55;
+  then Ball(x,r) \/ Sphere(x,r) c= cl_Ball(x,r) by XBOOLE_1:8;
+  hence thesis by A2,XBOOLE_0:def 10;
 end;
 

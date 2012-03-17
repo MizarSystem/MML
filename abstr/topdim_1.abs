@@ -1,0 +1,368 @@
+:: Small {I}nductive {D}imension of {T}opological {S}paces
+::  by Karol P\c{a}k
+::
+:: Received June 29, 2009
+:: Copyright (c) 2009 Association of Mizar Users
+
+environ
+
+ vocabularies ARYTM, ARYTM_1, BOOLE, CARD_1, CARD_4, CARD_5, COMPTS_1,
+      FINSET_1, FINSEQ_4, FUNCT_1, FUNCT_3, GROUP_3, INT_1, MCART_1, PCOMPS_1,
+      PROB_1, PRE_TOPC, RELAT_1, RLVECT_3, SETFAM_1, SEQM_3, SUBSET_1, TARSKI,
+      TOPS_1, TOPS_2, T_0TOPSP, WAYBEL23, METRIZTS, TOPDIM_1, ORDINAL2;
+ notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1,
+      ORDINAL1, MCART_1, FUNCT_2, CARD_1, CARD_3, CANTOR_1, FINSET_1, NUMBERS,
+      ZFMISC_1, XXREAL_0, REAL_1, SETFAM_1, DOMAIN_1, PRE_TOPC, TOPS_1, TOPS_2,
+      NAT_1, STRUCT_0, COMPTS_1, PCOMPS_1, PROB_1, WAYBEL23, BORSUK_1,
+      BORSUK_3, INT_1, METRIZTS;
+ constructors SETFAM_1, TOPS_1, TOPS_2, BORSUK_1, REAL_1, KURATO_2, CANTOR_1,
+      WELLFND1, WAYBEL23, COMPTS_1, BORSUK_3, TSP_1, METRIZTS, RELSET_1,
+      ORDINAL2;
+ registrations BORSUK_3, CARD_1, COMPTS_1, FINSET_1, FUNCT_2, INT_1, NAT_1,
+      ORDINAL1, PRE_TOPC, RELAT_1, STRUCT_0, SUBSET_1, TOPREAL6, TOPS_1,
+      XBOOLE_0, XCMPLX_0, XREAL_0, XXREAL_0, YELLOW13, METRIZTS, RELSET_1;
+ requirements ARITHM, BOOLE, NUMERALS, REAL, SUBSET;
+
+
+begin :: Preliminaries
+
+reserve T,T1,T2 for TopSpace,
+  A,B for Subset of T,
+  F for Subset of T|A,
+  G,G1,
+  G2 for Subset-Family of T,
+  U,W for open Subset of T|A,
+  p for Point of T|A,
+  n
+  for Nat,
+  I for Integer;
+
+theorem :: TOPDIM_1:1
+  F = B/\A implies Fr F c= Fr B/\A;
+
+theorem :: TOPDIM_1:2
+  T is normal iff for A,B be closed Subset of T st A misses B ex U,
+  W be open Subset of T st A c=U & B c=W & Cl U misses Cl W;
+
+::  The sequence of a subset family of topological spaces
+::  with limited small inductive dimension
+
+definition
+  let T;
+  func Seq_of_ind T -> SetSequence of bool the carrier of T means
+:: TOPDIM_1:def 1
+
+  it.0
+= { {}T } & ( A in it.(n+1) iff A in it.n or for p,U st p in U ex W st p in W &
+  W c=U & Fr W in it.n);
+end;
+
+registration
+  let T;
+  cluster Seq_of_ind T -> non-descending;
+end;
+
+theorem :: TOPDIM_1:3
+  for F st F = B holds F in (Seq_of_ind T|A).n iff B in (Seq_of_ind
+  T).n;
+
+definition
+  let T,A;
+  attr A is with_finite_small_inductive_dimension means
+:: TOPDIM_1:def 2
+
+  ex n st A in (
+  Seq_of_ind T).n;
+end;
+
+notation
+  let T,A;
+  synonym A is finite-ind for A is with_finite_small_inductive_dimension;
+end;
+
+definition
+  let T,G;
+  attr G is with_finite_small_inductive_dimension means
+:: TOPDIM_1:def 3
+
+  ex n st G c=(
+  Seq_of_ind T).n;
+end;
+
+notation
+  let T,G;
+  synonym G is finite-ind for G is with_finite_small_inductive_dimension;
+end;
+
+theorem :: TOPDIM_1:4
+  A in G & G is finite-ind implies A is finite-ind;
+
+registration
+  let T;
+  cluster finite -> finite-ind Subset of T;
+  cluster empty -> finite-ind Subset-Family of T;
+  cluster non empty finite-ind Subset-Family of T;
+end;
+
+registration
+  let T be non empty TopSpace;
+  cluster non empty finite-ind Subset of T;
+end;
+
+definition
+  let T;
+  attr T is with_finite_small_inductive_dimension means
+:: TOPDIM_1:def 4
+
+  [#]T is
+  with_finite_small_inductive_dimension;
+end;
+
+notation
+  let T;
+  synonym T is finite-ind for T is with_finite_small_inductive_dimension;
+end;
+
+registration
+  cluster empty -> finite-ind TopSpace;
+end;
+
+registration
+  let X be set;
+  cluster 1TopSp X -> finite-ind;
+end;
+
+registration
+  cluster non empty finite-ind TopSpace;
+end;
+
+reserve Af,Bf for finite-ind Subset of T,
+  Tf for finite-ind TopSpace;
+
+begin :: Concept of the Small Inductive Dimension
+
+definition
+  let T;
+  let A such that
+ A is finite-ind;
+  func ind A -> Integer means
+:: TOPDIM_1:def 5
+
+  A in (Seq_of_ind T).(it+1) & not A in (
+  Seq_of_ind T).it;
+end;
+
+theorem :: TOPDIM_1:5
+  -1 <= ind Af;
+
+theorem :: TOPDIM_1:6
+  ind Af = -1 iff Af is empty;
+
+registration
+  let T be non empty TopSpace;
+  let A be non empty finite-ind Subset of T;
+  cluster ind A -> natural;
+end;
+
+theorem :: TOPDIM_1:7
+  ind Af <= n-1 iff Af in (Seq_of_ind T).n;
+
+theorem :: TOPDIM_1:8
+  for A be finite Subset of T holds ind A < card A;
+
+theorem :: TOPDIM_1:9
+  ind Af <= n iff for p be Point of T|Af,U be open Subset of T|Af
+st p in U ex W be open Subset of T|Af st p in W & W c= U & Fr W is finite-ind &
+  ind Fr W <= n-1;
+
+definition
+  let T;
+  let G such that
+ G is finite-ind;
+  func ind G -> Integer means
+:: TOPDIM_1:def 6
+
+  G c= (Seq_of_ind T).(it+1) & -1<=it & for
+  i be Integer st-1<=i & G c= (Seq_of_ind T).(i+1) holds it<=i;
+end;
+
+theorem :: TOPDIM_1:10
+  ind G = -1 & G is finite-ind iff G c= {{}T};
+
+theorem :: TOPDIM_1:11
+  G is finite-ind & ind G <= I iff -1 <= I & for A st A in G holds
+  A is finite-ind & ind A <= I;
+
+theorem :: TOPDIM_1:12
+  G1 is finite-ind & G2 c= G1 implies G2 is finite-ind & ind G2 <= ind
+  G1;
+
+registration
+  let T;
+  let G1,G2 be finite-ind Subset-Family of T;
+  cluster G1 \/ G2 -> finite-ind Subset-Family of T;
+end;
+
+theorem :: TOPDIM_1:13
+  G is finite-ind & G1 is finite-ind & ind G <= I & ind G1 <= I implies
+  ind (G\/G1) <= I;
+
+definition
+  let T;
+  func ind T -> Integer equals
+:: TOPDIM_1:def 7
+  ind [#]T;
+end;
+
+registration
+  let T be non empty finite-ind TopSpace;
+  cluster ind T -> natural;
+end;
+
+theorem :: TOPDIM_1:14
+  for X be non empty set holds ind 1TopSp X = 0;
+
+theorem :: TOPDIM_1:15
+  (ex n st for p be Point of T,U be open Subset of T st p in U ex
+W be open Subset of T st p in W & W c= U & Fr W is finite-ind & ind Fr W <= n-1
+  ) implies T is finite-ind;
+
+theorem :: TOPDIM_1:16
+  ind Tf <= n iff for p be Point of Tf,U be open Subset of Tf st p
+in U ex W be open Subset of Tf st p in W & W c= U & Fr W is finite-ind & ind Fr
+  W <= n-1;
+
+begin :: Monotonic of the Small Inductive Dimension
+
+registration
+  let Tf;
+  cluster -> finite-ind Subset of Tf;
+end;
+
+registration
+  let T,Af;
+  cluster T|Af -> finite-ind;
+end;
+
+::  Teoria wymiaru Th 1.1.2
+
+theorem :: TOPDIM_1:17
+  ind T|Af = ind Af;
+
+theorem :: TOPDIM_1:18
+  T|A is finite-ind implies A is finite-ind;
+
+theorem :: TOPDIM_1:19
+  A c= Af implies A is finite-ind & ind A <= ind Af;
+
+theorem :: TOPDIM_1:20
+  for A be Subset of Tf holds ind A <= ind Tf;
+
+theorem :: TOPDIM_1:21
+  F = B & B is finite-ind implies F is finite-ind & ind F = ind B;
+
+theorem :: TOPDIM_1:22
+  F = B & F is finite-ind implies B is finite-ind & ind F = ind B;
+
+::  Teoria wymiaru Th 1.1.4
+
+theorem :: TOPDIM_1:23
+  for T be non empty TopSpace st T is regular holds T is finite-ind &
+  ind T <= n iff for A be closed Subset of T,p be Point of T st not p in A ex L
+  be Subset of T st L separates{p},A & L is finite-ind & ind L <= n-1;
+
+theorem :: TOPDIM_1:24
+  T1,T2 are_homeomorphic implies (T1 is finite-ind iff T2 is finite-ind);
+
+theorem :: TOPDIM_1:25
+  T1,T2 are_homeomorphic & T1 is finite-ind implies ind T1 = ind T2;
+
+theorem :: TOPDIM_1:26
+  for A1 be Subset of T1,A2 be Subset of T2 st A1,A2
+  are_homeomorphic holds A1 is finite-ind iff A2 is finite-ind;
+
+theorem :: TOPDIM_1:27
+  for A1 be Subset of T1,A2 be Subset of T2 st A1,A2 are_homeomorphic &
+  A1 is finite-ind holds ind A1 = ind A2;
+
+theorem :: TOPDIM_1:28
+  [:T1,T2:] is finite-ind implies [:T2,T1:] is finite-ind & ind [:T1,T2
+  :] = ind [:T2,T1:];
+
+theorem :: TOPDIM_1:29
+  for Ga be Subset-Family of T|A st Ga is finite-ind & Ga = G holds G is
+  finite-ind & ind G = ind Ga;
+
+theorem :: TOPDIM_1:30
+  for Ga be Subset-Family of T|A st G is finite-ind & Ga = G holds Ga is
+  finite-ind & ind G = ind Ga;
+
+begin :: Basic Properties for zero dimensional Topological Spaces
+
+::  Teoria wymiaru Th 1.1.6
+
+theorem :: TOPDIM_1:31
+  T is finite-ind & ind T <= n iff ex Bas be Basis of T st for A
+  st A in Bas holds Fr A is finite-ind & ind Fr A <= n-1;
+
+::  Wprowadzenie do topologi 3.4.2 "=>"
+
+theorem :: TOPDIM_1:32
+  for T st T is T_1 & for A,B be closed Subset of T st A misses B
+ex A',B' be closed Subset of T st A' misses B' & A'\/B' = [#]T & A c= A' & B c=
+  B' holds T is finite-ind & ind T <= 0;
+
+theorem :: TOPDIM_1:33
+  for X be set,f be SetSequence of X ex g be SetSequence of X st
+union rng f = union rng g & (for i,j be Nat st i<>j holds g.i misses g.j) & for
+n ex fn be finite Subset-Family of X st fn={f.i where i is Element of NAT:i<n}
+  & g.n=f.n \ union fn;
+
+::  Wprowadzenie do topologi 3.4.2 "<="
+
+theorem :: TOPDIM_1:34
+  for T st T is finite-ind & ind T<=0 & T is Lindelof for A,B be
+closed Subset of T st A misses B ex A',B' be closed Subset of T st A' misses B'
+  & A'\/B' = [#]T & A c= A' & B c= B';
+
+::  Teoria wymiaru Th 1.2.6
+
+theorem :: TOPDIM_1:35
+  for T st T is T_1 & T is Lindelof holds T is finite-ind & ind T
+  <= 0 iff for A,B be closed Subset of T st A misses B holds {}T separates A,B;
+
+theorem :: TOPDIM_1:36
+  for T st T is T_4 & T is Lindelof & ex F be Subset-Family of T st F is
+closed & F is Cover of T & F is countable & F is finite-ind & ind F <= 0 holds
+  T is finite-ind & ind T<=0;
+
+reserve TM for metrizable TopSpace;
+
+::  Teoria wymiaru Th 1.2.11
+
+theorem :: TOPDIM_1:37
+  for A,B be closed Subset of TM st A misses B for Null be
+  finite-ind Subset of TM st ind Null<=0 & TM|Null is second-countable ex L be
+  Subset of TM st L separates A,B & L misses Null;
+
+::  Teoria wymiaru Th 1.2.12
+
+theorem :: TOPDIM_1:38
+  for Null be Subset of TM st TM|Null is second-countable holds
+  Null is finite-ind & ind Null<=0 iff for p be Point of TM,U be open Subset of
+  TM st p in U ex W be open Subset of TM st p in W & W c=U & Null misses Fr W;
+
+::  Teoria wymiaru Th 1.2.13
+
+theorem :: TOPDIM_1:39
+  for Null be Subset of TM st TM|Null is second-countable holds
+Null is finite-ind & ind Null<=0 iff ex B be Basis of TM st for A be Subset of
+  TM st A in B holds Null misses Fr A;
+
+::  Teoria wymiaru Th 1.5.2
+
+theorem :: TOPDIM_1:40
+  for Null,A be Subset of TM st TM|Null is second-countable & Null is
+finite-ind & A is finite-ind & ind Null<=0 holds A\/Null is finite-ind & ind(A
+  \/Null)<=ind A+1;
+

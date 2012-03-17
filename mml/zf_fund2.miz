@@ -7,16 +7,16 @@
 environ
 
  vocabularies ZF_LANG, FUNCT_1, ARYTM_3, ZF_MODEL, BOOLE, ORDINAL1, CLASSES2,
-      ZF_REFLE, PROB_1, RELAT_1, TARSKI, ORDINAL2, CARD_1, CLASSES1, QC_LANG3,
-      ZFMODEL1, QC_LANG1, ZF_FUND1, FUNCT_2, ORDINAL4, ZF_FUND2, ARYTM;
+      ZF_REFLE, PROB_1, RELAT_1, TARSKI, ORDINAL2, CARD_1, QC_LANG3, ZFMODEL1,
+      QC_LANG1, ZF_FUND1, FUNCT_2, ORDINAL4, ZF_FUND2, ARYTM;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS,
       NAT_1, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, ORDINAL1, ZF_LANG,
-      ZF_MODEL, ZFMODEL1, ORDINAL2, CARD_3, ZF_LANG1, CLASSES1, CLASSES2,
-      ORDINAL4, ZF_REFLE, ZF_FUND1, XXREAL_0;
+      ZF_MODEL, ZFMODEL1, ORDINAL2, CARD_3, ZF_LANG1, CLASSES2, ORDINAL4,
+      ZF_REFLE, ZF_FUND1, XXREAL_0;
  constructors PARTFUN1, WELLORD2, DOMAIN_1, XXREAL_0, XREAL_0, NAT_1, CLASSES1,
       ZFMODEL1, ZF_LANG1, ZF_REFLE, ZF_FUND1, ORDINAL4, RELSET_1;
- registrations XBOOLE_0, ORDINAL1, RELSET_1, FINSET_1, XREAL_0, CARD_1,
-      CLASSES2, ZF_LANG, ORDINAL4;
+ registrations ORDINAL1, RELSET_1, FINSET_1, XREAL_0, CARD_1, CLASSES2,
+      ZF_LANG, ORDINAL4;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, ORDINAL1, XBOOLE_0;
  theorems TARSKI, NAT_1, ENUMSET1, FUNCT_1, FUNCT_2, ORDINAL1, ORDINAL2,
@@ -30,31 +30,36 @@ begin
 reserve H for ZF-formula,
   M,E for non empty set,
   e for Element of E,
-  m,m0,m3,m4 for Element of M,
+  m,m0,m3,
+  m4 for Element of M,
   v,v1,v2 for Function of VAR,M,
   f,f1 for Function of VAR,E,
   g for Function,
   u,u1,u2 for set,
   x,y for Variable,
   i,n for Element of NAT,
-  X for set;
+  X
+  for set;
 
 definition
   let H,M,v;
   func Section(H,v) -> Subset of M equals
-  :
-  Def1: { m : M,v/(x.0,m) |= H } if x.0 in Free H otherwise {};
+  : Def1:
+  { m : M,v/(x.0,m) |= H } if
+  x.0 in Free H otherwise {};
   coherence
   proof
-    thus x.0 in Free H implies
-    { m where m is Element of M: M,v/(x.0,m) |= H } is Subset of M
+    thus x.0 in Free H implies { m where m is Element of M: M,v/(x.0,m) |= H }
+    is Subset of M
     proof
-      assume x.0 in Free H;
       set X = {m where m is Element of M: M,v/(x.0,m) |= H };
+      assume
+      x.0 in Free H;
       X c= M
       proof
         let u;
-        assume u in X;
+        assume
+        u in X;
         then ex m being Element of M st u = m & M,v/(x.0,m) |= H;
         hence thesis;
       end;
@@ -68,28 +73,26 @@ end;
 definition
   let M;
   attr M is predicatively_closed means
-  :
-  Def2: for H, E, f st E in M holds Section(H,f) in M;
+  : Def2:
+  for H, E, f st E in M holds
+  Section(H,f) in M;
 end;
 
 theorem Th1:
-  E is epsilon-transitive implies
-  Section(All(x.2,x.2 'in' x.0 => x.2 'in' x.1),f/(x.1,e)) = E /\ bool e
+  E is epsilon-transitive implies Section(All(x.2,x.2 'in' x.0 =>
+  x.2 'in' x.1),f/(x.1,e)) = E /\ bool e
 proof
   set H = All(x.2,x.2 'in' x.0 => x.2 'in' x.1), v = f/(x.1,e);
   set S = Section(H,v);
-  x.0 in Free H
-  proof
-    Free H=Free(x.2 'in' x.0 => x.2 'in' x.1)\{x.2} by ZF_LANG1:67
-      .=(Free(x.2 'in' x.0) \/ Free(x.2 'in' x.1))\{x.2} by ZF_LANG1:69
-      .=(Free(x.2 'in' x.0) \/ {x.2,x.1})\{x.2} by ZF_LANG1:64
-      .=({x.2,x.0} \/ {x.2,x.1})\{x.2} by ZF_LANG1:64
-      .=({x.2,x.0}\{x.2}) \/ ({x.2,x.1}\{x.2}) by XBOOLE_1:42
-      .=({x.2,x.0}\{x.2}) \/ {x.1} by ZFMISC_1:23,ZF_LANG1:86
-      .={x.0} \/ {x.1} by ZFMISC_1:23,ZF_LANG1:86
-      .={x.0,x.1} by ENUMSET1:41;
-    hence thesis by TARSKI:def 2;
-  end;
+  Free H=Free(x.2 'in' x.0 => x.2 'in' x.1)\{x.2} by ZF_LANG1:67
+    .=(Free(x.2 'in' x.0) \/ Free(x.2 'in' x.1))\{x.2} by ZF_LANG1:69
+    .=(Free(x.2 'in' x.0) \/ {x.2,x.1})\{x.2} by ZF_LANG1:64
+    .=({x.2,x.0} \/ {x.2,x.1})\{x.2} by ZF_LANG1:64
+    .=({x.2,x.0}\{x.2}) \/ ({x.2,x.1}\{x.2}) by XBOOLE_1:42
+    .=({x.2,x.0}\{x.2}) \/ {x.1} by ZFMISC_1:23,ZF_LANG1:86
+    .={x.0} \/ {x.1} by ZFMISC_1:23,ZF_LANG1:86
+    .={x.0,x.1} by ENUMSET1:41;
+  then x.0 in Free H by TARSKI:def 2;
   then
 A1: S={m where m is Element of E: E,v/(x.0,m)|= H} by Def1;
   assume
@@ -97,51 +100,57 @@ A2: X in E implies X c= E;
   thus S c= E /\ bool e
   proof
     let u;
-    assume u in S;
+    assume
+    u in S;
     then consider m being Element of E such that
-A3: u = m & E,v/(x.0,m) |= H by A1;
-A4: m c= E by A2;
+A3: u = m and
+A4: E,v/(x.0,m) |= H by A1;
+A5: m c= E by A2;
     m c= e
     proof
       let u1;
       assume
-A5:   u1 in m;
-      then reconsider u1 as Element of E by A4;
-      x.0 <> x.2 & x.0 <> x.1 & x.1 <> x.2 by ZF_LANG1:86;
-      then
-A6:   v/(x.0,m)/(x.2,u1).(x.2) = u1 & m = v/(x.0,m).(x.0) &
-      v/(x.0,m)/(x.2,u1).(x.1) = v/(x.0,m).(x.1) &
-      v.(x.1) = v/(x.0,m).(x.1) & v.x.1 = e &
-      v/(x.0,m)/(x.2,u1).(x.0) = v/(x.0,m).(x.0) by FUNCT_7:34,130;
-      then E,v/(x.0,m)/(x.2,u1) |= x.2 'in' x.0 &
-      E,v/(x.0,m)/(x.2,u1) |= x.2 'in' x.0 => x.2 'in' x.1
-      by A3,A5,ZF_LANG1:80,ZF_MODEL:13;
-      then E,v/(x.0,m)/(x.2,u1) |= x.2 'in' x.1 by ZF_MODEL:18;
-      hence thesis by A6,ZF_MODEL:13;
+A6:   u1 in m;
+      then reconsider u1 as Element of E by A5;
+A7:   v/(x.0,m)/(x.2,u1).(x.2) = u1 by FUNCT_7:130;
+A8:   E,v/(x.0,m)/(x.2,u1) |= x.2 'in' x.0 => x.2 'in' x.1 by A4,ZF_LANG1
+      :80;
+A9:   v/(x.0,m)/(x.2,u1).(x.1) = v/(x.0,m).(x.1) & v.(x.1) = v/(x.0,m).(
+      x.1) by FUNCT_7:34,ZF_LANG1:86;
+      m = v/(x.0,m).(x.0) & v/(x.0,m)/(x.2,u1).(x.0) = v/(x.0,m).(x.0) by
+      FUNCT_7:34,130,ZF_LANG1:86;
+      then E,v/(x.0,m)/(x.2,u1) |= x.2 'in' x.0 by A6,A7,ZF_MODEL:13;
+      then v.x.1 = e & E,v/(x.0,m)/(x.2,u1) |= x.2 'in' x.1 by
+      A8,FUNCT_7
+      :130 ,ZF_MODEL:18;
+      hence thesis by A7,A9,ZF_MODEL:13;
     end;
-    then u in bool e & u in E by A3,ZFMISC_1:def 1;
-    hence thesis by XBOOLE_0:def 4;
+    then u in bool e by A3,ZFMISC_1:def 1;
+    hence thesis by A3,XBOOLE_0:def 4;
   end;
   let u;
   assume
-A7: u in E /\ bool e;
+A10: u in E /\ bool e;
   then
-A8: u in E & u in bool e by XBOOLE_0:def 4;
-  reconsider u as Element of E by A7,XBOOLE_0:def 4;
+A11: u in bool e by XBOOLE_0:def 4;
+  reconsider u as Element of E by A10,XBOOLE_0:def 4;
   now
+A12: v.x.1 = e by FUNCT_7:130;
     let m be Element of E;
-    x.0 <> x.2 & x.0 <> x.1 & x.1 <> x.2 by ZF_LANG1:86;
-    then
-A9: v/(x.0,u)/(x.2,m).(x.2) = m & u = v/(x.0,u).(x.0) &
-    v/(x.0,u)/(x.2,m).(x.1) = v/(x.0,u).(x.1) &
-    v.(x.1) = v/(x.0,u).(x.1) & v.x.1 = e &
-    v/(x.0,u)/(x.2,m).(x.0) = v/(x.0,u).(x.0) by FUNCT_7:34,130;
+A13: v/(x.0,u)/(x.2,m).(x.2) = m by FUNCT_7:130;
+A14: u = v/(x.0,u).(x.0) & v/(x.0,u)/(x.2,m).(x.0) = v/(x.0,u).(x.0) by
+    FUNCT_7:34,130,ZF_LANG1:86;
+A15: v/(x.0,u)/(x.2,m).(x.1) = v/(x.0,u).(x.1) & v.(x.1) = v/(x.0,u).(x.1)
+    by FUNCT_7:34,ZF_LANG1:86;
     now
-      assume E,v/(x.0,u)/(x.2,m) |= x.2 'in' x.0;
-      then m in u by A9,ZF_MODEL:13;
-      hence E,v/(x.0,u)/(x.2,m) |= x.2 'in' x.1 by A8,A9,ZF_MODEL:13;
+      assume
+      E,v/(x.0,u)/(x.2,m) |= x.2 'in' x.0;
+      then m in u by A13,A14,ZF_MODEL:13;
+      hence E,v/(x.0,u)/(x.2,m) |= x.2 'in' x.1 by A11,A13,A15,A12,
+      ZF_MODEL:13;
     end;
-    hence E,v/(x.0,u)/(x.2,m) |= x.2 'in' x.0 => x.2 'in' x.1 by ZF_MODEL:18;
+    hence E,v/(x.0,u)/(x.2,m) |= x.2 'in' x.0 => x.2 'in' x.1 by ZF_MODEL:
+    18;
   end;
   then E,v/(x.0,u) |= H by ZF_LANG1:80;
   hence thesis by A1;
@@ -150,122 +159,138 @@ end;
 reserve W for Universe,
   w for Element of W,
   Y for Subclass of W,
-  a,a1,b,c for Ordinal of W,
+  a,a1,b,c for
+  Ordinal of W,
   L for DOMAIN-Sequence of W;
 
 Lm1: u1 in Union g implies ex u2 st u2 in dom g & u1 in g.u2
 proof
-  assume u1 in Union g;
+  assume
+  u1 in Union g;
   then u1 in union rng g by CARD_3:def 4;
   then consider X such that
-A1: u1 in X & X in rng g by TARSKI:def 4;
+A1: u1 in X and
+A2: X in rng g by TARSKI:def 4;
   consider u2 such that
-A2: u2 in dom g & X = g.u2 by A1,FUNCT_1:def 5;
+A3: u2 in dom g & X = g.u2 by A2,FUNCT_1:def 5;
   take u2;
-  thus thesis by A1,A2;
+  thus thesis by A1,A3;
 end;
 
 theorem Th2:
-  (for a,b st a in b holds L.a c= L.b) &
-  (for a holds L.a in Union L & L.a is epsilon-transitive) &
-  Union L is predicatively_closed implies Union L |= the_axiom_of_power_sets
+  (for a,b st a in b holds L.a c= L.b) & (for a holds L.a in Union
+L & L.a is epsilon-transitive) & Union L is predicatively_closed implies Union
+  L |= the_axiom_of_power_sets
 proof
   assume that
 A1: for a,b st a in b holds L.a c= L.b and
 A2: for a holds L.a in Union L & L.a is epsilon-transitive and
 A3: Union L is predicatively_closed;
-A4: Union L is epsilon-transitive
-  proof
-    let X;
-    assume X in Union L;
-    then consider u such that
-A5: u in dom L & X in L.u by Lm1;
-    reconsider u as Ordinal by A5;
-    u in On W by A5,ZF_REFLE:def 5;
-    then reconsider u as Ordinal of W by ZF_REFLE:8;
-    L.u is epsilon-transitive by A2;
-    then
-A6: X c= L.u by A5,ORDINAL1:def 2;
-    let u1;
-    assume u1 in X;
-    then u1 in L.u & L.u c= Union L by A6,ZF_REFLE:24;
-    hence thesis;
-  end;
   set M = Union L;
-A7: X in L.a implies L.a /\ bool X in M
+A4: X in L.a implies L.a /\ bool X in M
   proof
-    assume X in L.a;
-    then reconsider e = X as Element of L.a;
     consider f being Function of VAR,L.a;
+    assume
+    X in L.a;
+    then reconsider e = X as Element of L.a;
     L.a in M by A2;
-    then Section(All(x.2,x.2 'in' x.0 => x.2 'in' x.1),f/(x.1,e)) in M &
-    L.a is epsilon-transitive by A2,A3,Def2;
-    hence thesis by Th1;
-  end;
-  now
-    let X such that
-A8: X in M;
-A9: X in bool X by ZFMISC_1:def 1;
     then
-A10: X in M /\ bool X by A8,XBOOLE_0:def 4;
-    reconsider D = M /\ bool X as non empty set by A8,A9,XBOOLE_0:def 4;
+A5: Section(All(x.2,x.2 'in' x.0 => x.2 'in' x.1),f/(x.1,e)) in M by A3,
+    Def2;
+    L.a is epsilon-transitive by A2;
+    hence thesis by A5,Th1;
+  end;
+A6: now
     defpred P[set,set] means $1 in L.$2;
-A11: for d being Element of D ex a st P[d,a]
+    let X such that
+A7: X in M;
+A8: X in bool X by ZFMISC_1:def 1;
+    then reconsider D = M /\ bool X as non empty set by A7,XBOOLE_0:def 4;
+A9: X in M /\ bool X by A7,A8,XBOOLE_0:def 4;
+A10: for d being Element of D ex a st P[d,a]
     proof
       let d be Element of D;
       d in M by XBOOLE_0:def 4;
       then consider u2 such that
-A12:  u2 in dom L & d in L.u2 by Lm1;
-      u2 in On W by A12,ZF_REFLE:def 5;
+A11:  u2 in dom L and
+A12:  d in L.u2 by Lm1;
+      u2 in On W by A11,ZF_REFLE:def 5;
       then reconsider u2 as Ordinal of W by ZF_REFLE:8;
       take u2;
       thus thesis by A12;
     end;
     consider f being Function such that
 A13: dom f = D & for d being Element of D ex a st a = f.d & P[d,a] &
-    for b st P[d,b] holds a c= b from ZF_REFLE:sch 1(A11);
+    for b st P[d,b] holds a c= b from ZF_REFLE:sch 1(A10);
 A14: rng f c= W
     proof
       let u;
-      assume u in rng f;
+      assume
+      u in rng f;
       then consider u1 such that
-A15:  u1 in D & u = f.u1 by A13,FUNCT_1:def 5;
+A15:  u1 in D and
+A16:  u = f.u1 by A13,FUNCT_1:def 5;
       reconsider u1 as Element of D by A15;
-      ex a st a = f.u1 & u1 in L.a & for b st u1 in L.b holds a c= b by A13;
-      hence thesis by A15;
+      ex a st a = f.u1 & u1 in L.a & for b st u1 in L.b holds a c= b by
+      A13;
+      hence thesis by A16;
     end;
-    bool X in W & M /\ bool X c= bool X by A8,CLASSES2:65,XBOOLE_1:17;
-    then D in W & rng f = f.:(dom f) by CLASSES1:def 1,RELAT_1:146;
-    then card D in card W & card rng f c= card dom f by CARD_2:3,CLASSES2:1;
-    then card rng f in card W & W is Tarski by A13,ORDINAL1:22;
+A17: M /\ bool X c= bool X by XBOOLE_1:17;
+    bool X in W by A7,CLASSES2:65;
+    then D in W by A17,CLASSES1:def 1;
+    then rng f = f.:(dom f) & card D in card W by CLASSES2:1,RELAT_1:146;
+    then card rng f in card W by A13,CARD_2:3,ORDINAL1:22;
     then rng f in W by A14,CLASSES1:2;
-    then sup rng f in W by ZF_REFLE:28;
-    then reconsider a = sup rng f as Ordinal of W;
-A16: D c= L.a
+    then reconsider a = sup rng f as Ordinal of W by ZF_REFLE:28;
+A18: D c= L.a
     proof
       let u2;
-      assume u2 in D;
+      assume
+      u2 in D;
       then reconsider d = u2 as Element of D;
       consider c such that
-A17:  c = f.d & d in L.c & for b st d in L.b holds c c= b by A13;
-      c in rng f by A13,A17,FUNCT_1:def 5;
+A19:  c = f.d and
+A20:  d in L.c and
+      for b st d in L.b holds c c= b by A13;
+      c in rng f by A13,A19,FUNCT_1:def 5;
       then L.c c= L.a by A1,ORDINAL2:27;
-      hence thesis by A17;
+      hence thesis by A20;
     end;
-    then D /\ bool X = M /\ (bool X /\ bool X) & bool X /\ bool X = bool X &
-    D /\ bool X c= L.a /\ bool X & L.a c= M by XBOOLE_1:16,26,ZF_REFLE:24;
-    then D c= L.a /\ bool X & L.a /\ bool X c= D by XBOOLE_1:26;
-    then D = L.a /\ bool X by XBOOLE_0:def 10;
-    hence M /\ bool X in M by A7,A10,A16;
+A21: L.a /\ bool X c= D by XBOOLE_1:26,ZF_REFLE:24;
+    D /\ bool X = M /\ (bool X /\ bool X) by XBOOLE_1:16;
+    then D c= L.a /\ bool X by A18,XBOOLE_1:26;
+    then D = L.a /\ bool X by A21,XBOOLE_0:def 10;
+    hence M /\ bool X in M by A4,A9,A18;
   end;
-  hence thesis by A4,ZFMODEL1:9;
+  Union L is epsilon-transitive
+  proof
+    let X;
+    assume
+    X in Union L;
+    then consider u such that
+A22: u in dom L and
+A23: X in L.u by Lm1;
+    reconsider u as Ordinal by A22;
+    u in On W by A22,ZF_REFLE:def 5;
+    then reconsider u as Ordinal of W by ZF_REFLE:8;
+    L.u is epsilon-transitive by A2;
+    then
+A24: X c= L.u by A23,ORDINAL1:def 2;
+    let u1;
+A25: L.u c= Union L by ZF_REFLE:24;
+    assume
+    u1 in X;
+    then u1 in L.u by A24;
+    hence thesis by A25;
+  end;
+  hence thesis by A6,ZFMODEL1:9;
 end;
 
-Lm2: not x in variables_in H & {x.0,x.1,x.2} misses Free H &
-M,v |= All(x.3,Ex(x.0,All(x.4,H <=> x.4 '=' x.0))) implies
-{x.0,x.1,x.2} misses Free (H/(x.0,x)) &
-M,v |= All(x.3,Ex(x.0,All(x.4,H/(x.0,x) <=> x.4 '=' x.0))) &
-def_func'(H,v) = def_func'(H/(x.0,x),v)
+Lm2: not x in variables_in H & {x.0,x.1,x.2} misses Free H & M,v |= All(x.3,Ex
+(x.0,All(x.4,H <=> x.4 '=' x.0))) implies {x.0,x.1,x.2} misses Free (H/(x.0,x))
+& M,v |= All(x.3,Ex(x.0,All(x.4,H/(x.0,x) <=> x.4 '=' x.0))) & def_func'(H,v) =
+def_func'(H/(x.0,x),v)
+
 proof
   assume that
 A1: not x in variables_in H and
@@ -274,11 +299,9 @@ A3: M,v |= All(x.3,Ex(x.0,All(x.4,H <=> x.4 '=' x.0)));
   x.0 in {x.0,x.1,x.2} by ENUMSET1:def 1;
   then
 A4: not x.0 in Free H by A2,XBOOLE_0:3;
-  then
-A5: Free H = Free (H/(x.0,x)) by A1,ZFMODEL2:2; thus
-  {x.0,x.1,x.2} misses Free (H/(x.0,x)) by A1,A2,A4,ZFMODEL2:2;
-A6: not x.0 in Free (H/(x.0,x)) by A1,A4,ZFMODEL2:2;
-  now
+  hence {x.0,x.1,x.2} misses Free (H/(x.0,x)) by A1,A2,ZFMODEL2:2;
+A5: not x.0 in Free (H/(x.0,x)) by A1,A4,ZFMODEL2:2;
+A6: now
     let m3 be Element of M;
     consider m0 being Element of M such that
 A7: M,v/(x.3,m3)/(x.4,m) |= H iff m = m0 by A3,A4,ZFMODEL2:20;
@@ -286,137 +309,173 @@ A7: M,v/(x.3,m3)/(x.4,m) |= H iff m = m0 by A3,A4,ZFMODEL2:20;
     let m4 be Element of M;
     thus M,v/(x.3,m3)/(x.4,m4) |= H/(x.0,x) implies m4 = m0
     proof
-      assume M,v/(x.3,m3)/(x.4,m4) |= H/(x.0,x);
-      then M,v/(x.3,m3)/(x.4,m4)/(x.0,v/(x.3,m3)/(x.4,m4).x) |= H
-      by A1,ZFMODEL2:13;
+      assume
+      M,v/(x.3,m3)/(x.4,m4) |= H/(x.0,x);
+
+      then M,v/(x.3,m3)/(x.4,m4)/(x.0,v/(x.3,m3)/(x.4,m4).x) |= H by A1,
+      ZFMODEL2:13;
+
       then M,v/(x.3,m3)/(x.4,m4) |= H by A4,ZFMODEL2:10;
       hence thesis by A7;
     end;
-    assume m4 = m0;
+    assume
+    m4 = m0;
     then M,v/(x.3,m3)/(x.4,m4) |= H by A7;
-    then M,v/(x.3,m3)/(x.4,m4)/(x.0,v/(x.3,m3)/(x.4,m4).x) |= H
-    by A4,ZFMODEL2:10;
+
+    then M,v/(x.3,m3)/(x.4,m4)/(x.0,v/(x.3,m3)/(x.4,m4).x) |= H by A4,
+    ZFMODEL2:10;
+
     hence M,v/(x.3,m3)/(x.4,m4) |= H/(x.0,x) by A1,ZFMODEL2:13;
   end;
+  Free H = Free (H/(x.0,x)) by A1,A4,ZFMODEL2:2;
+
   hence
-A8: M,v |= All(x.3,Ex(x.0,All(x.4,H/(x.0,x) <=> x.4 '=' x.0)))
-  by A4,A5,ZFMODEL2:20;
+A8: M,v |= All(x.3,Ex(x.0,All(x.4,H/(x.0,x) <=> x.4 '=' x.0))) by A4,
+  A6,ZFMODEL2:20;
+
   now
     let u;
-    assume u in M;
+    assume
+    u in M;
     then reconsider u' = u as Element of M;
     set m = def_func'(H,v).u';
     M,v/(x.3,u')/(x.4,m) |= H by A3,A4,ZFMODEL2:11;
-    then M,v/(x.3,u')/(x.4,m)/(x.0,v/(x.3,u')/(x.4,m).x) |= H
-    by A4,ZFMODEL2:10;
+
+    then M,v/(x.3,u')/(x.4,m)/(x.0,v/(x.3,u')/(x.4,m).x) |= H by A4,
+    ZFMODEL2:10;
+
     then M,v/(x.3,u')/(x.4,m) |= H/(x.0,x) by A1,ZFMODEL2:13;
-    hence def_func'(H,v).u = def_func'(H/(x.0,x),v).u by A6,A8,ZFMODEL2:11;
+
+    hence def_func'(H,v).u = def_func'(H/(x.0,x),v).u by A5,A8,ZFMODEL2:11;
+
   end;
   hence thesis by FUNCT_2:18;
 end;
 
-Lm4: M,v |= All(x.3,Ex(x.0,All(x.4,H <=> x.4 '=' x.0))) & not x.4 in Free H
+Lm3: M,v |= All(x.3,Ex(x.0,All(x.4,H <=> x.4 '=' x.0))) & not x.4 in Free H
 implies for m holds def_func'(H,v).:m={}
+
 proof
-  assume
-A1: M,v |= All(x.3,Ex(x.0,All(x.4,H <=> x.4 '=' x.0))) & not x.4 in Free H;
-A2: x.4<>x.3 & x.4<>x.0 & x.3<>x.0 by ZF_LANG1:86;
   consider m3;
+  assume that
+A1: M,v |= All(x.3,Ex(x.0,All(x.4,H <=> x.4 '=' x.0))) and
+A2: not x.4 in Free H;
   M,v/(x.3,m3) |= Ex(x.0,All(x.4,H <=> x.4 '=' x.0)) by A1,ZF_LANG1:80;
   then consider m0 such that
-A3: M,v/(x.3,m3)/(x.0,m0) |= All(x.4,H <=> x.4 '=' x.0) by ZF_LANG1:82;
+
+A3: M,v/(x.3,m3)/(x.0,m0) |= All(x.4,H <=> x.4 '=' x.0) by ZF_LANG1:
+  82;
+
+  let m;
+  consider u being Element of def_func'(H,v).:m;
+  assume
+  def_func'(H,v).:m<>{};
+  then consider u1 such that
+A4: u1 in dom def_func'(H,v) and
+A5: u1 in m and
+  u=def_func'(H,v).u1 by FUNCT_1:def 12;
   set f=v/(x.3,m3)/(x.0,m0);
-A4: now
+  reconsider u1 as Element of M by A4;
+A6: now
     let m4;
     M,f/(x.4,m4) |= H <=> x.4 '=' x.0 by A3,ZF_LANG1:80;
     then M,f/(x.4,m4) |= H iff M,f/(x.4,m4) |= x.4 '=' x.0 by ZF_MODEL:19;
+
     then
-A5: M,f |= H iff f/(x.4,m4).x.4=f/(x.4,m4).x.0 by A1,ZFMODEL2:10,ZF_MODEL:12;
+A7: M,f |= H iff f/(x.4,m4).x.4=f/(x.4,m4).x.0 by A2,ZFMODEL2:10 ,
+    ZF_MODEL:12;
+
     f/(x.4,m4).x.4=m4 & f.x.0=m0 by FUNCT_7:130;
-    hence M,f |= H iff m4=m0 by A2,A5,FUNCT_7:34;
+    hence M,f |= H iff m4=m0 by A7,FUNCT_7:34,ZF_LANG1:86;
   end;
-  then
-A6: M,f |= H;
-  let m;
-  assume
-A7: def_func'(H,v).:m<>{};
-  consider u being Element of def_func'(H,v).:m;
-  consider u1 such that
-A8: u1 in dom def_func'(H,v) & u1 in m & u=def_func'(H,v).u1
-  by A7,FUNCT_1:def 12;
-  reconsider u1 as Element of M by A8;
-  u1=m0 & m=m0 by A4,A6;
-  hence contradiction by A8;
+  then M,f |= H;
+  then u1=m0 & m=m0 by A6;
+  hence contradiction by A5;
 end;
 
-Lm5: not x in variables_in H & not y in variables_in H
-& x<>x.0 & y<>x.0 & y<>x.4 implies
-(x.4 in Free H iff x.0 in Free(Ex(x.3,x.3 'in' x '&' (H/(x.0,y)/(x.4,x.0)))))
+Lm4: not y in variables_in H & x<>x.0 & y<>x.0 & y<>x.4 implies (x.4 in Free H
+iff x.0 in Free(Ex(x.3,x.3 'in' x '&' (H/(x.0,y)/(x.4,x.0)))))
+
 proof
-  assume
-A1: not x in variables_in H & not y in variables_in H
-  & x<>x.0 & y<>x.0 & y<>x.4;
-A2: x.0<>x.3 & x.0<>x.4 by ZF_LANG1:86;
+A1: x.0<>x.3 by ZF_LANG1:86;
+  assume that
+A2: not y in variables_in H and
+A3: x<>x.0 and
+A4: y<>x.0 and
+A5: y<>x.4;
   set G=H/(x.0,y)/(x.4,x.0);
-A3: Free(Ex(x.3,x.3 'in' x '&' G))=
-  Free(x.3 'in' x '&' G)\{x.3} by ZF_LANG1:71
+
+A6: Free(Ex(x.3,x.3 'in' x '&' G))= Free(x.3 'in' x '&' G)\{x.3} by ZF_LANG1
+  :71
+
     .=(Free(x.3 'in' x) \/ Free(G))\{x.3} by ZF_LANG1:66
     .=({x.3,x} \/ Free(G))\{x.3} by ZF_LANG1:64
     .=({x.3,x}\{x.3}) \/ (Free(G)\{x.3}) by XBOOLE_1:42;
-A4: now
+A7: x.0<>x.4 by ZF_LANG1:86;
+A8: now
     assume
-A5: x.4 in Free H;
-A6: x.4 in Free(H/(x.0,y))
+A9: x.4 in Free H;
+A10: x.4 in Free(H/(x.0,y))
     proof
-      now per cases;
-        suppose x.0 in Free H;
+      now
+        per cases;
+        suppose
+A11:      x.0 in Free H;
+          not x.4 in {x.0} by A7,TARSKI:def 1;
           then
-A7:       Free(H/(x.0,y))=(Free H \{x.0}) \/ {y} by A1,ZFMODEL2:2;
-          not x.4 in {x.0} by A2,TARSKI:def 1;
-          then x.4 in Free H \ {x.0} by A5,XBOOLE_0:def 5;
-          hence thesis by A7,XBOOLE_0:def 3;
+A12:      x.4 in Free H \ {x.0} by A9,XBOOLE_0:def 5;
+          Free(H/(x.0,y))=(Free H \{x.0}) \/ {y} by A2,A11, ZFMODEL2:2;
+          hence thesis by A12,XBOOLE_0:def 3;
         end;
-        suppose not x.0 in Free H;
-          hence thesis by A1,A5,ZFMODEL2:2;
+        suppose
+          not x.0 in Free H;
+          hence thesis by A2,A9,ZFMODEL2:2;
         end;
       end;
       hence thesis;
     end;
-    not x.0 in variables_in(H/(x.0,y)) by A1,ZF_LANG1:198;
+A13: x.0 in {x.0} by TARSKI:def 1;
+    not x.0 in variables_in(H/(x.0,y)) by A4,ZF_LANG1:198;
+    then Free G=(Free(H/(x.0,y))\{x.4}) \/ {x.0} by A10,ZFMODEL2:2;
     then
-A8: Free G=(Free(H/(x.0,y))\{x.4}) \/ {x.0} by A6,ZFMODEL2:2;
-    x.0 in {x.0} by TARSKI:def 1;
-    then x.0 in Free G & not x.0 in {x.3} by A2,A8,TARSKI:def 1,XBOOLE_0:def 3;
-    then x.0 in Free(G)\{x.3} by XBOOLE_0:def 5;
-    hence x.0 in Free(Ex(x.3,x.3 'in' x '&' G)) by A3,XBOOLE_0:def 3;
+A14: x.0 in Free G by A13,XBOOLE_0:def 3;
+    not x.0 in {x.3} by A1,TARSKI:def 1;
+    then x.0 in Free(G)\{x.3} by A14,XBOOLE_0:def 5;
+    hence x.0 in Free(Ex(x.3,x.3 'in' x '&' G)) by A6,XBOOLE_0:def 3;
   end;
   now
-    assume x.0 in Free(Ex(x.3,x.3 'in' x '&' G));
-    then x.0 in {x.3,x}\{x.3} or x.0 in Free(G)\{x.3} by A3,XBOOLE_0:def 3;
+    assume
+    x.0 in Free(Ex(x.3,x.3 'in' x '&' G));
+
+    then x.0 in {x.3,x}\{x.3} or x.0 in Free(G)\{x.3} by A6,
+    XBOOLE_0:def 3;
+
     then
-A9: x.0 in {x.3,x} or x.0 in Free G by XBOOLE_0:def 5;
-A10: not x.0 in variables_in(H/(x.0,y)) by A1,ZF_LANG1:198;
-A11: now
-      assume not x.4 in Free(H/(x.0,y));
+A15: x.0 in {x.3,x} or x.0 in Free G by XBOOLE_0:def 5;
+A16: not x.0 in variables_in(H/(x.0,y)) by A4,ZF_LANG1:198;
+A17: now
+      assume
+      not x.4 in Free(H/(x.0,y));
+
       then
-A12:  x.0 in Free(H/(x.0,y)) by A1,A2,A9,A10,TARSKI:def 2,ZFMODEL2:2;
+A18:  x.0 in Free(H/(x.0,y)) by A3,A1,A15,A16,
+      TARSKI:def 2,ZFMODEL2:2;
+
       Free(H/(x.0,y)) c= variables_in(H/(x.0,y)) by ZF_LANG1:164;
-      hence contradiction by A1,A12,ZF_LANG1:198;
+      hence contradiction by A4,A18,ZF_LANG1:198;
     end;
     Free(H/(x.0,y)) c= (Free H \ {x.0}) \/ {y} by ZFMODEL2:1;
-    then x.4 in Free H \ {x.0} or x.4 in {y} by A11,XBOOLE_0:def 3;
-    hence x.4 in Free H by A1,TARSKI:def 1,XBOOLE_0:def 5;
+    then x.4 in Free H \ {x.0} or x.4 in {y} by A17,XBOOLE_0:def 3;
+    hence x.4 in Free H by A5,TARSKI:def 1,XBOOLE_0:def 5;
   end;
-  hence thesis by A4;
+  hence thesis by A8;
 end;
 
 theorem Th3:
-  omega in W & (for a,b st a in b holds L.a c= L.b) &
-  (for a st a <> {} & a is limit_ordinal holds L.a = Union (L|a)) &
-  (for a holds L.a in Union L & L.a is epsilon-transitive) &
-  Union L is predicatively_closed implies
-  for H st {x.0,x.1,x.2} misses Free H holds
-  Union L |= the_axiom_of_substitution_for H
+  omega in W & (for a,b st a in b holds L.a c= L.b) & (for a st a
+<> {} & a is limit_ordinal holds L.a = Union (L|a)) & (for a holds L.a in Union
+L & L.a is epsilon-transitive) & Union L is predicatively_closed implies for H
+st {x.0,x.1,x.2} misses Free H holds Union L |= the_axiom_of_substitution_for H
 proof
   assume that
 A1: omega in W and
@@ -424,669 +483,731 @@ A2: for a,b st a in b holds L.a c= L.b and
 A3: for a st a <> {} & a is limit_ordinal holds L.a = Union (L|a) and
 A4: for a holds L.a in Union L & L.a is epsilon-transitive and
 A5: Union L is predicatively_closed;
-A6: Union L is epsilon-transitive
-  proof
-    let X;
-    assume X in Union L;
-    then consider u such that
-A7: u in dom L & X in L.u by Lm1;
-    reconsider u as Ordinal by A7;
-    u in On W by A7,ZF_REFLE:def 5;
-    then reconsider u as Ordinal of W by ZF_REFLE:8;
-    L.u is epsilon-transitive by A4;
-    then
-A8: X c= L.u by A7,ORDINAL1:def 2;
-    let u1;
-    assume u1 in X;
-    then u1 in L.u & L.u c= Union L by A8,ZF_REFLE:24;
-    hence thesis;
-  end;
   set M = Union L;
-  now
+A6: now
+    defpred P[set,set] means $1 in L.$2;
     let H;
     let f be Function of VAR,M such that
-A9: {x.0,x.1,x.2} misses Free H and
-A10: M,f |= All(x.3,Ex(x.0,All(x.4,H <=> x.4 '=' x.0)));
+A7: {x.0,x.1,x.2} misses Free H and
+A8: M,f |= All(x.3,Ex(x.0,All(x.4,H <=> x.4 '=' x.0)));
     consider k being Element of NAT such that
-A11: for i st x.i in variables_in H holds i < k by ZFMODEL2:4;
+A9: for i st x.i in variables_in H holds i < k by ZFMODEL2:4;
     set p = H/(x.0,x.(k+5));
-    0 <= 5 & k+0 = k;
+    k+0 = k;
     then
-A12: not x.(k+5) in variables_in H by A11,XREAL_1:9;
+A10: not x.(k+5) in variables_in H by A9,XREAL_1:9;
     then
-A13: {x.0,x.1,x.2} misses Free p by A9,A10,Lm2;
-A14: M,f |= All(x.3,Ex(x.0,All(x.4,p <=> x.4 '=' x.0))) &
-    def_func'(H,f) = def_func'(p,f) by A9,A10,A12,Lm2;
-    x.0 in {x.0,x.1,x.2} by ENUMSET1:def 1;
-    then
-A15: not x.0 in Free p by A13,XBOOLE_0:3;
+A11: M,f |= All(x.3,Ex(x.0,All(x.4,p <=> x.4 '=' x.0))) & def_func'(H,f) =
+    def_func'(p,f) by A7,A8,Lm2;
     set F = def_func'(H,f);
-    defpred P[set,set] means $1 in L.$2;
-A16: for d being Element of M qua non empty set ex a st P[d,a]
+A12: for d being Element of M qua non empty set ex a st P[d,a]
     proof
       let d be Element of M qua non empty set;
       consider u such that
-A17:  u in dom L & d in L.u by Lm1;
-      u in On W by A17,ZF_REFLE:def 5;
+A13:  u in dom L and
+A14:  d in L.u by Lm1;
+      u in On W by A13,ZF_REFLE:def 5;
       then reconsider u as Ordinal of W by ZF_REFLE:8;
       take u;
-      thus thesis by A17;
+      thus thesis by A14;
     end;
     consider g being Function such that
-A18: dom g = M & for d being Element of M qua non empty set ex a st
-    a = g.d & P[d,a] & for b st P[d,b] holds a c= b from ZF_REFLE:sch 1(A16);
-    let u be Element of M;
-    u in W & card (g.:(F.:u)) c= card (F.:u) & card (F.:u) c= card u
-    by CARD_2:3;
-    then card u in card W & card (g.:(F.:u)) c= card u & card (g.:u) c=
-    card u by CARD_2:3,CLASSES2:1,XBOOLE_1:1;
-    then
-A19: card (g.:(F.:u)) in card W & card (g.:u) in card W & W is Tarski
-    by ORDINAL1:22;
-A20: rng g c= W
+A15: dom g = M & for d being Element of M qua non empty set ex a st a
+    = g.d & P[d,a] & for b st P[d,b] holds a c= b from ZF_REFLE:sch 1(A12);
+A16: rng g c= W
     proof
       let u1;
-      assume u1 in rng g;
+      assume
+      u1 in rng g;
       then consider u2 such that
-A21:  u2 in dom g & u1 = g.u2 by FUNCT_1:def 5;
-      reconsider d = u2 as Element of M by A18,A21;
-      ex a st a = g.d & d in L.a & for b st d in L.b holds a c= b by A18;
-      hence thesis by A21;
+A17:  u2 in dom g and
+A18:  u1 = g.u2 by FUNCT_1:def 5;
+      reconsider d = u2 as Element of M by A15,A17;
+      ex a st a = g.d & d in L.a & for b st d in L.b holds a c= b by A15;
+      hence thesis by A18;
     end;
-    g.:(F.:u) c= rng g by RELAT_1:144;
-    then g.:(F.:u) c= W by A20,XBOOLE_1:1;
-    then g.:(F.:u) in W by A19,CLASSES1:2;
-    then sup (g.:(F.:u)) in W by ZF_REFLE:28;
-    then reconsider b1 = sup (g.:(F.:u)) as Ordinal of W;
-    consider b0 being Ordinal of W such that
-A22: b0 = g.u & u in L.b0 & for b st u in L.b holds b0 c= b by A18;
-    card VAR = omega & omega in card W
-    by A1,CARD_1:21,84,CLASSES2:1,ZF_REFLE:25;
-    then card (f.:dom f) c= card dom f & card dom f in card W & rng f = f.:
-    dom f by CARD_2:3,FUNCT_2:def 1,RELAT_1:146;
-    then card (g.:(rng f)) c= card (rng f) & card (rng f) in card W &
-    g.:(rng f) c= rng g by CARD_2:3,ORDINAL1:22,RELAT_1:144;
-    then card (g.:(rng f)) in card W & g.:(rng f) c= W
-    by A20,ORDINAL1:22,XBOOLE_1:1;
-    then g.:(rng f) in W by CLASSES1:2;
-    then sup (g.:(rng f)) in W by ZF_REFLE:28;
-    then reconsider b2 = sup (g.:(rng f)) as Ordinal of W;
+    card VAR = omega & omega in card W by A1,CARD_1:21,84,CLASSES2:1 ,
+    ZF_REFLE:25;
+    then
+A19: card dom f in card W by FUNCT_2:def 1;
+    rng f = f.: dom f by RELAT_1:146;
+    then card (rng f) in card W by A19,CARD_2:3,ORDINAL1:22;
+    then
+A20: card (g.:(rng f)) in card W by CARD_2:3,ORDINAL1:22;
+    g.:(rng f) c= rng g by RELAT_1:144;
+    then g.:(rng f) c= W by A16,XBOOLE_1:1;
+    then g.:(rng f) in W by A20,CLASSES1:2;
+    then reconsider b2 = sup (g.:(rng f)) as Ordinal of W by ZF_REFLE:28;
+A21: x.0 in {x.0,x.1,x.2} by ENUMSET1:def 1;
+    {x.0,x.1,x.2} misses Free p by A7,A8,A10,Lm2;
+    then
+A22: not x.0 in Free p by A21,XBOOLE_0:3;
 A23: X c= M & sup (g.:X) c= a implies X c= L.a
     proof
-      assume
-A24:  X c= M & sup (g.:X) c= a;
+      assume that
+A24:  X c= M and
+A25:  sup (g.:X) c= a;
       let u1;
       assume
-A25:  u1 in X;
+A26:  u1 in X;
       then reconsider d = u1 as Element of M by A24;
       consider b such that
-A26:  b = g.d & d in L.b & for a st d in L.a holds b c= a by A18;
-      b in g.:X by A18,A25,A26,FUNCT_1:def 12;
+A27:  b = g.d and
+A28:  d in L.b and
+      for a st d in L.a holds b c= a by A15;
+      b in g.:X by A15,A26,A27,FUNCT_1:def 12;
       then b in sup (g.:X) by ORDINAL2:27;
-      then L.b c= L.a by A2,A24;
-      hence thesis by A26;
+      then L.b c= L.a by A2,A25;
+      hence thesis by A28;
     end;
+    let u be Element of M;
+    consider b0 being Ordinal of W such that
+    b0 = g.u and
+A29: u in L.b0 and
+    for b st u in L.b holds b0 c= b by A15;
+A30: card u in card W by CLASSES2:1;
+    k+0 = k;
+    then
+A31: 0 <= k & k < k+5 by NAT_1:2,XREAL_1:8;
+    then
+A32: not x.0 in variables_in p by ZF_LANG1:86,198;
+    g.:(F.:u) c= rng g by RELAT_1:144;
+    then
+A33: g.:(F.:u) c= W by A16,XBOOLE_1:1;
+    card (g.:(F.:u)) c= card (F.:u) & card (F.:u) c= card u by CARD_2:3;
+    then card (g.:(F.:u)) in card W by A30,ORDINAL1:22,XBOOLE_1:1;
+    then g.:(F.:u) in W by A33,CLASSES1:2;
+    then reconsider b1 = sup (g.:(F.:u)) as Ordinal of W by ZF_REFLE:28;
     set b = b0 \/ b1;
     set a = b \/ b2;
+A34: F.:u c= L.b by A23,XBOOLE_1:7;
     consider phi being Ordinal-Sequence of W such that
-A27: phi is increasing & phi is continuous and
-A28: for a st phi.a = a & {} <> a for v being Function of VAR,L.a holds
-    M,M!v |= p/(x.4,x.0) iff L.a,v |= p/(x.4,x.0) by A1,A2,A3,ZF_REFLE:29;
+A35: phi is increasing & phi is continuous and
+A36: for a st phi.a = a & {} <> a for v being Function of VAR,L.a
+holds M,M!v |= p/(x.4,x.0) iff L.a,v |= p/(x.4,x.0) by A1,A2,A3,ZF_REFLE:29;
     consider a1 such that
-A29: a in a1 & phi.a1 = a1 by A1,A27,ZFREFLE1:30;
-A30: dom f = VAR by FUNCT_2:def 1;
-    rng f c= L.a1
+A37: a in a1 and
+A38: phi.a1 = a1 by A1,A35,ZFREFLE1:30;
+A39: rng f c= L.a1
     proof
       let u;
+A40:  b2 c= a by XBOOLE_1:7;
       assume
-A31:  u in rng f;
+A41:  u in rng f;
       then consider u1 such that
-A32:  u1 in dom f & u = f.u1 by FUNCT_1:def 5;
-      reconsider u1 as Variable by A32;
+A42:  u1 in dom f and
+A43:  u = f.u1 by FUNCT_1:def 5;
+      reconsider u1 as Variable by A42;
       consider a2 being Ordinal of W such that
-A33:  a2 = g.(f.u1) & f.u1 in L.a2 &
-      for b st f.u1 in L.b holds a2 c= b by A18;
-      a2 in g.:rng f by A18,A31,A32,A33,FUNCT_1:def 12;
-      then a2 in b2 & b2 c= a by ORDINAL2:27,XBOOLE_1:7;
-      then L.a2 c= L.a1 by A2,A29,ORDINAL1:19;
-      hence thesis by A32,A33;
+A44:  a2 = g.(f.u1) and
+A45:  f.u1 in L.a2 and
+      for b st f.u1 in L.b holds a2 c= b by A15;
+      a2 in g.:rng f by A15,A41,A43,A44,FUNCT_1:def 12;
+      then a2 in b2 by ORDINAL2:27;
+      then L.a2 c= L.a1 by A2,A37,A40,ORDINAL1:19;
+      hence thesis by A43,A45;
     end;
-    then reconsider v = f as Function of VAR,L.a1 by A30,FUNCT_2:def 1
-,RELSET_1:11;
-A34: L.a1 in M by A4;
-    F.:u c= M & sup (g.:(F.:u)) c= b & b in a1 by A29,ORDINAL1:22,XBOOLE_1:7;
-    then F.:u c= L.b & L.b c= L.a1 by A2,A23;
-    then
-A35: F.:u c= L.a1 by XBOOLE_1:1;
-    0 < 5 & k+0 = k;
-    then
-A36: 0 <= k & k < k+5 by NAT_1:2,XREAL_1:8;
-    then
-A37: not x.0 in variables_in p by ZF_LANG1:86,198;
     set x = x.(k+10);
+    k+0 = k;
+    then not k+10 < k by XREAL_1:8;
+    then not x in variables_in H by A9;
+    then
+A46: not x in variables_in H \ {x.0} by XBOOLE_0:def 5;
     set q = Ex(x.3,x.3 'in' x '&' (p/(x.4,x.0)));
+A47: 10 <= 10+k by NAT_1:11;
     b0 c= b & b c= a by XBOOLE_1:7;
     then b0 c= a by XBOOLE_1:1;
     then
-A38: L.b0 c= L.a1 by A2,A29,ORDINAL1:22;
-    then reconsider mu = u as Element of L.a1 by A22;
+A48: L.b0 c= L.a1 by A2,A37,ORDINAL1:22;
+    then reconsider mu = u as Element of L.a1 by A29;
+    dom f = VAR by FUNCT_2:def 1;
+    then reconsider v = f as Function of VAR,L.a1 by A39,FUNCT_2:def 1 ,
+    RELSET_1:11;
     set w = v/(x.0,v.x.4)/(x,mu);
-A39: 10 > 0 & 10 > 3 & 10 <= 10+k & 10+k = k+10 by NAT_1:11;
+A49: x <> x.(k+5) implies not x in {x.(k+5)} by TARSKI:def 1;
+    variables_in p c= (variables_in H \ {x.0}) \/ {x.(k+5)} & k+5 <> k+
+    10 by ZF_LANG1:201;
+    then not x in variables_in p by A46,A49,XBOOLE_0:def 3,ZF_LANG1:86;
     then
-A40: x.0 <> x.3 & x <> x.0 & x <> x.3 by ZF_LANG1:86;
-A41: variables_in (p/(x.4,x.0)) c= (variables_in p \ {x.4}) \/ {x.0} &
-    variables_in p c= (variables_in H \ {x.0}) \/ {x.(k+5)} by ZF_LANG1:201;
-    0 <= 10 & k+0 = k & 5 < 10;
-    then not k+10 < k & k+5 < k+10 by XREAL_1:8;
-    then not x in variables_in H & k+5 <> k+10 by A11;
-    then not x in variables_in H \ {x.0} & x <> x.(k+5) &
-    (x <> x.(k+5) implies not x in {x.(k+5)})
-    by TARSKI:def 1,XBOOLE_0:def 5,ZF_LANG1:86;
-    then not x in variables_in p by A41,XBOOLE_0:def 3;
-    then not x in variables_in p \ {x.4} & not x in {x.0}
-    by A40,TARSKI:def 1,XBOOLE_0:def 5;
+A50: variables_in (p/(x.4,x.0)) c= (variables_in p \ {x.4}) \/ {x.0} &
+    not x in variables_in p \ {x.4} by XBOOLE_0:def 5,ZF_LANG1:201;
+A51: 10 > 0;
     then
-A42: not x in variables_in (p/(x.4,x.0)) by A41,XBOOLE_0:def 3;
-    F.:u = Section(q,w)
+A52: x <> x.0 by A47,ZF_LANG1:86;
+    then not x in {x.0} by TARSKI:def 1;
+    then
+A53: not x in variables_in (p/(x.4,x.0)) by A50,XBOOLE_0:def 3;
+A54: 10 > 3;
+    then
+A55: x.0 <> x.3 & x <> x.3 by A47,ZF_LANG1:86;
+    b in a1 by A37,ORDINAL1:22,XBOOLE_1:7;
+    then L.b c= L.a1 by A2;
+    then
+A56: F.:u c= L.a1 by A34,XBOOLE_1:1;
+A57: F.:u = Section(q,w)
     proof
-      now per cases;
+      now
+        per cases;
         suppose
-A43:      x.4 in Free H;
-          not k+5<k & not k+10<k & 4<>k+5 by NAT_1:11;
-          then not x.(k+5) in variables_in H & not x.(k+10) in variables_in H
-          & x.(k+5)<>x.0 & x.(k+10)<>x.0 & x.(k+5)<>x.4
-          by A11,A36,A39,ZF_LANG1:86;
+A58:      x.4 in Free H;
+          4<>k+5 by NAT_1:11;
           then
-A44:      x.0 in Free q by A43,Lm5;
-A45:      F.:u c= Section(q,w)
+A59:      x.(k+5)<>x.4 by ZF_LANG1:86;
+A60:      x.(k+10)<>x.0 by A51,A47,ZF_LANG1:86;
+          ( not x.(k+5) in variables_in H)& x.(k+5)<>x.0 by A9,A31,
+          NAT_1:11 ,ZF_LANG1:86;
+          then
+A61:      x.0 in Free q by A58,A60,A59,Lm4;
+A62:      F.:u c= Section(q,w)
           proof
             let u1;
             assume
-A46:        u1 in F.:u;
+A63:        u1 in F.:u;
             then consider u2 such that
-A47:        u2 in dom F & u2 in u & u1 = F.u2 by FUNCT_1:def 12;
-            reconsider u2 as Element of M by A47;
-            M,f/(x.3,u2)/(x.4,F.u2) |= p & f/(x.3,u2)/(x.4,F.u2).(x.4)=F . u2
-            & 0 <> 4 by A14,A15,ZFMODEL2:11,FUNCT_7:130;
-            then M,f/(x.3,u2)/(x.4,F.u2)/(x.0,F.u2) |= p/(x.4,x.0) & x.0 <>
-            x.4 by A37,ZFMODEL2:14,ZF_LANG1:86;
-            then M,f/(x.3,u2)/(x.0,F.u2)/(x.4,F.u2) |= p/(x.4,x.0) &
-            not x.4 in variables_in (p/(x.4,x.0)) by FUNCT_7:35,ZF_LANG1:198;
-            then
-A48:        M,f/(x.3,u2)/(x.0,F.u2) |= p/(x.4,x.0) by ZFMODEL2:6;
-            reconsider m1 = u1 as Element of L.a1 by A35,A46;
+A64:        u2 in dom F and
+A65:        u2 in u and
+A66:        u1 = F.u2 by FUNCT_1:def 12;
+            reconsider m1 = u1 as Element of L.a1 by A56,A63;
+            reconsider u2 as Element of M by A64;
             L.a1 is epsilon-transitive by A4;
-            then u c= L.a1 by A22,A38,ORDINAL1:def 2;
-            then reconsider m2 = u2 as Element of L.a1 by A47;
-            f/(x.3,u2)/(x.0,F.u2) = v/(x.3,m2)/(x.0,m1) & L.a1 c= M
-            by A47,ZF_REFLE:24;
-            then f/(x.3,u2)/(x.0,F.u2) = M!(v/(x.3,m2)/(x.0,m1))
-            by ZF_LANG1:def 2;
-            then L.a1,v/(x.3,m2)/(x.0,m1) |= p/(x.4,x.0) by A28,A29,A48;
-            then L.a1,v/(x.3,m2)/(x.0,m1)/(x,mu) |= p/(x.4,x.0) &
-            w/(x.0,m1) = v/(x,mu)/(x.0,m1) by A42,ZFMODEL2:6,9;
+            then u c= L.a1 by A29,A48,ORDINAL1:def 2;
+            then reconsider m2 = u2 as Element of L.a1 by A65;
+A67:        f/(x.3,u2)/(x.0,F.u2) = M!(v/(x.3,m2)/(x.0,m1)) by A66,
+            ZF_LANG1:def 2,ZF_REFLE:24;
+            M,f/(x.3,u2)/(x.4,F.u2) |= p & f/(x.3,u2)/(x.4,F.u2).(x.4)=F
+            . u2 by A11,A22,FUNCT_7:130,ZFMODEL2:11;
+            then M,f/(x.3,u2)/(x.4,F.u2)/(x.0,F.u2) |= p/(x.4,x.0) by A32,
+            ZFMODEL2:14;
             then
-A49:        L.a1,w/(x.0,m1)/(x.3,m2) |= p/(x.4,x.0) by A40,ZFMODEL2:7;
-            w/(x.0,m1)/(x.3,m2).(x.3) = m2 &
-            w/(x.0,m1)/(x.3,m2).x = w/(x.0,m1).x &
-            w.x = w/(x.0,m1).x & w.x = mu by A40,FUNCT_7:34,130;
-            then L.a1,w/(x.0,m1)/(x.3,m2) |= x.3 'in' x by A47,ZF_MODEL:13;
-            then L.a1,w/(x.0,m1)/(x.3,m2) |= x.3 'in' x '&' (p/(x.4,x.0))
-            by A49,ZF_MODEL:15;
+A68:        M,f/(x.3,u2)/(x.0,F.u2)/(x.4,F.u2) |= p/(x.4,x.0) by
+            FUNCT_7:35 ,ZF_LANG1:86;
+            not x.4 in variables_in (p/(x.4,x.0)) by ZF_LANG1:86,198;
+            then M,f/(x.3,u2)/(x.0,F.u2) |= p/(x.4,x.0) by A68,
+            ZFMODEL2:6;
+            then L.a1,v/(x.3,m2)/(x.0,m1) |= p/(x.4,x.0) by A36,A37,A38,
+            A67;
+            then
+A69:        L.a1,v/(x.3,m2)/(x.0,m1)/(x,mu) |= p/(x.4,x.0) by A53,
+            ZFMODEL2:6;
+A70:        w.x = w/(x.0,m1).x & w.x = mu by A51,A47,FUNCT_7:34,130,
+            ZF_LANG1:86;
+            w/(x.0,m1)/(x.3,m2).(x.3) = m2 & w/(x.0,m1)/(x.3,m2).x = w/(
+            x.0,m1).x by A54,A47,FUNCT_7:34,130,ZF_LANG1:86;
+            then
+A71:        L.a1,w/(x.0,m1)/(x.3,m2) |= x.3 'in' x by A65,A70,
+            ZF_MODEL:13;
+            w/(x.0,m1) = v/(x,mu)/(x.0,m1) by ZFMODEL2:9;
+            then L.a1,w/(x.0,m1)/(x.3,m2) |= p/(x.4,x.0) by A52,A55,A69,
+            ZFMODEL2:7;
+            then L.a1,w/(x.0,m1)/(x.3,m2) |= x.3 'in' x '&' (p/(x.4,x.0)) by
+            A71,ZF_MODEL:15;
             then L.a1,w/(x.0,m1) |= q by ZF_LANG1:82;
             then u1 in { m where m is Element of L.a1: L.a1,w/(x.0,m) |= q };
-            hence thesis by A44,Def1;
+            hence thesis by A61,Def1;
           end;
           Section(q,w) c= F.:u
           proof
             let u1;
-            assume u1 in Section(q,w);
+A72:        L.a1 c= M by ZF_REFLE:24;
+            assume
+            u1 in Section(q,w);
             then u1 in { m where m is Element of L.a1: L.a1,w/(x.0,m) |= q }
-            by A44,Def1;
+            by A61,Def1;
             then consider m1 being Element of L.a1 such that
-A50:        u1 = m1 & L.a1,w/(x.0,m1) |= q;
+A73:        u1 = m1 and
+A74:        L.a1,w/(x.0,m1) |= q;
             consider m2 being Element of L.a1 such that
-A51:        L.a1,w/(x.0,m1)/(x.3,m2) |= x.3 'in' x '&' (p/(x.4,x.0))
-            by A50,ZF_LANG1:82;
-A52:        L.a1,w/(x.0,m1)/(x.3,m2) |= x.3 'in' x &
-            w/(x.0,m1)/(x.3,m2).(x.3) = m2 &
-            w/(x.0,m1)/(x.3,m2).x = w/(x.0,m1).x &
-            w.x = w/(x.0,m1).x & w.x = mu &
-            L.a1,w/(x.0,m1)/(x.3,m2) |= p/(x.4,x.0)
-            by A40,A51,FUNCT_7:34,130,ZF_MODEL:15;
+A75:        L.a1,w/(x.0,m1)/(x.3,m2) |= x.3 'in' x '&' (p/(x.4,x.0))
+            by A74,ZF_LANG1:82;
+            m1 in L.a1 & m2 in L.a1;
+            then reconsider u' = m1, u2 = m2 as Element of M by A72;
+A76:        w/(x.0,m1) = v/(x,mu)/(x.0,m1) by ZFMODEL2:9;
+            L.a1,w/(x.0,m1)/(x.3,m2) |= p/(x.4,x.0) by A75,ZF_MODEL:15;
+            then L.a1,v/(x.3,m2)/(x.0,m1)/(x,mu) |= p/(x.4,x.0) by A52,A55,
+            A76,ZFMODEL2:7;
             then
-A53:        m2 in u by ZF_MODEL:13;
-            w/(x.0,m1) = v/(x,mu)/(x.0,m1) by ZFMODEL2:9;
-            then L.a1,v/(x.3,m2)/(x.0,m1)/(x,mu) |= p/(x.4,x.0)
-            by A40,A52,ZFMODEL2:7;
+A77:        L.a1,v/(x.3,m2)/(x.0,m1) |= p/(x.4,x.0) by A53,
+            ZFMODEL2:6;
+A78:        f/(x.3,u2)/(x.0,u')/(x.4,u') = f/(x.3,u2)/(x.4,u')/(x.0,u')
+            & f/(x.3,u2)/(x. 0,u').(x.0) = u' by FUNCT_7:35,130,ZF_LANG1:86;
+            f/(x.3,u2)/(x.0,u') = M!(v/(x.3,m2)/(x.0,m1)) by ZF_LANG1:
+            def 2 ,ZF_REFLE:24;
+            then M,f/(x.3,u2)/(x.0,u') |= p/(x.4,x.0) by A36,A37,A38,A77;
+            then M,f/(x.3,u2)/(x.4,u')/(x.0,u') |= p by A32,A78,
+            ZFMODEL2:13;
+            then M,f/(x.3,u2)/(x.4,u') |= p by A32,ZFMODEL2:6;
             then
-A54:        L.a1,v/(x.3,m2)/(x.0,m1) |= p/(x.4,x.0) by A42,ZFMODEL2:6;
-            m1 in L.a1 & m2 in L.a1 & L.a1 c= M by ZF_REFLE:24;
-            then reconsider u' = m1, u2 = m2 as Element of M;
-            f/(x.3,u2)/(x.0,u') = v/(x.3,m2)/(x.0,m1) & L.a1 c= M & 0 <>
-            4 by ZF_REFLE:24;
-            then f/(x.3,u2)/(x.0,u') = M!(v/(x.3,m2)/(x.0,m1)) & x.0 <> x.4
-            by ZF_LANG1:86,def 2;
-            then M,f/(x.3,u2)/(x.0,u') |= p/(x.4,x.0) &
-            f/(x.3,u2)/(x.0,u')/(x.4,u') = f/(x.3,u2)/(x.4,u')/(x.0,u') &
-            f/(x.3,u2)/(x.0,u').(x.0) = u'
-             by A28,A29,A54,FUNCT_7:35,FUNCT_7:130;
-            then M,f/(x.3,u2)/(x.4,u')/(x.0,u') |= p by A37,ZFMODEL2:13;
-            then M,f/(x.3,u2)/(x.4,u') |= p by A37,ZFMODEL2:6;
-            then F.u2 = u' & dom F = M by A14,A15,FUNCT_2:def 1,ZFMODEL2:11;
-            hence thesis by A50,A53,FUNCT_1:def 12;
+A79:        F.u2 = u' by A11,A22,ZFMODEL2:11;
+A80:        w.x = w/(x.0,m1).x & w.x = mu by A51,A47,FUNCT_7:34,130,
+            ZF_LANG1:86;
+A81:        L.a1,w/(x.0,m1)/(x.3,m2) |= x.3 'in' x by A75,ZF_MODEL:15;
+A82:        dom F = M by FUNCT_2:def 1;
+            w/(x.0,m1)/(x.3,m2).(x.3) = m2 & w/(x.0,m1)/(x.3,m2).x = w/(
+            x.0,m1).x by A54,A47,FUNCT_7:34,130,ZF_LANG1:86;
+            then m2 in u by A81,A80,ZF_MODEL:13;
+            hence thesis by A73,A79,A82,FUNCT_1:def 12;
           end;
-          hence thesis by A45,XBOOLE_0:def 10;
+          hence thesis by A62,XBOOLE_0:def 10;
         end;
         suppose
-A55:      not x.4 in Free H;
-          not k+5<k & not k+10<k & 4<>k+5 by NAT_1:11;
-          then not x.(k+5) in variables_in H & not x.(k+10) in variables_in H
-          & x.(k+5)<>x.0 & x.(k+10)<>x.0 & x.(k+5)<>x.4
-          by A11,A36,A39,ZF_LANG1:86;
-          then not x.0 in Free q by A55,Lm5;
+A83:      not x.4 in Free H;
+          4<>k+5 by NAT_1:11;
+          then
+A84:      x.(k+5)<>x.4 by ZF_LANG1:86;
+A85:      x.(k+10)<>x.0 by A51,A47,ZF_LANG1:86;
+          ( not x.(k+5) in variables_in H)& x.(k+5)<>x.0 by A9,A31,
+          NAT_1:11 ,ZF_LANG1:86;
+          then not x.0 in Free q by A83,A85,A84,Lm4;
           then Section(q,w)={} by Def1;
-          hence thesis by A10,A55,Lm4;
+          hence thesis by A8,A83,Lm3;
         end;
       end;
       hence thesis;
     end;
-    hence def_func'(H,f).:u in M by A5,A34,Def2;
+    L.a1 in M by A4;
+    hence def_func'(H,f).:u in M by A5,A57,Def2;
+  end;
+  Union L is epsilon-transitive
+  proof
+    let X;
+    assume
+    X in Union L;
+    then consider u such that
+A86: u in dom L and
+A87: X in L.u by Lm1;
+    reconsider u as Ordinal by A86;
+    u in On W by A86,ZF_REFLE:def 5;
+    then reconsider u as Ordinal of W by ZF_REFLE:8;
+    L.u is epsilon-transitive by A4;
+    then
+A88: X c= L.u by A87,ORDINAL1:def 2;
+    let u1;
+A89: L.u c= Union L by ZF_REFLE:24;
+    assume
+    u1 in X;
+    then u1 in L.u by A88;
+    hence thesis by A89;
   end;
   hence thesis by A6,ZFMODEL1:19;
 end;
 
-Lm6: x.i in Free H implies
-{[i,m]} \/ (v*decode)|((code Free H)\{i})=(v/(x.i,m)*decode)|code Free H
+Lm5: x.i in Free H implies {[i,m]} \/ (v*decode)|((code Free H)\{i})=(v/(x.i,m
+)*decode)|code Free H
+
 proof
   set e=v/(x.i,m)*decode;
   set f=v*decode;
   set b=f|((code Free H)\{i});
-  assume x.i in Free H;
-  then x".x.i in code Free H by ZF_FUND1:34;
-  then i in code Free H by ZF_FUND1:def 3;
-  then
-A1: {i} c= code Free H by ZFMISC_1:37;
-A2: i in {i} by TARSKI:def 1;
-A3: dom(e|{i})=(dom e) /\ {i} by RELAT_1:90
+A1: i in {i} by TARSKI:def 1;
+A2: dom(e|{i})=(dom e) /\ {i} by RELAT_1:90
     .=omega /\ {i} by ZF_FUND1:32
     .={i} by ZFMISC_1:52;
   then
-A4: (e|{i})={[i,(e|{i}).i]} by GRFUNC_1:18
-    .={[i,e.i]} by A2,A3,FUNCT_1:70
+A3: (e|{i})={[i,(e|{i}).i]} by GRFUNC_1:18
+    .={[i,e.i]} by A1,A2,FUNCT_1:70
     .={[i,e.x".x.i]} by ZF_FUND1:def 3
     .={[i,(v/(x.i,m)).x.i]} by ZF_FUND1:33
     .={[i,m]} by FUNCT_7:130;
-A5: b=e|((code Free H)\{i})
-  proof
-A6: dom b=(dom f) /\ ((code Free H)\{i}) by RELAT_1:90
-      .=omega /\ ((code Free H)\{i}) by ZF_FUND1:32
-      .=dom e /\ ((code Free H)\{i}) by ZF_FUND1:32
-      .=dom(e|((code Free H)\{i})) by RELAT_1:90;
-    now
-      let u;
-      assume
-A7:   u in dom b;
-      then u in (dom f) /\ ((code Free H)\{i}) by RELAT_1:90;
-      then u in (code Free H) \ {i} by XBOOLE_0:def 4;
-      then
-A8:   u in code Free H & not u in {i} by XBOOLE_0:def 5;
-      then consider x such that
-A9:   x in Free H & u=x".x by ZF_FUND1:34;
-      i<>x".x by A8,A9,TARSKI:def 1;
-      then
-A10:  x<>x.i by ZF_FUND1:def 3;
-      thus b.u = f.u by A7,FUNCT_1:70
-        .=v.x by A9,ZF_FUND1:33
-        .=(v/(x.i,m)).x by A10,FUNCT_7:34
-        .=e.u by A9,ZF_FUND1:33
-        .=(e|((code Free H)\{i})).u by A6,A7,FUNCT_1:70;
-    end;
-    hence thesis by A6,FUNCT_1:9;
+A4: dom b=(dom f) /\ ((code Free H)\{i}) by RELAT_1:90
+    .=omega /\ ((code Free H)\{i}) by ZF_FUND1:32
+    .=dom e /\ ((code Free H)\{i}) by ZF_FUND1:32
+    .=dom(e|((code Free H)\{i})) by RELAT_1:90;
+  now
+    let u;
+    assume
+A5: u in dom b;
+    then u in (dom f) /\ ((code Free H)\{i}) by RELAT_1:90;
+    then
+A6: u in (code Free H) \ {i} by XBOOLE_0:def 4;
+    then u in code Free H by XBOOLE_0:def 5;
+    then consider x such that
+    x in Free H and
+A7: u=x".x by ZF_FUND1:34;
+    not u in {i} by A6,XBOOLE_0:def 5;
+    then i<>x".x by A7,TARSKI:def 1;
+    then
+A8: x<>x.i by ZF_FUND1:def 3;
+    thus b.u = f.u by A5,FUNCT_1:70
+      .=v.x by A7,ZF_FUND1:33
+      .=(v/(x.i,m)).x by A8,FUNCT_7:34
+      .=e.u by A7,ZF_FUND1:33
+      .=(e|((code Free H)\{i})).u by A4,A5,FUNCT_1:70;
   end;
-  e|code Free H=(e|({i} \/ ((code Free H)\{i}))) by A1,XBOOLE_1:45
-    .={[i,m]} \/ b by A4,A5,RELAT_1:107;
+  then
+A9: b=e|((code Free H)\{i}) by A4,FUNCT_1:9;
+  assume
+  x.i in Free H;
+  then x".x.i in code Free H by ZF_FUND1:34;
+  then i in code Free H by ZF_FUND1:def 3;
+  then {i} c= code Free H by ZFMISC_1:37;
+  then e|code Free H=(e|({i} \/ ((code Free H)\{i}))) by XBOOLE_1:45
+    .={[i,m]} \/ b by A3,A9,RELAT_1:107;
   hence thesis;
 end;
 
 theorem Th4:
-  Section(H,v)=
-  {m : {[{},m]} \/ (v*decode)|((code Free H)\{{}}) in Diagram(H,M)}
+  Section(H,v)= {m : {[{},m]} \/ (v*decode)|((code Free H)\{{}}) in
+  Diagram(H,M)}
 proof
   set S=Section(H,v);
   set D={m:{[{},m]}\/(v*decode)|((code Free H)\{{}}) in Diagram(H,M)};
-  now per cases;
+  now
+    per cases;
     suppose
 A1:   x.0 in Free H;
       then
 A2:   S={m: M,v/(x.0,m) |= H} by Def1;
-A3:   S c= D
+A3:   D c= S
       proof
         let u;
-        assume u in S;
+        assume
+        u in D;
         then consider m such that
-A4:     m=u & M,v/(x.0,m) |= H by A2;
-        v/(x.0,m) in St(H,M) by A4,ZF_MODEL:def 4;
-        then (v/(x.0,m)*decode)|code Free H in Diagram(H,M) by ZF_FUND1:def 5;
-        then {[{},m]}\/(v*decode)|((code Free H)\{{}}) in Diagram(H,M)
-        by A1,Lm6;
-        hence thesis by A4;
-      end;
-      D c= S
-      proof
-        let u;
-        assume u in D;
-        then consider m such that
-A5:     m=u & {[{},m]}\/(v*decode)|((code Free H)\{{}}) in Diagram(H,M);
-        (v/(x.0,m)*decode)|code Free H in Diagram(H,M) by A1,A5,Lm6;
-        then ex v1 st (v/(x.0,m)*decode)|code Free H=(v1*decode)|code Free H
-        & v1 in St(H,M) by ZF_FUND1:def 5;
+A4:     m=u and
+A5:     {[{},m]}\/(v*decode)|((code Free H)\{{}}) in Diagram(H,M);
+        (v/(x.0,m)*decode)|code Free H in Diagram(H,M) by A1,A5,Lm5;
+        then
+        ex v1 st (v/(x.0,m)*decode)|code Free H=(v1*decode)|code Free H &
+        v1 in St(H,M) by ZF_FUND1:def 5;
         then v/(x.0,m) in St(H,M) by ZF_FUND1:37;
         then M,v/(x.0,m) |= H by ZF_MODEL:def 4;
-        hence thesis by A2,A5;
+        hence thesis by A2,A4;
+      end;
+      S c= D
+      proof
+        let u;
+        assume
+        u in S;
+        then consider m such that
+A6:     m=u and
+A7:     M,v/(x.0,m) |= H by A2;
+        v/(x.0,m) in St(H,M) by A7,ZF_MODEL:def 4;
+        then (v/(x.0,m)*decode)|code Free H in Diagram(H,M) by
+        ZF_FUND1:def
+        5;
+        then {[{},m]}\/(v*decode)|((code Free H)\{{}}) in Diagram(H,M) by A1,
+        Lm5;
+        hence thesis by A6;
       end;
       hence thesis by A3,XBOOLE_0:def 10;
     end;
     suppose
-A6:   not x.0 in Free H;
+A8:   not x.0 in Free H;
       now
-        assume
-A7:     D<>{};
         consider u being Element of D;
-        u in D by A7;
+        assume
+        D<>{};
+        then u in D;
         then consider m such that
-A8:     m=u & {[{},m]}\/(v*decode)|((code Free H)\{{}}) in Diagram(H,M);
+        m=u and
+A9:     {[{},m]}\/(v*decode)|((code Free H)\{{}}) in Diagram(H,M);
         consider v2 such that
-A9:     ({[{},m]}\/(v*decode)|((code Free H)\{{}}))
-        =(v2*decode)|code Free H & v2 in St(H,M) by A8,ZF_FUND1:def 5;
-        reconsider w={[{},m]}\/(v*decode)|((code Free H)\{{}})
-        as Function by A9;
+A10:    ({[{},m]}\/(v*decode)|((code Free H)\{{}})) =(v2*decode)|code
+        Free H and
+        v2 in St(H,M) by A9,ZF_FUND1:def 5;
+        reconsider w={[{},m]}\/(v*decode)|((code Free H)\{{}}) as Function by
+        A10;
         [{},m]in{[{},m]} by TARSKI:def 1;
         then [{},m] in w by XBOOLE_0:def 3;
-        then {} in dom w & m=w.{} by FUNCT_1:8;
-        then {} in dom(v2*decode)/\(code Free H) by A9,RELAT_1:90;
+        then {} in dom w by FUNCT_1:8;
+        then {} in dom(v2*decode)/\(code Free H) by A10,RELAT_1:90;
         then {} in code Free H by XBOOLE_0:def 4;
-        then consider y such that
-A10:    y in Free H & {}=x".y by ZF_FUND1:34;
-        thus contradiction by A6,A10,ZF_FUND1:def 3;
+        then ex y st y in Free H & {}=x".y by ZF_FUND1:34;
+        hence contradiction by A8,ZF_FUND1:def 3;
       end;
-      hence thesis by A6,Def1;
+      hence thesis by A8,Def1;
     end;
   end;
   hence thesis;
 end;
 
 theorem Th5:
-  Y is closed_wrt_A1-A7 & Y is epsilon-transitive implies
-  Y is predicatively_closed
+  Y is closed_wrt_A1-A7 & Y is epsilon-transitive implies Y is
+  predicatively_closed
 proof
-  assume
-A1: Y is closed_wrt_A1-A7 & Y is epsilon-transitive;
+  assume that
+A1: Y is closed_wrt_A1-A7 and
+A2: Y is epsilon-transitive;
   let H,E,f such that
-A2: E in Y;
-  now per cases;
-    suppose not x.0 in Free H;
+A3: E in Y;
+  now
+    per cases;
+    suppose
+      not x.0 in Free H;
       then Section(H,f)={} by Def1;
       hence thesis by A1,ZF_FUND1:3;
     end;
     suppose
-A3:   x.0 in Free H;
+A4:   x.0 in Free H;
+      reconsider a=E as Element of W by A3;
       reconsider n={} as Element of omega by ORDINAL1:def 12;
       set fs=(code Free H)\{n};
-      reconsider a=E as Element of W by A2;
-A4:   Diagram(H,E) in Y by A1,A2,ZF_FUND1:22;
+A5:   Diagram(H,E) in Y by A1,A3,ZF_FUND1:22;
       then reconsider b=Diagram(H,E) as Element of W;
-A5:   Funcs(fs,a) in Y by A1,A2,ZF_FUND1:9;
-A6:   (f*decode)|fs in Funcs(fs,a) by ZF_FUND1:32;
-      then reconsider y=(f*decode)|fs as Element of W by A5,ZF_FUND1:1;
-      set A={w: w in a & {[n,w]} \/ y in b};
+A6:   b c= Funcs(fs \/ {n},a)
+      proof
+        let u;
+        assume
+        u in b;
+        then ex f1 st u=(f1*decode)|code Free H & f1 in St(H,E) by
+        ZF_FUND1:def 5;
+        then
+A7:     u in Funcs(code Free H,a) by ZF_FUND1:32;
+        x".x.0 in code Free H by A4,ZF_FUND1:34;
+        then n in code Free H by ZF_FUND1:def 3;
+        then {n} c= code Free H by ZFMISC_1:37;
+        hence thesis by A7,XBOOLE_1:45;
+      end;
+      n in {n} by TARSKI:def 1;
+      then
+A8:   not n in fs by XBOOLE_0:def 5;
+A9:   (f*decode)|fs in Funcs(fs,a) by ZF_FUND1:32;
+      Funcs(fs,a) in Y by A1,A3,ZF_FUND1:9;
+      then reconsider y=(f*decode)|fs as Element of W by A9,ZF_FUND1:1;
       set B={e: {[n,e]} \/ y in b};
-A7:   A=B
+      set A={w: w in a & {[n,w]} \/ y in b};
+A10:  A=B
       proof
         thus A c= B
         proof
           let u;
-          assume u in A;
+          assume
+          u in A;
           then ex w st u=w & w in a & {[n,w]} \/ y in b;
           hence thesis;
         end;
         let u;
-        assume u in B;
+        assume
+        u in B;
         then consider e such that
-A8:     u=e & {[n,e]} \/ y in b;
-        reconsider e as Element of W by A2,ZF_FUND1:1;
-        e in A by A8;
-        hence thesis by A8;
+A11:    u=e and
+A12:    {[n,e]} \/ y in b;
+        reconsider e as Element of W by A3,ZF_FUND1:1;
+        e in A by A12;
+        hence thesis by A11;
       end;
-      n in {n} by TARSKI:def 1;
-      then
-A9:   not n in fs by XBOOLE_0:def 5;
-A10:  a c= Y by A1,A2,ORDINAL1:def 2;
-      b c= Funcs(fs \/ {n},a)
-      proof
-        let u;
-        assume u in b;
-        then
-A11:    ex f1 st u=(f1*decode)|code Free H & f1 in St(H,E) by ZF_FUND1:def 5;
-        x".x.0 in code Free H by A3,ZF_FUND1:34;
-        then n in code Free H by ZF_FUND1:def 3;
-        then
-A12:    {n} c= code Free H by ZFMISC_1:37;
-        u in Funcs(code Free H,a) by A11,ZF_FUND1:32;
-        hence thesis by A12,XBOOLE_1:45;
-      end;
-      then A in Y by A1,A2,A4,A6,A9,A10,ZF_FUND1:16;
-      hence thesis by A7,Th4;
+      a c= Y by A2,A3,ORDINAL1:def 2;
+      then A in Y by A1,A3,A5,A9,A8,A6,ZF_FUND1:16;
+      hence thesis by A10,Th4;
     end;
   end;
   hence thesis;
 end;
 
 theorem
-  omega in W & (for a,b st a in b holds L.a c= L.b) &
-  (for a st a <> {} & a is limit_ordinal holds L.a = Union (L|a)) &
-  (for a holds L.a in Union L & L.a is epsilon-transitive) &
-  Union L is closed_wrt_A1-A7 implies Union L is being_a_model_of_ZF
+  omega in W & (for a,b st a in b holds L.a c= L.b) & (for a st a <> {}
+& a is limit_ordinal holds L.a = Union (L|a)) & (for a holds L.a in Union L & L
+  .a is epsilon-transitive) & Union L is closed_wrt_A1-A7 implies Union L is
+  being_a_model_of_ZF
 proof
   assume that
-A1: (omega in W) and
-A2: (for a,b st a in b holds L.a c= L.b) and
-A3: (for a st a <> {} & a is limit_ordinal holds L.a = Union (L|a)) and
-A4: (for a holds L.a in Union L & L.a is epsilon-transitive) and
-A5: (Union L is closed_wrt_A1-A7);
+A1: omega in W and
+A2: for a,b st a in b holds L.a c= L.b and
+A3: for a st a <> {} & a is limit_ordinal holds L.a = Union (L|a) and
+A4: for a holds L.a in Union L & L.a is epsilon-transitive and
+A5: Union L is closed_wrt_A1-A7;
 A6: Union L is epsilon-transitive
   proof
     let X;
-    assume X in Union L;
+    assume
+    X in Union L;
     then consider u such that
-A7: u in dom L & X in L.u by Lm1;
+A7: u in dom L and
+A8: X in L.u by Lm1;
     reconsider u as Ordinal by A7;
     u in On W by A7,ZF_REFLE:def 5;
     then reconsider u as Ordinal of W by ZF_REFLE:8;
     L.u is epsilon-transitive by A4;
     then
-A8: X c= L.u by A7,ORDINAL1:def 2;
+A9: X c= L.u by A8,ORDINAL1:def 2;
     let u1;
-    assume u1 in X;
-    then u1 in L.u & L.u c= Union L by A8,ZF_REFLE:24;
-    hence thesis;
+A10: L.u c= Union L by ZF_REFLE:24;
+    assume
+    u1 in X;
+    then u1 in L.u by A9;
+    hence thesis by A10;
   end;
+  then Union L is predicatively_closed by A5,Th5;
   then
-A9: Union L is predicatively_closed by A5,Th5;
-  for u1,u2 st u1 in Union L & u2 in Union L holds
-  {u1,u2} in Union L by A5,ZF_FUND1:6;
-  then
-A10: Union L |= the_axiom_of_pairs by A6,ZFMODEL1:3;
+A11: Union L |= the_axiom_of_power_sets & for H st {x.0,x.1,x.2} misses
+  Free H holds Union L |= the_axiom_of_substitution_for H by A1,A2,A3,A4,Th2,
+  Th3;
   for u st u in Union L holds union u in Union L by A5,ZF_FUND1:2;
   then
-A11: Union L |= the_axiom_of_unions by A6,ZFMODEL1:5;
-  ex u st u in Union L & u<>{} & for u1 st u1 in u ex u2 st u1 c< u2 & u2 in u
+A12: Union L |= the_axiom_of_unions by A6,ZFMODEL1:5;
+  for u1,u2 st u1 in Union L & u2 in Union L holds {u1,u2} in Union L by
+  A5,ZF_FUND1:6;
+  then
+A13: Union L |= the_axiom_of_pairs by A6,ZFMODEL1:3;
+  ex u st u in Union L & u<>{} & for u1 st u1 in u ex u2 st u1 c< u2 & u2
+  in u
   proof
+A14: card omega in card W by A1,CLASSES2:1;
     deffunc G(set,set) = inf {w: L.$2 in L.w};
     consider ksi being Function such that
-A12: dom ksi=NAT &
-    ksi.0=0-element_of(W) & for i being Nat holds ksi.(i+1)=G(i,ksi.i) from
-    NAT_1:sch 11;
-A13: for i holds ksi.i in On W & ksi.i is Ordinal of W
+A15: dom ksi=NAT & ksi.0=0-element_of(W) & for i being Nat holds ksi.(
+    i+1)=G(i,ksi.i) from NAT_1:sch 11;
+    card rng ksi c= card NAT by A15,CARD_1:28;
+    then
+A16: card rng ksi in card W by A14,ORDINAL1:22;
+    set lambda=sup rng ksi;
+A17: for i holds ksi.i in On W & ksi.i is Ordinal of W
     proof
       defpred P[Element of NAT] means ksi.$1 in On W & ksi.$1 is Ordinal of W;
-A14:  P[0] by A12,ZF_REFLE:8;
-A15:  now
+A18:  now
         let i;
-        assume P[i];
+        assume
+        P[i];
         then reconsider a=ksi.i as Ordinal of W;
-        L.a in Union L by A4;
-        then consider u such that
-A16:    u in dom L & L.a in L.u by Lm1;
-    dom L=On W by ZF_REFLE:def 5;
-        then reconsider b=u as Ordinal of W by A16,ZF_REFLE:8;
-        b in {w: L.a in L.w} by A16;
-        then
-A19:    inf {w: L.a in L.w} c= b by ORDINAL2:22;
-        thus P[i+1]
-        proof
-A20:      ksi.(i+1)=inf {w: L.a in L.w} by A12;
-          then ksi.(i+1) in W by A19,CLASSES1:def 1;
-          hence ksi.(i+1) in On W by A20,ORDINAL1:def 10;
-          hence thesis by ZF_REFLE:8;
-        end;
+A19:    ksi.(i+1)=inf {w: L.a in L.w} by A15;
+        consider u such that
+A20:    u in dom L and
+A21:    L.a in L.u by A4,Lm1;
+        dom L=On W by ZF_REFLE:def 5;
+        then reconsider b=u as Ordinal of W by A20,ZF_REFLE:8;
+        b in {w: L.a in L.w} by A21;
+        then inf {w: L.a in L.w} c= b by ORDINAL2:22;
+        then ksi.(i+1) in W by A19,CLASSES1:def 1;
+        hence P[i+1] by A19,ORDINAL1:def 10;
       end;
-      thus P[i] from NAT_1:sch 1(A14,A15);
+A22:  P[0] by A15,ZF_REFLE:8;
+      thus P[i] from NAT_1:sch 1(A22,A18);
     end;
-A21: for i holds L.(ksi.i) in L.(ksi.(i+1))
+    rng ksi c= W
+    proof
+      let a be set;
+      assume
+      a in rng ksi;
+      then consider i being set such that
+A23:  i in dom ksi and
+A24:  a=ksi.i by FUNCT_1:def 5;
+      reconsider i as Element of NAT by A15,A23;
+      ksi.i in On W by A17;
+      hence thesis by A24,ORDINAL1:def 10;
+    end;
+    then rng ksi in W by A16,CLASSES1:2;
+    then reconsider l=lambda as Ordinal of W by ZF_REFLE:28;
+A25: for i holds L.(ksi.i) in L.(ksi.(i+1))
     proof
       let i;
-A22:  ksi.(i+1)=inf {w: L.(ksi.i) in L.w} by A12;
-      reconsider a=ksi.i as Ordinal of W by A13;
-      L.a in Union L by A4;
-      then consider b being set such that
-A23:  b in dom L & L.a in L.b by Lm1;
-  b in On W by A23,ZF_REFLE:def 5;
+      reconsider a=ksi.i as Ordinal of W by A17;
+      consider b being set such that
+A26:  b in dom L and
+A27:  L.a in L.b by A4,Lm1;
+      b in On W by A26,ZF_REFLE:def 5;
       then reconsider b as Ordinal of W by ZF_REFLE:8;
-      b in {w: L.a in L.w} by A23;
-      then ksi.(i+1) in {w: L.(ksi.i) in L.w} by A22,ORDINAL2:25;
+A28:  b in {w: L.a in L.w} by A27;
+      ksi.(i+1)=inf {w: L.(ksi.i) in L.w} by A15;
+      then ksi.(i+1) in {w: L.(ksi.i) in L.w} by A28,ORDINAL2:25;
       then ex w st w=ksi.(i+1) & L.a in L.w;
       hence thesis;
     end;
-A25: for i holds ksi.i in ksi.(i+1)
+A29: for i holds ksi.i in ksi.(i+1)
     proof
       let i;
-      reconsider a=ksi.i as Ordinal of W by A13;
-      reconsider b=ksi.(i+1) as Ordinal of W by A13;
-      assume not ksi.i in ksi.(i+1);
+      reconsider b=ksi.(i+1) as Ordinal of W by A17;
+      reconsider a=ksi.i as Ordinal of W by A17;
+      assume
+      not ksi.i in ksi.(i+1);
       then b=a or b in a by ORDINAL1:24;
       then L.b c= L.a by A2;
-      hence contradiction by A21,ORDINAL1:7;
+      hence contradiction by A25,ORDINAL1:7;
     end;
-    set lambda=sup rng ksi;
-    take u = L.lambda;
-    lambda in On W
+A30: l c= union l
     proof
-A26:  rng ksi c= W
-      proof
-        let a be set;
-        assume a in rng ksi;
-        then consider i being set such that
-A27:    i in dom ksi & a=ksi.i by FUNCT_1:def 5;
-        reconsider i as Element of NAT by A12,A27;
-        ksi.i in On W by A13;
-        hence thesis by A27,ORDINAL1:def 10;
-      end;
-      card rng ksi c= card NAT & card NAT=card omega & card omega in card W
-      by A1,A12,CARD_1:28,CLASSES2:1;
-      then card rng ksi in card W by ORDINAL1:22;
-      then rng ksi in W by A26,CLASSES1:2;
-      then lambda in W by ZF_REFLE:28;
-      hence thesis by ORDINAL1:def 10;
+      let u1 be Ordinal;
+      assume
+      u1 in l;
+      then consider u2 being Ordinal such that
+A31:  u2 in rng ksi and
+A32:  u1 c= u2 by ORDINAL2:29;
+      consider i being set such that
+A33:  i in dom ksi and
+A34:  u2=ksi.i by A31,FUNCT_1:def 5;
+      reconsider i as Element of NAT by A15,A33;
+      reconsider u3=ksi.(i+1) as Ordinal of W by A17;
+      u3 in rng ksi by A15,FUNCT_1:def 5;
+      then
+A35:  u3 in l by ORDINAL2:27;
+      u1 in u3 by A29,A32,A34,ORDINAL1:22;
+      hence thesis by A35,TARSKI:def 4;
     end;
-    then reconsider l=lambda as Ordinal of W by ZF_REFLE:8;
-    L.l in Union L & L.l<>{} by A4;
-    hence u in Union L & u<>{};
-A28: l is limit_ordinal
-    proof
-A29:  union l c= l by ORDINAL2:5;
-      l c= union l
-      proof
-        let u1 be Ordinal;
-        assume u1 in l;
-        then consider u2 being Ordinal such that
-A30:    u2 in rng ksi & u1 c= u2 by ORDINAL2:29;
-        consider i being set such that
-A31:    i in dom ksi & u2=ksi.i by A30,FUNCT_1:def 5;
-        reconsider i as Element of NAT by A12,A31;
-        reconsider u3=ksi.(i+1) as Ordinal of W by A13;
-        u3 in rng ksi & u2 in u3 by A12,A25,A31,FUNCT_1:def 5;
-        then u3 in l & u1 in u3 by A30,ORDINAL1:22,ORDINAL2:27;
-        hence thesis by TARSKI:def 4;
-      end;
-      then l=union l by A29,XBOOLE_0:def 10;
-      hence thesis by ORDINAL1:def 6;
-    end;
-A32: union {L.(ksi.n): not contradiction}=L.l
+    union l c= l by ORDINAL2:5;
+    then l=union l by A30,XBOOLE_0:def 10;
+    then
+A36: l is limit_ordinal by ORDINAL1:def 6;
+A37: union {L.(ksi.n): not contradiction}=L.l
     proof
       set A={L.(ksi.n): not contradiction};
       thus union A c= L.l
       proof
         let u1;
-        assume u1 in union A;
+        assume
+        u1 in union A;
         then consider X such that
-A33:    u1 in X & X in A by TARSKI:def 4;
+A38:    u1 in X and
+A39:    X in A by TARSKI:def 4;
         consider n such that
-A34:    X=L.(ksi.n) by A33;
-        reconsider a=ksi.n as Ordinal of W by A13;
-        a in rng ksi by A12,FUNCT_1:def 5;
+A40:    X=L.(ksi.n) by A39;
+        reconsider a=ksi.n as Ordinal of W by A17;
+        a in rng ksi by A15,FUNCT_1:def 5;
         then L.a c= L.l by A2,ORDINAL2:27;
-        hence thesis by A33,A34;
+        hence thesis by A38,A40;
       end;
-      let u1 such that
-A35:  u1 in L.l;
-      0-element_of W in rng ksi by A12,FUNCT_1:def 5;
+      0-element_of W in rng ksi by A15,FUNCT_1:def 5;
       then l<>{} by ORDINAL2:27;
-      then L.l=Union(L|l) by A3,A28;
-      then consider u2 such that
-A36:  u2 in dom(L|l) & u1 in (L|l).u2 by A35,Lm1;
-A37:  u2 in (dom L) /\ l & u1 in L.u2 by A36,FUNCT_1:70,RELAT_1:90;
       then
-A38:  u2 in dom L & u2 in l by XBOOLE_0:def 4;
+A41:  L.l=Union(L|l) by A3,A36;
+      let u1;
+      assume
+      u1 in L.l;
+      then consider u2 such that
+A42:  u2 in dom(L|l) and
+A43:  u1 in (L|l).u2 by A41,Lm1;
+A44:  u1 in L.u2 by A42,A43,FUNCT_1:70;
+A45:  u2 in (dom L) /\ l by A42,RELAT_1:90;
+      then
+A46:  u2 in l by XBOOLE_0:def 4;
+      u2 in dom L by A45,XBOOLE_0:def 4;
       then u2 in On W by ZF_REFLE:def 5;
       then reconsider u2 as Ordinal of W by ZF_REFLE:8;
       consider b being Ordinal such that
-A39:  b in rng ksi & u2 c= b by A38,ORDINAL2:29;
+A47:  b in rng ksi and
+A48:  u2 c= b by A46,ORDINAL2:29;
       consider i being set such that
-A40:  i in dom ksi & b=ksi.i by A39,FUNCT_1:def 5;
-      reconsider i as Element of NAT by A12,A40;
-      b=ksi.i by A40;
-      then reconsider b as Ordinal of W by A13;
+A49:  i in dom ksi and
+A50:  b=ksi.i by A47,FUNCT_1:def 5;
+      reconsider i as Element of NAT by A15,A49;
+      b=ksi.i by A50;
+      then reconsider b as Ordinal of W by A17;
       u2 c< b iff u2 c= b & u2 <> b by XBOOLE_0:def 8;
-      then L.u2 c= L.b by A2,A39,ORDINAL1:21;
-      then u1 in L.(ksi.i) & L.(ksi.i) in A by A37,A40;
-      hence thesis by TARSKI:def 4;
+      then
+A51:  L.u2 c= L.b by A2,A48,ORDINAL1:21;
+      L.(ksi.i) in A;
+      hence thesis by A44,A50,A51,TARSKI:def 4;
     end;
+    take u = L.lambda;
+    L.l in Union L by A4;
+    hence u in Union L & u<>{};
     let u1;
-    assume u1 in u;
+    assume
+    u1 in u;
     then consider u2 such that
-A41: u1 in u2 & u2 in {L.(ksi.n): not contradiction} by A32,TARSKI:def 4;
+A52: u1 in u2 & u2 in {L.(ksi.n): not contradiction} by A37,TARSKI
+    :def 4;
     take u2;
     consider i such that
-A42: u2=L.(ksi.i) by A41;
-    reconsider a=ksi.i as Ordinal of W by A13;
+A53: u2=L.(ksi.i) by A52;
+A54: u1<>u2 by A52;
+    reconsider a=ksi.i as Ordinal of W by A17;
     L.a is epsilon-transitive by A4;
-    then
-A43: u1 c= u2 by A41,A42,ORDINAL1:def 2;
-    u1<>u2 by A41;
-    hence u1 c< u2 by A43,XBOOLE_0:def 8;
-    thus u2 in u
-    proof
-      L.(ksi.i) in L.(ksi.(i+1))
-      & L.(ksi.(i+1)) in {L.(ksi.n): not contradiction} by A21;
-      hence thesis by A32,A42,TARSKI:def 4;
-    end;
+    then u1 c= u2 by A52,A53,ORDINAL1:def 2;
+    hence u1 c< u2 by A54,XBOOLE_0:def 8;
+A55: L.(ksi.(i+1)) in {L.(ksi.n): not contradiction};
+    L.(ksi.i) in L.(ksi.(i+1)) by A25;
+    hence u2 in u by A37,A53,A55,TARSKI:def 4;
   end;
-  then
-A44: Union L |= the_axiom_of_infinity by A6,ZFMODEL1:7;
-A45: Union L |= the_axiom_of_power_sets by A2,A4,A9,Th2;
-  for H st {x.0,x.1,x.2} misses Free H holds
-  Union L |= the_axiom_of_substitution_for H by A1,A2,A3,A4,A9,Th3;
-  hence thesis by A6,A10,A11,A44,A45,ZF_MODEL:def 12;
+  then Union L |= the_axiom_of_infinity by A6,ZFMODEL1:7;
+  hence thesis by A6,A13,A12,A11,ZF_MODEL:def 12;
 end;
 

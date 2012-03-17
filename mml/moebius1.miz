@@ -12,17 +12,19 @@ environ
       MOEBIUS1, PYTHTRIP, MATRIX_2, RLVECT_1, AMI_1, COMPLEX1, XREAL_0,
       VALUED_0, INT_2;
  notations TARSKI, XBOOLE_0, SUBSET_1, FINSET_1, REALSET1, ORDINAL1, CARD_1,
-      NUMBERS, XCMPLX_0, XREAL_0, XXREAL_0, NAT_1, NAT_D, INT_2, NEWTON,
-      SETFAM_1, RELAT_1, FUNCT_1, FUNCT_2, FINSEQ_1, VALUED_0, SEQ_1, SEQM_3,
-      PBOOLE, SQUARE_1, POLYNOM1, POLYNOM2, RVSUM_1, BINOP_2, FUNCOP_1,
-      XXREAL_2, NAT_3, DOMAIN_1, ABIAN, PYTHTRIP, UPROOTS, RECDEF_1;
- constructors SETFAM_1, NAT_D, FINSOP_1, REALSET1, BINARITH,
-      WSIERP_1, ABIAN, PEPIN, PYTHTRIP, FACIRC_1, POLYNOM2, UPROOTS, NAT_3,
-      SEQ_1, RECDEF_1, BINOP_2, XXREAL_2;
- registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1, FINSET_1, NUMBERS,
-      XCMPLX_0, XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, FINSEQ_1, NEWTON,
-      PRE_CIRC, POLYNOM1, NAT_3, VALUED_0, XXREAL_2, CARD_1, FUNCT_2, UPROOTS,
-      RELSET_1;
+      NUMBERS, XCMPLX_0, XREAL_0, XXREAL_0,
+      NEWTON,
+      SETFAM_1, RELAT_1, FUNCT_1, FUNCT_2, FINSEQ_1, VALUED_0, SEQ_1, PBOOLE,
+      SQUARE_1, RVSUM_1, BINOP_2, FUNCOP_1, XXREAL_2, NAT_3, DOMAIN_1, ABIAN,
+      PYTHTRIP, UPROOTS, RECDEF_1, PRE_POLY, POLYNOM2, REAL_1, NAT_1, NAT_D,
+      INT_2;
+ constructors SETFAM_1, NAT_D, FINSOP_1, REALSET1, BINARITH, WSIERP_1, ABIAN,
+      PEPIN, PYTHTRIP, FACIRC_1, POLYNOM2, UPROOTS, NAT_3, SEQ_1, RECDEF_1,
+      BINOP_2, XXREAL_2, PRE_POLY, REAL_1;
+ registrations XBOOLE_0, FUNCT_1, ORDINAL1, FINSET_1, NUMBERS, XCMPLX_0,
+      XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, FINSEQ_1, NEWTON, NAT_3,
+      VALUED_0, XXREAL_2, CARD_1, FUNCT_2, UPROOTS, RELSET_1, PRE_POLY,
+      REAL_1;
  requirements NUMERALS, SUBSET, ARITHM, REAL, BOOLE;
  definitions TARSKI, XBOOLE_0, RVSUM_1, SQUARE_1;
  theorems XBOOLE_0, NAT_3, BAGORDER, NEWTON, INT_2, NAT_2, WSIERP_1, CARD_1,
@@ -30,13 +32,14 @@ environ
       XREAL_0, FINSEQ_1, XBOOLE_1, TARSKI, ZFMISC_1, PSCOMP_1, RVSUM_1,
       NUMBERS, INT_1, FUNCT_1, PBOOLE, POLYNOM1, UPROOTS, CARD_4, FUNCOP_1,
       RADIX_1, CIRCCMB3, RELAT_1, FINSOP_1, XXREAL_0, NAT_D, VALUED_0,
-      XXREAL_2, FUNCT_2, PARTFUN1;
+      XXREAL_2, FUNCT_2, PARTFUN1, PRE_POLY;
  schemes FUNCT_2, CLASSES1, PRE_CIRC, SUBSET_1, NAT_1;
 
 begin :: Preliminaries
 
-Lm1: for X, Y, Z, x being set st X misses Y holds
-x in X /\ Z implies not x in Y /\ Z
+Lm1: for X, Y, Z, x being set st X misses Y holds x in X /\ Z implies not x in
+Y /\ Z
+
 proof
   let X,Y,Z,x be set;
   assume that
@@ -46,24 +49,23 @@ A2: x in X /\ Z;
   hence thesis by A2,XBOOLE_0:3;
 end;
 
-scheme LambdaNATC{A() -> Element of NAT, B() -> set, F(set)->set}:
-  ex f being Function of NAT, B() st f.0 = A() &
-  for x being non zero Element of NAT holds f.x = F(x)
+scheme
+  LambdaNATC{A() -> Element of NAT, B() -> set, F(set)->set}: ex f being
+Function of NAT, B() st f.0 = A() & for x being non zero Element of NAT holds f
+  .x = F(x)
 provided
-A1: A() in B()
-and
+A1: A() in B() and
 A2: for x being non zero Element of NAT holds F(x) in B()
 proof
-  defpred C[set] means $1 = 0;
   deffunc G(set) = A();
-A3: for x being set st x in NAT holds
-  (C[x] implies G(x) in B()) & (not C[x] implies F(x) in B()) by A1,A2;
-  ex f being Function of NAT,B() st for x being set st x in NAT holds
-  (C[x] implies f.x = G(x)) & (not C[x] implies f.x = F(x))
-  from FUNCT_2:sch 5(A3);
+  defpred C[set] means $1 = 0;
+A3: for x being set st x in NAT holds (C[x] implies G(x) in B()) & (not C[x]
+  implies F(x) in B()) by A1,A2;
+  ex f being Function of NAT,B() st for x being set st x in NAT holds (C[x
+  ] implies f.x = G(x)) & (not C[x] implies f.x = F(x)) from FUNCT_2:sch 5(A3);
   then consider f being Function of NAT,B() such that
-A4: for x being set st x in NAT holds
-  (C[x] implies f.x = G(x)) & (not C[x] implies f.x = F(x));
+A4: for x being set st x in NAT holds (C[x] implies f.x = G(x)) & (not C
+  [x] implies f.x = F(x));
   take f;
   thus f.0 = A() by A4;
   let x be non zero Element of NAT;
@@ -81,45 +83,47 @@ proof
   let n be non zero natural number;
   assume
 A1: n <> 1;
-  assume n < 2;
+  assume
+  n < 2;
   then n < 1 + 1;
   then n <= 0 + 1 by NAT_1:13;
   hence contradiction by A1,NAT_1:8;
 end;
 
 theorem
-  for k, n, i being natural number st 1 <= k holds
-  i in Seg n iff k * i in Seg (k * n)
+  for k, n, i being natural number st 1 <= k holds i in Seg n iff k * i
+  in Seg (k * n)
 proof
   let k, n, i be natural number;
   assume
 A1: 1 <= k;
   hereby
-    assume i in Seg n;
+    assume
+A2: i in Seg n;
+    then i <= n by FINSEQ_1:3;
     then
-A2: 1 <= i & i <= n by FINSEQ_1:3;
-    then
-A3: 1 * 1 <= k * i by A1,XREAL_1:68;
-    k * i <= k * n by A2,NAT_1:4;
+A3: k * i <= k * n by NAT_1:4;
+    1 <= i by A2,FINSEQ_1:3;
+    then 1 * 1 <= k * i by A1,XREAL_1:68;
     hence k * i in Seg (k * n) by A3,FINSEQ_1:3;
   end;
   assume
 A4: k * i in Seg (k * n);
-  then 1 <= k * i & k * i <= k * n by FINSEQ_1:3;
+  then 0 < i by FINSEQ_1:3;
   then
-A5: i <= n by A1,XREAL_1:70;
-  i <> 0 by A4,FINSEQ_1:3;
-  then 0 < i;
-  then 0 + 1 <= i by NAT_1:13;
+A5: 0 + 1 <= i by NAT_1:13;
+  k * i <= k * n by A4,FINSEQ_1:3;
+  then i <= n by A1,XREAL_1:70;
   hence thesis by A5,FINSEQ_1:3;
 end;
 
 theorem
-  for m, n being Element of NAT st m, n are_relative_prime holds
-  m > 0 or n > 0
+  for m, n being Element of NAT st m, n are_relative_prime holds m > 0
+  or n > 0
 proof
   let a, b be Element of NAT;
-  assume a,b are_relative_prime;
+  assume
+  a,b are_relative_prime;
   then a is odd or b is odd by PYTHTRIP:10;
   hence thesis by HEYTING3:1;
 end;
@@ -130,49 +134,54 @@ proof
   assume
 A1: n <> 1;
   per cases;
-  suppose n is zero;
-    then 2 divides n by NAT_D:6;
-    hence thesis by INT_2:44;
+  suppose
+    n is zero;
+    hence thesis by INT_2:44,NAT_D:6;
   end;
-  suppose n is non zero;
-    then n >= 2 by A1,Th1;
-    then consider p being Element of NAT such that
-A2: p is prime & p divides n by INT_2:48;
-    thus thesis by A2;
+  suppose
+    n is non zero;
+
+    then ex p being Element of NAT st p is prime & p divides n by A1,Th1,
+INT_2:48;
+
+    hence thesis;
   end;
 end;
 
 theorem Th4:
-  for n being non prime Element of NAT st n <> 1
-  ex p being Prime st p divides n & p <> n
+  for n being non prime Element of NAT st n <> 1 ex p being Prime
+  st p divides n & p <> n
 proof
   let n be non prime Element of NAT;
-  assume n <> 1;
-  then consider p being Prime such that
-A1: p divides n by Lm2;
-  thus thesis by A1;
+  assume
+  n <> 1;
+  then ex p being Prime st p divides n by Lm2;
+  hence thesis;
 end;
 
 theorem Th5:
-  for n being natural number st n <> 1 ex p being Prime st p divides n
+  for n being natural number st n <> 1 ex p being Prime st p
+  divides n
 proof
   let n be natural number;
 A1: n in NAT by ORDINAL1:def 13;
   assume
 A2: n <> 1;
   per cases;
-  suppose n is Prime;
+  suppose
+    n is Prime;
     hence thesis;
   end;
-  suppose not n is Prime;
+  suppose
+    not n is Prime;
     then ex p being Prime st p divides n & p <> n by A1,A2,Th4;
     hence thesis;
   end;
 end;
 
 theorem Th6:
-  for p being Prime, n being non zero natural number holds
-  p divides n iff p |-count n > 0
+  for p being Prime, n being non zero natural number holds p
+  divides n iff p |-count n > 0
 proof
   let p be Prime, n be non zero natural number;
 A1: p <> 1 by INT_2:def 5;
@@ -182,16 +191,18 @@ A1: p <> 1 by INT_2:def 5;
 A2: p divides n;
     p |-count n >= 1
     proof
-      assume p |-count n < 1;
+      assume
+      p |-count n < 1;
       then p |-count n = 0 by NAT_1:26;
       then not p |^(0+1) divides n by A1,NAT_3:def 7;
       hence contradiction by A2,NEWTON:10;
     end;
     hence thesis;
   end;
-  assume p |-count n > 0;
+  assume
+  p |-count n > 0;
   then reconsider d = p |-count n as non zero natural number;
-  p <> 1 & d <> 0 by INT_2:def 5;
+  p <> 1 by INT_2:def 5;
   then p |^ d divides n by NAT_3:def 7;
   then p |^ (0+1) divides n by NAT_3:4;
   hence thesis by NEWTON:10;
@@ -215,15 +226,16 @@ end;
 reserve m, n for natural number;
 
 theorem Th9:
-  for p being Prime st n <> 0 & m <= p |-count n holds p |^ m divides n
+  for p being Prime st n <> 0 & m <= p |-count n holds p |^ m
+  divides n
 proof
   let p be Prime;
-A1: p > 1 by INT_2:def 5;
-  assume
-A2: n <> 0 & m <= p |-count n;
-  then
-A3: p |^ (p |-count n) divides n by A1,NAT_3:def 7;
-  p |^ m divides p |^ (p |-count n) by A2,RADIX_1:7;
+  assume that
+A1: n <> 0 and
+A2: m <= p |-count n;
+A3: p |^ m divides p |^ (p |-count n) by A2,RADIX_1:7;
+  p > 1 by INT_2:def 5;
+  then p |^ (p |-count n) divides n by A1,NAT_3:def 7;
   hence thesis by A3,NAT_D:4;
 end;
 
@@ -233,12 +245,13 @@ registration
 end;
 
 theorem Th10:
-  for a being Element of NAT, p being Prime holds
-  p |^ 2 divides a implies p divides a
+  for a being Element of NAT, p being Prime holds p |^ 2 divides a
+  implies p divides a
 proof
   let a be Element of NAT;
   let p be Prime;
-  assume p |^ 2 divides a;
+  assume
+  p |^ 2 divides a;
   then consider t being Nat such that
 A1: a = (p |^ 2) * t by NAT_D:def 3;
   a = (p * p) * t by A1,WSIERP_1:2
@@ -247,50 +260,53 @@ A1: a = (p |^ 2) * t by NAT_D:def 3;
 end;
 
 theorem Th11:
-  for p being prime Element of NAT, m, n being non zero Element of NAT st
-  m, n are_relative_prime & p |^ 2 divides (m * n) holds
-  p |^ 2 divides m or p |^ 2 divides n
+  for p being prime Element of NAT, m, n being non zero Element of
+NAT st m, n are_relative_prime & p |^ 2 divides (m * n) holds p |^ 2 divides m
+  or p |^ 2 divides n
 proof
   let p be prime Element of NAT, a, b be non zero Element of NAT;
-  assume
-A1: a, b are_relative_prime & p |^ 2 divides (a * b);
+  assume that
+A1: a, b are_relative_prime and
+A2: p |^ 2 divides (a * b);
   p divides p |^ 2 by NAT_3:3;
   then
-A2: p divides a * b by A1,NAT_D:4;
-  per cases by A2,NEWTON:98;
-  suppose p divides a;
+A3: p divides a * b by A2,NAT_D:4;
+  per cases by A3,NEWTON:98;
+  suppose
+    p divides a;
     then
-A3: not p divides b by A1,PYTHTRIP:def 2;
+A4: not p divides b by A1,PYTHTRIP:def 2;
     p,b are_relative_prime
     proof
-      assume not p, b are_relative_prime;
-      then
-X:       p gcd b <> 1 by INT_2:def 4;
       reconsider k = p gcd b as Element of NAT by ORDINAL1:def 13;
-A4:   p gcd b = k & k <> 1 by X;
+      assume
+      not p, b are_relative_prime;
+      then
+A5:   k <> 1 by INT_2:def 4;
       k divides p & k divides b by NAT_D:def 5;
-      hence contradiction by A3,A4,INT_2:def 5;
+      hence contradiction by A4,A5,INT_2:def 5;
     end;
     then p * p,b are_relative_prime by EULER_1:15;
     then p |^ 2,b are_relative_prime by WSIERP_1:2;
-    hence thesis by A1,EULER_1:14;
+    hence thesis by A2,EULER_1:14;
   end;
-  suppose p divides b;
+  suppose
+    p divides b;
     then
-A5: not p divides a by A1,PYTHTRIP:def 2;
+A6: not p divides a by A1,PYTHTRIP:def 2;
     p, a are_relative_prime
     proof
-      assume not p, a are_relative_prime;
-      then
-X:     p gcd a <> 1 by INT_2:def 4;
       reconsider k = p gcd a as Element of NAT by ORDINAL1:def 13;
-A6:   p gcd a = k & k <> 1 by X;
+      assume
+      not p, a are_relative_prime;
+      then
+A7:   k <> 1 by INT_2:def 4;
       k divides p & k divides a by NAT_D:def 5;
-      hence contradiction by A5,A6,INT_2:def 5;
+      hence contradiction by A6,A7,INT_2:def 5;
     end;
     then p * p, a are_relative_prime by EULER_1:15;
     then p |^2, a are_relative_prime by WSIERP_1:2;
-    hence thesis by A1,EULER_1:14;
+    hence thesis by A2,EULER_1:14;
   end;
 end;
 
@@ -298,16 +314,16 @@ theorem Th12:
   for N being Rbag of NAT st support N = {n} holds Sum N = N.n
 proof
   let N be Rbag of NAT;
+  reconsider F = <*N.n*> as FinSequence of REAL;
   assume
 A1: support N = {n};
-  then {n} c= dom N by POLYNOM1:41;
+  then {n} c= dom N by PRE_POLY:37;
+  then n in dom N by ZFMISC_1:37;
   then
-A2: n in dom N by ZFMISC_1:37;
-  reconsider F = <*N.n*> as FinSequence of REAL;
-A3: Sum F = N.n by FINSOP_1:12;
-  F = N * <*n*> by A2,BAGORDER:3
+A2: F = N * <*n*> by BAGORDER:3
     .= N * canFS(support N) by A1,UPROOTS:6;
-  hence thesis by A3,UPROOTS:def 3;
+  Sum F = N.n by FINSOP_1:12;
+  hence thesis by A2,UPROOTS:def 3;
 end;
 
 registration
@@ -316,96 +332,101 @@ registration
 end;
 
 theorem
-  for p being Prime st p divides n holds
-  { d where d is Element of NAT : d > 0 & d divides n & p divides d } =
-  { p * d where d is Element of NAT : d > 0 & d divides (n div p) }
+  for p being Prime st p divides n holds { d where d is Element of NAT :
+d > 0 & d divides n & p divides d } = { p * d where d is Element of NAT : d > 0
+  & d divides (n div p) }
 proof
   let p be Prime;
   assume
 A1: p divides n;
-  set A = { d where d is Element of NAT : d > 0 & d divides n & p divides d };
   set B = { p * d where d is Element of NAT : d > 0 & d divides (n div p) };
+  set A = { d where d is Element of NAT : d > 0 & d divides n & p divides d };
   thus A c= B
   proof
     let x be set;
-    assume x in A;
+    assume
+    x in A;
     then consider d being Element of NAT such that
-A2: d = x & d > 0 & d divides n & p divides d;
+A2: d = x and
+A3: d > 0 and
+A4: d divides n and
+A5: p divides d;
     consider d1 being Nat such that
-A3: d = p * d1 by A2,NAT_D:def 3;
-A4: d1 in NAT by ORDINAL1:def 13;
+A6: d = p * d1 by A5,NAT_D:def 3;
     consider d2 being Nat such that
-A5: n = d * d2 by A2,NAT_D:def 3;
-    n = p * (d1 * d2) by A3,A5;
+A7: n = d * d2 by A4,NAT_D:def 3;
+    n = p * (d1 * d2) by A6,A7;
     then p divides n by NAT_D:def 3;
-    then p * (n div p) = p * (d1 * d2) by A3,A5,NAT_D:3;
+    then p * (n div p) = p * (d1 * d2) by A6,A7,NAT_D:3;
+    then n div p = d1 * d2 by XCMPLX_1:5;
     then
-A6: n div p = d1 * d2 by XCMPLX_1:5;
-    d1 <> 0 by A2,A3;
-    then
-A7: d1 > 0;
-    d1 divides n div p by A6,NAT_D:def 3;
-    hence thesis by A2,A3,A4,A7;
+A8: d1 divides n div p by NAT_D:def 3;
+    d1 in NAT & d1 > 0 by A3,A6,ORDINAL1:def 13;
+    hence thesis by A2,A6,A8;
   end;
   let x be set;
-  assume x in B;
+  assume
+  x in B;
   then consider d being Element of NAT such that
-A8: p * d = x & d > 0 & d divides (n div p);
-  reconsider d1 = x as Element of NAT by A8;
-  d1 <> 0 by A8;
-  then
-A9: d1 > 0;
+A9: p * d = x and
+A10: d > 0 and
+A11: d divides (n div p);
+  reconsider d1 = x as Element of NAT by A9;
   consider d2 being Nat such that
-A10: n div p = d * d2 by A8,NAT_D:def 3;
-  (n div p) * p = d * d2 * p by A10;
+A12: n div p = d * d2 by A11,NAT_D:def 3;
+  (n div p) * p = d * d2 * p by A12;
   then n = d2 * (d * p) by A1,NAT_D:3;
   then
-A11: d1 divides n by A8,NAT_D:def 3;
-  p divides d1 by A8,NAT_D:def 3;
-  hence thesis by A9,A11;
+A13: d1 divides n by A9,NAT_D:def 3;
+  p divides d1 by A9,NAT_D:def 3;
+  hence thesis by A9,A10,A13;
 end;
 
 theorem Th14:
-  for n being non zero natural number holds
-  ex k being Element of NAT st support ppf n c= Seg k
+  for n being non zero natural number holds ex k being Element of
+  NAT st support ppf n c= Seg k
 proof
   let n be non zero natural number;
 A1: support ppf n = support pfexp n by NAT_3:def 9;
   per cases;
-  suppose support ppf n is empty;
-    hence thesis by FINSEQ_1:4;
+  suppose
+A:  support ppf n is empty;
+    take 0;
+    thus thesis by FINSEQ_1:4,A;
   end;
-  suppose support ppf n is non empty;
-    then reconsider S = support ppf n as finite non empty Subset of NAT
-    by XBOOLE_1:1;
+  suppose
+    support ppf n is non empty;
+    then reconsider S = support ppf n as finite non empty Subset of NAT by
+XBOOLE_1:1;
+    take max S;
 A2: support ppf n c= Seg max S
     proof
       let x be set;
       assume
 A3:   x in support ppf n;
+      then reconsider m = x as natural number;
+      x is Prime by A1,A3,NAT_3:34;
       then
-A4:   x is Prime by A1,NAT_3:34;
-      reconsider m = x as natural number by A3;
-A5:   1 <= m by A4,INT_2:def 5;
+A4:   1 <= m by INT_2:def 5;
       m <= max S by A3,XXREAL_2:def 8;
-      hence thesis by A5,FINSEQ_1:3;
+      hence thesis by A4,FINSEQ_1:3;
     end;
-    take max S;
     max S is Element of NAT by ORDINAL1:def 13;
     hence thesis by A2;
   end;
 end;
 
 theorem Th15:
-  for n being non zero Element of NAT, p being Prime st
-  not p in support ppf n holds p |-count n = 0
+  for n being non zero Element of NAT, p being Prime st not p in
+  support ppf n holds p |-count n = 0
 proof
   let n be non zero Element of NAT, p be Prime;
   assume
 A1: not p in support ppf n;
-  assume p |-count n <> 0;
+  assume
+  p |-count n <> 0;
   then (ppf n).p = p |^ (p |-count n) by NAT_3:56;
-  hence thesis by A1,POLYNOM1:def 7;
+  hence thesis by A1,PRE_POLY:def 7;
 end;
 
 theorem Th16:
@@ -413,25 +434,26 @@ theorem Th16:
   support ppf n c= Seg (k+1) & not support ppf n c= Seg k holds k+1 is Prime
 proof
   let k be Element of NAT, n be non zero Element of NAT;
-  assume
-A1: support ppf n c= Seg (k+1) & not support ppf n c= Seg k;
+  assume that
+A1: support ppf n c= Seg (k+1) and
+A2: not support ppf n c= Seg k;
   k+1 in support ppf n
   proof
-    assume not k+1 in support ppf n;
+    assume
+    not k+1 in support ppf n;
     then
-A2: {k+1} misses support ppf n by ZFMISC_1:56;
+A3: {k+1} misses support ppf n by ZFMISC_1:56;
     support ppf n \ {k+1} c= Seg (k+1) \ {k+1} by A1,XBOOLE_1:33;
-    then support ppf n c= Seg (k+1) \ {k+1} by A2,XBOOLE_1:83;
-    hence thesis by A1,FINSEQ_1:12;
+    then support ppf n c= Seg (k+1) \ {k+1} by A3,XBOOLE_1:83;
+    hence thesis by A2,FINSEQ_1:12;
   end;
   then k+1 in support pfexp n by NAT_3:def 9;
   hence thesis by NAT_3:34;
 end;
 
 theorem Th17:
-  for m, n being non zero natural number st
-  (for p being Prime holds p |-count m <= p |-count n) holds
-  support ppf m c= support ppf n
+  for m, n being non zero natural number st (for p being Prime
+  holds p |-count m <= p |-count n) holds support ppf m c= support ppf n
 proof
   let m, n be non zero natural number;
   assume
@@ -441,21 +463,19 @@ A1: for p being Prime holds p |-count m <= p |-count n;
 A2: x in support ppf m;
   then x in support pfexp m by NAT_3:def 9;
   then reconsider p = x as Prime by NAT_3:34;
-  (ppf m).p <> 0 by A2,POLYNOM1:def 7;
+  (ppf m).p <> 0 by A2,PRE_POLY:def 7;
   then p |-count m <> 0 by NAT_3:55;
-  then p |-count m > 0;
   then p |-count n > 0 by A1;
   then (ppf n).p = p |^ (p |-count n) by NAT_3:56;
-  hence thesis by POLYNOM1:def 7;
+  hence thesis by PRE_POLY:def 7;
 end;
 
 theorem Th18:
-  for k being Element of NAT,
-  n being non zero Element of NAT st support ppf n c= Seg (k+1) holds
-  ex m being non zero Element of NAT, e being Element of NAT st
-  support ppf m c= Seg k & n = m * ((k+1) |^ e) & (for p being Prime holds
-  (p in support ppf m implies p |-count m = p |-count n) &
-  (not p in support ppf m implies p |-count m <= p |-count n))
+  for k being Element of NAT, n being non zero Element of NAT st
+  support ppf n c= Seg (k+1) holds ex m being non zero Element of NAT, e being
+  Element of NAT st support ppf m c= Seg k & n = m * ((k+1) |^ e) & for p being
+Prime holds (p in support ppf m implies p |-count m = p |-count n) & (not p in
+  support ppf m implies p |-count m <= p |-count n)
 proof
   let k be Element of NAT, n be non zero Element of NAT;
   assume
@@ -470,399 +490,406 @@ A2: support ppf n c= Seg k;
   end;
   suppose
 A3: not support ppf n c= Seg k;
-A4: now
+    reconsider r = k+1 as non zero Element of NAT;
+    set e = r |-count n;
+    set s = r |^ e;
+    now
       assume
-A5:   not k+1 in support ppf n;
+A4:   not k+1 in support ppf n;
       support ppf n c= Seg k
       proof
         let x be set;
         assume
-A6:     x in support ppf n;
+A5:     x in support ppf n;
+        then reconsider m = x as natural number;
+        x in support pfexp n by A5,NAT_3:def 9;
+        then x is Prime by NAT_3:34;
         then
-A7:     x in support pfexp n by NAT_3:def 9;
-        then
-A8:     x is Prime by NAT_3:34;
-        reconsider m = x as natural number by A7;
-A9:     1 <= m by A8,INT_2:def 5;
-        m <= k+1 by A1,A6,FINSEQ_1:3;
-        then m < k+1 by A5,A6,XXREAL_0:1;
+A6:     1 <= m by INT_2:def 5;
+        m <= k+1 by A1,A5,FINSEQ_1:3;
+        then m < k+1 by A4,A5,XXREAL_0:1;
         then m <= k by NAT_1:13;
-        hence thesis by A9,FINSEQ_1:3;
+        hence thesis by A6,FINSEQ_1:3;
       end;
       hence contradiction by A3;
     end;
-    reconsider r = k+1 as non zero Element of NAT;
-    set e = r |-count n;
-    set s = r |^ e;
-    k+1 in support pfexp n by A4,NAT_3:def 9;
+    then k+1 in support pfexp n by NAT_3:def 9;
     then
-A10: r is Prime by NAT_3:34;
+A7: r is Prime by NAT_3:34;
     then
-A11: r > 1 by INT_2:def 5;
+A8: r > 1 by INT_2:def 5;
     then s divides n by NAT_3:def 7;
     then consider t being Nat such that
-A12: n = s * t by NAT_D:def 3;
-    reconsider s, t as non zero Element of NAT by A12,ORDINAL1:def 13;
-A13: support ppf t = support pfexp t by NAT_3:def 9;
-A14: support ppf t c= Seg k
+A9: n = s * t by NAT_D:def 3;
+    reconsider s, t as non zero Element of NAT by A9,ORDINAL1:def 13;
+A10: support ppf t = support pfexp t by NAT_3:def 9;
+A11: support ppf t c= Seg k
     proof
+      set f = r |-count t;
       let x be set;
       assume
-A15:  x in support ppf t;
-      then
-A16:  x in support pfexp t by NAT_3:def 9;
-      then
-A17:  x is Prime by NAT_3:34;
-      reconsider m = x as natural number by A16;
-A18:  1 <= m by A17,INT_2:def 5;
-      support pfexp t c= support pfexp n by A12,NAT_3:45;
-      then support ppf t c= support ppf n by A13,NAT_3:def 9;
-      then m in support ppf n by A15;
-      then
-A19:  m <= k+1 by A1,FINSEQ_1:3;
-      set f = r |-count t;
-      now
+A12:  x in support ppf t;
+      then reconsider m = x as natural number;
+A13:  x in support pfexp t by A12,NAT_3:def 9;
+A14:  now
         assume
-A20:    m = r;
-        (pfexp t).r = f by A10,NAT_3:def 8;
-        then f <> 0 by A16,A20,POLYNOM1:def 7;
-        then f > 0;
+A15:    m = r;
+        (pfexp t).r = f by A7,NAT_3:def 8;
+        then f <> 0 by A13,A15,PRE_POLY:def 7;
         then f >= 0+1 by NAT_1:13;
         then consider g being Nat such that
-A21:    f = 1 + g by NAT_1:10;
-        reconsider g as Element of NAT by ORDINAL1:def 13;
-        r |^ f divides t by A11,NAT_3:def 7;
+A16:    f = 1 + g by NAT_1:10;
+        r |^ f divides t by A8,NAT_3:def 7;
         then consider u being Nat such that
-A22:    t = (r |^ f)*u by NAT_D:def 3;
-        n = s * (((r |^ g)*r)*u) by A12,A21,A22,NEWTON:11
+A17:    t = (r |^ f)*u by NAT_D:def 3;
+        reconsider g as Element of NAT by ORDINAL1:def 13;
+        n = s * (((r |^ g)*r)*u) by A9,A16,A17,NEWTON:11
           .= s*r * ((r |^ g)*u)
           .= (r |^ (e+1)) * ((r |^ g) * u) by NEWTON:11;
         then r |^ (e+1) divides n by NAT_D:def 3;
-        hence contradiction by A11,NAT_3:def 7;
+        hence contradiction by A8,NAT_3:def 7;
       end;
-      then m < r by A19,XXREAL_0:1;
-      then m <= k by NAT_1:13;
+      support pfexp t c= support pfexp n by A9,NAT_3:45;
+      then support ppf t c= support ppf n by A10,NAT_3:def 9;
+      then m in support ppf n by A12;
+      then m <= k+1 by A1,FINSEQ_1:3;
+      then m < r by A14,XXREAL_0:1;
+      then
+A18:  m <= k by NAT_1:13;
+      x is Prime by A13,NAT_3:34;
+      then 1 <= m by INT_2:def 5;
       hence thesis by A18,FINSEQ_1:3;
     end;
-A23: e <> 0
+A19: e <> 0
     proof
-      assume e = 0;
-      then n = 1 * t by A12,NEWTON:9;
-      hence thesis by A3,A14;
-    end;
-    support ppf s = support pfexp s by NAT_3:def 9;
-    then
-A24: support ppf s = {r} by A10,A23,NAT_3:42;
-A25: now
-      assume support ppf s meets support ppf t;
-      then consider x being set such that
-A26:  x in support ppf s and
-A27:  x in support ppf t by XBOOLE_0:3;
-      x = r by A24,A26,TARSKI:def 1;
-      then r <= k by A14,A27,FINSEQ_1:3;
-      hence contradiction by NAT_1:13;
+      assume
+      e = 0;
+      then n = 1 * t by A9,NEWTON:9;
+      hence thesis by A3,A11;
     end;
     take m = t;
     take e = (k + 1) |-count n;
-    for p being Prime holds
-    (p in support ppf m implies p |-count m = p |-count n) &
-    (not p in support ppf m implies p |-count m <= p |-count n)
+    support ppf s = support pfexp s by NAT_3:def 9;
+    then
+A20: support ppf s = {r} by A7,A19,NAT_3:42;
+A21: now
+      assume
+      support ppf s meets support ppf t;
+      then consider x being set such that
+A22:  x in support ppf s and
+A23:  x in support ppf t by XBOOLE_0:3;
+      x = r by A20,A22,TARSKI:def 1;
+      then r <= k by A11,A23,FINSEQ_1:3;
+      hence contradiction by NAT_1:13;
+    end;
+    for p being Prime holds (p in support ppf m implies p |-count m = p
+    |-count n) & (not p in support ppf m implies p |-count m <= p |-count n)
     proof
       let p be Prime;
       hereby
-        assume p in support ppf m;
+        assume
+        p in support ppf m;
+        then not p in support ppf s by A21,XBOOLE_0:3;
         then
-A28:    not p in support ppf s by A25,XBOOLE_0:3;
-A29:    p |-count n = p |-count (r |^ e) + p |-count t by A12,NAT_3:28;
-        p |-count s = 0 by A28,Th15;
-        hence p |-count m = p |-count n by A29;
+A24:    p |-count s = 0 by Th15;
+        p |-count n = p |-count (r |^ e) + p |-count t by A9,NAT_3:28;
+        hence p |-count m = p |-count n by A24;
       end;
-      assume not p in support ppf m;
+      assume
+      not p in support ppf m;
       hence thesis by Th15;
     end;
-    hence thesis by A12,A14;
+    hence thesis by A9,A11;
   end;
 end;
 
 theorem Th19:
-  for m, n being non zero natural number st
-  (for p being Prime holds p |-count m <= p |-count n) holds m divides n
+  for m, n being non zero natural number st (for p being Prime
+  holds p |-count m <= p |-count n) holds m divides n
 proof
-  let m, n be non zero natural number;
-  assume
-A1: for p being Prime holds p |-count m <= p |-count n;
   defpred P[Element of NAT] means for k, l being non zero Element of NAT st
-  support ppf k c= Seg $1 & support ppf l c= Seg $1 &
-  (for p being Prime holds p |-count k <= p |-count l) holds k divides l;
-A2: P[0]
-  proof
-    let k, l be non zero Element of NAT;
-    assume support ppf k c= Seg 0 & support ppf l c= Seg 0 &
-    (for p being Prime holds p |-count k <= p |-count l);
-    then support ppf k = {} by XBOOLE_1:3;
-    then
-A3: support pfexp k = {} by NAT_3:def 9;
-    per cases;
-    suppose k <> 1;
-      then consider p being Prime such that
-A4:   p divides k by Lm2;
-      thus thesis by A3,A4,NAT_3:37;
-    end;
-    suppose k = 1;
-      hence thesis by NAT_D:6;
-    end;
-  end;
-A5: for k being Element of NAT st P[k] holds P[k+1]
+support ppf k c= Seg $1 & support ppf l c= Seg $1 & (for p being Prime holds p
+  |-count k <= p |-count l) holds k divides l;
+  let m, n be non zero natural number;
+A1: m is Element of NAT & n is Element of NAT by ORDINAL1:def 13;
+  consider k being Element of NAT such that
+A2: support ppf n c= Seg k by Th14;
+A3: for k being Element of NAT st P[k] holds P[k+1]
   proof
     let k be Element of NAT;
     assume
-A6: P[k];
+A4: P[k];
     let m, n be non zero Element of NAT;
     assume that
-A7: support ppf m c= Seg (k + 1) & support ppf n c= Seg (k + 1) and
-A8: (for p being Prime holds p |-count m <= p |-count n);
+A5: support ppf m c= Seg (k + 1) and
+A6: support ppf n c= Seg (k + 1) and
+A7: for p being Prime holds p |-count m <= p |-count n;
     per cases;
     suppose
-A9:   not support ppf n c= Seg k & support ppf m c= Seg k;
-A10:  now
+A8:   not support ppf n c= Seg k & support ppf m c= Seg k;
+      reconsider r = k+1 as non zero Element of NAT;
+      set e = r |-count n;
+      set s = r |^ e;
+      now
         assume
-A11:    not k+1 in support ppf n;
+A9:     not k+1 in support ppf n;
         support ppf n c= Seg k
         proof
           let x be set;
           assume
-A12:      x in support ppf n;
+A10:      x in support ppf n;
+          then reconsider m = x as natural number;
+          x in support pfexp n by A10,NAT_3:def 9;
+          then x is Prime by NAT_3:34;
           then
-A13:      x in support pfexp n by NAT_3:def 9;
-          then
-A14:      x is Prime by NAT_3:34;
-          reconsider m = x as natural number by A13;
-A15:      1 <= m by A14,INT_2:def 5;
-          m <= k+1 by A7,A12,FINSEQ_1:3;
-          then m < k+1 by A11,A12,XXREAL_0:1;
+A11:      1 <= m by INT_2:def 5;
+          m <= k+1 by A6,A10,FINSEQ_1:3;
+          then m < k+1 by A9,A10,XXREAL_0:1;
           then m <= k by NAT_1:13;
-          hence thesis by A15,FINSEQ_1:3;
+          hence thesis by A11,FINSEQ_1:3;
         end;
-        hence contradiction by A9;
+        hence contradiction by A8;
       end;
-      reconsider r = k+1 as non zero Element of NAT;
-      set e = r |-count n;
-      set s = r |^ e;
-A16:  k+1 in support pfexp n by A10,NAT_3:def 9;
       then
-A17:  r is Prime by NAT_3:34;
+A12:  k+1 in support pfexp n by NAT_3:def 9;
       then
-A18:  r > 1 by INT_2:def 5;
+A13:  r is Prime by NAT_3:34;
+      then
+A14:  r > 1 by INT_2:def 5;
       then s divides n by NAT_3:def 7;
       then consider t being Nat such that
-A19:  n = s * t by NAT_D:def 3;
-A20:  t divides n by A19,NAT_D:def 3;
-      reconsider s, t as non zero Element of NAT by A19,ORDINAL1:def 13;
-A21:  support ppf t = support pfexp t by NAT_3:def 9;
-A22:  support ppf t c= Seg k
+A15:  n = s * t by NAT_D:def 3;
+A16:  t divides n by A15,NAT_D:def 3;
+      reconsider s, t as non zero Element of NAT by A15,ORDINAL1:def 13;
+A17:  support ppf t = support pfexp t by NAT_3:def 9;
+A18:  support ppf t c= Seg k
       proof
+        set f = r |-count t;
         let x be set;
         assume
-A23:    x in support ppf t;
-        then
-A24:    x in support pfexp t by NAT_3:def 9;
-        then
-A25:    x is Prime by NAT_3:34;
-        reconsider m = x as natural number by A24;
-A26:    1 <= m by A25,INT_2:def 5;
-        support pfexp t c= support pfexp n by A19,NAT_3:45;
-        then support ppf t c= support ppf n by A21,NAT_3:def 9;
-        then m in support ppf n by A23;
-        then
-A27:    m <= k+1 by A7,FINSEQ_1:3;
-        set f = r |-count t;
-        now
+A19:    x in support ppf t;
+        then reconsider m = x as natural number;
+A20:    x in support pfexp t by A19,NAT_3:def 9;
+A21:    now
           assume
-A28:      m = r;
-          (pfexp t).r = f by A17,NAT_3:def 8;
-          then f <> 0 by A24,A28,POLYNOM1:def 7;
-          then f > 0;
+A22:      m = r;
+          (pfexp t).r = f by A13,NAT_3:def 8;
+          then f <> 0 by A20,A22,PRE_POLY:def 7;
           then f >= 0+1 by NAT_1:13;
           then consider g being Nat such that
-A29:      f = 1 + g by NAT_1:10;
-          reconsider g as Element of NAT by ORDINAL1:def 13;
-          r |^ f divides t by A18,NAT_3:def 7;
+A23:      f = 1 + g by NAT_1:10;
+          r |^ f divides t by A14,NAT_3:def 7;
           then consider u being Nat such that
-A30:      t = (r |^ f)*u by NAT_D:def 3;
-          n = s * (((r |^ g)*r)*u) by A19,A29,A30,NEWTON:11
+A24:      t = (r |^ f)*u by NAT_D:def 3;
+          reconsider g as Element of NAT by ORDINAL1:def 13;
+          n = s * (((r |^ g)*r)*u) by A15,A23,A24,NEWTON:11
             .= s*r * ((r |^ g)*u)
             .= (r |^ (e+1)) * ((r |^ g) * u) by NEWTON:11;
           then r |^ (e+1) divides n by NAT_D:def 3;
-          hence contradiction by A18,NAT_3:def 7;
+          hence contradiction by A14,NAT_3:def 7;
         end;
-        then m < r by A27,XXREAL_0:1;
-        then m <= k by NAT_1:13;
-        hence thesis by A26,FINSEQ_1:3;
+        support pfexp t c= support pfexp n by A15,NAT_3:45;
+        then support ppf t c= support ppf n by A17,NAT_3:def 9;
+        then m in support ppf n by A19;
+        then m <= k+1 by A6,FINSEQ_1:3;
+        then m < r by A21,XXREAL_0:1;
+        then
+A25:    m <= k by NAT_1:13;
+        x is Prime by A20,NAT_3:34;
+        then 1 <= m by INT_2:def 5;
+        hence thesis by A25,FINSEQ_1:3;
       end;
-A31:  e <> 0
+A26:  support ppf s = support pfexp s by NAT_3:def 9;
+      e <> 0
       proof
-        assume e = 0;
-        then not r divides n by A18,NAT_3:27;
-        hence thesis by A16,NAT_3:36;
+        assume
+        e = 0;
+        then not r divides n by A14,NAT_3:27;
+        hence thesis by A12,NAT_3:36;
       end;
-A32:  support ppf s = support pfexp s by NAT_3:def 9;
       then
-A33:  support ppf s = {r} by A17,A31,NAT_3:42;
-A34:  now
-        assume (support ppf s) meets (support ppf t);
+A27:  support ppf s = {r} by A13,A26,NAT_3:42;
+A28:  now
+        assume
+        (support ppf s) meets (support ppf t);
         then consider x being set such that
-A35:    x in support ppf s and
-A36:    x in support ppf t by XBOOLE_0:3;
-        x = r by A33,A35,TARSKI:def 1;
-        then r <= k by A22,A36,FINSEQ_1:3;
+A29:    x in support ppf s and
+A30:    x in support ppf t by XBOOLE_0:3;
+        x = r by A27,A29,TARSKI:def 1;
+        then r <= k by A18,A30,FINSEQ_1:3;
         hence contradiction by NAT_1:13;
       end;
-      support ppf n = support pfexp n &
-      support ppf t = support pfexp t by NAT_3:def 9;
+A31:  support ppf m c= Seg k & support ppf t c= Seg k & (for p being
+      Prime holds p |-count m <= p |-count t) implies m divides t by A4;
+      support ppf n = support pfexp n & support ppf t = support pfexp t
+      by NAT_3:def 9;
       then
-A37:  support ppf n = support ppf s \/ support ppf t by A19,A32,NAT_3:46;
-A38:  for p being Prime holds p |-count m <= p |-count t
+A32:  support ppf n = support ppf s \/ support ppf t by A15,A26,NAT_3:46;
+A33:  for p being Prime holds p |-count m <= p |-count t
       proof
         let p be Prime;
-A39:    p |-count n = p |-count (r |^ e) + p |-count t by A19,NAT_3:28;
+A34:    p |-count n = p |-count (r |^ e) + p |-count t by A15,NAT_3:28;
         per cases;
         suppose
-A40:      p in support ppf n;
-          per cases by A37,A40,XBOOLE_0:def 3;
-          suppose p in support ppf s;
+A35:      p in support ppf n;
+          per cases by A32,A35,XBOOLE_0:def 3;
+          suppose
+            p in support ppf s;
             then
-A41:        p = k+1 by A33,TARSKI:def 1;
+A36:        p = k+1 by A27,TARSKI:def 1;
             per cases;
-            suppose p in support ppf m;
-              then p <= k by A9,FINSEQ_1:3;
-              hence thesis by A41,NAT_1:13;
+            suppose
+              p in support ppf m;
+              then p <= k by A8,FINSEQ_1:3;
+              hence thesis by A36,NAT_1:13;
             end;
-            suppose not p in support ppf m;
+            suppose
+              not p in support ppf m;
               hence thesis by Th15;
             end;
           end;
-          suppose p in support ppf t;
-            then not p in support ppf s by A34,XBOOLE_0:3;
+          suppose
+            p in support ppf t;
+            then not p in support ppf s by A28,XBOOLE_0:3;
             then p |-count s = 0 by Th15;
-            hence thesis by A8,A39;
+            hence thesis by A7,A34;
           end;
         end;
-        suppose not p in support ppf n;
+        suppose
+          not p in support ppf n;
           then p |-count n = 0 by Th15;
-          hence thesis by A8;
+          hence thesis by A7;
         end;
       end;
-A42:  support ppf m c= Seg k & support ppf t c= Seg k &
-      (for p being Prime holds p |-count m <= p |-count t) implies
-      m divides t by A6;
-      support ppf m c= support ppf t by A38,Th17;
-      hence thesis by A20,A22,A38,A42,NAT_D:4,XBOOLE_1:1;
+      then support ppf m c= support ppf t by Th17;
+      hence thesis by A16,A18,A33,A31,NAT_D:4,XBOOLE_1:1;
     end;
     suppose
-A43:  not support ppf n c= Seg k & not support ppf m c= Seg k;
-      consider m1 being non zero Element of NAT, e1 being Element of NAT
-      such that
-A44:  support ppf m1 c= Seg k & m = m1 * ((k+1) |^ e1) &
-      (for p being Prime holds
-      (p in support ppf m1 implies p |-count m1 = p |-count m) &
-      (not p in support ppf m1 implies p |-count m1 <= p |-count m))
-      by A7,Th18;
-      consider m2 being non zero Element of NAT, e2 being Element of NAT
-      such that
-A45:  support ppf m2 c= Seg k & n = m2 * ((k+1) |^ e2) &
-      (for p being Prime holds
-      (p in support ppf m2 implies p |-count m2 = p |-count n) &
-      (not p in support ppf m2 implies p |-count m2 <= p |-count n))
-      by A7,Th18;
-A46:  k+1 is Prime by A7,A43,Th16;
+A37:  not support ppf n c= Seg k & not support ppf m c= Seg k;
+      then reconsider w = k+1 as Prime by A5,Th16;
+      consider m1 being non zero Element of NAT, e1 being Element of NAT such
+      that
+A38:  support ppf m1 c= Seg k and
+A39:  m = m1 * ((k+1) |^ e1) and
+A40:  for p being Prime holds (p in support ppf m1 implies p |-count
+m1 = p |-count m) & (not p in support ppf m1 implies p |-count m1 <= p |-count
+      m) by A5,Th18;
+      consider m2 being non zero Element of NAT, e2 being Element of NAT such
+      that
+A41:  support ppf m2 c= Seg k and
+A42:  n = m2 * ((k+1) |^ e2) and
+A43:  for p being Prime holds (p in support ppf m2 implies p |-count
+m2 = p |-count n) & (not p in support ppf m2 implies p |-count m2 <= p |-count
+      n) by A6,Th18;
+A44:  not w divides m2
+      proof
+        assume
+        w divides m2;
+        then w in support pfexp m2 by NAT_3:37;
+        then w in support ppf m2 by NAT_3:def 9;
+        then w <= k by A41,FINSEQ_1:3;
+        hence thesis by NAT_1:13;
+      end;
+A45:  k+1 is Prime by A5,A37,Th16;
       for p being Prime holds p |-count m1 <= p |-count m2
       proof
         let p be Prime;
         per cases;
         suppose
-A47:      p in support ppf m1 & p in support ppf m2;
+          p in support ppf m1 & p in support ppf m2;
           then
-A48:      p |-count m1 = p |-count m by A44;
-          p |-count m2 = p |-count n by A45,A47;
-          hence thesis by A8,A48;
+          p |-count m1 = p |-count m & p |-count m2 = p |-count n by A40,A43;
+          hence thesis by A7;
         end;
-        suppose not p in support ppf m1 & p in support ppf m2;
+        suppose
+          not p in support ppf m1 & p in support ppf m2;
           hence thesis by Th15;
         end;
         suppose
-A49:      p in support ppf m1 & not p in support ppf m2;
-          then p in support pfexp m1 by NAT_3:def 9;
+A46:      p in support ppf m1 & not p in support ppf m2;
+          m1 divides m by A39,NAT_D:def 3;
           then
-A50:      p divides m1 by NAT_3:36;
-A51:      p > 1 by INT_2:def 5;
-          then p |-count m1 <> 0 by A50,NAT_3:27;
+A47:      p |-count m1 <= p |-count m by NAT_3:30;
+A48:      p > 1 by INT_2:def 5;
+          p in support pfexp m1 by A46,NAT_3:def 9;
+          then p divides m1 by NAT_3:36;
+          then p |-count m1 <> 0 by A48,NAT_3:27;
+          then p |-count m1 > 0;
+          then p |-count n > 0 by A7,A47;
           then
-A52:      p |-count m1 > 0;
-          m1 divides m by A44,NAT_D:def 3;
-          then p |-count m1 <= p |-count m by NAT_3:30;
-          then
-A53:      p |-count n > 0 by A8,A52;
-          p |-count m2 = 0 by A49,Th15;
-          then
-A54:      not p divides m2 by A51,NAT_3:27;
-          p divides n by A51,A53,NAT_3:27;
-          then p divides (k+1) |^ e2 by A45,A54,NEWTON:98;
+A49:      p divides n by A48,NAT_3:27;
+          p |-count m2 = 0 by A46,Th15;
+          then not p divides m2 by A48,NAT_3:27;
+          then p divides (k+1) |^ e2 by A42,A49,NEWTON:98;
           then p divides (k+1) by NAT_3:5;
           then
-A55:      p = k+1 by A46,A51,INT_2:def 5;
+A50:      p = k+1 by A45,A48,INT_2:def 5;
           k < k + 1 by NAT_1:13;
-          hence thesis by A44,A49,A55,FINSEQ_1:3;
+          hence thesis by A38,A46,A50,FINSEQ_1:3;
         end;
-        suppose not p in support ppf m1 & not p in support ppf m2;
+        suppose
+          not p in support ppf m1 & not p in support ppf m2;
           hence thesis by Th15;
         end;
       end;
       then
-A56:  m1 divides m2 by A6,A44,A45;
-      reconsider w = k+1 as Prime by A7,A43,Th16;
-A57:  w > 1 by INT_2:def 5;
-      then
-A58:  w |-count (w |^ e1) = e1 by NAT_3:25;
-A59:  w |-count (w |^ e2) = e2 by A57,NAT_3:25;
-A60:  not w divides m1
+A51:  m1 divides m2 by A4,A38,A41;
+A52:  not w divides m1
       proof
-        assume w divides m1;
+        assume
+        w divides m1;
         then w in support pfexp m1 by NAT_3:37;
         then w in support ppf m1 by NAT_3:def 9;
-        then w <= k by A44,FINSEQ_1:3;
+        then w <= k by A38,FINSEQ_1:3;
         hence thesis by NAT_1:13;
       end;
-A61:  w |-count m = (w |-count m1) + e1 by A44,A58,NAT_3:28
-        .= 0 + e1 by A57,A60,NAT_3:27
-        .= e1;
-A62:  not w divides m2
-      proof
-        assume w divides m2;
-        then w in support pfexp m2 by NAT_3:37;
-        then w in support ppf m2 by NAT_3:def 9;
-        then w <= k by A45,FINSEQ_1:3;
-        hence thesis by NAT_1:13;
-      end;
-      w |-count n = (w |-count m2) + e2 by A45,A59,NAT_3:28
-        .= 0 + e2 by A57,A62,NAT_3:27
+A53:  w > 1 by INT_2:def 5;
+      then w |-count (w |^ e2) = e2 by NAT_3:25;
+      then
+A54:  w |-count n = (w |-count m2) + e2 by A42,NAT_3:28
+        .= 0 + e2 by A53,A44,NAT_3:27
         .= e2;
-      then ((k+1) |^ e1) divides ((k+1) |^ e2) by A8,A61,RADIX_1:7;
-      hence thesis by A44,A45,A56,NAT_3:1;
+      w |-count (w |^ e1) = e1 by A53,NAT_3:25;
+      then w |-count m = (w |-count m1) + e1 by A39,NAT_3:28
+        .= 0 + e1 by A53,A52,NAT_3:27
+        .= e1;
+      then ((k+1) |^ e1) divides ((k+1) |^ e2) by A7,A54,RADIX_1:7;
+      hence thesis by A39,A42,A51,NAT_3:1;
     end;
     suppose
-A63:  support ppf n c= Seg k;
-      support ppf m c= support ppf n by A8,Th17;
-      then support ppf m c= Seg k by A63,XBOOLE_1:1;
-      hence thesis by A6,A8,A63;
+A55:  support ppf n c= Seg k;
+      support ppf m c= support ppf n by A7,Th17;
+      then support ppf m c= Seg k by A55,XBOOLE_1:1;
+      hence thesis by A4,A7,A55;
     end;
   end;
-A64: for k being Element of NAT holds P[k] from NAT_1:sch 1(A2,A5);
-  consider k being Element of NAT such that
-A65: support ppf n c= Seg k by Th14;
-A66: m is Element of NAT & n is Element of NAT by ORDINAL1:def 13;
-  support ppf m c= support ppf n by A1,Th17;
-  then support ppf m c= Seg k by A65,XBOOLE_1:1;
-  hence thesis by A1,A64,A65,A66;
+A56: P[0]
+  proof
+    let k, l be non zero Element of NAT;
+    assume that
+A57: support ppf k c= Seg 0 and
+    support ppf l c= Seg 0 and
+    for p being Prime holds p |-count k <= p |-count l;
+    support ppf k = {} by A57,XBOOLE_1:3;
+    then
+A58: support pfexp k = {} by NAT_3:def 9;
+    per cases;
+    suppose
+      k <> 1;
+      then ex p being Prime st p divides k by Lm2;
+      hence thesis by A58,NAT_3:37;
+    end;
+    suppose
+      k = 1;
+      hence thesis by NAT_D:6;
+    end;
+  end;
+A59: for k being Element of NAT holds P[k] from NAT_1:sch 1(A56,A3);
+  assume
+A60: for p being Prime holds p |-count m <= p |-count n;
+  then support ppf m c= support ppf n by Th17;
+  then support ppf m c= Seg k by A2,XBOOLE_1:1;
+  hence thesis by A60,A59,A2,A1;
 end;
 
 begin :: Squarefree Numbers
@@ -871,13 +898,13 @@ definition
   let x be natural number;
   attr x is square-containing means
   :Def1:
-  ex p being Prime st p |^ 2 divides x;
+  ex p being Prime st p |^ 2 divides
+  x;
 end;
 
 theorem Th20:
-  for n being natural number st
-  ex p being non zero natural number st p <> 1 & p |^ 2 divides n holds
-  n is square-containing
+  for n being natural number st ex p being non zero natural number
+  st p <> 1 & p |^ 2 divides n holds n is square-containing
 proof
   let n be natural number;
   given p being non zero natural number such that
@@ -906,7 +933,8 @@ end;
 theorem Th22:
   1 is square-free
 proof
-  assume 1 is square-containing;
+  assume
+  1 is square-containing;
   then consider n being Prime such that
 A1: n |^ 2 divides 1 by Def1;
   n * n divides 1 by A1,WSIERP_1:2;
@@ -918,17 +946,20 @@ theorem Th23:
   for p being Prime holds p is square-free
 proof
   let p be Prime;
-  assume p is square-containing;
+  assume
+  p is square-containing;
   then consider n being Prime such that
 A1: n |^ 2 divides p by Def1;
 A2: n divides n |^ 2 by NAT_3:3;
   then
 A3: n divides p by A1,NAT_D:4;
   per cases by A3,INT_2:def 5;
-  suppose n = 1;
+  suppose
+    n = 1;
     hence contradiction by INT_2:def 5;
   end;
-  suppose n = p;
+  suppose
+    n = p;
     then n = n |^ 2 by A1,A2,NAT_D:5;
     then n |^ 1 = n |^ 2 by NEWTON:10;
     then n <= 1 by PEPIN:31;
@@ -944,30 +975,32 @@ end;
 definition
   func SCNAT -> Subset of NAT means
   :Def2:
-  for n being natural number holds
-  n in it iff n is square-free;
+  for n being natural number holds n
+  in it iff n is square-free;
   existence
   proof
     defpred P[natural number] means $1 is square-free;
     consider X being Subset of NAT such that
-A1: for n being Element of NAT holds n in X iff P[n] from SUBSET_1:sch 3;
+A1: for n being Element of NAT holds n in X iff P[n] from SUBSET_1:sch
+    3;
     take X;
     let n be natural number;
-A2: n is Element of NAT by INT_1:16;
     thus n in X implies n is square-free by A1;
-    assume n is square-free;
+    assume
+A2: n is square-free;
+    n is Element of NAT by INT_1:16;
     hence thesis by A1,A2;
   end;
   uniqueness
   proof
-    defpred P[natural number] means $1 is square-free;
     let X1, X2 be Subset of NAT;
+    defpred P[natural number] means $1 is square-free;
     assume that
 A3: for n being natural number holds n in X1 iff n is square-free and
 A4: for n being natural number holds n in X2 iff n is square-free;
-A5: for y being Element of NAT holds y in X1 iff P[y] by A3;
-A6: for y being Element of NAT holds y in X2 iff P[y] by A4;
-    thus X1 = X2 from SUBSET_1:sch 2(A5,A6);
+A5: for y being Element of NAT holds y in X2 iff P[y] by A4;
+A6: for y being Element of NAT holds y in X1 iff P[y] by A3;
+    thus X1 = X2 from SUBSET_1:sch 2(A6,A5);
   end;
 end;
 
@@ -993,16 +1026,15 @@ registration
 A1: n is square non trivial;
     then consider m being Nat such that
 A2: n = m^2 by PYTHTRIP:def 3;
-A3: m <> 1^2 by A1,A2,NAT_2:30;
-A4: m <> 0^2 by A1,A2,NAT_2:30;
-    n = m * m by A2;
-    then m |^ 2 divides n by WSIERP_1:2;
-    hence thesis by A3,A4,Th20;
+A3: m |^ 2 divides n by A2,WSIERP_1:2;
+    m <> 1^2 & m <> 0^2 by A1,A2,NAT_2:30;
+    hence thesis by A3,Th20;
   end;
 end;
 
 theorem Th24:
-  n is square-free implies for p being Prime holds p |-count n <= 1
+  n is square-free implies for p being Prime holds p |-count n <=
+  1
 proof
   assume
 A1: n is square-free;
@@ -1018,7 +1050,8 @@ theorem Th25:
 proof
   assume
 A1: m * n is square-free;
-  assume m is square-containing;
+  assume
+  m is square-containing;
   then consider p being Prime such that
 A2: p |^ 2 divides m by Def1;
   p |^ 2 divides m * n by A2,NAT_D:9;
@@ -1028,30 +1061,33 @@ end;
 theorem Th26:
   m is square-free & n divides m implies n is square-free
 proof
-  assume
-A1: m is square-free & n divides m;
-  then ex x being Nat st m = n * x by NAT_D:def 3;
+  assume that
+A1: m is square-free and
+A2: n divides m;
+  ex x being Nat st m = n * x by A2,NAT_D:def 3;
   hence thesis by A1,Th25;
 end;
 
 theorem Th27:
-  for p being Prime, m, d being natural number st
-  m is square-free & p divides m & d divides (m div p) holds
-  d divides m & not p divides d
+  for p being Prime, m, d being natural number st m is square-free
+  & p divides m & d divides (m div p) holds d divides m & not p divides d
 proof
   let p be Prime, m, d be natural number;
+  assume that
+A1: m is square-free and
+A2: p divides m;
   assume
-A1: m is square-free & p divides m;
-  assume d divides (m div p);
+  d divides (m div p);
   then consider z being Nat such that
-A2: m div p = d * z by NAT_D:def 3;
-A3: (m div p) * p = d * z * p by A2;
-  then m = d * (z * p) by A1,NAT_D:3;
+A3: m div p = d * z by NAT_D:def 3;
+A4: (m div p) * p = d * z * p by A3;
+  then m = d * (z * p) by A2,NAT_D:3;
   hence d divides m by NAT_D:def 3;
-  assume p divides d;
+  assume
+  p divides d;
   then consider w being Nat such that
-A4: d = p * w by NAT_D:def 3;
-  m = w * (p * p) * z by A1,A3,A4,NAT_D:3
+A5: d = p * w by NAT_D:def 3;
+  m = w * (p * p) * z by A2,A4,A5,NAT_D:3
     .= w * (p |^ 2) * z by WSIERP_1:2
     .= (p |^ 2) * (w * z);
   then p |^ 2 divides m by NAT_D:def 3;
@@ -1059,50 +1095,55 @@ A4: d = p * w by NAT_D:def 3;
 end;
 
 theorem Th28:
-  for p being Prime, m, d being natural number st
-  p divides m & d divides m & not p divides d holds d divides (m div p)
+  for p being Prime, m, d being natural number st p divides m & d
+  divides m & not p divides d holds d divides (m div p)
 proof
   let p be Prime, m,d be natural number;
   assume that
 A1: p divides m and
-A2: d divides m & not p divides d;
+A2: d divides m and
+A3: not p divides d;
   consider z being Nat such that
-A3: m = d * z by A2,NAT_D:def 3;
-  p divides z by A1,A2,A3,NEWTON:98;
+A4: m = d * z by A2,NAT_D:def 3;
+  p divides z by A1,A3,A4,NEWTON:98;
   then consider u being Nat such that
-A4: z = p * u by NAT_D:def 3;
-  m = d * u * p by A3,A4;
+A5: z = p * u by NAT_D:def 3;
+  m = d * u * p by A4,A5;
   then m div p = d * u by NAT_D:18;
   hence thesis by NAT_D:def 3;
 end;
 
 theorem
-  for p being Prime, m being natural number st
-  m is square-free & p divides m holds
-  { d where d is Element of NAT : 0 < d & d divides m & not p divides d } =
-  { d where d is Element of NAT : 0 < d & d divides (m div p) }
+  for p being Prime, m being natural number st m is square-free & p
+  divides m holds { d where d is Element of NAT : 0 < d & d divides m & not p
+  divides d } = { d where d is Element of NAT : 0 < d & d divides (m div p) }
 proof
   let p be Prime, m be natural number;
-  assume
-A1: m is square-free & p divides m;
-  set A =
-  { d where d is Element of NAT : 0 < d & d divides m & not p divides d };
+  assume that
+A1: m is square-free and
+A2: p divides m;
   set B = { d where d is Element of NAT : 0 < d & d divides (m div p) };
+  set A = { d where d is Element of NAT : 0 < d & d divides m & not p divides
+  d };
   thus A c= B
   proof
     let x be set;
-    assume x in A;
+    assume
+    x in A;
     then consider d being Element of NAT such that
-A2: d = x & 0 < d & d divides m & not p divides d;
-    d divides (m div p) by A1,A2,Th28;
-    hence thesis by A2;
+A3: d = x & 0 < d and
+A4: d divides m & not p divides d;
+    d divides (m div p) by A2,A4,Th28;
+    hence thesis by A3;
   end;
   let x be set;
-  assume x in B;
+  assume
+  x in B;
   then consider d being Element of NAT such that
-A3: d = x & 0 < d & d divides (m div p);
-  d divides m & not p divides d by A1,A3,Th27;
-  hence thesis by A3;
+A5: d = x & 0 < d and
+A6: d divides (m div p);
+  d divides m & not p divides d by A1,A2,A6,Th27;
+  hence thesis by A5;
 end;
 
 begin :: Moebius Function
@@ -1112,24 +1153,23 @@ definition
   func Moebius n -> real number means
   :Def3:
   it = 0 if n is square-containing
-  otherwise ex n' being non zero natural number st n' = n &
-  it = (-1) |^ card support ppf n';
+  otherwise ex n' being non zero natural number st n' = n & it = (-1) |^ card
+  support ppf n';
   consistency;
   existence
   proof
     thus n is square-containing implies ex r being real number st r=0;
-    (n is square-free implies
-    ex n' being non zero natural number st n' = n & ex r being real number
-    st r = (-1) |^ card support ppf n')
+    n is square-free implies ex n' being non zero natural number st n' = n
+    & ex r being real number st r = (-1) |^ card support ppf n'
     proof
       assume
 A1:   n is square-free;
       n is non zero natural number
       proof
-        assume
-A2:     not n is non zero natural number;
         consider p being Prime;
-        p|^2 divides n by A2,NAT_D:6;
+        assume
+        not n is non zero natural number;
+        then p|^2 divides n by NAT_D:6;
         hence contradiction by A1,Def1;
       end;
       then reconsider n' = n as non zero natural number;
@@ -1152,8 +1192,7 @@ end;
 theorem
   Moebius 2 = -1
 proof
-  2 is square-free by INT_2:44;
-  then Moebius 2 = (-1) |^ card support ppf 2 by Def3
+  Moebius 2 = (-1) |^ card support ppf 2 by Def3,INT_2:44
     .= (-1) |^ card {2} by Th8,INT_2:44
     .= (-1) |^ 1 by CARD_1:50;
   hence thesis by NEWTON:10;
@@ -1162,21 +1201,23 @@ end;
 theorem
   Moebius 3 = -1
 proof
-  3 is square-free by PEPIN:44;
-  then Moebius 3 = (-1) |^ card support ppf 3 by Def3
+  Moebius 3 = (-1) |^ card support ppf 3 by Def3,PEPIN:44
     .= (-1) |^ card {3} by Th8,PEPIN:44
     .= (-1) |^ 1 by CARD_1:50;
   hence thesis by NEWTON:10;
 end;
 
 theorem Th33:
-  for n being natural number st n is square-free holds Moebius n <> 0
+  for n being natural number st n is square-free holds Moebius n
+  <> 0
 proof
   let n be natural number;
-  assume n is square-free;
+  assume
+  n is square-free;
   then consider n' being non zero natural number such that
-A1: n' = n & Moebius n = (-1) |^ card support ppf n' by Def3;
-  thus thesis by A1,CARD_4:51;
+W:  n' = n & Moebius n = (-1) |^ card support ppf n' by Def3;
+   Moebius n = (-1 qua Real) |^ card support ppf n' by W;
+  hence thesis by CARD_4:51;
 end;
 
 registration
@@ -1197,8 +1238,8 @@ proof
 end;
 
 theorem Th35:
-  for m, n being non zero Element of NAT st m, n are_relative_prime holds
-  Moebius (m * n) = Moebius m * Moebius n
+  for m, n being non zero Element of NAT st m, n
+  are_relative_prime holds Moebius (m * n) = Moebius m * Moebius n
 proof
   let a, b be non zero Element of NAT;
   assume
@@ -1206,94 +1247,94 @@ A1: a, b are_relative_prime;
   per cases;
   suppose
 A2: a is square-free & b is square-free;
-    then
-A3: Moebius a = (-1) |^ card support ppf a &
-    Moebius b = (-1) |^ card support ppf b by Def3;
-    card support pfexp (a*b) =
-    card support pfexp a + card support pfexp b by A1,NAT_3:47;
-    then
-A4: card support ppf (a*b)
-    = card support pfexp a + card support pfexp b by NAT_3:def 9
-      .= card support pfexp a + card support ppf b by NAT_3:def 9
-      .= card support ppf a + card support ppf b by NAT_3:def 9;
-    a * b is square-free
+A3: a * b is square-free
     proof
-      assume a * b is square-containing;
+      assume
+      a * b is square-containing;
       then consider p being Prime such that
-A5:   p |^ 2 divides (a * b) by Def1;
+A4:   p |^ 2 divides (a * b) by Def1;
       p in NAT by ORDINAL1:def 13;
-      then p |^ 2 divides a or p |^ 2 divides b by A1,A5,Th11;
+      then p |^ 2 divides a or p |^ 2 divides b by A1,A4,Th11;
       hence contradiction by A2,Def1;
     end;
+A5: Moebius a = (-1) |^ card support ppf a by A2,Def3;
+    card support pfexp (a*b) = card support pfexp a + card support pfexp b
+    by A1,NAT_3:47;
+    then card support ppf (a*b) = card support pfexp a + card support pfexp b
+    by NAT_3:def 9
+      .= card support pfexp a + card support ppf b by NAT_3:def 9
+      .= card support ppf a + card support ppf b by NAT_3:def 9;
     then Moebius (a * b) = (-1) |^ (card support ppf a + card support ppf b)
-    by A4,Def3
-      .= ((-1) |^ card support ppf a) * ((-1) |^card support ppf b)
-    by NEWTON:13;
-    hence thesis by A3;
+    by A3,Def3
+      .= ((-1) |^ card support ppf a) * ((-1) |^card support ppf b) by
+NEWTON:13;
+    hence thesis by A2,A5,Def3;
   end;
   suppose
 A6: a is square-free & b is square-containing;
+    then consider p being Prime such that
+A7: p |^ 2 divides b by Def1;
+    p |^ 2 divides a * b by A7,NAT_D:9;
     then
-A7: Moebius a = (-1) |^ card support ppf a & Moebius b = 0 by Def3;
-    consider p being Prime such that
-A8: p |^ 2 divides b by A6,Def1;
-    p |^ 2 divides a * b by A8,NAT_D:9;
-    then a * b is square-containing by Def1;
-    hence thesis by A7,Def3;
+A8: a * b is square-containing by Def1;
+    Moebius b = 0 by A6,Def3;
+    hence thesis by A8,Def3;
   end;
   suppose
 A9: a is square-containing & b is square-free;
+    then consider p being Prime such that
+A10: p |^2 divides a by Def1;
+    p |^ 2 divides a * b by A10,NAT_D:9;
     then
-A10: Moebius b = (-1) |^ card support ppf b & Moebius a = 0 by Def3;
-    consider p being Prime such that
-A11: p |^2 divides a by A9,Def1;
-    p |^ 2 divides a * b by A11,NAT_D:9;
-    then a * b is square-containing by Def1;
-    hence thesis by A10,Def3;
+A11: a * b is square-containing by Def1;
+    Moebius a = 0 by A9,Def3;
+    hence thesis by A11,Def3;
   end;
   suppose
 A12: a is square-containing & b is square-containing;
+    then consider p being Prime such that
+A13: p |^ 2 divides a by Def1;
+    p |^ 2 divides a * b by A13,NAT_D:9;
     then
-A13: Moebius a = 0 & Moebius b = 0 by Def3;
-    consider p being Prime such that
-A14: p |^ 2 divides a by A12,Def1;
-    p |^ 2 divides a * b by A14,NAT_D:9;
-    then a * b is square-containing by Def1;
-    hence thesis by A13,Def3;
+A14: a * b is square-containing by Def1;
+    Moebius a = 0 by A12,Def3;
+    hence thesis by A14,Def3;
   end;
 end;
 
 theorem
-  for p being Prime, n being Element of NAT st
-  1 <= n & n * p is square-free holds Moebius (n * p) = - Moebius n
+  for p being Prime, n being Element of NAT st 1 <= n & n * p is
+  square-free holds Moebius (n * p) = - Moebius n
 proof
   let p be Prime, a be Element of NAT;
-  assume
-A1: 1 <= a & a * p is square-free;
-  then
-A2: a <> 0;
+  assume that
+A1: 1 <= a and
+A2: a * p is square-free;
 A3: p in NAT by ORDINAL1:def 13;
   a, p are_relative_prime
   proof
-    assume not a, p are_relative_prime;
+    assume
+    not a, p are_relative_prime;
     then consider q being prime Nat such that
-A4: q divides a & q divides p by PYTHTRIP:def 2;
-    q = 1 or q = p by A4,INT_2:def 5;
+A4: q divides a and
+A5: q divides p by PYTHTRIP:def 2;
+    q = 1 or q = p by A5,INT_2:def 5;
     then p * p divides a * p by A3,A4,INT_2:def 5,PYTHTRIP:7;
     then p |^ 2 divides a * p by WSIERP_1:2;
-    hence thesis by A1,Def1;
+    hence thesis by A2,Def1;
   end;
-  then Moebius (a * p) = (Moebius a) * (Moebius p) by A2,A3,Th35
+  then Moebius (a * p) = (Moebius a) * (Moebius p) by A1,A3,Th35
     .= (Moebius a) * (-1) by Th34;
   hence thesis;
 end;
 
 theorem
-  for m, n being non zero Element of NAT st not m, n are_relative_prime holds
-  Moebius (m * n) = 0
+  for m, n being non zero Element of NAT st not m, n are_relative_prime
+  holds Moebius (m * n) = 0
 proof
   let m, n be non zero Element of NAT;
-  assume not m, n are_relative_prime;
+  assume
+  not m, n are_relative_prime;
   then consider p being prime Nat such that
 A1: p divides m & p divides n by PYTHTRIP:def 2;
   reconsider p as prime Element of NAT by ORDINAL1:def 13;
@@ -1308,11 +1349,13 @@ theorem Th38:
 proof
   let n be natural number;
   hereby
-    assume n in SCNAT;
+    assume
+    n in SCNAT;
     then n is square-free by Def2;
     hence Moebius n <> 0;
   end;
-  assume Moebius n <> 0;
+  assume
+  Moebius n <> 0;
   then n is square-free by Def3;
   hence thesis by Def2;
 end;
@@ -1322,13 +1365,15 @@ begin :: Natural Divisors
 definition
   let n be natural number;
   func NatDivisors n -> Subset of NAT equals
-  { k where k is Element of NAT : k <> 0 & k divides n };
+  { k where k is Element of NAT : k
+  <> 0 & k divides n };
   coherence
   proof
     { k where k is Element of NAT : k <> 0 & k divides n } c= NAT
     proof
       let x be set;
-      assume x in { k where k is Element of NAT : k <> 0 & k divides n };
+      assume
+      x in { k where k is Element of NAT : k <> 0 & k divides n };
       then ex k being Element of NAT st k = x & k <> 0 & k divides n;
       hence thesis;
     end;
@@ -1337,18 +1382,19 @@ definition
 end;
 
 theorem
-  for n, k being natural number holds
-  k in NatDivisors n iff 0 < k & k divides n
+  for n, k being natural number holds k in NatDivisors n iff 0 < k & k
+  divides n
 proof
   let n, k be natural number;
-A1: k is Element of NAT by ORDINAL1:def 13;
   hereby
-    assume k in NatDivisors n;
-    then consider l being Element of NAT such that
-A2: l = k & l <> 0 & l divides n;
-    thus 0 < k & k divides n by A2;
+    assume
+    k in NatDivisors n;
+    then ex l being Element of NAT st l = k & l <> 0 & l divides n;
+    hence 0 < k & k divides n;
   end;
-  assume 0 < k & k divides n;
+  assume
+A1: 0 < k & k divides n;
+  k is Element of NAT by ORDINAL1:def 13;
   hence thesis by A1;
 end;
 
@@ -1357,10 +1403,12 @@ theorem Th40:
 proof
   let n be non zero natural number;
   let x be set;
-  assume x in NatDivisors n;
+  assume
+  x in NatDivisors n;
   then consider k being Element of NAT such that
-A1: x = k & k <> 0 & k divides n;
-  1 <= k & k <= n by A1,NAT_1:14,NAT_D:7;
+A1: x = k and
+A2: k <> 0 & k divides n;
+  1 <= k & k <= n by A2,NAT_1:14,NAT_D:7;
   hence thesis by A1,FINSEQ_1:3;
 end;
 
@@ -1372,16 +1420,12 @@ registration
     set P = NatDivisors n;
 A1: not 0 in P
     proof
-      assume 0 in P;
-      then consider k being Element of NAT such that
-A2:   k = 0 & k <> 0 & k divides n;
-      thus contradiction by A2;
+      assume
+      0 in P;
+      then ex k being Element of NAT st k = 0 & k <> 0 & k divides n;
+      hence contradiction;
     end;
-    P is finite
-    proof
-      P c= Seg n by Th40;
-      hence thesis;
-    end;
+    P c= Seg n by Th40;
     hence thesis by A1,PSCOMP_1:def 1;
   end;
 end;
@@ -1392,17 +1436,20 @@ proof
   thus NatDivisors 1 c= {1}
   proof
     let x be set;
-    assume x in NatDivisors 1;
+    assume
+    x in NatDivisors 1;
     then consider k being Element of NAT such that
-A1: x = k & k <> 0 & k divides 1;
-    k = 1 by A1,WSIERP_1:20;
+A1: x = k and
+    k <> 0 and
+A2: k divides 1;
+    k = 1 by A2,WSIERP_1:20;
     hence thesis by A1,ZFMISC_1:37;
   end;
   let x be set;
   assume
-A2: x in {1};
+A3: x in {1};
   then reconsider m = x as Element of NAT;
-  m <> 0 & m divides 1 by A2,TARSKI:def 1;
+  m <> 0 & m divides 1 by A3,TARSKI:def 1;
   hence thesis;
 end;
 
@@ -1412,35 +1459,37 @@ definition
   let X be set;
   func SMoebius X -> ManySortedSet of NAT means
   :Def5:
-  support it = X /\ SCNAT &
-  for k being Element of NAT st k in support it holds it.k = Moebius k;
+  support it = X /\ SCNAT
+  & for k being Element of NAT st k in support it holds it.k = Moebius k;
   existence
   proof
-    deffunc F(Element of NAT) = Moebius $1;
-    deffunc G(Element of NAT) = 0;
     defpred R[set] means $1 in X /\ SCNAT;
-    ex f being ManySortedSet of NAT st
-    for i being Element of NAT st i in NAT holds (R[i] implies f.i = F(i)) &
-    (not R[i] implies f.i = G(i)) from PRE_CIRC:sch 2;
+    deffunc G(Element of NAT) = 0;
+    deffunc F(Element of NAT) = Moebius $1;
+    ex f being ManySortedSet of NAT st for i being Element of NAT st i in
+    NAT holds (R[i] implies f.i = F(i)) & (not R[i] implies f.i = G(i)) from
+    PRE_CIRC:sch 2;
     then consider f being ManySortedSet of NAT such that
-A1: for i being Element of NAT st i in NAT holds (R[i] implies f.i = F(i)) &
-    (not R[i] implies f.i = G(i));
+A1: for i being Element of NAT st i in NAT holds (R[i] implies f.i = F
+    (i)) & (not R[i] implies f.i = G(i));
 A2: support f c= SCNAT
     proof
-      let x be set;
-      assume
-A3:   x in support f;
-      then
-A4:   f.x <> 0 by POLYNOM1:def 7;
       dom f = NAT by PARTFUN1:def 4;
       then
-A5:   support f c= NAT by POLYNOM1:41;
+A3:   support f c= NAT by PRE_POLY:37;
+      let x be set;
+      assume
+A4:   x in support f;
+      then
+A5:   f.x <> 0 by PRE_POLY:def 7;
       per cases;
-      suppose R[x];
+      suppose
+        R[x];
         hence thesis by XBOOLE_0:def 4;
       end;
-      suppose not R[x];
-        hence thesis by A1,A3,A4,A5;
+      suppose
+        not R[x];
+        hence thesis by A1,A4,A5,A3;
       end;
     end;
 A6: support f = X /\ SCNAT
@@ -1452,49 +1501,54 @@ A6: support f = X /\ SCNAT
 A7:     x in support f;
         then x in SCNAT by A2;
         then reconsider i = x as Element of NAT;
-        assume not x in X /\ SCNAT;
+        assume
+        not x in X /\ SCNAT;
         then f.i = 0 by A1;
-        hence contradiction by A7,POLYNOM1:def 7;
+        hence contradiction by A7,PRE_POLY:def 7;
       end;
       let x be set;
       assume
 A8:   x in X /\ SCNAT;
+      then reconsider i = x as Element of NAT;
+      x in SCNAT by A8,XBOOLE_0:def 4;
       then
-A9:   x in SCNAT by XBOOLE_0:def 4;
-      reconsider i = x as Element of NAT by A8;
-A10:  f.i = Moebius i by A1,A8;
-      Moebius i <> 0 by A9,Th38;
-      hence thesis by A10,POLYNOM1:def 7;
+A9:   Moebius i <> 0 by Th38;
+      f.i = Moebius i by A1,A8;
+      hence thesis by A9,PRE_POLY:def 7;
     end;
     reconsider f as ManySortedSet of NAT;
     take f;
     thus support f = X /\ SCNAT by A6;
     let k be Element of NAT;
-    assume k in support f;
+    assume
+    k in support f;
     hence thesis by A1,A6;
   end;
   uniqueness
   proof
     let f, g be ManySortedSet of NAT such that
-A11: support f = X /\ SCNAT &
-    for k being Element of NAT st k in support f holds f.k = Moebius k and
-A12: support g = X /\ SCNAT &
-    for k being Element of NAT st k in support g holds g.k = Moebius k;
+A10: support f = X /\ SCNAT and
+A11: for k being Element of NAT st k in support f holds f.k = Moebius
+    k and
+A12: support g = X /\ SCNAT and
+A13: for k being Element of NAT st k in support g holds g.k = Moebius
+    k;
     for i being set st i in NAT holds f.i = g.i
     proof
       let i be set;
-      assume i in NAT;
+      assume
+      i in NAT;
       then reconsider j = i as Element of NAT;
       per cases;
       suppose
-A13:    j in support f;
+A14:    j in support f;
         hence f.i = Moebius j by A11
-          .= g.i by A11,A12,A13;
+          .= g.i by A10,A12,A13,A14;
       end;
       suppose
-A14:    not j in support f;
-        hence f.i = 0 by POLYNOM1:def 7
-          .= g.i by A11,A12,A14,POLYNOM1:def 7;
+A15:    not j in support f;
+        hence f.i = 0 by PRE_POLY:def 7
+          .= g.i by A10,A12,A15,PRE_POLY:def 7;
       end;
     end;
     hence thesis by PBOOLE:3;
@@ -1509,21 +1563,24 @@ registration
     rng SMoebius X c= REAL
     proof
       let y be set;
-      assume y in rng SMoebius X;
+      assume
+      y in rng SMoebius X;
       then consider i being set such that
-A1:   i in dom SMoebius X & (SMoebius X).i = y by FUNCT_1:def 5;
+A1:   i in dom SMoebius X and
+A2:   (SMoebius X).i = y by FUNCT_1:def 5;
       dom SMoebius X = NAT by PARTFUN1:def 4;
       then reconsider i as natural number by A1;
       per cases;
       suppose
-A2:     i in support SMoebius X;
+A3:     i in support SMoebius X;
         then i in X /\ SCNAT by Def5;
-        then y = Moebius i by A1,A2,Def5;
+        then y = Moebius i by A2,A3,Def5;
         hence thesis by XREAL_0:def 1;
       end;
-      suppose not i in support SMoebius X;
-        then (SMoebius X).i = 0 by POLYNOM1:def 7;
-        hence thesis by A1;
+      suppose
+        not i in support SMoebius X;
+        then (SMoebius X).i = 0 by PRE_POLY:def 7;
+        hence thesis by A2;
       end;
     end;
     hence thesis by VALUED_0:def 3;
@@ -1536,144 +1593,143 @@ registration
   coherence
   proof
     support SMoebius X = X /\ SCNAT by Def5;
-    hence thesis by POLYNOM1:def 8;
+    hence thesis by PRE_POLY:def 8;
   end;
 end;
 
 theorem
   Sum SMoebius NatDivisors 1 = 1
 proof
-A1: 1 in {1} by TARSKI:def 1;
-  reconsider M = ({1},1)-bag as Rbag of NAT;
-A2: support M = {1} by UPROOTS:10;
-A3: 1 in SCNAT by Def2,Th22;
-  then {1} c= SCNAT by ZFMISC_1:37;
-  then
-A4: {1} /\ SCNAT = {1} by XBOOLE_1:28;
   reconsider J = 1 as Element of NAT;
+  reconsider M = ({1},1)-bag as Rbag of NAT;
+A1: 1 in {1} by TARSKI:def 1;
+A2: 1 in SCNAT by Def2,Th22;
   J in {1} by TARSKI:def 1;
-  then J in {1} /\ SCNAT by A3,XBOOLE_0:def 4;
+  then J in {1} /\ SCNAT by A2,XBOOLE_0:def 4;
   then J in support SMoebius {1} by Def5;
   then
-A5: (SMoebius {1}).1 = 1 by Def5,Th30;
+A3: (SMoebius {1}).1 = 1 by Def5,Th30;
+  {1} c= SCNAT by A2,ZFMISC_1:37;
+  then
+A4: {1} /\ SCNAT = {1} by XBOOLE_1:28;
   for x being set st x in NAT holds (SMoebius {1}).x = M.x
   proof
     let x be set;
     per cases;
     suppose
-A6:   x in {1};
+A5:   x in {1};
       then x = 1 by TARSKI:def 1;
-      hence thesis by A5,A6,UPROOTS:9;
-
+      hence thesis by A3,A5,UPROOTS:9;
     end;
     suppose
-A7:   not x in {1};
+A6:   not x in {1};
       then
-A8:   not x in support SMoebius {1} by A4,Def5;
-      M.x = 0 by A7,UPROOTS:8
-
-        .= (SMoebius {1}).x by A8,POLYNOM1:def 7;
+A7:   not x in support SMoebius {1} by A4,Def5;
+      M.x = 0 by A6,UPROOTS:8
+        .= (SMoebius {1}).x by A7,PRE_POLY:def 7;
       hence thesis;
     end;
   end;
-  then SMoebius {1} = M by PBOOLE:3;
-  then Sum SMoebius NatDivisors 1 = M.1 by A2,Th12,Th41
+  then support M = {1} & SMoebius {1} = M by PBOOLE:3,UPROOTS:10;
+  then Sum SMoebius NatDivisors 1 = M.1 by Th12,Th41
     .= 1 by A1,UPROOTS:9;
-
   hence thesis;
 end;
 
 theorem
-  for X, Y being finite Subset of NAT st X misses Y holds
-  support SMoebius X \/ support SMoebius Y = support (SMoebius X + SMoebius Y)
+  for X, Y being finite Subset of NAT st X misses Y holds support
+  SMoebius X \/ support SMoebius Y = support (SMoebius X + SMoebius Y)
 proof
   let X,Y be finite Subset of NAT;
   assume
 A1: X misses Y;
-  thus support SMoebius X \/ support SMoebius Y c=
-  support (SMoebius X + SMoebius Y)
+  thus support SMoebius X \/ support SMoebius Y c= support (SMoebius X +
+  SMoebius Y)
   proof
     let x be set;
-    assume
-A2: x in support SMoebius X \/ support SMoebius Y;
-A3: support SMoebius X = X /\ SCNAT by Def5;
-    support SMoebius Y = Y /\ SCNAT by Def5;
+    support SMoebius X = X /\ SCNAT & support SMoebius Y = Y /\ SCNAT by Def5;
     then
-A4: support SMoebius X misses support SMoebius Y by A1,A3,XBOOLE_1:76;
-    per cases by A2,XBOOLE_0:def 3;
+A2: support SMoebius X misses support SMoebius Y by A1,XBOOLE_1:76;
+    assume
+A3: x in support SMoebius X \/ support SMoebius Y;
+    per cases by A3,XBOOLE_0:def 3;
     suppose
-A5:   x in support SMoebius X;
-      then not x in support SMoebius Y by A4,XBOOLE_0:3;
-      then (SMoebius Y).x = 0 by POLYNOM1:def 7;
-      then (SMoebius X).x + (SMoebius Y).x <> 0 by A5,POLYNOM1:def 7;
-      then (SMoebius X + SMoebius Y).x <> 0 by POLYNOM1:def 5;
-      hence thesis by POLYNOM1:def 7;
+A4:   x in support SMoebius X;
+      then not x in support SMoebius Y by A2,XBOOLE_0:3;
+      then (SMoebius Y).x = 0 by PRE_POLY:def 7;
+      then (SMoebius X).x + (SMoebius Y).x <> 0 by A4,PRE_POLY:def 7;
+      then (SMoebius X + SMoebius Y).x <> 0 by PRE_POLY:def 5;
+      hence thesis by PRE_POLY:def 7;
     end;
     suppose
-A6:   x in support SMoebius Y;
-      then not x in support SMoebius X by A4,XBOOLE_0:3;
-      then (SMoebius X).x = 0 by POLYNOM1:def 7;
-      then (SMoebius X).x + (SMoebius Y).x <> 0 by A6,POLYNOM1:def 7;
-      then (SMoebius X + SMoebius Y).x <> 0 by POLYNOM1:def 5;
-      hence thesis by POLYNOM1:def 7;
+A5:   x in support SMoebius Y;
+      then not x in support SMoebius X by A2,XBOOLE_0:3;
+      then (SMoebius X).x = 0 by PRE_POLY:def 7;
+      then (SMoebius X).x + (SMoebius Y).x <> 0 by A5,PRE_POLY:def 7;
+      then (SMoebius X + SMoebius Y).x <> 0 by PRE_POLY:def 5;
+      hence thesis by PRE_POLY:def 7;
     end;
   end;
-  thus thesis by POLYNOM1:91;
+  thus thesis by PRE_POLY:75;
 end;
 
 theorem
-  for X, Y being finite Subset of NAT st X misses Y holds
-  SMoebius (X \/ Y) = SMoebius X + SMoebius Y
+  for X, Y being finite Subset of NAT st X misses Y holds SMoebius (X \/
+  Y) = SMoebius X + SMoebius Y
 proof
   let X,Y be finite Subset of NAT;
-  assume
-A1: X misses Y;
-A2: support SMoebius (X \/ Y) = (X \/ Y) /\ SCNAT by Def5
+A1: support SMoebius (X \/ Y) = (X \/ Y) /\ SCNAT by Def5
     .= (X /\ SCNAT) \/ (Y /\ SCNAT) by XBOOLE_1:23;
-  for x being set st x in NAT holds
-  (SMoebius (X \/ Y)).x = (SMoebius X + SMoebius Y).x
+  assume
+A2: X misses Y;
+  for x being set st x in NAT holds (SMoebius (X \/ Y)).x = (SMoebius X +
+  SMoebius Y).x
   proof
     let x be set;
     per cases;
     suppose
 A3:   x in support SMoebius (X \/ Y);
-      per cases by A2,A3,XBOOLE_0:def 3;
+      per cases by A1,A3,XBOOLE_0:def 3;
       suppose
 A4:     x in X /\ SCNAT;
+        then reconsider k = x as Element of NAT;
+A5:     k in support SMoebius X by A4,Def5;
+        not x in Y /\ SCNAT by A2,A4,Lm1;
         then
-A5:     not x in Y /\ SCNAT by A1,Lm1;
-        reconsider k = x as Element of NAT by A4;
-A6:     k in support SMoebius X & not (k in support SMoebius Y) by A4,A5,Def5;
+A6:     not k in support SMoebius Y by Def5;
         (SMoebius (X \/ Y)).x = Moebius k + (0 qua Nat) by A3,Def5
-          .= Moebius k + SMoebius Y.k by A6,POLYNOM1:def 7
-          .= SMoebius X.k + SMoebius Y.k by A6,Def5
-          .= (SMoebius X + SMoebius Y).x by POLYNOM1:def 5;
+          .= Moebius k + SMoebius Y.k by A6,PRE_POLY:def 7
+          .= SMoebius X.k + SMoebius Y.k by A5,Def5
+          .= (SMoebius X + SMoebius Y).x by PRE_POLY:def 5;
         hence thesis;
       end;
       suppose
 A7:     x in Y /\ SCNAT;
+        then consider k being Element of NAT such that
+A8:     k = x;
+        not x in X /\ SCNAT by A2,A7,Lm1;
         then
-A8:     not x in X /\ SCNAT by A1,Lm1;
-        consider k being Element of NAT such that
-A9:     k = x by A7;
-A10:    k in support SMoebius Y & not (k in support SMoebius X)
-        by A7,A8,A9,Def5;
-        (SMoebius (X \/ Y)).x = Moebius k + (0 qua Nat) by A3,A9,Def5
-          .= Moebius k + SMoebius X.k by A10,POLYNOM1:def 7
+A9:     not k in support SMoebius X by A8,Def5;
+A10:    k in support SMoebius Y by A7,A8,Def5;
+        (SMoebius (X \/ Y)).x = Moebius k + (0 qua Nat) by A3,A8,Def5
+          .= Moebius k + SMoebius X.k by A9,PRE_POLY:def 7
           .= SMoebius Y.k + SMoebius X.k by A10,Def5
-          .= (SMoebius X + SMoebius Y).x by A9,POLYNOM1:def 5;
+          .= (SMoebius X + SMoebius Y).x by A8,PRE_POLY:def 5;
         hence thesis;
       end;
     end;
     suppose
 A11:  not x in support SMoebius (X \/ Y);
-      then not (x in X /\ SCNAT) & not (x in Y /\ SCNAT) by A2,XBOOLE_0:def 3;
+      then not x in Y /\ SCNAT by A1,XBOOLE_0:def 3;
       then
-A12:  not x in support SMoebius X & not x in support SMoebius Y by Def5;
-      (SMoebius (X \/ Y)).x = 0 by A11,POLYNOM1:def 7
-        .= SMoebius Y.x + 0 by A12,POLYNOM1:def 7
-        .= SMoebius Y.x + SMoebius X.x by A12,POLYNOM1:def 7
-        .= (SMoebius X + SMoebius Y).x by POLYNOM1:def 5;
+A12:  not x in support SMoebius Y by Def5;
+      not x in X /\ SCNAT by A1,A11,XBOOLE_0:def 3;
+      then
+A13:  not x in support SMoebius X by Def5;
+      (SMoebius (X \/ Y)).x = 0 by A11,PRE_POLY:def 7
+        .= SMoebius Y.x + 0 by A12,PRE_POLY:def 7
+        .= SMoebius Y.x + SMoebius X.x by A13,PRE_POLY:def 7
+        .= (SMoebius X + SMoebius Y).x by PRE_POLY:def 5;
       hence thesis;
     end;
   end;
@@ -1686,88 +1742,95 @@ definition
   let n be non zero natural number;
   func PFactors n -> ManySortedSet of SetPrimes means
   :Def6:
-  support it = support pfexp n &
-  for p being natural number st p in support pfexp n holds it.p = p;
+  support it =
+support pfexp n & for p being natural number st p in support pfexp n holds it.p
+  = p;
   existence
   proof
-    defpred P[set,set] means for p being Prime st $1 = p holds
-    (p in support pfexp n implies $2 = p) &
-    (not p in support pfexp n implies $2 = 0);
-A5: for x being set st x in SetPrimes ex y being set st P[x,y]
+    defpred P[set,set] means for p being Prime st $1 = p holds (p in support
+    pfexp n implies $2 = p) & (not p in support pfexp n implies $2 = 0);
+A1: for x being set st x in SetPrimes ex y being set st P[x,y]
     proof
-      let x be set such that
-A6:   x in SetPrimes;
-      reconsider i = x as prime Element of NAT by A6,NEWTON:def 6;
+      let x be set;
+      assume
+      x in SetPrimes;
+      then reconsider i = x as prime Element of NAT by NEWTON:def 6;
       per cases;
       suppose
-A7:     i in support pfexp n;
+A2:     i in support pfexp n;
         take i;
         let p be Prime;
-        assume p = x;
-        hence thesis by A7;
+        assume
+        p = x;
+        hence thesis by A2;
       end;
       suppose
-A8:     not i in support pfexp n;
+A3:     not i in support pfexp n;
         take 0;
         let p be Prime;
-        assume p = x;
-        hence thesis by A8;
+        assume
+        p = x;
+        hence thesis by A3;
       end;
     end;
     consider f being Function such that
-A9: dom f = SetPrimes and
-A10: for x being set st x in SetPrimes holds P[x,f.x]
-    from CLASSES1:sch 1(A5);
-A11: support f c= SetPrimes by A9,POLYNOM1:41;
-A12: now
+A4: dom f = SetPrimes and
+A5: for x being set st x in SetPrimes holds P[x,f.x] from CLASSES1:sch
+    1(A1);
+A6: support f c= SetPrimes by A4,PRE_POLY:37;
+A7: now
       let x be set;
       hereby
         assume
-A13:    x in support f;
-        then x in SetPrimes by A11;
+A8:     x in support f;
+        then x in SetPrimes by A6;
         then reconsider i = x as prime Element of NAT by NEWTON:def 6;
-        assume not x in support pfexp n;
-        then f.i = 0 by A10,A11,A13;
-        hence contradiction by A13,POLYNOM1:def 7;
+        assume
+        not x in support pfexp n;
+        then f.i = 0 by A5,A6,A8;
+        hence contradiction by A8,PRE_POLY:def 7;
       end;
       assume
-A14:  x in support pfexp n;
+A9:   x in support pfexp n;
       then x in SetPrimes;
       then reconsider i = x as prime Element of NAT by NEWTON:def 6;
-      f.i = i by A10,A14;
-      hence x in support f by POLYNOM1:def 7;
+      f.i = i by A5,A9;
+      hence x in support f by PRE_POLY:def 7;
     end;
-    reconsider f as ManySortedSet of SetPrimes by A9,PARTFUN1:def 4
+    reconsider f as ManySortedSet of SetPrimes by A4,PARTFUN1:def 4
 ,RELAT_1:def 18;
     take f;
-    thus support f = support pfexp n by A12,TARSKI:2;
+    thus support f = support pfexp n by A7,TARSKI:2;
     let p be natural number;
     assume
-A15: p in support pfexp n;
+A10: p in support pfexp n;
     then p is Prime by NAT_3:34;
-    hence thesis by A10,A15;
+    hence thesis by A5,A10;
   end;
   uniqueness
   proof
     let it1, it2 be ManySortedSet of SetPrimes such that
-A16: support it1 = support pfexp n and
-A17: for p being natural number st p in support pfexp n holds it1.p = p and
-A18: support it2 = support pfexp n and
-A19: for p being natural number st p in support pfexp n holds it2.p = p;
+A11: support it1 = support pfexp n and
+A12: for p being natural number st p in support pfexp n holds it1.p =
+    p and
+A13: support it2 = support pfexp n and
+A14: for p being natural number st p in support pfexp n holds it2.p =
+    p;
     now
-      let i be set such that
-A20:  i in SetPrimes;
-      reconsider p = i as prime Element of NAT by A20,NEWTON:def 6;
+      let i be set;
+      assume
+      i in SetPrimes;
+      then reconsider p = i as prime Element of NAT by NEWTON:def 6;
       per cases;
       suppose
-A21:    p in support pfexp n;
-        hence it1.i = p by A17
-          .= it2.i by A19,A21;
+A15:    p in support pfexp n;
+        hence it1.i = p by A12
+          .= it2.i by A14,A15;
       end;
       suppose
-A22:    not p in support pfexp n;
-        hence it1.i = 0 by A16,POLYNOM1:def 7
-          .= it2.i by A18,A22,POLYNOM1:def 7;
+A16:    not p in support pfexp n;
+        hence it1.i = 0 by A11,PRE_POLY:def 7
+          .= it2.i by A13,A16,PRE_POLY:def 7;
       end;
     end;
     hence it1 = it2 by PBOOLE:3;
@@ -1779,26 +1842,30 @@ registration
   cluster PFactors n -> finite-support natural-valued;
   coherence
   proof
-A1: support PFactors n = support pfexp n by Def6;
-    rng PFactors n c= NAT
+A1: rng PFactors n c= NAT
     proof
       let x be set;
-      assume x in rng PFactors n;
+      assume
+      x in rng PFactors n;
       then consider y being set such that
-A2:   y in dom PFactors n & (PFactors n).y = x by FUNCT_1:def 5;
-A3:   y in SetPrimes by A2,PARTFUN1:def 4;
+A2:   y in dom PFactors n and
+A3:   (PFactors n).y = x by FUNCT_1:def 5;
+A4:   y in SetPrimes by A2,PARTFUN1:def 4;
       per cases;
-      suppose y in support pfexp n;
-        then x = y by A2,Def6;
-        hence thesis by A3;
+      suppose
+        y in support pfexp n;
+        then x = y by A3,Def6;
+        hence thesis by A4;
       end;
-      suppose not y in support pfexp n;
+      suppose
+        not y in support pfexp n;
         then not y in support PFactors n by Def6;
-        then x = 0 by A2,POLYNOM1:def 7;
+        then x = 0 by A3,PRE_POLY:def 7;
         hence thesis;
       end;
     end;
-    hence thesis by A1,POLYNOM1:def 8,VALUED_0:def 6;
+    support PFactors n = support pfexp n by Def6;
+    hence thesis by A1,PRE_POLY:def 8,VALUED_0:def 6;
   end;
 end;
 
@@ -1809,17 +1876,18 @@ proof
   for z being set st z in dom f holds f.z = 0
   proof
     let z be set;
-    assume z in dom f;
+    assume
+    z in dom f;
     then z in SetPrimes by PARTFUN1:def 4;
     then reconsider z as Element of NAT;
     support pfexp 1 = {};
     then not z in support f by Def6;
-    hence thesis by POLYNOM1:def 7;
+    hence thesis by PRE_POLY:def 7;
   end;
   then
 A1: f = (dom f) --> 0 by FUNCOP_1:17;
   dom f = SetPrimes by PARTFUN1:def 4;
-  hence thesis by A1,POLYNOM1:def 15;
+  hence thesis by A1,PRE_POLY:def 13;
 end;
 
 theorem Th46:
@@ -1827,49 +1895,50 @@ theorem Th46:
 proof
   let p be Prime;
   set f = <*p*>, g = PFactors p;
-A1: dom f = {1} by FINSEQ_1:4,55;
-A2: dom (g * f) = {1}
+A1: dom (g * f) = {1}
   proof
     thus dom (g * f) c= {1}
     proof
       let x be set;
-      assume x in dom (g * f);
-      then x in dom f & f.x in dom g by FUNCT_1:21;
+      assume
+      x in dom (g * f);
+      then x in dom f by FUNCT_1:21;
       hence thesis by FINSEQ_1:4,55;
     end;
     let x be set;
     assume
-A3: x in {1};
-    then
-A4: x = 1 by TARSKI:def 1;
-A5: x in dom f by A3,FINSEQ_1:4,55;
-    f.x = p by A4,FINSEQ_1:def 8;
+A2: x in {1};
+    then x = 1 by TARSKI:def 1;
+    then f.x = p by FINSEQ_1:def 8;
     then f.x in SetPrimes by NEWTON:def 6;
-    then f.x in dom g by PARTFUN1:def 4;
-    hence thesis by A5,FUNCT_1:21;
+    then
+A3: f.x in dom g by PARTFUN1:def 4;
+    x in dom f by A2,FINSEQ_1:4,55;
+    hence thesis by A3,FUNCT_1:21;
   end;
-  for x being set st x in dom (g * f) holds (g * f).x = f.x
+A4: for x being set st x in dom (g * f) holds (g * f).x = f.x
   proof
     let x be set;
+    (pfexp p).p <> 0 by NAT_3:38;
+    then
+A5: p in support pfexp p by PRE_POLY:def 7;
     assume
 A6: x in dom (g * f);
     then
-A7: x = 1 by A2,TARSKI:def 1;
-    (pfexp p).p <> 0 by NAT_3:38;
-    then
-A8: p in support pfexp p by POLYNOM1:def 7;
-    (g * f).1 = g.(f.1) by A6,A7,FUNCT_1:22
+A7: x = 1 by A1,TARSKI:def 1;
+    then (g * f).1 = g.(f.1) by A6,FUNCT_1:22
       .= g.p by FINSEQ_1:def 8
-      .= p by A8,Def6
+      .= p by A5,Def6
       .= f.1 by FINSEQ_1:def 8;
     hence thesis by A7;
   end;
-  hence thesis by A1,A2,FUNCT_1:9;
+  dom f = {1} by FINSEQ_1:4,55;
+  hence thesis by A1,A4,FUNCT_1:9;
 end;
 
 theorem Th47:
-  for p being Prime, n being non zero natural number holds
-  (PFactors (p|^n)) * <* p *> = <* p *>
+  for p being Prime, n being non zero natural number holds (
+  PFactors (p|^n)) * <* p *> = <* p *>
 proof
   let p be Prime, n be non zero natural number;
   set s = p |^ n;
@@ -1880,157 +1949,162 @@ A2: dom (g * f) = {1}
     thus dom (g * f) c= {1}
     proof
       let x be set;
-      assume x in dom (g * f);
+      assume
+      x in dom (g * f);
       hence thesis by A1,FUNCT_1:21;
     end;
     let x be set;
     assume
 A3: x in {1};
-    then
-A4: x = 1 by TARSKI:def 1;
-A5: x in dom f by A3,FINSEQ_1:4,55;
-    f.x = p by A4,FINSEQ_1:def 8;
+    then x = 1 by TARSKI:def 1;
+    then f.x = p by FINSEQ_1:def 8;
     then f.x in SetPrimes by NEWTON:def 6;
-    then f.x in dom g by PARTFUN1:def 4;
-    hence thesis by A5,FUNCT_1:21;
+    then
+A4: f.x in dom g by PARTFUN1:def 4;
+    x in dom f by A3,FINSEQ_1:4,55;
+    hence thesis by A4,FUNCT_1:21;
   end;
-  then
-A6: dom (g * f) = dom f by FINSEQ_1:4,55;
-  for x being set st x in dom (g * f) holds (g * f).x = f.x
+A5: for x being set st x in dom (g * f) holds (g * f).x = f.x
   proof
     let x be set;
+    (pfexp p).p <> 0 by NAT_3:38;
+    then p in support pfexp p by PRE_POLY:def 7;
+    then
+A6: p in support pfexp s by NAT_3:48;
     assume
 A7: x in dom (g * f);
     then
 A8: x = 1 by A2,TARSKI:def 1;
-    (pfexp p).p <> 0 by NAT_3:38;
-    then p in support pfexp p by POLYNOM1:def 7;
-    then
-A9: p in support pfexp s by NAT_3:48;
-    (g * f).1 = g.(f.1) by A7,A8,FUNCT_1:22
+    then (g * f).1 = g.(f.1) by A7,FUNCT_1:22
       .= g.p by FINSEQ_1:def 8
-      .= p by A9,Def6
+      .= p by A6,Def6
       .= f.1 by FINSEQ_1:def 8;
     hence thesis by A8;
   end;
-  hence thesis by A6,FUNCT_1:9;
+  dom (g * f) = dom f by A2,FINSEQ_1:4,55;
+  hence thesis by A5,FUNCT_1:9;
 end;
 
 theorem Th48:
-  for p being Prime, n being non zero natural number holds
-  p |-count n = 0 implies (PFactors n).p = 0
+  for p being Prime, n being non zero natural number holds p
+  |-count n = 0 implies (PFactors n).p = 0
 proof
   let p be Prime, n be non zero natural number;
-  assume p |-count n = 0;
+  assume
+  p |-count n = 0;
   then (pfexp n).p = 0 by NAT_3:def 8;
-  then not p in support pfexp n by POLYNOM1:def 7;
+  then not p in support pfexp n by PRE_POLY:def 7;
   then not p in support PFactors n by Def6;
-  hence thesis by POLYNOM1:def 7;
+  hence thesis by PRE_POLY:def 7;
 end;
 
 theorem Th49:
-  for n being non zero natural number, p being Prime st
-  p |-count n <> 0 holds (PFactors n).p = p
+  for n being non zero natural number, p being Prime st p |-count
+  n <> 0 holds (PFactors n).p = p
 proof
   let n be non zero natural number, p be Prime;
-  assume p |-count n <> 0;
+  assume
+  p |-count n <> 0;
   then (pfexp n).p <> 0 by NAT_3:def 8;
-  then p in support pfexp n by POLYNOM1:def 7;
+  then p in support pfexp n by PRE_POLY:def 7;
   hence thesis by Def6;
 end;
 
 theorem Th50:
-  for m, n being non zero Element of NAT st m, n are_relative_prime
-  holds PFactors (m * n) = PFactors m + PFactors n
+  for m, n being non zero Element of NAT st m, n
+  are_relative_prime holds PFactors (m * n) = PFactors m + PFactors n
 proof
   let a, b be non zero Element of NAT;
+  reconsider an = a, bn = b as non zero natural number;
   assume
 A1: a, b are_relative_prime;
-  reconsider an = a, bn = b as non zero natural number;
   now
-    let i be set such that
-A2: i in SetPrimes;
-    reconsider p = i as prime Element of NAT by A2,NEWTON:def 6;
-A3: p |-count (an*bn) = (p |-count a) + (p |-count b) by NAT_3:28;
+    let i be set;
+    assume
+    i in SetPrimes;
+    then reconsider p = i as prime Element of NAT by NEWTON:def 6;
+A2: p |-count (an*bn) = (p |-count a) + (p |-count b) by NAT_3:28;
+A3: a gcd b = 1 by A1,INT_2:def 4;
 A4: p > 1 by INT_2:def 5;
-A5: a gcd b = 1 by A1,INT_2:def 4;
     per cases;
     suppose
-A6:   p |-count (a*b) = 0;
+A5:   p |-count (a*b) = 0;
       then
-A7:   (p |-count a) = 0 & (p |-count b) = 0 by A3;
-      thus (PFactors (a*b)).i = 0 by A6,Th48
-        .= 0 + (PFactors b).i by A7,Th48
+A6:   (p |-count b) = 0 by A2;
+A7:   (p |-count a) = 0 by A2,A5;
+      thus (PFactors (a*b)).i = 0 by A5,Th48
+        .= 0 + (PFactors b).i by A6,Th48
         .= (PFactors a).i + (PFactors b).i by A7,Th48
-        .= (PFactors a + PFactors b).i by POLYNOM1:def 5;
+        .= (PFactors a + PFactors b).i by PRE_POLY:def 5;
     end;
     suppose
 A8:   p |-count (a*b) <> 0;
       thus (PFactors (a*b)).i = (PFactors a + PFactors b).i
       proof
-        per cases by A3,A8;
+        per cases by A2,A8;
         suppose
 A9:       (p |-count a) <> 0;
 A10:      now
-            assume (p |-count b) <> 0;
-            then consider kb being Nat such that
-A11:        (p |-count b) = kb+1 by NAT_1:6;
-            reconsider kb as Element of NAT by ORDINAL1:def 13;
-            p |^ (p |-count b) divides b by A4,NAT_3:def 7;
-            then p*(p|^kb) divides b by A11,NEWTON:11;
-            then consider lb being Nat such that
-A12:        b = p*(p|^kb)*lb by NAT_D:def 3;
-            b = p*((p|^kb)*lb) by A12;
-            then
-A13:        p divides b by NAT_D:def 3;
             consider ka being Nat such that
-A14:        (p |-count a) = ka+1 by A9,NAT_1:6;
+A11:        (p |-count a) = ka+1 by A9,NAT_1:6;
             reconsider ka as Element of NAT by ORDINAL1:def 13;
             p |^ (p |-count a) divides a by A4,NAT_3:def 7;
-            then p*(p|^ka) divides a by A14,NEWTON:11;
+            then p*(p|^ka) divides a by A11,NEWTON:11;
             then consider la being Nat such that
-A15:        a = p*(p|^ka)*la by NAT_D:def 3;
-            a = p*((p|^ka)*la) by A15;
-            then p divides a by NAT_D:def 3;
-            then p divides 1 by A5,A13,NAT_D:def 5;
+A12:        a = p*(p|^ka)*la by NAT_D:def 3;
+            a = p*((p|^ka)*la) by A12;
+            then
+A13:        p divides a by NAT_D:def 3;
+            assume
+            (p |-count b) <> 0;
+            then consider kb being Nat such that
+A14:        (p |-count b) = kb+1 by NAT_1:6;
+            reconsider kb as Element of NAT by ORDINAL1:def 13;
+            p |^ (p |-count b) divides b by A4,NAT_3:def 7;
+            then p*(p|^kb) divides b by A14,NEWTON:11;
+            then consider lb being Nat such that
+A15:        b = p*(p|^kb)*lb by NAT_D:def 3;
+            b = p*((p|^kb)*lb) by A15;
+            then p divides b by NAT_D:def 3;
+            then p divides 1 by A3,A13,NAT_D:def 5;
             hence contradiction by A4,NAT_D:7;
           end;
           thus (PFactors (a*b)).i = p by A8,Th49
             .= (PFactors a).p + 0 by A9,Th49
             .= (PFactors a).p + (PFactors b).p by A10,Th48
-            .= (PFactors a + PFactors b).i by POLYNOM1:def 5;
+            .= (PFactors a + PFactors b).i by PRE_POLY:def 5;
         end;
         suppose
 A16:      (p |-count b) <> 0;
 A17:      now
             assume
-A18:        (p |-count a) <> 0;
-            consider kb being Nat such that
-A19:        (p |-count b) = kb+1 by A16,NAT_1:6;
-            reconsider kb as Element of NAT by ORDINAL1:def 13;
-            p |^ (p |-count b) divides b by A4,NAT_3:def 7;
-            then p*(p|^kb) divides b by A19,NEWTON:11;
-            then consider lb being Nat such that
-A20:        b = p*(p|^kb)*lb by NAT_D:def 3;
-            b = p*((p|^kb)*lb) by A20;
-            then
-A21:        p divides b by NAT_D:def 3;
-            consider ka being Nat such that
-A22:        (p |-count a) = ka+1 by A18,NAT_1:6;
+            (p |-count a) <> 0;
+            then consider ka being Nat such that
+A18:        (p |-count a) = ka+1 by NAT_1:6;
             reconsider ka as Element of NAT by ORDINAL1:def 13;
             p |^ (p |-count a) divides a by A4,NAT_3:def 7;
-            then p*(p|^ka) divides a by A22,NEWTON:11;
+            then p*(p|^ka) divides a by A18,NEWTON:11;
             then consider la being Nat such that
-A23:        a = p*(p|^ka)*la by NAT_D:def 3;
-            a = p*((p|^ka)*la) by A23;
-            then p divides a by NAT_D:def 3;
-            then p divides 1 by A5,A21,NAT_D:def 5;
+A19:        a = p*(p|^ka)*la by NAT_D:def 3;
+            a = p*((p|^ka)*la) by A19;
+            then
+A20:        p divides a by NAT_D:def 3;
+            consider kb being Nat such that
+A21:        (p |-count b) = kb+1 by A16,NAT_1:6;
+            reconsider kb as Element of NAT by ORDINAL1:def 13;
+            p |^ (p |-count b) divides b by A4,NAT_3:def 7;
+            then p*(p|^kb) divides b by A21,NEWTON:11;
+            then consider lb being Nat such that
+A22:        b = p*(p|^kb)*lb by NAT_D:def 3;
+            b = p*((p|^kb)*lb) by A22;
+            then p divides b by NAT_D:def 3;
+            then p divides 1 by A3,A20,NAT_D:def 5;
             hence contradiction by A4,NAT_D:7;
           end;
           thus (PFactors (a*b)).i = p by A8,Th49
             .= 0+(PFactors b).p by A16,Th49
             .= (PFactors a).p + (PFactors b).p by A17,Th48
-            .= (PFactors a + PFactors b).i by POLYNOM1:def 5;
+            .= (PFactors a + PFactors b).i by PRE_POLY:def 5;
         end;
       end;
     end;
@@ -2039,34 +2113,35 @@ A23:        a = p*(p|^ka)*la by NAT_D:def 3;
 end;
 
 theorem
-  for n being non zero Element of NAT, A being finite Subset of NAT st
-  A = { k where k is Element of NAT :
-  0 < k & k divides n & k is square-containing } holds
-  SMoebius A = EmptyBag NAT
+  for n being non zero Element of NAT, A being finite Subset of NAT st A
+= { k where k is Element of NAT : 0 < k & k divides n & k is square-containing
+  } holds SMoebius A = EmptyBag NAT
 proof
   let n be non zero Element of NAT, A be finite Subset of NAT;
   assume
-A1: A = { k where k is Element of NAT :
-  0 < k & k divides n & k is square-containing };
+A1: A = { k where k is Element of NAT : 0 < k & k divides n & k is
+  square-containing };
 A2: A misses SCNAT
   proof
-    assume A meets SCNAT;
+    assume
+    A meets SCNAT;
     then consider x being set such that
-A3: x in A & x in SCNAT by XBOOLE_0:3;
-    ex k being Element of NAT st
-    k = x & 0 < k & k divides n & k is square-containing by A1,A3;
-    hence thesis by A3,Def2;
+A3: x in A and
+A4: x in SCNAT by XBOOLE_0:3;
+    ex k being Element of NAT st k = x & 0 < k & k divides n & k is
+    square-containing by A1,A3;
+    hence thesis by A4,Def2;
   end;
   for x being set st x in NAT holds (SMoebius A).x = (EmptyBag NAT).x
   proof
     let x be set;
-    assume x in NAT;
+    assume
+    x in NAT;
     then reconsider k = x as Element of NAT;
     support SMoebius A = A /\ SCNAT by Def5
       .= {} by A2,XBOOLE_0:def 7;
-    then (SMoebius A).k = 0 by POLYNOM1:def 7;
-    hence thesis by POLYNOM1:56;
-
+    then (SMoebius A).k = 0 by PRE_POLY:def 7;
+    hence thesis by PRE_POLY:52;
   end;
   hence thesis by PBOOLE:3;
 end;
@@ -2076,7 +2151,6 @@ begin :: The Radical of a Number
 definition
   let n be non zero natural number;
   func Radical n -> Element of NAT equals
-
   Product PFactors n;
   coherence;
 end;
@@ -2085,30 +2159,30 @@ theorem Th52:
   for n being non zero natural number holds Radical n > 0
 proof
   let n be non zero natural number;
-  assume Radical n <= 0;
+  assume
+  Radical n <= 0;
   then Product PFactors n = 0;
   then consider f being FinSequence of COMPLEX such that
-A1: Product f = 0 &
-  f = (PFactors n) * canFS(support PFactors n) by NAT_3:def 5;
+A1: Product f = 0 and
+A2: f = (PFactors n) * canFS(support PFactors n) by NAT_3:def 5;
   not ex k being Nat st k in dom f & f.k = 0
   proof
-A2: rng canFS support PFactors n c= support PFactors n by FINSEQ_1:def 4;
     given k being Nat such that
-A3: k in dom f & f.k = 0;
-    k in dom canFS support PFactors n by A1,A3,FUNCT_1:21;
+A3: k in dom f and
+A4: f.k = 0;
+    k in dom canFS support PFactors n by A2,A3,FUNCT_1:21;
     then
-A4: (canFS support PFactors n).k in rng canFS support PFactors n
-    by FUNCT_1:12;
-    then (canFS support PFactors n).k in support PFactors n by A2;
-    then reconsider p = (canFS support PFactors n).k as prime
-    Element of NAT by NEWTON:def 6;
-
-    p in support PFactors n by A2,A4;
+A5: rng canFS support PFactors n c= support PFactors n & (canFS support
+    PFactors n).k in rng canFS support PFactors n by FINSEQ_1:def 4,FUNCT_1:12;
+    then (canFS support PFactors n).k in support PFactors n;
+    then reconsider
+    p = (canFS support PFactors n).k as prime Element of NAT by NEWTON:def 6;
+    p in support PFactors n by A5;
     then
-A5: p in support pfexp n by Def6;
-    f.k = (PFactors n).p by A1,A3,FUNCT_1:22
-      .= p by A5,Def6;
-    hence thesis by A3;
+A6: p in support pfexp n by Def6;
+    f.k = (PFactors n).p by A2,A3,FUNCT_1:22
+      .= p by A6,Def6;
+    hence thesis by A4;
   end;
   hence contradiction by A1,RVSUM_1:133;
 end;
@@ -2127,52 +2201,44 @@ A1: support PFactors p = support pfexp p by Def6
     .= {p} by NAT_3:43;
   reconsider p as prime Element of NAT by ORDINAL1:def 13;
   reconsider f = <*p*> as FinSequence of NAT;
-A2: Product f = p by RVSUM_1:125;
-A3: f = (PFactors p) * <*p*> by Th46
-    .= (PFactors p) * canFS({p}) by UPROOTS:6;
   rng f c= NAT by FINSEQ_1:def 4;
   then rng f c= COMPLEX by NUMBERS:20,XBOOLE_1:1;
-  then f is FinSequence of COMPLEX by FINSEQ_1:def 4;
-  hence thesis by A1,A2,A3,NAT_3:def 5;
+  then
+A2: Product f = p & f is FinSequence of COMPLEX by FINSEQ_1:def 4,RVSUM_1:125;
+  f = (PFactors p) * <*p*> by Th46
+    .= (PFactors p) * canFS({p}) by UPROOTS:6;
+  hence thesis by A1,A2,NAT_3:def 5;
 end;
 
 theorem Th54:
-  for p being Prime, n being non zero Element of NAT holds
-  Radical (p |^ n) = p
+  for p being Prime, n being non zero Element of NAT holds Radical
+  (p |^ n) = p
 proof
   let p be Prime, n be non zero Element of NAT;
   reconsider p as prime Element of NAT by ORDINAL1:def 13;
   reconsider f = <*p*> as FinSequence of NAT;
-A1: Product f = p by RVSUM_1:125;
   set s = p |^ n;
-A2: support PFactors s = support pfexp s by Def6
-    .= support pfexp p by NAT_3:48
-    .= {p} by NAT_3:43;
-A3: f = (PFactors s) * <*p*> by Th47
+A1: f = (PFactors s) * <*p*> by Th47
     .= (PFactors s) * canFS({p}) by UPROOTS:6;
   rng f c= NAT by FINSEQ_1:def 4;
   then rng f c= COMPLEX by NUMBERS:20,XBOOLE_1:1;
-  then f is FinSequence of COMPLEX by FINSEQ_1:def 4;
-  hence thesis by A1,A2,A3,NAT_3:def 5;
+  then
+A2: Product f = p & f is FinSequence of COMPLEX by FINSEQ_1:def 4,RVSUM_1:125;
+  support PFactors s = support pfexp s by Def6
+    .= support pfexp p by NAT_3:48
+    .= {p} by NAT_3:43;
+  hence thesis by A1,A2,NAT_3:def 5;
 end;
 
 theorem Th55:
   for n being non zero natural number holds Radical n divides n
 proof
-  let n be non zero natural number;
   defpred P[natural number] means for n being non zero natural number st
   support PFactors n c= Seg $1 holds Radical n divides n;
-A1: P[0]
-  proof
-    let n be non zero natural number;
-    assume
-A2: support PFactors n c= Seg 0;
-    {} c= support PFactors n by XBOOLE_1:2;
-    then support PFactors n = {} by A2,XBOOLE_0:def 10;
-    then PFactors n = EmptyBag SetPrimes by BAGORDER:20;
-    then Radical n = 1 by NAT_3:20;
-    hence thesis by NAT_D:6;
-  end;
+  let n be non zero natural number;
+A1: ex mS being Element of NAT st support ppf n c= Seg mS by Th14;
+A2: support ppf n = support pfexp n by NAT_3:def 9
+    .= support PFactors n by Def6;
 A3: for k being natural number st P[k] holds P[k+1]
   proof
     let k be natural number;
@@ -2184,6 +2250,9 @@ A6: support pfexp n = support PFactors n by Def6;
     per cases;
     suppose
 A7:   not support PFactors n c= Seg k;
+      set p = k+1;
+      set e = p |-count n;
+      set s = p |^ e;
 A8:   now
         assume
 A9:     not k+1 in support PFactors n;
@@ -2192,147 +2261,154 @@ A9:     not k+1 in support PFactors n;
           let x be set;
           assume
 A10:      x in support PFactors n;
-          then
-A11:      x is Prime by A6,NAT_3:34;
-          reconsider m = x as natural number by A10;
-A12:      1 <= m by A11,INT_2:def 5;
+          then reconsider m = x as natural number;
           m <= k+1 by A5,A10,FINSEQ_1:3;
           then m < k+1 by A9,A10,XXREAL_0:1;
-          then m <= k by NAT_1:13;
-          hence thesis by A12,FINSEQ_1:3;
+          then
+A11:      m <= k by NAT_1:13;
+          x is Prime by A6,A10,NAT_3:34;
+          then 1 <= m by INT_2:def 5;
+          hence thesis by A11,FINSEQ_1:3;
         end;
         hence contradiction by A7;
       end;
-      set p = k+1;
-      set e = p |-count n;
-      set s = p |^ e;
-A13:  p is Prime by A6,A8,NAT_3:34;
       then
-A14:  (pfexp n).p = e by NAT_3:def 8;
-A15:  p > 1 by A13,INT_2:def 5;
+A12:  p is Prime by A6,NAT_3:34;
+      then
+A13:  p > 1 by INT_2:def 5;
       then s divides n by NAT_3:def 7;
       then consider t being Nat such that
-A16:  n = s * t by NAT_D:def 3;
-      reconsider s, t as non zero natural number by A16;
-A17:  support PFactors t c= Seg k
+A14:  n = s * t by NAT_D:def 3;
+      reconsider s, t as non zero natural number by A14;
+      consider f being FinSequence of COMPLEX such that
+A15:  Product PFactors s = Product f and
+A16:  f = (PFactors s)*canFS(support PFactors s) by NAT_3:def 5;
+A17:  dom PFactors s = SetPrimes by PARTFUN1:def 4;
+A18:  support ppf s = support pfexp s by NAT_3:def 9;
+      then
+A19:  support ppf s = support PFactors s by Def6;
+      (pfexp n).p = e by A12,NAT_3:def 8;
+      then
+A20:  e <> 0 by A6,A8,PRE_POLY:def 7;
+      then
+A21:  support ppf s = {p} by A12,A18,NAT_3:42;
+      then
+A22:  p in support pfexp s by A18,TARSKI:def 1;
+A23:  support PFactors t c= Seg k
       proof
+        set f = p |-count t;
         let x be set;
         assume
-A18:    x in support PFactors t;
-        then
-A19:    x in support pfexp t by Def6;
-        then
-A20:    x is Prime by NAT_3:34;
-        reconsider m = x as natural number by A19;
-A21:    1 <= m by A20,INT_2:def 5;
-        support pfexp t c= support pfexp n by A16,NAT_3:45;
-        then support PFactors t c= support PFactors n by A6,Def6;
-        then m in support PFactors n by A18;
-        then
-A22:    m <= k+1 by A5,FINSEQ_1:3;
-        set f = p |-count t;
-        now
+A24:    x in support PFactors t;
+        then reconsider m = x as natural number;
+A25:    x in support pfexp t by A24,Def6;
+A26:    now
           assume
-A23:      m = p;
-          (pfexp t).p = f by A13,NAT_3:def 8;
-          then f <> 0 by A19,A23,POLYNOM1:def 7;
-          then f > 0;
+A27:      m = p;
+          (pfexp t).p = f by A12,NAT_3:def 8;
+          then f <> 0 by A25,A27,PRE_POLY:def 7;
           then f >= 0+1 by NAT_1:13;
           then consider g being Nat such that
-A24:      f = 1 + g by NAT_1:10;
-          reconsider g as Element of NAT by ORDINAL1:def 13;
-          p |^ f divides t by A15,NAT_3:def 7;
+A28:      f = 1 + g by NAT_1:10;
+          p |^ f divides t by A13,NAT_3:def 7;
           then consider u being Nat such that
-A25:      t = (p |^ f)*u by NAT_D:def 3;
-          n = s * (((p |^ g)*p)*u) by A16,A24,A25,NEWTON:11
+A29:      t = (p |^ f)*u by NAT_D:def 3;
+          reconsider g as Element of NAT by ORDINAL1:def 13;
+          n = s * (((p |^ g)*p)*u) by A14,A28,A29,NEWTON:11
             .= s*p * ((p |^ g)*u)
             .= (p |^ (e+1))*((p |^ g)*u) by NEWTON:11;
           then p |^ (e+1) divides n by NAT_D:def 3;
-          hence contradiction by A15,NAT_3:def 7;
+          hence contradiction by A13,NAT_3:def 7;
         end;
-        then m < p by A22,XXREAL_0:1;
-        then m <= k by NAT_1:13;
-        hence thesis by A21,FINSEQ_1:3;
-      end;
-A26:  e <> 0 by A6,A8,A14,POLYNOM1:def 7;
-A27:  support ppf s = support pfexp s by NAT_3:def 9;
-      then
-A28:  support ppf s = {p} by A13,A26,NAT_3:42;
-      then
-A29:  support PFactors s = {p} by A27,Def6;
-A30:  now
-        assume (support ppf s) meets (support ppf t);
-        then consider x being set such that
-A31:    x in support ppf s and
-A32:    x in support ppf t by XBOOLE_0:3;
-        x in support pfexp t by A32,NAT_3:def 9;
+        support pfexp t c= support pfexp n by A14,NAT_3:45;
+        then support PFactors t c= support PFactors n by A6,Def6;
+        then m in support PFactors n by A24;
+        then m <= k+1 by A5,FINSEQ_1:3;
+        then m < p by A26,XXREAL_0:1;
         then
-A33:    x in support PFactors t by Def6;
-        x = p by A28,A31,TARSKI:def 1;
-        then p <= k by A17,A33,FINSEQ_1:3;
-        hence contradiction by NAT_1:13;
+A30:    m <= k by NAT_1:13;
+        x is Prime by A25,NAT_3:34;
+        then 1 <= m by INT_2:def 5;
+        hence thesis by A30,FINSEQ_1:3;
       end;
+      then
+A31:  Radical t divides t by A4;
+      support PFactors s = {p} by A18,A21,Def6;
+      then f = (PFactors s)*<*p*> by A16,UPROOTS:6
+        .= <* (PFactors s).p *> by A8,A17,CIRCCMB3:36;
+      then Product PFactors s = (PFactors s).p by A15,RVSUM_1:125
+        .= p by A22,Def6;
+      then
+A32:  Radical s divides s by A20,NAT_3:3;
       reconsider s1 = s, t1 = t as non zero Element of NAT by ORDINAL1:def 13;
-A34:  s1,t1 are_relative_prime
-      proof
-        assume not s1,t1 are_relative_prime;
-        then
-A35:    s1 gcd t1 <> 1 by INT_2:def 4;
-        set u = s1 gcd t1;
-A36:    u divides s1 by NAT_D:def 5;
-        u <> 0 by INT_2:5;
-        then 0 < u;
-        then 0+1 <= u by NAT_1:13;
-        then u > 1 by A35,XXREAL_0:1;
-        then u >= 1+1 by NAT_1:13;
-        then consider r being Element of NAT such that
-A37:    r is prime and
-A38:    r divides u by INT_2:48;
-        r divides s1 by A36,A38,NAT_D:4;
-        then r divides p by A37,NAT_3:5;
-        then
-A39:    r = 1 or r = p by A13,INT_2:def 5;
-        u divides t1 by NAT_D:def 5;
-        then p divides t1 by A37,A38,A39,INT_2:def 5,NAT_D:4;
-        then p in support pfexp t by A13,NAT_3:37;
-        then p in support PFactors t by Def6;
-        then k+1 <= k by A17,FINSEQ_1:3;
-        hence contradiction by NAT_1:13;
-      end;
-      consider f being FinSequence of COMPLEX such that
-A40:  Product PFactors s = Product f and
-A41:  f = (PFactors s)*canFS(support PFactors s) by NAT_3:def 5;
-A42:  dom PFactors s = SetPrimes by PARTFUN1:def 4;
-A43:  p in support pfexp s by A27,A28,TARSKI:def 1;
-      f = (PFactors s)*<*p*> by A29,A41,UPROOTS:6
-        .= <* (PFactors s).p *> by A8,A42,CIRCCMB3:36;
-      then
-A44:  Product PFactors s = (PFactors s).p by A40,RVSUM_1:125
-        .= p by A43,Def6;
       support ppf t = support pfexp t by NAT_3:def 9;
       then
-A45:  support ppf s = support PFactors s &
-      support ppf t = support PFactors t by A27,Def6;
-A46:  Radical s divides s & Radical t divides t by A4,A17,A26,A44,NAT_3:3;
-      Radical n = Product (PFactors s+PFactors t) by A16,A34,Th50
-        .= Radical s * Radical t by A30,A45,NAT_3:19;
-      hence thesis by A16,A46,NAT_3:1;
+A33:  support ppf t = support PFactors t by Def6;
+A34:  now
+        assume
+        (support ppf s) meets (support ppf t);
+        then consider x being set such that
+A35:    x in support ppf s and
+A36:    x in support ppf t by XBOOLE_0:3;
+        x in support pfexp t by A36,NAT_3:def 9;
+        then
+A37:    x in support PFactors t by Def6;
+        x = p by A21,A35,TARSKI:def 1;
+        then p <= k by A23,A37,FINSEQ_1:3;
+        hence contradiction by NAT_1:13;
+      end;
+      s1,t1 are_relative_prime
+      proof
+        set u = s1 gcd t1;
+A38:    u divides t1 by NAT_D:def 5;
+        u <> 0 by INT_2:5;
+        then
+A39:    0+1 <= u by NAT_1:13;
+        assume
+        not s1,t1 are_relative_prime;
+        then s1 gcd t1 <> 1 by INT_2:def 4;
+        then u > 1 by A39,XXREAL_0:1;
+        then u >= 1+1 by NAT_1:13;
+        then consider r being Element of NAT such that
+A40:    r is prime and
+A41:    r divides u by INT_2:48;
+        u divides s1 by NAT_D:def 5;
+        then r divides s1 by A41,NAT_D:4;
+        then r divides p by A40,NAT_3:5;
+        then r = 1 or r = p by A12,INT_2:def 5;
+        then p divides t1 by A40,A41,A38,INT_2:def 5,NAT_D:4;
+        then p in support pfexp t by A12,NAT_3:37;
+        then p in support PFactors t by Def6;
+        then k+1 <= k by A23,FINSEQ_1:3;
+        hence contradiction by NAT_1:13;
+      end;
+      then Radical n = Product (PFactors s+PFactors t) by A14,Th50
+        .= Radical s * Radical t by A34,A19,A33,NAT_3:19;
+      hence thesis by A14,A32,A31,NAT_3:1;
     end;
-    suppose support PFactors n c= Seg k;
+    suppose
+      support PFactors n c= Seg k;
       hence thesis by A4;
     end;
   end;
-A47: for k being natural number holds P[k] from NAT_1:sch 2(A1,A3);
-  consider mS being Element of NAT such that
-A48: support ppf n c= Seg mS by Th14;
-  support ppf n = support pfexp n by NAT_3:def 9
-    .= support PFactors n by Def6;
-  hence thesis by A47,A48;
+A42: P[0]
+  proof
+    let n be non zero natural number;
+A43: {} c= support PFactors n by XBOOLE_1:2;
+    assume
+    support PFactors n c= Seg 0;
+    then support PFactors n = {} by A43,XBOOLE_0:def 10;
+    then PFactors n = EmptyBag SetPrimes by BAGORDER:20;
+    then Radical n = 1 by NAT_3:20;
+    hence thesis by NAT_D:6;
+  end;
+  for k being natural number holds P[k] from NAT_1:sch 2(A42,A3);
+  hence thesis by A1,A2;
 end;
 
 theorem Th56:
-  for p being Prime, n being non zero natural number holds
-  p divides n iff p divides Radical n
+  for p being Prime, n being non zero natural number holds p
+  divides n iff p divides Radical n
 proof
   let p be Prime, n be non zero natural number;
   thus p divides n implies p divides Radical n
@@ -2342,23 +2418,25 @@ A1: p divides n and
 A2: not p divides Radical n;
 A3: p in support pfexp n by A1,NAT_3:37;
     then
-A4: (PFactors n).p = p by Def6;
-A5: p in support PFactors n by A3,Def6;
-A6: support PFactors n c= dom PFactors n by POLYNOM1:41;
-    consider f being FinSequence of COMPLEX such that
-A7: Product PFactors n = Product f &
-    f = (PFactors n) * canFS support PFactors n by NAT_3:def 5;
-    p in rng canFS support PFactors n by A5,FUNCT_2:def 3;
+A4: p in support PFactors n by Def6;
+    then p in rng canFS support PFactors n by FUNCT_2:def 3;
     then consider y being set such that
-A8: y in dom canFS support PFactors n &
-    p = (canFS support PFactors n).y by FUNCT_1:def 5;
-A9: y in dom f by A5,A6,A7,A8,FUNCT_1:21;
-A10: rng PFactors n c= NAT by VALUED_0:def 6;
-    rng f c= rng PFactors n by A7,RELAT_1:45;
-    then rng f c= NAT by A10,XBOOLE_1:1;
-    then reconsider f as FinSequence of NAT by FINSEQ_1:def 4;
-    f.y = p by A4,A7,A8,A9,FUNCT_1:22;
-    then p in rng f by A9,FUNCT_1:12;
+A5: y in dom canFS support PFactors n and
+A6: p = (canFS support PFactors n).y by FUNCT_1:def 5;
+    consider f being FinSequence of COMPLEX such that
+A7: Product PFactors n = Product f and
+A8: f = (PFactors n) * canFS support PFactors n by NAT_3:def 5;
+    rng PFactors n c= NAT & rng f c= rng PFactors n by A8,RELAT_1:45
+,VALUED_0:def 6;
+    then
+A9: rng f c= NAT by XBOOLE_1:1;
+    support PFactors n c= dom PFactors n by PRE_POLY:37;
+    then
+A10: y in dom f by A4,A8,A5,A6,FUNCT_1:21;
+    reconsider f as FinSequence of NAT by A9,FINSEQ_1:def 4;
+    (PFactors n).p = p by A3,Def6;
+    then f.y = p by A8,A6,A10,FUNCT_1:22;
+    then p in rng f by A10,FUNCT_1:12;
     hence contradiction by A2,A7,NAT_3:7;
   end;
   assume
@@ -2368,7 +2446,8 @@ A11: p divides Radical n;
 end;
 
 theorem Th57:
-  for k being non zero natural number st k is square-free holds Radical k = k
+  for k being non zero natural number st k is square-free holds
+  Radical k = k
 proof
   let k be non zero natural number;
   assume
@@ -2376,21 +2455,24 @@ A1: k is square-free;
   for i being set st i in SetPrimes holds (PFactors k).i = (ppf k).i
   proof
     let i be set;
-    assume i in SetPrimes;
+    assume
+    i in SetPrimes;
     then reconsider p = i as prime Element of NAT by NEWTON:def 6;
     per cases;
     suppose
 A2:   p in support pfexp k;
-A3:   p |-count k <= 1 by A1,Th24;
-A4:   p <> 1 by INT_2:def 5;
+A3:   p <> 1 by INT_2:def 5;
       p |-count k <> 0
       proof
-        assume p |-count k = 0;
-        then not p divides k by A4,NAT_3:27;
+        assume
+        p |-count k = 0;
+        then not p divides k by A3,NAT_3:27;
         hence thesis by A2,NAT_3:36;
       end;
-      then p |-count k >= 1 by NAT_1:14;
-      then p |-count k = 1 by A3,XXREAL_0:1;
+      then
+A4:   p |-count k >= 1 by NAT_1:14;
+      p |-count k <= 1 by A1,Th24;
+      then p |-count k = 1 by A4,XXREAL_0:1;
       then (ppf k).p = p |^ 1 by A2,NAT_3:def 9
         .= p by NEWTON:10;
       hence thesis by A2,Def6;
@@ -2399,9 +2481,9 @@ A4:   p <> 1 by INT_2:def 5;
 A5:   not p in support pfexp k;
       then not p in support PFactors k by Def6;
       then
-A6:   (PFactors k).p = 0 by POLYNOM1:def 7;
+A6:   (PFactors k).p = 0 by PRE_POLY:def 7;
       not p in support ppf k by A5,NAT_3:def 9;
-      hence thesis by A6,POLYNOM1:def 7;
+      hence thesis by A6,PRE_POLY:def 7;
     end;
   end;
   then PFactors k = ppf k by PBOOLE:3;
@@ -2412,8 +2494,8 @@ theorem
   for n being non zero natural number holds Radical n <= n by Th55,NAT_D:7;
 
 theorem
-  for p being Prime, n being non zero natural number holds
-  p |-count Radical n <= p |-count n by Th55,NAT_3:30;
+  for p being Prime, n being non zero natural number holds p |-count
+  Radical n <= p |-count n by Th55,NAT_3:30;
 
 theorem
   for n being non zero natural number holds Radical n = 1 iff n = 1
@@ -2421,265 +2503,273 @@ proof
   let n be non zero natural number;
   thus Radical n = 1 implies n = 1
   proof
-    assume
-A1: Radical n = 1;
-    assume n <> 1;
-    then consider p being Prime such that
-A2: p divides n by Th5;
-A3: 1 < p by INT_2:def 5;
-A4: p in support pfexp n by A2,NAT_3:37;
-    then
-A5: (PFactors n).p = p by Def6;
+A1: rng PFactors n c= NAT by VALUED_0:def 6;
     consider f being FinSequence of COMPLEX such that
-A6: Product PFactors n = Product f &
-    f = (PFactors n) * canFS (support PFactors n) by NAT_3:def 5;
-A7: rng f c= rng PFactors n by A6,RELAT_1:45;
-    rng PFactors n c= NAT by VALUED_0:def 6;
-    then rng f c= NAT by A7,XBOOLE_1:1;
+A2: Product PFactors n = Product f and
+A3: f = (PFactors n) * canFS (support PFactors n) by NAT_3:def 5;
+    rng f c= rng PFactors n by A3,RELAT_1:45;
+    then rng f c= NAT by A1,XBOOLE_1:1;
     then reconsider f as FinSequence of NAT by FINSEQ_1:def 4;
-A8: support PFactors n c= dom PFactors n by POLYNOM1:41;
-A9: p in support PFactors n by A4,Def6;
+    assume
+A4: Radical n = 1;
+    assume
+    n <> 1;
+    then consider p being Prime such that
+A5: p divides n by Th5;
+A6: p in support pfexp n by A5,NAT_3:37;
+    then
+A7: p in support PFactors n by Def6;
     then p in rng canFS support PFactors n by FUNCT_2:def 3;
     then consider y being set such that
-A10: y in dom canFS support PFactors n &
-    p = (canFS support PFactors n).y by FUNCT_1:def 5;
-A11: y in dom f by A6,A8,A9,A10,FUNCT_1:21;
-    f.y = p by A5,A6,A10,FUNCT_1:23;
-    then p in rng f by A11,FUNCT_1:12;
-    hence thesis by A1,A3,A6,NAT_3:7,NAT_D:7;
+A8: y in dom canFS support PFactors n & p = (canFS support PFactors n
+    ).y by FUNCT_1:def 5;
+    (PFactors n).p = p by A6,Def6;
+    then
+A9: f.y = p by A3,A8,FUNCT_1:23;
+    support PFactors n c= dom PFactors n by PRE_POLY:37;
+    then y in dom f by A3,A7,A8,FUNCT_1:21;
+    then 1 < p & p in rng f by A9,FUNCT_1:12,INT_2:def 5;
+    hence thesis by A4,A2,NAT_3:7,NAT_D:7;
   end;
   thus thesis by Th45,NAT_3:20;
 end;
 
 theorem Th61:
-  for p being Prime, n being non zero natural number holds
-  p |-count Radical n <= 1
+  for p being Prime, n being non zero natural number holds p
+  |-count Radical n <= 1
 proof
-  let p be Prime, n be non zero natural number;
   defpred P[natural number] means for n being non zero natural number st
-  support PFactors n c= Seg $1 holds
-  for p being Prime holds p |-count Radical n <= 1;
-A1: P[0]
-  proof
-    let n be non zero natural number;
-    assume
-A2: support PFactors n c= Seg 0;
-    {} c= support PFactors n by XBOOLE_1:2;
-    then support PFactors n = {} by A2,XBOOLE_0:def 10;
-    then
-A3: PFactors n = EmptyBag SetPrimes by BAGORDER:20;
-    let p be Prime;
-    not p divides Radical n
-    proof
-      assume p divides Radical n;
-      then p divides 1 & 1 divides p by A3,NAT_3:20,NAT_D:6;
-      then p = 1 by NAT_D:5;
-      hence thesis by INT_2:def 5;
-    end;
-    hence thesis by Th6;
-  end;
-A4: for k being natural number st P[k] holds P[k+1]
+support PFactors n c= Seg $1 holds for p being Prime holds p |-count Radical n
+  <= 1;
+  let p be Prime, n be non zero natural number;
+A1: ex mS being Element of NAT st support ppf n c= Seg mS by Th14;
+A2: support ppf n = support pfexp n by NAT_3:def 9
+    .= support PFactors n by Def6;
+A3: for k being natural number st P[k] holds P[k+1]
   proof
     let k be natural number;
     assume
-A5: P[k];
+A4: P[k];
     let n be non zero natural number such that
-A6: support PFactors n c= Seg (k+1);
-A7: support pfexp n = support PFactors n by Def6;
+A5: support PFactors n c= Seg (k+1);
+A6: support pfexp n = support PFactors n by Def6;
     per cases;
     suppose
-A8:   not support PFactors n c= Seg k;
-A9:   now
+A7:   not support PFactors n c= Seg k;
+      let p be Prime;
+      reconsider r = k+1 as non zero Element of NAT;
+      set e = r |-count n;
+      set s = r |^ e;
+A8:   now
         assume
-A10:    not k+1 in support PFactors n;
+A9:     not k+1 in support PFactors n;
         support PFactors n c= Seg k
         proof
           let x be set;
           assume
-A11:      x in support PFactors n;
+A10:      x in support PFactors n;
+          then reconsider m = x as natural number;
+          m <= k+1 by A5,A10,FINSEQ_1:3;
+          then m < k+1 by A9,A10,XXREAL_0:1;
           then
-A12:      x is Prime by A7,NAT_3:34;
-          reconsider m = x as natural number by A11;
-A13:      1 <= m by A12,INT_2:def 5;
-          m <= k+1 by A6,A11,FINSEQ_1:3;
-          then m < k+1 by A10,A11,XXREAL_0:1;
-          then m <= k by NAT_1:13;
-          hence thesis by A13,FINSEQ_1:3;
+A11:      m <= k by NAT_1:13;
+          x is Prime by A6,A10,NAT_3:34;
+          then 1 <= m by INT_2:def 5;
+          hence thesis by A11,FINSEQ_1:3;
         end;
-        hence contradiction by A8;
+        hence contradiction by A7;
       end;
-      reconsider r = k+1 as non zero Element of NAT;
-      set e = r |-count n;
-      set s = r |^ e;
-A14:  r is Prime by A7,A9,NAT_3:34;
       then
-A15:  (pfexp n).r = e by NAT_3:def 8;
-A16:  r > 1 by A14,INT_2:def 5;
+A12:  r is Prime by A6,NAT_3:34;
+      then
+A13:  r > 1 by INT_2:def 5;
       then s divides n by NAT_3:def 7;
       then consider t being Nat such that
-A17:  n = s * t by NAT_D:def 3;
-      reconsider s, t as non zero natural number by A17;
-      let p be Prime;
-A18:  support PFactors t c= Seg k
+A14:  n = s * t by NAT_D:def 3;
+      reconsider s, t as non zero natural number by A14;
+      reconsider s1 = s, t1 = t as non zero Element of NAT by ORDINAL1:def 13;
+A15:  support ppf s = support pfexp s by NAT_3:def 9;
+      then
+A16:  support ppf s = support PFactors s by Def6;
+A17:  support PFactors t c= Seg k
       proof
+        set f = r |-count t;
         let x be set;
         assume
-A19:    x in support PFactors t;
-        then
-A20:    x in support pfexp t by Def6;
-        then
-A21:    x is Prime by NAT_3:34;
-        reconsider m = x as natural number by A20;
-A22:    1 <= m by A21,INT_2:def 5;
-        support pfexp t c= support pfexp n by A17,NAT_3:45;
-        then support PFactors t c= support PFactors n by A7,Def6;
-        then m in support PFactors n by A19;
-        then
-A23:    m <= k+1 by A6,FINSEQ_1:3;
-        set f = r |-count t;
-        now
+A18:    x in support PFactors t;
+        then reconsider m = x as natural number;
+A19:    x in support pfexp t by A18,Def6;
+A20:    now
           assume
-A24:      m = r;
-          (pfexp t).r = f by A14,NAT_3:def 8;
-          then f <> 0 by A20,A24,POLYNOM1:def 7;
-          then f > 0;
+A21:      m = r;
+          (pfexp t).r = f by A12,NAT_3:def 8;
+          then f <> 0 by A19,A21,PRE_POLY:def 7;
           then f >= 0+1 by NAT_1:13;
           then consider g being Nat such that
-A25:      f = 1 + g by NAT_1:10;
-          reconsider g as Element of NAT by ORDINAL1:def 13;
-          r |^ f divides t by A16,NAT_3:def 7;
+A22:      f = 1 + g by NAT_1:10;
+          r |^ f divides t by A13,NAT_3:def 7;
           then consider u being Nat such that
-A26:      t = (r |^ f)*u by NAT_D:def 3;
-          n = s * (((r |^ g)*r)*u) by A17,A25,A26,NEWTON:11
+A23:      t = (r |^ f)*u by NAT_D:def 3;
+          reconsider g as Element of NAT by ORDINAL1:def 13;
+          n = s * (((r |^ g)*r)*u) by A14,A22,A23,NEWTON:11
             .= s*r * ((r |^ g)*u)
             .= (r |^ (e+1))*((r |^ g)*u) by NEWTON:11;
           then r |^ (e+1) divides n by NAT_D:def 3;
-          hence contradiction by A16,NAT_3:def 7;
+          hence contradiction by A13,NAT_3:def 7;
         end;
-        then m < r by A23,XXREAL_0:1;
-        then m <= k by NAT_1:13;
-        hence thesis by A22,FINSEQ_1:3;
+        support pfexp t c= support pfexp n by A14,NAT_3:45;
+        then support PFactors t c= support PFactors n by A6,Def6;
+        then m in support PFactors n by A18;
+        then m <= k+1 by A5,FINSEQ_1:3;
+        then m < r by A20,XXREAL_0:1;
+        then
+A24:    m <= k by NAT_1:13;
+        x is Prime by A19,NAT_3:34;
+        then 1 <= m by INT_2:def 5;
+        hence thesis by A24,FINSEQ_1:3;
       end;
-A27:  e <> 0 by A7,A9,A15,POLYNOM1:def 7;
-A28:  support ppf s = support pfexp s by NAT_3:def 9;
+      (pfexp n).r = e by A12,NAT_3:def 8;
       then
-A29:  support ppf s = {r} by A14,A27,NAT_3:42;
-A30:  now
-        assume (support ppf s) meets (support ppf t);
-        then consider x being set such that
-A31:    x in (support ppf s) and
-A32:    x in support ppf t by XBOOLE_0:3;
-        x in support pfexp t by A32,NAT_3:def 9;
-        then
-A33:    x in support PFactors t by Def6;
-        x = r by A29,A31,TARSKI:def 1;
-        then r <= k by A18,A33,FINSEQ_1:3;
-        hence contradiction by NAT_1:13;
-      end;
-      reconsider s1 = s, t1 = t as non zero Element of NAT by ORDINAL1:def 13;
-A34:  s1,t1 are_relative_prime
-      proof
-        assume not s1,t1 are_relative_prime;
-        then
-A35:    s1 gcd t1 <> 1 by INT_2:def 4;
-        set u = s1 gcd t1;
-A36:    u divides s1 by NAT_D:def 5;
-        u <> 0 by INT_2:5;
-        then 0 < u;
-        then 0+1 <= u by NAT_1:13;
-        then u > 1 by A35,XXREAL_0:1;
-        then u >= 1+1 by NAT_1:13;
-        then consider w being Element of NAT such that
-A37:    w is prime and
-A38:    w divides u by INT_2:48;
-        w divides s1 by A36,A38,NAT_D:4;
-        then w divides r by A37,NAT_3:5;
-        then
-A39:    w = 1 or w = r by A14,INT_2:def 5;
-        u divides t1 by NAT_D:def 5;
-        then r divides t1 by A37,A38,A39,INT_2:def 5,NAT_D:4;
-        then r in support pfexp t by A14,NAT_3:37;
-        then r in support PFactors t by Def6;
-        then k+1 <= k by A18,FINSEQ_1:3;
-        hence contradiction by NAT_1:13;
-      end;
-      support ppf t = support pfexp t by NAT_3:def 9;
-      then
-A40:  support ppf s = support PFactors s &
-      support ppf t = support PFactors t by A28,Def6;
-A41:  Radical n = Product (PFactors s+PFactors t) by A17,A34,Th50
-        .= Radical s * Radical t by A30,A40,NAT_3:19;
-A42:  p |-count Radical s <= p |-count s &
-      p |-count Radical t <= p |-count t by Th55,NAT_3:30;
-A43:  p |-count Radical s = 0 or p |-count Radical t = 0
-      proof
-        assume p |-count Radical s <> 0 & p |-count Radical t <> 0;
-        then p |-count s > 0 & p |-count t > 0 by A42;
-        then (PFactors s).p <> 0 & (PFactors t).p <> 0 by Th49;
-        then p in support PFactors s & p in support PFactors t
-        by POLYNOM1:def 7;
-        hence thesis by A30,A40,XBOOLE_0:3;
-      end;
-A44:  p |-count Radical s <= 1
+A25:  e <> 0 by A6,A8,PRE_POLY:def 7;
+A26:  p |-count Radical s <= 1
       proof
         per cases;
         suppose
-A45:      p = r;
-          then
-A46:      Radical s = r by A27,Th54;
-          p > 1 by INT_2:def 5;
-          hence thesis by A45,A46,NAT_3:22;
+A27:      p = r;
+A28:      p > 1 by INT_2:def 5;
+          Radical s = r by A25,A27,Th54;
+          hence thesis by A27,A28,NAT_3:22;
         end;
-        suppose p <> r;
-          then p, r are_relative_prime by A14,INT_2:47;
+        suppose
+          p <> r;
+          then p, r are_relative_prime by A12,INT_2:47;
           then
-A47:      not p divides r by PYTHTRIP:def 2;
-A48:      p > 1 by INT_2:def 5;
+A29:      not p divides r by PYTHTRIP:def 2;
+A30:      p > 1 by INT_2:def 5;
           p |-count s = e * (p |-count r) by NAT_3:32
-            .= e * 0 by A47,A48,NAT_3:27
+            .= e * 0 by A29,A30,NAT_3:27
             .= 0;
           hence thesis by Th55,NAT_3:30;
         end;
       end;
-      p |-count Radical n =
-      (p |-count Radical t) + (p |-count Radical s) by A41,NAT_3:28;
-      hence thesis by A5,A18,A43,A44;
+A31:  support ppf s = {r} by A12,A25,A15,NAT_3:42;
+A32:  now
+        assume
+        (support ppf s) meets (support ppf t);
+        then consider x being set such that
+A33:    x in (support ppf s) and
+A34:    x in support ppf t by XBOOLE_0:3;
+        x in support pfexp t by A34,NAT_3:def 9;
+        then
+A35:    x in support PFactors t by Def6;
+        x = r by A31,A33,TARSKI:def 1;
+        then r <= k by A17,A35,FINSEQ_1:3;
+        hence contradiction by NAT_1:13;
+      end;
+      support ppf t = support pfexp t by NAT_3:def 9;
+      then
+A36:  support ppf t = support PFactors t by Def6;
+A37:  p |-count Radical s = 0 or p |-count Radical t = 0
+      proof
+        assume that
+A38:    p |-count Radical s <> 0 and
+A39:    p |-count Radical t <> 0;
+        p |-count t > 0 by A39,Th55,NAT_3:30;
+        then (PFactors t).p <> 0 by Th49;
+        then
+A40:    p in support PFactors t by PRE_POLY:def 7;
+        p |-count s > 0 by A38,Th55,NAT_3:30;
+        then (PFactors s).p <> 0 by Th49;
+        then p in support PFactors s by PRE_POLY:def 7;
+        hence thesis by A32,A16,A36,A40,XBOOLE_0:3;
+      end;
+      s1,t1 are_relative_prime
+      proof
+        set u = s1 gcd t1;
+A41:    u divides t1 by NAT_D:def 5;
+        u <> 0 by INT_2:5;
+        then
+A42:    0+1 <= u by NAT_1:13;
+        assume
+        not s1,t1 are_relative_prime;
+        then s1 gcd t1 <> 1 by INT_2:def 4;
+        then u > 1 by A42,XXREAL_0:1;
+        then u >= 1+1 by NAT_1:13;
+        then consider w being Element of NAT such that
+A43:    w is prime and
+A44:    w divides u by INT_2:48;
+        u divides s1 by NAT_D:def 5;
+        then w divides s1 by A44,NAT_D:4;
+        then w divides r by A43,NAT_3:5;
+        then w = 1 or w = r by A12,INT_2:def 5;
+        then r divides t1 by A43,A44,A41,INT_2:def 5,NAT_D:4;
+        then r in support pfexp t by A12,NAT_3:37;
+        then r in support PFactors t by Def6;
+        then k+1 <= k by A17,FINSEQ_1:3;
+        hence contradiction by NAT_1:13;
+      end;
+      then Radical n = Product (PFactors s+PFactors t) by A14,Th50
+        .= Radical s * Radical t by A32,A16,A36,NAT_3:19;
+      then p |-count Radical n = (p |-count Radical t) + (p |-count Radical s
+      ) by NAT_3:28;
+      hence thesis by A4,A17,A37,A26;
     end;
-    suppose support PFactors n c= Seg k;
-      hence thesis by A5;
+    suppose
+      support PFactors n c= Seg k;
+      hence thesis by A4;
     end;
   end;
-A49: for k being natural number holds P[k] from NAT_1:sch 2(A1,A4);
-  consider mS being Element of NAT such that
-A50: support ppf n c= Seg mS by Th14;
-  support ppf n = support pfexp n by NAT_3:def 9
-    .= support PFactors n by Def6;
-  hence thesis by A49,A50;
+A45: P[0]
+  proof
+    let n be non zero natural number;
+    assume
+A46: support PFactors n c= Seg 0;
+    let p be Prime;
+    {} c= support PFactors n by XBOOLE_1:2;
+    then support PFactors n = {} by A46,XBOOLE_0:def 10;
+    then
+A47: PFactors n = EmptyBag SetPrimes by BAGORDER:20;
+    not p divides Radical n
+    proof
+      assume
+      p divides Radical n;
+      then
+A48:  p divides 1 by A47,NAT_3:20;
+      1 divides p by NAT_D:6;
+      then p = 1 by A48,NAT_D:5;
+      hence thesis by INT_2:def 5;
+    end;
+    hence thesis by Th6;
+  end;
+  for k being natural number holds P[k] from NAT_1:sch 2(A45,A3);
+  hence thesis by A1,A2;
 end;
 
-Lm3: for n being non zero natural number, p being Prime holds
-not p |^2 divides Radical n
+Lm3: for n being non zero natural number, p being Prime holds not p |^2
+divides Radical n
+
 proof
   let n be non zero natural number;
   let p be Prime;
   set PR = p |-count Radical n;
+A1: p <> 1 by INT_2:def 5;
   assume
-A1: p|^2 divides Radical n;
-A2: p <> 1 & Radical n <> 0 by INT_2:def 5;
+A2: p|^2 divides Radical n;
 A3: PR is non zero Element of NAT
   proof
-    assume not PR is non zero Element of NAT;
-    then p |^ 0 divides Radical n &
-    not p |^(0+1) divides Radical n by A2,NAT_3:def 7;
+    assume
+    not PR is non zero Element of NAT;
+    then not p |^(0+1) divides Radical n by A1,NAT_3:def 7;
     then not p divides Radical n by NEWTON:10;
-    hence contradiction by A1,Th10;
+    hence contradiction by A2,Th10;
   end;
   PR >= 2
   proof
-    assume PR < 2;
+    assume
+    PR < 2;
     then PR = 1 by A3,NAT_1:23;
-    then not p |^(1+1) divides Radical n by A2,NAT_3:def 7;
-    hence contradiction by A1;
+    then not p |^(1+1) divides Radical n by A1,NAT_3:def 7;
+    hence contradiction by A2;
   end;
   then PR > 1 by XXREAL_0:2;
   hence contradiction by Th61;
@@ -2688,10 +2778,10 @@ end;
 Lm4: for n being non zero natural number holds Radical n is square-free
 proof
   let n be non zero natural number;
-  assume Radical n is square-containing;
-  then consider p being Prime such that
-A1: p |^ 2 divides Radical n by Def1;
-  thus contradiction by A1,Lm3;
+  assume
+  Radical n is square-containing;
+  then ex p being Prime st p |^ 2 divides Radical n by Def1;
+  hence contradiction by Lm3;
 end;
 
 registration
@@ -2701,115 +2791,132 @@ registration
 end;
 
 theorem
-  for n being non zero natural number holds
-  Radical Radical n = Radical n by Th57;
+  for n being non zero natural number holds Radical Radical n = Radical
+  n by Th57;
 
 theorem
-  for n being non zero Element of NAT, p being Prime holds
-  { k where k is Element of NAT :
-  0 < k & k divides Radical n & p divides k } c= Seg n
+  for n being non zero Element of NAT, p being Prime holds { k where k
+  is Element of NAT : 0 < k & k divides Radical n & p divides k } c= Seg n
 proof
   let n be non zero Element of NAT;
   let p be Prime;
   let x be set;
-  assume x in { k where k is Element of NAT :
-  0 < k & k divides Radical n & p divides k };
+  assume
+  x in { k where k is Element of NAT : 0 < k & k divides Radical n & p
+  divides k };
   then consider k being Element of NAT such that
-A1: x = k & k > 0 & k divides Radical n & p divides k;
-  k <= Radical n & Radical n <= n by A1,Th55,NAT_D:7;
-  then 1 <= k & k <= n by A1,NAT_1:14,XXREAL_0:2;
-  hence thesis by A1,FINSEQ_1:3;
+A1: x = k and
+A2: k > 0 and
+A3: k divides Radical n and
+  p divides k;
+A4: 1 <= k by A2,NAT_1:14;
+A5: Radical n <= n by Th55,NAT_D:7;
+  k <= Radical n by A3,NAT_D:7;
+  then k <= n by A5,XXREAL_0:2;
+  hence thesis by A1,A4,FINSEQ_1:3;
 end;
 
 theorem
-  for n being non zero Element of NAT, p being Prime holds
-  { k where k is Element of NAT :
-  0 < k & k divides Radical n & not p divides k } c= Seg n
+  for n being non zero Element of NAT, p being Prime holds { k where k
+  is Element of NAT : 0 < k & k divides Radical n & not p divides k } c= Seg n
 proof
   let n be non zero Element of NAT;
   let p be Prime;
   let x be set;
-  assume x in { k where k is Element of NAT :
-  0 < k & k divides Radical n & not p divides k };
+  assume
+  x in { k where k is Element of NAT : 0 < k & k divides Radical n &
+  not p divides k };
   then consider k being Element of NAT such that
-A1: x = k & k > 0 & k divides Radical n & not p divides k;
-  k <= Radical n & Radical n <= n by A1,Th55,NAT_D:7;
-  then 1 <= k & k <= n by A1,NAT_1:14,XXREAL_0:2;
-  hence thesis by A1,FINSEQ_1:3;
+A1: x = k and
+A2: k > 0 and
+A3: k divides Radical n and
+  not p divides k;
+A4: 1 <= k by A2,NAT_1:14;
+A5: Radical n <= n by Th55,NAT_D:7;
+  k <= Radical n by A3,NAT_D:7;
+  then k <= n by A5,XXREAL_0:2;
+  hence thesis by A1,A4,FINSEQ_1:3;
 end;
 
-Lm5: for m, n being non zero Element of NAT st
-m divides n & m is square-free holds m divides Radical n
+Lm5: for m, n being non zero Element of NAT st m divides n & m is square-free
+holds m divides Radical n
+
 proof
   let m, n be non zero Element of NAT;
-  assume
-A1: m divides n & m is square-free;
+  assume that
+A1: m divides n and
+A2: m is square-free;
   for p being Prime holds p |-count m <= p |-count Radical n
   proof
     let p be Prime;
-A2: p > 1 by INT_2:def 5;
+A3: p > 1 by INT_2:def 5;
     per cases;
-    suppose p divides m;
+    suppose
+      p divides m;
+      then p divides n by A1,NAT_D:4;
+      then p divides Radical n by Th56;
       then
-A3:   p divides n by A1,NAT_D:4;
-A4:   p |-count m <= 1 by A1,Th24;
+A4:   p |-count Radical n <> 0 by A3,NAT_3:27;
       p |-count Radical n <= 1 by Th61;
       then
 A5:   p |-count Radical n < 1 + 1 by NAT_1:13;
-      p divides Radical n by A3,Th56;
-      then p |-count Radical n <> 0 by A2,NAT_3:27;
-      hence thesis by A4,A5,NAT_1:23;
+      p |-count m <= 1 by A2,Th24;
+      hence thesis by A5,A4,NAT_1:23;
     end;
-    suppose not p divides m;
-      hence thesis by A2,NAT_3:27;
+    suppose
+      not p divides m;
+      hence thesis by A3,NAT_3:27;
     end;
   end;
   hence thesis by Th19;
 end;
 
 theorem Th65:
-  for k, n being non zero natural number holds
-  k divides n & k is square-free iff k divides Radical n
+  for k, n being non zero natural number holds k divides n & k is
+  square-free iff k divides Radical n
 proof
   let k, n be non zero natural number;
-A1: k is non zero Element of NAT & n is non zero Element of NAT
-  by ORDINAL1:def 13;
-  k divides Radical n implies k divides n & k is square-free
+A1: k divides Radical n implies k divides n & k is square-free
   proof
     assume
 A2: k divides Radical n;
     Radical n divides n by Th55;
     hence thesis by A2,Th26,NAT_D:4;
   end;
+  k is non zero Element of NAT & n is non zero Element of NAT by
+ORDINAL1:def 13;
   hence thesis by A1,Lm5;
 end;
 
 theorem
-  for n being non zero natural number holds
-  { k where k is Element of NAT : 0 < k & k divides n & k is square-free } =
-  { k where k is Element of NAT : 0 < k & k divides Radical n }
+  for n being non zero natural number holds { k where k is Element of
+NAT : 0 < k & k divides n & k is square-free } = { k where k is Element of NAT
+  : 0 < k & k divides Radical n }
 proof
   let n be non zero natural number;
-  thus { k where k is Element of NAT :
-  0 < k & k divides n & k is square-free } c=
-  { k where k is Element of NAT : 0 < k & k divides Radical n }
+  thus { k where k is Element of NAT : 0 < k & k divides n & k is square-free
+  } c= { k where k is Element of NAT : 0 < k & k divides Radical n }
   proof
     let x be set;
-    assume x in { k where k is Element of NAT :
-    0 < k & k divides n & k is square-free };
+    assume
+    x in { k where k is Element of NAT : 0 < k & k divides n & k is
+    square-free };
     then consider k1 being Element of NAT such that
-A1: k1 = x & 0 < k1 & k1 divides n & k1 is square-free;
-    k1 divides Radical n by A1,Th65;
-    hence thesis by A1;
+A1: k1 = x and
+A2: 0 < k1 and
+A3: k1 divides n & k1 is square-free;
+    k1 divides Radical n by A2,A3,Th65;
+    hence thesis by A1,A2;
   end;
   let x be set;
-  assume x in { k where k is Element of NAT : 0 < k & k divides Radical n };
+  assume
+  x in { k where k is Element of NAT : 0 < k & k divides Radical n };
   then consider k1 being Element of NAT such that
-A2: x = k1 & 0 < k1 & k1 divides Radical n;
+A4: x = k1 & 0 < k1 and
+A5: k1 divides Radical n;
+A6: k1 is square-free by A5,Th26;
   Radical n divides n by Th55;
-  then
-A3: k1 divides n by A2,NAT_D:4;
-  k1 is square-free by A2,Th26;
-  hence thesis by A2,A3;
+  then k1 divides n by A5,NAT_D:4;
+  hence thesis by A4,A6;
 end;
 

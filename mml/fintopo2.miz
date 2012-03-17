@@ -27,8 +27,8 @@ reserve FT for non empty RelStr;
 reserve A for Subset of FT;
 
 theorem
-  for FT being non empty RelStr, A,B being Subset of FT holds
-  A c= B implies A^i c= B^i
+  for FT being non empty RelStr, A,B being Subset of FT holds A c= B
+  implies A^i c= B^i
 proof
   let FT be non empty RelStr;
   let A,B be Subset of FT;
@@ -42,7 +42,8 @@ A3: U_FT y c= A by A2,FIN_TOPO:12;
   for t being Element of FT st t in U_FT y holds t in B
   proof
     let t be Element of FT;
-    assume t in U_FT y;
+    assume
+    t in U_FT y;
     then t in A by A3;
     hence thesis by A1;
   end;
@@ -61,18 +62,24 @@ proof
       assume
 A1:   x in A^delta;
       then reconsider y=x as Element of FT;
-      U_FT y meets A & U_FT y meets A` by A1,FIN_TOPO:10;
-      then y in (A^b) & y in ((A`)^b)``;
-      then y in (A^b) & y in ((A^i)`) by FIN_TOPO:23;
-      hence thesis by XBOOLE_0:def 4;
+      U_FT y meets A` by A1,FIN_TOPO:10;
+      then y in ((A`)^b)``;
+      then
+A2:   y in ((A^i)`) by FIN_TOPO:23;
+      U_FT y meets A by A1,FIN_TOPO:10;
+      then y in (A^b);
+      hence thesis by A2,XBOOLE_0:def 4;
     end;
     assume
-A2: x in ((A^b) /\ ((A^i)`));
+A3: x in ((A^b) /\ ((A^i)`));
     then reconsider y=x as Element of FT;
-    x in (A^b) & x in ((A^i)`) by A2,XBOOLE_0:def 4;
-    then x in (A^b) & x in ((((A`)^b)`)`) by FIN_TOPO:23;
-    then U_FT y meets A & U_FT y meets A` by FIN_TOPO:13;
-    hence thesis;
+    x in ((A^i)`) by A3,XBOOLE_0:def 4;
+    then x in ((((A`)^b)`)`) by FIN_TOPO:23;
+    then
+A4: U_FT y meets A` by FIN_TOPO:13;
+    x in (A^b) by A3,XBOOLE_0:def 4;
+    then U_FT y meets A by FIN_TOPO:13;
+    hence thesis by A4;
   end;
   hence thesis by TARSKI:2;
 end;
@@ -85,11 +92,13 @@ proof
     let x be set;
     thus x in A^delta implies x in A^b \ A^i
     proof
-      assume x in A^delta;
+      assume
+      x in A^delta;
       then x in ((A^b) /\ ((A^i)`)) by Th2;
       hence thesis by SUBSET_1:32;
     end;
-    assume x in A^b \ A^i;
+    assume
+    x in A^b \ A^i;
     then x in ((A^b) /\ ((A^i)`)) by SUBSET_1:32;
     hence thesis by Th2;
   end;
@@ -99,7 +108,8 @@ end;
 theorem
   A` is open implies A is closed
 proof
-  assume A` is open;
+  assume
+  A` is open;
   then
 A1: A` = (A`)^i by FIN_TOPO:def 16;
   (A`)^i = (((A`)`)^b)` by FIN_TOPO:23
@@ -112,7 +122,8 @@ end;
 theorem
   A` is closed implies A is open
 proof
-  assume A` is closed;
+  assume
+  A` is closed;
   then
 A1: (A`) = (A`)^b by FIN_TOPO:def 17;
   (A`)^b = (((A`)`)^i)` by FIN_TOPO:22
@@ -129,7 +140,8 @@ definition
   let A be Subset of FT;
   func P_1(x,y,A) -> Element of BOOLEAN equals
   :Def1:
-  TRUE if (y in U_FT x) & (y in A) otherwise FALSE;
+  TRUE if y in U_FT x & y
+  in A otherwise FALSE;
   correctness;
 end;
 
@@ -140,40 +152,42 @@ definition
   let A be Subset of FT;
   func P_2(x,y,A) -> Element of BOOLEAN equals
   :Def2:
-  TRUE if (y in U_FT x) & (y in A`) otherwise FALSE;
+  TRUE if y in U_FT x & y
+  in A` otherwise FALSE;
   correctness;
 end;
 
 theorem
-  for x,y be Element of FT, A be Subset of FT
-  holds P_1(x,y,A) = TRUE iff (y in U_FT x) & (y in A) by Def1;
+  for x,y be Element of FT, A be Subset of FT holds P_1(x,y,A) = TRUE
+  iff y in U_FT x & y in A by Def1;
 
 theorem
-  for x,y be Element of FT, A be Subset of FT
-  holds P_2(x,y,A) = TRUE iff (y in U_FT x) & (y in A`) by Def2;
+  for x,y be Element of FT, A be Subset of FT holds P_2(x,y,A) = TRUE
+  iff y in U_FT x & y in A` by Def2;
 
 theorem Th8:
-  for x be Element of FT, A be Subset of FT
-  holds x in A^delta iff ex y1,y2 being Element of FT
-  st P_1(x,y1,A)=TRUE & P_2(x,y2,A)=TRUE
+  for x be Element of FT, A be Subset of FT holds x in A^delta iff
+  ex y1,y2 being Element of FT st P_1(x,y1,A)=TRUE & P_2(x,y2,A)=TRUE
 proof
   let x be Element of FT;
   let A be Subset of FT;
-A1: x in A^delta implies ex y1,y2 being Element of FT
-  st P_1(x,y1,A)=TRUE & P_2(x,y2,A)=TRUE
+A1: x in A^delta implies ex y1,y2 being Element of FT st P_1(x,y1,A)=TRUE &
+  P_2(x,y2,A)=TRUE
   proof
+    reconsider z=x as Element of FT;
     assume
 A2: x in A^delta;
-    reconsider z=x as Element of FT;
-A3: U_FT z meets A & U_FT z meets A` by A2,FIN_TOPO:10;
+    then U_FT z meets A by FIN_TOPO:10;
     then consider w1 be set such that
-A4: w1 in U_FT z & w1 in A by XBOOLE_0:3;
-    reconsider w1 as Element of FT by A4;
+A3: w1 in U_FT z and
+A4: w1 in A by XBOOLE_0:3;
+    reconsider w1 as Element of FT by A3;
     take w1;
-    consider w2 be set such that
-A5: w2 in U_FT z & w2 in A` by A3,XBOOLE_0:3;
+    U_FT z meets A` by A2,FIN_TOPO:10;
+    then consider w2 be set such that
+A5: w2 in U_FT z & w2 in A` by XBOOLE_0:3;
     take w2;
-    thus thesis by A4,A5,Def1,Def2;
+    thus thesis by A3,A4,A5,Def1,Def2;
   end;
   (ex y1,y2 being Element of FT st P_1(x,y1,A)=TRUE & P_2(x,y2,A)=TRUE)
   implies x in A^delta
@@ -181,11 +195,11 @@ A5: w2 in U_FT z & w2 in A` by A3,XBOOLE_0:3;
     given y1,y2 being Element of FT such that
 A6: P_1(x,y1,A)=TRUE and
 A7: P_2(x,y2,A)=TRUE;
-    (y1 in U_FT x) & (y1 in A) by A6,Def1;
+    y1 in U_FT x & y1 in A by A6,Def1;
     then U_FT x /\ A <> {} by XBOOLE_0:def 4;
     then
 A8: U_FT x meets A by XBOOLE_0:def 7;
-    (y2 in U_FT x) & (y2 in A`) by A7,Def2;
+    y2 in U_FT x & y2 in A` by A7,Def2;
     then U_FT x meets A` by XBOOLE_0:3;
     hence thesis by A8;
   end;
@@ -207,68 +221,71 @@ theorem
   for x,y be Element of FT holds P_0(x,y)=TRUE iff y in U_FT x by Def3;
 
 theorem
-  for x be Element of FT, A be Subset of FT
-  holds x in A^i iff (for y be Element of FT holds
-  (P_0(x,y)=TRUE implies P_1(x,y,A)=TRUE))
+  for x be Element of FT, A be Subset of FT holds x in A^i iff for y be
+  Element of FT holds (P_0(x,y)=TRUE implies P_1(x,y,A)=TRUE)
 proof
   let x be Element of FT;
   let A be Subset of FT;
-A1: x in A^i implies (for y be Element of FT
-  holds (P_0(x,y)=TRUE implies P_1(x,y,A)=TRUE))
-  proof
-    assume
-A2: x in A^i;
-    let y be Element of FT;
-    assume
-A3: P_0(x,y)=TRUE;
-A4: U_FT x c= A by A2,FIN_TOPO:12;
-    y in U_FT x by A3,Def3;
-    hence thesis by A4,Def1;
-  end;
-  (for y be Element of FT holds (P_0(x,y)=TRUE implies P_1(x,y,A)=TRUE))
+A1: (for y be Element of FT holds (P_0(x,y)=TRUE implies P_1(x,y,A)=TRUE))
   implies x in A^i
   proof
     assume
-A5: for y be Element of FT holds (P_0(x,y)=TRUE implies P_1(x,y,A)=TRUE);
-    for y be Element of FT holds
-    (y in (U_FT x)) implies ((y in U_FT x) & (y in A))
+A2: for y be Element of FT holds (P_0(x,y)=TRUE implies P_1(x,y,A)=
+    TRUE);
+    for y be Element of FT holds y in (U_FT x) implies y in U_FT x & y in
+    A
     proof
       let y be Element of FT;
-      assume y in (U_FT x);
+      assume
+      y in (U_FT x);
       then P_0(x,y)=TRUE by Def3;
-      then P_1(x,y,A)=TRUE by A5;
+      then P_1(x,y,A)=TRUE by A2;
       hence thesis by Def1;
     end;
-    then for y be Element of FT holds y in (U_FT x) implies (y in A);
+    then for y be Element of FT holds y in (U_FT x) implies y in A;
     then (U_FT x) c= A by SUBSET_1:7;
     hence thesis;
+  end;
+  x in A^i implies for y be Element of FT holds (P_0(x,y)=TRUE implies P_1
+  (x,y,A)=TRUE)
+  proof
+    assume
+    x in A^i;
+    then
+A3: U_FT x c= A by FIN_TOPO:12;
+    let y be Element of FT;
+    assume
+    P_0(x,y)=TRUE;
+    then y in U_FT x by Def3;
+    hence thesis by A3,Def1;
   end;
   hence thesis by A1;
 end;
 
 theorem
-  for x be Element of FT, A be Subset of FT holds x in A^b iff
-  ex y1 being Element of FT st P_1(x,y1,A)=TRUE
+  for x be Element of FT, A be Subset of FT holds x in A^b iff ex y1
+  being Element of FT st P_1(x,y1,A)=TRUE
 proof
   let x be Element of FT;
   let A be Subset of FT;
 A1: x in A^b implies ex y1 being Element of FT st P_1(x,y1,A)=TRUE
   proof
-    assume
-A2: x in A^b;
     reconsider z=x as Element of FT;
-    U_FT z meets A by A2,FIN_TOPO:13;
+    assume
+    x in A^b;
+    then U_FT z meets A by FIN_TOPO:13;
     then consider w be set such that
-A3: w in U_FT z & w in A by XBOOLE_0:3;
-    reconsider w as Element of FT by A3;
+A2: w in U_FT z and
+A3: w in A by XBOOLE_0:3;
+    reconsider w as Element of FT by A2;
     take w;
-    thus thesis by A3,Def1;
+    thus thesis by A2,A3,Def1;
   end;
   (ex y1 being Element of FT st P_1(x,y1,A)=TRUE) implies x in A^b
   proof
     given y be Element of FT such that
 A4: P_1(x,y,A)=TRUE;
-    (y in U_FT x) & (y in A) by A4,Def1;
+    y in U_FT x & y in A by A4,Def1;
     then y in (U_FT x /\ A) by XBOOLE_0:def 4;
     then U_FT x meets A by XBOOLE_0:def 7;
     hence thesis;
@@ -282,65 +299,72 @@ definition
   let A be Subset of FT;
   func P_A(x,A) -> Element of BOOLEAN equals
   :Def4:
-  TRUE if x in A
-  otherwise FALSE;
+  TRUE if x in A otherwise
+  FALSE;
   correctness;
 end;
 
 theorem
-  for x be Element of FT, A be Subset of FT
-  holds P_A(x,A)=TRUE iff x in A by Def4;
+  for x be Element of FT, A be Subset of FT holds P_A(x,A)=TRUE iff x in
+  A by Def4;
 
 theorem
-  for x be Element of FT, A be Subset of FT holds x in A^deltai iff
-  (ex y1,y2 being Element of FT
-  st P_1(x,y1,A)=TRUE & P_2(x,y2,A)=TRUE) & P_A(x,A) = TRUE
+  for x be Element of FT, A be Subset of FT holds x in A^deltai iff (ex
+y1,y2 being Element of FT st P_1(x,y1,A)=TRUE & P_2(x,y2,A)=TRUE) & P_A(x,A) =
+  TRUE
 proof
   let x be Element of FT;
   let A be Subset of FT;
-A1: x in A^deltai implies (ex y1,y2 being Element of FT
-  st P_1(x,y1,A)=TRUE & P_2(x,y2,A)=TRUE) & P_A(x,A) = TRUE
+A1: (ex y1,y2 being Element of FT st P_1(x,y1,A)=TRUE & P_2(x,y2,A)=TRUE) &
+  P_A(x,A) = TRUE implies x in A^deltai
   proof
-    assume x in A^deltai;
-    then x in A & x in A^delta by XBOOLE_0:def 4;
-    hence thesis by Def4,Th8;
-  end;
-  (ex y1,y2 being Element of FT
-  st P_1(x,y1,A)=TRUE & P_2(x,y2,A)=TRUE) & P_A(x,A) = TRUE
-  implies x in A^deltai
-  proof
-    assume (ex y1,y2 being Element of FT
-    st P_1(x,y1,A)=TRUE & P_2(x,y2,A)=TRUE) & P_A(x,A) = TRUE;
+    assume
+    ( ex y1,y2 being Element of FT st P_1(x,y1,A)=TRUE & P_2(x,y2,A)=
+    TRUE)& P_A(x, A) = TRUE;
     then x in A^delta & x in A by Def4,Th8;
     hence thesis by XBOOLE_0:def 4;
+  end;
+  x in A^deltai implies (ex y1,y2 being Element of FT st P_1(x,y1,A)=TRUE
+  & P_2(x,y2,A)=TRUE) & P_A(x,A) = TRUE
+  proof
+    assume
+    x in A^deltai;
+    then x in A & x in A^delta by XBOOLE_0:def 4;
+    hence thesis by Def4,Th8;
   end;
   hence thesis by A1;
 end;
 
 theorem
-  for x be Element of FT, A be Subset of FT holds x in A^deltao iff
-  (ex y1,y2 being Element of FT
-  st P_1(x,y1,A)=TRUE & P_2(x,y2,A)=TRUE) & P_A(x,A) = FALSE
+  for x be Element of FT, A be Subset of FT holds x in A^deltao iff (ex
+y1,y2 being Element of FT st P_1(x,y1,A)=TRUE & P_2(x,y2,A)=TRUE) & P_A(x,A) =
+  FALSE
 proof
   let x be Element of FT;
   let A be Subset of FT;
-A1: x in A^deltao implies (ex y1,y2 being Element of FT
-  st P_1(x,y1,A)=TRUE & P_2(x,y2,A)=TRUE) & P_A(x,A) = FALSE
+A1: (ex y1,y2 being Element of FT st P_1(x,y1,A)=TRUE & P_2(x,y2,A)=TRUE) &
+  P_A(x,A) = FALSE implies x in A^deltao
   proof
-    assume x in A^deltao;
-    then x in A` & x in A^delta by XBOOLE_0:def 4;
-    then not x in A & x in A^delta by XBOOLE_0:def 5;
-    hence thesis by Def4,Th8;
+    assume that
+A2: ex y1,y2 being Element of FT st P_1(x,y1,A)=TRUE & P_2(x,y2,A)=
+    TRUE and
+A3: P_A(x,A) = FALSE;
+    not x in A by A3,Def4;
+    then
+A4: x in A` by XBOOLE_0:def 5;
+    x in A^delta by A2,Th8;
+    hence thesis by A4,XBOOLE_0:def 4;
   end;
-  (ex y1,y2 being Element of FT
-  st P_1(x,y1,A)=TRUE & P_2(x,y2,A)=TRUE) & P_A(x,A) = FALSE
-  implies x in A^deltao
+  x in A^deltao implies (ex y1,y2 being Element of FT st P_1(x,y1,A)=TRUE
+  & P_2(x,y2,A)=TRUE) & P_A(x,A) = FALSE
   proof
-    assume (ex y1,y2 being Element of FT
-    st P_1(x,y1,A)=TRUE & P_2(x,y2,A)=TRUE) & P_A(x,A) = FALSE;
-    then x in A^delta & (x in (the carrier of FT) & not(x in A)) by Def4,Th8;
-    then x in A^delta & x in A` by XBOOLE_0:def 5;
-    hence thesis by XBOOLE_0:def 4;
+    assume
+A5: x in A^deltao;
+    then x in A` by XBOOLE_0:def 4;
+    then
+A6: not x in A by XBOOLE_0:def 5;
+    x in A^delta by A5,XBOOLE_0:def 4;
+    hence thesis by A6,Def4,Th8;
   end;
   hence thesis by A1;
 end;
@@ -351,8 +375,8 @@ definition
   let y be Element of FT;
   func P_e(x,y) -> Element of BOOLEAN equals
   :Def5:
-  TRUE if x = y
-  otherwise FALSE;
+  TRUE if x = y otherwise
+  FALSE;
   correctness;
 end;
 
@@ -360,123 +384,138 @@ theorem
   for x,y be Element of FT holds P_e(x,y)=TRUE iff x = y by Def5;
 
 theorem
-  for x be Element of FT, A be Subset of FT holds x in A^s iff P_A(x,A)=TRUE &
-  not(ex y being Element of FT st (P_1(x,y,A)=TRUE & P_e(x,y)=FALSE))
+  for x be Element of FT, A be Subset of FT holds x in A^s iff P_A(x,A)=
+  TRUE & not(ex y being Element of FT st P_1(x,y,A)=TRUE & P_e(x,y)=FALSE )
 proof
   let x be Element of FT;
   let A be Subset of FT;
-A1: x in A^s implies P_A(x,A)=TRUE & not(ex y being Element of FT
-  st (P_1(x,y,A)=TRUE & P_e(x,y)=FALSE))
-  proof
-    assume x in A^s;
-    then
-A2: x in A & (U_FT x \ {x}) misses A by FIN_TOPO:14;
-    then
-A3: x in A & (U_FT x \ {x}) /\ A = {} by XBOOLE_0:def 7;
-    not(ex y being Element of FT st (P_1(x,y,A)=TRUE & P_e(x,y)=FALSE))
-    proof
-      given y being Element of FT such that
-A4:   P_1(x,y,A)=TRUE and
-A5:   P_e(x,y)=FALSE;
-A6:   (y in U_FT x) & (y in A) by A4,Def1;
-      not x = y by A5,Def5;
-      then not y in {x} by TARSKI:def 1;
-      then y in (U_FT x \ {x}) by A6,XBOOLE_0:def 5;
-      hence contradiction by A3,A6,XBOOLE_0:def 4;
-    end;
-    hence thesis by A2,Def4;
-  end;
-  (P_A(x,A)=TRUE & not(ex y being Element of FT
-  st (P_1(x,y,A)=TRUE & P_e(x,y)=FALSE))) implies x in A^s
+A1: x in A^s implies P_A(x,A)=TRUE & not(ex y being Element of FT st P_1(x,y
+  ,A)=TRUE & P_e(x,y)=FALSE )
   proof
     assume
-A7: P_A(x,A)=TRUE & not(ex y being Element of FT
-    st (P_1(x,y,A)=TRUE & P_e(x,y)=FALSE));
+A2: x in A^s;
+    then (U_FT x \ {x}) misses A by FIN_TOPO:14;
     then
-A8: x in A by Def4;
-    for y be Element of FT holds not(y in ((U_FT x \ {x}) /\ A))
+A3: (U_FT x \ {x}) /\ A = {} by XBOOLE_0:def 7;
+A4: not(ex y being Element of FT st P_1(x,y,A)=TRUE & P_e(x,y)=FALSE )
+    proof
+      given y being Element of FT such that
+A5:   P_1(x,y,A)=TRUE and
+A6:   P_e(x,y)=FALSE;
+      not x = y by A6,Def5;
+      then
+A7:   not y in {x} by TARSKI:def 1;
+      y in U_FT x by A5,Def1;
+      then
+A8:   y in (U_FT x \ {x}) by A7,XBOOLE_0:def 5;
+      y in A by A5,Def1;
+      hence contradiction by A3,A8,XBOOLE_0:def 4;
+    end;
+    x in A by A2,FIN_TOPO:14;
+    hence thesis by A4,Def4;
+  end;
+  P_A(x,A)=TRUE & not(ex y being Element of FT st P_1(x,y,A)=TRUE & P_e(x
+  ,y)=FALSE ) implies x in A^s
+  proof
+    assume that
+A9: P_A(x,A)=TRUE and
+A10: not(ex y being Element of FT st P_1(x,y,A)=TRUE & P_e(x,y)=FALSE
+    );
+    for y be Element of FT holds not y in ((U_FT x \ {x}) /\ A)
     proof
       let y be Element of FT;
-      not (P_1(x,y,A)=TRUE & P_e(x,y)=FALSE) by A7;
-      then not((y in U_FT x) & (not x = y) & (y in A)) by Def1,Def5;
-      then not((y in U_FT x) & (not y in {x}) & (y in A)) by TARSKI:def 1;
-      then not(y in (U_FT x \ {x}) & (y in A)) by XBOOLE_0:def 5;
+      not (P_1(x,y,A)=TRUE & P_e(x,y)=FALSE) by A10;
+      then not( y in U_FT x & (not x = y) & y in A ) by Def1,Def5;
+      then not( y in U_FT x & (not y in {x}) & y in A ) by TARSKI:def 1;
+      then not(y in (U_FT x \ {x}) & y in A ) by XBOOLE_0:def 5;
       hence thesis by XBOOLE_0:def 4;
     end;
     then (U_FT x \ {x}) /\ A = {} by SUBSET_1:10;
-    then (U_FT x \ {x}) misses A by XBOOLE_0:def 7;
-    hence thesis by A8;
+    then
+A11: (U_FT x \ {x}) misses A by XBOOLE_0:def 7;
+    x in A by A9,Def4;
+    hence thesis by A11;
   end;
   hence thesis by A1;
 end;
 
 theorem
-  for x be Element of FT, A be Subset of FT holds x in A^n iff P_A(x,A)=TRUE &
-  ex y being Element of FT st (P_1(x,y,A)=TRUE & P_e(x,y)=FALSE)
+  for x be Element of FT, A be Subset of FT holds x in A^n iff P_A(x,A)=
+  TRUE & ex y being Element of FT st P_1(x,y,A)=TRUE & P_e(x,y)=FALSE
 proof
   let x be Element of FT;
   let A be Subset of FT;
-A1: x in A^n implies P_A(x,A)=TRUE & ex y being Element of FT
-  st (P_1(x,y,A)=TRUE & P_e(x,y)=FALSE)
+A1: x in A^n implies P_A(x,A)=TRUE & ex y being Element of FT st P_1(x,y,A)=
+  TRUE & P_e(x,y)=FALSE
   proof
-    assume x in A^n;
-    then
-A2: x in A & (U_FT x \ {x}) meets A by FIN_TOPO:15;
-    then x in A & (U_FT x \ {x}) /\ A <> {} by XBOOLE_0:def 7;
+    assume
+A2: x in A^n;
+    then (U_FT x \ {x}) meets A by FIN_TOPO:15;
+    then (U_FT x \ {x}) /\ A <> {} by XBOOLE_0:def 7;
     then consider y being Element of FT such that
 A3: y in ((U_FT x \ {x}) /\ A) by SUBSET_1:10;
-A4: (y in U_FT x \ {x}) & (y in A) by A3,XBOOLE_0:def 4;
+A4: y in U_FT x \ {x} by A3,XBOOLE_0:def 4;
     then
-A5: y in U_FT x & not y in {x} by XBOOLE_0:def 5;
+A5: y in U_FT x by XBOOLE_0:def 5;
+    not y in {x} by A4,XBOOLE_0:def 5;
     then not x = y by TARSKI:def 1;
     then
 A6: P_e(x,y)=FALSE by Def5;
-    P_1(x,y,A)=TRUE by A4,A5,Def1;
-    hence thesis by A2,A6,Def4;
-  end;
-  (P_A(x,A)=TRUE & ex y being Element of FT
-  st (P_1(x,y,A)=TRUE & P_e(x,y)=FALSE)) implies x in A^n
-  proof
-    assume
-A7: P_A(x,A)=TRUE & ex y being Element of FT
-    st (P_1(x,y,A)=TRUE & P_e(x,y)=FALSE);
+    y in A by A3,XBOOLE_0:def 4;
     then
-A8: x in A by Def4;
+A7: P_1(x,y,A)=TRUE by A5,Def1;
+    x in A by A2,FIN_TOPO:15;
+    hence thesis by A6,A7,Def4;
+  end;
+  (P_A(x,A)=TRUE & ex y being Element of FT st P_1(x,y,A)=TRUE & P_e(x,y)
+  =FALSE ) implies x in A^n
+  proof
+    assume that
+A8: P_A(x,A)=TRUE and
+A9: ex y being Element of FT st P_1(x,y,A)=TRUE & P_e(x,y)=FALSE;
     consider y being Element of FT such that
-A9: (P_1(x,y,A)=TRUE & P_e(x,y)=FALSE) by A7;
-    y in U_FT x & y in A & x <> y by A9,Def1,Def5;
-    then (y in U_FT x) & (not y in {x}) & (y in A) by TARSKI:def 1;
-    then y in (U_FT x \ {x}) & (y in A) by XBOOLE_0:def 5;
-    then (U_FT x \ {x}) meets A by XBOOLE_0:3;
-    hence thesis by A8,FIN_TOPO:15;
+A10: P_1(x,y,A)=TRUE and
+A11: P_e(x,y)=FALSE by A9;
+    x <> y by A11,Def5;
+    then
+A12: not y in {x} by TARSKI:def 1;
+    y in U_FT x by A10,Def1;
+    then
+A13: y in (U_FT x \ {x}) by A12,XBOOLE_0:def 5;
+    y in A by A10,Def1;
+    then
+A14: (U_FT x \ {x}) meets A by A13,XBOOLE_0:3;
+    x in A by A8,Def4;
+    hence thesis by A14,FIN_TOPO:15;
   end;
   hence thesis by A1;
 end;
 
 theorem
-  for x be Element of FT, A be Subset of FT holds x in A^f iff
-  (ex y being Element of FT st P_A(y,A)=TRUE & P_0(y,x)=TRUE)
+  for x be Element of FT, A be Subset of FT holds x in A^f iff ex y
+  being Element of FT st P_A(y,A)=TRUE & P_0(y,x)=TRUE
 proof
   let x be Element of FT;
   let A be Subset of FT;
-A1: x in A^f implies
-  (ex y being Element of FT st P_A(y,A)=TRUE & P_0(y,x)=TRUE)
+A1: (ex y being Element of FT st P_A(y,A)=TRUE & P_0(y,x)=TRUE) implies x in
+  A^f
   proof
-    assume x in A^f;
+    assume
+    ex y being Element of FT st P_A(y,A)=TRUE & P_0(y,x)=TRUE;
     then consider y being Element of FT such that
-A2: y in A & x in U_FT y by FIN_TOPO:16;
-A3: P_A(y,A)=TRUE by A2,Def4;
-    P_0(y,x)=TRUE by A2,Def3;
-    hence thesis by A3;
+A2: P_A(y,A)=TRUE & P_0(y,x)=TRUE;
+    y in A & x in U_FT y by A2,Def3,Def4;
+    hence thesis;
   end;
-  (ex y being Element of FT st P_A(y,A)=TRUE & P_0(y,x)=TRUE) implies x in A^f
+  x in A^f implies ex y being Element of FT st P_A(y,A)=TRUE & P_0(y,x)=
+  TRUE
   proof
-    assume ex y being Element of FT st P_A(y,A)=TRUE & P_0(y,x)=TRUE;
+    assume
+    x in A^f;
     then consider y being Element of FT such that
-A4: P_A(y,A)=TRUE & P_0(y,x)=TRUE;
-A5: y in A by A4,Def4;
-    x in U_FT y by A4,Def3;
-    hence thesis by A5;
+A3: y in A & x in U_FT y by FIN_TOPO:16;
+    P_A(y,A)=TRUE & P_0(y,x)=TRUE by A3,Def3,Def4;
+    hence thesis;
   end;
   hence thesis by A1;
 end;
@@ -488,14 +527,15 @@ begin
 ::
 
 definition
-  struct ( 1-sorted ) FMT_Space_Str (# carrier -> set,
-    BNbd -> Function of the carrier, bool bool the carrier #);
+  struct ( 1-sorted ) FMT_Space_Str (# carrier -> set, BNbd -> Function of the
+    carrier, bool bool the carrier #);
 end;
 
 registration
   cluster non empty strict FMT_Space_Str;
   existence
-  proof consider D being non empty set,f being Function of D, bool bool D;
+  proof
+    consider D being non empty set,f being Function of D, bool bool D;
     take FMT_Space_Str(#D,f#);
     thus the carrier of FMT_Space_Str(#D,f#) is non empty;
     thus thesis;
@@ -510,7 +550,6 @@ definition
   let FMT;
   let x be Element of FMT;
   func U_FMT x -> Subset-Family of FMT equals
-
   ( the BNbd of FMT ).x;
   correctness;
 end;
@@ -518,71 +557,72 @@ end;
 definition
   let T;
   func NeighSp T -> non empty strict FMT_Space_Str means
-  the carrier of it = the carrier of T & for x being Point of it holds
-  U_FMT x = {V where V is Subset of T: V in the topology of T & x in V};
+  the carrier of it =
+the carrier of T & for x being Point of it holds U_FMT x = {V where V is Subset
+  of T: V in the topology of T & x in V};
   existence
   proof
-    ex IT being non empty strict FMT_Space_Str
-    st the carrier of IT = the carrier of T & for x being Point of IT holds
-    U_FMT x = {V where V is Subset of T: V in the topology of T & x in V}
+    ex IT being non empty strict FMT_Space_Str st the carrier of IT = the
+carrier of T & for x being Point of IT holds U_FMT x = {V where V is Subset of
+T:  V in the topology of T & x in V}
     proof
-      deffunc F(set) =
-      {V where V is Subset of T: V in the topology of T & $1 in V};
+      deffunc F(set) = {V where V is Subset of T: V in the topology of T & $1
+      in V};
 A1:   for x being Element of T holds F(x) in bool bool the carrier of T
       proof
         let x being Element of T;
         now
           let Y be set;
-          assume Y in {V where V is Subset of T: V in the topology of T & x in
-          V};
-          then consider V being Subset of T such that
-A2:       V=Y & V in the topology of T & x in V;
-          thus Y in bool the carrier of T by A2;
+          assume
+          Y in {V where V is Subset of T: V in the topology of T & x
+          in V};
+          then ex V being Subset of T st V=Y & V in the topology of T & x in V;
+          hence Y in bool the carrier of T;
         end;
-        then {V where V is Subset of T: V in the topology of T & x in V}
-        c= bool the carrier of T by TARSKI:def 3;
+        then {V where V is Subset of T: V in the topology of T & x in V} c=
+        bool the carrier of T by TARSKI:def 3;
         hence thesis;
       end;
       consider f be Function of the carrier of T,bool bool the carrier of T
       such that
-A3:   for x being Element of T holds f.x = F(x) from FUNCT_2:sch 8(A1);
-      reconsider IT = FMT_Space_Str(#the carrier of T,f#)
-      as non empty strict FMT_Space_Str;
+A2:   for x being Element of T holds f.x = F(x) from FUNCT_2:sch 8(A1);
+      reconsider IT = FMT_Space_Str(#the carrier of T,f#) as non empty strict
+      FMT_Space_Str;
       take IT;
-      thus thesis by A3;
+      thus thesis by A2;
     end;
     hence thesis;
   end;
   uniqueness
   proof
     let it1,it2 be non empty strict FMT_Space_Str such that
-A4: the carrier of it1 = the carrier of T and
-A5: for x being Point of it1 holds
-    U_FMT x = {V where V is Subset of T: V in the topology of T & x in V} and
-A6: the carrier of it2 = the carrier of T and
-A7: for x being Point of it2 holds
-    U_FMT x = {V where V is Subset of T: V in the topology of T & x in V};
-A8: for x being Element of it1 holds (the BNbd of it1).x
-    = {V where V is Subset of T: V in the topology of T & x in V}
-    proof
-      let x be Element of it1;
-      (the BNbd of it1).x = U_FMT x;
-      hence thesis by A5;
-    end;
-A9: for x being Element of it2 holds (the BNbd of it2).x
-    = {V where V is Subset of T: V in the topology of T & x in V}
+A3: the carrier of it1 = the carrier of T and
+A4: for x being Point of it1 holds U_FMT x = {V where V is Subset of T
+    : V in the topology of T & x in V} and
+A5: the carrier of it2 = the carrier of T and
+A6: for x being Point of it2 holds U_FMT x = {V where V is Subset of
+T:  V in the topology of T & x in V};
+A7: for x being Element of it2 holds (the BNbd of it2).x = {V where V is
+    Subset of T: V in the topology of T & x in V}
     proof
       let x be Element of it2;
       (the BNbd of it2).x = U_FMT x;
-      hence thesis by A7;
+      hence thesis by A6;
+    end;
+A8: for x being Element of it1 holds (the BNbd of it1).x = {V where V is
+    Subset of T: V in the topology of T & x in V}
+    proof
+      let x be Element of it1;
+      (the BNbd of it1).x = U_FMT x;
+      hence thesis by A4;
     end;
     now
       let x being Point of it1;
-      thus (the BNbd of it1).x
-      = {V where V is Subset of T: V in the topology of T & x in V} by A8
-        .= (the BNbd of it2).x by A4,A6,A9;
+      thus (the BNbd of it1).x = {V where V is Subset of T: V in the topology
+      of T & x in V} by A8
+        .= (the BNbd of it2).x by A3,A5,A7;
     end;
-    hence thesis by A4,A6,FUNCT_2:113;
+    hence thesis by A3,A5,FUNCT_2:113;
   end;
 end;
 
@@ -592,19 +632,20 @@ definition
   let IT be non empty FMT_Space_Str;
   attr IT is Fo_filled means
   :Def8:
-  for x being Element of IT
-  for D being Subset of IT st D in U_FMT x holds x in D;
+  for x being Element of IT for D being
+  Subset of IT st D in U_FMT x holds x in D;
 end;
 
 definition
   let FMT;
   let A;
   func A^Fodelta -> Subset of FMT equals
-  {x:for W st W in U_FMT x holds W meets A & W meets A`};
+  {x:for W st W in U_FMT x holds W
+  meets A & W meets A`};
   coherence
   proof
-    defpred P[Element of FMT] means
-    for W st W in U_FMT $1 holds W meets A & W meets A`;
+    defpred P[Element of FMT] means for W st W in U_FMT $1 holds W meets A & W
+    meets A`;
     { x: P[x]} is Subset of FMT from DOMAIN_1:sch 7;
     hence thesis;
   end;
@@ -613,16 +654,19 @@ end;
 canceled;
 
 theorem Th20:
-  x in A^Fodelta iff for W st W in U_FMT x holds W meets A & W meets A`
+  x in A^Fodelta iff for W st W in U_FMT x holds W meets A & W
+  meets A`
 proof
-  thus x in A^Fodelta implies for W st W in U_FMT x holds W meets A &
-  W meets A`
+  thus x in A^Fodelta implies for W st W in U_FMT x holds W meets A & W meets
+  A`
   proof
-    assume x in A^Fodelta;
+    assume
+    x in A^Fodelta;
     then ex y st y=x & for W st W in U_FMT y holds W meets A & W meets A`;
     hence thesis;
   end;
-  assume for W st W in U_FMT x holds W meets A & W meets A`;
+  assume
+  for W st W in U_FMT x holds W meets A & W meets A`;
   hence thesis;
 end;
 
@@ -643,18 +687,19 @@ theorem Th21:
 proof
   thus x in A^Fob implies for W st W in U_FMT x holds W meets A
   proof
-    assume x in A^Fob;
+    assume
+    x in A^Fob;
     then ex y st y=x & for W st W in U_FMT y holds W meets A;
     hence thesis;
   end;
-  assume for W st W in U_FMT x holds W meets A;
+  assume
+  for W st W in U_FMT x holds W meets A;
   hence thesis;
 end;
 
 definition
   let FMT,A;
   func A^Foi -> Subset of FMT equals
-
   {x:ex V st V in U_FMT x & V c= A};
   coherence
   proof
@@ -669,66 +714,73 @@ theorem Th22:
 proof
   thus x in A^Foi implies ex V st V in U_FMT x & V c= A
   proof
-    assume x in A^Foi;
+    assume
+    x in A^Foi;
     then ex y st y=x & ex V st V in U_FMT y & V c= A;
     hence thesis;
   end;
-  assume ex V st V in U_FMT x & V c= A;
+  assume
+  ex V st V in U_FMT x & V c= A;
   hence thesis;
 end;
 
 definition
   let FMT,A;
   func A^Fos -> Subset of FMT equals
-  {x:x in A & (ex V st V in U_FMT x & V \ {x} misses A)};
+  {x:x in A & (ex V st V in U_FMT x & V \ {
+  x} misses A)};
   coherence
   proof
-    defpred P[Element of FMT] means
-    $1 in A & (ex V st V in U_FMT $1 & (V \ {$1}) misses A);
+    defpred P[Element of FMT] means $1 in A & (ex V st V in U_FMT $1 & (V \ {
+    $1}) misses A);
     {x: P[x]} is Subset of FMT from DOMAIN_1:sch 7;
     hence thesis;
   end;
 end;
 
 theorem Th23:
-  x in A^Fos iff x in A & (ex V st V in U_FMT x & V \ {x} misses A)
+  x in A^Fos iff x in A & ex V st V in U_FMT x & V \ {x} misses A
 proof
-  thus x in A^Fos implies x in A & (ex V st V in U_FMT x & V \ {x} misses A)
+  thus x in A^Fos implies x in A & ex V st V in U_FMT x & V \ {x} misses A
   proof
-    assume x in A^Fos;
-    then ex y st y=x & (y in A & (ex V st V in U_FMT y & (V \ {y}) misses A));
+    assume
+    x in A^Fos;
+    then ex y st y=x & y in A & ex V st V in U_FMT y & (V \ {y}) misses A;
     hence thesis;
   end;
-  assume x in A & (ex V st V in U_FMT x & V \ {x} misses A);
+  assume
+  x in A & ex V st V in U_FMT x & V \ {x} misses A;
   hence thesis;
 end;
 
 definition
   let FMT,A;
   func A^Fon -> Subset of FMT equals
-
   A\(A^Fos);
   coherence;
 end;
 
 theorem
-  x in A^Fon iff x in A & (for V st V in U_FMT x holds (V \ {x}) meets A)
+  x in A^Fon iff x in A & for V st V in U_FMT x holds (V \ {x}) meets A
 proof
-  thus x in A^Fon implies x in A & (for V st V in
-  U_FMT x holds (V \ {x}) meets A)
+  thus x in A^Fon implies x in A & for V st V in U_FMT x holds (V \ {x}) meets
+  A
   proof
-    assume x in A^Fon;
+    assume
+    x in A^Fon;
     then x in A & not x in A^Fos by XBOOLE_0:def 5;
     hence thesis;
   end;
-  assume x in A & (for V st V in U_FMT x holds (V \ {x}) meets A);
-  then x in A & not x in A^Fos by Th23;
-  hence thesis by XBOOLE_0:def 5;
+  assume that
+A1: x in A and
+A2: for V st V in U_FMT x holds (V \ {x}) meets A;
+  not x in A^Fos by A2,Th23;
+  hence thesis by A1,XBOOLE_0:def 5;
 end;
 
 theorem Th25:
-  for FMT being non empty FMT_Space_Str, A, B being Subset of FMT holds
-  A c= B implies A^Fob c= B^Fob
+  for FMT being non empty FMT_Space_Str, A, B being Subset of FMT
+  holds A c= B implies A^Fob c= B^Fob
 proof
   let FMT be non empty FMT_Space_Str;
   let A, B be Subset of FMT;
@@ -741,18 +793,18 @@ A2: x in A^Fob;
   for W being Subset of FMT st W in U_FMT y holds W meets B
   proof
     let W be Subset of FMT;
-    assume W in U_FMT y;
+    assume
+    W in U_FMT y;
     then W meets A by A2,Th21;
-    then consider z being set such that
-A3: z in W & z in A by XBOOLE_0:3;
-    thus W /\ B <> {} by A1,A3,XBOOLE_0:def 4;
+    then ex z being set st z in W & z in A by XBOOLE_0:3;
+    hence W /\ B <> {} by A1,XBOOLE_0:def 4;
   end;
   hence thesis;
 end;
 
 theorem Th26:
-  for FMT being non empty FMT_Space_Str, A,B being Subset of FMT holds
-  A c= B implies A^Foi c= B^Foi
+  for FMT being non empty FMT_Space_Str, A,B being Subset of FMT
+  holds A c= B implies A^Foi c= B^Foi
 proof
   let FMT be non empty FMT_Space_Str;
   let A,B be Subset of FMT;
@@ -763,16 +815,18 @@ A1: A c= B;
 A2: x in A^Foi;
   then reconsider y=x as Element of FMT;
   consider V' be Subset of FMT such that
-A3: V' in U_FMT y & V' c= A by A2,Th22;
-  V' in U_FMT y & V' c= B by A1,A3,XBOOLE_1:1;
-  hence thesis;
+A3: V' in U_FMT y and
+A4: V' c= A by A2,Th22;
+  V' c= B by A1,A4,XBOOLE_1:1;
+  hence thesis by A3;
 end;
 
 theorem Th27:
   ((A^Fob) \/ (B^Fob)) c= (A \/ B)^Fob
 proof
   let x be set;
-  assume x in ((A^Fob) \/ (B^Fob));
+  assume
+  x in ((A^Fob) \/ (B^Fob));
   then
 A1: x in (A^Fob) or x in (B^Fob) by XBOOLE_0:def 3;
   (A^Fob) c= (A \/ B)^Fob & (B^Fob) c= (B \/ A)^Fob by Th25,XBOOLE_1:7;
@@ -793,7 +847,8 @@ theorem
   ((A^Foi) \/ (B^Foi)) c= (A \/ B)^Foi
 proof
   let x be set;
-  assume x in ((A^Foi) \/ (B^Foi));
+  assume
+  x in ((A^Foi) \/ (B^Foi));
   then
 A1: x in (A^Foi) or x in (B^Foi) by XBOOLE_0:def 3;
   (A^Foi) c= (A \/ B)^Foi & (B^Foi) c= (B \/ A)^Foi by Th26,XBOOLE_1:7;
@@ -811,293 +866,296 @@ A1: x in (A /\ B)^Foi;
 end;
 
 theorem
-  for FMT being non empty FMT_Space_Str holds (for x being Element of FMT,
-  V1,V2 being Subset of FMT st ((V1 in U_FMT x) & (V2 in U_FMT x)) holds
-  ex W being Subset of FMT st ((W in U_FMT x) & (W c= (V1 /\ V2))))
-  iff for A,B being Subset of FMT holds (A \/ B)^Fob = ((A^Fob) \/ (B^Fob))
+  for FMT being non empty FMT_Space_Str holds (for x being Element of
+FMT, V1,V2 being Subset of FMT st ((V1 in U_FMT x) & (V2 in U_FMT x)) holds ex
+  W being Subset of FMT st ((W in U_FMT x) & (W c= (V1 /\ V2)))) iff for A,B
+  being Subset of FMT holds (A \/ B)^Fob = ((A^Fob) \/ (B^Fob))
 proof
   let FMT be non empty FMT_Space_Str;
-A1: (for x being Element of FMT, V1,V2 being Subset of FMT
-  st ((V1 in U_FMT x) & (V2 in U_FMT x)) holds ex W being Subset of FMT
-  st ((W in U_FMT x) & (W c= (V1 /\ V2))))
-  implies for A,B being Subset of FMT holds
-  (A \/ B)^Fob = ((A^Fob) \/ (B^Fob))
+A1: (for x being Element of FMT, V1,V2 being Subset of FMT st ((V1 in U_FMT
+x) & (V2 in U_FMT x)) holds ex W being Subset of FMT st ((W in U_FMT x) & (W c=
+(V1 /\ V2)))) implies for A,B being Subset of FMT holds (A \/ B)^Fob = ((A^Fob)
+  \/ (B^Fob))
   proof
     assume
-A2: (for x being Element of FMT, V1,V2 being Subset of FMT
-    st ((V1 in U_FMT x) & (V2 in U_FMT x)) holds ex W being Subset of FMT
-    st ((W in U_FMT x) & (W c= (V1 /\ V2))));
+A2: for x being Element of FMT, V1,V2 being Subset of FMT st V1 in
+U_FMT x & V2 in U_FMT x holds ex W being Subset of FMT st W in U_FMT x & W c= (
+    V1 /\ V2);
     let A,B be Subset of FMT;
-    for x be Element of FMT holds x in ((A \/ B)^Fob)
-    iff x in ((A^Fob) \/ (B^Fob))
+    for x be Element of FMT holds x in ((A \/ B)^Fob) iff x in ((A^Fob) \/
+    (B^Fob))
     proof
       let x be Element of FMT;
 A3:   x in ((A \/ B)^Fob) implies x in ((A^Fob) \/ (B^Fob))
       proof
         assume
 A4:     x in ((A \/ B)^Fob);
-A5:     for W1 being Subset of FMT st W1 in U_FMT x
-        holds W1 meets A or W1 meets B
+A5:     for W1 being Subset of FMT st W1 in U_FMT x holds W1 meets A or W1
+        meets B
         proof
           let W1 being Subset of FMT;
-          assume W1 in U_FMT x;
+          assume
+          W1 in U_FMT x;
           then W1 meets (A \/ B) by A4,Th21;
           then W1 /\ (A \/ B) <> {} by XBOOLE_0:def 7;
           then (W1 /\ A \/ W1 /\ B) <> {} by XBOOLE_1:23;
           then W1 /\ A <> {} or W1 /\ B <> {};
           hence thesis by XBOOLE_0:def 7;
         end;
-        for V1,V2 being Subset of FMT st V1 in U_FMT x & V2 in U_FMT x holds
-        (V1 meets A or V2 meets B)
+        for V1,V2 being Subset of FMT st V1 in U_FMT x & V2 in U_FMT x
+        holds (V1 meets A or V2 meets B)
         proof
           let V1,V2 be Subset of FMT;
-          assume V1 in U_FMT x & V2 in U_FMT x;
+          assume
+          V1 in U_FMT x & V2 in U_FMT x;
           then consider W being Subset of FMT such that
 A6:       W in U_FMT x and
 A7:       W c= (V1 /\ V2) by A2;
+          (V1 /\ V2) c= V1 by XBOOLE_1:17;
+          then W c= V1 by A7,XBOOLE_1:1;
+          then
+A8:       W /\ A c= V1 /\ A by XBOOLE_1:26;
+          (V1 /\ V2)c= V2 by XBOOLE_1:17;
+          then W c= V2 by A7,XBOOLE_1:1;
+          then
+A9:       W /\ B c= V2 /\ B by XBOOLE_1:26;
           W meets A or W meets B by A5,A6;
           then W /\ A<> {} or W /\ B<> {} by XBOOLE_0:def 7;
-          then consider z1,z2 being Element of FMT such that
-A8:       z1 in W /\ A or z2 in W /\ B by SUBSET_1:10;
-          (V1 /\ V2) c= V1 & (V1 /\ V2)c= V2 by XBOOLE_1:17;
-          then W c= V1 & W c= V2 by A7,XBOOLE_1:1;
-          then (W /\ A c= V1 /\ A) & ( W /\ B c= V2 /\ B) by XBOOLE_1:26;
-          hence thesis by A8,XBOOLE_0:def 7;
+          then
+          ex z1,z2 being Element of FMT st ( z1 in W /\ A or z2 in W /\ B)
+          by SUBSET_1:10;
+          hence thesis by A8,A9,XBOOLE_0:def 7;
         end;
-        then (for V1 being Subset of FMT st V1 in U_FMT x holds V1 meets A) or
-        (for V2 being Subset of FMT st V2 in U_FMT x holds V2 meets B);
+        then
+        (for V1 being Subset of FMT st V1 in U_FMT x holds V1 meets A) or
+        for V2 being Subset of FMT st V2 in U_FMT x holds V2 meets B;
         then x in (A^Fob) or x in (B^Fob);
         hence thesis by XBOOLE_0:def 3;
       end;
       x in ((A^Fob) \/ (B^Fob)) implies x in ((A \/ B)^Fob)
       proof
         assume
-A9:     x in ((A^Fob) \/ (B^Fob));
+A10:    x in ((A^Fob) \/ (B^Fob));
         ((A^Fob) \/ (B^Fob)) c= (A \/ B)^Fob by Th27;
-        hence thesis by A9;
+        hence thesis by A10;
       end;
       hence thesis by A3;
     end;
     hence thesis by SUBSET_1:8;
   end;
-  (for A,B being Subset of FMT holds (A \/ B)^Fob = ((A^Fob) \/ (B^Fob)) )
-  implies (for x being Element of FMT, V1,V2 being Subset of FMT
-  st ((V1 in U_FMT x) & (V2 in U_FMT x)) holds ex W being Subset of FMT
-  st ((W in U_FMT x) & (W c= (V1 /\ V2))))
+  (ex x being Element of FMT, V1,V2 being Subset of FMT st (V1 in U_FMT x
+  ) & (V2 in U_FMT x) & (for W being Subset of FMT st W in U_FMT x holds (not(W
+  c= V1 /\ V2)) ) ) implies ex A,B being Subset of FMT st ((A \/ B)^Fob) <> ((A
+  ^Fob) \/ (B^Fob))
   proof
-    (ex x being Element of FMT, V1,V2 being Subset of FMT
-    st (V1 in U_FMT x) & (V2 in U_FMT x) & (for W being Subset of FMT
-    st W in U_FMT x holds (not(W c= V1 /\ V2)) ) )
-    implies ( ex A,B being Subset of FMT
-    st ((A \/ B)^Fob) <> ((A^Fob) \/ (B^Fob)) )
+    given x0 being Element of FMT, V1,V2 being Subset of FMT such that
+A11: V1 in U_FMT x0 and
+A12: V2 in U_FMT x0 and
+A13: for W being Subset of FMT st W in U_FMT x0 holds not W c= V1 /\
+    V2;
+A14: not x0 in ((V2)`)^Fob
     proof
-      given x0 being Element of FMT, V1,V2 being Subset of FMT such that
-A10:  (V1 in U_FMT x0) & (V2 in U_FMT x0) and
-A11:  (for W being Subset of FMT
-      st W in U_FMT x0 holds (not(W c= V1 /\ V2)) );
-A12:  x0 in ((V1)` \/ (V2)`)^Fob
-      proof
-        for W being Subset of FMT
-        st W in U_FMT x0 holds W meets ((V1)` \/ (V2)`)
-        proof
-          let W being Subset of FMT;
-          assume W in U_FMT x0;
-          then
-A13:      not (W c= V1 /\ V2) by A11;
-          W /\ (V1 /\ V2)` <> {}
-          proof
-            assume W /\ (V1 /\ V2)` = {};
-            then W \ (V1 /\ V2) = {} by SUBSET_1:32;
-            hence contradiction by A13,XBOOLE_1:37;
-          end;
-          hence W /\ ((V1)` \/ (V2)`) <> {} by XBOOLE_1:54;
-        end;
-        hence thesis;
-      end;
-A14:  not x0 in ((V1)`)^Fob
-      proof
-        assume
-A15:    x0 in ((V1)`)^Fob;
-        V1 misses (V1)` by XBOOLE_1:79;
-        hence contradiction by A10,A15,Th21;
-      end;
-A16:  not (x0 in ((V2)`)^Fob)
-      proof
-        assume
-A17:    x0 in ((V2)`)^Fob;
-        V2 misses (V2)` by XBOOLE_1:79;
-        hence contradiction by A10,A17,Th21;
-      end;
-      take V1`,V2`;
-      thus thesis by A12,A14,A16,XBOOLE_0:def 3;
+A15:  V2 misses (V2)` by XBOOLE_1:79;
+      assume
+      x0 in ((V2)`)^Fob;
+      hence contradiction by A12,A15,Th21;
     end;
-    hence thesis;
+    take V1`,V2`;
+    for W being Subset of FMT st W in U_FMT x0 holds W meets ((V1)` \/ (
+    V2)`)
+    proof
+      let W being Subset of FMT;
+      assume
+      W in U_FMT x0;
+      then
+A16:  not W c= V1 /\ V2 by A13;
+      W /\ (V1 /\ V2)` <> {}
+      proof
+        assume
+        W /\ (V1 /\ V2)` = {};
+        then W \ (V1 /\ V2) = {} by SUBSET_1:32;
+        hence contradiction by A16,XBOOLE_1:37;
+      end;
+      hence W /\ ((V1)` \/ (V2)`) <> {} by XBOOLE_1:54;
+    end;
+    then
+A17: x0 in ((V1)` \/ (V2)`)^Fob;
+    not x0 in ((V1)`)^Fob
+    proof
+A18:  V1 misses (V1)` by XBOOLE_1:79;
+      assume
+      x0 in ((V1)`)^Fob;
+      hence contradiction by A11,A18,Th21;
+    end;
+    hence thesis by A17,A14,XBOOLE_0:def 3;
   end;
   hence thesis by A1;
 end;
 
 theorem
-  for FMT being non empty FMT_Space_Str holds (for x being Element of FMT,
-  V1,V2 being Subset of FMT st V1 in U_FMT x & V2 in U_FMT x holds
-  ex W being Subset of FMT st (W in U_FMT x & W c= V1 /\ V2))
-  iff for A,B being Subset of FMT holds (A^Foi) /\ (B^Foi) = (A /\ B)^Foi
+  for FMT being non empty FMT_Space_Str holds (for x being Element of
+  FMT, V1,V2 being Subset of FMT st V1 in U_FMT x & V2 in U_FMT x holds ex W
+being Subset of FMT st (W in U_FMT x & W c= V1 /\ V2)) iff for A,B being Subset
+  of FMT holds (A^Foi) /\ (B^Foi) = (A /\ B)^Foi
 proof
   let FMT be non empty FMT_Space_Str;
-  thus (for x being Element of FMT, V1,V2 being Subset of FMT
-  st V1 in U_FMT x & V2 in U_FMT x holds ex W being Subset of FMT
-  st (W in U_FMT x & W c= V1 /\ V2)) implies for A,B being Subset of FMT holds
-  (A^Foi) /\ (B^Foi) = (A /\ B)^Foi
+  thus (for x being Element of FMT, V1,V2 being Subset of FMT st V1 in U_FMT x
+& V2 in U_FMT x holds ex W being Subset of FMT st (W in U_FMT x & W c= V1 /\ V2
+)) implies for A,B being Subset of FMT holds (A^Foi) /\ (B^Foi) = (A /\ B)^Foi
   proof
     assume
-A1: (for x being Element of FMT, V1,V2 being Subset of FMT
-    st (V1 in U_FMT x & V2 in U_FMT x) holds ex W being Subset of FMT
-    st (W in U_FMT x & W c= V1 /\ V2));
+A1: for x being Element of FMT, V1,V2 being Subset of FMT st V1 in
+U_FMT x & V2 in U_FMT x holds ex W being Subset of FMT st W in U_FMT x & W c=
+    V1 /\ V2;
     let A,B be Subset of FMT;
-    thus (A^Foi) /\ (B^Foi) = (A /\ B)^Foi
+    for x be Element of FMT holds x in (A^Foi) /\ (B^Foi) iff x in (A /\ B
+    )^Foi
     proof
-      for x be Element of FMT
-      holds x in (A^Foi) /\ (B^Foi) iff x in (A /\ B)^Foi
+      let x be Element of FMT;
+A2:   x in (A^Foi) /\ (B^Foi) implies x in (A /\ B)^Foi
       proof
-        let x be Element of FMT;
-A2:     x in (A^Foi) /\ (B^Foi) implies x in (A /\ B)^Foi
-        proof
-          assume x in (A^Foi) /\ (B^Foi);
-          then x in A^Foi & x in B^Foi by XBOOLE_0:def 4;
-          then (ex W1 being Subset of FMT st W1 in U_FMT x & W1 c= A) &
-          ( ex W2 being Subset of FMT st W2 in U_FMT x & W2 c= B) by Th22;
-          then consider W1,W2 being Subset of FMT such that
-A3:       (W1 in U_FMT x & W2 in U_FMT x ) and
-A4:       (W1 c= A & W2 c= B);
-          consider W being Subset of FMT such that
-A5:       W in U_FMT x and
-A6:       W c= W1 /\ W2 by A1,A3;
-          W1 /\ W2 c= W1 & W1 /\ W2 c= W2 by XBOOLE_1:17;
-          then W c= W1 & W c= W2 by A6,XBOOLE_1:1;
-          then W in U_FMT x & W c= A & W c= B by A4,A5,XBOOLE_1:1;
-          then W in U_FMT x & W c= A /\ B by XBOOLE_1:19;
-          hence thesis;
-        end;
-        x in (A /\ B)^Foi implies x in (A^Foi) /\ (B^Foi)
-        proof
-          assume
-A7:       x in (A /\ B)^Foi;
-          (A /\ B)^Foi c= (A^Foi) /\ (B^Foi) by Th30;
-          hence thesis by A7;
-        end;
-        hence thesis by A2;
+        assume
+A3:     x in (A^Foi) /\ (B^Foi);
+        then x in B^Foi by XBOOLE_0:def 4;
+        then
+A4:     ex W2 being Subset of FMT st W2 in U_FMT x & W2 c= B by Th22;
+        x in A^Foi by A3,XBOOLE_0:def 4;
+        then ex W1 being Subset of FMT st W1 in U_FMT x & W1 c= A by Th22;
+        then consider W1,W2 being Subset of FMT such that
+A5:     W1 in U_FMT x & W2 in U_FMT x and
+A6:     W1 c= A and
+A7:     W2 c= B by A4;
+        consider W being Subset of FMT such that
+A8:     W in U_FMT x and
+A9:     W c= W1 /\ W2 by A1,A5;
+        W1 /\ W2 c= W2 by XBOOLE_1:17;
+        then W c= W2 by A9,XBOOLE_1:1;
+        then
+A10:    W c= B by A7,XBOOLE_1:1;
+        W1 /\ W2 c= W1 by XBOOLE_1:17;
+        then W c= W1 by A9,XBOOLE_1:1;
+        then W c= A by A6,XBOOLE_1:1;
+        then W c= A /\ B by A10,XBOOLE_1:19;
+        hence thesis by A8;
       end;
-      hence thesis by SUBSET_1:8;
-    end; thus thesis;
-  end;
-  thus (for A,B being Subset of FMT holds
-  ((A^Foi) /\ (B^Foi)) = (A /\ B)^Foi ) implies (for x being Element of FMT,
-  V1,V2 being Subset of FMT st (V1 in U_FMT x & V2 in U_FMT x) holds
-  ex W being Subset of FMT st (W in U_FMT x & W c= V1 /\ V2))
-  proof
-    (ex x being Element of FMT, V1,V2 being Subset of FMT
-    st (V1 in U_FMT x & V2 in U_FMT x) & (for W being Subset of FMT
-    st W in U_FMT x holds (not(W c= V1 /\ V2)) ) )
-    implies ex A,B being Subset of FMT st ((A^Foi) /\ (B^Foi)) <> (A /\ B)^Foi
-    proof
-      given x0 being Element of FMT, V1,V2 being Subset of FMT such that
-A8:   V1 in U_FMT x0 & V2 in U_FMT x0 and
-A9:   (for W being Subset of FMT st W in U_FMT x0 holds (not W c= V1 /\ V2) );
-      x0 in (V1)^Foi & x0 in (V2)^Foi by A8;
-      then
-A10:  not (x0 in ( ((V1)^Foi) /\ (V2^Foi) ) implies
-      x0 in ((V1 /\ V2)^Foi) ) by A9,Th22,XBOOLE_0:def 4;
-      take V1,V2;
-      thus thesis by A10;
+      x in (A /\ B)^Foi implies x in (A^Foi) /\ (B^Foi)
+      proof
+        assume
+A11:    x in (A /\ B)^Foi;
+        (A /\ B)^Foi c= (A^Foi) /\ (B^Foi) by Th30;
+        hence thesis by A11;
+      end;
+      hence thesis by A2;
     end;
-    hence thesis;
+    hence (A^Foi) /\ (B^Foi) = (A /\ B)^Foi by SUBSET_1:8;
+    thus thesis;
   end;
+  (ex x being Element of FMT, V1,V2 being Subset of FMT st (V1 in U_FMT x
+  & V2 in U_FMT x) & (for W being Subset of FMT st W in U_FMT x holds (not(W c=
+V1 /\ V2)) ) ) implies ex A,B being Subset of FMT st ((A^Foi) /\ (B^Foi)) <> (A
+  /\ B)^Foi
+  proof
+    given x0 being Element of FMT, V1,V2 being Subset of FMT such that
+A12: V1 in U_FMT x0 & V2 in U_FMT x0 and
+A13: for W being Subset of FMT st W in U_FMT x0 holds not W c= V1 /\
+    V2;
+    take V1,V2;
+    x0 in (V1)^Foi & x0 in (V2)^Foi by A12;
+    then x0 in ( ((V1)^Foi) /\ (V2^Foi) ) by XBOOLE_0:def 4;
+    hence thesis by A13,Th22;
+  end;
+  hence
+  (for A,B being Subset of FMT holds ((A^Foi) /\ (B^Foi)) = (A /\ B) ^Foi
+) implies for x being Element of FMT, V1,V2 being Subset of FMT st V1 in U_FMT
+  x & V2 in U_FMT x holds ex W being Subset of FMT st W in U_FMT x & W c= V1 /\
+  V2;
 end;
 
 theorem
-  for FMT being non empty FMT_Space_Str, A,B being Subset of FMT holds
-  (for x being Element of FMT, V1,V2 being Subset of FMT
-  st ((V1 in U_FMT x) & V2 in U_FMT x) holds ex W being Subset of FMT
-  st ((W in U_FMT x) & (W c= (V1 /\ V2))))
-  implies (A \/ B)^Fodelta c= ((A^Fodelta) \/ (B^Fodelta))
+  for FMT being non empty FMT_Space_Str, A,B being Subset of FMT holds (
+for x being Element of FMT, V1,V2 being Subset of FMT st ((V1 in U_FMT x) & V2
+in U_FMT x) holds ex W being Subset of FMT st ((W in U_FMT x) & (W c= (V1 /\ V2
+  )))) implies (A \/ B)^Fodelta c= ((A^Fodelta) \/ (B^Fodelta))
 proof
   let FMT be non empty FMT_Space_Str;
   let A,B be Subset of FMT;
   assume
-A1: (for x being Element of FMT, V1,V2 being Subset of FMT
-  st (V1 in U_FMT x & V2 in U_FMT x) holds ex W being Subset of FMT
-  st W in U_FMT x & W c= V1 /\ V2);
-  for x be Element of FMT holds x in (A \/ B)^Fodelta
-  implies x in (A^Fodelta) \/ (B^Fodelta)
+A1: for x being Element of FMT, V1,V2 being Subset of FMT st V1 in U_FMT
+  x & V2 in U_FMT x holds ex W being Subset of FMT st W in U_FMT x & W c= V1 /\
+  V2;
+  for x be Element of FMT holds x in (A \/ B)^Fodelta implies x in (A
+  ^Fodelta) \/ (B^Fodelta)
   proof
     let x be Element of FMT;
     assume
 A2: x in (A \/ B)^Fodelta;
-A3: for W1 being Subset of FMT st W1 in U_FMT x
-    holds ((W1 meets A & W1 meets A`) or (W1 meets B & W1 meets B`))
+A3: for W1 being Subset of FMT st W1 in U_FMT x holds ( W1 meets A & W1
+    meets A` or W1 meets B & W1 meets B` )
     proof
       let W1 being Subset of FMT;
       assume
 A4:   W1 in U_FMT x;
-      then W1 meets (A \/ B) by A2,Th20;
+      then W1 meets (A \/ B)` by A2,Th20;
+      then W1 /\ (A \/ B)` <> {} by XBOOLE_0:def 7;
       then
-A5:   W1 /\ (A \/ B) <> {} by XBOOLE_0:def 7;
-      W1 meets (A \/ B)` by A2,A4,Th20;
+A5:   W1 /\ (A` /\ B`) <> {} by XBOOLE_1:53;
+      then (W1 /\ A`) /\ B` <> {} by XBOOLE_1:16;
+      then (W1 /\ A`) meets B` by XBOOLE_0:def 7;
       then
-A6:   W1 /\ (A \/ B)` <> {} by XBOOLE_0:def 7;
-A7:   (W1 /\ A \/ W1 /\ B) <> {} by A5,XBOOLE_1:23;
-      W1 /\ (A` /\ B`) <> {} by A6,XBOOLE_1:53;
-      then (W1 /\ A`) /\ B` <> {} & (W1 /\ B`) /\ A` <> {} by XBOOLE_1:16;
+A6:   ex z1 being set st z1 in (W1 /\ A`) /\ B` by XBOOLE_0:4;
+      (W1 /\ B`) /\ A` <> {} by A5,XBOOLE_1:16;
+      then (W1 /\ B`) meets A` by XBOOLE_0:def 7;
       then
-A8:   (W1 /\ A`) meets B` & (W1 /\ B`) meets A` by XBOOLE_0:def 7;
-      then consider z1 being set such that
-A9:   z1 in (W1 /\ A`) /\ B` by XBOOLE_0:4;
-      consider z2 being set such that
-A10:  z2 in (W1 /\ B`) /\ A` by A8,XBOOLE_0:4;
-      (W1 /\ A <> {} & W1 /\ A` <> {}) or
-      (W1 /\ B <> {} & W1 /\ B` <> {}) by A7,A9,A10;
+A7:   ex z2 being set st z2 in (W1 /\ B`) /\ A` by XBOOLE_0:4;
+      W1 meets (A \/ B) by A2,A4,Th20;
+      then W1 /\ (A \/ B) <> {} by XBOOLE_0:def 7;
+      then (W1 /\ A \/ W1 /\ B) <> {} by XBOOLE_1:23;
+      then
+      W1 /\ A <> {} & W1 /\ A` <> {} or W1 /\ B <> {} & W1 /\ B` <> {} by
+      A6,A7;
       hence thesis by XBOOLE_0:def 7;
     end;
     for V1,V2 being Subset of FMT st V1 in U_FMT x & V2 in U_FMT x holds
-    (V1 meets A & V1 meets A`) or (V2 meets B & V2 meets B`)
+    V1 meets A & V1 meets A` or V2 meets B & V2 meets B`
     proof
       let V1,V2 be Subset of FMT;
-      assume V1 in U_FMT x & V2 in U_FMT x;
+      assume
+      V1 in U_FMT x & V2 in U_FMT x;
       then consider W being Subset of FMT such that
-A11:  W in U_FMT x and
-A12:  W c= V1 /\ V2 by A1;
-      V1 /\ V2 c= V1 & V1 /\ V2 c= V2 by XBOOLE_1:17;
-      then W c= V1 & W c= V2 by A12,XBOOLE_1:1;
+A8:   W in U_FMT x and
+A9:   W c= V1 /\ V2 by A1;
+      V1 /\ V2 c= V2 by XBOOLE_1:17;
+      then W c= V2 by A9,XBOOLE_1:1;
       then
-A13:  W /\ A c= V1 /\ A & W /\ A` c= V1 /\ A`
-      & W /\ B c= V2 /\ B & W /\ B` c= V2 /\ B` by XBOOLE_1:26;
-      (V1 meets A & V1 meets A`) or (V2 meets B & V2 meets B`)
+A10:  W /\ B c= V2 /\ B & W /\ B` c= V2 /\ B` by XBOOLE_1:26;
+      V1 /\ V2 c= V1 by XBOOLE_1:17;
+      then W c= V1 by A9,XBOOLE_1:1;
+      then
+A11:  W /\ A c= V1 /\ A & W /\ A` c= V1 /\ A` by XBOOLE_1:26;
+      V1 meets A & V1 meets A` or V2 meets B & V2 meets B`
       proof
-        now per cases by A3,A11;
+        now
+          per cases by A3,A8;
           case
-A14:        W meets A & W meets A`;
-            then consider z1 being set such that
-A15:        z1 in W /\ A by XBOOLE_0:4;
-            consider z2 being set such that
-A16:        z2 in W /\ A` by A14,XBOOLE_0:4;
-            thus thesis by A13,A15,A16,XBOOLE_0:4;
+            W meets A & W meets A`;
+            then (ex z1 being set st z1 in W /\ A )& ex z2 being set st z2 in
+            W /\ A` by XBOOLE_0:4;
+            hence thesis by A11,XBOOLE_0:4;
           end;
           case
-A17:        W meets B & W meets B`;
-            then consider z3 being set such that
-A18:        z3 in W /\ B by XBOOLE_0:4;
-            consider z4 being set such that
-A19:        z4 in W /\ B` by A17,XBOOLE_0:4;
-            thus thesis by A13,A18,A19,XBOOLE_0:4;
+            W meets B & W meets B`;
+            then (ex z3 being set st z3 in W /\ B )& ex z4 being set st z4 in
+            W /\ B` by XBOOLE_0:4;
+            hence thesis by A10,XBOOLE_0:4;
           end;
         end;
         hence thesis;
       end;
       hence thesis;
     end;
-    then (for V1 being Subset of FMT
-    st V1 in U_FMT x holds (V1 meets A & V1 meets A`)) or
-    (for V2 being Subset of FMT st
-    V2 in U_FMT x holds (V2 meets B & V2 meets B`));
+    then (for V1 being Subset of FMT st V1 in U_FMT x holds (V1 meets A & V1
+meets A`)) or for V2 being Subset of FMT st V2 in U_FMT x holds V2 meets B & V2
+    meets B`;
     then x in (A^Fodelta) or x in (B^Fodelta);
     hence thesis by XBOOLE_0:def 3;
   end;
@@ -1105,167 +1163,162 @@ A19:        z4 in W /\ B` by A17,XBOOLE_0:4;
 end;
 
 theorem
-  for FMT being non empty FMT_Space_Str st FMT is Fo_filled
-  holds (for A,B being Subset of FMT holds
-  (A \/ B)^Fodelta = ((A^Fodelta) \/ (B^Fodelta)))
-  implies (for x being Element of FMT, V1,V2 being Subset of FMT
-  st (V1 in U_FMT x & V2 in U_FMT x) holds ex W being Subset of FMT
-  st (W in U_FMT x & W c= (V1 /\ V2)))
+  for FMT being non empty FMT_Space_Str st FMT is Fo_filled holds (for A
+  ,B being Subset of FMT holds (A \/ B)^Fodelta = ((A^Fodelta) \/ (B^Fodelta)))
+implies for x being Element of FMT, V1,V2 being Subset of FMT st V1 in U_FMT x
+& V2 in U_FMT x holds ex W being Subset of FMT st W in U_FMT x & W c= (V1 /\ V2
+  )
 proof
   let FMT be non empty FMT_Space_Str;
   assume
 A1: FMT is Fo_filled;
-  (for A,B being Subset of FMT holds
-  (A \/ B)^Fodelta = ((A^Fodelta) \/ (B^Fodelta)) )
-  implies (for x being Element of FMT, V1,V2 being Subset of FMT
-  st (V1 in U_FMT x & V2 in U_FMT x) holds ex W being Subset of FMT
-  st (W in U_FMT x & W c= V1 /\ V2))
+  (ex x being Element of FMT, V1,V2 being Subset of FMT st (V1 in U_FMT x)
+& (V2 in U_FMT x) & (for W being Subset of FMT st W in U_FMT x holds (not(W c=
+V1 /\ V2)) ) ) implies ex A,B being Subset of FMT st ((A \/ B)^Fodelta) <> ((A
+  ^Fodelta) \/ (B^Fodelta))
   proof
-    (ex x being Element of FMT, V1,V2 being Subset of FMT
-    st (V1 in U_FMT x) & (V2 in U_FMT x) & (for W being Subset of FMT
-    st W in U_FMT x holds (not(W c= V1 /\ V2)) ) )
-    implies ( ex A,B being Subset of FMT
-    st ((A \/ B)^Fodelta) <> ((A^Fodelta) \/ (B^Fodelta)) )
+    given x0 being Element of FMT, V1,V2 being Subset of FMT such that
+A2: V1 in U_FMT x0 and
+A3: V2 in U_FMT x0 and
+A4: for W being Subset of FMT st W in U_FMT x0 holds not W c= V1 /\ V2;
+    take (V1)`,(V2)`;
+A5: not x0 in ((V2)`)^Fodelta
     proof
-      given x0 being Element of FMT, V1,V2 being Subset of FMT such that
-A2:   (V1 in U_FMT x0) & (V2 in U_FMT x0) and
-A3:   (for W being Subset of FMT
-      st W in U_FMT x0 holds (not(W c= V1 /\ V2)) );
-A4:   x0 in ((V1)` \/ (V2)`)^Fodelta
-      proof
-        for W being Subset of FMT st W in U_FMT x0
-        holds W meets ((V1)` \/ (V2)`) & W meets ((V1)` \/ (V2)`)`
-        proof
-          let W being Subset of FMT;
-          assume
-A5:       W in U_FMT x0;
-          then
-A6:       not W c= V1 /\ V2 by A3;
-A7:       W meets (V1 /\ V2)`
-          proof
-            assume W /\ (V1 /\ V2)` = {};
-            then W \ (V1 /\ V2) = {} by SUBSET_1:32;
-            hence contradiction by A6,XBOOLE_1:37;
-          end;
-          x0 in V1 & x0 in V2 by A1,A2,Def8;
-          then
-A8:       x0 in V1 /\ V2 by XBOOLE_0:def 4;
-          x0 in W by A1,A5,Def8;
-          then W /\ ((V1 /\ V2)`)` <> {} by A8,XBOOLE_0:def 4;
-          then W meets ((V1 /\ V2)`)` by XBOOLE_0:def 7;
-          hence thesis by A7,XBOOLE_1:54;
-        end;
-        hence thesis;
-      end;
-A9:   not x0 in ((V1)`)^Fodelta
-      proof
-        assume x0 in ((V1)`)^Fodelta;
-        then V1 meets (V1)` by A2,Th20;
-        hence contradiction by XBOOLE_1:79;
-      end;
-A10:  not x0 in ((V2)`)^Fodelta
-      proof
-        assume x0 in ((V2)`)^Fodelta;
-        then V2 meets (V2)` by A2,Th20;
-        hence contradiction by XBOOLE_1:79;
-      end;
-      take (V1)`,(V2)`;
-      thus thesis by A4,A9,A10,XBOOLE_0:def 3;
+      assume
+      x0 in ((V2)`)^Fodelta;
+      then V2 meets (V2)` by A3,Th20;
+      hence contradiction by XBOOLE_1:79;
     end;
-    hence thesis;
+    for W being Subset of FMT st W in U_FMT x0 holds W meets ((V1)` \/ (V2
+    )`) & W meets ((V1)` \/ (V2)`)`
+    proof
+      let W being Subset of FMT;
+      assume
+A6:   W in U_FMT x0;
+      then
+A7:   not W c= V1 /\ V2 by A4;
+A8:   W meets (V1 /\ V2)`
+      proof
+        assume
+        W /\ (V1 /\ V2)` = {};
+        then W \ (V1 /\ V2) = {} by SUBSET_1:32;
+        hence contradiction by A7,XBOOLE_1:37;
+      end;
+      x0 in V1 & x0 in V2 by A1,A2,A3,Def8;
+      then
+A9:   x0 in V1 /\ V2 by XBOOLE_0:def 4;
+      x0 in W by A1,A6,Def8;
+      then W /\ ((V1 /\ V2)`)` <> {} by A9,XBOOLE_0:def 4;
+      then W meets ((V1 /\ V2)`)` by XBOOLE_0:def 7;
+      hence thesis by A8,XBOOLE_1:54;
+    end;
+    then
+A10: x0 in ((V1)` \/ (V2)`)^Fodelta;
+    not x0 in ((V1)`)^Fodelta
+    proof
+      assume
+      x0 in ((V1)`)^Fodelta;
+      then V1 meets (V1)` by A2,Th20;
+      hence contradiction by XBOOLE_1:79;
+    end;
+    hence thesis by A10,A5,XBOOLE_0:def 3;
   end;
   hence thesis;
 end;
 
 theorem
-  for x be Element of FMT, A being Subset of FMT
-  holds x in A^Fos iff x in A & not x in (A\{x})^Fob
+  for x be Element of FMT, A being Subset of FMT holds x in A^Fos iff x
+  in A & not x in (A\{x})^Fob
 proof
   let x be Element of FMT;
   let A be Subset of FMT;
-A1: x in A^Fos implies x in A & not x in (A\{x})^Fob
-  proof
-    assume
-A2: x in A^Fos;
-    then consider V' being Subset of FMT such that
-A3: V' in U_FMT x & V' \ {x} misses A by Th23;
-    V' in U_FMT x & V' /\ {x}` misses A by A3,SUBSET_1:32;
-    then V' /\ {x}` /\ A = {} by XBOOLE_0:def 7;
-    then V' /\ ({x}`/\ A) = {} by XBOOLE_1:16;
-    then V' in U_FMT x & V' misses {x}`/\ A by A3,XBOOLE_0:def 7;
-    then V' in U_FMT x & V' misses A\{x} by SUBSET_1:32;
-    hence thesis by A2,Th21,Th23;
-  end;
-  x in A & not (x in (A\{x})^Fob) implies x in A^Fos
+A1: x in A & not x in (A\{x})^Fob implies x in A^Fos
   proof
     assume that
-A4: x in A and
-A5: not x in (A\{x})^Fob;
+A2: x in A and
+A3: not x in (A\{x})^Fob;
     consider V' being Subset of FMT such that
-A6: V' in U_FMT x & V' misses (A\{x}) by A5;
-    V' in U_FMT x & V' misses (A /\ {x}`) by A6,SUBSET_1:32;
-    then V' in U_FMT x & (V' /\ (A /\ {x}`)) = {} by XBOOLE_0:def 7;
-    then V' in U_FMT x & (V' /\ {x}`)/\ A = {} by XBOOLE_1:16;
-    then V' in U_FMT x & (V' \ {x}) /\ A = {} by SUBSET_1:32;
-    then V' in U_FMT x & (V' \ {x}) misses A by XBOOLE_0:def 7;
-    hence thesis by A4;
+A4: V' in U_FMT x and
+A5: V' misses (A\{x}) by A3;
+    V' misses (A /\ {x}`) by A5,SUBSET_1:32;
+    then (V' /\ (A /\ {x}`)) = {} by XBOOLE_0:def 7;
+    then (V' /\ {x}`)/\ A = {} by XBOOLE_1:16;
+    then (V' \ {x}) /\ A = {} by SUBSET_1:32;
+    then (V' \ {x}) misses A by XBOOLE_0:def 7;
+    hence thesis by A2,A4;
+  end;
+  x in A^Fos implies x in A & not x in (A\{x})^Fob
+  proof
+    assume
+A6: x in A^Fos;
+    then consider V' being Subset of FMT such that
+A7: V' in U_FMT x and
+A8: V' \ {x} misses A by Th23;
+    V' /\ {x}` misses A by A8,SUBSET_1:32;
+    then V' /\ {x}` /\ A = {} by XBOOLE_0:def 7;
+    then V' /\ ({x}`/\ A) = {} by XBOOLE_1:16;
+    then V' misses {x}`/\ A by XBOOLE_0:def 7;
+    then V' misses A\{x} by SUBSET_1:32;
+    hence thesis by A6,A7,Th21,Th23;
   end;
   hence thesis by A1;
 end;
 
 theorem Th36:
-  for FMT being non empty FMT_Space_Str holds FMT is Fo_filled
-  iff for A being Subset of FMT holds A c= A^Fob
+  for FMT being non empty FMT_Space_Str holds FMT is Fo_filled iff
+  for A being Subset of FMT holds A c= A^Fob
 proof
   let FMT be non empty FMT_Space_Str;
-A1: FMT is Fo_filled implies for A being Subset of FMT holds A c= A^Fob
+A1: (for A being Subset of FMT holds A c= A^Fob) implies FMT is Fo_filled
   proof
     assume
-A2: FMT is Fo_filled;
+A2: for A being Subset of FMT holds A c= A^Fob;
+    assume
+    not FMT is Fo_filled;
+    then consider y being Element of FMT, V being Subset of FMT such that
+A3: V in U_FMT y and
+A4: not y in V by Def8;
+A5: V misses {y}
+    proof
+      assume
+      V meets {y};
+      then ex z being set st z in V & z in {y} by XBOOLE_0:3;
+      hence contradiction by A4,TARSKI:def 1;
+    end;
+    not {y} c= {y}^Fob
+    proof
+A6:   y in {y} by TARSKI:def 1;
+      assume
+      {y} c= {y}^Fob;
+      hence contradiction by A3,A5,A6,Th21;
+    end;
+    hence contradiction by A2;
+  end;
+  FMT is Fo_filled implies for A being Subset of FMT holds A c= A^Fob
+  proof
+    assume
+A7: FMT is Fo_filled;
     let A being Subset of FMT;
     let x be set;
     assume
-A3: x in A;
+A8: x in A;
     then reconsider y=x as Element of FMT;
     for W being Subset of FMT st W in U_FMT y holds W meets A
     proof
       let W be Subset of FMT;
-      assume W in U_FMT y;
-      then y in W by A2,Def8;
-      hence thesis by A3,XBOOLE_0:3;
+      assume
+      W in U_FMT y;
+      then y in W by A7,Def8;
+      hence thesis by A8,XBOOLE_0:3;
     end;
     hence thesis;
-  end;
-  (for A being Subset of FMT holds A c= A^Fob) implies FMT is Fo_filled
-  proof
-    assume
-A4: for A being Subset of FMT holds A c= A^Fob;
-    assume not(FMT is Fo_filled);
-    then consider y being Element of FMT, V being Subset of FMT such that
-A5: V in U_FMT y and
-A6: not y in V by Def8;
-A7: V misses {y}
-    proof
-      assume V meets {y};
-      then consider z being set such that
-A8:   z in V & z in {y} by XBOOLE_0:3;
-      thus contradiction by A6,A8,TARSKI:def 1;
-    end;
-    not {y} c= {y}^Fob
-    proof
-      assume
-A9:   {y} c= {y}^Fob;
-      y in {y} by TARSKI:def 1;
-      hence contradiction by A5,A7,A9,Th21;
-    end;
-    hence contradiction by A4;
   end;
   hence thesis by A1;
 end;
 
 theorem Th37:
-  for FMT being non empty FMT_Space_Str holds FMT is Fo_filled
-  iff for A being Subset of FMT holds A^Foi c= A
+  for FMT being non empty FMT_Space_Str holds FMT is Fo_filled iff
+  for A being Subset of FMT holds A^Foi c= A
 proof
   let FMT be non empty FMT_Space_Str;
 A1: FMT is Fo_filled implies for A being Subset of FMT holds A^Foi c= A
@@ -1278,21 +1331,23 @@ A2: FMT is Fo_filled;
 A3: x in A^Foi;
     then reconsider y=x as Element of FMT;
     consider V be Subset of FMT such that
-A4: V in U_FMT y & V c= A by A3,Th22;
-    y in V & V c= A by A2,A4,Def8;
-    hence thesis;
+A4: V in U_FMT y and
+A5: V c= A by A3,Th22;
+    y in V by A2,A4,Def8;
+    hence thesis by A5;
   end;
   (for A being Subset of FMT holds A^Foi c= A) implies FMT is Fo_filled
   proof
     assume
-A5: for A being Subset of FMT holds A^Foi c= A;
-    assume not FMT is Fo_filled;
+A6: for A being Subset of FMT holds A^Foi c= A;
+    assume
+    not FMT is Fo_filled;
     then consider y being Element of FMT, V being Subset of FMT such that
-A6: V in U_FMT y and
-A7: not y in V by Def8;
-    y in V^Foi by A6;
-    then not V^Foi c= V by A7;
-    hence contradiction by A5;
+A7: V in U_FMT y and
+A8: not y in V by Def8;
+    y in V^Foi by A7;
+    then not V^Foi c= V by A8;
+    hence contradiction by A6;
   end;
   hence thesis by A1;
 end;
@@ -1310,21 +1365,23 @@ A1:   x in ((A`)^Fob)`;
       then reconsider y=x as Element of FMT;
       not y in (A`)^Fob by A1,XBOOLE_0:def 5;
       then consider V be Subset of FMT such that
-A2:   V in U_FMT y & V misses A`;
-      V /\ A` = {} by A2,XBOOLE_0:def 7;
-      then V in U_FMT y & V \ A = {} by A2,SUBSET_1:32;
-      then V in U_FMT y & V c= A by XBOOLE_1:37;
-      hence thesis;
+A2:   V in U_FMT y and
+A3:   V misses A`;
+      V /\ A` = {} by A3,XBOOLE_0:def 7;
+      then V \ A = {} by SUBSET_1:32;
+      then V c= A by XBOOLE_1:37;
+      hence thesis by A2;
     end;
     assume
-A3: x in A^Foi;
+A4: x in A^Foi;
     then reconsider y=x as Element of FMT;
     consider V be Subset of FMT such that
-A4: V in U_FMT y & V c= A by A3,Th22;
-    V in U_FMT y & V \ A = {} by A4,XBOOLE_1:37;
-    then V in U_FMT y & V /\ A` = {} by SUBSET_1:32;
-    then V in U_FMT y & V misses A` by XBOOLE_0:def 7;
-    then not y in (A`)^Fob by Th21;
+A5: V in U_FMT y and
+A6: V c= A by A4,Th22;
+    V \ A = {} by A6,XBOOLE_1:37;
+    then V /\ A` = {} by SUBSET_1:32;
+    then V misses A` by XBOOLE_0:def 7;
+    then not y in (A`)^Fob by A5,Th21;
     hence thesis by XBOOLE_0:def 5;
   end;
   hence thesis by TARSKI:2;
@@ -1345,26 +1402,28 @@ A2:   not y in (A`)^Foi by A1,XBOOLE_0:def 5;
       for W being Subset of FMT st W in U_FMT y holds W meets A
       proof
         let W be Subset of FMT;
-        assume W in U_FMT y;
+        assume
+        W in U_FMT y;
         then not W c= A` by A2;
         then consider z being set such that
-A3:     not(z in W implies z in A`) by TARSKI:def 3;
-        z in W & z in A by A3,XBOOLE_0:def 5;
-        hence thesis by XBOOLE_0:3;
+A3:     z in W and
+A4:     not z in A` by TARSKI:def 3;
+        z in A by A3,A4,XBOOLE_0:def 5;
+        hence thesis by A3,XBOOLE_0:3;
       end;
       hence thesis;
     end;
     assume
-A4: x in A^Fob;
+A5: x in A^Fob;
     then reconsider y=x as Element of FMT;
     for W being Subset of FMT st W in U_FMT y holds not W c= A`
     proof
       let W be Subset of FMT;
-      assume W in U_FMT y;
-      then W meets A by A4,Th21;
-      then consider z being set such that
-A5:   z in W & z in A by XBOOLE_0:3;
-      thus thesis by A5,XBOOLE_0:def 5;
+      assume
+      W in U_FMT y;
+      then W meets A by A5,Th21;
+      then ex z being set st z in W & z in A by XBOOLE_0:3;
+      hence thesis by XBOOLE_0:def 5;
     end;
     then not y in (A`)^Foi by Th22;
     hence thesis by XBOOLE_0:def 5;
@@ -1375,22 +1434,28 @@ end;
 theorem Th40:
   A^Fodelta = (A^Fob) /\ ((A`)^Fob)
 proof
-  for x being Element of FMT holds x in A^Fodelta
-  iff x in (A^Fob) /\ ((A`)^Fob)
+  for x being Element of FMT holds x in A^Fodelta iff x in (A^Fob) /\ ((A`
+  )^Fob)
   proof
     let x be Element of FMT;
     thus x in A^Fodelta implies x in (A^Fob) /\ ((A`)^Fob)
     proof
-      assume x in A^Fodelta;
-      then (for W being Subset of FMT st W in U_FMT x holds W meets A ) &
-      (for W being Subset of FMT st W in U_FMT x holds W meets A`) by Th20;
-      then x in (A^Fob) & x in((A`)^Fob);
-      hence thesis by XBOOLE_0:def 4;
+      assume
+A1:   x in A^Fodelta;
+      then for W being Subset of FMT st W in U_FMT x holds W meets A` by
+      Th20;
+      then
+A2:   x in((A`)^Fob);
+      for W being Subset of FMT st W in U_FMT x holds W meets A by A1,Th20;
+      then x in (A^Fob);
+      hence thesis by A2,XBOOLE_0:def 4;
     end;
-    assume x in ((A^Fob) /\ ((A`)^Fob));
+    assume
+    x in ((A^Fob) /\ ((A`)^Fob));
     then x in A^Fob & x in (A`)^Fob by XBOOLE_0:def 4;
-    then for W being Subset of FMT st W in U_FMT x
-    holds W meets A & W meets A` by Th21;
+    then
+    for W being Subset of FMT st W in U_FMT x holds W meets A & W meets A`
+    by Th21;
     hence thesis;
   end;
   hence thesis by SUBSET_1:8;
@@ -1418,12 +1483,14 @@ proof
     let x be set;
     thus x in A^Fodelta implies x in A^Fob \ A^Foi
     proof
-      assume x in A^Fodelta;
+      assume
+      x in A^Fodelta;
       then x in (A^Fob) /\ (((A`)^Fob)`)` by Th40;
       then x in ((A^Fob) /\ (A^Foi)`) by Th38;
       hence thesis by SUBSET_1:32;
     end;
-    assume x in A^Fob \ A^Foi;
+    assume
+    x in A^Fob \ A^Foi;
     then x in ((A^Fob) /\ ((A^Foi)`)) by SUBSET_1:32;
     then x in ((A^Fob) /\ (((A`)^Fob)`)`) by Th38;
     hence thesis by Th40;
@@ -1435,11 +1502,9 @@ definition
   let FMT;
   let A;
   func A^Fodel_i -> Subset of FMT equals
-
   A /\ (A^Fodelta);
   coherence;
   func A^Fodel_o -> Subset of FMT equals
-
   A` /\ (A^Fodelta);
   coherence;
 end;
@@ -1447,17 +1512,20 @@ end;
 theorem
   A^Fodelta = (A^Fodel_i) \/ (A^Fodel_o)
 proof
-  for x being set holds x in (A^Fodelta) iff x in (A^Fodel_i) \/ (A ^Fodel_o )
+  for x being set holds x in (A^Fodelta) iff x in (A^Fodel_i) \/ (A
+  ^Fodel_o )
   proof
     let x be set;
     thus x in A^Fodelta implies x in (A^Fodel_i) \/ (A^Fodel_o)
     proof
-      assume x in A^Fodelta;
+      assume
+      x in A^Fodelta;
       then x in [#](the carrier of FMT) /\ (A^Fodelta) by XBOOLE_1:28;
       then x in (A \/ A`) /\ (A^Fodelta) by SUBSET_1:25;
       hence thesis by XBOOLE_1:23;
     end;
-    assume x in (A^Fodel_i) \/ (A^Fodel_o);
+    assume
+    x in (A^Fodel_i) \/ (A^Fodel_o);
     then x in (A \/ A`) /\ (A^Fodelta) by XBOOLE_1:23;
     then x in [#](the carrier of FMT) /\ (A^Fodelta) by SUBSET_1:25;
     hence thesis by XBOOLE_1:28;
@@ -1479,7 +1547,8 @@ end;
 theorem
   A` is Fo_open implies A is Fo_closed
 proof
-  assume A` is Fo_open;
+  assume
+  A` is Fo_open;
   then
 A1: (A`) = (A`)^Foi by Def16;
   (((A`)^Foi)`)` = (A^Fob)` by Th39;
@@ -1489,7 +1558,8 @@ end;
 theorem
   A` is Fo_closed implies A is Fo_open
 proof
-  assume A` is Fo_closed;
+  assume
+  A` is Fo_closed;
   then
 A1: (A`) = (A`)^Fob by Def17;
   (A`)^Fob = (((A`)`)^Foi)` by Th39
@@ -1500,10 +1570,9 @@ A1: (A`) = (A`)^Fob by Def17;
 end;
 
 theorem
-  for FMT being non empty FMT_Space_Str,
-  A,B being Subset of FMT st FMT is Fo_filled
-  holds (for x being Element of FMT holds {x} in U_FMT x )
-  implies (A /\ B)^Fob = ((A^Fob) /\ (B^Fob))
+  for FMT being non empty FMT_Space_Str, A,B being Subset of FMT st FMT
+is Fo_filled holds (for x being Element of FMT holds {x} in U_FMT x ) implies (
+  A /\ B)^Fob = ((A^Fob) /\ (B^Fob))
 proof
   let FMT be non empty FMT_Space_Str;
   let A,B be Subset of FMT;
@@ -1517,57 +1586,58 @@ A3: for C being Subset of FMT holds C^Fob c= C
     for y being Element of FMT holds y in C^Fob implies y in C
     proof
       let y be Element of FMT;
-A4:   {y} in U_FMT y by A2;
-      assume y in C^Fob;
+      assume
+A4:   y in C^Fob;
+      {y} in U_FMT y by A2;
       then {y} meets C by A4,Th21;
-      then consider z being set such that
-A5:   z in {y} & z in C by XBOOLE_0:3;
-      thus thesis by A5,TARSKI:def 1;
+      then ex z being set st z in {y} & z in C by XBOOLE_0:3;
+      hence thesis by TARSKI:def 1;
     end;
     hence thesis by SUBSET_1:7;
   end;
-  for C being Subset of FMT holds C^Fob = C
+A5: for C being Subset of FMT holds C^Fob = C
   proof
     let C being Subset of FMT;
     C c= C^Fob & C^Fob c= C by A1,A3,Th36;
     hence thesis by XBOOLE_0:def 10;
   end;
-  then (A /\ B)^Fob = (A /\ B) & (A^Fob) = A & (B^Fob)= B;
-  hence thesis;
+  then (A /\ B)^Fob = (A /\ B) & (A^Fob) = A;
+  hence thesis by A5;
 end;
 
 theorem
-  for FMT being non empty FMT_Space_Str,
-  A,B being Subset of FMT st FMT is Fo_filled
-  holds (for x being Element of FMT holds {x} in U_FMT x )
-  implies (A^Foi) \/ (B^Foi) = (A \/ B)^Foi
+  for FMT being non empty FMT_Space_Str, A,B being Subset of FMT st FMT
+is Fo_filled holds (for x being Element of FMT holds {x} in U_FMT x ) implies (
+  A^Foi) \/ (B^Foi) = (A \/ B)^Foi
 proof
   let FMT be non empty FMT_Space_Str;
   let A,B be Subset of FMT;
   assume
 A1: FMT is Fo_filled;
   assume
-A2: (for x being Element of FMT holds {x} in U_FMT x );
+A2: for x being Element of FMT holds {x} in U_FMT x;
 A3: for C being Subset of FMT holds C c= C^Foi
   proof
     let C be Subset of FMT;
     for y being Element of FMT holds y in C implies y in C^Foi
     proof
       let y be Element of FMT;
-A4:   {y} in U_FMT y by A2;
-      assume y in C;
-      then {y} is Subset of C by SUBSET_1:63;
+      assume
+      y in C;
+      then
+A4:   {y} is Subset of C by SUBSET_1:63;
+      {y} in U_FMT y by A2;
       hence thesis by A4;
     end;
     hence thesis by SUBSET_1:7;
   end;
-  for C being Subset of FMT holds C = C^Foi
+A5: for C being Subset of FMT holds C = C^Foi
   proof
     let C being Subset of FMT;
     C c= C^Foi & C^Foi c= C by A1,A3,Th37;
     hence thesis by XBOOLE_0:def 10;
   end;
-  then (A \/ B)^Foi = (A \/ B) & (A^Foi) = A & (B^Foi)= B;
-  hence thesis;
+  then (A \/ B)^Foi = (A \/ B) & (A^Foi) = A;
+  hence thesis by A5;
 end;
 

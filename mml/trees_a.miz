@@ -15,7 +15,7 @@ environ
  requirements NUMERALS, BOOLE, SUBSET;
  definitions TARSKI, XBOOLE_0, TREES_1, TREES_2, RELAT_1;
  theorems TARSKI, FUNCT_1, FINSEQ_1, TREES_1, TREES_2, XBOOLE_0, XBOOLE_1,
-     RELAT_1;
+      RELAT_1;
  schemes TREES_2;
 
 begin
@@ -34,10 +34,8 @@ proof
   let p,q,r,s be FinSequence;
   assume
 A1: p^q = s^r;
-  then
-A2: p is_a_prefix_of s^r by TREES_1:8;
-  s is_a_prefix_of p^q by A1,TREES_1:8;
-  hence thesis by A1,A2,TREES_2:1;
+  A2: p is_a_prefix_of s^r & s is_a_prefix_of p^q by A1,TREES_1:8;
+  thus thesis by A1,A2,TREES_2:1;
 end;
 
 definition
@@ -52,261 +50,274 @@ A1: P<>{};
   existence
   proof
     reconsider P' = P as Subset of T by TREES_1:def 14;
-    now
+A2: now
       let x;
       assume
-A2:   x in P';
-      then reconsider x' = x as FinSequence by TREES_1:def 13;
-      reconsider x' as Element of T by A2;
-      now
+A3:   x in P';
+      reconsider x' = x as FinSequence by A3,TREES_1:def 13;
+      reconsider x' as Element of T by A3;
+A4:   now
         let p such that
-A3:     p in P;
+A5:     p in P;
         per cases;
-        suppose p <> x';
-          then not p,x' are_c=-comparable by A2,A3,TREES_1:def 13;
-          hence not p is_a_proper_prefix_of x' by XBOOLE_1:104;
+        suppose
+A6:       p <> x';
+A7:       not p,x' are_c=-comparable by A3,A5,A6,TREES_1:def 13;
+          thus not p is_a_proper_prefix_of x' by A7,XBOOLE_1:104;
         end;
-        suppose p = x';
-          hence not p is_a_proper_prefix_of x';
+        suppose
+A8:       p = x';
+          thus not p is_a_proper_prefix_of x' by A8;
         end;
       end;
-      hence x in {t : for p st p in P holds not p is_a_proper_prefix_of t};
+      thus x in {t : for p st p in P holds not p is_a_proper_prefix_of t}
+      by A4;
     end;
-    then P c= {t : for p st p in P holds not p is_a_proper_prefix_of t}
-    by TARSKI:def 3;
-    then reconsider Y = {t : for p st p in P holds not p is_a_proper_prefix_of
-    t} as non empty set by A1,XBOOLE_1:3;
+A9: P c= {t : for p st p in P holds not p is_a_proper_prefix_of t}
+    by A2,TARSKI:def 3;
+    reconsider Y = {t : for p st p in P holds not p is_a_proper_prefix_of
+    t} as non empty set by A1,A9,XBOOLE_1:3;
     consider Z such that
-A4: Z = {p^s where p is Element of T, s is Element of T1 : p in P};
+A10: Z = {p^s where p is Element of T, s is Element of T1 : p in P};
     reconsider X = Y \/ Z as non empty set;
-A5: x in {t : for p st p in P holds not p is_a_proper_prefix_of t} implies
+A11: x in {t : for p st p in P holds not p is_a_proper_prefix_of t} implies
     x is FinSequence of NAT & x in NAT* & x in T
     proof
-      assume x in {t : for p st p in P holds not p is_a_proper_prefix_of t};
-      then
-A6:   ex t st x = t & for p st p in P holds not p is_a_proper_prefix_of t;
-      hence x is FinSequence of NAT;
-      thus thesis by A6,FINSEQ_1:def 11;
+      assume
+      A12:  x in {t : for p st p in P holds not p is_a_proper_prefix_of t};
+      A13:  ex
+ t st x = t & for p st p in P holds not p is_a_proper_prefix_of t by A12;
+      thus x is FinSequence of NAT by A13;
+      thus thesis by A13,FINSEQ_1:def 11;
     end;
-    X is Tree-like
+A14: X is Tree-like
     proof
       thus X c= NAT*
       proof
         let x;
-        assume x in X;
-        then
-A7:     x in {t : for p st p in P holds not p is_a_proper_prefix_of t } or
+        assume
+A15:    x in X;
+        A16:    x
+ in {t : for p st p in P holds not p is_a_proper_prefix_of t } or
         x in {p^s where p is Element of T, s is Element of T1 : p in P}
-        by A4,XBOOLE_0:def 3;
-        now
-          assume x in {p^s where p is Element of T, s is Element of T1 : p in
+        by A10,A15,XBOOLE_0:def 3;
+A17:    now
+          assume
+          A18:      x
+ in {p^s where p is Element of T, s is Element of T1 : p in
           P };
-          then ex p being Element of T st ex s being Element of T1 st
-          x = p^s & p in P;
-          hence x is FinSequence of NAT;
+A19:      ex p being Element of T st ex s being Element of T1 st
+          x = p^s & p in P by A18;
+          thus x is FinSequence of NAT by A19;
         end;
-        hence thesis by A5,A7,FINSEQ_1:def 11;
+        thus thesis by A11,A16,A17,FINSEQ_1:def 11;
       end;
       thus for q st q in X holds ProperPrefixes q c= X
       proof
         let q such that
-A8:     q in X;
-A9:     now
+A20:    q in X;
+A21:    now
           assume
-A10:      q in {t : for p st p in P holds not p is_a_proper_prefix_of t};
-          then ex t st q = t &
-          for p st p in P holds not p is_a_proper_prefix_of t;
-          then
-A11:      ProperPrefixes q c= T by TREES_1:def 5;
+A22:      q in {t : for p st p in P holds not p is_a_proper_prefix_of t};
+A23:      ex t st q = t &
+          for p st p in P holds not p is_a_proper_prefix_of t by A22;
+A24:      ProperPrefixes q c= T by A23,TREES_1:def 5;
           thus ProperPrefixes q c= X
           proof
             let x;
             assume
-A12:        x in ProperPrefixes q;
-            then consider p1 such that
-A13:        x = p1 & p1 is_a_proper_prefix_of q by TREES_1:def 4;
-            reconsider p1 as Element of T by A11,A12,A13;
-            for p st p in P holds not p is_a_proper_prefix_of p1
+A25:        x in ProperPrefixes q;
+            consider p1 such that
+A26:        x = p1 and
+A27:        p1 is_a_proper_prefix_of q by A25,TREES_1:def 4;
+            reconsider p1 as Element of T by A24,A25,A26;
+A28:        for p st p in P holds not p is_a_proper_prefix_of p1
             proof
               let p such that
-A14:          p in P;
-              consider t such that
-A15:          q = t & for p st p in P holds
-              not p is_a_proper_prefix_of t by A10;
-              thus thesis by A13,A14,A15,XBOOLE_1:56;
+A29:          p in P;
+A30:          ex t st q = t & for p st p in P holds not p
+              is_a_proper_prefix_of t by A22;
+              thus thesis by A27,A29,A30,XBOOLE_1:56;
             end;
-            then x in { s1 where s1 is Element of T : for p st p in P holds
-            not p is_a_proper_prefix_of s1 } by A13;
-            hence thesis by XBOOLE_0:def 3;
+A31:        x in { s1 where s1 is Element of T : for p st p in P holds
+            not p is_a_proper_prefix_of s1 } by A26,A28;
+            thus thesis by A31,XBOOLE_0:def 3;
           end;
         end;
-        now
-          assume q in Z;
-          then consider p being Element of T, s being Element of T1 such that
-A16:      q = p^s & p in P by A4;
+A32:    now
+          assume
+A33:      q in Z;
+          consider p being Element of T, s being Element of T1 such that
+A34:      q = p^s and
+A35:      p in P by A10,A33;
           thus ProperPrefixes q c= X
           proof
             let x;
             assume
-A17:        x in ProperPrefixes q;
-            then reconsider r = x as FinSequence by TREES_1:35;
-            r is_a_proper_prefix_of p^s by A16,A17,TREES_1:36;
-            then r is_a_prefix_of p^s & r <> p^s by XBOOLE_0:def 8;
-            then consider r1 being FinSequence such that
-A18:        p^s = r^r1 by TREES_1:8;
-A19:        now
-              assume len p <= len r;
-              then consider r2 being FinSequence such that
-A20:          p^r2 = r by A18,FINSEQ_1:64;
-              p^s = p^(r2^r1) by A18,A20,FINSEQ_1:45;
-              then s = r2^r1 by FINSEQ_1:46;
-              then s|(dom r2) = r2 by FINSEQ_1:33;
-              then
-A21:          s|Seg(len r2) = r2 by FINSEQ_1:def 3;
-              then reconsider r2 as FinSequence of NAT by FINSEQ_1:23;
-              r2 is_a_prefix_of s & s in T1 by A21,TREES_1:def 1;
-              then reconsider r2 as Element of T1 by TREES_1:45;
-              r = p^r2 by A20;
-              then r in { w^v where w is Element of T,
-              v is Element of T1 : w in P } by A16;
-              hence r in X by A4,XBOOLE_0:def 3;
+A36:        x in ProperPrefixes q;
+            reconsider r = x as FinSequence by A36,TREES_1:35;
+A37:        r is_a_proper_prefix_of p^s by A34,A36,TREES_1:36;
+A38:        r is_a_prefix_of p^s by A37,XBOOLE_0:def 8;
+            consider r1 being FinSequence such that
+A39:        p^s = r^r1 by A38,TREES_1:8;
+A40:        now
+              assume
+A41:          len p <= len r;
+              consider r2 being FinSequence such that
+A42:          p^r2 = r by A39,A41,FINSEQ_1:64;
+A43:          p^s = p^(r2^r1) by A39,A42,FINSEQ_1:45;
+A44:          s = r2^r1 by A43,FINSEQ_1:46;
+A45:          s|(dom r2) = r2 by A44,FINSEQ_1:33;
+A46:          s|Seg(len r2) = r2 by A45,FINSEQ_1:def 3;
+              reconsider r2 as FinSequence of NAT by A46,FINSEQ_1:23;
+A47:          r2 is_a_prefix_of s by A46,TREES_1:def 1;
+              reconsider r2 as Element of T1 by A47,TREES_1:45;
+A48:          r = p^r2 by A42;
+A49:          r in { w^v where w is Element of T,
+              v is Element of T1 : w in P } by A35,A48;
+              thus r in X by A10,A49,XBOOLE_0:def 3;
             end;
-            now
-              assume len r <= len p;
-              then ex r2 being FinSequence st r^r2 = p by A18,FINSEQ_1:64;
-              then p|(dom r) = r by FINSEQ_1:33;
-              then
-A22:          p|Seg(len r) = r by FINSEQ_1:def 3;
-              then reconsider r3 = r as FinSequence of NAT by FINSEQ_1:23;
-A23:          r3 is_a_prefix_of p by A22,TREES_1:def 1;
-              then reconsider r3 as Element of T by TREES_1:45;
-              for p' st p' in P holds not p' is_a_proper_prefix_of r3
+A50:        now
+              assume
+A51:          len r <= len p;
+A52:          ex r2 being FinSequence st r^r2 = p by A39,A51,FINSEQ_1:64;
+A53:          p|(dom r) = r by A52,FINSEQ_1:33;
+A54:          p|Seg(len r) = r by A53,FINSEQ_1:def 3;
+              reconsider r3 = r as FinSequence of NAT by A54,FINSEQ_1:23;
+A55:          r3 is_a_prefix_of p by A54,TREES_1:def 1;
+              reconsider r3 as Element of T by A55,TREES_1:45;
+A56:          for p' st p' in P holds not p' is_a_proper_prefix_of r3
               proof
                 let p';
                 assume
-A24:            p' in P;
+A57:            p' in P;
                 assume
-A25:            p' is_a_proper_prefix_of r3;
-                then p' is_a_prefix_of r3 by XBOOLE_0:def 8;
-                then p' is_a_prefix_of p by A23,XBOOLE_1:1;
-                then
-A26:            p,p' are_c=-comparable by XBOOLE_0:def 9;
+A58:            p' is_a_proper_prefix_of r3;
+A59:            p' is_a_prefix_of r3 by A58,XBOOLE_0:def 8;
+A60:            p' is_a_prefix_of p by A55,A59,XBOOLE_1:1;
+A61:            p,p' are_c=-comparable by A60,XBOOLE_0:def 9;
                 per cases;
-                suppose p<>p';
-                  hence contradiction by A16,A24,A26,TREES_1:def 13;
+                suppose
+A62:              p<>p';
+                  thus contradiction by A35,A57,A61,A62,TREES_1:def 13;
                 end;
-                suppose p=p';
-                  hence contradiction by A23,A25,XBOOLE_0:def 8;
+                suppose
+A63:              p=p';
+                  thus contradiction by A55,A58,A63,XBOOLE_0:def 8;
                 end;
               end;
-              then r3 in { t : for p' st p' in P holds
-              not p' is_a_proper_prefix_of t };
-              hence r in X by XBOOLE_0:def 3;
+A64:          r3 in { t : for p' st p' in P holds
+              not p' is_a_proper_prefix_of t } by A56;
+              thus r in X by A64,XBOOLE_0:def 3;
             end;
-            hence thesis by A19;
+            thus thesis by A40,A50;
           end;
         end;
-        hence thesis by A8,A9,XBOOLE_0:def 3;
+        thus thesis by A20,A21,A32,XBOOLE_0:def 3;
       end;
       let q,k,n such that
-A27:  q^<*k*> in X & n <= k;
-A28:  now
+A65:  q^<*k*> in X and
+A66:  n <= k;
+A67:  now
         assume
-A29:    q^<*k*> in
+A68:    q^<*k*> in
         { t : for p st p in P holds not p is_a_proper_prefix_of t };
-        then ex s being Element of T st
-        q^<*k*> = s & for p st p in P holds not p is_a_proper_prefix_of s;
-        then reconsider u = q^<*n*> as Element of T by A27,TREES_1:def 5;
-        now
+A69:    ex s being Element of T st
+        q^<*k*> = s & for p st p in P holds not p is_a_proper_prefix_of s
+        by A68;
+        reconsider u = q^<*n*> as Element of T by A66,A69,TREES_1:def 5;
+A70:    now
           let p such that
-A30:      p in P;
-          assume p is_a_proper_prefix_of u;
-          then
-A31:      p is_a_prefix_of q by TREES_1:32;
-          consider s being Element of T such that
-A32:      q^<*k*> = s & for p st p in P holds
-          not p is_a_proper_prefix_of s by A29;
-          thus contradiction by A30,A31,A32,TREES_1:31;
+A71:      p in P;
+          assume
+A72:      p is_a_proper_prefix_of u;
+A73:      p is_a_prefix_of q by A72,TREES_1:32;
+A74:      ex s being Element of T st q^<*k*> = s & for p st p in
+          P holds not p is_a_proper_prefix_of s by A68;
+          thus contradiction by A71,A73,A74,TREES_1:31;
         end;
-        then q^<*n*> in {t : for p st p in P holds not p
-        is_a_proper_prefix_of t};
-        hence q^<*n*> in X by XBOOLE_0:def 3;
+A75:    q^<*n*> in {t : for p st p in P holds not p
+        is_a_proper_prefix_of t} by A70;
+        thus q^<*n*> in X by A75,XBOOLE_0:def 3;
       end;
-      now
-        assume q^<*k*> in Z;
-        then consider p being Element of T, s being Element of T1 such that
-A33:    q^<*k*> = p^s & p in P by A4;
-A34:    now
-          assume len q <= len p;
-          then consider r being FinSequence such that
-A35:      q^r = p by A33,FINSEQ_1:64;
-          q^<*k*> = q^(r^s) by A33,A35,FINSEQ_1:45;
-          then
-A36:      <*k*> = r^s by FINSEQ_1:46;
-A37:      now
+A76:  now
+        assume
+A77:    q^<*k*> in Z;
+        consider p being Element of T, s being Element of T1 such that
+A78:    q^<*k*> = p^s and
+A79:    p in P by A10,A77;
+A80:    now
+          assume
+A81:      len q <= len p;
+          consider r being FinSequence such that
+A82:      q^r = p by A78,A81,FINSEQ_1:64;
+A83:      q^<*k*> = q^(r^s) by A78,A82,FINSEQ_1:45;
+A84:      <*k*> = r^s by A83,FINSEQ_1:46;
+A85:      now
             assume
-A38:        r = <*k*>;
-            then reconsider s' = q^<*n*> as Element of T by A27,A35,
+A86:        r = <*k*>;
+            reconsider s' = q^<*n*> as Element of T by A66,A82,A86,
 TREES_1:def 5;
-            now
+A87:        now
               let p' such that
-A39:          p' in P;
+A88:          p' in P;
               assume
-A40:          p' is_a_proper_prefix_of s';
-              then
-A41:          p' is_a_prefix_of s' & p' <> s' by XBOOLE_0:def 8;
-A42:          len p = len q + len <*k*> by A35,A38,FINSEQ_1:35
+A89:          p' is_a_proper_prefix_of s';
+A90:          p' is_a_prefix_of s' by A89,XBOOLE_0:def 8;
+A91:          len p = len q + len <*k*> by A82,A86,FINSEQ_1:35
                 .= len q + 1 by FINSEQ_1:57
                 .= len q + len <*n*> by FINSEQ_1:57
                 .= len s' by FINSEQ_1:35;
               per cases;
-              suppose p' = p;
-                hence contradiction by A41,A42,TREES_1:15;
+              suppose
+A92:            p' = p;
+                thus contradiction by A89,A90,A91,A92,TREES_1:15;
               end;
               suppose
-A43:            p' <> p;
-A44:            q is_a_prefix_of p by A35,TREES_1:8;
-                p' is_a_prefix_of q by A40,TREES_1:32;
-                then p' is_a_prefix_of p by A44,XBOOLE_1:1;
-                then p,p' are_c=-comparable by XBOOLE_0:def 9;
-                hence contradiction by A33,A39,A43,TREES_1:def 13;
+A93:            p' <> p;
+                A94:            q
+ is_a_prefix_of p & p' is_a_prefix_of q by A82,A89,TREES_1:8,32;
+A95:            p' is_a_prefix_of p by A94,XBOOLE_1:1;
+A96:            p,p' are_c=-comparable by A95,XBOOLE_0:def 9;
+                thus contradiction by A79,A88,A93,A96,TREES_1:def 13;
               end;
             end;
-            hence q^<*n*> in { t : for p st p in P holds
-            not p is_a_proper_prefix_of t };
+            thus q^<*n*> in { t : for p st p in P holds
+            not p is_a_proper_prefix_of t } by A87;
           end;
-          now
-            assume
-A45:        s = <*k*> & r = {};
-            s = <*>NAT^s & s in T1 & {} = <*> NAT by FINSEQ_1:47;
-            then <*>NAT^<*n*> in T1 by A27,A45,TREES_1:def 5;
-            then reconsider t = <*n*> as Element of T1 by FINSEQ_1:47;
-            q^<*n*> = p^t by A35,A45,FINSEQ_1:47;
-            hence q^<*n*> in Z by A4,A33;
+A97:      now
+            assume that
+A98:        s = <*k*> and
+A99:        r = {};
+A100:       s = <*>NAT^s by FINSEQ_1:47;
+A101:       <*>NAT^<*n*> in T1 by A66,A98,A100,TREES_1:def 5;
+            reconsider t = <*n*> as Element of T1 by A101,FINSEQ_1:47;
+A102:       q^<*n*> = p^t by A82,A99,FINSEQ_1:47;
+            thus q^<*n*> in Z by A10,A79,A102;
           end;
-          hence q^<*n*> in X by A36,A37,TREES_1:6,XBOOLE_0:def 3;
+          thus q^<*n*> in X by A84,A85,A97,FINSEQ_1:109,XBOOLE_0:def 3;
         end;
-        now
-          assume len p <= len q;
-          then consider r being FinSequence such that
-A46:      p^r = q by A33,FINSEQ_1:64;
-          p^(r^<*k*>) = p^s by A33,A46,FINSEQ_1:45;
-          then
-A47:      r^<*k*> = s & s in T1 by FINSEQ_1:46;
-          then s|dom r = r by FINSEQ_1:33;
-          then s|Seg len r = r by FINSEQ_1:def 3;
-          then reconsider r as FinSequence of NAT by FINSEQ_1:23;
-          reconsider t = r^<*n*> as Element of T1 by A27,A47,TREES_1:def 5;
-          q^<*n*> = p^t by A46,FINSEQ_1:45;
-          then q^<*n*> in { p'^v where p' is Element of T,
-          v is Element of T1 : p' in P } by A33;
-          hence q^<*n*> in X by A4,XBOOLE_0:def 3;
+A103:   now
+          assume
+A104:     len p <= len q;
+          consider r being FinSequence such that
+A105:     p^r = q by A78,A104,FINSEQ_1:64;
+A106:     p^(r^<*k*>) = p^s by A78,A105,FINSEQ_1:45;
+A107:     r^<*k*> = s by A106,FINSEQ_1:46;
+A108:     s|dom r = r by A107,FINSEQ_1:33;
+A109:     s|Seg len r = r by A108,FINSEQ_1:def 3;
+          reconsider r as FinSequence of NAT by A109,FINSEQ_1:23;
+          reconsider t = r^<*n*> as Element of T1 by A66,A107,TREES_1:def 5;
+A110:     q^<*n*> = p^t by A105,FINSEQ_1:45;
+A111:     q^<*n*> in { p'^v where p' is Element of T,
+          v is Element of T1 : p' in P } by A79,A110;
+          thus q^<*n*> in X by A10,A111,XBOOLE_0:def 3;
         end;
-        hence q^<*n*> in X by A34;
+        thus q^<*n*> in X by A80,A103;
       end;
-      hence q^<*n*> in X by A27,A28,XBOOLE_0:def 3;
+      thus q^<*n*> in X by A65,A67,A76,XBOOLE_0:def 3;
     end;
-    then reconsider X as Tree;
+    reconsider X as Tree by A14;
     take X;
     let q;
     thus q in X implies
@@ -314,59 +325,61 @@ A47:      r^<*k*> = s & s in T1 by FINSEQ_1:46;
     or ex p,r st p in P & r in T1 & q = p^r
     proof
       assume
-A48:  q in X;
-A49:  now
-        assume q in Y;
-        then ex s being Element of T st q = s &
-        for p st p in P holds not p is_a_proper_prefix_of s;
-        hence thesis;
+A112: q in X;
+A113: now
+        assume
+A114:   q in Y;
+A115:   ex s being Element of T st q = s &
+        for p st p in P holds not p is_a_proper_prefix_of s by A114;
+        thus thesis by A115;
       end;
-      now
-        assume q in Z;
-        then ex p being Element of T st ex s being Element of T1 st
-        q = p^s & p in P by A4;
-        hence ex p,r st p in P & r in T1 & q = p^r;
+A116: now
+        assume
+A117:   q in Z;
+A118:   ex p being Element of T st ex s being Element of T1 st
+        q = p^s & p in P by A10,A117;
+        thus ex p,r st p in P & r in T1 & q = p^r by A118;
       end;
-      hence thesis by A48,A49,XBOOLE_0:def 3;
+      thus thesis by A112,A113,A116,XBOOLE_0:def 3;
     end;
     assume
-A50: (q in T & for p st p in P holds not p is_a_proper_prefix_of q)
+A119: (q in T & for p st p in P holds not p is_a_proper_prefix_of q)
     or ex p,r st p in P & r in T1 & q = p^r;
-A51: (q in T & for p st p in P holds not p is_a_proper_prefix_of q) implies
+A120: (q in T & for p st p in P holds not p is_a_proper_prefix_of q) implies
     q in {t : for p st p in P holds not p is_a_proper_prefix_of t};
-    now
+A121: now
       given p,r such that
-A52:  p in P & r in T1 & q = p^r;
-      P c= T by TREES_1:def 14;
-      hence q in Z by A4,A52;
+A122: p in P & r in T1 & q = p^r;
+A123: P c= T by TREES_1:def 14;
+      thus q in Z by A10,A122,A123;
     end;
-    hence thesis by A50,A51,XBOOLE_0:def 3;
+    thus thesis by A119,A120,A121,XBOOLE_0:def 3;
   end;
   uniqueness
   proof
     let S1,S2 be Tree such that
-A53: q in S1 iff (q in T & for p st p in
+A124: q in S1 iff (q in T & for p st p in
     P holds not p is_a_proper_prefix_of q)
     or ex p,r st p in P & r in T1 & q = p^r and
-A54: q in S2 iff (q in T & for p st p in
+A125: q in S2 iff (q in T & for p st p in
     P holds not p is_a_proper_prefix_of q)
     or ex p,r st p in P & r in T1 & q = p^r;
     let x be FinSequence of NAT;
     thus x in S1 implies x in S2
     proof
       assume
-A55:  x in S1;
+A126: x in S1;
       reconsider q = x as FinSequence of NAT;
-      (q in T & for p st p in P holds not p is_a_proper_prefix_of q)
-      or ex p,r st p in P & r in T1 & q = p^r by A53,A55;
-      hence thesis by A54;
+A127: (q in T & for p st p in P holds not p is_a_proper_prefix_of q)
+      or ex p,r st p in P & r in T1 & q = p^r by A124,A126;
+      thus thesis by A125,A127;
     end;
     assume
-A56: x in S2;
+A128: x in S2;
     reconsider q = x as FinSequence of NAT;
-    (q in T & for p st p in P holds not p is_a_proper_prefix_of q)
-    or ex p,r st p in P & r in T1 & q = p^r by A54,A56;
-    hence thesis by A53;
+A129: (q in T & for p st p in P holds not p is_a_proper_prefix_of q)
+    or ex p,r st p in P & r in T1 & q = p^r by A125,A128;
+    thus thesis by A124,A129;
   end;
 end;
 
@@ -384,33 +397,36 @@ A1: P <> {};
     let x be set;
     assume
 A2: x in tree(T,P,T1);
-    then reconsider q = x as FinSequence of NAT by TREES_1:44;
+    reconsider q = x as FinSequence of NAT by A2,TREES_1:44;
 A3: now
       given p,r such that
 A4:   p in P & r in T1 & q = p^r;
-      P c= T by TREES_1:def 14;
-      hence x in { p'^s where p' is Element of T,
-      s is Element of T1 : p' in P } by A4;
+A5:   P c= T by TREES_1:def 14;
+      thus x in { p'^s where p' is Element of T,
+      s is Element of T1 : p' in P } by A4,A5;
     end;
-    q in T & (for p st p in P holds not p is_a_proper_prefix_of q) implies
+    A6: q in T & (for p st p in P holds not p is_a_proper_prefix_of q) implies
     x in { t : for p st p in P holds not p is_a_proper_prefix_of t };
-    hence thesis by A1,A2,A3,Def1,XBOOLE_0:def 3;
+    thus thesis by A1,A2,A3,A6,Def1,XBOOLE_0:def 3;
   end;
   let x be set such that
-A5: x in { t : for p st p in P holds not p is_a_proper_prefix_of t } \/
+A7: x in { t : for p st p in P holds not p is_a_proper_prefix_of t } \/
   { p^s where p is Element of T, s is Element of T1 : p in P };
-A6: now
-    assume x in { p^s where p is Element of T, s is Element of T1 : p in P };
-    then ex p being Element of T st
-    ex s being Element of T1 st x = p^s & p in P;
-    hence thesis by Def1;
+A8: now
+    assume
+    A9: x in { p^s where p is Element of T, s is Element of T1 : p in P };
+A10: ex p being Element of T st
+    ex s being Element of T1 st x = p^s & p in P by A9;
+    thus thesis by A10,Def1;
   end;
-  now
-    assume x in { t : for p st p in P holds not p is_a_proper_prefix_of t };
-    then ex t st x = t & for p st p in P holds not p is_a_proper_prefix_of t;
-    hence thesis by A1,Def1;
+A11: now
+    assume
+    A12: x in { t : for p st p in P holds not p is_a_proper_prefix_of t };
+A13: ex t st x = t & for p st p in P holds not p is_a_proper_prefix_of t
+    by A12;
+    thus thesis by A1,A13,Def1;
   end;
-  hence thesis by A5,A6,XBOOLE_0:def 3;
+  thus thesis by A7,A8,A11,XBOOLE_0:def 3;
 end;
 
 theorem Th3:
@@ -420,17 +436,20 @@ theorem Th3:
   for p st p in P holds not p is_a_proper_prefix_of t1}
 proof
   let x be set;
-  assume x in {t1 where t1 is Element of T :
+  assume
+A1: x in {t1 where t1 is Element of T :
   for p st p in P holds not p is_a_prefix_of t1};
-  then consider t' being Element of T such that
-A1: x = t' & for p st p in P holds not p is_a_prefix_of t';
-  now
+  consider t' being Element of T such that
+A2: x = t' and
+A3: for p st p in P holds not p is_a_prefix_of t' by A1;
+A4: now
     let p;
-    assume p in P;
-    then not p is_a_prefix_of t' by A1;
-    hence not p is_a_proper_prefix_of t' by XBOOLE_0:def 8;
+    assume
+A5: p in P;
+A6: not p is_a_prefix_of t' by A3,A5;
+    thus not p is_a_proper_prefix_of t' by A6,XBOOLE_0:def 8;
   end;
-  hence thesis by A1;
+  thus thesis by A2,A4;
 end;
 
 theorem Th4:
@@ -440,27 +459,29 @@ proof
   let x be set;
   assume
 A1: x in P;
-  ex t1 being Element of T st x = t1 &
+A2: ex t1 being Element of T st x = t1 &
   for p st p in P holds not p is_a_proper_prefix_of t1
   proof
-    P c= T by TREES_1:def 14;
-    then consider t' being Element of T such that
-A2: t' = x by A1;
-    now
+A3: P c= T by TREES_1:def 14;
+    consider t' being Element of T such that
+A4: t' = x by A1,A3;
+A5: now
       let p such that
-A3:   p in P;
+A6:   p in P;
       per cases;
-      suppose t' = p;
-        hence not p is_a_proper_prefix_of t';
+      suppose
+A7:     t' = p;
+        thus not p is_a_proper_prefix_of t' by A7;
       end;
-      suppose t' <> p;
-        then not t', p are_c=-comparable by A1,A2,A3,TREES_1:def 13;
-        hence not p is_a_proper_prefix_of t' by XBOOLE_1:104;
+      suppose
+A8:     t' <> p;
+A9:     not t', p are_c=-comparable by A1,A4,A6,A8,TREES_1:def 13;
+        thus not p is_a_proper_prefix_of t' by A9,XBOOLE_1:104;
       end;
     end;
-    hence thesis by A2;
+    thus thesis by A4,A5;
   end;
-  hence thesis;
+  thus thesis by A2;
 end;
 
 theorem Th5:
@@ -469,61 +490,64 @@ theorem Th5:
   {t1 where t1 is Element of T :
   for p st p in P holds not p is_a_prefix_of t1} = P
 proof
-  now
+A1: now
     let x be set;
-    assume x in {t1 where t1 is Element of T :
+    assume
+A2: x in {t1 where t1 is Element of T :
     for p st p in P holds not p is_a_proper_prefix_of t1} \
     {t1 where t1 is Element of T :
     for p st p in P holds not p is_a_prefix_of t1};
-    then
-A1: x in {t1 where t1 is Element of T :
-    for p st p in P holds not p is_a_proper_prefix_of t1} &
-    not x in {t1 where t1 is Element of T :
-    for p st p in P holds not p is_a_prefix_of t1} by XBOOLE_0:def 5;
+A3: x in {t1 where t1 is Element of T : for p st p in P holds not p
+    is_a_proper_prefix_of t1} by A2;
+A4: not x in {t1 where t1 is Element of T : for p st p in P holds not p
+    is_a_prefix_of t1} by A2,XBOOLE_0:def 5;
     assume
-A2: not x in P;
-    ex t1 being Element of T st x = t1 &
+A5: not x in P;
+A6: ex t1 being Element of T st x = t1 &
     for p st p in P holds not p is_a_prefix_of t1
     proof
       consider t' being Element of T such that
-A3:   x = t' & for p st p in P holds not p is_a_proper_prefix_of t' by A1;
-      now
+A7:   x = t' and
+A8:   for p st p in P holds not p is_a_proper_prefix_of t' by A3;
+A9:   now
         let p;
         assume
-A4:     p in P;
-        then
-A5:     not p is_a_proper_prefix_of t' by A3;
-        per cases by A5,XBOOLE_0:def 8;
-        suppose not p is_a_prefix_of t';
-          hence not p is_a_prefix_of t';
+A10:    p in P;
+A11:    not p is_a_proper_prefix_of t' by A8,A10;
+        per cases by A11,XBOOLE_0:def 8;
+        suppose
+A12:      not p is_a_prefix_of t';
+          thus not p is_a_prefix_of t' by A12;
         end;
-        suppose p = t';
-          hence not p is_a_prefix_of t' by A2,A3,A4;
+        suppose
+A13:      p = t';
+          thus not p is_a_prefix_of t' by A5,A7,A10,A13;
         end;
       end;
-      hence thesis by A3;
+      thus thesis by A7,A9;
     end;
-    hence contradiction by A1;
+    thus contradiction by A4,A6;
   end;
-  hence {t1 where t1 is Element of T :
+  thus {t1 where t1 is Element of T :
   for p st p in P holds not p is_a_proper_prefix_of t1} \
   {t1 where t1 is Element of T :
-  for p st p in P holds not p is_a_prefix_of t1} c= P by TARSKI:def 3;
+  for p st p in P holds not p is_a_prefix_of t1} c= P by A1,TARSKI:def 3;
   let x be set;
   assume
-A6: x in P;
-A7: P c= {t1 where t1 is Element of T :
+A14: x in P;
+A15: P c= {t1 where t1 is Element of T :
   for p st p in P holds not p is_a_proper_prefix_of t1} by Th4;
-  not x in {t1 where t1 is Element of T :
+A16: not x in {t1 where t1 is Element of T :
   for p st p in P holds not p is_a_prefix_of t1}
   proof
-    assume x in {t1 where t1 is Element of T :
+    assume
+A17: x in {t1 where t1 is Element of T :
     for p st p in P holds not p is_a_prefix_of t1};
-    then consider t' being Element of T such that
-A8: x = t' & for p st p in P holds not p is_a_prefix_of t';
-    thus contradiction by A6,A8;
+A18: ex t' being Element of T st x = t' & for p st p in P
+    holds not p is_a_prefix_of t' by A17;
+    thus contradiction by A14,A18;
   end;
-  hence thesis by A6,A7,XBOOLE_0:def 5;
+  thus thesis by A14,A15,A16,XBOOLE_0:def 5;
 end;
 
 theorem Th6:
@@ -531,22 +555,23 @@ theorem Th6:
   P c= { p^s where p is Element of T, s is Element of T1 : p in P }
 proof
   let T, T1, P;
-  now
+A1: now
     let x be set;
     assume
-A1: x in P;
-    P c= T by TREES_1:def 14;
-    then consider q being Element of T such that
-A2: q = x by A1;
-    <*> NAT in T1 by TREES_1:47;
-    then consider s' being Element of T1 such that
-A3: s' = <*> NAT;
-    q = q^s' by A3,FINSEQ_1:47;
-    hence x in { p^s where p is Element of T, s is Element of T1 : p in P }
-    by A1,A2;
+A2: x in P;
+A3: P c= T by TREES_1:def 14;
+    consider q being Element of T such that
+A4: q = x by A2,A3;
+A5: <*> NAT in T1 by TREES_1:47;
+    consider s' being Element of T1 such that
+A6: s' = <*> NAT by A5;
+A7: q = q^s' by A6,FINSEQ_1:47;
+    thus
+    x in { p^s where p is Element of T, s is Element of T1 : p in P }
+    by A2,A4,A7;
   end;
-  hence thesis
-  by TARSKI:def 3;
+  thus thesis
+  by A1,TARSKI:def 3;
 end;
 
 theorem Th7:
@@ -556,66 +581,70 @@ theorem Th7:
 proof
   assume
 A1: P <> {};
-  then
 A2: tree(T,P,T1) = {t1 where t1 is Element of T :
   for p st p in P holds not p is_a_proper_prefix_of t1}
-  \/ { p^s where p is Element of T, s is Element of T1 : p in P } by Th2;
+  \/ { p^s where p is Element of T, s is Element of T1 : p in P } by A1,Th2;
   thus tree(T,P,T1) c= {t1 where t1 is Element of T :
   for p st p in P holds not p is_a_prefix_of t1}
   \/ { p^s where p is Element of T, s is Element of T1 : p in P }
   proof
     let x be set;
-    assume x in tree(T,P,T1);
-    then
-A3: x in {t1 where t1 is Element of T :
+    assume
+A3: x in tree(T,P,T1);
+A4: x in {t1 where t1 is Element of T :
     for p st p in P holds not p is_a_proper_prefix_of t1}
-    \/ { p^s where p is Element of T, s is Element of T1 : p in P } by A1,Th2;
-    now per cases;
+    \/ { p^s where p is Element of T, s is Element of T1 : p in P } by A1,A3
+,Th2;
+A5: now per cases;
       suppose
-A4:     x in P;
-        P c= { p^s where p is Element of T, s is Element of T1 : p in P }
+A6:     x in P;
+A7:     P c= { p^s where p is Element of T, s is Element of T1 : p in P }
         by Th6;
-        hence x in {t1 where t1 is Element of T :
+        thus x in {t1 where t1 is Element of T :
         for p st p in P holds not p is_a_prefix_of t1}
         or x in { p^s where p is Element of T, s is Element of T1 : p in P }
-        by A4;
+        by A6,A7;
       end;
       suppose
-A5:     not x in P;
-        now per cases by A3,XBOOLE_0:def 3;
+A8:     not x in P;
+A9:     now per cases by A4,XBOOLE_0:def 3;
           suppose
-A6:         x in {t1 where t1 is Element of T :
+A10:        x in {t1 where t1 is Element of T :
             for p st p in P holds not p is_a_proper_prefix_of t1};
-            x in {t1 where t1 is Element of T :
+A11:        x in {t1 where t1 is Element of T :
             for p st p in P holds not p is_a_prefix_of t1}
             proof
               assume
-A7:           not x in {t1 where t1 is Element of T :
+A12:          not x in {t1 where t1 is Element of T :
               for p st p in P holds not p is_a_prefix_of t1};
-              {t1 where t1 is Element of T :
+A13:          {t1 where t1 is Element of T :
               for p st p in P holds not p is_a_proper_prefix_of t1} \
               {t1 where t1 is Element of T :
               for p st p in P holds not p is_a_prefix_of t1} = P by Th5;
-              hence contradiction by A5,A6,A7,XBOOLE_0:def 5;
+              thus contradiction by A8,A10,A12,A13,XBOOLE_0:def 5;
             end;
-            hence x in {t1 where t1 is Element of T :
+            thus x in {t1 where t1 is Element of T :
             for p st p in P holds not p is_a_prefix_of t1} or
-            x in { p^s where p is Element of T, s is Element of T1 : p in P };
+            x in { p^s where p is Element of T, s is Element of T1 : p in P }
+            by A11;
           end;
           suppose
-            x in { p^s where p is Element of T, s is Element of T1 : p in P };
-            hence x in {t1 where t1 is Element of T :
+            A14:        x
+ in { p^s where p is Element of T, s is Element of T1 : p in P };
+            thus x in {t1 where t1 is Element of T :
             for p st p in P holds not p is_a_prefix_of t1} or
-            x in { p^s where p is Element of T, s is Element of T1 : p in P };
+            x in { p^s where p is Element of T, s is Element of T1 : p in P }
+            by A14;
           end;
         end;
-        hence x in {t1 where t1 is Element of T :
+        thus x in {t1 where t1 is Element of T :
         for p st p in P holds not p is_a_prefix_of t1}
-        or x in { p^s where p is Element of T, s is Element of T1 : p in P };
+        or x in { p^s where p is Element of T, s is Element of T1 : p in P }
+        by A9;
       end;
     end;
-    hence thesis
-    by XBOOLE_0:def 3;
+    thus thesis
+    by A5,XBOOLE_0:def 3;
   end;
   thus thesis by A2,Th3,XBOOLE_1:9;
 end;
@@ -627,51 +656,54 @@ theorem
 proof
   assume
 A1: p in P;
-  ex q,r st q in P & r in T1 & p = q^r
+A2: ex q,r st q in P & r in T1 & p = q^r
   proof
     consider q such that
-A2: q = p;
+A3: q = p;
     consider r such that
-A3: r = <*> NAT;
-A4: r in T1 by A3,TREES_1:47;
-    p = q^r by A2,A3,FINSEQ_1:47;
-    hence thesis by A1,A2,A4;
+A4: r = <*> NAT;
+A5: r in T1 by A4,TREES_1:47;
+A6: p = q^r by A3,A4,FINSEQ_1:47;
+    thus thesis by A1,A3,A5,A6;
   end;
-  then
-A5: p in tree(T,P,T1) by Def1;
+A7: p in tree(T,P,T1) by A2,Def1;
   let x be FinSequence of NAT;
   thus x in T1 implies x in tree(T,P,T1)|p
   proof
-    assume x in T1;
-    then p^x in tree(T,P,T1) by A1,Def1;
-    hence thesis by A5,TREES_1:def 9;
+    assume
+A8: x in T1;
+A9: p^x in tree(T,P,T1) by A1,A8,Def1;
+    thus thesis by A7,A9,TREES_1:def 9;
   end;
   thus x in tree(T,P,T1)|p implies x in T1
   proof
-    assume x in tree(T,P,T1)|p;
-    then
-A6: p^x in tree(T,P,T1) by A5,TREES_1:def 9;
-A7: now
-      assume p^x in T & for r st r in P holds not r is_a_proper_prefix_of p^x;
-      then
-A8:   not p is_a_proper_prefix_of p^x by A1;
-      p is_a_prefix_of p^x by TREES_1:8;
-      then p^x = p by A8,XBOOLE_0:def 8
+    assume
+A10: x in tree(T,P,T1)|p;
+A11: p^x in tree(T,P,T1) by A7,A10,TREES_1:def 9;
+A12: now
+      assume that p^x in T and
+A13:  for r st r in P holds not r is_a_proper_prefix_of p^x;
+A14:  not p is_a_proper_prefix_of p^x by A1,A13;
+A15:  p is_a_prefix_of p^x by TREES_1:8;
+A16:  p^x = p by A14,A15,XBOOLE_0:def 8
         .= p^<*>NAT by FINSEQ_1:47;
-      then x = {} by FINSEQ_1:46;
-      hence thesis by TREES_1:47;
+A17:  x = {} by A16,FINSEQ_1:46;
+      thus thesis by A17,TREES_1:47;
     end;
-    now
+A18: now
       given s,r such that
-A9:   s in P & r in T1 & p^x = s^r;
-      now
-        assume s <> p;
-        then not s,p are_c=-comparable by A1,A9,TREES_1:def 13;
-        hence contradiction by A9,Th1;
+A19:  s in P and
+A20:  r in T1 and
+A21:  p^x = s^r;
+A22:  now
+        assume
+A23:    s <> p;
+A24:    not s,p are_c=-comparable by A1,A19,A23,TREES_1:def 13;
+        thus contradiction by A21,A24,Th1;
       end;
-      hence thesis by A9,FINSEQ_1:46;
+      thus thesis by A20,A21,A22,FINSEQ_1:46;
     end;
-    hence thesis by A1,A6,A7,Def1;
+    thus thesis by A1,A11,A12,A18,Def1;
   end;
 end;
 
@@ -684,14 +716,15 @@ registration
     consider X being set such that
 A1: X = {w};
 A2: X is AntiChain_of_Prefixes-like by A1,TREES_1:70;
-    X c= T
+A3: X c= T
     proof
       let x be set;
-      assume x in X;
-      then x = w by A1,TARSKI:def 1;
-      hence thesis;
+      assume
+A4:   x in X;
+A5:   x = w by A1,A4,TARSKI:def 1;
+      thus thesis by A5;
     end;
-    then reconsider X as AntiChain_of_Prefixes of T by A2,TREES_1:def 14;
+    reconsider X as AntiChain_of_Prefixes of T by A2,A3,TREES_1:def 14;
     take X;
     thus thesis by A1;
   end;
@@ -715,33 +748,33 @@ A1: p in tree(T,{t},T1);
 A2: now
       assume
 A3:   p in T & for s st s in {t} holds not s is_a_proper_prefix_of p;
-      t in {t} by TARSKI:def 1;
-      hence p in T & not t is_a_proper_prefix_of p by A3;
+A4:   t in {t} by TARSKI:def 1;
+      thus p in T & not t is_a_proper_prefix_of p by A3,A4;
     end;
-    now
+A5: now
       given s such that
-A4:   ex r st s in {t} & r in T1 & p = s^r;
-      s = t by A4,TARSKI:def 1;
-      hence ex r st r in T1 & p = t^r by A4;
+A6:   ex r st s in {t} & r in T1 & p = s^r;
+A7:   s = t by A6,TARSKI:def 1;
+      thus ex r st r in T1 & p = t^r by A6,A7;
     end;
-    hence thesis by A1,A2,Def1,TREES_1:def 12;
+    thus thesis by A1,A2,A5,Def1,TREES_1:def 12;
   end;
   assume
-A5: p in T with-replacement (t,T1);
-A6: p in T & not t is_a_proper_prefix_of p implies
+A8: p in T with-replacement (t,T1);
+A9: p in T & not t is_a_proper_prefix_of p implies
   p in T & for s st s in {t} holds not s is_a_proper_prefix_of p
   by TARSKI:def 1;
-  now
+A10: now
     assume
-A7: ex r st r in T1 & p = t^r;
+A11: ex r st r in T1 & p = t^r;
     thus ex s,r st s in {t} & r in T1 & p = s^r
     proof
       take t;
-      t in {t} by TARSKI:def 1;
-      hence thesis by A7;
+A12:  t in {t} by TARSKI:def 1;
+      thus thesis by A11,A12;
     end;
   end;
-  hence thesis by A5,A6,Def1,TREES_1:def 12;
+  thus thesis by A8,A9,A10,Def1,TREES_1:def 12;
 end;
 
 reserve T,T1 for DecoratedTree,
@@ -766,33 +799,35 @@ A1: P<>{};
 A2: for q st q in tree(dom T,P,dom T1) ex x st X[q,x]
     proof
       let q;
-      assume q in tree(dom T, P, dom T1);
-      then
-A3:   q in {t where t is Element of dom T :
+      assume
+A3:   q in tree(dom T, P, dom T1);
+A4:   q in {t where t is Element of dom T :
       for p st p in P holds not p is_a_prefix_of t}
       \/ { p^s where p is Element of dom T,
-      s is Element of dom T1 : p in P } by A1,Th7;
-A4:   now
-        assume q in {t where t is Element of dom T :
+      s is Element of dom T1 : p in P } by A1,A3,Th7;
+A5:   now
+        assume
+A6:     q in {t where t is Element of dom T :
         for p st p in P holds not p is_a_prefix_of t};
-        then consider t such that
-A5:     q = t & for p st p in P holds not p is_a_prefix_of t;
+        consider t such that
+A7:     q = t & for p st p in P holds not p is_a_prefix_of t by A6;
         take x = T.t;
-        for p st p in P holds not p is_a_prefix_of q & x = T.q by A5;
-        hence thesis;
+A8:     for p st p in P holds not p is_a_prefix_of q & x = T.q by A7;
+        thus thesis by A8;
       end;
-      now
-        assume q in { p^s where p is Element of dom T,
+A9:   now
+        assume
+A10:    q in { p^s where p is Element of dom T,
         s is Element of dom T1 : p in P };
-        then consider p being Element of dom T, s being Element of dom T1
+        consider p being Element of dom T, s being Element of dom T1
         such that
-A6:     q = p^s & p in P;
+A11:    q = p^s & p in P by A10;
         take x = T1.s;
-        (for p st p in P holds not p is_a_prefix_of q & x = T.q) or
-        ex p,r st p in P & r in dom T1 & q = p^r & x = T1.r by A6;
-        hence thesis;
+A12:    (for p st p in P holds not p is_a_prefix_of q & x = T.q) or
+        ex p,r st p in P & r in dom T1 & q = p^r & x = T1.r by A11;
+        thus thesis by A12;
       end;
-      hence thesis by A3,A4,XBOOLE_0:def 3;
+      thus thesis by A4,A5,A9,XBOOLE_0:def 3;
     end;
     thus ex T0 being DecoratedTree st dom T0 = tree(dom T, P, dom T1) &
     for p st p in tree(dom T, P, dom T1) holds X[p,T0.p]
@@ -801,71 +836,87 @@ A6:     q = p^s & p in P;
   uniqueness
   proof
     let D1,D2 be DecoratedTree such that
-A7: dom D1 = tree(dom T,P,dom T1) and
-A8: for q st q in tree(dom T,P,dom T1) holds
+A13: dom D1 = tree(dom T,P,dom T1) and
+A14: for q st q in tree(dom T,P,dom T1) holds
     (for p st p in P holds not p is_a_prefix_of q & D1.q = T.q) or
     ex p,r st p in P & r in dom T1 & q = p^r & D1.q = T1.r and
-A9: dom D2 = tree(dom T,P,dom T1) and
-A10: for q st q in tree(dom T,P,dom T1) holds
+A15: dom D2 = tree(dom T,P,dom T1) and
+A16: for q st q in tree(dom T,P,dom T1) holds
     (for p st p in P holds not p is_a_prefix_of q & D2.q = T.q) or
     ex p,r st p in P & r in dom T1 & q = p^r & D2.q = T1.r;
-    now
+A17: now
       let q;
-      assume
-A11:  q in dom D1 & D1.q <> D2.q;
+      assume that
+A18:  q in dom D1 and
+A19:  D1.q <> D2.q;
       thus contradiction
       proof
-        per cases by A7,A8,A11;
+        per cases by A13,A14,A18;
         suppose
-A12:      for p st p in P holds not p is_a_prefix_of q & D1.q = T.q;
-          now
-            per cases by A7,A10,A11;
+A20:      for p st p in P holds not p is_a_prefix_of q & D1.q = T.q;
+A21:      now
+            per cases by A13,A16,A18;
             suppose
-A13:          for p st p in P holds not p is_a_prefix_of q & D2.q = T.q;
+A22:          for p st p in P holds not p is_a_prefix_of q & D2.q = T.q;
               consider x being set such that
-A14:          x in P by A1,XBOOLE_0:def 1;
-              P c= dom T by TREES_1:def 14;
-              then reconsider x as Element of dom T by A14;
-              consider p' such that
-A15:          p' = x;
-              D1.q = T.q by A12,A14,A15;
-              hence contradiction by A11,A13,A14,A15;
+A23:          x in P by A1,XBOOLE_0:def 1;
+A24:          P c= dom T by TREES_1:def 14;
+              reconsider x as Element of dom T by A23,A24;
+A25:          ex p' st p' = x;
+A26:          D1.q = T.q by A20,A23,A25;
+              thus contradiction by A19,A22,A23,A25,A26;
             end;
-            suppose ex p,r st p in P & r in dom T1 & q = p^r & D2.q = T1.r;
-              then consider p2,r2 such that
-A16:          p2 in P & r2 in dom T1 & q = p2^r2 & D2.q = T1.r2;
-              not p2 is_a_prefix_of q by A12,A16;
-              hence contradiction by A16,TREES_1:8;
+            suppose
+              A27:          ex
+ p,r st p in P & r in dom T1 & q = p^r & D2.q = T1.r;
+              consider p2,r2 such that
+A28:          p2 in P
+              and r2 in dom T1 and
+A29:          q = p2^r2
+              and D2.q = T1.r2 by A27;
+A30:          not p2 is_a_prefix_of q by A20,A28;
+              thus contradiction by A29,A30,TREES_1:8;
             end;
           end;
-          hence contradiction;
+          thus contradiction by A21;
         end;
-        suppose ex p,r st p in P & r in dom T1 & q = p^r & D1.q = T1.r;
-          then consider p1,r1 such that
-A17:      p1 in P & r1 in dom T1 & q = p1^r1 & D1.q = T1.r1;
-          now
-            per cases by A7,A10,A11;
-            suppose for p st p in P holds not p is_a_prefix_of q & D2.q = T.q;
-              then not p1 is_a_prefix_of q by A17;
-              hence contradiction by A17,TREES_1:8;
+        suppose
+A31:      ex p,r st p in P & r in dom T1 & q = p^r & D1.q = T1.r;
+          consider p1,r1 such that
+A32:      p1 in P
+          and r1 in dom T1 and
+A33:      q = p1^r1 and
+A34:      D1.q = T1.r1 by A31;
+A35:      now
+            per cases by A13,A16,A18;
+            suppose
+              A36:          for
+ p st p in P holds not p is_a_prefix_of q & D2.q = T.q;
+A37:          not p1 is_a_prefix_of q by A32,A36;
+              thus contradiction by A33,A37,TREES_1:8;
             end;
-            suppose ex p,r st p in P & r in dom T1 & q = p^r & D2.q = T1.r;
-              then consider p2,r2 such that
-A18:          p2 in P & r2 in dom T1 & q = p2^r2 & D2.q = T1.r2;
-              now
+            suppose
+              A38:          ex
+ p,r st p in P & r in dom T1 & q = p^r & D2.q = T1.r;
+              consider p2,r2 such that
+A39:          p2 in P
+              and r2 in dom T1 and
+A40:          q = p2^r2 and
+A41:          D2.q = T1.r2 by A38;
+A42:          now
                 assume
-A19:            p1 <> p2;
-                p1,p2 are_c=-comparable by A17,A18,Th1;
-                hence contradiction by A17,A18,A19,TREES_1:def 13;
+A43:            p1 <> p2;
+A44:            p1,p2 are_c=-comparable by A33,A40,Th1;
+                thus contradiction by A32,A39,A43,A44,TREES_1:def 13;
               end;
-              hence contradiction by A11,A17,A18,FINSEQ_1:46;
+              thus contradiction by A19,A33,A34,A40,A41,A42,FINSEQ_1:46;
             end;
           end;
-          hence contradiction;
+          thus contradiction by A35;
         end;
       end;
     end;
-    hence thesis by A7,A9,TREES_2:33;
+    thus thesis by A13,A15,A17,TREES_2:33;
   end;
 end;
 
@@ -879,22 +930,24 @@ proof
   assume
 A1: P<>{};
   let q;
-  assume q in dom tree(T,P,T1);
-  then q in tree(dom T,P,dom T1) by A1,Def2;
-  hence thesis by Def2;
+  assume
+A2: q in dom tree(T,P,T1);
+A3: q in tree(dom T,P,dom T1) by A1,A2,Def2;
+  thus thesis by A3,Def2;
 end;
 
 theorem Th14:
   p in dom T implies for q st q in dom (T with-replacement (p,T1)) holds
-  (not p is_a_prefix_of q & T with-replacement (p,T1).q = T.q)
+  not p is_a_prefix_of q & T with-replacement (p,T1).q = T.q
   or ex r st r in dom T1 & q = p^r & T with-replacement (p,T1).q = T1.r
 proof
   assume
 A1: p in dom T;
   let q;
-  assume q in dom (T with-replacement (p,T1));
-  then q in dom T with-replacement (p,dom T1) by A1,TREES_2:def 12;
-  hence thesis by A1,TREES_2:def 12;
+  assume
+A2: q in dom (T with-replacement (p,T1));
+A3: q in dom T with-replacement (p,dom T1) by A1,A2,TREES_2:def 12;
+  thus thesis by A1,A3,TREES_2:def 12;
 end;
 
 theorem Th15:
@@ -905,27 +958,31 @@ proof
   assume
 A1: P<>{};
   let q;
-  assume
-A2: q in dom tree(T,P,T1) & q in {t1 where t1 is Element of dom T :
-  for p st p in P holds not p is_a_prefix_of t1};
-  then consider t' being Element of dom T such that
-A3: t' = q & for p st p in P holds not p is_a_prefix_of t';
+  assume that
+A2: q in dom tree(T,P,T1) and
+A3: q in {t1 where t1 is Element of dom T : for p st p in P holds not p
+  is_a_prefix_of t1};
+A4: ex t' being Element of dom T st t' = q & for p st p in P
+  holds not p is_a_prefix_of t' by A3;
   per cases by A2,Th13;
   suppose
-A4: for p st p in P holds not p is_a_prefix_of q & tree(T,P,T1).q = T.q;
+A5: for p st p in P holds not p is_a_prefix_of q & tree(T,P,T1).q = T.q;
     consider x being set such that
-A5: x in P by A1,XBOOLE_0:def 1;
-    P c= dom T by TREES_1:def 14;
-    then reconsider x as Element of dom T by A5;
-    consider p' such that
-A6: p' = x;
-    thus thesis by A4,A5,A6;
+A6: x in P by A1,XBOOLE_0:def 1;
+A7: P c= dom T by TREES_1:def 14;
+    reconsider x as Element of dom T by A6,A7;
+A8: ex p' st p' = x;
+    thus thesis by A5,A6,A8;
   end;
-  suppose ex p,r st p in P & r in dom T1 & q = p^r & tree(T,P,T1).q = T1.r;
-    then consider p,r such that
-A7: p in P & r in dom T1 & q = p^r & tree(T,P,T1).q = T1.r;
-    not p is_a_prefix_of q by A3,A7;
-    hence thesis by A7,TREES_1:8;
+  suppose
+    A9: ex p,r st p in P & r in dom T1 & q = p^r & tree(T,P,T1).q = T1.r;
+    consider p,r such that
+A10: p in P
+    and r in dom T1 and
+A11: q = p^r
+    and tree(T,P,T1).q = T1.r by A9;
+A12: not p is_a_prefix_of q by A4,A10;
+    thus thesis by A11,A12,TREES_1:8;
   end;
 end;
 
@@ -937,19 +994,19 @@ proof
   assume
 A1: p in dom T;
   let q;
-  assume
-A2: q in dom (T with-replacement (p,T1)) &
-  q in {t1 where t1 is Element of dom T : not p is_a_prefix_of t1};
+  assume that
+A2: q in dom (T with-replacement (p,T1)) and
+A3: q in {t1 where t1 is Element of dom T : not p is_a_prefix_of t1};
   per cases by A1,A2,Th14;
-  suppose not p is_a_prefix_of q & T with-replacement (p,T1).q = T.q;
-    hence thesis;
+  suppose
+A4: not p is_a_prefix_of q & T with-replacement (p,T1).q = T.q;
+    thus thesis by A4;
   end;
-  suppose ex r st r in dom T1 & q = p^r & T with-replacement (p,T1).q = T1.r;
-    then consider r such that
-A3: r in dom T1 & q = p^r & T with-replacement (p,T1).q = T1.r;
-    consider t' being Element of dom T such that
-A4: q = t' & not p is_a_prefix_of t' by A2;
-    thus thesis by A3,A4,TREES_1:8;
+  suppose
+    A5: ex r st r in dom T1 & q = p^r & T with-replacement (p,T1).q = T1.r;
+A6: ex t' being Element of dom T st q = t' & not p
+    is_a_prefix_of t' by A3;
+    thus thesis by A5,A6,TREES_1:8;
   end;
 end;
 
@@ -960,33 +1017,40 @@ theorem Th17:
   q = p'^r & p' in P & tree(T,P,T1).q = T1.r
 proof
   let q;
-  assume
-A1: q in dom tree(T,P,T1) &
-  q in {p^s where p is Element of dom T, s is Element of dom T1 : p in P};
+  assume that
+A1: q in dom tree(T,P,T1) and
+A2: q in {p^s where p is Element of dom T, s is Element of dom T1 : p in
+  P};
   per cases by A1,Th13;
   suppose
-A2: for p st p in P holds not p is_a_prefix_of q & tree(T,P,T1).q = T.q;
+A3: for p st p in P holds not p is_a_prefix_of q & tree(T,P,T1).q = T.q;
     consider p' being Element of dom T, r being Element of dom T1 such that
-A3: q= p'^r & p' in P by A1;
-    now
+A4: q= p'^r and
+A5: p' in P by A2;
+A6: now
       assume tree(T,P,T1).q <> T1.r;
-      not p' is_a_prefix_of q by A2,A3;
-      hence contradiction by A3,TREES_1:8;
+A7:   not p' is_a_prefix_of q by A3,A5;
+      thus contradiction by A4,A7,TREES_1:8;
     end;
-    hence thesis by A3;
+    thus thesis by A4,A5,A6;
   end;
-  suppose ex p,r st p in P & r in dom T1 & q = p^r & tree(T,P,T1).q = T1.r;
-    then consider p,r such that
-A4: p in P & r in dom T1 & q = p^r & tree(T,P,T1).q = T1.r;
+  suppose
+    A8: ex p,r st p in P & r in dom T1 & q = p^r & tree(T,P,T1).q = T1.r;
+    consider p,r such that
+A9: p in P and
+A10: r in dom T1 and
+A11: q = p^r and
+A12: tree(T,P,T1).q = T1.r by A8;
     consider p' being Element of dom T, r' being Element of dom T1 such that
-A5: q = p'^r' & p' in P by A1;
-    now
+A13: q = p'^r' and
+A14: p' in P by A2;
+A15: now
       assume
-A6:   p <> p';
-      p,p' are_c=-comparable by A4,A5,Th1;
-      hence contradiction by A4,A5,A6,TREES_1:def 13;
+A16:  p <> p';
+A17:  p,p' are_c=-comparable by A11,A13,Th1;
+      thus contradiction by A9,A14,A16,A17,TREES_1:def 13;
     end;
-    hence thesis by A4;
+    thus thesis by A9,A10,A11,A12,A15;
   end;
 end;
 
@@ -999,77 +1063,74 @@ proof
   assume
 A1: p in dom T;
   let q;
-  assume
-A2: q in dom (T with-replacement (p,T1)) &
-  q in {p^s where s is Element of dom T1 : s = s};
+  assume that
+A2: q in dom (T with-replacement (p,T1)) and
+A3: q in {p^s where s is Element of dom T1 : s = s};
   per cases by A1,A2,Th14;
   suppose
-A3: not p is_a_prefix_of q & T with-replacement (p,T1).q = T.q;
-    consider r being Element of dom T1 such that
-A4: q = p^r & r = r by A2;
-    thus thesis by A3,A4,TREES_1:8;
+A4: not p is_a_prefix_of q & T with-replacement (p,T1).q = T.q;
+A5: ex r being Element of dom T1 st q = p^r & r = r by A3;
+    thus thesis by A4,A5,TREES_1:8;
   end;
-  suppose ex r st r in dom T1 & q = p^r & T with-replacement (p,T1).q = T1.r;
-    hence thesis;
+  suppose
+    A6: ex r st r in dom T1 & q = p^r & T with-replacement (p,T1).q = T1.r;
+    thus thesis by A6;
   end;
 end;
 
 theorem
   tree(T,{t},T1) = T with-replacement (t,T1)
 proof
-A1: dom tree(T,{t},T1) = dom (T with-replacement (t,T1))
-  proof
-    dom tree(T,{t},T1) = tree(dom T,{t},dom T1) by Def2
-      .= dom T with-replacement (t,dom T1) by Th10
-      .= dom (T with-replacement (t,T1)) by TREES_2:def 12;
-    hence thesis;
-  end;
-  for q st q in dom tree(T,{t},T1) holds tree(T,{t},T1).q =
+A1: dom tree(T,{t},T1) = tree(dom T,{t},dom T1) by Def2
+    .= dom T with-replacement (t,dom T1) by Th10
+    .= dom (T with-replacement (t,T1)) by TREES_2:def 12;
+A2: for q st q in dom tree(T,{t},T1) holds tree(T,{t},T1).q =
   T with-replacement (t,T1).q
   proof
     let q;
     assume
-A2: q in dom tree(T,{t},T1);
-    then
-A3: q in tree(dom T,{t},dom T1) by Def2;
-A4: tree(dom T,{t},dom T1) = {t1 where t1 is Element of dom T :
+A3: q in dom tree(T,{t},T1);
+A4: q in tree(dom T,{t},dom T1) by A3,Def2;
+A5: tree(dom T,{t},dom T1) = {t1 where t1 is Element of dom T :
     for p st p in {t} holds not p is_a_prefix_of t1} \/
     { p^s where p is Element of dom T, s is Element of dom T1 : p in {t} }
     by Th7;
-    per cases by A3,A4,XBOOLE_0:def 3;
+    per cases by A4,A5,XBOOLE_0:def 3;
     suppose
-A5:   q in {t1 where t1 is Element of dom T :
+A6:   q in {t1 where t1 is Element of dom T :
       for p st p in {t} holds not p is_a_prefix_of t1};
-      then consider t' being Element of dom T such that
-A6:   q = t' & for p st p in {t} holds not p is_a_prefix_of t';
+      consider t' being Element of dom T such that
+A7:   q = t' and
+A8:   for p st p in {t} holds not p is_a_prefix_of t' by A6;
       consider p such that
-A7:   p = t;
-      p in {t} by A7,TARSKI:def 1;
-      then
-A8:   not p is_a_prefix_of t' by A6;
-      q in dom (T with-replacement (t,T1)) &
+A9:   p = t;
+A10:  p in {t} by A9,TARSKI:def 1;
+A11:  not p is_a_prefix_of t' by A8,A10;
+A12:  q in dom (T with-replacement (t,T1)) &
       q in {t1 where t1 is Element of dom T : not p is_a_prefix_of t1}
-      implies T with-replacement (t,T1).q = T.q by A7,Th16;
-      hence thesis by A1,A2,A5,A6,A8
-,Th15;
+      implies T with-replacement (t,T1).q = T.q by A9,Th16;
+      thus thesis by A1,A3,A6,A7,A11,A12,Th15;
     end;
     suppose
-A9:   q in { p'^s where p' is Element of dom T,
+A13:  q in { p'^s where p' is Element of dom T,
       s is Element of dom T1 : p' in {t} };
-      then consider p being Element of dom T, r being Element of dom T1
+      consider p being Element of dom T, r being Element of dom T1
       such that
-A10:  q = p^r & p in {t};
-A11:  q in { p^s where s is Element of dom T1 : s = s } by A10;
+A14:  q = p^r and
+A15:  p in {t} by A13;
+A16:  q in { p^s where s is Element of dom T1 : s = s } by A14;
       consider p1 being Element of dom T, r1 being Element of dom T1 such that
-A12:  q = p1^r1 & p1 in {t} & tree(T,{t},T1).q = T1.r1 by A2,A9,Th17;
-A13:  p1 = t & p = t by A10,A12,TARSKI:def 1;
-      then consider r2 being Element of dom T1 such that
-A14:  q = p^r2 & (T with-replacement (p,T1)).q = T1.r2 by A1,A2,A11,Th18;
-      thus thesis by A12,A13,A14,
-FINSEQ_1:46;
+A17:  q = p1^r1 and
+A18:  p1 in {t} and
+A19:  tree(T,{t},T1).q = T1.r1 by A3,A13,Th17;
+A20:  p1 = t by A18,TARSKI:def 1;
+A21:  p = t by A15,TARSKI:def 1;
+A22:  ex r2 being Element of dom T1 st q = p^r2 & (T
+      with-replacement (p,T1)).q = T1.r2 by A1,A3,A16,A21,Th18;
+      thus thesis by A17,A19,A20,A21,A22,FINSEQ_1:46;
     end;
   end;
-  hence thesis by A1,TREES_2:33;
+  thus thesis by A1,A2,TREES_2:33;
 end;
 
 reserve D for non empty set,
@@ -1081,50 +1142,48 @@ definition
   assume
 A1: P<>{};
   func tree(T,P,T1) -> DecoratedTree of D equals
-
   tree(T,P,T1);
   coherence
   proof
     set T2 = tree(T,P,T1);
-    T2 is D-valued
+A2: T2 is D-valued
     proof
-        let y be set;
-        assume y in rng T2;
-        then consider x being set such that
-A3:     x in dom T2 & y = T2.x by FUNCT_1:def 5;
-        x is Element of dom T2 by A3;
-        then reconsider q = x as FinSequence of NAT;
-        dom T2 = tree(dom T,P,dom T1) by A1,Def2;
-        then
-A4:     dom T2 = {t1 where t1 is Element of dom T :
-        for p st p in P holds not p is_a_prefix_of t1}
-        \/ { p^s where p is Element of dom T,
-        s is Element of dom T1 : p in P } by A1,Th7;
-        per cases by A3,A4,XBOOLE_0:def 3;
-        suppose
-A5:       q in {t1 where t1 is Element of dom T :
-          for p st p in P holds not p is_a_prefix_of t1};
-          then
-A6:       tree(T,P,T1).q = T.q by A1,A3,Th15;
-          now
-            consider t' being Element of dom T such that
-A7:         q = t' & for p st p in P holds not p is_a_prefix_of t' by A5;
-            thus q in dom T by A7;
-          end;
-          then
-A8:       y in rng T by A3,A6,FUNCT_1:def 5;
-          rng T c= D by RELAT_1:def 19;
-          hence thesis by A8;
+      let y be set;
+      assume
+A3:   y in rng T2;
+      consider x being set such that
+A4:   x in dom T2 and
+A5:   y = T2.x by A3,FUNCT_1:def 5;
+A6:   x is Element of dom T2 by A4;
+      reconsider q = x as FinSequence of NAT by A6;
+A7:   dom T2 = tree(dom T,P,dom T1) by A1,Def2;
+A8:   dom T2 = {t1 where t1 is Element of dom T :
+      for p st p in P holds not p is_a_prefix_of t1}
+      \/ { p^s where p is Element of dom T,
+      s is Element of dom T1 : p in P } by A1,A7,Th7;
+      per cases by A4,A8,XBOOLE_0:def 3;
+      suppose
+A9:     q in {t1 where t1 is Element of dom T :
+        for p st p in P holds not p is_a_prefix_of t1};
+A10:    tree(T,P,T1).q = T.q by A1,A4,A9,Th15;
+A11:    now
+A12:      ex t' being Element of dom T st q = t' & for p st p in P
+          holds not p is_a_prefix_of t' by A9;
+          thus q in dom T by A12;
         end;
-        suppose q in { p^s where p is Element of dom T,
-          s is Element of dom T1 : p in P };
-          then consider p being Element of dom T,r being Element of dom T1
-          such that
-A9:       q = p^r & p in P & tree(T,P,T1).q = T1.r by A3,Th17;
-          thus thesis by A3,A9;
-        end;
+A13:    y in rng T by A5,A10,A11,FUNCT_1:def 5;
+A14:    rng T c= D by RELAT_1:def 19;
+        thus thesis by A13,A14;
+      end;
+      suppose
+A15:    q in { p^s where p is Element of dom T,
+        s is Element of dom T1 : p in P };
+A16:    ex p being Element of dom T,r being Element of dom T1 st
+        q = p^r & p in P & tree(T,P,T1).q = T1.r by A4,A15,Th17;
+        thus thesis by A5,A16;
+      end;
     end;
-    hence thesis;
+    thus thesis by A2;
   end;
 end;
 

@@ -12,10 +12,10 @@ environ
       UNIALG_1, BINOP_1, LATTICES, ALGSTR_2, RLSUB_1, RELAT_1, BOOLE, HAHNBAN1,
       XCMPLX_0, ARYTM, GROUP_1, REALSET1, POWER, VECTSP_2, ALGSTR_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, REALSET1, NUMBERS,
-      ARYTM_0, XCMPLX_0, XREAL_0, COMPLEX1, REAL_1, NAT_1, SQUARE_1, POWER,
-      STRUCT_0, ALGSTR_0, RLVECT_1, GROUP_1, VECTSP_1, RLSUB_1, VECTSP_4,
-      FUNCT_1, FUNCT_2, BINOP_1, RELSET_1, NATTRA_1, FUNCOP_1, HAHNBAN,
-      COMPLFLD, XXREAL_0;
+      XCMPLX_0, XREAL_0, COMPLEX1, REAL_1, NAT_1, SQUARE_1, POWER, STRUCT_0,
+      ALGSTR_0, RLVECT_1, GROUP_1, VECTSP_1, RLSUB_1, VECTSP_4, FUNCT_1,
+      FUNCT_2, BINOP_1, RELSET_1, NATTRA_1, FUNCOP_1, HAHNBAN, COMPLFLD,
+      XXREAL_0;
  constructors ARYTM_0, REAL_1, SQUARE_1, NAT_1, BINOP_2, POWER, REALSET1,
       RLSUB_1, COMPLFLD, VECTSP_4, NATTRA_1, BORSUK_1, HAHNBAN, SUPINF_1,
       FUNCOP_1;
@@ -26,18 +26,20 @@ environ
       COMPLEX1, STRUCT_0, ALGSTR_0;
  theorems TARSKI, ZFMISC_1, ABSVALUE, FUNCT_1, FUNCT_2, COMPLEX1, COMPLFLD,
       VECTSP_1, FUNCOP_1, RLVECT_1, BINOP_1, HAHNBAN, VECTSP_4, XBOOLE_0,
-      RELAT_1, XCMPLX_1, GROUP_1, XXREAL_0, XCMPLX_0, POWER, ALGSTR_0,
-      XREAL_0;
+      RELAT_1, XCMPLX_1, GROUP_1, XXREAL_0, XCMPLX_0, POWER, ALGSTR_0, XREAL_0;
  schemes FUNCT_2, BINOP_1, NAT_1;
 
 begin :: Preliminaries
 
 Lm1: for F be add-associative right_zeroed right_complementable Abelian
-right-distributive (non empty doubleLoopStr)
-for x,y be Element of F holds x*(-y) = -x*y
+right-distributive (non empty doubleLoopStr) for x,y be Element of F holds x*(-
+y) = -x*y
+
 proof
+
   let F be add-associative right_zeroed right_complementable Abelian
   right-distributive (non empty doubleLoopStr);
+
   let x,y be Element of F;
   x*y +x*(-y) = x*(y+(-y)) by VECTSP_1:def 11
     .= x*(0.F) by RLVECT_1:def 11
@@ -49,13 +51,14 @@ theorem
   for z be complex number holds abs |.z.| = |.z.|;
 
 theorem
-  for x1,y1,x2,y2 being real number holds
-  (x1+y1*<i>) * (x2+y2*<i>) = x1*x2-y1*y2 + (x1*y2+x2*y1)*<i>;
+  for x1,y1,x2,y2 being real number holds (x1+y1*<i>) * (x2+y2*<i>) = x1
+  *x2-y1*y2 + (x1*y2+x2*y1)*<i>;
 
 canceled 2;
 
 theorem Th5:
-  for z be Element of COMPLEX holds |.z.|+0*<i> = (z*'/(|.z.|+0*<i>))*z
+  for z be Element of COMPLEX holds |.z.|+0*<i> = (z*'/(|.z.|+0*<i>
+  ))*z
 proof
   let z be Element of COMPLEX;
   per cases;
@@ -66,20 +69,21 @@ A1: |.z.| = 0;
   end;
   suppose
 A2: |.z.| <> 0;
-A3: (z*'/|.z.|)*z = z*z*'/|.z.| by XCMPLX_1:75;
-A4: Re(z*z*') = (Re z)^2 + (Im z)^2 & Im(z*z*') = 0 by COMPLEX1:126;
+A3: Im(z*z*') = 0 by COMPLEX1:126;
     |.z.| = |.z.|+0*<i>;
     then
-A5: Re |.z.| = |.z.| & Im |.z.| = 0 by COMPLEX1:28;
+A4: Re |.z.| = |.z.| & Im |.z.| = 0 by COMPLEX1:28;
+A5: (z*'/|.z.|)*z = z*z*'/|.z.| & Re(z*z*') = (Re z)^2 + (Im z)^2 by
+    COMPLEX1:126,XCMPLX_1:75;
     then
-A6: Re((z*'/|.z.|)*z) = (((Re z)^2+(Im z)^2)*|.z.| + 0*0) / (|.z
-    .|^2 +0^2) by A3,A4,COMPLEX1:82
+A6: Im((z*'/|.z.|)*z) = (|.z.|*0 - ((Re z)^2+(Im z)^2)*0) / (|.z.| ^2 +0^2
+    ) by A3,A4,COMPLEX1:82;
+    Re((z*'/|.z.|)*z) = (((Re z)^2+(Im z)^2)*|.z.| + 0*0) / (|.z .|^2 +0^2
+    ) by A5,A3,A4,COMPLEX1:82
       .= |.z*z.|*|.z.| / (|.z.|*|.z.|) by COMPLEX1:154
       .= |.z*z.| / |.z.| by A2,XCMPLX_1:92
       .= |.z.|*|.z.| / |.z.| by COMPLEX1:151
       .= |.z.| by A2,XCMPLX_1:90;
-    Im((z*'/|.z.|)*z) = (|.z.|*0 - ((Re z)^2+(Im z)^2)*0) / (|.z.| ^2
-    +0^2) by A3,A4,A5,COMPLEX1:82;
     hence thesis by A6,COMPLEX1:29;
   end;
 end;
@@ -89,7 +93,6 @@ begin :: Some Facts on the Field of Complex Numbers
 definition
   let x,y be real number;
   func [**x,y**] -> Element of F_Complex equals
-
   x+y*<i>;
   coherence
   proof
@@ -100,7 +103,6 @@ end;
 
 definition
   func i_FC -> Element of F_Complex equals
-
   <i>;
   coherence
   proof
@@ -126,12 +128,12 @@ proof
 end;
 
 theorem
-  for x1,y1,x2,y2 be Real holds
-  [**x1,y1**] + [**x2,y2**] = [**x1 + x2,y1 + y2**];
+  for x1,y1,x2,y2 be Real holds [**x1,y1**] + [**x2,y2**] = [**x1 + x2,
+  y1 + y2**];
 
 theorem
-  for x1,y1,x2,y2 be real number holds
-  [**x1,y1**] * [**x2,y2**] = [**x1*x2 - y1*y2,x1*y2+x2*y1**];
+  for x1,y1,x2,y2 be real number holds [**x1,y1**] * [**x2,y2**] = [**x1
+  *x2 - y1*y2,x1*y2+x2*y1**];
 
 theorem
   for z be complex number holds abs(|.z.|) = |.z.|;
@@ -142,12 +144,12 @@ theorem
 canceled 2;
 
 theorem
-  for x,y be Element of F_Complex holds Re (x+y) = Re x + Re y &
-  Im (x+y) = Im x + Im y by COMPLEX1:19;
+  for x,y be Element of F_Complex holds Re (x+y) = Re x + Re y & Im (x+y
+  ) = Im x + Im y by COMPLEX1:19;
 
 theorem
-  for x,y be Element of F_Complex holds Re (x*y) = Re x * Re y - Im x * Im y &
-  Im (x*y) = Re x * Im y + Re y * Im x by COMPLEX1:24;
+  for x,y be Element of F_Complex holds Re (x*y) = Re x * Re y - Im x *
+  Im y & Im (x*y) = Re x * Im y + Re y * Im x by COMPLEX1:24;
 
 begin :: Functionals of Vector Space
 
@@ -164,7 +166,8 @@ definition
   canceled 3;
   func f+g -> Functional of V means
   :Def6:
-  for x be Element of V holds it.x = f.x + g.x;
+  for x be Element of V holds it.x =
+  f.x + g.x;
   existence
   proof
     deffunc G(Element of V) = f.$1 + g.$1;
@@ -194,7 +197,8 @@ definition
   let f be Functional of V;
   func -f -> Functional of V means
   :Def7:
-  for x be Element of V holds it.x = -(f.x);
+  for x be Element of V holds it.x = -
+  (f.x);
   existence
   proof
     deffunc G(Element of V) = -(f.$1);
@@ -223,7 +227,6 @@ definition
   let V be non empty VectSpStr over K;
   let f,g be Functional of V;
   func f-g -> Functional of V equals
-
   f+-g;
   coherence;
 end;
@@ -235,7 +238,8 @@ definition
   let f be Functional of V;
   func v*f -> Functional of V means
   :Def9:
-  for x be Element of V holds it.x = v*(f.x);
+  for x be Element of V holds it.x =
+  v*(f.x);
   existence
   proof
     deffunc G(Element of V) = v *(f.$1);
@@ -263,7 +267,6 @@ definition
   let K be non empty ZeroStr;
   let V be VectSpStr over K;
   func 0Functional(V) -> Functional of V equals
-
   [#]V --> 0.K;
   coherence;
 end;
@@ -274,7 +277,8 @@ definition
   let F be Functional of V;
   attr F is additive means
   :Def11:
-  for x,y be Vector of V holds F.(x+y) = F.x+F.y;
+  for x,y be Vector of V holds F.(x+y) = F.x+
+  F.y;
 end;
 
 definition
@@ -283,7 +287,8 @@ definition
   let F be Functional of V;
   attr F is homogeneous means
   :Def12:
-  for x be Vector of V, r be Scalar of V holds F.(r*x) = r*F.x;
+  for x be Vector of V, r be Scalar of V
+  holds F.(r*x) = r*F.x;
 end;
 
 definition
@@ -291,7 +296,6 @@ definition
   let V be non empty VectSpStr over K;
   let F be Functional of V;
   attr F is 0-preserving means
-
   F.(0.V) = 0.K;
 end;
 
@@ -318,10 +322,9 @@ registration
   coherence
   proof
     let x,y be Vector of V;
-A1: (0Functional(V)).x = 0.K by FUNCOP_1:13;
-A2: (0Functional(V)).y = 0.K by FUNCOP_1:13;
+A1: (0Functional(V)).x = 0.K & (0Functional(V)).y = 0.K by FUNCOP_1:13;
     thus (0Functional(V)).(x+y) = 0.K by FUNCOP_1:13
-      .= (0Functional(V)).x + (0Functional(V)).y by A1,A2,RLVECT_1:def 7;
+      .= (0Functional(V)).x + (0Functional(V)).y by A1,RLVECT_1:def 7;
   end;
 end;
 
@@ -365,8 +368,8 @@ end;
 canceled 2;
 
 theorem Th20:
-  for K be Abelian (non empty addLoopStr) for V be non empty VectSpStr over K
-  for f,g be Functional of V holds f+g = g+f
+  for K be Abelian (non empty addLoopStr) for V be non empty
+  VectSpStr over K for f,g be Functional of V holds f+g = g+f
 proof
   let K be Abelian (non empty addLoopStr);
   let V be non empty VectSpStr over K;
@@ -380,9 +383,8 @@ proof
 end;
 
 theorem Th21:
-  for K be add-associative (non empty addLoopStr)
-  for V be non empty VectSpStr over K for f,g,h be Functional of V holds
-  f+g+h = f+(g+h)
+  for K be add-associative (non empty addLoopStr) for V be non
+  empty VectSpStr over K for f,g,h be Functional of V holds f+g+h = f+(g+h)
 proof
   let K be add-associative (non empty addLoopStr);
   let V be non empty VectSpStr over K;
@@ -399,13 +401,12 @@ proof
 end;
 
 theorem
-  for K be non empty ZeroStr for V be non empty VectSpStr over K
-  for x be Element of V holds (0Functional(V)).x = 0.K by FUNCOP_1:13;
+  for K be non empty ZeroStr for V be non empty VectSpStr over K for x
+  be Element of V holds (0Functional(V)).x = 0.K by FUNCOP_1:13;
 
 theorem Th23:
-  for K be right_zeroed (non empty addLoopStr)
-  for V be non empty VectSpStr over K for f be Functional of V holds
-  f + 0Functional(V) = f
+  for K be right_zeroed (non empty addLoopStr) for V be non empty
+  VectSpStr over K for f be Functional of V holds f + 0Functional(V) = f
 proof
   let K be right_zeroed (non empty addLoopStr);
   let V be non empty VectSpStr over K;
@@ -420,12 +421,12 @@ proof
 end;
 
 theorem Th24:
-  for K be add-associative right_zeroed right_complementable
-  (non empty addLoopStr) for V be non empty VectSpStr over K
-  for f be Functional of V holds f-f = 0Functional(V)
+  for K be add-associative right_zeroed right_complementable (non
+empty addLoopStr) for V be non empty VectSpStr over K for f be Functional of V
+  holds f-f = 0Functional(V)
 proof
-  let K be add-associative right_zeroed right_complementable
-  (non empty addLoopStr);
+  let K be add-associative right_zeroed right_complementable (non empty
+  addLoopStr);
   let V be non empty VectSpStr over K;
   let f be Functional of V;
   now
@@ -439,9 +440,9 @@ proof
 end;
 
 theorem Th25:
-  for K be right-distributive (non empty doubleLoopStr)
-  for V be non empty VectSpStr over K for r be Element of K
-  for f,g be Functional of V holds r*(f+g) = r*f+r*g
+  for K be right-distributive (non empty doubleLoopStr) for V be
+  non empty VectSpStr over K for r be Element of K for f,g be Functional of V
+  holds r*(f+g) = r*f+r*g
 proof
   let K be right-distributive (non empty doubleLoopStr);
   let V be non empty VectSpStr over K;
@@ -460,9 +461,9 @@ proof
 end;
 
 theorem Th26:
-  for K be left-distributive (non empty doubleLoopStr)
-  for V be non empty VectSpStr over K for r,s be Element of K
-  for f be Functional of V holds (r+s)*f = r*f+s*f
+  for K be left-distributive (non empty doubleLoopStr) for V be
+  non empty VectSpStr over K for r,s be Element of K for f be Functional of V
+  holds (r+s)*f = r*f+s*f
 proof
   let K be left-distributive (non empty doubleLoopStr);
   let V be non empty VectSpStr over K;
@@ -480,9 +481,9 @@ proof
 end;
 
 theorem Th27:
-  for K be associative (non empty multMagma)
-  for V be non empty VectSpStr over K for r,s be Element of K
-  for f be Functional of V holds (r*s)*f = r*(s*f)
+  for K be associative (non empty multMagma) for V be non empty
+VectSpStr over K for r,s be Element of K for f be Functional of V holds (r*s)*f
+  = r*(s*f)
 proof
   let K be associative (non empty multMagma);
   let V be non empty VectSpStr over K;
@@ -499,9 +500,8 @@ proof
 end;
 
 theorem Th28:
-  for K be left_unital (non empty doubleLoopStr)
-  for V be non empty VectSpStr over K for f be Functional of V holds
-  (1.K)*f = f
+  for K be left_unital (non empty doubleLoopStr) for V be non
+  empty VectSpStr over K for f be Functional of V holds (1.K)*f = f
 proof
   let K be left_unital (non empty doubleLoopStr);
   let V be non empty VectSpStr over K;
@@ -637,32 +637,33 @@ definition
   let V be non empty VectSpStr over K;
   func V*' -> non empty strict VectSpStr over K means
   :Def14:
-  (for x be set holds x in the carrier of it iff
-  x is linear-Functional of V) &
-  (for f,g be linear-Functional of V holds (the addF of it).(f,g) = f+g) &
-  (0.it = 0Functional(V)) &
-  for f be linear-Functional of V for x be Element of K holds
-  (the lmult of it).(x,f) = x*f;
+  (for x be set
+  holds x in the carrier of it iff x is linear-Functional of V) & (for f,g be
+linear-Functional of V holds (the addF of it).(f,g) = f+g) & 0.it = 0Functional
+(V) & for f be linear-Functional of V for x be Element of K holds (the lmult of
+  it).(x,f) = x*f;
   existence
   proof
+    defpred P[set,set,set] means ex f,g be Functional of V st $1=f & $2=g & $3
+    =f+g;
     0Functional(V) in {x where x is linear-Functional of V: not
     contradiction};
-    then reconsider ca = {x where x is linear-Functional of V :
-    not contradiction} as non empty set;
+    then reconsider
+    ca = {x where x is linear-Functional of V : not contradiction}
+    as non empty set;
 A1: now
       let x be set;
       thus x in ca implies x is linear-Functional of V
       proof
-        assume x in ca;
-        then consider y be linear-Functional of V such that
-A2:     x=y;
-        thus thesis by A2;
+        assume
+        x in ca;
+        then ex y be linear-Functional of V st x=y;
+        hence thesis;
       end;
       thus x is linear-Functional of V implies x in ca;
     end;
-    defpred P[set,set,set] means
-    ex f,g be Functional of V st $1=f & $2=g & $3=f+g;
-A3: for x,y be Element of ca ex u be Element of ca st P[x,y,u]
+    then reconsider 0F=0Functional(V) as Element of ca;
+A2: for x,y be Element of ca ex u be Element of ca st P[x,y,u]
     proof
       let x,y be Element of ca;
       reconsider f=x,g=y as linear-Functional of V by A1;
@@ -671,18 +672,12 @@ A3: for x,y be Element of ca ex u be Element of ca st P[x,y,u]
       thus thesis;
     end;
     consider ad be Function of [:ca,ca:],ca such that
-A4: for x,y be Element of ca holds P[x,y,ad.(x,y)] from BINOP_1:sch 3(A3);
-A5: now
-      let f,g be linear-Functional of V;
-      reconsider x=f,y=g as Element of ca by A1;
-      consider f1,g1 be Functional of V such that
-A6:   x=f1 & y=g1 & ad.(x,y)=f1+g1 by A4;
-      thus ad.(f,g) = f+g by A6;
-    end;
-    reconsider 0F=0Functional(V) as Element of ca by A1;
-    defpred P[Element of K,set,set] means
-    ex f be Functional of V st $2=f & $3=$1*f;
-A7: for x be Element of K,y be Element of ca ex u be Element of ca st P[x,y,u]
+A3: for x,y be Element of ca holds P[x,y,ad.(x,y)] from BINOP_1:sch 3(
+    A2);
+    defpred P[Element of K,set,set] means ex f be Functional of V st $2=f & $3
+    =$1*f;
+A4: for x be Element of K,y be Element of ca ex u be Element of ca st P[x,
+    y,u]
     proof
       let x be Element of K,y be Element of ca;
       reconsider f=y as linear-Functional of V by A1;
@@ -691,67 +686,75 @@ A7: for x be Element of K,y be Element of ca ex u be Element of ca st P[x,y,u]
       thus thesis;
     end;
     consider lm be Function of [:the carrier of K,ca:],ca such that
-A8: for x be Element of K,y be Element of ca holds
-    P[x,y,lm.(x,y)] from BINOP_1:sch 3(A7);
-A9: now
+A5: for x be Element of K,y be Element of ca holds P[x,y,lm.(x,y)]
+    from BINOP_1:sch 3(A4);
+A6: now
       let f be linear-Functional of V;
-      let x be Element of K;
       reconsider y=f as Element of ca by A1;
-      consider f1 be Functional of V such that
-A10:  y=f1 & lm.(x,y)=x*f1 by A8;
-      thus lm.(x,f) = x*f by A10;
+      let x be Element of K;
+      ex f1 be Functional of V st y=f1 & lm.(x,y)=x*f1 by A5;
+      hence lm.(x,f) = x*f;
     end;
-    reconsider V1 = VectSpStr(# ca,ad,0F,lm #)
-    as non empty strict VectSpStr over K;
+    reconsider V1 = VectSpStr(# ca,ad,0F,lm #) as non empty strict VectSpStr
+    over K;
     take V1;
-    thus thesis by A1,A5,A9;
+    now
+      let f,g be linear-Functional of V;
+      reconsider x=f,y=g as Element of ca by A1;
+      ex f1,g1 be Functional of V st x=f1 & y=g1 & ad.(x,y)=f1 +g1 by A3;
+      hence ad.(f,g) = f+g;
+    end;
+    hence thesis by A1,A6;
   end;
   uniqueness
   proof
     let V1,V2 be non empty strict VectSpStr over K;
     assume that
-A11: for x be set holds x in the carrier of V1 iff
-    x is linear-Functional of V and
-A12: for f,g be linear-Functional of V holds (the addF of V1).(f,g)=f+g and
-A13: 0.V1 = 0Functional(V) and
-A14: for f be linear-Functional of V for x be Element of K
-    holds (the lmult of V1).(x,f) = x*f and
-A15: for x be set holds x in the carrier of V2 iff
-    x is linear-Functional of V and
-A16: for f,g be linear-Functional of V holds (the addF of V2).(f,g)=f+g and
-A17: 0.V2 = 0Functional(V) and
-A18: for f be linear-Functional of V for x be Element of K
-    holds (the lmult of V2).(x,f) = x*f;
+A7: for x be set holds x in the carrier of V1 iff x is
+    linear-Functional of V and
+A8: for f,g be linear-Functional of V holds (the addF of V1).(f,g)=f+
+    g and
+A9: 0.V1 = 0Functional(V) and
+A10: for f be linear-Functional of V for x be Element of K holds (the
+    lmult of V1).(x,f) = x*f and
+A11: for x be set holds x in the carrier of V2 iff x is
+    linear-Functional of V and
+A12: for f,g be linear-Functional of V holds (the addF of V2).(f,g)=f+
+    g and
+A13: 0.V2 = 0Functional(V) and
+A14: for f be linear-Functional of V for x be Element of K holds (the
+    lmult of V2).(x,f) = x*f;
+A15: now
+      let r be Element of K;
+      let x be Element of V1;
+      reconsider f=x as linear-Functional of V by A7;
+      thus (the lmult of V1).(r,x) = r*f by A10
+        .= (the lmult of V2).(r,x) by A14;
+    end;
     now
       let x be set;
       thus x in the carrier of V1 implies x in the carrier of V2
       proof
-        assume x in the carrier of V1;
-        then x is linear-Functional of V by A11;
-        hence thesis by A15;
+        assume
+        x in the carrier of V1;
+        then x is linear-Functional of V by A7;
+        hence thesis by A11;
       end;
-      assume x in the carrier of V2;
-      then x is linear-Functional of V by A15;
-      hence x in the carrier of V1 by A11;
+      assume
+      x in the carrier of V2;
+      then x is linear-Functional of V by A11;
+      hence x in the carrier of V1 by A7;
     end;
     then
-A19: the carrier of V1 = the carrier of V2 by TARSKI:2;
+A16: the carrier of V1 = the carrier of V2 by TARSKI:2;
     now
       let x,y be Element of V1;
-      reconsider f=x, g=y as linear-Functional of V by A11;
-      thus (the addF of V1).(x,y) = f+g by A12
-        .= (the addF of V2).(x,y) by A16;
+      reconsider f=x, g=y as linear-Functional of V by A7;
+      thus (the addF of V1).(x,y) = f+g by A8
+        .= (the addF of V2).(x,y) by A12;
     end;
-    then
-A20: the addF of V1 = the addF of V2 by A19,BINOP_1:2;
-    now
-      let r be Element of K;
-      let x be Element of V1;
-      reconsider f=x as linear-Functional of V by A11;
-      thus (the lmult of V1).(r,x) = r*f by A14
-        .= (the lmult of V2).(r,x) by A18;
-    end;
-    hence thesis by A13,A17,A19,A20,BINOP_1:2;
+    then the addF of V1 = the addF of V2 by A16,BINOP_1:2;
+    hence thesis by A9,A13,A16,A15,BINOP_1:2;
   end;
 end;
 
@@ -852,7 +855,8 @@ definition
   canceled;
   attr F is subadditive means
   :Def16:
-  for x,y be Vector of V holds F.(x+y) <= F.x+F.y;
+  for x,y be Vector of V holds F.(x+y) <=
+  F.x+F.y;
 end;
 
 definition
@@ -861,7 +865,8 @@ definition
   let F be RFunctional of V;
   attr F is additive means
   :Def17:
-  for x,y be Vector of V holds F.(x+y) = F.x+F.y;
+  for x,y be Vector of V holds F.(x+y) = F.x+
+  F.y;
 end;
 
 definition
@@ -869,14 +874,14 @@ definition
   let F be RFunctional of V;
   attr F is Real_homogeneous means
   :Def18:
-  for v be Vector of V
-  for r be Real holds F.([**r,0**]*v) = r*F.v;
+  for v be Vector of V for r be Real
+  holds F.([**r,0**]*v) = r*F.v;
 end;
 
 theorem Th29:
-  for V be VectSp-like (non empty VectSpStr over F_Complex)
-  for F be RFunctional of V st F is Real_homogeneous for v be Vector of V
-  for r be Real holds F.([**0,r**]*v) = r*F.(i_FC*v)
+  for V be VectSp-like (non empty VectSpStr over F_Complex) for F
+be RFunctional of V st F is Real_homogeneous for v be Vector of V for r be Real
+  holds F.([**0,r**]*v) = r*F.(i_FC*v)
 proof
   let V be VectSp-like (non empty VectSpStr over F_Complex);
   let F be RFunctional of V;
@@ -894,8 +899,8 @@ definition
   let F be RFunctional of V;
   attr F is homogeneous means
   :Def19:
-  for v be Vector of V
-  for r be Scalar of V holds F.(r*v) = |.r.|*F.v;
+  for v be Vector of V for r be Scalar of
+  V holds F.(r*v) = |.r.|*F.v;
 end;
 
 definition
@@ -903,7 +908,6 @@ definition
   let V be VectSpStr over K;
   let F be RFunctional of V;
   attr F is 0-preserving means
-
   F.(0.V) = 0;
 end;
 
@@ -940,7 +944,6 @@ definition
   let K be 1-sorted;
   let V be VectSpStr over K;
   func 0RFunctional(V) -> RFunctional of V equals
-
   [#]V --> 0;
   coherence;
 end;
@@ -952,10 +955,8 @@ registration
   coherence
   proof
     let x,y be Vector of V;
-A1: (0RFunctional(V)).x = 0 by FUNCOP_1:13;
-    (0RFunctional(V)).y = 0 by FUNCOP_1:13;
-    hence thesis
-    by A1,FUNCOP_1:13;
+    (0RFunctional(V)).x = 0 & (0RFunctional(V)).y = 0 by FUNCOP_1:13;
+    hence thesis by FUNCOP_1:13;
   end;
   cluster 0RFunctional(V) -> 0-preserving;
   coherence
@@ -1017,14 +1018,16 @@ definition
   let V be non empty VectSpStr over F_Complex;
   func RealVS(V) -> strict RLSStruct means
   :Def22:
-  the addLoopStr of it = the addLoopStr of V &
-  for r be Real, v be Vector of V holds (the Mult of it).(r,v)=[**r,0**]*v;
+  the addLoopStr of it = the
+addLoopStr of V & for r be Real, v be Vector of V holds (the Mult of it).(r,v)=
+  [**r,0**]*v;
   existence
   proof
     deffunc F(Element of REAL, Element of V) = [**$1,0**]*$2;
     consider f be Function of [:REAL, the carrier of V:], the carrier of V
     such that
-A1: for r be Real, v be Vector of V holds f.(r,v)=F(r,v) from BINOP_1:sch 4;
+A1: for r be Real, v be Vector of V holds f.(r,v)=F(r,v) from BINOP_1:
+    sch 4;
     take R = RLSStruct (#the carrier of V, 0.V, the addF of V, f#);
     thus the addLoopStr of R = the addLoopStr of V;
     let r be Real;
@@ -1035,10 +1038,11 @@ A1: for r be Real, v be Vector of V holds f.(r,v)=F(r,v) from BINOP_1:sch 4;
   proof
     let a,b be strict RLSStruct such that
 A2: the addLoopStr of a = the addLoopStr of V and
-A3: for r be Real, v be Vector of V holds
-    (the Mult of a).(r,v)=[**r,0**]*v and
+A3: for r be Real, v be Vector of V holds (the Mult of a).(r,v)=[**r,0
+    **]*v and
 A4: the addLoopStr of b = the addLoopStr of V and
-A5: for r be Real, v be Vector of V holds (the Mult of b).(r,v)=[**r,0**]*v;
+A5: for r be Real, v be Vector of V holds (the Mult of b).(r,v)=[**r,0
+    **]*v;
     now
       let r be Real, v be Vector of V;
       thus (the Mult of a).(r,v) = [**r,0**]*v by A3
@@ -1120,54 +1124,54 @@ registration
   cluster RealVS(V) -> RealLinearSpace-like;
   coherence
   proof
-    thus for a be real number for v,w be Element of RealVS(V) holds
-    a * (v + w) = a * v + a * w
+    thus for a be real number for v,w be Element of RealVS(V) holds a * (v + w
+    ) = a * v + a * w
     proof
       let a be real number;
-       reconsider a as Real by XREAL_0:def 1;
+      reconsider a as Real by XREAL_0:def 1;
       let v,w be Element of RealVS(V);
-A1:   the addLoopStr of V = the addLoopStr of RealVS(V) by Def22;
       set a1=[**a,0**];
-      reconsider v1=v,w1=w as Element of V by A1;
-       a * (v + w) = [**a,0**] * (v1 + w1) by A1,Def22
+A1:   the addLoopStr of V = the addLoopStr of RealVS(V) by Def22;
+      then reconsider v1=v,w1=w as Element of V;
+      a * (v + w) = [**a,0**] * (v1 + w1) by A1,Def22
         .= a1 * v1 + a1 * w1 by VECTSP_1:def 26
         .= (the addF of V).[((the Mult of RealVS(V)).(a,v1)),[**a,0**]*w1]
       by Def22
         .= a * v + a * w by A1,Def22;
-     hence thesis;
+      hence thesis;
     end;
-    thus for a,b be real number for v be Element of RealVS(V) holds
-    (a + b) * v = a * v + b * v
+    thus for a,b be real number for v be Element of RealVS(V) holds (a + b) *
+    v = a * v + b * v
     proof
       let a,b be real number;
-       reconsider a,b as Real by XREAL_0:def 1;
+      reconsider a,b as Real by XREAL_0:def 1;
       let v be Element of RealVS(V);
-A2:   the addLoopStr of V = the addLoopStr of RealVS(V) by Def22;
       set a1=[**a,0**];
       set b1=[**b,0**];
-A3:   [**a,0**] + [**b,0**] = [**a+b,0**];
-      reconsider v1=v as Element of V by A2;
-      (a + b) * v = ([**a,0**] + [**b,0**]) * v1 by A3,Def22
+A2:   the addLoopStr of V = the addLoopStr of RealVS(V) by Def22;
+      then reconsider v1=v as Element of V;
+      [**a,0**] + [**b,0**] = [**a+b,0**];
+      then (a + b) * v = ([**a,0**] + [**b,0**]) * v1 by Def22
         .= a1 * v1 + b1 * v1 by VECTSP_1:def 26
-        .= (the addF of RealVS(V)).[((the Mult of RealVS(V)).(a,v)),
-      ([**b,0**]*v1)] by A2,Def22
+        .= (the addF of RealVS(V)).[((the Mult of RealVS(V)).(a,v)), ([**b,0
+      **]*v1)] by A2,Def22
         .= a * v + b * v by Def22;
-     hence thesis;
+      hence thesis;
     end;
-    thus for a,b be real number for v be Element of RealVS(V) holds
-    (a * b) * v = a * (b * v)
+    thus for a,b be real number for v be Element of RealVS(V) holds (a * b) *
+    v = a * (b * v)
     proof
       let a,b be real number;
-       reconsider a,b as Real by XREAL_0:def 1;
+      reconsider a,b as Real by XREAL_0:def 1;
       let v be Element of RealVS(V);
-A4:   the addLoopStr of V = the addLoopStr of RealVS(V) by Def22;
-A5:   [**a*b,0**] = [**a,0**]*[**b,0**];
-      reconsider v1=v as Element of V by A4;
-       (a * b) * v = ([**a,0**] * [**b,0**]) * v1 by A5,Def22
+      the addLoopStr of V = the addLoopStr of RealVS(V) by Def22;
+      then reconsider v1=v as Element of V;
+      [**a*b,0**] = [**a,0**]*[**b,0**];
+      then (a * b) * v = ([**a,0**] * [**b,0**]) * v1 by Def22
         .= [**a,0**] * ([**b,0**] * v1) by VECTSP_1:def 26
         .= (the Mult of RealVS(V)).(a,([**b,0**] * v1)) by Def22
         .= a * (b * v) by Def22;
-     hence thesis;
+      hence thesis;
     end;
     let v be Element of RealVS(V);
     the addLoopStr of V = the addLoopStr of RealVS(V) by Def22;
@@ -1178,101 +1182,104 @@ A5:   [**a*b,0**] = [**a,0**]*[**b,0**];
 end;
 
 theorem Th30:
-  for V be non empty VectSp of F_Complex for M be Subspace of V holds
-  RealVS(M) is Subspace of RealVS(V)
+  for V be non empty VectSp of F_Complex for M be Subspace of V
+  holds RealVS(M) is Subspace of RealVS(V)
 proof
   let V be non empty VectSp of F_Complex;
   let M be Subspace of V;
 A1: the carrier of M c= the carrier of V by VECTSP_4:def 2;
-A2: the addLoopStr of M = the addLoopStr of RealVS(M) by Def22;
-A3: the addLoopStr of V = the addLoopStr of RealVS(V) by Def22;
+A2: the lmult of M = (the lmult of V) | [:the carrier of F_Complex, the
+  carrier of M:] by VECTSP_4:def 2;
+A3: the addLoopStr of M = the addLoopStr of RealVS(M) by Def22;
+A4: the addLoopStr of V = the addLoopStr of RealVS(V) by Def22;
   hence
-A4: the carrier of RealVS(M) c= the carrier of RealVS(V) by A2,VECTSP_4:def 2;
-  thus 0.RealVS(M) = 0.M by A2
-    .= 0.V by VECTSP_4:def 2
-    .= 0.RealVS(V) by A3;
-  thus the addF of RealVS(M)
-  = (the addF of RealVS(V))||the carrier of RealVS(M) by A2,A3,VECTSP_4:def 2;
-  [:REAL,the carrier of RealVS(M):] c= [:REAL,the carrier of RealVS(V) :]
-  by A4,ZFMISC_1:118;
-  then [:REAL,the carrier of RealVS(M):] c= dom (the Mult of RealVS(V))
-  by FUNCT_2:def 1;
+A5: the carrier of RealVS(M) c= the carrier of RealVS(V) by A3,
+  VECTSP_4:def 2;
   then
-A5: dom((the Mult of RealVS(V)) | [:REAL,the carrier of RealVS(M):])=
-  [:REAL,the carrier of RealVS(M):] by RELAT_1:91;
-A6: the lmult of M = (the lmult of V) |
-  [:the carrier of F_Complex, the carrier of M:] by VECTSP_4:def 2;
-  rng ((the Mult of RealVS(V)) | [:REAL,the carrier of RealVS(M):]) c=
-  the carrier of RealVS(M)
+  [:REAL,the carrier of RealVS(M):] c= [:REAL,the carrier of RealVS(V) :]
+  by ZFMISC_1:118;
+  then [:REAL,the carrier of RealVS(M):] c= dom (the Mult of RealVS(V)) by
+  FUNCT_2:def 1;
+  then
+A6: dom((the Mult of RealVS(V)) | [:REAL,the carrier of RealVS(M):])= [:REAL
+  ,the carrier of RealVS(M):] by RELAT_1:91;
+  rng ((the Mult of RealVS(V)) | [:REAL,the carrier of RealVS(M):]) c= the
+  carrier of RealVS(M)
   proof
     let y be set;
-    assume y in rng ((the Mult of RealVS(V)) |
-    [:REAL,the carrier of RealVS(M):]);
+    assume
+    y in rng ((the Mult of RealVS(V)) | [:REAL,the carrier of RealVS(
+    M):]);
     then consider x be set such that
-A7: x in dom ((the Mult of RealVS(V)) | [:REAL,the carrier of RealVS(M):]) and
-A8: y = ((the Mult of RealVS(V)) | [:REAL,the carrier of RealVS(M):]).x
-    by FUNCT_1:def 5;
+A7: x in dom ((the Mult of RealVS(V)) | [:REAL,the carrier of RealVS(
+    M):]) and
+A8: y = ((the Mult of RealVS(V)) | [:REAL,the carrier of RealVS(M):])
+    .x by FUNCT_1:def 5;
     consider a,b be set such that
 A9: x = [a,b] by A7,RELAT_1:def 1;
     reconsider a as Real by A7,A9,ZFMISC_1:106;
-    reconsider b as Element of RealVS(M) by A5,A7,A9,ZFMISC_1:106;
-    reconsider b1 = b as Element of M by A2;
+    reconsider b as Element of RealVS(M) by A6,A7,A9,ZFMISC_1:106;
+    reconsider b1 = b as Element of M by A3;
     reconsider b2 = b1 as Element of V by A1,TARSKI:def 3;
-A10: [[**a,0**],b1] in [:the carrier of F_Complex, the carrier of M:]
-    by ZFMISC_1:106;
-    [[**a,0**],b2] in [:the carrier of F_Complex, the carrier of V:]
-    by ZFMISC_1:106;
-    then [[**a,0**],b2] in dom (the lmult of V) by FUNCT_2:def 1;
-    then [[**a,0**],b2] in (dom (the lmult of V)) /\
-    [:the carrier of F_Complex, the carrier of M:] by A10,XBOOLE_0:def 4;
+    [[**a,0**],b2] in [:the carrier of F_Complex, the carrier of V:] by
+    ZFMISC_1:106;
+    then [[**a,0**],b1] in [:the carrier of F_Complex, the carrier of M:] & [
+    [**a,0 **],b2] in dom (the lmult of V) by FUNCT_2:def 1,ZFMISC_1:106;
+    then [[**a,0**],b2] in (dom (the lmult of V)) /\ [:the carrier of
+    F_Complex, the carrier of M:] by XBOOLE_0:def 4;
     then
-A11: [[**a,0**],b2] in dom ((the lmult of V) |
-    [:the carrier of F_Complex, the carrier of M:]) by RELAT_1:90
-;
+A10: [[**a,0**],b2] in dom ((the lmult of V) | [:the carrier of F_Complex,
+    the carrier of M:]) by RELAT_1:90;
     y = (the Mult of RealVS(V)).(a,b) by A7,A8,A9,FUNCT_1:70
       .= [**a,0**]*b2 by Def22
-      .= [**a,0**]*b1 by A6,A11,FUNCT_1:70
+      .= [**a,0**]*b1 by A2,A10,FUNCT_1:70
       .= (the Mult of RealVS(M)).(a,b) by Def22;
     hence thesis;
   end;
-  then reconsider RM = (the Mult of RealVS(V)) |
-  [: REAL,the carrier of RealVS(M) :] as Function of
-  [:REAL,the carrier of RealVS(M):],the carrier of RealVS(M) by A5,FUNCT_2:4;
+  then reconsider
+  RM = (the Mult of RealVS(V)) | [: REAL,the carrier of RealVS(M)
+:] as Function of [:REAL,the carrier of RealVS(M):],the carrier of RealVS(M) by
+  A6,FUNCT_2:4;
+  thus 0.RealVS(M) = 0.M by A3
+    .= 0.V by VECTSP_4:def 2
+    .= 0.RealVS(V) by A4;
+  thus the addF of RealVS(M) = (the addF of RealVS(V))||the carrier of RealVS(
+  M) by A3,A4,VECTSP_4:def 2;
   now
     let a be Real, b be Element of RealVS(M);
-    reconsider b1 = b as Element of M by A2;
+    reconsider b1 = b as Element of M by A3;
     reconsider b2 = b1 as Element of V by A1,TARSKI:def 3;
-A12: [a,b] in [: REAL,the carrier of RealVS(M) :] by ZFMISC_1:106;
-    b in the carrier of RealVS(V) by A4,TARSKI:def 3;
+    [[**a,0**],b2] in [:the carrier of F_Complex, the carrier of V:] by
+    ZFMISC_1:106;
+    then [[**a,0**],b1] in [:the carrier of F_Complex, the carrier of M:] & [
+    [**a,0 **],b2] in dom (the lmult of V) by FUNCT_2:def 1,ZFMISC_1:106;
+    then [[**a,0**],b2] in (dom (the lmult of V)) /\ [:the carrier of
+    F_Complex, the carrier of M:] by XBOOLE_0:def 4;
+    then
+A11: [[**a,0**],b2] in dom ((the lmult of V) | [:the carrier of F_Complex,
+    the carrier of M:]) by RELAT_1:90;
+    b in the carrier of RealVS(V) by A5,TARSKI:def 3;
     then [a,b] in [: REAL,the carrier of RealVS(V) :] by ZFMISC_1:106;
-    then [a,b] in dom (the Mult of RealVS(V)) by FUNCT_2:def 1;
-    then [a,b] in (dom (the Mult of RealVS(V))) /\
-    [: REAL,the carrier of RealVS(M) :] by A12,XBOOLE_0:def 4;
     then
-A13: [a,b] in dom RM by RELAT_1:90;
-A14: [[**a,0**],b1] in [:the carrier of F_Complex, the carrier of M:]
-    by ZFMISC_1:106;
-    [[**a,0**],b2] in [:the carrier of F_Complex, the carrier of V:]
-    by ZFMISC_1:106;
-    then [[**a,0**],b2] in dom (the lmult of V) by FUNCT_2:def 1;
-    then [[**a,0**],b2] in (dom (the lmult of V)) /\
-    [:the carrier of F_Complex, the carrier of M:] by A14,XBOOLE_0:def 4;
+    [a,b] in [: REAL,the carrier of RealVS(M) :] & [a,b] in dom (the Mult
+    of RealVS(V)) by FUNCT_2:def 1,ZFMISC_1:106;
+    then [a,b] in (dom (the Mult of RealVS(V))) /\ [: REAL,the carrier of
+    RealVS(M) :] by XBOOLE_0:def 4;
     then
-A15: [[**a,0**],b2] in dom ((the lmult of V) |
-    [:the carrier of F_Complex, the carrier of M:]) by RELAT_1:90
-;
+A12: [a,b] in dom RM by RELAT_1:90;
     thus (the Mult of RealVS(M)).(a,b) = [**a,0**]*b1 by Def22
-      .= [**a,0**]*b2 by A6,A15,FUNCT_1:70
+      .= [**a,0**]*b2 by A2,A11,FUNCT_1:70
       .= (the Mult of RealVS(V)).(a,b) by Def22
-      .= RM.(a,b) by A13,FUNCT_1:70;
+      .= RM.(a,b) by A12,FUNCT_1:70;
   end;
-  hence the Mult of RealVS(M) =
-  (the Mult of RealVS(V)) | [:REAL,the carrier of RealVS(M):] by BINOP_1:2;
+  hence
+  the Mult of RealVS(M) = (the Mult of RealVS(V)) | [:REAL,the carrier of
+  RealVS(M):] by BINOP_1:2;
 end;
 
 theorem Th31:
-  for V be non empty VectSpStr over F_Complex for p be RFunctional of V holds
-  p is Functional of RealVS(V)
+  for V be non empty VectSpStr over F_Complex for p be RFunctional
+  of V holds p is Functional of RealVS(V)
 proof
   let V be non empty VectSpStr over F_Complex;
   let p be RFunctional of V;
@@ -1281,8 +1288,8 @@ proof
 end;
 
 theorem Th32:
-  for V be non empty VectSp of F_Complex for p be Semi-Norm of V holds
-  p is Banach-Functional of RealVS(V)
+  for V be non empty VectSp of F_Complex for p be Semi-Norm of V
+  holds p is Banach-Functional of RealVS(V)
 proof
   let V be non empty VectSp of F_Complex;
   let p be Semi-Norm of V;
@@ -1315,7 +1322,8 @@ definition
   let l be Functional of V;
   func projRe(l) -> Functional of RealVS(V) means
   :Def23:
-  for i be Element of V holds it.i = Re(l.i);
+  for i be Element of
+  V holds it.i = Re(l.i);
   existence
   proof
     deffunc F(Element of V) = Re(l.$1);
@@ -1349,7 +1357,8 @@ definition
   let l be Functional of V;
   func projIm(l) -> Functional of RealVS(V) means
   :Def24:
-  for i be Element of V holds it.i = Im(l.i);
+  for i be Element of
+  V holds it.i = Im(l.i);
   existence
   proof
     deffunc F(Element of V) = Im(l.$1);
@@ -1382,7 +1391,6 @@ definition
   let V be non empty VectSpStr over F_Complex;
   let l be Functional of RealVS(V);
   func RtoC(l) -> RFunctional of V equals
-
   l;
   coherence
   proof
@@ -1395,7 +1403,6 @@ definition
   let V be non empty VectSpStr over F_Complex;
   let l be RFunctional of V;
   func CtoR(l) -> Functional of RealVS(V) equals
-
   l;
   coherence
   proof
@@ -1467,7 +1474,8 @@ definition
   let l be RFunctional of V;
   func i-shift(l) -> RFunctional of V means
   :Def27:
-  for v be Element of V holds it.v = l.(i_FC*v);
+  for v be Element of V
+  holds it.v = l.(i_FC*v);
   existence
   proof
     deffunc F(Element of V) = l.(i_FC*$1);
@@ -1496,12 +1504,13 @@ definition
   let l be Functional of RealVS(V);
   func prodReIm(l) -> Functional of V means
   :Def28:
-  for v be Element of V holds it.v = [**(RtoC l).v,-(i-shift(RtoC l)).v**];
+  for v be Element of V
+  holds it.v = [**(RtoC l).v,-(i-shift(RtoC l)).v**];
   existence
   proof
     deffunc F(Element of V) = [**(RtoC l).$1,-(i-shift(RtoC l)).$1**];
-    consider f be Function of the carrier of V,the carrier of F_Complex
-    such that
+    consider f be Function of the carrier of V,the carrier of F_Complex such
+    that
 A1: for v be Element of V holds f.v = F(v) from FUNCT_2:sch 4;
     reconsider f as Functional of V;
     take f;
@@ -1511,9 +1520,11 @@ A1: for v be Element of V holds f.v = F(v) from FUNCT_2:sch 4;
   proof
     let a,b be Functional of V;
     assume
-A2: for v be Element of V holds a.v = [**(RtoC l).v,-(i-shift(RtoC l)).v**];
+A2: for v be Element of V holds a.v = [**(RtoC l).v,-(i-shift(RtoC l))
+    .v**];
     assume
-A3: for v be Element of V holds b.v = [**(RtoC l).v,-(i-shift(RtoC l)).v**];
+A3: for v be Element of V holds b.v = [**(RtoC l).v,-(i-shift(RtoC l))
+    .v**];
     now
       let v be Element of V;
       thus a.v = [**(RtoC l).v,-(i-shift(RtoC l)).v**] by A2
@@ -1524,23 +1535,12 @@ A3: for v be Element of V holds b.v = [**(RtoC l).v,-(i-shift(RtoC l)).v**];
 end;
 
 theorem Th33:
-  for V be non empty VectSp of F_Complex for l be linear-Functional of V holds
-  projRe(l) is linear-Functional of RealVS(V)
+  for V be non empty VectSp of F_Complex for l be
+  linear-Functional of V holds projRe(l) is linear-Functional of RealVS(V)
 proof
   let V be non empty VectSp of F_Complex;
   let l be linear-Functional of V;
-A1: projRe(l) is additive
-  proof
-    let x,y be VECTOR of RealVS(V);
-A2: the addLoopStr of V = the addLoopStr of RealVS(V) by Def22;
-    then reconsider x1=x, y1=y as Vector of V;
-    thus (projRe(l)).(x+y) = Re(l.(x1+y1)) by A2,Def23
-      .= Re(l.x1+l.y1) by Def11
-      .= Re(l.x1)+Re(l.y1) by COMPLEX1:19
-      .= Re(l.x1)+(projRe(l)).y by Def23
-      .= (projRe(l)).x+(projRe(l)).y by Def23;
-  end;
-  projRe(l) is homogeneous
+A1: projRe(l) is homogeneous
   proof
     let x be VECTOR of RealVS(V);
     let r be Real;
@@ -1554,27 +1554,27 @@ A2: the addLoopStr of V = the addLoopStr of RealVS(V) by Def22;
       .= r * Re (l.x1) by COMPLEX1:28
       .= r*(projRe(l)).x by Def23;
   end;
-  hence thesis by A1;
-end;
-
-theorem
-  for V be non empty VectSp of F_Complex for l be linear-Functional of V holds
-  projIm(l) is linear-Functional of RealVS(V)
-proof
-  let V be non empty VectSp of F_Complex;
-  let l be linear-Functional of V;
-A1: projIm(l) is additive
+  projRe(l) is additive
   proof
     let x,y be VECTOR of RealVS(V);
 A2: the addLoopStr of V = the addLoopStr of RealVS(V) by Def22;
     then reconsider x1=x, y1=y as Vector of V;
-    thus (projIm(l)).(x+y) = Im(l.(x1+y1)) by A2,Def24
-      .= Im(l.x1+l.y1) by Def11
-      .= Im(l.x1)+Im(l.y1) by COMPLEX1:19
-      .= Im(l.x1)+(projIm(l)).y by Def24
-      .= (projIm(l)).x+(projIm(l)).y by Def24;
+    thus (projRe(l)).(x+y) = Re(l.(x1+y1)) by A2,Def23
+      .= Re(l.x1+l.y1) by Def11
+      .= Re(l.x1)+Re(l.y1) by COMPLEX1:19
+      .= Re(l.x1)+(projRe(l)).y by Def23
+      .= (projRe(l)).x+(projRe(l)).y by Def23;
   end;
-  projIm(l) is homogeneous
+  hence thesis by A1;
+end;
+
+theorem
+  for V be non empty VectSp of F_Complex for l be linear-Functional of V
+  holds projIm(l) is linear-Functional of RealVS(V)
+proof
+  let V be non empty VectSp of F_Complex;
+  let l be linear-Functional of V;
+A1: projIm(l) is homogeneous
   proof
     let x be VECTOR of RealVS(V);
     let r be Real;
@@ -1588,109 +1588,124 @@ A2: the addLoopStr of V = the addLoopStr of RealVS(V) by Def22;
       .= r * Im (l.x1) by COMPLEX1:28
       .= r*(projIm(l)).x by Def24;
   end;
+  projIm(l) is additive
+  proof
+    let x,y be VECTOR of RealVS(V);
+A2: the addLoopStr of V = the addLoopStr of RealVS(V) by Def22;
+    then reconsider x1=x, y1=y as Vector of V;
+    thus (projIm(l)).(x+y) = Im(l.(x1+y1)) by A2,Def24
+      .= Im(l.x1+l.y1) by Def11
+      .= Im(l.x1)+Im(l.y1) by COMPLEX1:19
+      .= Im(l.x1)+(projIm(l)).y by Def24
+      .= (projIm(l)).x+(projIm(l)).y by Def24;
+  end;
   hence thesis by A1;
 end;
 
 theorem Th35:
-  for V be non empty VectSp of F_Complex
-  for l be linear-Functional of RealVS(V) holds
-  prodReIm(l) is linear-Functional of V
+  for V be non empty VectSp of F_Complex for l be
+  linear-Functional of RealVS(V) holds prodReIm(l) is linear-Functional of V
 proof
   let V be non empty VectSp of F_Complex;
   let l be linear-Functional of RealVS(V);
-A1: prodReIm(l) is additive
-  proof
-    let x,y be Vector of V;
-    thus (prodReIm(l)).(x+y) =
-    [**(RtoC l).(x+y),-(i-shift(RtoC l)).(x+y)**] by Def28
-      .= [**(RtoC l).(x+y),-(RtoC l).(i_FC*(x+y))**] by Def27
-      .= [**(RtoC l).x+(RtoC l).y,-(RtoC l).(i_FC*(x+y))**] by Def17
-      .= [**(RtoC l).x+(RtoC l).y,
-    -(RtoC l).(i_FC*x+i_FC*y)**] by VECTSP_1:def 26
-      .= [**(RtoC l).x+(RtoC l).y,
-    -((RtoC l).(i_FC*x)+(RtoC l).(i_FC*y))**] by Def17
-      .= [**(RtoC l).x,-(RtoC l).(i_FC*x)**] +
-    [**(RtoC l).y,-(RtoC l).(i_FC*y)**]
-      .= [**(RtoC l).x,-(i-shift(RtoC l)).x**] +
-    [**(RtoC l).y,-(RtoC l).(i_FC*y)**] by Def27
-      .= [**(RtoC l).x,-(i-shift(RtoC l)).x**] +
-    [**(RtoC l).y,-(i-shift(RtoC l)).y**] by Def27
-      .= (prodReIm(l)).x + [**(RtoC l).y,-(i-shift(RtoC l)).y**] by Def28
-      .= (prodReIm(l)).x + (prodReIm(l)).y by Def28;
-  end;
-  prodReIm(l) is homogeneous
+A1: prodReIm(l) is homogeneous
   proof
     let x be Vector of V;
     let r be Scalar of V;
     reconsider r1=r as Element of COMPLEX by COMPLFLD:def 1;
     set a=Re r1,b=Im r1;
 A2: r1 = a+b*<i> by COMPLEX1:29;
-A3: a*((RtoC l).x)-b*(-(RtoC l).(i_FC*x)) = a*((RtoC l).x)+b*(RtoC l).(
+A3: -1_F_Complex = [**-1,0**] by COMPLFLD:4,10;
+    x = i_FC*(i_FC*(-1_F_Complex))*x by Th8,Th9,VECTSP_1:def 26
+      .= i_FC*((-1_F_Complex)*i_FC*x) by VECTSP_1:def 26;
+    then
+A4: a*(-(RtoC l).(i_FC*x))+((RtoC l).x)*b = -a*(RtoC l).(i_FC*x)+b*(RtoC l
+    ).(i_FC*((-1_F_Complex)*i_FC*x))
+      .= -(RtoC l).([**a,0**]*(i_FC*x))+ -(-b)*(RtoC l).(i_FC*((-1_F_Complex
+    )*i_FC*x)) by Def18
+      .= -(RtoC l).([**a,0**]*(i_FC*x))+ -(RtoC l).([**0,-b**]*((-
+    1_F_Complex)*i_FC*x)) by Th29
+      .= -(RtoC l).([**a,0**]*(i_FC*x))+ -(RtoC l).([**0,-b**]*((-
+    1_F_Complex)*(i_FC*x))) by VECTSP_1:def 26
+      .= -(RtoC l).([**a,0**]*(i_FC*x))+ -(RtoC l).([**0,-b**]*(-1_F_Complex
+    )*(i_FC*x)) by VECTSP_1:def 26
+      .= -((RtoC l).([**a,0**]*(i_FC*x))+(RtoC l).([**0,b**]*(i_FC*x))) by
+    A3
+      .= -(RtoC l).([**a,0**]*(i_FC*x)+[**0,b**]*(i_FC*x)) by Def17
+      .= -(RtoC l).(([**a,0**]+[**0,b**])*(i_FC*x)) by VECTSP_1:def 26
+      .= -(RtoC l).(i_FC*r*x) by A2,VECTSP_1:def 26;
+A5: a*((RtoC l).x)-b*(-(RtoC l).(i_FC*x)) = a*((RtoC l).x)+b*(RtoC l).(
     i_FC*x)
       .= (RtoC l).([**a,0**]*x)+b*(RtoC l).(i_FC*x) by Def18
       .= (RtoC l).([**a,0**]*x)+(RtoC l).([**0,b**]*x) by Th29
       .= (RtoC l).([**a,0**]*x+[**0,b**]*x) by Def17
       .= (RtoC l).(([**a,0**]+[**0,b**])*x) by VECTSP_1:def 26
       .= (RtoC l).(r*x) by COMPLEX1:29;
-A4: x = i_FC*(i_FC*(-1_F_Complex))*x by Th8,Th9,VECTSP_1:def 26
-      .= i_FC*((-1_F_Complex)*i_FC*x) by VECTSP_1:def 26;
-A5: -1_F_Complex = [**-1,0**] by COMPLFLD:4,10;
-A6: a*(-(RtoC l).(i_FC*x))+((RtoC l).x)*b =
-    -a*(RtoC l).(i_FC*x)+b*(RtoC l).(i_FC*((-1_F_Complex)*i_FC*x)) by A4
-      .= -(RtoC l).([**a,0**]*(i_FC*x))+
-    -(-b)*(RtoC l).(i_FC*((-1_F_Complex)*i_FC*x)) by Def18
-      .= -(RtoC l).([**a,0**]*(i_FC*x))+
-    -(RtoC l).([**0,-b**]*((-1_F_Complex)*i_FC*x)) by Th29
-      .= -(RtoC l).([**a,0**]*(i_FC*x))+
-    -(RtoC l).([**0,-b**]*((-1_F_Complex)*(i_FC*x))) by VECTSP_1:def 26
-      .= -(RtoC l).([**a,0**]*(i_FC*x))+
-    -(RtoC l).([**0,-b**]*(-1_F_Complex)*(i_FC*x)) by VECTSP_1:def 26
-      .= -((RtoC l).([**a,0**]*(i_FC*x))+(RtoC l).([**0,b**]*(i_FC*x))) by A5
-      .= -(RtoC l).([**a,0**]*(i_FC*x)+[**0,b**]*(i_FC*x)) by Def17
-      .= -(RtoC l).(([**a,0**]+[**0,b**])*(i_FC*x)) by VECTSP_1:def 26
-      .= -(RtoC l).(i_FC*r*x) by A2,VECTSP_1:def 26;
-    thus (prodReIm(l)).(r*x) =
-    [**(RtoC l).(r*x),-(i-shift(RtoC l)).(r*x)**] by Def28
+    thus (prodReIm(l)).(r*x) = [**(RtoC l).(r*x),-(i-shift(RtoC l)).(r*x)**]
+    by Def28
       .= [**(RtoC l).(r*x),-(RtoC l).(i_FC*(r*x))**] by Def27
-      .= (RtoC l).(r*x)+(a*(-(RtoC l).(i_FC*x))+((RtoC l).x)*b)*<i> by A6,
-VECTSP_1:def 26
-      .= r*[**(RtoC l).x,-(RtoC l).(i_FC*x)**] by A2,A3
+      .= (RtoC l).(r*x)+(a*(-(RtoC l).(i_FC*x))+((RtoC l).x)*b)*<i> by A4,
+    VECTSP_1:def 26
+      .= r*[**(RtoC l).x,-(RtoC l).(i_FC*x)**] by A2,A5
       .= r*[**(RtoC l).x,-(i-shift(RtoC l)).x**] by Def27
       .= r*(prodReIm(l)).x by Def28;
   end;
+  prodReIm(l) is additive
+  proof
+    let x,y be Vector of V;
+    thus (prodReIm(l)).(x+y) = [**(RtoC l).(x+y),-(i-shift(RtoC l)).(x+y)**]
+    by Def28
+      .= [**(RtoC l).(x+y),-(RtoC l).(i_FC*(x+y))**] by Def27
+      .= [**(RtoC l).x+(RtoC l).y,-(RtoC l).(i_FC*(x+y))**] by Def17
+      .= [**(RtoC l).x+(RtoC l).y, -(RtoC l).(i_FC*x+i_FC*y)**] by VECTSP_1:
+    def 26
+      .= [**(RtoC l).x+(RtoC l).y, -((RtoC l).(i_FC*x)+(RtoC l).(i_FC*y))**]
+    by Def17
+      .= [**(RtoC l).x,-(RtoC l).(i_FC*x)**] + [**(RtoC l).y,-(RtoC l).(i_FC
+    *y)**]
+      .= [**(RtoC l).x,-(i-shift(RtoC l)).x**] + [**(RtoC l).y,-(RtoC l).(
+    i_FC*y)**] by Def27
+      .= [**(RtoC l).x,-(i-shift(RtoC l)).x**] + [**(RtoC l).y,-(i-shift(
+    RtoC l)).y**] by Def27
+      .= (prodReIm(l)).x + [**(RtoC l).y,-(i-shift(RtoC l)).y**] by Def28
+      .= (prodReIm(l)).x + (prodReIm(l)).y by Def28;
+  end;
   hence thesis by A1;
 end;
+:: Hahn Banach Theorem
 
-theorem :: Hahn Banach Theorem
-  for V be non empty VectSp of F_Complex for p be Semi-Norm of V
-  for M be Subspace of V for l be linear-Functional of M st
-  for e be Vector of M for v be Vector of V st v=e holds |.l.e.| <= p.v
-  ex L be linear-Functional of V st L|the carrier of M = l &
-  for e be Vector of V holds |.L.e.| <= p.e
+theorem
+  for V be non empty VectSp of F_Complex for p be Semi-Norm of V for M
+be Subspace of V for l be linear-Functional of M st for e be Vector of M for v
+be Vector of V st v=e holds |.l.e.| <= p.v ex L be linear-Functional of V st L|
+  the carrier of M = l & for e be Vector of V holds |.L.e.| <= p.e
 proof
   let V be non empty VectSp of F_Complex;
   let p be Semi-Norm of V;
-  let M be Subspace of V;
-  let l be linear-Functional of M;
-  assume
-A1: for e be Vector of M for v be Vector of V st v=e holds |.l.e.| <= p.v;
-  reconsider RVSM = RealVS(M) as Subspace of RealVS(V) by Th30;
   reconsider p1=p as Banach-Functional of RealVS(V) by Th32;
+  let M be Subspace of V;
+  reconsider tcM = the carrier of M as Subset of V by VECTSP_4:def 2;
+  reconsider RVSM = RealVS(M) as Subspace of RealVS(V) by Th30;
+  let l be linear-Functional of M;
   reconsider prRl = projRe(l) as linear-Functional of RVSM by Th33;
-A2: the addLoopStr of V = the addLoopStr of RealVS(V) by Def22;
-A3: the addLoopStr of M = the addLoopStr of RealVS(M) by Def22;
-  for x be VECTOR of RVSM
-  for v be VECTOR of RealVS(V) st x=v holds prRl.x <= p1.v
+A1: the addLoopStr of V = the addLoopStr of RealVS(V) by Def22;
+A2: the addLoopStr of M = the addLoopStr of RealVS(M) by Def22;
+  assume
+A3: for e be Vector of M for v be Vector of V st v=e holds |.l.e.| <= p.
+  v;
+  for x be VECTOR of RVSM for v be VECTOR of RealVS(V) st x=v holds prRl.x
+  <= p1.v
   proof
     let x be VECTOR of RVSM;
+    reconsider x1=x as Vector of M by A2;
     let v be VECTOR of RealVS(V);
-    reconsider x1=x as Vector of M by A3;
-    reconsider v1=v as Vector of V by A2;
-    assume x=v;
-    then
-A4: |.l.x1.| <= p.v1 by A1;
+    reconsider v1=v as Vector of V by A1;
     prRl.x = Re(l.x1) by Def23;
-    then prRl.x <= |.l.x1.| by COMPLEX1:140;
+    then
+A4: prRl.x <= |.l.x1.| by COMPLEX1:140;
+    assume
+    x=v;
+    then |.l.x1.| <= p.v1 by A3;
     hence thesis by A4,XXREAL_0:2;
   end;
   then consider L1 be linear-Functional of RealVS(V) such that
@@ -1698,58 +1713,58 @@ A5: L1|the carrier of RVSM=prRl and
 A6: for e be VECTOR of RealVS(V) holds L1.e <= p1.e by HAHNBAN:35;
   reconsider L=prodReIm(L1) as linear-Functional of V by Th35;
   take L;
-  reconsider tcM = the carrier of M as Subset of V by VECTSP_4:def 2;
   now
     let x be Element of M;
     the carrier of M c= the carrier of V by VECTSP_4:def 2;
     then reconsider x2=x as Element of V by TARSKI:def 3;
-    reconsider x1=x2,ix1=i_FC*x2 as Element of RealVS(V) by A2;
-A7: L1.x1 = (projRe(l)).x1 by A3,A5,FUNCT_1:72
-      .= Re(l.x) by Def23;
+    reconsider x1=x2,ix1=i_FC*x2 as Element of RealVS(V) by A1;
     reconsider lx=l.x as Element of COMPLEX by COMPLFLD:def 1;
     lx = Re lx+(Im lx)*<i> by COMPLEX1:29;
     then
-A9: i_FC*l.x = 0*Re lx-1*Im lx + (0*Im lx+1*Re lx)*<i>;
-A11: i_FC*x = i_FC*x2 by VECTSP_4:22;
+A7: i_FC*l.x = 0*Re lx-1*Im lx + (0*Im lx+1*Re lx)*<i>;
+A8: i_FC*x = i_FC*x2 by VECTSP_4:22;
     then
-A12: L1.ix1 = (projRe(l)).ix1 by A3,A5,FUNCT_1:72
-      .= Re(l.(i_FC*x)) by A11,Def23
-      .= Re((-Im lx)+Re lx*<i>) by A9,Def12
+A9: L1.ix1 = (projRe(l)).ix1 by A2,A5,FUNCT_1:72
+      .= Re(l.(i_FC*x)) by A8,Def23
+      .= Re((-Im lx)+Re lx*<i>) by A7,Def12
       .= -Im(l.x) by COMPLEX1:28;
+A10: L1.x1 = (projRe(l)).x1 by A2,A5,FUNCT_1:72
+      .= Re(l.x) by Def23;
     thus (L|tcM).x = L.x by FUNCT_1:72
       .= [**(RtoC L1).x2,-(i-shift(RtoC L1)).x2**] by Def28
-      .= [**Re(l.x),-(RtoC L1).(i_FC*x2)**] by A7,Def27
-      .= l.x by A12,COMPLEX1:29;
+      .= [**Re(l.x),-(RtoC L1).(i_FC*x2)**] by A10,Def27
+      .= l.x by A9,COMPLEX1:29;
   end;
   hence L|the carrier of M = l by FUNCT_2:113;
   let e be Vector of V;
   reconsider Le = L.e as Element of COMPLEX by COMPLFLD:def 1;
-  reconsider Ledz = Le*'/|.Le.| as Element of F_Complex
-  by COMPLFLD:def 1;
-  reconsider e1=e,Ledze=Ledz*e as VECTOR of RealVS(V) by A2;
+  reconsider Ledz = Le*'/|.Le.| as Element of F_Complex by COMPLFLD:def 1;
+  reconsider e1=e,Ledze=Ledz*e as VECTOR of RealVS(V) by A1;
   per cases;
   suppose
-A13: |.Le.| <> 0;
-A15: |.Ledz.| = |.Le*'.|/|.|.Le.|.| by COMPLEX1:153
+A11: |.Le.| <> 0;
+A12: |.Ledz.| = |.Le*'.|/|.|.Le.|.| by COMPLEX1:153
       .= |.Le.|/|.Le.| by COMPLEX1:139
-      .= 1 by A13,XCMPLX_1:60;
-A16: p1.Ledze = |.Ledz.|*p.e by Def19
-      .= p.e by A15;
+      .= 1 by A11,XCMPLX_1:60;
     |.Le.|+0*<i> = Ledz*L.e by Th5
       .= L.(Ledz*e) by Def12
       .= [**(RtoC L1).(Ledz*e),-(i-shift(RtoC L1)).(Ledz*e)**] by Def28
       .= L1.Ledze+(-(i-shift(RtoC L1)).(Ledz*e))*<i>;
-    then L1.Ledze = |.L.e.| by COMPLEX1:163;
-    hence thesis by A6,A16;
+    then
+A13: L1.Ledze = |.L.e.| by COMPLEX1:163;
+    p1.Ledze = |.Ledz.|*p.e by Def19
+      .= p.e by A12;
+    hence thesis by A6,A13;
   end;
   suppose
-A17: |.Le.| = 0;
+A14: |.Le.| = 0;
     |.L.e.| = |.[**(RtoC L1).e,-(i-shift(RtoC L1)).e**].| by Def28
       .= |.(RtoC L1).e+(-(i-shift(RtoC L1)).e)*<i>.|;
-    then (RtoC L1).e+(-(i-shift(RtoC L1)).e)*<i> = 0+0*<i>
-    by A17,COMPLEX1:131;
+    then (RtoC L1).e+(-(i-shift(RtoC L1)).e)*<i> = 0+0*<i> by A14,
+    COMPLEX1
+    :131;
     then L1.e1 = 0 by COMPLEX1:163;
-    hence thesis by A6,A17;
+    hence thesis by A6,A14;
   end;
 end;
 
@@ -1758,27 +1773,29 @@ begin :: Addenda
 :: from COMPTRIG, 2006.08.12, A.T.
 
 theorem
-  for x be Real st x > 0 for n be Element of NAT holds
-  (power F_Complex).([**x,0**],n) = [**x to_power n,0**]
+  for x be Real st x > 0 for n be Element of NAT holds (power F_Complex)
+  .([**x,0**],n) = [**x to_power n,0**]
 proof
   let x be Real;
+  defpred P[Element of NAT] means (power F_Complex).([**x,0**],$1) = [**x
+  to_power $1,0**];
   assume
 A1: x > 0;
-  defpred P[Element of NAT] means
-  (power F_Complex).([**x,0**],$1) = [**x to_power $1,0**];
-  (power F_Complex).([**x,0**],0) = 1r+0*<i> by COMPLFLD:10,GROUP_1:def 8
-    .= [**x to_power 0,0**] by POWER:29;
-  then
-A2: P[0];
-A3: now
+A2: now
     let n be Element of NAT;
-    assume P[n];
-    then (power F_Complex).([**x,0**],n+1) = [**x to_power n,0**]*[**x,0**]
-    by GROUP_1:def 8
+    assume
+    P[n];
+    then
+    (power F_Complex).([**x,0**],n+1) = [**x to_power n,0**]*[**x,0**] by
+    GROUP_1:def 8
       .= [**(x to_power n)*(x to_power 1),0**] by POWER:30
       .= [**x to_power (n+1),0**] by A1,POWER:32;
     hence P[n+1];
   end;
-  thus for n be Element of NAT holds P[n] from NAT_1:sch 1(A2,A3);
+  (power F_Complex).([**x,0**],0) = 1r+0*<i> by COMPLFLD:10,GROUP_1:def 8
+    .= [**x to_power 0,0**] by POWER:29;
+  then
+A3: P[0];
+  thus for n be Element of NAT holds P[n] from NAT_1:sch 1(A3,A2);
 end;
 

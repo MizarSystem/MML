@@ -1,0 +1,2676 @@
+:: Small Inductive Dimension of Topological Spaces, Part {II}
+::  by Karol P\c{a}k
+::
+:: Received August 7, 2009
+:: Copyright (c) 2009 Association of Mizar Users
+
+environ
+
+ vocabularies BOOLE, PRE_TOPC, COMPTS_1, SETFAM_1, METRIC_1, SUBSET_1,
+      PCOMPS_1, RELAT_1, ORDINAL2, PROB_1, FUNCT_1, ARYTM, ARYTM_1, RELAT_2,
+      ABSVALUE, FINSET_1, TARSKI, CARD_1, RLVECT_3, CARD_4, WAYBEL23, SQUARE_1,
+      TOPS_1, T_0TOPSP, INT_1, FUNCOP_1, CARD_2, FINSEQ_1, RLVECT_1, FUNCT_4,
+      TOPGEN_4, EUCLID, CONNSP_1, RVSUM_1, FUNCT_3, MCART_1, COMPLEX1,
+      SUPINF_1, TREES_2, PEPIN, METRIZTS, TOPDIM_1, MIDSP_3;
+ notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, RELSET_1, MCART_1,
+      ZFMISC_1, FUNCT_2, CARD_1, CANTOR_1, COMPLEX1, FINSET_1, ORDINAL1,
+      NUMBERS, XXREAL_0, XREAL_0, REAL_1, XXREAL_3, NAT_1, INT_1, SETFAM_1,
+      DOMAIN_1, FUNCOP_1, TOPS_2, STRUCT_0, PRE_TOPC, METRIC_1, PCOMPS_1,
+      CARD_3, PROB_1, KURATO_2, WAYBEL23, TOPS_1, T_0TOPSP, CARD_2, RVSUM_1,
+      FINSEQ_1, FINSEQ_2,
+      EUCLID, BORSUK_1, TOPGEN_4, FUNCT_4, SQUARE_1, CONNSP_1,
+      TOPREAL9, ORDERS_4, METRIZTS, TOPDIM_1;
+ constructors TOPS_2, BORSUK_1, REAL_1, COMPLEX1, CANTOR_1, TOPGEN_4, WAYBEL23,
+      TOPS_1, SQUARE_1, RVSUM_1, BORSUK_3, CARD_2, TSP_1, CONNSP_1, BINOP_2,
+      TOPREAL9, ORDERS_4, XXREAL_3, METRIZTS, TOPDIM_1, FUNCOP_1, FUNCSDOM;
+ registrations REALSET1, PRE_TOPC, PCOMPS_1, NAT_1, XREAL_0, SUBSET_1,
+      STRUCT_0, TOPS_1, XXREAL_0, YELLOW13, CARD_1, XBOOLE_0, FINSET_1,
+      VALUED_0, RELAT_1, FUNCT_1, INT_1, CARD_3, TOPGEN_4, BORSUK_3, MEMBERED,
+      XXREAL_3, METRIZTS, TOPDIM_1, EUCLID;
+ requirements REAL, SUBSET, NUMERALS, ARITHM, BOOLE;
+ definitions STRUCT_0, SQUARE_1, EUCLID, PCOMPS_1, TOPS_1, TARSKI, METRIC_1,
+      XBOOLE_0, TOPS_2, SETFAM_1, SUBSET_1, CARD_3, TOPDIM_1;
+ theorems ABSVALUE, FINSEQ_1, FINSEQ_2, FUNCT_1, FUNCT_2, RVSUM_1, TARSKI,
+      XREAL_0, COMPLEX1, XREAL_1, XXREAL_0, FUNCOP_1, ORDINAL1, RELAT_1,
+      PRE_TOPC, TOPMETR, EUCLID, METRIC_1, XBOOLE_0, TOPS_1, TOPS_2, TOPREAL7,
+      PROB_1, ZFMISC_1, NAT_1, KURATO_2, INT_1, TOPGEN_1, XBOOLE_1, MCART_1,
+      CARD_1, TOPGEN_4, SUBSET_1, TSEP_1, TSP_1, SETFAM_1, CARD_4, YELLOW_9,
+      CANTOR_1, ORDERS_4, BORSUK_1, CARD_3, CARD_2, NECKLACE, BORSUK_3,
+      TOPALG_3, JORDAN2C, TOPREAL9, JORDAN2B, JORDAN, STIRL2_1, FUNCT_4,
+      ENUMSET1, XXREAL_3, CONNSP_1, WELLORD2, METRIZTS, PCOMPS_1, TOPDIM_1,
+      YELLOW14;
+ schemes FUNCT_2, NAT_1, CLASSES1, LMOD_7, BORSUK_2;
+
+begin :: Order of a Family of Subsets of a Set
+
+reserve n for Nat,
+        X for set,
+        Fx,Gx for Subset-Family of X;
+
+definition
+  let X,Fx;
+  attr Fx is finite-order means :Def1:
+  ex n st for Gx st Gx c=Fx & n in card Gx holds meet Gx is empty;
+end;
+
+registration
+  let X;
+  cluster finite-order Subset-Family of X;
+  existence
+  proof
+    reconsider E={} as Subset-Family of X by XBOOLE_1:2;
+    take E,0;
+    let G be Subset-Family of X;
+    thus thesis;
+  end;
+  cluster finite -> finite-order Subset-Family of X;
+  coherence
+  proof
+    let F be Subset-Family of X;
+    assume F is finite;
+    then reconsider f=F as finite Subset-Family of X;
+    take n=card f;
+    let G be Subset-Family of X;
+    assume that
+A1: G c=F and
+A2: n in card G;
+    card G c=card F by A1,CARD_1:27;
+    hence thesis by A2,NAT_1:45;
+  end;
+end;
+
+definition
+  let X,Fx;
+  func order Fx -> ext-real number means :Def2:
+  (for Gx st it+1 in card Gx & Gx c= Fx holds meet Gx is empty)
+    & ex Gx st Gx c= Fx & card Gx = it+1 &
+  (meet Gx is non empty or Gx is empty) if Fx is finite-order
+  otherwise it = +infty;
+  existence
+  proof
+    defpred P[Nat] means
+    for Gx st Gx c=Fx & $1 in card Gx holds meet Gx is empty;
+    now
+      assume Fx is finite-order;
+      then
+A1:   ex n st P[n] by Def1;
+      consider k be Nat such that
+A2:   P[k] and
+A3:   for n be Nat st P[n] holds k<=n from NAT_1:sch 5(A1);
+      take O=k-1;
+      thus for Gx st O+1 in card Gx & Gx c=Fx holds meet Gx is empty by A2;
+      thus ex Gx be Subset-Family of X st Gx c=Fx & card Gx=O+1 &
+      (meet Gx is non empty or Gx is empty)
+      proof
+        per cases;
+        suppose
+A4:       k=0;
+          reconsider E={} as Subset-Family of X by XBOOLE_1:2;
+          take E;
+          thus E c=Fx & card E=O+1 & (meet E is non empty or E is empty) by A4,
+          XBOOLE_1:2;
+        end;
+        suppose k>0;
+          then reconsider k1=k-1 as Element of NAT by NAT_1:20;
+          assume
+A5:       for Gx st Gx c=Fx & card Gx=O+1 holds meet Gx
+          is empty & Gx is non empty;
+          P[k1]
+          proof
+A6:         card card(k1+1)=card(k1+1);
+            then
+A7:         card(k1+1)=k by CARD_1:71;
+            let Gx such that
+A8:         Gx c=Fx and
+A9:         k1 in card Gx;
+            card card k1=card k1;
+            then card k1=k1 by CARD_1:71;
+            then nextcard k1=card k by A6,NAT_1:43;
+            then card k c=card Gx by A9,CARD_3:107;
+            then consider f be Function such that
+A10:        f is one-to-one & dom f=k and
+A11:        rng f c=Gx by CARD_1:26;
+            reconsider R=rng f as Subset-Family of X by A11,XBOOLE_1:1;
+            k,R are_equipotent by A10,WELLORD2:def 4;
+            then
+A12:        k=card R by A7,CARD_1:21;
+            then
+A13:        R is non empty by A6;
+            R c=Fx by A8,A11,XBOOLE_1:1;
+            then meet R is empty by A5,A12;
+            then meet Gx c={} by A11,A13,SETFAM_1:7;
+            hence thesis;
+          end;
+          then k1+1<=k1 by A3;
+          hence contradiction by NAT_1:13;
+        end;
+      end;
+    end;
+    hence thesis;
+  end;
+  uniqueness
+  proof
+    let O1,O2 be ext-real number;
+    now
+      assume Fx is finite-order;
+      assume
+A14:  for Gx st O1+1 in card Gx & Gx c=Fx holds meet Gx is empty;
+      given G1 be Subset-Family of X such that
+A15:  G1 c=Fx and
+A16:  card G1=O1+1 and
+A17:  meet G1 is non empty or G1 is empty;
+      assume
+A18:  for Gx st O2+1 in card Gx & Gx c=Fx holds meet
+      Gx is empty;
+      given G2 be Subset-Family of X such that
+A19:  G2 c=Fx and
+A20:  card G2=O2+1 and
+A21:  meet G2 is non empty or G2 is empty;
+      not card G2 in card G1 by A15,A17,A18,A20;
+      then
+A22:  card G1 c=card G2 by CARD_1:13;
+      not card G1 in card G2 by A14,A16,A19,A21;
+      then card G1=card G2 by A22,CARD_1:13;
+      hence O1=O2 by A16,A20,XXREAL_3:11;
+    end;
+    hence thesis;
+  end;
+  consistency;
+end;
+
+registration
+  let X;
+  let F be finite-order Subset-Family of X;
+  cluster order F + 1 -> natural;
+  coherence
+  proof
+    consider G be Subset-Family of X such that
+A1: G c=F and
+A2: card G=order F+1 and
+A3: meet G is non empty or G is empty by Def2;
+      consider n such that
+A4:   for H be Subset-Family of X st H c=F & n in card H holds meet H is
+      empty by Def1;
+      card n=card card n;
+      then
+A5:   card n=n by CARD_1:71;
+      then not card n in card G by A1,A3,A4;
+      then card G c=n by A5,CARD_1:14;
+      then reconsider G as finite Subset-Family of X;
+      order F+1=card G-1+1 by A2;
+      hence thesis;
+  end;
+  cluster order F -> integer;
+  coherence
+  proof
+    reconsider O1=order F+1 as natural number;
+    order F+1=O1-1+1;
+    hence thesis by XXREAL_3:11;
+  end;
+end;
+
+theorem Th1:
+  order Fx <= n implies Fx is finite-order
+proof
+  assume order Fx<=n;
+  then order Fx<>+infty by XXREAL_0:4;
+  hence thesis by Def2;
+end;
+
+theorem
+  order Fx <= n implies
+    for Gx st Gx c= Fx & n+1 in card Gx holds meet Gx is empty
+proof
+  card(n+1)=card card(n+1);
+  then
+A1: card(n+1)=n+1 by CARD_1:71;
+  card(n+2)=card card(n+2);
+  then
+A2: card(n+2)=n+2 by CARD_1:71;
+  assume
+A3: order Fx<=n;
+  then reconsider f=Fx as finite-order Subset-Family of X by Th1;
+  order f+1<=n+1 by A3,XREAL_1:8;
+  then order f+1<n+1+1 by NAT_1:13;
+  then
+A4: order f+1 in n+2 by NAT_1:45;
+  let Gx such that
+A5: Gx c=Fx and
+A6: n+1 in card Gx;
+  nextcard(n+1)c=card Gx by A6,CARD_3:107;
+  then card(n+1+1)c=card Gx by A1,NAT_1:43;
+  hence thesis by A5,A2,A4,Def2;
+end;
+
+theorem Th3:
+  (for G be finite Subset-Family of X st G c=Fx & n+1<card G holds
+     meet G is empty) implies order Fx <= n
+proof
+  set n1=n+1;
+  assume
+A1: for G be finite Subset-Family of X st G c=Fx & n+1<card G holds
+  meet G is empty;
+A2: now card card(n1+1)=card(n1+1);
+    then
+A3: card(n1+1)=n1+1 by CARD_1:71;
+    let Gx such that
+A4: Gx c=Fx and
+A5: n1 in card Gx;
+    card card n1=card n1;
+    then card n1=n1 by CARD_1:71;
+    then nextcard n1=card(n1+1) by NAT_1:43;
+    then card(n1+1)c=card Gx by A5,CARD_3:107;
+    then consider f be Function such that
+A6: f is one-to-one & dom f=(n1+1) and
+A7: rng f c=Gx by CARD_1:26;
+    reconsider R=rng f as Subset-Family of X by A7,XBOOLE_1:1;
+    n1+1,R are_equipotent by A6,WELLORD2:def 4;
+    then
+A8: n1+1=card R by A3,CARD_1:21;
+    then reconsider R as finite Subset-Family of X;
+    n1<card R by A8,NAT_1:13;
+    then
+A9: meet R is empty by A1,A4,A7,XBOOLE_1:1;
+    R is non empty by A8;
+    then meet Gx c={} by A7,A9,SETFAM_1:7;
+    hence meet Gx is empty;
+  end;
+  then reconsider f=Fx as finite-order Subset-Family of X by Def1;
+  consider Gx such that
+A10: Gx c=f and
+A11: card Gx=order f+1 and
+A12: meet Gx is non empty or Gx is empty by Def2;
+  assume order Fx>n;
+  then order f+1>n1 by XREAL_1:8;
+  then n1 in card Gx by A11,NAT_1:45;
+  hence thesis by A2,A10,A12;
+end;
+
+begin :: Basic Properties for n-dimensional Topological Spaces
+
+reserve TM for metrizable TopSpace,
+        TM1,TM2 for finite-ind second-countable metrizable TopSpace,
+        A,B,L,H for Subset of TM,
+        U,W for open Subset of TM,
+        p for Point of TM,
+        F for Subset-Family of TM,
+        F,G for finite Subset-Family of TM,
+        I for Integer;
+
+Lm1: for T be TopSpace,Af be finite-ind Subset of T holds ind Af+1 is Nat
+proof
+  let T be TopSpace,Af be finite-ind Subset of T;
+  Af in (Seq_of_ind T).(1+ind Af) by TOPDIM_1:def 5;
+  then (ind Af)+1 in dom(Seq_of_ind T) by FUNCT_1:def 4;
+  hence thesis;
+end;
+
+Lm2: for T be TopSpace,g be SetSequence of T st for i be Nat holds g.i is
+finite-ind & ind g.i<=n & g.i is F_sigma ex G be Subset-Family of T st
+G is closed & G is finite-ind & ind G<=n & G is countable &
+Union g=union G
+proof
+  let T be TopSpace;
+  let g be SetSequence of T such that
+A1: for i be Nat holds g.i is finite-ind & ind g.i<=n & g.i is F_sigma;
+  defpred F[set,set] means
+  for n be Nat,F be Subset-Family of T st n=$1 & F=$2 holds union F=g.n & F is
+  closed countable;
+A2: for x be set st x in NAT ex y be set st y in bool bool the carrier of T &
+  F[x,y]
+  proof
+    let x be set;
+    assume x in NAT;
+    then reconsider n=x as Element of NAT;
+    g.n is F_sigma by A1;
+    then consider y be closed countable Subset-Family of T such that
+A3: g.n=union y by TOPGEN_4:def 6;
+    take y;
+    thus thesis by A3;
+  end;
+  consider f be SetSequence of bool the carrier of T such that
+A4: for x be set st x in NAT holds F[x,f.x] from FUNCT_2:sch 1(A2);
+  take F=Union f;
+  thus F is closed
+  proof
+    let A be Subset of T;
+    assume A in F;
+    then consider n be Element of NAT such that
+A5: A in f.n by PROB_1:25;
+    f.n is closed by A4;
+    hence thesis by A5,TOPS_2:def 2;
+  end;
+  for A be Subset of T st A in F holds A is finite-ind & ind A<=n
+  proof
+    let A be Subset of T;
+    assume A in F;
+    then consider i be Element of NAT such that
+A6: A in f.i by PROB_1:25;
+    union(f.i)=g.i by A4;
+    then
+A7: A c=g.i by A6,ZFMISC_1:92;
+A8: ind g.i<=n by A1;
+A9: g.i is finite-ind by A1;
+    then ind A<=ind g.i by A7,TOPDIM_1:19;
+    hence thesis by A7,A8,A9,TOPDIM_1:19,XXREAL_0:2;
+  end;
+  hence F is finite-ind & ind F<=n by TOPDIM_1:11;
+  for x be set st x in dom f holds f.x is countable by A4;
+  hence F is countable by CARD_4:61;
+  thus Union g c=union F
+  proof
+    let x be set;
+    assume x in Union g;
+    then consider i be Element of NAT such that
+A10: x in g.i by PROB_1:25;
+    union(f.i)=g.i by A4;
+    then consider y be set such that
+A11: x in y and
+A12: y in f.i by A10,TARSKI:def 4;
+    y in F by A12,PROB_1:25;
+    hence thesis by A11,TARSKI:def 4;
+  end;
+  thus union F c=Union g
+  proof
+    let x be set;
+    assume x in union F;
+    then consider y be set such that
+A13: x in y and
+A14: y in F by TARSKI:def 4;
+    consider i be Element of NAT such that
+A15: y in f.i by A14,PROB_1:25;
+    union(f.i)=g.i by A4;
+    then x in g.i by A13,A15,TARSKI:def 4;
+    hence thesis by PROB_1:25;
+  end;
+end;
+
+Lm3: for T be metrizable TopSpace st T is second-countable holds((ex F be
+Subset-Family of T st F is closed & F is Cover of T & F is countable & F is
+finite-ind & ind F<=n) implies T is finite-ind & ind T<=n) &
+(T is finite-ind & ind T<=n implies ex A,B be Subset of T st[#]T=A\/B
+& A misses B & ind A<=n-1 & ind B<=0)
+proof
+  defpred R[Nat] means
+  for T be metrizable TopSpace st T is second-countable & T is
+  finite-ind & ind T<=$1ex A,B be Subset of T st[#]T=A\/B & A misses B &
+  ind A<=$1-1 & ind B<=0;
+  defpred P[Nat] means
+  for T be metrizable TopSpace st T is second-countable & ex F be
+  Subset-Family of T st F is closed & F is Cover of T & F is countable & F is
+  finite-ind & ind F<=$1 holds T is finite-ind & ind T<=$1;
+A1: for n st P[n] holds R[n+1]
+  proof
+    defpred P1[set] means not contradiction;
+    let n such that
+A2: P[n];
+    let T be metrizable TopSpace such that
+A3: T is second-countable and
+A4: T is finite-ind and
+A5: ind T<=n+1;
+    consider B be Basis of T such that
+A6: for A be Subset of T st A in B holds Fr A is finite-ind & ind
+    Fr A<=n+1-1 by A4,A5,TOPDIM_1:31;
+    deffunc F(Subset of T)=Fr$1;
+    consider uB be Basis of T such that
+A7: uB c=B and
+A8: uB is countable by A3,METRIZTS:24;
+    defpred P[set] means $1 in uB & P1[$1];
+    consider S be Subset-Family of T such that
+A9: S={F(b) where b is Subset of T:P[b]} from LMOD_7:sch 5;
+    set uS=union S;
+    set TS=T|uS;
+A10: [#]TS=uS by PRE_TOPC:def 10;
+    then reconsider S'=S as Subset-Family of TS by ZFMISC_1:100;
+A11: T|(uS`) is second-countable by A3;
+    for a be Subset of TS st a in S' holds a is finite-ind & ind a<=n
+    proof
+      let a be Subset of TS;
+      assume a in S';
+      then consider b be Subset of T such that
+A12:  a=F(b) and
+A13:  P[b] by A9;
+      Fr b is finite-ind & ind Fr b<=n+1-1 by A6,A7,A13;
+      hence thesis by A12,TOPDIM_1:21;
+    end;
+    then
+A14: S' is finite-ind & ind S'<=n by TOPDIM_1:11;
+A15: for p be Point of T,U be open Subset of T st p in U ex W be open Subset
+    of T st p in W & W c=U & uS`misses Fr W
+    proof
+      let p be Point of T,U be open Subset of T;
+      assume p in U;
+      then consider a be Subset of T such that
+A16:  a in uB and
+A17:  p in a & a c=U by YELLOW_9:31;
+      uB c=the topology of T by CANTOR_1:def 2;
+      then reconsider a as open Subset of T by A16,PRE_TOPC:def 5;
+      take a;
+      F(a) in S by A9,A16;
+      then F(a)c=uS by ZFMISC_1:92;
+      hence thesis by A17,SUBSET_1:44;
+    end;
+    take A=uS,B=uS`;
+A18: card{F(b) where b is Subset of T:b in uB & P1[b]}c=card uB from
+    BORSUK_2:sch 1;
+    card uB c=omega by A8,CARD_3:def 15;
+    then card S c=omega by A9,A18,XBOOLE_1:1;
+    then
+A19: S' is countable by CARD_3:def 15;
+A20: S' is closed
+    proof
+      let a be Subset of TS;
+      assume a in S';
+      then ex b be Subset of T st a=F(b) & P[b] by A9;
+      hence thesis by TSEP_1:8;
+    end;
+    S' is Cover of TS by A10,SETFAM_1:def 12;
+    then ind TS<=n by A2,A3,A14,A19,A20;
+    hence thesis by A4,A11,A15,TOPDIM_1:17,38,PRE_TOPC:18,SUBSET_1:43;
+  end;
+A21: P[0] by TOPDIM_1:36;
+A22: for n st P[n] holds P[n+1]
+  proof
+    let n such that
+A23: P[n];
+    let T be metrizable TopSpace such that
+A24: T is second-countable;
+    given F be Subset-Family of T such that
+A25: F is closed and
+A26: F is Cover of T and
+A27: F is countable and
+A28: F is finite-ind & ind F<=n+1;
+    per cases;
+    suppose T is empty;
+      hence thesis by TOPDIM_1:6;
+    end;
+    suppose
+A29:  T is non empty;
+      set cT=the carrier of T;
+A30:  F is non empty by A26,A29,SETFAM_1:60,ZFMISC_1:2;
+      then consider f be Function of NAT,F such that
+A31:  rng f=F by A27,CARD_3:146;
+      dom f=NAT by A30,FUNCT_2:def 1;
+      then reconsider f as SetSequence of T by A31,FUNCT_2:4;
+      consider g be SetSequence of T such that
+A32:  union rng f=union rng g and
+A33:  for i,j be Nat st i<>j holds g.i misses g.j and
+A34:  for n ex fn be finite Subset-Family of T st fn={f.i where i is
+      Element of NAT:i<n} & g.n=f.n\union fn by TOPDIM_1:33;
+      defpred Q[set,set] means
+      for i be Nat,A,B be Subset of T st$1=i & $2=[A,B] holds A\/B=g.i & A is
+      finite-ind & B is finite-ind & ind A<=n & ind B<=0;
+A35:  for x be set st x in NAT ex y be set st y in [:bool cT,bool cT:] &
+      Q[x,y]
+      proof
+        let x be set;
+        assume x in NAT;
+        then reconsider N=x as Element of NAT;
+        reconsider gN=g.N as Subset of T;
+        dom f=NAT by FUNCT_2:def 1;
+        then
+A36:    f.N in F by A31,FUNCT_1:def 5;
+        then
+A37:    f.N is finite-ind by A28,TOPDIM_1:4;
+        ex fn be finite Subset-Family of T st
+        fn={f.i where i is Element of NAT:i< N} & g.N=f.N\union fn by A34;
+        then
+A38:    g.N c=f.N by XBOOLE_1:36;
+        then
+A39:    g.N is finite-ind by A37,TOPDIM_1:19;
+A40:    ind g.N<=ind f.N by A37,A38,TOPDIM_1:19;
+        ind f.N<=n+1 by A28,A36,TOPDIM_1:11;
+        then
+A41:    ind(g.N)<=n+1 by A40,XXREAL_0:2;
+        ind(T|gN)=ind gN by A39,TOPDIM_1:17;
+        then consider A,B be Subset of T|gN such that
+A42:    A\/B=[#](T|gN) and
+        A misses B and
+A43:    ind A<=n+1-1 & ind B<=0 by A1,A23,A24,A39,A41;
+A44:    A is finite-ind by A39;
+        [#](T|gN)=gN by PRE_TOPC:def 10;
+        then reconsider A'=A,B'=B as Subset of T by XBOOLE_1:1;
+        B is finite-ind by A39;
+        then
+A45:    B' is finite-ind & ind B'=ind B by TOPDIM_1:22;
+        take y=[A',B'];
+        thus y in [:bool cT,bool cT:];
+        let i be Nat,a,b be Subset of T such that
+A46:    x=i and
+A47:    y=[a,b];
+A48:    a=A' by A47,ZFMISC_1:33;
+        A'\/B'=g.i by A42,A46,PRE_TOPC:def 10;
+        hence thesis by A43,A44,A45,A47,A48,TOPDIM_1:22,ZFMISC_1:33;
+      end;
+      consider P12 be Function of NAT,[:bool cT,bool cT:] such that
+A49:  for x be set st x in NAT holds Q[x,P12.x] from FUNCT_2:sch 1(A35);
+      set P1=pr1 P12,P2=pr2 P12;
+      set U1=Union P1,U2=Union P2;
+      set Tu1=T|U1,Tu2=T|U2;
+      reconsider Tu1 as metrizable TopSpace;
+A50:  dom P1=NAT by FUNCT_2:def 1;
+A51:  [#]Tu1=U1 by PRE_TOPC:def 10;
+      then reconsider P1 as SetSequence of Tu1 by A50,FUNCT_2:4,ZFMISC_1:100;
+      reconsider Tu2 as metrizable TopSpace;
+A52:  dom P2=NAT by FUNCT_2:def 1;
+A53:  for i be Nat holds g.i is F_sigma
+      proof
+        let i be Nat;
+        consider fi be finite Subset-Family of T such that
+A54:    fi={f.j where j is Element of NAT:j<i} and
+A55:    g.i=f.i\union fi by A34;
+        fi is closed
+        proof
+          let A be Subset of T;
+          assume A in fi;
+          then
+A56:      ex j be Element of NAT st A=f.j & j<i by A54;
+          dom f=NAT by FUNCT_2:def 1;
+          then A in F by A31,A56,FUNCT_1:def 5;
+          hence thesis by A25,TOPS_2:def 2;
+        end;
+        then
+A57:    union fi is closed by TOPS_2:28;
+        dom f=NAT & i in NAT by FUNCT_2:def 1,ORDINAL1:def 13;
+        then f.i in F by A31,FUNCT_1:def 5;
+        then f.i is closed by A25,TOPS_2:def 2;
+        then
+A58:    f.i is F_sigma by A29,TOPGEN_4:45;
+        (union fi)`/\f.i=([#]T/\f.i)\(union fi) by XBOOLE_1:49
+          .=g.i by A55,XBOOLE_1:28;
+        hence thesis by A29,A57,A58,TOPGEN_4:41;
+      end;
+      for i be Nat holds P1.i is finite-ind & ind P1.i<=n & P1.i is
+      F_sigma
+      proof
+        let i be Nat;
+        consider y1,y2 be set such that
+A59:    y1 in bool cT and
+A60:    y2 in bool cT and
+A61:    P12.i=[y1,y2] by ZFMISC_1:def 2;
+        reconsider y1 as Subset of T by A59;
+A62:    i in NAT by ORDINAL1:def 13; then
+A63:    y1 is finite-ind & ind y1<=n by A49,A60,A61;
+        [y1,y2]`1=y1 & dom P12=NAT by FUNCT_2:def 1,MCART_1:def 1; then
+A64:    y1=P1.i by A61,A62,MCART_1:def 12;
+A65:    U1/\g.i c=P1.i
+        proof
+          let x be set;
+          assume
+A66:      x in U1/\g.i;
+          then
+A67:      x in g.i by XBOOLE_0:def 4;
+          x in U1 by A66,XBOOLE_0:def 4;
+          then consider j be Element of NAT such that
+A68:      x in P1.j by PROB_1:25;
+          consider z1,z2 be set such that
+A69:      z1 in bool cT & z2 in bool cT and
+A70:      P12.j=[z1,z2] by ZFMISC_1:def 2;
+          [z1,z2]`1=z1 & dom P12=NAT by FUNCT_2:def 1,MCART_1:def 1;
+          then
+A71:      z1=P1.j by A70,MCART_1:def 12;
+          z1\/z2=g.j by A49,A69,A70;
+          then x in g.j by A68,A71,XBOOLE_0:def 3;
+          then g.i meets g.j by A67,XBOOLE_0:3;
+          hence thesis by A33,A68;
+        end;
+        y1\/y2=g.i by A49,A60,A61,A62;
+        then P1.i c=g.i by A64,XBOOLE_1:7;
+        then P1.i c=U1/\g.i by A51,XBOOLE_1:19;
+        then P1.i=U1/\g.i & g.i is F_sigma by A53,A65,XBOOLE_0:def 10;
+        hence thesis by A63,A64,TOPDIM_1:21,METRIZTS:10;
+      end;
+      then consider G1 be Subset-Family of Tu1 such that
+A72:  G1 is closed & G1 is finite-ind & ind G1<=n & G1 is countable and
+A73:  Union P1=union G1 by Lm2;
+A74:  G1 is Cover of Tu1 by A51,A73,SETFAM_1:def 12;
+      then
+A75:  Tu1 is finite-ind by A23,A24,A72;
+      then
+A76:  U1 is finite-ind by TOPDIM_1:18;
+A77:  [#]Tu2=U2 by PRE_TOPC:def 10;
+      then reconsider P2 as SetSequence of Tu2 by A52,FUNCT_2:4,ZFMISC_1:100;
+      for i be Nat holds P2.i is finite-ind & ind P2.i<=0 & P2.i is
+      F_sigma
+      proof
+        let i be Nat;
+        consider y1,y2 be set such that
+A78:    y1 in bool cT and
+A79:    y2 in bool cT and
+A80:    P12.i=[y1,y2] by ZFMISC_1:def 2;
+        reconsider y2 as Subset of T by A79;
+A81:    i in NAT by ORDINAL1:def 13; then
+A82:    y2 is finite-ind & ind y2<=0 by A49,A78,A80;
+        [y1,y2]`2=y2 & dom P12=NAT by FUNCT_2:def 1,MCART_1:def 2;
+        then
+A83:    y2=P2.i by A80,A81,MCART_1:def 13;
+A84:    U2/\g.i c=P2.i
+        proof
+          let x be set;
+          assume
+A85:      x in U2/\g.i; then
+A86:      x in g.i by XBOOLE_0:def 4;
+          x in U2 by A85,XBOOLE_0:def 4;
+          then consider j be Element of NAT such that
+A87:      x in P2.j by PROB_1:25;
+          consider z1,z2 be set such that
+A88:      z1 in bool cT & z2 in bool cT and
+A89:      P12.j=[z1,z2] by ZFMISC_1:def 2;
+          [z1,z2]`2=z2 & dom P12=NAT by FUNCT_2:def 1,MCART_1:def 2;
+          then
+A90:      z2=P2.j by A89,MCART_1:def 13;
+          z1\/z2=g.j by A49,A88,A89;
+          then x in g.j by A87,A90,XBOOLE_0:def 3;
+          then g.i meets g.j by A86,XBOOLE_0:3;
+          hence thesis by A33,A87;
+        end;
+        y1\/y2=g.i by A49,A78,A80,A81;
+        then P2.i c=g.i by A83,XBOOLE_1:7;
+        then P2.i c=U2/\g.i by A77,XBOOLE_1:19;
+        then P2.i=U2/\g.i & g.i is F_sigma by A53,A84,XBOOLE_0:def 10;
+        hence thesis by A82,A83,TOPDIM_1:21,METRIZTS:10;
+      end;
+      then consider G2 be Subset-Family of Tu2 such that
+A91:  G2 is closed & G2 is finite-ind & ind G2<=0 & G2 is countable and
+A92:  Union P2=union G2 by Lm2;
+A93:  G2 is Cover of Tu2 by A77,A92,SETFAM_1:def 12;
+      then Tu2 is finite-ind by A23,A24,A91;
+      then
+A94:  U2 is finite-ind by TOPDIM_1:18;
+      ind Tu1<=n by A23,A24,A72,A74;
+      then ind U1<=n by A76,TOPDIM_1:17;
+      then
+A95:  ind U1+1<=n+1 by XREAL_1:8;
+A96:  U1 is finite-ind by A75,TOPDIM_1:18;
+      [#]T c=U1\/U2
+      proof
+        let x be set;
+A97:    dom P12=NAT by FUNCT_2:def 1;
+        assume x in [#]T;
+        then x in Union g by A26,A31,A32,SETFAM_1:60;
+        then consider i be Element of NAT such that
+A98:    x in g.i by PROB_1:25;
+        consider y1,y2 be set such that
+A99:    y1 in bool cT & y2 in bool cT and
+A100:   P12.i=[y1,y2] by ZFMISC_1:def 2;
+        [y1,y2]`1=y1 by MCART_1:def 1;
+        then
+A101:   y1=P1.i by A97,A100,MCART_1:def 12;
+        [y1,y2]`2=y2 by MCART_1:def 2;
+        then
+A102:   y2=P2.i by A97,A100,MCART_1:def 13;
+        y1\/y2=g.i by A49,A99,A100;
+        then x in P1.i or x in P2.i by A98,A101,A102,XBOOLE_0:def 3;
+        then x in U1 or x in U2 by PROB_1:25;
+        hence thesis by XBOOLE_0:def 3;
+      end;
+      then
+A103: U1\/U2=[#]T by XBOOLE_0:def 10;
+      ind Tu2<=0 by TOPDIM_1:36,A24,A91,A93;
+      then
+A104: ind U2<=0 by A94,TOPDIM_1:17;
+      T|U2 is second-countable by A24;
+      then U1\/U2 is finite-ind & ind(U1\/U2)<=ind U1+1 by A94,A104,
+      A96,TOPDIM_1:40;
+      hence thesis by A103,A95,TOPDIM_1:def 4,XXREAL_0:2;
+    end;
+  end;
+A105: for n holds P[n] from NAT_1:sch 2(A21,A22);
+  let T be metrizable TopSpace such that
+A106: T is second-countable;
+  thus(ex F be Subset-Family of T st F is closed & F is Cover of T & F is
+  countable & F is finite-ind & ind F<=n) implies T is finite-ind &
+  ind T<=n by A105,A106;
+  assume that
+A107: T is finite-ind and
+A108: ind T<=n;
+  per cases;
+  suppose
+A109: n=0;
+    take A={}T,B=[#]T;
+    thus thesis by A108,A109,TOPDIM_1:6,XBOOLE_1:65;
+  end;
+  suppose n>0;
+    then reconsider n1=n-1 as Element of NAT by NAT_1:20;
+    (P[n1]) & n1+1=n by A105;
+    hence thesis by A1,A106,A107,A108;
+  end;
+end;
+
+::Teoria wymiaru Th 1.5.3
+
+theorem
+  for TM st TM is second-countable &
+    ex F st F is closed & F is Cover of TM & F is countable &
+       F is finite-ind & ind F <= n
+  holds TM is finite-ind & ind TM <= n by Lm3;
+
+::Teoria wymiaru Th 1.5.5
+
+theorem Th5:
+  for A,B be finite-ind Subset of TM st A is closed &
+  TM|(A\/B) is second-countable & ind A<=I & ind B<=I holds
+  ind(A\/B)<=I & A\/B is finite-ind
+proof
+  let A,B be finite-ind Subset of TM such that
+A1: A is closed and
+A2: TM|(A\/B) is second-countable and
+A3: ind A<=I and
+A4: ind B<=I;
+  -1<=ind A by TOPDIM_1:5; then
+A5: -1<=I by A3,XXREAL_0:2;
+  per cases;
+  suppose A\/B is empty;
+    hence thesis by A5,TOPDIM_1:6;
+  end;
+  suppose
+A6: A\/B is non empty; then
+A7: TM is non empty;
+    A is non empty or B is non empty by A6;
+    then 0<=ind A or 0<=ind B by A7;
+    then
+A8: I in NAT by A3,A4,INT_1:16;
+    reconsider AB=A\/B as Subset of TM;
+    set Tab=TM|AB;
+A9: [#]Tab=AB by PRE_TOPC:def 10;
+    then reconsider a=A,b=B as Subset of Tab by XBOOLE_1:7;
+    A/\[#]Tab=a by XBOOLE_1:28;
+    then
+A10: a is closed by A1,TSP_1:def 2;
+    then consider F be closed countable Subset-Family of Tab such that
+A11: a`=union F by TOPGEN_4:def 6;
+    reconsider a,b as finite-ind Subset of Tab by TOPDIM_1:21;
+    reconsider AA={a} as Subset-Family of Tab;
+    union(AA\/F)=union AA\/union F by ZFMISC_1:96
+      .=a\/a` by A11,ZFMISC_1:31
+      .=[#]Tab by PRE_TOPC:18;
+    then
+A12: AA\/F is Cover of Tab by SETFAM_1:def 12;
+    AA is closed
+    proof
+      let D be Subset of Tab;
+      assume D in AA;
+      hence thesis by A10,TARSKI:def 1;
+    end;
+    then
+A13: AA\/F is closed by TOPS_2:23;
+    for D be Subset of Tab st D in AA\/F holds D is finite-ind&ind D<=I
+    proof
+      let D be Subset of Tab such that
+A14:  D in AA\/F;
+      per cases by A14,XBOOLE_0:def 3;
+      suppose D in AA;
+        then D=a by TARSKI:def 1;
+        hence thesis by A3,TOPDIM_1:21;
+      end;
+      suppose
+A15:    D in F;
+        a`=b\a by A9,XBOOLE_1:40;
+        then
+A16:    a`c=b by XBOOLE_1:36;
+        D c=a` by A11,A15,ZFMISC_1:92;
+        then
+A17:    D c=b by A16,XBOOLE_1:1;
+        then ind b=ind B & ind D<=ind b by TOPDIM_1:19,21;
+        hence thesis by A4,A17,TOPDIM_1:19,XXREAL_0:2;
+      end;
+    end;
+    then
+A18: AA\/F is finite-ind & ind(AA\/F)<=I by A5,TOPDIM_1:11;
+A19: AA\/F is countable by CARD_3:128;
+    then Tab is finite-ind by A2,A8,A12,A13,A18,Lm3;
+    then
+A20: A\/B is finite-ind by TOPDIM_1:18;
+    ind Tab<=I by A2,A8,A12,A13,A18,A19,Lm3;
+    hence thesis by A20,TOPDIM_1:17;
+  end;
+end;
+
+::Teoria wymiaru Th 1.5.7 "=>"
+
+theorem
+  for TM st TM is second-countable & TM is finite-ind & ind TM<=n
+    ex A,B st [#]TM = A\/B & A misses B & ind A <= n-1 & ind B <= 0 by Lm3;
+
+::Teoria wymiaru Th 1.5.8 "=>"
+
+theorem Th7:
+  for TM st TM is second-countable finite-ind & ind TM <= I
+  ex F st F is Cover of TM & F is finite-ind & ind F <= 0 & card F <= I+1
+         & for A,B st A in F & B in F & A meets B holds A = B
+proof
+  defpred P[Nat] means
+  for TM st TM is second-countable finite-ind & ind TM<=$1-1
+  ex F be finite Subset-Family of TM st
+        F is Cover of TM &  F is finite-ind &
+        ind F<=0 & card F<=$1 & for A,B be Subset of TM st
+        A in F & B in F & A meets B holds A=B;
+  let TM such that
+A1: TM is second-countable finite-ind and
+A2: ind TM<=I;
+  -1<=ind[#]TM by A1,TOPDIM_1:5;
+  then -1<=I by A2,XXREAL_0:2;
+  then -1+1<=I+1 by XREAL_1:8;
+  then reconsider i1=I+1 as Element of NAT by INT_1:16;
+A3: for n st P[n] holds P[n+1]
+  proof
+    let n such that
+A4: P[n];
+    let TM such that
+A5: TM is second-countable and
+A6: TM is finite-ind and
+A7: ind TM<=n+1-1;
+    consider A,B be Subset of TM such that
+A8: [#]TM=A\/B and
+A9: A misses B and
+A10: ind A<=n-1 and
+A11: ind B<=0 by A5,A6,A7,Lm3;
+    set BB={B};
+    for b be Subset of TM st b in BB holds b is finite-ind & ind b<=0
+    by A6,A11,TARSKI:def 1;
+    then
+A12: BB is finite-ind & ind BB<=0 by TOPDIM_1:11;
+    set TA=TM|A;
+    ind TA=ind A by A6,TOPDIM_1:17;
+    then consider F be finite Subset-Family of TA such that
+A13: F is Cover of TA and
+A14: F is finite-ind and
+A15: ind F<=0 and
+A16: card F<=n and
+A17: for A,B be Subset of TA st A in F & B in F & A meets B holds A=B by A4
+    ,A5,A6,A10;
+    [#]TA c=[#]TM by PRE_TOPC:def 9;
+    then bool[#]TA c=bool[#]TM by ZFMISC_1:79;
+    then reconsider F'=F as finite Subset-Family of TM by XBOOLE_1:1;
+    take G=F'\/BB;
+A18: union F'=[#]TA by A13,SETFAM_1:60
+      .=A by PRE_TOPC:def 10;
+    then union G=A\/union BB by ZFMISC_1:96
+      .=[#]TM by A8,ZFMISC_1:31;
+    hence G is Cover of TM by SETFAM_1:def 12;
+    F' is finite-ind & ind F'=ind F by A14,TOPDIM_1:29;
+    hence G is finite-ind & ind G<=0 by A12,A15,TOPDIM_1:13;
+    card BB=1 by CARD_1:50;
+    then
+A19: card G<=card F'+1 by CARD_2:62;
+    card F'+1<=n+1 by A16,XREAL_1:8;
+    hence card G<=n+1 by A19,XXREAL_0:2;
+    let a,b be Subset of TM such that
+A20: a in G & b in G and
+A21: a meets b;
+    per cases by A20,XBOOLE_0:def 3;
+    suppose a in F & b in F;
+      hence thesis by A17,A21;
+    end;
+    suppose
+A22:  a in F & b in BB;
+      then b=B by TARSKI:def 1;
+      hence thesis by A9,A18,A21,A22,XBOOLE_1:63,ZFMISC_1:92;
+    end;
+    suppose
+A23:  a in BB & b in F;
+      then a=B by TARSKI:def 1;
+      hence thesis by A9,A18,A21,A23,XBOOLE_1:63,ZFMISC_1:92;
+    end;
+    suppose
+A24:  a in BB & b in BB;
+      then a=B by TARSKI:def 1;
+      hence thesis by A24,TARSKI:def 1;
+    end;
+  end;
+A25: P[0]
+  proof
+    let TM such that
+    TM is second-countable and
+A26: TM is finite-ind and
+A27: ind TM<=0-1;
+    ind[#]TM>=-1 by A26,TOPDIM_1:5;
+    then ind[#]TM=-1 by A27,XXREAL_0:1;
+    then
+A28: [#]TM={}TM by A26,TOPDIM_1:6;
+    reconsider F={} as empty Subset-Family of TM by TOPGEN_4:18;
+    take F;
+    F c={{}TM} by XBOOLE_1:2;
+    hence thesis by A28,TOPDIM_1:10,SETFAM_1:def 12,ZFMISC_1:2;
+  end;
+  for n holds P[n] from NAT_1:sch 2(A25,A3);
+  then P[i1];
+  hence thesis by A1,A2;
+end;
+
+::Teoria wymiaru Th 1.5.8 "<="
+
+theorem Th8:
+  for TM st TM is second-countable &
+    ex F st F is Cover of TM & F is finite-ind & ind F<=0 & card F <= I+1
+  holds TM is finite-ind & ind TM <= I
+proof
+  defpred P[Nat] means
+  for TM st TM is second-countable & ex F be finite Subset-Family of TM st F
+  is Cover of TM & F is finite-ind & ind F<=0 & card F<=$1 holds TM is
+  finite-ind & ind TM<=$1-1;
+  let TM  such that
+A1: TM is second-countable;
+  given F be finite Subset-Family of TM such that
+A2: F is Cover of TM & F is finite-ind & ind F<=0 and
+A3: card F<=I+1;
+  reconsider i1=I+1 as Element of NAT by A3,INT_1:16;
+A4: P[0]
+  proof
+    let TM such that
+    TM is second-countable;
+    given F be finite Subset-Family of TM such that
+A5: F is Cover of TM and
+    F is finite-ind and
+    ind F<=0 and
+A6: card F<=0;
+    F={} by A6;
+    then [#]TM={} by A5,SETFAM_1:60,ZFMISC_1:2;
+    hence thesis by TOPDIM_1:6,def 4;
+  end;
+A7: for n st P[n] holds P[n+1]
+  proof
+    let n such that
+A8: P[n];
+    let TM such that
+A9: TM is second-countable;
+    given F be finite Subset-Family of TM such that
+A10: F is Cover of TM and
+A11: F is finite-ind and
+A12: ind F<=0 and
+A13: card F<=n+1;
+    per cases;
+    suppose F={};
+      then card F=0;
+      hence thesis by A4,A9,A10,A11,A12;
+    end;
+    suppose F<>{};
+      then consider A be set such that
+A14:  A in F by XBOOLE_0:def 1;
+      reconsider A as Subset of TM by A14;
+      set AA={A};
+      set FA=F\AA;
+A15:  FA\/AA=F by A14,ZFMISC_1:140;
+A16:  [#]TM=union F by A10,SETFAM_1:60
+        .=union FA\/union AA by A15,ZFMISC_1:96
+        .=union FA\/A by ZFMISC_1:31;
+A17:  FA c=F by XBOOLE_1:36;
+      then
+A18:  ind FA<=0 by A11,A12,TOPDIM_1:12;
+      not A in FA by ZFMISC_1:64;
+      then FA c<F by A14,A17,XBOOLE_0:def 8;
+      then card FA<n+1 by A13,CARD_2:67,XXREAL_0:2;
+      then
+A19:  card FA<=n by NAT_1:13;
+      reconsider uFA=union FA as Subset of TM;
+      set Tu=TM|uFA;
+A20:  [#]Tu=uFA by PRE_TOPC:def 10;
+      then reconsider FA'=FA as Subset-Family of Tu by ZFMISC_1:100;
+A21:  TM|A is second-countable by A9;
+      FA is finite-ind by A11,A17,TOPDIM_1:12;
+      then
+A22:  FA' is finite-ind & ind FA=ind FA' by TOPDIM_1:30;
+A23:  FA' is Cover of Tu by A20,SETFAM_1:def 12;
+      then
+A24:  Tu is finite-ind by A8,A9,A18,A19,A22;
+      then
+A25:  ind Tu=ind uFA by A20,TOPDIM_1:22;
+      ind Tu<=n-1 by A8,A9,A18,A19,A22,A23;
+      then
+A26:  ind uFA+1<=n-1+1 by A25,XREAL_1:8;
+A27:  uFA is finite-ind by A24,TOPDIM_1:18;
+      A is finite-ind & ind A<=0 by A11,A12,A14,TOPDIM_1:11;
+      then [#]TM is finite-ind & ind[#]TM<=ind uFA+1 by A16,A21,A27,
+      TOPDIM_1:40;
+      hence thesis by A26,TOPDIM_1:def 4,XXREAL_0:2;
+    end;
+  end;
+  for n holds P[n] from NAT_1:sch 2(A4,A7);
+  then P[i1];
+  hence thesis by A1,A2,A3;
+end;
+
+Lm4:
+  A is finite-ind & B is finite-ind &
+  TM|(A\/B) is second-countable
+  implies A\/B is finite-ind & ind(A\/B)<=ind A+ind B+1
+proof
+  assume that
+A1: A is finite-ind & B is finite-ind and
+A2: TM|(A\/B) is second-countable;
+    set AB=A\/B;
+    set Tab=TM|AB;
+    [#]Tab=AB by PRE_TOPC:def 10;
+    then reconsider a=A,b=B as Subset of Tab by XBOOLE_1:7;
+A5: a is finite-ind by A1,TOPDIM_1:21;
+    then
+A6: ind(Tab|a)=ind a by TOPDIM_1:17
+      .=ind A by A1,TOPDIM_1:21;
+    [#](Tab|b)c=[#]Tab by PRE_TOPC:def 9;
+    then
+A7: bool[#](Tab|b)c=bool[#]Tab by ZFMISC_1:79;
+A8: b is finite-ind by A1,TOPDIM_1:21;
+    then consider Fb be finite Subset-Family of Tab|b such that
+A9: Fb is Cover of Tab|b and
+A10: Fb is finite-ind and
+A11: ind Fb<=0 and
+A12: card Fb<=ind(Tab|b)+1 and
+    for a',b' be Subset of Tab|b st a' in Fb & b' in Fb & a' meets b'
+       holds a'=b' by A2,Th7;
+    consider Fa be finite Subset-Family of Tab|a such that
+A13: Fa is Cover of Tab|a and
+A14: Fa is finite-ind and
+A15: ind Fa<=0 and
+A16: card Fa<=ind(Tab|a)+1 and
+    for a',b' be Subset of Tab|a st a' in Fa & b' in Fa & a' meets b' holds a'=
+    b' by A2,A5,Th7;
+    [#](Tab|a)c=[#]Tab by PRE_TOPC:def 9;
+    then bool[#](Tab|a)c=bool[#]Tab by ZFMISC_1:79;
+    then reconsider FA=Fa,FB=Fb as finite Subset-Family of Tab
+      by A7,XBOOLE_1:1;
+A17: FB is finite-ind by A10,TOPDIM_1:29;
+    ind(Tab|b)=ind b by A8,TOPDIM_1:17
+      .=ind B by A1,TOPDIM_1:21;
+    then card(FA\/FB)<=card FA+card FB & card FA+card FB<=ind A+1+(ind B+1)
+      by A12,A16,A6,CARD_2:62,XREAL_1:9;
+    then
+A18: card(FA\/FB)<=ind A+1+ind B+1 by XXREAL_0:2;
+    union(FA\/FB)=(union Fa)\/union Fb by ZFMISC_1:96
+      .=([#](Tab|a))\/union Fb by A13,SETFAM_1:60
+      .=([#](Tab|a))\/([#](Tab|b)) by A9,SETFAM_1:60
+      .=a\/([#](Tab|b)) by PRE_TOPC:def 10
+      .=a\/b by PRE_TOPC:def 10
+      .=[#]Tab by PRE_TOPC:def 10;
+    then
+A19: FA\/FB is Cover of Tab by SETFAM_1:def 12;
+A20: ind FB=ind Fb by A10,TOPDIM_1:29;
+A21: FA is finite-ind by A14,TOPDIM_1:29;
+    ind FA=ind Fa by A14,TOPDIM_1:29;
+    then
+A22: ind(FA\/FB)<=0 by A11,A15,A21,A17,A20,TOPDIM_1:13;
+    then Tab is finite-ind by A2,A17,A18,A21,A19,Th8;
+    then
+A23: AB is finite-ind by TOPDIM_1:18;
+    ind Tab<=ind A+1+ind B by A2,A17,A18,A21,A19,A22,Th8;
+    hence thesis by A23,TOPDIM_1:17;
+end;
+
+registration
+  let TM be second-countable metrizable TopSpace;
+  let A,B be finite-ind Subset of TM;
+  cluster A\/B -> finite-ind Subset of TM;
+  coherence
+proof
+  TM|(A\/B) is second-countable;
+  hence thesis by Lm4;
+end;
+end;
+
+::Teoria wymiaru Th 1.5.10
+
+theorem
+  A is finite-ind & B is finite-ind & TM|(A\/B) is second-countable
+    implies A\/B is finite-ind & ind(A\/B) <= ind A+ind B+1 by Lm4;
+
+theorem Th10:
+  for T1,T2 be TopSpace,A1 be Subset of T1,A2 be Subset of T2 holds
+  Fr [:A1,A2:] = [:Fr A1,Cl A2:] \/ [:Cl A1,Fr A2:]
+proof
+  let T1,T2 be TopSpace,A1 be Subset of T1,A2 be Subset of T2;
+A1: [:Cl A1,Cl A2:]/\[:Cl A1`,[#]T2:]=[:(Cl A1)/\(Cl A1`),(Cl A2)/\[#]T2:] by
+  ZFMISC_1:123
+    .=[:Fr A1,Cl A2:] by XBOOLE_1:28;
+A2: [:Cl A1,Cl A2:]/\[:[#]T1,Cl A2`:]=[:(Cl A1)/\[#]T1,(Cl A2)/\(Cl A2`):] by
+  ZFMISC_1:123
+    .=[:Cl A1,Fr A2:] by XBOOLE_1:28;
+  Cl[#]T1=[#]T1 by TOPS_1:27;
+  then
+A3: Cl[:[#]T1,A2`:]=[:[#]T1,Cl A2`:] by TOPALG_3:15;
+  Cl[#]T2=[#]T2 by TOPS_1:27;
+  then
+A4: Cl[:A1`,[#]T2:]=[:Cl A1`,[#]T2:] by TOPALG_3:15;
+  Cl[:A1,A2:]`=Cl([:[#]T1,[#]T2:]\[:A1,A2:]) by BORSUK_1:def 5
+    .=Cl([:[#]T1\A1,[#]T2:]\/[:[#]T1,[#]T2\A2:]) by ZFMISC_1:126
+    .=[:Cl A1`,[#]T2:]\/[:[#]T1,Cl A2`:] by A4,A3,PRE_TOPC:50;
+  hence Fr[:A1,A2:]=[:Cl A1,Cl A2:]/\([:Cl A1`,[#]T2:]\/[:[#]T1,Cl A2`:])
+  by TOPALG_3:15
+    .=[:Fr A1,Cl A2:]\/[:Cl A1,Fr A2:] by A1,A2,XBOOLE_1:23;
+end;
+
+Lm5: TM1 is non empty or TM2 is non empty implies
+  [:TM1,TM2:] is finite-ind & ind [:TM1,TM2:]<=ind TM1+ind TM2
+proof
+  defpred P[Nat] means for TM1,TM2 st
+ (TM1 is non empty or TM2 is non empty) & ind TM1+ind TM2+2<=$1
+   holds [:TM1,TM2:] is finite-ind & ind[:TM1,TM2:]<=ind TM1+ind TM2;
+  reconsider i1=ind TM1+1,i2=ind TM2+1 as Nat by Lm1;
+A1: for n st P[n] holds P[n+1]
+  proof
+    let n such that
+A2: P[n];
+    let TM1,TM2;
+assume that
+A3: TM1 is non empty or TM2 is non empty and
+A4: ind TM1+ind TM2+2<=n+1;
+    set T12=[:TM1,TM2:];
+    per cases;
+    suppose
+A5:   TM1 is empty;
+      then ind TM1=-1 by TOPDIM_1:6;
+      then 0+-1<=ind TM2+ind TM1 by A3,XREAL_1:8;
+      hence thesis by A5,TOPDIM_1:6;
+    end;
+    suppose
+A6:  TM2 is empty;
+      then ind TM2=-1 by TOPDIM_1:6;
+      then 0+-1<=ind TM1+ind TM2 by A3,XREAL_1:8;
+      hence thesis by A6,TOPDIM_1:6;
+    end;
+    suppose
+A7:  TM1 is non empty & TM2 is non empty;
+      then reconsider i1=ind TM1,i2=ind TM2 as Nat;
+A8:  for p be Point of T12,U be open Subset of T12 st p in U
+        ex W be open Subset of T12 st p in W & W c=U & Fr W is finite-ind &
+        ind Fr W<=i1+i2-1
+      proof
+        let p be Point of T12,U be open Subset of T12;
+        consider F be Subset-Family of T12 such that
+A9:    U=union F and
+A10:    for e be set st e in F ex X1 be Subset of TM1,X2 be Subset of TM2 st
+        e=[:X1,X2:] & X1 is open & X2 is open by BORSUK_1:45;
+        assume p in U;
+        then consider U12 be set such that
+A11:    p in U12 and
+A12:    U12 in F by A9,TARSKI:def 4;
+A13:    U12 c=U by A9,A12,ZFMISC_1:92;
+        consider U1 be Subset of TM1,U2 be Subset of TM2 such that
+A14:    U12=[:U1,U2:] and
+A15:    U1 is open and
+A16:    U2 is open by A10,A12;
+        consider p1,p2 be set such that
+A17:    p1 in U1 and
+A18:    p2 in U2 and
+A19:    p=[p1,p2] by A11,A14,ZFMISC_1:def 2;
+        reconsider p1 as Point of TM1 by A17;
+        consider W1 be open Subset of TM1 such that
+A20:    p1 in W1 and
+A21:    W1 c=U1 and
+        Fr W1 is finite-ind and
+A22:    ind Fr W1<=i1-1 by A15,A17,TOPDIM_1:16;
+        set ClW1=Cl W1;
+A23:    ind(TM1|ClW1)=ind Cl W1 & ind Cl W1<=i1 by TOPDIM_1:17,19;
+        reconsider p2 as Point of TM2 by A18;
+        consider W2 be open Subset of TM2 such that
+A24:    p2 in W2 and
+A25:    W2 c=U2 and
+        Fr W2 is finite-ind and
+A26:    ind Fr W2<=i2-1 by A16,A18,TOPDIM_1:16;
+        reconsider W12=[:W1,W2:] as open Subset of T12 by BORSUK_1:46;
+        take W12;
+        W12 c=U12 by A14,A25,A21,ZFMISC_1:119;
+        hence p in W12 & W12 c=U by A13,A19,A24,A20,XBOOLE_1:1,ZFMISC_1:106;
+        i1+i2+1+1<=n+1 by A4;
+        then
+A27:    i1+i2+1<=n by XREAL_1:8;
+        set FrW1=Fr W1;
+A28:    ind(TM1|FrW1)=ind Fr W1 by TOPDIM_1:17;
+        set ClW2=Cl W2;
+        reconsider F1C2=[:Fr W1,Cl W2:] as Subset of T12;
+A29:    [:TM1|FrW1,TM2|ClW2:]=T12|F1C2 by BORSUK_3:26;
+        ind(TM2|ClW2)=ind Cl W2 & ind Cl W2<=i2 by TOPDIM_1:17,19;
+        then
+A30:    ind(TM1|FrW1)+ind(TM2|ClW2)<=i1-1+i2 by A22,A28,XREAL_1:9;
+        then ind(TM1|FrW1)+ind(TM2|ClW2)+2<=i1+i2-1+2 by XREAL_1:8;
+        then
+A31:    W2 c=Cl W2 & ind(TM1|FrW1)+ind(TM2|ClW2)+2<=n by A27,PRE_TOPC:48,
+          XXREAL_0:2;
+        then [:TM1|FrW1,TM2|ClW2:] is finite-ind by A2,A7,A24;
+        then
+A32:    F1C2 is finite-ind by A29,TOPDIM_1:18;
+        set FrW2=Fr W2;
+        reconsider C1F2=[:Cl W1,Fr W2:] as Subset of T12;
+A33:    [:TM1|ClW1,TM2|FrW2:]=T12|C1F2 by BORSUK_3:26;
+        ind(TM2|FrW2)=ind Fr W2 by TOPDIM_1:17;
+        then
+A34:    ind(TM1|ClW1)+ind(TM2|FrW2)<=i1+(i2-1) by A26,A23,XREAL_1:9;
+        then ind(TM1|ClW1)+ind(TM2|FrW2)+2<=i1+(i2-1)+2 by XREAL_1:8;
+        then
+A35:    ind(TM1|ClW1)+ind(TM2|FrW2)+2<=n by A27,XXREAL_0:2;
+        W1 c=Cl W1 & [#](TM1|ClW1)=ClW1 by PRE_TOPC:48,def 10;
+        then
+A36:    TM1|ClW1 is non empty by A20;
+        then [:TM1|ClW1,TM2|FrW2:] is finite-ind by A2,A35;
+        then
+A37:    C1F2 is finite-ind by A33,TOPDIM_1:18;
+        ind[:TM1|ClW1,TM2|FrW2:]<=ind TM1|ClW1+ind TM2|FrW2 by A2,A35,A36;
+        then ind[:TM1|ClW1,TM2|FrW2:]<=i1+i2-1 by A34,XXREAL_0:2;
+        then
+A38:    ind C1F2<=i1+i2-1 by A33,A37,TOPDIM_1:17;
+A39:    F1C2 is closed & T12|(C1F2\/F1C2) is second-countable by TOPALG_3:16;
+        ind[:TM1|FrW1,TM2|ClW2:]<=ind TM1|FrW1+ind TM2|ClW2 by A2,A7,A24,A31;
+        then ind[:TM1|FrW1,TM2|ClW2:]<=i1-1+i2 by A30,XXREAL_0:2;
+        then ind F1C2<=i1+i2-1 by A29,A32,TOPDIM_1:17;
+        then C1F2\/F1C2 is finite-ind & ind(C1F2\/F1C2)<=i1+i2-1
+          by A39,A32,A37,A38,Th5;
+        hence thesis by Th10;
+      end;
+      then T12 is finite-ind by TOPDIM_1:15;
+      hence thesis by A8,TOPDIM_1:16;
+    end;
+  end;
+A40: P[0]
+  proof
+    let TM1,TM2;
+    assume that A41: TM1 is non empty or TM2 is non empty and
+A42: ind TM1+ind TM2+2<=0;
+    reconsider i1=ind TM1+1,i2=ind TM2+1 as Nat by Lm1;
+    i1+i2<=0 by A42;
+    hence thesis by A41;
+  end;
+A43: for n holds P[n] from NAT_1:sch 2(A40,A1);
+  ind TM1+ind TM2+2=i1+i2;
+  hence thesis by A43;
+end;
+
+registration
+  let TM1,TM2;
+  cluster [:TM1,TM2:] -> finite-ind;
+  coherence
+   proof
+     per cases;
+       suppose TM1 is empty & TM2 is empty;
+         hence thesis;
+       end;
+       suppose TM1 is non empty or TM2 is non empty;
+         hence thesis by Lm5;
+       end;
+   end;
+end;
+
+::Teoria wymiaru Th 1.5.12
+
+theorem Th11:
+  for A,B st A is closed & B is closed & A misses B
+  for H st ind H<=n & TM|H is second-countable finite-ind
+    ex L st L separates A,B & ind(L/\H) <= n-1
+proof
+  let A,B such that
+A1: A is closed & B is closed and
+A2: A misses B;
+  let H such that
+A3: ind H<=n and
+A4: TM|H is second-countable finite-ind;
+  H is finite-ind by A4,TOPDIM_1:18;
+  then ind H=ind(TM|H) by TOPDIM_1:17;
+  then consider a,b be Subset of TM|H such that
+A5: [#](TM|H)=a\/b and
+  a misses b and
+A6: ind a<=n-1 and
+A7: ind b<=0 by A3,A4,Lm3;
+  [#](TM|H)c=[#]TM by PRE_TOPC:def 9;
+  then reconsider aa=a,bb=b as Subset of TM by XBOOLE_1:1;
+A8: bb is finite-ind by A4,TOPDIM_1:22;
+A9: H=aa\/bb by A5,PRE_TOPC:def 10;
+  then
+A10: bb/\H=bb by XBOOLE_1:7,28;
+  ind b=ind bb & TM|H|b=TM|bb by A4,TOPDIM_1:22,METRIZTS:9;
+  then consider L be Subset of TM such that
+A11: L separates A,B and
+A12: L misses bb by A1,A2,A4,A7,A8,TOPDIM_1:37;
+  take L;
+  L/\H misses bb & L/\H c= H
+    by A10,A12,XBOOLE_1:17,76;
+  then aa is finite-ind & L/\H c=aa
+  by A4,A9,TOPDIM_1:22,XBOOLE_1:73;
+  then ind a=ind aa & ind(L/\H)<=ind aa by TOPDIM_1:19,21;
+  hence thesis by A6,A11,XXREAL_0:2;
+end;
+
+::Teoria wymiaru Th 1.5.13
+
+theorem
+  for TM st TM is finite-ind second-countable & ind TM<=n
+  for A,B st A is closed & B is closed & A misses B
+  ex L st L separates A,B & ind L<=n-1
+proof
+  let TM such that
+A1: TM is finite-ind second-countable and
+A2: ind TM<=n;
+A3: TM|([#]TM) is second-countable by A1;
+  let A,B such that
+A4: A is closed & B is closed and
+A5: A misses B;
+  consider L be Subset of TM such that
+A6: L separates A,B & ind(L/\[#]TM)<=n-1 by A4,A1,A2,A3,A5,Th11;
+  take L;
+  thus thesis by A6,XBOOLE_1:28;
+end;
+
+::Teoria wymiaru Th 1.5.14
+
+theorem Th13:
+  for H st TM|H is second-countable holds H is
+  finite-ind & ind H<=n iff for p,U st p in U
+  ex W st p in W & W c=U & H/\Fr W is finite-ind & ind(H/\Fr W)<=n-1
+proof
+  let M be Subset of TM such that
+A1: TM|M is second-countable;
+  hereby
+    assume that
+A2: M is finite-ind and
+A3: ind M<=n;
+    let p be Point of TM,U be open Subset of TM such that
+A4: p in U;
+    reconsider P={p} as Subset of TM by A4,ZFMISC_1:37;
+    TM is non empty & not p in U` by A4,XBOOLE_0:def 5;
+    then consider L be Subset of TM such that
+A5: L separates P,U` and
+A6: ind(L/\M)<=n-1 by A1,A2,A3,Th11,ZFMISC_1:56;
+    consider W,W1 be open Subset of TM such that
+A7: P c=W and
+A8: U`c=W1 and
+A9: W misses W1 and
+A10: L=(W\/W1)` by A5,METRIZTS:def 3;
+    take W;
+    W c=W1` & W1`c=U`` by A8,A9,SUBSET_1:31,43;
+    hence p in W & W c=U by A7,XBOOLE_1:1,ZFMISC_1:37;
+    Cl W misses W1 by A9,TSEP_1:40;
+    then Cl W\W1=Cl W by XBOOLE_1:83;
+    then Fr W=(Cl W\W1)\W by TOPS_1:76
+      .=Cl W\(W\/W1) by XBOOLE_1:41
+      .=Cl W/\L by A10,SUBSET_1:32;
+    then Fr W c=L by XBOOLE_1:17;
+    then
+A11: M/\Fr W c=M/\L by XBOOLE_1:27;
+    M/\L c=M by XBOOLE_1:17;
+    then
+A12: M/\L is finite-ind by A2,TOPDIM_1:19;
+    then ind(M/\Fr W)<=ind(M/\L) by A11,TOPDIM_1:19;
+    hence M/\Fr W is finite-ind & ind(M/\Fr W)<=n-1 by A6,A11,A12,
+    TOPDIM_1:19,XXREAL_0:2;
+  end;
+  set Tm=TM|M;
+  assume
+A13: for p be Point of TM,U be open Subset of TM st p in U ex W be
+open Subset of TM st p in W & W c=U & M/\Fr W is finite-ind &
+ind(M/\Fr W)<=n-1;
+A14: for p be Point of Tm,U be open Subset of Tm st p in U ex W be open
+  Subset of Tm st p in W & W c=U & Fr W is finite-ind & ind Fr W<=n-1
+  proof
+A15: [#]Tm=M by PRE_TOPC:def 10;
+    let p be Point of Tm,U be open Subset of Tm such that
+A16: p in U;
+    p in M by A15,A16;
+    then reconsider p'=p as Point of TM;
+    consider U' be Subset of TM such that
+A17: U' is open and
+A18: U=U'/\the carrier of Tm by TSP_1:def 1;
+    p' in U' by A16,A18,XBOOLE_0:def 4;
+    then consider W' be open Subset of TM such that
+A19: p' in W' & W' c=U' and
+A20: M/\Fr W' is finite-ind and
+A21: ind(M/\Fr W')<=n-1 by A13,A17;
+    reconsider W=W'/\the carrier of Tm as Subset of Tm by XBOOLE_1:17;
+    reconsider W as open Subset of Tm by TSP_1:def 1;
+    take W;
+    thus p in W & W c=U by A16,A18,A19,XBOOLE_0:def 4,XBOOLE_1:26;
+    reconsider FrW=Fr W as Subset of TM by A15,XBOOLE_1:1;
+A22: FrW c=Fr W'/\M by A15,TOPDIM_1:1;
+    then
+A23: FrW is finite-ind by A20,TOPDIM_1:19;
+    ind FrW<=ind(Fr W'/\M) by A20,A22,TOPDIM_1:19;
+    then ind Fr W<=ind(Fr W'/\M) by A23,TOPDIM_1:21;
+    hence thesis by A21,A23,TOPDIM_1:21,XXREAL_0:2;
+  end;
+  then
+A24: Tm is finite-ind by TOPDIM_1:15;
+  then
+A25: M is finite-ind by TOPDIM_1:18;
+  ind Tm<=n by A14,A24,TOPDIM_1:16;
+  hence thesis by A25,TOPDIM_1:17;
+end;
+
+::Teoria wymiaru Th 1.5.15
+
+theorem
+  for H st TM|H is second-countable holds H is
+  finite-ind & ind H<=n iff ex Bas be Basis of TM st
+  for A st A in Bas holds H/\Fr A is finite-ind & ind(H/\Fr A)<=n-1
+proof
+  set cTM=[#]TM;
+  set TOP=the topology of TM;
+  let M be Subset of TM such that
+A1: TM|M is second-countable;
+  hereby
+    defpred P[set,set] means
+    for p be Point of TM,A be Subset of TM st$1=[p,A] holds$2 in TOP & (not p
+in A implies $2={}TM) & (p in A implies ex W be open Subset of TM st W=$2 & p
+    in W & W c=A & M/\Fr W is finite-ind & ind(M/\Fr W)<=n-1);
+    assume
+A2: M is finite-ind & ind M<=n;
+A3: for x be set st x in [:cTM,TOP:]ex y be set st P[x,y]
+    proof
+      let x be set such that
+A4:   x in [:cTM,TOP:];
+      consider p',A' be set such that
+A5:   p' in cTM and
+A6:   A' in TOP and
+A7:   x=[p',A'] by A4,ZFMISC_1:def 2;
+      reconsider A' as open Subset of TM by A6,PRE_TOPC:def 5;
+      reconsider p' as Point of TM by A5;
+      per cases;
+      suppose
+A8:     not p' in A';
+        take{}TM;
+        let p be Point of TM,A be Subset of TM such that
+A9:     x=[p,A];
+        p=p' by A7,A9,ZFMISC_1:33;
+        hence thesis by A7,A8,A9,PRE_TOPC:def 5,ZFMISC_1:33;
+      end;
+      suppose p' in A';
+        then consider W be open Subset of TM such that
+A10:    p' in W & W c=A' & M/\Fr W is finite-ind & ind(M/\Fr W)<=n-
+        1 by A1,A2,Th13;
+        take W;
+        let p be Point of TM,A be Subset of TM such that
+A11:    x=[p,A];
+        p=p' & A=A' by A7,A11,ZFMISC_1:33;
+        hence thesis by A10,PRE_TOPC:def 5;
+      end;
+    end;
+    consider f be Function such that
+A12: dom f=[:cTM,TOP:] and
+A13: for x be set st x in [:cTM,TOP:] holds P[x,f.x] from CLASSES1:sch 1(A3);
+A14: rng f c=TOP
+    proof
+      let y be set;
+      assume y in rng f;
+      then consider x be set such that
+A15:  x in dom f and
+A16:  f.x=y by FUNCT_1:def 5;
+      ex p,A be set st p in cTM & A in TOP & x=[p,A] by A12,A15,ZFMISC_1:def 2;
+      hence thesis by A12,A13,A15,A16;
+    end;
+    then reconsider RNG=rng f as Subset-Family of TM by XBOOLE_1:1;
+    now
+      let A be Subset of TM such that
+A17:  A is open;
+A18:  A in TOP by A17,PRE_TOPC:def 5;
+      let p be Point of TM such that
+A19:  p in A;
+A20:  [p,A] in [:cTM,TOP:] by A18,A19,ZFMISC_1:106;
+      then consider W be open Subset of TM such that
+A21:  W=f.[p,A] & p in W & W c=A and
+      M/\Fr W is finite-ind and
+      ind(M/\Fr W)<=n-1 by A13,A19;
+      reconsider W as Subset of TM;
+      take W;
+      thus W in RNG & p in W & W c=A by A12,A20,A21,FUNCT_1:def 5;
+    end;
+    then reconsider RNG as Basis of TM by A14,YELLOW_9:32;
+    take RNG;
+    let B be Subset of TM;
+    assume B in RNG;
+    then consider x be set such that
+A22: x in dom f and
+A23: f.x=B by FUNCT_1:def 5;
+    consider p,A be set such that
+A24: p in cTM and
+A25: A in TOP and
+A26: x=[p,A] by A12,A22,ZFMISC_1:def 2;
+    reconsider A as open Subset of TM by A25,PRE_TOPC:def 5;
+    per cases;
+    suppose p in A;
+      then ex W be open Subset of TM st W=f.[p,A] & p in W & W c=A & M/\Fr W is
+      finite-ind & ind(M/\Fr W)<=n-1 by A12,A13,A22,A26;
+      hence M/\Fr B is finite-ind & ind(M/\Fr B)<=n-1 by A23,A26;
+    end;
+    suppose not p in A;
+      then B={}TM by A12,A13,A22,A23,A24,A26;
+      then
+A27:  Fr B={} by TOPGEN_1:16;
+      0-1<=n-1 by XREAL_1:11;
+      hence M/\Fr B is finite-ind & ind(M/\Fr B)<=n-1 by A27,TOPDIM_1:6;
+    end;
+  end;
+  given B be Basis of TM such that
+A28: for A be Subset of TM st A in B holds M/\Fr A is finite-ind &
+  ind(M/\Fr A)<=n-1;
+  for p be Point of TM,U be open Subset of TM st p in U ex W be open Subset of
+  TM st p in W & W c=U & M/\Fr W is finite-ind & ind(M/\Fr W)<=n-1
+  proof
+    let p be Point of TM,U be open Subset of TM such that
+A29: p in U;
+    consider a be Subset of TM such that
+A30: a in B and
+A31: p in a & a c=U by A29,YELLOW_9:31;
+    B c=TOP by CANTOR_1:def 2;
+    then reconsider a as open Subset of TM by A30,PRE_TOPC:def 5;
+    take a;
+    thus thesis by A28,A30,A31;
+  end;
+  hence thesis by A1,Th13;
+end;
+
+::Teoria wymiaru Th 1.5.16
+
+theorem
+  TM1 is non empty or TM2 is non empty implies
+    ind [:TM1,TM2:] <= ind TM1+ind TM2 by Lm5;
+
+:: Wprowadzenie do topologii 3.4.10
+
+theorem
+  ind TM2 = 0 implies ind [:TM1,TM2:] = ind TM1
+proof
+  assume
+A1: ind TM2=0;
+A2: TM2 is non empty by A1,TOPDIM_1:6;
+  then
+A3: ind[:TM1,TM2:]<=ind TM1+0 by A1,Lm5;
+  set x=the Point of TM2;
+  reconsider X={x} as Subset of TM2 by A2,ZFMISC_1:37;
+  per cases;
+  suppose
+A4: TM1 is empty;
+    then ind TM1=-1 by TOPDIM_1:6;
+    hence thesis by A4,TOPDIM_1:6;
+  end;
+  suppose
+A5: TM1 is non empty;
+    ind[:TM2|X,TM1:]=ind TM1 by A5,A2,BORSUK_3:15,TOPDIM_1:25;
+    then
+A6: ind[:TM1,TM2|X:]=ind TM1 by TOPDIM_1:28;
+A7: [:TM1,TM2|X:] is SubSpace of[:TM1,TM2:] by BORSUK_3:17;
+    then [#][:TM1,TM2|X:]c=[#][:TM1,TM2:] by PRE_TOPC:def 9;
+    then reconsider cT12=[#][:TM1,TM2|X:] as Subset of[:TM1,TM2:];
+    [:TM1,TM2|X:]=[:TM1,TM2:]|cT12 by A7,PRE_TOPC:def 10;
+    then ind cT12=ind TM1 by A6,TOPDIM_1:17;
+    then ind TM1<=ind[:TM1,TM2:] by TOPDIM_1:19;
+    hence thesis by A3,XXREAL_0:1;
+  end;
+end;
+
+begin :: The Small Inductive Dimension of Euclidean Spaces
+
+reserve u for Point of Euclid 1,
+  U for Point of TOP-REAL 1,
+  r,u1 for real number,
+  s for Real;
+
+theorem Th17:
+  <*u1*> = u & r > 0 implies cl_Ball(u,r)={<*s*>:u1-r <= s & s <= u1+r}
+proof
+  assume that
+A1: <*u1*>=u and
+  r>0;
+  set E1={q where q is Element of Euclid 1:dist(u,q)<=r};
+  reconsider u1 as Real by XREAL_0:def 1;
+  set R1={<*s*> where s is Real:u1-r<=s & s<=u1+r};
+A2: E1 c=R1
+  proof
+    let x be set;
+    assume x in E1;
+    then consider q being Element of Euclid 1 such that
+A3: x=q and
+A4: dist(u,q)<=r;
+    q is Tuple of 1, REAL by FINSEQ_2:151;
+    then consider s1 be Real such that
+A5: q=<*s1*> by FINSEQ_2:117;
+    <*u1*>-<*s1*>=<*u1-s1*> by RVSUM_1:50;
+    then sqr(<*u1*>-<*s1*>)=<*(u1-s1)^2*> by RVSUM_1:81;
+    then Sum sqr(<*u1*>-<*s1*>)=(u1-s1)^2 by RVSUM_1:103;
+    then
+A6: sqrt Sum sqr(<*u1*>-<*s1*>)=abs(u1-s1) by COMPLEX1:158;
+A7: |.<*u1*>-<*s1*>.|<=r by A1,A4,A5,EUCLID:def 6;
+    then u1-s1<=r by A6,ABSVALUE:12;
+    then u1-s1+s1<=r+s1 by XREAL_1:8;
+    then
+A8: u1-r<=r+s1-r by XREAL_1:11;
+    -r<=u1-s1 by A6,A7,ABSVALUE:12;
+    then -r+s1<=u1-s1+s1 by XREAL_1:8;
+    then s1-r+r<=u1+r by XREAL_1:8;
+    hence thesis by A3,A5,A8;
+    reconsider eu=u,eq=q as Element of REAL 1;
+  end;
+  R1 c=E1
+  proof
+    reconsider eu1=<*u1*> as Element of REAL 1 by FINSEQ_2:118;
+    let x be set;
+    assume x in R1;
+    then consider s be Real such that
+A9: x=<*s*> and
+A10: u1-r<=s and
+A11: s<=u1+r;
+    s-r<=u1+r-r by A11,XREAL_1:11;
+    then
+A12: s+-r-s<=u1-s by XREAL_1:11;
+    reconsider es=<*s*> as Element of REAL 1 by FINSEQ_2:118;
+    reconsider q1=<*s*> as Element of Euclid 1 by FINSEQ_2:118;
+    <*u1*>-<*s*>=<*u1-s*> by RVSUM_1:50;
+    then sqr(<*u1*>-<*s*>)=<*(u1-s)^2*> by RVSUM_1:81;
+    then
+A13: Sum sqr(<*u1*>-<*s*>)=(u1-s)^2 by RVSUM_1:103;
+    u1-r+r<=s+r by A10,XREAL_1:8;
+    then u1-s<=s+r-s by XREAL_1:11;
+    then abs(u1-s)<=r by A12,ABSVALUE:12;
+    then |.<*u1*>-<*s*>.|<=r by A13,COMPLEX1:158;
+    then (the distance of Euclid 1).(u,q1)=dist(u,q1) & (Pitag_dist 1).(eu1,es)
+    <=r by EUCLID:def 6;
+    hence thesis by A1,A9;
+  end;
+  then E1=R1 by A2,XBOOLE_0:def 10;
+  hence thesis by METRIC_1:19;
+end;
+
+A: the TopStruct of TOP-REAL 1 = TopSpaceMetr Euclid 1 by EUCLID:def 8;
+
+theorem Th18:
+  <*u1*> = U & r > 0 implies Fr Ball(U,r) = {<*u1-r*>,<*u1+r*>}
+proof
+  assume that
+A1: <*u1*>=U and
+A2: r>0;
+  reconsider u=U as Point of Euclid 1 by A;
+A3: Ball(u,r)={<*s*>:u1-r<s & s<u1+r} by A1,A2,JORDAN2B:33;
+  Ball(U,r)=Ball(u,r) by TOPREAL9:13;
+  then Ball(U,r) is open by KURATO_2:30;
+  then
+A4: Fr Ball(U,r)=Cl Ball(U,r)\Ball(U,r) by TOPS_1:76
+    .=cl_Ball(U,r)\Ball(U,r) by A2,JORDAN:23
+    .=cl_Ball(u,r)\Ball(U,r) by TOPREAL9:14
+    .=cl_Ball(u,r)\Ball(u,r) by TOPREAL9:13;
+A5: cl_Ball(u,r)={<*s*>:u1-r<=s & s<=u1+r} by A1,A2,Th17;
+  thus Fr Ball(U,r)c={<*u1-r*>,<*u1+r*>}
+  proof
+    let x be set such that
+A6: x in Fr Ball(U,r);
+    reconsider X=x as Point of Euclid 1 by A,A6;
+    x in cl_Ball(u,r) by A4,A6,XBOOLE_0:def 5;
+    then consider s be Real such that
+A7: x=<*s*> and
+A8: u1-r<=s and
+A9: s<=u1+r by A5;
+    assume
+A10: not x in {<*u1-r*>,<*u1+r*>};
+    then s<>u1+r by A7,TARSKI:def 2;
+    then
+A11: s<u1+r by A9,XXREAL_0:1;
+    s<>u1-r by A7,A10,TARSKI:def 2;
+    then u1-r<s by A8,XXREAL_0:1;
+    then X in Ball(u,r) by A3,A7,A11;
+    hence thesis by A4,A6,XBOOLE_0:def 5;
+  end;
+  let x be set;
+  assume x in {<*u1-r*>,<*u1+r*>};
+  then
+A12: x=<*u1-r*> or x=<*u1+r*> by TARSKI:def 2;
+A13: u1-r is Real & u1+r is Real by XREAL_0:def 1;
+  assume
+A14: not x in Fr Ball(U,r);
+  u1+-r<=u1+r by A2,XREAL_1:8;
+  then x in cl_Ball(u,r) by A5,A12,A13;
+  then x in Ball(u,r) by A4,A14,XBOOLE_0:def 5;
+  then ex s be Real st x=<*s*> & u1-r<s & s<u1+r by A3;
+  hence contradiction by A12,FINSEQ_1:97;
+end;
+
+theorem Th19:
+  for T be TopSpace,A be countable Subset of T st T|A is T_4
+    holds A is finite-ind & ind A<=0
+proof
+  let T be TopSpace,A be countable Subset of T such that
+A1: T|A is T_4;
+  per cases;
+  suppose A={}T;
+    hence thesis by TOPDIM_1:6;
+  end;
+  suppose
+A2: A is non empty;
+    then reconsider TT=T as non empty TopSpace;
+    reconsider a=A as non empty Subset of TT by A2;
+    set Ta=TT|a;
+    deffunc F(Point of Ta)={$1};
+    defpred P[set] means
+    not contradiction;
+    defpred PP[set] means
+    $1 in A & P[$1];
+    consider S be Subset-Family of Ta such that
+A3: S={F(w) where w is Point of Ta:PP[w]} from LMOD_7:sch 5;
+    for B be Subset of Ta st B in S holds B is finite-ind & ind B<=0
+    proof
+      let B be Subset of Ta;
+      assume B in S;
+      then consider w be Point of Ta such that
+A4:   B=F(w) and
+      PP[w] by A3;
+      card F(w)=1 by CARD_1:50;
+      then ind F(w)<1+0 by TOPDIM_1:8;
+      hence thesis by A4,INT_1:20;
+    end;
+    then
+A5: S is finite-ind & ind S<=0 by TOPDIM_1:11;
+    [#]Ta c=union S
+    proof
+      let x be set;
+      assume
+A6:   x in [#]Ta;
+      then x in a by PRE_TOPC:def 10;
+      then x in {x} & {x} in S by A3,A6,TARSKI:def 1;
+      hence thesis by TARSKI:def 4;
+    end;
+    then
+A7: S is Cover of Ta by SETFAM_1:def 12;
+A8: S is closed
+    proof
+      let B be Subset of Ta;
+      assume B in S;
+      then ex w be Point of Ta st B=F(w) & PP[w] by A3;
+      hence thesis by A1;
+    end;
+A9: card A c=omega by CARD_3:def 15;
+    card{F(w) where w is Point of TT|a:PP[w]}c=card A from BORSUK_2:sch 1;
+    then card S c=omega by A3,A9,XBOOLE_1:1;
+    then
+A10: S is countable by CARD_3:def 15;
+    [#]Ta=A by PRE_TOPC:def 10;
+    then
+A11: Ta is countable by ORDERS_4:def 2;
+    then Ta is finite-ind by A1,A5,A7,A8,A10,TOPDIM_1:36;
+    then
+A12: A is finite-ind by TOPDIM_1:18;
+    ind Ta<=0 by A1,A5,A7,A8,A10,A11,TOPDIM_1:36;
+    hence thesis by A12,TOPDIM_1:17;
+  end;
+end;
+
+registration
+  let TM be metrizable TopSpace;
+  cluster countable -> finite-ind Subset of TM;
+  coherence
+  proof
+    let A be Subset of TM such that
+A1: A is countable;
+    TM|A is T_4;
+    hence thesis by A1,Th19;
+  end;
+end;
+
+Lm6:TOP-REAL 0 is finite-ind & ind TOP-REAL 0=0
+proof
+  set T=TOP-REAL 0;
+  the TopStruct of T = TopSpaceMetr Euclid 0 by EUCLID:def 8; then
+A1: [#]T={<*>REAL} by FINSEQ_2:112;
+  card{<*>REAL}=1 by CARD_1:50;
+  then ind[#]T<1 by A1,TOPDIM_1:8;
+  hence thesis by A1,TOPDIM_1:def 4,NAT_1:26;
+end;
+
+Lm7: TOP-REAL 1 is finite-ind & ind TOP-REAL 1=1
+proof
+  set T=TOP-REAL 1;
+A1: for p be Point of T,U be open Subset of T st p in U ex W be open Subset
+  of T st p in W & W c=U & Fr W is finite-ind & ind Fr W<=1-1
+  proof
+    let p be Point of T,U be open Subset of T such that
+A2: p in U;
+    reconsider p'=p as Point of Euclid 1 by A;
+    set M = Euclid 1;
+B1: the TopStruct of TopSpaceMetr(M) = the TopStruct of TOP-REAL 1
+      by EUCLID:def 8; then
+    reconsider V = U as Subset of TopSpaceMetr(M);
+    V is open by B1, PRE_TOPC:60; then
+    consider r be real number such that
+A3: r>0 and
+A4: Ball(p',r)c=U by A2,TOPMETR:22;
+    reconsider B=Ball(p',r) as open Subset of T by KURATO_2:30;
+    take B;
+    p' is Tuple of 1, REAL by FINSEQ_2:151;
+    then consider p1 be Real such that
+A5: p'=<*p1*> by FINSEQ_2:117;
+A6: Ball(p,r)=Ball(p',r) by TOPREAL9:13;
+    then Aa: Fr B={<*p1-r*>,<*p1+r*>} by A3,A5,Th18;
+    T is metrizable
+    proof
+      ex f being Function of [:the carrier of T,the carrier of T :],REAL
+      st f is_metric_of (the carrier of T) &
+      Family_open_set( SpaceMetr (the carrier of T,f) ) =
+      the topology of T by B1,PCOMPS_1:def 9;
+      hence thesis by PCOMPS_1:def 9;
+    end; then
+    T|(Fr B) is metrizable;
+    hence thesis by A3,A4,A6,Th19,JORDAN:16,Aa;
+  end;
+  then
+A7: T is finite-ind by TOPDIM_1:15;
+A8: ind T>=1
+  proof
+    reconsider p=<*0 *>,q=<*1*> as Point of Euclid 1 by FINSEQ_2:118;
+    the TopStruct of T = TopSpaceMetr Euclid 1 by EUCLID:def 8; then
+    reconsider p'=p as Point of T;
+A9: Ball(p,1)=Ball(p',1) by TOPREAL9:13;
+    then reconsider B=Ball(p',1) as open Subset of T by KURATO_2:30;
+    assume ind T<1;
+    then ind T<1+0;
+    then
+A10: ind T<=0 by INT_1:20;
+    p in B by JORDAN:16;
+    then consider W be open Subset of T such that
+A11: p in W and
+A12: W c=B and
+A13: Fr W is finite-ind & ind Fr W<=0-1 by A7,A10,TOPDIM_1:16;
+    Fr W={}T by A13;
+    then
+A14: W is closed by TOPGEN_1:16;
+A15: W\/W`=[#]T by PRE_TOPC:18;
+     W misses W` by SUBSET_1:44;
+     then [#]T is connected & W,W`are_separated
+     by A14,A15,CONNSP_1:3,JORDAN2C:22; then
+A16: W`={}T by A11,A15,CONNSP_1:16;
+A17: B={<*s*> where s is Real:0-1<s & s<0+1} by A9,JORDAN2B:33;
+A:  the TopStruct of T = TopSpaceMetr Euclid 1 by EUCLID:def 8;
+    not q in B
+    proof
+      assume q in B;
+      then ex s be Real st q=<*s*> & 0-1<s & s<0+1 by A17;
+      hence contradiction by FINSEQ_1:97;
+    end;
+    then not q in W by A12;
+    hence contradiction by A,A16,XBOOLE_0:def 5;
+  end;
+  ind T<=1 by A1,A7,TOPDIM_1:16;
+  hence thesis by A1,A8,TOPDIM_1:15,XXREAL_0:1;
+end;
+
+Lm8:
+  TOP-REAL n is finite-ind & ind TOP-REAL n <= n
+proof
+  defpred P[Nat] means
+  TOP-REAL$1 is finite-ind & ind TOP-REAL$1<=$1;
+A1: for n st P[n] holds P[n+1]
+  proof
+    let n;
+F:  the TopStruct of TOP-REAL n = TopSpaceMetr Euclid n &
+    the TopStruct of TOP-REAL (n+1) = TopSpaceMetr Euclid (n+1) &
+    the TopStruct of TOP-REAL 1 = TopSpaceMetr Euclid 1 by EUCLID:def 8;
+A2: n in NAT by ORDINAL1:def 13; then
+A3: [:TopSpaceMetr Euclid n,TopSpaceMetr Euclid 1:],
+      TopSpaceMetr Euclid (n+1) are_homeomorphic by TOPREAL7:27;
+    TOP-REAL 1, TopSpaceMetr Euclid 1 are_homeomorphic
+      by F,YELLOW14:20; then
+X1: TopSpaceMetr Euclid 1 is finite-ind & ind TopSpaceMetr Euclid 1=1
+      by Lm7,TOPDIM_1:24,25;
+    assume
+A4: P[n];
+P0: TOP-REAL n, TopSpaceMetr Euclid n are_homeomorphic by F,YELLOW14:20;
+P1: TOP-REAL (n+1), TopSpaceMetr Euclid (n+1) are_homeomorphic
+      by F,YELLOW14:20;
+X2: TopSpaceMetr Euclid n is finite-ind &
+      ind TopSpaceMetr Euclid n=ind TOP-REAL n by A4,TOPDIM_1:24,25,P0;
+A5: ind [:TopSpaceMetr Euclid n, TopSpaceMetr Euclid 1:]<=
+    (ind TopSpaceMetr Euclid n)+1 by X2,Lm5,F,X1;
+    (ind TopSpaceMetr Euclid n)+1<=n+1 by XREAL_1:8,A4,X2; then
+aa: ind [:TopSpaceMetr Euclid n, TopSpaceMetr Euclid 1:]<= n+1
+      by A5,XXREAL_0:2;
+ab: ind TopSpaceMetr Euclid (n+1) <= n+1
+      by aa,A2,TOPREAL7:27,TOPDIM_1:25,X2,X1,F;
+    TopSpaceMetr Euclid (n+1) is finite-ind by X2,X1,F,A3,TOPDIM_1:24; then
+    TOP-REAL (n+1) is finite-ind by TOPDIM_1:24,P1;
+    hence thesis by ab,F,YELLOW14:20,TOPDIM_1:25;
+  end;
+A6: P[0] by Lm6;
+  for n holds P[n] from NAT_1:sch 2(A6,A1);
+  hence thesis;
+end;
+
+registration
+  let n be Nat;
+  cluster TOP-REAL n -> finite-ind;
+  coherence by Lm8;
+end;
+
+theorem
+  n <= 1 implies ind TOP-REAL n = n
+proof
+  assume n<=1;
+  then n < 1 or n=1 by XXREAL_0:1;
+  then n=0 or n=1 by NAT_1:14;
+  hence thesis by Lm6,Lm7;
+end;
+
+theorem
+  ind TOP-REAL n <= n by Lm8;
+
+Lm9: for A be finite-ind Subset of TM st TM|A is second-countable &
+ind TM|A<=0 for U1,U2 be open Subset of TM st A c=U1\/U2 ex V1,V2 be open
+Subset of TM st V1 c=U1 & V2 c=U2 & V1 misses V2 & A c=V1\/V2
+proof
+  let A be finite-ind Subset of TM such that
+A1: TM|A is second-countable & ind TM|A<=0;
+  let U1,U2 be open Subset of TM such that
+A2: A c=U1\/U2;
+  set U12=U1\/U2;
+  set TU=TM|U12;
+A3: [#]TU=U12 by PRE_TOPC:def 10;
+  then reconsider u1=U1,u2=U2,a=A as Subset of TU by A2,XBOOLE_1:7;
+A4: a is finite-ind by TOPDIM_1:21;
+A5: u1`misses u2`
+  proof
+    assume u1`meets u2`;
+    then consider z be set such that
+A6: z in u1` and
+A7: z in u2` by XBOOLE_0:3;
+    (not z in U1) & not z in U2 by A6,A7,XBOOLE_0:def 5;
+    hence thesis by A3,A6,XBOOLE_0:def 3;
+  end;
+  U2/\U12=u2 by XBOOLE_1:7,28; then
+A8: u2 is open by A3,TSP_1:def 1;
+  U1/\U12=u1 by XBOOLE_1:7,28; then
+A9: u1 is open by A3,TSP_1:def 1;
+A10: ind a=ind A by TOPDIM_1:21;
+  ind A<=0 & TU|a is second-countable by A1,TOPDIM_1:17,METRIZTS:9;
+  then consider L be Subset of TU such that
+A11: L separates u1`,u2` and
+A12: ind(L/\a)<=0-1 by A4,A5,A9,A8,A10,Th11;
+  consider v1,v2 be open Subset of TU such that
+A13: u1`c=v1 & u2`c=v2 and
+A14: v1 misses v2 and
+A15: L=(v1\/v2)` by A11,METRIZTS:def 3;
+  reconsider V1=v1,V2=v2 as Subset of TM by A3,XBOOLE_1:1;
+  reconsider V1,V2 as open Subset of TM by A3,TSEP_1:9;
+  take V2,V1;
+  u1`misses v2 & u2`misses v1 by A13,A14,XBOOLE_1:63;
+  hence V2 c=U1 & V1 c=U2 & V2 misses V1 by A14,SUBSET_1:44;
+  L/\a c=a by XBOOLE_1:17;
+  then
+A16: L/\a is finite-ind by A4,TOPDIM_1:19;
+  then ind(L/\a)>=-1 by TOPDIM_1:5;
+  then ind(L/\a)=-1 by A12,XXREAL_0:1;
+  then L/\a is empty by A16,TOPDIM_1:6;
+  then L misses a by XBOOLE_0:def 7;
+  hence thesis by A15,SUBSET_1:44;
+end;
+
+::Wprowadzenie do topologii Th 3.4.13
+
+theorem Th22:
+  for A st TM|A is second-countable finite-ind & ind A<=0
+     for F st F is open & F is Cover of A
+     ex g be Function of F,bool the carrier of TM st
+       rng g is open & rng g is Cover of A &
+       (for a be set st a in F holds g.a c= a) &
+       for a,b be set st a in F & b in F & a<>b holds g.a misses g.b
+proof
+  defpred P[Nat] means
+  for A be Subset of TM st TM|A is second-countable & A is finite-ind
+  & ind A<=0 for F be finite Subset-Family of TM st F is open &
+  F is Cover of A & card F<=$1ex g be Function of F,bool the carrier of TM st
+  rng g is open & rng g is Cover of A &
+  (for a be set st a in F holds g.a c=a) & for a,b be set st a
+  in F & b in F & a<>b holds g.a misses g.b;
+  let A be Subset of TM such that
+A1: TM|A is second-countable finite-ind & ind A<=0;
+  let F be finite Subset-Family of TM such that
+A2: F is open & F is Cover of A;
+A3: for n st P[n] holds P[n+1]
+  proof
+    let n such that
+A4: P[n];
+    let A be Subset of TM such that
+A5: TM|A is second-countable and
+A6: A is finite-ind and
+A7: ind A<=0;
+    let F be finite Subset-Family of TM such that
+A8: F is open and
+A9: F is Cover of A and
+A10: card F<=n+1;
+    per cases by A10,NAT_1:8;
+    suppose card F<=n;
+      hence thesis by A4,A5,A6,A7,A8,A9;
+    end;
+    suppose
+A11:  card F=n+1;
+      per cases;
+      suppose n=0;
+        then consider x be set such that
+A12:    F={x} by A11,CARD_2:60;
+        set g=F-->x;
+        dom g=F & rng g=F by A12,FUNCOP_1:14,19;
+        then reconsider g as Function of F,bool the carrier of TM by FUNCT_2:4;
+        take g;
+        thus rng g is open & rng g is Cover of A by A8,A9,A12,FUNCOP_1:14;
+        hereby
+          let a be set;
+          assume
+A13:      a in F;
+          then g.a=x by FUNCOP_1:13;
+          hence g.a c=a by A12,A13,TARSKI:def 1;
+        end;
+        let a,b be set such that
+A14:    a in F and
+A15:    b in F & a<>b;
+        x=a by A12,A14,TARSKI:def 1;
+        hence thesis by A12,A15,TARSKI:def 1;
+      end;
+      suppose n>0;
+        then reconsider n1=n-1 as Element of NAT by NAT_1:20;
+        F is non empty by A11;
+        then consider x be set such that
+A16:    x in F by XBOOLE_0:def 1;
+A17:    card(F\{x})=n1+1 by A11,A16,STIRL2_1:65;
+        then F\{x} is non empty;
+        then consider y be set such that
+A18:    y in F\{x} by XBOOLE_0:def 1;
+        y in F by A18,XBOOLE_0:def 5;
+        then reconsider x,y as open Subset of TM by A8,A16,TOPS_2:def 1;
+        set X={x},xy=x\/y,Y={y},XY={xy};
+A19:    (F\X)\/X=F by A16,ZFMISC_1:140;
+        set Fxy=F\X\Y;
+A20:    card Fxy=n1 by A17,A18,STIRL2_1:65;
+        set FXY=Fxy\/XY;
+        card XY=1 by CARD_1:50;
+        then
+A21:    card FXY<=n1+1 by A20,CARD_2:62;
+        F\X is open by A8,TOPS_2:22;
+        then
+A22:    Fxy is open by TOPS_2:22;
+A23:    ((F\X)\Y)\/Y=F\X by A18,ZFMISC_1:140;
+        for A be Subset of TM st A in XY holds A is open by TARSKI:def 1;
+        then
+A24:    XY is open by TOPS_2:def 1;
+        per cases;
+        suppose
+A25:      Fxy is Cover of A;
+          card Fxy<=n1+1 by A20,NAT_1:13;
+          then consider g be Function of Fxy,bool the carrier of TM such that
+A26:      rng g is open and
+A27:      rng g is Cover of A and
+A28:      for a be set st a in Fxy holds g.a c=a and
+A29:      for a,b be set st a in Fxy & b in Fxy & a<>b holds g.a misses g.b
+          by A4,A5,A6,A7,A22,A25;
+A30:      A c=union rng g by A27,SETFAM_1:def 12;
+          set h=(x,y)-->({}TM,{}TM);
+A31:      dom h={x,y} by FUNCT_4:65;
+          not x in F\X by ZFMISC_1:64;
+          then
+A32:      not x in Fxy by ZFMISC_1:64;
+          not y in Fxy by ZFMISC_1:64;
+          then
+A33:      Fxy misses{x,y} by A32,ZFMISC_1:57;
+A34:      x<>y by A18,ZFMISC_1:64;
+          then
+A35:      rng h={{}TM,{}TM} by FUNCT_4:67;
+A36:      Fxy\/{x,y}=Fxy\/(Y\/X) by ENUMSET1:41
+            .=Fxy\/Y\/X by XBOOLE_1:4
+            .=F by A18,A19,ZFMISC_1:140;
+A37:      dom g=Fxy by FUNCT_2:def 1;
+          then
+A38:      rng(g+*h)=rng g\/rng h by A31,A33,NECKLACE:7;
+          dom(g+*h)=Fxy\/{x,y} by A31,A37,FUNCT_4:def 1;
+          then reconsider gh=g+*h as Function of F,bool the carrier of TM
+            by A36,A38,FUNCT_2:4;
+          take gh;
+          h.y={}TM & y in {x,y} by FUNCT_4:66,TARSKI:def 2;
+          then
+A39:      gh.y={}TM by A31,FUNCT_4:14;
+          for A be Subset of TM st A in {{}TM,{}TM} holds A is open
+            by TARSKI:def 2;
+          then {{}TM,{}TM} is open by TOPS_2:def 1;
+          hence rng gh is open by A26,A35,A38,TOPS_2:20;
+          union rng gh=union rng g\/union rng h by A38,ZFMISC_1:96
+            .=union rng g\/union{{}TM} by A35,ENUMSET1:69
+            .=union rng g\/{}TM by ZFMISC_1:31
+            .=union rng g;
+          hence rng gh is Cover of A by A30,SETFAM_1:def 12;
+          x in {x,y} & h.x={}TM by A34,FUNCT_4:66,TARSKI:def 2;
+          then
+A40:      gh.x={}TM by A31,FUNCT_4:14;
+          hereby
+            let a be set;
+            assume
+A41:        a in F;
+            per cases by A36,A41,XBOOLE_0:def 3;
+            suppose a in Fxy;
+              then (not a in dom h) & g.a c=a by A28,A33,XBOOLE_0:3;
+              hence gh.a c=a by FUNCT_4:12;
+            end;
+            suppose a in {x,y};
+              then a=x or a=y by TARSKI:def 2;
+              hence gh.a c=a by A39,A40,XBOOLE_1:2;
+            end;
+          end;
+          let a,b be set such that
+A42:      a in F & b in F and
+A43:      a<>b;
+          per cases by A36,A42,XBOOLE_0:def 3;
+          suppose
+A44:        a in Fxy & b in Fxy;
+            then not a in dom h by A33,XBOOLE_0:3;
+            then
+A45:        gh.a=g.a by FUNCT_4:12;
+            (not b in dom h) & g.a misses g.b by A29,A33,A43,A44,XBOOLE_0:3;
+            hence thesis by A45,FUNCT_4:12;
+          end;
+          suppose a in {x,y} or b in {x,y};
+            then gh.a={}TM or gh.b={}TM by A39,A40,TARSKI:def 2;
+            hence thesis by XBOOLE_1:65;
+          end;
+        end;
+        suppose
+A46:      not Fxy is Cover of A;
+A47:      union Fxy\/xy=union Fxy\/union XY by ZFMISC_1:31
+            .=union FXY by ZFMISC_1:96;
+A48:      FXY is open by A22,A24,TOPS_2:20;
+A49:      union F=union(F\X)\/union X by A19,ZFMISC_1:96
+            .=union(F\X)\/x by ZFMISC_1:31
+            .=union Fxy\/union Y\/x by A23,ZFMISC_1:96
+            .=union Fxy\/y\/x by ZFMISC_1:31
+            .=union Fxy\/(y\/x) by XBOOLE_1:4;
+          A c=union F by A9,SETFAM_1:def 12;
+          then FXY is Cover of A by A47,A49,SETFAM_1:def 12;
+          then consider g be Function of FXY,bool the carrier of TM such that
+A50:      rng g is open and
+A51:      rng g is Cover of A and
+A52:      for a be set st a in FXY holds g.a c=a and
+A53:      for a,b be set st a in FXY & b in FXY & a<>b holds g.a misses g.b
+          by A4,A5,A6,A7,A21,A48;
+A54:      rng(g|Fxy) is open by A50,RELAT_1:99,TOPS_2:18;
+          xy in XY by TARSKI:def 1;
+          then
+A55:      xy in FXY by XBOOLE_0:def 3;
+          then
+A56:      g.xy c=xy by A52;
+A57:      dom g=FXY by FUNCT_2:def 1;
+          then
+A58:      dom(g|Fxy)=FXY/\Fxy by RELAT_1:90
+            .=Fxy by XBOOLE_1:21;
+          g.xy in rng g by A55,A57,FUNCT_1:def 5;
+          then reconsider gxy=g.xy as open Subset of TM by A50,TOPS_2:def 1;
+          set gxyA=gxy/\A;
+          gxyA c=gxy by XBOOLE_1:17;
+          then
+A59:      gxyA c=xy by A56,XBOOLE_1:1;
+          [#](TM|A)=A by PRE_TOPC:def 10;
+          then reconsider GxyA=gxyA as Subset of TM|A by XBOOLE_1:17;
+A60:      TM|A|GxyA=TM|gxyA by METRIZTS:9;
+          then
+A61:      gxyA is finite-ind by A6,TOPDIM_1:18;
+          then
+A62:      ind gxyA=ind TM|gxyA by TOPDIM_1:17;
+          ind GxyA<=ind TM|A by A6,TOPDIM_1:19;
+          then ind GxyA<=0 by A6,A7,TOPDIM_1:17;
+          then ind gxyA<=0 by A61,TOPDIM_1:21;
+          then consider V1,V2 be open Subset of TM such that
+A63:      V1 c=x & V2 c=y and
+A64:      V1 misses V2 and
+A65:      gxyA c=V1\/V2 by A5,A59,A60,A61,A62,Lm9;
+          reconsider gV1=gxy/\V1,gV2=gxy/\V2 as open Subset of TM;
+          set h=(x,y)-->(gV1,gV2);
+A66:      dom h={x,y} by FUNCT_4:65;
+          then
+A67:      dom((g|Fxy)+*h)=Fxy\/{x,y} by A58,FUNCT_4:def 1;
+          not x in F\X by ZFMISC_1:64;
+          then
+A68:      not x in Fxy by ZFMISC_1:64;
+A69:      x in {x,y} by TARSKI:def 2;
+A70:      Fxy\/{x,y}=Fxy\/(Y\/X) by ENUMSET1:41
+            .=Fxy\/Y\/X by XBOOLE_1:4
+            .=F by A18,A19,ZFMISC_1:140;
+          for A be Subset of TM st A in {gV1,gV2} holds A is open
+            by TARSKI:def 2;
+          then
+A71:      {gV1,gV2} is open by TOPS_2:def 1;
+A72:      y in {x,y} by TARSKI:def 2;
+          not y in Fxy by ZFMISC_1:64;
+          then
+A73:      Fxy misses{x,y} by A68,ZFMISC_1:57;
+          then
+A74:      rng((g|Fxy)+*h)=rng(g|Fxy)\/rng h by A58,A66,NECKLACE:7;
+          then reconsider gh=(g|Fxy)+*h as
+            Function of F,bool the carrier of TM by A67,A70,FUNCT_2:4;
+A75:      Fxy c=dom gh by A67,XBOOLE_1:7;
+          take gh;
+A76:      x<>y by A18,ZFMISC_1:64;
+          then rng h={gV1,gV2} by FUNCT_4:67;
+          hence rng gh is open by A54,A71,A74,TOPS_2:20;
+          h.x=gV1 by A76,FUNCT_4:66;
+          then
+A77:      gh.x=gV1 by A66,A69,FUNCT_4:14;
+          h.y=gV2 by FUNCT_4:66;
+          then
+A78:      gh.y=gV2 by A66,A72,FUNCT_4:14;
+A79:      for a,b be set st a in Fxy & b in {x,y} & a<>b holds gh.a misses gh
+          .b
+          proof
+            xy in XY by TARSKI:def 1; then
+A80:        xy in FXY by XBOOLE_0:def 3;
+            let a,b be set such that
+A81:        a in Fxy and
+A82:        b in {x,y} and
+            a<>b;
+            (g|Fxy).a=g.a & not a in dom h
+            by A58,A73,A81,FUNCT_1:70,XBOOLE_0:3;
+            then
+A83:        gh.a=g.a by FUNCT_4:12;
+A84:        a<>xy
+            proof
+              assume a=xy; then
+A85:          union F=union Fxy by A49,A81,XBOOLE_1:12,ZFMISC_1:92;
+              not A c=union Fxy by A46,SETFAM_1:def 12;
+              hence thesis by A9,A85,SETFAM_1:def 12;
+            end;
+            assume gh.a meets gh.b;
+            then consider z be set such that
+A86:        z in gh.a and
+A87:        z in gh.b by XBOOLE_0:3;
+            z in gV1 or z in gV2 by A78,A77,A82,A87,TARSKI:def 2;
+            then z in gxy by XBOOLE_0:def 4;
+            then g.xy meets g.a by A83,A86,XBOOLE_0:3;
+            hence thesis by A53,A58,A80,A81,A84;
+          end;
+A88:      {x,y}c=dom gh by A67,XBOOLE_1:7;
+          then
+A89:      gh.y in rng gh by A72,FUNCT_1:def 5;
+A90:      gh.x in rng gh by A69,A88,FUNCT_1:def 5;
+          A c=union rng gh
+          proof
+            let z be set such that
+A91:        z in A;
+            A c=union rng g by A51,SETFAM_1:def 12;
+            then consider G be set such that
+A92:        z in G and
+A93:        G in rng g by A91,TARSKI:def 4;
+            consider Gx be set such that
+A94:        Gx in FXY and
+A95:        g.Gx=G by A57,A93,FUNCT_1:def 5;
+            per cases by A94,XBOOLE_0:def 3;
+            suppose
+A96:          Gx in Fxy;
+              then (g|Fxy).Gx=G & not Gx in dom h by A58,A73,A95,FUNCT_1:70,
+              XBOOLE_0:3;
+              then
+A97:          gh.Gx=G by FUNCT_4:12;
+              gh.Gx in rng gh by A75,A96,FUNCT_1:def 5;
+              hence thesis by A92,A97,TARSKI:def 4;
+            end;
+            suppose Gx in XY;
+              then
+A98:          z in gxy by A92,A95,TARSKI:def 1;
+              then z in gxyA by A91,XBOOLE_0:def 4;
+              then z in V1 or z in V2 by A65,XBOOLE_0:def 3;
+              then z in gV1 or z in gV2 by A98,XBOOLE_0:def 4;
+              hence thesis by A78,A77,A90,A89,TARSKI:def 4;
+            end;
+          end;
+          hence rng gh is Cover of A by SETFAM_1:def 12;
+A99:      gV1 c=V1 & gV2 c=V2 by XBOOLE_1:17;
+          hereby
+            let a be set;
+            assume
+A100:       a in F;
+            per cases by A70,A100,XBOOLE_0:def 3;
+            suppose
+A101:         a in Fxy; then
+A102:         (g|Fxy).a=g.a by A58,FUNCT_1:70;
+              (not a in dom h) & g.a c=a by A52,A58,A73,A101,XBOOLE_0:3;
+              hence gh.a c=a by A102,FUNCT_4:12;
+            end;
+            suppose a in {x,y};
+              then a=x or a=y by TARSKI:def 2;
+              hence gh.a c=a by A63,A78,A77,A99,XBOOLE_1:1;
+            end;
+          end;
+          let a,b be set such that
+A103:     a in F & b in F and
+A104:     a<>b;
+          per cases by A70,A103,XBOOLE_0:def 3;
+          suppose
+A105:       a in Fxy & b in Fxy;
+            then (g|Fxy).a=g.a & not a in dom h
+              by A58,A73,FUNCT_1:70,XBOOLE_0:3;
+            then
+A106:       gh.a=g.a by FUNCT_4:12;
+A107:       (g|Fxy).b=g.b & not b in dom h by A58,A73,A105,FUNCT_1:70,
+              XBOOLE_0:3;
+            g.a misses g.b by A53,A58,A104,A105;
+            hence thesis by A106,A107,FUNCT_4:12;
+          end;
+          suppose a in Fxy & b in {x,y} or a in {x,y} & b in Fxy;
+            hence thesis by A79,A104;
+          end;
+          suppose
+A108:       a in {x,y} & b in {x,y};
+            then a=x or a=y by TARSKI:def 2;
+            then a=x & b=y or a=y & b=x by A104,A108,TARSKI:def 2;
+            hence thesis by A64,A78,A77,A99,XBOOLE_1:64;
+          end;
+        end;
+      end;
+    end;
+  end;
+A109: P[0]
+  proof
+    let A be Subset of TM such that
+    TM|A is second-countable and
+    A is finite-ind and
+    ind A<=0;
+    let F be finite Subset-Family of TM such that
+    F is open and
+A110: F is Cover of A and
+A111: card F<=0;
+    rng{}c=bool the carrier of TM & dom{}=F by A111,XBOOLE_1:2;
+    then reconsider g={} as Function of F,bool the carrier of TM by FUNCT_2:4;
+    take g;
+    F={} by A111;
+    hence thesis by A110;
+  end;
+  for n holds P[n] from NAT_1:sch 2(A109,A3);
+  then P[card F];
+  hence thesis by A1,A2,TOPDIM_1:18;
+end;
+
+:: Wprowadzenie do topologii Th 3.4.14
+
+theorem
+  for TM st TM is second-countable finite-ind & ind TM <= n
+  for F st F is open & F is Cover of TM
+  ex G st G is open & G is Cover of TM & G is_finer_than F &
+  card G <= card F*(n+1) & order G <= n
+proof
+  let TM such that
+A1: TM is second-countable finite-ind and
+A2: ind TM<=n;
+  reconsider I=n as Integer;
+  consider G be finite Subset-Family of TM such that
+A3: G is Cover of TM and
+A4: G is finite-ind & ind G<=0 and
+A5: card G<=I+1 and
+  for a,b be Subset of TM st a in G & b in G & a meets b holds a=b by A1,A2,
+  Th7;
+  set cTM=the carrier of TM;
+  let F be finite Subset-Family of TM such that
+A6: F is open and
+A7: F is Cover of TM;
+  card((n+1)*card F)=card card((n+1)*card F);
+  then
+A8: card((n+1)*card F)=(n+1)*card F by CARD_1:71;
+  defpred P[set,set] means
+  for A be Subset of TM st A=$1ex g be Function of F,bool cTM st$2=rng g &
+     rng g is open & rng g is Cover of A &
+    (for a be set st a in F holds g.a c=a) &
+    for a,b be set st a in F & b in F & a<>b holds g.a misses g.b;
+A9: for x be set st x in G ex y be set st y in bool bool cTM & P[x,y]
+  proof
+    let x be set;
+    assume
+A10: x in G;
+    then reconsider A=x as Subset of TM;
+A11: TM|A is second-countable by A1;
+    [#]TM c=union F by A7,SETFAM_1:def 12;
+    then A c=union F by XBOOLE_1:1;
+    then
+A12: F is Cover of A by SETFAM_1:def 12;
+    A is finite-ind & ind A<=0 by A4,A10,TOPDIM_1:11;
+    then consider g be Function of F,bool the carrier of TM such that
+A13: rng g is open & rng g is Cover of A & ((for a be set st a in F holds g
+.a c=a) & for a,b be set st a in F & b in F & a<>b holds g.a misses g.b) by A6,
+    A11,A12,Th22;
+    take rng g;
+    thus thesis by A13;
+  end;
+  consider GG be Function of G,bool bool cTM such that
+A14: for x be set st x in G holds P[x,GG.x] from FUNCT_2:sch 1(A9);
+  union rng GG c=union bool bool cTM by ZFMISC_1:95;
+  then reconsider Ugg=Union GG as Subset-Family of TM;
+A15: dom GG=G by FUNCT_2:def 1;
+A16: for x be set st x in dom GG holds card(GG.x)c=card F
+  proof
+    let x be set;
+    assume
+A17: x in dom GG;
+    then reconsider A=x as Subset of TM by A15;
+    consider g be Function of F,bool cTM such that
+A18: GG.x=rng g and
+    rng g is open and
+    rng g is Cover of A and
+    for a be set st a in F holds g.a c=a and
+    for a,b be set st a in F & b in F & a<>b holds g.a misses g.b by A14,A17;
+    dom g=F by FUNCT_2:def 1;
+    hence thesis by A18,CARD_1:28;
+  end;
+  card dom GG c=n+1 by A5,A15,NAT_1:40;
+  then
+A19: card Ugg c=(n+1)*`card F by A16,CARD_3:132;
+  card card(n+1)=card(n+1);
+  then card card F=card F & card(n+1)=n+1 by CARD_1:71;
+  then
+A20: (n+1)*`card F=(n+1)*card F by A8,CARD_2:52;
+  then reconsider Ugg as finite Subset-Family of TM by A19;
+  take Ugg;
+  thus Ugg is open
+  proof
+    let A be Subset of TM;
+    assume A in Ugg;
+    then consider Y be set such that
+A21: A in Y and
+A22: Y in rng GG by TARSKI:def 4;
+    consider x be set such that
+A23: x in dom GG & Y=GG.x by A22,FUNCT_1:def 5;
+    ex g be Function of F,bool cTM st Y=rng g & rng g is open &
+rng g is Cover of x &
+  (for a be set st a in F holds g.a c=a) &
+   for a,b be set st a in F & b in
+    F & a<>b holds g.a misses g.b by A14,A15,A23;
+    hence thesis by A21,TOPS_2:def 1;
+  end;
+  [#]TM c=union Ugg
+  proof
+A24: [#]TM c=union G by A3,SETFAM_1:def 12;
+    let x be set such that
+A25: x in [#]TM;
+    consider A be set such that
+A26: x in A and
+A27: A in G by A24,A25,TARSKI:def 4;
+    consider g be Function of F,bool cTM such that
+A28: GG.A=rng g and
+    rng g is open and
+A29: rng g is Cover of A and
+    for a be set st a in F holds g.a c=a and
+    for a,b be set st a in F & b in F & a<>b holds g.a misses g.b by A14,A27;
+    A c=union rng g by A29,SETFAM_1:def 12;
+    then consider y be set such that
+A30: x in y and
+A31: y in rng g by A26,TARSKI:def 4;
+    GG.A in rng GG by A15,A27,FUNCT_1:def 5;
+    then y in Ugg by A28,A31,TARSKI:def 4;
+    hence thesis by A30,TARSKI:def 4;
+  end;
+  hence Ugg is Cover of TM by SETFAM_1:def 12;
+  thus Ugg is_finer_than F
+  proof
+    let A be set;
+    assume A in Ugg;
+    then consider Y be set such that
+A32: A in Y and
+A33: Y in rng GG by TARSKI:def 4;
+    consider x be set such that
+A34: x in dom GG & Y=GG.x by A33,FUNCT_1:def 5;
+    consider g be Function of F,bool cTM such that
+A35: Y=rng g and
+    rng g is open and
+    rng g is Cover of x and
+A36: for a be set st a in F holds g.a c=a and
+    for a,b be set st a in F & b in F & a<>b holds g.a misses g.b by A14,A15,
+    A34;
+    dom g=F by FUNCT_2:def 1;
+    then ex z be set st z in F & g.z=A by A32,A35,FUNCT_1:def 5;
+    hence thesis by A36;
+  end;
+  thus card Ugg<=card F*(n+1) by A19,A20,NAT_1:40;
+  defpred Q[set,set] means
+  $1 in GG.$2;
+  now
+    let H be finite Subset-Family of TM such that
+A37: H c=Ugg and
+A38: card H>n+1;
+    H is non empty by A38;
+    then consider XX be set such that
+A39: XX in H by XBOOLE_0:def 1;
+A40: for x be set st x in H ex y be set st y in G & Q[x,y]
+    proof
+      let A be set;
+      assume A in H;
+      then consider Y be set such that
+A41:  A in Y and
+A42:  Y in rng GG by A37,TARSKI:def 4;
+      ex x be set st x in dom GG & Y=GG.x by A42,FUNCT_1:def 5;
+      hence thesis by A41;
+    end;
+    consider q be Function of H,G such that
+A43: for x be set st x in H holds Q[x,q.x] from FUNCT_2:sch 1(A40);
+    ex y be set st y in G & Q[XX,y] by A40,A39;
+    then
+A44: dom q=H by FUNCT_2:def 1;
+    assume meet H is non empty;
+    then consider x be set such that
+A45: x in meet H by XBOOLE_0:def 1;
+    for x1,x2 be set st x1 in dom q & x2 in dom q & q.x1=q.x2 holds x1=x2
+    proof
+      let x1,x2 be set such that
+A46:  x1 in dom q and
+A47:  x2 in dom q and
+A48:  q.x1=q.x2;
+      x in x1 & x in x2 by A45,A46,A47,SETFAM_1:def 1;
+      then
+A49:  x1 meets x2 by XBOOLE_0:3;
+      q.x1 in rng q by A46,FUNCT_1:def 5;
+      then q.x1 in G;
+      then consider g be Function of F,bool cTM such that
+A50:  GG.(q.x1)=rng g and
+      rng g is open and
+      rng g is Cover of(q.x1) and
+      for a be set st a in F holds g.a c=a and
+A51:  for a,b be set st a in F & b in F & a<>b holds g.a misses g.b by A14;
+A52:  dom g=F by FUNCT_2:def 1;
+      x2 in GG.(q.x1) by A43,A47,A48;
+      then
+A53:  ex y2 be set st y2 in F & x2=g.y2 by A50,A52,FUNCT_1:def 5;
+      x1 in GG.(q.x1) by A43,A46;
+      then ex y1 be set st y1 in F & x1=g.y1 by A50,A52,FUNCT_1:def 5;
+      hence thesis by A49,A51,A53;
+    end;
+    then
+A54: q is one-to-one by FUNCT_1:def 8;
+    rng q c=G;
+    then card H c=card G by A54,A44,CARD_1:26;
+    then card H<=card G by NAT_1:40;
+    hence contradiction by A5,A38,XXREAL_0:2;
+  end;
+  hence thesis by Th3;
+end;
+
+::Wprowadzenie do topologii Lm 3.4.17
+
+theorem
+  for TM st TM is finite-ind
+  for A st ind A`<=n & TM|A` is second-countable
+  for A1,A2 be closed Subset of TM st A=A1\/A2
+  ex X1,X2 be closed Subset of TM st[#]TM=X1\/X2 & A1 c=X1 & A2 c=X2 &
+  A1/\X2=A1/\A2 & A1/\A2=X1/\A2 & ind((X1/\X2)\(A1/\A2))<=n-1
+proof
+  let TM such that
+A1: TM is finite-ind;
+  set cTM=[#]TM;
+  let A such that
+A2: ind A`<=n and
+A3: TM|A` is second-countable;
+  let A1,A2 be closed Subset of TM such that
+A4: A=A1\/A2;
+  set A12=A1/\A2;
+  set T'12=TM|(cTM\A12);
+A5: [#]T'12=cTM\A12 by PRE_TOPC:def 10;
+  A`c=cTM\A12 by A4,XBOOLE_1:29,34;
+  then reconsider A1'=A1\A12,A2'=A2\A12,A'=A` as Subset of T'12 by A5,XBOOLE_1:
+  33;
+  A2/\[#]T'12=(A2/\cTM)\A12 by A5,XBOOLE_1:49
+    .=A2' by XBOOLE_1:28;
+  then reconsider A2' as closed Subset of T'12 by PRE_TOPC:43;
+  A1/\[#]T'12=(A1/\cTM)\A12 by A5,XBOOLE_1:49
+    .=A1' by XBOOLE_1:28;
+  then reconsider A1' as closed Subset of T'12 by PRE_TOPC:43;
+  A1\A2=A1' by XBOOLE_1:47;
+  then A1' misses A2 by XBOOLE_1:79;
+  then
+A6: A1' misses A2' by XBOOLE_1:36,63;
+A7: ind A`=ind A' by A1,TOPDIM_1:21;
+  T'12|A' is second-countable by A3,METRIZTS:9;
+  then consider L be Subset of T'12 such that
+A8: L separates A1',A2' and
+A9: ind(L/\A')<=n-1 by A1,A2,A6,A7,Th11;
+  consider U,W be open Subset of T'12 such that
+A10: A1' c=U and
+A11: A2' c=W and
+A12: U misses W and
+A13: L=(U\/W)` by A8,METRIZTS:def 3;
+  [#]T'12 c=cTM by PRE_TOPC:def 9;
+  then reconsider L'=L,U'=U,W'=W as Subset of TM by XBOOLE_1:1;
+A14: A1=(A1\A12)\/A12 & A2=(A2\A12)\/A12 by XBOOLE_1:17,45;
+  L misses A
+  proof
+    assume L meets A;
+    then consider x be set such that
+A15: x in L and
+A16: x in A by XBOOLE_0:3;
+A17: x in A1 or x in A2 by A4,A16,XBOOLE_0:def 3;
+    not x in A12 by A5,A15,XBOOLE_0:def 5;
+    then x in A1' or x in A2' by A17,XBOOLE_0:def 5;
+    then x in U\/W by A10,A11,XBOOLE_0:def 3;
+    hence thesis by A13,A15,XBOOLE_0:def 5;
+  end;
+  then
+A18: L=L'\A by XBOOLE_1:83
+    .=(L/\cTM)\A by XBOOLE_1:28
+    .=L/\A' by XBOOLE_1:49;
+A19: cTM\(cTM\A12)=cTM/\A12 by XBOOLE_1:48
+    .=A12 by XBOOLE_1:28;
+A20: A1\(A1\A12)=A1/\A12 by XBOOLE_1:48
+    .=A12 by XBOOLE_1:17,28;
+  A12` is open;
+  then reconsider U',W' as open Subset of TM by A5,TSEP_1:9;
+  take X2=W'`,X1=U'`;
+A21: W' c=X1 by A12,SUBSET_1:43;
+A22: W\/(cTM\(U\/W))=W\/(X1/\X2) by XBOOLE_1:53
+    .=(W'\/X1)/\(W\/X2) by XBOOLE_1:24
+    .=(W'\/X1)/\cTM by XBOOLE_1:45
+    .=X1/\cTM by A21,XBOOLE_1:12
+    .=X1 by XBOOLE_1:28;
+  thus X2\/X1=cTM\(U'/\W') by XBOOLE_1:54
+    .=cTM\{} by A12,XBOOLE_0:def 7
+    .=cTM;
+A23: U' c=X2 by A12,SUBSET_1:43;
+A24: U\/(cTM\(U\/W))=U\/((X1)/\X2) by XBOOLE_1:53
+    .=(U'\/X1)/\(U\/X2) by XBOOLE_1:24
+    .=cTM/\(U\/X2) by XBOOLE_1:45
+    .=cTM/\X2 by A23,XBOOLE_1:12
+    .=X2 by XBOOLE_1:28;
+  cTM\(cTM\A12)c=cTM\(U\/W) by A5,XBOOLE_1:34;
+  hence
+A25: A1 c=X2 & A2 c=X1 by A10,A11,A14,A19,A24,A22,XBOOLE_1:13;
+  then
+A26: A12 c=A1/\X1 by XBOOLE_1:26;
+  A1/\X1=(cTM/\A1)\U' by XBOOLE_1:49
+    .=A1\U' by XBOOLE_1:28;
+  then A1/\X1 c=A12 by A10,A20,XBOOLE_1:34;
+  hence A1/\X1=A12 by A26,XBOOLE_0:def 10;
+A27: A2\(A2\A12)=A2/\A12 by XBOOLE_1:48
+    .=A12 by XBOOLE_1:17,28;
+A28: A12 c=A2/\X2 by A25,XBOOLE_1:26;
+  A2/\X2=(cTM/\A2)\W' by XBOOLE_1:49
+    .=A2\W' by XBOOLE_1:28;
+  then A2/\X2 c=A12 by A11,A27,XBOOLE_1:34;
+  hence A12=X2/\A2 by A28,XBOOLE_0:def 10;
+  (X2/\X1)\A12=cTM\(W'\/U')\A12 by XBOOLE_1:53
+    .=cTM\((W'\/U')\/A12) by XBOOLE_1:41
+    .=L by A5,A13,XBOOLE_1:41;
+  hence thesis by A1,A9,A18,TOPDIM_1:21;
+end;

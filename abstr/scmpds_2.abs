@@ -7,18 +7,18 @@
 environ
 
  vocabularies AMI_1, INT_1, AMI_2, GR_CY_1, SCMPDS_1, RELAT_1, FUNCT_1, BOOLE,
-      CAT_1, FINSET_1, AMI_3, AMI_5, ORDINAL2, FINSEQ_1, MCART_1, ABSVALUE,
-      CARD_3, ARYTM_1, NAT_1, CQC_LANG, FUNCT_4, SCMPDS_2, TARSKI, FUNCT_7,
-      ARYTM, ORDINAL1, SCMNORM;
+      CAT_1, FINSET_1, AMI_3, AMI_5, FINSEQ_1, MCART_1, ABSVALUE, CARD_3,
+      ARYTM_1, NAT_1, CQC_LANG, FUNCT_4, SCMPDS_2, FUNCT_7, ARYTM, ORDINAL1,
+      SCMNORM, FUNCT_5;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, ORDINAL1, XCMPLX_0, FUNCT_1,
       FUNCT_2, INT_1, NAT_1, MCART_1, FUNCOP_1, CARD_1, CARD_3, ZFMISC_1,
       STRUCT_0, RELAT_1, FUNCT_4, FINSET_1, FINSEQ_1, FINSEQ_4, FUNCT_7, AMI_1,
       SCMNORM, AMI_2, SCMPDS_1, AMI_3, INT_2, XXREAL_0;
  constructors DOMAIN_1, XXREAL_0, REAL_1, NAT_1, INT_2, FINSEQ_4, CAT_2, AMI_5,
       SCMPDS_1, SCMNORM, RELSET_1;
- registrations XBOOLE_0, SETFAM_1, RELAT_1, ORDINAL1, FUNCOP_1, FRAENKEL,
-      NUMBERS, XREAL_0, INT_1, FINSEQ_1, CARD_3, AMI_1, AMI_2, SCMPDS_1,
-      SCMNORM, XXREAL_0, FUNCT_1;
+ registrations XBOOLE_0, SETFAM_1, RELAT_1, ORDINAL1, FUNCOP_1, NUMBERS,
+      XREAL_0, INT_1, FINSEQ_1, CARD_3, AMI_1, AMI_2, SCMPDS_1, SCMNORM,
+      XXREAL_0, FUNCT_1, GR_CY_1, FINSEQ_4;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -30,12 +30,17 @@ reserve x for set,
 definition
   func SCMPDS -> strict AMI-Struct over NAT, { INT } equals
 :: SCMPDS_2:def 1
-  AMI-Struct(#SCM-Memory,In(NAT,SCM-Memory),SCMPDS-Instr,
-    SCMPDS-OK,SCMPDS-Exec#);
+  AMI-Struct(#
+    SCM-Memory,In(NAT,SCM-Memory),SCMPDS-Instr, SCMPDS-OK,SCMPDS-Exec#);
 end;
 
 registration
-  cluster SCMPDS -> standard-ins non empty stored-program;
+ cluster proj2 SCMPDS-Instr -> FinSequence-membered;
+end;
+
+
+registration
+  cluster SCMPDS -> non empty stored-program standard-ins;
 end;
 
 canceled 2;
@@ -48,8 +53,7 @@ registration
 end;
 
 theorem :: SCMPDS_2:4
-  the Instructions of SCMPDS <> INT &
-  NAT <> the Instructions of SCMPDS;
+  the Instructions of SCMPDS <> INT & NAT <> the Instructions of SCMPDS;
 
 canceled;
 
@@ -86,12 +90,8 @@ theorem :: SCMPDS_2:13
 begin :: The Instruction Structure
 
 reserve d1,d2,d3,d4,d5 for Element of SCM-Data-Loc,
-  k1,k2,k3,k4,k5,k6 for Integer;
-
-registration
-  let I be Instruction of SCMPDS;
-  cluster InsCode I -> natural;
-end;
+  k1,k2,k3,k4,k5,k6 for
+  Integer;
 
 reserve I for Instruction of SCMPDS;
 
@@ -110,7 +110,6 @@ definition
   canceled;
   func DataLoc(m,n) -> Int_position equals
 :: SCMPDS_2:def 4
-
   [1,abs(m+n)];
 end;
 
@@ -127,7 +126,8 @@ theorem :: SCMPDS_2:19
   x in { 4,5,6,7,8 } implies [x,<*d3,k3,k4*>] in SCMPDS-Instr;
 
 theorem :: SCMPDS_2:20
-  x in { 9,10,11,12,13 } implies [x,<*d4,d5,k5,k6*>] in SCMPDS-Instr;
+  x in { 9,10,11,12,13 } implies [x,<*d4,d5,k5,k6*>] in
+  SCMPDS-Instr;
 
 reserve a,b,c for Int_position;
 
@@ -135,7 +135,6 @@ definition
   let k1;
   func goto k1 -> Instruction of SCMPDS equals
 :: SCMPDS_2:def 5
-
   [ 0, <*k1*>];
 end;
 
@@ -143,7 +142,6 @@ definition
   let a;
   func return a -> Instruction of SCMPDS equals
 :: SCMPDS_2:def 6
-
   [ 1, <*a*>];
 end;
 
@@ -151,11 +149,9 @@ definition
   let a,k1;
   func a := k1 -> Instruction of SCMPDS equals
 :: SCMPDS_2:def 7
-
   [ 2, <*a,k1*>];
   func saveIC(a,k1) -> Instruction of SCMPDS equals
 :: SCMPDS_2:def 8
-
   [ 3, <*a,k1*>];
 end;
 
@@ -163,23 +159,18 @@ definition
   let a,k1,k2;
   func (a,k1)<>0_goto k2 -> Instruction of SCMPDS equals
 :: SCMPDS_2:def 9
-
   [ 4, <*a,k1,k2*>];
   func (a,k1)<=0_goto k2 -> Instruction of SCMPDS equals
 :: SCMPDS_2:def 10
-
   [ 5, <*a,k1,k2*>];
   func (a,k1)>=0_goto k2 -> Instruction of SCMPDS equals
 :: SCMPDS_2:def 11
-
   [ 6, <*a,k1,k2*>];
   func (a,k1) := k2 -> Instruction of SCMPDS equals
 :: SCMPDS_2:def 12
-
   [ 7, <*a,k1,k2*>];
   func AddTo(a,k1,k2) -> Instruction of SCMPDS equals
 :: SCMPDS_2:def 13
-
   [ 8, <*a,k1,k2*>];
 end;
 
@@ -187,22 +178,18 @@ definition
   let a,b,k1,k2;
   func AddTo(a,k1,b,k2) -> Instruction of SCMPDS equals
 :: SCMPDS_2:def 14
-
   [ 9, <*a,b,k1,k2*>];
   func SubFrom(a,k1,b,k2) -> Instruction of SCMPDS equals
 :: SCMPDS_2:def 15
   [ 10, <*a,b,k1,k2*>];
   func MultBy(a,k1,b,k2) -> Instruction of SCMPDS equals
 :: SCMPDS_2:def 16
-
   [ 11, <*a,b,k1,k2*>];
   func Divide(a,k1,b,k2) -> Instruction of SCMPDS equals
 :: SCMPDS_2:def 17
-
   [ 12, <*a,b,k1,k2*>];
   func (a,k1) := (b,k2) -> Instruction of SCMPDS equals
 :: SCMPDS_2:def 18
-
   [ 13, <*a,b,k1,k2*>];
 end;
 
@@ -249,60 +236,60 @@ theorem :: SCMPDS_2:34
   InsCode ((a,k1) := (b,k2)) = 13;
 
 theorem :: SCMPDS_2:35
-  for ins being Instruction of SCMPDS st InsCode ins = 0
-  holds ex k1 st ins = goto k1;
+  for ins being Instruction of SCMPDS st InsCode ins = 0 holds ex k1 st
+  ins = goto k1;
 
 theorem :: SCMPDS_2:36
-  for ins being Instruction of SCMPDS st InsCode ins = 1
-  holds ex a st ins = return a;
+  for ins being Instruction of SCMPDS st InsCode ins = 1 holds ex a st
+  ins = return a;
 
 theorem :: SCMPDS_2:37
-  for ins being Instruction of SCMPDS st InsCode ins = 2
-  holds ex a,k1 st ins = a := k1;
+  for ins being Instruction of SCMPDS st InsCode ins = 2 holds ex a,k1
+  st ins = a := k1;
 
 theorem :: SCMPDS_2:38
-  for ins being Instruction of SCMPDS st InsCode ins = 3
-  holds ex a,k1 st ins = saveIC(a,k1);
+  for ins being Instruction of SCMPDS st InsCode ins = 3 holds ex a,k1
+  st ins = saveIC(a,k1);
 
 theorem :: SCMPDS_2:39
-  for ins being Instruction of SCMPDS st InsCode ins = 4
-  holds ex a,k1,k2 st ins = (a,k1)<>0_goto k2;
+  for ins being Instruction of SCMPDS st InsCode ins = 4 holds ex a,k1,
+  k2 st ins = (a,k1)<>0_goto k2;
 
 theorem :: SCMPDS_2:40
-  for ins being Instruction of SCMPDS st InsCode ins = 5
-  holds ex a,k1,k2 st ins = (a,k1)<=0_goto k2;
+  for ins being Instruction of SCMPDS st InsCode ins = 5 holds ex a,k1,
+  k2 st ins = (a,k1)<=0_goto k2;
 
 theorem :: SCMPDS_2:41
-  for ins being Instruction of SCMPDS st InsCode ins = 6
-  holds ex a,k1,k2 st ins = (a,k1)>=0_goto k2;
+  for ins being Instruction of SCMPDS st InsCode ins = 6 holds ex a,k1,
+  k2 st ins = (a,k1)>=0_goto k2;
 
 theorem :: SCMPDS_2:42
-  for ins being Instruction of SCMPDS st InsCode ins = 7
-  holds ex a,k1,k2 st ins = (a,k1) := k2;
+  for ins being Instruction of SCMPDS st InsCode ins = 7 holds ex a,k1,
+  k2 st ins = (a,k1) := k2;
 
 theorem :: SCMPDS_2:43
-  for ins being Instruction of SCMPDS st InsCode ins = 8
-  holds ex a,k1,k2 st ins = AddTo(a,k1,k2);
+  for ins being Instruction of SCMPDS st InsCode ins = 8 holds ex a,k1,
+  k2 st ins = AddTo(a,k1,k2);
 
 theorem :: SCMPDS_2:44
-  for ins being Instruction of SCMPDS st InsCode ins = 9
-  holds ex a,b,k1,k2 st ins = AddTo(a,k1,b,k2);
+  for ins being Instruction of SCMPDS st InsCode ins = 9 holds ex a,b,k1
+  ,k2 st ins = AddTo(a,k1,b,k2);
 
 theorem :: SCMPDS_2:45
-  for ins being Instruction of SCMPDS st InsCode ins = 10
-  holds ex a,b,k1,k2 st ins = SubFrom(a,k1,b,k2);
+  for ins being Instruction of SCMPDS st InsCode ins = 10 holds ex a,b,
+  k1,k2 st ins = SubFrom(a,k1,b,k2);
 
 theorem :: SCMPDS_2:46
-  for ins being Instruction of SCMPDS st InsCode ins = 11
-  holds ex a,b,k1,k2 st ins = MultBy(a,k1,b,k2);
+  for ins being Instruction of SCMPDS st InsCode ins = 11 holds ex a,b,
+  k1,k2 st ins = MultBy(a,k1,b,k2);
 
 theorem :: SCMPDS_2:47
-  for ins being Instruction of SCMPDS st InsCode ins = 12
-  holds ex a,b,k1,k2 st ins = Divide(a,k1,b,k2);
+  for ins being Instruction of SCMPDS st InsCode ins = 12 holds ex a,b,
+  k1,k2 st ins = Divide(a,k1,b,k2);
 
 theorem :: SCMPDS_2:48
-  for ins being Instruction of SCMPDS st InsCode ins = 13
-  holds ex a,b,k1,k2 st ins = (a,k1) := (b,k2);
+  for ins being Instruction of SCMPDS st InsCode ins = 13 holds ex a,b,
+  k1,k2 st ins = (a,k1) := (b,k2);
 
 theorem :: SCMPDS_2:49
   for s being State of SCMPDS, d being Int_position holds d in dom s;
@@ -317,13 +304,13 @@ theorem :: SCMPDS_2:52
   for dl being Int_position holds dl <> IC SCMPDS;
 
 theorem :: SCMPDS_2:53
-  for il being Instruction-Location of SCMPDS,dl being Int_position holds
-  il <> dl;
+  for il being Instruction-Location of SCMPDS,dl being Int_position
+  holds il <> dl;
 
 theorem :: SCMPDS_2:54
-  for s1,s2 being State of SCMPDS st IC s1 = IC s2 &
-  (for a being Int_position holds s1.a = s2.a) &
-  for i being Instruction-Location of SCMPDS holds s1.i = s2.i holds s1 = s2;
+  for s1,s2 being State of SCMPDS st IC s1 = IC s2 & (for a being
+  Int_position holds s1.a = s2.a) & for i being Instruction-Location of SCMPDS
+  holds s1.i = s2.i holds s1 = s2;
 
 begin :: Execution semantics of the SCMPDS instructions
 
@@ -334,118 +321,104 @@ theorem :: SCMPDS_2:57
   for b st b <> a holds Exec( a:=k1, s).b = s.b;
 
 theorem :: SCMPDS_2:58
-  Exec((a,k1):=k2, s).IC SCMPDS = Next IC s &
-  Exec((a,k1):=k2, s).DataLoc(s.a,k1) = k2 &
-  for b st b <> DataLoc(s.a,k1) holds Exec((a,k1):=k2, s).b = s.b;
+  Exec((a,k1):=k2, s).IC SCMPDS = Next IC s & Exec((a,k1):=k2, s).
+DataLoc(s.a,k1) = k2 & for b st b <> DataLoc(s.a,k1) holds Exec((a,k1):=k2, s).
+  b = s.b;
 
 theorem :: SCMPDS_2:59
-  Exec((a,k1):=(b,k2), s).IC SCMPDS = Next IC s &
-  Exec((a,k1):=(b,k2), s).DataLoc(s.a,k1) = s.DataLoc(s.b,k2) &
-  for c st c <> DataLoc(s.a,k1) holds Exec((a,k1):=(b,k2),s).c = s.c;
+  Exec((a,k1):=(b,k2), s).IC SCMPDS = Next IC s & Exec((a,k1):=(b,
+  k2), s).DataLoc(s.a,k1) = s.DataLoc(s.b,k2) & for c st c <> DataLoc(s.a,k1)
+  holds Exec((a,k1):=(b,k2),s).c = s.c;
 
 theorem :: SCMPDS_2:60
-  Exec(AddTo(a,k1,k2), s).IC SCMPDS = Next IC s &
-  Exec(AddTo(a,k1,k2), s).DataLoc(s.a,k1)=s.DataLoc(s.a,k1)+k2 &
-  for b st b <>DataLoc(s.a,k1) holds Exec(AddTo(a,k1,k2), s).b = s.b;
+  Exec(AddTo(a,k1,k2), s).IC SCMPDS = Next IC s & Exec(AddTo(a,k1,
+  k2), s).DataLoc(s.a,k1)=s.DataLoc(s.a,k1)+k2 & for b st b <>DataLoc(s.a,k1)
+  holds Exec(AddTo(a,k1,k2), s).b = s.b;
 
 theorem :: SCMPDS_2:61
-  Exec(AddTo(a,k1,b,k2), s).IC SCMPDS = Next IC s &
-  Exec(AddTo(a,k1,b,k2), s).DataLoc(s.a,k1)
-  = s.DataLoc(s.a,k1) + s.DataLoc(s.b,k2) &
-  for c st c <> DataLoc(s.a,k1) holds Exec(AddTo(a,k1,b,k2),s).c = s.c;
+  Exec(AddTo(a,k1,b,k2), s).IC SCMPDS = Next IC s & Exec(AddTo(a,
+k1,b,k2), s).DataLoc(s.a,k1) = s.DataLoc(s.a,k1) + s.DataLoc(s.b,k2) & for c st
+  c <> DataLoc(s.a,k1) holds Exec(AddTo(a,k1,b,k2),s).c = s.c;
 
 theorem :: SCMPDS_2:62
-  Exec(SubFrom(a,k1,b,k2), s).IC SCMPDS = Next IC s &
-  Exec(SubFrom(a,k1,b,k2), s).DataLoc(s.a,k1)
-  = s.DataLoc(s.a,k1) - s.DataLoc(s.b,k2) &
-  for c st c <> DataLoc(s.a,k1) holds Exec(SubFrom(a,k1,b,k2),s).c = s.c;
+  Exec(SubFrom(a,k1,b,k2), s).IC SCMPDS = Next IC s & Exec(SubFrom
+(a,k1,b,k2), s).DataLoc(s.a,k1) = s.DataLoc(s.a,k1) - s.DataLoc(s.b,k2) & for c
+  st c <> DataLoc(s.a,k1) holds Exec(SubFrom(a,k1,b,k2),s).c = s.c;
 
 theorem :: SCMPDS_2:63
-  Exec(MultBy(a,k1,b,k2), s).IC SCMPDS = Next IC s &
-  Exec(MultBy(a,k1,b,k2), s).DataLoc(s.a,k1)
-  = s.DataLoc(s.a,k1) * s.DataLoc(s.b,k2) &
-  for c st c <> DataLoc(s.a,k1) holds Exec(MultBy(a,k1,b,k2),s).c = s.c;
+  Exec(MultBy(a,k1,b,k2), s).IC SCMPDS = Next IC s & Exec(MultBy(a
+  ,k1,b,k2), s).DataLoc(s.a,k1) = s.DataLoc(s.a,k1) * s.DataLoc(s.b,k2) & for c
+  st c <> DataLoc(s.a,k1) holds Exec(MultBy(a,k1,b,k2),s).c = s.c;
 
 theorem :: SCMPDS_2:64
-  Exec(Divide(a,k1,b,k2), s).IC SCMPDS = Next IC s &
-  (DataLoc(s.a,k1) <> DataLoc(s.b,k2) implies
-  Exec(Divide(a,k1,b,k2), s).DataLoc(s.a,k1)
-  = s.DataLoc(s.a,k1) div s.DataLoc(s.b,k2)) &
-  Exec(Divide(a,k1,b,k2), s).DataLoc(s.b,k2)
-  = s.DataLoc(s.a,k1) mod s.DataLoc(s.b,k2) &
-  for c st c <> DataLoc(s.a,k1) & c <> DataLoc(s.b,k2)
-  holds Exec(Divide(a,k1,b,k2),s).c = s.c;
+  Exec(Divide(a,k1,b,k2), s).IC SCMPDS = Next IC s & (DataLoc(s.a,
+k1) <> DataLoc(s.b,k2) implies Exec(Divide(a,k1,b,k2), s).DataLoc(s.a,k1) = s.
+DataLoc(s.a,k1) div s.DataLoc(s.b,k2)) & Exec(Divide(a,k1,b,k2), s).DataLoc(s.b
+,k2) = s.DataLoc(s.a,k1) mod s.DataLoc(s.b,k2) & for c st c <> DataLoc(s.a,k1)
+  & c <> DataLoc(s.b,k2) holds Exec(Divide(a,k1,b,k2),s).c = s.c;
 
 theorem :: SCMPDS_2:65
-  Exec(Divide(a,k1,a,k1), s).IC SCMPDS = Next IC s &
-  Exec(Divide(a,k1,a,k1), s).DataLoc(s.a,k1)
-  = s.DataLoc(s.a,k1) mod s.DataLoc(s.a,k1) &
-  for c st c <> DataLoc(s.a,k1) holds
-  Exec(Divide(a,k1,a,k1),s).c = s.c;
+  Exec(Divide(a,k1,a,k1), s).IC SCMPDS = Next IC s & Exec(Divide(a,k1,a,
+k1), s).DataLoc(s.a,k1) = s.DataLoc(s.a,k1) mod s.DataLoc(s.a,k1) & for c st c
+  <> DataLoc(s.a,k1) holds Exec(Divide(a,k1,a,k1),s).c = s.c;
 
 definition
- canceled;
+  canceled;
   let s be State of SCMPDS,c be Integer;
   func ICplusConst(s,c) -> Instruction-Location of SCMPDS means
 :: SCMPDS_2:def 20
 
-  ex m be Element of NAT st m = IC s & it = abs(m+c);
+  ex m
+  be Element of NAT st m = IC s & it = abs(m+c);
 end;
 
 theorem :: SCMPDS_2:66
-  Exec(goto k1, s).IC SCMPDS = ICplusConst(s,k1) &
-  for a holds Exec(goto k1, s).a = s.a;
+  Exec(goto k1, s).IC SCMPDS = ICplusConst(s,k1) & for a holds
+  Exec(goto k1, s).a = s.a;
 
 theorem :: SCMPDS_2:67
-  ( s.DataLoc(s.a,k1) <> 0 implies
-  Exec((a,k1)<>0_goto k2, s).IC SCMPDS = ICplusConst(s,k2)) &
-  ( s.DataLoc(s.a,k1) = 0 implies
-  Exec((a,k1)<>0_goto k2, s).IC SCMPDS = Next IC s ) &
-  Exec((a,k1)<>0_goto k2, s).b = s.b;
+  ( s.DataLoc(s.a,k1) <> 0 implies Exec((a,k1)<>0_goto k2, s).IC
+  SCMPDS = ICplusConst(s,k2)) & ( s.DataLoc(s.a,k1) = 0 implies Exec((a,k1)
+  <>0_goto k2, s).IC SCMPDS = Next IC s ) & Exec((a,k1)<>0_goto k2, s).b = s.b;
 
 theorem :: SCMPDS_2:68
-  ( s.DataLoc(s.a,k1) <= 0 implies
-  Exec((a,k1)<=0_goto k2, s).IC SCMPDS = ICplusConst(s,k2)) &
-  ( s.DataLoc(s.a,k1) > 0 implies
-  Exec((a,k1)<=0_goto k2, s).IC SCMPDS = Next IC s ) &
-  Exec((a,k1)<=0_goto k2, s).b = s.b;
+  ( s.DataLoc(s.a,k1) <= 0 implies Exec((a,k1)<=0_goto k2, s).IC
+  SCMPDS = ICplusConst(s,k2)) & ( s.DataLoc(s.a,k1) > 0 implies Exec((a,k1)
+  <=0_goto k2, s).IC SCMPDS = Next IC s ) & Exec((a,k1)<=0_goto k2, s).b = s.b;
 
 theorem :: SCMPDS_2:69
-  ( s.DataLoc(s.a,k1) >= 0 implies
-  Exec((a,k1)>=0_goto k2, s).IC SCMPDS = ICplusConst(s,k2)) &
-  ( s.DataLoc(s.a,k1) < 0 implies
-  Exec((a,k1)>=0_goto k2, s).IC SCMPDS = Next IC s ) &
-  Exec((a,k1)>=0_goto k2, s).b = s.b;
+  ( s.DataLoc(s.a,k1) >= 0 implies Exec((a,k1)>=0_goto k2, s).IC
+  SCMPDS = ICplusConst(s,k2)) & ( s.DataLoc(s.a,k1) < 0 implies Exec((a,k1)
+  >=0_goto k2, s).IC SCMPDS = Next IC s ) & Exec((a,k1)>=0_goto k2, s).b = s.b;
 
 theorem :: SCMPDS_2:70
   Exec(return a, s).IC SCMPDS = (abs(s.DataLoc(s.a,RetIC)))+2 &
-  Exec(return a, s).a = s.DataLoc(s.a,RetSP) &
-  for b st a <> b holds Exec(return a, s).b = s.b;
+Exec(return a, s).a = s.DataLoc(s.a,RetSP) & for b st a <> b holds Exec(return
+  a, s).b = s.b;
 
 theorem :: SCMPDS_2:71
-  Exec(saveIC(a,k1),s).IC SCMPDS = Next IC s &
-  Exec(saveIC(a,k1), s).DataLoc(s.a,k1) = IC s &
-  for b st DataLoc(s.a,k1) <> b holds Exec(saveIC(a,k1), s).b = s.b;
+  Exec(saveIC(a,k1),s).IC SCMPDS = Next IC s & Exec(saveIC(a,k1),
+s).DataLoc(s.a,k1) = IC s & for b st DataLoc(s.a,k1) <> b holds Exec(saveIC(a,
+  k1), s).b = s.b;
 
 theorem :: SCMPDS_2:72
-  for k be Integer holds (ex f being Function of SCM-Data-Loc,INT st
-  for x being Element of SCM-Data-Loc holds f.x = k );
+  for k be Integer holds ex f being Function of SCM-Data-Loc,INT
+  st for x being Element of SCM-Data-Loc holds f.x = k;
 
 theorem :: SCMPDS_2:73
-  for k be Integer holds
-  (ex s be State of SCMPDS st for d being Int_position holds s.d = k );
+  for k be Integer holds ex s be State of SCMPDS st for d being
+  Int_position holds s.d = k;
 
 theorem :: SCMPDS_2:74
-  for k be Integer,loc be Instruction-Location of SCMPDS holds
-  (ex s be State of SCMPDS st s.NAT=loc &
-  for d being Int_position holds s.d = k );
+  for k be Integer,loc be Instruction-Location of SCMPDS holds ex
+  s be State of SCMPDS st s.NAT=loc & for d being Int_position holds s.d = k;
 
 theorem :: SCMPDS_2:75
   goto 0 is halting;
 
 theorem :: SCMPDS_2:76
-  for I being Instruction of SCMPDS st ex s st Exec(I,s).IC SCMPDS = Next IC s
-  holds I is non halting;
+  for I being Instruction of SCMPDS st ex s st Exec(I,s).IC SCMPDS
+  = Next IC s holds I is non halting;
 
 theorem :: SCMPDS_2:77
   a:=k1 is non halting;
@@ -490,25 +463,22 @@ theorem :: SCMPDS_2:90
   saveIC(a,k1) is non halting;
 
 theorem :: SCMPDS_2:91
-  for I being set holds I is Instruction of SCMPDS iff
-  (ex k1 st I = goto k1) or (ex a st I = return a) or
-  (ex a,k1 st I = saveIC(a,k1)) or (ex a,k1 st I = a:=k1) or
-  (ex a,k1,k2 st I = (a,k1):=k2) or (ex a,k1,k2 st I = (a,k1)<>0_goto k2) or
-  (ex a,k1,k2 st I = (a,k1)<=0_goto k2) or
-  (ex a,k1,k2 st I = (a,k1)>=0_goto k2) or
-  (ex a,b,k1,k2 st I = AddTo(a,k1,k2)) or
-  (ex a,b,k1,k2 st I = AddTo(a,k1,b,k2)) or
-  (ex a,b,k1,k2 st I = SubFrom(a,k1,b,k2)) or
-  (ex a,b,k1,k2 st I = MultBy(a,k1,b,k2)) or
-  (ex a,b,k1,k2 st I = Divide(a,k1,b,k2)) or
-  (ex a,b,k1,k2 st I = (a,k1):=(b,k2));
+  for I being set holds I is Instruction of SCMPDS iff (ex k1 st I
+= goto k1) or (ex a st I = return a) or (ex a,k1 st I = saveIC(a,k1)) or (ex a,
+k1 st I = a:=k1) or (ex a,k1,k2 st I = (a,k1):=k2) or (ex a,k1,k2 st I = (a,k1)
+<>0_goto k2) or (ex a,k1,k2 st I = (a,k1)<=0_goto k2) or (ex a,k1,k2 st I = (a,
+k1)>=0_goto k2) or (ex a,b,k1,k2 st I = AddTo(a,k1,k2)) or (ex a,b,k1,k2 st I =
+AddTo(a,k1,b,k2)) or (ex a,b,k1,k2 st I = SubFrom(a,k1,b,k2)) or (ex a,b,k1,k2
+st I = MultBy(a,k1,b,k2)) or (ex a,b,k1,k2 st I = Divide(a,k1,b,k2)) or ex a,b,
+  k1,k2 st I = (a,k1):=(b,k2);
 
 registration
   cluster SCMPDS -> halting;
 end;
 
 theorem :: SCMPDS_2:92
-  for I being Instruction of SCMPDS st I is halting holds I = halt SCMPDS;
+  for I being Instruction of SCMPDS st I is halting holds I = halt
+  SCMPDS;
 
 theorem :: SCMPDS_2:93
   halt SCMPDS = goto 0;
@@ -516,8 +486,8 @@ theorem :: SCMPDS_2:93
 canceled 2;
 
 theorem :: SCMPDS_2:96
-  for s being State of SCMPDS, i being Instruction of SCMPDS,
-  l being Instruction-Location of SCMPDS holds Exec(i,s).l = s.l;
+  for s being State of SCMPDS, i being Instruction of SCMPDS, l
+  being Instruction-Location of SCMPDS holds Exec(i,s).l = s.l;
 
 theorem :: SCMPDS_2:97
   SCMPDS is realistic;
@@ -533,4 +503,5 @@ theorem :: SCMPDS_2:99
   for I being Instruction of SCMPDS st I = goto 0 holds I is halting;
 
 theorem :: SCMPDS_2:100
- Data-Locations SCMPDS = SCM-Data-Loc;
+  Data-Locations SCMPDS = SCM-Data-Loc;
+

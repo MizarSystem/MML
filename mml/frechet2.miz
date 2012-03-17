@@ -12,17 +12,15 @@ environ
       WAYBEL_7, FUNCT_2, FRECHET2, RLVECT_3, SGRAPH1, ARYTM, SUBSET_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0, XREAL_0,
       ORDINAL1, SETFAM_1, FINSET_1, CARD_3, TOPS_2, RELAT_1, FUNCT_1, RELSET_1,
-      PARTFUN1, SEQ_1, FUNCT_2, COMPTS_1, URYSOHN1, REAL_1, NAT_1, XXREAL_2,
-      LIMFUNC1, VALUED_0, SEQM_3, METRIC_1, PCOMPS_1, TBSP_1,
-      DOMAIN_1, STRUCT_0, PRE_TOPC, FUNCOP_1, METRIC_6, YELLOW_8, FRECHET,
-      SEQ_4, RECDEF_1;
+      PARTFUN1, SEQ_1, FUNCT_2, REAL_1, NAT_1, XXREAL_2, LIMFUNC1, VALUED_0,
+      METRIC_1, PCOMPS_1, TBSP_1, DOMAIN_1, STRUCT_0, PRE_TOPC, FUNCOP_1,
+      METRIC_6, YELLOW_8, FRECHET, SEQ_4;
  constructors SETFAM_1, PARTFUN1, NAT_1, NAT_D, SEQ_1, LIMFUNC1, REALSET1,
-      CARD_3, TOPS_2, COMPTS_1, PCOMPS_1, BHSP_3, TBSP_1, URYSOHN1,
-      METRIC_6, YELLOW_8, FRECHET, RECDEF_1, SEQ_4, XXREAL_2, SEQM_3, RELSET_1,
-      FUNCOP_1;
- registrations XBOOLE_0, SUBSET_1, FUNCT_1, RELSET_1, FUNCT_2, NUMBERS,
-      XREAL_0, NAT_1, MEMBERED, SEQM_3, REALSET1, STRUCT_0, METRIC_1, PCOMPS_1,
-      FRECHET, VALUED_0, CARD_1, XXREAL_2, ORDINAL1;
+      CARD_3, TOPS_2, COMPTS_1, PCOMPS_1, BHSP_3, TBSP_1, URYSOHN1, METRIC_6,
+      YELLOW_8, FRECHET, RECDEF_1, SEQ_4, XXREAL_2, SEQM_3, RELSET_1, FUNCOP_1;
+ registrations SUBSET_1, FUNCT_1, RELSET_1, FUNCT_2, NUMBERS, XREAL_0,
+      MEMBERED, REALSET1, STRUCT_0, METRIC_1, PCOMPS_1, FRECHET, VALUED_0,
+      CARD_1, XXREAL_2, ORDINAL1;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, SEQM_3, PRE_TOPC, TOPS_2, METRIC_6, FUNCT_1, FUNCT_2,
       FRECHET, XBOOLE_0;
@@ -35,8 +33,9 @@ environ
 
 begin
 
-Lm1: for T being non empty TopSpace st
-for p being Point of T holds Cl({p}) = {p} holds T is T_1
+Lm1: for T being non empty TopSpace st for p being Point of T holds Cl({p}) =
+{p} holds T is T_1
+
 proof
   let T be non empty TopSpace;
   assume
@@ -50,14 +49,16 @@ A1: for p being Point of T holds Cl({p}) = {p};
   hence thesis by URYSOHN1:27;
 end;
 
-Lm2: for T being non empty TopSpace holds not T is T_1 implies
-ex x1,x2 being Point of T st x1 <> x2 & x2 in Cl({x1})
+Lm2: for T being non empty TopSpace holds not T is T_1 implies ex x1,x2 being
+Point of T st x1 <> x2 & x2 in Cl({x1})
+
 proof
   let T be non empty TopSpace;
-  assume not T is T_1;
+  assume
+  not T is T_1;
   then consider x1 being Point of T such that
 A1: Cl{x1} <> {x1} by Lm1;
-  not ({x1} c= Cl{x1}) or not(Cl{x1} c= {x1}) by A1,XBOOLE_0:def 10;
+  not {x1} c= Cl{x1} or not Cl{x1} c= {x1} by A1,XBOOLE_0:def 10;
   then consider x2 being set such that
 A2: x2 in Cl{x1} and
 A3: not x2 in {x1} by PRE_TOPC:48,TARSKI:def 3;
@@ -67,12 +68,14 @@ A3: not x2 in {x1} by PRE_TOPC:48,TARSKI:def 3;
   thus thesis by A2;
 end;
 
-Lm3: for T being non empty TopSpace holds not T is T_1 implies
-ex x1,x2 being Point of T, S being sequence of T st
-S = (NAT --> x1) & x1 <> x2 & S is_convergent_to x2
+Lm3: for T being non empty TopSpace holds not T is T_1 implies ex x1,x2 being
+Point of T, S being sequence of T st S = (NAT --> x1) & x1 <> x2 & S
+is_convergent_to x2
+
 proof
   let T be non empty TopSpace;
-  assume not T is T_1;
+  assume
+  not T is T_1;
   then consider x1,x2 being Point of T such that
 A1: x1 <> x2 and
 A2: x2 in Cl({x1}) by Lm2;
@@ -83,91 +86,95 @@ A2: x2 in Cl({x1}) by Lm2;
   thus S is_convergent_to x2
   proof
     let U1 be Subset of T;
-    assume U1 is open & x2 in U1;
-    then {x1} meets U1 by A2,PRE_TOPC:def 13;
-    then
-A3: x1 in U1 by ZFMISC_1:56;
+    assume
+A3: U1 is open & x2 in U1;
     take 0;
-    thus thesis by A3,FUNCOP_1:13;
+    {x1} meets U1 by A2,A3,PRE_TOPC:def 13;
+    then x1 in U1 by ZFMISC_1:56;
+    hence thesis by FUNCOP_1:13;
   end;
 end;
 
 Lm4: for T being non empty TopSpace holds T is T_2 implies T is T_1
 proof
   let T be non empty TopSpace;
-  assume T is T_2;
+  assume
+  T is T_2;
   then for p being Point of T holds {p} is closed by PCOMPS_1:10;
   hence thesis by URYSOHN1:27;
 end;
 
 theorem
-  for T being non empty 1-sorted, S being sequence of T,
-  NS being increasing sequence of NAT holds S*NS is sequence of T;
+  for T being non empty 1-sorted, S being sequence of T, NS being
+  increasing sequence of NAT holds S*NS is sequence of T;
 
 theorem
-  for RS being Real_Sequence st RS=id NAT holds
-  RS is increasing sequence of NAT;
+  for RS being Real_Sequence st RS=id NAT holds RS is increasing
+  sequence of NAT;
 
 canceled 3;
 
 theorem Th6:
-  for T being non empty 1-sorted, S being sequence of T,
-  A being Subset of T holds
-  (for S1 being subsequence of S holds not rng S1 c= A) implies
-  (ex n being Element of NAT st for m being Element of NAT
-  st n <= m holds not S.m in A)
+  for T being non empty 1-sorted, S being sequence of T, A being
+Subset of T holds (for S1 being subsequence of S holds not rng S1 c= A) implies
+ex n being Element of NAT st for m being Element of NAT st n <= m holds not S.m
+  in A
 proof
   let T be non empty 1-sorted, S be sequence of T, A be Subset of T;
   assume
 A1: for S1 being subsequence of S holds not rng S1 c= A;
-  assume
-A2: for n being Element of NAT ex m being Element of NAT st n <= m & S.m in A;
   defpred Q[set] means $1 in A;
-A3: for n being Element of NAT ex m being Element of NAT
-  st n <= m & Q[S.m] by A2;
+  assume
+  for n being Element of NAT ex m being Element of NAT st n <= m & S.m
+  in A;
+  then
+A2: for n being Element of NAT ex m being Element of NAT st n <= m & Q[S.m];
   consider S1 being subsequence of S such that
-A5: for n being Element of NAT holds Q[S1.n] from VALUED_1:sch 1(A3);
+A3: for n being Element of NAT holds Q[S1.n] from VALUED_1:sch 1(A2);
   rng S1 c= A
   proof
     let y be set;
-    assume y in rng S1;
+    assume
+    y in rng S1;
     then consider x1 being set such that
-A6: x1 in dom S1 and
-A7: S1.x1 = y by FUNCT_1:def 5;
-    reconsider n=x1 as Element of NAT by A6;
-    S1.n in A by A5;
-    hence thesis by A7;
+A4: x1 in dom S1 and
+A5: S1.x1 = y by FUNCT_1:def 5;
+    reconsider n=x1 as Element of NAT by A4;
+    S1.n in A by A3;
+    hence thesis by A5;
   end;
   hence contradiction by A1;
 end;
 
 theorem Th7:
-  for T being non empty 1-sorted,S being sequence of T,
-  A,B being Subset of T st rng S c= A \/ B holds
-  ex S1 being subsequence of S st rng S1 c= A or rng S1 c= B
+  for T being non empty 1-sorted,S being sequence of T, A,B being
+Subset of T st rng S c= A \/ B holds ex S1 being subsequence of S st rng S1 c=
+  A or rng S1 c= B
 proof
   let T be non empty 1-sorted,S be sequence of T, A,B be Subset of T;
   assume
 A1: rng S c= A \/ B;
   assume
-A2: for S1 being subsequence of S holds not rng S1 c= A & not rng S1 c= B;
+A2: for S1 being subsequence of S holds not rng S1 c= A & not rng S1 c=
+  B;
   then consider n1 being Element of NAT such that
 A3: for m being Element of NAT st n1 <= m holds not S.m in A by Th6;
   consider n2 being Element of NAT such that
 A4: for m being Element of NAT st n2 <= m holds not S.m in B by A2,Th6;
   reconsider n=max(n1,n2) as Element of NAT;
-A5: not S.n in A by A3,XXREAL_0:25;
-A6: not S.n in B by A4,XXREAL_0:25;
+A5: not S.n in B by A4,XXREAL_0:25;
   n in NAT;
   then n in dom S by NORMSP_1:17;
-  then S.n in rng S by FUNCT_1:def 5;
+  then
+A6: S.n in rng S by FUNCT_1:def 5;
+  not S.n in A by A3,XXREAL_0:25;
   hence contradiction by A1,A5,A6,XBOOLE_0:def 3;
 end;
 
-Lm10: for T being non empty TopSpace st T is first-countable holds
-for x being Point of T holds ex B being Basis of x st ex S being Function st
-dom S = NAT & rng S = B &
-for n,m being Element of NAT st m >= n holds S.m c= S.n
+Lm5: for T being non empty TopSpace st T is first-countable holds for x being
+Point of T holds ex B being Basis of x st ex S being Function st dom S = NAT &
+rng S = B & for n,m being Element of NAT st m >= n holds S.m c= S.n
+
 proof
   let T be non empty TopSpace;
   assume
@@ -182,122 +189,130 @@ A4: for n being set st n in NAT ex A being set st P[n,A];
   consider S being Function such that
 A5: dom S = NAT and
 A6: for n being set st n in NAT holds P[n,S.n] from CLASSES1:sch 1(A4);
-A7: for n,m being Element of NAT st m >= n holds S.m c= S.n
-  proof
-    let n,m be Element of NAT;
-    assume
-A8: m >= n;
-    n in succ n & dom f = NAT by FUNCT_2:def 1,ORDINAL1:10;
-    then
-A9: f.n in f.:succ n by FUNCT_1:def 12;
-    n + 1 <= m + 1 by A8,XREAL_1:8;
-    then n + 1 c= m + 1 by NAT_1:40;
-    then succ n c= m +1 by NAT_1:39;
-    then succ n c= succ m by NAT_1:39;
-    then f.:(succ n) c= f.:(succ m) by RELAT_1:156;
-    then meet (f.:succ m) c= meet (f.:succ n) by A9,SETFAM_1:7;
-    then S.m c= meet (f.:succ n) by A6;
-    hence thesis by A6;
-  end;
-A10: rng S c= bool the carrier of T
+A7: rng S c= bool the carrier of T
   proof
     let A be set;
-    assume A in rng S;
+    assume
+    A in rng S;
     then consider n being set such that
-A11: n in dom S and
-A12: A = S.n by FUNCT_1:def 5;
+A8: n in dom S & A = S.n by FUNCT_1:def 5;
     reconsider fsuccn = f.:succ n as Subset-Family of T by XBOOLE_1:1;
     meet fsuccn = meet (f.:succ n);
     then meet (f.:succ n) in bool the carrier of T;
-    hence thesis by A5,A6,A11,A12;
+    hence thesis by A5,A6,A8;
   end;
   then reconsider B = rng S as Subset-Family of T;
   reconsider B as Subset-Family of T;
-A13: B c= the topology of T
-  proof
-    let A be set;
-    assume A in B;
-    then consider n being set such that
-A14: n in dom S and
-A15: A = S.n by FUNCT_1:def 5;
-A16: A = meet (f.:succ n) by A5,A6,A14,A15;
-    reconsider C=f.:succ n as Subset-Family of T by XBOOLE_1:1;
-    reconsider n'=n as Element of NAT by A5,A14;
-    succ(n') is finite;
-    then
-A17: f.:(succ n) is finite by FINSET_1:17;
-    C is open
-    proof
-      let P be Subset of T;
-      assume P in C;
-      hence thesis by YELLOW_8:21;
-    end;
-    then meet C is open by A17,TOPS_2:27;
-    hence thesis by A16,PRE_TOPC:def 5;
-  end;
-A18: ex A being set st A in B
+A9: ex A being set st A in B
   proof
     take A = meet(f.:(succ 0));
     A = S.0 by A6;
     hence thesis by A5,FUNCT_1:def 5;
   end;
   then
-A19: Intersect B = meet B by SETFAM_1:def 10;
+A10: Intersect B = meet B by SETFAM_1:def 10;
   for A being set st A in B holds x in A
   proof
     let A be set;
-    assume A in B;
+    assume
+    A in B;
     then consider n being set such that
-A20: n in dom S and
-A21: A = S.n by FUNCT_1:def 5;
-A22: A = meet (f.:(succ n)) by A5,A6,A20,A21;
-A23: for A1 being set st A1 in f.:(succ n) holds x in A1
+A11: n in dom S and
+A12: A = S.n by FUNCT_1:def 5;
+    dom f = NAT & n in succ n by FUNCT_2:def 1,ORDINAL1:10;
+    then
+A13: f.n in f.:succ n by A5,A11,FUNCT_1:def 12;
+A14: for A1 being set st A1 in f.:(succ n) holds x in A1
     proof
       let A1 be set;
-      assume A1 in f.:(succ n);
+      assume
+      A1 in f.:(succ n);
       then consider m being set such that
-A24:  m in dom f and m in succ n and
-A25:  A1 = f.m by FUNCT_1:def 12;
-      f.m in rng f by A24,FUNCT_1:def 5;
-      then reconsider A2=A1 as Subset of T by A3,A25;
+A15:  m in dom f and
+      m in succ n and
+A16:  A1 = f.m by FUNCT_1:def 12;
+      f.m in rng f by A15,FUNCT_1:def 5;
+      then reconsider A2=A1 as Subset of T by A3,A16;
       reconsider A2 as Subset of T;
-      A2 in B1 by A3,A24,A25,FUNCT_1:def 5;
+      A2 in B1 by A3,A15,A16,FUNCT_1:def 5;
       hence thesis by YELLOW_8:21;
     end;
-A26: dom f = NAT by FUNCT_2:def 1;
-    n in succ n by ORDINAL1:10;
-    then f.n in f.:succ n by A5,A20,A26,FUNCT_1:def 12;
-    hence thesis by A22,A23,SETFAM_1:def 1;
+    A = meet (f.:(succ n)) by A5,A6,A11,A12;
+    hence thesis by A14,A13,SETFAM_1:def 1;
   end;
   then
-A27: x in meet B by A18,SETFAM_1:def 1;
-  for O being Subset of T st O is open & x in O
-  ex A being Subset of T st A in B & A c= O
+A17: x in meet B by A9,SETFAM_1:def 1;
+A18: B c= the topology of T
+  proof
+    let A be set;
+    assume
+    A in B;
+    then consider n being set such that
+A19: n in dom S and
+A20: A = S.n by FUNCT_1:def 5;
+    reconsider n'=n as Element of NAT by A5,A19;
+    reconsider C=f.:succ n as Subset-Family of T by XBOOLE_1:1;
+A21: C is open
+    proof
+      let P be Subset of T;
+      assume
+      P in C;
+      hence thesis by YELLOW_8:21;
+    end;
+    succ(n') is finite;
+    then f.:(succ n) is finite by FINSET_1:17;
+    then
+A22: meet C is open by A21,TOPS_2:27;
+    A = meet (f.:succ n) by A5,A6,A19,A20;
+    hence thesis by A22,PRE_TOPC:def 5;
+  end;
+
+  for O being Subset of T st O is open & x in O ex A being Subset of T st
+  A in B & A c= O
+
   proof
     let O be Subset of T;
-    assume O is open & x in O;
+    assume
+    O is open & x in O;
     then consider A1 being Subset of T such that
-A28: A1 in B1 and
-A29: A1 c= O by YELLOW_8:def 2;
+A23: A1 in B1 and
+A24: A1 c= O by YELLOW_8:def 2;
     consider n being set such that
-A30: n in dom f and
-A31: A1 = f.n by A3,A28,FUNCT_1:def 5;
-    S.n in rng S by A5,A30,FUNCT_1:def 5;
-    then reconsider A = S.n as Subset of T by A10;
+A25: n in dom f and
+A26: A1 = f.n by A3,A23,FUNCT_1:def 5;
+    S.n in rng S by A5,A25,FUNCT_1:def 5;
+    then reconsider A = S.n as Subset of T by A7;
     reconsider A as Subset of T;
     take A;
-    thus A in B by A5,A30,FUNCT_1:def 5;
+    thus A in B by A5,A25,FUNCT_1:def 5;
     n in succ n by ORDINAL1:10;
-    then f.n in f.:(succ n) by A30,FUNCT_1:def 12;
-    then meet(f.:(succ n)) c= A1 by A31,SETFAM_1:4;
-    then S.n c= A1 by A6,A30;
-    hence thesis by A29,XBOOLE_1:1;
+    then f.n in f.:(succ n) by A25,FUNCT_1:def 12;
+    then meet(f.:(succ n)) c= A1 by A26,SETFAM_1:4;
+    then S.n c= A1 by A6,A25;
+    hence thesis by A24,XBOOLE_1:1;
   end;
-  then reconsider B as Basis of x by A13,A19,A27,YELLOW_8:def 2;
+  then reconsider B as Basis of x by A18,A10,A17,YELLOW_8:def 2;
   take B,S;
   thus dom S = NAT by A5;
   thus rng S = B;
-  thus thesis by A7;
+  for n,m being Element of NAT st m >= n holds S.m c= S.n
+  proof
+    let n,m be Element of NAT;
+    assume
+    m >= n;
+    then n + 1 <= m + 1 by XREAL_1:8;
+    then n + 1 c= m + 1 by NAT_1:40;
+    then succ n c= m +1 by NAT_1:39;
+    then succ n c= succ m by NAT_1:39;
+    then
+A27: f.:(succ n) c= f.:(succ m) by RELAT_1:156;
+    n in succ n & dom f = NAT by FUNCT_2:def 1,ORDINAL1:10;
+    then f.n in f.:succ n by FUNCT_1:def 12;
+    then meet (f.:succ m) c= meet (f.:succ n) by A27,SETFAM_1:7;
+    then S.m c= meet (f.:succ n) by A6;
+    hence thesis by A6;
+  end;
+  hence thesis;
 end;
 
 theorem
@@ -307,9 +322,10 @@ theorem
 proof
   let T be non empty TopSpace;
   assume
-A1: for S being sequence of T holds for x1,x2 being Point of T holds
-  (x1 in Lim S & x2 in Lim S implies x1=x2);
-  assume not T is T_1;
+A1: for S being sequence of T holds for x1,x2 being Point of T holds (x1
+  in Lim S & x2 in Lim S implies x1=x2);
+  assume
+  not T is T_1;
   then consider x1,x2 being Point of T,S being sequence of T such that
 A2: S = (NAT --> x1) and
 A3: x1 <> x2 and
@@ -322,17 +338,18 @@ A5: x1 in Lim S by FRECHET:def 4;
 end;
 
 theorem Th9:
-  for T being non empty TopSpace st T is T_2 holds
-  for S being sequence of T, x1,x2 being Point of T holds
-  (x1 in Lim S & x2 in Lim S implies x1=x2)
+  for T being non empty TopSpace st T is T_2 holds for S being
+sequence of T, x1,x2 being Point of T holds (x1 in Lim S & x2 in Lim S implies
+  x1=x2)
 proof
   let T be non empty TopSpace;
   assume
 A1: T is T_2;
-  assume not(for S being sequence of T, x1,x2 being Point of T holds
-  (x1 in Lim S & x2 in Lim S implies x1=x2));
+  assume
+  not(for S being sequence of T, x1,x2 being Point of T holds (x1 in
+  Lim S & x2 in Lim S implies x1=x2));
   then consider S being sequence of T such that
-A2: ex x1,x2 being Point of T st (x1 in Lim S & x2 in Lim S & x1<>x2);
+A2: ex x1,x2 being Point of T st x1 in Lim S & x2 in Lim S & x1<>x2;
   consider x1,x2 being Point of T such that
 A3: x1 in Lim S and
 A4: x2 in Lim S and
@@ -343,155 +360,155 @@ A7: U2 is open and
 A8: x1 in U1 and
 A9: x2 in U2 and
 A10: U1 misses U2 by A1,A5,PRE_TOPC:def 16;
-A11: U1 /\ U2 = {} by A10,XBOOLE_0:def 7;
   S is_convergent_to x1 by A3,FRECHET:def 4;
   then consider n1 being Element of NAT such that
-A12: for m being Element of NAT st n1 <= m holds S.m in U1
-  by A6,A8,FRECHET:def 2;
+A11: for m being Element of NAT st n1 <= m holds S.m in U1 by A6,A8,
+  FRECHET:def 2;
   S is_convergent_to x2 by A4,FRECHET:def 4;
   then consider n2 being Element of NAT such that
-A13: for m being Element of NAT st n2 <= m holds S.m in U2
-  by A7,A9,FRECHET:def 2;
+A12: for m being Element of NAT st n2 <= m holds S.m in U2 by A7,A9,
+  FRECHET:def 2;
   reconsider n = max(n1,n2) as Element of NAT;
-A14: S.n in U1 by A12,XXREAL_0:25;
-  S.n in U2 by A13,XXREAL_0:25;
-  hence contradiction by A11,A14,XBOOLE_0:def 4;
+A13: S.n in U1 by A11,XXREAL_0:25;
+A14: S.n in U2 by A12,XXREAL_0:25;
+  U1 /\ U2 = {} by A10,XBOOLE_0:def 7;
+  hence contradiction by A13,A14,XBOOLE_0:def 4;
 end;
 
 theorem
-  for T being non empty TopSpace st T is first-countable holds T is T_2 iff
-  (for S being sequence of T holds for x1,x2 being Point of T holds
-  (x1 in Lim S & x2 in Lim S implies x1=x2))
+  for T being non empty TopSpace st T is first-countable holds T is T_2
+iff for S being sequence of T holds for x1,x2 being Point of T holds (x1 in Lim
+  S & x2 in Lim S implies x1=x2)
 proof
   let T be non empty TopSpace;
   assume
 A1: T is first-countable;
-  thus T is T_2 implies (for S being sequence of T holds
-  for x1,x2 being Point of T holds
-  (x1 in Lim S & x2 in Lim S implies x1=x2)) by Th9;
+  thus T is T_2 implies for S being sequence of T holds for x1,x2 being Point
+  of T holds (x1 in Lim S & x2 in Lim S implies x1=x2) by Th9;
   assume
-A2: for S being sequence of T holds for x1,x2 being Point of T holds
-  (x1 in Lim S & x2 in Lim S implies x1=x2);
-  assume not T is T_2;
+A2: for S being sequence of T holds for x1,x2 being Point of T holds (x1
+  in Lim S & x2 in Lim S implies x1=x2);
+  assume
+  not T is T_2;
   then consider x1,x2 being Point of T such that
 A3: x1 <> x2 and
-A4: for U1,U2 being Subset of T st
-  (U1 is open & U2 is open & x1 in U1 & x2 in U2) holds
-  U1 meets U2 by PRE_TOPC:def 16;
+A4: for U1,U2 being Subset of T st U1 is open & U2 is open & x1 in U1 &
+  x2 in U2 holds U1 meets U2 by PRE_TOPC:def 16;
   consider B1 being Basis of x1 such that
-A5: ex S being Function st dom S = NAT & rng S = B1 &
-  for n,m being Element of NAT st m >= n holds S.m c= S.n by A1,Lm10;
-  consider S1 being Function such that
-A6: dom S1 = NAT and
-A7: rng S1 = B1 and
-A8: for n,m being Element of NAT st m >= n holds S1.m c= S1.n by A5;
+A5: ex S being Function st dom S = NAT & rng S = B1 & for n,m being
+  Element of NAT st m >= n holds S.m c= S.n by A1,Lm5;
   consider B2 being Basis of x2 such that
-A9: ex S being Function st dom S = NAT & rng S = B2 &
-  for n,m being Element of NAT st m >= n holds S.m c= S.n by A1,Lm10;
+A6: ex S being Function st dom S = NAT & rng S = B2 & for n,m being
+  Element of NAT st m >= n holds S.m c= S.n by A1,Lm5;
+  consider S1 being Function such that
+A7: dom S1 = NAT and
+A8: rng S1 = B1 and
+A9: for n,m being Element of NAT st m >= n holds S1.m c= S1.n by A5;
   consider S2 being Function such that
 A10: dom S2 = NAT and
 A11: rng S2 = B2 and
-A12: for n,m being Element of NAT st m >= n holds S2.m c= S2.n by A9;
+A12: for n,m being Element of NAT st m >= n holds S2.m c= S2.n by A6;
   defpred P[set,set] means $2 in S1.$1 /\ S2.$1;
-A13: for n being set st n in NAT ex x being set st
-  x in the carrier of T & P[n,x]
+A13: for n being set st n in NAT ex x being set st x in the carrier of T & P
+  [n,x]
   proof
     let n be set;
+    consider x being Element of S1.n /\ S2.n;
     assume
 A14: n in NAT;
     then
-A15: S1.n in B1 by A6,A7,FUNCT_1:def 5;
+A15: S1.n in B1 by A7,A8,FUNCT_1:def 5;
     then reconsider U1=S1.n as Subset of T;
-    reconsider U1 as Subset of T;
-A16: U1 is open & x1 in U1 by A15,YELLOW_8:21;
-A17: S2.n in B2 by A10,A11,A14,FUNCT_1:def 5;
+A16: S2.n in B2 by A10,A11,A14,FUNCT_1:def 5;
     then reconsider U2=S2.n as Subset of T;
+    take x;
+    reconsider U1 as Subset of T;
     reconsider U2 as Subset of T;
-    U2 is open & x2 in U2 by A17,YELLOW_8:21;
-    then U1 meets U2 by A4,A16;
+A17: U2 is open & x2 in U2 by A16,YELLOW_8:21;
+    U1 is open & x1 in U1 by A15,YELLOW_8:21;
+    then U1 meets U2 by A4,A17;
     then
 A18: U1 /\ U2 <> {} by XBOOLE_0:def 7;
-    consider x being Element of S1.n /\ S2.n;
-    take x;
-    x in U1 /\ U2 by A18;
+    then x in U1 /\ U2;
     hence x in the carrier of T;
     thus thesis by A18;
   end;
   consider S being Function such that
-A19: dom S = NAT and
-A20: rng S c= the carrier of T and
-A21: for n being set st n in NAT holds P[n,S.n] from WELLORD2:sch 1(A13);
-  reconsider S as Function of NAT,the carrier of T by A19,A20,FUNCT_2:def 1
-,RELSET_1:11;
-  S is_convergent_to x1
-  proof
-    let U1 be Subset of T;
-    assume U1 is open & x1 in U1;
-    then consider V1 being Subset of T such that
-A22: V1 in B1 and
-A23: V1 c= U1 by YELLOW_8:22;
-    consider n being set such that
-A24: n in dom S1 and
-A25: V1 = S1.n by A7,A22,FUNCT_1:def 5;
-    reconsider n as Element of NAT by A6,A24;
-    take n;
-    let m be Element of NAT;
-    assume n <= m;
-    then
-A26: S1.m c= S1.n by A8;
-A27: S.m in S1.m /\ S2.m by A21;
-    S1.m /\ S2.m c= S1.m by XBOOLE_1:17;
-    then S.m in S1.m by A27;
-    then S.m in S1.n by A26;
-    hence S.m in U1 by A23,A25;
-  end;
-  then
-A28: x1 in Lim S by FRECHET:def 4;
+A19: dom S = NAT & rng S c= the carrier of T and
+A20: for n being set st n in NAT holds P[n,S.n] from WELLORD2:sch 1(A13);
+  reconsider S as Function of NAT,the carrier of T by A19,FUNCT_2:def 1 ,
+  RELSET_1:11;
   S is_convergent_to x2
   proof
     let U2 be Subset of T;
-    assume U2 is open & x2 in U2;
+    assume
+    U2 is open & x2 in U2;
     then consider V2 being Subset of T such that
-A29: V2 in B2 and
-A30: V2 c= U2 by YELLOW_8:22;
+A21: V2 in B2 and
+A22: V2 c= U2 by YELLOW_8:22;
     consider n being set such that
-A31: n in dom S2 and
-A32: V2 = S2.n by A11,A29,FUNCT_1:def 5;
-    reconsider n as Element of NAT by A10,A31;
+A23: n in dom S2 and
+A24: V2 = S2.n by A11,A21,FUNCT_1:def 5;
+    reconsider n as Element of NAT by A10,A23;
     take n;
     let m be Element of NAT;
-    assume n <= m;
+    S.m in S1.m /\ S2.m & S1.m /\ S2.m c= S2.m by A20,XBOOLE_1:17;
     then
-A33: S2.m c= S2.n by A12;
-A34: S.m in S1.m /\ S2.m by A21;
-    S1.m /\ S2.m c= S2.m by XBOOLE_1:17;
-    then S.m in S2.m by A34;
-    then S.m in S2.n by A33;
-    hence S.m in U2 by A30,A32;
+A25: S.m in S2.m;
+    assume
+    n <= m;
+    then S2.m c= S2.n by A12;
+    then S.m in S2.n by A25;
+    hence S.m in U2 by A22,A24;
   end;
-  then x2 in Lim S by FRECHET:def 4;
-  hence contradiction by A2,A3,A28;
+  then
+A26: x2 in Lim S by FRECHET:def 4;
+  S is_convergent_to x1
+  proof
+    let U1 be Subset of T;
+    assume
+    U1 is open & x1 in U1;
+    then consider V1 being Subset of T such that
+A27: V1 in B1 and
+A28: V1 c= U1 by YELLOW_8:22;
+    consider n being set such that
+A29: n in dom S1 and
+A30: V1 = S1.n by A8,A27,FUNCT_1:def 5;
+    reconsider n as Element of NAT by A7,A29;
+    take n;
+    let m be Element of NAT;
+    S.m in S1.m /\ S2.m & S1.m /\ S2.m c= S1.m by A20,XBOOLE_1:17;
+    then
+A31: S.m in S1.m;
+    assume
+    n <= m;
+    then S1.m c= S1.n by A9;
+    then S.m in S1.n by A31;
+    hence S.m in U1 by A28,A30;
+  end;
+  then x1 in Lim S by FRECHET:def 4;
+  hence contradiction by A2,A3,A26;
 end;
 
 theorem Th11:
-  for T being non empty TopStruct, S being sequence of T st S is not convergent
-  holds Lim S = {}
+  for T being non empty TopStruct, S being sequence of T st S is
+  not convergent holds Lim S = {}
 proof
   let T be non empty TopStruct, S be sequence of T;
   assume
 A1: S is not convergent;
+  consider x being Element of Lim S;
   assume
 A2: Lim S <> {};
-  consider x being Element of Lim S;
-  x in Lim S by A2;
+  then x in Lim S;
   then reconsider x as Point of T;
   S is_convergent_to x by A2,FRECHET:def 4;
   hence contradiction by A1,FRECHET:def 3;
 end;
 
 theorem Th12:
-  for T being non empty TopSpace,A being Subset of T holds A is closed implies
-  (for S being sequence of T st rng S c= A holds Lim S c= A)
+  for T being non empty TopSpace,A being Subset of T holds A is
+  closed implies for S being sequence of T st rng S c= A holds Lim S c= A
 proof
   let T be non empty TopSpace,A be Subset of T;
   assume
@@ -500,49 +517,50 @@ A1: A is closed;
   assume
 A2: rng S c= A;
   per cases;
-  suppose S is convergent;
-    hence thesis by A1,A2,FRECHET:26;
+  suppose
+    S is convergent;
+    thus thesis by A1,A2,FRECHET:26;
   end;
-  suppose S is not convergent;
+  suppose
+    S is not convergent;
     then Lim S = {} by Th11;
     hence thesis by XBOOLE_1:2;
   end;
 end;
 
 theorem
-  for T being non empty TopStruct,S being sequence of T, x being Point of T
-  st not S is_convergent_to x holds ex S1 being subsequence of S
-  st for S2 being subsequence of S1 holds not S2 is_convergent_to x
+  for T being non empty TopStruct,S being sequence of T, x being Point
+  of T st not S is_convergent_to x holds ex S1 being subsequence of S st for S2
+  being subsequence of S1 holds not S2 is_convergent_to x
 proof
   let T be non empty TopStruct,S be sequence of T, x be Point of T;
-  assume not S is_convergent_to x;
+  assume
+  not S is_convergent_to x;
   then consider A being Subset of T such that
-A1: A is open and
-A2: x in A and
-A3: for n being Element of NAT
-  ex m being Element of NAT st n <= m & not S.m in A by FRECHET:def 2;
+A1: A is open & x in A and
+A2: for n being Element of NAT ex m being Element of NAT st n <= m & not
+  S.m in A by FRECHET:def 2;
   defpred P[set] means not $1 in A;
-A4: for n being Element of NAT
-  ex m being Element of NAT st n <= m & P[S.m] by A3;
+A3: for n being Element of NAT ex m being Element of NAT st n <= m & P[S.m]
+  by A2;
   consider S1 being subsequence of S such that
-A6: for n being Element of NAT holds P[S1.n] from VALUED_1:sch 1(A4);
+A4: for n being Element of NAT holds P[S1.n] from VALUED_1:sch 1(A3);
   take S1;
   let S2 be subsequence of S1;
-  ex U1 being Subset of T st U1 is open & x in U1 &
-  for n being Element of NAT ex m being Element of NAT
-  st n <= m & not S2.m in U1
+  ex U1 being Subset of T st U1 is open & x in U1 & for n being Element of
+  NAT ex m being Element of NAT st n <= m & not S2.m in U1
   proof
     take A;
-    thus A is open & x in A by A1,A2;
+    consider NS being increasing sequence of NAT such that
+A5: S2=S1*NS by VALUED_0:def 17;
+    thus A is open & x in A by A1;
     let n be Element of NAT;
     take n;
     thus n <= n;
-    consider NS being increasing sequence of NAT such that
-A7: S2=S1*NS by VALUED_0:def 17;
     n in NAT;
     then n in dom S2 by NORMSP_1:17;
-    then S2.n=S1.(NS.n) by A7,FUNCT_1:22;
-    hence thesis by A6;
+    then S2.n=S1.(NS.n) by A5,FUNCT_1:22;
+    hence thesis by A4;
   end;
   hence thesis by FRECHET:def 2;
 end;
@@ -550,10 +568,9 @@ end;
 begin ::The Continuous Maps
 
 theorem Th14:
-  for T1,T2 being non empty TopSpace, f being Function of T1,T2 holds
-  f is continuous implies
-  for S1 being sequence of T1, S2 being sequence of T2 st S2=f*S1 holds
-  f.:(Lim S1) c= Lim S2
+  for T1,T2 being non empty TopSpace, f being Function of T1,T2
+holds f is continuous implies for S1 being sequence of T1, S2 being sequence of
+  T2 st S2=f*S1 holds f.:(Lim S1) c= Lim S2
 proof
   let T1,T2 be non empty TopSpace, f be Function of T1,T2;
   assume
@@ -575,19 +592,20 @@ A5: y' in U2;
 A6: x in dom f and
 A7: x in Lim S1 and
 A8: y = f.x by A3,FUNCT_1:def 12;
+A9: x in f"U2 by A5,A6,A8,FUNCT_1:def 13;
     reconsider U1=f"U2 as Subset of T1;
     [#]T2 <> {};
     then
-A9: U1 is open by A1,A4,TOPS_2:55;
-A10: x in f"U2 by A5,A6,A8,FUNCT_1:def 13;
+A10: U1 is open by A1,A4,TOPS_2:55;
     reconsider x as Point of T1 by A6;
     S1 is_convergent_to x by A7,FRECHET:def 4;
     then consider n being Element of NAT such that
-A11: for m being Element of NAT st n <= m holds S1.m in f"U2
-    by A9,A10,FRECHET:def 2;
+A11: for m being Element of NAT st n <= m holds S1.m in f"U2 by A10,
+    A9,FRECHET:def 2;
     take n;
     let m be Element of NAT;
-    assume n <= m;
+    assume
+    n <= m;
     then S1.m in f"U2 by A11;
     then
 A12: f.(S1.m) in U2 by FUNCT_1:def 13;
@@ -598,55 +616,54 @@ A12: f.(S1.m) in U2 by FUNCT_1:def 13;
 end;
 
 theorem
-  for T1,T2 being non empty TopSpace, f being Function of T1,T2
-  st T1 is sequential holds f is continuous iff
-  for S1 being sequence of T1, S2 being sequence of T2 st S2=f*S1 holds
-  f.:(Lim S1) c= Lim S2
+  for T1,T2 being non empty TopSpace, f being Function of T1,T2 st T1 is
+  sequential holds f is continuous iff for S1 being sequence of T1, S2 being
+  sequence of T2 st S2=f*S1 holds f.:(Lim S1) c= Lim S2
 proof
   let T1,T2 be non empty TopSpace, f be Function of T1,T2;
   assume
 A1: T1 is sequential;
-  thus f is continuous implies
-  for S1 being sequence of T1, S2 being sequence of T2 st S2=f*S1 holds
-  f.:(Lim S1) c= Lim S2 by Th14;
+  thus f is continuous implies for S1 being sequence of T1, S2 being sequence
+  of T2 st S2=f*S1 holds f.:(Lim S1) c= Lim S2 by Th14;
   assume
-A2: for S1 being sequence of T1, S2 being sequence of T2 st S2=f*S1 holds
-  f.:(Lim S1) c= Lim S2;
+A2: for S1 being sequence of T1, S2 being sequence of T2 st S2=f*S1
+  holds f.:(Lim S1) c= Lim S2;
   let B be Subset of T2;
+  reconsider A=f"B as Subset of T1;
   assume
 A3: B is closed;
-  reconsider A=f"B as Subset of T1;
-  for S being sequence of T1 st ( S is convergent & rng S c= A ) holds
-  Lim S c= A
+  for S being sequence of T1 st S is convergent & rng S c= A holds Lim S
+  c= A
   proof
-    let S be sequence of T1;
-    assume that S is convergent and
-A4: rng S c= A;
-    let x be set;
-    assume
-A5: x in Lim S;
-    set S2=f*S;
-A6: dom f = the carrier of T1 by FUNCT_2:def 1;
-    then
-A7: f.x in f.:(Lim S) by A5,FUNCT_1:def 12;
-    f.:(Lim S) c= Lim S2 by A2;
-    then
-A8: f.x in Lim S2 by A7;
     reconsider B'=B as Subset of T2;
+    let S be sequence of T1;
+    assume that
+    S is convergent and
+A4: rng S c= A;
+    set S2=f*S;
     rng S2 c= B'
     proof
       let z be set;
-      assume z in rng S2;
+      assume
+      z in rng S2;
       then consider n being set such that
-A9:   n in dom S2 and
-A10:  z = S2.n by FUNCT_1:def 5;
+A5:   n in dom S2 and
+A6:   z = S2.n by FUNCT_1:def 5;
       dom S = NAT by NORMSP_1:17;
-      then S.n in rng S by A9,FUNCT_1:def 5;
+      then S.n in rng S by A5,FUNCT_1:def 5;
       then f.(S.n) in B by A4,FUNCT_1:def 13;
-      hence thesis by A9,A10,FUNCT_1:22;
+      hence thesis by A5,A6,FUNCT_1:22;
     end;
-    then Lim S2 c= B' by A3,Th12;
-    hence thesis by A5,A6,A8,FUNCT_1:def 13;
+    then
+A7: Lim S2 c= B' by A3,Th12;
+    let x be set;
+A8: dom f = the carrier of T1 by FUNCT_2:def 1;
+A9: f.:(Lim S) c= Lim S2 by A2;
+    assume
+A10: x in Lim S;
+    then f.x in f.:(Lim S) by A8,FUNCT_1:def 12;
+    then f.x in Lim S2 by A9;
+    hence thesis by A10,A8,A7,FUNCT_1:def 13;
   end;
   hence thesis by A1,FRECHET:def 6;
 end;
@@ -658,51 +675,55 @@ definition
   canceled;
   func Cl_Seq A -> Subset of T means
   :Def2:
-  for x being Point of T holds x in it iff
-  ex S being sequence of T st rng S c= A & x in Lim S;
+  for x being Point of T holds x in
+  it iff ex S being sequence of T st rng S c= A & x in Lim S;
   existence
   proof
-    defpred P[Point of T] means
-    ex S being sequence of T st rng S c=A & $1 in Lim S;
-    reconsider X= {x where x is Point of T: P[x]}
-    as Subset of T from DOMAIN_1:sch 7;
+    defpred P[Point of T] means ex S being sequence of T st rng S c=A & $1 in
+    Lim S;
+    reconsider X= {x where x is Point of T: P[x]} as Subset of T from DOMAIN_1
+    :sch 7;
     reconsider X as Subset of T;
     take X;
     let x be Point of T;
-    thus x in X implies (ex S being sequence of T st rng S c= A & x in Lim S)
+    thus x in X implies ex S being sequence of T st rng S c= A & x in Lim S
     proof
-      assume x in X;
-      then consider x' being Point of T such that
-A1:   x=x' & ex S being sequence of T st rng S c= A & x' in Lim S;
-      thus thesis by A1;
+      assume
+      x in X;
+      then
+      ex x' being Point of T st x=x' & ex S being sequence of T st rng S c=
+      A & x' in Lim S;
+      hence thesis;
     end;
-    assume ex S being sequence of T st rng S c= A & x in Lim S;
+    assume
+    ex S being sequence of T st rng S c= A & x in Lim S;
     hence thesis;
   end;
   uniqueness
   proof
     let A1,A2 be Subset of T;
     assume that
-A2: for x being Point of T holds
-    x in A1 iff ex S being sequence of T st rng S c= A & x in Lim S and
-A3: for x being Point of T holds
-    x in A2 iff ex S being sequence of T st rng S c= A & x in Lim S;
+A1: for x being Point of T holds x in A1 iff ex S being sequence of T
+    st rng S c= A & x in Lim S and
+A2: for x being Point of T holds x in A2 iff ex S being sequence of T
+    st rng S c= A & x in Lim S;
     for x being Point of T holds x in A1 iff x in A2
     proof
       let x be Point of T;
-      x in A1 iff ex S being sequence of T st rng S c= A & x in Lim S by A2;
-      hence thesis by A3;
+      x in A1 iff ex S being sequence of T st rng S c= A & x in Lim S by
+      A1;
+      hence thesis by A2;
     end;
     hence thesis by SUBSET_1:8;
   end;
 end;
 
 theorem Th16:
-  for T being non empty TopStruct, A being Subset of T, S being sequence of T,
-  x being Point of T st rng S c= A & x in Lim S holds x in Cl(A)
+  for T being non empty TopStruct, A being Subset of T, S being
+  sequence of T, x being Point of T st rng S c= A & x in Lim S holds x in Cl(A)
 proof
-  let T be non empty TopStruct, A be Subset of T, S be sequence of T,
-  x be Point of T;
+  let T be non empty TopStruct, A be Subset of T, S be sequence of T, x be
+  Point of T;
   assume that
 A1: rng S c= A and
 A2: x in Lim S;
@@ -711,16 +732,17 @@ A2: x in Lim S;
     let O be Subset of T;
     assume
 A3: O is open;
+A4: S is_convergent_to x by A2,FRECHET:def 4;
     assume
-A4: x in O;
-    S is_convergent_to x by A2,FRECHET:def 4;
+    x in O;
     then consider n being Element of NAT such that
-A5: for m being Element of NAT st n <= m holds S.m in O
-    by A3,A4,FRECHET:def 2;
-A6: S.n in O by A5;
+A5: for m being Element of NAT st n <= m holds S.m in O by A3,A4,
+    FRECHET:def 2;
     n in NAT;
     then n in dom S by NORMSP_1:17;
-    then S.n in rng S by FUNCT_1:def 5;
+    then
+A6: S.n in rng S by FUNCT_1:def 5;
+    S.n in O by A5;
     then S.n in A /\ O by A1,A6,XBOOLE_0:def 4;
     hence thesis by XBOOLE_0:def 7;
   end;
@@ -741,35 +763,37 @@ A1: x in Cl_Seq(A);
 end;
 
 theorem Th18:
-  for T being non empty TopStruct, S being sequence of T,
-  S1 being subsequence of S, x being Point of T
-  holds S is_convergent_to x implies S1 is_convergent_to x
+  for T being non empty TopStruct, S being sequence of T, S1 being
+  subsequence of S, x being Point of T holds S is_convergent_to x implies S1
+  is_convergent_to x
 proof
-  let T be non empty TopStruct, S be sequence of T, S1 be subsequence of S,
-  x be Point of T;
+  let T be non empty TopStruct, S be sequence of T, S1 be subsequence of S, x
+  be Point of T;
   assume
 A1: S is_convergent_to x;
   let U1 be Subset of T;
-  assume U1 is open & x in U1;
+  assume
+  U1 is open & x in U1;
   then consider n being Element of NAT such that
-A2: for m being Element of NAT st n <= m holds S.m in U1 by A1,FRECHET:def 2;
+A2: for m being Element of NAT st n <= m holds S.m in U1 by A1,
+  FRECHET:def 2;
   take n;
   let m be Element of NAT;
   assume
 A3: n <= m;
-  consider NS being increasing sequence of NAT such that
-A4: S1 = S * NS by VALUED_0:def 17;
-  m <= NS.m by SEQM_3:33;
-  then
-A5: S.(NS.m) in U1 by A2,A3,XXREAL_0:2;
   m in NAT;
-  then m in dom S1 by NORMSP_1:17;
-  hence S1.m in U1 by A4,A5,FUNCT_1:22;
+  then
+A4: m in dom S1 by NORMSP_1:17;
+  consider NS being increasing sequence of NAT such that
+A5: S1 = S * NS by VALUED_0:def 17;
+  m <= NS.m by SEQM_3:33;
+  then S.(NS.m) in U1 by A2,A3,XXREAL_0:2;
+  hence S1.m in U1 by A5,A4,FUNCT_1:22;
 end;
 
 theorem Th19:
-  for T being non empty TopStruct, S being sequence of T,
-  S1 being subsequence of S holds Lim S c= Lim S1
+  for T being non empty TopStruct, S being sequence of T, S1 being
+  subsequence of S holds Lim S c= Lim S1
 proof
   let T be non empty TopStruct, S be sequence of T, S1 be subsequence of S;
   let x be set;
@@ -791,14 +815,16 @@ A1: Cl_Seq({}T) <> {};
   then x in Cl_Seq({}T);
   then reconsider x as Point of T;
   consider S being sequence of T such that
-A2: rng S c= {}T & x in Lim S by A1,Def2;
+A2: rng S c= {}T and
+  x in Lim S by A1,Def2;
   rng S = {} by A2;
   then dom S = {} by RELAT_1:65;
   hence contradiction by NORMSP_1:17;
 end;
 
 theorem Th21:
-  for T being non empty TopStruct, A being Subset of T holds A c= Cl_Seq(A)
+  for T being non empty TopStruct, A being Subset of T holds A c=
+  Cl_Seq(A)
 proof
   let T be non empty TopStruct, A be Subset of T;
   let x be set;
@@ -812,7 +838,8 @@ A1: x in A;
     {x'} c= A
     proof
       let x'' be set;
-      assume x'' in {x'};
+      assume
+      x'' in {x'};
       hence thesis by A1,TARSKI:def 1;
     end;
     hence rng S c= A by FUNCOP_1:14;
@@ -864,14 +891,16 @@ A8: x in Cl_Seq(A \/ B);
 A9: rng S c= A \/ B and
 A10: x' in Lim S by A8,Def2;
     consider S1 being subsequence of S such that
-A11: (rng S1 c= A or rng S1 c= B) by A9,Th7;
+A11: rng S1 c= A or rng S1 c= B by A9,Th7;
 A12: Lim S c= Lim S1 by Th19;
     per cases by A11;
-    suppose rng S1 c= A;
+    suppose
+      rng S1 c= A;
       then x' in Cl_Seq(A) by A10,A12,Def2;
       hence thesis by XBOOLE_0:def 3;
     end;
-    suppose rng S1 c= B;
+    suppose
+      rng S1 c= B;
       then x' in Cl_Seq(B) by A10,A12,Def2;
       hence thesis by XBOOLE_0:def 3;
     end;
@@ -879,8 +908,8 @@ A12: Lim S c= Lim S1 by Th19;
 end;
 
 theorem Th23:
-  for T being non empty TopStruct holds
-  T is Frechet iff for A being Subset of T holds Cl(A)=Cl_Seq(A)
+  for T being non empty TopStruct holds T is Frechet iff for A
+  being Subset of T holds Cl(A)=Cl_Seq(A)
 proof
   let T be non empty TopStruct;
   thus T is Frechet implies for A being Subset of T holds Cl(A)=Cl_Seq(A)
@@ -895,8 +924,8 @@ A1: T is Frechet;
       assume
 A2:   x in Cl(A);
       then reconsider x'=x as Point of T;
-      ex S being sequence of T st (rng S c= A' & x' in Lim S )
-      by A1,A2,FRECHET:def 5;
+      ex S being sequence of T st rng S c= A' & x' in Lim S by A1,A2,
+      FRECHET:def 5;
       hence thesis by Def2;
     end;
     thus thesis by Th17;
@@ -904,77 +933,77 @@ A2:   x in Cl(A);
   assume
 A3: for A being Subset of T holds Cl(A)=Cl_Seq(A);
   let A be Subset of T,x be Point of T;
-  assume x in Cl(A);
+  assume
+  x in Cl(A);
   then x in Cl_Seq(A) by A3;
   hence thesis by Def2;
 end;
 
 theorem Th24:
-  for T being non empty TopSpace st T is Frechet holds
-  for A,B being Subset of T holds Cl_Seq({}T) = {} & A c= Cl_Seq(A) &
-  Cl_Seq(A \/ B) = Cl_Seq(A) \/ Cl_Seq(B) & Cl_Seq(Cl_Seq(A)) = Cl_Seq(A)
+  for T being non empty TopSpace st T is Frechet holds for A,B
+  being Subset of T holds Cl_Seq({}T) = {} & A c= Cl_Seq(A) & Cl_Seq(A \/ B) =
+  Cl_Seq(A) \/ Cl_Seq(B) & Cl_Seq(Cl_Seq(A)) = Cl_Seq(A)
 proof
   let T be non empty TopSpace;
   assume
 A1: T is Frechet;
   let A,B be Subset of T;
-  thus Cl_Seq({}T) = {} & A c= Cl_Seq(A) & Cl_Seq(A \/ B)=Cl_Seq(A) \/
-  Cl_Seq(B) by Th20,Th21,Th22;
+  thus Cl_Seq({}T) = {} & A c= Cl_Seq(A) & Cl_Seq(A \/ B)=Cl_Seq(A) \/ Cl_Seq(
+  B) by Th20,Th21,Th22;
   thus Cl_Seq(Cl_Seq(A)) = Cl_Seq(Cl(A)) by A1,Th23
     .= Cl(Cl(A)) by A1,Th23
     .= Cl_Seq(A) by A1,Th23;
 end;
 
 theorem Th25:
-  for T being non empty TopSpace st T is sequential holds
-  (for A being Subset of T holds Cl_Seq(Cl_Seq(A)) = Cl_Seq(A)) implies
-  T is Frechet
+  for T being non empty TopSpace st T is sequential holds (for A
+  being Subset of T holds Cl_Seq(Cl_Seq(A)) = Cl_Seq(A)) implies T is Frechet
 proof
   let T be non empty TopSpace;
   assume
 A1: T is sequential;
   assume
 A2: for A being Subset of T holds Cl_Seq(Cl_Seq(A)) = Cl_Seq(A);
-  assume not T is Frechet;
+  assume
+  not T is Frechet;
   then consider A being Subset of T such that
-A3: ex x being Point of T st x in Cl(A) &
-  for S being sequence of T holds (rng S c= A implies not x in Lim S )
-  by FRECHET:def 5;
-  consider x being Point of T such that
-A4: x in Cl(A) and
-A5: for S being sequence of T holds (rng S c= A implies not x in Lim S ) by A3;
-A6: A c= Cl_Seq(A) by Th21;
-  for Sq being sequence of T st ( Sq is convergent & rng Sq c= Cl_Seq(A) )
+A3: ex x being Point of T st x in Cl(A) & for S being sequence of T
+  holds (rng S c= A implies not x in Lim S ) by FRECHET:def 5;
+  for Sq being sequence of T st Sq is convergent & rng Sq c= Cl_Seq(A)
   holds Lim Sq c= Cl_Seq(A)
   proof
     let Sq be sequence of T;
-    assume that Sq is convergent and
-A7: rng Sq c= Cl_Seq(A);
+    assume that
+    Sq is convergent and
+A4: rng Sq c= Cl_Seq(A);
     let y be set;
     assume
-A8: y in Lim Sq;
+A5: y in Lim Sq;
     then reconsider y'=y as Point of T;
-    y' in Cl_Seq(Cl_Seq(A)) by A7,A8,Def2;
+    y' in Cl_Seq(Cl_Seq(A)) by A4,A5,Def2;
     hence thesis by A2;
   end;
-  then Cl_Seq(A) is closed by A1,FRECHET:def 6;
-  then x in Cl_Seq(A) by A4,A6,PRE_TOPC:45;
-  then consider S being sequence of T such that
-A9: rng S c= A & x in Lim S by Def2;
-  thus contradiction by A5,A9;
+  then
+A6: Cl_Seq(A) is closed by A1,FRECHET:def 6;
+  consider x being Point of T such that
+A7: x in Cl(A) and
+A8: for S being sequence of T holds (rng S c= A implies not x in Lim S )
+  by A3;
+  A c= Cl_Seq(A) by Th21;
+  then x in Cl_Seq(A) by A7,A6,PRE_TOPC:45;
+  hence contradiction by A8,Def2;
 end;
 
 theorem
-  for T being non empty TopSpace st T is sequential holds
-  T is Frechet iff for A,B being Subset of T holds Cl_Seq({}T) = {} &
-  A c= Cl_Seq(A) & Cl_Seq(A \/ B) = Cl_Seq(A) \/ Cl_Seq(B) &
-  Cl_Seq(Cl_Seq(A)) = Cl_Seq(A) by Th24,Th25;
+  for T being non empty TopSpace st T is sequential holds T is Frechet
+iff for A,B being Subset of T holds Cl_Seq({}T) = {} & A c= Cl_Seq(A) & Cl_Seq(
+A \/ B) = Cl_Seq(A) \/ Cl_Seq(B) & Cl_Seq(Cl_Seq(A)) = Cl_Seq(A) by Th24,Th25;
 
 begin ::The Limit
 
 definition
   let T be non empty TopSpace, S be sequence of T;
-  assume that
+  assume
 A1: ex x being Point of T st Lim S = {x};
   func lim S -> Point of T means
   :Def3:
@@ -995,24 +1024,23 @@ A3: S is_convergent_to x1 and
 A4: S is_convergent_to x2;
     consider x being Point of T such that
 A5: Lim S = {x} by A1;
+A6: x2 in {x} by A4,A5,FRECHET:def 4;
     x1 in Lim S by A3,FRECHET:def 4;
-    then
-A6: x1=x by A5,TARSKI:def 1;
-    x2 in {x} by A4,A5,FRECHET:def 4;
+    then x1=x by A5,TARSKI:def 1;
     hence thesis by A6,TARSKI:def 1;
   end;
 end;
 
 theorem Th27:
-  for T being non empty TopSpace st T is T_2
-  for S being sequence of T st S is convergent holds
-  ex x being Point of T st Lim S = {x}
+  for T being non empty TopSpace st T is T_2 for S being sequence
+  of T st S is convergent holds ex x being Point of T st Lim S = {x}
 proof
   let T be non empty TopSpace;
   assume
 A1: T is T_2;
   let S be sequence of T;
-  assume S is convergent;
+  assume
+  S is convergent;
   then consider x being Point of T such that
 A2: S is_convergent_to x by FRECHET:def 3;
   take x;
@@ -1027,20 +1055,21 @@ A4: y in Lim S;
     hence thesis by TARSKI:def 1;
   end;
   let y be set;
-  assume y in {x};
+  assume
+  y in {x};
   hence thesis by A3,TARSKI:def 1;
 end;
 
 theorem Th28:
-  for T being non empty TopSpace st T is T_2
-  for S being sequence of T,x being Point of T holds
-  S is_convergent_to x iff S is convergent & x = lim S
+  for T being non empty TopSpace st T is T_2 for S being sequence
+  of T,x being Point of T holds S is_convergent_to x iff S is convergent & x =
+  lim S
 proof
   let T be non empty TopSpace;
   assume
 A1: T is T_2;
   let S be sequence of T, x be Point of T;
-  thus S is_convergent_to x implies (S is convergent & x = lim S)
+  thus S is_convergent_to x implies S is convergent & x = lim S
   proof
     assume
 A2: S is_convergent_to x;
@@ -1048,15 +1077,16 @@ A2: S is_convergent_to x;
     then ex y being Point of T st Lim S = {y} by A1,Th27;
     hence thesis by A2,Def3;
   end;
-  assume
-A3: S is convergent & x = lim S;
-  then ex x being Point of T st Lim S = {x} by A1,Th27;
-  hence thesis by A3,Def3;
+  assume that
+A3: S is convergent and
+A4: x = lim S;
+  ex x being Point of T st Lim S = {x} by A1,A3,Th27;
+  hence thesis by A4,Def3;
 end;
 
 theorem
-  for M being MetrStruct,S being sequence of M holds
-  S is sequence of TopSpaceMetr(M)
+  for M being MetrStruct,S being sequence of M holds S is sequence of
+  TopSpaceMetr(M)
 proof
   let M be MetrStruct,S be sequence of M;
   the carrier of M = the carrier of TopSpaceMetr M by TOPMETR:16;
@@ -1064,82 +1094,88 @@ proof
 end;
 
 theorem
-  for M being non empty MetrStruct,S being sequence of TopSpaceMetr(M) holds
-  S is sequence of M by TOPMETR:16;
+  for M being non empty MetrStruct,S being sequence of TopSpaceMetr(M)
+  holds S is sequence of M by TOPMETR:16;
 
 theorem Th31:
-  for M being non empty MetrSpace,S being sequence of M, x being Point of M,
-  S' being sequence of TopSpaceMetr(M), x' being Point of TopSpaceMetr(M)
-  st S = S' & x = x' holds
-  S is_convergent_in_metrspace_to x iff S' is_convergent_to x'
+  for M being non empty MetrSpace,S being sequence of M, x being
+  Point of M, S' being sequence of TopSpaceMetr(M), x' being Point of
+TopSpaceMetr(M) st S = S' & x = x' holds S is_convergent_in_metrspace_to x iff
+  S' is_convergent_to x'
 proof
-  let M be non empty MetrSpace,S be sequence of M, x be Point of M,
-  S' be sequence of TopSpaceMetr(M), x' be Point of TopSpaceMetr(M);
-  assume
-A1: S = S' & x=x';
+  let M be non empty MetrSpace,S be sequence of M, x be Point of M, S' be
+  sequence of TopSpaceMetr(M), x' be Point of TopSpaceMetr(M);
+  assume that
+A1: S = S' and
+A2: x=x';
   thus S is_convergent_in_metrspace_to x implies S' is_convergent_to x'
   proof
     assume
-A2: S is_convergent_in_metrspace_to x;
+A3: S is_convergent_in_metrspace_to x;
     let U1 be Subset of TopSpaceMetr(M);
-    assume U1 is open & x' in U1;
+    assume
+    U1 is open & x' in U1;
     then consider r being real number such that
-A3: r>0 and
-A4: Ball(x,r) c= U1 by A1,TOPMETR:22;
+A4: r>0 and
+A5: Ball(x,r) c= U1 by A2,TOPMETR:22;
     reconsider r as Real by XREAL_0:def 1;
-    Ball(x,r) contains_almost_all_sequence S by A2,A3,METRIC_6:30;
+    Ball(x,r) contains_almost_all_sequence S by A3,A4,METRIC_6:30;
     then consider n being Element of NAT such that
-A5: for m being Element of NAT st n <= m holds S.m in Ball(x,r)
-    by METRIC_6:def 12;
+A6: for m being Element of NAT st n <= m holds S.m in Ball(x,r) by
+    METRIC_6:def 12;
     take n;
     let m be Element of NAT;
-    assume n <= m;
-    then S.m in Ball(x,r) by A5;
-    hence S'.m in U1 by A1,A4;
+    assume
+    n <= m;
+    then S.m in Ball(x,r) by A6;
+    hence S'.m in U1 by A1,A5;
   end;
   assume
-A6: S' is_convergent_to x';
-  for V being Subset of M st x in V & V in Family_open_set M holds
-  V contains_almost_all_sequence S
+A7: S' is_convergent_to x';
+  for V being Subset of M st x in V & V in Family_open_set M holds V
+  contains_almost_all_sequence S
   proof
     let V be Subset of M;
     assume that
-A7: x in V and
-A8: V in Family_open_set M;
+A8: x in V and
+A9: V in Family_open_set M;
     reconsider V'=V as Subset of TopSpaceMetr(M) by TOPMETR:16;
     reconsider V' as Subset of TopSpaceMetr(M);
-    V' in the topology of TopSpaceMetr(M) by A8,TOPMETR:16;
+    V' in the topology of TopSpaceMetr(M) by A9,TOPMETR:16;
     then V' is open by PRE_TOPC:def 5;
     then consider n being Element of NAT such that
-A9: for m being Element of NAT st n <= m holds S'.m in V'
-    by A1,A6,A7,FRECHET:def 2;
+A10: for m being Element of NAT st n <= m holds S'.m in V' by A2,A7,
+    A8,FRECHET:def 2;
     take n;
     let m be Element of NAT;
-    assume n <= m;
-    hence thesis by A1,A9;
+    assume
+    n <= m;
+    hence thesis by A1,A10;
   end;
   hence thesis by METRIC_6:32;
 end;
 
 theorem
-  for M being non empty MetrSpace,Sm being sequence of M,
-  St being sequence of TopSpaceMetr(M) st Sm=St holds
-  Sm is convergent iff St is convergent
+  for M being non empty MetrSpace,Sm being sequence of M, St being
+  sequence of TopSpaceMetr(M) st Sm=St holds Sm is convergent iff St is
+  convergent
 proof
-  let M be non empty MetrSpace,Sm be sequence of M,
-  St be sequence of TopSpaceMetr(M);
+  let M be non empty MetrSpace,Sm be sequence of M, St be sequence of
+  TopSpaceMetr(M);
   assume
 A1: Sm=St;
   thus Sm is convergent implies St is convergent
   proof
-    assume Sm is convergent;
+    assume
+    Sm is convergent;
     then consider x being Point of M such that
 A2: Sm is_convergent_in_metrspace_to x by METRIC_6:22;
     reconsider x'=x as Point of TopSpaceMetr(M) by TOPMETR:16;
     St is_convergent_to x' by A1,A2,Th31;
     hence thesis by FRECHET:def 3;
   end;
-  assume St is convergent;
+  assume
+  St is convergent;
   then consider x' being Point of TopSpaceMetr(M) such that
 A3: St is_convergent_to x' by FRECHET:def 3;
   reconsider x=x' as Point of M by TOPMETR:16;
@@ -1148,21 +1184,21 @@ A3: St is_convergent_to x' by FRECHET:def 3;
 end;
 
 theorem
-  for M being non empty MetrSpace,Sm being sequence of M,
-  St being sequence of TopSpaceMetr(M) st Sm=St & Sm is convergent holds
-  lim Sm = lim St
+  for M being non empty MetrSpace,Sm being sequence of M, St being
+  sequence of TopSpaceMetr(M) st Sm=St & Sm is convergent holds lim Sm = lim St
 proof
-  let M be non empty MetrSpace,Sm be sequence of M,
-  St be sequence of TopSpaceMetr(M);
+  let M be non empty MetrSpace,Sm be sequence of M, St be sequence of
+  TopSpaceMetr(M);
   assume that
 A1: Sm=St and
 A2: Sm is convergent;
-A3: TopSpaceMetr(M) is T_2 by PCOMPS_1:38;
   set x=lim Sm;
   reconsider x'=x as Point of TopSpaceMetr(M) by TOPMETR:16;
   Sm is_convergent_in_metrspace_to x by A2,METRIC_6:27;
-  then St is_convergent_to x' by A1,Th31;
-  hence thesis by A3,Th28;
+  then TopSpaceMetr(M) is T_2 & St is_convergent_to x' by A1,
+  Th31,PCOMPS_1:
+  38;
+  hence thesis by Th28;
 end;
 
 begin ::The Cluster Points
@@ -1171,41 +1207,40 @@ definition
   let T be TopStruct, S be sequence of T, x be Point of T;
   pred x is_a_cluster_point_of S means
   :Def4:
-  for O being Subset of T, n being Element of NAT st O is open & x in O
-  ex m being Element of NAT st n <= m & S.m in O;
+  for O being Subset of T, n being
+Element of NAT st O is open & x in O ex m being Element of NAT st n <= m & S.m
+  in O;
 end;
 
 theorem Th34:
-  for T being non empty TopStruct, S being sequence of T, x being Point of T
-  st ex S1 being subsequence of S st S1 is_convergent_to x holds
-  x is_a_cluster_point_of S
+  for T being non empty TopStruct, S being sequence of T, x being
+  Point of T st ex S1 being subsequence of S st S1 is_convergent_to x holds x
+  is_a_cluster_point_of S
 proof
   let T be non empty TopStruct, S be sequence of T, x be Point of T;
   given S1 being subsequence of S such that
 A1: S1 is_convergent_to x;
   let O be Subset of T, n be Element of NAT;
-  assume that
-A2: O is open and
-A3: x in O;
-  consider n1 being Element of NAT such that
-A4: for m being Element of NAT st n1 <= m holds S1.m in O
-  by A1,A2,A3,FRECHET:def 2;
+  assume
+  O is open & x in O;
+  then consider n1 being Element of NAT such that
+A2: for m being Element of NAT st n1 <= m holds S1.m in O by A1,
+  FRECHET:def 2;
   set n2=max(n1,n);
+A3: S1.n2 in O by A2,XXREAL_0:25;
   consider NS being increasing sequence of NAT such that
-A5: S1 = S * NS by VALUED_0:def 17;
+A4: S1 = S * NS by VALUED_0:def 17;
   take NS.n2;
-A6: n <= n2 by XXREAL_0:25;
-  n2 <= NS.n2 by SEQM_3:33;
-  hence n <= NS.n2 by A6,XXREAL_0:2;
-A7: S1.n2 in O by A4,XXREAL_0:25;
+  n <= n2 & n2 <= NS.n2 by SEQM_3:33,XXREAL_0:25;
+  hence n <= NS.n2 by XXREAL_0:2;
   n2 in NAT;
   then n2 in dom NS by FUNCT_2:def 1;
-  hence thesis by A5,A7,FUNCT_1:23;
+  hence thesis by A4,A3,FUNCT_1:23;
 end;
 
 theorem
-  for T being non empty TopStruct, S being sequence of T, x being Point of T
-  st S is_convergent_to x holds x is_a_cluster_point_of S
+  for T being non empty TopStruct, S being sequence of T, x being Point
+  of T st S is_convergent_to x holds x is_a_cluster_point_of S
 proof
   let T be non empty TopStruct, S be sequence of T, x be Point of T;
   assume
@@ -1220,37 +1255,37 @@ A1: S is_convergent_to x;
 end;
 
 theorem Th36:
-  for T being non empty TopStruct, S being sequence of T, x being Point of T,
-  Y being Subset of T st Y = {y where y is Point of T : x in Cl({y}) } &
-  rng S c= Y holds S is_convergent_to x
+  for T being non empty TopStruct, S being sequence of T, x being
+Point of T, Y being Subset of T st Y = {y where y is Point of T : x in Cl({y})
+  } & rng S c= Y holds S is_convergent_to x
 proof
-  let T be non empty TopStruct, S be sequence of T, x be Point of T,
-  Y be Subset of T;
+  let T be non empty TopStruct, S be sequence of T, x be Point of T, Y be
+  Subset of T;
   assume that
 A1: Y = {y where y is Point of T : x in Cl({y}) } and
 A2: rng S c= Y;
   let U1 be Subset of T;
-  assume that
-A3: U1 is open and
-A4: x in U1;
+  assume
+A3: U1 is open & x in U1;
   take 0;
   let m be Element of NAT;
-  assume 0 <= m;
   m in NAT;
   then m in dom S by NORMSP_1:17;
   then S.m in rng S by FUNCT_1:def 5;
   then S.m in Y by A2;
   then consider y being Point of T such that
-A5: y=S.m and
-A6: x in Cl({y}) by A1;
-  {y} meets U1 by A3,A4,A6,PRE_TOPC:def 13;
-  hence S.m in U1 by A5,ZFMISC_1:56;
+A4: y=S.m and
+A5: x in Cl({y}) by A1;
+  assume
+  0 <= m;
+  {y} meets U1 by A3,A5,PRE_TOPC:def 13;
+  hence S.m in U1 by A4,ZFMISC_1:56;
 end;
 
 theorem Th37:
-  for T being non empty TopStruct, S being sequence of T, x,y being Point of T
-  st for n being Element of NAT holds S.n = y & S is_convergent_to x holds
-  x in Cl({y})
+  for T being non empty TopStruct, S being sequence of T, x,y
+  being Point of T st for n being Element of NAT holds S.n = y & S
+  is_convergent_to x holds x in Cl({y})
 proof
   let T be non empty TopStruct, S be sequence of T, x,y be Point of T;
   assume
@@ -1260,10 +1295,11 @@ A1: for n being Element of NAT holds S.n = y & S is_convergent_to x;
     let G be Subset of T;
     assume
 A2: G is open;
-    assume x in G;
+    assume
+    x in G;
     then consider n being Element of NAT such that
-A3: for m being Element of NAT st n <= m holds S.m in G
-    by A1,A2,FRECHET:def 2;
+A3: for m being Element of NAT st n <= m holds S.m in G by A1,A2,
+    FRECHET:def 2;
     S.n in G by A3;
     then
 A4: y in G by A1;
@@ -1275,159 +1311,163 @@ A4: y in G by A1;
 end;
 
 theorem Th38:
-  for T being non empty TopStruct, x being Point of T,
-  Y being Subset of T, S being sequence of T st
-  Y = { y where y is Point of T : x in Cl({y}) } & rng S misses Y &
-  S is_convergent_to x ex S1 being subsequence of S st S1 is one-to-one
+  for T being non empty TopStruct, x being Point of T, Y being
+Subset of T, S being sequence of T st Y = { y where y is Point of T : x in Cl({
+  y}) } & rng S misses Y & S is_convergent_to x ex S1 being subsequence of S st
+  S1 is one-to-one
 proof
-  let T be non empty TopStruct, x be Point of T,
-  Y be Subset of T, S be sequence of T;
+  let T be non empty TopStruct, x be Point of T, Y be Subset of T, S be
+  sequence of T;
   assume that
 A1: Y = { y where y is Point of T : x in Cl({y}) } and
 A2: rng S /\ Y = {} and
 A3: S is_convergent_to x;
-A4: for z being set st z in rng S ex n0 being Element of NAT st
-  for m being Element of NAT st n0 <= m holds z <> S.m
+  defpred P[Element of NAT,set,set] means $3 in NAT & for n1,n2,m being
+  Element of NAT st n1=$2 & n2=$3 & n2 <= m holds S.m <> S.n1;
+A4: for z being set st z in rng S ex n0 being Element of NAT st for m being
+  Element of NAT st n0 <= m holds z <> S.m
   proof
     let z be set;
+    defpred P[set] means $1 = z;
     assume
 A5: z in rng S;
+    then reconsider z'=z as Point of T;
     assume
-A6: for n0 being Element of NAT
-    ex m being Element of NAT st n0 <= m & z = S.m;
-    reconsider z'=z as Point of T by A5;
-    defpred P[set] means $1 = z;
-A7: for n being Element of NAT ex m being Element of NAT st
-    n <= m & P[S.m] by A6;
-    consider S1 being subsequence of S such that
-A10: for n being Element of NAT holds P[S1.n] from VALUED_1:sch 1(A7);
-    S1 is_convergent_to x by A3,Th18;
-    then x in Cl({z'}) by A10,Th37;
+    for n0 being Element of NAT ex m being Element of NAT st n0 <= m &
+    z = S.m;
+    then
+A6: for n being Element of NAT ex m being Element of NAT st n <= m & P[S.m
+    ];
+    ex S1 being subsequence of S st for n being Element of NAT holds P[S1.n
+    ] from VALUED_1:sch 1(A6 );
+    then x in Cl({z'}) by A3,Th18,Th37;
     then z' in Y by A1;
     hence contradiction by A2,A5,XBOOLE_0:def 4;
   end;
-  defpred P[Element of NAT,set,set] means $3 in NAT &
-  for n1,n2,m being Element of NAT
-  st n1=$2 & n2=$3 & n2 <= m holds S.m <> S.n1;
-A11: for n being Element of NAT for z1 being set ex z2 being set st P[n,z1,z2]
+A7: for n being Element of NAT for z1 being set ex z2 being set st P[n,z1,
+  z2]
   proof
     let n be Element of NAT, z1 be set;
     per cases;
     suppose
-A12:  not z1 in NAT;
+A8:   not z1 in NAT;
       take 0;
       thus 0 in NAT;
       let n1,n2,m be Element of NAT;
       assume that
-A13:  n1=z1 and n2=0 & n2 <= m;
-      thus thesis by A12,A13;
+A9:   n1=z1 and
+      n2=0 and
+      n2 <= m;
+      thus thesis by A8,A9;
     end;
-    suppose z1 in NAT;
+    suppose
+      z1 in NAT;
       then z1 in dom S by NORMSP_1:17;
       then S.z1 in rng S by FUNCT_1:def 5;
       then consider n0 being Element of NAT such that
-A14:  for m being Element of NAT st n0 <= m holds S.z1 <> S.m by A4;
+A10:  for m being Element of NAT st n0 <= m holds S.z1 <> S.m by A4;
       take n0;
       thus n0 in NAT;
       let n1,n2,m be Element of NAT;
-      assume that
-A15:  n1=z1 and
-A16:  n2=n0 and
-A17:  n2 <= m;
-      thus thesis by A14,A15,A16,A17;
+      assume
+      n1=z1 & n2=n0 & n2 <= m;
+      hence thesis by A10;
     end;
   end;
   consider f being Function such that
-A18: dom f = NAT and
-A19: f.0 = 0 and
-A20: for n being Element of NAT holds P[n,f.n,f.(n+1)]
-  from RECDEF_1:sch 1(A11);
-A21: for n being Element of NAT holds f.n is Element of NAT
+A11: dom f = NAT and
+A12: f.0 = 0 and
+A13: for n being Element of NAT holds P[n,f.n,f.(n+1)] from RECDEF_1:sch
+  1(A7);
+A14: for n being Element of NAT holds f.n is Element of NAT
   proof
     let n be Element of NAT;
     per cases;
-    suppose n = 0;
-      hence thesis by A19;
+    suppose
+      n = 0;
+      hence thesis by A12;
     end;
-    suppose n <> 0;
+    suppose
+      n <> 0;
       then 0 < n by NAT_1:3;
       then 0 + 1 < n + 1 by XREAL_1:8;
       then 1 <= n by NAT_1:13;
       then reconsider n1=n-1 as Element of NAT by INT_1:18;
       n1 + 1 = n;
-      hence thesis by A20;
+      hence thesis by A13;
     end;
   end;
   then for n be Element of NAT holds f.n is real;
-  then reconsider f as Real_Sequence by A18,SEQ_1:4;
+  then reconsider f as Real_Sequence by A11,SEQ_1:4;
   f is increasing
   proof
     let n be Element of NAT;
+    reconsider n2=f.(n+1) as Element of NAT by A14;
+    reconsider n1=f.n as Element of NAT by A14;
     assume
-A22: f.n >= f.(n+1);
-    reconsider n1=f.n as Element of NAT by A21;
-    reconsider n2=f.(n+1) as Element of NAT by A21;
-    n2 <= n1 by A22;
-    then S.n1 <> S.n1 by A20;
+    f.n >= f.(n+1);
+    then n2 <= n1;
+    then S.n1 <> S.n1 by A13;
     hence contradiction;
   end;
-  then reconsider f as increasing sequence of NAT by A21,SEQM_3:29;
+  then reconsider f as increasing sequence of NAT by A14,SEQM_3:29;
   take S1=S*f;
-  let x1,x2 be set;
-  assume that
-A23: x1 in dom S1 and
-A24: x2 in dom S1 and
-A25: S1.x1 = S1.x2;
-  assume
-A26: x1 <> x2;
-A27: for n1,n2 being Element of NAT st n1 < n2 holds S1.n1 <> S1.n2
+A15: for n1,n2 being Element of NAT st n1 < n2 holds S1.n1 <> S1.n2
   proof
     let n1,n2 be Element of NAT;
-    assume
-A28: n1 < n2;
     reconsider n1'=f.n1 as Element of NAT;
     reconsider n3'=f.(n1+1) as Element of NAT;
-    n3' <= f.n2
-    proof
-A29:  n1 + 1 <= n2 by A28,NAT_1:13;
-      f.(n1+1) <= f.n2
-      proof
-        per cases;
-        suppose n1+1 = n2;
-          hence thesis;
-        end;
-        suppose n1 + 1 <> n2;
-          then n1 + 1 < n2 by A29,XXREAL_0:1;
-          hence thesis by SEQM_3:7;
-        end;
-      end;
-      hence thesis;
-    end;
-    then
-A30: S.(f.n2) <> S.n1' by A20;
     n2 in NAT;
     then n2 in dom S1 by NORMSP_1:17;
     then
-A31: S.(f.n2) = S1.n2 by FUNCT_1:22;
+A16: S.(f.n2) = S1.n2 by FUNCT_1:22;
+    assume
+    n1 < n2;
+    then
+A17: n1 + 1 <= n2 by NAT_1:13;
+    f.(n1+1) <= f.n2
+    proof
+      per cases;
+      suppose
+        n1+1 = n2;
+        hence thesis;
+      end;
+      suppose
+        n1 + 1 <> n2;
+        then n1 + 1 < n2 by A17,XXREAL_0:1;
+        hence thesis by SEQM_3:7;
+      end;
+    end;
+    then
+A18: S.(f.n2) <> S.n1' by A13;
     n1 in NAT;
     then n1 in dom S1 by NORMSP_1:17;
-    hence thesis by A30,A31,FUNCT_1:22;
+    hence thesis by A18,A16,FUNCT_1:22;
   end;
-  reconsider n1=x1 as Element of NAT by A23;
-  reconsider n2=x2 as Element of NAT by A24;
-  per cases by A26,XXREAL_0:1;
-  suppose n1 < n2;
-    hence contradiction by A25,A27;
+  let x1,x2 be set;
+  assume that
+A19: x1 in dom S1 and
+A20: x2 in dom S1 and
+A21: S1.x1 = S1.x2;
+  reconsider n2=x2 as Element of NAT by A20;
+  reconsider n1=x1 as Element of NAT by A19;
+  assume
+A22: x1 <> x2;
+  per cases by A22,XXREAL_0:1;
+  suppose
+    n1 < n2;
+    hence contradiction by A21,A15;
   end;
-  suppose n2 < n1;
-    hence contradiction by A25,A27;
+  suppose
+    n2 < n1;
+    hence contradiction by A21,A15;
   end;
 end;
 
 theorem Th39:
   for T being non empty TopStruct, S1,S2 being sequence of T st
-  rng S2 c= rng S1 & S2 is one-to-one
-  ex P being Permutation of NAT st S2*P is subsequence of S1
+  rng S2 c= rng S1 & S2 is one-to-one ex P being Permutation of NAT st S2*P is
+  subsequence of S1
 proof
   let T be non empty TopStruct, S1,S2 be sequence of T;
   assume that
@@ -1437,7 +1477,8 @@ A2: S2 is one-to-one;
 A3: for n being set st n in NAT ex u being set st u in NAT & P[n,u]
   proof
     let n be set;
-    assume n in NAT;
+    assume
+    n in NAT;
     then n in dom S2 by NORMSP_1:17;
     then S2.n in rng S2 by FUNCT_1:def 5;
     then consider m being set such that
@@ -1452,6 +1493,9 @@ A6: dom f = NAT and
 A7: rng f c= NAT and
 A8: for n being set st n in NAT holds P[n,f.n] from WELLORD2:sch 1(A3);
   reconsider A=rng f as non empty Subset of NAT by A6,A7,RELAT_1:65;
+  defpred P[Element of NAT,set,set] means for B being non empty Subset of NAT,
+m being Element of NAT st m=$2 & B={k where k is Element of NAT:k in rng f & k>
+  m} holds $3=min B;
 A9: f is one-to-one
   proof
     let x1,x2 be set;
@@ -1462,28 +1506,28 @@ A12: f.x1 = f.x2;
     S2.x2 = S1.(f.x2) by A6,A8,A11;
     then
 A13: S2.x1 = S2.x2 by A6,A8,A10,A12;
-A14: x1 in dom S2 by A6,A10,NORMSP_1:17;
-    x2 in dom S2 by A6,A11,NORMSP_1:17;
-    hence thesis by A2,A13,A14,FUNCT_1:def 8;
+    x1 in dom S2 & x2 in dom S2 by A6,A10,A11,NORMSP_1:17;
+    hence thesis by A2,A13,FUNCT_1:def 8;
   end;
-A15: for m being Element of NAT holds
-  {k where k is Element of NAT : k in rng f & k>m} <> {}
+A14: for m being Element of NAT holds {k where k is Element of NAT : k in
+  rng f & k>m} <> {}
   proof
     let m be Element of NAT;
     assume
-A16: {k where k is Element of NAT : k in rng f & k>m} = {};
+A15: {k where k is Element of NAT : k in rng f & k>m} = {};
     rng f c= m + 1
     proof
       let x be set;
       assume
-A18:  x in rng f;
+A16:  x in rng f;
       then reconsider x'=x as Element of NAT by A7;
       x' < m + 1
       proof
-        assume x'>= m + 1;
+        assume
+        x'>= m + 1;
         then x' > m by NAT_1:13;
-        then x' in {k where k is Element of NAT : k in rng f & k>m} by A18;
-        hence contradiction by A16;
+        then x' in {k where k is Element of NAT : k in rng f & k>m} by A16;
+        hence contradiction by A15;
       end;
       then x' in {x'' where x'' is Element of NAT:x''< m+1};
       hence thesis by AXIOMS:30;
@@ -1491,334 +1535,324 @@ A18:  x in rng f;
     then rng f is finite by FINSET_1:13;
     hence contradiction by A6,A9,CARD_1:97;
   end;
-A19: for m being Element of NAT holds
-  {k where k is Element of NAT : k in rng f & k>m} c= NAT
+A17: for m being Element of NAT holds {k where k is Element of NAT : k in
+  rng f & k>m} c= NAT
   proof
     let m be Element of NAT;
     let z be set;
-    assume z in {k where k is Element of NAT : k in rng f & k>m};
-    then consider k being Element of NAT such that
-A20: k = z and k in rng f & k>m;
-    thus thesis by A20;
+    assume
+    z in {k where k is Element of NAT : k in rng f & k>m};
+    then ex k being Element of NAT st k = z & k in rng f & k>m;
+    hence thesis;
   end;
-  defpred P[Element of NAT,set,set] means
-  for B being non empty Subset of NAT, m being Element of NAT st
-  m=$2 & B={k where k is Element of NAT:k in rng f & k>m} holds $3=min B;
-A21: for n being Element of NAT for x being set ex y being set st P[n,x,y]
+A18: for n being Element of NAT for x being set ex y being set st P[n,x,y]
   proof
     let n be Element of NAT, x be set;
     per cases;
-    suppose x in NAT;
+    suppose
+      x in NAT;
       then reconsider x'=x as Element of NAT;
       set B={k where k is Element of NAT:k in rng f & k>x'};
-      reconsider B as Subset of NAT by A19;
-      reconsider B as non empty Subset of NAT by A15;
+      reconsider B as Subset of NAT by A17;
+      reconsider B as non empty Subset of NAT by A14;
       take min B;
       let B' be non empty Subset of NAT, m be Element of NAT;
-      assume that
-A22:  m=x and
-A23:  B'={k where k is Element of NAT:k in rng f & k>m};
-      thus thesis by A22,A23;
+      assume
+      m=x & B'={k where k is Element of NAT:k in rng f & k>m};
+      hence thesis;
     end;
     suppose
-A24:  not x in NAT;
+A19:  not x in NAT;
       take 0;
       let B be non empty Subset of NAT, m be Element of NAT;
       assume that
-A25:  m=x and B={k where k is Element of NAT:k in rng f & k>m};
-      thus thesis by A24,A25;
+A20:  m=x and
+      B={k where k is Element of NAT:k in rng f & k>m};
+      thus thesis by A19,A20;
     end;
   end;
   consider g being Function such that
-A26: dom g = NAT and
-A27: g.0 = min A and
-A28: for n being Element of NAT holds P[n,g.n,g.(n+1)]
-  from RECDEF_1:sch 1(A21);
+A21: dom g = NAT and
+A22: g.0 = min A and
+A23: for n being Element of NAT holds P[n,g.n,g.(n+1)] from RECDEF_1:sch
+  1(A18);
   defpred P[Element of NAT] means g.$1 in NAT;
-A29: P[0] by A27;
-A30: for k being Element of NAT st P[k] holds P[k+1]
+A24: for k being Element of NAT st P[k] holds P[k+1]
   proof
     let k be Element of NAT;
-    assume g.k in NAT;
+    assume
+    g.k in NAT;
     then reconsider m=g.k as Element of NAT;
     set B={l where l is Element of NAT:l in rng f & l>m};
-    reconsider B as Subset of NAT by A19;
-    reconsider B as non empty Subset of NAT by A15;
-    g.(k+1)= min B by A28;
+    reconsider B as Subset of NAT by A17;
+    reconsider B as non empty Subset of NAT by A14;
+    g.(k+1)= min B by A23;
     hence thesis;
   end;
-A31: for k being Element of NAT holds P[k] from NAT_1:sch 1(A29,A30);
-A32: rng g c= NAT
-  proof
-    let y be set;
-    assume y in rng g;
-    then consider x being set such that
-A33: x in dom g and
-A34: y = g.x by FUNCT_1:def 5;
-    reconsider x as Element of NAT by A26,A33;
-    g.x in NAT by A31;
-    hence thesis by A34;
-  end;
+A25: P[0] by A22;
+A26: for k being Element of NAT holds P[k] from NAT_1:sch 1(A25,A24);
   for n being Element of NAT holds g.n is real
   proof
     let n be Element of NAT;
-    g.n in NAT by A31;
+    g.n in NAT by A26;
     then reconsider w = g.n as Element of REAL;
     w is real;
     hence thesis;
   end;
-  then reconsider g1=g as Real_Sequence by A26,SEQ_1:4;
-  g1 is increasing
+  then reconsider g1=g as Real_Sequence by A21,SEQ_1:4;
+A27: g1 is increasing
   proof
     let n be Element of NAT;
-    reconsider m=g.n as Element of NAT by A31;
-    reconsider B={k where k is Element of NAT : k in rng f & k>m}
-    as non empty Subset of NAT by A15,A19;
-    g1.(n+1)=min B by A28;
+    reconsider m=g.n as Element of NAT by A26;
+    reconsider B={k where k is Element of NAT : k in rng f & k>m} as non empty
+    Subset of NAT by A14,A17;
+    g1.(n+1)=min B by A23;
     then g1.(n+1) in B by XXREAL_2:def 7;
-    then consider k being Element of NAT such that
-A35: k = g1.(n+1) and k in rng f and
-A36: k>m;
-    thus thesis by A35,A36;
+    then ex k being Element of NAT st k = g1.(n+1) & k in rng f & k>m;
+    hence thesis;
   end;
-  then reconsider g1 as increasing sequence of NAT by A32,A26,RELSET_1:11;
-A37: g1 is one-to-one
+A28: rng g c= NAT
+  proof
+    let y be set;
+    assume
+    y in rng g;
+    then consider x being set such that
+A29: x in dom g and
+A30: y = g.x by FUNCT_1:def 5;
+    reconsider x as Element of NAT by A21,A29;
+    g.x in NAT by A26;
+    hence thesis by A30;
+  end;
+  then reconsider g1 as increasing sequence of NAT by A21,A27,RELSET_1:11;
+A31: g1 is one-to-one
   proof
     let x1,x2 be set;
     assume that
-A38: x1 in dom g1 and
-A39: x2 in dom g1 and
-A40: g1.x1 = g1.x2;
-    reconsider n1=x1 as Element of NAT by A38;
-    reconsider n2=x2 as Element of NAT by A39;
+A32: x1 in dom g1 and
+A33: x2 in dom g1 and
+A34: g1.x1 = g1.x2;
+    reconsider n2=x2 as Element of NAT by A33;
+    reconsider n1=x1 as Element of NAT by A32;
     assume
-A41: x1 <> x2;
-    per cases by A41,XXREAL_0:1;
-    suppose n1 < n2;
-      hence contradiction by A40,SEQM_3:7;
+A35: x1 <> x2;
+    per cases by A35,XXREAL_0:1;
+    suppose
+      n1 < n2;
+      hence contradiction by A34,SEQM_3:7;
     end;
-    suppose n2 < n1;
-      hence contradiction by A40,SEQM_3:7;
+    suppose
+      n2 < n1;
+      hence contradiction by A34,SEQM_3:7;
     end;
   end;
   then
-A42: g" is one-to-one;
-A43: rng f = rng g
+A36: rng(g") = NAT by A21,FUNCT_1:55;
+A37: rng f = rng g
   proof
     thus for y being set holds y in rng f implies y in rng g
     proof
       let y be set;
       assume
-A44:  y in rng f;
+A38:  y in rng f;
       then reconsider y'=y as Element of NAT by A7;
-      assume
-A45:  not y in rng g;
       defpred P[Element of NAT] means g1.$1 < y';
-A46:  P[0]
-      proof
-        assume
-A47:    not g1.0 < y';
-A48:    min A <= y' by A44,XXREAL_2:def 7;
-        g.0 in rng g by A26,FUNCT_1:def 5;
-        hence contradiction by A27,A45,A47,A48,XXREAL_0:1;
-      end;
-A49:  for n being Element of NAT st P[n] holds P[n+1]
+      assume
+A39:  not y in rng g;
+A40:  for n being Element of NAT st P[n] holds P[n+1]
       proof
         let n be Element of NAT;
+        reconsider m = g.n as Element of NAT by A26;
+        reconsider B={k where k is Element of NAT:k in rng f & k>m} as non
+        empty Subset of NAT by A14,A17;
+A41:    g.(n+1)=min B & g.(n+1) in rng g by A21,A23,FUNCT_1:def 5;
         assume
-A50:    g1.n < y';
-        assume
-A51:    not g1.(n+1) < y';
-        reconsider m = g.n as Element of NAT by A31;
-        reconsider B={k where k is Element of NAT:k in rng f & k>m}
-        as non empty Subset of NAT by A15,A19;
-A52:    g.(n+1)=min B by A28;
-        y' in {k where k is Element of NAT:k in rng f & k>m} by A44,A50;
+        g1.n < y';
+        then y' in {k where k is Element of NAT:k in rng f & k>m} by A38;
         then
-A53:    min B <= y' by XXREAL_2:def 7;
-        g.(n+1) in rng g by A26,FUNCT_1:def 5;
-        hence contradiction by A45,A51,A52,A53,XXREAL_0:1;
+A42:    min B <= y' by XXREAL_2:def 7;
+        assume
+        not g1.(n+1) < y';
+        hence contradiction by A39,A42,A41,XXREAL_0:1;
       end;
-A55:  for n being Element of NAT holds P[n] from NAT_1:sch 1(A46,A49);
+A43:  P[0]
+      proof
+        assume
+A44:    not g1.0 < y';
+        min A <= y' & g.0 in rng g by A21,A38,FUNCT_1:def 5,XXREAL_2:def
+        7;
+        hence contradiction by A22,A39,A44,XXREAL_0:1;
+      end;
+A45:  for n being Element of NAT holds P[n] from NAT_1:sch 1(A43,A40);
       rng g c= y'
       proof
         let y be set;
-        assume y in rng g;
+        assume
+        y in rng g;
         then consider x being set such that
-A56:    x in dom g and
-A57:    y = g.x by FUNCT_1:def 5;
-        reconsider x as Element of NAT by A26,A56;
-        g1.x < y' by A55;
+A46:    x in dom g and
+A47:    y = g.x by FUNCT_1:def 5;
+        reconsider x as Element of NAT by A21,A46;
+        g1.x < y' by A45;
         then g1.x in {i where i is Element of NAT:i<y'};
-        hence thesis by A57,AXIOMS:30;
+        hence thesis by A47,AXIOMS:30;
       end;
       then rng g is finite by FINSET_1:13;
-      hence contradiction by A26,A37,CARD_1:97;
+      hence contradiction by A21,A31,CARD_1:97;
     end;
     let y be set;
-    assume y in rng g;
+    assume
+    y in rng g;
     then consider x being set such that
-A58: x in dom g and
-A59: y = g.x by FUNCT_1:def 5;
-    reconsider n=x as Element of NAT by A26,A58;
+A48: x in dom g and
+A49: y = g.x by FUNCT_1:def 5;
+    reconsider n=x as Element of NAT by A21,A48;
     per cases;
-    suppose n=0;
-      hence thesis by A27,A59,XXREAL_2:def 7;
+    suppose
+      n=0;
+      hence thesis by A22,A49,XXREAL_2:def 7;
     end;
-    suppose n<>0;
+    suppose
+      n<>0;
       then n > 0 by NAT_1:3;
       then n + 1 > 0 + 1 by XREAL_1:8;
       then 1 <= n by NAT_1:13;
       then reconsider m=n-1 as Element of NAT by INT_1:18;
-A60:  m+1 = n;
-      reconsider l = g.m as Element of NAT by A31;
-      reconsider B={k where k is Element of NAT:k in rng f & k>l}
-      as non empty Subset of NAT by A15,A19;
-      g.n = min B by A28,A60;
-      then y in B by A59,XXREAL_2:def 7;
-      then consider k being Element of NAT such that
-A61:  k = y and
-A62:  k in rng f and k>l;
-      thus thesis by A61,A62;
+      reconsider l = g.m as Element of NAT by A26;
+      reconsider B={k where k is Element of NAT:k in rng f & k>l} as non empty
+      Subset of NAT by A14,A17;
+      m+1 = n;
+      then g.n = min B by A23;
+      then y in B by A49,XXREAL_2:def 7;
+      then ex k being Element of NAT st k = y & k in rng f & k>l;
+      hence thesis;
     end;
   end;
   then
-A63: rng f = dom(g") by A37,FUNCT_1:55;
-  then
-A64: dom(g"*f) = dom f & rng(g"*f) = rng(g") by RELAT_1:46,47;
-A65: rng(g") = dom g by A37,FUNCT_1:55;
-  rng(g") = NAT by A26,A37,FUNCT_1:55;
-  then reconsider P=g"*f as Function of NAT,NAT by A6,A64,FUNCT_2:def 1
-,RELSET_1:11;
-  P is bijective
-  proof
-    thus P is one-to-one by A9,A42;
-    thus rng P = NAT by A26,A63,A65,RELAT_1:47;
-  end;
-  then reconsider P as Permutation of NAT;
+A50: rng f = dom(g") by A31,FUNCT_1:55;
+  then dom(g"*f) = dom f & rng(g"*f) = rng(g") by RELAT_1:46,47;
+  then reconsider P=g"*f as Function of NAT,NAT by A6,A36,FUNCT_2:def 1 ,
+  RELSET_1:11;
+  rng(g") = dom g by A31,FUNCT_1:55;
+  then rng P = NAT by A21,A50,RELAT_1:47;
+  then P is onto by FUNCT_2:def 3;
+  then reconsider P as Permutation of NAT by A9,A31;
   take P";
-  NAT = dom (S2*P") & NAT = dom (S1*g) &
-  for x being set st x in NAT holds (S2*P").x = (S1*g).x
+  NAT = dom (S2*P") & NAT = dom (S1*g) & for x being set st x in NAT
+  holds (S2*P").x = (S1*g).x
   proof
-A66: dom (P") = NAT & rng (P") c= NAT by FUNCT_2:def 1;
     thus NAT = dom (S2*(P")) by FUNCT_2:def 1;
-    rng g c= dom S1 by A32,NORMSP_1:17;
-    hence NAT = dom (S1*g) by A26,RELAT_1:46;
+    rng g c= dom S1 by A28,NORMSP_1:17;
+    hence NAT = dom (S1*g) by A21,RELAT_1:46;
     let x be set;
     assume
-A67: x in NAT;
+A51: x in NAT;
     then
-A68: g. x in rng g by A26,FUNCT_1:def 5;
+A52: g. x in rng g by A21,FUNCT_1:def 5;
     then
-A69: f".(g.x) in dom f by A9,A43,FUNCT_1:54;
-    thus (S2*(P")).x = S2.(((g"*f)").x) by A66,A67,FUNCT_1:23
-      .= S2.((f"*(g")").x) by A9,A42,FUNCT_1:66
-      .= S2.((f"*g).x) by A37,FUNCT_1:65
-      .= S2.(f".(g.x)) by A26,A67,FUNCT_1:23
-      .= S1.(f.(f".(g.x))) by A6,A8,A69
-      .= S1.(g.x) by A9,A43,A68,FUNCT_1:57
-      .= (S1*g).x by A26,A67,FUNCT_1:23;
+A53: f".(g.x) in dom f by A9,A37,FUNCT_1:54;
+    dom (P") = NAT by FUNCT_2:def 1;
+    hence (S2*(P")).x = S2.(((g"*f)").x) by A51,FUNCT_1:23
+      .= S2.((f"*(g")").x) by A9,A31,FUNCT_1:66
+      .= S2.((f"*g).x) by A31,FUNCT_1:65
+      .= S2.(f".(g.x)) by A21,A51,FUNCT_1:23
+      .= S1.(f.(f".(g.x))) by A6,A8,A53
+      .= S1.(g.x) by A9,A37,A52,FUNCT_1:57
+      .= (S1*g).x by A21,A51,FUNCT_1:23;
   end;
   then S2*(P")=S1*g1 by FUNCT_1:9;
   hence thesis;
 end;
 
-scheme PermSeq
-  {T()->non empty 1-sorted,S()->sequence of T(),p()->Permutation of NAT,
-  P[set]} : ex n being Element of NAT st for m being Element of NAT
-  st n<=m holds P[(S()*p()).m]
+scheme
+  PermSeq {T()->non empty 1-sorted,S()->sequence of T(),p()->Permutation of
+NAT, P[set]} : ex n being Element of NAT st for m being Element of NAT st n<=m
+  holds P[(S()*p()).m]
 provided
-A1: ex
-n being Element of NAT st for m being Element of NAT, x being Point of T()
-st n<=m & x=S().m holds P[x]
+A1: ex n being Element of NAT st for m being Element of NAT, x being
+Point of T() st n<=m & x=S().m holds P[x]
 proof
   consider n being Element of NAT such that
 A2: for m being Element of NAT, x being Point of T() st n<=m & x=S().m
   holds P[x] by A1;
   n in succ n & dom (p()") = NAT by FUNCT_2:def 1,ORDINAL1:10;
   then (p()").n in (p()").:(succ n) by FUNCT_1:def 12;
-  then reconsider X=(p()").:(succ n) as finite non empty Subset of NAT
-  by FINSET_1:17;
-  reconsider mm = max X as natural number;
+  then reconsider X=(p()").:(succ n) as finite non empty Subset of NAT by
+  FINSET_1:17;
   reconsider mX = (max X) + 1 as Element of NAT;
   take mX;
   let m be Element of NAT;
-  assume
-A5: mX<=m;
   m in NAT;
   then
-A6: m in dom p() by FUNCT_2:67;
+A3: m in dom p() by FUNCT_2:67;
+  assume
+A4: mX<=m;
   n<=p().m
   proof
-    assume p().m<n;
+    assume
+    p().m<n;
     then p().m in {p1 where p1 is Element of NAT : p1 < n};
     then p().m in n by AXIOMS:30;
     then p().m in succ n by ORDINAL1:13;
-    then m in p()"(succ n) by A6,FUNCT_1:def 13;
+    then m in p()"(succ n) by A3,FUNCT_1:def 13;
     then m in (p()").:(succ n) by FUNCT_1:155;
-    then
-A7: m <=max X by XXREAL_2:def 8;
-    thus contradiction by A5,A7,NAT_1:13;
+    then m <=max X by XXREAL_2:def 8;
+    hence contradiction by A4,NAT_1:13;
   end;
   then
-A8: P[S().(p().m)] by A2;
+A5: P[S().(p().m)] by A2;
   m in NAT;
   then m in dom p() by FUNCT_2:def 1;
-  hence thesis by A8,FUNCT_1:23;
+  hence thesis by A5,FUNCT_1:23;
+  reconsider mm = max X as natural number;
 end;
 
-scheme PermSeq2
-  {T()->non empty TopStruct,S()->sequence of T(),p()->Permutation of NAT,
-  P[set]} : ex n being Element of NAT st for m being Element of NAT st n<=m
+scheme
+  PermSeq2 {T()->non empty TopStruct,S()->sequence of T(),p()->Permutation of
+NAT, P[set]} : ex n being Element of NAT st for m being Element of NAT st n<=m
   holds P[(S()*p()).m]
 provided
-A1: ex
-n being Element of NAT st for m being Element of NAT, x being Point of T()
-st n<=m & x=S().m holds P[x]
+A1: ex n being Element of NAT st for m being Element of NAT, x being
+Point of T() st n<=m & x=S().m holds P[x]
 proof
   reconsider T1=T() as non empty 1-sorted;
   reconsider S1=S() as sequence of T1;
-A2: ex
-  n being Element of NAT st for m being Element of NAT, x being Point of T1
-  st n<=m & x=S1.m holds P[x] by A1;
-  ex n being Element of NAT st for m being Element of NAT st n<=m
-  holds P[(S1*p()).m] from PermSeq(A2);
+A2: ex n being Element of NAT st for m being Element of NAT, x being Point
+  of T1 st n<=m & x=S1.m holds P[x] by A1;
+  ex n being Element of NAT st for m being Element of NAT st n<=m holds P[
+  (S1*p()).m] from PermSeq(A2);
   hence thesis;
 end;
 
 theorem Th40:
-  for T being non empty TopStruct, S being sequence of T,
-  P being Permutation of NAT, x being Point of T st S is_convergent_to x
-  holds S*P is_convergent_to x
+  for T being non empty TopStruct, S being sequence of T, P being
+  Permutation of NAT, x being Point of T st S is_convergent_to x holds S*P
+  is_convergent_to x
 proof
-  let T be non empty TopStruct, S be sequence of T, P be Permutation of NAT,
-  x be Point of T;
+  let T be non empty TopStruct, S be sequence of T, P be Permutation of NAT, x
+  be Point of T;
   assume
 A1: S is_convergent_to x;
-  for U1 being Subset of T st (U1 is open & x in U1)
-  ex n being Element of NAT st for m being Element of NAT st n <= m
-  holds (S*P).m in U1
+  for U1 being Subset of T st U1 is open & x in U1 ex n being Element of
+  NAT st for m being Element of NAT st n <= m holds (S*P).m in U1
   proof
     let U1 be Subset of T;
-    assume that
-A2: U1 is open and
-A3: x in U1;
     defpred P[set] means $1 in U1;
-A4: ex n being Element of NAT st for m being Element of NAT, x being Point of T
-    st n<=m & x=S.m holds P[x]
+    assume
+A2: U1 is open & x in U1;
+A3: ex n being Element of NAT st for m being Element of NAT, x being Point
+    of T st n<=m & x=S.m holds P[x]
     proof
       consider n being Element of NAT such that
-A5:   for m being Element of NAT st n<=m holds S.m in U1
-      by A1,A2,A3,FRECHET:def 2;
+A4:   for m being Element of NAT st n<=m holds S.m in U1 by A1,A2,
+      FRECHET:def 2;
       take n;
       let m be Element of NAT, x be Point of T;
-      assume that
-A6:   n<=m and
-A7:   x=S.m;
-      thus thesis by A5,A6,A7;
+      assume
+      n<=m & x=S.m;
+      hence thesis by A4;
     end;
     thus ex n being Element of NAT st for m being Element of NAT st n <= m
-    holds P[(S*P).m] from PermSeq2(A4);
+    holds P[(S*P).m] from PermSeq2(A3);
   end;
   hence thesis by FRECHET:def 2;
 end;
@@ -1853,36 +1887,32 @@ end;
 canceled;
 
 theorem Th43:
-  for T being non empty TopStruct, S being sequence of T, x being Point of T,
-  n0 being Nat st x is_a_cluster_point_of S
-  holds x is_a_cluster_point_of S^\n0
+  for T being non empty TopStruct, S being sequence of T, x being
+  Point of T, n0 being Nat st x is_a_cluster_point_of S holds x
+  is_a_cluster_point_of S^\n0
 proof
-  let T be non empty TopStruct, S be sequence of T, x be Point of T,
-  n0 be Nat;
-  assume that
+  let T be non empty TopStruct, S be sequence of T, x be Point of T, n0 be Nat;
+  assume
 A1: x is_a_cluster_point_of S;
   set S1 = S^\n0;
-A2: for n being Element of NAT holds S1.n=S.(n+n0) by NAT_1:def 3;
   let O be Subset of T, n be Element of NAT;
-  assume that
-A4: O is open and
-A5: x in O;
-  consider m0 being Element of NAT such that
-A6: n + n0 <= m0 and
-A7: S.m0 in O by A1,A4,A5,Def4;
-X: n0 in NAT by ORDINAL1:def 13;
-  n0 <= n + n0 by NAT_1:11;
-  then reconsider m=m0-n0 as Element of NAT by A6,X,INT_1:18,XXREAL_0:2;
+  assume
+  O is open & x in O;
+  then consider m0 being Element of NAT such that
+A2: n + n0 <= m0 and
+A3: S.m0 in O by A1,Def4;
+  n0 in NAT & n0 <= n + n0 by NAT_1:11,ORDINAL1:def 13;
+  then reconsider m=m0-n0 as Element of NAT by A2,INT_1:18,XXREAL_0:2;
   take m;
-  thus n <= m by A6,XREAL_1:21;
-  S1.m = S.(m0-n0+n0) by A2
+  thus n <= m by A2,XREAL_1:21;
+  S1.m = S.(m0-n0+n0) by NAT_1:def 3
     .= S.m0;
-  hence thesis by A7;
+  hence thesis by A3;
 end;
 
 theorem Th44:
-  for T being non empty TopStruct, S being sequence of T, x being Point of T
-  st x is_a_cluster_point_of S holds x in Cl(rng S)
+  for T being non empty TopStruct, S being sequence of T, x being
+  Point of T st x is_a_cluster_point_of S holds x in Cl(rng S)
 proof
   let T be non empty TopStruct, S be sequence of T, x be Point of T;
   assume
@@ -1892,8 +1922,10 @@ A1: x is_a_cluster_point_of S;
     let G be Subset of T;
     assume
 A2: G is open;
-    assume x in G;
-    then consider m being Element of NAT such that 0 <= m and
+    assume
+    x in G;
+    then consider m being Element of NAT such that
+    0 <= m and
 A3: S.m in G by A1,A2,Def4;
     m in NAT;
     then m in dom S by NORMSP_1:17;
@@ -1905,10 +1937,9 @@ A3: S.m in G by A1,A2,Def4;
 end;
 
 theorem
-  for T being non empty TopStruct st T is Frechet
-  for S being sequence of T, x being Point of T
-  st x is_a_cluster_point_of S holds
-  ex S1 being subsequence of S st S1 is_convergent_to x
+  for T being non empty TopStruct st T is Frechet for S being sequence
+  of T, x being Point of T st x is_a_cluster_point_of S holds ex S1 being
+  subsequence of S st S1 is_convergent_to x
 proof
   let T be non empty TopStruct;
   assume
@@ -1917,74 +1948,72 @@ A1: T is Frechet;
   assume
 A2: x is_a_cluster_point_of S;
   defpred P[Point of T] means x in Cl{$1};
-  reconsider Y={y where y is Point of T : P[y]}
-  as Subset of T from DOMAIN_1:sch 7;
+  reconsider Y={y where y is Point of T : P[y]} as Subset of T from DOMAIN_1:
+  sch 7;
   per cases;
   suppose
-A3: for n being Element of NAT ex m being Element of NAT st m >= n & S.m in Y;
+A3: for n being Element of NAT ex m being Element of NAT st m >= n & S
+    .m in Y;
     defpred P[set] means $1 in Y;
-A4: for n being Element of NAT ex m being Element of NAT st
-    n <= m & P[S.m] by A3;
+A4: for n being Element of NAT ex m being Element of NAT st n <= m & P[S.m
+    ] by A3;
     consider S1 being subsequence of S such that
-A7: for n being Element of NAT holds P[S1.n] from VALUED_1:sch 1(A4);
-A8: rng S1 c= Y
+A5: for n being Element of NAT holds P[S1.n] from VALUED_1:sch 1(A4);
+    take S1;
+    rng S1 c= Y
     proof
       let y be set;
-      assume y in rng S1;
+      assume
+      y in rng S1;
       then consider n being set such that
-A9:   n in dom S1 and
-A10:  y = S1.n by FUNCT_1:def 5;
-      reconsider n as Element of NAT by A9;
-      S1.n in Y by A7;
-      hence thesis by A10;
+A6:   n in dom S1 and
+A7:   y = S1.n by FUNCT_1:def 5;
+      reconsider n as Element of NAT by A6;
+      S1.n in Y by A5;
+      hence thesis by A7;
     end;
-    take S1;
-    thus thesis by A8,Th36;
+    hence thesis by Th36;
   end;
-  suppose ex n being Element of NAT st for m being Element of NAT st m >= n
+  suppose
+    ex n being Element of NAT st for m being Element of NAT st m >= n
     holds not S.m in Y;
     then consider n0 being Element of NAT such that
-A11: for m being Element of NAT st m >= n0 holds not S.m in Y;
-     set S' = S^\n0;
-A12: for n being Element of NAT holds S'.n=S.(n+n0) by NAT_1:def 3;
-A13: for n being Element of NAT holds not S'.n in Y
+A8: for m being Element of NAT st m >= n0 holds not S.m in Y;
+    set S' = S^\n0;
+    x in Cl(rng S') by A2,Th43,Th44;
+    then consider S2 being sequence of T such that
+A9: rng S2 c= rng S' and
+A10: x in Lim S2 by A1,FRECHET:def 5;
+A11: S2 is_convergent_to x by A10,FRECHET:def 4;
+A12: for n being Element of NAT holds not S'.n in Y
     proof
       let n be Element of NAT;
-      not S.(n+n0) in Y by A11,NAT_1:11;
-      hence thesis by A12;
+      not S.(n+n0) in Y by A8,NAT_1:11;
+      hence thesis by NAT_1:def 3;
     end;
     rng S' /\ Y = {}
     proof
-      assume
-A14:  rng S' /\ Y <> {};
       consider y being Element of rng S' /\ Y;
-      y in rng S' & y in Y by A14,XBOOLE_0:def 4;
+      assume
+A13:  rng S' /\ Y <> {};
+      then y in rng S' by XBOOLE_0:def 4;
       then consider n being set such that
-A15:  n in dom S' and
-A16:  y = S'.n by FUNCT_1:def 5;
-      reconsider n as Element of NAT by A15;
-      not S'.n in Y by A13;
-      hence contradiction by A14,A16,XBOOLE_0:def 4;
+A14:  n in dom S' and
+A15:  y = S'.n by FUNCT_1:def 5;
+      reconsider n as Element of NAT by A14;
+      not S'.n in Y by A12;
+      hence contradiction by A13,A15,XBOOLE_0:def 4;
     end;
-    then
-A17: rng S' misses Y by XBOOLE_0:def 7;
-    x is_a_cluster_point_of S' by A2,Th43;
-    then x in Cl(rng S') by Th44;
-    then consider S2 being sequence of T such that
-A18: rng S2 c= rng S' and
-A19: x in Lim S2 by A1,FRECHET:def 5;
-A20: S2 is_convergent_to x by A19,FRECHET:def 4;
-    rng S2 misses Y by A17,A18,XBOOLE_1:63;
+    then rng S' misses Y by XBOOLE_0:def 7;
     then consider S2' being subsequence of S2 such that
-A21: S2' is one-to-one by A20,Th38;
+A16: S2' is one-to-one by A9,A11,Th38,XBOOLE_1:63;
     rng S2' c= rng S2 by VALUED_0:21;
-    then rng S2' c= rng S' by A18,XBOOLE_1:1;
     then consider P being Permutation of NAT such that
-A22: S2'*P is subsequence of S' by A21,Th39;
-    reconsider S1=S2'*P as subsequence of S' by A22;
+A17: S2'*P is subsequence of S' by A9,A16,Th39,XBOOLE_1:1;
+    reconsider S1=S2'*P as subsequence of S' by A17;
     reconsider S1 as subsequence of S by VALUED_0:20;
     take S1;
-    S2' is_convergent_to x by A20,Th18;
+    S2' is_convergent_to x by A11,Th18;
     hence thesis by Th40;
   end;
 end;
@@ -1992,20 +2021,20 @@ end;
 begin :: Auxiliary theorems
 
 theorem
-  for T being non empty TopSpace st T is first-countable holds
-  for x being Point of T holds ex B being Basis of x st ex S being Function st
-  dom S = NAT & rng S = B &
-  for n,m being Element of NAT st m >= n holds S.m c= S.n by Lm10;
+  for T being non empty TopSpace st T is first-countable holds for x
+being Point of T holds ex B being Basis of x st ex S being Function st dom S =
+  NAT & rng S = B & for n,m being Element of NAT st m >= n holds S.m c= S.n by
+  Lm5;
 
 theorem
-  for T being non empty TopSpace st for p being Point of T holds Cl({p}) = {p}
-  holds T is T_1 by Lm1;
+  for T being non empty TopSpace st for p being Point of T holds Cl({p})
+  = {p} holds T is T_1 by Lm1;
 
 theorem
   for T being non empty TopSpace holds T is T_2 implies T is T_1 by Lm4;
 
 theorem
-  for T being non empty TopSpace st not T is T_1 holds
-  ex x1,x2 being Point of T, S being sequence of T st
-  S = (NAT --> x1) & x1 <> x2 & S is_convergent_to x2 by Lm3;
+  for T being non empty TopSpace st not T is T_1 holds ex x1,x2 being
+  Point of T, S being sequence of T st S = (NAT --> x1) & x1 <> x2 & S
+  is_convergent_to x2 by Lm3;
 

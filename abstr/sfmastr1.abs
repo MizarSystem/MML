@@ -17,11 +17,11 @@ environ
       SCMFSA8B, SCMFSA8C, XXREAL_0, SEQ_4;
  constructors DOMAIN_1, SETWISEO, XXREAL_0, NAT_1, SEQ_4, PRE_FF, SCM_1,
       SCMFSA_5, SCMFSA6A, SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA8A, SCMFSA8B,
-      SCMFSA8C, SCMNORM, SCMFSA_4, XXREAL_2, RELSET_1;
+      SCMFSA8C, SCMNORM, SCMFSA_4, XXREAL_2, RELSET_1, PRE_POLY;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1,
-      FINSET_1, FRAENKEL, NUMBERS, XREAL_0, NAT_1, INT_1, MEMBERED, CARD_3,
-      SEQ_4, AMI_5, SCMFSA_2, SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA7B, SCMFSA8A,
-      SCMFSA8C, SCMFSA_9, AMI_1, XXREAL_2;
+      FINSET_1, NUMBERS, XREAL_0, NAT_1, INT_1, MEMBERED, CARD_3, AMI_5,
+      SCMFSA_2, SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA7B, SCMFSA8A, SCMFSA8C,
+      SCMFSA_9, XXREAL_2;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -111,19 +111,21 @@ registration
 end;
 
 theorem :: SFMASTR1:1
-  for a being Int-Location, I being Program of SCM+FSA st not a in UsedIntLoc I
-  holds I does_not_destroy a;
+  for a being Int-Location, I being Program of SCM+FSA st not a in
+  UsedIntLoc I holds I does_not_destroy a;
 
 begin :: Composition of non parahalting macro instructions
 
 reserve s, S for State of SCM+FSA,
   I, J for Program of SCM+FSA,
-  Ig for good Program of SCM+FSA,
+  Ig for good
+  Program of SCM+FSA,
   i for good parahalting Instruction of SCM+FSA,
-  j for parahalting Instruction of SCM+FSA,
+  j for
+  parahalting Instruction of SCM+FSA,
   a, b for Int-Location,
-  f for FinSeq-Location;
-
+  f for
+  FinSeq-Location;
 :: set D = Int-Locations U FinSeq-Locations;
 :: NOTE:
 :: The definition of parahalting seems to be too weak
@@ -134,88 +136,82 @@ theorem :: SFMASTR1:2
   DataPart(I +* Start-At insloc 0) = {};
 
 theorem :: SFMASTR1:3
-  I is_halting_on Initialize S & I is_closed_on Initialize S &
-  J is_closed_on IExec(I, S) implies I ';' J is_closed_on Initialize S;
+  I is_halting_on Initialize S & I is_closed_on Initialize S & J
+  is_closed_on IExec(I, S) implies I ';' J is_closed_on Initialize S;
 
-theorem :: SFMASTR1:4
-  I is_halting_on Initialize S & J is_halting_on IExec(I, S) &
-  I is_closed_on Initialize S & J is_closed_on IExec(I, S)
-  implies I ';' J is_halting_on Initialize S;
+theorem :: SFMASTR1:4  :: SCMFSA6B:27
+  I is_halting_on Initialize S & J is_halting_on IExec(I, S) & I
+  is_closed_on Initialize S & J is_closed_on IExec(I, S) implies I ';' J
+  is_halting_on Initialize S;
 
-theorem :: SFMASTR1:5
+theorem :: SFMASTR1:5  :: SCMFSA6B:27
   I is_closed_on s & I +* Start-At insloc 0 c= s & s is halting
-  implies for m being Element of NAT st m <= LifeSpan s
-  holds  Computation( s,m),  Computation((s+*(I ';' J)),m) equal_outside NAT;
+implies for m being Element of NAT st m <= LifeSpan s holds Computation( s,m),
+  Computation((s+*(I ';' J)),m) equal_outside NAT;
 
-theorem :: SFMASTR1:6  ::T22
-  Ig is_halting_on Initialize s & J is_halting_on IExec(Ig, s) &
-  Ig is_closed_on Initialize s & J is_closed_on IExec(Ig, s) implies
-  LifeSpan (s +* Initialized (Ig ';' J)) = LifeSpan (s +* Initialized Ig) + 1
-  + LifeSpan (Result (s +* Initialized Ig) +* Initialized J);
+theorem :: SFMASTR1:6
+  Ig is_halting_on Initialize s & J is_halting_on IExec(Ig, s) & Ig
+is_closed_on Initialize s & J is_closed_on IExec(Ig, s) implies LifeSpan (s +*
+Initialized (Ig ';' J)) = LifeSpan (s +* Initialized Ig) + 1 + LifeSpan (Result
+  (s +* Initialized Ig) +* Initialized J);
 
 theorem :: SFMASTR1:7  :: Main theorem
-  Ig is_halting_on Initialize s & J is_halting_on IExec(Ig, s) &
-  Ig is_closed_on Initialize s & J is_closed_on IExec(Ig, s)
-  implies IExec(Ig ';' J, s)
-  = IExec(J, IExec(Ig, s))+*Start-At(IC IExec(J, IExec(Ig, s))+card Ig);
+  Ig is_halting_on Initialize s & J is_halting_on IExec(Ig, s) & Ig
+is_closed_on Initialize s & J is_closed_on IExec(Ig, s) implies IExec(Ig ';' J,
+  s) = IExec(J, IExec(Ig, s))+*Start-At(IC IExec(J, IExec(Ig, s))+card Ig);
 
 theorem :: SFMASTR1:8
-  (Ig is parahalting or
-  Ig is_halting_on Initialize s & Ig is_closed_on Initialize s) &
-  (J is parahalting or
-  J is_halting_on IExec(Ig, s) & J is_closed_on IExec(Ig, s))
-  implies IExec(Ig ';' J, s).a = IExec(J, IExec(Ig, s)).a;
+  (Ig is parahalting or Ig is_halting_on Initialize s & Ig
+is_closed_on Initialize s) & (J is parahalting or J is_halting_on IExec(Ig, s)
+& J is_closed_on IExec(Ig, s)) implies IExec(Ig ';' J, s).a = IExec(J, IExec(Ig
+  , s)).a;
 
 theorem :: SFMASTR1:9
-  (Ig is parahalting or
-  Ig is_halting_on Initialize s & Ig is_closed_on Initialize s) &
-  (J is parahalting or
-  J is_halting_on IExec(Ig, s) & J is_closed_on IExec(Ig, s))
-  implies IExec(Ig ';' J, s).f = IExec(J, IExec(Ig, s)).f;
+  (Ig is parahalting or Ig is_halting_on Initialize s & Ig
+is_closed_on Initialize s) & (J is parahalting or J is_halting_on IExec(Ig, s)
+& J is_closed_on IExec(Ig, s)) implies IExec(Ig ';' J, s).f = IExec(J, IExec(Ig
+  , s)).f;
 
 theorem :: SFMASTR1:10
-  (Ig is parahalting or
-  Ig is_halting_on Initialize s & Ig is_closed_on Initialize s) &
-  (J is parahalting or
-  J is_halting_on IExec(Ig, s) & J is_closed_on IExec(Ig, s))
-  implies DataPart IExec(Ig ';' J, s) = DataPart IExec(J, IExec(Ig, s));
+  (Ig is parahalting or Ig is_halting_on Initialize s & Ig is_closed_on
+  Initialize s) & (J is parahalting or J is_halting_on IExec(Ig, s) & J
+is_closed_on IExec(Ig, s)) implies DataPart IExec(Ig ';' J, s) = DataPart IExec
+  (J, IExec(Ig, s));
 
 theorem :: SFMASTR1:11
-  Ig is parahalting
-  or Ig is_closed_on Initialize s & Ig is_halting_on Initialize s
-  implies
-  DataPart Initialize IExec(Ig, s) = DataPart IExec(Ig, s);
+  Ig is parahalting or Ig is_closed_on Initialize s & Ig
+is_halting_on Initialize s implies DataPart Initialize IExec(Ig, s) = DataPart
+  IExec(Ig, s);
 
 theorem :: SFMASTR1:12
-  Ig is parahalting or
-  Ig is_halting_on Initialize s & Ig is_closed_on Initialize s
-  implies IExec(Ig ';' j, s).a = Exec(j, IExec(Ig, s)).a;
+  Ig is parahalting or Ig is_halting_on Initialize s & Ig
+is_closed_on Initialize s implies IExec(Ig ';' j, s).a = Exec(j, IExec(Ig, s)).
+  a;
 
 theorem :: SFMASTR1:13
-  Ig is parahalting or
-  Ig is_halting_on Initialize s & Ig is_closed_on Initialize s
-  implies IExec(Ig ';' j, s).f = Exec(j, IExec(Ig, s)).f;
+  Ig is parahalting or Ig is_halting_on Initialize s & Ig
+is_closed_on Initialize s implies IExec(Ig ';' j, s).f = Exec(j, IExec(Ig, s)).
+  f;
 
 theorem :: SFMASTR1:14
-  Ig is parahalting or
-  Ig is_halting_on Initialize s & Ig is_closed_on Initialize s
-  implies DataPart IExec(Ig ';' j, s) = DataPart Exec(j, IExec(Ig, s));
+  Ig is parahalting or Ig is_halting_on Initialize s & Ig is_closed_on
+Initialize s implies DataPart IExec(Ig ';' j, s) = DataPart Exec(j, IExec(Ig, s
+  ));
 
 theorem :: SFMASTR1:15
-  J is parahalting or J is_halting_on Exec(i, Initialize s) &
-  J is_closed_on Exec(i, Initialize s)
-  implies IExec(i ';' J, s).a = IExec(J, Exec(i, Initialize s)).a;
+  J is parahalting or J is_halting_on Exec(i, Initialize s) & J
+is_closed_on Exec(i, Initialize s) implies IExec(i ';' J, s).a = IExec(J, Exec(
+  i, Initialize s)).a;
 
 theorem :: SFMASTR1:16
-  J is parahalting or J is_halting_on Exec(i, Initialize s) &
-  J is_closed_on Exec(i, Initialize s)
-  implies IExec(i ';' J, s).f = IExec(J, Exec(i, Initialize s)).f;
+  J is parahalting or J is_halting_on Exec(i, Initialize s) & J
+is_closed_on Exec(i, Initialize s) implies IExec(i ';' J, s).f = IExec(J, Exec(
+  i, Initialize s)).f;
 
 theorem :: SFMASTR1:17
-  J is parahalting or J is_halting_on Exec(i, Initialize s) &
-  J is_closed_on Exec(i, Initialize s)
-  implies DataPart IExec(i ';' J, s) = DataPart IExec(J, Exec(i, Initialize s))
-;
+  J is parahalting or J is_halting_on Exec(i, Initialize s) & J
+  is_closed_on Exec(i, Initialize s) implies DataPart IExec(i ';' J, s) =
+  DataPart IExec(J, Exec(i, Initialize s));
 
 begin :: Memory allocation
 
@@ -238,10 +234,10 @@ definition
   func RWNotIn-seq L -> Function of NAT, bool NAT means
 :: SFMASTR1:def 2
 
-  it.0 = {k where k is Element of NAT : not intloc k in L & k <> 0} &
-  (for i being Element of NAT, sn being non empty Subset of NAT
-  st it.i = sn holds it.(i+1) = sn \ {min sn}) &
-  for i being Element of NAT holds it.i is infinite;
+  it.0 = {k where
+k is Element of NAT : not intloc k in L & k <> 0} & (for i being Element of NAT
+, sn being non empty Subset of NAT st it.i = sn holds it.(i+1) = sn \ {min sn})
+  & for i being Element of NAT holds it.i is infinite;
 end;
 
 registration
@@ -250,8 +246,8 @@ registration
 end;
 
 theorem :: SFMASTR1:18
-  not 0 in (RWNotIn-seq L).n &
-  (for m st m in (RWNotIn-seq L).n holds not intloc m in L);
+  not 0 in (RWNotIn-seq L).n & for m st m in (RWNotIn-seq L).n
+  holds not intloc m in L;
 
 theorem :: SFMASTR1:19
   min ((RWNotIn-seq L).n) < min ((RWNotIn-seq L).(n+1));
@@ -263,14 +259,14 @@ definition
   let n be Element of NAT, L be finite Subset of Int-Locations;
   func n-thRWNotIn L -> Int-Location equals
 :: SFMASTR1:def 3
-
   intloc min ((RWNotIn-seq L).n);
 end;
 
 notation
   let n be Element of NAT, L be finite Subset of Int-Locations;
-  synonym n-stRWNotIn L for n-thRWNotIn L; synonym n-ndRWNotIn L for
-  n-thRWNotIn L; synonym n-rdRWNotIn L for n-thRWNotIn L;
+  synonym n-stRWNotIn L for n-thRWNotIn L;
+  synonym n-ndRWNotIn L for n-thRWNotIn L;
+  synonym n-rdRWNotIn L for n-thRWNotIn L;
 end;
 
 registration
@@ -288,14 +284,14 @@ definition
   let n be Element of NAT, p be preProgram of SCM+FSA;
   func n-thNotUsed p -> Int-Location equals
 :: SFMASTR1:def 4
-
   n-thRWNotIn UsedIntLoc p;
 end;
 
 notation
   let n be Element of NAT, p be preProgram of SCM+FSA;
-  synonym n-stNotUsed p for n-thNotUsed p; synonym n-ndNotUsed p for
-  n-thNotUsed p; synonym n-rdNotUsed p for n-thNotUsed p;
+  synonym n-stNotUsed p for n-thNotUsed p;
+  synonym n-ndNotUsed p for n-thNotUsed p;
+  synonym n-rdNotUsed p for n-thNotUsed p;
 end;
 
 registration
@@ -310,7 +306,17 @@ theorem :: SFMASTR1:23
 
 definition
   let N, result be Int-Location;
-
+  func Fib_macro (N, result) -> Program of SCM+FSA equals
+:: SFMASTR1:def 5
+  2-ndRWNotIn
+  UsedIntLoc swap(result, 1-stRWNotIn {N, result}) := N ';' (SubFrom(result,
+result)) ';' (1-stRWNotIn {N, result} := intloc 0) ';' ((1-stRWNotIn UsedIntLoc
+swap(result, 1-stRWNotIn {N, result})) := (2-ndRWNotIn UsedIntLoc swap(result,
+  1-stRWNotIn {N, result}))) ';' Times( 1-stRWNotIn UsedIntLoc swap(result, 1
+-stRWNotIn {N, result}), AddTo(result, 1-stRWNotIn {N, result}) ';' swap(result
+  , 1-stRWNotIn {N, result}) ) ';' (N := (2-ndRWNotIn UsedIntLoc swap(result, 1
+  -stRWNotIn {N, result})));
+end;
 ::  set next = 1-stRWNotIn {N, result};
 ::      local variable
 ::  set aux  = 1-stRWNotIn UsedIntLoc swap(result, next);
@@ -320,21 +326,9 @@ definition
 :: - requires: N <> result
 :: - does not change N
 :: - note: Times allocates no memory
-  func Fib_macro (N, result) -> Program of SCM+FSA equals
-:: SFMASTR1:def 5
-  2-ndRWNotIn UsedIntLoc swap(result, 1-stRWNotIn {N, result}) := N ';'
-  (SubFrom(result, result)) ';' (1-stRWNotIn {N, result} := intloc 0) ';'
-  ((1-stRWNotIn UsedIntLoc swap(result, 1-stRWNotIn {N, result})) :=
-  (2-ndRWNotIn UsedIntLoc swap(result, 1-stRWNotIn {N, result}))) ';'
-  Times( 1-stRWNotIn UsedIntLoc swap(result, 1-stRWNotIn {N, result}),
-  AddTo(result, 1-stRWNotIn {N, result}) ';'
-  swap(result, 1-stRWNotIn {N, result}) ) ';'
-  (N := (2-ndRWNotIn UsedIntLoc swap(result, 1-stRWNotIn {N, result})));
-end;
 
 theorem :: SFMASTR1:24
-  for N, result being read-write Int-Location st N <> result
-  for n being Element of NAT st n = s.N
-  holds IExec(Fib_macro(N, result), s).result = Fib n &
+  for N, result being read-write Int-Location st N <> result for n being
+Element of NAT st n = s.N holds IExec(Fib_macro(N, result), s).result = Fib n &
   IExec(Fib_macro(N, result), s).N = s.N;
 

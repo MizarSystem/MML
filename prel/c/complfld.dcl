@@ -7,6 +7,7 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="TARSKI"/>
@@ -14,8 +15,8 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
-<ArticleID name="COMPLEX1"/>
 <ArticleID name="INT_1"/>
+<ArticleID name="COMPLEX1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
@@ -29,36 +30,36 @@
 </Signature>
 <FCluster aid="COMPLFLD" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="178"/>
+<Func kind="K" nr="186"/>
 <Cluster>
-<Adjective nr="36" value="false"/>
-<Adjective nr="83"/>
+<Adjective nr="38" value="false"/>
+<Adjective nr="84"/>
 </Cluster>
 </FCluster>
 <FCluster aid="COMPLFLD" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="178"/>
+<Func kind="K" nr="186"/>
 <Cluster>
-<Adjective nr="83"/>
-<Adjective nr="93"/>
+<Adjective nr="84"/>
+<Adjective nr="94"/>
 </Cluster>
 </FCluster>
 <FCluster aid="COMPLFLD" nr="3">
 <ArgTypes/>
-<Func kind="K" nr="178"/>
+<Func kind="K" nr="186"/>
 <Cluster>
-<Adjective nr="40" value="false"/>
-<Adjective nr="60"/>
-<Adjective nr="80"/>
-<Adjective nr="83"/>
-<Adjective nr="86"/>
-<Adjective nr="88"/>
-<Adjective nr="92"/>
-<Adjective nr="94"/>
+<Adjective nr="42" value="false"/>
+<Adjective nr="61"/>
+<Adjective nr="81"/>
+<Adjective nr="84"/>
+<Adjective nr="87"/>
+<Adjective nr="89"/>
+<Adjective nr="93"/>
 <Adjective nr="95"/>
-<Adjective nr="100"/>
+<Adjective nr="96"/>
 <Adjective nr="101"/>
 <Adjective nr="102"/>
+<Adjective nr="103"/>
 </Cluster>
 </FCluster>
 <CCluster aid="COMPLFLD" nr="1">
@@ -67,11 +68,11 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="178"/>
+<Func kind="K" nr="186"/>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="23"/>
+<Adjective nr="24"/>
 </Cluster>
 </CCluster>
 </Registrations>

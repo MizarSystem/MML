@@ -8,12 +8,11 @@
 environ
 
  vocabularies FUNCT_1, TARSKI, RELAT_1, BOOLE, FUNCOP_1, PARTFUN1, FUNCT_2,
-      FUNCT_4, CAT_4, CAT_1, ZF_REFLE;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, RELSET_1,
-      FUNCT_2, BINOP_1, PARTFUN1, FUNCOP_1;
- constructors PARTFUN1, BINOP_1, FUNCOP_1, RELSET_1;
- registrations XBOOLE_0, RELAT_1, FUNCT_1, FUNCOP_1, PARTFUN1, FUNCT_2,
-      RELSET_1;
+      FUNCT_4, CAT_4, CAT_1, ZF_REFLE, ORDINAL1, PRALG_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, RELAT_1, FUNCT_1,
+      RELSET_1, FUNCT_2, BINOP_1, PARTFUN1, FUNCOP_1;
+ constructors PARTFUN1, BINOP_1, FUNCOP_1, RELSET_1, ORDINAL1;
+ registrations XBOOLE_0, RELAT_1, FUNCT_1, FUNCOP_1, RELSET_1;
  requirements BOOLE, SUBSET;
 
 
@@ -24,7 +23,8 @@ reserve A,D,D' for non empty set;
 reserve f,g,h for Function;
 
 theorem :: FUNCT_4:1
-  (for z st z in Z holds ex x,y st z = [x,y]) implies ex X,Y st Z c= [:X,Y:];
+  (for z st z in Z holds ex x,y st z = [x,y]) implies ex X,Y st Z
+  c= [:X,Y:];
 
 theorem :: FUNCT_4:2
   g*f = (g|rng f)*f;
@@ -59,9 +59,9 @@ definition
   func f +* g -> Function means
 :: FUNCT_4:def 1
 
-  dom it = dom f \/ dom g &
-  for x st x in dom f \/ dom g
-  holds (x in dom g implies it.x = g.x) & (not x in dom g implies it.x = f.x);
+  dom it = dom f \/ dom g & for x st x in
+dom f \/ dom g holds (x in dom g implies it.x = g.x) & (not x in dom g implies
+  it.x = f.x);
   idempotence;
 end;
 
@@ -147,7 +147,8 @@ theorem :: FUNCT_4:37
   for f,g being PartFunc of X,Y st g is total holds f +* g = g;
 
 theorem :: FUNCT_4:38
-  for f,g being Function of X,Y st Y = {} implies X = {} holds f +* g = g;
+  for f,g being Function of X,Y st Y = {} implies X = {} holds f
+  +* g = g;
 
 theorem :: FUNCT_4:39
   for f,g being Function of X,X holds f +* g = g;
@@ -165,8 +166,8 @@ definition
   func ~f -> Function means
 :: FUNCT_4:def 2
 
-  (for x holds x in dom it iff ex y,z st x = [z,y] & [y,z] in dom f) &
-  for y,z st [y,z] in dom f holds it.(z,y) = f.(y,z);
+  (for x holds x in dom it iff ex y,z st x =
+  [z,y] & [y,z] in dom f) & for y,z st [y,z] in dom f holds it.(z,y) = f.(y,z);
 end;
 
 theorem :: FUNCT_4:42
@@ -194,7 +195,8 @@ theorem :: FUNCT_4:49
   for f being PartFunc of [:X,Y:],Z holds ~f is PartFunc of [:Y,X:],Z;
 
 theorem :: FUNCT_4:50
-  for f being Function of [:X,Y:],Z st Z<>{} holds ~f is Function of [:Y,X:],Z;
+  for f being Function of [:X,Y:],Z st Z<>{} holds ~f is Function
+  of [:Y,X:],Z;
 
 theorem :: FUNCT_4:51
   for f being Function of [:X,Y:],D holds ~f is Function of [:Y,X:],D;
@@ -217,38 +219,39 @@ definition
   func |:f,g:| -> Function means
 :: FUNCT_4:def 3
 
-  (for z holds z in dom it iff
-  ex x,y,x',y' st z = [[x,x'],[y,y']] & [x,y] in dom f & [x',y'] in dom g) &
-  for x,y,x',y' st [x,y] in dom f & [x',y'] in dom g
-  holds it.([x,x'],[y,y']) = [f.(x,y),g.(x',y')];
+  (for z holds z in dom it iff ex x,y,x'
+,y' st z = [[x,x'],[y,y']] & [x,y] in dom f & [x',y'] in dom g) & for x,y,x',y'
+st [x,y] in dom f & [x',y'] in dom g holds it.([x,x'],[y,y']) = [f.(x,y),g.(x',
+  y')];
 end;
 
 theorem :: FUNCT_4:57
-  [[x,x'],[y,y']] in dom |:f,g:| iff [x,y] in dom f & [x',y'] in dom g;
+  [[x,x'],[y,y']] in dom |:f,g:| iff [x,y] in dom f & [x',y'] in
+  dom g;
 
 theorem :: FUNCT_4:58
-  [[x,x'],[y,y']] in dom |:f,g:|
-  implies |:f,g:|.([x,x'],[y,y']) = [f.(x,y),g.(x',y')];
+  [[x,x'],[y,y']] in dom |:f,g:| implies |:f,g:|.([x,x'],[y,y']) = [f.(x
+  ,y),g.(x',y')];
 
 theorem :: FUNCT_4:59
   rng |:f,g:| c= [:rng f,rng g:];
 
 theorem :: FUNCT_4:60
-  dom f c= [:X,Y:] & dom g c= [:X',Y':]
-  implies dom|:f,g:| c= [:[:X,X':],[:Y,Y':]:];
+  dom f c= [:X,Y:] & dom g c= [:X',Y':] implies dom|:f,g:| c= [:[:
+  X,X':],[:Y,Y':]:];
 
 theorem :: FUNCT_4:61
-  dom f = [:X,Y:] & dom g = [:X',Y':]
-  implies dom|:f,g:| = [:[:X,X':],[:Y,Y':]:];
+  dom f = [:X,Y:] & dom g = [:X',Y':] implies dom|:f,g:| = [:[:X,
+  X':],[:Y,Y':]:];
 
 theorem :: FUNCT_4:62
   for f being PartFunc of [:X,Y:],Z for g being PartFunc of [:X',Y':],Z'
   holds |:f,g:| is PartFunc of [:[:X,X':],[:Y,Y':]:],[:Z,Z':];
 
 theorem :: FUNCT_4:63
-  for f being Function of [:X,Y:],Z for g being Function of [:X',Y':],Z'
-  st Z <> {} & Z' <> {}
-  holds |:f,g:| is Function of [:[:X,X':],[:Y,Y':]:],[:Z,Z':];
+  for f being Function of [:X,Y:],Z for g being Function of [:X',
+Y':],Z' st Z <> {} & Z' <> {} holds |:f,g:| is Function of [:[:X,X':],[:Y,Y':]
+  :],[:Z,Z':];
 
 theorem :: FUNCT_4:64
   for f being Function of [:X,Y:],D for g being Function of [:X',Y':],D'
@@ -258,7 +261,6 @@ definition
   let x,y,a,b be set;
   func (x,y) --> (a,b) -> set equals
 :: FUNCT_4:def 4
-
   (x .--> a) +* (y .--> b);
 end;
 
@@ -268,11 +270,12 @@ registration
 end;
 
 theorem :: FUNCT_4:65
-  dom((x1,x2) --> (y1,y2)) = {x1,x2} & rng((x1,x2) --> (y1,y2)) c= {y1,y2};
+  dom((x1,x2) --> (y1,y2)) = {x1,x2} & rng((x1,x2) --> (y1,y2)) c=
+  {y1,y2};
 
 theorem :: FUNCT_4:66
-  (x1 <> x2 implies
-  ((x1,x2) --> (y1,y2)).x1 = y1) & ((x1,x2) --> (y1,y2)).x2 = y2;
+  (x1 <> x2 implies ((x1,x2) --> (y1,y2)).x1 = y1) & ((x1,x2) -->
+  (y1,y2)).x2 = y2;
 
 theorem :: FUNCT_4:67
   x1 <> x2 implies rng((x1,x2) --> (y1,y2)) = {y1,y2};
@@ -287,27 +290,26 @@ definition
 end;
 
 theorem :: FUNCT_4:69
-  for a,b,c,d being set,
-  g being Function st dom g = {a,b} & g.a = c & g.b = d holds
-  g = (a,b) --> (c,d);
+  for a,b,c,d being set, g being Function st dom g = {a,b} & g.a = c & g
+  .b = d holds g = (a,b) --> (c,d);
 
 canceled;
 
 theorem :: FUNCT_4:71
-  for a,b,c,d being set st a <> c holds (a,c) --> (b,d) = { [a,b], [c,d] };
+  for a,b,c,d being set st a <> c holds (a,c) --> (b,d) = { [a,b],
+  [c,d] };
 
 theorem :: FUNCT_4:72
-  for a,b,x,y,x',y' being set st a <> b & (a,b) --> (x,y) = (a,b) --> (x',y')
-  holds x = x' & y = y';
+  for a,b,x,y,x',y' being set st a <> b & (a,b) --> (x,y) = (a,b) --> (
+  x',y') holds x = x' & y = y';
 
 begin :: Addenda
 
 :: from CIRCCOMB
 
 theorem :: FUNCT_4:73
-  for f1,f2, g1,g2 being Function st
-  rng g1 c= dom f1 & rng g2 c= dom f2 & f1 tolerates f2
-  holds (f1+*f2)*(g1+*g2) = (f1*g1)+*(f2*g2);
+  for f1,f2, g1,g2 being Function st rng g1 c= dom f1 & rng g2 c= dom f2
+  & f1 tolerates f2 holds (f1+*f2)*(g1+*g2) = (f1*g1)+*(f2*g2);
 
 :: from AMI_1
 
@@ -319,31 +321,34 @@ theorem :: FUNCT_4:74
 :: from AMI_5
 
 theorem :: FUNCT_4:75
-  for p,q being Function , A being set holds (p +* q)|A = p|A +* q|A;
+  for p,q being Function , A being set holds (p +* q)|A = p|A +* q
+  |A;
 
 theorem :: FUNCT_4:76
-  for f,g being Function, A being set st A misses dom g holds (f +* g)|A = f|A;
+  for f,g being Function, A being set st A misses dom g holds (f
+  +* g)|A = f|A;
 
 theorem :: FUNCT_4:77
-  for f,g being Function , A being set
-  holds dom f misses A implies (f +* g)|A = g|A;
+  for f,g being Function , A being set holds dom f misses A implies (f
+  +* g)|A = g|A;
 
 theorem :: FUNCT_4:78
   for f,g,h being Function st dom g = dom h holds f +* g +* h = f +* h;
 
 theorem :: FUNCT_4:79
-  for f,g being Function holds f c= g implies f +* g = g & g +* f = g;
+  for f,g being Function holds f c= g implies f +* g = g & g +* f
+  = g;
 
 theorem :: FUNCT_4:80
   for f being Function, A being set holds f +* f|A = f;
 
 theorem :: FUNCT_4:81
-  for f,g being Function, B,C being set st
-  dom f c= B & dom g c= C & B misses C holds (f +* g)|B = f & (f +* g)|C = g;
+  for f,g being Function, B,C being set st dom f c= B & dom g c= C & B
+  misses C holds (f +* g)|B = f & (f +* g)|C = g;
 
 theorem :: FUNCT_4:82
-  for p,q being Function, A being set
-  holds dom p c= A & dom q misses A implies (p +* q)|A = p;
+  for p,q being Function, A being set holds dom p c= A & dom q misses A
+  implies (p +* q)|A = p;
 
 theorem :: FUNCT_4:83
   for f being Function, A,B being set holds f|(A \/ B) = f|A +* f|B;
@@ -370,12 +375,12 @@ theorem :: FUNCT_4:87
 :: from SCMPDS_9, 2006.03.26, A.T.
 
 theorem :: FUNCT_4:88
-  for f being Function, a,b,c being set st a <> c holds
-  (f +* (a .-->b)).c = f.c;
+  for f being Function, a,b,c being set st a <> c holds (f +* (a .-->b))
+  .c = f.c;
 
 theorem :: FUNCT_4:89
-  for f being Function, a,b,c,d being set st a <> b holds
-  (f +* ((a,b)-->(c,d))) .a = c & (f +* ((a,b)-->(c,d))) .b = d;
+  for f being Function, a,b,c,d being set st a <> b holds (f +* ((a,b)
+  -->(c,d))) .a = c & (f +* ((a,b)-->(c,d))) .b = d;
 
 :: from AMI_3, 2007.06.14, A.T.
 
@@ -384,8 +389,8 @@ theorem :: FUNCT_4:90
   holds a .--> b c= f;
 
 theorem :: FUNCT_4:91
-  for a,b,c,d being set, f being Function st
-  a in dom f & c in dom f & f.a = b & f.c = d holds (a,c) --> (b,d) c= f;
+  for a,b,c,d being set, f being Function st a in dom f & c in dom f & f
+  .a = b & f.c = d holds (a,c) --> (b,d) c= f;
 
 :: from SCMFSA6A, 2007.07.23, A.T.
 
@@ -395,32 +400,34 @@ theorem :: FUNCT_4:92
 :: from SCMFSA6B, 2007.07.25, A.T.
 
 theorem :: FUNCT_4:93
-  for f, g being Function, A being set st A /\ dom f c= A /\ dom g
-  holds (f+*g|A)|A = g|A;
+  for f, g being Function, A being set st A /\ dom f c= A /\ dom g holds
+  (f+*g|A)|A = g|A;
 
 :: from SCMFSA8A, 2007.07.25, A.T.
 
 theorem :: FUNCT_4:94
-  for f,g being Function, D being set holds
-  dom g misses D implies (f +* g) | D = f | D;
+  for f,g being Function, D being set holds dom g misses D implies (f +*
+  g) | D = f | D;
 
 :: from SCMBSORT, 2007.07.26, A.T.
 
 theorem :: FUNCT_4:95
-  for f be Function, a,b,n,m be set holds (f +* (a .--> b) +* (m .--> n)).m=n;
+  for f be Function, a,b,n,m be set holds (f +* (a .--> b) +* (m .--> n)
+  ).m=n;
 
 theorem :: FUNCT_4:96
-  for f be Function, n,m be set holds (f +* (n .--> m) +* (m .--> n)).n=m;
+  for f be Function, n,m be set holds (f +* (n .--> m) +* (m .--> n)).n=
+  m;
 
 theorem :: FUNCT_4:97
-  for f be Function, a,b,n,m,x be set st x <> m & x <> a
-  holds (f +* (a .--> b) +* (m .--> n)).x=f.x;
+  for f be Function, a,b,n,m,x be set st x <> m & x <> a holds (f +* (a
+  .--> b) +* (m .--> n)).x=f.x;
 
 :: from KNASTER, 2007.010.28, A.T.
 
 theorem :: FUNCT_4:98
-  f is one-to-one & g is one-to-one & rng f misses rng g
-  implies f+*g is one-to-one;
+  f is one-to-one & g is one-to-one & rng f misses rng g implies f+*g is
+  one-to-one;
 
 :: from SCMFSA_9, 2008.03.04, A.T.
 
@@ -428,70 +435,72 @@ theorem :: FUNCT_4:99
   for f,g being Function holds f +* g +* g = f +* g;
 
 theorem :: FUNCT_4:100
-  for f,g,h being Function, D being set holds
-  (f +* g)|D =h | D implies (h +* g) | D = (f +* g) | D;
+  for f,g,h being Function, D being set holds (f +* g)|D =h | D implies
+  (h +* g) | D = (f +* g) | D;
 
 theorem :: FUNCT_4:101
-  for f,g,h being Function, D being set holds
-  f | D =h | D implies (h +* g) | D = (f +* g) | D;
+  for f,g,h being Function, D being set holds f | D =h | D implies (h +*
+  g) | D = (f +* g) | D;
 
 :: missing, 2008.03.20, A.T.
 
 theorem :: FUNCT_4:102
- x .--> x = id{x};
+  x .--> x = id{x};
 
 theorem :: FUNCT_4:103
- f c= g implies f+*g = g;
+  f c= g implies f+*g = g;
 
 theorem :: FUNCT_4:104
- f c= g implies g+*f = g;
+  f c= g implies g+*f = g;
 
 begin :: Changing a value in the range, 2008.03.20, A.T.
 
-definition let f,x,y;
- func f+~(x,y) equals
+definition
+  let f,x,y;
+  func f+~(x,y) equals
 :: FUNCT_4:def 5
   f+*((x .--> y)*f);
 end;
 
-registration let f,x,y;
- cluster f+~(x,y) -> Relation-like Function-like;
+registration
+  let f,x,y;
+  cluster f+~(x,y) -> Relation-like Function-like;
 end;
 
 theorem :: FUNCT_4:105
- dom(f+~(x,y)) = dom f;
+  dom(f+~(x,y)) = dom f;
 
 theorem :: FUNCT_4:106
- x <> y implies not x in rng(f+~(x,y));
+  x <> y implies not x in rng(f+~(x,y));
 
 theorem :: FUNCT_4:107
- x in rng f implies y in rng(f+~(x,y));
+  x in rng f implies y in rng(f+~(x,y));
 
 theorem :: FUNCT_4:108
- f+~(x,x) = f;
+  f+~(x,x) = f;
 
 theorem :: FUNCT_4:109
- not x in rng f implies f+~(x,y) = f;
+  not x in rng f implies f+~(x,y) = f;
 
 theorem :: FUNCT_4:110
- rng(f+~(x,y)) c= rng f \ {x} \/ {y};
+  rng(f+~(x,y)) c= rng f \ {x} \/ {y};
 
 theorem :: FUNCT_4:111
- f.z <> x implies (f+~(x,y)).z = f.z;
+  f.z <> x implies (f+~(x,y)).z = f.z;
 
 theorem :: FUNCT_4:112
- z in dom f & f.z = x implies (f+~(x,y)).z = y;
+  z in dom f & f.z = x implies (f+~(x,y)).z = y;
 
 canceled 2;
 
 :: missing, 2008.04.06, A.T.
 
 theorem :: FUNCT_4:115
- not x in dom f implies f c= f +*(x .--> y);
+  not x in dom f implies f c= f +*(x .--> y);
 
 theorem :: FUNCT_4:116
- for f being PartFunc of X,Y, x,y st x in X & y in Y
-  holds f+*(x .--> y) is PartFunc of X,Y;
+  for f being PartFunc of X,Y, x,y st x in X & y in Y holds f+*(x .--> y
+  ) is PartFunc of X,Y;
 
 :: from FINSEQ_1, 2008.05.06, A.T.
 
@@ -506,5 +515,24 @@ end;
 registration
   let f,g be non-empty Function;
   cluster f+*g -> non-empty;
+end;
+
+definition let X,Y be set;
+ let f,g be PartFunc of X,Y;
+ redefine func f+* g ->  PartFunc of X,Y;
+end;
+
+:: 2009.08.31, A.T.
+
+theorem :: FUNCT_4:117
+ dom ((x --> y)+*(x .-->z)) = succ x;
+
+theorem :: FUNCT_4:118
+ dom ((x --> y)+*(x .-->z)+*(succ x .-->z)) = succ succ x;
+
+:: 2009.09.08, A.T.
+
+registration let f,g be Function-yielding Function;
+ cluster f+*g -> Function-yielding;
 end;
 

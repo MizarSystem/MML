@@ -6,14 +6,14 @@
 
 environ
 
- vocabularies SETFAM_1, BOOLE, LATTICES, FILTER_0, GROUP_6, FUNCT_1,
-      RELAT_1, WELLORD1, FILTER_1, ZF_LANG, SUBSET_1, FINSUB_1, LATTICE2,
-      SETWISEO, BINOP_1, FUNCOP_1, VECTSP_1, LATTICE4, HAHNBAN, SGRAPH1;
+ vocabularies SETFAM_1, BOOLE, LATTICES, FILTER_0, GROUP_6, FUNCT_1, RELAT_1,
+      WELLORD1, FILTER_1, ZF_LANG, SUBSET_1, FINSUB_1, LATTICE2, SETWISEO,
+      BINOP_1, FUNCOP_1, VECTSP_1, LATTICE4, HAHNBAN, SGRAPH1, WAYBEL23;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, RELAT_1, ORDINAL1,
       FUNCT_1, PARTFUN1, FUNCT_2, BINOP_1, FINSUB_1, STRUCT_0, LATTICES,
       LATTICE2, FILTER_0, FUNCOP_1, SETWISEO, WELLORD1, FILTER_1;
  constructors WELLORD1, DOMAIN_1, SETWISEO, LATTICE2, FILTER_1, GRCAT_1,
-      FUNCOP_1, RELSET_1;
+      FUNCOP_1, RELSET_1, FILTER_0;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, FUNCT_2, STRUCT_0, LATTICES,
       FILTER_0;
  requirements BOOLE, SUBSET;
@@ -30,27 +30,29 @@ reserve x,y,X,X1,Y,Z for set;
 canceled 2;
 
 theorem
-  for X st X <> {} & for Z st Z <> {} & Z c= X & Z is c=-linear
-  ex Y st Y in X & for X1 st X1 in Z holds X1 c= Y
-  ex Y st Y in X & for Z st Z in X & Z <> Y holds not Y c= Z
+  for X st X <> {} & for Z st Z <> {} & Z c= X & Z is c=-linear ex Y st
+  Y in X & for X1 st X1 in Z holds X1 c= Y ex Y st Y in X & for Z st Z in X & Z
+  <> Y holds not Y c= Z
 proof
   let X such that
-A1: X <> {} & for Z st Z <> {} & Z c= X & Z is c=-linear
-  ex Y st Y in X & for X1 st X1 in Z holds X1 c= Y;
-  for Z st Z c= X & Z is c=-linear
-  ex Y st Y in X & for X1 st X1 in Z holds X1 c= Y
+A1: X <> {} and
+A2: for Z st Z <> {} & Z c= X & Z is c=-linear ex Y st Y in X & for X1
+  st X1 in Z holds X1 c= Y;
+  for Z st Z c= X & Z is c=-linear ex Y st Y in X & for X1 st X1 in Z
+  holds X1 c= Y
   proof
     let Z such that
-A2: Z c= X & Z is c=-linear;
+A3: Z c= X & Z is c=-linear;
     per cases;
     suppose
-A3:   Z = {};
+A4:   Z = {};
       consider Y being Element of X;
-      for X1 st X1 in Z holds X1 c= Y by A3;
+      for X1 st X1 in Z holds X1 c= Y by A4;
       hence thesis by A1;
     end;
-    suppose Z <> {};
-      hence thesis by A1,A2;
+    suppose
+      Z <> {};
+      hence thesis by A2,A3;
     end;
   end;
   hence thesis by A1,ORDERS_1:175;
@@ -72,25 +74,28 @@ end;
 theorem
   F c= <.F \/ H.) & H c= <.F \/ H.)
 proof
-A1: F c= F \/ H & H c= F \/ H by XBOOLE_1:7;
-  F \/ H c= <.F \/ H.) by FILTER_0:def 5;
+A1: F \/ H c= <.F \/ H.) by FILTER_0:def 5;
+  F c= F \/ H & H c= F \/ H by XBOOLE_1:7;
   hence thesis by A1,XBOOLE_1:1;
 end;
 
 theorem
   p in <.<.q.) \/ F.) implies ex r st r in F & q "/\" r [= p
 proof
+A1: <.<.q.) \/ F.)={r : ex p',q' being Element of L st p'"/\"q' [= r & p' in
+  <.q.) & q' in F} by FILTER_0:48;
   assume
-A1: p in <.<.q.) \/ F.);
-  <.<.q.) \/ F.)={r : ex p',q' being Element of L st
-  p'"/\"q' [= r & p' in <.q.) & q' in F} by FILTER_0:48;
-  then ex r st r=p & ex p',q' being Element of L st
-  p'"/\"q' [= r & p' in <.q.) & q' in F by A1;
+  p in <.<.q.) \/ F.);
+  then
+  ex r st r=p & ex p',q' being Element of L st p'"/\"q' [= r & p' in <.q.)
+  & q' in F by A1;
   then consider p',q' being Element of L such that
-A2: p' "/\" q' [= p & p' in <.q.) & q' in F;
-  q [= p' by A2,FILTER_0:18;
+A2: p' "/\" q' [= p and
+A3: p' in <.q.) and
+A4: q' in F;
+  q [= p' by A3,FILTER_0:18;
   then q "/\" q' [= p' "/\" q' by LATTICES:27;
-  hence thesis by A2,LATTICES:25;
+  hence thesis by A2,A4,LATTICES:25;
 end;
 
 reserve L1, L2 for Lattice;
@@ -99,10 +104,11 @@ reserve a2 for Element of L2;
 
 definition
   let L1,L2;
-  mode Homomorphism of L1,L2 ->
-    Function of the carrier of L1, the carrier of L2 means
+  mode Homomorphism of L1,L2 -> Function of the carrier of L1, the carrier of
+    L2 means
     :Def1:
-    it.(a1 "\/" b1) = it.a1 "\/" it.b1 & it.(a1 "/\" b1) = it.a1 "/\" it.b1;
+    it.(a1 "\/" b1) = it.a1 "\/" it.b1 & it.(a1 "/\" b1) = it.a1
+    "/\" it.b1;
   existence
   proof
     consider b being Element of L2;
@@ -137,23 +143,21 @@ theorem Th7:
 proof
   assume
 A1: a1 [= b1;
-  thus f.a1 [= f.b1
-  proof
-    thus f.a1 "\/" f.b1 = f.(a1 "\/" b1) by Def1
-      .= f.b1 by A1,LATTICES:def 3;
-  end;
+  f.a1 "\/" f.b1 = f.(a1 "\/" b1) by Def1
+    .= f.b1 by A1,LATTICES:def 3;
+  hence f.a1 [= f.b1 by LATTICES:def 3;
 end;
 
 theorem Th8:
   f is one-to-one implies (a1 [= b1 iff (f.a1) [= (f.b1))
 proof
-  assume f is one-to-one;
-  then
+  assume
 A1: f is one-to-one;
   reconsider f as Function of the carrier of L1,the carrier of L2;
   f.a1 [= f.b1 implies a1 [= b1
   proof
-    assume f.a1 [= f.b1;
+    assume
+    f.a1 [= f.b1;
     then f.a1 "\/" f.b1 = f.b1 by LATTICES:def 3;
     then f.(a1 "\/" b1) =f.b1 by Def1;
     hence a1 "\/" b1 = b1 by A1,FUNCT_2:25;
@@ -162,19 +166,19 @@ A1: f is one-to-one;
 end;
 
 theorem Th9:
-  for f being Function of the carrier of L1, the carrier of L2 holds
-  f is onto implies (for a2 ex a1 st a2 = f.a1)
+  for f being Function of the carrier of L1, the carrier of L2
+  holds f is onto implies for a2 ex a1 st a2 = f.a1
 proof
   let f be Function of the carrier of L1, the carrier of L2;
-  assume
-A1: f is onto;
   reconsider g = f as Function of the carrier of L1,the carrier of L2;
-A2: rng g = the carrier of L2 by A1,FUNCT_2:def 3;
+  assume
+  f is onto;
+  then
+A1: rng g = the carrier of L2 by FUNCT_2:def 3;
   now
     let a2 be Element of L2;
-    consider x be set such that
-A3: x in the carrier of L1 & g.x = a2 by A2,FUNCT_2:17;
-    thus ex a1 st g.a1 = a2 by A3;
+    ex x be set st x in the carrier of L1 & g.x = a2 by A1,FUNCT_2:17;
+    hence ex a1 st g.a1 = a2;
   end;
   hence thesis;
 end;
@@ -183,99 +187,99 @@ definition
   let L1,L2;
   canceled 3;
   redefine pred L1,L2 are_isomorphic means
-
   ex f st f is bijective;
   compatibility
   proof
     thus L1,L2 are_isomorphic implies ex f st f is bijective
     proof
-      assume L1,L2 are_isomorphic;
+      set R = LattRel L1, S = LattRel L2;
+      assume
+      L1,L2 are_isomorphic;
       then LattRel L1, LattRel L2 are_isomorphic by FILTER_1:def 9;
       then consider F being Function such that
 A1:   F is_isomorphism_of LattRel L1, LattRel L2 by WELLORD1:def 8;
-      set R = LattRel L1, S = LattRel L2;
-A2:   field S = the carrier of L2 & field R = the carrier of L1 by FILTER_1:33;
-A3:   dom F = field R & rng F = field S & F is one-to-one &
-      for a,b being set holds [a,b] in R iff
-      a in field R & b in field R & [F.a,F.b] in S by A1,WELLORD1:def 7;
-      then reconsider F as Function of the carrier of L1,
-      the carrier of L2 by A2,FUNCT_2:3;
+A2:   dom F = field R by A1,WELLORD1:def 7;
+A3:   field S = the carrier of L2 & rng F = field S by A1,FILTER_1:33 ,
+      WELLORD1:def 7;
+A4:   field R = the carrier of L1 by FILTER_1:33;
+      then reconsider
+      F as Function of the carrier of L1, the carrier of L2 by
+      A2,A3,FUNCT_2:3;
       now
         let a1,b1 be Element of L1;
         reconsider a1'=a1,b1'=b1 as Element of L1;
-A4:     F is onto by A2,A3,FUNCT_2:def 3;
+A5:     F is onto by A3,FUNCT_2:def 3;
         thus F.(a1 "\/" b1) = F.a1 "\/" F.b1
         proof
-          consider k1 being Element of L1 such that
-A5:       F.a1 "\/" F.b1 = F.k1 by A4,Th9;
-          F.a1 [= F.k1 & F.b1 [= F.k1 by A5,LATTICES:22;
-          then [F.a1,F.k1] in LattRel L2 & [F.b1,F.k1] in LattRel L2 by
-          FILTER_1:32;
-          then [a1,k1] in LattRel L1 & [b1,k1] in LattRel L1 by A1,A2,
-          WELLORD1:def 7;
-          then a1 [= k1 & b1 [= k1 by FILTER_1:32;
-          then a1 "\/" b1 [= k1 by FILTER_0:6;
-          then [a1 "\/" b1,k1] in R by FILTER_1:32;
-          then [F.(a1 "\/" b1),F.k1] in LattRel L2 by A1,WELLORD1:def 7;
-          then
-A6:       F.(a1 "\/" b1) [= F.a1 "\/" F.b1 by A5,FILTER_1:32;
-          a1' [= a1' "\/" b1' by LATTICES:22;
-          then [a1,a1 "\/" b1] in R by FILTER_1:32;
-          then [F.a1,F.(a1 "\/" b1)] in S by A1,WELLORD1:def 7;
-          then
-A7:       F.a1' [= F.(a1' "\/" b1') by FILTER_1:32;
           b1' [= a1' "\/" b1' by LATTICES:22;
           then [b1,a1 "\/" b1] in R by FILTER_1:32;
           then [F.b1,F.(a1 "\/" b1)] in S by A1,WELLORD1:def 7;
-          then F.b1' [= F.(a1' "\/" b1') by FILTER_1:32;
-          then F.a1 "\/" F.b1 [= F.(a1 "\/" b1) by A7,FILTER_0:6;
-          hence thesis by A6,LATTICES:26;
+          then
+A6:       F.b1' [= F.(a1' "\/" b1') by FILTER_1:32;
+          consider k1 being Element of L1 such that
+A7:       F.a1 "\/" F.b1 = F.k1 by A5,Th9;
+          F.b1 [= F.k1 by A7,LATTICES:22;
+          then [F.b1,F.k1] in LattRel L2 by FILTER_1:32;
+          then [b1,k1] in LattRel L1 by A1,A4,WELLORD1:def 7;
+          then
+A8:       b1 [= k1 by FILTER_1:32;
+          F.a1 [= F.k1 by A7,LATTICES:22;
+          then [F.a1,F.k1] in LattRel L2 by FILTER_1:32;
+          then [a1,k1] in LattRel L1 by A1,A4,WELLORD1:def 7;
+          then a1 [= k1 by FILTER_1:32;
+          then a1 "\/" b1 [= k1 by A8,FILTER_0:6;
+          then [a1 "\/" b1,k1] in R by FILTER_1:32;
+          then [F.(a1 "\/" b1),F.k1] in LattRel L2 by A1,WELLORD1:def 7;
+          then
+A9:       F.(a1 "\/" b1) [= F.a1 "\/" F.b1 by A7,FILTER_1:32;
+          a1' [= a1' "\/" b1' by LATTICES:22;
+          then [a1,a1 "\/" b1] in R by FILTER_1:32;
+          then [F.a1,F.(a1 "\/" b1)] in S by A1,WELLORD1:def 7;
+          then F.a1' [= F.(a1' "\/" b1') by FILTER_1:32;
+          then F.a1 "\/" F.b1 [= F.(a1 "\/" b1) by A6,FILTER_0:6;
+          hence thesis by A9,LATTICES:26;
         end;
         thus F.(a1 "/\" b1) = F.a1 "/\" F.b1
         proof
-          consider k1 being Element of L1 such that
-A8:       F.a1 "/\" F.b1 = F.k1 by A4,Th9;
-          F.k1 [= F.a1 & F.k1 [= F.b1 by A8,LATTICES:23;
-          then [F.k1,F.a1] in LattRel L2 & [F.k1,F.b1] in LattRel L2 by
-          FILTER_1:32;
-          then [k1,a1] in LattRel L1 & [k1,b1] in LattRel L1 by A1,A2,
-          WELLORD1:def 7;
-          then k1 [= a1 & k1 [= b1 by FILTER_1:32;
-          then k1 [= a1 "/\" b1 by FILTER_0:7;
-          then [k1,a1 "/\" b1] in LattRel L1 by FILTER_1:32;
-          then [F.k1,F.(a1 "/\" b1)] in LattRel L2 by A1,WELLORD1:def 7;
-          then
-A9:       F.a1 "/\" F.b1 [= F.(a1 "/\" b1) by A8,FILTER_1:32;
-          a1' "/\" b1' [= a1' by LATTICES:23;
-          then [a1 "/\" b1,a1] in R by FILTER_1:32;
-          then [F.(a1 "/\" b1),F.a1] in S by A1,WELLORD1:def 7;
-          then
-A10:      F.(a1' "/\" b1') [= F.a1' by FILTER_1:32;
           a1' "/\" b1' [= b1' by LATTICES:23;
           then [a1 "/\" b1,b1] in R by FILTER_1:32;
           then [F.(a1 "/\" b1),F.b1] in S by A1,WELLORD1:def 7;
-          then F.(a1' "/\" b1') [= F.b1' by FILTER_1:32;
+          then
+A10:      F.(a1' "/\" b1') [= F.b1' by FILTER_1:32;
+          consider k1 being Element of L1 such that
+A11:      F.a1 "/\" F.b1 = F.k1 by A5,Th9;
+          F.k1 [= F.b1 by A11,LATTICES:23;
+          then [F.k1,F.b1] in LattRel L2 by FILTER_1:32;
+          then [k1,b1] in LattRel L1 by A1,A4,WELLORD1:def 7;
+          then
+A12:      k1 [= b1 by FILTER_1:32;
+          F.k1 [= F.a1 by A11,LATTICES:23;
+          then [F.k1,F.a1] in LattRel L2 by FILTER_1:32;
+          then [k1,a1] in LattRel L1 by A1,A4,WELLORD1:def 7;
+          then k1 [= a1 by FILTER_1:32;
+          then k1 [= a1 "/\" b1 by A12,FILTER_0:7;
+          then [k1,a1 "/\" b1] in LattRel L1 by FILTER_1:32;
+          then [F.k1,F.(a1 "/\" b1)] in LattRel L2 by A1,WELLORD1:def 7;
+          then
+A13:      F.a1 "/\" F.b1 [= F.(a1 "/\" b1) by A11,FILTER_1:32;
+          a1' "/\" b1' [= a1' by LATTICES:23;
+          then [a1 "/\" b1,a1] in R by FILTER_1:32;
+          then [F.(a1 "/\" b1),F.a1] in S by A1,WELLORD1:def 7;
+          then F.(a1' "/\" b1') [= F.a1' by FILTER_1:32;
           then F.(a1 "/\" b1) [= F.a1 "/\" F.b1 by A10,FILTER_0:7;
-          hence thesis by A9,LATTICES:26;
+          hence thesis by A13,LATTICES:26;
         end;
       end;
       then reconsider F as Homomorphism of L1,L2 by Def1;
       take F;
-      F is one-to-one onto by A2,A3,FUNCT_2:def 3;
+      F is one-to-one onto by A1,A3,FUNCT_2:def 3,WELLORD1:def 7;
       hence thesis;
     end;
-    given f such that
-A11: f is bijective;
-A12: f is one-to-one onto by A11;
-    then
-A13: f is one-to-one;
     set R = LattRel L1, S = LattRel L2;
-A14: dom f = the carrier of L1 by FUNCT_2:def 1
-      .= field R by FILTER_1:33;
-A15: rng f = the carrier of L2 by A12,FUNCT_2:def 3
-      .= field S by FILTER_1:33;
-    for a,b be set holds [a,b] in R iff
-    a in field R & b in field R & [f.a,f.b] in S
+    given f such that
+A14: f is bijective;
+A15: for a,b be set holds [a,b] in R iff a in field R & b in field R & [f.
+    a,f.b] in S
     proof
       let a,b be set;
       hereby
@@ -284,17 +288,22 @@ A16:    [a,b] in R;
         hence a in field R & b in field R by RELAT_1:30;
         then reconsider a'=a,b'=b as Element of L1 by FILTER_1:33;
         a' [= b' by A16,FILTER_1:32;
-        then f.a' [= f.b' by A12,Th8;
+        then f.a' [= f.b' by A14,Th8;
         hence [f.a,f.b] in S by FILTER_1:32;
       end;
-      assume
-A17:  a in field R & b in field R & [f.a,f.b] in S;
-      then reconsider a'=a,b'=b as Element of L1 by FILTER_1:33;
-      f.a' [= f.b' by A17,FILTER_1:32;
-      then a' [= b' by A12,Th8;
+      assume that
+A17:  a in field R & b in field R and
+A18:  [f.a,f.b] in S;
+      reconsider a'=a,b'=b as Element of L1 by A17,FILTER_1:33;
+      f.a' [= f.b' by A18,FILTER_1:32;
+      then a' [= b' by A14,Th8;
       hence thesis by FILTER_1:32;
     end;
-    then f is_isomorphism_of LattRel L1, LattRel L2 by A13,A14,A15,
+A19: dom f = the carrier of L1 by FUNCT_2:def 1
+      .= field R by FILTER_1:33;
+    rng f = the carrier of L2 by A14,FUNCT_2:def 3
+      .= field S by FILTER_1:33;
+    then f is_isomorphism_of LattRel L1, LattRel L2 by A14,A19,A15,
     WELLORD1:def 7;
     then LattRel L1, LattRel L2 are_isomorphic by WELLORD1:def 8;
     hence thesis by FILTER_1:def 9;
@@ -319,16 +328,8 @@ end;
 
 definition
   let L;
-  mode ClosedSubset of L -> Subset of L means
-    :Def10:
-    p in it & q in it implies p "/\" q in it & p "\/" q in it;
-  existence
-  proof
-    the carrier of L c= the carrier of L;
-    then reconsider F = the carrier of L as non empty Subset of L;
-    take F;
-    thus thesis;
-  end;
+  canceled;
+  mode ClosedSubset of L is meet-closed join-closed Subset of L;
 end;
 
 theorem Th10:
@@ -336,8 +337,9 @@ theorem Th10:
 proof
   the carrier of L c= the carrier of L;
   then reconsider F=the carrier of L as Subset of L;
-  p in F & q in F implies p "/\" q in F & p "\/" q in F;
-  hence thesis by Def10;
+B: p in F & q in F implies p "/\" q in F;
+  p in F & q in F implies p "\/" q in F;
+  hence thesis by B,LATTICES:def 24, def 25;
 end;
 
 registration
@@ -351,13 +353,8 @@ registration
 end;
 
 theorem
-  for F being Filter of L holds F is ClosedSubset of L
-proof
-  let F be Filter of L;
-  for p,q st p in F & q in F holds
-  p "/\" q in F & p "\/" q in F by FILTER_0:10,def 1;
-  hence thesis by Def10;
-end;
+  for F being Filter of L holds F is ClosedSubset of L;
+:::                by FILTER_0:10,8,LATTICES:def 24,def 25;
 
 reserve B for Finite_Subset of the carrier of L;
 
@@ -365,11 +362,9 @@ definition
   let L,B;
   canceled;
   func FinJoin B -> Element of L equals
-
   FinJoin (B,id L);
   coherence;
   func FinMeet B -> Element of L equals
-
   FinMeet (B,id L);
   coherence;
 end;
@@ -411,33 +406,34 @@ A1: f is onto;
     let a,b,c be Element of L2;
     consider a' be Element of DL such that
 A2: f.a'=a by A1,Th9;
-    consider b' be Element of DL such that
-A3: f.b'=b by A1,Th9;
     consider c' be Element of DL such that
-A4: f.c'=c by A1,Th9;
-    thus a"/\"(b"\/"c) = a"/\"f.(b'"\/"c') by A3,A4,Def1
+A3: f.c'=c by A1,Th9;
+    consider b' be Element of DL such that
+A4: f.b'=b by A1,Th9;
+    thus a"/\"(b"\/"c) = a"/\"f.(b'"\/"c') by A4,A3,Def1
       .= f.(a'"/\"(b'"\/"c')) by A2,Def1
       .=f.((a'"/\"b')"\/"(a'"/\"c')) by LATTICES:def 11
       .=f.(a'"/\"b')"\/"f.(a'"/\"c') by Def1
-      .=(a"/\"b)"\/"f.(a'"/\"c') by A2,A3,Def1
-      .=(a"/\"b)"\/"(a"/\"c) by A2,A4,Def1;
+      .=(a"/\"b)"\/"f.(a'"/\"c') by A2,A4,Def1
+      .=(a"/\"b)"\/"(a"/\"c) by A2,A3,Def1;
   end;
 end;
 
 begin :: Lower-bounded Lattices
 
 reserve 0L for lower-bounded Lattice,
-  B,B1,B2 for Finite_Subset of the carrier of 0L,
+  B,B1,B2 for Finite_Subset of the carrier
+  of 0L,
   b for Element of 0L;
 
 theorem Th19:
-  for f being Homomorphism of 0L,L2 st f is onto holds
-  L2 is lower-bounded & f preserves_bottom
+  for f being Homomorphism of 0L,L2 st f is onto holds L2 is
+  lower-bounded & f preserves_bottom
 proof
   let f be Homomorphism of 0L,L2;
+  set r = f.(Bottom 0L);
   assume
 A1: f is onto;
-  set r = f.(Bottom 0L);
 A2: now
     let a2 be Element of L2;
     consider a1 be Element of 0L such that
@@ -461,10 +457,10 @@ theorem Th20:
   FinJoin(B \/ {.b.},f) = FinJoin (B,f) "\/" f.b
 proof
   set J= the L_join of 0L;
-A1: J is idempotent & J is commutative & J is associative
-  & J is having_a_unity by LATTICE2:26,27,29,67;
+A1: J is idempotent & J is commutative by LATTICE2:26,27;
+A2: J is associative by LATTICE2:29;
   thus FinJoin (B \/ {.b.},f) = J $$ (B \/ {.b.},f) by LATTICE2:def 3
-    .= J $$ (B,f) "\/" f.b by A1,SETWISEO:41
+    .= J $$ (B,f) "\/" f.b by A1,A2,LATTICE2:67,SETWISEO:41
     .= FinJoin (B,f) "\/" f.b by LATTICE2:def 3;
 end;
 
@@ -479,24 +475,26 @@ theorem
   FinJoin B1 "\/" FinJoin B2 = FinJoin (B1 \/ B2)
 proof
   set J = the L_join of 0L;
-A1: J is idempotent & J is commutative & J is associative
-  & J is having_a_unity by LATTICE2:26,27,29,67;
+A1: J is idempotent & J is commutative by LATTICE2:26,27;
+A2: J is associative by LATTICE2:29;
   thus FinJoin (B1 \/ B2) = J $$ (B1 \/ B2,id 0L) by LATTICE2:def 3
-    .= J $$ (B1,id 0L) "\/" J $$ (B2,id 0L) by A1,SETWISEO:42
+    .= J $$ (B1,id 0L) "\/" J $$ (B2,id 0L) by A1,A2,LATTICE2:67,SETWISEO:42
     .= FinJoin B1 "\/" J $$ (B2,id 0L) by LATTICE2:def 3
     .=FinJoin B1 "\/" FinJoin B2 by LATTICE2:def 3;
 end;
 
-Lm1: for f being Function of the carrier of 0L, the carrier of 0L
-holds FinJoin ({}.the carrier of 0L,f) = Bottom 0L
+Lm1: for f being Function of the carrier of 0L, the carrier of 0L holds
+FinJoin ({}.the carrier of 0L,f) = Bottom 0L
+
 proof
   let f be Function of the carrier of 0L, the carrier of 0L;
   set J=the L_join of 0L;
-A1: J is commutative & J is associative & J is having_a_unity
- by LATTICE2:27,29,67;
-  thus FinJoin ({}.the carrier of 0L,f)
-  = J $$ ({}.the carrier of 0L,f) by LATTICE2:def 3
-    .= the_unity_wrt J by A1,SETWISEO:40
+A1: J is commutative & J is associative by LATTICE2:27,29;
+
+  thus FinJoin ({}.the carrier of 0L,f) = J $$ ({}.the carrier of 0L,f) by
+  LATTICE2:def 3
+
+    .= the_unity_wrt J by A1,LATTICE2:67,SETWISEO:40
     .= Bottom 0L by LATTICE2:68;
 end;
 
@@ -504,47 +502,49 @@ theorem
   FinJoin {}.the carrier of 0L = Bottom 0L by Lm1;
 
 theorem Th24:
-  for A being ClosedSubset of 0L st Bottom 0L in A
-  for B holds B c= A implies FinJoin B in A
+  for A being ClosedSubset of 0L st Bottom 0L in A for B holds B
+  c= A implies FinJoin B in A
 proof
   let A be ClosedSubset of 0L;
-  defpred X[Finite_Subset of the carrier of 0L] means
-  $1 c= A implies FinJoin $1 in A;
-  assume Bottom 0L in A;
-  then
-A1: X[{}.the carrier of 0L] by Lm1;
-A2: for B1 being Finite_Subset of the carrier of 0L
-  for p being Element of 0L st X[B1] holds X[B1 \/ {.p.}]
+  defpred X[Finite_Subset of the carrier of 0L] means $1 c= A implies FinJoin
+  $1 in A;
+A1: for B1 being Finite_Subset of the carrier of 0L for p being Element of
+  0L st X[B1] holds X[B1 \/ {.p.}]
   proof
     let B1 be Finite_Subset of the carrier of 0L;
     let p be Element of 0L;
     assume
-A3: B1 c=A implies FinJoin B1 in A;
+A2: B1 c=A implies FinJoin B1 in A;
     assume
-A4: B1 \/ {p} c=A;
+A3: B1 \/ {p} c=A;
     then {p} c= A by XBOOLE_1:11;
     then p in A by ZFMISC_1:37;
-    then FinJoin B1 "\/" p in A by A3,A4,Def10,XBOOLE_1:11;
+    then FinJoin B1 "\/" p in A by A2,A3,LATTICES:def 25,XBOOLE_1:11;
     hence thesis by Th21;
   end;
-  thus for B being Element of Fin the carrier of 0L
-  holds X[B] from SETWISEO:sch 4(A1,A2);
+  assume
+  Bottom 0L in A;
+  then
+A4: X[{}.the carrier of 0L] by Lm1;
+  thus for B being Element of Fin the carrier of 0L holds X[B] from SETWISEO:
+  sch 4(A4,A1);
 end;
 
 begin :: Upper-bounded Lattices
 
 reserve 1L for upper-bounded Lattice,
-  B,B1,B2 for Finite_Subset of the carrier of 1L,
+  B,B1,B2 for Finite_Subset of the carrier
+  of 1L,
   b for Element of 1L;
 
 theorem Th25:
-  for f being Homomorphism of 1L,L2 st f is onto
-  holds L2 is upper-bounded & f preserves_top
+  for f being Homomorphism of 1L,L2 st f is onto holds L2 is
+  upper-bounded & f preserves_top
 proof
   let f be Homomorphism of 1L,L2;
+  set r = f.(Top 1L);
   assume
 A1: f is onto;
-  set r = f.(Top 1L);
 A2: now
     let a2 be Element of L2;
     consider a1 be Element of 1L such that
@@ -562,15 +562,18 @@ A3: f.a1 = a2 by A1,Th9;
   hence thesis by Def7;
 end;
 
-Lm2: for f being Function of the carrier of 1L, the carrier of 1L
-holds FinMeet ({}.the carrier of 1L,f) = Top 1L
+Lm2: for f being Function of the carrier of 1L, the carrier of 1L holds
+FinMeet ({}.the carrier of 1L,f) = Top 1L
+
 proof
   let f be Function of the carrier of 1L, the carrier of 1L;
   set M=the L_meet of 1L;
-A1: M is commutative associative & M is having_a_unity by LATTICE2:31,32,73;
-  thus FinMeet ({}.the carrier of 1L,f)
-  = M $$ ({}.the carrier of 1L,f) by LATTICE2:def 4
-    .= the_unity_wrt M by A1,SETWISEO:40
+A1: M is commutative associative by LATTICE2:31,32;
+
+  thus FinMeet ({}.the carrier of 1L,f) = M $$ ({}.the carrier of 1L,f) by
+  LATTICE2:def 4
+
+    .= the_unity_wrt M by A1,LATTICE2:73,SETWISEO:40
     .= Top 1L by LATTICE2:74;
 end;
 
@@ -583,10 +586,10 @@ theorem Th27:
   FinMeet(B \/ {.b.},f) = FinMeet (B,f) "/\" f.b
 proof
   set M= the L_meet of 1L;
-A1: M is idempotent & M is commutative & M is associative
-  & M is having_a_unity by LATTICE2:30,31,32,73;
+A1: M is idempotent & M is commutative by LATTICE2:30,31;
+A2: M is associative by LATTICE2:32;
   thus FinMeet (B \/ {.b.},f) = M $$ (B \/ {.b.},f) by LATTICE2:def 4
-    .= M $$ (B,f) "/\" f.b by A1,SETWISEO:41
+    .= M $$ (B,f) "/\" f.b by A1,A2,LATTICE2:73,SETWISEO:41
     .= FinMeet (B,f) "/\" f.b by LATTICE2:def 4;
 end;
 
@@ -601,10 +604,9 @@ theorem Th29:
   FinMeet(f.:B,g) = FinMeet(B,g*f)
 proof
   set M= the L_meet of 1L;
-A1: M is idempotent & M is commutative associative
-  & M is having_a_unity by LATTICE2:30,31,32,73;
+A1: M is idempotent & M is commutative associative by LATTICE2:30,31,32;
   thus FinMeet(f.:B,g) = M$$(f.:B,g) by LATTICE2:def 4
-    .= M$$(B,g*f) by A1,SETWISEO:44
+    .= M$$(B,g*f) by A1,LATTICE2:73,SETWISEO:44
     .= FinMeet(B,g*f)by LATTICE2:def 4;
 end;
 
@@ -612,71 +614,75 @@ theorem Th30:
   FinMeet B1 "/\" FinMeet B2 = FinMeet (B1 \/ B2)
 proof
   set M= the L_meet of 1L;
-A1: M is idempotent & M is commutative & M is associative
-  & M is having_a_unity by LATTICE2:30,31,32,73;
+A1: M is idempotent & M is commutative by LATTICE2:30,31;
+A2: M is associative by LATTICE2:32;
   thus FinMeet (B1 \/ B2) = M $$ (B1 \/ B2,id 1L) by LATTICE2:def 4
-    .= M $$ (B1,id 1L) "/\" M $$ (B2,id 1L) by A1,SETWISEO:42
+    .= M $$ (B1,id 1L) "/\" M $$ (B2,id 1L) by A1,A2,LATTICE2:73,SETWISEO:42
     .= FinMeet B1 "/\" M $$ (B2,id 1L) by LATTICE2:def 4
     .=FinMeet B1 "/\" FinMeet B2 by LATTICE2:def 4;
 end;
 
 theorem Th31:
-  for F being ClosedSubset of 1L st Top 1L in F
-  for B holds B c= F implies FinMeet B in F
+  for F being ClosedSubset of 1L st Top 1L in F for B holds B c= F
+  implies FinMeet B in F
 proof
   let F be ClosedSubset of 1L;
-  defpred X[Finite_Subset of the carrier of 1L] means
-  $1 c= F implies FinMeet $1 in F;
-  assume Top 1L in F;
-  then
-A1: X[{}.the carrier of 1L] by Lm2;
-A2: for B1 being Finite_Subset of the carrier of 1L
-  for p being Element of 1L st X[B1] holds X[B1 \/ {.p.}]
+  defpred X[Finite_Subset of the carrier of 1L] means $1 c= F implies FinMeet
+  $1 in F;
+A1: for B1 being Finite_Subset of the carrier of 1L for p being Element of
+  1L st X[B1] holds X[B1 \/ {.p.}]
   proof
     let B1 be Finite_Subset of the carrier of 1L;
     let p be Element of 1L;
     assume
-A3: B1 c=F implies FinMeet B1 in F;
+A2: B1 c=F implies FinMeet B1 in F;
     assume
-A4: B1 \/ {p} c=F;
+A3: B1 \/ {p} c=F;
     then {p} c= F by XBOOLE_1:11;
     then p in F by ZFMISC_1:37;
-    then FinMeet B1 "/\" p in F by A3,A4,Def10,XBOOLE_1:11;
+    then FinMeet B1 "/\" p in F by A2,A3,LATTICES:def 24,XBOOLE_1:11;
     hence thesis by Th28;
   end;
-  thus for B being Element of Fin the carrier of 1L
-  holds X[B] from SETWISEO:sch 4(A1,A2);
+  assume
+  Top 1L in F;
+  then
+A4: X[{}.the carrier of 1L] by Lm2;
+  thus for B being Element of Fin the carrier of 1L holds X[B] from SETWISEO:
+  sch 4(A4,A1);
 end;
 
 begin :: Distributive Upper-bounded Lattices
 
 reserve DL for distributive upper-bounded Lattice,
-  B for Finite_Subset of the carrier of DL,
+  B for Finite_Subset of the
+  carrier of DL,
   p for Element of DL,
   f for UnOp of the carrier of DL;
 
-Lm3: (the L_join of DL).((the L_meet of DL) $$ (B,f),p) =
-(the L_meet of DL) $$ (B,(the L_join of DL) [:] (f,p))
+Lm3: (the L_join of DL).((the L_meet of DL) $$ (B,f),p) = (the L_meet of DL)
+$$ (B,(the L_join of DL) [:] (f,p))
+
 proof
   set J = the L_join of DL;
   set M = the L_meet of DL;
-A1: M is idempotent & M is commutative & M is associative
-  by LATTICE2:30,31,32;
-  now per cases;
-    suppose B<> {};
-      hence thesis by A1,LATTICE2:35
-      ,SETWISEO:37;
+A1: M is associative by LATTICE2:32;
+A2: M is idempotent & M is commutative by LATTICE2:30,31;
+  now
+    per cases;
+    suppose
+      B<> {};
+      hence thesis by A2,A1,LATTICE2:35,SETWISEO:37;
     end;
     suppose
-A2:   B = {};
-A3:   now
+A3:   B = {};
+A4:   now
         let f;
-        thus M $$ (B,f) = FinMeet({}.the carrier of DL,f) by A2,LATTICE2:def 4
+        thus M $$ (B,f) = FinMeet({}.the carrier of DL,f) by A3,LATTICE2:def 4
           .=Top DL by Lm2;
       end;
       hence J.(M $$ (B,f),p) = Top DL "\/" p
         .= Top DL by LATTICES:44
-        .= M $$ (B,J [:] (f,p)) by A3;
+        .= M $$ (B,J [:] (f,p)) by A4;
     end;
   end;
   hence thesis;
@@ -710,12 +716,14 @@ proof
 end;
 
 theorem Th34:
-  f is one-to-one implies (f.i "/\" f.k [= f.j implies f.k [= f.(i => j))
+  f is one-to-one implies (f.i "/\" f.k [= f.j implies f.k [= f.(i
+  => j))
 proof
   assume
 A1: f is one-to-one;
   hereby
-    assume f.i "/\" f.k [= f.j;
+    assume
+    f.i "/\" f.k [= f.j;
     then f.(i "/\" k) [= f.j by Def1;
     then i "/\" k [= j by A1,Th8;
     then k [= (i => j) by FILTER_0:def 8;
@@ -724,11 +732,10 @@ A1: f is one-to-one;
 end;
 
 theorem
-  f is bijective implies (CL is implicative & f preserves_implication)
+  f is bijective implies CL is implicative & f preserves_implication
 proof
-  assume f is bijective;
-  then
-A1: f is onto one-to-one;
+  assume
+A1: f is bijective;
   thus CL is implicative
   proof
     let p,q be Element of CL;
@@ -740,9 +747,9 @@ A3: f.j=q by A1,Th9;
     thus p "/\" r [= q by A2,A3,Th33;
     hereby
       let r1 be Element of CL;
-      consider k such that
-A4:   f.k = r1 by A1,Th9;
-      assume p "/\" r1 [= q;
+      assume
+A4:   p "/\" r1 [= q;
+      ex k st f.k = r1 by A1,Th9;
       hence r1 [= r by A1,A2,A3,A4,Th34;
     end;
   end;
@@ -750,14 +757,14 @@ A4:   f.k = r1 by A1,Th9;
   reconsider f as Homomorphism of IL,CL;
   now
     let i,j;
-A5: (f.i) "/\" f.(i => j) [= (f.j) by Th33;
-    now
+A5: now
       let r1 be Element of CL;
-      consider k such that
-A6:   f.k=r1 by A1,Th9;
-      assume (f.i) "/\" r1 [= (f.j);
+      assume
+A6:   (f.i) "/\" r1 [= (f.j);
+      ex k st f.k=r1 by A1,Th9;
       hence r1 [= f.(i => j) by A1,A6,Th34;
     end;
+    (f.i) "/\" f.(i => j) [= (f.j) by Th33;
     hence (f.i) => (f.j) = f.(i => j) by A5,FILTER_0:def 8;
   end;
   hence thesis by Def6;
@@ -796,19 +803,19 @@ proof
 A1: f is onto;
   then
 A2: f preserves_top by Th25;
-A3: f preserves_bottom by A1,Th19;
   thus CL is bounded complemented;
   thus CL is distributive by A1,Th18;
   then reconsider CL as Boolean Lattice;
+A3: f preserves_bottom by A1,Th19;
   reconsider f as Homomorphism of BL,CL;
   now
     let a1;
-A4: f.(a1`)"\/"f.a1 =f.(a1` "\/" a1) by Def1
-      .=f.(Top BL) by LATTICES:48
-      .= Top CL by A2,Def7;
-    f.(a1`)"/\"f.a1 = f.(a1` "/\" a1) by Def1
+A4: f.(a1`)"/\"f.a1 = f.(a1` "/\" a1) by Def1
       .=f.(Bottom BL) by LATTICES:47
       .= Bottom CL by A3,Def8;
+    f.(a1`)"\/"f.a1 =f.(a1` "\/" a1) by Def1
+      .=f.(Top BL) by LATTICES:48
+      .= Top CL by A2,Def7;
     then f.(a1`) is_a_complement_of f.a1 by A4,LATTICES:def 18;
     hence (f.a1)` = f.(a1`) by LATTICES:def 21;
   end;
@@ -819,12 +826,14 @@ definition
   let BL;
   mode Field of BL -> non empty Subset of BL means
     :Def14:
-    a in it & b in it implies a "/\" b in it & a` in it;
+    a in it & b in it
+    implies a "/\" b in it & a` in it;
   existence
   proof
     the carrier of BL c= the carrier of BL;
     then reconsider F=the carrier of BL as non empty Subset of BL;
-    take F; thus thesis;
+    take F;
+    thus thesis;
   end;
 end;
 
@@ -833,7 +842,8 @@ reserve F,H for Field of BL;
 theorem Th39:
   a in F & b in F implies a "\/" b in F
 proof
-  assume a in F & b in F;
+  assume
+  a in F & b in F;
   then a` in F & b` in F by Def14;
   then a` "/\" b` in F by Def14;
   then ( a"\/"b )` in F by LATTICES:51;
@@ -844,10 +854,11 @@ end;
 theorem Th40:
   a in F & b in F implies a => b in F
 proof
-  assume
-A1: a in F & b in F;
-  then a` in F by Def14;
-  then a` "\/" b in F by A1,Th39;
+  assume that
+A1: a in F and
+A2: b in F;
+  a` in F by A1,Def14;
+  then a` "\/" b in F by A2,Th39;
   hence thesis by FILTER_0:55;
 end;
 
@@ -863,36 +874,36 @@ end;
 theorem Th42:
   F is ClosedSubset of BL
 proof
-  for a,b st a in F & b in F holds
-  a "/\" b in F & a "\/" b in F by Def14,Th39;
-  hence thesis by Def10;
+B: for a,b st a in F & b in F holds a "/\" b in F by Def14;
+  for a,b st a in F & b in F holds a "\/" b in F by Th39;
+  hence thesis by B,LATTICES:def 24, def 25;
 end;
 
 definition
   let BL,A;
   func field_by A -> Field of BL means
   :Def15:
-  A c= it & for F st A c= F holds it c= F;
+  A c= it & for F st A c= F holds
+  it c= F;
   existence
   proof
+    consider x being Element of A;
     defpred X[set] means $1 is Field of BL & A c= $1;
     consider X such that
 A1: Z in X iff Z in bool the carrier of BL & X[Z] from XBOOLE_0:sch 1;
-    consider x being Element of A;
-A2: the carrier of BL c= the carrier of BL;
     reconsider x as Element of BL;
-A3: A c= the carrier of BL & the carrier of BL is Field of BL &
-    the carrier of BL in bool the carrier of BL by A2,Th41;
+A2: the carrier of BL is Field of BL by Th41;
     then
-A4: the carrier of BL in X by A1;
-A5: X <> {} by A1,A3;
+A3: X <> {} by A1;
     now
       let Z;
-      assume Z in X;
+      assume
+      Z in X;
       then A c= Z by A1;
       hence x in Z by TARSKI:def 3;
     end;
-    then reconsider F1 = meet X as non empty set by A5,SETFAM_1:def 1;
+    then reconsider F1 = meet X as non empty set by A3,SETFAM_1:def 1;
+A4: the carrier of BL in X by A1,A2;
     F1 c= the carrier of BL
     proof
       let x;
@@ -902,60 +913,52 @@ A5: X <> {} by A1,A3;
     F1 is Field of BL
     proof
       let a,b;
-      assume
-A6:   a in F1 & b in F1;
-A7:   a "/\" b in F1
+      assume that
+A5:   a in F1 and
+A6:   b in F1;
+A7:   for Z st Z in X holds a "/\" b in Z
       proof
-        for Z st Z in X holds a "/\" b in Z
-        proof
-          let Z;
-          assume
-A8:       Z in X;
-          then
-A9:       Z is Field of BL by A1;
-          a in Z & b in Z by A6,A8,SETFAM_1:def 1;
-          hence thesis by A9,Def14;
-        end;
-        hence thesis by A5,SETFAM_1:def 1;
+        let Z;
+        assume
+A8:     Z in X;
+        then
+A9:     b in Z by A6,SETFAM_1:def 1;
+        Z is Field of BL & a in Z by A1,A5,A8,SETFAM_1:def 1;
+        hence thesis by A9,Def14;
       end;
-      a` in F1
+      for Z st Z in X holds a` in Z
       proof
-        for Z st Z in X holds a` in Z
-        proof
-          let Z;
-          assume
-A10:      Z in X;
-          then
-A11:      Z is Field of BL by A1;
-          a in Z by A6,A10,SETFAM_1:def 1;
-          hence thesis by A11,Def14;
-        end;
-        hence thesis by A5,SETFAM_1:def 1;
+        let Z;
+        assume
+        Z in X;
+        then Z is Field of BL & a in Z by A1,A5,SETFAM_1:def 1;
+        hence thesis by Def14;
       end;
-      hence thesis by A7;
+      hence thesis by A3,A7,SETFAM_1:def 1;
     end;
     then reconsider F = F1 as Field of BL;
     take F;
     for Z st Z in X holds A c= Z by A1;
     hence A c= F by A4,SETFAM_1:6;
     let H;
-    assume A c= H;
+    assume
+    A c= H;
     then H in X by A1;
     hence thesis by SETFAM_1:4;
   end;
   uniqueness
   proof
-    let F1,F2 be Field of BL such that
-A12: A c= F1 & for F st A c= F holds F1 c= F and
-A13: A c= F2 & for F st A c= F holds F2 c= F;
-    thus F1 c= F2 & F2 c= F1 by A12,A13;
+    let F1,F2 be Field of BL;
+    assume
+    ( A c= F1 & for F st A c= F holds F1 c= F )&( A c= F2 & for F st
+    A c= F holds F2 c= F );
+    hence F1 c= F2 & F2 c= F1;
   end;
 end;
 
 definition
   let BL,A;
   func SetImp A -> Subset of BL equals
-
   { a => b : a in A & b in A};
   coherence
   proof
@@ -963,7 +966,8 @@ definition
     B c= the carrier of BL
     proof
       let x;
-      assume x in B;
+      assume
+      x in B;
       then ex p,q st x = p => q & p in A & q in A;
       hence thesis;
     end;
@@ -976,8 +980,8 @@ registration
   cluster SetImp A -> non empty;
   coherence
   proof
-    set B={ a => b : a in A & b in A};
     consider x being Element of A;
+    set B={ a => b : a in A & b in A};
     reconsider x as Element of BL;
     x => x in B;
     then reconsider B as non empty set;
@@ -993,24 +997,26 @@ theorem Th44:
   c in SetImp A iff ex p,q st c = p` "\/" q & p in A & q in A
 proof
   hereby
-    assume c in SetImp A;
+    assume
+    c in SetImp A;
     then consider p,q such that
 A1: c = p => q & p in A & q in A;
     take p,q;
     thus c = p` "\/" q & p in A & q in A by A1,FILTER_0:55;
   end;
   given p,q such that
-A2: c = p` "\/" q & p in A & q in A;
+A2: c = p` "\/" q and
+A3: p in A & q in A;
   c = p => q by A2,FILTER_0:55;
-  hence thesis by A2;
+  hence thesis by A3;
 end;
 
 definition
   let BL;
   deffunc U(Element of BL) = $1`;
   func comp BL -> Function of the carrier of BL, the carrier of BL means
-  :Def17:
-  it.a = a`;
+  :
+  Def17: it.a = a`;
   existence
   proof
     consider f being Function of the carrier of BL,the carrier of BL such that
@@ -1020,18 +1026,17 @@ A1: for a holds f.a= U(a) from FUNCT_2:sch 4;
   end;
   uniqueness
   proof
-    thus for f1,f2 being Function of the carrier of BL,the carrier of BL st
-    (for x being Element of BL holds f1.x = U(x)) &
-    (for x being Element of BL holds f2.x = U(x))
-    holds f1 = f2 from BINOP_2:sch 1;
+    thus for f1,f2 being Function of the carrier of BL,the carrier of BL st (
+for x being Element of BL holds f1.x = U(x)) & (for x being Element of BL holds
+    f2.x = U(x)) holds f1 = f2 from BINOP_2:sch 1;
   end;
 end;
 
 theorem Th45:
   FinJoin(B \/ {.b.},comp BL) = FinJoin (B,comp BL) "\/" b`
 proof
-  thus FinJoin(B \/ {.b.},comp BL)
-  = FinJoin(B,comp BL) "\/" (comp BL).b by Th20
+  thus FinJoin(B \/ {.b.},comp BL) = FinJoin(B,comp BL) "\/" (comp BL).b by
+  Th20
     .= FinJoin (B,comp BL) "\/" b` by Def17;
 end;
 
@@ -1040,19 +1045,12 @@ theorem
 proof
   set M= the L_meet of BL;
   set J= the L_join of BL;
-A1: M is idempotent commutative associative
-  & M is having_a_unity by LATTICE2:30,31,32,73;
-A2: J is idempotent commutative associative
-  & J is having_a_unity by LATTICE2:26,27,29,67;
-A3: (comp BL).(the_unity_wrt J) = the_unity_wrt M
-  proof
-    thus (comp BL).(the_unity_wrt J)= (the_unity_wrt J)` by Def17
-      .=(Bottom BL )` by LATTICE2:68
-      .=Top BL by Th37
-      .= the_unity_wrt M by LATTICE2:74;
-  end;
-A4: for a,b being Element of BL
-  holds (comp BL).(J.(a,b))= M.((comp BL).a,(comp BL).b)
+A1: M is idempotent commutative associative & M is having_a_unity by
+  LATTICE2:30,31,32,73;
+A2: J is idempotent commutative associative & J is having_a_unity by
+  LATTICE2:26,27,29,67;
+A3: for a,b being Element of BL holds (comp BL).(J.(a,b))= M.((comp BL).a,(
+  comp BL).b)
   proof
     let a,b be Element of BL;
     thus (comp BL).(J.(a,b))=(a"\/"b)` by Def17
@@ -1060,9 +1058,13 @@ A4: for a,b being Element of BL
       .= M.((comp BL).a,b`) by Def17
       .= M.((comp BL).a,(comp BL).b) by Def17;
   end;
+A4: (comp BL).(the_unity_wrt J)= (the_unity_wrt J)` by Def17
+    .=(Bottom BL )` by LATTICE2:68
+    .=Top BL by Th37
+    .= the_unity_wrt M by LATTICE2:74;
   thus (FinJoin B)`= (J$$(B,id BL))` by LATTICE2:def 3
     .= (comp BL).(J$$(B,id BL)) by Def17
-    .= M$$(B,(comp BL)*(id BL)) by A1,A2,A3,A4,SETWISEO:45
+    .= M$$(B,(comp BL)*(id BL)) by A1,A2,A4,A3,SETWISEO:45
     .= M$$(B, comp BL) by TMAP_1:93
     .= FinMeet(B, comp BL) by LATTICE2:def 4;
 end;
@@ -1070,8 +1072,8 @@ end;
 theorem
   FinMeet(B \/ {.b.},comp BL) = FinMeet (B,comp BL) "/\" b`
 proof
-  thus FinMeet(B \/ {.b.},comp BL)
-  =FinMeet (B,comp BL) "/\" (comp BL).b by Th27
+  thus FinMeet(B \/ {.b.},comp BL) =FinMeet (B,comp BL) "/\" (comp BL).b by
+  Th27
     .=FinMeet (B,comp BL) "/\" b` by Def17;
 end;
 
@@ -1080,19 +1082,12 @@ theorem Th48:
 proof
   set M= the L_meet of BL;
   set J= the L_join of BL;
-A1: M is idempotent commutative associative
-  & M is having_a_unity by LATTICE2:30,31,32,73;
-A2: J is idempotent commutative associative
-  & J is having_a_unity by LATTICE2:26,27,29,67;
-A3: (comp BL).(the_unity_wrt M) = the_unity_wrt J
-  proof
-    thus (comp BL).(the_unity_wrt M)= (the_unity_wrt M)` by Def17
-      .=(Top BL )` by LATTICE2:74
-      .=Bottom BL by Th36
-      .= the_unity_wrt J by LATTICE2:68;
-  end;
-A4: for a,b being Element of BL
-  holds (comp BL).(M.(a,b))= J.((comp BL).a,(comp BL).b)
+A1: M is idempotent commutative associative & M is having_a_unity by
+  LATTICE2:30,31,32,73;
+A2: J is idempotent commutative associative & J is having_a_unity by
+  LATTICE2:26,27,29,67;
+A3: for a,b being Element of BL holds (comp BL).(M.(a,b))= J.((comp BL).a,(
+  comp BL).b)
   proof
     let a,b be Element of BL;
     thus (comp BL).(M.(a,b))=(a"/\"b)` by Def17
@@ -1100,240 +1095,260 @@ A4: for a,b being Element of BL
       .= J.((comp BL).a,b`) by Def17
       .= J.((comp BL).a,(comp BL).b) by Def17;
   end;
+A4: (comp BL).(the_unity_wrt M)= (the_unity_wrt M)` by Def17
+    .=(Top BL )` by LATTICE2:74
+    .=Bottom BL by Th36
+    .= the_unity_wrt J by LATTICE2:68;
   thus (FinMeet B)`= (M$$(B,id BL))` by LATTICE2:def 4
     .= (comp BL).(M$$(B,id BL)) by Def17
-    .= J$$(B,(comp BL)*(id BL)) by A1,A2,A3,A4,SETWISEO:45
+    .= J$$(B,(comp BL)*(id BL)) by A1,A2,A4,A3,SETWISEO:45
     .= J$$(B, comp BL) by TMAP_1:93
     .= FinJoin(B, comp BL) by LATTICE2:def 3;
 end;
 
 theorem Th49:
-  for AF being non empty ClosedSubset of BL st Bottom BL in AF & Top BL in AF
-  for B holds B c= SetImp AF implies
-  ex B0 st B0 c= SetImp AF & FinJoin( B,comp BL) = FinMeet B0
+  for AF being non empty ClosedSubset of BL st Bottom BL in AF &
+  Top BL in AF for B holds B c= SetImp AF implies ex B0 st B0 c= SetImp AF &
+  FinJoin( B,comp BL) = FinMeet B0
 proof
   let AF be non empty ClosedSubset of BL such that
-A1: Bottom BL in AF & Top BL in AF;
-  let B;
-  assume
-A2: B c= SetImp AF;
+A1: Bottom BL in AF and
+A2: Top BL in AF;
   set C={ FinJoin A1 "\/" FinJoin(A2,comp BL): A1 c= AF & A2 c= AF};
+A3: C c= SetImp AF
+  proof
+    let x;
+    assume
+    x in C;
+    then consider A1,A2 such that
+A4: x = FinJoin A1 "\/" FinJoin(A2,comp BL) and
+A5: A1 c= AF & A2 c= AF;
+    consider p,q such that
+A6: p = FinMeet A2 & q = FinJoin A1;
+A7: x = p` "\/" q by A4,A6,Th48;
+    p in AF & q in AF by A1,A2,A5,A6,Th24,Th31;
+    hence thesis by A7,Th44;
+  end;
   defpred X[Finite_Subset of the carrier of BL] means $1 c= SetImp AF implies
   ex B0 st B0 c= C & FinJoin($1,comp BL) = FinMeet B0;
-A3: X[{}.the carrier of BL]
+  let B;
+  assume
+A8: B c= SetImp AF;
+A9: for B' being Finite_Subset of the carrier of BL, b being Element of BL
+  st X[B'] holds X[B' \/ {.b.}]
   proof
-    assume {}.the carrier of BL c= SetImp AF;
-    take B0={.Bottom BL.};
-A4: FinJoin ({}.the carrier of BL,comp BL)= Bottom BL by Lm1
-      .=FinMeet {.Bottom BL.} by Th17;
-    B0 c= C
+    set J = the L_join of BL;
+    let B' be Finite_Subset of the carrier of BL, b be Element of BL;
+    assume
+A10: B' c= SetImp AF implies ex B1 st B1 c= C & FinJoin(B',comp BL) =
+    FinMeet B1;
+    assume
+A11: B' \/ {b} c= SetImp AF;
+    then consider B1 such that
+A12: B1 c= C and
+A13: FinJoin(B',comp BL) = FinMeet B1 by A10,SETWISEO:8;
+    b in SetImp AF by A11,SETWISEO:8;
+    then consider p,q such that
+A14: b = p` "\/" q and
+A15: p in AF and
+A16: q in AF by Th44;
+A17: for x,b holds x in (J[:](id BL,b)).:B1 implies ex a st a in B1 & x =
+    a "\/" b
+    proof
+      let x,b;
+      assume
+A18:  x in (J[:](id BL,b)).:B1;
+      (J[:](id BL,b)).:B1 c= the carrier of BL by FUNCT_2:44;
+      then reconsider x as Element of BL by A18;
+      consider a such that
+A19:  a in B1 and
+A20:  x = (J[:](id BL,b)).a by A18,FUNCT_2:116;
+      x = J.(id BL.a,b) by A20,FUNCOP_1:60
+        .= a "\/" b by TMAP_1:91;
+      hence thesis by A19;
+    end;
+A21: (J[:](id BL,p)).:B1 c= C
     proof
       let x;
-      assume x in B0;
+      assume
+      x in (J[:](id BL,p)).:B1;
+      then consider a such that
+A22:  a in B1 and
+A23:  x = a "\/" p by A17;
+      a in C by A12,A22;
+      then consider A1,A2 such that
+A24:  a = FinJoin A1 "\/" FinJoin(A2,comp BL) and
+A25:  A1 c= AF & A2 c= AF;
+      ex A1',A2' being Finite_Subset of the carrier of BL st x = FinJoin
+      A1' "\/" FinJoin (A2',comp BL) & A1' c= AF & A2' c= AF
+      proof
+        take A1'=A1 \/ {.p.};
+        take A2'=A2;
+        x = (FinJoin A1 "\/" p) "\/" FinJoin(A2,comp BL) by A23,A24,
+        LATTICES:def 5
+          .= FinJoin(A1') "\/" FinJoin(A2',comp BL) by Th21;
+        hence thesis by A15,A25,SETWISEO:8;
+      end;
+      hence thesis;
+    end;
+A26: (J[:](id BL,q`)).:B1 c= C
+    proof
+      let x;
+      assume
+      x in (J[:](id BL,q`)).:B1;
+      then consider a such that
+A27:  a in B1 and
+A28:  x = a "\/" q` by A17;
+      a in C by A12,A27;
+      then consider A1,A2 such that
+A29:  a = FinJoin A1 "\/" FinJoin(A2,comp BL) and
+A30:  A1 c= AF & A2 c= AF;
+      ex A1',A2' being Finite_Subset of the carrier of BL st x = FinJoin
+      A1' "\/" FinJoin (A2',comp BL) & A1' c= AF & A2' c= AF
+      proof
+        take A1'=A1;
+        take A2'=A2 \/ {.q.};
+        x = FinJoin A1 "\/" (FinJoin(A2,comp BL) "\/" q`) by A28,A29,
+        LATTICES:def 5
+          .= FinJoin(A1') "\/" FinJoin(A2',comp BL) by Th45;
+        hence thesis by A16,A30,SETWISEO:8;
+      end;
+      hence thesis;
+    end;
+    take (J[:](id BL,p)).:B1 \/ (J[:](id BL,q`)).:B1;
+    b` = p`` "/\" q` by A14,LATTICES:51
+      .= p "/\" q` by LATTICES:49;
+    then FinJoin(B' \/ {.b.} ,comp BL) = FinMeet B1 "\/" (p "/\" q`) by A13,
+    Th45
+      .= (FinMeet B1 "\/" p) "/\" (FinMeet B1 "\/" q`) by LATTICES:31
+      .= FinMeet((J[:](id BL,p)).:B1) "/\" (FinMeet B1 "\/" q`) by Th32
+      .= FinMeet((J[:](id BL,p)).:B1) "/\" FinMeet ((J[:] (id BL,q`)).:B1)
+    by Th32
+      .= FinMeet ((J[:](id BL,p)).:B1 \/ (J[:](id BL,q`)).:B1) by Th30;
+    hence thesis by A21,A26,XBOOLE_1:8;
+  end;
+A31: X[{}.the carrier of BL]
+  proof
+    assume
+    {}.the carrier of BL c= SetImp AF;
+    take B0={.Bottom BL.};
+A32: B0 c= C
+    proof
+      let x;
+      assume
+      x in B0;
       then
-A5:   x = Bottom BL by TARSKI:def 1;
-      ex A1,A2 st
-      x = FinJoin A1 "\/" FinJoin(A2,comp BL) & A1 c= AF & A2 c= AF
+A33:  x = Bottom BL by TARSKI:def 1;
+      ex A1,A2 st x = FinJoin A1 "\/" FinJoin(A2,comp BL) & A1 c= AF & A2
+      c= AF
       proof
         take A1={.Bottom BL.};
         take A2={.Top BL.};
-        thus x = Bottom BL "\/" Bottom BL by A5,LATTICES:17
+        thus x = Bottom BL "\/" Bottom BL by A33,LATTICES:17
           .= Bottom BL "\/" (Top BL)` by Th36
           .=FinJoin A1 "\/" (Top BL)` by Th16
           .=FinJoin A1 "\/" (FinMeet A2)` by Th17
           .=FinJoin A1 "\/" FinJoin (A2,comp BL) by Th48;
         thus A1 c= AF by A1,ZFMISC_1:37;
-        thus thesis by A1,ZFMISC_1:37;
+        thus thesis by A2,ZFMISC_1:37;
       end;
       hence thesis;
     end;
-    hence thesis by A4;
+    FinJoin ({}.the carrier of BL,comp BL)= Bottom BL by Lm1
+      .=FinMeet {.Bottom BL.} by Th17;
+    hence thesis by A32;
   end;
-A6: for B' being Finite_Subset of the carrier of BL,
-  b being Element of BL st X[B'] holds X[B' \/ {.b.}]
-  proof
-    let B' be Finite_Subset of the carrier of BL, b be Element of BL;
-    assume
-A7: (B' c= SetImp AF implies
-    ex B1 st B1 c= C & FinJoin(B',comp BL) = FinMeet B1 );
-    assume
-A8: B' \/ {b} c= SetImp AF;
-    then
-A9: B' c= SetImp AF & b in SetImp AF by SETWISEO:8;
-    consider B1 such that
-A10: B1 c= C & FinJoin(B',comp BL) = FinMeet B1 by A7,A8,SETWISEO:8;
-    consider p,q such that
-A11: b = p` "\/" q & p in AF & q in AF by A9,Th44;
-A12: b` = p`` "/\" q` by A11,LATTICES:51
-      .= p "/\" q` by LATTICES:49;
-    set J = the L_join of BL;
-    take (J[:](id BL,p)).:B1 \/ (J[:](id BL,q`)).:B1;
-A13: FinJoin(B' \/ {.b.} ,comp BL) = FinMeet B1 "\/" (p "/\"
-    q`) by A10,A12,Th45
-      .= (FinMeet B1 "\/" p) "/\" (FinMeet B1 "\/" q`) by LATTICES:31
-      .= FinMeet((J[:](id BL,p)).:B1) "/\" (FinMeet B1 "\/" q`) by Th32
-      .= FinMeet((J[:](id BL,p)).:B1) "/\" FinMeet ((J[:]
-    (id BL,q`)).:B1) by Th32
-      .= FinMeet ((J[:](id BL,p)).:B1 \/ (J[:](id BL,q`)).:B1) by Th30;
-A14: for x,b holds x in (J[:](id BL,b)).:B1 implies ex a st
-    a in B1 & x = a "\/" b
-    proof
-      let x,b;
-      assume
-A15:  x in (J[:](id BL,b)).:B1;
-      (J[:](id BL,b)).:B1 c= the carrier of BL by FUNCT_2:44;
-      then reconsider x as Element of BL by A15;
-      consider a such that
-A16:  a in B1 & x = (J[:](id BL,b)).a by A15,FUNCT_2:116;
-      x = J.(id BL.a,b) by A16,FUNCOP_1:60
-        .= a "\/" b by TMAP_1:91;
-      hence thesis by A16;
-    end;
-A17: (J[:](id BL,p)).:B1 c= C
-    proof
-      let x;
-      assume x in (J[:](id BL,p)).:B1;
-      then consider a such that
-A18:  a in B1 & x = a "\/" p by A14;
-      a in C by A10,A18;
-      then consider A1,A2 such that
-A19:  a = FinJoin A1 "\/" FinJoin(A2,comp BL) & A1 c= AF & A2 c= AF;
-      ex A1',A2' being Finite_Subset of the carrier of BL st
-      x = FinJoin A1' "\/" FinJoin (A2',comp BL) & A1' c= AF & A2' c= AF
-      proof
-        take A1'=A1 \/ {.p.};
-        take A2'=A2;
-        x = (FinJoin A1 "\/" p) "\/" FinJoin(A2,comp BL) by A18,A19,
-        LATTICES:def 5
-          .= FinJoin(A1') "\/" FinJoin(A2',comp BL) by Th21;
-        hence thesis by A11,A19,SETWISEO:8;
-      end;
-      hence thesis;
-    end;
-    (J[:](id BL,q`)).:B1 c= C
-    proof
-      let x;
-      assume x in (J[:](id BL,q`)).:B1;
-      then consider a such that
-A20:  a in B1 & x = a "\/" q` by A14;
-      a in C by A10,A20;
-      then consider A1,A2 such that
-A21:  a = FinJoin A1 "\/" FinJoin(A2,comp BL) & A1 c= AF & A2 c= AF;
-      ex A1',A2' being Finite_Subset of the carrier of BL st
-      x = FinJoin A1' "\/" FinJoin (A2',comp BL) & A1' c= AF & A2' c= AF
-      proof
-        take A1'=A1;
-        take A2'=A2 \/ {.q.};
-        x = FinJoin A1 "\/" (FinJoin(A2,comp BL) "\/" q`) by A20,A21,
-        LATTICES:def 5
-          .= FinJoin(A1') "\/" FinJoin(A2',comp BL) by Th45;
-        hence thesis by A11,A21,SETWISEO:8;
-      end;
-      hence thesis;
-    end;
-    hence thesis by A13,A17,XBOOLE_1:8;
-  end;
-  for B being Finite_Subset of the carrier of BL holds X[B]
-  from SETWISEO:sch 4(A3,A6);
-  then consider B1 such that
-A22: B1 c= C & FinJoin(B,comp BL) = FinMeet B1 by A2;
-  C c= SetImp AF
-  proof
-    let x;
-    assume x in C;
-    then consider A1,A2 such that
-A23: x = FinJoin A1 "\/" FinJoin(A2,comp BL) & A1 c= AF & A2 c= AF;
-    consider p,q such that
-A24: p = FinMeet A2 & q = FinJoin A1;
-A25: p in AF & q in AF by A1,A23,A24,Th24,Th31;
-    x = p` "\/" q by A23,A24,Th48;
-    hence thesis by A25,Th44;
-  end;
-  hence thesis by A22,XBOOLE_1:1;
+  for B being Finite_Subset of the carrier of BL holds X[B] from SETWISEO
+  :sch 4(A31,A9);
+  then ex B1 st B1 c= C & FinJoin(B,comp BL) = FinMeet B1 by A8;
+  hence thesis by A3,XBOOLE_1:1;
 end;
 
 theorem
-  for AF being non empty ClosedSubset of BL st
-  Bottom BL in AF & Top BL in AF holds
-  { FinMeet B : B c= SetImp AF } = field_by AF
+  for AF being non empty ClosedSubset of BL st Bottom BL in AF & Top BL
+  in AF holds { FinMeet B : B c= SetImp AF } = field_by AF
 proof
   let AF be non empty ClosedSubset of BL such that
-A1: Bottom BL in AF & Top BL in AF;
+A1: Bottom BL in AF and
+A2: Top BL in AF;
   set A1= { FinMeet B :B c= SetImp AF };
-A2: AF c= A1
+A3: AF c= A1
   proof
     let x;
     assume
-A3: x in AF;
+A4: x in AF;
     then reconsider b=x as Element of BL;
     reconsider B = {.b.} as Finite_Subset of the carrier of BL;
     b = Bottom BL "\/" b by LATTICES:39
       .= (Top BL)` "\/" b by Th36;
-    then b in SetImp AF by A1,A3,Th44;
+    then b in SetImp AF by A2,A4,Th44;
     then
-A4: B c= SetImp AF by ZFMISC_1:37;
+A5: B c= SetImp AF by ZFMISC_1:37;
     x = FinMeet B by Th17;
-    hence thesis by A4;
+    hence thesis by A5;
   end;
   A1 c= the carrier of BL
   proof
     let x;
-    assume x in A1;
-    then consider B such that
-A5: x = FinMeet B & B c= SetImp AF;
-    thus thesis by A5;
+    assume
+    x in A1;
+    then ex B st x = FinMeet B & B c= SetImp AF;
+    hence thesis;
   end;
-  then reconsider A1 as non empty Subset of BL by A2;
-A6: A1 is Field of BL
+  then reconsider A1 as non empty Subset of BL by A3;
+A6: now
+    let F;
+    assume
+A7: AF c= F;
+    thus A1 c= F
+    proof
+      reconsider F1=F as ClosedSubset of BL by Th42;
+      let x;
+      assume
+      x in A1;
+      then consider B such that
+A8:   x=FinMeet B and
+A9:   B c= SetImp AF;
+      SetImp AF c= F
+      proof
+        let y;
+        assume
+        y in SetImp AF;
+        then ex p,q st y = p => q & p in AF & q in AF;
+        hence thesis by A7,Th40;
+      end;
+      then B c= F1 by A9,XBOOLE_1:1;
+      hence thesis by A2,A7,A8,Th31;
+    end;
+  end;
+  A1 is Field of BL
   proof
     let p,q;
-    assume
-A7: p in A1 & q in A1;
+    assume that
+A10: p in A1 and
+A11: q in A1;
     thus p "/\" q in A1
     proof
-      consider B1 such that
-A8:   p=FinMeet B1 & B1 c= SetImp AF by A7;
       consider B2 such that
-A9:   q=FinMeet B2 & B2 c= SetImp AF by A7;
+A12:  q=FinMeet B2 & B2 c= SetImp AF by A11;
+      consider B1 such that
+A13:  p=FinMeet B1 & B1 c= SetImp AF by A10;
       consider B0 such that
-A10:  B0=B1 \/ B2;
-A11:  B0 c= SetImp AF by A8,A9,A10,XBOOLE_1:8;
-      p "/\" q = FinMeet B0 by A8,A9,A10,Th30;
-      hence thesis by A11;
+A14:  B0=B1 \/ B2;
+      B0 c= SetImp AF & p "/\" q = FinMeet B0 by A13,A12,A14,Th30,
+      XBOOLE_1:8;
+      hence thesis;
     end;
     thus p` in A1
     proof
       consider B such that
-A12:  p=FinMeet B & B c= SetImp AF by A7;
-      p` = FinJoin ( B,comp BL) by A12,Th48;
-      then consider B0 such that
-A13:  B0 c= SetImp AF & p` = FinMeet B0 by A1,A12,Th49;
-      thus thesis by A13;
+A15:  p=FinMeet B and
+A16:  B c= SetImp AF by A10;
+      p` = FinJoin ( B,comp BL) by A15,Th48;
+      then ex B0 st B0 c= SetImp AF & p` = FinMeet B0 by A1,A2,A16,Th49;
+      hence thesis;
     end;
   end;
-  now
-    let F;
-    assume
-A14: AF c= F;
-    thus A1 c= F
-    proof
-      let x;
-      assume x in A1;
-      then consider B such that
-A15:  x=FinMeet B & B c= SetImp AF;
-A16:  SetImp AF c= F
-      proof
-        let y;
-        assume y in SetImp AF;
-        then consider p,q such that
-A17:    y = p => q & p in AF & q in AF;
-        thus thesis by A14,A17,Th40;
-      end;
-      reconsider F1=F as ClosedSubset of BL by Th42;
-      B c= F1 & Top BL in F1 by A1,A14,A15,A16,XBOOLE_1:1;
-      hence thesis by A15,Th31;
-    end;
-  end;
-  hence thesis by A2,A6,Def15;
+  hence thesis by A3,A6,Def15;
 end;
 

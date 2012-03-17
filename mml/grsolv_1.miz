@@ -9,13 +9,13 @@ environ
  vocabularies REALSET1, FINSEQ_1, GROUP_3, FUNCT_1, RLSUB_1, GROUP_2, RELAT_1,
       GROUP_6, BINOP_1, BOOLE, QC_LANG1, WELLORD1, VECTSP_1, GRAPH_1, GRSOLV_1,
       COMPLEX1, ARYTM, ALGSTR_0, SGRAPH1;
- notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, NAT_1, STRUCT_0,
-      ALGSTR_0, BINOP_1, RELAT_1, FUNCT_1, RELSET_1, FUNCT_2, GR_CY_1,
-      FINSEQ_1, GROUP_1, GROUP_2, GROUP_3, GROUP_6, XXREAL_0;
+ notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, NAT_1, STRUCT_0, ALGSTR_0,
+      BINOP_1, RELAT_1, FUNCT_1, RELSET_1, FUNCT_2, GR_CY_1, FINSEQ_1, GROUP_1,
+      GROUP_2, GROUP_3, GROUP_6, XXREAL_0;
  constructors PARTFUN1, BINOP_1, FINSUB_1, XXREAL_0, REALSET1, GROUP_6,
       GR_CY_1, RELSET_1;
  registrations XBOOLE_0, FUNCT_1, RELSET_1, XREAL_0, FINSEQ_1, STRUCT_0,
-      GROUP_2, GROUP_3, GROUP_6, GR_CY_1, ORDINAL1, NAT_1;
+      GROUP_2, GROUP_3, GROUP_6, GR_CY_1, ORDINAL1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  definitions GROUP_2, RELAT_1, TARSKI, ALGSTR_0;
  theorems FINSEQ_1, BINOP_1, GROUP_2, GROUP_3, TARSKI, GROUP_6, FINSEQ_2,
@@ -30,11 +30,11 @@ definition
   let IT be Group;
   attr IT is solvable means
   :Def1:
-  ex F being FinSequence of Subgroups IT st len F>0 & F.1=(Omega).IT &
-  F.(len F)=(1).IT & for i st i in dom F & i+1 in dom F
-  for G1,G2 being strict Subgroup of IT st G1=F.i & G2=F.(i+1) holds
-  G2 is strict normal Subgroup of G1 &
-  for N being normal Subgroup of G1 st N=G2 holds G1./.N is commutative;
+  ex F being FinSequence of Subgroups IT st
+len F>0 & F.1=(Omega).IT & F.(len F)=(1).IT & for i st i in dom F & i+1 in dom
+  F for G1,G2 being strict Subgroup of IT st G1=F.i & G2=F.(i+1) holds G2 is
+strict normal Subgroup of G1 & for N being normal Subgroup of G1 st N=G2 holds
+  G1./.N is commutative;
 end;
 
 registration
@@ -45,40 +45,37 @@ registration
     take H=(1).G;
     thus H is solvable
     proof
-      <*H*> is FinSequence of Subgroups H
+      rng <*H*> c=Subgroups H
       proof
-        rng <*H*> c=Subgroups H
-        proof
-          let x be set;
-          assume
-A1:       x in rng<*H*>;
-          rng <*H*> ={ H } by FINSEQ_1:56;
-          then x=H by A1,TARSKI:def 1;
-          then x is strict Subgroup of H by GROUP_2:63;
-          hence thesis by GROUP_3:def 1;
-        end;
-        hence thesis by FINSEQ_1:def 4;
+        let x be set;
+A1:     rng <*H*> ={ H } by FINSEQ_1:56;
+        assume
+        x in rng<*H*>;
+        then x=H by A1,TARSKI:def 1;
+        then x is strict Subgroup of H by GROUP_2:63;
+        hence thesis by GROUP_3:def 1;
       end;
-      then reconsider F=<*H*> as FinSequence of Subgroups H;
+      then reconsider F=<*H*> as FinSequence of Subgroups H by FINSEQ_1:def 4;
       take F;
 A2:   len F=1 by FINSEQ_1:56;
-      then
-A3:   F.(len F)=H by FINSEQ_1:57
-        .=(1).H by GROUP_2:75;
-      for i st i in dom F & i+1 in dom F
-      for G1,G2 being Subgroup of H st G1=F.i & G2=F.(i+1) holds
-      G2 is normal Subgroup of G1 &
-      for N being normal Subgroup of G1 st N=G2 holds G1./.N is commutative
+A3:   for i st i in dom F & i+1 in dom F for G1,G2 being Subgroup of H st
+G1=F.i & G2=F.(i+1) holds G2 is normal Subgroup of G1 & for N being normal
+      Subgroup of G1 st N=G2 holds G1./.N is commutative
       proof
         let i;
-        assume
-A4:     i in dom F & i+1 in dom F;
+        assume that
+A4:     i in dom F and
+A5:     i+1 in dom F;
         let G1,G2 be Subgroup of H;
-        assume G1=F.i & G2=F.(i+1);
-        dom F={1} by A2,FINSEQ_1:4,def 3;
-        then i=1 & i+1=1 by A4,TARSKI:def 1;
-        hence thesis;
+        assume that
+        G1=F.i and
+        G2=F.(i+1);
+A6:     dom F={1} by A2,FINSEQ_1:4,def 3;
+        then i=1 by A4,TARSKI:def 1;
+        hence thesis by A5,A6,TARSKI:def 1;
       end;
+      F.(len F)=H by A2,FINSEQ_1:57
+        .=(1).H by GROUP_2:75;
       hence thesis by A2,A3,FINSEQ_1:57;
     end;
     thus thesis;
@@ -91,41 +88,39 @@ theorem Th1:
 proof
   let G be strict Group;
   let H,F1,F2 be strict Subgroup of G;
+  reconsider F=F2 /\ H as Subgroup of F2 by GROUP_2:106;
   assume
 A1: F1 is normal Subgroup of F2;
   then
 A2: (F1 /\ H) = ((F1 /\ F2) /\ H) by GROUP_2:107
     .= F1 /\ (F2 /\ H) by GROUP_2:102;
   reconsider F1 as normal Subgroup of F2 by A1;
-  reconsider F=F2 /\ H as Subgroup of F2 by GROUP_2:106;
   F1/\F is normal Subgroup of F;
   hence thesis by A2,GROUP_6:3;
 end;
 
 theorem
-  for G being strict Group for F2 being strict Subgroup of G
-  for F1 being strict normal Subgroup of F2 for a,b being Element of F2
-  holds (a*F1) *(b*F1)=a *b *F1
+  for G being strict Group for F2 being strict Subgroup of G for F1
+being strict normal Subgroup of F2 for a,b being Element of F2 holds (a*F1) *(b
+  *F1)=a *b *F1
 proof
   let G be strict Group;
   let F2 be strict Subgroup of G;
   let F1 be strict normal Subgroup of F2;
   let a,b be Element of F2;
-A1: (nat_hom F1).a=(a*F1) by GROUP_6:def 9;
-A2: (nat_hom F1).b=(b*F1) by GROUP_6:def 9;
-A3: @((nat_hom F1).a)=(nat_hom F1).a by GROUP_6:def 6;
-A4: @((nat_hom F1).b)=(nat_hom F1).b by GROUP_6:def 6;
+A1: (nat_hom F1).a=(a*F1) & (nat_hom F1).b=(b*F1) by GROUP_6:def 9;
+A2: @((nat_hom F1).a)=(nat_hom F1).a & @((nat_hom F1).b)=(nat_hom F1).b by
+  GROUP_6:def 6;
   thus a*b*F1 =(nat_hom F1).(a*b) by GROUP_6:def 9
     .=((nat_hom F1).a) *((nat_hom F1).b) by GROUP_6:def 7
-    .=(a*F1 )*(b*F1) by A1,A2,A3,A4,GROUP_6:24;
+    .=(a*F1 )*(b*F1) by A1,A2,GROUP_6:24;
 end;
 
 theorem
-  for G being strict Group for H,F2 being strict Subgroup of G
-  for F1 being strict normal Subgroup of F2 holds
-  for G2 being strict Subgroup of G st G2=H/\F2
-  for G1 being normal Subgroup of G2 st G1=H /\ F1
-  ex G3 being Subgroup of F2./.F1 st G2./.G1, G3 are_isomorphic
+  for G being strict Group for H,F2 being strict Subgroup of G for F1
+  being strict normal Subgroup of F2 holds for G2 being strict Subgroup of G st
+G2=H/\F2 for G1 being normal Subgroup of G2 st G1=H /\ F1 ex G3 being Subgroup
+  of F2./.F1 st G2./.G1, G3 are_isomorphic
 proof
   let G be strict Group;
   let H,F2 be strict Subgroup of G;
@@ -133,42 +128,42 @@ proof
   reconsider G2=H /\ F2 as strict Subgroup of G;
   consider f being Function such that
 A1: f=(nat_hom F1)|(the carrier of H);
-  reconsider f1=nat_hom F1 as Function of
-  the carrier of F2,the carrier of F2./.F1;
-A2: the carrier of F2=carr(F2);
-A3: the carrier of H= carr(H);
+  reconsider f1=nat_hom F1 as Function of the carrier of F2,the carrier of F2
+  ./.F1;
+A2: the carrier of F2=carr(F2) & the carrier of H= carr(H);
   dom f1=the carrier of F2 by FUNCT_2:def 1;
   then
-A4: dom f=(the carrier of F2) /\ (the carrier of H) by A1,RELAT_1:90
-    .=carr(F2/\ H) by A2,A3,GROUP_2:98
+A3: dom f=(the carrier of F2) /\ (the carrier of H) by A1,RELAT_1:90
+    .=carr(F2/\ H) by A2,GROUP_2:98
     .= the carrier of (H /\ F2);
-  rng f c=the carrier of F2./.F1
-  proof
-    rng ((nat_hom F1)|(the carrier of H)) c=rng (nat_hom F1) by RELAT_1:99;
-    hence thesis by A1;
-  end;
-  then reconsider f as Function of
-  the carrier of H/\F2,the carrier of F2./.F1 by A4,FUNCT_2:4;
+  rng ((nat_hom F1)|(the carrier of H)) c=rng (nat_hom F1) by RELAT_1:99;
+  then reconsider
+  f as Function of the carrier of H/\F2,the carrier of F2./.F1 by
+  A1,A3,FUNCT_2:4;
   for a,b being Element of H /\F2 holds f.(a * b) = f.a * f.b
   proof
     let a,b be Element of H /\F2;
-A5: the carrier of H /\F2=carr(H) /\ carr(F2) by GROUP_2:def 10;
+A4: the carrier of H /\F2=carr(H) /\ carr(F2) by GROUP_2:def 10;
+    then reconsider a'=a, b'=b as Element of F2 by XBOOLE_0:def 4;
+    b in carr(H) by A4,XBOOLE_0:def 4;
     then
-A6: a in carr(H) & a in carr(F2) & b in carr(H) & b in carr(F2)&
-    a*b in carr(H) & a*b in carr(F2) by XBOOLE_0:def 4;
-    reconsider a'=a, b'=b as Element of F2 by A5,XBOOLE_0:def 4;
+A5: ((nat_hom F1)|(the carrier of H)).b=(nat_hom F1).b by
+    FUNCT_1:72;
+    a*b in carr(H) by A4,XBOOLE_0:def 4;
+    then
+A6: ((nat_hom F1)|(the carrier of H)).(a*b)=(nat_hom F1).(a*b) by
+    FUNCT_1:72;
     H /\ F2 is Subgroup of F2 by GROUP_2:106;
     then
 A7: a*b=a' *b' by GROUP_2:52;
-    ((nat_hom F1)|(the carrier of H)).a=(nat_hom F1).a &
-    ((nat_hom F1)|(the carrier of H)).b=(nat_hom F1).b &
-    ((nat_hom F1)|(the carrier of H)).(a*b)=(nat_hom F1).(a*b)
-    by A6,FUNCT_1:72;
-    hence thesis by A1,A7,GROUP_6:def 7;
+    a in carr(H) by A4,XBOOLE_0:def 4;
+    then ((nat_hom F1)|(the carrier of H)).a=(nat_hom F1).a by
+    FUNCT_1:72;
+    hence thesis by A1,A7,A5,A6,GROUP_6:def 7;
   end;
   then reconsider f as Homomorphism of H/\F2,F2./.F1 by GROUP_6:def 7;
-A8: (the carrier of H) /\ (the carrier of F2)
-  =carr(H/\ F2) by A2,A3,GROUP_2:98
+A8: (the carrier of H) /\ (the carrier of F2) =carr(H/\ F2) by A2,GROUP_2:
+  98
     .= the carrier of (H /\ F2);
 A9: Ker f=H /\ F1
   proof
@@ -183,40 +178,42 @@ A10:    x in L;
         then x in carr(Ker f) by STRUCT_0:def 5;
         then reconsider a=x as Element of H/\F2;
 A11:    the carrier of H /\F2=carr(H) /\ carr(F2) by GROUP_2:def 10;
+        then reconsider a'=a as Element of F2 by XBOOLE_0:def 4;
+A12:    a in carr(H) by A11,XBOOLE_0:def 4;
         then
-A12:    a in carr(H) & a in carr(F2) by XBOOLE_0:def 4;
+A13:    a in H by STRUCT_0:def 5;
+        ((nat_hom F1)|(the carrier of H)).a=(nat_hom F1).a by A12,FUNCT_1
+        :72;
         then
-A13:    a in dom (nat_hom F1) & a in H by FUNCT_2:def 1,STRUCT_0:def 5;
-A14:    ((nat_hom F1)|(the carrier of H)).a=(nat_hom F1).a by A12,FUNCT_1:72;
-        reconsider a'=a as Element of F2 by A11,XBOOLE_0:def 4;
-A15:    f.a =1_(F2./.F1) by A10,GROUP_6:50
+A14:    f.a= a' *F1 by A1,GROUP_6:def 9;
+        f.a =1_(F2./.F1) by A10,GROUP_6:50
           .=carr F1 by GROUP_6:29;
-        f.a= a' *F1 by A1,A14,GROUP_6:def 9;
-        then a' in F1 by A15,GROUP_2:136;
+        then a' in F1 by A14,GROUP_2:136;
         hence thesis by A13,GROUP_2:99;
       end;
       thus x in H /\ F1 implies x in L
       proof
-        assume x in H /\ F1;
+        reconsider F1'=F1 as strict Subgroup of G;
+A15:    (the carrier of H) /\ (the carrier of F1) =carr(H) /\ carr(F1')
+          .= the carrier of (H /\ F1) by GROUP_2:def 10;
+        assume
+        x in H /\ F1;
         then
 A16:    x in carr(H /\F1) by STRUCT_0:def 5;
-A17:    the carrier of F1 c= the carrier of F2 by GROUP_2:def 5;
-        reconsider F1'=F1 as strict Subgroup of G;
-A18:    (the carrier of H) /\ (the carrier of F1) =carr(H) /\ carr(F1')
-          .= the carrier of (H /\ F1) by GROUP_2:def 10;
-        then
-A19:    x in the carrier of F1 by A16,XBOOLE_0:def 4;
-        the carrier of (H /\ F1) c= the carrier of (H /\ F2) by A8,A17,A18,
-XBOOLE_1:26;
+        the carrier of F1 c= the carrier of F2 by GROUP_2:def 5;
+        then the carrier of (H /\ F1) c= the carrier of (H /\ F2) by A8,
+        A15,XBOOLE_1:26;
         then reconsider a=x as Element of H/\F2 by A16;
-A20:    a in F1 by A19,STRUCT_0:def 5;
-A21:    the carrier of H /\F2=carr(H) /\ carr(F2) by GROUP_2:def 10;
-        then a in carr(H) & a in carr(F2) by XBOOLE_0:def 4;
+        x in the carrier of F1 by A16,A15,XBOOLE_0:def 4;
         then
-A22:    ((nat_hom F1)|(the carrier of H)).a=(nat_hom F1).a by FUNCT_1:72;
-        reconsider a'=a as Element of F2 by A21,XBOOLE_0:def 4;
-        f.a= a' *F1 by A1,A22,GROUP_6:def 9
-          .=carr F1 by A20,GROUP_2:136
+A17:    a in F1 by STRUCT_0:def 5;
+A18:    the carrier of H /\F2=carr(H) /\ carr(F2) by GROUP_2:def 10;
+        then reconsider a'=a as Element of F2 by XBOOLE_0:def 4;
+        a in carr(H) by A18,XBOOLE_0:def 4;
+        then ((nat_hom F1)|(the carrier of H)).a=(nat_hom F1).a by
+        FUNCT_1:72;
+        then f.a= a' *F1 by A1,GROUP_6:def 9
+          .=carr F1 by A17,GROUP_2:136
           .=1_(F2./.F1) by GROUP_6:29;
         hence thesis by GROUP_6:50;
       end;
@@ -229,11 +226,10 @@ A22:    ((nat_hom F1)|(the carrier of H)).a=(nat_hom F1).a by FUNCT_1:72;
 end;
 
 theorem Th4:
-  for G being strict Group for H,F2 being strict Subgroup of G
-  for F1 being strict normal Subgroup of F2 holds
-  for G2 being strict Subgroup of G st G2=F2/\H
-  for G1 being normal Subgroup of G2 st G1=F1/\H
-  ex G3 being Subgroup of F2./.F1 st G2./.G1, G3 are_isomorphic
+  for G being strict Group for H,F2 being strict Subgroup of G for
+  F1 being strict normal Subgroup of F2 holds for G2 being strict Subgroup of G
+st G2=F2/\H for G1 being normal Subgroup of G2 st G1=F1/\H ex G3 being Subgroup
+  of F2./.F1 st G2./.G1, G3 are_isomorphic
 proof
   let G be strict Group;
   let H,F2 be strict Subgroup of G;
@@ -241,41 +237,41 @@ proof
   reconsider G2=F2 /\ H as strict Subgroup of G;
   consider f being Function such that
 A1: f=(nat_hom F1)|(the carrier of H);
-  reconsider f1=nat_hom F1 as Function of
-  the carrier of F2,the carrier of F2./.F1;
-A2: the carrier of F2=carr(F2);
-A3: the carrier of H= carr(H);
+  reconsider f1=nat_hom F1 as Function of the carrier of F2,the carrier of F2
+  ./.F1;
+A2: the carrier of F2=carr(F2) & the carrier of H= carr(H);
   dom f1=the carrier of F2 by FUNCT_2:def 1;
   then
-A4: dom f=(the carrier of F2) /\ (the carrier of H) by A1,RELAT_1:90
-    .=the carrier of (F2 /\ H) by A2,A3,GROUP_2:def 10;
-  rng f c=the carrier of F2./.F1
-  proof
-    rng ((nat_hom F1)|(the carrier of H)) c=rng (nat_hom F1) by RELAT_1:99;
-    hence thesis by A1;
-  end;
-  then reconsider f as Function of
-  the carrier of F2 /\ H,the carrier of F2./.F1 by A4,FUNCT_2:4;
+A3: dom f=(the carrier of F2) /\ (the carrier of H) by A1,RELAT_1:90
+    .=the carrier of (F2 /\ H) by A2,GROUP_2:def 10;
+  rng ((nat_hom F1)|(the carrier of H)) c=rng (nat_hom F1) by RELAT_1:99;
+  then reconsider
+  f as Function of the carrier of F2 /\ H,the carrier of F2./.F1 by
+  A1,A3,FUNCT_2:4;
   for a,b being Element of F2 /\ H holds f.(a * b) = f.a * f.b
   proof
     let a,b be Element of F2 /\ H;
-A5: the carrier of F2 /\ H=carr(H) /\ carr(F2) by GROUP_2:def 10;
+A4: the carrier of F2 /\ H=carr(H) /\ carr(F2) by GROUP_2:def 10;
+    then reconsider a'=a, b'=b as Element of F2 by XBOOLE_0:def 4;
+    b in carr(H) by A4,XBOOLE_0:def 4;
     then
-A6: a in carr(H) & a in carr(F2) & b in carr(H) & b in carr(F2)&
-    a*b in carr(H) & a*b in carr(F2) by XBOOLE_0:def 4;
-    reconsider a'=a, b'=b as Element of F2 by A5,XBOOLE_0:def 4;
+A5: ((nat_hom F1)|(the carrier of H)).b=(nat_hom F1).b by
+    FUNCT_1:72;
+    a*b in carr(H) by A4,XBOOLE_0:def 4;
+    then
+A6: ((nat_hom F1)|(the carrier of H)).(a*b)=(nat_hom F1).(a*b) by
+    FUNCT_1:72;
     F2 /\ H is Subgroup of F2 by GROUP_2:106;
     then
 A7: a*b=a' *b' by GROUP_2:52;
-    ((nat_hom F1)|(the carrier of H)).a=(nat_hom F1).a &
-    ((nat_hom F1)|(the carrier of H)).b=(nat_hom F1).b &
-    ((nat_hom F1)|(the carrier of H)).(a*b)=(nat_hom F1).(a*b)
-    by A6,FUNCT_1:72;
-    hence thesis by A1,A7,GROUP_6:def 7;
+    a in carr(H) by A4,XBOOLE_0:def 4;
+    then ((nat_hom F1)|(the carrier of H)).a=(nat_hom F1).a by
+    FUNCT_1:72;
+    hence thesis by A1,A7,A5,A6,GROUP_6:def 7;
   end;
   then reconsider f as Homomorphism of F2 /\ H,F2./.F1 by GROUP_6:def 7;
-A8: (the carrier of H) /\ (the carrier of F2)
-  =carr(F2 /\ H) by A2,A3,GROUP_2:98
+A8: (the carrier of H) /\ (the carrier of F2) =carr(F2 /\ H) by A2,GROUP_2:
+  98
     .= the carrier of (F2 /\ H);
 A9: Ker f=F1 /\ H
   proof
@@ -290,40 +286,42 @@ A10:    x in L;
         then x in carr(Ker f) by STRUCT_0:def 5;
         then reconsider a=x as Element of F2 /\ H;
 A11:    the carrier of F2 /\ H=carr(H) /\ carr(F2) by GROUP_2:def 10;
+        then reconsider a'=a as Element of F2 by XBOOLE_0:def 4;
+A12:    a in carr(H) by A11,XBOOLE_0:def 4;
         then
-A12:    a in carr(H) & a in carr(F2) by XBOOLE_0:def 4;
+A13:    a in H by STRUCT_0:def 5;
+        ((nat_hom F1)|(the carrier of H)).a=(nat_hom F1).a by A12,FUNCT_1
+        :72;
         then
-A13:    a in dom (nat_hom F1) & a in H by FUNCT_2:def 1,STRUCT_0:def 5;
-A14:    ((nat_hom F1)|(the carrier of H)).a=(nat_hom F1).a by A12,FUNCT_1:72;
-        reconsider a'=a as Element of F2 by A11,XBOOLE_0:def 4;
-A15:    f.a =1_(F2./.F1) by A10,GROUP_6:50
+A14:    f.a= a' *F1 by A1,GROUP_6:def 9;
+        f.a =1_(F2./.F1) by A10,GROUP_6:50
           .=carr F1 by GROUP_6:29;
-        f.a= a' *F1 by A1,A14,GROUP_6:def 9;
-        then a' in F1 by A15,GROUP_2:136;
+        then a' in F1 by A14,GROUP_2:136;
         hence thesis by A13,GROUP_2:99;
       end;
       thus x in F1 /\ H implies x in L
       proof
-        assume x in F1 /\ H;
+        reconsider F1'=F1 as strict Subgroup of G;
+A15:    (the carrier of H) /\ (the carrier of F1) =carr(H) /\ carr(F1')
+          .= the carrier of (F1 /\ H) by GROUP_2:def 10;
+        assume
+        x in F1 /\ H;
         then
 A16:    x in carr(F1 /\ H) by STRUCT_0:def 5;
-A17:    the carrier of F1 c= the carrier of F2 by GROUP_2:def 5;
-        reconsider F1'=F1 as strict Subgroup of G;
-A18:    (the carrier of H) /\ (the carrier of F1) =carr(H) /\ carr(F1')
-          .= the carrier of (F1 /\ H) by GROUP_2:def 10;
-        then
-A19:    x in the carrier of F1 by A16,XBOOLE_0:def 4;
-        the carrier of (F1 /\ H) c= the carrier of (F2 /\ H) by A8,A17,A18,
-XBOOLE_1:26;
+        the carrier of F1 c= the carrier of F2 by GROUP_2:def 5;
+        then the carrier of (F1 /\ H) c= the carrier of (F2 /\ H) by A8,
+        A15,XBOOLE_1:26;
         then reconsider a=x as Element of F2 /\ H by A16;
-A20:    a in F1 by A19,STRUCT_0:def 5;
-A21:    the carrier of F2 /\ H=carr(H) /\ carr(F2) by GROUP_2:def 10;
-        then a in carr(H) & a in carr(F2) by XBOOLE_0:def 4;
+        x in the carrier of F1 by A16,A15,XBOOLE_0:def 4;
         then
-A22:    ((nat_hom F1)|(the carrier of H)).a=(nat_hom F1).a by FUNCT_1:72;
-        reconsider a'=a as Element of F2 by A21,XBOOLE_0:def 4;
-        f.a= a' *F1 by A1,A22,GROUP_6:def 9
-          .=carr F1 by A20,GROUP_2:136
+A17:    a in F1 by STRUCT_0:def 5;
+A18:    the carrier of F2 /\ H=carr(H) /\ carr(F2) by GROUP_2:def 10;
+        then reconsider a'=a as Element of F2 by XBOOLE_0:def 4;
+        a in carr(H) by A18,XBOOLE_0:def 4;
+        then ((nat_hom F1)|(the carrier of H)).a=(nat_hom F1).a by
+        FUNCT_1:72;
+        then f.a= a' *F1 by A1,GROUP_6:def 9
+          .=carr F1 by A17,GROUP_2:136
           .=1_(F2./.F1) by GROUP_6:29;
         hence thesis by GROUP_6:50;
       end;
@@ -336,24 +334,26 @@ A22:    ((nat_hom F1)|(the carrier of H)).a=(nat_hom F1).a by FUNCT_1:72;
 end;
 
 theorem
-  for G being solvable strict Group for H being strict Subgroup of G holds
-  H is solvable
+  for G being solvable strict Group for H being strict Subgroup of G
+  holds H is solvable
 proof
   let G be solvable strict Group;
   let H be strict Subgroup of G;
   consider F being FinSequence of Subgroups G such that
-A1: len F>0 & F.1=(Omega).G & F.(len F)=(1).G &
-  for i st i in dom F & i+1 in dom F
-  for G1,G2 being strict Subgroup of G st G1=F.i & G2=F.(i+1) holds
-  G2 is strict normal Subgroup of G1 &
-  for N being normal Subgroup of G1 st N=G2 holds G1./.N is commutative
-  by Def1;
-  defpred P[set,set] means ex I being strict Subgroup of G st I=F.$1 &
-  $2=I /\ H;
-A2: for k be Nat st k in Seg len F ex x being Element of Subgroups H st P[k,x]
+A1: len F>0 and
+A2: F.1=(Omega).G and
+A3: F.(len F)=(1).G and
+A4: for i st i in dom F & i+1 in dom F for G1,G2 being strict Subgroup
+  of G st G1=F.i & G2=F.(i+1) holds G2 is strict normal Subgroup of G1 & for N
+  being normal Subgroup of G1 st N=G2 holds G1./.N is commutative by Def1;
+  defpred P[set,set] means ex I being strict Subgroup of G st I=F.$1 & $2=I /\
+  H;
+A5: for k be Nat st k in Seg len F ex x being Element of Subgroups H st P[k,
+  x]
   proof
     let k be Nat;
-    assume k in Seg len F;
+    assume
+    k in Seg len F;
     then k in dom F by FINSEQ_1:def 3;
     then F.k in Subgroups G by FINSEQ_2:13;
     then reconsider I=F.k as strict Subgroup of G by GROUP_3:def 1;
@@ -364,100 +364,93 @@ A2: for k be Nat st k in Seg len F ex x being Element of Subgroups H st P[k,x]
     thus thesis;
   end;
   consider R being FinSequence of Subgroups H such that
-A3: dom R=Seg len F &
-  for i be Nat st i in Seg len F holds P[i,R.i] from FINSEQ_1:sch 5(A2);
-A4: len R=len F by A3,FINSEQ_1:def 3;
-A5: len R >0 by A1,A3,FINSEQ_1:def 3;
-A6: R.1=(Omega).H
-  proof
-    1<=len R by A5,NAT_1:14;
-    then 1 in Seg len F by A4,FINSEQ_1:3;
-    then consider I being strict Subgroup of G such that
-A7: I=F.1 & R.1=I /\ H by A3;
-    thus thesis by A1,A7,GROUP_2:104;
-  end;
-A8: R.(len R)= (1).H
-  proof
-    len R in Seg len F by A1,A4,FINSEQ_1:5;
-    then consider I being strict Subgroup of G such that
-A9: I=F.(len R) & R.(len R)=I /\ H by A3;
-    thus R.(len R)=(1).G by A1,A4,A9,GROUP_2:103
-      .=(1).H by GROUP_2:75;
-  end;
-A10: for i st i in dom R & i+1 in dom R
-  for H1,H2 being strict Subgroup of H st H1=R.i & H2=R.(i+1) holds
-  H2 is strict normal Subgroup of H1 &
-  for N being normal Subgroup of H1 st N=H2 holds H1./.N is commutative
+A6: dom R=Seg len F & for i be Nat st i in Seg len F holds P[i,R.i] from
+  FINSEQ_1:sch 5(A5);
+A7: for i st i in dom R & i+1 in dom R for H1,H2 being strict Subgroup of H
+  st H1=R.i & H2=R.(i+1) holds H2 is strict normal Subgroup of H1 & for N being
+  normal Subgroup of H1 st N=H2 holds H1./.N is commutative
   proof
     let i;
-    assume
-A11: i in dom R & i+1 in dom R;
-    let H1,H2 be strict Subgroup of H;
-    assume
-A12: H1=R.i & H2=R.(i+1);
-    consider I being strict Subgroup of G such that
-A13: I=F.i & R.i=I /\ H by A3,A11;
+    assume that
+A8: i in dom R and
+A9: i+1 in dom R;
     consider J being strict Subgroup of G such that
-A14: J=F.(i+1) & R.(i+1)=J /\ H by A3,A11;
-A15: i in dom F & i+1 in dom F by A3,A11,FINSEQ_1:def 3;
-    then reconsider J1=J as strict normal Subgroup of I by A1,A13,A14;
-A16: H1=I /\ H & H2=J1/\H by A12,A13,A14;
-    for N being strict normal Subgroup of H1 st N=H2 holds
-    H1./.N is commutative
+A10: J=F.(i+1) and
+A11: R.(i+1)=J /\ H by A6,A9;
+    consider I being strict Subgroup of G such that
+A12: I=F.i and
+A13: R.i=I /\ H by A6,A8;
+    let H1,H2 be strict Subgroup of H;
+    assume that
+A14: H1=R.i and
+A15: H2=R.(i+1);
+A16: i in dom F & i+1 in dom F by A6,A8,A9,FINSEQ_1:def 3;
+    then reconsider J1=J as strict normal Subgroup of I by A4,A12,A10;
+A17: for N being strict normal Subgroup of H1 st N=H2 holds H1./.N is
+    commutative
     proof
       let N be strict normal Subgroup of H1;
-      assume N=H2;
+      assume
+      N=H2;
       then consider G3 being Subgroup of I./.J1 such that
-A17:  H1 ./. N, G3 are_isomorphic by A12,A13,A14,Th4;
+A18:  H1 ./. N, G3 are_isomorphic by A14,A15,A13,A11,Th4;
       consider h being Homomorphism of H1./. N,G3 such that
-A18:  h is bijective by A17,GROUP_6:def 15;
-A19:  h is onto & h is one-to-one by A18,FUNCT_2:def 4;
-      I ./.J1 is commutative by A1,A13,A14,A15;
-      then
-A20:  G3 is commutative;
-      H1./.N is commutative
-      proof
-        now
-          let a,b be Element of H1./.N;
-          consider a' being Element of G3 such that
-A21:      a'=h.a;
-          consider b' being Element of G3 such that
-A22:      b'=h.b;
-          the multF of G3 is commutative by A20,GROUP_3:2;
-          then
-A23:      a'*b'=b'*a' by BINOP_1:def 2;
-          thus (the multF of H1./.N).(a,b)=h".(h.(a*b)) by A19,FUNCT_2:32
-            .=h".(h.b*h.a) by A21,A22,A23,GROUP_6:def 7
-            .=h".(h.(b*a)) by GROUP_6:def 7
-            .=(the multF of H1./.N).(b,a) by A19,FUNCT_2:32;
-        end;
-        then the multF of (H1./.N) is commutative by BINOP_1:def 2;
-        hence thesis by GROUP_3:2;
+A19:  h is bijective by A18,GROUP_6:def 15;
+A20:  h is one-to-one by A19,FUNCT_2:def 4;
+A21:  I ./.J1 is commutative by A4,A12,A10,A16;
+      now
+        let a,b be Element of H1./.N;
+        consider a' being Element of G3 such that
+A22:    a'=h.a;
+        consider b' being Element of G3 such that
+A23:    b'=h.b;
+        the multF of G3 is commutative by A21,GROUP_3:2;
+        then
+A24:    a'*b'=b'*a' by BINOP_1:def 2;
+        thus (the multF of H1./.N).(a,b)=h".(h.(a*b)) by A20,FUNCT_2:32
+          .=h".(h.b*h.a) by A22,A23,A24,GROUP_6:def 7
+          .=h".(h.(b*a)) by GROUP_6:def 7
+          .=(the multF of H1./.N).(b,a) by A20,FUNCT_2:32;
       end;
-      hence thesis;
+      then the multF of (H1./.N) is commutative by BINOP_1:def 2;
+      hence thesis by GROUP_3:2;
     end;
-    hence thesis by A16,Th1;
+    H2=J1/\H by A15,A11;
+    hence thesis by A14,A13,A17,Th1;
+  end;
+A25: len R=len F by A6,FINSEQ_1:def 3;
+A26: len R >0 by A1,A6,FINSEQ_1:def 3;
+A27: R.1=(Omega).H
+  proof
+    1<=len R by A26,NAT_1:14;
+    then 1 in Seg len F by A25,FINSEQ_1:3;
+    then ex I being strict Subgroup of G st I=F.1 & R.1=I /\ H by A6;
+    hence thesis by A2,GROUP_2:104;
   end;
   take R;
-  thus thesis by A1,A3,A6,A8,A10,FINSEQ_1:def 3;
+  R.(len R)= (1).H
+  proof
+    ex I being strict Subgroup of G st I=F.(len R) & R.(len R )=I /\ H by
+    A1,A6,A25,FINSEQ_1:5;
+    hence R.(len R)=(1).G by A3,A25,GROUP_2:103
+      .=(1).H by GROUP_2:75;
+  end;
+  hence thesis by A1,A6,A27,A7,FINSEQ_1:def 3;
 end;
 
 theorem
   for G being strict Group st ex F being FinSequence of Subgroups G st
-  len F>0 & F.1=(Omega).G & F.(len F)=(1).G &
-  for i st i in dom F & i+1 in dom F
-  for G1,G2 being strict Subgroup of G st G1=F.i & G2=F.(i+1) holds
-  G2 is strict normal Subgroup of G1 &
-  for N being normal Subgroup of G1 st N=G2 holds G1./.N is cyclic Group
-  holds G is solvable
+len F>0 & F.1=(Omega).G & F.(len F)=(1).G & for i st i in dom F & i+1 in dom F
+for G1,G2 being strict Subgroup of G st G1=F.i & G2=F.(i+1) holds G2 is strict
+normal Subgroup of G1 & for N being normal Subgroup of G1 st N=G2 holds G1./.N
+  is cyclic Group holds G is solvable
 proof
   let G be strict Group;
   given F being FinSequence of Subgroups G such that
-A1: len F>0 & F.1=(Omega).G & F.(len F)=(1).G &
-  for i st i in dom F & i+1 in dom F
-  for G1,G2 being strict Subgroup of G st G1=F.i & G2=F.(i+1) holds
-  G2 is strict normal Subgroup of G1 & for N being normal Subgroup of G1
-  st N=G2 holds G1./.N is cyclic Group;
+A1: len F>0 & F.1=(Omega).G &( F.(len F)=(1).G & for i st i in dom F & i
+  +1 in dom F for G1,G2 being strict Subgroup of G st G1=F.i & G2=F.(i+1) holds
+G2 is strict normal Subgroup of G1 & for N being normal Subgroup of G1 st N=G2
+  holds G1./.N is cyclic Group );
   take F;
   thus thesis by A1;
 end;
@@ -470,36 +463,43 @@ proof
   then <*(Omega).G,(1).G*>is FinSequence of Subgroups G by FINSEQ_2:15;
   then consider F being FinSequence of Subgroups G such that
 A1: F=<*(Omega).G,(1).G*>;
-A2: len F=2 & F.1=(Omega).G & F.2=(1).G by A1,FINSEQ_1:61;
-  for i st i in dom F & i+1 in dom F
-  for G1,G2 being strict Subgroup of G st G1=F.i & G2=F.(i+1) holds
-  G2 is strict normal Subgroup of G1 &
-  for N being normal Subgroup of G1 st N=G2 holds G1./.N is commutative
+A2: F.1=(Omega).G by A1,FINSEQ_1:61;
+A3: len F=2 by A1,FINSEQ_1:61;
+A4: F.2=(1).G by A1,FINSEQ_1:61;
+  for i st i in dom F & i+1 in dom F for G1,G2 being strict Subgroup of G
+  st G1=F.i & G2=F.(i+1) holds G2 is strict normal Subgroup of G1 & for N being
+  normal Subgroup of G1 st N=G2 holds G1./.N is commutative
   proof
     let i;
-    assume
-A3: i in dom F & i+1 in dom F;
+    assume that
+A5: i in dom F and
+A6: i+1 in dom F;
     now
       let G1,G2 be strict Subgroup of G;
       assume
-A4:   G1=F.i & G2=F.(i+1);
-A5:   dom F={1,2} by A2,FINSEQ_1:4,def 3;
-A6:   i in {1,2} & i+1 in{1,2}by A2,A3,FINSEQ_1:4,def 3;
-A7:   i=1 or i=2 by A3,A5,TARSKI:def 2;
-      for N being normal Subgroup of G1 st N=G2 holds G1./.N is commutative
+A7:   G1=F.i & G2=F.(i+1);
+      dom F={1,2} by A3,FINSEQ_1:4,def 3;
+      then
+A8:   i=1 or i=2 by A5,TARSKI:def 2;
+A9:   i+1 in{1,2} by A3,A6,FINSEQ_1:4,def 3;
+      for N being normal Subgroup of G1 st N=G2 holds G1./.N is
+      commutative
       proof
         let N be normal Subgroup of G1;
-        assume N=G2;
-        then G1,G1./.N are_isomorphic by A2,A4,A6,A7,GROUP_6:82,TARSKI:def 2;
+        assume
+        N=G2;
+        then G1,G1./.N are_isomorphic by A2,A4,A7,A9,A8,GROUP_6:82 ,
+        TARSKI:def 2;
         hence thesis by GROUP_6:89;
       end;
-      hence G2 is strict normal Subgroup of G1 &
-      for N being normal Subgroup of G1 st
-      N=G2 holds G1./.N is commutative by A2,A4,A6,A7,TARSKI:def 2;
+      hence
+      G2 is strict normal Subgroup of G1 & for N being normal Subgroup of
+      G1 st N=G2 holds G1./.N is commutative by A1,A2,A7,A9,A8,FINSEQ_1:61 ,
+      TARSKI:def 2;
     end;
     hence thesis;
   end;
-  hence thesis by A2,Def1;
+  hence thesis by A3,A2,A4,Def1;
 end;
 
 definition
@@ -507,40 +507,35 @@ definition
   let g be Homomorphism of G,H;
   let A be Subgroup of G;
   func g|A -> Homomorphism of A,H equals
-
   g|(the carrier of A);
   coherence
   proof
 A1: the carrier of A c= the carrier of G by GROUP_2:def 5;
-    then reconsider f=g|(the carrier of A) as
-    Function of the carrier of A,the carrier of H by FUNCT_2:38;
-    f is Homomorphism of A,H
-    proof
-      now
-        let a,b be Element of A;
-A2:     a is Element of G & b is Element of G by A1,TARSKI:def 3;
-A3:     (the multF of G).(a,b)=a*b
-        proof
-          reconsider a'=a as Element of G by A1,TARSKI:def 3;
-          reconsider b'=b as Element of G by A1,TARSKI:def 3;
-          thus (the multF of G).(a,b)=a'* b'
-            .=a*b by GROUP_2:52;
-        end;
-A4:     f.a=g.a & f.b=g.b by FUNCT_1:72;
-        for a,b being Element of G holds
-        (the multF of H).(g.a, g.b)=g.((the multF of G).(a,b))
-        proof
-          let a,b be Element of G;
-          thus (the multF of H).(g.a, g.b)=g.a * g.b
-            .=g.(a*b) by GROUP_6:def 7
-            .=g.((the multF of G).(a,b));
-        end;
-        hence f.a * f.b = g.((the multF of G).(a,b))by A2,A4
-          .= f.(a * b) by A3,FUNCT_1:72;
+    then reconsider f=g|(the carrier of A) as Function of the carrier of A,the
+    carrier of H by FUNCT_2:38;
+    now
+A2:   for a,b being Element of G holds (the multF of H).(g.a, g.b)=g.((the
+      multF of G).(a,b))
+      proof
+        let a,b be Element of G;
+        thus (the multF of H).(g.a, g.b)=g.a * g.b
+          .=g.(a*b) by GROUP_6:def 7
+          .=g.((the multF of G).(a,b));
       end;
-      hence thesis by GROUP_6:def 7;
+      let a,b be Element of A;
+A3:   f.a=g.a & f.b=g.b by FUNCT_1:72;
+A4:   (the multF of G).(a,b)=a*b
+      proof
+        reconsider b'=b as Element of G by A1,TARSKI:def 3;
+        reconsider a'=a as Element of G by A1,TARSKI:def 3;
+        thus (the multF of G).(a,b)=a'* b'
+          .=a*b by GROUP_2:52;
+      end;
+      a is Element of G & b is Element of G by A1,TARSKI:def 3;
+      hence f.a * f.b = g.((the multF of G).(a,b))by A3,A2
+        .= f.(a * b) by A4,FUNCT_1:72;
     end;
-    hence thesis;
+    hence thesis by GROUP_6:def 7;
   end;
 end;
 
@@ -549,7 +544,6 @@ definition
   let g be Homomorphism of G,H;
   let A be Subgroup of G;
   func g.:A -> strict Subgroup of H equals
-
   Image (g| A);
   coherence;
 end;
@@ -557,9 +551,8 @@ end;
 canceled;
 
 theorem Th9:
-  for G,H being strict Group, g being Homomorphism of G,H
-  for A being strict Subgroup of G holds
-  the carrier of (g.: A)=g.:(the carrier of A)
+  for G,H being strict Group, g being Homomorphism of G,H for A
+  being strict Subgroup of G holds the carrier of (g.: A)=g.:(the carrier of A)
 proof
   let G,H be strict Group;
   let g be Homomorphism of G,H;
@@ -570,36 +563,34 @@ end;
 
 theorem Th10:
   for G,H being strict Group, h being Homomorphism of G,H holds
-  for A being strict Subgroup of G holds
-  Image(h|A) is strict Subgroup of Image h
+for A being strict Subgroup of G holds Image(h|A) is strict Subgroup of Image h
 proof
   let G,H be strict Group;
   let h be Homomorphism of G,H;
   let A be strict Subgroup of G;
-A1: the carrier of A c= the carrier of G by GROUP_2:def 5;
-A2: the carrier of Image (h|A)=rng (h|A) by GROUP_6:53
+A1: the carrier of A c= the carrier of G & h.:(the carrier of G) = the
+  carrier of Image h by GROUP_2:def 5,GROUP_6:def 11;
+  the carrier of Image (h|A)=rng (h|A) by GROUP_6:53
     .=h.:(the carrier of A) by RELAT_1:148;
-  h.:(the carrier of G) = the carrier of Image h by GROUP_6:def 11;
-  hence thesis by A1,A2,GROUP_2:66,RELAT_1:156;
+  hence thesis by A1,GROUP_2:66,RELAT_1:156;
 end;
 
 theorem
-  for G,H being strict Group, h being Homomorphism of G,H holds
-  for A being strict Subgroup of G holds h.:A is strict Subgroup of Image h
-  by Th10;
+  for G,H being strict Group, h being Homomorphism of G,H holds for A
+  being strict Subgroup of G holds h.:A is strict Subgroup of Image h by Th10;
 
 theorem Th12:
-  for G,H being strict Group, h being Homomorphism of G,H holds
-  h.:((1).G)=(1).H & h.:((Omega).G)=(Omega).(Image h)
+  for G,H being strict Group, h being Homomorphism of G,H holds h
+  .:((1).G)=(1).H & h.:((Omega).G)=(Omega).(Image h)
 proof
   let G,H be strict Group;
   let h be Homomorphism of G,H;
 A1: dom h=the carrier of G by FUNCT_2:def 1;
-A2: the carrier of (1).G={1_G} by GROUP_2:def 7;
-A3: the carrier of (1).H={1_H} by GROUP_2:def 7;
-  the carrier of h.:((1).G)=Im(h,1_G) by A2,Th9
+A2: the carrier of (1).H={1_H} by GROUP_2:def 7;
+  the carrier of (1).G={1_G} by GROUP_2:def 7;
+  then the carrier of h.:((1).G)=Im(h,1_G) by Th9
     .={h.(1_G)} by A1,FUNCT_1:117
-    .= the carrier of (1).H by A3,GROUP_6:40;
+    .= the carrier of (1).H by A2,GROUP_6:40;
   hence h.:((1).G)= (1).H by GROUP_2:68;
   the carrier of h.:((Omega).G)=h.:(the carrier of G) by Th9
     .=the carrier of (Omega).(Image h) by GROUP_6:def 11;
@@ -607,14 +598,15 @@ A3: the carrier of (1).H={1_H} by GROUP_2:def 7;
 end;
 
 theorem Th13:
-  for G,H being strict Group, h being Homomorphism of G,H
-  for A,B being strict Subgroup of G holds A is Subgroup of B implies
-  h.:A is Subgroup of h.:B
+  for G,H being strict Group, h being Homomorphism of G,H for A,B
+being strict Subgroup of G holds A is Subgroup of B implies h.:A is Subgroup of
+  h.:B
 proof
   let G,H be strict Group;
   let h be Homomorphism of G,H;
   let A,B be strict Subgroup of G;
-  assume A is Subgroup of B;
+  assume
+  A is Subgroup of B;
   then the carrier of A c= the carrier of B by GROUP_2:def 5;
   then
 A1: h.:(the carrier of A)c= h.:(the carrier of B ) by RELAT_1:156;
@@ -624,9 +616,9 @@ A1: h.:(the carrier of A)c= h.:(the carrier of B ) by RELAT_1:156;
 end;
 
 theorem Th14:
-  for G,H being strict Group, h being Homomorphism of G,H
-  for A being strict Subgroup of G for a being Element of G holds
-  h.a* h.:A=h.:(a*A) & h.:A * h.a=h.:(A*a)
+  for G,H being strict Group, h being Homomorphism of G,H for A
+being strict Subgroup of G for a being Element of G holds h.a* h.:A=h.:(a*A) &
+  h.:A * h.a=h.:(A*a)
 proof
   let G,H be strict Group;
   let h be Homomorphism of G,H;
@@ -634,123 +626,148 @@ proof
   let a be Element of G;
   now
     let x be set;
-    assume x in h.a *h.:A;
-    then consider b1 being Element of H such that
-A1: x = h.a * b1 & b1 in h.:A by GROUP_2:125;
-    consider b being Element of A such that
-A2: b1=(h|A).b by A1,GROUP_6:54;
-A3: b in A by STRUCT_0:def 5;
-    reconsider b as Element of G by GROUP_2:51;
-    b1=h.b by A2,FUNCT_1:72;
+    assume
+    x in h.:(a *A);
+    then consider y being set such that
+A1: y in the carrier of G and
+A2: y in a*A and
+A3: x = h.y by FUNCT_2:115;
+    reconsider y as Element of G by A1;
+    consider b being Element of G such that
+A4: y=a* b and
+A5: b in A by A2,GROUP_2:125;
+    b in the carrier of A by A5,STRUCT_0:def 5;
+    then h.b in h.:(the carrier of A) by FUNCT_2:43;
+    then h.b in the carrier of h.: A by Th9;
     then
-A4: x=h.(a*b) by A1,GROUP_6:def 7;
-    a* b in a*A by A3,GROUP_2:125;
-    hence x in h.:(a*A) by A4,FUNCT_2:43;
+A6: h.b in h.:A by STRUCT_0:def 5;
+    x=h.a *h.b by A3,A4,GROUP_6:def 7;
+    hence x in h.a * h.:A by A6,GROUP_2:125;
   end;
   then
-A5: h.a *h.:A c= h.:(a * A) by TARSKI:def 3;
+A7: h.:(a * A) c= h.a *h.:A by TARSKI:def 3;
   now
     let x be set;
-    assume x in h.:(a *A);
-    then consider y being set such that
-A6: y in the carrier of G & y in a*A & x = h.y by FUNCT_2:115;
-    reconsider y as Element of G by A6;
-    consider b being Element of G such that
-A7: y=a* b & b in A by A6,GROUP_2:125;
-A8: b in the carrier of A by A7,STRUCT_0:def 5;
-A9: x=h.a *h.b by A6,A7,GROUP_6:def 7;
-    h.b in h.:(the carrier of A) by A8,FUNCT_2:43;
-    then h.b in the carrier of h.: A by Th9;
-    then h.b in h.:A by STRUCT_0:def 5;
-    hence x in h.a * h.:A by A9,GROUP_2:125;
-  end;
-  then h.:(a * A) c= h.a *h.:A by TARSKI:def 3;
-  hence h.a *h.:A = h.:(a * A) by A5,XBOOLE_0:def 10;
-  now
-    let x be set;
-    assume x in h.:A*h.a;
+    assume
+    x in h.a *h.:A;
     then consider b1 being Element of H such that
-A10: x = b1*h.a & b1 in h.:A by GROUP_2:126;
+A8: x = h.a * b1 and
+A9: b1 in h.:A by GROUP_2:125;
     consider b being Element of A such that
-A11: b1=(h|A).b by A10,GROUP_6:54;
-A12: b in A by STRUCT_0:def 5;
+A10: b1=(h|A).b by A9,GROUP_6:54;
+A11: b in A by STRUCT_0:def 5;
     reconsider b as Element of G by GROUP_2:51;
-    b1=h.b by A11,FUNCT_1:72;
+    b1=h.b by A10,FUNCT_1:72;
     then
-A13: x=h.(b*a) by A10,GROUP_6:def 7;
-    b* a in A*a by A12,GROUP_2:126;
-    hence x in h.:(A*a) by A13,FUNCT_2:43;
+A12: x=h.(a*b) by A8,GROUP_6:def 7;
+    a* b in a*A by A11,GROUP_2:125;
+    hence x in h.:(a*A) by A12,FUNCT_2:43;
   end;
-  then
-A14: h.:A*h.a c= h.:(A* a) by TARSKI:def 3;
+  then h.a *h.:A c= h.:(a * A) by TARSKI:def 3;
+  hence h.a *h.:A = h.:(a * A) by A7,XBOOLE_0:def 10;
   now
     let x be set;
-    assume x in h.:(A* a);
+    assume
+    x in h.:(A* a);
     then consider y being set such that
-A15: y in the carrier of G & y in A* a & x = h.y by FUNCT_2:115;
-    reconsider y as Element of G by A15;
+A13: y in the carrier of G and
+A14: y in A* a and
+A15: x = h.y by FUNCT_2:115;
+    reconsider y as Element of G by A13;
     consider b being Element of G such that
-A16: y=b* a & b in A by A15,GROUP_2:126;
-A17: b in the carrier of A by A16,STRUCT_0:def 5;
-A18: x=h.b *h.a by A15,A16,GROUP_6:def 7;
-    h.b in h.:(the carrier of A) by A17,FUNCT_2:43;
+A16: y=b* a and
+A17: b in A by A14,GROUP_2:126;
+    b in the carrier of A by A17,STRUCT_0:def 5;
+    then h.b in h.:(the carrier of A) by FUNCT_2:43;
     then h.b in the carrier of h.: A by Th9;
-    then h.b in h.:A by STRUCT_0:def 5;
+    then
+A18: h.b in h.:A by STRUCT_0:def 5;
+    x=h.b *h.a by A15,A16,GROUP_6:def 7;
     hence x in h.:A*h.a by A18,GROUP_2:126;
   end;
-  then h.:(A*a) c= h.:A*h.a by TARSKI:def 3;
-  hence thesis by A14,XBOOLE_0:def 10;
+  then
+A19: h.:(A*a) c= h.:A*h.a by TARSKI:def 3;
+  now
+    let x be set;
+    assume
+    x in h.:A*h.a;
+    then consider b1 being Element of H such that
+A20: x = b1*h.a and
+A21: b1 in h.:A by GROUP_2:126;
+    consider b being Element of A such that
+A22: b1=(h|A).b by A21,GROUP_6:54;
+A23: b in A by STRUCT_0:def 5;
+    reconsider b as Element of G by GROUP_2:51;
+    b1=h.b by A22,FUNCT_1:72;
+    then
+A24: x=h.(b*a) by A20,GROUP_6:def 7;
+    b* a in A*a by A23,GROUP_2:126;
+    hence x in h.:(A*a) by A24,FUNCT_2:43;
+  end;
+  then h.:A*h.a c= h.:(A* a) by TARSKI:def 3;
+  hence thesis by A19,XBOOLE_0:def 10;
 end;
 
 theorem Th15:
-  for G,H being strict Group, h being Homomorphism of G,H
-  for A,B being Subset of G holds h.:A* h.:B=h.:(A*B)
+  for G,H being strict Group, h being Homomorphism of G,H for A,B
+  being Subset of G holds h.:A* h.:B=h.:(A*B)
 proof
   let G,H be strict Group, h be Homomorphism of G,H;
   let A,B be Subset of G;
   now
     let z be set;
-    assume z in h.:(A)*h.:(B);
+    assume
+    z in h.:(A)*h.:(B);
     then consider z1,z2 being Element of H such that
-A1: z=z1 *z2 & z1 in h.:(A) & z2 in h.:(B);
-    consider z3 being set such that
-A2: z3 in the carrier of G & z3 in A & z1=h.z3 by A1,FUNCT_2:115;
+A1: z=z1 *z2 and
+A2: z1 in h.:(A) and
+A3: z2 in h.:(B);
     consider z4 being set such that
-A3: z4 in the carrier of G & z4 in B & z2=h.z4 by A1,FUNCT_2:115;
-    reconsider z3 as Element of G by A2;
-    reconsider z4 as Element of G by A3;
-A4: z=h.(z3* z4) by A1,A2,A3,GROUP_6:def 7;
-    z3 * z4 in (A) *(B) by A2,A3;
-    hence z in h.:((A) *(B)) by A4,FUNCT_2:43;
+A4: z4 in the carrier of G and
+A5: z4 in B and
+A6: z2=h.z4 by A3,FUNCT_2:115;
+    reconsider z4 as Element of G by A4;
+    consider z3 being set such that
+A7: z3 in the carrier of G and
+A8: z3 in A and
+A9: z1=h.z3 by A2,FUNCT_2:115;
+    reconsider z3 as Element of G by A7;
+A10: z3 * z4 in (A) *(B) by A8,A5;
+    z=h.(z3* z4) by A1,A9,A6,GROUP_6:def 7;
+    hence z in h.:((A) *(B)) by A10,FUNCT_2:43;
   end;
   then
-A5: h.:(A)*h.:(B)c= h.:((A) *(B)) by TARSKI:def 3;
+A11: h.:(A)*h.:(B)c= h.:((A) *(B)) by TARSKI:def 3;
   now
     let z be set;
-    assume z in h.:((A) *(B));
+    assume
+    z in h.:((A) *(B));
     then consider x being set such that
-A6: x in the carrier of G & x in (A)*(B) & z=h.x by FUNCT_2:115;
-    reconsider x as Element of G by A6;
+A12: x in the carrier of G and
+A13: x in (A)*(B) and
+A14: z=h.x by FUNCT_2:115;
+    reconsider x as Element of G by A12;
     consider z1,z2 being Element of G such that
-A7: x=z1 *z2 & z1 in(A)& z2 in (B) by A6;
-A8: z=h.z1 * h.z2 by A6,A7,GROUP_6:def 7;
-    h.z1 in h.:(A)& h.z2 in h.:(B) by A7,FUNCT_2:43;
-    hence z in h.:(A)* h.:(B) by A8;
+A15: x=z1 *z2 and
+A16: z1 in(A) & z2 in (B) by A13;
+A17: h.z1 in h.:(A) & h.z2 in h.:(B) by A16,FUNCT_2:43;
+    z=h.z1 * h.z2 by A14,A15,GROUP_6:def 7;
+    hence z in h.:(A)* h.:(B) by A17;
   end;
   then h.:((A) *(B)) c=h.:(A)*h.:(B) by TARSKI:def 3;
-  hence thesis by A5,XBOOLE_0:def 10;
+  hence thesis by A11,XBOOLE_0:def 10;
 end;
 
 theorem Th16:
-  for G,H being strict Group, h being Homomorphism of G,H
-  for A,B being strict Subgroup of G holds
-  A is strict normal Subgroup of B implies
-  h.:A is strict normal Subgroup of h.:B
+  for G,H being strict Group, h being Homomorphism of G,H for A,B
+being strict Subgroup of G holds A is strict normal Subgroup of B implies h.:A
+  is strict normal Subgroup of h.:B
 proof
   let G,H be strict Group;
   let h be Homomorphism of G,H;
   let A,B be strict Subgroup of G;
-  assume A is strict normal Subgroup of B;
+  assume
+  A is strict normal Subgroup of B;
   then reconsider A1=A as strict normal Subgroup of B;
   reconsider C=h.:A1 as strict Subgroup of h.:B by Th13;
   for b2 being Element of h.:B holds b2* C c= C * b2
@@ -758,32 +775,33 @@ proof
     let b2 be Element of h.:B;
 A1: b2 in h.:B by STRUCT_0:def 5;
     now
+      consider b1 being Element of B such that
+A2:   b2=(h|B).b1 by A1,GROUP_6:54;
+      reconsider b1 as Element of G by GROUP_2:51;
+A3:   b2=h.b1 by A2,FUNCT_1:72;
+      reconsider b=b1 as Element of B;
       let x be set;
       assume
-A2:   x in b2* C;
-      consider b1 being Element of B such that
-A3:   b2=(h|B).b1 by A1,GROUP_6:54;
-      reconsider b1 as Element of G by GROUP_2:51;
-A4:   b2=h.b1 by A3,FUNCT_1:72;
-      consider g being Element of h.:B such that
-A5:   x = b2 * g & g in C by A2,GROUP_2:125;
+      x in b2* C;
+      then consider g being Element of h.:B such that
+A4:   x = b2 * g and
+A5:   g in C by GROUP_2:125;
       consider g1 being Element of A1 such that
 A6:   g=(h|A1).g1 by A5,GROUP_6:54;
       reconsider g1 as Element of G by GROUP_2:51;
-A7:   g1 in A1 by STRUCT_0:def 5;
       g=h.g1 by A6,FUNCT_1:72;
       then
-A8:   x =h.b1 * h.g1 by A4,A5,GROUP_2:52
+A7:   x =h.b1 * h.g1 by A3,A4,GROUP_2:52
         .=h.(b1 *g1) by GROUP_6:def 7;
-A9:   b1 * g1 in b1 * A1 by A7,GROUP_2:125;
-      reconsider b=b1 as Element of B;
+      g1 in A1 by STRUCT_0:def 5;
+      then
+A8:   b1 * g1 in b1 * A1 by GROUP_2:125;
+A9:   h.:(A1 * b1) = h.:A1 * h.b1 by Th14;
       b1 * A1=b * A1 by GROUP_6:2
         .=A1 * b by GROUP_3:140
         .=A1 * b1 by GROUP_6:2;
-      then
-A10:  x in h.:(A1 *b1) by A8,A9,FUNCT_2:43;
-      h.:(A1 * b1) = h.:A1 * h.b1 by Th14;
-      hence x in C* b2 by A4,A10,GROUP_6:2;
+      then x in h.:(A1 *b1) by A7,A8,FUNCT_2:43;
+      hence x in C* b2 by A3,A9,GROUP_6:2;
     end;
     hence thesis by TARSKI:def 3;
   end;
@@ -791,265 +809,291 @@ A10:  x in h.:(A1 *b1) by A8,A9,FUNCT_2:43;
 end;
 
 theorem
-  for G,H being strict Group, h being Homomorphism of G,H holds
-  G is solvable Group implies Image h is solvable
+  for G,H being strict Group, h being Homomorphism of G,H holds G is
+  solvable Group implies Image h is solvable
 proof
   let G,H be strict Group;
   let h be Homomorphism of G,H;
-  assume G is solvable Group;
+  assume
+  G is solvable Group;
   then consider F being FinSequence of Subgroups G such that
-A1: len F>0 & F.1=(Omega).G & F.(len F)=(1).G &
-  for i st i in dom F & i+1 in dom F
-  for G1,G2 being strict Subgroup of G st G1=F.i & G2=F.(i+1) holds
-  G2 is strict normal Subgroup of G1 &
-  for N being normal Subgroup of G1 st N=G2 holds G1./.N is commutative
-  by Def1;
-  defpred P[set,set] means
-  ex J being strict Subgroup of G st J= F.$1 & $2 =h.:(J);
-A2: for k be Nat st k in Seg len F
-  ex x being Element of Subgroups Image h st P[k,x]
+A1: len F>0 and
+A2: F.1=(Omega).G and
+A3: F.(len F)=(1).G and
+A4: for i st i in dom F & i+1 in dom F for G1,G2 being strict Subgroup
+  of G st G1=F.i & G2=F.(i+1) holds G2 is strict normal Subgroup of G1 & for N
+  being normal Subgroup of G1 st N=G2 holds G1./.N is commutative by Def1;
+  1 <= len F by A1,NAT_1:14;
+  then
+A5: 1 in Seg len F by FINSEQ_1:3;
+  defpred P[set,set] means ex J being strict Subgroup of G st J= F.$1 & $2 =h
+  .:(J);
+A6: for k be Nat st k in Seg len F ex x being Element of Subgroups Image h
+  st P[k,x]
   proof
     let k be Nat;
-    assume k in Seg len F;
+    assume
+    k in Seg len F;
     then k in dom F by FINSEQ_1:def 3;
     then F.k in Subgroups G by FINSEQ_2:13;
     then F.k is strict Subgroup of G by GROUP_3:def 1;
     then consider A being strict Subgroup of G such that
-A3: A=F.k;
+A7: A=F.k;
     h.:(A) is strict Subgroup of Image h by Th10;
     then h.:(A) in Subgroups Image h by GROUP_3:def 1;
-    then consider x being Element of Subgroups Image h such that
-A4: x=h.:(A);
-    thus thesis by A3,A4;
+    hence thesis by A7;
   end;
   consider z being FinSequence of Subgroups Image h such that
-A5: dom z = Seg len F & for j be Nat st j in Seg len F holds P[j,z.j]
-  from FINSEQ_1:sch 5(A2);
-A6: Seg len z=Seg len F by A5,FINSEQ_1:def 3;
-A7: len z= len F by A5,FINSEQ_1:def 3;
-A8: dom F=Seg len z by A6,FINSEQ_1:def 3
-    .=dom z by FINSEQ_1:def 3;
-  1<=1 &1 <= len F by A1,NAT_1:14;
+A8: dom z = Seg len F & for j be Nat st j in Seg len F holds P[j,z.j]
+  from FINSEQ_1:sch 5(A6);
+  Seg len z=Seg len F by A8,FINSEQ_1:def 3;
   then
-A9: 1 in Seg len F by FINSEQ_1:3;
-A10: z.1=(Omega).(Image h) & z.(len z)=(1).(Image h)
-  proof
-    consider A being strict Subgroup of G such that
-A11: A=F.1 & z.1=h.:(A) by A5,A9;
-    thus z.1=(Omega).(Image h) by A1,A11,Th12;
-    len F in Seg len F by A1,FINSEQ_1:5;
-    then consider B being strict Subgroup of G such that
-A12: B=F.(len F) & z.(len F)=h.:(B) by A5;
-    thus z.(len z)=(1).H by A1,A7,A12,Th12
-      .=(1).(Image h) by GROUP_2:75;
-  end;
-A13: for i st i in dom z & i+1 in dom z
-  for G1,G2 being strict Subgroup of Image h st G1=z.i & G2=z.(i+1) holds
-  G2 is strict normal Subgroup of G1 &
-  for N being normal Subgroup of G1 st N=G2 holds G1./.N is commutative
+A9: dom F=Seg len z by FINSEQ_1:def 3
+    .=dom z by FINSEQ_1:def 3;
+A10: for i st i in dom z & i+1 in dom z for G1,G2 being strict Subgroup of
+Image h st G1=z.i & G2=z.(i+1) holds G2 is strict normal Subgroup of G1 & for N
+  being normal Subgroup of G1 st N=G2 holds G1./.N is commutative
   proof
     let i;
-    assume
-A14: i in dom z & i+1 in dom z;
+    assume that
+A11: i in dom z and
+A12: i+1 in dom z;
     let G1,G2 be strict Subgroup of Image h;
-    assume
-A15: G1=z.i & G2=z.(i+1);
-    then consider A being strict Subgroup of G such that
-A16: A=F.i & G1=h.:A by A5,A14;
+    assume that
+A13: G1=z.i and
+A14: G2=z.(i+1);
+    consider A being strict Subgroup of G such that
+A15: A=F.i and
+A16: G1=h.:A by A8,A11,A13;
     consider B being strict Subgroup of G such that
-A17: B=F.(i+1) & G2=h.:B by A5,A14,A15;
-A18: B is strict normal Subgroup of A by A1,A8,A14,A16,A17;
-    for N being normal Subgroup of G1 st N=G2 holds G1./.N is commutative
+A17: B=F.(i+1) and
+A18: G2=h.:B by A8,A12,A14;
+A19: for N being normal Subgroup of G1 st N=G2 holds G1./.N is commutative
     proof
       let N be normal Subgroup of G1;
       assume
-A19:  N=G2;
+A20:  N=G2;
       now
         let x,y be Element of G1./.N;
-A20:    x in G1./.N & y in G1./.N by STRUCT_0:def 5;
-        x in the carrier of G1./.N & y in the carrier of G1./.N;
+        x in G1./.N by STRUCT_0:def 5;
+        then consider a being Element of G1 such that
+A21:    x= a* N and
+        x=N* a by GROUP_6:28;
+        y in G1./.N by STRUCT_0:def 5;
+        then consider b being Element of G1 such that
+A22:    y= b* N and
+        y=N* b by GROUP_6:28;
+        x in the carrier of G1./.N;
         then
-A21:    x in Cosets N & y in Cosets N by GROUP_6:22;
-        consider a being Element of G1 such that
-A22:    x= a* N & x=N* a by A20,GROUP_6:28;
-        consider b being Element of G1 such that
-A23:    y= b* N & y=N* b by A20,GROUP_6:28;
-        reconsider x1=x as Subset of G1 by A21;
-        reconsider y1=y as Subset of G1 by A21;
-A24:    a in h.:A & b in h.:A by A16,STRUCT_0:def 5;
-        then consider a1 being Element of A such that
-A25:    a=(h|A).a1 by GROUP_6:54;
-        consider b1 being Element of A such that
-A26:    b=(h|A).b1 by A24,GROUP_6:54;
-        reconsider a1 as Element of G by GROUP_2:51;
+A23:    x in Cosets N by GROUP_6:22;
+        then reconsider x1=x as Subset of G1;
+        b in h.:A by A16,STRUCT_0:def 5;
+        then consider b1 being Element of A such that
+A24:    b=(h|A).b1 by GROUP_6:54;
         reconsider b1 as Element of G by GROUP_2:51;
-A27:    a=h.a1 by A25,FUNCT_1:72;
-A28:    b=h.b1 by A26,FUNCT_1:72;
-A29:    a * N= h.a1 * h.:B by A17,A19,A27,GROUP_6:2
-          .=h.:(a1*B) by Th14;
-A30:    b * N= h.b1 * h.:B by A17,A19,A28,GROUP_6:2
+        b=h.b1 by A24,FUNCT_1:72;
+        then
+A25:    b * N= h.b1 * h.:B by A18,A20,GROUP_6:2
           .=h .:(b1 *B ) by Th14;
-        reconsider x2=h.:(a1 *B) as Subset of G1 by A29;
-        reconsider y2=h.:(b1 *B) as Subset of G1 by A30;
-A31:    h.:(a1*B)*h.:(b1 * B)=h.:((a1 *B)*(b1 *B)) by Th15;
-A32:    x2*y2 =h.:(a1*B)* h.:(b1*B)
-        proof
-          now
-            let z be set;
-            assume z in x2*y2;
-            then consider z1,z2 being Element of G1 such that
-A33:        z=z1 *z2 & z1 in x2 & z2 in y2;
-            reconsider z11=z1 as Element of H by A33;
-            reconsider z22=z2 as Element of H by A33;
-            z=z11 * z22 by A33,GROUP_2:52;
-            hence z in h.:(a1 *B) *h.:(b1 * B) by A33;
-          end;
-          then
-A34:      x2 * y2 c= h.:(a1 *B) *h.:(b1 * B) by TARSKI:def 3;
-          now
-            let z be set;
-            assume z in h.:(a1 *B) *h.:(b1 * B);
-            then consider x being set such that
-A35:        x in the carrier of G
-            & x in (a1*B)*(b1*B) & z=h.x by A31,FUNCT_2:115;
-            reconsider x as Element of G by A35;
-            consider z1,z2 being Element of G such that
-A36:        x=z1 *z2 & z1 in(a1*B)& z2 in (b1*B) by A35;
-A37:        h.z1 in x2 & h.z2 in y2 by A36,FUNCT_2:43;
-            then reconsider z11=h.z1 as Element of G1;
-            reconsider z22=h.z2 as Element of G1 by A37;
-            z=h.z1 * h.z2 by A35,A36,GROUP_6:def 7
-              .=z11 *z22 by GROUP_2:52;
-            hence z in x2* y2 by A37;
-          end;
-          then h.:(a1 *B) *h.:(b1 * B) c= x2 * y2 by TARSKI:def 3;
-          hence thesis by A34,XBOOLE_0:def 10;
+        then reconsider y2=h.:(b1 *B) as Subset of G1;
+        a in h.:A by A16,STRUCT_0:def 5;
+        then consider a1 being Element of A such that
+A26:    a=(h|A).a1 by GROUP_6:54;
+        reconsider a1 as Element of G by GROUP_2:51;
+        a=h.a1 by A26,FUNCT_1:72;
+        then
+A27:    a * N= h.a1 * h.:B by A18,A20,GROUP_6:2
+          .=h.:(a1*B) by Th14;
+        then reconsider x2=h.:(a1 *B) as Subset of G1;
+        now
+          let z be set;
+          assume
+          z in x2*y2;
+          then consider z1,z2 being Element of G1 such that
+A28:      z=z1 *z2 and
+A29:      z1 in x2 and
+A30:      z2 in y2;
+          reconsider z22=z2 as Element of H by A30;
+          reconsider z11=z1 as Element of H by A29;
+          z=z11 * z22 by A28,GROUP_2:52;
+          hence z in h.:(a1 *B) *h.:(b1 * B) by A29,A30;
         end;
-A38:    h.:(b1*B)*h.:(a1 * B)=h.:((b1 *B)*(a1 *B)) by Th15;
-A39:    y2*x2 =h.:(b1*B)* h.:(a1*B)
+        then
+A31:    x2 * y2 c= h.:(a1 *B) *h.:(b1 * B) by TARSKI:def 3;
+A32:    (a1*B)*(b1*B)=(b1 *B)*(a1*B)
         proof
-          now
-            let z be set;
-            assume z in y2*x2;
-            then consider z1,z2 being Element of G1 such that
-A40:        z=z1 *z2 & z1 in y2 & z2 in x2;
-            reconsider z11=z1 as Element of H by A40;
-            reconsider z22=z2 as Element of H by A40;
-            z=z11 * z22 by A40,GROUP_2:52;
-            hence z in h.:(b1 *B) *h.:(a1 * B) by A40;
-          end;
-          then
-A41:      y2*x2 c= h.:(b1 *B) *h.:(a1 * B) by TARSKI:def 3;
-          now
-            let z be set;
-            assume z in h.:(b1 *B) *h.:(a1 * B);
-            then consider x being set such that
-A42:        x in the carrier of G
-            & x in (b1*B)*(a1*B) & z=h.x by A38,FUNCT_2:115;
-            reconsider x as Element of G by A42;
-            consider z1,z2 being Element of G such that
-A43:        x=z1 *z2 & z1 in(b1*B)& z2 in (a1*B) by A42;
-A44:        h.z1 in y2 & h.z2 in x2 by A43,FUNCT_2:43;
-            then reconsider z11=h.z1 as Element of G1;
-            reconsider z22=h.z2 as Element of G1 by A44;
-            z=h.z1 * h.z2 by A42,A43,GROUP_6:def 7
-              .=z11 *z22 by GROUP_2:52;
-            hence z in y2*x2 by A44;
-          end;
-          then h.:(b1 *B) *h.:(a1 * B) c= y2*x2 by TARSKI:def 3;
-          hence thesis by A41,XBOOLE_0:def 10;
-        end;
-A45:    (a1*B)*(b1*B)=(b1 *B)*(a1*B)
-        proof
-          reconsider K=B as normal Subgroup of A by A1,A8,A14,A16,A17;
+          reconsider K=B as normal Subgroup of A by A4,A9,A11,A12,A15,A17;
           reconsider a2=a1,b2=b1 as Element of A;
-A46:      A ./. K is commutative Group by A1,A8,A14,A16,A17;
-A47:      for a,b being Element of A./.K holds
-          (the multF of A./.K).(a,b)= (the multF of A./.K).(b,a)
+A33:      a1*B=a2 *K by GROUP_6:2;
+          then reconsider A1=a1 * B as Subset of A;
+A34:      b1 *B=b2*K by GROUP_6:2;
+          then reconsider B1=b1 * B as Subset of A;
+          reconsider a12=a1 * B,b12=b1 * B as Element of Cosets K by A33,A34,
+          GROUP_6:16;
+          a2 * K is Element of A./.K by GROUP_6:27;
+          then reconsider a11=a12 as Element of A./.K by GROUP_6:2;
+          b2 * K is Element of A./.K by GROUP_6:27;
+          then reconsider b11=b12 as Element of A./.K by GROUP_6:2;
+          now
+            let x be set;
+            assume
+            x in (a1 *B) *(b1 * B);
+            then consider z1,z2 being Element of G such that
+A35:        x=z1 *z2 and
+A36:        z1 in(a1*B) & z2 in (b1*B);
+            z1 in A1 & z2 in B1 by A36;
+            then reconsider z11=z1, z22=z2 as Element of A;
+            z1*z2=z11*z22 by GROUP_2:52;
+            hence x in A1* B1 by A35,A36;
+          end;
+          then
+A37:      (a1*B)*(b1 *B) c= A1*B1 by TARSKI:def 3;
+          now
+            let x be set;
+            assume
+            x in (b1 *B) *(a1 * B);
+            then consider z1,z2 being Element of G such that
+A38:        x=z1 *z2 and
+A39:        z1 in(b1*B) & z2 in (a1*B);
+            z1 in B1 & z2 in A1 by A39;
+            then reconsider z11=z1, z22=z2 as Element of A;
+            z1*z2=z11*z22 by GROUP_2:52;
+            hence x in B1*A1 by A38,A39;
+          end;
+          then
+A40:      (b1*B)*(a1*B) c= B1*A1 by TARSKI:def 3;
+          now
+            let x be set;
+            assume
+            x in B1*A1;
+            then consider z1,z2 being Element of A such that
+A41:        x=z1 *z2 and
+A42:        z1 in B1 & z2 in A1;
+            reconsider z11=z1, z22=z2 as Element of G by A42;
+            z1*z2=z11*z22 by GROUP_2:52;
+            hence x in (b1*B)*(a1*B)by A41,A42;
+          end;
+          then
+A43:      B1*A1 c=(b1*B)*(a1*B) by TARSKI:def 3;
+A44:      A ./. K is commutative Group by A4,A9,A11,A12,A15,A17;
+A45:      for a,b being Element of A./.K holds (the multF of A./.K).(a,b)
+          = (the multF of A./.K).(b,a)
           proof
             let a,b be Element of A./.K;
-            (the multF of A./.K) is commutative by A46,GROUP_3:2;
-            hence thesis
-            by BINOP_1:def 2;
+            (the multF of A./.K) is commutative by A44,GROUP_3:2;
+            hence thesis by BINOP_1:def 2;
           end;
-A48:      a1*B=a2 *K & b1 *B=b2*K by GROUP_6:2;
-A49:      a2 * K is Element of A./.K by GROUP_6:27;
-A50:      b2 * K is Element of A./.K by GROUP_6:27;
-          reconsider a12=a1 * B,b12=b1 * B
-          as Element of Cosets K by A48,GROUP_6:16;
-          reconsider a11=a12 as Element of A./.K by A49,GROUP_6:2;
-          reconsider b11=b12 as Element of A./.K by A50,GROUP_6:2;
-          reconsider A1=a1 * B as Subset of A by A48;
-          reconsider B1=b1 * B as Subset of A by A48;
-A51:      A1*B1=(CosOp K).(a11,b11) by GROUP_6:def 4
+A46:      A1*B1=(CosOp K).(a11,b11) by GROUP_6:def 4
             .=(the multF of A./.K).(a12,b12) by GROUP_6:23
-            .=(the multF of A./.K).(b11,a11) by A47
+            .=(the multF of A./.K).(b11,a11) by A45
             .=(CosOp K).(b12,a12) by GROUP_6:23
             .=B1*A1 by GROUP_6:def 4;
-A52:      (a1*B)*(b1 *B)=A1*B1
-          proof
-            now
-              let x be set;
-              assume x in (a1 *B) *(b1 * B);
-              then consider z1,z2 being Element of G such that
-A53:          x=z1 *z2 & z1 in(a1*B)& z2 in (b1*B);
-              z1 in A1 & z2 in B1 by A53;
-              then reconsider z11=z1, z22=z2 as Element of A;
-              z1*z2=z11*z22 by GROUP_2:52;
-              hence x in A1* B1 by A53;
-            end;
-            then
-A54:        (a1*B)*(b1 *B) c= A1*B1 by TARSKI:def 3;
-            now
-              let x be set;
-              assume x in A1 * B1;
-              then consider z1,z2 being Element of A such that
-A55:          x=z1 *z2 & z1 in A1 & z2 in B1;
-              reconsider z11=z1, z22=z2 as Element of G by A55;
-              z1*z2=z11*z22 by GROUP_2:52;
-              hence x in (a1*B)*(b1 *B)by A55;
-            end;
-            then A1*B1 c=(a1*B)*(b1 *B) by TARSKI:def 3;
-            hence thesis by A54,XBOOLE_0:def 10;
+          now
+            let x be set;
+            assume
+            x in A1 * B1;
+            then consider z1,z2 being Element of A such that
+A47:        x=z1 *z2 and
+A48:        z1 in A1 & z2 in B1;
+            reconsider z11=z1, z22=z2 as Element of G by A48;
+            z1*z2=z11*z22 by GROUP_2:52;
+            hence x in (a1*B)*(b1 *B)by A47,A48;
           end;
-          (b1*B)*(a1*B)=B1*A1
-          proof
-            now
-              let x be set;
-              assume x in (b1 *B) *(a1 * B);
-              then consider z1,z2 being Element of G such that
-A56:          x=z1 *z2 & z1 in(b1*B)& z2 in (a1*B);
-              z1 in B1 & z2 in A1 by A56;
-              then reconsider z11=z1, z22=z2 as Element of A;
-              z1*z2=z11*z22 by GROUP_2:52;
-              hence x in B1*A1 by A56;
-            end;
-            then
-A57:        (b1*B)*(a1*B) c= B1*A1 by TARSKI:def 3;
-            now
-              let x be set;
-              assume x in B1*A1;
-              then consider z1,z2 being Element of A such that
-A58:          x=z1 *z2 & z1 in B1 & z2 in A1;
-              reconsider z11=z1, z22=z2 as Element of G by A58;
-              z1*z2=z11*z22 by GROUP_2:52;
-              hence x in (b1*B)*(a1*B)by A58;
-            end;
-            then B1*A1 c=(b1*B)*(a1*B) by TARSKI:def 3;
-            hence thesis by A57,XBOOLE_0:def 10;
-          end;
-          hence thesis by A51,A52;
+          then A1*B1 c=(a1*B)*(b1 *B) by TARSKI:def 3;
+          then (a1*B)*(b1 *B)=A1*B1 by A37,XBOOLE_0:def 10;
+          hence thesis by A46,A40,A43,XBOOLE_0:def 10;
         end;
+        now
+          let z be set;
+          assume
+          z in y2*x2;
+          then consider z1,z2 being Element of G1 such that
+A49:      z=z1 *z2 and
+A50:      z1 in y2 and
+A51:      z2 in x2;
+          reconsider z22=z2 as Element of H by A51;
+          reconsider z11=z1 as Element of H by A50;
+          z=z11 * z22 by A49,GROUP_2:52;
+          hence z in h.:(b1 *B) *h.:(a1 * B) by A50,A51;
+        end;
+        then
+A52:    y2*x2 c= h.:(b1 *B) *h.:(a1 * B) by TARSKI:def 3;
+A53:    h.:(b1*B)*h.:(a1 * B)=h.:((b1 *B)*(a1 *B)) by Th15;
+        now
+          let z be set;
+          assume
+          z in h.:(b1 *B) *h.:(a1 * B);
+          then consider x being set such that
+A54:      x in the carrier of G and
+A55:      x in (b1*B)*(a1*B) and
+A56:      z=h.x by A53,FUNCT_2:115;
+          reconsider x as Element of G by A54;
+          consider z1,z2 being Element of G such that
+A57:      x=z1 *z2 and
+A58:      z1 in(b1*B) and
+A59:      z2 in (a1*B) by A55;
+A60:      h.z2 in x2 by A59,FUNCT_2:43;
+          then reconsider z22=h.z2 as Element of G1;
+A61:      h.z1 in y2 by A58,FUNCT_2:43;
+          then reconsider z11=h.z1 as Element of G1;
+          z=h.z1 * h.z2 by A56,A57,GROUP_6:def 7
+            .=z11 *z22 by GROUP_2:52;
+          hence z in y2*x2 by A61,A60;
+        end;
+        then h.:(b1 *B) *h.:(a1 * B) c= y2*x2 by TARSKI:def 3;
+        then
+A62:    y2*x2 =h.:(b1*B)* h.:(a1*B) by A52,XBOOLE_0:def 10;
+A63:    h.:(a1*B)*h.:(b1 * B)=h.:((a1 *B)*(b1 *B)) by Th15;
+        now
+          let z be set;
+          assume
+          z in h.:(a1 *B) *h.:(b1 * B);
+          then consider x being set such that
+A64:      x in the carrier of G and
+A65:      x in (a1*B)*(b1*B) and
+A66:      z=h.x by A63,FUNCT_2:115;
+          reconsider x as Element of G by A64;
+          consider z1,z2 being Element of G such that
+A67:      x=z1 *z2 and
+A68:      z1 in(a1*B) and
+A69:      z2 in (b1*B) by A65;
+A70:      h.z2 in y2 by A69,FUNCT_2:43;
+          then reconsider z22=h.z2 as Element of G1;
+A71:      h.z1 in x2 by A68,FUNCT_2:43;
+          then reconsider z11=h.z1 as Element of G1;
+          z=h.z1 * h.z2 by A66,A67,GROUP_6:def 7
+            .=z11 *z22 by GROUP_2:52;
+          hence z in x2* y2 by A71,A70;
+        end;
+        then h.:(a1 *B) *h.:(b1 * B) c= x2 * y2 by TARSKI:def 3;
+        then
+A72:    x2*y2 =h.:(a1*B)* h.:(b1*B) by A31,XBOOLE_0:def 10;
+        y in the carrier of G1./.N;
+        then
+A73:    y in Cosets N by GROUP_6:22;
+        then reconsider y1=y as Subset of G1;
         thus x*y=(CosOp N).(x,y) by GROUP_6:23
-          .=y1*x1 by A21,A22,A23,A29,A30,A31,A32,A38,A39,A45,GROUP_6:def 4
-          .=(CosOp N).(y,x) by A21,GROUP_6:def 4
+          .=y1*x1 by A23,A73,A21,A22,A27,A25,A63,A72,A53,A62,A32,GROUP_6:def
+        4
+          .=(CosOp N).(y,x) by A23,A73,GROUP_6:def 4
           .=y *x by GROUP_6:23;
       end;
       hence thesis by GROUP_1:def 16;
     end;
-    hence thesis by A16,A17,A18,Th16;
+    B is strict normal Subgroup of A by A4,A9,A11,A12,A15,A17;
+    hence thesis by A16,A18,A19,Th16;
   end;
   take z;
-  thus thesis by A1,A5,A10,A13,FINSEQ_1:def 3;
+A74: len z= len F by A8,FINSEQ_1:def 3;
+  z.1=(Omega).(Image h) & z.(len z)=(1).(Image h)
+  proof
+    ex A being strict Subgroup of G st A=F.1 & z.1=h.:(A) by A8,A5;
+    hence z.1=(Omega).(Image h) by A2,Th12;
+    ex B being strict Subgroup of G st B=F.(len F) & z.(len F )=h.:(B) by
+    A1,A8,FINSEQ_1:5;
+    hence z.(len z)=(1).H by A3,A74,Th12
+      .=(1).(Image h) by GROUP_2:75;
+  end;
+  hence thesis by A1,A8,A10,FINSEQ_1:def 3;
 end;
 

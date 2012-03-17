@@ -19,7 +19,7 @@ environ
       FUNCT_4, XREAL_0, NAT_1, CARD_2, CLASSES1, ORDINAL2, ORDINAL3, XXREAL_0,
       FINSUB_1, RELSET_1;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1, ORDINAL1,
-      FUNCOP_1, FUNCT_4, FINSET_1, FRAENKEL, XREAL_0, CARD_1, FINSUB_1;
+      FUNCOP_1, FUNCT_4, FINSET_1, XREAL_0, CARD_1, FINSUB_1;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
 
 
@@ -86,7 +86,6 @@ definition
    dom it = dom f & for x st x in dom f holds it.x = [:f.x,{x}:];
   func Union f -> set equals
 :: CARD_3:def 4
-
   union rng f;
   func product f -> set means
 :: CARD_3:def 5
@@ -208,11 +207,9 @@ definition
   let F;
   func Sum F -> Cardinal equals
 :: CARD_3:def 7
-
   card Union disjoin F;
   func Product F -> Cardinal equals
 :: CARD_3:def 8
-
   card product F;
 end;
 
@@ -271,20 +268,16 @@ scheme :: CARD_3:sch 2
  FinRegularity { X()->finite set, P[set,set] }:
   ex x st x in X() & for y st y in X() & y <> x holds not P[y,x]
 provided
- X() <> {}
-and
- for x,y st P[x,y] & P[y,x] holds x = y
-and
+ X() <> {} and
+ for x,y st P[x,y] & P[y,x] holds x = y and
  for x,y,z st P[x,y] & P[y,z] holds P[x,z];
 
 scheme :: CARD_3:sch 3
  MaxFinSetElem { X()->finite set, P[set,set] }:
   ex x st x in X() & for y st y in X() holds P[x,y]
 provided
- X() <> {}
-and
- for x,y holds P[x,y] or P[y,x]
-and
+ X() <> {} and
+ for x,y holds P[x,y] or P[y,x] and
  for x,y,z st P[x,y] & P[y,z] holds P[x,z];
 
 scheme :: CARD_3:sch 4
@@ -467,7 +460,7 @@ definition
   func DOM X -> set means
 :: CARD_3:def 12 :: overloading (dom) dozwolony
 
-  (for x be Function st x in X holds it = dom x) if X <> {}
+  for x be Function st x in X holds it = dom x if X <> {}
   otherwise it = {};
 end;
 
@@ -480,13 +473,12 @@ definition
   let S be functional set;
   func product" S -> Function means
 :: CARD_3:def 13  :: tu trzeba uzyc DOM
-
 :: uzywajac meet mamy definicje
 :: nie przez czesci
 
   (for x being set holds x in dom it iff
   for f being Function st f in S holds x in dom f) &
-  (for i being set st i in dom it holds it.i = pi(S,i)) if S is non empty
+  for i being set st i in dom it holds it.i = pi(S,i) if S is non empty
   otherwise it = {};
 end;
 
@@ -538,7 +530,7 @@ theorem :: CARD_3:95
 theorem :: CARD_3:96
   for f being Function
   for s, t being Element of product f, A be set holds
-   s +* t|A is Element of product f;
+  s +* t|A is Element of product f;
 
 theorem :: CARD_3:97
   for f being non-empty Function
@@ -550,15 +542,17 @@ theorem :: CARD_3:98
 
 :: needed, 2008.04.20, A.T.
 
-definition let f be non-empty Function;
- let g be Element of product f; let X;
- redefine func g|X -> Element of sproduct f;
+definition
+  let f be non-empty Function;
+  let g be Element of product f;
+  let X;
+  redefine func g|X -> Element of sproduct f;
 end;
 
 theorem :: CARD_3:99
   for f being non-empty Function
   for s,ss being Element of product f, A being set
-   holds (ss +* s | A) | A = s | A;
+  holds (ss +* s | A) | A = s | A;
 
 :: from PRE_CIRC, 2008.06.02, A.T.
 
@@ -620,7 +614,7 @@ theorem :: CARD_3:116
   omega c= A implies 1+^A = A;
 
 registration
- cluster infinite -> limit_ordinal Cardinal;
+  cluster infinite -> limit_ordinal Cardinal;
 end;
 
 theorem :: CARD_3:117
@@ -670,8 +664,8 @@ definition
 end;
 
 registration
- cluster denumerable -> countable infinite set;
- cluster countable infinite -> denumerable set;
+  cluster denumerable -> countable infinite set;
+  cluster countable infinite -> denumerable set;
 end;
 
 registration
@@ -683,14 +677,15 @@ registration
 end;
 
 registration
- cluster denumerable set;
+  cluster denumerable set;
 end;
 
 theorem :: CARD_3:127
   X is countable iff ex f st dom f = NAT & X c= rng f;
 
-registration let X be countable set;
- cluster -> countable Subset of X;
+registration
+  let X be countable set;
+  cluster -> countable Subset of X;
 end;
 
 theorem :: CARD_3:128
@@ -776,4 +771,24 @@ theorem :: CARD_3:148
 theorem :: CARD_3:149
   for f,g being non-empty Function st f tolerates g
   for x being Element of product (f+*g) holds x|dom f in product f;
+
+:: missing, 2009.09.06, A.T.
+
+theorem :: CARD_3:150
+  for S being with_common_domain functional set, f be Function
+     st f in S  holds dom f = dom product" S;
+
+theorem :: CARD_3:151
+  for S being functional set, f be Function, i be set
+     st f in S & i in dom product" S holds f.i in (product" S).i;
+
+theorem :: CARD_3:152
+  for S being with_common_domain functional set, f be Function, i be set
+     st f in S & i in dom f holds f.i in (product" S).i;
+
+:: 2009.09.12, A.T.
+
+registration let X be with_common_domain set;
+ cluster -> with_common_domain Subset of X;
+end;
 

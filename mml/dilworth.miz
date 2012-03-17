@@ -1,0 +1,3713 @@
+:: Dilworth's Decomposition Theorem for Posets
+::  by Piotr Rudnicki
+:: 
+:: Received September 17, 2009
+:: Copyright (c) 2009 Association of Mizar Users
+
+environ
+
+ vocabularies DILWORTH, ORDERS_1, FINSET_1, RELAT_2, EQREL_1, CARD_1, ARYTM,
+      BOOLE, ORDERS_2, YELLOW_0, ARYTM_1, TARSKI, SGRAPH1, FUNCT_1, LEXBFS,
+      RELAT_1, SETFAM_1, WAYBEL_0, WAYBEL_4, PUA2MSS1, JORDAN4, ASYMPT_0,
+      HAHNBAN, ZFMISC_1, FINSEQ_1, SQUARE_1, UPROOTS, RLVECT_1, FINSEQ_2,
+      VALUED_0, ORDINAL2, SEQM_3, SUPINF_1, GROUP_10, RAMSEY_1, COMBGRAS,
+      CIRCUIT2, SUBSET_1, REALSET1;
+ notations TARSKI, RELAT_1, RELAT_2, RELSET_1, FINSET_1, SETFAM_1, XBOOLE_0,
+      SUBSET_1, CARD_1, STRUCT_0, WAYBEL_0, WAYBEL_4, ORDERS_2, NAT_1, EQREL_1,
+      FUNCT_1, FUNCT_2, NUMBERS, GROUP_1, XREAL_0, XXREAL_0, YELLOW_0,
+      XCMPLX_0, ZFMISC_1, LEXBFS, ORDINAL1, FINSEQ_1, SQUARE_1, UPROOTS,
+      RVSUM_1, INT_5, FINSEQ_2, VALUED_0, GROUP_10, RAMSEY_1, DOMAIN_1;
+ constructors DOMAIN_1, SETFAM_1, ORDERS_3, LEXBFS, WAYBEL_4, SQUARE_1,
+      UPROOTS, WSIERP_1, PROB_3, INT_5, SEQ_1, RAMSEY_1, RELSET_1, BINOP_2;
+ registrations STRUCT_0, MEMBERED, XXREAL_0, RELSET_1, CARD_1, YELLOW_0,
+      XREAL_0, FINSET_1, XBOOLE_0, ORDERS_3, NAT_1, INT_1, YELLOW_2, EQREL_1,
+      FINSEQ_1, FUNCT_1, SUBSET_1, ORDINAL1, PEPIN, RVSUM_1, UPROOTS, FUNCT_2,
+      FINSEQ_2, NUMBERS, PNPROC_1, RELAT_1, VALUED_0, ZFMISC_1, ORDERS_2;
+ requirements ARITHM, SUBSET, BOOLE, NUMERALS, REAL;
+ definitions TARSKI, STRUCT_0, FUNCT_1, RELAT_2, WAYBEL_0, ORDINAL1, XBOOLE_0,
+      SQUARE_1, VALUED_0, ORDERS_2, GROUP_10;
+ theorems CARD_1, CARD_2, NAT_1, XREAL_1, YELLOW_0, XBOOLE_0, TARSKI, ORDERS_2,
+      XBOOLE_1, ZFMISC_1, EQREL_1, INT_1, EULER_1, ENUMSET1, FUNCT_1, FUNCT_2,
+      LEXBFS, FINSEQ_4, RELAT_2, BAGORDER, WAYBEL_0, WAYBEL_4, XXREAL_0,
+      RELAT_1, ORDERS_1, FINSET_1, ORDINAL1, PUA2MSS1, GLIB_002, DICKSON,
+      FINSEQ_1, INT_5, RVSUM_1, UPROOTS, FINSEQ_2, CARD_3, FINSEQ_3, GRFUNC_1,
+      RAMSEY_1, REALSET1, SUBSET_1, PRE_POLY;
+ schemes NAT_1, FUNCT_2, XBOOLE_0, CLASSES1, FRAENKEL, TREES_2, RELSET_1;
+
+begin  :: Preliminaries
+       :: Facts that I could not find in MML.
+
+scheme FraenkelFinCard1 { A() -> finite non empty set, P[set],
+  Y() -> finite set, F(set) -> set }:
+  card Y() <= card A()
+provided
+A: Y() = { F(w) where w is Element of A(): P[w] }
+proof
+B: A() is finite;
+  set Z = { F(w) where w is Element of A(): w in A() };
+  Z is finite from FRAENKEL:sch 21 (B);
+  then reconsider Z as finite set;
+C: Z = { F(w) where w is Element of A(): w in A() };
+D: card Z <= card A() from TREES_2:sch 3(C);
+   Y() c= Z proof
+     let x be set;
+     assume x in Y();
+      then ex w being Element of A() st x = F(w) & P[w] by A;
+     hence x in Z;
+   end;
+   then card Y() <= card Z by NAT_1:44;
+  hence card Y() <= card A() by D, XXREAL_0:2;
+end;
+
+theorem set00: :: set00:
+for X, Y, x being set st not x in X holds X \ (Y \/ {x}) = X \ Y
+proof
+  let X, Y, x be set;
+  assume not x in X;
+   then B: not x in X \ Y;
+  thus X \ (Y \/ {x}) = (X \ Y) \ {x} by XBOOLE_1:41
+   .= X \ Y by B, ZFMISC_1:65;
+end;
+
+registration
+ cluster empty -> c=-linear set;
+ coherence
+  proof let X be set such that
+Z: X is empty;
+   let x be set;
+   thus thesis by Z;
+  end;
+end;
+
+registration let X be c=-linear set;
+ cluster -> c=-linear Subset of X;
+ coherence
+proof
+ let Y be Subset of X;
+   let x, y be set;
+   assume x in Y & y in Y;
+   hence x,y are_c=-comparable by ORDINAL1:def 9;
+end;
+end;
+
+theorem ssf0: :: ssf0:
+for X, Y being set, F being Subset-Family of X, G being Subset-Family of Y
+ holds F \/ G is Subset-Family of X \/ Y
+proof
+ let X, Y be set, F be Subset-Family of X, G be Subset-Family of Y;
+A: F \/ G c= bool X \/ bool Y by XBOOLE_1:13;
+   bool X \/ bool Y c= bool (X \/ Y) by ZFMISC_1:81;
+  hence F \/ G is Subset-Family of X \/ Y by A, XBOOLE_1:1;
+end;
+
+theorem SPpart0: :: SPpart0:
+for X, Y being set, F being a_partition of X, G being a_partition of Y
+  st X misses Y holds F \/ G is a_partition of X \/ Y
+proof
+  let X, Y be set, F be a_partition of X, G be a_partition of Y such that
+A: X misses Y;
+   set PR = F \/ G; set XY = X \/ Y;
+B: PR is Subset-Family of XY by ssf0;
+C: union PR = union F \/ union G by ZFMISC_1:96
+    .= X \/ union G by EQREL_1:def 6 .= X \/ Y by EQREL_1:def 6;
+   now
+    let A be Subset of XY such that
+   A1: A in PR;
+     A in F or A in G by A1, XBOOLE_0:def 3;
+    hence A <> {} by EQREL_1:def 6;
+    let B be Subset of XY such that
+   B1: B in PR;
+    per cases by A1, B1, XBOOLE_0:def 3;
+    suppose A in F & B in F or A in G & B in G;
+     hence A = B or A misses B by EQREL_1:def 6;
+    end;
+    suppose A in F & B in G or A in G & B in F;
+     hence A = B or A misses B by A, XBOOLE_1:64;
+    end;
+   end;
+  hence F \/ G is a_partition of X \/ Y by B, C, EQREL_1:def 6;
+end;
+
+theorem SPpart: :: SPpart:
+for X, Y being set, F being a_partition of Y
+ st Y c< X holds F \/ { X \ Y } is a_partition of X
+proof
+  let X, Y be set, F be a_partition of Y;
+  assume A: Y c< X;
+  then Ba: X \ Y <> {} by XBOOLE_1:105;
+    Y c= X by A, XBOOLE_0:def 8;
+  then C: Y \/ (X \ Y) = X by XBOOLE_1:45;
+   { X \ Y } is a_partition of X \ Y by Ba, EQREL_1:48;
+  hence F \/ { X \ Y } is a_partition of X by XBOOLE_1:79, C, SPpart0;
+end;
+
+theorem Sinfset: :: Sinfset:
+for X being infinite set, n being Nat
+ ex Y being finite Subset of X st card Y > n
+proof :: DICKSON:3
+ let X be infinite set, n be Nat;
+ consider f being Function of NAT, X such that
+A: f is one-to-one by DICKSON:3;
+   set Sn = Seg (n+1);
+   reconsider ff = f|Sn as Function of Sn, X by FUNCT_2:38;
+   ff is one-to-one by A, FUNCT_1:84;
+   then card ff = card rng ff by PRE_POLY:19;
+   then Z: card dom ff = card rng ff by CARD_1:104;
+   reconsider Y = rng ff as finite Subset of X by RELAT_1:def 19;
+   take Y;
+   dom ff = Sn by FUNCT_2:def 1;
+   then card dom ff = n+1 by FINSEQ_1:78;
+   hence card Y > n by Z, NAT_1:13;
+end;
+
+begin ::  Cliques and stable sets
+
+definition
+  let R be RelStr, S be Subset of R;
+  attr S is connected means                   :Lclique:
+  the InternalRel of R is_connected_in S;
+end;
+
+notation
+  let R be RelStr, S be Subset of R;
+  synonym S is clique for S is connected;
+end;
+
+registration
+  let R be RelStr;
+  cluster trivial -> clique Subset of R;
+  coherence proof let S be Subset of R;
+   assume Z: S is trivial;
+   let x1, x2 be set;
+   thus thesis by Z, ZFMISC_1:def 10;
+  end;
+end;
+
+registration
+  let R be RelStr;
+  cluster clique Subset of R;
+  existence proof take {}R; let x1, x2 be set; thus thesis; end;
+end;
+
+definition
+  let R be RelStr;
+  mode Clique of R is clique Subset of R;
+end;
+
+theorem DClique: :: DClique:
+for R being RelStr, S being Subset of R holds
+S is Clique of R iff
+for a, b being Element of R st a in S & b in S & a <> b holds a <= b or b <= a
+proof
+  let R be RelStr, S be Subset of R;
+  set RR = the InternalRel of R;
+  hereby
+    assume S is Clique of R;
+    then A: RR is_connected_in S by Lclique;
+    let a, b be Element of R;
+    assume a in S & b in S & a <> b;
+     then [a,b] in RR or [b,a] in RR by A, RELAT_2:def 6;
+    hence a <= b or b <= a by ORDERS_2:def 9;
+  end;
+  assume
+  A: for a, b being Element of R st a in S & b in S & a <> b
+      holds a <= b or b <= a;
+  RR is_connected_in S proof
+    let x, y be set;
+    assume A1: x in S & y in S & x <> y;
+    then reconsider x' = x, y' = y as Element of R;
+    x' <= y' or y' <= x' by A1, A;
+    hence [x,y] in RR or [y,x] in RR by ORDERS_2:def 9;
+  end;
+  hence S is Clique of R by Lclique;
+end;
+
+registration
+ let R be RelStr;
+ cluster finite Clique of R;
+ existence proof take {}R; thus thesis; end;
+end;
+
+registration
+  let R be reflexive RelStr;
+  cluster connected -> strongly_connected Subset of R;
+  coherence proof
+   let C be Subset of R;
+   set iR = the InternalRel of R, cR = the carrier of R;
+   assume C is clique;
+   then A: iR is_connected_in C by Lclique;
+ B: iR is_reflexive_in cR by ORDERS_2:def 4;
+   thus C is strongly_connected proof
+     let x, y be set such that
+   A1: x in C and
+   B1: y in C;
+    per cases;
+    suppose x = y;
+     hence [x,y] in the InternalRel of R or [y,x] in the InternalRel of R
+      by  A1, B, RELAT_2:def 1;
+    end;
+    suppose x <> y;
+     hence [x,y] in the InternalRel of R or [y,x] in the InternalRel of R
+       by A1, B1, A, RELAT_2:def 6;
+    end;
+   end;
+  end;
+end;
+
+registration
+  let R be non empty RelStr;
+  cluster finite non empty Clique of R;
+  existence proof
+   {the Element of R} is clique;
+   hence thesis;
+  end;
+end;
+
+theorem :: Clique36a:
+for R being non empty RelStr, a1,a2 being Element of R
+ st a1 <> a2 & {a1,a2} is Clique of R holds a1 <= a2 or a2 <= a1
+proof
+let R be non empty RelStr, a1,a2 be Element of R;
+   assume A: a1 <> a2;
+A1: a1 in {a1,a2} & a2 in {a1,a2} by TARSKI:def 2;
+   assume {a1,a2} is Clique of R;
+   hence thesis by A1, A, DClique;
+end;
+
+theorem Clique36b: :: Clique36b:
+for R being non empty RelStr, a1,a2 being Element of R
+ st a1 <= a2 or a2 <= a1 holds {a1,a2} is Clique of R
+proof
+let R be non empty RelStr, a1,a2 be Element of R;
+  assume A2: a1 <= a2 or a2 <= a1;
+  now
+    let x,y be Element of R;
+    assume x in {a1,a2} & y in {a1,a2};
+     then A4: (x = a1 or x = a2) & (y = a1 or y = a2) by TARSKI:def 2;
+    assume x <> y;
+    hence x <= y or y <= x by A2, A4;
+  end;
+  hence thesis by DClique;
+end;
+
+theorem Clique37: :: Clique37:
+for R being RelStr, C being Clique of R, S being Subset of C
+  holds S is Clique of R
+proof
+  let R be RelStr, C be Clique of R, S be Subset of C;
+  set iR = the InternalRel of R;
+B1: iR is_connected_in C by Lclique;
+  iR is_connected_in S proof
+    let x1, x2 be set;
+    assume x1 in S & x2 in S & x1<>x2;
+    hence thesis by B1, RELAT_2:def 6;
+  end;
+  hence thesis by Lclique, XBOOLE_1:1;
+end;
+
+theorem :: Clique1:
+for R being RelStr, C being finite Clique of R, n being Nat
+  st n <= card C ex B being finite Clique of R st card B = n
+proof
+ let R be RelStr, C be finite Clique of R, n be Nat such that
+A: n <= card C;
+   consider BB being finite Subset of C such that
+B: card BB = n by A, FINSEQ_4:87;
+   reconsider BB as finite Clique of R by Clique37;
+   take BB;
+   thus card BB = n by B;
+end;
+
+theorem ExtClique: :: ExtClique
+for R being transitive RelStr, C being Clique of R, x, y being Element of R
+ st x is_maximal_in C & x <= y holds C \/ {y} is Clique of R
+proof
+  let R be transitive RelStr, C be Clique of R, x, y be Element of R such that
+A: x is_maximal_in C and
+B: x <= y;
+C: x in C by A, WAYBEL_4:56;
+B3a: the carrier of R is non empty by A, WAYBEL_4:56;
+  set Cb = C \/ {y};
+D: Cb c= the carrier of R proof
+    let x be set;
+    assume A1: x in Cb;
+    per cases by A1, XBOOLE_0:def 3;
+    suppose x in C;
+      hence x in the carrier of R;
+    end;
+    suppose x in {y};
+      then x = y by TARSKI:def 1;
+      hence x in the carrier of R by B3a;
+    end;
+   end;
+  now
+    let a, b be Element of R such that
+  A3: a in Cb & b in Cb and
+  A3a: a <> b;
+    per cases by A3, XBOOLE_0:def 3;
+    suppose a in C & b in C;
+     hence a <= b or b <= a by A3a, DClique;
+    end;
+    suppose that
+    S1: a in C and
+    T1: b in {y};
+    A4: b = y by T1, TARSKI:def 1;
+    B4: not x < a by A, S1, WAYBEL_4:56;
+        per cases;
+        suppose x <> a;
+          then a <= x or x <= a by S1, C, DClique;
+          hence a <= b or b <= a by B, A4, ORDERS_2:26,B4,ORDERS_2:def 10;
+        end;
+        suppose x = a;
+          hence a <= b or b <= a by B, T1, TARSKI:def 1;
+        end;
+    end;
+    suppose that
+    S1: a in {y} and
+    T1: b in C;
+    A4: a = y by S1, TARSKI:def 1;
+    B4: not x < b by A, T1, WAYBEL_4:56;
+        per cases;
+        suppose x <> b;
+          then b <= x or x <= b by T1, C, DClique;
+          hence a <= b or b <= a by B, A4, ORDERS_2:26, B4,ORDERS_2:def 10;
+        end;
+        suppose x = b;
+          hence a <= b or b <= a by B, S1, TARSKI:def 1;
+        end;
+    end;
+    suppose a in {y} & b in {y};
+      then a = y & b = y by TARSKI:def 1;
+      hence a <= b or b <= a by A3a;
+    end;
+  end;
+  hence C \/ {y} is Clique of R by D, DClique;
+end;
+
+theorem ExtCliquemin: :: ExtCliquemin
+for R being transitive RelStr, C being Clique of R, x, y being Element of R
+ st x is_minimal_in C & y <= x holds C \/ {y} is Clique of R
+proof
+  let R be transitive RelStr, C be Clique of R, x, y be Element of R such that
+A: x is_minimal_in C and
+B: y <= x;
+C: x in C by A, WAYBEL_4:57;
+B3a: the carrier of R is non empty by A, WAYBEL_4:57;
+  set Cb = C \/ {y};
+D: Cb c= the carrier of R proof
+    let x be set;
+    assume A1: x in Cb;
+    per cases by A1, XBOOLE_0:def 3;
+    suppose x in C;
+      hence x in the carrier of R;
+    end;
+    suppose x in {y};
+      then x = y by TARSKI:def 1;
+      hence x in the carrier of R by B3a;
+    end;
+   end;
+   now
+    let a, b be Element of R such that
+   A3: a in Cb & b in Cb and
+   A3a: a <> b;
+    per cases by A3, XBOOLE_0:def 3;
+    suppose a in C & b in C;
+     hence a <= b or b <= a by A3a, DClique;
+    end;
+    suppose that
+    S1: a in C and
+    T1: b in {y};
+    A4: b = y by T1, TARSKI:def 1;
+    B4: not a < x by A, S1, WAYBEL_4:57;
+        per cases;
+        suppose S2: a <> x;
+          then not a <= x by B4, ORDERS_2:def 10;
+          then x <= a by S1, C, S2, DClique;
+          hence a <= b or b <= a by B, A4, ORDERS_2:26;
+        end;
+        suppose x = a;
+          hence a <= b or b <= a by B, T1, TARSKI:def 1;
+        end;
+    end;
+    suppose that
+    S1: a in {y} and
+    T1: b in C;
+    A4: a = y by S1, TARSKI:def 1;
+    B4: not b < x by A, T1, WAYBEL_4:57;
+        per cases;
+        suppose S2: b <> x;
+          then not b <= x  by B4, ORDERS_2:def 10;
+          then x <= b by T1, C, S2, DClique;
+          hence a <= b or b <= a by B, A4, ORDERS_2:26;
+        end;
+        suppose x = b;
+          hence a <= b or b <= a by B, S1, TARSKI:def 1;
+        end;
+    end;
+    suppose a in {y} & b in {y};
+      then a = y & b = y by TARSKI:def 1;
+      hence a <= b or b <= a by A3a;
+    end;
+  end;
+  hence C \/ {y} is Clique of R by D, DClique;
+end;
+
+definition
+  let R be RelStr, S be Subset of R;
+  attr S is stable means                                          :LAChain:
+    for x, y being Element of R st x in S & y in S & x <> y
+     holds not x <= y & not y <= x;
+end;
+
+registration
+  let R be RelStr;
+  cluster trivial -> stable Subset of R;
+  coherence
+   proof let S be Subset of R;
+    assume
+Z:   S is trivial;
+    let x, y being Element of R;
+    thus thesis by Z,ZFMISC_1:def 10;
+  end;
+end;
+
+registration
+  let R be RelStr;
+  cluster stable Subset of R;
+  existence proof
+    reconsider A = {} as Subset of R by XBOOLE_1:2;
+    take A;
+    let x, y be Element of R;
+    thus thesis;
+  end;
+end;
+
+definition
+  let R be RelStr;
+  mode StableSet of R is stable Subset of R;
+    :: other possible names: AntiChain of R, IndependentSet of R
+end;
+
+registration
+  let R be RelStr;
+  cluster finite StableSet of R;
+  existence proof
+    take {}R;
+    thus thesis;
+  end;
+end;
+
+registration
+  let R be non empty RelStr;
+  cluster finite non empty StableSet of R;
+  existence proof
+   {the Element of R} is stable;
+   hence thesis;
+  end;
+end;
+
+theorem :: AChain36a:
+for R being non empty RelStr, a1, a2 being Element of R
+  st a1 <> a2 & {a1,a2} is StableSet of R holds not (a1 <= a2 or a2 <= a1)
+proof
+ let R be non empty RelStr, a1,a2 be Element of R;
+ assume A: a1 <> a2;
+A1: a1 in {a1,a2} & a2 in {a1,a2} by TARSKI:def 2;
+  assume {a1,a2} is StableSet of R;
+  hence thesis by A1, A, LAChain;
+end;
+
+theorem AChain36b: :: AChain36b:
+for R being non empty RelStr, a1, a2 being Element of R
+ st not (a1 <= a2 or a2 <= a1) holds {a1,a2} is StableSet of R
+proof
+ let R be non empty RelStr, a1,a2 be Element of R;
+  assume
+A2: not (a1 <= a2 or a2 <= a1);
+    set S = {a1,a2};
+   S is stable proof
+    let x, y be Element of R such that
+   B1: x in S & y in S & x <> y;
+      (x = a1 or x = a2) & (y = a1 or y = a2) by B1, TARSKI:def 2;
+      hence thesis by A2, B1;
+   end;
+   hence thesis;
+end;
+
+theorem ACClique: :: ACClique:
+for R being RelStr, C being Clique of R, A being StableSet of R, a, b being set
+ st a in A & b in A & a in C & b in C holds a = b
+proof
+ let R be RelStr, C be Clique of R, A be StableSet of R, a, b be set such that
+A: a in A & b in A and
+C: a in C & b in C;
+  assume S: a <> b;
+   reconsider a' = a, b' = b as Element of R by A;
+   not a' <= b' & not b' <= a' by A, S, LAChain;
+  hence contradiction by C, S, DClique;
+end;
+
+theorem AChain0: :: AChain0:
+for R being RelStr, A being StableSet of R, B being Subset of A
+ holds B is StableSet of R
+proof
+ let R be RelStr, A be StableSet of R, B be Subset of A;
+ reconsider BB = B as Subset of R by XBOOLE_1:1;
+ BB is stable proof
+   let x, y be Element of R such that
+ A: x in BB & y in BB & x <> y;
+   thus not x <= y & not y <= x by A, LAChain;
+ end;
+ hence thesis;
+end;
+
+theorem AChain1: :: AChain1:
+for R being RelStr, A being finite StableSet of R, n being Nat
+  st n <= card A ex B being finite StableSet of R st card B = n
+proof
+ let R be RelStr, A be finite StableSet of R, n be Nat such that
+A: n <= card A;
+   consider BB being finite Subset of A such that
+B: card BB = n by A, FINSEQ_4:87;
+   reconsider BB as finite StableSet of R by AChain0;
+   take BB;
+   thus card BB = n by B;
+end;
+
+begin :: Clique number and stability number
+
+definition
+  let R be RelStr;
+  attr R is with_finite_clique# means                               :Lfheight:
+   ex C being finite Clique of R
+    st for D being finite Clique of R holds card D <= card C;
+end;
+
+registration
+  cluster finite -> with_finite_clique# RelStr;
+  coherence proof
+   let R be RelStr;
+   assume R is finite;
+    then reconsider R' = R as finite RelStr;
+    defpred P[Nat] means ex c being finite Clique of R st card c = $1;
+  P1: for k being Nat st P[k] holds k <= card R' by NAT_1:44;
+     card {}R = 0; then
+  P2: ex k being Nat st P[k];
+    consider k being Nat such that
+  B: P[k] and
+  C: for n being Nat st P[n] holds n <= k from NAT_1:sch 6(P1,P2);
+    consider c being finite Clique of R such that
+  D: card c = k by B;
+    for D be finite Clique of R holds card(D) <= card(c) by D, C;
+   hence R is with_finite_clique# by Lfheight;
+  end;
+end;
+
+registration
+  let R be with_finite_clique# RelStr;
+  cluster -> finite Clique of R;
+  coherence proof
+    let D be Clique of R;
+     consider C being finite Clique of R such that
+  A: for D being finite Clique of R holds card(D) <= card(C) by Lfheight;
+    assume D is infinite;
+    then consider Y being finite Subset of D such that
+  B: card Y > card C by Sinfset;
+    Y is Clique of R by Clique37;
+    hence contradiction by B, A;
+  end;
+end;
+
+definition
+  let R be with_finite_clique# RelStr;
+  func clique# R -> Nat  means                                    :Lheight:
+   (ex C being finite Clique of R st card C = it)
+     & for T being finite Clique of R holds card T <= it;
+  existence proof
+    consider A being finite Clique of R such that
+  A: for B being finite Clique of R holds card(B) <= card(A) by Lfheight;
+    take itt = card A;
+    thus ex A being finite Clique of R st card A = itt;
+    let T being finite Clique of R;
+    thus card T <= itt by A;
+  end;
+  uniqueness proof
+    let it1, it2 be Nat such that
+  A1a: ex S1 being finite Clique of R st card(S1) = it1 and
+  A1b: for T being finite Clique of R holds card(T) <= it1 and
+  A2a: ex S2 being finite Clique of R st card(S2) = it2 and
+  A2b: for T being finite Clique of R holds card(T) <= it2;
+    consider S1 being finite Clique of R such that
+  A1: card(S1) = it1 by A1a;
+    consider S2 being finite Clique of R such that
+  A2: card(S2) = it2 by A2a;
+    it1 <= it2 & it2 <= it1 by A1, A2, A1b, A2b;
+   hence it1 = it2 by XXREAL_0:1;
+  end;
+end;
+
+registration
+  let R be empty RelStr;
+  cluster clique# R -> empty;
+  coherence proof
+   for T being Clique of R holds card T <= card {}R;
+   hence thesis by Lheight;
+  end;
+end;
+
+registration
+  let R be with_finite_clique# non empty RelStr;
+  cluster clique# R -> positive;
+  coherence proof
+    card {the Element of R} <= clique# R by Lheight;
+   hence thesis;
+  end;
+end;
+
+theorem :: Height3:
+for R being with_finite_clique# non empty RelStr
+ st [#]R is StableSet of R holds clique# R = 1
+proof
+ let R be with_finite_clique# non empty RelStr;
+ assume A: [#]R is StableSet of R;
+   B: clique# R >= 0+1 by NAT_1:13;
+   consider A being finite Clique of R such that
+ C: card A = clique# R by Lheight;
+ assume clique# R <> 1;
+ then card A > 1 by B, C, XXREAL_0:1;
+ then consider a, b being set such that
+ D: a in A and
+ E: b in A and
+ F: a <> b by GLIB_002:1;
+ thus thesis by D, E, F, A, ACClique;
+end;
+
+theorem Height4: :: Height4:
+for R being with_finite_clique# RelStr st clique# R = 1
+  holds [#]R is StableSet of R
+proof
+ let R be with_finite_clique# RelStr;
+ assume A: clique# R = 1;
+ set cR = the carrier of R;
+D: R is non empty by A;
+ now
+   let a, b be Element of R such that
+    a in cR and b in cR and
+ C1: a <> b;
+   assume a <= b or b <= a;
+   then D1: {a,b} is Clique of R by D, Clique36b;
+    card {a,b} = 2 by C1, CARD_2:76;
+   hence contradiction by D1, A, Lheight;
+ end;
+ hence [#]R is StableSet of R by LAChain;
+end;
+
+definition
+  let R be RelStr;
+  attr R is with_finite_stability# means                             :Lfwidth:
+   ex A being finite StableSet of R
+    st for B being finite StableSet of R holds card B <= card A;
+end;
+
+registration
+  cluster finite -> with_finite_stability# RelStr;
+  coherence proof
+    let R be RelStr;
+    assume R is finite;
+    then reconsider R' = R as finite RelStr;
+    defpred P[Nat] means
+    ex A being finite StableSet of R' st card A = $1;
+  P1: for k being Nat st P[k] holds k <= card R' by NAT_1:44;
+      {}R is StableSet of R & card {} = 0;
+  then P2: ex k being Nat st P[k];
+      consider k being Nat such that
+  A1: P[k] and
+  B1: for n being Nat st P[n] holds n <= k from NAT_1:sch 6(P1, P2);
+   consider S being finite StableSet of R such that
+  C1: card S = k by A1;
+    take S;
+    let T be finite StableSet of R;
+    thus card T <= card S by C1, B1;
+  end;
+end;
+
+registration
+  let R be with_finite_stability# RelStr;
+  cluster -> finite StableSet of R;
+  coherence proof
+   consider A being finite StableSet of R such that
+  A: for B being finite StableSet of R holds card(A) >= card(B) by Lfwidth;
+   given B being StableSet of R such that
+  B: B is infinite;
+   consider C being finite Subset of B such that
+  C: card C > card A by B, Sinfset;
+     C is StableSet of R by AChain0;
+   hence contradiction by A, C;
+  end;
+end;
+
+definition
+  let R be with_finite_stability# RelStr;
+  func stability# R -> Nat means                                    :Lwidth:
+   (ex A being finite StableSet of R st card(A) = it)
+     & for T being finite StableSet of R holds card T <= it;
+  existence proof
+    consider A being finite StableSet of R such that
+  A: for B being finite StableSet of R holds card(A) >= card(B) by Lfwidth;
+    take itt = card A;
+    thus ex A being finite StableSet of R st card A = itt;
+    let T being finite StableSet of R;
+    thus card(T) <= itt by A;
+  end;
+  uniqueness proof
+    let it1, it2 be Nat such that
+  Aa: ex S1 being finite StableSet of R st card S1 = it1 and
+  A1: for T being finite StableSet of R holds card(T) <= it1 and
+  Ab: ex S2 being finite StableSet of R st card S2 = it2 and
+  A2: for T being finite StableSet of R holds card(T) <= it2;
+      consider S1 being finite StableSet of R such that
+  A3: card S1 = it1 by Aa;
+      consider S2 being finite StableSet of R such that
+  A4: card S2 = it2 by Ab;
+    it1 <= it2 & it2 <= it1 by A1, A2, A3, A4;
+   hence it1 = it2 by XXREAL_0:1;
+  end;
+end;
+
+registration
+  let R be empty RelStr;
+  cluster stability# R -> empty;
+  coherence proof
+   for T being StableSet of R holds card(T) <= card {}R;
+   hence thesis by Lwidth;
+  end;
+end;
+
+registration
+  let R be with_finite_stability# non empty RelStr;
+  cluster stability# R -> positive;
+  coherence proof
+    card{the Element of R} <= stability# R by Lwidth;
+   hence thesis;
+  end;
+end;
+
+theorem Width3: :: Width3:
+for R being with_finite_stability# non empty RelStr
+ st [#]R is Clique of R holds stability# R = 1
+proof
+ let R be with_finite_stability# non empty RelStr;
+ assume A: [#]R is Clique of R;
+   B: stability# R >= 0+1 by NAT_1:13;
+   consider A being finite StableSet of R such that
+ C: card(A) = stability# R by Lwidth;
+ assume stability# R <> 1;
+ then card A > 1 by B, C, XXREAL_0:1;
+ then consider a, b being set such that
+ D: a in A and
+ E: b in A and
+ F: a <> b by GLIB_002:1;
+ thus thesis by D, E, F, A, ACClique;
+end;
+
+theorem Width4: :: Width4:
+for R being with_finite_stability# RelStr st stability# R = 1
+ holds [#]R is Clique of R
+proof
+ let R be with_finite_stability# RelStr;
+ assume A: stability# R = 1;
+ set cR = the carrier of R;
+ now
+   let a, b be Element of R such that
+ A1: a in cR and b in cR and
+ C1: a <> b;
+ E1: R is non empty by A1;
+   assume not (a <= b or b <= a);
+   then D1: {a,b} is StableSet of R by E1, AChain36b;
+   card {a,b} = 2 by C1, CARD_2:76;
+   hence contradiction by A, Lwidth, D1;
+ end;
+ hence [#]R is Clique of R by DClique;
+end;
+
+registration
+
+ :: I have done it through Ramsey.  How else to prove it?
+ :: For posets one gets it directly from Dilworth.
+
+ :: Related: how big the gap between (clique# * stability#) and
+ ::          card of the carrier can be?
+
+  cluster with_finite_clique# with_finite_stability# -> finite RelStr;
+  coherence proof
+    let R be RelStr;
+    assume A: R is with_finite_clique#;
+    assume B: R is with_finite_stability#;
+    assume C: R is infinite;
+    reconsider R as with_finite_clique# with_finite_stability# RelStr by A, B;
+    consider C being finite Clique of R such that
+  D: card C = clique# R by Lheight;
+    consider An being finite StableSet of R such that
+  E: card(An) = stability# R by Lwidth;
+     set h = clique# R, w = stability# R;
+  hh:  0+1 <= h by C, NAT_1:13;
+  ww: 0+1 <= w by C, NAT_1:13;
+     set cR = the carrier of R, iR = the InternalRel of R;
+  cR: cR = [#]R;
+  per cases by hh, ww, XXREAL_0:1;
+  suppose h = 1;
+    then A1: cR is StableSet of R by cR, Height4;
+    consider Y being finite Subset of cR such that
+  B1: card Y > w by C, Sinfset;
+    Y is StableSet of R by A1, AChain0;
+    hence thesis by B1, Lwidth;
+  end;
+  suppose w = 1;
+    then A1: cR is Clique of R by cR, Width4;
+    consider Y being finite Subset of cR such that
+  B1: card Y > h by C, Sinfset;
+    Y is Clique of R by A1, Clique37;
+    hence thesis by B1, Lheight;
+  end;
+  suppose S1: h > 1 & w > 1;
+    set m = max(clique# R, stability# R) +1;
+    reconsider m as natural number;
+    consider r being natural number such that
+  G: for X being finite set,
+        P being a_partition of the_subsets_of_card(2,X)
+     st card X >= r & card P = 2 holds
+      ex S being Subset of X st card S >= m & S is_homogeneous_for P
+     by RAMSEY_1:17;
+     consider Y being finite Subset of R such that
+  HY: card Y > r by C, Sinfset;
+     set X = Y \/ An \/ C;
+     reconsider X as finite Subset of R;
+     Y c= Y \/ An  & Y \/ An c= Y \/ An \/ C by XBOOLE_1:7;
+     then
+  H1a: card Y <= card X by NAT_1:44, XBOOLE_1:1;
+     set A = { {x,y} where x,y is Element of R :
+                x<>y & x in X & y in X & (x <= y or y <= x) };
+     set B = { {x,y} where x,y is Element of R :
+                x<>y & x in X & y in X & not (x <= y or y <= x) };
+     set E = the_subsets_of_card(2,X);     set P = { A, B };
+  As: A c= E proof
+       let x be set;
+       assume x in A;
+       then consider xx, yy being Element of R such that
+        D1: {xx,yy} = x and
+        E1: xx<>yy and
+        F1: xx in X and
+        G1: yy in X and xx <= yy or yy <= xx;
+            x is Subset of X & card x = 2
+                by D1, E1, F1, G1, ZFMISC_1:38, CARD_2:76;
+            hence thesis;
+     end;
+  Bs: B c= E proof
+        let x be set;
+        assume A3: x in B;
+        consider xx, yy being Element of R such that
+        D1: {xx,yy} = x and
+        E1: xx<>yy and
+        F1: xx in X and
+        G1: yy in X and not (xx <= yy or yy <= xx) by A3;
+            x is Subset of X & card x = 2
+                by D1, E1, F1, G1, ZFMISC_1:38, CARD_2:76;
+            hence thesis;
+     end;
+  AB: A in P & B in P by TARSKI:def 2;
+  Ha: now
+       assume A2: A = B;
+       consider a, b being set such that
+      B2: a in An and
+      C2: b in An and
+      D2: a <> b by S1, E, GLIB_002:1;
+          reconsider a, b as Element of R by B2, C2;
+      E2: not (a <= b or b <= a) by B2, C2, D2, LAChain;
+          a in Y \/ An & b in Y \/ An by B2, C2, XBOOLE_0:def 3;
+          then a in X & b in X by XBOOLE_0:def 3;
+         then {a,b} in B by E2, D2;
+         then consider aa, bb being Element of R such that
+      F2: {a,b} = {aa, bb} and
+         aa <> bb & aa in X & bb in X and
+      H2: aa <= bb or bb <= aa by A2;
+          a = aa & b = bb or a = bb & b = aa by F2, ZFMISC_1:10;
+       hence contradiction by H2, B2, C2, D2, LAChain;
+      end;
+  Hca: P c= bool E proof
+       let x be set;
+       assume x in P;
+       then x c= E by As, Bs, TARSKI:def 2;
+       hence thesis;
+      end;
+  Hb: union P = E proof
+        thus union P c= E proof
+          let x be set;
+          assume x in union P;
+          then consider Y being set such that
+        A3: x in Y and
+        B3: Y in P by TARSKI:def 4;
+            Y = A or Y = B by B3, TARSKI:def 2;
+          hence thesis by A3, As, Bs;
+        end;
+        thus E c= union P proof
+          let x be set;
+          assume x in E;
+            then consider xx being Subset of X such that
+        A2: x = xx and
+        B2: card xx = 2;
+            consider a, b being set such that
+        C2: a <> b and
+        D2: xx = {a,b} by B2, CARD_2:79;
+            a in xx & b in xx by D2, TARSKI:def 2;
+            then a in X & b in X;
+            then reconsider a, b as Element of R;
+        E2a: a in xx & b in xx by D2, TARSKI:def 2;
+            not (a <= b or b <= a) or (a <= b or b <= a);
+            then {a,b} in A or {a,b} in B by E2a, C2;
+          hence x in union P by A2, D2, AB, TARSKI:def 4;
+        end;
+      end;
+      for a being Subset of E st a in P holds a<>{} &
+        for b being Subset of E st b in P holds a = b or a misses b proof
+       let a be Subset of E such that
+    A2: a in P;
+       thus a<>{} proof
+         per cases by A2, TARSKI:def 2;
+         suppose S2: a = A;
+           consider aa, bb being set such that
+         B3: aa in C and
+         C3: bb in C and
+         D3: aa <> bb by S1, D, GLIB_002:1;
+          reconsider aa, bb as Element of R by B3, C3;
+         E3: aa <= bb or bb <= aa by B3, C3, D3, DClique;
+          aa in Y \/ An \/ C & bb in Y \/ An \/ C by B3, C3, XBOOLE_0:def 3;
+          then {aa,bb} in A by E3, D3;
+          hence thesis by S2;
+         end;
+         suppose S2: a = B;
+           consider aa, bb being set such that
+         B3: aa in An and
+         C3: bb in An and
+         D3: aa <> bb by S1, E, GLIB_002:1;
+          reconsider aa, bb as Element of R by B3, C3;
+         E3: not (aa <= bb or bb <= aa) by B3, C3, D3, LAChain;
+          aa in Y \/ An & bb in Y \/ An by B3, C3, XBOOLE_0:def 3;
+          then aa in X & bb in X by XBOOLE_0:def 3;
+          then {aa,bb} in B by E3, D3;
+          hence thesis by S2;
+         end;
+       end;
+       let b be Subset of E such that
+    B2: b in P;
+       assume C2: a <> b;
+       assume D2: a meets b;
+        (a = A or a = B) & (b = A or b = B) by A2,B2, TARSKI:def 2;
+       then A /\ B <> {} by C2, D2, XBOOLE_0:def 7;
+       then consider x being set such that
+    E2: x in A /\ B by XBOOLE_0:def 1;
+        x in A by E2, XBOOLE_0:def 4;
+        then consider xx, yy being Element of R such that
+    F1: {xx,yy} = x and xx<>yy & xx in X & yy in X and
+    G1: xx <= yy or yy <= xx;
+        x in B by E2, XBOOLE_0:def 4;
+        then consider x2, y2 being Element of R such that
+    H1: {x2,y2} = x and x2<>y2 & x2 in X & y2 in X and
+    I1: not (x2 <= y2 or y2 <= x2);
+        xx = x2 & yy = y2 or xx = y2 & yy = x2 by F1, H1, ZFMISC_1:10;
+       hence contradiction by G1, I1;
+      end;
+     then reconsider P as a_partition of E by Hb, Hca, EQREL_1:def 6;
+  J: card P = 2 by Ha, CARD_2:76;
+     consider S being Subset of X such that
+  K: card S >= m and
+  L: S is_homogeneous_for P  by H1a, J, G, HY, XXREAL_0:2;
+     reconsider S as finite Subset of R by XBOOLE_1:1;
+      max(clique# R, stability# R) >= clique# R by XXREAL_0:25;
+      then m > clique# R by NAT_1:13;
+      then
+  mh: card S > clique# R by K, XXREAL_0:2;
+      max(clique# R, stability# R) >= stability# R by XXREAL_0:25;
+      then m > stability# R by NAT_1:13;
+      then
+  mw: card S > stability# R by K, XXREAL_0:2;
+     consider p being Element of P such that
+  M: the_subsets_of_card(2,S) c= p by L, RAMSEY_1:def 1;
+     per cases by TARSKI:def 2;
+     suppose S1: p = A;
+       now
+        let x, y  be Element of R such that
+     A1: x in S and
+     B1: y in S and
+     C1: x <> y;
+           {x,y} is Subset of S & card {x,y} = 2
+               by A1, B1, C1, ZFMISC_1:38, CARD_2:76;
+           then {x,y} in the_subsets_of_card(2,S);
+           then {x,y} in A by S1, M;
+           then consider xx, yy being Element of R such that
+        D1: {xx,yy} = {x,y} and xx<>yy & xx in X & yy in X and
+        E1: xx <= yy or yy <= xx;
+            xx = x & yy = y or xx = y & yy = x by D1, ZFMISC_1:10;
+         hence x <= y or y <= x by E1;
+       end;
+       then S is Clique of R by DClique;
+       hence contradiction by mh, Lheight;
+     end;
+     suppose S1: p = B;
+       S is stable proof
+         let x, y being Element of R such that
+       A1: x in S and
+       B1: y in S and
+       C1: x <> y;
+           {x,y} is Subset of S & card {x,y} = 2
+               by A1, B1, C1, ZFMISC_1:38, CARD_2:76;
+           then {x,y} in the_subsets_of_card(2,S);
+           then {x,y} in B by S1, M;
+           then consider xx, yy being Element of R such that
+        D1: {xx,yy} = {x,y} and xx<>yy & xx in X & yy in X and
+        E1: not (xx <= yy or yy <= xx);
+            xx = x & yy = y or xx = y & yy = x by D1, ZFMISC_1:10;
+         hence not x <= y & not y <= x by E1;
+       end;
+       hence contradiction by mw, Lwidth;
+     end;
+  end;
+  end;
+end;
+
+begin :: Lower and upper sets, minimal and maximal elements
+
+definition
+  let R be RelStr, X be Subset of R;
+  func Lower X -> Subset of R equals
+   X \/ downarrow X;
+  coherence;
+  func Upper X -> Subset of R equals
+   X \/ uparrow X;
+   coherence;
+end;
+
+theorem ABAC0: :: ABAC0:
+for R being antisymmetric transitive RelStr, A being StableSet of R,
+    z being set
+ st z in Upper A & z in Lower A holds z in A
+proof
+ let R be antisymmetric transitive RelStr, A be StableSet of R,
+     z be set such that
+A: z in Upper A and
+B: z in Lower A;
+ per cases;
+ suppose z in A;
+   hence thesis;
+ end;
+ suppose S1: not z in A;
+ A1: z in uparrow A by A, S1, XBOOLE_0:def 3;
+ B1: z in downarrow A by B, S1, XBOOLE_0:def 3;
+   reconsider y = z as Element of R by A;
+   consider x being Element of R such that
+E: x <= y and
+F: x in A by A1, WAYBEL_0:def 16;
+   reconsider x' = z as Element of R by B;
+   consider y' being Element of R such that
+I: x' <= y' and
+J: y' in A by B1,WAYBEL_0:def 15;
+   x <= y' by E, I,  YELLOW_0:def 2;
+   then x = y' by F, J, LAChain;
+  hence z in A by E, F, I, YELLOW_0:def 3;
+ end;
+end;
+
+theorem ABunion: :: ABunion:
+for R being with_finite_stability# RelStr, A being StableSet of R
+ st card A = stability# R holds Upper A \/ Lower A = [#]R
+proof
+ let R be with_finite_stability# RelStr, A be StableSet of R such that
+AA: card A = stability# R;
+   set cP = the carrier of R;
+   cP c= Upper A \/ Lower A proof
+     let x be set;
+     assume A: x in cP;
+     assume B: not x in Upper A \/ Lower A;
+      reconsider x as Element of cP by A;
+     C: not x in Upper A by B, XBOOLE_0:def 3;
+     Ca: not x in A by C, XBOOLE_0:def 3;
+     Cb: not x in uparrow A by C, XBOOLE_0:def 3;
+     D: not x in Lower A by B, XBOOLE_0:def 3;
+     Db: not x in downarrow A by D, XBOOLE_0:def 3;
+       set Ax = A \/ {x};
+       Ka: {x} c= the carrier of R by A, ZFMISC_1:37;
+      now
+         let a, b be Element of R such that
+       A1: a in Ax and
+       B1: b in Ax and
+       C1: a <> b;
+      per cases by A1, B1, XBOOLE_0:def 3;
+      suppose a in A & b in A;
+       hence not a <= b & not b <= a by C1, LAChain;
+      end;
+      suppose S1: a in A & b in {x};
+        then b = x by TARSKI:def 1;
+     hence not a <= b & not b <= a by Cb,WAYBEL_0:def 16,Db,WAYBEL_0:def 15,S1;
+      end;
+      suppose S1: a in {x} & b in A;
+        then a = x by TARSKI:def 1;
+     hence not a <= b & not b <= a by Cb,WAYBEL_0:def 16,Db,WAYBEL_0:def 15,S1;
+      end;
+      suppose a in {x} & b in {x};
+        then a = x & b = x by TARSKI:def 1;
+       hence not a <= b & not b <= a by C1;
+      end;
+      end;
+      then P: Ax is StableSet of R by Ka, XBOOLE_1:8, LAChain;
+       card Ax = card A + 1 by Ca, CARD_2:54;
+      then card Ax > card A by NAT_1:13;
+    hence contradiction by Lwidth, AA, P;
+   end;
+ hence Upper A \/ Lower A = [#]R by XBOOLE_0:def 10;
+end;
+
+theorem Pminmin: :: Pminmin:
+for R being transitive RelStr, x being Element of R, S being Subset of R
+ st x is_minimal_in Lower S holds x is_minimal_in [#]R
+proof
+ let R be transitive RelStr, x be Element of R, S be Subset of R such that
+A: x is_minimal_in Lower S;
+ set cR = the carrier of R;
+B: x in Lower S by A, WAYBEL_4:57;
+ assume not x is_minimal_in [#]R;
+ then consider y being Element of R such that  y in cR and
+E: y < x by B, WAYBEL_4:57;
+ per cases by B, XBOOLE_0:def 3;
+ suppose S1: x in S;
+    y <= x by E, ORDERS_2:def 10;
+   then y in downarrow S by S1, WAYBEL_0:def 15;
+   then y in Lower S by XBOOLE_0:def 3;
+  hence thesis by A, E, WAYBEL_4:57;
+ end;
+ suppose S1: x in downarrow S;
+   consider x'' being Element of R such that
+H: x <= x'' and
+I: x'' in S by S1, WAYBEL_0:def 15;
+   y <= x by E, ORDERS_2:def 10; then
+J: y <= x'' by H, YELLOW_0:def 2;
+   y in downarrow S by I, J, WAYBEL_0:def 15;
+   then y in Lower S by XBOOLE_0:def 3;
+  hence contradiction by A, E, WAYBEL_4:57;
+ end;
+end;
+
+theorem Pmaxmax: :: Pmaxmax:
+for R being transitive RelStr, x being Element of R, S being Subset of R
+ st x is_maximal_in Upper S holds x is_maximal_in [#]R
+proof
+ let R be transitive RelStr, x be Element of R, S be Subset of R such that
+A: x is_maximal_in Upper S;
+   set cR = the carrier of R;
+B: x in Upper S by A, WAYBEL_4:56;
+ assume not x is_maximal_in [#]R;
+ then consider y being Element of R such that y in cR and
+E: x < y by B, WAYBEL_4:56;
+ per cases by B, XBOOLE_0:def 3;
+ suppose S1: x in S;
+   x <= y by E, ORDERS_2:def 10;
+   then y in uparrow S by S1, WAYBEL_0:def 16;
+   then y in Upper S by XBOOLE_0:def 3;
+   hence thesis by A, E, WAYBEL_4:56;
+ end;
+ suppose x in uparrow S;
+   then consider x'' being Element of R such that
+H: x'' <= x and
+I: x'' in S by WAYBEL_0:def 16;
+   x <= y by E, ORDERS_2:def 10;
+   then x'' <= y by H, YELLOW_0:def 2;
+   then y in uparrow S by I, WAYBEL_0:def 16;
+   then y in Upper S by XBOOLE_0:def 3;
+  hence contradiction by A, E, WAYBEL_4:56;
+ end;
+end;
+
+definition
+  let R be RelStr;
+  set cR = the carrier of R;
+  func minimals R -> Subset of R means                                 :Lmin:
+   for x being Element of R holds x in it iff x is_minimal_in [#]R
+     if R is non empty
+   otherwise it  = {};
+  consistency;
+  existence proof
+   defpred P[set] means ex a being Element of R st a = $1 & a is_minimal_in cR;
+   consider X being set such that
+A: for x being set holds x in X iff x in cR & P[x] from XBOOLE_0:sch 1;
+B: now
+    assume S1: cR is non empty;
+      for x being set st x in X holds x in cR by A;
+      then reconsider X as Subset of R by TARSKI:def 3;
+    take X;
+    let x be Element of R;
+      x in X implies P[x] by A;
+    hence x in X iff x is_minimal_in cR by A, S1;
+   end;
+   now
+    reconsider X = {} as Subset of R by XBOOLE_1:2;
+    take X;
+    thus X = {};
+   end;
+   hence thesis by B;
+  end;
+  uniqueness proof
+    let it1, it2 be Subset of R;
+    now assume that R is non empty and
+  A1: for x being Element of R holds x in it1 iff x is_minimal_in cR and
+  A2: for x being Element of R holds x in it2 iff x is_minimal_in cR;
+      now
+       let x be set;
+       now
+        assume A3: x in it1 or x in it2;
+          then reconsider x' = x as Element of R;
+          x' is_minimal_in cR by A3, A1, A2;
+        hence x in it1 & x in it2 by A1, A2;
+       end;
+       hence x in it1 iff x in it2;
+      end;
+     hence it1 = it2 by TARSKI:2;
+    end;
+    hence thesis;
+  end;
+
+  func maximals R -> Subset of R means                                 :Lmax:
+   for x being Element of R holds x in it iff x is_maximal_in [#]R
+     if R is non empty
+   otherwise it  = {};
+  consistency;
+  existence proof
+   defpred P[set] means ex a being Element of R st a = $1 & a is_maximal_in cR;
+   consider X being set such that
+A: for x being set holds x in X iff x in cR & P[x] from XBOOLE_0:sch 1;
+B: now
+    assume S1: cR is non empty;
+      for x being set st x in X holds x in cR by A;
+      then reconsider X as Subset of R by TARSKI:def 3;
+    take X;
+    let x be Element of R;
+      x in X implies P[x] by A;
+    hence x in X iff x is_maximal_in cR by A, S1;
+   end;
+   now
+    reconsider X = {} as Subset of R by XBOOLE_1:2;
+    take X;
+    thus X = {};
+   end;
+   hence thesis by B;
+  end;
+  uniqueness proof
+    let it1, it2 be Subset of R;
+    now assume that R is non empty and
+  A1: for x being Element of R holds x in it1 iff x is_maximal_in cR and
+  A2: for x being Element of R holds x in it2 iff x is_maximal_in cR;
+      now
+       let x be set;
+       now
+        assume A3: x in it1 or x in it2;
+          then reconsider x' = x as Element of R;
+          x' is_maximal_in cR by A3, A1, A2;
+        hence x in it1 & x in it2 by A1, A2;
+       end;
+       hence x in it1 iff x in it2;
+      end;
+     hence it1 = it2 by TARSKI:2;
+    end;
+    hence thesis;
+  end;
+end;
+
+registration
+  let R be with_finite_clique# non empty antisymmetric transitive RelStr;
+  cluster maximals R -> non empty;
+  coherence proof
+  set cP = the carrier of R, iP = the InternalRel of R;
+  consider CL being finite Clique of R such that
+  AA: for D being finite Clique of R holds card(D) <= card(CL) by Lfheight;
+      card {the Element of R} <= card CL by AA;
+      then CL <> {};
+     then consider y being Element of R such that y in CL and
+  D: y is_maximal_wrt CL, iP by BAGORDER:7;
+  E: y is_maximal_in CL by D, WAYBEL_4:def 25;
+  F: cP = [#]R;
+     now
+       assume not y is_maximal_in cP;
+         then consider z being Element of R such that z in cP and
+     C1: y < z by WAYBEL_4:56;
+     D1: y <= z by C1, ORDERS_2:def 10;
+         set C = CL \/ {z};
+         reconsider C as finite Clique of R by D1, E, ExtClique;
+         not z in CL by E, C1, WAYBEL_4:56;
+         then card C = card CL + 1 by CARD_2:54;
+         then card CL + 1 <= card CL + 0 by AA;
+       hence contradiction by XREAL_1:8;
+     end;
+     hence thesis by F, Lmax;
+  end;
+  cluster minimals R -> non empty;
+  coherence proof
+  set cP = the carrier of R, iP = the InternalRel of R;
+  consider CL being finite Clique of R such that
+  AA: for D being finite Clique of R holds card(D) <= card(CL) by Lfheight;
+      card {the Element of R} <= card CL by AA;
+      then CL <> {};
+     then consider y being Element of R such that y in CL and
+  D: y is_minimal_wrt CL, iP by BAGORDER:8;
+  E: y is_minimal_in CL by D, WAYBEL_4:def 27;
+  F: cP = [#]R;
+     now
+       assume not y is_minimal_in cP;
+         then consider z being Element of R such that z in cP and
+     C1: z < y by WAYBEL_4:57;
+     D1: z <= y by C1, ORDERS_2:def 10;
+         set C = CL \/ {z};
+         reconsider C as finite Clique of R by D1, E, ExtCliquemin;
+         not z in CL by E, C1, WAYBEL_4:57;
+         then card C = card CL + 1 by CARD_2:54;
+         then card CL + 1 <= card CL + 0 by AA;
+       hence contradiction by XREAL_1:8;
+     end;
+     hence thesis by F, Lmin;
+  end;
+end;
+
+registration let R be RelStr;
+ cluster minimals R -> stable;
+ coherence
+proof
+ set mR = minimals R, cR = the carrier of R;
+ let x, y be Element of R such that
+A: x in mR and
+B: y in mR and
+C: x <> y;
+D: R is non empty by A;
+   y is_minimal_in [#]R by B, D, Lmin;
+   then not y > x by A, WAYBEL_4:57;
+  hence not x <= y by C, ORDERS_2:def 10;
+   x is_minimal_in [#]R  by A, D, Lmin;
+   then not x > y  by B, WAYBEL_4:57;
+  hence not y <= x by C, ORDERS_2:def 10;
+end;
+ cluster maximals R -> stable;
+ coherence
+proof
+ set mR = maximals R, cR = the carrier of R;
+ let x, y be Element of R such that
+A: x in mR and
+B: y in mR and
+C: x <> y;
+D: R is non empty by A;
+   x is_maximal_in [#]R by A, D, Lmax;
+   then not y > x  by B, WAYBEL_4:56;
+  hence not x <= y by C, ORDERS_2:def 10;
+   y is_maximal_in [#]R by B, D, Lmax;
+   then not x > y by A, WAYBEL_4:56;
+  hence not y <= x by C, ORDERS_2:def 10;
+end;
+end;
+
+theorem PCAamin: :: PCAamin:
+for R being RelStr, A being StableSet of R
+ st not minimals R c= A holds not minimals R c= Upper A
+proof
+  let R be RelStr, A be StableSet of R;
+  assume not minimals R c= A;
+  then consider x being set such that
+B: x in minimals R and
+C: not x in A by TARSKI:def 3;
+  assume D: minimals R c= Upper A;
+   reconsider x' = x as Element of R by B;
+   R is non empty by B;
+   then B1: x' is_minimal_in [#]R by B, Lmin;
+      x' in uparrow A by C, B, D, XBOOLE_0:def 3;
+      then consider x'' being Element of R such that
+  C1: x'' <= x' and
+  D1: x'' in A by WAYBEL_0:def 16;
+      now assume x'' <> x';
+        then x'' < x' by C1, ORDERS_2:def 10;
+       hence contradiction by B, B1, WAYBEL_4:57;
+      end;
+   hence contradiction by D1, C;
+end;
+
+theorem PCAbmax: :: PCAbmax:
+for R being RelStr, A being StableSet of R
+ st not maximals R c= A holds not maximals R c= Lower A
+proof
+  let R be RelStr, A be StableSet of R such that
+A: not maximals R c= A;
+   consider x being set such that
+B: x in maximals R and
+C: not x in A by A, TARSKI:def 3;
+  assume D: maximals R c= Lower A;
+   reconsider x' = x as Element of R by B;
+   R is non empty by B;
+   then B1: x' is_maximal_in [#]R by B, Lmax;
+   x' in downarrow A by C, B, D, XBOOLE_0:def 3;
+   then consider x'' being Element of R such that
+  C1: x' <= x'' and
+  D1: x'' in A by WAYBEL_0:def 15;
+      now assume x'' <> x';
+        then x' < x'' by C1, ORDERS_2:def 10;
+       hence contradiction by B, B1, WAYBEL_4:56;
+      end;
+  hence contradiction by D1, C;
+end;
+
+begin :: Substructures
+
+registration
+  let R be RelStr, X be finite Subset of R;
+  cluster subrelstr X -> finite;
+  coherence by YELLOW_0:def 15;
+end;
+
+theorem SPClique: :: SPClique:
+for R being RelStr, S being Subset of R, C being Clique of subrelstr S
+ holds C is Clique of R
+proof
+ let R be RelStr, S be Subset of R, C be Clique of subrelstr S;
+Aa: the carrier of subrelstr S = S by YELLOW_0:def 15;
+  now
+   let a, b be Element of R such that
+  A1: a in C and
+  B1: b in C and
+  C1: a <> b;
+     reconsider a' = a, b' = b as Element of subrelstr S by A1,B1;
+        a' <= b' or b' <= a' by A1, B1, C1, DClique;
+   hence a <= b or b <= a by YELLOW_0:60;
+  end;
+ hence C is Clique of R by Aa, XBOOLE_1:1, DClique;
+end;
+
+theorem SPClique1: :: SPClique1:
+for R being RelStr, S being Subset of R, C being Clique of R
+ holds C /\ S is Clique of subrelstr S
+proof
+ let R be RelStr, S be Subset of R, C be Clique of R;
+ set sS = subrelstr S, CS = C /\ S;
+Aa: CS c= S by XBOOLE_1:17;
+B: S = the carrier of sS by YELLOW_0:def 15;
+  now
+   let a, b be Element of sS;
+   assume Z0: a in CS;
+   assume Z1: b in CS;
+   assume Z2a: a <> b;
+   ZZ: a in S & b in S by Z0, Z1, XBOOLE_0:def 4;
+     Z2: S is non empty by Z0;
+     Z4: R is non empty by Z0;
+     reconsider a' = a, b' = b as Element of R by Z2, Z4, YELLOW_0:59;
+     a' in C & b' in C by Z0, Z1, XBOOLE_0:def 4;
+     then a' <= b' or b' <= a' by Z2a, DClique;
+   hence a <= b or b <= a by ZZ, B, YELLOW_0:61;
+  end;
+ hence C /\ S is Clique of subrelstr S by DClique, Aa, YELLOW_0:def 15;
+end;
+
+theorem SPAChain1: :: SPAChain1:
+for R being RelStr, S being Subset of R, A being StableSet of subrelstr S
+ holds A is StableSet of R
+proof
+ let R be RelStr, S be Subset of R, A be StableSet of subrelstr S;
+   set sS = subrelstr S;
+ per cases;
+ suppose R is empty;
+    then the carrier of sS = {} by YELLOW_0:def 15;
+    then A = {}R;
+   hence A is StableSet of R;
+ end;
+ suppose S1: R is non empty;
+   per cases;
+   suppose S is empty;
+     then the carrier of sS = {} by YELLOW_0:def 15;
+     then A = {}R;
+    hence A is StableSet of R;
+   end;
+   suppose S2: S is non empty;
+      S = the carrier of sS by YELLOW_0:def 15;
+      then reconsider A as Subset of R by XBOOLE_1:1;
+     A is stable proof
+      let x, y be Element of R such that
+     A1: x in A and
+     B1: y in A and
+     C1: x <> y;
+       reconsider x' = x, y' = y as Element of sS by A1, B1;
+       not x' <= y' & not y' <= x' by A1, B1, C1, LAChain;
+        hence not x <= y & not y <= x by S1, S2, YELLOW_0:61;
+     end;
+     hence thesis;
+   end;
+  end;
+end;
+
+theorem SPAChain: :: SPAChain:
+for R being RelStr, S being Subset of R, A being StableSet of R
+ holds A /\ S is StableSet of subrelstr S
+proof
+ let R be RelStr, S be Subset of R, A be StableSet of R;
+   set sS = subrelstr S, AS = A /\ S;
+ per cases;
+ suppose R is empty;
+    then A /\ S = {}sS;
+   hence A /\ S is StableSet of sS;
+ end;
+ suppose S1: R is non empty;
+   per cases;
+   suppose S is empty;
+     then A /\ S = {}sS;
+    hence A /\ S is StableSet of sS;
+   end;
+   suppose S2: S is non empty;
+      S = the carrier of sS by YELLOW_0:def 15;
+     then reconsider AS as Subset of sS by XBOOLE_1:17;
+     AS is stable proof
+      let x, y be Element of sS such that
+     A1: x in AS and
+     B1: y in AS and
+     C1: x <> y;
+       reconsider x' = x, y' = y as Element of R by S1, S2, YELLOW_0:59;
+     D1: x' in A by A1, XBOOLE_0:def 4;
+     E1: y' in A by B1, XBOOLE_0:def 4;
+       not x' <= y' & not y' <= x' by D1, E1, C1, LAChain;
+      hence not x <= y & not y <= x by YELLOW_0:60;
+      end;
+     hence A /\ S is StableSet of sS;
+   end;
+  end;
+end;
+
+theorem SPmax: :: SPmax
+for R being RelStr, S being Subset of R, B being Subset of subrelstr S,
+    x being Element of subrelstr S, y being Element of R
+ st x = y & x is_maximal_in B holds y is_maximal_in B
+proof
+ let R be RelStr, S be Subset of R, B be Subset of subrelstr S,
+     x be Element of subrelstr S, y be Element of R such that
+A: x = y and
+B: x is_maximal_in B;
+C: x in B by B, WAYBEL_4:56;
+ assume not y is_maximal_in B;
+   then consider z being Element of R such that
+A1: z in B and
+B1: y < z by A, C, WAYBEL_4:56;
+C1: y <= z by B1, ORDERS_2:def 10;
+    reconsider z' = z as Element of subrelstr S by A1;
+    x <= z' by A1, C1, A, YELLOW_0:61;
+    then x < z' by B1, A, ORDERS_2:def 10;
+  hence contradiction by A1, B, WAYBEL_4:56;
+end;
+
+theorem SPmin: :: SPmin
+for R being RelStr, S being Subset of R, B being Subset of subrelstr S,
+    x being Element of subrelstr S, y being Element of R
+ st x = y & x is_minimal_in B holds y is_minimal_in B
+proof
+ let R be RelStr, S be Subset of R, B be Subset of subrelstr S,
+     x be Element of subrelstr S, y be Element of R such that
+A: x = y and
+B: x is_minimal_in B;
+C: x in B by B, WAYBEL_4:57;
+ assume not y is_minimal_in B;
+   then consider z being Element of R such that
+A1: z in B and
+B1: z < y by A, C, WAYBEL_4:57;
+C1: z <= y by B1, ORDERS_2:def 10;
+    reconsider z' = z as Element of subrelstr S by A1;
+    z' <= x by A1, C1, A, YELLOW_0:61;
+    then z' < x by B1, A, ORDERS_2:def 10;
+  hence contradiction by A1, B, WAYBEL_4:57;
+end;
+
+theorem PbeSmax: :: PbeSmax:
+for R being transitive RelStr, A being StableSet of R,
+    C being Clique of subrelstr Lower A, a, b being Element of R
+ st a in A & a in C & b in C holds a = b or b <= a
+proof
+let R be transitive RelStr, A be StableSet of R,
+    C be Clique of subrelstr Lower A, a, b be Element of R such that
+A: a in A and
+B: a in C and
+C: b in C;
+   set ap = subrelstr Lower A;
+   reconsider a' = a as Element of ap by B;
+Da: b in the carrier of ap by C;
+   reconsider b' = b as Element of ap by C;
+D: b' in Lower A by Da, YELLOW_0:def 15;
+E: C is Clique of R by SPClique;
+   per cases by D, XBOOLE_0:def 3;
+   suppose b' in A;
+     hence thesis by A,B,C,E,ACClique;
+   end;
+   suppose b' in downarrow A;
+    then consider c being Element of R such that
+  A1: b <= c and
+  B1: c in A by WAYBEL_0:def 15;
+ per cases;
+  suppose Ax: a <> b;
+    per cases by Ax, B, C, DClique;
+    suppose a' <= b';
+      then S1a: a <= b by YELLOW_0:60;
+      a <= c by S1a, A1, YELLOW_0:def 2;
+      hence thesis by B1, A1, A, LAChain;
+    end;
+    suppose b' <= a';
+      hence thesis by YELLOW_0:60;
+    end;
+  end;
+  suppose a = b;
+    hence thesis;
+  end;
+ end;
+end;
+
+theorem PabSmin: :: PabSmin:
+for R being transitive RelStr, A being StableSet of R,
+    C being Clique of subrelstr Upper A, a, b being Element of R
+ st a in A & a in C & b in C holds a = b or a <= b
+proof
+ let R be transitive RelStr, A be StableSet of R,
+     C be Clique of subrelstr Upper A, a, b be Element of R such that
+A: a in A and
+B: a in C and
+C: b in C;
+   set ap = subrelstr Upper A;
+   reconsider a' = a as Element of ap by B;
+Da: b in the carrier of ap by C;
+   reconsider b' = b as Element of ap by C;
+D: b' in Upper A by Da, YELLOW_0:def 15;
+E: C is Clique of R by SPClique;
+   per cases by D, XBOOLE_0:def 3;
+   suppose b' in A;
+     hence thesis by A, B, C, E, ACClique;
+   end;
+   suppose b' in uparrow A;
+    then consider c being Element of R such that
+A1: c <= b and
+B1: c in A by WAYBEL_0:def 16;
+  per cases;
+  suppose Ax: a <> b;
+   per cases by Ax, B, C, DClique;
+   suppose a' <= b';
+    hence thesis by YELLOW_0:60;
+   end;
+   suppose b' <= a';
+    then S1a: b <= a by YELLOW_0:60;
+       c <= a by S1a, A1, YELLOW_0:def 2;
+    hence thesis by B1, A1, A, LAChain;
+   end;
+  end;
+  suppose a = b;
+   hence thesis;
+  end;
+ end;
+end;
+
+registration
+  let R be with_finite_clique# RelStr, S be Subset of R;
+  cluster subrelstr S -> with_finite_clique#;
+  coherence proof
+   consider C being finite Clique of R such that
+  A: for D being finite Clique of R holds card(D) <= card(C) by Lfheight;
+    set sS = subrelstr S;
+    defpred P[Nat] means ex c being finite Clique of sS st card c = $1;
+  P1: for k being Nat st P[k] holds k <= card C proof
+     let k be Nat;
+     assume P[k];
+     then consider c being finite Clique of sS such that
+    A1: card c = k;
+     c is finite Clique of R by SPClique;
+     hence thesis by A1, A;
+    end;
+      card {}sS = 0; then
+  P2: ex k being Nat st P[k];
+    consider k being Nat such that
+  B: P[k] and
+  C: for n being Nat st P[n] holds n <= k from NAT_1:sch 6(P1,P2);
+    consider c being finite Clique of sS such that
+  D: card c = k by B;
+     for D being finite Clique of sS holds card(D) <= card(c) by D, C;
+    hence sS is with_finite_clique# by Lfheight;
+  end;
+end;
+
+registration
+  let R be with_finite_stability# RelStr, S be Subset of R;
+  cluster subrelstr S -> with_finite_stability#;
+  coherence proof
+   consider A being finite StableSet of R such that
+  A: for B being finite StableSet of R holds card(A) >= card(B) by Lfwidth;
+     assume Aa: not subrelstr S is with_finite_stability#;
+     defpred P[Nat] means
+      ex C being finite StableSet of subrelstr S
+       st card C = $1
+        & ex B being finite StableSet of subrelstr S st $1 < card(B);
+
+   P1: P[0] proof
+        reconsider C = {}(subrelstr S) as finite StableSet of subrelstr S;
+        take C;
+        thus card C = 0;
+        hence thesis by Aa, Lfwidth;
+       end;
+   P2: for n being Nat st P[n] holds P[n+1] proof
+        let n be Nat;
+        given C being finite StableSet of subrelstr S such that card C = n and
+       C1: ex B being finite StableSet of subrelstr S st n < card(B);
+           consider B being finite Subset of subrelstr S such that
+       D1: n < card(B) & B is StableSet of subrelstr S by C1;
+           n+1 <= card B by D1, NAT_1:13;
+           then consider BB being finite StableSet of subrelstr S such that
+       E1: card BB = n+1 by D1, AChain1;
+           take BB;
+           thus card BB = n+1 by E1;
+           consider Bb being finite StableSet of subrelstr S such that
+       D1b: card BB < card(Bb) by Aa, Lfwidth;
+           take Bb;
+           thus n+1 < card Bb by D1b, E1;
+       end;
+   Q: for n being Nat holds P[n] from NAT_1:sch 2(P1,P2);
+      consider C being finite StableSet of subrelstr S such that
+         card C = card A and
+   S: ex B being finite StableSet of subrelstr S st card A < card(B) by Q;
+      consider B being finite StableSet of subrelstr S such that
+   T: card A < card(B) by S;
+      B is StableSet of R by SPAChain1;
+   hence contradiction by A, T;
+  end;
+end;
+
+theorem Pmaxmin: :: Pmaxmin:
+for R being with_finite_clique# non empty antisymmetric transitive RelStr,
+    x being Element of R
+ holds ex y being Element of R st y is_minimal_in [#]R & (y = x or y < x)
+proof
+ let R be with_finite_clique# non empty antisymmetric transitive RelStr,
+     x be Element of R;
+ set cR = the carrier of R, iR = the InternalRel of R;
+ set sx = Lower {x}; set sL = subrelstr sx;
+reconsider sL as with_finite_clique# non empty antisymmetric transitive RelStr;
+   consider y being set such that
+A: y in minimals sL by XBOOLE_0:def 1;
+   reconsider y as Element of sL by A;
+C: [#]sL = sx by YELLOW_0:def 15;
+B: y is_minimal_in sx by A, C, Lmin;
+   reconsider y' = y as Element of R by YELLOW_0:59;
+   take y';
+   sx c= the carrier of sL by YELLOW_0:def 15;
+   hence y' is_minimal_in [#]R by B, SPmin, Pminmin;
+   per cases;
+   suppose y' = x;
+     hence thesis;
+   end;
+   suppose y' <> x;
+     then not y' in {x} by TARSKI:def 1;
+     then y' in downarrow x by XBOOLE_0:def 3, C;
+     then y' <= x by WAYBEL_0:17;
+    hence thesis by ORDERS_2:def 10;
+   end;
+end;
+
+theorem :: Pam:
+for R being with_finite_clique# antisymmetric transitive RelStr
+ holds Upper minimals R = [#]R
+proof
+ let R being with_finite_clique# antisymmetric transitive RelStr;
+ set ap = Upper minimals R; set cR = the carrier of R;
+   cR c= ap proof
+     let x be set;
+     assume A1: x in cR;
+     then reconsider x' = x as Element of R;
+   B1: R is non empty by A1;
+     consider y being Element of R such that
+   C1: y is_minimal_in [#]R and
+   D1: y = x' or y < x' by B1, Pmaxmin;
+   E1: y in minimals R by C1, B1, Lmin;
+       per cases by D1;
+       suppose x' = y;
+         hence thesis by E1, XBOOLE_0:def 3;
+       end;
+       suppose y < x';
+         then y <= x' by ORDERS_2:def 10;
+         then x in uparrow minimals R by E1, WAYBEL_0:def 16;
+         hence x in ap by XBOOLE_0:def 3;
+       end;
+   end;
+  hence thesis by XBOOLE_0:def 10;
+end;
+
+theorem Pminmax: :: Pminmax
+for R being with_finite_clique# non empty antisymmetric transitive RelStr,
+    x being Element of R
+  ex y being Element of R st y is_maximal_in [#]R & (y = x or x < y)
+proof
+ let R be with_finite_clique# non empty antisymmetric transitive RelStr,
+     x be Element of R;
+ set cR = the carrier of R;
+ set ax = Upper {x}; set sU = subrelstr ax;
+reconsider sU as with_finite_clique# non empty antisymmetric transitive RelStr;
+ consider y being set such that
+A: y in maximals sU by XBOOLE_0:def 1;
+ reconsider y as Element of sU by A;
+C: [#]sU = ax by YELLOW_0:def 15;
+B: y is_maximal_in ax by A, C, Lmax;
+ reconsider y' = y as Element of R by YELLOW_0:59;
+   take y';
+   ax c= the carrier of sU by YELLOW_0:def 15;
+   hence y' is_maximal_in [#]R by B, SPmax, Pmaxmax;
+   per cases;
+   suppose y' = x;
+     hence thesis;
+   end;
+   suppose y' <> x;
+     then not y' in {x} by TARSKI:def 1;
+     then y' in uparrow x by XBOOLE_0:def 3, C;
+     then x <= y' by WAYBEL_0:18;
+    hence thesis by ORDERS_2:def 10;
+   end;
+end;
+
+theorem :: Pbm:
+for R being with_finite_clique# antisymmetric transitive RelStr
+ holds Lower maximals R = [#]R
+proof
+ let P being with_finite_clique# antisymmetric transitive RelStr;
+ set ap = Lower maximals P; set cP = the carrier of P;
+   cP c= ap proof
+     let x be set;
+     assume A1: x in cP;
+     then reconsider x' = x as Element of P;
+   B1: P is non empty by A1;
+     consider y being Element of P such that
+   C1: y is_maximal_in [#]P and
+   D1: y = x' or y > x' by B1, Pminmax;
+   E1: y in maximals P by C1, B1, Lmax;
+       per cases by D1;
+       suppose x' = y;
+         hence thesis by E1, XBOOLE_0:def 3;
+       end;
+       suppose y > x';
+         then x' <= y by ORDERS_2:def 10;
+         then x in downarrow maximals P by E1, WAYBEL_0:def 15;
+         hence x in ap by XBOOLE_0:def 3;
+       end;
+   end;
+  hence thesis by XBOOLE_0:def 10;
+end;
+
+theorem PCAmin: :: PCAmin:
+for R being with_finite_clique# antisymmetric transitive RelStr,
+    A being StableSet of R
+ st minimals R c= A holds A = minimals R
+proof
+ let R be with_finite_clique# antisymmetric transitive RelStr,
+     A be StableSet of R such that
+A: minimals R c= A;
+  A c= minimals R proof
+    let x be set;
+    assume A1: x in A;
+    then A1a: R is non empty;
+    reconsider x' = x as Element of R by A1;
+     consider y being Element of R such that
+  B1: y is_minimal_in [#]R and
+  C1: y = x' or y < x' by A1a, Pmaxmin;
+  D1: y = x' or y <= x' by C1, ORDERS_2:def 10;
+      y in minimals R by A1a, B1, Lmin;
+    hence x in minimals R by A, A1, D1, LAChain;
+  end;
+  hence A = minimals R by A, XBOOLE_0:def 10;
+end;
+
+theorem PCAmax: :: PCAmax:
+for R being with_finite_clique# antisymmetric transitive RelStr,
+    A being StableSet of R
+ st maximals R c= A holds A = maximals R
+proof
+ let R be with_finite_clique# antisymmetric transitive RelStr,
+     A be StableSet of R such that
+A: maximals R c= A;
+  A c= maximals R proof
+    let x be set;
+    assume A1: x in A;
+    then A1a: R is non empty;
+    reconsider x' = x as Element of R by A1;
+     consider y being Element of R such that
+  B1: y is_maximal_in [#]R and
+  C1: y = x' or x' < y by A1a, Pminmax;
+  D1: y = x' or x' <= y by C1, ORDERS_2:def 10;
+      y in maximals R by A1a, B1, Lmax;
+    hence x in maximals R by A, A1, D1, LAChain;
+  end;
+  hence A = maximals R by A, XBOOLE_0:def 10;
+end;
+
+theorem Hsubp0: :: Hsubp0:
+for R being with_finite_clique# RelStr, S being Subset of R
+ holds clique# subrelstr S <= clique# R
+proof
+ let R be with_finite_clique# RelStr, S be Subset of R;
+  set s = subrelstr S;
+ consider c being finite Clique of s such that
+a: card c = clique# s by Lheight;
+ c is Clique of R by SPClique;
+ hence clique# subrelstr S <= clique# R by Lheight, a;
+end;
+
+theorem :: Hsubp1:
+for R being with_finite_clique# RelStr, C being Clique of R,
+    S being Subset of R st card C = clique# R & C c= S
+ holds clique# subrelstr S = clique# R
+proof
+ let R be with_finite_clique# RelStr, C be Clique of R, S be Subset of R
+ such that
+A: card C = clique# R and
+B: C c= S;
+   C = C /\ S by B, XBOOLE_1:28; then
+C: C is Clique of subrelstr S by SPClique1;
+   consider Cs being Clique of subrelstr S such that
+As: card(Cs) = clique# subrelstr S by Lheight;
+D:  card C  <= card Cs by C, As, Lheight;
+   clique# subrelstr S <= clique# R by Hsubp0;
+ hence clique# subrelstr S = clique# R by As, A, D, XXREAL_0:1;
+end;
+
+theorem Wsubp0: :: Wsubp0:
+for R being with_finite_stability# RelStr, S being Subset of R
+ holds stability# subrelstr S <= stability# R
+proof
+ let R be with_finite_stability# RelStr, S be Subset of R;
+   consider As being StableSet of subrelstr S such that
+As: card(As) = stability# subrelstr S by Lwidth;
+   As is StableSet of R by SPAChain1;
+ hence stability# subrelstr S <= stability# R by As, Lwidth;
+end;
+
+theorem Wsubp1: :: Wsubp1:
+for R being with_finite_stability# RelStr, A being StableSet of R,
+    S being Subset of R st card A = stability# R & A c= S
+ holds stability# subrelstr S = stability# R
+proof
+ let R be with_finite_stability# RelStr, A be StableSet of R, S be Subset of R
+ such that
+A: card A = stability# R and
+B: A c= S;
+   A = A /\ S by B, XBOOLE_1:28; then
+C: A is StableSet of subrelstr S by SPAChain;
+   consider As being StableSet of subrelstr S such that
+As: card(As) = stability# subrelstr S by Lwidth;
+D:  card A  <= card As by C, As, Lwidth;
+   stability# subrelstr S <= stability# R by Wsubp0;
+ hence stability# subrelstr S = stability# R by As, A, D, XXREAL_0:1;
+end;
+
+begin :: Partitions into cliques and stable sets
+
+definition
+  let R be RelStr, P be a_partition of the carrier of R;
+  attr P is Clique-wise means                                      :LCpart:
+    for x being set st x in P holds x is Clique of R;
+end;
+
+registration let R be RelStr;
+ cluster Clique-wise a_partition of the carrier of R;
+ existence
+   proof set cR = the carrier of R;
+   per cases;
+   suppose R is empty;
+     then reconsider S = {} as a_partition of cR by EQREL_1:54;
+     take S ;
+    thus for x being set st x in S holds x is Clique of R;
+   end;
+   suppose S: R is non empty;
+     take S = SmallestPartition cR;
+     let z being set;
+     assume A: z in S;
+     S = {{x} where x is Element of cR: not contradiction} by S, EQREL_1:46;
+      then consider x being Element of cR such that
+     B: z = {x} and not contradiction by A;
+     thus z is Clique of R by B, S, SUBSET_1:55;
+   end;
+  end;
+end;
+
+definition
+  let R be RelStr;
+  mode Clique-partition of R is Clique-wise a_partition of the carrier of R;
+end;
+
+registration let R be empty RelStr;
+ cluster empty -> Clique-wise a_partition of the carrier of R;
+ coherence
+  proof let P be a_partition of the carrier of R such that P is empty;
+   let x be set;
+   thus thesis;
+  end;
+end;
+
+theorem Chpw: :: Chpw:
+for R being finite RelStr, C being Clique-partition of R
+ holds card C >= stability# R
+proof
+ let R be finite RelStr, C be Clique-partition of R;
+ assume A: card(C) < stability# R;
+ consider A being StableSet of R such that
+B: card A = stability# R by Lwidth;
+   card card C = card C & card card A = card A;
+   then C: card C in card A by A, B, NAT_1:42;
+   set cR = the carrier of R;
+  per cases;
+  suppose R is empty;
+    hence contradiction by A;
+  end;
+  suppose S1: R is non empty;
+  defpred P[set,set] means
+    $1 in A & $2 in C & $1 in $2;
+P: for x being set st x in A ex y being set st y in C & P[x,y] proof
+     let x be set such that
+   A1: x in A;
+       reconsider x' = x as Element of R by A1;
+       cR is non empty by S1;
+       then x' in cR;
+       then x in union C by EQREL_1:def 6;
+       then consider y being set such that
+   B1: x in y and
+   C1: y in C by TARSKI:def 4;
+       take y;
+       thus thesis by A1, B1, C1;
+   end;
+   consider f being Function of A, C such that
+Q: for x being set st x in A holds P[x,f.x] from FUNCT_2:sch 1(P);
+    consider x,y being set such that
+  A1: x in A and
+  B1: y in A and
+  C1: x <> y and
+  D1: f.x = f.y by S1, C, FINSEQ_4:80;
+   f.x in C by A1, FUNCT_2:7; then
+  E1: f.x is Clique of R by LCpart;
+      x in f.x & y in f.x by D1, A1, B1, Q;
+    hence contradiction by E1, A1, B1, C1, ACClique;
+  end;
+end;
+
+theorem ACpart1: :: ACpart1:
+for R being with_finite_stability# RelStr, A being StableSet of R,
+    C being Clique-partition of R st card C = card A
+  ex f being Function of A, C st f is bijective &
+   for x being set st x in A holds x in f.x
+proof
+  let R be with_finite_stability# RelStr, A be StableSet of R,
+      C be Clique-partition of R; assume that
+A: card C = card A;
+  set cR = the carrier of R;
+  per cases;
+  suppose S1: R is empty;
+  AA: the carrier of R is empty by S1;
+  A1: C = {} by AA, EQREL_1:41;
+      consider f being Function of A, C;
+      dom f = {} by S1;
+      then reconsider f = {} as Function of A, C by RELAT_1:64;
+  G1: f is onto by RELAT_1:60, A1, FUNCT_2:def 3;
+      take f;
+      thus f is bijective by G1;
+      thus thesis;
+  end;
+  suppose S1: R is non empty;
+  defpred P[set,set] means
+    $1 in A & $2 in C & $1 in $2;
+P: for x being set st x in A ex y being set st y in C & P[x,y] proof
+     let x be set;
+     assume A1: x in A;
+       then reconsider x' = x as Element of R;
+       cR is non empty by S1;
+       then x' in cR;
+       then x' in union C by EQREL_1:def 6;
+       then consider y being set such that
+   B1: x in y and
+   C1: y in C by TARSKI:def 4;
+       take y;
+       thus thesis by A1, B1, C1;
+   end;
+   consider f being Function of A, C such that
+Q: for x being set st x in A holds P[x,f.x] from FUNCT_2:sch 1(P);
+   take f;
+R: f is one-to-one proof
+     let x1,x2 be set such that
+   A1: x1 in dom f and
+   B1: x2 in dom f and
+   C1: f.x1 = f.x2;
+   F1: x1 in f.x1 by A1, Q;
+   G1: x2 in f.x2 by B1, Q;
+    f.x1 in C by S1, A1, FUNCT_2:7;
+    then f.x1 is Clique of R by LCpart;
+     hence x1 = x2 by A1, B1, F1, G1, C1, ACClique;
+   end;
+   C is finite by A;
+   then rng f = C by A, R, FINSEQ_4:78;
+   then f is onto by FUNCT_2:def 3;
+   hence f is bijective by R;
+   let x be set;
+   assume x in A;
+   hence x in f.x by Q;
+  end;
+end;
+
+theorem  ACpart2: :: ACpart2:
+for R being finite RelStr, A being StableSet of R,
+    C being Clique-partition of R st card C = card A
+  for c being set st c in C ex a being Element of A st c /\ A = {a}
+proof
+  let R be finite RelStr, A be StableSet of R,
+      C be Clique-partition of R such that
+A: card C = card A;
+    consider f being Function of A, C such that
+B: f is bijective and
+C: for x being set st x in A holds x in f.x by A, ACpart1;
+   let c be set such that
+D: c in C;
+   rng f = C by B, FUNCT_2:def 3;
+   then consider x being set such that
+E: x in dom f and
+F: c = f.x by D, FUNCT_1:def 5;
+G:  x in c by E, F, C;
+    reconsider a = x as Element of A by E;
+    take a;
+    now
+      let z be set;
+      hereby
+        assume z in c /\ A;
+        then A1: z in c & z in A by XBOOLE_0:def 4;
+        c is Clique of R by D, LCpart;
+        hence z = a by A1, G, ACClique;
+      end;
+      assume z = a;
+      hence z in c /\ A by G, E, XBOOLE_0:def 4;
+    end;
+    hence c /\ A = {a} by TARSKI:def 1;
+end;
+
+theorem Main: :: Glueing lemma:
+for R being with_finite_stability# antisymmetric transitive non empty RelStr,
+    A being StableSet of R,
+    U being Clique-partition of subrelstr Upper A,
+    L being Clique-partition of subrelstr Lower A
+ st card A = stability# R & card U = stability# R & card L = stability# R
+  ex C being Clique-partition of R st card C = stability# R
+proof
+  let R be with_finite_stability# antisymmetric transitive non empty RelStr,
+      A be StableSet of R,
+      U be Clique-partition of subrelstr Upper A,
+      L be Clique-partition of subrelstr Lower A such that
+A1: card A = stability# R and
+B1: card U = stability# R and
+C1: card L = stability# R;
+D1: A is non empty by A1;
+       set aA = Upper A, bA = Lower A;
+       set cR = the carrier of R, Pa = subrelstr aA, Pb = subrelstr bA;
+S2d: aA = the carrier of Pa by YELLOW_0:def 15;
+S2e: bA = the carrier of Pb by YELLOW_0:def 15;
+    reconsider Pa = subrelstr Upper A as
+       with_finite_stability# antisymmetric transitive non empty RelStr by D1;
+      A /\ Upper A = A by XBOOLE_1:21;
+    then D1a: A is StableSet of Pa by SPAChain;
+     consider f being Function of A, U such that
+E1: f is bijective and
+E1a: for x being set st x in A holds x in f.x by A1, B1, D1a, ACpart1;
+E1b: dom f = A by D1, FUNCT_2:def 1;
+E1d: rng f = U by E1, FUNCT_2:def 3;
+    reconsider Pb = subrelstr Lower A as
+       with_finite_stability# antisymmetric transitive non empty RelStr by D1;
+     A /\ Lower A = A by XBOOLE_1:21;
+    then F1a: A is StableSet of Pb by SPAChain;
+    consider g being Function of A, L such that
+G1: g is bijective and
+G1a: for x being set st x in A holds x in g.x by A1, C1, F1a, ACpart1;
+G1b: dom g = A by D1, FUNCT_2:def 1;
+G1d: rng g = L by G1, FUNCT_2:def 3;
+    set h = f .\/ g; set C = rng h;
+I1a: dom h = dom f \/ dom g by LEXBFS:def 2;
+Y1a: C c= bool cR proof
+       let x be set;
+       assume x in C;
+       then consider a being set such that
+     A2: a in dom h and
+     B2: h.a = x by FUNCT_1:def 5;
+     C2: h.a = f.a \/ g.a by A2, I1a, LEXBFS:def 2;
+         f.a in U by A2, I1a, FUNCT_2:7;
+         then D2: f.a c= cR by S2d, XBOOLE_1:1;
+         g.a in L by A2, I1a, FUNCT_2:7;
+        then g.a c= cR by S2e, XBOOLE_1:1;
+       then x c= cR by B2, C2, D2, XBOOLE_1:8;
+       hence x in bool cR;
+     end;
+Y1b: union C = cR proof
+        now let x be set;
+         hereby assume x in union C;
+           then consider Y being set such that
+         B2: x in Y and
+         C2: Y in C by TARSKI:def 4;
+           consider a being set such that
+         D2: a in dom h and
+         E2: Y = h.a by C2, FUNCT_1:def 5;
+         F2: x in f.a \/ g.a by D2, E2, B2, I1a, LEXBFS:def 2;
+             per cases by F2, XBOOLE_0:def 3;
+             suppose S2: x in f.a;
+               f.a in U by D2, I1a, FUNCT_2:7;
+               then x in aA by S2, S2d;
+               hence x in cR;
+             end;
+             suppose S2: x in g.a;
+               g.a in L by D2, I1a, FUNCT_2:7;
+               then x in bA by S2, S2e;
+               hence x in cR;
+             end;
+         end;
+         assume x in [#]R;
+         then A2: x in Upper A \/ Lower A by A1, ABunion;
+         per cases by A2, XBOOLE_0:def 3;
+         suppose x in Upper A;
+            then x in union U by S2d, EQREL_1:def 6;
+            then consider Y being set such that
+         A3: x in Y and
+         B3: Y in U by TARSKI:def 4;
+            consider a being set such that
+         C3: a in dom f and
+         D3: Y = f.a by B3, E1d, FUNCT_1:def 5;
+         E3: h.a in rng h by C3, I1a, E1b, G1b, FUNCT_1:12;
+             h.a = f.a \/ g.a by C3, I1a, E1b, G1b, LEXBFS:def 2;
+             then x in h.a by A3, D3, XBOOLE_0:def 3;
+           hence x in union C by E3, TARSKI:def 4;
+         end;
+         suppose x in Lower A;
+            then x in union L by S2e, EQREL_1:def 6;
+            then consider Y being set such that
+         A3: x in Y and
+         B3: Y in L by TARSKI:def 4;
+            consider a being set such that
+         C3: a in dom g and
+         D3: Y = g.a by B3, G1d, FUNCT_1:def 5;
+         E3: h.a in rng h by C3, I1a, E1b, G1b, FUNCT_1:12;
+             h.a = f.a \/ g.a by C3, I1a, E1b, G1b, LEXBFS:def 2;
+             then x in h.a by A3, D3, XBOOLE_0:def 3;
+           hence x in union C by E3, TARSKI:def 4;
+         end;
+       end;
+      hence thesis by TARSKI:2;
+     end;
+Y1c: now
+       let a be Subset of cR;
+       assume a in C;
+       then consider x being set such that
+     B2: x in dom h and
+     C2: h.x = a by FUNCT_1:def 5;
+     D2: h.x = f.x \/ g.x by B2, I1a, LEXBFS:def 2;
+         set cfx = f.x, cgx = g.x;
+     E2: cfx in U by B2, I1a, FUNCT_2:7;
+         then reconsider cfx as Subset of Pa;
+     E2g: cgx in L by B2, I1a, FUNCT_2:7;
+         then reconsider cgx as Subset of Pb;
+         cfx <> {} by E2, EQREL_1:def 6;
+       hence a <> {} by C2, D2;
+       let b be Subset of cR;
+       assume b in C;
+         then consider y being set such that
+     B2y: y in dom h and
+     C2y: h.y = b by FUNCT_1:def 5;
+     D2y: h.y = f.y \/ g.y by B2y, I1a, LEXBFS:def 2;
+         set cfy = f.y, cgy = g.y;
+     E2y: cfy in U by B2y, I1a, FUNCT_2:7;
+         then reconsider cfy as Subset of Pa;
+     E2yg: cgy in L by B2y, I1a, FUNCT_2:7;
+         then reconsider cgy as Subset of Pb;
+       assume FF2: a <> b;
+     F2a: cfx <> cfy by E1, FF2, C2, C2y, B2, B2y, I1a, E1b, FUNCT_1:def 8;
+     F2g: cgx <> cgy by G1, FF2, C2, C2y, B2, B2y, I1a, G1b, FUNCT_1:def 8;
+       assume a meets b;
+       then a /\ b <> {} by XBOOLE_0:def 7;
+       then consider z being set such that
+     F2b: z in a /\ b by XBOOLE_0:def 1;
+     G2: z in a by F2b, XBOOLE_0:def 4;
+     H2: z in b by F2b, XBOOLE_0:def 4;
+       set cfz = f.z, cgz = g.z;
+       per cases by G2, H2, C2, C2y, D2, D2y, XBOOLE_0:def 3;
+       suppose z in cfx & z in cfy;
+           then z in cfx /\ cfy by XBOOLE_0:def 4;
+           then cfx meets cfy by XBOOLE_0:def 7;
+         hence contradiction by E2, E2y, F2a, EQREL_1:def 6;
+       end;
+       suppose S1: z in cfx & z in cgy;
+       C3: z in A by S1, S2d, S2e, ABAC0;
+       D3: z in f.z by S1, S2d, S2e, ABAC0, E1a;
+       E3: cfz in U by S1, S2d, S2e, ABAC0, FUNCT_2:7;
+         then reconsider cfz as Subset of Pa;
+         z in cfx /\ cfz by S1, D3, XBOOLE_0:def 4;
+         then cfz meets cfx by XBOOLE_0:def 7;
+         then cfz = cfx by E2, E3, EQREL_1:def 6;
+         then F3: z = x by E1, B2, C3, I1a, E1b, FUNCT_1:def 8;
+       D3g: z in g.z by S1, S2d, S2e, ABAC0, G1a;
+       E3g: cgz in L by S1, S2d, S2e, ABAC0, FUNCT_2:7;
+         then reconsider cgz as Subset of Pb;
+         z in cgz /\ cgy by S1, D3g, XBOOLE_0:def 4;
+         then cgz meets cgy by XBOOLE_0:def 7;
+         then cgz = cgy by E2yg, E3g, EQREL_1:def 6;
+         hence contradiction by F3, FF2, C2, C2y, G1, B2y,
+               C3, I1a, G1b, FUNCT_1:def 8;
+       end;
+       suppose S1: z in cgx & z in cfy;
+       C3: z in A by S1, S2d, S2e, ABAC0;
+       D3: z in f.z by S1, S2d, S2e, ABAC0, E1a;
+       E3: cfz in U by S1, S2d, S2e, ABAC0, FUNCT_2:7;
+         then reconsider cfz as Subset of Pa;
+         z in cfy /\ cfz by S1, D3, XBOOLE_0:def 4;
+         then cfz meets cfy by XBOOLE_0:def 7;
+         then cfz = cfy by E2y, E3, EQREL_1:def 6;
+         then F3: z = y by E1, B2y, C3, I1a, E1b, FUNCT_1:def 8;
+       D3g: z in g.z by S1, S2d, S2e, ABAC0, G1a;
+       E3g: cgz in L by S1, S2d, S2e, ABAC0, FUNCT_2:7;
+         then reconsider cgz as Subset of Pb;
+         z in cgz /\ cgx by S1, D3g, XBOOLE_0:def 4;
+         then cgz meets cgx by XBOOLE_0:def 7;
+         then cgz = cgx by E2g, E3g, EQREL_1:def 6;
+         hence contradiction by F3, FF2,C2,C2y, G1, B2, C3, I1a,
+                 G1b, FUNCT_1:def 8;
+       end;
+       suppose z in cgx & z in cgy;
+           then z in cgx /\ cgy by XBOOLE_0:def 4;
+           then cgx meets cgy by XBOOLE_0:def 7;
+         hence contradiction by E2g, E2yg, F2g, EQREL_1:def 6;
+       end;
+     end;
+Z1: for x being set st x in C holds x is Clique of R
+    proof
+      let c be set;
+      assume c in C;
+        then consider x being set such that
+    B2: x in dom h and
+    C2: c = h.x by FUNCT_1:def 5;
+    D2: c = f.x \/ g.x by B2, C2, I1a, LEXBFS:def 2;
+        set cf = f.x, cg = g.x;
+        cf in U by B2, I1a, FUNCT_2:7;
+        then
+    G2b: cf is Clique of Pa by LCpart;
+        then G2a: cf is Clique of R by SPClique;
+        cg in L by B2, I1a, FUNCT_2:7;
+        then
+    H2b: cg is Clique of Pb by LCpart;
+        then H2a: cg is Clique of R by SPClique;
+        then reconsider c' = c as Subset of R by D2, G2a, XBOOLE_1:8;
+        now let a, b being Element of R such that
+        A3: a in c' and
+        B3: b in c' and
+        C3: a <> b;
+        E3: x in cf by B2, I1a, E1a;
+        F3: x in cg by B2, I1a, G1a;
+            reconsider x as Element of R by B2, I1a, E1b, G1b;
+         per cases by A3, B3, D2, XBOOLE_0:def 3;
+         suppose a in f.x & b in f.x;
+           hence a <= b or b <= a by G2a, C3, DClique;
+         end;
+         suppose S1: a in f.x & b in g.x;
+         A4: x = a or x <= a by E3, S1, B2, I1a, G2b, PabSmin;
+         B4: x = b or b <= x by F3, S1, B2, I1a, H2b, PbeSmax;
+           thus a <= b or b <= a by C3, A4, B4, YELLOW_0:def 2;
+         end;
+         suppose S1: a in g.x & b in f.x;
+         A4: x = a or a <= x by F3, S1, B2, I1a, H2b, PbeSmax;
+         B4: x = b or x <= b by E3, S1, B2, I1a, G2b, PabSmin;
+           thus a <= b or b <= a by C3, A4, B4, YELLOW_0:def 2;
+         end;
+         suppose a in g.x & b in g.x;
+           hence a <= b or b <= a by H2a, C3, DClique;
+         end;
+        end;
+      hence c is Clique of R by DClique;
+    end;
+H1: h is one-to-one proof
+     let x1,x2 be set such that
+    A2: x1 in dom h and
+    B2: x2 in dom h and
+    C2: h.x1 = h.x2;
+    D2: h.x1 is Clique of R by Z1, A2, FUNCT_1:12;
+    D2b: h.x1 = f.x1 \/ g.x1 by I1a, A2, LEXBFS:def 2;
+         x1 in f.x1 & x1 in g.x1 by A2, I1a, E1a, G1a;
+    then D2a: x1 in h.x1 by D2b, XBOOLE_0:def 3;
+    E2b: h.x2 = f.x2 \/ g.x2 by I1a, B2, LEXBFS:def 2;
+         x2 in f.x2 & x2 in g.x2 by B2, I1a, E1a, G1a;
+         then x2 in h.x2 by E2b, XBOOLE_0:def 3;
+     hence x1 = x2 by I1a, A2, B2, C2, D2, D2a, ACClique;
+    end;
+    reconsider C as Clique-partition of R
+     by Y1a, Y1b, Y1c, EQREL_1:def 6, Z1, LCpart;
+    take C;
+    card C = card h by H1, PRE_POLY:19
+          .= card A by I1a, E1b, G1b, CARD_1:104;
+    hence card C = stability# R by A1;
+end;
+
+definition
+  let R be RelStr, P be a_partition of the carrier of R;
+  attr P is StableSet-wise means
+  :LACpart:
+    for x being set st x in P holds x is StableSet of R;
+end;
+
+registration
+  let R be RelStr;
+  cluster StableSet-wise a_partition of the carrier of R;
+  existence
+   proof set cR = the carrier of R;
+   per cases;
+   suppose R is empty;
+     then reconsider S = {} as a_partition of cR by EQREL_1:54;
+     take S;
+    let x be set;
+    thus thesis;
+   end;
+   suppose S: R is non empty;
+      then reconsider RR = R as non empty RelStr;
+     take S = SmallestPartition cR;
+     let z being set;
+     assume A: z in S;
+     S = {{x} where x is Element of cR: not contradiction} by S, EQREL_1:46;
+      then consider x being Element of RR such that
+W:     z = {x} by A;
+     thus z is StableSet of R by W;
+   end;
+  end;
+end;
+
+definition
+  let R be RelStr;
+  mode Coloring of R is StableSet-wise a_partition of the carrier of R;
+end;
+
+registration let R be empty RelStr;
+ cluster -> StableSet-wise a_partition of the carrier of R;
+ coherence
+  proof let P be a_partition of the carrier of R;
+   let x be set;
+   thus thesis;
+  end;
+end;
+
+theorem :: ColClique:
+for R being finite RelStr, C being Coloring of R holds card C >= clique# R
+proof
+ let R be finite RelStr, C be Coloring of R;
+ assume A: card(C) < clique# R;
+ consider A being Clique of R such that
+B: card A = clique# R by Lheight;
+   card card C = card C & card card A = card A;
+   then C: card C in card A by A, B, NAT_1:42;
+   set cR = the carrier of R;
+  per cases;
+  suppose S1: R is empty;
+    thus contradiction by A, S1;
+  end;
+  suppose S1: R is non empty;
+  defpred P[set,set] means
+    $1 in A & $2 in C & $1 in $2;
+P: for x being set st x in A ex y being set st y in C & P[x,y] proof
+     let x be set such that
+   A1: x in A;
+       reconsider x' = x as Element of R by A1;
+       cR is non empty by S1;
+       then x' in cR;
+       then x in union C by EQREL_1:def 6;
+       then consider y being set such that
+   B1: x in y and
+   C1: y in C by TARSKI:def 4;
+       take y;
+       thus thesis by A1, B1, C1;
+   end;
+   consider f being Function of A, C such that
+Q: for x being set st x in A holds P[x,f.x] from FUNCT_2:sch 1(P);
+    consider x,y being set such that
+  A1: x in A and
+  B1: y in A and
+  C1: x <> y and
+  D1: f.x = f.y by S1, C, FINSEQ_4:80;
+    f.x in C by A1, FUNCT_2:7;
+    then
+  E1: f.x is StableSet of R by LACpart;
+      x in f.x & y in f.x by D1, A1, B1, Q;
+    hence contradiction by E1, A1, B1, C1, ACClique;
+  end;
+end;
+
+begin :: Dilworth's theorem and a dual
+
+    :: There seems to be little theory of antisymmetric transitive relations.
+    :: Posets are required to be reflexive and antisymmetric while
+    :: strict posets to be irreflexive and asymmetric (and both are
+    :: required to be transitive.) Since asymmetric implies antisymmetric,
+    :: it seems that the common ground would be antisymmetric and transitive
+    :: relations.
+
+theorem  DWf:  ::  Dilworth: Finite case
+for R being finite antisymmetric transitive RelStr
+ ex C being Clique-partition of R st card(C) = stability# R
+proof
+  defpred P[Nat] means
+  for P being finite antisymmetric transitive RelStr
+   st card(P) = $1 ex C being Clique-partition of P st card(C) = stability# P;
+P: for n being Nat st for k being Nat st k < n holds P[k] holds P[n] proof
+     let n be Nat; assume
+   A1: for k being Nat st k < n holds P[k];
+       let P be finite antisymmetric transitive RelStr; assume
+   B1: card(P) = n;
+       set wP = stability# P;
+     per cases;
+     suppose S1: n = 0;
+      then P is empty by B1;
+      then reconsider C = {} as Clique-partition of P by EQREL_1:54;
+      take C;
+        P is empty by B1, S1;
+      hence card(C) = stability# P by B1, S1;
+     end;
+     suppose S1: n > 0;
+  per cases;
+  suppose ex A being StableSet of P st card(A) = stability# P &
+                 A <> minimals(P) & A <> maximals(P);
+      then consider A being StableSet of P such that
+  S2a: card A = stability# P and
+  S2b: A <> minimals(P) and
+  S2c: A <> maximals(P);
+       set aA = Upper A, bA = Lower A;
+       set cP = the carrier of P, Pa = subrelstr aA, Pb = subrelstr bA;
+       reconsider PP = P as finite non empty antisymmetric transitive RelStr
+        by S1, B1;
+  S2d: aA = the carrier of Pa by YELLOW_0:def 15;
+  S2e: bA = the carrier of Pb by YELLOW_0:def 15;
+       not minimals PP c= aA by S2b, PCAmin, PCAamin;
+       then consider mi being set such that
+  A2a:  mi in minimals P and
+  A2b:  not mi in aA by TARSKI:def 3;
+       not maximals PP c= bA by S2c, PCAmax, PCAbmax;
+       then consider ma being set such that
+  B2a:  ma in maximals P and
+  B2b:  not ma in bA by TARSKI:def 3;
+        reconsider Pa as finite antisymmetric transitive RelStr;
+        mi in cP by A2a;
+        then aA c< cP by A2b, XBOOLE_0:def 8;
+        then card Pa < card P by S2d, CARD_2:67;
+        then consider Ca being Clique-partition of Pa such that
+   C2a: card(Ca) = stability# Pa by A1, B1;
+   C2b: stability# Pa = wP by S2a, Wsubp1, XBOOLE_1:7;
+        reconsider Pb as finite antisymmetric transitive RelStr;
+        ma in cP by B2a;
+        then bA c< cP by B2b, XBOOLE_0:def 8;
+        then card Pb < card P by S2e, CARD_2:67;
+        then consider L being Clique-partition of Pb such that
+   D2a: card(L) = stability# Pb by A1, B1;
+   D2b: stability# Pb = wP by S2a, Wsubp1, XBOOLE_1:7;
+      consider C being Clique-partition of P such that
+   Z: card C = stability# PP by S2a, C2a, C2b, D2a, D2b, Main;
+      take C;
+      thus card(C) = stability# P by Z;
+  end;
+  suppose S2: for A being StableSet of P st card(A) = stability# P
+               holds A = minimals(P) or A = maximals(P);
+    consider S being StableSet of P such that
+  B2: card(S) = stability# P by Lwidth;
+      reconsider PP = P as finite non empty antisymmetric transitive RelStr
+        by S1, B1;
+      set iR = the InternalRel of PP, cR = the carrier of PP;
+      consider a being Element of minimals(P);
+  D2a: a in minimals(PP);
+      reconsider a as Element of PP by D2a;
+      consider b being Element of PP such that
+  F2: b is_maximal_in [#]PP and
+  G2: a = b or a < b by Pminmax;
+  F2a: b in maximals(P) by F2, Lmax;
+      set cP = the carrier of P, cPP = the carrier of PP;
+      set Cn = {a, b}; set cP' = cP \ Cn;
+  G2a: cP = cP' \/ Cn by XBOOLE_1:45;
+  G2b: cP' misses {a,b} by XBOOLE_1:79;
+       then G2c: cP \ cP' = {a,b} by G2a, XBOOLE_1:88;
+      reconsider cP' as Subset of cR;
+      set P' = subrelstr cP';
+  H2a: cP' = the carrier of P' by YELLOW_0:def 15;
+      set k = card P';
+  H2: card cP'= card P' by YELLOW_0:def 15;
+      card cP' = card cP - card {a,b} by CARD_2:63;
+      then consider C being Clique-partition of P' such that
+  I2: card(C) = stability# P' by A1, B1, H2, XREAL_1:46;
+  I2a: not {a,b} in C proof
+         assume :: works through typing: Subset-Family -> Subset bool ...
+       A3: {a,b} in C;
+       B3: a in {a,b} by TARSKI:def 2;
+         thus contradiction by G2b, ZFMISC_1:55, H2a, A3, B3;
+       end;
+      set wP = stability# PP; set wP1 = wP - 1;
+      0+1 <= wP by NAT_1:13;
+      then 0+1-1 <= wP-1 by XREAL_1:11;
+      then wP1 in NAT by INT_1:16;
+      then reconsider wP1 as Nat;
+      set S' = S /\ cP';
+          S /\ cP = S by XBOOLE_1:28;
+      then J2aa: S' = S \ {a,b} by XBOOLE_1:49;
+  J2ab: {a,b} = {a} \/ {b} by ENUMSET1:41;
+      reconsider S' as StableSet of P' by SPAChain;
+  J2a: card S' = wP1 proof
+        per cases by S2, B2;
+        suppose S3: S = minimals(P);
+          S' = S \ {a} proof
+           per cases;
+           suppose a = b;
+             hence S' = S \ {a} by J2aa, ENUMSET1:69;
+           end;
+           suppose A5aa: a <> b;
+             now
+               assume b in minimals(PP);
+                then b is_minimal_in [#]PP by Lmin;
+               hence contradiction by A5aa, G2, WAYBEL_4:57;
+             end;
+             hence S' = S \ {a} by J2aa, J2ab, S3, set00;
+           end;
+          end;
+          hence card S' = card S - card {a} by S3, EULER_1:5
+              .= wP1 by B2, CARD_1:50;
+        end;
+        suppose S3: S = maximals(PP);
+         A4: S' = S \ {b} proof
+           per cases;
+           suppose a = b;
+             hence S' = S \ {b} by J2aa, ENUMSET1:69;
+           end;
+           suppose A5aa: a <> b;
+             now
+               assume a in maximals(PP);
+                then a is_maximal_in [#]PP by Lmax;
+               hence contradiction by A5aa, G2, WAYBEL_4:56;
+             end;
+             hence S' = S \ {b} by J2aa, J2ab, S3, set00;
+           end;
+         end;
+         b in S by S3, F2, Lmax;
+         hence card S' = card S - card {b} by A4, EULER_1:5
+           .= wP1 by B2, CARD_1:50;
+        end;
+      end;
+  J2b: for T being StableSet of P' holds card(T) <= card(S') proof
+        let T be StableSet of P';
+        assume card(T) > card(S');
+        then card T >= card S' + 1 by NAT_1:13;
+        then consider V being StableSet of P' such that
+       B3: card V = card S' + 1 by AChain1;
+       C3: V is StableSet of P by SPAChain1;
+           V = minimals(P) or V =maximals(P) by S2,C3,B3,J2a;
+        hence contradiction by D2a, F2a, H2a, G2b, ZFMISC_1:55;
+       end;
+  J2c: stability# P' + 1 = wP - 1 + 1 by J2a,J2b,Lwidth .= wP;
+      set CC = C \/ {{a,b}};
+      cP' <> cP by G2c, XBOOLE_1:37;
+      then
+x:     cP' c< cP by XBOOLE_0:def 8;
+      now :: Cliques in CC
+         let x be set;
+         assume A3: x in CC;
+         per cases by A3, XBOOLE_0:def 3;
+         suppose x in C;
+             then x is Clique of P' by LCpart;
+           hence x is Clique of P by SPClique;
+         end;
+         suppose x in {{a,b}};
+            then A4: x = {a,b} by TARSKI:def 1;
+           per cases;
+           suppose a = b;
+             then x = {a} by A4, ENUMSET1:69;
+            hence x is Clique of P;
+           end;
+           suppose a <> b;
+             then a <= b by G2, ORDERS_2:def 10;
+            hence x is Clique of P by A4, Clique36b;
+           end;
+         end;
+      end;
+      then reconsider CC as Clique-partition of P by G2c, H2a, SPpart,LCpart,x;
+      take CC;
+      thus card(CC) = stability# P by I2, J2c, I2a, CARD_2:54;
+  end;
+     end;
+   end;
+Z: for n being Nat holds P[n] from NAT_1:sch 4(P);
+  let R be finite antisymmetric transitive RelStr;
+  card R = card R;
+  hence thesis by Z;
+end;
+
+definition
+  let R be with_finite_stability# non empty RelStr, C be Subset of R;
+  attr C is strong-chain means                               :Lsc:
+  for S being finite non empty Subset of R
+   ex P being Clique-partition of subrelstr S
+    st card P <= stability# R &
+       ex c being set st c in P & S /\ C c= c &
+            for d being set st d in P & d <> c holds C /\ d = {};
+end;
+
+registration let R be with_finite_stability# non empty RelStr;
+ cluster strong-chain -> clique Subset of R;
+ coherence
+proof
+ let C be Subset of R;
+ assume A: C is strong-chain;
+  now
+    let a, b be Element of R such that
+  A1: a in C and
+  B1: b in C and
+  B1a: a <> b;
+    set S = {a,b};
+    reconsider S as finite non empty Subset of R;
+    consider P being Clique-partition of subrelstr S such that
+     card P <= stability# R and
+  C1: ex c being set st c in P & S /\ C c= c &
+            for d being set st d in P & d <> c holds C /\ d = {} by A, Lsc;
+     consider c being set such that
+  D1: c in P and
+  E1: S /\ C c= c and
+      for d being set st d in P & d <> c holds C /\ d = {} by C1;
+      c is Clique of subrelstr S by D1, LCpart;
+      then F1: c is Clique of R by SPClique;
+      a in S & b in S by TARSKI:def 2;
+      then a in S /\ C & b in S /\ C by A1, B1, XBOOLE_0:def 4;
+    hence a <= b or b <= a by E1, F1, B1a, DClique;
+  end;
+  hence C is clique by DClique;
+end;
+end;
+
+registration
+ let R be with_finite_stability# antisymmetric transitive non empty RelStr;
+ cluster trivial non empty -> strong-chain Subset of R;
+ coherence
+proof
+ let C be Subset of R;
+ assume C is trivial non empty;
+  then consider x being set such that
+Z: C = {x} by REALSET1:def 4;
+ let S be finite non empty Subset of R;
+  consider P being Clique-partition of subrelstr S such that
+A1: card P = stability# subrelstr S by DWf;
+ cS: S = the carrier of subrelstr S by YELLOW_0:def 15;
+ take P;
+ thus card P <= stability# R by A1, Wsubp0;
+ per cases;
+ suppose x in S;
+    then x in union P by cS, EQREL_1:def 6;
+    then consider c being set such that
+  A2: x in c and
+  B2: c in P by TARSKI:def 4;
+    take c;
+    thus c in P by B2;
+    thus S /\ C c= c proof
+       let a be set;
+       assume a in S /\ C;
+       then a in C by XBOOLE_0:def 4;
+       hence thesis by A2, Z,TARSKI:def 1;
+     end;
+    let d be set such that
+  C3: d in P and
+  D3: d <> c;
+    assume C /\ d <> {};
+    then consider a being set such that
+  E3: a in C /\ d by XBOOLE_0:def 1;
+      reconsider d, c as Subset of S by C3, B2, YELLOW_0:def 15;
+    a in C by E3, XBOOLE_0:def 4;
+    then a = x by Z,TARSKI:def 1;
+    then x in d by E3, XBOOLE_0:def 4;
+    then x in d /\ c by A2, XBOOLE_0:def 4;
+    then d meets c by XBOOLE_0:def 7;
+    hence contradiction by C3, B2, D3, EQREL_1:def 6;
+ end;
+ suppose S1: not x in S;
+   consider c being Element of P;
+   take c;
+   thus c in P;
+     C misses S by S1, ZFMISC_1:56,Z;
+     then S /\ C = {} by XBOOLE_0:def 7;
+   hence S /\ C c= c by XBOOLE_1:2;
+   let d be set such that
+ A2: d in P and d <> c;
+    not x in d by S1, cS, A2;
+   then C misses d by ZFMISC_1:56,Z;
+   hence C /\ d = {} by XBOOLE_0:def 7;
+ end;
+end;
+end;
+
+theorem Maxsc: :: Maxsc:
+for R being with_finite_stability# non empty antisymmetric transitive RelStr
+ ex S being non empty Subset of R
+  st S is strong-chain &
+          not ex D being Subset of R st D is strong-chain & S c< D
+proof
+ let R be with_finite_stability# non empty antisymmetric transitive RelStr;
+ set E = { C where C is Subset of R: C is strong-chain };
+   consider x being Element of R;
+   reconsider xs = {x} as Subset of R;
+   Aa: {x} in E;
+   now  :: premise of maximal principle
+     let Z be set such that
+  A1: Z c= E and
+  B1: Z is c=-linear;
+     set Y = union Z;
+   take Y;
+    now
+      let B be set;
+      assume B in Z;
+      then B in E by A1;
+      then ex C being Subset of R st C = B & C is strong-chain;
+      hence B c= the carrier of R;
+    end;
+   then reconsider Y' = Y as Subset of R by ZFMISC_1:94;
+   Y' is strong-chain proof
+    let S be finite non empty Subset of R;
+     set F = S /\ Y;
+    per cases;
+    suppose S1: F is empty;
+     consider p being Clique-partition of subrelstr S such that
+    A3: card p = stability# subrelstr S by DWf;
+     take p;
+     thus card p <= stability# R by Wsubp0, A3;
+     consider c being Element of p;
+     take c;
+     thus c in p;
+     thus S /\ Y' c= c by S1, XBOOLE_1:2;
+     let d be set such that
+    B3: d in p and d <> c;
+        d c= the carrier of subrelstr S by B3;
+        then d c= S by YELLOW_0:def 15;
+     hence Y' /\ d = {} by S1, XBOOLE_1:26, XBOOLE_1:3;
+    end;
+    suppose S1: F is non empty;
+    S1a: Z is non empty by S1, ZFMISC_1:2;
+    defpred P[set,set] means
+     $1 in F & $2 in Z & $1 in $2;
+   P: for x being set st x in F ex y being set st y in Z & P[x,y] proof
+     let x be set;
+     assume A4a: x in F;
+     then x in Y by XBOOLE_0:def 4;
+     then consider y being set such that
+     A4: x in y and
+     B4: y in Z by TARSKI:def 4;
+     take y;
+     thus thesis by B4, A4a, A4;
+   end;
+       consider f being Function of F, Z such that
+   J3: for x being set st x in F holds P[x,f.x] from FUNCT_2:sch 1(P);
+      set rf = rng f;
+l3: rf c= Z & Z is c=-linear implies rf is c=-linear;
+      consider m being set such that
+    M3: m in rf and
+    N3: for C being set st C in rf holds C c= m
+          by l3, B1, RELAT_1:def 19, FINSET_1:31, S1, S1a;
+        rf c= Z by RELAT_1:def 19;
+        then m in Z by M3;
+        then m in E by A1;
+        then consider C being Subset of R such that
+    O3: m = C and
+    P3: C is strong-chain;
+    P3a: F c= C proof
+           let x be set;
+           assume A4: x in F;
+            then B4: x in f.x by J3;
+            f.x c= C by O3, N3, A4, S1a, FUNCT_2:6;
+           hence x in C by B4;
+         end;
+        consider p being Clique-partition of subrelstr S such that
+    R3: card p <= stability# R and
+    S3: ex c being set st c in p & S /\ C c= c &
+            for d being set st d in p & d <> c holds C /\ d = {} by P3, Lsc;
+        take p;
+        thus card p <= stability# R by R3;
+        consider c being set such that
+    T3: c in p and
+    U3: S /\ C c= c and
+    V3: for d being set st d in p & d <> c holds C /\ d = {} by S3;
+        take c;
+        thus c in p by T3;
+        thus S /\ Y' c= c proof
+          let x be set;
+          assume x in S /\ Y';
+          then x in S & x in C by P3a, XBOOLE_0:def 4;
+          then x in S /\ C by XBOOLE_0:def 4;
+          hence x in c by U3;
+        end;
+        let d be set such that
+     W3: d in p and
+     X3: d <> c;
+        assume Y' /\ d <> {};
+        then consider x being set such that
+     Y3: x in Y' /\ d by XBOOLE_0:def 1;
+     Y3a: x in Y' by Y3, XBOOLE_0:def 4;
+     Z3: x in d by Y3, XBOOLE_0:def 4;
+         d is Subset of S by W3, YELLOW_0:def 15;
+         then x in F by Z3, Y3a, XBOOLE_0:def 4;
+         then x in C /\ d by Z3, P3a, XBOOLE_0:def 4;
+      hence contradiction by W3, X3, V3;
+    end;
+   end;
+   hence Y in E;
+   let X1 be set such that
+  C1: X1 in Z;
+   thus X1 c= Y by C1, ZFMISC_1:92;
+   end;
+   then consider Y being set such that
+B: Y in E and
+C: for Z being set st Z in E & Z <> Y holds not Y c= Z by Aa, ORDERS_1:175;
+   consider C being Subset of R such that
+D: Y = C and
+E: C is strong-chain by B;
+   reconsider S = C as non empty Subset of R by D, Aa, C, XBOOLE_1:2;
+ take S;
+ thus S is strong-chain by E;
+ let D be Subset of R such that
+F: D is strong-chain and
+G: S c< D;
+I: D in E by F;
+   D <> S & S c= D by G, XBOOLE_0:def 8;
+  hence contradiction by D, I, C;
+end;
+
+theorem :: Dilworth: General case
+for R being with_finite_stability# antisymmetric transitive RelStr
+ ex C being Clique-partition of R st card C = stability# R
+proof
+ let R be with_finite_stability# antisymmetric transitive RelStr;
+ per cases;
+ suppose R is finite;
+   hence thesis by DWf;
+ end;
+ suppose S0: R is infinite;
+
+ defpred P[Nat] means
+  for P being with_finite_stability# non empty antisymmetric transitive RelStr
+   st stability# P = $1
+    ex C being Clique-partition of P st card(C) = stability# P;
+ P1: P[0];
+ P2: for k be Nat st P[k] holds P[k + 1] proof
+ let k be Nat;
+ assume A: P[k];
+ let P be with_finite_stability# non empty antisymmetric transitive RelStr;
+ assume B: stability# P = k+1;
+  consider C being non empty Subset of P such that
+C: C is strong-chain and
+D: not ex D being Subset of P st D is strong-chain & C c< D by Maxsc;
+    set cP = the carrier of P;
+   per cases;
+   suppose S1: C = cP;  :: real base case
+     for x being set st x in { C } holds x is Clique of P
+      by C, TARSKI:def 1;
+     then reconsider Cp = { C } as Clique-partition of P
+           by LCpart,S1,EQREL_1:48;
+     take Cp;
+R: cP = [#]P;
+     thus card Cp = 1 by CARD_1:50
+                 .= stability# P by R, C, S1, Width3;
+   end;
+   suppose C <> cP;
+    then S1a: C c< cP by XBOOLE_0:def 8;
+    set cP' = cP \ C;
+E:  cP \ cP' = cP /\ C by XBOOLE_1:48
+            .= C by XBOOLE_1:28;
+    reconsider cP' as Subset of P;
+    set P' = subrelstr cP';
+    cP' <> {} by S1a, XBOOLE_1:105;
+  then reconsider P' = subrelstr cP'
+       as with_finite_stability# non empty antisymmetric transitive RelStr;
+ cP'c: cP' = the carrier of P' by YELLOW_0:def 15;
+G:  stability# P' <= k+1 by B, Wsubp0;
+H:  stability# P' <> k+1 proof
+     assume AA: stability# P' = k+1;
+     consider A being finite StableSet of P' such that
+    A1: card(A) = stability# P' by Lwidth;
+    reconsider A' = A as finite non empty StableSet of P by A1, SPAChain1;
+
+    defpred R[set, set, set] means
+      for c being set st c in $2 holds not $1 /\ $3 c= c or
+              ex d being set st d in $2 & d <> c & $3 /\ d <> {};
+
+    defpred Q[finite Subset of P,set] means
+     for p being Clique-partition of subrelstr $1
+        st card p <= stability# P holds R[$1,p,$2];
+
+    defpred P[set,set] means
+     ex S being finite non empty Subset of P
+      st $2 = S & $1 in $2 & Q[S, C\/{$1}];
+    P: for x being set st x in A ex y being set st P[x,y] proof
+        let a be set;
+        assume A2: a in A;
+            A c= cP by cP'c, XBOOLE_1:1;
+            then {a} c= cP by A2, ZFMISC_1:37;
+         then reconsider Ca = C \/ {a} as Subset of P by XBOOLE_1:8;
+        now
+          assume A3: Ca is strong-chain;
+               a in {a} by TARSKI:def 1;
+           then B3: a in Ca by XBOOLE_0:def 3;
+           C3: not a in C by cP'c, A2, XBOOLE_0:def 5;
+               C c= Ca by XBOOLE_1:7;
+           then C c< Ca by B3, C3, XBOOLE_0:def 8;
+           hence contradiction by A3, D;
+        end;
+        then consider S being finite non empty Subset of P such that
+     B2: Q[S,Ca] by Lsc;
+         take S;
+         take S;
+         thus S = S;
+          now
+            assume A3: not a in S;
+            A3b: S /\ C c= S /\ Ca proof
+                  let x be set;
+                  assume x in S /\ C;
+                  then x in S & x in C by XBOOLE_0:def 4;
+                  then x in S & x in Ca by XBOOLE_0:def 3;
+                  hence x in S /\ Ca by XBOOLE_0:def 4;
+                 end;
+                 S /\ Ca c= S /\ C proof
+                   let x be set;
+                   assume A4: x in S /\ Ca;
+                   then B4: x in S by XBOOLE_0:def 4;
+                     x in Ca by A4, XBOOLE_0:def 4;
+                   then x in C or x in {a} by XBOOLE_0:def 3;
+                   hence x in S /\ C by B4, A3, TARSKI:def 1, XBOOLE_0:def 4;
+                 end;
+            then A3a: S /\ C = S /\ Ca by A3b, XBOOLE_0:def 10;
+            consider p being Clique-partition of subrelstr S such that
+          B3: card p <= stability# P and
+          C3: not R[S,p,C] by C, Lsc;
+            consider c being set such that
+          D3: c in p and
+          E3: S /\ C c= c and
+          F3: for d being set st d in p & d <> c holds C /\ d = {} by C3;
+              for d being set st d in p & d <> c holds Ca /\ d = {} proof
+                let d be set such that
+              A4: d in p and
+              B4: d <> c;
+                  now
+                   assume Ca /\ d <> {};
+                   then consider x being set such that
+                  A5: x in Ca /\ d by XBOOLE_0:def 1;
+                  B5: x in Ca by A5, XBOOLE_0:def 4;
+                  C5: x in d by A5, XBOOLE_0:def 4;
+                   per cases by B5, XBOOLE_0:def 3;
+                   suppose x in C;
+                     then x in C /\ d by C5, XBOOLE_0:def 4;
+                    hence contradiction by A4, B4, F3;
+                   end;
+                   suppose x in {a};
+                     then x = a by TARSKI:def 1;
+                     then a in the carrier of subrelstr S by C5, A4;
+                    hence contradiction by A3, YELLOW_0:def 15;
+                  end;
+                 end;
+              hence Ca /\ d = {};
+              end;
+            hence contradiction by D3, E3, B3, A3a, B2;
+          end;
+         hence a in S;
+         thus thesis by B2;
+       end;
+
+      consider f being Function such that
+    C1: dom f = A and
+    E1: for x being set st x in A holds P[x,f.x] from CLASSES1:sch 1(P);
+
+    D1a:  rng f is finite by C1, FINSET_1:26;
+     set SS = union rng f;
+    C1bb:  for x being set st x in rng f holds x is finite proof
+          let x be set;
+          assume x in rng f;
+           then consider a being set such that
+          A2: a in dom f and
+          B2: x = f.a by FUNCT_1:def 5;
+            consider S being finite non empty Subset of P such that
+          C2: f.a = S and a in f.a & Q[S, C \/ {a}] by C1, A2, E1;
+          thus x is finite by C2, B2;
+         end;
+    C1c: SS c= cP proof
+          let x be set;
+          assume x in SS;
+          then consider y being set such that
+          A2: x in y and
+          B2: y in rng f by TARSKI:def 4;
+              consider a being set such that
+          C2: a in dom f and
+          D2: y = f.a by B2, FUNCT_1:def 5;
+            consider S being finite non empty Subset of P such that
+          E2: f.a = S and a in f.a & Q[S, C \/ {a}] by C1, C2, E1;
+          thus x in cP by A2, D2, E2;
+         end;
+    C1a: A' c= SS proof
+          let x be set;
+          assume A2: x in A';
+          then consider S being finite non empty Subset of P such that
+              f.x = S and
+          D2: x in f.x  and Q[S, C \/ {x}] by E1;
+          f.x in rng f by A2, C1, FUNCT_1:12;
+          hence x in SS by D2, TARSKI:def 4;
+         end;
+     then reconsider SS as finite non empty Subset of P
+                      by C1bb, D1a, FINSET_1:25, C1c;
+     set SSp = subrelstr SS;
+    cSS: SS = the carrier of SSp by YELLOW_0:def 15;
+     consider p being Clique-partition of SSp such that
+    F1: card p <= stability# P and
+    G1: not R[SS,p,C] by C, Lsc;
+        consider c being set such that
+    H1: c in p and
+    I1: SS /\ C c= c and
+    J1: for d being set st d in p & d <> c holds C /\ d = {} by G1;
+        reconsider c as Element of p by H1;
+        A' = A' /\ SS by C1a, XBOOLE_1:28;
+     then reconsider A = A' as finite non empty StableSet of SSp by SPAChain;
+    K1: stability# SSp >= card A by Lwidth;
+        card p >= stability# SSp by Chpw;
+        then card p >= card A by K1, XXREAL_0:2;
+        then consider a being Element of A such that
+    L1: c /\ A = {a} by ACpart2, F1, A1, AA, B, XXREAL_0:1;
+        a in c /\ A by L1, TARSKI:def 1; then
+    M1: a in c by XBOOLE_0:def 4;
+        consider S being finite non empty Subset of P such that
+    N1: f.a = S and
+    O1: a in f.a and
+    P1: Q[S, C \/ {a}] by E1;
+
+        deffunc F(set) = $1 /\ S;
+        defpred P[set] means $1 meets S;
+        set Sp = { F(e) where e is Element of p: P[e]};
+
+    R1: S c= SS proof
+          let x be set;
+          assume A2: x in S;
+          S in rng f by N1, C1, FUNCT_1:12;
+          hence x in SS by A2, TARSKI:def 4;
+        end;
+        then reconsider Sp as a_partition of S by cSS, PUA2MSS1:11;
+        for x being set st x in Sp holds x is Clique of subrelstr S proof
+          let x be set;
+          assume x in Sp;
+          then consider e being Element of p such that
+        A2: x = e /\ S and e meets S;
+            e is Clique of SSp by LCpart;
+            then e is Clique of P by SPClique;
+          hence x is Clique of subrelstr S by A2, SPClique1;
+        end;
+        then reconsider Sp as Clique-partition of subrelstr S
+         by YELLOW_0:def 15, LCpart;
+    T1a: Sp = { F(e) where e is Element of p: P[e]};
+    T1b: card Sp <= card p from FraenkelFinCard1(T1a);
+         set cc = c /\ S;
+         c meets S by M1, N1, O1, XBOOLE_0:3; then
+    U1: cc in Sp;
+         S /\ (C \/ {a}) c= cc proof
+           let x be set;
+           assume A2: x in S /\ (C \/ {a});
+           B2: x in S by A2, XBOOLE_0:def 4;
+           C2: x in C \/ {a} by A2, XBOOLE_0:def 4;
+            per cases by C2, XBOOLE_0:def 3;
+            suppose x in C;
+                then x in SS /\ C by B2, R1, XBOOLE_0:def 4;
+              hence x in cc by B2, I1, XBOOLE_0:def 4;
+            end;
+            suppose x in {a};
+              then x = a by TARSKI:def 1;
+              hence x in cc by M1, N1, O1, XBOOLE_0:def 4;
+            end;
+         end;
+         then consider d being set such that
+     V1: d in Sp and
+     W1: d <> cc and
+     X1: (C \/ {a}) /\ d <> {} by U1, T1b, F1, XXREAL_0:2, P1;
+         consider dd being Element of p such that
+     Y1: d = dd /\ S and
+         dd meets S by V1;
+          C /\ dd = {} by Y1, W1, J1; then
+     Z1a: C /\ d = {} /\ S by Y1, XBOOLE_1:16 .= {};
+          C /\ d \/ {a} /\ d <> {} by X1, XBOOLE_1:23;
+          then consider x being set such that
+     Y1a: x in {a} /\ d by Z1a, XBOOLE_0:def 1;
+          x in {a} & x in d by Y1a, XBOOLE_0:def 4;
+          then a in d by TARSKI:def 1;
+          then a in dd by Y1, XBOOLE_0:def 4;
+          then c meets dd by M1, XBOOLE_0:3;
+     hence contradiction by Y1, W1, EQREL_1:def 6;
+    end;
+    then stability# P' < k+1 by G, XXREAL_0:1; then
+Ha: stability# P' <= k by NAT_1:13;
+    consider A being finite StableSet of P such that
+I:  card A = stability# P by Lwidth;
+Y:  stability# P' = k proof
+     per cases;
+     suppose S2: A /\ C = {};
+        A c= cP' proof
+          let x be set;
+          assume A3: x in A;
+          not x in C by A3, S2, XBOOLE_0:def 4;
+          hence x in cP' by A3, XBOOLE_0:def 5;
+         end;
+       hence thesis by B, H, I, Wsubp1;
+     end;
+     suppose A /\ C <> {};
+       then consider x being set such that
+     A3: x in A /\ C by XBOOLE_0:def 1;
+     B3: x in A by A3, XBOOLE_0:def 4;
+     C3: x in C by A3, XBOOLE_0:def 4;
+         set A' = A \ {x};
+         {x} c= A by B3, ZFMISC_1:37;
+         then D3: A = A' \/ {x} by XBOOLE_1:45;
+         x in {x} by TARSKI:def 1;
+         then not x in A' by XBOOLE_0:def 5;
+         then D4a: card A = card A' + 1 by D3, CARD_2:54;
+     E4: A' c= A by XBOOLE_1:36;
+         A' c= cP' proof
+           let xx be set;
+           assume A5: xx in A';
+         B5: xx in A by A5, XBOOLE_0:def 5;
+         C5: not xx in {x} by A5, XBOOLE_0:def 5;
+             xx <> x by C5, TARSKI:def 1;
+             then not xx in C by B3, C3, B5, C, ACClique;
+           hence xx in cP' by A5, XBOOLE_0:def 5;
+         end; then
+     F4: A' c= A /\ cP' by E4, XBOOLE_1:19;
+         A /\ cP' c= A' proof
+           let xx be set;
+           assume A5: xx in A /\ cP';
+         B5: xx in A by A5, XBOOLE_0:def 4;
+             xx in cP' by A5, XBOOLE_0:def 4;
+           then x <> xx by C3, XBOOLE_0:def 5;
+           then not xx in {x} by TARSKI:def 1;
+           hence xx in A' by B5, XBOOLE_0:def 5;
+         end;
+         then A' = A /\ cP' by F4, XBOOLE_0:def 10;
+         then reconsider A' as StableSet of P' by SPAChain;
+         stability# P' >= card A' by Lwidth;
+       hence thesis by D4a, I, B, Ha, XXREAL_0:1;
+     end;
+    end;
+    then consider Cp' being Clique-partition of P' such that
+Z: card(Cp') = stability# P' by A;
+    set Cp = Cp' \/ { cP \ cP' };
+Zk: Cp' is finite by Z;
+    cP' <> cP by E, XBOOLE_1:37;
+    then
+Zl: cP' c< cP by XBOOLE_0:def 8;
+    then reconsider Cp as a_partition of cP by cP'c, SPpart;
+     now  :: chains in Cp;
+       let x be set;
+       assume A2: x in Cp;
+       per cases by A2, XBOOLE_0:def 3;
+       suppose x in Cp';
+         then x is Clique of P' by LCpart;
+         hence x is Clique of P by SPClique;
+       end;
+       suppose x in { cP \ cP' };
+        hence x is Clique of P by C,E, TARSKI:def 1;
+       end;
+     end;
+    then reconsider Cp as Clique-partition of P by LCpart;
+    take Cp;
+    not cP \ cP' in Cp' proof
+      assume not thesis;
+      then cP c= cP' \/ cP' by cP'c, XBOOLE_1:44;
+      hence contradiction by Zl, XBOOLE_1:60;
+    end;
+    hence card Cp = stability# P by B, Y, Z, Zk, CARD_2:54;
+   end;
+  end;
+  for k being Nat holds P[k] from NAT_1:sch 2(P1,P2);
+  hence thesis by S0;
+ end;
+end;
+
+theorem :: A dual of Dilworth's theorem
+for R being with_finite_clique# antisymmetric transitive RelStr
+ ex A being Coloring of R st card A = clique# R
+proof
+ let R be with_finite_clique# antisymmetric transitive RelStr;
+  defpred P[Nat] means
+  for P being with_finite_clique# antisymmetric transitive RelStr
+   st clique# P = $1 ex A being Coloring of P st card A = clique# P;
+P1: P[0] proof
+     let P be with_finite_clique# antisymmetric transitive RelStr;
+     assume S1a: clique# P = 0;
+     then P is empty;
+     then reconsider C = {} as Coloring of P by EQREL_1:54;
+     take C;
+     thus card(C) = clique# P by S1a;
+    end;
+P2: for n being Nat st P[n] holds P[n+1] proof
+   let n be Nat;
+   assume AA: P[n];
+   let P be with_finite_clique# antisymmetric transitive RelStr;
+   assume A1: clique# P = n+1;
+A1a: P is non empty by A1;
+   reconsider PP = P
+      as with_finite_clique# non empty antisymmetric transitive RelStr by A1;
+   set M = maximals(PP);
+   set cP = the carrier of P;
+   set cPM = cP \ M;
+   reconsider cPM as Subset of P;
+   set PM = subrelstr cPM;
+cPM: cPM = the carrier of PM by YELLOW_0:def 15;
+   reconsider PM as with_finite_clique# antisymmetric transitive RelStr;
+
+   consider Ca being finite Clique of PM such that
+B1a: card Ca = clique# PM by Lheight;
+C1b: Ca is Clique of P by SPClique;
+
+   consider C being finite Clique of P such that
+B1: card(C) = n+1 by A1, Lheight;
+B1b: C <> {} by B1;
+
+    set cC = C /\ cPM;
+    reconsider cC as finite Clique of PM by SPClique1;
+    consider m being Element of P such that
+F1: m in C and
+G1: m is_maximal_wrt C, the InternalRel of P by A1a, B1b, BAGORDER:7;
+G1a: m is_maximal_in C by G1, WAYBEL_4:def 25;
+H1: C /\ M = {m} proof
+     thus C /\ M c= {m} proof
+      let a be set;
+      assume A2: a in C /\ M;
+     B2: a in C by A2, XBOOLE_0:def 4;
+     C2: a in M by A2, XBOOLE_0:def 4;
+       reconsider a' = a as Element of P by A2;
+     D2: a' is_maximal_in [#]P by C2, Lmax;
+      now
+        assume A3: a <> m;
+        not m < a' by B2, G1a, WAYBEL_4:56;
+        then not m <= a' by A3, ORDERS_2:def 10;
+        then a' <= m by F1, B2, A3, DClique;
+        then a' < m by A3, ORDERS_2:def 10;
+        hence contradiction by D2, F1, WAYBEL_4:56;
+      end;
+      hence a in {m} by TARSKI:def 1;
+     end;
+     thus {m} c= C /\ M proof
+      let a be set;
+      assume a in {m};
+      then A2: a = m by TARSKI:def 1;
+      now
+        assume A3: not a in M;
+          consider y being Element of P such that
+      B3: y is_maximal_in [#]P and
+      C3: m = y or m < y by A1a, Pminmax;
+          set Cm = C \/ {y};
+          now
+            per cases;
+            suppose m = y;
+              hence Cm is finite Clique of P by F1, ZFMISC_1:46;
+            end;
+            suppose m <> y;
+               then m <= y by C3, ORDERS_2:def 10;
+              hence Cm is finite Clique of P by G1a, ExtClique;
+            end;
+          end;
+          then reconsider Cm as finite Clique of P;
+           not y in C by A2, A3, B3, Lmax, C3, G1a, WAYBEL_4:56;
+          then card Cm = card C + 1 by CARD_2:54;
+          then n+1+1 <= n+1+0 by B1, A1, Lheight;
+        hence contradiction by XREAL_1:8;
+      end;
+      hence a in C /\ M by A2, F1, XBOOLE_0:def 4;
+     end;
+    end;
+D1b: cC = C /\ cP \ C /\ M by XBOOLE_1:50;
+D1c: C /\ cP = C by XBOOLE_1:28;
+D1: card cC = card C - card {m} by F1, H1, D1b, D1c, EULER_1:5
+           .= n+1-1 by B1, CARD_1:50
+           .= n;
+D1a: clique# PM >= card cC by Lheight;
+E1: clique# PM <= clique# P by Hsubp0;
+    now
+      assume A2: clique# PM = n+1;
+    B2: Ca <> {} by A2, B1a;
+    B2a:PM is non empty by A2;
+        consider x being Element of PM such that
+    D2e: x in Ca and
+    D2: x is_maximal_wrt Ca, the InternalRel of PM by B2a, B2, BAGORDER:7;
+    D2a: x is_maximal_in Ca by D2, WAYBEL_4:def 25;
+        reconsider x' = x as Element of P by B2a, YELLOW_0:59;
+        consider y being Element of P such that
+    E2: y is_maximal_in [#]P and
+    F2: x' = y or x' < y by Pminmax;
+        set Cb = Ca \/ {y};
+          now
+            per cases;
+            suppose x' = y;
+              hence Cb is finite Clique of P by D2e, C1b, ZFMISC_1:46;
+            end;
+            suppose x' <> y;
+               then x' <= y by F2, ORDERS_2:def 10;
+             hence Cb is finite Clique of P by D2a, SPmax, C1b, ExtClique;
+            end;
+          end;
+        then reconsider Cb as finite Clique of P;
+        y in M by E2, Lmax;
+        then not y in Ca by cPM, XBOOLE_0:def 5; then
+    G2: card Cb = n+1+1 by B1a, A2, CARD_2:54;
+        card Cb <= n+1 by A1, Lheight;
+        then n+1 <= n+0 by G2, XREAL_1:8;
+      hence contradiction by XREAL_1:8;
+    end;
+    then clique# PM < n+1 by A1, E1, XXREAL_0:1;
+    then clique# PM <= n by NAT_1:13;
+   then clique# PM = n by D1, D1a, XXREAL_0:1;
+   then consider Aa being Coloring of PM such that
+K1: card Aa = n by AA;
+    reconsider Ab = Aa as finite set by K1;
+    set A = Aa \/ {M};
+L1b: cP = cPM \/ M by XBOOLE_1:45;
+    {M} is a_partition of M by EQREL_1:48;
+    then
+L1: A is a_partition of cP by XBOOLE_1:79, L1b, cPM, SPpart0;
+    now let x be set;
+      assume A2: x in A;
+      per cases by A2, XBOOLE_0:def 3;
+      suppose x in Aa;
+        then x is StableSet of PM by LACpart;
+        hence x is StableSet of P by  SPAChain1;
+      end;
+      suppose x in {M};
+        hence x is StableSet of P by TARSKI:def 1;
+      end;
+    end;
+   then reconsider A as Coloring of P by L1, LACpart;
+   take A;
+   not M in Ab by cPM, XBOOLE_1:38;
+   hence card A = clique# P by A1, K1, CARD_2:54;
+  end;
+    for n being Nat holds P[n] from NAT_1:sch 2(P1,P2);
+ hence ex A being Coloring of R st card(A) = clique# R;
+end;
+
+begin :: Erdos-Szekeres theorem
+
+theorem CSR: :: CSR
+for R being finite antisymmetric transitive RelStr, r, s  being Nat
+ st card R = r*s+1
+  holds (ex C being Clique of R st card C >= r+1) or
+        (ex A being StableSet of R st card A >= s+1)
+proof
+  let R be finite antisymmetric transitive RelStr, r, s be Nat such that
+A: card R = r*s+1 and
+B: for C being Clique of R holds card C < r+1 and
+C: for A being StableSet of R holds card A < s+1;
+  consider p being Clique-partition of R such that
+D: card p = stability# R by DWf;
+  consider A being finite StableSet of R such that
+E: card A = stability# R by Lwidth;
+   stability# R < s+1 by C, E; then
+Fa: stability# R <= s by NAT_1:13;
+   set wR = stability# R;   set cR = the carrier of R;   set f = canFS p;
+Fb: len f = card p by UPROOTS:5;
+Fd: dom f = Seg len f by FINSEQ_1:def 3;
+   set f = canFS p;
+G: rng f = p by FUNCT_2:def 3;
+   reconsider f as FinSequence of bool cR by G, FINSEQ_1:def 4;
+   now
+     let d,e be Nat such that
+   A2: d in dom f and
+   B2: e in dom f and
+   C2: d<>e;
+   D2: f.d in rng f by A2, FUNCT_1:12;
+   E2: f.e in rng f by B2, FUNCT_1:12;
+       reconsider fd = f.d, fe = f.e as Subset of cR by D2, E2, G;
+       fd <> fe by C2, A2, B2, FUNCT_1:def 8;
+     hence f.d misses f.e by D2, E2, G, EQREL_1:def 6;
+   end;
+   then
+I: card union rng f = Sum Card f by Fb, INT_5:48;
+   reconsider n' = r as Element of NAT by ORDINAL1:def 13;
+   reconsider h = wR |-> n' as Element of wR-tuples_on NAT by FINSEQ_2:132;
+Ia: Sum h = wR*r by RVSUM_1:110;
+    dom f = dom Card f by CARD_3:def 2;
+    then
+Ib: len Card f = wR by Fb, D, FINSEQ_3:31;
+   reconsider Cf = Card f as Element of wR-tuples_on NAT by Ib, FINSEQ_2:110;
+Ic: h is Element of wR-tuples_on REAL by FINSEQ_2:129;
+Ie: Cf is Element of wR-tuples_on REAL by FINSEQ_2:129;
+   now
+     let j being Nat such that
+   A2: j in Seg wR;
+   B2: h.j = r by A2, FINSEQ_2:71;
+   C2: Cf.j = card (f.j) by A2, Fb, Fd, D, CARD_3:def 2;
+      f.j in p by G,A2,D,Fb,Fd, FUNCT_1:12;
+      then
+       reconsider fj = f.j as Clique of R by LCpart;
+       card fj < r+1 by B;
+     hence Cf.j <= h.j by B2, C2, NAT_1:13;
+   end;
+   then
+bI: Sum Cf <= Sum h by Ic, Ie, RVSUM_1:112;
+   wR*r <= s*r by Fa, XREAL_1:66;
+   then Sum Cf <= s*r by Ia, bI, XXREAL_0:2;
+   then r*s+1 <= r*s+0 by I, G, A, EQREL_1:def 6;
+  hence contradiction by XREAL_1:8;
+end;
+
+:: In a sequence of n^2+1 (distinct) real numbers there is a monotone
+:: subsequence of length at least n+1.
+
+:: Let F be the sequence.  Define a RelStr with the carrier equal F (a set
+:: of ordered pairs) and the relation defined as: if a = [i,F.i] in F and
+:: b = [j,F.j] in F, for some i and j, then  a < b iff i < j & F.i < F.j.
+:: The relation is asymmetric and transitive.
+
+:: Considered defining FinSubsequence of f but have given up.
+:: There is not much gain from having FinSubsequence of f instead of
+:: FinSubsequence st g c= f
+
+theorem
+for f being real-valued FinSequence, n being Nat
+ st card f = n^2+1 & f is one-to-one
+  ex g being real-valued FinSubsequence
+   st g c= f & card g >= n+1 & (g is increasing or g is decreasing)
+proof
+  let f be real-valued FinSequence, n be Nat such that
+A: card f = n^2+1 and
+AA: f is one-to-one;
+  set cP = f;
+  defpred P[set,set] means
+  ex i,j being Nat, r, s being real number
+   st $1 = [i,r] & $2 = [j,s] & i<j & r<s;
+  consider iP being Relation of f, f such that
+B: for x, y being set holds [x,y] in iP iff x in f & y in f & P[x,y]
+    from RELSET_1:sch 1;
+
+    set P = RelStr (# cP, iP #);
+G3c: dom f = Seg len f by FINSEQ_1:def 3;
+Pa: P is antisymmetric proof
+     let x, y be set such that
+        x in the carrier of P and y in the carrier of P and
+    C1: [x,y] in the InternalRel of P and
+    D1: [y,x] in the InternalRel of P;
+        consider i,j being Nat, r, s being real number such that
+    E1: x = [i,r] and
+    F1: y = [j,s] and
+    G1: i<j & r<s by C1, B;
+        consider j1,i1 being Nat, s1, r1 being real number such that
+    H1: y = [j1,s1] and
+    I1: x = [i1,r1] and
+    J1: j1<i1 & s1<r1 by D1, B;
+        i = i1 & j = j1 by E1, F1, H1, I1, ZFMISC_1:33;
+     hence x = y by G1, J1;
+    end;
+Pt: P is transitive proof
+     let x, y, z be set such that
+    A1: x in the carrier of P and y in the carrier of P and
+    C1: z in the carrier of P and
+    D1: [x,y] in the InternalRel of P and
+    E1: [y,z] in the InternalRel of P;
+        consider ix,jy being Nat, rx, sy being real number such that
+    F1: x = [ix,rx] and
+    G1: y = [jy,sy] and
+    H1: ix<jy & rx<sy by D1, B;
+        consider iy,jz being Nat, ry, sz being real number such that
+    I1: y = [iy,ry] and
+    J1: z = [jz,sz] and
+    K1: iy<jz & ry<sz by E1, B;
+    L1: jy = iy & sy = ry by G1, I1, ZFMISC_1:33;
+         ix<jz & rx<sz by L1, H1, K1, XXREAL_0:2;
+        hence [x,z] in the InternalRel of P by F1,J1,A1,C1,B;
+    end;
+    reconsider P as finite antisymmetric transitive RelStr by Pa, Pt;
+C: card P = card f;
+   per cases by C, A, CSR;
+   suppose ex C being Clique of P st card C >= n+1;
+      then consider C being Clique of P such that
+   A1: card C >= n+1;
+       set g = C;
+       reconsider g as Subset of f;
+       reconsider g as Function;
+       dom g c= Seg len f proof
+         let x be set;
+         assume x in dom g;
+         then consider y being set such that
+       A2: [x,y] in g by RELAT_1:def 4;
+         x in dom f by A2, RELAT_1:def 4;
+        hence thesis by FINSEQ_1:def 3;
+       end;
+       then reconsider g as FinSubsequence by FINSEQ_1:def 12;
+       reconsider g as real-valued FinSubsequence;
+       take g;
+       thus g c= f;
+       thus card g >= n+1 by A1;
+       g is increasing proof
+         let e1, e2 be ext-real number such that
+       A3: e1 in dom g and
+       B3: e2 in dom g and
+       C3: e1 < e2;
+       D3: [e1,g.e1] in g by A3, FUNCT_1:8;
+       E3: [e2,g.e2] in g by B3, FUNCT_1:8;
+           reconsider p1 = [e1,g.e1], p2 = [e2,g.e2] as Element of P by D3, E3;
+       F3: p1 <> p2 by C3, ZFMISC_1:33;
+         per cases by D3, E3, F3, DClique;
+         suppose p1 <= p2;
+           then [p1,p2] in iP by ORDERS_2:def 9;
+           then consider i,j being Nat, r, s being real number such that
+         A4: p1 = [i,r] and
+         B4: p2 = [j,s] and
+         C4: i<j & r<s by B;
+         E4: j = e2 & s = g.e2 by B4, ZFMISC_1:33;
+           thus g.e1 < g.e2 by C4, E4, A4, ZFMISC_1:33;
+         end;
+         suppose p2 <= p1;
+           then [p2,p1] in iP by ORDERS_2:def 9;
+           then consider i,j being Nat, r, s being real number such that
+         A4: p2 = [i,r] and
+         B4: p1 = [j,s] and
+         C4: i<j & r<s by B;
+             i = e2 & j = e1 by A4, B4,ZFMISC_1:33;
+           hence g.e1 < g.e2 by C3, C4;
+         end;
+       end;
+     hence thesis;
+   end;
+   suppose ex A being StableSet of P st card A >= n+1;
+      then consider A being StableSet of P such that
+   A1: card A >= n+1;
+       set g = A;
+       reconsider g as Subset of f;
+       reconsider g as Function;
+   B1: dom g c= Seg len f proof
+         let x be set;
+         assume x in dom g;
+         then consider y being set such that
+       A2: [x,y] in g by RELAT_1:def 4;
+         x in dom f by A2, RELAT_1:def 4;
+        hence thesis by FINSEQ_1:def 3;
+       end;
+       then reconsider g as FinSubsequence by FINSEQ_1:def 12;
+       reconsider g as real-valued FinSubsequence;
+       take g;
+       thus g c= f;
+       thus card g >= n+1 by A1;
+       g is decreasing proof
+         let e1, e2 be ext-real number such that
+       A3: e1 in dom g and
+       B3: e2 in dom g and
+       C3: e1 < e2;
+       D3: [e1,g.e1] in g by A3, FUNCT_1:8;
+       E3: [e2,g.e2] in g by B3, FUNCT_1:8;
+           reconsider p1 = [e1,g.e1], p2 = [e2,g.e2] as Element of P by D3, E3;
+       F3: p1 <> p2 by C3, ZFMISC_1:33;
+       G3b: g.e1 = f.e1 & g.e2 = f.e2 by A3, B3, GRFUNC_1:8;
+       G3: g.e1 <> g.e2 by G3c, B1, A3, B3, G3b, C3, AA, FUNCT_1:def 8;
+           reconsider i = e1, j = e2 as Nat by B1, A3, B3;
+           reconsider r = g.e1, s = g.e2 as real number;
+       H3: p1 = [i,r] & p2 = [j,s];
+         per cases by G3, XXREAL_0:1;
+         suppose g.e1 < g.e2;
+           then [p1,p2] in iP by D3, B, C3, H3;
+           then p1 <= p2 by ORDERS_2:def 9;
+           hence g.e1 > g.e2 by D3, E3, F3, LAChain;
+         end;
+         suppose g.e1 > g.e2;
+           hence thesis;
+         end;
+       end;
+     hence thesis;
+   end;
+end;

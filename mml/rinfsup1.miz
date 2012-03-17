@@ -10,8 +10,8 @@ environ
       ARYTM, ABSVALUE, BOOLE, RINFSUP1, SEQM_3, SQUARE_1, PROB_1, LATTICES,
       SUPINF_2, PARTFUN3, SEQ_4;
  notations ORDINAL1, NUMBERS, XCMPLX_0, XXREAL_0, XREAL_0, REAL_1, NAT_1,
-      COMPLEX1, TARSKI, XXREAL_2, VALUED_0, SEQM_3, SEQ_4, XBOOLE_0, SUBSET_1,
-      SEQ_2, RELSET_1, FUNCT_2, LIMFUNC1, PSCOMP_1, VALUED_1, SEQ_1, PARTFUN3;
+      COMPLEX1, TARSKI, XXREAL_2, VALUED_0, SEQ_4, XBOOLE_0, SUBSET_1, SEQ_2,
+      RELSET_1, FUNCT_2, LIMFUNC1, PSCOMP_1, VALUED_1, SEQ_1, PARTFUN3;
  constructors REAL_1, NAT_1, COMPLEX1, SEQM_3, LIMFUNC1, PARTFUN3, PARTFUN1,
       SEQ_1, XXREAL_2, SEQ_4, RELSET_1;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0,
@@ -35,7 +35,8 @@ Lm1: for s st 0 < s & r1 <= r2 holds r1 < r2 + s & r1 - s < r2
 proof
   let s such that
 A1: 0<s;
-  assume r1 <= r2;
+  assume
+  r1 <= r2;
   then r1 + 0 < r2 + s by A1,XREAL_1:10;
   hence thesis by XREAL_1:21;
 end;
@@ -45,27 +46,27 @@ theorem Th1:
 proof
   thus s - r < t & s + r > t implies abs(t-s) < r
   proof
-    assume
-A1: s - r < t & s + r > t;
-    then -r + s < t;
+    assume that
+A1: s - r < t and
+A2: s + r > t;
+    -r + s < t by A1;
     then
-A2: -r < t - s by XREAL_1:22;
-    t - s < r by A1,XREAL_1:21;
-    hence thesis by A2,SEQ_2:9;
+A3: -r < t - s by XREAL_1:22;
+    t - s < r by A2,XREAL_1:21;
+    hence thesis by A3,SEQ_2:9;
   end;
   assume
-A3: abs(t-s) < r;
+A4: abs(t-s) < r;
   then -r < t - s by SEQ_2:9;
   then
-A4: s + -r < t by XREAL_1:22;
-  t - s < r by A3,SEQ_2:9;
-  hence thesis by A4,XREAL_1:21;
+A5: s + -r < t by XREAL_1:22;
+  t - s < r by A4,SEQ_2:9;
+  hence thesis by A5,XREAL_1:21;
 end;
 
 definition
   let seq be Real_Sequence;
   func sup seq -> Real equals
-
   upper_bound rng seq;
   coherence;
 end;
@@ -73,7 +74,6 @@ end;
 definition
   let seq be Real_Sequence;
   func inf seq -> Real equals
-
   lower_bound rng seq;
   coherence;
 end;
@@ -99,13 +99,15 @@ theorem Th3:
 proof
   thus r in rng seq implies -r in rng(-seq)
   proof
-    assume r in rng seq;
+    assume
+    r in rng seq;
     then consider n such that
 A1: r=seq.n by FUNCT_2:190;
     -r=(-seq).n by A1,SEQ_1:14;
     hence thesis by VALUED_0:28;
   end;
-  assume -r in rng(-seq);
+  assume
+  -r in rng(-seq);
   then consider n such that
 A2: -r=(-seq).n by FUNCT_2:190;
   r=-(-seq).n by A2;
@@ -138,30 +140,33 @@ end;
 theorem Th5:
   seq is bounded_above iff rng seq is bounded_above
 proof
-A1: rng seq is bounded_above implies seq is bounded_above
+A1: seq is bounded_above implies rng seq is bounded_above
   proof
-    assume rng seq is bounded_above;
+    assume
+    seq is bounded_above;
     then consider t such that
-A2: for r st r in rng seq holds r<=t by SEQ_4:def 1;
+A2: for n holds seq.n<t by SEQ_2:def 3;
+    now
+      let r;
+      assume
+      r in rng seq;
+      then ex n being set st n in dom seq & seq.n = r by FUNCT_1:def 5;
+      hence r<=t by A2;
+    end;
+    hence thesis by SEQ_4:def 1;
+  end;
+  rng seq is bounded_above implies seq is bounded_above
+  proof
+    assume
+    rng seq is bounded_above;
+    then consider t such that
+A3: for r st r in rng seq holds r<=t by SEQ_4:def 1;
     now
       let n;
-      seq.n <= t by A2,FUNCT_2:6;
+      seq.n <= t by A3,FUNCT_2:6;
       hence seq.n < t+1 by Lm1;
     end;
     hence thesis by SEQ_2:def 3;
-  end;
-  seq is bounded_above implies rng seq is bounded_above
-  proof
-    assume seq is bounded_above;
-    then consider t such that
-A3: for n holds seq.n<t by SEQ_2:def 3;
-    now
-      let r;
-      assume r in rng seq;
-      then ex n being set st n in dom seq & seq.n = r by FUNCT_1:def 5;
-      hence r<=t by A3;
-    end;
-    hence thesis by SEQ_4:def 1;
   end;
   hence thesis by A1;
 end;
@@ -169,148 +174,165 @@ end;
 theorem Th6:
   seq is bounded_below iff rng seq is bounded_below
 proof
-A1: rng seq is bounded_below implies seq is bounded_below
+A1: seq is bounded_below implies rng seq is bounded_below
   proof
-    assume rng seq is bounded_below;
+    assume
+    seq is bounded_below;
     then consider t such that
-A2: for r st r in rng seq holds t<=r by SEQ_4:def 2;
+A2: for n holds t<seq.n by SEQ_2:def 4;
+    now
+      let r;
+      assume
+      r in rng seq;
+      then ex n being set st n in dom seq & seq.n = r by FUNCT_1:def 5;
+      hence t<=r by A2;
+    end;
+    hence thesis by SEQ_4:def 2;
+  end;
+  rng seq is bounded_below implies seq is bounded_below
+  proof
+    assume
+    rng seq is bounded_below;
+    then consider t such that
+A3: for r st r in rng seq holds t<=r by SEQ_4:def 2;
     now
       let n;
-      t <= seq.n by A2,FUNCT_2:6;
+      t <= seq.n by A3,FUNCT_2:6;
       hence t - 1 < seq.n by Lm1;
     end;
     hence thesis by SEQ_2:def 4;
-  end;
-  seq is bounded_below implies rng seq is bounded_below
-  proof
-    assume seq is bounded_below;
-    then consider t such that
-A3: for n holds t<seq.n by SEQ_2:def 4;
-    now
-      let r;
-      assume r in rng seq;
-      then ex n being set st n in dom seq & seq.n = r by FUNCT_1:def 5;
-      hence t<=r by A3;
-    end;
-    hence thesis by SEQ_4:def 2;
   end;
   hence thesis by A1;
 end;
 
 theorem Th7:
-  seq is bounded_above implies ( r = sup seq iff
-  ((for n holds seq.n <= r) & (for s st 0<s holds ex k st r-s < seq.k)))
+  seq is bounded_above implies ( r = sup seq iff (for n holds seq.n
+  <= r) & for s st 0<s holds ex k st r-s < seq.k )
 proof
-  assume seq is bounded_above;
-  then
-A1: rng seq is bounded_above & rng seq <> {} by Th5,RELAT_1:64;
   set R = rng seq;
-A2: r = sup seq implies
-  (for n holds seq.n <= r) & (for s st 0<s holds ex k st r-s<seq.k)
-  proof
-    assume
-A3: r = sup seq;
-A4: now
-      let n;
-      seq.n in R by FUNCT_2:6;
-      hence seq.n <= r by A1,A3,SEQ_4:def 4;
-    end;
-    now
-      let s;
-      assume 0<s;
-      then consider r2 such that
-A5:   r2 in R & r-s<r2 by A1,A3,SEQ_4:def 4;
-      consider k such that
-A6:   r2 = seq.k by A5,SETLIM_1:4;
-      take k;
-      thus r-s < seq.k by A5,A6;
-    end;
-    hence thesis by A4;
-  end;
-  ((for n holds seq.n <= r) & (for s st 0<s holds ex k st r-s<seq.k))
+  assume
+  seq is bounded_above;
+  then
+A1: rng seq is bounded_above by Th5;
+A2: rng seq <> {} by RELAT_1:64;
+A3: (for n holds seq.n <= r) & (for s st 0<s holds ex k st r-s<seq.k)
   implies r = sup seq
   proof
-    assume
-A7: (for n holds seq.n <= r) & (for s st 0<s holds ex k st r-s<seq.k);
-A8: now
-      let r1;
-      assume r1 in R;
-      then ex n being set st n in dom seq & seq.n = r1 by FUNCT_1:def 5;
-      hence r1 <= r by A7;
+    assume that
+A4: for n holds seq.n <= r and
+A5: for s st 0<s holds ex k st r-s<seq.k;
+A6: now
+      let s;
+      assume
+      0<s;
+      then consider k such that
+A7:   r-s< seq.k by A5;
+      consider r2 such that
+A8:   r2 in R & r2 = seq.k by FUNCT_2:6;
+      take r2;
+      thus r2 in R & r-s < r2 by A7,A8;
     end;
     now
-      let s;
-      assume 0<s;
-      then consider k such that
-A9:   r-s< seq.k by A7;
-      consider r2 such that
-A10:  r2 in R & r2 = seq.k by FUNCT_2:6;
-      take r2;
-      thus r2 in R & r-s < r2 by A9,A10;
+      let r1;
+      assume
+      r1 in R;
+      then ex n being set st n in dom seq & seq.n = r1 by FUNCT_1:def 5;
+      hence r1 <= r by A4;
     end;
-    hence thesis by A1,A8,SEQ_4:def 4;
+    hence thesis by A1,A2,A6,SEQ_4:def 4;
   end;
-  hence thesis by A2;
+  r = sup seq implies (for n holds seq.n <= r) & for s st 0<s holds ex k
+  st r-s<seq.k
+  proof
+    assume
+A9: r = sup seq;
+A10: now
+      let s;
+      assume
+      0<s;
+      then consider r2 such that
+A11:  r2 in R and
+A12:  r-s<r2 by A1,A2,A9,SEQ_4:def 4;
+      consider k such that
+A13:  r2 = seq.k by A11,SETLIM_1:4;
+      take k;
+      thus r-s < seq.k by A12,A13;
+    end;
+    now
+      let n;
+      seq.n in R by FUNCT_2:6;
+      hence seq.n <= r by A1,A9,SEQ_4:def 4;
+    end;
+    hence thesis by A10;
+  end;
+  hence thesis by A3;
 end;
 
 theorem Th8:
-  seq is bounded_below implies (r = inf seq iff
-  ((for n holds r <= seq.n) & (for s st 0<s holds ex k st seq.k < r+s)))
+  seq is bounded_below implies (r = inf seq iff (for n holds r <=
+  seq.n) & for s st 0<s holds ex k st seq.k < r+s )
 proof
-  assume seq is bounded_below;
-  then
-A1: rng seq is bounded_below & rng seq <> {} by Th6,RELAT_1:64;
   set R = rng seq;
-A2: r = inf seq implies
-  (for n holds r <= seq.n) & (for s st 0<s holds ex k st seq.k<r+s)
-  proof
-    assume
-A3: r = inf seq;
-A4: now
-      let n;
-      seq.n in R by FUNCT_2:6;
-      hence r <= seq.n by A1,A3,SEQ_4:def 5;
-    end;
-    now
-      let s;
-      assume 0<s;
-      then consider r2 such that
-A5:   r2 in R & r2<r+s by A1,A3,SEQ_4:def 5;
-      consider k such that
-A6:   r2 = seq.k by A5,SETLIM_1:4;
-      take k;
-      thus seq.k<r+s by A5,A6;
-    end;
-    hence thesis by A4;
-  end;
-  ((for n holds r <= seq.n) & (for s st 0<s holds ex k st seq.k<r+s))
+  assume
+  seq is bounded_below;
+  then
+A1: rng seq is bounded_below by Th6;
+A2: rng seq <> {} by RELAT_1:64;
+A3: (for n holds r <= seq.n) & (for s st 0<s holds ex k st seq.k<r+s)
   implies r = inf seq
   proof
-    assume
-A7: (for n holds r <= seq.n) & (for s st 0<s holds ex k st seq.k<r+s);
-A8: now
-      let r1;
-      assume r1 in R;
-      then ex n being set st n in dom seq & seq.n = r1 by FUNCT_1:def 5;
-      hence r <= r1 by A7;
+    assume that
+A4: for n holds r <= seq.n and
+A5: for s st 0<s holds ex k st seq.k<r+s;
+A6: now
+      let s;
+      assume
+      0<s;
+      then consider k such that
+A7:   seq.k < r+s by A5;
+      consider r2 such that
+A8:   r2 in R & r2 = seq.k by FUNCT_2:6;
+      take r2;
+      thus r2 in R & r2 <r+s by A7,A8;
     end;
     now
-      let s;
-      assume 0<s;
-      then consider k such that
-A9:   seq.k < r+s by A7;
-      consider r2 such that
-A10:  r2 in R & r2 = seq.k by FUNCT_2:6;
-      take r2;
-      thus r2 in R & r2 <r+s by A9,A10;
+      let r1;
+      assume
+      r1 in R;
+      then ex n being set st n in dom seq & seq.n = r1 by FUNCT_1:def 5;
+      hence r <= r1 by A4;
     end;
-    hence thesis by A1,A8,SEQ_4:def 5;
+    hence thesis by A1,A2,A6,SEQ_4:def 5;
   end;
-  hence thesis by A2;
+  r = inf seq implies (for n holds r <= seq.n) & for s st 0<s holds ex k
+  st seq.k<r+s
+  proof
+    assume
+A9: r = inf seq;
+A10: now
+      let s;
+      assume
+      0<s;
+      then consider r2 such that
+A11:  r2 in R and
+A12:  r2<r+s by A1,A2,A9,SEQ_4:def 5;
+      consider k such that
+A13:  r2 = seq.k by A11,SETLIM_1:4;
+      take k;
+      thus seq.k<r+s by A12,A13;
+    end;
+    now
+      let n;
+      seq.n in R by FUNCT_2:6;
+      hence r <= seq.n by A1,A9,SEQ_4:def 5;
+    end;
+    hence thesis by A10;
+  end;
+  hence thesis by A3;
 end;
 
 theorem Th9:
-  (for n holds seq.n <= r) iff (seq is bounded_above & sup seq <= r)
+  (for n holds seq.n <= r) iff seq is bounded_above & sup seq <= r
 proof
   thus (for n holds seq.n <= r) implies seq is bounded_above & sup seq <= r
   proof
@@ -324,30 +346,30 @@ A1: for n holds seq.n <= r;
     hence
 A2: seq is bounded_above by SEQ_2:def 3;
     now
-      assume
-A3:   r < sup seq;
       set r1= (sup seq) - r;
-      r1 > 0 by A3,XREAL_1:52;
-      then consider k such that
-A4:   (sup seq) - r1 < seq.k by A2,Th7;
-      thus contradiction by A1,A4;
+      assume
+      r < sup seq;
+      then r1 > 0 by XREAL_1:52;
+      then ex k st (sup seq) - r1 < seq.k by A2,Th7;
+      hence contradiction by A1;
     end;
     hence thesis;
   end;
-  assume
-A5: seq is bounded_above & sup seq <= r;
+  assume that
+A3: seq is bounded_above and
+A4: sup seq <= r;
   now
     let n;
-    seq.n <= sup seq by A5,Th7;
-    hence seq.n <= r by A5,XXREAL_0:2;
+    seq.n <= sup seq by A3,Th7;
+    hence seq.n <= r by A4,XXREAL_0:2;
   end;
   hence thesis;
 end;
 
 theorem Th10:
-  (for n holds r <= seq.n) iff (seq is bounded_below & r <= inf seq)
+  (for n holds r <= seq.n) iff seq is bounded_below & r <= inf seq
 proof
-  thus (for n holds r <= seq.n) implies (seq is bounded_below & r <= inf seq)
+  thus (for n holds r <= seq.n) implies seq is bounded_below & r <= inf seq
   proof
     assume
 A1: for n holds r <= seq.n;
@@ -359,22 +381,22 @@ A1: for n holds r <= seq.n;
     hence
 A2: seq is bounded_below by SEQ_2:def 4;
     now
-      assume
-A3:   r > inf seq;
       set r1=r - (inf seq);
-      r1 > 0 by A3,XREAL_1:52;
-      then consider k such that
-A4:   (seq.k < (inf seq) + r1) by A2,Th8;
-      thus contradiction by A1,A4;
+      assume
+      r > inf seq;
+      then r1 > 0 by XREAL_1:52;
+      then ex k st seq.k < (inf seq) + r1 by A2,Th8;
+      hence contradiction by A1;
     end;
     hence thesis;
   end;
-  assume
-A5: seq is bounded_below & r <= inf seq;
+  assume that
+A3: seq is bounded_below and
+A4: r <= inf seq;
   now
     let n;
-    inf seq <= seq.n by A5,Th8;
-    hence r <= seq.n by A5,XXREAL_0:2;
+    inf seq <= seq.n by A3,Th8;
+    hence r <= seq.n by A4,XXREAL_0:2;
   end;
   hence thesis;
 end;
@@ -384,17 +406,18 @@ theorem
 proof
   set seq1=-seq;
   thus seq is bounded_above implies -seq is bounded_below;
-  assume seq1 is bounded_below;
+  assume
+  seq1 is bounded_below;
   then consider t such that
-A3: for n holds seq1.n>t by SEQ_2:def 4;
+A1: for n holds seq1.n>t by SEQ_2:def 4;
   for n holds seq.n < -t
   proof
     let n;
     seq1.n=-seq.n by SEQ_1:14;
     then
-A4: -seq1.n = seq.n;
-    seq1.n > t by A3;
-    hence thesis by A4,XREAL_1:26;
+A2: -seq1.n = seq.n;
+    seq1.n > t by A1;
+    hence thesis by A2,XREAL_1:26;
   end;
   hence thesis by SEQ_2:def 3;
 end;
@@ -409,7 +432,8 @@ end;
 theorem Th13:
   seq is bounded_above implies sup seq = -inf (-seq)
 proof
-  assume seq is bounded_above;
+  assume
+  seq is bounded_above;
   then rng seq is non empty bounded_above by Th5,RELAT_1:64;
   then sup rng seq = - inf -(rng seq) by PSCOMP_1:18
     .= - inf rng -seq by Th4;
@@ -419,7 +443,8 @@ end;
 theorem Th14:
   seq is bounded_below implies inf seq = -sup (-seq)
 proof
-  assume seq is bounded_below;
+  assume
+  seq is bounded_below;
   then rng seq is non empty bounded_below by Th6,RELAT_1:64;
   then inf rng seq = - sup -(rng seq) by PSCOMP_1:17
     .= - sup rng -seq by Th4;
@@ -427,33 +452,37 @@ proof
 end;
 
 theorem Th15:
-  seq1 is bounded_below & seq2 is bounded_below implies
-  inf (seq1 + seq2) >= inf seq1 + inf seq2
+  seq1 is bounded_below & seq2 is bounded_below implies inf (seq1
+  + seq2) >= inf seq1 + inf seq2
 proof
-  assume
-A1: seq1 is bounded_below & seq2 is bounded_below;
+  assume that
+A1: seq1 is bounded_below and
+A2: seq2 is bounded_below;
   for n holds (seq1 + seq2).n >= inf seq1 + inf seq2
   proof
     let n;
-A2: (seq1 + seq2).n = seq1.n + seq2.n by SEQ_1:11;
-    seq1.n >= inf seq1 & seq2.n >= inf seq2 by A1,Th8;
-    hence thesis by A2,XREAL_1:9;
+A3: seq2.n >= inf seq2 by A2,Th8;
+    (seq1 + seq2).n = seq1.n + seq2.n & seq1.n >= inf seq1 by A1,Th8,SEQ_1
+    :11;
+    hence thesis by A3,XREAL_1:9;
   end;
   hence thesis by Th10;
 end;
 
 theorem Th16:
-  seq1 is bounded_above & seq2 is bounded_above implies
-  sup (seq1 + seq2) <= sup seq1 + sup seq2
+  seq1 is bounded_above & seq2 is bounded_above implies sup (seq1
+  + seq2) <= sup seq1 + sup seq2
 proof
-  assume
-A1: seq1 is bounded_above & seq2 is bounded_above;
+  assume that
+A1: seq1 is bounded_above and
+A2: seq2 is bounded_above;
   for n holds (seq1 + seq2).n <= sup seq1 + sup seq2
   proof
     let n;
-A2: (seq1 + seq2).n = seq1.n + seq2.n by SEQ_1:11;
-    seq1.n <= sup seq1 & seq2.n <= sup seq2 by A1,Th7;
-    hence thesis by A2,XREAL_1:9;
+A3: seq2.n <= sup seq2 by A2,Th7;
+    (seq1 + seq2).n = seq1.n + seq2.n & seq1.n <= sup seq1 by A1,Th7,SEQ_1
+    :11;
+    hence thesis by A3,XREAL_1:9;
   end;
   hence thesis by Th9;
 end;
@@ -480,10 +509,10 @@ A1:   f is nonnegative;
     assume
 A2: for n holds f.n >= 0;
     let r be real number;
-    assume r in rng f;
-    then consider x being Element of NAT such that
-A3: r = f.x by FUNCT_2:190;
-    thus thesis by A2,A3;
+    assume
+    r in rng f;
+    then ex x being Element of NAT st r = f.x by FUNCT_2:190;
+    hence thesis by A2;
   end;
 end;
 
@@ -504,7 +533,8 @@ end;
 theorem Th18:
   seq is bounded_below nonnegative implies inf seq >= 0
 proof
-  assume seq is bounded_below nonnegative;
+  assume
+  seq is bounded_below nonnegative;
   then for n holds seq.n >= 0 by Def3;
   hence thesis by Th10;
 end;
@@ -512,59 +542,66 @@ end;
 theorem
   seq is bounded_above nonnegative implies sup seq >= 0
 proof
-  assume seq is bounded_above nonnegative;
-  then seq.0 <= sup seq & seq.0 >= 0 by Def3,Th7;
-  hence thesis;
+  assume
+A1: seq is bounded_above nonnegative;
+  then seq.0 <= sup seq by Th7;
+  hence thesis by A1,Def3;
 end;
 
 theorem Th20:
-  seq1 is bounded_below nonnegative &
-  seq2 is bounded_below nonnegative implies (seq1(#)seq2) is bounded_below &
-  inf (seq1 (#) seq2) >= (inf seq1) * (inf seq2)
+  seq1 is bounded_below nonnegative & seq2 is bounded_below
+  nonnegative implies (seq1(#)seq2) is bounded_below & inf (seq1 (#) seq2) >= (
+  inf seq1) * (inf seq2)
 proof
-  assume
-A1: seq1 is bounded_below nonnegative & seq2 is bounded_below nonnegative;
+  assume that
+A1: seq1 is bounded_below nonnegative and
+A2: seq2 is bounded_below nonnegative;
   for n holds (seq1 (#) seq2).n >= (inf seq1) * (inf seq2)
   proof
     let n;
-A2: (seq1 (#) seq2).n = seq1.n * seq2.n by SEQ_1:12;
-A3: seq1.n >= inf seq1 & seq2.n >= inf seq2 by A1,Th8;
-    inf seq1 >= 0 & inf seq2 >= 0 by A1,Th18;
-    hence thesis by A2,A3,XREAL_1:68;
+A3: (seq1 (#) seq2).n = seq1.n * seq2.n & seq1.n >= inf seq1 by A1,Th8,
+    SEQ_1:12;
+A4: inf seq2 >= 0 by A2,Th18;
+    seq2.n >= inf seq2 & inf seq1 >= 0 by A1,A2,Th8,Th18;
+    hence thesis by A3,A4,XREAL_1:68;
   end;
   hence thesis by Th10;
 end;
 
 theorem Th21:
-  seq1 is bounded_above nonnegative &
-  seq2 is bounded_above nonnegative implies (seq1(#)seq2) is bounded_above &
-  sup (seq1 (#) seq2) <= (sup seq1) * (sup seq2)
+  seq1 is bounded_above nonnegative & seq2 is bounded_above
+  nonnegative implies (seq1(#)seq2) is bounded_above & sup (seq1 (#) seq2) <= (
+  sup seq1) * (sup seq2)
 proof
-  assume
-A1: seq1 is bounded_above nonnegative & seq2 is bounded_above nonnegative;
+  assume that
+A1: seq1 is bounded_above nonnegative and
+A2: seq2 is bounded_above nonnegative;
   for n holds (seq1 (#) seq2).n <= (sup seq1) * (sup seq2)
   proof
     let n;
-A2: (seq1 (#) seq2).n = seq1.n * seq2.n by SEQ_1:12;
-A3: seq1.n <= sup seq1 & seq2.n <= sup seq2 by A1,Th7;
-    seq1.n >= 0 & seq2.n >= 0 by A1,Def3;
-    hence thesis by A2,A3,XREAL_1:68;
+A3: (seq1 (#) seq2).n = seq1.n * seq2.n & seq1.n <= sup seq1 by A1,Th7,
+    SEQ_1:12;
+A4: seq2.n >= 0 by A2,Def3;
+    seq2.n <= sup seq2 & seq1.n >= 0 by A1,A2,Def3,Th7;
+    hence thesis by A3,A4,XREAL_1:68;
   end;
   hence thesis by Th9;
 end;
 
-theorem Th22:
+theorem
   seq is non-decreasing bounded_above implies seq is bounded
 proof
-  assume seq is non-decreasing bounded_above;
+  assume
+  seq is non-decreasing bounded_above;
   then seq is bounded_below bounded_above by LIMFUNC1:26;
   hence thesis;
 end;
 
-theorem Th23:
+theorem
   seq is non-increasing bounded_below implies seq is bounded
 proof
-  assume seq is non-increasing bounded_below;
+  assume
+  seq is non-increasing bounded_below;
   then seq is bounded_below bounded_above by LIMFUNC1:26;
   hence thesis;
 end;
@@ -574,15 +611,12 @@ theorem Th24:
 proof
   assume
 A1: seq is non-decreasing bounded_above;
+  then for n holds seq.n <= lim seq by SEQ_4:54;
   then
-A2: seq is bounded & seq is convergent by Th22;
-  then seq is bounded_above & seq is bounded_below;
-  then for n holds seq.n <= sup seq by Th7;
-  then
-A3: lim seq <= sup seq by A2,PREPOWER:3;
-  for n holds seq.n <= lim seq by A1,SEQ_4:54;
-  then sup seq <= lim seq by Th9;
-  hence thesis by A3,XXREAL_0:1;
+A2: sup seq <= lim seq by Th9;
+  for n holds seq.n <= sup seq by A1,Th7;
+  then lim seq <= sup seq by A1,PREPOWER:3;
+  hence thesis by A2,XXREAL_0:1;
 end;
 
 theorem Th25:
@@ -590,21 +624,18 @@ theorem Th25:
 proof
   assume
 A1: seq is non-increasing bounded_below;
+  then for n holds lim seq <= seq.n by SEQ_4:55;
   then
-A2: seq is bounded convergent by Th23;
-  then seq is bounded_above bounded_below;
-  then for n holds inf seq <= seq.n by Th8;
-  then
-A3: inf seq <= lim seq by A2,PREPOWER:2;
-  for n holds lim seq <= seq.n by A1,SEQ_4:55;
-  then lim seq <= inf seq by Th10;
-  hence thesis by A3,XXREAL_0:1;
+A2: lim seq <= inf seq by Th10;
+  for n holds inf seq <= seq.n by A1,Th8;
+  then inf seq <= lim seq by A1,PREPOWER:2;
+  hence thesis by A2,XXREAL_0:1;
 end;
 
-theorem Th26:
+theorem
   seq is bounded_above implies seq ^\k is bounded_above by SEQM_3:56;
 
-theorem Th27:
+theorem
   seq is bounded_below implies seq ^\k is bounded_below by SEQM_3:57;
 
 theorem
@@ -617,12 +648,13 @@ proof
   set Y = {seq.k: n <= k};
   now
     let x;
-    assume x in Y;
+    assume
+    x in Y;
     then consider z1 be set such that
-A1: z1 = x & z1 in Y;
-    consider k1 being Element of NAT such that
-A2: z1 = seq.k1 & n <= k1 by A1;
-    thus x in REAL by A1,A2;
+A1: z1 = x and
+A2: z1 in Y;
+    ex k1 being Element of NAT st z1 = seq.k1 & n <= k1 by A2;
+    hence x in REAL by A1;
   end;
   hence thesis by TARSKI:def 3;
 end;
@@ -631,28 +663,32 @@ theorem Th30:
   rng (seq ^\ k) = {seq.n: k <= n}
 proof
   set seq1 = seq ^\ k;
-A1: dom seq1 = NAT by FUNCT_2:def 1;
   set Z = {seq.m : k <= m};
   now
     let x;
-    assume x in Z;
+    assume
+    x in Z;
     then consider k1 being Element of NAT such that
-A2: x=seq.k1 & k <= k1;
+A1: x=seq.k1 and
+A2: k <= k1;
     consider k2 being Nat such that
 A3: k1 = k + k2 by A2,NAT_1:10;
     reconsider k2 as Element of NAT by ORDINAL1:def 13;
-    x = seq1.k2 by A2,A3,NAT_1:def 3;
+    x = seq1.k2 by A1,A3,NAT_1:def 3;
     hence x in rng seq1 by FUNCT_2:6;
   end;
   then
 A4: Z c= rng seq1 by TARSKI:def 3;
+A5: dom seq1 = NAT by FUNCT_2:def 1;
   now
     let y;
-    assume y in rng seq1;
+    assume
+    y in rng seq1;
     then consider m1 be set such that
-A5: m1 in NAT & y = seq1.m1 by A1,FUNCT_1:def 5;
-    reconsider m1 as Element of NAT by A5;
-    y = seq.(k+m1) by A5,NAT_1:def 3;
+A6: m1 in NAT and
+A7: y = seq1.m1 by A5,FUNCT_1:def 5;
+    reconsider m1 as Element of NAT by A6;
+    y = seq.(k+m1) by A7,NAT_1:def 3;
     hence y in Z by SETLIM_1:1;
   end;
   then rng seq1 c= Z by TARSKI:def 3;
@@ -660,146 +696,134 @@ A5: m1 in NAT & y = seq1.m1 by A1,FUNCT_1:def 5;
 end;
 
 theorem Th31:
-  seq is bounded_above implies (for n for R being Subset of REAL st
-  R = {seq.k : n <= k} holds R is bounded_above)
+  seq is bounded_above implies for n for R being Subset of REAL st
+  R = {seq.k : n <= k} holds R is bounded_above
 proof
   assume
 A1: seq is bounded_above;
   let n;
+  set seq1 = seq ^\n;
+  seq1 is bounded_above by A1,SEQM_3:56;
+  then
+A2: rng seq1 is bounded_above by Th5;
   let R be Subset of REAL;
   assume
-A2: R = {seq.k : n <= k};
-  set seq1 = seq ^\n;
-  seq1 is bounded_above by A1,Th26;
-  then rng seq1 is bounded_above by Th5;
+  R = {seq.k : n <= k};
   hence thesis by A2,Th30;
 end;
 
 theorem Th32:
-  seq is bounded_below implies (for n for R being Subset of REAL st
-  R = {seq.k : n <= k} holds R is bounded_below)
+  seq is bounded_below implies for n for R being Subset of REAL st
+  R = {seq.k : n <= k} holds R is bounded_below
 proof
   assume
 A1: seq is bounded_below;
   let n;
+  set seq1 = seq ^\n;
+  seq1 is bounded_below by A1,SEQM_3:57;
+  then
+A2: rng seq1 is bounded_below by Th6;
   let R be Subset of REAL;
   assume
-A2: R = {seq.k : n <= k};
-  set seq1 = seq ^\n;
-  seq1 is bounded_below by A1,Th27;
-  then rng seq1 is bounded_below by Th6;
+  R = {seq.k : n <= k};
   hence thesis by A2,Th30;
 end;
 
 theorem Th33:
-  seq is bounded implies (for n for R being Subset of REAL st
-  R = {seq.k : n <= k} holds R is bounded)
+  seq is bounded implies for n for R being Subset of REAL st R = {
+  seq.k : n <= k} holds R is bounded
 proof
-  assume seq is bounded;
-  then
-A1: seq is bounded_above & seq is bounded_below;
+  assume
+A1: seq is bounded;
   let n;
   let R be Subset of REAL;
-  assume R = {seq.k : n <= k};
+  assume
+  R = {seq.k : n <= k};
   then R is bounded_above & R is bounded_below by A1,Th31,Th32;
   hence thesis by XXREAL_2:def 11;
 end;
 
 theorem Th34:
-  seq is non-decreasing implies for n
-  for R being Subset of REAL st R = {seq.k : n <= k} holds inf R = seq.n
+  seq is non-decreasing implies for n for R being Subset of REAL
+  st R = {seq.k : n <= k} holds inf R = seq.n
 proof
   assume
 A1: seq is non-decreasing;
-  then
-A2: seq is bounded_below by LIMFUNC1:26;
   let n;
+A2: now
+    let r;
+    assume
+    r in {seq.k : n <= k};
+    then consider r1 being real number such that
+A3: r = r1 & r1 in {seq.k : n <= k};
+    consider k1 such that
+A4: r1 = seq.k1 and
+A5: n <= k1 by A3;
+    consider k being Nat such that
+A6: n + k =k1 by A5,NAT_1:10;
+    k in NAT by ORDINAL1:def 13;
+    hence seq.n <= r by A1,A3,A4,A6,SEQM_3:11;
+  end;
   let R be Subset of REAL;
+A7: now
+    let s;
+A8: seq.n in {seq.k : n <= k};
+    assume
+    0 < s;
+    hence ex r st r in {seq.k : n <= k} & r< seq.n + s by A8,XREAL_1:31;
+  end;
   assume
-A3: R = {seq.k : n <= k};
+A9: R = {seq.k : n <= k};
   then
-A4: R <> {} & R is bounded_below by A2,Th32,SETLIM_1:1;
-A5: for r st r in R holds seq.n <=r
-  proof
-    now
-      let r;
-      assume r in {seq.k : n <= k};
-      then consider r1 being real number such that
-A6:   r = r1 & r1 in {seq.k : n <= k};
-      consider k1 such that
-A7:   r1 = seq.k1 & n <= k1 by A6;
-      consider k being Nat such that
-A8:   n + k =k1 by A7,NAT_1:10;
-      k in NAT by ORDINAL1:def 13;
-      hence seq.n <= r by A1,A6,A7,A8,SEQM_3:11;
-    end;
-    hence thesis by A3;
-  end;
-  for s st 0<s ex r st r in R & r< seq.n + s
-  proof
-    now
-      let s;
-      assume
-A9:   0 < s;
-A10:  seq.n in {seq.k : n <= k};
-      thus ex r st r in {seq.k : n <= k} & r< seq.n + s by A9,A10,XREAL_1:31;
-    end;
-    hence thesis by A3;
-  end;
-  hence thesis by A4,A5,SEQ_4:def 5;
+A10: R <> {} by SETLIM_1:1;
+  R is bounded_below by A1,A9,Th32,LIMFUNC1:26;
+  hence thesis by A9,A10,A2,A7,SEQ_4:def 5;
 end;
 
 theorem Th35:
-  seq is non-increasing implies
-  for n for R being Subset of REAL st R = {seq.k : n <= k} holds sup R = seq.n
+  seq is non-increasing implies for n for R being Subset of REAL
+  st R = {seq.k : n <= k} holds sup R = seq.n
 proof
   assume
 A1: seq is non-increasing;
-  then
-A2: seq is bounded_above by LIMFUNC1:26;
   let n;
+A2: now
+    let r;
+    assume
+    r in {seq.k : n <= k};
+    then consider r1 being real number such that
+A3: r = r1 & r1 in {seq.k : n <= k};
+    consider k1 such that
+A4: r1 = seq.k1 and
+A5: n <= k1 by A3;
+    consider k being Nat such that
+A6: n + k =k1 by A5,NAT_1:10;
+    k in NAT by ORDINAL1:def 13;
+    hence r <= seq.n by A1,A3,A4,A6,SEQM_3:13;
+  end;
   let R be Subset of REAL;
+A7: now
+    let s;
+A8: seq.n in {seq.k : n <= k};
+    assume
+    0 < s;
+    hence ex r st r in {seq.k : n <= k} & seq.n - s < r by A8,XREAL_1:46;
+  end;
   assume
-A3: R = {seq.k : n <= k};
+A9: R = {seq.k : n <= k};
   then
-A4: R <> {} & R is bounded_above by A2,Th31,SETLIM_1:1;
-A5: for r st r in R holds r <= seq.n
-  proof
-    now
-      let r;
-      assume r in {seq.k : n <= k};
-      then consider r1 being real number such that
-A6:   r = r1 & r1 in {seq.k : n <= k};
-      consider k1 such that
-A7:   r1 = seq.k1 & n <= k1 by A6;
-      consider k being Nat such that
-A8:   n + k =k1 by A7,NAT_1:10;
-      k in NAT by ORDINAL1:def 13;
-      hence r <= seq.n by A1,A6,A7,A8,SEQM_3:13;
-    end;
-    hence thesis by A3;
-  end;
-  for s st 0<s ex r st r in R & seq.n - s < r
-  proof
-    now
-      let s;
-      assume
-A9:   0 < s;
-A10:  seq.n in {seq.k : n <= k};
-      thus ex r st r in {seq.k : n <= k} & seq.n - s < r by A9,A10,XREAL_1:46;
-    end;
-    hence thesis by A3;
-  end;
-  hence thesis by A4,A5,SEQ_4:def 4;
+A10: R <> {} by SETLIM_1:1;
+  R is bounded_above by A1,A9,Th31,LIMFUNC1:26;
+  hence thesis by A9,A10,A2,A7,SEQ_4:def 4;
 end;
 
 theorem Th36:
-  for seq holds ex f being Function of NAT,REAL st
-  for n for Y being Subset of REAL st Y = {seq.k: n <= k} holds f.n = sup Y
+  for seq holds ex f being Function of NAT,REAL st for n for Y
+  being Subset of REAL st Y = {seq.k: n <= k} holds f.n = sup Y
 proof
   let seq be Real_Sequence;
-  defpred P[Element of NAT, Element of REAL] means
-  for Y being Subset of REAL st Y = {seq.k: $1 <= k} holds $2 = sup Y;
+  defpred P[Element of NAT, Element of REAL] means for Y being Subset of REAL
+  st Y = {seq.k: $1 <= k} holds $2 = sup Y;
 A1: for n being Element of NAT ex y being Element of REAL st P[n,y]
   proof
     let n be Element of NAT;
@@ -808,18 +832,18 @@ A1: for n being Element of NAT ex y being Element of REAL st P[n,y]
     for Y being Subset of REAL st Y = {seq.k: n <= k} holds y = sup Y;
     hence thesis;
   end;
-  ex f being Function of NAT,REAL st
-  for n being Element of NAT holds P[n, f.n] from FUNCT_2:sch 3(A1);
+  ex f being Function of NAT,REAL st for n being Element of NAT holds P[n,
+  f.n] from FUNCT_2:sch 3(A1);
   hence thesis;
 end;
 
 theorem Th37:
-  for seq holds ex f being Function of NAT,REAL st
-  for n for Y being Subset of REAL st Y = {seq.k: n <= k} holds f.n = inf Y
+  for seq holds ex f being Function of NAT,REAL st for n for Y
+  being Subset of REAL st Y = {seq.k: n <= k} holds f.n = inf Y
 proof
   let seq be Real_Sequence;
-  defpred P[Element of NAT, Element of REAL] means
-  for Y being Subset of REAL st Y = {seq.k: $1 <= k} holds $2 = inf Y;
+  defpred P[Element of NAT, Element of REAL] means for Y being Subset of REAL
+  st Y = {seq.k: $1 <= k} holds $2 = inf Y;
 A1: for n being Element of NAT ex y being Element of REAL st P[n,y]
   proof
     let n be Element of NAT;
@@ -828,8 +852,8 @@ A1: for n being Element of NAT ex y being Element of REAL st P[n,y]
     for Y being Subset of REAL st Y = {seq.k: n <= k} holds y = inf Y;
     hence thesis;
   end;
-  ex f being Function of NAT,REAL st
-  for n being Element of NAT holds P[n, f.n] from FUNCT_2:sch 3(A1);
+  ex f being Function of NAT,REAL st for n being Element of NAT holds P[n,
+  f.n] from FUNCT_2:sch 3(A1);
   hence thesis;
 end;
 
@@ -837,20 +861,21 @@ definition
   let seq be Real_Sequence;
   func inferior_realsequence seq -> Real_Sequence means
   :Def4:
-  for n for Y being Subset of REAL st Y = {seq.k : n <= k}
-   holds it.n = lower_bound Y;
+  for n for Y
+  being Subset of REAL st Y = {seq.k : n <= k} holds it.n = lower_bound Y;
   existence by Th37;
   uniqueness
   proof
     let seq1,seq2 be Real_Sequence such that
-A1: for n for Y being Subset of REAL
-    st Y = {seq.k : n <= k} holds seq1.n = inf Y and
-A2: for m for Y being Subset of REAL
-    st Y = {seq.k : m <= k} holds seq2.m = inf Y;
+A1: for n for Y being Subset of REAL st Y = {seq.k : n <= k} holds
+    seq1.n = inf Y and
+A2: for m for Y being Subset of REAL st Y = {seq.k : m <= k} holds
+    seq2.m = inf Y;
 A3: for y st y in NAT holds seq1.y = seq2.y
     proof
       let y;
-      assume y in NAT;
+      assume
+      y in NAT;
       then reconsider y as Element of NAT;
       reconsider Y = {seq.k: y <= k} as Subset of REAL by Th29;
       seq1.y = inf Y by A1;
@@ -865,20 +890,21 @@ definition
   let seq be Real_Sequence;
   func superior_realsequence seq -> Real_Sequence means
   :Def5:
-  for n for Y being Subset of REAL st Y = {seq.k : n <= k}
-   holds it.n = upper_bound Y;
+  for n for Y
+  being Subset of REAL st Y = {seq.k : n <= k} holds it.n = upper_bound Y;
   existence by Th36;
   uniqueness
   proof
     let seq1,seq2 be Real_Sequence such that
-A1: for n for Y being Subset of REAL
-    st Y = {seq.k : n <= k} holds seq1.n = sup Y and
-A2: for m for Y being Subset of REAL
-    st Y = {seq.k : m <= k} holds seq2.m = sup Y;
+A1: for n for Y being Subset of REAL st Y = {seq.k : n <= k} holds
+    seq1.n = sup Y and
+A2: for m for Y being Subset of REAL st Y = {seq.k : m <= k} holds
+    seq2.m = sup Y;
 A3: for y st y in NAT holds seq1.y = seq2.y
     proof
       let y;
-      assume y in NAT;
+      assume
+      y in NAT;
       then reconsider y as Element of NAT;
       reconsider Y = {seq.k: y <= k} as Subset of REAL by Th29;
       seq1.y = sup Y by A1;
@@ -891,7 +917,8 @@ end;
 
 theorem Th38:
   (inferior_realsequence seq).n = inf (seq ^\n)
-proof reconsider Y = {seq.k: n <= k} as Subset of REAL by Th29;
+proof
+  reconsider Y = {seq.k: n <= k} as Subset of REAL by Th29;
   (inferior_realsequence seq).n = inf Y by Def4
     .= inf rng (seq ^\ n) by Th30;
   hence thesis;
@@ -899,14 +926,16 @@ end;
 
 theorem Th39:
   (superior_realsequence seq).n = sup (seq ^\n)
-proof reconsider Y = {seq.k: n <= k} as Subset of REAL by Th29;
+proof
+  reconsider Y = {seq.k: n <= k} as Subset of REAL by Th29;
   (superior_realsequence seq).n = sup Y by Def5
     .= sup rng (seq ^\ n) by Th30;
   hence thesis;
 end;
 
 theorem Th40:
-  seq is bounded_below implies (inferior_realsequence seq).0 = inf seq
+  seq is bounded_below implies (inferior_realsequence seq).0 = inf
+  seq
 proof
   reconsider Y1 = {seq.k : 0 <= k} as Subset of REAL by Th29;
   (inferior_realsequence seq).0 = inf Y1 by Def4
@@ -915,7 +944,8 @@ proof
 end;
 
 theorem Th41:
-  seq is bounded_above implies (superior_realsequence seq).0 = sup seq
+  seq is bounded_above implies (superior_realsequence seq).0 = sup
+  seq
 proof
   reconsider Y1 = {seq.k : 0 <= k} as Subset of REAL by Th29;
   (superior_realsequence seq).0 = sup Y1 by Def5
@@ -924,451 +954,496 @@ proof
 end;
 
 theorem Th42:
-  seq is bounded_below implies (r = (inferior_realsequence seq).n iff
-  (for k holds r <= seq.(n+k)) & for s st 0<s ex k st seq.(n+k)<r+s)
+  seq is bounded_below implies (r = (inferior_realsequence seq).n
+  iff (for k holds r <= seq.(n+k)) & for s st 0<s ex k st seq.(n+k)<r+s)
 proof
-  assume
-A1: seq is bounded_below;
   reconsider Y1 = {seq.k : n <= k} as Subset of REAL by Th29;
-A2: Y1 is non empty bounded_below by A1,Th32,SETLIM_1:1;
-  thus r = (inferior_realsequence seq).n implies
-  (for k holds r<=seq.(n+k)) & for s st 0<s ex k st seq.(n+k)<r+s
+  assume
+  seq is bounded_below;
+  then
+A1: Y1 is non empty bounded_below by Th32,SETLIM_1:1;
+  thus r = (inferior_realsequence seq).n implies (for k holds r<=seq.(n+k)) &
+  for s st 0<s ex k st seq.(n+k)<r+s
   proof
-    assume r = (inferior_realsequence seq).n;
+    assume
+    r = (inferior_realsequence seq).n;
     then
-A3: r = inf Y1 by Def4;
-A4: for k holds r<=seq.(n+k)
+A2: r = inf Y1 by Def4;
+A3: for s st 0<s ex k st seq.(n+k)<r+s
     proof
-      let k;
-      seq.(n+k) in Y1 by SETLIM_1:1;
-      hence thesis by A2,A3,SEQ_4:def 5;
-    end;
-    for s st 0<s ex k st seq.(n+k)<r+s
-    proof
-      let s such that
-A5:   0<s;
-      consider r1 such that
-A6:   r1 in Y1 & r1<r+s by A2,A3,A5,SEQ_4:def 5;
+      let s;
+      assume
+      0<s;
+      then consider r1 such that
+A4:   r1 in Y1 and
+A5:   r1<r+s by A1,A2,SEQ_4:def 5;
       consider k1 such that
-A7:   r1=seq.k1 & n <= k1 by A6;
+A6:   r1=seq.k1 and
+A7:   n <= k1 by A4;
       consider k2 being Nat such that
 A8:   k1 = n + k2 by A7,NAT_1:10;
       k2 in NAT by ORDINAL1:def 13;
-      hence thesis by A6,A7,A8;
+      hence thesis by A5,A6,A8;
     end;
-    hence thesis by A4;
+    for k holds r<=seq.(n+k)
+    proof
+      let k;
+      seq.(n+k) in Y1 by SETLIM_1:1;
+      hence thesis by A1,A2,SEQ_4:def 5;
+    end;
+    hence thesis by A3;
   end;
   assume that
 A9: for k holds r <= seq.(n+k) and
 A10: for s st 0<s ex k st seq.(n+k)<r+s;
-A11: for r1 st r1 in Y1 holds r <= r1
+A11: for s st 0<s ex r1 st r1 in Y1 & r1<r+s
   proof
-    let r1 such that
-A12: r1 in Y1;
-    consider k1 such that
-A13: r1=seq.k1 & n <= k1 by A12;
-    consider k2 being Nat such that
-A14: k1 = n + k2 by A13,NAT_1:10;
-    k2 in NAT by ORDINAL1:def 13;
-    hence thesis by A9,A13,A14;
-  end;
-  for s st 0<s ex r1 st r1 in Y1 & r1<r+s
-  proof
-    let s such that
-A15: 0<s;
-    consider k such that
-A16: seq.(n+k)<r+s by A10,A15;
+    let s;
+    assume
+    0<s;
+    then consider k such that
+A12: seq.(n+k)<r+s by A10;
     n + k >= n by NAT_1:11;
     then seq.(n+k) in Y1;
-    then consider r1 such that
-A17: r1 in Y1 & r1 = seq.(n+k);
-    thus thesis by A16,A17;
+    hence thesis by A12;
   end;
-  then r=inf Y1 by A2,A11,SEQ_4:def 5;
+  for r1 st r1 in Y1 holds r <= r1
+  proof
+    let r1;
+    assume
+    r1 in Y1;
+    then consider k1 such that
+A13: r1=seq.k1 and
+A14: n <= k1;
+    consider k2 being Nat such that
+A15: k1 = n + k2 by A14,NAT_1:10;
+    k2 in NAT by ORDINAL1:def 13;
+    hence thesis by A9,A13,A15;
+  end;
+  then r=inf Y1 by A1,A11,SEQ_4:def 5;
   hence thesis by Def4;
 end;
 
 theorem Th43:
-  seq is bounded_above implies (r = (superior_realsequence seq).n iff
-  (for k holds seq.(n+k) <= r) & for s st 0<s ex k st r-s<seq.(n+k))
+  seq is bounded_above implies (r = (superior_realsequence seq).n
+  iff (for k holds seq.(n+k) <= r) & for s st 0<s ex k st r-s<seq.(n+k))
 proof
-  assume
-A1: seq is bounded_above;
   reconsider Y1 = {seq.k : n <= k} as Subset of REAL by Th29;
-A2: Y1 is non empty bounded_above by A1,Th31,SETLIM_1:1;
-  thus r = (superior_realsequence seq).n implies
-  (for k holds seq.(n+k) <= r) & for s st 0<s ex k st r-s<seq.(n+k)
+  assume
+  seq is bounded_above;
+  then
+A1: Y1 is non empty bounded_above by Th31,SETLIM_1:1;
+  thus r = (superior_realsequence seq).n implies (for k holds seq.(n+k) <= r)
+  & for s st 0<s ex k st r-s<seq.(n+k)
   proof
-    assume r = (superior_realsequence seq).n;
+    assume
+    r = (superior_realsequence seq).n;
     then
-A3: r = sup Y1 by Def5;
-A4: for k holds seq.(n+k) <= r
+A2: r = sup Y1 by Def5;
+A3: for s st 0<s ex k st r-s<seq.(n+k)
     proof
-      let k;
-      seq.(n+k) in Y1 by SETLIM_1:1;
-      hence thesis by A2,A3,SEQ_4:def 4;
-    end;
-    for s st 0<s ex k st r-s<seq.(n+k)
-    proof
-      let s such that
-A5:   0<s;
-      consider r1 such that
-A6:   r1 in Y1 & r-s<r1 by A2,A3,A5,SEQ_4:def 4;
+      let s;
+      assume
+      0<s;
+      then consider r1 such that
+A4:   r1 in Y1 and
+A5:   r-s<r1 by A1,A2,SEQ_4:def 4;
       consider k1 such that
-A7:   r1=seq.k1 & n <= k1 by A6;
+A6:   r1=seq.k1 and
+A7:   n <= k1 by A4;
       consider k2 being Nat such that
 A8:   k1 = n + k2 by A7,NAT_1:10;
       k2 in NAT by ORDINAL1:def 13;
-      hence thesis by A6,A7,A8;
+      hence thesis by A5,A6,A8;
     end;
-    hence thesis by A4;
+    for k holds seq.(n+k) <= r
+    proof
+      let k;
+      seq.(n+k) in Y1 by SETLIM_1:1;
+      hence thesis by A1,A2,SEQ_4:def 4;
+    end;
+    hence thesis by A3;
   end;
   assume that
 A9: for k holds seq.(n+k) <= r and
 A10: for s st 0<s ex k st r-s<seq.(n+k);
-A11: for r1 st r1 in Y1 holds r1 <= r
+A11: for s st 0<s ex r1 st r1 in Y1 & r-s<r1
   proof
-    let r1 such that
-A12: r1 in Y1;
-    consider k1 such that
-A13: r1=seq.k1 & n <= k1 by A12;
-    consider k2 being Nat such that
-A14: k1 = n + k2 by A13,NAT_1:10;
-    k2 in NAT by ORDINAL1:def 13;
-    hence thesis by A9,A13,A14;
-  end;
-  for s st 0<s ex r1 st r1 in Y1 & r-s<r1
-  proof
-    let s such that
-A15: 0<s;
-    consider k such that
-A16: r-s<seq.(n+k) by A10,A15;
+    let s;
+    assume
+    0<s;
+    then consider k such that
+A12: r-s<seq.(n+k) by A10;
     n + k >= n by NAT_1:11;
     then seq.(n+k) in Y1;
-    then consider r1 such that
-A17: r1 in Y1 & r1 = seq.(n+k);
-    thus thesis by A16,A17;
+    hence thesis by A12;
   end;
-  then r=sup Y1 by A2,A11,SEQ_4:def 4;
+  for r1 st r1 in Y1 holds r1 <= r
+  proof
+    let r1;
+    assume
+    r1 in Y1;
+    then consider k1 such that
+A13: r1=seq.k1 and
+A14: n <= k1;
+    consider k2 being Nat such that
+A15: k1 = n + k2 by A14,NAT_1:10;
+    k2 in NAT by ORDINAL1:def 13;
+    hence thesis by A9,A13,A15;
+  end;
+  then r=sup Y1 by A1,A11,SEQ_4:def 4;
   hence thesis by Def5;
 end;
 
 theorem Th44:
-  seq is bounded_below implies
-  ((for k holds r <= seq.(n+k)) iff r <= (inferior_realsequence seq).n)
+  seq is bounded_below implies ((for k holds r <= seq.(n+k)) iff r
+  <= (inferior_realsequence seq).n)
 proof
-  assume
-A1: seq is bounded_below;
   reconsider Y1 = {seq.k : n <= k} as Subset of REAL by Th29;
   set seq1 = seq ^\n;
+  assume
+  seq is bounded_below;
+  then
+A1: seq1 is bounded_below by SEQM_3:57;
 A2: rng seq1 = Y1 by Th30;
-A3: seq1 is bounded_below by A1,Th27;
-  thus ((for k holds r <= seq.(n+k)) implies
-  r <= (inferior_realsequence seq).n)
+  thus (for k holds r <= seq.(n+k)) implies r <= (inferior_realsequence seq).n
   proof
     assume
-A4: for k holds r <= seq.(n+k);
+A3: for k holds r <= seq.(n+k);
     now
       let n1 being Element of NAT;
       seq1.n1 in rng seq1 by FUNCT_2:6;
       then consider r1 such that
-A5:   seq1.n1= r1 & r1 in Y1 by A2;
+A4:   seq1.n1= r1 and
+A5:   r1 in Y1 by A2;
       consider k1 being Element of NAT such that
-A6:   r1 = seq.k1 & n <= k1 by A5;
+A6:   r1 = seq.k1 and
+A7:   n <= k1 by A5;
       consider k2 being Nat such that
-A7:   k1 = n + k2 by A6,NAT_1:10;
+A8:   k1 = n + k2 by A7,NAT_1:10;
       k2 in NAT by ORDINAL1:def 13;
-      hence r <= seq1.n1 by A4,A5,A6,A7;
+      hence r <= seq1.n1 by A3,A4,A6,A8;
     end;
     then r <= inf seq1 by Th10;
     then r <= inf Y1 by Th30;
     hence thesis by Def4;
   end;
-  assume r <= (inferior_realsequence seq).n;
+  assume
+  r <= (inferior_realsequence seq).n;
   then r <= inf Y1 by Def4;
   then
-A8: r <= inf seq1 by Th30;
+A9: r <= inf seq1 by Th30;
   now
     let m1 be Element of NAT;
     n <= n+m1 by NAT_1:11;
     then seq.(n+m1) in Y1;
     then seq.(n+m1) in rng seq1 by Th30;
-    then consider k being set such that
-A9: k in dom seq1 & seq1.k = seq.(n+m1) by FUNCT_1:def 5;
-    thus r <= seq.(n+m1) by A3,A8,A9,Th10;
+    then ex k being set st k in dom seq1 & seq1.k = seq.(n+m1) by FUNCT_1:
+    def 5;
+    hence r <= seq.(n+m1) by A1,A9,Th10;
   end;
   hence thesis;
 end;
 
 theorem Th45:
-  seq is bounded_below implies
-  ((for m st n <= m holds r <= seq.m) iff r <= (inferior_realsequence seq).n)
+  seq is bounded_below implies ((for m st n <= m holds r <= seq.m)
+  iff r <= (inferior_realsequence seq).n)
 proof
   assume
 A1: seq is bounded_below;
-  thus ((for m st n<=m holds r <= seq.m) implies
-  r <= (inferior_realsequence seq).n)
+  thus (for m st n<=m holds r <= seq.m) implies r <= (inferior_realsequence
+  seq).n
   proof
-    assume for m st n<=m holds r <= seq.m;
+    assume
+    for m st n<=m holds r <= seq.m;
     then for k holds r <= seq.(n+k) by NAT_1:11;
     hence thesis by A1,Th44;
   end;
   assume
 A2: r <= (inferior_realsequence seq).n;
   now
-    let m such that
-A3: n<=m;
-    consider k being Nat such that
-A4: m = n + k by A3,NAT_1:10;
+    let m;
+    assume
+    n<=m;
+    then consider k being Nat such that
+A3: m = n + k by NAT_1:10;
     k in NAT by ORDINAL1:def 13;
-    hence r <= seq.m by A1,A2,A4,Th44;
+    hence r <= seq.m by A1,A2,A3,Th44;
   end;
   hence thesis;
 end;
 
 theorem Th46:
-  seq is bounded_above implies
-  ((for k holds seq.(n+k) <= r) iff (superior_realsequence seq).n <= r)
+  seq is bounded_above implies ((for k holds seq.(n+k) <= r) iff (
+  superior_realsequence seq).n <= r)
 proof
-  assume
-A1: seq is bounded_above;
   reconsider Y1 = {seq.k : n <= k} as Subset of REAL by Th29;
   set seq1 = seq ^\n;
+  assume
+  seq is bounded_above;
+  then
+A1: seq1 is bounded_above by SEQM_3:56;
 A2: rng seq1 = Y1 by Th30;
-A3: seq1 is bounded_above by A1,Th26;
-  thus ((for k holds seq.(n+k) <= r) implies
-  (superior_realsequence seq).n <= r)
+  thus (for k holds seq.(n+k) <= r) implies (superior_realsequence seq).n <= r
   proof
     assume
-A4: (for k holds seq.(n+k) <= r);
+A3: for k holds seq.(n+k) <= r;
     now
       let n1 being Element of NAT;
       seq1.n1 in rng seq1 by FUNCT_2:6;
       then consider r1 such that
-A5:   seq1.n1= r1 & r1 in Y1 by A2;
+A4:   seq1.n1= r1 and
+A5:   r1 in Y1 by A2;
       consider k1 being Element of NAT such that
-A6:   r1 = seq.k1 & n <= k1 by A5;
+A6:   r1 = seq.k1 and
+A7:   n <= k1 by A5;
       consider k2 being Nat such that
-A7:   k1 = n + k2 by A6,NAT_1:10;
+A8:   k1 = n + k2 by A7,NAT_1:10;
       k2 in NAT by ORDINAL1:def 13;
-      hence seq1.n1 <= r by A4,A5,A6,A7;
+      hence seq1.n1 <= r by A3,A4,A6,A8;
     end;
     then sup seq1 <= r by Th9;
     then sup Y1 <= r by Th30;
     hence thesis by Def5;
   end;
-  assume (superior_realsequence seq).n <= r;
+  assume
+  (superior_realsequence seq).n <= r;
   then sup Y1 <= r by Def5;
   then
-A8: sup seq1 <= r by Th30;
+A9: sup seq1 <= r by Th30;
   now
     let m1 being Element of NAT;
     n <= n+m1 by NAT_1:11;
     then seq.(n+m1) in Y1;
     then seq.(n+m1) in rng seq1 by Th30;
-    then consider k being set such that
-A9: k in dom seq1 & seq1.k = seq.(n+m1) by FUNCT_1:def 5;
-    thus seq.(n+m1) <= r by A3,A8,A9,Th9;
+    then ex k being set st k in dom seq1 & seq1.k = seq.(n+m1) by FUNCT_1:
+    def 5;
+    hence seq.(n+m1) <= r by A1,A9,Th9;
   end;
   hence thesis;
 end;
 
 theorem Th47:
-  seq is bounded_above implies
-  ((for m st n<=m holds seq.m <= r) iff (superior_realsequence seq).n <= r)
+  seq is bounded_above implies ((for m st n<=m holds seq.m <= r)
+  iff (superior_realsequence seq).n <= r)
 proof
   assume
 A1: seq is bounded_above;
-  thus ((for m st n<=m holds seq.m <= r) implies
-  (superior_realsequence seq).n <= r)
+  thus (for m st n<=m holds seq.m <= r) implies (superior_realsequence seq).n
+  <= r
   proof
-    assume for m st n<=m holds seq.m <= r;
+    assume
+    for m st n<=m holds seq.m <= r;
     then for k holds seq.(n+k) <= r by NAT_1:11;
     hence thesis by A1,Th46;
   end;
   assume
 A2: (superior_realsequence seq).n <= r;
   now
-    let m such that
-A3: n<=m;
-    consider k being Nat such that
-A4: m = n + k by A3,NAT_1:10;
+    let m;
+    assume
+    n<=m;
+    then consider k being Nat such that
+A3: m = n + k by NAT_1:10;
     k in NAT by ORDINAL1:def 13;
-    hence seq.m <= r by A1,A2,A4,Th46;
+    hence seq.m <= r by A1,A2,A3,Th46;
   end;
   hence thesis;
 end;
 
 theorem Th48:
-  seq is bounded_below implies
-  (inferior_realsequence seq).n = min((inferior_realsequence seq).(n+1),seq.n)
+  seq is bounded_below implies (inferior_realsequence seq).n = min
+  ((inferior_realsequence seq).(n+1),seq.n)
 proof
-  assume
-A1: seq is bounded_below;
-  reconsider Y1 = {seq.k : n <= k} as Subset of REAL by Th29;
-A2: (inferior_realsequence seq).n = inf Y1 by Def4;
   reconsider Y2 = {seq.k : n+1 <= k} as Subset of REAL by Th29;
-A3: (inferior_realsequence seq).(n+1) = inf Y2 by Def4;
+  reconsider Y1 = {seq.k : n <= k} as Subset of REAL by Th29;
   reconsider Y3 = {seq.n} as Subset of REAL;
-A4: Y1 <> {} & Y2 <> {} & Y3 <> {} by SETLIM_1:1;
-A5: Y1 is bounded_below & Y2 is bounded_below by A1,Th32;
-A6: Y3 is bounded_below
+A1: (inferior_realsequence seq).(n+1) = inf Y2 by Def4;
+  assume
+A2: seq is bounded_below;
+  then
+A3: Y2 <> {} & Y2 is bounded_below by Th32,SETLIM_1:1;
+A4: Y3 is bounded_below
   proof
     consider t such that
-A7: for m holds t<seq.m by A1,SEQ_2:def 4;
+A5: for m holds t<seq.m by A2,SEQ_2:def 4;
     now
       take t;
       let r;
-      assume r in Y3;
+      assume
+      r in Y3;
       then r = seq.n by TARSKI:def 1;
-      hence t <= r by A7;
+      hence t <= r by A5;
     end;
     hence thesis by SEQ_4:def 2;
   end;
-  (inferior_realsequence seq).n = inf (Y2 \/ Y3) by A2,SETLIM_1:2
-    .= min(inf Y2,inf Y3) by A4,A5,A6,SPRECT_1:52
-    .= min((inferior_realsequence seq).(n+1),seq.n) by A3,SEQ_4:22;
+  (inferior_realsequence seq).n = inf Y1 by Def4;
+  then (inferior_realsequence seq).n = inf (Y2 \/ Y3) by SETLIM_1:2
+    .= min(inf Y2,inf Y3) by A3,A4,SPRECT_1:52
+    .= min((inferior_realsequence seq).(n+1),seq.n) by A1,SEQ_4:22;
   hence thesis;
 end;
 
 theorem Th49:
-  seq is bounded_above implies
-  (superior_realsequence seq).n = max((superior_realsequence seq).(n+1),seq.n)
+  seq is bounded_above implies (superior_realsequence seq).n = max
+  ((superior_realsequence seq).(n+1),seq.n)
 proof
-  assume
-A1: seq is bounded_above;
-  reconsider Y1 = {seq.k : n <= k} as Subset of REAL by Th29;
-A2: (superior_realsequence seq).n = sup Y1 by Def5;
   reconsider Y2 = {seq.k : n+1 <= k} as Subset of REAL by Th29;
-A3: (superior_realsequence seq).(n+1) = sup Y2 by Def5;
+  reconsider Y1 = {seq.k : n <= k} as Subset of REAL by Th29;
   reconsider Y3 = {seq.n} as Subset of REAL;
-A4: Y1 <> {} & Y2 <> {} & Y3 <> {} by SETLIM_1:1;
-A5: Y1 is bounded_above & Y2 is bounded_above by A1,Th31;
-A6: Y3 is bounded_above
+A1: (superior_realsequence seq).(n+1) = sup Y2 by Def5;
+  assume
+A2: seq is bounded_above;
+  then
+A3: Y2 <> {} & Y2 is bounded_above by Th31,SETLIM_1:1;
+A4: Y3 is bounded_above
   proof
     consider t such that
-A7: for m holds seq.m<t by A1,SEQ_2:def 3;
+A5: for m holds seq.m<t by A2,SEQ_2:def 3;
     now
       take t;
       let r;
-      assume r in Y3;
+      assume
+      r in Y3;
       then r = seq.n by TARSKI:def 1;
-      hence r <=t by A7;
+      hence r <=t by A5;
     end;
     hence thesis by SEQ_4:def 1;
   end;
-  (superior_realsequence seq).n = sup (Y2 \/ Y3) by A2,SETLIM_1:2
-    .= max(sup Y2,sup Y3) by A4,A5,A6,SPRECT_1:53
-    .= max((superior_realsequence seq).(n+1),seq.n) by A3,SEQ_4:22;
+  (superior_realsequence seq).n = sup Y1 by Def5;
+  then (superior_realsequence seq).n = sup (Y2 \/ Y3) by SETLIM_1:2
+    .= max(sup Y2,sup Y3) by A3,A4,SPRECT_1:53
+    .= max((superior_realsequence seq).(n+1),seq.n) by A1,SEQ_4:22;
   hence thesis;
 end;
 
 theorem Th50:
-  seq is bounded_below implies (inferior_realsequence seq).n <=
-  (inferior_realsequence seq).(n+1)
+  seq is bounded_below implies (inferior_realsequence seq).n <= (
+  inferior_realsequence seq).(n+1)
 proof
+A1: min((inferior_realsequence seq).(n+1),seq.n) <= (inferior_realsequence
+  seq).(n+1) by XXREAL_0:17;
   assume
-A1: seq is bounded_below;
-  min((inferior_realsequence seq).(n+1),seq.n) <=
-  (inferior_realsequence seq).(n+1) by XXREAL_0:17;
+  seq is bounded_below;
   hence thesis by A1,Th48;
 end;
 
 theorem Th51:
-  seq is bounded_above implies (superior_realsequence seq).(n+1) <=
-  (superior_realsequence seq).n
+  seq is bounded_above implies (superior_realsequence seq).(n+1)
+  <= (superior_realsequence seq).n
 proof
+A1: (superior_realsequence seq).(n+1) <= max((superior_realsequence seq).(n+
+  1),seq.n) by XXREAL_0:25;
   assume
-A1: seq is bounded_above;
-  (superior_realsequence seq).(n+1) <=
-  max((superior_realsequence seq).(n+1),seq.n) by XXREAL_0:25;
+  seq is bounded_above;
   hence thesis by A1,Th49;
 end;
 
 theorem Th52:
-  seq is bounded_below implies inferior_realsequence seq is non-decreasing
+  seq is bounded_below implies inferior_realsequence seq is
+  non-decreasing
 proof
-  assume seq is bounded_below;
-  then (inferior_realsequence seq).n <= (inferior_realsequence seq).(n+1) by
-Th50;
+  assume
+  seq is bounded_below;
+  then
+  (inferior_realsequence seq).n <= (inferior_realsequence seq).(n+1) by Th50;
   hence thesis by SEQM_3:def 13;
 end;
 
 theorem Th53:
-  seq is bounded_above implies superior_realsequence seq is non-increasing
+  seq is bounded_above implies superior_realsequence seq is
+  non-increasing
 proof
-  assume seq is bounded_above;
-  then (superior_realsequence seq).(n+1) <= (superior_realsequence seq).n by
-Th51;
+  assume
+  seq is bounded_above;
+  then
+  (superior_realsequence seq).(n+1) <= (superior_realsequence seq).n by Th51;
   hence thesis by SEQM_3:def 14;
 end;
 
 theorem
-  seq is bounded implies
-  (inferior_realsequence seq).n <= (superior_realsequence seq).n
+  seq is bounded implies (inferior_realsequence seq).n <= (
+  superior_realsequence seq).n
 proof
+  reconsider Y1 = {seq.k : n <= k} as Subset of REAL by Th29;
   assume
 A1: seq is bounded;
-  reconsider Y1 = {seq.k : n <= k} as Subset of REAL by Th29;
-A2: (superior_realsequence seq).n = sup Y1 by Def5;
-A3: (inferior_realsequence seq).n = inf Y1 by Def4;
-  Y1 <> {} & Y1 is bounded by A1,Th33,SETLIM_1:1;
-  hence thesis by A2,A3,SEQ_4:24;
+A2: Y1 <> {} by SETLIM_1:1;
+  (superior_realsequence seq).n = sup Y1 & (inferior_realsequence seq).n =
+  inf Y1 by Def4,Def5;
+  hence thesis by A1,A2,Th33,SEQ_4:24;
 end;
 
 theorem Th55:
-  seq is bounded implies
-  (inferior_realsequence seq).n <= inf (superior_realsequence seq)
+  seq is bounded implies (inferior_realsequence seq).n <= inf (
+  superior_realsequence seq)
 proof
+  reconsider Y2 = {seq.k2 : n <= k2} as Subset of REAL by Th29;
   assume
 A1: seq is bounded;
-  reconsider Y2 = {seq.k2 : n <= k2} as Subset of REAL by Th29;
-A2: (inferior_realsequence seq).n = inf Y2 by Def4;
-  now
+A2: now
     let m;
     reconsider Y1 = {seq.k1 : m <= k1} as Subset of REAL by Th29;
-A3: (superior_realsequence seq).m = sup Y1 by Def5;
-    Y1 is bounded & Y2 is bounded by A1,Th33;
+    n <= n + m by NAT_1:11;
     then
-A4: Y1 is bounded_above & Y2 is bounded_below by XXREAL_2:def 11;
-    n <= n + m & m <= n + m by NAT_1:11;
-    then seq.(n+m) in Y1 & seq.(n+m) in Y2;
-    then seq.(n+m) <= sup Y1 & inf Y2 <= seq.(n+m) by A4,SEQ_4:def 4,def 5;
-    hence inf Y2 <= (superior_realsequence seq).m by A3,XXREAL_0:2;
+A3: seq.(n+m) in Y2;
+    Y2 is bounded by A1,Th33;
+    then Y2 is bounded_below by XXREAL_2:def 11;
+    then
+A4: inf Y2 <= seq.(n+m) by A3,SEQ_4:def 5;
+    m <= n + m by NAT_1:11;
+    then
+A5: seq.(n+m) in Y1;
+    Y1 is bounded by A1,Th33;
+    then Y1 is bounded_above by XXREAL_2:def 11;
+    then
+A6: seq.(n+m) <= sup Y1 by A5,SEQ_4:def 4;
+    (superior_realsequence seq).m = sup Y1 by Def5;
+    hence inf Y2 <= (superior_realsequence seq).m by A6,A4,XXREAL_0:2;
   end;
+  (inferior_realsequence seq).n = inf Y2 by Def4;
   hence thesis by A2,Th10;
 end;
 
 theorem Th56:
-  seq is bounded implies
-  sup(inferior_realsequence seq) <= (superior_realsequence seq).n
+  seq is bounded implies sup(inferior_realsequence seq) <= (
+  superior_realsequence seq).n
 proof
+  reconsider Y2 = {seq.k2 : n <= k2} as Subset of REAL by Th29;
   assume
 A1: seq is bounded;
-  reconsider Y2 = {seq.k2 : n <= k2} as Subset of REAL by Th29;
-A2: (superior_realsequence seq).n = sup Y2 by Def5;
-  now
+A2: now
     let m;
     reconsider Y1 = {seq.k1 : m <= k1} as Subset of REAL by Th29;
-A3: (inferior_realsequence seq).m = inf Y1 by Def4;
-    Y1 is bounded & Y2 is bounded by A1,Th33;
+    n <= n + m by NAT_1:11;
     then
-A4: Y1 is bounded_below & Y2 is bounded_above by XXREAL_2:def 11;
-    n <= n + m & m <= n + m by NAT_1:11;
-    then seq.(n+m) in Y1 & seq.(n+m) in Y2;
-    then seq.(n+m) >= inf Y1 & sup Y2 >= seq.(n+m) by A4,SEQ_4:def 4,def 5;
-    hence sup Y2 >= (inferior_realsequence seq).m by A3,XXREAL_0:2;
+A3: seq.(n+m) in Y2;
+    Y2 is bounded by A1,Th33;
+    then Y2 is bounded_above by XXREAL_2:def 11;
+    then
+A4: sup Y2 >= seq.(n+m) by A3,SEQ_4:def 4;
+    m <= n + m by NAT_1:11;
+    then
+A5: seq.(n+m) in Y1;
+    Y1 is bounded by A1,Th33;
+    then Y1 is bounded_below by XXREAL_2:def 11;
+    then
+A6: seq.(n+m) >= inf Y1 by A5,SEQ_4:def 5;
+    (inferior_realsequence seq).m = inf Y1 by Def4;
+    hence sup Y2 >= (inferior_realsequence seq).m by A6,A4,XXREAL_0:2;
   end;
+  (superior_realsequence seq).n = sup Y2 by Def5;
   hence thesis by A2,Th9;
 end;
 
 theorem Th57:
-  seq is bounded implies sup(inferior_realsequence seq) <=
-  inf(superior_realsequence seq)
+  seq is bounded implies sup(inferior_realsequence seq) <= inf(
+  superior_realsequence seq)
 proof
   set seq1 = (inferior_realsequence seq);
   set r = inf(superior_realsequence seq);
-  assume seq is bounded;
+  assume
+  seq is bounded;
   then seq1.n <= r by Th55;
   hence thesis by Th9;
 end;
@@ -1379,30 +1454,30 @@ theorem Th58:
 proof
   assume
 A1: seq is bounded;
-  then seq is bounded_above & seq is bounded_below;
-  then superior_realsequence seq is non-increasing &
-  inferior_realsequence seq is non-decreasing by Th52,Th53;
+  then inferior_realsequence seq is non-decreasing by Th52;
   then
-A2: superior_realsequence seq is bounded_above &
-  inferior_realsequence seq is bounded_below by LIMFUNC1:26;
+A2: inferior_realsequence seq is bounded_below by LIMFUNC1:26;
   now
     let m;
-    (inferior_realsequence seq).m <= inf (superior_realsequence seq)
-    by A1,Th55;
-    hence (inferior_realsequence seq).m <
-    (inf (superior_realsequence seq)) +1 by Lm1;
+    sup(inferior_realsequence seq) <= (superior_realsequence seq).m by A1
+    ,Th56;
+    hence (sup(inferior_realsequence seq)) - 1 < (superior_realsequence seq).m
+    by Lm1;
   end;
   then
-A3: (inferior_realsequence seq) is bounded_above by SEQ_2:def 3;
+A3: (superior_realsequence seq) is bounded_below by SEQ_2:def 4;
   now
     let m;
-    sup(inferior_realsequence seq) <= (superior_realsequence seq).m
-    by A1,Th56;
-    hence (sup(inferior_realsequence seq)) - 1 <
-    (superior_realsequence seq).m by Lm1;
+    (inferior_realsequence seq).m <= inf (superior_realsequence seq) by A1
+    ,Th55;
+    hence (inferior_realsequence seq).m < (inf (superior_realsequence seq)) +1
+    by Lm1;
   end;
-  then (superior_realsequence seq) is bounded_below by SEQ_2:def 4;
-  hence thesis by A2,A3;
+  then
+A4: (inferior_realsequence seq) is bounded_above by SEQ_2:def 3;
+  superior_realsequence seq is non-increasing by A1,Th53;
+  then superior_realsequence seq is bounded_above by LIMFUNC1:26;
+  hence thesis by A2,A4,A3;
 end;
 
 theorem Th59:
@@ -1410,13 +1485,11 @@ theorem Th59:
   lim inferior_realsequence seq = sup inferior_realsequence seq
 proof
   assume
-A1: seq is bounded;
-  then seq is bounded_above & seq is bounded_below;
+  seq is bounded;
   then
-A2: inferior_realsequence seq is non-decreasing by Th52;
-  inferior_realsequence seq is bounded by A1,Th58;
-  then inferior_realsequence seq is bounded_above;
-  hence thesis by A2,Th24;
+  inferior_realsequence seq is non-decreasing & inferior_realsequence seq
+  is bounded by Th52,Th58;
+  hence thesis by Th24;
 end;
 
 theorem Th60:
@@ -1424,77 +1497,76 @@ theorem Th60:
   lim superior_realsequence seq = inf superior_realsequence seq
 proof
   assume
-A1: seq is bounded;
-  then seq is bounded_above & seq is bounded_below;
+  seq is bounded;
   then
-A2: superior_realsequence seq is non-increasing by Th53;
-  superior_realsequence seq is bounded by A1,Th58;
-  then superior_realsequence seq is bounded_below;
-  hence thesis by A2,Th25;
+  superior_realsequence seq is non-increasing & superior_realsequence seq
+  is bounded by Th53,Th58;
+  hence thesis by Th25;
 end;
 
 theorem Th61:
-  seq is bounded_below implies
-  (inferior_realsequence seq).n = - (superior_realsequence(-seq)).n
+  seq is bounded_below implies (inferior_realsequence seq).n = - (
+  superior_realsequence(-seq)).n
 proof
-  assume seq is bounded_below;
-  then
-A1: -seq is bounded_above & seq ^\n is bounded_below by Th27;
+  assume
+A1: seq is bounded_below;
   (inferior_realsequence seq).n = inf (seq ^\n) by Th38
-    .= - sup -(seq ^\n) by A1,Th14
+    .= - sup -(seq ^\n) by A1,Th14,SEQM_3:57
     .= - sup ((-seq) ^\n) by SEQM_3:38;
   hence thesis by Th39;
 end;
 
 theorem Th62:
-  seq is bounded_above implies
-  (superior_realsequence seq).n = - (inferior_realsequence(-seq)).n
+  seq is bounded_above implies (superior_realsequence seq).n = - (
+  inferior_realsequence(-seq)).n
 proof
-  assume seq is bounded_above;
-  then
-A1: -seq is bounded_below & seq ^\n is bounded_above by Th26;
+  assume
+A1: seq is bounded_above;
   (superior_realsequence seq).n = sup (seq ^\n) by Th39
-    .= - inf -(seq ^\n) by A1,Th13
+    .= - inf -(seq ^\n) by A1,Th13,SEQM_3:56
     .= - inf ((-seq) ^\n) by SEQM_3:38;
   hence thesis by Th38;
 end;
 
 theorem Th63:
-  seq is bounded_below implies
-  (inferior_realsequence seq) = - (superior_realsequence(-seq))
+  seq is bounded_below implies (inferior_realsequence seq) = - (
+  superior_realsequence(-seq))
 proof
-  assume seq is bounded_below;
+  assume
+  seq is bounded_below;
   then (inferior_realsequence seq).n = - (superior_realsequence(-seq)).n by
-Th61;
+  Th61;
   hence thesis by SEQ_1:14;
 end;
 
 theorem Th64:
-  seq is bounded_above implies
-  (superior_realsequence seq) = - (inferior_realsequence(-seq))
+  seq is bounded_above implies (superior_realsequence seq) = - (
+  inferior_realsequence(-seq))
 proof
-  assume seq is bounded_above;
+  assume
+  seq is bounded_above;
   then (superior_realsequence seq).n = - (inferior_realsequence(-seq)).n by
-Th62;
+  Th62;
   hence thesis by SEQ_1:14;
 end;
 
 theorem
-  seq is non-decreasing implies seq.n <= (inferior_realsequence seq).(n+1)
+  seq is non-decreasing implies seq.n <= (inferior_realsequence seq).(n+
+  1)
 proof
-  assume
-A1: seq is non-decreasing;
   reconsider Y1 = {seq.k : n+1 <= k} as Subset of REAL by Th29;
-A2: (inferior_realsequence seq).(n+1) = inf Y1 by Def4;
-  inf Y1 = seq.(n+1) by A1,Th34;
-  hence thesis by A1,A2,SEQM_3:def 13;
+A1: (inferior_realsequence seq).(n+1) = inf Y1 by Def4;
+  assume
+A2: seq is non-decreasing;
+  then inf Y1 = seq.(n+1) by Th34;
+  hence thesis by A2,A1,SEQM_3:def 13;
 end;
 
 Lm2: seq is non-decreasing implies (inferior_realsequence seq).n = seq.n
 proof
+  reconsider Y1 = {seq.k : n <= k} as Subset of REAL by Th29;
   assume
 A1: seq is non-decreasing;
-  reconsider Y1 = {seq.k : n <= k} as Subset of REAL by Th29;
   (inferior_realsequence seq).n = inf Y1 by Def4;
   hence thesis by A1,Th34;
 end;
@@ -1502,63 +1574,62 @@ end;
 theorem
   seq is non-decreasing implies inferior_realsequence seq = seq
 proof
-  assume seq is non-decreasing;
+  assume
+  seq is non-decreasing;
   then (inferior_realsequence seq).n = seq.n by Lm2;
   hence thesis by FUNCT_2:113;
 end;
 
 theorem Th67:
-  seq is non-decreasing bounded_above implies
-  seq.n <= (superior_realsequence seq).(n+1)
+  seq is non-decreasing bounded_above implies seq.n <= (
+  superior_realsequence seq).(n+1)
 proof
-  assume
-A1: seq is non-decreasing bounded_above;
-  then
-A2: seq.n <= seq.(n+1) by SEQM_3:def 13;
   reconsider Y1 = {seq.k : n+1 <= k} as Subset of REAL by Th29;
-A3: (superior_realsequence seq).(n+1) = sup Y1 by Def5;
-A4: Y1 <> {} & Y1 is bounded_above by A1,Th31,SETLIM_1:1;
-  seq.(n+1) in Y1;
-  then seq.(n+1) <= sup Y1 by A4,SEQ_4:def 4;
-  hence thesis by A2,A3,XXREAL_0:2;
+A1: seq.(n+1) in Y1;
+  assume
+A2: seq is non-decreasing bounded_above;
+  then Y1 is bounded_above by Th31;
+  then
+A3: seq.(n+1) <= sup Y1 by A1,SEQ_4:def 4;
+A4: (superior_realsequence seq).(n+1) = sup Y1 by Def5;
+  seq.n <= seq.(n+1) by A2,SEQM_3:def 13;
+  hence thesis by A4,A3,XXREAL_0:2;
 end;
 
 theorem Th68:
-  seq is non-decreasing bounded_above implies
-  (superior_realsequence seq).n = (superior_realsequence seq).(n+1)
+  seq is non-decreasing bounded_above implies (
+  superior_realsequence seq).n = (superior_realsequence seq).(n+1)
 proof
   assume
 A1: seq is non-decreasing bounded_above;
   then seq.n <= (superior_realsequence seq).(n+1) by Th67;
-  then max((superior_realsequence seq).(n+1),seq.n)
-  = (superior_realsequence seq).(n+1) by XXREAL_0:def 10;
+  then max((superior_realsequence seq).(n+1),seq.n) = (superior_realsequence
+  seq).(n+1) by XXREAL_0:def 10;
   hence thesis by A1,Th49;
 end;
 
 theorem Th69:
-  seq is non-decreasing bounded_above implies
-  (superior_realsequence seq).n = sup seq &
-  (superior_realsequence seq) is constant
+  seq is non-decreasing bounded_above implies (
+  superior_realsequence seq).n = sup seq & (superior_realsequence seq) is
+  constant
 proof
+  defpred P[Nat] means (superior_realsequence seq).$1 = sup seq;
   assume
 A1: seq is non-decreasing bounded_above;
-  defpred P[Nat] means (superior_realsequence seq).$1 = sup seq;
-  for n being Nat holds (superior_realsequence seq).n = sup seq
+A2: for k being Nat st P[k] holds P[k+1]
   proof
-A2: P[0] by A1,Th41;
-A3: for k being Nat st P[k] holds P[k+1]
-     proof let k be Nat;
-       k in NAT by ORDINAL1:def 13;
-      hence thesis by A1,Th68;
-     end;
-    thus for k being Nat holds P[k] from NAT_1:sch 2(A2,A3);
+    let k be Nat;
+    k in NAT by ORDINAL1:def 13;
+    hence thesis by A1,Th68;
   end;
+A3: P[0] by A1,Th41;
+  for k being Nat holds P[k] from NAT_1:sch 2(A3,A2);
   hence thesis by VALUED_0:def 18;
 end;
 
 theorem
-  seq is non-decreasing bounded_above implies
-  inf (superior_realsequence seq) = sup seq
+  seq is non-decreasing bounded_above implies inf (superior_realsequence
+  seq) = sup seq
 proof
   assume
 A1: seq is non-decreasing bounded_above;
@@ -1572,21 +1643,22 @@ A2: rng (superior_realsequence seq)={r1} by FUNCT_2:188;
 end;
 
 theorem
-  seq is non-increasing implies (superior_realsequence seq).(n+1) <= seq.n
+  seq is non-increasing implies (superior_realsequence seq).(n+1) <= seq
+  .n
 proof
-  assume
-A1: seq is non-increasing;
   reconsider Y1 = {seq.k : n+1 <= k} as Subset of REAL by Th29;
-A2: (superior_realsequence seq).(n+1) = sup Y1 by Def5;
-  sup Y1 = seq.(n+1) by A1,Th35;
-  hence thesis by A1,A2,SEQM_3:def 14;
+A1: (superior_realsequence seq).(n+1) = sup Y1 by Def5;
+  assume
+A2: seq is non-increasing;
+  then sup Y1 = seq.(n+1) by Th35;
+  hence thesis by A2,A1,SEQM_3:def 14;
 end;
 
 Lm3: seq is non-increasing implies (superior_realsequence seq).n = seq.n
 proof
+  reconsider Y1 = {seq.k : n <= k} as Subset of REAL by Th29;
   assume
 A1: seq is non-increasing;
-  reconsider Y1 = {seq.k : n <= k} as Subset of REAL by Th29;
   (superior_realsequence seq).n = sup Y1 by Def5;
   hence thesis by A1,Th35;
 end;
@@ -1594,63 +1666,63 @@ end;
 theorem
   seq is non-increasing implies superior_realsequence seq = seq
 proof
-  assume seq is non-increasing;
+  assume
+  seq is non-increasing;
   then (superior_realsequence seq).n = seq.n by Lm3;
   hence thesis by FUNCT_2:113;
 end;
 
 theorem Th73:
-  seq is non-increasing bounded_below implies
-  (inferior_realsequence seq).(n+1) <= seq.n
+  seq is non-increasing bounded_below implies (
+  inferior_realsequence seq).(n+1) <= seq.n
 proof
-  assume
-A1: seq is non-increasing bounded_below;
-  then
-A2: seq.(n+1) <= seq.n by SEQM_3:def 14;
   reconsider Y1 = {seq.k : n+1 <= k} as Subset of REAL by Th29;
-A3: (inferior_realsequence seq).(n+1) = inf Y1 by Def4;
-A4: Y1 <> {} & Y1 is bounded_below by A1,Th32,SETLIM_1:1;
-  seq.(n+1) in Y1;
-  then inf Y1 <= seq.(n+1) by A4,SEQ_4:def 5;
-  hence thesis by A2,A3,XXREAL_0:2;
+A1: seq.(n+1) in Y1;
+  assume
+A2: seq is non-increasing bounded_below;
+  then Y1 is bounded_below by Th32;
+  then
+A3: inf Y1 <= seq.(n+1) by A1,SEQ_4:def 5;
+A4: (inferior_realsequence seq).(n+1) = inf Y1 by Def4;
+  seq.(n+1) <= seq.n by A2,SEQM_3:def 14;
+  hence thesis by A4,A3,XXREAL_0:2;
 end;
 
 theorem Th74:
-  seq is non-increasing bounded_below implies
-  (inferior_realsequence seq).n = (inferior_realsequence seq).(n+1)
+  seq is non-increasing bounded_below implies (
+  inferior_realsequence seq).n = (inferior_realsequence seq).(n+1)
 proof
   assume
 A1: seq is non-increasing bounded_below;
   then (inferior_realsequence seq).(n+1) <= seq.n by Th73;
-  then min((inferior_realsequence seq).(n+1),seq.n)
-  = (inferior_realsequence seq).(n+1) by XXREAL_0:def 9;
+  then min((inferior_realsequence seq).(n+1),seq.n) = (inferior_realsequence
+  seq).(n+1) by XXREAL_0:def 9;
   hence thesis by A1,Th48;
 end;
 
 theorem Th75:
-  seq is non-increasing & seq is bounded_below implies
-  (inferior_realsequence seq).n = inf seq &
-  (inferior_realsequence seq) is constant
+  seq is non-increasing & seq is bounded_below implies (
+  inferior_realsequence seq).n = inf seq & (inferior_realsequence seq) is
+  constant
 proof
-  assume
-A1: seq is non-increasing & seq is bounded_below;
+  assume that
+A1: seq is non-increasing and
+A2: seq is bounded_below;
   defpred P[Nat] means (inferior_realsequence seq).$1 = inf seq;
-  for n being Nat holds (inferior_realsequence seq).n = inf seq
-  proof
-A2: P[0] by A1,Th40;
 A3: for k being Nat st P[k] holds P[k+1]
-     proof let k be Nat;
-       k in NAT by ORDINAL1:def 13;
-      hence thesis by A1,Th74;
-     end;
-    thus for k being Nat holds P[k] from NAT_1:sch 2(A2,A3);
+  proof
+    let k be Nat;
+    k in NAT by ORDINAL1:def 13;
+    hence thesis by A1,A2,Th74;
   end;
+A4: P[0] by A2,Th40;
+  for k being Nat holds P[k] from NAT_1:sch 2(A4,A3);
   hence thesis by VALUED_0:def 18;
 end;
 
 theorem
-  seq is non-increasing bounded_below implies
-  sup inferior_realsequence seq = inf seq
+  seq is non-increasing bounded_below implies sup inferior_realsequence
+  seq = inf seq
 proof
   assume
 A1: seq is non-increasing bounded_below;
@@ -1665,144 +1737,165 @@ A2: rng inferior_realsequence seq={r1} by FUNCT_2:188;
 end;
 
 theorem Th77:
-  seq1 is bounded & seq2 is bounded & (for n holds seq1.n <= seq2.n) implies
-  ((for n holds (superior_realsequence seq1).n <=
-  (superior_realsequence seq2).n) &
-  (for n holds (inferior_realsequence seq1).n <=
-  (inferior_realsequence seq2).n))
+  seq1 is bounded & seq2 is bounded & (for n holds seq1.n <= seq2.
+  n) implies (for n holds (superior_realsequence seq1).n <= (
+superior_realsequence seq2).n) & for n holds (inferior_realsequence seq1).n <=
+  (inferior_realsequence seq2).n
 proof
   assume that
-A1: seq1 is bounded & seq2 is bounded and
-A2: for n holds seq1.n <= seq2.n;
+A1: seq1 is bounded and
+A2: seq2 is bounded and
+A3: for n holds seq1.n <= seq2.n;
   now
     let n;
-    reconsider Y1 = {seq1.k1 : n <= k1} as Subset of REAL by Th29;
     reconsider Y2 = {seq2.k2 : n <= k2} as Subset of REAL by Th29;
-A3: (superior_realsequence seq1).n = sup Y1 &
-    (superior_realsequence seq2).n = sup Y2 by Def5;
-A4: (inferior_realsequence seq1).n = inf Y1 &
-    (inferior_realsequence seq2).n = inf Y2 by Def4;
-A5: Y1 <> {} & Y2 <> {} by SETLIM_1:1;
-A6: Y1 is bounded & Y2 is bounded by A1,Th33;
+    reconsider Y1 = {seq1.k1 : n <= k1} as Subset of REAL by Th29;
+A4: Y1 <> {} & Y2 <> {} by SETLIM_1:1;
+A5: (inferior_realsequence seq1).n = inf Y1 & (inferior_realsequence seq2)
+    .n = inf Y2 by Def4;
+    Y1 is bounded by A1,Th33;
     then
-A7: Y1 is bounded_above & Y1 is bounded_below by XXREAL_2:def 11;
-A8: Y2 is bounded_above & Y2 is bounded_below by A6,XXREAL_2:def 11;
-A9: now
-      let r;
-      assume r in Y1;
-      then consider k such that
-A10:  r = seq1.k & n <= k;
-A11:  r <= seq2.k by A2,A10;
-      seq2.k in Y2 by A10;
-      then seq2.k <= sup Y2 by A8,SEQ_4:def 4;
-      hence r <= sup Y2 by A11,XXREAL_0:2;
-    end;
+A6: Y1 is bounded_below by XXREAL_2:def 11;
     now
       let r;
-      assume r in Y2;
+      assume
+      r in Y2;
       then consider k such that
-A12:  r = seq2.k & n <= k;
-A13:  seq1.k <= r by A2,A12;
-      seq1.k in Y1 by A12;
-      then inf Y1 <= seq1.k by A7,SEQ_4:def 5;
-      hence inf Y1 <= r by A13,XXREAL_0:2;
+A7:   r = seq2.k and
+A8:   n <= k;
+      seq1.k in Y1 by A8;
+      then
+A9:   inf Y1 <= seq1.k by A6,SEQ_4:def 5;
+      seq1.k <= r by A3,A7;
+      hence inf Y1 <= r by A9,XXREAL_0:2;
     end;
-    then for r be Real st r in Y2 holds inf Y1 <= r;
-    hence (superior_realsequence seq1).n <= (superior_realsequence seq2).n &
-    (inferior_realsequence seq1).n <= (inferior_realsequence seq2).n
-    by A3,A4,A5,A9,COMPLSP1:84,TOPMETR3:1;
+    then
+A10: for r be Real st r in Y2 holds inf Y1 <= r;
+    Y2 is bounded by A2,Th33;
+    then
+A11: Y2 is bounded_above by XXREAL_2:def 11;
+A12: now
+      let r;
+      assume
+      r in Y1;
+      then consider k such that
+A13:  r = seq1.k and
+A14:  n <= k;
+      seq2.k in Y2 by A14;
+      then
+A15:  seq2.k <= sup Y2 by A11,SEQ_4:def 4;
+      r <= seq2.k by A3,A13;
+      hence r <= sup Y2 by A15,XXREAL_0:2;
+    end;
+    (superior_realsequence seq1).n = sup Y1 & (superior_realsequence seq2)
+    .n = sup Y2 by Def5;
+    hence (superior_realsequence seq1).n <= (superior_realsequence seq2).n & (
+inferior_realsequence seq1).n <= (inferior_realsequence seq2).n by A5,A4,A12
+    ,A10,COMPLSP1:84,TOPMETR3:1;
   end;
   hence thesis;
 end;
 
 theorem
-  seq1 is bounded_below & seq2 is bounded_below implies
-  (inferior_realsequence(seq1+seq2)).n >=
-  (inferior_realsequence seq1).n + (inferior_realsequence seq2).n
+  seq1 is bounded_below & seq2 is bounded_below implies (
+  inferior_realsequence(seq1+seq2)).n >= (inferior_realsequence seq1).n + (
+  inferior_realsequence seq2).n
 proof
-  assume seq1 is bounded_below & seq2 is bounded_below;
-  then seq1 ^\n is bounded_below & seq2 ^\n is bounded_below by Th27;
+  assume
+  seq1 is bounded_below & seq2 is bounded_below;
+  then seq1 ^\n is bounded_below & seq2 ^\n is bounded_below by
+  SEQM_3:57;
   then inf(seq1 ^\n + seq2 ^\n) >= inf(seq1 ^\n) + inf(seq2 ^\n) by Th15;
   then
 A1: inf((seq1+seq2) ^\n) >= inf(seq1 ^\n) + inf(seq2 ^\n) by SEQM_3:37;
-  (inferior_realsequence seq1).n = inf(seq1 ^\n) &
-  (inferior_realsequence seq2).n = inf(seq2 ^\n) by Th38;
+  (inferior_realsequence seq1).n = inf(seq1 ^\n) & (inferior_realsequence
+  seq2 ).n = inf(seq2 ^\n) by Th38;
   hence thesis by A1,Th38;
 end;
 
 theorem
-  seq1 is bounded_above & seq2 is bounded_above implies
-  (superior_realsequence(seq1+seq2)).n <=
-  (superior_realsequence seq1).n + (superior_realsequence seq2).n
+  seq1 is bounded_above & seq2 is bounded_above implies (
+  superior_realsequence(seq1+seq2)).n <= (superior_realsequence seq1).n + (
+  superior_realsequence seq2).n
 proof
-  assume seq1 is bounded_above & seq2 is bounded_above;
-  then seq1 ^\n is bounded_above & seq2 ^\n is bounded_above by Th26;
+  assume
+  seq1 is bounded_above & seq2 is bounded_above;
+  then seq1 ^\n is bounded_above & seq2 ^\n is bounded_above by
+  SEQM_3:56;
   then sup(seq1 ^\n + seq2 ^\n) <= sup(seq1 ^\n) + sup(seq2 ^\n) by Th16;
   then
 A1: sup((seq1+seq2) ^\n) <= sup(seq1 ^\n) + sup(seq2 ^\n) by SEQM_3:37;
-  (superior_realsequence seq1).n = sup(seq1 ^\n) &
-  (superior_realsequence seq2).n = sup(seq2 ^\n) by Th39;
+  (superior_realsequence seq1).n = sup(seq1 ^\n) & (superior_realsequence
+  seq2 ).n = sup(seq2 ^\n) by Th39;
   hence thesis by A1,Th39;
 end;
 
 theorem
-  seq1 is bounded_below nonnegative &
-  seq2 is bounded_below nonnegative implies
-  (inferior_realsequence(seq1(#)seq2)).n >=
-  (inferior_realsequence seq1).n * (inferior_realsequence seq2).n
+  seq1 is bounded_below nonnegative & seq2 is bounded_below nonnegative
+implies (inferior_realsequence(seq1(#)seq2)).n >= (inferior_realsequence seq1).
+  n * (inferior_realsequence seq2).n
 proof
-  assume seq1 is bounded_below nonnegative &
-  seq2 is bounded_below nonnegative;
-  then seq1 ^\n is bounded_below nonnegative &
-  seq2 ^\n is bounded_below nonnegative by Th17,Th27;
-  then inf((seq1 ^\n)(#)(seq2 ^\n))>=inf(seq1 ^\n) * inf(seq2 ^\n) by Th20;
+  assume
+  seq1 is bounded_below nonnegative & seq2 is bounded_below
+  nonnegative;
+  then seq1 ^\n is bounded_below nonnegative & seq2 ^\n is bounded_below
+  nonnegative by Th17,SEQM_3:57;
+  then inf((seq1 ^\n)(#)(seq2 ^\n))>=inf(seq1 ^\n) * inf(seq2 ^\n) by
+  Th20;
   then
-A1: inf((seq1 (#) seq2) ^\n) >= inf(seq1 ^\n) * inf(seq2 ^\n) by SEQM_3:42;
-  (inferior_realsequence seq1).n = inf(seq1 ^\n) &
-  (inferior_realsequence seq2).n = inf(seq2 ^\n) by Th38;
+A1: inf((seq1 (#) seq2) ^\n) >= inf(seq1 ^\n) * inf(seq2 ^\n) by
+  SEQM_3:
+  42;
+  (inferior_realsequence seq1).n = inf(seq1 ^\n) & (inferior_realsequence
+  seq2 ).n = inf(seq2 ^\n) by Th38;
   hence thesis by A1,Th38;
 end;
 
 theorem Th81:
-  seq1 is bounded_below nonnegative &
-  seq2 is bounded_below nonnegative implies
-  (inferior_realsequence(seq1(#)seq2)).n >=
-  (inferior_realsequence seq1).n * (inferior_realsequence seq2).n
+  seq1 is bounded_below nonnegative & seq2 is bounded_below
+  nonnegative implies (inferior_realsequence(seq1(#)seq2)).n >= (
+  inferior_realsequence seq1).n * (inferior_realsequence seq2).n
 proof
-  assume seq1 is bounded_below nonnegative &
-  seq2 is bounded_below nonnegative;
-  then seq1 ^\n is bounded_below nonnegative &
-  seq2 ^\n is bounded_below nonnegative by Th17,Th27;
-  then inf((seq1 ^\n)(#)(seq2 ^\n))>=inf(seq1 ^\n) * inf(seq2 ^\n) by Th20;
+  assume
+  seq1 is bounded_below nonnegative & seq2 is bounded_below
+  nonnegative;
+  then seq1 ^\n is bounded_below nonnegative & seq2 ^\n is bounded_below
+  nonnegative by Th17,SEQM_3:57;
+  then inf((seq1 ^\n)(#)(seq2 ^\n))>=inf(seq1 ^\n) * inf(seq2 ^\n) by
+  Th20;
   then
-A1: inf((seq1 (#) seq2) ^\n) >= inf(seq1 ^\n) * inf(seq2 ^\n) by SEQM_3:42;
-  (inferior_realsequence seq1).n = inf(seq1 ^\n) &
-  (inferior_realsequence seq2).n = inf(seq2 ^\n) by Th38;
+A1: inf((seq1 (#) seq2) ^\n) >= inf(seq1 ^\n) * inf(seq2 ^\n) by
+  SEQM_3:
+  42;
+  (inferior_realsequence seq1).n = inf(seq1 ^\n) & (inferior_realsequence
+  seq2 ).n = inf(seq2 ^\n) by Th38;
   hence thesis by A1,Th38;
 end;
 
 theorem Th82:
-  seq1 is bounded_above nonnegative &
-  seq2 is bounded_above nonnegative implies
-  (superior_realsequence(seq1(#)seq2)).n <=
-  (superior_realsequence seq1).n * (superior_realsequence seq2).n
+  seq1 is bounded_above nonnegative & seq2 is bounded_above
+  nonnegative implies (superior_realsequence(seq1(#)seq2)).n <= (
+  superior_realsequence seq1).n * (superior_realsequence seq2).n
 proof
-  assume seq1 is bounded_above nonnegative &
-  seq2 is bounded_above nonnegative;
-  then seq1 ^\n is bounded_above nonnegative &
-  seq2 ^\n is bounded_above nonnegative by Th17,Th26;
-  then sup((seq1 ^\n)(#)(seq2 ^\n))<=sup(seq1 ^\n) * sup(seq2 ^\n) by Th21;
+  assume
+  seq1 is bounded_above nonnegative & seq2 is bounded_above
+  nonnegative;
+  then seq1 ^\n is bounded_above nonnegative & seq2 ^\n is bounded_above
+  nonnegative by Th17,SEQM_3:56;
+  then sup((seq1 ^\n)(#)(seq2 ^\n))<=sup(seq1 ^\n) * sup(seq2 ^\n) by
+  Th21;
   then
-A1: sup((seq1 (#) seq2) ^\n) <= sup(seq1 ^\n) * sup(seq2 ^\n) by SEQM_3:42;
-  (superior_realsequence seq1).n = sup(seq1 ^\n) &
-  (superior_realsequence seq2).n = sup(seq2 ^\n) by Th39;
+A1: sup((seq1 (#) seq2) ^\n) <= sup(seq1 ^\n) * sup(seq2 ^\n) by
+  SEQM_3:
+  42;
+  (superior_realsequence seq1).n = sup(seq1 ^\n) & (superior_realsequence
+  seq2 ).n = sup(seq2 ^\n) by Th39;
   hence thesis by A1,Th39;
 end;
 
 definition
   let seq be Real_Sequence;
   func lim_sup seq -> Element of REAL equals
-
   inf superior_realsequence seq;
   coherence;
 end;
@@ -1810,55 +1903,50 @@ end;
 definition
   let seq be Real_Sequence;
   func lim_inf seq -> Element of REAL equals
-
   sup inferior_realsequence seq;
   coherence;
 end;
 
 theorem Th83:
-  seq is bounded implies (lim_inf seq <= r iff
-  (for s st 0<s holds (for n ex k st seq.(n+k)<r+s)))
+  seq is bounded implies (lim_inf seq <= r iff for s st 0<s holds
+  for n ex k st seq.(n+k)<r+s )
 proof
   set seq1 = inferior_realsequence seq;
   assume
 A1: seq is bounded;
   then
-A2: seq is bounded_below bounded_above;
-  seq1 is bounded by A1,Th58;
-  then
-A3: seq1 is bounded_below bounded_above;
-  thus lim_inf seq <= r implies
-  (for s st 0<s holds (for n ex k st seq.(n+k)<r+s))
+A2: seq1 is bounded by Th58;
+  thus lim_inf seq <= r implies for s st 0<s holds for n ex k st seq.(n+k)<r+s
   proof
     assume
-A4: lim_inf seq <= r;
+A3: lim_inf seq <= r;
     let s such that
-A5: 0<s;
+A4: 0<s;
     for n ex k st seq.(n+k)<r+s
     proof
       let n;
       consider k such that
-A6:   seq.(n+k) < seq1.n+s by A2,A5,Th42;
-      seq1.n <= r by A3,A4,Th9;
-      then seq.(n+k)+seq1.n < r+(seq1.n+s) by A6,XREAL_1:10;
+A5:   seq.(n+k) < seq1.n+s by A1,A4,Th42;
+      seq1.n <= r by A2,A3,Th9;
+      then seq.(n+k)+seq1.n < r+(seq1.n+s) by A5,XREAL_1:10;
       then seq.(n+k) < r+(seq1.n+s)-seq1.n by XREAL_1:22;
       hence thesis;
     end;
     hence thesis;
   end;
   assume
-A7: for s st 0<s holds (for n ex k st seq.(n+k)<r+s);
+A6: for s st 0<s holds for n ex k st seq.(n+k)<r+s;
   for s st 0<s holds lim_inf seq<=r+s
   proof
     let s such that
-A8: 0<s;
+A7: 0<s;
     for n holds seq1.n <= r+s
     proof
       let n;
       consider k such that
-A9:   seq.(n+k)<r+s by A7,A8;
-      seq1.n <= seq.(n+k) by A2,Th42;
-      hence thesis by A9,XXREAL_0:2;
+A8:   seq.(n+k)<r+s by A6,A7;
+      seq1.n <= seq.(n+k) by A1,Th42;
+      hence thesis by A8,XXREAL_0:2;
     end;
     hence thesis by Th9;
   end;
@@ -1866,36 +1954,33 @@ A9:   seq.(n+k)<r+s by A7,A8;
 end;
 
 theorem Th84:
-  seq is bounded implies (r <= lim_inf seq iff
-  (for s st 0<s holds ex n st for k holds r-s<seq.(n+k)))
+  seq is bounded implies (r <= lim_inf seq iff for s st 0<s holds
+  ex n st for k holds r-s<seq.(n+k) )
 proof
   set seq1 = inferior_realsequence seq;
   assume
 A1: seq is bounded;
   then
-A2: seq is bounded_below bounded_above;
-  seq1 is bounded by A1,Th58;
-  then
-A3: seq1 is bounded_below bounded_above;
-  thus r <= lim_inf seq implies
-  (for s st 0<s holds (ex n st for k holds r-s<seq.(n+k)))
+A2: seq1 is bounded by Th58;
+  thus r <= lim_inf seq implies for s st 0<s holds ex n st for k holds r-s<seq
+  .(n+k)
   proof
     assume
-A4: r <= lim_inf seq;
+A3: r <= lim_inf seq;
     let s such that
-A5: 0<s;
+A4: 0<s;
     ex n st for k holds r-s<seq.(n+k)
     proof
       consider n1 be Element of NAT such that
-A6:   seq1.n1 > sup seq1-s by A3,A5,Th7;
-      seq1.n1 + sup seq1 > r + (sup seq1-s) by A4,A6,XREAL_1:10;
+A5:   seq1.n1 > sup seq1-s by A2,A4,Th7;
+      seq1.n1 + sup seq1 > r + (sup seq1-s) by A3,A5,XREAL_1:10;
       then seq1.n1 + sup seq1 > r - s + sup seq1;
       then
-A7:   (seq1.n1 + sup seq1) - sup seq1 > r-s by XREAL_1:22;
+A6:   (seq1.n1 + sup seq1) - sup seq1 > r-s by XREAL_1:22;
       now
         let k;
-        seq1.n1 <= seq.(n1+k) by A2,Th42;
-        then (r-s) + seq1.n1 < seq.(n1+k) + seq1.n1 by A7,XREAL_1:10;
+        seq1.n1 <= seq.(n1+k) by A1,Th42;
+        then (r-s) + seq1.n1 < seq.(n1+k) + seq1.n1 by A6,XREAL_1:10;
         then (r-s) + seq1.n1 - seq1.n1 < seq.(n1+k) by XREAL_1:21;
         hence r-s<seq.(n1+k);
       end;
@@ -1904,87 +1989,83 @@ A7:   (seq1.n1 + sup seq1) - sup seq1 > r-s by XREAL_1:22;
     hence thesis;
   end;
   assume
-A8: for s st 0<s holds ex n st for k holds r-s<seq.(n+k);
+A7: for s st 0<s holds ex n st for k holds r-s<seq.(n+k);
   for s st 0<s holds r-s<=lim_inf seq
   proof
-    let s such that
-A9: 0<s;
-    consider n1 be Element of NAT such that
-A10: for k holds r-s<seq.(n1+k) by A8,A9;
-    for k holds r-s<=seq.(n1+k) by A10;
+    let s;
+    assume
+    0<s;
+    then consider n1 be Element of NAT such that
+A8: for k holds r-s<seq.(n1+k) by A7;
+    for k holds r-s<=seq.(n1+k) by A8;
     then
-A11: r-s <= seq1.n1 by A2,Th44;
-    seq1.n1 <= sup seq1 by A3,Th7;
-    hence thesis by A11,XXREAL_0:2;
+A9: r-s <= seq1.n1 by A1,Th44;
+    seq1.n1 <= sup seq1 by A2,Th7;
+    hence thesis by A9,XXREAL_0:2;
   end;
   hence thesis by XREAL_1:59;
 end;
 
 theorem
-  seq is bounded implies (r = lim_inf seq iff
-  (for s st 0<s holds ((for n ex k st seq.(n+k)<r+s) &
-  (ex n st for k holds r-s<seq.(n+k)))))
+  seq is bounded implies (r = lim_inf seq iff for s st 0<s holds (for n
+  ex k st seq.(n+k)<r+s) & ex n st for k holds r-s<seq.(n+k) )
 proof
   assume
 A1: seq is bounded;
-  hence r = lim_inf seq implies
-  (for s st 0<s holds ((for n ex k st seq.(n+k)<r+s) &
-  (ex n st for k holds r-s<seq.(n+k)))) by Th83,Th84;
+  hence
+  r = lim_inf seq implies for s st 0<s holds (for n ex k st seq.(n+k)<r+s
+  ) & ex n st for k holds r-s<seq.(n+k) by Th83,Th84;
   assume
-A2: for s st 0<s holds ((for n ex k st seq.(n+k)<r+s) &
-  (ex n st for k holds r-s<seq.(n+k)));
-  then for s st 0<s holds (for n ex k st seq.(n+k)<r+s);
+A2: for s st 0<s holds (for n ex k st seq.(n+k)<r+s) & ex n st for k
+  holds r-s<seq.(n+k);
+  then for s st 0<s holds ex n st for k holds r-s<seq.(n+k);
   then
-A3: lim_inf seq <= r by A1,Th83;
-  for s st 0<s holds (ex n st for k holds r-s<seq.(n+k)) by A2;
-  then r <= lim_inf seq by A1,Th84;
+A3: r <= lim_inf seq by A1,Th84;
+  for s st 0<s holds for n ex k st seq.(n+k)<r+s by A2;
+  then lim_inf seq <= r by A1,Th83;
   hence thesis by A3,XXREAL_0:1;
 end;
 
 theorem Th86:
-  seq is bounded implies (r <= lim_sup seq iff
-  (for s st 0<s holds (for n ex k st seq.(n+k)>r-s)))
+  seq is bounded implies (r <= lim_sup seq iff for s st 0<s holds
+  for n ex k st seq.(n+k)>r-s )
 proof
   set seq1 = superior_realsequence seq;
   assume
 A1: seq is bounded;
   then
-A2: seq is bounded_below bounded_above;
-  seq1 is bounded by A1,Th58;
-  then
-A3: seq1 is bounded_below bounded_above;
-  thus r <= lim_sup seq implies
-  (for s st 0<s holds (for n ex k st seq.(n+k)>r-s))
+A2: seq1 is bounded by Th58;
+  thus r <= lim_sup seq implies for s st 0<s holds for n ex k st seq.(n+k)>r-s
   proof
     assume
-A4: r <= lim_sup seq;
+A3: r <= lim_sup seq;
     let s such that
-A5: 0<s;
+A4: 0<s;
     for n ex k st seq.(n+k)>r-s
     proof
       let n;
       consider k such that
-A6:   seq.(n+k) > seq1.n-s by A2,A5,Th43;
-      seq1.n >= r by A3,A4,Th10;
-      then seq1.n+seq.(n+k) > r+(seq1.n-s) by A6,XREAL_1:10;
+A5:   seq.(n+k) > seq1.n-s by A1,A4,Th43;
+      seq1.n >= r by A2,A3,Th10;
+      then seq1.n+seq.(n+k) > r+(seq1.n-s) by A5,XREAL_1:10;
       then seq.(n+k) > r+seq1.n-s-seq1.n by XREAL_1:21;
       hence thesis;
     end;
     hence thesis;
   end;
   assume
-A7: for s st 0<s holds (for n ex k st seq.(n+k)>r-s);
+A6: for s st 0<s holds for n ex k st seq.(n+k)>r-s;
   for s st 0<s holds lim_sup seq>=r-s
   proof
     let s such that
-A8: 0<s;
+A7: 0<s;
     for n holds r-s <= seq1.n
     proof
       let n;
       consider k such that
-A9:   r-s<seq.(n+k) by A7,A8;
-      seq.(n+k) <= seq1.n by A2,Th43;
-      hence thesis by A9,XXREAL_0:2;
+A8:   r-s<seq.(n+k) by A6,A7;
+      seq.(n+k) <= seq1.n by A1,Th43;
+      hence thesis by A8,XXREAL_0:2;
     end;
     hence thesis by Th10;
   end;
@@ -1992,38 +2073,35 @@ A9:   r-s<seq.(n+k) by A7,A8;
 end;
 
 theorem Th87:
-  seq is bounded implies (lim_sup seq <= r iff
-  (for s st 0<s holds (ex n st for k holds seq.(n+k)<r+s)))
+  seq is bounded implies (lim_sup seq <= r iff for s st 0<s holds
+  ex n st for k holds seq.(n+k)<r+s )
 proof
   set seq1 = superior_realsequence seq;
   assume
 A1: seq is bounded;
   then
-A2: seq is bounded_below bounded_above;
-  seq1 is bounded by A1,Th58;
-  then
-A3: seq1 is bounded_below bounded_above;
-  thus lim_sup seq <= r implies
-  (for s st 0<s holds (ex n st for k holds seq.(n+k)<r+s))
+A2: seq1 is bounded by Th58;
+  thus lim_sup seq <= r implies for s st 0<s holds ex n st for k holds seq.(n+
+  k)<r+s
   proof
     assume
-A4: lim_sup seq <= r;
-    for s st 0<s holds (ex n st for k holds seq.(n+k)<r+s)
+A3: lim_sup seq <= r;
+    for s st 0<s holds ex n st for k holds seq.(n+k)<r+s
     proof
       let s such that
-A5:   0<s;
+A4:   0<s;
       ex n st for k holds seq.(n+k)<r+s
       proof
         consider n1 be Element of NAT such that
-A6:     seq1.n1 < inf seq1+s by A3,A5,Th8;
-        seq1.n1 + inf seq1 < r + (inf seq1+s) by A4,A6,XREAL_1:10;
+A5:     seq1.n1 < inf seq1+s by A2,A4,Th8;
+        seq1.n1 + inf seq1 < r + (inf seq1+s) by A3,A5,XREAL_1:10;
         then seq1.n1 + inf seq1 < r + s + inf seq1;
         then
-A7:     (seq1.n1 + inf seq1) - inf seq1 < r+s by XREAL_1:21;
+A6:     (seq1.n1 + inf seq1) - inf seq1 < r+s by XREAL_1:21;
         now
           let k;
-          seq.(n1+k) <= seq1.n1 by A2,Th43;
-          then seq.(n1+k) + seq1.n1 < (r+s) + seq1.n1 by A7,XREAL_1:10;
+          seq.(n1+k) <= seq1.n1 by A1,Th43;
+          then seq.(n1+k) + seq1.n1 < (r+s) + seq1.n1 by A6,XREAL_1:10;
           then seq.(n1+k) + seq1.n1 - seq1.n1 < (r+s) by XREAL_1:21;
           hence seq.(n1+k) < r+s;
         end;
@@ -2034,40 +2112,40 @@ A7:     (seq1.n1 + inf seq1) - inf seq1 < r+s by XREAL_1:21;
     hence thesis;
   end;
   assume
-A8: for s st 0<s holds (ex n st for k holds seq.(n+k)<r+s);
+A7: for s st 0<s holds ex n st for k holds seq.(n+k)<r+s;
   for s st 0<s holds lim_sup seq<=r+s
   proof
-    let s such that
-A9: 0<s;
-    consider n1 be Element of NAT such that
-A10: for k holds seq.(n1+k)<r+s by A8,A9;
-    for k holds seq.(n1+k)<=r+s by A10;
+    let s;
+    assume
+    0<s;
+    then consider n1 be Element of NAT such that
+A8: for k holds seq.(n1+k)<r+s by A7;
+    for k holds seq.(n1+k)<=r+s by A8;
     then
-A11: seq1.n1<=r+s by A2,Th46;
-    inf seq1 <= seq1.n1 by A3,Th8;
-    hence thesis by A11,XXREAL_0:2;
+A9: seq1.n1<=r+s by A1,Th46;
+    inf seq1 <= seq1.n1 by A2,Th8;
+    hence thesis by A9,XXREAL_0:2;
   end;
   hence thesis by XREAL_1:43;
 end;
 
 theorem
-  seq is bounded implies (r = lim_sup seq iff
-  (for s st 0<s holds ((for n holds ex k st seq.(n+k)>r-s) &
-  (ex n st for k holds seq.(n+k)<r+s))))
+  seq is bounded implies (r = lim_sup seq iff for s st 0<s holds (for n
+  holds ex k st seq.(n+k)>r-s) & ex n st for k holds seq.(n+k)<r+s )
 proof
   assume
 A1: seq is bounded;
-  hence r = lim_sup seq implies
-  (for s st 0<s holds ((for n holds ex k st seq.(n+k)>r-s) &
-  (ex n st for k holds seq.(n+k)<r+s))) by Th86,Th87;
+  hence
+  r = lim_sup seq implies for s st 0<s holds (for n holds ex k st seq.(n+
+  k)>r-s) & ex n st for k holds seq.(n+k)<r+s by Th86,Th87;
   assume
-A2: for s st 0<s holds ((for n holds ex k st seq.(n+k)>r-s) &
-  (ex n st for k holds seq.(n+k)<r+s));
-  then for s st 0<s holds (for n holds ex k st seq.(n+k)>r-s);
+A2: for s st 0<s holds (for n holds ex k st seq.(n+k)>r-s) & ex n st for
+  k holds seq.(n+k)<r+s;
+  then for s st 0<s holds ex n st for k holds seq.(n+k)<r+s;
   then
-A3: r <= lim_sup seq by A1,Th86;
-  for s st 0<s holds (ex n st for k holds seq.(n+k)<r+s) by A2;
-  then lim_sup seq <= r by A1,Th87;
+A3: lim_sup seq <= r by A1,Th87;
+  for s st 0<s holds for n holds ex k st seq.(n+k)>r-s by A2;
+  then r <= lim_sup seq by A1,Th86;
   hence thesis by A3,XXREAL_0:1;
 end;
 
@@ -2079,438 +2157,414 @@ theorem Th90:
 proof
   thus seq is bounded & lim_sup seq = lim_inf seq implies seq is convergent
   proof
-    assume that
-A1: seq is bounded & lim_sup seq = lim_inf seq;
-A2: seq is bounded_above & seq is bounded_below by A1;
-A3: superior_realsequence seq is bounded &
-    inferior_realsequence seq is bounded by A1,Th58;
-    then
-A4: superior_realsequence seq is bounded_above bounded_below;
-A5: inferior_realsequence seq is bounded_above bounded_below
-    by A3;
-A6: superior_realsequence seq is non-increasing &
-    inferior_realsequence seq is non-decreasing by A2,Th52,Th53;
     reconsider r= inf superior_realsequence seq as real number;
+    assume that
+A1: seq is bounded and
+A2: lim_sup seq = lim_inf seq;
+A3: inferior_realsequence seq is bounded by A1,Th58;
+A4: inferior_realsequence seq is non-decreasing by A1,Th52;
+A5: superior_realsequence seq is non-increasing by A1,Th53;
+A6: superior_realsequence seq is bounded by A1,Th58;
     for s st 0<s ex n st for m st n<=m holds abs (seq.m-r) < s
     proof
       let s such that
 A7:   0 < s;
-      consider k1 be Element of NAT such that
-A8:   r - s < (inferior_realsequence seq).k1 by A1,A5,A7,Th7;
       consider k2 be Element of NAT such that
-A9:   (superior_realsequence seq).k2 < r + s by A4,A7,Th8;
+A8:   (superior_realsequence seq).k2 < r + s by A6,A7,Th8;
+      consider k1 be Element of NAT such that
+A9:   r - s < (inferior_realsequence seq).k1 by A2,A3,A7,Th7;
       reconsider k = max(k1,k2) as Element of NAT;
-      k1 <= k & k2 <= k by XXREAL_0:25;
+      k2 <= k by XXREAL_0:25;
       then
-A10:  (inferior_realsequence seq).k1 <= (inferior_realsequence seq). k &
-      (superior_realsequence seq).k <= (superior_realsequence seq).k2
-      by A6,SEQM_3:12,14;
+A10:  (superior_realsequence seq).k <= (superior_realsequence seq).k2 by
+      A5,SEQM_3:14;
+      k1 <= k by XXREAL_0:25;
+      then
+A11:  (inferior_realsequence seq).k1 <= (inferior_realsequence seq). k by
+      A4,SEQM_3:12;
       ex n st for m st n<=m holds abs(seq.m-r) < s
       proof
         take k;
-        let m such that
-A11:    k <= m;
-        consider k3 being Nat such that
-A12:    m = k + k3 by A11,NAT_1:10;
-        k3 in NAT by ORDINAL1:def 13;
-        then (inferior_realsequence seq).k <= seq.m &
-        seq.m <= (superior_realsequence seq).k by A2,A12,Th42,Th43;
-        then (inferior_realsequence seq).k1 <= seq.m &
-        seq.m <= (superior_realsequence seq).k2 by A10,XXREAL_0:2;
-        then r - s < seq.m & seq.m < r + s by A8,A9,XXREAL_0:2;
-        hence thesis by Th1;
+        let m;
+        assume
+        k <= m;
+        then consider k3 being Nat such that
+A12:    m = k + k3 by NAT_1:10;
+A13:    k3 in NAT by ORDINAL1:def 13;
+        then seq.m <= (superior_realsequence seq).k by A1,A12,Th43;
+        then seq.m <= (superior_realsequence seq).k2 by A10,XXREAL_0:2;
+        then
+A14:    seq.m < r + s by A8,XXREAL_0:2;
+        (inferior_realsequence seq).k <= seq.m by A1,A12,A13,Th42;
+        then (inferior_realsequence seq).k1 <= seq.m by A11,XXREAL_0:2;
+        then r - s < seq.m by A9,XXREAL_0:2;
+        hence thesis by A14,Th1;
       end;
       hence thesis;
     end;
     hence thesis by SEQ_2:def 6;
   end;
   assume
-A13: seq is convergent;
-  then
-A14: seq is bounded by SEQ_2:27;
-  then
-A15: seq is bounded_above & seq is bounded_below;
-A16: superior_realsequence seq is bounded &
-  inferior_realsequence seq is bounded by A14,Th58;
-  then
-A17: superior_realsequence seq is bounded_above bounded_below;
-A18: inferior_realsequence seq is bounded_above bounded_below
-  by A16;
-  consider r such that
-A19: for p st 0 < p ex n st for m st n<=m holds abs(seq.m-r) < p
-  by A13,SEQ_2:def 6;
-A20: for p st 0 < p ex n st r - p <= (inferior_realsequence seq).n &
-  (superior_realsequence seq).n <= r + p
+A15: seq is convergent;
+  then consider r such that
+A16: for p st 0 < p ex n st for m st n<=m holds abs(seq.m-r) < p by
+  SEQ_2:def 6;
+A17: seq is bounded by A15,SEQ_2:27;
+A18: for p st 0 < p ex n st r - p <= (inferior_realsequence seq).n & (
+  superior_realsequence seq).n <= r + p
   proof
-    let p such that
-A21: 0 < p;
-    consider n such that
-A22: for m st n<=m holds abs(seq.m-r) < p by A19,A21;
-A23: for m st n<=m holds r - p <= seq.m & seq.m <= r + p
+    let p;
+    assume
+    0 < p;
+    then consider n such that
+A19: for m st n<=m holds abs(seq.m-r) < p by A16;
+A20: for m st n<=m holds r - p <= seq.m & seq.m <= r + p
     proof
-      let m such that
-A24:  n<=m;
-      abs(seq.m-r) < p by A22,A24;
+      let m;
+      assume
+      n<=m;
+      then abs(seq.m-r) < p by A19;
       hence thesis by Th1;
     end;
-    then for m st n<=m holds r - p <= seq.m;
+    then for m st n<=m holds seq.m <= r + p;
     then
-A25: r - p <= (inferior_realsequence seq).n by A15,Th45;
-    for m st n<=m holds seq.m <= r + p by A23;
-    then (superior_realsequence seq).n <= r + p by A15,Th47;
-    hence thesis by A25;
+A21: (superior_realsequence seq).n <= r + p by A17,Th47;
+    for m st n<=m holds r - p <= seq.m by A20;
+    then r - p <= (inferior_realsequence seq).n by A17,Th45;
+    hence thesis by A21;
   end;
-A26: for p holds 0 < p implies r - p <= sup inferior_realsequence seq &
-  inf superior_realsequence seq <= r + p
+A22: superior_realsequence seq is bounded & inferior_realsequence seq is
+  bounded by A17,Th58;
+A23: for p holds 0 < p implies r - p <= sup inferior_realsequence seq & inf
+  superior_realsequence seq <= r + p
   proof
-    let p such that
-A27: 0 < p;
-    consider n such that
-A28: r - p <= (inferior_realsequence seq).n &
-    (superior_realsequence seq).n <= r + p by A20,A27;
-    (inferior_realsequence seq).n <= sup inferior_realsequence seq &
-    inf superior_realsequence seq <= (superior_realsequence seq).n
-    by A17,A18,Th7,Th8;
-    hence thesis by A28,XXREAL_0:2;
+    let p;
+    assume
+    0 < p;
+    then consider n such that
+A24: r - p <= (inferior_realsequence seq).n & (superior_realsequence
+    seq).n <= r + p by A18;
+    (inferior_realsequence seq).n <= sup inferior_realsequence seq & inf
+    superior_realsequence seq <= (superior_realsequence seq).n by A22,Th7,Th8;
+    hence thesis by A24,XXREAL_0:2;
   end;
   reconsider r as Real by XREAL_0:def 1;
+A25: for p holds 0 < p implies inf superior_realsequence seq <= r + p by A23;
+  then
+A26: inf superior_realsequence seq <= r by XREAL_1:43;
   for p holds 0 < p implies r <= sup inferior_realsequence seq + p
   proof
     let p;
-    assume 0 < p;
-    then r - p <= sup inferior_realsequence seq by A26;
+    assume
+    0 < p;
+    then r - p <= sup inferior_realsequence seq by A23;
     hence thesis by XREAL_1:22;
   end;
   then
-A29: r <= sup inferior_realsequence seq by XREAL_1:43;
-  for p holds 0 < p implies inf superior_realsequence seq <= r + p by A26;
-  then
-A30: inf superior_realsequence seq <= r by XREAL_1:43;
-  sup (inferior_realsequence seq) <= inf (superior_realsequence seq)
-  by A13,Th57,SEQ_2:27;
-  then r <= sup inferior_realsequence seq &
-  sup inferior_realsequence seq <= r & r <= inf superior_realsequence seq &
-  inf superior_realsequence seq <= r by A29,A30,XXREAL_0:2;
-  then r = sup inferior_realsequence seq & r = inf superior_realsequence seq
-  by XXREAL_0:1;
-  hence thesis by A13,SEQ_2:27;
+A27: r <= sup inferior_realsequence seq by XREAL_1:43;
+A28: sup (inferior_realsequence seq) <= inf (superior_realsequence seq) by
+  A15,Th57,SEQ_2:27;
+  inf superior_realsequence seq <= r by A25,XREAL_1:43;
+  then sup inferior_realsequence seq <= r by A28,XXREAL_0:2;
+  then r = sup inferior_realsequence seq by A27,XXREAL_0:1;
+  hence thesis by A15,A28,A26,SEQ_2:27,XXREAL_0:1;
 end;
 
 theorem
-  seq is convergent implies lim seq = lim_sup seq & lim seq = lim_inf seq
+  seq is convergent implies lim seq = lim_sup seq & lim seq = lim_inf
+  seq
 proof
+  reconsider r= lim seq as real number;
   assume
 A1: seq is convergent;
   then
-A2: seq is bounded by SEQ_2:27;
+A2: sup(inferior_realsequence seq) <= inf(superior_realsequence seq) by
+  Th57,SEQ_2:27;
+A3: seq is bounded by A1,SEQ_2:27;
   then
-A3: seq is bounded_above & seq is bounded_below;
-A4: superior_realsequence seq is bounded &
-  inferior_realsequence seq is bounded by A2,Th58;
-  then
-A5: superior_realsequence seq is bounded_above &
-  superior_realsequence seq is bounded_below;
-A6: inferior_realsequence seq is bounded_above &
-  inferior_realsequence seq is bounded_below by A4;
-  reconsider r= lim seq as real number;
-A7: for p holds 0 < p implies r - p <= sup inferior_realsequence seq &
-  inf superior_realsequence seq <= r + p
+A4: superior_realsequence seq is bounded & inferior_realsequence seq is
+  bounded by Th58;
+A5: for p holds 0 < p implies r - p <= sup inferior_realsequence seq & inf
+  superior_realsequence seq <= r + p
   proof
-    let p such that
-A8: 0 < p;
-    consider k such that
-A9: for m st k <= m holds abs(seq.m-r)<p by A1,A8,SEQ_2:def 7;
-A10: for m st k <= m holds r - p <= seq.m & seq.m <= r + p
+    let p;
+    assume
+    0 < p;
+    then consider k such that
+A6: for m st k <= m holds abs(seq.m-r)<p by A1,SEQ_2:def 7;
+A7: for m st k <= m holds r - p <= seq.m & seq.m <= r + p
     proof
-      let m such that
-A11:  k <= m;
-      abs(seq.m - r) < p by A9,A11;
+      let m;
+      assume
+      k <= m;
+      then abs(seq.m - r) < p by A6;
       hence thesis by Th1;
     end;
     then for m st k <= m holds r - p <= seq.m;
     then
-A12: r - p <= (inferior_realsequence seq).k by A3,Th45;
-    for m st k <= m holds seq.m <= r + p by A10;
+A8: r - p <= (inferior_realsequence seq).k by A3,Th45;
+    for m st k <= m holds seq.m <= r + p by A7;
     then
-A13: (superior_realsequence seq).k <= r + p by A3,Th47;
-    (inferior_realsequence seq).k <= sup inferior_realsequence seq &
-    inf superior_realsequence seq <= (superior_realsequence seq).k
-    by A5,A6,Th7,Th8;
-    hence thesis by A12,A13,XXREAL_0:2;
+A9: (superior_realsequence seq).k <= r + p by A3,Th47;
+    (inferior_realsequence seq).k <= sup inferior_realsequence seq & inf
+    superior_realsequence seq <= (superior_realsequence seq).k by A4,Th7,Th8;
+    hence thesis by A8,A9,XXREAL_0:2;
   end;
-  for p holds 0 < p implies r <= sup inferior_realsequence seq + p
+A10: for p holds 0 < p implies r <= sup inferior_realsequence seq + p
   proof
     let p;
-    assume 0 < p;
-    then r - p <= sup inferior_realsequence seq by A7;
+    assume
+    0 < p;
+    then r - p <= sup inferior_realsequence seq by A5;
     hence thesis by XREAL_1:22;
   end;
   then
-A14: r <= sup inferior_realsequence seq by XREAL_1:43;
-  for p holds 0 < p implies inf superior_realsequence seq <= r + p by A7;
+A11: r <= sup inferior_realsequence seq by XREAL_1:43;
+  r <= sup inferior_realsequence seq by A10,XREAL_1:43;
   then
-A15: inf superior_realsequence seq <= r by XREAL_1:43;
-  sup(inferior_realsequence seq) <= inf(superior_realsequence seq)
-  by A1,Th57,SEQ_2:27;
-  then r <= sup inferior_realsequence seq &
-  sup inferior_realsequence seq <= r & r <= inf superior_realsequence seq &
-  inf superior_realsequence seq <= r by A14,A15,XXREAL_0:2;
-  hence thesis by XXREAL_0:1;
+A12: r <= inf superior_realsequence seq by A2,XXREAL_0:2;
+  for p holds 0 < p implies inf superior_realsequence seq <= r + p by A5;
+  then
+A13: inf superior_realsequence seq <= r by XREAL_1:43;
+  then sup inferior_realsequence seq <= r by A2,XXREAL_0:2;
+  hence thesis by A13,A11,A12,XXREAL_0:1;
 end;
 
 theorem Th92:
-  seq is bounded implies
-  ((lim_sup -seq = - lim_inf seq) & (lim_inf -seq = - lim_sup seq))
+  seq is bounded implies lim_sup -seq = - lim_inf seq & lim_inf -
+  seq = - lim_sup seq
 proof
   assume
 A1: seq is bounded;
+  then inferior_realsequence seq is bounded by Th58;
   then
-A2: seq is bounded_below bounded_above & -seq is bounded;
-  superior_realsequence seq is bounded &
-  inferior_realsequence seq is bounded by A1,Th58;
-  then
-A3: superior_realsequence seq is bounded_below bounded_above &
-  inferior_realsequence seq is bounded_above bounded_below;
-  then
-A4: - lim_inf seq = -- inf - inferior_realsequence seq by Th13
-    .= inf --superior_realsequence(-seq) by A2,Th63
+A2: - lim_inf seq = -- inf - inferior_realsequence seq by Th13
+    .= inf --superior_realsequence(-seq) by A1,Th63
     .= lim_sup -seq;
-  - lim_sup seq = -- sup - superior_realsequence seq by A3,Th14
-    .= sup --inferior_realsequence(-seq) by A2,Th64
+  superior_realsequence seq is bounded by A1,Th58;
+  then - lim_sup seq = -- sup - superior_realsequence seq by Th14
+    .= sup --inferior_realsequence(-seq) by A1,Th64
     .= lim_inf -seq;
-  hence thesis by A4;
+  hence thesis by A2;
 end;
 
 theorem
-  seq1 is bounded & seq2 is bounded & (for n holds seq1.n <= seq2.n) implies
-  lim_sup seq1 <= lim_sup seq2 & lim_inf seq1 <= lim_inf seq2
+  seq1 is bounded & seq2 is bounded & (for n holds seq1.n <= seq2.n)
+  implies lim_sup seq1 <= lim_sup seq2 & lim_inf seq1 <= lim_inf seq2
+proof
+  assume that
+A1: seq1 is bounded and
+A2: seq2 is bounded and
+A3: for n holds seq1.n <= seq2.n;
+A4: superior_realsequence seq1 is convergent & inferior_realsequence seq1 is
+  convergent by A1,Th59,Th60;
+  superior_realsequence seq2 is bounded by A2,Th58;
+  then
+A5: lim superior_realsequence seq2 = inf superior_realsequence seq2 by A2,
+  Th25,Th53;
+  inferior_realsequence seq1 is bounded by A1,Th58;
+  then
+A6: lim inferior_realsequence seq1 = sup inferior_realsequence seq1 by A1,
+  Th24,Th52;
+  superior_realsequence seq1 is bounded by A1,Th58;
+  then
+A7: lim superior_realsequence seq1 = inf superior_realsequence seq1 by A1,
+  Th25,Th53;
+A8: superior_realsequence seq2 is convergent & inferior_realsequence seq2 is
+  convergent by A2,Th59,Th60;
+  inferior_realsequence seq2 is bounded by A2,Th58;
+  then
+A9: lim inferior_realsequence seq2 = sup inferior_realsequence seq2 by A2,
+  Th24,Th52;
+  ( for n holds (superior_realsequence seq1).n <= (superior_realsequence
+seq2).n) & for n holds (inferior_realsequence seq1).n <= (inferior_realsequence
+  seq2).n by A1,A2,A3,Th77;
+  hence thesis by A4,A8,A7,A6,A5,A9,SEQ_2:32;
+end;
+
+theorem
+  seq1 is bounded & seq2 is bounded implies lim_inf seq1 + lim_inf seq2
+  <= lim_inf (seq1+seq2) & lim_inf (seq1+seq2) <= lim_inf seq1 + lim_sup seq2 &
+  lim_inf (seq1+seq2) <= lim_sup seq1 + lim_inf seq2 & lim_inf seq1 + lim_sup
+seq2 <= lim_sup (seq1+seq2) & lim_sup seq1 + lim_inf seq2 <= lim_sup (seq1+seq2
+) & lim_sup (seq1+seq2) <= lim_sup seq1 + lim_sup seq2 & (seq1 is convergent or
+seq2 is convergent implies lim_inf (seq1+seq2) = lim_inf seq1 + lim_inf seq2 &
+  lim_sup (seq1+seq2) = lim_sup seq1 + lim_sup seq2 )
 proof
   assume
-A1: seq1 is bounded & seq2 is bounded & for n holds seq1.n <= seq2.n;
-  then
-A2: superior_realsequence seq1 is convergent &
-  inferior_realsequence seq1 is convergent &
-  superior_realsequence seq2 is convergent &
-  inferior_realsequence seq2 is convergent by Th59,Th60;
-A3: (for n holds (superior_realsequence seq1).n <=
-  (superior_realsequence seq2).n) &
-  (for n holds (inferior_realsequence seq1).n <=
-  (inferior_realsequence seq2).n) by A1,Th77;
-  seq1 is bounded_above bounded_below &
-  seq2 is bounded_above bounded_below by A1;
-  then
-A4: superior_realsequence seq1 is non-increasing &
-  inferior_realsequence seq1 is non-decreasing &
-  superior_realsequence seq2 is non-increasing &
-  inferior_realsequence seq2 is non-decreasing by Th52,Th53;
-  superior_realsequence seq1 is bounded &
-  inferior_realsequence seq1 is bounded &
-  superior_realsequence seq2 is bounded &
-  inferior_realsequence seq2 is bounded by A1,Th58;
-  then superior_realsequence seq1 is bounded_below &
-  inferior_realsequence seq1 is bounded_above &
-  superior_realsequence seq2 is bounded_below &
-  inferior_realsequence seq2 is bounded_above;
-  then lim superior_realsequence seq1 = inf superior_realsequence seq1 &
-  lim inferior_realsequence seq1 = sup inferior_realsequence seq1 &
-  lim superior_realsequence seq2 = inf superior_realsequence seq2 &
-  lim inferior_realsequence seq2 = sup inferior_realsequence seq2
-  by A4,Th24,Th25;
-  hence thesis by A2,A3,SEQ_2:32;
-end;
-
-theorem
-  seq1 is bounded & seq2 is bounded implies
-  ((lim_inf seq1 + lim_inf seq2 <= lim_inf (seq1+seq2)) &
-  (lim_inf (seq1+seq2) <= lim_inf seq1 + lim_sup seq2) &
-  (lim_inf (seq1+seq2) <= lim_sup seq1 + lim_inf seq2) &
-  (lim_inf seq1 + lim_sup seq2 <= lim_sup (seq1+seq2)) &
-  (lim_sup seq1 + lim_inf seq2 <= lim_sup (seq1+seq2)) &
-  (lim_sup (seq1+seq2) <= lim_sup seq1 + lim_sup seq2) &
-  (seq1 is convergent or seq2 is convergent implies
-  (lim_inf (seq1+seq2) = lim_inf seq1 + lim_inf seq2) &
-  (lim_sup (seq1+seq2) = lim_sup seq1 + lim_sup seq2)))
-proof
-A1: for seq1,seq2 st (seq1 is bounded & seq2 is bounded) holds
-  (lim_inf seq1 + lim_inf seq2 <= lim_inf (seq1+seq2))
-  proof
-    let seq1,seq2;
-    set r1 = lim_inf seq1, r2 = lim_inf seq2;
-    assume
-A2: seq1 is bounded & seq2 is bounded;
-    then
-A3: (seq1+seq2) is bounded;
-    for s st 0<s holds ex n st for k holds r1+r2-s < (seq1+seq2).(n+k)
-    proof
-      let s such that
-A4:   0<s;
-A5:   0<s/2 by A4,XREAL_1:217;
-      then consider n1 being Element of NAT such that
-A6:   for k holds r1-s/2 < seq1.(n1+k) by A2,Th84;
-      consider n2 being Element of NAT such that
-A7:   for k holds r2-s/2 < seq2.(n2+k) by A2,A5,Th84;
-      for k holds r1+r2-s < (seq1+seq2).(n1+n2+k)
-      proof
-        let k;
-A8:     r1-s/2 < seq1.(n1+(n2+k)) by A6;
-        r2-s/2 < seq2.(n2+(n1+k)) by A7;
-        then (r1-s/2)+(r2-s/2) < seq1.(n1+n2+k) + seq2.(n1+n2+k)
-        by A8,XREAL_1:10;
-        hence thesis by SEQ_1:11;
-      end;
-      hence thesis;
-    end;
-    hence thesis by A3,Th84;
-  end;
-A9: for seq1,seq2 st (seq1 is bounded & seq2 is bounded) holds
-  (lim_inf (seq1+seq2) <= lim_inf seq1 + lim_sup seq2)
-  proof
-    let seq1,seq2;
-    assume
-A10: seq1 is bounded & seq2 is bounded;
-    then seq1+seq2 is bounded & -seq1 is bounded & -seq2 is bounded;
-    then lim_inf ((seq1+seq2)+(-seq2)) >= lim_inf (seq1+seq2) + lim_inf (-
-    seq2) by A1;
-    then lim_inf (seq1+seq2+-seq2) >= lim_inf (seq1+seq2) +- lim_sup seq2
-    by A10,Th92;
-    then lim_inf (seq1+seq2-seq2) >= lim_inf (seq1+seq2) - lim_sup seq2;
-    then lim_inf seq1 >= lim_inf (seq1+seq2) - lim_sup seq2 by Th2;
-    hence thesis by XREAL_1:22;
-  end;
-A11: for seq1,seq2 st seq1 is bounded & seq2 is bounded holds
-  lim_sup (seq1+seq2) <= lim_sup seq1 + lim_sup seq2
+A1: seq1 is bounded & seq2 is bounded;
+A2: for seq1,seq2 st seq1 is bounded & seq2 is bounded holds lim_sup (seq1+
+  seq2) <= lim_sup seq1 + lim_sup seq2
   proof
     let seq1,seq2;
     set r1 = lim_sup seq1, r2 = lim_sup seq2;
-    assume
-A12: seq1 is bounded & seq2 is bounded;
-    then
-A13: (seq1+seq2) is bounded;
+    assume that
+A3: seq1 is bounded and
+A4: seq2 is bounded;
     for s st 0<s holds ex n st for k holds (seq1+seq2).(n+k) < r1+r2+s
     proof
-      let s such that
-A14:  0<s;
-A15:  0<s/2 by A14,XREAL_1:217;
+      let s;
+      assume
+      0<s;
+      then
+A5:   0<s/2 by XREAL_1:217;
       then consider n1 being Element of NAT such that
-A16:  for k holds seq1.(n1+k) < r1+s/2 by A12,Th87;
+A6:   for k holds seq1.(n1+k) < r1+s/2 by A3,Th87;
       consider n2 being Element of NAT such that
-A17:  for k holds seq2.(n2+k) < r2+s/2 by A12,A15,Th87;
+A7:   for k holds seq2.(n2+k) < r2+s/2 by A4,A5,Th87;
       for k holds (seq1+seq2).(n1+n2+k) < r1+r2+s
       proof
         let k;
-A18:    seq1.(n1+(n2+k)) < r1+s/2 by A16;
-        seq2.(n2+(n1+k)) < r2+s/2 by A17;
-        then seq1.(n1+n2+k) + seq2.(n1+n2+k) < (r1+s/2)+(r2+s/2)
-        by A18,XREAL_1:10;
+        seq1.(n1+(n2+k)) < r1+s/2 & seq2.(n2+(n1+k)) < r2+s/2 by A6,A7;
+        then seq1.(n1+n2+k) + seq2.(n1+n2+k) < (r1+s/2)+(r2+s/2) by
+        XREAL_1:10;
         hence thesis by SEQ_1:11;
       end;
       hence thesis;
     end;
-    hence thesis by A13,Th87;
+    hence thesis by A3,A4,Th87;
   end;
-A19: for seq1,seq2 st seq1 is bounded & seq2 is bounded holds
-  lim_inf seq1 + lim_sup seq2 <= lim_sup (seq1+seq2)
+A8: for seq1,seq2 st seq1 is bounded & seq2 is bounded holds lim_inf seq1 +
+  lim_sup seq2 <= lim_sup (seq1+seq2)
   proof
     let seq1,seq2;
-    assume
-A20: seq1 is bounded & seq2 is bounded;
-    then seq1+seq2 is bounded & -seq1 is bounded & -seq2 is bounded;
-    then lim_sup ((seq1+seq2)+(-seq1)) <= lim_sup (-seq1) + lim_sup (seq1+
-    seq2) by A11;
-    then lim_sup (seq1+seq2+-seq1) <= -lim_inf seq1 + lim_sup (seq1+seq2)
-    by A20,Th92;
+    assume that
+A9: seq1 is bounded and
+A10: seq2 is bounded;
+    lim_sup ((seq1+seq2)+(-seq1)) <= lim_sup (-seq1) + lim_sup (seq1+
+    seq2) by A2,A9,A10;
+    then lim_sup (seq1+seq2+-seq1) <= -lim_inf seq1 + lim_sup (seq1+seq2) by
+    A9,Th92;
     then lim_sup (seq2+seq1-seq1) <= lim_sup (seq1+seq2) - lim_inf seq1;
     then lim_sup seq2 <= lim_sup (seq1+seq2) - lim_inf seq1 by Th2;
     hence thesis by XREAL_1:21;
   end;
-  assume
-A21: seq1 is bounded & seq2 is bounded;
   then
-A22: lim_inf seq1 + lim_inf seq2 <= lim_inf (seq1+seq2) by A1;
-A23: lim_inf (seq1+seq2) <= lim_inf seq1 + lim_sup seq2 &
-  lim_inf (seq1+seq2) <= lim_sup seq1 + lim_inf seq2 by A9,A21;
-A24: lim_inf seq1 + lim_sup seq2 <= lim_sup (seq1+seq2) &
-  lim_sup seq1 + lim_inf seq2 <= lim_sup (seq1+seq2) by A19,A21;
-A25: lim_sup (seq1+seq2) <= lim_sup seq1 + lim_sup seq2 by A11,A21;
-  seq1 is convergent or seq2 is convergent implies
-  lim_inf (seq1+seq2) = lim_inf seq1 + lim_inf seq2 &
-  lim_sup (seq1+seq2) = lim_sup seq1 + lim_sup seq2
+A11: lim_inf seq1 + lim_sup seq2 <= lim_sup (seq1+seq2) by A1;
+A12: lim_sup seq1 + lim_inf seq2 <= lim_sup (seq1+seq2) by A8,A1;
+A13: lim_sup (seq1+seq2) <= lim_sup seq1 + lim_sup seq2 by A2,A1;
+A14: for seq1,seq2 st seq1 is bounded & seq2 is bounded holds lim_inf seq1 +
+  lim_inf seq2 <= lim_inf (seq1+seq2)
+  proof
+    let seq1,seq2;
+    set r1 = lim_inf seq1, r2 = lim_inf seq2;
+    assume that
+A15: seq1 is bounded and
+A16: seq2 is bounded;
+    for s st 0<s holds ex n st for k holds r1+r2-s < (seq1+seq2).(n+k)
+    proof
+      let s;
+      assume
+      0<s;
+      then
+A17:  0<s/2 by XREAL_1:217;
+      then consider n1 being Element of NAT such that
+A18:  for k holds r1-s/2 < seq1.(n1+k) by A15,Th84;
+      consider n2 being Element of NAT such that
+A19:  for k holds r2-s/2 < seq2.(n2+k) by A16,A17,Th84;
+      for k holds r1+r2-s < (seq1+seq2).(n1+n2+k)
+      proof
+        let k;
+        r1-s/2 < seq1.(n1+(n2+k)) & r2-s/2 < seq2.(n2+(n1+k)) by A18,A19;
+        then (r1-s/2)+(r2-s/2) < seq1.(n1+n2+k) + seq2.(n1+n2+k) by
+        XREAL_1:10;
+        hence thesis by SEQ_1:11;
+      end;
+      hence thesis;
+    end;
+    hence thesis by A15,A16,Th84;
+  end;
+  then
+A20: lim_inf seq1 + lim_inf seq2 <= lim_inf (seq1+seq2) by A1;
+A21: for seq1,seq2 st seq1 is bounded & seq2 is bounded holds lim_inf (seq1+
+  seq2) <= lim_inf seq1 + lim_sup seq2
+  proof
+    let seq1,seq2;
+    assume that
+A22: seq1 is bounded and
+A23: seq2 is bounded;
+    lim_inf ((seq1+seq2)+(-seq2)) >= lim_inf (seq1+seq2) + lim_inf (-
+    seq2) by A14,A22,A23;
+    then lim_inf (seq1+seq2+-seq2) >= lim_inf (seq1+seq2) +- lim_sup seq2 by
+    A23,Th92;
+    then lim_inf (seq1+seq2-seq2) >= lim_inf (seq1+seq2) - lim_sup seq2;
+    then lim_inf seq1 >= lim_inf (seq1+seq2) - lim_sup seq2 by Th2;
+    hence thesis by XREAL_1:22;
+  end;
+  then
+A24: lim_inf (seq1+seq2) <= lim_sup seq1 + lim_inf seq2 by A1;
+A25: lim_inf (seq1+seq2) <= lim_inf seq1 + lim_sup seq2 by A21,A1;
+  seq1 is convergent or seq2 is convergent implies lim_inf (seq1+seq2) =
+lim_inf seq1 + lim_inf seq2 & lim_sup (seq1+seq2) = lim_sup seq1 + lim_sup seq2
   proof
     assume
 A26: seq1 is convergent or seq2 is convergent;
     per cases by A26;
-    suppose seq1 is convergent;
+    suppose
+      seq1 is convergent;
       then lim_inf seq1 = lim_sup seq1 by Th90;
-      hence thesis by A22,A23,A24,A25,XXREAL_0:1;
+      hence thesis by A20,A24,A11,A13,XXREAL_0:1;
     end;
-    suppose seq2 is convergent;
+    suppose
+      seq2 is convergent;
       then lim_inf seq2 = lim_sup seq2 by Th90;
-      hence thesis by A22,A23,A24,A25,XXREAL_0:1;
+      hence thesis by A20,A25,A12,A13,XXREAL_0:1;
     end;
   end;
-  hence thesis by A1,A9,A11,A19,A21;
+  hence thesis by A14,A21,A2,A8,A1;
 end;
 
 theorem
-  seq1 is bounded nonnegative & seq2 is bounded nonnegative implies
-  (lim_inf seq1) * (lim_inf seq2) <= lim_inf(seq1(#)seq2) &
-  lim_sup(seq1(#)seq2) <= (lim_sup seq1) * (lim_sup seq2)
+  seq1 is bounded nonnegative & seq2 is bounded nonnegative implies (
+  lim_inf seq1) * (lim_inf seq2) <= lim_inf(seq1(#)seq2) & lim_sup(seq1(#)seq2)
+  <= (lim_sup seq1) * (lim_sup seq2)
 proof
-A1: for seq1,seq2 st seq1 is bounded nonnegative &
-  seq2 is bounded nonnegative holds
-  (lim_inf seq1) * (lim_inf seq2) <= lim_inf(seq1(#)seq2)
+A1: for seq1,seq2 st seq1 is bounded & seq1 is nonnegative & seq2 is
+bounded & seq2 is nonnegative holds lim_sup(seq1(#)seq2) <= (lim_sup seq1) * (
+  lim_sup seq2)
   proof
     let seq1,seq2;
-    assume
-A2: seq1 is bounded nonnegative & seq2 is bounded nonnegative;
-    set seq3 = inferior_realsequence seq1, seq4 = inferior_realsequence seq2,
-    seq5 = inferior_realsequence(seq1(#)seq2);
-A4: seq3 is bounded & seq4 is bounded &
-    seq3 is convergent & seq4 is convergent by A2,Th58,Th59;
-    then
-A5: (seq3(#)seq4) is convergent by SEQ_2:28;
- seq1(#)seq2 is bounded by A2;
-    then
-A7: seq5 is bounded & seq5 is convergent by Th58,Th59;
-    for n holds seq5.n >= (seq3(#)seq4).n
-    proof
-      let n;
-      seq5.n >= seq3.n * seq4.n by A2,Th81;
-      hence thesis by SEQ_1:12;
-    end;
-    then
-A8: lim seq5 >= lim (seq3(#)seq4) by A5,A7,SEQ_2:32;
-    sup seq5 = lim seq5 & sup seq3 = lim seq3 & sup seq4 =lim seq4
-    by A2,Th59;
-    hence thesis by A4,A8,SEQ_2:29;
-  end;
-  for seq1,seq2 st seq1 is bounded & seq1 is nonnegative &
-  seq2 is bounded & seq2 is nonnegative holds
-  lim_sup(seq1(#)seq2) <= (lim_sup seq1) * (lim_sup seq2)
-  proof
-    let seq1,seq2;
-    assume
-A9: seq1 is bounded nonnegative & seq2 is bounded nonnegative;
+    assume that
+A2: seq1 is bounded nonnegative and
+A3: seq2 is bounded nonnegative;
     set seq3 = superior_realsequence seq1, seq4 = superior_realsequence seq2,
     seq5 = superior_realsequence(seq1(#)seq2);
-A11: seq3 is bounded & seq4 is bounded &
-    seq3 is convergent & seq4 is convergent by A9,Th58,Th60;
-    then
-A12: (seq3(#)seq4) is convergent by SEQ_2:28;
- seq1(#)seq2 is bounded by A9;
-    then
-A14: seq5 is bounded & seq5 is convergent by Th58,Th60;
-    for n holds seq5.n <= (seq3(#)seq4).n
+A4: seq5 is convergent by A2,A3,Th60;
+A5: inf seq5 = lim seq5 & inf seq3 = lim seq3 by A2,A3,Th60;
+A6: inf seq4 =lim seq4 by A3,Th60;
+A7: for n holds seq5.n <= (seq3(#)seq4).n
     proof
       let n;
-      seq5.n <= seq3.n * seq4.n by A9,Th82;
+      seq5.n <= seq3.n * seq4.n by A2,A3,Th82;
       hence thesis by SEQ_1:12;
     end;
-    then
-A15: lim seq5 <= lim (seq3(#)seq4) by A12,A14,SEQ_2:32;
-    inf seq5 = lim seq5 & inf seq3 = lim seq3 & inf seq4 =lim seq4
-    by A9,Th60;
-    hence thesis by A11,A15,SEQ_2:29;
+A8: seq3 is convergent & seq4 is convergent by A2,A3,Th60;
+    then (seq3(#)seq4) is convergent by SEQ_2:28;
+    then lim seq5 <= lim (seq3(#)seq4) by A4,A7,SEQ_2:32;
+    hence thesis by A8,A5,A6,SEQ_2:29;
+  end;
+  for seq1,seq2 st seq1 is bounded nonnegative & seq2 is bounded
+  nonnegative holds (lim_inf seq1) * (lim_inf seq2) <= lim_inf(seq1(#)seq2)
+  proof
+    let seq1,seq2;
+    assume that
+A9: seq1 is bounded nonnegative and
+A10: seq2 is bounded nonnegative;
+    set seq3 = inferior_realsequence seq1, seq4 = inferior_realsequence seq2,
+    seq5 = inferior_realsequence(seq1(#)seq2);
+A11: seq5 is convergent by A9,A10,Th59;
+A12: sup seq5 = lim seq5 & sup seq3 = lim seq3 by A9,A10,Th59;
+A13: sup seq4 =lim seq4 by A10,Th59;
+A14: for n holds seq5.n >= (seq3(#)seq4).n
+    proof
+      let n;
+      seq5.n >= seq3.n * seq4.n by A9,A10,Th81;
+      hence thesis by SEQ_1:12;
+    end;
+A15: seq3 is convergent & seq4 is convergent by A9,A10,Th59;
+    then (seq3(#)seq4) is convergent by SEQ_2:28;
+    then lim seq5 >= lim (seq3(#)seq4) by A11,A14,SEQ_2:32;
+    hence thesis by A15,A12,A13,SEQ_2:29;
   end;
   hence thesis by A1;
 end;

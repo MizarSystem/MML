@@ -16,19 +16,19 @@ environ
  notations TARSKI, XBOOLE_0, SUBSET_1, ZFMISC_1, ORDINAL1, FINSET_1, RVSUM_1,
       CARD_1, CLASSES1, DOMAIN_1, NUMBERS, XCMPLX_0, XXREAL_0, NAT_1, POWER,
       RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, FUNCOP_1, FINSEQ_1,
-      POLYNOM1, FUNCT_4, STRUCT_0, ALGSTR_0, RLVECT_1, GROUP_1, VECTSP_1,
-      BINOP_1, RFINSEQ, PBOOLE, GROUP_2, BHSP_1, ALGSEQ_1, POLYNOM2, WSIERP_1,
-      POLYNOM3, POLYNOM4, UPROOTS, NAT_3, POLYNOM5, GROUP_4, GR_CY_1, INT_1,
-      FUNCT_7, NEWTON, INT_2, INT_3, HURWITZ, VALUED_0, REALSET1, RECDEF_1;
+      FUNCT_4, STRUCT_0, ALGSTR_0, GROUP_1, VECTSP_1, BINOP_1, PBOOLE, GROUP_2,
+      BHSP_1, ALGSEQ_1, WSIERP_1, POLYNOM3, POLYNOM4, UPROOTS, NAT_3, POLYNOM5,
+      GROUP_4, GR_CY_1, INT_1, FUNCT_7, NEWTON, INT_2, INT_3, HURWITZ,
+      VALUED_0, REALSET1, RECDEF_1, PRE_POLY, POLYNOM2;
  constructors REAL_1, NAT_D, NAT_3, SEQ_1, PEPIN, EUCLID, REALSET1, GROUP_4,
       GR_CY_1, INT_3, WSIERP_1, BINARITH, BHSP_1, POLYNOM2, POLYNOM4, POLYNOM5,
       WELLORD2, POWER, RFINSEQ, ALGSTR_1, HURWITZ, UPROOTS, FUNCT_4, RECDEF_1,
-      BINOP_2, CLASSES1, RELSET_1, PBOOLE, FUNCT_7;
+      BINOP_2, CLASSES1, RELSET_1, PBOOLE, FUNCT_7, PRE_POLY;
  registrations XBOOLE_0, STRUCT_0, FUNCT_1, XREAL_0, ORDINAL1, NAT_1, INT_1,
       GROUP_1, GROUP_2, FINSET_1, FINSEQ_1, FUNCT_2, GR_CY_1, ALGSTR_0,
       MEMBERED, VECTSP_1, INT_3, XXREAL_0, NEWTON, SUBSET_1, RELAT_1, CARD_1,
-      ALGSTR_1, POLYNOM1, NAT_3, VALUED_0, POLYNOM3, POLYNOM4, POLYNOM5,
-      UPROOTS, RELSET_1;
+      ALGSTR_1, NAT_3, VALUED_0, POLYNOM3, POLYNOM4, POLYNOM5, UPROOTS,
+      RELSET_1, PRE_POLY;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions STRUCT_0, GROUP_1, INT_3, CARD_1, ALGSTR_0, BINOP_1, FINSEQ_1,
       POLYNOM3, HURWITZ, REALSET1, TARSKI;
@@ -39,7 +39,7 @@ environ
       POWER, VALUED_0, ALGSEQ_1, POLYNOM1, NAT_3, UPROOTS, RVSUM_1, BAGORDER,
       FINSEQ_4, FINSEQ_5, POLYNOM3, POLYNOM4, POLYNOM5, CARD_2, EULER_1,
       EULER_2, XBOOLE_1, FINSEQ_1, HURWITZ, GROUP_8, REALSET1, RELSET_1,
-      FUNCT_4, FUNCOP_1, CLASSES1, PARTFUN1;
+      FUNCT_4, FUNCOP_1, CLASSES1, PARTFUN1, PRE_POLY;
  schemes NAT_1, PRE_CIRC, FUNCT_2, RECDEF_1;
 
 begin :: Uniqueness of factoring an integer
@@ -68,401 +68,436 @@ A4: not z in X;
 end;
 
 theorem Th1:
-  for p being ManySortedSet of X st support p = {x} holds p = (X-->0)+*(x,p.x)
+  for p being ManySortedSet of X st support p = {x} holds p = (X-->
+  0)+*(x,p.x)
 proof
   let p be ManySortedSet of X;
   assume
 A1: support p = {x};
-  dom ((X-->0)+*(x,p.x)) = dom (X-->0) by FUNCT_7:32
-    .= X by FUNCOP_1:19;
-  then
-A2: dom p = dom ((X-->0)+*(x,p.x)) by PARTFUN1:def 4;
-  for y st y in dom p holds p.y=(X-->0)+*(x,p.x).y
+A2: for y st y in dom p holds p.y=(X-->0)+*(x,p.x).y
   proof
     let y be set;
-    assume y in dom p;
+    assume
+    y in dom p;
     then y in X by PARTFUN1:def 4;
     then
 A3: y in dom (X-->0) by FUNCOP_1:19;
     per cases;
-    suppose x=y;
+    suppose
+      x=y;
       hence thesis by A3,FUNCT_7:33;
     end;
     suppose
 A4:   x<>y;
       then not y in support p by A1,TARSKI:def 1;
-      then p.y=0 by POLYNOM1:def 7;
+      then p.y=0 by PRE_POLY:def 7;
       hence thesis by A4,Lm1;
     end;
   end;
+  dom ((X-->0)+*(x,p.x)) = dom (X-->0) by FUNCT_7:32
+    .= X by FUNCOP_1:19;
+  then dom p = dom ((X-->0)+*(x,p.x)) by PARTFUN1:def 4;
   hence thesis by A2,FUNCT_1:9;
 end;
 
 theorem Th2:
-  for X be set,p,q,r be real-valued ManySortedSet of X
-  st (support p) /\ (support q) = {} & (support p) \/ (support q) =(support r)
-  & p|(support p) = r | (support p) & q|(support q) = r | (support q) holds
-  p+q = r
+  for X be set,p,q,r be real-valued ManySortedSet of X st (support
+p) /\ (support q) = {} & (support p) \/ (support q) =(support r) & p|(support p
+  ) = r | (support p) & q|(support q) = r | (support q) holds p+q = r
 proof
   let X be set, p,q,r be real-valued ManySortedSet of X;
-  assume
-A1: (support p) /\ (support q) = {} & (support p) \/ (support q) =(support r)
-  & p|(support p) = r | (support p) & q|(support q) = r | (support q);
+  assume that
+A1: (support p) /\ (support q) = {} and
+A2: (support p) \/ (support q) =(support r) and
+A3: p|(support p) = r | (support p) and
+A4: q|(support q) = r | (support q);
   for x being set st x in X holds r.x=p.x+q.x
   proof
     let x being set;
-    assume x in X;
+    assume
+    x in X;
     per cases;
     suppose
-A2:   x in (support p) \/ (support q);
-      now per cases by A2,XBOOLE_0:def 3;
+A5:   x in (support p) \/ (support q);
+      now
+        per cases by A5,XBOOLE_0:def 3;
         suppose
-A3:       x in support p;
+A6:       x in support p;
           then
-A4:       not x in support q by A1,XBOOLE_0:def 4;
-          thus r.x=r|(support p).x by A3,FUNCT_1:72
-            .=p.x +0 by A1,A3,FUNCT_1:72
-            .=p.x + q.x by A4,POLYNOM1:def 7;
+A7:       not x in support q by A1,XBOOLE_0:def 4;
+          thus r.x=r|(support p).x by A6,FUNCT_1:72
+            .=p.x +0 by A3,A6,FUNCT_1:72
+            .=p.x + q.x by A7,PRE_POLY:def 7;
         end;
         suppose
-A5:       x in (support q);
+A8:       x in (support q);
           then
-A6:       not x in support p by A1,XBOOLE_0:def 4;
-          thus r.x=r|(support q).x by A5,FUNCT_1:72
-            .=0 +q.x by A1,A5,FUNCT_1:72
-            .=p.x + q.x by A6,POLYNOM1:def 7;
+A9:       not x in support p by A1,XBOOLE_0:def 4;
+          thus r.x=r|(support q).x by A8,FUNCT_1:72
+            .=0 +q.x by A4,A8,FUNCT_1:72
+            .=p.x + q.x by A9,PRE_POLY:def 7;
         end;
       end;
       hence thesis;
     end;
     suppose
-A7:   not x in (support p) \/ (support q);
+A10:  not x in (support p) \/ (support q);
       then
-A8:   not x in (support p) & not x in (support q) by XBOOLE_0:def 3;
-      thus r.x = 0 by A1,A7,POLYNOM1:def 7
-        .= 0 + q.x by A8,POLYNOM1:def 7
-        .=p.x+q.x by A8,POLYNOM1:def 7;
+A11:  not x in (support q) by XBOOLE_0:def 3;
+A12:  not x in (support p) by A10,XBOOLE_0:def 3;
+      thus r.x = 0 by A2,A10,PRE_POLY:def 7
+        .= 0 + q.x by A11,PRE_POLY:def 7
+        .=p.x+q.x by A12,PRE_POLY:def 7;
     end;
   end;
-  hence r=p+q by POLYNOM1:37;
+  hence r=p+q by PRE_POLY:33;
 end;
 
 theorem Th3:
-  for X be set,p,q be ManySortedSet of X
-  st p|(support p) = q|(support q) holds p = q
+  for X be set,p,q be ManySortedSet of X st p|(support p) = q|(
+  support q) holds p = q
 proof
   let X be set,p,q be ManySortedSet of X;
+A1: dom (p| (support p)) = dom p /\ (support p) by RELAT_1:90
+    .=support p by PRE_POLY:37,XBOOLE_1:28;
+A2: dom (q| (support q)) =dom q /\ (support q) by RELAT_1:90
+    .=support q by PRE_POLY:37,XBOOLE_1:28;
   assume
-A1: p|(support p) = q| (support q);
-A2: dom (p| (support p)) = dom p /\ (support p) by RELAT_1:90
-    .=support p by POLYNOM1:41,XBOOLE_1:28;
-A3: dom (q| (support q)) =dom q /\ (support q) by RELAT_1:90
-    .=support q by POLYNOM1:41,XBOOLE_1:28;
+A3: p|(support p) = q| (support q);
 A4: for x being set st x in X holds p.x=q.x
   proof
     let x being set;
-    assume x in X;
+    assume
+    x in X;
     per cases;
     suppose
 A5:   x in support p;
-      thus p.x=p|(support p).x by A5,FUNCT_1:72
-        .=q.x by A1,A2,A3,A5,FUNCT_1:72;
+      hence p.x=p|(support p).x by FUNCT_1:72
+        .=q.x by A3,A1,A2,A5,FUNCT_1:72;
     end;
     suppose
 A6:   not x in support p;
-      thus p.x = 0 by A6,POLYNOM1:def 7
-        .=q.x by A1,A2,A3,A6,POLYNOM1:def 7;
+      hence p.x = 0 by PRE_POLY:def 7
+        .=q.x by A3,A1,A2,A6,PRE_POLY:def 7;
     end;
   end;
-  dom p = X& dom q = X by PARTFUN1:def 4;
-  hence thesis by A4,FUNCT_1:9;
+A7: dom q = X by PARTFUN1:def 4;
+  dom p = X by PARTFUN1:def 4;
+  hence thesis by A4,A7,FUNCT_1:9;
 end;
 
 theorem Th4:
-  for X be set,p,q be bag of X st support p = {} & support q={} holds p = q
+  for X be set,p,q be bag of X st support p = {} & support q={}
+  holds p = q
 proof
   let X be set,p,q be bag of X;
-  assume
-A1: support p = {} & support q={};
-A2: dom (p| (support p)) =dom p /\ (support p) by RELAT_1:90
-    .= {} by A1;
+  assume that
+A1: support p = {} and
+A2: support q={};
 A3: {} = dom q /\ {}
-    .= dom (q| (support q)) by A1;
-A4: for x be set st x in dom (p| (support p))
-  holds (p| (support p)).x = (q| (support q)).x by A2;
-  p| (support p) = q| (support q) by A2,A3,A4,FUNCT_1:9;
-  hence thesis by Th3;
+    .= dom (q| (support q)) by A2;
+A4: dom (p| (support p)) =dom p /\ (support p) by RELAT_1:90
+    .= {} by A1;
+  then
+  for x be set st x in dom (p| (support p)) holds (p| (support p)).x = (q|
+  (support q)).x;
+  hence thesis by A4,A3,Th3,FUNCT_1:9;
 end;
 
-Lm2: for p,q be bag of SetPrimes
-st (support p) c= (support q) & p | (support p)=q | (support p) holds
-ex r be bag of SetPrimes st (support r) = (support q) \ (support p) &
-(support p) misses (support r) & r | (support r) = q | (support r) & p+r = q
+Lm2: for p,q be bag of SetPrimes st (support p) c= (support q) & p | (support
+p)=q | (support p) holds ex r be bag of SetPrimes st (support r) = (support q)
+\ (support p) & (support p) misses (support r) & r | (support r) = q | (support
+r) & p+r = q
+
 proof
-  let p,q be bag of SetPrimes;
-  assume
-A1: (support p) c= (support q) & p | (support p) =q | (support p);
-  defpred C[set] means $1 in (support q) \ (support p);
-  deffunc F(set) = q.$1;
   deffunc G(set) = 0;
-A2: for x be set st x in SetPrimes holds
-  (C[ x] implies F(x) in NAT) & (not C[ x] implies G(x) in NAT);
+  let p,q be bag of SetPrimes;
+  assume that
+A1: (support p) c= (support q) and
+A2: p | (support p) =q | (support p);
+  deffunc F(set) = q.$1;
+  defpred C[set] means $1 in (support q) \ (support p);
+
+A3: for x be set st x in SetPrimes holds (C[ x] implies F(x) in NAT) & (not
+  C[ x] implies G(x) in NAT);
+
   consider f being Function of SetPrimes,NAT such that
-A3: for x be set st x in SetPrimes holds
-  (C[ x] implies f.x = F(x)) & (not C[ x] implies f.x = G(x))
-  from FUNCT_2:sch 5(A2);
-A4: for x be set st x in SetPrimes holds
-  x in (support q) \ (support p) implies f.x<>0
+
+A4: for x be set st x in SetPrimes holds (C[ x] implies f.x = F(x)) & (
+  not C[ x] implies f.x = G(x)) from FUNCT_2:sch 5(A3);
+
+A5: for x be set st x in SetPrimes holds x in (support q) \ (support p)
+  implies f.x<>0
+
+  proof
+    let x be set;
+    assume that
+    x in SetPrimes and
+A6: x in (support q) \ (support p);
+    x in support q by A6,XBOOLE_0:def 5;
+    then q.x<>0 by PRE_POLY:def 7;
+    hence thesis by A4,A6;
+  end;
+A7: for x being set st not x in SetPrimes holds f.x=0
   proof
     let x be set;
     assume
-A5: x in SetPrimes & x in (support q) \ (support p);
-    then x in support q by XBOOLE_0:def 5;
-    then q.x<>0 by POLYNOM1:def 7;
-    hence thesis by A3,A5;
-  end;
-A6: for x being set st not x in SetPrimes holds f.x=0
-  proof
-    let x be set;
-    assume not x in SetPrimes;
+    not x in SetPrimes;
     then not x in dom f;
     hence thesis by FUNCT_1:def 4;
   end;
-A7: for x being set holds x in (support q) \ (support p) iff f.x<>0
+A8: for x being set holds x in (support q) \ (support p) iff f.x<>0
   proof
     let x be set;
     per cases;
-    suppose x in SetPrimes;
-      hence thesis by A3,A4;
+    suppose
+      x in SetPrimes;
+      hence thesis by A4,A5;
     end;
-    suppose not x in SetPrimes;
-      hence thesis by A6;
+    suppose
+      not x in SetPrimes;
+      hence thesis by A7;
     end;
   end;
-A8: (support f)=(support q) \ (support p) by A7,POLYNOM1:def 7;
-A9: (support p) misses (support f)
-  proof
-    assume (support p) meets (support f);
-    then consider x be set such that
-A10: x in support p & x in support f by XBOOLE_0:3;
-    thus contradiction by A8,A10,XBOOLE_0:def 5;
-  end;
-  then
-A11: (support p) /\ (support f) = {} by XBOOLE_0:def 7;
-A12: f | (support f) =q | (support f)
-  proof
-A13: dom (f|(support f)) =(dom f)/\ support f by RELAT_1:90
-      .=support f by POLYNOM1:41,XBOOLE_1:28;
-A14: dom (q|(support f)) =(dom q)/\ support f by RELAT_1:90
-      .=(dom q)/\ ((support q) \ (support p)) by A7,POLYNOM1:def 7
-      .= ((dom q)/\ (support q)) \ (support p) by XBOOLE_1:49
-      .= (support q) \ (support p) by POLYNOM1:41,XBOOLE_1:28
-      .=support f by A7,POLYNOM1:def 7;
-    for x be set st x in dom (f|(support f))
-    holds (f|(support f)).x =(q|(support f)).x
-    proof
-      let x be set;
-      assume
-A15:  x in dom (f|(support f));
-      then (f|(support f)).x=f.x & (q|(support f)).x=q.x by A13,FUNCT_1:72;
-      hence thesis by A3,A8,A13,A15;
-    end;
-    hence thesis by A13,A14,FUNCT_1:def 17;
-  end;
-A16: support f is finite by A7,POLYNOM1:def 7;
-  reconsider r = f as bag of SetPrimes by A16,POLYNOM1:def 8
-;
-  (support p) \/ (support r)
-  =(support p) \/ ((support q) \ (support p)) by A7,POLYNOM1:def 7
+  then support f is finite by PRE_POLY:def 7;
+  then reconsider r = f as bag of SetPrimes by PRE_POLY:def 8;
+
+A9: (support p) \/ (support r) =(support p) \/ ((support q) \ (support p))
+  by A8,PRE_POLY:def 7
+
     .=(support p) \/ (support q) by XBOOLE_1:39
     .=(support q) by A1,XBOOLE_1:12;
-  then p+r = q by A1,A11,A12,Th2;
-  hence thesis by A8,A9,A12;
+A10: dom (f|(support f)) =(dom f)/\ support f by RELAT_1:90
+    .=support f by PRE_POLY:37,XBOOLE_1:28;
+A11: (support f)=(support q) \ (support p) by A8,PRE_POLY:def 7;
+
+A12: for x be set st x in dom (f|(support f)) holds (f|(support f)).x =(q|(
+  support f)).x
+
+  proof
+    let x be set;
+    assume
+A13: x in dom (f|(support f));
+    then
+A14: (q|(support f)).x=q.x by A10,FUNCT_1:72;
+    (f|(support f)).x=f.x by A10,A13,FUNCT_1:72;
+    hence thesis by A4,A11,A10,A13,A14;
+  end;
+  dom (q|(support f)) =(dom q)/\ support f by RELAT_1:90
+    .=(dom q)/\ ((support q) \ (support p)) by A8,PRE_POLY:def 7
+    .= ((dom q)/\ (support q)) \ (support p) by XBOOLE_1:49
+    .= (support q) \ (support p) by PRE_POLY:37,XBOOLE_1:28
+    .=support f by A8,PRE_POLY:def 7;
+  then
+A15: f | (support f) =q | (support f) by A10,A12,FUNCT_1:def 17;
+A16: (support p) misses (support f)
+  proof
+    assume
+    (support p) meets (support f);
+    then ex x be set st x in support p & x in support f by XBOOLE_0:3;
+    hence contradiction by A11,XBOOLE_0:def 5;
+  end;
+  then (support p) /\ (support f) = {} by XBOOLE_0:def 7;
+  then p+r = q by A2,A15,A9,Th2;
+  hence thesis by A11,A16,A15;
 end;
 
-Lm3: for p be bag of SetPrimes, X be set st X c= (support p) holds
-ex q,r be bag of SetPrimes st (support q) = (support p) \ X &
-(support r) = X & (support q) misses (support r) &
-q | (support q) =p | (support q) & r | (support r) =p | (support r) & q+r = p
+Lm3: for p be bag of SetPrimes, X be set st X c= (support p) holds ex q,r be
+bag of SetPrimes st (support q) = (support p) \ X & (support r) = X & (support
+q) misses (support r) & q | (support q) =p | (support q) & r | (support r) =p |
+(support r) & q+r = p
+
 proof
   let p be bag of SetPrimes,X be set;
-  assume
-A1: X c= (support p);
   defpred C[set] means $1 in X;
   deffunc F(set) = p.$1;
   set fq =p +* (X --> 0);
-A2: dom(X --> 0) = X by FUNCOP_1:19;
+A1: rng fq c= rng p \/ rng(X --> 0) by FUNCT_4:18;
+A2: rng p c= NAT by VALUED_0:def 6;
+  then rng p \/ rng(X --> 0) c= NAT by XBOOLE_1:8;
   then
-A3: dom fq = dom p \/ X by FUNCT_4:def 1
-    .= SetPrimes \/ X by PARTFUN1:def 4
-    .= SetPrimes by A1,XBOOLE_1:1,12;
-A4: rng p c= NAT by VALUED_0:def 6;
-A5: rng p \/ rng(X --> 0) c= NAT by A4,XBOOLE_1:8;
-  rng fq c= rng p \/ rng(X --> 0) by FUNCT_4:18;
-  then rng fq c= NAT by A5,XBOOLE_1:1;
-  then reconsider fq as Function of SetPrimes,NAT
-  by A3,FUNCT_2:def 1,RELSET_1:11;
-A6: x in X implies fq.x = 0
-  proof
-    assume
-A7: x in X;
-    hence fq.x = (X --> 0).x by A2,FUNCT_4:14
-      .= 0 by A7,FUNCOP_1:13;
-  end;
+A3: rng fq c= NAT by A1,XBOOLE_1:1;
   set fr = p +* (SetPrimes \X -->0);
-A8: dom fr = dom p \/ dom (SetPrimes \ X -->0) by FUNCT_4:def 1
+A4: dom fr = dom p \/ dom (SetPrimes \ X -->0) by FUNCT_4:def 1
     .=dom p \/ (SetPrimes \ X) by FUNCOP_1:19
     .= SetPrimes \/ (SetPrimes \X) by PARTFUN1:def 4
     .= SetPrimes by XBOOLE_1:12,36;
-A9: rng p \/ rng(SetPrimes \X --> 0) c= NAT by A4,XBOOLE_1:8;
-  rng fr c= rng p \/ rng(SetPrimes \ X --> 0) by FUNCT_4:18;
-  then rng fr c= NAT by A9,XBOOLE_1:1;
-  then reconsider fr as Function of SetPrimes,NAT
-  by A8,FUNCT_2:def 1,RELSET_1:11;
-A10: x in X implies fr.x =p.x
+A5: rng fr c= rng p \/ rng(SetPrimes \ X --> 0) by FUNCT_4:18;
+  rng p \/ rng(SetPrimes \X --> 0) c= NAT by A2,XBOOLE_1:8;
+  then rng fr c= NAT by A5,XBOOLE_1:1;
+  then reconsider fr as Function of SetPrimes,NAT by A4,FUNCT_2:def 1
+,RELSET_1:11;
+  assume
+A6: X c= support p;
+A7: not x in X & x in SetPrimes implies fr.x = 0
   proof
-    assume
-A11: x in X;
-    not x in dom(SetPrimes \ X --> 0) by A11,XBOOLE_0:def 5;
-    hence thesis by FUNCT_4:12;
-  end;
-A12: not x in X & x in SetPrimes implies fr.x = 0
-  proof
-    assume not x in X & x in SetPrimes;
-    then
-A13: x in SetPrimes \ X by XBOOLE_0:def 5;
+    assume that
+A8: not x in X and
+A9: x in SetPrimes;
+A10: x in SetPrimes \ X by A8,A9,XBOOLE_0:def 5;
     then x in dom(SetPrimes \ X --> 0) by FUNCOP_1:19;
     then fr.x = (SetPrimes \ X --> 0).x by FUNCT_4:14;
-    hence thesis by A13,FUNCOP_1:13;
+    hence thesis by A10,FUNCOP_1:13;
   end;
-A14: for x be set st x in SetPrimes & x in X holds fr.x<>0
+A11: dom(X --> 0) = X by FUNCOP_1:19;
+  then dom fq = dom p \/ X by FUNCT_4:def 1
+    .= SetPrimes \/ X by PARTFUN1:def 4
+    .= SetPrimes by A6,XBOOLE_1:1,12;
+
+  then reconsider fq as Function of SetPrimes,NAT by A3,FUNCT_2:def 1
+,RELSET_1:11;
+
+A12: dom (fq|(support fq)) =(dom fq)/\ support fq by RELAT_1:90
+    .=support fq by PRE_POLY:37,XBOOLE_1:28;
+A13: for x being set st not x in SetPrimes holds fr.x=0 &fq.x=0
   proof
     let x be set;
     assume
-A15: x in SetPrimes & x in X;
-    then p.x<>0 by A1,POLYNOM1:def 7;
-    hence thesis by A10,A15;
+A14: not x in SetPrimes;
+    then
+A15: not x in dom fr;
+    not x in dom fq by A14;
+    hence thesis by A15,FUNCT_1:def 4;
   end;
-A16: for x being set st not x in SetPrimes holds fr.x=0 &fq.x=0
+A16: x in X implies fr.x =p.x
+  proof
+    assume
+    x in X;
+    then not x in dom(SetPrimes \ X --> 0) by XBOOLE_0:def 5;
+    hence thesis by FUNCT_4:12;
+  end;
+A17: for x be set st x in SetPrimes & x in X holds fr.x<>0
   proof
     let x be set;
-    assume not x in SetPrimes;
-    then not x in dom fq &not x in dom fr;
-    hence thesis by FUNCT_1:def 4;
+    assume that
+    x in SetPrimes and
+A18: x in X;
+    p.x<>0 by A6,A18,PRE_POLY:def 7;
+    hence thesis by A16,A18;
   end;
-A17: for x being set holds x in X iff fr.x<>0
+A19: for x being set holds x in X iff fr.x<>0
   proof
     let x be set;
-    now per cases;
-      suppose x in SetPrimes;
-        hence thesis by A12,A14;
+    now
+      per cases;
+      suppose
+        x in SetPrimes;
+        hence thesis by A7,A17;
       end;
       suppose
-A18:    not x in SetPrimes;
-        X c= SetPrimes by A1,XBOOLE_1:1;
-        hence thesis by A16,A18;
+A20:    not x in SetPrimes;
+        X c= SetPrimes by A6,XBOOLE_1:1;
+        hence thesis by A13,A20;
       end;
     end;
     hence thesis;
   end;
   then
-A19: (support fr) = X by POLYNOM1:def 7;
-A20: for x be set holds x in (support p) \ X iff fq.x<>0
+A21: (support fr) = X by PRE_POLY:def 7;
+  then reconsider r = fr as bag of SetPrimes by A6,PRE_POLY:def 8;
+A22: support p c= dom p by PRE_POLY:37;
+A23: dom (fr|(support fr)) =(dom fr)/\ support fr by RELAT_1:90
+    .=support fr by PRE_POLY:37,XBOOLE_1:28
+    .= X by A19,PRE_POLY:def 7;
+
+A24: for x be set st x in dom (fr|(support fr)) holds (fr|(support fr)).x =(
+  p|(support fr)).x
+
+  proof
+    let x be set;
+    assume
+A25: x in dom (fr|(support fr));
+    then
+A26: (p|(support fr)).x=p.x by A21,A23,FUNCT_1:72;
+    (fr|(support fr)).x=fr.x by A21,A23,A25,FUNCT_1:72;
+    hence thesis by A16,A23,A25,A26;
+  end;
+  dom (p|(support fr)) =(dom p)/\ support fr by RELAT_1:90
+    .=(dom p)/\ X by A19,PRE_POLY:def 7
+    .=X by A6,A22,XBOOLE_1:1,28;
+  then
+A27: fr | (support fr) =p | (support fr) by A23,A24,FUNCT_1:def 17;
+A28: x in X implies fq.x = 0
+  proof
+    assume
+A29: x in X;
+    hence fq.x = (X --> 0).x by A11,FUNCT_4:14
+      .= 0 by A29,FUNCOP_1:13;
+  end;
+A30: for x be set holds x in (support p) \ X iff fq.x<>0
   proof
     let x be set;
     per cases;
-    suppose x in X;
-      hence thesis by A6,XBOOLE_0:def 5;
+    suppose
+      x in X;
+      hence thesis by A28,XBOOLE_0:def 5;
     end;
     suppose
-A21:  not x in X;
+A31:  not x in X;
       then
-A22:  fq.x=p.x by A2,FUNCT_4:12;
+A32:  fq.x=p.x by A11,FUNCT_4:12;
       per cases;
-      suppose x in support p;
-        hence thesis by A21,A22,POLYNOM1:def 7,XBOOLE_0:def 5;
+      suppose
+        x in support p;
+        hence thesis by A31,A32,PRE_POLY:def 7,XBOOLE_0:def 5;
       end;
-      suppose not x in support p;
-        hence thesis by A22,POLYNOM1:def 7,XBOOLE_0:def 5;
+      suppose
+        not x in support p;
+        hence thesis by A32,PRE_POLY:def 7,XBOOLE_0:def 5;
       end;
     end;
-  end;
-A23: support fq = support p \ X by A20,POLYNOM1:def 7;
-A24: (support fq) /\ (support fr) = {}
-  proof
-    (support p \ X) misses X by XBOOLE_1:79;
-    hence thesis by A19,A23,XBOOLE_0:def 7;
   end;
   then
-A25: (support fq) misses (support fr) by XBOOLE_0:def 7;
-A26: fq|(support fq)=p|(support fq)
+A33: support fq = support p \ X by PRE_POLY:def 7;
+  then reconsider q = fq as bag of SetPrimes by PRE_POLY:def 8;
+A34: dom (p|(support fq)) =(dom p)/\ support fq by RELAT_1:90
+    .=(dom p)/\ (support p \ X) by A30,PRE_POLY:def 7
+    .= ((dom p)/\ (support p)) \ X by XBOOLE_1:49
+    .= (support p) \ X by PRE_POLY:37,XBOOLE_1:28
+    .=support fq by A30,PRE_POLY:def 7;
+  (support p \ X) misses X by XBOOLE_1:79;
+  then
+A35: (support fq) /\ (support fr) = {} by A21,A33,XBOOLE_0:def 7;
+A36: for x be set st x in SetPrimes & x in (support fq) holds p.x=fq.x
   proof
-A27: dom (fq|(support fq)) =(dom fq)/\ support fq by RELAT_1:90
-      .=support fq by POLYNOM1:41,XBOOLE_1:28;
-A28: dom (p|(support fq)) =(dom p)/\ support fq by RELAT_1:90
-      .=(dom p)/\ (support p \ X) by A20,POLYNOM1:def 7
-      .= ((dom p)/\ (support p)) \ X by XBOOLE_1:49
-      .= (support p) \ X by POLYNOM1:41,XBOOLE_1:28
-      .=support fq by A20,POLYNOM1:def 7;
-A29: for x be set st x in SetPrimes & x in (support fq) holds p.x=fq.x
-    proof
-      let x be set;
-      assume x in SetPrimes & x in (support fq);
-      then not x in X by A19,A24,XBOOLE_0:def 4;
-      hence thesis by A2,FUNCT_4:12;
-    end;
-    for x be set st x in dom (fq|(support fq))
-    holds (fq|(support fq)).x =(p|(support fq)).x
-    proof
-      let x be set;
-      assume
-A30:  x in dom (fq|(support fq));
-      then (fq|(support fq)).x=fq.x &
-      (p|(support fq)).x=p.x by A27,FUNCT_1:72;
-      hence thesis by A27,A29,A30;
-    end;
-    hence thesis by A27,A28,FUNCT_1:def 17;
+    let x be set;
+    assume that
+    x in SetPrimes and
+A37: x in (support fq);
+    not x in X by A21,A35,A37,XBOOLE_0:def 4;
+    hence thesis by A11,FUNCT_4:12;
   end;
-A31: fr | (support fr) =p | (support fr)
+
+  for x be set st x in dom (fq|(support fq)) holds (fq|(support fq)).x =(
+  p|(support fq)).x
+
   proof
-A32: support fr c= dom fr & support p c= dom p by POLYNOM1:41;
-A33: dom (fr|(support fr)) =(dom fr)/\ support fr by RELAT_1:90
-      .=support fr by POLYNOM1:41,XBOOLE_1:28
-      .= X by A17,POLYNOM1:def 7;
-A34: dom (p|(support fr)) =(dom p)/\ support fr by RELAT_1:90
-      .=(dom p)/\ X by A17,POLYNOM1:def 7
-      .=X by A1,A32,XBOOLE_1:1,28;
-    for x be set st x in dom (fr|(support fr))
-    holds (fr|(support fr)).x =(p|(support fr)).x
-    proof
-      let x be set;
-      assume
-A35:  x in dom (fr|(support fr));
-      then (fr|(support fr)).x=fr.x &
-      (p|(support fr)).x=p.x by A19,A33,FUNCT_1:72;
-      hence thesis by A10,A33,A35;
-    end;
-    hence thesis by A33,A34,FUNCT_1:def 17;
+    let x be set;
+    assume
+A38: x in dom (fq|(support fq));
+    then
+A39: (p|(support fq)).x=p.x by A12,FUNCT_1:72;
+    (fq|(support fq)).x=fq.x by A12,A38,FUNCT_1:72;
+    hence thesis by A12,A36,A38,A39;
   end;
-A36: support fq is finite & support fr is finite
-  by A1,A19,A20,POLYNOM1:def 7;
-  reconsider q = fq as bag of SetPrimes by A23,POLYNOM1:def 8
-;
-  reconsider r = fr as bag of SetPrimes by A36,POLYNOM1:def 8;
-  (support fr) \/ (support fq)
-  =(support fr) \/(support p \ support fr) by A17,A23,POLYNOM1:def 7
+  then
+A40: fq|(support fq)=p|(support fq) by A12,A34,FUNCT_1:def 17;
+
+  (support fr) \/ (support fq) =(support fr) \/(support p \ support fr)
+  by A19,A33,PRE_POLY:def 7
+
     .=(support fr) \/(support p) by XBOOLE_1:39
-    .= support p by A1,A19,XBOOLE_1:12;
-  then q+r=p by A24,A26,A31,Th2;
-  hence thesis by A19,A23,A25,A26,A31;
+    .= support p by A6,A21,XBOOLE_1:12;
+  then q+r=p by A35,A40,A27,Th2;
+  hence thesis by A21,A33,A40,A27,XBOOLE_1:79;
 end;
 
 definition
   let p be bag of SetPrimes;
   attr p is prime-factorization-like means
   :Def1:
-  for x being Prime st x in support p
-  ex n be natural number st 0 < n & p.x = x |^n;
+  for x being Prime st x in
+  support p ex n be natural number st 0 < n & p.x = x |^n;
 end;
 
 registration
@@ -473,501 +508,559 @@ registration
     let p be Prime;
     assume
 A1: p in support ppf n;
-    then
-A2: p in support pfexp n by NAT_3:def 9;
-    take k=p |-count n;
-    p |-count n <>0
+A2: p |-count n <>0
     proof
-      assume p |-count n =0;
+      assume
+      p |-count n =0;
       then (ppf n).p=0 by NAT_3:55;
-      hence contradiction by A1,POLYNOM1:def 7;
+      hence contradiction by A1,PRE_POLY:def 7;
     end;
+    take k=p |-count n;
+    p in support pfexp n by A1,NAT_3:def 9;
     hence thesis by A2,NAT_3:def 9;
   end;
 end;
 
 theorem Th5:
-  for p,q be Prime,n,m be natural number
-  st p divides m*(q|^n) & p <> q holds p divides m
+  for p,q be Prime,n,m be natural number st p divides m*(q|^n) & p
+  <> q holds p divides m
 proof
   let p,q be Prime;
   let n,m be natural number;
-  assume
-A1: p divides m*(q|^n) & p <> q;
+  assume that
+A1: p divides m*(q|^n) and
+A2: p <> q;
   p divides m or p divides (q|^n) by A1,NEWTON:98;
-  hence thesis by A1,NAT_3:6;
+  hence thesis by A2,NAT_3:6;
 end;
 
-Lm4: for a be Prime, b be bag of SetPrimes
-st b is prime-factorization-like & a in support b holds a divides Product b &
-ex n be natural number st a|^n divides Product b
+Lm4: for a be Prime, b be bag of SetPrimes st b is prime-factorization-like &
+a in support b holds a divides Product b & ex n be natural number st a|^n
+divides Product b
+
 proof
   let a be Prime, b be bag of SetPrimes;
-  assume
-A1: b is prime-factorization-like & a in support b;
-  consider f being FinSequence of COMPLEX such that
-A2: Product b = Product f & f = b*canFS(support b) by NAT_3:def 5;
-A3: rng b c= NAT by VALUED_0:def 6;
-  rng f c= rng b by A2,RELAT_1:45;
-  then rng f c= NAT by A3,XBOOLE_1:1;
-  then
-  reconsider f as FinSequence of NAT by FINSEQ_1:def 4;
-A4: support b c= dom b by POLYNOM1:41;
-  rng canFS(support b) = support b by FUNCT_2:def 3;
-  then
-A5: dom f = dom canFS(support b) by A2,A4,RELAT_1:46;
-A6: a in rng canFS(support b) by A1,FUNCT_2:def 3;
+  assume that
+A1: b is prime-factorization-like and
+A2: a in support b;
   consider n be natural number such that
-A7: 0 < n & b.a = a |^n by A1,Def1;
-  consider d be set such that
-A8: d in dom canFS(support b) & a=(canFS(support b)).d by A6,FUNCT_1:def 5;
-  b.a=(b*(canFS(support b))).d by A2,A5,A8,FUNCT_1:22;
-  then b.a in rng f by A2,A5,A8,FUNCT_1:12;
+A3: 0 < n and
+A4: b.a = a |^n by A1,A2,Def1;
+A5: a divides b.a by A3,A4,NAT_3:3;
+A6: rng b c= NAT by VALUED_0:def 6;
+  a in rng canFS(support b) by A2,FUNCT_2:def 3;
+  then consider d be set such that
+A7: d in dom canFS(support b) and
+A8: a=(canFS(support b)).d by FUNCT_1:def 5;
+  consider f being FinSequence of COMPLEX such that
+A9: Product b = Product f and
+A10: f = b*canFS(support b) by NAT_3:def 5;
+  rng f c= rng b by A10,RELAT_1:45;
+  then rng f c= NAT by A6,XBOOLE_1:1;
+  then reconsider f as FinSequence of NAT by FINSEQ_1:def 4;
+A11: rng canFS(support b) = support b by FUNCT_2:def 3;
+  support b c= dom b by PRE_POLY:37;
   then
-A9: (a |^n) divides (Product f) by A7,NAT_3:7;
-  a divides b.a by A7,NAT_3:3;
-  hence thesis by A2,A7,A9,NAT_D:4;
+A12: dom f = dom canFS(support b) by A10,A11,RELAT_1:46;
+  then b.a=(b*(canFS(support b))).d by A10,A7,A8,FUNCT_1:22;
+  then b.a in rng f by A10,A12,A7,FUNCT_1:12;
+  then (a |^n) divides (Product f) by A4,NAT_3:7;
+  hence thesis by A9,A4,A5,NAT_D:4;
 end;
 
-Lm5: for p be FinSequence of NAT,x be Element of NAT, b be bag of SetPrimes
-st b is prime-factorization-like & (p^<*x*>) = b*canFS(support b) holds
-ex p1 being FinSequence of NAT, q be Prime,n be Element of NAT,
-b1 be bag of SetPrimes st 0 < n & b1 is prime-factorization-like &
-q in support b & support b1 = support b \ {q} & x= q|^n & len p1=len p &
-Product p = Product p1 & p1=b1*canFS(support b1)
+Lm5: for p be FinSequence of NAT,x be Element of NAT, b be bag of SetPrimes st
+b is prime-factorization-like & (p^<*x*>) = b*canFS(support b) holds ex p1
+being FinSequence of NAT, q be Prime,n be Element of NAT, b1 be bag of
+SetPrimes st 0 < n & b1 is prime-factorization-like & q in support b & support
+b1 = support b \ {q} & x= q|^n & len p1=len p & Product p = Product p1 & p1=b1*
+canFS(support b1)
+
 proof
+  deffunc G(set) = 0;
   let p be FinSequence of NAT,x be Element of NAT, b be bag of SetPrimes;
-  assume
-A1: b is prime-factorization-like & ( p^<*x*>) = b*canFS(support b);
-  p = (b*canFS(support b))| (dom p) by A1,FINSEQ_1:33;
-  then
-A2: dom p = dom (b*canFS(support b)) /\ (dom p) by RELAT_1:90;
+  assume that
+A1: b is prime-factorization-like and
+A2: ( p^<*x*>) = b*canFS(support b);
 A3: rng canFS(support b) = support b by FUNCT_2:def 3;
   dom b = SetPrimes by PARTFUN1:def 4;
   then
 A4: dom (b*canFS(support b)) = dom (canFS(support b)) by A3,RELAT_1:46;
-A5: rng canFS(support b) =support b by FUNCT_2:def 3;
-A6: len <*x*> = 1 by FINSEQ_1:57;
+  p = (b*canFS(support b))| (dom p) by A2,FINSEQ_1:33;
+  then dom p = dom (b*canFS(support b)) /\ (dom p) by RELAT_1:90;
+
   then
-A7: len (p^<*x*>) = len p + 1 by FINSEQ_1:35;
-  len p + 1 in Seg (len p + 1) by FINSEQ_1:6;
-  then
-A8: (len p + 1) in dom (b*canFS(support b)) by A1,A7,FINSEQ_1:def 3;
-A9: x =(p^<*x*>) .(len p + 1) by FINSEQ_1:59
-    .= b.((canFS(support b)).(len p + 1)) by A1,A4,A8,FUNCT_1:23;
-A10: (canFS(support b)).(len p + 1) in support b by A4,A5,A8,FUNCT_1:12;
-  then
-  reconsider q=(canFS(support b)).(len p + 1) as Prime by NEWTON:def 6;
-  consider n be natural number such that
-A11: 0 < n & b.q = q |^n by A1,A10,Def1;
-  reconsider n as Element of NAT by ORDINAL1:def 13;
-  defpred P[set] means $1 in support b \ {q};
+A5: dom ((canFS(support b)) | (dom p)) = dom p by A4,RELAT_1:91,XBOOLE_1:17;
+
   deffunc F(set) = b.$1;
-  deffunc G(set) = 0;
+A6: card (support b) = len canFS(support b) by UPROOTS:5;
+  dom b = SetPrimes by PARTFUN1:def 4;
+  then
+A7: dom (b*canFS(support b)) = dom (canFS(support b)) by A3,RELAT_1:46;
+A8: len p + 1 in Seg (len p + 1) by FINSEQ_1:6;
+A9: len <*x*> = 1 by FINSEQ_1:57;
+  then len (p^<*x*>) = len p + 1 by FINSEQ_1:35;
+  then
+A10: (len p + 1) in dom (b*canFS(support b)) by A2,A8,FINSEQ_1:def 3;
+A11: x =(p^<*x*>) .(len p + 1) by FINSEQ_1:59
+    .= b.((canFS(support b)).(len p + 1)) by A2,A7,A10,FUNCT_1:23;
+A12: rng canFS(support b) =support b by FUNCT_2:def 3;
+  then
+A13: (canFS(support b)).(len p + 1) in support b by A7,A10,FUNCT_1:12;
+  then reconsider q=(canFS(support b)).(len p + 1) as Prime by NEWTON:def 6;
+  defpred P[set] means $1 in support b \ {q};
   consider b1 being ManySortedSet of SetPrimes such that
-A12: for i being Element of SetPrimes st i in SetPrimes
-  holds (P[i] implies b1.i = F(i)) & (not P[i] implies b1.i = G(i))
-  from PRE_CIRC:sch 2;
-A13: support b1 = (support b) \ {q}
-  proof
-    now
-      let z be set;
-      assume
-A14:  z in support b1;
-      z in dom b1
-      proof
-        assume not z in dom b1;
-        then b1.z = {} by FUNCT_1:def 4;
-        hence contradiction by A14,POLYNOM1:def 7;
-      end;
-      then
-      reconsider y = z as Element of SetPrimes by PARTFUN1:def 4;
-A15:  b1.y <> 0 by A14,POLYNOM1:def 7;
-      assume not z in (support b) \ {q};
-      hence contradiction by A12,A15;
-    end;
-    then
-A16: support b1 c= (support b) \ {q} by TARSKI:def 3;
-    now
-      let z be set;
-      assume
-A17:  z in (support b) \ {q};
-      then
-A18:  z in support b by XBOOLE_0:def 5;
-      reconsider y = z as Element of SetPrimes by A17;
-      b1.y =b.y by A12,A17;
-      then
-      b1. y <> 0 by A18,POLYNOM1:def 7;
-      hence z in support b1 by POLYNOM1:def 7;
-    end;
-    then
-    (support b) \ {q} c= support b1 by TARSKI:def 3;
-    hence thesis by A16,XBOOLE_0:def 10;
-  end;
-  rng b1 c= NAT
+
+A14: for i being Element of SetPrimes st i in SetPrimes holds (P[i]
+  implies b1.i = F(i)) & (not P[i] implies b1.i = G(i)) from PRE_CIRC:sch 2;
+
+A15: rng b1 c= NAT
   proof
     let y be set;
-    assume y in rng b1;
+    assume
+    y in rng b1;
     then consider x be set such that
-A19: x in dom b1 & y=b1.x by FUNCT_1:def 5;
-    reconsider x as Element of SetPrimes by A19,PARTFUN1:def 4;
+A16: x in dom b1 and
+A17: y=b1.x by FUNCT_1:def 5;
+    reconsider x as Element of SetPrimes by A16,PARTFUN1:def 4;
     b1.x in NAT
     proof
       per cases;
-      suppose x in support b \ {q};
-        then b1.x = b.x by A12;
+      suppose
+        x in support b \ {q};
+        then b1.x = b.x by A14;
         hence thesis;
       end;
-      suppose not x in support b \ {q};
-        then b1.x = 0 by A12;
+      suppose
+        not x in support b \ {q};
+        then b1.x = 0 by A14;
         hence thesis;
       end;
     end;
-    hence thesis by A19;
+    hence thesis by A17;
   end;
-  then
-  reconsider b1 as bag of SetPrimes by A13,POLYNOM1:def 8,VALUED_0:def 6;
-A20: now
-    let x be Prime;
+  now
+    let z be set;
     assume
-A21: x in support b1;
-    support b \ {q} c= support b by XBOOLE_1:36;
-    then consider m be natural number such that
-A22: 0 < m & b.x = x |^m by A1,A13,A21,Def1;
-    take m;
-    thus 0 < m by A22;
-    thus b1.x=x |^m by A12,A13,A21,A22;
+A18: z in support b1;
+    z in dom b1
+    proof
+      assume
+      not z in dom b1;
+      then b1.z = {} by FUNCT_1:def 4;
+      hence contradiction by A18,PRE_POLY:def 7;
+    end;
+    then reconsider y = z as Element of SetPrimes by PARTFUN1:def 4;
+    assume
+A19: not z in (support b) \ {q};
+    b1.y <> 0 by A18,PRE_POLY:def 7;
+    hence contradiction by A14,A19;
   end;
-  dom b = SetPrimes by PARTFUN1:def 4;
   then
-  dom (b*canFS(support b)) = dom (canFS(support b)) by A3,RELAT_1:46;
+A20: support b1 c= (support b) \ {q} by TARSKI:def 3;
+  now
+    let z be set;
+    assume
+A21: z in (support b) \ {q};
+    then
+A22: z in support b by XBOOLE_0:def 5;
+    reconsider y = z as Element of SetPrimes by A21;
+    b1.y =b.y by A14,A21;
+    then b1. y <> 0 by A22,PRE_POLY:def 7;
+    hence z in support b1 by PRE_POLY:def 7;
+  end;
   then
-A23: dom ((canFS(support b)) | (dom p)) = dom p by A2,RELAT_1:91,XBOOLE_1:17;
-A24: SetPrimes = dom b by PARTFUN1:def 4;
-A25: rng canFS(support b) =support b by FUNCT_2:def 3;
-A26: card dom (b*canFS(support b))
-  =card dom (canFS(support b)) by A24,A25,RELAT_1:46
+A23: (support b) \ {q} c= support b1 by TARSKI:def 3;
+  then
+A24: support b1 = (support b) \ {q} by A20,XBOOLE_0:def 10;
+  reconsider b1 as bag of SetPrimes by A20,A15,PRE_POLY:def 8,VALUED_0:def 6;
+  consider n be natural number such that
+A25: 0 < n and
+A26: b.q = q |^n by A1,A13,Def1;
+  reconsider n as Element of NAT by ORDINAL1:def 13;
+A27: rng canFS(support b) =support b by FUNCT_2:def 3;
+  SetPrimes = dom b by PARTFUN1:def 4;
+
+  then card dom (b*canFS(support b)) =card dom (canFS(support b)) by A27,
+RELAT_1:46
+
     .=card Seg len (canFS(support b)) by FINSEQ_1:def 3
     .= card len (canFS(support b)) by FINSEQ_1:76
     .= len (canFS(support b));
-A27: len canFS(support b) = card Seg len ((p^<*x*>)) by A1,A26,FINSEQ_1:def 3
+
+  then
+A28: len canFS(support b) = card Seg len ((p^<*x*>)) by A2,FINSEQ_1:def 3
+
     .= card len ((p^<*x*>)) by FINSEQ_1:76
-    .= len p + 1 by A6,FINSEQ_1:35;
-A28: dom canFS(support b1) = dom p
-  proof
-A29: card( (support b) \ {q})
-    =card( (support b)) - card({q}) by A4,A5,A8,EULER_1:5,FUNCT_1:12
-      .=card( (support b)) - 1 by CARD_1:50;
-A30: card (support b) = len canFS(support b) by UPROOTS:5;
-    len (canFS(support b1)) =len p by A13,A27,A29,A30,UPROOTS:5;
-    then dom (canFS(support b1)) = Seg len p by FINSEQ_1:def 3;
-    hence thesis by FINSEQ_1:def 3;
+    .= len p + 1 by A9,FINSEQ_1:35;
+
+  card( (support b) \ {q}) =card( (support b)) - card({q}) by A7,A12,A10,
+EULER_1:5,FUNCT_1:12
+
+    .=card( (support b)) - 1 by CARD_1:50;
+  then
+A29: len (canFS(support b1)) =len p by A24,A28,A6,UPROOTS:5;
+  then
+A30: dom (canFS(support b1)) = Seg len p by FINSEQ_1:def 3;
+  then
+A31: dom canFS(support b1) = dom p by FINSEQ_1:def 3;
+A32: now
+    let x be Prime;
+    assume
+A33: x in support b1;
+    support b \ {q} c= support b by XBOOLE_1:36;
+    then consider m be natural number such that
+A34: 0 < m and
+A35: b.x = x |^m by A1,A24,A33,Def1;
+    take m;
+    thus 0 < m by A34;
+    thus b1.x=x |^m by A14,A20,A33,A35;
   end;
   per cases;
   suppose
-A31: dom p = {};
+A36: dom p = {};
     set p1=b1*canFS(support b1);
-A32: p = {} by A31;
+A37: p = {} by A36;
     Seg len canFS(support b1) = dom canFS(support b1) by FINSEQ_1:def 3
-      .= Seg len p by A28,FINSEQ_1:def 3
-      .= Seg 0 by A32;
-    then len canFS(support b1) = 0;
+      .= Seg len p by A29,FINSEQ_1:def 3
+      .= Seg 0 by A37;
     then canFS(support b1) = {};
     then
-A33: p1 = <*>NAT;
-    reconsider p1 as FinSequence of NAT by A33;
+A38: p1 = <*>NAT;
+    then reconsider p1 as FinSequence of NAT;
     take p1,q,n,b1;
-    thus thesis
-     by A4,A5,A8,A9,A11,A13,A20,A31,A33,Def1,FUNCT_1:12,RELAT_1:64;
+
+    thus thesis by A7,A12,A10,A11,A25,A26,A20,A23,A32,A36,A38,Def1,FUNCT_1:12
+,RELAT_1:64,XBOOLE_0:def 10;
+
   end;
   suppose
-A34: dom p <> {};
-A35: (support b) \ {q} <> {}
-    proof
-      assume (support b) \ {q} = {};
-      then
-A36:  rng canFS(support b1) = {} by A13;
-      dom p ={}
+A39: dom p <> {};
+A40: rng canFS(support b) = support b by FUNCT_2:def 3;
+    now
+      let y be set;
+      assume
+A41:  y in ((support b) \ {q});
+      then y in rng canFS(support b) by A40,XBOOLE_0:def 5;
+      then consider x be set such that
+A42:  x in dom (canFS(support b)) and
+A43:  y=(canFS(support b)).x by FUNCT_1:def 5;
+A44:  x in dom p
       proof
-        assume dom p <> {};
-        then consider x be set such that
-A37:    x in dom p by XBOOLE_0:def 1;
-        thus contradiction by A28,A36,A37,FUNCT_1:12;
-      end;
-      hence contradiction by A34;
-    end;
-A38: rng ((canFS(support b)) | (dom p))= ((support b) \ {q})
-    proof
-      now
-        let y be set;
-        assume y in rng ((canFS(support b)) | (dom p));
-        then
-        consider x be set such that
-A39:    x in dom ((canFS(support b)) | (dom p))
-        & y=((canFS(support b)) | (dom p)).x by FUNCT_1:def 5;
-A40:    y= (canFS(support b)).x by A39,FUNCT_1:70;
-A41:    x in dom (canFS(support b)) /\ (dom p) by A39,RELAT_1:90;
-        then
-A42:    x in dom (canFS(support b)) by XBOOLE_0:def 4;
-A43:    x in dom p by A41,XBOOLE_0:def 4;
-A44:    y in rng (canFS(support b)) by A40,A42,FUNCT_1:12;
-        y <> q
-        proof
-          assume
-A46:      y=q;
-          len p + 1 in Seg (len p + 1) by FINSEQ_1:6;
-          then len p + 1 in dom canFS(support b) by A27,FINSEQ_1:def 3;
-          then len p+1 = x by A40,A42,A46,FUNCT_1:def 8;
-          then
-A47:      len p + 1 in Seg len p by A43,FINSEQ_1:def 3;
-          len p + 0 < 1+ len p by XREAL_1:10;
-          hence contradiction by A47,FINSEQ_1:3;
-        end;
-        then
-        not y in {q} by TARSKI:def 1;
-        hence y in (support b) \ {q} by A44,XBOOLE_0:def 5;
-      end;
-      then
-A48:  rng ((canFS(support b)) | (dom p)) c= ((support b) \ {q})
-      by TARSKI:def 3;
-A49:  rng canFS(support b) = support b by FUNCT_2:def 3;
-      now
-        let y be set;
         assume
-A50:    y in ((support b) \ {q});
-        then y in rng canFS(support b) by A49,XBOOLE_0:def 5;
-        then consider x be set such that
-A51:    x in dom (canFS(support b)) & y=(canFS(support b)).x by FUNCT_1:def 5;
-A52:    x in dom p
-        proof
-          assume not x in dom p;
-          then
-A53:      not x in Seg len p by FINSEQ_1:def 3;
-A54:      x in Seg (len p + 1) by A27,A51,FINSEQ_1:def 3;
-          reconsider x as Element of NAT by A51;
-A55:      1 <=x & x <= len p + 1 by A54,FINSEQ_1:3;
-          len p < x by A53,A55;
-          then len p+ 1 <= x by NAT_1:13;
-          then x = len p + 1 by A55,XXREAL_0:1;
-          then y in {q} by A51,TARSKI:def 1;
-          hence contradiction by A50,XBOOLE_0:def 5;
-        end;
+        not x in dom p;
         then
-A56:    y = ((canFS(support b)) | (dom p)).x by A51,FUNCT_1:72;
-        x in dom (canFS(support b)) /\ (dom p) by A51,A52,XBOOLE_0:def 4;
+A45:    not x in Seg len p by FINSEQ_1:def 3;
+A46:    x in Seg (len p + 1) by A28,A42,FINSEQ_1:def 3;
+        reconsider x as Element of NAT by A42;
+        1 <=x by A46,FINSEQ_1:3;
+        then len p < x by A45;
         then
-        x in dom ((canFS(support b)) | (dom p)) by RELAT_1:90;
-        hence y in rng ((canFS(support b)) | (dom p)) by A56,FUNCT_1:12;
+A47:    len p+ 1 <= x by NAT_1:13;
+        x <= len p + 1 by A46,FINSEQ_1:3;
+        then x = len p + 1 by A47,XXREAL_0:1;
+        then y in {q} by A43,TARSKI:def 1;
+        hence contradiction by A41,XBOOLE_0:def 5;
+      end;
+      then x in dom (canFS(support b)) /\ (dom p) by A42,XBOOLE_0:def 4;
+      then
+A48:  x in dom ((canFS(support b)) | (dom p)) by RELAT_1:90;
+      y = ((canFS(support b)) | (dom p)).x by A43,A44,FUNCT_1:72;
+      hence y in rng ((canFS(support b)) | (dom p)) by A48,FUNCT_1:12;
+    end;
+
+    then
+A49: ((support b) \ {q}) c= rng ((canFS(support b)) | (dom p)) by TARSKI:def 3;
+
+    now
+      let y be set;
+      assume
+      y in rng ((canFS(support b)) | (dom p));
+      then consider x be set such that
+A50:  x in dom ((canFS(support b)) | (dom p)) and
+A51:  y=((canFS(support b)) | (dom p)).x by FUNCT_1:def 5;
+A52:  y= (canFS(support b)).x by A50,A51,FUNCT_1:70;
+A53:  x in dom (canFS(support b)) /\ (dom p) by A50,RELAT_1:90;
+      then
+A54:  x in dom (canFS(support b)) by XBOOLE_0:def 4;
+A55:  x in dom p by A53,XBOOLE_0:def 4;
+      y <> q
+      proof
+        len p + 1 in Seg (len p + 1) by FINSEQ_1:6;
+        then
+A56:    len p + 1 in dom canFS(support b) by A28,FINSEQ_1:def 3;
+        assume
+        y=q;
+        then len p+1 = x by A52,A54,A56,FUNCT_1:def 8;
+        then
+A57:    len p + 1 in Seg len p by A55,FINSEQ_1:def 3;
+        len p + 0 < 1+ len p by XREAL_1:10;
+        hence contradiction by A57,FINSEQ_1:3;
       end;
       then
-      ((support b) \ {q}) c= rng ((canFS(support b)) | (dom p))
-      by TARSKI:def 3;
-      hence thesis by A48,XBOOLE_0:def 10;
+A58:  not y in {q} by TARSKI:def 1;
+      y in rng (canFS(support b)) by A52,A54,FUNCT_1:12;
+      hence y in (support b) \ {q} by A58,XBOOLE_0:def 5;
     end;
-    reconsider L0=
-    (canFS(support b)) | (dom p) as Function of (dom p),((support b) \ {q})
-    by A23,A38,FUNCT_2:3;
-A57: rng L0 = (support b) \ {q} & dom L0 = dom p by A35,A38,FUNCT_2:def 1;
+
+    then rng ((canFS(support b)) | (dom p)) c= ((support b) \ {q}) by
+TARSKI:def 3;
+
+    then
+A59: rng ((canFS(support b)) | (dom p))= ((support b) \ {q}) by A49,
+XBOOLE_0:def 10;
+
+    then reconsider L0= (canFS(support b)) | (dom p) as Function of (dom p),((
+    support b) \ {q}) by A5,FUNCT_2:3;
+
 A60: L0 is one-to-one by FUNCT_1:84;
-    then L0" is one-to-one;
     then
-A61: L0"*canFS(support b1) is one-to-one;
-    L0 is one-to-one by FUNCT_1:84;
+A61: dom (L0") = (support b) \ {q} by A59,FUNCT_1:55;
+A62: (support b) \ {q} <> {} by A20,A30,A39,FINSEQ_1:def 3;
+    then dom L0 = dom p by FUNCT_2:def 1;
     then
-A62: dom (L0") = (support b) \ {q} & rng (L0") = dom p by A57,FUNCT_1:55;
-    then
-    reconsider LL1 = L0" as Function of (support b) \ {q},dom p by FUNCT_2:3;
-A63: rng canFS(support b1) =support b1 by FUNCT_2:def 3;
-    canFS(support b1) is Function of (dom p),(support b) \ {q}
-    by A13,A28,A63,FUNCT_2:3;
-    then
-    reconsider L0L=LL1*canFS(support b1)
-    as Function of (dom p),(dom p) by A35,FUNCT_2:19;
-    rng L0L = dom p by A13,A62,A63,RELAT_1:47;
+A64: rng (L0") = dom p by A60,FUNCT_1:55;
+
+    then reconsider LL1 = L0" as Function of (support b) \ {q},dom p by A61,
+FUNCT_2:3;
+
+A65: rng canFS(support b1) =support b1 by FUNCT_2:def 3;
+
+    then canFS(support b1) is Function of (dom p),(support b) \ {q} by A24,A31,
+FUNCT_2:3;
+
+    then reconsider
+    L0L=LL1*canFS(support b1) as Function of (dom p),(dom p) by A62,FUNCT_2:19;
+
+A66: L0 is one-to-one by FUNCT_1:84;
+    rng L0L = dom p by A23,A61,A64,A65,RELAT_1:47;
     then L0L is onto by FUNCT_2:def 3;
-    then reconsider LL = L0L as Permutation of (dom p) by A61;
-    ( (canFS(support b))| dom p) * LL
-    = ( ( (canFS(support b)) | dom p) * LL1)*canFS(support b1) by RELAT_1:55
-      .= (id (support b1)) * canFS(support b1) by A13,A35,A38,A60,FUNCT_2:35
+    then reconsider LL = L0L as Permutation of (dom p) by A66;
+
+    ( (canFS(support b))| dom p) * LL = ( ( (canFS(support b)) | dom p)
+    * LL1)*canFS(support b1) by RELAT_1:55
+
+      .= (id (support b1)) * canFS(support b1) by A24,A62,A59,A66,FUNCT_2:35
+
       .=canFS(support b1) by FUNCT_2:23;
+
     then
-A64: canFS(support b1)*LL" =( (canFS(support b))| dom p)* (LL*LL")
-    by RELAT_1:55;
-    rng LL= dom p by FUNCT_2:def 3;
-    then
-A65: canFS(support b1)*LL" =( (canFS(support b))| dom p)* (id (dom p))
-    by A34,A64,FUNCT_2:35;
-    reconsider L= LL" as Permutation of dom p;
+A67: canFS(support b1)*LL" =( (canFS(support b))| dom p)* (LL*LL") by
+RELAT_1:55;
+
     reconsider FS=canFS(support b1) as FinSequence;
-A66: rng L = dom FS by A28,FUNCT_2:def 3;
+    reconsider L= LL" as Permutation of dom p;
+A68: rng L = dom FS by A31,FUNCT_2:def 3;
     then
-A67: dom (FS*L) = dom L by RELAT_1:46
-      .=dom p by A34,FUNCT_2:def 1;
-A68: SetPrimes = dom b1 by PARTFUN1:def 4;
-    rng canFS(support b1) =support b1 by FUNCT_2:def 3;
-    then
-A69: dom (b1*FS) =dom p by A28,A68,RELAT_1:46;
-A70: rng (FS*L) = rng FS by A66,RELAT_1:47
-      .= (support b) \ {q} by A13,FUNCT_2:def 3;
+A69: dom (FS*L) = dom L by RELAT_1:46
+      .=dom p by A39,FUNCT_2:def 1;
+    set p1=b1*FS;
+A70: rng canFS(support b1) =support b1 by FUNCT_2:def 3;
     SetPrimes = dom b1 by PARTFUN1:def 4;
     then
-A71: dom p = dom (b1*(FS*L)) by A67,A70,RELAT_1:46;
-A72: now
-      let k be set;
-      assume
-A73:  k in dom p;
-A74:  dom p c=dom (p^<*x*>) by FINSEQ_1:39;
-A76:  (FS*L).k in support b \ {q} by A67,A70,A73,FUNCT_1:12;
-      thus p.k = (p^<*x*>).k by A73,FINSEQ_1:def 7
-        .=b.((canFS(support b)).k) by A1,A73,A74,FUNCT_1:22
-        .=b.(((canFS(support b)) |(dom p)).k) by A73,FUNCT_1:72
-        .=b.((FS*L).k) by A65,FUNCT_2:23
-        .=b1.((FS*L).k) by A12,A76
-        .= (b1*(FS*L)).k by A71,A73,FUNCT_1:22;
-    end;
-    set p1=b1*FS;
-A77: p=b1*(FS*L) by A71,A72,FUNCT_1:9
-      .=p1*L by RELAT_1:55;
-A78: p,p1 are_fiberwise_equipotent by A69,A77,CLASSES1:88;
-    dom p1 = Seg len p by A69,FINSEQ_1:def 3;
+A71: dom (b1*FS) =dom p by A31,A70,RELAT_1:46;
+    then dom p1 = Seg len p by FINSEQ_1:def 3;
     then
-A79: p1 is FinSequence by FINSEQ_1:def 2;
+A72: p1 is FinSequence by FINSEQ_1:def 2;
+A73: rng (FS*L) = rng FS by A68,RELAT_1:47
+      .= (support b) \ {q} by A24,FUNCT_2:def 3;
+    SetPrimes = dom b1 by PARTFUN1:def 4;
+    then
+A74: dom p = dom (b1*(FS*L)) by A69,A73,RELAT_1:46;
+    rng LL= dom p by FUNCT_2:def 3;
+
+    then
+A75: canFS(support b1)*LL" =( (canFS(support b))| dom p)* (id (dom p)) by A39
+,A67,FUNCT_2:35;
+
+    now
+      let k be set;
+A76:  dom p c=dom (p^<*x*>) by FINSEQ_1:39;
+      assume
+A77:  k in dom p;
+      then
+A78:  (FS*L).k in support b \ {q} by A69,A73,FUNCT_1:12;
+      thus p.k = (p^<*x*>).k by A77,FINSEQ_1:def 7
+        .=b.((canFS(support b)).k) by A2,A77,A76,FUNCT_1:22
+        .=b.(((canFS(support b)) |(dom p)).k) by A77,FUNCT_1:72
+        .=b.((FS*L).k) by A75,FUNCT_2:23
+        .=b1.((FS*L).k) by A14,A78
+        .= (b1*(FS*L)).k by A74,A77,FUNCT_1:22;
+    end;
+    then p=b1*(FS*L) by A74,FUNCT_1:9
+      .=p1*L by RELAT_1:55;
+    then
+A79: p,p1 are_fiberwise_equipotent by A71,CLASSES1:88;
     rng p1 c= NAT by VALUED_0:def 6;
-    then reconsider p1 as FinSequence of NAT by A79,FINSEQ_1:def 4;
-A80: Seg len p1 =dom p by A69,FINSEQ_1:def 3;
+    then reconsider p1 as FinSequence of NAT by A72,FINSEQ_1:def 4;
     take p1,q,n,b1;
-    thus thesis by A4,A5,A8,A9,A11,A13,A20,A78,A80,Def1,EULER_2:25
-,FINSEQ_1:def 3,FUNCT_1:12;
+    Seg len p1 =dom p by A71,FINSEQ_1:def 3;
+
+    hence thesis by A7,A12,A10,A11,A25,A26,A20,A23,A32,A79,Def1,EULER_2:25
+,FINSEQ_1:def 3,FUNCT_1:12,XBOOLE_0:def 10;
+
   end;
 end;
 
-Lm6: for i be Element of NAT,f be FinSequence of NAT,
-b be bag of SetPrimes,a be Prime st len f = i&
-b is prime-factorization-like & Product b <> 1&
-a divides Product b & Product b = Product f & f = b*canFS(support b)
-holds a in support b
+Lm6: for i be Element of NAT,f be FinSequence of NAT, b be bag of SetPrimes,a
+be Prime st len f = i& b is prime-factorization-like & Product b <> 1& a
+divides Product b & Product b = Product f & f = b*canFS(support b) holds a in
+support b
+
 proof
-  defpred P[Element of NAT] means
-  for f be FinSequence of NAT, b be bag of SetPrimes,
-  a be Prime st len f =$1 & b is prime-factorization-like &
-  Product b <> 1 & a divides Product b &
-  Product b = Product f & f = b*canFS(support b) holds a in support b;
-A1: P[ 0 ] by FINSEQ_1:32,RVSUM_1:124;
-A2: for k being Element of NAT st P[k] holds P[k+1]
+
+  defpred P[Element of NAT] means for f be FinSequence of NAT, b be bag of
+
+SetPrimes, a be Prime st len f =$1 & b is prime-factorization-like & Product b
+  <> 1 & a divides Product b & Product b = Product f & f = b*canFS(support b)
+  holds a in support b;
+
+A1: for k being Element of NAT st P[k] holds P[k+1]
   proof
     let k be Element of NAT;
     assume
-A3: P[k];
+A2: P[k];
     thus P[k+1]
     proof
+A3:   1<= (k+1) by NAT_1:11;
       let f be FinSequence of NAT, b be bag of SetPrimes, a be Prime;
-      assume
-A4:   len f =k+1 & b is prime-factorization-like &
-      Product b <> 1 & a divides Product b &
-      Product b = Product f & f = b*canFS(support b);
-      reconsider x=f.(k+1) as Element of NAT;
+      assume that
+A4:   len f =k+1 and
+A5:   b is prime-factorization-like and
+      Product b <> 1 and
+A6:   a divides Product b and
+A7:   Product b = Product f and
+A8:   f = b*canFS(support b);
       reconsider p=f|k as FinSequence of NAT;
-A5:   1<= (k+1) & k+1 <= len f by A4,NAT_1:11;
-A6:   f = (f|k)^<*f/.len f*> by A4,FINSEQ_5:24
-        .= p^ <*x*> by A4,A5,FINSEQ_4:24;
-A7:   len p = k by A4,FINSEQ_1:80,NAT_1:11;
-      consider p1 being FinSequence of NAT, q be Prime,n be Element of NAT,
-      b1 be bag of SetPrimes such that
-A8:   0 < n & b1 is prime-factorization-like & q in support b &
-      support b1 = support b \ {q} & x= q|^n & len p1=len p &
-      Product p = Product p1 & p1=b1*canFS(support b1) by A4,A6,Lm5;
-A9:   Product(f)=Product (p1) * x by A6,A8,RVSUM_1:126;
+      reconsider x=f.(k+1) as Element of NAT;
+A9:   len p = k by A4,FINSEQ_1:80,NAT_1:11;
+A10:  f = (f|k)^<*f/.len f*> by A4,FINSEQ_5:24
+        .= p^ <*x*> by A4,A3,FINSEQ_4:24;
+
+      then consider
+      p1 being FinSequence of NAT, q be Prime,n be Element of NAT, b1
+      be bag of SetPrimes such that
+
+      0 < n and
+A11:  b1 is prime-factorization-like and
+A12:  q in support b and
+A13:  support b1 = support b \ {q} and
+A14:  x= q|^n and
+A15:  len p1=len p and
+A16:  Product p = Product p1 and
+A17:  p1=b1*canFS(support b1) by A5,A8,Lm5;
+A18:  Product(f)=Product (p1) * x by A10,A16,RVSUM_1:126;
       rng p1 c= COMPLEX by NUMBERS:20,XBOOLE_1:1;
       then p1 is FinSequence of COMPLEX by FINSEQ_1:def 4;
       then
-A10:  Product (b1) = Product p1 by A8,NAT_3:def 5;
-      now per cases;
+A19:  Product (b1) = Product p1 by A17,NAT_3:def 5;
+      now
+        per cases;
         suppose
-A11:      Product (p1) = 1;
-A12:      a <> 1 & q <> 1 by INT_2:def 5;
-          then ex k being Element of NAT st a = q*k by A4,A8,A9,A11,PEPIN:33;
+A20:      Product (p1) = 1;
+          a <> 1 by INT_2:def 5;
+
+          then ex k being Element of NAT st a = q*k by A6,A7,A14,A18,A20,
+PEPIN:33;
+
           then
-          q divides a by INT_1:def 9;
-          hence thesis by A8,A12,INT_2:def 5;
+A21:      q divides a by INT_1:def 9;
+          q <> 1 by INT_2:def 5;
+          hence thesis by A12,A21,INT_2:def 5;
         end;
         suppose
-A13:      Product (p1) <> 1;
+A22:      Product (p1) <> 1;
           per cases;
-          suppose a=q;
-            hence thesis by A8;
+          suppose
+            a=q;
+            hence thesis by A12;
           end;
           suppose
-A14:        a<>q;
-A15:        a in support b1 by A3,A4,A7,A8,A9,A10,A13,A14,Th5;
-            support b1 c= support b by A8,XBOOLE_1:36;
-            hence thesis by A15;
+A23:        a<>q;
+A24:        support b1 c= support b by A13,XBOOLE_1:36;
+
+            a in support b1 by A2,A6,A7,A9,A11,A14,A15,A17,A18,A19,A22,A23,Th5;
+
+            hence thesis by A24;
           end;
         end;
       end;
       hence thesis;
     end;
   end;
-  for k be Element of NAT holds P[k] from NAT_1:sch 1(A1,A2);
+A25: P[ 0 ]
+   proof let f be FinSequence of NAT, b be bag of SetPrimes, a be Prime;
+    assume len f =0;
+     then f =<*>NAT;
+    hence thesis by RVSUM_1:124;
+   end;
+  for k be Element of NAT holds P[k] from NAT_1:sch 1(A25,A1);
   hence thesis;
 end;
 
 theorem Th6:
-  for f be FinSequence of NAT, b be bag of SetPrimes,a be Prime
-  st b is prime-factorization-like & Product b <> 1 & a divides Product b &
-  Product b = Product f & f = b*canFS(support b) holds a in support b
+  for f be FinSequence of NAT, b be bag of SetPrimes,a be Prime st
+b is prime-factorization-like & Product b <> 1 & a divides Product b & Product
+  b = Product f & f = b*canFS(support b) holds a in support b
 proof
   let f be FinSequence of NAT, b be bag of SetPrimes, a be Prime;
-  assume
-A1: b is prime-factorization-like & Product b <> 1 &
-  a divides Product b & Product b = Product f & f = b*canFS(support b);
+  assume that
+A1: b is prime-factorization-like and
+A2: Product b <> 1 and
+A3: a divides Product b and
+A4: Product b = Product f and
+A5: f = b*canFS(support b);
   len f is Element of NAT;
-  hence thesis by A1,Lm6;
+  hence thesis by A1,A2,A3,A4,A5,Lm6;
 end;
 
-Lm7: for a be Prime, b be bag of SetPrimes
-st b is prime-factorization-like & a divides Product b holds a in support b
+Lm7: for a be Prime, b be bag of SetPrimes st b is prime-factorization-like &
+a divides Product b holds a in support b
+
 proof
   let a be Prime, b be bag of SetPrimes;
-  assume
-A1: b is prime-factorization-like & a divides Product b;
+  assume that
+A1: b is prime-factorization-like and
+A2: a divides Product b;
   per cases;
   suppose
-A2: Product b = 1;
+A3: Product b = 1;
     a <> 1 by INT_2:def 5;
-    hence thesis by A1,A2,WSIERP_1:20;
+    hence thesis by A2,A3,WSIERP_1:20;
   end;
   suppose
 A4: Product b <> 1;
+A5: rng b c= NAT by VALUED_0:def 6;
     consider f being FinSequence of COMPLEX such that
-A5: Product b = Product f & f = b*canFS(support b) by NAT_3:def 5;
-A6: rng b c= NAT by VALUED_0:def 6;
-    rng f c= rng b by A5,RELAT_1:45;
-    then rng f c= NAT by A6,XBOOLE_1:1;
+A6: Product b = Product f and
+A7: f = b*canFS(support b) by NAT_3:def 5;
+    rng f c= rng b by A7,RELAT_1:45;
+    then rng f c= NAT by A5,XBOOLE_1:1;
     then reconsider f as FinSequence of NAT by FINSEQ_1:def 4;
-    b is prime-factorization-like & Product b <> 1 & a divides Product b &
-    Product b = Product f & f = b*canFS(support b) by A1,A4,A5;
-    hence thesis by Th6;
+    Product b = Product f by A6;
+    hence thesis by A1,A2,A4,A7,Th6;
   end;
 end;
 
 theorem Th7:
-  for p,q be bag of SetPrimes
-  st (support p) c= (support q) & p | (support p) = q | (support p) holds
-  (Product p) divides (Product q)
+  for p,q be bag of SetPrimes st (support p) c= (support q) & p | (
+  support p) = q | (support p) holds (Product p) divides (Product q)
 proof
   let p,q be bag of SetPrimes;
-  assume
-A1: (support p) c= (support q) & p | (support p) =q | (support p);
+  assume that
+A1: (support p) c= (support q) and
+A2: p | (support p) =q | (support p);
   consider r be bag of SetPrimes such that
-A2: support r =(support q) \ (support p) & (support p) misses (support r) &
-  r |(support r) = q|( support r) & p+r = q by A1,Lm2;
-  (Product p)*(Product r) = Product (q) by A2,NAT_3:19;
+  support r =(support q) \ (support p) and
+A3: (support p) misses (support r) and
+  r |(support r) = q|( support r) and
+A4: p+r = q by A1,A2,Lm2;
+  (Product p)*(Product r) = Product (q) by A3,A4,NAT_3:19;
   hence thesis by INT_1:def 9;
 end;
 
 theorem
-  for p be bag of SetPrimes,x be Prime st p is prime-factorization-like holds
-  x divides Product p iff x in support p by Lm4,Lm7;
+  for p be bag of SetPrimes,x be Prime st p is prime-factorization-like
+  holds x divides Product p iff x in support p by Lm4,Lm7;
 
 theorem Th9:
   for n,m,k be non empty natural number st k = n lcm m holds
@@ -976,395 +1069,429 @@ proof
   let n,m,k be non empty natural number;
   assume
 A1: k = n lcm m;
-A2: support ppf k =support pfexp k by NAT_3:def 9
-    .=support max(pfexp n,pfexp m) by A1,NAT_3:54;
-A3: support ppf n = support pfexp n by NAT_3:def 9;
-A4: support ppf m = support pfexp m by NAT_3:def 9;
-A5: support ppf k c= (support ppf n) \/ (support ppf m) by A2,A3,A4,NAT_3:18;
-  support pfexp n \/ support pfexp m c= support max(pfexp n,pfexp m)
+A2: support ppf n = support pfexp n by NAT_3:def 9;
+A3: support pfexp n \/ support pfexp m c= support max(pfexp n,pfexp m)
   proof
     let x be set;
     assume
-A6: x in support pfexp n \/ support pfexp m;
-    per cases by A6,XBOOLE_0:def 3;
-    suppose x in support pfexp n;
-      then
-      (pfexp n).x <> 0 by POLYNOM1:def 7;
-      then
-A7:   0 < (pfexp n).x;
-      (pfexp n).x <=max(pfexp n,pfexp m).x
+A4: x in support pfexp n \/ support pfexp m;
+    per cases by A4,XBOOLE_0:def 3;
+    suppose
+A5:   x in support pfexp n;
+A6:   (pfexp n).x <=max(pfexp n,pfexp m).x
       proof
         per cases;
-        suppose (pfexp n).x <= (pfexp m).x;
+        suppose
+          (pfexp n).x <= (pfexp m).x;
           hence thesis by NAT_3:def 4;
         end;
-        suppose (pfexp n).x > (pfexp m).x;
+        suppose
+          (pfexp n).x > (pfexp m).x;
           hence thesis by NAT_3:def 4;
         end;
       end;
-      hence thesis by A7,POLYNOM1:def 7;
+      (pfexp n).x <> 0 by A5,PRE_POLY:def 7;
+      then 0 < (pfexp n).x;
+      hence thesis by A6,PRE_POLY:def 7;
     end;
-    suppose x in support pfexp m;
-      then
-      (pfexp m).x <> 0 by POLYNOM1:def 7;
-      then
-A8:   0 < (pfexp m).x;
-      (pfexp m).x <=max(pfexp n,pfexp m).x
+    suppose
+A7:   x in support pfexp m;
+A8:   (pfexp m).x <=max(pfexp n,pfexp m).x
       proof
         per cases;
-        suppose (pfexp n).x <= (pfexp m).x;
+        suppose
+          (pfexp n).x <= (pfexp m).x;
           hence thesis by NAT_3:def 4;
         end;
-        suppose (pfexp n).x > (pfexp m).x;
+        suppose
+          (pfexp n).x > (pfexp m).x;
           hence thesis by NAT_3:def 4;
         end;
       end;
-      hence thesis by A8,POLYNOM1:def 7;
+      (pfexp m).x <> 0 by A7,PRE_POLY:def 7;
+      then 0 < (pfexp m).x;
+      hence thesis by A8,PRE_POLY:def 7;
     end;
   end;
-  hence thesis by A2,A3,A4,A5,XBOOLE_0:def 10;
+A9: support ppf m = support pfexp m by NAT_3:def 9;
+A10: support ppf k =support pfexp k by NAT_3:def 9
+    .=support max(pfexp n,pfexp m) by A1,NAT_3:54;
+  then support ppf k c= (support ppf n) \/ (support ppf m) by A2,A9,NAT_3:18;
+  hence thesis by A10,A2,A9,A3,XBOOLE_0:def 10;
 end;
 
 theorem Th10:
-  for X being set,b1,b2 being bag of X
-  holds support min(b1,b2) = support b1 /\ support b2
+  for X being set,b1,b2 being bag of X holds support min(b1,b2) =
+  support b1 /\ support b2
 proof
   let X be set;
   let b1,b2 be bag of X;
   set f = min(b1,b2);
-A1: for x be set holds
-  x in support b1 & x in support b2 implies x in support min(b1,b2)
-  proof
-    let x be set;
-    assume (x in support b1) & (x in support b2);
-    then
-A2: b1.x<>0 & b2.x<>0 by POLYNOM1:def 7;
-    b1.x <= b2.x or b1.x > b2.x;
-    then f.x = b1.x or f.x = b2.x by NAT_3:def 3;
-    hence thesis by A2,POLYNOM1:def 7;
-  end;
-  for x be set holds x in support min(b1,b2)
-  implies x in support b1 & x in support b2
+A1: for x be set holds x in support min(b1,b2) implies x in support b1 & x
+  in support b2
   proof
     let x be set;
     assume
-A3: x in support min(b1,b2);
+A2: x in support min(b1,b2);
     assume
-A4: not( x in support b1) or not ( x in support b2);
-    now per cases;
+A3: not x in support b1 or not x in support b2;
+    now
+      per cases;
       case
-A5:     b1.x<=b2.x;
-A6:     not( x in support b1)
+A4:     b1.x<=b2.x;
+A5:     not x in support b1
         proof
-          assume x in support b1;
-          then b1.x<>0 & b2.x=0 by A4,POLYNOM1:def 7;
-          hence contradiction by A5;
+          assume
+A6:       x in support b1;
+          then
+A7:       b1.x<>0 by PRE_POLY:def 7;
+          b2.x=0 by A3,A6,PRE_POLY:def 7;
+          hence contradiction by A4,A7;
         end;
-        f.x = b1.x by A5,NAT_3:def 3
-          .=0 by A6,POLYNOM1:def 7;
-        hence contradiction by A3,POLYNOM1:def 7;
+        f.x = b1.x by A4,NAT_3:def 3
+          .=0 by A5,PRE_POLY:def 7;
+        hence contradiction by A2,PRE_POLY:def 7;
       end;
       case
-A7:     b2.x<b1.x;
-        f.x = b2.x by A7,NAT_3:def 3
-          .=0 by A4,A7,POLYNOM1:def 7;
-        hence contradiction by A3,POLYNOM1:def 7;
+A8:     b2.x<b1.x;
+        then f.x = b2.x by NAT_3:def 3
+          .=0 by A3,A8,PRE_POLY:def 7;
+        hence contradiction by A2,PRE_POLY:def 7;
       end;
     end;
     hence thesis;
+  end;
+  for x be set holds x in support b1 & x in support b2 implies x in
+  support min(b1,b2)
+  proof
+    let x be set;
+    assume that
+A9: x in support b1 and
+A10: x in support b2;
+A11: b2.x<>0 by A10,PRE_POLY:def 7;
+    b1.x <= b2.x or b1.x > b2.x;
+    then
+A12: f.x = b1.x or f.x = b2.x by NAT_3:def 3;
+    b1.x<>0 by A9,PRE_POLY:def 7;
+    hence thesis by A11,A12,PRE_POLY:def 7;
   end;
   hence thesis by A1,XBOOLE_0:def 4;
 end;
 
 theorem
-  for n,m,k be non empty natural number st k = n gcd m holds
-  support ppf k = (support ppf n) /\ (support ppf m)
+  for n,m,k be non empty natural number st k = n gcd m holds support ppf
+  k = (support ppf n) /\ (support ppf m)
 proof
   let n,m,k be non empty natural number;
   assume
 A1: k = n gcd m;
-A2: support ppf k =support pfexp k by NAT_3:def 9
+A2: support ppf n = support pfexp n by NAT_3:def 9;
+A3: support ppf m = support pfexp m by NAT_3:def 9;
+  support ppf k =support pfexp k by NAT_3:def 9
     .=support min(pfexp n,pfexp m) by A1,NAT_3:53;
-A3: support ppf n = support pfexp n by NAT_3:def 9;
-  support ppf m = support pfexp m by NAT_3:def 9;
   hence thesis by A2,A3,Th10;
 end;
 
 theorem Th12:
-  for p,q be bag of SetPrimes st p is prime-factorization-like &
-  q is prime-factorization-like & (support p) misses (support q) holds
-  Product p,Product q are_relative_prime
+  for p,q be bag of SetPrimes st p is prime-factorization-like & q
+  is prime-factorization-like & (support p) misses (support q) holds Product p,
+  Product q are_relative_prime
 proof
   let p,q be bag of SetPrimes;
+  assume that
+A1: p is prime-factorization-like and
+A2: q is prime-factorization-like and
+A3: (support p) misses (support q);
   assume
-A1: p is prime-factorization-like &
-  q is prime-factorization-like & (support p) misses (support q);
-  assume not Product p,Product q are_relative_prime;
+  not Product p,Product q are_relative_prime;
   then consider x be prime Nat such that
-A2: x divides (Product p) & x divides (Product q) by PYTHTRIP:def 2;
-A3: x in (support p) by A1,A2,Lm7;
-  x in (support q) by A1,A2,Lm7;
-  hence contradiction by A1,A3,XBOOLE_0:3;
+A4: x divides (Product p) and
+A5: x divides (Product q) by PYTHTRIP:def 2;
+A6: x in (support q) by A2,A5,Lm7;
+  x in (support p) by A1,A4,Lm7;
+  hence contradiction by A3,A6,XBOOLE_0:3;
 end;
 
 Lm8: for q be Prime,g be Element of NAT st g <> 0 ex p1 be bag of SetPrimes st
 p1 = (SetPrimes --> 0)+*(q,g) & support p1 = {q} & Product p1 = g
+
 proof
   let q be Prime,g be Element of NAT;
-  assume
-A1: g <> 0;
   set p = (SetPrimes --> 0)+*(q,g);
-A2: dom(SetPrimes --> 0) = SetPrimes by FUNCOP_1:19;
   reconsider p as ManySortedSet of SetPrimes;
-  q in dom(SetPrimes --> 0) by A2,NEWTON:def 6;
+A1: dom(SetPrimes --> 0) = SetPrimes by FUNCOP_1:19;
+  then q in dom(SetPrimes --> 0) by NEWTON:def 6;
   then
-A3: p.q = g by FUNCT_7:33;
-A4: for x st not x in {q} holds p.x=0
+A2: p.q = g by FUNCT_7:33;
+A3: for x st not x in {q} holds p.x=0
   proof
     let x be set;
-    assume not x in {q};
+    assume
+    not x in {q};
     then x <> q by TARSKI:def 1;
     hence thesis by Lm1;
   end;
-A5: support p = {q}
-  proof
-    now
-      let z be set;
-      assume
-A6:   z in support p;
-      z in dom p
-      proof
-        assume not z in dom p;
-        then p.z = {} by FUNCT_1:def 4;
-        hence contradiction by A6,POLYNOM1:def 7;
-      end;
-      then reconsider y = z as Element of SetPrimes by A2,FUNCT_7:32;
-A7:   p.y <> 0 by A6,POLYNOM1:def 7;
-      assume not z in {q};
-      thus z in {q} by A4,A7;
-    end;
-    then for z be set st z in support p holds z in {q};
-    then
-A8: support p c= {q} by TARSKI:def 3;
-    now
-      let z be set;
-      assume z in {q};
-      then
-A9:   z=q by TARSKI:def 1;
-      then
-      reconsider y = z as Element of SetPrimes by NEWTON:def 6;
-      thus z in support p by A1,A3,A9,POLYNOM1:def 7;
-    end;
-    then
-    {q} c= support p by TARSKI:def 3;
-    hence thesis by A8,XBOOLE_0:def 10;
-  end;
-  reconsider p as bag of SetPrimes by A5,POLYNOM1:def 8;
-  take p;
-  consider f being FinSequence of COMPLEX such that
-A10: Product p = Product f & f = p*canFS(support p) by NAT_3:def 5;
-A11: q in support p by A5,TARSKI:def 1;
-A12: q in dom p
-  proof
-    assume not q in dom p;
-    then
-    p.q = {} by FUNCT_1:def 4;
-    hence contradiction by A11,POLYNOM1:def 7;
-  end;
-  f = p*(<*q*>) by A5,A10,UPROOTS:6;
-  then f = <*(p.q)*> by A12,BAGORDER:3;
-  hence thesis by A3,A5,A10,RVSUM_1:125;
-end;
-
-Lm9: for p be bag of SetPrimes, x be Prime st p is prime-factorization-like &
-x in support p & p.x = x holds ex p1,r1 be bag of SetPrimes st
-p1 is prime-factorization-like & (support r1) = {x} & Product r1 = x &
-(support p1) = (support p) \ {x} & p1 | (support p1) = p | (support p1) &
-Product p= (Product p1)*x
-proof
-  let p be bag of SetPrimes,x be Prime;
-  assume
-A1: p is prime-factorization-like & x in support p & p.x = x;
-  then
-  {x} c= support p by ZFMISC_1:37;
-  then
-  consider q,r be bag of SetPrimes such that
-A2: (support q) = (support p) \ {x}& (support r) = {x} &
-  (support q) misses (support r) & q | (support q) =p | (support q) &
-  r | (support r) =p | (support r) & q+r = p by Lm3;
-A3: (Product q)*(Product r) = Product p by A2,NAT_3:19;
-  defpred C[set] means $1 in {x};
-  consider nx be natural number such that
-A4: 0 < nx & p.x =x |^ nx by A1,Def1;
-  consider mx be Nat such that
-A5: nx=mx + 1 by A4,NAT_1:6;
-A6: mx = 0
-  proof
-    assume mx <> 0;
-    then 0 < mx;
-    then
-A7: 0+1 < mx+ 1 by XREAL_1:10;
-    1 < x by INT_2:def 5;
-    then
-A8: x to_power 1 < x to_power nx by A5,A7,POWER:44;
-    x|^1 < x to_power nx by A8,POWER:46;
-    then
-    x|^1 < x |^ nx by POWER:46;
-    hence contradiction by A1,A4,NEWTON:10;
-  end;
-A9: q is prime-factorization-like
-  proof
-    now
-      let z be Prime;
-      assume
-A10:  z in support q;
-A11:  (support q) c= (support p) by A2,XBOOLE_1:36;
-      consider n be natural number such that
-A12:  0 < n & p.z =z |^ n by A1,A10,A11,Def1;
-      take n;
-      q.z = (q|support q).z by A10,FUNCT_1:72
-        .= p.z by A2,A10,FUNCT_1:72;
-      hence 0 < n & q.z =z |^ n by A12;
-    end;
-    hence thesis by Def1;
-  end;
-A13: x in (support r) by A2,TARSKI:def 1;
-A14: r.x =(r | (support r)).x by A13,FUNCT_1:72
-    .= p.x by A2,A13,FUNCT_1:72
-    .= x by A4,A5,A6,NEWTON:10;
-  r = (SetPrimes --> 0)+*(x,r.x) by A2,Th1;
-  then ex rr1 be bag of SetPrimes st rr1=r & support rr1 = {x} &
-  Product rr1 = x by A14,Lm8;
-  hence thesis by A2,A3,A9;
-end;
-
-Lm10: for p be bag of SetPrimes,x be Prime st
-p is prime-factorization-like & x in support p & p.x <> x holds
-ex p1,r1 be bag of SetPrimes st p1 is prime-factorization-like &
-(support r1) = {x} & Product r1 = x & support p1 = support p &
-p1 | ((support p1) \ {x}) =p | ((support p1) \{x})& p.x =(p1.x)*x &
-Product p= (Product p1)*x
-proof
-  let p be bag of SetPrimes,x be Prime;
-  assume
-A1: p is prime-factorization-like& x in support p & p.x <> x;
-  then
-A2: {x} c= support p by ZFMISC_1:37;
-  then
-  consider q,r be bag of SetPrimes such that
-A3: (support q) = (support p) \ {x} & (support r) = {x} &
-  (support q) misses (support r) & q | (support q) =p | (support q) &
-  r | (support r) =p | (support r) & q+r = p by Lm3;
-  defpred C[set] means $1 in {x};
-A4: (support q) /\ (support r) = {} by A3,XBOOLE_0:def 7;
-  set r10 = (SetPrimes --> 0)+*(x,x);
-  consider nx be natural number such that
-A5: 0 < nx & p.x =x |^ nx by A1,Def1;
-  consider mx be Nat such that
-A6: nx=mx + 1 by A5,NAT_1:6;
-A7: mx <> 0 by A1,A5,A6,NEWTON:10;
-A8: x in (support r) by A3,TARSKI:def 1;
-A9: r.x =(r | (support r)).x by A8,FUNCT_1:72
-    .=p.x by A3,A8,FUNCT_1:72;
-A10: (r.x)/x =((x |^ mx)*x)/x by A5,A6,A9,NEWTON:11
-    .= x |^mx by XCMPLX_1:90;
-  reconsider rxx= (r.x)/x as Element of NAT by A10,ORDINAL1:def 13;
-  defpred C2[set] means $1 in {x};
-  set r20 = (SetPrimes --> 0)+*(x,rxx);
-  x is Element of NAT & x <> 0 by ORDINAL1:def 13;
-  then consider r1 be bag of SetPrimes such that
-A11: r1=r10 & support r1 = {x} & Product r1 = x by Lm8;
-  rxx <> 0
-  proof
-    assume
-A12: rxx=0;
-    r.x= rxx*x by XCMPLX_1:88
-      .=0 by A12;
-    hence contradiction by A5,A9;
-  end;
-  then
-  consider r2 be bag of SetPrimes such that
-A13: r2=r20 & support r2 = {x} & Product r2 = rxx by Lm8;
-A14: r.x= rxx*x by XCMPLX_1:88;
-  r = (SetPrimes --> 0)+*(x,r.x) by A3,Th1;
-  then
-A15: ex rr1 be bag of SetPrimes st rr1=r & support rr1 = {x} &
-  Product rr1 = rxx*x by A5,A9,A14,Lm8;
-A16: dom(SetPrimes-->0) = SetPrimes by FUNCOP_1:19;
-  then
-A17: x in dom(SetPrimes-->0) by NEWTON:def 6;
-  set p1=q+r2;
-  x in {x} by TARSKI:def 1;
-  then
-A18: not x in support q by A3,XBOOLE_0:def 5;
-  p1.x= q.x + r2.x by POLYNOM1:def 5
-    .= 0 + r2.x by A18,POLYNOM1:def 7
-    .= rxx by A13,A17,FUNCT_7:33;
-  then
-A19: p.x =(p1.x)*x by A9,XCMPLX_1:88;
-A20: Product p = (Product q)*((Product r2)*x) by A3,A13,A15,NAT_3:19
-    .= ((Product q)*(Product r2))*x
-    .= (Product p1)*x by A3,A13,NAT_3:19;
-A21: p1 is prime-factorization-like
-  proof
-    now
-      let z be Prime;
-      assume z in support p1;
-      then
-A22:  z in support q \/ support r2 by POLYNOM1:42;
-A23:  p1.z= q.z + r2.z by POLYNOM1:def 5;
-      per cases by A22,XBOOLE_0:def 3;
-      suppose
-A24:    z in support q;
-        (support q) c= (support p) by A3,XBOOLE_1:36;
-        then
-        consider n be natural number such that
-A25:    0 < n & p.z =z |^ n by A1,A24,Def1;
-A26:    q.z = (q|support q).z by A24,FUNCT_1:72
-          .= p.z by A3,A24,FUNCT_1:72;
-        not z in {x} by A3,A24,XBOOLE_0:def 5;
-        then
-A27:    r2.z = 0 by A13,POLYNOM1:def 7; thus
-        ex n be natural number st 0 < n & p1.z =z |^ n by A23,A25,A26,A27;
-      end;
-      suppose
-A28:    z in support r2;
-        then
-A29:    z = x by A13,TARSKI:def 1;
-A30:    not z in support q by A3,A4,A13,A28,XBOOLE_0:def 4;
-        take mx;
-        thus 0 < mx by A7;
-        p1.z= q.z + r2.z by POLYNOM1:def 5
-          .= 0 + r2.z by A30,POLYNOM1:def 7
-          .= z |^ mx by A10,A13,A16,A28,A29,FUNCT_7:33;
-        hence p1.z = z |^ mx;
-      end;
-    end;
-    hence thesis by Def1;
-  end;
-A31: dom p1= SetPrimes by PARTFUN1:def 4
-    .= dom p by PARTFUN1:def 4;
   now
     let z be set;
     assume
-A32: z in (support p1) \ {x};
-    then z in support p1 by XBOOLE_0:def 5;
-    then z in support q \/ support r2 by POLYNOM1:42;
+A4: z in support p;
+    z in dom p
+    proof
+      assume
+      not z in dom p;
+      then p.z = {} by FUNCT_1:def 4;
+      hence contradiction by A4,PRE_POLY:def 7;
+    end;
+    then reconsider y = z as Element of SetPrimes by A1,FUNCT_7:32;
+    assume
+    not z in {q};
+    p.y <> 0 by A4,PRE_POLY:def 7;
+    hence z in {q} by A3;
+  end;
+  then for z be set st z in support p holds z in {q};
+  then
+A5: support p c= {q} by TARSKI:def 3;
+  assume
+A6: g <> 0;
+  now
+    let z be set;
+    assume
+    z in {q};
     then
-A33: z in support q or z in support r2 by XBOOLE_0:def 3;
-A34: p1.z= q.z + r2.z by POLYNOM1:def 5;
-A35: q.z = (q|support q).z by A13,A32,A33,FUNCT_1:72,XBOOLE_0:def 5
-      .= p.z by A3,A13,A32,A33,FUNCT_1:72,XBOOLE_0:def 5;
-    not z in {x} by A32,XBOOLE_0:def 5;
-    then r2.z = 0 by A13,POLYNOM1:def 7;
-    hence p1.z =p.z by A34,A35;
+A7: z=q by TARSKI:def 1;
+    then reconsider y = z as Element of SetPrimes by NEWTON:def 6;
+    thus z in support p by A6,A2,A7,PRE_POLY:def 7;
   end;
   then
-A36: p1 | ((support p1) \ {x}) =p | ((support p1) \{x}) by A31,FUNCT_1:166;
-  support p1 = ( (support p) \ {x}) \/ {x} by A3,A13,POLYNOM1:42
+A8: {q} c= support p by TARSKI:def 3;
+  then
+A9: support p = {q} by A5,XBOOLE_0:def 10;
+  reconsider p as bag of SetPrimes by A5,PRE_POLY:def 8;
+A10: q in support p by A9,TARSKI:def 1;
+A11: q in dom p
+  proof
+    assume
+    not q in dom p;
+    then p.q = {} by FUNCT_1:def 4;
+    hence contradiction by A10,PRE_POLY:def 7;
+  end;
+  take p;
+  consider f being FinSequence of COMPLEX such that
+A12: Product p = Product f and
+A13: f = p*canFS(support p) by NAT_3:def 5;
+  f = p*(<*q*>) by A9,A13,UPROOTS:6;
+  then f = <*(p.q)*> by A11,BAGORDER:3;
+  hence thesis by A2,A5,A8,A12,RVSUM_1:125,XBOOLE_0:def 10;
+end;
+
+Lm9: for p be bag of SetPrimes, x be Prime st p is prime-factorization-like &
+x in support p & p.x = x holds ex p1,r1 be bag of SetPrimes st p1 is
+prime-factorization-like & (support r1) = {x} & Product r1 = x & (support p1) =
+(support p) \ {x} & p1 | (support p1) = p | (support p1) & Product p= (Product
+p1)*x
+
+proof
+  let p be bag of SetPrimes,x be Prime;
+  assume that
+A1: p is prime-factorization-like and
+A2: x in support p and
+A3: p.x = x;
+  consider nx be natural number such that
+A4: 0 < nx and
+A5: p.x =x |^ nx by A1,A2,Def1;
+  consider mx be Nat such that
+A6: nx=mx + 1 by A4,NAT_1:6;
+A7: mx = 0
+  proof
+    assume
+    mx <> 0;
+    then
+A8: 0+1 < mx+ 1 by XREAL_1:10;
+    1 < x by INT_2:def 5;
+    then x to_power 1 < x to_power nx by A6,A8,POWER:44;
+    then x|^1 < x to_power nx by POWER:46;
+    then x|^1 < x |^ nx by POWER:46;
+    hence contradiction by A3,A5,NEWTON:10;
+  end;
+  {x} c= support p by A2,ZFMISC_1:37;
+  then consider q,r be bag of SetPrimes such that
+A9: (support q) = (support p) \ {x} and
+A10: (support r) = {x} and
+A11: (support q) misses (support r) and
+A12: q | (support q) =p | (support q) and
+A13: r | (support r) =p | (support r) and
+A14: q+r = p by Lm3;
+A15: r = (SetPrimes --> 0)+*(x,r.x) by A10,Th1;
+  now
+    let z be Prime;
+    assume
+A16: z in support q;
+    (support q) c= (support p) by A9,XBOOLE_1:36;
+    then consider n be natural number such that
+A17: 0 < n and
+A18: p.z =z |^ n by A1,A16,Def1;
+    take n;
+    q.z = (q|support q).z by A16,FUNCT_1:72
+      .= p.z by A12,A16,FUNCT_1:72;
+    hence 0 < n & q.z =z |^ n by A17,A18;
+  end;
+  then
+A19: q is prime-factorization-like by Def1;
+A20: x in (support r) by A10,TARSKI:def 1;
+  then r.x =(r | (support r)).x by FUNCT_1:72
+    .= p.x by A13,A20,FUNCT_1:72
+    .= x by A5,A6,A7,NEWTON:10;
+
+  then
+A21: ex rr1 be bag of SetPrimes st rr1=r & support rr1 = {x} & Product rr1 =
+  x by A15,Lm8;
+
+  (Product q)*(Product r) = Product p by A11,A14,NAT_3:19;
+  hence thesis by A9,A12,A19,A21;
+  defpred C[set] means $1 in {x};
+end;
+
+Lm10: for p be bag of SetPrimes,x be Prime st p is prime-factorization-like &
+x in support p & p.x <> x holds ex p1,r1 be bag of SetPrimes st p1 is
+prime-factorization-like & (support r1) = {x} & Product r1 = x & support p1 =
+support p & p1 | ((support p1) \ {x}) =p | ((support p1) \{x})& p.x =(p1.x)*x &
+Product p= (Product p1)*x
+
+proof
+  let p be bag of SetPrimes,x be Prime;
+  assume that
+A1: p is prime-factorization-like and
+A2: x in support p and
+A3: p.x <> x;
+  consider nx be natural number such that
+A4: 0 < nx and
+A5: p.x =x |^ nx by A1,A2,Def1;
+  consider mx be Nat such that
+A6: nx=mx + 1 by A4,NAT_1:6;
+A7: mx <> 0 by A3,A5,A6,NEWTON:10;
+A8: dom(SetPrimes-->0) = SetPrimes by FUNCOP_1:19;
+  then
+A9: x in dom(SetPrimes-->0) by NEWTON:def 6;
+  defpred C2[set] means $1 in {x};
+  set r10 = (SetPrimes --> 0)+*(x,x);
+  defpred C[set] means $1 in {x};
+  x is Element of NAT by ORDINAL1:def 13;
+
+  then
+A10: ex r1 be bag of SetPrimes st r1=r10 & support r1 = {x} & Product r1
+  = x by Lm8;
+
+A11: {x} c= support p by A2,ZFMISC_1:37;
+  then consider q,r be bag of SetPrimes such that
+A12: (support q) = (support p) \ {x} and
+A13: (support r) = {x} and
+A14: (support q) misses (support r) and
+A15: q | (support q) =p | (support q) and
+A16: r | (support r) =p | (support r) and
+A17: q+r = p by Lm3;
+A18: x in (support r) by A13,TARSKI:def 1;
+  then
+A19: r.x =(r | (support r)).x by FUNCT_1:72
+    .=p.x by A16,A18,FUNCT_1:72;
+  then
+A20: (r.x)/x =((x |^ mx)*x)/x by A5,A6,NEWTON:11
+    .= x |^mx by XCMPLX_1:90;
+  then reconsider rxx= (r.x)/x as Element of NAT by ORDINAL1:def 13;
+  set r20 = (SetPrimes --> 0)+*(x,rxx);
+  rxx <> 0
+  proof
+    assume
+A21: rxx=0;
+    r.x= rxx*x by XCMPLX_1:88
+      .=0 by A21;
+    hence contradiction by A5,A19;
+  end;
+  then consider r2 be bag of SetPrimes such that
+A22: r2=r20 and
+A23: support r2 = {x} and
+A24: Product r2 = rxx by Lm8;
+  set p1=q+r2;
+A25: r = (SetPrimes --> 0)+*(x,r.x) by A13,Th1;
+A26: now
+    let z be set;
+A27: p1.z= q.z + r2.z by PRE_POLY:def 5;
+    assume
+A28: z in (support p1) \ {x};
+    then not z in {x} by XBOOLE_0:def 5;
+    then
+A29: r2.z = 0 by A23,PRE_POLY:def 7;
+    z in support p1 by A28,XBOOLE_0:def 5;
+    then z in support q \/ support r2 by PRE_POLY:38;
+    then
+A30: z in support q or z in support r2 by XBOOLE_0:def 3;
+    then q.z = (q|support q).z by A23,A28,FUNCT_1:72,XBOOLE_0:def 5
+      .= p.z by A15,A23,A28,A30,FUNCT_1:72,XBOOLE_0:def 5;
+    hence p1.z =p.z by A27,A29;
+  end;
+  dom p1= SetPrimes by PARTFUN1:def 4
+    .= dom p by PARTFUN1:def 4;
+
+  then
+A31: p1 | ((support p1) \ {x}) =p | ((support p1) \{x}) by A26,FUNCT_1:166;
+
+A32: (support q) /\ (support r) = {} by A14,XBOOLE_0:def 7;
+  now
+    let z be Prime;
+A33: p1.z= q.z + r2.z by PRE_POLY:def 5;
+    assume
+    z in support p1;
+    then
+A34: z in support q \/ support r2 by PRE_POLY:38;
+    per cases by A34,XBOOLE_0:def 3;
+    suppose
+A35:  z in support q;
+      then not z in {x} by A12,XBOOLE_0:def 5;
+      then
+A36:  r2.z = 0 by A23,PRE_POLY:def 7;
+A37:  (support q) c= (support p) by A12,XBOOLE_1:36;
+      q.z = (q|support q).z by A35,FUNCT_1:72
+        .= p.z by A15,A35,FUNCT_1:72;
+
+      hence ex n be natural number st 0 < n & p1.z =z |^ n by A1,A33,A35,A37
+,A36,Def1;
+
+    end;
+    suppose
+A38:  z in support r2;
+      take mx;
+      thus 0 < mx by A7;
+A39:  z = x by A23,A38,TARSKI:def 1;
+A40:  not z in support q by A13,A32,A23,A38,XBOOLE_0:def 4;
+      p1.z= q.z + r2.z by PRE_POLY:def 5
+        .= 0 + r2.z by A40,PRE_POLY:def 7
+        .= z |^ mx by A20,A22,A8,A38,A39,FUNCT_7:33;
+      hence p1.z = z |^ mx;
+    end;
+  end;
+  then
+A41: p1 is prime-factorization-like by Def1;
+  x in {x} by TARSKI:def 1;
+  then
+A42: not x in support q by A12,XBOOLE_0:def 5;
+  p1.x= q.x + r2.x by PRE_POLY:def 5
+    .= 0 + r2.x by A42,PRE_POLY:def 7
+    .= rxx by A22,A9,FUNCT_7:33;
+  then
+A43: p.x =(p1.x)*x by A19,XCMPLX_1:88;
+  r.x= rxx*x by XCMPLX_1:88;
+
+  then
+  ex rr1 be bag of SetPrimes st rr1=r & support rr1 = {x} & Product rr1 =
+  rxx*x by A5,A19,A25,Lm8;
+
+  then
+A44: Product p = (Product q)*((Product r2)*x) by A14,A17,A24,NAT_3:19
+    .= ((Product q)*(Product r2))*x
+    .= (Product p1)*x by A13,A14,A23,NAT_3:19;
+  support p1 = ( (support p) \ {x}) \/ {x} by A12,A23,PRE_POLY:38
     .= (support p) \/ {x} by XBOOLE_1:39
-    .= support p by A2,XBOOLE_1:12;
-  hence thesis by A11,A19,A20,A21,A36;
+    .= support p by A11,XBOOLE_1:12;
+  hence thesis by A10,A43,A44,A41,A31;
 end;
 
 theorem Th13:
@@ -1374,21 +1501,22 @@ proof
   let p be bag of SetPrimes;
   assume
 A1: p is prime-factorization-like;
+A2: rng canFS(support p) = support p by FUNCT_2:def 3;
   consider f being FinSequence of COMPLEX such that
-A2: Product p = Product f & f = p*canFS(support p) by NAT_3:def 5;
+A3: Product p = Product f and
+A4: f = p*canFS(support p) by NAT_3:def 5;
   reconsider f as complex-yielding FinSequence;
-  assume Product p = 0;
+  assume
+  Product p = 0;
+  then consider k be Nat such that
+A5: k in dom f and
+A6: f.k = 0 by A3,RVSUM_1:133;
+  k in dom (canFS(support p)) by A4,A5,FUNCT_1:21;
   then
-  consider k be Nat such that
-A3: k in dom f&f.k = 0 by A2,RVSUM_1:133;
-A4: rng canFS(support p) = support p by FUNCT_2:def 3;
-  k in dom (canFS(support p)) by A2,A3,FUNCT_1:21;
-  then
-A5: (canFS(support p)).k in support p by A4,FUNCT_1:12;
+A7: (canFS(support p)).k in support p by A2,FUNCT_1:12;
   then reconsider q= (canFS(support p)).k as Prime by NEWTON:def 6;
-  consider n be natural number such that
-A6: 0 < n & p.q = q|^n by A1,A5,Def1;
-  thus contradiction by A2,A3,A6,FUNCT_1:22;
+  ex n be natural number st 0 < n & p.q = q|^n by A1,A7,Def1;
+  hence contradiction by A4,A5,A6,FUNCT_1:22;
 end;
 
 theorem Th14:
@@ -1403,243 +1531,251 @@ A2: now
 A3: Product p = 1;
     thus support p = {}
     proof
-      assume support p <> {};
-      then
-      consider q be set such that
+      assume
+      support p <> {};
+      then consider q be set such that
 A4:   q in support p by XBOOLE_0:def 1;
       q in SetPrimes by A4;
-      then
-      reconsider q as Element of NAT;
+      then reconsider q as Element of NAT;
       reconsider q as Prime by A4,NEWTON:def 6;
-      q divides Product p by A1,A4,Lm4;
-      then
-      q =1 by A3,WSIERP_1:20;
+      q =1 by A1,A3,A4,Lm4,WSIERP_1:20;
       hence contradiction by INT_2:def 5;
     end;
   end;
   now
-    assume
-A5: support p = {};
     consider f being FinSequence of COMPLEX such that
-A6: Product p = Product f & f = p*canFS(support p) by NAT_3:def 5;
+A5: Product p = Product f and
+A6: f = p*canFS(support p) by NAT_3:def 5;
+    assume
+    support p = {};
+    hence Product p =1 by A5,A6,RVSUM_1:124;
 A7: rng p c= NAT by VALUED_0:def 6;
     rng f c= rng p by A6,RELAT_1:45;
     then rng f c= NAT by A7,XBOOLE_1:1;
     then reconsider f as FinSequence of NAT by FINSEQ_1:def 4;
-    len canFS(support p) = 0 by A5;
-    then canFS(support p) = {};
-    then f = {} by A6;
-    hence Product p =1 by A6,RVSUM_1:124;
   end;
   hence thesis by A2;
 end;
 
-Lm11: for n be Element of NAT, p,q be bag of SetPrimes st
-p is prime-factorization-like & q is prime-factorization-like &
-Product p <= 2|^n & Product p = Product q holds p=q
+Lm11: for n be Element of NAT, p,q be bag of SetPrimes st p is
+prime-factorization-like & q is prime-factorization-like & Product p <= 2|^n &
+Product p = Product q holds p=q
+
 proof
-  defpred P[Element of NAT] means for p,q be bag of SetPrimes st
-  p is prime-factorization-like & q is prime-factorization-like &
-  Product p <= 2|^ $1 & Product p = Product q holds p=q;
-A1: P[ 0 ]
-  proof
-    let p,q be bag of SetPrimes;
-    assume
-A2: p is prime-factorization-like & q is prime-factorization-like &
-    Product p <= 2|^0 & Product p = Product q;
-A3: Product p <= 1 by A2,NEWTON:9;
-    Product p <> 0 by A2,Th13;
-    then 0 < Product p;
-    then 0 +1 <= Product p by NAT_1:13;
-    then
-A4: Product p =1 by A3,XXREAL_0:1;
-    then
-A5: support p={} by A2,Th14;
-    support q ={} by A2,A4,Th14;
-    hence thesis by A5,Th4;
-  end;
-A6: now
+
+  defpred P[Element of NAT] means for p,q be bag of SetPrimes st p is
+
+prime-factorization-like & q is prime-factorization-like & Product p <= 2|^ $1
+  & Product p = Product q holds p=q;
+
+A1: now
     let k be Element of NAT;
     assume
-A7: P[k];
+A2: P[k];
     now
       let p,q be bag of SetPrimes;
-      assume
-A8:   p is prime-factorization-like &
-      q is prime-factorization-like & Product p <= 2|^ (k+1) &
-      Product p = Product q;
-      now per cases;
+      assume that
+A3:   p is prime-factorization-like and
+A4:   q is prime-factorization-like and
+A5:   Product p <= 2|^ (k+1) and
+A6:   Product p = Product q;
+      now
+        per cases;
         suppose
-A9:       support p={};
-          then Product p =1 by A8,Th14;
-          then support q ={} by A8,Th14;
-          hence p=q by A9,Th4;
+A7:       support p={};
+          then Product p =1 by A3,Th14;
+          then support q ={} by A4,A6,Th14;
+          hence p=q by A7,Th4;
         end;
-        suppose support p<>{};
+        suppose
+          support p<>{};
+          then consider x be set such that
+A8:       x in support p by XBOOLE_0:def 1;
+          reconsider x as Prime by A8,NEWTON:def 6;
+A9:       x divides Product p by A3,A8,Lm4;
           then
-          consider x be set such that
-A10:      x in support p by XBOOLE_0:def 1;
-          x is Element of SetPrimes by A10;
-          then reconsider x as Prime by NEWTON:def 6;
-          x divides Product p by A8,A10,Lm4;
-          then
-A11:      x in support q by A8,Lm7;
+A10:      x in support q by A4,A6,Lm7;
           per cases;
-          suppose p.x <> x;
-            then
-            consider p1,r1 be bag of SetPrimes such that
-A12:        p1 is prime-factorization-like &
-            (support r1) = {x} & Product r1 = x & support p1 = support p &
-            p1 | ((support p1) \ {x}) =p | ((support p1) \{x}) &
-            p.x =(p1.x)*x & Product p= (Product p1)*x by A8,A10,Lm10;
+          suppose
+            p.x <> x;
+            then consider p1,r1 be bag of SetPrimes such that
+A11:        p1 is prime-factorization-like and
+            (support r1) = {x} and
+            Product r1 = x and
+A12:        support p1 = support p and
+A13:        p1 | ((support p1) \ {x}) =p | ((support p1) \{x}) and
+A14:        p.x =(p1.x)*x and
+A15:        Product p= (Product p1)*x by A3,A8,Lm10;
             per cases;
-            suppose q.x <> x;
-              then consider q1,r2 be bag of SetPrimes such that
-A13:          q1 is prime-factorization-like & (support r2) = {x} &
-              Product r2 = x & support q1 = support q &
-              q1 | ((support q1) \ {x}) =q | ((support q1) \{x}) &
-              q.x =(q1.x)*x & Product q= (Product q1)*x by A8,A11,Lm10;
-A14:          1 < x by INT_2:def 5;
-A15:          1+1 <= x by A14,NAT_1:13;
-A16:          ((Product p1)*x) /x <= (2|^(k+1)) /x by A8,A12,XREAL_1:74;
-              (2|^(k+1)) /x <= (2|^(k+1)) /2 by A15,XREAL_1:120;
+            suppose
+A16:          q.x <> x;
+              1 < x by INT_2:def 5;
+              then 1+1 <= x by NAT_1:13;
               then
-              ((Product p1)*x) /x <= (2|^(k+1)) /2 by A16,XXREAL_0:2;
+A17:          (2|^(k+1)) /x <= (2|^(k+1)) /2 by XREAL_1:120;
+              consider q1,r2 be bag of SetPrimes such that
+A18:          q1 is prime-factorization-like and
+              (support r2) = {x} and
+              Product r2 = x and
+A19:          support q1 = support q and
+A20:          q1 | ((support q1) \ {x}) =q | ((support q1) \{x}) and
+A21:          q.x =(q1.x)*x and
+A22:          Product q= (Product q1)*x by A4,A6,A9,A16,Lm7,Lm10;
+              ((Product p1)*x) /x <= (2|^(k+1)) /x by A5,A15,XREAL_1:74;
+              then ((Product p1)*x) /x <= (2|^(k+1)) /2 by A17,XXREAL_0:2;
+              then Product p1 <= (2|^(k+1)) /2 by XCMPLX_1:90;
+              then Product p1 <= (2|^k*2|^1) /2 by NEWTON:13;
               then
-              Product p1 <= (2|^(k+1)) /2 by XCMPLX_1:90;
+A23:          Product p1 <= (2|^k*2) /2 by NEWTON:10;
               then
-              Product p1 <= (2|^k*2|^1) /2 by NEWTON:13;
-              then
-A17:          Product p1 <= (2|^k*2) /2 by NEWTON:10;
-A18:          p1=q1 by A7,A8,A12,A13,A17,XCMPLX_1:5;
-A19:          support p = support q by A7,A8,A12,A13,A17,XCMPLX_1:5;
-A20:          dom p= SetPrimes by PARTFUN1:def 4
-                .= dom q by PARTFUN1:def 4;
-              now
+A24:          p1=q1 by A2,A6,A11,A15,A18,A22,XCMPLX_1:5;
+A25:          now
                 let z be set;
                 assume
-A21:            z in support p;
+A26:            z in support p;
                 per cases;
-                suppose not z in {x};
+                suppose
+                  not z in {x};
                   then
-A22:              z in (support p1) \ {x} by A12,A21,XBOOLE_0:def 5;
-                  thus p.z = ( p| ((support p1) \ {x})).z by A22,FUNCT_1:72
-                    .= q.z by A12,A13,A18,A22,FUNCT_1:72;
+A27:              z in (support p1) \ {x} by A12,A26,XBOOLE_0:def 5;
+                  hence p.z = ( p| ((support p1) \ {x})).z by FUNCT_1:72
+                    .= q.z by A13,A20,A24,A27,FUNCT_1:72;
                 end;
                 suppose
-A23:              z in {x};
-                  thus p.z = (p1.x)*x by A12,A23,TARSKI:def 1
-                    .= (q1.x)*x by A7,A8,A12,A13,A17,XCMPLX_1:5
-                    .= q.z by A13,A23,TARSKI:def 1;
+A28:              z in {x};
+                  hence p.z = (p1.x)*x by A14,TARSKI:def 1
+                    .= (q1.x)*x by A2,A6,A11,A15,A18,A22,A23,XCMPLX_1:5
+                    .= q.z by A21,A28,TARSKI:def 1;
                 end;
               end;
-              then p| (support p) =q| (support q) by A19,A20,FUNCT_1:166;
+A29:          dom p= SetPrimes by PARTFUN1:def 4
+                .= dom q by PARTFUN1:def 4;
+
+              support p = support q by A2,A6,A11,A12,A15,A18,A19,A22,A23,
+XCMPLX_1:5;
+
+              then p| (support p) =q| (support q) by A29,A25,FUNCT_1:166;
               hence p=q by Th3;
             end;
-            suppose q.x = x;
+            suppose
+A30:          q.x = x;
+              1 < x by INT_2:def 5;
+              then 1+1 <= x by NAT_1:13;
               then
-              consider q1,r2 be bag of SetPrimes such that
-A24:          q1 is prime-factorization-like &
-              (support r2) = {x} & Product r2 = x &
-              (support q1) = (support q) \ {x} &
-              q1 | (support q1) =q | (support q1) &
-              Product q= (Product q1)*x by A8,A11,Lm9;
-A25:          1 < x by INT_2:def 5;
-A26:          1+1 <= x by A25,NAT_1:13;
-A27:          ((Product p1)*x) /x <= (2|^(k+1)) /x by A8,A12,XREAL_1:74;
-              (2|^(k+1)) /x <= (2|^(k+1)) /2 by A26,XREAL_1:120;
+A31:          (2|^(k+1)) /x <= (2|^(k+1)) /2 by XREAL_1:120;
+              ((Product p1)*x) /x <= (2|^(k+1)) /x by A5,A15,XREAL_1:74;
+              then ((Product p1)*x) /x <= (2|^(k+1)) /2 by A31,XXREAL_0:2;
+              then Product p1 <= (2|^(k+1)) /2 by XCMPLX_1:90;
+              then Product p1 <= (2|^k*2|^1) /2 by NEWTON:13;
               then
-              ((Product p1)*x) /x <= (2|^(k+1)) /2 by A27,XXREAL_0:2;
-              then
-              Product p1 <= (2|^(k+1)) /2 by XCMPLX_1:90;
-              then
-              Product p1 <= (2|^k*2|^1) /2 by NEWTON:13;
-              then
-A28:          Product p1 <= (2|^k*2) /2 by NEWTON:10;
-A29:          support p = support q \ {x} by A7,A8,A12,A24,A28,XCMPLX_1:5;
-              x in support q & not x in {x} by A10,A29,XBOOLE_0:def 5;
+A32:          Product p1 <= (2|^k*2) /2 by NEWTON:10;
+
+              ex q1,r2 be bag of SetPrimes st q1 is
+
+prime-factorization-like & (support r2) = {x} & Product r2 = x & (support q1
+
+) = (support q) \ {x} & q1 | (support q1) =q | (support q1) & Product q= (
+              Product q1)*x by A4,A6,A9,A30,Lm7,Lm9;
+
+              then support p = support q \ {x} by A2,A6,A11,A12,A15,A32,
+XCMPLX_1:5;
+
+              then not x in {x} by A8,XBOOLE_0:def 5;
               hence p=q by TARSKI:def 1;
             end;
           end;
           suppose
-A30:        p.x = x;
+A33:        p.x = x;
             then consider p1,r1 be bag of SetPrimes such that
-A31:        p1 is prime-factorization-like & (support r1) = {x} &
-            Product r1 = x & (support p1) = (support p) \ {x} &
-            p1 | (support p1) =p | (support p1) &
-            Product p= (Product p1)*x by A8,A10,Lm9;
+A34:        p1 is prime-factorization-like and
+            (support r1) = {x} and
+            Product r1 = x and
+A35:        (support p1) = (support p) \ {x} and
+A36:        p1 | (support p1) =p | (support p1) and
+A37:        Product p= (Product p1)*x by A3,A8,Lm9;
             per cases;
-            suppose q.x <> x;
-              then consider q1,r2 be bag of SetPrimes such that
-A32:          q1 is prime-factorization-like &
-              (support r2) = {x} & Product r2 = x & support q1 = support q &
-              q1 | ((support q1) \ {x}) =q | ((support q1) \{x}) &
-              q.x =(q1.x)*x & Product q= (Product q1)*x by A8,A11,Lm10;
-A33:          1 < x by INT_2:def 5;
-A34:          1+1 <= x by A33,NAT_1:13;
-A35:          ((Product p1)*x) /x <= (2|^(k+1)) /x by A8,A31,XREAL_1:74;
-              (2|^(k+1)) /x <= (2|^(k+1)) /2 by A34,XREAL_1:120;
+            suppose
+A38:          q.x <> x;
+              1 < x by INT_2:def 5;
+              then 1+1 <= x by NAT_1:13;
               then
-              ((Product p1)*x) /x <= (2|^(k+1)) /2 by A35,XXREAL_0:2;
+A39:          (2|^(k+1)) /x <= (2|^(k+1)) /2 by XREAL_1:120;
+              ((Product p1)*x) /x <= (2|^(k+1)) /x by A5,A37,XREAL_1:74;
+              then ((Product p1)*x) /x <= (2|^(k+1)) /2 by A39,XXREAL_0:2;
+              then Product p1 <= (2|^(k+1)) /2 by XCMPLX_1:90;
+              then Product p1 <= (2|^k*2|^1) /2 by NEWTON:13;
               then
-              Product p1 <= (2|^(k+1)) /2 by XCMPLX_1:90;
-              then
-              Product p1 <= (2|^k*2|^1) /2 by NEWTON:13;
-              then
-A36:          Product p1 <= (2|^k*2) /2 by NEWTON:10;
-A37:          support p \ {x} = support q by A7,A8,A31,A32,A36,XCMPLX_1:5;
-              x in support p & not x in {x} by A11,A37,XBOOLE_0:def 5;
+A40:          Product p1 <= (2|^k*2) /2 by NEWTON:10;
+
+              ex q1,r2 be bag of SetPrimes st q1 is
+
+prime-factorization-like & (support r2) = {x} & Product r2 = x & support q1
+
+= support q & q1 | ((support q1) \ {x}) =q | ((support q1) \{x}) & q.x =(q1.x
+              )*x & Product q= (Product q1)*x by A4,A6,A9,A38,Lm7,Lm10;
+
+              then support p \ {x} = support q by A2,A6,A34,A35,A37,A40,
+XCMPLX_1:5;
+
+              then not x in {x} by A10,XBOOLE_0:def 5;
               hence p=q by TARSKI:def 1;
             end;
             suppose
-A38:          q.x = x;
-              then consider q1,r2 be bag of SetPrimes such that
-A39:          q1 is prime-factorization-like &
-              (support r2) = {x} & Product r2 = x &
-              (support q1) = (support q) \ {x} &
-              q1 | (support q1) =q | (support q1) &
-              Product q= (Product q1)*x by A8,A11,Lm9;
-A40:          1 < x by INT_2:def 5;
-A41:          1+1 <= x by A40,NAT_1:13;
-A42:          ((Product p1)*x) /x <= (2|^(k+1)) /x by A8,A31,XREAL_1:74;
-              (2|^(k+1)) /x <= (2|^(k+1)) /2 by A41,XREAL_1:120;
+A41:          q.x = x;
+              1 < x by INT_2:def 5;
+              then 1+1 <= x by NAT_1:13;
+              then
+A42:          (2|^(k+1)) /x <= (2|^(k+1)) /2 by XREAL_1:120;
+              consider q1,r2 be bag of SetPrimes such that
+A43:          q1 is prime-factorization-like and
+              (support r2) = {x} and
+              Product r2 = x and
+A44:          (support q1) = (support q) \ {x} and
+A45:          q1 | (support q1) =q | (support q1) and
+A46:          Product q= (Product q1)*x by A4,A6,A9,A41,Lm7,Lm9;
+              ((Product p1)*x) /x <= (2|^(k+1)) /x by A5,A37,XREAL_1:74;
               then ((Product p1)*x) /x <= (2|^(k+1)) /2 by A42,XXREAL_0:2;
               then Product p1 <= (2|^(k+1)) /2 by XCMPLX_1:90;
               then Product p1 <= (2|^k*2|^1) /2 by NEWTON:13;
               then
-A43:          Product p1 <= (2|^k*2) /2 by NEWTON:10;
-A44:          p1=q1 by A7,A8,A31,A39,A43,XCMPLX_1:5;
-              support p \ {x}
-              = support q \ {x} by A7,A8,A31,A39,A43,XCMPLX_1:5;
+A47:          Product p1 <= (2|^k*2) /2 by NEWTON:10;
+
+              then support p \ {x} = support q \ {x} by A2,A6,A34,A35,A37,A43
+,A44,A46,XCMPLX_1:5;
+
+              then (support p) \/ {x} = (support q \ {x}) \/ {x} by XBOOLE_1:39
+;
+
               then
-              (support p) \/ {x} = (support q \ {x}) \/ {x} by XBOOLE_1:39;
-              then
-A45:          (support p) \/ {x} = (support q) \/ {x} by XBOOLE_1:39;
-A46:          {x} c= support p by A10,ZFMISC_1:37;
-A47:          {x} c= support q by A11,ZFMISC_1:37;
-A48:          support p = (support q) \/ {x} by A45,A46,XBOOLE_1:12;
-A49:          dom p= SetPrimes by PARTFUN1:def 4
-                .= dom q by PARTFUN1:def 4;
-              now
+A48:          (support p) \/ {x} = (support q) \/ {x} by XBOOLE_1:39;
+
+A49:          p1=q1 by A2,A6,A34,A37,A43,A46,A47,XCMPLX_1:5;
+A50:          now
                 let z be set;
                 assume
-A50:            z in (support p);
+A51:            z in (support p);
                 per cases;
-                suppose not z in {x};
+                suppose
+                  not z in {x};
                   then
-A51:              z in support p1 by A31,A50,XBOOLE_0:def 5;
-                  thus p.z = ( p1| (support p1)).z by A31,A51,FUNCT_1:72
-                    .= q.z by A39,A44,A51,FUNCT_1:72;
+A52:              z in support p1 by A35,A51,XBOOLE_0:def 5;
+                  hence p.z = ( p1| (support p1)).z by A36,FUNCT_1:72
+                    .= q.z by A45,A49,A52,FUNCT_1:72;
                 end;
                 suppose
-A52:              z in {x};
-                  thus p.z = x by A30,A52,TARSKI:def 1
-                    .= q.z by A38,A52,TARSKI:def 1;
+A53:              z in {x};
+                  hence p.z = x by A33,TARSKI:def 1
+                    .= q.z by A41,A53,TARSKI:def 1;
                 end;
               end;
+A54:          {x} c= support q by A10,ZFMISC_1:37;
+              {x} c= support p by A8,ZFMISC_1:37;
               then
-              p| (support p) = q| (support p) by A49,FUNCT_1:166
-                .=q| (support q) by A47,A48,XBOOLE_1:12;
+A55:          support p = (support q) \/ {x} by A48,XBOOLE_1:12;
+              dom p= SetPrimes by PARTFUN1:def 4
+                .= dom q by PARTFUN1:def 4;
+              then p| (support p) = q| (support p) by A50,FUNCT_1:166
+                .=q| (support q) by A54,A55,XBOOLE_1:12;
               hence p=q by Th3;
             end;
           end;
@@ -1649,226 +1785,239 @@ A52:              z in {x};
     end;
     hence P[k+1];
   end;
-  for k be Element of NAT holds P[k] from NAT_1:sch 1(A1,A6);
+A56: P[ 0 ]
+  proof
+    let p,q be bag of SetPrimes;
+    assume that
+A57: p is prime-factorization-like and
+A58: q is prime-factorization-like and
+A59: Product p <= 2|^0 and
+A60: Product p = Product q;
+    Product p <> 0 by A57,Th13;
+    then
+A61: 0 +1 <= Product p by NAT_1:13;
+    Product p <= 1 by A59,NEWTON:9;
+    then
+A62: Product p =1 by A61,XXREAL_0:1;
+    then
+A63: support p={} by A57,Th14;
+    support q ={} by A58,A60,A62,Th14;
+    hence thesis by A63,Th4;
+  end;
+  for k be Element of NAT holds P[k] from NAT_1:sch 1(A56,A1);
   hence thesis;
 end;
 
 theorem Th15:
-  for p,q be bag of SetPrimes st
-  p is prime-factorization-like &q is prime-factorization-like&
-  Product p = Product q holds p=q
+  for p,q be bag of SetPrimes st p is prime-factorization-like &q
+  is prime-factorization-like& Product p = Product q holds p=q
 proof
   let p,q be bag of SetPrimes;
-  assume
-A1: p is prime-factorization-like &
-  q is prime-factorization-like & Product p = Product q;
+  assume that
+A1: p is prime-factorization-like and
+A2: q is prime-factorization-like and
+A3: Product p = Product q;
   reconsider n=Product p as Element of NAT;
   n <=2|^n by NEWTON:105;
-  hence thesis by A1,Lm11;
+  hence thesis by A1,A2,A3,Lm11;
 end;
 
 theorem
-  for p be bag of SetPrimes, n be non empty natural number st
-  p is prime-factorization-like & n = Product p holds (ppf n) = p
+  for p be bag of SetPrimes, n be non empty natural number st p is
+  prime-factorization-like & n = Product p holds (ppf n) = p
 proof
   let p be bag of SetPrimes, n be non empty natural number;
-  assume
-A1: p is prime-factorization-like & n=Product p;
-  Product ppf n = Product p by A1,NAT_3:61;
+  assume that
+A1: p is prime-factorization-like and
+A2: n=Product p;
+  Product ppf n = Product p by A2,NAT_3:61;
   hence thesis by A1,Th15;
 end;
 
 theorem Th17:
-  for n,m be Element of NAT st 1<=n & 1 <=m holds
-  ex m0,n0 be Element of NAT st n lcm m =n0*m0 & n0 gcd m0 = 1 &
-  n0 divides n & m0 divides m & n0 <> 0 & m0 <> 0
+  for n,m be Element of NAT st 1<=n & 1 <=m holds ex m0,n0 be
+Element of NAT st n lcm m =n0*m0 & n0 gcd m0 = 1 & n0 divides n & m0 divides m
+  & n0 <> 0 & m0 <> 0
 proof
   let n1,m1 be Element of NAT;
-  assume
-A1: 1<=n1 & 1 <=m1;
+  assume that
+A1: 1<=n1 and
+A2: 1 <=m1;
+  reconsider n=n1,m=m1 as non empty natural number by A1,A2;
   set nm1 = n1 lcm m1;
-  reconsider n=n1,m=m1 as non empty natural number by A1;
-  reconsider nm=nm1 as non empty natural number by A1,INT_2:4;
-  set N1={p where p is Element of NAT:
-  p in (support (ppf n)) & (pfexp nm).p = (pfexp n). p };
+  reconsider nm=nm1 as non empty natural number by A1,A2,INT_2:4;
+  set N1={p where p is Element of NAT: p in (support (ppf n)) & (pfexp nm).p =
+  (pfexp n). p };
   set N2= (support (ppf nm)) \ N1;
-A2: support ppf nm = support ppf n \/ support ppf m by Th9;
-  then
-A3: support ppf n c= support ppf nm by XBOOLE_1:7;
-A4: N1 c= support ppf n
-  proof
-    let x be set;
-    assume x in N1;
-    then ex p be Element of NAT st x=p & p in (support (ppf n)) &
-    (pfexp nm).p = (pfexp n). p;
-    hence thesis;
-  end;
-  then
-A5: N1 c= support ppf nm by A3,XBOOLE_1:1;
-  N1 \/ N2 = support ppf nm by A3,A4,XBOOLE_1:1,45;
-  then
-A6: N2 c= support ppf nm by XBOOLE_1:7;
-A7: N2 c= support ppf m
+A3: N1 c= support ppf n
   proof
     let x be set;
     assume
-A8: x in N2;
+    x in N1;
     then
-A9: x in (support (ppf nm))& not x in N1 by XBOOLE_0:def 5;
-A10: support ppf m = support pfexp m by NAT_3:def 9;
-    not x in support ppf n or x in support ppf m
-    proof
-      x in SetPrimes by A8;
-      then
-A11:  not x in (support (ppf n)) or (pfexp nm).x <> (pfexp n). x by A9;
-A12:  ((pfexp n).x <= (pfexp m).x
-      implies max(pfexp n,pfexp m).x = (pfexp m).x) &
-      ((pfexp n).x > (pfexp m).x implies
-      max(pfexp n,pfexp m).x = (pfexp n).x) by NAT_3:def 4;
-      x in support pfexp nm by A9,NAT_3:def 9;
-      then (pfexp nm).x = (pfexp m). x implies
-      (pfexp m).x <> 0 by POLYNOM1:def 7;
-      hence thesis by A10,A11,A12,NAT_3:54,POLYNOM1:def 7;
-    end;
-    hence thesis by A2,A9,XBOOLE_0:def 3;
-  end;
-A13: for x be set st x in N1 holds (pfexp nm).x = (pfexp n). x
-  proof
-    let x be set;
-    assume x in N1;
-    then
-    ex p be Element of NAT st x=p & p in (support (ppf n)) &
-    (pfexp nm).p = (pfexp n). p;
+    ex p be Element of NAT st x=p & p in (support (ppf n)) & (pfexp nm).p
+    = (pfexp n). p;
     hence thesis;
   end;
-A14: for x be set st x in N2 holds (pfexp nm).x = (pfexp m).x
+A4: for x be set st x in N2 holds (pfexp nm).x = (pfexp m).x
   proof
     let x be set;
-    assume x in N2;
+A5: (pfexp n).x > (pfexp m).x implies max(pfexp n,pfexp m).x = (pfexp n).
+    x by NAT_3:def 4;
+    assume
+    x in N2;
     then
-A15: x in (support (ppf nm)) & not x in N1 by XBOOLE_0:def 5;
-A16: support ppf n = support pfexp n by NAT_3:def 9;
-A17: ((pfexp n).x <= (pfexp m).x
-    implies max(pfexp n,pfexp m).x = (pfexp m).x) &
-    ((pfexp n).x > (pfexp m).x implies
-    max(pfexp n,pfexp m).x = (pfexp n).x) by NAT_3:def 4;
-    not (pfexp n).x > (pfexp m).x
+A6: not x in N1 by XBOOLE_0:def 5;
+A7: support ppf n = support pfexp n by NAT_3:def 9;
+A8: not (pfexp n).x > (pfexp m).x
     proof
       assume
-A18:  (pfexp n).x > (pfexp m).x;
+A9:   (pfexp n).x > (pfexp m).x;
       then
-A19:  (pfexp nm).x = (pfexp n). x by A17,NAT_3:54;
-A20:  x in support (pfexp n) by A18,POLYNOM1:def 7;
-      then
-      x in SetPrimes;
-      hence contradiction by A15,A16,A19,A20;
+A10:  (pfexp nm).x = (pfexp n). x by A5,NAT_3:54;
+A11:  x in support (pfexp n) by A9,PRE_POLY:def 7;
+      then x in SetPrimes;
+      hence contradiction by A6,A7,A10,A11;
     end;
-    hence thesis by A17,NAT_3:54;
+    (pfexp n).x <= (pfexp m).x implies max(pfexp n,pfexp m).x = (pfexp m)
+    . x by NAT_3:def 4;
+    hence thesis by A8,NAT_3:54;
   end;
-A21: Product (ppf n)=n by NAT_3:61;
-A22: Product (ppf m)=m by NAT_3:61;
-  consider ppm,ppn be bag of SetPrimes such that
-A23: (support ppm) = (support (ppf nm)) \ N1 & (support ppn) = N1 &
-  (support ppm) misses (support ppn) &
-  ppm | (support ppm) =(ppf nm) | (support ppm) &
-  ppn | (support ppn) =(ppf nm) | (support ppn) &
-  ppm+ppn = (ppf nm) by A5,Lm3;
+A12: Product (ppf m)=m by NAT_3:61;
+A13: support ppf nm = support ppf n \/ support ppf m by Th9;
+  then
+A14: support ppf n c= support ppf nm by XBOOLE_1:7;
+  then consider ppm,ppn be bag of SetPrimes such that
+A15: (support ppm) = (support (ppf nm)) \ N1 and
+A16: (support ppn) = N1 and
+A17: (support ppm) misses (support ppn) and
+A18: ppm | (support ppm) =(ppf nm) | (support ppm) and
+A19: ppn | (support ppn) =(ppf nm) | (support ppn) and
+A20: ppm+ppn = (ppf nm) by A3,Lm3,XBOOLE_1:1;
   reconsider n0=Product ppn, m0=Product ppm as Element of NAT;
-A24: dom (ppf nm)= SetPrimes by PARTFUN1:def 4
-    .= dom (ppf n) by PARTFUN1:def 4;
-A25: now
-    let x1 be set;
+A21: Product (ppf n)=n by NAT_3:61;
+A22: N2 c= support ppf m
+  proof
+    let x be set;
+A23: (pfexp n).x <= (pfexp m).x implies max(pfexp n,pfexp m).x = (pfexp m)
+    . x by NAT_3:def 4;
+A24: (pfexp n).x > (pfexp m).x implies max(pfexp n,pfexp m).x = (pfexp n).
+    x by NAT_3:def 4;
     assume
-A26: x1 in N1;
+A25: x in N2;
     then
-A27: x1 in (support (ppf nm)) by A5;
+A26: x in SetPrimes;
+A27: x in (support (ppf nm)) by A25,XBOOLE_0:def 5;
+    then x in support pfexp nm by NAT_3:def 9;
     then
-A28: x1 in (support pfexp nm) by NAT_3:def 9;
-    x1 in support ppf n by A4,A26;
+A28: (pfexp nm).x = (pfexp m). x implies (pfexp m).x <> 0 by PRE_POLY:def 7;
+    not x in N1 by A25,XBOOLE_0:def 5;
     then
-A29: x1 in support pfexp n by NAT_3:def 9;
-    x1 is Element of SetPrimes by A27;
-    then
-    reconsider x=x1 as Prime by NEWTON:def 6;
-    thus (ppf nm).x1= x |^ (x |-count nm) by A28,NAT_3:def 9
-      .= x |^ ((pfexp nm).x) by NAT_3:def 8
-      .= x |^ ((pfexp n).x) by A13,A26
-      .= x |^ (x |-count n) by NAT_3:def 8
-      .= (ppf n).x1 by A29,NAT_3:def 9;
+A29: not x in (support (ppf n)) or (pfexp nm).x <> (pfexp n). x by A26;
+    support ppf m = support pfexp m by NAT_3:def 9;
+    hence thesis by A13,A27,A29,A23,A24,A28,NAT_3:54,PRE_POLY:def 7
+,XBOOLE_0:def 3;
   end;
-A30: ppn|N1=(ppf n)|N1 by A23,A24,A25,FUNCT_1:166;
-A31: dom (ppf nm)= SetPrimes by PARTFUN1:def 4
-    .= dom (ppf m) by PARTFUN1:def 4;
-A32: now
+  N1 \/ N2 = support ppf nm by A14,A3,XBOOLE_1:1,45;
+  then
+A30: N2 c= support ppf nm by XBOOLE_1:7;
+A31: now
     let x2 be set;
     assume
-A33: x2 in N2;
+A32: x2 in N2;
+    then reconsider x=x2 as Prime by NEWTON:def 6;
+    x2 in support ppf m by A22,A32;
     then
-    x2 in (support (ppf nm)) by A6;
-    then
-A34: x2 in (support pfexp nm) by NAT_3:def 9;
-    x2 in support ppf m by A7,A33;
-    then
-A35: x2 in support pfexp m by NAT_3:def 9;
-    x2 is Element of SetPrimes by A33;
-    then
-    reconsider x=x2 as Prime by NEWTON:def 6;
-    thus (ppf nm).x2 = x |^ (x |-count nm) by A34,NAT_3:def 9
+A33: x2 in support pfexp m by NAT_3:def 9;
+    x2 in (support (ppf nm)) by A30,A32;
+    then x2 in (support pfexp nm) by NAT_3:def 9;
+    hence (ppf nm).x2 = x |^ (x |-count nm) by NAT_3:def 9
       .= x |^ ((pfexp nm).x) by NAT_3:def 8
-      .= x |^ ((pfexp m).x) by A14,A33
+      .= x |^ ((pfexp m).x) by A4,A32
       .= x |^ (x |-count m) by NAT_3:def 8
-      .= (ppf m).x2 by A35,NAT_3:def 9;
+      .= (ppf m).x2 by A33,NAT_3:def 9;
   end;
-A36: ppm|N2 = (ppf m)|N2 by A23,A31,A32,FUNCT_1:166;
-A37: n0*m0 = Product (ppf nm) by A23,NAT_3:19
+  dom (ppf nm)= SetPrimes by PARTFUN1:def 4
+    .= dom (ppf m) by PARTFUN1:def 4;
+  then ppm|N2 = (ppf m)|N2 by A15,A18,A31,FUNCT_1:166;
+  then
+A34: m0 divides m by A22,A12,A15,Th7;
+A35: n0*m0 = Product (ppf nm) by A17,A20,NAT_3:19
     .=nm by NAT_3:61;
-A38: m0 divides m by A7,A22,A23,A36,Th7;
-A39: n0 <> 0 by A37;
-A40: m0 <> 0 by A37;
+  then
+A36: m0 <> 0;
   now
     let x being Prime;
     assume
-A41: x in support ppm;
+A37: x in support ppm;
+    then x in (support (ppf nm)) by A15,XBOOLE_0:def 5;
     then
-    x in (support (ppf nm)) by A23,XBOOLE_0:def 5;
+A38: x in (support pfexp nm) by NAT_3:def 9;
     then
-A42: x in (support pfexp nm) & x is natural number by NAT_3:def 9;
+A39: (ppf nm) .x = x |^ (x |-count nm) by NAT_3:def 9;
+    (pfexp nm).x <> 0 by A38,NAT_3:36,38;
     then
-A43: (ppf nm) .x = x |^ (x |-count nm) by NAT_3:def 9;
-    (pfexp nm).x <> 0 by A42,NAT_3:36,38;
-    then
-    0 <> (x |-count nm) by NAT_3:def 8;
-    then
-A44: 0 < (x |-count nm);
-    ppm.x =(ppm | (support ppm)).x by A41,FUNCT_1:72
-      .= (ppf nm).x by A23,A41,FUNCT_1:72;
-    hence
-    ex m be natural number st 0 < m & (ppm).x = x |^m by A43,A44;
+A40: 0 < (x |-count nm) by NAT_3:def 8;
+    ppm.x =(ppm | (support ppm)).x by A37,FUNCT_1:72
+      .= (ppf nm).x by A18,A37,FUNCT_1:72;
+    hence ex m be natural number st 0 < m & (ppm).x = x |^m by A39,A40;
   end;
   then
-A45: ppm is prime-factorization-like by Def1;
+A41: ppm is prime-factorization-like by Def1;
+A42: N1 c= support ppf nm by A14,A3,XBOOLE_1:1;
   now
     let x being Prime;
     assume
-A46: x in support (ppn);
-    then x in (support (ppf nm)) by A5,A23;
+A43: x in support (ppn);
+    then x in (support (ppf nm)) by A42,A16;
     then
-A47: x in (support pfexp nm) & x is natural number by NAT_3:def 9;
+A44: x in (support pfexp nm) by NAT_3:def 9;
     then
-A48: (ppf nm) .x = x |^ (x |-count nm) by NAT_3:def 9;
-    (pfexp nm).x <> 0 by A47,NAT_3:36,38;
-    then 0 <> (x |-count nm) by NAT_3:def 8;
+A45: (ppf nm) .x = x |^ (x |-count nm) by NAT_3:def 9;
+    (pfexp nm).x <> 0 by A44,NAT_3:36,38;
     then
-A49: 0 < (x |-count nm);
-    ppn.x =(ppn | (support ppn)).x by A46,FUNCT_1:72
-      .= (ppf nm).x by A23,A46,FUNCT_1:72;
-    hence ex n be natural number st 0 < n & (ppn).x = x |^n by A48,A49;
+A46: 0 < (x |-count nm) by NAT_3:def 8;
+    ppn.x =(ppn | (support ppn)).x by A43,FUNCT_1:72
+      .= (ppf nm).x by A19,A43,FUNCT_1:72;
+    hence ex n be natural number st 0 < n & (ppn).x = x |^n by A45,A46;
   end;
   then ppn is prime-factorization-like by Def1;
+  then n0,m0 are_relative_prime by A17,A41,Th12;
   then
-A50: n0,m0 are_relative_prime by A23,A45,Th12;
-A51: n0 gcd m0 = 1 by A50,INT_2:def 4;
-  thus thesis by A4,A21,A23,A30,A37,A38,A39,A40,A51,Th7;
+A47: n0 gcd m0 = 1 by INT_2:def 4;
+A48: for x be set st x in N1 holds (pfexp nm).x = (pfexp n). x
+  proof
+    let x be set;
+    assume
+    x in N1;
+    then
+    ex p be Element of NAT st x=p & p in (support (ppf n)) & (pfexp nm).p
+    = (pfexp n). p;
+    hence thesis;
+  end;
+A49: now
+    let x1 be set;
+    assume
+A50: x1 in N1;
+    then
+A51: x1 in (support (ppf nm)) by A42;
+    then reconsider x=x1 as Prime by NEWTON:def 6;
+    x1 in support ppf n by A3,A50;
+    then
+A52: x1 in support pfexp n by NAT_3:def 9;
+    x1 in (support pfexp nm) by A51,NAT_3:def 9;
+    hence (ppf nm).x1= x |^ (x |-count nm) by NAT_3:def 9
+      .= x |^ ((pfexp nm).x) by NAT_3:def 8
+      .= x |^ ((pfexp n).x) by A48,A50
+      .= x |^ (x |-count n) by NAT_3:def 8
+      .= (ppf n).x1 by A52,NAT_3:def 9;
+  end;
+  dom (ppf nm)= SetPrimes by PARTFUN1:def 4
+    .= dom (ppf n) by PARTFUN1:def 4;
+  then
+A53: ppn|N1=(ppf n)|N1 by A16,A19,A49,FUNCT_1:166;
+  n0 <> 0 by A35;
+  hence thesis by A3,A21,A16,A53,A35,A34,A36,A47,Th7;
 end;
 
 begin ::multiplicative group
@@ -1882,8 +2031,8 @@ A1: 1 < n;
   Segm(n) \ {0};
   correctness
   proof
-A2: 1 in Segm(n) by A1,GR_CY_1:10;
-    not 1 in {0} by TARSKI:def 1;
+A2: not 1 in {0} by TARSKI:def 1;
+    1 in Segm(n) by A1,NAT_1:45;
     hence thesis by A2,XBOOLE_0:def 5;
   end;
 end;
@@ -1892,222 +2041,205 @@ theorem Th18:
   for n be natural number st 1 < n holds card Segm0(n) = n-1
 proof
   let n be natural number;
+A1: card (Segm(n)) = n by CARD_1:def 5;
   assume
-A1: 1 < n;
-A2: Segm0(n) = Segm(n) \{0} by A1,Def2;
-A3: Segm(n) is finite & card (Segm(n)) = n by CARD_1:def 5;
-A4: 0 in Segm(n) by A1,NAT_1:45;
-  card {0} = 1 by CARD_1:50;
-  hence thesis by A2,A3,A4,EULER_1:5;
+A2: 1 < n;
+  then
+A3: 0 in Segm(n) by NAT_1:45;
+A4: card {0} = 1 by CARD_1:50;
+  Segm0(n) = Segm(n) \{0} by A2,Def2;
+  hence thesis by A1,A3,A4,EULER_1:5;
 end;
 
 definition
   let n be Prime;
   func multint0(n) -> BinOp of Segm0(n) equals
-
   (multint n) || Segm0 n;
   coherence
   proof
 A1: 1<n by INT_2:def 5;
     then Segm0(n) = Segm(n) \{0} by Def2;
-    then
-    reconsider S = Segm0 n as Subset of Segm n by XBOOLE_1:36;
+    then reconsider S = Segm0 n as Subset of Segm n by XBOOLE_1:36;
     multint n is Presv of Segm n,S
     proof
       let x be set;
-      assume x in [:S,S:];
+A2:   0 in Segm(n) by NAT_1:45;
+      assume
+      x in [:S,S:];
       then consider a,b be set such that
-A2:   a in Segm0(n) & b in Segm0(n) & x=[a,b] by ZFMISC_1:def 2;
-A3:   a in Segm(n)\{0} by A1,A2,Def2;
+A3:   a in Segm0(n) and
+A4:   b in Segm0(n) and
+A5:   x=[a,b] by ZFMISC_1:def 2;
+A6:   b in Segm(n)\{0} by A1,A4,Def2;
+      then reconsider b1 = b as Element of INT.Ring(n) by XBOOLE_0:def 5;
+      not b in {0} by A6,XBOOLE_0:def 5;
+      then b <> 0 by TARSKI:def 1;
       then
-      reconsider a1 = a as Element of INT.Ring(n) by XBOOLE_0:def 5;
-A4:   b in Segm(n)\{0} by A1,A2,Def2;
-      then
-      reconsider b1 = b as Element of INT.Ring(n) by XBOOLE_0:def 5;
+A7:   b <> 0.(INT.Ring(n)) by A2,FUNCT_7:def 1;
+A8:   a in Segm(n)\{0} by A1,A3,Def2;
+      then reconsider a1 = a as Element of INT.Ring(n) by XBOOLE_0:def 5;
       set y = (multint n).(a,b);
-A5:   y = a1*b1;
-A6:   0 in Segm(n) by GR_CY_1:10;
-      not a in {0} by A3,XBOOLE_0:def 5;
-      then
-      a <> 0 by TARSKI:def 1;
-      then
-A7:   a <> 0.(INT.Ring(n)) by A6,FUNCT_7:def 1;
-      not b in {0} by A4,XBOOLE_0:def 5;
-      then
-      b <> 0 by TARSKI:def 1;
-      then
-A8:   b <> 0.(INT.Ring(n)) by A6,FUNCT_7:def 1;
-      y <> In (0,Segm(n)) by A5,A7,A8,VECTSP_1:44;
-      then
-      y <> 0 by A5,FUNCT_7:def 1;
-      then
-      not y in {0} by TARSKI:def 1;
-      then
-      y in Segm(n)\{0} by A5,XBOOLE_0:def 5;
-      hence (multint n).x in S by A1,A2,Def2;
+A9:   y = a1*b1;
+      not a in {0} by A8,XBOOLE_0:def 5;
+      then a <> 0 by TARSKI:def 1;
+      then a <> 0.(INT.Ring(n)) by A2,FUNCT_7:def 1;
+      then y <> In (0,Segm(n)) by A9,A7,VECTSP_1:44;
+      then y <> 0 by A9,FUNCT_7:def 1;
+      then not y in {0} by TARSKI:def 1;
+      then y in Segm(n)\{0} by A9,XBOOLE_0:def 5;
+      hence (multint n).x in S by A1,A5,Def2;
     end;
     hence thesis by REALSET1:9;
   end;
 end;
 
-Lm12: for p be Prime, a,b be Element of multMagma(#Segm0(p),multint0(p)#),
-x,y be Element of INT.Ring(p) st a=x & y=b holds x*y = a*b
+Lm12: for p be Prime, a,b be Element of multMagma(#Segm0(p),multint0(p)#), x,y
+be Element of INT.Ring(p) st a=x & y=b holds x*y = a*b
+
 proof
-  let p be Prime, a,b be Element of multMagma(#Segm0(p),multint0(p)#),
-  x,y be Element of INT.Ring(p);
-  assume
-A1: a=x& y=b;
+
+  let p be Prime, a,b be Element of multMagma(#Segm0(p),multint0(p)#), x,y be
+  Element of INT.Ring(p);
+
+  assume that
+A1: a=x and
+A2: y=b;
   thus a*b = (multint(p)).([a,b]) by FUNCT_1:72
-    .=x*y by A1;
+    .=x*y by A1,A2;
 end;
 
 theorem Th19:
-  for p be Prime holds multMagma(#Segm0(p),multint0(p)#)
-  is associative commutative Group-like
+  for p be Prime holds multMagma(#Segm0(p),multint0(p)#) is
+  associative commutative Group-like
 proof
   let p be Prime;
-A1: 1 < p by INT_2:def 5;
   set Zp= multMagma(#Segm0(p),multint0(p)#);
-A2: 1 in Segm(p) by A1,GR_CY_1:10;
-  not 1 in {0} by TARSKI:def 1;
-  then
-  1 in Segm(p)\{0} by A2,XBOOLE_0:def 5;
-  then
-  1 in Segm0(p) by A1,Def2;
-  then
-  reconsider e=1.(INT.Ring(p)) as Element of Zp by A1,INT_3:24;
-A3: now
+A1: not 1 in {0} by TARSKI:def 1;
+A2: 1 < p by INT_2:def 5;
+  then 1 in Segm(p) by NAT_1:45;
+  then 1 in Segm(p)\{0} by A1,XBOOLE_0:def 5;
+  then 1 in Segm0(p) by A2,Def2;
+  then reconsider e=1.(INT.Ring(p)) as Element of Zp by A2,INT_3:24;
+A3: Zp is associative
+  proof
+    let x,y,z being Element of Zp;
+    x in Segm0(p);
+    then x in Segm(p)\{0} by A2,Def2;
+    then reconsider x1=x as Element of INT.Ring(p) by XBOOLE_0:def 5;
+    y in Segm0(p);
+    then y in Segm(p)\{0} by A2,Def2;
+    then reconsider y1=y as Element of INT.Ring(p) by XBOOLE_0:def 5;
+    z in Segm0(p);
+    then z in Segm(p)\{0} by A2,Def2;
+    then reconsider z1=z as Element of INT.Ring(p) by XBOOLE_0:def 5;
+A4: y*z=y1*z1 by Lm12;
+    x*y=x1*y1 by Lm12;
+    then (x*y)*z =(x1*y1)*z1 by Lm12
+      .=x1*(y1*z1) by GROUP_1:def 4
+      .= x*(y*z) by A4,Lm12;
+    hence thesis;
+  end;
+A5: now
     let h be Element of Zp;
     h in Segm0(p);
     then
-A4: h in Segm(p)\{0} by A1,Def2;
-    then
-    reconsider hp=h as Element of INT.Ring(p) by XBOOLE_0:def 5;
+A6: h in Segm(p)\{0} by A2,Def2;
+    then reconsider hp=h as Element of INT.Ring(p) by XBOOLE_0:def 5;
     thus h * e = hp*1_(INT.Ring(p)) by Lm12
       .= h by GROUP_1:def 5;
     thus e * h = 1_(INT.Ring(p))*hp by Lm12
       .= h by GROUP_1:def 5;
-    not h in {0} by A4,XBOOLE_0:def 5;
+    not h in {0} by A6,XBOOLE_0:def 5;
     then
-A5: hp <> 0 by TARSKI:def 1;
-    0 in Segm(p) by GR_CY_1:10;
-    then hp <> 0.(INT.Ring(p)) by A5,FUNCT_7:def 1;
+A7: hp <> 0 by TARSKI:def 1;
+    0 in Segm(p) by NAT_1:45;
+    then hp <> 0.(INT.Ring(p)) by A7,FUNCT_7:def 1;
     then consider hpd be Element of INT.Ring(p) such that
-A6: hpd*hp=1.(INT.Ring(p)) by VECTSP_1:def 20;
-    hpd <> 0.(INT.Ring(p)) by A6,VECTSP_1:36;
+A8: hpd*hp=1.(INT.Ring(p)) by VECTSP_1:def 20;
+    hpd <> 0.(INT.Ring(p)) by A8,VECTSP_1:36;
     then hpd <> 0 by FUNCT_7:def 1;
     then not hpd in {0} by TARSKI:def 1;
     then hpd in Segm(p)\{0} by XBOOLE_0:def 5;
-    then reconsider g=hpd as Element of Zp by A1,Def2;
-A7: h*g=e by A6,Lm12;
-    g * h = e by A6,Lm12;
-    hence ex g be Element of Zp st h*g = e & g*h = e by A7;
-  end;
-A8: Zp is associative
-  proof
-    let x,y,z being Element of Zp;
-    x in Segm0(p);
-    then
-    x in Segm(p)\{0} by A1,Def2;
-    then
-    reconsider x1=x as Element of INT.Ring(p) by XBOOLE_0:def 5;
-    y in Segm0(p);
-    then
-    y in Segm(p)\{0} by A1,Def2;
-    then
-    reconsider y1=y as Element of INT.Ring(p) by XBOOLE_0:def 5;
-    z in Segm0(p);
-    then
-    z in Segm(p)\{0} by A1,Def2;
-    then
-    reconsider z1=z as Element of INT.Ring(p) by XBOOLE_0:def 5;
-A9: x*y=x1*y1 by Lm12;
-A10: y*z=y1*z1 by Lm12;
-    (x*y)*z =(x1*y1)*z1 by A9,Lm12
-      .=x1*(y1*z1) by GROUP_1:def 4
-      .= x*(y*z) by A10,Lm12;
-    hence thesis;
+    then reconsider g=hpd as Element of Zp by A2,Def2;
+A9: g * h = e by A8,Lm12;
+    h*g=e by A8,Lm12;
+    hence ex g be Element of Zp st h*g = e & g*h = e by A9;
   end;
   Zp is commutative
   proof
     let x,y being Element of Zp;
     x in Segm0(p);
-    then x in Segm(p)\{0} by A1,Def2;
+    then x in Segm(p)\{0} by A2,Def2;
     then reconsider x1=x as Element of INT.Ring(p) by XBOOLE_0:def 5;
     y in Segm0(p);
-    then y in Segm(p)\{0} by A1,Def2;
+    then y in Segm(p)\{0} by A2,Def2;
     then reconsider y1=y as Element of INT.Ring(p) by XBOOLE_0:def 5;
     x*y = x1*y1 by Lm12
       .= y*x by Lm12;
     hence thesis;
   end;
-  hence thesis by A3,A8,GROUP_1:def 3;
+  hence thesis by A5,A3,GROUP_1:def 3;
 end;
 
 definition
   let p be Prime;
   func Z/Z*(p) -> commutative Group equals
-
   multMagma(#Segm0(p),multint0(p)#);
   correctness by Th19;
 end;
 
 theorem
-  for p be Prime,x,y be Element of Z/Z*(p),
-  x1,y1 be Element of INT.Ring(p) st x=x1 & y=y1 holds x*y = x1*y1 by Lm12;
+  for p be Prime,x,y be Element of Z/Z*(p), x1,y1 be Element of INT.Ring
+  (p) st x=x1 & y=y1 holds x*y = x1*y1 by Lm12;
 
 theorem Th21:
   for p be Prime holds 1_Z/Z*(p) =1 & 1_Z/Z*(p) = 1.(INT.Ring(p))
 proof
   let p be Prime;
-A1: 1 < p by INT_2:def 5;
-A2: 1 in Segm(p) by A1,GR_CY_1:10;
-  not 1 in {0} by TARSKI:def 1;
-  then 1 in Segm(p)\{0} by A2,XBOOLE_0:def 5;
-  then 1 in Segm0(p) by A1,Def2;
-  then reconsider e=1.(INT.Ring(p)) as Element of Z/Z*(p) by A1,INT_3:24;
+A1: not 1 in {0} by TARSKI:def 1;
+A2: 1 < p by INT_2:def 5;
+  then 1 in Segm(p) by NAT_1:45;
+  then 1 in Segm(p)\{0} by A1,XBOOLE_0:def 5;
+  then 1 in Segm0(p) by A2,Def2;
+  then reconsider e=1.(INT.Ring(p)) as Element of Z/Z*(p) by A2,INT_3:24;
   now
     let h being Element of Z/Z*(p);
     h in Segm0(p);
-    then
-    h in Segm(p)\{0} by A1,Def2;
-    then
-    reconsider hp=h as Element of INT.Ring(p) by XBOOLE_0:def 5;
+    then h in Segm(p)\{0} by A2,Def2;
+    then reconsider hp=h as Element of INT.Ring(p) by XBOOLE_0:def 5;
     thus h * e = hp*1_(INT.Ring(p)) by Lm12
       .= h by GROUP_1:def 5;
     thus e * h = 1_(INT.Ring(p))*hp by Lm12
       .= h by GROUP_1:def 5;
   end;
   then e=1_(Z/Z*(p)) by GROUP_1:def 5;
-  hence thesis by A1,INT_3:24;
+  hence thesis by A2,INT_3:24;
 end;
 
 theorem
-  for p be Prime, x be Element of Z/Z*(p),
-  x1 be Element of INT.Ring(p) st x=x1 holds x" = x1"
+  for p be Prime, x be Element of Z/Z*(p), x1 be Element of INT.Ring(p)
+  st x=x1 holds x" = x1"
 proof
   let p be Prime, h be Element of Z/Z*(p), hp be Element of INT.Ring(p);
   assume
 A1: h=hp;
-A2: 1 < p by INT_2:def 5;
-  h in Segm0(p);
-  then
-A3: h in Segm(p)\{0} by A2,Def2;
-  not h in {0} by A3,XBOOLE_0:def 5;
-  then
-A4: hp <> 0 by A1,TARSKI:def 1;
-  0 in Segm(p) by GR_CY_1:10;
-  then
-A5: hp <> 0.(INT.Ring(p)) by A4,FUNCT_7:def 1;
+A2: 0 in Segm(p) by NAT_1:45;
   set hpd=hp";
-A6: hp*hpd =1.(INT.Ring(p)) by A5,VECTSP_1:def 22;
-  hpd <> 0.(INT.Ring(p)) by A6,VECTSP_1:36;
+A3: 1 < p by INT_2:def 5;
+  h in Segm0(p);
+  then h in Segm(p)\{0} by A3,Def2;
+  then not h in {0} by XBOOLE_0:def 5;
+  then hp <> 0 by A1,TARSKI:def 1;
+  then
+A4: hp <> 0.(INT.Ring(p)) by A2,FUNCT_7:def 1;
+  then hp*hpd =1.(INT.Ring(p)) by VECTSP_1:def 22;
+  then hpd <> 0.(INT.Ring(p)) by VECTSP_1:36;
   then hpd <> 0 by FUNCT_7:def 1;
   then not hpd in {0} by TARSKI:def 1;
   then hpd in Segm(p)\{0} by XBOOLE_0:def 5;
-  then reconsider g=hpd as Element of Z/Z*(p) by A2,Def2;
+  then reconsider g=hpd as Element of Z/Z*(p) by A3,Def2;
   h*g=hp*hpd by A1,Lm12
-    .=1.(INT.Ring(p)) by A5,VECTSP_1:def 22
+    .=1.(INT.Ring(p)) by A4,VECTSP_1:def 22
     .=1_(Z/Z*(p)) by Th21;
   hence thesis by GROUP_1:def 6;
 end;
@@ -2127,26 +2259,26 @@ proof
 end;
 
 theorem
-  for G be Group,a be Element of G, i be Integer st
-   a is not being_of_order_0 holds
-  ex n,k be Element of NAT st a|^i=a|^n & n=k*ord(a) +i
+  for G be Group,a be Element of G, i be Integer st a is not
+  being_of_order_0 holds ex n,k be Element of NAT st a|^i=a|^n & n=k*ord(a) +i
 proof
   let G be Group,a be Element of G,i be Integer;
   assume
-A1: a is not being_of_order_0;
-  ord a<>0 by A1,GROUP_1:def 12;
+  a is not being_of_order_0;
+  then ord a<>0 by GROUP_1:def 12;
   then
-A2: abs(i)<=abs(i)*ord(a) by NAT_1:14,XREAL_1:153;
+A1: abs(i)<=abs(i)*ord(a) by NAT_1:14,XREAL_1:153;
   0<=abs(i)*ord(a)+i
   proof
     per cases;
-    suppose i<0;
-      then
-A3:   abs(i)=-i by ABSVALUE:def 1;
-      abs(i)+i<=abs(i)*ord(a)+i by A2,XREAL_1:8;
+    suppose
+A2:   i<0;
+A3:   abs(i)+i<=abs(i)*ord(a)+i by A1,XREAL_1:8;
+      abs(i)=-i by A2,ABSVALUE:def 1;
       hence thesis by A3;
     end;
-    suppose 0<=i;
+    suppose
+      0<=i;
       hence thesis;
     end;
   end;
@@ -2161,173 +2293,151 @@ A4: abs(i)*ord(a)+i is Element of NAT by INT_1:16;
 end;
 
 theorem Th25:
-  for G be commutative Group,a,b be Element of G, n,m be natural number
-  st G is finite & ord a=n & ord b= m & n gcd m = 1 holds ord (a*b) = n*m
+  for G be commutative Group,a,b be Element of G, n,m be natural
+number st G is finite & ord a=n & ord b= m & n gcd m = 1 holds ord (a*b) = n*m
 proof
   let G be commutative Group,a,b be Element of G, n,m be natural number;
-  assume
-A1: G is finite & ord a=n & ord b= m & n gcd m = 1;
-  reconsider n1=n, m1=m as Integer;
-  a is not being_of_order_0 & b is not being_of_order_0 by A1,GR_CY_1:26;
+  assume that
+A1: G is finite and
+A2: ord a=n and
+A3: ord b= m and
+A4: n gcd m = 1;
+  b is not being_of_order_0 by A1,GR_CY_1:26;
   then
-A2: n <> 0 & m <> 0 by A1,GROUP_1:def 12;
-  then
-A3: n*m <> 0 by XCMPLX_1:6;
-A4: a*b is not being_of_order_0 by A1,GR_CY_1:26;
-A5: n1,m1 are_relative_prime & m1,n1 are_relative_prime by A1,INT_2:def 4;
-A6: (a*b)|^(n*m) = a |^ (n*m) * (b |^ (n*m)) by GROUP_1:96
+A5: m <> 0 by A3,GROUP_1:def 12;
+A6: a*b is not being_of_order_0 by A1,GR_CY_1:26;
+A7: (a*b)|^(n*m) = a |^ (n*m) * (b |^ (n*m)) by GROUP_1:96
     .= (a |^ n)|^m * (b |^ (n*m)) by GROUP_1:67
     .= (a |^ n)|^m * ((b |^ m)|^n) by GROUP_1:67
-    .= (1_G)|^m * ((b |^ m)|^n) by A1,GROUP_1:82
-    .= (1_G)|^m * ((1_G)|^n) by A1,GROUP_1:82
+    .= (1_G)|^m * ((b |^ m)|^n) by A2,GROUP_1:82
+    .= (1_G)|^m * ((1_G)|^n) by A3,GROUP_1:82
     .= (1_G) * ((1_G)|^n) by GROUP_1:61
     .= (1_G) * (1_G) by GROUP_1:61
     .= 1_G by GROUP_1:def 5;
-A7: m*n is Element of NAT by ORDINAL1:def 13;
-A8: now
+A8: m*n is Element of NAT by ORDINAL1:def 13;
+  reconsider n1=n, m1=m as Integer;
+A9: n1,m1 are_relative_prime by A4,INT_2:def 4;
+  a is not being_of_order_0 by A1,GR_CY_1:26;
+  then
+A10: n <> 0 by A2,GROUP_1:def 12;
+A11: now
     let k be Nat;
-    assume
-A9: (a*b)|^k =1_G & k <> 0;
+    assume that
+A12: (a*b)|^k =1_G and
+A13: k <> 0;
     reconsider k1=k as Integer;
     1_G =(1_G)|^n by GROUP_1:61
-      .= (a*b)|^(k*n) by A9,GROUP_1:67
+      .= (a*b)|^(k*n) by A12,GROUP_1:67
       .= a |^ (k*n) * (b |^ (k*n)) by GROUP_1:96
       .= (a |^ n)|^k * (b |^ (k*n)) by GROUP_1:67
-      .= (1_G)|^k * (b |^ (k*n)) by A1,GROUP_1:82
+      .= (1_G)|^k * (b |^ (k*n)) by A2,GROUP_1:82
       .= (1_G) * (b |^ (k*n)) by GROUP_1:61
       .= b |^ (k*n) by GROUP_1:def 5;
-    then
-A10: m1 divides k1 by A1,A5,GROUP_1:86,INT_2:40;
+    then m1 divides k1 by A3,A9,GROUP_1:86,INT_2:40;
+    then consider i be Integer such that
+A14: k1 =m1*i by INT_1:def 9;
     1_G =(1_G)|^m by GROUP_1:61
-      .= (a*b)|^(k*m) by A9,GROUP_1:67
+      .= (a*b)|^(k*m) by A12,GROUP_1:67
       .= a |^ (k*m) * (b |^ (k*m)) by GROUP_1:96
       .= a |^ (k*m) * (b |^ m)|^k by GROUP_1:67
-      .= a |^ (k*m) * (1_G)|^k by A1,GROUP_1:82
+      .= a |^ (k*m) * (1_G)|^k by A3,GROUP_1:82
       .= a |^ (k*m) * (1_G) by GROUP_1:61
       .= a |^ (k*m) by GROUP_1:def 5;
-    then
-A11: n1 divides k1 by A1,A5,GROUP_1:86,INT_2:40;
-    consider i be Integer such that
-A12: k1 =m1*i by A10,INT_1:def 9;
-    n1 divides i by A5,A11,A12,INT_2:40;
+    then n1 divides k1 by A2,A9,GROUP_1:86,INT_2:40;
+    then n1 divides i by A9,A14,INT_2:40;
     then consider j be Integer such that
-A13: i =n1*j by INT_1:def 9;
-A14: k1 =(m1*n1)*j by A12,A13;
-    k/(m*n) = j by A2,A14,XCMPLX_1:6,90;
+A15: i =n1*j by INT_1:def 9;
+    k1 =(m1*n1)*j by A14,A15;
+    then k/(m*n) = j by A10,A5,XCMPLX_1:6,90;
     then
-A15: j is Element of NAT by INT_1:16;
-    j <> 0 by A9,A12,A13;
-    then (m*n)*1 <=(m*n)*j by A15,NAT_1:14,XREAL_1:66;
-    hence (m*n) <= k by A12,A13;
+A16: j is Element of NAT by INT_1:16;
+    j <> 0 by A13,A14,A15;
+    then (m*n)*1 <=(m*n)*j by A16,NAT_1:14,XREAL_1:66;
+    hence (m*n) <= k by A14,A15;
   end;
-  thus thesis by A3,A4,A6,A7,A8,GROUP_1:def 12;
+  n*m <> 0 by A10,A5,XCMPLX_1:6;
+  hence thesis by A6,A7,A8,A11,GROUP_1:def 12;
 end;
 
-Lm13: for L be Field, n be Element of NAT, f be non-zero Polynomial of L
-st deg f = n ex m be Element of NAT st m=card(Roots(f)) & m <= n
+Lm13: for L be Field, n be Element of NAT, f be non-zero Polynomial of L st
+deg f = n ex m be Element of NAT st m=card(Roots(f)) & m <= n
+
 proof
   let L be Field;
-  defpred P[Nat] means for f be non-zero Polynomial of L st deg f = $1
-  ex m be Element of NAT st m=card(Roots(f)) & m <= $1;
-A1: P[ 0 ]
-  proof
-    let f be non-zero Polynomial of L;
-    assume
-A2: deg f = 0;
-A3: f <> 0_.(L) by UPROOTS:def 5;
-A4: f.0 <> 0.L
-    proof
-      assume f.0 =0.L;
-      then f =<%0.L%> by A2,ALGSEQ_1:def 6;
-      hence contradiction by A3,POLYNOM5:35;
-    end;
-    reconsider x=f.0 as Element of L;
-A5: f =<%x%> by A2,ALGSEQ_1:def 6;
-A6: now
-      let z be Element of L;
-      eval(<%x%>,z) =eval(<%x,0.L%>,z) by POLYNOM5:44
-        .=x by POLYNOM5:46;
-      hence eval(<%x%>,z) <> 0.L by A4;
-    end;
-    Roots(f) = {}
-    proof
-      assume Roots(f) <> {};
-      then consider z be set such that
-A7:   z in Roots(f) by XBOOLE_0:def 1;
-      reconsider z as Element of L by A7;
-      z is_a_root_of f by A7,POLYNOM5:def 9;
-      then eval(<%x%>,z) = 0.L by A5,POLYNOM5:def 6;
-      hence contradiction by A6;
-    end;
-    then card Roots f = 0;
-    hence thesis;
-  end;
-A8: now
+
+  defpred P[Nat] means for f be non-zero Polynomial of L st deg f = $1 ex m be
+  Element of NAT st m=card(Roots(f)) & m <= $1;
+
+A1: now
     let k be Element of NAT;
     assume
-A9: P[k];
+A2: P[k];
     now
       let f be non-zero Polynomial of L;
-A10:  f <> 0_.(L) by UPROOTS:def 5;
+A3:   f <> 0_.(L) by UPROOTS:def 5;
       assume
-A11:  deg f = k+1;
+A4:   deg f = k+1;
       thus ex m be Element of NAT st m=card(Roots(f)) & m <= k+1
       proof
         per cases;
-        suppose Roots(f) = {};
-           then card Roots f = 0;
+        suppose
+          Roots(f) = {};
           hence thesis;
         end;
-        suppose Roots(f) <> {};
-          then consider z be set such that
-A12:      z in Roots(f) by XBOOLE_0:def 1;
-          reconsider z as Element of L by A12;
-A13:      z is_a_root_of f by A12,POLYNOM5:def 9;
-          then
-A14:      rpoly(1,z) divides f by HURWITZ:35;
+        suppose
+A5:       Roots(f) <> {};
+          set RF=Roots f;
+          consider z be set such that
+A6:       z in Roots(f) by A5,XBOOLE_0:def 1;
+          reconsider z as Element of L by A6;
           set g = f div rpoly(1,z);
-          0_.(L) =f mod rpoly(1,z) by A14,HURWITZ:def 7;
+A7:       z is_a_root_of f by A6,POLYNOM5:def 9;
+          then rpoly(1,z) divides f by HURWITZ:35;
+          then 0_.(L) =f mod rpoly(1,z) by HURWITZ:def 7;
+
+          then (g *' rpoly(1,z)) = f-g *' rpoly(1,z) + g *' rpoly(1,z) by
+POLYNOM3:29;
+
+          then (g *' rpoly(1,z)) = f+(-g *' rpoly(1,z) + g *' rpoly(1,z)) by
+POLYNOM3:26;
+
+          then (g *' rpoly(1,z)) = f+(g *' rpoly(1,z) - g *' rpoly(1,z));
+
+          then (g *' rpoly(1,z)) = f+ 0_.(L) by POLYNOM3:30;
           then
-          (g *' rpoly(1,z)) = f-g *' rpoly(1,z) + g *' rpoly(1,z)
-          by POLYNOM3:29;
-          then
-          (g *' rpoly(1,z)) = f+(-g *' rpoly(1,z) + g *' rpoly(1,z))
-          by POLYNOM3:26;
-          then
-          (g *' rpoly(1,z)) = f+(g *' rpoly(1,z) - g *' rpoly(1,z));
-          then
-          (g *' rpoly(1,z)) = f+ 0_.(L) by POLYNOM3:30;
-          then
-A15:      f = g *' rpoly(1,z) by POLYNOM3:29;
-          g <> 0_.(L) by A10,A15,POLYNOM3:35;
+A8:       f = g *' rpoly(1,z) by POLYNOM3:29;
+          then g <> 0_.(L) by A3,POLYNOM3:35;
           then reconsider g as non-zero Polynomial of L by UPROOTS:def 5;
-A16:      deg (g) = k+1 -1 by A10,A11,A13,HURWITZ:36
-            .= k;
           set RG = Roots g;
-          consider m1 be Element of NAT such that
-A17:      m1=card(Roots(g)) & m1 <= k by A9,A16;
-A18:      Roots(f) c= Roots(g) \/ {z}
+          deg (g) = k+1 -1 by A3,A4,A7,HURWITZ:36
+            .= k;
+
+          then ex m1 be Element of NAT st m1=card(Roots(g)) & m1 <= k by A2;
+
+          then
+A9:       card(RG)+1 <= k + 1 by XREAL_1:8;
+          Roots(f) c= Roots(g) \/ {z}
           proof
             let y be set;
             assume
-A19:        y in Roots(f);
-            then
-            reconsider y1=y as Element of L;
-            y1 is_a_root_of f by A19,POLYNOM5:def 9;
+A10:        y in Roots(f);
+            then reconsider y1=y as Element of L;
+            y1 is_a_root_of f by A10,POLYNOM5:def 9;
             then eval(f,y1) = 0.L by POLYNOM5:def 6;
-            then eval(g,y1)* eval(rpoly(1,z),y1)= 0.L by A15,POLYNOM4:27;
+            then eval(g,y1)* eval(rpoly(1,z),y1)= 0.L by A8,POLYNOM4:27;
             then
-A20:        eval(g,y1)* (y1-z) = 0.L by HURWITZ:29;
-            now per cases;
-              suppose y1=z;
-                then
-                y in {z} by TARSKI:def 1;
+A11:        eval(g,y1)* (y1-z) = 0.L by HURWITZ:29;
+            now
+              per cases;
+              suppose
+                y1=z;
+                then y in {z} by TARSKI:def 1;
                 hence thesis by XBOOLE_0:def 3;
               end;
-              suppose y1<> z;
-                then
-                y1-z <> 0.L by RLVECT_1:35;
-                then eval(g,y1) = 0.L by A20,VECTSP_1:44;
+              suppose
+                y1<> z;
+                then y1-z <> 0.L by RLVECT_1:35;
+                then eval(g,y1) = 0.L by A11,VECTSP_1:44;
                 then y1 is_a_root_of g by POLYNOM5:def 6;
                 then y1 in Roots(g) by POLYNOM5:def 9;
                 hence thesis by XBOOLE_0:def 3;
@@ -2335,39 +2445,70 @@ A20:        eval(g,y1)* (y1-z) = 0.L by HURWITZ:29;
             end;
             hence thesis;
           end;
-          set RF=Roots f;
+          then
+A12:      card RF <= card (RG \/ {z}) by NAT_1:44;
           card (RG \/ {z}) <= card RG + card {z} by CARD_2:62;
-          then
-A21:      card (RG \/ {z}) <= card RG + 1 by CARD_2:60;
-          card RF <= card (RG \/ {z}) by A18,NAT_1:44;
-          then
-A22:      card RF <= card(RG)+1 by A21,XXREAL_0:2;
-          card(RG)+1 <= k + 1 by A17,XREAL_1:8;
-          hence thesis by A22,XXREAL_0:2;
+          then card (RG \/ {z}) <= card RG + 1 by CARD_2:60;
+          then card RF <= card(RG)+1 by A12,XXREAL_0:2;
+          hence thesis by A9,XXREAL_0:2;
         end;
       end;
     end;
     hence P[k+1];
   end;
-  for k be Element of NAT holds P[k] from NAT_1:sch 1(A1,A8);
+A13: P[ 0 ]
+  proof
+    let f be non-zero Polynomial of L;
+    assume
+A14: deg f = 0;
+    reconsider x=f.0 as Element of L;
+A15: f <> 0_.(L) by UPROOTS:def 5;
+A16: f.0 <> 0.L
+    proof
+      assume
+      f.0 =0.L;
+      then f =<%0.L%> by A14,ALGSEQ_1:def 6;
+      hence contradiction by A15,POLYNOM5:35;
+    end;
+A17: now
+      let z be Element of L;
+      eval(<%x%>,z) =eval(<%x,0.L%>,z) by POLYNOM5:44
+        .=x by POLYNOM5:46;
+      hence eval(<%x%>,z) <> 0.L by A16;
+    end;
+A18: f =<%x%> by A14,ALGSEQ_1:def 6;
+    Roots(f) = {}
+    proof
+      assume
+      Roots(f) <> {};
+      then consider z be set such that
+A19:  z in Roots(f) by XBOOLE_0:def 1;
+      reconsider z as Element of L by A19;
+      z is_a_root_of f by A19,POLYNOM5:def 9;
+      then eval(<%x%>,z) = 0.L by A18,POLYNOM5:def 6;
+      hence contradiction by A17;
+    end;
+    hence thesis;
+  end;
+  for k be Element of NAT holds P[k] from NAT_1:sch 1(A13,A1);
   hence thesis;
 end;
 
 theorem Th26:
-  for L be non empty ZeroStr, p being Polynomial of L st 0 <= deg p
-  holds p is non-zero
+  for L be non empty ZeroStr, p being Polynomial of L st 0 <= deg
+  p holds p is non-zero
 proof
   let L be non empty ZeroStr, p being Polynomial of L;
-  assume 0 <=deg p;
+  assume
+  0 <=deg p;
   then deg p <> -1;
   then p <>0_.L by HURWITZ:20;
   hence thesis by UPROOTS:def 5;
 end;
 
 theorem Th27:
-  for L be Field,f be Polynomial of L st 0 <= deg f holds
-  Roots(f) is finite set & ex m,n be Element of NAT st n=deg f
-  & m=card(Roots(f)) & m <= n
+  for L be Field,f be Polynomial of L st 0 <= deg f holds Roots(f)
+is finite set & ex m,n be Element of NAT st n=deg f & m=card(Roots(f)) & m <= n
 proof
   let L be Field,f be Polynomial of L;
   assume
@@ -2379,168 +2520,169 @@ A1: 0 <=deg f;
 end;
 
 theorem Th28:
-  for p be Prime, z be Element of Z/Z*(p),
-  y be Element of INT.Ring(p) st z=y holds for n be Element of NAT holds
-  (power Z/Z*(p)).(z,n) = (power INT.Ring(p)).(y,n)
+  for p be Prime, z be Element of Z/Z*(p), y be Element of
+INT.Ring(p) st z=y holds for n be Element of NAT holds (power Z/Z*(p)).(z,n) =
+  (power INT.Ring(p)).(y,n)
 proof
   let p be Prime, z be Element of Z/Z*(p), y be Element of INT.Ring(p);
+  defpred P[Nat] means (power Z/Z*(p)).(z,$1) =(power INT.Ring(p)).(y,$1);
   assume
 A1: z=y;
-  defpred P[Nat] means (power Z/Z*(p)).(z,$1) =(power INT.Ring(p)).(y,$1);
-A2: P[ 0 ]
-  proof
-    thus (power Z/Z*(p)).(z,0)=1_(Z/Z*(p)) by GROUP_1:def 8
-      .= 1_(INT.Ring(p)) by Th21
-      .= (power INT.Ring(p)).(y,0) by GROUP_1:def 8;
-  end;
-A3: now
+A2: now
     let k be Element of NAT;
     assume
-A4: P[k];
+A3: P[k];
     (power Z/Z*(p)).(z,k+1) = (power Z/Z*(p)).(z,k)*z by GROUP_1:def 8
-      .=(power INT.Ring(p)).(y,k)*y by A1,A4,Lm12
+      .=(power INT.Ring(p)).(y,k)*y by A1,A3,Lm12
       .=(power INT.Ring(p)).(y,k+1) by GROUP_1:def 8;
     hence P[k+1];
   end;
-  for k be Element of NAT holds P[k] from NAT_1:sch 1(A2,A3);
+  (power Z/Z*(p)).(z,0)=1_(Z/Z*(p)) by GROUP_1:def 8
+    .= 1_(INT.Ring(p)) by Th21
+    .= (power INT.Ring(p)).(y,0) by GROUP_1:def 8;
+  then
+A4: P[ 0 ];
+  for k be Element of NAT holds P[k] from NAT_1:sch 1(A4,A2);
   hence thesis;
 end;
 
 Lm14: for p be Prime,L be Field, n be natural number st 0<n & L=INT.Ring(p)
-holds ex f be Polynomial of L st deg f = n & for x be Element of L,
-xz be Element of Z/Z*(p), xn be Element of INT.Ring(p)
-st x=xz & xn = xz|^n holds eval(f,x) = xn -1_(INT.Ring(p))
+holds ex f be Polynomial of L st deg f = n & for x be Element of L, xz be
+Element of Z/Z*(p), xn be Element of INT.Ring(p) st x=xz & xn = xz|^n holds
+eval(f,x) = xn -1_(INT.Ring(p))
+
 proof
   let p be Prime, L be Field, n be natural number;
-  assume
-A1: 0<n &L=INT.Ring(p);
-A2: 0+1 < n+1 by A1,XREAL_1:10;
+  assume that
+A1: 0<n and
+A2: L=INT.Ring(p);
+  set qq=1_.(L);
   reconsider n0=n as Element of NAT by ORDINAL1:def 13;
   set f = (<%0.L,1.L%>)`^n0-1_.(L);
   set pp= (<%0.L,1.L%>)`^n0;
-  set qq=1_.(L);
 A3: now
-    let x be Element of L, xz be Element of Z/Z*(p),
-    xn be Element of INT.Ring(p);
-    assume
-A4: x=xz & xn =xz|^n;
-A5: xn =xz|^n0 by A4
-      .=(power L).(x,n0) by A1,A4,Th28;
+
+    let x be Element of L, xz be Element of Z/Z*(p), xn be Element of INT.Ring
+    (p);
+
+    assume that
+A4: x=xz and
+A5: xn =xz|^n;
+A6: xn =xz|^n0 by A5
+      .=(power L).(x,n0) by A2,A4,Th28;
     thus eval(f,x)=eval(pp,x)-eval(qq,x) by POLYNOM4:24
       .= eval((<%0.L,1.L%>)`^n0,x)-1.L by POLYNOM4:21
       .= (power L).(eval(<%0.L,1.L%>,x),n0)-1.L by POLYNOM5:23
-      .= xn -1_(INT.Ring(p)) by A1,A5,POLYNOM5:49;
+      .= xn -1_(INT.Ring(p)) by A2,A6,POLYNOM5:49;
   end;
-A6: len <%0.L,1.L%> = 2 by POLYNOM5:41;
-A7: len((<%0.L,1.L%>)`^n0) = n*2-n+1 by A6,POLYNOM5:24
-    .=n+1;
-A8: len(1_.(L)) =1 by POLYNOM4:7;
+A7: len(1_.(L)) =1 by POLYNOM4:7;
+  len <%0.L,1.L%> = 2 by POLYNOM5:41;
   then
-A9: len((<%0.L,1.L%>)`^n0) <> len(-1_.(L)) by A2,A7,POLYNOM4:11;
-  len (f)=max(len((<%0.L,1.L%>)`^n0),len(-1_.(L))) by A9,POLYNOM4:10
-    .=max(n+1,1) by A7,A8,POLYNOM4:11
-    .=n+1 by A2,XXREAL_0:def 10;
+A8: len((<%0.L,1.L%>)`^n0) = n*2-n+1 by POLYNOM5:24
+    .=n+1;
+A9: 0+1 < n+1 by A1,XREAL_1:10;
+  then len((<%0.L,1.L%>)`^n0) <> len(-1_.(L)) by A8,A7,POLYNOM4:11;
+  then len (f)=max(len((<%0.L,1.L%>)`^n0),len(-1_.(L))) by POLYNOM4:10
+    .=max(n+1,1) by A8,A7,POLYNOM4:11
+    .=n+1 by A9,XXREAL_0:def 10;
   then deg f =n;
   hence thesis by A3;
 end;
 
 theorem Th29:
-  for p be Prime, a,b be Element of Z/Z*(p),
-  n be natural number st 0< n & ord a=n & b |^n =1 holds
-  b is Element of gr {a}
+  for p be Prime, a,b be Element of Z/Z*(p), n be natural number
+  st 0< n & ord a=n & b |^n =1 holds b is Element of gr {a}
 proof
   let p be Prime, a,b be Element of Z/Z*(p), n be natural number;
-  assume
-A1: 0 < n & ord a=n & b |^n =1;
-A2: 1 < p by INT_2:def 5;
-  assume
-A3: not b is Element of gr {a};
+  assume that
+A1: 0 < n and
+A2: ord a=n and
+A3: b |^n =1;
+  reconsider XX=the carrier of gr {a} as finite set;
+A4: ex D being finite set st D = the carrier of (gr {a}) & card (gr {a}) =
+  card D;
   reconsider L = INT.Ring(p) as unital (non empty doubleLoopStr);
   consider f be Polynomial of L such that
-A4: deg f = n & for x be Element of L, xz be Element of Z/Z*(p),
-  xn be Element of INT.Ring(p) st x=xz & xn =xz|^n holds
-  eval(f,x) = xn -1_(INT.Ring(p)) by A1,Lm14;
-A5: for x be Element of Z/Z*(p) st x |^n =1 holds x in Roots(f)
+A5: deg f = n and
+A6: for x be Element of L, xz be Element of Z/Z*(p), xn be Element of
+  INT.Ring(p) st x=xz & xn =xz|^n holds eval(f,x) = xn -1_(INT.Ring(p)) by A1
+,Lm14;
+  consider m,n0 be Element of NAT such that
+A7: n0=deg f and
+A8: m=card(Roots(f)) and
+A9: m <= n0 by A5,Th27;
+  assume
+  not b is Element of gr {a};
+  then card ( (the carrier of gr {a}) \/ {b}) =card ( XX) + 1 by CARD_2:54
+    .=n0+1 by A2,A5,A7,A4,GR_CY_1:27;
+  then
+A10: card (n0 + 1)=card ( (the carrier of gr {a}) \/ {b});
+A11: 1 < p by INT_2:def 5;
+A12: for x be Element of Z/Z*(p) st x |^n =1 holds x in Roots(f)
   proof
     let x1 be Element of Z/Z*(p);
     assume
-A6: x1 |^n =1;
-    x1 in Segm0(p);
+    x1 |^n =1;
     then
-    x1 in Segm(p) \ {0} by A2,Def2;
-    then
-    reconsider x3=x1 as Element of L by XBOOLE_0:def 5;
-A7: x1|^n = 1_(Z/Z*(p)) by A6,Th21
+A13: x1|^n = 1_(Z/Z*(p)) by Th21
       .= 1_(INT.Ring(p)) by Th21;
     x1|^n in Segm0(p);
-    then
-    x1|^n in Segm(p) \ {0} by A2,Def2;
-    then
-    reconsider x2=x1|^n as Element of INT.Ring(p) by XBOOLE_0:def 5;
-    eval(f,x3) = x2 - 1_(INT.Ring(p)) by A4
-      .=0.L by A7,RLVECT_1:28;
-    then
-    x3 is_a_root_of f by POLYNOM5:def 6;
+    then x1|^n in Segm(p) \ {0} by A11,Def2;
+    then reconsider x2=x1|^n as Element of INT.Ring(p) by XBOOLE_0:def 5;
+    x1 in Segm0(p);
+    then x1 in Segm(p) \ {0} by A11,Def2;
+    then reconsider x3=x1 as Element of L by XBOOLE_0:def 5;
+    eval(f,x3) = x2 - 1_(INT.Ring(p)) by A6
+      .=0.L by A13,RLVECT_1:28;
+    then x3 is_a_root_of f by POLYNOM5:def 6;
     hence thesis by POLYNOM5:def 9;
   end;
-A8: the carrier of gr {a} c= Roots(f)
+A14: the carrier of gr {a} c= Roots(f)
   proof
     let x be set;
     assume
-A9: x in the carrier of gr {a};
+A15: x in the carrier of gr {a};
     then x in gr {a} by STRUCT_0:def 5;
     then x in Z/Z*(p) by GROUP_2:49;
     then reconsider x1=x as Element of Z/Z*(p) by STRUCT_0:def 5;
-    x1 in gr {a} by A9,STRUCT_0:def 5;
+    x1 in gr {a} by A15,STRUCT_0:def 5;
     then consider j be Integer such that
-A10: x1 = a|^j by GR_CY_1:25;
-    x1|^n =a|^(j*n) by A10,GROUP_1:67
+A16: x1 = a|^j by GR_CY_1:25;
+    x1|^n =a|^(j*n) by A16,GROUP_1:67
       .=(a|^n)|^j by GROUP_1:67
-      .=(1_(Z/Z*(p))) |^j by A1,GROUP_1:82
+      .=(1_(Z/Z*(p))) |^j by A2,GROUP_1:82
       .= 1_(Z/Z*(p)) by GROUP_1:61
       .= 1 by Th21;
-    hence thesis by A5;
+    hence thesis by A12;
   end;
+  b in Roots(f) by A3,A12;
+  then {b} c= Roots(f) by ZFMISC_1:37;
+  then (the carrier of gr {a}) \/ {b} c= Roots(f) by A14,XBOOLE_1:8;
+  then
+A17: card ( (the carrier of gr {a}) \/ {b}) c= card (Roots(f)) by CARD_1:27;
+  card m = card (Roots(f)) by A8;
+  then n0 + 1 c= m by A17,A10,CARD_1:72;
+  then n0 + 1 <= m by NAT_1:40;
+  hence contradiction by A9,NAT_1:16,XXREAL_0:2;
   reconsider RF =Roots(f) as finite set;
-  consider m,n0 be Element of NAT such that
-A11: n0=deg f & m=card(Roots(f)) & m <= n0 by A4,Th27;
-A12: ex D being finite set st D = the carrier of (gr {a})
-  & card (gr {a}) = card D;
-  b in Roots(f) by A1,A5;
-  then
-  {b} c= Roots(f) by ZFMISC_1:37;
-  then
-A13: (the carrier of gr {a}) \/ {b} c= Roots(f) by A8,XBOOLE_1:8;
-  reconsider XX=the carrier of gr {a} as finite set;
-A14: card ( (the carrier of gr {a}) \/ {b}) =card ( XX) + 1 by A3,CARD_2:54
-    .=n0+1 by A1,A4,A11,A12,GR_CY_1:27;
-A15: card ( (the carrier of gr {a}) \/ {b}) c=
-  card (Roots(f)) by A13,CARD_1:27;
-A16: card m = card (Roots(f)) by A11;
-  card (n0 + 1)=card ( (the carrier of gr {a}) \/ {b}) by A14;
-  then
-  n0 + 1 c= m by A15,A16,CARD_1:72;
-  then
-  n0 + 1 <= m by NAT_1:40;
-  hence contradiction by A11,NAT_1:16,XXREAL_0:2;
 end;
 
 theorem Th30:
-  for G be Group, z be Element of G, d,l be Element of NAT
-  st G is finite & ord z=d*l holds ord (z|^d)=l
+  for G be Group, z be Element of G, d,l be Element of NAT st G is
+  finite & ord z=d*l holds ord (z|^d)=l
 proof
   let G be Group, z be Element of G, d,l be Element of NAT;
-  assume
-A1: G is finite & ord z=d*l;
-  reconsider H=gr {z} as strict Subgroup of G;
+  assume that
+A1: G is finite and
+A2: ord z=d*l;
   set m = d*l;
+  reconsider H=gr {z} as strict Subgroup of G;
   reconsider H as finite strict Subgroup of G by A1;
-A2: card H = m by A1,GR_CY_1:27;
   z in gr{z} by GR_CY_2:8;
-  then
-  reconsider z1=z as Element of H by STRUCT_0:def 5;
-  gr{z} =gr{z1} by GR_CY_2:9;
-  then ord (z1|^d) = l by A2,GR_CY_2:14;
+  then reconsider z1=z as Element of H by STRUCT_0:def 5;
+A3: gr{z} =gr{z1} by GR_CY_2:9;
+  card H = m by A1,A2,GR_CY_1:27;
+  then ord (z1|^d) = l by A3,GR_CY_2:14;
   hence thesis by A1,GROUP_8:3,5;
 end;
 
@@ -2548,190 +2690,189 @@ theorem
   for p be Prime holds Z/Z*(p) is cyclic Group
 proof
   let p be Prime;
-  assume
-A2: not Z/Z*(p) is cyclic Group;
-A3: for x be Element of Z/Z*(p) holds ord x < card (Z/Z*(p))
-  proof
-    let x be Element of Z/Z*(p);
-A5: ord x <= card (Z/Z*(p)) by GR_CY_1:28,NAT_D:7;
-    ord x <> card (Z/Z*(p)) by A2,GR_CY_1:43;
-    hence thesis by A5,XXREAL_0:1;
-  end;
   consider a be Element of Z/Z*(p);
   set ZP=Z/Z*(p);
   defpred P[natural number,Element of ZP,Element of ZP] means ord $2 < ord $3;
-A6: for n being Element of NAT for x being Element of ZP
-  ex y being Element of ZP st P[n,x,y]
+  assume
+A1: not Z/Z*(p) is cyclic Group;
+A2: for x be Element of Z/Z*(p) holds ord x < card (Z/Z*(p))
+  proof
+    let x be Element of Z/Z*(p);
+A3: ord x <= card (Z/Z*(p)) by GR_CY_1:28,NAT_D:7;
+    ord x <> card (Z/Z*(p)) by A1,GR_CY_1:43;
+    hence thesis by A3,XXREAL_0:1;
+  end;
+A4: for n being Element of NAT for x being Element of ZP ex y being Element
+  of ZP st P[n,x,y]
   proof
     let n being Element of NAT, x being Element of ZP;
     set n=ord x;
-A7: n < card Z/Z*(p) by A3;
-A8: the carrier of (gr {x}) c= the carrier of Z/Z*(p) by GROUP_2:def 5;
-A9: card gr {x} <> card Z/Z*(p) by A7,GR_CY_1:27;
-    the carrier of (gr {x}) c< the carrier of Z/Z*(p) by A8,A9,XBOOLE_0:def 8;
+    n < card Z/Z*(p) by A2;
     then
-    (the carrier of Z/Z*(p)) \ (the carrier of (gr {x})) <> {}
-    by XBOOLE_1:105;
-    then
-    consider z be set such that
-A10: z in (the carrier of Z/Z*(p))
-    \ (the carrier of (gr {x})) by XBOOLE_0:def 1;
+A5: card gr {x} <> card Z/Z*(p) by GR_CY_1:27;
+    the carrier of (gr {x}) c= the carrier of Z/Z*(p) by GROUP_2:def 5;
+    then the carrier of (gr {x}) c< the carrier of Z/Z*(p) by A5,XBOOLE_0:def 8
+;
+    then (the carrier of Z/Z*(p)) \ (the carrier of (gr {x})) <> {} by
+XBOOLE_1:105;
+    then consider z be set such that
+A6: z in (the carrier of Z/Z*(p)) \ (the carrier of (gr {x})) by XBOOLE_0:def 1
+;
+    reconsider z as Element of ZP by A6;
     1_(gr {x}) in the carrier of (gr {x});
+    then 1_ZP in the carrier of (gr {x}) by GROUP_2:53;
+    then 1 in the carrier of (gr {x}) by Th21;
+    then z <> 1 by A6,XBOOLE_0:def 5;
     then
-    1_ZP in the carrier of (gr {x}) by GROUP_2:53;
-    then
-A11: 1 in the carrier of (gr {x}) by Th21;
-    reconsider z as Element of ZP by A10;
+A7: z <> 1_ZP by Th21;
+    reconsider H=gr {z } as strict Subgroup of ZP;
     set m=ord z;
     reconsider d= m gcd n as Nat;
-A12: z <> 1 by A10,A11,XBOOLE_0:def 5;
-    reconsider H=gr {z } as strict Subgroup of ZP;
-A13: 1 <=card H by GROUP_1:90;
-A14: card H = m by GR_CY_1:27;
-    z <> 1_ZP by A12,Th21;
+A8: card H = m by GR_CY_1:27;
+    1 <=card H by GROUP_1:90;
     then
-A15: 1 < m by A13,A14,GROUP_1:85,XXREAL_0:1;
-    now per cases;
+A9: 1 < m by A8,A7,GROUP_1:85,XXREAL_0:1;
+    now
+      per cases;
       suppose
-A16:    d = 1;
+A10:    d = 1;
         take y=x*z;
         1 <=card gr {x} by GROUP_1:90;
-        then
-        1 <= n by GR_CY_1:27;
-        then
-        1*n < m*n by A15,XREAL_1:70;
-        hence n < ord y by A16,Th25;
+        then 1 <= n by GR_CY_1:27;
+        then 1*n < m*n by A9,XREAL_1:70;
+        hence n < ord y by A10,Th25;
       end;
-      suppose d <> 1;
+      suppose
+        d <> 1;
+        set l= m lcm n;
         1 <=card gr {x} by GROUP_1:90;
         then
-A17:    1 <= n by GR_CY_1:27;
-        1 <=card gr {z} by GROUP_1:90;
-        then
-A18:    1 <= m by GR_CY_1:27;
-        set l= m lcm n;
-        consider m0,n0 be Element of NAT such that
-A19:    l=n0*m0 & n0 gcd m0 = 1 & n0 divides n
-        & m0 divides m & n0 <> 0 & m0 <> 0 by A17,A18,Th17;
-        consider j be Integer such that
-A20:    n=n0* j by A19,INT_1:def 9;
-A21:    n/n0= j by A19,A20,XCMPLX_1:90;
-        reconsider d1=n/n0 as Element of NAT by A21,INT_1:16;
-        consider u be Integer such that
-A22:    m=m0* u by A19,INT_1:def 9;
-A23:    m/m0 = u by A19,A22,XCMPLX_1:90;
-        reconsider d2=m/m0 as Element of NAT by A23,INT_1:16;
-        take y =(x|^d1)*(z|^d2);
-        n=(n/n0)*n0 by A19,XCMPLX_1:88;
-        then
-A24:    ord (x|^d1) = n0 by Th30;
-        m=(m/m0)*m0 by A19,XCMPLX_1:88;
-        then
-        ord (z|^d2) = m0 by Th30;
-        then
-A25:    ord y = m0*n0 by A19,A24,Th25;
-A26:    not m divides n
+A11:    1 <= n by GR_CY_1:27;
+        not m divides n
         proof
           assume
-A27:      m divides n;
-          consider j be Integer such that
-A28:      n=m* j by A27,INT_1:def 9;
-A29:      z |^n =(z |^m)|^j by A28,GROUP_1:67
+          m divides n;
+          then consider j be Integer such that
+A12:      n=m* j by INT_1:def 9;
+          z |^n =(z |^m)|^j by A12,GROUP_1:67
             .= (1_(Z/Z*(p)))|^j by GROUP_1:82
             .= 1_(Z/Z*(p)) by GROUP_1:61
             .= 1 by Th21;
-          z is Element of gr {x} by A17,A29,Th29;
-          hence contradiction by A10,XBOOLE_0:def 5;
+          then z is Element of gr {x} by A11,Th29;
+          hence contradiction by A6,XBOOLE_0:def 5;
         end;
-A30:    n <> l by A26,INT_2:25;
-A31:    n divides (m lcm n) by INT_2:25;
-        consider j be Integer such that
-A32:    l=n* j by A31,INT_1:def 9;
-        l/n = j by A17,A32,XCMPLX_1:90;
         then
-A33:    j is Element of NAT by INT_1:16;
-        j <> 0 by A17,A18,A32,INT_2:4;
-        then n*1 <=n*j by A33,NAT_1:14,XREAL_1:66;
-        hence n < ord y by A19,A25,A30,A32,XXREAL_0:1;
+A13:    n <> l by INT_2:25;
+        1 <=card gr {z} by GROUP_1:90;
+        then
+A14:    1 <= m by GR_CY_1:27;
+        then consider m0,n0 be Element of NAT such that
+A15:    l=n0*m0 and
+A16:    n0 gcd m0 = 1 and
+A17:    n0 divides n and
+A18:    m0 divides m and
+A19:    n0 <> 0 and
+A20:    m0 <> 0 by A11,Th17;
+        consider j be Integer such that
+A21:    n=n0* j by A17,INT_1:def 9;
+        consider u be Integer such that
+A22:    m=m0* u by A18,INT_1:def 9;
+        m/m0 = u by A20,A22,XCMPLX_1:90;
+        then reconsider d2=m/m0 as Element of NAT by INT_1:16;
+        m=(m/m0)*m0 by A20,XCMPLX_1:88;
+        then
+A23:    ord (z|^d2) = m0 by Th30;
+        n/n0= j by A19,A21,XCMPLX_1:90;
+        then reconsider d1=n/n0 as Element of NAT by INT_1:16;
+        n divides (m lcm n) by INT_2:25;
+        then consider j be Integer such that
+A24:    l=n* j by INT_1:def 9;
+        take y =(x|^d1)*(z|^d2);
+        n=(n/n0)*n0 by A19,XCMPLX_1:88;
+        then ord (x|^d1) = n0 by Th30;
+        then
+A25:    ord y = m0*n0 by A16,A23,Th25;
+        l/n = j by A11,A24,XCMPLX_1:90;
+        then
+A26:    j is Element of NAT by INT_1:16;
+        j <> 0 by A11,A14,A24,INT_2:4;
+        then n*1 <=n*j by A26,NAT_1:14,XREAL_1:66;
+        hence n < ord y by A15,A25,A13,A24,XXREAL_0:1;
       end;
     end;
     hence thesis;
   end;
   consider f being Function of NAT,the carrier of ZP such that
-A34: f.0 = a & for n being Element of NAT holds P[n,f.n,f.(n+1)]
-  from RECDEF_1:sch 2(A6);
+A27: f.0 = a & for n being Element of NAT holds P[n,f.n,f.(n+1)] from
+  RECDEF_1:sch 2(A4);
   deffunc F(Element of NAT) =ord (f.$1);
   consider g be Function of NAT,NAT such that
-A35: for k be Element of NAT holds g.k=F(k) from FUNCT_2:sch 4;
-A36: now
+A28: for k be Element of NAT holds g.k=F(k) from FUNCT_2:sch 4;
+A29: now
     let k be Element of NAT;
-A37: g.k = ord (f.k) by A35;
-    g.(k+1) = ord (f.(k+1)) by A35;
-    hence g.k < g.(k+1) by A34,A37;
+A30: g.(k+1) = ord (f.(k+1)) by A28;
+    g.k = ord (f.k) by A28;
+    hence g.k < g.(k+1) by A27,A30;
   end;
-A38: for k,m be Element of NAT holds g.k< g.(k+1+m)
+A31: for k,m be Element of NAT holds g.k< g.(k+1+m)
   proof
     let k be Element of NAT;
     defpred P[Nat] means g.k< g.(k+1+$1);
-A39: P[ 0 ] by A36;
-A40: now
+A32: now
       let m be Element of NAT;
       assume
-A41:  P[m];
-      g.(k+1+m) < g.((k+1+m) + 1) by A36;
-      hence P[m+1] by A41,XXREAL_0:2;
+A33:  P[m];
+      g.(k+1+m) < g.((k+1+m) + 1) by A29;
+      hence P[m+1] by A33,XXREAL_0:2;
     end;
-    for m be Element of NAT holds P[m] from NAT_1:sch 1(A39,A40);
+A34: P[ 0 ] by A29;
+    for m be Element of NAT holds P[m] from NAT_1:sch 1(A34,A32);
     hence thesis;
   end;
-A42: for k,m be Element of NAT st k < m holds g.k< g.m
+A35: for k,m be Element of NAT st k < m holds g.k< g.m
   proof
     let k,m be Element of NAT;
     assume
-A43: k < m;
-    m-k is Element of NAT by A43,INT_1:18;
+A36: k < m;
+    then m-k is Element of NAT by INT_1:18;
     then reconsider mk=m-k as Nat;
-    m-k <> 0 by A43;
-    then
-    consider n0 be Nat such that
-A44: mk=n0+1 by NAT_1:6;
+    m-k <> 0 by A36;
+    then consider n0 be Nat such that
+A37: mk=n0+1 by NAT_1:6;
     reconsider n=n0 as Element of NAT by ORDINAL1:def 13;
-    m=k+1+n by A44;
-    hence thesis by A38;
+    m=k+1+n by A37;
+    hence thesis by A31;
   end;
-  g is one-to-one
-  proof
-    now
-      let x1,x2 be set;
-      assume
-A45:  x1 in NAT & x2 in NAT & g.x1 = g.x2;
-      then
-      reconsider xx1=x1,xx2=x2 as Element of NAT;
-A46:  xx1 <= xx2 by A42,A45;
-      xx2 <= xx1 by A42,A45;
-      hence x2=x1 by A46,XXREAL_0:1;
-    end;
-    hence thesis by FUNCT_2:25;
+  now
+    let x1,x2 be set;
+    assume that
+A38: x1 in NAT and
+A39: x2 in NAT and
+A40: g.x1 = g.x2;
+    reconsider xx1=x1,xx2=x2 as Element of NAT by A38,A39;
+A41: xx2 <= xx1 by A35,A40;
+    xx1 <= xx2 by A35,A40;
+    hence x2=x1 by A41,XXREAL_0:1;
   end;
+  then g is one-to-one by FUNCT_2:25;
   then dom g,rng g are_equipotent by WELLORD2:def 4;
+  then card (dom g) = card (rng g) by CARD_1:21;
   then
-A47: card (dom g) = card (rng g) by CARD_1:21;
-A48: rng g c= Segm(card ZP)
+A42: card rng g = card NAT by FUNCT_2:def 1;
+  rng g c= Segm(card ZP)
   proof
     let y be set;
-    assume y in rng g;
+    assume
+    y in rng g;
     then consider x be set such that
-A49: x in NAT & y=g.x by FUNCT_2:17;
-    reconsider x as Element of NAT by A49;
+A43: x in NAT and
+A44: y=g.x by FUNCT_2:17;
+    reconsider x as Element of NAT by A43;
     reconsider gg=g.x as Element of NAT;
-    g.x =ord (f.x) by A35;
-    then
-    gg < card ZP by A3;
-    hence thesis by A49,ALGSEQ_1:10;
+    g.x =ord (f.x) by A28;
+    then gg < card ZP by A2;
+    hence thesis by A44,ALGSEQ_1:10;
   end;
-A50: rng g is finite by A48;
-  card rng g = card NAT by A47,FUNCT_2:def 1;
-  then not card rng g is finite;
-  hence contradiction by A50;
+  hence contradiction by A42;
 end;
 

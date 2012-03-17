@@ -10,8 +10,8 @@ environ
  vocabularies BINOP_1, VECTSP_1, LATTICES, ALGSTR_2, VECTSP_2, FUNCSDOM,
       RLVECT_1, ARYTM_3, ARYTM_1, GROUP_1, EQREL_1, BOOLE, SETFAM_1, COHSP_1,
       INT_2, RELAT_1, GCD_1, ARYTM, ALGSTR_0;
- notations TARSKI, XBOOLE_0, SUBSET_1, REAL_1, NUMBERS, BINOP_2, STRUCT_0,
-      ALGSTR_0, RLVECT_1, GROUP_1, VECTSP_2, VECTSP_1, FUNCSDOM;
+ notations TARSKI, XBOOLE_0, SUBSET_1, REAL_1, NUMBERS, STRUCT_0, ALGSTR_0,
+      RLVECT_1, GROUP_1, VECTSP_2, VECTSP_1, FUNCSDOM;
  constructors BINOP_2, VECTSP_2, MONOID_0;
  registrations XBOOLE_0, SUBSET_1, MEMBERED, STRUCT_0, VECTSP_1, MONOID_0;
  requirements SUBSET, BOOLE;
@@ -23,7 +23,6 @@ environ
 begin :: Basics
 
 reserve X,Y for set;
-
 :: Theorems about Integral Domains
 
 registration
@@ -40,8 +39,8 @@ A2: R is right_unital;
 end;
 
 registration
-  cluster commutative right-distributive -> distributive
-    (non empty doubleLoopStr);
+  cluster commutative right-distributive -> distributive (non empty
+    doubleLoopStr);
   coherence
   proof
     let R be non empty doubleLoopStr such that
@@ -54,8 +53,8 @@ A2: R is right-distributive;
       .= y*x+x*z by A1,GROUP_1:def 16
       .= y*x+z*x by A1,GROUP_1:def 16;
   end;
-  cluster commutative left-distributive ->
-    distributive (non empty doubleLoopStr);
+  cluster commutative left-distributive -> distributive (non empty
+    doubleLoopStr);
   coherence
   proof
     let R be non empty doubleLoopStr such that
@@ -82,10 +81,10 @@ registration
     set D = F_Real;
     hereby
       let x,y be Element of F_Real;
-      assume that
-A1:   x*y = 0.D & x <> 0.D;
       reconsider x' = x, y' = y as Real;
-      0.D = 0 by STRUCT_0:def 6;
+A1:   0.D = 0 by STRUCT_0:def 6;
+      assume
+      x*y = 0.D & x <> 0.D;
       hence y = 0.D by A1,XCMPLX_1:6;
     end;
   end;
@@ -93,9 +92,8 @@ end;
 
 registration
   cluster strict Abelian add-associative right_zeroed right_complementable
-    associative commutative domRing-like distributive
-    well-unital non degenerated almost_left_invertible
-    (non empty doubleLoopStr);
+associative commutative domRing-like distributive well-unital non degenerated
+    almost_left_invertible (non empty doubleLoopStr);
   existence
   proof
     take F_Real;
@@ -107,16 +105,17 @@ reserve R for domRing-like commutative Ring;
 reserve c for Element of R;
 
 theorem Th1:
-  for R being domRing-like commutative Ring for a,b,c being Element of R holds
-  a <> 0.R implies ((a * b = a * c implies b = c) &
-  (b * a = c * a implies b = c))
+  for R being domRing-like commutative Ring for a,b,c being Element
+  of R holds a <> 0.R implies (a * b = a * c implies b = c) & (b * a = c * a
+  implies b = c)
 proof
   let R be domRing-like commutative Ring;
   let a,b,c be Element of R;
   assume
 A1: a <> 0.R;
   now
-    assume a * b = a * c;
+    assume
+    a * b = a * c;
     then 0.R = (a * b) + (-(a * c)) by RLVECT_1:def 11
       .= (a * b) + (a *(-c)) by VECTSP_1:40
       .= a * (b + (-c)) by VECTSP_1:def 11
@@ -209,70 +208,73 @@ end;
 :: Some Lemmata about Divisibility
 
 theorem Th2:
-  for R being associative (non empty multLoopStr)
-  for a,b,c being Element of R holds
-  a divides b & b divides c implies a divides c
+  for R being associative (non empty multLoopStr) for a,b,c being
+  Element of R holds a divides b & b divides c implies a divides c
 proof
   let R be associative (non empty multLoopStr);
   let A,B,C be Element of R;
   now
-    assume
-A1: A divides B & B divides C;
-    then consider D being Element of R such that
-A2: A * D = B by Def1;
+    assume that
+A1: A divides B and
+A2: B divides C;
+    consider D being Element of R such that
+A3: A * D = B by A1,Def1;
     consider E being Element of R such that
-A3: B * E = C by A1,Def1;
-    A * (D * E) = C by A2,A3,GROUP_1:def 4;
+A4: B * E = C by A2,Def1;
+    A * (D * E) = C by A3,A4,GROUP_1:def 4;
     hence thesis by Def1;
   end;
   hence thesis;
 end;
 
 theorem Th3:
-  for R being commutative associative (non empty multLoopStr)
-  for a,b,c,d being Element of R holds
-  (b divides a & d divides c) implies (b * d) divides (a * c)
+  for R being commutative associative (non empty multLoopStr) for a
+  ,b,c,d being Element of R holds (b divides a & d divides c) implies (b * d)
+  divides (a * c)
 proof
   let R be commutative associative (non empty multLoopStr);
   let a,b,c,d be Element of R;
-  assume
-A1: (b divides a) & (d divides c);
-  then consider x being Element of R such that
-A2: b * x = a by Def1;
+  assume that
+A1: b divides a and
+A2: d divides c;
+  consider x being Element of R such that
+A3: b * x = a by A1,Def1;
   consider y being Element of R such that
-A3: d * y = c by A1,Def1;
+A4: d * y = c by A2,Def1;
   (b * d) * (y * x) = ((b * d) * y) * x by GROUP_1:def 4
-    .= (b * c) * x by A3,GROUP_1:def 4
-    .= a * c by A2,GROUP_1:def 4;
+    .= (b * c) * x by A4,GROUP_1:def 4
+    .= a * c by A3,GROUP_1:def 4;
   hence thesis by Def1;
 end;
 
 theorem Th4:
-  for R being associative (non empty multLoopStr)
-  for a,b,c being Element of R holds
-  a is_associated_to b & b is_associated_to c implies a is_associated_to c
+  for R being associative (non empty multLoopStr) for a,b,c being
+  Element of R holds a is_associated_to b & b is_associated_to c implies a
+  is_associated_to c
 proof
   let R be associative (non empty multLoopStr);
   let A,B,C be Element of R;
   now
     assume
 A1: A is_associated_to B & B is_associated_to C;
+    then B divides A & C divides B by Def3;
     then
-A2: A divides B & B divides A by Def3;
-    B divides C & C divides B by A1,Def3;
-    then A divides C & C divides A by A2,Th2;
-    hence thesis by Def3;
+A2: C divides A by Th2;
+    A divides B & B divides C by A1,Def3;
+    then A divides C by Th2;
+    hence thesis by A2,Def3;
   end;
   hence thesis;
 end;
 
 theorem Th5:
-  for R being associative (non empty multLoopStr)
-  for a,b,c being Element of R holds a divides b implies c * a divides c * b
+  for R being associative (non empty multLoopStr) for a,b,c being
+  Element of R holds a divides b implies c * a divides c * b
 proof
   let R be associative (non empty multLoopStr);
   let A,B,C be Element of R;
-  assume A divides B;
+  assume
+  A divides B;
   then consider D being Element of R such that
 A1: A * D = B by Def1;
   (C * A) * D = C * B by A1,GROUP_1:def 4;
@@ -280,8 +282,8 @@ A1: A * D = B by Def1;
 end;
 
 theorem Th6:
-  for R being non empty multLoopStr for a,b being Element of R holds
-  a divides a * b & (R is commutative implies b divides a * b)
+  for R being non empty multLoopStr for a,b being Element of R
+  holds a divides a * b & (R is commutative implies b divides a * b)
 proof
   let R be non empty multLoopStr;
   let a,b be Element of R;
@@ -297,12 +299,13 @@ A1: R is commutative;
 end;
 
 theorem Th7:
-  for R being associative (non empty multLoopStr)
-  for a,b,c being Element of R holds a divides b implies a divides b * c
+  for R being associative (non empty multLoopStr) for a,b,c being
+  Element of R holds a divides b implies a divides b * c
 proof
   let R be associative (non empty multLoopStr);
   let a,b,c be Element of R;
-  assume a divides b;
+  assume
+  a divides b;
   then consider d being Element of R such that
 A1: a * d = b by Def1;
   a * (d * c) = b * c by A1,GROUP_1:def 4;
@@ -310,21 +313,24 @@ A1: a * d = b by Def1;
 end;
 
 theorem Th8:
-  for a,b being Element of R holds (b divides a & b <> 0.R)
-  implies (a/b = 0.R iff a = 0.R)
+  for a,b being Element of R holds b divides a & b <> 0.R implies (
+  a/b = 0.R iff a = 0.R)
 proof
   let a,b be Element of R;
-  assume
-A1: b divides a & b <> 0.R;
+  assume that
+A1: b divides a and
+A2: b <> 0.R;
   hereby
-    assume a/b = 0.R;
-    then a = 0.R * b by A1,Def4
+    assume
+    a/b = 0.R;
+    then a = 0.R * b by A1,A2,Def4
       .= 0.R by VECTSP_1:39;
     hence a = 0.R;
   end;
-  assume a = 0.R;
-  then 0.R = (a/b) * b by A1,Def4;
-  hence thesis by A1,VECTSP_2:def 5;
+  assume
+  a = 0.R;
+  then 0.R = (a/b) * b by A1,A2,Def4;
+  hence thesis by A2,VECTSP_2:def 5;
 end;
 
 theorem Th9:
@@ -339,138 +345,132 @@ A1: A <> 0.R;
 end;
 
 theorem Th10:
-  for R being non degenerated domRing-like commutative Ring
-  for a being Element of R holds a/1.R = a
+  for R being non degenerated domRing-like commutative Ring for a
+  being Element of R holds a/1.R = a
 proof
   let R be non degenerated domRing-like commutative Ring;
   let a be Element of R;
   set A = a/1.R;
-A1: 1.R <> 0.R;
   1.R * a = a by VECTSP_1:def 19;
   then
-A2: 1.R divides a by Def1;
+A1: 1.R <> 0.R & 1.R divides a by Def1;
   A = A * 1.R by VECTSP_1:def 13
-    .= a by A1,A2,Def4;
+    .= a by A1,Def4;
   hence thesis;
 end;
 
 theorem Th11:
-  for a,b,c being Element of R holds c <> 0.R implies
-  (((c divides (a * b) & c divides a) implies (a * b) / c = (a / c) * b) &
-  ((c divides (a * b) & c divides b) implies (a * b) / c = a * (b / c)))
+  for a,b,c being Element of R holds c <> 0.R implies ( c divides
+(a * b) & c divides a implies (a * b) / c = (a / c) * b) & ( c divides (a * b)
+  & c divides b implies (a * b) / c = a * (b / c))
 proof
   let A,B,C be Element of R;
   assume
 A1: C <> 0.R;
 A2: now
-    assume
-A3: C divides (A * B) & C divides A;
+    set A2 = B / C;
     set A1 = (A * B) / C;
-A4: A1 * C = A * B by A1,A3,Def4;
-    set A2 = A / C;
-    A2 * C = A by A1,A3,Def4;
-    then A1 * C = (A2 * B) * C by A4,GROUP_1:def 4;
-    hence (C divides (A * B) & C divides A) implies
-    (A * B) / C = (A / C) * B by A1,Th1;
+    assume
+    C divides (A * B) & C divides B;
+    then A1 * C = A * B & A2 * C = B by A1,Def4;
+    then A1 * C = (A * A2) * C by GROUP_1:def 4;
+    hence C divides (A * B) & C divides B implies (A * B) / C = A * (B / C) by
+    A1,Th1;
   end;
   now
-    assume
-A5: (C divides (A * B)) & C divides B;
+    set A2 = A / C;
     set A1 = (A * B) / C;
-A6: A1 * C = A * B by A1,A5,Def4;
-    set A2 = B / C;
-    A2 * C = B by A1,A5,Def4;
-    then A1 * C = (A * A2) * C by A6,GROUP_1:def 4;
-    hence C divides (A * B) & C divides B implies
-    (A * B) / C = A * (B / C) by A1,Th1;
+    assume
+    C divides (A * B) & C divides A;
+    then A1 * C = A * B & A2 * C = A by A1,Def4;
+    then A1 * C = (A2 * B) * C by GROUP_1:def 4;
+    hence C divides (A * B) & C divides A implies (A * B) / C = (A / C) * B by
+    A1,Th1;
   end;
   hence thesis by A2;
 end;
 
 theorem Th12:
-  for a,b,c being Element of R holds
-  (c <> 0.R & c divides a & c divides b & c divides (a + b))
-  implies (a/c) + (b/c) = (a + b)/c
+  for a,b,c being Element of R holds c <> 0.R & c divides a & c
+  divides b & c divides (a + b) implies (a/c) + (b/c) = (a + b)/c
 proof
   let a,b,c be Element of R;
   assume
 A1: c <> 0.R;
-  assume
-A2: c divides a & c divides b & c divides (a + b);
-  set d = a/c;
   set e = b/c;
-A3: d * c = a by A1,A2,Def4;
-  e * c = b by A1,A2,Def4;
-  then a + b = (d + e) * c by A3,VECTSP_1:def 12;
-  then (a + b)/c = (d + e) * (c/c) by A1,A2,Th11
+  set d = a/c;
+  assume that
+A2: c divides a & c divides b and
+A3: c divides (a + b);
+  d * c = a & e * c = b by A1,A2,Def4;
+  then a + b = (d + e) * c by VECTSP_1:def 12;
+  then (a + b)/c = (d + e) * (c/c) by A1,A3,Th11
     .= (d + e) * 1.R by A1,Th9
     .= d + e by VECTSP_1:def 13;
   hence thesis;
 end;
 
 theorem
-  for a,b,c being Element of R holds
-  (c <> 0.R & c divides a & c divides b) implies (a/c = b/c iff a = b)
+  for a,b,c being Element of R holds c <> 0.R & c divides a & c divides
+  b implies (a/c = b/c iff a = b)
 proof
   let a,b,c be Element of R;
   assume
 A1: c <> 0.R;
-  assume
-A2: c divides a & c divides b;
+  assume that
+A2: c divides a and
+A3: c divides b;
   now
-    assume (a/c) = (b/c);
+    assume
+    (a/c) = (b/c);
     consider e being Element of R such that
-A3: e = (b/c);
-    e * c = b by A1,A2,A3,Def4;
-    hence a/c = b/c implies a = b by A1,A2,A3,Def4;
+A4: e = (b/c);
+    e * c = b by A1,A3,A4,Def4;
+    hence a/c = b/c implies a = b by A1,A2,A4,Def4;
   end;
   hence thesis;
 end;
 
 theorem Th14:
-  for a,b,c,d being Element of R holds
-  (b <> 0.R & d <> 0.R & b divides a & d divides c)
-  implies (a/b) * (c/d) = (a * c) / (b * d)
+  for a,b,c,d being Element of R holds b <> 0.R & d <> 0.R & b
+  divides a & d divides c implies (a/b) * (c/d) = (a * c) / (b * d)
 proof
   let a,b,c,d be Element of R;
-  assume
-A1: b <> 0.R & d <> 0.R & b divides a & d divides c;
-  set x = a/b;
-  set y = c/d;
+  assume that
+A1: b <> 0.R & d <> 0.R and
+A2: b divides a & d divides c;
+A3: (b * d) divides (a * c) by A2,Th3;
   set z = (a * c)/(b * d);
-A2: x * b = a by A1,Def4;
-A3: y * d = c by A1,Def4;
-A4: (b * d) divides (a * c) by A1,Th3;
-A5: (b * d) <> 0.R by A1,VECTSP_2:def 5;
-  then z * (b * d) = (x * b) * (y * d) by A2,A3,A4,Def4
+  set y = c/d;
+  set x = a/b;
+A4: (b * d) <> 0.R by A1,VECTSP_2:def 5;
+  x * b = a & y * d = c by A1,A2,Def4;
+  then z * (b * d) = (x * b) * (y * d) by A3,A4,Def4
     .= x * (b * (y * d)) by GROUP_1:def 4
     .= x * (y * (b * d)) by GROUP_1:def 4
     .= (x * y) * (b * d) by GROUP_1:def 4;
-  hence thesis by A5,Th1;
+  hence thesis by A4,Th1;
 end;
 
 theorem Th15:
-  for a,b,c being Element of R holds ((a <> 0.R) & ((a * b) divides (a * c)))
-  implies (b divides c)
+  for a,b,c being Element of R holds a <> 0.R & (a * b) divides (a
+  * c) implies b divides c
 proof
   let A,B,C be Element of R;
-  assume
-A1: (A <> 0.R) & (A * B) divides (A * C);
-  then consider D being Element of R such that
-A2: (A * B) * D = A * C by Def1;
-A3: A * (B * D) = A * C by A2,GROUP_1:def 4;
-A4: (A * (B * D))/A = (A/A) * (B * D)
-  proof
-    A divides (A * (B * D)) by Th6;
-    hence thesis by A1,Th11;
-  end;
-A5: (A * C)/A = (A/A) * C
-  proof
-    A divides (A * C) by Th6;
-    hence thesis by A1,Th11;
-  end;
+  assume that
+A1: A <> 0.R and
+A2: (A * B) divides (A * C);
+  consider D being Element of R such that
+A3: (A * B) * D = A * C by A2,Def1;
+  A divides (A * C) by Th6;
+  then
+A4: (A * C)/A = (A/A) * C by A1,Th11;
+  A divides (A * (B * D)) by Th6;
+  then
+A5: (A * (B * D))/A = (A/A) * (B * D) by A1,Th11;
+A6: A * (B * D) = A * C by A3,GROUP_1:def 4;
   B * D = 1.R * (B * D) by VECTSP_1:def 19
-    .= (A/A) * C by A1,A3,A4,A5,Th9
+    .= (A/A) * C by A1,A6,A5,A4,Th9
     .= 1.R * C by A1,Th9
     .= C by VECTSP_1:def 19;
   hence thesis by Def1;
@@ -480,41 +480,44 @@ theorem
   for a being Element of R holds a is_associated_to 0.R implies a = 0.R
 proof
   let A be Element of R;
-  assume A is_associated_to 0.R;
+  assume
+  A is_associated_to 0.R;
   then 0.R divides A by Def3;
-  then consider D being Element of R such that
-A1: 0.R * D = A by Def1;
-  thus thesis by A1,VECTSP_1:39;
+  then ex D being Element of R st 0.R * D = A by Def1;
+  hence thesis by VECTSP_1:39;
 end;
 
 theorem Th17:
-  for a,b being Element of R holds (a <> 0.R & a * b = a) implies b = 1.R
+  for a,b being Element of R holds a <> 0.R & a * b = a implies b
+  = 1.R
 proof
   let A,B be Element of R;
-  assume
-A1: A <> 0.R & A * B = A;
+  assume that
+A1: A <> 0.R and
+A2: A * B = A;
   set A1 = A/A;
-A2: A1 = 1.R by A1,Th9;
-  (A * B)/A = (A/A) * B by A1,Th11;
-  hence thesis by A1,A2,VECTSP_1:def 19;
+  A1 = 1.R & (A * B)/A = (A/A) * B by A1,A2,Th9,Th11;
+  hence thesis by A2,VECTSP_1:def 19;
 end;
 
 theorem Th18:
-  for a,b being Element of R holds
-  a is_associated_to b iff (ex c st (c is unital & a * c = b))
+  for a,b being Element of R holds a is_associated_to b iff ex c
+  st c is unital & a * c = b
 proof
-A1: for a,b being Element of R holds (a is_associated_to b) implies
-  (ex c being Element of R st (c is unital & a * c = b))
+A1: for a,b being Element of R holds a is_associated_to b implies ex c being
+  Element of R st c is unital & a * c = b
   proof
     let A,B be Element of R;
-    assume A is_associated_to B;
-    then
-A2: A divides B & B divides A by Def3;
+    assume
+A2: A is_associated_to B;
+    then A divides B by Def3;
     then consider C being Element of R such that
 A3: B = A * C by Def1;
-    consider D being Element of R such that
-A4: A = B * D by A2,Def1;
-    now per cases;
+    B divides A by A2,Def3;
+    then consider D being Element of R such that
+A4: A = B * D by Def1;
+    now
+      per cases;
       case
 A5:     A <> 0.R;
         A = A * (C * D) by A3,A4,GROUP_1:def 4;
@@ -525,38 +528,37 @@ A5:     A <> 0.R;
       end;
       case
 A6:     A = 0.R;
-        then B = 0.R by A3,VECTSP_1:39;
+        1.R divides 1.R;
         then
-A7:     B = A * 1.R by A6,VECTSP_1:def 13;
-        1.R is unital
-        proof
-          thus 1.R divides 1.R;
-        end;
+A7:     1.R is unital by Def2;
+        B = 0.R by A3,A6,VECTSP_1:39;
+        then B = A * 1.R by A6,VECTSP_1:def 13;
         hence thesis by A7;
       end;
     end;
     hence thesis;
   end;
-  for a,b being Element of R holds
-  (ex c being Element of R st (c is unital & a * c = b))
-  implies a is_associated_to b
+  for a,b being Element of R holds (ex c being Element of R st (c is
+  unital & a * c = b)) implies a is_associated_to b
   proof
     let A,B be Element of R;
     (ex c st (c is unital & A * c = B)) implies A is_associated_to B
     proof
       now
-        assume (ex c st (c is unital & A * c = B));
+        assume
+        ex c st c is unital & A * c = B;
         then consider C being Element of R such that
-A8:     C is unital & A * C = B;
+A8:     C is unital and
+A9:     A * C = B;
         C divides 1.R by A8,Def2;
         then consider D being Element of R such that
-A9:     C * D = 1.R by Def1;
-        A = A * (C * D) by A9,VECTSP_1:def 13
-          .= B * D by A8,GROUP_1:def 4;
+A10:    C * D = 1.R by Def1;
+        A = A * (C * D) by A10,VECTSP_1:def 13
+          .= B * D by A9,GROUP_1:def 4;
         then
-A10:    B divides A by Def1;
-        A divides B by A8,Def1;
-        hence thesis by A10,Def3;
+A11:    B divides A by Def1;
+        A divides B by A9,Def1;
+        hence thesis by A11,Def3;
       end;
       hence thesis;
     end;
@@ -566,18 +568,19 @@ A10:    B divides A by Def1;
 end;
 
 theorem Th19:
-  for a,b,c being Element of R holds c <> 0.R & c * a is_associated_to c * b
-  implies a is_associated_to b
+  for a,b,c being Element of R holds c <> 0.R & c * a
+  is_associated_to c * b implies a is_associated_to b
 proof
   let A,B,C be Element of R;
-  assume
-A1: C <> 0.R & (C * A) is_associated_to (C * B);
-  then (C * A) divides (C * B) by Def3;
+  assume that
+A1: C <> 0.R and
+A2: (C * A) is_associated_to (C * B);
+  C * B divides C * A by A2,Def3;
   then
-A2: A divides B by A1,Th15;
-  C * B divides C * A by A1,Def3;
-  then B divides A by A1,Th15;
-  hence thesis by A2,Def3;
+A3: B divides A by A1,Th15;
+  (C * A) divides (C * B) by A2,Def3;
+  then A divides B by A1,Th15;
+  hence thesis by A3,Def3;
 end;
 
 begin
@@ -589,15 +592,16 @@ definition
   let a be Element of R;
   func Class a -> Subset of R means
   :Def5:
-  for b being Element of R holds
-  b in it iff b is_associated_to a;
+  for b being Element of R holds b in
+  it iff b is_associated_to a;
   existence
   proof
     set M = { b where b is Element of R: b is_associated_to a};
     now
       let B be set;
       now
-        assume B in M;
+        assume
+        B in M;
         then ex B' being Element of R st B = B' & B' is_associated_to a;
         hence B in M implies B in the carrier of R;
       end;
@@ -609,7 +613,8 @@ A1: M c= the carrier of R by TARSKI:def 3;
       let A be Element of R;
       A in M implies A is_associated_to a
       proof
-        assume A in M;
+        assume
+        A in M;
         then ex A' being Element of R st A = A' & A' is_associated_to a;
         hence thesis;
       end;
@@ -620,10 +625,10 @@ A1: M c= the carrier of R by TARSKI:def 3;
   uniqueness
   proof
     defpred P[Element of R] means $1 is_associated_to a;
-   let X1,X2 be Subset of R such that
-Z1: for y being Element of R holds y in X1 iff P[y] and
-Z2: for y being Element of R holds y in X2 iff P[y];
-   thus X1 = X2 from SUBSET_1:sch 2(Z1,Z2);
+    let X1,X2 be Subset of R such that
+A2: for y being Element of R holds y in X1 iff P[y] and
+A3: for y being Element of R holds y in X2 iff P[y];
+    thus X1 = X2 from SUBSET_1:sch 2(A2,A3);
   end;
 end;
 
@@ -639,57 +644,60 @@ registration
 end;
 
 theorem Th20:
-  for R being associative (non empty multLoopStr)
-  for a,b being Element of R holds
-  Class a meets Class b implies Class a = Class b
+  for R being associative (non empty multLoopStr) for a,b being
+  Element of R holds Class a meets Class b implies Class a = Class b
 proof
   let R be associative (non empty multLoopStr);
   let a,b be Element of R;
-  assume Class a /\ Class b <> {};
+  assume
+  Class a /\ Class b <> {};
   then Class a meets Class b by XBOOLE_0:def 7;
   then consider Z being set such that
-A1: Z in Class a & Z in Class b by XBOOLE_0:3;
+A1: Z in Class a and
+A2: Z in Class b by XBOOLE_0:3;
   reconsider Z as Element of R by A1;
-A2: Z is_associated_to a by A1,Def5;
-A3: Z is_associated_to b by A1,Def5;
-A4: for c be Element of R holds c in Class a implies c in Class b
+A3: Z is_associated_to b by A2,Def5;
+A4: Z is_associated_to a by A1,Def5;
+A5: for c being Element of R holds c in Class b implies c in Class a
   proof
     let c be Element of R;
-    assume c in Class a;
+    assume
+    c in Class b;
+    then c is_associated_to b by Def5;
+    then Z is_associated_to c by A3,Th4;
+    then a is_associated_to c by A4,Th4;
+    hence thesis by Def5;
+  end;
+  for c be Element of R holds c in Class a implies c in Class b
+  proof
+    let c be Element of R;
+    assume
+    c in Class a;
     then c is_associated_to a by Def5;
-    then Z is_associated_to c by A2,Th4;
+    then Z is_associated_to c by A4,Th4;
     then b is_associated_to c by A3,Th4;
     hence thesis by Def5;
   end;
-  for c being Element of R holds c in Class b implies c in Class a
-  proof
-    let c be Element of R;
-    assume c in Class b;
-    then c is_associated_to b by Def5;
-    then Z is_associated_to c by A3,Th4;
-    then a is_associated_to c by A2,Th4;
-    hence thesis by Def5;
-  end;
-  hence thesis by A4,SUBSET_1:8;
+  hence thesis by A5,SUBSET_1:8;
 end;
 
 definition
   let R be non empty multLoopStr;
   func Classes R -> Subset-Family of R means
   :Def6:
-  for A being Subset of R holds
-  A in it iff (ex a being Element of R st A = Class a);
+  for A being Subset of R
+  holds A in it iff ex a being Element of R st A = Class a;
   existence
   proof
     defpred P[set] means ex a being Element of R st $1 = Class a;
-    ex F being Subset-Family of R st
-    for A being Subset of R holds A in F iff P[A] from SUBSET_1:sch 3;
+    ex F being Subset-Family of R st for A being Subset of R holds A in F
+    iff P[A] from SUBSET_1:sch 3;
     hence thesis;
   end;
   uniqueness
   proof
-    let F1,F2 be Subset-Family of R;
     defpred P[set] means ex a being Element of R st $1 = Class a;
+    let F1,F2 be Subset-Family of R;
     assume
 A1: for A being Subset of R holds A in F1 iff P[A];
     assume
@@ -702,18 +710,20 @@ registration
   let R be non empty multLoopStr;
   cluster Classes R -> non empty;
   coherence
-  proof Class 1.R in Classes R by Def6;
+  proof
+    Class 1.R in Classes R by Def6;
     hence thesis;
   end;
 end;
 
 theorem Th21:
-  for R being well-unital (non empty multLoopStr)
-  for X being Subset of R holds X in Classes R implies X is non empty
+  for R being well-unital (non empty multLoopStr) for X being
+  Subset of R holds X in Classes R implies X is non empty
 proof
   let R be well-unital (non empty multLoopStr);
   let X be Subset of R;
-  assume X in Classes R;
+  assume
+  X in Classes R;
   then ex a being Element of R st X = Class a by Def6;
   hence thesis;
 end;
@@ -722,10 +732,9 @@ definition
   let R be associative well-unital (non empty multLoopStr);
   mode Am of R -> non empty Subset of R means
     :Def7:
-    (for a being Element of R ex z being Element of it
-    st z is_associated_to a) &
-    (for x,y being Element of it holds x <> y implies
-    x is_not_associated_to y);
+    (for a being Element of R
+ex z being Element of it st z is_associated_to a) & for x,y being Element of it
+    holds x <> y implies x is_not_associated_to y;
   existence
   proof
     now
@@ -734,142 +743,137 @@ definition
 A1:   for X st X in M holds X <> {}
       proof
         let X be set;
-        assume X in M;
-        then consider A being Element of R such that
-A2:     X = Class A by Def6;
-        thus thesis by A2;
+        assume
+        X in M;
+        then ex A being Element of R st X = Class A by Def6;
+        hence thesis;
       end;
       for X,Y st X in M & Y in M & X <> Y holds X misses Y
       proof
         let X,Y be set such that
-A3:     X in M & Y in M & X <> Y;
+A2:     X in M & Y in M and
+A3:     X <> Y;
         assume
 A4:     X meets Y;
-        consider A being Element of R such that
-A5:     X = Class A by A3,Def6;
-        consider B being Element of R such that
-A6:     Y = Class B by A3,Def6;
-        thus contradiction by A3,A4,A5,A6,Th20;
+        (ex A being Element of R st X = Class A )& ex B being Element of R
+        st Y = Class B by A2,Def6;
+        hence contradiction by A3,A4,Th20;
       end;
       then consider AmpS' being set such that
-A7:   for X st X in M ex x being set st AmpS' /\ X = {x} by A1,WELLORD2:27;
+A5:   for X st X in M ex x being set st AmpS' /\ X = {x} by A1,
+      WELLORD2:27;
       AmpS' is non empty
       proof
         Class 1.R in M by Def6;
-        then consider x being set such that
-A8:     AmpS' /\ Class 1.R = {x} by A7;
-        thus thesis by A8;
+        then ex x being set st AmpS' /\ Class 1.R = {x} by A5;
+        hence thesis;
       end;
       then reconsider AmpS' as non empty set;
-      set AmpS = { x where x is Element of AmpS':
-      ex X being non empty Subset of R st X in M & AmpS' /\ X = { x }};
-A9:   for X being Element of M holds
-      ex z being Element of AmpS st AmpS /\ X = {z}
-      proof
-        let X be Element of M;
-        consider x being set such that
-A10:    AmpS' /\ X = {x} by A7;
-        X in Classes R;
-        then
-A11:    X is non empty Subset of R by Th21;
-A12:    x in {x} by TARSKI:def 1;
-        then
-A13:    x in AmpS' by A10,XBOOLE_0:def 4;
-A14:    x in X by A10,A12,XBOOLE_0:def 4;
-A15:    x in AmpS by A10,A11,A13;
-        AmpS /\ X = {x}
-        proof
-          now
-            let y be set;
-A16:        now
-              assume y in {x};
-              then y = x by TARSKI:def 1;
-              hence y in {x} implies y in AmpS /\ X by A14,A15,XBOOLE_0:def 4;
-            end;
-            now
-              assume
-A17:          y in AmpS /\ X;
-              then
-A18:          y in X by XBOOLE_0:def 4;
-              y in AmpS by A17,XBOOLE_0:def 4;
-              then consider zz being Element of AmpS' such that
-A19:          y = zz & (ex X being non empty Subset of R
-              st X in M & AmpS' /\ X = {zz});
-
-thus y in AmpS /\ X implies y in {x} by A10,A18,A19,XBOOLE_0:def 4;
-            end;
-            hence y in {x} iff y in AmpS /\ X by A16;
-          end;
-          hence thesis by TARSKI:2;
-        end;
-        hence thesis by A15;
-      end;
-      AmpS is non empty Subset of R
+      set AmpS = { x where x is Element of AmpS': ex X being non empty Subset
+      of R st X in M & AmpS' /\ X = { x }};
+A6:   AmpS is non empty Subset of R
       proof
         AmpS is non empty
         proof
-A20:      Class 1.R in M by Def6;
+A7:       Class 1.R in M by Def6;
           then consider x being set such that
-A21:      AmpS' /\ Class 1.R = {x} by A7;
+A8:       AmpS' /\ Class 1.R = {x} by A5;
           x in {x} by TARSKI:def 1;
-          then x in AmpS' by A21,XBOOLE_0:def 4;
-          then x in AmpS by A20,A21;
+          then x in AmpS' by A8,XBOOLE_0:def 4;
+          then x in AmpS by A7,A8;
           hence thesis;
         end;
         then reconsider AmpS as non empty set;
         now
           let A be set;
           now
-            assume A in AmpS;
-            then consider x being Element of AmpS' such that
-A22:        A = x & (ex X being non empty Subset of R
-            st X in M & AmpS' /\ X = {x});
             consider X being non empty Subset of R;
+            assume
+            A in AmpS;
+            then consider x being Element of AmpS' such that
+A9:         A = x & ex X being non empty Subset of R st X in M &
+            AmpS' /\ X = {x};
             x in {x} by TARSKI:def 1;
-            hence (A in AmpS) implies (A in the carrier of R) by A22;
+            hence A in AmpS implies A in the carrier of R by A9;
           end;
-          hence (A in AmpS) implies (A in the carrier of R);
+          hence A in AmpS implies A in the carrier of R;
         end;
         hence thesis by TARSKI:def 3;
       end;
-      then reconsider AmpS as non empty Subset of R;
-A23:  for a being Element of R ex z being Element of AmpS
-      st z is_associated_to a
+A10:  for X being Element of M holds ex z being Element of AmpS st AmpS
+      /\ X = {z}
+      proof
+        let X be Element of M;
+        consider x being set such that
+A11:    AmpS' /\ X = {x} by A5;
+        X in Classes R;
+        then
+A12:    X is non empty Subset of R by Th21;
+A13:    x in {x} by TARSKI:def 1;
+        then x in AmpS' by A11,XBOOLE_0:def 4;
+        then
+A14:    x in AmpS by A11,A12;
+A15:    x in X by A11,A13,XBOOLE_0:def 4;
+        now
+          let y be set;
+A16:      now
+            assume
+A17:        y in AmpS /\ X;
+            then y in AmpS by XBOOLE_0:def 4;
+            then
+A18:        ex zz being Element of AmpS' st y = zz & ex X being non empty
+            Subset of R st X in M & AmpS' /\ X = {zz};
+            y in X by A17,XBOOLE_0:def 4;
+            hence y in AmpS /\ X implies y in {x} by A11,A18,XBOOLE_0:def 4;
+          end;
+          now
+            assume
+            y in {x};
+            then y = x by TARSKI:def 1;
+            hence y in {x} implies y in AmpS /\ X by A15,A14, XBOOLE_0:def
+            4;
+          end;
+          hence y in {x} iff y in AmpS /\ X by A16;
+        end;
+        then AmpS /\ X = {x} by TARSKI:2;
+        hence thesis by A14;
+      end;
+      reconsider AmpS as non empty Subset of R by A6;
+A19:  for x,y being Element of AmpS holds x <> y implies x
+      is_not_associated_to y
+      proof
+        let x,y be Element of AmpS;
+        assume
+A20:    x <> y;
+        x is_associated_to x;
+        then x in Class x by Def5;
+        then
+A21:    x in AmpS /\ Class x by XBOOLE_0:def 4;
+        Class x in M by Def6;
+        then consider z being Element of AmpS such that
+A22:    AmpS /\ Class x = {z} by A10;
+        assume
+        x is_associated_to y;
+        then y in Class x by Def5;
+        then y in AmpS /\ Class x by XBOOLE_0:def 4;
+        then y = z by A22,TARSKI:def 1;
+        hence thesis by A20,A21,A22,TARSKI:def 1;
+      end;
+      for a being Element of R ex z being Element of AmpS st z
+      is_associated_to a
       proof
         let a be Element of R;
         reconsider N = Class a as Element of M by Def6;
         consider z being Element of AmpS such that
-A24:    AmpS /\ N = {z} by A9;
+A23:    AmpS /\ N = {z} by A10;
         z in {z} by TARSKI:def 1;
-        then z in Class a by A24,XBOOLE_0:def 4;
+        then z in Class a by A23,XBOOLE_0:def 4;
         then z is_associated_to a by Def5;
         hence thesis;
       end;
-      for x,y being Element of AmpS holds
-      x <> y implies x is_not_associated_to y
-      proof
-        let x,y be Element of AmpS;
-        assume
-A25:    x <> y;
-        assume
-A26:    x is_associated_to y;
-        x is_associated_to x;
-        then
-A27:    x in Class x by Def5;
-A28:    y in Class x by A26,Def5;
-A29:    x in AmpS /\ Class x by A27,XBOOLE_0:def 4;
-A30:    y in AmpS /\ Class x by A28,XBOOLE_0:def 4;
-        Class x in M by Def6;
-        then consider z being Element of AmpS such that
-A31:    AmpS /\ Class x = {z} by A9;
-        y = z by A30,A31,TARSKI:def 1;
-        hence thesis by A25,A29,A31,TARSKI:def 1;
-      end;
-      hence ex s being non empty Subset of R st
-      (for a being Element of R ex z being Element of s
-      st z is_associated_to a) &
-      (for x,y being Element of s holds x <> y implies
-      x is_not_associated_to y) by A23;
+      hence ex s being non empty Subset of R st (for a being Element of R ex z
+being Element of s st z is_associated_to a) & for x,y being Element of s holds
+      x <> y implies x is_not_associated_to y by A19;
     end;
     hence thesis;
   end;
@@ -879,7 +883,8 @@ definition
   let R be associative well-unital (non empty multLoopStr);
   mode AmpleSet of R -> non empty Subset of R means
     :Def8:
-    it is Am of R & 1.R in it;
+    it is Am of R & 1.R
+    in it;
   existence
   proof
     now
@@ -887,110 +892,110 @@ definition
       consider x being Element of A such that
 A1:   x is_associated_to 1.R by Def7;
       set A' = { z where z is Element of A : z <> x } \/ {1.R};
-A2:   1.R in A'
-      proof
-        1.R in {1.R} by TARSKI:def 1;
-        hence thesis by XBOOLE_0:def 3;
-      end;
+      1.R in {1.R} by TARSKI:def 1;
+      then
+A2:   1.R in A' by XBOOLE_0:def 3;
       reconsider A' as non empty set;
 A3:   for x being Element of A' holds x = 1.R or x in A
       proof
         let y be Element of A';
-        now per cases by XBOOLE_0:def 3;
-          case y in {z where z is Element of A: z <> x};
+        now
+          per cases by XBOOLE_0:def 3;
+          case
+            y in {z where z is Element of A: z <> x};
             then ex zz being Element of A st y = zz & zz <> x;
             hence thesis;
           end;
-          case y in {1.R};
+          case
+            y in {1.R};
             hence thesis by TARSKI:def 1;
           end;
         end;
         hence thesis;
       end;
-      A' is non empty Subset of R
-      proof
+      now
+        let x be set;
         now
-          let x be set;
-          now
-            assume
-A4:         x in A';
-            x in the carrier of R
-            proof
-              now per cases by A3,A4;
-                case x = 1.R;
-                  hence thesis;
-                end;
-                case x in A;
-                  hence thesis;
-                end;
+          assume
+A4:       x in A';
+          x in the carrier of R
+          proof
+            now
+              per cases by A3,A4;
+              case
+                x = 1.R;
+                hence thesis;
               end;
-              hence thesis;
+              case
+                x in A;
+                hence thesis;
+              end;
             end;
-            hence x in A' implies x in the carrier of R;
+            hence thesis;
           end;
           hence x in A' implies x in the carrier of R;
         end;
-        hence thesis by TARSKI:def 3;
+        hence x in A' implies x in the carrier of R;
       end;
-      then reconsider A' as non empty Subset of R;
-A5:   for a being Element of R ex z being Element of A'
-      st z is_associated_to a
+      then reconsider A' as non empty Subset of R by TARSKI:def 3;
+A5:   for z,y being Element of A' holds z <> y implies z
+      is_not_associated_to y
       proof
-        let a be Element of R;
-        now per cases;
-          case a is_associated_to 1.R;
-            hence thesis by A2;
+        let z,y be Element of A';
+        assume
+A6:     z <> y;
+        now
+          per cases;
+          case
+            z = 1.R & y = 1.R;
+            hence thesis by A6;
           end;
           case
-A6:         a is_not_associated_to 1.R;
-            consider z being Element of A such that
-A7:         z is_associated_to a by Def7;
-            z <> x by A1,A6,A7,Th4;
-            then z in {zz where zz is Element of A : zz <> x};
-            then z in A' by XBOOLE_0:def 3;
-            hence thesis by A7;
+A7:         z = 1.R & y <> 1.R;
+            assume
+            z is_associated_to y;
+            not y in {1.R} by A7,TARSKI:def 1;
+            then y in {zz where zz is Element of A: zz <> x} by XBOOLE_0:
+            def 3;
+            then ex zz being Element of A st y = zz & zz <> x;
+            hence thesis by A1,A7,Def7,Th4;
+          end;
+          case
+A8:         z <> 1.R & y = 1.R;
+            assume
+            z is_associated_to y;
+            not z in {1.R} by A8,TARSKI:def 1;
+            then z in {zz where zz is Element of A: zz <> x} by XBOOLE_0:
+            def 3;
+            then ex zz being Element of A st z = zz & zz <> x;
+            hence thesis by A1,A8,Def7,Th4;
+          end;
+          case
+            z <> 1.R & y <> 1.R;
+            then z in A & y in A by A3;
+            hence thesis by A6,Def7;
           end;
         end;
         hence thesis;
       end;
-      for z,y being Element of A' holds
-      z <> y implies z is_not_associated_to y
+      for a being Element of R ex z being Element of A' st z
+      is_associated_to a
       proof
-        let z,y be Element of A';
-        assume
-A8:     z <> y;
-        now per cases;
-          case z = 1.R & y = 1.R;
-            hence thesis by A8;
+        let a be Element of R;
+        now
+          per cases;
+          case
+            a is_associated_to 1.R;
+            hence thesis by A2;
           end;
           case
-A9:         z = 1.R & y <> 1.R;
-            then not( y in {1.R} ) by TARSKI:def 1;
-            then y in {zz where zz is Element of A: zz <> x}
-            by XBOOLE_0:def 3;
-            then
-A10:        ex zz being Element of A st y = zz & zz <> x;
-            assume z is_associated_to y;
-            then x is_associated_to y by A1,A9,Th4;
-            hence thesis by A10,Def7;
-          end;
-          case
-A11:        z <> 1.R & y = 1.R;
-            then not( z in {1.R} ) by TARSKI:def 1;
-            then z in {zz where zz is Element of A: zz <> x}
-            by XBOOLE_0:def 3;
-            then
-A12:        ex zz being Element of A st z = zz & zz <> x;
-            assume z is_associated_to y;
-            then z is_associated_to x by A1,A11,Th4;
-            hence thesis by A12,Def7;
-          end;
-          case
-A13:        z <> 1.R & y <> 1.R;
-            then
-A14:        z in A by A3;
-            y in A by A3,A13;
-            hence thesis by A8,A14,Def7;
+A9:         a is_not_associated_to 1.R;
+            consider z being Element of A such that
+A10:        z is_associated_to a by Def7;
+            z <> x by A1,A9,A10,Th4;
+            then z in {zz where zz is Element of A : zz <> x};
+            then z in A' by XBOOLE_0:def 3;
+            hence thesis by A10;
           end;
         end;
         hence thesis;
@@ -1003,11 +1008,10 @@ A14:        z in A by A3;
 end;
 
 theorem Th22:
-  for R being associative well-unital (non empty multLoopStr)
-  for Amp being AmpleSet of R holds (1.R in Amp) &
-  (for a being Element of R ex z being Element of Amp
-  st z is_associated_to a) &
-  (for x,y being Element of Amp holds x <> y implies x is_not_associated_to y)
+  for R being associative well-unital (non empty multLoopStr) for
+  Amp being AmpleSet of R holds (1.R in Amp) & (for a being Element of R ex z
+  being Element of Amp st z is_associated_to a) & (for x,y being Element of Amp
+  holds x <> y implies x is_not_associated_to y)
 proof
   let R be associative well-unital (non empty multLoopStr);
   let Amp be AmpleSet of R;
@@ -1016,9 +1020,9 @@ proof
 end;
 
 theorem
-  for R being associative well-unital (non empty multLoopStr)
-  for Amp being AmpleSet of R for x,y being Element of Amp holds
-  x is_associated_to y implies x = y by Th22;
+  for R being associative well-unital (non empty multLoopStr) for Amp
+  being AmpleSet of R for x,y being Element of Amp holds x is_associated_to y
+  implies x = y by Th22;
 
 theorem Th24:
   for Amp being AmpleSet of R holds 0.R is Element of Amp
@@ -1027,9 +1031,8 @@ proof
   consider A being Element of Amp such that
 A1: A is_associated_to 0.R by Th22;
   0.R divides A by A1,Def3;
-  then consider D being Element of R such that
-A2: 0.R * D = A by Def1;
-  thus thesis by A2,VECTSP_1:39;
+  then ex D being Element of R st 0.R * D = A by Def1;
+  hence thesis by VECTSP_1:39;
 end;
 
 :: Definition of Normalform
@@ -1040,16 +1043,15 @@ definition
   let x be Element of R;
   func NF(x,Amp) -> Element of R means
   :Def9:
-  it in Amp & it is_associated_to x;
+  it in Amp & it is_associated_to
+  x;
   existence
   proof
     now
       let Amp be AmpleSet of R;
       let x be Element of R;
-      consider z being Element of Amp such that
-A1:   z is_associated_to x by Th22;
-      thus ex zz being Element of R st
-      zz in Amp & zz is_associated_to x by A1;
+      ex z being Element of Amp st z is_associated_to x by Th22;
+      hence ex zz being Element of R st zz in Amp & zz is_associated_to x;
     end;
     hence thesis;
   end;
@@ -1057,17 +1059,17 @@ A1:   z is_associated_to x by Th22;
 end;
 
 theorem Th25:
-  for Amp being AmpleSet of R holds NF(0.R,Amp) = 0.R & NF(1.R,Amp) = 1.R
+  for Amp being AmpleSet of R holds NF(0.R,Amp) = 0.R & NF(1.R,Amp
+  ) = 1.R
 proof
   let Amp be AmpleSet of R;
-A1: 1.R in Amp by Def8;
-  0.R is Element of Amp by Th24;
-  hence thesis by A1,Def9;
+  1.R in Amp & 0.R is Element of Amp by Def8,Th24;
+  hence thesis by Def9;
 end;
 
 theorem
-  for Amp being AmpleSet of R for a being Element of R holds
-  a in Amp iff a = NF(a,Amp) by Def9;
+  for Amp being AmpleSet of R for a being Element of R holds a in Amp
+  iff a = NF(a,Amp) by Def9;
 
 :: Definition of multiplicative AmpleSet
 
@@ -1076,58 +1078,62 @@ definition
   let Amp be AmpleSet of R;
   attr Amp is multiplicative means
   :Def10:
-  for x,y being Element of Amp holds x * y in Amp;
+  for x,y being Element of Amp holds
+  x * y in Amp;
 end;
 
 theorem Th27:
   for Amp being AmpleSet of R holds Amp is multiplicative implies
-  (for x,y being Element of Amp holds
-  (y divides x & y <> 0.R) implies x/y in Amp)
+  for x,y being Element of Amp holds y divides x & y <> 0.R implies x/y in Amp
 proof
   let Amp be AmpleSet of R;
   assume
 A1: Amp is multiplicative;
   let x,y be Element of Amp;
-  assume
-A2: y divides x & y <> 0.R;
-  now per cases;
+  assume that
+A2: y divides x and
+A3: y <> 0.R;
+  now
+    per cases;
     case
-A3:   x <> 0.R;
+A4:   x <> 0.R;
       set d = x/y;
-A4:   x = y * d by A2,Def4;
       consider d' being Element of Amp such that
 A5:   d' is_associated_to d by Th22;
       consider u being Element of R such that
-A6:   u is unital & d * u = d' by A5,Th18;
-A7:   u * x = y * d' by A4,A6,GROUP_1:def 4;
-A8:   y * d' in Amp by A1,Def10;
+A6:   u is unital and
+A7:   d * u = d' by A5,Th18;
+      x = y * d by A2,A3,Def4;
+      then
+A8:   u * x = y * d' by A7,GROUP_1:def 4;
 A9:   x is_associated_to u * x
       proof
-        x divides x;
-        then
-A10:    x divides u * x by Th7;
         u divides 1.R by A6,Def2;
         then consider e being Element of R such that
-A11:    u * e = 1.R by Def1;
+A10:    u * e = 1.R by Def1;
+        x divides x;
+        then
+A11:    x divides u * x by Th7;
         (u * x) * e = (e * u) * x by GROUP_1:def 4
-          .= x by A11,VECTSP_1:def 19;
+          .= x by A10,VECTSP_1:def 19;
         then u * x divides x by Def1;
-        hence thesis by A10,Def3;
+        hence thesis by A11,Def3;
       end;
+A12:  y * d' in Amp by A1,Def10;
       1.R * x = x by VECTSP_1:def 19
-        .= u * x by A7,A8,A9,Th22;
-      then u = 1.R by A3,Th1;
-      then d' = d by A6,VECTSP_1:def 13;
+        .= u * x by A8,A12,A9,Th22;
+      then u = 1.R by A4,Th1;
+      then d' = d by A7,VECTSP_1:def 13;
       hence thesis;
     end;
     case
-A12:  x = 0.R;
+A13:  x = 0.R;
       set d = x/y;
-      x = y * d by A2,Def4;
+      x = y * d by A2,A3,Def4;
       then
-A13:  d = 0.R by A2,A12,VECTSP_2:def 5;
+A14:  d = 0.R by A3,A13,VECTSP_2:def 5;
       0.R is Element of Amp by Th24;
-      hence thesis by A13;
+      hence thesis by A14;
     end;
   end;
   hence thesis;
@@ -1141,76 +1147,92 @@ definition
   let R be non empty multLoopStr;
   attr R is gcd-like means
   :Def11:
-  for x,y being Element of R
-  ex z being Element of R st z divides x & z divides y &
-  (for zz being Element of R st (zz divides x & zz divides y)
-  holds (zz divides z));
+  for x,y being Element of R ex z being
+  Element of R st z divides x & z divides y & for zz being Element of R st zz
+  divides x & zz divides y holds zz divides z;
 end;
 
 Lm1: now
   let F be Field;
   let x,y be Element of F;
-  now per cases;
+  now
+    per cases;
     case
 A1:   x <> 0.F & y <> 0.F;
-      x = (1_F) * x by VECTSP_1:def 16;
-      then
-A2:   (1_F) divides x by Def1;
-      y = (1_F) * y by VECTSP_1:def 16;
-      then
-A3:   (1_F) divides y by Def1;
-      for zz being Element of F st (zz divides x & zz divides y)
-      holds (zz divides (1_F))
+
+A2:   for zz being Element of F st zz divides x & zz divides y holds zz
+      divides (1_F)
+
       proof
         let zz be Element of F;
-        assume
-A4:     zz divides x & zz divides y;
-        now per cases;
-          case zz <> 0.F;
-            then consider zz' being Element of F such that
-A5:         zz' * zz = (1_F) by VECTSP_1:def 20;
-            thus thesis by A5,Def1;
+        assume that
+A3:     zz divides x and
+        zz divides y;
+        now
+          per cases;
+          case
+            zz <> 0.F;
+
+            then ex zz' being Element of F st zz' * zz = (1_F) by
+            VECTSP_1:
+            def 20;
+
+            hence thesis by Def1;
           end;
           case
-A6:         zz = 0.F;
-            assume zz divides x;
-            then consider d being Element of F such that
-A7:         zz * d = x by Def1;
-            thus thesis by A1,A6,A7,VECTSP_1:39;
+A4:         zz = 0.F;
+            assume
+            zz divides x;
+            then ex d being Element of F st zz * d = x by Def1;
+            hence thesis by A1,A4,VECTSP_1:39;
           end;
         end;
-        hence thesis by A4;
+        hence thesis by A3;
       end;
-      hence ex z being Element of F st z divides x & z divides y &
-      (for zz being Element of F st (zz divides x & zz divides y)
-      holds (zz divides z)) by A2,A3;
+      y = (1_F) * y by VECTSP_1:def 16;
+      then
+A5:   (1_F) divides y by Def1;
+      x = (1_F) * x by VECTSP_1:def 16;
+      then (1_F) divides x by Def1;
+
+      hence
+      ex z being Element of F st z divides x & z divides y & for zz being
+      Element of F st zz divides x & zz divides y holds zz divides z by A5,A2;
+
     end;
     case
-A8:   x = 0.F;
+A6:   x = 0.F;
       y * 0.F = 0.F by VECTSP_1:39;
       then
-A9:   y divides 0.F by Def1;
-      for z being Element of F st (z divides 0.F & z divides y)
-      holds z divides y;
-      hence ex z being Element of F st z divides x & z divides y &
-      (for zz being Element of F st (zz divides x & zz divides y)
-      holds (zz divides z)) by A8,A9;
+A7:   y divides 0.F by Def1;
+
+      for z being Element of F st z divides 0.F & z divides y holds z
+      divides y;
+
+      hence
+      ex z being Element of F st z divides x & z divides y & for zz being
+      Element of F st zz divides x & zz divides y holds zz divides z by A6,A7;
+
     end;
     case
-A10:  y = 0.F;
+A8:   y = 0.F;
       x * 0.F = 0.F by VECTSP_1:39;
       then
-A11:  x divides 0.F by Def1;
-      for z being Element of F st (z divides x & z divides 0.F)
-      holds (z divides x);
-      hence ex z being Element of F st z divides x & z divides y &
-      (for zz being Element of F st (zz divides x & zz divides y)
-      holds (zz divides z)) by A10,A11;
+A9:   x divides 0.F by Def1;
+
+      for z being Element of F st z divides x & z divides 0.F holds z
+      divides x;
+
+      hence
+      ex z being Element of F st z divides x & z divides y & for zz being
+      Element of F st zz divides x & zz divides y holds zz divides z by A8,A9;
+
     end;
   end;
-  hence ex z being Element of F st z divides x & z divides y &
-  (for zz being Element of F st (zz divides x & zz divides y)
-  holds (zz divides z));
+
+  hence ex z being Element of F st z divides x & z divides y & for zz being
+  Element of F st zz divides x & zz divides y holds zz divides z;
+
 end;
 
 registration
@@ -1221,8 +1243,8 @@ registration
     reconsider F as comRing;
     reconsider F as domRing by VECTSP_2:13;
     for x,y be Element of F holds ex z being Element of F st z divides x &
-    z divides y & (for zz being Element of F st (zz divides x & zz divides y)
-    holds (zz divides z)) by Lm1;
+z divides y & for zz being Element of F st zz divides x & zz divides y holds zz
+    divides z by Lm1;
     then F is gcd-like by Def11;
     hence thesis;
   end;
@@ -1234,22 +1256,22 @@ registration
   proof
     consider F being strict Field;
     for x,y be Element of F holds ex z being Element of F st z divides x &
-    z divides y & (for zz being Element of F st (zz divides x & zz divides y)
-    holds (zz divides z)) by Lm1;
+z divides y & for zz being Element of F st zz divides x & zz divides y holds zz
+    divides z by Lm1;
     then F is gcd-like by Def11;
     hence thesis;
   end;
 end;
 
 registration
-  cluster gcd-like associative commutative well-unital
-    (non empty multLoopStr_0);
+  cluster gcd-like associative commutative well-unital (non empty
+    multLoopStr_0);
   existence
   proof
     consider F being strict Field;
     for x,y be Element of F holds ex z being Element of F st z divides x &
-    z divides y & (for zz being Element of F st (zz divides x & zz divides y)
-    holds (zz divides z)) by Lm1;
+z divides y & for zz being Element of F st zz divides x & zz divides y holds zz
+    divides z by Lm1;
     then F is gcd-like by Def11;
     hence thesis;
   end;
@@ -1257,72 +1279,72 @@ end;
 
 registration
   cluster -> gcd-like (almost_left_invertible add-associative right_zeroed
-    right_complementable
-    left_unital well-unital left-distributive right-distributive
-    commutative (non empty doubleLoopStr));
+    right_complementable left_unital well-unital left-distributive
+    right-distributive commutative (non empty doubleLoopStr));
   coherence
   proof
     let F be almost_left_invertible add-associative right_zeroed
-    right_complementable
-    left_unital well-unital left-distributive right-distributive
-    commutative (non empty doubleLoopStr);
+    right_complementable left_unital well-unital left-distributive
+    right-distributive commutative (non empty doubleLoopStr);
     let x,y be Element of F;
-    now per cases;
+    now
+      per cases;
       case
 A1:     x <> 0.F & y <> 0.F;
-        x = 1_F * x by VECTSP_1:def 19;
-        then
-A2:     1_F divides x by Def1;
-        y = 1_F * y by VECTSP_1:def 19;
-        then
-A3:     1_F divides y by Def1;
-        for zz being Element of F st (zz divides x & zz divides y)
-        holds (zz divides 1_F)
+A2:     for zz being Element of F st zz divides x & zz divides y holds zz
+        divides 1_F
         proof
           let zz be Element of F;
-          assume
-A4:       zz divides x & zz divides y;
-          now per cases;
-            case zz <> 0.F;
-              then consider zz' being Element of F such that
-A5:           zz' * zz = 1_F by VECTSP_1:def 20;
-              thus thesis by A5,Def1;
+          assume that
+A3:       zz divides x and
+          zz divides y;
+          now
+            per cases;
+            case
+              zz <> 0.F;
+              then ex zz' being Element of F st zz' * zz = 1_F by
+              VECTSP_1:
+              def 20;
+              hence thesis by Def1;
             end;
             case
-A6:           zz = 0.F;
-              assume zz divides x;
-              then consider d being Element of F such that
-A7:           zz * d = x by Def1;
-              thus thesis by A1,A6,A7,VECTSP_1:39;
+A4:           zz = 0.F;
+              assume
+              zz divides x;
+              then ex d being Element of F st zz * d = x by Def1;
+              hence thesis by A1,A4,VECTSP_1:39;
             end;
           end;
-          hence thesis by A4;
+          hence thesis by A3;
         end;
-        hence ex z being Element of F st z divides x & z divides y &
-        (for zz being Element of F st (zz divides x & zz divides y)
-        holds (zz divides z)) by A2,A3;
+        y = 1_F * y by VECTSP_1:def 19;
+        then
+A5:     1_F divides y by Def1;
+        x = 1_F * x by VECTSP_1:def 19;
+        then 1_F divides x by Def1;
+        hence ex z being Element of F st z divides x & z divides y & for zz
+being Element of F st zz divides x & zz divides y holds zz divides z by A5,
+        A2;
       end;
       case
-A8:     x = 0.F;
+A6:     x = 0.F;
         y * 0.F = 0.F by VECTSP_1:36;
         then
-A9:     y divides 0.F by Def1;
-        for z being Element of F st z divides 0.F & z divides y
-        holds z divides y;
-        hence ex z being Element of F st z divides x & z divides y &
-        (for zz being Element of F st (zz divides x & zz divides y)
-        holds (zz divides z)) by A8,A9;
+A7:     y divides 0.F by Def1;
+        for z being Element of F st z divides 0.F & z divides y holds z
+        divides y;
+        hence ex z being Element of F st z divides x & z divides y & for zz
+being Element of F st zz divides x & zz divides y holds zz divides z by A6,A7;
       end;
       case
-A10:    y = 0.F;
+A8:     y = 0.F;
         x * 0.F = 0.F by VECTSP_1:36;
         then
-A11:    x divides 0.F by Def1;
-        for z being Element of F st (z divides x & z divides 0.F)
-        holds (z divides x);
-        hence ex z being Element of F st z divides x & z divides y &
-        (for zz being Element of F st (zz divides x & zz divides y)
-        holds (zz divides z)) by A10,A11;
+A9:     x divides 0.F by Def1;
+        for z being Element of F st z divides x & z divides 0.F holds z
+        divides x;
+        hence ex z being Element of F st z divides x & z divides y & for zz
+being Element of F st zz divides x & zz divides y holds zz divides z by A8,A9;
       end;
     end;
     hence thesis;
@@ -1330,10 +1352,9 @@ A11:    x divides 0.F by Def1;
 end;
 
 registration
-  cluster gcd-like associative commutative well-unital domRing-like
-    unital distributive non degenerated
-    Abelian add-associative right_zeroed right_complementable
-    (non empty doubleLoopStr);
+  cluster gcd-like associative commutative well-unital domRing-like unital
+    distributive non degenerated Abelian add-associative right_zeroed
+    right_complementable (non empty doubleLoopStr);
   existence
   proof
     take F_Real;
@@ -1352,47 +1373,45 @@ definition
   func gcd(x,y,Amp) -> Element of R means
   :Def12:
   it in Amp & it divides x &
-  it divides y & (for z being Element of R st (z divides x & z divides y)
-  holds z divides it);
+  it divides y & for z being Element of R st z divides x & z divides y holds z
+  divides it;
   existence
   proof
     consider u being Element of R such that
-A1: u divides x & u divides y & (for zz being Element of R
-    st (zz divides x & zz divides y) holds zz divides u) by Def11;
+A1: u divides x & u divides y and
+A2: for zz being Element of R st zz divides x & zz divides y holds zz
+    divides u by Def11;
     consider z being Element of Amp such that
-A2: z is_associated_to u by Th22;
-A3: z divides u by A2,Def3;
-    then
-A4: z divides x by A1,Th2;
-A5: z divides y by A1,A3,Th2;
-    for zz being Element of R st zz divides x & zz divides y
-    holds zz divides z
+A3: z is_associated_to u by Th22;
+A4: for zz being Element of R st zz divides x & zz divides y holds zz
+    divides z
     proof
       let zz be Element of R;
-      assume zz divides x & zz divides y;
+      assume
+      zz divides x & zz divides y;
       then
-A6:   zz divides u by A1;
-      u divides z by A2,Def3;
-      hence thesis by A6,Th2;
+A5:   zz divides u by A2;
+      u divides z by A3,Def3;
+      hence thesis by A5,Th2;
     end;
-    hence thesis by A4,A5;
+    z divides u by A3,Def3;
+    then z divides x & z divides y by A1,Th2;
+    hence thesis by A4;
   end;
   uniqueness
   proof
     now
       let z1 be Element of R such that
-A7:   z1 in Amp & z1 divides x & z1 divides y & (for z being Element of R
-      st (z divides x & z divides y) holds (z divides z1));
+A6:   z1 in Amp and
+A7:   z1 divides x & z1 divides y & for z being Element of R st z
+      divides x & z divides y holds z divides z1;
       let z2 be Element of R such that
-A8:   z2 in Amp & z2 divides x & z2 divides y & (for z being Element of R
-      st (z divides x & z divides y) holds (z divides z2));
-      z1 is_associated_to z2
-      proof
-A9:     z1 divides z2 by A7,A8;
-        z2 divides z1 by A7,A8;
-        hence thesis by A9,Def3;
-      end;
-      hence z1 = z2 by A7,A8,Th22;
+A8:   z2 in Amp and
+A9:   z2 divides x & z2 divides y & for z being Element of R st z
+      divides x & z divides y holds z divides z2;
+      z1 divides z2 & z2 divides z1 by A7,A9;
+      then z1 is_associated_to z2 by Def3;
+      hence z1 = z2 by A6,A8,Th22;
     end;
     hence thesis;
   end;
@@ -1405,12 +1424,13 @@ reserve R for gcdDomain;
 canceled;
 
 theorem Th29:
-  for Amp being AmpleSet of R for a,b,c being Element of R holds
-  c divides gcd(a,b,Amp) implies (c divides a & c divides b)
+  for Amp being AmpleSet of R for a,b,c being Element of R holds c
+  divides gcd(a,b,Amp) implies c divides a & c divides b
 proof
   let Amp be AmpleSet of R;
   let A,B,C be Element of R;
-  assume C divides gcd(A,B,Amp);
+  assume
+  C divides gcd(A,B,Amp);
   then consider D being Element of R such that
 A1: C * D = gcd(A,B,Amp) by Def1;
   gcd(A,B,Amp) divides A by Def12;
@@ -1425,42 +1445,41 @@ A4: gcd(A,B,Amp) * E = B by Def1;
 end;
 
 theorem Th30:
-  for Amp being AmpleSet of R for a,b being Element of R holds
-  gcd(a,b,Amp) = gcd(b,a,Amp)
+  for Amp being AmpleSet of R for a,b being Element of R holds gcd
+  (a,b,Amp) = gcd(b,a,Amp)
 proof
   let Amp be AmpleSet of R;
   let A,B be Element of R;
   set D = gcd(A,B,Amp);
-A1: D in Amp by Def12;
-A2: D divides B & D divides A by Def12;
-  for z being Element of R st (z divides B & z divides A)
-  holds (z divides D) by Def12;
-  hence thesis by A1,A2,Def12;
+A1: D divides A & for z being Element of R st z divides B & z divides A
+  holds z divides D by Def12;
+  D in Amp & D divides B by Def12;
+  hence thesis by A1,Def12;
 end;
 
 theorem Th31:
-  for Amp being AmpleSet of R for a being Element of R holds
-  gcd(a,0.R,Amp) = NF(a,Amp) & gcd(0.R,a,Amp) = NF(a,Amp)
+  for Amp being AmpleSet of R for a being Element of R holds gcd(a
+  ,0.R,Amp) = NF(a,Amp) & gcd(0.R,a,Amp) = NF(a,Amp)
 proof
   let Amp be AmpleSet of R;
   let A be Element of R;
-A1: NF(A,Amp)is_associated_to A by Def9;
-  then
-A2: NF(A,Amp) divides A by Def3;
+A1: NF(A,Amp) in Amp by Def9;
   NF(A,Amp) * 0.R = 0.R by VECTSP_1:36;
   then
-A3: NF(A,Amp) divides 0.R by Def1;
-A4: for z being Element of R st (z divides A & z divides 0.R)
-  holds (z divides NF(A,Amp))
+A2: NF(A,Amp) divides 0.R by Def1;
+A3: NF(A,Amp)is_associated_to A by Def9;
+A4: for z being Element of R st z divides A & z divides 0.R holds z divides
+  NF(A,Amp)
   proof
     let z be Element of R;
-    assume
-A5: z divides A & z divides 0.R;
-    A divides NF(A,Amp) by A1,Def3;
+    assume that
+A5: z divides A and
+    z divides 0.R;
+    A divides NF(A,Amp) by A3,Def3;
     hence thesis by A5,Th2;
   end;
-  NF(A,Amp) in Amp by Def9;
-  then gcd(A,0.R,Amp) = NF(A,Amp) by A2,A3,A4,Def12;
+  NF(A,Amp) divides A by A3,Def3;
+  then gcd(A,0.R,Amp) = NF(A,Amp) by A2,A4,A1,Def12;
   hence thesis by Th30;
 end;
 
@@ -1473,73 +1492,69 @@ proof
 end;
 
 theorem Th33:
-  for Amp being AmpleSet of R for a being Element of R holds
-  gcd(a,1.R,Amp) = 1.R & gcd(1.R,a,Amp) = 1.R
+  for Amp being AmpleSet of R for a being Element of R holds gcd(a
+  ,1.R,Amp) = 1.R & gcd(1.R,a,Amp) = 1.R
 proof
   let Amp be AmpleSet of R;
   let A be Element of R;
-A1: 1.R in Amp by Def8;
   1.R * A = A by VECTSP_1:def 19;
   then
-A2: 1.R divides A by Def1;
-  for z being Element of R st (z divides A & z divides 1.R)
-  holds (z divides 1.R);
-  then gcd(A,1.R,Amp) = 1.R by A1,A2,Def12;
+A1: 1.R divides A by Def1;
+  1.R in Amp & for z being Element of R st z divides A & z divides 1.R
+  holds z divides 1.R by Def8;
+  then gcd(A,1.R,Amp) = 1.R by A1,Def12;
   hence thesis by Th30;
 end;
 
 theorem Th34:
-  for Amp being AmpleSet of R for a,b being Element of R holds
-  gcd(a,b,Amp) = 0.R iff (a = 0.R & b = 0.R)
+  for Amp being AmpleSet of R for a,b being Element of R holds gcd
+  (a,b,Amp) = 0.R iff a = 0.R & b = 0.R
 proof
   let Amp be AmpleSet of R;
   let A,B be Element of R;
-A1: (A = 0.R & B = 0.R) implies (gcd(A,B,Amp) = 0.R)
-  proof
+A1: now
     assume
-A2: A = 0.R & B = 0.R;
-    then gcd(A,B,Amp) = NF(A,Amp) by Th31;
-    hence thesis by A2,Th25;
-  end;
-  now
-    assume gcd(A,B,Amp) = 0.R;
+A2: gcd(A,B,Amp) = 0.R;
+    then 0.R divides B by Def12;
     then
-A3: 0.R divides A & 0.R divides B by Def12;
-    then consider D being Element of R such that
-A4: 0.R * D = A by Def1;
-    consider E being Element of R such that
-A5: 0.R * E = B by A3,Def1;
-    thus (gcd(A,B,Amp) = 0.R) implies (A = 0.R & B = 0.R) by A4,A5,VECTSP_1:39;
+A3: ex E being Element of R st 0.R * E = B by Def1;
+    0.R divides A by A2,Def12;
+    then ex D being Element of R st 0.R * D = A by Def1;
+    hence gcd(A,B,Amp) = 0.R implies A = 0.R & B = 0.R by A3, VECTSP_1:39;
+  end;
+  A = 0.R & B = 0.R implies gcd(A,B,Amp) = 0.R
+  proof
+    assume that
+A4: A = 0.R and
+A5: B = 0.R;
+    gcd(A,B,Amp) = NF(A,Amp) by A5,Th31;
+    hence thesis by A4,Th25;
   end;
   hence thesis by A1;
 end;
 
 theorem Th35:
-  for Amp being AmpleSet of R for a,b,c being Element of R holds
-  (b is_associated_to c) implies
-  ((gcd(a,b,Amp) is_associated_to gcd(a,c,Amp)) &
-  (gcd(b,a,Amp) is_associated_to gcd(c,a,Amp)))
+  for Amp being AmpleSet of R for a,b,c being Element of R holds b
+is_associated_to c implies gcd(a,b,Amp) is_associated_to gcd(a,c,Amp) & gcd(b,a
+  ,Amp) is_associated_to gcd(c,a,Amp)
 proof
   let Amp be AmpleSet of R;
   let A,B,C be Element of R;
-  assume
-A1: B is_associated_to C;
-  then
-A2: B divides C by Def3;
-  gcd(A,B,Amp) divides B by Def12;
-  then
-A3: gcd(A,B,Amp) divides C by A2,Th2;
-  gcd(A,B,Amp) divides A by Def12;
-  then
-A4: gcd(A,B,Amp) divides gcd(A,C,Amp) by A3,Def12;
+A1: gcd(A,B,Amp) divides B by Def12;
+A2: gcd(A,B,Amp) divides A by Def12;
+A3: gcd(A,C,Amp) divides A by Def12;
+A4: gcd(A,C,Amp) divides C by Def12;
 A5: gcd(A,B,Amp) = gcd(B,A,Amp) by Th30;
-A6: C divides B by A1,Def3;
-  gcd(A,C,Amp) divides C by Def12;
+  assume
+A6: B is_associated_to C;
+  then C divides B by Def3;
+  then gcd(A,C,Amp) divides B by A4,Th2;
   then
-A7: gcd(A,C,Amp) divides B by A6,Th2;
-  gcd(A,C,Amp) divides A by Def12;
-  then gcd(A,C,Amp) divides gcd(A,B,Amp) by A7,Def12;
-  then gcd(A,B,Amp) is_associated_to gcd(A,C,Amp) by A4,Def3;
+A7: gcd(A,C,Amp) divides gcd(A,B,Amp) by A3,Def12;
+  B divides C by A6,Def3;
+  then gcd(A,B,Amp) divides C by A1,Th2;
+  then gcd(A,B,Amp) divides gcd(A,C,Amp) by A2,Def12;
+  then gcd(A,B,Amp) is_associated_to gcd(A,C,Amp) by A7,Def3;
   hence thesis by A5,Th30;
 end;
 
@@ -1553,20 +1568,24 @@ proof
   let A,B,C be Element of R;
   set D = gcd(gcd(A,B,Amp),C,Amp);
   set E = gcd(A,gcd(B,C,Amp),Amp);
-  D divides gcd(A,B,Amp) & D divides C by Def12;
-  then D divides A & D divides B & D divides C by Th29;
-  then D divides A & D divides gcd(B,C,Amp) by Def12;
+A1: D divides C by Def12;
+A2: E divides A by Def12;
+A3: E divides gcd(B,C,Amp) by Def12;
   then
-A1: D divides E by Def12;
-  E divides gcd(B,C,Amp) & E divides A by Def12;
-  then E divides B & E divides C & E divides A by Th29;
-  then E divides C & E divides gcd(A,B,Amp) by Def12;
-  then E divides D by Def12;
+A4: E divides C by Th29;
+  E divides B by A3,Th29;
+  then E divides gcd(A,B,Amp) by A2,Def12;
   then
-A2: D is_associated_to E by A1,Def3;
-A3: D is Element of Amp by Def12;
-  E is Element of Amp by Def12;
-  hence thesis by A2,A3,Th22;
+A5: E divides D by A4,Def12;
+A6: D is Element of Amp & E is Element of Amp by Def12;
+A7: D divides gcd(A,B,Amp) by Def12;
+  then
+A8: D divides A by Th29;
+  D divides B by A7,Th29;
+  then D divides gcd(B,C,Amp) by A1,Def12;
+  then D divides E by A8,Def12;
+  then D is_associated_to E by A5,Def3;
+  hence thesis by A6,Th22;
 end;
 
 theorem Th37:
@@ -1575,51 +1594,53 @@ theorem Th37:
 proof
   let Amp be AmpleSet of R;
   let A,B,C be Element of R;
-  now per cases;
+  now
+    per cases;
     case
 A1:   C <> 0.R;
       set D = gcd(A,B,Amp);
-      now per cases;
+      now
+        per cases;
         case
 A2:       D <> 0.R;
           set E = gcd((A * C),(B * C),Amp);
-          D divides A & D divides B by Def12;
-          then C * D divides A * C & C * D divides B * C by Th5;
-          then C * D divides gcd((A * C),(B * C),Amp) by Def12;
+A3:       E divides B * C by Def12;
+          D divides B by Def12;
+          then
+A4:       C * D divides B * C by Th5;
+          D divides A by Def12;
+          then C * D divides A * C by Th5;
+          then C * D divides gcd((A * C),(B * C),Amp) by A4,Def12;
           then consider F being Element of R such that
-A3:       E = (C * D) * F by Def1;
-A4:       E divides A * C by Def12;
-A5:       E divides B * C by Def12;
+A5:       E = (C * D) * F by Def1;
+A6:       E divides A * C by Def12;
           (D * F) divides A & (D * F) divides B
           proof
             consider G being Element of R such that
-A6:         ((C * D) * F) * G = A * C by A3,A4,Def1;
-            (C * (D * F)) * G = C * A by A6,GROUP_1:def 4;
+A7:         ((C * D) * F) * G = A * C by A5,A6,Def1;
+            (C * (D * F)) * G = C * A by A7,GROUP_1:def 4;
             then
-A7:         (C * (D * F)) divides C * A by Def1;
+A8:         (C * (D * F)) divides C * A by Def1;
             consider G being Element of R such that
-A8:         ((C * D) * F) * G = B * C by A3,A5,Def1;
-            (C * (D * F)) * G = C * B by A8,GROUP_1:def 4;
+A9:         ((C * D) * F) * G = B * C by A5,A3,Def1;
+            (C * (D * F)) * G = C * B by A9,GROUP_1:def 4;
             then (C * (D * F)) divides C * B by Def1;
-            hence thesis by A1,A7,Th15;
+            hence thesis by A1,A8,Th15;
           end;
           then
-A9:       D * F divides D by Def12;
-          F divides 1.R
-          proof
-            D = D * 1.R by VECTSP_1:def 13;
-            hence thesis by A2,A9,Th15;
-          end;
+A10:      D * F divides D by Def12;
+          D = D * 1.R by VECTSP_1:def 13;
+          then F divides 1.R by A2,A10,Th15;
           then F is unital by Def2;
-
-hence thesis by A3,Th18;
+          hence thesis by A5,Th18;
         end;
         case
-A10:      D = 0.R;
+A11:      D = 0.R;
           then
-A11:      A = 0.R & B = 0.R by Th34;
-A12:      C * gcd(A,B,Amp) = 0.R by A10,VECTSP_1:39;
-          gcd((A * C),(B * C),Amp) = gcd(0.R,(0.R * C),Amp) by A11,VECTSP_1:39
+A12:      C * gcd(A,B,Amp) = 0.R by VECTSP_1:39;
+          A = 0.R & B = 0.R by A11,Th34;
+          then gcd((A * C),(B * C),Amp) = gcd(0.R,(0.R * C),Amp) by
+          VECTSP_1:39
             .= gcd(0.R,0.R,Amp) by VECTSP_1:39
             .= C * gcd(A,B,Amp) by A12,Th32;
           hence thesis;
@@ -1629,10 +1650,8 @@ A12:      C * gcd(A,B,Amp) = 0.R by A10,VECTSP_1:39;
     end;
     case
 A13:  C = 0.R;
-      then
-A14:  A * C = 0.R by VECTSP_1:39;
-      B * C = 0.R by A13,VECTSP_1:39;
-      then gcd((A * C),(B * C),Amp) = 0.R by A14,Th32
+      then A * C = 0.R & B * C = 0.R by VECTSP_1:39;
+      then gcd((A * C),(B * C),Amp) = 0.R by Th32
         .= C * gcd(A,B,Amp) by A13,VECTSP_1:39;
       hence thesis;
     end;
@@ -1642,58 +1661,54 @@ end;
 
 theorem Th38:
   for Amp being AmpleSet of R for a,b,c being Element of R holds
-  (gcd(a,b,Amp) = 1.R) implies (gcd(a,(b * c),Amp) = gcd(a,c,Amp))
+  gcd(a,b,Amp) = 1.R implies gcd(a,(b * c),Amp) = gcd(a,c,Amp)
 proof
   let Amp be AmpleSet of R;
   let A,B,C be Element of R;
   assume
-A1: gcd(A,B,Amp) = 1.R;
-A2: gcd((A * C),(B * C),Amp) is_associated_to (C * gcd(A,B,Amp)) by Th37;
-  C * (gcd(A,B,Amp)) = C by A1,VECTSP_1:def 13;
-  then gcd(A,C,Amp) is_associated_to gcd(A,gcd((A * C),(B * C),Amp),Amp)
-  by A2,Th35;
+  gcd(A,B,Amp) = 1.R;
   then
-A3: gcd(A,C,Amp) is_associated_to gcd(gcd(A,(A * C),Amp),(B * C),Amp) by Th36;
-  gcd(A,(A * C),Amp) is_associated_to A
-  proof
-A4: gcd((A * 1.R),(A * C),Amp) is_associated_to (A * gcd(1.R,C,Amp)) by Th37;
-    A * gcd(1.R,C,Amp) = A * 1.R by Th33
-      .= A by VECTSP_1:def 13;
-    hence thesis by A4,VECTSP_1:def 13;
-  end;
-  then gcd(gcd(A,(A * C),Amp),(B * C),Amp) is_associated_to gcd(A,(B * C),Amp)
+A1: C * (gcd(A,B,Amp)) = C by VECTSP_1:def 13;
+  gcd((A * C),(B * C),Amp) is_associated_to (C * gcd(A,B,Amp)) by Th37;
+  then gcd(A,C,Amp) is_associated_to gcd(A,gcd((A * C),(B * C),Amp),Amp) by
+  A1,Th35;
+  then
+A2: gcd(A,C,Amp) is_associated_to gcd(gcd(A,(A * C),Amp),(B * C),Amp) by
+  Th36;
+A3: A * gcd(1.R,C,Amp) = A * 1.R by Th33
+    .= A by VECTSP_1:def 13;
+  gcd((A * 1.R),(A * C),Amp) is_associated_to (A * gcd(1.R,C,Amp)) by Th37;
+  then gcd(A,(A * C),Amp) is_associated_to A by A3,VECTSP_1:def 13;
+  then
+A4: gcd(gcd(A,(A * C),Amp),(B * C),Amp) is_associated_to gcd(A,(B * C),Amp)
   by Th35;
-  then
-A5: gcd(A,(B * C),Amp) is_associated_to gcd(A,C,Amp) by A3,Th4;
-A6: gcd(A,(B * C),Amp) is Element of Amp by Def12;
-  gcd(A,C,Amp) is Element of Amp by Def12;
-  hence thesis by A5,A6,Th22;
+  gcd(A,(B * C),Amp) is Element of Amp & gcd(A,C,Amp) is Element of Amp
+  by Def12;
+  hence thesis by A2,A4,Th4,Th22;
 end;
 
 theorem Th39:
-  for Amp being AmpleSet of R for a,b,c being Element of R holds
-  ((c = gcd(a,b,Amp)) & (c <> 0.R)) implies gcd((a/c),(b/c),Amp) = 1.R
+  for Amp being AmpleSet of R for a,b,c being Element of R holds c
+  = gcd(a,b,Amp) & c <> 0.R implies gcd((a/c),(b/c),Amp) = 1.R
 proof
   let Amp be AmpleSet of R;
   let A,B,C be Element of R;
-  assume
-A1: ((C = gcd(A,B,Amp)) & (C <> 0.R));
+  assume that
+A1: C = gcd(A,B,Amp) and
+A2: C <> 0.R;
   set A1 = A/C;
-  set B1 = B/C;
   C divides A by A1,Def12;
   then
-A2: A1 * C = A by A1,Def4;
+A3: A1 * C = A by A2,Def4;
+  set B1 = B/C;
+A4: gcd((A1 * C),(B1 * C),Amp) is_associated_to (C * gcd(A1,B1,Amp)) by Th37;
+A5: gcd(A1,B1,Amp) is Element of Amp & 1.R is Element of Amp by Def8,Def12;
   C divides B by A1,Def12;
-  then
-A3: gcd(A,B,Amp) = gcd((A1 * C),(B1 * C),Amp) by A1,A2,Def4;
-  gcd((A1 * C),(B1 * C),Amp) is_associated_to (C * gcd(A1,B1,Amp)) by Th37;
-
-then (C * 1.R) is_associated_to (C * gcd(A1,B1,Amp)) by A1,A3,VECTSP_1:def 13;
-  then
-A4: gcd(A1,B1,Amp) is_associated_to 1.R by A1,Th19;
-A5: gcd(A1,B1,Amp) is Element of Amp by Def12;
-  1.R is Element of Amp by Def8;
-  hence thesis by A4,A5,Th22;
+  then gcd(A,B,Amp) = gcd((A1 * C),(B1 * C),Amp) by A2,A3,Def4;
+  then (C * 1.R) is_associated_to (C * gcd(A1,B1,Amp)) by A1,
+  A4,VECTSP_1:def
+  13;
+  hence thesis by A2,A5,Th19,Th22;
 end;
 
 theorem Th40:
@@ -1703,28 +1718,23 @@ proof
   let Amp be AmpleSet of R;
   let A,B,C be Element of R;
   set D = gcd(A,C,Amp);
-A1: D divides A & D divides C by Def12;
-A2: D is Element of Amp by Def12;
-  consider E being Element of R such that
-A3: D * E = A by A1,Def1;
-  consider F being Element of R such that
-A4: D * F = C by A1,Def1;
-A5: D divides (A + (B * C))
-  proof
-    D * (E + (F * B)) = (D * E) + (D * (F * B)) by VECTSP_1:def 11
-      .= A + (B * C) by A3,A4,GROUP_1:def 4;
-    hence thesis by Def1;
-  end;
-  for z being Element of R st (z divides (A + (B * C)) & (z divides C))
-  holds (z divides D)
+  D divides A by Def12;
+  then consider E being Element of R such that
+A1: D * E = A by Def1;
+A2: D divides C by Def12;
+  then consider F being Element of R such that
+A3: D * F = C by Def1;
+A4: for z being Element of R st z divides (A + (B * C)) & z divides C holds
+  z divides D
   proof
     let Z be Element of R;
-    assume
-A6: Z divides (A + (B * C)) & (Z divides C);
-    then consider X being Element of R such that
-A7: Z * X = C by Def1;
+    assume that
+A5: Z divides (A + (B * C)) and
+A6: Z divides C;
+    consider X being Element of R such that
+A7: Z * X = C by A6,Def1;
     consider Y being Element of R such that
-A8: Z * Y = A + (B * C) by A6,Def1;
+A8: Z * Y = A + (B * C) by A5,Def1;
     Z * (Y + (-(B * X))) = (Z * Y) + (Z * (-(B * X))) by VECTSP_1:def 11
       .= (Z * Y) + (-(Z * (X * B))) by VECTSP_1:40
       .= (A + (B * C)) + (-(C * B)) by A7,A8,GROUP_1:def 4
@@ -1734,7 +1744,12 @@ A8: Z * Y = A + (B * C) by A6,Def1;
     then Z divides A by Def1;
     hence thesis by A6,Def12;
   end;
-  hence thesis by A1,A2,A5,Def12;
+  D * (E + (F * B)) = (D * E) + (D * (F * B)) by VECTSP_1:def 11
+    .= A + (B * C) by A1,A3,GROUP_1:def 4;
+  then
+A9: D divides (A + (B * C)) by Def1;
+  D is Element of Amp by Def12;
+  hence thesis by A2,A9,A4,Def12;
 end;
 
 begin
@@ -1742,160 +1757,159 @@ begin
 :: Brown & Henrici
 
 theorem Th41:
-  for Amp being AmpleSet of R for r1,r2,s1,s2 being Element of R holds
-  (gcd(r1,r2,Amp) = 1.R & gcd(s1,s2,Amp) = 1.R &
-  r2 <> 0.R & s2 <> 0.R) implies
-  gcd(((r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp)))),
-  (r2 * (s2/gcd(r2,s2,Amp))),Amp) =
-  gcd(((r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp)))),
-  gcd(r2,s2,Amp),Amp)
+  for Amp being AmpleSet of R for r1,r2,s1,s2 being Element of R
+holds gcd(r1,r2,Amp) = 1.R & gcd(s1,s2,Amp) = 1.R & r2 <> 0.R implies gcd(((r1
+* (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp)))), (r2 * (s2/gcd(r2,s2,Amp))
+),Amp) = gcd(((r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp)))), gcd(r2,
+  s2,Amp),Amp)
 proof
   let Amp be AmpleSet of R;
   let r1,r2,s1,s2 be Element of R;
-  assume
-A1: gcd(r1,r2,Amp) = 1.R & gcd(s1,s2,Amp) = 1.R & r2 <> 0.R & s2 <> 0.R;
+  assume that
+A1: gcd(r1,r2,Amp) = 1.R and
+A2: gcd(s1,s2,Amp) = 1.R and
+A3: r2 <> 0.R;
   set d = gcd(r2,s2,Amp);
-A2: d divides s2 by Def12;
-A3: d divides r2 by Def12;
-A4: d <> 0.R by A1,Th34;
   set r = r2/d;
   set s = s2/d;
-A5: gcd(((r1 * s) + (s1 * r)),s,Amp) = gcd((s1 * r),s,Amp) by Th40;
+A4: d <> 0.R by A3,Th34;
+  then
+A5: gcd(r,s,Amp) = 1.R by Th39;
+A6: d divides s2 by Def12;
   gcd(s,s1,Amp) = 1.R
   proof
-A6: gcd(s,s1,Amp) divides s1 by Def12;
     gcd(s,s1,Amp) divides s by Def12;
     then consider e being Element of R such that
 A7: gcd(s,s1,Amp) * e = s by Def1;
     gcd(s,s1,Amp) * (e * d) = s * d by A7,GROUP_1:def 4
-      .= s2 by A2,A4,Def4;
-    then gcd(s,s1,Amp) divides s2 by Def1;
+      .= s2 by A6,A4,Def4;
     then
-A8: gcd(s,s1,Amp) divides gcd(s1,s2,Amp) by A6,Def12;
+A8: gcd(s,s1,Amp) divides s2 by Def1;
+A9: gcd(s,s1,Amp) is Element of Amp & 1.R is Element of Amp by Def8,Def12;
     1.R * gcd(s,s1,Amp) = gcd(s,s1,Amp) by VECTSP_1:def 19;
-    then 1.R divides gcd(s,s1,Amp) by Def1;
     then
-A9: gcd(s,s1,Amp) is_associated_to 1.R by A1,A8,Def3;
-A10: gcd(s,s1,Amp) is Element of Amp by Def12;
-    1.R is Element of Amp by Def8;
-    hence thesis by A9,A10,Th22;
+A10: 1.R divides gcd(s,s1,Amp) by Def1;
+    gcd(s,s1,Amp) divides s1 by Def12;
+    then gcd(s,s1,Amp) divides gcd(s1,s2,Amp) by A8,Def12;
+    then gcd(s,s1,Amp) is_associated_to 1.R by A2,A10,Def3;
+    hence thesis by A9,Th22;
   end;
   then
 A11: gcd(s,(s1 * r),Amp) = gcd(s,r,Amp) by Th38;
-A12: gcd(r,s,Amp) = 1.R by A4,Th39;
-A13: gcd(((r1 * s) + (s1 * r)),s,Amp) = gcd(s,(s1 * r),Amp) by A5,Th30
-    .= 1.R by A11,A12,Th30;
-A14: r2 * s = s * (d * r)
-  proof
-A15: d divides (d * r2) by Th6;
-    r2 * s = (1.R * r2) * s by VECTSP_1:def 19
-      .= ((d/d) * r2) * s by A4,Th9
-      .= ((d * r2)/d) * s by A4,A15,Th11
-      .= s * (d * r) by A3,A4,A15,Th11;
-    hence thesis;
-  end;
-A16: gcd(((r1 * s) + (s1 * r)),r,Amp) = gcd((r1 * s),r,Amp) by Th40;
+  gcd(((r1 * s) + (s1 * r)),s,Amp) = gcd((s1 * r),s,Amp) by Th40;
+  then
+A12: gcd(((r1 * s) + (s1 * r)),s,Amp) = gcd(s,(s1 * r),Amp) by Th30
+    .= 1.R by A11,A5,Th30;
+A13: d divides (d * r2) by Th6;
+A14: d divides r2 by Def12;
   gcd(r,r1,Amp) = 1.R
   proof
-A17: gcd(r,r1,Amp) divides r1 by Def12;
     gcd(r,r1,Amp) divides r by Def12;
     then consider e being Element of R such that
-A18: gcd(r,r1,Amp) * e = r by Def1;
-    gcd(r,r1,Amp) * (e * d) = r * d by A18,GROUP_1:def 4
-      .= r2 by A3,A4,Def4;
-    then gcd(r,r1,Amp) divides r2 by Def1;
+A15: gcd(r,r1,Amp) * e = r by Def1;
+    gcd(r,r1,Amp) * (e * d) = r * d by A15,GROUP_1:def 4
+      .= r2 by A14,A4,Def4;
     then
-A19: gcd(r,r1,Amp) divides gcd(r1,r2,Amp) by A17,Def12;
+A16: gcd(r,r1,Amp) divides r2 by Def1;
+A17: gcd(r,r1,Amp) is Element of Amp & 1.R is Element of Amp by Def8,Def12;
     1.R * gcd(r,r1,Amp) = gcd(r,r1,Amp) by VECTSP_1:def 19;
-    then 1.R divides gcd(r,r1,Amp) by Def1;
     then
-A20: gcd(r,r1,Amp) is_associated_to 1.R by A1,A19,Def3;
-A21: gcd(r,r1,Amp) is Element of Amp by Def12;
-    1.R is Element of Amp by Def8;
-    hence thesis by A20,A21,Th22;
+A18: 1.R divides gcd(r,r1,Amp) by Def1;
+    gcd(r,r1,Amp) divides r1 by Def12;
+    then gcd(r,r1,Amp) divides gcd(r1,r2,Amp) by A16,Def12;
+    then gcd(r,r1,Amp) is_associated_to 1.R by A1,A18,Def3;
+    hence thesis by A17,Th22;
   end;
   then
-A22: gcd(r,(r1 * s),Amp) = gcd(r,s,Amp) by Th38;
+A19: gcd(r,(r1 * s),Amp) = gcd(r,s,Amp) by Th38;
+A20: gcd(((r1 * s) + (s1 * r)),r,Amp) = gcd((r1 * s),r,Amp) by Th40;
   gcd(r,s,Amp) = 1.R by A4,Th39;
-  then gcd(((r1 * s) + (s1 * r)),(d * r),Amp)
-  = gcd(((r1 * s) + (s1 * r)),d,Amp) by A16,A22,Th30,Th38;
-  hence thesis by A13,A14,Th38;
+  then
+A21: gcd(((r1 * s) + (s1 * r)),(d * r),Amp) = gcd(((r1 * s) + (s1 * r)),d,
+  Amp) by A20,A19,Th30,Th38;
+  r2 * s = (1.R * r2) * s by VECTSP_1:def 19
+    .= ((d/d) * r2) * s by A4,Th9
+    .= ((d * r2)/d) * s by A4,A13,Th11
+    .= s * (d * r) by A14,A4,A13,Th11;
+  hence thesis by A12,A21,Th38;
 end;
 
 theorem Th42:
-  for Amp being AmpleSet of R for r1,r2,s1,s2 being Element of R holds
-  (gcd(r1,r2,Amp) = 1.R & gcd(s1,s2,Amp) = 1.R &
-  r2 <> 0.R & s2 <> 0.R) implies
-  gcd(((r1/gcd(r1,s2,Amp)) * (s1/gcd(s1,r2,Amp))),
-  ((r2/gcd(s1,r2,Amp)) * (s2/gcd(r1,s2,Amp))),Amp) = 1.R
+  for Amp being AmpleSet of R for r1,r2,s1,s2 being Element of R
+  holds gcd(r1,r2,Amp) = 1.R & gcd(s1,s2,Amp) = 1.R & r2 <> 0.R & s2 <> 0.R
+implies gcd(((r1/gcd(r1,s2,Amp)) * (s1/gcd(s1,r2,Amp))), ((r2/gcd(s1,r2,Amp)) *
+  (s2/gcd(r1,s2,Amp))),Amp) = 1.R
 proof
   let Amp be AmpleSet of R;
   let r1,r2,s1,s2 be Element of R;
-  assume
-A1: gcd(r1,r2,Amp) = 1.R & gcd(s1,s2,Amp) = 1.R & r2 <> 0.R & s2 <> 0.R;
+  assume that
+A1: gcd(r1,r2,Amp) = 1.R and
+A2: gcd(s1,s2,Amp) = 1.R and
+A3: r2 <> 0.R and
+A4: s2 <> 0.R;
   set d1 = gcd(r1,s2,Amp);
+A5: d1 <> 0.R by A4,Th34;
   set d2 = gcd(s1,r2,Amp);
-A2: d1 <> 0.R by A1,Th34;
-A3: d2 <> 0.R by A1,Th34;
-  set r1' = r1/d1;
   set s1' = s1/d2;
   set r2' = r2/d2;
-  set s2' = s2/d1;
-  d1 divides r1 by Def12;
-  then r1' * d1 = r1 by A2,Def4;
+A6: d2 <> 0.R by A3,Th34;
   then
-A4: r1' divides r1 by Def1;
+A7: gcd(s1',r2',Amp) = 1.R by Th39;
+  set r1' = r1/d1;
+A8: gcd(r1',r2',Amp) divides r2' by Def12;
   d2 divides r2 by Def12;
-  then r2' * d2 = r2 by A3,Def4;
+  then r2' * d2 = r2 by A6,Def4;
+  then r2' divides r2 by Def1;
   then
-A5: r2' divides r2 by Def1;
-A6: gcd(r1',r2',Amp) divides r1' by Def12;
-A7: gcd(r1',r2',Amp) divides r2' by Def12;
-A8: gcd(r1',r2',Amp) divides r1 by A4,A6,Th2;
-  gcd(r1',r2',Amp) divides r2 by A5,A7,Th2;
+A9: gcd(r1',r2',Amp) divides r2 by A8,Th2;
+A10: gcd(r1',r2',Amp) is Element of Amp & 1.R is Element of Amp by Def8,
+  Def12;
+  d1 divides r1 by Def12;
+  then r1' * d1 = r1 by A5,Def4;
   then
-A9: gcd(r1',r2',Amp) divides gcd(r1,r2,Amp) by A8,Def12;
+A11: r1' divides r1 by Def1;
   1.R * gcd(r1',r2',Amp) = gcd(r1',r2',Amp) by VECTSP_1:def 19;
-  then 1.R divides gcd(r1',r2',Amp) by Def1;
   then
-A10: gcd(r1',r2',Amp) is_associated_to 1.R by A1,A9,Def3;
-A11: gcd(r1',r2',Amp) is Element of Amp by Def12;
-  1.R is Element of Amp by Def8;
-  then gcd(r1',r2',Amp) = 1.R by A10,A11,Th22;
+A12: 1.R divides gcd(r1',r2',Amp) by Def1;
+  gcd(r1',r2',Amp) divides r1' by Def12;
+  then gcd(r1',r2',Amp) divides r1 by A11,Th2;
+  then gcd(r1',r2',Amp) divides gcd(r1,r2,Amp) by A9,Def12;
+  then gcd(r1',r2',Amp) is_associated_to 1.R by A1,A12,Def3;
+  then gcd(r1',r2',Amp) = 1.R by A10,Th22;
   then
-A12: gcd(r2',r1',Amp) = 1.R by Th30;
+A13: gcd(r2',r1',Amp) = 1.R by Th30;
+  set s2' = s2/d1;
+A14: gcd(s1',s2',Amp) divides s2' by Def12;
   d1 divides s2 by Def12;
-  then s2' * d1 = s2 by A2,Def4;
+  then s2' * d1 = s2 by A5,Def4;
+  then s2' divides s2 by Def1;
   then
-A13: s2' divides s2 by Def1;
+A15: gcd(s1',s2',Amp) divides s2 by A14,Th2;
+A16: gcd(s1',s2',Amp) is Element of Amp & 1.R is Element of Amp by Def8,
+  Def12;
   d2 divides s1 by Def12;
-  then s1' * d2 = s1 by A3,Def4;
+  then s1' * d2 = s1 by A6,Def4;
   then
-A14: s1' divides s1 by Def1;
-A15: gcd(s1',s2',Amp) divides s1' by Def12;
-A16: gcd(s1',s2',Amp) divides s2' by Def12;
-A17: gcd(s1',s2',Amp) divides s1 by A14,A15,Th2;
-  gcd(s1',s2',Amp) divides s2 by A13,A16,Th2;
-  then
-A18: gcd(s1',s2',Amp) divides gcd(s1,s2,Amp) by A17,Def12;
+A17: s1' divides s1 by Def1;
   1.R * gcd(s1',s2',Amp) = gcd(s1',s2',Amp) by VECTSP_1:def 19;
-  then 1.R divides gcd(s1',s2',Amp) by Def1;
   then
-A19: gcd(s1',s2',Amp) is_associated_to 1.R by A1,A18,Def3;
-A20: gcd(s1',s2',Amp) is Element of Amp by Def12;
-  1.R is Element of Amp by Def8;
+A18: 1.R divides gcd(s1',s2',Amp) by Def1;
+  gcd(s1',s2',Amp) divides s1' by Def12;
+  then gcd(s1',s2',Amp) divides s1 by A17,Th2;
+  then gcd(s1',s2',Amp) divides gcd(s1,s2,Amp) by A15,Def12;
+  then gcd(s1',s2',Amp) is_associated_to 1.R by A2,A18,Def3;
   then
-A21: gcd(s1',s2',Amp) = 1.R by A19,A20,Th22;
-A22: gcd(s2',r1',Amp) = gcd((r1/d1),(s2/d1),Amp) by Th30
-    .= 1.R by A2,Th39;
-A23: gcd(s1',r2',Amp) = 1.R by A3,Th39;
+A19: gcd(s1',s2',Amp) = 1.R by A16,Th22;
+A20: gcd(s2',r1',Amp) = gcd((r1/d1),(s2/d1),Amp) by Th30
+    .= 1.R by A5,Th39;
   gcd((r1' * s1'),r2',Amp) = gcd(r2',(r1' * s1'),Amp) by Th30
-    .= gcd(r2',s1',Amp) by A12,Th38
-    .= 1.R by A23,Th30;
-  then gcd((r1' * s1'),(r2' * s2'),Amp) = gcd((r1' * s1'),s2',Amp) by Th38
+    .= gcd(r2',s1',Amp) by A13,Th38
+    .= 1.R by A7,Th30;
+  then gcd((r1' * s1'),(r2' * s2'),Amp) = gcd((r1' * s1'),s2',Amp) by
+  Th38
     .= gcd(s2',(r1' * s1'),Amp) by Th30
-    .= gcd(s2',s1',Amp) by A22,Th38
-    .= 1.R by A21,Th30;
+    .= gcd(s2',s1',Amp) by A20,Th38
+    .= 1.R by A19,Th30;
   hence thesis;
 end;
 
@@ -1913,23 +1927,25 @@ definition
 end;
 
 theorem Th43:
-  for Amp,Amp' being AmpleSet of R
-  for x,y being Element of R st x,y are_canonical_wrt Amp
-  holds x,y are_canonical_wrt Amp'
+  for Amp,Amp' being AmpleSet of R for x,y being Element of R st x
+  ,y are_canonical_wrt Amp holds x,y are_canonical_wrt Amp'
 proof
   let Amp,Amp' be AmpleSet of R;
   let x,y be Element of R;
-  assume x,y are_canonical_wrt Amp;
+  1.R * x = x by VECTSP_1:def 19;
+  then
+A1: 1.R divides x by Def1;
+  1.R * y = y by VECTSP_1:def 19;
+  then
+A2: 1.R divides y by Def1;
+  assume
+  x,y are_canonical_wrt Amp;
   then gcd(x,y,Amp) = 1.R by Def13;
   then
-A1: for z being Element of R st (z divides x & z divides y)
-  holds (z divides 1.R) by Def12;
-A2: 1.R * x = x by VECTSP_1:def 19;
-A3: 1.R * y = y by VECTSP_1:def 19;
-A4: 1.R divides x by A2,Def1;
-A5: 1.R divides y by A3,Def1;
+A3: for z being Element of R st z divides x & z divides y holds z divides 1.
+  R by Def12;
   1.R in Amp' by Def8;
-  then gcd(x,y,Amp') = 1.R by A1,A4,A5,Def12;
+  then gcd(x,y,Amp') = 1.R by A3,A1,A2,Def12;
   hence thesis by Def13;
 end;
 
@@ -1938,7 +1954,8 @@ definition
   let x,y be Element of R;
   pred x,y are_co-prime means
   :Def14:
-  ex Amp being AmpleSet of R st gcd(x,y,Amp) = 1.R;
+  ex Amp being AmpleSet of R st gcd(x,y,
+  Amp) = 1.R;
 end;
 
 definition
@@ -1956,12 +1973,13 @@ A1: gcd(x,y,Amp) = 1.R;
 end;
 
 theorem Th44:
-  for Amp being AmpleSet of R for x,y being Element of R holds
-  x,y are_co-prime implies gcd(x,y,Amp) = 1.R
+  for Amp being AmpleSet of R for x,y being Element of R holds x,y
+  are_co-prime implies gcd(x,y,Amp) = 1.R
 proof
   let Amp be AmpleSet of R;
   let x,y be Element of R;
-  assume x,y are_co-prime;
+  assume
+  x,y are_co-prime;
   then consider Amp' being AmpleSet of R such that
 A1: gcd(x,y,Amp') = 1.R by Def14;
   x,y are_canonical_wrt Amp' by A1,Def13;
@@ -1975,7 +1993,8 @@ definition
   let x,y be Element of R;
   pred x,y are_normalized_wrt Amp means
   :Def15:
-  gcd(x,y,Amp) = 1.R & y in Amp & y <> 0.R;
+  gcd(x,y,Amp) = 1.R & y in Amp
+  & y <> 0.R;
 end;
 
 :: Addition
@@ -1984,93 +2003,96 @@ definition
   let R be gcdDomain;
   let Amp be AmpleSet of R;
   let r1,r2,s1,s2 be Element of R;
-  assume
-A1: r1,r2 are_co-prime & s1,s2 are_co-prime &
-  r2 = NF(r2,Amp) & s2 = NF(s2,Amp);
+  assume that
+A1: r1,r2 are_co-prime and
+A2: s1,s2 are_co-prime and
+A3: r2 = NF(r2,Amp) and
+A4: s2 = NF(s2,Amp);
   func add1(r1,r2,s1,s2,Amp) -> Element of R equals
   :Def16:
-  s1 if r1 = 0.R,
-  r1 if s1 = 0.R, (r1 * s2) + (r2 * s1) if gcd(r2,s2,Amp) = 1.R,
-  0.R if (r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))) = 0.R
-  otherwise ((r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp)))) /
-  gcd((r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))),
-  gcd(r2,s2,Amp),Amp);
+  s1 if r1 = 0.R, r1
+  if s1 = 0.R, (r1 * s2) + (r2 * s1) if gcd(r2,s2,Amp) = 1.R, 0.R if (r1 * (s2/
+gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))) = 0.R otherwise ((r1 * (s2/gcd(r2
+,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp)))) / gcd((r1 * (s2/gcd(r2,s2,Amp))) + (s1
+  * (r2/gcd(r2,s2,Amp))), gcd(r2,s2,Amp),Amp);
   coherence;
   consistency
   proof
-A2: gcd(r1,r2,Amp) = 1.R & gcd(s1,s2,Amp) = 1.R by A1,Th44;
-A3: r1 = 0.R & gcd(r2,s2,Amp) = 1.R implies for z being Element of R
-    holds z = s1 iff z = (r1 * s2) + (r2 * s1)
+A5: gcd(s1,s2,Amp) = 1.R by A2,Th44;
+A6: s1 = 0.R & gcd(r2,s2,Amp) = 1.R implies for z being Element of R
+    holds z = r1 iff z = (r1 * s2) + (r2 * s1)
     proof
-      assume
-A4:   r1 = 0.R & gcd(r2,s2,Amp) = 1.R;
+      assume that
+A7:   s1 = 0.R and
+      gcd(r2,s2,Amp) = 1.R;
+A8:   s2 = 1.R by A4,A5,A7,Th31;
       let z be Element of R;
-A5:   r2 = 1.R by A1,A2,A4,Th31;
-      (r1 * s2) + (r2 * s1) = 0.R + (r2 * s1) by A4,VECTSP_1:39
-        .= 1.R * s1 by A5,RLVECT_1:10
+      (r1 * s2) + (r2 * s1) = (r1 * s2) + 0.R by A7,VECTSP_1:39
+        .= r1 * 1.R by A8,RLVECT_1:10
+        .= r1 by VECTSP_1:def 13;
+      hence thesis;
+    end;
+A9: s1 = 0.R & (r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))) =
+    0.R implies for z being Element of R holds z = r1 iff z = 0.R
+    proof
+A10:  1.R <> 0.R;
+      assume that
+A11:  s1 = 0.R and
+A12:  (r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))) = 0.R;
+      let z be Element of R;
+A13:  s2 = 1.R by A4,A5,A11,Th31;
+      then
+A14:  gcd(r2,s2,Amp) = 1.R by Th33;
+      0.R = (r1*(s2/gcd(r2,s2,Amp)))+0.R by A11,A12,VECTSP_1:39
+        .= r1*(1.R/gcd(r2,s2,Amp)) by A13,RLVECT_1:10
+        .= r1*1.R by A14,A10,Th9
+        .= r1 by VECTSP_1:def 13;
+      hence thesis;
+    end;
+A15: gcd(r1,r2,Amp) = 1.R by A1,Th44;
+A16: r1 = 0.R & gcd(r2,s2,Amp) = 1.R implies for z being Element of R holds
+    z = s1 iff z = (r1 * s2) + (r2 * s1)
+    proof
+      assume that
+A17:  r1 = 0.R and
+      gcd(r2,s2,Amp) = 1.R;
+A18:  r2 = 1.R by A3,A15,A17,Th31;
+      let z be Element of R;
+      (r1 * s2) + (r2 * s1) = 0.R + (r2 * s1) by A17,VECTSP_1:39
+        .= 1.R * s1 by A18,RLVECT_1:10
         .= s1 by VECTSP_1:def 19;
       hence thesis;
     end;
-A6: r1 = 0.R & (r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))) = 0.R
-    implies for z being Element of R holds z = s1 iff z = 0.R
+A19: r1 = 0.R & (r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))) =
+    0.R implies for z being Element of R holds z = s1 iff z = 0.R
     proof
-      assume
-A7:   r1 = 0.R & (r1 * (s2/gcd(r2,s2,Amp))) +
-      (s1 * (r2/gcd(r2,s2,Amp))) = 0.R;
+A20:  1.R <> 0.R;
+      assume that
+A21:  r1 = 0.R and
+A22:  (r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))) = 0.R;
       let z be Element of R;
-A8:   r2 = 1.R by A1,A2,A7,Th31;
+A23:  r2 = 1.R by A3,A15,A21,Th31;
       then
-A9:   gcd(r2,s2,Amp) = 1.R by Th33;
-A10:  1.R <> 0.R;
-      0.R = 0.R+(s1*(r2/gcd(r2,s2,Amp))) by A7,VECTSP_1:39
-        .= s1*(1.R/gcd(r2,s2,Amp)) by A8,RLVECT_1:10
-        .= s1*1.R by A9,A10,Th9
+A24:  gcd(r2,s2,Amp) = 1.R by Th33;
+      0.R = 0.R+(s1*(r2/gcd(r2,s2,Amp))) by A21,A22,VECTSP_1:39
+        .= s1*(1.R/gcd(r2,s2,Amp)) by A23,RLVECT_1:10
+        .= s1*1.R by A24,A20,Th9
         .= s1 by VECTSP_1:def 13;
       hence thesis;
     end;
-A11: s1 = 0.R & gcd(r2,s2,Amp) = 1.R implies for z being Element of R
-    holds z = r1 iff z = (r1 * s2) + (r2 * s1)
+    gcd(r2,s2,Amp) = 1.R & (r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,
+s2,Amp))) = 0.R implies for z being Element of R holds z = (r1 * s2) + (r2 * s1
+    ) iff z = 0.R
     proof
       assume
-A12:  s1 = 0.R & gcd(r2,s2,Amp) = 1.R;
+A25:  gcd(r2,s2,Amp) = 1.R & (r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/
+      gcd(r2,s2,Amp) )) = 0.R;
       let z be Element of R;
-A13:  s2 = 1.R by A1,A2,A12,Th31;
-      (r1 * s2) + (r2 * s1) = (r1 * s2) + 0.R by A12,VECTSP_1:39
-        .= r1 * 1.R by A13,RLVECT_1:10
-        .= r1 by VECTSP_1:def 13;
-      hence thesis;
-    end;
-A14: s1 = 0.R & (r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))) = 0.R
-    implies for z being Element of R holds z = r1 iff z = 0.R
-    proof
-      assume
-A15:  s1 = 0.R & (r1 * (s2/gcd(r2,s2,Amp))) +
-      (s1 * (r2/gcd(r2,s2,Amp))) = 0.R;
-      let z be Element of R;
-A16:  s2 = 1.R by A1,A2,A15,Th31;
-      then
-A17:  gcd(r2,s2,Amp) = 1.R by Th33;
-A18:  1.R <> 0.R;
-      0.R = (r1*(s2/gcd(r2,s2,Amp)))+0.R by A15,VECTSP_1:39
-        .= r1*(1.R/gcd(r2,s2,Amp)) by A16,RLVECT_1:10
-        .= r1*1.R by A17,A18,Th9
-        .= r1 by VECTSP_1:def 13;
-      hence thesis;
-    end;
-    gcd(r2,s2,Amp) = 1.R &
-    (r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))) = 0.R
-    implies for z being Element of R
-    holds z = (r1 * s2) + (r2 * s1) iff z = 0.R
-    proof
-      assume
-A19:  gcd(r2,s2,Amp) = 1.R &
-      (r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))) = 0.R;
-      let z be Element of R;
-      0.R = (r1 * s2) + (s1 * (r2/1.R)) by A19,Th10
+      0.R = (r1 * s2) + (s1 * (r2/1.R)) by A25,Th10
         .= (r1 * s2) + (s1 * r2) by Th10;
       hence thesis;
     end;
-    hence thesis by A3,A6,A11,A14;
+    hence thesis by A16,A19,A6,A9;
   end;
 end;
 
@@ -2078,232 +2100,235 @@ definition
   let R be gcdDomain;
   let Amp be AmpleSet of R;
   let r1,r2,s1,s2 be Element of R;
-  assume
-A1: r1,r2 are_co-prime & s1,s2 are_co-prime &
-  r2 = NF(r2,Amp) & s2 = NF(s2,Amp);
+  assume that
+A1: r1,r2 are_co-prime and
+A2: s1,s2 are_co-prime and
+A3: r2 = NF(r2,Amp) and
+A4: s2 = NF(s2,Amp);
   func add2(r1,r2,s1,s2,Amp) -> Element of R equals
   :Def17:
-  s2 if r1 = 0.R,
-  r2 if s1 = 0.R, r2 * s2 if gcd(r2,s2,Amp) = 1.R,
-  1.R if (r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))) = 0.R
-  otherwise (r2 * (s2/gcd(r2,s2,Amp))) / gcd((r1 * (s2/gcd(r2,s2,Amp))) +
-  (s1 * (r2/gcd(r2,s2,Amp))), gcd(r2,s2,Amp),Amp);
+  s2 if r1 = 0.R, r2
+if s1 = 0.R, r2 * s2 if gcd(r2,s2,Amp) = 1.R, 1.R if (r1 * (s2/gcd(r2,s2,Amp)))
++ (s1 * (r2/gcd(r2,s2,Amp))) = 0.R otherwise (r2 * (s2/gcd(r2,s2,Amp))) / gcd((
+  r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))), gcd(r2,s2,Amp),Amp);
   coherence;
   consistency
   proof
-A2: gcd(r1,r2,Amp) = 1.R & gcd(s1,s2,Amp) = 1.R by A1,Th44;
-A3: r1 = 0.R & s1 = 0.R implies for z being Element of R
-    holds z = s2 iff z = r2
+A5: gcd(r2,s2,Amp) = 1.R & (r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,
+s2,Amp))) = 0.R implies for z being Element of R holds z = r2 * s2 iff z = 1.R
     proof
-      assume
-A4:   r1 = 0.R & s1 = 0.R;
-      let z be Element of R;
-      r2 = 1.R by A1,A2,A4,Th31;
-      hence thesis by A1,A2,A4,Th31;
-    end;
-A5: r1 = 0.R & gcd(r2,s2,Amp) = 1.R implies for z being Element of R
-    holds z = s2 iff z = r2 * s2
-    proof
-      assume
-A6:   r1 = 0.R & gcd(r2,s2,Amp) = 1.R;
-      let z be Element of R;
-      r2 = 1.R by A1,A2,A6,Th31;
-      hence thesis by VECTSP_1:def 19;
-    end;
-A7: r1 = 0.R & (r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))) = 0.R
-    implies for z being Element of R holds z = s2 iff z = 1.R
-    proof
-      assume
-A8:   r1 = 0.R & (r1 * (s2/gcd(r2,s2,Amp))) +
-      (s1 * (r2/gcd(r2,s2,Amp))) = 0.R;
-      let z be Element of R;
-A9:   r2 = 1.R by A1,A2,A8,Th31;
-      then
-A10:  gcd(r2,s2,Amp) = 1.R by Th33;
-A11:  1.R <> 0.R;
-      0.R = 0.R+(s1*(r2/gcd(r2,s2,Amp))) by A8,VECTSP_1:39
-        .= s1*(1.R/gcd(r2,s2,Amp)) by A9,RLVECT_1:10
-        .= s1*1.R by A10,A11,Th9
-        .= s1 by VECTSP_1:def 13;
-      hence thesis by A1,A2,Th31;
-    end;
-A12: s1 = 0.R & gcd(r2,s2,Amp) = 1.R implies for z being Element of R
-    holds z = r2 iff z = r2 * s2
-    proof
-      assume
-A13:  s1 = 0.R & gcd(r2,s2,Amp) = 1.R;
-      let z be Element of R;
-      s2 = 1.R by A1,A2,A13,Th31;
-      hence thesis by VECTSP_1:def 13;
-    end;
-A14: s1 = 0.R & (r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))) = 0.R
-    implies for z being Element of R holds z = r2 iff z = 1.R
-    proof
-      assume
-A15:  s1 = 0.R & (r1 * (s2/gcd(r2,s2,Amp))) +
-      (s1 * (r2/gcd(r2,s2,Amp))) = 0.R;
-      let z be Element of R;
-A16:  s2 = 1.R by A1,A2,A15,Th31;
-      then
-A17:  gcd(r2,s2,Amp) = 1.R by Th33;
-A18:  1.R <> 0.R;
-      0.R = (r1*(s2/gcd(r2,s2,Amp)))+0.R by A15,VECTSP_1:39
-        .= r1*(1.R/gcd(r2,s2,Amp)) by A16,RLVECT_1:10
-        .= r1*1.R by A17,A18,Th9
-        .= r1 by VECTSP_1:def 13;
-      hence thesis by A1,A2,Th31;
-    end;
-    gcd(r2,s2,Amp) = 1.R &
-    (r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))) = 0.R
-    implies for z being Element of R holds z = r2 * s2 iff z = 1.R
-    proof
-      assume
-A19:  gcd(r2,s2,Amp) = 1.R &
-      (r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))) = 0.R;
-      let z be Element of R;
-A20:  0.R = (r1 * s2) + (s1 * (r2/1.R)) by A19,Th10
+      assume that
+A6:   gcd(r2,s2,Amp) = 1.R and
+A7:   (r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))) = 0.R;
+A8:   0.R = (r1 * s2) + (s1 * (r2/1.R)) by A6,A7,Th10
         .= (r1 * s2) + (s1 * r2) by Th10;
       then
-A21:  r1 * s2 = -(s1 * r2) by RLVECT_1:19;
-A22:  s1 * r2 = -(r1 * s2) by A20,RLVECT_1:19;
-      gcd(r2,r1,Amp) = 1.R by A1,Th44;
-      then gcd(r2,r1*s2,Amp) = 1.R by A19,Th38;
-      then
-A23:  1.R = gcd(1.R*r2,-(s1*r2),Amp) by A21,VECTSP_1:def 19
-        .= gcd(1.R*r2,(-s1)*r2,Amp) by VECTSP_1:40;
-A24:  r2 * gcd(1.R,(-s1),Amp) = r2 * 1.R by Th33
-        .= r2 by VECTSP_1:def 13;
-A25:  1.R is_associated_to r2 * gcd(1.R,(-s1),Amp) by A23,Th37;
-A26:  1.R in Amp by Th22;
-      then
-A27:  r2 = 1.R by A1,A24,A25,Def9;
-      gcd(s2,s1,Amp) = 1.R by A1,Th44;
+A9:   r1 * s2 = -(s1 * r2) by RLVECT_1:19;
+A10:  s1 * r2 = -(r1 * s2) by A8,RLVECT_1:19;
+      gcd(s2,s1,Amp) = 1.R by A2,Th44;
       then gcd(s2,s1*r2,Amp) = gcd(s2,r2,Amp) by Th38
-        .= 1.R by A19,Th30;
-      then
-A28:  1.R = gcd(1.R*s2,-(r1*s2),Amp) by A22,VECTSP_1:def 19
+        .= 1.R by A6,Th30;
+      then 1.R = gcd(1.R*s2,-(r1*s2),Amp) by A10,VECTSP_1:def 19
         .= gcd(1.R*s2,(-r1)*s2,Amp) by VECTSP_1:40;
-A29:  s2 * gcd(1.R,(-r1),Amp) = s2 * 1.R by Th33
+      then
+A11:  1.R is_associated_to s2 * gcd(1.R,(-r1),Amp) by Th37;
+      let z be Element of R;
+A12:  1.R in Amp by Th22;
+      gcd(r2,r1,Amp) = 1.R by A1,Th44;
+      then gcd(r2,r1*s2,Amp) = 1.R by A6,Th38;
+      then 1.R = gcd(1.R*r2,-(s1*r2),Amp) by A9,VECTSP_1:def 19
+        .= gcd(1.R*r2,(-s1)*r2,Amp) by VECTSP_1:40;
+      then
+A13:  1.R is_associated_to r2 * gcd(1.R,(-s1),Amp) by Th37;
+      s2 * gcd(1.R,(-r1),Amp) = s2 * 1.R by Th33
         .= s2 by VECTSP_1:def 13;
-      1.R is_associated_to s2 * gcd(1.R,(-r1),Amp) by A28,Th37;
-      then s2 = 1.R by A1,A26,A29,Def9;
-      hence thesis by A27,VECTSP_1:def 13;
+      then
+A14:  s2 = 1.R by A4,A12,A11,Def9;
+      r2 * gcd(1.R,(-s1),Amp) = r2 * 1.R by Th33
+        .= r2 by VECTSP_1:def 13;
+      then r2 = 1.R by A3,A13,A12,Def9;
+      hence thesis by A14,VECTSP_1:def 13;
     end;
-    hence thesis by A3,A5,A7,A12,A14;
+A15: gcd(r1,r2,Amp) = 1.R by A1,Th44;
+A16: r1 = 0.R & gcd(r2,s2,Amp) = 1.R implies for z being Element of R
+    holds z = s2 iff z = r2 * s2
+    proof
+      assume that
+A17:  r1 = 0.R and
+      gcd(r2,s2,Amp) = 1.R;
+      let z be Element of R;
+      r2 = 1.R by A3,A15,A17,Th31;
+      hence thesis by VECTSP_1:def 19;
+    end;
+A18: gcd(s1,s2,Amp) = 1.R by A2,Th44;
+A19: s1 = 0.R & gcd(r2,s2,Amp) = 1.R implies for z being Element of R
+    holds z = r2 iff z = r2 * s2
+    proof
+      assume that
+A20:  s1 = 0.R and
+      gcd(r2,s2,Amp) = 1.R;
+      let z be Element of R;
+      s2 = 1.R by A4,A18,A20,Th31;
+      hence thesis by VECTSP_1:def 13;
+    end;
+A21: s1 = 0.R & (r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))) =
+    0.R implies for z being Element of R holds z = r2 iff z = 1.R
+    proof
+A22:  1.R <> 0.R;
+      assume that
+A23:  s1 = 0.R and
+A24:  (r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))) = 0.R;
+      let z be Element of R;
+A25:  s2 = 1.R by A4,A18,A23,Th31;
+      then
+A26:  gcd(r2,s2,Amp) = 1.R by Th33;
+      0.R = (r1*(s2/gcd(r2,s2,Amp)))+0.R by A23,A24,VECTSP_1:39
+        .= r1*(1.R/gcd(r2,s2,Amp)) by A25,RLVECT_1:10
+        .= r1*1.R by A26,A22,Th9
+        .= r1 by VECTSP_1:def 13;
+      hence thesis by A3,A15,Th31;
+    end;
+A27: r1 = 0.R & (r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))) =
+    0.R implies for z being Element of R holds z = s2 iff z = 1.R
+    proof
+A28:  1.R <> 0.R;
+      assume that
+A29:  r1 = 0.R and
+A30:  (r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))) = 0.R;
+      let z be Element of R;
+A31:  r2 = 1.R by A3,A15,A29,Th31;
+      then
+A32:  gcd(r2,s2,Amp) = 1.R by Th33;
+      0.R = 0.R+(s1*(r2/gcd(r2,s2,Amp))) by A29,A30,VECTSP_1:39
+        .= s1*(1.R/gcd(r2,s2,Amp)) by A31,RLVECT_1:10
+        .= s1*1.R by A32,A28,Th9
+        .= s1 by VECTSP_1:def 13;
+      hence thesis by A4,A18,Th31;
+    end;
+    r1 = 0.R & s1 = 0.R implies for z being Element of R holds z = s2 iff
+    z = r2
+    proof
+      assume that
+A33:  r1 = 0.R and
+A34:  s1 = 0.R;
+      let z be Element of R;
+      r2 = 1.R by A3,A15,A33,Th31;
+      hence thesis by A4,A18,A34,Th31;
+    end;
+    hence thesis by A16,A27,A19,A21,A5;
   end;
 end;
 
 theorem
   for Amp being AmpleSet of R for r1,r2,s1,s2 being Element of R holds
-  (Amp is multiplicative & r1,r2 are_normalized_wrt Amp &
-  s1,s2 are_normalized_wrt Amp) implies
-  add1(r1,r2,s1,s2,Amp),add2(r1,r2,s1,s2,Amp) are_normalized_wrt Amp
+Amp is multiplicative & r1,r2 are_normalized_wrt Amp & s1,s2 are_normalized_wrt
+Amp implies add1(r1,r2,s1,s2,Amp),add2(r1,r2,s1,s2,Amp) are_normalized_wrt Amp
 proof
   let Amp be AmpleSet of R;
   let r1,r2,s1,s2 be Element of R;
-  assume
-A1: Amp is multiplicative & r1,r2 are_normalized_wrt Amp &
-  s1,s2 are_normalized_wrt Amp;
+  assume that
+A1: Amp is multiplicative and
+A2: r1,r2 are_normalized_wrt Amp and
+A3: s1,s2 are_normalized_wrt Amp;
+A4: r2 <> 0.R by A2,Def15;
+  r2 in Amp by A2,Def15;
   then
-A2: r2 in Amp & s2 in Amp & r2 <> 0.R & s2 <> 0.R by Def15;
+A5: r2 = NF(r2,Amp) by Def9;
+  s2 in Amp by A3,Def15;
   then
-A3: r2 = NF(r2,Amp) & s2 = NF(s2,Amp) & r2 <> 0.R & s2 <> 0.R by Def9;
-A4: gcd(r1,r2,Amp) = 1.R & gcd(s1,s2,Amp) = 1.R by A1,Def15;
+A6: s2 = NF(s2,Amp) by Def9;
+A7: gcd(r1,r2,Amp) = 1.R by A2,Def15;
   then
-A5: r1,r2 are_co-prime & s1,s2 are_co-prime by Def14;
-  now per cases;
+A8: r1,r2 are_co-prime by Def14;
+A9: gcd(s1,s2,Amp) = 1.R by A3,Def15;
+  then
+A10: s1,s2 are_co-prime by Def14;
+A11: s2 <> 0.R by A3,Def15;
+  now
+    per cases;
     case
-A6:   r1 = 0.R;
-      then add2(r1,r2,s1,s2,Amp) = s2 by A3,A5,Def17;
-      hence thesis by A1,A3,A5,A6,Def16;
+A12:  r1 = 0.R;
+      then add2(r1,r2,s1,s2,Amp) = s2 by A5,A6,A8,A10,Def17;
+      hence thesis by A3,A5,A6,A8,A10,A12,Def16;
     end;
     case
-A7:   s1 = 0.R;
-      then add2(r1,r2,s1,s2,Amp) = r2 by A3,A5,Def17;
-      hence thesis by A1,A3,A5,A7,Def16;
+A13:  s1 = 0.R;
+      then add2(r1,r2,s1,s2,Amp) = r2 by A5,A6,A8,A10,Def17;
+      hence thesis by A2,A5,A6,A8,A10,A13,Def16;
     end;
     case
-A8:   gcd(r2,s2,Amp) = 1.R;
+A14:  gcd(r2,s2,Amp) = 1.R;
       then
-A9:   add1(r1,r2,s1,s2,Amp) = (r1 * s2) + (r2 * s1) by A3,A5,Def16;
-A10:  add2(r1,r2,s1,s2,Amp) = r2 * s2 by A3,A5,A8,Def17;
+A15:  add2(r1,r2,s1,s2,Amp) = r2 * s2 by A5,A6,A8,A10,Def17;
+      add1(r1,r2,s1,s2,Amp) = (r1 * s2) + (r2 * s1) by A5,A6,A8,A10,A14
+      ,Def16;
       then
-A11:  gcd(add1(r1,r2,s1,s2,Amp),add2(r1,r2,s1,s2,Amp),Amp)
-      = gcd(((r1 * (s2/1.R)) + (s1 * r2)), (r2 * s2),Amp) by A9,Th10
+A16:  gcd(add1(r1,r2,s1,s2,Amp),add2(r1,r2,s1,s2,Amp),Amp) = gcd(((r1 * (
+      s2/1.R)) + (s1 * r2)), (r2 * s2),Amp) by A15,Th10
         .= gcd((r1 * (s2/1.R)) + (s1 * (r2/1.R)), (r2 * s2),Amp) by Th10
-        .= gcd((r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))),
-      (r2 * (s2/gcd(r2,s2,Amp))),Amp) by A8,Th10
-        .= gcd((r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))),
-      gcd(r2,s2,Amp),Amp) by A2,A4,Th41
-        .= 1.R by A8,Th33;
-      reconsider r2,s2 as Element of Amp by A1,Def15;
-A12:  r2 * s2 in Amp by A1,Def10;
-      r2 * s2 <> 0.R by A2,VECTSP_2:def 5;
-      hence thesis by A10,A11,A12,Def15;
-    end;
-    case (r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))) = 0.R;
-      then
-A13:  add2(r1,r2,s1,s2,Amp) = 1.R by A3,A5,Def17;
-      then
-A14:  gcd(add1(r1,r2,s1,s2,Amp),add2(r1,r2,s1,s2,Amp),Amp) = 1.R by Th33;
-A15:  1.R in Amp by Th22;
-      1.R <> 0.R;
-      hence thesis by A13,A14,A15,Def15;
+        .= gcd((r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))), (r2
+      * (s2/gcd(r2,s2,Amp))),Amp) by A14,Th10
+        .= gcd((r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))), gcd(
+      r2,s2,Amp),Amp) by A4,A7,A9,Th41
+        .= 1.R by A14,Th33;
+      reconsider r2,s2 as Element of Amp by A2,A3,Def15;
+      r2 * s2 in Amp & r2 * s2 <> 0.R by A1,A4,A11,Def10,VECTSP_2:def 5;
+      hence thesis by A15,A16,Def15;
     end;
     case
-A16:  r1 <> 0.R & s1 <> 0.R & gcd(r2,s2,Amp) <> 1.R &
-      (r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))) <> 0.R;
+A17:  (r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))) = 0.R;
+A18:  1.R in Amp & 1.R <> 0.R by Th22;
+A19:  add2(r1,r2,s1,s2,Amp) = 1.R by A5,A6,A8,A10,A17,Def17;
+      then gcd(add1(r1,r2,s1,s2,Amp),add2(r1,r2,s1,s2,Amp),Amp) = 1.R by
+      Th33;
+      hence thesis by A19,A18,Def15;
+    end;
+    case
+      r1 <> 0.R & s1 <> 0.R & gcd(r2,s2,Amp) <> 1.R & (r1 * (s2/gcd(
+      r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))) <> 0.R;
       then
-A17:  add1(r1,r2,s1,s2,Amp) =
-      ((r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp)))) /
-      gcd(((r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp)))),
-      gcd(r2,s2,Amp),Amp) by A3,A5,Def16;
-A18:  add2(r1,r2,s1,s2,Amp) = (r2 * (s2/gcd(r2,s2,Amp))) /
-      gcd(((r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp)))),
-      gcd(r2,s2,Amp),Amp) by A3,A5,A16,Def17;
-A19:  gcd((r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))),
-      (r2 * (s2/gcd(r2,s2,Amp))),Amp)
-      = gcd((r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))),
-      gcd(r2,s2,Amp),Amp) by A2,A4,Th41;
-      gcd(r2,s2,Amp) <> 0.R by A2,Th34;
-      then gcd((r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))),
-      gcd(r2,s2,Amp),Amp) <> 0.R by Th34;
+A20:  add1(r1,r2,s1,s2,Amp) = ((r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd
+(r2,s2,Amp )))) / gcd(((r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))))
+, gcd(r2,s2,Amp),Amp) & add2(r1,r2,s1,s2,Amp) = (r2 * (s2/gcd(r2,s2,Amp))) /
+gcd(((r1 * ( s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp)))), gcd(r2,s2,Amp),
+      Amp) by A5,A6,A8,A10,Def16,Def17;
+      gcd(r2,s2,Amp) <> 0.R by A4,Th34;
       then
-A20:  gcd( ((r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp)))) /
-      gcd((r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))),
-      gcd(r2,s2,Amp),Amp), ((r2 * (s2/gcd(r2,s2,Amp)))) /
-      gcd((r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))),
-      gcd(r2,s2,Amp),Amp), Amp) = 1.R by A19,Th39;
-      reconsider r2,s2 as Element of Amp by A1,Def15;
-A21:  gcd(r2,s2,Amp) divides s2 by Def12;
-A22:  gcd(r2,s2,Amp) <> 0.R by A2,Th34;
+A21:  gcd((r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))), gcd(r2
+      ,s2,Amp),Amp) <> 0.R by Th34;
+      gcd((r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))), (r2 *
+(s2/gcd(r2,s2,Amp))),Amp) = gcd((r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,
+      s2,Amp))), gcd(r2,s2,Amp),Amp) by A4,A7,A9,Th41;
+      then
+A22:  gcd( ((r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp)))) /
+gcd((r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))), gcd(r2,s2,Amp),Amp
+), ((r2 * (s2/gcd(r2,s2,Amp)))) / gcd((r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/
+      gcd(r2,s2,Amp))), gcd(r2,s2,Amp),Amp), Amp) = 1.R by A21,Th39;
+      reconsider r2,s2 as Element of Amp by A2,A3,Def15;
+A23:  gcd(r2,s2,Amp) divides s2 by Def12;
+      reconsider z2 = gcd(((r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,
+      Amp)))), gcd(r2,s2,Amp),Amp) as Element of Amp by Def12;
+A24:  gcd(r2,s2,Amp) <> 0.R by A4,Th34;
+      then
+A25:  z2 <> 0.R by Th34;
       gcd(r2,s2,Amp) in Amp by Def12;
-
-then reconsider z3 = s2/gcd(r2,s2,Amp) as Element of Amp by A1,A21,A22,Th27;
+      then reconsider z3 = s2/gcd(r2,s2,Amp) as Element of Amp by A1,A23,A24,
+      Th27;
       r2 * z3 in Amp by A1,Def10;
       then reconsider z1 = r2 * (s2/gcd(r2,s2,Amp)) as Element of Amp;
-      reconsider z2 =
-      gcd(((r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp)))),
-      gcd(r2,s2,Amp),Amp) as Element of Amp by Def12;
-A23:  z2 divides z1
-      proof
-A24:    z2 divides gcd(r2,s2,Amp) by Def12;
-        gcd(r2,s2,Amp) divides r2 by Def12;
-        then z2 divides r2 by A24,Th2;
-        hence thesis by Th7;
-      end;
-A25:  z2 <> 0.R by A22,Th34;
+A26:  r2 * s2 <> 0.R by A4,A11,VECTSP_2:def 5;
+A27:  gcd(r2,s2,Amp) divides r2 * s2 by A23,Th7;
+      then z1 = (r2 * s2)/gcd(r2,s2,Amp) by A23,A24,Th11;
       then
-A26:  z1 / z2 in Amp by A1,A23,Th27;
-      z1 / z2 <> 0.R
-      proof
-A27:    r2 * s2 <> 0.R by A2,VECTSP_2:def 5;
-A28:    gcd(r2,s2,Amp) divides r2 * s2 by A21,Th7;
-        then z1 = (r2 * s2)/gcd(r2,s2,Amp) by A21,A22,Th11;
-        then z1 <> 0.R by A22,A27,A28,Th8;
-        hence thesis by A23,A25,Th8;
-      end;
-      hence thesis by A17,A18,A20,A26,Def15;
+A28:  z1 <> 0.R by A24,A26,A27,Th8;
+      z2 divides gcd(r2,s2,Amp) & gcd(r2,s2,Amp) divides r2 by Def12;
+      then
+A29:  z2 divides r2 by Th2;
+      then z2 divides z1 by Th7;
+      then
+A30:  z1 / z2 <> 0.R by A25,A28,Th8;
+      z1 / z2 in Amp by A1,A29,A25,Th7,Th27;
+      hence thesis by A20,A22,A30,Def15;
     end;
   end;
   hence thesis;
@@ -2311,186 +2336,201 @@ end;
 
 theorem
   for Amp being AmpleSet of R for r1,r2,s1,s2 being Element of R holds
-  (Amp is multiplicative & r1,r2 are_normalized_wrt Amp &
-  s1,s2 are_normalized_wrt Amp) implies add1(r1,r2,s1,s2,Amp) * (r2 * s2) =
-  add2(r1,r2,s1,s2,Amp) * ((r1 * s2) + (s1 * r2))
+r1,r2 are_normalized_wrt Amp & s1,s2 are_normalized_wrt Amp implies add1(r1,r2,
+  s1,s2,Amp) * (r2 * s2) = add2(r1,r2,s1,s2,Amp) * ((r1 * s2) + (s1 * r2))
 proof
   let Amp be AmpleSet of R;
   let r1,r2,s1,s2 be Element of R;
-  assume
-A1: Amp is multiplicative & r1,r2 are_normalized_wrt Amp &
-  s1,s2 are_normalized_wrt Amp;
-  then gcd(r1,r2,Amp) = 1.R & gcd(s1,s2,Amp) = 1.R &
-  s2 in Amp & r2 in Amp by Def15;
+  assume that
+A1: r1,r2 are_normalized_wrt Amp and
+A2: s1,s2 are_normalized_wrt Amp;
+  gcd(r1,r2,Amp) = 1.R by A1,Def15;
   then
-A2: r1,r2 are_co-prime & s1,s2 are_co-prime & r2 <> 0.R & s2 <> 0.R &
-  r2 = NF(r2,Amp) & s2 = NF(s2,Amp) by A1,Def9,Def14,Def15;
-  now per cases;
+A3: r1,r2 are_co-prime by Def14;
+  s2 in Amp by A2,Def15;
+  then
+A4: s2 = NF(s2,Amp) by Def9;
+  gcd(s1,s2,Amp) = 1.R by A2,Def15;
+  then
+A5: s1,s2 are_co-prime by Def14;
+  r2 in Amp by A1,Def15;
+  then
+A6: r2 = NF(r2,Amp) by Def9;
+A7: r2 <> 0.R by A1,Def15;
+  now
+    per cases;
     case
-A3:   r1 = 0.R;
+A8:   r1 = 0.R;
       then
-A4:   add1(r1,r2,s1,s2,Amp) = s1 by A2,Def16;
-      add2(r1,r2,s1,s2,Amp) = s2 by A2,A3,Def17;
-      then add2(r1,r2,s1,s2,Amp) * ((r1 * s2) + (s1 * r2))
-      = s2 * (0.R + (s1 * r2)) by A3,VECTSP_1:39
+A9:   add1(r1,r2,s1,s2,Amp) = s1 by A3,A5,A6,A4,Def16;
+      add2(r1,r2,s1,s2,Amp) = s2 by A3,A5,A6,A4,A8,Def17;
+      then
+      add2(r1,r2,s1,s2,Amp) * ((r1 * s2) + (s1 * r2)) = s2 * (0.R + (s1 *
+      r2)) by A8,VECTSP_1:39
         .= s2 * (s1 * r2) by RLVECT_1:10
-        .= add1(r1,r2,s1,s2,Amp) * (r2 * s2) by A4,GROUP_1:def 4;
+        .= add1(r1,r2,s1,s2,Amp) * (r2 * s2) by A9,GROUP_1:def 4;
       hence thesis;
     end;
     case
-A5:   s1 = 0.R;
+A10:  s1 = 0.R;
       then
-A6:   add1(r1,r2,s1,s2,Amp) = r1 by A2,Def16;
-      add2(r1,r2,s1,s2,Amp) = r2 by A2,A5,Def17;
-      then add2(r1,r2,s1,s2,Amp) * ((r1 * s2) + (s1 * r2))
-      = r2 * ((r1 * s2) + 0.R) by A5,VECTSP_1:39
+A11:  add1(r1,r2,s1,s2,Amp) = r1 by A3,A5,A6,A4,Def16;
+      add2(r1,r2,s1,s2,Amp) = r2 by A3,A5,A6,A4,A10,Def17;
+      then
+      add2(r1,r2,s1,s2,Amp) * ((r1 * s2) + (s1 * r2)) = r2 * ((r1 * s2) +
+      0.R) by A10,VECTSP_1:39
         .= r2 * (r1 * s2) by RLVECT_1:10
-        .= add1(r1,r2,s1,s2,Amp) * (r2 * s2) by A6,GROUP_1:def 4;
+        .= add1(r1,r2,s1,s2,Amp) * (r2 * s2) by A11,GROUP_1:def 4;
       hence thesis;
     end;
     case
-A7:   gcd(r2,s2,Amp) = 1.R;
-      then add2(r1,r2,s1,s2,Amp) = r2 * s2 by A2,Def17;
-      hence thesis by A2,A7,Def16;
+A12:  gcd(r2,s2,Amp) = 1.R;
+      then add2(r1,r2,s1,s2,Amp) = r2 * s2 by A3,A5,A6,A4,Def17;
+      hence thesis by A3,A5,A6,A4,A12,Def16;
     end;
     case
-A8:   (r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))) = 0.R;
-      then
-A9:   add1(r1,r2,s1,s2,Amp) = 0.R by A2,Def16;
-A10:  (r1 * s2) + (s1 * r2) = 0.R
+A13:  (r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))) = 0.R;
+A14:  (r1 * s2) + (s1 * r2) = 0.R
       proof
-A11:    gcd(r2,s2,Amp) <> 0.R by A2,Th34;
-A12:    gcd(r2,s2,Amp) divides s2 by Def12;
-A13:    gcd(r2,s2,Amp) divides r2 by Def12;
-A14:    gcd(r2,s2,Amp) divides r1 * s2 by A12,Th7;
-A15:    gcd(r2,s2,Amp) divides s1 * r2 by A13,Th7;
-A16:    0.R = (r1 * s2)/gcd(r2,s2,Amp) + (s1 * (r2/gcd(r2,s2,Amp)))
-        by A8,A11,A12,A14,Th11
-          .= (r1 * s2)/gcd(r2,s2,Amp) + (s1 * r2)/gcd(r2,s2,Amp)
-        by A11,A13,A15,Th11;
+A15:    gcd(r2,s2,Amp) divides r2 by Def12;
+        then
+A16:    gcd(r2,s2,Amp) divides s1 * r2 by Th7;
+A17:    gcd(r2,s2,Amp) divides s2 by Def12;
+        then consider f being Element of R such that
+A18:    gcd(r2,s2,Amp) * f = s2 by Def1;
+A19:    gcd(r2,s2,Amp) <> 0.R by A7,Th34;
         consider e being Element of R such that
-A17:    gcd(r2,s2,Amp) * e = r2 by A13,Def1;
-        consider f being Element of R such that
-A18:    gcd(r2,s2,Amp) * f = s2 by A12,Def1;
-        gcd(r2,s2,Amp) * ((e * s1)+(f * r1))
-        = (gcd(r2,s2,Amp) * (e * s1))+(gcd(r2,s2,Amp) * (f * r1))
-        by VECTSP_1:def 11
-          .= ((gcd(r2,s2,Amp) * e) * s1)+(gcd(r2,s2,Amp) * (f * r1))
-        by GROUP_1:def 4
-          .= (r1 * s2)+(s1 * r2) by A17,A18,GROUP_1:def 4;
+A20:    gcd(r2,s2,Amp) * e = r2 by A15,Def1;
+        gcd(r2,s2,Amp) * ((e * s1)+(f * r1)) = (gcd(r2,s2,Amp) * (e * s1)
+        )+(gcd(r2,s2,Amp) * (f * r1)) by VECTSP_1:def 11
+          .= ((gcd(r2,s2,Amp) * e) * s1)+(gcd(r2,s2,Amp) * (f * r1)) by
+        GROUP_1:def 4
+          .= (r1 * s2)+(s1 * r2) by A20,A18,GROUP_1:def 4;
         then
-A19:    gcd(r2,s2,Amp) divides (r1 * s2) + (s1 * r2) by Def1;
+A21:    gcd(r2,s2,Amp) divides (r1 * s2) + (s1 * r2) by Def1;
+A22:    gcd(r2,s2,Amp) divides r1 * s2 by A17,Th7;
+        then 0.R = (r1 * s2)/gcd(r2,s2,Amp) + (s1 * (r2/gcd(r2,s2,Amp))) by
+        A13,A19,A17,Th11
+          .= (r1 * s2)/gcd(r2,s2,Amp) + (s1 * r2)/gcd(r2,s2,Amp) by A19,A15,
+        A16,Th11;
         then
-A20:    0.R
-        = ((r1 * s2) + (s1 * r2)) / gcd(r2,s2,Amp) by A11,A14,A15,A16,Th12;
+A23:    0.R = ((r1 * s2) + (s1 * r2)) / gcd(r2,s2,Amp) by A19,A22,A16,A21,Th12;
         0.R = 0.R * gcd(r2,s2,Amp) by VECTSP_1:39
-          .= ((r1 * s2) + (s1 * r2)) by A11,A19,A20,Def4;
+          .= ((r1 * s2) + (s1 * r2)) by A19,A21,A23,Def4;
         hence thesis;
       end;
-      add1(r1,r2,s1,s2,Amp) * (r2 * s2) = 0.R by A9,VECTSP_1:39
-        .= add2(r1,r2,s1,s2,Amp) * ((r1 * s2) + (s1 * r2)) by A10,VECTSP_1:39;
+      add1(r1,r2,s1,s2,Amp) = 0.R by A3,A5,A6,A4,A13,Def16;
+      then add1(r1,r2,s1,s2,Amp) * (r2 * s2) = 0.R by VECTSP_1:39
+        .= add2(r1,r2,s1,s2,Amp) * ((r1 * s2) + (s1 * r2)) by A14,VECTSP_1:
+      39;
       hence thesis;
     end;
     case
-A21:  r1 <> 0.R & s1 <> 0.R & gcd(r2,s2,Amp) <> 1.R &
-      (r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))) <> 0.R;
-      then
-A22:  add1(r1,r2,s1,s2,Amp) =
-      ((r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp)))) /
-      gcd((r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))),
-      gcd(r2,s2,Amp),Amp) by A2,Def16;
-A23:  add2(r1,r2,s1,s2,Amp) = (r2 * (s2/gcd(r2,s2,Amp))) /
-      gcd((r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))),
-      gcd(r2,s2,Amp),Amp) by A2,A21,Def17;
-A24:  gcd(r2,s2,Amp) <> 0.R by A2,Th34;
+A24:  r1 <> 0.R & s1 <> 0.R & gcd(r2,s2,Amp) <> 1.R & (r1 * (s2/gcd(
+      r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))) <> 0.R;
 A25:  gcd(r2,s2,Amp) divides s2 by Def12;
-A26:  gcd(r2,s2,Amp) divides r2 by Def12;
-A27:  gcd(r2,s2,Amp) divides r1 * s2 by A25,Th7;
-A28:  gcd(r2,s2,Amp) divides s1 * r2 by A26,Th7;
-A29:  gcd(r2,s2,Amp) divides ((r1 * s2) * r2) by A27,Th7;
-A30:  gcd(r2,s2,Amp) divides ((s1 * r2) * r2) by A26,Th7;
-A31:  gcd(r2,s2,Amp) divides (((r1 * s2) * r2) * s2) by A29,Th7;
-A32:  gcd(r2,s2,Amp) divides (((s1 * r2) * r2) * s2) by A30,Th7;
-A33:  ((r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp)))) * (r2 * s2)
-      = ((r1 * (s2/gcd(r2,s2,Amp))) * (r2 * s2)) +
-      ((s1 * (r2/gcd(r2,s2,Amp))) * (r2 * s2)) by VECTSP_1:def 18
-        .= (((r1 * s2)/gcd(r2,s2,Amp)) * (r2 * s2)) +
-      ((s1 * (r2/gcd(r2,s2,Amp))) * (r2 * s2)) by A24,A25,A27,Th11
-        .= (((r1 * s2)/gcd(r2,s2,Amp)) * (r2 * s2)) +
-      (((s1 * r2)/gcd(r2,s2,Amp)) * (r2 * s2)) by A24,A26,A28,Th11
-        .= ((((r1 * s2)/gcd(r2,s2,Amp)) * r2) * s2) +
-      (((s1 * r2)/gcd(r2,s2,Amp)) * (r2 * s2)) by GROUP_1:def 4
-        .= ((((r1 * s2)/gcd(r2,s2,Amp)) * r2) * s2) +
-      ((((s1 * r2)/gcd(r2,s2,Amp)) * r2) * s2) by GROUP_1:def 4
-        .= ((((r1 * s2) * r2)/gcd(r2,s2,Amp)) * s2) +
-      ((((s1 * r2)/gcd(r2,s2,Amp)) * r2) * s2) by A24,A27,A29,Th11
-        .= ((((r1 * s2) * r2)/gcd(r2,s2,Amp)) * s2) +
-      ((((s1 * r2) * r2)/gcd(r2,s2,Amp)) * s2) by A24,A28,A30,Th11
-        .= ((((r1 * s2) * r2) * s2)/gcd(r2,s2,Amp)) +
-      ((((s1 * r2) * r2)/gcd(r2,s2,Amp)) * s2) by A24,A29,A31,Th11
-        .= ((((r1 * s2) * r2) * s2)/gcd(r2,s2,Amp)) +
-      ((((s1 * r2) * r2) * s2)/gcd(r2,s2,Amp)) by A24,A30,A32,Th11;
-A34:  gcd(r2,s2,Amp) divides (r2 * s2) by A26,Th7;
       then
-A35:  gcd(r2,s2,Amp) divides ((r2 * s2) * r1) by Th7;
-A36:  gcd(r2,s2,Amp) divides ((r2 * s2) * s1) by A34,Th7;
-A37:  gcd(r2,s2,Amp) divides (((r2 * s2) * r1) * s2) by A35,Th7;
-A38:  gcd(r2,s2,Amp) divides (((r2 * s2) * s1) * r2) by A36,Th7;
-A39:  (r2 * (s2/gcd(r2,s2,Amp))) * ((r1 * s2) + (s1 * r2))
-      = ((r2 * (s2/gcd(r2,s2,Amp))) * (r1 * s2)) +
-      ((r2 * (s2/gcd(r2,s2,Amp))) * (s1 * r2)) by VECTSP_1:def 11
-        .= (((r2 * (s2/gcd(r2,s2,Amp))) * r1) * s2) +
-      ((r2 * (s2/gcd(r2,s2,Amp))) * (s1 * r2)) by GROUP_1:def 4
-        .= (((r2 * (s2/gcd(r2,s2,Amp))) * r1) * s2) +
-      (((r2 * (s2/gcd(r2,s2,Amp))) * s1) * r2) by GROUP_1:def 4
-        .= ((((r2 * s2)/gcd(r2,s2,Amp)) * r1) * s2) +
-      (((r2 * (s2/gcd(r2,s2,Amp))) * s1) * r2) by A24,A25,A34,Th11
-        .= ((((r2 * s2)/gcd(r2,s2,Amp)) * r1) * s2) +
-      ((((r2 * s2)/gcd(r2,s2,Amp)) * s1) * r2) by A24,A25,A34,Th11
-        .= ((((r2 * s2) * r1)/gcd(r2,s2,Amp)) * s2) +
-      ((((r2 * s2)/gcd(r2,s2,Amp)) * s1) * r2) by A24,A34,A35,Th11
-        .= ((((r2 * s2) * r1)/gcd(r2,s2,Amp)) * s2) +
-      ((((r2 * s2) * s1)/gcd(r2,s2,Amp)) * r2) by A24,A34,A36,Th11
-        .= ((((r2 * s2) * r1) * s2)/gcd(r2,s2,Amp)) +
-      ((((r2 * s2) * s1)/gcd(r2,s2,Amp)) * r2) by A24,A35,A37,Th11
-        .= (((r1 * (s2 * r2)) * s2)/gcd(r2,s2,Amp)) +
-      ((((r2 * s2) * s1) * r2)/gcd(r2,s2,Amp)) by A24,A36,A38,Th11
-        .= ((((r1 * s2) * r2) * s2)/gcd(r2,s2,Amp)) +
-      ((((r2 * s2) * s1) * r2)/gcd(r2,s2,Amp)) by GROUP_1:def 4
-        .= ((((r1 * s2) * r2) * s2)/gcd(r2,s2,Amp)) +
-      ((s1 * ((r2 * s2) * r2))/gcd(r2,s2,Amp)) by GROUP_1:def 4
-        .= ((((r1 * s2) * r2) * s2)/gcd(r2,s2,Amp)) +
-      ((s1 * ((r2 * r2) * s2))/gcd(r2,s2,Amp)) by GROUP_1:def 4
-        .= ((((r1 * s2) * r2) * s2)/gcd(r2,s2,Amp)) +
-      (((s1 * (r2 * r2)) * s2)/gcd(r2,s2,Amp)) by GROUP_1:def 4
-        .= ((((r1 * s2) * r2) * s2)/gcd(r2,s2,Amp)) +
-      ((((s1 * r2) * r2) * s2)/gcd(r2,s2,Amp)) by GROUP_1:def 4;
-A40:  gcd((r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))),
-      gcd(r2,s2,Amp),Amp) <> 0.R by A24,Th34;
-A41:  gcd((r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))),
-      gcd(r2,s2,Amp),Amp) divides
-      ((r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp)))) by Def12;
+A26:  gcd(r2,s2,Amp) divides r1 * s2 by Th7;
       then
-A42:  gcd((r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))),
-      gcd(r2,s2,Amp),Amp) divides
-      ((r1*(s2/gcd(r2,s2,Amp)))+(s1 * (r2/gcd(r2,s2,Amp)))) * (r2*s2) by Th7;
-      gcd((r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))),
-      gcd(r2,s2,Amp),Amp) divides gcd(r2,s2,Amp) by Def12;
-      then gcd((r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))),
-      gcd(r2,s2,Amp),Amp) divides r2 by A26,Th2;
+A27:  gcd(r2,s2,Amp) divides ((r1 * s2) * r2) by Th7;
       then
-A43:  gcd((r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))),
-      gcd(r2,s2,Amp),Amp) divides (r2 * (s2/gcd(r2,s2,Amp))) by Th7;
+A28:  gcd(r2,s2,Amp) divides (((r1 * s2) * r2) * s2) by Th7;
+A29:  add1(r1,r2,s1,s2,Amp) = ((r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd
+(r2,s2,Amp)))) / gcd((r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))),
+      gcd(r2,s2,Amp),Amp) by A3,A5,A6,A4,A24,Def16;
+A30:  gcd(r2,s2,Amp) divides r2 by Def12;
       then
-A44:  gcd((r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))),
-      gcd(r2,s2,Amp),Amp) divides
-      (r2 * (s2/gcd(r2,s2,Amp))) * ((r1 * s2)+(s1 * r2)) by Th7;
-      add1(r1,r2,s1,s2,Amp) * (r2 * s2)
-      = (((r1 * (s2/gcd(r2,s2,Amp)))+(s1 * (r2/gcd(r2,s2,Amp)))) * (r2 * s2))
-      / gcd((r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))),
-      gcd(r2,s2,Amp),Amp) by A22,A40,A41,A42,Th11
-        .= add2(r1,r2,s1,s2,Amp) * ((r1 * s2) + (s1 * r2)) by A23,A33,A39,A40
-,A43,A44,Th11;
+A31:  gcd(r2,s2,Amp) divides s1 * r2 by Th7;
+      gcd((r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))), gcd(r2
+      ,s2,Amp),Amp) divides gcd(r2,s2,Amp) by Def12;
+      then
+      gcd((r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))), gcd(r2
+      ,s2,Amp),Amp) divides r2 by A30,Th2;
+      then
+A32:  gcd((r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))), gcd(r2
+      ,s2,Amp),Amp) divides (r2 * (s2/gcd(r2,s2,Amp))) by Th7;
+      then
+A33:  gcd((r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))), gcd(r2
+,s2,Amp),Amp) divides (r2 * (s2/gcd(r2,s2,Amp))) * ((r1 * s2)+(s1 * r2)) by
+      Th7;
+A34:  gcd(r2,s2,Amp) divides ((s1 * r2) * r2) by A30,Th7;
+      then
+A35:  gcd(r2,s2,Amp) divides (((s1 * r2) * r2) * s2) by Th7;
+A36:  gcd(r2,s2,Amp) divides (r2 * s2) by A30,Th7;
+      then
+A37:  gcd(r2,s2,Amp) divides ((r2 * s2) * r1) by Th7;
+      then
+A38:  gcd(r2,s2,Amp) divides (((r2 * s2) * r1) * s2) by Th7;
+A39:  gcd(r2,s2,Amp) divides ((r2 * s2) * s1) by A36,Th7;
+      then
+A40:  gcd(r2,s2,Amp) divides (((r2 * s2) * s1) * r2) by Th7;
+A41:  add2(r1,r2,s1,s2,Amp) = (r2 * (s2/gcd(r2,s2,Amp))) / gcd((r1 * (s2/
+gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))), gcd(r2,s2,Amp),Amp) by A3,A5,A6
+      ,A4,A24,Def17;
+A42:  gcd(r2,s2,Amp) <> 0.R by A7,Th34;
+      then
+A43:  gcd((r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))), gcd(r2
+      ,s2,Amp),Amp) <> 0.R by Th34;
+A44:  (r2 * (s2/gcd(r2,s2,Amp))) * ((r1 * s2) + (s1 * r2)) = ((r2 * (s2/
+gcd(r2,s2,Amp))) * (r1 * s2)) + ((r2 * (s2/gcd(r2,s2,Amp))) * (s1 * r2)) by
+      VECTSP_1:def 11
+        .= (((r2 * (s2/gcd(r2,s2,Amp))) * r1) * s2) + ((r2 * (s2/gcd(r2,s2,
+      Amp))) * (s1 * r2)) by GROUP_1:def 4
+        .= (((r2 * (s2/gcd(r2,s2,Amp))) * r1) * s2) + (((r2 * (s2/gcd(r2,s2,
+      Amp))) * s1) * r2) by GROUP_1:def 4
+        .= ((((r2 * s2)/gcd(r2,s2,Amp)) * r1) * s2) + (((r2 * (s2/gcd(r2,s2,
+      Amp))) * s1) * r2) by A42,A25,A36,Th11
+        .= ((((r2 * s2)/gcd(r2,s2,Amp)) * r1) * s2) + ((((r2 * s2)/gcd(r2,s2
+      ,Amp)) * s1) * r2) by A42,A25,A36,Th11
+        .= ((((r2 * s2) * r1)/gcd(r2,s2,Amp)) * s2) + ((((r2 * s2)/gcd(r2,s2
+      ,Amp)) * s1) * r2) by A42,A36,A37,Th11
+        .= ((((r2 * s2) * r1)/gcd(r2,s2,Amp)) * s2) + ((((r2 * s2) * s1)/gcd
+      (r2,s2,Amp)) * r2) by A42,A36,A39,Th11
+        .= ((((r2 * s2) * r1) * s2)/gcd(r2,s2,Amp)) + ((((r2 * s2) * s1)/gcd
+      (r2,s2,Amp)) * r2) by A42,A37,A38,Th11
+        .= (((r1 * (s2 * r2)) * s2)/gcd(r2,s2,Amp)) + ((((r2 * s2) * s1) *
+      r2)/gcd(r2,s2,Amp)) by A42,A39,A40,Th11
+        .= ((((r1 * s2) * r2) * s2)/gcd(r2,s2,Amp)) + ((((r2 * s2) * s1) *
+      r2)/gcd(r2,s2,Amp)) by GROUP_1:def 4
+        .= ((((r1 * s2) * r2) * s2)/gcd(r2,s2,Amp)) + ((s1 * ((r2 * s2) * r2
+      ))/gcd(r2,s2,Amp)) by GROUP_1:def 4
+        .= ((((r1 * s2) * r2) * s2)/gcd(r2,s2,Amp)) + ((s1 * ((r2 * r2) * s2
+      ))/gcd(r2,s2,Amp)) by GROUP_1:def 4
+        .= ((((r1 * s2) * r2) * s2)/gcd(r2,s2,Amp)) + (((s1 * (r2 * r2)) *
+      s2)/gcd(r2,s2,Amp)) by GROUP_1:def 4
+        .= ((((r1 * s2) * r2) * s2)/gcd(r2,s2,Amp)) + ((((s1 * r2) * r2) *
+      s2)/gcd(r2,s2,Amp)) by GROUP_1:def 4;
+A45:  ((r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp)))) * (r2 *
+s2) = ((r1 * (s2/gcd(r2,s2,Amp))) * (r2 * s2)) + ((s1 * (r2/gcd(r2,s2,Amp))) *
+      (r2 * s2)) by VECTSP_1:def 18
+        .= (((r1 * s2)/gcd(r2,s2,Amp)) * (r2 * s2)) + ((s1 * (r2/gcd(r2,s2,
+      Amp))) * (r2 * s2)) by A42,A25,A26,Th11
+        .= (((r1 * s2)/gcd(r2,s2,Amp)) * (r2 * s2)) + (((s1 * r2)/gcd(r2,s2,
+      Amp)) * (r2 * s2)) by A42,A30,A31,Th11
+        .= ((((r1 * s2)/gcd(r2,s2,Amp)) * r2) * s2) + (((s1 * r2)/gcd(r2,s2,
+      Amp)) * (r2 * s2)) by GROUP_1:def 4
+        .= ((((r1 * s2)/gcd(r2,s2,Amp)) * r2) * s2) + ((((s1 * r2)/gcd(r2,s2
+      ,Amp)) * r2) * s2) by GROUP_1:def 4
+        .= ((((r1 * s2) * r2)/gcd(r2,s2,Amp)) * s2) + ((((s1 * r2)/gcd(r2,s2
+      ,Amp)) * r2) * s2) by A42,A26,A27,Th11
+        .= ((((r1 * s2) * r2)/gcd(r2,s2,Amp)) * s2) + ((((s1 * r2) * r2)/gcd
+      (r2,s2,Amp)) * s2) by A42,A31,A34,Th11
+        .= ((((r1 * s2) * r2) * s2)/gcd(r2,s2,Amp)) + ((((s1 * r2) * r2)/gcd
+      (r2,s2,Amp)) * s2) by A42,A27,A28,Th11
+        .= ((((r1 * s2) * r2) * s2)/gcd(r2,s2,Amp)) + ((((s1 * r2) * r2) *
+      s2)/gcd(r2,s2,Amp)) by A42,A34,A35,Th11;
+A46:  gcd((r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))), gcd(r2
+,s2,Amp),Amp) divides ((r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))))
+      by Def12;
+      then
+      gcd((r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp))), gcd(r2
+,s2,Amp),Amp) divides ((r1*(s2/gcd(r2,s2,Amp)))+(s1 * (r2/gcd(r2,s2,Amp)))) * (
+      r2*s2) by Th7;
+      then add1(r1,r2,s1,s2,Amp) * (r2 * s2) = (((r1 * (s2/gcd(r2,s2,Amp)))+(
+s1 * (r2/gcd(r2,s2,Amp)))) * (r2 * s2)) / gcd((r1 * (s2/gcd(r2,s2,Amp))) + (s1
+      * (r2/gcd(r2,s2,Amp))), gcd(r2,s2,Amp),Amp) by A29,A43,A46,Th11
+        .= add2(r1,r2,s1,s2,Amp) * ((r1 * s2) + (s1 * r2)) by A41,A45,A44,
+      A43,A32,A33,Th11;
       hence thesis;
     end;
   end;
@@ -2505,106 +2545,128 @@ definition
   let r1,r2,s1,s2 be Element of R;
   func mult1(r1,r2,s1,s2,Amp) -> Element of R equals
   :Def18:
-  0.R if r1 = 0.R or s1 = 0.R, r1 * s1 if r2 = 1.R & s2 = 1.R,
-  (r1 * s1)/gcd(r1,s2,Amp) if s2 <> 0.R & r2 = 1.R,
-  (r1 * s1)/gcd(s1,r2,Amp) if r2 <> 0.R & s2 = 1.R
-  otherwise (r1/gcd(r1,s2,Amp)) * (s1/gcd(s1,r2,Amp));
+  0.R if r1 = 0.R
+or s1 = 0.R, r1 * s1 if r2 = 1.R & s2 = 1.R, (r1 * s1)/gcd(r1,s2,Amp) if s2 <>
+0.R & r2 = 1.R, (r1 * s1)/gcd(s1,r2,Amp) if r2 <> 0.R & s2 = 1.R otherwise (r1/
+  gcd(r1,s2,Amp)) * (s1/gcd(s1,r2,Amp));
   coherence;
   consistency
   proof
-A1: (r1 = 0.R or s1 = 0.R) & (r2 = 1.R & s2 = 1.R) implies
-    for z being Element of R holds z = 0.R iff z = r1 * s1
+A1: (r1 = 0.R or s1 = 0.R) & r2 <> 0.R & s2 = 1.R implies for z being
+    Element of R holds z = 0.R iff z = (r1 * s1)/gcd(s1,r2,Amp)
     proof
-      assume
-A2:   (r1 = 0.R or s1 = 0.R) & (r2 = 1.R & s2 = 1.R);
-      now per cases by A2;
-        case r1 = 0.R;
-          hence thesis by VECTSP_1:39;
-        end;
-        case s1 = 0.R;
-          hence thesis by VECTSP_1:39;
-        end;
-      end;
-      hence thesis;
-    end;
-A3: ((r1 = 0.R or s1 = 0.R) & (s2 <> 0.R & r2 = 1.R)) implies
-    for z being Element of R holds z = 0.R iff z = (r1 * s1)/gcd(r1,s2,Amp)
-    proof
-      assume
-A4:   (r1 = 0.R or s1 = 0.R) & s2 <> 0.R & r2 = 1.R;
+      set d = (r1 * s1)/gcd(s1,r2,Amp);
+      assume that
+A2:   r1 = 0.R or s1 = 0.R and
+A3:   r2 <> 0.R and
+      s2 = 1.R;
+A4:   gcd(s1,r2,Amp) <> 0.R by A3,Th34;
       let z be Element of R;
 A5:   r1 * s1 = 0.R
       proof
-        now per cases by A4;
-          case r1 = 0.R;
+        now
+          per cases by A2;
+          case
+            r1 = 0.R;
             hence thesis by VECTSP_1:39;
           end;
-          case s1 = 0.R;
-            hence thesis by VECTSP_1:39;
-          end;
-        end;
-        hence thesis;
-      end;
-      gcd(r1,s2,Amp) divides r1 by Def12;
-      then
-A6:   gcd(r1,s2,Amp) divides r1 * s1 by Th7;
-A7:   gcd(r1,s2,Amp) <> 0.R by A4,Th34;
-      set d = (r1 * s1)/gcd(r1,s2,Amp);
-      d * gcd(r1,s2,Amp) = 0.R by A5,A6,A7,Def4;
-      hence thesis by A7,VECTSP_2:def 5;
-    end;
-A8: ((r1 = 0.R or s1 = 0.R) & (r2 <> 0.R & s2 = 1.R)) implies
-    for z being Element of R holds z = 0.R iff z = (r1 * s1)/gcd(s1,r2,Amp)
-    proof
-      assume
-A9:   (r1 = 0.R or s1 = 0.R) & r2 <> 0.R & s2 = 1.R;
-      let z be Element of R;
-A10:  r1 * s1 = 0.R
-      proof
-        now per cases by A9;
-          case r1 = 0.R;
-            hence thesis by VECTSP_1:39;
-          end;
-          case s1 = 0.R;
+          case
+            s1 = 0.R;
             hence thesis by VECTSP_1:39;
           end;
         end;
         hence thesis;
       end;
       gcd(s1,r2,Amp) divides s1 by Def12;
-      then
-A11:  gcd(s1,r2,Amp) divides r1 * s1 by Th7;
-A12:  gcd(s1,r2,Amp) <> 0.R by A9,Th34;
-      set d = (r1 * s1)/gcd(s1,r2,Amp);
-      d * gcd(s1,r2,Amp) = 0.R by A10,A11,A12,Def4;
+      then gcd(s1,r2,Amp) divides r1 * s1 by Th7;
+      then d * gcd(s1,r2,Amp) = 0.R by A5,A4,Def4;
+      hence thesis by A4,VECTSP_2:def 5;
+    end;
+A6: s2 <> 0.R & r2 = 1.R & r2 <> 0.R & s2 = 1.R implies for z being
+Element of R holds z = (r1 * s1)/gcd(r1,s2,Amp) iff z = (r1 * s1)/gcd(s1,r2,Amp
+    )
+    proof
+      assume that
+      s2 <> 0.R and
+A7:   r2 = 1.R and
+      r2 <> 0.R and
+A8:   s2 = 1.R;
+      gcd(s1,r2,Amp) = 1.R by A7,Th33;
+      hence thesis by A8,Th33;
+    end;
+A9: (r1 = 0.R or s1 = 0.R) & s2 <> 0.R & r2 = 1.R implies for z being
+    Element of R holds z = 0.R iff z = (r1 * s1)/gcd(r1,s2,Amp)
+    proof
+      set d = (r1 * s1)/gcd(r1,s2,Amp);
+      assume that
+A10:  r1 = 0.R or s1 = 0.R and
+A11:  s2 <> 0.R and
+      r2 = 1.R;
+A12:  gcd(r1,s2,Amp) <> 0.R by A11,Th34;
+      let z be Element of R;
+A13:  r1 * s1 = 0.R
+      proof
+        now
+          per cases by A10;
+          case
+            r1 = 0.R;
+            hence thesis by VECTSP_1:39;
+          end;
+          case
+            s1 = 0.R;
+            hence thesis by VECTSP_1:39;
+          end;
+        end;
+        hence thesis;
+      end;
+      gcd(r1,s2,Amp) divides r1 by Def12;
+      then gcd(r1,s2,Amp) divides r1 * s1 by Th7;
+      then d * gcd(r1,s2,Amp) = 0.R by A13,A12,Def4;
       hence thesis by A12,VECTSP_2:def 5;
     end;
-A13: ((r2 = 1.R & s2 = 1.R) & (s2 <> 0.R & r2 = 1.R))
-    implies for z being Element of R
-    holds z = r1 * s1 iff z = (r1 * s1)/gcd(r1,s2,Amp)
+A14: r2 = 1.R & s2 = 1.R & r2 <> 0.R & s2 = 1.R implies for z being
+    Element of R holds z = r1 * s1 iff z = (r1 * s1)/gcd(s1,r2,Amp)
     proof
-      assume r2 = 1.R & s2 = 1.R & s2 <> 0.R & r2 = 1.R;
-      then gcd(r1,s2,Amp) = 1.R by Th33;
+      assume that
+A15:  r2 = 1.R and
+      s2 = 1.R and
+      r2 <> 0.R and
+      s2 = 1.R;
+      gcd(s1,r2,Amp) = 1.R by A15,Th33;
       hence thesis by Th10;
     end;
-A14: ((r2 = 1.R & s2 = 1.R) & (r2 <> 0.R & s2 = 1.R))
-    implies for z being Element of R
-    holds z = r1 * s1 iff z = (r1 * s1)/gcd(s1,r2,Amp)
+A16: (r1 = 0.R or s1 = 0.R) & r2 = 1.R & s2 = 1.R implies for z being
+    Element of R holds z = 0.R iff z = r1 * s1
     proof
-      assume r2 = 1.R & s2 = 1.R & r2 <> 0.R & s2 = 1.R;
-      then gcd(s1,r2,Amp) = 1.R by Th33;
+      assume that
+A17:  r1 = 0.R or s1 = 0.R and
+      r2 = 1.R and
+      s2 = 1.R;
+      now
+        per cases by A17;
+        case
+          r1 = 0.R;
+          hence thesis by VECTSP_1:39;
+        end;
+        case
+          s1 = 0.R;
+          hence thesis by VECTSP_1:39;
+        end;
+      end;
+      hence thesis;
+    end;
+    r2 = 1.R & s2 = 1.R & s2 <> 0.R & r2 = 1.R implies for z being
+    Element of R holds z = r1 * s1 iff z = (r1 * s1)/gcd(r1,s2,Amp)
+    proof
+      assume that
+      r2 = 1.R and
+A18:  s2 = 1.R and
+      s2 <> 0.R and
+      r2 = 1.R;
+      gcd(r1,s2,Amp) = 1.R by A18,Th33;
       hence thesis by Th10;
     end;
-    ((s2 <> 0.R & r2 = 1.R) & (r2 <> 0.R & s2 = 1.R))
-    implies for z being Element of R holds z = (r1 * s1)/gcd(r1,s2,Amp) iff
-    z = (r1 * s1)/gcd(s1,r2,Amp)
-    proof
-      assume
-A15:  s2 <> 0.R & r2 = 1.R & r2 <> 0.R & s2 = 1.R;
-      then gcd(s1,r2,Amp) = 1.R by Th33;
-      hence thesis by A15,Th33;
-    end;
-    hence thesis by A1,A3,A8,A13,A14;
+    hence thesis by A16,A9,A1,A14,A6;
   end;
 end;
 
@@ -2612,210 +2674,236 @@ definition
   let R be gcdDomain;
   let Amp be AmpleSet of R;
   let r1,r2,s1,s2 be Element of R;
-  assume
-A1: r1,r2 are_co-prime & s1,s2 are_co-prime &
-  r2 = NF(r2,Amp) & s2 = NF(s2,Amp);
+  assume that
+A1: r1,r2 are_co-prime and
+A2: s1,s2 are_co-prime and
+A3: r2 = NF(r2,Amp) and
+A4: s2 = NF(s2,Amp);
   func mult2(r1,r2,s1,s2,Amp) -> Element of R equals
   :Def19:
-  1.R if r1 = 0.R or s1 = 0.R, 1.R if r2 = 1.R & s2 = 1.R,
-  s2/gcd(r1,s2,Amp) if s2 <> 0.R & r2 = 1.R,
-  r2/gcd(s1,r2,Amp) if r2 <> 0.R & s2 = 1.R
-  otherwise (r2/gcd(s1,r2,Amp)) * (s2/gcd(r1,s2,Amp));
+  1.R if r1 = 0.R
+or s1 = 0.R, 1.R if r2 = 1.R & s2 = 1.R, s2/gcd(r1,s2,Amp) if s2 <> 0.R & r2 =
+1.R, r2/gcd(s1,r2,Amp) if r2 <> 0.R & s2 = 1.R otherwise (r2/gcd(s1,r2,Amp)) *
+  (s2/gcd(r1,s2,Amp));
   coherence;
   consistency
   proof
-A2: gcd(r1,r2,Amp) = 1.R & gcd(s1,s2,Amp) = 1.R by A1,Th44;
-A3: (r1 = 0.R or s1 = 0.R) & (s2 <> 0.R & r2 = 1.R)
-    implies for z being Element of R holds z = 1.R iff z = s2/gcd(r1,s2,Amp)
+A5: gcd(s1,s2,Amp) = 1.R by A2,Th44;
+A6: (r1 = 0.R or s1 = 0.R) & s2 <> 0.R & r2 = 1.R implies for z being
+    Element of R holds z = 1.R iff z = s2/gcd(r1,s2,Amp)
     proof
-      assume
-A4:   (r1 = 0.R or s1 = 0.R) & s2 <> 0.R & r2 = 1.R;
-      now per cases by A4;
-        case r1 = 0.R;
-          then gcd(r1,s2,Amp) = s2 by A1,Th31;
-          hence thesis by A4,Th9;
-        end;
-        case s1 = 0.R;
-          then
-A5:       1.R = s2 by A1,A2,Th31;
-          then
-A6:       gcd(r1,s2,Amp) = 1.R by Th33;
-          1.R <> 0.R;
-          hence thesis by A5,A6,Th9;
-        end;
-      end;
-      hence thesis;
-    end;
-A7: (r1 = 0.R or s1 = 0.R) & (r2 <> 0.R & s2 = 1.R)
-    implies for z being Element of R holds z = 1.R iff z = r2/gcd(s1,r2,Amp)
-    proof
-      assume
-A8:   (r1 = 0.R or s1 = 0.R) & r2 <> 0.R & s2 = 1.R;
-      now per cases by A8;
-        case s1 = 0.R;
-          then gcd(s1,r2,Amp) = r2 by A1,Th31;
+      assume that
+A7:   r1 = 0.R or s1 = 0.R and
+A8:   s2 <> 0.R and
+      r2 = 1.R;
+      now
+        per cases by A7;
+        case
+          r1 = 0.R;
+          then gcd(r1,s2,Amp) = s2 by A4,Th31;
           hence thesis by A8,Th9;
         end;
-        case r1 = 0.R;
-          then
-A9:       1.R = r2 by A1,A2,Th31;
-          then
-A10:      gcd(s1,r2,Amp) = 1.R by Th33;
-          1.R <> 0.R;
-          hence thesis by A9,A10,Th9;
+        case
+A9:       s1 = 0.R;
+A10:      1.R <> 0.R;
+A11:      1.R = s2 by A4,A5,A9,Th31;
+          then gcd(r1,s2,Amp) = 1.R by Th33;
+          hence thesis by A11,A10,Th9;
         end;
       end;
       hence thesis;
     end;
-A11: (r2 = 1.R & s2 = 1.R) & (s2 <> 0.R & r2 = 1.R)
-    implies for z being Element of R holds z = 1.R iff z = s2/gcd(r1,s2,Amp)
+A12: s2 <> 0.R & r2 = 1.R & r2 <> 0.R & s2 = 1.R implies for z being
+    Element of R holds z = s2/gcd(r1,s2,Amp) iff z = r2/gcd(s1,r2,Amp)
     proof
-      assume
-A12:  r2 = 1.R & s2 = 1.R & s2 <> 0.R & r2 = 1.R;
-      then gcd(r1,s2,Amp) = 1.R by Th33;
-      hence thesis by A12,Th9;
+      assume that
+      s2 <> 0.R and
+A13:  r2 = 1.R and
+      r2 <> 0.R and
+A14:  s2 = 1.R;
+      gcd(r1,s2,Amp) = 1.R by A14,Th33;
+      hence thesis by A13,A14,Th33;
     end;
-A13: (r2 = 1.R & s2 = 1.R) & (r2 <> 0.R & s2 = 1.R)
-    implies for z being Element of R holds z = 1.R iff z = r2/gcd(s1,r2,Amp)
+A15: gcd(r1,r2,Amp) = 1.R by A1,Th44;
+A16: (r1 = 0.R or s1 = 0.R) & r2 <> 0.R & s2 = 1.R implies for z being
+    Element of R holds z = 1.R iff z = r2/gcd(s1,r2,Amp)
     proof
-      assume
-A14:  r2 = 1.R & s2 = 1.R & r2 <> 0.R & s2 = 1.R;
-      then gcd(s1,r2,Amp) = 1.R by Th33;
-      hence thesis by A14,Th9;
+      assume that
+A17:  r1 = 0.R or s1 = 0.R and
+A18:  r2 <> 0.R and
+      s2 = 1.R;
+      now
+        per cases by A17;
+        case
+          s1 = 0.R;
+          then gcd(s1,r2,Amp) = r2 by A3,Th31;
+          hence thesis by A18,Th9;
+        end;
+        case
+A19:      r1 = 0.R;
+A20:      1.R <> 0.R;
+A21:      1.R = r2 by A3,A15,A19,Th31;
+          then gcd(s1,r2,Amp) = 1.R by Th33;
+          hence thesis by A21,A20,Th9;
+        end;
+      end;
+      hence thesis;
     end;
-    (s2 <> 0.R & r2 = 1.R) & (r2 <> 0.R & s2 = 1.R)
-    implies for z being Element of R
-    holds z = s2/gcd(r1,s2,Amp) iff z = r2/gcd(s1,r2,Amp)
+A22: r2 = 1.R & s2 = 1.R & r2 <> 0.R & s2 = 1.R implies for z being
+    Element of R holds z = 1.R iff z = r2/gcd(s1,r2,Amp)
     proof
-      assume
-A15:  s2 <> 0.R & r2 = 1.R & r2 <> 0.R & s2 = 1.R;
-      then gcd(r1,s2,Amp) = 1.R by Th33;
-      hence thesis by A15,Th33;
+      assume that
+A23:  r2 = 1.R and
+      s2 = 1.R and
+A24:  r2 <> 0.R and
+      s2 = 1.R;
+      gcd(s1,r2,Amp) = 1.R by A23,Th33;
+      hence thesis by A23,A24,Th9;
     end;
-    hence thesis by A3,A7,A11,A13;
+    r2 = 1.R & s2 = 1.R & s2 <> 0.R & r2 = 1.R implies for z being
+    Element of R holds z = 1.R iff z = s2/gcd(r1,s2,Amp)
+    proof
+      assume that
+      r2 = 1.R and
+A25:  s2 = 1.R and
+A26:  s2 <> 0.R and
+      r2 = 1.R;
+      gcd(r1,s2,Amp) = 1.R by A25,Th33;
+      hence thesis by A25,A26,Th9;
+    end;
+    hence thesis by A6,A16,A22,A12;
   end;
 end;
 
 theorem
   for Amp being AmpleSet of R for r1,r2,s1,s2 being Element of R holds
-  (Amp is multiplicative & r1,r2 are_normalized_wrt Amp &
-  s1,s2 are_normalized_wrt Amp) implies
-  mult1(r1,r2,s1,s2,Amp),mult2(r1,r2,s1,s2,Amp) are_normalized_wrt Amp
+Amp is multiplicative & r1,r2 are_normalized_wrt Amp & s1,s2 are_normalized_wrt
+  Amp implies mult1(r1,r2,s1,s2,Amp),mult2(r1,r2,s1,s2,Amp) are_normalized_wrt
+  Amp
 proof
   let Amp be AmpleSet of R;
   let r1,r2,s1,s2 be Element of R;
-  assume
-A1: Amp is multiplicative & r1,r2 are_normalized_wrt Amp &
-  s1,s2 are_normalized_wrt Amp;
+  assume that
+A1: Amp is multiplicative and
+A2: r1,r2 are_normalized_wrt Amp and
+A3: s1,s2 are_normalized_wrt Amp;
+A4: gcd(r1,r2,Amp) = 1.R by A2,Def15;
   then
-A2: gcd(r1,r2,Amp) = 1.R & gcd(s1,s2,Amp) = 1.R &
-  s2 in Amp & r2 in Amp by Def15;
+A5: r1,r2 are_co-prime by Def14;
+  s2 in Amp by A3,Def15;
   then
-A3: r1,r2 are_co-prime & s1,s2 are_co-prime & r2 <> 0.R & s2 <> 0.R &
-  r2 = NF(r2,Amp) & s2 = NF(s2,Amp) by A1,Def9,Def14,Def15;
+A6: s2 = NF(s2,Amp) by Def9;
+  r2 in Amp by A2,Def15;
   then
-A4: gcd(r1,s2,Amp) <> 0.R & gcd(s1,r2,Amp) <> 0.R by Th34;
-  now per cases;
-    case r1 = 0.R or s1 = 0.R;
+A7: r2 = NF(r2,Amp) by Def9;
+A8: r2 <> 0.R by A2,Def15;
+  then
+A9: gcd(s1,r2,Amp) <> 0.R by Th34;
+A10: gcd(s1,s2,Amp) = 1.R by A3,Def15;
+  then
+A11: s1,s2 are_co-prime by Def14;
+A12: s2 <> 0.R by A3,Def15;
+  then
+A13: gcd(r1,s2,Amp) <> 0.R by Th34;
+  now
+    per cases;
+    case
+A14:  r1 = 0.R or s1 = 0.R;
+A15:  1.R in Amp & 1.R <> 0.R by Th22;
+A16:  mult2(r1,r2,s1,s2,Amp) = 1.R by A5,A11,A7,A6,A14,Def19;
       then
-A5:   mult2(r1,r2,s1,s2,Amp) = 1.R by A3,Def19;
-      then
-A6:   gcd(mult1(r1,r2,s1,s2,Amp),mult2(r1,r2,s1,s2,Amp),Amp) = 1.R by Th33;
-A7:   1.R in Amp by Th22;
-      1.R <> 0.R;
-      hence thesis by A5,A6,A7,Def15;
-    end;
-    case r2 = 1.R & s2 = 1.R;
-      then
-A8:   mult2(r1,r2,s1,s2,Amp) = 1.R by A3,Def19;
-      then
-A9:   gcd(mult1(r1,r2,s1,s2,Amp),mult2(r1,r2,s1,s2,Amp),Amp) = 1.R by Th33;
-A10:  1.R in Amp by Th22;
-      1.R <> 0.R;
-      hence thesis by A8,A9,A10,Def15;
+      gcd(mult1(r1,r2,s1,s2,Amp),mult2(r1,r2,s1,s2,Amp),Amp) = 1.R by Th33;
+      hence thesis by A16,A15,Def15;
     end;
     case
-A11:  s2 <> 0.R & r2 = 1.R;
+A17:  r2 = 1.R & s2 = 1.R;
+A18:  1.R in Amp & 1.R <> 0.R by Th22;
+A19:  mult2(r1,r2,s1,s2,Amp) = 1.R by A5,A11,A7,A17,Def19;
       then
-A12:  mult1(r1,r2,s1,s2,Amp) = (r1 * s1)/gcd(r1,s2,Amp) by Def18;
-A13:  mult2(r1,r2,s1,s2,Amp) = s2/gcd(r1,s2,Amp) by A3,A11,Def19;
-A14:  gcd(s1,r2,Amp) = 1.R by A11,Th33;
+      gcd(mult1(r1,r2,s1,s2,Amp),mult2(r1,r2,s1,s2,Amp),Amp) = 1.R by Th33;
+      hence thesis by A19,A18,Def15;
+    end;
+    case
+A20:  s2 <> 0.R & r2 = 1.R;
       then
-A15:  r2/gcd(s1,r2,Amp) = 1.R by A11,Th9;
-A16:  gcd(r1,s2,Amp) divides r1 by Def12;
+A21:  gcd(s1,r2,Amp) = 1.R by Th33;
+      then r2/gcd(s1,r2,Amp) = 1.R by A20,Th9;
+      then
+A22:  s2/gcd(r1,s2,Amp) = (s2/gcd(r1,s2,Amp)) * (r2/gcd(s1,r2,Amp)) by
+      VECTSP_1:def 13;
+A23:  gcd(r1,s2,Amp) divides r1 by Def12;
       then gcd(r1,s2,Amp) divides (r1 * s1) by Th7;
       then
-A17:  (r1 * s1)/gcd(r1,s2,Amp) = (r1/gcd(r1,s2,Amp)) * s1 by A4,A16,Th11
-        .= (r1/gcd(r1,s2,Amp)) * (s1/gcd(s1,r2,Amp)) by A14,Th10;
-      s2/gcd(r1,s2,Amp)
-      = (s2/gcd(r1,s2,Amp)) * (r2/gcd(s1,r2,Amp)) by A15,VECTSP_1:def 13;
-      then
-A18:  gcd(mult1(r1,r2,s1,s2,Amp),mult2(r1,r2,s1,s2,Amp),Amp)
-      = 1.R by A2,A3,A12,A13,A17,Th42;
-A19:  gcd(r1,s2,Amp) divides s2 by Def12;
-A20:  gcd(r1,s2,Amp) <> 0.R by A3,Th34;
-      then
-A21:  s2/gcd(r1,s2,Amp) <> 0.R by A3,A19,Th8;
+A24:  (r1 * s1)/gcd(r1,s2,Amp) = (r1/gcd(r1,s2,Amp)) * s1 by A13,A23,
+      Th11
+        .= (r1/gcd(r1,s2,Amp)) * (s1/gcd(s1,r2,Amp)) by A21,Th10;
+A25:  mult2(r1,r2,s1,s2,Amp) = s2/gcd(r1,s2,Amp) by A5,A11,A7,A6,A20,
+      Def19;
       reconsider zz = gcd(r1,s2,Amp) as Element of Amp by Def12;
-      reconsider s2 as Element of Amp by A1,Def15;
-      s2/zz in Amp by A1,A19,A20,Th27;
-      hence thesis by A13,A18,A21,Def15;
+A26:  gcd(r1,s2,Amp) divides s2 & gcd(r1,s2,Amp) <> 0.R by A12,Def12,Th34;
+      then
+A27:  s2/gcd(r1,s2,Amp) <> 0.R by A12,Th8;
+      mult1(r1,r2,s1,s2,Amp) = (r1 * s1)/gcd(r1,s2,Amp) by A20,Def18;
+      then
+A28:  gcd(mult1(r1,r2,s1,s2,Amp),mult2(r1,r2,s1,s2,Amp),Amp) = 1.R by A4,
+      A10,A8,A12,A25,A24,A22,Th42;
+      reconsider s2 as Element of Amp by A3,Def15;
+      s2/zz in Amp by A1,A26,Th27;
+      hence thesis by A25,A28,A27,Def15;
     end;
     case
-A22:  r2 <> 0.R & s2 = 1.R;
+A29:  r2 <> 0.R & s2 = 1.R;
       then
-A23:  mult1(r1,r2,s1,s2,Amp) = (r1 * s1)/gcd(s1,r2,Amp) by Def18;
-A24:  mult2(r1,r2,s1,s2,Amp) = r2/gcd(s1,r2,Amp) by A3,A22,Def19;
-A25:  gcd(r1,s2,Amp) = 1.R by A22,Th33;
+A30:  gcd(r1,s2,Amp) = 1.R by Th33;
+      then s2/gcd(r1,s2,Amp) = 1.R by A29,Th9;
       then
-A26:  s2/gcd(r1,s2,Amp) = 1.R by A22,Th9;
-A27:  gcd(s1,r2,Amp) divides s1 by Def12;
+A31:  r2/gcd(s1,r2,Amp) = (r2/gcd(s1,r2,Amp)) * (s2/gcd(r1,s2,Amp)) by
+      VECTSP_1:def 13;
+A32:  gcd(s1,r2,Amp) divides s1 by Def12;
       then gcd(s1,r2,Amp) divides (r1 * s1) by Th7;
       then
-A28:  (r1 * s1)/gcd(s1,r2,Amp) = r1 * (s1/gcd(s1,r2,Amp)) by A4,A27,Th11
-        .= (r1/gcd(r1,s2,Amp)) * (s1/gcd(s1,r2,Amp)) by A25,Th10;
-      r2/gcd(s1,r2,Amp)
-      = (r2/gcd(s1,r2,Amp)) * (s2/gcd(r1,s2,Amp)) by A26,VECTSP_1:def 13;
-      then
-A29:  gcd(mult1(r1,r2,s1,s2,Amp),mult2(r1,r2,s1,s2,Amp),Amp)
-      = 1.R by A2,A3,A23,A24,A28,Th42;
-A30:  gcd(s1,r2,Amp) divides r2 by Def12;
-A31:  gcd(s1,r2,Amp) <> 0.R by A3,Th34;
-      then
-A32:  r2/gcd(s1,r2,Amp) <> 0.R by A3,A30,Th8;
+A33:  (r1 * s1)/gcd(s1,r2,Amp) = r1 * (s1/gcd(s1,r2,Amp)) by A9,A32,
+      Th11
+        .= (r1/gcd(r1,s2,Amp)) * (s1/gcd(s1,r2,Amp)) by A30,Th10;
+A34:  mult2(r1,r2,s1,s2,Amp) = r2/gcd(s1,r2,Amp) by A5,A11,A7,A6,A29,
+      Def19;
       reconsider zz = gcd(s1,r2,Amp) as Element of Amp by Def12;
-      reconsider r2 as Element of Amp by A1,Def15;
-      r2/zz in Amp by A1,A30,A31,Th27;
-      hence thesis by A24,A29,A32,Def15;
+A35:  gcd(s1,r2,Amp) divides r2 & gcd(s1,r2,Amp) <> 0.R by A8,Def12,Th34;
+      then
+A36:  r2/gcd(s1,r2,Amp) <> 0.R by A8,Th8;
+      mult1(r1,r2,s1,s2,Amp) = (r1 * s1)/gcd(s1,r2,Amp) by A29,Def18;
+      then
+A37:  gcd(mult1(r1,r2,s1,s2,Amp),mult2(r1,r2,s1,s2,Amp),Amp) = 1.R by A4,
+      A10,A8,A12,A34,A33,A31,Th42;
+      reconsider r2 as Element of Amp by A2,Def15;
+      r2/zz in Amp by A1,A35,Th27;
+      hence thesis by A34,A37,A36,Def15;
     end;
     case
-A33:  not(r1 = 0.R or s1 = 0.R) & not(r2 = 1.R & s2 = 1.R) &
-      not(s2 <> 0.R & r2 = 1.R) & not(r2 <> 0.R & s2 = 1.R);
-      then
-A34:  mult1(r1,r2,s1,s2,Amp) = (r1/gcd(r1,s2,Amp)) * (s1/gcd(s1,r2, Amp))
-      by Def18;
-A35:  mult2(r1,r2,s1,s2,Amp) = (r2/gcd(s1,r2,Amp)) * (s2/gcd(r1,s2,Amp))
-      by A3,A33,Def19;
-      then
-A36:  gcd(mult1(r1,r2,s1,s2,Amp),mult2(r1,r2,s1,s2,Amp),Amp)
-      = 1.R by A2,A3,A34,Th42;
-A37:  gcd(r1,s2,Amp) divides s2 by Def12;
-A38:  gcd(r1,s2,Amp) <> 0.R by A3,Th34;
-      then
-A39:  s2/gcd(r1,s2,Amp) <> 0.R by A3,A37,Th8;
-      reconsider z1 = gcd(r1,s2,Amp) as Element of Amp by Def12;
-      reconsider s2 as Element of Amp by A1,Def15;
-A40:  gcd(s1,r2,Amp) divides r2 by Def12;
-A41:  gcd(s1,r2,Amp) <> 0.R by A3,Th34;
-      then
-A42:  r2/gcd(s1,r2,Amp) <> 0.R by A3,A40,Th8;
+A38:  not(r1 = 0.R or s1 = 0.R) & not(r2 = 1.R & s2 = 1.R) & not(s2
+      <> 0.R & r2 = 1.R) & not(r2 <> 0.R & s2 = 1.R);
       reconsider z2 = gcd(s1,r2,Amp) as Element of Amp by Def12;
-      reconsider r2 as Element of Amp by A1,Def15;
-      reconsider u = s2/z1 as Element of Amp by A1,A37,A38,Th27;
-      reconsider v = r2/z2 as Element of Amp by A1,A40,A41,Th27;
-A43:  v * u in Amp by A1,Def10;
-      v * u <> 0.R by A39,A42,VECTSP_2:def 5;
-      hence thesis by A35,A36,A43,Def15;
+      reconsider z1 = gcd(r1,s2,Amp) as Element of Amp by Def12;
+A39:  gcd(r1,s2,Amp) divides s2 & gcd(r1,s2,Amp) <> 0.R by A12,Def12,Th34;
+      then
+A40:  s2/gcd(r1,s2,Amp) <> 0.R by A12,Th8;
+A41:  mult2(r1,r2,s1,s2,Amp) = (r2/gcd(s1,r2,Amp)) * (s2/gcd(r1,s2,Amp))
+      by A5,A11,A7,A6,A38,Def19;
+      mult1(r1,r2,s1,s2,Amp) = (r1/gcd(r1,s2,Amp)) * (s1/gcd(s1,r2, Amp))
+      by A38,Def18;
+      then
+A42:  gcd(mult1(r1,r2,s1,s2,Amp),mult2(r1,r2,s1,s2,Amp),Amp) = 1.R by A4,
+      A10,A8,A12,A41,Th42;
+A43:  gcd(s1,r2,Amp) divides r2 & gcd(s1,r2,Amp) <> 0.R by A8,Def12,Th34;
+      then
+A44:  r2/gcd(s1,r2,Amp) <> 0.R by A8,Th8;
+      reconsider s2 as Element of Amp by A3,Def15;
+      reconsider u = s2/z1 as Element of Amp by A1,A39,Th27;
+      reconsider r2 as Element of Amp by A2,Def15;
+      reconsider v = r2/z2 as Element of Amp by A1,A43,Th27;
+A45:  v * u <> 0.R by A40,A44,VECTSP_2:def 5;
+      v * u in Amp by A1,Def10;
+      hence thesis by A41,A42,A45,Def15;
     end;
   end;
   hence thesis;
@@ -2823,148 +2911,160 @@ end;
 
 theorem
   for Amp being AmpleSet of R for r1,r2,s1,s2 being Element of R holds
-  (Amp is multiplicative & r1,r2 are_normalized_wrt Amp &
-  s1,s2 are_normalized_wrt Amp) implies mult1(r1,r2,s1,s2,Amp) * (r2 * s2) =
-  mult2(r1,r2,s1,s2,Amp) * (r1 * s1)
+r1,r2 are_normalized_wrt Amp & s1,s2 are_normalized_wrt Amp implies mult1(r1,r2
+  ,s1,s2,Amp) * (r2 * s2) = mult2(r1,r2,s1,s2,Amp) * (r1 * s1)
 proof
   let Amp be AmpleSet of R;
   let r1,r2,s1,s2 be Element of R;
-  assume
-A1: Amp is multiplicative & r1,r2 are_normalized_wrt Amp &
-  s1,s2 are_normalized_wrt Amp;
-  then gcd(r1,r2,Amp) = 1.R & gcd(s1,s2,Amp) = 1.R &
-  s2 in Amp & r2 in Amp by Def15;
+  assume that
+A1: r1,r2 are_normalized_wrt Amp and
+A2: s1,s2 are_normalized_wrt Amp;
+  gcd(r1,r2,Amp) = 1.R by A1,Def15;
   then
-A2: r1,r2 are_co-prime & s1,s2 are_co-prime & r2 <> 0.R & s2 <> 0.R &
-  r2 = NF(r2,Amp) & s2 = NF(s2,Amp) by A1,Def9,Def14,Def15;
+A3: r1,r2 are_co-prime by Def14;
+  s2 <> 0.R by A2,Def15;
   then
-A3: gcd(r1,s2,Amp) <> 0.R & gcd(s1,r2,Amp) <> 0.R by Th34;
-  now per cases;
+A4: gcd(r1,s2,Amp) <> 0.R by Th34;
+  r2 in Amp by A1,Def15;
+  then
+A5: r2 = NF(r2,Amp) by Def9;
+  gcd(s1,s2,Amp) = 1.R by A2,Def15;
+  then
+A6: s1,s2 are_co-prime by Def14;
+  r2 <> 0.R by A1,Def15;
+  then
+A7: gcd(s1,r2,Amp) <> 0.R by Th34;
+  s2 in Amp by A2,Def15;
+  then
+A8: s2 = NF(s2,Amp) by Def9;
+  now
+    per cases;
     case
-A4:   r1 = 0.R or s1 = 0.R;
+A9:   r1 = 0.R or s1 = 0.R;
       then
-A5:   mult1(r1,r2,s1,s2,Amp) = 0.R by Def18;
-      now per cases by A4;
-        case r1 = 0.R;
-          then mult2(r1,r2,s1,s2,Amp) * (r1 * s1)
-          = mult2(r1,r2,s1,s2,Amp) * 0.R by VECTSP_1:39
+A10:  mult1(r1,r2,s1,s2,Amp) = 0.R by Def18;
+      now
+        per cases by A9;
+        case
+          r1 = 0.R;
+          then mult2(r1,r2,s1,s2,Amp) * (r1 * s1) = mult2(r1,r2,s1,s2,Amp) *
+          0.R by VECTSP_1:39
             .= 0.R by VECTSP_1:39;
-          hence thesis by A5,VECTSP_1:39;
+          hence thesis by A10,VECTSP_1:39;
         end;
-        case s1 = 0.R;
-          then mult2(r1,r2,s1,s2,Amp) * (r1 * s1)
-          = mult2(r1,r2,s1,s2,Amp) * 0.R by VECTSP_1:39
+        case
+          s1 = 0.R;
+          then mult2(r1,r2,s1,s2,Amp) * (r1 * s1) = mult2(r1,r2,s1,s2,Amp) *
+          0.R by VECTSP_1:39
             .= 0.R by VECTSP_1:39;
-          hence thesis by A5,VECTSP_1:39;
+          hence thesis by A10,VECTSP_1:39;
         end;
       end;
       hence thesis;
     end;
     case
-A6:   r2 = 1.R & s2 = 1.R;
-      then
-A7:   mult1(r1,r2,s1,s2,Amp) = r1 * s1 by Def18;
-      mult2(r1,r2,s1,s2,Amp) = 1.R by A2,A6,Def19;
-      hence thesis by A6,A7,VECTSP_1:def 13;
+A11:  r2 = 1.R & s2 = 1.R;
+      then mult1(r1,r2,s1,s2,Amp) = r1 * s1 & mult2(r1,r2,s1,s2,Amp) = 1.R by
+      A3,A6,A5,Def18,Def19;
+      hence thesis by A11,VECTSP_1:def 13;
     end;
     case
-A8:   s2 <> 0.R & r2 = 1.R;
-      then
-A9:   mult2(r1,r2,s1,s2,Amp) = s2/gcd(r1,s2,Amp) by A2,Def19;
+A12:  s2 <> 0.R & r2 = 1.R;
       gcd(r1,s2,Amp) divides r1 by Def12;
       then
-A10:  gcd(r1,s2,Amp) divides (r1 * s1) by Th7;
+A13:  gcd(r1,s2,Amp) divides (r1 * s1) by Th7;
       then
-A11:  gcd(r1,s2,Amp) divides (r1 * s1) * s2 by Th7;
-A12:  ((r1 * s1)/gcd(r1,s2,Amp)) * (r2 * s2)
-      = ((r1 * s1)/gcd(r1,s2,Amp)) * s2 by A8,VECTSP_1:def 19
-        .= ((r1 * s1) * s2)/gcd(r1,s2,Amp) by A3,A10,A11,Th11;
-A13:  gcd(r1,s2,Amp) divides s2 by Def12;
+A14:  gcd(r1,s2,Amp) divides (r1 * s1) * s2 by Th7;
+A15:  ((r1 * s1)/gcd(r1,s2,Amp)) * (r2 * s2) = ((r1 * s1)/gcd(r1,s2,Amp))
+      * s2 by A12,VECTSP_1:def 19
+        .= ((r1 * s1) * s2)/gcd(r1,s2,Amp) by A4,A13,A14,Th11;
+A16:  mult2(r1,r2,s1,s2,Amp) = s2/gcd(r1,s2,Amp) by A3,A6,A5,A8,A12,
+      Def19;
+A17:  gcd(r1,s2,Amp) divides s2 by Def12;
       then
-A14:  gcd(r1,s2,Amp) divides s2 * r1 by Th7;
+A18:  gcd(r1,s2,Amp) divides s2 * r1 by Th7;
       then
-A15:  gcd(r1,s2,Amp) divides (s2 * r1) * s1 by Th7;
-      (s2/gcd(r1,s2,Amp)) * (r1 * s1)
-      = ((s2/gcd(r1,s2,Amp)) * r1) * s1 by GROUP_1:def 4
-        .= ((s2 * r1)/gcd(r1,s2,Amp)) * s1 by A3,A13,A14,Th11
-        .= ((s2 * r1) * s1)/gcd(r1,s2,Amp) by A3,A14,A15,Th11
+A19:  gcd(r1,s2,Amp) divides (s2 * r1) * s1 by Th7;
+      (s2/gcd(r1,s2,Amp)) * (r1 * s1) = ((s2/gcd(r1,s2,Amp)) * r1) * s1
+      by GROUP_1:def 4
+        .= ((s2 * r1)/gcd(r1,s2,Amp)) * s1 by A4,A17,A18,Th11
+        .= ((s2 * r1) * s1)/gcd(r1,s2,Amp) by A4,A18,A19,Th11
         .= ((r1 * s1) * s2)/gcd(r1,s2,Amp) by GROUP_1:def 4;
-      hence thesis by A8,A9,A12,Def18;
+      hence thesis by A12,A16,A15,Def18;
     end;
     case
-A16:  r2 <> 0.R & s2 = 1.R;
-      then
-A17:  mult2(r1,r2,s1,s2,Amp) = r2/gcd(s1,r2,Amp) by A2,Def19;
+A20:  r2 <> 0.R & s2 = 1.R;
       gcd(s1,r2,Amp) divides s1 by Def12;
       then
-A18:  gcd(s1,r2,Amp) divides (s1 * r1) by Th7;
+A21:  gcd(s1,r2,Amp) divides (s1 * r1) by Th7;
       then
-A19:  gcd(s1,r2,Amp) divides (s1 * r1) * r2 by Th7;
-A20:  ((r1 * s1)/gcd(s1,r2,Amp)) * (r2 * s2)
-      = ((r1 * s1)/gcd(s1,r2,Amp)) * r2 by A16,VECTSP_1:def 13
-        .= ((r1 * s1) * r2)/gcd(s1,r2,Amp) by A3,A18,A19,Th11;
-A21:  gcd(s1,r2,Amp) divides r2 by Def12;
+A22:  gcd(s1,r2,Amp) divides (s1 * r1) * r2 by Th7;
+A23:  ((r1 * s1)/gcd(s1,r2,Amp)) * (r2 * s2) = ((r1 * s1)/gcd(s1,r2,Amp))
+      * r2 by A20,VECTSP_1:def 13
+        .= ((r1 * s1) * r2)/gcd(s1,r2,Amp) by A7,A21,A22,Th11;
+A24:  mult2(r1,r2,s1,s2,Amp) = r2/gcd(s1,r2,Amp) by A3,A6,A5,A8,A20,
+      Def19;
+A25:  gcd(s1,r2,Amp) divides r2 by Def12;
       then
-A22:  gcd(s1,r2,Amp) divides r2 * r1 by Th7;
+A26:  gcd(s1,r2,Amp) divides r2 * r1 by Th7;
       then
-A23:  gcd(s1,r2,Amp) divides (r2 * r1) * s1 by Th7;
-      (r2/gcd(s1,r2,Amp)) * (r1 * s1)
-      = ((r2/gcd(s1,r2,Amp)) * r1) * s1 by GROUP_1:def 4
-        .= ((r2 * r1)/gcd(s1,r2,Amp)) * s1 by A3,A21,A22,Th11
-        .= ((r2 * r1) * s1)/gcd(s1,r2,Amp) by A3,A22,A23,Th11
+A27:  gcd(s1,r2,Amp) divides (r2 * r1) * s1 by Th7;
+      (r2/gcd(s1,r2,Amp)) * (r1 * s1) = ((r2/gcd(s1,r2,Amp)) * r1) * s1
+      by GROUP_1:def 4
+        .= ((r2 * r1)/gcd(s1,r2,Amp)) * s1 by A7,A25,A26,Th11
+        .= ((r2 * r1) * s1)/gcd(s1,r2,Amp) by A7,A26,A27,Th11
         .= ((r1 * s1) * r2)/gcd(s1,r2,Amp) by GROUP_1:def 4;
-      hence thesis by A16,A17,A20,Def18;
+      hence thesis by A20,A24,A23,Def18;
     end;
     case
-A24:  not(r1 = 0.R or s1 = 0.R) & not(r2 = 1.R & s2 = 1.R) &
-      not(s2 <> 0.R & r2 = 1.R) & not(r2 <> 0.R & s2 = 1.R);
+A28:  not(r1 = 0.R or s1 = 0.R) & not(r2 = 1.R & s2 = 1.R) & not(s2
+      <> 0.R & r2 = 1.R) & not(r2 <> 0.R & s2 = 1.R);
+A29:  gcd(s1,r2,Amp) divides r2 & gcd(r1,s2,Amp) divides s2 by Def12;
       then
-A25:  mult2(r1,r2,s1,s2,Amp) =
-      (r2/gcd(s1,r2,Amp)) * (s2/gcd(r1,s2,Amp)) by A2,Def19;
-A26:  gcd(r1,s2,Amp) divides r1 by Def12;
-A27:  gcd(s1,r2,Amp) divides s1 by Def12;
+A30:  (gcd(s1,r2,Amp) * gcd(r1,s2,Amp)) divides r2 * s2 by Th3;
       then
-A28:  (gcd(r1,s2,Amp) *gcd(s1,r2,Amp)) divides r1 * s1 by A26,Th3;
+A31:  (gcd(s1,r2,Amp) * gcd(r1,s2,Amp)) divides (r2 * s2) * r1 by
+      Th7;
       then
-A29:  (gcd(r1,s2,Amp) * gcd(s1,r2,Amp)) divides (r1 * s1) * r2 by Th7;
+A32:  (gcd(s1,r2,Amp) * gcd(r1,s2,Amp)) divides ((r2 * s2) * r1) * s1 by
+      Th7;
+A33:  gcd(r1,s2,Amp) divides r1 & gcd(s1,r2,Amp) divides s1 by Def12;
       then
-A30:  (gcd(r1,s2,Amp) * gcd(s1,r2,Amp)) divides ((r1 * s1) * r2) * s2 by Th7;
-A31:  (gcd(r1,s2,Amp) * gcd(s1,r2,Amp)) <> 0.R by A3,VECTSP_2:def 5;
-A32:  ((r1/gcd(r1,s2,Amp)) * (s1/gcd(s1,r2,Amp))) * (r2 * s2)
-      = ((r1 * s1)/(gcd(r1,s2,Amp) * gcd(s1,r2,Amp))) * (r2 * s2)
-      by A3,A26,A27,Th14
-        .= (((r1 * s1)/(gcd(r1,s2,Amp) * gcd(s1,r2,Amp))) * r2) * s2
-      by GROUP_1:def 4
-        .= (((r1 * s1) * r2)/(gcd(r1,s2,Amp) * gcd(s1,r2,Amp))) * s2
-      by A28,A29,A31,Th11
-        .= (((r1 * s1) * r2) * s2)/(gcd(r1,s2,Amp) * gcd(s1,r2,Amp))
-      by A29,A30,A31,Th11;
-A33:  gcd(s1,r2,Amp) divides r2 by Def12;
-A34:  gcd(r1,s2,Amp) divides s2 by Def12;
+A34:  (gcd(r1,s2,Amp) *gcd(s1,r2,Amp)) divides r1 * s1 by Th3;
       then
-A35:  (gcd(s1,r2,Amp) * gcd(r1,s2,Amp)) divides r2 * s2 by A33,Th3;
+A35:  (gcd(r1,s2,Amp) * gcd(s1,r2,Amp)) divides (r1 * s1) * r2 by
+      Th7;
       then
-A36:  (gcd(s1,r2,Amp) * gcd(r1,s2,Amp)) divides (r2 * s2) * r1 by Th7;
-      then
-A37:  (gcd(s1,r2,Amp) * gcd(r1,s2,Amp)) divides ((r2 * s2) * r1) * s1 by Th7;
-      ((r2/gcd(s1,r2,Amp)) * (s2/gcd(r1,s2,Amp))) * (r1 * s1)
-      = ((r2 * s2)/(gcd(s1,r2,Amp) * gcd(r1,s2,Amp))) * (r1 * s1)
-      by A3,A33,A34,Th14
-        .= (((r2 * s2)/(gcd(s1,r2,Amp) * gcd(r1,s2,Amp))) * r1) * s1
-      by GROUP_1:def 4
-        .= (((r2 * s2) * r1)/(gcd(s1,r2,Amp) * gcd(r1,s2,Amp))) * s1
-      by A31,A35,A36,Th11
-        .= (((r2 * s2) * r1) * s1)/(gcd(s1,r2,Amp) * gcd(r1,s2,Amp))
-      by A31,A36,A37,Th11
-        .= (r1 * ((r2 * s2) * s1))/(gcd(s1,r2,Amp) * gcd(r1,s2,Amp))
-      by GROUP_1:def 4
-        .= (r1 * ((s1 * r2) * s2))/(gcd(s1,r2,Amp) * gcd(r1,s2,Amp))
-      by GROUP_1:def 4
-        .= ((r1 * (s1 * r2)) * s2)/(gcd(s1,r2,Amp) * gcd(r1,s2,Amp))
-      by GROUP_1:def 4
-        .= (((r1 * s1) * r2) * s2)/(gcd(s1,r2,Amp) * gcd(r1,s2,Amp))
-      by GROUP_1:def 4;
-      hence thesis by A24,A25,A32,Def18;
+A36:  (gcd(r1,s2,Amp) * gcd(s1,r2,Amp)) divides ((r1 * s1) * r2) * s2 by
+      Th7;
+A37:  mult2(r1,r2,s1,s2,Amp) = (r2/gcd(s1,r2,Amp)) * (s2/gcd(r1,s2,Amp))
+      by A3,A6,A5,A8,A28,Def19;
+A38:  (gcd(r1,s2,Amp) * gcd(s1,r2,Amp)) <> 0.R by A4,A7,VECTSP_2:def 5;
+A39:  ((r2/gcd(s1,r2,Amp)) * (s2/gcd(r1,s2,Amp))) * (r1 * s1) = ((r2 * s2
+      )/(gcd(s1,r2,Amp) * gcd(r1,s2,Amp))) * (r1 * s1) by A4,A7,A29,Th14
+        .= (((r2 * s2)/(gcd(s1,r2,Amp) * gcd(r1,s2,Amp))) * r1) * s1 by
+      GROUP_1:def 4
+        .= (((r2 * s2) * r1)/(gcd(s1,r2,Amp) * gcd(r1,s2,Amp))) * s1 by A38,
+      A30,A31,Th11
+        .= (((r2 * s2) * r1) * s1)/(gcd(s1,r2,Amp) * gcd(r1,s2,Amp)) by A38,
+      A31,A32,Th11
+        .= (r1 * ((r2 * s2) * s1))/(gcd(s1,r2,Amp) * gcd(r1,s2,Amp)) by
+      GROUP_1:def 4
+        .= (r1 * ((s1 * r2) * s2))/(gcd(s1,r2,Amp) * gcd(r1,s2,Amp)) by
+      GROUP_1:def 4
+        .= ((r1 * (s1 * r2)) * s2)/(gcd(s1,r2,Amp) * gcd(r1,s2,Amp)) by
+      GROUP_1:def 4
+        .= (((r1 * s1) * r2) * s2)/(gcd(s1,r2,Amp) * gcd(r1,s2,Amp)) by
+      GROUP_1:def 4;
+      ((r1/gcd(r1,s2,Amp)) * (s1/gcd(s1,r2,Amp))) * (r2 * s2) = ((r1 * s1
+      )/(gcd(r1,s2,Amp) * gcd(s1,r2,Amp))) * (r2 * s2) by A4,A7,A33,Th14
+        .= (((r1 * s1)/(gcd(r1,s2,Amp) * gcd(s1,r2,Amp))) * r2) * s2 by
+      GROUP_1:def 4
+        .= (((r1 * s1) * r2)/(gcd(r1,s2,Amp) * gcd(s1,r2,Amp))) * s2 by A34,
+      A35,A38,Th11
+        .= (((r1 * s1) * r2) * s2)/(gcd(r1,s2,Amp) * gcd(s1,r2,Amp)) by A35,
+      A36,A38,Th11;
+      hence thesis by A28,A37,A39,Def18;
     end;
   end;
   hence thesis;
@@ -2974,25 +3074,25 @@ canceled 2;
 
 theorem
   for F be add-associative right_zeroed right_complementable Abelian
-  distributive (non empty doubleLoopStr), x,y being Element of F
-  holds (-x)*y = -x*y & x*(-y) = -x*y by VECTSP_1:40,41;
+distributive (non empty doubleLoopStr), x,y being Element of F holds (-x)*y = -
+  x*y & x*(-y) = -x*y by VECTSP_1:40,41;
 
 canceled;
 
 theorem
-  for F being almost_left_invertible commutative Ring
-  for a, b being Element of F st a <> 0.F & b <> 0.F holds a"*b" = (b*a)"
+  for F being almost_left_invertible commutative Ring for a, b being
+  Element of F st a <> 0.F & b <> 0.F holds a"*b" = (b*a)"
 proof
   let F be almost_left_invertible commutative Ring;
   let a,b be Element of F such that
 A1: a <> 0.F and
 A2: b <> 0.F;
-A3: b*a <> 0.F by A1,A2,VECTSP_1:44;
-  b*a * (a"*b") = b*a*a"*b" by GROUP_1:def 4
+A3: b*a * (a"*b") = b*a*a"*b" by GROUP_1:def 4
     .= b*(a*a")*b" by GROUP_1:def 4
     .= b*1_F*b" by A1,VECTSP_1:def 22
     .= b*b" by VECTSP_1:def 13
     .= 1_F by A2,VECTSP_1:def 22;
+  b*a <> 0.F by A1,A2,VECTSP_1:44;
   hence thesis by A3,VECTSP_1:def 22;
 end;
 

@@ -8,10 +8,9 @@ environ
 
  vocabularies RLVECT_1, BOOLE, ARYTM_1, RELAT_1, FUNCT_1, BINOP_1, RLSUB_1,
       REALSET1, ARYTM, ALGSTR_0;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS,
-      ORDINAL1, XCMPLX_0, XREAL_0, NAT_1, REAL_1,
-      MCART_1, RELAT_1, FUNCT_1, FUNCT_2, BINOP_1, REALSET1, DOMAIN_1,
-      STRUCT_0, ALGSTR_0, RLVECT_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, ORDINAL1, XCMPLX_0,
+      XREAL_0, REAL_1, MCART_1, RELAT_1, FUNCT_1, FUNCT_2, BINOP_1, REALSET1,
+      DOMAIN_1, STRUCT_0, ALGSTR_0, RLVECT_1;
  constructors PARTFUN1, BINOP_1, REAL_1, NAT_1, REALSET1, RLVECT_1, RELSET_1;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, RELSET_1, NUMBERS, REALSET1,
       STRUCT_0, RLVECT_1, REAL_1, ORDINAL1, ALGSTR_0, XREAL_0;
@@ -38,8 +37,8 @@ definition
   let V1;
   attr V1 is linearly-closed means
   :Def1:
-  (for v,u st v in V1 & u in V1 holds v + u in V1) &
-  (for a,v st v in V1 holds a * v in V1);
+  (for v,u st v in V1 & u in V1 holds
+  v + u in V1) & for a,v st v in V1 holds a * v in V1;
 end;
 
 canceled 3;
@@ -57,19 +56,20 @@ A2: V1 is linearly-closed;
 end;
 
 theorem Th5:
-  V1 is linearly-closed implies (for v st v in V1 holds - v in V1)
+  V1 is linearly-closed implies for v st v in V1 holds - v in V1
 proof
   assume
 A1: V1 is linearly-closed;
   let v;
-  assume v in V1;
+  assume
+  v in V1;
   then (- 1) * v in V1 by A1,Def1;
   hence thesis by RLVECT_1:29;
 end;
 
 theorem
-  V1 is linearly-closed implies
-  (for v,u st v in V1 & u in V1 holds v - u in V1)
+  V1 is linearly-closed implies for v,u st v in V1 & u in V1 holds v - u
+  in V1
 proof
   assume
 A1: V1 is linearly-closed;
@@ -77,7 +77,7 @@ A1: V1 is linearly-closed;
   assume that
 A2: v in V1 and
 A3: u in V1;
-  v - u = v + (- u) & - u in V1 by A1,A3,Th5;
+  - u in V1 by A1,A3,Th5;
   hence thesis by A1,A2,Def1;
 end;
 
@@ -87,10 +87,11 @@ proof
   thus for v,u st v in {0.V} & u in {0.V} holds v + u in {0.V}
   proof
     let v,u;
-    assume v in {0.V} & u in {0.V};
+    assume
+    v in {0.V} & u in {0.V};
     then v = 0.V & u = 0.V by TARSKI:def 1;
-    then v + u = 0.V & 0.V in {0.V} by RLVECT_1:10,TARSKI:def 1;
-    hence thesis;
+    then v + u = 0.V by RLVECT_1:10;
+    hence thesis by TARSKI:def 1;
   end;
   let a,v;
   assume
@@ -106,13 +107,14 @@ proof
 A1: the carrier of V = V1;
   hence for v,u st v in V1 & u in V1 holds v + u in V1;
   let a,v;
-  assume v in V1;
+  assume
+  v in V1;
   thus thesis by A1;
 end;
 
 theorem
-  V1 is linearly-closed & V2 is linearly-closed &
-  V3 = {v + u : v in V1 & u in V2} implies V3 is linearly-closed
+  V1 is linearly-closed & V2 is linearly-closed & V3 = {v + u : v in V1
+  & u in V2} implies V3 is linearly-closed
 proof
   assume that
 A1: V1 is linearly-closed & V2 is linearly-closed and
@@ -129,56 +131,64 @@ A6: v1 in V1 & v2 in V2 by A2,A3;
     consider u1,u2 such that
 A7: u = u1 + u2 and
 A8: u1 in V1 & u2 in V2 by A2,A4;
-A9: v1 + u1 in V1 & v2 + u2 in V2 by A1,A6,A8,Def1;
-    v + u = ((v1 + v2) + u1) + u2 by A5,A7,RLVECT_1:def 6
+A9: v + u = ((v1 + v2) + u1) + u2 by A5,A7,RLVECT_1:def 6
       .= ((v1 + u1) + v2) + u2 by RLVECT_1:def 6
       .= (v1 + u1) + (v2 + u2) by RLVECT_1:def 6;
+    v1 + u1 in V1 & v2 + u2 in V2 by A1,A6,A8,Def1;
     hence thesis by A2,A9;
   end;
   let a,v;
-  assume v in V3;
+  assume
+  v in V3;
   then consider v1,v2 such that
 A10: v = v1 + v2 and
 A11: v1 in V1 & v2 in V2 by A2;
-A12: a * v1 in V1 & a * v2 in V2 by A1,A11,Def1;
-  a * v = a * v1 + a * v2 by A10,RLVECT_1:def 9;
+A12: a * v = a * v1 + a * v2 by A10,RLVECT_1:def 9;
+  a * v1 in V1 & a * v2 in V2 by A1,A11,Def1;
   hence thesis by A2,A12;
 end;
 
 theorem
-  V1 is linearly-closed & V2 is linearly-closed implies
-  V1 /\ V2 is linearly-closed
+  V1 is linearly-closed & V2 is linearly-closed implies V1 /\ V2 is
+  linearly-closed
 proof
-  assume
-A1: V1 is linearly-closed & V2 is linearly-closed;
+  assume that
+A1: V1 is linearly-closed and
+A2: V2 is linearly-closed;
   thus for v,u st v in V1 /\ V2 & u in V1 /\ V2 holds v + u in V1 /\ V2
   proof
     let v,u;
-    assume v in V1 /\ V2 & u in V1 /\ V2;
-    then v in V1 & v in V2 & u in V1 & u in V2 by XBOOLE_0:def 4;
-    then v + u in V1 & v + u in V2 by A1,Def1;
-    hence thesis by XBOOLE_0:def 4;
+    assume
+A3: v in V1 /\ V2 & u in V1 /\ V2;
+    then v in V2 & u in V2 by XBOOLE_0:def 4;
+    then
+A4: v + u in V2 by A2,Def1;
+    v in V1 & u in V1 by A3,XBOOLE_0:def 4;
+    then v + u in V1 by A1,Def1;
+    hence thesis by A4,XBOOLE_0:def 4;
   end;
   let a,v;
-  assume v in V1 /\ V2;
-  then v in V1 & v in V2 by XBOOLE_0:def 4;
-  then a * v in V1 & a * v in V2 by A1,Def1;
-  hence thesis by XBOOLE_0:def 4;
+  assume
+A5: v in V1 /\ V2;
+  then v in V2 by XBOOLE_0:def 4;
+  then
+A6: a * v in V2 by A2,Def1;
+  v in V1 by A5,XBOOLE_0:def 4;
+  then a * v in V1 by A1,Def1;
+  hence thesis by A6,XBOOLE_0:def 4;
 end;
 
 definition
   let V;
   mode Subspace of V -> RealLinearSpace means
     :Def2:
-    the carrier of it c= the carrier of V & 0.it = 0.V &
-    the addF of it = (the addF of V)||the carrier of it &
-    the Mult of it = (the Mult of V) | [:REAL, the carrier of it:];
+    the carrier of it c= the
+carrier of V & 0.it = 0.V & the addF of it = (the addF of V)||the carrier of it
+    & the Mult of it = (the Mult of V) | [:REAL, the carrier of it:];
   existence
   proof
-    the carrier of V c= the carrier of V & 0.V = 0.V &
-    the addF of V = (the addF of V)||the carrier of V &
-    the Mult of V = (the Mult of V) | [:REAL, the carrier of V:] by RELSET_1:34
-;
+    the addF of V = (the addF of V)||the carrier of V & the Mult of V = (
+    the Mult of V) | [:REAL, the carrier of V:] by RELSET_1:34;
     hence thesis;
   end;
 end;
@@ -195,19 +205,22 @@ canceled 5;
 theorem
   x in W1 & W1 is Subspace of W2 implies x in W2
 proof
-  assume x in W1 & W1 is Subspace of W2;
-  then x in the carrier of W1 & the carrier of W1 c= the carrier of W2
-  by Def2,STRUCT_0:def 5;
+  assume
+  x in W1 & W1 is Subspace of W2;
+  then x in the carrier of W1 & the carrier of W1 c= the carrier of W2 by
+  Def2, STRUCT_0:def 5;
   hence thesis by STRUCT_0:def 5;
 end;
 
 theorem Th17:
   x in W implies x in V
 proof
-  assume x in W;
-  then x in the carrier of W & the carrier of W c= the carrier of V
-  by Def2,STRUCT_0:def 5;
-  hence thesis by STRUCT_0:def 5;
+  assume
+  x in W;
+  then
+A1: x in the carrier of W by STRUCT_0:def 5;
+  the carrier of W c= the carrier of V by Def2;
+  hence thesis by A1,STRUCT_0:def 5;
 end;
 
 theorem Th18:
@@ -248,9 +261,9 @@ end;
 theorem Th23:
   w = v implies - v = - w
 proof
+A1: - v = (- 1) * v & - w = (- 1) * w by RLVECT_1:29;
   assume
-A1: w = v;
-  - v = (- 1) * v & - w = (- 1) * w by RLVECT_1:29;
+  w = v;
   hence thesis by A1,Th22;
 end;
 
@@ -266,21 +279,23 @@ end;
 
 Lm1: the carrier of W = V1 implies V1 is linearly-closed
 proof
-  assume
-A1: the carrier of W = V1;
   set VW = the carrier of W;
   reconsider WW = W as RealLinearSpace;
+  assume
+A1: the carrier of W = V1;
   thus for v,u st v in V1 & u in V1 holds v + u in V1
   proof
     let v,u;
-    assume v in V1 & u in V1;
+    assume
+    v in V1 & u in V1;
     then reconsider vv = v, uu = u as VECTOR of WW by A1;
     reconsider vw = vv + uu as Element of VW;
     vw in V1 by A1;
     hence thesis by Th21;
   end;
   let a,v;
-  assume v in V1;
+  assume
+  v in V1;
   then reconsider vv = v as VECTOR of WW by A1;
   reconsider vw = a * vv as Element of VW;
   vw in V1 by A1;
@@ -289,13 +304,15 @@ end;
 
 theorem Th25:
   0.V in W
-proof 0.W in W & 0.V = 0.W by Def2,RLVECT_1:3;
-  hence thesis;
+proof
+  0.W in W by RLVECT_1:3;
+  hence thesis by Def2;
 end;
 
 theorem
   0.W1 in W2
-proof 0.W1 = 0.V by Def2;
+proof
+  0.W1 = 0.V by Def2;
   hence thesis by Th25;
 end;
 
@@ -305,10 +322,11 @@ theorem
 theorem Th28:
   u in W & v in W implies u + v in W
 proof
-  assume u in W & v in W;
+  reconsider VW = the carrier of W as Subset of V by Def2;
+  assume
+  u in W & v in W;
   then
 A1: u in the carrier of W & v in the carrier of W by STRUCT_0:def 5;
-  reconsider VW = the carrier of W as Subset of V by Def2;
   VW is linearly-closed by Lm1;
   then u + v in the carrier of W by A1,Def1;
   hence thesis by STRUCT_0:def 5;
@@ -317,10 +335,11 @@ end;
 theorem Th29:
   v in W implies a * v in W
 proof
-  assume v in W;
+  reconsider VW = the carrier of W as Subset of V by Def2;
+  assume
+  v in W;
   then
 A1: v in the carrier of W by STRUCT_0:def 5;
-  reconsider VW = the carrier of W as Subset of V by Def2;
   VW is linearly-closed by Lm1;
   then a * v in the carrier of W by A1,Def1;
   hence thesis by STRUCT_0:def 5;
@@ -329,7 +348,8 @@ end;
 theorem Th30:
   v in W implies - v in W
 proof
-  assume v in W;
+  assume
+  v in W;
   then (- 1) * v in W by Th29;
   hence thesis by RLVECT_1:29;
 end;
@@ -350,9 +370,8 @@ reserve A for BinOp of D;
 reserve M for Function of [:REAL,D:],D;
 
 theorem Th32:
-  V1 = D & d1 = 0.V & A = (the addF of V)||V1 &
-  M = (the Mult of V) | [:REAL,V1:] implies
-  RLSStruct (# D,d1,A,M #) is Subspace of V
+  V1 = D & d1 = 0.V & A = (the addF of V)||V1 & M = (the Mult of V
+  ) | [:REAL,V1:] implies RLSStruct (# D,d1,A,M #) is Subspace of V
 proof
   assume that
 A1: V1 = D and
@@ -360,25 +379,24 @@ A2: d1 = 0.V and
 A3: A = (the addF of V)||V1 and
 A4: M = (the Mult of V) | [:REAL,V1:];
   set W = RLSStruct (# D,d1,A,M #);
-A5: 0.W = 0.V by A2;
-A6: for x,y being VECTOR of W holds x + y = (the addF of V).(x,y)
-  proof
-    let x,y be VECTOR of W;
-    thus x + y = (the addF of V).[x,y] by A1,A3,FUNCT_1:72
-      .= (the addF of V).(x,y);
-  end;
-A7: for a for x being VECTOR of W holds a * x = (the Mult of V).(a,x)
+A5: for a for x being VECTOR of W holds a * x = (the Mult of V).(a,x)
   proof
     let a;
     let x be VECTOR of W;
     thus a * x = (the Mult of V).[a,x] by A1,A4,FUNCT_1:72
       .= (the Mult of V).(a,x);
   end;
-  W is Abelian add-associative right_zeroed right_complementable
+A6: for x,y being VECTOR of W holds x + y = (the addF of V).(x,y)
+  proof
+    let x,y be VECTOR of W;
+    thus x + y = (the addF of V).[x,y] by A1,A3,FUNCT_1:72
+      .= (the addF of V).(x,y);
+  end;
+A7: W is Abelian add-associative right_zeroed right_complementable
   RealLinearSpace-like
   proof
-    set AV = the addF of V;
     set MV = the Mult of V;
+    set AV = the addF of V;
     thus W is Abelian
     proof
       let x,y be VECTOR of W;
@@ -412,59 +430,60 @@ A7: for a for x being VECTOR of W holds a * x = (the Mult of V).(a,x)
 A8:   x1 + v = 0.V by ALGSTR_0:def 11;
       v = - x1 by A8,RLVECT_1:def 11
         .= (- 1) * x1 by RLVECT_1:29
-        .= (- 1) * x by A7;
+        .= (- 1) * x by A5;
       then reconsider y = v as VECTOR of W;
       take y;
       thus thesis by A2,A6,A8;
     end;
-    thus for a being real number
-     for x,y being VECTOR of W holds a * (x + y) = a * x + a * y
+    thus for a being real number for x,y being VECTOR of W holds a * (x + y) =
+    a * x + a * y
     proof
       let a be real number;
-       reconsider a as Real by XREAL_0:def 1;
       let x,y be VECTOR of W;
       reconsider x1 = x, y1 = y as VECTOR of V by A1,TARSKI:def 3;
-       a * (x + y) = MV.(a,x + y) by A7
+      reconsider a as Real by XREAL_0:def 1;
+      a * (x + y) = MV.(a,x + y) by A5
         .= a * (x1 + y1) by A6
         .= a * x1 + a * y1 by RLVECT_1:def 9
-        .= AV.(MV.(a,x1),a * y) by A7
-        .= AV.(a * x, a * y) by A7
+        .= AV.(MV.(a,x1),a * y) by A5
+        .= AV.(a * x, a * y) by A5
         .= a * x + a * y by A6;
-     hence thesis;
+      hence thesis;
     end;
-    thus for a,b being real number
-     for x being VECTOR of W holds (a + b) * x = a * x + b * x
+    thus for a,b being real number for x being VECTOR of W holds (a + b) * x =
+    a * x + b * x
     proof
       let a,b be real number;
-       reconsider a,b as Real by XREAL_0:def 1;
       let x be VECTOR of W;
       reconsider y = x as VECTOR of V by A1,TARSKI:def 3;
-       (a + b) * x = (a + b) * y by A7
+      reconsider a,b as Real by XREAL_0:def 1;
+      (a + b) * x = (a + b) * y by A5
         .= a * y + b * y by RLVECT_1:def 9
-        .= AV.(MV.(a,y),b * x) by A7
-        .= AV.(a * x,b * x) by A7
+        .= AV.(MV.(a,y),b * x) by A5
+        .= AV.(a * x,b * x) by A5
         .= a * x + b * x by A6;
-     hence thesis;
+      hence thesis;
     end;
-    thus for a,b being real number
-     for x being VECTOR of W holds (a * b) * x = a * (b * x)
+    thus for a,b being real number for x being VECTOR of W holds (a * b) * x =
+    a * (b * x)
     proof
       let a,b be real number;
-       reconsider a,b as Real by XREAL_0:def 1;
       let x be VECTOR of W;
       reconsider y = x as VECTOR of V by A1,TARSKI:def 3;
-       (a * b) * x = (a * b) * y by A7
+      reconsider a,b as Real by XREAL_0:def 1;
+      (a * b) * x = (a * b) * y by A5
         .= a * (b * y) by RLVECT_1:def 9
-        .= MV.(a,b * x) by A7
-        .= a * (b * x) by A7;
-     hence thesis;
+        .= MV.(a,b * x) by A5
+        .= a * (b * x) by A5;
+      hence thesis;
     end;
     let x be VECTOR of W;
     reconsider y = x as VECTOR of V by A1,TARSKI:def 3;
-    thus 1 * x = 1 * y by A7
+    thus 1 * x = 1 * y by A5
       .= x by RLVECT_1:def 9;
   end;
-  hence thesis by A1,A3,A4,A5,Def2;
+  0.W = 0.V by A2;
+  hence thesis by A1,A3,A4,A7,Def2;
 end;
 
 theorem Th33:
@@ -475,86 +494,90 @@ proof
 end;
 
 theorem Th34:
-  for V,X being strict RealLinearSpace holds
-  V is Subspace of X & X is Subspace of V implies V = X
+  for V,X being strict RealLinearSpace holds V is Subspace of X &
+  X is Subspace of V implies V = X
 proof
   let V,X be strict RealLinearSpace;
-  assume
-A1: V is Subspace of X & X is Subspace of V;
-  set VV = the carrier of V;
+  assume that
+A1: V is Subspace of X and
+A2: X is Subspace of V;
   set VX = the carrier of X;
-  set AV = the addF of V;
+  set VV = the carrier of V;
+  VV c= VX & VX c= VV by A1,A2,Def2;
+  then
+A3: VV = VX by XBOOLE_0:def 10;
   set AX = the addF of X;
-  set MV = the Mult of V;
+  set AV = the addF of V;
+  AV = AX||VV & AX = AV||VX by A1,A2,Def2;
+  then
+A4: AV = AX by A3,RELAT_1:101;
   set MX = the Mult of X;
-  VV c= VX & VX c= VV by A1,Def2;
-  then
-A2: VV = VX by XBOOLE_0:def 10;
-A3: 0.V = 0.X by A1,Def2;
-  AV = AX||VV & AX = AV||VX by A1,Def2;
-  then
-A4: AV = AX by A2,RELAT_1:101;
-  MV = MX | [:REAL,VV:] & MX = MV | [:REAL,VX:] by A1,Def2;
-  hence thesis by A2,A3,A4,RELAT_1:101;
+  set MV = the Mult of V;
+A5: MX = MV | [:REAL,VX:] by A2,Def2;
+  0.V = 0.X & MV = MX | [:REAL,VV:] by A1,Def2;
+  hence thesis by A3,A4,A5,RELAT_1:101;
 end;
 
 theorem Th35:
-  V is Subspace of X & X is Subspace of Y implies V is Subspace of Y
+  V is Subspace of X & X is Subspace of Y implies V is Subspace of
+  Y
 proof
-  assume
-A1: V is Subspace of X & X is Subspace of Y;
-  thus the carrier of V c= the carrier of Y
-  proof
-    the carrier of V c= the carrier of X &
-    the carrier of X c= the carrier of Y by A1,Def2;
-    hence thesis by XBOOLE_1:1;
-  end;
-  thus 0.V = 0.Y
-  proof 0.V = 0.X & 0.X = 0.Y by A1,Def2;
-    hence thesis;
-  end;
+  assume that
+A1: V is Subspace of X and
+A2: X is Subspace of Y;
+  the carrier of V c= the carrier of X & the carrier of X c= the carrier
+  of Y by A1,A2,Def2;
+  hence the carrier of V c= the carrier of Y by XBOOLE_1:1;
+  0.V = 0.X by A1,Def2;
+  hence 0.V = 0.Y by A2,Def2;
   thus the addF of V = (the addF of Y)||the carrier of V
   proof
-    set AV = the addF of V;
-    set VV = the carrier of V;
-    set AX = the addF of X;
-    set VX = the carrier of X;
     set AY = the addF of Y;
-    AV = AX||VV & AX = AY||VX & VV c= VX by A1,Def2;
-    then AV = AY||VX||VV & [:VV,VV:] c= [:VX,VX:] by ZFMISC_1:119;
-    hence thesis by FUNCT_1:82;
+    set VX = the carrier of X;
+    set AX = the addF of X;
+    set VV = the carrier of V;
+    set AV = the addF of V;
+    VV c= VX by A1,Def2;
+    then
+A3: [:VV,VV:] c= [:VX,VX:] by ZFMISC_1:119;
+    AV = AX||VV by A1,Def2;
+    then AV = AY||VX||VV by A2,Def2;
+    hence thesis by A3,FUNCT_1:82;
   end;
-  set MV = the Mult of V;
-  set VV = the carrier of V;
-  set MX = the Mult of X;
-  set VX = the carrier of X;
   set MY = the Mult of Y;
-  MV = MX | [:REAL,VV:] & MX = MY | [:REAL,VX:] & VV c= VX by A1,Def2;
-  then MV = (MY | [:REAL,VX:]) | [:REAL,VV:] & [:REAL,VV:] c= [:REAL,VX:]
-  by ZFMISC_1:118;
-  hence thesis by FUNCT_1:82;
+  set MX = the Mult of X;
+  set MV = the Mult of V;
+  set VX = the carrier of X;
+  set VV = the carrier of V;
+  VV c= VX by A1,Def2;
+  then
+A4: [:REAL,VV:] c= [:REAL,VX:] by ZFMISC_1:118;
+  MV = MX | [:REAL,VV:] by A1,Def2;
+  then MV = (MY | [:REAL,VX:]) | [:REAL,VV:] by A2,Def2;
+  hence thesis by A4,FUNCT_1:82;
 end;
 
 theorem Th36:
-  the carrier of W1 c= the carrier of W2 implies W1 is Subspace of W2
+  the carrier of W1 c= the carrier of W2 implies W1 is Subspace of
+  W2
 proof
-  assume
-A1: the carrier of W1 c= the carrier of W2;
   set VW1 = the carrier of W1;
   set VW2 = the carrier of W2;
   set AV = the addF of V;
   set MV = the Mult of V;
-  0.W1 = 0.V & 0.W2 = 0.V by Def2;
-  hence the carrier of W1 c= the carrier of W2 & 0.W1 = 0.W2 by A1;
-  thus the addF of W1 = (the addF of W2)||the carrier of W1
-  proof
-    the addF of W1 = AV||VW1 & the addF of W2 = AV||VW2 &
-    [:VW1,VW1:] c= [:VW2,VW2:] by A1,Def2,ZFMISC_1:119;
-    hence thesis by FUNCT_1:82;
-  end;
-  the Mult of W1 = MV | [:REAL,VW1:] & the Mult of W2 = MV | [:REAL,VW2 :] &
-  [:REAL,VW1:] c= [:REAL,VW2:] by A1,Def2,ZFMISC_1:118;
-  hence thesis by FUNCT_1:82;
+  assume
+A1: the carrier of W1 c= the carrier of W2;
+  then
+A2: [:VW1,VW1:] c= [:VW2,VW2:] by ZFMISC_1:119;
+  0.W1 = 0.V by Def2;
+  hence the carrier of W1 c= the carrier of W2 & 0.W1 = 0.W2 by A1,Def2;
+  the addF of W1 = AV||VW1 & the addF of W2 = AV||VW2 by Def2;
+  hence the addF of W1 = (the addF of W2)||the carrier of W1 by A2,FUNCT_1:
+  82;
+A3: [:REAL,VW1:] c= [:REAL,VW2:] by A1,ZFMISC_1:118;
+  the Mult of W1 = MV | [:REAL,VW1:] & the Mult of W2 = MV | [:REAL,VW2 :]
+  by Def2;
+  hence thesis by A3,FUNCT_1:82;
 end;
 
 theorem
@@ -581,29 +604,31 @@ registration
   cluster strict Subspace of V;
   existence
   proof
-    the carrier of V is Subset of V iff the carrier of V c= the carrier of V;
+    the carrier of V is Subset of V iff the carrier of V c= the carrier of
+    V;
     then reconsider V1 = the carrier of V as Subset of V;
-    0.V = 0.V & the addF of V = (the addF of V)||V1 &
-    the Mult of V = (the Mult of V) | [:REAL,V1:] by RELSET_1:34;
-    then RLSStruct(#the carrier of V,0.V,the addF of V,the Mult of V #)
-    is Subspace of V by Th32;
+    the addF of V = (the addF of V)||V1 & the Mult of V = (the Mult of V)
+    | [: REAL,V1:] by RELSET_1:34;
+    then RLSStruct(#the carrier of V,0.V,the addF of V,the Mult of V #) is
+    Subspace of V by Th32;
     hence thesis;
   end;
 end;
 
 theorem Th38:
-  for W1,W2 being strict Subspace of V holds
-  the carrier of W1 = the carrier of W2 implies W1 = W2
+  for W1,W2 being strict Subspace of V holds the carrier of W1 =
+  the carrier of W2 implies W1 = W2
 proof
   let W1,W2 be strict Subspace of V;
-  assume the carrier of W1 = the carrier of W2;
+  assume
+  the carrier of W1 = the carrier of W2;
   then W1 is Subspace of W2 & W2 is Subspace of W1 by Th36;
   hence thesis by Th34;
 end;
 
 theorem Th39:
-  for W1,W2 being strict Subspace of V holds
-  (for v holds v in W1 iff v in W2) implies W1 = W2
+  for W1,W2 being strict Subspace of V holds (for v holds v in W1
+  iff v in W2) implies W1 = W2
 proof
   let W1,W2 be strict Subspace of V;
   assume
@@ -658,87 +683,82 @@ theorem
   the carrier of W = V1 implies V1 is linearly-closed by Lm1;
 
 theorem Th43:
-  V1 <> {} & V1 is linearly-closed implies
-  (ex W being strict Subspace of V st V1 = the carrier of W)
+  V1 <> {} & V1 is linearly-closed implies ex W being strict
+  Subspace of V st V1 = the carrier of W
 proof
   assume that
 A1: V1 <> {} and
 A2: V1 is linearly-closed;
   reconsider D = V1 as non empty set by A1;
-  reconsider d1 = 0.V as Element of D by A2,Th4;
-  set A = (the addF of V)||V1;
   set M = (the Mult of V) | [:REAL,V1:];
   set VV = the carrier of V;
-  dom(the addF of V) = [:VV,VV:] by FUNCT_2:def 1;
-  then dom A = [:VV,VV:] /\ [:V1,V1:] & [:V1,V1:] c= [:VV,VV:] by RELAT_1:90;
-  then
-A3: dom A = [:D,D:] by XBOOLE_1:28;
   dom(the Mult of V) = [:REAL,VV:] by FUNCT_2:def 1;
-  then dom M = [:REAL,VV:] /\ [:REAL,V1:] & [:REAL,V1:] c= [:REAL,VV:]
-  by RELAT_1:90,ZFMISC_1:118;
   then
-A4: dom M = [:REAL,D:] by XBOOLE_1:28;
-A5: D = rng A
-  proof
-    now
-      let y be set;
-      thus y in D implies ex x being set st x in dom A & y = A.x
-      proof
-        assume
-A6:     y in D;
-        then reconsider v1 = y, v0 = d1 as Element of VV;
-A7:     [d1,y] in [:D,D:] & [d1,y] in [:VV,VV:] by A6,ZFMISC_1:106;
-        then A.[d1,y] = v0 + v1 by FUNCT_1:72
-          .= y by RLVECT_1:10;
-        hence thesis by A3,A7;
-      end;
-      given x being set such that
-A8:   x in dom A and
-A9:   y = A.x;
-      consider x1,x2 being set such that
-A10:  x1 in D & x2 in D and
-A11:  x = [x1,x2] by A3,A8,ZFMISC_1:def 2;
-A12:  [x1,x2] in [:VV,VV:] & [x1,x2] in [:V1,V1:] by A10,ZFMISC_1:106;
-      reconsider v1 = x1, v2 = x2 as Element of VV by A10;
-      y = v1 + v2 by A9,A11,A12,FUNCT_1:72;
-      hence y in D by A2,A10,Def1;
+A3: dom M = [:REAL,VV:] /\ [:REAL,V1:] by RELAT_1:90;
+  [:REAL,V1:] c= [:REAL,VV:] by ZFMISC_1:118;
+  then
+A4: dom M = [:REAL,D:] by A3,XBOOLE_1:28;
+  now
+    let y be set;
+    thus y in D implies ex x being set st x in dom M & y = M.x
+    proof
+      assume
+A5:   y in D;
+      then reconsider v1 = y as Element of VV;
+A6:   [1,y] in [:REAL,D:] by A5,ZFMISC_1:106;
+      then M.[1,y] = 1 * v1 by FUNCT_1:72
+        .= y by RLVECT_1:def 9;
+      hence thesis by A4,A6;
     end;
-    hence thesis by FUNCT_1:def 5;
+    given x being set such that
+A7: x in dom M and
+A8: y = M.x;
+    consider x1,x2 being set such that
+A9: x1 in REAL and
+A10: x2 in D and
+A11: x = [x1,x2] by A4,A7,ZFMISC_1:def 2;
+    reconsider xx1 = x1 as Real by A9;
+    reconsider v2 = x2 as Element of VV by A10;
+    [x1,x2] in [:REAL,V1:] by A9,A10,ZFMISC_1:106;
+    then y = xx1 * v2 by A8,A11,FUNCT_1:72;
+    hence y in D by A2,A10,Def1;
   end;
-A13: D = rng M
-  proof
-    now
-      let y be set;
-      thus y in D implies ex x being set st x in dom M & y = M.x
-      proof
-        assume
-A14:    y in D;
-        then reconsider v1 = y as Element of VV;
-A15:    [1,y] in [:REAL,D:] & [1,y] in [:REAL,VV:] by A14,ZFMISC_1:106;
-        then M.[1,y] = 1 * v1 by FUNCT_1:72
-          .= y by RLVECT_1:def 9;
-        hence thesis by A4,A15;
-      end;
-      given x being set such that
-A16:  x in dom M and
-A17:  y = M.x;
-      consider x1,x2 being set such that
-A18:  x1 in REAL and
-A19:  x2 in D and
-A20:  x = [x1,x2] by A4,A16,ZFMISC_1:def 2;
-A21:  [x1,x2] in [:REAL,VV:] & [x1,x2] in [:REAL,V1:] by A18,A19,ZFMISC_1:106;
-      reconsider v2 = x2 as Element of VV by A19;
-      reconsider xx1 = x1 as Real by A18;
-      y = xx1 * v2 by A17,A20,A21,FUNCT_1:72;
-      hence y in D by A2,A19,Def1;
+  then D = rng M by FUNCT_1:def 5;
+  then reconsider M as Function of [:REAL,D:],D by A4,
+  FUNCT_2:def 1,RELSET_1:11;
+  set A = (the addF of V)||V1;
+  reconsider d1 = 0.V as Element of D by A2,Th4;
+  dom(the addF of V) = [:VV,VV:] by FUNCT_2:def 1;
+  then dom A = [:VV,VV:] /\ [:V1,V1:] by RELAT_1:90;
+  then
+A12: dom A = [:D,D:] by XBOOLE_1:28;
+  now
+    let y be set;
+    thus y in D implies ex x being set st x in dom A & y = A.x
+    proof
+      assume
+A13:  y in D;
+      then reconsider v1 = y, v0 = d1 as Element of VV;
+A14:  [d1,y] in [:D,D:] by A13,ZFMISC_1:106;
+      then A.[d1,y] = v0 + v1 by FUNCT_1:72
+        .= y by RLVECT_1:10;
+      hence thesis by A12,A14;
     end;
-    hence thesis by FUNCT_1:def 5;
+    given x being set such that
+A15: x in dom A and
+A16: y = A.x;
+    consider x1,x2 being set such that
+A17: x1 in D & x2 in D and
+A18: x = [x1,x2] by A12,A15,ZFMISC_1:def 2;
+    reconsider v1 = x1, v2 = x2 as Element of VV by A17;
+    [x1,x2] in [:V1,V1:] by A17,ZFMISC_1:106;
+    then y = v1 + v2 by A16,A18,FUNCT_1:72;
+    hence y in D by A2,A17,Def1;
   end;
-  reconsider A as Function of [:D,D:],D by A3,A5,FUNCT_2:def 1,RELSET_1:11;
-  reconsider M as Function of [:REAL,D:],D
-  by A4,A13,FUNCT_2:def 1,RELSET_1:11;
+  then D = rng A by FUNCT_1:def 5;
+  then reconsider A as Function of [:D,D:],D by A12,FUNCT_2:def 1,RELSET_1:11;
   set W = RLSStruct (# D,d1,A,M #);
-  W is Subspace of V & the carrier of W = D by Th32;
+  W is Subspace of V by Th32;
   hence thesis;
 end;
 
@@ -751,99 +771,95 @@ definition
   func (0).V -> strict Subspace of V means
   :Def3:
   the carrier of it = {0.V};
-  correctness by Th38,Th43,Th7;
+  correctness by Th7,Th38,Th43;
 end;
 
 definition
   let V;
   func (Omega).V -> strict Subspace of V equals
-
   the RLSStruct of V;
   coherence
   proof
     set W = the RLSStruct of V;
-    W is Abelian add-associative right_zeroed right_complementable
-    RealLinearSpace-like
+A1: for u,v,w being VECTOR of W holds (u + v) + w = u + (v + w)
     proof
-A1:   for a for v,w be VECTOR of W, v',w' be VECTOR of V st v=v' & w=w'
-      holds v+w = v'+w' & a*v = a*v';
-      thus for v,w being VECTOR of W holds v + w = w + v
-      proof
-        let v,w be VECTOR of W;
-        reconsider v'=v,w'=w as VECTOR of V;
-        thus v + w = w' + v' by A1
-          .= w + v;
-      end;
-      thus for u,v,w being VECTOR of W holds (u + v) + w = u + (v + w)
-      proof
-        let u,v,w be VECTOR of W;
-        reconsider u'=u,v'=v,w'=w as VECTOR of V;
-        thus (u + v) + w = (u' + v') + w'
-          .= u' + (v' + w') by RLVECT_1:def 6
-          .= u + (v + w);
-      end;
-      thus for v being VECTOR of W holds v + 0.W = v
-      proof
-        let v be VECTOR of W;
-        reconsider v'=v as VECTOR of V;
-        thus v + 0.W = v' + 0.V
-          .= v by RLVECT_1:10;
-      end;
-      thus W is right_complementable
-      proof
-        let v be VECTOR of W;
-        reconsider v'=v as VECTOR of V;
-        consider w' being VECTOR of V such that
-A2:     v' + w' = 0.V by ALGSTR_0:def 11;
-        reconsider w=w' as VECTOR of W;
-        take w;
-        thus thesis by A2;
-      end;
-      thus for a being real number
-       for v,w being VECTOR of W holds a * (v + w) = a * v + a * w
-      proof
-        let a be real number;
-        let v,w be VECTOR of W;
-        reconsider v'=v,w'=w as VECTOR of V;
-        thus a * (v + w) = a * (v' + w')
-          .= a * v' + a * w' by RLVECT_1:def 9
-          .= a * v + a * w;
-      end;
-      thus for a,b being real number
-       for v being VECTOR of W holds (a + b) * v = a * v + b * v
-      proof
-        let a,b be real number;
-        let v be VECTOR of W;
-        reconsider v'=v as VECTOR of V;
-        thus (a + b) * v = (a + b) * v'
-          .= a * v' + b * v' by RLVECT_1:def 9
-          .= a * v + b * v;
-      end;
-      thus for a,b being real number
-       for v being VECTOR of W holds (a * b) * v = a * (b * v)
-      proof
-        let a,b be real number;
-        let v be VECTOR of W;
-        reconsider v'=v as VECTOR of V;
-        thus (a * b) * v = (a * b) * v'
-          .= a * (b * v') by RLVECT_1:def 9
-          .= a * (b * v);
-      end;
-      thus for v being VECTOR of W holds 1 * v = v
-      proof
-        let v be VECTOR of W;
-        reconsider v'=v as VECTOR of V;
-        thus 1 * v = 1 * v'
-          .= v by RLVECT_1:def 9;
-      end;
+      let u,v,w be VECTOR of W;
+      reconsider u'=u,v'=v,w'=w as VECTOR of V;
+      thus (u + v) + w = (u' + v') + w'
+        .= u' + (v' + w') by RLVECT_1:def 6
+        .= u + (v + w);
     end;
-    then reconsider W as RealLinearSpace;
-    W is Subspace of V
+A2: for v being VECTOR of W holds v + 0.W = v
     proof
-      thus the carrier of W c= the carrier of V & 0.W = 0.V;
-      thus thesis by RELSET_1:34;
+      let v be VECTOR of W;
+      reconsider v'=v as VECTOR of V;
+      thus v + 0.W = v' + 0.V
+        .= v by RLVECT_1:10;
     end;
-    hence thesis;
+A3: W is right_complementable
+    proof
+      let v be VECTOR of W;
+      reconsider v'=v as VECTOR of V;
+      consider w' being VECTOR of V such that
+A4:   v' + w' = 0.V by ALGSTR_0:def 11;
+      reconsider w=w' as VECTOR of W;
+      take w;
+      thus thesis by A4;
+    end;
+A5: for a being real number for v,w being VECTOR of W holds a * (v + w) =
+    a * v + a * w
+    proof
+      let a be real number;
+      let v,w be VECTOR of W;
+      reconsider v'=v,w'=w as VECTOR of V;
+      thus a * (v + w) = a * (v' + w')
+        .= a * v' + a * w' by RLVECT_1:def 9
+        .= a * v + a * w;
+    end;
+A6: for a,b being real number for v being VECTOR of W holds (a * b) * v =
+    a * (b * v)
+    proof
+      let a,b be real number;
+      let v be VECTOR of W;
+      reconsider v'=v as VECTOR of V;
+      thus (a * b) * v = (a * b) * v'
+        .= a * (b * v') by RLVECT_1:def 9
+        .= a * (b * v);
+    end;
+A7: for a,b being real number for v being VECTOR of W holds (a + b) * v =
+    a * v + b * v
+    proof
+      let a,b be real number;
+      let v be VECTOR of W;
+      reconsider v'=v as VECTOR of V;
+      thus (a + b) * v = (a + b) * v'
+        .= a * v' + b * v' by RLVECT_1:def 9
+        .= a * v + b * v;
+    end;
+A8: for a for v,w be VECTOR of W, v',w' be VECTOR of V st v=v' & w=w'
+    holds v+w = v'+w' & a*v = a*v';
+A9: for v,w being VECTOR of W holds v + w = w + v
+    proof
+      let v,w be VECTOR of W;
+      reconsider v'=v,w'=w as VECTOR of V;
+      thus v + w = w' + v' by A8
+        .= w + v;
+    end;
+    for v being VECTOR of W holds 1 * v = v
+    proof
+      let v be VECTOR of W;
+      reconsider v'=v as VECTOR of V;
+      thus 1 * v = 1 * v'
+        .= v by RLVECT_1:def 9;
+    end;
+    then reconsider W as RealLinearSpace by A9,A1,A2,A3,A5,A7,A6,
+    RLVECT_1:def 5
+    ,def 6,def 7,def 9;
+A10: the Mult of W = (the Mult of V) | [:REAL, the carrier of W:] by
+    RELSET_1:34;
+    0.W = 0.V & the addF of W = (the addF of V)||the carrier of W by
+    RELSET_1:34;
+    hence thesis by A10,Def2;
   end;
 end;
 
@@ -855,16 +871,19 @@ canceled 4;
 
 theorem Th48:
   (0).W = (0).V
-proof the carrier of (0).W = {0.W} & the carrier of (0).V = {0.V} by Def3;
-  then the carrier of (0).W = the carrier of (0).V & (0).W is Subspace of V
-  by Def2,Th35;
-  hence thesis by Th38;
+proof
+  the carrier of (0).W = {0.W} & the carrier of (0).V = {0.V} by Def3;
+  then
+A1: the carrier of (0).W = the carrier of (0).V by Def2;
+  (0).W is Subspace of V by Th35;
+  hence thesis by A1,Th38;
 end;
 
 theorem Th49:
   (0).W1 = (0).W2
-proof (0).W1 = (0).V & (0).W2 = (0).V by Th48;
-  hence thesis;
+proof
+  (0).W1 = (0).V by Th48;
+  hence thesis by Th48;
 end;
 
 theorem
@@ -872,14 +891,16 @@ theorem
 
 theorem
   (0).V is Subspace of W
-proof the carrier of (0).V = {0.V} by Def3
+proof
+  the carrier of (0).V = {0.V} by Def3
     .= {0.W} by Def2;
   hence thesis by Th36;
 end;
 
 theorem
   (0).W1 is Subspace of W2
-proof (0).W1 = (0).W2 & (0).W2 is Subspace of W2 by Th49;
+proof
+  (0).W1 = (0).W2 by Th49;
   hence thesis;
 end;
 
@@ -896,66 +917,67 @@ definition
   let V;
   let v,W;
   func v + W -> Subset of V equals
-
   {v + u : u in W};
   coherence
   proof
+    set Y = {v + u : u in W};
     defpred P[set] means ex u st $1 = v + u & u in W;
     consider X being set such that
-A1: for x being set holds x in X iff x in the carrier of V &
-    P[x] from XBOOLE_0:sch 1;
+A1: for x being set holds x in X iff x in the carrier of V & P[x] from
+    XBOOLE_0:sch 1;
     X c= the carrier of V
     proof
       let x be set;
-      assume x in X;
+      assume
+      x in X;
       hence thesis by A1;
     end;
     then reconsider X as Subset of V;
-    set Y = {v + u : u in W};
-    X = Y
+A2: Y c= X
     proof
-      thus X c= Y
-      proof
-        let x be set;
-        assume x in X;
-        then ex u st x = v + u & u in W by A1;
-        hence thesis;
-      end;
-      thus Y c= X
-      proof
-        let x be set;
-        assume x in Y;
-        then ex u st x = v + u & u in W;
-        hence thesis by A1;
-      end;
+      let x be set;
+      assume
+      x in Y;
+      then ex u st x = v + u & u in W;
+      hence thesis by A1;
     end;
-    hence thesis;
+    X c= Y
+    proof
+      let x be set;
+      assume
+      x in X;
+      then ex u st x = v + u & u in W by A1;
+      hence thesis;
+    end;
+    hence thesis by A2,XBOOLE_0:def 10;
   end;
 end;
 
 Lm2: 0.V + W = the carrier of W
 proof
   set A = {0.V + u : u in W};
-A1: A c= the carrier of W
+A1: the carrier of W c= A
   proof
     let x be set;
-    assume x in A;
-    then consider u such that
-A2: x = 0.V + u and
-A3: u in W;
-    x = u by A2,RLVECT_1:10;
-    hence thesis by A3,STRUCT_0:def 5;
-  end;
-  the carrier of W c= A
-  proof
-    let x be set;
-    assume x in the carrier of W;
+    assume
+    x in the carrier of W;
     then
-A4: x in W by STRUCT_0:def 5;
+A2: x in W by STRUCT_0:def 5;
     then x in V by Th17;
     then reconsider y = x as Element of V by STRUCT_0:def 5;
     0.V + y = x by RLVECT_1:10;
-    hence thesis by A4;
+    hence thesis by A2;
+  end;
+  A c= the carrier of W
+  proof
+    let x be set;
+    assume
+    x in A;
+    then consider u such that
+A3: x = 0.V + u and
+A4: u in W;
+    x = u by A3,RLVECT_1:10;
+    hence thesis by A4,STRUCT_0:def 5;
   end;
   hence thesis by A1,XBOOLE_0:def 10;
 end;
@@ -988,14 +1010,16 @@ theorem Th58:
 proof
   thus 0.V in v + W implies v in W
   proof
-    assume 0.V in v + W;
+    assume
+    0.V in v + W;
     then consider u such that
 A1: 0.V = v + u and
 A2: u in W;
     v = - u by A1,RLVECT_1:def 11;
     hence thesis by A2,Th30;
   end;
-  assume v in W;
+  assume
+  v in W;
   then
 A3: - v in W by Th30;
   0.V = v - v by RLVECT_1:28
@@ -1005,7 +1029,8 @@ end;
 
 theorem Th59:
   v in v + W
-proof v + 0.V = v & 0.V in W by Th25,RLVECT_1:10;
+proof
+  v + 0.V = v & 0.V in W by Th25,RLVECT_1:10;
   hence thesis;
 end;
 
@@ -1018,61 +1043,67 @@ proof
   thus v + (0).V c= {v}
   proof
     let x be set;
-    assume x in v + (0).V;
+    assume
+    x in v + (0).V;
     then consider u such that
 A1: x = v + u and
 A2: u in (0).V;
-    the carrier of (0).V = {0.V} & u in the carrier of (0).V
-    by A2,Def3,STRUCT_0:def 5;
-    then u = 0.V by TARSKI:def 1;
+A3: the carrier of (0).V = {0.V} by Def3;
+    u in the carrier of (0).V by A2,STRUCT_0:def 5;
+    then u = 0.V by A3,TARSKI:def 1;
     then x = v by A1,RLVECT_1:10;
     hence thesis by TARSKI:def 1;
   end;
   let x be set;
-  assume x in {v};
+  assume
+  x in {v};
   then
-A3: x = v by TARSKI:def 1;
+A4: x = v by TARSKI:def 1;
   0.V in (0).V & v = v + 0.V by Th25,RLVECT_1:10;
-  hence thesis by A3;
+  hence thesis by A4;
 end;
 
 Lm3: v in W iff v + W = the carrier of W
 proof
+  0.V in W & v + 0.V = v by Th25,RLVECT_1:10;
+  then
+A1: v in {v + u : u in W};
   thus v in W implies v + W = the carrier of W
   proof
     assume
-A1: v in W;
+A2: v in W;
     thus v + W c= the carrier of W
     proof
       let x be set;
-      assume x in v + W;
+      assume
+      x in v + W;
       then consider u such that
-A2:   x = v + u and
-A3:   u in W;
-      v + u in W by A1,A3,Th28;
-      hence thesis by A2,STRUCT_0:def 5;
+A3:   x = v + u and
+A4:   u in W;
+      v + u in W by A2,A4,Th28;
+      hence thesis by A3,STRUCT_0:def 5;
     end;
     let x be set;
-    assume x in the carrier of W;
-    then reconsider y = x, z = v as Element of W by A1,STRUCT_0:def 5;
+    assume
+    x in the carrier of W;
+    then reconsider y = x, z = v as Element of W by A2,STRUCT_0:def 5;
     reconsider y1 = y, z1 = z as VECTOR of V by Th18;
-A4: y - z in W by STRUCT_0:def 5;
 A5: z + (y - z) = (y + z) - z by RLVECT_1:def 6
       .= y + (z - z) by RLVECT_1:def 6
       .= y + 0.W by RLVECT_1:28
       .= x by RLVECT_1:10;
-A6: y - z = y1 - z1 by Th24;
-A7: y1 - z1 in W by A4,Th24;
-    z1 + (y1 - z1) = x by A5,A6,Th21;
-    hence thesis by A7;
+    y - z in W by STRUCT_0:def 5;
+    then
+A6: y1 - z1 in W by Th24;
+    y - z = y1 - z1 by Th24;
+    then z1 + (y1 - z1) = x by A5,Th21;
+    hence thesis by A6;
   end;
   assume
-A8: v + W = the carrier of W;
+A7: v + W = the carrier of W;
   assume
-A9: not v in W;
-  0.V in W & v + 0.V = v by Th25,RLVECT_1:10;
-  then v in {v + u : u in W};
-  hence thesis by A8,A9,STRUCT_0:def 5;
+  not v in W;
+  hence thesis by A7,A1,STRUCT_0:def 5;
 end;
 
 theorem Th62:
@@ -1085,9 +1116,8 @@ end;
 theorem Th63:
   0.V in v + W iff v + W = the carrier of W
 proof
-  (0.V in v + W iff v in W) & (v in
-  W iff v + W = the carrier of W) by Lm3,Th58;
-  hence thesis;
+  0.V in v + W iff v in W by Th58;
+  hence thesis by Lm3;
 end;
 
 theorem
@@ -1101,7 +1131,8 @@ A1: v in W;
   thus (a * v) + W c= the carrier of W
   proof
     let x be set;
-    assume x in (a * v) + W;
+    assume
+    x in (a * v) + W;
     then consider u such that
 A2: x = a * v + u and
 A3: u in W;
@@ -1112,16 +1143,17 @@ A3: u in W;
   let x be set;
   assume
 A4: x in the carrier of W;
-  the carrier of W c= the carrier of V & v in V by Def2,RLVECT_1:3;
-  then reconsider y = x as Element of V by A4;
-  a * v in W & x in W by A1,A4,Th29,STRUCT_0:def 5;
   then
-A5: y - a * v in W by Th31;
-  a * v + (y - a * v) = (y + a * v) - a * v by RLVECT_1:def 6
+A5: x in W by STRUCT_0:def 5;
+  the carrier of W c= the carrier of V by Def2;
+  then reconsider y = x as Element of V by A4;
+A6: a * v + (y - a * v) = (y + a * v) - a * v by RLVECT_1:def 6
     .= y + (a * v - a * v) by RLVECT_1:def 6
     .= y + 0.V by RLVECT_1:28
     .= x by RLVECT_1:10;
-  hence thesis by A5;
+  a * v in W by A1,Th29;
+  then y - a * v in W by A5,Th31;
+  hence thesis by A6;
 end;
 
 theorem Th66:
@@ -1130,7 +1162,8 @@ proof
   assume that
 A1: a <> 0 and
 A2: (a * v) + W = the carrier of W;
-  assume not v in W;
+  assume
+  not v in W;
   then not 1 * v in W by RLVECT_1:def 9;
   then not (a" * a) * v in W by A1,XCMPLX_0:def 7;
   then not a" * (a * v) in W by RLVECT_1:def 9;
@@ -1144,9 +1177,8 @@ end;
 theorem Th67:
   v in W iff - v + W = the carrier of W
 proof
-  (v in W iff ((- 1) * v) + W = the carrier of W) & (- 1) * v = - v
-  by Th65,Th66,RLVECT_1:29;
-  hence thesis;
+  v in W iff ((- 1) * v) + W = the carrier of W by Th65,Th66;
+  hence thesis by RLVECT_1:29;
 end;
 
 theorem Th68:
@@ -1159,25 +1191,27 @@ A1: u in W;
     thus v + W c= (v + u) + W
     proof
       let x be set;
-      assume x in v + W;
+      assume
+      x in v + W;
       then consider v1 such that
 A2:   x = v + v1 and
 A3:   v1 in W;
-A4:   v1 - u in W by A1,A3,Th31;
-      (v + u) + (v1 - u) = v + (u + (v1 - u)) by RLVECT_1:def 6
+A4:   (v + u) + (v1 - u) = v + (u + (v1 - u)) by RLVECT_1:def 6
         .= v + ((v1 + u) - u) by RLVECT_1:def 6
         .= v + (v1 + (u - u)) by RLVECT_1:def 6
         .= v + (v1 + 0.V) by RLVECT_1:28
         .= x by A2,RLVECT_1:10;
+      v1 - u in W by A1,A3,Th31;
       hence thesis by A4;
     end;
     let x be set;
-    assume x in (v + u) + W;
+    assume
+    x in (v + u) + W;
     then consider v2 such that
 A5: x = (v + u) + v2 and
 A6: v2 in W;
-A7: u + v2 in W by A1,A6,Th28;
-    x = v + (u + v2) by A5,RLVECT_1:def 6;
+A7: x = v + (u + v2) by A5,RLVECT_1:def 6;
+    u + v2 in W by A1,A6,Th28;
     hence thesis by A7;
   end;
   assume
@@ -1196,13 +1230,14 @@ end;
 theorem
   u in W iff v + W = (v - u) + W
 proof
-A1: (- u in W iff v + W = (v + (- u)) + W) & v + (- u) = v - u by Th68;
-  - u in W implies u in W
+A1: - u in W implies u in W
   proof
-    assume - u in W;
+    assume
+    - u in W;
     then - (- u) in W by Th30;
     hence thesis by RLVECT_1:30;
   end;
+  - u in W iff v + W = (v + (- u)) + W by Th68;
   hence thesis by A1,Th30;
 end;
 
@@ -1211,33 +1246,35 @@ theorem Th70:
 proof
   thus v in u + W implies u + W = v + W
   proof
-    assume v in u + W;
+    assume
+    v in u + W;
     then consider z being VECTOR of V such that
 A1: v = u + z and
 A2: z in W;
     thus u + W c= v + W
     proof
       let x be set;
-      assume x in u + W;
+      assume
+      x in u + W;
       then consider v1 such that
 A3:   x = u + v1 and
 A4:   v1 in W;
-A5:   v1 - z in W by A2,A4,Th31;
       v - z = u + (z - z) by A1,RLVECT_1:def 6
         .= u + 0.V by RLVECT_1:28
         .= u by RLVECT_1:10;
-      then x = v + (v1 + (- z)) by A3,RLVECT_1:def 6
+      then
+A5:   x = v + (v1 + (- z)) by A3,RLVECT_1:def 6
         .= v + (v1 - z);
+      v1 - z in W by A2,A4,Th31;
       hence thesis by A5;
     end;
     let x be set;
-    assume x in v + W;
+    assume
+    x in v + W;
     then consider v2 such that
-A6: x = v + v2 and
-A7: v2 in W;
-A8: z + v2 in W by A2,A7,Th28;
-    x = u + (z + v2) by A1,A6,RLVECT_1:def 6;
-    hence thesis by A8;
+A6: x = v + v2 & v2 in W;
+    z + v2 in W & x = u + (z + v2) by A1,A2,A6,Th28,RLVECT_1:def 6;
+    hence thesis;
   end;
   thus thesis by Th59;
 end;
@@ -1247,7 +1284,8 @@ theorem Th71:
 proof
   thus v + W = (- v) + W implies v in W
   proof
-    assume v + W = (- v) + W;
+    assume
+    v + W = (- v) + W;
     then v in (- v) + W by Th59;
     then consider u such that
 A1: v = - v + u and
@@ -1260,13 +1298,14 @@ A2: u in W;
       .= ((1 + 1) * v) - u by RLVECT_1:def 9
       .= 2 * v - u;
     then 2" * (2 * v) = 2" * u by RLVECT_1:35;
-    then (2" * 2) * v = 2" * u & 0 <> 2 by RLVECT_1:def 9;
+    then (2" * 2) * v = 2" * u by RLVECT_1:def 9;
     then v = 2" * u by RLVECT_1:def 9;
     hence thesis by A2,Th29;
   end;
-  assume v in W;
-  then v + W = the carrier of W & (- v) + W = the carrier of W by Lm3,Th67;
-  hence thesis;
+  assume
+A3: v in W;
+  then v + W = the carrier of W by Lm3;
+  hence thesis by A3,Th67;
 end;
 
 theorem Th72:
@@ -1284,40 +1323,43 @@ A6: x2 in W by A2;
   thus v1 + W c= v2 + W
   proof
     let x be set;
-    assume x in v1 + W;
+    assume
+    x in v1 + W;
     then consider u1 such that
 A7: x = v1 + u1 and
 A8: u1 in W;
+    x2 - x1 in W by A4,A6,Th31;
+    then
+A9: (x2 - x1) + u1 in W by A8,Th28;
     u - x1 = v1 + (x1 - x1) by A3,RLVECT_1:def 6
       .= v1 + 0.V by RLVECT_1:28
       .= v1 by RLVECT_1:10;
-    then
-A9: x = (v2 + (x2 - x1)) + u1 by A5,A7,RLVECT_1:def 6
+    then x = (v2 + (x2 - x1)) + u1 by A5,A7,RLVECT_1:def 6
       .= v2 + ((x2 - x1) + u1) by RLVECT_1:def 6;
-    x2 - x1 in W by A4,A6,Th31;
-    then (x2 - x1) + u1 in W by A8,Th28;
     hence thesis by A9;
   end;
   let x be set;
-  assume x in v2 + W;
+  assume
+  x in v2 + W;
   then consider u1 such that
 A10: x = v2 + u1 and
 A11: u1 in W;
+  x1 - x2 in W by A4,A6,Th31;
+  then
+A12: (x1 - x2) + u1 in W by A11,Th28;
   u - x2 = v2 + (x2 - x2) by A5,RLVECT_1:def 6
     .= v2 + 0.V by RLVECT_1:28
     .= v2 by RLVECT_1:10;
-  then
-A12: x = (v1 + (x1 - x2)) + u1 by A3,A10,RLVECT_1:def 6
+  then x = (v1 + (x1 - x2)) + u1 by A3,A10,RLVECT_1:def 6
     .= v1 + ((x1 - x2) + u1) by RLVECT_1:def 6;
-  x1 - x2 in W by A4,A6,Th31;
-  then (x1 - x2) + u1 in W by A11,Th28;
   hence thesis by A12;
 end;
 
 theorem
   u in v + W & u in (- v) + W implies v in W
 proof
-  assume u in v + W & u in (- v) + W;
+  assume
+  u in v + W & u in (- v) + W;
   then v + W = (- v) + W by Th72;
   hence thesis by Th71;
 end;
@@ -1328,39 +1370,39 @@ proof
   assume that
 A1: a <> 1 and
 A2: a * v in v + W;
+A3: a - 1 <> 0 by A1;
   consider u such that
-A3: a * v = v + u and
-A4: u in W by A2;
+A4: a * v = v + u and
+A5: u in W by A2;
   u = u + 0.V by RLVECT_1:10
     .= u + (v - v) by RLVECT_1:28
-    .= a * v - v by A3,RLVECT_1:def 6
+    .= a * v - v by A4,RLVECT_1:def 6
     .= a * v - 1 * v by RLVECT_1:def 9
     .= (a - 1) * v by RLVECT_1:49;
-  then (a - 1)" * u = ((a - 1)" * (a - 1)) * v & a - 1 <> 0
-  by A1,RLVECT_1:def 9;
-  then 1 * v = (a - 1)" * u by XCMPLX_0:def 7;
+  then (a - 1)" * u = ((a - 1)" * (a - 1)) * v by RLVECT_1:def 9;
+  then 1 * v = (a - 1)" * u by A3,XCMPLX_0:def 7;
   then v = (a - 1)" * u by RLVECT_1:def 9;
-  hence thesis by A4,Th29;
+  hence thesis by A5,Th29;
 end;
 
 theorem Th75:
   v in W implies a * v in v + W
 proof
   assume
-A1: v in W;
-A2: a * v = ((a - 1) + 1) * v
+  v in W;
+  then
+A1: (a - 1) * v in W by Th29;
+  a * v = ((a - 1) + 1) * v
     .= (a - 1) * v + 1 * v by RLVECT_1:def 9
     .= v + (a - 1) * v by RLVECT_1:def 9;
-  (a - 1) * v in W by A1,Th29;
-  hence thesis by A2;
+  hence thesis by A1;
 end;
 
 theorem
   - v in v + W iff v in W
 proof
-  (v in W implies (- 1) * v in v + W) & (- 1) * v = - v &
-  (-1 <> 1 & (- 1) * v in v + W implies v in W) by Th74,Th75,RLVECT_1:29;
-  hence thesis;
+  (- 1) * v = - v by RLVECT_1:29;
+  hence thesis by Th74,Th75;
 end;
 
 theorem Th77:
@@ -1368,13 +1410,13 @@ theorem Th77:
 proof
   thus u + v in v + W implies u in W
   proof
-    assume u + v in v + W;
-    then consider v1 such that
-A1: u + v = v + v1 and
-A2: v1 in W;
-    thus thesis by A1,A2,RLVECT_1:21;
+    assume
+    u + v in v + W;
+    then ex v1 st u + v = v + v1 & v1 in W;
+    hence thesis by RLVECT_1:21;
   end;
-  assume u in W;
+  assume
+  u in W;
   hence thesis;
 end;
 
@@ -1382,17 +1424,18 @@ theorem
   v - u in v + W iff u in W
 proof
 A1: v - u = (- u) + v;
-A2: u in W implies - u in W by Th30;
-  - u in W implies - (- u) in W by Th30;
+A2: - u in W implies - (- u) in W by Th30;
+  u in W implies - u in W by Th30;
   hence thesis by A1,A2,Th77,RLVECT_1:30;
 end;
 
 theorem Th79:
-  u in v + W iff (ex v1 st v1 in W & u = v + v1)
+  u in v + W iff ex v1 st v1 in W & u = v + v1
 proof
-  thus u in v + W implies (ex v1 st v1 in W & u = v + v1)
+  thus u in v + W implies ex v1 st v1 in W & u = v + v1
   proof
-    assume u in v + W;
+    assume
+    u in v + W;
     then ex v1 st u = v + v1 & v1 in W;
     hence thesis;
   end;
@@ -1402,11 +1445,12 @@ A1: v1 in W & u = v + v1;
 end;
 
 theorem
-  u in v + W iff (ex v1 st v1 in W & u = v - v1)
+  u in v + W iff ex v1 st v1 in W & u = v - v1
 proof
-  thus u in v + W implies (ex v1 st v1 in W & u = v - v1)
+  thus u in v + W implies ex v1 st v1 in W & u = v - v1
   proof
-    assume u in v + W;
+    assume
+    u in v + W;
     then consider v1 such that
 A1: u = v + v1 and
 A2: v1 in W;
@@ -1415,9 +1459,10 @@ A2: v1 in W;
     thus thesis by A1,RLVECT_1:30;
   end;
   given v1 such that
-A3: v1 in W & u = v - v1;
-  u = v + (- v1) & - v1 in W by A3,Th30;
-  hence thesis;
+A3: v1 in W and
+A4: u = v - v1;
+  - v1 in W by A3,Th30;
+  hence thesis by A4;
 end;
 
 theorem Th81:
@@ -1428,20 +1473,21 @@ proof
     given v such that
 A1: v1 in v + W and
 A2: v2 in v + W;
-    consider u1 such that
-A3: u1 in W and
-A4: v1 = v + u1 by A1,Th79;
     consider u2 such that
-A5: u2 in W and
-A6: v2 = v + u2 by A2,Th79;
-    v1 - v2 = (u1 + v) + ((- v) - u2) by A4,A6,RLVECT_1:44
+A3: u2 in W and
+A4: v2 = v + u2 by A2,Th79;
+    consider u1 such that
+A5: u1 in W and
+A6: v1 = v + u1 by A1,Th79;
+    v1 - v2 = (u1 + v) + ((- v) - u2) by A6,A4,RLVECT_1:44
       .= ((u1 + v) + (- v)) - u2 by RLVECT_1:def 6
       .= (u1 + (v + (- v))) - u2 by RLVECT_1:def 6
       .= (u1 + 0.V) - u2 by RLVECT_1:16
       .= u1 - u2 by RLVECT_1:10;
-    hence thesis by A3,A5,Th31;
+    hence thesis by A5,A3,Th31;
   end;
-  assume v1 - v2 in W;
+  assume
+  v1 - v2 in W;
   then
 A7: - (v1 - v2) in W by Th30;
   take v1;
@@ -1454,19 +1500,19 @@ A7: - (v1 - v2) in W by Th30;
 end;
 
 theorem Th82:
-  v + W = u + W implies (ex v1 st v1 in W & v + v1 = u)
+  v + W = u + W implies ex v1 st v1 in W & v + v1 = u
 proof
   assume
-A1: v + W = u + W;
-  take v1 = u - v;
-  v in u + W by A1,Th59;
+  v + W = u + W;
+  then v in u + W by Th59;
   then consider u1 such that
-A2: v = u + u1 and
-A3: u1 in W;
-  0.V = (u + u1) - v by A2,RLVECT_1:28
+A1: v = u + u1 and
+A2: u1 in W;
+  take v1 = u - v;
+  0.V = (u + u1) - v by A1,RLVECT_1:28
     .= u1 + (u - v) by RLVECT_1:def 6;
   then v1 = - u1 by RLVECT_1:def 11;
-  hence v1 in W by A3,Th30;
+  hence v1 in W by A2,Th30;
   thus v + v1 = (u + v) - v by RLVECT_1:def 6
     .= u + (v - v) by RLVECT_1:def 6
     .= u + 0.V by RLVECT_1:28
@@ -1474,26 +1520,27 @@ A3: u1 in W;
 end;
 
 theorem Th83:
-  v + W = u + W implies (ex v1 st v1 in W & v - v1 = u)
+  v + W = u + W implies ex v1 st v1 in W & v - v1 = u
 proof
   assume
-A1: v + W = u + W;
-  take v1 = v - u;
-  u in v + W by A1,Th59;
+  v + W = u + W;
+  then u in v + W by Th59;
   then consider u1 such that
-A2: u = v + u1 and
-A3: u1 in W;
-  0.V = (v + u1) - u by A2,RLVECT_1:28
+A1: u = v + u1 and
+A2: u1 in W;
+  take v1 = v - u;
+  0.V = (v + u1) - u by A1,RLVECT_1:28
     .= u1 + (v - u) by RLVECT_1:def 6;
   then v1 = - u1 by RLVECT_1:def 11;
-  hence v1 in W by A3,Th30;
+  hence v1 in W by A2,Th30;
   thus v - v1 = (v - v) + u by RLVECT_1:43
     .= 0.V + u by RLVECT_1:28
     .= u by RLVECT_1:10;
 end;
 
 theorem Th84:
-  for W1,W2 being strict Subspace of V holds v + W1 = v + W2 iff W1 = W2
+  for W1,W2 being strict Subspace of V holds v + W1 = v + W2 iff
+  W1 = W2
 proof
   let W1,W2 be strict Subspace of V;
   thus v + W1 = v + W2 implies W1 = W2
@@ -1503,34 +1550,34 @@ A1: v + W1 = v + W2;
     the carrier of W1 = the carrier of W2
     proof
 A2:   the carrier of W1 c= the carrier of V by Def2;
-A3:   the carrier of W2 c= the carrier of V by Def2;
       thus the carrier of W1 c= the carrier of W2
       proof
         let x be set;
         assume
-A4:     x in the carrier of W1;
+A3:     x in the carrier of W1;
         then reconsider y = x as Element of V by A2;
         set z = v + y;
-        x in W1 by A4,STRUCT_0:def 5;
+        x in W1 by A3,STRUCT_0:def 5;
         then z in v + W2 by A1;
         then consider u such that
-A5:     z = v + u and
-A6:     u in W2;
-        y = u by A5,RLVECT_1:21;
-        hence thesis by A6,STRUCT_0:def 5;
+A4:     z = v + u and
+A5:     u in W2;
+        y = u by A4,RLVECT_1:21;
+        hence thesis by A5,STRUCT_0:def 5;
       end;
       let x be set;
       assume
-A7:   x in the carrier of W2;
-      then reconsider y = x as Element of V by A3;
+A6:   x in the carrier of W2;
+      the carrier of W2 c= the carrier of V by Def2;
+      then reconsider y = x as Element of V by A6;
       set z = v + y;
-      x in W2 by A7,STRUCT_0:def 5;
+      x in W2 by A6,STRUCT_0:def 5;
       then z in v + W1 by A1;
       then consider u such that
-A8:   z = v + u and
-A9:   u in W1;
-      y = u by A8,RLVECT_1:21;
-      hence thesis by A9,STRUCT_0:def 5;
+A7:   z = v + u and
+A8:   u in W1;
+      y = u by A7,RLVECT_1:21;
+      hence thesis by A8,STRUCT_0:def 5;
     end;
     hence thesis by Th38;
   end;
@@ -1538,69 +1585,69 @@ A9:   u in W1;
 end;
 
 theorem Th85:
-  for W1,W2 being strict Subspace of V holds v + W1 = u + W2 implies W1 = W2
+  for W1,W2 being strict Subspace of V holds v + W1 = u + W2
+  implies W1 = W2
 proof
   let W1,W2 be strict Subspace of V;
   assume
 A1: v + W1 = u + W2;
-  set V1 = the carrier of W1;
   set V2 = the carrier of W2;
+  set V1 = the carrier of W1;
   assume
 A2: W1 <> W2;
-  then V1 <> V2 by Th38;
-  then
-A3: not V1 c= V2 or not V2 c= V1 by XBOOLE_0:def 10;
-A4: now
-    assume
-A5: V1 \ V2 <> {};
+A3: now
     consider x being Element of V1 \ V2;
-    x in V1 & not x in V2 by A5,XBOOLE_0:def 5;
+    assume
+    V1 \ V2 <> {};
+    then x in V1 by XBOOLE_0:def 5;
     then
-A6: x in W1 & not x in W2 by STRUCT_0:def 5;
+A4: x in W1 by STRUCT_0:def 5;
     then x in V by Th17;
     then reconsider x as Element of V by STRUCT_0:def 5;
     set z = v + x;
-    z in u + W2 by A1,A6;
+    z in u + W2 by A1,A4;
     then consider u1 such that
-A7: z = u + u1 and
-A8: u1 in W2;
+A5: z = u + u1 and
+A6: u1 in W2;
     x = 0.V + x by RLVECT_1:10
       .= v - v + x by RLVECT_1:28
-      .= - v + (u + u1) by A7,RLVECT_1:def 6;
+      .= - v + (u + u1) by A5,RLVECT_1:def 6;
     then
-A9: (v + (- v + (u + u1))) + W1 = v + W1 by A6,Th68;
+A7: (v + (- v + (u + u1))) + W1 = v + W1 by A4,Th68;
     v + (- v + (u + u1)) = (v - v) + (u + u1) by RLVECT_1:def 6
       .= 0.V + (u + u1) by RLVECT_1:28
       .= u + u1 by RLVECT_1:10;
-    then (u + u1) + W2 = (u + u1) + W1 by A1,A8,A9,Th68;
+    then (u + u1) + W2 = (u + u1) + W1 by A1,A6,A7,Th68;
     hence thesis by A2,Th84;
   end;
-  now
-    assume
-A10: V2 \ V1 <> {};
+A8: now
     consider x being Element of V2 \ V1;
-    x in V2 & not x in V1 by A10,XBOOLE_0:def 5;
+    assume
+    V2 \ V1 <> {};
+    then x in V2 by XBOOLE_0:def 5;
     then
-A11: x in W2 & not x in W1 by STRUCT_0:def 5;
+A9: x in W2 by STRUCT_0:def 5;
     then x in V by Th17;
     then reconsider x as Element of V by STRUCT_0:def 5;
     set z = u + x;
-    z in v + W1 by A1,A11;
+    z in v + W1 by A1,A9;
     then consider u1 such that
-A12: z = v + u1 and
-A13: u1 in W1;
+A10: z = v + u1 and
+A11: u1 in W1;
     x = 0.V + x by RLVECT_1:10
       .= u - u + x by RLVECT_1:28
-      .= - u + (v + u1) by A12,RLVECT_1:def 6;
+      .= - u + (v + u1) by A10,RLVECT_1:def 6;
     then
-A14: (u + (- u + (v + u1))) + W2 = u + W2 by A11,Th68;
+A12: (u + (- u + (v + u1))) + W2 = u + W2 by A9,Th68;
     u + (- u + (v + u1)) = (u - u) + (v + u1) by RLVECT_1:def 6
       .= 0.V + (v + u1) by RLVECT_1:28
       .= v + u1 by RLVECT_1:10;
-    then (v + u1) + W1 = (v + u1) + W2 by A1,A13,A14,Th68;
+    then (v + u1) + W1 = (v + u1) + W2 by A1,A11,A12,Th68;
     hence thesis by A2,Th84;
   end;
-  hence thesis by A3,A4,XBOOLE_1:37;
+  V1 <> V2 by A2,Th38;
+  then not V1 c= V2 or not V2 c= V1 by XBOOLE_0:def 10;
+  hence thesis by A3,A8,XBOOLE_1:37;
 end;
 
 ::
@@ -1625,25 +1672,26 @@ A2: C = v + W by Def6;
 end;
 
 theorem
-  for W1,W2 being strict Subspace of V,
-  C1 being Coset of W1, C2 being Coset of W2 holds C1 = C2 implies W1 = W2
+  for W1,W2 being strict Subspace of V, C1 being Coset of W1, C2 being
+  Coset of W2 holds C1 = C2 implies W1 = W2
 proof
   let W1,W2 be strict Subspace of V, C1 be Coset of W1, C2 be Coset of W2;
-A1: ex v1 st C1 = v1 + W1 by Def6;
-  ex v2 st C2 = v2 + W2 by Def6;
-  hence thesis by A1,Th85;
+  ( ex v1 st C1 = v1 + W1)& ex v2 st C2 = v2 + W2 by Def6;
+  hence thesis by Th85;
 end;
 
 theorem
   {v} is Coset of (0).V
-proof v + (0).V = {v} by Th61;
+proof
+  v + (0).V = {v} by Th61;
   hence thesis by Def6;
 end;
 
 theorem
-  V1 is Coset of (0).V implies (ex v st V1 = {v})
+  V1 is Coset of (0).V implies ex v st V1 = {v}
 proof
-  assume V1 is Coset of (0).V;
+  assume
+  V1 is Coset of (0).V;
   then consider v such that
 A1: V1 = v + (0).V by Def6;
   take v;
@@ -1652,16 +1700,17 @@ end;
 
 theorem
   the carrier of W is Coset of W
-proof the carrier of W = 0.V + W by Lm2;
+proof
+  the carrier of W = 0.V + W by Lm2;
   hence thesis by Def6;
 end;
 
 theorem
   the carrier of V is Coset of (Omega).V
 proof
+  consider v;
   the carrier of V is Subset of V iff the carrier of V c= the carrier of V;
   then reconsider A = the carrier of V as Subset of V;
-  consider v;
   A = v + (Omega).V by Th62;
   hence thesis by Def6;
 end;
@@ -1669,7 +1718,8 @@ end;
 theorem
   V1 is Coset of (Omega).V implies V1 = the carrier of V
 proof
-  assume V1 is Coset of (Omega).V;
+  assume
+  V1 is Coset of (Omega).V;
   then ex v st V1 = v + (Omega).V by Def6;
   hence thesis by Th62;
 end;
@@ -1695,17 +1745,19 @@ A1: u in C;
 end;
 
 theorem
-  u in C & v in C implies (ex v1 st v1 in W & u + v1 = v)
+  u in C & v in C implies ex v1 st v1 in W & u + v1 = v
 proof
-  assume u in C & v in C;
+  assume
+  u in C & v in C;
   then C = u + W & C = v + W by Th94;
   hence thesis by Th82;
 end;
 
 theorem
-  u in C & v in C implies (ex v1 st v1 in W & u - v1 = v)
+  u in C & v in C implies ex v1 st v1 in W & u - v1 = v
 proof
-  assume u in C & v in C;
+  assume
+  u in C & v in C;
   then C = u + W & C = v + W by Th94;
   hence thesis by Th83;
 end;
@@ -1720,7 +1772,8 @@ A1: v1 in C & v2 in C;
     ex v st C = v + W by Def6;
     hence thesis by A1,Th81;
   end;
-  assume v1 - v2 in W;
+  assume
+  v1 - v2 in W;
   then consider v such that
 A2: v1 in v + W & v2 in v + W by Th81;
   reconsider C = v + W as Coset of W by Def6;
@@ -1733,8 +1786,7 @@ theorem
 proof
   assume
 A1: u in B & u in C;
-A2: ex v1 st B = v1 + W by Def6;
-  ex v2 st C = v2 + W by Def6;
-  hence thesis by A1,A2,Th72;
+  ( ex v1 st B = v1 + W)& ex v2 st C = v2 + W by Def6;
+  hence thesis by A1,Th72;
 end;
 

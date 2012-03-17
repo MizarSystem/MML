@@ -11,11 +11,11 @@ environ
  notations TARSKI, SUBSET_1, NUMBERS, XCMPLX_0, REAL_1, NAT_1, RELAT_1,
       FUNCT_1, FUNCT_2, ZFMISC_1, PARTFUN1, BINOP_1, FUNCOP_1, FINSEQ_1,
       FINSEQOP, VALUED_1, COMPLSP1, COMPLEX1, RVSUM_1, FINSEQ_2, BINOP_2,
-      EUCLID_2, ORDINAL1, MATRIX_5, XXREAL_0, SEQ_1;
+      ORDINAL1, MATRIX_5, XXREAL_0, SEQ_1;
  constructors PARTFUN1, SETWISEO, XXREAL_0, REAL_1, BINOP_2, FINSEQOP,
-      COMPLSP1, EUCLID_2, MATRIX_5, SEQ_1, BINOP_1, RVSUM_1, RELSET_1;
+      COMPLSP1, MATRIX_5, SEQ_1, BINOP_1, RVSUM_1, RELSET_1;
  registrations XBOOLE_0, FUNCT_1, RELSET_1, FUNCT_2, NUMBERS, XCMPLX_0,
-      BINOP_2, MEMBERED, FINSEQ_2, XXREAL_0, VALUED_0;
+      BINOP_2, MEMBERED, FINSEQ_2, XXREAL_0, VALUED_0, FINSEQ_1;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, VALUED_1;
  theorems FUNCT_1, FUNCT_2, FINSEQ_1, FUNCOP_1, FINSEQ_2, FINSEQOP, RELAT_1,
@@ -27,61 +27,69 @@ begin :: Preliminaries
 
 reserve i,j,k for Element of NAT,
   x,y,z for FinSequence of COMPLEX,
-  c for Element of COMPLEX,
+  c for
+  Element of COMPLEX,
   R,R1,R2 for Element of i-tuples_on COMPLEX;
 
 definition
   let z be FinSequence of COMPLEX;
   func z*' -> FinSequence of COMPLEX means
   :Def1:
-  len it = len z &
-  for i being Nat st 1<=i & i<=len z holds it.i = (z.i)*';
+  len it = len z & for i being
+  Nat st 1<=i & i<=len z holds it.i = (z.i)*';
   existence
   proof
     deffunc F(Nat)=(z.$1)*';
     consider p being FinSequence such that
-A1: len p = len z & for k be Nat st k in dom p holds p.k=F(k)
-        from FINSEQ_1:sch 2;
-A2: for i be Nat st 1<=i & i<=len z holds ((z.i)*')=p.i
-    proof
-      let i be Nat;
-      assume 1<=i & i<=len z;
-      then i in dom p by A1,FINSEQ_3:27;
-      hence thesis by A1;
-    end;
+A1: len p = len z & for k be Nat st k in dom p holds p.k=F(k) from
+    FINSEQ_1:sch 2;
     rng p c= COMPLEX
     proof
       let s2 be set;
-      assume s2 in rng p;
+      assume
+      s2 in rng p;
       then consider s1 being set such that
-A3:   s1 in dom p & s2=p.s1 by FUNCT_1:def 5;
-      reconsider nx=s1 as Element of NAT by A3;
-      p.nx = (z.nx)*' by A1,A3;
+A2:   s1 in dom p and
+A3:   s2=p.s1 by FUNCT_1:def 5;
+      reconsider nx=s1 as Element of NAT by A2;
+      p.nx = (z.nx)*' by A1,A2;
       hence thesis by A3;
     end;
-    then p is FinSequence of COMPLEX by FINSEQ_1:def 4;
-    hence thesis by A1,A2;
+    then
+A4: p is FinSequence of COMPLEX by FINSEQ_1:def 4;
+    for i be Nat st 1<=i & i<=len z holds ((z.i)*')=p.i
+    proof
+      let i be Nat;
+      assume
+      1<=i & i<=len z;
+      then i in dom p by A1,FINSEQ_3:27;
+      hence thesis by A1;
+    end;
+    hence thesis by A1,A4;
   end;
   uniqueness
   proof
     let p1,p2 be FinSequence of COMPLEX;
-    assume
-A4: (len p1=len z & for i be Nat st 1<=i & i<=len z holds (z.i)*'=p1.i)&
-    (len p2=len z & for i be Nat st 1<=i & i<=len z holds (z.i)*'=p2.i);
+    assume that
+A5: len p1=len z and
+A6: for i be Nat st 1<=i & i<=len z holds (z.i)*'=p1.i and
+A7: len p2=len z and
+A8: for i be Nat st 1<=i & i<=len z holds (z.i)*'=p2.i;
     for i be Nat st 1<=i & i<=len p1 holds p1.i=p2.i
     proof
       let i be Nat;
       assume
-A5:   1<=i & i<=len p1;
-      then (z.i)*'=p1.i by A4;
-      hence thesis by A4,A5;
+A9:   1<=i & i<=len p1;
+      then (z.i)*'=p1.i by A5,A6;
+      hence thesis by A5,A8,A9;
     end;
-    hence thesis by A4,FINSEQ_1:18;
+    hence thesis by A5,A7,FINSEQ_1:18;
   end;
 end;
 
 Lm1: c*x = (multcomplex[;](c,id COMPLEX))*x
-proof c multcomplex = multcomplex[;](c,id COMPLEX) by COMPLSP1:def 5;
+proof
+  c multcomplex = multcomplex[;](c,id COMPLEX) by COMPLSP1:def 5;
   hence thesis by COMPLSP1:def 10;
 end;
 
@@ -95,7 +103,8 @@ definition
   let i,R1,R2;
   redefine func R1 - R2 -> Element of i-tuples_on COMPLEX;
   coherence
-  proof R1 - R2 = diffcomplex.:(R1,R2) by COMPLSP1:def 8;
+  proof
+    R1 - R2 = diffcomplex.:(R1,R2) by COMPLSP1:def 8;
     hence thesis by FINSEQ_2:140;
   end;
 end;
@@ -104,7 +113,8 @@ definition
   let i,R1,R2;
   redefine func R1 + R2 -> Element of i-tuples_on COMPLEX;
   coherence
-  proof R1 + R2 = addcomplex.:(R1,R2) by COMPLSP1:def 7;
+  proof
+    R1 + R2 = addcomplex.:(R1,R2) by COMPLSP1:def 7;
     hence thesis by FINSEQ_2:140;
   end;
 end;
@@ -153,35 +163,36 @@ proof
 end;
 
 theorem Th6:
-  for x1,x2 being FinSequence of COMPLEX st len x1=len x2 holds
-  len (x1+x2)=len x1
+  for x1,x2 being FinSequence of COMPLEX st len x1=len x2 holds len
+  (x1+x2)=len x1
 proof
   let x1,x2 be FinSequence of COMPLEX;
-  assume
-A1: len x1=len x2;
   set n=len x1;
   reconsider z1=x1 as Element of (len x1)-tuples_on COMPLEX by FINSEQ_2:110;
-  reconsider z2=x2 as Element of n-tuples_on COMPLEX by A1,FINSEQ_2:110;
+  assume
+  len x1=len x2;
+  then reconsider z2=x2 as Element of n-tuples_on COMPLEX by FINSEQ_2:110;
   dom (z1+z2)=Seg n by FINSEQ_2:144;
   hence thesis by FINSEQ_1:def 3;
 end;
 
 theorem Th7:
-  for x1,x2 being FinSequence of COMPLEX st len x1=len x2 holds
-  len (x1-x2)=len x1
+  for x1,x2 being FinSequence of COMPLEX st len x1=len x2 holds len
+  (x1-x2)=len x1
 proof
   let x1,x2 be FinSequence of COMPLEX;
-  assume
-A1: len x1=len x2;
   set n=len x1;
   reconsider z1=x1 as Element of (len x1)-tuples_on COMPLEX by FINSEQ_2:110;
-  reconsider z2=x2 as Element of n-tuples_on COMPLEX by A1,FINSEQ_2:110;
+  assume
+  len x1=len x2;
+  then reconsider z2=x2 as Element of n-tuples_on COMPLEX by FINSEQ_2:110;
   dom (z1-z2)=Seg n by FINSEQ_2:144;
   hence thesis by FINSEQ_1:def 3;
 end;
 
 theorem
-  for f being FinSequence of COMPLEX holds f is Element of COMPLEX (len f)
+  for f being FinSequence of COMPLEX holds f is Element of COMPLEX (len
+  f)
 proof
   let f be FinSequence of COMPLEX;
   f is Element of COMPLEX* by FINSEQ_1:def 11;
@@ -227,7 +238,8 @@ definition
   let i,R;
   redefine func -R -> Element of i-tuples_on COMPLEX;
   coherence
-  proof -R = compcomplex*R by COMPLSP1:def 9;
+  proof
+    -R = compcomplex*R by COMPLSP1:def 9;
     hence thesis by FINSEQ_2:133;
   end;
 end;
@@ -246,7 +258,8 @@ proof
 end;
 
 theorem Th16:
-  for i being Nat for a being complex number holds (a*x).i = a*(x.i)
+  for i being Nat for a being complex number holds (a*x).i = a*(x.
+  i)
 proof
   let i be Nat;
   let a be complex number;
@@ -262,10 +275,10 @@ A2: not i in dom x by Th15;
   suppose
 A3: i in dom (a*x);
     set a' = x.i;
-A4: i in dom(a*x) & a*x = (multcomplex[;](aa,id COMPLEX))*x by A3,Lm1;
+A4: a*x = (multcomplex[;](aa,id COMPLEX))*x by Lm1;
     then
-A5: a' in dom(multcomplex[;](aa,id COMPLEX)) by FUNCT_1:21;
-    thus (a*x).i = (multcomplex[;](aa,id COMPLEX)).a' by A4,FUNCT_1:22
+A5: a' in dom(multcomplex[;](aa,id COMPLEX)) by A3,FUNCT_1:21;
+    thus (a*x).i = (multcomplex[;](aa,id COMPLEX)).a' by A3,A4,FUNCT_1:22
       .= multcomplex.(a,(id COMPLEX).a') by A5,FUNCOP_1:42
       .= multcomplex.(aa,a') by FUNCT_1:35
       .= a*(x.i) by BINOP_2:def 5;
@@ -277,151 +290,154 @@ theorem Th17:
 proof
   let a be complex number;
   reconsider aa = a as Element of COMPLEX by XCMPLX_0:def 2;
-A1: len (a*x) = len x by Th3;
-A2: len ((a*x)*') = len (a*x) by Def1;
   len (a*'*(x*')) = len (x*') by Th3;
-  then len (a*'*(x*')) = len x by Def1;
   then
-A3: len ((a*x)*')=len (a*'*(x*')) by A2,Th3;
-  now
+A1: len (a*'*(x*')) = len x by Def1;
+A2: len (a*x) = len x by Th3;
+A3: now
     let i be Nat;
-    assume 1 <= i & i <= len ((a*x)*');
-    then
-A4: 1 <= i & i <= len (a*x) by Def1;
-    hence (a*x)*'.i = (((a*x).i)*') by Def1
+    assume that
+A4: 1 <= i and
+A5: i <= len ((a*x)*');
+A6: i <= len (a*x) by A5,Def1;
+    hence (a*x)*'.i = (((a*x).i)*') by A4,Def1
       .= (aa*(x.i))*' by Th16
       .= aa*'*(x.i)*' by COMPLEX1:121
-      .= a*'*((x*').i) by A1,A4,Def1
+      .= a*'*((x*').i) by A2,A4,A6,Def1
       .= (a*'*(x*')).i by Th16;
   end;
-  hence thesis by A3,FINSEQ_1:18;
+  len ((a*x)*') = len (a*x) by Def1;
+  hence thesis by A1,A3,Th3,FINSEQ_1:18;
 end;
 
 theorem Th18:
   (R1+R2).j = R1.j + R2.j
-proof per cases;
+proof
+  per cases;
   suppose
 A1: not j in Seg i;
     then
-A2: not j in dom R1 by FINSEQ_2:144;
-A3: not j in dom R2 by A1,FINSEQ_2:144;
+A2: not j in dom R2 by FINSEQ_2:144;
+A3: not j in dom R1 by A1,FINSEQ_2:144;
     not j in dom(R1+R2) by A1,FINSEQ_2:144;
     hence (R1+R2).j = 0+0 by FUNCT_1:def 4
-      .= R1.j + 0 by A2,FUNCT_1:def 4
-      .= R1.j + R2.j by A3,FUNCT_1:def 4;
+      .= R1.j + 0 by A3,FUNCT_1:def 4
+      .= R1.j + R2.j by A2,FUNCT_1:def 4;
   end;
-  suppose j in Seg i;
+  suppose
+    j in Seg i;
     then j in dom (R1 + R2) by FINSEQ_2:144;
     hence thesis by VALUED_1:def 1;
   end;
 end;
 
 theorem Th19:
-  for x1,x2 being FinSequence of COMPLEX st len x1=len x2 holds
-  (x1 + x2)*' = x1*' + x2*'
+  for x1,x2 being FinSequence of COMPLEX st len x1=len x2 holds (
+  x1 + x2)*' = x1*' + x2*'
 proof
   let x1,x2 be FinSequence of COMPLEX;
+  reconsider x'=x1 as Element of (len x1)-tuples_on COMPLEX by FINSEQ_2:110;
+  reconsider y'=x2 as Element of (len x2)-tuples_on COMPLEX by FINSEQ_2:110;
+  reconsider x3=x1*' as Element of (len (x1*'))-tuples_on COMPLEX by
+FINSEQ_2:110;
+  reconsider x4=x2*' as Element of (len (x2*'))-tuples_on COMPLEX by
+FINSEQ_2:110;
   assume
 A1: len x1=len x2;
   then
 A2: len (x1 + x2) = len x1 by Th6;
-  reconsider x'=x1 as Element of (len x1)-tuples_on COMPLEX by FINSEQ_2:110;
-  reconsider y'=x2 as Element of (len x2)-tuples_on COMPLEX by FINSEQ_2:110;
-  reconsider x3=x1*' as Element of (len (x1*'))-tuples_on COMPLEX
-  by FINSEQ_2:110;
-  reconsider x4=x2*' as Element of (len (x2*'))-tuples_on COMPLEX
-  by FINSEQ_2:110;
-A3: len x1=len (x1*') by Def1;
-A4: len x2=len (x2*') by Def1;
-  then len (x1*' + x2*') = len x1 by A1,A3,Th6;
-  then
-A5: len ((x1 + x2)*')=len (x1*' + x2*') by A2,Def1;
-  now
+A3: len x1=len (x1*') & len x2=len (x2*') by Def1;
+A4: now
     let i be Nat;
-A6: i in NAT by ORDINAL1:def 13;
-    assume 1 <= i & i <= len ((x1 + x2)*');
-    then
-A7: 1 <= i & i <= len (x1 + x2) by Def1;
-    hence (x1 + x2)*'.i = (((x1 + x2).i)*') by Def1
-      .= (x'.i + y'.i)*' by A1,A6,Th18
+A5: i in NAT by ORDINAL1:def 13;
+    assume that
+A6: 1 <= i and
+A7: i <= len ((x1 + x2)*');
+A8: i <= len (x1 + x2) by A7,Def1;
+    hence (x1 + x2)*'.i = (((x1 + x2).i)*') by A6,Def1
+      .= (x'.i + y'.i)*' by A1,A5,Th18
       .= (x1.i)*'+(x2.i)*' by COMPLEX1:118
-      .= ((x1*').i)+(x2.i)*' by A2,A7,Def1
-      .= ((x1*').i)+((x2*').i) by A1,A2,A7,Def1
-      .= (x3+x4).i by A1,A3,A4,A6,Th18;
+      .= ((x1*').i)+(x2.i)*' by A2,A6,A8,Def1
+      .= ((x1*').i)+((x2*').i) by A1,A2,A6,A8,Def1
+      .= (x3+x4).i by A1,A3,A5,Th18;
   end;
-  hence thesis by A5,FINSEQ_1:18;
+  len (x1*' + x2*') = len x1 by A1,A3,Th6;
+  then len ((x1 + x2)*')=len (x1*' + x2*') by A2,Def1;
+  hence thesis by A4,FINSEQ_1:18;
 end;
 
 theorem Th20:
   (R1-R2).j = R1.j - R2.j
-proof per cases;
+proof
+  per cases;
   suppose
 A1: not j in Seg i;
     then
-A2: not j in dom R1 by FINSEQ_2:144;
-A3: not j in dom R2 by A1,FINSEQ_2:144;
+A2: not j in dom R2 by FINSEQ_2:144;
+A3: not j in dom R1 by A1,FINSEQ_2:144;
     not j in dom(R1-R2) by A1,FINSEQ_2:144;
     hence (R1-R2).j = 0-0 by FUNCT_1:def 4
-      .= R1.j - 0 by A2,FUNCT_1:def 4
-      .= R1.j - R2.j by A3,FUNCT_1:def 4;
+      .= R1.j - 0 by A3,FUNCT_1:def 4
+      .= R1.j - R2.j by A2,FUNCT_1:def 4;
   end;
-  suppose j in Seg i;
+  suppose
+    j in Seg i;
     then j in dom (R1 - R2) by FINSEQ_2:144;
     hence thesis by VALUED_1:13;
   end;
 end;
 
 theorem Th21:
-  for x1,x2 being FinSequence of COMPLEX st len x1=len x2 holds
-  (x1 - x2)*' = x1*' - x2*'
+  for x1,x2 being FinSequence of COMPLEX st len x1=len x2 holds (
+  x1 - x2)*' = x1*' - x2*'
 proof
   let x1,x2 be FinSequence of COMPLEX;
+  reconsider x'=x1 as Element of (len x1)-tuples_on COMPLEX by FINSEQ_2:110;
+  reconsider y'=x2 as Element of (len x2)-tuples_on COMPLEX by FINSEQ_2:110;
+  reconsider x3=x1*' as Element of (len (x1*'))-tuples_on COMPLEX by
+FINSEQ_2:110;
+  reconsider x4=x2*' as Element of (len (x2*'))-tuples_on COMPLEX by
+FINSEQ_2:110;
   assume
 A1: len x1=len x2;
   then
 A2: len (x1 - x2) = len x1 by Th7;
-  reconsider x'=x1 as Element of (len x1)-tuples_on COMPLEX by FINSEQ_2:110;
-  reconsider y'=x2 as Element of (len x2)-tuples_on COMPLEX by FINSEQ_2:110;
-  reconsider x3=x1*' as Element of (len (x1*'))-tuples_on COMPLEX
-  by FINSEQ_2:110;
-  reconsider x4=x2*' as Element of (len (x2*'))-tuples_on COMPLEX
-  by FINSEQ_2:110;
-A3: len x1=len (x1*') by Def1;
-A4: len x2=len (x2*') by Def1;
-  then len (x1*' - x2*') = len x1 by A1,A3,Th7;
-  then
-A5: len ((x1 - x2)*')=len (x1*' - x2*') by A2,Def1;
-  now
+A3: len x1=len (x1*') & len x2=len (x2*') by Def1;
+A4: now
     let i be Nat;
-A6: i in NAT by ORDINAL1:def 13;
-    assume 1 <= i & i <= len ((x1 - x2)*');
-    then
-A7: 1 <= i & i <= len (x1 - x2) by Def1;
-    hence (x1 - x2)*'.i = (((x1 - x2).i)*') by Def1
-      .= (x'.i - y'.i)*' by A1,A6,Th20
+A5: i in NAT by ORDINAL1:def 13;
+    assume that
+A6: 1 <= i and
+A7: i <= len ((x1 - x2)*');
+A8: i <= len (x1 - x2) by A7,Def1;
+    hence (x1 - x2)*'.i = (((x1 - x2).i)*') by A6,Def1
+      .= (x'.i - y'.i)*' by A1,A5,Th20
       .= (x1.i)*'-(x2.i)*' by COMPLEX1:120
-      .= ((x1*').i)-(x2.i)*' by A2,A7,Def1
-      .= ((x1*').i)-((x2*').i) by A1,A2,A7,Def1
-      .= (x3-x4).i by A1,A3,A4,A6,Th20;
+      .= ((x1*').i)-(x2.i)*' by A2,A6,A8,Def1
+      .= ((x1*').i)-((x2*').i) by A1,A2,A6,A8,Def1
+      .= (x3-x4).i by A1,A3,A5,Th20;
   end;
-  hence thesis by A5,FINSEQ_1:18;
+  len (x1*' - x2*') = len x1 by A1,A3,Th7;
+  then len ((x1 - x2)*')=len (x1*' - x2*') by A2,Def1;
+  hence thesis by A4,FINSEQ_1:18;
 end;
 
 theorem
   for z being FinSequence of COMPLEX holds (z*')*' = z
 proof
   let z be FinSequence of COMPLEX;
-A1: len ((z*')*') = len (z*') by Def1;
-A2: len (z*') = len z by Def1;
-  now
+A1: len (z*') = len z by Def1;
+A2: now
     let i be Nat;
-    assume 1 <= i & i <= len ((z*')*');
-    then
-A3: 1 <= i & i <= len (z*') by Def1;
-    then z*'.i = (z.i)*' by A2,Def1;
-    hence ((z*')*').i = ((z.i)*')*' by A3,Def1
+    assume that
+A3: 1 <= i and
+A4: i <= len ((z*')*');
+A5: i <= len (z*') by A4,Def1;
+    then z*'.i = (z.i)*' by A1,A3,Def1;
+    hence ((z*')*').i = ((z.i)*')*' by A3,A5,Def1
       .= z.i;
   end;
+  len ((z*')*') = len (z*') by Def1;
   hence thesis by A1,A2,FINSEQ_1:18;
 end;
 
@@ -447,18 +463,18 @@ proof
 end;
 
 theorem Th25:
-  for x,y being FinSequence of COMPLEX st len x=len y holds
-  (x-y).i = x.i - y.i
+  for x,y being FinSequence of COMPLEX st len x=len y holds (x-y).
+  i = x.i - y.i
 proof
   let x,y be FinSequence of COMPLEX;
+  reconsider x2=x as Element of (len x)-tuples_on COMPLEX by FINSEQ_2:110;
+  reconsider y2=y as Element of (len y)-tuples_on COMPLEX by FINSEQ_2:110;
+  reconsider y2'=(x2 - y2) as Element of (len (x2 - y2))-tuples_on COMPLEX by
+FINSEQ_2:110;
   assume
 A1: len x=len y;
   then
 A2: len (x - y) = len x by Th7;
-  reconsider x2=x as Element of (len x)-tuples_on COMPLEX by FINSEQ_2:110;
-  reconsider y2=y as Element of (len y)-tuples_on COMPLEX by FINSEQ_2:110;
-  reconsider y2'=(x2 - y2) as Element of (len (x2 - y2))-tuples_on COMPLEX
-  by FINSEQ_2:110;
   per cases;
   suppose
 A3: not i in Seg (len x);
@@ -471,25 +487,26 @@ A5: not i in dom y2 by A1,A3,FINSEQ_2:144;
       .= x2.i - y2.i by A5,FUNCT_1:def 4;
     hence thesis;
   end;
-  suppose i in Seg (len x);
+  suppose
+    i in Seg (len x);
     then i in dom (y2') by A2,FINSEQ_2:144;
     hence thesis by VALUED_1:13;
   end;
 end;
 
 theorem Th26:
-  for x,y being FinSequence of COMPLEX st len x=len y holds
-  (x+y).i = x.i + y.i
+  for x,y being FinSequence of COMPLEX st len x=len y holds (x+y).
+  i = x.i + y.i
 proof
   let x,y be FinSequence of COMPLEX;
+  reconsider x2=x as Element of (len x)-tuples_on COMPLEX by FINSEQ_2:110;
+  reconsider y2=y as Element of (len y)-tuples_on COMPLEX by FINSEQ_2:110;
+  reconsider y2'=(x2 + y2) as Element of (len (x2 + y2))-tuples_on COMPLEX by
+FINSEQ_2:110;
   assume
 A1: len x=len y;
   then
 A2: len (x + y) = len x by Th6;
-  reconsider x2=x as Element of (len x)-tuples_on COMPLEX by FINSEQ_2:110;
-  reconsider y2=y as Element of (len y)-tuples_on COMPLEX by FINSEQ_2:110;
-  reconsider y2'=(x2 + y2) as Element of (len (x2 + y2))-tuples_on COMPLEX
-  by FINSEQ_2:110;
   per cases;
   suppose
 A3: not i in Seg (len x);
@@ -502,7 +519,8 @@ A5: not i in dom y2 by A1,A3,FINSEQ_2:144;
       .= x2.i + y2.i by A5,FUNCT_1:def 4;
     hence thesis;
   end;
-  suppose i in Seg (len x);
+  suppose
+    i in Seg (len x);
     then i in dom (y2') by A2,FINSEQ_2:144;
     hence thesis by VALUED_1:def 1;
   end;
@@ -511,7 +529,6 @@ end;
 definition
   let z be FinSequence of COMPLEX;
   func Re z -> FinSequence of REAL equals
-
   1/2*(z+z*');
   coherence
   proof
@@ -521,17 +538,20 @@ A2: len (1/2*(z+z*')) = len (z+z*') by Th3
     rng (1/2*(z+z*')) c= REAL
     proof
       let w be set;
-      assume w in rng (1/2*(z+z*'));
+      assume
+      w in rng (1/2*(z+z*'));
       then consider x being set such that
-A3:   x in dom (1/2*(z+z*')) & w=(1/2*(z+z*')).x by FUNCT_1:def 5;
-A4:   x in Seg len (1/2*(z+z*')) by A3,FINSEQ_1:def 3;
+A3:   x in dom (1/2*(z+z*')) and
+A4:   w=(1/2*(z+z*')).x by FUNCT_1:def 5;
       reconsider i=x as Element of NAT by A3;
-A5:   1<=i & i<=len z by A2,A4,FINSEQ_1:3;
+      x in Seg len (1/2*(z+z*')) by A3,FINSEQ_1:def 3;
+      then
+A5:   1<=i & i<=len z by A2,FINSEQ_1:3;
       (1/2*(z+z*')).i = 1/2*((z+z*').i) by Th16
         .=1/2*((z.i)+(z*').i) by A1,Th26
         .=1/2*((z.i)+(z.i)*') by A5,Def1
         .=(1/2)*(2*(Re (z.i))) by Th24;
-      hence thesis by A3;
+      hence thesis by A4;
     end;
     hence thesis by FINSEQ_1:def 4;
   end;
@@ -552,7 +572,6 @@ end;
 definition
   let z be FinSequence of COMPLEX;
   func Im z -> FinSequence of REAL equals
-
   (-1/2*<i>)*(z-z*');
   coherence
   proof
@@ -562,18 +581,20 @@ A2: len ((-1/2*<i>)*(z-z*')) = len (z-z*') by Th3
     rng ((-1/2*<i>)*(z-z*')) c= REAL
     proof
       let w be set;
-      assume w in rng ((-1/2*<i>)*(z-z*'));
+      assume
+      w in rng ((-1/2*<i>)*(z-z*'));
       then consider x being set such that
-A3:   x in dom ((-1/2*<i>)*(z-z*')) &
-      w=((-1/2*<i>)*(z-z*')).x by FUNCT_1:def 5;
-A4:   x in Seg len ((-1/2*<i>)*(z-z*')) by A3,FINSEQ_1:def 3;
+A3:   x in dom ((-1/2*<i>)*(z-z*')) and
+A4:   w=((-1/2*<i>)*(z-z*')).x by FUNCT_1:def 5;
       reconsider i=x as Element of NAT by A3;
-A5:   1<=i & i<=len z by A2,A4,FINSEQ_1:3;
+      x in Seg len ((-1/2*<i>)*(z-z*')) by A3,FINSEQ_1:def 3;
+      then
+A5:   1<=i & i<=len z by A2,FINSEQ_1:3;
       ((-1/2*<i>)*(z-z*')).i =(-1/2*<i>)*((z-z*').i) by Th16
         .=(-1/2*<i>)*((z.i)-(z*').i) by A1,Th25
         .=(-1/2*<i>)*((z.i)-(z.i)*') by A5,Def1
         .=(-1/2*<i>)*((2*(Im (z.i))) * <i>) by Th27;
-      hence thesis by A3;
+      hence thesis by A4;
     end;
     hence thesis by FINSEQ_1:def 4;
   end;
@@ -582,20 +603,21 @@ end;
 definition
   let x,y be FinSequence of COMPLEX;
   func |( x,y )| -> Element of COMPLEX equals
-  |(Re x,Re y)| - <i>*(|(Re x,Im y)|) + <i>*(|(Im x,Re y)|) + |(Im x,Im y)|;
+  |(Re x,Re y)| - <i>*(|(Re x,Im y
+  )|) + <i>*(|(Im x,Re y)|) + |(Im x,Im y)|;
   coherence by XCMPLX_0:def 2;
 end;
 
 theorem Th28:
-  for x,y,z being FinSequence of COMPLEX st len x=len y & len y=len z holds
-  x + (y + z) = x + y + z
+  for x,y,z being FinSequence of COMPLEX st len x=len y & len y=
+  len z holds x + (y + z) = x + y + z
 proof
   let x,y,z be FinSequence of COMPLEX;
   assume
 A1: len x=len y & len y=len z;
-  reconsider x'=x as Element of (len x)-tuples_on COMPLEX by FINSEQ_2:110;
-  reconsider y'=y as Element of (len y)-tuples_on COMPLEX by FINSEQ_2:110;
   reconsider z'=z as Element of (len z)-tuples_on COMPLEX by FINSEQ_2:110;
+  reconsider y'=y as Element of (len y)-tuples_on COMPLEX by FINSEQ_2:110;
+  reconsider x'=x as Element of (len x)-tuples_on COMPLEX by FINSEQ_2:110;
   x + (y + z) = addcomplex.:(x,y+z) by COMPLSP1:def 7
     .= addcomplex.:(x,addcomplex.:(y,z)) by COMPLSP1:def 7
     .= addcomplex.:(addcomplex.:(x',y'),z') by A1,FINSEQOP:29
@@ -605,18 +627,19 @@ A1: len x=len y & len y=len z;
 end;
 
 theorem
-  for x,y being FinSequence of COMPLEX st len x=len y holds x + y = y + x;
+  for x,y being FinSequence of COMPLEX st len x=len y holds x + y = y +
+  x;
 
 theorem Th30:
-  for c being complex number,
-  x,y being FinSequence of COMPLEX st len x=len y holds c*(x+y) = c*x + c*y
+  for c being complex number, x,y being FinSequence of COMPLEX st
+  len x=len y holds c*(x+y) = c*x + c*y
 proof
   let c be complex number, x,y be FinSequence of COMPLEX;
   assume
 A1: len x=len y;
-  reconsider x'=x as Element of (len x)-tuples_on COMPLEX by FINSEQ_2:110;
-  reconsider y'=y as Element of (len y)-tuples_on COMPLEX by FINSEQ_2:110;
   set cM = c multcomplex;
+  reconsider y'=y as Element of (len y)-tuples_on COMPLEX by FINSEQ_2:110;
+  reconsider x'=x as Element of (len x)-tuples_on COMPLEX by FINSEQ_2:110;
 A2: c is Element of COMPLEX by XCMPLX_0:def 2;
   c*(x+y) = cM*(x + y) by COMPLSP1:def 10
     .= cM*(addcomplex.:(x,y)) by COMPLSP1:def 7
@@ -628,7 +651,8 @@ A2: c is Element of COMPLEX by XCMPLX_0:def 2;
 end;
 
 theorem
-  for x,y being FinSequence of COMPLEX st len x=len y holds x - y = x + - y;
+  for x,y being FinSequence of COMPLEX st len x=len y holds x - y = x +
+  - y;
 
 definition
   let i,c;
@@ -637,18 +661,18 @@ definition
 end;
 
 theorem Th32:
-  for x,y being FinSequence of COMPLEX
-  st len x=len y & x + y = 0c (len x) holds x = -y & y = -x
+  for x,y being FinSequence of COMPLEX st len x=len y & x + y = 0c
+  (len x) holds x = -y & y = -x
 proof
   let x,y be FinSequence of COMPLEX;
-  assume
-A1: len x=len y & x + y = 0c (len x);
-  reconsider y'=y as Element of (len y)-tuples_on COMPLEX by FINSEQ_2:110;
+  assume that
+A1: len x=len y and
+A2: x + y = 0c (len x);
   reconsider x'=x as Element of (len x)-tuples_on COMPLEX by FINSEQ_2:110;
-A2: x + y = addcomplex.:(x,y) by COMPLSP1:def 7;
-A3: -y = compcomplex*y by COMPLSP1:def 9;
-  x + y = (len x) |-> 0c by A1,COMPLSP1:def 13;
-  then x' = -y' by A1,A2,A3,BINOP_2:1,COMPLSP1:7,8,FINSEQOP:78;
+  reconsider y'=y as Element of (len y)-tuples_on COMPLEX by FINSEQ_2:110;
+A3: x + y = addcomplex.:(x,y) & -y = compcomplex*y by COMPLSP1:def 7,def 9;
+  x + y = (len x) |-> 0c by A2,COMPLSP1:def 13;
+  then x' = -y' by A1,A3,BINOP_2:1,COMPLSP1:7,8,FINSEQOP:78;
   hence thesis;
 end;
 
@@ -676,40 +700,42 @@ proof
 end;
 
 theorem Th35:
-  for x,y being FinSequence of COMPLEX st len x=len y holds -(x + y) = -x + -y
+  for x,y being FinSequence of COMPLEX st len x=len y holds -(x +
+  y) = -x + -y
 proof
   let x,y be FinSequence of COMPLEX;
   assume
 A1: len x=len y;
 A2: len (-y) = len y by Th5;
-A3: len (-x) = len x by Th5;
-A4: len (x + y) = len x by A1,Th6;
-A5: len (-x + -y) = len (-x) by A1,A2,Th5,Th6;
-  (x + y) + (-x + -y) = y + x + -x + -y by A1,A2,A3,A4,Th28
-    .= y + (x + -x) + -y by A1,A3,Th28
+  then
+A3: len (-x + -y) = len (-x) by A1,Th5,Th6;
+A4: len (-x) = len x by Th5;
+A5: len (x + y) = len x by A1,Th6;
+  then (x + y) + (-x + -y) = y + x + -x + -y by A1,A2,A4,Th28
+    .= y + (x + -x) + -y by A1,A4,Th28
     .= y + 0c (len x) + -y by Th34
     .= y + -y by A1,Th33
     .= 0c (len y) by Th34;
-  hence thesis by A1,A3,A4,A5,Th32;
+  hence thesis by A1,A4,A5,A3,Th32;
 end;
 
 theorem Th36:
-  for x,y,z being FinSequence of COMPLEX st len x=len y & len y=len z holds
-  x - y - z = x - (y + z)
+  for x,y,z being FinSequence of COMPLEX st len x=len y & len y=
+  len z holds x - y - z = x - (y + z)
 proof
   let x,y,z be FinSequence of COMPLEX;
-  assume
-A1: len x=len y & len y=len z;
-A2: len (-y) = len y by Th5;
-  len (-z) = len z by Th5;
+  assume that
+A1: len x=len y and
+A2: len y=len z;
+  len (-y) = len y & len (-z) = len z by Th5;
   then x - y - z = x + (- y + - z) by A1,A2,Th28
-    .= x - (y + z) by A1,Th35;
+    .= x - (y + z) by A2,Th35;
   hence thesis;
 end;
 
 theorem Th37:
-  for x,y,z being FinSequence of COMPLEX st len x=len y & len y=len z holds
-  x + (y - z) = x + y - z
+  for x,y,z being FinSequence of COMPLEX st len x=len y & len y=
+  len z holds x + (y - z) = x + y - z
 proof
   let x,y,z be FinSequence of COMPLEX;
   assume
@@ -722,7 +748,8 @@ theorem
   for x being FinSequence of COMPLEX holds --x = x;
 
 theorem Th39:
-  for x,y being FinSequence of COMPLEX st len x=len y holds -(x - y) = -x + y
+  for x,y being FinSequence of COMPLEX st len x=len y holds -(x -
+  y) = -x + y
 proof
   let x,y be FinSequence of COMPLEX;
   assume
@@ -734,15 +761,16 @@ A1: len x=len y;
 end;
 
 theorem Th40:
-  for x,y,z being FinSequence of COMPLEX st len x=len y & len y=len z holds
-  x - (y - z) = x - y + z
+  for x,y,z being FinSequence of COMPLEX st len x=len y & len y=
+  len z holds x - (y - z) = x - y + z
 proof
   let x,y,z be FinSequence of COMPLEX;
-  assume
-A1: len x=len y & len y=len z;
-A2: len (-y) = len y by Th5;
-  x - (y - z) = x + (- y + z) by A1,Th39
-    .= x - y + z by A1,A2,Th28;
+  assume that
+A1: len x=len y and
+A2: len y=len z;
+A3: len (-y) = len y by Th5;
+  x - (y - z) = x + (- y + z) by A2,Th39
+    .= x - y + z by A1,A2,A3,Th28;
   hence thesis;
 end;
 
@@ -766,25 +794,24 @@ theorem Th42:
   for c being complex number holds -c*x = c*(-x)
 proof
   let c be complex number;
-A1: len x=len (-x) by Th5;
-A2: len (c*(-x))=len (-x) by Th3;
-A3: len (c*x)=len x by Th3;
-  c*(-x) + c*x = c*(x+-x) by A1,Th30
+A1: len (c*(-x))=len (-x) & len (c*x)=len x by Th3;
+A2: len x=len (-x) by Th5;
+  then c*(-x) + c*x = c*(x+-x) by Th30
     .= c*(0c (len x)) by Th34
     .= 0c (len x) by Th41;
-  hence thesis by A1,A2,A3,Th32;
+  hence thesis by A2,A1,Th32;
 end;
 
 theorem Th43:
-  for c being complex number,
-  x,y being FinSequence of COMPLEX st len x=len y holds c*(x-y) = c*x - c*y
+  for c being complex number, x,y being FinSequence of COMPLEX st
+  len x=len y holds c*(x-y) = c*x - c*y
 proof
   let c be complex number, x,y be FinSequence of COMPLEX;
   assume
 A1: len x=len y;
-  reconsider x'=x as Element of (len x)-tuples_on COMPLEX by FINSEQ_2:110;
-  reconsider y'=y as Element of (len y)-tuples_on COMPLEX by FINSEQ_2:110;
   reconsider cc = c as Element of COMPLEX by XCMPLX_0:def 2;
+  reconsider y'=y as Element of (len y)-tuples_on COMPLEX by FINSEQ_2:110;
+  reconsider x'=x as Element of (len x)-tuples_on COMPLEX by FINSEQ_2:110;
   set cM = cc multcomplex;
   c*(x-y) = cM*(x +(- y)) by COMPLSP1:def 10
     .= cM*(addcomplex.:(x,(-y))) by COMPLSP1:def 7
@@ -797,15 +824,14 @@ A1: len x=len y;
 end;
 
 theorem
-  for x1,y1 being Element of COMPLEX
-  for x2,y2 being Real st x1 = x2 & y1 = y2 holds
-  addcomplex.(x1,y1) = addreal.(x2,y2)
+  for x1,y1 being Element of COMPLEX for x2,y2 being Real st x1 = x2 &
+  y1 = y2 holds addcomplex.(x1,y1) = addreal.(x2,y2)
 proof
   let x1,y1 be Element of COMPLEX;
   let x2,y2 be Real;
+A1: addcomplex.(x1,y1)= x1+y1 by BINOP_2:def 3;
   assume
-A1: x1 = x2 & y1 = y2;
-  addcomplex.(x1,y1)= x1+y1 by BINOP_2:def 3;
+  x1 = x2 & y1 = y2;
   hence thesis by A1,BINOP_2:def 9;
 end;
 
@@ -813,145 +839,152 @@ reserve C for Function of [:COMPLEX,COMPLEX:],COMPLEX;
 reserve G for Function of [:REAL,REAL:],REAL;
 
 theorem Th45:
-  for x1,y1 being FinSequence of COMPLEX for x2,y2 being FinSequence of REAL
-  st x1 = x2 & y1 = y2 & len x1=len y2 &
-  (for i st i in dom x1 holds C.(x1.i,y1.i)=G.(x2.i,y2.i))
-  holds C.:(x1,y1)=G.:(x2,y2)
+  for x1,y1 being FinSequence of COMPLEX for x2,y2 being
+  FinSequence of REAL st x1 = x2 & y1 = y2 & len x1=len y2 & (for i st i in dom
+  x1 holds C.(x1.i,y1.i)=G.(x2.i,y2.i)) holds C.:(x1,y1)=G.:(x2,y2)
 proof
   let x1,y1 be FinSequence of COMPLEX;
   let x2,y2 be FinSequence of REAL;
-  assume
-A1: x1 = x2 & y1 = y2 & len x1=len y2 &
-  (for i st i in dom x1 holds C.(x1.i,y1.i)=G.(x2.i,y2.i));
-  then
-A2: len (C.:(x1,y1)) = len x1 by FINSEQ_2:86;
-A3: len (G.:(x2,y2)) = len x1 by A1,FINSEQ_2:86;
-  now
+  assume that
+A1: x1 = x2 and
+A2: y1 = y2 and
+A3: len x1=len y2 and
+A4: for i st i in dom x1 holds C.(x1.i,y1.i)=G.(x2.i,y2.i);
+A5: len (G.:(x2,y2)) = len x1 by A1,A3,FINSEQ_2:86;
+A6: now
     let i be Nat;
-    assume
-A4: 1 <= i & i <= len (C.:(x1,y1));
+    assume that
+A7: 1 <= i and
+A8: i <= len (C.:(x1,y1));
+A9: i <= len x1 by A2,A3,A8,FINSEQ_2:86;
     then
-A5: 1 <= i & i <= len x1 by A1,FINSEQ_2:86;
-    then
-A6: i in dom x1 by FINSEQ_3:27;
-A7: i in dom (G.:(x2,y2)) by A3,A5,FINSEQ_3:27;
-    i in dom (C.:(x1,y1)) by A4,FINSEQ_3:27;
+A10: i in dom x1 by A7,FINSEQ_3:27;
+A11: i in dom (G.:(x2,y2)) by A5,A7,A9,FINSEQ_3:27;
+    i in dom (C.:(x1,y1)) by A7,A8,FINSEQ_3:27;
     hence (C.:(x1,y1)).i = C.(x1.i,y1.i) by FUNCOP_1:28
-      .= G.(x2.i,y2.i) by A1,A6
-      .= (G.:(x2,y2)).i by A7,FUNCOP_1:28;
+      .= G.(x2.i,y2.i) by A4,A10
+      .= (G.:(x2,y2)).i by A11,FUNCOP_1:28;
   end;
-  hence thesis by A2,A3,FINSEQ_1:18;
+  len (C.:(x1,y1)) = len x1 by A2,A3,FINSEQ_2:86;
+  hence thesis by A5,A6,FINSEQ_1:18;
 end;
 
 theorem
-  for x1,y1 being FinSequence of COMPLEX for x2,y2 being FinSequence of REAL
-  st x1 = x2 & y1 = y2 & len x1=len y2 holds
-  addcomplex.:(x1,y1) = addreal.:(x2,y2)
+  for x1,y1 being FinSequence of COMPLEX for x2,y2 being FinSequence of
+REAL st x1 = x2 & y1 = y2 & len x1=len y2 holds addcomplex.:(x1,y1) = addreal.:
+  (x2,y2)
 proof
   let x1,y1 be FinSequence of COMPLEX;
   let x2,y2 be FinSequence of REAL;
-  assume
-A1: x1 = x2 & y1 = y2 & len x1=len y2;
+  assume that
+A1: x1 = x2 & y1 = y2 and
+A2: len x1=len y2;
   for i st i in dom x1 holds addcomplex.(x1.i,y1.i)=addreal.(x2.i,y2.i)
   proof
     let i;
     x1.i + y1.i = addcomplex.(x1.i,y1.i) by BINOP_2:def 3;
     hence thesis by A1,BINOP_2:def 9;
   end;
-  hence thesis by A1,Th45;
+  hence thesis by A1,A2,Th45;
 end;
 
 theorem
-  for x1,y1 being FinSequence of COMPLEX for x2,y2 being FinSequence of REAL
-  st x1 = x2 & y1 = y2 & len x1=len y2 holds x1 + y1 = x2 + y2;
+  for x1,y1 being FinSequence of COMPLEX for x2,y2 being FinSequence of
+  REAL st x1 = x2 & y1 = y2 & len x1=len y2 holds x1 + y1 = x2 + y2;
 
 theorem Th48:
-  for x being FinSequence of COMPLEX holds len (Re x)=len x & len (Im x)=len x
+  for x being FinSequence of COMPLEX holds len (Re x)=len x & len
+  (Im x)=len x
 proof
   let x be FinSequence of COMPLEX;
 A1: len x=len (x*') by Def1;
-A2: len (Re x) =len (x+x*') by Th3
-    .=len x by A1,Th6;
-  len (Im x) =len (x-x*') by Th3
+A2: len (Im x) =len (x-x*') by Th3
     .=len x by A1,Th7;
+  len (Re x) =len (x+x*') by Th3
+    .=len x by A1,Th6;
   hence thesis by A2;
 end;
 
 theorem Th49:
-  for x,y being FinSequence of COMPLEX st len x=len y holds
-  Re (x+y) = Re x + Re y & Im(x + y) = Im x + Im y
+  for x,y being FinSequence of COMPLEX st len x=len y holds Re (x+
+  y) = Re x + Re y & Im(x + y) = Im x + Im y
 proof
   let x,y be FinSequence of COMPLEX;
+A1: len (-x*')=len (x*') by Th5;
   assume
-A1: len x=len y;
-A2: len y=len (y*') by Def1;
-A3: len x=len (x*') by Def1;
-A4: len (x+y)=len x by A1,Th6;
-A5: len (x+(x*'))=len x by A3,Th6;
-A6: len (y+(y*'))=len y by A2,Th6;
-A7: len (-x*')=len (x*') by Th5;
-A8: len (x-(x*'))=len x by A3,Th7;
-A9: len (y-(y*'))=len y by A2,Th7;
-  thus Re (x+y)=1/2*((x+y)+(x*'+y*')) by A1,Th19
-    .=1/2*((x+y+x*')+y*') by A1,A2,A3,A4,Th28
-    .=1/2*((x+x*'+y)+y*') by A1,A3,Th28
-    .=1/2*((x+x*')+(y+y*')) by A1,A2,A5,Th28
-    .= Re x + Re y by A1,A5,A6,Th30;
-  thus Im (x+y)=(-1/2*<i>)*((x+y)-(x*'+y*')) by A1,Th19
-    .=(-1/2*<i>)*((x+y)-x*'-y*') by A1,A2,A3,A4,Th36
-    .=(-1/2*<i>)*(x+-x*'+y-y*') by A1,A3,A7,Th28
-    .=(-1/2*<i>)*((x-x*')+(y-y*')) by A1,A2,A8,Th37
-    .=Im x + Im y by A1,A8,A9,Th30;
+A2: len x=len y;
+  then
+A3: len (x+y)=len x by Th6;
+A4: len y=len (y*') by Def1;
+  then
+A5: len (y+(y*'))=len y by Th6;
+A6: len x=len (x*') by Def1;
+  then
+A7: len (x+(x*'))=len x by Th6;
+A8: len (x-(x*'))=len x by A6,Th7;
+A9: len (y-(y*'))=len y by A4,Th7;
+  thus Re (x+y)=1/2*((x+y)+(x*'+y*')) by A2,Th19
+    .=1/2*((x+y+x*')+y*') by A2,A4,A6,A3,Th28
+    .=1/2*((x+x*'+y)+y*') by A2,A6,Th28
+    .=1/2*((x+x*')+(y+y*')) by A2,A4,A7,Th28
+    .= Re x + Re y by A2,A7,A5,Th30;
+  thus Im (x+y)=(-1/2*<i>)*((x+y)-(x*'+y*')) by A2,Th19
+    .=(-1/2*<i>)*((x+y)-x*'-y*') by A2,A4,A6,A3,Th36
+    .=(-1/2*<i>)*(x+-x*'+y-y*') by A2,A6,A1,Th28
+    .=(-1/2*<i>)*((x-x*')+(y-y*')) by A2,A4,A8,Th37
+    .=Im x + Im y by A2,A8,A9,Th30;
 end;
 
 theorem
-  for x1,y1 being FinSequence of COMPLEX
-  for x2,y2 being FinSequence of REAL st
-  x1 = x2 & y1 = y2 & len x1=len y2 holds
-  diffcomplex.:(x1,y1) = diffreal.:(x2,y2)
+  for x1,y1 being FinSequence of COMPLEX for x2,y2 being FinSequence of
+REAL st x1 = x2 & y1 = y2 & len x1=len y2 holds diffcomplex.:(x1,y1) = diffreal
+  .:(x2,y2)
 proof
   let x1,y1 be FinSequence of COMPLEX, x2,y2 be FinSequence of REAL;
-  assume
-A1: x1 = x2 & y1 = y2 & len x1=len y2;
+  assume that
+A1: x1 = x2 & y1 = y2 and
+A2: len x1=len y2;
   for i st i in dom x1 holds diffcomplex.(x1.i,y1.i)=diffreal.(x2.i,y2.i)
   proof
     let i;
     x1.i - y1.i = diffcomplex.(x1.i,y1.i) by BINOP_2:def 4;
     hence thesis by A1,BINOP_2:def 10;
   end;
-  hence thesis by A1,Th45;
+  hence thesis by A1,A2,Th45;
 end;
 
 theorem
-  for x1,y1 being FinSequence of COMPLEX for x2,y2 being FinSequence of REAL
-  st x1 = x2 & y1 = y2 & len x1=len y2 holds x1 - y1 = x2 - y2;
+  for x1,y1 being FinSequence of COMPLEX for x2,y2 being FinSequence of
+  REAL st x1 = x2 & y1 = y2 & len x1=len y2 holds x1 - y1 = x2 - y2;
 
 theorem Th52:
-  for x,y being FinSequence of COMPLEX st len x=len y holds
-  Re(x - y) = Re x - Re y & Im(x - y) = Im x - Im y
+  for x,y being FinSequence of COMPLEX st len x=len y holds Re(x -
+  y) = Re x - Re y & Im(x - y) = Im x - Im y
 proof
   let x,y be FinSequence of COMPLEX;
   assume
 A1: len x=len y;
-A2: len y=len (y*') by Def1;
+  then
+A2: len (x-y)=len x by Th7;
 A3: len x=len (x*') by Def1;
   then
 A4: len (x+(x*'))=len x by Th6;
-A5: len (y+(y*'))=len y by A2,Th6;
-A6: len (x-y)=len x by A1,Th7;
-A7: len (x-(x*'))=len x by A3,Th7;
-A8: len (y-(y*'))=len y by A2,Th7;
+A5: len y=len (y*') by Def1;
+  then
+A6: len (y+(y*'))=len y by Th6;
   thus Re (x-y)=(1/2)*((x-y)+(x*'-y*')) by A1,Th21
-    .=(1/2)*(x*'+(x-y)-y*') by A1,A2,A3,A6,Th37
-    .=(1/2)*(x*'+((x-y)-y*')) by A1,A2,A3,A6,Th37
-    .=(1/2)*(x*'+(x-(y+y*'))) by A1,A2,Th36
-    .=(1/2)*(x+x*'-(y+y*')) by A1,A3,A5,Th37
-    .= Re x - Re y by A1,A4,A5,Th43;
+    .=(1/2)*(x*'+(x-y)-y*') by A1,A5,A3,A2,Th37
+    .=(1/2)*(x*'+((x-y)-y*')) by A1,A5,A3,A2,Th37
+    .=(1/2)*(x*'+(x-(y+y*'))) by A1,A5,Th36
+    .=(1/2)*(x+x*'-(y+y*')) by A1,A3,A6,Th37
+    .= Re x - Re y by A1,A4,A6,Th43;
+A7: len (x-(x*'))=len x by A3,Th7;
+A8: len (y-(y*'))=len y by A5,Th7;
   thus Im (x-y)=(-1/2*<i>)*((x-y)-(x*'-y*')) by A1,Th21
-    .=(-1/2*<i>)*((x-y)-x*'+y*') by A1,A2,A3,A6,Th40
+    .=(-1/2*<i>)*((x-y)-x*'+y*') by A1,A5,A3,A2,Th40
     .=(-1/2*<i>)*(x-(x*'+y)+y*') by A1,A3,Th36
     .=(-1/2*<i>)*(x-x*'-y+y*') by A1,A3,Th36
-    .=(-1/2*<i>)*((x-x*')-(y-y*')) by A1,A2,A7,Th40
+    .=(-1/2*<i>)*((x-x*')-(y-y*')) by A1,A5,A7,Th40
     .=Im x - Im y by A1,A7,A8,Th43;
 end;
 
@@ -963,10 +996,10 @@ proof
   thus (a*b)*z = (multcomplex[;](aa*bb,id COMPLEX))*z by Lm1
     .= multcomplex[;](multcomplex.(aa,bb),id COMPLEX)*z by BINOP_2:def 5
     .= multcomplex[;](aa,multcomplex[;](bb,id COMPLEX))*z by FUNCOP_1:77
-    .= (multcomplex[;](aa,id COMPLEX)*multcomplex[;](bb,id COMPLEX))*z
-  by FUNCOP_1:69
-    .= (multcomplex[;](aa,id COMPLEX))*(multcomplex[;](bb,id COMPLEX)*z)
-  by RELAT_1:55
+    .= (multcomplex[;](aa,id COMPLEX)*multcomplex[;](bb,id COMPLEX))*z by
+FUNCOP_1:69
+    .= (multcomplex[;](aa,id COMPLEX))*(multcomplex[;](bb,id COMPLEX)*z) by
+RELAT_1:55
     .= (multcomplex[;](aa,id COMPLEX))*(b*z) by Lm1
     .= a*(b*z) by Lm1;
 end;
@@ -999,31 +1032,32 @@ reserve h for Function of COMPLEX,COMPLEX,
   g for Function of REAL,REAL;
 
 theorem Th55:
-  for y1 being FinSequence of COMPLEX for y2 being FinSequence of REAL
-  st len y1=len y2 & (for i st i in dom y1 holds h.(y1.i)=g.(y2.i)) holds
-  h*y1 = g*y2
+  for y1 being FinSequence of COMPLEX for y2 being FinSequence of
+REAL st len y1=len y2 & (for i st i in dom y1 holds h.(y1.i)=g.(y2.i)) holds h*
+  y1 = g*y2
 proof
   let y1 be FinSequence of COMPLEX;
   let y2 be FinSequence of REAL;
-  assume
-A1: len y1=len y2 & (for i st i in dom y1 holds h.(y1.i)=g.(y2.i));
-A2: len (h*y1) = len y1 by FINSEQ_2:37;
+  assume that
+A1: len y1=len y2 and
+A2: for i st i in dom y1 holds h.(y1.i)=g.(y2.i);
 A3: len (g*y2) = len y1 by A1,FINSEQ_2:37;
-  now
+A4: now
     let i be Nat;
-    assume
-A4: 1 <= i & i <= len (h*y1);
+    assume that
+A5: 1 <= i and
+A6: i <= len (h*y1);
+A7: i <= len y1 by A6,FINSEQ_2:37;
     then
-A5: 1 <= i & i <= len y1 by FINSEQ_2:37;
-    then
-A6: i in dom y1 by FINSEQ_3:27;
-A7: i in dom (g*y2) by A3,A5,FINSEQ_3:27;
-    i in dom (h*y1) by A4,FINSEQ_3:27;
+A8: i in dom y1 by A5,FINSEQ_3:27;
+A9: i in dom (g*y2) by A3,A5,A7,FINSEQ_3:27;
+    i in dom (h*y1) by A5,A6,FINSEQ_3:27;
     hence (h*y1).i = h.(y1.i) by FUNCT_1:22
-      .= g.(y2.i) by A1,A6
-      .= (g*y2).i by A7,FUNCT_1:22;
+      .= g.(y2.i) by A2,A8
+      .= (g*y2).i by A9,FUNCT_1:22;
   end;
-  hence thesis by A2,A3,FINSEQ_1:18;
+  len (h*y1) = len y1 by FINSEQ_2:37;
+  hence thesis by A3,A4,FINSEQ_1:18;
 end;
 
 theorem
@@ -1032,16 +1066,18 @@ theorem
 proof
   let y1 be FinSequence of COMPLEX;
   let y2 be FinSequence of REAL;
-  assume
-A1: y1 = y2 & len y1=len y2;
+  assume that
+A1: y1 = y2 and
+A2: len y1=len y2;
   for i st i in dom y1 holds compcomplex.(y1.i)=compreal.(y2.i)
   proof
     let i;
-    assume i in dom y1;
+    assume
+    i in dom y1;
     - y1.i = compcomplex.(y1.i) by BINOP_2:def 1;
     hence thesis by A1,BINOP_2:def 7;
   end;
-  hence thesis by A1,Th55;
+  hence thesis by A2,Th55;
 end;
 
 theorem
@@ -1049,110 +1085,111 @@ theorem
   st y1 = y2 & len y1=len y2 holds - y1 = - y2;
 
 theorem Th58:
-  for x being FinSequence of COMPLEX holds
-  Re (<i>*x) = -(Im x) & Im (<i>*x) = Re x
+  for x being FinSequence of COMPLEX holds Re (<i>*x) = -(Im x) &
+  Im (<i>*x) = Re x
 proof
   let x be FinSequence of COMPLEX;
 A1: len (x*') = len x by Def1;
-A2: Re (<i>*x) =(1/2)*(<i>*x+((-<i>)*(x*'))) by Th17,COMPLEX1:116
+A2: Im (<i>*x) =(((-1/2)*<i>))*(<i>*x-((-<i>)*(x*'))) by Th17,COMPLEX1:116
+    .=(((-1/2)*<i>))*(<i>*x+-(-(<i>*x*'))) by Th54
+    .=(((-1/2)*<i>))*(<i>*(x+x*')) by A1,Th30
+    .=(((-1/2)*<i>)*<i>)*(x+x*') by Th53
+    .=Re x;
+  Re (<i>*x) =(1/2)*(<i>*x+((-<i>)*(x*'))) by Th17,COMPLEX1:116
     .=(1/2)*(<i>*x-(<i>*((x*')))) by Th54
     .=(1/2)*(<i>*(x-(x*'))) by A1,Th43
     .=(1/2*<i>)*(x-x*') by Th53
     .=((-1)*((-1/2)*<i>))*(x-x*')
     .=-(Im x) by Th53;
-  Im (<i>*x) =(((-1/2)*<i>))*(<i>*x-((-<i>)*(x*'))) by Th17,COMPLEX1:116
-    .=(((-1/2)*<i>))*(<i>*x+-(-(<i>*x*'))) by Th54
-    .=(((-1/2)*<i>))*(<i>*(x+x*')) by A1,Th30
-    .=(((-1/2)*<i>)*<i>)*(x+x*') by Th53
-    .=Re x;
   hence thesis by A2;
 end;
 
 theorem Th59:
-  for x,y being FinSequence of COMPLEX st len x=len y holds
-  |(<i>*x,y)| = <i>*(|(x,y)|)
+  for x,y being FinSequence of COMPLEX st len x=len y holds |(<i>*
+  x,y)| = <i>*(|(x,y)|)
 proof
   let x,y be FinSequence of COMPLEX;
   assume
 A1: len x=len y;
-A2: len (Re y) = len y by Th48;
-A3: len (Im x) = len x by Th48;
-A4: len (Im y) = len y by Th48;
-  |(<i>*x,y)| =|(-(Im x),Re y)| - <i>*(|(Re (<i>*x),Im y)|)
-  + <i>*(|(Im (<i>*x),Re y)|) + |(Im (<i>*x),Im y)| by Th58
-    .=|(-(Im x),Re y)| - <i>*(|(-(Im x),Im y)|)
-  + <i>*(|(Im (<i>*x),Re y)|) + |(Im (<i>*x),Im y)| by Th58
-    .=|(-(Im x),Re y)| - <i>*(|(-(Im x),Im y)|)
-  + <i>*(|(Re x,Re y)|) + |(Im (<i>*x),Im y)| by Th58
-    .=|(-(Im x),Re y)| - <i>*(|(-(Im x),Im y)|)
-  + <i>*(|(Re x,Re y)|) + |(Re x,Im y)| by Th58
-    .=-|((Im x),Re y)| - <i>*(|(-(Im x),Im y)|)
-  + <i>*(|(Re x,Re y)|) + |(Re x,Im y)| by A1,A2,A3,EUCLID_2:22
-    .=-|((Im x),Re y)| - <i>*(-|((Im x),Im y)|)
-  + <i>*(|(Re x,Re y)|) + |(Re x,Im y)| by A1,A3,A4,EUCLID_2:22
+A2: len (Im y) = len y by Th48;
+A3: len (Re y) = len y by Th48;
+A4: len (Im x) = len x by Th48;
+  |(<i>*x,y)| =|(-(Im x),Re y)| - <i>*(|(Re (<i>*x),Im y)|) + <i>*(|(Im (
+  <i>*x),Re y)|) + |(Im (<i>*x),Im y)| by Th58
+    .=|(-(Im x),Re y)| - <i>*(|(-(Im x),Im y)|) + <i>*(|(Im (<i>*x),Re y)|)
+  + |(Im (<i>*x),Im y)| by Th58
+    .=|(-(Im x),Re y)| - <i>*(|(-(Im x),Im y)|) + <i>*(|(Re x,Re y)|) + |(Im
+  (<i>*x),Im y)| by Th58
+    .=|(-(Im x),Re y)| - <i>*(|(-(Im x),Im y)|) + <i>*(|(Re x,Re y)|) + |(Re
+  x,Im y)| by Th58
+    .=-|((Im x),Re y)| - <i>*(|(-(Im x),Im y)|) + <i>*(|(Re x,Re y)|) + |(Re
+  x,Im y)| by A1,A3,A4,RVSUM_1:152
+    .=-|((Im x),Re y)| - <i>*(-|((Im x),Im y)|) + <i>*(|(Re x,Re y)|) + |(Re
+  x,Im y)| by A1,A4,A2,RVSUM_1:152
     .=<i>*(|(x,y)|);
   hence thesis;
 end;
 
 theorem Th60:
-  for x,y being FinSequence of COMPLEX st len x=len y holds
-  |(x,<i>*y)| = -<i>*(|(x,y)|)
+  for x,y being FinSequence of COMPLEX st len x=len y holds |(x,
+  <i>*y)| = -<i>*(|(x,y)|)
 proof
   let x,y be FinSequence of COMPLEX;
   assume
 A1: len x=len y;
-A2: len (Re x) = len x by Th48;
-A3: len (Im x) = len x by Th48;
+A2: len (Im x) = len x by Th48;
+A3: len (Re x) = len x by Th48;
 A4: len (Im y) = len y by Th48;
-  |(x,<i>*y)| =|(Re x,-(Im y))| - <i>*(|(Re x,Im (<i>*y))|)
-  + <i>*(|(Im x,Re (<i>*y))|) + |(Im x,Im (<i>*y))| by Th58
-    .=|(Re x,-(Im y))| - <i>*(|(Re x,Re y)|)
-  + <i>*(|(Im x,Re (<i>*y))|) + |(Im x,Im (<i>*y))| by Th58
-    .=|(Re x,-(Im y))| - <i>*(|(Re x,Re y)|)
-  + <i>*(|(Im x,-Im y)|) + |(Im x,Im (<i>*y))| by Th58
-    .=|(Re x,-(Im y))| - <i>*(|(Re x,Re y)|)
-  + <i>*(|(Im x,-Im y)|) + |(Im x,Re y)| by Th58
-    .=-|(Re x,Im y)| - <i>*(|(Re x,Re y)|)
-  + <i>*(|(Im x,-Im y)|) + |(Im x,Re y)| by A1,A2,A4,EUCLID_2:23
-    .=-|(Re x,Im y)| - <i>*(|(Re x,Re y)|)
-  + <i>*(-(|(Im x,Im y)|)) + |(Im x,Re y)| by A1,A3,A4,EUCLID_2:23
+  |(x,<i>*y)| =|(Re x,-(Im y))| - <i>*(|(Re x,Im (<i>*y))|) + <i>*(|(Im x,
+  Re (<i>*y))|) + |(Im x,Im (<i>*y))| by Th58
+    .=|(Re x,-(Im y))| - <i>*(|(Re x,Re y)|) + <i>*(|(Im x,Re (<i>*y))|) +
+  |(Im x,Im (<i>*y))| by Th58
+    .=|(Re x,-(Im y))| - <i>*(|(Re x,Re y)|) + <i>*(|(Im x,-Im y)|) + |(Im x
+  ,Im (<i>*y))| by Th58
+    .=|(Re x,-(Im y))| - <i>*(|(Re x,Re y)|) + <i>*(|(Im x,-Im y)|) + |(Im x
+  ,Re y)| by Th58
+    .=-|(Re x,Im y)| - <i>*(|(Re x,Re y)|) + <i>*(|(Im x,-Im y)|) + |(Im x,
+  Re y)| by A1,A3,A4,RVSUM_1:152
+    .=-|(Re x,Im y)| - <i>*(|(Re x,Re y)|) + <i>*(-(|(Im x,Im y)|)) + |(Im x
+  ,Re y)| by A1,A2,A4,RVSUM_1:152
     .=-<i>*(|(x,y)|);
   hence thesis;
 end;
 
 theorem
-  for a1 being Element of COMPLEX,y1 being FinSequence of COMPLEX
-  for a2 being Element of REAL,y2 being FinSequence of REAL
-  st a1 = a2 & y1 = y2 & len y1=len y2 holds
-  (a1 multcomplex)*y1 = (a2 multreal)*y2
+  for a1 being Element of COMPLEX,y1 being FinSequence of COMPLEX for a2
+  being Element of REAL,y2 being FinSequence of REAL st a1 = a2 & y1 = y2 & len
+  y1=len y2 holds (a1 multcomplex)*y1 = (a2 multreal)*y2
 proof
   let a1 be Element of COMPLEX,y1 be FinSequence of COMPLEX;
   let a2 be Element of REAL,y2 be FinSequence of REAL;
-  assume
-A1: a1=a2 & y1 = y2 & len y1=len y2;
+  assume that
+A1: a1=a2 & y1 = y2 and
+A2: len y1=len y2;
   for i st i in dom y1 holds (a1 multcomplex).(y1.i)=(a2 multreal).(y2.i)
   proof
     let i;
-    assume i in dom y1;
-A2: (a1*y1).i = a1*(y1.i) by Th16
-      .= multcomplex.(a1,(y1.i)) by BINOP_2:def 5
-      .= multcomplex.(a1,(id COMPLEX).(y1.i)) by FUNCT_1:35
-      .= (multcomplex[;](a1,id COMPLEX)).(y1.i) by FUNCOP_1:66
-      .= (a1 multcomplex).(y1.i) by COMPLSP1:def 5;
-    (a2*y2).i = a2*(y2.i) by RVSUM_1:66
+    assume
+    i in dom y1;
+A3: (a2*y2).i = a2*(y2.i) by RVSUM_1:66
       .= multreal.(a2,(y2.i)) by BINOP_2:def 11
       .= multreal.(a2,(id REAL).(y2.i)) by FUNCT_1:35
       .= (multreal[;](a2,id REAL)).(y2.i) by FUNCOP_1:66
       .= (a2 multreal).(y2.i) by RVSUM_1:def 3;
-    hence thesis by A1,A2;
+    (a1*y1).i = a1*(y1.i) by Th16
+      .= multcomplex.(a1,(y1.i)) by BINOP_2:def 5
+      .= multcomplex.(a1,(id COMPLEX).(y1.i)) by FUNCT_1:35
+      .= (multcomplex[;](a1,id COMPLEX)).(y1.i) by FUNCOP_1:66
+      .= (a1 multcomplex).(y1.i) by COMPLSP1:def 5;
+    hence thesis by A1,A3;
   end;
-  hence thesis by A1,Th55;
+  hence thesis by A2,Th55;
 end;
 
 theorem
-  for a1 being complex number, y1 being FinSequence of COMPLEX
-  for a2 being Element of REAL,y2 being FinSequence of REAL
-  st a1 = a2 & y1 = y2 & len y1=len y2 holds a1*y1 = a2*y2;
+  for a1 being complex number, y1 being FinSequence of COMPLEX for a2
+  being Element of REAL,y2 being FinSequence of REAL st a1 = a2 & y1 = y2 & len
+  y1=len y2 holds a1*y1 = a2*y2;
 
 theorem Th63:
   for a, b being complex number holds (a+b)*z = a*z + b*z
@@ -1182,161 +1219,151 @@ end;
 
 theorem Th65:
   for a being Element of COMPLEX,x being FinSequence of COMPLEX
-  holds Re (a*x) = Re a * Re x - Im a * Im x &
-  Im (a*x) = Im a * Re x + Re a * Im x
+holds Re (a*x) = Re a * Re x - Im a * Im x & Im (a*x) = Im a * Re x + Re a * Im
+  x
 proof
   let a be Element of COMPLEX, x be FinSequence of COMPLEX;
-A1: len (x*') = len x by Def1;
-A2: len Re x = len x by Th48;
   reconsider z5=Re a, z6=Im a as Element of COMPLEX by XCMPLX_0:def 2;
+A1: len (x*') = len x by Def1;
+  len (1/2*z5*x) = len x by Th3;
+  then
+A2: len ((1/2*<i>)*z6*x+1/2*z5*x) =len ((1/2*<i>)*z6*x) by Th3,Th6;
 A3: len (1/2*z5*x) = len x by Th3;
-A4: Re a * Re x =(z5 * (1/2))*(x+x*') by Th53
+A4: len (z5*x) = len x & len ((<i>*z6)*x) = len x by Th3;
+A5: Re a * Re x =(z5 * (1/2))*(x+x*') by Th53
     .=(z5*1/2)*x+(z5*1/2)*(x*') by A1,Th30;
-A5: Im a * Im x =(z6 * (-1/2*<i>))*(x-x*') by Th53
+A6: len Re x = len x & len (Re a * Re x)=len (Re x) by Th48,RVSUM_1:147;
+A7: len ((z5-z6*<i>)*x*') = len (x*') & len ((z5 + <i>*z6)*x) = len x by Th3;
+A8: len (((-1/2*<i>)*z6)*(x*')) = len (x*') by Th3;
+A9: Im a * Im x =(z6 * (-1/2*<i>))*(x-x*') by Th53
     .=((-1/2*<i>)*z6)*x -((-1/2*<i>)*z6)*(x*') by A1,Th43;
-A6: len (1/2*z5*x) = len x by Th3;
-A7: len (1/2*z5*(x*')) = len (x*') by Th3;
-A8: len (Re a * Re x)=len (Re x) by EUCLID_2:8;
-A9: len (((-1/2*<i>)*z6)*x) = len x by Th3;
-A10: len (((-1/2*<i>)*z6)*(x*')) = len (x*') by Th3;
-A11: len (((1/2*<i>)*z6)*x) = len x by Th3;
-A12: len ((1/2*<i>)*z6*x+1/2*z5*x) =len ((1/2*<i>)*z6*x) by A6,Th3,Th6;
-A13: len ((z5-z6*<i>)*x*') = len (x*') by Th3;
-A14: len ((z5 + <i>*z6)*x) = len x by Th3;
-A15: len (z5*x) = len x by Th3;
-A16: len ((<i>*z6)*x) = len x by Th3;
-A17: len (z5*(x*')) = len (x*') by Th3;
-A18: len ((z6*<i>)*(x*')) = len (x*') by Th3;
-A19: len ((<i>*z6)*(x*')) = len (x*') by Th3;
-A20: len ((a*x)*') = len (a*x) by Def1;
-A21: len (z6*(x*')) = len (x*') by Th3;
-A22: len ((-z5)*(x*')) = len (x*') by Th3;
-A23: len (z6*x)=len x by Th3;
-A24: len ((1/2)*(z6*x)) = len (z6*x) by Th3;
-A25: len (((-1/2*<i>)*z5)*x) = len x by Th3;
-A26: len ((1/2)*(z6*(x*')))=len (z6*(x*')) by Th3;
-A27: len (((1/2*<i>)*z5)*(x*'))=len (x*') by Th3;
-A28: len ((1/2)*(z6*x)+((-1/2*<i>)*z5)*x)
-  = len ((1/2)*(z6*x)) by A24,A25,Th3,Th6;
-A29: len ((1/2)*(z6*x)+(1/2)*(z6*(x*')))
-  = len ((1/2)*(z6*x)) by A1,A21,A24,A26,Th3,Th6;
-A30: len (-(a*x)*') = len ((a*x)*') by Th5;
-A31: Re (a*x) = (1/2)*((a*'*x*')+a*x) by Th17
+A10: len (((-1/2*<i>)*z6)*x) = len x by Th3;
+A11: len (z5*(x*')) = len (x*') & len ((z6*<i>)*(x*')) = len (x*') by Th3;
+A12: len (1/2*z5*(x*')) = len (x*') & len (((1/2*<i>)*z6)*x) = len x by Th3;
+A13: Re (a*x) = (1/2)*((a*'*x*')+a*x) by Th17
     .= (1/2)*((a*'*x*')+((z5) + <i>*z6)*x) by COMPLEX1:29
     .= (1/2)*(((z5-z6*<i>)*x*')+(z5 + <i>*z6)*x) by COMPLEX1:def 15
-    .= (1/2)*((z5-z6*<i>)*x*')+(1/2)*((z5 + <i>*z6)*x) by A1,A13,A14,Th30
+    .= (1/2)*((z5-z6*<i>)*x*')+(1/2)*((z5 + <i>*z6)*x) by A1,A7,Th30
     .= (1/2)*((z5-z6*<i>)*x*')+(1/2)*(z5*x + (<i>*z6)*x) by Th63
     .= (1/2)*(z5*(x*')-(z6*<i>)*(x*'))+(1/2)*(z5*x + (<i>*z6)*x) by Th64
-    .= 1/2*(z5*(x*')-(z6*<i>)*(x*'))
-  +(1/2*(z5*x) + 1/2*((<i>*z6)*x)) by A15,A16,Th30
-    .= ((1/2*(z5*(x*'))-1/2*((z6*<i>)*(x*'))))
-  +(1/2*(z5*x) + 1/2*((<i>*z6)*x)) by A17,A18,Th43
-    .= 1/2*(z5*(x*'))-1/2*((<i>*z6)*(x*'))
-  +(1/2*(z5*x) + 1/2*(<i>*z6)*x) by Th53
-    .= (1/2*(z5*(x*'))+(-(1/2*<i>)*z6*(x*')))
-  +((1/2*(z5*x) + (1/2*<i>)*z6*x)) by Th53
-    .= (1/2*(z5*(x*'))+((-1/2*<i>*z6)*(x*')))
-  +((1/2*(z5*x) + (1/2*<i>)*z6*x)) by Th54
-    .= ((1/2*z5)*(x*')+((-1/2*<i>)*z6)*(x*'))
-  +((1/2*(z5*x) + (1/2*<i>)*z6*x)) by Th53
-    .= (1/2*z5*x + (1/2*<i>)*z6*x)
-  + (1/2*z5*(x*') + (-1/2*<i>)*z6*(x*')) by Th53
-    .= ((1/2*<i>)*z6*x+1/2*z5*x)
-  + 1/2*z5*(x*') + (-1/2*<i>)*z6*(x*') by A1,A7,A10,A11,A12,Th28
-    .= (1/2*z5*x+1/2*z5*(x*'))
-  +((-(-1/2*<i>)*z6)*x) +((-1/2*<i>)*z6*(x*')) by A1,A3,A7,A11,Th28
-    .= (1/2*z5*x+1/2*z5*(x*'))
-  -((-1/2*<i>)*z6*x) +((-1/2*<i>)*z6*(x*')) by Th54
-    .= Re a * Re x - Im a * Im x by A1,A2,A4,A8,A9,A10,Th40,A5;
-A32: Im a * Re x = (z6 * (1/2))*(x+x*') by Th53
+    .= 1/2*(z5*(x*')-(z6*<i>)*(x*')) +(1/2*(z5*x) + 1/2*((<i>*z6)*x)) by A4
+,Th30
+    .= ((1/2*(z5*(x*'))-1/2*((z6*<i>)*(x*')))) +(1/2*(z5*x) + 1/2*((<i>*z6)*
+  x)) by A11,Th43
+    .= 1/2*(z5*(x*'))-1/2*((<i>*z6)*(x*')) +(1/2*(z5*x) + 1/2*(<i>*z6)*x) by
+Th53
+    .= (1/2*(z5*(x*'))+(-(1/2*<i>)*z6*(x*'))) +((1/2*(z5*x) + (1/2*<i>)*z6*x
+  )) by Th53
+    .= (1/2*(z5*(x*'))+((-1/2*<i>*z6)*(x*'))) +((1/2*(z5*x) + (1/2*<i>)*z6*x
+  )) by Th54
+    .= ((1/2*z5)*(x*')+((-1/2*<i>)*z6)*(x*')) +((1/2*(z5*x) + (1/2*<i>)*z6*x
+  )) by Th53
+    .= (1/2*z5*x + (1/2*<i>)*z6*x) + (1/2*z5*(x*') + (-1/2*<i>)*z6*(x*')) by
+Th53
+    .= ((1/2*<i>)*z6*x+1/2*z5*x) + 1/2*z5*(x*') + (-1/2*<i>)*z6*(x*') by A1,A8
+,A12,A2,Th28
+    .= (1/2*z5*x+1/2*z5*(x*')) +((-(-1/2*<i>)*z6)*x) +((-1/2*<i>)*z6*(x*'))
+  by A1,A3,A12,Th28
+    .= (1/2*z5*x+1/2*z5*(x*')) -((-1/2*<i>)*z6*x) +((-1/2*<i>)*z6*(x*')) by
+Th54
+    .= Re a * Re x - Im a * Im x by A1,A5,A9,A6,A10,A8,Th40;
+A14: len (((1/2*<i>)*z5)*(x*'))=len (x*') by Th3;
+A15: Im a * Re x = (z6 * (1/2))*(x+x*') by Th53
     .= (1/2*z6)*x+(1/2*z6)*(x*') by A1,Th30;
-A33: Re a * Im x = (z5 * (-1/2*<i>))*(x-x*') by Th53
+A16: len ((<i>*z6)*(x*')) = len (x*') & len ((-z5)*(x*')) = len (x*') by Th3;
+A17: len ((1/2)*(z6*x)) = len (z6*x) by Th3;
+A18: len (z6*(x*')) = len (x*') & len ((1/2)*(z6*(x*')))=len (z6*(x*')) by Th3;
+  then
+A19: len ((1/2)*(z6*x)+(1/2)*(z6*(x*'))) = len ((1/2)*(z6*x)) by A1,A17,Th3,Th6
+;
+A20: len (((-1/2*<i>)*z5)*x) = len x by Th3;
+  then
+A21: len ((1/2)*(z6*x)+((-1/2*<i>)*z5)*x) = len ((1/2)*(z6*x)) by A17,Th3,Th6;
+A22: Re a * Im x = (z5 * (-1/2*<i>))*(x-x*') by Th53
     .= ((-1/2*<i>)*z5)*x-((-1/2*<i>)*z5)*(x*') by A1,Th43;
-  Im (a*x) = (-1/2*<i>)*((-((a*x)*')))+(-1/2*<i>)*(a*x) by A20,A30,Th30
+A23: len (z6*x)=len x by Th3;
+  len ((a*x)*') = len (a*x) & len (-(a*x)*') = len ((a*x)*') by Def1,Th5;
+  then Im (a*x) = (-1/2*<i>)*((-((a*x)*')))+(-1/2*<i>)*(a*x) by Th30
     .= (-1/2*<i>)*(-((a*')*(x*')))+(-1/2*<i>)*(a*x) by Th17
-    .= (-1/2*<i>)*(-((a*')*(x*')))
-  +(-1/2*<i>)*((z5 + <i>*z6)*x) by COMPLEX1:29
-    .= (-1/2*<i>)*(-((z5-z6*<i>)*x*'))
-  +(-1/2*<i>)*((z5 + <i>*z6)*x) by COMPLEX1:def 15
+    .= (-1/2*<i>)*(-((a*')*(x*'))) +(-1/2*<i>)*((z5 + <i>*z6)*x) by COMPLEX1:29
+    .= (-1/2*<i>)*(-((z5-z6*<i>)*x*')) +(-1/2*<i>)*((z5 + <i>*z6)*x) by
+COMPLEX1:def 15
     .= (-1/2*<i>)*((-(z5-z6*<i>))*x*') +(-1/2*<i>)*((z5 + <i>*z6)*x) by Th54
     .= (-1/2*<i>)*((-z5+z6*<i>)*(x*')) +(-1/2*<i>)*((z5 + <i>*z6)*x)
-    .= (-1/2*<i>)*((-z5)*(x*')+(<i>*z6)*(x*'))
-  +(-1/2*<i>)*((z5 + <i>*z6)*x) by Th63
-    .= (-1/2*<i>)*((-z5)*(x*')+(<i>*z6)*(x*'))
-  +(-1/2*<i>)*(z5*x + (<i>*z6)*x) by Th63
-    .= (-1/2*<i>)*((-z5)*(x*')+(<i>*z6)*(x*'))
-  +((-1/2*<i>)*(z5*x) + (-1/2*<i>)*((<i>*z6)*x)) by A15,A16,Th30
-    .= (-1/2*<i>)*((-z5)*(x*'))+(-1/2*<i>)*((<i>*z6)*(x*'))
-  +((-1/2*<i>)*(z5*x) + (-1/2*<i>)*((<i>*z6)*x)) by A19,A22,Th30
-    .= ((-1/2*<i>)*(-z5))*(x*')+(-1/2*<i>)*((<i>*z6)*(x*'))
-  +((-1/2*<i>)*(z5*x) + (-1/2*<i>)*((<i>*z6)*x)) by Th53
-    .= ((-1/2*<i>)*(-z5))*(x*')+(-1/2*<i>)*(<i>*(z6*(x*')))
-  +((-1/2*<i>)*(z5*x) + (-1/2*<i>)*((<i>*z6)*x)) by Th53
-    .= ((-1/2*<i>)*(-z5))*(x*')+((-1/2*<i>)*<i>)*(z6*(x*'))
-  +((-1/2*<i>)*(z5*x) + (-1/2*<i>)*((<i>*z6)*x)) by Th53
-    .= ((-1/2*<i>)*(-z5))*(x*')+((-1/2*<i>)*<i>)*(z6*(x*'))
-  +(((-1/2*<i>)*z5)*x + (-1/2*<i>)*((<i>*z6)*x)) by Th53
-    .= ((-1/2*<i>)*(-z5))*(x*')+((-1/2*<i>)*<i>)*(z6*(x*'))
-  +(((-1/2*<i>)*z5)*x + (-1/2*<i>)*(<i>*(z6*x))) by Th53
-    .= (1/2)*(z6*x)+((-1/2*<i>)*z5)*x
-  +((1/2)*(z6*(x*'))+((1/2*<i>)*z5)*(x*')) by Th53
-    .= (1/2)*(z6*x)+(((-1/2*<i>)*z5)*x)
-  +(1/2)*(z6*(x*'))+((1/2*<i>)*z5)*(x*') by A1,A21,A23,A24,A26,A27,A28,Th28
-    .= (1/2)*(z6*x)+(1/2)*(z6*(x*')) + (((-1/2*<i>)*z5)*x)+((1/2*<i>)*z5)*(x*')
-  by A1,A21,A23,A24,A25,A26,Th28
-    .= (1/2*(z6*x)+(1/2)*(z6*(x*')))+((((-1/2*<i>)*z5)*x)+((1/2*<i>)*z5)*(x*'))
-  by A1,A23,A24,A25,A27,A29,Th28
-    .= (1/2*z6)*x+(1/2)*(z6*(x*'))
-  +((((-1/2*<i>)*z5)*x)+((1/2*<i>)*z5)*(x*')) by Th53
-    .= (1/2*z6)*x+(1/2*z6)*(x*')
-  +(((-1/2*<i>)*z5)*x+((-((-1/2*<i>)*z5))*(x*'))) by Th53
-    .= Im a * Re x + Re a * Im x by Th54,A32,A33;
-  hence thesis by A31;
+    .= (-1/2*<i>)*((-z5)*(x*')+(<i>*z6)*(x*')) +(-1/2*<i>)*((z5 + <i>*z6)*x)
+  by Th63
+    .= (-1/2*<i>)*((-z5)*(x*')+(<i>*z6)*(x*')) +(-1/2*<i>)*(z5*x + (<i>*z6)*
+  x) by Th63
+    .= (-1/2*<i>)*((-z5)*(x*')+(<i>*z6)*(x*')) +((-1/2*<i>)*(z5*x) + (-1/2*
+  <i>)*((<i>*z6)*x)) by A4,Th30
+    .= (-1/2*<i>)*((-z5)*(x*'))+(-1/2*<i>)*((<i>*z6)*(x*')) +((-1/2*<i>)*(z5
+  *x) + (-1/2*<i>)*((<i>*z6)*x)) by A16,Th30
+    .= ((-1/2*<i>)*(-z5))*(x*')+(-1/2*<i>)*((<i>*z6)*(x*')) +((-1/2*<i>)*(z5
+  *x) + (-1/2*<i>)*((<i>*z6)*x)) by Th53
+    .= ((-1/2*<i>)*(-z5))*(x*')+(-1/2*<i>)*(<i>*(z6*(x*'))) +((-1/2*<i>)*(z5
+  *x) + (-1/2*<i>)*((<i>*z6)*x)) by Th53
+    .= ((-1/2*<i>)*(-z5))*(x*')+((-1/2*<i>)*<i>)*(z6*(x*')) +((-1/2*<i>)*(z5
+  *x) + (-1/2*<i>)*((<i>*z6)*x)) by Th53
+    .= ((-1/2*<i>)*(-z5))*(x*')+((-1/2*<i>)*<i>)*(z6*(x*')) +(((-1/2*<i>)*z5
+  )*x + (-1/2*<i>)*((<i>*z6)*x)) by Th53
+    .= ((-1/2*<i>)*(-z5))*(x*')+((-1/2*<i>)*<i>)*(z6*(x*')) +(((-1/2*<i>)*z5
+  )*x + (-1/2*<i>)*(<i>*(z6*x))) by Th53
+    .= (1/2)*(z6*x)+((-1/2*<i>)*z5)*x +((1/2)*(z6*(x*'))+((1/2*<i>)*z5)*(x*'
+  )) by Th53
+    .= (1/2)*(z6*x)+(((-1/2*<i>)*z5)*x) +(1/2)*(z6*(x*'))+((1/2*<i>)*z5)*(x
+  *') by A1,A23,A17,A18,A14,A21,Th28
+    .= (1/2)*(z6*x)+(1/2)*(z6*(x*')) + (((-1/2*<i>)*z5)*x)+((1/2*<i>)*z5)*(x
+  *') by A1,A23,A17,A20,A18,Th28
+    .= (1/2*(z6*x)+(1/2)*(z6*(x*')))+((((-1/2*<i>)*z5)*x)+((1/2*<i>)*z5)*(x
+  *')) by A1,A23,A17,A20,A14,A19,Th28
+    .= (1/2*z6)*x+(1/2)*(z6*(x*')) +((((-1/2*<i>)*z5)*x)+((1/2*<i>)*z5)*(x*'
+  )) by Th53
+    .= (1/2*z6)*x+(1/2*z6)*(x*') +(((-1/2*<i>)*z5)*x+((-((-1/2*<i>)*z5))*(x
+  *'))) by Th53
+    .= Im a * Re x + Re a * Im x by A15,A22,Th54;
+  hence thesis by A13;
 end;
 
 begin :: The Inner Product and Conjugate of Finite Sequences
 
 theorem Th66:
-  for x1,x2,y being FinSequence of COMPLEX st len x1=len x2 & len x2=len y
-  holds |((x1+x2),y)| = |(x1,y)| + |(x2,y)|
+  for x1,x2,y being FinSequence of COMPLEX st len x1=len x2 & len
+  x2=len y holds |((x1+x2),y)| = |(x1,y)| + |(x2,y)|
 proof
   let x1,x2,y be FinSequence of COMPLEX;
-  assume
-A1: len x1=len x2 & len x2=len y;
-A2: len (Re x1) = len x1 by Th48;
-A3: len (Re x2) = len x2 by Th48;
-A4: len (Re y) = len y by Th48;
-A5: len (Im x1) = len x1 by Th48;
-A6: len (Im x2) = len x2 by Th48;
-A7: len (Im y) = len y by Th48;
-  |((x1+x2),y)| = |((Re x1+ Re x2),Re y)| - <i>*(|(Re (x1+x2),Im y)|)
-  + <i>*(|(Im (x1+x2),Re y)|) + |(Im (x1+x2),Im y)| by A1,Th49
-    .= |((Re x1+ Re x2),Re y)| - <i>*(|((Re x1+Re x2),Im y)|)
-  + <i>*(|(Im (x1+x2),Re y)|) + |(Im (x1+x2),Im y)| by A1,Th49
-    .= |((Re x1+ Re x2),Re y)| - <i>*(|((Re x1+Re x2),Im y)|)
-  + <i>*(|((Im x1+ Im x2),Re y)|) + |(Im (x1+x2),Im y)| by A1,Th49
-    .= |((Re x1+ Re x2),Re y)| - <i>*(|((Re x1+Re x2),Im y)|)
-  + <i>*(|((Im x1+ Im x2),Re y)|) + |((Im x1+ Im x2),Im y)| by A1,Th49
-    .= |(Re x1,Re y)|+ |(Re x2,Re y)| - <i>*(|((Re x1+Re x2),Im y)|)
-  + <i>*(|((Im x1+ Im x2),Re y)|) + |((Im x1+ Im x2),Im y)|
-  by A1,A2,A3,A4,EUCLID_2:19
-    .= |(Re x1,Re y)|+ |(Re x2,Re y)| - <i>*(|(Re x1,Im y)| + |(Re x2,Im y)|)
-  + <i>*(|((Im x1+ Im x2),Re y)|) + |((Im x1+ Im x2),Im y)|
-  by A1,A2,A3,A7,EUCLID_2:19
-    .= |(Re x1,Re y)|+ |(Re x2,Re y)| - <i>*(|(Re x1,Im y)| + |(Re x2,Im y)|)
-  + <i>*(|(Im x1,Re y)|+ |(Im x2,Re y)|) + |((Im x1+ Im x2),Im y)|
-  by A1,A4,A5,A6,EUCLID_2:19
-    .= |(Re x1,Re y)| + |(Re x2,Re y)|
-  - <i>*(|(Re x1,Im y)| + |(Re x2,Im y)|)
-  + <i>*(|(Im x1,Re y)| + |(Im x2,Re y)|)
-  + (|(Im x1,Im y)|+ |(Im x2,Im y)|) by A1,A5,A6,A7,EUCLID_2:19
+  assume that
+A1: len x1=len x2 and
+A2: len x2=len y;
+A3: len (Re x1) = len x1 & len (Re x2) = len x2 by Th48;
+A4: len (Im y) = len y by Th48;
+A5: len (Im x1) = len x1 & len (Im x2) = len x2 by Th48;
+A6: len (Re y) = len y by Th48;
+  |((x1+x2),y)| = |((Re x1+ Re x2),Re y)| - <i>*(|(Re (x1+x2),Im y)|) +
+  <i>*(|(Im (x1+x2),Re y)|) + |(Im (x1+x2),Im y)| by A1,Th49
+    .= |((Re x1+ Re x2),Re y)| - <i>*(|((Re x1+Re x2),Im y)|) + <i>*(|(Im (
+  x1+x2),Re y)|) + |(Im (x1+x2),Im y)| by A1,Th49
+    .= |((Re x1+ Re x2),Re y)| - <i>*(|((Re x1+Re x2),Im y)|) + <i>*(|((Im
+  x1+ Im x2),Re y)|) + |(Im (x1+x2),Im y)| by A1,Th49
+    .= |((Re x1+ Re x2),Re y)| - <i>*(|((Re x1+Re x2),Im y)|) + <i>*(|((Im
+  x1+ Im x2),Re y)|) + |((Im x1+ Im x2),Im y)| by A1,Th49
+    .= |(Re x1,Re y)|+ |(Re x2,Re y)| - <i>*(|((Re x1+Re x2),Im y)|) + <i>*(
+  |((Im x1+ Im x2),Re y)|) + |((Im x1+ Im x2),Im y)| by A1,A2,A3,A6,RVSUM_1:150
+    .= |(Re x1,Re y)|+ |(Re x2,Re y)| - <i>*(|(Re x1,Im y)| + |(Re x2,Im y)|
+  ) + <i>*(|((Im x1+ Im x2),Re y)|) + |((Im x1+ Im x2),Im y)| by A1,A2,A3,A4,
+RVSUM_1:150
+    .= |(Re x1,Re y)|+ |(Re x2,Re y)| - <i>*(|(Re x1,Im y)| + |(Re x2,Im y)|
+) + <i>*(|(Im x1,Re y)|+ |(Im x2,Re y)|) + |((Im x1+ Im x2),Im y)| by A1,A2,A6
+,A5,RVSUM_1:150
+    .= |(Re x1,Re y)| + |(Re x2,Re y)| - <i>*(|(Re x1,Im y)| + |(Re x2,Im y
+)|) + <i>*(|(Im x1,Re y)| + |(Im x2,Re y)|) + (|(Im x1,Im y)|+ |(Im x2,Im y)|)
+  by A1,A2,A5,A4,RVSUM_1:150
     .= |(x1,y)| + |(x2,y)|;
   hence thesis;
 end;
 
 theorem Th67:
-  for x1,x2 being FinSequence of COMPLEX st len x1=len x2 holds
-  |(-x1, x2)| = -|(x1, x2)|
+  for x1,x2 being FinSequence of COMPLEX st len x1=len x2 holds |(
+  -x1, x2)| = -|(x1, x2)|
 proof
   let x1,x2 be FinSequence of COMPLEX;
   assume
@@ -1351,8 +1378,8 @@ A2: len (<i>*x1)=len x1 by Th3;
 end;
 
 theorem Th68:
-  for x1,x2 being FinSequence of COMPLEX st len x1=len x2 holds
-  |(x1, -x2)| = -|(x1, x2)|
+  for x1,x2 being FinSequence of COMPLEX st len x1=len x2 holds |(
+  x1, -x2)| = -|(x1, x2)|
 proof
   let x1,x2 be FinSequence of COMPLEX;
   assume
@@ -1367,8 +1394,8 @@ A2: len (<i>*x2)=len x2 by Th3;
 end;
 
 theorem
-  for x1,x2 being FinSequence of COMPLEX st len x1=len x2 holds
-  |(-x1, -x2)| = |(x1, x2)|
+  for x1,x2 being FinSequence of COMPLEX st len x1=len x2 holds |(-x1, -
+  x2)| = |(x1, x2)|
 proof
   let x1,x2 be FinSequence of COMPLEX;
   assume
@@ -1380,176 +1407,175 @@ A1: len x1=len x2;
 end;
 
 theorem Th70:
-  for x1,x2,x3 being FinSequence of COMPLEX st len x1=len x2 & len x2=len x3
-  holds |(x1-x2, x3)| = |(x1, x3)| - |(x2, x3)|
+  for x1,x2,x3 being FinSequence of COMPLEX st len x1=len x2 & len
+  x2=len x3 holds |(x1-x2, x3)| = |(x1, x3)| - |(x2, x3)|
 proof
   let x1,x2,x3 be FinSequence of COMPLEX;
-  assume
-A1: len x1=len x2 & len x2=len x3;
+  assume that
+A1: len x1=len x2 and
+A2: len x2=len x3;
   len (-x2)=len x2 by Th5;
-  then |(x1 - x2, x3)| = |(x1, x3)| + |(-x2, x3)| by A1,Th66
-    .= |(x1, x3)| + - |(x2, x3)| by A1,Th67;
+  then |(x1 - x2, x3)| = |(x1, x3)| + |(-x2, x3)| by A1,A2,Th66
+    .= |(x1, x3)| + - |(x2, x3)| by A2,Th67;
   hence thesis;
 end;
 
 theorem Th71:
-  for x,y1,y2 being FinSequence of COMPLEX st len x=len y1 & len y1=len y2
-  holds |(x, y1+y2)| = |(x, y1)| + |(x, y2)|
+  for x,y1,y2 being FinSequence of COMPLEX st len x=len y1 & len
+  y1=len y2 holds |(x, y1+y2)| = |(x, y1)| + |(x, y2)|
 proof
   let x,y1,y2 be FinSequence of COMPLEX;
-  assume
-A1: len x=len y1 &len y1=len y2;
-A2: len (Re y1) = len y1 by Th48;
-A3: len (Re y2) = len y2 by Th48;
-A4: len (Re x) = len x by Th48;
-A5: len (Im y1) = len y1 by Th48;
-A6: len (Im y2) = len y2 by Th48;
-A7: len (Im x) = len x by Th48;
-  |(x,(y1+y2))| = |(Re x,(Re y1+ Re y2))| - <i>*(|(Re x,Im (y1+y2))|)
-  + <i>*(|(Im x,Re (y1+y2))|) + |(Im x,Im (y1+y2))| by A1,Th49
-    .= |(Re x,(Re y1+ Re y2))| - <i>*(|(Re x,Im (y1+y2))|)
-  + <i>*(|(Im x,Re (y1+y2))|) + |(Im x,(Im y1+Im y2))| by A1,Th49
-    .= |(Re x,(Re y1+ Re y2))| - <i>*(|(Re x,(Im y1+Im y2))|)
-  + <i>*(|(Im x,Re (y1+y2))|) + |(Im x,(Im y1+Im y2))| by A1,Th49
-    .= |(Re x,(Re y1+ Re y2))| - <i>*(|(Re x,(Im y1+Im y2))|)
-  + <i>*(|(Im x,(Re y1+Re y2))|) + |(Im x,(Im y1+Im y2))| by A1,Th49
-    .= |(Re x,Re y1)|+ |(Re x,Re y2)| - <i>*(|(Re x,(Im y1+Im y2))|)
-  + <i>*(|(Im x,(Re y1+Re y2))|) + |(Im x,(Im y1+Im y2))|
-  by A1,A2,A3,A4,EUCLID_2:27
-    .= |(Re x,Re y1)|+ |(Re x,Re y2)| - <i>*(|(Re x,(Im y1+Im y2))|)
-  + <i>*(|(Im x,(Re y1+Re y2))|) + (|(Im x,Im y1)|+|(Im x,Im y2)|)
-  by A1,A5,A6,A7,EUCLID_2:27
+  assume that
+A1: len x=len y1 and
+A2: len y1=len y2;
+A3: len (Re y1) = len y1 & len (Re y2) = len y2 by Th48;
+A4: len (Im x) = len x by Th48;
+A5: len (Im y1) = len y1 & len (Im y2) = len y2 by Th48;
+A6: len (Re x) = len x by Th48;
+  |(x,(y1+y2))| = |(Re x,(Re y1+ Re y2))| - <i>*(|(Re x,Im (y1+y2))|) +
+  <i>*(|(Im x,Re (y1+y2))|) + |(Im x,Im (y1+y2))| by A2,Th49
+    .= |(Re x,(Re y1+ Re y2))| - <i>*(|(Re x,Im (y1+y2))|) + <i>*(|(Im x,Re
+  (y1+y2))|) + |(Im x,(Im y1+Im y2))| by A2,Th49
+    .= |(Re x,(Re y1+ Re y2))| - <i>*(|(Re x,(Im y1+Im y2))|) + <i>*(|(Im x,
+  Re (y1+y2))|) + |(Im x,(Im y1+Im y2))| by A2,Th49
+    .= |(Re x,(Re y1+ Re y2))| - <i>*(|(Re x,(Im y1+Im y2))|) + <i>*(|(Im x,
+  (Re y1+Re y2))|) + |(Im x,(Im y1+Im y2))| by A2,Th49
+    .= |(Re x,Re y1)|+ |(Re x,Re y2)| - <i>*(|(Re x,(Im y1+Im y2))|) + <i>*(
+  |(Im x,(Re y1+Re y2))|) + |(Im x,(Im y1+Im y2))| by A1,A2,A3,A6,RVSUM_1:150
+    .= |(Re x,Re y1)|+ |(Re x,Re y2)| - <i>*(|(Re x,(Im y1+Im y2))|) + <i>*(
+  |(Im x,(Re y1+Re y2))|) + (|(Im x,Im y1)|+|(Im x,Im y2)|) by A1,A2,A5,A4,
+RVSUM_1:150
     .= |(Re x,Re y1)|+ |(Re x,Re y2)| - <i>*(|(Re x,Im y1)|+|(Re x,Im y2)|)
-  + <i>*(|(Im x,(Re y1+Re y2))|) + (|(Im x,Im y1)|+|(Im x,Im y2)|)
-  by A1,A4,A5,A6,EUCLID_2:27
++ <i>*(|(Im x,(Re y1+Re y2))|) + (|(Im x,Im y1)|+|(Im x,Im y2)|) by A1,A2,A6,A5
+,RVSUM_1:150
     .= |(Re x,Re y1)|+ |(Re x,Re y2)| - <i>*(|(Re x,Im y1)|+|(Re x,Im y2)|)
-  + <i>*(|(Im x,Re y1)|+|(Im x,Re y2)|) + (|(Im x,Im y1)|+|(Im x,Im y2)|)
-  by A1,A2,A3,A7,EUCLID_2:27
++ <i>*(|(Im x,Re y1)|+|(Im x,Re y2)|) + (|(Im x,Im y1)|+|(Im x,Im y2)|) by A1
+,A2,A3,A4,RVSUM_1:150
     .= |(x,y1)| + |(x,y2)|;
   hence thesis;
 end;
 
 theorem Th72:
-  for x,y1,y2 being FinSequence of COMPLEX st len x=len y1 & len y1=len y2
-  holds |(x, y1-y2)| = |(x, y1)| - |(x, y2)|
+  for x,y1,y2 being FinSequence of COMPLEX st len x=len y1 & len
+  y1=len y2 holds |(x, y1-y2)| = |(x, y1)| - |(x, y2)|
 proof
   let x,y1,y2 be FinSequence of COMPLEX;
-  assume
-A1: len x=len y1 &len y1=len y2;
-A2: len (Re y1) = len y1 by Th48;
-A3: len (Re y2) = len y2 by Th48;
-A4: len (Re x) = len x by Th48;
-A5: len (Im y1) = len y1 by Th48;
-A6: len (Im y2) = len y2 by Th48;
-A7: len (Im x) = len x by Th48;
-  |(x,(y1-y2))| = |(Re x,(Re y1- Re y2))| - <i>*(|(Re x,Im (y1-y2))|)
-  + <i>*(|(Im x,Re (y1-y2))|) + |(Im x,Im (y1-y2))| by A1,Th52
-    .= |(Re x,(Re y1- Re y2))| - <i>*(|(Re x,Im (y1-y2))|)
-  + <i>*(|(Im x,Re (y1-y2))|) + |(Im x,(Im y1-Im y2))| by A1,Th52
-    .= |(Re x,(Re y1- Re y2))| - <i>*(|(Re x,(Im y1-Im y2))|)
-  + <i>*(|(Im x,Re (y1-y2))|) + |(Im x,(Im y1-Im y2))| by A1,Th52
-    .= |(Re x,(Re y1- Re y2))| - <i>*(|(Re x,(Im y1-Im y2))|)
-  + <i>*(|(Im x,(Re y1-Re y2))|) + |(Im x,(Im y1-Im y2))| by A1,Th52
-    .= |(Re x,Re y1)|- |(Re x,Re y2)| - <i>*(|(Re x,(Im y1-Im y2))|)
-  + <i>*(|(Im x,(Re y1-Re y2))|) + |(Im x,(Im y1-Im y2))|
-  by A1,A2,A3,A4,EUCLID_2:28
-    .= |(Re x,Re y1)|- |(Re x,Re y2)| - <i>*(|(Re x,(Im y1-Im y2))|)
-  + <i>*(|(Im x,(Re y1-Re y2))|) + (|(Im x,Im y1)|-|(Im x,Im y2)|)
-  by A1,A5,A6,A7,EUCLID_2:28
+  assume that
+A1: len x=len y1 and
+A2: len y1=len y2;
+A3: len (Re y1) = len y1 & len (Re y2) = len y2 by Th48;
+A4: len (Im x) = len x by Th48;
+A5: len (Im y1) = len y1 & len (Im y2) = len y2 by Th48;
+A6: len (Re x) = len x by Th48;
+  |(x,(y1-y2))| = |(Re x,(Re y1- Re y2))| - <i>*(|(Re x,Im (y1-y2))|) +
+  <i>*(|(Im x,Re (y1-y2))|) + |(Im x,Im (y1-y2))| by A2,Th52
+    .= |(Re x,(Re y1- Re y2))| - <i>*(|(Re x,Im (y1-y2))|) + <i>*(|(Im x,Re
+  (y1-y2))|) + |(Im x,(Im y1-Im y2))| by A2,Th52
+    .= |(Re x,(Re y1- Re y2))| - <i>*(|(Re x,(Im y1-Im y2))|) + <i>*(|(Im x,
+  Re (y1-y2))|) + |(Im x,(Im y1-Im y2))| by A2,Th52
+    .= |(Re x,(Re y1- Re y2))| - <i>*(|(Re x,(Im y1-Im y2))|) + <i>*(|(Im x,
+  (Re y1-Re y2))|) + |(Im x,(Im y1-Im y2))| by A2,Th52
+    .= |(Re x,Re y1)|- |(Re x,Re y2)| - <i>*(|(Re x,(Im y1-Im y2))|) + <i>*(
+  |(Im x,(Re y1-Re y2))|) + |(Im x,(Im y1-Im y2))| by A1,A2,A3,A6,RVSUM_1:154
+    .= |(Re x,Re y1)|- |(Re x,Re y2)| - <i>*(|(Re x,(Im y1-Im y2))|) + <i>*(
+  |(Im x,(Re y1-Re y2))|) + (|(Im x,Im y1)|-|(Im x,Im y2)|) by A1,A2,A5,A4,
+RVSUM_1:154
     .= |(Re x,Re y1)|- |(Re x,Re y2)| - <i>*(|(Re x,Im y1)|-|(Re x,Im y2)|)
-  + <i>*(|(Im x,(Re y1-Re y2))|) + (|(Im x,Im y1)|-|(Im x,Im y2)|)
-  by A1,A4,A5,A6,EUCLID_2:28
++ <i>*(|(Im x,(Re y1-Re y2))|) + (|(Im x,Im y1)|-|(Im x,Im y2)|) by A1,A2,A6,A5
+,RVSUM_1:154
     .= |(Re x,Re y1)|- |(Re x,Re y2)| - <i>*(|(Re x,Im y1)|-|(Re x,Im y2)|)
-  + <i>*(|(Im x,Re y1)|-|(Im x,Re y2)|) + (|(Im x,Im y1)|-|(Im x,Im y2)|)
-  by A1,A2,A3,A7,EUCLID_2:28
++ <i>*(|(Im x,Re y1)|-|(Im x,Re y2)|) + (|(Im x,Im y1)|-|(Im x,Im y2)|) by A1
+,A2,A3,A4,RVSUM_1:154
     .= |(x,y1)| - |(x,y2)|;
   hence thesis;
 end;
 
 theorem Th73:
-  for x1,x2,y1,y2 being FinSequence of COMPLEX
-  st len x1=len x2 & len x2=len y1 & len y1=len y2 holds
-  |(x1+x2, y1+y2)| = |(x1, y1)| + |(x1, y2)| + |(x2, y1)| + |(x2, y2)|
+  for x1,x2,y1,y2 being FinSequence of COMPLEX st len x1=len x2 &
+len x2=len y1 & len y1=len y2 holds |(x1+x2, y1+y2)| = |(x1, y1)| + |(x1, y2)|
+  + |(x2, y1)| + |(x2, y2)|
 proof
   let x1,x2,y1,y2 be FinSequence of COMPLEX;
-  assume
-A1: len x1=len x2 & len x2=len y1 & len y1=len y2;
-  then |(x1+x2, y2)| = |(x1, y2)| + |(x2, y2)| by Th66;
+  assume that
+A1: len x1=len x2 and
+A2: len x2=len y1 and
+A3: len y1=len y2;
+  |(x1+x2, y2)| = |(x1, y2)| + |(x2, y2)| by A1,A2,A3,Th66;
   then
-A2: |(x1+x2, y1)| + |(x1+x2, y2)|
-  = (|(x1, y1)|+|(x2, y1)|) + (|(x1, y2)| + |(x2, y2)|) by A1,Th66;
+A4: |(x1+x2, y1)| + |(x1+x2, y2)| = (|(x1, y1)|+|(x2, y1)|) + (|(x1, y2)| +
+  |(x2, y2)|) by A1,A2,Th66;
   len (x1+x2)=len x1 by A1,Th6;
-  hence thesis by A1,A2,Th71;
+  hence thesis by A1,A2,A3,A4,Th71;
 end;
 
 theorem Th74:
-  for x1,x2,y1,y2 being FinSequence of COMPLEX
-  st len x1=len x2 & len x2=len y1 & len y1=len y2 holds
-  |(x1-x2, y1-y2)| = |(x1, y1)| - |(x1, y2)| - |(x2, y1)| + |(x2, y2)|
+  for x1,x2,y1,y2 being FinSequence of COMPLEX st len x1=len x2 &
+len x2=len y1 & len y1=len y2 holds |(x1-x2, y1-y2)| = |(x1, y1)| - |(x1, y2)|
+  - |(x2, y1)| + |(x2, y2)|
 proof
   let x1,x2,y1,y2 be FinSequence of COMPLEX;
-  assume
-A1: len x1=len x2 & len x2=len y1 & len y1=len y2;
-  then |(x1,y1-y2)| = |(x1,y1)| - |(x1,y2)| by Th72;
+  assume that
+A1: len x1=len x2 and
+A2: len x2=len y1 and
+A3: len y1=len y2;
+  |(x1,y1-y2)| = |(x1,y1)| - |(x1,y2)| by A1,A2,A3,Th72;
   then
-A2: |(x1,y1-y2)| - |(x2,y1-y2)|
-  = (|(x1,y1)|-|(x1,y2)|)-(|(x2,y1)|-|(x2,y2)|) by A1,Th72;
-  len (y1 - y2)=len y1 by A1,Th7;
-  hence thesis by A1,A2,Th70;
+A4: |(x1,y1-y2)| - |(x2,y1-y2)| = (|(x1,y1)|-|(x1,y2)|)-(|(x2,y1)|-|(x2,y2)|
+  ) by A2,A3,Th72;
+  len (y1 - y2)=len y1 by A3,Th7;
+  hence thesis by A1,A2,A4,Th70;
 end;
 
 theorem Th75:
-  for x,y being FinSequence of COMPLEX st len x=len y holds
-  |(x,y)| = (|(y,x)|)*'
+  for x,y being FinSequence of COMPLEX holds |(x,y)| = (|(y,x)|)*'
 proof
   let x,y be FinSequence of COMPLEX;
-  assume len x=len y;
   set x1=|(Re y,Re x)|,x2=|(Re y,Im x)|,y1=|(Im y,Re x)|, y2=|(Im y,Im x)|;
   reconsider x1'=x1, x2'=x2, y1'=y1, y2'=y2 as Element of REAL;
 A1: Im x1'=0 by COMPLEX1:def 3;
 A2: Im x2'=0 by COMPLEX1:def 3;
-A3: Im y1'=0 by COMPLEX1:def 3;
-A4: Im y2'=0 by COMPLEX1:def 3;
-  reconsider x1'=x1, x2'=x2, y1'=y1, y2'=y2 as Element of COMPLEX
-  by XCMPLX_0:def 2;
+A3: Im y2'=0 by COMPLEX1:def 3;
+A4: Im y1'=0 by COMPLEX1:def 3;
+  reconsider x1'=x1, x2'=x2, y1'=y1, y2'=y2 as Element of COMPLEX by
+XCMPLX_0:def 2;
   (|(y,x)|)*' =(x1' + y2' + <i>*((y1') - (x2')))*'
     .=(x1' + y2')*' + (<i>*((y1') - (x2')))*' by COMPLEX1:118
     .=(x1')*' + (y2')*' + (<i>*((y1') - (x2')))*' by COMPLEX1:118
     .=x1' + (y2')*' + (<i>*((y1') - (x2')))*' by A1,COMPLEX1:124
-    .=x1' + y2' + (<i>*((y1') - (x2')))*' by A4,COMPLEX1:124
+    .=x1' + y2' + (<i>*((y1') - (x2')))*' by A3,COMPLEX1:124
     .=x1' + y2' + (-<i>)*((y1') - (x2'))*' by COMPLEX1:116,121
     .=x1' + y2' + (-<i>)*((y1')*' - (x2')*') by COMPLEX1:120
-    .=x1' + y2' + (-<i>)*((y1') - (x2')*') by A3,COMPLEX1:124
+    .=x1' + y2' + (-<i>)*((y1') - (x2')*') by A4,COMPLEX1:124
     .=x1' + y2' + (-<i>)*((y1') - (x2')) by A2,COMPLEX1:124
     .=|(x, y)|;
   hence thesis;
 end;
 
 theorem
-  for x,y being FinSequence of COMPLEX st len x=len y holds
-  |(x+y,x+y)| = |(x,x)| + 2*Re(|(x,y)|) + |(y,y)|
+  for x,y being FinSequence of COMPLEX st len x=len y holds |(x+y,x+y)|
+  = |(x,x)| + 2*Re(|(x,y)|) + |(y,y)|
 proof
   let x,y be FinSequence of COMPLEX;
-  assume
-A1: len x=len y;
   set z=|(x, y)|;
-  |(x+y, x+y)| =|(x, x)| + |(x, y)| + |(y, x)| + |(y, y)| by A1,Th73
-    .=|(x, x)| + |(x, y)| + (|(x, y)|)*' + |(y, y)| by A1,Th75
+  assume
+  len x=len y;
+  then |(x+y, x+y)| =|(x, x)| + |(x, y)| + |(y, x)| + |(y, y)| by Th73
+    .=|(x, x)| + |(x, y)| + (|(x, y)|)*' + |(y, y)| by Th75
     .=|(x, x)| + (z+z*') + |(y, y)|
     .=|(x, x)| + 2*Re(|(x, y)|) + |(y, y)| by Th24;
   hence thesis;
 end;
 
 theorem
-  for x,y being FinSequence of COMPLEX st len x=len y holds
-  |(x-y, x-y)| = |(x, x)| - 2*Re(|(x, y)|) + |(y, y)|
+  for x,y being FinSequence of COMPLEX st len x=len y holds |(x-y, x-y)|
+  = |(x, x)| - 2*Re(|(x, y)|) + |(y, y)|
 proof
   let x,y be FinSequence of COMPLEX;
-  assume
-A1: len x=len y;
   set z=|(x, y)|;
-  |(x-y, x-y)| =|(x, x)| - |(x, y)| - |(y, x)| + |(y, y)| by A1,Th74
-    .=|(x, x)| - |(x, y)| - (|(x, y)|)*' + |(y, y)| by A1,Th75
+  assume
+  len x=len y;
+  then |(x-y, x-y)| =|(x, x)| - |(x, y)| - |(y, x)| + |(y, y)| by Th74
+    .=|(x, x)| - |(x, y)| - (|(x, y)|)*' + |(y, y)| by Th75
     .=|(x, x)| - (z + z*') + |(y, y)|
     .=|(x, x)| - 2*Re(|(x, y)|) + |(y, y)| by Th24;
   hence thesis;
@@ -1562,90 +1588,79 @@ proof
   let a be Element of COMPLEX, x,y be FinSequence of COMPLEX;
   assume
 A1: len x=len y;
-A2: len (Re x) = len x by Th48;
-A3: len (Re y) = len y by Th48;
-A4: len (Im x) = len x by Th48;
+A2: len (Re a * Im x) = len (Im x) & len (Im a * Re x) = len (Re x) by
+RVSUM_1:147;
+A3: len (Re a * Re x) = len (Re x) & len (Im a * Im x) = len (Im x) by
+RVSUM_1:147;
+A4: len (Re x) = len x by Th48;
 A5: len (Im y) = len y by Th48;
-A6: len (Re a * Re x) = len (Re x) by EUCLID_2:8;
-A7: len (Im a * Im x) = len (Im x) by EUCLID_2:8;
-A8: len (Re a * Im x) = len (Im x) by EUCLID_2:8;
-A9: len (Im a * Re x) = len (Re x) by EUCLID_2:8;
-  |(a*x,y)| = |((Re a * Re x - Im a * Im x),Re y)| - <i>*(|(Re (a*x),Im y)|)
-  + <i>*(|(Im (a*x),Re y)|) + |(Im (a*x),Im y)| by Th65
-    .= |((Re a * Re x - Im a * Im x),Re y)|
-  - <i>*(|((Re a * Re x - Im a * Im x),Im y)|)
-  + <i>*(|(Im (a*x),Re y)|) + |(Im (a*x),Im y)| by Th65
-    .= |((Re a * Re x - Im a * Im x),Re y)|
-  - <i>*(|((Re a * Re x - Im a * Im x),Im y)|)
-  + <i>*(|((Im a * Re x + Re a * Im x),Re y)|) + |(Im (a*x),Im y)| by Th65
-    .= |((Re a * Re x - Im a * Im x),Re y)|
-  - <i>*(|((Re a * Re x - Im a * Im x),Im y)|)
-  + <i>*(|((Im a * Re x + Re a * Im x),Re y)|)
-  + (|((Im a * Re x + Re a * Im x),Im y)|) by Th65
-    .= |(Re a * Re x,Re y)|-|(Im a * Im x,Re y)|
-  - <i>*(|((Re a * Re x - Im a * Im x),Im y)|)
-  + <i>*(|((Im a * Re x + Re a * Im x),Re y)|)
-  + (|((Im a * Re x + Re a * Im x),Im y)|) by A1,A2,A3,A4,A6,A7,EUCLID_2:25
-    .= |(Re a * Re x,Re y)|-|(Im a * Im x,Re y)|
-  - <i>*((|(Re a * Re x,Im y)|)-(|(Im a * Im x,Im y)|))
-  + <i>*(|((Im a * Re x + Re a * Im x),Re y)|)
-  + (|((Im a * Re x + Re a * Im x),Im y)|) by A1,A2,A4,A5,A6,A7,EUCLID_2:25
-    .= |(Re a * Re x,Re y)|-|(Im a * Im x,Re y)|
-  - <i>*((|(Re a * Re x,Im y)|)-(|(Im a * Im x,Im y)|))
-  + <i>*((|(Im a * Re x,Re y)|)+(|(Re a * Im x,Re y)|))
-  + (|((Im a * Re x + Re a * Im x),Im y)|) by A1,A2,A3,A4,A8,A9,EUCLID_2:19
-    .= |(Re a * Re x,Re y)|-|(Im a * Im x,Re y)|
-  - <i>*((|(Re a * Re x,Im y)|)-(|(Im a * Im x,Im y)|))
-  + <i>*((|(Im a * Re x,Re y)|)+(|(Re a * Im x,Re y)|))
-  + ((|(Im a * Re x,Im y)|)+(|(Re a * Im x,Im y)|))
-  by A1,A2,A4,A5,A8,A9,EUCLID_2:19
-    .= |(Re a * Re x,Re y)|-|(Im a * Im x,Re y)|
-  - <i>*((Re a * (|(Re x,Im y)|))-(|(Im a * Im x,Im y)|))
-  + <i>*((|(Im a * Re x,Re y)|)+(|(Re a * Im x,Re y)|))
-  + ((|(Im a * Re x,Im y)|)+(|(Re a * Im x,Im y)|)) by A1,A2,A5,EUCLID_2:20
-    .= |(Re a * Re x,Re y)|-|(Im a * Im x,Re y)|
-  - <i>*((Re a * (|(Re x,Im y)|))-Im a * (|(Im x,Im y)|))
-  + <i>*((|(Im a * Re x,Re y)|)+(|(Re a * Im x,Re y)|))
-  + ((|(Im a * Re x,Im y)|)+(|(Re a * Im x,Im y)|)) by A1,A4,A5,EUCLID_2:20
-    .= Re a * (|(Re x,Re y)|)-|(Im a * Im x,Re y)|
-  - <i>*((Re a * (|(Re x,Im y)|))-Im a * (|(Im x,Im y)|))
-  + <i>*((|(Im a * Re x,Re y)|)+(|(Re a * Im x,Re y)|))
-  + ((|(Im a * Re x,Im y)|)+(|(Re a * Im x,Im y)|)) by A1,A2,A3,EUCLID_2:20
-    .= Re a * (|(Re x,Re y)|)-Im a * (|(Im x,Re y)|)
-  - <i>*((Re a * (|(Re x,Im y)|))-Im a * (|(Im x,Im y)|))
-  + <i>*((|(Im a * Re x,Re y)|)+(|(Re a * Im x,Re y)|))
-  + ((|(Im a * Re x,Im y)|)+(|(Re a * Im x,Im y)|)) by A1,A3,A4,EUCLID_2:20
-    .= Re a * (|(Re x,Re y)|)-Im a * (|(Im x,Re y)|)
-  - <i>*((Re a * (|(Re x,Im y)|))-Im a * (|(Im x,Im y)|))
-  + <i>*(Im a * (|(Re x,Re y)|)+(|(Re a * Im x,Re y)|))
-  + ((|(Im a * Re x,Im y)|)+(|(Re a * Im x,Im y)|)) by A1,A2,A3,EUCLID_2:20
-    .= Re a * (|(Re x,Re y)|)-Im a * (|(Im x,Re y)|)
-  - <i>*((Re a * (|(Re x,Im y)|))-Im a * (|(Im x,Im y)|))
-  + <i>*(Im a * (|(Re x,Re y)|)+Re a * (|(Im x,Re y)|))
-  + ((|(Im a * Re x,Im y)|)+(|(Re a * Im x,Im y)|)) by A1,A3,A4,EUCLID_2:20
-    .= Re a * (|(Re x,Re y)|)-Im a * (|(Im x,Re y)|)
-  - <i>*((Re a * (|(Re x,Im y)|))-Im a * (|(Im x,Im y)|))
-  + <i>*(Im a * (|(Re x,Re y)|)+Re a * (|(Im x,Re y)|))
-  + (Im a * (|(Re x,Im y)|)+(|(Re a * Im x,Im y)|)) by A1,A2,A5,EUCLID_2:20
-    .= Re a * (|(Re x,Re y)|)-Im a * (|(Im x,Re y)|)
-  - <i>*((Re a * (|(Re x,Im y)|))-Im a * (|(Im x,Im y)|))
-  + <i>*(Im a * (|(Re x,Re y)|)+Re a * (|(Im x,Re y)|))
-  + (Im a * (|(Re x,Im y)|)+Re a * (|(Im x,Im y)|)) by A1,A4,A5,EUCLID_2:20
-    .= Re a*(|(Re x,Re y)|) + <i>*(Im a)*(|(Re x,Re y)|)
-  - Re a*<i>*(|(Re x,Im y)|) + (Im a)*(|(Re x,Im y)|)
-  + (Re a*(<i>*(|(Im x,Re y)|)) - (Im a)*(|(Im x,Re y)|))
-  + (Re a + <i>*(Im a))*(|(Im x,Im y)|)
-    .= Re a*(|(Re x,Re y)|) + <i>*(Im a)*(|(Re x,Re y)|)
-  - Re a*<i>*(|(Re x,Im y)|) + (Im a)*(|(Re x,Im y)|)
-  + (Re a + <i>*(Im a))*(<i>*(|(Im x,Re y)|))
+A6: len (Re y) = len y by Th48;
+A7: len (Im x) = len x by Th48;
+  |(a*x,y)| = |((Re a * Re x - Im a * Im x),Re y)| - <i>*(|(Re (a*x),Im y
+  )|) + <i>*(|(Im (a*x),Re y)|) + |(Im (a*x),Im y)| by Th65
+    .= |((Re a * Re x - Im a * Im x),Re y)| - <i>*(|((Re a * Re x - Im a *
+  Im x),Im y)|) + <i>*(|(Im (a*x),Re y)|) + |(Im (a*x),Im y)| by Th65
+    .= |((Re a * Re x - Im a * Im x),Re y)| - <i>*(|((Re a * Re x - Im a *
+Im x),Im y)|) + <i>*(|((Im a * Re x + Re a * Im x),Re y)|) + |(Im (a*x),Im y)|
+  by Th65
+    .= |((Re a * Re x - Im a * Im x),Re y)| - <i>*(|((Re a * Re x - Im a *
+Im x),Im y)|) + <i>*(|((Im a * Re x + Re a * Im x),Re y)|) + (|((Im a * Re x +
+  Re a * Im x),Im y)|) by Th65
+    .= |(Re a * Re x,Re y)|-|(Im a * Im x,Re y)| - <i>*(|((Re a * Re x - Im
+a * Im x),Im y)|) + <i>*(|((Im a * Re x + Re a * Im x),Re y)|) + (|((Im a * Re
+  x + Re a * Im x),Im y)|) by A1,A4,A6,A7,A3,RVSUM_1:154
+    .= |(Re a * Re x,Re y)|-|(Im a * Im x,Re y)| - <i>*((|(Re a * Re x,Im y
+)|)-(|(Im a * Im x,Im y)|)) + <i>*(|((Im a * Re x + Re a * Im x),Re y)|) + (|((
+  Im a * Re x + Re a * Im x),Im y)|) by A1,A4,A7,A5,A3,RVSUM_1:154
+    .= |(Re a * Re x,Re y)|-|(Im a * Im x,Re y)| - <i>*((|(Re a * Re x,Im y
+)|)-(|(Im a * Im x,Im y)|)) + <i>*((|(Im a * Re x,Re y)|)+(|(Re a * Im x,Re y)|
+  )) + (|((Im a * Re x + Re a * Im x),Im y)|) by A1,A4,A6,A7,A2,RVSUM_1:150
+    .= |(Re a * Re x,Re y)|-|(Im a * Im x,Re y)| - <i>*((|(Re a * Re x,Im y
+)|)-(|(Im a * Im x,Im y)|)) + <i>*((|(Im a * Re x,Re y)|)+(|(Re a * Im x,Re y)|
+)) + ((|(Im a * Re x,Im y)|)+(|(Re a * Im x,Im y)|)) by A1,A4,A7,A5,A2,
+RVSUM_1:150
+    .= |(Re a * Re x,Re y)|-|(Im a * Im x,Re y)| - <i>*((Re a * (|(Re x,Im y
+)|))-(|(Im a * Im x,Im y)|)) + <i>*((|(Im a * Re x,Re y)|)+(|(Re a * Im x,Re y
+)|)) + ((|(Im a * Re x,Im y)|)+(|(Re a * Im x,Im y)|)) by A1,A4,A5,RVSUM_1:151
+    .= |(Re a * Re x,Re y)|-|(Im a * Im x,Re y)| - <i>*((Re a * (|(Re x,Im y
+)|))-Im a * (|(Im x,Im y)|)) + <i>*((|(Im a * Re x,Re y)|)+(|(Re a * Im x,Re y
+)|)) + ((|(Im a * Re x,Im y)|)+(|(Re a * Im x,Im y)|)) by A1,A7,A5,RVSUM_1:151
+    .= Re a * (|(Re x,Re y)|)-|(Im a * Im x,Re y)| - <i>*((Re a * (|(Re x,Im
+y)|))-Im a * (|(Im x,Im y)|)) + <i>*((|(Im a * Re x,Re y)|)+(|(Re a * Im x,Re y
+)|)) + ((|(Im a * Re x,Im y)|)+(|(Re a * Im x,Im y)|)) by A1,A4,A6,RVSUM_1:151
+    .= Re a * (|(Re x,Re y)|)-Im a * (|(Im x,Re y)|) - <i>*((Re a * (|(Re x,
+Im y)|))-Im a * (|(Im x,Im y)|)) + <i>*((|(Im a * Re x,Re y)|)+(|(Re a * Im x,
+Re y)|)) + ((|(Im a * Re x,Im y)|)+(|(Re a * Im x,Im y)|)) by A1,A6,A7,
+RVSUM_1:151
+    .= Re a * (|(Re x,Re y)|)-Im a * (|(Im x,Re y)|) - <i>*((Re a * (|(Re x,
+Im y)|))-Im a * (|(Im x,Im y)|)) + <i>*(Im a * (|(Re x,Re y)|)+(|(Re a * Im x,
+Re y)|)) + ((|(Im a * Re x,Im y)|)+(|(Re a * Im x,Im y)|)) by A1,A4,A6,
+RVSUM_1:151
+    .= Re a * (|(Re x,Re y)|)-Im a * (|(Im x,Re y)|) - <i>*((Re a * (|(Re x,
+Im y)|))-Im a * (|(Im x,Im y)|)) + <i>*(Im a * (|(Re x,Re y)|)+Re a * (|(Im x,
+Re y)|)) + ((|(Im a * Re x,Im y)|)+(|(Re a * Im x,Im y)|)) by A1,A6,A7,
+RVSUM_1:151
+    .= Re a * (|(Re x,Re y)|)-Im a * (|(Im x,Re y)|) - <i>*((Re a * (|(Re x,
+Im y)|))-Im a * (|(Im x,Im y)|)) + <i>*(Im a * (|(Re x,Re y)|)+Re a * (|(Im x,
+Re y)|)) + (Im a * (|(Re x,Im y)|)+(|(Re a * Im x,Im y)|)) by A1,A4,A5,
+RVSUM_1:151
+    .= Re a * (|(Re x,Re y)|)-Im a * (|(Im x,Re y)|) - <i>*((Re a * (|(Re x,
+Im y)|))-Im a * (|(Im x,Im y)|)) + <i>*(Im a * (|(Re x,Re y)|)+Re a * (|(Im x,
+Re y)|)) + (Im a * (|(Re x,Im y)|)+Re a * (|(Im x,Im y)|)) by A1,A7,A5,
+RVSUM_1:151
+    .= Re a*(|(Re x,Re y)|) + <i>*(Im a)*(|(Re x,Re y)|) - Re a*<i>*(|(Re x,
+Im y)|) + (Im a)*(|(Re x,Im y)|) + (Re a*(<i>*(|(Im x,Re y)|)) - (Im a)*(|(Im x
+  ,Re y)|)) + (Re a + <i>*(Im a))*(|(Im x,Im y)|)
+    .= Re a*(|(Re x,Re y)|) + <i>*(Im a)*(|(Re x,Re y)|) - Re a*<i>*(|(Re x,
+Im y)|) + (Im a)*(|(Re x,Im y)|) + (Re a + <i>*(Im a))*(<i>*(|(Im x,Re y)|)) +
+  a*(|(Im x,Im y)|) by COMPLEX1:29
+    .= Re a*(|(Re x,Re y)|) + <i>*(Im a)*(|(Re x,Re y)|) - (Re a + <i>*(Im a
+  ))*(<i>*(|(Re x,Im y)|)) + a*(<i>*(|(Im x,Re y)|)) + a*(|(Im x,Im y)|) by
+COMPLEX1:29
+    .= (Re a + <i>*(Im a))*(|(Re x,Re y)|) - a*(<i>*(|(Re x,Im y)|)) + a*(
+  <i>*(|(Im x,Re y)|)) + a*(|(Im x,Im y)|) by COMPLEX1:29
+    .= a*(|(Re x,Re y)|) - a*(<i>*(|(Re x,Im y)|)) + a*(<i>*(|(Im x,Re y)|))
   + a*(|(Im x,Im y)|) by COMPLEX1:29
-    .= Re a*(|(Re x,Re y)|) + <i>*(Im a)*(|(Re x,Re y)|)
-  - (Re a + <i>*(Im a))*(<i>*(|(Re x,Im y)|))
-  + a*(<i>*(|(Im x,Re y)|)) + a*(|(Im x,Im y)|) by COMPLEX1:29
-    .= (Re a + <i>*(Im a))*(|(Re x,Re y)|) - a*(<i>*(|(Re x,Im y)|))
-  + a*(<i>*(|(Im x,Re y)|)) + a*(|(Im x,Im y)|) by COMPLEX1:29
-    .= a*(|(Re x,Re y)|) - a*(<i>*(|(Re x,Im y)|))
-  + a*(<i>*(|(Im x,Re y)|)) + a*(|(Im x,Im y)|) by COMPLEX1:29
     .= a*(|(x,y)|);
   hence thesis;
 end;
@@ -1657,42 +1672,40 @@ proof
   let a be Element of COMPLEX, x,y be FinSequence of COMPLEX;
   assume
 A1: len x=len y;
-  len (a*y) = len y by Th3;
-  then |(x,a*y)|=(|(a*y,x)|)*' by A1,Th75
+  |(x,a*y)|=(|(a*y,x)|)*' by Th75
     .=(a*|(y,x)|)*' by A1,Th78
     .=(a*')*(|(y,x)|)*' by COMPLEX1:121
-    .=(a*')*(|(x,y)|) by A1,Th75;
+    .=(a*')*(|(x,y)|) by Th75;
   hence thesis;
 end;
 
 theorem
-  for a,b being Element of COMPLEX,x,y,z being FinSequence of COMPLEX
-  st len x=len y & len y=len z holds |((a*x+b*y), z)| = a*|(x,z)| + b*|(y,z)|
+  for a,b being Element of COMPLEX,x,y,z being FinSequence of COMPLEX st
+  len x=len y & len y=len z holds |((a*x+b*y), z)| = a*|(x,z)| + b*|(y,z)|
 proof
   let a,b be Element of COMPLEX,x,y,z be FinSequence of COMPLEX;
-  assume
-A1: len x=len y & len y=len z;
-A2: len (a*x)=len x by Th3;
-  len (b*y)=len y by Th3;
+  assume that
+A1: len x=len y and
+A2: len y=len z;
+  len (a*x)=len x & len (b*y)=len y by Th3;
   then |(a*x + b*y, z)| = |(a*x, z)| + |(b*y, z)| by A1,A2,Th66
-    .= a*|(x,z)| + |(b*y,z)| by A1,Th78
-    .= a*|(x,z)| + b*|(y,z)| by A1,Th78;
+    .= a*|(x,z)| + |(b*y,z)| by A1,A2,Th78
+    .= a*|(x,z)| + b*|(y,z)| by A2,Th78;
   hence thesis;
 end;
 
 theorem
-  for a,b being Element of COMPLEX,x,y,z being FinSequence of COMPLEX
-  st len x=len y & len y=len z holds
-  |(x,a*y+b*z)| = (a*')*|(x,y)| + (b*')*|(x,z)|
+  for a,b being Element of COMPLEX,x,y,z being FinSequence of COMPLEX st
+  len x=len y & len y=len z holds |(x,a*y+b*z)| = (a*')*|(x,y)| + (b*')*|(x,z)|
 proof
   let a,b be Element of COMPLEX,x,y,z be FinSequence of COMPLEX;
-  assume
-A1: len x=len y & len y=len z;
-A2: len (a*y)=len y by Th3;
-  len (b*z)=len z by Th3;
+  assume that
+A1: len x=len y and
+A2: len y=len z;
+  len (a*y)=len y & len (b*z)=len z by Th3;
   then |(x,a*y+b*z)| = |(x, a*y)| + |(x, b*z)| by A1,A2,Th71
     .= (a*')*|(x,y)| + |(x,b*z)| by A1,Th79
-    .= (a*')*|(x,y)| + (b*')*|(x,z)| by A1,Th79;
+    .= (a*')*|(x,y)| + (b*')*|(x,z)| by A1,A2,Th79;
   hence thesis;
 end;
 

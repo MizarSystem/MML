@@ -10,6 +10,7 @@
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="ORDINAL1"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
@@ -22,7 +23,7 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="26" value="false"/>
+<Adjective nr="27" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -32,10 +33,10 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="39" value="false">
+<Adjective nr="40" value="false">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="40">
+<Adjective nr="41">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -49,9 +50,9 @@
 <Adjective nr="16"/>
 <Adjective nr="17"/>
 <Adjective nr="18"/>
-<Adjective nr="26" value="false"/>
-<Adjective nr="30"/>
-<Adjective nr="31" value="false"/>
+<Adjective nr="27" value="false"/>
+<Adjective nr="31"/>
+<Adjective nr="32" value="false"/>
 </Cluster>
 </RCluster>
 <FCluster aid="CARD_FIL" nr="1">
@@ -84,50 +85,50 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="26" value="false"/>
-<Adjective nr="30"/>
+<Adjective nr="27" value="false"/>
+<Adjective nr="31"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="82">
+<Func kind="K" nr="90">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="30"/>
-<Adjective nr="31" value="false"/>
+<Adjective nr="31"/>
+<Adjective nr="32" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster aid="CARD_FIL" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="26" value="false"/>
-<Adjective nr="30"/>
-<Adjective nr="31" value="false"/>
+<Adjective nr="27" value="false"/>
+<Adjective nr="31"/>
+<Adjective nr="32" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="106">
+<Func kind="K" nr="114">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="26" value="false"/>
-<Adjective nr="30"/>
+<Adjective nr="27" value="false"/>
+<Adjective nr="31"/>
 </Cluster>
 </FCluster>
 <CCluster aid="CARD_FIL" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="26" value="false"/>
+<Adjective nr="27" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
 <Cluster>
-<Adjective nr="38">
+<Adjective nr="39">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="40">
+<Adjective nr="41">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -136,7 +137,7 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="39" value="false">
+<Adjective nr="40" value="false">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -144,83 +145,83 @@
 <CCluster aid="CARD_FIL" nr="2">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="26" value="false"/>
-<Adjective nr="30"/>
-<Adjective nr="41"/>
+<Adjective nr="27" value="false"/>
+<Adjective nr="31"/>
+<Adjective nr="42"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="26" value="false"/>
-<Adjective nr="30"/>
+<Adjective nr="27" value="false"/>
 <Adjective nr="31"/>
-<Adjective nr="37"/>
+<Adjective nr="32"/>
+<Adjective nr="38"/>
 </Cluster>
 </CCluster>
 <CCluster aid="CARD_FIL" nr="3">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="26" value="false"/>
-<Adjective nr="30"/>
-<Adjective nr="42"/>
+<Adjective nr="27" value="false"/>
+<Adjective nr="31"/>
+<Adjective nr="43"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="26" value="false"/>
-<Adjective nr="30"/>
+<Adjective nr="27" value="false"/>
 <Adjective nr="31"/>
+<Adjective nr="32"/>
 </Cluster>
 </CCluster>
 <CCluster aid="CARD_FIL" nr="4">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="26" value="false"/>
-<Adjective nr="30"/>
-<Adjective nr="43"/>
+<Adjective nr="27" value="false"/>
+<Adjective nr="31"/>
+<Adjective nr="44"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="26" value="false"/>
-<Adjective nr="30"/>
-<Adjective nr="37"/>
-<Adjective nr="42"/>
+<Adjective nr="27" value="false"/>
+<Adjective nr="31"/>
+<Adjective nr="38"/>
+<Adjective nr="43"/>
 </Cluster>
 </CCluster>
 <CCluster aid="CARD_FIL" nr="5">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="26" value="false"/>
-<Adjective nr="30"/>
-<Adjective nr="43"/>
+<Adjective nr="27" value="false"/>
+<Adjective nr="31"/>
+<Adjective nr="44"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="26" value="false"/>
-<Adjective nr="30"/>
-<Adjective nr="41"/>
+<Adjective nr="27" value="false"/>
+<Adjective nr="31"/>
+<Adjective nr="42"/>
 </Cluster>
 </CCluster>
 <CCluster aid="CARD_FIL" nr="6">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="26" value="false"/>
-<Adjective nr="30"/>
-<Adjective nr="31" value="false"/>
+<Adjective nr="27" value="false"/>
+<Adjective nr="31"/>
+<Adjective nr="32" value="false"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="26" value="false"/>
-<Adjective nr="30"/>
-<Adjective nr="37"/>
+<Adjective nr="27" value="false"/>
+<Adjective nr="31"/>
+<Adjective nr="38"/>
 </Cluster>
 </CCluster>
 </Registrations>

@@ -10,6 +10,7 @@
 <ArticleID name="TARSKI"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
@@ -43,7 +44,7 @@
 </Pred>
 </For>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="160">
+<Func kind="K" nr="168">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>
@@ -68,9 +69,9 @@
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="93">
+<Func kind="K" nr="101">
 <Var nr="1"/>
-<Func kind="K" nr="95">
+<Func kind="K" nr="103">
 <Var nr="2"/>
 </Func>
 </Func>

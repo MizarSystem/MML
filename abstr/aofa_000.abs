@@ -12,22 +12,21 @@ environ
       TREES_4, FINSEQ_2, ARYTM_1, FINSET_1, CQC_LANG, SUBSET_1, FUNCT_3,
       VECTSP_1, SETFAM_1, FREEALG, FINSEQ_4, DTCONSTR, CARD_1, TREES_2, LANG1,
       TDGROUP, TREES_3, TREES_1, MEMBERED, SQUARE_1, WELLORD1, INCPROJ,
-      FACIRC_1, UNIALG_2, PRELAMB, FUNCT_5, CQC_SIM1, ALG_1, ORDINAL2;
+      UNIALG_2, PRELAMB, FUNCT_5, CQC_SIM1, ALG_1, ORDINAL2, PRALG_2;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ENUMSET1, SETFAM_1, ORDINAL1,
       MEMBERED, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, FINSET_1, LANG1,
       BINOP_1, CARD_1, CARD_3, FINSEQ_1, FINSEQ_2, XXREAL_2, FACIRC_1, NUMBERS,
-      XCMPLX_0, XXREAL_0, XREAL_0, TREES_1, TREES_2, TREES_3, NAT_1, NAT_D,
-      BINARITH, SUPINF_1, MESFUNC1, FUNCOP_1, FUNCT_4, FUNCT_5, FUNCT_7, ABIAN,
-      CAT_2, MARGREL1, STRUCT_0, UNIALG_1, UNIALG_2, ALG_1, FREEALG, PUA2MSS1,
-      COMPUT_1, SUPINF_2, TREES_4, DTCONSTR, FINSEQ_4, RECDEF_1;
+      XCMPLX_0, XXREAL_0, TREES_1, TREES_2, TREES_3, NAT_1, NAT_D, SUPINF_1,
+      MESFUNC1, FUNCOP_1, FUNCT_4, FUNCT_5, FUNCT_7, ABIAN, CAT_2, MARGREL1,
+      STRUCT_0, UNIALG_1, UNIALG_2, ALG_1, FREEALG, PUA2MSS1, COMPUT_1,
+      SUPINF_2, TREES_4, DTCONSTR, FINSEQ_4, RECDEF_1;
  constructors PUA2MSS1, COMPUT_1, BINARITH, REAL_1, BORSUK_1, SUPINF_2,
       FINSEQ_4, FACIRC_1, ALG_1, FREEALG, FINSEQOP, WELLORD2, CAT_2, ABIAN,
-      RECDEF_1, MESFUNC1, NAT_1, SUPINF_1, NAT_D;
+      RECDEF_1, MESFUNC1, NAT_1, SUPINF_1, NAT_D, FINSEQ_3;
  registrations FUNCT_1, FINSEQ_2, FUNCT_2, FINSEQ_1, UNIALG_1, NAT_1, STRUCT_0,
       PUA2MSS1, DTCONSTR, FREEALG, FUNCT_7, CARD_5, SUBSET_1, XXREAL_0,
       XREAL_0, TREES_2, TREES_3, MEMBERED, XBOOLE_0, FINSET_1, TREES_1,
-      PRE_CIRC, FACIRC_1, RELAT_1, VALUED_0, CARD_1, XXREAL_2, CARD_3,
-      FINSEQ_4, RELSET_1;
+      FACIRC_1, RELAT_1, VALUED_0, CARD_1, XXREAL_2, RELSET_1, FINSEQ_3;
  requirements BOOLE, SUBSET, NUMERALS, ARITHM, REAL;
 
 
@@ -123,7 +122,6 @@ definition
   let X be set;
   func (f,X)+*g -> Function equals
 :: AOFA_000:def 4
-
   g+*(f|X);
 end;
 
@@ -168,7 +166,7 @@ theorem :: AOFA_000:8
   for f being Function, x being set st x in dom f holds f.x in f orbit x;
 
 theorem :: AOFA_000:9
-  for f being Function, x being set st x in dom f & f.x in dom f
+  for f being Function, x being set st x in dom f
   holds f orbit (f.x) c= f orbit x;
 
 definition
@@ -178,7 +176,6 @@ definition
   let x be set;
   func (A,x) iter f -> Function means
 :: AOFA_000:def 6
-
   dom it = dom f &
   for a being set st a in dom f holds (f orbit a c= A implies it.a = x) &
   for n being Nat st iter(f,n).a nin A &
@@ -257,8 +254,8 @@ end;
 theorem :: AOFA_000:16
   for G being non empty DTConstrStr for t being set st t in TS G holds
   (ex d being Symbol of G st d in Terminals G & t = root-tree d) or
-  (ex o being Symbol of G, p being FinSequence of TS G
-  st o ==> roots p & t = o-tree p);
+  ex o being Symbol of G, p being FinSequence of TS G
+  st o ==> roots p & t = o-tree p;
 
 theorem :: AOFA_000:17
   for X being disjoint_with_NAT non empty set
@@ -316,10 +313,8 @@ scheme :: AOFA_000:sch 1
  MaxVal{A() -> non empty set, B() -> set, P[set,set]}: ex n being Nat st
   for x being Element of A() st x in B() holds P[x,n]
 provided
- B() is finite
-and
- for x being Element of A() st x in B() ex n being Nat st P[x,n]
-and
+ B() is finite and
+ for x being Element of A() st x in B() ex n being Nat st P[x,n] and
  for x being Element of A()
 for n,m being Nat st P[x,n] & n <= m holds P[x,m];
 
@@ -337,7 +332,6 @@ definition
   let A be Universal_Algebra;
   func Generators A -> Subset of A equals
 :: AOFA_000:def 9
-
   (the carrier of A) \
   union {rng o where o is Element of Operations A: not contradiction};
 end;
@@ -564,7 +558,6 @@ definition
   let C,I be Algorithm of A;
   func if-then(C,I) -> Algorithm of A equals
 :: AOFA_000:def 19
-
   if-then-else(C,I,EmptyIns A);
 end;
 
@@ -585,7 +578,6 @@ definition
   let I0,C,I,J be Element of A;
   func for-do(I0,C,J,I) -> Element of A equals
 :: AOFA_000:def 21
-
   I0\;while(C,I\;J);
 end;
 
@@ -593,7 +585,6 @@ definition
   let A be preIfWhileAlgebra;
   func ElementaryInstructions A -> Subset of A equals
 :: AOFA_000:def 22
-
   (the carrier of A)
   \ {EmptyIns A} \ rng Den(In(3, dom the charact of A), A)
   \ rng Den(In(4, dom the charact of A), A)
@@ -621,7 +612,7 @@ theorem :: AOFA_000:53
   st I nin ElementaryInstructions A holds I = EmptyIns A or
   (ex I1,I2 being Element of A st I = I1\;I2 & I1 <> I1\;I2 & I2 <> I1\;I2) or
   (ex C,I1,I2 being Element of A st I = if-then-else(C,I1,I2)) or
-  (ex C,J being Element of A st I = while(C,J));
+  ex C,J being Element of A st I = while(C,J);
 
 definition
   let A be preIfWhileAlgebra;
@@ -640,8 +631,8 @@ definition
   (ex I1,I2,C,J1,J2 being Element of A st I1 <> EmptyIns A & I2 <> EmptyIns A &
   I1\;I2 = if-then-else(C,J1,J2)) or
   (ex I1,I2,C,J being Element of A st I1 <> EmptyIns A & I2 <> EmptyIns A &
-  I1\;I2 = while(C,J)) or (ex C1,I1,I2,C2,J being Element of A st
-  if-then-else(C1,I1,I2) = while(C2,J));
+  I1\;I2 = while(C,J)) or ex C1,I1,I2,C2,J being Element of A st
+  if-then-else(C1,I1,I2) = while(C2,J);
   attr A is well_founded means
 :: AOFA_000:def 25
 
@@ -681,8 +672,8 @@ theorem :: AOFA_000:56
   for X being disjoint_with_NAT non empty set
   for I being Element of FreeUnivAlgNSG(ECIW-signature,X) holds
   (ex x being Element of X st I = root-tree x) or
-  (ex n being Nat, p being FinSequence of FreeUnivAlgNSG(ECIW-signature,X)
-  st n in Seg 4 & I = n-tree p & len p = ECIW-signature.n);
+  ex n being Nat, p being FinSequence of FreeUnivAlgNSG(ECIW-signature,X)
+  st n in Seg 4 & I = n-tree p & len p = ECIW-signature.n;
 
 theorem :: AOFA_000:57
   for X being disjoint_with_NAT non empty set
@@ -836,8 +827,8 @@ theorem :: AOFA_000:77
   (ex C,I1,I2 being Element of A st x = if-then-else(C,I1,I2) &
   C in (ElementaryInstructions A)|^n &
   I1 in (ElementaryInstructions A)|^n & I2 in (ElementaryInstructions A)|^n) or
-  (ex C,I being Element of A st x = while(C,I) &
-  C in (ElementaryInstructions A)|^n & I in (ElementaryInstructions A)|^n);
+  ex C,I being Element of A st x = while(C,I) &
+  C in (ElementaryInstructions A)|^n & I in (ElementaryInstructions A)|^n;
 
 theorem :: AOFA_000:78
   for A being Universal_Algebra for B being Subset of A
@@ -854,13 +845,10 @@ scheme :: AOFA_000:sch 2
 provided
  for I being Element of A() st I in ElementaryInstructions A() holds P[I]
 and
- P[EmptyIns A()]
-and
- for I1,I2 being Element of A() st P[I1] & P[I2] holds P[I1\;I2]
-and
+ P[EmptyIns A()] and
+ for I1,I2 being Element of A() st P[I1] & P[I2] holds P[I1\;I2] and
  for C,I1,I2 being Element of A() st P[C] & P[I1] & P[I2]
-holds P[if-then-else(C,I1,I2)]
-and
+holds P[if-then-else(C,I1,I2)] and
  for C,I being Element of A() st P[C] & P[I] holds P[while(C,I)];
 
 begin :: Execution function
@@ -939,7 +927,6 @@ definition
   let s be Element of S;
   let T be Subset of S;   :: true states
   let f be ExecutionFunction of A, S, T;
-
 :: iteration of I started in s terminates wrt f
   pred f iteration_terminates_for I,s means
 :: AOFA_000:def 33
@@ -986,8 +973,7 @@ scheme :: AOFA_000:sch 3
   f() -> ExecutionFunction of A(),S(),T(), F(set) -> Nat, P[set] }:
   f() iteration_terminates_for I(),s()
 provided
- s() in T() iff P[s()]
-and
+ s() in T() iff P[s()] and
  for s being Element of S() st P[s]
 holds (P[f().(s,I())] iff f().(s,I()) in T()) & F(f().(s,I())) < F(s);
 
@@ -997,10 +983,8 @@ scheme :: AOFA_000:sch 4
   f() -> ExecutionFunction of A(),S(),T(), F(set) -> Nat, P,R[set] }:
   f() iteration_terminates_for I(),s()
 provided
- P[s()]
-and
- s() in T() iff R[s()]
-and
+ P[s()] and
+ s() in T() iff R[s()] and
  for s being Element of S() st P[s] & s in T() & R[s]
 holds P[f().(s, I())] & (R[f().(s,I())] iff f().(s,I()) in T()) &
 F(f().(s,I())) < F(s);
@@ -1020,10 +1004,8 @@ scheme :: AOFA_000:sch 5
   f() -> ExecutionFunction of A(),S(),T(), P,R[set] }:
   P[f().(s(),while(C(),I()))] & not R[f().(s(),while(C(),I()))]
 provided
- P[s()]
-and
- f() iteration_terminates_for I()\;C(), f().(s(),C())
-and
+ P[s()] and
+ f() iteration_terminates_for I()\;C(), f().(s(),C()) and
  for s being Element of S() st P[s] & s in T() & R[s] holds P[f().(s,I())]
 and
  for s being Element of S() st P[s] holds
@@ -1034,13 +1016,10 @@ scheme :: AOFA_000:sch 6
   S() -> non empty set, s() -> (Element of S()), T() -> Subset of S(),
   f() -> ExecutionFunction of A(),S(),T(), P[set] }: P[s()]
 provided
- P[f().(s(),while(C(),I()))]
-and
- f() iteration_terminates_for I()\;C(), f().(s(),C())
-and
+ P[f().(s(),while(C(),I()))] and
+ f() iteration_terminates_for I()\;C(), f().(s(),C()) and
  for s being Element of S() st P[f().(f().(s,C()),I())] & f().(s,C()) in T()
-holds P[f().(s,C())]
-and
+holds P[f().(s,C())] and
  for s being Element of S() st P[f().(s,C())] holds P[s];
 
 theorem :: AOFA_000:88
@@ -1074,7 +1053,7 @@ scheme :: AOFA_000:sch 7
   (for I1,I2 being Element of A() holds f.(I1\;I2) = ConF(f.I1,f.I2)) &
   (for C,I1,I2 being Element of A()
   holds f.if-then-else(C,I1,I2) = IfF(f.C,f.I1,f.I2)) &
-  (for C,I being Element of A() holds f.while(C,I) = WhiF(f.C,f.I))
+  for C,I being Element of A() holds f.while(C,I) = WhiF(f.C,f.I)
 provided
  for I being Element of A() st I in ElementaryInstructions A()
 holds ElemF(I) in S();

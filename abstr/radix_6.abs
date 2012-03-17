@@ -7,9 +7,9 @@
 environ
 
  vocabularies ARYTM_1, NAT_1, INT_1, RADIX_1, FINSEQ_1, MIDSP_3, FINSEQ_4,
-      GROUP_1, RELAT_1, RLVECT_1, FUNCT_1, RADIX_5, RADIX_6, ARYTM;
- notations TARSKI, SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0, INT_1, NAT_1, NAT_D,
-      NEWTON, BINARITH, RADIX_1, FINSEQ_1, FUNCT_1, RELSET_1, PARTFUN1,
+      GROUP_1, RELAT_1, RLVECT_1, FUNCT_1, RADIX_5, RADIX_6, ARYTM, FINSEQ_2;
+ notations SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0, INT_1, NAT_1, NAT_D, NEWTON,
+      BINARITH, RADIX_1, FINSEQ_1, FINSEQ_2, FUNCT_1, RELSET_1, PARTFUN1,
       GR_CY_1, RADIX_5;
  constructors REAL_1, NAT_1, NAT_D, PARTFUN1, NEWTON, BINARITH, GR_CY_1,
       RADIX_5, SEQ_1, RELSET_1;
@@ -21,8 +21,8 @@ environ
 begin
 
 theorem :: RADIX_6:1
-  for n be Nat st n >= 1 holds for m,k be Nat st m >= 1 & k >= 2 holds
-  SDDec(Fmin(m+n,m,k)) = SDDec(Fmin(m,m,k));
+  for n be Nat st n >= 1 holds for m,k be Nat st m >= 1 & k >= 2
+  holds SDDec(Fmin(m+n,m,k)) = SDDec(Fmin(m,m,k));
 
 theorem :: RADIX_6:2
   for m,k be Nat st m >= 1 & k >= 2 holds SDDec(Fmin(m,m,k)) > 0;
@@ -37,8 +37,7 @@ definition
   func M0Digit(r,i) -> Element of k-SD equals
 :: RADIX_6:def 1
 
-  r.i if i >= m,
-  0 if i < m;
+  r.i if i >= m, 0 if i < m;
 end;
 
 definition
@@ -46,7 +45,8 @@ definition
   func M0(r) -> Tuple of (m+2),k-SD means
 :: RADIX_6:def 2
 
-  for i be Nat st i in Seg (m+2) holds DigA(it,i) = M0Digit(r,i);
+  for i be Nat st i in Seg (m+2
+  ) holds DigA(it,i) = M0Digit(r,i);
 end;
 
 definition
@@ -57,8 +57,8 @@ definition
   func MmaxDigit(r,i) -> Element of k-SD equals
 :: RADIX_6:def 3
 
-  r.i if i >= m,
-  Radix(k)-1 if i < m;
+  r.i if i >= m, Radix(k)
+  -1 if i < m;
 end;
 
 definition
@@ -66,7 +66,8 @@ definition
   func Mmax(r) -> Tuple of (m+2),k-SD means
 :: RADIX_6:def 4
 
-  for i be Nat st i in Seg (m+2) holds DigA(it,i) = MmaxDigit(r,i);
+  for i be Nat st i in Seg (m
+  +2) holds DigA(it,i) = MmaxDigit(r,i);
 end;
 
 definition
@@ -77,8 +78,8 @@ definition
   func MminDigit(r,i) -> Element of k-SD equals
 :: RADIX_6:def 5
 
-  r.i if i >= m,
-  -Radix(k)+1 if i < m;
+  r.i if i >= m, -Radix(k
+  )+1 if i < m;
 end;
 
 definition
@@ -86,15 +87,16 @@ definition
   func Mmin(r) -> Tuple of (m+2),k-SD means
 :: RADIX_6:def 6
 
-  for i be Nat st i in Seg (m+2) holds DigA(it,i) = MminDigit(r,i);
+  for i be Nat st i in Seg (m
+  +2) holds DigA(it,i) = MminDigit(r,i);
 end;
 
 theorem :: RADIX_6:3
-  for m,k be Nat st m >= 1 & k >= 2 holds for r be Tuple of (m+2),k-SD holds
+  for m,k be Nat st k >= 2 holds for r be Tuple of (m+2),k-SD holds
   SDDec(Mmax(r)) >= SDDec(r);
 
 theorem :: RADIX_6:4
-  for m,k be Nat st m >= 1 & k >= 2 holds for r be Tuple of (m+2),k-SD holds
+  for m,k be Nat st k >= 2 holds for r be Tuple of (m+2),k-SD holds
   SDDec(r) >= SDDec(Mmin(r));
 
 begin :: Properties of minimum digits of Radix-$2^k$ SD number
@@ -104,15 +106,16 @@ definition
   pred x needs_digits_of n,k means
 :: RADIX_6:def 7
 
-  x < (Radix(k) |^ n) & x >= (Radix(k) |^ (n-'1));
+  x < (Radix(k) |^ n) & x >= (Radix(k)
+  |^ (n-'1));
 end;
 
 theorem :: RADIX_6:5
   for x,n,k,i be Nat st i in Seg n holds DigA(DecSD(x,n,k),i) >= 0;
 
 theorem :: RADIX_6:6
-  for n,k,x be Nat st n >= 1 & k >= 2 & x needs_digits_of n,k holds
-  DigA(DecSD(x,n,k),n) > 0;
+  for n,k,x be Nat st n >= 1 & x needs_digits_of n,k holds DigA(
+  DecSD(x,n,k),n) > 0;
 
 theorem :: RADIX_6:7
   for f,m,k be Nat st m >= 1 & k >= 2 & f needs_digits_of m,k holds
@@ -122,46 +125,46 @@ theorem :: RADIX_6:7
 begin :: Modulo calculation algorithm using Upper 3 Digits of Radix-$2^k$ SD number
 
 theorem :: RADIX_6:8
-  for mlow,mhigh,f be Integer st mhigh < mlow + f & f > 0 holds
-  ex s be Integer st -f < mlow - s * f & mhigh - s * f < f;
+  for mlow,mhigh,f be Integer st mhigh < mlow + f & f > 0 holds ex
+  s be Integer st -f < mlow - s * f & mhigh - s * f < f;
 
 theorem :: RADIX_6:9
-  for m,k be Nat st m >= 1 & k >= 2 holds for r be Tuple of (m+2),k-SD holds
-  SDDec(Mmax(r)) + SDDec(DecSD(0,m+2,k))
-  = SDDec(M0(r)) + SDDec(SDMax(m+2,m,k));
+  for m,k be Nat st k >= 2 holds for r be Tuple of (m+2),k-SD holds
+  SDDec(Mmax(r)) + SDDec(DecSD(0,m+2,k)) = SDDec(M0(r)) + SDDec(SDMax(m+2,m,k))
+;
 
 theorem :: RADIX_6:10
-  for m,k be Nat st m >= 1 & k >= 2 holds for r be Tuple of (m+2),k-SD holds
-  SDDec(Mmax(r)) < SDDec(M0(r)) + SDDec(Fmin(m+2,m,k));
+  for m,k be Nat st m >= 1 & k >= 2 holds for r be Tuple of (m+2),
+  k-SD holds SDDec(Mmax(r)) < SDDec(M0(r)) + SDDec(Fmin(m+2,m,k));
 
 theorem :: RADIX_6:11
-  for m,k be Nat st m >= 1 & k >= 2 holds for r be Tuple of (m+2),k-SD holds
-  SDDec(Mmin(r)) + SDDec(DecSD(0,m+2,k))
-  = SDDec(M0(r)) + SDDec(SDMin(m+2,m,k));
+  for m,k be Nat st k >= 2 holds for r be Tuple of (m+2),k-SD
+holds SDDec(Mmin(r)) + SDDec(DecSD(0,m+2,k)) = SDDec(M0(r)) + SDDec(SDMin(m+2,m
+  ,k));
 
 theorem :: RADIX_6:12
-  for m,k be Nat, r be Tuple of (m+2),k-SD st m >= 1 & k >= 2 holds
-  SDDec(M0(r)) + SDDec(DecSD(0,m+2,k))
-  = SDDec(Mmin(r)) + SDDec(SDMax(m+2,m,k));
+  for m,k be Nat, r be Tuple of (m+2),k-SD st m >= 1 & k >= 2
+holds SDDec(M0(r)) + SDDec(DecSD(0,m+2,k)) = SDDec(Mmin(r)) + SDDec(SDMax(m+2,m
+  ,k));
 
 theorem :: RADIX_6:13
-  for m,k be Nat st m >= 1 & k >= 2 holds for r be Tuple of (m+2),k-SD holds
-  SDDec(M0(r)) < SDDec(Mmin(r)) + SDDec(Fmin(m+2,m,k));
+  for m,k be Nat st m >= 1 & k >= 2 holds for r be Tuple of (m+2),
+  k-SD holds SDDec(M0(r)) < SDDec(Mmin(r)) + SDDec(Fmin(m+2,m,k));
 
 theorem :: RADIX_6:14
-  for m,k,f be Nat, r be Tuple of (m+2),k-SD
-  st m >= 1 & k >= 2 & f needs_digits_of m,k holds ex s be Integer st
-  (- f < (SDDec(M0(r)) - s*f)) & ( SDDec(Mmax(r)) - s*f < f );
+  for m,k,f be Nat, r be Tuple of (m+2),k-SD st m >= 1 & k >= 2 & f
+needs_digits_of m,k holds ex s be Integer st - f < (SDDec(M0(r)) - s*f) & SDDec
+  (Mmax(r)) - s*f < f;
 
 theorem :: RADIX_6:15
-  for m,k,f be Nat, r be Tuple of (m+2),k-SD
-  st m >= 1 & k >= 2 & f needs_digits_of m,k holds ex s be Integer st
-  (- f < (SDDec(Mmin(r)) - s*f)) & ( SDDec(M0(r)) - s*f < f );
+  for m,k,f be Nat, r be Tuple of (m+2),k-SD st m >= 1 & k >= 2 & f
+  needs_digits_of m,k holds ex s be Integer st - f < (SDDec(Mmin(r)) - s*f) &
+  SDDec(M0(r)) - s*f < f;
 
 theorem :: RADIX_6:16
-  for m,k be Nat, r be Tuple of (m+2),k-SD st m >= 1 & k >= 2 holds
-  SDDec(M0(r)) <= SDDec(r) & SDDec(r) <= SDDec(Mmax(r)) or
-  SDDec(Mmin(r)) <= SDDec(r) & SDDec(r) < SDDec(M0(r));
+  for m,k be Nat, r be Tuple of (m+2),k-SD st k >= 2 holds SDDec(M0(r))
+<= SDDec(r) & SDDec(r) <= SDDec(Mmax(r)) or SDDec(Mmin(r)) <= SDDec(r) & SDDec(
+  r) < SDDec(M0(r));
 
 begin :: How to identify the range of modulo arithmetic result
 
@@ -172,8 +175,8 @@ definition
   func MmaskDigit(r,i) -> Element of k-SD equals
 :: RADIX_6:def 8
 
-  r.i if i< m,
-  0 if i >= m;
+  r.i if i< m, 0 if i >=
+  m;
 end;
 
 definition
@@ -181,12 +184,13 @@ definition
   func Mmask(r) -> Tuple of (m+2),k-SD means
 :: RADIX_6:def 9
 
-  for i be Nat st i in Seg (m+2) holds DigA(it,i) = MmaskDigit(r,i);
+  for i be Nat st i in Seg (
+  m+2) holds DigA(it,i) = MmaskDigit(r,i);
 end;
 
 theorem :: RADIX_6:17
-  for m,k be Nat, r be Tuple of (m+2),k-SD st m >= 1 & k >= 2 holds
-  SDDec(M0(r)) + SDDec(Mmask(r)) = SDDec(r) + SDDec(DecSD(0,m+2,k));
+  for m,k be Nat, r be Tuple of (m+2),k-SD st k >= 2 holds SDDec(
+  M0(r)) + SDDec(Mmask(r)) = SDDec(r) + SDDec(DecSD(0,m+2,k));
 
 theorem :: RADIX_6:18
   for m,k be Nat, r be Tuple of (m+2),k-SD st m >= 1 & k >= 2 holds
@@ -199,8 +203,8 @@ definition
   func FSDMinDigit(m,k,i) -> Element of k-SD equals
 :: RADIX_6:def 10
 
-  0 if i > m,
-  1 if i = m otherwise -Radix(k)+1;
+  0 if i > m, 1 if i
+  = m otherwise -Radix(k)+1;
 end;
 
 definition
@@ -208,23 +212,25 @@ definition
   func FSDMin(n,m,k) -> Tuple of n,k-SD means
 :: RADIX_6:def 11
 
-  for i be Nat st i in Seg n holds DigA(it,i) = FSDMinDigit(m,k,i);
+  for i be Nat st i in Seg
+  n holds DigA(it,i) = FSDMinDigit(m,k,i);
 end;
 
 theorem :: RADIX_6:19
-  for n be Nat st n >= 1 holds for m,k be Nat st m in Seg n & k >= 2 holds
-  SDDec(FSDMin(n,m,k)) = 1;
+  for n be Nat st n >= 1 holds for m,k be Nat st m in Seg n & k >=
+  2 holds SDDec(FSDMin(n,m,k)) = 1;
 
 definition
   let n,m,k be Nat, r be Tuple of m+2,k-SD;
   pred r is_Zero_over n means
 :: RADIX_6:def 12
 
-  for i be Nat st i > n holds DigA(r,i) = 0;
+  for i be Nat st i > n holds DigA(r,i) =
+  0;
 end;
 
 theorem :: RADIX_6:20
   for m be Nat st m >= 1 holds for n,k be Nat, r be Tuple of m+2,k-SD st
-  k >= 2 & n in Seg (m+2) &
-  Mmask(r) is_Zero_over n & DigA(Mmask(r),n) > 0 holds SDDec(Mmask(r)) > 0;
+k >= 2 & n in Seg (m+2) & Mmask(r) is_Zero_over n & DigA(Mmask(r),n) > 0 holds
+  SDDec(Mmask(r)) > 0;
 

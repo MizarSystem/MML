@@ -10,7 +10,7 @@ environ
  notations TARSKI, XBOOLE_0, SUBSET_1, XBOOLEAN, MARGREL1, RELAT_1, FUNCT_1,
       FUNCT_2, BVFUNC_1;
  constructors BVFUNC_1;
- registrations XBOOLE_0, FUNCT_1, FUNCT_2, XBOOLEAN, MARGREL1;
+ registrations XBOOLE_0, XBOOLEAN, MARGREL1;
  requirements SUBSET, BOOLE;
  definitions BVFUNC_1, XBOOLEAN;
  theorems FUNCT_1, FUNCT_2, MARGREL1, BINARITH, BVFUNC_1, BVFUNC_4, XBOOLEAN;
@@ -22,32 +22,43 @@ begin
 reserve Y for non empty set;
 
 theorem
-  for a,b being Element of Funcs(Y,BOOLEAN) holds
-  (a 'imp' b) '&' ('not' a 'imp' b) = b
+  for a,b being Element of Funcs(Y,BOOLEAN) holds (a 'imp' b) '&' ('not'
+  a 'imp' b) = b
 proof
   let a,b be Element of Funcs(Y,BOOLEAN);
-A1: for x being Element of Y holds
-  ((a 'imp' b) '&' ('not' a 'imp' b)).x = (b).x
+  consider k3 being Function such that
+A1: ((a 'imp' b) '&' ('not' a 'imp' b))=k3 and
+A2: dom k3=Y and
+  rng k3 c= BOOLEAN by FUNCT_2:def 2;
+  consider k4 being Function such that
+A3: b=k4 and
+A4: dom k4=Y and
+  rng k4 c= BOOLEAN by FUNCT_2:def 2;
+  for x being Element of Y holds ((a 'imp' b) '&' ('not' a 'imp' b)).x = (
+  b).x
   proof
     let x be Element of Y;
-A2: ((a 'imp' b) '&' ('not' a 'imp' b)).x
-    =(a 'imp' b).x '&' ('not' a 'imp' b).x by MARGREL1:def 21
+A5: ((a 'imp' b) '&' ('not' a 'imp' b)).x =(a 'imp' b).x '&' ('not' a
+    'imp' b).x by MARGREL1:def 21
       .=('not' (a).x 'or' (b).x) '&' ('not' a 'imp' b).x by BVFUNC_1:def 11
-      .=('not' (a).x 'or' (b).x) '&' ('not' ('not'
-    a).x 'or' (b).x) by BVFUNC_1:def 11
+      .=('not' (a).x 'or' (b).x) '&' ('not' ('not' a).x 'or' (b).x) by
+    BVFUNC_1:def 11
       .=('not' (a).x 'or' (b).x) '&' ((a).x 'or' (b).x) by MARGREL1:def 20;
-    now per cases by XBOOLEAN:def 3;
-      case (a).x=TRUE;
-        then ((a 'imp' b) '&' ('not' a 'imp' b)).x
-        =(FALSE 'or' (b).x) '&' (TRUE 'or' (b).x) by A2,MARGREL1:41
+    now
+      per cases by XBOOLEAN:def 3;
+      case
+        (a).x=TRUE;
+        then ((a 'imp' b) '&' ('not' a 'imp' b)).x =(FALSE 'or' (b).x) '&' (
+        TRUE 'or' (b).x) by A5,MARGREL1:41
           .=(FALSE 'or' (b).x) '&' TRUE by BINARITH:19
           .=TRUE '&' (b).x by BINARITH:7
           .=(b).x by MARGREL1:50;
         hence thesis;
       end;
-      case (a).x=FALSE;
-        then ((a 'imp' b) '&' ('not' a 'imp' b)).x
-        =(TRUE 'or' (b).x) '&' (FALSE 'or' (b).x) by A2,MARGREL1:41
+      case
+        (a).x=FALSE;
+        then ((a 'imp' b) '&' ('not' a 'imp' b)).x =(TRUE 'or' (b).x) '&' (
+        FALSE 'or' (b).x) by A5,MARGREL1:41
           .=TRUE '&' (FALSE 'or' (b).x) by BINARITH:19
           .=TRUE '&' (b).x by BINARITH:7
           .=(b).x by MARGREL1:50;
@@ -56,45 +67,51 @@ A2: ((a 'imp' b) '&' ('not' a 'imp' b)).x
     end;
     hence thesis;
   end;
-  consider k3 being Function such that
-A3: ((a 'imp' b) '&' ('not' a 'imp' b))=k3 & dom k3=Y & rng k3 c= BOOLEAN
-  by FUNCT_2:def 2;
-  consider k4 being Function such that
-A4: b=k4 & dom k4=Y & rng k4 c= BOOLEAN by FUNCT_2:def 2;
-  Y=dom k3 & Y=dom k4 & (for u being set
-  st u in Y holds k3.u=k4.u)by A1,A3,A4;
-  hence thesis by A3,A4,FUNCT_1:9;
+  then for u being set st u in Y holds k3.u=k4.u by A1,A3;
+  hence thesis by A1,A2,A3,A4,FUNCT_1:9;
 end;
 
 theorem
-  for a,b being Element of Funcs(Y,BOOLEAN) holds
-  (a 'imp' b) '&' (a 'imp' 'not' b) = 'not' a
+  for a,b being Element of Funcs(Y,BOOLEAN) holds (a 'imp' b) '&' (a
+  'imp' 'not' b) = 'not' a
 proof
   let a,b be Element of Funcs(Y,BOOLEAN);
-A1: for x being Element of Y holds
-  ((a 'imp' b) '&' (a 'imp' 'not' b)).x = ('not' a).x
+  consider k3 being Function such that
+A1: ((a 'imp' b) '&' (a 'imp' 'not' b))=k3 and
+A2: dom k3=Y and
+  rng k3 c= BOOLEAN by FUNCT_2:def 2;
+  consider k4 being Function such that
+A3: 'not' a=k4 and
+A4: dom k4=Y and
+  rng k4 c= BOOLEAN by FUNCT_2:def 2;
+  for x being Element of Y holds ((a 'imp' b) '&' (a 'imp' 'not' b)).x = (
+  'not' a).x
   proof
     let x be Element of Y;
-A2: ((a 'imp' b) '&' (a 'imp' 'not' b)).x
-    =(a 'imp' b).x '&' (a 'imp' 'not' b).x by MARGREL1:def 21
+A5: ((a 'imp' b) '&' (a 'imp' 'not' b)).x =(a 'imp' b).x '&' (a 'imp'
+    'not' b).x by MARGREL1:def 21
       .=('not' (a).x 'or' (b).x) '&' (a 'imp' 'not' b).x by BVFUNC_1:def 11
-      .=('not' (a).x 'or' (b).x) '&' ('not' (a).x 'or' ('not'
-    b).x) by BVFUNC_1:def 11
-      .=('not' (a).x 'or' (b).x) '&' ('not' (a).x 'or' 'not'
-    (b).x) by MARGREL1:def 20;
-    now per cases by XBOOLEAN:def 3;
-      case (b).x=TRUE;
-        then ((a 'imp' b) '&' (a 'imp' 'not' b)).x
-        =('not' (a).x 'or' TRUE) '&' ('not' (a).x 'or' FALSE) by A2,MARGREL1:41
+      .=('not' (a).x 'or' (b).x) '&' ('not' (a).x 'or' ('not' b).x) by
+    BVFUNC_1:def 11
+      .=('not' (a).x 'or' (b).x) '&' ('not' (a).x 'or' 'not' (b).x) by
+    MARGREL1:def 20;
+    now
+      per cases by XBOOLEAN:def 3;
+      case
+        (b).x=TRUE;
+        then
+        ((a 'imp' b) '&' (a 'imp' 'not' b)).x =('not' (a).x 'or' TRUE) '&'
+        ('not' (a).x 'or' FALSE) by A5, MARGREL1:41
           .=('not' (a).x 'or' TRUE) '&' 'not' (a).x by BINARITH:7
           .=TRUE '&' 'not' (a).x by BINARITH:19
           .='not' (a).x by MARGREL1:50
           .=('not' a).x by MARGREL1:def 20;
         hence thesis;
       end;
-      case (b).x=FALSE;
-        then ((a 'imp' b) '&' (a 'imp' 'not' b)).x
-        =('not' (a).x 'or' FALSE) '&' ('not' (a).x 'or' TRUE) by A2,MARGREL1:41
+      case
+        (b).x=FALSE;
+        then ((a 'imp' b) '&' (a 'imp' 'not' b)).x =('not' (a).x 'or' FALSE)
+        '&' ('not' (a).x 'or' TRUE) by A5, MARGREL1:41
           .='not' (a).x '&' ('not' (a).x 'or' TRUE) by BINARITH:7
           .=TRUE '&' 'not' (a).x by BINARITH:19
           .='not' (a).x by MARGREL1:50
@@ -104,194 +121,215 @@ A2: ((a 'imp' b) '&' (a 'imp' 'not' b)).x
     end;
     hence thesis;
   end;
-  consider k3 being Function such that
-A3: ((a 'imp' b) '&' (a 'imp' 'not' b))=k3 & dom k3=Y & rng k3 c= BOOLEAN
-  by FUNCT_2:def 2;
-  consider k4 being Function such that
-A4: 'not' a=k4 & dom k4=Y & rng k4 c= BOOLEAN by FUNCT_2:def 2;
-  Y=dom k3 & Y=dom k4 & (for u being set
-  st u in Y holds k3.u=k4.u)by A1,A3,A4;
-  hence thesis by A3,A4,FUNCT_1:9;
+  then for u being set st u in Y holds k3.u=k4.u by A1,A3;
+  hence thesis by A1,A2,A3,A4,FUNCT_1:9;
 end;
 
 theorem
-  for a,b,c being Element of Funcs(Y,BOOLEAN) holds
-  a 'imp' (b 'or' c) = (a 'imp' b) 'or' (a 'imp' c)
+  for a,b,c being Element of Funcs(Y,BOOLEAN) holds a 'imp' (b 'or' c) =
+  (a 'imp' b) 'or' (a 'imp' c)
 proof
   let a,b,c be Element of Funcs(Y,BOOLEAN);
-A1: for x being Element of Y holds
-  (a 'imp' (b 'or' c)).x = ((a 'imp' b) 'or' (a 'imp' c)).x
+  consider k3 being Function such that
+A1: (a 'imp' (b 'or' c))=k3 and
+A2: dom k3=Y and
+  rng k3 c= BOOLEAN by FUNCT_2:def 2;
+  consider k4 being Function such that
+A3: (a 'imp' b) 'or' (a 'imp' c)=k4 and
+A4: dom k4=Y and
+  rng k4 c= BOOLEAN by FUNCT_2:def 2;
+  for x being Element of Y holds (a 'imp' (b 'or' c)).x = ((a 'imp' b)
+  'or' (a 'imp' c)).x
   proof
     let x be Element of Y;
-    ((a 'imp' b) 'or' (a 'imp' c)).x
-    =(a 'imp' b).x 'or' (a 'imp' c).x by BVFUNC_1:def 7
+    ((a 'imp' b) 'or' (a 'imp' c)).x =(a 'imp' b).x 'or' (a 'imp' c).x by
+    BVFUNC_1:def 7
       .=('not' (a).x 'or' (b).x) 'or' (a 'imp' c).x by BVFUNC_1:def 11
-      .=('not' (a).x 'or' (b).x) 'or' ('not'
-    (a).x 'or' (c).x) by BVFUNC_1:def 11
-      .=('not' (a).x 'or' ('not' (a).x 'or' (b).x)) 'or' (c).x by BINARITH:20
-      .=(('not' (a).x 'or' 'not' (a).x) 'or' (b).x) 'or' (c).x by BINARITH:20
+      .=('not' (a).x 'or' (b).x) 'or' ('not' (a).x 'or' (c).x) by BVFUNC_1:
+    def 11
+      .=('not' (a).x 'or' ('not' (a).x 'or' (b).x)) 'or' (c).x by BINARITH:
+    20
+      .=(('not' (a).x 'or' 'not' (a).x) 'or' (b).x) 'or' (c).x by BINARITH:
+    20
       .='not' (a).x 'or' ((b).x 'or' (c).x) by BINARITH:20
       .='not' (a).x 'or' (b 'or' c).x by BVFUNC_1:def 7
       .=(a 'imp' (b 'or' c)).x by BVFUNC_1:def 11;
     hence thesis;
   end;
-  consider k3 being Function such that
-A2: (a 'imp' (b 'or' c))=k3 & dom k3=Y & rng k3 c= BOOLEAN by FUNCT_2:def 2;
-  consider k4 being Function such that
-A3: (a 'imp' b) 'or' (a 'imp' c)=k4 & dom k4=Y & rng k4 c= BOOLEAN
-  by FUNCT_2:def 2;
-  Y=dom k3 & Y=dom k4 & (for u being set
-  st u in Y holds k3.u=k4.u)by A1,A2,A3;
-  hence thesis by A2,A3,FUNCT_1:9;
+  then for u being set st u in Y holds k3.u=k4.u by A1,A3;
+  hence thesis by A1,A2,A3,A4,FUNCT_1:9;
 end;
 
 theorem
-  for a,b,c being Element of Funcs(Y,BOOLEAN) holds
-  a 'imp' (b '&' c) = (a 'imp' b) '&' (a 'imp' c)
+  for a,b,c being Element of Funcs(Y,BOOLEAN) holds a 'imp' (b '&' c) =
+  (a 'imp' b) '&' (a 'imp' c)
 proof
   let a,b,c be Element of Funcs(Y,BOOLEAN);
-A1: for x being Element of Y holds
-  (a 'imp' (b '&' c)).x = ((a 'imp' b) '&' (a 'imp' c)).x
+  consider k3 being Function such that
+A1: (a 'imp' (b '&' c))=k3 and
+A2: dom k3=Y and
+  rng k3 c= BOOLEAN by FUNCT_2:def 2;
+  consider k4 being Function such that
+A3: (a 'imp' b) '&' (a 'imp' c)=k4 and
+A4: dom k4=Y and
+  rng k4 c= BOOLEAN by FUNCT_2:def 2;
+  for x being Element of Y holds (a 'imp' (b '&' c)).x = ((a 'imp' b) '&'
+  (a 'imp' c)).x
   proof
     let x be Element of Y;
-    ((a 'imp' b) '&' (a 'imp' c)).x
-    =(a 'imp' b).x '&' (a 'imp' c).x by MARGREL1:def 21
+    ((a 'imp' b) '&' (a 'imp' c)).x =(a 'imp' b).x '&' (a 'imp' c).x by
+    MARGREL1:def 21
       .=('not' (a).x 'or' (b).x) '&' (a 'imp' c).x by BVFUNC_1:def 11
-      .=('not' (a).x 'or' (b).x) '&' ('not'
-    (a).x 'or' (c).x) by BVFUNC_1:def 11
+      .=('not' (a).x 'or' (b).x) '&' ('not' (a).x 'or' (c).x) by BVFUNC_1:
+    def 11
       .='not' (a).x 'or' ((b).x '&' (c).x) by XBOOLEAN:9
       .='not' (a).x 'or' ((b '&' c).x) by MARGREL1:def 21
       .=(a 'imp' (b '&' c)).x by BVFUNC_1:def 11;
     hence thesis;
   end;
-  consider k3 being Function such that
-A2: (a 'imp' (b '&' c))=k3 & dom k3=Y & rng k3 c= BOOLEAN by FUNCT_2:def 2;
-  consider k4 being Function such that
-A3: (a 'imp' b) '&' (a 'imp' c)=k4 & dom k4=Y & rng k4 c= BOOLEAN
-  by FUNCT_2:def 2;
-  Y=dom k3 & Y=dom k4 & (for u being set
-  st u in Y holds k3.u=k4.u)by A1,A2,A3;
-  hence thesis by A2,A3,FUNCT_1:9;
+  then for u being set st u in Y holds k3.u=k4.u by A1,A3;
+  hence thesis by A1,A2,A3,A4,FUNCT_1:9;
 end;
 
 theorem
-  for a,b,c being Element of Funcs(Y,BOOLEAN) holds
-  (a 'or' b) 'imp' c = (a 'imp' c) '&' (b 'imp' c)
+  for a,b,c being Element of Funcs(Y,BOOLEAN) holds (a 'or' b) 'imp' c =
+  (a 'imp' c) '&' (b 'imp' c)
 proof
   let a,b,c be Element of Funcs(Y,BOOLEAN);
-A1: for x being Element of Y holds
-  ((a 'or' b) 'imp' c).x = ((a 'imp' c) '&' (b 'imp' c)).x
+  consider k3 being Function such that
+A1: ((a 'or' b) 'imp' c)=k3 and
+A2: dom k3=Y and
+  rng k3 c= BOOLEAN by FUNCT_2:def 2;
+  consider k4 being Function such that
+A3: (a 'imp' c) '&' (b 'imp' c)=k4 and
+A4: dom k4=Y and
+  rng k4 c= BOOLEAN by FUNCT_2:def 2;
+  for x being Element of Y holds ((a 'or' b) 'imp' c).x = ((a 'imp' c) '&'
+  (b 'imp' c)).x
   proof
     let x be Element of Y;
-    ((a 'imp' c) '&' (b 'imp' c)).x
-    =(a 'imp' c).x '&' (b 'imp' c).x by MARGREL1:def 21
+    ((a 'imp' c) '&' (b 'imp' c)).x =(a 'imp' c).x '&' (b 'imp' c).x by
+    MARGREL1:def 21
       .=('not' (a).x 'or' (c).x) '&' (b 'imp' c).x by BVFUNC_1:def 11
-      .=((c).x 'or' 'not' (a).x) '&' ('not'
-    (b).x 'or' (c).x) by BVFUNC_1:def 11
+      .=((c).x 'or' 'not' (a).x) '&' ('not' (b).x 'or' (c).x) by BVFUNC_1:
+    def 11
       .='not'( (a).x 'or' (b).x) 'or' (c).x by XBOOLEAN:9
       .='not' (a 'or' b).x 'or' (c).x by BVFUNC_1:def 7
       .=((a 'or' b) 'imp' c).x by BVFUNC_1:def 11;
     hence thesis;
   end;
-  consider k3 being Function such that
-A2: ((a 'or' b) 'imp' c)=k3 & dom k3=Y & rng k3 c= BOOLEAN by FUNCT_2:def 2;
-  consider k4 being Function such that
-A3: (a 'imp' c) '&' (b 'imp' c)=k4 & dom k4=Y & rng k4 c= BOOLEAN
-  by FUNCT_2:def 2;
-  Y=dom k3 & Y=dom k4 & (for u being set
-  st u in Y holds k3.u=k4.u)by A1,A2,A3;
-  hence thesis by A2,A3,FUNCT_1:9;
+  then for u being set st u in Y holds k3.u=k4.u by A1,A3;
+  hence thesis by A1,A2,A3,A4,FUNCT_1:9;
 end;
 
 theorem
-  for a,b,c being Element of Funcs(Y,BOOLEAN) holds
-  (a '&' b) 'imp' c = (a 'imp' c) 'or' (b 'imp' c)
+  for a,b,c being Element of Funcs(Y,BOOLEAN) holds (a '&' b) 'imp' c =
+  (a 'imp' c) 'or' (b 'imp' c)
 proof
   let a,b,c be Element of Funcs(Y,BOOLEAN);
-A1: for x being Element of Y holds
-  ((a '&' b) 'imp' c).x = ((a 'imp' c) 'or' (b 'imp' c)).x
+  consider k3 being Function such that
+A1: ((a '&' b) 'imp' c)=k3 and
+A2: dom k3=Y and
+  rng k3 c= BOOLEAN by FUNCT_2:def 2;
+  consider k4 being Function such that
+A3: (a 'imp' c) 'or' (b 'imp' c)=k4 and
+A4: dom k4=Y and
+  rng k4 c= BOOLEAN by FUNCT_2:def 2;
+  for x being Element of Y holds ((a '&' b) 'imp' c).x = ((a 'imp' c) 'or'
+  (b 'imp' c)).x
   proof
     let x be Element of Y;
-    ((a 'imp' c) 'or' (b 'imp' c)).x
-    =(a 'imp' c).x 'or' (b 'imp' c).x by BVFUNC_1:def 7
+    ((a 'imp' c) 'or' (b 'imp' c)).x =(a 'imp' c).x 'or' (b 'imp' c).x by
+    BVFUNC_1:def 7
       .=('not' (a).x 'or' (c).x) 'or' (b 'imp' c).x by BVFUNC_1:def 11
-      .=('not' (a).x 'or' (c).x) 'or' ('not'
-    (b).x 'or' (c).x) by BVFUNC_1:def 11
-      .=('not' (a).x 'or' ((c).x 'or' 'not' (b).x)) 'or' (c).x by BINARITH:20
-      .=(('not' (a).x 'or' 'not' (b).x) 'or' (c).x) 'or' (c).x by BINARITH:20
-      .=('not' (a).x 'or' 'not' (b).x) 'or' ((c).x 'or' (c).x) by BINARITH:20
+      .=('not' (a).x 'or' (c).x) 'or' ('not' (b).x 'or' (c).x) by BVFUNC_1:
+    def 11
+      .=('not' (a).x 'or' ((c).x 'or' 'not' (b).x)) 'or' (c).x by BINARITH:
+    20
+      .=(('not' (a).x 'or' 'not' (b).x) 'or' (c).x) 'or' (c).x by BINARITH:
+    20
+      .=('not' (a).x 'or' 'not' (b).x) 'or' ((c).x 'or' (c).x) by BINARITH:
+    20
       .='not' (a '&' b).x 'or' (c).x by MARGREL1:def 21
       .=((a '&' b) 'imp' c).x by BVFUNC_1:def 11;
     hence thesis;
   end;
-  consider k3 being Function such that
-A2: ((a '&' b) 'imp' c)=k3 & dom k3=Y & rng k3 c= BOOLEAN by FUNCT_2:def 2;
-  consider k4 being Function such that
-A3: (a 'imp' c) 'or' (b 'imp' c)=k4 & dom k4=Y & rng k4 c= BOOLEAN
-  by FUNCT_2:def 2;
-  Y=dom k3 & Y=dom k4 & (for u being set
-  st u in Y holds k3.u=k4.u)by A1,A2,A3;
-  hence thesis by A2,A3,FUNCT_1:9;
+  then for u being set st u in Y holds k3.u=k4.u by A1,A3;
+  hence thesis by A1,A2,A3,A4,FUNCT_1:9;
 end;
 
 theorem Th7:
-  for a,b,c being Element of Funcs(Y,BOOLEAN) holds
-  (a '&' b) 'imp' c = a 'imp' (b 'imp' c)
+  for a,b,c being Element of Funcs(Y,BOOLEAN) holds (a '&' b) 'imp'
+  c = a 'imp' (b 'imp' c)
 proof
   let a,b,c be Element of Funcs(Y,BOOLEAN);
-A1: for x being Element of Y holds
-  ((a '&' b) 'imp' c).x = (a 'imp' (b 'imp' c)).x
+  consider k3 being Function such that
+A1: ((a '&' b) 'imp' c)=k3 and
+A2: dom k3=Y and
+  rng k3 c= BOOLEAN by FUNCT_2:def 2;
+  consider k4 being Function such that
+A3: a 'imp' (b 'imp' c)=k4 and
+A4: dom k4=Y and
+  rng k4 c= BOOLEAN by FUNCT_2:def 2;
+  for x being Element of Y holds ((a '&' b) 'imp' c).x = (a 'imp' (b 'imp'
+  c)).x
   proof
     let x be Element of Y;
-    (a 'imp' (b 'imp' c)).x ='not' (a).x 'or' (b 'imp' c).x by BVFUNC_1:def 11
+    (a 'imp' (b 'imp' c)).x ='not' (a).x 'or' (b 'imp' c).x by BVFUNC_1:
+    def 11
       .='not' (a).x 'or' ('not' (b).x 'or' (c).x) by BVFUNC_1:def 11
       .=('not' (a).x 'or' 'not' (b).x) 'or' (c).x by BINARITH:20
       .='not' (a '&' b).x 'or' (c).x by MARGREL1:def 21
       .=((a '&' b) 'imp' c).x by BVFUNC_1:def 11;
     hence thesis;
   end;
-  consider k3 being Function such that
-A2: ((a '&' b) 'imp' c)=k3 & dom k3=Y & rng k3 c= BOOLEAN by FUNCT_2:def 2;
-  consider k4 being Function such that
-A3: a 'imp' (b 'imp' c)=k4 & dom k4=Y & rng k4 c= BOOLEAN by FUNCT_2:def 2;
-  Y=dom k3 & Y=dom k4 & (for u being set
-  st u in Y holds k3.u=k4.u)by A1,A2,A3;
-  hence thesis by A2,A3,FUNCT_1:9;
+  then for u being set st u in Y holds k3.u=k4.u by A1,A3;
+  hence thesis by A1,A2,A3,A4,FUNCT_1:9;
 end;
 
 theorem
-  for a,b,c being Element of Funcs(Y,BOOLEAN) holds
-  (a '&' b) 'imp' c = a 'imp' ('not' b 'or' c)
+  for a,b,c being Element of Funcs(Y,BOOLEAN) holds (a '&' b) 'imp' c =
+  a 'imp' ('not' b 'or' c)
 proof
   let a,b,c be Element of Funcs(Y,BOOLEAN);
-A1: for x being Element of Y holds
-  ((a '&' b) 'imp' c).x = (a 'imp' ('not' b 'or' c)).x
+  consider k3 being Function such that
+A1: ((a '&' b) 'imp' c)=k3 and
+A2: dom k3=Y and
+  rng k3 c= BOOLEAN by FUNCT_2:def 2;
+  consider k4 being Function such that
+A3: a 'imp' ('not' b 'or' c)=k4 and
+A4: dom k4=Y and
+  rng k4 c= BOOLEAN by FUNCT_2:def 2;
+  for x being Element of Y holds ((a '&' b) 'imp' c).x = (a 'imp' ('not' b
+  'or' c)).x
   proof
     let x be Element of Y;
     (a 'imp' ('not' b 'or' c)).x =(a 'imp' (b 'imp' c)).x by BVFUNC_4:8;
     hence thesis by Th7;
   end;
-  consider k3 being Function such that
-A2: ((a '&' b) 'imp' c)=k3 & dom k3=Y & rng k3 c= BOOLEAN by FUNCT_2:def 2;
-  consider k4 being Function such that
-A3: a 'imp' ('not' b 'or' c)=k4 & dom k4=Y & rng k4 c= BOOLEAN
-  by FUNCT_2:def 2;
-  Y=dom k3 & Y=dom k4 & (for u being set
-  st u in Y holds k3.u=k4.u)by A1,A2,A3;
-  hence thesis by A2,A3,FUNCT_1:9;
+  then for u being set st u in Y holds k3.u=k4.u by A1,A3;
+  hence thesis by A1,A2,A3,A4,FUNCT_1:9;
 end;
 
 theorem
-  for a,b,c being Element of Funcs(Y,BOOLEAN) holds
-  a 'imp' (b 'or' c) = (a '&' 'not' b) 'imp' c
+  for a,b,c being Element of Funcs(Y,BOOLEAN) holds a 'imp' (b 'or' c) =
+  (a '&' 'not' b) 'imp' c
 proof
   let a,b,c be Element of Funcs(Y,BOOLEAN);
-A1: for x being Element of Y holds
-  (a 'imp' (b 'or' c)).x = ((a '&' 'not' b) 'imp' c).x
+  consider k3 being Function such that
+A1: (a 'imp' (b 'or' c))=k3 and
+A2: dom k3=Y and
+  rng k3 c= BOOLEAN by FUNCT_2:def 2;
+  consider k4 being Function such that
+A3: (a '&' 'not' b) 'imp' c =k4 and
+A4: dom k4=Y and
+  rng k4 c= BOOLEAN by FUNCT_2:def 2;
+  for x being Element of Y holds (a 'imp' (b 'or' c)).x = ((a '&' 'not' b)
+  'imp' c).x
   proof
     let x be Element of Y;
-    ((a '&' 'not' b) 'imp' c).x
-    ='not' (a '&' 'not' b).x 'or' (c).x by BVFUNC_1:def 11
+    ((a '&' 'not' b) 'imp' c).x ='not' (a '&' 'not' b).x 'or' (c).x by
+    BVFUNC_1:def 11
       .=('not' (a).x 'or' 'not' ('not' b).x) 'or' (c).x by MARGREL1:def 21
       .=('not' (a).x 'or' (b).x) 'or' (c).x by MARGREL1:def 20
       .='not' (a).x 'or' ((b).x 'or' (c).x) by BINARITH:20
@@ -299,21 +337,24 @@ A1: for x being Element of Y holds
       .=(a 'imp' (b 'or' c)).x by BVFUNC_1:def 11;
     hence thesis;
   end;
-  consider k3 being Function such that
-A2: (a 'imp' (b 'or' c))=k3 & dom k3=Y & rng k3 c= BOOLEAN by FUNCT_2:def 2;
-  consider k4 being Function such that
-A3: (a '&' 'not' b) 'imp' c =k4 & dom k4=Y & rng k4 c= BOOLEAN
-  by FUNCT_2:def 2;
-  Y=dom k3 & Y=dom k4 & (for u being set
-  st u in Y holds k3.u=k4.u)by A1,A2,A3;
-  hence thesis by A2,A3,FUNCT_1:9;
+  then for u being set st u in Y holds k3.u=k4.u by A1,A3;
+  hence thesis by A1,A2,A3,A4,FUNCT_1:9;
 end;
 
 theorem
-  for a,b being Element of Funcs(Y,BOOLEAN) holds a '&' (a 'imp' b) = a '&' b
+  for a,b being Element of Funcs(Y,BOOLEAN) holds a '&' (a 'imp' b) = a
+  '&' b
 proof
   let a,b be Element of Funcs(Y,BOOLEAN);
-A1: for x being Element of Y holds (a '&' (a 'imp' b)).x = (a '&' b).x
+  consider k3 being Function such that
+A1: (a '&' (a 'imp' b))=k3 and
+A2: dom k3=Y and
+  rng k3 c= BOOLEAN by FUNCT_2:def 2;
+  consider k4 being Function such that
+A3: a '&' b=k4 and
+A4: dom k4=Y and
+  rng k4 c= BOOLEAN by FUNCT_2:def 2;
+  for x being Element of Y holds (a '&' (a 'imp' b)).x = (a '&' b).x
   proof
     let x be Element of Y;
     (a '&' (a 'imp' b)).x =(a).x '&' (a 'imp' b).x by MARGREL1:def 21
@@ -324,149 +365,153 @@ A1: for x being Element of Y holds (a '&' (a 'imp' b)).x = (a '&' b).x
       .=(a '&' b).x by MARGREL1:def 21;
     hence thesis;
   end;
-  consider k3 being Function such that
-A2: (a '&' (a 'imp' b))=k3 & dom k3=Y & rng k3 c= BOOLEAN by FUNCT_2:def 2;
-  consider k4 being Function such that
-A3: a '&' b=k4 & dom k4=Y & rng k4 c= BOOLEAN by FUNCT_2:def 2;
-  Y=dom k3 & Y=dom k4 & (for u being set
-  st u in Y holds k3.u=k4.u)by A1,A2,A3;
-  hence thesis by A2,A3,FUNCT_1:9;
+  then for u being set st u in Y holds k3.u=k4.u by A1,A3;
+  hence thesis by A1,A2,A3,A4,FUNCT_1:9;
 end;
 
 theorem
-  for a,b being Element of Funcs(Y,BOOLEAN) holds
-  (a 'imp' b) '&' 'not' b = 'not' a '&' 'not' b
+  for a,b being Element of Funcs(Y,BOOLEAN) holds (a 'imp' b) '&' 'not'
+  b = 'not' a '&' 'not' b
 proof
   let a,b be Element of Funcs(Y,BOOLEAN);
-A1: for x being Element of Y holds
-  ((a 'imp' b) '&' 'not' b).x = ('not' a '&' 'not' b).x
+  consider k3 being Function such that
+A1: ((a 'imp' b) '&' 'not' b)=k3 and
+A2: dom k3=Y and
+  rng k3 c= BOOLEAN by FUNCT_2:def 2;
+  consider k4 being Function such that
+A3: 'not' a '&' 'not' b=k4 and
+A4: dom k4=Y and
+  rng k4 c= BOOLEAN by FUNCT_2:def 2;
+  for x being Element of Y holds ((a 'imp' b) '&' 'not' b).x = ('not' a
+  '&' 'not' b).x
   proof
     let x be Element of Y;
-    ((a 'imp' b) '&' 'not' b).x
-    =(a 'imp' b).x '&' ('not' b).x by MARGREL1:def 21
+    ((a 'imp' b) '&' 'not' b).x =(a 'imp' b).x '&' ('not' b).x by MARGREL1
+    :def 21
       .=('not' b).x '&' ('not' (a).x 'or' (b).x) by BVFUNC_1:def 11
-      .=(('not' b).x '&' 'not' (a).x) 'or' (('not'
-    b).x '&' (b).x) by XBOOLEAN:8
-      .=(('not' b).x '&' 'not' (a).x) 'or' ((b).x '&' 'not'
-    (b).x) by MARGREL1:def 20
+      .=(('not' b).x '&' 'not' (a).x) 'or' (('not' b).x '&' (b).x) by
+    XBOOLEAN:8
+      .=(('not' b).x '&' 'not' (a).x) 'or' ((b).x '&' 'not' (b).x) by
+    MARGREL1:def 20
       .=(('not' b).x '&' 'not' (a).x) 'or' FALSE by XBOOLEAN:138
       .=('not' b).x '&' 'not' (a).x by BINARITH:7
       .=('not' b).x '&' ('not' a).x by MARGREL1:def 20
       .=('not' a '&' 'not' b).x by MARGREL1:def 21;
     hence thesis;
   end;
-  consider k3 being Function such that
-A2: ((a 'imp' b) '&' 'not' b)=k3 & dom k3=Y & rng k3 c= BOOLEAN
-  by FUNCT_2:def 2;
-  consider k4 being Function such that
-A3: 'not' a '&' 'not' b=k4 & dom k4=Y & rng k4 c= BOOLEAN by FUNCT_2:def 2;
-  Y=dom k3 & Y=dom k4 & (for u being set
-  st u in Y holds k3.u=k4.u)by A1,A2,A3;
-  hence thesis by A2,A3,FUNCT_1:9;
+  then for u being set st u in Y holds k3.u=k4.u by A1,A3;
+  hence thesis by A1,A2,A3,A4,FUNCT_1:9;
 end;
 
 theorem
-  for a,b,c being Element of Funcs(Y,BOOLEAN) holds
-  (a 'imp' b) '&' (b 'imp' c) = (a 'imp' b) '&' (b 'imp' c) '&' (a 'imp' c)
+  for a,b,c being Element of Funcs(Y,BOOLEAN) holds (a 'imp' b) '&' (b
+  'imp' c) = (a 'imp' b) '&' (b 'imp' c) '&' (a 'imp' c)
 proof
   let a,b,c be Element of Funcs(Y,BOOLEAN);
-A1: for x being Element of Y holds ((a 'imp' b) '&' (b 'imp' c)).x =
-  ((a 'imp' b) '&' (b 'imp' c) '&' (a 'imp' c)).x
+  consider k3 being Function such that
+A1: ((a 'imp' b) '&' (b 'imp' c))=k3 and
+A2: dom k3=Y and
+  rng k3 c= BOOLEAN by FUNCT_2:def 2;
+  consider k4 being Function such that
+A3: (a 'imp' b) '&' (b 'imp' c) '&' (a 'imp' c)= k4 and
+A4: dom k4=Y and
+  rng k4 c= BOOLEAN by FUNCT_2:def 2;
+  for x being Element of Y holds ((a 'imp' b) '&' (b 'imp' c)).x = ((a
+  'imp' b) '&' (b 'imp' c) '&' (a 'imp' c)).x
   proof
     let x be Element of Y;
-A2: ((a 'imp' b) '&' (b 'imp' c) '&' (a 'imp' c)).x
-    =((a 'imp' b) '&' (b 'imp' c)).x '&' ((a 'imp' c)).x by MARGREL1:def 21
-      .=((a 'imp' b).x '&' (b 'imp' c).x) '&' ((a 'imp' c)).x
-    by MARGREL1:def 21
-      .=(('not' (a).x 'or' (b).x) '&' (b 'imp' c).x) '&' ((a 'imp' c)).x
-    by BVFUNC_1:def 11
-      .=(('not' (a).x 'or' (b).x) '&' ('not'
-    (b).x 'or' (c).x)) '&' ((a 'imp' c)).x by BVFUNC_1:def 11
-      .=(('not' (a).x 'or' (b).x) '&' ('not' (b).x 'or' (c).x))
-    '&' ('not' (a).x 'or' (c).x) by BVFUNC_1:def 11
-      .=(('not' (a).x 'or' (b).x) '&' ('not' (b).x 'or' (c).x)) '&' 'not'
-    (a).x 'or'
-    (('not' (a).x 'or' (b).x) '&' ('not' (b).x 'or' (c).x)) '&' (c).x
-    by XBOOLEAN:8;
-A3: ((a 'imp' b) '&' (b 'imp' c)).x
-    =(a 'imp' b).x '&' (b 'imp' c).x by MARGREL1:def 21
-      .=('not' (a).x 'or' (b).x) '&' (b 'imp' c).x by BVFUNC_1:def 11
-      .=('not' (a).x 'or' (b).x) '&' ('not' (b).x 'or' (c).x)
-    by BVFUNC_1:def 11;
-A4: (('not' (a).x 'or' (b).x) '&' ('not' (b).x 'or' (c).x))
-    =((a 'imp' b).x '&' ('not' (b).x 'or' (c).x)) by BVFUNC_1:def 11
+A5: ((a 'imp' b) '&' (b 'imp' c) '&' (a 'imp' c)).x =((a 'imp' b) '&' (b
+    'imp' c)).x '&' ((a 'imp' c)).x by MARGREL1:def 21
+      .=((a 'imp' b).x '&' (b 'imp' c).x) '&' ((a 'imp' c)).x by MARGREL1:
+    def 21
+      .=(('not' (a).x 'or' (b).x) '&' (b 'imp' c).x) '&' ((a 'imp' c)).x by
+    BVFUNC_1:def 11
+      .=(('not' (a).x 'or' (b).x) '&' ('not' (b).x 'or' (c).x)) '&' ((a
+    'imp' c)).x by BVFUNC_1:def 11
+      .=(('not' (a).x 'or' (b).x) '&' ('not' (b).x 'or' (c).x)) '&' ('not' (
+    a).x 'or' (c).x) by BVFUNC_1:def 11
+      .=(('not' (a).x 'or' (b).x) '&' ('not' (b).x 'or' (c).x)) '&' 'not' (a
+).x 'or' (('not' (a).x 'or' (b).x) '&' ('not' (b).x 'or' (c).x)) '&' (c).x by
+    XBOOLEAN:8;
+A6: (('not' (a).x 'or' (b).x) '&' ('not' (b).x 'or' (c).x)) =((a 'imp' b).
+    x '&' ('not' (b).x 'or' (c).x)) by BVFUNC_1:def 11
       .=(a 'imp' b).x '&' (b 'imp' c).x by BVFUNC_1:def 11
       .=((a 'imp' b) '&' (b 'imp' c)).x by MARGREL1:def 21;
-    now per cases by XBOOLEAN:def 3;
-      case (a).x=TRUE & (c).x=TRUE;
-        then ((a 'imp' b) '&' (b 'imp' c) '&' (a 'imp' c)).x
-        =(('not' (a).x 'or' (b).x) '&' ('not'
-        (b).x 'or' (c).x)) '&' FALSE 'or'
-        (('not' (a).x 'or' (b).x) '&' ('not' (b).x 'or' (c).x)) '&' TRUE
-        by A2,MARGREL1:41
-          .=FALSE 'or' (('not' (a).x 'or' (b).x) '&' ('not'
-        (b).x 'or' (c).x)) '&' TRUE by MARGREL1:49
-          .=FALSE 'or' (('not' (a).x 'or' (b).x) '&' ('not' (b).x 'or' (c).x))
-        by MARGREL1:50
-          .=((a 'imp' b) '&' (b 'imp' c)).x by A4,BINARITH:7;
+A7: ((a 'imp' b) '&' (b 'imp' c)).x =(a 'imp' b).x '&' (b 'imp' c).x by
+    MARGREL1:def 21
+      .=('not' (a).x 'or' (b).x) '&' (b 'imp' c).x by BVFUNC_1:def 11
+      .=('not' (a).x 'or' (b).x) '&' ('not' (b).x 'or' (c).x) by BVFUNC_1:
+    def 11;
+    now
+      per cases by XBOOLEAN:def 3;
+      case
+        (a).x=TRUE & (c).x=TRUE;
+        then ((a 'imp' b) '&' (b 'imp' c) '&' (a 'imp' c)).x =(('not' (a).x
+'or' (b).x) '&' ('not' (b).x 'or' (c).x)) '&' FALSE 'or' (('not' (a).x 'or' (b)
+        .x) '&' ('not' (b).x 'or' (c).x)) '&' TRUE by A5,MARGREL1:41
+          .=FALSE 'or' (('not' (a).x 'or' (b).x) '&' ('not' (b).x 'or' (c).x
+        )) '&' TRUE by MARGREL1:49
+          .=FALSE 'or' (('not' (a).x 'or' (b).x) '&' ('not' (b).x 'or' (c).x
+        )) by MARGREL1:50
+          .=((a 'imp' b) '&' (b 'imp' c)).x by A6,BINARITH:7;
         hence thesis;
       end;
       case
-A5:     (a).x=TRUE & (c).x=FALSE;
+A8:     (a).x=TRUE & (c).x=FALSE;
         then
-A6:     ((a 'imp' b) '&' (b 'imp' c) '&' (a 'imp' c)).x
-        =(('not' (a).x 'or' (b).x) '&' ('not'
-        (b).x 'or' (c).x)) '&' FALSE 'or'
-        (('not' (a).x 'or' (b).x) '&' ('not' (b).x 'or' (c).x)) '&' FALSE
-        by A2,MARGREL1:41
-          .=FALSE by MARGREL1:49;
-        ((a 'imp' b) '&' (b 'imp' c)).x
-        =(FALSE 'or' (b).x) '&' ('not' (b).x 'or' FALSE) by A3,A5,MARGREL1:41
+A9:     ((a 'imp' b) '&' (b 'imp' c)).x =(FALSE 'or' (b).x) '&' ('not' (b
+        ).x 'or' FALSE) by A7,MARGREL1:41
           .=(FALSE 'or' (b).x) '&' 'not' (b).x by BINARITH:7
           .=(b).x '&' 'not' (b).x by BINARITH:7
           .=FALSE by XBOOLEAN:138;
-        hence thesis by A6;
+        ((a 'imp' b) '&' (b 'imp' c) '&' (a 'imp' c)).x =(('not' (a).x
+'or' (b).x) '&' ('not' (b).x 'or' (c).x)) '&' FALSE 'or' (('not' (a).x 'or' (b)
+        .x) '&' ('not' (b).x 'or' (c).x)) '&' FALSE by A5,A8,MARGREL1:41
+          .=FALSE by MARGREL1:49;
+        hence thesis by A9;
       end;
-      case (a).x=FALSE & (c).x=TRUE;
-        then ((a 'imp' b) '&' (b 'imp' c) '&' (a 'imp' c)).x
-        =(('not' (a).x 'or' (b).x) '&' ('not' (b).x 'or' (c).x)) '&' TRUE 'or'
-        (('not' (a).x 'or' (b).x) '&' ('not' (b).x 'or' (c).x)) '&' TRUE
-        by A2,MARGREL1:41
-          .=((a 'imp' b) '&' (b 'imp' c)).x by A4,MARGREL1:50;
+      case
+        (a).x=FALSE & (c).x=TRUE;
+        then ((a 'imp' b) '&' (b 'imp' c) '&' (a 'imp' c)).x =(('not' (a).x
+'or' (b).x) '&' ('not' (b).x 'or' (c).x)) '&' TRUE 'or' (('not' (a).x 'or' (b).
+        x) '&' ('not' (b).x 'or' (c).x)) '&' TRUE by A5,MARGREL1:41
+          .=((a 'imp' b) '&' (b 'imp' c)).x by A6,MARGREL1:50;
         hence thesis;
       end;
-      case (a).x=FALSE & (c).x=FALSE;
-        then ((a 'imp' b) '&' (b 'imp' c) '&' (a 'imp' c)).x
-        =TRUE '&' (('not' (a).x 'or' (b).x) '&' ('not' (b).x 'or' (c).x)) 'or'
-        FALSE '&' (('not' (a).x 'or' (b).x) '&' ('not'
-        (b).x 'or' (c).x)) by A2,MARGREL1:41
+      case
+        (a).x=FALSE & (c).x=FALSE;
+        then
+        ((a 'imp' b) '&' (b 'imp' c) '&' (a 'imp' c)).x =TRUE '&' (('not'
+(a).x 'or' (b).x) '&' ('not' (b).x 'or' (c).x)) 'or' FALSE '&' (('not' (a).x
+        'or' (b).x) '&' ('not' (b).x 'or' (c).x)) by A5,MARGREL1:41
           .=(('not' (a).x 'or' (b).x) '&' ('not' (b).x 'or' (c).x)) 'or'
-        FALSE '&' (('not' (a).x 'or' (b).x) '&' ('not' (b).x 'or' (c).x))
-        by MARGREL1:50
-          .=(('not' (a).x 'or' (b).x) '&' ('not' (b).x 'or' (c).x)) 'or' FALSE
-        by MARGREL1:49
-          .=((a 'imp' b) '&' (b 'imp' c)).x by A4,BINARITH:7;
+FALSE '&' (('not' (a).x 'or' (b).x) '&' ('not' (b).x 'or' (c).x)) by MARGREL1:
+        50
+          .=(('not' (a).x 'or' (b).x) '&' ('not' (b).x 'or' (c).x)) 'or'
+        FALSE by MARGREL1:49
+          .=((a 'imp' b) '&' (b 'imp' c)).x by A6,BINARITH:7;
         hence thesis;
       end;
     end;
     hence thesis;
   end;
-  consider k3 being Function such that
-A7: ((a 'imp' b) '&' (b 'imp' c))=k3 & dom k3=Y & rng k3 c= BOOLEAN
-  by FUNCT_2:def 2;
-  consider k4 being Function such that
-A8: (a 'imp' b) '&' (b 'imp' c) '&' (a 'imp' c)=
-  k4 & dom k4=Y & rng k4 c= BOOLEAN by FUNCT_2:def 2;
-  Y=dom k3 & Y=dom k4 & (for u being set
-  st u in Y holds k3.u=k4.u)by A1,A7,A8;
-  hence thesis by A7,A8,FUNCT_1:9;
+  then for u being set st u in Y holds k3.u=k4.u by A1,A3;
+  hence thesis by A1,A2,A3,A4,FUNCT_1:9;
 end;
 
 theorem
   for a being Element of Funcs(Y,BOOLEAN) holds I_el(Y) 'imp' a = a
 proof
   let a be Element of Funcs(Y,BOOLEAN);
-A1: for x being Element of Y holds (I_el(Y) 'imp' a).x = (a).x
+  consider k3 being Function such that
+A1: (I_el(Y) 'imp' a)=k3 and
+A2: dom k3=Y and
+  rng k3 c= BOOLEAN by FUNCT_2:def 2;
+  consider k4 being Function such that
+A3: a=k4 and
+A4: dom k4=Y and
+  rng k4 c= BOOLEAN by FUNCT_2:def 2;
+  for x being Element of Y holds (I_el(Y) 'imp' a).x = (a).x
   proof
     let x be Element of Y;
     (I_el(Y) 'imp' a).x ='not' (I_el(Y)).x 'or' (a).x by BVFUNC_1:def 11
@@ -474,20 +519,24 @@ A1: for x being Element of Y holds (I_el(Y) 'imp' a).x = (a).x
       .=FALSE 'or' (a).x by MARGREL1:41;
     hence thesis by BINARITH:7;
   end;
-  consider k3 being Function such that
-A2: (I_el(Y) 'imp' a)=k3 & dom k3=Y & rng k3 c= BOOLEAN by FUNCT_2:def 2;
-  consider k4 being Function such that
-A3: a=k4 & dom k4=Y & rng k4 c= BOOLEAN by FUNCT_2:def 2;
-  Y=dom k3 & Y=dom k4 & (for u being set
-  st u in Y holds k3.u=k4.u)by A1,A2,A3;
-  hence thesis by A2,A3,FUNCT_1:9;
+  then for u being set st u in Y holds k3.u=k4.u by A1,A3;
+  hence thesis by A1,A2,A3,A4,FUNCT_1:9;
 end;
 
 theorem
-  for a being Element of Funcs(Y,BOOLEAN) holds a 'imp' O_el(Y) = 'not' a
+  for a being Element of Funcs(Y,BOOLEAN) holds a 'imp' O_el(Y) = 'not'
+  a
 proof
   let a be Element of Funcs(Y,BOOLEAN);
-A1: for x being Element of Y holds (a 'imp' O_el(Y)).x = ('not' a).x
+  consider k3 being Function such that
+A1: (a 'imp' O_el(Y))=k3 and
+A2: dom k3=Y and
+  rng k3 c= BOOLEAN by FUNCT_2:def 2;
+  consider k4 being Function such that
+A3: 'not' a=k4 and
+A4: dom k4=Y and
+  rng k4 c= BOOLEAN by FUNCT_2:def 2;
+  for x being Element of Y holds (a 'imp' O_el(Y)).x = ('not' a).x
   proof
     let x be Element of Y;
     (a 'imp' O_el(Y)).x ='not' (a).x 'or' (O_el(Y)).x by BVFUNC_1:def 11
@@ -495,17 +544,13 @@ A1: for x being Element of Y holds (a 'imp' O_el(Y)).x = ('not' a).x
       .='not' (a).x by BINARITH:7;
     hence thesis by MARGREL1:def 20;
   end;
-  consider k3 being Function such that
-A2: (a 'imp' O_el(Y))=k3 & dom k3=Y & rng k3 c= BOOLEAN by FUNCT_2:def 2;
-  consider k4 being Function such that
-A3: 'not' a=k4 & dom k4=Y & rng k4 c= BOOLEAN by FUNCT_2:def 2;
-  Y=dom k3 & Y=dom k4 & (for u being set
-  st u in Y holds k3.u=k4.u)by A1,A2,A3;
-  hence thesis by A2,A3,FUNCT_1:9;
+  then for u being set st u in Y holds k3.u=k4.u by A1,A3;
+  hence thesis by A1,A2,A3,A4,FUNCT_1:9;
 end;
 
 theorem
-  for a being Element of Funcs(Y,BOOLEAN) holds O_el(Y) 'imp' a = I_el(Y)
+  for a being Element of Funcs(Y,BOOLEAN) holds O_el(Y) 'imp' a = I_el(Y
+  )
 proof
   let a be Element of Funcs(Y,BOOLEAN);
   for x being Element of Y holds (O_el(Y) 'imp' a).x = TRUE
@@ -520,7 +565,8 @@ proof
 end;
 
 theorem
-  for a being Element of Funcs(Y,BOOLEAN) holds a 'imp' I_el(Y) = I_el(Y)
+  for a being Element of Funcs(Y,BOOLEAN) holds a 'imp' I_el(Y) = I_el(Y
+  )
 proof
   let a be Element of Funcs(Y,BOOLEAN);
   for x being Element of Y holds (a 'imp' I_el(Y)).x = TRUE
@@ -534,10 +580,19 @@ proof
 end;
 
 theorem
-  for a being Element of Funcs(Y,BOOLEAN) holds a 'imp' 'not' a = 'not' a
+  for a being Element of Funcs(Y,BOOLEAN) holds a 'imp' 'not' a = 'not'
+  a
 proof
   let a be Element of Funcs(Y,BOOLEAN);
-A1: for x being Element of Y holds (a 'imp' 'not' a).x = ('not' a).x
+  consider k3 being Function such that
+A1: (a 'imp' 'not' a)=k3 and
+A2: dom k3=Y and
+  rng k3 c= BOOLEAN by FUNCT_2:def 2;
+  consider k4 being Function such that
+A3: 'not' a=k4 and
+A4: dom k4=Y and
+  rng k4 c= BOOLEAN by FUNCT_2:def 2;
+  for x being Element of Y holds (a 'imp' 'not' a).x = ('not' a).x
   proof
     let x be Element of Y;
     (a 'imp' 'not' a).x ='not' (a).x 'or' ('not' a).x by BVFUNC_1:def 11
@@ -545,30 +600,27 @@ A1: for x being Element of Y holds (a 'imp' 'not' a).x = ('not' a).x
       .=('not' a).x;
     hence thesis;
   end;
-  consider k3 being Function such that
-A2: (a 'imp' 'not' a)=k3 & dom k3=Y & rng k3 c= BOOLEAN by FUNCT_2:def 2;
-  consider k4 being Function such that
-A3: 'not' a=k4 & dom k4=Y & rng k4 c= BOOLEAN by FUNCT_2:def 2;
-  Y=dom k3 & Y=dom k4 & (for u being set
-  st u in Y holds k3.u=k4.u)by A1,A2,A3;
-  hence thesis by A2,A3,FUNCT_1:9;
+  then for u being set st u in Y holds k3.u=k4.u by A1,A3;
+  hence thesis by A1,A2,A3,A4,FUNCT_1:9;
 end;
 
 theorem
-  for a,b,c being Element of Funcs(Y,BOOLEAN) holds
-  (a 'imp' b) '<' (c 'imp' a) 'imp' (c 'imp' b)
+  for a,b,c being Element of Funcs(Y,BOOLEAN) holds (a 'imp' b) '<' (c
+  'imp' a) 'imp' (c 'imp' b)
 proof
   let a,b,c be Element of Funcs(Y,BOOLEAN);
   let z be Element of Y;
-  assume (a 'imp' b).z=TRUE;
+  assume
+  (a 'imp' b).z=TRUE;
   then
 A1: 'not' (a).z 'or' (b).z = TRUE by BVFUNC_1:def 11;
 A2: (b).z=TRUE or (b).z=FALSE by XBOOLEAN:def 3;
-  now per cases by A1,A2,BINARITH:7;
+  now
+    per cases by A1,A2,BINARITH:7;
     case
 A3:   'not' a.z=TRUE;
-      ((c 'imp' a) 'imp' (c 'imp' b)).z
-      ='not' (c 'imp' a).z 'or' (c 'imp' b).z by BVFUNC_1:def 11
+      ((c 'imp' a) 'imp' (c 'imp' b)).z ='not' (c 'imp' a).z 'or' (c 'imp'
+      b).z by BVFUNC_1:def 11
         .='not'( 'not' c.z 'or' a.z) 'or' (c 'imp' b).z by BVFUNC_1:def 11
         .=(c).z 'or' (c 'imp' b).z by A3,MARGREL1:50
         .=(c).z 'or' ('not' c.z 'or' b.z) by BVFUNC_1:def 11
@@ -579,11 +631,12 @@ A3:   'not' a.z=TRUE;
     end;
     case
 A4:   (b).z=TRUE;
-      ((c 'imp' a) 'imp' (c 'imp' b)).z
-      ='not' (c 'imp' a).z 'or' (c 'imp' b).z by BVFUNC_1:def 11
-        .='not'( 'not' (c).z 'or' (a).z) 'or' (c 'imp' b).z by BVFUNC_1:def 11
-        .='not'( 'not' (c).z 'or' (a).z) 'or' ('not'
-      (c).z 'or' TRUE) by A4,BVFUNC_1:def 11
+      ((c 'imp' a) 'imp' (c 'imp' b)).z ='not' (c 'imp' a).z 'or' (c 'imp'
+      b).z by BVFUNC_1:def 11
+        .='not'( 'not' (c).z 'or' (a).z) 'or' (c 'imp' b).z by BVFUNC_1:def
+      11
+        .='not'( 'not' (c).z 'or' (a).z) 'or' ('not' (c).z 'or' TRUE) by A4,
+      BVFUNC_1:def 11
         .='not'( 'not' (c).z 'or' (a).z) 'or' TRUE by BINARITH:19
         .=TRUE by BINARITH:19;
       hence thesis;
@@ -593,314 +646,254 @@ A4:   (b).z=TRUE;
 end;
 
 theorem
-  for a,b,c being Element of Funcs(Y,BOOLEAN) holds
-  (a 'eqv' b) '<' (a 'eqv' c) 'eqv' (b 'eqv' c)
+  for a,b,c being Element of Funcs(Y,BOOLEAN) holds (a 'eqv' b) '<' (a
+  'eqv' c) 'eqv' (b 'eqv' c)
 proof
   let a,b,c be Element of Funcs(Y,BOOLEAN);
   let z be Element of Y;
-  assume
-A1: (a 'eqv' b).z=TRUE;
-A2: (a 'eqv' b).z =((a 'imp' b) '&' (b 'imp' a)).z by BVFUNC_4:7
+A1: (a 'eqv' b).z =((a 'imp' b) '&' (b 'imp' a)).z by BVFUNC_4:7
     .=(a 'imp' b).z '&' (b 'imp' a).z by MARGREL1:def 21;
+  assume
+A2: (a 'eqv' b).z=TRUE;
+  then (a 'imp' b).z=TRUE by A1,MARGREL1:45;
   then
-A3: (a 'imp' b).z=TRUE & (b 'imp' a).z=TRUE by A1,MARGREL1:45;
-  then
-A4: 'not' (a).z 'or' (b).z = TRUE by BVFUNC_1:def 11;
+A3: 'not' (a).z 'or' (b).z = TRUE by BVFUNC_1:def 11;
+A4: (a).z=TRUE or (a).z=FALSE by XBOOLEAN:def 3;
 A5: (b).z=TRUE or (b).z=FALSE by XBOOLEAN:def 3;
 A6: (b 'imp' a).z = 'not' (b).z 'or' (a).z by BVFUNC_1:def 11;
-A7: (a).z=TRUE or (a).z=FALSE by XBOOLEAN:def 3;
+A7: ((a 'eqv' c) 'eqv' (b 'eqv' c)).z =(((a 'eqv' c) 'imp' (b 'eqv' c)) '&'
+  ((b 'eqv' c) 'imp' (a 'eqv' c))).z by BVFUNC_4:7
+    .=((((a 'imp' c) '&' (c 'imp' a)) 'imp' (b 'eqv' c)) '&' ((b 'eqv' c)
+  'imp' (a 'eqv' c))).z by BVFUNC_4:7
+    .=((((a 'imp' c) '&' (c 'imp' a)) 'imp' (b 'imp' c) '&' (c 'imp' b)) '&'
+  ((b 'eqv' c) 'imp' (a 'eqv' c))).z by BVFUNC_4:7
+    .=((((a 'imp' c) '&' (c 'imp' a)) 'imp' (b 'imp' c) '&' (c 'imp' b)) '&'
+  (((b 'imp' c) '&' (c 'imp' b)) 'imp' (a 'eqv' c))).z by BVFUNC_4:7
+    .=((((a 'imp' c) '&' (c 'imp' a)) 'imp' ((b 'imp' c) '&' (c 'imp' b)))
+  '&' (((b 'imp' c) '&' (c 'imp' b)) 'imp' ((a 'imp' c) '&' (c 'imp' a)))).z by
+  BVFUNC_4:7
+    .=(((('not' a 'or' c) '&' (c 'imp' a)) 'imp' ((b 'imp' c) '&' (c 'imp' b
+))) '&' (((b 'imp' c) '&' (c 'imp' b)) 'imp' ((a 'imp' c) '&' (c 'imp' a)))).z
+  by BVFUNC_4:8
+    .=(((('not' a 'or' c) '&' ('not' c 'or' a)) 'imp' ((b 'imp' c) '&' (c
+'imp' b))) '&' (((b 'imp' c) '&' (c 'imp' b)) 'imp' ((a 'imp' c) '&' (c 'imp' a
+  )))).z by BVFUNC_4:8
+    .=(((('not' a 'or' c) '&' ('not' c 'or' a)) 'imp' (('not' b 'or' c) '&'
+  (c 'imp' b))) '&' (((b 'imp' c) '&' (c 'imp' b)) 'imp' ((a 'imp' c) '&' (c
+  'imp' a)))).z by BVFUNC_4:8
+    .=(((('not' a 'or' c) '&' ('not' c 'or' a)) 'imp' (('not' b 'or' c) '&'
+('not' c 'or' b))) '&' (((b 'imp' c) '&' (c 'imp' b)) 'imp' ((a 'imp' c) '&' (c
+  'imp' a)))).z by BVFUNC_4:8
+    .=(((('not' a 'or' c) '&' ('not' c 'or' a)) 'imp' (('not' b 'or' c) '&'
+  ('not' c 'or' b))) '&' ((('not' b 'or' c) '&' (c 'imp' b)) 'imp' ((a 'imp' c)
+  '&' (c 'imp' a)))).z by BVFUNC_4:8
+    .=(((('not' a 'or' c) '&' ('not' c 'or' a)) 'imp' (('not' b 'or' c) '&'
+('not' c 'or' b))) '&' ((('not' b 'or' c) '&' ('not' c 'or' b)) 'imp' ((a 'imp'
+  c) '&' (c 'imp' a)))).z by BVFUNC_4:8
+    .=(((('not' a 'or' c) '&' ('not' c 'or' a)) 'imp' (('not' b 'or' c) '&'
+('not' c 'or' b))) '&' ((('not' b 'or' c) '&' ('not' c 'or' b)) 'imp' (('not' a
+  'or' c) '&' (c 'imp' a)))).z by BVFUNC_4:8
+    .=(((('not' a 'or' c) '&' ('not' c 'or' a)) 'imp' (('not' b 'or' c) '&'
+('not' c 'or' b))) '&' ((('not' b 'or' c) '&' ('not' c 'or' b)) 'imp' (('not' a
+  'or' c) '&' ('not' c 'or' a)))).z by BVFUNC_4:8
+    .=(('not'( ('not' a 'or' c) '&' ('not' c 'or' a)) 'or' (('not' b 'or' c)
+  '&' ('not' c 'or' b))) '&' ((('not' b 'or' c) '&' ('not' c 'or' b)) 'imp' ((
+  'not' a 'or' c) '&' ('not' c 'or' a)))).z by BVFUNC_4:8
+    .=(('not'( ('not' a 'or' c) '&' ('not' c 'or' a)) 'or' (('not' b 'or' c)
+'&' ('not' c 'or' b))) '&' ('not'( ('not' b 'or' c) '&' ('not' c 'or' b)) 'or'
+  (('not' a 'or' c) '&' ('not' c 'or' a)))).z by BVFUNC_4:8
+    .=((('not'( 'not' a 'or' c) 'or' 'not'( 'not' c 'or' a)) 'or' (('not' b
+'or' c) '&' ('not' c 'or' b))) '&' ('not'( ('not' b 'or' c) '&' ('not' c 'or' b
+  )) 'or' (('not' a 'or' c) '&' ('not' c 'or' a)))).z by BVFUNC_1:17
+    .=((('not'( 'not' a 'or' c) 'or' 'not'( 'not' c 'or' a)) 'or' (('not' b
+'or' c) '&' ('not' c 'or' b))) '&' (('not'( 'not' b 'or' c) 'or' 'not'( 'not' c
+  'or' b)) 'or' (('not' a 'or' c) '&' ('not' c 'or' a)))).z by BVFUNC_1:17
+    .=(((('not' 'not' a '&' 'not' c) 'or' 'not'( 'not' c 'or' a)) 'or' ((
+'not' b 'or' c) '&' ('not' c 'or' b))) '&' (('not'( 'not' b 'or' c) 'or' 'not'(
+'not' c 'or' b)) 'or' (('not' a 'or' c) '&' ('not' c 'or' a)))).z by BVFUNC_1:
+  16
+    .=(((('not' 'not' a '&' 'not' c) 'or' ('not' 'not' c '&' 'not' a)) 'or'
+  (('not' b 'or' c) '&' ('not' c 'or' b))) '&' (('not'( 'not' b 'or' c) 'or'
+  'not'( 'not' c 'or' b)) 'or' (('not' a 'or' c) '&' ('not' c 'or' a)))).z by
+  BVFUNC_1:16
+    .=(((('not' 'not' a '&' 'not' c) 'or' ('not' 'not' c '&' 'not' a)) 'or'
+(('not' b 'or' c) '&' ('not' c 'or' b))) '&' ((('not' 'not' b '&' 'not' c) 'or'
+  'not'( 'not' c 'or' b)) 'or' (('not' a 'or' c) '&' ('not' c 'or' a)))).z by
+  BVFUNC_1:16
+    .=((((a '&' 'not' c) 'or' (c '&' 'not' a)) 'or' (('not' b 'or' c) '&' (
+'not' c 'or' b))) '&' (((b '&' 'not' c) 'or' ('not' 'not' c '&' 'not' b)) 'or'
+  (('not' a 'or' c) '&' ('not' c 'or' a)))).z by BVFUNC_1:16
+    .=(((a '&' 'not' c) 'or' (c '&' 'not' a)) 'or' (('not' b 'or' c) '&' (
+'not' c 'or' b))).z '&' (((b '&' 'not' c) 'or' (c '&' 'not' b)) 'or' (('not' a
+  'or' c) '&' ('not' c 'or' a))).z by MARGREL1:def 21
+    .=(((a '&' 'not' c) 'or' (c '&' 'not' a)).z 'or' (('not' b 'or' c) '&' (
+'not' c 'or' b)).z) '&' (((b '&' 'not' c) 'or' (c '&' 'not' b)) 'or' (('not' a
+  'or' c) '&' ('not' c 'or' a))).z by BVFUNC_1:def 7
+    .=(((a '&' 'not' c) 'or' (c '&' 'not' a)).z 'or' (('not' b 'or' c) '&' (
+'not' c 'or' b)).z) '&' (((b '&' 'not' c) 'or' (c '&' 'not' b)).z 'or' (('not'
+  a 'or' c) '&' ('not' c 'or' a)).z) by BVFUNC_1:def 7
+    .=(((a '&' 'not' c).z 'or' (c '&' 'not' a).z) 'or' (('not' b 'or' c) '&'
+('not' c 'or' b)).z) '&' (((b '&' 'not' c) 'or' (c '&' 'not' b)).z 'or' (('not'
+  a 'or' c) '&' ('not' c 'or' a)).z) by BVFUNC_1:def 7
+    .=(((a '&' 'not' c).z 'or' (c '&' 'not' a).z) 'or' (('not' b 'or' c).z
+'&' ('not' c 'or' b).z)) '&' (((b '&' 'not' c) 'or' (c '&' 'not' b)).z 'or' ((
+  'not' a 'or' c) '&' ('not' c 'or' a)).z) by MARGREL1:def 21
+    .=(((a '&' 'not' c).z 'or' (c '&' 'not' a).z) 'or' (('not' b 'or' c).z
+'&' ('not' c 'or' b).z)) '&' (((b '&' 'not' c).z 'or' (c '&' 'not' b).z) 'or' (
+  ('not' a 'or' c) '&' ('not' c 'or' a)).z) by BVFUNC_1:def 7
+    .=(((a '&' 'not' c).z 'or' (c '&' 'not' a).z) 'or' (('not' b 'or' c).z
+'&' ('not' c 'or' b).z)) '&' (((b '&' 'not' c).z 'or' (c '&' 'not' b).z) 'or' (
+  ('not' a 'or' c).z '&' ('not' c 'or' a).z)) by MARGREL1:def 21
+    .=((((a).z '&' ('not' c).z) 'or' (c '&' 'not' a).z) 'or' (('not' b 'or'
+  c).z '&' ('not' c 'or' b).z)) '&' (((b '&' 'not' c).z 'or' (c '&' 'not' b).z)
+  'or' (('not' a 'or' c).z '&' ('not' c 'or' a).z)) by MARGREL1:def 21
+    .=((((a).z '&' ('not' c).z) 'or' ((c).z '&' ('not' a).z)) 'or' (('not' b
+'or' c).z '&' ('not' c 'or' b).z)) '&' (((b '&' 'not' c).z 'or' (c '&' 'not' b)
+  .z) 'or' (('not' a 'or' c).z '&' ('not' c 'or' a).z)) by MARGREL1:def 21
+    .=((((a).z '&' ('not' c).z) 'or' ((c).z '&' ('not' a).z)) 'or' ((('not'
+  b).z 'or' (c).z) '&' ('not' c 'or' b).z)) '&' (((b '&' 'not' c).z 'or' (c '&'
+'not' b).z) 'or' (('not' a 'or' c).z '&' ('not' c 'or' a).z)) by BVFUNC_1:def 7
+    .=((((a).z '&' ('not' c).z) 'or' ((c).z '&' ('not' a).z)) 'or' ((('not'
+b).z 'or' (c).z) '&' (('not' c).z 'or' (b).z))) '&' (((b '&' 'not' c).z 'or' (c
+'&' 'not' b).z) 'or' (('not' a 'or' c).z '&' ('not' c 'or' a).z)) by BVFUNC_1:
+  def 7
+    .=((((a).z '&' ('not' c).z) 'or' ((c).z '&' ('not' a).z)) 'or' ((('not'
+  b).z 'or' (c).z) '&' (('not' c).z 'or' (b).z))) '&' ((((b).z '&' ('not' c).z)
+  'or' (c '&' 'not' b).z) 'or' (('not' a 'or' c).z '&' ('not' c 'or' a).z)) by
+  MARGREL1:def 21
+    .=((((a).z '&' ('not' c).z) 'or' ((c).z '&' ('not' a).z)) 'or' ((('not'
+  b).z 'or' (c).z) '&' (('not' c).z 'or' (b).z))) '&' ((((b).z '&' ('not' c).z)
+'or' ((c).z '&' ('not' b).z)) 'or' (('not' a 'or' c).z '&' ('not' c 'or' a).z))
+  by MARGREL1:def 21
+    .=((((a).z '&' ('not' c).z) 'or' ((c).z '&' ('not' a).z)) 'or' ((('not'
+  b).z 'or' (c).z) '&' (('not' c).z 'or' (b).z))) '&' ((((b).z '&' ('not' c).z)
+'or' ((c).z '&' ('not' b).z)) 'or' ((('not' a).z 'or' (c).z) '&' ('not' c 'or'
+  a).z)) by BVFUNC_1:def 7
+    .=((((a).z '&' ('not' c).z) 'or' ((c).z '&' ('not' a).z)) 'or' ((('not'
+  b).z 'or' (c).z) '&' (('not' c).z 'or' (b).z))) '&' ((((b).z '&' ('not' c).z)
+  'or' ((c).z '&' ('not' b).z)) 'or' ((('not' a).z 'or' (c).z) '&' (('not' c).z
+  'or' (a).z))) by BVFUNC_1:def 7
+    .=((((a).z '&' ('not' c).z) 'or' ((c).z '&' 'not' (a).z)) 'or' ((('not'
+  b).z 'or' (c).z) '&' (('not' c).z 'or' (b).z))) '&' ((((b).z '&' ('not' c).z)
+  'or' ((c).z '&' ('not' b).z)) 'or' ((('not' a).z 'or' (c).z) '&' (('not' c).z
+  'or' (a).z))) by MARGREL1:def 20
+    .=((((a).z '&' ('not' c).z) 'or' ((c).z '&' 'not' (a).z)) 'or' (('not' (
+  b).z 'or' (c).z) '&' (('not' c).z 'or' (b).z))) '&' ((((b).z '&' ('not' c).z)
+  'or' ((c).z '&' ('not' b).z)) 'or' ((('not' a).z 'or' (c).z) '&' (('not' c).z
+  'or' (a).z))) by MARGREL1:def 20
+    .=((((a).z '&' ('not' c).z) 'or' ((c).z '&' 'not' (a).z)) 'or' (('not' (
+  b).z 'or' (c).z) '&' (('not' c).z 'or' (b).z))) '&' ((((b).z '&' ('not' c).z)
+  'or' ((c).z '&' 'not' (b).z)) 'or' ((('not' a).z 'or' (c).z) '&' (('not' c).z
+  'or' (a).z))) by MARGREL1:def 20
+    .=((((a).z '&' ('not' c).z) 'or' ((c).z '&' 'not' (a).z)) 'or' (('not' (
+  b).z 'or' (c).z) '&' (('not' c).z 'or' (b).z))) '&' ((((b).z '&' ('not' c).z)
+  'or' ((c).z '&' 'not' (b).z)) 'or' (('not' (a).z 'or' (c).z) '&' (('not' c).z
+  'or' (a).z))) by MARGREL1:def 20;
+  (b 'imp' a).z=TRUE by A2,A1,MARGREL1:45;
   then
-A8: 'not' (b).z=TRUE or (a).z=TRUE by A3,A6,BINARITH:7;
-A9: ((a 'eqv' c) 'eqv' (b 'eqv' c)).z
-  =((((a).z '&' ('not' c).z) 'or' ((c).z '&' 'not' (a).z)) 'or'
-  (('not' (b).z 'or' (c).z) '&' (('not' c).z 'or' (b).z))) '&'
-  ((((b).z '&' ('not' c).z) 'or' ((c).z '&' 'not' (b).z)) 'or'
-  (('not' (a).z 'or' (c).z) '&' (('not' c).z 'or' (a).z)))
-  proof
-    ((a 'eqv' c) 'eqv' (b 'eqv' c)).z
-    =(((a 'eqv' c) 'imp' (b 'eqv' c)) '&' ((b 'eqv' c) 'imp' (a 'eqv' c))).z
-    by BVFUNC_4:7
-      .=((((a 'imp' c) '&' (c 'imp' a)) 'imp' (b 'eqv' c)) '&'
-    ((b 'eqv' c) 'imp' (a 'eqv' c))).z by BVFUNC_4:7
-      .=((((a 'imp' c) '&' (c 'imp' a)) 'imp' (b 'imp' c) '&' (c 'imp' b)) '&'
-    ((b 'eqv' c) 'imp' (a 'eqv' c))).z by BVFUNC_4:7
-      .=((((a 'imp' c) '&' (c 'imp' a)) 'imp' (b 'imp' c) '&' (c 'imp' b)) '&'
-    (((b 'imp' c) '&' (c 'imp' b)) 'imp' (a 'eqv' c))).z by BVFUNC_4:7
-
-.=((((a 'imp' c) '&' (c 'imp' a)) 'imp' ((b 'imp' c) '&' (c 'imp' b))) '&'
-    (((b 'imp' c) '&' (c 'imp' b)) 'imp' ((a 'imp' c) '&' (c 'imp' a)))).z
-    by BVFUNC_4:7
-      .=(((('not'
-    a 'or' c) '&' (c 'imp' a)) 'imp' ((b 'imp' c) '&' (c 'imp' b))) '&'
-    (((b 'imp' c) '&' (c 'imp' b)) 'imp' ((a 'imp' c) '&' (c 'imp' a)))).z
-    by BVFUNC_4:8
-      .=(((('not' a 'or' c) '&' ('not'
-    c 'or' a)) 'imp' ((b 'imp' c) '&' (c 'imp' b))) '&'
-    (((b 'imp' c) '&' (c 'imp' b)) 'imp' ((a 'imp' c) '&' (c 'imp' a)))).z
-    by BVFUNC_4:8
-      .=(((('not' a 'or' c) '&' ('not' c 'or' a)) 'imp' (('not'
-    b 'or' c) '&' (c 'imp' b))) '&'
-    (((b 'imp' c) '&' (c 'imp' b)) 'imp' ((a 'imp' c) '&' (c 'imp' a)))).z
-    by BVFUNC_4:8
-      .=(((('not' a 'or' c) '&' ('not' c 'or' a)) 'imp'
-    (('not' b 'or' c) '&' ('not' c 'or' b))) '&'
-    (((b 'imp' c) '&' (c 'imp' b)) 'imp' ((a 'imp' c) '&' (c 'imp' a)))).z
-    by BVFUNC_4:8
-      .=(((('not' a 'or' c) '&' ('not' c 'or' a)) 'imp'
-    (('not' b 'or' c) '&' ('not' c 'or' b))) '&' ((('not'
-    b 'or' c) '&' (c 'imp' b)) 'imp' ((a 'imp' c) '&' (c 'imp' a)))).z
-    by BVFUNC_4:8
-      .=(((('not' a 'or' c) '&' ('not' c 'or' a)) 'imp'
-    (('not' b 'or' c) '&' ('not' c 'or' b))) '&' ((('not' b 'or' c) '&' ('not'
-    c 'or' b)) 'imp' ((a 'imp' c) '&' (c 'imp' a)))).z by BVFUNC_4:8
-      .=(((('not' a 'or' c) '&' ('not' c 'or' a)) 'imp'
-    (('not' b 'or' c) '&' ('not' c 'or' b))) '&'
-    ((('not' b 'or' c) '&' ('not' c 'or' b)) 'imp' (('not'
-    a 'or' c) '&' (c 'imp' a)))).z by BVFUNC_4:8
-      .=(((('not' a 'or' c) '&' ('not' c 'or' a)) 'imp'
-    (('not' b 'or' c) '&' ('not' c 'or' b))) '&'
-    ((('not' b 'or' c) '&' ('not' c 'or' b)) 'imp'
-    (('not' a 'or' c) '&' ('not' c 'or' a)))).z by BVFUNC_4:8
-      .=(('not'( ('not' a 'or' c) '&' ('not' c 'or' a))
-    'or' (('not' b 'or' c) '&' ('not' c 'or' b))) '&'
-    ((('not' b 'or' c) '&' ('not' c 'or' b)) 'imp'
-    (('not' a 'or' c) '&' ('not' c 'or' a)))).z by BVFUNC_4:8
-      .=(('not'( ('not' a 'or' c) '&' ('not' c 'or' a)) 'or'
-    (('not' b 'or' c) '&' ('not' c 'or' b))) '&'
-    ('not'( ('not' b 'or' c) '&' ('not' c 'or' b)) 'or'
-    (('not' a 'or' c) '&' ('not' c 'or' a)))).z by BVFUNC_4:8
-      .=((('not'( 'not' a 'or' c) 'or' 'not'( 'not' c 'or' a)) 'or'
-    (('not' b 'or' c) '&' ('not' c 'or' b))) '&'
-    ('not'( ('not' b 'or' c) '&' ('not' c 'or' b)) 'or'
-    (('not' a 'or' c) '&' ('not' c 'or' a)))).z by BVFUNC_1:17
-      .=((('not'( 'not' a 'or' c) 'or' 'not'( 'not' c 'or' a)) 'or'
-    (('not' b 'or' c) '&' ('not' c 'or' b))) '&'
-    (('not'( 'not' b 'or' c) 'or' 'not'( 'not' c 'or' b)) 'or'
-    (('not' a 'or' c) '&' ('not' c 'or' a)))).z by BVFUNC_1:17
-      .=(((('not' 'not' a '&' 'not' c) 'or' 'not'( 'not' c 'or' a)) 'or'
-    (('not' b 'or' c) '&' ('not' c 'or' b))) '&'
-    (('not'( 'not' b 'or' c) 'or' 'not'( 'not' c 'or' b)) 'or'
-    (('not' a 'or' c) '&' ('not' c 'or' a)))).z by BVFUNC_1:16
-      .=(((('not' 'not' a '&' 'not' c) 'or' ('not' 'not' c '&' 'not' a)) 'or'
-    (('not' b 'or' c) '&' ('not' c 'or' b))) '&'
-    (('not'( 'not' b 'or' c) 'or' 'not'( 'not' c 'or' b)) 'or'
-    (('not' a 'or' c) '&' ('not' c 'or' a)))).z by BVFUNC_1:16
-      .=(((('not' 'not' a '&' 'not' c) 'or' ('not' 'not' c '&' 'not' a)) 'or'
-    (('not' b 'or' c) '&' ('not' c 'or' b))) '&'
-    ((('not' 'not' b '&' 'not' c) 'or' 'not'( 'not' c 'or' b)) 'or'
-    (('not' a 'or' c) '&' ('not' c 'or' a)))).z by BVFUNC_1:16
-      .=((((a '&' 'not' c) 'or' (c '&' 'not' a)) 'or'
-    (('not' b 'or' c) '&' ('not' c 'or' b))) '&'
-    (((b '&' 'not' c) 'or' ('not' 'not' c '&' 'not' b)) 'or'
-    (('not' a 'or' c) '&' ('not' c 'or' a)))).z by BVFUNC_1:16
-      .=(((a '&' 'not' c) 'or' (c '&' 'not' a)) 'or'
-    (('not' b 'or' c) '&' ('not' c 'or' b))).z '&'
-    (((b '&' 'not' c) 'or' (c '&' 'not' b)) 'or'
-    (('not' a 'or' c) '&' ('not' c 'or' a))).z by MARGREL1:def 21
-      .=(((a '&' 'not' c) 'or' (c '&' 'not' a)).z 'or'
-    (('not' b 'or' c) '&' ('not' c 'or' b)).z) '&'
-    (((b '&' 'not' c) 'or' (c '&' 'not' b)) 'or'
-    (('not' a 'or' c) '&' ('not' c 'or' a))).z by BVFUNC_1:def 7
-      .=(((a '&' 'not' c) 'or' (c '&' 'not' a)).z 'or'
-    (('not' b 'or' c) '&' ('not' c 'or' b)).z) '&'
-    (((b '&' 'not' c) 'or' (c '&' 'not' b)).z 'or'
-    (('not' a 'or' c) '&' ('not' c 'or' a)).z) by BVFUNC_1:def 7
-      .=(((a '&' 'not' c).z 'or' (c '&' 'not' a).z) 'or'
-    (('not' b 'or' c) '&' ('not' c 'or' b)).z) '&'
-    (((b '&' 'not' c) 'or' (c '&' 'not' b)).z 'or'
-    (('not' a 'or' c) '&' ('not' c 'or' a)).z) by BVFUNC_1:def 7
-      .=(((a '&' 'not' c).z 'or' (c '&' 'not' a).z) 'or'
-    (('not' b 'or' c).z '&' ('not' c 'or' b).z)) '&'
-    (((b '&' 'not' c) 'or' (c '&' 'not' b)).z 'or'
-    (('not' a 'or' c) '&' ('not' c 'or' a)).z) by MARGREL1:def 21
-      .=(((a '&' 'not' c).z 'or' (c '&' 'not' a).z) 'or'
-    (('not' b 'or' c).z '&' ('not' c 'or' b).z)) '&'
-    (((b '&' 'not' c).z 'or' (c '&' 'not' b).z) 'or'
-    (('not' a 'or' c) '&' ('not' c 'or' a)).z) by BVFUNC_1:def 7
-      .=(((a '&' 'not' c).z 'or' (c '&' 'not' a).z) 'or'
-    (('not' b 'or' c).z '&' ('not' c 'or' b).z)) '&'
-    (((b '&' 'not' c).z 'or' (c '&' 'not' b).z) 'or'
-    (('not' a 'or' c).z '&' ('not' c 'or' a).z)) by MARGREL1:def 21
-      .=((((a).z '&' ('not' c).z) 'or' (c '&' 'not' a).z) 'or'
-    (('not' b 'or' c).z '&' ('not' c 'or' b).z)) '&'
-    (((b '&' 'not' c).z 'or' (c '&' 'not' b).z) 'or'
-    (('not' a 'or' c).z '&' ('not' c 'or' a).z)) by MARGREL1:def 21
-      .=((((a).z '&' ('not' c).z) 'or' ((c).z '&' ('not' a).z)) 'or'
-    (('not' b 'or' c).z '&' ('not' c 'or' b).z)) '&'
-    (((b '&' 'not' c).z 'or' (c '&' 'not' b).z) 'or'
-    (('not' a 'or' c).z '&' ('not' c 'or' a).z)) by MARGREL1:def 21
-      .=((((a).z '&' ('not' c).z) 'or' ((c).z '&' ('not' a).z)) 'or'
-    ((('not' b).z 'or' (c).z) '&' ('not' c 'or' b).z)) '&'
-    (((b '&' 'not' c).z 'or' (c '&' 'not' b).z) 'or'
-    (('not' a 'or' c).z '&' ('not' c 'or' a).z)) by BVFUNC_1:def 7
-      .=((((a).z '&' ('not' c).z) 'or' ((c).z '&' ('not' a).z)) 'or'
-    ((('not' b).z 'or' (c).z) '&' (('not' c).z 'or' (b).z))) '&'
-    (((b '&' 'not' c).z 'or' (c '&' 'not' b).z) 'or'
-    (('not' a 'or' c).z '&' ('not' c 'or' a).z)) by BVFUNC_1:def 7
-      .=((((a).z '&' ('not' c).z) 'or' ((c).z '&' ('not' a).z)) 'or'
-    ((('not' b).z 'or' (c).z) '&' (('not' c).z 'or' (b).z))) '&'
-    ((((b).z '&' ('not' c).z) 'or' (c '&' 'not' b).z) 'or'
-    (('not' a 'or' c).z '&' ('not' c 'or' a).z)) by MARGREL1:def 21
-      .=((((a).z '&' ('not' c).z) 'or' ((c).z '&' ('not' a).z)) 'or'
-    ((('not' b).z 'or' (c).z) '&' (('not' c).z 'or' (b).z))) '&'
-    ((((b).z '&' ('not' c).z) 'or' ((c).z '&' ('not' b).z)) 'or'
-    (('not' a 'or' c).z '&' ('not' c 'or' a).z)) by MARGREL1:def 21
-      .=((((a).z '&' ('not' c).z) 'or' ((c).z '&' ('not' a).z)) 'or'
-    ((('not' b).z 'or' (c).z) '&' (('not' c).z 'or' (b).z))) '&'
-    ((((b).z '&' ('not' c).z) 'or' ((c).z '&' ('not' b).z)) 'or'
-    ((('not' a).z 'or' (c).z) '&' ('not' c 'or' a).z)) by BVFUNC_1:def 7
-      .=((((a).z '&' ('not' c).z) 'or' ((c).z '&' ('not' a).z)) 'or'
-    ((('not' b).z 'or' (c).z) '&' (('not' c).z 'or' (b).z))) '&'
-    ((((b).z '&' ('not' c).z) 'or' ((c).z '&' ('not' b).z)) 'or'
-    ((('not' a).z 'or' (c).z) '&' (('not' c).z 'or' (a).z))) by BVFUNC_1:def 7
-      .=((((a).z '&' ('not' c).z) 'or' ((c).z '&' 'not' (a).z)) 'or'
-    ((('not' b).z 'or' (c).z) '&' (('not' c).z 'or' (b).z))) '&'
-    ((((b).z '&' ('not' c).z) 'or' ((c).z '&' ('not' b).z)) 'or'
-    ((('not' a).z 'or' (c).z) '&' (('not' c).z 'or' (a).z)))
-    by MARGREL1:def 20
-      .=((((a).z '&' ('not' c).z) 'or' ((c).z '&' 'not' (a).z)) 'or'
-    (('not' (b).z 'or' (c).z) '&' (('not' c).z 'or' (b).z))) '&'
-    ((((b).z '&' ('not' c).z) 'or' ((c).z '&' ('not' b).z)) 'or'
-    ((('not' a).z 'or' (c).z) '&' (('not' c).z 'or' (a).z)))
-    by MARGREL1:def 20
-      .=((((a).z '&' ('not' c).z) 'or' ((c).z '&' 'not' (a).z)) 'or'
-    (('not' (b).z 'or' (c).z) '&' (('not' c).z 'or' (b).z))) '&'
-    ((((b).z '&' ('not' c).z) 'or' ((c).z '&' 'not' (b).z)) 'or'
-    ((('not' a).z 'or' (c).z) '&' (('not' c).z 'or' (a).z)))
-    by MARGREL1:def 20
-      .=((((a).z '&' ('not' c).z) 'or' ((c).z '&' 'not' (a).z)) 'or'
-    (('not' (b).z 'or' (c).z) '&' (('not' c).z 'or' (b).z))) '&'
-    ((((b).z '&' ('not' c).z) 'or' ((c).z '&' 'not' (b).z)) 'or'
-    (('not' (a).z 'or' (c).z) '&' (('not' c).z 'or' (a).z)))
-    by MARGREL1:def 20;
-    hence thesis;
-  end;
-  now per cases by A4,A5,BINARITH:7;
+A8: 'not' (b).z=TRUE or (a).z=TRUE by A6,A4,BINARITH:7;
+  now
+    per cases by A3,A5,BINARITH:7;
     case
-A10:  'not' (a).z=TRUE;
+A9:   'not' (a).z=TRUE;
       then (a).z=FALSE by MARGREL1:41;
-      then ((a 'eqv' c) 'eqv' (b 'eqv' c)).z
-      =((FALSE 'or' ((c).z '&' TRUE)) 'or'
-      (('not' (b).z 'or' (c).z) '&' (('not' c).z 'or' (b).z))) '&'
-      ((((b).z '&' ('not' c).z) 'or' ((c).z '&' 'not' (b).z)) 'or'
-      ((TRUE 'or' (c).z) '&' (('not' c).z 'or' FALSE))) by A9,A10,MARGREL1:49
-        .=((FALSE 'or' (c).z) 'or'
-      (('not' (b).z 'or' (c).z) '&' (('not' c).z 'or' (b).z))) '&'
-      ((((b).z '&' ('not' c).z) 'or' ((c).z '&' 'not' (b).z)) 'or'
-      ((TRUE 'or' (c).z) '&' (('not' c).z 'or' FALSE))) by MARGREL1:50
-        .=((c).z 'or'
-      (('not' (b).z 'or' (c).z) '&' (('not' c).z 'or' (b).z))) '&'
-      ((((b).z '&' ('not' c).z) 'or' ((c).z '&' 'not' (b).z)) 'or'
-      ((TRUE 'or' (c).z) '&' (('not' c).z 'or' FALSE))) by BINARITH:7
-        .=((c).z 'or'
-      (('not' (b).z 'or' (c).z) '&' (('not' c).z 'or' (b).z))) '&'
-      ((((b).z '&' ('not' c).z) 'or' ((c).z '&' 'not' (b).z)) 'or'
-      ((TRUE 'or' (c).z) '&' ('not' c).z)) by BINARITH:7
-        .=((c).z 'or'
-      (('not' (b).z 'or' (c).z) '&' (('not' c).z 'or' (b).z))) '&'
-      ((((b).z '&' ('not' c).z) 'or' ((c).z '&' 'not' (b).z)) 'or'
-      (TRUE '&' ('not' c).z)) by BINARITH:19
-        .=((c).z 'or' (('not' (b).z 'or' (c).z) '&' (('not'
-      c).z 'or' (b).z))) '&' ((((b).z '&' ('not' c).z) 'or' ((c).z '&' 'not'
-      (b).z)) 'or' ('not' c).z) by MARGREL1:50
-        .=(((c).z 'or' ((c).z 'or' 'not' (b).z)) '&'
-      ((c).z 'or' (('not' c).z 'or' (b).z))) '&'
-      ((((b).z '&' ('not' c).z) 'or' ((c).z '&' 'not'
-      (b).z)) 'or' ('not' c).z) by XBOOLEAN:9
-        .=((((c).z 'or' (c).z) 'or' 'not' (b).z) '&'
-      ((c).z 'or' (('not' c).z 'or' (b).z))) '&'
-      ((((b).z '&' ('not' c).z) 'or' ((c).z '&' 'not'
-      (b).z)) 'or' ('not' c).z) by BINARITH:20
-        .=(((c).z 'or' 'not' (b).z) '&'
-      (((c).z 'or' ('not' c).z) 'or' (b).z)) '&'
-      ((((b).z '&' ('not' c).z) 'or' ((c).z '&' 'not'
-      (b).z)) 'or' ('not' c).z) by BINARITH:20
-        .=(((c).z 'or' 'not' (b).z) '&'
-      (((c).z 'or' 'not' (c).z) 'or' (b).z)) '&'
-      ((((b).z '&' ('not' c).z) 'or' ((c).z '&' 'not'
-      (b).z)) 'or' ('not' c).z) by MARGREL1:def 20
-        .=(((c).z 'or' 'not' (b).z) '&' (TRUE 'or' (b).z)) '&'
-      ((((b).z '&' ('not' c).z) 'or' ((c).z '&' 'not'
-      (b).z)) 'or' ('not' c).z) by XBOOLEAN:102
-        .=(TRUE '&' ((c).z 'or' 'not' (b).z)) '&'
-      ((((b).z '&' ('not' c).z) 'or' ((c).z '&' 'not'
-      (b).z)) 'or' ('not' c).z) by BINARITH:19
-        .=((c).z 'or' 'not' (b).z) '&'
-      ((((b).z '&' ('not' c).z) 'or'
-      ((c).z '&' 'not' (b).z)) 'or' ('not' c).z) by MARGREL1:50
-        .=((c).z 'or' 'not' (b).z) '&'
-      (((b).z '&' ('not' c).z) 'or' (('not' c).z 'or'
-      ((c).z '&' 'not' (b).z))) by BINARITH:20
-        .=((c).z 'or' 'not' (b).z) '&'
-      (((b).z '&' ('not' c).z) 'or'
-      ((('not' c).z 'or' (c).z) '&' (('not' c).z 'or' 'not' (b).z)))
-      by XBOOLEAN:9
-        .=((c).z 'or' 'not' (b).z) '&'
-      (((b).z '&' ('not' c).z) 'or'
-      (('not' (c).z 'or' (c).z) '&' (('not' c).z 'or' 'not' (b).z)))
-      by MARGREL1:def 20
-        .=((c).z 'or' 'not' (b).z) '&'
-      (((b).z '&' ('not' c).z) 'or' (TRUE '&' (('not' c).z 'or' 'not' (b).z)))
-      by XBOOLEAN:102
-        .=((c).z 'or' 'not' (b).z) '&'
-      ((('not' c).z 'or' 'not' (b).z) 'or' ((b).z '&' ('not'
-      c).z)) by MARGREL1:50
-        .=((c).z 'or' 'not' (b).z) '&'
-      (((('not' c).z 'or' 'not' (b).z) 'or' (b).z) '&'
-      ((('not' c).z 'or' 'not' (b).z) 'or' ('not' c).z)) by XBOOLEAN:9
-        .=((c).z 'or' 'not' (b).z) '&'
-      ((('not' c).z 'or' ('not' (b).z 'or' (b).z)) '&'
-      ((('not' c).z 'or' 'not' (b).z) 'or' ('not' c).z)) by BINARITH:20
-        .=((c).z 'or' 'not' (b).z) '&' ((('not' c).z 'or' TRUE) '&'
-      ((('not' c).z 'or' 'not' (b).z) 'or' ('not' c).z)) by XBOOLEAN:102
-        .=((c).z 'or' 'not' (b).z) '&'
-      (TRUE '&' ((('not' c).z 'or' 'not' (b).z) 'or' ('not' c).z))
-      by BINARITH:19
-        .=((c).z 'or' 'not' (b).z) '&'
-      (('not' (b).z 'or' ('not' c).z) 'or' ('not' c).z) by MARGREL1:50
-        .=((c).z 'or' 'not' (b).z) '&'
-      ('not' (b).z 'or' (('not' c).z 'or' ('not' c).z)) by BINARITH:20
-        .=('not' (b).z '&' ((c).z 'or' 'not' (b).z)) 'or'
-      (((c).z 'or' 'not' (b).z) '&' ('not' c).z) by XBOOLEAN:8
+      then ((a 'eqv' c) 'eqv' (b 'eqv' c)).z =((FALSE 'or' ((c).z '&' TRUE))
+'or' (('not' (b).z 'or' (c).z) '&' (('not' c).z 'or' (b).z))) '&' ((((b).z '&'
+('not' c).z) 'or' ((c).z '&' 'not' (b).z)) 'or' ((TRUE 'or' (c).z) '&' (('not'
+      c).z 'or' FALSE))) by A7,A9, MARGREL1:49
+        .=((FALSE 'or' (c).z) 'or' (('not' (b).z 'or' (c).z) '&' (('not' c).
+z 'or' (b).z))) '&' ((((b).z '&' ('not' c).z) 'or' ((c).z '&' 'not' (b).z))
+      'or' ((TRUE 'or' (c).z) '&' (('not' c).z 'or' FALSE))) by MARGREL1:50
+        .=((c).z 'or' (('not' (b).z 'or' (c).z) '&' (('not' c).z 'or' (b).z)
+)) '&' ((((b).z '&' ('not' c).z) 'or' ((c).z '&' 'not' (b).z)) 'or' ((TRUE 'or'
+      (c).z) '&' (('not' c).z 'or' FALSE))) by BINARITH:7
+        .=((c).z 'or' (('not' (b).z 'or' (c).z) '&' (('not' c).z 'or' (b).z)
+)) '&' ((((b).z '&' ('not' c).z) 'or' ((c).z '&' 'not' (b).z)) 'or' ((TRUE 'or'
+      (c).z) '&' ('not' c).z)) by BINARITH:7
+        .=((c).z 'or' (('not' (b).z 'or' (c).z) '&' (('not' c).z 'or' (b).z)
+)) '&' ((((b).z '&' ('not' c).z) 'or' ((c).z '&' 'not' (b).z)) 'or' (TRUE '&' (
+      'not' c).z)) by BINARITH:19
+        .=((c).z 'or' (('not' (b).z 'or' (c).z) '&' (('not' c).z 'or' (b).z)
+)) '&' ((((b).z '&' ('not' c).z) 'or' ((c).z '&' 'not' (b).z)) 'or' ('not' c).z
+      ) by MARGREL1:50
+        .=(((c).z 'or' ((c).z 'or' 'not' (b).z)) '&' ((c).z 'or' (('not' c).
+z 'or' (b).z))) '&' ((((b).z '&' ('not' c).z) 'or' ((c).z '&' 'not' (b).z))
+      'or' ('not' c).z) by XBOOLEAN:9
+        .=((((c).z 'or' (c).z) 'or' 'not' (b).z) '&' ((c).z 'or' (('not' c).
+z 'or' (b).z))) '&' ((((b).z '&' ('not' c).z) 'or' ((c).z '&' 'not' (b).z))
+      'or' ('not' c).z) by BINARITH:20
+        .=(((c).z 'or' 'not' (b).z) '&' (((c).z 'or' ('not' c).z) 'or' (b).z
+)) '&' ((((b).z '&' ('not' c).z) 'or' ((c).z '&' 'not' (b).z)) 'or' ('not' c).z
+      ) by BINARITH:20
+        .=(((c).z 'or' 'not' (b).z) '&' (((c).z 'or' 'not' (c).z) 'or' (b).z
+)) '&' ((((b).z '&' ('not' c).z) 'or' ((c).z '&' 'not' (b).z)) 'or' ('not' c).z
+      ) by MARGREL1:def 20
+        .=(((c).z 'or' 'not' (b).z) '&' (TRUE 'or' (b).z)) '&' ((((b).z '&'
+('not' c).z) 'or' ((c).z '&' 'not' (b).z)) 'or' ('not' c).z) by XBOOLEAN:102
+        .=(TRUE '&' ((c).z 'or' 'not' (b).z)) '&' ((((b).z '&' ('not' c).z)
+      'or' ((c).z '&' 'not' (b).z)) 'or' ('not' c).z) by BINARITH:19
+        .=((c).z 'or' 'not' (b).z) '&' ((((b).z '&' ('not' c).z) 'or' ((c).z
+      '&' 'not' (b).z)) 'or' ('not' c).z) by MARGREL1:50
+        .=((c).z 'or' 'not' (b).z) '&' (((b).z '&' ('not' c).z) 'or' (('not'
+      c).z 'or' ((c).z '&' 'not' (b).z))) by BINARITH:20
+        .=((c).z 'or' 'not' (b).z) '&' (((b).z '&' ('not' c).z) 'or' (((
+      'not' c).z 'or' (c).z) '&' (('not' c).z 'or' 'not' (b).z))) by XBOOLEAN:9
+        .=((c).z 'or' 'not' (b).z) '&' (((b).z '&' ('not' c).z) 'or' (('not'
+      (c).z 'or' (c).z) '&' (('not' c).z 'or' 'not' (b).z))) by MARGREL1:def 20
+        .=((c).z 'or' 'not' (b).z) '&' (((b).z '&' ('not' c).z) 'or' (TRUE
+      '&' (('not' c).z 'or' 'not' (b).z))) by XBOOLEAN:102
+        .=((c).z 'or' 'not' (b).z) '&' ((('not' c).z 'or' 'not' (b).z) 'or'
+      ((b).z '&' ('not' c).z)) by MARGREL1:50
+        .=((c).z 'or' 'not' (b).z) '&' (((('not' c).z 'or' 'not' (b).z) 'or'
+(b).z) '&' ((('not' c).z 'or' 'not' (b).z) 'or' ('not' c).z)) by XBOOLEAN:9
+        .=((c).z 'or' 'not' (b).z) '&' ((('not' c).z 'or' ('not' (b).z 'or'
+(b).z)) '&' ((('not' c).z 'or' 'not' (b).z) 'or' ('not' c).z)) by BINARITH:20
+        .=((c).z 'or' 'not' (b).z) '&' ((('not' c).z 'or' TRUE) '&' ((('not'
+      c).z 'or' 'not' (b).z) 'or' ('not' c).z)) by XBOOLEAN:102
+        .=((c).z 'or' 'not' (b).z) '&' (TRUE '&' ((('not' c).z 'or' 'not' (b
+      ).z) 'or' ('not' c).z)) by BINARITH:19
+        .=((c).z 'or' 'not' (b).z) '&' (('not' (b).z 'or' ('not' c).z) 'or'
+      ('not' c).z) by MARGREL1:50
+        .=((c).z 'or' 'not' (b).z) '&' ('not' (b).z 'or' (('not' c).z 'or' (
+      'not' c).z)) by BINARITH:20
+        .=('not' (b).z '&' ((c).z 'or' 'not' (b).z)) 'or' (((c).z 'or' 'not'
+      (b).z) '&' ('not' c).z) by XBOOLEAN:8
         .=(('not' (b).z '&' (c).z) 'or' ('not' (b).z '&' 'not' (b).z)) 'or'
       (('not' c).z '&' ((c).z 'or' 'not' (b).z)) by XBOOLEAN:8
-        .=(('not' (b).z '&' (c).z) 'or' 'not' (b).z) 'or'
-      (('not' c).z '&' (c).z 'or' ('not' c).z '&' 'not' (b).z) by XBOOLEAN:8
-        .=(('not' (b).z '&' (c).z) 'or' 'not' (b).z) 'or'
-      (((c).z '&' 'not' (c).z) 'or' (('not' c).z '&' 'not'
-      (b).z)) by MARGREL1:def 20
-        .=(('not' (b).z '&' (c).z) 'or' 'not' (b).z) 'or'
-      (FALSE 'or' (('not' c).z '&' 'not' (b).z)) by XBOOLEAN:138
-        .=('not' (b).z 'or' ('not' (b).z '&' (c).z)) 'or'
-      (('not' c).z '&' 'not' (b).z) by BINARITH:7
-        .='not' (b).z 'or' (('not' (b).z '&' (c).z) 'or'
-      (('not' c).z '&' 'not' (b).z)) by BINARITH:20
-        .=TRUE by A8,A10,BINARITH:19,MARGREL1:41;
+        .=(('not' (b).z '&' (c).z) 'or' 'not' (b).z) 'or' (('not' c).z '&' (
+      c).z 'or' ('not' c).z '&' 'not' (b).z) by XBOOLEAN:8
+        .=(('not' (b).z '&' (c).z) 'or' 'not' (b).z) 'or' (((c).z '&' 'not'
+      (c).z) 'or' (('not' c).z '&' 'not' (b).z)) by MARGREL1:def 20
+        .=(('not' (b).z '&' (c).z) 'or' 'not' (b).z) 'or' (FALSE 'or' ((
+      'not' c).z '&' 'not' (b).z)) by XBOOLEAN:138
+        .=('not' (b).z 'or' ('not' (b).z '&' (c).z)) 'or' (('not' c).z '&'
+      'not' (b).z) by BINARITH:7
+        .='not' (b).z 'or' (('not' (b).z '&' (c).z) 'or' (('not' c).z '&'
+      'not' (b).z)) by BINARITH:20
+        .=TRUE by A8,A9,BINARITH:19,MARGREL1:41;
       hence thesis;
     end;
     case
-A11:  (b).z=TRUE;
+A10:  (b).z=TRUE;
       then 'not' (b).z=FALSE by MARGREL1:41;
-      then ((a 'eqv' c) 'eqv' (b 'eqv' c)).z
-      =((('not' c).z 'or' (FALSE '&' (c).z)) 'or'
-      ((FALSE 'or' (c).z) '&' (('not' c).z 'or' TRUE))) '&'
-      ((('not' c).z 'or' ((c).z '&' FALSE)) 'or'
-      ((FALSE 'or' (c).z) '&' (('not' c).z 'or' TRUE))) by A1,A2,A6,A7,A9,A11,
-      MARGREL1:45,50
-        .=((('not' c).z 'or' FALSE) 'or'
-      ((FALSE 'or' (c).z) '&' (('not' c).z 'or' TRUE))) '&'
-      ((('not' c).z 'or' FALSE) 'or'
-      ((FALSE 'or' (c).z) '&' (('not' c).z 'or' TRUE))) by MARGREL1:49
+      then
+      ((a 'eqv' c) 'eqv' (b 'eqv' c)).z =((('not' c).z 'or' (FALSE '&' (c
+).z)) 'or' ((FALSE 'or' (c).z) '&' (('not' c).z 'or' TRUE))) '&' ((('not' c).z
+'or' ((c).z '&' FALSE)) 'or' ((FALSE 'or' (c).z) '&' (('not' c).z 'or' TRUE)))
+      by A2,A1,A6,A4,A7,A10,MARGREL1:45,50
+        .=((('not' c).z 'or' FALSE) 'or' ((FALSE 'or' (c).z) '&' (('not' c).
+z 'or' TRUE))) '&' ((('not' c).z 'or' FALSE) 'or' ((FALSE 'or' (c).z) '&' ((
+      'not' c).z 'or' TRUE))) by MARGREL1:49
         .=((('not' c).z 'or' FALSE) 'or' ((FALSE 'or' (c).z) '&' TRUE)) '&'
-      ((('not' c).z 'or' FALSE) 'or' ((FALSE 'or' (c).z) '&' TRUE))
-      by BINARITH:19
-        .=((('not' c).z 'or' FALSE) 'or' ((c).z '&' TRUE)) '&'
-      ((('not' c).z 'or' FALSE) 'or' ((c).z '&' TRUE)) by BINARITH:7
-        .=(('not' c).z 'or' (TRUE '&' (c).z)) '&'
-      (('not' c).z 'or' ((c).z '&' TRUE)) by BINARITH:7
-        .=(('not' c).z 'or' (c).z) '&' (('not' c).z 'or' (c).z) by MARGREL1:50
-        .=('not' (c).z 'or' (c).z) '&' ('not' (c).z 'or' (c).z)
-      by MARGREL1:def 20
+((('not' c).z 'or' FALSE) 'or' ((FALSE 'or' (c).z) '&' TRUE)) by BINARITH:19
+        .=((('not' c).z 'or' FALSE) 'or' ((c).z '&' TRUE)) '&' ((('not' c).z
+      'or' FALSE) 'or' ((c).z '&' TRUE)) by BINARITH:7
+        .=(('not' c).z 'or' (TRUE '&' (c).z)) '&' (('not' c).z 'or' ((c).z
+      '&' TRUE)) by BINARITH:7
+        .=(('not' c).z 'or' (c).z) '&' (('not' c).z 'or' (c).z) by MARGREL1:
+      50
+        .=('not' (c).z 'or' (c).z) '&' ('not' (c).z 'or' (c).z) by MARGREL1:
+      def 20
         .=TRUE by XBOOLEAN:102;
       hence thesis;
     end;
@@ -909,61 +902,62 @@ A11:  (b).z=TRUE;
 end;
 
 theorem
-  for a,b,c being Element of Funcs(Y,BOOLEAN) holds
-  (a 'eqv' b) '<' (a 'imp' c) 'eqv' (b 'imp' c)
+  for a,b,c being Element of Funcs(Y,BOOLEAN) holds (a 'eqv' b) '<' (a
+  'imp' c) 'eqv' (b 'imp' c)
 proof
   let a,b,c be Element of Funcs(Y,BOOLEAN);
   let z be Element of Y;
-  assume
-A1: (a 'eqv' b).z=TRUE;
-A2: (a 'eqv' b).z =((a 'imp' b) '&' (b 'imp' a)).z by BVFUNC_4:7
+A1: (a 'eqv' b).z =((a 'imp' b) '&' (b 'imp' a)).z by BVFUNC_4:7
     .=(a 'imp' b).z '&' (b 'imp' a).z by MARGREL1:def 21;
+  assume
+A2: (a 'eqv' b).z=TRUE;
+  then (a 'imp' b).z=TRUE by A1,MARGREL1:45;
   then
-A3: (a 'imp' b).z=TRUE & (b 'imp' a).z=TRUE by A1,MARGREL1:45;
+A3: 'not' (a).z 'or' (b).z = TRUE by BVFUNC_1:def 11;
+  (b 'imp' a).z=TRUE by A2,A1,MARGREL1:45;
   then
-A4: 'not' (a).z 'or' (b).z = TRUE by BVFUNC_1:def 11;
-A5: (b).z=TRUE or (b).z=FALSE by XBOOLEAN:def 3;
-A6: (b 'imp' a).z = 'not' (b).z 'or' (a).z by BVFUNC_1:def 11;
-A7: 'not' (b).z 'or' (a).z = TRUE by A3,BVFUNC_1:def 11;
-A8: (a).z=TRUE or (a).z=FALSE by XBOOLEAN:def 3;
-A9: ((a 'imp' c) 'eqv' (b 'imp' c)).z
-  =(((a 'imp' c) 'imp' (b 'imp' c)) '&' ((b 'imp' c) 'imp' (a 'imp' c))).z
-  by BVFUNC_4:7
-    .=((a 'imp' c) 'imp' (b 'imp' c)).z '&'
-  ((b 'imp' c) 'imp' (a 'imp' c)).z by MARGREL1:def 21
-    .=('not' (a 'imp' c).z 'or' (b 'imp' c).z) '&'
-  ((b 'imp' c) 'imp' (a 'imp' c)).z by BVFUNC_1:def 11
-    .=('not' (a 'imp' c).z 'or' (b 'imp' c).z) '&'
-  ('not' (b 'imp' c).z 'or' (a 'imp' c).z) by BVFUNC_1:def 11
-    .=('not'( 'not' (a).z 'or' (c).z) 'or' (b 'imp' c).z) '&'
-  ('not' (b 'imp' c).z 'or' (a 'imp' c).z) by BVFUNC_1:def 11
-    .=('not'( 'not' (a).z 'or' (c).z) 'or' ('not' (b).z 'or' (c).z)) '&'
-  ('not' (b 'imp' c).z 'or' (a 'imp' c).z) by BVFUNC_1:def 11
-    .=('not'( 'not' (a).z 'or' (c).z) 'or' ('not' (b).z 'or' (c).z)) '&'
-  ('not'( 'not' (b).z 'or' (c).z) 'or' (a 'imp' c).z) by BVFUNC_1:def 11
-    .=(((a).z '&' 'not' (c).z) 'or' ('not' (b).z 'or' (c).z)) '&'
-  (((b).z '&' 'not' (c).z) 'or' ('not' (a).z 'or' (c).z)) by BVFUNC_1:def 11;
-  now per cases by A4,A5,BINARITH:7;
+A4: 'not' (b).z 'or' (a).z = TRUE by BVFUNC_1:def 11;
+A5: ((a 'imp' c) 'eqv' (b 'imp' c)).z =(((a 'imp' c) 'imp' (b 'imp' c)) '&'
+  ((b 'imp' c) 'imp' (a 'imp' c))).z by BVFUNC_4:7
+    .=((a 'imp' c) 'imp' (b 'imp' c)).z '&' ((b 'imp' c) 'imp' (a 'imp' c)).
+  z by MARGREL1:def 21
+    .=('not' (a 'imp' c).z 'or' (b 'imp' c).z) '&' ((b 'imp' c) 'imp' (a
+  'imp' c)).z by BVFUNC_1:def 11
+    .=('not' (a 'imp' c).z 'or' (b 'imp' c).z) '&' ('not' (b 'imp' c).z 'or'
+  (a 'imp' c).z) by BVFUNC_1:def 11
+    .=('not'( 'not' (a).z 'or' (c).z) 'or' (b 'imp' c).z) '&' ('not' (b
+  'imp' c).z 'or' (a 'imp' c).z) by BVFUNC_1:def 11
+    .=('not'( 'not' (a).z 'or' (c).z) 'or' ('not' (b).z 'or' (c).z)) '&' (
+  'not' (b 'imp' c).z 'or' (a 'imp' c).z) by BVFUNC_1:def 11
+    .=('not'( 'not' (a).z 'or' (c).z) 'or' ('not' (b).z 'or' (c).z)) '&' (
+  'not'( 'not' (b).z 'or' (c).z) 'or' (a 'imp' c).z) by BVFUNC_1:def 11
+    .=(((a).z '&' 'not' (c).z) 'or' ('not' (b).z 'or' (c).z)) '&' (((b).z
+  '&' 'not' (c).z) 'or' ('not' (a).z 'or' (c).z)) by BVFUNC_1:def 11;
+A6: (a).z=TRUE or (a).z=FALSE by XBOOLEAN:def 3;
+A7: (b 'imp' a).z = 'not' (b).z 'or' (a).z by BVFUNC_1:def 11;
+A8: (b).z=TRUE or (b).z=FALSE by XBOOLEAN:def 3;
+  now
+    per cases by A3,A8,BINARITH:7;
     case
-A10:  'not' (a).z=TRUE;
+A9:   'not' (a).z=TRUE;
       then
-A11:  (a).z=FALSE by MARGREL1:41;
-      then 'not' (b).z=TRUE by A7,BINARITH:7;
-      then ((a 'imp' c) 'eqv' (b 'imp' c)).z
-      =(FALSE 'or' (TRUE 'or' (c).z)) '&'
-      (FALSE 'or' (TRUE 'or' (c).z)) by A9,A10,A11,MARGREL1:49
+A10:  (a).z=FALSE by MARGREL1:41;
+      then 'not' (b).z=TRUE by A4,BINARITH:7;
+      then ((a 'imp' c) 'eqv' (b 'imp' c)).z =(FALSE 'or' (TRUE 'or' (c).z))
+      '&' (FALSE 'or' (TRUE 'or' (c).z)) by A5,A9,A10,MARGREL1:49
         .=(TRUE 'or' (c).z) '&' (TRUE 'or' (c).z) by BINARITH:7
         .=TRUE by BINARITH:19;
       hence thesis;
     end;
     case
-A12:  (b).z=TRUE;
+A11:  (b).z=TRUE;
       then 'not' (b).z=FALSE by MARGREL1:41;
-      then ((a 'imp' c) 'eqv' (b 'imp' c)).z
-      =('not' (c).z 'or' (FALSE 'or' (c).z)) '&'
-      ('not' (c).z 'or' (FALSE 'or' (c).z))
-      by A1,A2,A6,A8,A9,A12,BINARITH:7,MARGREL1:45
-        .=('not' (c).z 'or' (c).z) '&' ('not' (c).z 'or' (c).z) by BINARITH:7
+      then
+      ((a 'imp' c) 'eqv' (b 'imp' c)).z =('not' (c).z 'or' (FALSE 'or' (c
+      ).z)) '&' ('not' (c).z 'or' (FALSE 'or' (c).z)) by A2,A1,A7,A6,A5,A11,
+      BINARITH:7,MARGREL1:45
+        .=('not' (c).z 'or' (c).z) '&' ('not' (c).z 'or' (c).z) by BINARITH:
+      7
         .=TRUE by XBOOLEAN:102;
       hence thesis;
     end;
@@ -972,59 +966,61 @@ A12:  (b).z=TRUE;
 end;
 
 theorem
-  for a,b,c being Element of Funcs(Y,BOOLEAN) holds
-  (a 'eqv' b) '<' (c 'imp' a) 'eqv' (c 'imp' b)
+  for a,b,c being Element of Funcs(Y,BOOLEAN) holds (a 'eqv' b) '<' (c
+  'imp' a) 'eqv' (c 'imp' b)
 proof
   let a,b,c be Element of Funcs(Y,BOOLEAN);
   let z be Element of Y;
-  assume
-A1: (a 'eqv' b).z=TRUE;
-A2: (a 'eqv' b).z =((a 'imp' b) '&' (b 'imp' a)).z by BVFUNC_4:7
+A1: (a 'eqv' b).z =((a 'imp' b) '&' (b 'imp' a)).z by BVFUNC_4:7
     .=(a 'imp' b).z '&' (b 'imp' a).z by MARGREL1:def 21;
+  assume
+A2: (a 'eqv' b).z=TRUE;
+  then (a 'imp' b).z=TRUE by A1,MARGREL1:45;
   then
-A3: (a 'imp' b).z=TRUE & (b 'imp' a).z=TRUE by A1,MARGREL1:45;
+A3: 'not' (a).z 'or' (b).z = TRUE by BVFUNC_1:def 11;
+  (b 'imp' a).z=TRUE by A2,A1,MARGREL1:45;
   then
-A4: 'not' (a).z 'or' (b).z = TRUE by BVFUNC_1:def 11;
-A5: (b).z=TRUE or (b).z=FALSE by XBOOLEAN:def 3;
-A6: (b 'imp' a).z = 'not' (b).z 'or' (a).z by BVFUNC_1:def 11;
-A7: 'not' (b).z 'or' (a).z = TRUE by A3,BVFUNC_1:def 11;
-A8: (a).z=TRUE or (a).z=FALSE by XBOOLEAN:def 3;
-A9: ((c 'imp' a) 'eqv' (c 'imp' b)).z
-  =(((c 'imp' a) 'imp' (c 'imp' b)) '&' ((c 'imp' b) 'imp' (c 'imp' a))).z
-  by BVFUNC_4:7
-    .=((c 'imp' a) 'imp' (c 'imp' b)).z '&'
-  ((c 'imp' b) 'imp' (c 'imp' a)).z by MARGREL1:def 21
-    .=('not' (c 'imp' a).z 'or' (c 'imp' b).z) '&'
-  ((c 'imp' b) 'imp' (c 'imp' a)).z by BVFUNC_1:def 11
-    .=('not' (c 'imp' a).z 'or' (c 'imp' b).z) '&'
-  ('not' (c 'imp' b).z 'or' (c 'imp' a).z) by BVFUNC_1:def 11
-    .=('not'( 'not' (c).z 'or' (a).z) 'or' (c 'imp' b).z) '&'
-  ('not' (c 'imp' b).z 'or' (c 'imp' a).z) by BVFUNC_1:def 11
-    .=('not'( 'not' (c).z 'or' (a).z) 'or' ('not' (c).z 'or' (b).z)) '&'
-  ('not' (c 'imp' b).z 'or' (c 'imp' a).z) by BVFUNC_1:def 11
-    .=('not'( 'not' (c).z 'or' (a).z) 'or' ('not' (c).z 'or' (b).z)) '&'
-  ('not'( 'not' (c).z 'or' (b).z) 'or' (c 'imp' a).z) by BVFUNC_1:def 11
-    .=(((c).z '&' 'not' (a).z) 'or' ('not' (c).z 'or' (b).z)) '&'
-  (((c).z '&' 'not' (b).z) 'or' ('not' (c).z 'or' (a).z)) by BVFUNC_1:def 11;
-  now per cases by A4,A5,BINARITH:7;
+A4: 'not' (b).z 'or' (a).z = TRUE by BVFUNC_1:def 11;
+A5: ((c 'imp' a) 'eqv' (c 'imp' b)).z =(((c 'imp' a) 'imp' (c 'imp' b)) '&'
+  ((c 'imp' b) 'imp' (c 'imp' a))).z by BVFUNC_4:7
+    .=((c 'imp' a) 'imp' (c 'imp' b)).z '&' ((c 'imp' b) 'imp' (c 'imp' a)).
+  z by MARGREL1:def 21
+    .=('not' (c 'imp' a).z 'or' (c 'imp' b).z) '&' ((c 'imp' b) 'imp' (c
+  'imp' a)).z by BVFUNC_1:def 11
+    .=('not' (c 'imp' a).z 'or' (c 'imp' b).z) '&' ('not' (c 'imp' b).z 'or'
+  (c 'imp' a).z) by BVFUNC_1:def 11
+    .=('not'( 'not' (c).z 'or' (a).z) 'or' (c 'imp' b).z) '&' ('not' (c
+  'imp' b).z 'or' (c 'imp' a).z) by BVFUNC_1:def 11
+    .=('not'( 'not' (c).z 'or' (a).z) 'or' ('not' (c).z 'or' (b).z)) '&' (
+  'not' (c 'imp' b).z 'or' (c 'imp' a).z) by BVFUNC_1:def 11
+    .=('not'( 'not' (c).z 'or' (a).z) 'or' ('not' (c).z 'or' (b).z)) '&' (
+  'not'( 'not' (c).z 'or' (b).z) 'or' (c 'imp' a).z) by BVFUNC_1:def 11
+    .=(((c).z '&' 'not' (a).z) 'or' ('not' (c).z 'or' (b).z)) '&' (((c).z
+  '&' 'not' (b).z) 'or' ('not' (c).z 'or' (a).z)) by BVFUNC_1:def 11;
+A6: (a).z=TRUE or (a).z=FALSE by XBOOLEAN:def 3;
+A7: (b 'imp' a).z = 'not' (b).z 'or' (a).z by BVFUNC_1:def 11;
+A8: (b).z=TRUE or (b).z=FALSE by XBOOLEAN:def 3;
+  now
+    per cases by A3,A8,BINARITH:7;
     case
-A10:  'not' (a).z=TRUE;
+A9:   'not' (a).z=TRUE;
       then
-A11:  (a).z=FALSE by MARGREL1:41;
-      then 'not' (b).z=TRUE by A7,BINARITH:7;
-      then ((c 'imp' a) 'eqv' (c 'imp' b)).z
-      =((c).z 'or' ('not' (c).z 'or' FALSE)) '&'
-      ((c).z 'or' ('not' (c).z 'or' FALSE)) by A9,A10,A11,MARGREL1:50
-        .=((c).z 'or' 'not' (c).z) '&' ((c).z 'or' 'not' (c).z) by BINARITH:7
+A10:  (a).z=FALSE by MARGREL1:41;
+      then 'not' (b).z=TRUE by A4,BINARITH:7;
+      then ((c 'imp' a) 'eqv' (c 'imp' b)).z =((c).z 'or' ('not' (c).z 'or'
+      FALSE)) '&' ((c).z 'or' ('not' (c).z 'or' FALSE)) by A5,A9,A10,MARGREL1:
+      50
+        .=((c).z 'or' 'not' (c).z) '&' ((c).z 'or' 'not' (c).z) by BINARITH:
+      7
         .=TRUE by XBOOLEAN:102;
       hence thesis;
     end;
     case
-A12:  (b).z=TRUE;
+A11:  (b).z=TRUE;
       then 'not' (b).z=FALSE by MARGREL1:41;
-      then ((c 'imp' a) 'eqv' (c 'imp' b)).z
-      =(FALSE 'or' ('not' (c).z 'or' TRUE)) '&'
-      (FALSE 'or' ('not' (c).z 'or' TRUE)) by A1,A2,A6,A8,A9,A12,MARGREL1:45
+      then ((c 'imp' a) 'eqv' (c 'imp' b)).z =(FALSE 'or' ('not' (c).z 'or'
+      TRUE)) '&' (FALSE 'or' ('not' (c).z 'or' TRUE)) by A2,A1,A7,A6,A5,A11,
+      MARGREL1:45
         .=('not' (c).z 'or' TRUE) '&' ('not' (c).z 'or' TRUE) by BINARITH:7
         .=TRUE by BINARITH:19;
       hence thesis;
@@ -1034,62 +1030,63 @@ A12:  (b).z=TRUE;
 end;
 
 theorem
-  for a,b,c being Element of Funcs(Y,BOOLEAN) holds
-  (a 'eqv' b) '<' (a '&' c) 'eqv' (b '&' c)
+  for a,b,c being Element of Funcs(Y,BOOLEAN) holds (a 'eqv' b) '<' (a
+  '&' c) 'eqv' (b '&' c)
 proof
   let a,b,c be Element of Funcs(Y,BOOLEAN);
   let z be Element of Y;
-  assume
-A1: (a 'eqv' b).z=TRUE;
-A2: (a 'eqv' b).z =((a 'imp' b) '&' (b 'imp' a)).z by BVFUNC_4:7
+A1: (a 'eqv' b).z =((a 'imp' b) '&' (b 'imp' a)).z by BVFUNC_4:7
     .=(a 'imp' b).z '&' (b 'imp' a).z by MARGREL1:def 21;
+  assume
+A2: (a 'eqv' b).z=TRUE;
+  then (a 'imp' b).z=TRUE by A1,MARGREL1:45;
   then
-A3: (a 'imp' b).z=TRUE & (b 'imp' a).z=TRUE by A1,MARGREL1:45;
+A3: 'not' (a).z 'or' (b).z = TRUE by BVFUNC_1:def 11;
+  (b 'imp' a).z=TRUE by A2,A1,MARGREL1:45;
   then
-A4: 'not' (a).z 'or' (b).z = TRUE by BVFUNC_1:def 11;
-A5: (b).z=TRUE or (b).z=FALSE by XBOOLEAN:def 3;
-A6: (b 'imp' a).z = 'not' (b).z 'or' (a).z by BVFUNC_1:def 11;
-A7: 'not' (b).z 'or' (a).z = TRUE by A3,BVFUNC_1:def 11;
-A8: (a).z=TRUE or (a).z=FALSE by XBOOLEAN:def 3;
-A9: ((a '&' c) 'eqv' (b '&' c)).z
-  =(((a '&' c) 'imp' (b '&' c)) '&' ((b '&' c) 'imp' (a '&' c))).z
-  by BVFUNC_4:7
-    .=((a '&' c) 'imp' (b '&' c)).z '&'
-  ((b '&' c) 'imp' (a '&' c)).z by MARGREL1:def 21
+A4: 'not' (b).z 'or' (a).z = TRUE by BVFUNC_1:def 11;
+A5: ((a '&' c) 'eqv' (b '&' c)).z =(((a '&' c) 'imp' (b '&' c)) '&' ((b '&'
+  c) 'imp' (a '&' c))).z by BVFUNC_4:7
+    .=((a '&' c) 'imp' (b '&' c)).z '&' ((b '&' c) 'imp' (a '&' c)).z by
+  MARGREL1:def 21
     .=('not' (a '&' c).z 'or' (b '&' c).z) '&' ((b '&' c) 'imp' (a '&' c)).z
   by BVFUNC_1:def 11
-    .=('not' (a '&' c).z 'or' (b '&' c).z) '&'
-  ('not' (b '&' c).z 'or' (a '&' c).z) by BVFUNC_1:def 11
-    .=('not'( (a).z '&' (c).z) 'or' (b '&' c).z) '&'
-  ('not' (b '&' c).z 'or' (a '&' c).z) by MARGREL1:def 21
-    .=('not'( (a).z '&' (c).z) 'or' ((b).z '&' (c).z)) '&'
-  ('not' (b '&' c).z 'or' (a '&' c).z) by MARGREL1:def 21
-    .=('not'( (a).z '&' (c).z) 'or' ((b).z '&' (c).z)) '&'
-  ('not'( (b).z '&' (c).z) 'or' (a '&' c).z) by MARGREL1:def 21
-    .=(('not' (a).z 'or' 'not' (c).z) 'or' ((b).z '&' (c).z)) '&'
-  (('not' (b).z 'or' 'not' (c).z) 'or' ((a).z '&' (c).z)) by MARGREL1:def 21;
-  now per cases by A4,A5,BINARITH:7;
+    .=('not' (a '&' c).z 'or' (b '&' c).z) '&' ('not' (b '&' c).z 'or' (a
+  '&' c).z) by BVFUNC_1:def 11
+    .=('not'( (a).z '&' (c).z) 'or' (b '&' c).z) '&' ('not' (b '&' c).z 'or'
+  (a '&' c).z) by MARGREL1:def 21
+    .=('not'( (a).z '&' (c).z) 'or' ((b).z '&' (c).z)) '&' ('not' (b '&' c).
+  z 'or' (a '&' c).z) by MARGREL1:def 21
+    .=('not'( (a).z '&' (c).z) 'or' ((b).z '&' (c).z)) '&' ('not'( (b).z '&'
+  (c).z) 'or' (a '&' c).z) by MARGREL1:def 21
+    .=(('not' (a).z 'or' 'not' (c).z) 'or' ((b).z '&' (c).z)) '&' (('not' (b
+  ).z 'or' 'not' (c).z) 'or' ((a).z '&' (c).z)) by MARGREL1:def 21;
+A6: (a).z=TRUE or (a).z=FALSE by XBOOLEAN:def 3;
+A7: (b 'imp' a).z = 'not' (b).z 'or' (a).z by BVFUNC_1:def 11;
+A8: (b).z=TRUE or (b).z=FALSE by XBOOLEAN:def 3;
+  now
+    per cases by A3,A8,BINARITH:7;
     case
-A10:  'not' (a).z=TRUE;
+A9:   'not' (a).z=TRUE;
       then
-A11:  (a).z=FALSE by MARGREL1:41;
-      then 'not' (b).z=TRUE by A7,BINARITH:7;
-      then ((a '&' c) 'eqv' (b '&' c)).z
-      =((TRUE 'or' 'not' (c).z) 'or' FALSE) '&'
-      ((TRUE 'or' 'not' (c).z) 'or' FALSE) by A9,A10,A11,MARGREL1:49
+A10:  (a).z=FALSE by MARGREL1:41;
+      then 'not' (b).z=TRUE by A4,BINARITH:7;
+      then
+      ((a '&' c) 'eqv' (b '&' c)).z =((TRUE 'or' 'not' (c).z) 'or' FALSE)
+      '&' ((TRUE 'or' 'not' (c).z) 'or' FALSE) by A5,A9,A10,MARGREL1:49
         .=(TRUE 'or' 'not' (c).z) '&' (TRUE 'or' 'not' (c).z) by BINARITH:7
         .=TRUE by BINARITH:19;
       hence thesis;
     end;
     case
-A12:  (b).z=TRUE;
+A11:  (b).z=TRUE;
       then 'not' (b).z=FALSE by MARGREL1:41;
-      then ((a '&' c) 'eqv' (b '&' c)).z
-      =((FALSE 'or' 'not' (c).z) 'or' (c).z) '&'
-      ((FALSE 'or' 'not' (c).z) 'or' (c).z) by A1,A2,A6,A8,A9,A12,BINARITH:7
-      ,MARGREL1:45
-        .=('not' (c).z 'or' (c).z) '&' ('not' (c).z 'or' (c).z)
-      by BINARITH:7
+      then
+      ((a '&' c) 'eqv' (b '&' c)).z =((FALSE 'or' 'not' (c).z) 'or' (c).z
+      ) '&' ((FALSE 'or' 'not' (c).z) 'or' (c).z) by A2,A1,A7,A6,A5,A11,
+      BINARITH:7,MARGREL1:45
+        .=('not' (c).z 'or' (c).z) '&' ('not' (c).z 'or' (c).z) by BINARITH:
+      7
         .=TRUE by XBOOLEAN:102;
       hence thesis;
     end;
@@ -1098,58 +1095,61 @@ A12:  (b).z=TRUE;
 end;
 
 theorem
-  for a,b,c being Element of Funcs(Y,BOOLEAN) holds
-  (a 'eqv' b) '<' (a 'or' c) 'eqv' (b 'or' c)
+  for a,b,c being Element of Funcs(Y,BOOLEAN) holds (a 'eqv' b) '<' (a
+  'or' c) 'eqv' (b 'or' c)
 proof
   let a,b,c be Element of Funcs(Y,BOOLEAN);
   let z be Element of Y;
-  assume
-A1: (a 'eqv' b).z=TRUE;
-A2: (a 'eqv' b).z =((a 'imp' b) '&' (b 'imp' a)).z by BVFUNC_4:7
+A1: (a 'eqv' b).z =((a 'imp' b) '&' (b 'imp' a)).z by BVFUNC_4:7
     .=(a 'imp' b).z '&' (b 'imp' a).z by MARGREL1:def 21;
+  assume
+A2: (a 'eqv' b).z=TRUE;
+  then (a 'imp' b).z=TRUE by A1,MARGREL1:45;
   then
-A3: (a 'imp' b).z=TRUE & (b 'imp' a).z=TRUE by A1,MARGREL1:45;
+A3: 'not' (a).z 'or' (b).z = TRUE by BVFUNC_1:def 11;
+  (b 'imp' a).z=TRUE by A2,A1,MARGREL1:45;
   then
-A4: 'not' (a).z 'or' (b).z = TRUE by BVFUNC_1:def 11;
-A5: (b).z=TRUE or (b).z=FALSE by XBOOLEAN:def 3;
-A6: (b 'imp' a).z = 'not' (b).z 'or' (a).z by BVFUNC_1:def 11;
-A7: 'not' (b).z 'or' (a).z = TRUE by A3,BVFUNC_1:def 11;
-A8: (a).z=TRUE or (a).z=FALSE by XBOOLEAN:def 3;
-A9: ((a 'or' c) 'eqv' (b 'or' c)).z
-  =(((a 'or' c) 'imp' (b 'or' c)) '&' ((b 'or' c) 'imp' (a 'or' c))).z
-  by BVFUNC_4:7
-    .=((a 'or' c) 'imp' (b 'or' c)).z '&'
-  ((b 'or' c) 'imp' (a 'or' c)).z by MARGREL1:def 21
-    .=('not' (a 'or' c).z 'or' (b 'or' c).z) '&'
-  ((b 'or' c) 'imp' (a 'or' c)).z by BVFUNC_1:def 11
-    .=('not' (a 'or' c).z 'or' (b 'or' c).z) '&'
-  ('not' (b 'or' c).z 'or' (a 'or' c).z) by BVFUNC_1:def 11
-    .=('not'( (a).z 'or' (c).z) 'or' (b 'or' c).z) '&'
-  ('not' (b 'or' c).z 'or' (a 'or' c).z) by BVFUNC_1:def 7
-    .=('not'( (a).z 'or' (c).z) 'or' ((b).z 'or' (c).z)) '&'
-  ('not' (b 'or' c).z 'or' (a 'or' c).z) by BVFUNC_1:def 7
-    .=('not'( (a).z 'or' (c).z) 'or' ((b).z 'or' (c).z)) '&'
-  ('not'( (b).z 'or' (c).z) 'or' (a 'or' c).z) by BVFUNC_1:def 7
-    .=(('not' (a).z '&' 'not' (c).z) 'or' ((b).z 'or' (c).z)) '&'
-  (('not' (b).z '&' 'not' (c).z) 'or' ((a).z 'or' (c).z)) by BVFUNC_1:def 7;
-  now per cases by A4,A5,BINARITH:7;
+A4: 'not' (b).z 'or' (a).z = TRUE by BVFUNC_1:def 11;
+A5: ((a 'or' c) 'eqv' (b 'or' c)).z =(((a 'or' c) 'imp' (b 'or' c)) '&' ((b
+  'or' c) 'imp' (a 'or' c))).z by BVFUNC_4:7
+    .=((a 'or' c) 'imp' (b 'or' c)).z '&' ((b 'or' c) 'imp' (a 'or' c)).z by
+  MARGREL1:def 21
+    .=('not' (a 'or' c).z 'or' (b 'or' c).z) '&' ((b 'or' c) 'imp' (a 'or' c
+  )).z by BVFUNC_1:def 11
+    .=('not' (a 'or' c).z 'or' (b 'or' c).z) '&' ('not' (b 'or' c).z 'or' (a
+  'or' c).z) by BVFUNC_1:def 11
+    .=('not'( (a).z 'or' (c).z) 'or' (b 'or' c).z) '&' ('not' (b 'or' c).z
+  'or' (a 'or' c).z) by BVFUNC_1:def 7
+    .=('not'( (a).z 'or' (c).z) 'or' ((b).z 'or' (c).z)) '&' ('not' (b 'or'
+  c).z 'or' (a 'or' c).z) by BVFUNC_1:def 7
+    .=('not'( (a).z 'or' (c).z) 'or' ((b).z 'or' (c).z)) '&' ('not'( (b).z
+  'or' (c).z) 'or' (a 'or' c).z) by BVFUNC_1:def 7
+    .=(('not' (a).z '&' 'not' (c).z) 'or' ((b).z 'or' (c).z)) '&' (('not' (b
+  ).z '&' 'not' (c).z) 'or' ((a).z 'or' (c).z)) by BVFUNC_1:def 7;
+A6: (a).z=TRUE or (a).z=FALSE by XBOOLEAN:def 3;
+A7: (b 'imp' a).z = 'not' (b).z 'or' (a).z by BVFUNC_1:def 11;
+A8: (b).z=TRUE or (b).z=FALSE by XBOOLEAN:def 3;
+  now
+    per cases by A3,A8,BINARITH:7;
     case
-A10:  'not' (a).z=TRUE;
+A9:   'not' (a).z=TRUE;
       then
-A11:  (a).z=FALSE by MARGREL1:41;
-      then 'not' (b).z=TRUE by A7,BINARITH:7;
-      then ((a 'or' c) 'eqv' (b 'or' c)).z
-      =('not' (c).z 'or' (FALSE 'or' (c).z)) '&'
-      ('not' (c).z 'or' (FALSE 'or' (c).z)) by A9,A10,A11,MARGREL1:50
-        .=('not' (c).z 'or' (c).z) '&' ('not' (c).z 'or' (c).z) by BINARITH:7
+A10:  (a).z=FALSE by MARGREL1:41;
+      then 'not' (b).z=TRUE by A4,BINARITH:7;
+      then
+      ((a 'or' c) 'eqv' (b 'or' c)).z =('not' (c).z 'or' (FALSE 'or' (c).
+      z)) '&' ('not' (c).z 'or' (FALSE 'or' (c).z)) by A5,A9,A10,MARGREL1:50
+        .=('not' (c).z 'or' (c).z) '&' ('not' (c).z 'or' (c).z) by BINARITH:
+      7
         .=TRUE by XBOOLEAN:102;
       hence thesis;
     end;
     case
-A12:  (b).z=TRUE;
+A11:  (b).z=TRUE;
       then 'not' (b).z=FALSE by MARGREL1:41;
-      then ((a 'or' c) 'eqv' (b 'or' c)).z =(FALSE 'or' (TRUE 'or' (c).z)) '&'
-      (FALSE 'or' (TRUE 'or' (c).z)) by A1,A2,A6,A8,A9,A12,MARGREL1:45
+      then
+      ((a 'or' c) 'eqv' (b 'or' c)).z =(FALSE 'or' (TRUE 'or' (c).z)) '&'
+      (FALSE 'or' (TRUE 'or' (c).z)) by A2,A1,A7,A6,A5,A11,MARGREL1:45
         .=(TRUE 'or' (c).z) '&' (TRUE 'or' (c).z) by BINARITH:7
         .=TRUE by BINARITH:19;
       hence thesis;
@@ -1159,164 +1159,147 @@ A12:  (b).z=TRUE;
 end;
 
 theorem
-  for a,b being Element of Funcs(Y,BOOLEAN) holds
-  a '<' (a 'eqv' b) 'eqv' (b 'eqv' a) 'eqv' a
+  for a,b being Element of Funcs(Y,BOOLEAN) holds a '<' (a 'eqv' b)
+  'eqv' (b 'eqv' a) 'eqv' a
 proof
   let a,b be Element of Funcs(Y,BOOLEAN);
   let z be Element of Y;
+A1: ('not' a).z='not' (a).z by MARGREL1:def 20;
   assume
-A1: (a).z=TRUE;
+A2: (a).z=TRUE;
   then
-A2: 'not' (a).z=FALSE by MARGREL1:41;
-A3: ('not' a).z='not' (a).z by MARGREL1:def 20;
+A3: 'not' (a).z=FALSE by MARGREL1:41;
 A4: ((a 'eqv' b) 'eqv' (b 'eqv' a)).z =(((a 'eqv' b) 'imp' (b 'eqv' a)) '&'
   ((b 'eqv' a) 'imp' (a 'eqv' b))).z by BVFUNC_4:7
-    .=('not'( a 'eqv' b) 'or' (b 'eqv' a)).z '&'
-  ('not'( b 'eqv' a) 'or' (a 'eqv' b)).z by BVFUNC_4:8
-    .=(('not'( a 'eqv' b)).z 'or' (b 'eqv' a).z) '&'
-  (('not'( b 'eqv' a)).z 'or' (a 'eqv' b).z) by BVFUNC_1:def 7
-    .=(('not'( (a 'imp' b) '&' (b 'imp' a))).z 'or' (b 'eqv' a).z) '&'
-  (('not'( b 'eqv' a)).z 'or' (a 'eqv' b).z) by BVFUNC_4:7
-    .=(('not'( (a 'imp' b) '&' (b 'imp' a))).z 'or' (b 'eqv' a).z) '&'
-  (('not'( b 'eqv' a)).z 'or' ((a 'imp' b) '&' (b 'imp' a)).z) by BVFUNC_4:7
-    .=(('not'( (a 'imp' b) '&' (b 'imp' a))).z 'or'
-  ((b 'imp' a) '&' (a 'imp' b)).z) '&'
-  (('not'( b 'eqv' a)).z 'or' ((a 'imp' b) '&' (b 'imp' a)).z) by BVFUNC_4:7
-    .=(('not'( (a 'imp' b) '&' (b 'imp' a))).z 'or'
-  ((b 'imp' a) '&' (a 'imp' b)).z) '&'
-  (('not'( (b 'imp' a) '&' (a 'imp' b))).z 'or'
-  ((a 'imp' b) '&' (b 'imp' a)).z) by BVFUNC_4:7
-    .=('not' ((a 'imp' b) '&' (b 'imp' a)).z 'or'
-  ((b 'imp' a) '&' (a 'imp' b)).z) '&'
-  ('not' ((b 'imp' a) '&' (a 'imp' b)).z 'or' ((a 'imp' b) '&' (b 'imp' a)).z)
-  by MARGREL1:def 20
-    .=('not'( (a 'imp' b).z '&' (b 'imp' a).z) 'or'
-  ((b 'imp' a) '&' (a 'imp' b)).z) '&'
-  ('not' ((b 'imp' a) '&' (a 'imp' b)).z 'or' ((a 'imp' b) '&' (b 'imp' a)).z)
-  by MARGREL1:def 21
-    .=('not'( (a 'imp' b).z '&' (b 'imp' a).z) 'or'
-  ((b 'imp' a).z '&' (a 'imp' b).z)) '&'
-  ('not' ((b 'imp' a) '&' (a 'imp' b)).z 'or' ((a 'imp' b) '&' (b 'imp' a)).z)
-  by MARGREL1:def 21
-    .=('not'( (a 'imp' b).z '&' (b 'imp' a).z) 'or'
-  ((b 'imp' a).z '&' (a 'imp' b).z)) '&'
-  ('not'( (b 'imp' a).z '&' (a 'imp' b).z) 'or'
-  ((a 'imp' b) '&' (b 'imp' a)).z) by MARGREL1:def 21
-    .=('not'( (a 'imp' b).z '&' (b 'imp' a).z) 'or'
-  ((b 'imp' a).z '&' (a 'imp' b).z)) '&'
-  ('not'( (b 'imp' a).z '&' (a 'imp' b).z) 'or'
-  ((a 'imp' b).z '&' (b 'imp' a).z)) by MARGREL1:def 21
-    .=('not'( ('not' a 'or' b).z '&' (b 'imp' a).z) 'or'
-  ((b 'imp' a).z '&' (a 'imp' b).z)) '&'
-  ('not'( (b 'imp' a).z '&' (a 'imp' b).z) 'or'
+    .=('not'( a 'eqv' b) 'or' (b 'eqv' a)).z '&' ('not'( b 'eqv' a) 'or' (a
+  'eqv' b)).z by BVFUNC_4:8
+    .=(('not'( a 'eqv' b)).z 'or' (b 'eqv' a).z) '&' (('not'( b 'eqv' a)).z
+  'or' (a 'eqv' b).z) by BVFUNC_1:def 7
+    .=(('not'( (a 'imp' b) '&' (b 'imp' a))).z 'or' (b 'eqv' a).z) '&' ((
+  'not'( b 'eqv' a)).z 'or' (a 'eqv' b).z) by BVFUNC_4:7
+    .=(('not'( (a 'imp' b) '&' (b 'imp' a))).z 'or' (b 'eqv' a).z) '&' ((
+  'not'( b 'eqv' a)).z 'or' ((a 'imp' b) '&' (b 'imp' a)).z) by BVFUNC_4:7
+    .=(('not'( (a 'imp' b) '&' (b 'imp' a))).z 'or' ((b 'imp' a) '&' (a
+  'imp' b)).z) '&' (('not'( b 'eqv' a)).z 'or' ((a 'imp' b) '&' (b 'imp' a)).z)
+  by BVFUNC_4:7
+    .=(('not'( (a 'imp' b) '&' (b 'imp' a))).z 'or' ((b 'imp' a) '&' (a
+'imp' b)).z) '&' (('not'( (b 'imp' a) '&' (a 'imp' b))).z 'or' ((a 'imp' b) '&'
+  (b 'imp' a)).z) by BVFUNC_4:7
+    .=('not' ((a 'imp' b) '&' (b 'imp' a)).z 'or' ((b 'imp' a) '&' (a 'imp'
+  b)).z) '&' ('not' ((b 'imp' a) '&' (a 'imp' b)).z 'or' ((a 'imp' b) '&' (b
+  'imp' a)).z) by MARGREL1:def 20
+    .=('not'( (a 'imp' b).z '&' (b 'imp' a).z) 'or' ((b 'imp' a) '&' (a
+'imp' b)).z) '&' ('not' ((b 'imp' a) '&' (a 'imp' b)).z 'or' ((a 'imp' b) '&' (
+  b 'imp' a)).z) by MARGREL1:def 21
+    .=('not'( (a 'imp' b).z '&' (b 'imp' a).z) 'or' ((b 'imp' a).z '&' (a
+'imp' b).z)) '&' ('not' ((b 'imp' a) '&' (a 'imp' b)).z 'or' ((a 'imp' b) '&' (
+  b 'imp' a)).z) by MARGREL1:def 21
+    .=('not'( (a 'imp' b).z '&' (b 'imp' a).z) 'or' ((b 'imp' a).z '&' (a
+'imp' b).z)) '&' ('not'( (b 'imp' a).z '&' (a 'imp' b).z) 'or' ((a 'imp' b) '&'
+  (b 'imp' a)).z) by MARGREL1:def 21
+    .=('not'( (a 'imp' b).z '&' (b 'imp' a).z) 'or' ((b 'imp' a).z '&' (a
+  'imp' b).z)) '&' ('not'( (b 'imp' a).z '&' (a 'imp' b).z) 'or' ((a 'imp' b).z
+  '&' (b 'imp' a).z)) by MARGREL1:def 21
+    .=('not'( ('not' a 'or' b).z '&' (b 'imp' a).z) 'or' ((b 'imp' a).z '&'
+(a 'imp' b).z)) '&' ('not'( (b 'imp' a).z '&' (a 'imp' b).z) 'or' ((a 'imp' b).
+  z '&' (b 'imp' a).z)) by BVFUNC_4:8
+    .=('not'( ('not' a 'or' b).z '&' ('not' b 'or' a).z) 'or' ((b 'imp' a).z
+'&' (a 'imp' b).z)) '&' ('not'( (b 'imp' a).z '&' (a 'imp' b).z) 'or' ((a 'imp'
+  b).z '&' (b 'imp' a).z)) by BVFUNC_4:8
+    .=('not'( ('not' a 'or' b).z '&' ('not' b 'or' a).z) 'or' (('not' b 'or'
+a).z '&' (a 'imp' b).z)) '&' ('not'( (b 'imp' a).z '&' (a 'imp' b).z) 'or' ((a
+  'imp' b).z '&' (b 'imp' a).z)) by BVFUNC_4:8
+    .=('not'( ('not' a 'or' b).z '&' ('not' b 'or' a).z) 'or' (('not' b 'or'
+a).z '&' ('not' a 'or' b).z)) '&' ('not'( (b 'imp' a).z '&' (a 'imp' b).z) 'or'
   ((a 'imp' b).z '&' (b 'imp' a).z)) by BVFUNC_4:8
-    .=('not'( ('not' a 'or' b).z '&' ('not' b 'or' a).z) 'or'
-  ((b 'imp' a).z '&' (a 'imp' b).z)) '&'
-  ('not'( (b 'imp' a).z '&' (a 'imp' b).z) 'or'
-  ((a 'imp' b).z '&' (b 'imp' a).z)) by BVFUNC_4:8
-    .=('not'( ('not' a 'or' b).z '&' ('not' b 'or' a).z) 'or'
-  (('not' b 'or' a).z '&' (a 'imp' b).z)) '&'
-  ('not'( (b 'imp' a).z '&' (a 'imp' b).z) 'or'
-  ((a 'imp' b).z '&' (b 'imp' a).z)) by BVFUNC_4:8
-    .=('not'( ('not' a 'or' b).z '&' ('not' b 'or' a).z) 'or'
-  (('not' b 'or' a).z '&' ('not' a 'or' b).z)) '&'
-  ('not'( (b 'imp' a).z '&' (a 'imp' b).z) 'or'
-  ((a 'imp' b).z '&' (b 'imp' a).z)) by BVFUNC_4:8
-    .=('not'( ('not' a 'or' b).z '&' ('not' b 'or' a).z) 'or'
-  (('not' b 'or' a).z '&' ('not' a 'or' b).z)) '&'
-  ('not'( ('not' b 'or' a).z '&' (a 'imp' b).z) 'or'
-  ((a 'imp' b).z '&' (b 'imp' a).z)) by BVFUNC_4:8
-    .=('not'( ('not' a 'or' b).z '&' ('not' b 'or' a).z) 'or'
-  (('not' b 'or' a).z '&' ('not' a 'or' b).z)) '&'
-  ('not'( ('not' b 'or' a).z '&' ('not' a 'or' b).z) 'or'
-  ((a 'imp' b).z '&' (b 'imp' a).z)) by BVFUNC_4:8
-    .=('not'( ('not' a 'or' b).z '&' ('not' b 'or' a).z) 'or'
-  (('not' b 'or' a).z '&' ('not' a 'or' b).z)) '&'
-  ('not'( ('not' b 'or' a).z '&' ('not' a 'or' b).z) 'or'
-  (('not' a 'or' b).z '&' (b 'imp' a).z)) by BVFUNC_4:8
-    .=('not'( ('not' a 'or' b).z '&' ('not' b 'or' a).z) 'or'
-  (('not' b 'or' a).z '&' ('not' a 'or' b).z)) '&'
-  ('not'( ('not' b 'or' a).z '&' ('not' a 'or' b).z) 'or'
-  (('not' a 'or' b).z '&' ('not' b 'or' a).z)) by BVFUNC_4:8
-    .=('not'( (('not' a).z 'or' (b).z) '&' (('not' b 'or' a).z)) 'or'
-  ((('not' b 'or' a).z) '&' (('not' a 'or' b).z))) '&'
-  ('not'( (('not' b 'or' a).z) '&' (('not' a 'or' b).z)) 'or'
-  ((('not' a 'or' b).z) '&' (('not' b 'or' a).z))) by BVFUNC_1:def 7
-    .=('not'( (('not' a).z 'or' (b).z) '&' (('not' b).z 'or' (a).z)) 'or'
-  ((('not' b 'or' a).z) '&' (('not' a 'or' b).z))) '&'
-  ('not'( (('not' b 'or' a).z) '&' (('not' a 'or' b).z)) 'or'
-  ((('not' a 'or' b).z) '&' (('not' b 'or' a).z))) by BVFUNC_1:def 7
-    .=('not'( (('not' a).z 'or' (b).z) '&' (('not' b).z 'or' (a).z)) 'or'
-  ((('not' b).z 'or' (a).z) '&' (('not' a 'or' b).z))) '&'
-  ('not'( (('not' b 'or' a).z) '&' (('not' a 'or' b).z)) 'or'
-  ((('not' a 'or' b).z) '&' (('not' b 'or' a).z))) by BVFUNC_1:def 7
-    .=('not'( (('not' a).z 'or' (b).z) '&' (('not' b).z 'or' (a).z)) 'or'
-  ((('not' b).z 'or' (a).z) '&' (('not' a).z 'or' (b).z))) '&'
-  ('not'( (('not' b 'or' a).z) '&' (('not' a 'or' b).z)) 'or'
-  ((('not' a 'or' b).z) '&' (('not' b 'or' a).z))) by BVFUNC_1:def 7
-    .=('not'( (('not' a).z 'or' (b).z) '&' (('not' b).z 'or' (a).z)) 'or'
-  ((('not' b).z 'or' (a).z) '&' (('not' a).z 'or' (b).z))) '&'
-  ('not'( (('not' b).z 'or' (a).z) '&' (('not' a 'or' b).z)) 'or'
-  ((('not' a 'or' b).z) '&' (('not' b 'or' a).z))) by BVFUNC_1:def 7
-    .=('not'( (('not' a).z 'or' (b).z) '&' (('not' b).z 'or' (a).z)) 'or'
-  ((('not' b).z 'or' (a).z) '&' (('not' a).z 'or' (b).z))) '&'
-  ('not'( (('not' b).z 'or' (a).z) '&' (('not' a).z 'or' (b).z)) 'or'
-  ((('not' a 'or' b).z) '&' (('not' b 'or' a).z))) by BVFUNC_1:def 7
-    .=('not'( (('not' a).z 'or' (b).z) '&' (('not' b).z 'or' (a).z)) 'or'
-  ((('not' b).z 'or' (a).z) '&' (('not' a).z 'or' (b).z))) '&'
-  ('not'( (('not' b).z 'or' (a).z) '&' (('not' a).z 'or' (b).z)) 'or'
-  ((('not' a).z 'or' (b).z) '&' (('not' b 'or' a).z))) by BVFUNC_1:def 7
-    .=('not'( (FALSE 'or' (b).z) '&' (('not' b).z 'or' TRUE)) 'or'
-  ((('not' b).z 'or' TRUE) '&' (FALSE 'or' (b).z))) '&'
-  ('not'( (('not' b).z 'or' TRUE) '&' (FALSE 'or' (b).z)) 'or'
-  ((FALSE 'or' (b).z) '&' (('not' b).z 'or' TRUE))) by A1,A2,A3,BVFUNC_1:def 7
-    .=('not'( (b).z '&' (('not' b).z 'or' TRUE)) 'or'
-  ((('not' b).z 'or' TRUE) '&' (FALSE 'or' (b).z))) '&'
-  ('not'( (('not' b).z 'or' TRUE) '&' (FALSE 'or' (b).z)) 'or'
-  ((FALSE 'or' (b).z) '&' (('not' b).z 'or' TRUE))) by BINARITH:7
-    .=('not'( (b).z '&' (('not' b).z 'or' TRUE)) 'or'
-  ((('not' b).z 'or' TRUE) '&' (b).z)) '&'
-  ('not'( (('not' b).z 'or' TRUE) '&' (FALSE 'or' (b).z)) 'or'
-  ((FALSE 'or' (b).z) '&' (('not' b).z 'or' TRUE))) by BINARITH:7
-    .=('not'( (b).z '&' (('not' b).z 'or' TRUE)) 'or'
-  ((('not' b).z 'or' TRUE) '&' (b).z)) '&'
-  ('not'( (('not' b).z 'or' TRUE) '&' (FALSE 'or' (b).z)) 'or'
-  ((b).z '&' (('not' b).z 'or' TRUE))) by BINARITH:7
+    .=('not'( ('not' a 'or' b).z '&' ('not' b 'or' a).z) 'or' (('not' b 'or'
+a).z '&' ('not' a 'or' b).z)) '&' ('not'( ('not' b 'or' a).z '&' (a 'imp' b).z)
+  'or' ((a 'imp' b).z '&' (b 'imp' a).z)) by BVFUNC_4:8
+    .=('not'( ('not' a 'or' b).z '&' ('not' b 'or' a).z) 'or' (('not' b 'or'
+a).z '&' ('not' a 'or' b).z)) '&' ('not'( ('not' b 'or' a).z '&' ('not' a 'or'
+  b).z) 'or' ((a 'imp' b).z '&' (b 'imp' a).z)) by BVFUNC_4:8
+    .=('not'( ('not' a 'or' b).z '&' ('not' b 'or' a).z) 'or' (('not' b 'or'
+a).z '&' ('not' a 'or' b).z)) '&' ('not'( ('not' b 'or' a).z '&' ('not' a 'or'
+  b).z) 'or' (('not' a 'or' b).z '&' (b 'imp' a).z)) by BVFUNC_4:8
+    .=('not'( ('not' a 'or' b).z '&' ('not' b 'or' a).z) 'or' (('not' b 'or'
+a).z '&' ('not' a 'or' b).z)) '&' ('not'( ('not' b 'or' a).z '&' ('not' a 'or'
+  b).z) 'or' (('not' a 'or' b).z '&' ('not' b 'or' a).z)) by BVFUNC_4:8
+    .=('not'( (('not' a).z 'or' (b).z) '&' (('not' b 'or' a).z)) 'or' (((
+'not' b 'or' a).z) '&' (('not' a 'or' b).z))) '&' ('not'( (('not' b 'or' a).z)
+'&' (('not' a 'or' b).z)) 'or' ((('not' a 'or' b).z) '&' (('not' b 'or' a).z)))
+  by BVFUNC_1:def 7
+    .=('not'( (('not' a).z 'or' (b).z) '&' (('not' b).z 'or' (a).z)) 'or' ((
+('not' b 'or' a).z) '&' (('not' a 'or' b).z))) '&' ('not'( (('not' b 'or' a).z)
+'&' (('not' a 'or' b).z)) 'or' ((('not' a 'or' b).z) '&' (('not' b 'or' a).z)))
+  by BVFUNC_1:def 7
+    .=('not'( (('not' a).z 'or' (b).z) '&' (('not' b).z 'or' (a).z)) 'or' ((
+('not' b).z 'or' (a).z) '&' (('not' a 'or' b).z))) '&' ('not'( (('not' b 'or' a
+).z) '&' (('not' a 'or' b).z)) 'or' ((('not' a 'or' b).z) '&' (('not' b 'or' a)
+  .z))) by BVFUNC_1:def 7
+    .=('not'( (('not' a).z 'or' (b).z) '&' (('not' b).z 'or' (a).z)) 'or' ((
+  ('not' b).z 'or' (a).z) '&' (('not' a).z 'or' (b).z))) '&' ('not'( (('not' b
+  'or' a).z) '&' (('not' a 'or' b).z)) 'or' ((('not' a 'or' b).z) '&' (('not' b
+  'or' a).z))) by BVFUNC_1:def 7
+    .=('not'( (('not' a).z 'or' (b).z) '&' (('not' b).z 'or' (a).z)) 'or' ((
+('not' b).z 'or' (a).z) '&' (('not' a).z 'or' (b).z))) '&' ('not'( (('not' b).z
+'or' (a).z) '&' (('not' a 'or' b).z)) 'or' ((('not' a 'or' b).z) '&' (('not' b
+  'or' a).z))) by BVFUNC_1:def 7
+    .=('not'( (('not' a).z 'or' (b).z) '&' (('not' b).z 'or' (a).z)) 'or' ((
+('not' b).z 'or' (a).z) '&' (('not' a).z 'or' (b).z))) '&' ('not'( (('not' b).z
+  'or' (a).z) '&' (('not' a).z 'or' (b).z)) 'or' ((('not' a 'or' b).z) '&' ((
+  'not' b 'or' a).z))) by BVFUNC_1:def 7
+    .=('not'( (('not' a).z 'or' (b).z) '&' (('not' b).z 'or' (a).z)) 'or' ((
+('not' b).z 'or' (a).z) '&' (('not' a).z 'or' (b).z))) '&' ('not'( (('not' b).z
+'or' (a).z) '&' (('not' a).z 'or' (b).z)) 'or' ((('not' a).z 'or' (b).z) '&' ((
+  'not' b 'or' a).z))) by BVFUNC_1:def 7
+    .=('not'( (FALSE 'or' (b).z) '&' (('not' b).z 'or' TRUE)) 'or' ((('not'
+  b).z 'or' TRUE) '&' (FALSE 'or' (b).z))) '&' ('not'( (('not' b).z 'or' TRUE)
+'&' (FALSE 'or' (b).z)) 'or' ((FALSE 'or' (b).z) '&' (('not' b).z 'or' TRUE)))
+  by A2,A3,A1,BVFUNC_1:def 7
+    .=('not'( (b).z '&' (('not' b).z 'or' TRUE)) 'or' ((('not' b).z 'or'
+  TRUE) '&' (FALSE 'or' (b).z))) '&' ('not'( (('not' b).z 'or' TRUE) '&' (FALSE
+'or' (b).z)) 'or' ((FALSE 'or' (b).z) '&' (('not' b).z 'or' TRUE))) by BINARITH
+  :7
+    .=('not'( (b).z '&' (('not' b).z 'or' TRUE)) 'or' ((('not' b).z 'or'
+  TRUE) '&' (b).z)) '&' ('not'( (('not' b).z 'or' TRUE) '&' (FALSE 'or' (b).z))
+  'or' ((FALSE 'or' (b).z) '&' (('not' b).z 'or' TRUE))) by BINARITH:7
+    .=('not'( (b).z '&' (('not' b).z 'or' TRUE)) 'or' ((('not' b).z 'or'
+  TRUE) '&' (b).z)) '&' ('not'( (('not' b).z 'or' TRUE) '&' (FALSE 'or' (b).z))
+  'or' ((b).z '&' (('not' b).z 'or' TRUE))) by BINARITH:7
     .=('not'( (b).z '&' TRUE) 'or' ((('not' b).z 'or' TRUE) '&' (b).z)) '&'
-  ('not'( (('not' b).z 'or' TRUE) '&' (FALSE 'or' (b).z)) 'or'
-  ((b).z '&' (('not' b).z 'or' TRUE))) by BINARITH:19
-    .=('not'( (b).z '&' TRUE) 'or' (TRUE '&' (b).z)) '&'
-  ('not'( (('not' b).z 'or' TRUE) '&' (FALSE 'or' (b).z)) 'or'
-  ((b).z '&' (('not' b).z 'or' TRUE))) by BINARITH:19
-    .=('not'( (b).z '&' TRUE) 'or' (TRUE '&' (b).z)) '&'
-  ('not'( TRUE '&' (FALSE 'or' (b).z)) 'or'
-  ((b).z '&' (('not' b).z 'or' TRUE))) by BINARITH:19
-    .=('not'( (b).z '&' TRUE) 'or' (TRUE '&' (b).z)) '&'
-  ('not'( TRUE '&' (FALSE 'or' (b).z)) 'or' ((b).z '&' TRUE)) by BINARITH:19
-    .=('not'( TRUE '&' (b).z) 'or' (TRUE '&' (b).z)) '&'
-  ('not'( TRUE '&' (b).z) 'or' ((b).z '&' TRUE)) by BINARITH:7
-    .=('not' (b).z 'or' (TRUE '&' (b).z)) '&'
-  ('not' (b).z 'or' (TRUE '&' (b).z)) by MARGREL1:50
+('not'( (('not' b).z 'or' TRUE) '&' (FALSE 'or' (b).z)) 'or' ((b).z '&' (('not'
+  b).z 'or' TRUE))) by BINARITH:19
+    .=('not'( (b).z '&' TRUE) 'or' (TRUE '&' (b).z)) '&' ('not'( (('not' b).
+z 'or' TRUE) '&' (FALSE 'or' (b).z)) 'or' ((b).z '&' (('not' b).z 'or' TRUE)))
+  by BINARITH:19
+    .=('not'( (b).z '&' TRUE) 'or' (TRUE '&' (b).z)) '&' ('not'( TRUE '&' (
+  FALSE 'or' (b).z)) 'or' ((b).z '&' (('not' b).z 'or' TRUE))) by BINARITH:19
+    .=('not'( (b).z '&' TRUE) 'or' (TRUE '&' (b).z)) '&' ('not'( TRUE '&' (
+  FALSE 'or' (b).z)) 'or' ((b).z '&' TRUE)) by BINARITH:19
+    .=('not'( TRUE '&' (b).z) 'or' (TRUE '&' (b).z)) '&' ('not'( TRUE '&' (b
+  ).z) 'or' ((b).z '&' TRUE)) by BINARITH:7
+    .=('not' (b).z 'or' (TRUE '&' (b).z)) '&' ('not' (b).z 'or' (TRUE '&' (b
+  ).z)) by MARGREL1:50
     .=('not' (b).z 'or' (b).z) '&' ('not' (b).z 'or' (b).z) by MARGREL1:50
     .=TRUE by XBOOLEAN:102;
-  ((a 'eqv' b) 'eqv' (b 'eqv' a) 'eqv' a).z
-  =((((a 'eqv' b) 'eqv' (b 'eqv' a)) 'imp' a) '&'
-  (a 'imp' ((a 'eqv' b) 'eqv' (b 'eqv' a)))).z by BVFUNC_4:7
-    .=(((a 'eqv' b) 'eqv' (b 'eqv' a)) 'imp' a).z '&'
-  (a 'imp' ((a 'eqv' b) 'eqv' (b 'eqv' a))).z by MARGREL1:def 21
-    .=('not' ((a 'eqv' b) 'eqv' (b 'eqv' a)).z 'or' (a).z) '&'
-  (a 'imp' ((a 'eqv' b) 'eqv' (b 'eqv' a))).z by BVFUNC_1:def 11
-    .=('not' ((a 'eqv' b) 'eqv' (b 'eqv' a)).z 'or' (a).z) '&'
-  ('not' (a).z 'or' ((a 'eqv' b) 'eqv' (b 'eqv' a)).z) by BVFUNC_1:def 11
+  ((a 'eqv' b) 'eqv' (b 'eqv' a) 'eqv' a).z =((((a 'eqv' b) 'eqv' (b 'eqv'
+  a)) 'imp' a) '&' (a 'imp' ((a 'eqv' b) 'eqv' (b 'eqv' a)))).z by BVFUNC_4:7
+    .=(((a 'eqv' b) 'eqv' (b 'eqv' a)) 'imp' a).z '&' (a 'imp' ((a 'eqv' b)
+  'eqv' (b 'eqv' a))).z by MARGREL1:def 21
+    .=('not' ((a 'eqv' b) 'eqv' (b 'eqv' a)).z 'or' (a).z) '&' (a 'imp' ((a
+  'eqv' b) 'eqv' (b 'eqv' a))).z by BVFUNC_1:def 11
+    .=('not' ((a 'eqv' b) 'eqv' (b 'eqv' a)).z 'or' (a).z) '&' ('not' (a).z
+  'or' ((a 'eqv' b) 'eqv' (b 'eqv' a)).z) by BVFUNC_1:def 11
     .=(FALSE 'or' (a).z) '&' ('not' (a).z 'or' TRUE) by A4,MARGREL1:41
     .=(a).z '&' ('not' (a).z 'or' TRUE) by BINARITH:7
     .=TRUE '&' (a).z by BINARITH:19
-    .=TRUE by A1;
+    .=TRUE by A2;
   hence thesis;
 end;
 
 theorem
-  for a,b being Element of Funcs(Y,BOOLEAN) holds a '<' (a 'imp' b) 'eqv' b
+  for a,b being Element of Funcs(Y,BOOLEAN) holds a '<' (a 'imp' b)
+  'eqv' b
 proof
   let a,b be Element of Funcs(Y,BOOLEAN);
   let z be Element of Y;
@@ -1325,40 +1308,40 @@ A1: (a).z=TRUE;
   then
 A2: 'not' (a).z=FALSE by MARGREL1:41;
   ((a 'imp' b) 'eqv' b).z =(('not' a 'or' b) 'eqv' b).z by BVFUNC_4:8
-    .=((('not' a 'or' b) 'imp' b) '&' (b 'imp' ('not' a 'or' b))).z
-  by BVFUNC_4:7
-    .=(('not'( 'not' a 'or' b) 'or' b) '&' (b 'imp' ('not'
-  a 'or' b))).z by BVFUNC_4:8
-    .=(('not'( 'not' a 'or' b) 'or' b) '&' ('not' b 'or' ('not'
-  a 'or' b))).z by BVFUNC_4:8
-    .=('not'( 'not' a 'or' b) 'or' b).z '&' ('not' b 'or' ('not' a 'or' b)).z
-  by MARGREL1:def 21
-    .=(('not'( 'not' a 'or' b)).z 'or' (b).z) '&' ('not' b 'or' ('not'
-  a 'or' b)).z by BVFUNC_1:def 7
-    .=('not' ('not' a 'or' b).z 'or' (b).z) '&' ('not' b 'or' ('not'
-  a 'or' b)).z by MARGREL1:def 20
-    .=('not'( ('not' a).z 'or' (b).z) 'or' (b).z) '&'
-  ('not' b 'or' ('not' a 'or' b)).z by BVFUNC_1:def 7
-    .=(('not' 'not' (a).z '&' 'not' (b).z) 'or' (b).z) '&'
-  ('not' b 'or' ('not' a 'or' b)).z by MARGREL1:def 20
-    .=(((a).z '&' 'not' (b).z) 'or' (b).z) '&'
-  (('not' b).z 'or' ('not' a 'or' b).z) by BVFUNC_1:def 7
-    .=(((a).z '&' 'not' (b).z) 'or' (b).z) '&'
-  (('not' b).z 'or' (('not' a).z 'or' (b).z)) by BVFUNC_1:def 7
-    .=(((a).z '&' 'not' (b).z) 'or' (b).z) '&'
-  (('not' b).z 'or' ('not' (a).z 'or' (b).z)) by MARGREL1:def 20
-    .=((TRUE '&' 'not' (b).z) 'or' (b).z) '&'
-  ('not' (b).z 'or' (FALSE 'or' (b).z)) by A1,A2,MARGREL1:def 20
-    .=('not' (b).z 'or' (b).z) '&' ('not' (b).z 'or' (FALSE 'or' (b).z))
-  by MARGREL1:50
-    .=('not' (b).z 'or' (b).z) '&' ('not' (b).z 'or' (b).z)
-  by BINARITH:7
+    .=((('not' a 'or' b) 'imp' b) '&' (b 'imp' ('not' a 'or' b))).z by
+  BVFUNC_4:7
+    .=(('not'( 'not' a 'or' b) 'or' b) '&' (b 'imp' ('not' a 'or' b))).z by
+  BVFUNC_4:8
+    .=(('not'( 'not' a 'or' b) 'or' b) '&' ('not' b 'or' ('not' a 'or' b))).
+  z by BVFUNC_4:8
+    .=('not'( 'not' a 'or' b) 'or' b).z '&' ('not' b 'or' ('not' a 'or' b)).
+  z by MARGREL1:def 21
+    .=(('not'( 'not' a 'or' b)).z 'or' (b).z) '&' ('not' b 'or' ('not' a
+  'or' b)).z by BVFUNC_1:def 7
+    .=('not' ('not' a 'or' b).z 'or' (b).z) '&' ('not' b 'or' ('not' a 'or'
+  b)).z by MARGREL1:def 20
+    .=('not'( ('not' a).z 'or' (b).z) 'or' (b).z) '&' ('not' b 'or' ('not' a
+  'or' b)).z by BVFUNC_1:def 7
+    .=(('not' 'not' (a).z '&' 'not' (b).z) 'or' (b).z) '&' ('not' b 'or' (
+  'not' a 'or' b)).z by MARGREL1:def 20
+    .=(((a).z '&' 'not' (b).z) 'or' (b).z) '&' (('not' b).z 'or' ('not' a
+  'or' b).z) by BVFUNC_1:def 7
+    .=(((a).z '&' 'not' (b).z) 'or' (b).z) '&' (('not' b).z 'or' (('not' a).
+  z 'or' (b).z)) by BVFUNC_1:def 7
+    .=(((a).z '&' 'not' (b).z) 'or' (b).z) '&' (('not' b).z 'or' ('not' (a).
+  z 'or' (b).z)) by MARGREL1:def 20
+    .=((TRUE '&' 'not' (b).z) 'or' (b).z) '&' ('not' (b).z 'or' (FALSE 'or'
+  (b).z)) by A1,A2,MARGREL1:def 20
+    .=('not' (b).z 'or' (b).z) '&' ('not' (b).z 'or' (FALSE 'or' (b).z)) by
+  MARGREL1:50
+    .=('not' (b).z 'or' (b).z) '&' ('not' (b).z 'or' (b).z) by BINARITH:7
     .=TRUE by XBOOLEAN:102;
   hence thesis;
 end;
 
 theorem
-  for a,b being Element of Funcs(Y,BOOLEAN) holds a '<' (b 'imp' a) 'eqv' a
+  for a,b being Element of Funcs(Y,BOOLEAN) holds a '<' (b 'imp' a)
+  'eqv' a
 proof
   let a,b be Element of Funcs(Y,BOOLEAN);
   let z be Element of Y;
@@ -1367,30 +1350,30 @@ A1: (a).z=TRUE;
   then
 A2: 'not' (a).z=FALSE by MARGREL1:41;
   ((b 'imp' a) 'eqv' a).z =(('not' b 'or' a) 'eqv' a).z by BVFUNC_4:8
-    .=((('not' b 'or' a) 'imp' a) '&' (a 'imp' ('not' b 'or' a))).z
-  by BVFUNC_4:7
-    .=(('not'( 'not' b 'or' a) 'or' a) '&' (a 'imp' ('not'
-  b 'or' a))).z by BVFUNC_4:8
-    .=(('not'( 'not' b 'or' a) 'or' a) '&' ('not' a 'or' ('not'
-  b 'or' a))).z by BVFUNC_4:8
-    .=('not'( 'not' b 'or' a) 'or' a).z '&' ('not' a 'or' ('not' b 'or' a)).z
-  by MARGREL1:def 21
-    .=(('not'( 'not' b 'or' a)).z 'or' (a).z) '&' ('not' a 'or' ('not'
-  b 'or' a)).z by BVFUNC_1:def 7
-    .=('not' ('not' b 'or' a).z 'or' (a).z) '&' ('not' a 'or' ('not'
-  b 'or' a)).z by MARGREL1:def 20
-    .=('not'( ('not' b).z 'or' (a).z) 'or' (a).z) '&'
-  ('not' a 'or' ('not' b 'or' a)).z by BVFUNC_1:def 7
-    .=(('not' 'not' (b).z '&' 'not' (a).z) 'or' (a).z) '&'
-  ('not' a 'or' ('not' b 'or' a)).z by MARGREL1:def 20
-    .=(((b).z '&' 'not' (a).z) 'or' (a).z) '&'
-  (('not' a).z 'or' ('not' b 'or' a).z) by BVFUNC_1:def 7
-    .=(((b).z '&' 'not' (a).z) 'or' (a).z) '&'
-  (('not' a).z 'or' (('not' b).z 'or' (a).z)) by BVFUNC_1:def 7
-    .=(((b).z '&' 'not' (a).z) 'or' (a).z) '&'
-  (('not' a).z 'or' ('not' (b).z 'or' (a).z)) by MARGREL1:def 20
-    .=(((b).z '&' 'not' (a).z) 'or' (a).z) '&'
-  ('not' (a).z 'or' ('not' (b).z 'or' (a).z)) by MARGREL1:def 20
+    .=((('not' b 'or' a) 'imp' a) '&' (a 'imp' ('not' b 'or' a))).z by
+  BVFUNC_4:7
+    .=(('not'( 'not' b 'or' a) 'or' a) '&' (a 'imp' ('not' b 'or' a))).z by
+  BVFUNC_4:8
+    .=(('not'( 'not' b 'or' a) 'or' a) '&' ('not' a 'or' ('not' b 'or' a))).
+  z by BVFUNC_4:8
+    .=('not'( 'not' b 'or' a) 'or' a).z '&' ('not' a 'or' ('not' b 'or' a)).
+  z by MARGREL1:def 21
+    .=(('not'( 'not' b 'or' a)).z 'or' (a).z) '&' ('not' a 'or' ('not' b
+  'or' a)).z by BVFUNC_1:def 7
+    .=('not' ('not' b 'or' a).z 'or' (a).z) '&' ('not' a 'or' ('not' b 'or'
+  a)).z by MARGREL1:def 20
+    .=('not'( ('not' b).z 'or' (a).z) 'or' (a).z) '&' ('not' a 'or' ('not' b
+  'or' a)).z by BVFUNC_1:def 7
+    .=(('not' 'not' (b).z '&' 'not' (a).z) 'or' (a).z) '&' ('not' a 'or' (
+  'not' b 'or' a)).z by MARGREL1:def 20
+    .=(((b).z '&' 'not' (a).z) 'or' (a).z) '&' (('not' a).z 'or' ('not' b
+  'or' a).z) by BVFUNC_1:def 7
+    .=(((b).z '&' 'not' (a).z) 'or' (a).z) '&' (('not' a).z 'or' (('not' b).
+  z 'or' (a).z)) by BVFUNC_1:def 7
+    .=(((b).z '&' 'not' (a).z) 'or' (a).z) '&' (('not' a).z 'or' ('not' (b).
+  z 'or' (a).z)) by MARGREL1:def 20
+    .=(((b).z '&' 'not' (a).z) 'or' (a).z) '&' ('not' (a).z 'or' ('not' (b).
+  z 'or' (a).z)) by MARGREL1:def 20
     .=TRUE '&' (FALSE 'or' ('not' (b).z 'or' TRUE)) by A1,A2,BINARITH:19
     .=FALSE 'or' ('not' (b).z 'or' TRUE) by MARGREL1:50
     .='not' (b).z 'or' TRUE by BINARITH:7
@@ -1399,34 +1382,32 @@ A2: 'not' (a).z=FALSE by MARGREL1:41;
 end;
 
 theorem
-  for a,b being Element of Funcs(Y,BOOLEAN) holds
-  a '<' (a '&' b) 'eqv' (b '&' a) 'eqv' a
+  for a,b being Element of Funcs(Y,BOOLEAN) holds a '<' (a '&' b) 'eqv'
+  (b '&' a) 'eqv' a
 proof
   let a,b be Element of Funcs(Y,BOOLEAN);
   let z be Element of Y;
   assume
 A1: (a).z=TRUE;
-A2: ((a '&' b) 'eqv' (a '&' b)).z
-  =(((a '&' b) 'imp' (a '&' b)) '&' ((a '&' b) 'imp' (a '&' b))).z
-  by BVFUNC_4:7
+A2: ((a '&' b) 'eqv' (a '&' b)).z =(((a '&' b) 'imp' (a '&' b)) '&' ((a '&'
+  b) 'imp' (a '&' b))).z by BVFUNC_4:7
     .=('not'( a '&' b) 'or' (a '&' b)).z by BVFUNC_4:8
     .=(I_el(Y)).z by BVFUNC_4:6
     .=TRUE by BVFUNC_1:def 14;
-  ((a '&' b) 'eqv' (b '&' a) 'eqv' a).z
-  =((((a '&' b) 'eqv' (a '&' b)) 'imp' a) '&'
-  (a 'imp' ((a '&' b) 'eqv' (a '&' b)))).z by BVFUNC_4:7
-    .=(((a '&' b) 'eqv' (a '&' b)) 'imp' a).z '&'
-  (a 'imp' ((a '&' b) 'eqv' (a '&' b))).z by MARGREL1:def 21
-    .=('not'( (a '&' b) 'eqv' (a '&' b)) 'or' a).z '&'
-  (a 'imp' ((a '&' b) 'eqv' (a '&' b))).z by BVFUNC_4:8
-    .=('not'( (a '&' b) 'eqv' (a '&' b)) 'or' a).z '&'
-  ('not' a 'or' ((a '&' b) 'eqv' (a '&' b))).z by BVFUNC_4:8
-    .=(('not'( (a '&' b) 'eqv' (a '&' b))).z 'or' (a).z) '&'
-  ('not' a 'or' ((a '&' b) 'eqv' (a '&' b))).z by BVFUNC_1:def 7
-    .=(('not'( (a '&' b) 'eqv' (a '&' b))).z 'or' (a).z) '&'
-  (('not' a).z 'or' ((a '&' b) 'eqv' (a '&' b)).z) by BVFUNC_1:def 7
-    .=('not' ((a '&' b) 'eqv' (a '&' b)).z 'or' (a).z) '&'
-  (('not' a).z 'or' ((a '&' b) 'eqv' (a '&' b)).z) by MARGREL1:def 20
+  ((a '&' b) 'eqv' (b '&' a) 'eqv' a).z =((((a '&' b) 'eqv' (a '&' b))
+  'imp' a) '&' (a 'imp' ((a '&' b) 'eqv' (a '&' b)))).z by BVFUNC_4:7
+    .=(((a '&' b) 'eqv' (a '&' b)) 'imp' a).z '&' (a 'imp' ((a '&' b) 'eqv'
+  (a '&' b))).z by MARGREL1:def 21
+    .=('not'( (a '&' b) 'eqv' (a '&' b)) 'or' a).z '&' (a 'imp' ((a '&' b)
+  'eqv' (a '&' b))).z by BVFUNC_4:8
+    .=('not'( (a '&' b) 'eqv' (a '&' b)) 'or' a).z '&' ('not' a 'or' ((a '&'
+  b) 'eqv' (a '&' b))).z by BVFUNC_4:8
+    .=(('not'( (a '&' b) 'eqv' (a '&' b))).z 'or' (a).z) '&' ('not' a 'or' (
+  (a '&' b) 'eqv' (a '&' b))).z by BVFUNC_1:def 7
+    .=(('not'( (a '&' b) 'eqv' (a '&' b))).z 'or' (a).z) '&' (('not' a).z
+  'or' ((a '&' b) 'eqv' (a '&' b)).z) by BVFUNC_1:def 7
+    .=('not' ((a '&' b) 'eqv' (a '&' b)).z 'or' (a).z) '&' (('not' a).z 'or'
+  ((a '&' b) 'eqv' (a '&' b)).z) by MARGREL1:def 20
     .=(FALSE 'or' (a).z) '&' (('not' a).z 'or' TRUE) by A2,MARGREL1:41
     .=(a).z '&' (('not' a).z 'or' TRUE) by BINARITH:7
     .=TRUE '&' (a).z by BINARITH:19

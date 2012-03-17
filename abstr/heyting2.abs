@@ -16,8 +16,8 @@ environ
  constructors FUNCOP_1, SETWISEO, FINSEQ_1, FILTER_0, LATTICE2, HEYTING1,
       SUBSTLAT, RELSET_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1, FINSET_1,
-      FINSUB_1, SETWISEO, FRAENKEL, RFINSEQ, STRUCT_0, LATTICES, SUBSTLAT,
-      FUNCT_2, RELSET_1;
+      FINSUB_1, SETWISEO, RFINSEQ, STRUCT_0, LATTICES, SUBSTLAT, FUNCT_2,
+      RELSET_1, PRE_POLY;
  requirements SUBSET, BOOLE;
 
 
@@ -26,42 +26,31 @@ begin :: Preliminaries
 reserve V, C, x, a, b for set;
 reserve A, B for Element of SubstitutionSet (V, C);
 
-theorem :: HEYTING2:1
-  for V, C being non empty set ex f be Element of PFuncs (V, C) st f <> {};
+canceled;
 
 theorem :: HEYTING2:2
   for a, b being set st b in SubstitutionSet (V, C) & a in b holds
   a is finite Function;
 
-theorem :: HEYTING2:3
-  for f being Element of PFuncs (V, C),
-  g being set st g c= f holds g in PFuncs (V, C);
-
-theorem :: HEYTING2:4
-  PFuncs(V,C) c= bool [:V,C:];
-
-theorem :: HEYTING2:5
-  V is finite & C is finite implies PFuncs (V, C) is finite;
-
-registration
-  cluster functional finite non empty set;
-end;
-
 begin :: Some properties of sets of substitutions
 
+canceled 3;
+
 theorem :: HEYTING2:6
-  for a being finite Element of PFuncs (V, C) holds
-  {a} in SubstitutionSet (V, C);
+  for a being finite Element of PFuncs (V, C) holds {a} in
+  SubstitutionSet (V, C);
 
 theorem :: HEYTING2:7
-  A ^ B = A implies for a be set st a in A ex b be set st b in B & b c= a;
+  A ^ B = A implies for a be set st a in A ex b be set st b in B & b c=
+  a;
 
 theorem :: HEYTING2:8
-  mi (A ^ B) = A implies for a be set st a in A ex b be set st b in B & b c= a;
+  mi (A ^ B) = A implies for a be set st a in A ex b be set st b in
+  B & b c= a;
 
 theorem :: HEYTING2:9
-  (for a be set st a in A ex b be set st b in
-  B & b c= a) implies mi (A ^ B) = A;
+  (for a be set st a in A ex b be set st b in B & b c= a) implies
+  mi (A ^ B) = A;
 
 definition
   let V be set, C be finite set;
@@ -69,34 +58,36 @@ definition
   func Involved A means
 :: HEYTING2:def 1
 
-  x in it iff ex f being finite Function st f in A & x in dom f;
+  x in it iff ex f being finite Function st f in
+  A & x in dom f;
 end;
 
 reserve C for finite set;
 
 theorem :: HEYTING2:10
-  for V being set, C be finite set,
-  A being Element of Fin PFuncs (V, C) holds Involved A c= V;
+  for V being set, C be finite set, A being Element of Fin PFuncs
+  (V, C) holds Involved A c= V;
 
 theorem :: HEYTING2:11
-  for V being set, C being finite set,
-  A being Element of Fin PFuncs (V, C) st A = {} holds Involved A = {};
+  for V being set, C being finite set, A being Element of Fin
+  PFuncs (V, C) st A = {} holds Involved A = {};
 
 theorem :: HEYTING2:12
-  for V being set, C being finite set,
-  A being Element of Fin PFuncs (V, C) holds Involved A is finite;
+  for V being set, C being finite set, A being Element of Fin
+  PFuncs (V, C) holds Involved A is finite;
 
 theorem :: HEYTING2:13
-  for C being finite set,
-  A being Element of Fin PFuncs ({}, C) holds Involved A = {};
+  for C being finite set, A being Element of Fin PFuncs ({}, C) holds
+  Involved A = {};
 
 definition
   let V be set, C be finite set;
   let A be Element of Fin PFuncs (V, C);
   func -A -> Element of Fin PFuncs (V, C) equals
 :: HEYTING2:def 2
-  { f where f is Element of PFuncs (Involved A, C) :
-  for g be Element of PFuncs (V, C) st g in A holds not f tolerates g };
+  { f where f is Element of
+PFuncs (Involved A, C) : for g be Element of PFuncs (V, C) st g in A holds not
+  f tolerates g };
 end;
 
 theorem :: HEYTING2:14
@@ -109,41 +100,38 @@ theorem :: HEYTING2:16
   A = { {} } implies -A = {};
 
 theorem :: HEYTING2:17
-  for V being set, C being finite set
-  for A being Element of SubstitutionSet (V, C) holds
-  mi (A ^ -A) = Bottom SubstLatt (V,C);
+  for V being set, C being finite set for A being Element of
+  SubstitutionSet (V, C) holds mi (A ^ -A) = Bottom SubstLatt (V,C);
 
 theorem :: HEYTING2:18
-  for V being non empty set, C being finite non empty set
-  for A being Element of SubstitutionSet (V, C) st A = {} holds
-  mi -A = Top SubstLatt (V,C);
+  for V being non empty set, C being finite non empty set for A being
+  Element of SubstitutionSet (V, C) st A = {} holds mi -A = Top SubstLatt (V,C)
+;
 
 theorem :: HEYTING2:19
-  for V being set, C being finite set
-  for A being Element of SubstitutionSet (V, C),
-  a being Element of PFuncs (V, C),
-  B being Element of SubstitutionSet (V, C) st B = { a } holds
-  A ^ B = {} implies ex b being finite set st b in -A & b c= a;
+  for V being set, C being finite set for A being Element of
+  SubstitutionSet (V, C), a being Element of PFuncs (V, C), B being Element of
+SubstitutionSet (V, C) st B = { a } holds A ^ B = {} implies ex b being finite
+  set st b in -A & b c= a;
 
 definition
   let V be set, C be finite set;
   let A, B be Element of Fin PFuncs (V, C);
   func A =>> B -> Element of Fin PFuncs (V, C) equals
 :: HEYTING2:def 3
-
-  PFuncs (V, C) /\
-  { union {f.i \ i where i is Element of PFuncs (V, C) : i in A}
-  where f is Element of PFuncs (A, B) : dom f = A };
+  PFuncs (V, C) /\ { union
+  {f.i \ i where i is Element of PFuncs (V, C) : i in A} where f is Element of
+  PFuncs (A, B) : dom f = A };
 end;
 
 theorem :: HEYTING2:20
-  for A, B being Element of Fin PFuncs (V, C), s being set st
-  s in A =>> B holds ex f being PartFunc of A, B st
-  s = union {f.i \ i where i is Element of PFuncs (V, C) : i in A} & dom f = A;
+  for A, B being Element of Fin PFuncs (V, C), s being set st s in
+  A =>> B holds ex f being PartFunc of A, B st s = union {f.i \ i where i is
+  Element of PFuncs (V, C) : i in A} & dom f = A;
 
 theorem :: HEYTING2:21
-  for V being set, C being finite set, A being Element of Fin PFuncs (V, C )
-  st A = {} holds A =>> A = {{}};
+  for V being set, C being finite set, A being Element of Fin PFuncs (V,
+  C ) st A = {} holds A =>> A = {{}};
 
 reserve u, v for Element of SubstLatt (V, C);
 reserve s, t, a, b for Element of PFuncs (V,C);
@@ -159,28 +147,29 @@ definition
   func pseudo_compl (V, C) -> UnOp of the carrier of SubstLatt (V, C) means
 :: HEYTING2:def 4
 
-  for u' being Element of SubstitutionSet (V, C) st u' = u holds
-  it.u = mi(-u');
+   for
+ u' being Element of SubstitutionSet (V, C) st u' = u holds it.u = mi(
+  -u');
   func StrongImpl(V, C) -> BinOp of the carrier of SubstLatt (V, C) means
 :: HEYTING2:def 5
 
-  for u', v' being Element of SubstitutionSet (V, C) st u' = u & v' = v
+   for u', v' being Element of SubstitutionSet (V, C) st u' = u & v' = v
   holds it.(u,v) = mi (u' =>> v');
   let u;
   func SUB u -> Element of Fin the carrier of SubstLatt (V, C) equals
 :: HEYTING2:def 6
-
   bool u;
   func diff(u) -> UnOp of the carrier of SubstLatt (V, C) means
 :: HEYTING2:def 7
 
-  it.v = u \ v;
+  it.v =
+  u \ v;
 end;
 
 definition
   let V, C;
-  func Atom(V, C) -> Function of PFuncs (V, C), the carrier of SubstLatt (V, C)
-  means
+  func Atom(V, C) -> Function of PFuncs (V, C), the carrier of SubstLatt (V, C
+  ) means
 :: HEYTING2:def 8
 
   for a being Element of PFuncs (V,C) holds it.a = mi {.a.};
@@ -190,32 +179,33 @@ theorem :: HEYTING2:23
   FinJoin (K, Atom(V, C)) = FinUnion(K, singleton PFuncs (V, C));
 
 theorem :: HEYTING2:24
-  for u being Element of SubstitutionSet (V, C) holds
-  u = FinJoin(u, Atom (V, C));
+  for u being Element of SubstitutionSet (V, C) holds u = FinJoin(
+  u, Atom (V, C));
 
 theorem :: HEYTING2:25
   (diff u).v [= u;
 
 theorem :: HEYTING2:26
-  for a being Element of PFuncs (V, C) st a is finite
-  for c being set st c in Atom(V, C).a holds c = a;
+  for a being Element of PFuncs (V, C) st a is finite for c being
+  set st c in Atom(V, C).a holds c = a;
 
 theorem :: HEYTING2:27
-  for a being Element of PFuncs (V, C) st
-  K = {a} & L = u & L ^ K = {} holds Atom(V, C).a [= pseudo_compl(V, C).u;
+  for a being Element of PFuncs (V, C) st K = {a} & L = u & L ^ K
+  = {} holds Atom(V, C).a [= pseudo_compl(V, C).u;
 
 theorem :: HEYTING2:28
-  for a being finite Element of PFuncs (V,C) holds a in Atom(V, C).a;
+  for a being finite Element of PFuncs (V,C) holds a in Atom(V, C)
+  .a;
 
 theorem :: HEYTING2:29
-  for u, v being Element of SubstitutionSet (V, C) holds
-  ((for c being set st c in u ex b being set st b in v & b c= c \/ a)
-  implies ex b being set st b in u =>> v & b c= a );
+  for u, v being Element of SubstitutionSet (V, C) holds ((for c
+being set st c in u ex b being set st b in v & b c= c \/ a) implies ex b being
+  set st b in u =>> v & b c= a );
 
 theorem :: HEYTING2:30
-  for a being finite Element of PFuncs (V,C) st
-  (for b being Element of PFuncs (V, C) st b in u holds b tolerates a ) &
-  u "/\" Atom(V, C).a [= v holds Atom(V, C).a [= StrongImpl(V, C).(u, v);
+  for a being finite Element of PFuncs (V,C) st (for b being
+Element of PFuncs (V, C) st b in u holds b tolerates a ) & u "/\" Atom(V, C).a
+  [= v holds Atom(V, C).a [= StrongImpl(V, C).(u, v);
 
 theorem :: HEYTING2:31
   u "/\" pseudo_compl(V, C).u = Bottom SubstLatt (V, C);
@@ -229,7 +219,6 @@ registration
 end;
 
 theorem :: HEYTING2:33
-  u => v = FinJoin(SUB u,
-  (the L_meet of SubstLatt (V, C)).:(pseudo_compl(V, C),
-  StrongImpl(V, C)[:](diff u, v)));
+  u => v = FinJoin(SUB u, (the L_meet of SubstLatt (V, C)).:(
+  pseudo_compl(V, C), StrongImpl(V, C)[:](diff u, v)));
 

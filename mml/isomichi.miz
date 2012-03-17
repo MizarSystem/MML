@@ -8,15 +8,14 @@ environ
 
  vocabularies BOOLE, SUBSET_1, PRE_TOPC, TOPS_1, ZFMISC_1, TDLAT_3, REALSET1,
       COLLSP, BORSUK_5, RAT_1, ARYTM, LIMFUNC1, TOPMETR, RCOMP_1, TEX_1,
-      IRRAT_1, DECOMP_1, ISOMICHI, SUPINF_1;
+      DECOMP_1, ISOMICHI, SUPINF_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, XREAL_0, LIMFUNC1, RCOMP_1,
-      NUMBERS, DOMAIN_1, REALSET1, STRUCT_0, PRE_TOPC, TOPS_1,
-      TDLAT_3, TEX_1, TEX_2, TOPMETR, BORSUK_5, IRRAT_1, SEQ_4, DECOMP_1,
-      XXREAL_0;
- constructors RAT_1, PROB_1, SEQ_4, RCOMP_1, LIMFUNC1, TOPS_1,
-      REALSET2, TDLAT_3, TEX_1, TEX_2, TOPMETR, BORSUK_5, DECOMP_1;
+      NUMBERS, DOMAIN_1, REALSET1, STRUCT_0, PRE_TOPC, TOPS_1, TDLAT_3, TEX_1,
+      TOPMETR, BORSUK_5, SEQ_4, DECOMP_1, XXREAL_0;
+ constructors RAT_1, PROB_1, SEQ_4, RCOMP_1, LIMFUNC1, TOPS_1, REALSET2,
+      TDLAT_3, TEX_1, TEX_2, TOPMETR, BORSUK_5, DECOMP_1;
  registrations XBOOLE_0, XXREAL_0, XREAL_0, MEMBERED, RCOMP_1, REALSET1,
-      STRUCT_0, TOPS_1, TEX_1, TEX_2, TOPMETR, FCONT_3, SUBSET_1, ZFMISC_1;
+      STRUCT_0, TOPS_1, TEX_1, TEX_2, TOPMETR, FCONT_3, ZFMISC_1;
  requirements BOOLE, SUBSET, NUMERALS, REAL;
  definitions TARSKI, XBOOLE_0, SUBSET_1, STRUCT_0, LIMFUNC1, PROB_1;
  theorems SUBSET_1, XBOOLE_0, XBOOLE_1, PRE_TOPC, TOPS_1, TDLAT_1, TDLAT_3,
@@ -76,23 +75,27 @@ definition
   Cl Int A = Cl A;
 end;
 
-registration let T;
- cluster closed -> supercondensed Subset of T;
- coherence
-proof let A be Subset of T;
-  assume A is closed;
-  then Int Cl A = Int A by PRE_TOPC:52;
-  hence thesis by Def1;
-end;
+registration
+  let T;
+  cluster closed -> supercondensed Subset of T;
+  coherence
+  proof
+    let A be Subset of T;
+    assume
+    A is closed;
+    then Int Cl A = Int A by PRE_TOPC:52;
+    hence thesis by Def1;
+  end;
 end;
 
-theorem  :: Remark 1
+theorem :: Remark 1
   A is closed implies A is supercondensed;
 
-theorem Th4: :: Remark 1
+theorem Th4:
   A is open implies A is subcondensed
 proof
-  assume A is open;
+  assume
+  A is open;
   then Cl Int A = Cl A by TOPS_1:55;
   hence thesis by Def2;
 end;
@@ -104,14 +107,14 @@ definition
   Cl Int A = Cl A & Int Cl A = Int A;
   compatibility
   proof
-    thus A is condensed implies
-    Cl Int A = Cl A & Int Cl A = Int A by TDLAT_3:11;
-    assume
-A1: Cl Int A = Cl A & Int Cl A = Int A;
-    then
-A2: A c= Cl Int A by PRE_TOPC:48;
-    Int A c= A by TOPS_1:44;
-    hence thesis by A1,A2,TOPS_1:def 6;
+    thus A is condensed implies Cl Int A = Cl A & Int Cl A = Int A by TDLAT_3:
+    11;
+    assume that
+A1: Cl Int A = Cl A and
+A2: Int Cl A = Int A;
+A3: Int A c= A by TOPS_1:44;
+    A c= Cl Int A by A1,PRE_TOPC:48;
+    hence thesis by A2,A3,TOPS_1:def 6;
   end;
 end;
 
@@ -120,13 +123,19 @@ theorem Th5: :: Remark 2
 proof
   thus A is condensed implies A is subcondensed & A is supercondensed
   proof
-    assume A is condensed;
-    then Cl Int A = Cl A & Int Cl A = Int A by Def3;
-    hence thesis by Def1,Def2;
+    assume
+A1: A is condensed;
+    then
+A2: Int Cl A = Int A by Def3;
+    Cl Int A = Cl A by A1,Def3;
+    hence thesis by A2,Def1,Def2;
   end;
-  assume A is subcondensed & A is supercondensed;
-  then Int Cl A = Int A & Cl Int A = Cl A by Def1,Def2;
-  hence thesis by Def3;
+  assume that
+A3: A is subcondensed and
+A4: A is supercondensed;
+A5: Cl Int A = Cl A by A3,Def2;
+  Int Cl A = Int A by A4,Def1;
+  hence thesis by A5,Def3;
 end;
 
 registration
@@ -152,25 +161,27 @@ end;
 theorem :: Theorem 1
   A is supercondensed implies A` is subcondensed
 proof
-  assume A is supercondensed;
+A1: (Int A)` = Cl (A`) by TDLAT_3:3;
+  assume
+  A is supercondensed;
   then
-A1: (Int Cl A)` = (Int A)` by Def1;
-A2: (Int Cl A)` = Cl (Cl A)` by TDLAT_3:3
+A2: (Int Cl A)` = (Int A)` by Def1;
+  (Int Cl A)` = Cl (Cl A)` by TDLAT_3:3
     .= Cl Int (A`) by TDLAT_3:4;
-  (Int A)` = Cl (A`) by TDLAT_3:3;
-  hence thesis by A1,A2,Def2;
+  hence thesis by A2,A1,Def2;
 end;
 
 theorem :: Theorem 1
   A is subcondensed implies A` is supercondensed
 proof
-  assume A is subcondensed;
+A1: (Cl A)` = Int A` by TDLAT_3:4;
+  assume
+  A is subcondensed;
   then
-A1: (Cl Int A)` = (Cl A)` by Def2;
-A2: (Cl Int A)` = Int ((Int A)`) by TDLAT_3:4
+A2: (Cl Int A)` = (Cl A)` by Def2;
+  (Cl Int A)` = Int ((Int A)`) by TDLAT_3:4
     .= Int (Cl A`) by TDLAT_3:3;
-  (Cl A)` = Int A` by TDLAT_3:4;
-  hence thesis by A1,A2,Def1;
+  hence thesis by A2,A1,Def1;
 end;
 
 :: Corollary to Theorem 1
@@ -181,11 +192,13 @@ theorem Th8: :: Theorem 2
 proof
   thus A is supercondensed implies Int Cl A c= A
   proof
-    assume A is supercondensed;
+    assume
+    A is supercondensed;
     then Int Cl A = Int A by Def1;
     hence thesis by TOPS_1:44;
   end;
-  assume Int Cl A c= A;
+  assume
+  Int Cl A c= A;
   then
 A1: Int Int Cl A c= Int A by TOPS_1:48;
   Int A c= Int Cl A by PRE_TOPC:48,TOPS_1:48;
@@ -198,11 +211,13 @@ theorem Th9: :: Theorem 2
 proof
   thus A is subcondensed implies A c= Cl Int A
   proof
-    assume A is subcondensed;
+    assume
+    A is subcondensed;
     then Cl Int A = Cl A by Def2;
     hence thesis by PRE_TOPC:48;
   end;
-  assume A c= Cl Int A;
+  assume
+  A c= Cl Int A;
   then
 A1: Cl A c= Cl Cl Int A by PRE_TOPC:49;
   Cl Int A c= Cl A by PRE_TOPC:49,TOPS_1:44;
@@ -216,7 +231,8 @@ registration
   coherence
   proof
     let A be Subset of T;
-    assume A is subcondensed;
+    assume
+    A is subcondensed;
     then A c= Cl Int A by Th9;
     hence thesis by DECOMP_1:def 2;
   end;
@@ -224,19 +240,23 @@ registration
   coherence
   proof
     let A be Subset of T;
-    assume A is semi-open;
+    assume
+    A is semi-open;
     then A c= Cl Int A by DECOMP_1:def 2;
     hence thesis by Th9;
   end;
 end;
 
 theorem Th10: :: Corollary to Theorem 2
-  A is condensed iff (Int Cl A c= A & A c= Cl Int A)
+  A is condensed iff Int Cl A c= A & A c= Cl Int A
 proof
   thus A is condensed implies Int Cl A c= A & A c= Cl Int A by Th8,Th9;
-  assume Int Cl A c= A & A c= Cl Int A;
-  then A is supercondensed & A is subcondensed by Th8,Th9;
-  hence thesis;
+  assume that
+A1: Int Cl A c= A and
+A2: A c= Cl Int A;
+A3: A is subcondensed by A2,Th9;
+  A is supercondensed by A1,Th8;
+  hence thesis by A3;
 end;
 
 begin :: Regular Open and Regular Closed Sets
@@ -252,11 +272,12 @@ notation
 end;
 
 theorem :: Remark 1
-  for T being TopSpace holds [#]T is regular_open & [#]T is regular_closed
+  for T being TopSpace holds [#]T is regular_open & [#]T is
+  regular_closed
 proof
   let T be TopSpace;
-A1: Cl [#]T = [#]T by TOPS_1:27;
-  Int [#]T = [#]T by TOPS_1:43;
+A1: Int [#]T = [#]T by TOPS_1:43;
+  Cl [#]T = [#]T by TOPS_1:27;
   hence thesis by A1,TOPS_1:def 7,def 8;
 end;
 
@@ -264,25 +285,26 @@ registration
   let T be TopSpace;
   cluster [#]T -> regular_open regular_closed;
   coherence
-proof
-A1: Cl [#]T = [#]T by TOPS_1:27;
-  Int [#]T = [#]T by TOPS_1:43;
-  hence thesis by A1,TOPS_1:def 7,def 8;
-end;
+  proof
+A1: Int [#]T = [#]T by TOPS_1:43;
+    Cl [#]T = [#]T by TOPS_1:27;
+    hence thesis by A1,TOPS_1:def 7,def 8;
+  end;
 end;
 
 registration
   let T be TopSpace;
   cluster empty -> regular_open regular_closed Subset of T;
   coherence
-proof let S be Subset of T;
- assume
-Z: S is empty;
-  then
-A1: S = Cl S by PCOMPS_1:2;
-  S = Int S by Z;
-  hence thesis by A1,TOPS_1:def 7,def 8;
-end;
+  proof
+    let S be Subset of T;
+    assume
+A1: S is empty;
+    then
+A2: S = Int S;
+    S = Cl S by A1,PCOMPS_1:2;
+    hence thesis by A2,TOPS_1:def 7,def 8;
+  end;
 end;
 
 canceled 2;
@@ -298,14 +320,16 @@ end;
 theorem Th15: :: Remark 2
   A is regular_open implies A` is regular_closed
 proof
-  assume A is regular_open;
+  assume
+  A is regular_open;
   then Int Cl A = A by TOPS_1:def 8;
   then Cl (Cl A)` = A` by TDLAT_3:3;
   then Cl Int (A`) = A` by TDLAT_3:4;
   hence thesis by TOPS_1:def 7;
 end;
 
-registration let T be TopSpace;
+registration
+  let T be TopSpace;
   cluster regular_open regular_closed Subset of T;
   existence
   proof
@@ -324,7 +348,8 @@ end;
 theorem Th16: :: Remark 2
   A is regular_closed implies A` is regular_open
 proof
-  assume A is regular_closed;
+  assume
+  A is regular_closed;
   then Cl Int A = A by TOPS_1:def 7;
   then Int (Int A)` = A` by TDLAT_3:4;
   then Int Cl(A`) = A` by TDLAT_3:3;
@@ -346,17 +371,16 @@ registration
   coherence by TOPS_1:106;
 end;
 
-:: Remark 3
 :: (A is regular_open & B is regular_open) implies
 ::   A /\ B is regular_open by TOPS_1:109;
 :: A is regular_closed & B is regular_closed implies
 ::   A \/ B is regular_closed by TOPS_1:108;
 
-theorem Th17: :: Remark 4
+theorem Th17: :: Remark 3
   Int Cl A is regular_open & Cl Int A is regular_closed
 proof
-A1: Int Cl Int Cl A = Int Cl A by TDLAT_1:5;
-  Cl Int Cl Int A = Cl Int A by TOPS_1:58;
+A1: Cl Int Cl Int A = Cl Int A by TOPS_1:58;
+  Int Cl Int Cl A = Int Cl A by TDLAT_1:5;
   hence thesis by A1,TOPS_1:def 7,def 8;
 end;
 
@@ -369,39 +393,45 @@ registration
 end;
 
 theorem :: Theorem 3
-  A is regular_open iff (A is supercondensed & A is open)
+  A is regular_open iff A is supercondensed & A is open
 proof
-  thus A is regular_open implies (A is supercondensed & A is open)
+  thus A is regular_open implies A is supercondensed & A is open
   proof
-    assume A is regular_open;
+    assume
+    A is regular_open;
     then
 A1: Int Cl A = A by TOPS_1:def 8;
     then Int A = A;
     hence thesis by A1,Def1;
   end;
-  assume A is supercondensed & A is open;
-  then Int Cl A = Int A & Int A = A by Def1,TOPS_1:55;
-  hence thesis;
+  assume that
+A2: A is supercondensed and
+A3: A is open;
+  Int Cl A = Int A by A2,Def1;
+  hence thesis by A3,TOPS_1:55;
 end;
 
 theorem :: Theorem 3
-  A is regular_closed iff (A is subcondensed & A is closed)
+  A is regular_closed iff A is subcondensed & A is closed
 proof
-  thus A is regular_closed implies (A is subcondensed & A is closed)
+  thus A is regular_closed implies A is subcondensed & A is closed
   proof
-    assume A is regular_closed;
+    assume
+    A is regular_closed;
     then
 A1: Cl Int A = A by TOPS_1:def 7;
     then Cl A = A;
     hence thesis by A1,Def2;
   end;
-  assume A is subcondensed & A is closed;
-  then Cl Int A = Cl A & Cl A = A by Def2,PRE_TOPC:52;
-  hence thesis;
+  assume that
+A2: A is subcondensed and
+A3: A is closed;
+  Cl Int A = Cl A by A2,Def2;
+  hence thesis by A3,PRE_TOPC:52;
 end;
 
 registration
-  let T be TopSpace; :: Corollary to Theorem 3
+  let T be TopSpace;
   cluster regular_open -> condensed open Subset of T;
   coherence by TOPS_1:107;
   cluster condensed open -> regular_open Subset of T;
@@ -412,73 +442,75 @@ registration
   coherence by TOPS_1:106;
 end;
 
-theorem :: Theorem 4
-  A is condensed iff (ex B st B is regular_open & B c= A & A c= Cl B)
+theorem :: Corollary to Theorem 3:: Theorem 4
+  A is condensed iff ex B st B is regular_open & B c= A & A c= Cl B
 proof
   thus A is condensed implies ex B st B is regular_open & B c= A & A c= Cl B
   proof
-    assume A is condensed;
+    assume
+A1: A is condensed;
     then
-A1: Int Cl A = Int A & Cl Int A = Cl A by Def3;
+A2: Cl Int A = Cl A by Def3;
     take U = Int Cl A;
-    thus thesis by A1,PRE_TOPC:48,TOPS_1:44;
+    Int Cl A = Int A by A1,Def3;
+    hence thesis by A2,PRE_TOPC:48,TOPS_1:44;
   end;
   given B such that
-A2: B is regular_open & B c= A & A c= Cl B;
-A3: Int Cl B = B by A2,TOPS_1:def 8;
-  Cl A c= Cl Cl B by A2,PRE_TOPC:49;
-  then
-A4: Int Cl A c= Int Cl Cl B by TOPS_1:48;
-  Cl B c= Cl A by A2,PRE_TOPC:49;
-  then Int Cl B c= Int Cl A by TOPS_1:48;
-  then
-A5: B = Int Cl A by A3,A4,XBOOLE_0:def 10;
-  Int A c= Int Cl B by A2,TOPS_1:48;
-  then
-A6: Cl Int A c= Cl B by A3,PRE_TOPC:49;
-  Int B c= Int A by A2,TOPS_1:48;
+A3: B is regular_open and
+A4: B c= A and
+A5: A c= Cl B;
+A6: Int Cl B = B by A3,TOPS_1:def 8;
+  Int B c= Int A by A4,TOPS_1:48;
   then
 A7: Cl Int B c= Cl Int A by PRE_TOPC:49;
-  B is condensed by A2;
-  then B is subcondensed;
-  then Cl Int B = Cl B by Def2;
-  then Cl B = Cl Int A by A6,A7,XBOOLE_0:def 10;
-  hence thesis by A2,A5,Th10;
+A8: Cl Int B = Cl B by A3,Def2;
+  Int A c= Int Cl B by A5,TOPS_1:48;
+  then Cl Int A c= Cl B by A6,PRE_TOPC:49;
+  then
+A9: Cl B = Cl Int A by A7,A8,XBOOLE_0:def 10;
+  Cl B c= Cl A by A4,PRE_TOPC:49;
+  then
+A10: Int Cl B c= Int Cl A by TOPS_1:48;
+  Cl A c= Cl Cl B by A5,PRE_TOPC:49;
+  then Int Cl A c= Int Cl Cl B by TOPS_1:48;
+  then B = Int Cl A by A6,A10,XBOOLE_0:def 10;
+  hence thesis by A4,A5,A9,Th10;
 end;
 
 theorem :: Theorem 4
-  A is condensed iff (ex B st B is regular_closed & Int B c= A & A c= B)
+  A is condensed iff ex B st B is regular_closed & Int B c= A & A c= B
 proof
-  thus A is condensed implies
-  ex B st B is regular_closed & Int B c= A & A c= B
+  thus A is condensed implies ex B st B is regular_closed & Int B c= A & A c=
+  B
   proof
-    assume A is condensed;
+    assume
+A1: A is condensed;
     then
-A1: Int Cl A = Int A & Cl Int A = Cl A by Def3;
+A2: Cl Int A = Cl A by Def3;
     take U = Cl Int A;
-    thus thesis by A1,PRE_TOPC:48,TOPS_1:44;
+    Int Cl A = Int A by A1,Def3;
+    hence thesis by A2,PRE_TOPC:48,TOPS_1:44;
   end;
   given B such that
-A2: B is regular_closed & Int B c= A & A c= B;
-A3: Cl Int B = B by A2,TOPS_1:def 7;
-  Int Int B c= Int A by A2,TOPS_1:48;
+A3: B is regular_closed and
+A4: Int B c= A and
+A5: A c= B;
+A6: Cl Int B = B by A3,TOPS_1:def 7;
+  Cl A c= Cl B by A5,PRE_TOPC:49;
+  then Int Cl A c= Int Cl B by TOPS_1:48;
   then
-A4: Cl Int Int B c= Cl Int A by PRE_TOPC:49;
-  Int A c= Int B by A2,TOPS_1:48;
-  then Cl Int A c= Cl Int B by PRE_TOPC:49;
+A7: Int Cl A c= Int B by A3,Def1;
+  Cl Int B c= Cl A by A4,PRE_TOPC:49;
+  then Int B c= Int Cl A by A6,TOPS_1:48;
   then
-A5: Cl Int A = B by A3,A4,XBOOLE_0:def 10;
-  Cl Int B c= Cl A by A2,PRE_TOPC:49;
+A8: Int B = Int Cl A by A7,XBOOLE_0:def 10;
+  Int A c= Int B by A5,TOPS_1:48;
   then
-A6: Int B c= Int Cl A by A3,TOPS_1:48;
-  Cl A c= Cl B by A2,PRE_TOPC:49;
-  then
-A7: Int Cl A c= Int Cl B by TOPS_1:48;
-  B is condensed by A2;
-  then B is supercondensed;
-  then Int Cl A c= Int B by A7,Def1;
-  then Int B = Int Cl A by A6,XBOOLE_0:def 10;
-  hence thesis by A2,A5,Th10;
+A9: Cl Int A c= Cl Int B by PRE_TOPC:49;
+  Int Int B c= Int A by A4,TOPS_1:48;
+  then Cl Int Int B c= Cl Int A by PRE_TOPC:49;
+  then Cl Int A = B by A6,A9,XBOOLE_0:def 10;
+  hence thesis by A4,A5,A8,Th10;
 end;
 
 begin :: Boundaries and Borders
@@ -491,7 +523,6 @@ end;
 definition
   let T be TopStruct, A be Subset of T;
   redefine func Fr A equals
-
   Cl A \ Int A;
   compatibility by TOPGEN_1:10;
 end;
@@ -500,55 +531,56 @@ theorem
   Fr A is closed;
 
 theorem :: Theorem 5
-  A is condensed iff Fr A = Cl Int A \ Int Cl A & Fr A = Cl Int A /\ Cl Int A`
+  A is condensed iff Fr A = Cl Int A \ Int Cl A & Fr A = Cl Int A /\ Cl
+  Int A`
 proof
-  thus A is condensed implies Fr A = Cl Int A \ Int Cl A &
-  Fr A = Cl Int A /\ Cl Int A`
+A1: A c= Cl A by PRE_TOPC:48;
+  Cl Int A /\ Cl Int A` c= Cl Int A by XBOOLE_1:17;
+  then
+A2: Int A \/ (Cl Int A /\ Cl Int A`) c= Int A \/ Cl Int A by XBOOLE_1:
+  13;
+  thus A is condensed implies Fr A = Cl Int A \ Int Cl A & Fr A = Cl Int A /\
+  Cl Int A`
   proof
     assume
-A1: A is condensed;
+A3: A is condensed;
     then A` is condensed by TDLAT_1:16;
-    then A` is supercondensed & A` is subcondensed;
     then
-A2: Cl Int A` = Cl A` by Def2;
-    A is supercondensed & A is subcondensed by A1;
-    then Int Cl A = Int A & Cl Int A = Cl A by Def1,Def2;
-    hence thesis by A2,TOPS_1:def 2;
+A4: Cl Int A` = Cl A` by Def2;
+    Cl Int A = Cl A by A3,Def2;
+    hence thesis by A3,A4,Def1,TOPS_1:def 2;
   end;
-  assume
-A3: Fr A = Cl Int A \ Int Cl A & Fr A = Cl Int A /\ Cl Int A`;
-A4: Int A c= A by TOPS_1:44;
-A5: A c= Cl A by PRE_TOPC:48;
-  Cl A \/ Int A = Int A \/ Fr A by XBOOLE_1:39;
+  assume that
+  Fr A = Cl Int A \ Int Cl A and
+A5: Fr A = Cl Int A /\ Cl Int A`;
+A6: Cl A \/ Int A = Int A \/ Fr A by XBOOLE_1:39;
+  Int A c= A by TOPS_1:44;
+  then Cl A = Int A \/ (Cl Int A /\ Cl Int A`) by A5,A1,A6,XBOOLE_1:1,
+  12;
   then
-A6: Cl A = Int A \/ (Cl Int A /\ Cl Int A`) by A3,A4,A5,XBOOLE_1:1,12;
-  Cl Int A /\ Cl Int A` c= Cl Int A by XBOOLE_1:17;
-  then Int A \/ (Cl Int A /\ Cl Int A`) c= Int A \/ Cl Int A by XBOOLE_1:13;
-  then
-A7: Cl A c= Cl Int A by A6,PRE_TOPC:48,XBOOLE_1:12;
+A7: Cl A c= Cl Int A by A2,PRE_TOPC:48,XBOOLE_1:12;
   Cl Int A c= Cl A by PRE_TOPC:49,TOPS_1:44;
   then Cl Int A = Cl A by A7,XBOOLE_0:def 10;
   then
 A8: A is subcondensed by Def2;
-A9: Int A` c= A` by TOPS_1:44;
-A10: A` c= Cl A` by PRE_TOPC:48;
-A11: Cl Int A` c= Cl A` by PRE_TOPC:49,TOPS_1:44;
-A12: Fr A = Fr A` by TOPS_1:62;
-  Cl A` \/ Int A` = Int A` \/ Fr A` by XBOOLE_1:39;
-  then
-A13: Cl A` = Int A` \/ (Cl Int A` /\ Cl Int A``) by A3,A9,A10,A12,XBOOLE_1:1,12
-  ;
+A9: A` c= Cl A` by PRE_TOPC:48;
+A10: Cl A` \/ Int A` = Int A` \/ Fr A` by XBOOLE_1:39;
+A11: Fr A = Fr A` by TOPS_1:62;
   Cl Int A` /\ Cl Int A`` c= Cl Int A` by XBOOLE_1:17;
   then
-A14: Int A` \/ (Cl Int A` /\ Cl Int A``) c= Int A` \/ Cl Int A`
-  by XBOOLE_1:13;
-  Int A` \/ Cl Int A` = Cl Int A` by PRE_TOPC:48,XBOOLE_1:12;
-  then
-A15: Cl A` = Cl Int A` by A11,A13,A14,XBOOLE_0:def 10;
-A16: Cl A` = (Int A)` by TDLAT_3:3;
-  Cl Int A` = Cl (Cl A)` by TDLAT_3:4
+A12: Int A` \/ (Cl Int A` /\ Cl Int A``) c= Int A` \/ Cl Int A` by
+  XBOOLE_1:13;
+A13: Cl Int A` c= Cl A` by PRE_TOPC:49,TOPS_1:44;
+A14: Cl Int A` = Cl (Cl A)` by TDLAT_3:4
     .= (Int Cl A)` by TDLAT_3:3;
-  then Int A = (Int Cl A)`` by A15,A16;
+A15: Int A` \/ Cl Int A` = Cl Int A` by PRE_TOPC:48,XBOOLE_1:12;
+  Int A` c= A` by TOPS_1:44;
+  then Cl A` = Int A` \/ (Cl Int A` /\ Cl Int A``) by A5,A9,A11,A10,
+  XBOOLE_1:1,12;
+  then
+A16: Cl A` = Cl Int A` by A13,A12,A15,XBOOLE_0:def 10;
+  Cl A` = (Int A)` by TDLAT_3:3;
+  then Int A = (Int Cl A)`` by A16,A14;
   then A is supercondensed by Def1;
   hence thesis by A8;
 end;
@@ -556,7 +588,6 @@ end;
 definition
   let T be TopStruct, A be Subset of T;
   func Border A -> Subset of T equals
-
   Int Fr A;
   coherence;
 end;
@@ -565,21 +596,15 @@ theorem Th24: :: Theorem 6
   Border A is regular_open & Border A = (Int Cl A) \ (Cl Int A) &
   Border A = Int Cl A /\ (Int Cl A`)
 proof
-  thus Border A is regular_open
-  proof
-    Fr A = Cl Fr A by PRE_TOPC:52;
-    hence thesis;
-  end;
-  thus Border A = (Int Cl A) \ (Cl Int A)
-  proof
-    (Int Cl A) \ (Cl Int A) = (Int Cl A) \ ((Cl Int A)`)`
-      .= (Int Cl A) \ (Int (Int A)`)` by TDLAT_3:4
-      .= (Int Cl A) \ (Int Cl A`)` by TDLAT_3:3
-      .= Int Cl A /\ (Int Cl A`)`` by SUBSET_1:32
-      .= Int (Cl A /\ Cl A`) by TOPS_1:46
-      .= Int Fr A by TOPS_1:def 2;
-    hence thesis;
-  end;
+  Fr A = Cl Fr A by PRE_TOPC:52;
+  hence Border A is regular_open;
+  (Int Cl A) \ (Cl Int A) = (Int Cl A) \ ((Cl Int A)`)`
+    .= (Int Cl A) \ (Int (Int A)`)` by TDLAT_3:4
+    .= (Int Cl A) \ (Int Cl A`)` by TDLAT_3:3
+    .= Int Cl A /\ (Int Cl A`)`` by SUBSET_1:32
+    .= Int (Cl A /\ Cl A`) by TOPS_1:46
+    .= Int Fr A by TOPS_1:def 2;
+  hence Border A = (Int Cl A) \ (Cl Int A);
   Int Cl A /\ (Int Cl A`) = Int (Cl A /\ Cl A`) by TOPS_1:46
     .= Int Fr A by TOPS_1:def 2;
   hence thesis;
@@ -592,80 +617,86 @@ registration
 end;
 
 theorem Th25: :: Theorem 7
-  A is supercondensed iff (Int A is regular_open & Border A is empty)
+  A is supercondensed iff Int A is regular_open & Border A is
+  empty
 proof
+A1: Int A c= Int Cl A by PRE_TOPC:48,TOPS_1:48;
   thus A is supercondensed implies Int A is regular_open & Border A is empty
   proof
     assume
-A1: A is supercondensed;
+A2: A is supercondensed;
     then Int Cl A = Int A by Def1;
     then Int Cl A c= Cl Int A by PRE_TOPC:48;
     then (Int Cl A) \ (Cl Int A) is empty by XBOOLE_1:37;
-    hence thesis by A1,Def1,Th24;
+    hence thesis by A2,Def1,Th24;
   end;
-  assume
-A2: Int A is regular_open & Border A is empty;
-  then
-A3: Int A = Int Cl Int A by TOPS_1:def 8;
-  (Int Cl A) \ (Cl Int A) is empty by A2,Th24;
+  assume that
+A3: Int A is regular_open and
+A4: Border A is empty;
+  (Int Cl A) \ (Cl Int A) is empty by A4,Th24;
   then Int Cl A c= Cl Int A by XBOOLE_1:37;
   then
-A4: Int Int Cl A c= Int Cl Int A by TOPS_1:48;
-  Int A c= Int Cl A by PRE_TOPC:48,TOPS_1:48;
-  then Int Cl A = Int A by A3,A4,XBOOLE_0:def 10;
+A5: Int Int Cl A c= Int Cl Int A by TOPS_1:48;
+  Int A = Int Cl Int A by A3,TOPS_1:def 8;
+  then Int Cl A = Int A by A5,A1,XBOOLE_0:def 10;
   hence thesis by Def1;
 end;
 
 theorem Th26: :: Theorem 7
-  A is subcondensed iff (Cl A is regular_closed & Border A is empty)
+  A is subcondensed iff Cl A is regular_closed & Border A is empty
 proof
+A1: Cl Int A c= Cl A by PRE_TOPC:49,TOPS_1:44;
   thus A is subcondensed implies Cl A is regular_closed & Border A is empty
   proof
     assume
-A1: A is subcondensed;
+A2: A is subcondensed;
     then Cl Int A = Cl A by Def2;
     then Int Cl A c= Cl Int A by TOPS_1:44;
     then (Int Cl A) \ (Cl Int A) is empty by XBOOLE_1:37;
-    hence thesis by A1,Def2,Th24;
+    hence thesis by A2,Def2,Th24;
   end;
-  assume
-A2: Cl A is regular_closed & Border A is empty;
-  then
-A3: Cl A = Cl Int Cl A by TOPS_1:def 7;
-  (Int Cl A) \ (Cl Int A) is empty by A2,Th24;
+  assume that
+A3: Cl A is regular_closed and
+A4: Border A is empty;
+  (Int Cl A) \ (Cl Int A) is empty by A4,Th24;
   then Int Cl A c= Cl Int A by XBOOLE_1:37;
   then
-A4: Cl Int Cl A c= Cl Cl Int A by PRE_TOPC:49;
-  Cl Int A c= Cl A by PRE_TOPC:49,TOPS_1:44;
-  then Cl Int A = Cl A by A3,A4,XBOOLE_0:def 10;
+A5: Cl Int Cl A c= Cl Cl Int A by PRE_TOPC:49;
+  Cl A = Cl Int Cl A by A3,TOPS_1:def 7;
+  then Cl Int A = Cl A by A5,A1,XBOOLE_0:def 10;
   hence thesis by Def2;
 end;
 
 registration
-  let T be TopSpace, A be Subset of T; :: Remark
+  let T be TopSpace, A be Subset of T;
   cluster Border Border A -> empty;
   coherence;
 end;
 
-theorem :: Corollary to Theorem 7
-  A is condensed iff
-  Int A is regular_open & Cl A is regular_closed & Border A is empty
+theorem :: Remark:: Corollary to Theorem 7
+  A is condensed iff Int A is regular_open & Cl A is regular_closed &
+  Border A is empty
 proof
-  thus A is condensed implies Int A is regular_open &
-  Cl A is regular_closed & Border A is empty by Th25,Th26;
-  assume Int A is regular_open & Cl A is regular_closed & Border A is empty;
-  then A is supercondensed & A is subcondensed by Th25,Th26;
-  hence thesis;
+  thus A is condensed implies Int A is regular_open & Cl A is regular_closed &
+  Border A is empty by Th25,Th26;
+  assume that
+A1: Int A is regular_open and
+A2: Cl A is regular_closed and
+A3: Border A is empty;
+A4: A is subcondensed by A2,A3,Th26;
+  A is supercondensed by A1,A3,Th25;
+  hence thesis by A4;
 end;
 
 begin :: Auxiliary Theorems
 
 theorem
-  for A being Subset of R^1, a being real number st A = ]. -infty, a.] holds
-  Int A = ]. -infty, a.[
+  for A being Subset of R^1, a being real number st A = ]. -infty, a.]
+  holds Int A = ]. -infty, a.[
 proof
   let A be Subset of R^1, a be real number;
-  assume A = ]. -infty, a.];
+  assume
+  A = ]. -infty, a.];
   then A` = ].a,+infty .[ by TOPMETR:24,XXREAL_1:224,288;
   then Cl A` = [.a,+infty .[ by BORSUK_5:75;
   then (Cl A`)` = ]. -infty, a.[ by TOPMETR:24,XXREAL_1:224,294;
@@ -673,11 +704,12 @@ proof
 end;
 
 theorem
-  for A being Subset of R^1, a being real number st A = [.a,+infty .[ holds
-  Int A = ].a,+infty .[
+  for A being Subset of R^1, a being real number st A = [.a,+infty .[
+  holds Int A = ].a,+infty .[
 proof
   let A be Subset of R^1, a be real number;
-  assume A = [.a,+infty .[;
+  assume
+  A = [.a,+infty .[;
   then A` = ]. -infty,a.[ by TOPMETR:24,XXREAL_1:224,294;
   then Cl A` = ]. -infty,a.] by BORSUK_5:77;
   then (Cl A`)` = ].a,+infty .[ by TOPMETR:24,XXREAL_1:224,288;
@@ -685,14 +717,13 @@ proof
 end;
 
 theorem Th30:
-  for A being Subset of R^1, a, b being real number st
-  A = ]. -infty,a.] \/ IRRAT (a,b) \/ [.b,+infty .[ holds
-  Cl A = the carrier of R^1
+  for A being Subset of R^1, a, b being real number st A = ].
+  -infty,a.] \/ IRRAT (a,b) \/ [.b,+infty .[ holds Cl A = the carrier of R^1
 proof
+  reconsider B = IRRAT as Subset of R^1 by TOPMETR:24;
   let A be Subset of R^1, a, b be real number;
   assume
 A1: A = ]. -infty,a.] \/ IRRAT (a,b) \/ [.b,+infty .[;
-  reconsider B = IRRAT as Subset of R^1 by TOPMETR:24;
   B c= A
   proof
     let x be set;
@@ -700,19 +731,22 @@ A1: A = ]. -infty,a.] \/ IRRAT (a,b) \/ [.b,+infty .[;
 A2: x in B;
     then reconsider x' = x as real number;
     per cases;
-    suppose x' <= a;
+    suppose
+      x' <= a;
       then x' in ]. -infty,a.] by XXREAL_1:234;
       then x' in ]. -infty,a.] \/ IRRAT (a,b) by XBOOLE_0:def 3;
       hence thesis by A1,XBOOLE_0:def 3;
     end;
-    suppose x' > a & x' < b;
+    suppose
+      x' > a & x' < b;
       then x' in ]. a, b .[ by XXREAL_1:4;
       then x' in IRRAT /\ ]. a, b .[ by A2,XBOOLE_0:def 4;
       then x' in IRRAT (a, b) by BORSUK_5:def 5;
       then x' in ]. -infty,a.] \/ IRRAT (a,b) by XBOOLE_0:def 3;
       hence thesis by A1,XBOOLE_0:def 3;
     end;
-    suppose x' >= b;
+    suppose
+      x' >= b;
       then x' in [.b,+infty .[ by XXREAL_1:236;
       hence thesis by A1,XBOOLE_0:def 3;
     end;
@@ -724,8 +758,8 @@ A3: Cl B c= Cl A by PRE_TOPC:49;
 end;
 
 theorem
-  for A being Subset of R^1, a, b being real number st A = RAT (a,b) holds
-  Int A = {}
+  for A being Subset of R^1, a, b being real number st A = RAT (a,b)
+  holds Int A = {}
 proof
   let A be Subset of R^1, a, b be real number;
   assume
@@ -738,14 +772,14 @@ A1: A = RAT (a,b);
 end;
 
 theorem
-  for A being Subset of R^1, a, b being real number st A = IRRAT (a,b) holds
-  Int A = {}
+  for A being Subset of R^1, a, b being real number st A = IRRAT (a,b)
+  holds Int A = {}
 proof
+  reconsider B = IRRAT as Subset of R^1 by TOPMETR:24;
   let A be Subset of R^1, a, b be real number;
   assume
-A1: A = IRRAT (a,b);
-  reconsider B = IRRAT as Subset of R^1 by TOPMETR:24;
-  A = IRRAT /\ ]. a, b .[ by A1,BORSUK_5:def 5;
+  A = IRRAT (a,b);
+  then A = IRRAT /\ ]. a, b .[ by BORSUK_5:def 5;
   then A c= B by XBOOLE_1:17;
   then A is boundary by TOPGEN_1:57,TOPS_3:11;
   hence thesis;
@@ -770,68 +804,69 @@ proof
   let a,b be real number;
   per cases;
   suppose
-A1: a < b;
+    a < b;
     let x be set;
     assume
-A2: x in IRRAT (a,b);
+A1: x in IRRAT (a,b);
     then reconsider x as real number;
-    x is irrational & a < x & x < b by A1,A2,BORSUK_5:53;
+    a < x by A1,BORSUK_5:53;
     hence thesis by XXREAL_1:236;
   end;
-  suppose a >= b;
+  suppose
+    a >= b;
     then IRRAT (a,b) = {} by Th35;
     hence thesis by XBOOLE_1:2;
   end;
 end;
 
 theorem Th37:
-  for A being Subset of R^1, a, b, c being real number st
-  A = ]. -infty, a .[ \/ RAT (b,c) & a < b & b < c holds
-  Int A = ]. -infty, a .[
+  for A being Subset of R^1, a, b, c being real number st A = ].
+  -infty, a .[ \/ RAT (b,c) & a < b & b < c holds Int A = ]. -infty, a .[
 proof
   let A be Subset of R^1, a, b, c be real number;
-  reconsider B = [. a, b .], C = IRRAT (b,c), D = [. c,+infty .[
-  as Subset of R^1 by TOPMETR:24;
-  B is closed by TOPREAL6:79;
+  reconsider B = [. a, b .], C = IRRAT (b,c), D = [. c,+infty .[ as Subset of
+  R^1 by TOPMETR:24;
+  assume that
+A1: A = ]. -infty, a.[ \/ RAT (b,c) and
+A2: a < b and
+A3: b < c;
+A4: a < c by A2,A3,XXREAL_0:2;
+  A` = REAL \ ( ]. -infty, a.[ \/ RAT (b,c)) by A1,TOPMETR:24
+    .= (REAL \ RAT (b,c)) \ ]. -infty, a.[ by XBOOLE_1:41
+    .= (]. -infty,b.] \/ IRRAT (b, c) \/ [.c,+infty .[) \ ]. -infty,a.[ by
+  BORSUK_5:85
+    .= (]. -infty,b.] \/ (IRRAT (b, c) \/ [.c,+infty .[)) \ ]. -infty,a.[ by
+  XBOOLE_1:4
+    .= (]. -infty,b.] \ ]. -infty,a.[) \/ ((IRRAT (b, c) \/ [.c,+infty .[) \
+  ]. -infty,a.[) by XBOOLE_1:42;
   then
-A1: Cl B = B by PRE_TOPC:52;
+A5: A` = [.a,b.] \/ ((IRRAT (b, c) \/ [.c,+infty .[) \ ]. -infty,a.[) by
+  XXREAL_1:289
+    .= [.a,b.] \/ ((IRRAT (b,c) \ ]. -infty,a.[) \/ ([.c,+infty .[ \ ].
+  -infty,a.[)) by XBOOLE_1:42;
   right_closed_halfline c is closed;
   then D is closed by TOPREAL6:79;
   then
-A2: Cl D = D by PRE_TOPC:52;
-  assume
-A3: A = ]. -infty, a.[ \/ RAT (b,c) & a < b & b < c;
-  then A` = REAL \ ( ]. -infty, a.[ \/ RAT (b,c)) by TOPMETR:24
-    .= (REAL \ RAT (b,c)) \ ]. -infty, a.[ by XBOOLE_1:41
-    .= (]. -infty,b.] \/ IRRAT (b, c) \/ [.c,+infty .[) \ ]. -infty,a.[
-  by BORSUK_5:85
-    .= (]. -infty,b.] \/ (IRRAT (b, c) \/ [.c,+infty .[)) \ ]. -infty,a.[
-  by XBOOLE_1:4
-    .= (]. -infty,b.] \ ]. -infty,a.[) \/
-  ((IRRAT (b, c) \/ [.c,+infty .[) \ ]. -infty,a.[) by XBOOLE_1:42;
+A6: Cl D = D by PRE_TOPC:52;
+  [.b,+infty .[ misses ]. -infty,a.[ by A2,XXREAL_1:94;
+  then IRRAT (b,c) misses ]. -infty,a.[ by Th36,XBOOLE_1:63;
   then
-A4: A` = [.a,b.] \/ ((IRRAT (b, c) \/ [.c,+infty .[) \ ]. -infty,a.[)
- by XXREAL_1:289
-    .= [.a,b.] \/ ((IRRAT (b,c) \ ]. -infty,a.[) \/
-  ([.c,+infty .[ \ ]. -infty,a.[)) by XBOOLE_1:42;
-  IRRAT (b,c) misses ]. -infty,a.[
-  proof
-    [.b,+infty .[ misses ]. -infty,a.[ by A3,XXREAL_1:94;
-    hence thesis by Th36,XBOOLE_1:63;
-  end;
+A7: IRRAT (b,c) \ ]. -infty,a.[ = IRRAT (b,c) by XBOOLE_1:83;
+  B is closed by TOPREAL6:79;
   then
-A5: IRRAT (b,c) \ ]. -infty,a.[ = IRRAT (b,c) by XBOOLE_1:83;
-A6: a < c by A3,XXREAL_0:2;
-  [.c,+infty .[ misses ]. -infty,a.[ by A3,XXREAL_0:2,XXREAL_1:94;
-  then A` = [.a,b.] \/ (IRRAT (b,c) \/ [.c,+infty .[) by A4,A5,XBOOLE_1:83
+A8: Cl B = B by PRE_TOPC:52;
+  [.c,+infty .[ misses ]. -infty,a.[ by A2,A3,XXREAL_0:2,XXREAL_1:94;
+  then A` = [.a,b.] \/ (IRRAT (b,c) \/ [.c,+infty .[) by A5,A7,
+  XBOOLE_1
+  :83
     .= [.a,b.] \/ (IRRAT (b,c) \/ ({c} \/ ].c,+infty .[)) by BORSUK_5:67
     .= [.a,b.] \/ IRRAT (b,c) \/ ({c} \/ ].c,+infty .[) by XBOOLE_1:4
     .= [. a, b .] \/ IRRAT (b,c) \/ [. c,+infty .[ by BORSUK_5:67;
   then Cl A` = Cl (B \/ C) \/ Cl D by PRE_TOPC:50
     .= Cl B \/ Cl C \/ Cl D by PRE_TOPC:50
-    .= B \/ [.b,c.] \/ D by A1,A2,A3,BORSUK_5:55
-    .= [.a,c.] \/ D by A3,XXREAL_1:165
-    .= [. a,+infty .[ by A6,BORSUK_5:28;
+    .= B \/ [.b,c.] \/ D by A8,A6,A3,BORSUK_5:55
+    .= [.a,c.] \/ D by A2,A3,XXREAL_1:165
+    .= [. a,+infty .[ by A4,BORSUK_5:28;
   then (Cl A`)` = ]. -infty, a .[ by TOPMETR:24,XXREAL_1:224,294;
   hence thesis by TOPS_1:def 1;
 end;
@@ -849,8 +884,8 @@ end;
 canceled 3;
 
 theorem
-  for a,b being real number st a < b holds
-  REAL = ]. -infty,a.[ \/ [.a,b.] \/ ].b,+infty .[
+  for a,b being real number st a < b holds REAL = ]. -infty,a.[ \/ [.a,b
+  .] \/ ].b,+infty .[
 proof
   let a,b be real number;
   assume
@@ -869,19 +904,22 @@ end;
 canceled 2;
 
 theorem Th44:
-  for A being Subset of R^1, a, b, c being real number st
-  A = ]. -infty, a .] \/ [.b,c.] & a < b & b < c holds
-  Int A = ]. -infty, a .[ \/ ].b,c.[
+  for A being Subset of R^1, a, b, c being real number st A = ].
+-infty, a .] \/ [.b,c.] & a < b & b < c holds Int A = ]. -infty, a .[ \/ ].b,c
+  .[
 proof
   let A be Subset of R^1, a, b, c be real number;
-  assume
-A1: A = ]. -infty, a .] \/ [.b,c.] & a < b & b < c;
-  reconsider B = ]. a,b .[, C = ].c,+infty .[ as Subset of R^1 by TOPMETR:24;
-A2: Cl B = [. a,b .] by A1,BORSUK_5:36;
-A3: Cl C = [. c,+infty .[ by BORSUK_5:75;
-X:  a < c by A1,XXREAL_0:2;
+  assume that
+A1: A = ]. -infty, a .] \/ [.b,c.] and
+A2: a < b and
+A3: b < c;
+  a < c by A2,A3,XXREAL_0:2;
   then
-A4: ].c,+infty .[ /\ ].a,+infty .[ = ].c,+infty .[ by XBOOLE_1:28,XXREAL_1:46;
+A4: ].c,+infty .[ /\ ].a,+infty .[ = ].c,+infty .[ by XBOOLE_1:28 ,
+  XXREAL_1:46;
+  reconsider B = ]. a,b .[, C = ].c,+infty .[ as Subset of R^1 by TOPMETR:24;
+A5: Cl B = [. a,b .] by A2,BORSUK_5:36;
+A6: Cl C = [. c,+infty .[ by BORSUK_5:75;
   A` = REAL \ (]. -infty, a .] \/ [.b,c.]) by A1,TOPMETR:24
     .= (REAL \ left_closed_halfline a) \ [.b,c.] by XBOOLE_1:41
     .= right_open_halfline a \ [.b,c.] by XXREAL_1:224,288
@@ -889,11 +927,12 @@ A4: ].c,+infty .[ /\ ].a,+infty .[ = ].c,+infty .[ by XBOOLE_1:28,XXREAL_1:46;
     .= ( ].a,+infty .[ \ [.b,+infty .[) \/ ( ].a,+infty .[ /\ ].c,+infty .[)
   by XBOOLE_1:52
     .= ]. a,b .[ \/ ]. c,+infty .[ by A4,XXREAL_1:294;
-  then Cl A` = [. a,b .] \/ [. c,+infty .[ by A2,A3,PRE_TOPC:50;
-  then (Cl A`)` = REAL \ ([. c,+infty .[ \/ [.a,b.]) by TOPMETR:24
+  then (Cl A`)` = REAL \ ([. c,+infty .[ \/ [.a,b.]) by A5,A6,
+  PRE_TOPC:50 ,
+  TOPMETR:24
     .= (REAL \ right_closed_halfline c) \ [.a,b.] by XBOOLE_1:41
     .= left_open_halfline c \ [.a,b.] by XXREAL_1:224,294
-    .= ]. -infty, a .[ \/ ].b,c.[ by X,XXREAL_1:339;
+    .= ]. -infty, a .[ \/ ].b,c.[ by A2,A3,XXREAL_0:2,XXREAL_1:339;
   hence thesis by TOPS_1:def 1;
 end;
 
@@ -905,13 +944,16 @@ notation
 end;
 
 theorem Th45:
-  for A, B being set holds A, B are_c=-incomparable or A c= B or B c< A
+  for A, B being set holds A, B are_c=-incomparable or A c= B or B
+  c< A
 proof
   let A, B be set;
-  assume
-A1: A, B are_c=-comparable & not A c= B & not B c< A;
-  then A c= B or B c= A by XBOOLE_0:def 9;
-  hence thesis by A1,XBOOLE_0:def 8;
+  assume that
+A1: A, B are_c=-comparable and
+A2: not A c= B and
+A3: not B c< A;
+  A c= B or B c= A by A1,XBOOLE_0:def 9;
+  hence thesis by A2,A3,XBOOLE_0:def 8;
 end;
 
 definition
@@ -930,10 +972,14 @@ end;
 theorem
   A is 1st_class or A is 2nd_class or A is 3rd_class
 proof
-  assume not (A is 1st_class or A is 2nd_class or A is 3rd_class);
-  then not Int Cl A c= Cl Int A & not Cl Int A c< Int Cl A &
-  Cl Int A, Int Cl A are_c=-comparable by Def6,Def7,Def8;
-  hence thesis by Th45;
+  assume that
+A1: not A is 1st_class and
+A2: not A is 2nd_class and
+A3: not A is 3rd_class;
+A4: not Cl Int A c< Int Cl A by A2,Def7;
+A5: Cl Int A, Int Cl A are_c=-comparable by A3,Def8;
+  not Int Cl A c= Cl Int A by A1,Def6;
+  hence thesis by A4,A5,Th45;
 end;
 
 registration
@@ -942,26 +988,28 @@ registration
   coherence
   proof
     let A be Subset of T;
-    assume A is 1st_class;
+    assume
+    A is 1st_class;
     then
 A1: Int Cl A c= Cl Int A by Def6;
     then
-A2: not Cl Int A c< Int Cl A by XBOOLE_1:60;
-    Cl Int A, Int Cl A are_c=-comparable by A1,XBOOLE_0:def 9;
+A2: Cl Int A, Int Cl A are_c=-comparable by XBOOLE_0:def 9;
+    not Cl Int A c< Int Cl A by A1,XBOOLE_1:60;
     hence thesis by A2,Def7,Def8;
   end;
   cluster 2nd_class -> non 1st_class non 3rd_class Subset of T;
   coherence
   proof
     let A be Subset of T;
-    assume A is 2nd_class;
+    assume
+    A is 2nd_class;
     then
 A3: Cl Int A c< Int Cl A by Def7;
+    then Cl Int A c= Int Cl A by XBOOLE_0:def 8;
     then
-A4: Cl Int A c= Int Cl A & Cl Int A <> Int Cl A by XBOOLE_0:def 8;
-A5: not Int Cl A c= Cl Int A by A3,XBOOLE_0:def 8;
-    Cl Int A, Int Cl A are_c=-comparable by A4,XBOOLE_0:def 9;
-    hence thesis by A5,Def6,Def8;
+A4: Cl Int A, Int Cl A are_c=-comparable by XBOOLE_0:def 9;
+    not Int Cl A c= Cl Int A by A3,XBOOLE_0:def 8;
+    hence thesis by A4,Def6,Def8;
   end;
   cluster 3rd_class -> non 1st_class non 2nd_class Subset of T;
   coherence;
@@ -970,19 +1018,21 @@ end;
 theorem Th47: :: Remark 1
   A is 1st_class iff Border A is empty
 proof
-A1: A is 1st_class implies Border A is empty
+A1: Border A is empty implies A is 1st_class
   proof
-    assume A is 1st_class;
-    then Int Cl A c= Cl Int A by Def6;
-    then Int Cl A \ Cl Int A = {} by XBOOLE_1:37;
-    hence thesis by Th24;
-  end;
-  Border A is empty implies A is 1st_class
-  proof
-    assume Border A is empty;
+    assume
+    Border A is empty;
     then Int Cl A \ Cl Int A = {} by Th24;
     then Int Cl A c= Cl Int A by XBOOLE_1:37;
     hence thesis by Def6;
+  end;
+  A is 1st_class implies Border A is empty
+  proof
+    assume
+    A is 1st_class;
+    then Int Cl A c= Cl Int A by Def6;
+    then Int Cl A \ Cl Int A = {} by XBOOLE_1:37;
+    hence thesis by Th24;
   end;
   hence thesis by A1;
 end;
@@ -993,7 +1043,8 @@ registration
   coherence
   proof
     let A be Subset of T;
-    assume A is supercondensed;
+    assume
+    A is supercondensed;
     then Border A is empty by Th25;
     hence thesis by Th47;
   end;
@@ -1001,7 +1052,8 @@ registration
   coherence
   proof
     let A be Subset of T;
-    assume A is subcondensed;
+    assume
+    A is subcondensed;
     then Border A is empty by Th26;
     hence thesis by Th47;
   end;
@@ -1011,13 +1063,16 @@ definition
   let T be TopSpace;
   attr T is with_1st_class_subsets means
   :Def9:
-  ex A being Subset of T st A is 1st_class;
+  ex A being Subset of T st A is
+  1st_class;
   attr T is with_2nd_class_subsets means
   :Def10:
-  ex A being Subset of T st A is 2nd_class;
+  ex A being Subset of T st A
+  is 2nd_class;
   attr T is with_3rd_class_subsets means
   :Def11:
-  ex A being Subset of T st A is 3rd_class;
+  ex A being Subset of T st A
+  is 3rd_class;
 end;
 
 registration
@@ -1044,8 +1099,8 @@ registration
   cluster 2nd_class Subset of T;
   existence
   proof
-    consider A being proper non empty Subset of T;
     consider x being Element of T;
+    consider A being proper non empty Subset of T;
     reconsider A = {x} as Subset of T;
     Cl A = the carrier of T by TEX_1:11;
     hence thesis;
@@ -1053,39 +1108,40 @@ registration
 end;
 
 registration
-  cluster with_1st_class_subsets with_2nd_class_subsets
-    non empty strict non trivial TopSpace;
+  cluster with_1st_class_subsets with_2nd_class_subsets non empty strict non
+    trivial TopSpace;
   existence
   proof
     consider T being anti-discrete non trivial non empty strict TopSpace;
-    {}T is 1st_class;
-    then
-A1: T is with_1st_class_subsets by Def9;
     consider B being 2nd_class Subset of T;
     B is 2nd_class;
-    then T is with_2nd_class_subsets by Def10;
+    then
+A1: T is with_2nd_class_subsets by Def10;
+    {}T is 1st_class;
+    then T is with_1st_class_subsets by Def9;
     hence thesis by A1;
   end;
   cluster with_3rd_class_subsets non empty strict TopSpace;
   existence
   proof
-    take R^1;
     set B = ]. -infty, 1 .[, C = RAT(2,4);
+    take R^1;
     set A = B \/ C;
     reconsider A, B, C as Subset of R^1 by TOPMETR:24;
-A2: Cl Int A = ]. -infty, 1 .] by Th37,BORSUK_5:77;
-A3: Cl B = ]. -infty, 1 .] by BORSUK_5:77;
-    Cl C = [. 2,4 .] by BORSUK_5:54;
-    then Cl A = ]. -infty, 1 .] \/ [. 2,4 .] by A3,PRE_TOPC:50;
+A2: Cl C = [. 2,4 .] by BORSUK_5:54;
+    Cl B = ]. -infty, 1 .] by BORSUK_5:77;
+    then Cl A = ]. -infty, 1 .] \/ [. 2,4 .] by A2,PRE_TOPC:50;
     then
-A4: Int Cl A = ]. -infty, 1 .[ \/ ]. 2,4 .[ by Th44;
+A3: Int Cl A = ]. -infty, 1 .[ \/ ]. 2,4 .[ by Th44;
+A4: Cl Int A = ]. -infty, 1 .] by Th37,BORSUK_5:77;
     3 in ]. 2, 4 .[ by XXREAL_1:4;
-    then 3 in Int Cl A by A4,XBOOLE_0:def 3;
+    then 3 in Int Cl A by A3,XBOOLE_0:def 3;
     then
-A5: not Int Cl A c= Cl Int A by A2,XXREAL_1:234;
-A6: 1 in Cl Int A by A2,XXREAL_1:234;
-    not 1 in ]. -infty,1.[ & not 1 in ].2,4.[ by XXREAL_1:4;
-    then not Cl Int A c= Int Cl A by A4,A6,XBOOLE_0:def 3;
+A5: not Int Cl A c= Cl Int A by A4,XXREAL_1:234;
+A6: not 1 in ].2,4.[ by XXREAL_1:4;
+A7: not 1 in ]. -infty,1.[ by XXREAL_1:4;
+    1 in Cl Int A by A4,XXREAL_1:234;
+    then not Cl Int A c= Int Cl A by A3,A7,A6,XBOOLE_0:def 3;
     then Int Cl A, Cl Int A are_c=-incomparable by A5,XBOOLE_0:def 9;
     then A is 3rd_class by Def8;
     hence thesis by Def11;
@@ -1117,26 +1173,28 @@ end;
 theorem Th48: :: Theorem 8
   A is 1st_class iff A` is 1st_class
 proof
-A1: A is 1st_class implies A` is 1st_class
+A1: A` is 1st_class implies A is 1st_class
   proof
-    assume A is 1st_class;
-    then Int Cl A c= Cl Int A by Def6;
-    then (Cl Int A)` c= (Int Cl A)` by SUBSET_1:31;
-    then Int (Int A)` c= (Int Cl A)` by TDLAT_3:4;
-    then Int (Int A)` c= Cl (Cl A)` by TDLAT_3:3;
-    then Int (Int A)` c= Cl Int A` by TDLAT_3:4;
-    then Int Cl A` c= Cl Int A` by TDLAT_3:3;
-    hence thesis by Def6;
-  end;
-  A` is 1st_class implies A is 1st_class
-  proof
-    assume A` is 1st_class;
+    assume
+    A` is 1st_class;
     then Int Cl A` c= Cl Int A` by Def6;
     then Int (Int A)` c= Cl Int A` by TDLAT_3:3;
     then (Cl Int A)` c= Cl Int A` by TDLAT_3:4;
     then (Cl Int A)` c= Cl (Cl A)` by TDLAT_3:4;
     then (Cl Int A)` c= (Int Cl A)` by TDLAT_3:3;
     then Int Cl A c= Cl Int A by SUBSET_1:31;
+    hence thesis by Def6;
+  end;
+  A is 1st_class implies A` is 1st_class
+  proof
+    assume
+    A is 1st_class;
+    then Int Cl A c= Cl Int A by Def6;
+    then (Cl Int A)` c= (Int Cl A)` by SUBSET_1:31;
+    then Int (Int A)` c= (Int Cl A)` by TDLAT_3:4;
+    then Int (Int A)` c= Cl (Cl A)` by TDLAT_3:3;
+    then Int (Int A)` c= Cl Int A` by TDLAT_3:4;
+    then Int Cl A` c= Cl Int A` by TDLAT_3:3;
     hence thesis by Def6;
   end;
   hence thesis by A1;
@@ -1148,20 +1206,28 @@ proof
 A1: for A being Subset of T st A` is 2nd_class holds A is 2nd_class
   proof
     let A be Subset of T;
-    assume A` is 2nd_class;
-    then Cl Int A` c< Int Cl A` by Def7;
-    then Cl Int A` c= Int Cl A` & Cl Int A` <> Int Cl A` by XBOOLE_0:def 8;
-    then Cl Int A` c= Int (Int A)` & Cl (Cl A)` <> Int Cl A` by TDLAT_3:3,4;
-    then Cl Int A` c= (Cl Int A)` & Cl (Cl A)` <> Int (Int A)` by TDLAT_3:3,4;
-    then Cl (Cl A)` c= (Cl Int A)` & (Cl Int A)` <> Cl (Cl A)` by TDLAT_3:4;
-    then (Int Cl A)` c= (Cl Int A)` & Cl Int A <> Int Cl A by TDLAT_3:3;
-    then Cl Int A c= Int Cl A & Cl Int A <> Int Cl A by SUBSET_1:31;
-    then Cl Int A c< Int Cl A by XBOOLE_0:def 8;
+    assume
+    A` is 2nd_class;
+    then
+A2: Cl Int A` c< Int Cl A` by Def7;
+    then Cl Int A` c= Int Cl A` by XBOOLE_0:def 8;
+    then Cl Int A` c= Int (Int A)` by TDLAT_3:3;
+    then Cl Int A` c= (Cl Int A)` by TDLAT_3:4;
+    then Cl (Cl A)` c= (Cl Int A)` by TDLAT_3:4;
+    then (Int Cl A)` c= (Cl Int A)` by TDLAT_3:3;
+    then
+A3: Cl Int A c= Int Cl A by SUBSET_1:31;
+    Cl (Cl A)` <> Int Cl A` by A2,TDLAT_3:4;
+    then Cl (Cl A)` <> Int (Int A)` by TDLAT_3:3;
+    then (Cl Int A)` <> Cl (Cl A)` by TDLAT_3:4;
+    then Cl Int A <> Int Cl A by TDLAT_3:3;
+    then Cl Int A c< Int Cl A by A3,XBOOLE_0:def 8;
     hence thesis by Def7;
   end;
   A is 2nd_class implies A` is 2nd_class
   proof
-    assume A is 2nd_class;
+    assume
+    A is 2nd_class;
     then A`` is 2nd_class;
     hence thesis by A1;
   end;
@@ -1171,34 +1237,40 @@ end;
 theorem Th50: :: Theorem 8
   A is 3rd_class iff A` is 3rd_class
 proof
-  (Cl Int A)` = Int (Int A)` by TDLAT_3:4
-    .= Int Cl A` by TDLAT_3:3;
-  then
-A1: Cl Int A = (Int Cl A`)`;
   (Int Cl A)` = Cl (Cl A)` by TDLAT_3:3
     .= Cl Int A` by TDLAT_3:4;
   then
-A2: Int Cl A = (Cl Int A`)`;
-A3: A is 3rd_class implies A` is 3rd_class
+A1: Int Cl A = (Cl Int A`)`;
+  (Cl Int A)` = Int (Int A)` by TDLAT_3:4
+    .= Int Cl A` by TDLAT_3:3;
+  then
+A2: Cl Int A = (Int Cl A`)`;
+A3: A` is 3rd_class implies A is 3rd_class
   proof
-    assume A is 3rd_class;
-    then Cl Int A, Int Cl A are_c=-incomparable by Def8;
-    then not Cl Int A c= Int Cl A & not Int Cl A c= Cl Int A
-    by XBOOLE_0:def 9;
-    then not Cl Int A` c= Int Cl A` & not Int Cl A` c= Cl Int A`
-    by A1,A2,SUBSET_1:31;
-    then Cl Int A`, Int Cl A` are_c=-incomparable by XBOOLE_0:def 9;
+    assume
+    A` is 3rd_class;
+    then
+A4: Cl Int A`, Int Cl A` are_c=-incomparable by Def8;
+    then not Int Cl A` c= Cl Int A` by XBOOLE_0:def 9;
+    then
+A5: not Int Cl A c= Cl Int A by A2,A1,SUBSET_1:31;
+    not Cl Int A` c= Int Cl A` by A4,XBOOLE_0:def 9;
+    then not Cl Int A c= Int Cl A by A2,A1,SUBSET_1:31;
+    then Cl Int A, Int Cl A are_c=-incomparable by A5,XBOOLE_0:def 9;
     hence thesis by Def8;
   end;
-  A` is 3rd_class implies A is 3rd_class
+  A is 3rd_class implies A` is 3rd_class
   proof
-    assume A` is 3rd_class;
-    then Cl Int A`, Int Cl A` are_c=-incomparable by Def8;
-    then not Cl Int A` c= Int Cl A` & not Int Cl A` c= Cl Int A`
-    by XBOOLE_0:def 9;
-    then not Cl Int A c= Int Cl A & not Int Cl A c= Cl Int A
-    by A1,A2,SUBSET_1:31;
-    then Cl Int A, Int Cl A are_c=-incomparable by XBOOLE_0:def 9;
+    assume
+    A is 3rd_class;
+    then
+A6: Cl Int A, Int Cl A are_c=-incomparable by Def8;
+    then not Int Cl A c= Cl Int A by XBOOLE_0:def 9;
+    then
+A7: not Int Cl A` c= Cl Int A` by A2,A1,SUBSET_1:31;
+    not Cl Int A c= Int Cl A by A6,XBOOLE_0:def 9;
+    then not Cl Int A` c= Int Cl A` by A2,A1,SUBSET_1:31;
+    then Cl Int A`, Int Cl A` are_c=-incomparable by A7,XBOOLE_0:def 9;
     hence thesis by Def8;
   end;
   hence thesis by A3;
@@ -1226,24 +1298,28 @@ registration
 end;
 
 theorem Th51: :: Theorem 9
-  A is 1st_class implies Int Cl A = Int Cl Int A & Cl Int A = Cl Int Cl A
+  A is 1st_class implies Int Cl A = Int Cl Int A & Cl Int A = Cl
+  Int Cl A
 proof
-  assume A is 1st_class;
-  then
-A1: Int Cl A c= Cl Int A by Def6;
-  then
-A2: Int Int Cl A c= Int Cl Int A by TOPS_1:48;
   Cl Int A c= Cl A by PRE_TOPC:49,TOPS_1:44;
   then
-A3: Int Cl Int A c= Int Cl A by TOPS_1:48;
-A4: Cl Int Cl A c= Cl Cl Int A by A1,PRE_TOPC:49;
+A1: Int Cl Int A c= Int Cl A by TOPS_1:48;
   Int A c= Int Cl A by PRE_TOPC:48,TOPS_1:48;
-  then Cl Int A c= Cl Int Cl A by PRE_TOPC:49;
-  hence thesis by A2,A3,A4,XBOOLE_0:def 10;
+  then
+A2: Cl Int A c= Cl Int Cl A by PRE_TOPC:49;
+  assume
+  A is 1st_class;
+  then
+A3: Int Cl A c= Cl Int A by Def6;
+  then
+A4: Cl Int Cl A c= Cl Cl Int A by PRE_TOPC:49;
+  Int Int Cl A c= Int Cl Int A by A3,TOPS_1:48;
+  hence thesis by A1,A4,A2,XBOOLE_0:def 10;
 end;
 
 theorem Th52: :: Theorem 9
-  (Int Cl A = Int Cl Int A or Cl Int A = Cl Int Cl A) implies A is 1st_class
+  (Int Cl A = Int Cl Int A or Cl Int A = Cl Int Cl A) implies A is
+  1st_class
 proof
   assume
 A1: Int Cl A = Int Cl Int A or Cl Int A = Cl Int Cl A;
@@ -1264,43 +1340,50 @@ theorem Th53: :: Theorem 10
   A is 1st_class & B is 1st_class implies Int Cl A /\ Int Cl B =
   Int Cl (A /\ B) & Cl Int A \/ Cl Int B = Cl Int (A \/ B)
 proof
-  assume A is 1st_class & B is 1st_class;
+  assume that
+A1: A is 1st_class and
+A2: B is 1st_class;
+A3: Cl Int B = Cl Int Cl B by A2,Th51;
+  Cl Int A = Cl Int Cl A by A1,Th51;
   then
-A1: Int Cl A = Int Cl Int A & Cl Int A = Cl Int Cl A &
-  Int Cl B = Int Cl Int B & Cl Int B = Cl Int Cl B by Th51;
+A4: Cl Int A \/ Cl Int B = Cl Int Cl (A \/ B) by A3,Th2;
   Int Cl (A /\ B) c= Int (Cl A /\ Cl B) by PRE_TOPC:51,TOPS_1:48;
   then
-A2: Int Cl (A /\ B) c= Int Cl A /\ Int Cl B by TOPS_1:46;
-A3: Int Cl A /\ Int Cl B = Int Cl Int (A /\ B) by A1,Th1;
-  Cl Int (A /\ B) c= Cl (A /\ B) by PRE_TOPC:49,TOPS_1:44;
+A5: Int Cl (A /\ B) c= Int Cl A /\ Int Cl B by TOPS_1:46;
+  Int (A \/ B) c= Int Cl (A \/ B) by PRE_TOPC:48,TOPS_1:48;
   then
-A4: Int Cl Int (A /\ B) c= Int Cl (A /\ B) by TOPS_1:48;
+A6: Cl Int (A \/ B) c= Cl Int Cl (A \/ B) by PRE_TOPC:49;
   Cl (Int A \/ Int B) c= Cl Int (A \/ B) by PRE_TOPC:49,TOPS_1:49;
   then
-A5: Cl Int A \/ Cl Int B c= Cl Int (A \/ B) by PRE_TOPC:50;
-A6: Cl Int A \/ Cl Int B = Cl Int Cl (A \/ B) by A1,Th2;
-  Int (A \/ B) c= Int Cl (A \/ B) by PRE_TOPC:48,TOPS_1:48;
-  then Cl Int (A \/ B) c= Cl Int Cl (A \/ B) by PRE_TOPC:49;
-  hence thesis by A2,A3,A4,A5,A6,XBOOLE_0:def 10;
+A7: Cl Int A \/ Cl Int B c= Cl Int (A \/ B) by PRE_TOPC:50;
+A8: Int Cl B = Int Cl Int B by A2,Th51;
+  Cl Int (A /\ B) c= Cl (A /\ B) by PRE_TOPC:49,TOPS_1:44;
+  then
+A9: Int Cl Int (A /\ B) c= Int Cl (A /\ B) by TOPS_1:48;
+  Int Cl A = Int Cl Int A by A1,Th51;
+  then Int Cl A /\ Int Cl B = Int Cl Int (A /\ B) by A8,Th1;
+  hence thesis by A5,A9,A7,A4,A6,XBOOLE_0:def 10;
 end;
 
 theorem :: Theorem 11
-  A is 1st_class & B is 1st_class implies
-  A \/ B is 1st_class & A /\ B is 1st_class
+  A is 1st_class & B is 1st_class implies A \/ B is 1st_class & A /\ B
+  is 1st_class
 proof
-  assume
-A1: A is 1st_class & B is 1st_class;
-  then
-A2: Int Cl A = Int Cl Int A & Cl Int A = Cl Int Cl A &
-  Int Cl B = Int Cl Int B & Cl Int B = Cl Int Cl B by Th51;
-A3: Int Cl (A /\ B) = Int Cl A /\ Int Cl B by A1,Th53
-    .= Int Cl Int (A /\ B) by A2,Th1;
-  Cl Int (A \/ B) = Cl Int A \/ Cl Int B by A1,Th53
-    .= Cl Int Cl (A \/ B) by A2,Th2;
-  hence thesis by A3,Th52;
+  assume that
+A1: A is 1st_class and
+A2: B is 1st_class;
+A3: Cl Int A = Cl Int Cl A by A1,Th51;
+A4: Int Cl B = Int Cl Int B by A2,Th51;
+A5: Int Cl A = Int Cl Int A by A1,Th51;
+A6: Cl Int B = Cl Int Cl B by A2,Th51;
+A7: Cl Int (A \/ B) = Cl Int A \/ Cl Int B by A1,A2,Th53
+    .= Cl Int Cl (A \/ B) by A3,A6,Th2;
+  Int Cl (A /\ B) = Int Cl A /\ Int Cl B by A1,A2,Th53
+    .= Int Cl Int (A /\ B) by A5,A4,Th1;
+  hence thesis by A7,Th52;
 end;
 
-:: TODO: Remark 2 from Isomichi's paper 
+:: TODO: Remark 2 from Isomichi's paper
 :: condensed = domain    Int Cl A c= Cl Int A 
 :: closed domain:   A = Cl Int A:  regular_closed = closed_condensed 
 :: open domain:     A = Int Cl A:  regular_open = open_condensed 

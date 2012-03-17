@@ -11,14 +11,14 @@ environ
       GRAPH_1, ARYTM_1, MCART_1, VECTSP_1, GROUP_6, CARD_3, GOBOARD5, BINOP_1,
       SQUARE_1, REALSET1, ARYTM, XREAL_0, POLYNOM1, SETFAM_1, ALGSTR_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, RELAT_1, ORDINAL1,
-      XCMPLX_0, XXREAL_0, XREAL_0, FUNCT_1, REAL_1, REALSET1, EUCLID, FUNCT_2,
-      ABIAN, CARD_1, DOMAIN_1, MOD_4, CARD_3, BINOP_1, SEQ_1, VECTSP_1, NAT_1,
+      XCMPLX_0, XXREAL_0, XREAL_0, FUNCT_1, REAL_1, EUCLID, FUNCT_2, ABIAN,
+      CARD_1, DOMAIN_1, MOD_4, CARD_3, BINOP_1, SEQ_1, VECTSP_1, NAT_1,
       NUMBERS, FINSET_1, STRUCT_0, ALGSTR_0, FINSEQ_1, FINSEQ_2, RLVECT_1;
  constructors REAL_1, SQUARE_1, NAT_1, CARD_3, REALSET1, ABIAN, EUCLID, MOD_4,
       SEQ_1, XXREAL_2, RELSET_1;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, FINSET_1, NUMBERS, XXREAL_0,
       XREAL_0, NAT_1, MEMBERED, FINSEQ_1, REALSET1, ABIAN, STRUCT_0, VECTSP_1,
-      CARD_1, ALGSTR_0, VALUED_0, CARD_3, ZFMISC_1;
+      CARD_1, VALUED_0, ZFMISC_1, RELAT_1;
  requirements NUMERALS, SUBSET, BOOLE, REAL, ARITHM;
 
 
@@ -52,7 +52,6 @@ definition
   let d be real Element of NAT;
   redefine attr d is zero means
 :: CHAIN_1:def 1
-
   not d > 0;
 end;
 
@@ -98,8 +97,7 @@ scheme :: CHAIN_1:sch 2
  NonEmptyFinite
   { X()->non empty set, A()->non empty finite Subset of X(), P[set] } : P[A()]
 provided
- for x being Element of X() st x in A() holds P[{x}]
-and
+ for x being Element of X() st x in A() holds P[{x}] and
  for x being Element of X(), B being non empty finite Subset of X()
 st x in A() & B c= A() & not x in B & P[B] holds P[B \/ {x}];
 
@@ -109,8 +107,7 @@ scheme :: CHAIN_1:sch 3
   P[A()]
 provided
  for x,y being Element of X() st x in A() & y in A() & x <> y
-holds P[{x,y}]
-and
+holds P[{x,y}] and
  for x being Element of X(), B being non trivial finite Subset of X()
 st x in A() & B c= A() & not x in B & P[B] holds P[B \/ {x}];
 
@@ -134,7 +131,7 @@ theorem :: CHAIN_1:9
 :: elements of REAL d as functions to REAL
 
 definition
- canceled;
+  canceled;
   let n;
   redefine func REAL n means
 :: CHAIN_1:def 4
@@ -240,7 +237,7 @@ end;
 
 theorem :: CHAIN_1:24
   x in cell(l,r) iff ((for i holds l.i <= x.i & x.i <= r.i) or
-  (ex i st r.i < l.i & (x.i <= r.i or l.i <= x.i)));
+  ex i st r.i < l.i & (x.i <= r.i or l.i <= x.i) );
 
 theorem :: CHAIN_1:25
   (for i holds l.i <= r.i) implies
@@ -303,14 +300,14 @@ theorem :: CHAIN_1:35
   k <= d & cell(l,r) in cells(k,G) implies
   (for i holds (l.i < r.i & [l.i,r.i] is Gap of G.i) or
   (l.i = r.i & l.i in G.i)) or
-  (for i holds r.i < l.i & [l.i,r.i] is Gap of G.i);
+  for i holds r.i < l.i & [l.i,r.i] is Gap of G.i;
 
 theorem :: CHAIN_1:36
   k <= d & cell(l,r) in cells(k,G) implies for i holds l.i in G.i & r.i in G.i;
 
 theorem :: CHAIN_1:37
   k <= d & cell(l,r) in cells(k,G) implies
-  (for i holds l.i <= r.i) or (for i holds r.i < l.i);
+  (for i holds l.i <= r.i) or for i holds r.i < l.i;
 
 theorem :: CHAIN_1:38
   for A being Subset of REAL d holds
@@ -322,11 +319,11 @@ theorem :: CHAIN_1:39
 theorem :: CHAIN_1:40
   for A being Subset of REAL d holds A in cells(d,G) iff
   ex l,r st A = cell(l,r) & (for i holds [l.i,r.i] is Gap of G.i) &
-  ((for i holds l.i < r.i) or (for i holds r.i < l.i));
+  ((for i holds l.i < r.i) or for i holds r.i < l.i );
 
 theorem :: CHAIN_1:41
   cell(l,r) in cells(d,G) iff (for i holds [l.i,r.i] is Gap of G.i) &
-  ((for i holds l.i < r.i) or (for i holds r.i < l.i));
+  ((for i holds l.i < r.i) or for i holds r.i < l.i );
 
 theorem :: CHAIN_1:42
   d = d' + 1 implies for A being Subset of REAL d holds A in cells(d',G) iff
@@ -351,14 +348,14 @@ theorem :: CHAIN_1:45
 
 theorem :: CHAIN_1:46
   k <= d & k' <= d & cell(l,r) in cells(k,G) & cell(l',r') in cells(k',G) &
-  cell(l,r) c= cell(l',r') implies for i holds (l.i = l'.i & r.i = r'.i) or
-  (l.i = l'.i & r.i = l'.i) or (l.i = r'.i & r.i = r'.i) or
-  (l.i <= r.i & r'.i < l'.i & r'.i <= l.i & r.i <= l'.i);
+  cell(l,r) c= cell(l',r') implies for i holds l.i = l'.i & r.i = r'.i or
+  l.i = l'.i & r.i = l'.i or l.i = r'.i & r.i = r'.i or
+  l.i <= r.i & r'.i < l'.i & r'.i <= l.i & r.i <= l'.i;
 
 theorem :: CHAIN_1:47
   k < k' & k' <= d & cell(l,r) in cells(k,G) & cell(l',r') in cells(k',G) &
   cell(l,r) c= cell(l',r') implies
-  ex i st (l.i = l'.i & r.i = l'.i) or (l.i = r'.i & r.i = r'.i);
+  ex i st l.i = l'.i & r.i = l'.i or l.i = r'.i & r.i = r'.i;
 
 theorem :: CHAIN_1:48
   for X,X' being Subset of Seg d st cell(l,r) c= cell(l',r') &
@@ -367,8 +364,8 @@ theorem :: CHAIN_1:48
   (for i holds (i in X' & l'.i < r'.i & [l'.i,r'.i] is Gap of G.i) or
   (not i in X' & l'.i = r'.i & l'.i in G.i)) holds X c= X' &
   (for i st i in X or not i in X' holds l.i = l'.i & r.i = r'.i) &
-  (for i st not i in X & i in X' holds
-  (l.i = l'.i & r.i = l'.i) or (l.i = r'.i & r.i = r'.i));
+  for i st not i in X & i in X' holds
+  l.i = l'.i & r.i = l'.i or l.i = r'.i & r.i = r'.i;
 
 definition
   let d,G,k;
@@ -384,7 +381,6 @@ definition
   let d,G,k;
   func 0_(k,G) -> Chain of k,G equals
 :: CHAIN_1:def 9
-
   {};
 end;
 
@@ -392,7 +388,6 @@ definition
   let d,G;
   func Omega(G) -> Chain of d,G equals
 :: CHAIN_1:def 10
-
   cells(d,G);
 end;
 
@@ -428,10 +423,8 @@ scheme :: CHAIN_1:sch 4
  ChainInd { d()->non zero Element of NAT, G()->Grating of d(),
   k()->Element of NAT, C()->Chain of k(),G(), P[set] } : P[C()]
 provided
- P[0_(k(),G())]
-and
- for A being Cell of k(),G() st A in C() holds P[{A}]
-and
+ P[0_(k(),G())] and
+ for A being Cell of k(),G() st A in C() holds P[{A}] and
  for C1,C2 being Chain of k(),G() st C1 c= C() & C2 c= C() &
 P[C1] & P[C2] holds P[C1 + C2];
 
@@ -468,7 +461,6 @@ definition
   let C be Chain of (k + 1),G, C' be Chain of k,G;
   pred C' bounds C means
 :: CHAIN_1:def 14
-
   C' = del C;
 end;
 
@@ -527,9 +519,9 @@ definition
   mode Cycle of k,G -> Chain of k,G means
 :: CHAIN_1:def 15
 
-    (k = 0 & card it is even) or
-    (ex k' st k = k' + 1 & ex C being Chain of (k' + 1),G st C = it &
-    del C = 0_(k',G));
+    k = 0 & card it is even or
+    ex k' st k = k' + 1 & ex C being Chain of (k' + 1),G st C = it &
+    del C = 0_(k',G);
 end;
 
 theorem :: CHAIN_1:66
@@ -547,7 +539,6 @@ definition
   let C be Cycle of (k + 1),G;
   redefine func del C equals
 :: CHAIN_1:def 16
-
   0_(k,G);
 end;
 
@@ -583,9 +574,9 @@ definition
   func Chains(k,G) -> strict AbGroup means
 :: CHAIN_1:def 17
 
-  (the carrier of it = bool(cells(k,G))) & (0.it = 0_(k,G)) &
-  (for A,B being Element of it, A',B' being Chain of k,G
-  st A = A' & B = B' holds A + B = A' + B');
+  the carrier of it = bool(cells(k,G)) & 0.it = 0_(k,G) &
+  for A,B being Element of it, A',B' being Chain of k,G
+  st A = A' & B = B' holds A + B = A' + B';
 end;
 
 definition

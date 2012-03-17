@@ -11,6 +11,7 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="NAT_1"/>
@@ -27,7 +28,6 @@
 <ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
 <ArticleID name="RELAT_2"/>
-<ArticleID name="PARTFUN1"/>
 <ArticleID name="EQREL_1"/>
 <ArticleID name="CONNSP_2"/>
 <ArticleID name="PCOMPS_1"/>
@@ -60,16 +60,16 @@
 <Adjective nr="10" value="false"/>
 <Adjective nr="21">
 <Func kind="K" nr="48"/>
+</Adjective>
+<Adjective nr="22">
+<Func kind="K" nr="48"/>
 <Func kind="K" nr="44"/>
 </Adjective>
-<Adjective nr="31"/>
-<Adjective nr="78">
-<Func kind="K" nr="48"/>
-</Adjective>
+<Adjective nr="32"/>
+<Adjective nr="87"/>
 <Adjective nr="88"/>
 <Adjective nr="89"/>
-<Adjective nr="90"/>
-<Adjective nr="103"/>
+<Adjective nr="102"/>
 </Cluster>
 </RCluster>
 <FCluster aid="TIETZE" nr="1">
@@ -92,13 +92,13 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="123">
+<Func kind="K" nr="131">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="46"/>
-<Adjective nr="85">
+<Adjective nr="84">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

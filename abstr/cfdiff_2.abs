@@ -1,6 +1,6 @@
 :: Cauchy-Riemann Differential Equations of Complex Functions
 ::  by Hiroshi Yamazaki , Yasunari Shidama , Chanapat Pacharapokin and Yatsuka Nakamura
-:: 
+::
 :: Received April 7, 2009
 :: Copyright (c) 2009 Association of Mizar Users
 
@@ -22,92 +22,80 @@ environ
       PDIFF_1, CFDIFF_1, COMSEQ_2, COMSEQ_3, RVSUM_1, RELSET_1;
  registrations RELSET_1, STRUCT_0, ORDINAL1, MEMBERED, NUMBERS, XBOOLE_0,
       XREAL_0, XXREAL_0, XCMPLX_0, FUNCT_2, REAL_NS1, COMSEQ_3, VALUED_0,
-      VALUED_1, SEQM_3, SEQ_4, FDIFF_1, CFDIFF_1, FINSEQ_2;
+      VALUED_1, SEQ_4, FDIFF_1, CFDIFF_1, FINSEQ_2;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
 
 
 begin
 
- reserve k, k1, n, n1, m, m1 for Element of NAT;
- reserve X, y for set;
- reserve Y for Subset of COMPLEX;
- reserve f, f1, f2 for PartFunc of COMPLEX,COMPLEX;
- reserve r, p for Real;
- reserve a, a1, a2, b, b1, b2, x, x0, y, y0, z, z0 for Complex;
+reserve k, k1, n, n1, m, m1 for Element of NAT;
+reserve X, y for set;
+reserve Y for Subset of COMPLEX;
+reserve f, f1, f2 for PartFunc of COMPLEX,COMPLEX;
+reserve r, p for Real;
+reserve a, a1, a2, b, b1, b2, x, x0, y, y0, z, z0 for Complex;
 
-definition let f be PartFunc of COMPLEX,COMPLEX; ::: to be removed
+definition
+  let f be PartFunc of COMPLEX,COMPLEX;
   func Re f -> PartFunc of COMPLEX,REAL means
 :: CFDIFF_2:def 1
-  dom f = dom it &
-  for z be Complex st z in dom it holds it.z = Re(f/.z);
+
+  dom f = dom it & for z be
+  Complex st z in dom it holds it.z = Re(f/.z);
 end;
 
-definition let f be PartFunc of COMPLEX,COMPLEX; ::: to be removed
+definition
+  let f be PartFunc of COMPLEX,COMPLEX;
   func Im f -> PartFunc of COMPLEX,REAL means
 :: CFDIFF_2:def 2
-  dom f = dom it & for z be Complex st z in dom it holds it.z=Im (f/.z);
+
+  dom f = dom it & for z be
+  Complex st z in dom it holds it.z=Im (f/.z);
 end;
 
 theorem :: CFDIFF_2:1
-  for f be PartFunc of COMPLEX,COMPLEX st f is total
-  holds dom (Re f) = COMPLEX & dom (Im f) = COMPLEX;
+  for f be PartFunc of COMPLEX,COMPLEX st f is total holds dom (Re
+  f) = COMPLEX & dom (Im f) = COMPLEX;
 
 :: Cauchy-Riemann
+
 theorem :: CFDIFF_2:2
-  for f be PartFunc of COMPLEX, COMPLEX,
-  u,v be PartFunc of REAL 2, REAL,
-  z0 be Complex,
-  x0, y0 be Real,
-  xy0 be Element of REAL 2 st
-  (for x, y be Real st x+y*<i> in dom f holds
-  <*x,y*> in dom u & u.<*x,y*> = (Re f).(x+y*<i>)) &
-  (for x,y be Real st x+y*<i> in dom f holds
-  <*x,y*> in dom v & v.<*x,y*> = (Im f).(x+y*<i>)) &
-  z0 = x0+y0*<i> & xy0 = <*x0,y0*> & f is_differentiable_in z0 holds
-  u is_partial_differentiable_in xy0,1 & u is_partial_differentiable_in xy0,2 &
-  v is_partial_differentiable_in xy0,1 & v is_partial_differentiable_in xy0,2 &
-  Re diff(f,z0) = partdiff(u,xy0,1) & Re diff(f,z0) = partdiff(v,xy0,2) &
-  Im diff(f,z0) =-partdiff(u,xy0,2) & Im diff(f,z0) = partdiff(v,xy0,1);
+  for f be PartFunc of COMPLEX, COMPLEX, u,v be PartFunc of REAL 2,
+  REAL, z0 be Complex, x0, y0 be Real, xy0 be Element of REAL 2 st (for x, y be
+Real st x+y*<i> in dom f holds <*x,y*> in dom u & u.<*x,y*> = (Re f).(x+y*<i>))
+& (for x,y be Real st x+y*<i> in dom f holds <*x,y*> in dom v & v.<*x,y*> = (Im
+  f).(x+y*<i>)) & z0 = x0+y0*<i> & xy0 = <*x0,y0*> & f is_differentiable_in z0
+holds u is_partial_differentiable_in xy0,1 & u is_partial_differentiable_in xy0
+,2 & v is_partial_differentiable_in xy0,1 & v is_partial_differentiable_in xy0,
+2 & Re diff(f,z0) = partdiff(u,xy0,1) & Re diff(f,z0) = partdiff(v,xy0,2) & Im
+  diff(f,z0) =-partdiff(u,xy0,2) & Im diff(f,z0) = partdiff(v,xy0,1);
 
 theorem :: CFDIFF_2:3
-  for seq be Real_Sequence holds (seq is convergent & lim seq = 0)
-  iff (abs seq is convergent & lim abs seq = 0);
+  for seq be Real_Sequence holds seq is convergent & lim seq = 0
+  iff abs seq is convergent & lim abs seq = 0;
 
 theorem :: CFDIFF_2:4
-  for X be RealNormSpace, seq be sequence of X
-  holds (seq is convergent & lim seq = 0.X ) iff
-  (||. seq .|| is convergent & lim ||. seq .|| = 0);
+  for X be RealNormSpace, seq be sequence of X holds seq is
+convergent & lim seq = 0.X iff ||. seq .|| is convergent & lim ||. seq .|| = 0;
 
 theorem :: CFDIFF_2:5
-  for u be PartFunc of REAL 2, REAL,
-  x0, y0 be Real,
-  xy0 be Element of REAL 2
-  st xy0 = <*x0,y0*> & <>*u is_differentiable_in xy0
-  holds
-  u is_partial_differentiable_in xy0,1 &
-  u is_partial_differentiable_in xy0,2 &
-  <* partdiff(u,xy0,1) *> = diff(<>*u,xy0).(<* 1,0 *>) &
-  <* partdiff(u,xy0,2) *> = diff(<>*u,xy0).(<* 0,1 *>);
+  for u be PartFunc of REAL 2, REAL, x0, y0 be Real, xy0 be Element
+  of REAL 2 st xy0 = <*x0,y0*> & <>*u is_differentiable_in xy0 holds u
+is_partial_differentiable_in xy0,1 & u is_partial_differentiable_in xy0,2 & <*
+  partdiff(u,xy0,1) *> = diff(<>*u,xy0).(<* 1,0 *>) & <* partdiff(u,xy0,2) *> =
+  diff(<>*u,xy0).(<* 0,1 *>);
 
 theorem :: CFDIFF_2:6
-  for f be PartFunc of COMPLEX, COMPLEX,
-  u,v be PartFunc of REAL 2, REAL,
-  z0 be Complex,
-  x0, y0 be Real,
-  xy0 be Element of REAL 2 st
-  (for x,y be Real st <*x,y*> in dom v holds x+y*<i> in dom f) &
-  (for x,y be Real st x+y*<i> in dom f holds
-  <*x,y*> in dom u & u.<*x,y*> = (Re f).(x+y*<i>)) &
-  (for x,y be Real st x+y*<i> in dom f holds
-  <*x,y*> in dom v & v.<*x,y*> = (Im f).(x+y*<i>)) &
-  z0 = x0+y0*<i> & xy0 = <*x0,y0*> &
-  <>*u is_differentiable_in xy0 &
-  <>*v is_differentiable_in xy0 &
-  partdiff(u,xy0,1) = partdiff(v,xy0,2) &
-  partdiff(u,xy0,2) = -partdiff(v,xy0,1)
-  holds
-  f is_differentiable_in z0 &
-  u is_partial_differentiable_in xy0,1 & u is_partial_differentiable_in xy0,2 &
-  v is_partial_differentiable_in xy0,1 & v is_partial_differentiable_in xy0,2 &
-  Re diff(f,z0) = partdiff(u,xy0,1) & Re diff(f,z0) = partdiff(v,xy0,2) &
-  Im diff(f,z0) =-partdiff(u,xy0,2) & Im diff(f,z0) = partdiff(v,xy0,1);
+  for f be PartFunc of COMPLEX, COMPLEX, u,v be PartFunc of REAL 2, REAL
+  , z0 be Complex, x0, y0 be Real, xy0 be Element of REAL 2 st (for x,y be Real
+  st <*x,y*> in dom v holds x+y*<i> in dom f) & (for x,y be Real st x+y*<i> in
+dom f holds <*x,y*> in dom u & u.<*x,y*> = (Re f).(x+y*<i>)) & (for x,y be Real
+st x+y*<i> in dom f holds <*x,y*> in dom v & v.<*x,y*> = (Im f).(x+y*<i>)) & z0
+  = x0+y0*<i> & xy0 = <*x0,y0*> & <>*u is_differentiable_in xy0 & <>*v
+is_differentiable_in xy0 & partdiff(u,xy0,1) = partdiff(v,xy0,2) & partdiff(u,
+  xy0,2) = -partdiff(v,xy0,1) holds f is_differentiable_in z0 & u
+  is_partial_differentiable_in xy0,1 & u is_partial_differentiable_in xy0,2 & v
+is_partial_differentiable_in xy0,1 & v is_partial_differentiable_in xy0,2 & Re
+diff(f,z0) = partdiff(u,xy0,1) & Re diff(f,z0) = partdiff(v,xy0,2) & Im diff(f,
+  z0) =-partdiff(u,xy0,2) & Im diff(f,z0) = partdiff(v,xy0,1);
+

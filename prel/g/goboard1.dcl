@@ -7,6 +7,7 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="TARSKI"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
@@ -26,10 +27,10 @@
 <ArticleID name="MATRIX_1"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="PRE_TOPC"/>
+<ArticleID name="RAT_1"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
-<ArticleID name="RAT_1"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_1"/>
 <ArticleID name="RLTOPSP1"/>
@@ -40,56 +41,52 @@
 <ArgTypes/>
 <Typ kind="M" nr="6">
 <Cluster/>
-<Func kind="K" nr="44"/>
+<Func kind="K" nr="51"/>
 </Typ>
 <Cluster>
 <Adjective nr="1"/>
-<Adjective nr="4">
-<Func kind="K" nr="48"/>
-</Adjective>
 <Adjective nr="5">
-<Func kind="K" nr="44"/>
+<Func kind="K" nr="51"/>
 </Adjective>
 <Adjective nr="6"/>
 <Adjective nr="10" value="false"/>
-<Adjective nr="26"/>
-<Adjective nr="32"/>
-<Adjective nr="92"/>
+<Adjective nr="27"/>
+<Adjective nr="33"/>
+<Adjective nr="34"/>
 <Adjective nr="93"/>
 <Adjective nr="94"/>
-<Adjective nr="98"/>
+<Adjective nr="95"/>
+<Adjective nr="99"/>
 </Cluster>
 </RCluster>
 <RCluster aid="GOBOARD1" nr="2">
 <ArgTypes/>
 <Typ kind="M" nr="6">
 <Cluster/>
-<Func kind="K" nr="44"/>
+<Func kind="K" nr="51"/>
 </Typ>
 <Cluster>
 <Adjective nr="1"/>
-<Adjective nr="4">
-<Func kind="K" nr="48"/>
-</Adjective>
 <Adjective nr="5">
-<Func kind="K" nr="44"/>
+<Func kind="K" nr="51"/>
 </Adjective>
 <Adjective nr="6"/>
 <Adjective nr="8"/>
-<Adjective nr="26"/>
-<Adjective nr="32"/>
-<Adjective nr="92"/>
+<Adjective nr="27"/>
+<Adjective nr="33"/>
+<Adjective nr="34"/>
 <Adjective nr="93"/>
 <Adjective nr="94"/>
+<Adjective nr="95"/>
 </Cluster>
 </RCluster>
 <RCluster aid="GOBOARD1" nr="3">
 <ArgTypes/>
 <Typ kind="M" nr="6">
 <Cluster/>
-<Func kind="K" nr="128">
+<Func kind="K" nr="136">
 <Func kind="U" nr="1">
-<Func kind="K" nr="281">
+<Func kind="K" nr="290">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -98,26 +95,24 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="3" value="false"/>
-<Adjective nr="4">
-<Func kind="K" nr="48"/>
-</Adjective>
 <Adjective nr="5">
-<Func kind="K" nr="128">
+<Func kind="K" nr="136">
 <Func kind="U" nr="1">
-<Func kind="K" nr="281">
+<Func kind="K" nr="290">
 <Num nr="2"/>
 </Func>
 </Func>
 </Func>
 </Adjective>
 <Adjective nr="6"/>
-<Adjective nr="26"/>
-<Adjective nr="32"/>
-<Adjective nr="90"/>
-<Adjective nr="149"/>
+<Adjective nr="27"/>
+<Adjective nr="33"/>
+<Adjective nr="34"/>
+<Adjective nr="91"/>
 <Adjective nr="150"/>
 <Adjective nr="151"/>
 <Adjective nr="152"/>
+<Adjective nr="153"/>
 </Cluster>
 </RCluster>
 <CCluster aid="GOBOARD1" nr="1">
@@ -125,10 +120,10 @@
 <Cluster/>
 <Typ kind="M" nr="6">
 <Cluster/>
-<Func kind="K" nr="44"/>
+<Func kind="K" nr="51"/>
 </Typ>
 <Cluster>
-<Adjective nr="94"/>
+<Adjective nr="95"/>
 </Cluster>
 </CCluster>
 </Registrations>

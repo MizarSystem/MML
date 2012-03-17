@@ -13,17 +13,16 @@ environ
       ALGSTR_0, SEQ_4;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, MCART_1, PRE_TOPC, DOMAIN_1,
       RELAT_1, FUNCOP_1, REALSET1, XXREAL_0, XREAL_0, XXREAL_2, COMPLEX1,
-      REAL_1, NAT_1,
-      STRUCT_0, ALGSTR_0, ORDINAL1, NUMBERS, FUNCT_1, RELSET_1, FUNCT_2,
-      INTEGRA2, PSCOMP_1, RLVECT_1, VALUED_1, COMSEQ_1, CFUNCT_1,
-      COMSEQ_2, NORMSP_1, SEQ_1, SEQ_2, SEQM_3, CLVECT_1, SEQ_4, PARTFUN1,
-      CSSPACE, CSSPACE3, CLOPBAN1;
+      REAL_1, NAT_1, STRUCT_0, ALGSTR_0, ORDINAL1, NUMBERS, FUNCT_1, RELSET_1,
+      FUNCT_2, INTEGRA2, PSCOMP_1, RLVECT_1, VALUED_1, COMSEQ_1, CFUNCT_1,
+      COMSEQ_2, NORMSP_1, SEQ_1, SEQ_2, CLVECT_1, SEQ_4, PARTFUN1, CSSPACE,
+      CSSPACE3, CLOPBAN1;
  constructors PARTFUN1, REAL_1, NAT_1, COMPLEX1, SEQM_3, COMSEQ_2, REALSET1,
       PSCOMP_1, INTEGRA2, LOPBAN_1, CSSPACE3, CLOPBAN1, SEQ_1, XXREAL_2,
       RVSUM_1, SEQ_4, RELSET_1;
- registrations XBOOLE_0, SUBSET_1, RELAT_1, ORDINAL1, FUNCT_2, NUMBERS,
-      XXREAL_0, XREAL_0, MEMBERED, SEQM_3, REALSET1, STRUCT_0, CLVECT_1,
-      CSSPACE3, VALUED_0, CSSPACE, VALUED_1, FUNCOP_1, SEQ_2, SEQ_4, RFUNCT_1;
+ registrations SUBSET_1, RELAT_1, ORDINAL1, FUNCT_2, NUMBERS, XXREAL_0,
+      XREAL_0, MEMBERED, REALSET1, STRUCT_0, CLVECT_1, CSSPACE3, VALUED_0,
+      CSSPACE, VALUED_1, FUNCOP_1, SEQ_2, SEQ_4, RFUNCT_1;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
  definitions TARSKI, XBOOLE_0, SEQ_4, RLVECT_1, REALSET1, CLOPBAN1, BINOP_1,
       STRUCT_0, ALGSTR_0, VALUED_1;
@@ -36,35 +35,37 @@ environ
 
 begin :: Complex Banach space of bounded complex sequences
 
-Lm1: for rseq be Real_Sequence
-for K be real number st (for n be Element of NAT holds rseq.n <= K)
-holds sup rng rseq <= K
+Lm1: for rseq be Real_Sequence for K be real number st (for n be Element of
+NAT holds rseq.n <= K) holds sup rng rseq <= K
+
 proof
   let rseq be Real_Sequence;
   let K be real number such that
 A1: for n be Element of NAT holds rseq.n <= K;
   now
-    let s be real number such that
-A2: s in rng rseq;
-    consider n be set such that
-A3: n in NAT & rseq.n=s by A2,FUNCT_2:17;
-    thus s <=K by A1,A3;
+    let s be real number;
+    assume
+    s in rng rseq;
+    then ex n be set st n in NAT & rseq.n=s by FUNCT_2:17;
+    hence s <=K by A1;
   end;
   hence thesis by SEQ_4:62;
 end;
 
-Lm2: for rseq be Real_Sequence st rseq is bounded holds
-for n be Element of NAT holds rseq.n <= sup rng rseq
+Lm2: for rseq be Real_Sequence st rseq is bounded holds for n be Element of
+NAT holds rseq.n <= sup rng rseq
+
 proof
-  let rseq be Real_Sequence such that
-A1: rseq is bounded;
-  let n be Element of NAT;
-  rng rseq is bounded by A1,PSCOMP_1:7;
+  let rseq be Real_Sequence;
+  assume
+  rseq is bounded;
+  then rng rseq is bounded by PSCOMP_1:7;
   then
-A2: rng rseq is bounded_above by XXREAL_2:def 11;
+A1: rng rseq is bounded_above by XXREAL_2:def 11;
+  let n be Element of NAT;
   NAT = dom rseq by FUNCT_2:def 1;
   then rseq.n in rng rseq by FUNCT_1:12;
-  hence thesis by A2,SEQ_4:def 4;
+  hence thesis by A1,SEQ_4:def 4;
 end;
 
 definition
@@ -72,100 +73,107 @@ definition
   Linear_Space_of_ComplexSequences means
   :Def1:
   for x being set holds x in it iff
-  (x in the_set_of_ComplexSequences & seq_id x is bounded);
+  x in the_set_of_ComplexSequences & seq_id x is bounded;
   existence
   proof
     defpred P[set] means seq_id $1 is bounded;
     consider IT being set such that
-A1: for x being set holds x in IT
-    iff x in the_set_of_ComplexSequences & P[x] from XBOOLE_0:sch 1;
-    IT is Subset of the_set_of_ComplexSequences
-    proof
-      for x be set st x in IT holds x in the_set_of_ComplexSequences by A1;
-      hence thesis by TARSKI:def 3;
-    end;
+A1: for x being set holds x in IT iff x in the_set_of_ComplexSequences
+    & P[x] from XBOOLE_0:sch 1;
+    for x be set st x in IT holds x in the_set_of_ComplexSequences by A1;
+    then IT is Subset of the_set_of_ComplexSequences by TARSKI:def 3;
     hence thesis by A1,CSSPACE:def 7;
   end;
   uniqueness
   proof
     let X1,X2 be Subset of Linear_Space_of_ComplexSequences;
     assume that
-A2: for x being set holds x in X1 iff
-    (x in the_set_of_ComplexSequences & seq_id(x) is bounded) and
-A3: for x being set holds x in X2 iff
-    (x in the_set_of_ComplexSequences & seq_id(x) is bounded);
+A2: for x being set holds x in X1 iff x in the_set_of_ComplexSequences
+    & seq_id(x) is bounded and
+A3: for x being set holds x in X2 iff x in the_set_of_ComplexSequences
+    & seq_id(x) is bounded;
     thus X1 c= X2
     proof
       let x be set;
-      assume x in X1;
+      assume
+      x in X1;
       then x in the_set_of_ComplexSequences & seq_id(x) is bounded by A2;
       hence thesis by A3;
     end;
     let x be set;
-    assume x in X2;
+    assume
+    x in X2;
     then x in the_set_of_ComplexSequences & seq_id(x) is bounded by A3;
     hence thesis by A2;
   end;
 end;
 
-Lm3: for seq1,seq2 be Complex_Sequence st
-seq1 is bounded & seq2 is bounded holds seq1 + seq2 is bounded
+Lm3: for seq1,seq2 be Complex_Sequence st seq1 is bounded & seq2 is bounded
+holds seq1 + seq2 is bounded
+
 proof
   let seq1,seq2 be Complex_Sequence;
-  assume
-A1: seq1 is bounded & seq2 is bounded;
-  then consider r1 being Real such that
-A2: 0 < r1 & for n be Element of NAT holds |.seq1.n.| < r1 by COMSEQ_2:8;
+  assume that
+A1: seq1 is bounded and
+A2: seq2 is bounded;
   consider r2 being Real such that
-A3: 0 < r2 & for n be Element of NAT holds |.seq2.n.| < r2 by A1,COMSEQ_2:8;
+  0 < r2 and
+A3: for n be Element of NAT holds |.seq2.n.| < r2 by A2,COMSEQ_2:8;
+  consider r1 being Real such that
+  0 < r1 and
+A4: for n be Element of NAT holds |.seq1.n.| < r1 by A1,COMSEQ_2:8;
   for n be Element of NAT holds |.(seq1+seq2).n.| < r1+r2
   proof
     let n be Element of NAT;
     |.(seq1+seq2).n.| = |.(seq1.n + seq2.n).| by VALUED_1:1;
     then
-A4: |.(seq1+seq2).n.| <= |.seq1.n.| + |.seq2.n.| by COMPLEX1:142;
-    |.seq1.n.| < r1 & |.seq2.n.| < r2 by A2,A3;
-    then |.seq1.n.| + |.seq2.n.| < r1 + r2 by XREAL_1:10;
-    hence thesis by A4,XXREAL_0:2;
+A5: |.(seq1+seq2).n.| <= |.seq1.n.| + |.seq2.n.| by COMPLEX1:142;
+    |.seq1.n.| < r1 by A4;
+    then |.seq1.n.| + |.seq2.n.| < r1 + r2 by A3,XREAL_1:10;
+    hence thesis by A5,XXREAL_0:2;
   end;
   hence thesis by COMSEQ_2:def 3;
 end;
 
-Lm4: for c be Complex, seq be Complex_Sequence st seq is bounded holds
-c(#)seq is bounded
+Lm4: for c be Complex, seq be Complex_Sequence st seq is bounded holds c(#)seq
+is bounded
+
 proof
   let c be Complex;
-  let seq be Complex_Sequence such that
-A1: seq is bounded;
-  consider r be Real such that
-A2: 0 < r & for n be Element of NAT holds |.seq.n.| < r by A1,COMSEQ_2:8;
+  let seq be Complex_Sequence;
+  assume
+  seq is bounded;
+  then consider r be Real such that
+  0 < r and
+A1: for n be Element of NAT holds |.seq.n.| < r by COMSEQ_2:8;
   ex r1 be Real st for n be Element of NAT holds |.(c(#)seq).n.| < r1
   proof
-    now per cases;
+    now
+      per cases;
       case
-A3:     c = 0c;
-A4:     for n be Element of NAT holds |.(c(#)seq).n.| < 1
+A2:     c = 0c;
+        take r1 = 1;
+        for n be Element of NAT holds |.(c(#)seq).n.| < 1
         proof
           let n be Element of NAT;
           (c(#)seq).n = c * seq.n by VALUED_1:6
-            .= 0 by A3;
+            .= 0 by A2;
           hence thesis by COMPLEX1:130;
         end;
-        take r1 = 1;
-        thus thesis by A4;
+        hence thesis;
       end;
       case
-A5:     c <> 0c;
-A6:     for n be Element of NAT holds |.(c(#)seq).n.| < |.c.|*r
+A3:     c <> 0c;
+        take r1 = |.c.|*r;
+        for n be Element of NAT holds |.(c(#)seq).n.| < |.c.|*r
         proof
           let n be Element of NAT;
-A7:       |.c.| > 0 & r > |.seq.n.| by A2,A5,COMPLEX1:133;
-          |.(c(#)seq).n.| = |.c * seq.n.| by VALUED_1:6
+A4:       |.(c(#)seq).n.| = |.c * seq.n.| by VALUED_1:6
             .= |.c.|*|.seq.n.| by COMPLEX1:151;
-          hence thesis by A7,XREAL_1:70;
+          |.c.| > 0 by A3,COMPLEX1:133;
+          hence thesis by A1,A4,XREAL_1:70;
         end;
-        take r1 = |.c.|*r;
-        thus thesis by A6;
+        hence thesis;
       end;
     end;
     hence thesis;
@@ -180,8 +188,8 @@ registration
     seq_id CZeroseq is bounded
     proof
       reconsider seq=seq_id CZeroseq as Complex_Sequence;
-      for n being Element of NAT holds |.seq.n.| < 1
-      by COMPLEX1:130,CSSPACE:def 6;
+      for n being Element of NAT holds |.seq.n.| < 1 by COMPLEX1:130,
+      CSSPACE:def 6;
       hence thesis by COMSEQ_2:8;
     end;
     hence thesis by Def1;
@@ -190,158 +198,158 @@ registration
   coherence
   proof
     set W = the_set_of_BoundedComplexSequences;
-A1: for v,u be VECTOR of Linear_Space_of_ComplexSequences st
-    v in the_set_of_BoundedComplexSequences &
-    u in the_set_of_BoundedComplexSequences
-    holds v + u in the_set_of_BoundedComplexSequences
-    proof
-      let v,u be VECTOR of Linear_Space_of_ComplexSequences such that
-A2:   v in W & u in W;
-      seq_id(v+u) is bounded
-      proof
-A3:     seq_id v is bounded by A2,Def1;
-A4:     seq_id u is bounded by A2,Def1;
-        seq_id(v+u)=seq_id(seq_id v+seq_id u) by CSSPACE:4,def 7
-          .=seq_id v + seq_id u by CSSPACE:3;
-        hence thesis by A3,A4,Lm3;
-      end;
-      hence thesis by Def1,CSSPACE:def 7;
-    end;
-    for c be Complex, v be VECTOR of Linear_Space_of_ComplexSequences st
-    v in W holds c * v in W
+A1: for c be Complex, v be VECTOR of Linear_Space_of_ComplexSequences st v
+    in W holds c * v in W
     proof
       let c be Complex;
-      let v be VECTOR of Linear_Space_of_ComplexSequences such that
-A5:   v in W;
-      seq_id(c*v) is bounded
-      proof
-A6:     seq_id v is bounded by A5,Def1;
-        seq_id(c*v) =seq_id(c(#)seq_id(v)) by CSSPACE:5,def 7
-          .=c(#)seq_id(v) by CSSPACE:3;
-        hence thesis by A6,Lm4;
-      end;
+      let v be VECTOR of Linear_Space_of_ComplexSequences;
+      assume
+      v in W;
+      then
+A2:   seq_id v is bounded by Def1;
+      seq_id(c*v) =seq_id(c(#)seq_id(v)) by CSSPACE:5,def 7
+        .=c(#)seq_id(v) by CSSPACE:3;
+      then seq_id(c*v) is bounded by A2,Lm4;
+      hence thesis by Def1,CSSPACE:def 7;
+    end;
+    for v,u be VECTOR of Linear_Space_of_ComplexSequences st v in
+the_set_of_BoundedComplexSequences & u in the_set_of_BoundedComplexSequences
+    holds v + u in the_set_of_BoundedComplexSequences
+    proof
+      let v,u be VECTOR of Linear_Space_of_ComplexSequences;
+      assume
+      v in W & u in W;
+      then
+A3:   seq_id v is bounded & seq_id u is bounded by Def1;
+      seq_id(v+u)=seq_id(seq_id v+seq_id u) by CSSPACE:4,def 7
+        .=seq_id v + seq_id u by CSSPACE:3;
+      then seq_id(v+u) is bounded by A3,Lm3;
       hence thesis by Def1,CSSPACE:def 7;
     end;
     hence thesis by A1,CLVECT_1:def 4;
   end;
 end;
 
-Lm5: CLSStruct (# the_set_of_BoundedComplexSequences,
-  Zero_(the_set_of_BoundedComplexSequences,Linear_Space_of_ComplexSequences),
-  Add_(the_set_of_BoundedComplexSequences,Linear_Space_of_ComplexSequences),
-  Mult_(the_set_of_BoundedComplexSequences,Linear_Space_of_ComplexSequences) #)
-is Subspace of Linear_Space_of_ComplexSequences by CSSPACE:13;
+Lm5: CLSStruct (# the_set_of_BoundedComplexSequences, Zero_(
+  the_set_of_BoundedComplexSequences,Linear_Space_of_ComplexSequences), Add_(
+  the_set_of_BoundedComplexSequences,Linear_Space_of_ComplexSequences), Mult_(
+  the_set_of_BoundedComplexSequences,Linear_Space_of_ComplexSequences) #) is
+Subspace of Linear_Space_of_ComplexSequences by CSSPACE:13;
 
 registration
-  cluster CLSStruct (# the_set_of_BoundedComplexSequences,
-
-Zero_(the_set_of_BoundedComplexSequences,Linear_Space_of_ComplexSequences),
-
-Add_(the_set_of_BoundedComplexSequences,Linear_Space_of_ComplexSequences),
-
-Mult_(the_set_of_BoundedComplexSequences,Linear_Space_of_ComplexSequences) #)
-    -> Abelian add-associative right_zeroed right_complementable
+  cluster CLSStruct (# the_set_of_BoundedComplexSequences, Zero_(
+the_set_of_BoundedComplexSequences,Linear_Space_of_ComplexSequences), Add_(
+the_set_of_BoundedComplexSequences,Linear_Space_of_ComplexSequences), Mult_(
+the_set_of_BoundedComplexSequences,Linear_Space_of_ComplexSequences) #) ->
+    Abelian add-associative right_zeroed right_complementable
     ComplexLinearSpace-like;
   coherence by CSSPACE:13;
 end;
 
-Lm6: CLSStruct (# the_set_of_BoundedComplexSequences,
-  Zero_(the_set_of_BoundedComplexSequences,Linear_Space_of_ComplexSequences),
-  Add_(the_set_of_BoundedComplexSequences,Linear_Space_of_ComplexSequences),
-  Mult_(the_set_of_BoundedComplexSequences,Linear_Space_of_ComplexSequences) #)
-is Abelian add-associative right_zeroed
-right_complementable ComplexLinearSpace-like;
+Lm6: CLSStruct (# the_set_of_BoundedComplexSequences, Zero_(
+  the_set_of_BoundedComplexSequences,Linear_Space_of_ComplexSequences), Add_(
+  the_set_of_BoundedComplexSequences,Linear_Space_of_ComplexSequences), Mult_(
+  the_set_of_BoundedComplexSequences,Linear_Space_of_ComplexSequences) #) is
+Abelian add-associative right_zeroed right_complementable
+ComplexLinearSpace-like;
 
-Lm7: ex NORM be Function of the_set_of_BoundedComplexSequences,REAL st
-for x be set st x in the_set_of_BoundedComplexSequences holds
-NORM.x = sup rng |.seq_id(x).|
+Lm7: ex NORM be Function of the_set_of_BoundedComplexSequences,REAL st for x
+be set st x in the_set_of_BoundedComplexSequences holds NORM.x = sup rng |.
+seq_id(x).|
+
 proof
   deffunc F(set) = upper_bound rng |.seq_id($1).|;
-A1: for z be set st z in the_set_of_BoundedComplexSequences
-  holds F(z) in REAL;
-  ex f being Function of the_set_of_BoundedComplexSequences,REAL st
-  for x being set st x in the_set_of_BoundedComplexSequences holds
-  f.x = F(x) from FUNCT_2:sch 2(A1);
+
+A1: for z be set st z in the_set_of_BoundedComplexSequences holds F(z) in
+  REAL;
+
+  ex f being Function of the_set_of_BoundedComplexSequences,REAL st for x
+  being set st x in the_set_of_BoundedComplexSequences holds f.x = F(x) from
+  FUNCT_2:sch 2(A1);
+
   hence thesis;
 end;
 
 definition
-  func Complex_linfty_norm ->
-  Function of the_set_of_BoundedComplexSequences, REAL means
+  func Complex_linfty_norm -> Function of the_set_of_BoundedComplexSequences,
+  REAL means
   :Def2:
   for x be set st x in the_set_of_BoundedComplexSequences holds
   it.x = sup rng |.seq_id x.|;
   existence by Lm7;
   uniqueness
   proof
-    let NORM1,NORM2
-    be Function of the_set_of_BoundedComplexSequences, REAL such that
+    let NORM1,NORM2 be Function of the_set_of_BoundedComplexSequences, REAL
+    such that
 A1: for x be set st x in the_set_of_BoundedComplexSequences holds
     NORM1.x = sup rng |.seq_id x.| and
 A2: for x be set st x in the_set_of_BoundedComplexSequences holds
     NORM2.x = sup rng |.seq_id x.|;
-A3: dom NORM1 = the_set_of_BoundedComplexSequences &
-    dom NORM2 = the_set_of_BoundedComplexSequences by FUNCT_2:def 1;
-    for z be set st z in the_set_of_BoundedComplexSequences holds
-    NORM1.z = NORM2.z
+A3: for z be set st z in the_set_of_BoundedComplexSequences holds NORM1.z
+    = NORM2.z
     proof
       let z be set such that
 A4:   z in the_set_of_BoundedComplexSequences;
       NORM1.z = sup rng |.seq_id(z).| by A1,A4;
       hence thesis by A2,A4;
     end;
+    dom NORM1 = the_set_of_BoundedComplexSequences & dom NORM2 =
+    the_set_of_BoundedComplexSequences by FUNCT_2:def 1;
     hence thesis by A3,FUNCT_1:9;
   end;
 end;
 
-Lm8: for
-seq be Complex_Sequence st (for n be Element of NAT holds seq.n=0c) holds
-seq is bounded & sup rng |.seq.| = 0
+Lm8: for seq be Complex_Sequence st (for n be Element of NAT holds seq.n=0c)
+holds seq is bounded & sup rng |.seq.| = 0
+
 proof
   let seq be Complex_Sequence such that
 A1: for n be Element of NAT holds seq.n=0c;
   for n be Element of NAT holds |.seq.n.| < 1 by A1,COMPLEX1:130;
   hence seq is bounded by COMSEQ_2:def 3;
-  rng |.seq.| = {0}
+  rng |.seq.| c= {0}
   proof
-    rng |.seq.| c= {0}
-    proof
-      let y be set;
-      assume y in rng |.seq.|;
-      then consider n be set such that
-A2:   n in NAT & (|.seq.|).n=y by FUNCT_2:17;
-      reconsider n as Element of NAT by A2;
-      |.seq.| .n = |. seq.n .| by VALUED_1:18
-        .= |.0c.| by A1;
-      hence thesis by A2,COMPLEX1:130,TARSKI:def 1;
-    end;
-    hence thesis by ZFMISC_1:39;
+    let y be set;
+    assume
+    y in rng |.seq.|;
+    then consider n be set such that
+A2: n in NAT and
+A3: (|.seq.|).n=y by FUNCT_2:17;
+    reconsider n as Element of NAT by A2;
+    |.seq.| .n = |. seq.n .| by VALUED_1:18
+      .= |.0c.| by A1;
+    hence thesis by A3,COMPLEX1:130,TARSKI:def 1;
   end;
+  then rng |.seq.| = {0} by ZFMISC_1:39;
   hence thesis by SEQ_4:22;
 end;
 
 Lm9: for seq be Complex_Sequence st seq is bounded holds |.seq.| is bounded
 proof
   let seq be Complex_Sequence;
-  assume seq is bounded;
+A1: 0 <= |. seq.0 .| by COMPLEX1:132;
+  assume
+  seq is bounded;
   then consider r be Real such that
-A1: for n be Element of NAT holds |.seq.n.| < r by COMSEQ_2:def 3;
-A2: |. seq.0 .| < r & 0 <= |. seq.0 .| by A1,COMPLEX1:132;
-  for n be Element of NAT holds abs (|.seq.| .n) < r
+A2: for n be Element of NAT holds |.seq.n.| < r by COMSEQ_2:def 3;
+A3: for n be Element of NAT holds abs (|.seq.| .n) < r
   proof
     let n be Element of NAT;
     |.seq.| .n = |.seq.n.| by VALUED_1:18;
-    hence thesis by A1;
+    hence thesis by A2;
   end;
-  hence thesis by A2,SEQ_2:15;
+  |. seq.0 .| < r by A2;
+  hence thesis by A1,A3,SEQ_2:15;
 end;
 
 Lm10: for seq be Complex_Sequence st |.seq.| is bounded holds seq is bounded
 proof
   let seq be Complex_Sequence;
-  assume |.seq.| is bounded;
+  assume
+  |.seq.| is bounded;
   then consider r be real number such that
-A1: 0 < r & for n be Element of NAT holds abs(|.seq.| .n)<r by SEQ_2:15;
+  0 < r and
+A1: for n be Element of NAT holds abs(|.seq.| .n)<r by SEQ_2:15;
   reconsider r as Real by XREAL_0:def 1;
   for n be Element of NAT holds |.seq.n.| < r
   proof
@@ -353,17 +361,18 @@ A1: 0 < r & for n be Element of NAT holds abs(|.seq.| .n)<r by SEQ_2:15;
   hence thesis by COMSEQ_2:def 3;
 end;
 
-Lm11: for seq be Complex_Sequence st
-( seq is bounded & sup rng |.seq.| = 0 ) holds
-for n be Element of NAT holds seq.n = 0c
+Lm11: for seq be Complex_Sequence st seq is bounded & sup rng |.seq.| = 0
+holds for n be Element of NAT holds seq.n = 0c
+
 proof
   let seq be Complex_Sequence such that
 A1: seq is bounded and
 A2: sup rng |.seq.| = 0;
   let n be Element of NAT;
-A3: |.seq.| is bounded by A1,Lm9;
   0 <= |.seq.n.| by COMPLEX1:132;
-  then 0 <= |.seq.| .n by VALUED_1:18;
+  then
+A3: 0 <= |.seq.| .n by VALUED_1:18;
+  |.seq.| is bounded by A1,Lm9;
   then (|.seq.|).n =0 by A2,A3,Lm2;
   then |.seq.n.| = 0 by VALUED_1:18;
   hence thesis by COMPLEX1:131;
@@ -372,18 +381,14 @@ end;
 canceled;
 
 theorem
-  for seq be Complex_Sequence holds
-  ( seq is bounded & sup rng |.seq.| = 0 ) iff
-  for n be Element of NAT holds seq.n = 0c by Lm8,Lm11;
+  for seq be Complex_Sequence holds seq is bounded & sup rng |.seq.| = 0
+  iff for n be Element of NAT holds seq.n = 0c by Lm8,Lm11;
 
 registration
-  cluster CNORMSTR (# the_set_of_BoundedComplexSequences,
-
-Zero_(the_set_of_BoundedComplexSequences,Linear_Space_of_ComplexSequences),
-
-Add_(the_set_of_BoundedComplexSequences,Linear_Space_of_ComplexSequences),
-
-Mult_(the_set_of_BoundedComplexSequences,Linear_Space_of_ComplexSequences),
+  cluster CNORMSTR (# the_set_of_BoundedComplexSequences, Zero_(
+the_set_of_BoundedComplexSequences,Linear_Space_of_ComplexSequences), Add_(
+the_set_of_BoundedComplexSequences,Linear_Space_of_ComplexSequences), Mult_(
+      the_set_of_BoundedComplexSequences,Linear_Space_of_ComplexSequences),
       Complex_linfty_norm #) -> Abelian add-associative right_zeroed
     right_complementable ComplexLinearSpace-like;
   coherence by Lm6,CSSPACE3:4;
@@ -391,202 +396,113 @@ end;
 
 definition
   func Complex_linfty_Space -> non empty CNORMSTR equals
-  CNORMSTR (# the_set_of_BoundedComplexSequences,
-    Zero_(the_set_of_BoundedComplexSequences,Linear_Space_of_ComplexSequences),
-    Add_(the_set_of_BoundedComplexSequences,Linear_Space_of_ComplexSequences),
-    Mult_(the_set_of_BoundedComplexSequences,Linear_Space_of_ComplexSequences),
-    Complex_linfty_norm #);
+  CNORMSTR (#
+the_set_of_BoundedComplexSequences, Zero_(the_set_of_BoundedComplexSequences,
+    Linear_Space_of_ComplexSequences), Add_(the_set_of_BoundedComplexSequences,
+Linear_Space_of_ComplexSequences), Mult_(the_set_of_BoundedComplexSequences,
+    Linear_Space_of_ComplexSequences), Complex_linfty_norm #);
   coherence;
 end;
 
 theorem Th3:
-  the carrier of Complex_linfty_Space = the_set_of_BoundedComplexSequences &
-  ( for x be set holds x is VECTOR of Complex_linfty_Space
-  iff x is Complex_Sequence & seq_id x is bounded ) &
-  0.Complex_linfty_Space = CZeroseq &
-  ( for u be VECTOR of Complex_linfty_Space holds u = seq_id u ) &
-
-( for u,v be VECTOR of Complex_linfty_Space holds u+v =seq_id(u)+seq_id(v) ) &
-  ( for c be Complex, u be VECTOR of Complex_linfty_Space holds
-  c*u =c(#)seq_id(u) ) & ( for u be VECTOR of Complex_linfty_Space holds
-  -u = -seq_id u & seq_id(-u) = -seq_id u ) &
-
-( for u,v be VECTOR of Complex_linfty_Space holds u-v =seq_id(u)-seq_id(v) ) &
-  ( for v be VECTOR of Complex_linfty_Space holds seq_id v is bounded ) &
-  ( for v be VECTOR of Complex_linfty_Space holds
-  ||.v.|| = sup rng |.seq_id v.| )
+  the carrier of Complex_linfty_Space =
+  the_set_of_BoundedComplexSequences & ( for x be set holds x is VECTOR of
+  Complex_linfty_Space iff x is Complex_Sequence & seq_id x is bounded ) & 0.
+  Complex_linfty_Space = CZeroseq & ( for u be VECTOR of Complex_linfty_Space
+holds u = seq_id u ) & ( for u,v be VECTOR of Complex_linfty_Space holds u+v =
+seq_id(u)+seq_id(v) ) & ( for c be Complex, u be VECTOR of Complex_linfty_Space
+holds c*u =c(#)seq_id(u) ) & ( for u be VECTOR of Complex_linfty_Space holds -u
+  = -seq_id u & seq_id(-u) = -seq_id u ) & ( for u,v be VECTOR of
+  Complex_linfty_Space holds u-v =seq_id(u)-seq_id(v) ) & ( for v be VECTOR of
+  Complex_linfty_Space holds seq_id v is bounded ) & for v be VECTOR of
+  Complex_linfty_Space holds ||.v.|| = sup rng |.seq_id v.|
 proof
   set l1 =Complex_linfty_Space;
-A1: for x be set holds x is Element of l1
-  iff x is Complex_Sequence & seq_id x is bounded
+A1: for x be set holds x is Element of l1 iff x is Complex_Sequence & seq_id
+  x is bounded
   proof
     let x be set;
-    x in the_set_of_ComplexSequences iff x is Complex_Sequence
-    by CSSPACE:def 1;
+    x in the_set_of_ComplexSequences iff x is Complex_Sequence by CSSPACE:
+    def 1;
     hence thesis by Def1;
   end;
-A2: for u be VECTOR of l1 holds u = seq_id u
+A2: for u,v be VECTOR of l1 holds u+v =seq_id u+seq_id v
+  proof
+    let u,v be VECTOR of l1;
+    reconsider u1=u, v1 = v as VECTOR of Linear_Space_of_ComplexSequences by
+    Lm5,CLVECT_1:30;
+    set L1=Linear_Space_of_ComplexSequences;
+    set W = the_set_of_BoundedComplexSequences;
+    dom (the addF of L1) = [:the carrier of L1,the carrier of L1:] by
+    FUNCT_2:def 1;
+    then
+A3: dom ((the addF of Linear_Space_of_ComplexSequences)||W) =[:W,W:] by
+    RELAT_1:91;
+    u+v =((the addF of Linear_Space_of_ComplexSequences)||W).[u,v] by
+    CSSPACE:def 8
+      .=u1+v1 by A3,FUNCT_1:70;
+    hence thesis by CSSPACE:4,def 7;
+  end;
+A4: for c be Complex, u be VECTOR of l1 holds c*u =c(#)seq_id u
+  proof
+    let c be Complex;
+    let u be VECTOR of l1;
+    reconsider u1=u as VECTOR of Linear_Space_of_ComplexSequences by Lm5,
+    CLVECT_1:30;
+    set L1=Linear_Space_of_ComplexSequences;
+    set W = the_set_of_BoundedComplexSequences;
+    dom (the Mult of L1) = [:COMPLEX,the carrier of L1:] by FUNCT_2:def 1;
+    then
+A5: dom ((the Mult of Linear_Space_of_ComplexSequences) | [:COMPLEX,W :])
+    =[:COMPLEX,W:] by RELAT_1:91,ZFMISC_1:119;
+    c*u =(the Mult of l1).[c,u] by CLVECT_1:def 1
+      .=((the Mult of Linear_Space_of_ComplexSequences)|[:COMPLEX,W:]).[c,u]
+    by CSSPACE:def 9
+      .=(the Mult of Linear_Space_of_ComplexSequences).[c,u] by A5,FUNCT_1:
+    70
+      .=c*u1 by CLVECT_1:def 1;
+    hence thesis by CSSPACE:5,def 7;
+  end;
+A6: for u be VECTOR of l1 holds u = seq_id u
   proof
     let u be VECTOR of l1;
     u is VECTOR of Linear_Space_of_ComplexSequences by Lm5,CLVECT_1:30;
     hence thesis by CSSPACE:def 2,def 7;
   end;
-A3: for u,v be VECTOR of l1 holds u+v =seq_id u+seq_id v
-  proof
-    let u,v be VECTOR of l1;
-    reconsider u1=u, v1 = v as VECTOR of Linear_Space_of_ComplexSequences
-    by Lm5,CLVECT_1:30;
-    set L1=Linear_Space_of_ComplexSequences;
-    set W = the_set_of_BoundedComplexSequences;
-    dom (the addF of L1)
-    = [:the carrier of L1,the carrier of L1:] by FUNCT_2:def 1;
-    then
-A4: dom ((the addF of Linear_Space_of_ComplexSequences)||W)
-    =[:W,W:] by RELAT_1:91;
-    u+v =((the addF of Linear_Space_of_ComplexSequences)||W).[u,v]
-    by CSSPACE:def 8
-      .=u1+v1 by A4,FUNCT_1:70;
-    hence thesis by CSSPACE:4,def 7;
-  end;
-A5: for c be Complex, u be VECTOR of l1 holds c*u =c(#)seq_id u
-  proof
-    let c be Complex;
-    let u be VECTOR of l1;
-    reconsider u1=u as VECTOR of Linear_Space_of_ComplexSequences
-    by Lm5,CLVECT_1:30;
-    set L1=Linear_Space_of_ComplexSequences;
-    set W = the_set_of_BoundedComplexSequences;
-    dom (the Mult of L1) = [:COMPLEX,the carrier of L1:] by FUNCT_2:def 1;
-    then
-A6: dom ((the Mult of Linear_Space_of_ComplexSequences) | [:COMPLEX,W :])
-    =[:COMPLEX,W:] by RELAT_1:91,ZFMISC_1:119;
-    c*u =(the Mult of l1).[c,u] by CLVECT_1:def 1
-      .=((the Mult of Linear_Space_of_ComplexSequences)|[:COMPLEX,W:]).[c,u]
-    by CSSPACE:def 9
-      .=(the Mult of Linear_Space_of_ComplexSequences).[c,u]
-    by A6,FUNCT_1:70
-      .=c*u1 by CLVECT_1:def 1;
-    hence thesis by CSSPACE:5,def 7;
-  end;
 A7: for u be VECTOR of l1 holds -u =-seq_id u & seq_id(-u)=-seq_id u
   proof
     let u be VECTOR of l1;
     -u = (-1r)*u by CLVECT_1:4
-      .= (-1r)(#)seq_id u by A5
+      .= (-1r)(#)seq_id u by A4
       .= -seq_id u by COMSEQ_1:14;
-    hence thesis by A2;
+    hence thesis by A6;
   end;
 A8: for u,v be VECTOR of l1 holds u-v =seq_id u-seq_id v
   proof
     let u,v be VECTOR of l1;
-    thus u-v = seq_id u+seq_id(-v) by A3
+    thus u-v = seq_id u+seq_id(-v) by A2
       .= seq_id u-seq_id v by A7;
   end;
-A9: 0.l1 = CZeroseq
-  proof
-    thus 0.l1 = 0.Linear_Space_of_ComplexSequences by CSSPACE:def 10
-      .= CZeroseq by CSSPACE:def 7;
-  end;
-  for v be VECTOR of l1 holds ||.v.|| = sup rng |.seq_id v.|
+A9: for v be VECTOR of l1 holds ||.v.|| = sup rng |.seq_id v.|
   proof
     let v be VECTOR of l1;
     thus ||.v.|| = (the norm of l1).v by CLVECT_1:def 10
       .= sup rng |.seq_id v.| by Def2;
   end;
-  hence thesis by A1,A2,A3,A5,A7,A8,A9;
+  0.l1 = 0.Linear_Space_of_ComplexSequences by CSSPACE:def 10
+    .= CZeroseq by CSSPACE:def 7;
+  hence thesis by A1,A6,A2,A4,A7,A8,A9;
 end;
 
 theorem Th4:
   for x, y being Point of Complex_linfty_Space, c be Complex holds
-  ( ||.x.|| = 0 iff x = 0.Complex_linfty_Space ) & 0 <= ||.x.|| &
-  ||.x+y.|| <= ||.x.|| + ||.y.|| & ||. c*x .|| = |.c.| * ||.x.||
+  ( ||.x.|| = 0 iff x = 0.Complex_linfty_Space ) & 0 <= ||.x.|| & ||.x+y.|| <=
+  ||.x.|| + ||.y.|| & ||. c*x .|| = |.c.| * ||.x.||
 proof
   let x, y be Point of Complex_linfty_Space;
   let c be Complex;
-A1: now
-    assume
-A2: ||.x.|| = 0;
-A3: ||.x.|| = sup rng |.seq_id x.| by Th3;
-    seq_id x is bounded by Th3;
-    then
-A4: for n be Element of NAT holds 0c = (seq_id x).n by A2,A3,Lm11;
-    x in the_set_of_ComplexSequences by Def1;
-    hence x=0.Complex_linfty_Space by A4,Th3,CSSPACE:def 6;
-  end;
-A5: now
-    assume x=0.Complex_linfty_Space;
-    then
-A6: for n be Element of NAT holds (seq_id x).n=0c by Th3,CSSPACE:def 6;
-    thus ||.x.|| = sup rng |.seq_id x.| by Th3
-      .= 0 by A6,Lm8;
-  end;
-A7: seq_id x is bounded by Def1;
-A8: 0 <= sup rng |.seq_id x.|
-  proof
-A9: |.seq_id x.| is bounded by A7,Lm9;
-    |.seq_id x.| .1 =|.(seq_id x).1 .| by VALUED_1:18;
-    then 0<= |.seq_id x.| .1 by COMPLEX1:132;
-    hence thesis by A9,Lm2;
-  end;
-A10: ||.y.|| = sup rng |.seq_id y.| by Th3;
-A11: sup rng |.seq_id(x+y).| = ||.x + y.|| by Th3;
-A12: for n be Element of NAT holds |.seq_id(x+y).| .n
-  = |.(((seq_id x).n) + ((seq_id y).n)).|
-  proof
-    let n be Element of NAT;
-    (|.seq_id(x+y).|).n = (|.(seq_id(seq_id x+seq_id y)).|).n by Th3
-      .= (|.(seq_id x+seq_id y).|).n by CSSPACE:3
-      .= |.((seq_id x+seq_id y).n).| by VALUED_1:18
-      .= |.(((seq_id x).n)+((seq_id y).n)).| by VALUED_1:1;
-    hence thesis;
-  end;
-A13: for n be Element of NAT holds (|.seq_id(x+y).|).n
-  <= (|.seq_id x.|).n + (|.seq_id y.|).n
-  proof
-    let n be Element of NAT;
-    |.(((seq_id x).n)+ ((seq_id y).n)).|
-    <= |.((seq_id x).n).| + |.((seq_id y).n).| by COMPLEX1:142;
-    then (|.(seq_id(x+y)).|).n
-    <= |.((seq_id x).n).| + |.((seq_id y).n).| by A12;
-    then (|.seq_id(x+y).|).n
-    <= (|.seq_id x.|).n + |.((seq_id y).n).| by VALUED_1:18;
-    hence thesis by VALUED_1:18;
-  end;
-A14: for n being Element of NAT holds
-  (|.(seq_id(x+y)).|).n <= ((|.seq_id x.|) + (|.seq_id y.|)).n
-  proof
-    let n be Element of NAT;
-    (|.seq_id x.|).n + (|.seq_id y.|).n
-    =((|.seq_id x.|) + (|.seq_id y.|)).n by SEQ_1:11;
-    hence thesis by A13;
-  end;
-  seq_id x is bounded by Def1;
-  then
-A15: |.seq_id x.| is bounded by Lm9;
-  seq_id y is bounded by Def1;
-  then
-A16: |.seq_id y.| is bounded by Lm9;
-A17: upper_bound rng |.seq_id(x+y).|
- <= upper_bound rng |.seq_id x.| + upper_bound rng |.seq_id y.|
-  proof
-    now
-      let n be Element of NAT;
-A18:  (|.seq_id(x+y).|).n <= (|.seq_id x.| + |.seq_id y.|).n by A14;
-A19:  (|.seq_id x.| + |.seq_id y.|).n
-      = (|.seq_id x.|).n + (|.seq_id y.|).n by SEQ_1:11;
-A20:  (|.seq_id x.|).n <=sup rng |.seq_id x.| by A15,Lm2;
-      (|.seq_id y.|).n <=sup rng |.seq_id y.| by A16,Lm2;
-      then ((|.seq_id x.|) + (|.seq_id y.|)).n
-      <= upper_bound rng |.seq_id x.| + upper_bound rng |.seq_id y.|
-      by A19,A20,XREAL_1:9;
-      hence (|.seq_id(x+y).|).n
-       <= upper_bound rng |.seq_id x.| + upper_bound rng |.seq_id y.|
-      by A18,XXREAL_0:2;
-    end;
-    hence thesis by Lm1;
-  end;
-A21: for n be Element of NAT holds
-  (|.(c(#)seq_id x).|).n =|.c.|*(|.seq_id x.|).n
+A1: for n be Element of NAT holds (|.(c(#)seq_id x).|).n =|.c.|*(|.seq_id x
+  .|).n
   proof
     let n be Element of NAT;
     (|.c(#)seq_id x.|).n =|.((c(#)seq_id x).n).| by VALUED_1:18
@@ -595,55 +511,125 @@ A21: for n be Element of NAT holds
       .=|.c.|*(|.(seq_id x).| .n) by VALUED_1:18;
     hence thesis;
   end;
+  |.seq_id x.| .1 =|.(seq_id x).1 .| by VALUED_1:18;
+  then
+A2: 0<= |.seq_id x.| .1 by COMPLEX1:132;
+A3: for n be Element of NAT holds |.seq_id(x+y).| .n = |.(((seq_id x).n) +
+  ((seq_id y).n)).|
+  proof
+    let n be Element of NAT;
+    (|.seq_id(x+y).|).n = (|.(seq_id(seq_id x+seq_id y)).|).n by Th3
+      .= (|.(seq_id x+seq_id y).|).n by CSSPACE:3
+      .= |.((seq_id x+seq_id y).n).| by VALUED_1:18
+      .= |.(((seq_id x).n)+((seq_id y).n)).| by VALUED_1:1;
+    hence thesis;
+  end;
+A4: for n be Element of NAT holds (|.seq_id(x+y).|).n <= (|.seq_id x.|).n +
+  (|.seq_id y.|).n
+  proof
+    let n be Element of NAT;
+    |.(((seq_id x).n)+ ((seq_id y).n)).| <= |.((seq_id x).n).| + |.((
+    seq_id y).n).| by COMPLEX1:142;
+    then (|.(seq_id(x+y)).|).n <= |.((seq_id x).n).| + |.((seq_id y).n).| by
+    A3;
+    then (|.seq_id(x+y).|).n <= (|.seq_id x.|).n + |.((seq_id y).n).| by
+    VALUED_1:18;
+    hence thesis by VALUED_1:18;
+  end;
+A5: for n being Element of NAT holds (|.(seq_id(x+y)).|).n <= ((|.seq_id x
+  .|) + (|.seq_id y.|)).n
+  proof
+    let n be Element of NAT;
+    (|.seq_id x.|).n + (|.seq_id y.|).n =((|.seq_id x.|) + (|.seq_id y.|)
+    ).n by SEQ_1:11;
+    hence thesis by A4;
+  end;
+A6: now
+A7: x in the_set_of_ComplexSequences by Def1;
+    assume
+A8: ||.x.|| = 0;
+    ||.x.|| = sup rng |.seq_id x.| & seq_id x is bounded by Th3;
+    then for n be Element of NAT holds 0c = (seq_id x).n by A8,Lm11;
+    hence x=0.Complex_linfty_Space by A7,Th3,CSSPACE:def 6;
+  end;
+  seq_id x is bounded by Def1;
+  then |.seq_id x.| is bounded by Lm9;
+  then
+A9: 0 <= sup rng |.seq_id x.| by A2,Lm2;
+  seq_id y is bounded by Def1;
+  then
+A10: |.seq_id y.| is bounded by Lm9;
   seq_id x is bounded by Def1;
   then |.seq_id x.| is bounded by Lm9;
   then rng |.seq_id x.| is bounded by PSCOMP_1:7;
   then
-A22: rng |.seq_id x.| is bounded_above by XXREAL_2:def 11;
+A11: rng |.seq_id x.| is bounded_above by XXREAL_2:def 11;
+A12: now
+    assume
+    x=0.Complex_linfty_Space;
+    then
+A13: for n be Element of NAT holds (seq_id x).n=0c by
+    Th3,CSSPACE:def 6;
+    thus ||.x.|| = sup rng |.seq_id x.| by Th3
+      .= 0 by A13,Lm8;
+  end;
+  seq_id x is bounded by Def1;
+  then
+A14: |.seq_id x.| is bounded by Lm9;
+  now
+    let n be Element of NAT;
+A15: (|.seq_id y.|).n <=sup rng |.seq_id y.| by A10,Lm2;
+    (|.seq_id x.| + |.seq_id y.|).n = (|.seq_id x.|).n + (|.seq_id y.|).n
+    & (|. seq_id x.|).n <=sup rng |.seq_id x.| by A14,Lm2,SEQ_1:11;
+    then
+A16: ((|.seq_id x.|) + (|.seq_id y.|)).n <= upper_bound rng |.seq_id x.| +
+    upper_bound rng |.seq_id y.| by A15,XREAL_1:9;
+    (|.seq_id(x+y).|).n <= (|.seq_id x.| + |.seq_id y.|).n by A5;
+    hence
+    (|.seq_id(x+y).|).n <= upper_bound rng |.seq_id x.| + upper_bound rng
+    |.seq_id y.| by A16,XXREAL_0:2;
+  end;
+  then
+A17: upper_bound rng |.seq_id(x+y).| <= upper_bound rng |.seq_id x.| +
+  upper_bound rng |.seq_id y.| by Lm1;
+A18: ||.y.|| = sup rng |.seq_id y.| & sup rng |.seq_id(x+y).| = ||.x + y.||
+  by Th3;
   ||. c*x .|| = sup rng |.seq_id(c*x).| by Th3
     .=sup rng |.(seq_id(c(#)seq_id x)).| by Th3
     .=sup(rng |.(c(#)seq_id x).|) by CSSPACE:3
-    .=sup(rng (|.c.| (#) (|.seq_id x.|))) by A21,SEQ_1:13
+    .=sup(rng (|.c.| (#) (|.seq_id x.|))) by A1,SEQ_1:13
     .=sup(|.c.|**rng |.seq_id x.|) by INTEGRA2:17
-    .=|.c.|*sup rng |.seq_id x.| by A22,COMPLEX1:132,INTEGRA2:13
+    .=|.c.|*sup rng |.seq_id x.| by A11,COMPLEX1:132,INTEGRA2:13
     .=|.c.|*||.x.|| by Th3;
-  hence thesis by A1,A5,A8,A10,A11,A17,Th3;
+  hence thesis by A6,A12,A9,A18,A17,Th3;
 end;
 
 registration
-  cluster Complex_linfty_Space -> ComplexNormSpace-like ComplexLinearSpace-like
-    Abelian add-associative right_zeroed right_complementable;
+  cluster Complex_linfty_Space -> ComplexNormSpace-like
+    ComplexLinearSpace-like Abelian add-associative right_zeroed
+    right_complementable;
   coherence by Th4,CLVECT_1:def 11;
 end;
 
-Lm12: for seq1,seq2,seq3 be Complex_Sequence holds seq1 = seq2 - seq3 iff
-for n be Element of NAT holds seq1.n = seq2.n - seq3.n
+Lm12: for seq1,seq2,seq3 be Complex_Sequence holds seq1 = seq2 - seq3 iff for
+n be Element of NAT holds seq1.n = seq2.n - seq3.n
+
 proof
   let seq1,seq2,seq3 be Complex_Sequence;
-A1: seq1 = seq2 - seq3 implies
-  for n be Element of NAT holds seq1.n = seq2.n - seq3.n
+
+A1: (for n be Element of NAT holds seq1.n = seq2.n - seq3.n) implies seq1 =
+  seq2 - seq3
+
   proof
     assume
-A2: seq1 = seq2 - seq3;
-    now
-      let n be Element of NAT;
-      seq1.n = seq2.n + (-seq3).n by A2,VALUED_1:1
-        .= seq2.n + -seq3.n by VALUED_1:8;
-      hence seq1.n = seq2.n - seq3.n;
-    end;
-    hence thesis;
-  end;
-  (for n be Element of NAT holds seq1.n = seq2.n - seq3.n) implies
-  seq1 = seq2 - seq3
-  proof
-    assume
-A3: for n be Element of NAT holds seq1.n = seq2.n - seq3.n;
+A2: for n be Element of NAT holds seq1.n = seq2.n - seq3.n;
     for x be set st x in NAT holds seq1.x = (seq2-seq3).x
     proof
       let x be set;
-      assume x in NAT;
+      assume
+      x in NAT;
       then reconsider x as Element of NAT;
-      seq1.x = seq2.x - seq3.x by A3
+      seq1.x = seq2.x - seq3.x by A2
         .= seq2.x + -seq3.x
         .= seq2.x + (-seq3).x by VALUED_1:8
         .= (seq2 + (-seq3)).x by VALUED_1:1;
@@ -651,287 +637,285 @@ A3: for n be Element of NAT holds seq1.n = seq2.n - seq3.n;
     end;
     hence thesis by FUNCT_2:18;
   end;
+
+  seq1 = seq2 - seq3 implies for n be Element of NAT holds seq1.n = seq2.n
+  - seq3.n
+
+  proof
+    assume
+A3: seq1 = seq2 - seq3;
+    now
+      let n be Element of NAT;
+      seq1.n = seq2.n + (-seq3).n by A3,VALUED_1:1
+        .= seq2.n + -seq3.n by VALUED_1:8;
+      hence seq1.n = seq2.n - seq3.n;
+    end;
+    hence thesis;
+  end;
   hence thesis by A1;
 end;
 
 theorem Th5:
-  for vseq be sequence of Complex_linfty_Space st
-  vseq is Cauchy_sequence_by_Norm holds vseq is convergent
+  for vseq be sequence of Complex_linfty_Space st vseq is
+  Cauchy_sequence_by_Norm holds vseq is convergent
 proof
   let vseq be sequence of Complex_linfty_Space such that
 A1: vseq is Cauchy_sequence_by_Norm;
-  defpred P[set,set] means ex i be Element of NAT st $1=i &
-  ex cseqi be Complex_Sequence st
-  (for n be Element of NAT holds cseqi.n=(seq_id(vseq.n)).i) &
-  cseqi is convergent & $2 = lim cseqi;
+  defpred P[set,set] means ex i be Element of NAT st $1=i & ex cseqi be
+Complex_Sequence st (for n be Element of NAT holds cseqi.n=(seq_id(vseq.n)).i)
+  & cseqi is convergent & $2 = lim cseqi;
 A2: for x be set st x in NAT ex y be set st y in COMPLEX & P[x,y]
   proof
     let x be set;
-    assume x in NAT;
+    assume
+    x in NAT;
     then reconsider i=x as Element of NAT;
     deffunc F(Element of NAT) = (seq_id(vseq.$1)).i;
     consider cseqi be Complex_Sequence such that
 A3: for n be Element of NAT holds cseqi.n = F(n) from COMSEQ_1:sch 1;
-A4: cseqi is convergent
-    proof
-      now
-        let e be Real such that
-A5:     e > 0;
-        thus ex k be Element of NAT st
-        for m be Element of NAT st k <= m holds |.(cseqi.m -cseqi.k).| < e
-        proof
-          consider k be Element of NAT such that
-A6:       for n, m be Element of NAT st n >= k & m >= k holds
-          ||.(vseq.n) - (vseq.m).|| < e by A1,A5,CSSPACE3:10;
-          take k;
-          let m be Element of NAT such that
-A7:       k<=m;
-          ||.(vseq.m) - (vseq.k).||
-          =sup rng |.(seq_id((vseq.m) - (vseq.k))).| by Th3;
-          then
-A8:       sup rng |.(seq_id((vseq.m) - (vseq.k))).| < e by A6,A7;
-          seq_id((vseq.m)-(vseq.k)) is bounded by Def1;
-          then |.(seq_id((vseq.m)-(vseq.k))).| is bounded by Lm9;
-          then
-A9:       |.(seq_id((vseq.m) - (vseq.k))).| .i
-          <= sup rng |.(seq_id((vseq.m) - (vseq.k))).| by Lm2;
-          seq_id((vseq.m) - (vseq.k))
-          = seq_id(seq_id(vseq.m)-seq_id(vseq.k)) by Th3
-            .= seq_id(vseq.m)+-seq_id(vseq.k) by CSSPACE:3;
-          then (seq_id((vseq.m) - (vseq.k))).i
-          = (seq_id(vseq.m)).i+(-seq_id(vseq.k)).i by VALUED_1:1
-            .=(seq_id(vseq.m)).i+(-(seq_id(vseq.k)).i) by VALUED_1:8
-            .=(seq_id(vseq.m)).i-(seq_id(vseq.k)).i
-            .=cseqi.m -(seq_id(vseq.k)).i by A3
-            .=cseqi.m - cseqi.k by A3;
-          then |.(cseqi.m-cseqi.k).| = |.(seq_id((vseq.m)-(vseq.k))).| .i
-          by VALUED_1:18;
-          hence thesis by A8,A9,XXREAL_0:2;
-        end;
-      end;
-      hence thesis by COMSEQ_3:46;
-    end;
     take y = lim cseqi;
-    thus thesis by A3,A4;
+    now
+      let e be Real such that
+A4:   e > 0;
+      thus ex k be Element of NAT st for m be Element of NAT st k <= m holds
+      |.(cseqi.m -cseqi.k).| < e
+      proof
+        consider k be Element of NAT such that
+A5:     for n, m be Element of NAT st n >= k & m >= k holds ||.(vseq.n
+        ) - (vseq.m).|| < e by A1,A4,CSSPACE3:10;
+        take k;
+        let m be Element of NAT such that
+A6:     k<=m;
+        seq_id((vseq.m) - (vseq.k)) = seq_id(seq_id(vseq.m)-seq_id(vseq.k
+        )) by Th3
+          .= seq_id(vseq.m)+-seq_id(vseq.k) by CSSPACE:3;
+        then (seq_id((vseq.m) - (vseq.k))).i = (seq_id(vseq.m)).i+(-seq_id(
+        vseq.k)).i by VALUED_1:1
+          .=(seq_id(vseq.m)).i+(-(seq_id(vseq.k)).i) by VALUED_1:8
+          .=(seq_id(vseq.m)).i-(seq_id(vseq.k)).i
+          .=cseqi.m -(seq_id(vseq.k)).i by A3
+          .=cseqi.m - cseqi.k by A3;
+        then
+A7:     |.
+(cseqi.m-cseqi.k).| = |.(seq_id((vseq.m)-(vseq.k))).| .i by VALUED_1:18;
+        seq_id((vseq.m)-(vseq.k)) is bounded by Def1;
+        then |.(seq_id((vseq.m)-(vseq.k))).| is bounded by Lm9;
+        then
+A8:     |.(seq_id((vseq.m) - (vseq.k))).| .i <= sup rng |.(seq_id((vseq.m
+        ) - (vseq.k))).| by Lm2;
+        ||.(vseq.m) - (vseq.k).|| =sup rng |.(seq_id((vseq.m) - (vseq.k)))
+        .| by Th3;
+        then sup rng |.(seq_id((vseq.m) - (vseq.k))).| < e by A5,A6;
+        hence thesis by A8,A7,XXREAL_0:2;
+      end;
+    end;
+    then cseqi is convergent by COMSEQ_3:46;
+    hence thesis by A3;
   end;
   consider f be Function of NAT,COMPLEX such that
-A10: for x be set st x in NAT holds P[x,f.x] from FUNCT_2:sch 1(A2);
+A9: for x be set st x in NAT holds P[x,f.x] from FUNCT_2:sch 1(A2);
   reconsider tseq=f as Complex_Sequence;
-A11: now
+A10: now
     let i be Element of NAT;
     reconsider x=i as set;
-    ex i0 be Element of NAT st x=i0 & ex cseqi be Complex_Sequence st
-    ( for n be Element of NAT holds cseqi.n=(seq_id(vseq.n)).i0 ) &
-    cseqi is convergent & f.x=lim cseqi by A10;
-    hence ex cseqi be Complex_Sequence st
-    ( for n be Element of NAT holds cseqi.n=(seq_id(vseq.n)).i ) &
-    cseqi is convergent & tseq.i=lim cseqi;
+    ex i0 be Element of NAT st x=i0 & ex cseqi be Complex_Sequence st (
+    for n be Element of NAT holds cseqi.n=(seq_id(vseq.n)).i0 ) & cseqi is
+    convergent & f.x=lim cseqi by A9;
+    hence
+    ex cseqi be Complex_Sequence st ( for n be Element of NAT holds cseqi
+    .n=(seq_id(vseq.n)).i ) & cseqi is convergent & tseq.i=lim cseqi;
   end;
-A12: for e be Real st e >0 ex k be Element of NAT st
-  for n be Element of NAT st n >= k holds
-  |.(seq_id tseq-seq_id(vseq.n)).| is bounded &
-  sup rng |.(seq_id tseq-seq_id(vseq.n)).| <= e
+A11: for e be Real st e >0 ex k be Element of NAT st for n be Element of NAT
+st n >= k holds |.(seq_id tseq-seq_id(vseq.n)).| is bounded & sup rng |.(seq_id
+  tseq-seq_id(vseq.n)).| <= e
   proof
     let e be Real such that
-A13: e > 0;
+A12: e > 0;
     consider k be Element of NAT such that
-A14: for n, m be Element of NAT st n >= k & m >= k holds
-    ||.(vseq.n) - (vseq.m).|| < e by A1,A13,CSSPACE3:10;
-A15: for m,n be Element of NAT st n >= k & m >= k holds
-    |.seq_id((vseq.n) - (vseq.m)).| is bounded &
-    sup rng |.seq_id((vseq.n) - (vseq.m)).| < e
+A13: for n, m be Element of NAT st n >= k & m >= k holds ||.(vseq.n) -
+    (vseq.m).|| < e by A1,A12,CSSPACE3:10;
+A14: for m,n be Element of NAT st n >= k & m >= k holds |.seq_id((vseq.n)
+    - (vseq.m)).| is bounded & sup rng |.seq_id((vseq.n) - (vseq.m)).| < e
     proof
-      let m,n be Element of NAT such that
-A16:  n >= k & m >= k;
-      ||.(vseq.n) - (vseq.m).|| < e by A14,A16;
+      let m,n be Element of NAT;
+      assume
+      n >= k & m >= k;
+      then ||.(vseq.n) - (vseq.m).|| < e by A13;
       then
-A17:  (the norm of Complex_linfty_Space).((vseq.n) - (vseq.m))
-      < e by CLVECT_1:def 10;
+A15:  (the norm of Complex_linfty_Space).((vseq.n) - (vseq.m)) < e by
+      CLVECT_1:def 10;
       seq_id((vseq.n) - (vseq.m)) is bounded by Def1;
-      hence thesis by A17,Def2,Lm9;
+      hence thesis by A15,Def2,Lm9;
     end;
-A18: for n be Element of NAT for i be Element of NAT holds
-    for rseq be Real_Sequence st
-    ( for m be Element of NAT holds rseq.m=|.(seq_id(vseq.m-vseq.n)).| .i )
-    holds ( rseq is convergent &
-    lim rseq = |.((seq_id tseq -seq_id(vseq.n))).| .i )
+A16: for n be Element of NAT for i be Element of NAT holds for rseq be
+Real_Sequence st ( for m be Element of NAT holds rseq.m=|.(seq_id(vseq.m-vseq.n
+)).| .i ) holds rseq is convergent & lim rseq = |.((seq_id tseq -seq_id(vseq.n)
+    )).| .i
     proof
       let n be Element of NAT;
-A19:  for m,k be Element of NAT holds
-      seq_id((vseq.m) - (vseq.k)) = seq_id(vseq.m)-seq_id(vseq.k)
+A17:  for m,k be Element of NAT holds seq_id((vseq.m) - (vseq.k)) =
+      seq_id(vseq.m)-seq_id(vseq.k)
       proof
         let m,k be Element of NAT;
-        seq_id((vseq.m) - (vseq.k))
-        = seq_id(seq_id(vseq.m)-seq_id(vseq.k)) by Th3;
+        seq_id((vseq.m) - (vseq.k)) = seq_id(seq_id(vseq.m)-seq_id(vseq.k
+        )) by Th3;
         hence thesis by CSSPACE:3;
       end;
       now
         let i be Element of NAT;
         consider cseqi be Complex_Sequence such that
-A20:    ( for n be Element of NAT holds cseqi.n=(seq_id(vseq.n)).i ) &
-        cseqi is convergent & tseq.i=lim cseqi by A11;
+A18:    for n be Element of NAT holds cseqi.n=(seq_id(vseq.n)).i and
+A19:    cseqi is convergent & tseq.i=lim cseqi by A10;
         now
           let rseq be Real_Sequence such that
-A21:      for m be Element of NAT holds rseq.m=|.(seq_id(vseq.m-vseq.n)).| .i;
-A22:      now
+A20:      for m be Element of NAT holds rseq.m=|.(seq_id(vseq.m-vseq.
+          n)).| .i;
+A21:      now
             let m be Element of NAT;
-A23:        seq_id(vseq.m - vseq.n) = seq_id(vseq.m)-seq_id(vseq.n) by A19;
-            thus rseq.m=|.(seq_id(vseq.m-vseq.n)).| .i by A21
+A22:        seq_id(vseq.m - vseq.n) = seq_id(vseq.m)-seq_id(vseq.n) by
+            A17;
+            thus rseq.m=|.(seq_id(vseq.m-vseq.n)).| .i by A20
               .=|.((seq_id(vseq.m-vseq.n)).i).| by VALUED_1:18
-              .=|.((seq_id(vseq.m)).i -(seq_id(vseq.n)).i).| by A23,Lm12
-              .= |.(cseqi.m -(seq_id(vseq.n)).i) .| by A20;
+              .=|.((seq_id(vseq.m)).i -(seq_id(vseq.n)).i).| by A22,Lm12
+              .= |.(cseqi.m -(seq_id(vseq.n)).i) .| by A18;
           end;
-          |.(tseq.i-(seq_id(vseq.n)).i).|
-          = |.((tseq-(seq_id(vseq.n))).i).| by Lm12
+          |.(tseq.i-(seq_id(vseq.n)).i).| = |.((tseq-(seq_id(vseq.n))).i)
+          .| by Lm12
             .= |.((seq_id tseq-(seq_id(vseq.n))).i).| by CSSPACE:3
             .= |.((seq_id tseq -seq_id(vseq.n))).| .i by VALUED_1:18;
-          hence rseq is convergent &
-          lim rseq = |.(seq_id tseq -seq_id(vseq.n)).| .i
-          by A20,A22,CSSPACE3:1;
+          hence
+          rseq is convergent & lim rseq = |.(seq_id tseq -seq_id(vseq.n))
+          .| .i by A19,A21,CSSPACE3:1;
         end;
-        hence for rseq be Real_Sequence st ( for m be Element of NAT
-        holds rseq.m=|.(seq_id(vseq.m-vseq.n)).| .i ) holds rseq is convergent
-        & lim rseq = |.(seq_id tseq -seq_id(vseq.n)).| .i;
+        hence
+        for rseq be Real_Sequence st ( for m be Element of NAT holds rseq
+.m=|.(seq_id(vseq.m-vseq.n)).| .i ) holds rseq is convergent & lim rseq = |.(
+        seq_id tseq -seq_id(vseq.n)).| .i;
       end;
       hence thesis;
     end;
-    for n be Element of NAT st n >= k holds
-    |.(seq_id tseq-seq_id(vseq.n)).| is bounded &
-    sup rng |.(seq_id tseq-seq_id(vseq.n)).| <= e
+    for n be Element of NAT st n >= k holds |.(seq_id tseq-seq_id(vseq.n)
+    ).| is bounded & sup rng |.(seq_id tseq-seq_id(vseq.n)).| <= e
     proof
       let n be Element of NAT such that
-A24:  n >= k;
-A25:  for i be Element of NAT
-      holds |.((seq_id tseq -seq_id(vseq.n))).| .i <= e
+A23:  n >= k;
+A24:  for i be Element of NAT holds |.((seq_id tseq -seq_id(vseq.n))).| .
+      i <= e
       proof
         let i be Element of NAT;
         deffunc F(Element of NAT)= |.(seq_id((vseq.$1) - (vseq.n))).| .i;
         consider rseq be Real_Sequence such that
-A26:    for m be Element of NAT holds rseq.m = F(m) from SEQ_1:sch 1;
-A27:    rseq is convergent by A18,A26;
-A28:    lim rseq = |.(seq_id tseq-seq_id(vseq.n)).| .i by A18,A26;
-        for m be Element of NAT st m >= k holds rseq.m <= e
+A25:    for m be Element of NAT holds rseq.m = F(m) from SEQ_1:sch 1;
+A26:    for m be Element of NAT st m >= k holds rseq.m <= e
         proof
           let m be Element of NAT;
-          assume m >= k;
+A27:      rseq.m = |.(seq_id((vseq.m) - (vseq.n))).| .i by A25;
+          assume
+A28:      m >= k;
+          then |.(seq_id((vseq.m) - (vseq.n))).| is bounded by A14,A23;
           then
-A29:      |.(seq_id((vseq.m) - (vseq.n))).| is bounded &
-          sup rng |. seq_id((vseq.m) - (vseq.n)).| <= e by A15,A24;
-          then
-A30:      |.(seq_id((vseq.m) - (vseq.n))).| .i
-          <=sup rng |.seq_id((vseq.m) - (vseq.n)).| by Lm2;
-          rseq.m = |.(seq_id((vseq.m) - (vseq.n))).| .i by A26;
-          hence thesis by A29,A30,XXREAL_0:2;
+A29:      |.(seq_id((vseq.m) - (vseq.n))).| .i <=sup rng |.seq_id((vseq.m
+          ) - (vseq.n)).| by Lm2;
+          sup rng |. seq_id((vseq.m) - (vseq.n)).| <= e by A14,A23,A28;
+          hence thesis by A29,A27,XXREAL_0:2;
         end;
-        hence thesis by A27,A28,RSSPACE2:6;
+        rseq is convergent & lim rseq = |.(seq_id tseq-seq_id(vseq.n)).|
+        .i by A16,A25;
+        hence thesis by A26,RSSPACE2:6;
       end;
-      |.(seq_id tseq-seq_id(vseq.n)).| is bounded
-      proof
-A31:    0 + 0 < 1 + e by A13;
-A32:    0 + e < 1 + e by XREAL_1:10;
-        now
-          let i be Element of NAT;
-          |.((seq_id tseq -seq_id(vseq.n))).| .i <= e by A25;
-          then |.(((seq_id tseq -seq_id(vseq.n))).i).| <= e by VALUED_1:18;
-          hence |.(((seq_id tseq -seq_id(vseq.n))).i).|
-          <e+1 by A32,XXREAL_0:2;
-        end;
-        then seq_id tseq -seq_id(vseq.n) is bounded by A31,COMSEQ_2:8;
-        hence thesis by Lm9;
+A30:  0 + e < 1 + e by XREAL_1:10;
+      now
+        let i be Element of NAT;
+        |.((seq_id tseq -seq_id(vseq.n))).| .i <= e by A24;
+        then |.(((seq_id tseq -seq_id(vseq.n))).i).| <= e by VALUED_1:18;
+        hence |.(((seq_id tseq -seq_id(vseq.n))).i).| <e+1 by A30,XXREAL_0:
+        2;
       end;
-      hence thesis by A25,Lm1;
+      then seq_id tseq -seq_id(vseq.n) is bounded by A12,COMSEQ_2:8;
+      hence thesis by A24,Lm1,Lm9;
     end;
     hence thesis;
   end;
-A33: seq_id tseq is bounded
+A31: seq_id tseq is bounded
   proof
     consider m be Element of NAT such that
-A34: for n be Element of NAT st n >= m holds
-    |.(seq_id tseq -seq_id(vseq.n)).| is bounded &
-    sup rng |.(seq_id tseq -seq_id(vseq.n)).| <= 1 by A12;
-A35: |.(seq_id tseq -seq_id(vseq.m)).| is bounded by A34;
+A32: for n be Element of NAT st n >= m holds |.(seq_id tseq -seq_id(
+vseq.n)).| is bounded & sup rng |.(seq_id tseq -seq_id(vseq.n)).| <= 1 by A11;
+A33: |.(seq_id tseq -seq_id(vseq.m)).| is bounded by A32;
+    set d=|.seq_id tseq.|;
+    set b=|.seq_id(vseq.m).|;
+    set a=|.(seq_id tseq -seq_id(vseq.m)).|;
     seq_id(vseq.m) is bounded by Def1;
     then
-A36: |.seq_id (vseq.m).| is bounded by Lm9;
-    set a=|.(seq_id tseq -seq_id(vseq.m)).|;
-    set b=|.seq_id(vseq.m).|;
-    set d=|.seq_id tseq.|;
-A37: a + b is bounded by A35,A36;
-A38: for i be Element of NAT holds d.i <= (a+b).i
+A34: |.seq_id (vseq.m).| is bounded by Lm9;
+A35: for i be Element of NAT holds d.i <= (a+b).i
     proof
       let i be Element of NAT;
-A39:  a.i = |.((seq_id tseq+-seq_id(vseq.m)).i).| by VALUED_1:18
+A36:  b.i=|.((seq_id(vseq.m)).i).| & d.i=|.((seq_id tseq).i).| by
+      VALUED_1:18;
+      a.i = |.((seq_id tseq+-seq_id(vseq.m)).i).| by VALUED_1:18
         .= |.((seq_id tseq).i+(-seq_id(vseq.m)).i).| by VALUED_1:1
         .= |.((seq_id tseq).i+(-(seq_id(vseq.m)).i)).| by VALUED_1:8
         .= |.((seq_id tseq).i-(seq_id(vseq.m)).i).|;
-A40:  b.i=|.((seq_id(vseq.m)).i).| by VALUED_1:18;
-      d.i=|.((seq_id tseq).i).| by VALUED_1:18;
-      then d.i-b.i <= a.i by A39,A40,COMPLEX1:145;
+      then d.i-b.i <= a.i by A36,COMPLEX1:145;
       then d.i-b.i+b.i<= a.i + b.i by XREAL_1:8;
       hence thesis by SEQ_1:11;
     end;
     d is bounded
     proof
       reconsider r=sup rng (a+b)+1 as real number;
-      0 <= sup rng(a+b)
-      proof
-A41:    (a+b).1 =a.1 + b.1 by SEQ_1:11;
-        a.1=|.((seq_id tseq -seq_id(vseq.m)).1).| by VALUED_1:18;
-        then
-A42:    0<= a.1 by COMPLEX1:132;
-        b.1=|.( (seq_id(vseq.m)).1 ).| by VALUED_1:18;
-        then 0<= b.1 by COMPLEX1:132;
-        then 0 + 0 <= a.1+ b.1 by A42;
-        hence thesis by A37,A41,Lm2;
-      end;
+      b.1=|.( (seq_id(vseq.m)).1 ).| by VALUED_1:18;
       then
-A43:  0+0 < sup( rng(a+b) )+1;
-A44:  sup( rng(a+b) ) +0 < sup( rng(a+b) )+1 by XREAL_1:10;
-      now
+A37:  0<= b.1 by COMPLEX1:132;
+A38:  sup( rng(a+b) ) +0 < sup( rng(a+b) )+1 by XREAL_1:10;
+A39:  now
         let i be Element of NAT;
-A45:    d.i <= (a+b).i by A38;
-        (a+b).i <= sup rng (a+b) by A37,Lm2;
+        d.i <= (a+b).i & (a+b).i <= sup rng (a+b) by A33,A34,A35,Lm2;
         then
-A46:    d.i <= sup rng (a+b) by A45,XXREAL_0:2;
+A40:    d.i <= sup rng (a+b) by XXREAL_0:2;
         d.i=|.((seq_id tseq).i).| by VALUED_1:18;
-        hence |.((seq_id tseq).i).| <r by A44,A46,XXREAL_0:2;
+        hence |.((seq_id tseq).i).| <r by A38,A40,XXREAL_0:2;
       end;
-      then seq_id tseq is bounded by A43,COMSEQ_2:8;
+      a.1=|.((seq_id tseq -seq_id(vseq.m)).1).| by VALUED_1:18;
+      then (a+b).1 =a.1 + b.1 & 0<= a.1 by COMPLEX1:132,SEQ_1:11;
+      then 0 <= sup rng(a+b) by A33,A34,A37,Lm2;
+      then seq_id tseq is bounded by A39,COMSEQ_2:8;
       hence thesis by Lm9;
     end;
     hence thesis by Lm10;
   end;
-A47: tseq in the_set_of_ComplexSequences by CSSPACE:def 1;
-  then reconsider tv=tseq as Point of Complex_linfty_Space by A33,Def1;
-  ex tv be Point of Complex_linfty_Space st for e1 be Real st e1 > 0
-  ex m be Element of NAT st
-  for n be Element of NAT st n >= m holds ||.(vseq.n) - tv.|| < e1
+A41: tseq in the_set_of_ComplexSequences by CSSPACE:def 1;
+  then reconsider tv=tseq as Point of Complex_linfty_Space by A31,Def1;
+  ex tv be Point of Complex_linfty_Space st for e1 be Real st e1 > 0 ex m
+  be Element of NAT st for n be Element of NAT st n >= m holds ||.(vseq.n) - tv
+  .|| < e1
   proof
     take tv;
     let e1 be Real such that
-A48: e1 > 0;
+A42: e1 > 0;
     set e=e1/2;
-A49: e > 0 by A48,XREAL_1:217;
-A50: e < e1 by A48,XREAL_1:218;
     consider m be Element of NAT such that
-A51: for n be Element of NAT st n >= m holds
-    |.(seq_id tseq-seq_id(vseq.n)).| is bounded &
-    sup rng |.(seq_id tseq-seq_id(vseq.n)).| <= e by A12,A49;
+A43: for n be Element of NAT st n >= m holds |.(seq_id tseq-seq_id(
+vseq.n)).| is bounded & sup rng |.(seq_id tseq-seq_id(vseq.n)).| <= e by A11,
+    A42,XREAL_1:217;
+A44: e < e1 by A42,XREAL_1:218;
     now
-      let n be Element of NAT such that
-A52:  n >= m;
-      reconsider u=tseq as VECTOR of Complex_linfty_Space by A33,A47,Def1;
-A53:  sup rng( |.(seq_id tseq-seq_id(vseq.n)).|) <= e by A51,A52;
+      reconsider u=tseq as VECTOR of Complex_linfty_Space by A31,A41,Def1;
+      let n be Element of NAT;
+      assume
+      n >= m;
+      then
+A45:  sup rng( |.(seq_id tseq-seq_id(vseq.n)).|) <= e by A43;
       reconsider v=vseq.n as VECTOR of Complex_linfty_Space;
       seq_id(u-v) = u-v by Th3;
-      then sup rng |.seq_id(u-v).|
-      = sup rng |.(seq_id tseq-seq_id(vseq.n)).| by Th3;
+      then sup rng |.seq_id(u-v).| = sup rng |.(seq_id tseq-seq_id(vseq.n)).|
+      by Th3;
       then
-A54:  (the norm of Complex_linfty_Space).(u-v) <= e by A53,Def2;
+A46:  (the norm of Complex_linfty_Space).(u-v) <= e by A45,Def2;
       ||.(vseq.n) - tv.|| =||.-(tv-(vseq.n)).|| by RLVECT_1:47
         .=||.tv-(vseq.n).|| by CLVECT_1:104;
-      then ||.(vseq.n) - tv.|| <= e by A54,CLVECT_1:def 10;
-      hence ||.(vseq.n) - tv.|| < e1 by A50,XXREAL_0:2;
+      then ||.(vseq.n) - tv.|| <= e by A46,CLVECT_1:def 10;
+      hence ||.(vseq.n) - tv.|| < e1 by A44,XXREAL_0:2;
     end;
     hence thesis;
   end;
@@ -949,14 +933,13 @@ definition
   let IT be Function of X, the carrier of Y;
   attr IT is bounded means
   :Def4:
-  ex K being Real st 0 <= K &
-  for x being Element of X holds ||. IT.x .|| <= K;
+  ex K being Real st 0 <= K & for x being
+  Element of X holds ||. IT.x .|| <= K;
 end;
 
 theorem Th7:
-  for X be non empty set, Y be ComplexNormSpace,
-  f be Function of X,the carrier of Y st
-  (for x be Element of X holds f.x=0.Y) holds f is bounded
+  for X be non empty set, Y be ComplexNormSpace, f be Function of X
+  ,the carrier of Y st (for x be Element of X holds f.x=0.Y) holds f is bounded
 proof
   let X be non empty set;
   let Y be ComplexNormSpace;
@@ -989,55 +972,54 @@ definition
   let X be non empty set;
   let Y be ComplexNormSpace;
   func ComplexBoundedFunctions(X,Y) -> Subset of ComplexVectSpace(X,Y) means
-  :Def5:
-  for x being set holds x in it iff
-  x is bounded Function of X,the carrier of Y;
+  :
+  Def5: for
+ x being set holds x in it iff x is bounded Function of X,the carrier
+  of Y;
   existence
   proof
     defpred P[set] means $1 is bounded Function of X,the carrier of Y;
     consider IT being set such that
-A1: for x being set holds x in IT
-    iff x in Funcs(X,the carrier of Y) & P[x] from XBOOLE_0:sch 1;
-A2: IT is Subset of Funcs(X,the carrier of Y)
-    proof
-      for x be set st x in IT holds x in Funcs(X,the carrier of Y) by A1;
-      hence thesis by TARSKI:def 3;
-    end;
+A1: for x being set holds x in IT iff x in Funcs(X,the carrier of Y) &
+    P[x] from XBOOLE_0:sch 1;
     take IT;
-    thus IT is Subset of ComplexVectSpace(X,Y) by A2;
+    for x be set st x in IT holds x in Funcs(X,the carrier of Y) by A1;
+    hence IT is Subset of ComplexVectSpace(X,Y) by TARSKI:def 3;
     let x be set;
     thus x in IT implies x is bounded Function of X,the carrier of Y by A1;
     assume
-A3: x is bounded Function of X,the carrier of Y;
+A2: x is bounded Function of X,the carrier of Y;
     then x in Funcs(X,the carrier of Y) by FUNCT_2:11;
-    hence thesis by A1,A3;
+    hence thesis by A1,A2;
   end;
   uniqueness
   proof
     let X1,X2 be Subset of ComplexVectSpace(X,Y);
     assume that
-A4: for x being set holds x in X1 iff
-    x is bounded Function of X,the carrier of Y and
-A5: for x being set holds x in X2 iff
-    x is bounded Function of X,the carrier of Y;
-    for x being set st x in X1 holds x in X2
-    proof
-      let x be set;
-      assume x in X1;
-      then x is bounded Function of X,the carrier of Y by A4;
-      hence thesis by A5;
-    end;
-    then
-A6: X1 c= X2 by TARSKI:def 3;
+A3: for x being set holds x in X1 iff x is bounded Function of X,the
+    carrier of Y and
+A4: for x being set holds x in X2 iff x is bounded Function of X,the
+    carrier of Y;
     for x being set st x in X2 holds x in X1
     proof
       let x be set;
-      assume x in X2;
-      then x is bounded Function of X,the carrier of Y by A5;
+      assume
+      x in X2;
+      then x is bounded Function of X,the carrier of Y by A4;
+      hence thesis by A3;
+    end;
+    then
+A5: X2 c= X1 by TARSKI:def 3;
+    for x being set st x in X1 holds x in X2
+    proof
+      let x be set;
+      assume
+      x in X1;
+      then x is bounded Function of X,the carrier of Y by A3;
       hence thesis by A4;
     end;
-    then X2 c= X1 by TARSKI:def 3;
-    hence thesis by A6,XBOOLE_0:def 10;
+    then X1 c= X2 by TARSKI:def 3;
+    hence thesis by A5,XBOOLE_0:def 10;
   end;
 end;
 
@@ -1049,11 +1031,8 @@ registration
   proof
     set f=X --> 0.Y;
     reconsider f as Function of X,the carrier of Y;
-    f is bounded
-    proof
-      for x be Element of X holds f.x =0.Y by FUNCOP_1:13;
-      hence thesis by Th7;
-    end;
+    for x be Element of X holds f.x =0.Y by FUNCOP_1:13;
+    then f is bounded by Th7;
     hence thesis by Def5;
   end;
 end;
@@ -1065,37 +1044,39 @@ proof
   let X be non empty set;
   let Y be ComplexNormSpace;
   set W = ComplexBoundedFunctions(X,Y);
-A1: for v,u be VECTOR of ComplexVectSpace(X,Y) st
-  v in W & u in W holds v + u in W
+A1: for v,u be VECTOR of ComplexVectSpace(X,Y) st v in W & u in W holds v +
+  u in W
   proof
     let v,u be VECTOR of ComplexVectSpace(X,Y) such that
-A2: v in W & u in W;
+A2: v in W and
+A3: u in W;
     reconsider f=v+u as Function of X,the carrier of Y by FUNCT_2:121;
     f is bounded
     proof
-      reconsider u1=u as bounded Function of X, the carrier of Y by A2,Def5;
       reconsider v1=v as bounded Function of X, the carrier of Y by A2,Def5;
-      consider K1 be Real such that
-A3:   0 <= K1 & for x be Element of X holds ||. u1.x .|| <= K1 by Def4;
       consider K2 be Real such that
-A4:   0 <= K2 & for x be Element of X holds ||. v1.x .|| <= K2 by Def4;
+A4:   0 <= K2 and
+A5:   for x be Element of X holds ||. v1.x .|| <= K2 by Def4;
+      reconsider u1=u as bounded Function of X, the carrier of Y by A3,Def5;
+      consider K1 be Real such that
+A6:   0 <= K1 and
+A7:   for x be Element of X holds ||. u1.x .|| <= K1 by Def4;
       take K3=K1+K2;
-A5:   0 + 0 <= K1+K2 by A3,A4;
       now
         let x be Element of X;
-A6:     ||. f.x .|| =||. v1.x+u1.x .|| by CLOPBAN1:12;
-A7:     ||. u1.x+v1.x .|| <= ||. u1.x .||+ ||. v1.x .|| by CLVECT_1:def 11;
-A8:     ||. u1.x .|| <= K1 by A3;
-        ||. v1.x .|| <= K2 by A4;
-        then ||. u1.x .|| + ||. v1.x .|| <= K1 +K2 by A8,XREAL_1:9;
-        hence ||. f.x .|| <= K3 by A6,A7,XXREAL_0:2;
+        ||. u1.x .|| <= K1 & ||. v1.x .|| <= K2 by A7,A5;
+        then
+A8:     ||. u1.x .|| + ||. v1.x .|| <= K1 +K2 by XREAL_1:9;
+        ||. f.x .|| =||. v1.x+u1.x .|| & ||. u1.x+v1.x .|| <= ||. u1.x
+        .||+ ||. v1.x .|| by CLOPBAN1:12,CLVECT_1:def 11;
+        hence ||. f.x .|| <= K3 by A8,XXREAL_0:2;
       end;
-      hence thesis by A5;
+      hence thesis by A6,A4;
     end;
     hence thesis by Def5;
   end;
-  for c be Complex for v be VECTOR of ComplexVectSpace(X,Y) st
-  v in W holds c * v in W
+  for c be Complex for v be VECTOR of ComplexVectSpace(X,Y) st v in W
+  holds c * v in W
   proof
     let c be Complex;
     let v be VECTOR of ComplexVectSpace(X,Y) such that
@@ -1105,17 +1086,18 @@ A9: v in W;
     proof
       reconsider v1=v as bounded Function of X, the carrier of Y by A9,Def5;
       consider K be Real such that
-A10:  0 <= K & for x be Element of X holds ||. v1.x .|| <= K by Def4;
+A10:  0 <= K and
+A11:  for x be Element of X holds ||. v1.x .|| <= K by Def4;
       take K1=|.c.|*K;
-A11:  0 <= K & 0 <=|.c.| by A10,COMPLEX1:132;
-      now
+A12:  now
         let x be Element of X;
-A12:    ||. f.x .|| =||. c*v1.x .|| by CLOPBAN1:13;
-A13:    ||. c*v1.x .|| = |.c.|* ||. v1.x .|| by CLVECT_1:def 11;
-        0 <=|.c.| by COMPLEX1:132;
-        hence ||. f.x .|| <= |.c.|* K by A10,A12,A13,XREAL_1:66;
+A13:    0 <=|.c.| by COMPLEX1:132;
+        ||. f.x .|| =||. c*v1.x .|| & ||. c*v1.x .|| = |.c.|* ||. v1.x
+        .|| by CLOPBAN1:13,CLVECT_1:def 11;
+        hence ||. f.x .|| <= |.c.|* K by A11,A13,XREAL_1:66;
       end;
-      hence thesis by A11;
+      0 <=|.c.| by COMPLEX1:132;
+      hence thesis by A10,A12;
     end;
     hence thesis by Def5;
   end;
@@ -1123,22 +1105,20 @@ A13:    ||. c*v1.x .|| = |.c.|* ||. v1.x .|| by CLVECT_1:def 11;
 end;
 
 theorem
-  for X be non empty set for Y be ComplexNormSpace holds
-  CLSStruct (# ComplexBoundedFunctions(X,Y),
-    Zero_(ComplexBoundedFunctions(X,Y),ComplexVectSpace(X,Y)),
-    Add_(ComplexBoundedFunctions(X,Y),ComplexVectSpace(X,Y)),
-    Mult_(ComplexBoundedFunctions(X,Y),ComplexVectSpace(X,Y)) #)
-  is Subspace of ComplexVectSpace(X,Y) by Th8,CSSPACE:13;
+  for X be non empty set for Y be ComplexNormSpace holds CLSStruct (#
+    ComplexBoundedFunctions(X,Y), Zero_(ComplexBoundedFunctions(X,Y),
+ComplexVectSpace(X,Y)), Add_(ComplexBoundedFunctions(X,Y),ComplexVectSpace(X,Y)
+), Mult_(ComplexBoundedFunctions(X,Y),ComplexVectSpace(X,Y)) #) is Subspace of
+  ComplexVectSpace(X,Y) by Th8,CSSPACE:13;
 
 registration
   let X be non empty set;
   let Y be ComplexNormSpace;
-  cluster CLSStruct (# ComplexBoundedFunctions(X,Y),
-      Zero_(ComplexBoundedFunctions(X,Y), ComplexVectSpace(X,Y)),
-      Add_(ComplexBoundedFunctions(X,Y), ComplexVectSpace(X,Y)),
-      Mult_(ComplexBoundedFunctions(X,Y), ComplexVectSpace(X,Y)) #)
-    -> Abelian add-associative right_zeroed right_complementable
-    ComplexLinearSpace-like;
+  cluster CLSStruct (# ComplexBoundedFunctions(X,Y), Zero_(
+      ComplexBoundedFunctions(X,Y), ComplexVectSpace(X,Y)), Add_(
+      ComplexBoundedFunctions(X,Y), ComplexVectSpace(X,Y)), Mult_(
+      ComplexBoundedFunctions(X,Y), ComplexVectSpace(X,Y)) #) -> Abelian
+    add-associative right_zeroed right_complementable ComplexLinearSpace-like;
   coherence by Th8,CSSPACE:13;
 end;
 
@@ -1146,10 +1126,9 @@ definition
   let X be non empty set;
   let Y be ComplexNormSpace;
   func C_VectorSpace_of_BoundedFunctions(X,Y) -> ComplexLinearSpace equals
-  CLSStruct (# ComplexBoundedFunctions(X,Y),
-    Zero_(ComplexBoundedFunctions(X,Y),ComplexVectSpace(X,Y)),
-    Add_(ComplexBoundedFunctions(X,Y),ComplexVectSpace(X,Y)),
-    Mult_(ComplexBoundedFunctions(X,Y),ComplexVectSpace(X,Y)) #);
+CLSStruct (# ComplexBoundedFunctions(X,Y), Zero_(ComplexBoundedFunctions(X,Y),
+ComplexVectSpace(X,Y)), Add_(ComplexBoundedFunctions(X,Y),ComplexVectSpace(X,Y)
+    ), Mult_(ComplexBoundedFunctions(X,Y),ComplexVectSpace(X,Y)) #);
   coherence;
 end;
 
@@ -1163,80 +1142,78 @@ end;
 canceled;
 
 theorem Th11:
-  for X be non empty set for Y be ComplexNormSpace,
-  f,g,h be VECTOR of C_VectorSpace_of_BoundedFunctions(X,Y),
-  f',g',h' be bounded Function of X,the carrier of Y st
-  f'=f & g'=g & h'=h holds
-  (h = f+g iff (for x be Element of X holds (h'.x = f'.x + g'.x)) )
+  for X be non empty set for Y be ComplexNormSpace, f,g,h be
+VECTOR of C_VectorSpace_of_BoundedFunctions(X,Y), f',g',h' be bounded Function
+of X,the carrier of Y st f'=f & g'=g & h'=h holds (h = f+g iff for x be Element
+  of X holds h'.x = f'.x + g'.x )
 proof
   let X be non empty set;
   let Y be ComplexNormSpace;
   let f,g,h be VECTOR of C_VectorSpace_of_BoundedFunctions(X,Y);
-  let f',g',h' be bounded Function of X,the carrier of Y such that
-A1: f'=f and
-A2: g'=g and
-A3: h'=h;
-A4: C_VectorSpace_of_BoundedFunctions(X,Y) is Subspace of ComplexVectSpace(
+A1: C_VectorSpace_of_BoundedFunctions(X,Y) is Subspace of ComplexVectSpace(
   X,Y) by Th8,CSSPACE:13;
   then reconsider f1=f as VECTOR of ComplexVectSpace(X,Y) by CLVECT_1:30;
-  reconsider g1=g as VECTOR of ComplexVectSpace(X,Y) by A4,CLVECT_1:30;
-  reconsider h1=h as VECTOR of ComplexVectSpace(X,Y) by A4,CLVECT_1:30;
-A5: now
+  reconsider h1=h as VECTOR of ComplexVectSpace(X,Y) by A1,CLVECT_1:30;
+  reconsider g1=g as VECTOR of ComplexVectSpace(X,Y) by A1,CLVECT_1:30;
+  let f',g',h' be bounded Function of X,the carrier of Y such that
+A2: f'=f & g'=g & h'=h;
+A3: now
     assume
-A6: h = f+g;
+A4: h = f+g;
     let x be Element of X;
-    h1=f1+g1 by A4,A6,CLVECT_1:33;
-    hence h'.x=f'.x+g'.x by A1,A2,A3,CLOPBAN1:12;
+    h1=f1+g1 by A1,A4,CLVECT_1:33;
+    hence h'.x=f'.x+g'.x by A2,CLOPBAN1:12;
   end;
   now
-    assume for x be Element of X holds h'.x=f'.x+g'.x;
-    then h1=f1+g1 by A1,A2,A3,CLOPBAN1:12;
-    hence h =f+g by A4,CLVECT_1:33;
+    assume
+    for x be Element of X holds h'.x=f'.x+g'.x;
+    then h1=f1+g1 by A2,CLOPBAN1:12;
+    hence h =f+g by A1,CLVECT_1:33;
   end;
-  hence thesis by A5;
+  hence thesis by A3;
 end;
 
 theorem Th12:
-  for X be non empty set for Y be ComplexNormSpace,
-  f,h be VECTOR of C_VectorSpace_of_BoundedFunctions(X,Y),
-  f',h' be bounded Function of X,the carrier of Y st f'=f & h'=h
-  for c be Complex holds h = c*f iff for x be Element of X holds h'.x = c*f'.x
+  for X be non empty set for Y be ComplexNormSpace, f,h be VECTOR
+  of C_VectorSpace_of_BoundedFunctions(X,Y), f',h' be bounded Function of X,the
+carrier of Y st f'=f & h'=h for c be Complex holds h = c*f iff for x be Element
+  of X holds h'.x = c*f'.x
 proof
   let X be non empty set;
   let Y be ComplexNormSpace;
   let f,h be VECTOR of C_VectorSpace_of_BoundedFunctions(X,Y);
   let f',h' be bounded Function of X,the carrier of Y such that
-A1: f'=f and
-A2: h'=h;
+A1: f'=f & h'=h;
   let c be Complex;
-A3: C_VectorSpace_of_BoundedFunctions(X,Y) is Subspace of ComplexVectSpace(
+A2: C_VectorSpace_of_BoundedFunctions(X,Y) is Subspace of ComplexVectSpace(
   X,Y) by Th8,CSSPACE:13;
-  then reconsider f1=f, h1=h as VECTOR of ComplexVectSpace(X,Y) by CLVECT_1:30;
-A4: now
+  then reconsider f1=f, h1=h as VECTOR of ComplexVectSpace(X,Y) by
+  CLVECT_1:30;
+A3: now
     assume
-A5: h = c*f;
+A4: h = c*f;
     let x be Element of X;
-    h1=c*f1 by A3,A5,CLVECT_1:34;
-    hence h'.x=c*f'.x by A1,A2,CLOPBAN1:13;
+    h1=c*f1 by A2,A4,CLVECT_1:34;
+    hence h'.x=c*f'.x by A1,CLOPBAN1:13;
   end;
   now
-    assume for x be Element of X holds h'.x=c*f'.x;
-    then h1=c*f1 by A1,A2,CLOPBAN1:13;
-    hence h =c*f by A3,CLVECT_1:34;
+    assume
+    for x be Element of X holds h'.x=c*f'.x;
+    then h1=c*f1 by A1,CLOPBAN1:13;
+    hence h =c*f by A2,CLVECT_1:34;
   end;
-  hence thesis by A4;
+  hence thesis by A3;
 end;
 
 theorem Th13:
-  for X be non empty set, Y be ComplexNormSpace holds
-  0.C_VectorSpace_of_BoundedFunctions(X,Y) = (X -->0.Y)
+  for X be non empty set, Y be ComplexNormSpace holds 0.
+  C_VectorSpace_of_BoundedFunctions(X,Y) = (X -->0.Y)
 proof
   let X be non empty set;
   let Y be ComplexNormSpace;
-A1: C_VectorSpace_of_BoundedFunctions(X,Y) is Subspace of ComplexVectSpace(
-  X,Y) by Th8,CSSPACE:13;
-  0.ComplexVectSpace(X,Y) = (X -->0.Y) by LOPBAN_1:def 3;
-  hence thesis by A1,CLVECT_1:31;
+  C_VectorSpace_of_BoundedFunctions(X,Y) is Subspace of ComplexVectSpace(
+  X,Y) & 0.ComplexVectSpace(X,Y) = (X -->0.Y) by Th8,CSSPACE:13,LOPBAN_1:def 3;
+  hence thesis by CLVECT_1:31;
 end;
 
 definition
@@ -1245,7 +1222,8 @@ definition
   let f be set such that
 A1: f in ComplexBoundedFunctions(X,Y);
   func modetrans(f,X,Y) -> bounded Function of X,the carrier of Y equals
-  :Def7:
+  :Def7
+  :
   f;
   coherence by A1,Def5;
 end;
@@ -1255,137 +1233,138 @@ definition
   let Y be ComplexNormSpace;
   let u be Function of X,the carrier of Y;
   func PreNorms(u) -> non empty Subset of REAL equals
-  {||.u.t.|| where t is Element of X : not contradiction };
+  {||.u.t.|| where t is
+  Element of X : not contradiction };
   coherence
   proof
+    consider x be Element of X;
 A1: now
       let x be set;
       now
-        assume x in {||.u.t.|| where t is Element of X: not contradiction };
-        then consider t be Element of X such that
-A2:     x=||.u.t.||;
-        thus x in REAL by A2;
+        assume
+        x in {||.u.t.|| where t is Element of X: not contradiction };
+        then ex t be Element of X st x=||.u.t.||;
+        hence x in REAL;
       end;
       hence x in {||.u.t.|| where t is Element of X: not contradiction }
       implies x in REAL;
     end;
-    consider x be Element of X;
     ||.u.x.|| in {||.u.t.|| where t is Element of X: not contradiction };
     hence thesis by A1,TARSKI:def 3;
   end;
 end;
 
 theorem Th14:
-  for X be non empty set for Y be ComplexNormSpace,
-  g be bounded Function of X,the carrier of Y holds
-  PreNorms(g) is non empty bounded_above
+  for X be non empty set for Y be ComplexNormSpace, g be bounded
+  Function of X,the carrier of Y holds PreNorms(g) is non empty bounded_above
 proof
   let X be non empty set;
   let Y be ComplexNormSpace;
   let g be bounded Function of X,the carrier of Y;
   PreNorms(g) is bounded_above
   proof
-    consider K be Real such that 0 <= K and
+    consider K be Real such that
+    0 <= K and
 A1: for x be Element of X holds ||. g.x .|| <= K by Def4;
-A2: now
-      let r be Real such that
-A3:   r in PreNorms(g);
-      consider t be Element of X such that
-A4:   r=||.g.t.|| by A3;
-      thus r <=K by A1,A4;
-    end;
     take K;
-    thus thesis by A2;
+    now
+      let r be Real;
+      assume
+      r in PreNorms(g);
+      then ex t be Element of X st r=||.g.t.||;
+      hence r <=K by A1;
+    end;
+    hence thesis;
   end;
   hence thesis;
 end;
 
 theorem
-  for X be non empty set for Y be ComplexNormSpace,
-  g be Function of X,the carrier of Y holds
-  g is bounded iff PreNorms(g) is bounded_above
+  for X be non empty set for Y be ComplexNormSpace, g be Function of X,
+  the carrier of Y holds g is bounded iff PreNorms(g) is bounded_above
 proof
   let X be non empty set;
   let Y be ComplexNormSpace;
   let g be Function of X,the carrier of Y;
   now
+    reconsider K=upper_bound PreNorms(g) as Real;
     assume
 A1: PreNorms(g) is bounded_above;
-    reconsider K=upper_bound PreNorms(g) as Real;
 A2: 0 <= K
     proof
-A3:   now
-        let r be Real such that
-A4:     r in PreNorms(g);
-        consider t be Element of X such that
-A5:     r=||.g.t.|| by A4;
-        thus 0 <= r by A5,CLVECT_1:106;
-      end;
       consider r0 be set such that
-A6:   r0 in PreNorms(g) by XBOOLE_0:def 1;
-      reconsider r0 as Real by A6;
-      0 <= r0 by A3,A6;
-      hence thesis by A1,A6,SEQ_4:def 4;
+A3:   r0 in PreNorms(g) by XBOOLE_0:def 1;
+      reconsider r0 as Real by A3;
+      now
+        let r be Real;
+        assume
+        r in PreNorms(g);
+        then ex t be Element of X st r=||.g.t.||;
+        hence 0 <= r by CLVECT_1:106;
+      end;
+      then 0 <= r0 by A3;
+      hence thesis by A1,A3,SEQ_4:def 4;
     end;
-A7: now
+    take K;
+    now
       let t be Element of X;
       ||.g.t.|| in PreNorms(g);
       hence ||.g.t.|| <= K by A1,SEQ_4:def 4;
     end;
-    take K;
-    thus g is bounded by A2,A7,Def4;
+    hence g is bounded by A2,Def4;
   end;
   hence thesis by Th14;
 end;
 
 theorem Th16:
-  for X be non empty set, Y be ComplexNormSpace
-  ex NORM be Function of ComplexBoundedFunctions(X,Y),REAL st
-  for f be set st f in ComplexBoundedFunctions(X,Y) holds
-  NORM.f = sup PreNorms(modetrans(f,X,Y))
+  for X be non empty set, Y be ComplexNormSpace ex NORM be
+  Function of ComplexBoundedFunctions(X,Y),REAL st for f be set st f in
+  ComplexBoundedFunctions(X,Y) holds NORM.f = sup PreNorms(modetrans(f,X,Y))
 proof
   let X be non empty set;
   let Y be ComplexNormSpace;
   deffunc F(set) = upper_bound PreNorms(modetrans($1,X,Y));
 A1: for z be set st z in ComplexBoundedFunctions(X,Y) holds F(z) in REAL;
-  ex f being Function of ComplexBoundedFunctions(X,Y),REAL st
-  for x being set st x in ComplexBoundedFunctions(X,Y) holds
-  f.x = F(x) from FUNCT_2:sch 2(A1);
+  ex f being Function of ComplexBoundedFunctions(X,Y),REAL st for x being
+set st x in ComplexBoundedFunctions(X,Y) holds f.x = F(x) from FUNCT_2:sch 2(A1
+  );
   hence thesis;
 end;
 
 definition
   let X be non empty set;
   let Y be ComplexNormSpace;
-  func ComplexBoundedFunctionsNorm(X,Y)
-  -> Function of ComplexBoundedFunctions(X,Y), REAL means
+  func ComplexBoundedFunctionsNorm(X,Y) -> Function of ComplexBoundedFunctions
+  (X,Y), REAL means
   :Def9:
-  for x be set st x in ComplexBoundedFunctions(X,Y) holds
-  it.x = sup PreNorms(modetrans(x,X,Y));
+  for x be set st x in ComplexBoundedFunctions(X,Y)
+  holds it.x = sup PreNorms(modetrans(x,X,Y));
   existence by Th16;
   uniqueness
   proof
-    let NORM1,NORM2 be Function of ComplexBoundedFunctions(X,Y), REAL such that
-A1: (for x be set st x in ComplexBoundedFunctions(X,Y) holds
-    NORM1.x = sup PreNorms(modetrans(x,X,Y))) and
-A2: (for x be set st x in ComplexBoundedFunctions(X,Y) holds
-    NORM2.x = sup PreNorms(modetrans(x,X,Y)));
-A3: dom NORM1 = ComplexBoundedFunctions(X,Y) &
-    dom NORM2 = ComplexBoundedFunctions(X,Y) by FUNCT_2:def 1;
-    for z be set st z in ComplexBoundedFunctions(X,Y) holds NORM1.z = NORM2.z
+    let NORM1,NORM2 be Function of ComplexBoundedFunctions(X,Y), REAL such
+    that
+A1: for x be set st x in ComplexBoundedFunctions(X,Y) holds NORM1.x =
+    sup PreNorms(modetrans(x,X,Y)) and
+A2: for x be set st x in ComplexBoundedFunctions(X,Y) holds NORM2.x =
+    sup PreNorms(modetrans(x,X,Y));
+A3: for z be set st z in ComplexBoundedFunctions(X,Y) holds NORM1.z =
+    NORM2.z
     proof
       let z be set such that
 A4:   z in ComplexBoundedFunctions(X,Y);
       NORM1.z = sup PreNorms(modetrans(z,X,Y)) by A1,A4;
       hence thesis by A2,A4;
     end;
+    dom NORM1 = ComplexBoundedFunctions(X,Y) & dom NORM2 =
+    ComplexBoundedFunctions(X,Y) by FUNCT_2:def 1;
     hence thesis by A3,FUNCT_1:9;
   end;
 end;
 
 theorem Th17:
-  for X be non empty set, Y be ComplexNormSpace,
-  f be bounded Function of X,the carrier of Y holds modetrans(f,X,Y)=f
+  for X be non empty set, Y be ComplexNormSpace, f be bounded
+  Function of X,the carrier of Y holds modetrans(f,X,Y)=f
 proof
   let X be non empty set;
   let Y be ComplexNormSpace;
@@ -1395,17 +1374,18 @@ proof
 end;
 
 theorem Th18:
-  for X be non empty set, Y be ComplexNormSpace,
-  f be bounded Function of X,the carrier of Y holds
-  ComplexBoundedFunctionsNorm(X,Y).f = sup PreNorms(f)
+  for X be non empty set, Y be ComplexNormSpace, f be bounded
+  Function of X,the carrier of Y holds ComplexBoundedFunctionsNorm(X,Y).f = sup
+  PreNorms(f)
 proof
   let X be non empty set;
   let Y be ComplexNormSpace;
   let f be bounded Function of X,the carrier of Y;
-A1: f in ComplexBoundedFunctions(X,Y) by Def5;
   reconsider f'=f as set;
-  thus ComplexBoundedFunctionsNorm(X,Y).f
-  = sup PreNorms(modetrans(f',X,Y)) by A1,Def9
+  f in ComplexBoundedFunctions(X,Y) by Def5;
+  hence
+  ComplexBoundedFunctionsNorm(X,Y).f = sup PreNorms(modetrans(f',X,Y)) by
+  Def9
     .= sup PreNorms(f) by Th17;
 end;
 
@@ -1413,17 +1393,16 @@ definition
   let X be non empty set;
   let Y be ComplexNormSpace;
   func C_NormSpace_of_BoundedFunctions(X,Y) -> non empty CNORMSTR equals
-  CNORMSTR (# ComplexBoundedFunctions(X,Y),
-    Zero_(ComplexBoundedFunctions(X,Y),ComplexVectSpace(X,Y)),
-    Add_(ComplexBoundedFunctions(X,Y),ComplexVectSpace(X,Y)),
-    Mult_(ComplexBoundedFunctions(X,Y),ComplexVectSpace(X,Y)),
+  CNORMSTR (# ComplexBoundedFunctions(X,Y), Zero_(ComplexBoundedFunctions(X,Y),
+ComplexVectSpace(X,Y)), Add_(ComplexBoundedFunctions(X,Y),ComplexVectSpace(X,Y)
+    ), Mult_(ComplexBoundedFunctions(X,Y),ComplexVectSpace(X,Y)),
     ComplexBoundedFunctionsNorm(X,Y) #);
   coherence;
 end;
 
 theorem Th19:
-  for X be non empty set, Y be ComplexNormSpace holds
-  (X --> 0.Y) = 0.C_NormSpace_of_BoundedFunctions(X,Y)
+  for X be non empty set, Y be ComplexNormSpace holds (X --> 0.Y)
+  = 0.C_NormSpace_of_BoundedFunctions(X,Y)
 proof
   let X be non empty set;
   let Y be ComplexNormSpace;
@@ -1433,10 +1412,9 @@ proof
 end;
 
 theorem Th20:
-  for X be non empty set, Y be ComplexNormSpace,
-  f being Point of C_NormSpace_of_BoundedFunctions(X,Y),
-  g be bounded Function of X,the carrier of Y st g=f holds
-  for t be Element of X holds ||.g.t.|| <= ||.f.||
+  for X be non empty set, Y be ComplexNormSpace, f being Point of
+C_NormSpace_of_BoundedFunctions(X,Y), g be bounded Function of X,the carrier of
+  Y st g=f holds for t be Element of X holds ||.g.t.|| <= ||.f.||
 proof
   let X be non empty set;
   let Y be ComplexNormSpace;
@@ -1455,35 +1433,34 @@ A2: PreNorms(g) is non empty bounded_above by Th14;
 end;
 
 theorem
-  for X be non empty set, Y be ComplexNormSpace,
-  f being Point of C_NormSpace_of_BoundedFunctions(X,Y) holds 0 <= ||.f.||
+  for X be non empty set, Y be ComplexNormSpace, f being Point of
+  C_NormSpace_of_BoundedFunctions(X,Y) holds 0 <= ||.f.||
 proof
   let X be non empty set;
   let Y be ComplexNormSpace;
   let f being Point of C_NormSpace_of_BoundedFunctions(X,Y);
   reconsider g=f as bounded Function of X,the carrier of Y by Def5;
-A1: now
-    let r be Real such that
-A2: r in PreNorms(g);
-    consider t be Element of X such that
-A3: r=||.g.t.|| by A2;
-    thus 0 <= r by A3,CLVECT_1:106;
-  end;
-A4: PreNorms(g) is non empty bounded_above by Th14;
   consider r0 be set such that
-A5: r0 in PreNorms(g) by XBOOLE_0:def 1;
-  reconsider r0 as Real by A5;
-  0 <= r0 by A1,A5;
-  then
-A6: 0 <=sup PreNorms(g) by A4,A5,SEQ_4:def 4;
-  ComplexBoundedFunctionsNorm(X,Y).f = sup PreNorms(g) by Th18;
-  hence thesis by A6,CLVECT_1:def 10;
+A1: r0 in PreNorms(g) by XBOOLE_0:def 1;
+  reconsider r0 as Real by A1;
+A2: PreNorms(g) is non empty bounded_above by Th14;
+A3: ComplexBoundedFunctionsNorm(X,Y).f = sup PreNorms(g) by Th18;
+  now
+    let r be Real;
+    assume
+    r in PreNorms(g);
+    then ex t be Element of X st r=||.g.t.||;
+    hence 0 <= r by CLVECT_1:106;
+  end;
+  then 0 <= r0 by A1;
+  then 0 <=sup PreNorms(g) by A2,A1,SEQ_4:def 4;
+  hence thesis by A3,CLVECT_1:def 10;
 end;
 
 theorem Th22:
-  for X be non empty set, Y be ComplexNormSpace,
-  f being Point of C_NormSpace_of_BoundedFunctions(X,Y) st
-  f = 0.C_NormSpace_of_BoundedFunctions(X,Y) holds 0 = ||.f.||
+  for X be non empty set, Y be ComplexNormSpace, f being Point of
+C_NormSpace_of_BoundedFunctions(X,Y) st f = 0.C_NormSpace_of_BoundedFunctions(X
+  ,Y) holds 0 = ||.f.||
 proof
   let X be non empty set;
   let Y be ComplexNormSpace;
@@ -1491,91 +1468,87 @@ proof
 A1: f = 0.C_NormSpace_of_BoundedFunctions(X,Y);
   thus ||.f.|| = 0
   proof
+    reconsider g=f as bounded Function of X, the carrier of Y by Def5;
     set z = X --> 0.Y;
     reconsider z as Function of X, the carrier of Y;
-    reconsider g=f as bounded Function of X, the carrier of Y by Def5;
-A2: z=g by A1,Th19;
-A3: now
-      let r be Real such that
-A4:   r in PreNorms(g);
-      consider t be Element of X such that
-A5:   r=||.g.t.|| by A4;
-      ||.g.t.|| = ||.0.Y.|| by A2,FUNCOP_1:13
-        .= 0 by CLVECT_1:def 11;
-      hence 0 <= r & r <=0 by A5;
-    end;
-A6: PreNorms(g) is non empty bounded_above by Th14;
     consider r0 be set such that
-A7: r0 in PreNorms(g) by XBOOLE_0:def 1;
-    reconsider r0 as Real by A7;
-A8: 0 <= r0 & r0<=0 by A3,A7;
-    (for s be real number st s in PreNorms(g) holds s <= 0)
-    implies sup PreNorms(g) <= 0 by SEQ_4:62;
-    then sup PreNorms(g) = 0 by A3,A6,A7,A8,SEQ_4:def 4;
+A2: r0 in PreNorms(g) by XBOOLE_0:def 1;
+    reconsider r0 as Real by A2;
+A3: (for s be real number st s in PreNorms(g) holds s <= 0) implies sup
+    PreNorms(g) <= 0 by SEQ_4:62;
+A4: PreNorms(g) is non empty bounded_above by Th14;
+A5: z=g by A1,Th19;
+A6: now
+      let r be Real;
+      assume
+      r in PreNorms(g);
+      then consider t be Element of X such that
+A7:   r=||.g.t.||;
+      ||.g.t.|| = ||.0.Y.|| by A5,FUNCOP_1:13
+        .= 0 by CLVECT_1:def 11;
+      hence 0 <= r & r <=0 by A7;
+    end;
+    then 0 <= r0 by A2;
+    then sup PreNorms(g) = 0 by A6,A4,A2,A3,SEQ_4:def 4;
     then ComplexBoundedFunctionsNorm(X,Y).f=0 by Th18;
     hence thesis by CLVECT_1:def 10;
   end;
 end;
 
 theorem Th23:
-  for X be non empty set, Y be ComplexNormSpace,
-  f,g,h be Point of C_NormSpace_of_BoundedFunctions(X,Y),
-  f',g',h' be bounded Function of X,the carrier of Y st
-  f'=f & g'=g & h'=h holds
-  ( h = f+g iff (for x be Element of X holds (h'.x = f'.x + g'.x)) )
+  for X be non empty set, Y be ComplexNormSpace, f,g,h be Point of
+  C_NormSpace_of_BoundedFunctions(X,Y), f',g',h' be bounded Function of X,the
+  carrier of Y st f'=f & g'=g & h'=h holds ( h = f+g iff for x be Element of X
+  holds h'.x = f'.x + g'.x )
 proof
   let X be non empty set;
   let Y be ComplexNormSpace;
   let f,g,h be Point of C_NormSpace_of_BoundedFunctions(X,Y);
-  let f',g',h' be bounded Function of X,the carrier of Y such that
-A1: f'=f and
-A2: g'=g and
-A3: h'=h;
-  reconsider f1=f, g1=g, h1=h as VECTOR of
-  C_VectorSpace_of_BoundedFunctions(X,Y);
-  h=f+g iff h1=f1+g1;
-  hence thesis by A1,A2,A3,Th11;
+  reconsider f1=f, g1=g, h1=h as VECTOR of C_VectorSpace_of_BoundedFunctions(X
+  ,Y);
+A1: h=f+g iff h1=f1+g1;
+  let f',g',h' be bounded Function of X,the carrier of Y;
+  assume
+  f'=f & g'=g & h'=h;
+  hence thesis by A1,Th11;
 end;
 
 theorem Th24:
-  for X be non empty set, Y be ComplexNormSpace,
-  f,h be Point of C_NormSpace_of_BoundedFunctions(X,Y),
-  f',h' be bounded Function of X,the carrier of Y st f'=f & h'=h
-  for c be Complex holds h = c*f iff for x be Element of X holds h'.x = c*f'.x
+  for X be non empty set, Y be ComplexNormSpace, f,h be Point of
+  C_NormSpace_of_BoundedFunctions(X,Y), f',h' be bounded Function of X,the
+carrier of Y st f'=f & h'=h for c be Complex holds h = c*f iff for x be Element
+  of X holds h'.x = c*f'.x
 proof
   let X be non empty set;
   let Y be ComplexNormSpace;
   let f,h be Point of C_NormSpace_of_BoundedFunctions(X,Y);
   let f',h' be bounded Function of X,the carrier of Y such that
-A1: f'=f and
-A2: h'=h;
-  let c be Complex;
-  reconsider f1=f as VECTOR of C_VectorSpace_of_BoundedFunctions(X,Y);
+A1: f'=f & h'=h;
   reconsider h1=h as VECTOR of C_VectorSpace_of_BoundedFunctions(X,Y);
-  h=c*f iff h1=c*f1
-  proof
-A3: now
-      assume h=c*f;
-      hence h1=Mult_(ComplexBoundedFunctions(X,Y),
-      ComplexVectSpace(X,Y)).[c,f] by CLVECT_1:def 1
-        .=c*f1 by CLVECT_1:def 1;
-    end;
-    now
-      assume h1=c*f1;
-      hence h=Mult_(ComplexBoundedFunctions(X,Y), ComplexVectSpace(X,Y))
-      .[c,f1] by CLVECT_1:def 1
-        .=c*f by CLVECT_1:def 1;
-    end;
-    hence thesis by A3;
+  reconsider f1=f as VECTOR of C_VectorSpace_of_BoundedFunctions(X,Y);
+  let c be Complex;
+A2: now
+    assume
+    h1=c*f1;
+    hence h=Mult_(ComplexBoundedFunctions(X,Y), ComplexVectSpace(X,Y)) .[c,f1]
+    by CLVECT_1:def 1
+      .=c*f by CLVECT_1:def 1;
+  end;
+  now
+    assume
+    h=c*f;
+    hence h1=Mult_(ComplexBoundedFunctions(X,Y), ComplexVectSpace(X,Y)).[c,f]
+    by CLVECT_1:def 1
+      .=c*f1 by CLVECT_1:def 1;
   end;
   hence thesis by A1,A2,Th12;
 end;
 
 theorem Th25:
-  for X be non empty set, Y be ComplexNormSpace,
-  f,g being Point of C_NormSpace_of_BoundedFunctions(X,Y), c be Complex holds
-  ( ||.f.|| = 0 iff f = 0.C_NormSpace_of_BoundedFunctions(X,Y) ) &
-  ||.c*f.|| = |.c.| * ||.f.|| & ||.f+g.|| <= ||.f.|| + ||.g.||
+  for X be non empty set, Y be ComplexNormSpace, f,g being Point
+of C_NormSpace_of_BoundedFunctions(X,Y), c be Complex holds ( ||.f.|| = 0 iff f
+= 0.C_NormSpace_of_BoundedFunctions(X,Y) ) & ||.c*f.|| = |.c.| * ||.f.|| & ||.f
+  +g.|| <= ||.f.|| + ||.g.||
 proof
   let X be non empty set;
   let Y be ComplexNormSpace;
@@ -1583,150 +1556,149 @@ proof
   let c be Complex;
 A1: now
     assume
-A2: ||.f.|| = 0;
+A2: f = 0.C_NormSpace_of_BoundedFunctions(X,Y);
+    thus ||.f.|| = 0
+    proof
+      reconsider g=f as bounded Function of X,the carrier of Y by Def5;
+      set z = X --> 0.Y;
+      reconsider z as Function of X, the carrier of Y;
+      consider r0 be set such that
+A3:   r0 in PreNorms(g) by XBOOLE_0:def 1;
+      reconsider r0 as Real by A3;
+A4:   (for s be real number st s in PreNorms(g) holds s <= 0) implies sup
+      PreNorms(g) <= 0 by SEQ_4:62;
+A5:   PreNorms(g) is non empty bounded_above by Th14;
+A6:   z=g by A2,Th19;
+A7:   now
+        let r be Real;
+        assume
+        r in PreNorms(g);
+        then consider t be Element of X such that
+A8:     r=||.g.t.||;
+        ||.g.t.|| = ||.0.Y.|| by A6,FUNCOP_1:13
+          .= 0 by CLVECT_1:def 11;
+        hence 0 <= r & r <=0 by A8;
+      end;
+      then 0<=r0 by A3;
+      then sup PreNorms(g) = 0 by A7,A5,A3,A4,SEQ_4:def 4;
+      then ComplexBoundedFunctionsNorm(X,Y).f =0 by Th18;
+      hence thesis by CLVECT_1:def 10;
+    end;
+  end;
+A9: ||.f+g.|| <= ||.f.|| + ||.g.||
+  proof
+    reconsider f1=f, g1=g, h1=f+g as bounded Function of X,the carrier of Y by
+    Def5;
+A10: (for s be real number st s in PreNorms(h1) holds s <= ||.f.|| + ||.g
+    .||) implies sup PreNorms(h1) <= ||.f.|| + ||.g.|| by SEQ_4:62;
+A11: now
+      let t be Element of X;
+      ||.f1.t.||<= ||.f.|| & ||.g1.t.||<= ||.g.|| by Th20;
+      then
+A12:  ||.f1.t.||+||.g1.t.|| <= ||.f.|| + ||.g.|| by XREAL_1:9;
+      ||.h1.t.||= ||.f1.t+g1.t.|| & ||.f1.t+g1.t.|| <=||.f1.t.||+||.g1.t
+      .|| by Th23,CLVECT_1:def 11;
+      hence ||.h1.t.|| <= ||.f.|| + ||.g.|| by A12,XXREAL_0:2;
+    end;
+A13: now
+      let r be Real;
+      assume
+      r in PreNorms(h1);
+      then ex t be Element of X st r=||.h1.t.||;
+      hence r <= ||.f.|| + ||.g.|| by A11;
+    end;
+    ComplexBoundedFunctionsNorm(X,Y).(f+g) = sup PreNorms(h1) by Th18;
+    hence thesis by A13,A10,CLVECT_1:def 10;
+  end;
+A14: ||.c*f.|| = |.c.| * ||.f.||
+  proof
+    reconsider f1=f, h1=c*f as bounded Function of X, the carrier of Y by Def5;
+A15: (for s be real number st s in PreNorms(h1) holds s <= |.c.|*||.f.|| )
+    implies sup PreNorms(h1) <= |.c.|*||.f.|| by SEQ_4:62;
+A16: now
+      let t be Element of X;
+A17:  0<= |.c.| by COMPLEX1:132;
+      ||.h1.t.||= ||.c*f1.t.|| & ||.c*f1.t.|| =|.c.|*||.f1.t.|| by Th24,
+      CLVECT_1:def 11;
+      hence ||.h1.t.|| <= |.c.|*||.f.|| by A17,Th20,XREAL_1:66;
+    end;
+A18: now
+      let r be Real;
+      assume
+      r in PreNorms(h1);
+      then ex t be Element of X st r=||.h1.t.||;
+      hence r <= |.c.|*||.f.|| by A16;
+    end;
+A19: now
+      per cases;
+      case
+A20:    c <> 0c;
+A21:    now
+          let t be Element of X;
+A22:      |.c".| = |.1r/c.| by COMPLEX1:def 7,XCMPLX_1:217
+            .= 1/|.c.| by COMPLEX1:134,153
+            .= 1*(|.c.|)" by XCMPLX_0:def 9
+            .= |.c.|";
+          h1.t=c*f1.t by Th24;
+          then
+A23:      c"*h1.t =( c"* c)*f1.t by CLVECT_1:def 2
+            .=1r*f1.t by A20,COMPLEX1:def 7,XCMPLX_0:def 7
+            .=f1.t by CLVECT_1:def 2;
+          ||.c"*h1.t.|| =|.c".|*||.h1.t.|| & 0<= |.c".| by CLVECT_1:def
+          11 ,COMPLEX1:132;
+          hence ||.f1.t.|| <= |.c.|"*||.c*f.|| by A23,A22,Th20,XREAL_1:66;
+        end;
+A24:    now
+          let r be Real;
+          assume
+          r in PreNorms(f1);
+          then ex t be Element of X st r=||.f1.t.||;
+          hence r <= |.c.|"*||.c*f.|| by A21;
+        end;
+A25:    ( for s be real number st s in PreNorms(f1) holds s <= |.c.|"*||.
+        c*f.|| ) implies sup PreNorms(f1) <= |.c.|"*||.c*f.|| by SEQ_4:62;
+A26:    0 <= |.c.| by COMPLEX1:132;
+        ComplexBoundedFunctionsNorm(X,Y).(f) = sup PreNorms(f1) by Th18;
+        then ||.f.|| <=|.c.|"*||.c*f.|| by A24,A25,CLVECT_1:def 10;
+        then |.c.|*||.f.|| <= |.c.|*(|.c.|"*||.c*f.||) by A26,XREAL_1:66;
+        then
+A27:    |.c.|*||.f.|| <=(|.c.|*|.c.|")*||.c*f.||;
+        |.c.| <>0 by A20,COMPLEX1:133;
+        then |.c.|*||.f.|| <=1*||.c*f.|| by A27,XCMPLX_0:def 7;
+        hence |.c.|* ||.f.|| <=||.c*f.||;
+      end;
+      case
+A28:    c = 0c;
+        reconsider fz=f as VECTOR of C_VectorSpace_of_BoundedFunctions(X,Y);
+        c*f =Mult_(ComplexBoundedFunctions(X,Y), ComplexVectSpace(X,Y)).[
+        c,f] by CLVECT_1:def 1
+          .=c*fz by CLVECT_1:def 1
+          .=0.C_VectorSpace_of_BoundedFunctions(X,Y) by A28,CLVECT_1:2
+          .=0.C_NormSpace_of_BoundedFunctions(X,Y);
+        hence thesis by A28,Th22,COMPLEX1:130;
+      end;
+    end;
+    ComplexBoundedFunctionsNorm(X,Y).(c*f) = sup PreNorms(h1) by Th18;
+    then ||.c*f.|| <= |.c.|*||.f.|| by A18,A15,CLVECT_1:def 10;
+    hence thesis by A19,XXREAL_0:1;
+  end;
+  now
     reconsider g=f as bounded Function of X,the carrier of Y by Def5;
     set z = X --> 0.Y;
     reconsider z as Function of X, the carrier of Y;
+    assume
+A29: ||.f.|| = 0;
     now
       let t be Element of X;
       ||.g.t.|| <= ||.f.|| by Th20;
-      then ||.g.t.|| = 0 by A2,CLVECT_1:106;
+      then ||.g.t.|| = 0 by A29,CLVECT_1:106;
       hence g.t =0.Y by CLVECT_1:def 11
         .=z.t by FUNCOP_1:13;
     end;
     then g=z by FUNCT_2:113;
     hence f=0.C_NormSpace_of_BoundedFunctions(X,Y) by Th19;
   end;
-A3: now
-    assume
-A4: f = 0.C_NormSpace_of_BoundedFunctions(X,Y);
-    thus ||.f.|| = 0
-    proof
-      set z = X --> 0.Y;
-      reconsider z as Function of X, the carrier of Y;
-      reconsider g=f as bounded Function of X,the carrier of Y by Def5;
-A5:   z=g by A4,Th19;
-A6:   now
-        let r be Real such that
-A7:     r in PreNorms(g);
-        consider t be Element of X such that
-A8:     r=||.g.t.|| by A7;
-        ||.g.t.|| = ||.0.Y.|| by A5,FUNCOP_1:13
-          .= 0 by CLVECT_1:def 11;
-        hence 0 <= r & r <=0 by A8;
-      end;
-A9:   PreNorms(g) is non empty bounded_above by Th14;
-      consider r0 be set such that
-A10:  r0 in PreNorms(g) by XBOOLE_0:def 1;
-      reconsider r0 as Real by A10;
-A11:  0<=r0 by A6,A10;
-      (for s be real number st s in PreNorms(g) holds s <= 0)
-      implies sup PreNorms(g) <= 0 by SEQ_4:62;
-      then sup PreNorms(g) = 0 by A6,A9,A10,A11,SEQ_4:def 4;
-      then ComplexBoundedFunctionsNorm(X,Y).f =0 by Th18;
-      hence thesis by CLVECT_1:def 10;
-    end;
-  end;
-A12: ||.c*f.|| = |.c.| * ||.f.||
-  proof
-    reconsider f1=f, h1=c*f as bounded Function of X, the carrier of Y
-    by Def5;
-A13: now
-      let t be Element of X;
-A14:  ||.h1.t.||= ||.c*f1.t.|| by Th24;
-A15:  ||.c*f1.t.|| =|.c.|*||.f1.t.|| by CLVECT_1:def 11;
-      0<= |.c.| by COMPLEX1:132;
-      hence ||.h1.t.|| <= |.c.|*||.f.|| by A14,A15,Th20,XREAL_1:66;
-    end;
-A16: now
-      let r be Real such that
-A17:  r in PreNorms(h1);
-      consider t be Element of X such that
-A18:  r=||.h1.t.|| by A17;
-      thus r <= |.c.|*||.f.|| by A13,A18;
-    end;
-A19: (for s be real number st s in PreNorms(h1) holds s <= |.c.|*||.f.|| )
-    implies sup PreNorms(h1) <= |.c.|*||.f.|| by SEQ_4:62;
-    ComplexBoundedFunctionsNorm(X,Y).(c*f) = sup PreNorms(h1) by Th18;
-    then
-A20: ||.c*f.|| <= |.c.|*||.f.|| by A16,A19,CLVECT_1:def 10;
-    now per cases;
-      case
-A21:    c <> 0c;
-A22:    now
-          let t be Element of X;
-          h1.t=c*f1.t by Th24;
-          then
-A23:      c"*h1.t =( c"* c)*f1.t by CLVECT_1:def 2
-            .=1r*f1.t by A21,COMPLEX1:def 7,XCMPLX_0:def 7
-            .=f1.t by CLVECT_1:def 2;
-A24:      ||.c"*h1.t.|| =|.c".|*||.h1.t.|| by CLVECT_1:def 11;
-A25:      0<= |.c".| by COMPLEX1:132;
-          |.c".| = |.1r/c.| by COMPLEX1:def 7,XCMPLX_1:217
-            .= 1/|.c.| by COMPLEX1:134,153
-            .= 1*(|.c.|)" by XCMPLX_0:def 9
-            .= |.c.|";
-          hence ||.f1.t.|| <= |.c.|"*||.c*f.|| by A23,A24,A25,Th20,XREAL_1:66;
-        end;
-A26:    now
-          let r be Real such that
-A27:      r in PreNorms(f1);
-          consider t be Element of X such that
-A28:      r=||.f1.t.|| by A27;
-          thus r <= |.c.|"*||.c*f.|| by A22,A28;
-        end;
-A29:    |.c.| <>0 by A21,COMPLEX1:133;
-A30:    (
-        for s be real number st s in PreNorms(f1) holds s <= |.c.|"*||.c*f.|| )
-        implies sup PreNorms(f1) <= |.c.|"*||.c*f.|| by SEQ_4:62;
-        ComplexBoundedFunctionsNorm(X,Y).(f) = sup PreNorms(f1) by Th18;
-        then
-A31:    ||.f.|| <=|.c.|"*||.c*f.|| by A26,A30,CLVECT_1:def 10;
-        0 <= |.c.| by COMPLEX1:132;
-        then |.c.|*||.f.|| <= |.c.|*(|.c.|"*||.c*f.||) by A31,XREAL_1:66;
-        then |.c.|*||.f.|| <=(|.c.|*|.c.|")*||.c*f.||;
-        then |.c.|*||.f.|| <=1*||.c*f.|| by A29,XCMPLX_0:def 7;
-        hence |.c.|* ||.f.|| <=||.c*f.||;
-      end;
-      case
-A32:    c = 0c;
-        reconsider fz=f as VECTOR of C_VectorSpace_of_BoundedFunctions(X,Y);
-        c*f =Mult_(ComplexBoundedFunctions(X,Y),
-        ComplexVectSpace(X,Y)).[c,f] by CLVECT_1:def 1
-          .=c*fz by CLVECT_1:def 1
-          .=0.C_VectorSpace_of_BoundedFunctions(X,Y) by A32,CLVECT_1:2
-          .=0.C_NormSpace_of_BoundedFunctions(X,Y);
-        hence thesis by A32,Th22,COMPLEX1:130;
-      end;
-    end;
-    hence thesis by A20,XXREAL_0:1;
-  end;
-  ||.f+g.|| <= ||.f.|| + ||.g.||
-  proof
-    reconsider f1=f, g1=g, h1=f+g as
-    bounded Function of X,the carrier of Y by Def5;
-A33: now
-      let t be Element of X;
-A34:  ||.h1.t.||= ||.f1.t+g1.t.|| by Th23;
-A35:  ||.f1.t+g1.t.|| <=||.f1.t.||+||.g1.t.|| by CLVECT_1:def 11;
-A36:  ||.f1.t.||<= ||.f.|| by Th20;
-      ||.g1.t.||<= ||.g.|| by Th20;
-      then ||.f1.t.||+||.g1.t.|| <= ||.f.|| + ||.g.|| by A36,XREAL_1:9;
-      hence ||.h1.t.|| <= ||.f.|| + ||.g.|| by A34,A35,XXREAL_0:2;
-    end;
-A37: now
-      let r be Real such that
-A38:  r in PreNorms(h1);
-      consider t be Element of X such that
-A39:  r=||.h1.t.|| by A38;
-      thus r <= ||.f.|| + ||.g.|| by A33,A39;
-    end;
-A40: (for s be real number st s in PreNorms(h1) holds s <= ||.f.|| + ||.g.||)
-    implies sup PreNorms(h1) <= ||.f.|| + ||.g.|| by SEQ_4:62;
-    ComplexBoundedFunctionsNorm(X,Y).(f+g) = sup PreNorms(h1) by Th18;
-    hence thesis by A37,A40,CLVECT_1:def 10;
-  end;
-  hence thesis by A1,A3,A12;
+  hence thesis by A1,A14,A9;
 end;
 
 theorem Th26:
@@ -1735,10 +1707,9 @@ theorem Th26:
 proof
   let X be non empty set;
   let Y be ComplexNormSpace;
-  for x, y being Point of C_NormSpace_of_BoundedFunctions(X,Y)
-  for c be Complex holds ( ||.x.|| = 0 iff
-  x = 0.C_NormSpace_of_BoundedFunctions(X,Y) ) & ||.c*x.|| = |.c.| * ||.x.|| &
-  ||.x+y.|| <= ||.x.|| + ||.y.|| by Th25;
+  for x, y being Point of C_NormSpace_of_BoundedFunctions(X,Y) for c be
+Complex holds ( ||.x.|| = 0 iff x = 0.C_NormSpace_of_BoundedFunctions(X,Y) ) &
+  ||.c*x.|| = |.c.| * ||.x.|| & ||.x+y.|| <= ||.x.|| + ||.y.|| by Th25;
   hence thesis by CLVECT_1:def 11;
 end;
 
@@ -1748,364 +1719,359 @@ theorem Th27:
 proof
   let X be non empty set;
   let Y be ComplexNormSpace;
-  CLSStruct (# ComplexBoundedFunctions(X,Y),
-    Zero_(ComplexBoundedFunctions(X,Y),ComplexVectSpace(X,Y)),
-    Add_(ComplexBoundedFunctions(X,Y), ComplexVectSpace(X,Y)),
-    Mult_(ComplexBoundedFunctions(X,Y),ComplexVectSpace(X,Y)) #)
-  is ComplexLinearSpace;
+  CLSStruct (# ComplexBoundedFunctions(X,Y), Zero_(ComplexBoundedFunctions
+    (X,Y),ComplexVectSpace(X,Y)), Add_(ComplexBoundedFunctions(X,Y),
+ComplexVectSpace(X,Y)), Mult_(ComplexBoundedFunctions(X,Y),ComplexVectSpace(X,Y
+    )) #) is ComplexLinearSpace;
   hence thesis by Th26,CSSPACE3:4;
 end;
 
 registration
   let X be non empty set;
   let Y be ComplexNormSpace;
-  cluster C_NormSpace_of_BoundedFunctions(X,Y) ->
-    ComplexNormSpace-like ComplexLinearSpace-like
-    Abelian add-associative right_zeroed right_complementable;
+  cluster C_NormSpace_of_BoundedFunctions(X,Y) -> ComplexNormSpace-like
+    ComplexLinearSpace-like Abelian add-associative right_zeroed
+    right_complementable;
   coherence by Th27;
 end;
 
 theorem Th28:
-  for X be non empty set for Y be ComplexNormSpace,
-  f,g,h be Point of C_NormSpace_of_BoundedFunctions(X,Y),
-  f',g',h' be bounded Function of X,the carrier of Y st
-  f'=f & g'=g & h'=h holds
-  (h = f-g iff (for x be Element of X holds (h'.x = f'.x - g'.x)) )
+  for X be non empty set for Y be ComplexNormSpace, f,g,h be Point
+of C_NormSpace_of_BoundedFunctions(X,Y), f',g',h' be bounded Function of X,the
+  carrier of Y st f'=f & g'=g & h'=h holds (h = f-g iff for x be Element of X
+  holds h'.x = f'.x - g'.x )
 proof
   let X be non empty set;
   let Y be ComplexNormSpace;
   let f,g,h be Point of C_NormSpace_of_BoundedFunctions(X,Y);
   let f',g',h' be bounded Function of X,the carrier of Y such that
-A1: f'=f and
-A2: g'=g and
-A3: h'=h;
-A4: now
-    assume h=f-g;
-    then h+g=f-(g-g) by RLVECT_1:43;
-    then h+g=f-0.C_NormSpace_of_BoundedFunctions(X,Y) by RLVECT_1:28;
-    then
-A5: h+g=f by RLVECT_1:26;
-    now
-      let x be Element of X;
-      f'.x=h'.x + g'.x by A1,A2,A3,A5,Th23;
-      then f'.x-g'.x=h'.x + (g'.x-g'.x) by RLVECT_1:def 6;
-      then f'.x-g'.x=h'.x + 0.Y by RLVECT_1:28;
-      hence f'.x-g'.x=h'.x by RLVECT_1:10;
-    end;
-    hence for x be Element of X holds (h'.x = f'.x - g'.x);
-  end;
-  now
+A1: f'=f & g'=g & h'=h;
+A2: now
     assume
-A6: for x be Element of X holds (h'.x = f'.x - g'.x);
+A3: for x be Element of X holds h'.x = f'.x - g'.x;
     now
       let x be Element of X;
-      h'.x = f'.x - g'.x by A6;
+      h'.x = f'.x - g'.x by A3;
       then h'.x + g'.x= f'.x - (g'.x- g'.x) by RLVECT_1:43;
       then h'.x + g'.x= f'.x - 0.Y by RLVECT_1:28;
       hence h'.x + g'.x= f'.x by RLVECT_1:26;
     end;
-    then f=h+g by A1,A2,A3,Th23;
+    then f=h+g by A1,Th23;
     then f-g=h+(g-g) by RLVECT_1:def 6;
     then f-g=h+0.C_NormSpace_of_BoundedFunctions(X,Y) by RLVECT_1:28;
     hence f-g=h by RLVECT_1:10;
   end;
-  hence thesis by A4;
+  now
+    assume
+    h=f-g;
+    then h+g=f-(g-g) by RLVECT_1:43;
+    then h+g=f-0.C_NormSpace_of_BoundedFunctions(X,Y) by RLVECT_1:28;
+    then
+A4: h+g=f by RLVECT_1:26;
+    now
+      let x be Element of X;
+      f'.x=h'.x + g'.x by A1,A4,Th23;
+      then f'.x-g'.x=h'.x + (g'.x-g'.x) by RLVECT_1:def 6;
+      then f'.x-g'.x=h'.x + 0.Y by RLVECT_1:28;
+      hence f'.x-g'.x=h'.x by RLVECT_1:10;
+    end;
+    hence for x be Element of X holds h'.x = f'.x - g'.x;
+  end;
+  hence thesis by A2;
 end;
 
-Lm13: for e be Real, seq be Real_Sequence st ( seq is convergent &
-ex k be Element of NAT st (for i be Element of NAT st k <= i
-holds seq.i <=e ) ) holds lim seq <=e
+Lm13: for e be Real, seq be Real_Sequence st ( seq is convergent & ex k be
+Element of NAT st for i be Element of NAT st k <= i holds seq.i <=e ) holds lim
+seq <=e
+
 proof
   let e be Real;
   let seq be Real_Sequence such that
 A1: seq is convergent and
-A2: ex k be Element of NAT st (for i be Element of NAT st k <= i
-  holds seq.i <=e );
-  reconsider cseq = NAT --> e as Real_Sequence;
+
+A2: ex k be Element of NAT st for i be Element of NAT st k <= i holds
+  seq.i <=e;
+
   consider k be Element of NAT such that
-A4: for i be Element of NAT st k <= i holds seq.i <=e by A2;
-A5: (seq ^\k) is convergent by A1;
-A6: lim (seq ^\k)=lim seq by A1,SEQ_4:33;
-A7: now
-    let i be Element of NAT;
-A8: (seq ^\k).i = seq.(k+i) by NAT_1:def 3;
-    seq.(k+i) <=e by A4,NAT_1:11;
-    hence (seq ^\k) .i <= cseq.i by A8,FUNCOP_1:13;
-  end;
-  lim cseq = cseq.0 by SEQ_4:41
+A3: for i be Element of NAT st k <= i holds seq.i <=e by A2;
+  reconsider cseq = NAT --> e as Real_Sequence;
+A4: lim cseq = cseq.0 by SEQ_4:41
     .= e by FUNCOP_1:13;
-  hence thesis by A5,A6,A7,SEQ_2:32;
+A5: now
+    let i be Element of NAT;
+    (seq ^\k).i = seq.(k+i) & seq.(k+i) <=e by A3,NAT_1:11,def 3;
+    hence (seq ^\k) .i <= cseq.i by FUNCOP_1:13;
+  end;
+  lim (seq ^\k)=lim seq by A1,SEQ_4:33;
+  hence thesis by A1,A5,A4,SEQ_2:32;
 end;
 
 theorem Th29:
   for X be non empty set, Y be ComplexNormSpace st Y is complete
-  for seq be sequence of C_NormSpace_of_BoundedFunctions(X,Y) st
-  seq is Cauchy_sequence_by_Norm holds seq is convergent
+  for seq be sequence of C_NormSpace_of_BoundedFunctions(X,Y) st seq is
+  Cauchy_sequence_by_Norm holds seq is convergent
 proof
   let X be non empty set;
   let Y be ComplexNormSpace such that
 A1: Y is complete;
   let vseq be sequence of C_NormSpace_of_BoundedFunctions(X,Y) such that
 A2: vseq is Cauchy_sequence_by_Norm;
-A3: ||.vseq.|| is convergent
-  proof
-    now
-      let e1 be real number such that
-A4:   e1 >0;
-      reconsider e =e1 as Real by XREAL_0:def 1;
-      consider k be Element of NAT such that
-A5:   for n, m be Element of NAT st n >= k & m >= k holds
-      ||.(vseq.n) - (vseq.m).|| < e by A2,A4,CSSPACE3:10;
-A6:   now
-        let m be Element of NAT such that
-A7:     m >= k;
-A8:     abs( ||.vseq.m.||- ||.vseq.k.|| )
-        <= ||.(vseq.m) - (vseq.k).|| by CLVECT_1:111;
-A9:     ||.vseq.k.||= ||.vseq.||.k by CLVECT_1:def 17;
-A10:    ||.vseq.m.||= ||.vseq.||.m by CLVECT_1:def 17;
-        ||.(vseq.m) - (vseq.k).|| <e by A5,A7;
-        hence abs( ||.vseq.||.m - ||.vseq.||.k ) <e1 by A8,A9,A10,XXREAL_0:2;
-      end;
-      take k;
-      thus for m be Element of NAT st m >= k holds
-      abs(||.vseq.||.m - ||.vseq.||.k ) < e1 by A6;
-    end;
-    hence thesis by SEQ_4:58;
-  end;
-  defpred P[set, set] means ex xseq be sequence of Y st
-  (for n be Element of NAT holds xseq.n=modetrans((vseq.n),X,Y).$1)
-  & xseq is convergent & $2= lim xseq;
-A11: for x be Element of X ex y be Element of Y st P[x,y]
+  defpred P[set, set] means ex xseq be sequence of Y st (for n be Element of
+  NAT holds xseq.n=modetrans((vseq.n),X,Y).$1) & xseq is convergent & $2= lim
+  xseq;
+A3: for x be Element of X ex y be Element of Y st P[x,y]
   proof
     let x be Element of X;
     deffunc F(Element of NAT) = modetrans((vseq.$1),X,Y).x;
     consider xseq be sequence of Y such that
-A12: for n be Element of NAT holds xseq.n = F(n) from FUNCT_2:sch 4;
-A13: for m,k be Element of NAT holds
-    ||.xseq.m-xseq.k.|| <= ||.vseq.m - vseq.k.||
+A4: for n be Element of NAT holds xseq.n = F(n) from FUNCT_2:sch 4;
+    take y = lim xseq;
+A5: for m,k be Element of NAT holds ||.xseq.m-xseq.k.|| <= ||.vseq.m -
+    vseq.k.||
     proof
       let m,k be Element of NAT;
-      vseq.m is bounded Function of X,the carrier of Y by Def5;
-      then
-A14:  modetrans((vseq.m),X,Y)=vseq.m by Th17;
       vseq.k is bounded Function of X,the carrier of Y by Def5;
       then
-A15:  modetrans((vseq.k),X,Y)=vseq.k by Th17;
-      reconsider h1=vseq.m-vseq.k
-      as bounded Function of X,the carrier of Y by Def5;
-A16:  xseq.m = modetrans((vseq.m),X,Y).x by A12;
-      xseq.k = modetrans((vseq.k),X,Y).x by A12;
-      then xseq.m - xseq.k = h1.x by A14,A15,A16,Th28;
+A6:   modetrans((vseq.k),X,Y)=vseq.k by Th17;
+      reconsider h1=vseq.m-vseq.k as bounded Function of X,the carrier of Y by
+      Def5;
+      vseq.m is bounded Function of X,the carrier of Y by Def5;
+      then
+A7:   modetrans((vseq.m),X,Y)=vseq.m by Th17;
+      xseq.m = modetrans((vseq.m),X,Y).x & xseq.k = modetrans((vseq.k),X,
+      Y).x by A4;
+      then xseq.m - xseq.k = h1.x by A7,A6,Th28;
       hence thesis by Th20;
     end;
-A17: xseq is convergent
-    proof
-      now
-        let e be Real such that
-A18:    e > 0;
-        thus ex k be Element of NAT st
-        for n, m be Element of NAT st n >= k & m >= k holds
-        ||.xseq.n -xseq.m.|| < e
+    now
+      let e be Real such that
+A8:   e > 0;
+      thus ex k be Element of NAT st for n, m be Element of NAT st n >= k & m
+      >= k holds ||.xseq.n -xseq.m.|| < e
+      proof
+        consider k be Element of NAT such that
+A9:     for n, m be Element of NAT st n >= k & m >= k holds ||.(vseq.
+        n) - (vseq.m).|| < e by A2,A8,CSSPACE3:10;
+        take k;
+        thus for n, m be Element of NAT st n >= k & m >= k holds ||.xseq.n-
+        xseq.m.|| < e
         proof
-          consider k be Element of NAT such that
-A19:      for n, m be Element of NAT st n >= k & m >= k holds
-          ||.(vseq.n) - (vseq.m).|| < e by A2,A18,CSSPACE3:10;
-          take k;
-          thus for n, m be Element of NAT st ( n >= k & m >= k )
-          holds ||.xseq.n-xseq.m.|| < e
-          proof
-            let n,m be Element of NAT such that
-A20:        n >=k & m >= k;
-A21:        ||.xseq.n-xseq.m.|| <= ||.(vseq.n) - (vseq.m).|| by A13;
-            ||.(vseq.n) - (vseq.m).|| < e by A19,A20;
-            hence thesis by A21,XXREAL_0:2;
-          end;
+          let n,m be Element of NAT;
+          assume
+          n >=k & m >= k;
+          then
+A10:      ||.(vseq.n) - (vseq.m).|| < e by A9;
+          ||.xseq.n-xseq.m.|| <= ||.(vseq.n) - (vseq.m).|| by A5;
+          hence thesis by A10,XXREAL_0:2;
         end;
       end;
-      then xseq is Cauchy_sequence_by_Norm by CSSPACE3:10;
-      hence thesis by A1,CLOPBAN1:def 14;
     end;
-    take y = lim xseq;
-    thus thesis by A12,A17;
+    then xseq is Cauchy_sequence_by_Norm by CSSPACE3:10;
+    then xseq is convergent by A1,CLOPBAN1:def 14;
+    hence thesis by A4;
   end;
   consider f be Function of X,the carrier of Y such that
-A22: for x be Element of X holds P[x,f.x] from FUNCT_2:sch 3(A11);
+A11: for x be Element of X holds P[x,f.x] from FUNCT_2:sch 3(A3);
   reconsider tseq=f as Function of X,the carrier of Y;
-A23: tseq is bounded
+  now
+    let e1 be real number such that
+A12: e1 >0;
+    reconsider e =e1 as Real by XREAL_0:def 1;
+    consider k be Element of NAT such that
+A13: for n, m be Element of NAT st n >= k & m >= k holds ||.(vseq.n) -
+    (vseq.m).|| < e by A2,A12,CSSPACE3:10;
+    take k;
+    now
+      let m be Element of NAT;
+      assume
+      m >= k;
+      then
+A14:  ||.vseq.m.||= ||.vseq.||.m & ||.(vseq.m) - (vseq.k).|| <e by A13,
+      CLVECT_1:def 17;
+      abs( ||.vseq.m.||- ||.vseq.k.|| ) <= ||.(vseq.m) - (vseq.k).|| & ||.
+      vseq.k .||= ||.vseq.||.k by CLVECT_1:111,def 17;
+      hence abs( ||.vseq.||.m - ||.vseq.||.k ) <e1 by A14,XXREAL_0:2;
+    end;
+    hence
+    for m be Element of NAT st m >= k holds abs(||.vseq.||.m - ||.vseq.||
+    .k ) < e1;
+  end;
+  then
+A15: ||.vseq.|| is convergent by SEQ_4:58;
+A16: tseq is bounded
   proof
-A24: now
+    take K= lim (||.vseq.|| );
+A17: now
       let x be Element of X;
       consider xseq be sequence of Y such that
-A25:  (for n be Element of NAT holds xseq.n=modetrans((vseq.n),X,Y).x)
-      & xseq is convergent & tseq.x = lim xseq by A22;
-A26:  for m be Element of NAT holds ||.xseq.m.|| <= ||.vseq.m.||
+A18:  for n be Element of NAT holds xseq.n=modetrans((vseq.n),X,Y).x and
+A19:  xseq is convergent & tseq.x = lim xseq by A11;
+A20:  for m be Element of NAT holds ||.xseq.m.|| <= ||.vseq.m.||
       proof
         let m be Element of NAT;
-A27:    vseq.m is bounded Function of X,the carrier of Y by Def5;
-        xseq.m =modetrans((vseq.m),X,Y).x by A25;
-        hence thesis by A27,Th17,Th20;
+        vseq.m is bounded Function of X,the carrier of Y & xseq.m =
+        modetrans((vseq.m ),X,Y).x by A18,Def5;
+        hence thesis by Th17,Th20;
       end;
-A28:  ||.xseq.|| is convergent by A25,CLOPBAN1:45;
-A29:  ||.tseq.x.|| = lim ||.xseq.|| by A25,CLOPBAN1:45;
-      for n be Element of NAT holds ||.xseq.||.n <=(||.vseq.||).n
+A21:  for n be Element of NAT holds ||.xseq.||.n <=(||.vseq.||).n
       proof
         let n be Element of NAT;
-A30:    ||.xseq.||.n = ||.(xseq.n).|| by CLVECT_1:def 17;
-        ||.(xseq.n).|| <= ||.vseq.n.|| by A26;
-        hence thesis by A30,CLVECT_1:def 17;
+        ||.xseq.||.n = ||.(xseq.n).|| & ||.(xseq.n).|| <= ||.vseq.n.|| by
+        A20, CLVECT_1:def 17;
+        hence thesis by CLVECT_1:def 17;
       end;
-      hence ||.tseq.x.|| <= lim (||.vseq.|| ) by A3,A28,A29,SEQ_2:32;
+      ||.xseq.|| is convergent & ||.tseq.x.|| = lim ||.xseq.|| by A19,
+      CLOPBAN1:45;
+      hence ||.tseq.x.|| <= lim (||.vseq.|| ) by A15,A21,SEQ_2:32;
     end;
-    take K= lim (||.vseq.|| );
-    K >=0
-    proof
-      now
-        let n be Element of NAT;
-        ||.vseq.n.|| >=0 by CLVECT_1:106;
-        hence ||.vseq.||.n >=0 by CLVECT_1:def 17;
-      end;
-      hence thesis by A3,SEQ_2:31;
+    now
+      let n be Element of NAT;
+      ||.vseq.n.|| >=0 by CLVECT_1:106;
+      hence ||.vseq.||.n >=0 by CLVECT_1:def 17;
     end;
-    hence thesis by A24;
+    hence thesis by A15,A17,SEQ_2:31;
   end;
-A31: for e be Real st
-  e > 0 ex k be Element of NAT st for n be Element of NAT st n >= k holds
-  for x be Element of X holds ||.modetrans((vseq.n),X,Y).x - tseq.x.|| <= e
+A22: for e be Real st e > 0 ex k be Element of NAT st for n be Element of
+NAT st n >= k holds for x be Element of X holds ||.modetrans((vseq.n),X,Y).x -
+  tseq.x.|| <= e
   proof
-    let e be Real such that
-A32: e > 0;
-    consider k be Element of NAT such that
-A33: for n, m be Element of NAT st ( n >= k & m >= k ) holds
-    ||.(vseq.n) - (vseq.m).|| < e by A2,A32,CSSPACE3:10;
-A34: now
+    let e be Real;
+    assume
+    e > 0;
+    then consider k be Element of NAT such that
+A23: for n, m be Element of NAT st n >= k & m >= k holds ||.(vseq.n) -
+    (vseq.m).|| < e by A2,CSSPACE3:10;
+    take k;
+    now
       let n be Element of NAT such that
-A35:  n >= k;
+A24:  n >= k;
       now
         let x be Element of X;
         consider xseq be sequence of Y such that
-A36:    (for n be Element of NAT holds xseq.n=modetrans((vseq.n),X,Y).x)
-        & xseq is convergent & tseq.x = lim xseq by A22;
-A37:    for m,k be Element of NAT holds
-        ||.xseq.m-xseq.k.|| <= ||.vseq.m - vseq.k.||
+A25:    for n be Element of NAT holds xseq.n=modetrans((vseq.n),X,Y).
+        x and
+A26:    xseq is convergent & tseq.x = lim xseq by A11;
+A27:    for m,k be Element of NAT holds ||.xseq.m-xseq.k.|| <= ||.vseq.m
+        - vseq.k.||
         proof
           let m,k be Element of NAT;
-          vseq.m is bounded Function of X,the carrier of Y by Def5;
-          then
-A38:      modetrans((vseq.m),X,Y)=vseq.m by Th17;
           vseq.k is bounded Function of X,the carrier of Y by Def5;
           then
-A39:      modetrans((vseq.k),X,Y)=vseq.k by Th17;
-          reconsider h1=vseq.m-vseq.k
-          as bounded Function of X,the carrier of Y by Def5;
-A40:      xseq.m =modetrans((vseq.m),X,Y).x by A36;
-          xseq.k =modetrans((vseq.k),X,Y).x by A36;
-          then xseq.m - xseq.k =h1.x by A38,A39,A40,Th28;
+A28:      modetrans((vseq.k),X,Y)=vseq.k by Th17;
+          reconsider h1=vseq.m-vseq.k as bounded Function of X,the carrier of
+          Y by Def5;
+          vseq.m is bounded Function of X,the carrier of Y by Def5;
+          then
+A29:      modetrans((vseq.m),X,Y)=vseq.m by Th17;
+          xseq.m =modetrans((vseq.m),X,Y).x & xseq.k =modetrans((vseq.k),
+          X,Y).x by A25;
+          then xseq.m - xseq.k =h1.x by A29,A28,Th28;
           hence thesis by Th20;
         end;
-A41:    for m be Element of NAT st m >=k holds ||.xseq.n-xseq.m.|| <= e
+A30:    for m be Element of NAT st m >=k holds ||.xseq.n-xseq.m.|| <= e
         proof
-          let m be Element of NAT such that
-A42:      m >=k;
-A43:      ||.xseq.n-xseq.m.|| <= ||.vseq.n - vseq.m.|| by A37;
-          ||.vseq.n - vseq.m.|| <e by A33,A35,A42;
-          hence thesis by A43,XXREAL_0:2;
+          let m be Element of NAT;
+          assume
+          m >=k;
+          then
+A31:      ||.vseq.n - vseq.m.|| <e by A23,A24;
+          ||.xseq.n-xseq.m.|| <= ||.vseq.n - vseq.m.|| by A27;
+          hence thesis by A31,XXREAL_0:2;
         end;
         ||.xseq.n-tseq.x.|| <= e
         proof
           deffunc F(Element of NAT) = ||.xseq.$1 - xseq.n.||;
           consider rseq be Real_Sequence such that
-A44:      for m be Element of NAT holds rseq.m = F(m) from SEQ_1:sch 1;
-A45:      rseq is convergent & lim rseq = ||.tseq.x-xseq.n.||
-          proof
-A46:        xseq - xseq.n is convergent by A36,CLVECT_1:117;
-A47:        lim (xseq-xseq.n)= tseq.x - xseq.n by A36,CLVECT_1:123;
-            rseq = ||.xseq - xseq.n.||
-            proof
-              now
-                let x be set such that
-A48:            x in NAT;
-                reconsider k=x as Element of NAT by A48;
-                thus rseq.x = ||.xseq.k - xseq.n.|| by A44
-                  .= ||.(xseq - xseq.n).k.|| by NORMSP_1:def 7
-                  .= ||.(xseq - xseq.n).||.x by CLVECT_1:def 17;
-              end;
-              hence thesis by FUNCT_2:18;
-            end;
-            hence thesis by A46,A47,CLOPBAN1:22;
+A32:      for m be Element of NAT holds rseq.m = F(m) from SEQ_1:sch
+          1;
+          now
+            let x be set;
+            assume
+            x in NAT;
+            then reconsider k=x as Element of NAT;
+            thus rseq.x = ||.xseq.k - xseq.n.|| by A32
+              .= ||.(xseq - xseq.n).k.|| by NORMSP_1:def 7
+              .= ||.(xseq - xseq.n).||.x by CLVECT_1:def 17;
           end;
+          then
+A33:      rseq = ||.xseq - xseq.n.|| by FUNCT_2:18;
+A34:      xseq - xseq.n is convergent & lim (xseq-xseq.n)= tseq.x - xseq.
+          n by A26, CLVECT_1:117,123;
+          then
+A35:      lim rseq = ||.tseq.x-xseq.n.|| by A33,CLOPBAN1:22;
           for m be Element of NAT st m >= k holds rseq.m <= e
           proof
             let m be Element of NAT such that
-A49:        m >=k;
-            rseq.m = ||.xseq.m-xseq.n.|| by A44
+A36:        m >=k;
+            rseq.m = ||.xseq.m-xseq.n.|| by A32
               .= ||.xseq.n-xseq.m.|| by CLVECT_1:109;
-            hence thesis by A41,A49;
+            hence thesis by A30,A36;
           end;
-          then lim rseq <= e by A45,Lm13;
-          hence thesis by A45,CLVECT_1:109;
+          then lim rseq <= e by A34,A33,Lm13,CLOPBAN1:22;
+          hence thesis by A35,CLVECT_1:109;
         end;
-        hence ||.modetrans((vseq.n),X,Y).x - tseq.x.|| <= e by A36;
+        hence ||.modetrans((vseq.n),X,Y).x - tseq.x.|| <= e by A25;
       end;
-      hence for x be Element of X holds
-      ||.modetrans((vseq.n),X,Y).x - tseq.x.|| <= e;
+      hence for x be Element of X holds ||.modetrans((vseq.n),X,Y).x - tseq.x
+      .|| <= e;
     end;
-    take k;
-    thus thesis by A34;
+    hence thesis;
   end;
-  reconsider tseq as bounded Function of X,the carrier of Y by A23;
+  reconsider tseq as bounded Function of X,the carrier of Y by A16;
   reconsider tv=tseq as Point of C_NormSpace_of_BoundedFunctions(X,Y) by Def5;
-A50: for e be Real st
-  e > 0 ex k be Element of NAT st for n be Element of NAT st
-  n >= k holds ||.vseq.n - tv.|| <= e
+A37: for e be Real st e > 0 ex k be Element of NAT st for n be Element of
+  NAT st n >= k holds ||.vseq.n - tv.|| <= e
   proof
-    let e be Real such that
-A51: e > 0;
-    consider k be Element of NAT such that
-A52: for n be Element of NAT st n >= k holds for x be Element of X holds
-    ||.modetrans((vseq.n),X,Y).x - tseq.x.|| <= e by A31,A51;
+    let e be Real;
+    assume
+    e > 0;
+    then consider k be Element of NAT such that
+A38: for n be Element of NAT st n >= k holds for x be Element of X
+    holds ||.modetrans((vseq.n),X,Y).x - tseq.x.|| <= e by A22;
     now
-      let n be Element of NAT such that
-A53:  n >= k;
-      set f1=modetrans((vseq.n),X,Y);
       set g1=tseq;
-      reconsider h1=vseq.n-tv
-      as bounded Function of X,the carrier of Y by Def5;
-A54:  now
+      let n be Element of NAT such that
+A39:  n >= k;
+      reconsider h1=vseq.n-tv as bounded Function of X,the carrier of Y by
+      Def5;
+      set f1=modetrans((vseq.n),X,Y);
+A40:  now
         let t be Element of X;
         vseq.n is bounded Function of X,the carrier of Y by Def5;
         then modetrans((vseq.n),X,Y)=vseq.n by Th17;
         then ||.h1.t.||= ||.f1.t-g1.t.|| by Th28;
-        hence ||.h1.t.|| <=e by A52,A53;
+        hence ||.h1.t.|| <=e by A38,A39;
       end;
-A55:  now
-        let r be Real such that
-A56:    r in PreNorms(h1);
-        consider t be Element of X such that
-A57:    r=||.h1.t.|| by A56;
-        thus r <=e by A54,A57;
+A41:  now
+        let r be Real;
+        assume
+        r in PreNorms(h1);
+        then ex t be Element of X st r=||.h1.t.||;
+        hence r <=e by A40;
       end;
-A58:  (for s be real number st s in PreNorms(h1) holds s <= e)
-      implies sup PreNorms(h1) <=e by SEQ_4:62;
-      ComplexBoundedFunctionsNorm(X,Y).(vseq.n-tv) = sup PreNorms(h1) by Th18;
-      hence ||.vseq.n-tv.|| <=e by A55,A58,CLVECT_1:def 10;
+A42:  (for s be real number st s in PreNorms(h1) holds s <= e) implies
+      sup PreNorms(h1) <=e by SEQ_4:62;
+      ComplexBoundedFunctionsNorm(X,Y).(vseq.n-tv) = sup PreNorms(h1) by
+      Th18;
+      hence ||.vseq.n-tv.|| <=e by A41,A42,CLVECT_1:def 10;
     end;
     hence thesis;
   end;
-  for e be Real st e > 0 ex m be Element of NAT st for n be Element of NAT st
-  n >= m holds ||.(vseq.n) - tv.|| < e
+  for e be Real st e > 0 ex m be Element of NAT st for n be Element of
+  NAT st n >= m holds ||.(vseq.n) - tv.|| < e
   proof
     let e be Real such that
-A59: e > 0;
-A60: e/2 > 0 by A59,XREAL_1:217;
-A61: e/2<e by A59,XREAL_1:218;
+A43: e > 0;
     consider m be Element of NAT such that
-A62: for n be Element of NAT st n >= m holds ||.(vseq.n) - tv.|| <= e/2
-    by A50,A60;
+A44: for n be Element of NAT st n >= m holds ||.(vseq.n) - tv.|| <= e/
+    2 by A37,A43,XREAL_1:217;
+A45: e/2<e by A43,XREAL_1:218;
     now
-      let n be Element of NAT such that
-A63:  n >= m;
-      ||.(vseq.n) - tv.|| <= e/2 by A62,A63;
-      hence ||.(vseq.n) - tv.|| < e by A61,XXREAL_0:2;
+      let n be Element of NAT;
+      assume
+      n >= m;
+      then ||.(vseq.n) - tv.|| <= e/2 by A44;
+      hence ||.(vseq.n) - tv.|| < e by A45,XXREAL_0:2;
     end;
     hence thesis;
   end;
@@ -2118,8 +2084,8 @@ theorem Th30:
 proof
   let X be non empty set;
   let Y be ComplexBanachSpace;
-  for seq be sequence of C_NormSpace_of_BoundedFunctions(X,Y)
-  st seq is Cauchy_sequence_by_Norm holds seq is convergent by Th29;
+  for seq be sequence of C_NormSpace_of_BoundedFunctions(X,Y) st seq is
+  Cauchy_sequence_by_Norm holds seq is convergent by Th29;
   hence thesis by CLOPBAN1:def 14;
 end;
 
@@ -2133,18 +2099,18 @@ end;
 begin :: Some properties of complex sequences
 
 theorem
-  for seq1,seq2 be Complex_Sequence st seq1 is bounded & seq2 is bounded holds
-  seq1 + seq2 is bounded by Lm3;
+  for seq1,seq2 be Complex_Sequence st seq1 is bounded & seq2 is bounded
+  holds seq1 + seq2 is bounded by Lm3;
 
 theorem
-  for c be Complex, seq be Complex_Sequence st seq is bounded holds
-  c(#)seq is bounded by Lm4;
+  for c be Complex, seq be Complex_Sequence st seq is bounded holds c(#)
+  seq is bounded by Lm4;
 
 theorem
-  for seq be Complex_Sequence holds seq is bounded iff
-  |.seq.| is bounded by Lm9,Lm10;
+  for seq be Complex_Sequence holds seq is bounded iff |.seq.| is
+  bounded by Lm9,Lm10;
 
 theorem
   for seq1,seq2,seq3 be Complex_Sequence holds seq1 = seq2 - seq3 iff
-  ( for n be Element of NAT holds seq1.n = seq2.n - seq3.n ) by Lm12;
+  for n be Element of NAT holds seq1.n = seq2.n - seq3.n by Lm12;
 

@@ -44,6 +44,7 @@
 <Adjective nr="10" value="false"/>
 <Adjective nr="20"/>
 <Adjective nr="26"/>
+<Adjective nr="27"/>
 </Cluster>
 </RCluster>
 <FCluster aid="HALLMAR1" nr="1">

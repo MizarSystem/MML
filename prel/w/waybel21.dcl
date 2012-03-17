@@ -41,7 +41,6 @@
 <ArticleID name="YELLOW_0"/>
 <ArticleID name="WAYBEL_0"/>
 <ArticleID name="LATTICES"/>
-<ArticleID name="FILTER_0"/>
 <ArticleID name="FILTER_1"/>
 <ArticleID name="LATTICE3"/>
 <ArticleID name="YELLOW_3"/>
@@ -58,9 +57,9 @@
 <Adjective nr="94"/>
 <Adjective nr="95"/>
 <Adjective nr="96"/>
-<Adjective nr="177"/>
 <Adjective nr="178"/>
 <Adjective nr="179"/>
+<Adjective nr="180"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -88,8 +87,8 @@
 <Adjective nr="135">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="178"/>
 <Adjective nr="179"/>
+<Adjective nr="180"/>
 </Cluster>
 </RCluster>
 <RCluster aid="WAYBEL21" nr="2">
@@ -136,9 +135,9 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="414">
+<Func kind="K" nr="405">
 <LocusVar nr="1"/>
-<Func kind="K" nr="211">
+<Func kind="K" nr="213">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
@@ -178,7 +177,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="414">
+<Func kind="K" nr="405">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -243,7 +242,7 @@
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="411">
+<Func kind="K" nr="402">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -265,7 +264,7 @@
 <Adjective nr="94"/>
 <Adjective nr="95"/>
 <Adjective nr="96"/>
-<Adjective nr="178"/>
+<Adjective nr="179"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="9">
@@ -273,7 +272,7 @@
 <Adjective nr="94"/>
 <Adjective nr="95"/>
 <Adjective nr="96"/>
-<Adjective nr="178"/>
+<Adjective nr="179"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -328,7 +327,7 @@
 <Adjective nr="94"/>
 <Adjective nr="95"/>
 <Adjective nr="96"/>
-<Adjective nr="178"/>
+<Adjective nr="179"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="9">
@@ -337,12 +336,12 @@
 <Adjective nr="95"/>
 <Adjective nr="96"/>
 <Adjective nr="125"/>
-<Adjective nr="178"/>
+<Adjective nr="179"/>
 </Cluster>
 </Typ>
 </ArgTypes>
 <Cluster/>
-<Typ kind="M" nr="39">
+<Typ kind="M" nr="38">
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>

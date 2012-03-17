@@ -14,8 +14,8 @@ environ
       FUNCT_2, BINOP_1, XXREAL_0, NEWTON;
  constructors BINOP_1, XXREAL_0, REAL_1, NAT_1, NAT_D, NEWTON, WELLORD2,
       RELSET_1;
- registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, FINSET_1, XXREAL_0,
-      XREAL_0, NAT_1, INT_1, CARD_1, FINSEQ_1, NEWTON;
+ registrations SUBSET_1, ORDINAL1, RELSET_1, FINSET_1, XXREAL_0, XREAL_0,
+      NAT_1, INT_1, CARD_1, FINSEQ_1, NEWTON;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, FUNCT_1, FUNCT_2, XBOOLE_0, BINOP_1;
  theorems TARSKI, INT_2, AXIOMS, FINSEQ_1, CARD_1, NAT_1, ABSVALUE, CARD_2,
@@ -30,10 +30,11 @@ reserve a,b,c,k,l,m,n for Nat,
 
 Lm1: k <> 0 & ([\ j/k /]) + 1 >= j/k implies k >= j - (([\ j/k /])*k)
 proof
-  assume
-A1: k <> 0 & ([\ j/k /]) + 1 >= j/k;
-  then ([\ j/k /]) + 1 + -1 >= j/k + -1 by XREAL_1:8;
-  then (([\ j/k /]))*k >= ((j/k)-1)*k by XREAL_1:66;
+  assume that
+A1: k <> 0 and
+A2: ([\ j/k /]) + 1 >= j/k;
+  ([\ j/k /]) + 1 + -1 >= j/k + -1 by A2,XREAL_1:8;
+  then ([\ j/k /]) *k >= ((j/k)-1)*k by XREAL_1:66;
   then -(((j/k) - 1)*k) >= -(([\ j/k /])*k) by XREAL_1:26;
   then j + -(((j/k) - 1)*k) >= j + -(([\ j/k /])*k) by XREAL_1:8;
   then j - ((j/k)*k - 1*k) >= j - (([\ j/k /])*k);
@@ -53,60 +54,62 @@ proof
 end;
 
 theorem Th3:
-  for k,n be Nat holds
-  k <> 0 & k < n & n is prime implies k,n are_relative_prime
+  for k,n be Nat holds k <> 0 & k < n & n is prime implies k,n
+  are_relative_prime
 proof
   let k,n be Nat;
-  assume
-A1: k <> 0 & k < n & n is prime;
-A2: (k gcd n) divides n by NAT_D:def 5;
-  per cases by A1,A2,INT_2:def 5;
-  suppose k gcd n = 1;
+  assume that
+A1: k <> 0 & k < n and
+A2: n is prime;
+A3: (k gcd n) divides n by NAT_D:def 5;
+  per cases by A2,A3,INT_2:def 5;
+  suppose
+    k gcd n = 1;
     hence thesis by INT_2:def 4;
   end;
-  suppose k gcd n = n;
-    then
-A3: n divides k by NAT_D:def 5;
-    thus thesis by A1,A3,NAT_D:7;
+  suppose
+    k gcd n = n;
+    then n divides k by NAT_D:def 5;
+    hence thesis by A1,NAT_D:7;
   end;
 end;
 
 theorem Th4:
-  n is prime & k in {kk where kk is Element of NAT:
-  n,kk are_relative_prime & kk >= 1 & kk <= n}
-  iff n is prime & k in n & not k in {0}
+  n is prime & k in {kk where kk is Element of NAT: n,kk
+are_relative_prime & kk >= 1 & kk <= n} iff n is prime & k in n & not k in {0}
 proof
-  set X = {kk where kk is Element of NAT :
-  n,kk are_relative_prime & kk >= 1 & kk <= n};
+  set X = {kk where kk is Element of NAT : n,kk are_relative_prime & kk >= 1 &
+  kk <= n};
   thus n is prime & k in X implies n is prime & k in n & not k in {0}
   proof
-    assume
-A1: n is prime & k in X;
-    then
-A2: ex kk being Element of NAT st
-    kk = k & n,kk are_relative_prime & kk >= 1 & kk <= n;
+    assume that
+A1: n is prime and
+A2: k in X;
+A3: ex kk being Element of NAT st kk = k & n,kk are_relative_prime & kk >=
+    1 & kk <= n by A2;
     then k <> n by A1,Lm2,Th2;
-    then k < n by A2,XXREAL_0:1;
-    hence thesis by A1,A2,NAT_1:45,TARSKI:def 1;
+    then k < n by A3,XXREAL_0:1;
+    hence thesis by A1,A3,NAT_1:45,TARSKI:def 1;
   end;
-  assume
-A3: n is prime & k in n & not k in {0};
+  assume that
+A4: n is prime and
+A5: k in n and
+A6: not k in {0};
+A7: k <> 0 by A6,TARSKI:def 1;
   then
-A4: k < n by NAT_1:45;
-A5: k <> 0 by A3,TARSKI:def 1;
-  then
-A6: k >= 1 by NAT_1:14;
-A7: k in NAT by ORDINAL1:def 13;
-  k,n are_relative_prime by A3,A4,A5,Th3;
-  hence thesis by A3,A4,A6,A7;
+A8: k >= 1 by NAT_1:14;
+A9: k < n by A5,NAT_1:45;
+  then k in NAT & k,n are_relative_prime by A4,A7,Th3,ORDINAL1:def 13;
+  hence thesis by A4,A9,A8;
 end;
 
 theorem Th5:
-  for A being finite set, x being set st x in A holds
-  card(A \ {x}) = card A - card{x}
+  for A being finite set, x being set st x in A holds card(A \ {x})
+  = card A - card{x}
 proof
   let A be finite set,x be set;
-  assume x in A;
+  assume
+  x in A;
   then {x} c= A by ZFMISC_1:37;
   hence thesis by CARD_2:63;
 end;
@@ -116,25 +119,26 @@ theorem Th6:
 proof
   assume
 A1: a gcd b = 1;
-  reconsider a' = a, b' = b as Integer;
-A2: a',b' are_relative_prime by A1,INT_2:def 4;
   let m;
-  thus a*m gcd b*m = abs(abs(m)) by A2,INT_2:39
+  reconsider a' = a, b' = b as Integer;
+  a',b' are_relative_prime by A1,INT_2:def 4;
+  hence a*m gcd b*m = abs(abs(m)) by INT_2:39
     .= m by ABSVALUE:def 1;
 end;
 
 theorem Th7:
-  a <> 0 & b <> 0 & c <> 0 & a*c gcd b*c = c implies a,b are_relative_prime
+  a <> 0 & c <> 0 & a*c gcd b*c = c implies a,b are_relative_prime
 proof
-  assume
-A1: a <> 0 & b <> 0 & c <> 0 & a*c gcd b*c = c;
-  then a*c <> 0*c & b*c <> 0*c by XCMPLX_1:5;
+  assume that
+A1: a <> 0 and
+A2: c <> 0 and
+A3: a*c gcd b*c = c;
+  a*c <> 0*c by A1,A2,XCMPLX_1:5;
   then consider a1,b1 being Integer such that
-A2: a*c = (a*c gcd b*c)*a1 and
-A3: b*c = (a*c gcd b*c)*b1 and
-A4: a1,b1 are_relative_prime by INT_2:38;
-  a = a1 & b = b1 by A1,A2,A3,XCMPLX_1:5;
-  hence thesis by A4;
+A4: a*c = (a*c gcd b*c)*a1 and
+A5: b*c = (a*c gcd b*c)*b1 & a1,b1 are_relative_prime by INT_2:38;
+  a = a1 by A2,A3,A4,XCMPLX_1:5;
+  hence thesis by A2,A3,A5,XCMPLX_1:5;
 end;
 
 theorem Th8:
@@ -143,17 +147,20 @@ proof
   assume
 A1: a gcd b = 1;
   set n = (a + b) gcd b;
-A2: n divides (a + b) & n divides b by NAT_D:def 5;
-  then n divides a by NAT_D:10;
+A2: n divides b by NAT_D:def 5;
+  n divides (a + b) by NAT_D:def 5;
+  then n divides a by A2,NAT_D:10;
   then n divides a gcd b by A2,NEWTON:63;
   then
-A3: n <= 1 + 0 & n >= 0 by A1,NAT_D:7;
+A3: n <= 1 + 0 by A1,NAT_D:7;
   per cases by A3,NAT_1:9;
-  suppose n = 1;
+  suppose
+    n = 1;
     hence thesis;
   end;
-  suppose n = 0;
-    then (a + b) = 0 & b = 0 by INT_2:5;
+  suppose
+    n = 0;
+    then b = 0 by INT_2:5;
     hence thesis by A1;
   end;
 end;
@@ -163,49 +170,50 @@ theorem Th9:
 proof
   let a, b, c be Nat;
   defpred P[Nat] means (a + b*$1) gcd b = a gcd b;
-A1: P[0];
-A2: for k being Nat st P[k] holds P[k + 1]
+A1: for k being Nat st P[k] holds P[k + 1]
   proof
     let kk be Nat;
     assume
-A3: (a + b*kk) gcd b = a gcd b;
-    now per cases;
-      suppose b = 0;
+A2: (a + b*kk) gcd b = a gcd b;
+    now
+      per cases;
+      suppose
+        b = 0;
         hence (a + b*(kk + 1)) gcd b = a gcd b;
       end;
       suppose
-A4:     b > 0;
-A5:     a gcd b divides (a + b*kk) by A3,NAT_D:def 5;
-        then
-A6:     (a + b*kk) = (a gcd b)*((a + b*kk) div (a gcd b)) by NAT_D:3;
+A3:     b > 0;
         set T = a gcd b;
-A7:     a gcd b > 0 by A4,NEWTON:71;
-        now per cases;
+A4:     a gcd b > 0 by A3,NEWTON:71;
+A5:     a gcd b divides (a + b*kk) by A2,NAT_D:def 5;
+        then
+A6:     (a + b*kk) = (a gcd b)*((a + b*kk) div (a gcd b)) by
+        NAT_D:3;
+        now
+          per cases;
           suppose
-A8:         a + b*kk = 0;
+A7:         a + b*kk = 0;
             then a gcd b = 0 gcd b by NAT_1:7
               .= b by NEWTON:65;
-            hence (a + b*(kk + 1)) gcd b = a gcd b by A8,NAT_D:32;
+            hence (a + b*(kk + 1)) gcd b = a gcd b by A7,NAT_D:32;
           end;
-          suppose (a + b*kk) > 0;
-            then
-A9:         ((a + b*kk) div (a gcd b)) <> 0 by A6;
+          suppose
+A8:         (a + b*kk) > 0;
+            set T2 = (b div (a gcd b));
             set T1 = ((a + b*kk) div (a gcd b));
+A9:         ((a + b*kk) div (a gcd b)) <> 0 by A6,A8;
             a gcd b divides b by NAT_D:def 5;
             then
 A10:        b = (a gcd b)*(b div (a gcd b)) by NAT_D:3;
-            then
-A11:        (b div (a gcd b)) <> 0 by A4;
-            set T2 = (b div (a gcd b));
-            T1*T gcd T2*T = T by A3,A5,A10,NAT_D:3;
-            then T1,T2 are_relative_prime by A7,A9,A11,Th7;
+            then T1*T gcd T2*T = T by A2,A5,NAT_D:3;
+            then T1,T2 are_relative_prime by A4,A9,Th7;
             then T1 gcd T2 = 1 by INT_2:def 4;
             then
-A12:        (T1 + T2) gcd T2 = 1 by Th8;
+A11:        (T1 + T2) gcd T2 = 1 by Th8;
             (a + b*(kk + 1)) gcd b = ((a + b*kk) + b) gcd b
               .= (T*T1 + T*T2) gcd T*T2 by A5,A10,NAT_D:3
               .= (T*(T1 + T2)) gcd T*T2
-              .= a gcd b by A12,Th6;
+              .= a gcd b by A11,Th6;
             hence (a + b*(kk + 1)) gcd b = a gcd b;
           end;
         end;
@@ -214,26 +222,27 @@ A12:        (T1 + T2) gcd T2 = 1 by Th8;
     end;
     hence thesis;
   end;
-  for c be Nat holds P[c] from NAT_1:sch 2(A1,A2);
+A12: P[0];
+  for c be Nat holds P[c] from NAT_1:sch 2(A12,A1);
   hence thesis;
 end;
 
 theorem Th10:
-  m,n are_relative_prime implies
-  ex k st (ex i0,j0 being Integer st k = i0*m + j0*n & k > 0) &
-  for l st (ex i,j being Integer st l = i*m + j*n & l > 0) holds k <= l
+  m,n are_relative_prime implies ex k st (ex i0,j0 being Integer
+st k = i0*m + j0*n & k > 0) & for l st (ex i,j being Integer st l = i*m + j*n &
+  l > 0) holds k <= l
 proof
   defpred P[Nat] means ex i0,j0 being Integer st $1 = i0*m + j0*n & $1>0;
   assume
 A1: m,n are_relative_prime;
   m > 0 or n > 0
   proof
-    assume not(m > 0 or n > 0);
+    assume
+    ( not m > 0)& not n > 0;
     then m = 0 & n = 0;
     then m gcd n <> 1 by NAT_D:32;
     hence contradiction by A1,INT_2:def 4;
   end;
-  then m + n <> 0;
   then 1*m + 1*n > 0;
   then
 A2: ex k be Nat st P[k];
@@ -247,14 +256,16 @@ A4: for l be Nat st P[l] holds k<=l from NAT_1:sch 5(A2);
 end;
 
 theorem Th11:
-  m,n are_relative_prime implies for k holds ex i,j st i*m + j*n = k
+  m,n are_relative_prime implies for k holds ex i,j st i*m + j*n =
+  k
 proof
+  reconsider 1'=1, 0'=0 as Integer;
   assume
 A1: m,n are_relative_prime;
-  let k;
-  consider a such that
+  then consider a such that
 A2: ex i0,j0 being Integer st a = i0*m + j0*n & a>0 and
-A3: for c st (ex i,j st c = i*m + j*n & c>0) holds a <= c by A1,Th10;
+A3: for c st (ex i,j st c = i*m + j*n & c>0) holds a <= c by Th10;
+  let k;
   consider i0,j0 being Integer such that
 A4: a = i0*m + j0*n and
 A5: a > 0 by A2;
@@ -262,46 +273,50 @@ A6: for c st (ex i,j st c = i*m + j*n & c > 0) holds c mod a = 0
   proof
     let b;
     assume
-A7: ex i,j st b = i*m + j*n & b > 0;
-    assume
-A8: b mod a <> 0;
-    consider i,j such that
-A9: b=i*m + j*n & b>0 by A7;
-    set t1 = i - ((b div a)*i0);
+    ex i,j st b = i*m + j*n & b > 0;
+    then consider i,j such that
+A7: b=i*m + j*n and
+    b>0;
     set t2 = j - ((b div a)*j0);
-A10: b mod a + a*(b div a) - a*(b div a) = b - a*(b div a) by A5,NAT_D:2;
-    reconsider c = t1*m + t2*n as Element of NAT by A4,A9,A10;
-    c < a by A4,A5,A9,A10,NAT_D:1;
-    hence contradiction by A3,A4,A8,A9,A10;
+    set t1 = i - ((b div a)*i0);
+A8: b mod a + a*(b div a) - a*(b div a) = b - a*(b div a) by A5,NAT_D:2;
+    then reconsider c = t1*m + t2*n as Element of NAT by A4,A7;
+    assume
+A9: b mod a <> 0;
+    c < a by A4,A5,A7,A8,NAT_D:1;
+    hence contradiction by A3,A4,A9,A7,A8;
   end;
-  reconsider 1'=1, 0'=0 as Integer;
-A12: a divides m
+A10: a divides n
   proof
     per cases;
-    suppose m = 0;
+    suppose
+      n = 0;
       hence thesis by NAT_D:6;
     end;
-    suppose m > 0;
-      then 1'*m + 0'*n > 0;
-      then m mod a = 0 by A6;
-      then m = a*(m div a) + 0 by A2,NAT_D:2;
-      hence thesis by NAT_D:3;
-    end;
-  end;
-  a divides n
-  proof
-    per cases;
-    suppose n = 0;
-      hence thesis by NAT_D:6;
-    end;
-    suppose n > 0;
+    suppose
+      n > 0;
       then 0'*m + 1'*n > 0;
       then n mod a = 0 by A6;
       then n = a*(n div a) + 0 by A2,NAT_D:2;
       hence thesis by NAT_D:3;
     end;
   end;
-  then a divides (m gcd n) by A12,NAT_D:def 5;
+  a divides m
+  proof
+    per cases;
+    suppose
+      m = 0;
+      hence thesis by NAT_D:6;
+    end;
+    suppose
+      m > 0;
+      then 1'*m + 0'*n > 0;
+      then m mod a = 0 by A6;
+      then m = a*(m div a) + 0 by A2,NAT_D:2;
+      hence thesis by NAT_D:3;
+    end;
+  end;
+  then a divides (m gcd n) by A10,NAT_D:def 5;
   then a divides 1 by A1,INT_2:def 4;
   then ex b be Nat st 1 = a*b by NAT_D:def 3;
   then i0*m + j0*n = 1 by A4,NAT_1:15;
@@ -312,21 +327,21 @@ A12: a divides m
 end;
 
 theorem Th12:
-  for A,B being non empty finite set holds
-  (ex f being Function of A, B st f is one-to-one onto)
-  implies card A = card B
+  for A,B being non empty finite set holds (ex f being Function of
+  A, B st f is one-to-one onto) implies card A = card B
 proof
   let A,B be non empty finite set;
   given f being Function of A, B such that
 A1: f is one-to-one and
 A2: f is onto;
-A3: A = dom f & rng f c= B by FUNCT_2:def 1,RELAT_1:def 19;
-  then card A c= card B by A1,CARD_1:26;
-  then
-A4: card A <= card B by NAT_1:40;
+A3: A = dom f by FUNCT_2:def 1;
   B c= rng f by A2,FUNCT_2:def 3;
   then card B c= card A by A3,CARD_1:28;
-  then card B <= card A by NAT_1:40;
+  then
+A4: card B <= card A by NAT_1:40;
+  rng f c= B by RELAT_1:def 19;
+  then card A c= card B by A1,A3,CARD_1:26;
+  then card A <= card B by NAT_1:40;
   hence thesis by A4,XXREAL_0:1;
 end;
 
@@ -348,135 +363,145 @@ A1: n <> 0;
       .= i mod n by A1,INT_1:def 8;
     hence thesis;
   end;
-  suppose n = 0;
+  suppose
+    n = 0;
     hence thesis;
   end;
 end;
 
 theorem Th14:
-  a <> 0 & b <> 0 & c <> 0 & c divides a*b & a,c are_relative_prime implies c
-  divides b
+  c divides a*b & a,c are_relative_prime implies c divides b
 proof
-  assume
-A1: a <> 0 & b <> 0 & c <> 0 & c divides a*b & a,c are_relative_prime;
-  then a gcd c = 1 by INT_2:def 4;
-  then
-A2: (a*b gcd c*b) = b by Th6;
-  c divides c*b by NAT_D:9;
-  hence thesis by A1,A2,NEWTON:63;
+  assume that
+A1: c divides a*b and
+A2: a,c are_relative_prime;
+A3: c divides c*b by NAT_D:9;
+  a gcd c = 1 by A2,INT_2:def 4;
+  then (a*b gcd c*b) = b by Th6;
+  hence thesis by A1,A3,NEWTON:63;
 end;
 
 theorem Th15:
-  a <> 0 & b <> 0 & c <> 0 & a,c are_relative_prime & b,c are_relative_prime
-  implies a*b,c are_relative_prime
+  a <> 0 & c <> 0 & a,c are_relative_prime & b,c
+  are_relative_prime implies a*b,c are_relative_prime
 proof
-  assume
-A1: a <> 0 & b <> 0 & c <> 0 &
-  a,c are_relative_prime & b,c are_relative_prime;
+  assume that
+A1: a <> 0 and
+A2: c <> 0 and
+A3: a,c are_relative_prime and
+A4: b,c are_relative_prime;
+A5: (a gcd c) = 1 by A3,INT_2:def 4;
+A6: (a*b gcd c) divides c by NAT_D:def 5;
+  ((a*b gcd c) gcd a) divides (a*b gcd c) by NAT_D:def 5;
+  then ((a*b gcd c) gcd a) divides a & ((a*b gcd c) gcd a) divides c by A6,
+  NAT_D:4,def 5;
+  then ((a*b gcd c) gcd a) divides 1 by A5,NEWTON:63;
   then
-A2: (a gcd c) = 1 & (b gcd c) = 1 by INT_2:def 4;
-A3: a > 0 & b > 0 & c > 0 by A1;
+A7: ((a*b gcd c) gcd a) <= 0 + 1 by NAT_D:7;
+  ((a*b gcd c) gcd a) <> 0 by A1,NEWTON:71;
+  then ((a*b gcd c) gcd a) = 1 by A7,NAT_1:9;
+  then (a*b gcd c) divides a*b & a,(a*b gcd c) are_relative_prime by
+  INT_2:def 4,NAT_D:def 5;
   then
-A4: (a*b) gcd c > 0 & a*b gcd c <> 0 by NEWTON:71;
-A5: (a*b gcd c) divides a*b & (a*b gcd c) divides c by NAT_D:def 5;
-A6: ((a*b gcd c) gcd a) divides (a*b gcd c) & ((a*b gcd c) gcd a) divides
-  a by NAT_D:def 5;
-  then ((a*b gcd c) gcd a) divides c by A5,NAT_D:4;
+A8: (a*b gcd c) divides b by Th14;
+  (b gcd c) = 1 by A4,INT_2:def 4;
+  then (a*b gcd c) divides 1 by A6,A8,NEWTON:63;
   then
-A7: ((a*b gcd c) gcd a) divides 1 by A2,A6,NEWTON:63;
-A8: ((a*b gcd c) gcd a) <> 0 by A3,NEWTON:71;
-  ((a*b gcd c) gcd a) >= 0 & ((a*b gcd c) gcd a) <= 0 + 1 by A7,NAT_D:7;
-  then ((a*b gcd c) gcd a) = 1 by A8,NAT_1:9;
-  then a,(a*b gcd c) are_relative_prime by INT_2:def 4;
-  then (a*b gcd c) divides b by A1,A4,A5,Th14;
-  then (a*b gcd c) divides 1 by A2,A5,NEWTON:63;
-  then a*b gcd c >= 0 & a*b gcd c <= 0 + 1 by NAT_D:7;
-  then a*b gcd c = 1 by A4,NAT_1:9;
+A9: a*b gcd c <= 0 + 1 by NAT_D:7;
+  (a*b) gcd c > 0 by A2,NEWTON:71;
+  then a*b gcd c = 1 by A9,NAT_1:9;
   hence thesis by INT_2:def 4;
 end;
 
 theorem Th16:
-  x <> 0 & y <> 0 & i > 0 implies i*x gcd i*y = i*(x gcd y)
+  x <> 0 & i > 0 implies i*x gcd i*y = i*(x gcd y)
 proof
-  assume
-A1: x <> 0 & y <> 0 & i > 0;
-  then consider a2,b2 being Integer such that
-A2: x = (x gcd y)*a2 and
-A3: y = (x gcd y)*b2 and
-A4: a2,b2 are_relative_prime by INT_2:38;
-A5: i*x = (i*(x gcd y))*a2 by A2;
-  i*y = (i*(x gcd y))*b2 by A3;
+  assume that
+A1: x <> 0 and
+A2: i > 0;
+  consider a2,b2 being Integer such that
+A3: x = (x gcd y)*a2 & y = (x gcd y)*b2 and
+A4: a2,b2 are_relative_prime by A1,INT_2:38;
+  i*x = (i*(x gcd y))*a2 & i*y = (i*(x gcd y))*b2 by A3;
   then
-A6: i*x gcd i*y = abs(i*(x gcd y)) by A4,A5,INT_2:39
+A5: i*x gcd i*y = abs(i*(x gcd y)) by A4,INT_2:39
     .= abs(i)*abs((x gcd y)) by COMPLEX1:151;
-  i = abs(i) by A1,ABSVALUE:def 1;
-  hence thesis by A6,ABSVALUE:def 1;
+  i = abs(i) by A2,ABSVALUE:def 1;
+  hence thesis by A5,ABSVALUE:def 1;
 end;
 
 theorem Th17:
-  for x st a <> 0 & b <> 0 holds (a + x*b) gcd b = a gcd b
+  for x st a <> 0 holds (a + x*b) gcd b = a gcd b
 proof
   let xx be Integer;
-  assume a <> 0 & b <> 0;
-  then
-A1: a > 0 & b > 0;
   set i = a gcd b;
-A2: a = abs(a) & b = abs(b) by ABSVALUE:def 1;
-A3: i divides a & i divides b by NAT_D:def 5;
-  then
-A4: a = i*(a div i) & b = i*(b div i) by NAT_D:3;
-A5: i divides abs(a + xx*b)
-  proof
-    per cases;
-    suppose a + xx*b < 0;
-      then
-A6:   abs((a + xx*b)) = -(a + xx*b) by ABSVALUE:def 1;
-      -(a + xx*b) = i * (-((a div i) + (xx*(b div i)))) by A4;
-      hence thesis by A6,INT_1:def 9;
-    end;
-    suppose (a + xx*b) >= 0;
-      then
-A7:   abs((a + xx*b)) = a + xx*b by ABSVALUE:def 1;
-      a + xx*b = i*((a div i) + (xx*(b div i))) by A4;
-      hence thesis by A7,INT_1:def 9;
-    end;
-  end;
-  for m be Nat st m divides abs((a + xx*b)) & m divides abs(b) holds
-  m divides i
+A1: b = abs(b) by ABSVALUE:def 1;
+  assume
+A2: a <> 0;
+A3: for m be Nat st m divides abs((a + xx*b)) & m divides abs(b) holds m
+  divides i
   proof
     let mm be Nat;
-    assume
-A8: mm divides abs((a + xx*b)) & mm divides abs(b);
-    then consider n being Nat such that
-A9: b = mm*n by A2,NAT_D:def 3;
+    assume that
+A4: mm divides abs((a + xx*b)) and
+A5: mm divides abs(b);
+    consider n being Nat such that
+A6: b = mm*n by A1,A5,NAT_D:def 3;
     reconsider mm as Element of NAT by ORDINAL1:def 13;
-    now per cases;
-      suppose (a + xx*b) >= 0;
+    now
+      per cases;
+      suppose
+        (a + xx*b) >= 0;
         then abs((a + xx*b)) = (a + xx*b) by ABSVALUE:def 1;
         then consider t being Integer such that
-A10:    (a + xx*b) = mm*t by A8,INT_1:def 9;
-A11:    a = mm*t - mm*(xx*n) by A9,A10,XCMPLX_1:26
+A7:     (a + xx*b) = mm*t by A4,INT_1:def 9;
+A8:     a = mm*t - mm*(xx*n) by A6,A7,XCMPLX_1:26
           .= mm*(t - (xx*n));
-        then (t - (xx*n)) >= 0 by A1;
+        then (t - (xx*n)) >= 0 by A2;
         then reconsider tt = (t - (xx*n)) as Element of NAT by INT_1:16;
-        a = mm*tt by A11;
+        a = mm*tt by A8;
         hence mm divides a by NAT_D:def 3;
       end;
-      suppose (a + xx*b) < 0;
+      suppose
+        (a + xx*b) < 0;
         then abs((a + xx*b)) = -(a + xx*b) by ABSVALUE:def 1;
         then consider t being Integer such that
-A12:    -(a + xx*b) = mm*t by A8,INT_1:def 9;
-A13:    a = -mm*t - mm*(xx*n) by A9,A12,XCMPLX_1:26
+A9:     -(a + xx*b) = mm*t by A4,INT_1:def 9;
+A10:    a = -mm*t - mm*(xx*n) by A6,A9,XCMPLX_1:26
           .= mm*(-t - (xx*n));
-        then (-t - (xx*n)) >= 0 by A1;
+        then (-t - (xx*n)) >= 0 by A2;
         then reconsider tt = (-t - (xx*n)) as Element of NAT by INT_1:16;
-        a = mm*tt by A13;
+        a = mm*tt by A10;
         hence mm divides a by NAT_D:def 3;
       end;
     end;
-    hence thesis by A2,A8,NEWTON:63;
+    hence thesis by A1,A5,NEWTON:63;
   end;
-  then abs((a + xx*b)) gcd abs(b) = i by A2,A3,A5,NAT_D:def 5;
+  i divides a by NAT_D:def 5;
+  then
+A11: a = i*(a div i) by NAT_D:3;
+A12: i divides b by NAT_D:def 5;
+  then
+A13: b = i*(b div i) by NAT_D:3;
+  i divides abs(a + xx*b)
+  proof
+    per cases;
+    suppose
+      a + xx*b < 0;
+      then
+A14:  abs((a + xx*b)) = -(a + xx*b) by ABSVALUE:def 1;
+      -(a + xx*b) = i * (-((a div i) + (xx*(b div i)))) by A11,A13;
+      hence thesis by A14,INT_1:def 9;
+    end;
+    suppose
+      (a + xx*b) >= 0;
+      then
+A15:  abs((a + xx*b)) = a + xx*b by ABSVALUE:def 1;
+      a + xx*b = i*((a div i) + (xx*(b div i))) by A11,A13;
+      hence thesis by A15,INT_1:def 9;
+    end;
+  end;
+  then abs((a + xx*b)) gcd abs(b) = i by A1,A12,A3,NAT_D:def 5;
   hence thesis by INT_2:51;
 end;
 
@@ -485,19 +510,20 @@ begin :: Euler's function
 definition
   let n be Nat;
   func Euler n -> Element of NAT equals
-
-  card {k where k is Element of NAT :
-  n,k are_relative_prime & k >= 1 & k <= n};
+  card {k where k is Element of NAT : n,
+  k are_relative_prime & k >= 1 & k <= n};
   coherence
   proof
-    set X = {k where k is Element of NAT :
-    n,k are_relative_prime & k >= 1 & k <= n};
+    set X = {k where k is Element of NAT : n,k are_relative_prime & k >= 1 & k
+    <= n};
     X c= Seg n
     proof
       let x be set;
-      assume x in X;
-      then ex k be Element of NAT st
-      k = x & n,k are_relative_prime & k >= 1 & k <= n;
+      assume
+      x in X;
+      then
+      ex k be Element of NAT st k = x & n,k are_relative_prime & k >= 1 &
+      k <= n;
       hence thesis by FINSEQ_1:3;
     end;
     then reconsider X as finite set;
@@ -505,16 +531,21 @@ definition
     hence thesis;
   end;
 end;
-set X = {k where k is Element of NAT :
-1,k are_relative_prime & k >= 1 & k <= 1};
+
+set X = {k where k is Element of NAT : 1,k are_relative_prime & k >= 1 & k <=
+1};
 for x being set holds x in X iff x = 1
 proof
   let x be set;
   thus x in X implies x = 1
   proof
-    assume x in X;
-    then ex k be Element of NAT st k = x &
-    1,k are_relative_prime & k >= 1 & k <= 1;
+    assume
+    x in X;
+
+    then
+    ex k be Element of NAT st k = x & 1,k are_relative_prime & k >= 1 & k
+    <= 1;
+
     hence thesis by XXREAL_0:1;
   end;
   1 gcd 1 = 1 by NAT_D:32;
@@ -522,33 +553,32 @@ proof
   hence thesis;
 end;
 then
-
 Lm3: card{1} = Euler 1 by TARSKI:def 1;
 
 theorem
   Euler 1 = 1 by Lm3,CARD_1:50;
-set X = {k where k is Element of NAT :
-2,k are_relative_prime & k >= 1 & k <= 2};
+
+set X = {k where k is Element of NAT : 2,k are_relative_prime & k >= 1 & k <=
+2};
 for x being set holds x in X iff x = 1
 proof
   let x be set;
   thus x in X implies x = 1
   proof
-    assume x in X;
+    assume
+    x in X;
     then consider k be Element of NAT such that
-A1: k = x and
-A2: 2,k are_relative_prime and
-A3: k >= 1 & k <= 2;
-A4: k = 1 or k = 2 by A3,NAT_1:27;
-    2 gcd 2 = 2 by NAT_D:32;
-    hence thesis by A1,A2,A4,INT_2:def 4;
+A1: k = x & 2,k are_relative_prime and
+A2: k >= 1 & k <= 2;
+A3: 2 gcd 2 = 2 by NAT_D:32;
+    k = 1 or k = 2 by A2,NAT_1:27;
+    hence thesis by A1,A3,INT_2:def 4;
   end;
   2 gcd 1 = 1 by NEWTON:64;
   then 2,1 are_relative_prime by INT_2:def 4;
   hence thesis;
 end;
 then
-
 Lm4: card{1} = Euler 2 by TARSKI:def 1;
 
 theorem
@@ -557,691 +587,725 @@ theorem
 theorem Th20:
   n > 1 implies Euler n <= n - 1
 proof
-  assume
-A1: n > 1;
-  set X={kk where kk is Element of NAT :
-  n,kk are_relative_prime & kk >= 1 & kk <= n};
+  set X={kk where kk is Element of NAT : n,kk are_relative_prime & kk >= 1 &
+  kk <= n};
   X c= Seg n
   proof
     let x be set;
-    assume x in X;
-    then consider k be Element of NAT such that
-A2: k = x & n,k are_relative_prime & k >= 1 & k <= n;
-    thus thesis by A2,FINSEQ_1:3;
+    assume
+    x in X;
+    then ex k be Element of NAT st k = x & n,k are_relative_prime & k >= 1 & k
+    <= n;
+    hence thesis by FINSEQ_1:3;
   end;
   then reconsider X as finite set;
+  assume
+A1: n > 1;
+  then 0 in {l where l is Element of NAT: l < n};
+  then 0 in n by AXIOMS:30;
+  then
+A2: card(n \ {0}) = card n - card {0} by Th5;
 A3: X c= n \ {0}
   proof
     let x be set;
-    assume x in X;
+    assume
+    x in X;
     then consider k be Element of NAT such that
-A4: k = x & n,k are_relative_prime & k >= 1 & k <= n;
-A5: not k in {0} by A4,TARSKI:def 1;
+A4: k = x and
+A5: n,k are_relative_prime and
+A6: k >= 1 and
+A7: k <= n;
     not n,n are_relative_prime by A1,Th2;
-    then k < n by A4,XXREAL_0:1;
+    then k < n by A5,A7,XXREAL_0:1;
     then k in {l where l is Element of NAT: l < n};
-    then k in n by AXIOMS:30;
-    hence thesis by A4,A5,XBOOLE_0:def 5;
+    then
+A8: k in n by AXIOMS:30;
+    not k in {0} by A6,TARSKI:def 1;
+    hence thesis by A4,A8,XBOOLE_0:def 5;
   end;
-  0 in {l where l is Element of NAT: l < n} by A1;
-  then 0 in n by AXIOMS:30;
-  then
-A6: card(n \ {0}) = card n - card {0} by Th5;
   card n = n & card {0} = 1 by CARD_1:50,def 5;
-  hence thesis by A3,A6,NAT_1:44;
+  hence thesis by A3,A2,NAT_1:44;
 end;
 
 theorem
   n is prime implies Euler n = n - 1
 proof
-  assume
-A1: n is prime;
-  set X={kk where kk is Element of NAT :
-  n,kk are_relative_prime & kk >= 1 & kk <= n};
+  set X={kk where kk is Element of NAT : n,kk are_relative_prime & kk >= 1 &
+  kk <= n};
   X c= Seg n
   proof
     let x be set;
-    assume x in X;
-    then consider k be Element of NAT such that
-A2: k = x & n,k are_relative_prime & k >= 1 & k <= n;
-    thus thesis by A2,FINSEQ_1:3;
+    assume
+    x in X;
+    then ex k be Element of NAT st k = x & n,k are_relative_prime & k >= 1 & k
+    <= n;
+    hence thesis by FINSEQ_1:3;
   end;
   then reconsider X as finite set;
-A3: n < 1 or n = 1 or n > 1 by XXREAL_0:1;
-A4: n <> 0
+  assume
+A1: n is prime;
+  n <> 0
   proof
-    assume n = 0;
+    assume
+    n = 0;
     then n in SetPrimenumber 2 by A1,NEWTON:def 7;
     hence contradiction;
   end;
-A5: Euler n <= n - 1 by A1,A3,Th20,INT_2:def 5;
-  n - 1 <= Euler n
+  then 0 in {l where l is Element of NAT: l < n};
+  then
+A2: 0 in n by AXIOMS:30;
+  n \ {0} c= X
   proof
-    n \ {0} c= X
-    proof
-      let x be set;
-      assume x in n \ {0};
-      then
-A6:   x in n & not x in {0} by XBOOLE_0:def 5;
-      then x in {k where k is Element of NAT: k< n} by AXIOMS:30;
-      then ex k be Element of NAT st k = x & k < n;
-      hence thesis by A1,A6,Th4;
-    end;
+    let x be set;
+    assume
+A3: x in n \ {0};
+    then x in n;
+    then x in {k where k is Element of NAT: k< n} by AXIOMS:30;
     then
-A7: card (n \ {0}) <= card X by NAT_1:44;
-    0 < n by A4;
-    then 0 in {l where l is Element of NAT: l < n};
-    then
-A8: 0 in n by AXIOMS:30;
-    card n = n & card {0} = 1 by CARD_1:50,def 5;
-    hence thesis by A7,A8,Th5;
+A4: ex k be Element of NAT st k = x & k < n;
+    not x in {0} by A3,XBOOLE_0:def 5;
+    hence thesis by A1,A3,A4,Th4;
   end;
-  hence thesis by A5,XXREAL_0:1;
+  then
+A5: card (n \ {0}) <= card X by NAT_1:44;
+  n < 1 or n = 1 or n > 1 by XXREAL_0:1;
+  then
+A6: Euler n <= n - 1 by A1,Th20,INT_2:def 5;
+  card n = n & card {0} = 1 by CARD_1:50,def 5;
+  then n - 1 <= Euler n by A5,A2,Th5;
+  hence thesis by A6,XXREAL_0:1;
 end;
 
 theorem
-  m > 1 & n > 1 & m,n are_relative_prime
-  implies Euler (m*n) = Euler m * Euler n
+  m > 1 & n > 1 & m,n are_relative_prime implies Euler (m*n) = Euler m *
+  Euler n
 proof
-  assume
-A1: m > 1 & n > 1 & m,n are_relative_prime;
-  then
-A2: m*n <> 1 by NAT_1:15;
-A3: m*n <> 0 by A1,XCMPLX_1:6;
-A4: m*n >= 1 by A1,NAT_1:14,XCMPLX_1:6;
-  set A={i where i is Element of NAT:n,i are_relative_prime & i >= 1 & i <= n};
-  set B={i where i is Element of NAT:m,i are_relative_prime & i >= 1 & i <= m};
-  set C={i where i is Element of NAT:ex x,y being Integer st
-  i = (m*y + n*x) mod m*n & m*n,i are_relative_prime &
-  y <= n & x <= m & i >= 0};
-  set X={i where i is Element of NAT:
-  m*n,i are_relative_prime & i >= 1 & i <= m*n};
-A5: A c= Seg n
-  proof
-    let x be set;
-    assume x in A;
-    then consider i being Element of NAT such that
-A6: i = x and n,i are_relative_prime and
-A7: i >= 1 & i <= n;
-    thus thesis by A6,A7,FINSEQ_1:3;
-  end;
-  then reconsider A as finite set;
-A8: B c= Seg m
-  proof
-    let x be set;
-    assume x in B;
-    then consider i being Element of NAT such that
-A9: i = x and m,i are_relative_prime and
-A10: i >= 1 & i <= m;
-    thus thesis by A9,A10,FINSEQ_1:3;
-  end;
-  then reconsider B as finite set;
-A11: C c= Seg (m*n) \/ {0}
+  assume that
+A1: m > 1 and
+A2: n > 1 and
+A3: m,n are_relative_prime;
+  set X={i where i is Element of NAT: m*n,i are_relative_prime & i >= 1 & i <=
+  m*n};
+  set C={i where i is Element of NAT:ex x,y being Integer st i = (m*y + n*x)
+  mod m*n & m*n,i are_relative_prime & y <= n & x <= m & i >= 0};
+A4: m*n <> 0 by A1,A2,XCMPLX_1:6;
+A5: C c= Seg (m*n) \/ {0}
   proof
     let z be set;
-    assume z in C;
+    assume
+    z in C;
     then consider i being Element of NAT such that
-A12: i = z and
-A13: ex x,y being Integer st i = (m*y + n*x) mod m*n &
-    m*n,i are_relative_prime & y <= n & x <= m & i >= 0;
+A6: i = z and
+A7: ex x,y being Integer st i = (m*y + n*x) mod m*n & m*n,i
+    are_relative_prime & y <= n & x <= m & i >= 0;
     consider x,y being Integer such that
-A14: i = (m*y + n*x) mod m*n and m*n,i are_relative_prime and
-    y <= n & x <= m & i >= 0 by A13;
+A8: i = (m*y + n*x) mod m*n and
+    m*n,i are_relative_prime and
+    y <= n and
+    x <= m and
+    i >= 0 by A7;
     per cases;
-    suppose i > 0;
-      then
-A15:  i >= 1 by NAT_1:14;
-      (m*y + n*x) mod m*n <= m*n
+    suppose
+A9:   i > 0;
+A10:  (m*y + n*x) mod m*n <= m*n
       proof
-        set i1 = (m*y + n*x);
         set i2 = m*n;
-A16:    (m*y + n*x) mod m*n = i1 - (i1 div i2)*i2 by A3,INT_1:def 8
+        set i1 = (m*y + n*x);
+A11:    ([\ i1/i2 /]) + 1 >= i1/i2 by INT_1:52;
+        (m*y + n*x) mod m*n = i1 - (i1 div i2)*i2 by A4,INT_1:def 8
           .= i1 - ([\ i1/i2 /])*i2 by INT_1:def 7;
-        ([\ i1/i2 /]) + 1 >= i1/i2 by INT_1:52;
-        hence thesis by A1,A16,Lm1,XCMPLX_1:6;
+        hence thesis by A1,A2,A11,Lm1,XCMPLX_1:6;
       end;
-      then z in Seg (m*n) by A12,A14,A15,FINSEQ_1:3;
+      i >= 1 by A9,NAT_1:14;
+      then z in Seg (m*n) by A6,A8,A10,FINSEQ_1:3;
       hence thesis by XBOOLE_0:def 3;
     end;
     suppose
-A17:  i = 0;
+A12:  i = 0;
       0 in {0} by TARSKI:def 1;
-      hence thesis by A12,A17,XBOOLE_0:def 3;
+      hence thesis by A6,A12,XBOOLE_0:def 3;
     end;
   end;
   then reconsider C as finite set;
-A18: C = X
+  set A={i where i is Element of NAT:n,i are_relative_prime & i >= 1 & i <= n};
+A13: A c= Seg n
+  proof
+    let x be set;
+    assume
+    x in A;
+    then
+    ex i being Element of NAT st i = x & n,i are_relative_prime & i >= 1 &
+    i <= n;
+    hence thesis by FINSEQ_1:3;
+  end;
+A14: y = 1 & x = 1 implies (m*y + n*x) mod m*n in C
+  proof
+A15: m gcd n = 1 by A3,INT_2:def 4;
+    then (m + n) gcd m = 1 by Th8;
+    then
+A16: m,(m + n) are_relative_prime by INT_2:def 4;
+    (m + n) gcd n = 1 by A15,Th8;
+    then n,(m + n) are_relative_prime by INT_2:def 4;
+    then m*n,(m + n) are_relative_prime by A1,A16,Th15;
+    then
+A17: m*n gcd (m + n) = 1 by INT_2:def 4;
+    assume
+A18: y = 1 & x = 1;
+    then reconsider y'= y,x'= x as Element of NAT;
+    (m*y' + n*x') mod m*n = (m*y + n*x) mod m*n;
+    then consider t being Element of NAT such that
+A19: t = (m*y + n*x) mod m*n;
+    ex d being Nat st (m + n) = (m*n)*d + ((m + n) mod m*n) & ((m + n) mod
+    m*n) < (m*n) by A4,NAT_D:def 2;
+    then (m + n) mod m*n gcd m*n = 1 by A17,Th9;
+    then m*n,t are_relative_prime by A18,A19,INT_2:def 4;
+    hence thesis by A1,A2,A18,A19;
+  end;
+  reconsider A as finite set by A13;
+A20: a = 1 implies a in A
+  proof
+    assume
+A21: a = 1;
+    then n gcd a = 1 by NEWTON:64;
+    then n,a are_relative_prime by INT_2:def 4;
+    hence thesis by A2,A21;
+  end;
+  set B={i where i is Element of NAT:m,i are_relative_prime & i >= 1 & i <= m};
+A22: B c= Seg m
+  proof
+    let x be set;
+    assume
+    x in B;
+    then
+    ex i being Element of NAT st i = x & m,i are_relative_prime & i >= 1 &
+    i <= m;
+    hence thesis by FINSEQ_1:3;
+  end;
+A23: m*n <> 1 by A1,NAT_1:15;
+A24: C = X
   proof
     thus C c= X
     proof
       let z be set;
-      assume z in C;
+      assume
+      z in C;
       then consider i being Element of NAT such that
-A19:  i = z and
-A20:  ex x,y being Integer st i = (m*y + n*x) mod m*n &
-      m*n,i are_relative_prime & y <= n & x <= m & i >= 0;
+A25:  i = z and
+A26:  ex x,y being Integer st i = (m*y + n*x) mod m*n & m*n,i
+      are_relative_prime & y <= n & x <= m & i >= 0;
       consider x,y being Integer such that
-A21:  i = (m*y + n*x) mod m*n and
-A22:  m*n,i are_relative_prime and y <= n & x <= m & i >= 0 by A20;
-A23:  (m*y + n*x) mod m*n <= m*n
+A27:  i = (m*y + n*x) mod m*n and
+A28:  m*n,i are_relative_prime and
+      y <= n and
+      x <= m and
+      i >= 0 by A26;
+A29:  (m*y + n*x) mod m*n <= m*n
       proof
-        set i1 = (m*y + n*x);
         set i2 = m*n;
-A24:    (m*y + n*x) mod m*n = i1 - (i1 div i2)*i2 by A3,INT_1:def 8
+        set i1 = (m*y + n*x);
+A30:    ([\ i1/i2 /]) + 1 >= i1/i2 by INT_1:52;
+        (m*y + n*x) mod m*n = i1 - (i1 div i2)*i2 by A4,INT_1:def 8
           .= i1 - ([\ i1/i2 /])*i2 by INT_1:def 7;
-        ([\ i1/i2 /]) + 1 >= i1/i2 by INT_1:52;
-        hence thesis by A1,A24,Lm1,XCMPLX_1:6;
+        hence thesis by A1,A2,A30,Lm1,XCMPLX_1:6;
       end;
       per cases;
-      suppose i > 0;
+      suppose
+        i > 0;
         then i >= 1 by NAT_1:14;
-        hence thesis by A19,A21,A22,A23;
+        hence thesis by A25,A27,A28,A29;
       end;
-      suppose i = 0;
-        then m*n gcd 0 = 1 by A22,INT_2:def 4;
-        hence thesis by A2,NEWTON:65;
+      suppose
+        i = 0;
+        then m*n gcd 0 = 1 by A28,INT_2:def 4;
+        hence thesis by A23,NEWTON:65;
       end;
     end;
     let z be set;
-    assume z in X;
+    assume
+    z in X;
     then consider i being Element of NAT such that
-A25: i=z and
-A26: m*n,i are_relative_prime and
-A27: i >= 1 & i <= m*n;
+A31: i=z and
+A32: m*n,i are_relative_prime and
+    i >= 1 and
+A33: i <= m*n;
     i <> m*n
     proof
-      assume i = m*n;
-      then (m*n) gcd (m*n) = 1 by A26,INT_2:def 4;
+      assume
+      i = m*n;
+      then (m*n) gcd (m*n) = 1 by A32,INT_2:def 4;
       then m*n = 1 by NAT_D:32;
       hence contradiction by A1,NAT_1:15;
     end;
     then
-A28: i < m*n by A27,XXREAL_0:1;
+A34: i < m*n by A33,XXREAL_0:1;
     consider y0,x0 being Integer such that
-A29: y0*m + x0*n = i by A1,Th11;
-    consider x1,y1 being Integer such that
-A30: x1 = x0 mod m and
-A31: y1 = y0 mod n;
-A32: x0 mod m = x0 - (x0 div m)*m by A1,INT_1:def 8;
-    set j = x0 div m;
-A33: x1 = x0 - (x0 div m)*m by A1,A30,INT_1:def 8
-      .= x0 - ([\ x0/m /])*m by INT_1:def 7;
-    ([\ x0/m /]) + 1 >= x0/m by INT_1:52;
-    then
-A34: x1 <= m by A1,A33,Lm1;
-A35: y0 mod n = y0- (y0 div n)*n by A1,INT_1:def 8;
-    set k = y0 div n;
-A36: y1 = y0 - (y0 div n)*n by A1,A31,INT_1:def 8
-      .= y0 - ([\ y0/n /])*n by INT_1:def 7;
-    ([\ y0/n /]) + 1 >= y0/n by INT_1:52;
-    then
-A37: y1 <= n by A1,A36,Lm1;
-A38: m*y0 + n*x0 = m*y1 + n*x1 + (m*n)*(k+j) by A30,A31,A32,A35;
-    (m*y0 + n*x0) mod (m*n)
-    = (m*y0 + n*x0) - ((m*y0 + n*x0) div (m*n))*(m*n) by A3,INT_1:def 8
-      .= (m*y0 + n*x0) - 0*(m*n) by A28,A29,PRE_FF:4
+A35: y0*m + x0*n = i by A3,Th11;
+A36: (m*y0 + n*x0) mod (m*n) = (m*y0 + n*x0) - ((m*y0 + n*x0) div (m*n))*(
+    m*n) by A4,INT_1:def 8
+      .= (m*y0 + n*x0) - 0*(m*n) by A34,A35,PRE_FF:4
       .= m*y0 + n*x0;
-    then m*y0 + n*x0 = (m*y1 + n*x1) mod (m*n) by A38,Th13;
-    hence thesis by A25,A26,A29,A34,A37;
+    set k = y0 div n;
+    set j = x0 div m;
+    consider x1,y1 being Integer such that
+A37: x1 = x0 mod m and
+A38: y1 = y0 mod n;
+    x0 mod m = x0 - (x0 div m)*m & y0 mod n = y0- (y0 div n)*n by A1,A2,
+    INT_1:def 8;
+    then m*y0 + n*x0 = m*y1 + n*x1 + (m*n)*(k+j) by A37,A38;
+    then
+A39: m*y0 + n*x0 = (m*y1 + n*x1) mod (m*n) by A36,Th13;
+A40: ([\ y0/n /]) + 1 >= y0/n by INT_1:52;
+A41: ([\ x0/m /]) + 1 >= x0/m by INT_1:52;
+    y1 = y0 - (y0 div n)*n by A2,A38,INT_1:def 8
+      .= y0 - ([\ y0/n /])*n by INT_1:def 7;
+    then
+A42: y1 <= n by A2,A40,Lm1;
+    x1 = x0 - (x0 div m)*m by A1,A37,INT_1:def 8
+      .= x0 - ([\ x0/m /])*m by INT_1:def 7;
+    then x1 <= m by A1,A41,Lm1;
+    hence thesis by A31,A32,A35,A42,A39;
   end;
-A39: a = 1 implies a in A
+  reconsider B as finite set by A22;
+A43: b = 1 implies b in B
   proof
     assume
-A40: a = 1;
-    then n gcd a = 1 by NEWTON:64;
-    then n,a are_relative_prime by INT_2:def 4;
-    hence thesis by A1,A40;
-  end;
-A41: b = 1 implies b in B
-  proof
-    assume
-A42: b = 1;
+A44: b = 1;
     then m gcd b = 1 by NEWTON:64;
     then m,b are_relative_prime by INT_2:def 4;
-    hence thesis by A1,A42;
-  end;
-A43: y = 1 & x = 1 implies (m*y + n*x) mod m*n in C
-  proof
-    assume
-A44: y = 1 & x = 1;
-    then reconsider y'= y,x'= x as Element of NAT;
-    (m*y' + n*x') mod m*n = (m*y + n*x) mod m*n;
-    then consider t being Element of NAT such that
-A45: t = (m*y + n*x) mod m*n;
-A46: m gcd n = 1 by A1,INT_2:def 4;
-    then (m + n) gcd n = 1 by Th8;
-    then
-A47: n,(m + n) are_relative_prime by INT_2:def 4;
-    (m + n) gcd m = 1 by A46,Th8;
-    then
-A48: m,(m + n) are_relative_prime by INT_2:def 4;
-    m*n,(m + n) are_relative_prime by A1,A47,A48,Th15;
-    then
-A49: m*n gcd (m + n) = 1 by INT_2:def 4;
-    consider d being Nat such that
-A50: (m + n) = (m*n)*d + ((m + n) mod m*n) and
-    ((m + n) mod m*n) < (m*n) by A3,NAT_D:def 2;
-    (m + n) mod m*n gcd m*n = 1 by A49,A50,Th9;
-    then m*n,t are_relative_prime by A44,A45,INT_2:def 4;
-    hence thesis by A1,A44,A45;
+    hence thesis by A1,A44;
   end;
   {0} c= NAT by ZFMISC_1:37;
   then Seg (m*n) \/ {0} c= NAT by XBOOLE_1:8;
-  then reconsider A,B,C as non empty finite Subset of NAT
-  by A5,A8,A11,A39,A41,A43,XBOOLE_1:1;
+  then reconsider
+  A,B,C as non empty finite Subset of NAT by A13,A22,A5,A20,A43,A14
+  ,XBOOLE_1:1;
   deffunc F(Element of A,Element of B) = (m*$1+n*$2) mod (m*n);
-A51: for y being Element of A, x being Element of B holds F(y,x) in C
+A45: for y being Element of A, x being Element of B holds F(y,x) in C
   proof
+    set l = n*m;
     let y be Element of A, x be Element of B;
     y in A;
     then consider i being Element of NAT such that
-A52: i = y and
-A53: n,i are_relative_prime and
-A54: i >= 1 and
-A55: i <= n;
+A46: i = y and
+A47: n,i are_relative_prime and
+A48: i >= 1 and
+A49: i <= n;
     x in B;
     then consider j being Element of NAT such that
-A56: j = x and
-A57: m,j are_relative_prime and
-A58: j >= 1 and
-A59: j <= m;
+A50: j = x and
+A51: m,j are_relative_prime and
+    j >= 1 and
+A52: j <= m;
+    i*m,n are_relative_prime by A1,A2,A3,A47,Th15;
+    then i*m gcd n = 1 by INT_2:def 4;
+    then (m*i + n*j) gcd n = 1 by Th9;
+    then
+A53: n,(m*i + n*j) are_relative_prime by INT_2:def 4;
+    j*n,m are_relative_prime by A1,A2,A3,A51,Th15;
+    then j*n gcd m = 1 by INT_2:def 4;
+    then (m*i + n*j) gcd m = 1 by Th9;
+    then
+A54: m,(m*i + n*j) are_relative_prime by INT_2:def 4;
+    i*m <> 0*m by A1,A48,XCMPLX_1:5;
+    then n*m,(m*i + n*j) are_relative_prime by A1,A53,A54,Th15;
+    then
+A55: n*m gcd (m*i + n*j) = 1 by INT_2:def 4;
     reconsider ii = i,jj = j as Integer;
     m*ii + n*jj mod m*n = m*i + n*j mod m*n;
     then consider q being Element of NAT such that
-A60: q = (m*ii + n*jj) mod m*n;
-    i*m,n are_relative_prime by A1,A53,A54,Th15;
-    then
-A61: i*m gcd n = 1 by INT_2:def 4;
-    j*n,m are_relative_prime by A1,A57,A58,Th15;
-    then
-A62: j*n gcd m = 1 by INT_2:def 4;
-    (m*i + n*j) gcd n = 1 by A61,Th9;
-    then
-A63: n,(m*i + n*j) are_relative_prime by INT_2:def 4;
-    (m*i + n*j) gcd m = 1 by A62,Th9;
-    then
-A64: m,(m*i + n*j) are_relative_prime by INT_2:def 4;
-    i*m <> 0*m & j*n <> 0*n by A1,A54,A58,XCMPLX_1:5;
-    then (m*i + n*j) <> 0;
-    then n*m,(m*i + n*j) are_relative_prime by A1,A63,A64,Th15;
-    then
-A65: n*m gcd (m*i + n*j) = 1 by INT_2:def 4;
-    consider t being Nat such that
-A66: (m*i + n*j) = (n*m)*t + ((m*i + n*j) mod n*m) and
-    ((m*i + n*j) mod n*m) < (n*m) by A3,NAT_D:def 2;
-    set l = n*m;
-    ((m*i + n*j) mod l) gcd l = 1 by A65,A66,Th9;
-    then l,q are_relative_prime by A60,INT_2:def 4;
-    hence thesis by A52,A55,A56,A59,A60;
+A56: q = (m*ii + n*jj) mod m*n;
+    ex t being Nat st (m*i + n*j) = (n*m)*t + ((m*i + n*j) mod n*m) & ((m
+    *i + n*j) mod n*m) < (n*m) by A4,NAT_D:def 2;
+    then ((m*i + n*j) mod l) gcd l = 1 by A55,Th9;
+    then l,q are_relative_prime by A56,INT_2:def 4;
+    hence thesis by A46,A49,A50,A52,A56;
   end;
   consider f being Function of [:A,B:], C such that
-A67: for y being Element of A,
-  x being Element of B holds f.(y,x) = F(y,x) from FUNCT_7:sch 1(A51);
-A68: f is one-to-one
-  proof
-    let x,y be set;
-A69: dom f = [:A,B:] by FUNCT_2:def 1;
-    assume x in dom f;
-    then consider xx1 being Element of A, xx2 being Element of B such that
-A70: x = [xx1,xx2] by A69,DOMAIN_1:9;
-    xx1 in A;
-    then consider x1 being Element of NAT such that
-A71: xx1 = x1 and n,x1 are_relative_prime and
-A72: x1 >= 1 and
-A73: x1 <= n;
-    xx2 in B;
-    then consider x2 being Element of NAT such that
-A74: xx2 = x2 and m,x2 are_relative_prime and
-A75: x2 >= 1 and
-A76: x2 <= m;
-    assume y in dom f;
-    then consider yy1 being Element of A, yy2 being Element of B such that
-A77: y = [yy1,yy2] by A69,DOMAIN_1:9;
-    yy1 in A;
-    then consider y1 being Element of NAT such that
-A78: yy1 = y1 and n,y1 are_relative_prime and
-A79: y1 >= 1 and
-A80: y1 <= n;
-    yy2 in B;
-    then consider y2 being Element of NAT such that
-A81: yy2 = y2 and m,y2 are_relative_prime and
-A82: y2 >= 1 and
-A83: y2 <= m;
-    assume
-A84: f.x = f.y;
-A85: (x1*m+x2*n) mod (m*n) = f.(xx1,xx2) by A67,A71,A74
-      .= f.(yy1,yy2) by A70,A77,A84
-      .= (y1*m+y2*n) mod (m*n) by A67,A78,A81;
-    reconsider y1,y2,x1,x2 as Element of NAT;
-    set k = (x1*m+x2*n) mod (m*n);
-A86: y1*m + y2*n = k + ((y1*m + y2*n) div (m*n))*(m*n) by A4,A85,NAT_D:2;
-A87: (x1*m + x2*n)-(y1*m + y2*n) = m*(x1 - y1) + n*(x2 - y2);
-A88: k + ((x1*m + x2*n) div (m*n))*(m*n) -
-    (k + ((y1*m + y2*n) div (m*n))*(m*n)) = (m*n)*(((x1*m + x2*n) div (m*n)) -
-    ((y1*m + y2*n) div (m*n)));
-    set w = (((x1*m + x2*n) div (m*n)) - ((y1*m + y2*n) div (m*n)));
-    consider p being Integer such that
-A89: p = m;
-A90: m*(x1 - y1) + n*(x2 - y2) = (m*n)*w by A4,A86,A87,A88,NAT_D:2;
-    then n*(x2 - y2) = m*((n*w) - (x1 - y1));
-    then
-A91: p divides n*(x2 - y2) by A89,INT_1:def 9;
-    then
-A92: m divides (x2 - y2) by A1,A89,INT_2:40;
-A93: x2 - y2 = 0
-    proof
-      per cases;
-      suppose
-A94:    0<=(x2 - y2);
-        consider k being Integer such that
-A95:    k = x2 - y2;
-        reconsider k as Element of NAT by A94,A95,INT_1:16;
-        k = 0
-        proof
-          assume k <> 0;
-          then
-A96:      0 < k;
-          -y2 <= -1 by A82,XREAL_1:26;
-          then
-A97:      x2 + -y2 <= m + -1 by A76,XREAL_1:9;
-          set b = m + -1;
-          b is Element of NAT by A94,A97,INT_1:16;
-          then k < b + 1 by A95,A97,NAT_1:13;
-          hence contradiction by A1,A89,A91,A95,A96,INT_2:40,NAT_D:7;
-        end;
-        hence thesis by A95;
-      end;
-      suppose
-A98:    (x2 - y2)<=0;
-        consider k being Integer such that
-A99:    k = -(x2 - y2);
-A100:   m divides k by A92,A99,INT_2:14;
-A101:   -0 <= k by A98,A99;
-        then reconsider k as Element of NAT by INT_1:16;
-        k = 0
-        proof
-          assume k <> 0;
-          then
-A102:     0 < k;
-          -x2 <= -1 by A75,XREAL_1:26;
-          then
-A103:     - x2 + y2 <= m + -1 by A83,XREAL_1:9;
-          set b = m + -1;
-          b is Element of NAT by A99,A101,A103,INT_1:16;
-          then k < b + 1 by A99,A103,NAT_1:13;
-          hence contradiction by A100,A102,NAT_D:7;
-        end;
-        hence thesis by A99;
-      end;
-    end;
-    consider p being Integer such that
-A104: p = n;
-    m*(x1 - y1) = n*((m*w) - (x2 - y2)) by A90;
-    then
-A105: p divides m*(x1 - y1) by A104,INT_1:def 9;
-    then
-A106: n divides (x1 - y1) by A1,A104,INT_2:40;
-    x1 - y1 = 0
-    proof
-      per cases;
-      suppose
-A107:   0<=(x1 - y1);
-        consider k being Integer such that
-A108:   k = x1 - y1;
-        reconsider k as Element of NAT by A107,A108,INT_1:16;
-        k = 0
-        proof
-          assume k <> 0;
-          then
-A109:     0 < k;
-          -y1 <= -1 by A79,XREAL_1:26;
-          then
-A110:     x1 + -y1 <= n + -1 by A73,XREAL_1:9;
-          set b = n + -1;
-          b is Element of NAT by A107,A110,INT_1:16;
-          then k < b + 1 by A108,A110,NAT_1:13;
-          hence contradiction by A1,A104,A105,A108,A109,INT_2:40,NAT_D:7;
-        end;
-        hence thesis by A108;
-      end;
-      suppose
-A111:   (x1 - y1)<=0;
-        consider k being Integer such that
-A112:   k = -(x1 - y1);
-A113:   n divides k by A106,A112,INT_2:14;
-A114:   -0 <= k by A111,A112;
-        then reconsider k as Element of NAT by INT_1:16;
-        k = 0
-        proof
-          assume k <> 0;
-          then
-A115:     0 < k;
-          -x1 <= -1 by A72,XREAL_1:26;
-          then
-A116:     - x1 + y1 <= n + -1 by A80,XREAL_1:9;
-          set b = n + -1;
-          b is Element of NAT by A112,A114,A116,INT_1:16;
-          then k < b + 1 by A112,A116,NAT_1:13;
-          hence contradiction by A113,A115,NAT_D:7;
-        end;
-        hence thesis by A112;
-      end;
-    end;
-    hence thesis by A70,A71,A74,A77,A78,A81,A93;
-  end;
-  f is onto
+A57: for y being Element of A, x being Element of B holds f.(y,x) = F(y
+  ,x) from FUNCT_7:sch 1(A45);
+A58: f is onto
   proof
     thus rng f c= C by RELAT_1:def 19;
     let z be set;
-    assume z in C;
+    assume
+    z in C;
     then consider i being Element of NAT such that
-A117: i = z and
-A118: ex x0,y0 being Integer st i = (m*y0 + n*x0) mod m*n &
-    m*n,i are_relative_prime & y0 <= n & x0 <= m & i >= 0;
+A59: i = z and
+A60: ex x0,y0 being Integer st i = (m*y0 + n*x0) mod m*n & m*n,i
+    are_relative_prime & y0 <= n & x0 <= m & i >= 0;
     consider x0,y0 being Integer such that
-A119: i = (m*y0 + n*x0) mod m*n and
-A120: m*n,i are_relative_prime and y0 <= n & x0 <= m & i >= 0 by A118;
+A61: i = (m*y0 + n*x0) mod m*n and
+A62: m*n,i are_relative_prime and
+    y0 <= n and
+    x0 <= m and
+    i >= 0 by A60;
     consider x,y being Integer such that
-A121: x = x0 mod m and
-A122: y = y0 mod n;
-A123: x <= m & y <= n by A1,A121,A122,NEWTON:79;
-A126: (m*y + n*x) mod (m*n) = (m*y0 + n*x0) mod (m*n)
+A63: x = x0 mod m and
+A64: y = y0 mod n;
+A65: x <= m by A1,A63,NEWTON:79;
+A66: (m*y + n*x) mod (m*n) = (m*y0 + n*x0) mod (m*n)
     proof
-A127: x0 mod m = x0 - (x0 div m)*m by A1,INT_1:def 8;
-      set j = x0 div m;
-A128: y0 mod n = y0- (y0 div n)*n by A1,INT_1:def 8;
       set k = y0 div n;
-      m*y0 + n*x0 = m*y + n*x + (m*n)*(k+j) by A121,A122,A127,A128;
+      set j = x0 div m;
+      x0 mod m = x0 - (x0 div m)*m & y0 mod n = y0- (y0 div n)*n by A1,
+      A2, INT_1:def 8;
+      then m*y0 + n*x0 = m*y + n*x + (m*n)*(k+j) by A63,A64;
       hence thesis by Th13;
     end;
-A129: m,x0 are_relative_prime
+A67: y <= n by A2,A64,NEWTON:79;
+    reconsider x,y as Element of NAT by A63,A64,INT_1:16,NEWTON:78;
+A68: x <> 0
+    proof
+      set j = x0 div m;
+      set jj = (y0 + (n*j)) - (n*((m*(y0 + (n*j))) div m*n));
+      assume
+      x = 0;
+      then x0 - (x0 div m)*m = 0 by A1,A63,INT_1:def 8;
+      then
+A69:  (m*y0 + n*x0) mod m*n = m*(y0 + (n*j)) - ((m*(y0 + (n*j))) div m*n
+      )*(m*n) by A4,INT_1:def 8
+        .= m*((y0 + (n*j)) - (n*((m*(y0 + (n*j))) div m*n)));
+      then reconsider g = m*jj as Element of NAT by A61;
+A70:  m*n gcd m*jj = 1 by A61,A62,A69,INT_2:def 4;
+A71:  g > 0 or g = 0;
+      not jj < 0
+      proof
+        assume
+        jj < 0;
+        then m*jj < 0*jj by A1,XREAL_1:71;
+        hence contradiction by A71;
+      end;
+      then reconsider jj as Element of NAT by INT_1:16;
+      jj = 0
+      proof
+        assume
+        not jj = 0;
+        m*(n gcd jj) = 1 by A1,A2,A70,Th16;
+        hence contradiction by A1,NAT_1:15;
+      end;
+      then m*n gcd 0 = 1 by A61,A62,A69,INT_2:def 4;
+      hence contradiction by A23,NEWTON:65;
+    end;
+A72: y <> 0
+    proof
+      set j = y0 div n;
+      set jj = ((m*j) + x0) - (m*((n*((m*j) + x0)) div m*n));
+      assume
+      y = 0;
+      then y0 - (y0 div n)*n = 0 by A2,A64,INT_1:def 8;
+      then
+A73:  (m*y0 + n*x0) mod m*n = n*((m*j) + x0) - ((n*((m*j) + x0)) div m*n
+      )*(m*n) by A4,INT_1:def 8
+        .= n*(((m*j) + x0) - (m*((n*((m*j) + x0)) div m*n)));
+      then reconsider g = n*jj as Element of NAT by A61;
+A74:  m*n gcd n*jj = 1 by A61,A62,A73,INT_2:def 4;
+A75:  g > 0 or g = 0;
+      not jj < 0
+      proof
+        assume
+        jj < 0;
+        then n*jj < 0*jj by A2,XREAL_1:71;
+        hence contradiction by A75;
+      end;
+      then reconsider jj as Element of NAT by INT_1:16;
+      jj = 0
+      proof
+        assume
+        not jj = 0;
+        n*(m gcd jj) = 1 by A1,A2,A74,Th16;
+        hence contradiction by A2,NAT_1:15;
+      end;
+      then m*n gcd 0 = 1 by A61,A62,A73,INT_2:def 4;
+      hence contradiction by A23,NEWTON:65;
+    end;
+A76: m,x0 are_relative_prime
     proof
       set p = m gcd x0;
       p divides m by INT_2:31;
       then consider i1 being Integer such that
-A130: m = p*i1 by INT_1:def 9;
-      p <> 0 & i1 <> 0 by A1,A130;
-      then
-A131: p > 0;
+A77:  m = p*i1 by INT_1:def 9;
       p divides x0 by INT_2:32;
       then consider i2 being Integer such that
-A132: x0 = p*i2 by INT_1:def 9;
-A133: (m*y0 + n*x0) mod m*n = ((p*i1)*y0 + n*(p*i2)) - (((p*i1)*y0 + n*(p*i2))
-      div((p*i1)*n))*((p*i1)*n) by A3,A130,A132,INT_1:def 8;
+A78:  x0 = p*i2 by INT_1:def 9;
+      set jj = i1*n;
       set k = ((p*i1)*y0 + n*(p*i2))div((p*i1)*n);
-A134: ((p*i1)*y0 + n*(p*i2)) - k*((p*i1)*n) = p*((i1*y0 + n*i2) - ((i1*k)*n));
       set j = (i1*y0 + n*i2) - ((i1*k)*n);
+A79:  p <> 0 by A1,A77;
+A80:  (m*y0 + n*x0) mod m*n = ((p*i1)*y0 + n*(p*i2)) - (((p*i1)*y0 + n*(
+      p*i2)) div((p*i1)*n))*((p*i1)*n) by A4,A77,A78,INT_1:def 8;
+A81:  ((p*i1)*y0 + n*(p*i2)) - k*((p*i1)*n) = p*((i1*y0 + n*i2) - ((i1*k
+      )*n));
       not j < 0
       proof
-        assume j < 0;
-        then p*j < 0*j by A131,XREAL_1:71;
-        hence contradiction by A3,A119,A130,A132,A134,INT_1:def 8;
+        assume
+        j < 0;
+        then p*j < 0*j by A79,XREAL_1:71;
+        hence contradiction by A4,A61,A77,A78,A81,INT_1:def 8;
       end;
       then reconsider p,j as Element of NAT by INT_1:16;
-A135: m*n = p*(i1*n) by A130;
-      set jj = i1*n;
       not jj < 0
       proof
-        assume jj < 0;
-        then p*jj < 0*jj by A131,XREAL_1:71;
-        hence contradiction by A3,A130;
+        assume
+        jj < 0;
+        then p*jj < 0*jj by A79,XREAL_1:71;
+        hence contradiction by A4,A77;
       end;
       then reconsider jj as Element of NAT by INT_1:16;
-      now per cases by A1,A135,XCMPLX_1:6;
+A82:  m*n = p*(i1*n) by A77;
+      now
+        per cases by A1,A2,A82,XCMPLX_1:6;
         suppose
-A136:     p <> 0 & jj <> 0 & j <> 0;
-          p*jj gcd p*j = 1 by A119,A120,A130,A133,INT_2:def 4;
-          then p*(jj gcd j) = 1 by A136,Th16;
+A83:      p <> 0 & jj <> 0 & j <> 0;
+          p*jj gcd p*j = 1 by A61,A62,A77,A80,INT_2:def 4;
+          then p*(jj gcd j) = 1 by A83,Th16;
           hence p = 1 by NAT_1:15;
         end;
-        suppose p <> 0 & jj <> 0 & j = 0;
-          then p*jj gcd 0 = 1 by A119,A120,A130,A133,A134,INT_2:def 4;
+        suppose
+          p <> 0 & jj <> 0 & j = 0;
+          then p*jj gcd 0 = 1 by A61,A62,A77,A80,A81,INT_2:def 4;
           then p*jj = 1 by NEWTON:65;
           hence p = 1 by NAT_1:15;
         end;
       end;
       hence thesis by INT_2:def 4;
     end;
-A138: n,y0 are_relative_prime
+    n,y0 are_relative_prime
     proof
       set p = n gcd y0;
       p divides n by INT_2:31;
       then consider i1 being Integer such that
-A139: n = p*i1 by INT_1:def 9;
-      p <> 0 & i1 <> 0 by A1,A139;
-      then
-A140: p > 0;
+A84:  n = p*i1 by INT_1:def 9;
       p divides y0 by INT_2:32;
       then consider i2 being Integer such that
-A141: y0 = p*i2 by INT_1:def 9;
-A142: (m*y0 + n*x0) mod m*n = (m*(p*i2) + (p*i1)*x0) - ((m*(p*i2) + (p*i1)*x0)
-      div (m*(p*i1)))*(m*(p*i1)) by A3,A139,A141,INT_1:def 8;
+A85:  y0 = p*i2 by INT_1:def 9;
+      set jj = i1*m;
       set k = (m*(p*i2) + (p*i1)*x0) div (m*(p*i1));
-A143: (m*(p*i2) + (p*i1)*x0) - k*(m*(p*i1)) = p*((m*i2 + i1*x0) - ((i1*k)*m));
       set j = (m*i2 + i1*x0) - ((i1*k)*m);
+A86:  p <> 0 by A2,A84;
+A87:  (m*y0 + n*x0) mod m*n = (m*(p*i2) + (p*i1)*x0) - ((m*(p*i2) + (p*
+      i1)*x0) div (m*(p*i1)))*(m*(p*i1)) by A4,A84,A85,INT_1:def 8;
+A88:  (m*(p*i2) + (p*i1)*x0) - k*(m*(p*i1)) = p*((m*i2 + i1*x0) - ((i1*k
+      )*m));
       j >= 0
       proof
-        assume j < 0;
-        then p*j < 0*j by A140,XREAL_1:71;
-        hence contradiction by A3,A119,A139,A141,A143,INT_1:def 8;
+        assume
+        j < 0;
+        then p*j < 0*j by A86,XREAL_1:71;
+        hence contradiction by A4,A61,A84,A85,A88,INT_1:def 8;
       end;
       then reconsider p,j as Element of NAT by INT_1:16;
-A144: m*n = p*(i1*m) by A139;
-      set jj = i1*m;
       not jj < 0
       proof
-        assume jj < 0;
-        then p*jj < 0*jj by A140,XREAL_1:71;
-        hence contradiction by A3,A139;
+        assume
+        jj < 0;
+        then p*jj < 0*jj by A86,XREAL_1:71;
+        hence contradiction by A4,A84;
       end;
       then reconsider jj as Element of NAT by INT_1:16;
-      now per cases by A1,A144,XCMPLX_1:6;
+A89:  m*n = p*(i1*m) by A84;
+      now
+        per cases by A1,A2,A89,XCMPLX_1:6;
         suppose
-A145:     p <> 0 & jj <> 0 & j <> 0;
-          p*jj gcd p*j = 1 by A119,A120,A139,A142,INT_2:def 4;
-          then p*(jj gcd j) = 1 by A145,Th16;
+A90:      p <> 0 & jj <> 0 & j <> 0;
+          p*jj gcd p*j = 1 by A61,A62,A84,A87,INT_2:def 4;
+          then p*(jj gcd j) = 1 by A90,Th16;
           hence p = 1 by NAT_1:15;
         end;
-        suppose p <> 0 & jj <> 0 & j = 0;
-          then p*jj gcd 0 = 1 by A119,A120,A139,A142,A143,INT_2:def 4;
+        suppose
+          p <> 0 & jj <> 0 & j = 0;
+          then p*jj gcd 0 = 1 by A61,A62,A84,A87,A88,INT_2:def 4;
           then p*jj = 1 by NEWTON:65;
           hence p = 1 by NAT_1:15;
         end;
       end;
       hence thesis by INT_2:def 4;
     end;
-    reconsider x,y as Element of NAT by A121,A122,INT_1:16,NEWTON:78;
-A147: x <> 0
-    proof
-      assume x = 0;
-      then
-A148: x0 - (x0 div m)*m = 0 by A1,A121,INT_1:def 8;
-      set j = x0 div m;
-A149: (m*y0 + n*x0) mod m*n =
-      m*(y0 + (n*j)) - ((m*(y0 + (n*j))) div m*n)*(m*n) by A3,A148,INT_1:def 8
-        .= m*((y0 + (n*j)) - (n*((m*(y0 + (n*j))) div m*n)));
-      set jj = (y0 + (n*j)) - (n*((m*(y0 + (n*j))) div m*n));
-      reconsider g = m*jj as Element of NAT by A119,A149;
-A150: g > 0 or g = 0;
-A151: not jj < 0
-      proof
-        assume jj < 0;
-        then m*jj < 0*jj by A1,XREAL_1:71;
-        hence contradiction by A150;
-      end;
-A152: m*n gcd m*jj = 1 by A119,A120,A149,INT_2:def 4;
-      reconsider jj as Element of NAT by A151,INT_1:16;
-      jj = 0
-      proof
-        assume not(jj = 0);
-        then m*(n gcd jj) = 1 by A1,A152,Th16;
-        hence contradiction by A1,NAT_1:15;
-      end;
-      then m*n gcd 0 = 1 by A119,A120,A149,INT_2:def 4;
-      hence contradiction by A2,NEWTON:65;
-    end;
     then
-A153: x >= 0 + 1 by INT_1:20;
-A154: y <> 0
-    proof
-      assume y = 0;
-      then
-A155: y0 - (y0 div n)*n = 0 by A1,A122,INT_1:def 8;
-      set j = y0 div n;
-A156: (m*y0 + n*x0) mod m*n =
-      n*((m*j) + x0) - ((n*((m*j) + x0)) div m*n)*(m*n) by A3,A155,INT_1:def 8
-        .= n*(((m*j) + x0) - (m*((n*((m*j) + x0)) div m*n)));
-      set jj = ((m*j) + x0) - (m*((n*((m*j) + x0)) div m*n));
-      reconsider g = n*jj as Element of NAT by A119,A156;
-A157: g > 0 or g = 0;
-A158: not jj < 0
-      proof
-        assume jj < 0;
-        then n*jj < 0*jj by A1,XREAL_1:71;
-        hence contradiction by A157;
-      end;
-A159: m*n gcd n*jj = 1 by A119,A120,A156,INT_2:def 4;
-      reconsider jj as Element of NAT by A158,INT_1:16;
-      jj = 0
-      proof
-        assume not(jj = 0);
-        then n*(m gcd jj) = 1 by A1,A159,Th16;
-        hence contradiction by A1,NAT_1:15;
-      end;
-      then m*n gcd 0 = 1 by A119,A120,A156,INT_2:def 4;
-      hence contradiction by A2,NEWTON:65;
-    end;
+A91: y0 gcd n = 1 by INT_2:def 4;
+    x = x0 - (x0 div m)*m by A1,A63,INT_1:def 8;
+    then x0 gcd m = x + (x0 div m)*m gcd m;
+    then x0 gcd m = x gcd m by A68,Th17;
+    then m gcd x = 1 by A76,INT_2:def 4;
     then
-A160: y >= 0 + 1 by INT_1:20;
-A161: m,x are_relative_prime
-    proof
-      x = x0 - (x0 div m)*m by A1,A121,INT_1:def 8;
-      then x0 gcd m = x + (x0 div m)*m gcd m;
-      then x0 gcd m = x gcd m by A1,A147,Th17;
-      then m gcd x = 1 by A129,INT_2:def 4;
-      hence thesis by INT_2:def 4;
-    end;
-A162: n,y are_relative_prime
-    proof
-      y = y0 - (y0 div n)*n by A1,A122,INT_1:def 8;
-      then y0 gcd n = y + (y0 div n)*n gcd n;
-      then
-A163: y0 gcd n = y gcd n by A1,A154,Th17;
-      y0 gcd n = 1 by A138,INT_2:def 4;
-      hence thesis by A163,INT_2:def 4;
-    end;
-    x in B by A123,A153,A161;
-    then reconsider x as Element of B;
-    y in A by A123,A160,A162;
+A92: m,x are_relative_prime by INT_2:def 4;
+    x >= 0 + 1 by A68,INT_1:20;
+    then
+A93: x in B by A65,A92;
+    y = y0 - (y0 div n)*n by A2,A64,INT_1:def 8;
+    then y0 gcd n = y + (y0 div n)*n gcd n;
+    then y0 gcd n = y gcd n by A72,Th17;
+    then
+A94: n,y are_relative_prime by A91,INT_2:def 4;
+    y >= 0 + 1 by A72,INT_1:20;
+    then y in A by A67,A94;
     then reconsider y as Element of A;
-A164: dom f = [:A,B:] by FUNCT_2:def 1;
+    reconsider x as Element of B by A93;
+A95: i = f.(y,x) by A57,A61,A66;
     consider w being set such that
-A165: w = [y,x];
-A166: w in dom f by A164,A165,ZFMISC_1:106;
-    i = f.(y,x) by A67,A119,A126;
-    hence z in rng f by A117,A165,A166,FUNCT_1:def 5;
+A96: w = [y,x];
+    dom f = [:A,B:] by FUNCT_2:def 1;
+    then w in dom f by A96,ZFMISC_1:106;
+    hence z in rng f by A59,A96,A95,FUNCT_1:def 5;
   end;
-  then card[:A,B:] = card C by A68,Th12;
-  hence thesis by A18,CARD_2:65;
+A97: m*n >= 1 by A1,A2,NAT_1:14,XCMPLX_1:6;
+  f is one-to-one
+  proof
+    let x,y be set;
+A98: dom f = [:A,B:] by FUNCT_2:def 1;
+    assume
+    x in dom f;
+    then consider xx1 being Element of A, xx2 being Element of B such that
+A99: x = [xx1,xx2] by A98,DOMAIN_1:9;
+    assume
+    y in dom f;
+    then consider yy1 being Element of A, yy2 being Element of B such that
+A100: y = [yy1,yy2] by A98,DOMAIN_1:9;
+    xx1 in A;
+    then consider x1 being Element of NAT such that
+A101: xx1 = x1 and
+    n,x1 are_relative_prime and
+A102: x1 >= 1 and
+A103: x1 <= n;
+    xx2 in B;
+    then consider x2 being Element of NAT such that
+A104: xx2 = x2 and
+    m,x2 are_relative_prime and
+A105: x2 >= 1 and
+A106: x2 <= m;
+    consider p being Integer such that
+A107: p = m;
+    assume
+A108: f.x = f.y;
+    yy2 in B;
+    then consider y2 being Element of NAT such that
+A109: yy2 = y2 and
+    m,y2 are_relative_prime and
+A110: y2 >= 1 and
+A111: y2 <= m;
+    yy1 in A;
+    then consider y1 being Element of NAT such that
+A112: yy1 = y1 and
+    n,y1 are_relative_prime and
+A113: y1 >= 1 and
+A114: y1 <= n;
+A115: (x1*m+x2*n) mod (m*n) = f.(xx1,xx2) by A57,A101,A104
+      .= f.(yy1,yy2) by A99,A100,A108
+      .= (y1*m+y2*n) mod (m*n) by A57,A112,A109;
+    reconsider y1,y2,x1,x2 as Element of NAT;
+    set k = (x1*m+x2*n) mod (m*n);
+A116: (x1*m + x2*n)-(y1*m + y2*n) = m*(x1 - y1) + n*(x2 - y2) & k + ((x1*m
++ x2*n) div (m*n))*(m*n) - (k + ((y1*m + y2*n) div (m*n))*(m*n)) = (m*n)*(((x1*
+    m + x2*n ) div (m*n)) - ((y1*m + y2*n) div (m*n)));
+    set w = (((x1*m + x2*n) div (m*n)) - ((y1*m + y2*n) div (m*n)));
+    y1*m + y2*n = k + ((y1*m + y2*n) div (m*n))*(m*n) by A97,A115,NAT_D:2;
+    then
+A117: m*(x1 - y1) + n*(x2 - y2) = (m*n)*w by A97,A116,NAT_D:2;
+    then n*(x2 - y2) = m*((n*w) - (x1 - y1));
+    then
+A118: p divides n*(x2 - y2) by A107,INT_1:def 9;
+    consider p being Integer such that
+A119: p = n;
+    m*(x1 - y1) = n*((m*w) - (x2 - y2)) by A117;
+    then
+A120: p divides m*(x1 - y1) by A119,INT_1:def 9;
+    then
+A121: n divides (x1 - y1) by A3,A119,INT_2:40;
+A122: x1 - y1 = 0
+    proof
+      per cases;
+      suppose
+A123:   0<=(x1 - y1);
+        consider k being Integer such that
+A124:   k = x1 - y1;
+        reconsider k as Element of NAT by A123,A124,INT_1:16;
+        k = 0
+        proof
+          set b = n + -1;
+          -y1 <= -1 by A113,XREAL_1:26;
+          then
+A125:     x1 + -y1 <= n + -1 by A103,XREAL_1:9;
+          then b is Element of NAT by A123,INT_1:16;
+          then
+A126:     k < b + 1 by A124,A125,NAT_1:13;
+          assume
+          k <> 0;
+          hence contradiction by A3,A119,A120,A124,A126,INT_2:40,NAT_D:7;
+        end;
+        hence thesis by A124;
+      end;
+      suppose
+A127:   (x1 - y1)<=0;
+        consider k being Integer such that
+A128:   k = -(x1 - y1);
+A129:   -0 <= k by A127,A128;
+A130:   n divides k by A121,A128,INT_2:14;
+        reconsider k as Element of NAT by A127,A128,INT_1:16;
+        k = 0
+        proof
+          set b = n + -1;
+          -x1 <= -1 by A102,XREAL_1:26;
+          then
+A131:     - x1 + y1 <= n + -1 by A114,XREAL_1:9;
+          then b is Element of NAT by A128,A129,INT_1:16;
+          then
+A132:     k < b + 1 by A128,A131,NAT_1:13;
+          assume
+          k <> 0;
+          hence contradiction by A130,A132,NAT_D:7;
+        end;
+        hence thesis by A128;
+      end;
+    end;
+A133: m divides (x2 - y2) by A3,A107,A118,INT_2:40;
+    x2 - y2 = 0
+    proof
+      per cases;
+      suppose
+A134:   0<=(x2 - y2);
+        consider k being Integer such that
+A135:   k = x2 - y2;
+        reconsider k as Element of NAT by A134,A135,INT_1:16;
+        k = 0
+        proof
+          set b = m + -1;
+          -y2 <= -1 by A110,XREAL_1:26;
+          then
+A136:     x2 + -y2 <= m + -1 by A106,XREAL_1:9;
+          then b is Element of NAT by A134,INT_1:16;
+          then
+A137:     k < b + 1 by A135,A136,NAT_1:13;
+          assume
+          k <> 0;
+          hence contradiction by A3,A107,A118,A135,A137,INT_2:40,NAT_D:7;
+        end;
+        hence thesis by A135;
+      end;
+      suppose
+A138:   (x2 - y2)<=0;
+        consider k being Integer such that
+A139:   k = -(x2 - y2);
+A140:   -0 <= k by A138,A139;
+A141:   m divides k by A133,A139,INT_2:14;
+        reconsider k as Element of NAT by A138,A139,INT_1:16;
+        k = 0
+        proof
+          set b = m + -1;
+          -x2 <= -1 by A105,XREAL_1:26;
+          then
+A142:     - x2 + y2 <= m + -1 by A111,XREAL_1:9;
+          then b is Element of NAT by A139,A140,INT_1:16;
+          then
+A143:     k < b + 1 by A139,A142,NAT_1:13;
+          assume
+          k <> 0;
+          hence contradiction by A141,A143,NAT_D:7;
+        end;
+        hence thesis by A139;
+      end;
+    end;
+    hence thesis by A99,A101,A104,A100,A112,A109,A122;
+  end;
+  then card[:A,B:] = card C by A58,Th12;
+  hence thesis by A24,CARD_2:65;
 end;
 

@@ -25,7 +25,6 @@
 <ArticleID name="YELLOW_1"/>
 <ArticleID name="LATTICES"/>
 <ArticleID name="EQREL_1"/>
-<ArticleID name="FILTER_0"/>
 <ArticleID name="FILTER_1"/>
 <ArticleID name="LATTICE3"/>
 </Signature>
@@ -34,14 +33,14 @@
 <Typ kind="G" nr="6">
 <Cluster>
 <Adjective nr="34" value="false"/>
+<Adjective nr="47"/>
 <Adjective nr="48"/>
 <Adjective nr="49"/>
-<Adjective nr="50"/>
-<Adjective nr="61"/>
+<Adjective nr="60"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="118">
+<Func kind="K" nr="120">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -52,21 +51,21 @@
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
+<Adjective nr="47"/>
 <Adjective nr="48"/>
 <Adjective nr="49"/>
-<Adjective nr="50"/>
-<Adjective nr="61"/>
+<Adjective nr="60"/>
 <Adjective nr="116"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="126">
-<Func kind="K" nr="118">
+<Func kind="K" nr="128">
+<Func kind="K" nr="120">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="46"/>
+<Adjective nr="45"/>
 <Adjective nr="117"/>
 </Cluster>
 </FCluster>

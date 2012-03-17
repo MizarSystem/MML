@@ -82,35 +82,36 @@ end;
 theorem Th1:
   n1 > n or n2 > n implies n1 + n2 > n
 proof
+A1: n1 > n & n2 >= 0 implies n1 + n2 > n + 0 by XREAL_1:10;
+A2: n1 >= 0 & n2 > n implies n1 + n2 > n + 0 by XREAL_1:10;
   assume
-A1: n1 > n or n2 > n;
-A2: n1 > n & n2 >= 0 implies n1 + n2 > n + 0 by XREAL_1:10;
-  n1 >= 0 & n2 > n implies n1 + n2 > n + 0 by XREAL_1:10;
+  n1 > n or n2 > n;
   hence thesis by A1,A2;
 end;
 
 theorem Th2:
   n1 + n <= n2 + 1 & n > 0 implies n1 <= n2
 proof
-  assume
-A1: n1 + n <= n2 + 1 & n > 0;
-  then 1 + 0 <= n by NAT_1:13;
+  assume that
+A1: n1 + n <= n2 + 1 and
+A2: n > 0;
+  1 + 0 <= n by A2,NAT_1:13;
   hence thesis by A1,XREAL_1:10;
 end;
 
 theorem Th3:
-  n1 + n2 = 1 iff (n1 = 1 & n2 = 0) or (n1 = 0 & n2 = 1)
+  n1 + n2 = 1 iff n1 = 1 & n2 = 0 or n1 = 0 & n2 = 1
 proof
-  thus n1 + n2 = 1 implies (n1 = 1 & n2 = 0) or (n1 = 0 & n2 = 1)
+  thus n1 + n2 = 1 implies n1 = 1 & n2 = 0 or n1 = 0 & n2 = 1
   proof
     assume
 A1: n1 + n2 = 1;
     now
+A2:   n1 = 0 & n2 = 0 implies contradiction by A1;
       assume
-A2:   n1 <= 1 & n2 <= 1;
-A3:   n1 = 1 & n2 = 1 implies contradiction by A1;
-      n1 = 0 & n2 = 0 implies contradiction by A1;
-      hence thesis by A2,A3,NAT_1:26;
+A3:   n1 <= 1 & n2 <= 1;
+      n1 = 1 & n2 = 1 implies contradiction by A1;
+      hence thesis by A3,A2,NAT_1:26;
     end;
     hence thesis by A1,Th1;
   end;
@@ -120,28 +121,29 @@ end;
 :: Preliminaries - Sequences:
 
 theorem Th4:
-  a ^ b = <%x%> iff (a = <%>E & b = <%x%>) or (b = <%>E & a = <%x%>)
+  a ^ b = <%x%> iff a = <%>E & b = <%x%> or b = <%>E & a = <%x%>
 proof
-  thus a ^ b = <%x%> implies (a = <%>E & b = <%x%>) or (b = <%>E & a = <%x%>)
+  thus a ^ b = <%x%> implies a = <%>E & b = <%x%> or b = <%>E & a = <%x%>
   proof
     assume
 A1: a ^ b = <%x%>;
     then len (a ^ b) = 1 by AFINSQ_1:38;
     then len a + len b = 1 by AFINSQ_1:20;
-    then (len a = 1 & len b = 0) or (len a = 0 & len b = 1) by Th3;
-    then (len a = 1 & b = <%>E) or (a = <%>E & len b = 1);
+    then len a = 1 & b = <%>E or a = <%>E & len b = 1 by Th3;
     hence thesis by A1,AFINSQ_1:32;
   end;
-  assume (a = <%>E & b = <%x%>) or (b = <%>E & a = <%x%>);
+  assume
+  a = <%>E & b = <%x%> or b = <%>E & a = <%x%>;
   hence thesis by AFINSQ_1:32;
 end;
 
 theorem Th5:
-  for p, q being XFinSequence holds a = p ^ q implies
-  p is Element of E^omega & q is Element of E^omega
+  for p, q being XFinSequence holds a = p ^ q implies p is Element
+  of E^omega & q is Element of E^omega
 proof
   let p, q be XFinSequence;
-  assume a = p ^ q;
+  assume
+  a = p ^ q;
   then p is XFinSequence of E & q is XFinSequence of E by AFINSQ_1:34;
   hence thesis by AFINSQ_1:def 8;
 end;
@@ -149,7 +151,8 @@ end;
 theorem Th6:
   <%x%> is Element of E^omega implies x in E
 proof
-  assume <%x%> is Element of E^omega;
+  assume
+  <%x%> is Element of E^omega;
   then rng <%x%> c= E by RELAT_1:def 19;
   then {x} c= E by AFINSQ_1:36;
   hence thesis by ZFMISC_1:37;
@@ -163,33 +166,34 @@ A1: len b = n + 1;
   then b <> {};
   then consider c' being XFinSequence, x such that
 A2: b = c' ^ <%x%> by AFINSQ_1:44;
-  reconsider c = c' as Element of E^omega by A2,Th5;
-A3: n + 1 = len c + len <%x%> by A1,A2,AFINSQ_1:20
-    .= len c + 1 by AFINSQ_1:36;
   <%x%> is Element of E^omega by A2,Th5;
   then reconsider e = x as Element of E by Th6;
+  reconsider c = c' as Element of E^omega by A2,Th5;
   take c, e;
-  thus thesis by A2,A3;
+  n + 1 = len c + len <%x%> by A1,A2,AFINSQ_1:20
+    .= len c + 1 by AFINSQ_1:36;
+  hence thesis by A2;
 end;
 
 theorem Th8:
-  for p being XFinSequence st p <> {}
-  ex q being XFinSequence, x st p = <%x%> ^ q
+  for p being XFinSequence st p <> {} ex q being XFinSequence, x st
+  p = <%x%> ^ q
 proof
-  defpred P[Nat] means for p being XFinSequence st len p = $1 & p <> {}
-  ex q being XFinSequence, x st p = <%x%> ^ q;
-A1: P[0];
-A2: now
+  let p be XFinSequence;
+  defpred P[Nat] means for p being XFinSequence st len p = $1 & p <> {} ex q
+  being XFinSequence, x st p = <%x%> ^ q;
+A1: now
     let n;
     assume
-A3: P[n];
+A2: P[n];
     thus P[n + 1]
     proof
       let p be XFinSequence such that
-A4:   len p = n + 1 & p <> {};
+A3:   len p = n + 1 and
+A4:   p <> {};
       consider q being XFinSequence, x such that
 A5:   p = q ^ <%x%> by A4,AFINSQ_1:44;
-A6:   n + 1 = len q + len <%x%> by A4,A5,AFINSQ_1:20
+A6:   n + 1 = len q + len <%x%> by A3,A5,AFINSQ_1:20
         .= len q + 1 by AFINSQ_1:36;
       per cases;
       suppose
@@ -198,20 +202,21 @@ A7:     q = {};
           .= <%x%> ^ q by A7,AFINSQ_1:32;
         hence thesis;
       end;
-      suppose q <> {};
+      suppose
+        q <> {};
         then consider r being XFinSequence, y such that
-A8:     q = <%y%> ^ r by A3,A6;
+A8:     q = <%y%> ^ r by A2,A6;
         p = <%y%> ^ (r ^ <%x%>) by A5,A8,AFINSQ_1:30;
         hence thesis;
       end;
     end;
   end;
-A9: for n holds P[n] from NAT_1:sch 2(A1, A2);
-  let p be XFinSequence;
+A9: P[0];
+A10: for n holds P[n] from NAT_1:sch 2(A9, A1);
+A11: len p = len p;
   assume
-A10: p <> {};
-  len p = len p;
-  hence thesis by A9,A10;
+  p <> {};
+  hence thesis by A10,A11;
 end;
 
 theorem
@@ -222,89 +227,97 @@ A1: len b = n + 1;
   then b <> {};
   then consider c' being XFinSequence, x such that
 A2: b = <%x%> ^ c' by Th8;
-  reconsider c = c' as Element of E^omega by A2,Th5;
-A3: n + 1 = len c + len <%x%> by A1,A2,AFINSQ_1:20
-    .= len c + 1 by AFINSQ_1:36;
   <%x%> is Element of E^omega by A2,Th5;
   then reconsider e = x as Element of E by Th6;
+  reconsider c = c' as Element of E^omega by A2,Th5;
   take c, e;
-  thus thesis by A2,A3;
+  n + 1 = len c + len <%x%> by A1,A2,AFINSQ_1:20
+    .= len c + 1 by AFINSQ_1:36;
+  hence thesis by A2;
 end;
 
 theorem Th10:
-  for p being XFinSequence st len p = i + j
-  ex q1, q2 being XFinSequence st len q1 = i & len q2 = j & p = q1 ^ q2
+  for p being XFinSequence st len p = i + j ex q1, q2 being
+  XFinSequence st len q1 = i & len q2 = j & p = q1 ^ q2
 proof
-  defpred P[Nat] means
-  for p being XFinSequence, i, j st len p = $1 & len p = i + j
-  ex q1, q2 being XFinSequence st len q1 = i & len q2 = j & p = q1 ^ q2;
-A1: P[0]
-  proof
-    let p be XFinSequence;
-    let i, j;
-    assume
-A2: len p = 0 & len p = i + j;
-    then
-A3: p = {};
-A4: len {} = i & len {} = j by A2;
-    p = {} ^ {} by A3,AFINSQ_1:32;
-    hence thesis by A4;
-  end;
-A5: now
+  defpred P[Nat] means for p being XFinSequence, i, j st len p = $1 & len p =
+  i + j ex q1, q2 being XFinSequence st len q1 = i & len q2 = j & p = q1 ^ q2;
+A1: now
     let n;
     assume
-A6: P[n];
+A2: P[n];
     thus P[n + 1]
     proof
       let p be XFinSequence;
       let i, j;
-      assume
-A7:   len p = n + 1 & len p = i + j;
+      assume that
+A3:   len p = n + 1 and
+A4:   len p = i + j;
       per cases;
       suppose
-A8:     j = 0;
+A5:     j = 0;
         take q1 = p;
         take q2 = {};
-        thus thesis by A7,A8,AFINSQ_1:32;
+        thus thesis by A4,A5,AFINSQ_1:32;
       end;
-      suppose j > 0;
+      suppose
+        j > 0;
         then consider k such that
-A9:     j = k + 1 by NAT_1:6;
-A10:    n = i + k by A7,A9;
-        p <> {} by A7;
+A6:     j = k + 1 by NAT_1:6;
+        p <> {} by A3;
         then consider q being XFinSequence, x such that
-A11:    p = q ^ <%x%> by AFINSQ_1:44;
-        n + 1 = len q + len <%x%> by A7,A11,AFINSQ_1:20
+A7:     p = q ^ <%x%> by AFINSQ_1:44;
+A8:     n + 1 = len q + len <%x%> by A3,A7,AFINSQ_1:20
           .= len q + 1 by AFINSQ_1:36;
+        n = i + k by A3,A4,A6;
         then consider q1, q2 being XFinSequence such that
-A12:    len q1 = i & len q2 = k & q = q1 ^ q2 by A6,A10;
-A13:    p = q1 ^ (q2 ^ <%x%>) by A11,A12,AFINSQ_1:30;
-        len (q2 ^ <%x%>) = len q2 + len <%x%> by AFINSQ_1:20
-          .= j by A9,A12,AFINSQ_1:36;
-        hence thesis by A12,A13;
+A9:     len q1 = i and
+A10:    len q2 = k and
+A11:    q = q1 ^ q2 by A2,A8;
+A12:    len (q2 ^ <%x%>) = len q2 + len <%x%> by AFINSQ_1:20
+          .= j by A6,A10,AFINSQ_1:36;
+        p = q1 ^ (q2 ^ <%x%>) by A7,A11,AFINSQ_1:30;
+        hence thesis by A9,A12;
       end;
     end;
   end;
-  for n holds P[n] from NAT_1:sch 2(A1, A5);
+A13: P[0]
+  proof
+    let p be XFinSequence;
+    let i, j;
+    assume that
+A14: len p = 0 and
+A15: len p = i + j;
+    p = {} by A14;
+    then
+A16: p = {} ^ {} by AFINSQ_1:32;
+    len {} = i by A14,A15;
+    hence thesis by A14,A15,A16;
+  end;
+  for n holds P[n] from NAT_1:sch 2(A13, A1);
   hence thesis;
 end;
 
 theorem
-  len b = n + m implies ex c1, c2 st len c1 = n & len c2 = m & b = c1 ^ c2
+  len b = n + m implies ex c1, c2 st len c1 = n & len c2 = m & b = c1 ^
+  c2
 proof
-  assume len b = n + m;
+  assume
+  len b = n + m;
   then consider c1', c2' being XFinSequence such that
-A1: len c1' = n & len c2' = m & b = c1' ^ c2' by Th10;
-  reconsider c1 = c1' as Element of E^omega by A1,Th5;
-  reconsider c2 = c2' as Element of E^omega by A1,Th5;
+A1: len c1' = n & len c2' = m and
+A2: b = c1' ^ c2' by Th10;
+  reconsider c2 = c2' as Element of E^omega by A2,Th5;
+  reconsider c1 = c1' as Element of E^omega by A2,Th5;
   take c1, c2;
-  thus thesis by A1;
+  thus thesis by A1,A2;
 end;
 
 theorem Th12:
   a ^ a = a implies a = {}
 proof
-  assume a ^ a = a;
+  assume
+  a ^ a = a;
   then len a + len a = len a by AFINSQ_1:20;
   hence thesis;
 end;
@@ -318,7 +331,8 @@ definition
   let E, A, B;
   func A ^^ B -> Subset of E^omega means
   :Def1:
-  x in it iff ex a, b st a in A & b in B & x = a ^ b;
+  x in it iff ex a, b st a in A
+  & b in B & x = a ^ b;
   existence
   proof
     defpred P[set] means ex a, b st a in A & b in B & $1 = a ^ b;
@@ -336,11 +350,13 @@ A3: x in C2 iff ex a, b st a in A & b in B & x = a ^ b;
       let x;
       thus x in C1 implies x in C2
       proof
-        assume x in C1;
+        assume
+        x in C1;
         then ex a, b st a in A & b in B & x = a ^ b by A2;
         hence thesis by A3;
       end;
-      assume x in C2;
+      assume
+      x in C2;
       then ex a, b st a in A & b in B & x = a ^ b by A3;
       hence x in C1 by A2;
     end;
@@ -358,22 +374,23 @@ proof
   proof
     assume that
 A1: A ^^ B = {} and
-A2: A <> {} & B <> {};
+A2: A <> {} and
+A3: B <> {};
     consider a such that
-A3: a in A by A2,SUBSET_1:10;
+A4: a in A by A2,SUBSET_1:10;
     consider b such that
-A4: b in B by A2,SUBSET_1:10;
-    a ^ b in A ^^ B by A3,A4,Def1;
+A5: b in B by A3,SUBSET_1:10;
+    a ^ b in A ^^ B by A4,A5,Def1;
     hence contradiction by A1;
   end;
   assume
-A5: A = {} or B = {};
+A6: A = {} or B = {};
   not ex x st x in A ^^ B
   proof
     given x such that
-A6: x in A ^^ B;
-    ex a, b st a in A & b in B & x = a ^ b by A6,Def1;
-    hence contradiction by A5;
+A7: x in A ^^ B;
+    ex a, b st a in A & b in B & x = a ^ b by A7,Def1;
+    hence contradiction by A6;
   end;
   hence thesis by XBOOLE_0:def 1;
 end;
@@ -381,50 +398,55 @@ end;
 theorem Th14:
   A ^^ {<%>E} = A & {<%>E} ^^ A = A
 proof
-A1: x in {<%>E} ^^ A implies x in A
-  proof
-    assume x in {<%>E} ^^ A;
-    then consider d, a such that
-A2: d in {<%>E} & a in A & x = d ^ a by Def1;
-    x = <%>E ^ a by A2,TARSKI:def 1;
-    hence thesis by A2,AFINSQ_1:32;
-  end;
-A3: x in A ^^ {<%>E} implies x in A
-  proof
-    assume x in A ^^ {<%>E};
-    then consider a, d such that
-A4: a in A & d in {<%>E} & x = a ^ d by Def1;
-    x = a ^ <%>E by A4,TARSKI:def 1;
-    hence thesis by A4,AFINSQ_1:32;
-  end;
-A5: x in A implies x in {<%>E} ^^ A
+A1: x in A ^^ {<%>E} implies x in A
   proof
     assume
-A6: x in A;
+    x in A ^^ {<%>E};
+    then consider a, d such that
+A2: a in A and
+A3: d in {<%>E} & x = a ^ d by Def1;
+    x = a ^ <%>E by A3,TARSKI:def 1;
+    hence thesis by A2,AFINSQ_1:32;
+  end;
+A4: x in A implies x in {<%>E} ^^ A
+  proof
+    assume
+A5: x in A;
     ex d, a st d in {<%>E} & a in A & x = d ^ a
     proof
+      reconsider a = x as Element of E^omega by A5;
       consider d such that
-A7:   d = <%>E;
-      reconsider a = x as Element of E^omega by A6;
+A6:   d = <%>E;
       take d, a;
-      thus thesis by A6,A7,AFINSQ_1:32,TARSKI:def 1;
+      thus thesis by A5,A6,AFINSQ_1:32,TARSKI:def 1;
     end;
     hence thesis by Def1;
   end;
-  x in A implies x in A ^^ {<%>E}
+A7: x in A implies x in A ^^ {<%>E}
   proof
     assume
 A8: x in A;
     ex a, d st a in A & d in {<%>E} & x = a ^ d
     proof
-      set d = <%>E;
       reconsider a = x as Element of E^omega by A8;
+      set d = <%>E;
       take a, d;
       thus thesis by A8,AFINSQ_1:32,TARSKI:def 1;
     end;
     hence thesis by Def1;
   end;
-  hence thesis by A1,A3,A5,TARSKI:2;
+  x in {<%>E} ^^ A implies x in A
+  proof
+    assume
+    x in {<%>E} ^^ A;
+    then consider d, a such that
+A9: d in {<%>E} and
+A10: a in A and
+A11: x = d ^ a by Def1;
+    x = <%>E ^ a by A9,A11,TARSKI:def 1;
+    hence thesis by A10,AFINSQ_1:32;
+  end;
+  hence thesis by A1,A4,A7,TARSKI:2;
 end;
 
 theorem Th15:
@@ -434,36 +456,42 @@ proof
   proof
     assume that
 A1: A ^^ B = {<%>E} and
-A2: (A <> {<%>E} or B <> {<%>E});
+A2: A <> {<%>E} or B <> {<%>E};
     <%>E in A ^^ B by A1,TARSKI:def 1;
     then consider a, b such that
-A3: a in A & b in B & <%>E = a ^ b by Def1;
-    now
+A3: a in A and
+A4: b in B and
+    <%>E = a ^ b by Def1;
+A5: now
       let x;
-      assume
-A4:   (x in A or x in B) & x <> <%>E;
-A5:   now
+      assume that
+A6:   x in A or x in B and
+A7:   x <> <%>E;
+A8:   now
         assume
-A6:     x in A;
-        then reconsider xa = x as Element of E^omega;
-A7:     xa ^ b in A ^^ B by A3,A6,Def1;
-        xa ^ b <> <%>E by A4,AFINSQ_1:33;
-        hence contradiction by A1,A7,TARSKI:def 1;
+A9:     x in B;
+        then reconsider xb = x as Element of E^omega;
+A10:    a ^ xb <> <%>E by A7,AFINSQ_1:33;
+        a ^ xb in A ^^ B by A3,A9,Def1;
+        hence contradiction by A1,A10,TARSKI:def 1;
       end;
       now
         assume
-A8:     x in B;
-        then reconsider xb = x as Element of E^omega;
-A9:     a ^ xb in A ^^ B by A3,A8,Def1;
-        a ^ xb <> <%>E by A4,AFINSQ_1:33;
-        hence contradiction by A1,A9,TARSKI:def 1;
+A11:    x in A;
+        then reconsider xa = x as Element of E^omega;
+A12:    xa ^ b <> <%>E by A7,AFINSQ_1:33;
+        xa ^ b in A ^^ B by A4,A11,Def1;
+        hence contradiction by A1,A12,TARSKI:def 1;
       end;
-      hence contradiction by A4,A5;
+      hence contradiction by A6,A8;
     end;
-    then (x in A iff x = <%>E) & (x in B iff x = <%>E) by A3;
-    hence contradiction by A2,TARSKI:def 1;
+    then
+A13: x in B iff x = <%>E by A4;
+    x in A iff x = <%>E by A3,A5;
+    hence contradiction by A2,A13,TARSKI:def 1;
   end;
-  assume A = {<%>E} & B = {<%>E};
+  assume
+  A = {<%>E} & B = {<%>E};
   hence thesis by Th14;
 end;
 
@@ -472,12 +500,13 @@ theorem Th16:
 proof
   thus <%>E in A ^^ B implies <%>E in A & <%>E in B
   proof
-    assume <%>E in A ^^ B;
-    then consider a, b such that
-A1: a in A & b in B & a ^ b = <%>E by Def1;
-    thus thesis by A1,AFINSQ_1:33;
+    assume
+    <%>E in A ^^ B;
+    then ex a, b st a in A & b in B & a ^ b = <%>E by Def1;
+    hence thesis by AFINSQ_1:33;
   end;
-  assume <%>E in A & <%>E in B;
+  assume
+  <%>E in A & <%>E in B;
   then <%>E ^ <%>E in A ^^ B by Def1;
   hence thesis by AFINSQ_1:32;
 end;
@@ -515,10 +544,10 @@ A1: A c= C & B c= D;
   thus thesis
   proof
     let x;
-    assume x in A ^^ B;
-    then consider a, b such that
-A2: a in A & b in B & x = a ^ b by Def1;
-    thus thesis by A1,A2,Def1;
+    assume
+    x in A ^^ B;
+    then ex a, b st a in A & b in B & x = a ^ b by Def1;
+    hence thesis by A1,Def1;
   end;
 end;
 
@@ -529,151 +558,182 @@ proof
     let x;
     thus x in (A ^^ B) ^^ C implies x in A ^^ (B ^^ C)
     proof
-      assume x in (A ^^ B) ^^ C;
+      assume
+      x in (A ^^ B) ^^ C;
       then consider ab, c such that
-A1:   ab in (A ^^ B) & c in C & x = ab ^ c by Def1;
+A1:   ab in (A ^^ B) and
+A2:   c in C & x = ab ^ c by Def1;
       consider a, b such that
-A2:   a in A & b in B & ab = a ^ b by A1,Def1;
-A3:   x = a ^ (b ^ c) by A1,A2,AFINSQ_1:30;
-      b ^ c in B ^^ C by A1,A2,Def1;
-      hence thesis by A2,A3,Def1;
+A3:   a in A and
+A4:   b in B & ab = a ^ b by A1,Def1;
+      x = a ^ (b ^ c) & b ^ c in B ^^ C by A2,A4,Def1,AFINSQ_1:30;
+      hence thesis by A3,Def1;
     end;
-    assume x in A ^^ (B ^^ C);
+    assume
+    x in A ^^ (B ^^ C);
     then consider a, bc such that
-A4: a in A & bc in (B ^^ C) & x = a ^ bc by Def1;
+A5: a in A and
+A6: bc in (B ^^ C) and
+A7: x = a ^ bc by Def1;
     consider b, c such that
-A5: b in B & c in C & bc = b ^ c by A4,Def1;
-A6: x = (a ^ b) ^ c by A4,A5,AFINSQ_1:30;
-    a ^ b in A ^^ B by A4,A5,Def1;
-    hence x in (A ^^ B) ^^ C by A5,A6,Def1;
+A8: b in B and
+A9: c in C and
+A10: bc = b ^ c by A6,Def1;
+    x = (a ^ b) ^ c & a ^ b in A ^^ B by A5,A7,A8,A10,Def1,AFINSQ_1:30;
+    hence x in (A ^^ B) ^^ C by A9,Def1;
   end;
   hence thesis by TARSKI:2;
 end;
 
 theorem Th20:
-  A ^^ (B /\ C) c= (A ^^ B) /\ (A ^^ C) &
-  (B /\ C) ^^ A c= (B ^^ A) /\ (C ^^ A)
+  A ^^ (B /\ C) c= (A ^^ B) /\ (A ^^ C) & (B /\ C) ^^ A c= (B ^^ A
+  ) /\ (C ^^ A)
 proof
   thus A ^^ (B /\ C) c= (A ^^ B) /\ (A ^^ C)
   proof
     let x;
-    assume x in A ^^ (B /\ C);
+    assume
+    x in A ^^ (B /\ C);
     then consider a, bc such that
-A1: a in A & bc in B /\ C & x = a ^ bc by Def1;
-    bc in B & bc in C by A1,XBOOLE_0:def 4;
-    then x in A ^^ B & x in A ^^ C by A1,Def1;
-    hence thesis by XBOOLE_0:def 4;
+A1: a in A and
+A2: bc in B /\ C and
+A3: x = a ^ bc by Def1;
+    bc in C by A2,XBOOLE_0:def 4;
+    then
+A4: x in A ^^ C by A1,A3,Def1;
+    bc in B by A2,XBOOLE_0:def 4;
+    then x in A ^^ B by A1,A3,Def1;
+    hence thesis by A4,XBOOLE_0:def 4;
   end;
   thus (B /\ C) ^^ A c= (B ^^ A) /\ (C ^^ A)
   proof
     let x;
-    assume x in (B /\ C) ^^ A;
+    assume
+    x in (B /\ C) ^^ A;
     then consider bc, a such that
-A2: bc in B /\ C & a in A & x = bc ^ a by Def1;
-    bc in B & bc in C by A2,XBOOLE_0:def 4;
-    then x in B ^^ A & x in C ^^ A by A2,Def1;
-    hence thesis by XBOOLE_0:def 4;
+A5: bc in B /\ C and
+A6: a in A & x = bc ^ a by Def1;
+    bc in C by A5,XBOOLE_0:def 4;
+    then
+A7: x in C ^^ A by A6,Def1;
+    bc in B by A5,XBOOLE_0:def 4;
+    then x in B ^^ A by A6,Def1;
+    hence thesis by A7,XBOOLE_0:def 4;
   end;
 end;
 
 theorem Th21:
-  A ^^ B \/ A ^^ C = A ^^ (B \/ C) & B ^^ A \/ C ^^ A = (B \/ C) ^^ A
+  A ^^ B \/ A ^^ C = A ^^ (B \/ C) & B ^^ A \/ C ^^ A = (B \/ C)
+  ^^ A
 proof
 A1: A ^^ (B \/ C) c= (A ^^ B) \/ (A ^^ C)
   proof
     let x;
-    assume x in A ^^ (B \/ C);
+    assume
+    x in A ^^ (B \/ C);
     then consider a, bc such that
-A2: a in A & bc in B \/ C & x = a ^ bc by Def1;
-    bc in B or bc in C by A2,XBOOLE_0:def 3;
-    then x in A ^^ B or x in A ^^ C by A2,Def1;
+A2: a in A and
+A3: bc in B \/ C and
+A4: x = a ^ bc by Def1;
+    bc in B or bc in C by A3,XBOOLE_0:def 3;
+    then x in A ^^ B or x in A ^^ C by A2,A4,Def1;
     hence thesis by XBOOLE_0:def 3;
   end;
-A3: (B \/ C) ^^ A c= (B ^^ A) \/ (C ^^ A)
+A5: (B \/ C) ^^ A c= (B ^^ A) \/ (C ^^ A)
   proof
     let x;
-    assume x in (B \/ C) ^^ A;
+    assume
+    x in (B \/ C) ^^ A;
     then consider bc, a such that
-A4: bc in B \/ C & a in A & x = bc ^ a by Def1;
-    bc in B or bc in C by A4,XBOOLE_0:def 3;
-    then x in B ^^ A or x in C ^^ A by A4,Def1;
+A6: bc in B \/ C and
+A7: a in A & x = bc ^ a by Def1;
+    bc in B or bc in C by A6,XBOOLE_0:def 3;
+    then x in B ^^ A or x in C ^^ A by A7,Def1;
     hence thesis by XBOOLE_0:def 3;
   end;
-A5: now
-    B c= B \/ C & C c= B \/ C by XBOOLE_1:7;
-    then A ^^ B c= A ^^ (B \/ C) & A ^^ C c= A ^^ (B \/ C) by Th18;
-    hence (A ^^ B) \/ (A ^^ C) c= A ^^ (B \/ C) by XBOOLE_1:8;
-  end;
-  now
-    B c= B \/ C & C c= B \/ C by XBOOLE_1:7;
-    then B ^^ A c= (B \/ C) ^^ A & C ^^ A c= (B \/ C) ^^ A by Th18;
-    hence (B ^^ A) \/ (C ^^ A) c= (B \/ C) ^^ A by XBOOLE_1:8;
-  end;
-  hence thesis by A1,A3,A5,XBOOLE_0:def 10;
+  C c= B \/ C by XBOOLE_1:7;
+  then
+A8: C ^^ A c= (B \/ C) ^^ A by Th18;
+  B c= B \/ C by XBOOLE_1:7;
+  then B ^^ A c= (B \/ C) ^^ A by Th18;
+  then
+A9: (B ^^ A) \/ (C ^^ A) c= (B \/ C) ^^ A by A8,XBOOLE_1:8;
+  C c= B \/ C by XBOOLE_1:7;
+  then
+A10: A ^^ C c= A ^^ (B \/ C) by Th18;
+  B c= B \/ C by XBOOLE_1:7;
+  then A ^^ B c= A ^^ (B \/ C) by Th18;
+  then (A ^^ B) \/ (A ^^ C) c= A ^^ (B \/ C) by A10,XBOOLE_1:8;
+  hence thesis by A1,A5,A9,XBOOLE_0:def 10;
 end;
 
 theorem Th22:
-  (A ^^ B) \ (A ^^ C) c= A ^^ (B \ C) & (B ^^ A) \ (C ^^ A) c= (B \ C) ^^ A
+  (A ^^ B) \ (A ^^ C) c= A ^^ (B \ C) & (B ^^ A) \ (C ^^ A) c= (B
+  \ C) ^^ A
 proof
   thus (A ^^ B) \ (A ^^ C) c= A ^^ (B \ C)
   proof
     let x;
-    assume x in (A ^^ B) \ (A ^^ C);
-    then
-A1: x in A ^^ B & not x in A ^^ C by XBOOLE_0:def 5;
+    assume
+A1: x in (A ^^ B) \ (A ^^ C);
+    then x in A ^^ B by XBOOLE_0:def 5;
     then consider a, b such that
-A2: a in A & b in B & x = a ^ b by Def1;
-    now
-      assume not b in C;
-      then b in B \ C by A2,XBOOLE_0:def 5;
-      hence thesis by A2,Def1;
+A2: a in A and
+A3: b in B and
+A4: x = a ^ b by Def1;
+A5: now
+      assume
+      not b in C;
+      then b in B \ C by A3,XBOOLE_0:def 5;
+      hence thesis by A2,A4,Def1;
     end;
-    hence thesis by A1,A2,Def1;
+    not x in A ^^ C by A1,XBOOLE_0:def 5;
+    hence thesis by A2,A4,A5,Def1;
   end;
   thus (B ^^ A) \ (C ^^ A) c= (B \ C) ^^ A
   proof
     let x;
-    assume x in (B ^^ A) \ (C ^^ A);
-    then
-A3: x in B ^^ A & not x in C ^^ A by XBOOLE_0:def 5;
+    assume
+A6: x in (B ^^ A) \ (C ^^ A);
+    then x in B ^^ A by XBOOLE_0:def 5;
     then consider b, a such that
-A4: b in B & a in A & x = b ^ a by Def1;
-    now
-      assume not b in C;
-      then b in B \ C by A4,XBOOLE_0:def 5;
-      hence thesis by A4,Def1;
+A7: b in B and
+A8: a in A & x = b ^ a by Def1;
+A9: now
+      assume
+      not b in C;
+      then b in B \ C by A7,XBOOLE_0:def 5;
+      hence thesis by A8,Def1;
     end;
-    hence thesis by A3,A4,Def1;
+    not x in C ^^ A by A6,XBOOLE_0:def 5;
+    hence thesis by A8,A9,Def1;
   end;
 end;
 
 theorem
-  (A ^^ B) \+\ (A ^^ C) c= A ^^ (B \+\ C) &
-  (B ^^ A) \+\ (C ^^ A) c= (B \+\ C) ^^ A
+  (A ^^ B) \+\ (A ^^ C) c= A ^^ (B \+\ C) & (B ^^ A) \+\ (C ^^ A) c= (B
+  \+\ C) ^^ A
 proof
-A1: now
-A2: A ^^ (B /\ C) c= (A ^^ B) /\ (A ^^ C) by Th20;
-A3: (A ^^ (B \/ C)) \ (A ^^ (B /\ C)) c= A ^^ ((B \/ C) \ (B /\ C)) by Th22;
-    (A ^^ B) \+\ (A ^^ C)
-    = ((A ^^ B) \/ (A ^^ C)) \ ((A ^^ B) /\ (A ^^ C)) by XBOOLE_1:101
-      .= (A ^^ (B \/ C)) \ ((A ^^ B) /\ (A ^^ C)) by Th21;
-    then (A ^^ B) \+\ (A ^^ C) c=
-    (A ^^ (B \/ C)) \ (A ^^ (B /\ C)) by A2,XBOOLE_1:34;
-    then (A ^^ B) \+\ (A ^^ C) c= A ^^ ((B \/ C) \ (B /\ C)) by A3,XBOOLE_1:1;
-    hence (A ^^ B) \+\ (A ^^ C) c= A ^^ (B \+\ C) by XBOOLE_1:101;
-  end;
-  now
-A4: (B /\ C) ^^ A c= (B ^^ A) /\ (C ^^ A) by Th20;
-A5: ((B \/ C) ^^ A) \ ((B /\ C) ^^ A) c= ((B \/ C) \ (B /\ C)) ^^ A by Th22;
-    (B ^^ A) \+\ (C ^^ A)
-    = ((B ^^ A) \/ (C ^^ A)) \ ((B ^^ A) /\ (C ^^ A)) by XBOOLE_1:101
-      .= ((B \/ C) ^^ A) \ ((B ^^ A) /\ (C ^^ A)) by Th21;
-    then (B ^^ A) \+\ (C ^^ A) c=
-    ((B \/ C) ^^ A) \ ((B /\ C) ^^ A) by A4,XBOOLE_1:34;
-    then (B ^^ A) \+\ (C ^^ A) c= ((B \/ C) \ (B /\ C)) ^^ A by A5,XBOOLE_1:1;
-    hence (B ^^ A) \+\ (C ^^ A) c= (B \+\ C) ^^ A by XBOOLE_1:101;
-  end;
-  hence thesis by A1;
+  (A ^^ B) \+\ (A ^^ C) = ((A ^^ B) \/ (A ^^ C)) \ ((A ^^ B) /\ (A ^^ C))
+  by XBOOLE_1:101
+    .= (A ^^ (B \/ C)) \ ((A ^^ B) /\ (A ^^ C)) by Th21;
+  then
+A1: (A ^^ B) \+\ (A ^^ C) c= (A ^^ (B \/ C)) \ (A ^^ (B /\ C)) by Th20,
+  XBOOLE_1:34;
+  (B ^^ A) \+\ (C ^^ A) = ((B ^^ A) \/ (C ^^ A)) \ ((B ^^ A) /\ (C ^^ A))
+  by XBOOLE_1:101
+    .= ((B \/ C) ^^ A) \ ((B ^^ A) /\ (C ^^ A)) by Th21;
+  then
+A2: (B ^^ A) \+\ (C ^^ A) c= ((B \/ C) ^^ A) \ ((B /\ C) ^^ A) by Th20,
+  XBOOLE_1:34;
+  ((B \/ C) ^^ A) \ ((B /\ C) ^^ A) c= ((B \/ C) \ (B /\ C)) ^^ A by Th22;
+  then
+A3: (B ^^ A) \+\ (C ^^ A) c= ((B \/ C) \ (B /\ C)) ^^ A by
+  A2,XBOOLE_1:1;
+  (A ^^ (B \/ C)) \ (A ^^ (B /\ C)) c= A ^^ ((B \/ C) \ (B /\ C)) by Th22;
+  then (A ^^ B) \+\ (A ^^ C) c= A ^^ ((B \/ C) \ (B /\ C)) by
+  A1,XBOOLE_1:1;
+  hence thesis by A3,XBOOLE_1:101;
 end;
 
 begin
@@ -685,13 +745,14 @@ definition
   let E, A, n;
   func A |^ n -> Subset of E^omega means
   :Def2:
-  ex concat being Function of NAT, bool (E^omega) st it = concat.n &
-  concat.0 = {<%>E} & for i holds concat.(i + 1) = concat.i ^^ A;
+  ex concat being Function of
+NAT, bool (E^omega) st it = concat.n & concat.0 = {<%>E} & for i holds concat.(
+  i + 1) = concat.i ^^ A;
   existence
   proof
     defpred P[set, set, set] means ex B, C st C = $3 & B = $2 & C = B ^^ A;
-A1: for i being Element of NAT for x being Element of bool (E^omega)
-    ex y being Element of bool (E^omega) st P[i, x, y]
+A1: for i being Element of NAT for x being Element of bool (E^omega) ex y
+    being Element of bool (E^omega) st P[i, x, y]
     proof
       let i be Element of NAT;
       let x be Element of bool (E^omega);
@@ -699,17 +760,16 @@ A1: for i being Element of NAT for x being Element of bool (E^omega)
       thus thesis;
     end;
     consider f being Function of NAT, bool (E^omega) such that
-A2: f.0 = {<%>E} & for i being Element of NAT holds P[i, f.i, f.(i + 1)]
-    from RECDEF_1:sch 2(A1);
+A2: f.0 = {<%>E} & for i being Element of NAT holds P[i, f.i, f.(i + 1
+    )] from RECDEF_1:sch 2(A1);
     consider C being Subset of E^omega such that
 A3: C = f.n;
     take C;
     now
       let i;
       reconsider j = i as Element of NAT by ORDINAL1:def 13;
-      consider B, C such that
-A4:   C = f.(j + 1) & B = f.j & C = B ^^ A by A2;
-      thus f.(i + 1) = f.i ^^ A by A4;
+      ex B, C st C = f.(j + 1) & B = f.j & C = B ^^ A by A2;
+      hence f.(i + 1) = f.i ^^ A;
     end;
     hence thesis by A2,A3;
   end;
@@ -717,20 +777,24 @@ A4:   C = f.(j + 1) & B = f.j & C = B ^^ A by A2;
   proof
     let C1, C2 be Subset of E^omega;
     given f1 being Function of NAT, bool (E^omega) such that
-A5: C1 = f1.n & f1.0 = {<%>E} & for i holds f1.(i + 1) = f1.i ^^ A;
+A4: C1 = f1.n and
+A5: f1.0 = {<%>E} and
+A6: for i holds f1.(i + 1) = f1.i ^^ A;
     given f2 being Function of NAT, bool (E^omega) such that
-A6: C2 = f2.n & f2.0 = {<%>E} & for i holds f2.(i + 1) = f2.i ^^ A;
+A7: C2 = f2.n and
+A8: f2.0 = {<%>E} and
+A9: for i holds f2.(i + 1) = f2.i ^^ A;
     defpred P[Nat] means f1.$1 = f2.$1;
-A7: P[0] by A5,A6;
-A8: now
+A10: now
       let k;
       assume
-A9:   P[k];
-      f2.(k + 1) = f2.k ^^ A by A6;
-      hence P[k + 1] by A5,A9;
+A11:  P[k];
+      f2.(k + 1) = f2.k ^^ A by A9;
+      hence P[k + 1] by A6,A11;
     end;
-    for k holds P[k] from NAT_1:sch 2(A7, A8);
-    hence thesis by A5,A6;
+A12: P[0] by A5,A8;
+    for k holds P[k] from NAT_1:sch 2(A12, A10);
+    hence thesis by A4,A7;
   end;
 end;
 
@@ -741,29 +805,30 @@ theorem Th24:
   A |^ (n + 1) = (A |^ n) ^^ A
 proof
   consider concat being Function of NAT, bool (E^omega) such that
-A1: A |^ n = concat.n & concat.0 = {<%>E} &
-  for i holds concat.(i + 1) = concat.i ^^ A by Def2;
-  concat.(n + 1) = (A |^ n) ^^ A by A1;
-  hence thesis by A1,Def2;
+A1: A |^ n = concat.n and
+A2: concat.0 = {<%>E} and
+A3: for i holds concat.(i + 1) = concat.i ^^ A by Def2;
+  concat.(n + 1) = (A |^ n) ^^ A by A1,A3;
+  hence thesis by A2,A3,Def2;
 end;
 
 theorem Th25:
   A |^ 0 = {<%>E}
 proof
-  consider concat being Function of NAT, bool (E^omega) such that
-A1: A |^ 0 = concat.0 & concat.0 = {<%>E} &
-  for i holds concat.(i + 1) = concat.i ^^ A by Def2;
-  thus thesis by A1;
+  ex concat being Function of NAT, bool (E^omega) st A |^ 0 = concat.0 &
+  concat.0 = {<%>E} & for i holds concat.(i + 1) = concat.i ^^ A by Def2;
+  hence thesis;
 end;
 
 theorem Th26:
   A |^ 1 = A
 proof
   consider concat being Function of NAT, bool (E^omega) such that
-A1: A |^ 1 = concat.1 & concat.0 = {<%>E} &
-  for i holds concat.(i + 1) = concat.i ^^ A by Def2;
+A1: A |^ 1 = concat.1 and
+A2: concat.0 = {<%>E} & for i holds concat.(i + 1) = concat.i ^^ A by
+  Def2;
   thus A |^ 1 = concat.(0 + 1) by A1
-    .= {<%>E} ^^ A by A1
+    .= {<%>E} ^^ A by A2
     .= A by Th14;
 end;
 
@@ -778,72 +843,74 @@ end;
 theorem Th28:
   A |^ n = {} iff n > 0 & A = {}
 proof
+  defpred P[Nat] means A |^ $1 = {};
   thus A |^ n = {} implies n > 0 & A = {}
   proof
     assume that
 A1: A |^ n = {} and
 A2: n <= 0 or A <> {};
 A3: now
+      defpred P[Nat] means A |^ $1 <> {};
       assume
 A4:   A <> {};
-      defpred P[Nat] means A |^ $1 <> {};
-A5:   P[0]
-      proof
-        A |^ 0 = {<%>E} by Th25;
-        hence thesis;
-      end;
-A6:   now
+A5:   now
         let n;
-        assume P[n];
+        assume
+        P[n];
         then consider a1 such that
-A7:     a1 in A |^ n by SUBSET_1:10;
+A6:     a1 in A |^ n by SUBSET_1:10;
         consider a2 such that
-A8:     a2 in A by A4,SUBSET_1:10;
-        a1 ^ a2 in A |^ n ^^ A by A7,A8,Def1;
+A7:     a2 in A by A4,SUBSET_1:10;
+        a1 ^ a2 in A |^ n ^^ A by A6,A7,Def1;
         hence P[n + 1] by Th24;
       end;
-      for n holds P[n] from NAT_1:sch 2(A5, A6);
+      A |^ 0 = {<%>E} by Th25;
+      then
+A8:   P[0];
+      for n holds P[n] from NAT_1:sch 2(A8, A5);
       hence contradiction by A1;
     end;
     now
-      assume n <= 0;
+      assume
+      n <= 0;
       then n = 0;
       then A |^ n = {<%>E} by Th25;
       hence contradiction by A1;
     end;
     hence thesis by A2,A3;
   end;
-  assume
-A9: n > 0 & A = {};
-  then
-A10: n >= 0 + 1 by NAT_1:13;
-  defpred P[Nat] means A |^ $1 = {};
-A11: P[1] by A9,Th26;
-A12: now
+  assume that
+A9: n > 0 and
+A10: A = {};
+A11: now
     let m be Nat;
-    assume 1 <= m & P[m];
+    assume that
+    1 <= m and
+    P[m];
     {}(E^omega) |^ (m + 1) = {}(E^omega) |^ m ^^ {}(E^omega) by Th24
       .= {} by Th13;
-    hence P[m + 1] by A9;
+    hence P[m + 1] by A10;
   end;
-  for m being Nat st m >= 1 holds P[m] from NAT_1:sch 8(A11, A12);
-  hence thesis by A10;
+A12: P[1] by A10,Th26;
+A13: for m being Nat st m >= 1 holds P[m] from NAT_1:sch 8(A12, A11);
+  n >= 0 + 1 by A9,NAT_1:13;
+  hence thesis by A13;
 end;
 
 theorem Th29:
   {<%>E} |^ n = {<%>E}
 proof
   defpred P[Nat] means {<%>E} |^ $1 = {<%>E};
-A1: P[0] by Th25;
-A2: now
+A1: now
     let n;
     assume
-A3: P[n];
+A2: P[n];
     {<%>E} |^ (n + 1) = ({<%>E} |^ n) ^^ {<%>E} by Th24
-      .= {<%>E} by A3,Th14;
+      .= {<%>E} by A2,Th14;
     hence P[n + 1];
   end;
-  for n holds P[n] from NAT_1:sch 2(A1, A2);
+A3: P[0] by Th25;
+  for n holds P[n] from NAT_1:sch 2(A3, A1);
   hence thesis;
 end;
 
@@ -855,7 +922,8 @@ proof
     assume
 A1: A |^ n = {<%>E};
     now
-      assume n > 0;
+      assume
+      n > 0;
       then consider m such that
 A2:   m + 1 = n by NAT_1:6;
       A |^ n = (A |^ m) ^^ A by A2,Th24;
@@ -863,169 +931,170 @@ A2:   m + 1 = n by NAT_1:6;
     end;
     hence thesis;
   end;
-  assume n = 0 or A = {<%>E};
+  assume
+  n = 0 or A = {<%>E};
   hence thesis by Th25,Th29;
 end;
 
 theorem Th31:
   <%>E in A implies <%>E in A |^ n
 proof
+  defpred P[Nat] means <%>E in A |^ $1;
   assume
 A1: <%>E in A;
-  defpred P[Nat] means <%>E in A |^ $1;
-A2: P[0]
-  proof
-    A |^ 0 = {<%>E} by Th25;
-    hence thesis by TARSKI:def 1;
-  end;
-A3: now
+A2: now
     let n;
-    assume P[n];
+    assume
+    P[n];
     then <%>E in (A |^ n) ^^ A by A1,Th16;
     hence P[n + 1] by Th24;
   end;
-  for n holds P[n] from NAT_1:sch 2(A2, A3);
+  A |^ 0 = {<%>E} by Th25;
+  then
+A3: P[0] by TARSKI:def 1;
+  for n holds P[n] from NAT_1:sch 2(A3, A2);
   hence thesis;
 end;
 
 theorem
   <%>E in A |^ n & n > 0 implies <%>E in A
 proof
-  assume
-A1: <%>E in A |^ n & n > 0;
-  then consider m such that
-A2: m + 1 = n by NAT_1:6;
-  A |^ n = (A |^ m) ^^ A by A2,Th24;
-  then consider a1, a2 such that
-A3: a1 in A |^ m & a2 in A & a1 ^ a2 = <%>E by A1,Def1;
-  thus thesis by A3,AFINSQ_1:33;
+  assume that
+A1: <%>E in A |^ n and
+A2: n > 0;
+  consider m such that
+A3: m + 1 = n by A2,NAT_1:6;
+  A |^ n = (A |^ m) ^^ A by A3,Th24;
+  then ex a1, a2 st a1 in A |^ m & a2 in A & a1 ^ a2 = <%>E by A1,Def1;
+  hence thesis by AFINSQ_1:33;
 end;
 
 theorem Th33:
   (A |^ n) ^^ A = A ^^ (A |^ n)
 proof
   defpred P[Nat] means (A |^ $1) ^^ A = A ^^ (A |^ $1);
-A1: P[0]
-  proof
-    thus (A |^ 0) ^^ A = {<%>E} ^^ A by Th25
-      .= A by Th14
-      .= A ^^ {<%>E} by Th14
-      .= A ^^ (A |^ 0) by Th25;
-  end;
-A2: now
+A1: now
     let n;
     assume
-A3: P[n];
+A2: P[n];
     (A |^ (n + 1)) ^^ A = ((A |^ n) ^^ A) ^^ A by Th24
-      .= A ^^ ((A |^ n) ^^ A) by A3,Th19
+      .= A ^^ ((A |^ n) ^^ A) by A2,Th19
       .= A ^^ (A |^ (n + 1)) by Th24;
     hence P[n + 1];
   end;
-  for n holds P[n] from NAT_1:sch 2(A1, A2);
+  (A |^ 0) ^^ A = {<%>E} ^^ A by Th25
+    .= A by Th14
+    .= A ^^ {<%>E} by Th14
+    .= A ^^ (A |^ 0) by Th25;
+  then
+A3: P[0];
+  for n holds P[n] from NAT_1:sch 2(A3, A1);
   hence thesis;
 end;
 
 theorem Th34:
   A |^ (m + n) = (A |^ m) ^^ (A |^ n)
 proof
-  defpred P[Nat] means
-  for m, n st m + n <= $1 holds A |^ (m + n) = (A |^ m) ^^ (A |^ n);
-A1: P[0]
-  proof
-    let m, n;
-    assume m + n <= 0;
-    then
-A2: m + n = 0;
-    then
-A3: m = 0 & n = 0;
-    thus A |^ (m + n) = (A |^ 0) ^^ {<%>E} by A2,Th14
-      .= (A |^ m) ^^ (A |^ n) by A3,Th25;
-  end;
-A4: now
+  defpred P[Nat] means for m, n st m + n <= $1 holds A |^ (m + n) = (A |^ m)
+  ^^ (A |^ n);
+A1: now
     let l;
     assume
-A5: P[l];
+A2: P[l];
     now
       let m, n be Nat;
-      assume
-A6:   m + n <= l + 1;
-A7:   now
+A3:   now
         assume
-A8:     m + n = l + 1;
-A9:     now
+        m + n < l + 1;
+        then m + n <= l by NAT_1:13;
+        hence A |^ (m + n) = (A |^ m) ^^ (A |^ n) by A2;
+      end;
+A4:   now
+        assume
+A5:     m + n = l + 1;
+A6:     now
           assume
-A10:      m = 0;
-          thus A |^ (m + n) = {<%>E} ^^ (A |^ (l + 1)) by A8,Th14
-            .= (A |^ m) ^^ (A |^ n) by A8,A10,Th25;
+A7:       n = 0;
+          thus A |^ (m + n) = (A |^ (l + 1)) ^^ {<%>E} by A5,Th14
+            .= (A |^ m) ^^ (A |^ n) by A5,A7,Th25;
         end;
-A11:    now
-          assume
-A12:      n = 0;
-          thus A |^ (m + n) = (A |^ (l + 1)) ^^ {<%>E} by A8,Th14
-            .= (A |^ m) ^^ (A |^ n) by A8,A12,Th25;
-        end;
-        now
-          assume
-A13:      m > 0 & n > 0;
-          then consider k such that
-A14:      k + 1 = m by NAT_1:6;
-          A |^ (m + n) = A |^ (k + n + 1) by A14
+A8:     now
+          assume that
+A9:       m > 0 and
+A10:      n > 0;
+          consider k such that
+A11:      k + 1 = m by A9,NAT_1:6;
+          A |^ (m + n) = A |^ (k + n + 1) by A11
             .= (A |^ (k + n)) ^^ A by Th24
             .= A ^^ (A |^ (k + n)) by Th33
-            .= A ^^ ((A |^ k) ^^ (A |^ n)) by A5,A8,A14
+            .= A ^^ ((A |^ k) ^^ (A |^ n)) by A2,A5,A11
             .= (A ^^ (A |^ k)) ^^ (A |^ n) by Th19
             .= ((A |^ k) ^^ A) ^^ (A |^ n) by Th33
             .= ((A |^ k) ^^ (A |^ 1)) ^^ (A |^ n) by Th26
-            .= (A |^ m) ^^ (A |^ n) by A5,A8,A13,A14,Th2;
+            .= (A |^ m) ^^ (A |^ n) by A2,A5,A10,A11,Th2;
           hence A |^ (m + n) = (A |^ m) ^^ (A |^ n);
         end;
-        hence A |^ (m + n) = (A |^ m) ^^ (A |^ n) by A9,A11;
+        now
+          assume
+A12:      m = 0;
+          thus A |^ (m + n) = {<%>E} ^^ (A |^ (l + 1)) by A5,Th14
+            .= (A |^ m) ^^ (A |^ n) by A5,A12,Th25;
+        end;
+        hence A |^ (m + n) = (A |^ m) ^^ (A |^ n) by A6,A8;
       end;
-      now
-        assume m + n < l + 1;
-        then m + n <= l by NAT_1:13;
-        hence A |^ (m + n) = (A |^ m) ^^ (A |^ n) by A5;
-      end;
-      hence A |^ (m + n) = (A |^ m) ^^ (A |^ n) by A6,A7,XXREAL_0:1;
+      assume
+      m + n <= l + 1;
+      hence A |^ (m + n) = (A |^ m) ^^ (A |^ n) by A4,A3,XXREAL_0:1;
     end;
     hence P[l + 1];
   end;
-  for l holds P[l] from NAT_1:sch 2(A1, A4);
+A13: P[0]
+  proof
+    let m, n;
+    assume
+A14: m + n <= 0;
+    then
+A15: m = 0;
+A16: m + n = 0 by A14;
+    hence A |^ (m + n) = (A |^ 0) ^^ {<%>E} by Th14
+      .= (A |^ m) ^^ (A |^ n) by A16,A15,Th25;
+  end;
+  for l holds P[l] from NAT_1:sch 2(A13, A1);
   hence thesis;
 end;
 
 theorem
   (A |^ m) |^ n = A |^ (m * n)
 proof
-  defpred P[Nat] means
-  for m, n st m + n <= $1 holds (A |^ m) |^ n = A |^ (m * n);
-A1: P[0]
-  proof
-    let m, n;
-    assume m + n <= 0;
-    then m + n = 0;
-    then
-A2: m = 0 & n = 0;
-    hence (A |^ m) |^ n = {<%>E} by Th25
-      .= A |^ (m * n) by A2,Th25;
-  end;
-A3: now
+  defpred P[Nat] means for m, n st m + n <= $1 holds (A |^ m) |^ n = A |^ (m *
+  n);
+A1: now
     let l;
     assume
-A4: P[l];
+A2: P[l];
     now
       let m, n;
-      assume
-A5:   m + n <= l + 1;
-A6:   now
+A3:   now
         assume
-A7:     m + n = l + 1;
-A8:     now
-          assume
-A9:       m = 0;
-          hence (A |^ m) |^ n = {<%>E} |^ n by Th25
-            .= {<%>E} by Th29
-            .= A |^ (m * n) by A9,Th25;
+        m + n < l + 1;
+        then m + n <= l by NAT_1:13;
+        hence (A |^ m) |^ n = A |^ (m * n) by A2;
+      end;
+A4:   now
+        assume
+A5:     m + n = l + 1;
+A6:     now
+          assume that
+          m > 0 and
+A7:       n > 0;
+          consider k such that
+A8:       k + 1 = n by A7,NAT_1:6;
+A9:       m + k <= l by A5,A8;
+          (A |^ m) |^ n = ((A |^ m) |^ k) ^^ (A |^ m) by A8,Th24
+            .= (A |^ (m * k)) ^^ (A |^ m) by A2,A9
+            .= A |^ (m * k + m) by Th34
+            .= A |^ (m * n) by A8;
+          hence (A |^ m) |^ n = A |^ (m * n);
         end;
 A10:    now
           assume
@@ -1034,33 +1103,37 @@ A11:      n = 0;
             .= A |^ (m * n) by A11,Th25;
         end;
         now
-          assume m > 0 & n > 0;
-          then consider k such that
-A12:      k + 1 = n by NAT_1:6;
-A13:      m + k <= l by A7,A12;
-          (A |^ m) |^ n = ((A |^ m) |^ k) ^^ (A |^ m) by A12,Th24
-            .= (A |^ (m * k)) ^^ (A |^ m) by A4,A13
-            .= A |^ (m * k + m) by Th34
-            .= A |^ (m * n) by A12;
-          hence (A |^ m) |^ n = A |^ (m * n);
+          assume
+A12:      m = 0;
+          hence (A |^ m) |^ n = {<%>E} |^ n by Th25
+            .= {<%>E} by Th29
+            .= A |^ (m * n) by A12,Th25;
         end;
-        hence (A |^ m) |^ n = A |^ (m * n) by A8,A10;
+        hence (A |^ m) |^ n = A |^ (m * n) by A10,A6;
       end;
-      now
-        assume m + n < l + 1;
-        then m + n <= l by NAT_1:13;
-        hence (A |^ m) |^ n = A |^ (m * n) by A4;
-      end;
-      hence (A |^ m) |^ n = A |^ (m * n) by A5,A6,XXREAL_0:1;
+      assume
+      m + n <= l + 1;
+      hence (A |^ m) |^ n = A |^ (m * n) by A4,A3,XXREAL_0:1;
     end;
     hence P[l + 1];
   end;
-A14: for l holds P[l] from NAT_1:sch 2(A1, A3);
+A13: P[0]
+  proof
+    let m, n;
+    assume
+A14: m + n <= 0;
+    then
+A15: m = 0;
+    n = 0 by A14;
+    hence (A |^ m) |^ n = {<%>E} by Th25
+      .= A |^ (m * n) by A15,Th25;
+  end;
+A16: for l holds P[l] from NAT_1:sch 2(A13, A1);
   now
     let m, n;
     reconsider l = m + n as Nat;
     m + n <= l;
-    hence (A |^ m) |^ n = A |^ (m * n) by A14;
+    hence (A |^ m) |^ n = A |^ (m * n) by A16;
   end;
   hence thesis;
 end;
@@ -1094,22 +1167,20 @@ end;
 theorem Th38:
   A c= B implies A |^ n c= B |^ n
 proof
+  defpred P[Nat] means A |^ $1 c= B |^ $1;
   assume
 A1: A c= B;
-  defpred P[Nat] means A |^ $1 c= B |^ $1;
-A2: P[0]
-  proof
-    A |^ 0 = {<%>E} & B |^ 0 = {<%>E} by Th25;
-    hence thesis;
-  end;
-A3: now
+A2: now
     let n;
     assume
-A4: P[n];
+A3: P[n];
     (A |^ n) ^^ A = A |^ (n + 1) & (B |^ n) ^^ B = B |^ (n + 1) by Th24;
-    hence P[n + 1] by A1,A4,Th18;
+    hence P[n + 1] by A1,A3,Th18;
   end;
-  for n holds P[n] from NAT_1:sch 2(A2, A3);
+  A |^ 0 = {<%>E} by Th25;
+  then
+A4: P[0] by Th25;
+  for n holds P[n] from NAT_1:sch 2(A4, A2);
   hence thesis;
 end;
 
@@ -1130,7 +1201,8 @@ end;
 theorem Th41:
   a in C |^ m & b in C |^ n implies a ^ b in C |^ (m + n)
 proof
-  assume a in C |^ m & b in C |^ n;
+  assume
+  a in C |^ m & b in C |^ n;
   then a ^ b in (C |^ m) ^^ (C |^ n) by Def1;
   hence thesis by Th34;
 end;
@@ -1143,13 +1215,12 @@ begin
 definition
   let E, A;
   func A* -> Subset of E^omega equals
-
   union { B : ex n st B = A |^ n };
   coherence
   proof
     defpred P[set] means ex n st $1 = A |^ n;
-    reconsider M = { B : P[B] } as Subset-Family of E^omega
-    from DOMAIN_1:sch 7;
+    reconsider M = { B : P[B] } as Subset-Family of E^omega from DOMAIN_1:sch
+    7;
     union M is Subset of E^omega;
     hence thesis;
   end;
@@ -1163,11 +1234,12 @@ theorem Th42:
 proof
   thus x in A* implies ex n st x in A |^ n
   proof
-    assume x in A*;
+    defpred P[set] means ex k st $1 = A |^ k;
+    assume
+    x in A*;
     then consider X such that
 A1: x in X and
 A2: X in { B : ex k st B = A |^ k } by TARSKI:def 4;
-    defpred P[set] means ex k st $1 = A |^ k;
 A3: X in { B : P[B] } by A2;
     P[X] from CARD_FIL:sch 1(A3);
     hence thesis by A1;
@@ -1176,9 +1248,10 @@ A3: X in { B : P[B] } by A2;
 A4: x in A |^ n;
   defpred P[set] means ex k st $1 = A |^ k;
   consider B such that
-A5: x in B & P[B] by A4;
+A5: x in B and
+A6: P[B] by A4;
   reconsider A = { C : P[C] } as Subset-Family of E^omega from DOMAIN_1:sch 7;
-  B in A by A5;
+  B in A by A6;
   hence thesis by A5,TARSKI:def 4;
 end;
 
@@ -1206,13 +1279,14 @@ end;
 theorem Th46:
   a in C* & b in C* implies a ^ b in C*
 proof
-  assume
-A1: a in C* & b in C*;
-  then consider k such that
-A2: a in C |^ k by Th42;
+  assume that
+A1: a in C* and
+A2: b in C*;
+  consider k such that
+A3: a in C |^ k by A1,Th42;
   consider l such that
-A3: b in C |^ l by A1,Th42;
-  a ^ b in C |^ (k + l) by A2,A3,Th41;
+A4: b in C |^ l by A2,Th42;
+  a ^ b in C |^ (k + l) by A3,A4,Th41;
   hence thesis by Th42;
 end;
 
@@ -1224,10 +1298,10 @@ A1: A c= C* & B c= C*;
   thus thesis
   proof
     let x;
-    assume x in A ^^ B;
-    then consider a, b such that
-A2: a in A & b in B & x = a ^ b by Def1;
-    thus thesis by A1,A2,Th46;
+    assume
+    x in A ^^ B;
+    then ex a, b st a in A & b in B & x = a ^ b by Def1;
+    hence thesis by A1,Th46;
   end;
 end;
 
@@ -1236,29 +1310,29 @@ theorem
 proof
   thus A* = {<%>E} implies A = {} or A = {<%>E}
   proof
+A1: A c= A* by Th44;
     assume that
-A1: A* = {<%>E} and
-A2: A <> {} & A <> {<%>E};
-    consider x such that
-A3: x in A & x <> <%>E by A2,ZFMISC_1:41;
-    A c= A* by Th44;
-    hence contradiction by A1,A3,TARSKI:def 1;
+A2: A* = {<%>E} and
+A3: A <> {} & A <> {<%>E};
+    ex x st x in A & x <> <%>E by A3,ZFMISC_1:41;
+    hence contradiction by A2,A1,TARSKI:def 1;
   end;
 A4: now
     assume
 A5: A = {};
 A6: now
       let x;
-      assume x in A*;
+      assume
+      x in A*;
       then consider n such that
 A7:   x in A |^ n by Th42;
-A8:   n = 0 implies x in {<%>E} by A7,Th25;
-      n > 0 implies contradiction by A5,A7,Th28;
-      hence x in {<%>E} by A8;
+      n = 0 implies x in {<%>E} by A7,Th25;
+      hence x in {<%>E} by A5,A7,Th28;
     end;
     now
       let x;
-      assume x in {<%>E};
+      assume
+      x in {<%>E};
       then x in A |^ 0 by Th25;
       hence x in A* by Th42;
     end;
@@ -1266,23 +1340,24 @@ A8:   n = 0 implies x in {<%>E} by A7,Th25;
   end;
   now
     assume
-A9: A = {<%>E};
-A10: A* c= {<%>E}
+A8: A = {<%>E};
+A9: A* c= {<%>E}
     proof
       let x;
-      assume x in A*;
-      then consider n such that
-A11:  x in A |^ n by Th42;
-      thus thesis by A9,A11,Th29;
+      assume
+      x in A*;
+      then ex n st x in A |^ n by Th42;
+      hence thesis by A8,Th29;
     end;
     {<%>E} c= A*
     proof
       let x;
-      assume x in {<%>E};
+      assume
+      x in {<%>E};
       then x in A |^ 0 by Th25;
       hence thesis by Th42;
     end;
-    hence A* = {<%>E} by A10,XBOOLE_0:def 10;
+    hence A* = {<%>E} by A9,XBOOLE_0:def 10;
   end;
   hence thesis by A4;
 end;
@@ -1298,31 +1373,36 @@ end;
 theorem
   A* = {x} implies x = <%>E
 proof
-  assume
-A1: A* = {x} & x <> <%>E;
-  then
-A2: x in A* by ZFMISC_1:37;
+  assume that
+A1: A* = {x} and
+A2: x <> <%>E;
   reconsider a = x as Element of E^omega by A1,ZFMISC_1:37;
-A3: a ^ a in A* by A2,Th46;
-  a ^ a <> x by A1,Th12;
+  x in A* by A1,ZFMISC_1:37;
+  then
+A3: a ^ a in A* by Th46;
+  a ^ a <> x by A2,Th12;
   hence thesis by A1,A3,TARSKI:def 1;
 end;
 
 theorem Th51:
   x in A |^ (m + 1) implies x in (A*) ^^ A & x in A ^^ (A*)
 proof
-  assume x in A |^ (m + 1);
+  assume
+  x in A |^ (m + 1);
   then
 A1: x in (A |^ m) ^^ A by Th24;
   then consider a, b such that
-A2: a in A |^ m & b in A & x = a ^ b by Def1;
-  a in A* & b in A by A2,Th42;
-  hence x in (A*) ^^ A by A2,Def1;
+A2: a in A |^ m and
+A3: b in A & x = a ^ b by Def1;
+  a in A* by A2,Th42;
+  hence x in (A*) ^^ A by A3,Def1;
   x in A ^^ (A |^ m) by A1,Th33;
   then consider a, b such that
-A3: a in A & b in A |^ m & x = a ^ b by Def1;
-  a in A & b in A* by A3,Th42;
-  hence thesis by A3,Def1;
+A4: a in A and
+A5: b in A |^ m and
+A6: x = a ^ b by Def1;
+  b in A* by A5,Th42;
+  hence thesis by A4,A6,Def1;
 end;
 
 theorem
@@ -1331,11 +1411,13 @@ proof
   thus A |^ (m + 1) c= (A*) ^^ A
   proof
     let x;
-    assume x in A |^ (m + 1);
+    assume
+    x in A |^ (m + 1);
     hence thesis by Th51;
   end;
   let x;
-  assume x in A |^ (m + 1);
+  assume
+  x in A |^ (m + 1);
   hence thesis by Th51;
 end;
 
@@ -1344,25 +1426,31 @@ theorem Th53:
 proof
 A1: now
     let x;
-    assume x in (A*) ^^ A;
+    assume
+    x in A ^^ (A*);
     then consider a, b such that
-A2: a in A* & b in A & x = a ^ b by Def1;
+A2: a in A and
+A3: b in A* and
+A4: x = a ^ b by Def1;
     consider n such that
-A3: a in A |^ n by A2,Th42;
-    b in A |^ 1 by A2,Th26;
-    then a ^ b in A |^ (n + 1) by A3,Th41;
-    hence x in A* by A2,Th42;
+A5: b in A |^ n by A3,Th42;
+    a in A |^ 1 by A2,Th26;
+    then a ^ b in A |^ (n + 1) by A5,Th41;
+    hence x in A* by A4,Th42;
   end;
   now
     let x;
-    assume x in A ^^ (A*);
+    assume
+    x in (A*) ^^ A;
     then consider a, b such that
-A4: a in A & b in A* & x = a ^ b by Def1;
+A6: a in A* and
+A7: b in A and
+A8: x = a ^ b by Def1;
     consider n such that
-A5: b in A |^ n by A4,Th42;
-    a in A |^ 1 by A4,Th26;
-    then a ^ b in A |^ (n + 1) by A5,Th41;
-    hence x in A* by A4,Th42;
+A9: a in A |^ n by A6,Th42;
+    b in A |^ 1 by A7,Th26;
+    then a ^ b in A |^ (n + 1) by A9,Th41;
+    hence x in A* by A8,Th42;
   end;
   hence thesis by A1;
 end;
@@ -1373,13 +1461,15 @@ proof
   thus (A*) ^^ A c= A*
   proof
     let x;
-    assume x in (A*) ^^ A;
+    assume
+    x in (A*) ^^ A;
     hence thesis by Th53;
   end;
   thus A ^^ (A*) c= A*
   proof
     let x;
-    assume x in A^^ (A*);
+    assume
+    x in A^^ (A*);
     hence thesis by Th53;
   end;
 end;
@@ -1390,64 +1480,67 @@ proof
   assume
 A1: <%>E in A;
 A2: <%>E in A* by Th49;
-A3: for x holds (x in (A*) ^^ A implies x in A*) &
-  (x in A ^^ (A*) implies x in A*) by Th53;
-  now
+A3: now
     let x;
-    assume x in A*;
+    assume
+    x in A*;
     then consider n such that
 A4: x in A |^ n by Th42;
 A5: now
-      assume n = 0;
+      assume
+      n = 0;
       then x in {<%>E} by A4,Th25;
       then x = <%>E by TARSKI:def 1;
       hence x in (A*) ^^ A & x in A ^^ (A*) by A1,A2,Th16;
     end;
 A6: now
-      assume n > 0;
-      then consider m such that
-A7:   m + 1 = n by NAT_1:6;
-      thus x in (A*) ^^ A by A4,A7,Th51;
+      assume
+      n > 0;
+      then ex m st m + 1 = n by NAT_1:6;
+      hence x in A ^^ (A*) by A4,Th51;
     end;
     now
-      assume n > 0;
-      then consider m such that
-A8:   m + 1 = n by NAT_1:6;
-      thus x in A ^^ (A*) by A4,A8,Th51;
+      assume
+      n > 0;
+      then ex m st m + 1 = n by NAT_1:6;
+      hence x in (A*) ^^ A by A4,Th51;
     end;
     hence x in (A*) ^^ A & x in A ^^ (A*) by A5,A6;
   end;
-  then (x in A* implies x in (A*) ^^ A) & (x in A* implies x in A ^^ (A*));
-  hence thesis by A3,TARSKI:2;
+  then
+A7: x in A* implies x in (A*) ^^ A;
+A8: x in A* implies x in A ^^ (A*) by A3;
+  for x holds (x in (A*) ^^ A implies x in A*) & (x in A ^^ (A*) implies x
+  in A*) by Th53;
+  hence thesis by A7,A8,TARSKI:2;
 end;
 
 theorem
   <%>E in A implies A* = (A*) ^^ (A |^ n) & A* = (A |^ n) ^^ (A*)
 proof
-  assume
-A1: <%>E in A;
   defpred P[Nat] means A* = (A*) ^^ (A |^ $1) & A* = (A |^ $1) ^^ (A*);
-A2: P[0]
-  proof
-    thus (A*) ^^ (A |^ 0) = (A*) ^^ {<%>E} by Th25
-      .= A* by Th14;
-    thus (A |^ 0) ^^ (A*) = {<%>E} ^^ (A*) by Th25
-      .= A* by Th14;
-  end;
+A1: (A |^ 0) ^^ (A*) = {<%>E} ^^ (A*) by Th25
+    .= A* by Th14;
+  assume
+A2: <%>E in A;
 A3: now
     let n;
     assume
 A4: P[n];
 A5: (A*) ^^ (A |^ (n + 1)) = (A*) ^^ ((A |^ n) ^^ A) by Th24
       .= (A*) ^^ A by A4,Th19
-      .= A* by A1,Th55;
+      .= A* by A2,Th55;
     (A |^ (n + 1)) ^^ (A*) = ((A |^ n) ^^ A) ^^ (A*) by Th24
       .= (A ^^ (A |^ n)) ^^ (A*) by Th33
       .= A ^^ (A*) by A4,Th19
-      .= A* by A1,Th55;
+      .= A* by A2,Th55;
     hence P[n + 1] by A5;
   end;
-  for n holds P[n] from NAT_1:sch 2(A2, A3);
+  (A*) ^^ (A |^ 0) = (A*) ^^ {<%>E} by Th25
+    .= A* by Th14;
+  then
+A6: P[0] by A1;
+  for n holds P[n] from NAT_1:sch 2(A6, A3);
   hence thesis;
 end;
 
@@ -1456,62 +1549,72 @@ theorem Th57:
 proof
 A1: now
     let x;
-    assume x in A*;
-    then consider n such that
-A2: x in A |^ n by Th42;
-A3: n = 0 implies x in {<%>E} by A2,Th25;
-    now
-      assume n > 0;
-      then consider m such that
-A4:   m + 1 = n by NAT_1:6;
-      thus x in (A*) ^^ A by A2,A4,Th51;
-    end;
-    hence x in {<%>E} \/ (A*) ^^ A by A3,XBOOLE_0:def 3;
-  end;
-A5: now
-    let x;
-    assume x in A*;
-    then consider n such that
-A6: x in A |^ n by Th42;
-A7: n = 0 implies x in {<%>E} by A6,Th25;
-    now
-      assume n > 0;
-      then consider m such that
-A8:   m + 1 = n by NAT_1:6;
-      thus x in A ^^ (A*) by A6,A8,Th51;
-    end;
-    hence x in {<%>E} \/ A ^^ (A*) by A7,XBOOLE_0:def 3;
-  end;
-A9: now
-    let x;
-    assume x in {<%>E} \/ A ^^ (A*);
-    then x in {<%>E} or x in A ^^ (A*) by XBOOLE_0:def 3;
-    then x = <%>E or x in A* by Th53,TARSKI:def 1;
-    hence x in A* by Th49;
-  end;
-  now
-    let x;
-    assume x in {<%>E} \/ (A*) ^^ A;
+    assume
+    x in {<%>E} \/ (A*) ^^ A;
     then x in {<%>E} or x in (A*) ^^ A by XBOOLE_0:def 3;
     then x = <%>E or x in A* by Th53,TARSKI:def 1;
     hence x in A* by Th49;
   end;
-  hence thesis by A1,A5,A9,TARSKI:2;
+A2: now
+    let x;
+    assume
+    x in A*;
+    then consider n such that
+A3: x in A |^ n by Th42;
+A4: now
+      assume
+      n > 0;
+      then ex m st m + 1 = n by NAT_1:6;
+      hence x in (A*) ^^ A by A3,Th51;
+    end;
+    n = 0 implies x in {<%>E} by A3,Th25;
+    hence x in {<%>E} \/ (A*) ^^ A by A4,XBOOLE_0:def 3;
+  end;
+A5: now
+    let x;
+    assume
+    x in A*;
+    then consider n such that
+A6: x in A |^ n by Th42;
+A7: now
+      assume
+      n > 0;
+      then ex m st m + 1 = n by NAT_1:6;
+      hence x in A ^^ (A*) by A6,Th51;
+    end;
+    n = 0 implies x in {<%>E} by A6,Th25;
+    hence x in {<%>E} \/ A ^^ (A*) by A7,XBOOLE_0:def 3;
+  end;
+  now
+    let x;
+    assume
+    x in {<%>E} \/ A ^^ (A*);
+    then x in {<%>E} or x in A ^^ (A*) by XBOOLE_0:def 3;
+    then x = <%>E or x in A* by Th53,TARSKI:def 1;
+    hence x in A* by Th49;
+  end;
+  hence thesis by A2,A5,A1,TARSKI:2;
 end;
 
 theorem Th58:
   A ^^ (A*) = (A*) ^^ A
 proof
 A1: A* = {<%>E} \/ A ^^ (A*) & A* = {<%>E} \/ (A*) ^^ A by Th57;
-  now per cases;
-    suppose <%>E in A;
-      then A* = A ^^ (A*) & A* = (A*) ^^ A by Th55;
-      hence thesis;
+  now
+    per cases;
+    suppose
+A2:   <%>E in A;
+      then A* = A ^^ (A*) by Th55;
+      hence thesis by A2,Th55;
     end;
-    suppose not <%>E in A;
-      then not <%>E in A ^^ (A*) & not <%>E in (A*) ^^ A by Th16;
-      then {<%>E} misses A ^^ (A*) & {<%>E} misses (A*) ^^ A by ZFMISC_1:56;
-      hence thesis by A1,XBOOLE_1:71;
+    suppose
+A3:   not <%>E in A;
+      then not <%>E in (A*) ^^ A by Th16;
+      then
+A4:   {<%>E} misses (A*) ^^ A by ZFMISC_1:56;
+      not <%>E in A ^^ (A*) by A3,Th16;
+      then {<%>E} misses A ^^ (A*) by ZFMISC_1:56;
+      hence thesis by A1,A4,XBOOLE_1:71;
     end;
   end;
   hence thesis;
@@ -1521,48 +1624,46 @@ theorem
   (A |^ n) ^^ (A*) = (A*) ^^ (A |^ n)
 proof
   defpred P[Nat] means (A |^ $1) ^^ (A*) = (A*) ^^ (A |^ $1);
-A1: P[0]
-  proof
-    thus (A |^ 0) ^^ (A*) = {<%>E} ^^ (A*) by Th25
-      .= A* by Th14
-      .= (A*) ^^ {<%>E} by Th14
-      .= (A*) ^^ (A |^ 0) by Th25;
-  end;
-A2: now
+A1: now
     let n;
     assume
-A3: P[n];
+A2: P[n];
     (A |^ (n + 1)) ^^ (A*) = (A |^ n ^^ A) ^^ (A*) by Th24
       .= A |^ n ^^ (A ^^ (A*)) by Th19
       .= A |^ n ^^ ((A*) ^^ A) by Th58
-      .= ((A*) ^^ A |^ n) ^^ A by A3,Th19
+      .= ((A*) ^^ A |^ n) ^^ A by A2,Th19
       .= (A*) ^^ (A |^ n ^^ A) by Th19
       .= (A*) ^^ A |^ (n + 1) by Th24;
     hence P[n + 1];
   end;
-  for n holds P[n] from NAT_1:sch 2(A1, A2);
+  (A |^ 0) ^^ (A*) = {<%>E} ^^ (A*) by Th25
+    .= A* by Th14
+    .= (A*) ^^ {<%>E} by Th14
+    .= (A*) ^^ (A |^ 0) by Th25;
+  then
+A3: P[0];
+  for n holds P[n] from NAT_1:sch 2(A3, A1);
   hence thesis;
 end;
 
 theorem Th60:
   A c= B* implies A |^ n c= B*
 proof
+  defpred P[Nat] means A |^ $1 c= B*;
   assume
 A1: A c= B*;
-  defpred P[Nat] means A |^ $1 c= B*;
-A2: P[0]
-  proof
-    <%>E in B* by Th49;
-    then {<%>E} c= B* by ZFMISC_1:37;
-    hence thesis by Th25;
-  end;
-A3: now
+A2: now
     let n;
-    assume P[n];
+    assume
+    P[n];
     then (A |^ n) ^^ A c= B* by A1,Th47;
     hence P[n + 1] by Th24;
   end;
-  for n holds P[n] from NAT_1:sch 2(A2, A3);
+  <%>E in B* by Th49;
+  then {<%>E} c= B* by ZFMISC_1:37;
+  then
+A3: P[0] by Th25;
+  for n holds P[n] from NAT_1:sch 2(A3, A2);
   hence thesis;
 end;
 
@@ -1574,7 +1675,8 @@ A1: A c= B*;
   thus thesis
   proof
     let x;
-    assume x in A*;
+    assume
+    x in A*;
     then consider n such that
 A2: x in A |^ n by Th42;
     A |^ n c= B* by A1,Th60;
@@ -1595,17 +1697,17 @@ end;
 theorem Th63:
   (A*)* = A*
 proof
-A1: (A*)* c= A* by Th61;
-  A* c= (A*)* by Th44;
-  hence thesis by A1,XBOOLE_0:def 10;
+  (A*)* c= A* & A* c= (A*)* by Th44,Th61;
+  hence thesis by XBOOLE_0:def 10;
 end;
 
 theorem
   (A*) ^^ (A*) = A*
 proof
-A1: (A*) ^^ (A*) c= A* by Th47;
   <%>E in A* by Th49;
-  then A* c= (A*) ^^ (A*) by Th17;
+  then
+A1: A* c= (A*) ^^ (A*) by Th17;
+  (A*) ^^ (A*) c= A* by Th47;
   hence thesis by A1,XBOOLE_0:def 10;
 end;
 
@@ -1632,42 +1734,42 @@ end;
 theorem Th68:
   A c= B* implies B* = (B \/ A)*
 proof
+  defpred P[Nat] means (B \/ A) |^ $1 c= B*;
   assume
 A1: A c= B*;
-  defpred P[Nat] means (B \/ A) |^ $1 c= B*;
-A2: P[0]
-  proof
-A3: (B \/ A) |^ 0 = {<%>E} by Th25;
-    <%>E in B* by Th49;
-    hence thesis by A3,ZFMISC_1:37;
-  end;
-A4: now
+A2: now
     let n;
     assume
-A5: P[n];
-A6: (B \/ A) |^ (n + 1) = (B \/ A) |^ n ^^ (B \/ A) by Th24;
+A3: P[n];
     B c= B* by Th44;
-    then B \/ A c= B* by A1,XBOOLE_1:8;
-    hence P[n + 1] by A5,A6,Th47;
+    then
+A4: B \/ A c= B* by A1,XBOOLE_1:8;
+    (B \/ A) |^ (n + 1) = (B \/ A) |^ n ^^ (B \/ A) by Th24;
+    hence P[n + 1] by A3,A4,Th47;
   end;
-A7: for n holds P[n] from NAT_1:sch 2(A2, A4);
-A8: (B \/ A)* c= B*
+  (B \/ A) |^ 0 = {<%>E} & <%>E in B* by Th25,Th49;
+  then
+A5: P[0] by ZFMISC_1:37;
+A6: for n holds P[n] from NAT_1:sch 2(A5, A2);
+A7: (B \/ A)* c= B*
   proof
     let x;
-    assume x in (B \/ A)*;
+    assume
+    x in (B \/ A)*;
     then consider n such that
-A9: x in (B \/ A) |^ n by Th42;
-    (B \/ A) |^ n c= B* by A7;
-    hence thesis by A9;
+A8: x in (B \/ A) |^ n by Th42;
+    (B \/ A) |^ n c= B* by A6;
+    hence thesis by A8;
   end;
   B* c= (B \/ A)* by Th62,XBOOLE_1:7;
-  hence thesis by A8,XBOOLE_0:def 10;
+  hence thesis by A7,XBOOLE_0:def 10;
 end;
 
 theorem Th69:
   a in A* implies A* = (A \/ {a})*
 proof
-  assume a in A*;
+  assume
+  a in A*;
   then {a} c= A* by ZFMISC_1:37;
   hence thesis by Th68;
 end;
@@ -1699,46 +1801,50 @@ theorem Th73:
 proof
   thus <%x%> in A* implies <%x%> in A
   proof
-    assume
-A1: <%x%> in A* & not <%x%> in A;
     defpred P[Nat] means <%x%> in A |^ $1;
-    consider n such that
-A2: P[n] by A1,Th42;
-A3: ex i being Nat st P[i] by A2;
-    ex n1 being Nat st P[n1] &
-    for n2 being Nat st P[n2] holds n1 <= n2 from NAT_1:sch 5(A3);
+    assume that
+A1: <%x%> in A* and
+A2: not <%x%> in A;
+A3: ex i being Nat st P[i] by A1,Th42;
+    ex n1 being Nat st P[n1] & for n2 being Nat st P[n2] holds n1 <= n2
+    from NAT_1:sch 5(A3);
     then consider n1 being Nat such that
 A4: P[n1] and
 A5: for n2 being Nat st P[n2] holds n1 <= n2;
 A6: now
-      assume n1 > 1;
-      then consider n2 such that
-A7:   n2 + 1 = n1 by NAT_1:6;
-      <%x%> in (A |^ n2) ^^ A by A4,A7,Th24;
-      then consider a, b such that
-A8:   a in (A |^ n2) & b in A & <%x%> = a ^ b by Def1;
-      now
-        assume
-A9:     (a = <%x%> & b = <%>E);
-        reconsider n2 as Element of NAT by ORDINAL1:def 13;
-        ex i being Element of NAT st P[i] & n1 > i
-        proof
-          take n2;
-          thus thesis by A7,A8,A9,NAT_1:13;
-        end;
-        hence contradiction by A5;
-      end;
-      hence <%x%> in A by A8,Th4;
-    end;
-A10: n1 = 1 implies <%x%> in A by A4,Th26;
-    now
-      assume n1 = 0;
+      assume
+      n1 = 0;
       then <%x%> in {<%>E} by A4,Th25;
       hence contradiction by TARSKI:def 1;
     end;
-    hence contradiction by A1,A6,A10,NAT_1:26;
+A7: now
+      assume
+      n1 > 1;
+      then consider n2 such that
+A8:   n2 + 1 = n1 by NAT_1:6;
+      <%x%> in (A |^ n2) ^^ A by A4,A8,Th24;
+      then consider a, b such that
+A9:   a in (A |^ n2) and
+A10:  b in A & <%x%> = a ^ b by Def1;
+      now
+        reconsider n2 as Element of NAT by ORDINAL1:def 13;
+        assume that
+A11:    a = <%x%> and
+        b = <%>E;
+        ex i being Element of NAT st P[i] & n1 > i
+        proof
+          take n2;
+          thus thesis by A8,A9,A11,NAT_1:13;
+        end;
+        hence contradiction by A5;
+      end;
+      hence <%x%> in A by A10,Th4;
+    end;
+    n1 = 1 implies <%x%> in A by A4,Th26;
+    hence contradiction by A2,A7,A6,NAT_1:26;
   end;
-  assume <%x%> in A;
+  assume
+  <%x%> in A;
   then <%x%> in A |^ 1 by Th26;
   hence thesis by Th42;
 end;
@@ -1752,7 +1858,8 @@ definition
   let E;
   func Lex(E) -> Subset of E^omega means
   :Def4:
-  x in it iff ex e st e in E & x = <%e%>;
+  x in it iff ex e st e in E & x
+  = <%e%>;
   existence
   proof
     defpred P[set] means ex e st e in E & $1 = <%e%>;
@@ -1763,31 +1870,34 @@ A1: x in C iff x in E^omega & P[x] from SUBSET_1:sch 1;
     proof
       thus x in C implies ex e st e in E & x = <%e%> by A1;
       given e such that
-A2:   e in E & x = <%e%>;
+A2:   e in E and
+A3:   x = <%e%>;
       {e} c= E by A2,ZFMISC_1:37;
       then rng <%e%> c= E by AFINSQ_1:36;
       then <%e%> is XFinSequence of E by RELAT_1:def 19;
       then <%e%> is Element of E^omega by AFINSQ_1:def 8;
-      hence thesis by A1,A2;
+      hence thesis by A1,A2,A3;
     end;
     hence thesis;
   end;
   uniqueness
   proof
     let C1, C2 be Subset of E^omega such that
-A3: x in C1 iff ex e st e in E & x = <%e%> and
-A4: x in C2 iff ex e st e in E & x = <%e%>;
+A4: x in C1 iff ex e st e in E & x = <%e%> and
+A5: x in C2 iff ex e st e in E & x = <%e%>;
     now
       let x;
       thus x in C1 implies x in C2
       proof
-        assume x in C1;
-        then ex e st e in E & x = <%e%> by A3;
-        hence thesis by A4;
+        assume
+        x in C1;
+        then ex e st e in E & x = <%e%> by A4;
+        hence thesis by A5;
       end;
-      assume x in C2;
-      then ex e st e in E & x = <%e%> by A4;
-      hence x in C1 by A3;
+      assume
+      x in C2;
+      then ex e st e in E & x = <%e%> by A5;
+      hence x in C1 by A4;
     end;
     hence thesis by TARSKI:2;
   end;
@@ -1800,33 +1910,37 @@ theorem Th74:
   a in Lex(E) |^ len a
 proof
   defpred P[Nat] means for a holds len a = $1 implies a in Lex(E) |^ $1;
-A1: P[0]
-  proof
-    let a;
-    assume len a = 0;
-    then a = <%>E;
-    then a in {<%>E} by TARSKI:def 1;
-    hence thesis by Th25;
-  end;
-A2: now
+A1: now
     let n;
     assume
-A3: P[n];
+A2: P[n];
     now
       let b;
-      assume len b = n + 1;
+      assume
+      len b = n + 1;
       then consider c, e such that
-A4:   len c = n & b = c ^ <%e%> by Th7;
-A5:   c in Lex(E) |^ n by A3,A4;
+A3:   len c = n and
+A4:   b = c ^ <%e%> by Th7;
       <%e%> is Element of E^omega by A4,Th5;
       then e in E by Th6;
       then <%e%> in Lex(E) by Def4;
-      then <%e%> in Lex(E) |^ 1 by Th26;
+      then
+A5:   <%e%> in Lex(E) |^ 1 by Th26;
+      c in Lex(E) |^ n by A2,A3;
       hence b in Lex(E) |^ (n + 1) by A4,A5,Th41;
     end;
     hence P[n + 1];
   end;
-  for n holds P[n] from NAT_1:sch 2(A1, A2);
+A6: P[0]
+  proof
+    let a;
+    assume
+    len a = 0;
+    then a = <%>E;
+    then a in {<%>E} by TARSKI:def 1;
+    hence thesis by Th25;
+  end;
+  for n holds P[n] from NAT_1:sch 2(A6, A1);
   hence thesis;
 end;
 
@@ -1835,7 +1949,8 @@ theorem
 proof
 A1: now
     let x;
-    assume x in E^omega;
+    assume
+    x in E^omega;
     then reconsider a = x as Element of E^omega;
     a in Lex(E) |^ len a by Th74;
     hence x in Lex(E)* by Th42;
@@ -1854,9 +1969,8 @@ A1: A* = E^omega;
     let x;
     assume
 A2: x in Lex(E);
-    then consider e such that
-A3: e in E & x = <%e%> by Def4;
-    thus thesis by A1,A2,A3,Th73;
+    then ex e st e in E & x = <%e%> by Def4;
+    hence thesis by A1,A2,Th73;
   end;
 end;
 

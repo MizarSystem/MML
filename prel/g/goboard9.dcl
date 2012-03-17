@@ -7,6 +7,7 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="TARSKI"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
@@ -15,20 +16,20 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="NAT_1"/>
+<ArticleID name="INT_1"/>
+<ArticleID name="RAT_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="FINSEQ_2"/>
 <ArticleID name="FINSEQ_5"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="MEMBERED"/>
+<ArticleID name="FINSEQ_2"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
 <ArticleID name="ALGSTR_0"/>
-<ArticleID name="INT_1"/>
-<ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="VALUED_1"/>
 <ArticleID name="RLVECT_1"/>
@@ -44,7 +45,7 @@
 <Cluster/>
 <Func kind="K" nr="21">
 <Func kind="U" nr="1">
-<Func kind="K" nr="271">
+<Func kind="K" nr="280">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -52,8 +53,8 @@
 </Typ>
 <Cluster>
 <Adjective nr="10" value="false"/>
-<Adjective nr="147">
-<Func kind="K" nr="271">
+<Adjective nr="148">
+<Func kind="K" nr="280">
 <Num nr="2"/>
 </Func>
 </Adjective>
@@ -68,8 +69,9 @@
 <Adjective nr="1"/>
 <Adjective nr="6"/>
 <Adjective nr="8" value="false"/>
-<Adjective nr="25"/>
-<Adjective nr="31"/>
+<Adjective nr="28"/>
+<Adjective nr="34"/>
+<Adjective nr="35"/>
 </Cluster>
 </RCluster>
 <FCluster aid="GOBOARD9" nr="1">
@@ -79,18 +81,18 @@
 <Adjective nr="1"/>
 <Adjective nr="6"/>
 <Adjective nr="8" value="false"/>
-<Adjective nr="31"/>
+<Adjective nr="34"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="126">
+<Func kind="K" nr="138">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="6"/>
 <Adjective nr="8" value="false"/>
-<Adjective nr="31"/>
+<Adjective nr="34"/>
 </Cluster>
 </FCluster>
 </Registrations>

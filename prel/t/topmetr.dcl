@@ -11,6 +11,7 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="ENUMSET1"/>
@@ -20,7 +21,6 @@
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="RELAT_2"/>
-<ArticleID name="PARTFUN1"/>
 <ArticleID name="EQREL_1"/>
 <ArticleID name="CONNSP_2"/>
 <ArticleID name="BINOP_1"/>
@@ -35,10 +35,10 @@
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
+<Adjective nr="74"/>
 <Adjective nr="75"/>
 <Adjective nr="76"/>
 <Adjective nr="77"/>
-<Adjective nr="78"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -47,22 +47,22 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="70"/>
+<Adjective nr="69"/>
+<Adjective nr="74"/>
 <Adjective nr="75"/>
 <Adjective nr="76"/>
 <Adjective nr="77"/>
-<Adjective nr="78"/>
 </Cluster>
 </RCluster>
 <RCluster aid="TOPMETR" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="31" value="false"/>
+<Adjective nr="32" value="false"/>
+<Adjective nr="74"/>
 <Adjective nr="75"/>
 <Adjective nr="76"/>
 <Adjective nr="77"/>
-<Adjective nr="78"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -71,23 +71,23 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="31" value="false"/>
-<Adjective nr="70"/>
+<Adjective nr="32" value="false"/>
+<Adjective nr="69"/>
+<Adjective nr="74"/>
 <Adjective nr="75"/>
 <Adjective nr="76"/>
 <Adjective nr="77"/>
-<Adjective nr="78"/>
 </Cluster>
 </RCluster>
 <FCluster aid="TOPMETR" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="31" value="false"/>
+<Adjective nr="32" value="false"/>
+<Adjective nr="74"/>
 <Adjective nr="75"/>
 <Adjective nr="76"/>
 <Adjective nr="77"/>
-<Adjective nr="78"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -101,20 +101,20 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="200">
+<Func kind="K" nr="201">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="31" value="false"/>
-<Adjective nr="70"/>
+<Adjective nr="32" value="false"/>
+<Adjective nr="69"/>
 </Cluster>
 </FCluster>
 <FCluster aid="TOPMETR" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="202"/>
+<Func kind="K" nr="203"/>
 <Cluster>
-<Adjective nr="31" value="false"/>
+<Adjective nr="32" value="false"/>
 <Adjective nr="43"/>
 <Adjective nr="44"/>
 </Cluster>
@@ -132,7 +132,7 @@
 <Func kind="K" nr="11">
 <LocusVar nr="1"/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="202"/>
+<Func kind="K" nr="203"/>
 </Func>
 </Func>
 </Func>

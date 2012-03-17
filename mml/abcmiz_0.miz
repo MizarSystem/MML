@@ -30,7 +30,7 @@ environ
       FUNCT_1, FUNCT_2, FUNCT_4, FUNCOP_1, STRUCT_0, ORDERS_2, LATTICE3,
       YELLOW_0, WAYBEL_0, YELLOW_1, YELLOW_4, YELLOW_7, WAYBEL_6, WAYBEL_8,
       ZFMISC_1, FINSEQ_2, FINSEQ_3, HILBERT2, REWRITE1, ORDINAL1, XREAL_1,
-      XXREAL_0;
+      XXREAL_0, PRE_POLY;
  schemes XBOOLE_0, NAT_1, FUNCT_1, FUNCT_2, RECDEF_1, RELSET_1, ORDERS_1,
       WELLORD2;
 
@@ -60,20 +60,24 @@ registration
     let S be non empty RelStr;
     assume
 A1: for x,y being Element of S holds x = y;
-    set R = the InternalRel of S;
     let Y be set;
+    set R = the InternalRel of S;
     assume
 A2: Y c= field R;
-    assume Y <> {};
+    assume
+    Y <> {};
     then reconsider X = Y as non empty set;
     consider a being Element of X;
-    take a; thus
-A3: a in Y;
+    take a;
+    thus a in Y;
+    then
+A3: a in field R by A2;
     let b be set;
-    assume b in Y;
-    then a in field R & b in field R &
-    field R c= (the carrier of S) \/ the carrier of S by A2,A3,RELSET_1:19;
-    hence thesis by A1;
+A4: field R c= (the carrier of S) \/ the carrier of S by RELSET_1:19;
+    assume
+    b in Y;
+    then b in field R by A2;
+    hence thesis by A1,A3,A4;
   end;
 end;
 
@@ -82,18 +86,17 @@ definition
   redefine attr T is Noetherian means
   :Def2:
   for A being non empty Subset of T
-  ex a being Element of T st a in A &
-  for b being Element of T st b in A holds not a < b;
+  ex a being Element of T st a in A & for b being Element of T st b in A holds
+  not a < b;
   compatibility
   proof
     set R = the InternalRel of T;
-    thus T is Noetherian implies for A being non empty Subset of T
-    ex a being Element of T st a in A &
-    for b being Element of T st b in A holds not a < b
+    thus T is Noetherian implies for A being non empty Subset of T ex a being
+    Element of T st a in A & for b being Element of T st b in A holds not a < b
     proof
       assume
-A1:   for Y being set st Y c= field R & Y <> {} ex a being set st a in Y &
-      for b being set st b in Y & a <> b holds not [a,b] in R;
+A1:   for Y being set st Y c= field R & Y <> {} ex a being set st a in
+      Y & for b being set st b in Y & a <> b holds not [a,b] in R;
       let A be non empty Subset of T;
       consider a being Element of A;
       reconsider a as Element of T;
@@ -101,51 +104,61 @@ A1:   for Y being set st Y c= field R & Y <> {} ex a being set st a in Y &
       per cases;
       suppose
 A2:     A misses field R;
-        take a; thus a in A;
+        take a;
+        thus a in A;
         let b be Element of T;
-        assume b in A & a < b;
-        then a <= b by ORDERS_2:def 10;
+        assume that
+        b in A and
+A3:     a < b;
+        a <= b by A3,ORDERS_2:def 10;
         then [a,b] in R by ORDERS_2:def 9;
         then a in field R by RELAT_1:30;
         hence contradiction by A2,XBOOLE_0:3;
       end;
-      suppose A meets field R;
-        then Y c= field R & Y <> {} by XBOOLE_0:def 7,XBOOLE_1:17;
+      suppose
+        A meets field R;
+        then Y <> {} by XBOOLE_0:def 7;
         then consider x being set such that
-A3:     x in Y and
-A4:     for y being set st y in Y & x <> y holds not [x,y] in R by A1;
-        reconsider x as Element of T by A3;
-        take x; thus x in A by A3,XBOOLE_0:def 4;
+A4:     x in Y and
+A5:     for y being set st y in Y & x <> y holds not [x,y] in R by A1,
+XBOOLE_1:17;
+        reconsider x as Element of T by A4;
+        take x;
+        thus x in A by A4,XBOOLE_0:def 4;
         let b be Element of T;
-        assume
-A5:     b in A & x < b;
-        then x <= b & x <> b by ORDERS_2:def 10;
+        assume that
+A6:     b in A and
+A7:     x < b;
+        x <= b by A7,ORDERS_2:def 10;
         then
-A6:     [x,b] in R by ORDERS_2:def 9;
+A8:     [x,b] in R by ORDERS_2:def 9;
         then b in field R by RELAT_1:30;
-        then b in Y by A5,XBOOLE_0:def 4;
-        hence contradiction by A4,A5,A6;
+        then b in Y by A6,XBOOLE_0:def 4;
+        hence contradiction by A5,A7,A8;
       end;
     end;
     assume
-A7: for A being non empty Subset of T ex a being Element of T st a in A &
-    for b being Element of T st b in A holds not a < b;
+A9: for A being non empty Subset of T ex a being Element of T st a in
+    A & for b being Element of T st b in A holds not a < b;
     let Y be set;
-    assume
-A8: Y c= field R & Y <> {};
+    assume that
+A10: Y c= field R and
+A11: Y <> {};
     field R c= (the carrier of T) \/ the carrier of T by RELSET_1:19;
-    then reconsider A = Y as non empty Subset of T by A8,XBOOLE_1:1;
+    then reconsider A = Y as non empty Subset of T by A10,A11,XBOOLE_1:1;
     consider a being Element of T such that
-A9: a in A and
-A10: for b being Element of T st b in A holds not a < b by A7;
-    take a; thus a in Y by A9;
+A12: a in A and
+A13: for b being Element of T st b in A holds not a < b by A9;
+    take a;
+    thus a in Y by A12;
     let b be set;
-    assume
-A11: b in Y & a <> b;
-    then b in A;
+    assume that
+A14: b in Y and
+A15: a <> b;
+    b in A by A14;
     then reconsider b as Element of T;
-    not a < b by A10,A11;
-    then not a <= b by A11,ORDERS_2:def 10;
+    not a < b by A13,A14;
+    then not a <= b by A15,ORDERS_2:def 10;
     hence thesis by ORDERS_2:def 9;
   end;
 end;
@@ -153,7 +166,6 @@ end;
 definition
   let T be Poset;
   attr T is Mizar-widening-like means
-
   T is sup-Semilattice & T is Noetherian;
 end;
 
@@ -162,19 +174,23 @@ registration
   coherence
   proof
     let T be Poset;
-    assume
-A1: T is sup-Semilattice & T is Noetherian;
-    hence T is Noetherian with_suprema;
+    assume that
+A1: T is sup-Semilattice and
+A2: T is Noetherian;
     reconsider S = T as sup-Semilattice by A1;
     the carrier of S c= the carrier of S;
-    then consider a being Element of T such that a in the carrier of T and
-A2: for b being Element of T st b in the carrier of T holds not a < b
-    by A1,Def2;
+    then consider a being Element of T such that
+    a in the carrier of T and
+A3: for b being Element of T st b in the carrier of T holds not a < b
+    by A2,Def2;
+    thus T is Noetherian with_suprema by A1,A2;
     take a;
     let b be Element of T;
-    a"\/"b in the carrier of S;
-    then a"\/"b >= a & not a < a"\/"b by A2,YELLOW_0:22;
-    then a"\/"b = a by ORDERS_2:def 10;
+A4: a"\/"b in the carrier of S;
+    then
+A5: a"\/"b >= a by YELLOW_0:22;
+    not a < a"\/"b by A3,A4;
+    then a"\/"b = a by A5,ORDERS_2:def 10;
     hence thesis by A1,YELLOW_0:22;
   end;
 end;
@@ -195,7 +211,8 @@ registration
   existence
   proof
     consider T being trivial LATTICE;
-    take T; thus T is sup-Semilattice;
+    take T;
+    thus T is sup-Semilattice;
     thus thesis;
   end;
 end;
@@ -207,8 +224,8 @@ registration
 end;
 
 theorem Th1:
-  for T being Noetherian sup-Semilattice
-  for I being Ideal of T holds ex_sup_of I, T & sup I in I
+  for T being Noetherian sup-Semilattice for I being Ideal of T
+  holds ex_sup_of I, T & sup I in I
 proof
   let T be Noetherian sup-Semilattice;
   let I be Ideal of T;
@@ -218,14 +235,16 @@ A2: for b being Element of T st b in I holds not a < b by Def2;
 A3: I is_<=_than a
   proof
     let d be Element of T;
-    assume d in I;
+    assume
+    d in I;
     then a"\/"d in I by A1,WAYBEL_0:40;
-    then a <= a"\/"d & not a < a"\/"d by A2,YELLOW_0:22;
-    then a = a"\/"d by ORDERS_2:def 10;
+    then
+A4: not a < a"\/"d by A2;
+    a <= a"\/"d by YELLOW_0:22;
+    then a = a"\/"d by A4,ORDERS_2:def 10;
     hence thesis by YELLOW_0:22;
   end;
-  for c being Element of T st I is_<=_than c holds a <= c
-  by A1,LATTICE3:def 9;
+  for c being Element of T st I is_<=_than c holds a <= c by A1,LATTICE3:def 9;
   hence thesis by A1,A3,YELLOW_0:30;
 end;
 
@@ -245,12 +264,13 @@ definition
 end;
 
 theorem
-  for A1,A2 being AdjectiveStr st the adjectives of A1 = the adjectives of A2
-  holds A1 is void implies A2 is void
+  for A1,A2 being AdjectiveStr st the adjectives of A1 = the adjectives
+  of A2 holds A1 is void implies A2 is void
 proof
   let A1,A2 be AdjectiveStr such that
 A1: the adjectives of A1 = the adjectives of A2;
-  assume the adjectives of A1 is empty;
+  assume
+  the adjectives of A1 is empty;
   hence the adjectives of A2 is empty by A1;
 end;
 
@@ -258,41 +278,43 @@ definition
   let A be AdjectiveStr;
   let a be Element of the adjectives of A;
   func non-a -> adjective of A equals
-
   (the non-op of A).a;
   coherence
   proof
     per cases;
-    suppose the adjectives of A is empty;
-      then a = {} & not a in the adjectives of A &
-      dom the non-op of A = the adjectives of A by SUBSET_1:def 2;
-      hence thesis by FUNCT_1:def 4;
+    suppose
+A1:   the adjectives of A is empty;
+      then
+A2:   dom the non-op of A = the adjectives of A;
+      a = {} by A1,SUBSET_1:def 2;
+      hence thesis by A1,A2,FUNCT_1:def 4;
     end;
-    suppose the adjectives of A is non empty;
+    suppose
+      the adjectives of A is non empty;
       hence thesis by FUNCT_2:7;
     end;
   end;
 end;
 
 theorem
-  for A1,A2 being AdjectiveStr
-  st the AdjectiveStr of A1 = the AdjectiveStr of A2
-  for a1 being adjective of A1, a2 being adjective of A2 st a1 = a2
-  holds non-a1 = non-a2;
+  for A1,A2 being AdjectiveStr st the AdjectiveStr of A1 = the
+AdjectiveStr of A2 for a1 being adjective of A1, a2 being adjective of A2 st a1
+  = a2 holds non-a1 = non-a2;
 
 definition
   let A be AdjectiveStr;
   attr A is involutive means
   :Def6:
-  for a being adjective of A holds non-non-a = a;
+  for a being adjective of A holds non-non-a
+  = a;
   attr A is without_fixpoints means
   not ex a being adjective of A st non-a = a;
 end;
 
 theorem Th4:
-  for a1,a2 being set st a1 <> a2 for A being AdjectiveStr
-  st the adjectives of A = {a1,a2} & (the non-op of A).a1 = a2 &
-  (the non-op of A).a2 = a1 holds A is non void involutive without_fixpoints
+  for a1,a2 being set st a1 <> a2 for A being AdjectiveStr st the
+adjectives of A = {a1,a2} & (the non-op of A).a1 = a2 & (the non-op of A).a2 =
+  a1 holds A is non void involutive without_fixpoints
 proof
   let a1,a2 be set such that
 A1: a1 <> a2;
@@ -307,15 +329,15 @@ A4: (the non-op of A).a2 = a1;
     hence non-non-a = a by A3,A4;
   end;
   let a be adjective of A;
-A5: a = a1 or a = a2 by A2,TARSKI:def 2;
-  assume non-a = a;
+  assume
+A5: non-a = a;
+  a = a1 or a = a2 by A2,TARSKI:def 2;
   hence thesis by A1,A3,A4,A5;
 end;
 
 theorem Th5:
-  for A1,A2 being AdjectiveStr
-  st the AdjectiveStr of A1 = the AdjectiveStr of A2
-  holds A1 is involutive implies A2 is involutive
+  for A1,A2 being AdjectiveStr st the AdjectiveStr of A1 = the
+  AdjectiveStr of A2 holds A1 is involutive implies A2 is involutive
 proof
   let A1,A2 be AdjectiveStr such that
 A1: the AdjectiveStr of A1 = the AdjectiveStr of A2;
@@ -328,9 +350,9 @@ A2: for a being adjective of A1 holds non-non-a = a;
 end;
 
 theorem Th6:
-  for A1,A2 being AdjectiveStr
-  st the AdjectiveStr of A1 = the AdjectiveStr of A2
-  holds A1 is without_fixpoints implies A2 is without_fixpoints
+  for A1,A2 being AdjectiveStr st the AdjectiveStr of A1 = the
+  AdjectiveStr of A2 holds A1 is without_fixpoints implies A2 is
+  without_fixpoints
 proof
   let A1,A2 be AdjectiveStr such that
 A1: the AdjectiveStr of A1 = the AdjectiveStr of A2;
@@ -350,8 +372,9 @@ registration
     reconsider x = 0, y = 1 as Element of {0,1} by TARSKI:def 2;
     reconsider n = (0,1)-->(y,x) as UnOp of {0,1};
     take AdjectiveStr(#{0,1}, n#);
-    0 <> 1 & n.x = y & n.y = x by FUNCT_4:66;
-    hence thesis by Th4;
+A1: n.y = x by FUNCT_4:66;
+    n.x = y by FUNCT_4:66;
+    hence thesis by A1,Th4;
   end;
 end;
 
@@ -363,8 +386,7 @@ end;
 
 definition
   struct(RelStr,AdjectiveStr) TA-structure(# carrier, adjectives -> set,
-    InternalRel -> (Relation of the carrier),
-    non-op -> UnOp of the adjectives,
+    InternalRel -> (Relation of the carrier), non-op -> UnOp of the adjectives,
     adj-map -> Function of the carrier, Fin the adjectives #);
 end;
 
@@ -393,11 +415,11 @@ registration
     strict TA-structure;
   existence
   proof
-    consider R being trivial reflexive non empty RelStr,
-    A being non void involutive without_fixpoints AdjectiveStr,
-    f being Function of the carrier of R, Fin the adjectives of A;
-    take T = TA-structure(# the carrier of R, the adjectives of A,
-      the InternalRel of R, the non-op of A, f #);
+    consider R being trivial reflexive non empty RelStr, A being non void
+involutive without_fixpoints AdjectiveStr, f being Function of the carrier of R
+    , Fin the adjectives of A;
+    take T = TA-structure(# the carrier of R, the adjectives of A, the
+      InternalRel of R, the non-op of A, f #);
     thus T is trivial;
     the RelStr of R = the RelStr of T;
     hence T is reflexive by WAYBEL_8:12;
@@ -412,18 +434,18 @@ definition
   let T be TA-structure;
   let t be Element of T;
   func adjs t -> Subset of the adjectives of T equals
-
   (the adj-map of T).t;
   coherence
   proof
     per cases;
-    suppose the carrier of T is empty;
-      then t = {} & not t in the carrier of T &
-      dom the adj-map of T = the carrier of T by SUBSET_1:def 2;
-      then (the adj-map of T).t = {} the adjectives of T by FUNCT_1:def 4;
+    suppose
+A1:   the carrier of T is empty;
+      then dom the adj-map of T = the carrier of T;
+      then (the adj-map of T).t = {} the adjectives of T by A1,FUNCT_1:def 4;
       hence thesis;
     end;
-    suppose the carrier of T is non empty;
+    suppose
+      the carrier of T is non empty;
       then (the adj-map of T).t in Fin the adjectives of T by FUNCT_2:7;
       hence thesis by FINSUB_1:32;
     end;
@@ -431,32 +453,31 @@ definition
 end;
 
 theorem
-  for T1,T2 being TA-structure
-  st the TA-structure of T1 = the TA-structure of T2
-  for t1 being type of T1, t2 being type of T2 st t1 = t2
+  for T1,T2 being TA-structure st the TA-structure of T1 = the
+  TA-structure of T2 for t1 being type of T1, t2 being type of T2 st t1 = t2
   holds adjs t1 = adjs t2;
 
 definition
   let T be TA-structure;
   attr T is consistent means
   :Def9:
-  for t being type of T
-  for a being adjective of T st a in adjs t holds not non-a in adjs t;
+  for t being type of T for a being
+  adjective of T st a in adjs t holds not non-a in adjs t;
 end;
 
 theorem Th8:
-  for T1,T2 being TA-structure
-  st the TA-structure of T1 = the TA-structure of T2
-  holds T1 is consistent implies T2 is consistent
+  for T1,T2 being TA-structure st the TA-structure of T1 = the
+  TA-structure of T2 holds T1 is consistent implies T2 is consistent
 proof
   let T1,T2 be TA-structure such that
 A1: the TA-structure of T1 = the TA-structure of T2 and
 A2: for t being type of T1 for a being adjective of T1 st a in adjs t
   holds not non-a in adjs t;
   let t2 be type of T2, a2 be adjective of T2;
-  reconsider t1 = t2 as type of T1 by A1;
   reconsider a1 = a2 as adjective of T1 by A1;
-  assume a2 in adjs t2;
+  reconsider t1 = t2 as type of T1 by A1;
+  assume
+  a2 in adjs t2;
   then not non-a1 in adjs t1 by A1,A2;
   hence thesis by A1;
 end;
@@ -464,27 +485,25 @@ end;
 definition
   let T be non empty TA-structure;
   attr T is adj-structured means
-
-  the adj-map of T is
-  join-preserving Function of T, (BoolePoset the adjectives of T) opp;
+  the adj-map of T is join-preserving Function
+  of T, (BoolePoset the adjectives of T) opp;
 end;
 
 theorem Th9:
-  for T1,T2 being non empty TA-structure
-  st the TA-structure of T1 = the TA-structure of T2
-  holds T1 is adj-structured implies T2 is adj-structured
+  for T1,T2 being non empty TA-structure st the TA-structure of T1
+  = the TA-structure of T2 holds T1 is adj-structured implies T2 is
+  adj-structured
 proof
   let T1,T2 be non empty TA-structure such that
 A1: the TA-structure of T1 = the TA-structure of T2;
-  assume the adj-map of T1 is
-  join-preserving Function of T1, (BoolePoset the adjectives of T1) opp;
-  then reconsider f = the adj-map of T1 as
-  join-preserving Function of T1, (BoolePoset the adjectives of T1) opp;
-  reconsider g = f as Function
-  of T2, (BoolePoset the adjectives of T2) opp by A1;
-A2: the RelStr of T1 = the RelStr of T2 & the RelStr of (BoolePoset the
-  adjectives of T1) opp = the RelStr of (BoolePoset the adjectives of T2) opp
-  by A1;
+  assume
+  the adj-map of T1 is join-preserving Function of T1, (BoolePoset the
+  adjectives of T1) opp;
+  then reconsider f = the adj-map of T1 as join-preserving Function of T1, (
+  BoolePoset the adjectives of T1) opp;
+  reconsider g = f as Function of T2, (BoolePoset the adjectives of T2) opp by
+A1;
+A2: the RelStr of T1 = the RelStr of T2 by A1;
   g is join-preserving
   proof
     let x,y be type of T2;
@@ -492,73 +511,76 @@ A2: the RelStr of T1 = the RelStr of T2 & the RelStr of (BoolePoset the
     assume
 A3: ex_sup_of {x,y}, T2;
     then
-A4: ex_sup_of {x',y'}, T1 & f preserves_sup_of {x',y'}
-    by A2,WAYBEL_0:def 35,YELLOW_0:14;
-    then
-A5: ex_sup_of f.:{x',y'}, (BoolePoset the adjectives of T1) opp &
-    sup (f.:{x',y'}) = f.sup {x',y'} by WAYBEL_0:def 31;
-    thus ex_sup_of g.:{x,y}, (BoolePoset the adjectives of T2) opp
-    by A1,A4,WAYBEL_0:def 31;
-    thus thesis by A2,A3,A5,YELLOW_0:26;
+A4: ex_sup_of {x',y'}, T1 by A2,YELLOW_0:14;
+A5: f preserves_sup_of {x',y'} by WAYBEL_0:def 35;
+    hence ex_sup_of g.:{x,y}, (BoolePoset the adjectives of T2) opp by A1,A4,
+WAYBEL_0:def 31;
+    sup (f.:{x',y'}) = f.sup {x',y'} by A4,A5,WAYBEL_0:def 31;
+    hence thesis by A1,A2,A3,YELLOW_0:26;
   end;
-  hence the adj-map of T2 is join-preserving Function
-  of T2, (BoolePoset the adjectives of T2) opp by A1;
+  hence the adj-map of T2 is join-preserving Function of T2, (BoolePoset the
+  adjectives of T2) opp by A1;
 end;
 
 definition
   let T be reflexive transitive antisymmetric with_suprema TA-structure;
   redefine attr T is adj-structured means
   :Def11:
-  for t1,t2 being type of T holds adjs(t1"\/"t2) = (adjs t1) /\ (adjs t2);
+  for t1,t2 being type of T
+  holds adjs(t1"\/"t2) = (adjs t1) /\ (adjs t2);
   compatibility
   proof
-    thus T is adj-structured implies
-    for t1,t2 being type of T holds adjs(t1"\/"t2) = (adjs t1) /\ (adjs t2)
+A1: dom the adj-map of T = the carrier of T by FUNCT_2:def 1;
+A2: Fin the adjectives of T c= bool the adjectives of T by FINSUB_1:26;
+    BoolePoset the adjectives of T = InclPoset bool the adjectives of T by
+YELLOW_1:4
+      .= RelStr(#bool the adjectives of T, RelIncl bool the adjectives of T
+    #) by YELLOW_1:def 1;
+    then
+    rng the adj-map of T c= the carrier of (BoolePoset the adjectives of T
+    ) opp by A2,XBOOLE_1:1;
+    then reconsider f = the adj-map of T as Function of T, (BoolePoset the
+    adjectives of T) opp by A1,FUNCT_2:4;
+    thus T is adj-structured implies for t1,t2 being type of T holds adjs(t1
+    "\/"t2) = (adjs t1) /\ (adjs t2)
     proof
-      assume the adj-map of T is
-      join-preserving Function of T, (BoolePoset the adjectives of T) opp;
-      then reconsider f = the adj-map of T as
-      join-preserving Function of T, (BoolePoset the adjectives of T) opp;
+      assume
+      the adj-map of T is join-preserving Function of T, (BoolePoset
+      the adjectives of T) opp;
+      then reconsider f = the adj-map of T as join-preserving Function of T, (
+      BoolePoset the adjectives of T) opp;
       let t1,t2 be type of T;
       thus adjs(t1"\/"t2) = (f.t1) "\/" (f.t2) by WAYBEL_6:2
         .= (~(f.t1)) "/\" (~(f.t2)) by YELLOW_7:22
         .= (adjs t1) /\ (adjs t2) by YELLOW_1:17;
     end;
     assume
-A1: for t1,t2 being type of T holds adjs(t1"\/"t2) = (adjs t1) /\ (adjs t2);
-A2: BoolePoset the adjectives of T = InclPoset bool the adjectives of T
-    by YELLOW_1:4
-      .= RelStr(#bool the adjectives of T, RelIncl bool the adjectives of T#)
-    by YELLOW_1:def 1;
-    rng the adj-map of T c= Fin the adjectives of T & Fin the adjectives of T
-    c= bool the adjectives of T by FINSUB_1:26;
-    then rng the adj-map of T c= the carrier of (BoolePoset the adjectives
-    of T) opp & dom the adj-map of T = the carrier of T
-    by A2,FUNCT_2:def 1,XBOOLE_1:1;
-    then reconsider f = the adj-map of T as Function of T,
-    (BoolePoset the adjectives of T) opp by FUNCT_2:4;
+A3: for t1,t2 being type of T holds adjs(t1"\/"t2) = (adjs t1) /\ (
+    adjs t2);
     now
       let t1,t2 be type of T;
       thus f.(t1"\/"t2) = adjs(t1"\/"t2)
-        .= (adjs t1)/\(adjs t2) by A1
+        .= (adjs t1)/\(adjs t2) by A3
         .= (~(f.t1))"/\"(~(f.t2)) by YELLOW_1:17
         .= f.t1 "\/" f.t2 by YELLOW_7:22;
     end;
-    hence the adj-map of T is join-preserving
-    Function of T, (BoolePoset the adjectives of T) opp by WAYBEL_6:2;
+    hence the adj-map of T is join-preserving Function of T, (BoolePoset the
+    adjectives of T) opp by WAYBEL_6:2;
   end;
 end;
 
 theorem Th10:
-  for T being reflexive transitive antisymmetric with_suprema TA-structure
-  st T is adj-structured
-  for t1,t2 being type of T st t1 <= t2 holds adjs t2 c= adjs t1
+  for T being reflexive transitive antisymmetric with_suprema
+TA-structure st T is adj-structured for t1,t2 being type of T st t1 <= t2 holds
+  adjs t2 c= adjs t1
 proof
-  let T be reflexive transitive antisymmetric with_suprema
-  TA-structure such that
-A1: for t1,t2 being type of T holds adjs(t1"\/"t2) = (adjs t1) /\ (adjs t2);
+  let T be reflexive transitive antisymmetric with_suprema TA-structure such
+  that
+A1: for t1,t2 being type of T holds adjs(t1"\/"t2) = (adjs t1) /\ (adjs
+  t2);
   let t1,t2 be type of T;
-  assume t1 <= t2;
+  assume
+  t1 <= t2;
   then t1"\/"t2 = t2 by YELLOW_0:24;
   then adjs t2 = (adjs t1)/\(adjs t2) by A1;
   hence thesis by XBOOLE_1:17;
@@ -569,39 +591,41 @@ definition
   let a be Element of the adjectives of T;
   func types a -> Subset of T means
   :Def12:
-  for x being set holds
-  x in it iff ex t being type of T st x = t & a in adjs t;
+  for x being set holds x in it iff
+  ex t being type of T st x = t & a in adjs t;
   existence
   proof
     defpred P[set] means ex t being type of T st $1 = t & a in adjs t;
     consider tt being set such that
-A1: for x being set holds x in tt iff
-    x in the carrier of T & P[x] from XBOOLE_0:sch 1;
+A1: for x being set holds x in tt iff x in the carrier of T & P[x]
+    from XBOOLE_0:sch 1;
     tt c= the carrier of T
     proof
-      let x be set; thus thesis by A1;
+      let x be set;
+      thus thesis by A1;
     end;
     then reconsider tt as Subset of T;
     take tt;
     let x be set;
     thus x in tt implies ex t being type of T st x = t & a in adjs t by A1;
     given t being type of T such that
-A2: x = t & a in adjs t;
+A2: x = t and
+A3: a in adjs t;
     now
-      assume not x in the carrier of T;
-      then the carrier of T is empty & dom the adj-map of T = the carrier of T
-      by A2,FUNCT_2:def 1;
-      hence contradiction by A2,FUNCT_1:def 4;
+A4:   dom the adj-map of T = the carrier of T by FUNCT_2:def 1;
+      assume
+      not x in the carrier of T;
+      hence contradiction by A2,A3,A4,FUNCT_1:def 4;
     end;
-    hence thesis by A1,A2;
+    hence thesis by A1,A2,A3;
   end;
   uniqueness
   proof
     defpred P[set] means ex t being type of T st $1 = t & a in adjs t;
     let X1,X2 be Subset of T such that
-A3: for x being set holds x in X1 iff P[x] and
-A4: for x being set holds x in X2 iff P[x];
-    thus thesis from XBOOLE_0:sch 2(A3,A4);
+A5: for x being set holds x in X1 iff P[x] and
+A6: for x being set holds x in X2 iff P[x];
+    thus thesis from XBOOLE_0:sch 2(A5,A6);
   end;
 end;
 
@@ -610,18 +634,19 @@ definition
   let A be Subset of the adjectives of T;
   func types A -> Subset of T means
   :Def13:
-  for t being type of T holds
-  t in it iff for a being adjective of T st a in A holds t in types a;
+  for t being type of T holds t in
+  it iff for a being adjective of T st a in A holds t in types a;
   existence
   proof
-    defpred P[set] means
-    for a being adjective of T st a in A holds $1 in types a;
+    defpred P[set] means for a being adjective of T st a in A holds $1 in
+    types a;
     consider tt being set such that
 A1: for x being set holds x in tt iff x in the carrier of T & P[x]
     from XBOOLE_0:sch 1;
     tt c= the carrier of T
     proof
-      let x be set; thus thesis by A1;
+      let x be set;
+      thus thesis by A1;
     end;
     then reconsider tt as Subset of T;
     take tt;
@@ -630,14 +655,14 @@ A1: for x being set holds x in tt iff x in the carrier of T & P[x]
   uniqueness
   proof
     let X1,X2 be Subset of T such that
-A2: for t being type of T holds
-    t in X1 iff for a being adjective of T st a in A holds t in types a and
-A3: for t being type of T holds
-    t in X2 iff for a being adjective of T st a in A holds t in types a;
+A2: for t being type of T holds t in X1 iff for a being adjective of T
+    st a in A holds t in types a and
+A3: for t being type of T holds t in X2 iff for a being adjective of T
+    st a in A holds t in types a;
     now
       let x be set;
-      x in X1 iff x is type of T &
-      for a being adjective of T st a in A holds x in types a by A2;
+      x in X1 iff x is type of T & for a being adjective of T st a in A
+      holds x in types a by A2;
       hence x in X1 iff x in X2 by A3;
     end;
     hence thesis by TARSKI:2;
@@ -645,10 +670,9 @@ A3: for t being type of T holds
 end;
 
 theorem Th11:
-  for T1,T2 being TA-structure
-  st the TA-structure of T1 = the TA-structure of T2
-  for a1 being adjective of T1, a2 being adjective of T2 st a1 = a2
-  holds types a1 = types a2
+  for T1,T2 being TA-structure st the TA-structure of T1 = the
+TA-structure of T2 for a1 being adjective of T1, a2 being adjective of T2 st a1
+  = a2 holds types a1 = types a2
 proof
   let T1,T2 be TA-structure such that
 A1: the TA-structure of T1 = the TA-structure of T2;
@@ -658,25 +682,28 @@ A2: a1 = a2;
     thus types a1 is Subset of T2 by A1;
     let x be set;
     hereby
-      assume x in types a1;
+      assume
+      x in types a1;
       then consider t1 being type of T1 such that
-A3:   x = t1 & a1 in adjs t1 by Def12;
+A3:   x = t1 and
+A4:   a1 in adjs t1 by Def12;
       reconsider t2 = t1 as type of T2 by A1;
       adjs t1 = adjs t2 by A1;
-      hence ex t2 being type of T2 st x = t2 & a2 in adjs t2 by A2,A3;
+      hence ex t2 being type of T2 st x = t2 & a2 in adjs t2 by A2,A3,A4;
     end;
     given t2 being type of T2 such that
-A4: x = t2 & a2 in adjs t2;
+A5: x = t2 and
+A6: a2 in adjs t2;
     reconsider t1 = t2 as type of T1 by A1;
     adjs t1 = adjs t2 by A1;
-    hence x in types a1 by A2,A4,Def12;
+    hence x in types a1 by A2,A5,A6,Def12;
   end;
   hence thesis by Def12;
 end;
 
 theorem
-  for T being non empty TA-structure for a being adjective of T
-  holds types a = {t where t is type of T: a in adjs t}
+  for T being non empty TA-structure for a being adjective of T holds
+  types a = {t where t is type of T: a in adjs t}
 proof
   let T be non empty TA-structure;
   let a be adjective of T;
@@ -684,37 +711,39 @@ proof
   X c= the carrier of T
   proof
     let x be set;
-    assume x in X;
+    assume
+    x in X;
     then ex t being type of T st x = t & a in adjs t;
     hence thesis;
   end;
   then reconsider X as Subset of T;
-  for x being set holds
-  x in X iff ex t being type of T st x = t & a in adjs t;
+  for x being set holds x in X iff ex t being type of T st x = t & a in
+  adjs t;
   hence thesis by Def12;
 end;
 
 theorem Th13:
-  for T being TA-structure for t being type of T, a being adjective of T
-  holds a in adjs t iff t in types a
+  for T being TA-structure for t being type of T, a being
+  adjective of T holds a in adjs t iff t in types a
 proof
   let T be TA-structure;
   let t be type of T, a be adjective of T;
   thus a in adjs t implies t in types a by Def12;
-  assume t in types a;
+  assume
+  t in types a;
   then ex t' being type of T st t = t' & a in adjs t' by Def12;
   hence thesis;
 end;
 
 theorem Th14:
-  for T being non empty TA-structure
-  for t being type of T, A being Subset of the adjectives of T
-  holds A c= adjs t iff t in types A
+  for T being non empty TA-structure for t being type of T, A
+  being Subset of the adjectives of T holds A c= adjs t iff t in types A
 proof
   let T be non empty TA-structure;
   let t be type of T, a be Subset of the adjectives of T;
   hereby
-    assume a c= adjs t;
+    assume
+    a c= adjs t;
     then for b being adjective of T st b in a holds t in types b by Th13;
     hence t in types a by Def13;
   end;
@@ -729,8 +758,8 @@ A2: x in a;
 end;
 
 theorem
-  for T being non void TA-structure for t being type of T
-  holds adjs t = {a where a is adjective of T: t in types a}
+  for T being non void TA-structure for t being type of T holds adjs t =
+  {a where a is adjective of T: t in types a}
 proof
   let T be non void TA-structure;
   let t be type of T;
@@ -745,103 +774,108 @@ A1: x in adjs t;
     hence thesis;
   end;
   let x be set;
-  assume x in X;
+  assume
+  x in X;
   then ex a being adjective of T st x = a & t in types a;
   hence thesis by Th13;
 end;
 
 theorem Th16:
-  for T being non empty TA-structure
-  holds types ({} the adjectives of T) = the carrier of T
+  for T being non empty TA-structure holds types ({} the
+  adjectives of T) = the carrier of T
 proof
   let T be non empty TA-structure;
   thus types ({} the adjectives of T) c= the carrier of T;
   let x be set;
-  assume x in the carrier of T;
+  assume
+  x in the carrier of T;
   then reconsider t = x as type of T;
-  for a being adjective of T st a in {} the adjectives of T
-  holds t in types a;
+  for a being adjective of T st a in {} the adjectives of T holds t in
+  types a;
   hence thesis by Def13;
 end;
 
 definition
   let T be TA-structure;
   attr T is adjs-typed means
-  for a being adjective of T holds types a \/ types non-a is non empty;
+  for a being adjective of T holds types a \/ types
+  non-a is non empty;
 end;
 
 theorem Th17:
-  for T1,T2 being TA-structure
-  st the TA-structure of T1 = the TA-structure of T2
-  holds T1 is adjs-typed implies T2 is adjs-typed
+  for T1,T2 being TA-structure st the TA-structure of T1 = the
+  TA-structure of T2 holds T1 is adjs-typed implies T2 is adjs-typed
 proof
   let T1,T2 be TA-structure such that
 A1: the TA-structure of T1 = the TA-structure of T2 and
-A2: for a being adjective of T1 holds types a \/ types non-a is non empty;
+A2: for a being adjective of T1 holds types a \/ types non-a is non
+  empty;
   let b be adjective of T2;
   reconsider a = b as adjective of T1 by A1;
-  types a = types b & types non-a = types non-b &
-  types a \/ types non-a is non empty by A1,A2,Th11;
-  hence thesis;
+A3: types a \/ types non-a is non empty by A2;
+  types a = types b by A1,Th11;
+  hence thesis by A1,A3,Th11;
 end;
 
 registration
-  cluster non void Mizar-widening-like involutive without_fixpoints
-    consistent adj-structured adjs-typed
-    (complete upper-bounded non empty trivial
-    reflexive transitive antisymmetric strict TA-structure);
+  cluster non void Mizar-widening-like involutive without_fixpoints consistent
+adj-structured adjs-typed (complete upper-bounded non empty trivial reflexive
+    transitive antisymmetric strict TA-structure);
   existence
   proof
-    consider R being trivial reflexive non empty RelStr;
-    reconsider x = 0, y = 1 as Element of {0,1} by TARSKI:def 2;
-    reconsider n = (0,1)-->(y,x) as UnOp of {0,1};
     {0} c= {0,1} by ZFMISC_1:12;
     then reconsider A = {0} as Element of Fin {0,1} by FINSUB_1:def 5;
+    reconsider x = 0, y = 1 as Element of {0,1} by TARSKI:def 2;
+    consider R being trivial reflexive non empty RelStr;
+    reconsider n = (0,1)-->(y,x) as UnOp of {0,1};
     set f = (the carrier of R) --> A;
-    set T = TA-structure(#the carrier of R, {0,1},
-      the InternalRel of R, n, f#);
+    set T = TA-structure(#the carrier of R, {0,1}, the InternalRel of R, n, f
+    #);
     the RelStr of T = the RelStr of R;
-    then reconsider T as strict trivial reflexive non empty TA-structure
-    by WAYBEL_8:12;
-    take T; thus T is non void;
+    then reconsider T as strict trivial reflexive non empty TA-structure by
+WAYBEL_8:12;
+    take T;
+    thus T is non void;
     thus T is Mizar-widening-like;
-A1: 0 <> 1 & n.x = y & n.y = x by FUNCT_4:66;
-    hence T is involutive without_fixpoints by Th4;
+A1: n.y = x by FUNCT_4:66;
+A2: n.x = y by FUNCT_4:66;
+    hence T is involutive without_fixpoints by A1,Th4;
     hereby
       let t be type of T;
       let a be adjective of T;
-A2:   (a = 0 or a = 1) & non-a = n.a by TARSKI:def 2;
-      adjs t = A by FUNCOP_1:13;
-      hence a in adjs t implies not non-a in adjs t by A1,A2,TARSKI:def 1;
+A3:   adjs t = A by FUNCOP_1:13;
+      a = 0 or a = 1 by TARSKI:def 2;
+      hence a in adjs t implies not non-a in adjs t by A2,A3,TARSKI:def 1;
     end;
+    consider t being type of T;
     hereby
       let t1,t2 be type of T;
-      adjs(t1"\/"t2) = A & adjs t1 = A & adjs t2 = A by FUNCOP_1:13;
-      hence adjs(t1"\/"t2) = adjs t1 /\ adjs t2;
+A4:   adjs t2 = A by FUNCOP_1:13;
+      adjs t1 = A by FUNCOP_1:13;
+      hence adjs(t1"\/"t2) = adjs t1 /\ adjs t2 by A4,FUNCOP_1:13;
     end;
     let a be adjective of T;
-A3: (a = 0 or a = 1) & non-a = n.a by TARSKI:def 2;
-    consider t being type of T;
-    adjs t = A by FUNCOP_1:13;
-    then a in adjs t or non-a in adjs t by A1,A3,TARSKI:def 1;
+A5: adjs t = A by FUNCOP_1:13;
+    a = 0 or a = 1 by TARSKI:def 2;
+    then a in adjs t or non-a in adjs t by A1,A5,TARSKI:def 1;
     then t in types a or t in types non-a by Th13;
     hence thesis;
   end;
 end;
 
 theorem
-  for T being consistent TA-structure for a being adjective of T
-  holds types a misses types non-a
+  for T being consistent TA-structure for a being adjective of T holds
+  types a misses types non-a
 proof
   let T be consistent TA-structure;
   let a be adjective of T;
-  assume types a meets types non-a;
+  assume
+  types a meets types non-a;
   then consider x being set such that
 A1: x in types a and
 A2: x in types non-a by XBOOLE_0:3;
-  consider t1 being type of T such that
-A3: x = t1 & a in adjs t1 by A1,Def12;
-  ex t2 being type of T st x = t2 & non-a in adjs t2 by A2,Def12;
+A3: ex t2 being type of T st x = t2 & non-a in adjs t2 by A2,Def12;
+  ex t1 being type of T st x = t1 & a in adjs t1 by A1,Def12;
   hence thesis by A3,Def9;
 end;
 
@@ -855,18 +889,23 @@ registration
     thus types a is lower
     proof
       let x,y be Element of T;
-      assume x in types a & y <= x;
-      then a in adjs x & adjs x c= adjs y by Th10,Th13;
-      hence thesis by Th13;
+      assume that
+A1:   x in types a and
+A2:   y <= x;
+A3:   adjs x c= adjs y by A2,Th10;
+      a in adjs x by A1,Th13;
+      hence thesis by A3,Th13;
     end;
     let x,y be Element of T;
-    assume x in types a & y in types a;
-    then a in adjs x & a in adjs y by Th13;
-    then a in (adjs x)/\adjs y by XBOOLE_0:def 4;
-    then
-A1: a in adjs(x"\/"y) by Def11;
+    assume that
+A4: x in types a and
+A5: y in types a;
     take x"\/"y;
-    thus thesis by A1,Th13,YELLOW_0:22;
+A6: a in adjs y by A5,Th13;
+    a in adjs x by A4,Th13;
+    then a in (adjs x)/\adjs y by A6,XBOOLE_0:def 4;
+    then a in adjs(x"\/"y) by Def11;
+    hence thesis by Th13,YELLOW_0:22;
   end;
 end;
 
@@ -880,31 +919,40 @@ registration
     thus types A is lower
     proof
       let x,y be Element of T;
-      assume
-A1:   x in types A & y <= x;
+      assume that
+A1:   x in types A and
+A2:   y <= x;
       now
         let a be adjective of T;
-        assume a in A;
+        assume
+        a in A;
         then x in types a by A1,Def13;
-        then a in adjs x & adjs x c= adjs y by A1,Th10,Th13;
-        hence y in types a by Th13;
+        then
+A3:     a in adjs x by Th13;
+        adjs x c= adjs y by A2,Th10;
+        hence y in types a by A3,Th13;
       end;
       hence thesis by Def13;
     end;
     let x,y be Element of T;
-    assume
-A2: x in types A & y in types A;
-A3: now
+    assume that
+A4: x in types A and
+A5: y in types A;
+    take x"\/"y;
+    now
       let a be adjective of T;
-      assume a in A;
-      then x in types a & y in types a by A2,Def13;
-      then a in adjs x & a in adjs y by Th13;
-      then a in (adjs x)/\adjs y by XBOOLE_0:def 4;
+      assume
+A6:   a in A;
+      then y in types a by A5,Def13;
+      then
+A7:   a in adjs y by Th13;
+      x in types a by A4,A6,Def13;
+      then a in adjs x by Th13;
+      then a in (adjs x)/\adjs y by A7,XBOOLE_0:def 4;
       then a in adjs(x"\/"y) by Def11;
       hence x"\/"y in types a by Th13;
     end;
-    take x"\/"y;
-    thus thesis by A3,Def13,YELLOW_0:22;
+    hence thesis by Def13,YELLOW_0:22;
   end;
 end;
 
@@ -916,7 +964,8 @@ definition
   let a be adjective of T;
   pred a is_applicable_to t means
   :Def15:
-  ex t' being type of T st t' in types a & t' <= t;
+  ex t' being type of T st t' in types
+  a & t' <= t;
 end;
 
 definition
@@ -925,23 +974,25 @@ definition
   let A be Subset of the adjectives of T;
   pred A is_applicable_to t means
   :Def16:
-  ex t' being type of T st A c= adjs t' & t' <= t;
+  ex t' being type of T st A c= adjs
+  t' & t' <= t;
 end;
 
 canceled;
 
 theorem Th20:
-  for T being adj-structured (reflexive transitive antisymmetric with_suprema
-  TA-structure) for a being adjective of T for t being type of T
-  st a is_applicable_to t holds types a /\ downarrow t is Ideal of T
+  for T being adj-structured (reflexive transitive antisymmetric
+with_suprema TA-structure) for a being adjective of T for t being type of T st
+  a is_applicable_to t holds types a /\ downarrow t is Ideal of T
 proof
   let T be adj-structured (reflexive transitive antisymmetric with_suprema
   TA-structure);
   let a be adjective of T;
   let t be type of T;
   given t' being type of T such that
-A1: t' in types a & t' <= t;
-  t' in downarrow t by A1,WAYBEL_0:17;
+A1: t' in types a and
+A2: t' <= t;
+  t' in downarrow t by A2,WAYBEL_0:17;
   hence thesis by A1,WAYBEL_0:27,44,XBOOLE_0:def 4;
 end;
 
@@ -950,21 +1001,21 @@ definition
   let t be Element of T;
   let a be adjective of T;
   func a ast t -> type of T equals
-
   sup(types a /\ downarrow t);
   coherence;
 end;
 
 theorem Th21:
-  for T being Noetherian adj-structured (reflexive transitive antisymmetric
-  with_suprema TA-structure) for t being type of T for a being adjective of T
-  st a is_applicable_to t holds a ast t <= t
+  for T being Noetherian adj-structured (reflexive transitive
+  antisymmetric with_suprema TA-structure) for t being type of T for a being
+  adjective of T st a is_applicable_to t holds a ast t <= t
 proof
   let T be Noetherian adj-structured (reflexive transitive antisymmetric
   with_suprema TA-structure);
   let t be type of T;
   let a be adjective of T;
-  assume a is_applicable_to t;
+  assume
+  a is_applicable_to t;
   then types a /\ downarrow t is Ideal of T by Th20;
   then sup (types a /\ downarrow t) in types a /\ downarrow t by Th1;
   then a ast t in downarrow t by XBOOLE_0:def 4;
@@ -972,15 +1023,16 @@ proof
 end;
 
 theorem Th22:
-  for T being Noetherian adj-structured (reflexive transitive antisymmetric
-  with_suprema TA-structure) for t being type of T for a being adjective of T
-  st a is_applicable_to t holds a in adjs(a ast t)
+  for T being Noetherian adj-structured (reflexive transitive
+  antisymmetric with_suprema TA-structure) for t being type of T for a being
+  adjective of T st a is_applicable_to t holds a in adjs(a ast t)
 proof
   let T be Noetherian adj-structured (reflexive transitive antisymmetric
   with_suprema TA-structure);
   let t be type of T;
   let a be adjective of T;
-  assume a is_applicable_to t;
+  assume
+  a is_applicable_to t;
   then types a /\ downarrow t is Ideal of T by Th20;
   then sup (types a /\ downarrow t) in types a /\ downarrow t by Th1;
   then a ast t in types a by XBOOLE_0:def 4;
@@ -988,51 +1040,54 @@ proof
 end;
 
 theorem Th23:
-  for T being Noetherian adj-structured (reflexive transitive antisymmetric
-  with_suprema TA-structure) for t being type of T for a being adjective of T
-  st a is_applicable_to t holds a ast t in types a
+  for T being Noetherian adj-structured (reflexive transitive
+  antisymmetric with_suprema TA-structure) for t being type of T for a being
+  adjective of T st a is_applicable_to t holds a ast t in types a
 proof
   let T be Noetherian adj-structured (reflexive transitive antisymmetric
   with_suprema TA-structure);
   let t be type of T;
   let a be adjective of T;
-  assume a is_applicable_to t;
+  assume
+  a is_applicable_to t;
   then types a /\ downarrow t is Ideal of T by Th20;
   then sup (types a /\ downarrow t) in types a /\ downarrow t by Th1;
   hence thesis by XBOOLE_0:def 4;
 end;
 
 theorem Th24:
-  for T being Noetherian adj-structured (reflexive transitive antisymmetric
-  with_suprema TA-structure) for t being type of T for a being adjective of T
-  for t' being type of T st t' <= t & a in adjs t'
-  holds a is_applicable_to t & t' <= a ast t
+  for T being Noetherian adj-structured (reflexive transitive
+  antisymmetric with_suprema TA-structure) for t being type of T for a being
+  adjective of T for t' being type of T st t' <= t & a in adjs t' holds a
+  is_applicable_to t & t' <= a ast t
 proof
   let T be Noetherian adj-structured (reflexive transitive antisymmetric
   with_suprema TA-structure);
   let t be type of T;
   let a be adjective of T;
   let t' be type of T;
-  assume
-A1: t' <= t & a in adjs t';
-  then
-A2: t' in downarrow t & t' in types a by Th13,WAYBEL_0:17;
+  assume that
+A1: t' <= t and
+A2: a in adjs t';
+A3: t' in downarrow t by A1,WAYBEL_0:17;
   thus a is_applicable_to t
   proof
-    take t'; thus thesis by A1,Th13;
+    take t';
+    thus thesis by A1,A2,Th13;
   end;
   then types a /\ downarrow t is Ideal of T by Th20;
-  then ex_sup_of types a /\ downarrow t, T &
-  a ast t = sup (types a /\ downarrow t) by Th1;
-  then a ast t is_>=_than types a /\ downarrow t & t' in types a /\
-  downarrow t by A2,XBOOLE_0:def 4,YELLOW_0:30;
-  hence thesis by LATTICE3:def 9;
+  then ex_sup_of types a /\ downarrow t, T by Th1;
+  then
+A4: a ast t is_>=_than types a /\ downarrow t by YELLOW_0:30;
+  t' in types a by A2,Th13;
+  then t' in types a /\ downarrow t by A3,XBOOLE_0:def 4;
+  hence thesis by A4,LATTICE3:def 9;
 end;
 
 theorem Th25:
-  for T being Noetherian adj-structured (reflexive transitive antisymmetric
-  with_suprema TA-structure) for t being type of T for a being adjective of T
-  st a in adjs t holds a is_applicable_to t & a ast t = t
+  for T being Noetherian adj-structured (reflexive transitive
+  antisymmetric with_suprema TA-structure) for t being type of T for a being
+  adjective of T st a in adjs t holds a is_applicable_to t & a ast t = t
 proof
   let T be Noetherian adj-structured (reflexive transitive antisymmetric
   with_suprema TA-structure);
@@ -1041,17 +1096,18 @@ proof
   assume
 A1: a in adjs t;
   hence a is_applicable_to t by Th24;
-  then t <= a ast t & a ast t <= t by A1,Th21,Th24;
-  hence thesis by YELLOW_0:def 3;
+  then
+A2: a ast t <= t by Th21;
+  t <= a ast t by A1,Th24;
+  hence thesis by A2,YELLOW_0:def 3;
 end;
 
 theorem
-  for T being Noetherian adj-structured (reflexive transitive antisymmetric
-  with_suprema TA-structure) for t being type of T
-  for a,b being adjective of T
-  st a is_applicable_to t & b is_applicable_to a ast t
-  holds b is_applicable_to t & a is_applicable_to b ast t &
-  a ast (b ast t) = b ast (a ast t)
+  for T being Noetherian adj-structured (reflexive transitive
+  antisymmetric with_suprema TA-structure) for t being type of T for a,b being
+  adjective of T st a is_applicable_to t & b is_applicable_to a ast t holds b
+  is_applicable_to t & a is_applicable_to b ast t & a ast (b ast t) = b ast (a
+  ast t)
 proof
   let T be Noetherian adj-structured (reflexive transitive antisymmetric
   with_suprema TA-structure);
@@ -1059,63 +1115,79 @@ proof
   let a,b be adjective of T such that
 A1: a is_applicable_to t and
 A2: b is_applicable_to a ast t;
-A3: a ast t = sup (types a /\ downarrow t) & a ast t <= t & a ast t in types a
-  by A1,Th21,Th23;
   consider t' being type of T such that
-A4: t' in types b & t' <= a ast t by A2,Def15;
-A5: t' <= t & b in adjs t' by A3,A4,Th13,YELLOW_0:def 2;
-  thus b is_applicable_to t
+A3: t' in types b and
+A4: t' <= a ast t by A2,Def15;
+A5: b in adjs t' by A3,Th13;
+A6: a ast t <= t by A1,Th21;
+  thus
+A7: b is_applicable_to t
   proof
-    take t'; thus thesis by A3,A4,YELLOW_0:def 2;
+    take t';
+    thus thesis by A6,A3,A4,YELLOW_0:def 2;
   end;
-  then
-A6: b ast t = sup (types b /\ downarrow t) & b ast t <= t & b ast t in types b
-  by Th21,Th23; thus
-A7: a is_applicable_to b ast t
+A8: t' <= t by A6,A4,YELLOW_0:def 2;
+  thus
+A9: a is_applicable_to b ast t
   proof
     take t';
     a ast t in types a by A1,Th23;
     hence t' in types a by A4,WAYBEL_0:def 19;
-    thus t' <= b ast t by A5,Th24;
+    thus t' <= b ast t by A8,A5,Th24;
   end;
-A8: a ast (b ast t) is_>=_than types b /\ downarrow (a ast t)
+  then
+A10: a ast (b ast t) <= b ast t by Th21;
+A11: a ast t in types a by A1,Th23;
+A12: a ast (b ast t) is_>=_than types b /\ downarrow (a ast t)
   proof
     let t' be type of T;
-    assume t' in types b /\ downarrow (a ast t);
-    then t' in types b & t' in downarrow (a ast t) by XBOOLE_0:def 4;
+    assume
+A13: t' in types b /\ downarrow (a ast t);
+    then t' in types b by XBOOLE_0:def 4;
     then
-A9: b in adjs t' & t' <= a ast t by Th13,WAYBEL_0:17;
-    then t' <= t & t' in types a by A3,WAYBEL_0:def 19,YELLOW_0:def 2;
-    then t' <= b ast t & a in adjs t' by A9,Th13,Th24;
-    hence thesis by Th24;
+A14: b in adjs t' by Th13;
+    t' in downarrow (a ast t) by A13,XBOOLE_0:def 4;
+    then
+A15: t' <= a ast t by WAYBEL_0:17;
+    then t' in types a by A11,WAYBEL_0:def 19;
+    then
+A16: a in adjs t' by Th13;
+    t' <= t by A6,A15,YELLOW_0:def 2;
+    then t' <= b ast t by A14,Th24;
+    hence thesis by A16,Th24;
   end;
-  a ast (b ast t) <= b ast t by A7,Th21;
-  then a ast (b ast t) <= t & a in adjs (a ast (b ast t))
-  by A6,A7,Th22,YELLOW_0:def 2;
-  then a ast (b ast t) <= b ast t & a ast (b ast t) <= a ast t
-  by A7,Th21,Th24;
-  then a ast (b ast t) in types b & a ast (b ast t) in downarrow (a ast t)
-  by A6,WAYBEL_0:17,def 19;
-  then a ast (b ast t) in types b /\ downarrow (a ast t) by XBOOLE_0:def 4;
+  b ast t <= t by A7,Th21;
+  then
+A17: a ast (b ast t) <= t by A10,YELLOW_0:def 2;
+  a in adjs (a ast (b ast t)) by A9,Th22;
+  then a ast (b ast t) <= a ast t by A17,Th24;
+  then
+A18: a ast (b ast t) in downarrow (a ast t) by WAYBEL_0:17;
+A19: a ast (b ast t) <= b ast t by A9,Th21;
+  b ast t in types b by A7,Th23;
+  then a ast (b ast t) in types b by A19,WAYBEL_0:def 19;
+  then a ast (b ast t) in types b /\ downarrow (a ast t) by A18,XBOOLE_0:def 4;
   then for t' being type of T st t' is_>=_than types b /\ downarrow (a ast t)
   holds a ast (b ast t) <= t' by LATTICE3:def 9;
-  hence thesis by A8,YELLOW_0:30;
+  hence thesis by A12,YELLOW_0:30;
 end;
 
 theorem Th27:
-  for T being adj-structured (reflexive transitive antisymmetric with_suprema
-  TA-structure) for A being Subset of the adjectives of T
-  for t being type of T st A is_applicable_to t
-  holds types A /\ downarrow t is Ideal of T
+  for T being adj-structured (reflexive transitive antisymmetric
+  with_suprema TA-structure) for A being Subset of the adjectives of T for t
+  being type of T st A is_applicable_to t holds types A /\ downarrow t is Ideal
+  of T
 proof
   let T be adj-structured (reflexive transitive antisymmetric with_suprema
   TA-structure);
   let A be Subset of the adjectives of T;
   let t be type of T;
   given t' being type of T such that
-A1: A c= adjs t' & t' <= t;
-  t' in downarrow t & t' in types A by A1,Th14,WAYBEL_0:17;
-  hence thesis by WAYBEL_0:27,44,XBOOLE_0:def 4;
+A1: A c= adjs t' and
+A2: t' <= t;
+A3: t' in downarrow t by A2,WAYBEL_0:17;
+  t' in types A by A1,Th14;
+  hence thesis by A3,WAYBEL_0:27,44,XBOOLE_0:def 4;
 end;
 
 definition
@@ -1123,14 +1195,13 @@ definition
   let t be type of T;
   let A be Subset of the adjectives of T;
   func A ast t -> type of T equals
-
   sup(types A /\ downarrow t);
   coherence;
 end;
 
 theorem Th28:
-  for T being non empty reflexive transitive antisymmetric TA-structure
-  for t being type of T holds ({} the adjectives of T) ast t = t
+  for T being non empty reflexive transitive antisymmetric
+  TA-structure for t being type of T holds ({} the adjectives of T) ast t = t
 proof
   let T be non empty reflexive transitive antisymmetric TA-structure;
   let t be type of T;
@@ -1146,118 +1217,139 @@ definition
   let p be FinSequence of the adjectives of T;
   func apply(p,t) -> FinSequence of the carrier of T means
   :Def19:
-  len it = len p+1 & it.1 = t &
-  for i being Element of NAT, a being adjective of T, t being type of T
-  st i in dom p & a = p.i & t = it.i holds it.(i+1) = a ast t;
+  len it =
+  len p+1 & it.1 = t & for i being Element of NAT, a being adjective of T, t
+  being type of T st i in dom p & a = p.i & t = it.i holds it.(i+1) = a ast t;
   existence
   proof
-    defpred P[set,set,set] means ex a being adjective of T st
-    a = p.$1 & ($2 is not type of T & $3 = 0 or
-    ex t being type of T st t = $2 & $3 = a ast t);
-A1: for i being Element of NAT st 1 <= i & i < len p+1 for x being set
-    ex y being set st P[i,x,y]
+    defpred P[set,set,set] means ex a being adjective of T st a = p.$1 & ($2
+is not type of T & $3 = 0 or ex t being type of T st t = $2 & $3 = a ast t);
+A1: for i being Element of NAT st 1 <= i & i < len p+1 for x being set ex
+    y being set st P[i,x,y]
     proof
       let i be Element of NAT;
       assume
 A2:   1 <= i;
-      assume i < len p+1;
+      assume
+      i < len p+1;
       then i <= len p by NAT_1:13;
       then i in dom p by A2,FINSEQ_3:27;
-      then p.i in rng p & rng p c= the adjectives of T by FUNCT_1:12;
+      then p.i in rng p by FUNCT_1:12;
       then reconsider a = p.i as adjective of T;
       let x be set;
       per cases;
       suppose
 A3:     x is not type of T;
-        take 0, a; thus thesis by A3;
+        take 0, a;
+        thus thesis by A3;
       end;
-      suppose x is type of T;
+      suppose
+        x is type of T;
         then reconsider t = x as type of T;
-        take a ast t, a; thus a = p.i;
+        take a ast t, a;
+        thus a = p.i;
         thus thesis;
       end;
     end;
     consider q being FinSequence such that
-A5: len q = len p+1 and
-A6: q.1 = t or len p+1 = 0 and
-A7: for i being Element of NAT st 1 <= i & i < len p+1 holds P[i,q.i,q.(i+1)]
-    from RECDEF_1:sch 3(A1);
+A4: len q = len p+1 and
+A5: q.1 = t or len p+1 = 0 and
+A6: for i being Element of NAT st 1 <= i & i < len p+1 holds P[i,q.i,
+    q.(i+1)] from RECDEF_1:sch 3(A1);
     defpred P[Element of NAT] means $1 in dom q implies q.$1 is type of T;
-A8: P[0] by FINSEQ_3:26;
-A9: now
+A7: now
       let k be Element of NAT such that
-A10:  P[k];
+A8:   P[k];
       now
-        assume k+1 in dom q;
-        then (k <> 0 implies k > 0) & k+1 <= len q by FINSEQ_3:27;
+        assume
+        k+1 in dom q;
+        then k+1 <= len q by FINSEQ_3:27;
         then
-A11:    (k <> 0 implies k >= 0+1) & k < len q by NAT_1:13;
-        then k <> 0 implies ex a being adjective of T st a = p.k &
-        (q.k is not type of T & q.(k+1) = 0
-        or ex t being type of T st t = q.k & q.(k+1) = a ast t) by A5,A7;
-        hence q.(k+1) is type of T by A6,A10,A11,FINSEQ_3:27;
+A9:     k < len q by NAT_1:13;
+A10:    k <> 0 implies k >= 0+1 by NAT_1:13;
+        then
+        k <> 0 implies ex a being adjective of T st a = p.k & (q.k is not
+type of T & q.(k+1) = 0 or ex t being type of T st t = q.k & q.(k+1) = a ast t)
+        by A4,A6,A9;
+        hence q.(k+1) is type of T by A5,A8,A10,A9,FINSEQ_3:27;
       end;
       hence P[k+1];
     end;
-A12: for k being Element of NAT holds P[k] from NAT_1:sch 1(A8,A9);
+A11: P[0] by FINSEQ_3:26;
+A12: for k being Element of NAT holds P[k] from NAT_1:sch 1(A11,A7);
     rng q c= the carrier of T
     proof
       let a be set;
-      assume a in rng q;
-      then consider x being set such that
-A13:  x in dom q & a = q.x by FUNCT_1:def 5;
-      a is type of T by A12,A13;
+      assume
+      a in rng q;
+      then ex x being set st x in dom q & a = q.x by FUNCT_1:def 5;
+      then a is type of T by A12;
       hence thesis;
     end;
     then reconsider q as FinSequence of the carrier of T by FINSEQ_1:def 4;
-    take q; thus len q = len p+1 & q.1 = t by A5,A6;
+    take q;
+    thus len q = len p+1 & q.1 = t by A4,A5;
     let i be Element of NAT, a be adjective of T, t being type of T;
-    assume
-A14: i in dom p & a = p.i & t = q.i;
-    then i >= 1 & i <= len p by FINSEQ_3:27;
-    then i >= 1 & i < len p+1 by NAT_1:13;
-    then ex a being adjective of T st a = p.i & (q.i is not type of T & q.(i+1
-    )=0 or ex t being type of T st t = q.i & q.(i+1) = a ast t) by A7;
-    hence thesis by A14;
+    assume that
+A13: i in dom p and
+A14: a = p.i and
+A15: t = q.i;
+    i <= len p by A13,FINSEQ_3:27;
+    then
+A16: i < len p+1 by NAT_1:13;
+    i >= 1 by A13,FINSEQ_3:27;
+    then
+    ex a being adjective of T st a = p.i & (q.i is not type of T & q.(i+1
+    )=0 or ex t being type of T st t = q.i & q.(i+1) = a ast t) by A6,A16;
+    hence thesis by A14,A15;
   end;
   correctness
   proof
     let q1, q2 be FinSequence of the carrier of T such that
-A15: len q1 = len p+1 & q1.1 = t and
-A16: for i being Element of NAT, a being adjective of T, t being type of T
-    st i in dom p & a = p.i & t = q1.i holds q1.(i+1) = a ast t and
-A17: len q2 = len p+1 & q2.1 = t and
-A18: for i being Element of NAT, a being adjective of T, t being type of T
-    st i in dom p & a = p.i & t = q2.i holds q2.(i+1) = a ast t;
-A19: dom q1 = dom q2 by A15,A17,FINSEQ_3:31;
+A17: len q1 = len p+1 and
+A18: q1.1 = t and
+A19: for i being Element of NAT, a being adjective of T, t being type
+    of T st i in dom p & a = p.i & t = q1.i holds q1.(i+1) = a ast t and
+A20: len q2 = len p+1 and
+A21: q2.1 = t and
+A22: for i being Element of NAT, a being adjective of T, t being type
+    of T st i in dom p & a = p.i & t = q2.i holds q2.(i+1) = a ast t;
     defpred P[Nat] means $1 in dom q1 implies q1.$1 = q2.$1;
-A20: P[0] by FINSEQ_3:27;
-A21: now
+A23: now
       let i be Nat such that
-A22:  P[i];
+A24:  P[i];
       now
-        assume i+1 in dom q1;
-        then i+1 <= len q1 & i <= i+1 by FINSEQ_3:27,NAT_1:13;
+        assume
+        i+1 in dom q1;
         then
-A23:    i <= len p & i <= len q1 by A15,XREAL_1:8,XXREAL_0:2;
+A25:    i+1 <= len q1 by FINSEQ_3:27;
+        then
+A26:    i <= len q1 by NAT_1:13;
+A27:    i <= len p by A17,A25,XREAL_1:8;
         per cases;
-        suppose i = 0;
-          hence q1.(i+1) = q2.(i+1) by A15,A17;
+        suppose
+          i = 0;
+          hence q1.(i+1) = q2.(i+1) by A18,A21;
         end;
-        suppose i > 0;
-          then i >= 0+1 by NAT_1:13;
+        suppose
+          i > 0;
           then
-A24:      i in dom p & i in dom q1 by A23,FINSEQ_3:27;
+A28:      i >= 0+1 by NAT_1:13;
+          then
+A29:      i in dom p by A27,FINSEQ_3:27;
           then reconsider a = p.i as adjective of T by FINSEQ_2:13;
-          reconsider t = q1.i as type of T by A24,FINSEQ_2:13;
-          thus q1.(i+1) = a ast t by A16,A24
-            .= q2.(i+1) by A18,A22,A24;
+          i in dom q1 by A26,A28,FINSEQ_3:27;
+          then reconsider t = q1.i as type of T by FINSEQ_2:13;
+          thus q1.(i+1) = a ast t by A19,A29
+            .= q2.(i+1) by A22,A24,A26,A28,A29,FINSEQ_3:27;
         end;
       end;
       hence P[i+1];
     end;
-    for i being Nat holds P[i] from NAT_1:sch 2(A20,A21);
-    hence thesis by A19,FINSEQ_1:17;
+A30: P[0] by FINSEQ_3:27;
+A31: for i being Nat holds P[i] from NAT_1:sch 2(A30,A23);
+    dom q1 = dom q2 by A17,A20,FINSEQ_3:31;
+    hence thesis by A31,FINSEQ_1:17;
   end;
 end;
 
@@ -1274,29 +1366,31 @@ registration
 end;
 
 theorem
-  for T being non empty non void reflexive transitive TA-structure
-  for t being type of T holds apply(<*> the adjectives of T, t) = <*t*>
+  for T being non empty non void reflexive transitive TA-structure for t
+  being type of T holds apply(<*> the adjectives of T, t) = <*t*>
 proof
   let T be non empty non void reflexive transitive TA-structure;
   let t be type of T;
-  len apply(<*> the adjectives of T, t) = 0+1 &
-  apply(<*> the adjectives of T, t).1 = t by Def19,CARD_1:47;
-  hence thesis by FINSEQ_1:57;
+A1: apply(<*> the adjectives of T, t).1 = t by Def19;
+  len apply(<*> the adjectives of T, t) = 0+1 by Def19,CARD_1:47;
+  hence thesis by A1,FINSEQ_1:57;
 end;
 
 theorem Th30:
   for T being non empty non void reflexive transitive TA-structure
-  for t being type of T, a be adjective of T
-  holds apply(<*a*>, t) = <*t, a ast t*>
+for t being type of T, a be adjective of T holds apply(<*a*>, t) = <*t, a ast t
+  *>
 proof
   let T be non empty non void reflexive transitive TA-structure;
   let t be type of T, a be adjective of T;
-A1: len <*a*> = 1 by FINSEQ_1:57;
+A1: <*a*>.1 = a by FINSEQ_1:57;
+A2: apply(<*a*>, t).1 = t by Def19;
+A3: len <*a*> = 1 by FINSEQ_1:57;
   then
-A2: len apply(<*a*>, t) = 1+1 & apply(<*a*>, t).1 = t & <*a*>.1 = a &
-  1 in dom <*a*> by Def19,FINSEQ_1:57,FINSEQ_3:27;
-  then apply(<*a*>, t).(len <*a*>+1) = a ast t by A1,Def19;
-  hence thesis by A1,A2,FINSEQ_1:61;
+A4: len apply(<*a*>, t) = 1+1 by Def19;
+  1 in dom <*a*> by A3,FINSEQ_3:27;
+  then apply(<*a*>, t).(len <*a*>+1) = a ast t by A3,A2,A1,Def19;
+  hence thesis by A3,A4,A2,FINSEQ_1:61;
 end;
 
 definition
@@ -1304,20 +1398,19 @@ definition
   let t be type of T;
   let v be FinSequence of the adjectives of T;
   func v ast t -> type of T equals
-
   apply(v,t).(len v+1);
   coherence
   proof
-    len v+1 >= 1 & len apply(v,t) = len v+1 by Def19,NAT_1:11;
-    then len v+1 in dom apply(v,t) by FINSEQ_3:27;
+A1: len v+1 >= 1 by NAT_1:11;
+    len apply(v,t) = len v+1 by Def19;
+    then len v+1 in dom apply(v,t) by A1,FINSEQ_3:27;
     hence thesis by FINSEQ_2:13;
   end;
 end;
 
 theorem
-  for T being non empty non void reflexive transitive TA-structure
-  for t being type of T holds (<*> the adjectives of T) ast t = t
-   by Def19;
+  for T being non empty non void reflexive transitive TA-structure for t
+  being type of T holds (<*> the adjectives of T) ast t = t by Def19;
 
 theorem Th32:
   for T being non empty non void reflexive transitive TA-structure
@@ -1326,201 +1419,247 @@ proof
   let T be non empty non void reflexive transitive TA-structure;
   let t be type of T;
   let a be adjective of T;
-  apply(<*a*>, t) = <*t, a ast t*> & len <*a*> = 1 by Th30,FINSEQ_1:57;
-  hence thesis by FINSEQ_1:61;
+A1: len <*a*> = 1 by FINSEQ_1:57;
+  apply(<*a*>, t) = <*t, a ast t*> by Th30;
+  hence thesis by A1,FINSEQ_1:61;
 end;
 
 theorem
-  for p,q being FinSequence
-  for i being natural number st i >= 1 & i < len p holds (p$^q).i = p.i
+  for p,q being FinSequence for i being natural number st i >= 1 & i <
+  len p holds (p$^q).i = p.i
 proof
   let p,q be FinSequence;
   let i be natural number;
-  assume
-A1: i >= 1 & i < len p;
+  assume that
+A1: i >= 1 and
+A2: i < len p;
   per cases;
-  suppose q = {};
+  suppose
+    q = {};
     hence thesis by REWRITE1:1;
   end;
-  suppose q <> {};
+  suppose
+    q <> {};
     then consider j being Element of NAT, r being FinSequence such that
-A3: len p = j+1 & r = p|Seg j & p$^q = r^q by A1,CARD_1:47,REWRITE1:def 1;
+A3: len p = j+1 and
+A4: r = p|Seg j and
+A5: p$^q = r^q by A2,CARD_1:47,REWRITE1:def 1;
+A6: p = r^<*p.len p*> by A3,A4,FINSEQ_3:61;
     j < len p by A3,NAT_1:13;
-    then len r = j & i <= j & i is Element of NAT
-    by A1,A3,FINSEQ_1:21,NAT_1:13,ORDINAL1:def 13;
     then
-A4: i in dom r by A1,FINSEQ_3:27;
-    then (p$^q).i = r.i & p = r^<*p.len p*> by A3,FINSEQ_1:def 7,FINSEQ_3:61;
-    hence thesis by A4,FINSEQ_1:def 7;
+A7: len r = j by A4,FINSEQ_1:21;
+    i <= j by A2,A3,NAT_1:13;
+    then
+A8: i in dom r by A1,A7,FINSEQ_3:27;
+    then (p$^q).i = r.i by A5,FINSEQ_1:def 7;
+    hence thesis by A8,A6,FINSEQ_1:def 7;
   end;
 end;
 
 theorem Th34:
-  for p being non empty FinSequence, q being FinSequence
-  for i being natural number st i < len q holds (p$^q).(len p+i) = q.(i+1)
+  for p being non empty FinSequence, q being FinSequence for i
+  being natural number st i < len q holds (p$^q).(len p+i) = q.(i+1)
 proof
   let p be non empty FinSequence, q be FinSequence;
   let i be natural number;
+A1: i+1 >= 1 by NAT_1:11;
   assume
-A1: i < len q;
+A2: i < len q;
   then consider j being Element of NAT, r being FinSequence such that
-A2: len p = j+1 & r = p|Seg j & p$^q = r^q by CARD_1:47,REWRITE1:def 1;
-  j < len p by A2,NAT_1:13;
-  then len r = j & i+1 >= 1 & i+1 <= len q & i+1 is Element of NAT
-  by A1,A2,FINSEQ_1:21,NAT_1:11,13;
-  then len p+i =len r+(i+1) & i+1 in dom q by A2,FINSEQ_3:27;
-  hence thesis by A2,FINSEQ_1:def 7;
+A3: len p = j+1 and
+A4: r = p|Seg j and
+A5: p$^q = r^q by CARD_1:47,REWRITE1:def 1;
+  i+1 <= len q by A2,NAT_1:13;
+  then
+A6: i+1 in dom q by A1,FINSEQ_3:27;
+  j < len p by A3,NAT_1:13;
+  then len r = j by A4,FINSEQ_1:21;
+  then len p+i =len r+(i+1) by A3;
+  hence thesis by A5,A6,FINSEQ_1:def 7;
 end;
 
 theorem Th35:
   for T being non empty non void reflexive transitive TA-structure
-  for t being type of T for v1,v2 being FinSequence of the adjectives of T
-  holds apply(v1^v2, t) = apply(v1, t) $^ apply(v2, v1 ast t)
+for t being type of T for v1,v2 being FinSequence of the adjectives of T holds
+  apply(v1^v2, t) = apply(v1, t) $^ apply(v2, v1 ast t)
 proof
   let T be non empty non void reflexive transitive TA-structure;
   let t be type of T;
   let v1,v2 be FinSequence of the adjectives of T;
-A1: len apply(v1,t) = len v1+1 & len apply(v2, v1 ast t) = len v2+1 by Def19;
-  consider tt being FinSequence of the carrier of T,
-  q being Element of T such that
-A2: apply(v1,t) = tt^<*q*> by HILBERT2:4;
-A3: apply(v1, t) $^ apply(v2, v1 ast t) = tt^apply(v2, v1 ast t)
-  by A2,REWRITE1:2;
+  consider tt being FinSequence of the carrier of T, q being Element of T such
+  that
+A1: apply(v1,t) = tt^<*q*> by HILBERT2:4;
+  set s = apply(v1, t) $^ apply(v2, v1 ast t), p = v1^v2;
+A2: len apply(v1,t) = len v1+1 by Def19;
+A3: apply(v1, t) $^ apply(v2, v1 ast t) = tt^apply(v2, v1 ast t) by A1,
+REWRITE1:2;
   len <*q*> = 1 by FINSEQ_1:56;
   then
-A4: len v1+1 = len tt+1 by A1,A2,FINSEQ_1:35;
-  set s = apply(v1, t) $^ apply(v2, v1 ast t), p = v1^v2;
-A5: len s = len tt+(len v2+1) by A1,A3,FINSEQ_1:35
-    .= len v1+len v2+1 by A4
-    .= len p+1 by FINSEQ_1:35;
-A6: s.1 = t
-  proof per cases;
-    suppose len v1 = 0;
-      then v1 = <*>the adjectives of T & tt = {} by A4;
-      then s = apply(v2, v1 ast t) & v1 ast t = t
-       by A3,Def19,CARD_1:47,FINSEQ_1:47;
-      hence thesis by Def19;
-    end;
-    suppose len v1 > 0;
-      then len tt >= 0+1 & 0+1 = 1 & 1 <= 1 by A4,NAT_1:13;
-      then 1 in dom tt by FINSEQ_3:27;
-      then s.1 = tt.1 & tt.1 = apply(v1, t).1 by A2,A3,FINSEQ_1:def 7;
-      hence thesis by Def19;
-    end;
-  end;
-  now
-    let i be Element of NAT, a be adjective of T, t' be type of T such that
-A7: i in dom p and
-A8: a = p.i & t' = s.i;
-A9: 1 <= i & i <= len p & len p = len v1+len v2 by A7,FINSEQ_1:35,FINSEQ_3:27;
-A10: len apply(v2, v1 ast t) = len v2+1 by Def19;
-    per cases by XXREAL_0:1;
-    suppose i < len v1;
-      then i+1 <= len v1 & i <= len v1 & i+1 >= 1 by NAT_1:11,13;
+A4: len v1+1 = len tt+1 by A2,A1,FINSEQ_1:35;
+A5: s.1 = t
+  proof
+    per cases;
+    suppose
+A6:   len v1 = 0;
+      then tt = {} by A4;
       then
-A11:  i in dom tt & i+1 in dom tt & i in dom v1 by A4,A9,FINSEQ_3:27;
-      then s.i = tt.i & tt.i = apply(v1, t).i & s.(i+1) = tt.(i+1) & p.i = v1
-      .i & tt.(i+1) = apply(v1, t).(i+1) by A2,A3,FINSEQ_1:def 7;
-      hence s.(i+1) = a ast t' by A8,A11,Def19;
+A7:   s = apply(v2, v1 ast t) by A3,FINSEQ_1:47;
+      v1 ast t = t by A6,Def19;
+      hence thesis by A7,Def19;
     end;
     suppose
-A12:  i = len v1;
-      1 <= len apply(v2, v1 ast t) by A10,NAT_1:11;
+      len v1 > 0;
+      then len tt >= 0+1 by A4,NAT_1:13;
       then
-A13:  i in dom tt & i in dom v1 & 1 in dom apply(v2, v1 ast t)
-      by A4,A9,A12,FINSEQ_3:27;
+A8:   1 in dom tt by FINSEQ_3:27;
       then
-A14:  s.i = tt.i & tt.i = apply(v1, t).i & s.(i+1) = apply(v2, v1 ast t) .1 &
-      p.i = v1.i by A2,A3,A4,A12,FINSEQ_1:def 7;
-      then a ast t' = v1 ast t by A8,A12,A13,Def19;
-      hence s.(i+1) = a ast t' by A14,Def19;
-    end;
-    suppose i > len v1;
-      then i >= len v1+1 by NAT_1:13;
-      then consider j being Nat such that
-A15:  i = len v1+1+j by NAT_1:10;
-A16:  i = j+1+len v1 & j+1+len v1+1 = j+1+1+len v1 by A15;
-      then
-A17:  1+j >= 1 & 1+j <= len v2 & 0 <= 1 by A9,NAT_1:11,XREAL_1:8;
-      then 1+j+1 <= len v2+1 & 1+j+1 >= 1 & 1+j+0 <= len v2+1
-      by NAT_1:11,XREAL_1:9;
-      then
-A18:  j+1 in dom v2 & j+1 in dom apply(v2, v1 ast t) &
-      j+1+1 in dom apply(v2, v1 ast t) by A10,A17,FINSEQ_3:27;
-      then s.i = apply(v2, v1 ast t).(j+1) & p.i = v2.(j+1) &
-      s.(i+1) = apply(v2, v1 ast t).(j+1+1) by A3,A4,A16,FINSEQ_1:def 7;
-      hence s.(i+1) = a ast t' by A8,A18,Def19;
+A9:   tt.1 = apply(v1, t).1 by A1,FINSEQ_1:def 7;
+      s.1 = tt.1 by A3,A8,FINSEQ_1:def 7;
+      hence thesis by A9,Def19;
     end;
   end;
-  hence thesis by A3,A5,A6,Def19;
+A10: now
+A11: len p = len v1+len v2 by FINSEQ_1:35;
+A12: len apply(v2, v1 ast t) = len v2+1 by Def19;
+    let i be Element of NAT, a be adjective of T, t' be type of T such that
+A13: i in dom p and
+A14: a = p.i and
+A15: t' = s.i;
+A16: 1 <= i by A13,FINSEQ_3:27;
+A17: i <= len p by A13,FINSEQ_3:27;
+    per cases by XXREAL_0:1;
+    suppose
+A18:  i < len v1;
+A19:  i+1 >= 1 by NAT_1:11;
+      i+1 <= len v1 by A18,NAT_1:13;
+      then
+A20:  i+1 in dom tt by A4,A19,FINSEQ_3:27;
+      then
+A21:  s.(i+1) = tt.(i+1) by A3,FINSEQ_1:def 7;
+A22:  i in dom tt by A4,A16,A18,FINSEQ_3:27;
+      then
+A23:  s.i = tt.i by A3,FINSEQ_1:def 7;
+A24:  tt.(i+1) = apply(v1, t).(i+1) by A1,A20,FINSEQ_1:def 7;
+A25:  tt.i = apply(v1, t).i by A1,A22,FINSEQ_1:def 7;
+A26:  i in dom v1 by A16,A18,FINSEQ_3:27;
+      then p.i = v1 .i by FINSEQ_1:def 7;
+      hence s.(i+1) = a ast t' by A14,A15,A26,A23,A25,A21,A24,Def19;
+    end;
+    suppose
+A27:  i = len v1;
+      1 <= len apply(v2, v1 ast t) by A12,NAT_1:11;
+      then 1 in dom apply(v2, v1 ast t) by FINSEQ_3:27;
+      then
+A28:  s.(i+1) = apply(v2, v1 ast t) .1 by A3,A4,A27,FINSEQ_1:def 7;
+A29:  i in dom tt by A4,A16,A27,FINSEQ_3:27;
+      then
+A30:  s.i = tt.i by A3,FINSEQ_1:def 7;
+A31:  tt.i = apply(v1, t).i by A1,A29,FINSEQ_1:def 7;
+A32:  i in dom v1 by A16,A27,FINSEQ_3:27;
+      then p.i = v1.i by FINSEQ_1:def 7;
+      then a ast t' = v1 ast t by A14,A15,A27,A32,A30,A31,Def19;
+      hence s.(i+1) = a ast t' by A28,Def19;
+    end;
+    suppose
+      i > len v1;
+      then i >= len v1+1 by NAT_1:13;
+      then consider j being Nat such that
+A33:  i = len v1+1+j by NAT_1:10;
+A34:  1+j+1 >= 1 by NAT_1:11;
+A35:  j+1+len v1+1 = j+1+1+len v1;
+A36:  1+j >= 1 by NAT_1:11;
+A37:  i = j+1+len v1 by A33;
+      then
+A38:  1+j <= len v2 by A17,A11,XREAL_1:8;
+      then 1+j+0 <= len v2+1 by XREAL_1:9;
+      then j+1 in dom apply(v2, v1 ast t) by A12,A36,FINSEQ_3:27;
+      then
+A39:  s.i = apply(v2, v1 ast t).(j+1) by A3,A4,A37,FINSEQ_1:def 7;
+      1+j+1 <= len v2+1 by A38,XREAL_1:9;
+      then j+1+1 in dom apply(v2, v1 ast t) by A12,A34,FINSEQ_3:27;
+      then
+A40:  s.(i+1) = apply(v2, v1 ast t).(j+1+1) by A3,A4,A33,A35,FINSEQ_1:def 7;
+A41:  j+1 in dom v2 by A36,A38,FINSEQ_3:27;
+      then p.i = v2.(j+1) by A37,FINSEQ_1:def 7;
+      hence s.(i+1) = a ast t' by A14,A15,A41,A39,A40,Def19;
+    end;
+  end;
+  len apply(v2, v1 ast t) = len v2+1 by Def19;
+  then len s = len tt+(len v2+1) by A3,FINSEQ_1:35
+    .= len v1+len v2+1 by A4
+    .= len p+1 by FINSEQ_1:35;
+  hence thesis by A3,A5,A10,Def19;
 end;
 
 theorem Th36:
   for T being non empty non void reflexive transitive TA-structure
-  for t being type of T for v1,v2 being FinSequence of the adjectives of T
-  for i being natural number st i in dom v1
-  holds apply(v1^v2, t).i = apply(v1, t).i
+for t being type of T for v1,v2 being FinSequence of the adjectives of T for i
+  being natural number st i in dom v1 holds apply(v1^v2, t).i = apply(v1, t).i
 proof
   let T be non empty non void reflexive transitive TA-structure;
   let t be type of T;
   let v1,v2 be FinSequence of the adjectives of T;
   set v = v1^v2;
-A1: len apply(v1,t) = len v1+1 & len apply(v2, v1 ast t) = len v2+1 by Def19;
-  consider tt being FinSequence of the carrier of T,
-  q being Element of T such that
-A2: apply(v1,t) = tt^<*q*> by HILBERT2:4;
-A3: apply(v,t) = apply(v1,t) $^ apply(v2, v1 ast t) by Th35
-    .= tt^apply(v2, v1 ast t) by A2,REWRITE1:2;
-  len <*q*> = 1 by FINSEQ_1:56;
-  then
-A4: len v1+1 = len tt+1 by A1,A2,FINSEQ_1:35;
+  consider tt being FinSequence of the carrier of T, q being Element of T such
+  that
+A1: apply(v1,t) = tt^<*q*> by HILBERT2:4;
   let i be natural number;
-  assume i in dom v1;
-  then i >= 1 & i <= len tt & i is Element of NAT by A4,FINSEQ_3:27;
-  then i in dom tt by FINSEQ_3:27;
-  then apply(v,t).i = tt.i & tt.i = apply(v1,t).i by A2,A3,FINSEQ_1:def 7;
-  hence thesis;
+A2: len apply(v1,t) = len v1+1 by Def19;
+  assume
+A3: i in dom v1;
+  then
+A4: i >= 1 by FINSEQ_3:27;
+  len <*q*> = 1 by FINSEQ_1:56;
+  then len v1+1 = len tt+1 by A2,A1,FINSEQ_1:35;
+  then i <= len tt by A3,FINSEQ_3:27;
+  then
+A5: i in dom tt by A4,FINSEQ_3:27;
+  apply(v,t) = apply(v1,t) $^ apply(v2, v1 ast t) by Th35
+    .= tt^apply(v2, v1 ast t) by A1,REWRITE1:2;
+  then apply(v,t).i = tt.i by A5,FINSEQ_1:def 7;
+  hence thesis by A1,A5,FINSEQ_1:def 7;
 end;
 
 theorem Th37:
   for T being non empty non void reflexive transitive TA-structure
-  for t being type of T for v1,v2 being FinSequence of the adjectives of T
-  holds apply(v1^v2, t).(len v1+1) = v1 ast t
+for t being type of T for v1,v2 being FinSequence of the adjectives of T holds
+  apply(v1^v2, t).(len v1+1) = v1 ast t
 proof
   let T be non empty non void reflexive transitive TA-structure;
   let t be type of T;
   let v1,v2 be FinSequence of the adjectives of T;
   set v = v1^v2;
-A1: len apply(v1,t) = len v1+1 & len apply(v2, v1 ast t) = len v2+1 by Def19;
-  apply(v,t) = apply(v1,t) $^ apply(v2, v1 ast t) by Th35;
-  then apply(v,t).(len v1+1+0) = apply(v2, v1 ast t).(0+1) by A1,Th34;
+A1: len apply(v2, v1 ast t) = len v2+1 by Def19;
+A2: apply(v,t) = apply(v1,t) $^ apply(v2, v1 ast t) by Th35;
+  len apply(v1,t) = len v1+1 by Def19;
+  then apply(v,t).(len v1+1+0) = apply(v2, v1 ast t).(0+1) by A1,A2,Th34;
   hence thesis by Def19;
 end;
 
 theorem Th38:
   for T being non empty non void reflexive transitive TA-structure
-  for t being type of T for v1,v2 being FinSequence of the adjectives of T
-  holds v2 ast (v1 ast t) = v1^v2 ast t
+for t being type of T for v1,v2 being FinSequence of the adjectives of T holds
+  v2 ast (v1 ast t) = v1^v2 ast t
 proof
   let T be non empty non void reflexive transitive TA-structure;
   let t be type of T;
   let v1,v2 be FinSequence of the adjectives of T;
   set v = v1^v2;
-A1: len apply(v1,t) = len v1+1 & len apply(v2, v1 ast t) = len v2+1 by Def19;
-  consider tt being FinSequence of the carrier of T,
-  q being Element of T such that
-A2: apply(v1,t) = tt^<*q*> by HILBERT2:4;
-A3: apply(v,t) = apply(v1,t) $^ apply(v2, v1 ast t) by Th35
-    .= tt^apply(v2, v1 ast t) by A2,REWRITE1:2;
-  len apply(v2, v1 ast t) = len v2+1 & len v2+1 >= 1 by Def19,NAT_1:11;
-  then
-A4: len v2+1 in dom apply(v2, v1 ast t) by FINSEQ_3:27;
+  consider tt being FinSequence of the carrier of T, q being Element of T such
+  that
+A1: apply(v1,t) = tt^<*q*> by HILBERT2:4;
+A2: len apply(v1,t) = len v1+1 by Def19;
   len <*q*> = 1 by FINSEQ_1:56;
   then
-A5: len v1+1 = len tt+1 by A1,A2,FINSEQ_1:35;
-  thus v2 ast (v1 ast t) =
-  apply(v,t).(len tt+(len v2+1)) by A3,A4,FINSEQ_1:def 7
-    .= apply(v,t).(len v1+len v2+1) by A5
+A3: len v1+1 = len tt+1 by A2,A1,FINSEQ_1:35;
+A4: len v2+1 >= 1 by NAT_1:11;
+  len apply(v2, v1 ast t) = len v2+1 by Def19;
+  then
+A5: len v2+1 in dom apply(v2, v1 ast t) by A4,FINSEQ_3:27;
+  apply(v,t) = apply(v1,t) $^ apply(v2, v1 ast t) by Th35
+    .= tt^apply(v2, v1 ast t) by A1,REWRITE1:2;
+  hence v2 ast (v1 ast t) = apply(v,t).(len tt+(len v2+1)) by A5,FINSEQ_1:def 7
+    .= apply(v,t).(len v1+len v2+1) by A3
     .= v ast t by FINSEQ_1:35;
 end;
 
@@ -1530,13 +1669,14 @@ definition
   let v be FinSequence of the adjectives of T;
   pred v is_applicable_to t means
   :Def21:
-  for i being natural number, a being adjective of T, s being type of T
-  st i in dom v & a = v.i & s = apply(v,t).i holds a is_applicable_to s;
+  for i being natural number, a being
+  adjective of T, s being type of T st i in dom v & a = v.i & s = apply(v,t).i
+  holds a is_applicable_to s;
 end;
 
 theorem
-  for T being non empty non void reflexive transitive TA-structure
-  for t being type of T holds <*> the adjectives of T is_applicable_to t
+  for T being non empty non void reflexive transitive TA-structure for t
+  being type of T holds <*> the adjectives of T is_applicable_to t
 proof
   let T be non empty non void reflexive transitive TA-structure;
   let t be type of T;
@@ -1544,172 +1684,187 @@ proof
   thus thesis;
 end;
 
-theorem Th40:
-  for T being non empty non void reflexive transitive TA-structure
-  for t being type of T, a being adjective of T
-  holds a is_applicable_to t iff <*a*> is_applicable_to t
+theorem
+  for T being non empty non void reflexive transitive TA-structure for t
+  being type of T, a being adjective of T holds a is_applicable_to t iff <*a*>
+  is_applicable_to t
 proof
   let T be non empty non void reflexive transitive TA-structure;
   let t be type of T;
   let a be adjective of T;
   set v = <*a*>;
+A1: v.1 = a by FINSEQ_1:57;
   hereby
     assume
-A1: a is_applicable_to t;
+A2: a is_applicable_to t;
     thus <*a*> is_applicable_to t
     proof
       let i be natural number, b be adjective of T, s be type of T;
-      assume i in dom v;
+      assume
+      i in dom v;
       then i in Seg 1 by FINSEQ_1:55;
-      then i = 1 by FINSEQ_1:4,TARSKI:def 1;
-      then v.i = a & apply(v,t).i = t by Def19,FINSEQ_1:57;
-      hence thesis by A1;
+      then
+A3:   i = 1 by FINSEQ_1:4,TARSKI:def 1;
+      then v.i = a by FINSEQ_1:57;
+      hence thesis by A2,A3,Def19;
     end;
   end;
   assume
-A2: for i being natural number, a' being adjective of T, s being type of T
-  st i in dom v & a' = v.i & s = apply(v,t).i holds a' is_applicable_to s;
+A4: for i being natural number, a' being adjective of T, s being type of
+  T st i in dom v & a' = v.i & s = apply(v,t).i holds a' is_applicable_to s;
   len v = 1 by FINSEQ_1:57;
-
-then 1 in dom v & v.1 = a & apply(v,t).1 = t by Def19,FINSEQ_1:57,FINSEQ_3:27;
-  hence thesis by A2;
+  then
+A5: 1 in dom v by FINSEQ_3:27;
+  apply(v,t).1 = t by Def19;
+  hence thesis by A4,A5,A1;
 end;
 
 theorem Th41:
   for T being non empty non void reflexive transitive TA-structure
-  for t being type of T for v1,v2 being FinSequence of the adjectives of T
-  st v1^v2 is_applicable_to t
-  holds v1 is_applicable_to t & v2 is_applicable_to v1 ast t
+for t being type of T for v1,v2 being FinSequence of the adjectives of T st v1^
+v2 is_applicable_to t holds v1 is_applicable_to t & v2 is_applicable_to v1 ast
+  t
 proof
   let T be non empty non void reflexive transitive TA-structure;
   let t be type of T;
   let v1,v2 be FinSequence of the adjectives of T;
   set v = v1^v2;
+A1: apply(v,t) = apply(v1,t)$^apply(v2, v1 ast t) by Th35;
+A2: len apply(v2, v1 ast t) = len v2+1 by Def19;
   assume
-A1: for i being natural number, a being adjective of T, s being type of T
-  st i in dom v & a = v.i & s = apply(v,t).i holds a is_applicable_to s;
+A3: for i being natural number, a being adjective of T, s being type of
+  T st i in dom v & a = v.i & s = apply(v,t).i holds a is_applicable_to s;
   hereby
+A4: dom v1 c= dom v by FINSEQ_1:39;
     let i be natural number, a be adjective of T, s be type of T such that
-A2: i in dom v1 & a = v1.i & s = apply(v1,t).i;
-    dom v1 c= dom v by FINSEQ_1:39;
-    then i in dom v & a = v.i & s = apply(v,t).i by A2,Th36,FINSEQ_1:def 7;
-    hence a is_applicable_to s by A1;
+A5: i in dom v1 and
+A6: a = v1.i and
+A7: s = apply(v1,t).i;
+A8: a = v.i by A5,A6,FINSEQ_1:def 7;
+    s = apply(v,t).i by A5,A7,Th36;
+    hence a is_applicable_to s by A3,A5,A4,A8;
   end;
   let i be natural number, a be adjective of T, s be type of T such that
-A3: i in dom v2 & a = v2.i & s = apply(v2, v1 ast t).i;
-A4: apply(v,t) = apply(v1,t)$^apply(v2, v1 ast t) by Th35;
-  i >= 1 by A3,FINSEQ_3:27;
+A9: i in dom v2 and
+A10: a = v2.i and
+A11: s = apply(v2, v1 ast t).i;
+A12: a = v.(len v1+i) by A9,A10,FINSEQ_1:def 7;
+  i >= 1 by A9,FINSEQ_3:27;
   then consider j being Nat such that
-A5: i = 1+j by NAT_1:10;
-  i <= len v2 by A3,FINSEQ_3:27;
-  then len apply(v1,t) = len v1+1 & len apply(v2, v1 ast t) = len v2+1 &
-  j < len v2 by A5,Def19,NAT_1:13;
-  then len v1+i = len apply(v1,t)+j & j < len apply(v2, v1 ast t)
-  by A5,NAT_1:13;
-  then len v1+i in dom v & a = v.(len v1+i) & s = apply(v,t).(len v1+i)
-  by A3,A4,A5,Th34,FINSEQ_1:41,def 7;
-  hence thesis by A1;
+A13: i = 1+j by NAT_1:10;
+  i <= len v2 by A9,FINSEQ_3:27;
+  then j < len v2 by A13,NAT_1:13;
+  then
+A14: j < len apply(v2, v1 ast t) by A2,NAT_1:13;
+  len apply(v1,t) = len v1+1 by Def19;
+  then len v1+i = len apply(v1,t)+j by A13;
+  then s = apply(v,t).(len v1+i) by A11,A1,A13,A14,Th34;
+  hence thesis by A3,A9,A12,FINSEQ_1:41;
 end;
 
 theorem Th42:
-  for T being Noetherian adj-structured (reflexive transitive antisymmetric
-  with_suprema non void TA-structure) for t being type of T
-  for v being FinSequence of the adjectives of T st v is_applicable_to t
-  for i1,i2 being natural number st 1 <= i1 & i1 <= i2 & i2 <= len v+1
-  for t1,t2 being type of T st t1 = apply(v,t).i1 & t2 = apply(v,t).i2
-  holds t2 <= t1
+  for T being Noetherian adj-structured (reflexive transitive
+  antisymmetric with_suprema non void TA-structure) for t being type of T for v
+  being FinSequence of the adjectives of T st v is_applicable_to t for i1,i2
+being natural number st 1 <= i1 & i1 <= i2 & i2 <= len v+1 for t1,t2 being type
+  of T st t1 = apply(v,t).i1 & t2 = apply(v,t).i2 holds t2 <= t1
 proof
   let T be Noetherian adj-structured (reflexive transitive antisymmetric
   with_suprema non void TA-structure);
   let t be type of T;
   let v be FinSequence of the adjectives of T such that
-A1: for i being natural number, a being adjective of T, s being type of T
-  st i in dom v & a = v.i & s = apply(v,t).i holds a is_applicable_to s;
+A1: for i being natural number, a being adjective of T, s being type of
+  T st i in dom v & a = v.i & s = apply(v,t).i holds a is_applicable_to s;
   let i1,i2 be natural number such that
-A2: 1 <= i1 & i1 <= i2 & i2 <= len v+1;
+A2: 1 <= i1 and
+A3: i1 <= i2 and
+A4: i2 <= len v+1;
   consider j being Nat such that
-A3: i2 = i1+j by A2,NAT_1:10;
-A4: j in NAT by ORDINAL1:def 13;
-A5: len apply(v,t) = len v+1 by Def19;
+A5: i2 = i1+j by A3,NAT_1:10;
   let s1,s2 be type of T;
-  defpred P[Element of NAT] means i1+$1 <= len apply(v,t) implies
-  for s being type of T st s = apply(v,t).(i1+$1) holds s <= s1;
-  assume
-A6: s1 = apply(v,t).i1 & s2 = apply(v,t).i2;
-  then
-A7: P[0];
-A8: for i being Element of NAT st P[i] holds P[i+1]
+  defpred P[Element of NAT] means i1+$1 <= len apply(v,t) implies for s being
+  type of T st s = apply(v,t).(i1+$1) holds s <= s1;
+A6: len apply(v,t) = len v+1 by Def19;
+A7: for i being Element of NAT st P[i] holds P[i+1]
   proof
     let i be Element of NAT such that
-A9: P[i] and
-A10: i1+(i+1) <= len apply(v,t);
-A11: i1 <= i1+i & i1+(i+1) = i1+i+1 by NAT_1:11;
+A8: P[i] and
+A9: i1+(i+1) <= len apply(v,t);
+    i1 <= i1+i by NAT_1:11;
     then
-A12: 1 <= i1+i & i1+i <= len v & i1+i is Element of NAT
-    by A2,A5,A10,XREAL_1:8,XXREAL_0:2;
+A10: 1 <= i1+i by A2,XXREAL_0:2;
+A11: i1+(i+1) = i1+i+1;
+    then i1+i <= len v by A6,A9,XREAL_1:8;
     then
-A13: i1+i in dom v by FINSEQ_3:27;
-    then v.(i1+i) in rng v & rng v c= the adjectives of T by FUNCT_1:12;
+A12: i1+i in dom v by A10,FINSEQ_3:27;
+    then v.(i1+i) in rng v by FUNCT_1:12;
     then reconsider a = v.(i1+i) as adjective of T;
-    i1+i < len v+1 by A5,A10,A11,NAT_1:13;
-    then i1+i in dom apply(v,t) by A5,A12,FINSEQ_3:27;
-    then apply(v,t).(i1+i) in rng apply(v,t) & rng apply(v,t) c= the
-    carrier of T by FUNCT_1:12;
+    i1+i < len v+1 by A6,A9,A11,NAT_1:13;
+    then i1+i in dom apply(v,t) by A6,A10,FINSEQ_3:27;
+    then apply(v,t).(i1+i) in rng apply(v,t) by FUNCT_1:12;
     then reconsider s = apply(v,t).(i1+i) as type of T;
-A14: a is_applicable_to s by A1,A13;
-A15: apply(v,t).(i1+i+1) = a ast s by A13,Def19;
-    s <= s1 & a ast s <= s by A9,A10,A11,A14,Th21,NAT_1:13;
-    hence thesis by A15,YELLOW_0:def 2;
+A13: apply(v,t).(i1+i+1) = a ast s by A12,Def19;
+A14: a ast s <= s by A1,A12,Th21;
+    s <= s1 by A8,A9,A11,NAT_1:13;
+    hence thesis by A13,A14,YELLOW_0:def 2;
   end;
-  for i being Element of NAT holds P[i] from NAT_1:sch 1(A7,A8);
-  hence thesis by A2,A3,A4,A5,A6;
+A15: j in NAT by ORDINAL1:def 13;
+  assume that
+A16: s1 = apply(v,t).i1 and
+A17: s2 = apply(v,t).i2;
+A18: P[0] by A16;
+  for i being Element of NAT holds P[i] from NAT_1:sch 1(A18,A7);
+  hence thesis by A4,A5,A15,A6,A17;
 end;
 
 theorem Th43:
-  for T being Noetherian adj-structured (reflexive transitive antisymmetric
-  with_suprema non void TA-structure) for t being type of T
-  for v being FinSequence of the adjectives of T st v is_applicable_to t
-  for s being type of T st s in rng apply(v, t) holds v ast t <= s & s <= t
+  for T being Noetherian adj-structured (reflexive transitive
+  antisymmetric with_suprema non void TA-structure) for t being type of T for v
+  being FinSequence of the adjectives of T st v is_applicable_to t for s being
+  type of T st s in rng apply(v, t) holds v ast t <= s & s <= t
 proof
   let T be Noetherian adj-structured (reflexive transitive antisymmetric
   with_suprema non void TA-structure);
   let t be type of T;
   let v be FinSequence of the adjectives of T such that
 A1: v is_applicable_to t;
+A2: len apply(v,t) = len v+1 by Def19;
   let s be type of T;
-  assume s in rng apply(v,t);
+  assume
+  s in rng apply(v,t);
   then consider x being set such that
-A2: x in dom apply(v,t) & s = apply(v,t).x by FUNCT_1:def 5;
-  reconsider x as Element of NAT by A2;
-A3: 1 <= 1 & x >= 1 & x <= len apply(v,t) & len v+1 <= len v+1
-  by A2,FINSEQ_3:27;
-  len apply(v,t) = len v+1 & apply(v,t).1 = t &
-  v ast t = apply(v,t).(len v+1) by Def19;
-  hence thesis by A1,A2,A3,Th42;
+A3: x in dom apply(v,t) and
+A4: s = apply(v,t).x by FUNCT_1:def 5;
+  reconsider x as Element of NAT by A3;
+A5: x <= len apply(v,t) by A3,FINSEQ_3:27;
+A6: apply(v,t).1 = t by Def19;
+  x >= 1 by A3,FINSEQ_3:27;
+  hence thesis by A1,A4,A5,A2,A6,Th42;
 end;
 
 theorem Th44:
-  for T being Noetherian adj-structured (reflexive transitive antisymmetric
-  with_suprema non void TA-structure) for t being type of T
-  for v being FinSequence of the adjectives of T st v is_applicable_to t
-  holds v ast t <= t
+  for T being Noetherian adj-structured (reflexive transitive
+  antisymmetric with_suprema non void TA-structure) for t being type of T for v
+being FinSequence of the adjectives of T st v is_applicable_to t holds v ast t
+  <= t
 proof
   let T be Noetherian adj-structured (reflexive transitive antisymmetric
   with_suprema non void TA-structure);
   let t be type of T;
   let v be FinSequence of the adjectives of T such that
 A1: v is_applicable_to t;
-  len apply(v,t) = len v+1 & len v+1 >= 1 by Def19,NAT_1:11;
-  then len v+1 in dom apply(v, t) by FINSEQ_3:27;
+A2: len v+1 >= 1 by NAT_1:11;
+  len apply(v,t) = len v+1 by Def19;
+  then len v+1 in dom apply(v, t) by A2,FINSEQ_3:27;
   then apply(v,t).(len v+1) in rng apply(v,t) by FUNCT_1:12;
   hence thesis by A1,Th43;
 end;
 
 theorem Th45:
-  for T being Noetherian adj-structured (reflexive transitive antisymmetric
-  with_suprema non void TA-structure) for t being type of T
-  for v being FinSequence of the adjectives of T st v is_applicable_to t
-  holds rng v c= adjs (v ast t)
+  for T being Noetherian adj-structured (reflexive transitive
+  antisymmetric with_suprema non void TA-structure) for t being type of T for v
+being FinSequence of the adjectives of T st v is_applicable_to t holds rng v c=
+  adjs (v ast t)
 proof
   let T be Noetherian adj-structured (reflexive transitive antisymmetric
   with_suprema non void TA-structure);
@@ -1720,127 +1875,141 @@ A1: v is_applicable_to t;
   assume
 A2: a in rng v;
   then consider x being set such that
-A3: x in dom v & a = v.x by FUNCT_1:def 5;
-  reconsider x as Element of NAT by A3;
+A3: x in dom v and
+A4: a = v.x by FUNCT_1:def 5;
   reconsider a as adjective of T by A2;
-A4: x >= 1 & x <= len v by A3,FINSEQ_3:27;
-  len apply(v,t) = len v+1 by Def19;
-  then x < len apply(v,t) & x+1 <= len apply(v,t) & x+1 >= 1
-  by A4,NAT_1:13,XREAL_1:8;
-  then x in dom apply(v,t) & x+1 in dom apply(v,t) by A4,FINSEQ_3:27;
+  reconsider x as Element of NAT by A3;
+A5: x >= 1 by A3,FINSEQ_3:27;
   then
-A5: apply(v,t).x in rng apply(v,t) & apply(v,t).(x+1) in rng apply(v,t) &
-  rng apply(v,t) c= the carrier of T by FUNCT_1:12;
+A6: x+1 >= 1 by NAT_1:13;
+A7: len apply(v,t) = len v+1 by Def19;
+A8: x <= len v by A3,FINSEQ_3:27;
+  then x+1 <= len apply(v,t) by A7,XREAL_1:8;
+  then x+1 in dom apply(v,t) by A6,FINSEQ_3:27;
+  then
+A9: apply(v,t).(x+1) in rng apply(v,t) by FUNCT_1:12;
+  x < len apply(v,t) by A8,A7,NAT_1:13;
+  then x in dom apply(v,t) by A5,FINSEQ_3:27;
+  then apply(v,t).x in rng apply(v,t) by FUNCT_1:12;
   then reconsider s = apply(v,t).x as type of T;
-  a is_applicable_to s by A1,A3,Def21;
+  a ast s = apply(v,t).(x+1) by A3,A4,Def19;
+  then a ast s >= v ast t by A1,A9,Th43;
   then
-A6: a in adjs (a ast s) by Th22;
-  a ast s = apply(v,t).(x+1) by A3,Def19;
-  then a ast s >= v ast t by A1,A5,Th43;
-  then adjs (a ast s) c= adjs(v ast t) by Th10;
-  hence thesis by A6;
+A10: adjs (a ast s) c= adjs(v ast t) by Th10;
+  a is_applicable_to s by A1,A3,A4,Def21;
+  then a in adjs (a ast s) by Th22;
+  hence thesis by A10;
 end;
 
 theorem Th46:
-  for T being Noetherian adj-structured (reflexive transitive antisymmetric
-  with_suprema non void TA-structure) for t being type of T
-  for v being FinSequence of the adjectives of T st v is_applicable_to t
-  for A being Subset of the adjectives of T st A = rng v
-  holds A is_applicable_to t
+  for T being Noetherian adj-structured (reflexive transitive
+  antisymmetric with_suprema non void TA-structure) for t being type of T for v
+  being FinSequence of the adjectives of T st v is_applicable_to t for A being
+  Subset of the adjectives of T st A = rng v holds A is_applicable_to t
 proof
   let T be Noetherian adj-structured (reflexive transitive antisymmetric
   with_suprema non void TA-structure);
   let t be type of T;
   let v be FinSequence of the adjectives of T;
-  assume v is_applicable_to t;
-  then v ast t <= t & rng v c= adjs (v ast t) by Th44,Th45;
-  hence thesis by Def16;
+  assume
+A1: v is_applicable_to t;
+  then
+A2: rng v c= adjs (v ast t) by Th45;
+  v ast t <= t by A1,Th44;
+  hence thesis by A2,Def16;
 end;
 
 theorem Th47:
-  for T being Noetherian adj-structured (reflexive transitive antisymmetric
-  with_suprema non void TA-structure) for t being type of T
-  for v1,v2 being FinSequence of the adjectives of T
-  st v1 is_applicable_to t & rng v2 c= rng v1
-  for s being type of T st s in rng apply(v2,t) holds v1 ast t <= s
+  for T being Noetherian adj-structured (reflexive transitive
+antisymmetric with_suprema non void TA-structure) for t being type of T for v1,
+  v2 being FinSequence of the adjectives of T st v1 is_applicable_to t & rng v2
+  c= rng v1 for s being type of T st s in rng apply(v2,t) holds v1 ast t <= s
 proof
   let T be Noetherian adj-structured (reflexive transitive antisymmetric
   with_suprema non void TA-structure);
   let t be type of T;
   let v,v' be FinSequence of the adjectives of T such that
-A1: v is_applicable_to t & rng v' c= rng v;
-  let s be type of T;
-  assume s in rng apply(v',t);
-  then consider x being set such that
-A2: x in dom apply(v',t) & s = apply(v',t).x by FUNCT_1:def 5;
-A3: x in Seg len apply(v',t) by A2,FINSEQ_1:def 3;
-  reconsider x as Element of NAT by A2;
-  reconsider x as non empty Element of NAT by A3,FINSEQ_1:3;
-A4: x <= len apply(v',t) by A2,FINSEQ_3:27;
-  defpred P[Nat] means $1 <= len apply(v',t) implies
-  for s being type of T st s = apply(v',t).$1 holds v ast t <= s;
+A1: v is_applicable_to t and
+A2: rng v' c= rng v;
+  defpred P[Nat] means $1 <= len apply(v',t) implies for s being type of T st
+  s = apply(v',t).$1 holds v ast t <= s;
+A3: for i being non empty Nat st P[i] holds P[i+1]
+  proof
+A4: rng v c= adjs (v ast t) by A1,Th45;
+    let i be non empty Nat such that
+A5: P[i] and
+A6: i+1 <= len apply(v',t);
+A7: 0+1 <= i by NAT_1:13;
+A8: len apply(v',t) = len v'+1 by Def19;
+    then i < len v'+1 by A6,NAT_1:13;
+    then i in dom apply(v',t) by A8,A7,FINSEQ_3:27;
+    then apply(v',t).i in rng apply(v',t) by FUNCT_1:12;
+    then reconsider s = apply(v',t).i as type of T;
+A9: v ast t <= s by A5,A6,NAT_1:13;
+    i <= len v' by A6,A8,XREAL_1:8;
+    then
+A10: i in dom v' by A7,FINSEQ_3:27;
+    then
+A11: v'.i in rng v' by FUNCT_1:12;
+    then reconsider a = v'.i as adjective of T;
+A12: a in rng v by A2,A11;
+    apply(v',t).(i+1) = a ast s by A10,Def19;
+    hence thesis by A12,A4,A9,Th24;
+  end;
   apply(v',t).1 = t by Def19;
   then
-A5: P[1] by A1,Th44;
-A6: for i being non empty Nat st P[i] holds P[i+1]
-  proof
-    let i be non empty Nat such that
-A7: P[i] and
-A8: i+1 <= len apply(v',t);
-A9: i > 0 & len apply(v',t) = len v'+1 by Def19;
-    then
-A10: 0+1 <= i & i <= len v' by A8,NAT_1:13,XREAL_1:8;
-    then
-A11: i in dom v' by FINSEQ_3:27;
-    then
-A12: v'.i in rng v' & rng v' c= the adjectives of T by FUNCT_1:12;
-    then reconsider a = v'.i as adjective of T;
-    i < len v'+1 by A8,A9,NAT_1:13;
-    then i in dom apply(v',t) by A9,A10,FINSEQ_3:27;
-    then apply(v',t).i in rng apply(v',t) & rng apply(v',t) c= the carrier
-    of T by FUNCT_1:12;
-    then reconsider s = apply(v',t).i as type of T;
-A13: apply(v',t).(i+1) = a ast s by A11,Def19;
-    a in rng v & rng v c= adjs (v ast t) by A1,A12,Th45;
-    then v ast t <= s & a in adjs (v ast t) by A7,A8,NAT_1:13;
-    hence thesis by A13,Th24;
-  end;
-  for i being non empty Nat holds P[i] from NAT_1:sch 10(A5,A6);
-  hence thesis by A2,A4;
+A13: P[1] by A1,Th44;
+A14: for i being non empty Nat holds P[i] from NAT_1:sch 10(A13,A3);
+  let s be type of T;
+  assume
+  s in rng apply(v',t);
+  then consider x being set such that
+A15: x in dom apply(v',t) and
+A16: s = apply(v',t).x by FUNCT_1:def 5;
+A17: x in Seg len apply(v',t) by A15,FINSEQ_1:def 3;
+  reconsider x as Element of NAT by A15;
+  reconsider x as non empty Element of NAT by A17,FINSEQ_1:3;
+  x <= len apply(v',t) by A15,FINSEQ_3:27;
+  hence thesis by A16,A14;
 end;
 
 theorem Th48:
-  for T being Noetherian adj-structured (reflexive transitive antisymmetric
-  with_suprema non void TA-structure) for t being type of T
-  for v1,v2 being FinSequence of the adjectives of T
-  st v1^v2 is_applicable_to t holds v2^v1 is_applicable_to t
+  for T being Noetherian adj-structured (reflexive transitive
+antisymmetric with_suprema non void TA-structure) for t being type of T for v1,
+  v2 being FinSequence of the adjectives of T st v1^v2 is_applicable_to t holds
+  v2^v1 is_applicable_to t
 proof
   let T be Noetherian adj-structured (reflexive transitive antisymmetric
   with_suprema non void TA-structure);
   let t be type of T;
   let v1,v2 be FinSequence of the adjectives of T;
+A1: rng (v1^v2) = rng v1 \/ rng v2 by FINSEQ_1:44;
   assume
-A1: v1^v2 is_applicable_to t;
-  let i be natural number, a be adjective of T, s be type of T such that
-A2: i in dom (v2^v1) & a = (v2^v1).i & s = apply(v2^v1,t).i;
-A3: i >= 1 & i <= len (v2^v1) & i is Element of NAT by A2,FINSEQ_3:27;
-A4: rng (v1^v2) = rng v1 \/ rng v2 & rng (v2^v1) = rng v1 \/ rng v2
-  by FINSEQ_1:44;
-  i < len (v2^v1)+1 & len apply(v2^v1,t) = len (v2^v1)+1 by A3,Def19,NAT_1:13;
-  then i in dom apply(v2^v1,t) by A3,FINSEQ_3:27;
-  then s in rng apply(v2^v1,t) by A2,FUNCT_1:12;
+A2: v1^v2 is_applicable_to t;
   then
-A5: (v1^v2) ast t <= s by A1,A4,Th47;
-  a in rng (v2^v1) & rng (v1^v2) c= adjs ((v1^v2) ast t)
-  by A1,A2,Th45,FUNCT_1:12;
-  hence thesis by A4,A5,Th24;
+A3: rng (v1^v2) c= adjs ((v1^v2) ast t) by Th45;
+  let i be natural number, a be adjective of T, s be type of T such that
+A4: i in dom (v2^v1) and
+A5: a = (v2^v1).i and
+A6: s = apply(v2^v1,t).i;
+A7: a in rng (v2^v1) by A4,A5,FUNCT_1:12;
+A8: len apply(v2^v1,t) = len (v2^v1)+1 by Def19;
+A9: rng (v2^v1) = rng v1 \/ rng v2 by FINSEQ_1:44;
+  i <= len (v2^v1) by A4,FINSEQ_3:27;
+  then
+A10: i < len (v2^v1)+1 by NAT_1:13;
+  i >= 1 by A4,FINSEQ_3:27;
+  then i in dom apply(v2^v1,t) by A10,A8,FINSEQ_3:27;
+  then s in rng apply(v2^v1,t) by A6,FUNCT_1:12;
+  then (v1^v2) ast t <= s by A2,A1,A9,Th47;
+  hence thesis by A1,A9,A7,A3,Th24;
 end;
 
 theorem
-  for T being Noetherian adj-structured (reflexive transitive antisymmetric
-  with_suprema non void TA-structure) for t being type of T
-  for v1,v2 being FinSequence of the adjectives of T
-  st v1^v2 is_applicable_to t holds v1^v2 ast t = v2^v1 ast t
+  for T being Noetherian adj-structured (reflexive transitive
+antisymmetric with_suprema non void TA-structure) for t being type of T for v1,
+  v2 being FinSequence of the adjectives of T st v1^v2 is_applicable_to t holds
+  v1^v2 ast t = v2^v1 ast t
 proof
   let T be Noetherian adj-structured (reflexive transitive antisymmetric
   with_suprema non void TA-structure);
@@ -1848,32 +2017,34 @@ proof
   let v1,v2 be FinSequence of the adjectives of T;
   assume
 A1: v1^v2 is_applicable_to t;
-A2: len apply(v1^v2, t) = len (v1^v2)+1 &
+A2: len (v1^v2) = len v1+len v2 by FINSEQ_1:35;
+A3: rng (v1^v2) = rng v1 \/ rng v2 by FINSEQ_1:44;
+A4: len (v2^v1) = len v1+len v2 by FINSEQ_1:35;
+A5: len (v1^v2)+1 >= 1 by NAT_1:11;
+A6: rng (v2^v1) = rng v1 \/ rng v2 by FINSEQ_1:44;
   len apply(v2^v1, t) = len (v2^v1)+1 by Def19;
-A3: len (v1^v2) = len v1+len v2 & len (v2^v1) = len v1+len v2 by FINSEQ_1:35;
-A4: rng (v1^v2) = rng v1 \/ rng v2 & rng (v2^v1) = rng v1 \/ rng v2
-  by FINSEQ_1:44;
-  len (v1^v2)+1 >= 1 by NAT_1:11;
-  then len (v1^v2)+1 in dom apply(v1^v2, t) & len (v1^v2)+1 in dom apply(v2^
-  v1, t) by A2,A3,FINSEQ_3:27;
-  then v1^v2 ast t in rng apply(v1^v2, t) & v2^v1 ast t in rng apply(v2^v1, t)
-  by A3,FUNCT_1:12;
-  then v1^v2 ast t <= v2^v1 ast t & v2^v1 ast t <= v1^v2 ast t by A1,A4,Th47
-,Th48;
-  hence thesis by YELLOW_0:def 3;
+  then len (v1^v2)+1 in dom apply(v2^ v1, t) by A2,A4,A5,FINSEQ_3:27;
+  then v2^v1 ast t in rng apply(v2^v1, t) by A2,A4,FUNCT_1:12;
+  then
+A7: v1^v2 ast t <= v2^v1 ast t by A1,A3,A6,Th47;
+  len apply(v1^v2, t) = len (v1^v2)+1 by Def19;
+  then len (v1^v2)+1 in dom apply(v1^v2, t) by A5,FINSEQ_3:27;
+  then v1^v2 ast t in rng apply(v1^v2, t) by FUNCT_1:12;
+  then v2^v1 ast t <= v1^v2 ast t by A1,A3,A6,Th47,Th48;
+  hence thesis by A7,YELLOW_0:def 3;
 end;
 
 theorem Th50:
-  for T being Noetherian adj-structured (reflexive transitive antisymmetric
-  with_suprema TA-structure) for t being type of T
-  for A being Subset of the adjectives of T st A is_applicable_to t
-  holds A ast t <= t
+  for T being Noetherian adj-structured (reflexive transitive
+  antisymmetric with_suprema TA-structure) for t being type of T for A being
+  Subset of the adjectives of T st A is_applicable_to t holds A ast t <= t
 proof
   let T be Noetherian adj-structured (reflexive transitive antisymmetric
   with_suprema TA-structure);
   let t be type of T;
   let a be Subset of the adjectives of T;
-  assume a is_applicable_to t;
+  assume
+  a is_applicable_to t;
   then types a /\ downarrow t is Ideal of T by Th27;
   then sup (types a /\ downarrow t) in types a /\ downarrow t by Th1;
   then a ast t in downarrow t by XBOOLE_0:def 4;
@@ -1881,16 +2052,16 @@ proof
 end;
 
 theorem Th51:
-  for T being Noetherian adj-structured (reflexive transitive antisymmetric
-  with_suprema TA-structure) for t being type of T
-  for A being Subset of the adjectives of T st A is_applicable_to t
-  holds A c= adjs(A ast t)
+  for T being Noetherian adj-structured (reflexive transitive
+  antisymmetric with_suprema TA-structure) for t being type of T for A being
+Subset of the adjectives of T st A is_applicable_to t holds A c= adjs(A ast t)
 proof
   let T be Noetherian adj-structured (reflexive transitive antisymmetric
   with_suprema TA-structure);
   let t be type of T;
   let a be Subset of the adjectives of T;
-  assume a is_applicable_to t;
+  assume
+  a is_applicable_to t;
   then types a /\ downarrow t is Ideal of T by Th27;
   then sup (types a /\ downarrow t) in types a /\ downarrow t by Th1;
   then a ast t in types a by XBOOLE_0:def 4;
@@ -1898,26 +2069,25 @@ proof
 end;
 
 theorem
-  for T being Noetherian adj-structured (reflexive transitive antisymmetric
-  with_suprema TA-structure) for t being type of T
-  for A being Subset of the adjectives of T st A is_applicable_to t
-  holds A ast t in types A
+  for T being Noetherian adj-structured (reflexive transitive
+  antisymmetric with_suprema TA-structure) for t being type of T for A being
+Subset of the adjectives of T st A is_applicable_to t holds A ast t in types A
 proof
   let T be Noetherian adj-structured (reflexive transitive antisymmetric
   with_suprema TA-structure);
   let t be type of T;
   let a be Subset of the adjectives of T;
-  assume a is_applicable_to t;
+  assume
+  a is_applicable_to t;
   then types a /\ downarrow t is Ideal of T by Th27;
   then sup (types a /\ downarrow t) in types a /\ downarrow t by Th1;
   hence thesis by XBOOLE_0:def 4;
 end;
 
 theorem Th53:
-  for T being Noetherian adj-structured (reflexive transitive antisymmetric
-  with_suprema TA-structure) for t being type of T
-  for A being Subset of the adjectives of T
-  for t' being type of T st t' <= t & A c= adjs t'
+  for T being Noetherian adj-structured (reflexive transitive
+  antisymmetric with_suprema TA-structure) for t being type of T for A being
+Subset of the adjectives of T for t' being type of T st t' <= t & A c= adjs t'
   holds A is_applicable_to t & t' <= A ast t
 proof
   let T be Noetherian adj-structured (reflexive transitive antisymmetric
@@ -1925,27 +2095,29 @@ proof
   let t be type of T;
   let a be Subset of the adjectives of T;
   let t' be type of T;
-  assume
-A1: t' <= t & a c= adjs t';
-  then
-A2: t' in downarrow t & t' in types a by Th14,WAYBEL_0:17;
+  assume that
+A1: t' <= t and
+A2: a c= adjs t';
+A3: t' in downarrow t by A1,WAYBEL_0:17;
   thus a is_applicable_to t
   proof
-    take t'; thus thesis by A1;
+    take t';
+    thus thesis by A1,A2;
   end;
   then types a /\ downarrow t is Ideal of T by Th27;
-  then ex_sup_of types a /\ downarrow t, T &
-  a ast t = sup (types a /\ downarrow t) by Th1;
-  then a ast t is_>=_than types a /\ downarrow t & t' in types a /\
-  downarrow t by A2,XBOOLE_0:def 4,YELLOW_0:30;
-  hence thesis by LATTICE3:def 9;
+  then ex_sup_of types a /\ downarrow t, T by Th1;
+  then
+A4: a ast t is_>=_than types a /\ downarrow t by YELLOW_0:30;
+  t' in types a by A2,Th14;
+  then t' in types a /\ downarrow t by A3,XBOOLE_0:def 4;
+  hence thesis by A4,LATTICE3:def 9;
 end;
 
 theorem
-  for T being Noetherian adj-structured (reflexive transitive antisymmetric
-  with_suprema TA-structure) for t being type of T
-  for A being Subset of the adjectives of T st A c= adjs t
-  holds A is_applicable_to t & A ast t = t
+  for T being Noetherian adj-structured (reflexive transitive
+  antisymmetric with_suprema TA-structure) for t being type of T for A being
+Subset of the adjectives of T st A c= adjs t holds A is_applicable_to t & A ast
+  t = t
 proof
   let T be Noetherian adj-structured (reflexive transitive antisymmetric
   with_suprema TA-structure);
@@ -1954,132 +2126,149 @@ proof
   assume
 A1: a c= adjs t;
   hence a is_applicable_to t by Th53;
-  then t <= a ast t & a ast t <= t by A1,Th50,Th53;
-  hence thesis by YELLOW_0:def 3;
+  then
+A2: a ast t <= t by Th50;
+  t <= a ast t by A1,Th53;
+  hence thesis by A2,YELLOW_0:def 3;
 end;
 
 theorem Th55:
-  for T being TA-structure, t being type of T
-  for A,B being Subset of the adjectives of T st A is_applicable_to t & B c= A
-  holds B is_applicable_to t
+  for T being TA-structure, t being type of T for A,B being Subset
+  of the adjectives of T st A is_applicable_to t & B c= A holds B
+  is_applicable_to t
 proof
   let T be TA-structure;
   let t be type of T;
   let A,B be Subset of the adjectives of T;
   given t' being type of T such that
-A1: A c= adjs t' & t' <= t;
+A1: A c= adjs t' and
+A2: t' <= t;
   assume
-A2: B c= A;
+A3: B c= A;
   take t';
-  thus thesis by A1,A2,XBOOLE_1:1;
+  thus thesis by A1,A2,A3,XBOOLE_1:1;
 end;
 
 theorem Th56:
-  for T being Noetherian adj-structured (reflexive transitive antisymmetric
-  with_suprema non void TA-structure)
-  for t being type of T, a being adjective of T
-  for A,B being Subset of the adjectives of T
-  st B = A \/ {a} & B is_applicable_to t holds a ast (A ast t) = B ast t
+  for T being Noetherian adj-structured (reflexive transitive
+  antisymmetric with_suprema non void TA-structure) for t being type of T, a
+being adjective of T for A,B being Subset of the adjectives of T st B = A \/ {a
+  } & B is_applicable_to t holds a ast (A ast t) = B ast t
 proof
   let T be Noetherian adj-structured (reflexive transitive antisymmetric
   with_suprema non void TA-structure);
   let t be type of T, a be adjective of T;
   let A,B be Subset of the adjectives of T such that
-A1: B = A \/ {a} & B is_applicable_to t;
-A2: A c= B & {a} c= B by A1,XBOOLE_1:7;
-A3: A is_applicable_to t by A1,Th55,XBOOLE_1:7;
+A1: B = A \/ {a} and
+A2: B is_applicable_to t;
+A3: A is_applicable_to t by A1,A2,Th55,XBOOLE_1:7;
+A4: {a} c= B by A1,XBOOLE_1:7;
+A5: A c= B by A1,XBOOLE_1:7;
   types a /\ downarrow (A ast t) = types B /\ downarrow t
   proof
     thus types a /\ downarrow (A ast t) c= types B /\ downarrow t
     proof
       let x be set;
       assume
-A4:   x in types a /\ downarrow (A ast t);
+A6:   x in types a /\ downarrow (A ast t);
+      then reconsider t' = x as type of T;
+      x in types a by A6,XBOOLE_0:def 4;
+      then a in adjs t' by Th13;
       then
-A5:   x in types a & x in downarrow (A ast t) by XBOOLE_0:def 4;
-      reconsider t' = x as type of T by A4;
-A6:   t' <= A ast t & A ast t <= t & A c= adjs (A ast t)
-      by A3,A5,Th50,Th51,WAYBEL_0:17;
-      then t' <= t by YELLOW_0:def 2;
+A7:   {a} c= adjs t' by ZFMISC_1:37;
+      x in downarrow (A ast t) by A6,XBOOLE_0:def 4;
       then
-A7:   t' in downarrow t by WAYBEL_0:17;
-      a in adjs t' & adjs (A ast t) c= adjs t' by A5,A6,Th10,Th13;
-      then A c= adjs t' & {a} c= adjs t' by A6,XBOOLE_1:1,ZFMISC_1:37;
-      then B c= adjs t' by A1,XBOOLE_1:8;
+A8:   t' <= A ast t by WAYBEL_0:17;
+      then
+A9:   adjs (A ast t) c= adjs t' by Th10;
+      A ast t <= t by A3,Th50;
+      then t' <= t by A8,YELLOW_0:def 2;
+      then
+A10:  t' in downarrow t by WAYBEL_0:17;
+      A c= adjs (A ast t) by A3,Th51;
+      then A c= adjs t' by A9,XBOOLE_1:1;
+      then B c= adjs t' by A1,A7,XBOOLE_1:8;
       then t' in types B by Th14;
-      hence thesis by A7,XBOOLE_0:def 4;
+      hence thesis by A10,XBOOLE_0:def 4;
     end;
     let x be set;
     assume
-A8: x in types B /\ downarrow t;
+A11: x in types B /\ downarrow t;
+    then reconsider t' = x as type of T;
+    x in downarrow t by A11,XBOOLE_0:def 4;
     then
-A9: x in types B & x in downarrow t by XBOOLE_0:def 4;
-    reconsider t' = x as type of T by A8;
-A10: t' <= t & B c= adjs t' & a in B by A2,A9,Th14,WAYBEL_0:17,ZFMISC_1:37;
-    then A c= adjs t' by A2,XBOOLE_1:1;
-    then t' <= A ast t & a in adjs t' by A10,Th53;
-    then t' in downarrow (A ast t) & t' in types a by Th13,WAYBEL_0:17;
-    hence thesis by XBOOLE_0:def 4;
+A12: t' <= t by WAYBEL_0:17;
+    x in types B by A11,XBOOLE_0:def 4;
+    then
+A13: B c= adjs t' by Th14;
+    then A c= adjs t' by A5,XBOOLE_1:1;
+    then t' <= A ast t by A12,Th53;
+    then
+A14: t' in downarrow (A ast t) by WAYBEL_0:17;
+    a in B by A4,ZFMISC_1:37;
+    then t' in types a by A13,Th13;
+    hence thesis by A14,XBOOLE_0:def 4;
   end;
   hence thesis;
 end;
 
 theorem Th57:
-  for T being Noetherian adj-structured (reflexive transitive antisymmetric
-  with_suprema non void TA-structure) for t being type of T
-  for v being FinSequence of the adjectives of T st v is_applicable_to t
-  for A being Subset of the adjectives of T st A = rng v
-  holds v ast t = A ast t
+  for T being Noetherian adj-structured (reflexive transitive
+  antisymmetric with_suprema non void TA-structure) for t being type of T for v
+  being FinSequence of the adjectives of T st v is_applicable_to t for A being
+  Subset of the adjectives of T st A = rng v holds v ast t = A ast t
 proof
   let T be Noetherian adj-structured (reflexive transitive antisymmetric
   with_suprema non void TA-structure);
-  defpred P[Element of NAT] means
-  for t being type of T, v being FinSequence of the adjectives of T
-  st $1 = len v & v is_applicable_to t
-  for A being Subset of the adjectives of T st A = rng v
-  holds v ast t = A ast t;
-A1: P[0]
-  proof
-    let t be type of T;
-    let v be FinSequence of the adjectives of T;
-    assume 0 = len v;
-    then v = <*> the adjectives of T & rng {} = {};
-    then v ast t = t & rng v = {} the adjectives of T by Def19,CARD_1:47;
-    hence thesis by Th28;
-  end;
-A2: now
+  defpred P[Element of NAT] means for t being type of T, v being FinSequence
+of the adjectives of T st $1 = len v & v is_applicable_to t for A being Subset
+  of the adjectives of T st A = rng v holds v ast t = A ast t;
+  let t be type of T;
+  let v be FinSequence of the adjectives of T;
+A1: now
     let n be Element of NAT such that
-A3: P[n];
+A2: P[n];
     now
       let t be type of T, v be FinSequence of the adjectives of T such that
-A4:   n+1 = len v & v is_applicable_to t;
-      consider v1 being FinSequence of the adjectives of T,
-      a being Element of the adjectives of T such that
-A5:   v = v1^<*a*> by A4,FINSEQ_2:22;
-      reconsider a as adjective of T;
+A3:   n+1 = len v and
+A4:   v is_applicable_to t;
+      consider v1 being FinSequence of the adjectives of T, a being Element of
+      the adjectives of T such that
+A5:   v = v1^<*a*> by A3,FINSEQ_2:22;
       reconsider B = rng v1 as Subset of the adjectives of T;
+      reconsider a as adjective of T;
       len <*a*> = 1 by FINSEQ_1:57;
-      then len v = len v1+1 by A5,FINSEQ_1:35;
-      then len v1 = n & v1 is_applicable_to t & <*a*> is_applicable_to v1 ast
-      t by A4,A5,Th41;
       then
-A6:   v1 ast t = B ast t & a is_applicable_to v1 ast t by A3,Th40;
+A6:   len v = len v1+1 by A5,FINSEQ_1:35;
+      v1 is_applicable_to t by A4,A5,Th41;
+      then
+A7:   v1 ast t = B ast t by A2,A3,A6;
       let A be Subset of the adjectives of T;
       assume
-A7:   A = rng v;
+A8:   A = rng v;
       then
-A8:   A = B \/ rng <*a*> by A5,FINSEQ_1:44
+A9:   A = B \/ rng <*a*> by A5,FINSEQ_1:44
         .= B \/ {a} by FINSEQ_1:55;
       thus v ast t = <*a*> ast (v1 ast t) by A5,Th38
-        .= a ast (B ast t) by A6,Th32
-        .= A ast t by A4,A7,A8,Th46,Th56;
+        .= a ast (B ast t) by A7,Th32
+        .= A ast t by A4,A8,A9,Th46,Th56;
     end;
     hence P[n+1];
   end;
-A9: for n being Element of NAT holds P[n] from NAT_1:sch 1(A1,A2);
-  let t be type of T;
-  let v be FinSequence of the adjectives of T;
-  thus thesis by A9;
+A10: P[0]
+  proof
+    let t be type of T;
+    let v be FinSequence of the adjectives of T;
+    assume
+A11: 0 = len v;
+    then v = <*> the adjectives of T;
+    then
+A12: rng v = {} the adjectives of T;
+    v ast t = t by A11,Def19;
+    hence thesis by A12,Th28;
+  end;
+  for n being Element of NAT holds P[n] from NAT_1:sch 1(A10,A1);
+  hence thesis;
 end;
 
 begin :: Subject function
@@ -2087,7 +2276,8 @@ begin :: Subject function
 definition
   let T be non empty non void TA-structure;
   func sub T -> Function of the adjectives of T, the carrier of T means
-  :Def22:
+  :Def22
+  :
   for a being adjective of T holds it.a = sup(types a \/ types non-a);
   existence
   proof
@@ -2102,8 +2292,10 @@ A1: for a being Element of the adjectives of T holds f.a = F(a) from
   uniqueness
   proof
     let f1,f2 be Function of the adjectives of T, the carrier of T such that
-A2: for a being adjective of T holds f1.a = sup(types a \/ types non-a) and
-A3: for a being adjective of T holds f2.a = sup(types a \/ types non-a);
+A2: for a being adjective of T holds f1.a = sup(types a \/ types non-a
+    ) and
+A3: for a being adjective of T holds f2.a = sup(types a \/ types non-a
+    );
     now
       let a be Element of the adjectives of T;
       reconsider b = a as adjective of T;
@@ -2115,11 +2307,10 @@ A3: for a being adjective of T holds f2.a = sup(types a \/ types non-a);
 end;
 
 definition
-  struct(TA-structure) TAS-structure(# carrier, adjectives -> set,
-    InternalRel -> (Relation of the carrier),
-    non-op -> UnOp of the adjectives,
-    adj-map -> Function of the carrier, Fin the adjectives,
-    sub-map -> Function of the adjectives, the carrier #);
+  struct(TA-structure) TAS-structure(# carrier, adjectives -> set, InternalRel
+    -> (Relation of the carrier), non-op -> UnOp of the adjectives, adj-map ->
+    Function of the carrier, Fin the adjectives, sub-map -> Function of the
+    adjectives, the carrier #);
 end;
 
 registration
@@ -2128,9 +2319,9 @@ registration
   proof
     consider P being non void reflexive trivial non empty TA-structure;
     consider s being Function of the adjectives of P, the carrier of P;
-    take T = TAS-structure(#the carrier of P, the adjectives of P,
-      the InternalRel of P, the non-op of P, the adj-map of P, s#);
-    T is non empty & the RelStr of P = the RelStr of T;
+    take T = TAS-structure(#the carrier of P, the adjectives of P, the
+      InternalRel of P, the non-op of P, the adj-map of P, s#);
+    the RelStr of P = the RelStr of T;
     hence thesis by Def4,WAYBEL_8:12;
   end;
 end;
@@ -2139,7 +2330,6 @@ definition
   let T be non empty non void TAS-structure;
   let a be adjective of T;
   func sub a -> type of T equals
-
   (the sub-map of T).a;
   coherence;
 end;
@@ -2147,23 +2337,23 @@ end;
 definition
   let T be non empty non void TAS-structure;
   attr T is non-absorbing means
-  (the sub-map of T)*(the non-op of T) = the sub-map of T;
+  (the sub-map of T)*(the non-op of T) = the
+  sub-map of T;
   attr T is subjected means
-
-  for a being adjective of T holds
-  types a \/ types non-a is_<=_than sub a &
-  (types a <> {} & types non-a <> {} implies
-  sub a = sup (types a \/ types non-a));
+  for a being adjective of T holds types a \/ types
+non-a is_<=_than sub a & (types a <> {} & types non-a <> {} implies sub a = sup
+  (types a \/ types non-a));
 end;
 
 definition
   let T be non empty non void TAS-structure;
   redefine attr T is non-absorbing means
-  for a being adjective of T holds sub non-a = sub a;
+  for a being adjective of T holds sub
+  non-a = sub a;
   compatibility
   proof
-    thus T is non-absorbing implies
-    for a being adjective of T holds sub non-a = sub a
+    thus T is non-absorbing implies for a being adjective of T holds sub non-a
+    = sub a
     proof
       assume
 A1:   (the sub-map of T)*(the non-op of T) = the sub-map of T;
@@ -2179,8 +2369,8 @@ A2: for a being adjective of T holds sub non-a = sub a;
         .= sub a by A2
         .= (the sub-map of T).x;
     end;
-    hence (the sub-map of T)*(the non-op of T) = the sub-map of T
-    by FUNCT_2:113;
+    hence (the sub-map of T)*(the non-op of T) = the sub-map of T by
+FUNCT_2:113;
   end;
 end;
 
@@ -2190,7 +2380,8 @@ definition
   let a be adjective of T;
   pred a is_properly_applicable_to t means
   :Def27:
-  t <= sub a & a is_applicable_to t;
+  t <= sub a & a
+  is_applicable_to t;
 end;
 
 definition
@@ -2199,33 +2390,34 @@ definition
   let v be FinSequence of the adjectives of T;
   pred v is_properly_applicable_to t means
   :Def28:
-  for i being natural number, a being adjective of T, s being type of T
-  st i in dom v & a = v.i & s = apply(v,t).i
-  holds a is_properly_applicable_to s;
+  for i being natural number,
+a being adjective of T, s being type of T st i in dom v & a = v.i & s = apply(v
+  ,t).i holds a is_properly_applicable_to s;
 end;
 
 theorem Th58:
-  for T being non empty non void reflexive transitive TAS-structure
-  for t being type of T, v being FinSequence of the adjectives of T
+  for T being non empty non void reflexive transitive
+TAS-structure for t being type of T, v being FinSequence of the adjectives of T
   st v is_properly_applicable_to t holds v is_applicable_to t
 proof
   let T be non empty non void reflexive transitive TAS-structure;
   let t be type of T;
   let v be FinSequence of the adjectives of T;
   assume
-A1: for i being natural number, a being adjective of T, s being type of T
-  st i in dom v & a = v.i & s = apply(v,t).i
-  holds a is_properly_applicable_to s;
+A1: for i being natural number, a being adjective of T, s being type of
+T st i in dom v & a = v.i & s = apply(v,t).i holds a is_properly_applicable_to
+  s;
   let i be natural number, a be adjective of T, s be type of T such that
-A2: i in dom v & a = v.i & s = apply(v, t).i;
-  a is_properly_applicable_to s by A1,A2;
+A2: i in dom v and
+A3: a = v.i and
+A4: s = apply(v, t).i;
+  a is_properly_applicable_to s by A1,A2,A3,A4;
   hence thesis by Def27;
 end;
 
 theorem
-  for T being non empty non void reflexive transitive TAS-structure
-  for t being type of T
-  holds <*> the adjectives of T is_properly_applicable_to t
+  for T being non empty non void reflexive transitive TAS-structure for
+  t being type of T holds <*> the adjectives of T is_properly_applicable_to t
 proof
   let T be non empty non void reflexive transitive TAS-structure;
   let t be type of T;
@@ -2234,78 +2426,89 @@ proof
 end;
 
 theorem
-  for T being non empty non void reflexive transitive TAS-structure
-  for t being type of T, a being adjective of T
-  holds a is_properly_applicable_to t iff <*a*> is_properly_applicable_to t
+  for T being non empty non void reflexive transitive TAS-structure for
+  t being type of T, a being adjective of T holds a is_properly_applicable_to t
+  iff <*a*> is_properly_applicable_to t
 proof
   let T be non empty non void reflexive transitive TAS-structure;
   let t be type of T;
   let a be adjective of T;
   set v = <*a*>;
+A1: v.1 = a by FINSEQ_1:57;
   hereby
     assume
-A1: a is_properly_applicable_to t;
+A2: a is_properly_applicable_to t;
     thus <*a*> is_properly_applicable_to t
     proof
       let i be natural number, b be adjective of T, s be type of T;
-      assume i in dom v;
+      assume
+      i in dom v;
       then i in Seg 1 by FINSEQ_1:55;
-      then i = 1 by FINSEQ_1:4,TARSKI:def 1;
-      then v.i = a & apply(v,t).i = t by Def19,FINSEQ_1:57;
-      hence thesis by A1;
+      then
+A3:   i = 1 by FINSEQ_1:4,TARSKI:def 1;
+      then v.i = a by FINSEQ_1:57;
+      hence thesis by A2,A3,Def19;
     end;
   end;
   assume
-A2: for i being natural number, a' being adjective of T, s being type of T
-  st i in dom v & a' = v.i & s = apply(v,t).i
-  holds a' is_properly_applicable_to s;
+A4: for i being natural number, a' being adjective of T, s being type of
+  T st i in dom v & a' = v.i & s = apply(v,t).i holds a'
+  is_properly_applicable_to s;
   len v = 1 by FINSEQ_1:57;
-
-then 1 in dom v & v.1 = a & apply(v,t).1 = t by Def19,FINSEQ_1:57,FINSEQ_3:27;
-  hence thesis by A2;
+  then
+A5: 1 in dom v by FINSEQ_3:27;
+  apply(v,t).1 = t by Def19;
+  hence thesis by A4,A5,A1;
 end;
 
 theorem Th61:
-  for T being non empty non void reflexive transitive TAS-structure
-  for t being type of T, v1,v2 being FinSequence of the adjectives of T
-  st v1^v2 is_properly_applicable_to t
-  holds v1 is_properly_applicable_to t & v2 is_properly_applicable_to v1 ast t
+  for T being non empty non void reflexive transitive
+TAS-structure for t being type of T, v1,v2 being FinSequence of the adjectives
+of T st v1^v2 is_properly_applicable_to t holds v1 is_properly_applicable_to t
+  & v2 is_properly_applicable_to v1 ast t
 proof
   let T be non empty non void reflexive transitive TAS-structure;
   let t be type of T;
   let v1,v2 be FinSequence of the adjectives of T;
   set v = v1^v2;
+A1: apply(v,t) = apply(v1,t)$^apply(v2, v1 ast t) by Th35;
+A2: len apply(v2, v1 ast t) = len v2+1 by Def19;
   assume
-A1: for i being natural number, a being adjective of T, s being type of T
-  st i in dom v & a = v.i & s = apply(v,t).i
-  holds a is_properly_applicable_to s;
+A3: for i being natural number, a being adjective of T, s being type of
+T st i in dom v & a = v.i & s = apply(v,t).i holds a is_properly_applicable_to
+  s;
   hereby
+A4: dom v1 c= dom v by FINSEQ_1:39;
     let i be natural number, a be adjective of T, s be type of T such that
-A2: i in dom v1 & a = v1.i & s = apply(v1,t).i;
-    dom v1 c= dom v by FINSEQ_1:39;
-    then i in dom v & a = v.i & s = apply(v,t).i by A2,Th36,FINSEQ_1:def 7;
-    hence a is_properly_applicable_to s by A1;
+A5: i in dom v1 and
+A6: a = v1.i and
+A7: s = apply(v1,t).i;
+A8: a = v.i by A5,A6,FINSEQ_1:def 7;
+    s = apply(v,t).i by A5,A7,Th36;
+    hence a is_properly_applicable_to s by A3,A5,A4,A8;
   end;
   let i be natural number, a be adjective of T, s be type of T such that
-A3: i in dom v2 & a = v2.i & s = apply(v2, v1 ast t).i;
-A4: apply(v,t) = apply(v1,t)$^apply(v2, v1 ast t) by Th35;
-  i >= 1 by A3,FINSEQ_3:27;
+A9: i in dom v2 and
+A10: a = v2.i and
+A11: s = apply(v2, v1 ast t).i;
+A12: a = v.(len v1+i) by A9,A10,FINSEQ_1:def 7;
+  i >= 1 by A9,FINSEQ_3:27;
   then consider j being Nat such that
-A5: i = 1+j by NAT_1:10;
-  i <= len v2 by A3,FINSEQ_3:27;
-  then len apply(v1,t) = len v1+1 & len apply(v2, v1 ast t) = len v2+1 &
-  j < len v2 by A5,Def19,NAT_1:13;
-  then len v1+i = len apply(v1,t)+j & j < len apply(v2, v1 ast t)
-  by A5,NAT_1:13;
-  then len v1+i in dom v & a = v.(len v1+i) & s = apply(v,t).(len v1+i)
-  by A3,A4,A5,Th34,FINSEQ_1:41,def 7;
-  hence thesis by A1;
+A13: i = 1+j by NAT_1:10;
+  i <= len v2 by A9,FINSEQ_3:27;
+  then j < len v2 by A13,NAT_1:13;
+  then
+A14: j < len apply(v2, v1 ast t) by A2,NAT_1:13;
+  len apply(v1,t) = len v1+1 by Def19;
+  then len v1+i = len apply(v1,t)+j by A13;
+  then s = apply(v,t).(len v1+i) by A11,A1,A13,A14,Th34;
+  hence thesis by A3,A9,A12,FINSEQ_1:41;
 end;
 
 theorem Th62:
-  for T being non empty non void reflexive transitive TAS-structure
-  for t being type of T, v1,v2 being FinSequence of the adjectives of T
-  st v1 is_properly_applicable_to t & v2 is_properly_applicable_to v1 ast t
+  for T being non empty non void reflexive transitive
+TAS-structure for t being type of T, v1,v2 being FinSequence of the adjectives
+of T st v1 is_properly_applicable_to t & v2 is_properly_applicable_to v1 ast t
   holds v1^v2 is_properly_applicable_to t
 proof
   let T be non empty non void reflexive transitive TAS-structure;
@@ -2313,38 +2516,51 @@ proof
   let v1,v2 be FinSequence of the adjectives of T;
   set v = v1^v2;
   assume
-A1: for i being natural number, a being adjective of T, s being type of T
-  st i in dom v1 & a = v1.i & s = apply(v1,t).i
-  holds a is_properly_applicable_to s;
+A1: for i being natural number, a being adjective of T, s being type of
+  T st i in dom v1 & a = v1.i & s = apply(v1,t).i holds a
+  is_properly_applicable_to s;
   assume
-A2: for i being natural number, a being adjective of T, s being type of T
-  st i in dom v2 & a = v2.i & s = apply(v2, v1 ast t).i
-  holds a is_properly_applicable_to s;
+A2: for i being natural number, a being adjective of T, s being type of
+  T st i in dom v2 & a = v2.i & s = apply(v2, v1 ast t).i holds a
+  is_properly_applicable_to s;
+A3: apply(v,t) = apply(v1,t)$^apply(v2, v1 ast t) by Th35;
   let i be natural number, a be adjective of T, s be type of T such that
-A3: i in dom v & a = v.i & s = apply(v, t).i;
-A4: apply(v,t) = apply(v1,t)$^apply(v2, v1 ast t) by Th35;
-A5: i >= 1 & i <= len v & i is Element of NAT by A3,FINSEQ_3:27;
+A4: i in dom v and
+A5: a = v.i and
+A6: s = apply(v, t).i;
+A7: i >= 1 by A4,FINSEQ_3:27;
+A8: i <= len v by A4,FINSEQ_3:27;
   per cases;
-  suppose i <= len v1;
+  suppose
+    i <= len v1;
     then
-A6: i in dom v1 by A5,FINSEQ_3:27;
-    then a = v1.i & s = apply(v1,t).i by A3,Th36,FINSEQ_1:def 7;
-    hence thesis by A1,A6;
+A9: i in dom v1 by A7,FINSEQ_3:27;
+    then
+A10: a = v1.i by A5,FINSEQ_1:def 7;
+    s = apply(v1,t).i by A6,A9,Th36;
+    hence thesis by A1,A9,A10;
   end;
-  suppose i > len v1;
+  suppose
+    i > len v1;
     then i >= 1+len v1 by NAT_1:13;
     then consider j being Nat such that
-A7: i = len v1+1+j by NAT_1:10;
-    len v = len v1+len v2 & i = len v1+(j+1) by A7,FINSEQ_1:35;
-    then j+1 >= 1 & j+1 <= len v2 by A5,NAT_1:11,XREAL_1:8;
+A11: i = len v1+1+j by NAT_1:10;
+A12: len apply(v2, v1 ast t) = len v2+1 by Def19;
+A13: len v = len v1+len v2 by FINSEQ_1:35;
+A14: len apply(v1,t) = len v1+1 by Def19;
+    i = len v1+(j+1) by A11;
     then
-A8: len apply(v1,t) = len v1+1 & len apply(v2, v1 ast t) = len v2+1 &
-    j < len v2 & j+1 in dom v2 by Def19,FINSEQ_3:27,NAT_1:13;
-    then len v1+(j+1) = len apply(v1,t)+j & j < len apply(v2, v1 ast t)
-    by NAT_1:13;
-    then a = v2.(1+j) & s = apply(v2,v1 ast t).(1+j)
-    by A3,A4,A7,A8,Th34,FINSEQ_1:def 7;
-    hence thesis by A2,A8;
+A15: j+1 <= len v2 by A8,A13,XREAL_1:8;
+    then j < len v2 by NAT_1:13;
+    then j < len apply(v2, v1 ast t) by A12,NAT_1:13;
+    then
+A16: s = apply(v2,v1 ast t).(1+j) by A6,A3,A11,A14,Th34;
+    j+1 >= 1 by NAT_1:11;
+    then
+A17: j+1 in dom v2 by A15,FINSEQ_3:27;
+    len v1+(j+1) = len apply(v1,t)+j by A14;
+    then a = v2.(1+j) by A5,A11,A17,FINSEQ_1:def 7;
+    hence thesis by A2,A17,A16;
   end;
 end;
 
@@ -2354,26 +2570,27 @@ definition
   let A be Subset of the adjectives of T;
   pred A is_properly_applicable_to t means
   :Def29:
-  ex s being FinSequence of the adjectives of T st
-  rng s = A & s is_properly_applicable_to t;
+  ex s being FinSequence of
+  the adjectives of T st rng s = A & s is_properly_applicable_to t;
 end;
 
 theorem Th63:
-  for T being non empty non void reflexive transitive TAS-structure
-  for t being type of T, A being Subset of the adjectives of T
-  st A is_properly_applicable_to t holds A is finite
+  for T being non empty non void reflexive transitive
+TAS-structure for t being type of T, A being Subset of the adjectives of T st A
+  is_properly_applicable_to t holds A is finite
 proof
   let T be non empty non void reflexive transitive TAS-structure;
   let t be type of T, A be Subset of the adjectives of T;
-  assume ex s being FinSequence of the adjectives of T st
-  rng s = A & s is_properly_applicable_to t;
+  assume
+  ex s being FinSequence of the adjectives of T st rng s = A & s
+  is_properly_applicable_to t;
   hence thesis;
 end;
 
 theorem Th64:
-  for T being non empty non void reflexive transitive TAS-structure
-  for t being type of T
-  holds {} the adjectives of T is_properly_applicable_to t
+  for T being non empty non void reflexive transitive
+  TAS-structure for t being type of T holds {} the adjectives of T
+  is_properly_applicable_to t
 proof
   let T be non empty non void reflexive transitive TAS-structure;
   let t be type of T;
@@ -2383,203 +2600,223 @@ proof
   thus thesis;
 end;
 
-scheme MinimalFiniteSet{P[set]}:
-  ex A being finite set st P[A] & for B being set st B c= A & P[B] holds B = A
+scheme
+  MinimalFiniteSet{P[set]}: ex A being finite set st P[A] & for B being set st
+  B c= A & P[B] holds B = A
 provided
 A1: ex A being finite set st P[A]
 proof
   consider A being finite set such that
 A2: P[A] by A1;
+  defpred R[set,set] means $1 c= $2;
   consider Y being set such that
-A3: for x being set holds x in Y iff x in bool A & P[x] from XBOOLE_0:sch 1;
+A3: for x being set holds x in Y iff x in bool A & P[x] from XBOOLE_0:
+  sch 1;
   A c= A;
   then reconsider Y as non empty set by A2,A3;
   Y c= bool A
   proof
-    let x be set; thus thesis by A3;
+    let x be set;
+    thus thesis by A3;
   end;
   then reconsider Y as finite non empty set;
-  defpred R[set,set] means $1 c= $2;
-A5: for x being Element of Y holds R[x,x];
-A6: for x,y being Element of Y st R[x,y] & R[y,x] holds x = y
-  by XBOOLE_0:def 10;
-A7: for x,y,z being Element of Y st R[x,y] & R[y,z] holds R[x,z]
-  by XBOOLE_1:1;
-A8: for X being set st X c= Y & (for x,y being Element of Y st x in X & y in X
-  holds R[x,y] or R[y,x]) holds ex y being Element of Y st
-  for x being Element of Y st x in X holds R[y,x]
+A4: for x,y being Element of Y st R[x,y] & R[y,x] holds x = y by
+XBOOLE_0:def 10;
+A5: for x,y,z being Element of Y st R[x,y] & R[y,z] holds R[x,z] by XBOOLE_1:1;
+A6: for X being set st X c= Y & (for x,y being Element of Y st x in X & y in
+X holds R[x,y] or R[y,x]) holds ex y being Element of Y st for x being Element
+  of Y st x in X holds R[y,x]
   proof
     let X be set such that
-A9: X c= Y and
-A10: for x,y being Element of Y st x in X & y in X holds R[x,y] or R[y,x];
+A7: X c= Y and
+A8: for x,y being Element of Y st x in X & y in X holds R[x,y] or R[y
+    ,x];
     per cases;
     suppose
-A11:  X = {};
+A9:   X = {};
       consider y being Element of Y;
       take y;
-      thus thesis by A11;
+      thus thesis by A9;
     end;
     suppose
-A12:  X <> {};
+A10:  X <> {};
       consider x0 being Element of X;
-      x0 in X by A12;
-      then reconsider x0 as Element of Y by A9;
+      x0 in X by A10;
+      then reconsider x0 as Element of Y by A7;
       deffunc F(set) = card {y where y is Element of Y: y in X & y c< $1};
       consider f being Function such that
-A13:  dom f = X & for x being set st x in X holds f.x = F(x) from
+A11:  dom f = X & for x being set st x in X holds f.x = F(x) from
       FUNCT_1:sch 3;
-      set fx0 = {y where y is Element of Y: y in X & y c< x0};
-      fx0 c= Y
-      proof
-        let a be set;
-        assume a in fx0;
-        then ex y being Element of Y st a = y & y in X & y c< x0;
-        hence thesis;
-      end;
-      then reconsider fx0 as finite set;
       defpred P[Nat] means ex x being Element of Y st x in X & $1 = f.x;
-      f.x0 = card fx0 by A12,A13;
-      then
-A14:  ex n being Nat st P[n] by A12;
-A15:  for k being Nat st k<>0 & P[k] ex n being Nat st n<k & P[n]
+A12:  for k being Nat st k<>0 & P[k] ex n being Nat st n<k & P[n]
       proof
         let k be Nat such that
-A16:    k <> 0;
+A13:    k <> 0;
         given x being Element of Y such that
-A17:    x in X & k = f.x;
+A14:    x in X and
+A15:    k = f.x;
+        set fx = {a where a is Element of Y: a in X & a c< x};
+        fx c= Y
+        proof
+          let a be set;
+          assume
+          a in fx;
+          then ex z being Element of Y st a = z & z in X & z c< x;
+          hence thesis;
+        end;
+        then reconsider fx as finite set;
+A16:    k = card fx by A11,A14,A15;
         set A = {z where z is Element of Y: z in X & z c< x};
-        reconsider A as non empty set by A13,A16,A17,CARD_1:47;
+        reconsider A as non empty set by A11,A13,A14,A15,CARD_1:47;
         consider z being Element of A;
         z in A;
         then consider y being Element of Y such that
-A18:    z = y & y in X & y c< x;
+A17:    z = y and
+A18:    y in X and
+A19:    y c< x;
         set fx0 = {a where a is Element of Y: a in X & a c< y};
         fx0 c= Y
         proof
           let a be set;
-          assume a in fx0;
+          assume
+          a in fx0;
           then ex z being Element of Y st a = z & z in X & z c< y;
           hence thesis;
         end;
         then reconsider fx0 as finite set;
         reconsider n = card fx0 as Element of NAT;
-        set fx = {a where a is Element of Y: a in X & a c< x};
-        fx c= Y
-        proof
-          let a be set;
-          assume a in fx;
-          then ex z being Element of Y st a = z & z in X & z c< x;
-          hence thesis;
-        end;
-        then reconsider fx as finite set;
-A19:    k = card fx by A13,A17;
         take n;
-A20:    fx0 c= fx
+        not ex a being Element of Y st y = a & a in X & a c< y;
+        then
+A20:    not y in fx0;
+A21:    y in fx by A17;
+A22:    fx0 c= fx
         proof
           let a be set;
-          assume a in fx0;
+          assume
+          a in fx0;
           then consider b being Element of Y such that
-A21:      a = b & b in X & b c< y;
-          b c< x by A18,A21,XBOOLE_1:56;
-          hence thesis by A21;
+A23:      a = b and
+A24:      b in X and
+A25:      b c< y;
+          b c< x by A19,A25,XBOOLE_1:56;
+          hence thesis by A23,A24;
         end;
         then card fx0 c= card fx by CARD_1:27;
-        then
-A22:    n <= k by A19,NAT_1:40;
-        not ex a being Element of Y st y = a & a in X & a c< y;
-        then y in fx & not y in fx0 by A18;
-        then card fx <> card fx0 by A20,TRIANG_1:3;
-        hence n < k by A19,A22,XXREAL_0:1;
-        take y; thus thesis by A13,A18;
+        then n <= k by A16,NAT_1:40;
+        hence n < k by A16,A22,A21,A20,PRE_POLY:8,XXREAL_0:1;
+        take y;
+        thus thesis by A11,A18;
       end;
-      P[0] from NAT_1:sch 7(A14,A15);
+      set fx0 = {y where y is Element of Y: y in X & y c< x0};
+      fx0 c= Y
+      proof
+        let a be set;
+        assume
+        a in fx0;
+        then ex y being Element of Y st a = y & y in X & y c< x0;
+        hence thesis;
+      end;
+      then reconsider fx0 as finite set;
+      f.x0 = card fx0 by A10,A11;
+      then
+A26:  ex n being Nat st P[n] by A10;
+      P[0] from NAT_1:sch 7(A26,A12);
       then consider y being Element of Y such that
-A23:  y in X & 0 = f.y;
-A24:  f.y = card {z where z is Element of Y: z in X & z c< y} by A13,A23;
+A27:  y in X and
+A28:  0 = f.y;
       take y;
       let x be Element of Y;
       assume
-A25:  x in X;
-      then x c= y or y c= x by A10,A23;
+A29:  x in X;
+      then x c= y or y c= x by A8,A27;
       then x c< y or y c= x by XBOOLE_0:def 8;
-      then x in {z where z is Element of Y: z in X & z c< y} or y c= x by A25;
-      hence thesis by A23,A24;
+      then
+A30:  x in {z where z is Element of Y: z in X & z c< y} or y c= x by A29;
+      f.y = card {z where z is Element of Y: z in X & z c< y} by A11,A27;
+      hence thesis by A28,A30;
     end;
   end;
+A31: for x being Element of Y holds R[x,x];
   consider x being Element of Y such that
-A26: for y being Element of Y st x <> y holds not R[y,x]
-  from ORDERS_1:sch 2(A5,A6,A7,A8);
+A32: for y being Element of Y st x <> y holds not R[y,x] from ORDERS_1:
+  sch 2(A31,A4,A5,A6);
   x in bool A by A3;
   then reconsider x as finite set;
-  take x; thus P[x] by A3;
+  take x;
+  thus P[x] by A3;
   let B be set;
-  assume
-A27: B c= x & P[B];
+  assume that
+A33: B c= x and
+A34: P[B];
   x in bool A by A3;
-  then B c= A by A27,XBOOLE_1:1;
-  then B in Y by A3,A27;
-  hence thesis by A26,A27;
+  then B c= A by A33,XBOOLE_1:1;
+  then B in Y by A3,A34;
+  hence thesis by A32,A33;
 end;
 
 theorem Th65:
-  for T being non empty non void reflexive transitive TAS-structure
-  for t being type of T, A being Subset of the adjectives of T
-  st A is_properly_applicable_to t ex B being Subset of the adjectives of T st
-  B c= A & B is_properly_applicable_to t & A ast t = B ast t &
-  for C being Subset of the adjectives of T
-  st C c= B & C is_properly_applicable_to t & A ast t = C ast t holds C = B
+  for T being non empty non void reflexive transitive
+TAS-structure for t being type of T, A being Subset of the adjectives of T st A
+is_properly_applicable_to t ex B being Subset of the adjectives of T st B c= A
+& B is_properly_applicable_to t & A ast t = B ast t & for C being Subset of the
+  adjectives of T st C c= B & C is_properly_applicable_to t & A ast t = C ast t
+  holds C = B
 proof
   let T be non empty non void reflexive transitive TAS-structure;
   let t be type of T, A be Subset of the adjectives of T;
-  defpred P[set] means ex B being Subset of the adjectives of T st
-  $1 = B & $1 c= A & B is_properly_applicable_to t & A ast t = B ast t;
-  assume A is_properly_applicable_to t;
-  then A is finite & A c= A & A is_properly_applicable_to t & A ast t = A
-  ast t by Th63;
+  defpred P[set] means ex B being Subset of the adjectives of T st $1 = B & $1
+  c= A & B is_properly_applicable_to t & A ast t = B ast t;
+  assume
+A1: A is_properly_applicable_to t;
+  then A is finite by Th63;
   then
-A1: ex a being finite set st P[a];
+A2: ex a being finite set st P[a] by A1;
   consider B being finite set such that
-A2: P[B] and
-A3: for C being set st C c= B & P[C] holds C = B from MinimalFiniteSet(A1);
-  reconsider B as Subset of the adjectives of T by A2;
+A3: P[B] and
+A4: for C being set st C c= B & P[C] holds C = B from MinimalFiniteSet(
+  A2);
+  reconsider B as Subset of the adjectives of T by A3;
   take B;
-  thus B c= A & B is_properly_applicable_to t & A ast t = B ast t by A2;
+  thus B c= A & B is_properly_applicable_to t & A ast t = B ast t by A3;
   let C be Subset of the adjectives of T;
   assume
-A4: C c= B;
-  then C c= A by A2,XBOOLE_1:1;
-  hence thesis by A3,A4;
+A5: C c= B;
+  then C c= A by A3,XBOOLE_1:1;
+  hence thesis by A4,A5;
 end;
 
 definition
   let T be non empty non void reflexive transitive TAS-structure;
   attr T is commutative means
   :Def30:
-  for t1,t2 being type of T, a being adjective of T
-  st a is_properly_applicable_to t1 & a ast t1 <= t2
-  ex A being finite Subset of the adjectives of T
-  st A is_properly_applicable_to t1 "\/" t2 & A ast (t1 "\/" t2) = t2;
+  for t1,t2 being type of T, a being
+  adjective of T st a is_properly_applicable_to t1 & a ast t1 <= t2 ex A being
+finite Subset of the adjectives of T st A is_properly_applicable_to t1 "\/" t2
+  & A ast (t1 "\/" t2) = t2;
 end;
 
 registration
-  cluster Mizar-widening-like involutive without_fixpoints
-    consistent adj-structured adjs-typed non-absorbing subjected commutative
-    (complete upper-bounded non empty non void trivial reflexive
-    transitive antisymmetric strict TAS-structure);
+  cluster Mizar-widening-like involutive without_fixpoints consistent
+    adj-structured adjs-typed non-absorbing subjected commutative (complete
+    upper-bounded non empty non void trivial reflexive transitive antisymmetric
+    strict TAS-structure);
   existence
-  proof consider P being non void Mizar-widening-like involutive
-    without_fixpoints consistent adj-structured adjs-typed
-    (trivial non empty reflexive complete strict TA-structure);
-    set T = TAS-structure(#the carrier of P, the adjectives of P,
-      the InternalRel of P, the non-op of P, the adj-map of P, sub P#);
-    T is non empty & the RelStr of P = the RelStr of T;
-    then reconsider T as non void trivial non empty reflexive strict
-    TAS-structure by Def4,WAYBEL_8:12;
-    take T; thus T is Mizar-widening-like;
+  proof
+    consider P being non void Mizar-widening-like involutive without_fixpoints
+    consistent adj-structured adjs-typed (trivial non empty reflexive complete
+    strict TA-structure);
+    set T = TAS-structure(#the carrier of P, the adjectives of P, the
+      InternalRel of P, the non-op of P, the adj-map of P, sub P#);
+    the RelStr of P = the RelStr of T;
+    then reconsider
+    T as non void trivial non empty reflexive strict TAS-structure
+    by Def4,WAYBEL_8:12;
+    take T;
+    thus T is Mizar-widening-like;
     the AdjectiveStr of P = the AdjectiveStr of T;
     hence T is involutive without_fixpoints by Th5,Th6;
     thus T is consistent adj-structured adjs-typed by Th8,Th9,Th17;
-A1: the RelStr of P = the RelStr of T;
     hereby
       let a be adjective of T;
       reconsider b = a as adjective of P;
@@ -2587,18 +2824,21 @@ A1: the RelStr of P = the RelStr of T;
         .= sup (types non-b \/ types b) by Def6
         .= sub a by Def22;
     end;
+A1: the RelStr of P = the RelStr of T;
     thus T is subjected
     proof
       let a be adjective of T;
       reconsider b = a as adjective of P;
-      types a = types b & types non-a = types non-b by Th11;
-      then sup (types a \/ types non-a) = sup (types b \/ types non-b)
-      by A1,YELLOW_0:17,26;
+A2:   types non-a = types non-b by Th11;
+      types a = types b by Th11;
+      then sup (types a \/ types non-a) = sup (types b \/ types non-b) by A1,A2
+,YELLOW_0:17,26;
       then sup (types a \/ types non-a) = sub a by Def22;
       hence thesis by YELLOW_0:32;
     end;
     let t1,t2 be type of T, a be adjective of T such that
-    a is_properly_applicable_to t1 & a ast t1 <= t2;
+    a is_properly_applicable_to t1 and
+    a ast t1 <= t2;
     take A = {} the adjectives of T;
     thus A is_properly_applicable_to t1 "\/" t2 by Th64;
     thus A ast (t1 "\/" t2) = t2 by STRUCT_0:def 10;
@@ -2606,93 +2846,106 @@ A1: the RelStr of P = the RelStr of T;
 end;
 
 theorem Th66:
-  for T being Noetherian adj-structured (reflexive transitive antisymmetric
-  with_suprema non void TAS-structure)
-  for t being type of T, A being Subset of the adjectives of T
-  st A is_properly_applicable_to t
-  ex s being one-to-one FinSequence of the adjectives of T st
-  rng s = A & s is_properly_applicable_to t
+  for T being Noetherian adj-structured (reflexive transitive
+  antisymmetric with_suprema non void TAS-structure) for t being type of T, A
+being Subset of the adjectives of T st A is_properly_applicable_to t ex s being
+  one-to-one FinSequence of the adjectives of T st rng s = A & s
+  is_properly_applicable_to t
 proof
   let T be Noetherian adj-structured (reflexive transitive antisymmetric
   with_suprema non void TAS-structure);
   let t be type of T, A be Subset of the adjectives of T;
   given s' being FinSequence of the adjectives of T such that
-A1: rng s' = A & s' is_properly_applicable_to t;
-  defpred P[Nat] means ex s being FinSequence of the adjectives of T st
-  $1 = len s & rng s = A & s is_properly_applicable_to t;
+A1: rng s' = A and
+A2: s' is_properly_applicable_to t;
+  defpred P[Nat] means ex s being FinSequence of the adjectives of T st $1 =
+  len s & rng s = A & s is_properly_applicable_to t;
   len s' = len s';
   then
-A2: ex k being Nat st P[k] by A1;
+A3: ex k being Nat st P[k] by A1,A2;
   consider k being Nat such that
-A3: P[k] and
-A4: for n being Nat st P[n] holds k <= n from NAT_1:sch 5(A2);
+A4: P[k] and
+A5: for n being Nat st P[n] holds k <= n from NAT_1:sch 5(A3);
   consider s being FinSequence of the adjectives of T such that
-A5: k = len s & rng s = A & s is_properly_applicable_to t by A3;
+A6: k = len s and
+A7: rng s = A and
+A8: s is_properly_applicable_to t by A4;
   s is one-to-one
   proof
     let x,y be set;
-    assume
-A6: x in dom s & y in dom s & s.x = s.y & x <> y;
-    then reconsider x,y as Element of NAT;
-    x < y or x > y by A6,XXREAL_0:1;
+    assume that
+A9: x in dom s and
+A10: y in dom s and
+A11: s.x = s.y and
+A12: x <> y;
+    reconsider x,y as Element of NAT by A9,A10;
+    x < y or x > y by A12,XXREAL_0:1;
     then consider x,y being Element of NAT such that
-A7: x in dom s & y in dom s & x < y & s.x = s.y by A6;
-    y >= 1 by A7,FINSEQ_3:27;
+A13: x in dom s and
+A14: y in dom s and
+A15: x < y and
+A16: s.x = s.y by A9,A10,A11;
+A17: x >= 1 by A13,FINSEQ_3:27;
+    y >= 1 by A14,FINSEQ_3:27;
     then consider i being Nat such that
-A8: y = 1+i by NAT_1:10;
+A18: y = 1+i by NAT_1:10;
     reconsider i as Element of NAT by ORDINAL1:def 13;
-    reconsider s1 = s|Seg i as FinSequence of the adjectives of T
-    by FINSEQ_1:23;
+    reconsider s1 = s|Seg i as FinSequence of the adjectives of T by
+FINSEQ_1:23;
+A19: y <= len s by A14,FINSEQ_3:27;
+    then i <= len s by A18,NAT_1:13;
+    then
+A20: len s1 = i by FINSEQ_1:21;
+    x <= i by A15,A18,NAT_1:13;
+    then
+A21: x in dom s1 by A20,A17,FINSEQ_3:27;
     s1 c= s by TREES_1:def 1;
     then consider s2 being FinSequence such that
-A9: s = s1^s2 by TREES_1:8;
-    reconsider s2 as FinSequence of the adjectives of T by A9,FINSEQ_1:50;
-    reconsider s21 = s2|Seg 1 as FinSequence of the adjectives of T
-    by FINSEQ_1:23;
-A10: y <= len s & i < y by A7,A8,FINSEQ_3:27,NAT_1:13;
-    then i <= len s by XXREAL_0:2;
+A22: s = s1^s2 by TREES_1:8;
+    reconsider s2 as FinSequence of the adjectives of T by A22,FINSEQ_1:50;
+A23: len s = len s1+len s2 by A22,FINSEQ_1:35;
     then
-A11: len s = len s1+len s2 & len s1 = i by A9,FINSEQ_1:21,35;
+A24: len s2 >= 1 by A18,A19,A20,XREAL_1:8;
     then
-A12: len s2 >= 1 by A8,A10,XREAL_1:8;
-    then
-A13: len s21 = 1 by FINSEQ_1:21;
-    then
-A14: s21 = <*s21.1*> by FINSEQ_1:57;
-    then
-A15: rng s21 = {s21.1} by FINSEQ_1:56;
-    then reconsider a = s21.1 as adjective of T by ZFMISC_1:37;
+A25: 1 in dom s2 by FINSEQ_3:27;
+    reconsider s21 = s2|Seg 1 as FinSequence of the adjectives of T by
+FINSEQ_1:23;
     s21 c= s2 by TREES_1:def 1;
     then consider s22 being FinSequence such that
-A16: s2 = s21^s22 by TREES_1:8;
-    reconsider s22 as FinSequence of the adjectives of T by A16,FINSEQ_1:50;
-A17: 1 in dom s2 by A12,FINSEQ_3:27;
-A18: a = s2.1 by A14,A16,FINSEQ_1:58
-      .= s.y by A8,A9,A11,A17,FINSEQ_1:def 7;
-    x <= i & x >= 1 by A7,A8,FINSEQ_3:27,NAT_1:13;
+A26: s2 = s21^s22 by TREES_1:8;
+    reconsider s22 as FinSequence of the adjectives of T by A26,FINSEQ_1:50;
+A27: len s21 = 1 by A24,FINSEQ_1:21;
     then
-A19: x in dom s1 & s1 is_properly_applicable_to t
-    by A5,A9,A11,Th61,FINSEQ_3:27;
-    then a = s1.x & s1 is_applicable_to t by A7,A9,A18,Th58,FINSEQ_1:def 7;
+A28: s21 = <*s21.1*> by FINSEQ_1:57;
     then
-A20: a in rng s1 & rng s1 c= adjs (s1 ast t) by A19,Th45,FUNCT_1:12;
+A29: rng s21 = {s21.1} by FINSEQ_1:56;
+    then reconsider a = s21.1 as adjective of T by ZFMISC_1:37;
+A30: rng s2 = rng s21 \/ rng s22 by A26,FINSEQ_1:44;
+    a = s2.1 by A28,A26,FINSEQ_1:58
+      .= s.y by A18,A22,A20,A25,FINSEQ_1:def 7;
+    then a = s1.x by A16,A22,A21,FINSEQ_1:def 7;
     then
-A21: s1 ast t = a ast (s1 ast t) by Th25
-      .= s21 ast (s1 ast t) by A14,Th32;
-    s2 is_properly_applicable_to s1 ast t by A5,A9,Th61;
-    then s22 is_properly_applicable_to s1 ast t by A16,A21,Th61;
-    then
-A22: s1^s22 is_properly_applicable_to t by A19,Th62;
-    rng s21 c= rng s1 by A15,A20,ZFMISC_1:37;
+A31: a in rng s1 by A21,FUNCT_1:12;
+    then rng s21 c= rng s1 by A29,ZFMISC_1:37;
     then rng s1 \/ rng s21 = rng s1 by XBOOLE_1:12;
-    then rng (s1^s22) = rng s1 \/ rng s21 \/ rng s22 & rng s = rng s1 \/ rng
-    s2 & rng s2 = rng s21 \/ rng s22 by A9,A16,FINSEQ_1:44;
-    then k <= len (s1^s22) by A4,A5,A22,XBOOLE_1:4;
-    then k <= len s1+len s22 & len s2 = len s21+len s22 by A16,FINSEQ_1:35;
-    then len s21+len s22 <= 0+len s22 by A5,A11,XREAL_1:8;
-    hence thesis by A13,XREAL_1:8;
+    then
+A32: rng (s1^s22) = rng s1 \/ rng s21 \/ rng s22 by FINSEQ_1:44;
+A33: s2 is_properly_applicable_to s1 ast t by A8,A22,Th61;
+A34: s1 is_properly_applicable_to t by A8,A22,A23,Th61;
+    then rng s1 c= adjs (s1 ast t) by Th45,Th58;
+    then s1 ast t = a ast (s1 ast t) by A31,Th25
+      .= s21 ast (s1 ast t) by A28,Th32;
+    then s22 is_properly_applicable_to s1 ast t by A26,A33,Th61;
+    then
+A35: s1^s22 is_properly_applicable_to t by A34,Th62;
+A36: len s2 = len s21+len s22 by A26,FINSEQ_1:35;
+    rng s = rng s1 \/ rng s2 by A22,FINSEQ_1:44;
+    then k <= len (s1^s22) by A5,A7,A35,A32,A30,XBOOLE_1:4;
+    then k <= len s1+len s22 by FINSEQ_1:35;
+    then len s21+len s22 <= 0+len s22 by A6,A23,A36,XREAL_1:8;
+    hence thesis by A27,XREAL_1:8;
   end;
-  hence thesis by A5;
+  hence thesis by A7,A8;
 end;
 
 begin :: Reduction of adjectives
@@ -2701,47 +2954,49 @@ definition
   let T be non empty non void reflexive transitive TAS-structure;
   func T @--> -> Relation of T means
   :Def31:
-  for t1,t2 being type of T holds [t1,t2] in it iff
-  ex a being adjective of T st not a in adjs t2 &
-  a is_properly_applicable_to t2 & a ast t2 = t1;
+  for t1,t2 being type of T holds [
+  t1,t2] in it iff ex a being adjective of T st not a in adjs t2 & a
+  is_properly_applicable_to t2 & a ast t2 = t1;
   existence
   proof
-    defpred P[Element of T, Element of T] means
-    ex a being adjective of T st not a in adjs $2 &
-    a is_properly_applicable_to $2 & a ast $2 = $1;
+    defpred P[Element of T, Element of T] means ex a being adjective of T st
+    not a in adjs $2 & a is_properly_applicable_to $2 & a ast $2 = $1;
     consider R being Relation of the carrier of T such that
-A1: for t1,t2 being Element of T
-    holds [t1,t2] in R iff P[t1,t2] from RELSET_1:sch 2;
+A1: for t1,t2 being Element of T holds [t1,t2] in R iff P[t1,t2] from
+    RELSET_1:sch 2;
     reconsider R as Relation of T;
-    take R; thus thesis by A1;
+    take R;
+    thus thesis by A1;
   end;
   uniqueness
   proof
     let R1,R2 be Relation of T such that
-A2: for t1,t2 being type of T holds [t1,t2] in R1 iff
-    ex a being adjective of T st not a in adjs t2 &
-    a is_properly_applicable_to t2 & a ast t2 = t1 and
-A3: for t1,t2 being type of T holds [t1,t2] in R2 iff
-    ex a being adjective of T st not a in adjs t2 &
-    a is_properly_applicable_to t2 & a ast t2 = t1;
+A2: for t1,t2 being type of T holds [t1,t2] in R1 iff ex a being
+adjective of T st not a in adjs t2 & a is_properly_applicable_to t2 & a ast t2
+    = t1 and
+A3: for t1,t2 being type of T holds [t1,t2] in R2 iff ex a being
+adjective of T st not a in adjs t2 & a is_properly_applicable_to t2 & a ast t2
+    = t1;
     let t1,t2 be Element of T;
-    [t1,t2] in R1 iff ex a being adjective of T st not a in adjs t2 &
-    a is_properly_applicable_to t2 & a ast t2 = t1 by A2;
+    [t1,t2] in R1 iff ex a being adjective of T st not a in adjs t2 & a
+    is_properly_applicable_to t2 & a ast t2 = t1 by A2;
     hence [t1,t2] in R1 iff [t1,t2] in R2 by A3;
   end;
 end;
 
 theorem Th67:
-  for T being adj-structured antisymmetric
-  (non void reflexive transitive with_suprema Noetherian TAS-structure)
-  holds T@--> c= the InternalRel of T
+  for T being adj-structured antisymmetric (non void reflexive
+  transitive with_suprema Noetherian TAS-structure) holds T@--> c= the
+  InternalRel of T
 proof
-  let T be adj-structured with_suprema antisymmetric
-  (non empty non void reflexive transitive Noetherian TAS-structure);
+  let T be adj-structured with_suprema antisymmetric (non empty non void
+  reflexive transitive Noetherian TAS-structure);
   let t1,t2 be Element of T;
   reconsider q1 = t1, q2 = t2 as type of T;
-  assume [t1,t2] in T@-->;
-  then consider a being adjective of T such that not a in adjs q2 and
+  assume
+  [t1,t2] in T@-->;
+  then consider a being adjective of T such that
+  not a in adjs q2 and
 A1: a is_properly_applicable_to q2 and
 A2: a ast q2 = q1 by Def31;
   a is_applicable_to q2 by A1,Def27;
@@ -2749,341 +3004,379 @@ A2: a ast q2 = q1 by Def31;
   hence thesis by ORDERS_2:def 9;
 end;
 
-scheme RedInd{X() -> non empty set, P[set,set], R() -> Relation of X()}:
-  for x,y being Element of X() st R() reduces x,y holds P[x,y]
+scheme
+  RedInd{X() -> non empty set, P[set,set], R() -> Relation of X()}: for x,y
+  being Element of X() st R() reduces x,y holds P[x,y]
 provided
-A1: for x,y being Element of X() st [x,y] in R() holds P[x,y]
-and
-A2: for x being Element of X() holds P[x,x]
-and
+A1: for x,y being Element of X() st [x,y] in R() holds P[x,y] and
+A2: for x being Element of X() holds P[x,x] and
 A3: for x,y,z being Element of X() st P[x,y] & P[y,z] holds P[x,z]
 proof
   let x,y be Element of X();
   given p being RedSequence of R() such that
-A4: p.1 = x & p.len p = y;
+A4: p.1 = x and
+A5: p.len p = y;
   defpred P[Element of NAT] means 1+$1 <= len p implies P[x, p.(1+$1)];
-A5: P[0] by A2,A4;
 A6: now
     let i be Element of NAT such that
 A7: P[i];
     now
+A8:   i+1 >= 1 by NAT_1:11;
       assume
-A8:   1+(i+1) <= len p;
-      then i+1 < len p & i+1 >= 1 & 1+(i+1) >= 1 by NAT_1:11,13;
-      then P[x, p.(1+i)] & i+1 in dom p & 1+(i+1) in dom p
-      by A7,A8,FINSEQ_3:27;
+A9:   1+(i+1) <= len p;
+      1+(i+1) >= 1 by NAT_1:11;
       then
-A9:   [p.(i+1), p.(1+(i+1))] in R() by REWRITE1:def 2;
+A10:  1+(i+1) in dom p by A9,FINSEQ_3:27;
+      i+1 < len p by A9,NAT_1:13;
+      then i+1 in dom p by A8,FINSEQ_3:27;
       then
-A10:  p.(i+1) in X() & p.(1+(i+1)) in X() by ZFMISC_1:106;
-      then P[p.(i+1), p.(1+(i+1))] by A1,A9;
-      hence P[x, p.(1+(i+1))] by A3,A7,A8,A10,NAT_1:13;
+A11:  [p.(i+1), p.(1+(i+1))] in R() by A10,REWRITE1:def 2;
+      then
+A12:  p.(1+(i+1)) in X() by ZFMISC_1:106;
+A13:  p.(i+1) in X() by A11,ZFMISC_1:106;
+      then P[p.(i+1), p.(1+(i+1))] by A1,A11,A12;
+      hence P[x, p.(1+(i+1))] by A3,A7,A9,A13,A12,NAT_1:13;
     end;
     hence P[i+1];
   end;
+A14: P[0] by A2,A4;
+A15: for n being Element of NAT holds P[n] from NAT_1:sch 1(A14,A6);
   len p >= 0+1 by NAT_1:13;
   then consider n being Nat such that
-A11: len p = 1+n by NAT_1:10;
-A12: n in NAT by ORDINAL1:def 13;
-  for n being Element of NAT holds P[n] from NAT_1:sch 1(A5,A6);
-  hence thesis by A4,A11,A12;
+A16: len p = 1+n by NAT_1:10;
+  n in NAT by ORDINAL1:def 13;
+  hence thesis by A5,A16,A15;
 end;
 
 theorem Th68:
-  for T being adj-structured antisymmetric
-  (non void reflexive transitive with_suprema Noetherian TAS-structure)
-  for t1,t2 being type of T st T@--> reduces t1,t2 holds t1 <= t2
+  for T being adj-structured antisymmetric (non void reflexive
+transitive with_suprema Noetherian TAS-structure) for t1,t2 being type of T st
+  T@--> reduces t1,t2 holds t1 <= t2
 proof
-  let T be adj-structured with_suprema antisymmetric
-  (non empty non void reflexive transitive Noetherian TAS-structure);
+  let T be adj-structured with_suprema antisymmetric (non empty non void
+  reflexive transitive Noetherian TAS-structure);
   let t1,t2 be type of T;
   set R = T@-->;
   defpred P[Element of T, Element of T] means $1 <= $2;
-A1: now
+A1: for x,y,z be Element of T holds P[x, y] & P[y, z] implies P[x, z] by
+YELLOW_0:def 2;
+A2: now
     let x,y be Element of T;
     R c= the InternalRel of T by Th67;
     hence [x,y] in R implies P[x, y] by ORDERS_2:def 9;
   end;
-A2: for x being Element of T holds P[x, x];
-A3: for x,y,z be Element of T
-  holds P[x, y] & P[y, z] implies P[x, z] by YELLOW_0:def 2;
-  for x,y being Element of T st R reduces x,y holds P[x,y]
-  from RedInd(A1,A2,A3);
+A3: for x being Element of T holds P[x, x];
+  for x,y being Element of T st R reduces x,y holds P[x,y] from RedInd(A2,
+  A3,A1);
   hence thesis;
 end;
 
 theorem Th69:
-  for T being Noetherian adj-structured (reflexive transitive antisymmetric
-  non void with_suprema TAS-structure) holds T@--> is irreflexive
+  for T being Noetherian adj-structured (reflexive transitive
+  antisymmetric non void with_suprema TAS-structure) holds T@--> is irreflexive
 proof
-  let T be Noetherian adj-structured (reflexive transitive antisymmetric
-  non void with_suprema TAS-structure);
+  let T be Noetherian adj-structured (reflexive transitive antisymmetric non
+  void with_suprema TAS-structure);
   set R = T@-->;
   let x be set;
-  assume x in field R;
+  assume
+  x in field R;
   assume
 A1: [x,x] in R;
   then reconsider x as type of T by ZFMISC_1:106;
   consider a being adjective of T such that
 A2: not a in adjs x and
-A3: a is_properly_applicable_to x & a ast x = x by A1,Def31;
+A3: a is_properly_applicable_to x and
+A4: a ast x = x by A1,Def31;
   a is_applicable_to x by A3,Def27;
-  hence thesis by A2,A3,Th22;
+  hence thesis by A2,A4,Th22;
 end;
 
 theorem Th70:
-  for T being adj-structured antisymmetric
-  (non void reflexive transitive with_suprema Noetherian TAS-structure)
-  holds T@--> is strongly-normalizing
+  for T being adj-structured antisymmetric (non void reflexive
+  transitive with_suprema Noetherian TAS-structure) holds T@--> is
+  strongly-normalizing
 proof
-  let T be adj-structured with_suprema antisymmetric
-  (non empty non void reflexive transitive Noetherian TAS-structure);
+  let T be adj-structured with_suprema antisymmetric (non empty non void
+  reflexive transitive Noetherian TAS-structure);
   set R = T@-->, Q = the InternalRel of T;
-A1: R c= Q by Th67;
-A2: field R c= field Q by Th67,RELAT_1:31;
+A1: field R c= field Q by Th67,RELAT_1:31;
+A2: R c= Q by Th67;
   R is co-well_founded
   proof
     let Y be set;
-    assume
-A3: Y c= field R & Y <> {};
-    then Y c= field Q by A2,XBOOLE_1:1;
+    assume that
+A3: Y c= field R and
+A4: Y <> {};
+    Y c= field Q by A1,A3,XBOOLE_1:1;
     then consider a being set such that
-A4: a in Y & for b being set st b in Y & a <> b holds not [a,b] in Q
-    by A3,REWRITE1:def 16;
+A5: a in Y and
+A6: for b being set st b in Y & a <> b holds not [a,b] in Q by A4,
+REWRITE1:def 16;
     take a;
-    thus thesis by A1,A4;
+    thus thesis by A2,A5,A6;
   end;
   then R is irreflexive co-well_founded Relation by Th69;
   hence thesis;
 end;
 
 theorem Th71:
-  for T being Noetherian adj-structured (reflexive transitive antisymmetric
-  with_suprema non void TAS-structure)
-  for t being type of T, A being finite Subset of the adjectives of T
-  st for C being Subset of the adjectives of T
-  st C c= A & C is_properly_applicable_to t & A ast t = C ast t holds C = A
-  for s being one-to-one FinSequence of the adjectives of T
-  st rng s = A & s is_properly_applicable_to t
-  for i being natural number st 1 <= i & i <= len s
-  holds [apply(s, t).(i+1), apply(s, t).i] in T@-->
+  for T being Noetherian adj-structured (reflexive transitive
+  antisymmetric with_suprema non void TAS-structure) for t being type of T, A
+  being finite Subset of the adjectives of T st for C being Subset of the
+  adjectives of T st C c= A & C is_properly_applicable_to t & A ast t = C ast t
+holds C = A for s being one-to-one FinSequence of the adjectives of T st rng s
+= A & s is_properly_applicable_to t for i being natural number st 1 <= i & i <=
+  len s holds [apply(s, t).(i+1), apply(s, t).i] in T@-->
 proof
   let T be Noetherian adj-structured (reflexive transitive antisymmetric
   with_suprema non void TAS-structure);
   let t be type of T, A be finite Subset of the adjectives of T such that
-A1: for C being Subset of the adjectives of T
-  st C c= A & C is_properly_applicable_to t & A ast t = C ast t holds C = A;
+A1: for C being Subset of the adjectives of T st C c= A & C
+  is_properly_applicable_to t & A ast t = C ast t holds C = A;
   let s be one-to-one FinSequence of the adjectives of T such that
-A2: rng s = A & s is_properly_applicable_to t;
-A3: len apply(s, t) = len s+1 by Def19;
+A2: rng s = A and
+A3: s is_properly_applicable_to t;
   let j be natural number;
-  assume
-A4: 1 <= j & j <= len s;
-  then j < len s+1 & j is Element of NAT by NAT_1:13,ORDINAL1:def 13;
-  then
-A5: j in dom s & j in dom apply(s, t) by A3,A4,FINSEQ_3:27;
-  then s.j in rng s & rng s c= the adjectives of T by FUNCT_1:12;
-  then reconsider a = s.j as adjective of T;
-  apply(s, t).j in rng apply(s, t) & rng apply(s, t) c= the carrier of T
-  by A5,FUNCT_1:12;
+  assume that
+A4: 1 <= j and
+A5: j <= len s;
+A6: len apply(s, t) = len s+1 by Def19;
+  j < len s+1 by A5,NAT_1:13;
+  then j in dom apply(s, t) by A6,A4,FINSEQ_3:27;
+  then apply(s, t).j in rng apply(s, t) by FUNCT_1:12;
   then reconsider tt = apply(s, t).j as type of T;
-A6: apply(s, t).(j+1) = a ast tt & a is_properly_applicable_to tt
-  by A2,A5,Def19,Def28;
-  not a in adjs tt
+A7: j in dom s by A4,A5,FINSEQ_3:27;
+  then s.j in rng s by FUNCT_1:12;
+  then reconsider a = s.j as adjective of T;
+A8: apply(s, t).(j+1) = a ast tt by A7,Def19;
+A9: not a in adjs tt
   proof
     assume
-A7: a in adjs tt;
+A10: a in adjs tt;
     consider i being Nat such that
-A8: j = 1+i by A4,NAT_1:10;
+A11: j = 1+i by A4,NAT_1:10;
     reconsider i as Element of NAT by ORDINAL1:def 13;
-    reconsider s1 = s|Seg i as FinSequence of the adjectives of T
-    by FINSEQ_1:23;
+    reconsider s1 = s|Seg i as FinSequence of the adjectives of T by
+FINSEQ_1:23;
     s1 c= s by TREES_1:def 1;
     then consider s2 being FinSequence such that
-A9: s = s1^s2 by TREES_1:8;
-    reconsider s2 as FinSequence of the adjectives of T by A9,FINSEQ_1:50;
-    reconsider s21 = s2|Seg 1 as FinSequence of the adjectives of T
-    by FINSEQ_1:23;
-    i <= len s by A4,A8,NAT_1:13;
+A12: s = s1^s2 by TREES_1:8;
+    reconsider s2 as FinSequence of the adjectives of T by A12,FINSEQ_1:50;
+A13: len s = len s1+len s2 by A12,FINSEQ_1:35;
     then
-A10: len s = len s1+len s2 & len s1 = i by A9,FINSEQ_1:21,35;
+A14: s1 is_properly_applicable_to t by A3,A12,Th61;
+    reconsider s21 = s2|Seg 1 as FinSequence of the adjectives of T by
+FINSEQ_1:23;
+    i <= len s by A5,A11,NAT_1:13;
     then
-A11: len s2 >= 1 by A4,A8,XREAL_1:8;
+A15: len s1 = i by FINSEQ_1:21;
     then
-A12: len s21 = 1 by FINSEQ_1:21;
+A16: len s2 >= 1 by A5,A11,A13,XREAL_1:8;
     then
-A13: s21 = <*s21.1*> by FINSEQ_1:57;
+A17: len s21 = 1 by FINSEQ_1:21;
     then
-A14: rng s21 = {s21.1} by FINSEQ_1:56;
+A18: s21 = <*s21.1*> by FINSEQ_1:57;
+    then
+A19: rng s21 = {s21.1} by FINSEQ_1:56;
     then reconsider b = s21.1 as adjective of T by ZFMISC_1:37;
+A20: 1 in dom s2 by A16,FINSEQ_3:27;
     s21 c= s2 by TREES_1:def 1;
     then consider s22 being FinSequence such that
-A15: s2 = s21^s22 by TREES_1:8;
-    reconsider s22 as FinSequence of the adjectives of T by A15,FINSEQ_1:50;
-A16: 1 in dom s2 by A11,FINSEQ_3:27;
-A17: b = s2.1 by A13,A15,FINSEQ_1:58
-      .= a by A8,A9,A10,A16,FINSEQ_1:def 7;
-A18: s1 is_properly_applicable_to t by A2,A9,A10,Th61;
-    s1 ast t = tt by A8,A9,A10,Th37;
+A21: s2 = s21^s22 by TREES_1:8;
+    reconsider s22 as FinSequence of the adjectives of T by A21,FINSEQ_1:50;
+A22: rng s2 = rng s21 \/ rng s22 by A21,FINSEQ_1:44;
     then
-A19: s1 ast t = a ast (s1 ast t) by A7,Th25
-      .= s21 ast (s1 ast t) by A13,A17,Th32;
-    s2 is_properly_applicable_to s1 ast t by A2,A9,Th61;
-    then s22 is_properly_applicable_to s1 ast t by A15,A19,Th61;
+A23: rng s22 c= rng s2 by XBOOLE_1:7;
+A24: b = s2.1 by A18,A21,FINSEQ_1:58
+      .= a by A11,A12,A15,A20,FINSEQ_1:def 7;
+    then a in rng s21 by A19,TARSKI:def 1;
     then
-A20: s1^s22 is_properly_applicable_to t by A18,Th62;
+A25: a in rng s2 by A22,XBOOLE_0:def 3;
+    s1 ast t = tt by A11,A12,A13,A15,Th37;
+    then
+A26: s1 ast t = a ast (s1 ast t) by A10,Th25
+      .= s21 ast (s1 ast t) by A18,A24,Th32;
+    s2 is_properly_applicable_to s1 ast t by A3,A12,Th61;
+    then s22 is_properly_applicable_to s1 ast t by A21,A26,Th61;
+    then
+A27: s1^s22 is_properly_applicable_to t by A14,Th62;
     reconsider B = rng (s1^s22) as Subset of the adjectives of T;
-    s ast t = s2 ast (s1 ast t) by A9,Th38
-      .= s22 ast (s1 ast t) by A15,A19,Th38
+A28: B = rng s1 \/ rng s22 by FINSEQ_1:44;
+A29: A = rng s1 \/ rng s2 by A2,A12,FINSEQ_1:44;
+    s ast t = s2 ast (s1 ast t) by A12,Th38
+      .= s22 ast (s1 ast t) by A21,A26,Th38
       .= s1^s22 ast t by Th38;
     then
-A21: A ast t = s1^s22 ast t by A2,Th57,Th58
-      .= B ast t by A20,Th57,Th58;
-A22: B is_properly_applicable_to t by A20,Def29;
-A23: B = rng s1 \/ rng s22 & A = rng s1 \/ rng s2 &
-    rng s2 = rng s21 \/ rng s22 by A2,A9,A15,FINSEQ_1:44;
-    then rng s22 c= rng s2 by XBOOLE_1:7;
+A30: A ast t = s1^s22 ast t by A2,A3,Th57,Th58
+      .= B ast t by A27,Th57,Th58;
+    B is_properly_applicable_to t by A27,Def29;
+    then B = A by A1,A30,A28,A29,A23,XBOOLE_1:9;
     then
-A24: B = A by A1,A21,A22,A23,XBOOLE_1:9;
-    a in rng s21 by A14,A17,TARSKI:def 1;
-    then a in rng s2 by A23,XBOOLE_0:def 3;
-    then
-A25: a in B by A23,A24,XBOOLE_0:def 3;
-    per cases by A23,A25,XBOOLE_0:def 3;
-    suppose a in rng s1;
+A31: a in B by A29,A25,XBOOLE_0:def 3;
+    per cases by A28,A31,XBOOLE_0:def 3;
+    suppose
+      a in rng s1;
       then consider x being set such that
-A26:  x in dom s1 & a = s1.x by FUNCT_1:def 5;
-      reconsider x as Element of NAT by A26;
-      dom s1 c= dom s & x <= len s1 by A9,A26,FINSEQ_1:39,FINSEQ_3:27;
-      then x < j & x in dom s & s.x = a by A8,A9,A10,A26,FINSEQ_1:def 7
-,NAT_1:13;
-      hence contradiction by A5,FUNCT_1:def 8;
-    end;
-    suppose a in rng s22;
-      then consider x being set such that
-A27:  x in dom s22 & a = s22.x by FUNCT_1:def 5;
-      reconsider x as Element of NAT by A27;
-      x >= 0+1 by A27,FINSEQ_3:27;
+A32:  x in dom s1 and
+A33:  a = s1.x by FUNCT_1:def 5;
+      reconsider x as Element of NAT by A32;
+      x <= len s1 by A32,FINSEQ_3:27;
       then
-A28:  x+1+i = j+x & j+x > j+0 by A8,XREAL_1:8;
-      1+x in dom s2 & s2.(1+x) = a by A12,A15,A27,FINSEQ_1:41,def 7;
-      then i+(1+x) in dom s & s.(i+(1+x)) = a by A9,A10,FINSEQ_1:41,def 7;
-      hence contradiction by A5,A28,FUNCT_1:def 8;
+A34:  x < j by A11,A15,NAT_1:13;
+A35:  dom s1 c= dom s by A12,FINSEQ_1:39;
+      s.x = a by A12,A32,A33,FINSEQ_1:def 7;
+      hence contradiction by A7,A32,A35,A34,FUNCT_1:def 8;
+    end;
+    suppose
+      a in rng s22;
+      then consider x being set such that
+A36:  x in dom s22 and
+A37:  a = s22.x by FUNCT_1:def 5;
+      reconsider x as Element of NAT by A36;
+A38:  1+x in dom s2 by A17,A21,A36,FINSEQ_1:41;
+      x >= 0+1 by A36,FINSEQ_3:27;
+      then
+A39:  j+x > j+0 by XREAL_1:8;
+      s2.(1+x) = a by A17,A21,A36,A37,FINSEQ_1:def 7;
+      then
+A40:  s.(i+(1+x)) = a by A12,A15,A38,FINSEQ_1:def 7;
+      i+(1+x) in dom s by A12,A15,A38,FINSEQ_1:41;
+      hence contradiction by A7,A11,A39,A40,FUNCT_1:def 8;
     end;
   end;
-  hence thesis by A6,Def31;
+  a is_properly_applicable_to tt by A3,A7,Def28;
+  hence thesis by A8,A9,Def31;
 end;
 
 theorem Th72:
-  for T being Noetherian adj-structured (reflexive transitive antisymmetric
-  with_suprema non void TAS-structure)
-  for t being type of T, A being finite Subset of the adjectives of T
-  st for C being Subset of the adjectives of T
-  st C c= A & C is_properly_applicable_to t & A ast t = C ast t holds C = A
-  for s being one-to-one FinSequence of the adjectives of T
-  st rng s = A & s is_properly_applicable_to t
-  holds Rev apply(s, t) is RedSequence of T@-->
+  for T being Noetherian adj-structured (reflexive transitive
+  antisymmetric with_suprema non void TAS-structure) for t being type of T, A
+  being finite Subset of the adjectives of T st for C being Subset of the
+  adjectives of T st C c= A & C is_properly_applicable_to t & A ast t = C ast t
+holds C = A for s being one-to-one FinSequence of the adjectives of T st rng s
+  = A & s is_properly_applicable_to t holds Rev apply(s, t) is RedSequence of T
+  @-->
 proof
   let T be Noetherian adj-structured (reflexive transitive antisymmetric
   with_suprema non void TAS-structure);
   let t be type of T, A be finite Subset of the adjectives of T such that
-A1: for C being Subset of the adjectives of T
-  st C c= A & C is_properly_applicable_to t & A ast t = C ast t holds C = A;
+A1: for C being Subset of the adjectives of T st C c= A & C
+  is_properly_applicable_to t & A ast t = C ast t holds C = A;
   let s be one-to-one FinSequence of the adjectives of T such that
-A2: rng s = A & s is_properly_applicable_to t;
-A3: len Rev apply(s, t) = len apply(s, t) & len apply(s, t) = len s+1 &
-  dom Rev apply(s, t) = dom apply(s, t) by Def19,FINSEQ_5:60,def 3;
+A2: rng s = A and
+A3: s is_properly_applicable_to t;
+A4: len Rev apply(s, t) = len apply(s, t) by FINSEQ_5:def 3;
   hence len Rev apply(s, t) > 0;
   let i be Element of NAT;
-  assume i in dom Rev apply(s, t) & i+1 in dom Rev apply(s, t);
+  assume that
+A5: i in dom Rev apply(s, t) and
+A6: i+1 in dom Rev apply(s, t);
+A7: len apply(s, t) = len s+1 by Def19;
   then
-A4: i >= 1 & i+1 <= len s+1 & (Rev apply(s, t)).i = apply(s, t).(len s+1 -i
-  +1) & (Rev apply(s, t)).(i+1) = apply(s, t).(len s+1-(i+1)+1)
-  by A3,FINSEQ_3:27,FINSEQ_5:def 3;
+A8: (Rev apply(s, t)).i = apply(s, t).(len s+1 -i +1) by A5,FINSEQ_5:def 3;
+  i+1 <= len s+1 by A4,A7,A6,FINSEQ_3:27;
   then consider j being Nat such that
-A5: len s+1 = i+1+j by NAT_1:10;
-  len s+1-(i+1) = j & len s+1-i = j+1 & len s = i+j by A5;
-  then j+1 >= 1 & j+1 <= len s by A4,NAT_1:11,XREAL_1:8;
-  hence thesis by A1,A2,A4,A5,Th71;
+A9: len s+1 = i+1+j by NAT_1:10;
+A10: (Rev apply(s, t)).(i+1) = apply(s, t).(len s+1-(i+1)+1) by A7,A6,
+FINSEQ_5:def 3;
+A11: i >= 1 by A5,FINSEQ_3:27;
+  len s = i+j by A9;
+  then
+A12: j+1 <= len s by A11,XREAL_1:8;
+  j+1 >= 1 by NAT_1:11;
+  hence thesis by A1,A2,A3,A8,A10,A9,A12,Th71;
 end;
 
 theorem Th73:
-  for T being Noetherian adj-structured (reflexive transitive antisymmetric
-  with_suprema non void TAS-structure)
-  for t being type of T, A being finite Subset of the adjectives of T
-  st A is_properly_applicable_to t holds T@--> reduces A ast t, t
+  for T being Noetherian adj-structured (reflexive transitive
+  antisymmetric with_suprema non void TAS-structure) for t being type of T, A
+  being finite Subset of the adjectives of T st A is_properly_applicable_to t
+  holds T@--> reduces A ast t, t
 proof
   let T be Noetherian adj-structured (reflexive transitive antisymmetric
   with_suprema non void TAS-structure);
-  let t be type of T, A be finite Subset of the adjectives of T such that
-A1: A is_properly_applicable_to t;
   set R = T@-->;
-  consider A' being Subset of the adjectives of T such that
-A2: A' c= A & A' is_properly_applicable_to t & A ast t = A' ast t and
-A3: for C being Subset of the adjectives of T
-  st C c= A' & C is_properly_applicable_to t & A ast t = C ast t
-  holds C = A' by A1,Th65;
+  let t be type of T, A be finite Subset of the adjectives of T;
+  assume
+  A is_properly_applicable_to t;
+  then consider A' being Subset of the adjectives of T such that
+  A' c= A and
+A1: A' is_properly_applicable_to t and
+A2: A ast t = A' ast t and
+A3: for C being Subset of the adjectives of T st C c= A' & C
+  is_properly_applicable_to t & A ast t = C ast t holds C = A' by Th65;
   consider s being one-to-one FinSequence of the adjectives of T such that
-A4: rng s = A' & s is_properly_applicable_to t by A2,Th66;
-  reconsider p = Rev apply(s, t) as RedSequence of R by A2,A3,A4,Th72;
+A4: rng s = A' and
+A5: s is_properly_applicable_to t by A1,Th66;
+  reconsider p = Rev apply(s, t) as RedSequence of R by A2,A3,A4,A5,Th72;
   take p;
   thus p.1 = apply(s, t).len apply(s, t) by FINSEQ_5:65
     .= s ast t by Def19
-    .= A ast t by A2,A4,Th57,Th58;
+    .= A ast t by A2,A4,A5,Th57,Th58;
   thus p.len p = p.len apply(s, t) by FINSEQ_5:def 3
     .= apply(s, t).1 by FINSEQ_5:65
     .= t by Def19;
 end;
 
 theorem Th74:
-  for X being non empty set for R being Relation of X
-  for r being RedSequence of R st r.1 in X holds r is FinSequence of X
+  for X being non empty set for R being Relation of X for r being
+  RedSequence of R st r.1 in X holds r is FinSequence of X
 proof
   let X be non empty set;
   let R be Relation of X;
   let p be RedSequence of R such that
 A1: p.1 in X;
   let x be set;
-  assume x in rng p;
+  assume
+  x in rng p;
   then consider i being set such that
-A2: i in dom p & x = p.i by FUNCT_1:def 5;
+A2: i in dom p and
+A3: x = p.i by FUNCT_1:def 5;
   reconsider i as Element of NAT by A2;
-A3: i >= 1 by A2,FINSEQ_3:27;
-  per cases by A3,XXREAL_0:1;
-  suppose i = 1;
-    hence thesis by A1,A2;
+A4: i >= 1 by A2,FINSEQ_3:27;
+  per cases by A4,XXREAL_0:1;
+  suppose
+    i = 1;
+    hence thesis by A1,A3;
   end;
-  suppose i > 1;
+  suppose
+    i > 1;
     then i >= 1+1 by NAT_1:13;
     then consider j being Nat such that
-A4: i = 1+1+j by NAT_1:10;
-A5: i = j+1+1 & i <= len p by A2,A4,FINSEQ_3:27;
-    then j+1 >= 1 & j+1+1 >= 1 & j+1 < len p by NAT_1:11,13;
-    then j+1 in dom p by FINSEQ_3:27;
-    then [p.(j+1), x] in R by A2,A5,REWRITE1:def 2;
+A5: i = 1+1+j by NAT_1:10;
+A6: i = j+1+1 by A5;
+A7: j+1 >= 1 by NAT_1:11;
+    i <= len p by A2,FINSEQ_3:27;
+    then j+1 < len p by A6,NAT_1:13;
+    then j+1 in dom p by A7,FINSEQ_3:27;
+    then [p.(j+1), x] in R by A2,A3,A6,REWRITE1:def 2;
     hence thesis by ZFMISC_1:106;
   end;
 end;
 
 theorem Th75:
-  for X being non empty set for R being Relation of X
-  for x be Element of X, y being set st R reduces x,y holds y in X
+  for X being non empty set for R being Relation of X for x be
+  Element of X, y being set st R reduces x,y holds y in X
 proof
   let X be non empty set;
   let R be Relation of X;
   let x be Element of X, y be set;
   given p being RedSequence of R such that
-A1: p.1 = x & p.len p = y;
+A1: p.1 = x and
+A2: p.len p = y;
   len p >= 0+1 by NAT_1:13;
-  then len p in dom p & p is FinSequence of X by A1,Th74,FINSEQ_3:27;
-  then y in rng p & rng p c= X by A1,FINSEQ_1:def 4,FUNCT_1:12;
-  hence thesis;
+  then len p in dom p by FINSEQ_3:27;
+  then
+A3: y in rng p by A2,FUNCT_1:12;
+  p is FinSequence of X by A1,Th74;
+  then rng p c= X by FINSEQ_1:def 4;
+  hence thesis by A3;
 end;
 
 theorem Th76:
-  for X being non empty set for R being Relation of X
-  st R is with_UN_property weakly-normalizing for x be Element of X
-  holds nf(x, R) in X
+  for X being non empty set for R being Relation of X st R is
+  with_UN_property weakly-normalizing for x be Element of X holds nf(x, R) in X
 proof
   let X be non empty set;
   let R be Relation of X such that
@@ -3095,174 +3388,207 @@ A1: R is with_UN_property weakly-normalizing;
 end;
 
 theorem Th77:
-  for T being Noetherian adj-structured (reflexive transitive antisymmetric
-  with_suprema non void TAS-structure)
-  for t1, t2 being type of T st T@--> reduces t1, t2
-  ex A being finite Subset of the adjectives of T
-  st A is_properly_applicable_to t2 & t1 = A ast t2
+  for T being Noetherian adj-structured (reflexive transitive
+  antisymmetric with_suprema non void TAS-structure) for t1, t2 being type of T
+  st T@--> reduces t1, t2 ex A being finite Subset of the adjectives of T st A
+  is_properly_applicable_to t2 & t1 = A ast t2
 proof
   let T be Noetherian adj-structured (reflexive transitive antisymmetric
   with_suprema non void TAS-structure);
   let t1,t2 be type of T;
   set R = T@-->;
   given p being RedSequence of R such that
-A1: p.1 = t1 & t2 = p.len p;
-A2: len p >= 0+1 by NAT_1:13;
+A1: p.1 = t1 and
+A2: t2 = p.len p;
+  defpred P[set,set] means ex j being Element of NAT, a being adjective of T,
+  t being type of T st $2 = a & $1 = j & a ast t = p.j & t = p.(j+1) & a
+  is_properly_applicable_to t;
+A3: len Rev p = len p by FINSEQ_5:def 3;
+A4: len p-1+1 = len p;
+A5: len p >= 0+1 by NAT_1:13;
   then consider i being Nat such that
-A3: len p = 1+i by NAT_1:10;
+A6: len p = 1+i by NAT_1:10;
   reconsider i as Element of NAT by ORDINAL1:def 13;
-  defpred P[set,set] means ex j being Element of NAT,
-  a being adjective of T, t being type of T st
-  $2 = a & $1 = j & a ast t = p.j & t = p.(j+1) &
-  a is_properly_applicable_to t;
-A4: now
+A7: now
     let x be set;
     assume
-A5: x in Seg i;
+A8: x in Seg i;
     then reconsider j = x as Element of NAT;
-A6: j >= 1 & j <= i by A5,FINSEQ_1:3;
-    then 1 <= j+1 & j+1 <= len p & j < len p by A3,NAT_1:13,XREAL_1:8;
-    then j in dom p & j+1 in dom p by A6,FINSEQ_3:27;
+A9: j >= 1 by A8,FINSEQ_1:3;
     then
-A7: [p.j, p.(j+1)] in R by REWRITE1:def 2;
+A10: 1 <= j+1 by NAT_1:13;
+A11: j <= i by A8,FINSEQ_1:3;
+    then j < len p by A6,NAT_1:13;
+    then
+A12: j in dom p by A9,FINSEQ_3:27;
+    j+1 <= len p by A6,A11,XREAL_1:8;
+    then j+1 in dom p by A10,FINSEQ_3:27;
+    then
+A13: [p.j, p.(j+1)] in R by A12,REWRITE1:def 2;
     then reconsider q1 = p.j, q2 = p.(j+1) as type of T by ZFMISC_1:106;
-    ex a being adjective of T st not a in adjs q2 &
-    a is_properly_applicable_to q2 & a ast q2 = q1 by A7,Def31;
+    ex a being adjective of T st not a in adjs q2 & a
+    is_properly_applicable_to q2 & a ast q2 = q1 by A13,Def31;
     hence ex y being set st y in the adjectives of T & P[x,y];
   end;
   consider f being Function such that
-A8: dom f = Seg i & rng f c= the adjectives of T and
-A9: for x being set st x in Seg i holds P[x,f.x] from WELLORD2:sch 1(A4);
-  f is FinSequence by A8,FINSEQ_1:def 2;
-  then reconsider f as FinSequence of the adjectives of T by A8,FINSEQ_1:def 4;
+A14: dom f = Seg i & rng f c= the adjectives of T and
+A15: for x being set st x in Seg i holds P[x,f.x] from WELLORD2:sch 1(A7
+  );
+  f is FinSequence by A14,FINSEQ_1:def 2;
+  then reconsider f as FinSequence of the adjectives of T by A14,FINSEQ_1:def 4
+  ;
+A16: len f = i by A14,FINSEQ_1:def 3;
   set r = Rev f;
-  defpred P[Element of NAT] means
-  1+$1 <= len p implies (Rev p).(1+$1) = apply(r, t2).(1+$1);
-A10: len r = len f & len apply(r, t2) = len r+1 & len f = i & len Rev p = len p
-  by A8,Def19,FINSEQ_1:def 3,FINSEQ_5:def 3;
-  then 1 in dom Rev p & len p-1+1 = len p by A2,FINSEQ_3:27;
-  then (Rev p).1 = t2 by A1,FINSEQ_5:def 3;
-  then
-A11: P[0] by Def19;
-A12: now
+  defpred P[Element of NAT] means 1+$1 <= len p implies (Rev p).(1+$1) = apply
+  (r, t2).(1+$1);
+A17: len r = len f by FINSEQ_5:def 3;
+A18: now
     let j be Element of NAT such that
-A13: P[j];
+A19: P[j];
     now
+A20:  j+1 >= 1 by NAT_1:11;
       assume
-A14:  1+(j+1) <= len p;
-      then j+1 <= i by A3,XREAL_1:8;
+A21:  1+(j+1) <= len p;
+      then j+1 <= i by A6,XREAL_1:8;
       then consider x being Nat such that
-A15:  i = j+1+x by NAT_1:10;
+A22:  i = j+1+x by NAT_1:10;
       reconsider x as Element of NAT by ORDINAL1:def 13;
-A16:  i = x+1+j by A15;
-      then x+1 >= 1 & i >= x+1 by NAT_1:11;
-      then x+1 in Seg i;
-      then consider k being Element of NAT, a being adjective of T,
-      t being type of T such that
-A17:  f.(x+1) = a & x+1 = k & a ast t = p.k & t = p.(k+1) &
-      a is_properly_applicable_to t by A9;
-A18:  i+1-(j+1) = x+1 by A15;
-A19:  i+1-(1+(j+1)) = x by A15;
-      j <= i by A16,NAT_1:11;
-      then j+1 >= 1 & j+1 <= i & j+1 <= i+1 by A15,NAT_1:11,XREAL_1:8;
+A23:  i+1-(j+1) = x+1 by A22;
+      j+1 < len p by A21,NAT_1:13;
+      then j+1 in dom Rev p by A3,A20,FINSEQ_3:27;
       then
-A20:  j+1 in dom r & j+1 in dom apply(r, t2) by A10,FINSEQ_3:27;
-      1+(j+1) >= 1 & j+1 >= 1 & j+1 < len p by A14,NAT_1:11,13;
-      then j+1 in dom Rev p & 1+(j+1) in dom Rev p &
-      (Rev p).(1+j) = apply(r, t2).(1+j) by A10,A13,A14,FINSEQ_3:27;
+A24:  (Rev p).(j+1) = p.(x+1+1) by A6,A23,FINSEQ_5:def 3;
+A25:  i+1-(1+(j+1)) = x by A22;
+      1+(j+1) >= 1 by NAT_1:11;
+      then 1+(j+1) in dom Rev p by A3,A21,FINSEQ_3:27;
       then
-A21:  (Rev p).(j+1) = p.(x+1+1) & (Rev p).(1+(j+1)) = p.(x+1)
-      by A3,A18,A19,FINSEQ_5:def 3;
-      r.(j+1) = f.(len f-(j+1)+1) by A20,FINSEQ_5:def 3
-        .= a by A10,A15,A17;
-      hence (Rev p).(1+(j+1)) = apply(r, t2).(1+(j+1))
-      by A13,A14,A17,A20,A21,Def19,NAT_1:13;
+A26:  (Rev p).(1+(j+1)) = p.(x+1) by A6,A25,FINSEQ_5:def 3;
+      i = x+1+j by A22;
+      then
+A27:  i >= x+1 by NAT_1:11;
+      x+1 >= 1 by NAT_1:11;
+      then x+1 in Seg i by A27;
+      then consider
+      k being Element of NAT, a being adjective of T, t being type of
+      T such that
+A28:  f.(x+1) = a and
+A29:  x+1 = k and
+A30:  a ast t = p.k and
+A31:  t = p.(k+1) and
+      a is_properly_applicable_to t by A15;
+A32:  j+1 >= 1 by NAT_1:11;
+      j+1 <= i by A22,NAT_1:11;
+      then
+A33:  j+1 in dom r by A17,A16,A32,FINSEQ_3:27;
+      then r.(j+1) = f.(len f-(j+1)+1) by FINSEQ_5:def 3
+        .= a by A16,A22,A28;
+      hence (Rev p).(1+(j+1)) = apply(r, t2).(1+(j+1)) by A19,A21,A29,A30,A31
+,A33,A24,A26,Def19,NAT_1:13;
     end;
     hence P[j+1];
   end;
-A22: for j being Element of NAT holds P[j] from NAT_1:sch 1(A11,A12);
-  now
-    let j be Nat;
-    assume 1 <= j;
-    then consider k being Nat such that
-A23: j = 1+k by NAT_1:10;
-    k in NAT by ORDINAL1:def 13;
-    hence j <= len p implies (Rev p).j = apply(r, t2).j by A22,A23;
-  end;
-  then
-A24: Rev p = apply(r, t2) by A3,A10,FINSEQ_1:18;
-  then
-A25: p = Rev apply(r, t2) by FINSEQ_6:29;
   reconsider A = rng f as finite Subset of the adjectives of T;
   take A;
-A26: r is_properly_applicable_to t2
+A34: len apply(r, t2) = len r+1 by Def19;
+  1 in dom Rev p by A5,A3,FINSEQ_3:27;
+  then (Rev p).1 = t2 by A2,A4,FINSEQ_5:def 3;
+  then
+A35: P[0] by Def19;
+A36: for j being Element of NAT holds P[j] from NAT_1:sch 1(A35,A18);
+  now
+    let j be Nat;
+    assume
+    1 <= j;
+    then consider k being Nat such that
+A37: j = 1+k by NAT_1:10;
+    k in NAT by ORDINAL1:def 13;
+    hence j <= len p implies (Rev p).j = apply(r, t2).j by A36,A37;
+  end;
+  then
+A38: Rev p = apply(r, t2) by A6,A17,A34,A16,A3,FINSEQ_1:18;
+  then
+A39: p = Rev apply(r, t2) by FINSEQ_6:29;
+A40: r is_properly_applicable_to t2
   proof
     let j be natural number, a be adjective of T, s be type of T;
-    assume
-A27: j in dom r & a = r.j & s = apply(r,t2).j;
-    then j in dom f & j >= 1 & j <= len r by FINSEQ_3:27,FINSEQ_5:60;
+    assume that
+A41: j in dom r and
+A42: a = r.j and
+A43: s = apply(r,t2).j;
+    j <= len r by A41,FINSEQ_3:27;
     then consider k being Nat such that
-A28: len r = j+k by NAT_1:10;
+A44: len r = j+k by NAT_1:10;
+A45: len r = len f by FINSEQ_5:def 3;
     reconsider k as Element of NAT by ORDINAL1:def 13;
-A29: len r = len f by FINSEQ_5:def 3;
+A46: k+1 >= 1 by NAT_1:11;
+A47: j >= 1 by A41,FINSEQ_3:27;
+    then k+1 <= i by A16,A44,A45,XREAL_1:8;
+    then len f-j+1 in Seg i by A44,A45,A46;
+    then consider
+    o being Element of NAT, b being adjective of T, u being type of T
+    such that
+A48: f.(len f-j+1) = b and
+A49: len f-j+1 = o and
+    b ast u = p.o and
+A50: u = p.(o+1) and
+A51: b is_properly_applicable_to u by A15;
+A52: o+1 >= 1 by NAT_1:11;
+    i+1 = k+1+j by A17,A16,A44;
+    then o+1 <= len p by A6,A44,A45,A47,A49,XREAL_1:8;
     then
-A30: len f-j = k & k-1+1 = k & j >= 1 by A27,A28,FINSEQ_3:27;
-    then k+1 >= 1 & k+1 <= i by A10,A28,NAT_1:11,XREAL_1:8;
-    then len f-j+1 in Seg i by A28,A29;
-    then consider o being Element of NAT, b being adjective of T,
-    u being type of T such that
-A31: f.(len f-j+1) = b & len f-j+1 = o & b ast u = p.o & u = p.(o+1) &
-    b is_properly_applicable_to u by A9;
-    i+1 = k+1+j & (i+1)-(o+1) = (i+1)-o-1 by A10,A28;
-    then (i+1)-(o+1) = j-1 & o+1 >= 1 & o+1 <= len p
-    by A3,A30,A31,NAT_1:11,XREAL_1:8;
-    then
-A32: len (apply(r, t2))-(o+1)+1 = j & o+1 in dom p by A10,FINSEQ_3:27;
-    a = b by A27,A31,FINSEQ_5:def 3;
-    hence thesis by A25,A27,A31,A32,FINSEQ_5:def 3;
+A53: o+1 in dom p by A52,FINSEQ_3:27;
+A54: a = b by A41,A42,A48,FINSEQ_5:def 3;
+    len (apply(r, t2))-(o+1)+1 = j by A17,A34,A49;
+    hence thesis by A39,A43,A50,A51,A53,A54,FINSEQ_5:def 3;
   end;
-A33: rng r = A by FINSEQ_5:60;
   thus A is_properly_applicable_to t2
   proof
-    take r; thus thesis by A26,FINSEQ_5:60;
+    take r;
+    thus thesis by A40,FINSEQ_5:60;
   end;
-  A ast t2 = r ast t2 by A26,A33,Th57,Th58
+  rng r = A by FINSEQ_5:60;
+  then A ast t2 = r ast t2 by A40,Th57,Th58
     .= apply(r, t2).(len r+1);
-  hence thesis by A1,A10,A24,FINSEQ_5:65;
+  hence thesis by A1,A34,A3,A38,FINSEQ_5:65;
 end;
 
 theorem Th78:
-  for T being adj-structured antisymmetric commutative
-  (non void reflexive transitive with_suprema Noetherian TAS-structure)
-  holds T@--> is with_Church-Rosser_property with_UN_property
+  for T being adj-structured antisymmetric commutative (non void
+  reflexive transitive with_suprema Noetherian TAS-structure) holds T@--> is
+  with_Church-Rosser_property with_UN_property
 proof
-  let T be adj-structured with_suprema antisymmetric commutative
-  (non empty non void reflexive transitive Noetherian TAS-structure);
+  let T be adj-structured with_suprema antisymmetric commutative (non empty
+  non void reflexive transitive Noetherian TAS-structure);
   set R = T@-->;
   R is locally-confluent
   proof
     let a,b,c be set;
-    assume
-A1: [a,b] in R & [a,c] in R;
-    then reconsider t = a, t1 = b, t2 = c as type of T by ZFMISC_1:106;
+    assume that
+A1: [a,b] in R and
+A2: [a,c] in R;
+    reconsider t = a, t1 = b, t2 = c as type of T by A1,A2,ZFMISC_1:106;
     consider a2 being adjective of T such that
-A2: not a2 in adjs t1 &
-    a2 is_properly_applicable_to t1 & a2 ast t1 = t by A1,Def31;
-    consider a3 being adjective of T such that
-A3: not a3 in adjs t2 &
-    a3 is_properly_applicable_to t2 & a3 ast t2 = t by A1,Def31;
-    a2 is_applicable_to t1 & a3 is_applicable_to t2 by A2,A3,Def27;
-    then
-A4: t <= t1 & t <= t2 by A2,A3,Th21;
-    then consider A being finite Subset of the adjectives of T such that
-A5: A is_properly_applicable_to t1 "\/" t2 &
-    A ast (t1 "\/" t2) = t1 by A3,Def30;
-    consider B being finite Subset of the adjectives of T such that
-A6: B is_properly_applicable_to t1 "\/" t2 &
-    B ast (t1 "\/" t2) = t2 by A2,A4,Def30;
+    not a2 in adjs t1 and
+A3: a2 is_properly_applicable_to t1 and
+A4: a2 ast t1 = t by A1,Def31;
     set tt = t1 "\/" t2;
     take tt;
-    thus thesis by A5,A6,Th73;
+    consider a3 being adjective of T such that
+    not a3 in adjs t2 and
+A5: a3 is_properly_applicable_to t2 and
+A6: a3 ast t2 = t by A2,Def31;
+    a3 is_applicable_to t2 by A5,Def27;
+    then t <= t2 by A6,Th21;
+    then
+A7: ex B being finite Subset of the adjectives of T st B
+    is_properly_applicable_to t1 "\/" t2 & B ast (t1 "\/" t2) = t2 by A3,A4
+,Def30;
+    a2 is_applicable_to t1 by A3,Def27;
+    then t <= t1 by A4,Th21;
+    then ex A being finite Subset of the adjectives of T st A
+    is_properly_applicable_to t1 "\/" t2 & A ast (t1 "\/" t2) = t1 by A5,A6
+,Def30;
+    hence thesis by A7,Th73;
   end;
   then R is strongly-normalizing locally-confluent Relation by Th70;
   hence thesis;
@@ -3271,27 +3597,26 @@ end;
 begin :: Radix types
 
 definition
-  let T be adj-structured with_suprema antisymmetric commutative
-  (non empty non void reflexive transitive Noetherian TAS-structure);
+  let T be adj-structured with_suprema antisymmetric commutative (non empty
+  non void reflexive transitive Noetherian TAS-structure);
   let t be type of T;
   func radix t -> type of T equals
-
   nf(t, T@-->);
   coherence
   proof
-    T@--> is with_Church-Rosser_property with_UN_property strongly-normalizing
-    Relation by Th70,Th78;
+    T@--> is with_Church-Rosser_property with_UN_property
+    strongly-normalizing Relation by Th70,Th78;
     hence thesis by Th76;
   end;
 end;
 
 theorem Th79:
-  for T being adj-structured with_suprema antisymmetric commutative
-  (non empty non void reflexive transitive Noetherian TAS-structure)
+  for T being adj-structured with_suprema antisymmetric
+commutative (non empty non void reflexive transitive Noetherian TAS-structure)
   for t being type of T holds T@--> reduces t, radix t
 proof
-  let T be adj-structured with_suprema antisymmetric commutative
-  (non empty non void reflexive transitive Noetherian TAS-structure);
+  let T be adj-structured with_suprema antisymmetric commutative (non empty
+  non void reflexive transitive Noetherian TAS-structure);
   let t be type of T;
   set R = T@-->;
   R is with_Church-Rosser_property with_UN_property strongly-normalizing
@@ -3301,34 +3626,32 @@ proof
 end;
 
 theorem
-  for T being adj-structured with_suprema antisymmetric commutative
-  (non empty non void reflexive transitive Noetherian TAS-structure)
-  for t being type of T holds t <= radix t by Th68,Th79;
+  for T being adj-structured with_suprema antisymmetric commutative (non
+empty non void reflexive transitive Noetherian TAS-structure) for t being type
+  of T holds t <= radix t by Th68,Th79;
 
 theorem Th81:
-  for T being adj-structured with_suprema antisymmetric commutative
-  (non empty non void reflexive transitive Noetherian TAS-structure)
-  for t being type of T for X being set st X = {t' where t' is type of T:
-  ex A being finite Subset of the adjectives of T st
-  A is_properly_applicable_to t' & A ast t' = t}
-  holds ex_sup_of X, T & radix t = "\/"(X, T)
+  for T being adj-structured with_suprema antisymmetric
+commutative (non empty non void reflexive transitive Noetherian TAS-structure)
+  for t being type of T for X being set st X = {t' where t' is type of T: ex A
+being finite Subset of the adjectives of T st A is_properly_applicable_to t' &
+  A ast t' = t} holds ex_sup_of X, T & radix t = "\/"(X, T)
 proof
-  let T be adj-structured with_suprema antisymmetric commutative
-  (non empty non void reflexive transitive Noetherian TAS-structure);
+  let T be adj-structured with_suprema antisymmetric commutative (non empty
+  non void reflexive transitive Noetherian TAS-structure);
   let t be type of T;
   set R = T@-->;
-  set AA = {t' where t' is type of T:
-  ex A being finite Subset of the adjectives of T st
-  A is_properly_applicable_to t' & A ast t' = t};
+  set AA = {t' where t' is type of T: ex A being finite Subset of the
+  adjectives of T st A is_properly_applicable_to t' & A ast t' = t};
 A1: R is with_Church-Rosser_property with_UN_property strongly-normalizing
   Relation by Th70,Th78;
 A2: radix t is_>=_than AA
   proof
     let tt be type of T;
-    assume tt in AA;
-    then ex t' being type of T st tt = t' &
-    ex A being finite Subset of the adjectives of T st
-    A is_properly_applicable_to t' & A ast t' = t;
+    assume
+    tt in AA;
+    then ex t' being type of T st tt = t' & ex A being finite Subset of the
+    adjectives of T st A is_properly_applicable_to t' & A ast t' = t;
     then R reduces t, tt by Th73;
     then t, tt are_convertible_wrt R by REWRITE1:26;
     then nf(t, R) = nf(tt, R) by A1,REWRITE1:56;
@@ -3336,107 +3659,113 @@ A2: radix t is_>=_than AA
     then R reduces tt, nf(t,R) by REWRITE1:def 6;
     hence thesis by Th68;
   end;
-  ex A being finite Subset of the adjectives of T
-  st A is_properly_applicable_to radix t & A ast radix t = t by Th77,Th79;
+  ex A being finite Subset of the adjectives of T st A
+  is_properly_applicable_to radix t & A ast radix t = t by Th77,Th79;
   then radix t in AA;
-  then for t' being type of T st t' is_>=_than AA holds radix t <= t'
-  by LATTICE3:def 9;
+  then for t' being type of T st t' is_>=_than AA holds radix t <= t' by
+LATTICE3:def 9;
   hence thesis by A2,YELLOW_0:30;
 end;
 
 theorem Th82:
-  for T being adj-structured with_suprema antisymmetric commutative
-  (non empty non void reflexive transitive Noetherian TAS-structure)
-  for t1,t2 being type of T, a being adjective of T
-  st a is_properly_applicable_to t1 & a ast t1 <= radix t2
-  holds t1 <= radix t2
+  for T being adj-structured with_suprema antisymmetric
+commutative (non empty non void reflexive transitive Noetherian TAS-structure)
+  for t1,t2 being type of T, a being adjective of T st a
+  is_properly_applicable_to t1 & a ast t1 <= radix t2 holds t1 <= radix t2
 proof
-  let T be adj-structured with_suprema antisymmetric commutative
-  (non empty non void reflexive transitive Noetherian TAS-structure);
+  let T be adj-structured with_suprema antisymmetric commutative (non empty
+  non void reflexive transitive Noetherian TAS-structure);
   let t1,t2 be type of T, a be adjective of T;
   set R = T@-->;
-A1: R is with_Church-Rosser_property with_UN_property strongly-normalizing
+  set AA = {t' where t' is type of T: ex A being finite Subset of the
+  adjectives of T st A is_properly_applicable_to t' & A ast t' = t2};
+  assume that
+A1: a is_properly_applicable_to t1 and
+A2: a ast t1 <= radix t2;
+  consider A being finite Subset of the adjectives of T such that
+A3: A is_properly_applicable_to t1 "\/" radix t2 and
+A4: A ast (t1 "\/" radix t2) = radix t2 by A1,A2,Def30;
+  consider v1 being FinSequence of the adjectives of T such that
+A5: rng v1 = A and
+A6: v1 is_properly_applicable_to t1 "\/" radix t2 by A3,Def29;
+  R is with_Church-Rosser_property with_UN_property strongly-normalizing
   Relation by Th70,Th78;
-  set AA = {t' where t' is type of T:
-  ex A being finite Subset of the adjectives of T st
-  A is_properly_applicable_to t' & A ast t' = t2};
-  assume a is_properly_applicable_to t1 & a ast t1 <= radix t2;
-  then consider A being finite Subset of the adjectives of T such that
-A2: A is_properly_applicable_to t1 "\/" radix t2 &
-  A ast (t1 "\/" radix t2) = radix t2 by Def30;
-  nf(t2, R) is_a_normal_form_of t2, R by A1,REWRITE1:55;
+  then nf(t2, R) is_a_normal_form_of t2, R by REWRITE1:55;
   then R reduces t2, nf(t2,R) by REWRITE1:def 6;
   then consider B being finite Subset of the adjectives of T such that
-A3: B is_properly_applicable_to radix t2 & t2 = B ast radix t2 by Th77;
-  consider v1 being FinSequence of the adjectives of T such that
-A4: rng v1 = A & v1 is_properly_applicable_to t1 "\/" radix t2 by A2,Def29;
+A7: B is_properly_applicable_to radix t2 and
+A8: t2 = B ast radix t2 by Th77;
   consider v2 being FinSequence of the adjectives of T such that
-A5: rng v2 = B & v2 is_properly_applicable_to radix t2 by A3,Def29;
-A6: rng (v1^v2) = A \/ B by A4,A5,FINSEQ_1:44;
-A7: radix t2 = v1 ast (t1 "\/" radix t2) by A2,A4,Th57,Th58;
-  then v1^v2 is_properly_applicable_to t1 "\/" radix t2 by A4,A5,Th62;
+A9: rng v2 = B and
+A10: v2 is_properly_applicable_to radix t2 by A7,Def29;
+A11: rng (v1^v2) = A \/ B by A5,A9,FINSEQ_1:44;
+A12: radix t2 = v1 ast (t1 "\/" radix t2) by A4,A5,A6,Th57,Th58;
   then
-A8: A \/ B is_properly_applicable_to t1 "\/" radix t2 &
-  v1^v2 is_applicable_to t1 "\/" radix t2 by A6,Def29,Th58;
-  then (A \/ B) ast (t1 "\/" radix t2) = v1^v2 ast (t1 "\/" radix t2) by A6
-,Th57
-    .= v2 ast radix t2 by A7,Th38
-    .= t2 by A3,A5,Th57,Th58;
-  then t1 "\/" radix t2 in AA & ex_sup_of AA, T by A8,Th81;
-  then t1 "\/" radix t2 <= "\/"(AA, T) by YELLOW_4:1;
-  then t1 "\/" radix t2 <= radix t2 & t1 "\/" radix t2 >= t1
-  by Th81,YELLOW_0:22;
-  hence thesis by YELLOW_0:def 2;
+A13: v1^v2 is_properly_applicable_to t1 "\/" radix t2 by A6,A10,Th62;
+  then
+A14: A \/ B is_properly_applicable_to t1 "\/" radix t2 by A11,Def29;
+  (A \/ B) ast (t1 "\/" radix t2) = v1^v2 ast (t1 "\/" radix t2) by A11,A13
+,Th57,Th58
+    .= v2 ast radix t2 by A12,Th38
+    .= t2 by A8,A9,A10,Th57,Th58;
+  then t1 "\/" radix t2 in AA by A14;
+  then t1 "\/" radix t2 <= "\/"(AA, T) by Th81,YELLOW_4:1;
+  then
+A15: t1 "\/" radix t2 <= radix t2 by Th81;
+  t1 "\/" radix t2 >= t1 by YELLOW_0:22;
+  hence thesis by A15,YELLOW_0:def 2;
 end;
 
 theorem
-  for T being adj-structured with_suprema antisymmetric commutative
-  (non empty non void reflexive transitive Noetherian TAS-structure)
-  for t1,t2 being type of T st t1 <= t2 holds radix t1 <= radix t2
+  for T being adj-structured with_suprema antisymmetric commutative (non
+  empty non void reflexive transitive Noetherian TAS-structure) for t1,t2 being
+  type of T st t1 <= t2 holds radix t1 <= radix t2
 proof
-  let T be adj-structured with_suprema antisymmetric commutative
-  (non empty non void reflexive transitive Noetherian TAS-structure);
+  let T be adj-structured with_suprema antisymmetric commutative (non empty
+  non void reflexive transitive Noetherian TAS-structure);
   set R = T@-->;
   let t1, t2 be type of T such that
 A1: t1 <= t2;
   t2 <= radix t2 by Th68,Th79;
   then
-A2: t1 <= radix t2 & R reduces t1, radix t1 by A1,Th79,YELLOW_0:def 2;
+A2: t1 <= radix t2 by A1,YELLOW_0:def 2;
   set X = the carrier of T;
-  defpred P[Element of X, Element of X] means
-  $1 <= radix t2 implies $2 <= radix t2;
-A3: now
+  defpred P[Element of X, Element of X] means $1 <= radix t2 implies $2 <=
+  radix t2;
+A3: for x,y,z being Element of X st P[x,y] & P[y,z] holds P[x,z];
+A4: now
     let x,y be Element of X;
     reconsider t1 = x, t2 = y as type of T;
-    assume [x,y] in R;
-    then ex a being adjective of T st
-    not a in adjs t2 & a is_properly_applicable_to t2 & a ast t2 = t1 by Def31;
+    assume
+    [x,y] in R;
+    then ex a being adjective of T st not a in adjs t2 & a
+    is_properly_applicable_to t2 & a ast t2 = t1 by Def31;
     hence P[x,y] by Th82;
   end;
-A4: for x being Element of X holds P[x,x];
-A5: for x,y,z being Element of X st P[x,y] & P[y,z] holds P[x,z];
-  for x,y being Element of T st R reduces x,y holds P[x,y]
-  from RedInd(A3,A4,A5);
-  hence thesis by A2;
+A5: for x being Element of X holds P[x,x];
+  for x,y being Element of T st R reduces x,y holds P[x,y] from RedInd(A4,
+  A5,A3);
+  hence thesis by A2,Th79;
 end;
 
 theorem
-  for T being adj-structured with_suprema antisymmetric commutative
-  (non empty non void reflexive transitive Noetherian TAS-structure)
-  for t being type of T, a being adjective of T
-  st a is_properly_applicable_to t holds radix (a ast t) = radix t
+  for T being adj-structured with_suprema antisymmetric commutative (non
+empty non void reflexive transitive Noetherian TAS-structure) for t being type
+  of T, a being adjective of T st a is_properly_applicable_to t holds radix (a
+  ast t) = radix t
 proof
-  let T be adj-structured with_suprema antisymmetric commutative
-  (non empty non void reflexive transitive Noetherian TAS-structure);
-A1: T@--> is with_Church-Rosser_property with_UN_property strongly-normalizing
-  Relation by Th70,Th78;
+  let T be adj-structured with_suprema antisymmetric commutative (non empty
+  non void reflexive transitive Noetherian TAS-structure);
   let t be type of T, a be adjective of T;
+A1: a in adjs t or not a in adjs t;
   assume
-A2: a is_properly_applicable_to t;
-  a in adjs t or not a in adjs t;
-  then a ast t = t or [a ast t, t] in T@--> by A2,Def31,Th25;
+  a is_properly_applicable_to t;
+  then a ast t = t or [a ast t, t] in T@--> by A1,Def31,Th25;
   then T@--> reduces a ast t,t by REWRITE1:13,16;
-  then a ast t, t are_convertible_wrt T@--> by REWRITE1:26;
-  hence thesis by A1,REWRITE1:56;
+  then
+A2: a ast t, t are_convertible_wrt T@--> by REWRITE1:26;
+  T@--> is with_Church-Rosser_property with_UN_property
+  strongly-normalizing Relation by Th70,Th78;
+  hence thesis by A2,REWRITE1:56;
 end;
 

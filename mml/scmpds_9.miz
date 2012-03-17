@@ -6,31 +6,29 @@
 
 environ
 
- vocabularies BOOLE, SETFAM_1, FUNCT_1, ARYTM, ORDINAL2, FUNCT_4,
-      RELAT_1, CAT_1, FINSET_1, ARYTM_3, ARYTM_1, ABSVALUE, INT_1,
-      NAT_1, FUNCOP_1, AMI_1, AMI_2, AMI_3, AMISTD_1, SCMPDS_2, SCMPDS_3,
-      GOBOARD5, ORDINAL1;
+ vocabularies BOOLE, SETFAM_1, FUNCT_1, ARYTM, ORDINAL2, FUNCT_4, RELAT_1,
+      CAT_1, FINSET_1, ARYTM_3, ARYTM_1, ABSVALUE, INT_1, NAT_1, FUNCOP_1,
+      AMI_1, AMI_2, AMI_3, AMISTD_1, SCMPDS_2, SCMPDS_3, GOBOARD5, ORDINAL1;
  notations TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, ORDINAL1, NUMBERS, XCMPLX_0,
-      XXREAL_0, XREAL_0, FUNCT_1, PARTFUN1, INT_1, NAT_1, FINSET_1, COMPLEX1,
-      STRUCT_0, INT_2, RELAT_1, FUNCT_4, FINSEQ_1, AMI_1, AMI_2,
-      AMI_3, SCMPDS_2, SCMPDS_3, SCMNORM, AMISTD_1;
- constructors PARTFUN1, XXREAL_0, REAL_1, NAT_1, NAT_D, REALSET1,
-      AMI_3, SCMPDS_1, SCMPDS_3, AMISTD_2, SCMNORM;
- registrations XBOOLE_0, SETFAM_1, ORDINAL1, RELSET_1, FINSET_1, FRAENKEL,
-      NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, CARD_3, AMI_1,
-      SCMPDS_2, SCMNORM, FUNCT_1;
+      XXREAL_0, XREAL_0, FUNCT_1, INT_1, NAT_1, FINSET_1, COMPLEX1, INT_2,
+      RELAT_1, FUNCT_4, AMI_1, AMI_2, AMI_3, SCMPDS_2, SCMPDS_3, SCMNORM,
+      AMISTD_1;
+ constructors PARTFUN1, XXREAL_0, REAL_1, NAT_1, NAT_D, REALSET1, AMI_3,
+      SCMPDS_1, SCMPDS_3, AMISTD_2, SCMNORM;
+ registrations SETFAM_1, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1,
+      INT_1, MEMBERED, CARD_3, SCMPDS_2, SCMNORM, FUNCT_1;
  requirements BOOLE, SUBSET, NUMERALS, ARITHM, REAL;
  definitions TARSKI, XBOOLE_0, AMISTD_1, NAT_1, SCMPDS_3, AMI_3;
  theorems AMI_1, AMISTD_1, SETFAM_1, XBOOLE_0, SCMPDS_1, SCMPDS_2, ABSVALUE,
-      INT_1, ORDINAL1, TARSKI, AMI_2, NAT_1, XBOOLE_1,
-      FUNCT_4, PRE_CIRC, WSIERP_1, PEPIN, COMPLEX1, XREAL_1,
-      FUNCT_7, NAT_D, ZFMISC_1;
+      INT_1, ORDINAL1, TARSKI, AMI_2, NAT_1, XBOOLE_1, FUNCT_4, PRE_CIRC,
+      WSIERP_1, PEPIN, COMPLEX1, XREAL_1, FUNCT_7, NAT_D, ZFMISC_1;
 
 begin
 
 reserve a, b for Int_position,
   i for Instruction of SCMPDS,
-  l for Instruction-Location of SCMPDS,
+  l for
+  Instruction-Location of SCMPDS,
   k, k1, k2 for Integer;
 
 definition
@@ -38,9 +36,9 @@ definition
   redefine func (la,lb) --> (a,b) -> FinPartState of SCMPDS;
   coherence
   proof
-    a is Element of INT & b is Element of INT &
-    ObjectKind la = INT & ObjectKind lb = INT by INT_1:def 2,SCMPDS_2:13;
-    hence thesis by AMI_1:58;
+A1: ObjectKind la = INT & ObjectKind lb = INT by SCMPDS_2:13;
+    a is Element of INT & b is Element of INT by INT_1:def 2;
+    hence thesis by A1,AMI_1:58;
   end;
 end;
 
@@ -51,7 +49,7 @@ definition
   il.it = l;
   existence
   proof
-  reconsider i = l as Element of NAT by ORDINAL1:def 13;
+    reconsider i = l as Element of NAT by ORDINAL1:def 13;
     l = il.i;
     hence thesis;
   end;
@@ -66,7 +64,7 @@ end;
 
 canceled 2;
 
-theorem Th8:
+theorem Th3:
   l = locnum l
 proof
   thus locnum l = il.locnum l
@@ -79,514 +77,529 @@ theorem
 proof
   let l1, l2 be Instruction-Location of SCMPDS such that
 A1: l1 <> l2 & locnum l1 = locnum l2;
-  il.locnum l1 = l1 & il.locnum l2 = l2 by Def1;
-  hence thesis by A1;
+  il.locnum l1 = l1 by Def1;
+  hence thesis by A1,Def1;
 end;
 
 canceled 2;
 
-theorem Th12:
-  (for s being State of SCMPDS st IC s = l & s.l = i
-  holds Exec(i,s).IC SCMPDS = Next IC s) implies NIC(i, l) = {Next l}
+theorem Th7:
+  (for s being State of SCMPDS st IC s = l & s.l = i holds Exec(i,s
+  ).IC SCMPDS = Next IC s) implies NIC(i, l) = {Next l}
 proof
-  assume
-A1: for s being State of SCMPDS st IC s = l & s.l = i
-  holds Exec(i, s).IC SCMPDS = Next IC s;
-  hereby
-    let x be set;
-    assume x in NIC(i,l);
-    then consider s being State of SCMPDS such that
-A2: x = IC Following s & IC s = l & s.l = i;
-    x = Exec(s.IC s, s).IC SCMPDS by A2,AMI_1:131
-      .= Next l by A1,A2;
-    hence x in {Next l} by TARSKI:def 1;
-  end;
-  let x be set;
-  assume x in {Next l};
-  then
-A3: x = Next l by TARSKI:def 1;
   consider t being State of SCMPDS;
-  l in NAT by AMI_1:def 4;
-  then reconsider il1 = l as Element of ObjectKind IC SCMPDS by AMI_1:def 11;
   reconsider I = i as Element of ObjectKind l by AMI_1:def 14;
-  set u = t+*((IC SCMPDS, l)-->(il1, I));
-A4: IC u = l by AMI_1:129;
-A5: u.l = i by AMI_1:129;
-  IC Following u = Exec(u.IC u, u).IC SCMPDS by AMI_1:129
-    .= Next l by A1,A4,A5;
-  hence thesis by A3,A4,A5;
-end;
-
-theorem Th13:
-  (for l being Instruction-Location of SCMPDS holds NIC(i,l)={Next l})
-  implies JUMP i is empty
-proof
   assume
-A1: for l being Instruction-Location of SCMPDS holds NIC(i,l)={Next l};
-  set p=1, q=2;
-  reconsider p, q as Instruction-Location of SCMPDS by AMI_1:def 4;
-  set X = { NIC(i,f) where f is Instruction-Location of SCMPDS:
-  not contradiction };
-  assume not thesis;
-  then consider x being set such that
-A3: x in meet X by XBOOLE_0:def 1;
-  NIC(i,p) = {Next p} & NIC(i,q) = {Next q} by A1;
-  then {Next p} in X & {Next q} in X;
-  then x in {Next p} & x in {Next q} by A3,SETFAM_1:def 1;
-  then x = Next p & x = Next q by TARSKI:def 1;
-  hence contradiction;
-end;
-
-theorem Th14:
-  NIC(goto k,l) = { abs(k+locnum l) }
-proof
-  set i = goto k;
-  set t = abs(k+locnum l);
-A1: locnum l = l by Th8;
+A1: for s being State of SCMPDS st IC s = l & s.l = i holds Exec(i, s).
+  IC SCMPDS = Next IC s;
   hereby
     let x be set;
-    assume x in NIC(i,l);
+    assume
+    x in NIC(i,l);
     then consider s being State of SCMPDS such that
 A2: x = IC Following s and
-A3: IC s = l and
-A4: s.l = i;
-    consider m1 being Element of NAT such that
-A5: m1 = IC s and
-A6: ICplusConst(s,k) = abs(m1+k) by SCMPDS_2:def 20;
-    x = Exec(i,s).IC SCMPDS by A2,A3,A4,AMI_1:131
-      .= t by A1,A3,A5,A6,SCMPDS_2:66;
+A3: IC s = l & s.l = i;
+    x = Exec(s.IC s, s).IC SCMPDS by A2,AMI_1:131
+      .= Next l by A1,A3;
+    hence x in {Next l} by TARSKI:def 1;
+  end;
+  l in NAT by AMI_1:def 4;
+  then reconsider il1 = l as Element of ObjectKind IC SCMPDS by AMI_1:def 11;
+  let x be set;
+  set u = t+*((IC SCMPDS, l)-->(il1, I));
+A4: IC u = l & u.l = i by AMI_1:129;
+  assume
+  x in {Next l};
+  then
+A5: x = Next l by TARSKI:def 1;
+  IC Following u = Exec(u.IC u, u).IC SCMPDS by AMI_1:129
+    .= Next l by A1,A4;
+  hence thesis by A5,A4;
+end;
+
+theorem Th8:
+  (for l being Instruction-Location of SCMPDS holds NIC(i,l)={Next
+  l}) implies JUMP i is empty
+proof
+  set p=1, q=2;
+  assume
+A1: for l being Instruction-Location of SCMPDS holds NIC(i,l)={Next l};
+  set X = { NIC(i,f) where f is Instruction-Location of SCMPDS: not
+  contradiction };
+  reconsider p, q as Instruction-Location of SCMPDS by AMI_1:def 4;
+  assume
+  not thesis;
+  then consider x being set such that
+A2: x in meet X by XBOOLE_0:def 1;
+  NIC(i,p) = {Next p} by A1;
+  then {Next p} in X;
+  then x in {Next p} by A2,SETFAM_1:def 1;
+  then
+A3: x = Next p by TARSKI:def 1;
+  NIC(i,q) = {Next q} by A1;
+  then {Next q} in X;
+  then x in {Next q} by A2,SETFAM_1:def 1;
+  hence contradiction by A3,TARSKI:def 1;
+end;
+
+theorem Th9:
+  NIC(goto k,l) = { abs(k+locnum l) }
+proof
+  consider s being State of SCMPDS;
+  set i = goto k;
+  set t = abs(k+locnum l);
+  reconsider I = i as Element of ObjectKind l by AMI_1:def 14;
+  l in NAT by AMI_1:def 4;
+  then reconsider il1 = l as Element of ObjectKind IC SCMPDS by AMI_1:def 11;
+  set u = s+*((IC SCMPDS, l)-->(il1, I));
+A1: u.l = i by AMI_1:129;
+A2: locnum l = l by Th3;
+  hereby
+    let x be set;
+    assume
+    x in NIC(i,l);
+    then consider s being State of SCMPDS such that
+A3: x = IC Following s and
+A4: IC s = l and
+A5: s.l = i;
+A6: ex m1 being Element of NAT st m1 = IC s & ICplusConst(s,k ) = abs(m1+k)
+    by SCMPDS_2:def 20;
+    x = Exec(i,s).IC SCMPDS by A3,A4,A5,AMI_1:131
+      .= t by A2,A4,A6,SCMPDS_2:66;
     hence x in {t} by TARSKI:def 1;
   end;
   let x be set;
-  assume
-A7: x in {t};
-  consider s being State of SCMPDS;
-  l in NAT by AMI_1:def 4;
-  then reconsider il1 = l as Element of ObjectKind IC SCMPDS by AMI_1:def 11;
-  reconsider I = i as Element of ObjectKind l by AMI_1:def 14;
-  set u = s+*((IC SCMPDS, l)-->(il1, I));
-A8: u.l = i by AMI_1:129;
-A9: IC u = l by AMI_1:129;
+A7: IC u = l by AMI_1:129;
   consider m1 being Element of NAT such that
-A10: m1 = IC u and
-A11: ICplusConst(u,k) = abs(m1+k) by SCMPDS_2:def 20;
-  x = abs(m1+k) by A1,A7,A9,A10,TARSKI:def 1
-    .= Exec(i,u).IC SCMPDS by A11,SCMPDS_2:66
-    .= IC Following u by A8,A9,AMI_1:131;
-  hence thesis by A8,A9;
+A8: m1 = IC u and
+A9: ICplusConst(u,k) = abs(m1+k) by SCMPDS_2:def 20;
+  assume
+  x in {t};
+  then x = abs(m1+k) by A2,A7,A8,TARSKI:def 1
+    .= Exec(i,u).IC SCMPDS by A9,SCMPDS_2:66
+    .= IC Following u by A1,A7,AMI_1:131;
+  hence thesis by A1,A7;
 end;
 
-Lm2: for k being natural number st k > 1 holds k-2 is Element of NAT
+Lm1: for k being natural number st k > 1 holds k-2 is Element of NAT
 proof
   let k be natural number;
-  assume k > 1;
+  assume
+  k > 1;
   then k >= 1+1 by NAT_1:13;
   then k - 2 >= 2 - 2 by XREAL_1:11;
   hence thesis by INT_1:16;
 end;
 
-theorem Th15:
+theorem Th10:
   NIC(return a,l) = {k where k is Element of NAT: k > 1}
 proof
-  set i = return a;
+  consider s being State of SCMPDS;
   set X = {k where k is Element of NAT: k > 1};
+  set i = return a;
   hereby
     let x be set;
-    assume x in NIC(i,l);
+    assume
+    x in NIC(i,l);
     then consider s being State of SCMPDS such that
 A1: x = IC Following s and
-A2: IC s = l and
-A3: s.l = i;
-A4: x = Exec(i,s).IC SCMPDS by A1,A2,A3,AMI_1:131
-      .= (abs(s.DataLoc(s.a,1)) )+2 by SCMPDS_1:def 23,SCMPDS_2:70;
+A2: IC s = l & s.l = i;
     x in NAT by A1,AMI_1:def 4;
     then consider k being Element of NAT such that
-A5: x = k;
-    (abs(s.DataLoc(s.a,1)) )+2 >= 0+2 by XREAL_1:8;
-    then k >= 1+1 by A4,A5;
+A3: x = k;
+A4: (abs(s.DataLoc(s.a,1)) )+2 >= 0+2 by XREAL_1:8;
+    x = Exec(i,s).IC SCMPDS by A1,A2,AMI_1:131
+      .= (abs(s.DataLoc(s.a,1)) )+2 by SCMPDS_1:def 23,SCMPDS_2:70;
+    then k >= 1+1 by A3,A4;
     then k > 1 by NAT_1:13;
-    hence x in X by A5;
+    hence x in X by A3;
   end;
   let x be set;
-  assume x in X;
+  reconsider I = i as Element of ObjectKind l by AMI_1:def 14;
+  assume
+  x in X;
   then consider k being Element of NAT such that
-A6: x = k and
-A7: k > 1;
-  reconsider k2 = k - 2 as Element of NAT by A7,Lm2;
+A5: x = k and
+A6: k > 1;
+  l in NAT by AMI_1:def 4;
+  then reconsider il1 = l as Element of ObjectKind IC SCMPDS by AMI_1:def 11;
+  reconsider k2 = k - 2 as Element of NAT by A6,Lm1;
+  set u = s +* ((IC SCMPDS, l)-->(il1, I));
+A7: u.IC SCMPDS = IC u by AMI_1:def 15
+    .= l by AMI_1:129;
   a in SCM-Data-Loc by SCMPDS_2:def 2;
   then consider j being Element of NAT such that
 A8: a = [1,j] by AMI_2:32;
-  consider s being State of SCMPDS;
-  l in NAT by AMI_1:def 4;
-  then reconsider il1 = l as Element of ObjectKind IC SCMPDS by AMI_1:def 11;
-  reconsider I = i as Element of ObjectKind l by AMI_1:def 14;
-  set u = s +* ((IC SCMPDS, l)-->(il1, I));
   set t = [1,j+1];
   reconsider t1 = t as Int_position by AMI_2:33,SCMPDS_2:9;
+A9: DataLoc(j,1) = [1,abs(j+1)] by SCMPDS_2:def 4
+    .= t by ABSVALUE:def 1;
   set g = (a,t1)-->(j,k2);
   set v = u +* g;
-A9: dom g = {a,t} by FUNCT_4:65;
-A10: u.l = i by AMI_1:129;
-A11: u.IC SCMPDS = IC u by AMI_1:def 15
-    .= l by AMI_1:129;
-  l <> a & l <> t1 by SCMPDS_2:53;
-  then not l in dom g by A9,TARSKI:def 2;
-  then
-A12: v.l = i by A10,FUNCT_4:12;
-  a <> IC SCMPDS & t1 <> IC SCMPDS by SCMPDS_2:52;
-  then
-A13: not IC SCMPDS in dom g by A9,TARSKI:def 2;
-A14: IC v = v.IC SCMPDS by AMI_1:def 15
-    .= l by A11,A13,FUNCT_4:12;
+A10: dom g = {a,t} by FUNCT_4:65;
   j <> j+1;
   then
-A15: a <> t by A8,ZFMISC_1:33;
+A11: a <> t by A8,ZFMISC_1:33;
   then
-A16: v.a = j by FUNCT_4:89;
-A17: v.t = k2 by A15,FUNCT_4:89;
-A18: DataLoc(j,1) = [1,abs(j+1)] by SCMPDS_2:def 4
-    .= t by ABSVALUE:def 1;
-  x = ((k2 ) + 2) by A6
-    .= (abs(v.DataLoc(j,1)) ) + 2 by A17,ABSVALUE:def 1,A18
-    .= Exec(i,v).IC SCMPDS by A16,SCMPDS_1:def 23,SCMPDS_2:70
-    .= IC Following v by A12,A14,AMI_1:131;
-  hence thesis by A12,A14;
+A12: v.a = j by FUNCT_4:89;
+  l <> a & l <> t1 by SCMPDS_2:53;
+  then u.l = i & not l in dom g by A10,AMI_1:129,TARSKI:def 2;
+  then
+A13: v.l = i by FUNCT_4:12;
+  a <> IC SCMPDS & t1 <> IC SCMPDS by SCMPDS_2:52;
+  then
+A14: not IC SCMPDS in dom g by A10,TARSKI:def 2;
+A15: IC v = v.IC SCMPDS by AMI_1:def 15
+    .= l by A7,A14,FUNCT_4:12;
+A16: v.t = k2 by A11,FUNCT_4:89;
+  x = ((k2 ) + 2) by A5
+    .= (abs(v.DataLoc(j,1)) ) + 2 by A16,A9,ABSVALUE:def 1
+    .= Exec(i,v).IC SCMPDS by A12,SCMPDS_1:def 23,SCMPDS_2:70
+    .= IC Following v by A13,A15,AMI_1:131;
+  hence thesis by A13,A15;
 end;
 
-theorem Th16:
+theorem Th11:
   NIC(saveIC(a,k1), l) = {Next l}
 proof
   set i = saveIC(a,k1);
-  for s being State of SCMPDS st IC s = l & s.l = i
-  holds Exec(i,s).IC SCMPDS = Next IC s by SCMPDS_2:71;
-  hence thesis by Th12;
+  for s being State of SCMPDS st IC s = l & s.l = i holds Exec(i,s).IC
+  SCMPDS = Next IC s by SCMPDS_2:71;
+  hence thesis by Th7;
 end;
 
-theorem Th17:
+theorem Th12:
   NIC(a:=k1, l) = {Next l}
 proof
   set i = a:=k1;
-  for s being State of SCMPDS st IC s = l & s.l = i
-  holds Exec(i,s).IC SCMPDS = Next IC s by SCMPDS_2:57;
-  hence thesis by Th12;
+  for s being State of SCMPDS st IC s = l & s.l = i holds Exec(i,s).IC
+  SCMPDS = Next IC s by SCMPDS_2:57;
+  hence thesis by Th7;
 end;
 
-theorem Th18:
+theorem Th13:
   NIC((a,k1):=k2, l) = {Next l}
 proof
   set i = (a,k1):=k2;
-  for s being State of SCMPDS st IC s = l & s.l = i
-  holds Exec(i,s).IC SCMPDS = Next IC s by SCMPDS_2:58;
-  hence thesis by Th12;
+  for s being State of SCMPDS st IC s = l & s.l = i holds Exec(i,s).IC
+  SCMPDS = Next IC s by SCMPDS_2:58;
+  hence thesis by Th7;
 end;
 
-theorem Th19:
+theorem Th14:
   NIC((a,k1):=(b,k2), l) = {Next l}
 proof
   set i = (a,k1):=(b,k2);
-  for s being State of SCMPDS st IC s = l & s.l = i
-  holds Exec(i,s).IC SCMPDS = Next IC s by SCMPDS_2:59;
-  hence thesis by Th12;
+  for s being State of SCMPDS st IC s = l & s.l = i holds Exec(i,s).IC
+  SCMPDS = Next IC s by SCMPDS_2:59;
+  hence thesis by Th7;
 end;
 
-theorem Th20:
+theorem Th15:
   NIC(AddTo(a,k1,k2), l) = {Next l}
 proof
   set i = AddTo(a,k1,k2);
-  for s being State of SCMPDS st IC s = l & s.l = i
-  holds Exec(i,s).IC SCMPDS = Next IC s by SCMPDS_2:60;
-  hence thesis by Th12;
+  for s being State of SCMPDS st IC s = l & s.l = i holds Exec(i,s).IC
+  SCMPDS = Next IC s by SCMPDS_2:60;
+  hence thesis by Th7;
 end;
 
-theorem Th21:
+theorem Th16:
   NIC(AddTo(a,k1,b,k2), l) = {Next l}
 proof
   set i = AddTo(a,k1,b,k2);
-  for s being State of SCMPDS st IC s = l & s.l = i
-  holds Exec(i,s).IC SCMPDS = Next IC s by SCMPDS_2:61;
-  hence thesis by Th12;
+  for s being State of SCMPDS st IC s = l & s.l = i holds Exec(i,s).IC
+  SCMPDS = Next IC s by SCMPDS_2:61;
+  hence thesis by Th7;
 end;
 
-theorem Th22:
+theorem Th17:
   NIC(SubFrom(a,k1,b,k2), l) = {Next l}
 proof
   set i = SubFrom(a,k1,b,k2);
-  for s being State of SCMPDS st IC s = l & s.l = i
-  holds Exec(i,s).IC SCMPDS = Next IC s by SCMPDS_2:62;
-  hence thesis by Th12;
+  for s being State of SCMPDS st IC s = l & s.l = i holds Exec(i,s).IC
+  SCMPDS = Next IC s by SCMPDS_2:62;
+  hence thesis by Th7;
 end;
 
-theorem Th23:
+theorem Th18:
   NIC(MultBy(a,k1,b,k2), l) = {Next l}
 proof
   set i = MultBy(a,k1,b,k2);
-  for s being State of SCMPDS st IC s = l & s.l = i
-  holds Exec(i,s).IC SCMPDS = Next IC s by SCMPDS_2:63;
-  hence thesis by Th12;
+  for s being State of SCMPDS st IC s = l & s.l = i holds Exec(i,s).IC
+  SCMPDS = Next IC s by SCMPDS_2:63;
+  hence thesis by Th7;
 end;
 
-theorem Th24:
+theorem Th19:
   NIC(Divide(a,k1,b,k2), l) = {Next l}
 proof
   set i = Divide(a,k1,b,k2);
-  for s being State of SCMPDS st IC s = l & s.l = i
-  holds Exec(i,s).IC SCMPDS = Next IC s by SCMPDS_2:64;
-  hence thesis by Th12;
+  for s being State of SCMPDS st IC s = l & s.l = i holds Exec(i,s).IC
+  SCMPDS = Next IC s by SCMPDS_2:64;
+  hence thesis by Th7;
 end;
 
 theorem
   NIC((a,k1)<>0_goto k2,l) = { Next l, abs( (k2+locnum l) ) }
 proof
+  consider s being State of SCMPDS;
   set i = (a,k1)<>0_goto k2;
   set t = abs((k2+locnum l));
-A1: locnum l = l by Th8;
+  reconsider I = i as Element of ObjectKind l by AMI_1:def 14;
+  l in NAT by AMI_1:def 4;
+  then reconsider il1 = l as Element of ObjectKind IC SCMPDS by AMI_1:def 11;
+  set u = s+*((IC SCMPDS, l)-->(il1, I));
+A1: locnum l = l by Th3;
   hereby
     let x be set;
-    assume x in NIC(i,l);
+    assume
+    x in NIC(i,l);
     then consider s being State of SCMPDS such that
 A2: x = IC Following s and
 A3: IC s = l and
 A4: s.l = i;
-    consider m1 being Element of NAT such that
-A5: m1 = IC s and
-A6: ICplusConst(s,k2) = abs(m1+k2) by SCMPDS_2:def 20;
+A5: ex m1 being Element of NAT st m1 = IC s & ICplusConst(s, k2) = abs(m1+
+    k2) by SCMPDS_2:def 20;
     per cases;
     suppose
-A7:   s.DataLoc(s.a,k1) <> 0;
+A6:   s.DataLoc(s.a,k1) <> 0;
       x = Exec(i,s).IC SCMPDS by A2,A3,A4,AMI_1:131
-        .= t by A1,A3,A5,A6,A7,SCMPDS_2:67;
+        .= t by A1,A3,A5,A6,SCMPDS_2:67;
       hence x in {Next l,t} by TARSKI:def 2;
     end;
     suppose
-A8:   s.DataLoc(s.a,k1) = 0;
+A7:   s.DataLoc(s.a,k1) = 0;
       x = Exec(i,s).IC SCMPDS by A2,A3,A4,AMI_1:131
-        .= Next l by A3,A8,SCMPDS_2:67;
+        .= Next l by A3,A7,SCMPDS_2:67;
       hence x in {Next l,t} by TARSKI:def 2;
     end;
   end;
   let x be set;
   assume
-A9: x in {Next l,t};
-  consider s being State of SCMPDS;
-  l in NAT by AMI_1:def 4;
-  then reconsider il1 = l as Element of ObjectKind IC SCMPDS by AMI_1:def 11;
-  reconsider I = i as Element of ObjectKind l by AMI_1:def 14;
-  set u = s+*((IC SCMPDS, l)-->(il1, I));
-  per cases by A9,TARSKI:def 2;
+A8: x in {Next l,t};
+  per cases by A8,TARSKI:def 2;
   suppose
-A10: x = Next l;
+A9: x = Next l;
     set u1 = u +* (a.-->0);
     set u2 = u1 +* (DataLoc(u1.a,k1).-->0);
-A11: l <> a by SCMPDS_2:53;
+A10: l <> a by SCMPDS_2:53;
     l <> DataLoc(u1.a,k1) by SCMPDS_2:53;
     then
-A12: u2.l = u1.l by FUNCT_4:88
-      .= u.l by A11,FUNCT_4:88
+A11: u2.l = u1.l by FUNCT_4:88
+      .= u.l by A10,FUNCT_4:88
       .= i by AMI_1:129;
-A13: IC u2 = u2.IC SCMPDS by AMI_1:def 15
+A12: IC u2 = u2.IC SCMPDS by AMI_1:def 15
       .= u1.IC SCMPDS by FUNCT_4:88,SCMPDS_2:52
       .= u.IC SCMPDS by FUNCT_4:88,SCMPDS_2:52
       .= IC u by AMI_1:def 15
       .= il1 by AMI_1:129;
-A14: u2.DataLoc(u1.a,k1) = 0 by FUNCT_7:96;
+A13: u2.DataLoc(u1.a,k1) = 0 by FUNCT_7:96;
     u2.DataLoc(u2.a,k1) = 0
     proof
       per cases;
-      suppose a = DataLoc(u1.a,k1);
-        hence thesis by A14,FUNCT_7:96;
+      suppose
+        a = DataLoc(u1.a,k1);
+        hence thesis by A13,FUNCT_7:96;
       end;
-      suppose a <> DataLoc(u1.a,k1);
+      suppose
+        a <> DataLoc(u1.a,k1);
         then u2.a = u1.a by FUNCT_4:88;
         hence thesis by FUNCT_7:96;
       end;
     end;
-    then x = Exec(i,u2).IC SCMPDS by A10,A13,SCMPDS_2:67
-      .= IC Following u2 by A12,A13,AMI_1:131;
-    hence thesis by A12,A13;
+    then x = Exec(i,u2).IC SCMPDS by A9,A12,SCMPDS_2:67
+      .= IC Following u2 by A11,A12,AMI_1:131;
+    hence thesis by A11,A12;
   end;
   suppose
-A15: x = t;
+A14: x = t;
     set u1 = u +* (a.-->1);
     set u2 = u1 +* (DataLoc(u1.a,k1).-->1);
-A16: l <> a by SCMPDS_2:53;
+A15: l <> a by SCMPDS_2:53;
     l <> DataLoc(u1.a,k1) by SCMPDS_2:53;
     then
-A17: u2.l = u1.l by FUNCT_4:88
-      .= u.l by A16,FUNCT_4:88
+A16: u2.l = u1.l by FUNCT_4:88
+      .= u.l by A15,FUNCT_4:88
       .= i by AMI_1:129;
-A18: IC u2 = u2.IC SCMPDS by AMI_1:def 15
+A17: u2.DataLoc(u1.a,k1) = 1 by FUNCT_7:96;
+A18: u2.DataLoc(u2.a,k1) <> 0
+    proof
+      per cases;
+      suppose
+        a = DataLoc(u1.a,k1);
+        hence thesis by A17,FUNCT_7:96;
+      end;
+      suppose
+        a <> DataLoc(u1.a,k1);
+        then u2.a = u1.a by FUNCT_4:88;
+        hence thesis by FUNCT_7:96;
+      end;
+    end;
+A19: IC u2 = u2.IC SCMPDS by AMI_1:def 15
       .= u1.IC SCMPDS by FUNCT_4:88,SCMPDS_2:52
       .= u.IC SCMPDS by FUNCT_4:88,SCMPDS_2:52
       .= IC u by AMI_1:def 15
       .= il1 by AMI_1:129;
-A19: u2.DataLoc(u1.a,k1) = 1 by FUNCT_7:96;
-A20: u2.DataLoc(u2.a,k1) <> 0
-    proof
-      per cases;
-      suppose a = DataLoc(u1.a,k1);
-        hence thesis by A19,FUNCT_7:96;
-      end;
-      suppose a <> DataLoc(u1.a,k1);
-        then u2.a = u1.a by FUNCT_4:88;
-        hence thesis by FUNCT_7:96;
-      end;
-    end;
-    consider m1 being Element of NAT such that
-A21: m1 = IC u2 and
-A22: ICplusConst(u2,k2) = abs(m1+k2) by SCMPDS_2:def 20;
-    x = Exec(i,u2).IC SCMPDS by A1,A15,A18,A20,A21,A22,SCMPDS_2:67
-      .= IC Following u2 by A17,A18,AMI_1:131;
-    hence thesis by A17,A18;
+    ex m1 being Element of NAT st m1 = IC u2 & ICplusConst(u2,k2) = abs(
+    m1+k2) by SCMPDS_2:def 20;
+    then x = Exec(i,u2).IC SCMPDS by A1,A14,A19,A18,SCMPDS_2:67
+      .= IC Following u2 by A16,A19,AMI_1:131;
+    hence thesis by A16,A19;
   end;
 end;
 
 theorem
   NIC((a,k1)<=0_goto k2,l) = { Next l, abs( (k2+locnum l) ) }
 proof
+  consider s being State of SCMPDS;
   set i = (a,k1)<=0_goto k2;
   set t = abs((k2+locnum l));
-A1: locnum l = l by Th8;
+  reconsider I = i as Element of ObjectKind l by AMI_1:def 14;
+  l in NAT by AMI_1:def 4;
+  then reconsider il1 = l as Element of ObjectKind IC SCMPDS by AMI_1:def 11;
+  set u = s+*((IC SCMPDS, l)-->(il1, I));
+A1: locnum l = l by Th3;
   hereby
     let x be set;
-    assume x in NIC(i,l);
+    assume
+    x in NIC(i,l);
     then consider s being State of SCMPDS such that
 A2: x = IC Following s and
 A3: IC s = l and
 A4: s.l = i;
-    consider m1 being Element of NAT such that
-A5: m1 = IC s and
-A6: ICplusConst(s,k2) = abs(m1+k2) by SCMPDS_2:def 20;
+A5: ex m1 being Element of NAT st m1 = IC s & ICplusConst(s, k2) = abs(m1+
+    k2) by SCMPDS_2:def 20;
     per cases;
     suppose
-A7:   s.DataLoc(s.a,k1) <= 0;
+A6:   s.DataLoc(s.a,k1) <= 0;
       x = Exec(i,s).IC SCMPDS by A2,A3,A4,AMI_1:131
-        .= t by A1,A3,A5,A6,A7,SCMPDS_2:68;
+        .= t by A1,A3,A5,A6,SCMPDS_2:68;
       hence x in {Next l,t} by TARSKI:def 2;
     end;
     suppose
-A8:   s.DataLoc(s.a,k1) > 0;
+A7:   s.DataLoc(s.a,k1) > 0;
       x = Exec(i,s).IC SCMPDS by A2,A3,A4,AMI_1:131
-        .= Next l by A3,A8,SCMPDS_2:68;
+        .= Next l by A3,A7,SCMPDS_2:68;
       hence x in {Next l,t} by TARSKI:def 2;
     end;
   end;
   let x be set;
   assume
-A9: x in {Next l,t};
-  consider s being State of SCMPDS;
-  l in NAT by AMI_1:def 4;
-  then reconsider il1 = l as Element of ObjectKind IC SCMPDS by AMI_1:def 11;
-  reconsider I = i as Element of ObjectKind l by AMI_1:def 14;
-  set u = s+*((IC SCMPDS, l)-->(il1, I));
-  per cases by A9,TARSKI:def 2;
+A8: x in {Next l,t};
+  per cases by A8,TARSKI:def 2;
   suppose
-A10: x = Next l;
+A9: x = Next l;
     set u1 = u +* (a.-->1);
     set u2 = u1 +* (DataLoc(u1.a,k1).-->1);
-A11: l <> a by SCMPDS_2:53;
+A10: l <> a by SCMPDS_2:53;
     l <> DataLoc(u1.a,k1) by SCMPDS_2:53;
     then
-A12: u2.l = u1.l by FUNCT_4:88
-      .= u.l by A11,FUNCT_4:88
+A11: u2.l = u1.l by FUNCT_4:88
+      .= u.l by A10,FUNCT_4:88
       .= i by AMI_1:129;
-A13: IC u2 = u2.IC SCMPDS by AMI_1:def 15
+A12: IC u2 = u2.IC SCMPDS by AMI_1:def 15
       .= u1.IC SCMPDS by FUNCT_4:88,SCMPDS_2:52
       .= u.IC SCMPDS by FUNCT_4:88,SCMPDS_2:52
       .= IC u by AMI_1:def 15
       .= il1 by AMI_1:129;
-A14: u2.DataLoc(u1.a,k1) = 1 by FUNCT_7:96;
+A13: u2.DataLoc(u1.a,k1) = 1 by FUNCT_7:96;
     u2.DataLoc(u2.a,k1) > 0
     proof
       per cases;
-      suppose a = DataLoc(u1.a,k1);
-        hence thesis by A14,FUNCT_7:96;
+      suppose
+        a = DataLoc(u1.a,k1);
+        hence thesis by A13,FUNCT_7:96;
       end;
-      suppose a <> DataLoc(u1.a,k1);
+      suppose
+        a <> DataLoc(u1.a,k1);
         then u2.a = u1.a by FUNCT_4:88;
         hence thesis by FUNCT_7:96;
       end;
     end;
-    then x = Exec(i,u2).IC SCMPDS by A10,A13,SCMPDS_2:68
-      .= IC Following u2 by A12,A13,AMI_1:131;
-    hence thesis by A12,A13;
+    then x = Exec(i,u2).IC SCMPDS by A9,A12,SCMPDS_2:68
+      .= IC Following u2 by A11,A12,AMI_1:131;
+    hence thesis by A11,A12;
   end;
   suppose
-A15: x = t;
+A14: x = t;
     set u1 = u +* (a.-->0);
     set u2 = u1 +* (DataLoc(u1.a,k1).-->0);
-A16: l <> a by SCMPDS_2:53;
+A15: l <> a by SCMPDS_2:53;
     l <> DataLoc(u1.a,k1) by SCMPDS_2:53;
     then
-A17: u2.l = u1.l by FUNCT_4:88
-      .= u.l by A16,FUNCT_4:88
+A16: u2.l = u1.l by FUNCT_4:88
+      .= u.l by A15,FUNCT_4:88
       .= i by AMI_1:129;
-A18: IC u2 = u2.IC SCMPDS by AMI_1:def 15
+A17: u2.DataLoc(u1.a,k1) = 0 by FUNCT_7:96;
+A18: u2.DataLoc(u2.a,k1) <= 0
+    proof
+      per cases;
+      suppose
+        a = DataLoc(u1.a,k1);
+        hence thesis by A17,FUNCT_7:96;
+      end;
+      suppose
+        a <> DataLoc(u1.a,k1);
+        then u2.a = u1.a by FUNCT_4:88;
+        hence thesis by FUNCT_7:96;
+      end;
+    end;
+A19: IC u2 = u2.IC SCMPDS by AMI_1:def 15
       .= u1.IC SCMPDS by FUNCT_4:88,SCMPDS_2:52
       .= u.IC SCMPDS by FUNCT_4:88,SCMPDS_2:52
       .= IC u by AMI_1:def 15
       .= il1 by AMI_1:129;
-A19: u2.DataLoc(u1.a,k1) = 0 by FUNCT_7:96;
-A20: u2.DataLoc(u2.a,k1) <= 0
-    proof
-      per cases;
-      suppose a = DataLoc(u1.a,k1);
-        hence thesis by A19,FUNCT_7:96;
-      end;
-      suppose a <> DataLoc(u1.a,k1);
-        then u2.a = u1.a by FUNCT_4:88;
-        hence thesis by FUNCT_7:96;
-      end;
-    end;
-    consider m1 being Element of NAT such that
-A21: m1 = IC u2 and
-A22: ICplusConst(u2,k2) = abs(m1+k2) by SCMPDS_2:def 20;
-    x = Exec(i,u2).IC SCMPDS by A1,A15,A18,A20,A21,A22,SCMPDS_2:68
-      .= IC Following u2 by A17,A18,AMI_1:131;
-    hence thesis by A17,A18;
+    ex m1 being Element of NAT st m1 = IC u2 & ICplusConst(u2,k2) = abs(
+    m1+k2) by SCMPDS_2:def 20;
+    then x = Exec(i,u2).IC SCMPDS by A1,A14,A19,A18,SCMPDS_2:68
+      .= IC Following u2 by A16,A19,AMI_1:131;
+    hence thesis by A16,A19;
   end;
 end;
 
 theorem
   NIC((a,k1)>=0_goto k2,l) = { Next l, abs( (k2+locnum l) ) }
 proof
+  consider s being State of SCMPDS;
   set i = (a,k1)>=0_goto k2;
   set t = abs((k2+locnum l));
-A1: locnum l = l by Th8;
+  reconsider I = i as Element of ObjectKind l by AMI_1:def 14;
+  l in NAT by AMI_1:def 4;
+  then reconsider il1 = l as Element of ObjectKind IC SCMPDS by AMI_1:def 11;
+  set u = s+*((IC SCMPDS, l)-->(il1, I));
+A1: locnum l = l by Th3;
   hereby
     let x be set;
-    assume x in NIC(i,l);
+    assume
+    x in NIC(i,l);
     then consider s being State of SCMPDS such that
 A2: x = IC Following s and
 A3: IC s = l and
 A4: s.l = i;
-    consider m1 being Element of NAT such that
-A5: m1 = IC s and
-A6: ICplusConst(s,k2) = abs(m1+k2) by SCMPDS_2:def 20;
+A5: ex m1 being Element of NAT st m1 = IC s & ICplusConst(s, k2) = abs(m1+
+    k2) by SCMPDS_2:def 20;
     per cases;
     suppose
-A7:   s.DataLoc(s.a,k1) >= 0;
+A6:   s.DataLoc(s.a,k1) >= 0;
       x = Exec(i,s).IC SCMPDS by A2,A3,A4,AMI_1:131
-        .= t by A1,A3,A5,A6,A7,SCMPDS_2:69;
+        .= t by A1,A3,A5,A6,SCMPDS_2:69;
       hence x in {Next l,t} by TARSKI:def 2;
     end;
     suppose
-A8:   s.DataLoc(s.a,k1) < 0;
+A7:   s.DataLoc(s.a,k1) < 0;
       x = Exec(i,s).IC SCMPDS by A2,A3,A4,AMI_1:131
-        .= Next l by A3,A8,SCMPDS_2:69;
+        .= Next l by A3,A7,SCMPDS_2:69;
       hence x in {Next l,t} by TARSKI:def 2;
     end;
   end;
   let x be set;
   assume
-A9: x in {Next l,t};
-  consider s being State of SCMPDS;
-  l in NAT by AMI_1:def 4;
-  then reconsider il1 = l as Element of ObjectKind IC SCMPDS by AMI_1:def 11;
-  reconsider I = i as Element of ObjectKind l by AMI_1:def 14;
-  set u = s+*((IC SCMPDS, l)-->(il1, I));
-  per cases by A9,TARSKI:def 2;
+A8: x in {Next l,t};
+  per cases by A8,TARSKI:def 2;
   suppose
-A10: x = Next l;
+A9: x = Next l;
+A10: -1 < 0;
     set u1 = u +* (a.-->-1);
     set u2 = u1 +* (DataLoc(u1.a,k1).-->-1);
 A11: l <> a by SCMPDS_2:53;
@@ -601,102 +614,106 @@ A13: IC u2 = u2.IC SCMPDS by AMI_1:def 15
       .= IC u by AMI_1:def 15
       .= il1 by AMI_1:129;
 A14: u2.DataLoc(u1.a,k1) = -1 by FUNCT_7:96;
-A15: -1 < 0;
     u2.DataLoc(u2.a,k1) < 0
     proof
       per cases;
-      suppose a = DataLoc(u1.a,k1);
-        hence thesis by A14,A15,FUNCT_7:96;
+      suppose
+        a = DataLoc(u1.a,k1);
+        hence thesis by A14,A10,FUNCT_7:96;
       end;
-      suppose a <> DataLoc(u1.a,k1);
+      suppose
+        a <> DataLoc(u1.a,k1);
         then u2.a = u1.a by FUNCT_4:88;
-        hence thesis by A15,FUNCT_7:96;
+        hence thesis by A10,FUNCT_7:96;
       end;
     end;
-    then x = Exec(i,u2).IC SCMPDS by A10,A13,SCMPDS_2:69
+    then x = Exec(i,u2).IC SCMPDS by A9,A13,SCMPDS_2:69
       .= IC Following u2 by A12,A13,AMI_1:131;
     hence thesis by A12,A13;
   end;
   suppose
-A16: x = t;
+A15: x = t;
     set u1 = u +* (a.-->0);
     set u2 = u1 +* (DataLoc(u1.a,k1).-->0);
-A17: l <> a by SCMPDS_2:53;
+A16: l <> a by SCMPDS_2:53;
     l <> DataLoc(u1.a,k1) by SCMPDS_2:53;
     then
-A18: u2.l = u1.l by FUNCT_4:88
-      .= u.l by A17,FUNCT_4:88
+A17: u2.l = u1.l by FUNCT_4:88
+      .= u.l by A16,FUNCT_4:88
       .= i by AMI_1:129;
-A19: IC u2 = u2.IC SCMPDS by AMI_1:def 15
-      .= u1.IC SCMPDS by FUNCT_4:88,SCMPDS_2:52
-      .= u.IC SCMPDS by FUNCT_4:88,SCMPDS_2:52
-      .= IC u by AMI_1:def 15
-      .= il1 by AMI_1:129;
-A20: u2.DataLoc(u1.a,k1) = 0 by FUNCT_7:96;
-A21: u2.DataLoc(u2.a,k1) >= 0
+A18: u2.DataLoc(u1.a,k1) = 0 by FUNCT_7:96;
+A19: u2.DataLoc(u2.a,k1) >= 0
     proof
       per cases;
-      suppose a = DataLoc(u1.a,k1);
-        hence thesis by A20,FUNCT_7:96;
+      suppose
+        a = DataLoc(u1.a,k1);
+        hence thesis by A18,FUNCT_7:96;
       end;
-      suppose a <> DataLoc(u1.a,k1);
+      suppose
+        a <> DataLoc(u1.a,k1);
         then u2.a = u1.a by FUNCT_4:88;
         hence thesis by FUNCT_7:96;
       end;
     end;
-    consider m1 being Element of NAT such that
-A22: m1 = IC u2 and
-A23: ICplusConst(u2,k2) = abs(m1+k2) by SCMPDS_2:def 20;
-    x = Exec(i,u2).IC SCMPDS by A1,A16,A19,A21,A22,A23,SCMPDS_2:69
-      .= IC Following u2 by A18,A19,AMI_1:131;
-    hence thesis by A18,A19;
+A20: IC u2 = u2.IC SCMPDS by AMI_1:def 15
+      .= u1.IC SCMPDS by FUNCT_4:88,SCMPDS_2:52
+      .= u.IC SCMPDS by FUNCT_4:88,SCMPDS_2:52
+      .= IC u by AMI_1:def 15
+      .= il1 by AMI_1:129;
+    ex m1 being Element of NAT st m1 = IC u2 & ICplusConst(u2,k2) = abs(
+    m1+k2) by SCMPDS_2:def 20;
+    then x = Exec(i,u2).IC SCMPDS by A1,A15,A20,A19,SCMPDS_2:69
+      .= IC Following u2 by A17,A20,AMI_1:131;
+    hence thesis by A17,A20;
   end;
 end;
 
-Lm3: JUMP goto k = {}
+Lm2: JUMP goto k = {}
 proof
   set i = goto k;
-  set X = { NIC(i,l) where l is Instruction-Location of SCMPDS:
-  not contradiction };
+
+  set X = { NIC(i,l) where l is Instruction-Location of SCMPDS: not
+  contradiction };
+
   hereby
+    set l2 = inspos 1;
+    set l1 = inspos 0;
     let x be set;
     assume
 A1: x in JUMP i;
-    set l1 = inspos 0;
-    NIC(i,l1) in X;
-    then x in NIC(i,l1) by A1,SETFAM_1:def 1;
-    then consider s1 being State of SCMPDS such that
-A2: x = IC Following s1 and
-A3: IC s1 = l1 and
-A4: s1.l1 = i;
-    consider m1 being Element of NAT such that
-A5: m1 = IC s1 and
-A6: ICplusConst(s1,k) = abs(m1+k) by SCMPDS_2:def 20;
-A7: m1 = 0 by A3,A5;
-A8: x = (Following s1).IC SCMPDS by A2,AMI_1:def 15
-      .= Exec(CurInstr s1,s1).IC SCMPDS by AMI_1:def 18
-      .= Exec(i,s1).IC SCMPDS by A3,A4,AMI_1:def 17
-      .= abs(m1+k) by A6,SCMPDS_2:66;
-    set l2 = inspos 1;
     NIC(i,l2) in X;
     then x in NIC(i,l2) by A1,SETFAM_1:def 1;
     then consider s2 being State of SCMPDS such that
-A9: x = IC Following s2 and
-A10: IC s2 = l2 and
-A11: s2.l2 = i;
+A2: x = IC Following s2 and
+A3: IC s2 = l2 and
+A4: s2.l2 = i;
     consider m2 being Element of NAT such that
-A12: m2 = IC s2 and
-A13: ICplusConst(s2,k) = abs(m2+k) by SCMPDS_2:def 20;
-A14: m2 = 1 by A10,A12;
-A15: x = (Following s2).IC SCMPDS by A9,AMI_1:def 15
+A5: m2 = IC s2 and
+A6: ICplusConst(s2,k) = abs(m2+k) by SCMPDS_2:def 20;
+A7: x = (Following s2).IC SCMPDS by A2,AMI_1:def 15
       .= Exec(CurInstr s2,s2).IC SCMPDS by AMI_1:def 18
-      .= Exec(i,s2).IC SCMPDS by A10,A11,AMI_1:def 17
-      .= abs(m2+k) by A13,SCMPDS_2:66;
-    per cases by A7,A8,A14,A15,ABSVALUE:45;
-    suppose 0+k = 1+k;
+      .= Exec(i,s2).IC SCMPDS by A3,A4,AMI_1:def 17
+      .= abs(m2+k) by A6,SCMPDS_2:66;
+    NIC(i,l1) in X;
+    then x in NIC(i,l1) by A1,SETFAM_1:def 1;
+    then consider s1 being State of SCMPDS such that
+A8: x = IC Following s1 and
+A9: IC s1 = l1 and
+A10: s1.l1 = i;
+    consider m1 being Element of NAT such that
+A11: m1 = IC s1 and
+A12: ICplusConst(s1,k) = abs(m1+k) by SCMPDS_2:def 20;
+A13: x = (Following s1).IC SCMPDS by A8,AMI_1:def 15
+      .= Exec(CurInstr s1,s1).IC SCMPDS by AMI_1:def 18
+      .= Exec(i,s1).IC SCMPDS by A9,A10,AMI_1:def 17
+      .= abs(m1+k) by A12,SCMPDS_2:66;
+    per cases by A9,A11,A13,A3,A5,A7,ABSVALUE:45;
+    suppose
+      0+k = 1+k;
       hence x in {};
     end;
-    suppose k = -(1+k);
+    suppose
+      k = -(1+k);
       then --1/2 is integer;
       hence x in {} by NAT_D:33;
     end;
@@ -707,70 +724,71 @@ end;
 registration
   let k;
   cluster JUMP (goto k) -> empty;
-  coherence by Lm3;
+  coherence by Lm2;
 end;
 
-theorem Th28:
+theorem Th23:
   JUMP (return a) = {k where k is Element of NAT: k > 1}
 proof
-  set i = return a;
   set A = {k where k is Element of NAT: k > 1};
+  set i = return a;
+  set X = { NIC(i,l) where l is Instruction-Location of SCMPDS: not
+  contradiction };
   JUMP i c= NIC(i,inspos(0)) by AMISTD_1:58;
-  hence JUMP i c= A by Th15;
+  hence JUMP i c= A by Th10;
   let x be set;
   assume
 A1: x in A;
-  set X = { NIC(i,l) where l is Instruction-Location of SCMPDS:
-  not contradiction };
   now
+    consider k being Element of NAT such that
+A2: x = k and
+A3: k > 1 by A1;
+    reconsider k2 = k-2 as Element of NAT by A3,Lm1;
     NIC(i,inspos(0)) in X;
     hence X <> {};
-    let y be set;
-    assume y in X;
-    then consider l being Instruction-Location of SCMPDS such that
-A2: y = NIC(i,l);
     a in SCM-Data-Loc by SCMPDS_2:def 2;
     then consider j being Element of NAT such that
-A3: a = [1,j] by AMI_2:32;
+A4: a = [1,j] by AMI_2:32;
+    set t = [1,j+1];
     consider s being State of SCMPDS;
+    let y be set;
+A5: DataLoc(j,1) = [1,abs(j+1)] by SCMPDS_2:def 4
+      .= t by ABSVALUE:def 1;
+    reconsider t1 = t as Int_position by AMI_2:33,SCMPDS_2:9;
+    assume
+    y in X;
+    then consider l being Instruction-Location of SCMPDS such that
+A6: y = NIC(i,l);
     l in NAT by AMI_1:def 4;
-    then reconsider il1 = l as Element of ObjectKind IC SCMPDS by AMI_1:def 11;
+    then reconsider il1 = l as Element of ObjectKind IC SCMPDS by
+    AMI_1:def 11;
     reconsider I = i as Element of ObjectKind l by AMI_1:def 14;
     set u = s+*((IC SCMPDS, l)-->(il1, I));
-    consider k being Element of NAT such that
-A4: x = k and
-A5: k > 1 by A1;
-    set t = [1,j+1];
-    reconsider t1 = t as Int_position by AMI_2:33,SCMPDS_2:9;
-    reconsider k2 = k-2 as Element of NAT by A5,Lm2;
+A7: u.IC SCMPDS = IC u by AMI_1:def 15
+      .= l by AMI_1:129;
     set g = (a,t1)-->(j,k2);
     set v = u +* g;
-A6: dom g = {a,t1} by FUNCT_4:65;
-A7: u.l = i by AMI_1:129;
-A8: u.IC SCMPDS = IC u by AMI_1:def 15
-      .= l by AMI_1:129;
-    l <> a & l <> t1 by SCMPDS_2:53;
-    then not l in dom g by A6,TARSKI:def 2;
-    then
-A9: v.l = i by A7,FUNCT_4:12;
-    a <> IC SCMPDS & t1 <> IC SCMPDS by SCMPDS_2:52;
-    then
-A10: not IC SCMPDS in dom g by A6,TARSKI:def 2;
-A11: IC v = v.IC SCMPDS by AMI_1:def 15
-      .= l by A8,A10,FUNCT_4:12;
     j <> j+1;
     then
-A12: a <> t1 by A3,ZFMISC_1:33;
+A8: a <> t1 by A4,ZFMISC_1:33;
     then
-A13: v.a = j by FUNCT_4:89;
-A14: v.t1 = k2 by A12,FUNCT_4:89;
-A15: DataLoc(j,1) = [1,abs(j+1)] by SCMPDS_2:def 4
-      .= t by ABSVALUE:def 1;
-    x = ((k2 ) + 2) by A4
-      .= (abs(v.DataLoc(j,1)) ) + 2 by A14,ABSVALUE:def 1,A15
-      .= Exec(i,v).IC SCMPDS by A13,SCMPDS_1:def 23,SCMPDS_2:70
-      .= IC Following v by A9,A11,AMI_1:131;
-    hence x in y by A2,A9,A11;
+A9: v.a = j by FUNCT_4:89;
+A10: v.t1 = k2 by A8,FUNCT_4:89;
+A11: dom g = {a,t1} by FUNCT_4:65;
+    l <> a & l <> t1 by SCMPDS_2:53;
+    then u.l = i & not l in dom g by A11,AMI_1:129,TARSKI:def 2;
+    then
+A12: v.l = i by FUNCT_4:12;
+    a <> IC SCMPDS & t1 <> IC SCMPDS by SCMPDS_2:52;
+    then
+A13: not IC SCMPDS in dom g by A11,TARSKI:def 2;
+A14: IC v = v.IC SCMPDS by AMI_1:def 15
+      .= l by A7,A13,FUNCT_4:12;
+    x = ((k2 ) + 2) by A2
+      .= (abs(v.DataLoc(j,1)) ) + 2 by A10,A5,ABSVALUE:def 1
+      .= Exec(i,v).IC SCMPDS by A9,SCMPDS_1:def 23,SCMPDS_2:70
+      .= IC Following v by A12,A14,AMI_1:131;
+    hence x in y by A6,A12,A14;
   end;
   hence thesis by SETFAM_1:def 1;
 end;
@@ -778,7 +796,7 @@ end;
 registration
   let a;
   cluster JUMP (return a) -> infinite;
-  coherence by PRE_CIRC:29,Th28;
+  coherence by Th23,PRE_CIRC:29;
 end;
 
 registration
@@ -786,9 +804,9 @@ registration
   cluster JUMP (saveIC(a,k1)) -> empty;
   coherence
   proof
-    for l being Instruction-Location of SCMPDS holds
-    NIC(saveIC(a,k1),l)={Next l} by Th16;
-    hence thesis by Th13;
+    for l being Instruction-Location of SCMPDS holds NIC(saveIC(a,k1),l)={
+    Next l} by Th11;
+    hence thesis by Th8;
   end;
 end;
 
@@ -798,8 +816,8 @@ registration
   coherence
   proof
     for l being Instruction-Location of SCMPDS holds NIC(a:=k1,l)={Next l}
-    by Th17;
-    hence thesis by Th13;
+    by Th12;
+    hence thesis by Th8;
   end;
 end;
 
@@ -808,9 +826,9 @@ registration
   cluster JUMP ((a,k1):=k2) -> empty;
   coherence
   proof
-    for l being Instruction-Location of SCMPDS holds NIC((a,k1):=k2,l)={Next l
-    } by Th18;
-    hence thesis by Th13;
+    for l being Instruction-Location of SCMPDS holds NIC((a,k1):=k2,l)={
+    Next l } by Th13;
+    hence thesis by Th8;
   end;
 end;
 
@@ -819,9 +837,9 @@ registration
   cluster JUMP ((a,k1):=(b,k2)) -> empty;
   coherence
   proof
-    for l being Instruction-Location of SCMPDS holds
-    NIC((a,k1):=(b,k2),l)={Next l} by Th19;
-    hence thesis by Th13;
+    for l being Instruction-Location of SCMPDS holds NIC((a,k1):=(b,k2),l)
+    ={Next l} by Th14;
+    hence thesis by Th8;
   end;
 end;
 
@@ -830,9 +848,9 @@ registration
   cluster JUMP (AddTo(a,k1,k2)) -> empty;
   coherence
   proof
-    for l being Instruction-Location of SCMPDS holds
-    NIC(AddTo(a,k1,k2),l)={Next l} by Th20;
-    hence thesis by Th13;
+    for l being Instruction-Location of SCMPDS holds NIC(AddTo(a,k1,k2),l)
+    ={Next l} by Th15;
+    hence thesis by Th8;
   end;
 end;
 
@@ -841,38 +859,39 @@ registration
   cluster JUMP (AddTo(a,k1,b,k2)) -> empty;
   coherence
   proof
-    for l being Instruction-Location of SCMPDS holds
-    NIC(AddTo(a,k1,b,k2),l)={Next l} by Th21;
-    hence thesis by Th13;
+    for l being Instruction-Location of SCMPDS holds NIC(AddTo(a,k1,b,k2),
+    l)={Next l} by Th16;
+    hence thesis by Th8;
   end;
   cluster JUMP (SubFrom(a,k1,b,k2)) -> empty;
   coherence
   proof
-    for l being Instruction-Location of SCMPDS holds
-    NIC(SubFrom(a,k1,b,k2),l)={Next l} by Th22;
-    hence thesis by Th13;
+    for l being Instruction-Location of SCMPDS holds NIC(SubFrom(a,k1,b,k2
+    ),l)={Next l} by Th17;
+    hence thesis by Th8;
   end;
   cluster JUMP (MultBy(a,k1,b,k2)) -> empty;
   coherence
   proof
-    for l being Instruction-Location of SCMPDS holds
-    NIC(MultBy(a,k1,b,k2),l)={Next l} by Th23;
-    hence thesis by Th13;
+    for l being Instruction-Location of SCMPDS holds NIC(MultBy(a,k1,b,k2)
+    ,l)={Next l} by Th18;
+    hence thesis by Th8;
   end;
   cluster JUMP (Divide(a,k1,b,k2)) -> empty;
   coherence
   proof
-    for l being Instruction-Location of SCMPDS holds
-    NIC(Divide(a,k1,b,k2),l)={Next l} by Th24;
-    hence thesis by Th13;
+    for l being Instruction-Location of SCMPDS holds NIC(Divide(a,k1,b,k2)
+    ,l)={Next l} by Th19;
+    hence thesis by Th8;
   end;
 end;
 
-Lm4: 5/3 is not integer
+Lm3: 5/3 is not integer
 proof
   not 3 qua Integer divides 5
   proof
-    assume not thesis;
+    assume
+    not thesis;
     then
 A1: 5 mod 3 = 0 by PEPIN:6;
     5 = 3 * 1 + 2;
@@ -881,36 +900,38 @@ A1: 5 mod 3 = 0 by PEPIN:6;
   hence thesis by WSIERP_1:22;
 end;
 
-Lm5: for d being real number holds (abs(d)+(-d+abs(d)+4))+2-2+d <>
--((abs(d)+(-d+abs(d)+4)+(-d+abs(d)+4))+2-2+d)
+Lm4: for d being real number holds (abs(d)+(-d+abs(d)+4))+2-2+d <> -((abs(d)+(
+-d+abs(d)+4)+(-d+abs(d)+4))+2-2+d)
+
 proof
   let d be real number;
   set c = -d+abs(d)+4;
   set xx = c+c+c;
-  assume (abs(d)+c)+2-2+d = -((abs(d)+c+(-d+abs(d)+4))+2-2+d);
-  then
-A1: d + abs(d) = (-2)*xx/4;
   -d+abs(d) >= 0 by ABSVALUE:44;
-  then c >= 0+4 by XREAL_1:8;
-  then 3*c > 3*0 by XREAL_1:70;
   then (-2)*xx < (-2)*0 by XREAL_1:71;
-  then (-2)*xx/4 < 0/4 by XREAL_1:76;
+  then
+A1: (-2)*xx/4 < 0/4 by XREAL_1:76;
+  assume
+  (abs(d)+c)+2-2+d = -((abs(d)+c+(-d+abs(d)+4))+2-2+d);
+  then d + abs(d) = (-2)*xx/4;
   hence contradiction by A1,ABSVALUE:43;
 end;
 
-Lm6: for b,d being real number holds b+1 <> b + ((-d+abs(d)+4) + d)
+Lm5: for b,d being real number holds b+1 <> b + ((-d+abs(d)+4) + d)
 proof
   let b,d be real number;
   set c = -d+abs(d)+4;
-  assume
-A1: b+1 = b + (c + d);
   abs(d) >= 0 by COMPLEX1:132;
-  then abs(d)+3 >= 0+3 by XREAL_1:9;
+  then
+A1: abs(d)+3 >= 0+3 by XREAL_1:9;
+  assume
+  b+1 = b + (c + d);
   hence thesis by A1;
 end;
 
-Lm7: for c,d being real number st c > 0 holds
-(abs(d)+c)+1 <> -((abs(d)+c)+c+d)
+Lm6: for c,d being real number st c > 0 holds (abs(d)+c)+1 <> -((abs(d)+c)+c+d
+)
+
 proof
   let c,d being real number such that
 A1: c > 0;
@@ -920,27 +941,19 @@ A2: (abs(d)+c)+1 = -((abs(d)+c)+c+d);
   suppose
 A3: d >= 0;
     then abs(d) = d by ABSVALUE:def 1;
-    then
-A4: (3*d+3*c)+1 = 0 by A2;
-A5: 3*d >= 3*0 by A3;
-    3*c >= 3*0 by A1;
-    then (3*d+3*c) >= 0+0 by A5;
-    hence contradiction by A4;
+    hence contradiction by A1,A2,A3;
   end;
   suppose
-A6: d < 0;
+A4: d < 0;
     then abs(d) = -d by ABSVALUE:def 1;
-    then
-A7: (-d+3*c)+1 = 0 by A2;
-A8: -d > -0 by A6,XREAL_1:26;
-    3*c >= 3*0 by A1;
-    then (-d+3*c) >= 0+0 by A8;
-    hence contradiction by A7;
+    then (-d+3*c)+1 = 0 by A2;
+    hence contradiction by A1,A4;
   end;
 end;
 
-Lm8: for b being real number, d being Integer st d <> 5 holds
-(b+(-d+abs(d)+4)+1) <> (b+d)
+Lm7: for b being real number, d being Integer st d <> 5 holds (b+(-d+abs(d)+4)
++1) <> (b+d)
+
 proof
   let b be real number, d be Integer;
   assume
@@ -948,18 +961,21 @@ A1: d <> 5;
   assume
 A2: (b+(-d+abs(d)+4)+1) = (b+d);
   per cases;
-  suppose d >= 0;
+  suppose
+    d >= 0;
     then abs(d) = d by ABSVALUE:def 1;
     hence thesis by A1,A2;
   end;
-  suppose d < 0;
+  suppose
+    d < 0;
     then abs(d) = -d by ABSVALUE:def 1;
-    hence thesis by A2,Lm4;
+    hence thesis by A2,Lm3;
   end;
 end;
 
-Lm9: for c,d being real number st c > 0
-holds (abs(d)+c+c)+1 <> -((abs(d)+c)+d)
+Lm8: for c,d being real number st c > 0 holds (abs(d)+c+c)+1 <> -((abs(d)+c)+d
+)
+
 proof
   let c,d be real number;
   assume
@@ -970,121 +986,116 @@ A2: (abs(d)+c+c)+1 = -((abs(d)+c)+d);
   suppose
 A3: d >= 0;
     then abs(d) = d by ABSVALUE:def 1;
-    then
-A4: 3*d + 3*c +1 =0 by A2;
-A5: 3*d >= 3*0 by A3;
-    3*c >= 3*0 by A1;
-    then (3*d+3*c) >= 0+0 by A5;
-    hence contradiction by A4;
+    hence contradiction by A1,A2,A3;
   end;
   suppose
-A6: d < 0;
+A4: d < 0;
     then abs(d) = -d by ABSVALUE:def 1;
-    then
-A7: -d+3*c+1 = 0 by A2;
-A8: -d > -0 by A6,XREAL_1:26;
-    3*c >= 3*0 by A1;
-    then (-d+3*c) >= 0+0 by A8;
-    hence contradiction by A7;
+    hence contradiction by A1,A2,A4;
   end;
 end;
 
-Lm10: JUMP ((a,k1)<>0_goto 5) = {}
+Lm9: JUMP ((a,k1)<>0_goto 5) = {}
 proof
   set k2 = 5;
   set i = (a,k1)<>0_goto k2;
-  set X = { NIC(i,l) where l is Instruction-Location of SCMPDS:
-  not contradiction };
+
+  set X = { NIC(i,l) where l is Instruction-Location of SCMPDS: not
+  contradiction };
+
   hereby
+    set nl2 = 8;
+    set nl1 = 5;
     let x be set;
     assume
 A1: x in JUMP i;
-    set nl1 = 5;
-    set nl2 = 8;
-    set l1 = inspos nl1;
-    NIC(i,l1) in X;
-    then x in NIC(i,l1) by A1,SETFAM_1:def 1;
-    then consider s1 being State of SCMPDS such that
-A2: x = IC Following s1 and
-A3: IC s1 = l1 and
-A4: s1.l1 = i;
-    consider m1 being Element of NAT such that
-A5: m1 = IC s1 and
-A6: ICplusConst(s1,k2) = abs(m1+k2) by SCMPDS_2:def 20;
-A7: m1 = nl1 by A3,A5;
     set l2 = inspos nl2;
     NIC(i,l2) in X;
     then x in NIC(i,l2) by A1,SETFAM_1:def 1;
     then consider s2 being State of SCMPDS such that
-A8: x = IC Following s2 and
-A9: IC s2 = l2 and
-A10: s2.l2 = i;
+A2: x = IC Following s2 and
+A3: IC s2 = l2 and
+A4: s2.l2 = i;
+    set l1 = inspos nl1;
+    NIC(i,l1) in X;
+    then x in NIC(i,l1) by A1,SETFAM_1:def 1;
+    then consider s1 being State of SCMPDS such that
+A5: x = IC Following s1 and
+A6: IC s1 = l1 and
+A7: s1.l1 = i;
     consider m2 being Element of NAT such that
-A11: m2 = IC s2 and
-A12: ICplusConst(s2,k2) = abs(m2+k2) by SCMPDS_2:def 20;
-A13: m2 = nl2 by A9,A11;
+A8: m2 = IC s2 and
+A9: ICplusConst(s2,k2) = abs(m2+k2) by SCMPDS_2:def 20;
+    consider m1 being Element of NAT such that
+A10: m1 = IC s1 and
+A11: ICplusConst(s1,k2) = abs(m1+k2) by SCMPDS_2:def 20;
     per cases;
     suppose that
-A14:  s1.DataLoc(s1.a,k1) <> 0 and
-A15:  s2.DataLoc(s2.a,k1) <> 0;
-A16:  x = Exec(i,s1).IC SCMPDS by A2,A3,A4,AMI_1:131
-        .= abs(m1+k2) by A6,A14,SCMPDS_2:67;
-      x = Exec(i,s2).IC SCMPDS by A8,A9,A10,AMI_1:131
-        .= abs(m2+k2) by A12,A15,SCMPDS_2:67;
-      then nl1+k2 = nl2+k2 or nl1+k2 = -(nl2+k2) by A7,A13,A16,ABSVALUE:45;
+A12:  s1.DataLoc(s1.a,k1) <> 0 and
+A13:  s2.DataLoc(s2.a,k1) <> 0;
+A14:  x = Exec(i,s2).IC SCMPDS by A2,A3,A4,AMI_1:131
+        .= abs(m2+k2) by A9,A13,SCMPDS_2:67;
+      x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131
+        .= abs(m1+k2) by A11,A12,SCMPDS_2:67;
+
+      then nl1+k2 = nl2+k2 or nl1+k2 = -(nl2+k2) by A6,A10,A3,A8,A14,
+      ABSVALUE:45;
+
       hence x in {};
     end;
     suppose that
-A17:  s1.DataLoc(s1.a,k1) = 0 and
-A18:  s2.DataLoc(s2.a,k1) = 0;
-A19:  x = Exec(i,s1).IC SCMPDS by A2,A3,A4,AMI_1:131
-        .= Next l1 by A3,A17,SCMPDS_2:67;
-      x = Exec(i,s2).IC SCMPDS by A8,A9,A10,AMI_1:131
-        .= Next l2 by A9,A18,SCMPDS_2:67;
-      hence x in {} by A19;
+A15:  s1.DataLoc(s1.a,k1) = 0 and
+A16:  s2.DataLoc(s2.a,k1) = 0;
+A17:  x = Exec(i,s2).IC SCMPDS by A2,A3,A4,AMI_1:131
+        .= Next l2 by A3,A16,SCMPDS_2:67;
+      x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131
+        .= Next l1 by A6,A15,SCMPDS_2:67;
+      hence x in {} by A17;
     end;
     suppose that
-A20:  s1.DataLoc(s1.a,k1) = 0 and
-A21:  s2.DataLoc(s2.a,k1) <> 0;
+A18:  s1.DataLoc(s1.a,k1) = 0 and
+A19:  s2.DataLoc(s2.a,k1) <> 0;
       reconsider n1 = l1 as Element of NAT;
       set w1 = n1;
-A24:  x = Exec(i,s1).IC SCMPDS by A2,A3,A4,AMI_1:131
-        .= succ n1 by A3,A20,SCMPDS_2:67
+A20:  x = Exec(i,s2).IC SCMPDS by A2,A3,A4,AMI_1:131
+        .= abs(m2+k2) by A9,A19,SCMPDS_2:67;
+      x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131
+        .= succ n1 by A6,A18,SCMPDS_2:67
         .= n1 + 1;
-      x = Exec(i,s2).IC SCMPDS by A8,A9,A10,AMI_1:131
-        .= abs(m2+k2) by A12,A21,SCMPDS_2:67;
-      then w1+1 = m2+k2 or w1+1 = -(m2+k2) by A24,ABSVALUE:1;
-      hence x in {} by A13;
+      then w1+1 = m2+k2 or w1+1 = -(m2+k2) by A20,ABSVALUE:1;
+      hence x in {} by A3,A8;
     end;
     suppose that
-A25:  s1.DataLoc(s1.a,k1) <> 0 and
-A26:  s2.DataLoc(s2.a,k1) = 0;
+A21:  s1.DataLoc(s1.a,k1) <> 0 and
+A22:  s2.DataLoc(s2.a,k1) = 0;
       reconsider n2 = l2 as Element of NAT;
-      set w2 = n2;
-A29:  x = Exec(i,s1).IC SCMPDS by A2,A3,A4,AMI_1:131
-        .= abs(m1+k2) by A6,A25,SCMPDS_2:67;
-      x = Exec(i,s2).IC SCMPDS by A8,A9,A10,AMI_1:131
-        .= succ n2 by A9,A26,SCMPDS_2:67
+A23:  x = Exec(i,s2).IC SCMPDS by A2,A3,A4,AMI_1:131
+        .= succ n2 by A3,A22,SCMPDS_2:67
         .= n2 + 1;
-      then w2+1 = m1+k2 or w2+1 = -(m1+k2) by A29,ABSVALUE:1;
-      hence x in {} by A7;
+      set w2 = n2;
+      x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131
+        .= abs(m1+k2) by A11,A21,SCMPDS_2:67;
+      then w2+1 = m1+k2 or w2+1 = -(m1+k2) by A23,ABSVALUE:1;
+      hence x in {} by A6,A10;
     end;
   end;
   thus thesis by XBOOLE_1:2;
 end;
 
-Lm11: k2 <> 5 implies JUMP ((a,k1)<>0_goto k2) = {}
+Lm10: k2 <> 5 implies JUMP ((a,k1)<>0_goto k2) = {}
 proof
+  set i = (a,k1)<>0_goto k2;
+
+  set X = { NIC(i,l) where l is Instruction-Location of SCMPDS: not
+  contradiction };
+
   assume
 A1: k2 <> 5;
-  set i = (a,k1)<>0_goto k2;
-  set X = { NIC(i,l) where l is Instruction-Location of SCMPDS:
-  not contradiction };
   hereby
+    set x1 = -k2+abs(k2)+4;
     let x be set;
     assume
 A2: x in JUMP i;
-    set x1 = -k2+abs(k2)+4;
 A3: x1 > -k2+abs(k2)+0 by XREAL_1:8;
     then
 A4: x1 > 0 by ABSVALUE:44;
@@ -1092,6 +1103,7 @@ A4: x1 > 0 by ABSVALUE:44;
     set nl1 = abs(k2)+x1;
     set nl2 = nl1+x1;
     set l1 = inspos nl1;
+    set l2 = inspos nl2;
     NIC(i,l1) in X;
     then x in NIC(i,l1) by A2,SETFAM_1:def 1;
     then consider s1 being State of SCMPDS such that
@@ -1101,86 +1113,89 @@ A7: s1.l1 = i;
     consider m1 being Element of NAT such that
 A8: m1 = IC s1 and
 A9: ICplusConst(s1,k2) = abs(m1+k2) by SCMPDS_2:def 20;
-A10: m1 = nl1 by A6,A8;
-    set l2 = inspos nl2;
     NIC(i,l2) in X;
     then x in NIC(i,l2) by A2,SETFAM_1:def 1;
     then consider s2 being State of SCMPDS such that
-A11: x = IC Following s2 and
-A12: IC s2 = l2 and
-A13: s2.l2 = i;
+A10: x = IC Following s2 and
+A11: IC s2 = l2 and
+A12: s2.l2 = i;
     consider m2 being Element of NAT such that
-A14: m2 = IC s2 and
-A15: ICplusConst(s2,k2) = abs(m2+k2) by SCMPDS_2:def 20;
-A16: m2 = nl2 by A12,A14;
+A13: m2 = IC s2 and
+A14: ICplusConst(s2,k2) = abs(m2+k2) by SCMPDS_2:def 20;
     per cases;
     suppose that
-A18:  s1.DataLoc(s1.a,k1) <> 0 and
-A19:  s2.DataLoc(s2.a,k1) <> 0;
-A20:  x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131
-        .= abs(m1+k2) by A9,A18,SCMPDS_2:67;
-A21:  x = Exec(i,s2).IC SCMPDS by A11,A12,A13,AMI_1:131
-        .= abs(m2+k2) by A15,A19,SCMPDS_2:67;
+A15:  s1.DataLoc(s1.a,k1) <> 0 and
+A16:  s2.DataLoc(s2.a,k1) <> 0;
+A17:  x = Exec(i,s2).IC SCMPDS by A10,A11,A12,AMI_1:131
+        .= abs(m2+k2) by A14,A16,SCMPDS_2:67;
+A18:  x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131
+        .= abs(m1+k2) by A9,A15,SCMPDS_2:67;
       thus x in {}
       proof
-        per cases by A10,A16,A20,A21,ABSVALUE:45;
-        suppose nl1+2-2+k2 = nl2+2-2+k2;
+        per cases by A6,A8,A11,A13,A18,A17,ABSVALUE:45;
+        suppose
+          nl1+2-2+k2 = nl2+2-2+k2;
           hence thesis by A3,ABSVALUE:44;
         end;
-        suppose nl1+2-2+k2 = -(nl2+2-2+k2);
-          hence thesis by Lm5;
+        suppose
+          nl1+2-2+k2 = -(nl2+2-2+k2);
+          hence thesis by Lm4;
         end;
       end;
+    end;
+    suppose that
+A19:  s1.DataLoc(s1.a,k1) = 0 and
+A20:  s2.DataLoc(s2.a,k1) = 0;
+A21:  x = Exec(i,s2).IC SCMPDS by A10,A11,A12,AMI_1:131
+        .= Next l2 by A11,A20,SCMPDS_2:67;
+      x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131
+        .= Next l1 by A6,A19,SCMPDS_2:67;
+      hence x in {} by A3,A21,ABSVALUE:44;
     end;
     suppose that
 A22:  s1.DataLoc(s1.a,k1) = 0 and
-A23:  s2.DataLoc(s2.a,k1) = 0;
-A24:  x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131
-        .= Next l1 by A6,A22,SCMPDS_2:67;
-      x = Exec(i,s2).IC SCMPDS by A11,A12,A13,AMI_1:131
-        .= Next l2 by A12,A23,SCMPDS_2:67;
-      hence x in {} by A3,ABSVALUE:44,A24;
-    end;
-    suppose that
-A25:  s1.DataLoc(s1.a,k1) = 0 and
-A26:  s2.DataLoc(s2.a,k1) <> 0;
+A23:  s2.DataLoc(s2.a,k1) <> 0;
       reconsider n1 = l1 as Element of NAT;
       set w1 = n1;
-A29:  x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131
-        .= succ n1 by A6,A25,SCMPDS_2:67
+A24:  x = Exec(i,s2).IC SCMPDS by A10,A11,A12,AMI_1:131
+        .= abs(m2+k2) by A14,A23,SCMPDS_2:67;
+A25:  x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131
+        .= succ n1 by A6,A22,SCMPDS_2:67
         .= n1 + 1;
-A30:  x = Exec(i,s2).IC SCMPDS by A11,A12,A13,AMI_1:131
-        .= abs(m2+k2) by A15,A26,SCMPDS_2:67;
       thus x in {}
       proof
-        per cases by A29,A30,ABSVALUE:1;
-        suppose w1+1 = m2+k2;
-          then nl1+1 = nl1 + (x1 + k2) by A16;
-          hence thesis by Lm6;
+        per cases by A25,A24,ABSVALUE:1;
+        suppose
+          w1+1 = m2+k2;
+          then nl1+1 = nl1 + (x1 + k2) by A11,A13;
+          hence thesis by Lm5;
         end;
-        suppose w1+1 = -(m2+k2);
-          hence thesis by A4,A16,Lm7;
+        suppose
+          w1+1 = -(m2+k2);
+          hence thesis by A4,A11,A13,Lm6;
         end;
       end;
     end;
     suppose that
-A31:  s1.DataLoc(s1.a,k1) <> 0 and
-A32:  s2.DataLoc(s2.a,k1) = 0;
+A26:  s1.DataLoc(s1.a,k1) <> 0 and
+A27:  s2.DataLoc(s2.a,k1) = 0;
       reconsider n2 = l2 as Element of NAT;
-      set w2 = n2;
-A35:  x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131
-        .= abs(m1+k2) by A9,A31,SCMPDS_2:67;
-A36:  x = Exec(i,s2).IC SCMPDS by A11,A12,A13,AMI_1:131
-        .= succ n2 by A12,A32,SCMPDS_2:67
+A28:  x = Exec(i,s2).IC SCMPDS by A10,A11,A12,AMI_1:131
+        .= succ n2 by A11,A27,SCMPDS_2:67
         .= n2 + 1;
+      set w2 = n2;
+A29:  x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131
+        .= abs(m1+k2) by A9,A26,SCMPDS_2:67;
       thus x in {}
       proof
-        per cases by A35,A36,ABSVALUE:1;
-        suppose w2+1 = m1+k2;
-          hence thesis by A1,A10,Lm8;
+        per cases by A29,A28,ABSVALUE:1;
+        suppose
+          w2+1 = m1+k2;
+          hence thesis by A1,A6,A8,Lm7;
         end;
-        suppose w2+1 = -(m1+k2);
-          hence thesis by A4,A10,Lm9;
+        suppose
+          w2+1 = -(m1+k2);
+          hence thesis by A4,A6,A8,Lm8;
         end;
       end;
     end;
@@ -1188,102 +1203,107 @@ A36:  x = Exec(i,s2).IC SCMPDS by A11,A12,A13,AMI_1:131
   thus thesis by XBOOLE_1:2;
 end;
 
-Lm12: JUMP ((a,k1)<=0_goto 5) = {}
+Lm11: JUMP ((a,k1)<=0_goto 5) = {}
 proof
   set k2 = 5;
   set i = (a,k1)<=0_goto k2;
-  set X = { NIC(i,l) where l is Instruction-Location of SCMPDS:
-  not contradiction };
+
+  set X = { NIC(i,l) where l is Instruction-Location of SCMPDS: not
+  contradiction };
+
   hereby
+    set nl2 = 8;
+    set nl1 = 5;
     let x be set;
     assume
 A1: x in JUMP i;
-    set nl1 = 5;
-    set nl2 = 8;
-    set l1 = inspos nl1;
-    NIC(i,l1) in X;
-    then x in NIC(i,l1) by A1,SETFAM_1:def 1;
-    then consider s1 being State of SCMPDS such that
-A2: x = IC Following s1 and
-A3: IC s1 = l1 and
-A4: s1.l1 = i;
-    consider m1 being Element of NAT such that
-A5: m1 = IC s1 and
-A6: ICplusConst(s1,k2) = abs(m1+k2) by SCMPDS_2:def 20;
-A7: m1 = nl1 by A3,A5;
     set l2 = inspos nl2;
     NIC(i,l2) in X;
     then x in NIC(i,l2) by A1,SETFAM_1:def 1;
     then consider s2 being State of SCMPDS such that
-A8: x = IC Following s2 and
-A9: IC s2 = l2 and
-A10: s2.l2 = i;
+A2: x = IC Following s2 and
+A3: IC s2 = l2 and
+A4: s2.l2 = i;
+    set l1 = inspos nl1;
+    NIC(i,l1) in X;
+    then x in NIC(i,l1) by A1,SETFAM_1:def 1;
+    then consider s1 being State of SCMPDS such that
+A5: x = IC Following s1 and
+A6: IC s1 = l1 and
+A7: s1.l1 = i;
     consider m2 being Element of NAT such that
-A11: m2 = IC s2 and
-A12: ICplusConst(s2,k2) = abs(m2+k2) by SCMPDS_2:def 20;
-A13: m2 = nl2 by A9,A11;
+A8: m2 = IC s2 and
+A9: ICplusConst(s2,k2) = abs(m2+k2) by SCMPDS_2:def 20;
+    consider m1 being Element of NAT such that
+A10: m1 = IC s1 and
+A11: ICplusConst(s1,k2) = abs(m1+k2) by SCMPDS_2:def 20;
     per cases;
     suppose that
-A14:  s1.DataLoc(s1.a,k1) <= 0 and
-A15:  s2.DataLoc(s2.a,k1) <= 0;
-A16:  x = Exec(i,s1).IC SCMPDS by A2,A3,A4,AMI_1:131
-        .= abs(m1+k2) by A6,A14,SCMPDS_2:68;
-      x = Exec(i,s2).IC SCMPDS by A8,A9,A10,AMI_1:131
-        .= abs(m2+k2) by A12,A15,SCMPDS_2:68;
-      then nl1+k2 = nl2+k2 or nl1+k2 = -(nl2+k2) by A7,A13,A16,ABSVALUE:45;
+A12:  s1.DataLoc(s1.a,k1) <= 0 and
+A13:  s2.DataLoc(s2.a,k1) <= 0;
+A14:  x = Exec(i,s2).IC SCMPDS by A2,A3,A4,AMI_1:131
+        .= abs(m2+k2) by A9,A13,SCMPDS_2:68;
+      x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131
+        .= abs(m1+k2) by A11,A12,SCMPDS_2:68;
+
+      then nl1+k2 = nl2+k2 or nl1+k2 = -(nl2+k2) by A6,A10,A3,A8,A14,
+      ABSVALUE:45;
+
       hence x in {};
     end;
     suppose that
-A17:  s1.DataLoc(s1.a,k1) > 0 and
-A18:  s2.DataLoc(s2.a,k1) > 0;
-A19:  x = Exec(i,s1).IC SCMPDS by A2,A3,A4,AMI_1:131
-        .= Next l1 by A3,A17,SCMPDS_2:68;
-      x = Exec(i,s2).IC SCMPDS by A8,A9,A10,AMI_1:131
-        .= Next l2 by A9,A18,SCMPDS_2:68;
-      hence x in {} by A19;
+A15:  s1.DataLoc(s1.a,k1) > 0 and
+A16:  s2.DataLoc(s2.a,k1) > 0;
+A17:  x = Exec(i,s2).IC SCMPDS by A2,A3,A4,AMI_1:131
+        .= Next l2 by A3,A16,SCMPDS_2:68;
+      x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131
+        .= Next l1 by A6,A15,SCMPDS_2:68;
+      hence x in {} by A17;
     end;
     suppose that
-A20:  s1.DataLoc(s1.a,k1) > 0 and
-A21:  s2.DataLoc(s2.a,k1) <= 0;
+A18:  s1.DataLoc(s1.a,k1) > 0 and
+A19:  s2.DataLoc(s2.a,k1) <= 0;
       reconsider n1 = l1 as Element of NAT;
       set w1 = n1;
-A24:  x = Exec(i,s1).IC SCMPDS by A2,A3,A4,AMI_1:131
-        .= succ n1 by A3,A20,SCMPDS_2:68
+A20:  x = Exec(i,s2).IC SCMPDS by A2,A3,A4,AMI_1:131
+        .= abs(m2+k2) by A9,A19,SCMPDS_2:68;
+      x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131
+        .= succ n1 by A6,A18,SCMPDS_2:68
         .= n1 + 1;
-      x = Exec(i,s2).IC SCMPDS by A8,A9,A10,AMI_1:131
-        .= abs(m2+k2) by A12,A21,SCMPDS_2:68;
-      then w1+1 = m2+k2 or w1+1 = -(m2+k2) by A24,ABSVALUE:1;
-      hence x in {} by A13;
+      then w1+1 = m2+k2 or w1+1 = -(m2+k2) by A20,ABSVALUE:1;
+      hence x in {} by A3,A8;
     end;
     suppose that
-A25:  s1.DataLoc(s1.a,k1) <= 0 and
-A26:  s2.DataLoc(s2.a,k1) > 0;
+A21:  s1.DataLoc(s1.a,k1) <= 0 and
+A22:  s2.DataLoc(s2.a,k1) > 0;
       reconsider n2 = l2 as Element of NAT;
-      set w2 = n2;
-A29:  x = Exec(i,s1).IC SCMPDS by A2,A3,A4,AMI_1:131
-        .= abs(m1+k2) by A6,A25,SCMPDS_2:68;
-      x = Exec(i,s2).IC SCMPDS by A8,A9,A10,AMI_1:131
-        .= succ n2 by A9,A26,SCMPDS_2:68
+A23:  x = Exec(i,s2).IC SCMPDS by A2,A3,A4,AMI_1:131
+        .= succ n2 by A3,A22,SCMPDS_2:68
         .= n2 + 1;
-      then w2+1 = m1+k2 or w2+1 = -(m1+k2) by A29,ABSVALUE:1;
-      hence x in {} by A7;
+      set w2 = n2;
+      x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131
+        .= abs(m1+k2) by A11,A21,SCMPDS_2:68;
+      then w2+1 = m1+k2 or w2+1 = -(m1+k2) by A23,ABSVALUE:1;
+      hence x in {} by A6,A10;
     end;
   end;
   thus thesis by XBOOLE_1:2;
 end;
 
-Lm13: k2 <> 5 implies JUMP ((a,k1)<=0_goto k2) = {}
+Lm12: k2 <> 5 implies JUMP ((a,k1)<=0_goto k2) = {}
 proof
+  set i = (a,k1)<=0_goto k2;
+
+  set X = { NIC(i,l) where l is Instruction-Location of SCMPDS: not
+  contradiction };
+
   assume
 A1: k2 <> 5;
-  set i = (a,k1)<=0_goto k2;
-  set X = { NIC(i,l) where l is Instruction-Location of SCMPDS:
-  not contradiction };
   hereby
+    set x1 = -k2+abs(k2)+4;
     let x be set;
     assume
 A2: x in JUMP i;
-    set x1 = -k2+abs(k2)+4;
 A3: x1 > -k2+abs(k2)+0 by XREAL_1:8;
     then
 A4: x1 > 0 by ABSVALUE:44;
@@ -1291,6 +1311,7 @@ A4: x1 > 0 by ABSVALUE:44;
     set nl1 = abs(k2)+x1;
     set nl2 = nl1+x1;
     set l1 = inspos nl1;
+    set l2 = inspos nl2;
     NIC(i,l1) in X;
     then x in NIC(i,l1) by A2,SETFAM_1:def 1;
     then consider s1 being State of SCMPDS such that
@@ -1300,86 +1321,89 @@ A7: s1.l1 = i;
     consider m1 being Element of NAT such that
 A8: m1 = IC s1 and
 A9: ICplusConst(s1,k2) = abs(m1+k2) by SCMPDS_2:def 20;
-A10: m1 = nl1 by A6,A8;
-    set l2 = inspos nl2;
     NIC(i,l2) in X;
     then x in NIC(i,l2) by A2,SETFAM_1:def 1;
     then consider s2 being State of SCMPDS such that
-A11: x = IC Following s2 and
-A12: IC s2 = l2 and
-A13: s2.l2 = i;
+A10: x = IC Following s2 and
+A11: IC s2 = l2 and
+A12: s2.l2 = i;
     consider m2 being Element of NAT such that
-A14: m2 = IC s2 and
-A15: ICplusConst(s2,k2) = abs(m2+k2) by SCMPDS_2:def 20;
-A16: m2 = nl2 by A12,A14;
+A13: m2 = IC s2 and
+A14: ICplusConst(s2,k2) = abs(m2+k2) by SCMPDS_2:def 20;
     per cases;
     suppose that
-A18:  s1.DataLoc(s1.a,k1) <= 0 and
-A19:  s2.DataLoc(s2.a,k1) <= 0;
-A20:  x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131
-        .= abs(m1+k2) by A9,A18,SCMPDS_2:68;
-A21:  x = Exec(i,s2).IC SCMPDS by A11,A12,A13,AMI_1:131
-        .= abs(m2+k2) by A15,A19,SCMPDS_2:68;
+A15:  s1.DataLoc(s1.a,k1) <= 0 and
+A16:  s2.DataLoc(s2.a,k1) <= 0;
+A17:  x = Exec(i,s2).IC SCMPDS by A10,A11,A12,AMI_1:131
+        .= abs(m2+k2) by A14,A16,SCMPDS_2:68;
+A18:  x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131
+        .= abs(m1+k2) by A9,A15,SCMPDS_2:68;
       thus x in {}
       proof
-        per cases by A10,A16,A20,A21,ABSVALUE:45;
-        suppose nl1+k2 = nl2+k2;
+        per cases by A6,A8,A11,A13,A18,A17,ABSVALUE:45;
+        suppose
+          nl1+k2 = nl2+k2;
           hence thesis by A3,ABSVALUE:44;
         end;
-        suppose nl1+2-2+k2 = -(nl2+2-2+k2);
-          hence thesis by Lm5;
+        suppose
+          nl1+2-2+k2 = -(nl2+2-2+k2);
+          hence thesis by Lm4;
         end;
       end;
+    end;
+    suppose that
+A19:  s1.DataLoc(s1.a,k1) > 0 and
+A20:  s2.DataLoc(s2.a,k1) > 0;
+A21:  x = Exec(i,s2).IC SCMPDS by A10,A11,A12,AMI_1:131
+        .= Next l2 by A11,A20,SCMPDS_2:68;
+      x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131
+        .= Next l1 by A6,A19,SCMPDS_2:68;
+      hence x in {} by A3,A21,ABSVALUE:44;
     end;
     suppose that
 A22:  s1.DataLoc(s1.a,k1) > 0 and
-A23:  s2.DataLoc(s2.a,k1) > 0;
-A24:  x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131
-        .= Next l1 by A6,A22,SCMPDS_2:68;
-      x = Exec(i,s2).IC SCMPDS by A11,A12,A13,AMI_1:131
-        .= Next l2 by A12,A23,SCMPDS_2:68;
-      hence x in {} by A3,ABSVALUE:44,A24;
-    end;
-    suppose that
-A25:  s1.DataLoc(s1.a,k1) > 0 and
-A26:  s2.DataLoc(s2.a,k1) <= 0;
+A23:  s2.DataLoc(s2.a,k1) <= 0;
       reconsider n1 = l1 as Element of NAT;
       set w1 = n1;
-A29:  x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131
-        .= succ n1 by A6,A25,SCMPDS_2:68
+A24:  x = Exec(i,s2).IC SCMPDS by A10,A11,A12,AMI_1:131
+        .= abs(m2+k2) by A14,A23,SCMPDS_2:68;
+A25:  x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131
+        .= succ n1 by A6,A22,SCMPDS_2:68
         .= n1 + 1;
-A30:  x = Exec(i,s2).IC SCMPDS by A11,A12,A13,AMI_1:131
-        .= abs(m2+k2) by A15,A26,SCMPDS_2:68;
       thus x in {}
       proof
-        per cases by A29,A30,ABSVALUE:1;
-        suppose w1+1 = m2+k2;
-          then nl1+1 = nl1 + (x1 + k2) by A16;
-          hence thesis by Lm6;
+        per cases by A25,A24,ABSVALUE:1;
+        suppose
+          w1+1 = m2+k2;
+          then nl1+1 = nl1 + (x1 + k2) by A11,A13;
+          hence thesis by Lm5;
         end;
-        suppose w1+1 = -(m2+k2);
-          hence thesis by A4,A16,Lm7;
+        suppose
+          w1+1 = -(m2+k2);
+          hence thesis by A4,A11,A13,Lm6;
         end;
       end;
     end;
     suppose that
-A31:  s1.DataLoc(s1.a,k1) <= 0 and
-A32:  s2.DataLoc(s2.a,k1) > 0;
+A26:  s1.DataLoc(s1.a,k1) <= 0 and
+A27:  s2.DataLoc(s2.a,k1) > 0;
       reconsider n2 = l2 as Element of NAT;
-      set w2 = n2;
-A35:  x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131
-        .= abs(m1+k2) by A9,A31,SCMPDS_2:68;
-A36:  x = Exec(i,s2).IC SCMPDS by A11,A12,A13,AMI_1:131
-        .= succ n2 by A12,A32,SCMPDS_2:68
+A28:  x = Exec(i,s2).IC SCMPDS by A10,A11,A12,AMI_1:131
+        .= succ n2 by A11,A27,SCMPDS_2:68
         .= n2 + 1;
+      set w2 = n2;
+A29:  x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131
+        .= abs(m1+k2) by A9,A26,SCMPDS_2:68;
       thus x in {}
       proof
-        per cases by A35,A36,ABSVALUE:1;
-        suppose w2+1 = m1+k2;
-          hence thesis by A1,A10,Lm8;
+        per cases by A29,A28,ABSVALUE:1;
+        suppose
+          w2+1 = m1+k2;
+          hence thesis by A1,A6,A8,Lm7;
         end;
-        suppose w2+1 = -(m1+k2);
-          hence thesis by A4,A10,Lm9;
+        suppose
+          w2+1 = -(m1+k2);
+          hence thesis by A4,A6,A8,Lm8;
         end;
       end;
     end;
@@ -1387,103 +1411,108 @@ A36:  x = Exec(i,s2).IC SCMPDS by A11,A12,A13,AMI_1:131
   thus thesis by XBOOLE_1:2;
 end;
 
-Lm14: JUMP ((a,k1)>=0_goto 5) = {}
+Lm13: JUMP ((a,k1)>=0_goto 5) = {}
 proof
   set k2 = 5;
   set i = (a,k1)>=0_goto k2;
-  set X = { NIC(i,l) where l is Instruction-Location of SCMPDS:
-  not contradiction };
+
+  set X = { NIC(i,l) where l is Instruction-Location of SCMPDS: not
+  contradiction };
+
   hereby
+    set nl2 = 8;
+    set nl1 = 5;
     let x be set;
     assume
 A1: x in JUMP i;
-    set nl1 = 5;
-    set nl2 = 8;
-    set l1 = inspos nl1;
-    NIC(i,l1) in X;
-    then x in NIC(i,l1) by A1,SETFAM_1:def 1;
-    then consider s1 being State of SCMPDS such that
-A2: x = IC Following s1 and
-A3: IC s1 = l1 and
-A4: s1.l1 = i;
-    consider m1 being Element of NAT such that
-A5: m1 = IC s1 and
-A6: ICplusConst(s1,k2) = abs(m1+k2) by SCMPDS_2:def 20;
-A7: m1 = nl1 by A3,A5;
     set l2 = inspos nl2;
     NIC(i,l2) in X;
     then x in NIC(i,l2) by A1,SETFAM_1:def 1;
     then consider s2 being State of SCMPDS such that
-A8: x = IC Following s2 and
-A9: IC s2 = l2 and
-A10: s2.l2 = i;
+A2: x = IC Following s2 and
+A3: IC s2 = l2 and
+A4: s2.l2 = i;
+    set l1 = inspos nl1;
+    NIC(i,l1) in X;
+    then x in NIC(i,l1) by A1,SETFAM_1:def 1;
+    then consider s1 being State of SCMPDS such that
+A5: x = IC Following s1 and
+A6: IC s1 = l1 and
+A7: s1.l1 = i;
     consider m2 being Element of NAT such that
-A11: m2 = IC s2 and
-A12: ICplusConst(s2,k2) = abs(m2+k2) by SCMPDS_2:def 20;
-A13: m2 = nl2 by A9,A11;
+A8: m2 = IC s2 and
+A9: ICplusConst(s2,k2) = abs(m2+k2) by SCMPDS_2:def 20;
+    consider m1 being Element of NAT such that
+A10: m1 = IC s1 and
+A11: ICplusConst(s1,k2) = abs(m1+k2) by SCMPDS_2:def 20;
     per cases;
     suppose that
-A14:  s1.DataLoc(s1.a,k1) >= 0 and
-A15:  s2.DataLoc(s2.a,k1) >= 0;
-A16:  x = Exec(i,s1).IC SCMPDS by A2,A3,A4,AMI_1:131
-        .= abs(m1+k2) by A6,A14,SCMPDS_2:69;
-      x = Exec(i,s2).IC SCMPDS by A8,A9,A10,AMI_1:131
-        .= abs(m2+k2) by A12,A15,SCMPDS_2:69;
-      then nl1+2-2+k2 = nl2+2-2+k2 or
-      nl1+2-2+k2 = -(nl2+2-2+k2) by A7,A13,A16,ABSVALUE:45;
+A12:  s1.DataLoc(s1.a,k1) >= 0 and
+A13:  s2.DataLoc(s2.a,k1) >= 0;
+A14:  x = Exec(i,s2).IC SCMPDS by A2,A3,A4,AMI_1:131
+        .= abs(m2+k2) by A9,A13,SCMPDS_2:69;
+      x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131
+        .= abs(m1+k2) by A11,A12,SCMPDS_2:69;
+
+      then
+      nl1+2-2+k2 = nl2+2-2+k2 or nl1+2-2+k2 = -(nl2+2-2+k2) by A6,A10,A3,
+      A8,A14,ABSVALUE:45;
+
       hence x in {};
     end;
     suppose that
-A17:  s1.DataLoc(s1.a,k1) < 0 and
-A18:  s2.DataLoc(s2.a,k1) < 0;
-A19:  x = Exec(i,s1).IC SCMPDS by A2,A3,A4,AMI_1:131
-        .= Next l1 by A3,A17,SCMPDS_2:69;
-      x = Exec(i,s2).IC SCMPDS by A8,A9,A10,AMI_1:131
-        .= Next l2 by A9,A18,SCMPDS_2:69;
-      hence x in {} by A19;
+A15:  s1.DataLoc(s1.a,k1) < 0 and
+A16:  s2.DataLoc(s2.a,k1) < 0;
+A17:  x = Exec(i,s2).IC SCMPDS by A2,A3,A4,AMI_1:131
+        .= Next l2 by A3,A16,SCMPDS_2:69;
+      x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131
+        .= Next l1 by A6,A15,SCMPDS_2:69;
+      hence x in {} by A17;
     end;
     suppose that
-A20:  s1.DataLoc(s1.a,k1) < 0 and
-A21:  s2.DataLoc(s2.a,k1) >= 0;
+A18:  s1.DataLoc(s1.a,k1) < 0 and
+A19:  s2.DataLoc(s2.a,k1) >= 0;
       reconsider n1 = l1 as Element of NAT;
       set w1 = n1;
-A24:  x = Exec(i,s1).IC SCMPDS by A2,A3,A4,AMI_1:131
-        .= succ n1 by A3,A20,SCMPDS_2:69
+A20:  x = Exec(i,s2).IC SCMPDS by A2,A3,A4,AMI_1:131
+        .= abs(m2+k2) by A9,A19,SCMPDS_2:69;
+      x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131
+        .= succ n1 by A6,A18,SCMPDS_2:69
         .= n1 + 1;
-      x = Exec(i,s2).IC SCMPDS by A8,A9,A10,AMI_1:131
-        .= abs(m2+k2) by A12,A21,SCMPDS_2:69;
-      then w1+1 = m2+k2 or w1+1 = -(m2+k2) by A24,ABSVALUE:1;
-      hence x in {} by A13;
+      then w1+1 = m2+k2 or w1+1 = -(m2+k2) by A20,ABSVALUE:1;
+      hence x in {} by A3,A8;
     end;
     suppose that
-A25:  s1.DataLoc(s1.a,k1) >= 0 and
-A26:  s2.DataLoc(s2.a,k1) < 0;
+A21:  s1.DataLoc(s1.a,k1) >= 0 and
+A22:  s2.DataLoc(s2.a,k1) < 0;
       reconsider n2 = l2 as Element of NAT;
-      set w2 = n2;
-A29:  x = Exec(i,s1).IC SCMPDS by A2,A3,A4,AMI_1:131
-        .= abs(m1+k2) by A6,A25,SCMPDS_2:69;
-      x = Exec(i,s2).IC SCMPDS by A8,A9,A10,AMI_1:131
-        .= succ n2 by A9,A26,SCMPDS_2:69
+A23:  x = Exec(i,s2).IC SCMPDS by A2,A3,A4,AMI_1:131
+        .= succ n2 by A3,A22,SCMPDS_2:69
         .= n2 + 1;
-      then w2+1 = m1+k2 or w2+1 = -(m1+k2) by A29,ABSVALUE:1;
-      hence x in {} by A7;
+      set w2 = n2;
+      x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131
+        .= abs(m1+k2) by A11,A21,SCMPDS_2:69;
+      then w2+1 = m1+k2 or w2+1 = -(m1+k2) by A23,ABSVALUE:1;
+      hence x in {} by A6,A10;
     end;
   end;
   thus thesis by XBOOLE_1:2;
 end;
 
-Lm15: k2 <> 5 implies JUMP ((a,k1)>=0_goto k2) = {}
+Lm14: k2 <> 5 implies JUMP ((a,k1)>=0_goto k2) = {}
 proof
+  set i = (a,k1)>=0_goto k2;
+
+  set X = { NIC(i,l) where l is Instruction-Location of SCMPDS: not
+  contradiction };
+
   assume
 A1: k2 <> 5;
-  set i = (a,k1)>=0_goto k2;
-  set X = { NIC(i,l) where l is Instruction-Location of SCMPDS:
-  not contradiction };
   hereby
+    set x1 = -k2+abs(k2)+4;
     let x be set;
     assume
 A2: x in JUMP i;
-    set x1 = -k2+abs(k2)+4;
 A3: x1 > -k2+abs(k2)+0 by XREAL_1:8;
     then
 A4: x1 > 0 by ABSVALUE:44;
@@ -1491,6 +1520,7 @@ A4: x1 > 0 by ABSVALUE:44;
     set nl1 = abs(k2)+x1;
     set nl2 = nl1+x1;
     set l1 = inspos nl1;
+    set l2 = inspos nl2;
     NIC(i,l1) in X;
     then x in NIC(i,l1) by A2,SETFAM_1:def 1;
     then consider s1 being State of SCMPDS such that
@@ -1500,86 +1530,89 @@ A7: s1.l1 = i;
     consider m1 being Element of NAT such that
 A8: m1 = IC s1 and
 A9: ICplusConst(s1,k2) = abs(m1+k2) by SCMPDS_2:def 20;
-A10: m1 = nl1 by A6,A8;
-    set l2 = inspos nl2;
     NIC(i,l2) in X;
     then x in NIC(i,l2) by A2,SETFAM_1:def 1;
     then consider s2 being State of SCMPDS such that
-A11: x = IC Following s2 and
-A12: IC s2 = l2 and
-A13: s2.l2 = i;
+A10: x = IC Following s2 and
+A11: IC s2 = l2 and
+A12: s2.l2 = i;
     consider m2 being Element of NAT such that
-A14: m2 = IC s2 and
-A15: ICplusConst(s2,k2) = abs(m2+k2) by SCMPDS_2:def 20;
-A16: m2 = nl2 by A12,A14;
+A13: m2 = IC s2 and
+A14: ICplusConst(s2,k2) = abs(m2+k2) by SCMPDS_2:def 20;
     per cases;
     suppose that
-A18:  s1.DataLoc(s1.a,k1) >= 0 and
-A19:  s2.DataLoc(s2.a,k1) >= 0;
-A20:  x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131
-        .= abs(m1+k2) by A9,A18,SCMPDS_2:69;
-A21:  x = Exec(i,s2).IC SCMPDS by A11,A12,A13,AMI_1:131
-        .= abs(m2+k2) by A15,A19,SCMPDS_2:69;
+A15:  s1.DataLoc(s1.a,k1) >= 0 and
+A16:  s2.DataLoc(s2.a,k1) >= 0;
+A17:  x = Exec(i,s2).IC SCMPDS by A10,A11,A12,AMI_1:131
+        .= abs(m2+k2) by A14,A16,SCMPDS_2:69;
+A18:  x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131
+        .= abs(m1+k2) by A9,A15,SCMPDS_2:69;
       thus x in {}
       proof
-        per cases by A10,A16,A20,A21,ABSVALUE:45;
-        suppose nl1+2-2+k2 = nl2+2-2+k2;
+        per cases by A6,A8,A11,A13,A18,A17,ABSVALUE:45;
+        suppose
+          nl1+2-2+k2 = nl2+2-2+k2;
           hence thesis by A3,ABSVALUE:44;
         end;
-        suppose nl1+2-2+k2 = -(nl2+2-2+k2);
-          hence thesis by Lm5;
+        suppose
+          nl1+2-2+k2 = -(nl2+2-2+k2);
+          hence thesis by Lm4;
         end;
       end;
+    end;
+    suppose that
+A19:  s1.DataLoc(s1.a,k1) < 0 and
+A20:  s2.DataLoc(s2.a,k1) < 0;
+A21:  x = Exec(i,s2).IC SCMPDS by A10,A11,A12,AMI_1:131
+        .= Next l2 by A11,A20,SCMPDS_2:69;
+      x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131
+        .= Next l1 by A6,A19,SCMPDS_2:69;
+      hence x in {} by A3,A21,ABSVALUE:44;
     end;
     suppose that
 A22:  s1.DataLoc(s1.a,k1) < 0 and
-A23:  s2.DataLoc(s2.a,k1) < 0;
-A24:  x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131
-        .= Next l1 by A6,A22,SCMPDS_2:69;
-      x = Exec(i,s2).IC SCMPDS by A11,A12,A13,AMI_1:131
-        .= Next l2 by A12,A23,SCMPDS_2:69;
-      hence x in {} by A3,ABSVALUE:44,A24;
-    end;
-    suppose that
-A25:  s1.DataLoc(s1.a,k1) < 0 and
-A26:  s2.DataLoc(s2.a,k1) >= 0;
+A23:  s2.DataLoc(s2.a,k1) >= 0;
       reconsider n1 = l1 as Element of NAT;
       set w1 = n1;
-A29:  x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131
-        .= succ n1 by A6,A25,SCMPDS_2:69
+A24:  x = Exec(i,s2).IC SCMPDS by A10,A11,A12,AMI_1:131
+        .= abs(m2+k2) by A14,A23,SCMPDS_2:69;
+A25:  x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131
+        .= succ n1 by A6,A22,SCMPDS_2:69
         .= n1 + 1;
-A30:  x = Exec(i,s2).IC SCMPDS by A11,A12,A13,AMI_1:131
-        .= abs(m2+k2) by A15,A26,SCMPDS_2:69;
       thus x in {}
       proof
-        per cases by A29,A30,ABSVALUE:1;
-        suppose w1+1 = m2+k2;
-          then nl1+1 = nl1 + (x1 + k2) by A16;
-          hence thesis by Lm6;
+        per cases by A25,A24,ABSVALUE:1;
+        suppose
+          w1+1 = m2+k2;
+          then nl1+1 = nl1 + (x1 + k2) by A11,A13;
+          hence thesis by Lm5;
         end;
-        suppose w1+1 = -(m2+k2);
-          hence thesis by A4,A16,Lm7;
+        suppose
+          w1+1 = -(m2+k2);
+          hence thesis by A4,A11,A13,Lm6;
         end;
       end;
     end;
     suppose that
-A31:  s1.DataLoc(s1.a,k1) >= 0 and
-A32:  s2.DataLoc(s2.a,k1) < 0;
+A26:  s1.DataLoc(s1.a,k1) >= 0 and
+A27:  s2.DataLoc(s2.a,k1) < 0;
       reconsider n2 = l2 as Element of NAT;
-      set w2 = n2;
-A35:  x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131
-        .= abs(m1+k2) by A9,A31,SCMPDS_2:69;
-A36:  x = Exec(i,s2).IC SCMPDS by A11,A12,A13,AMI_1:131
-        .= succ n2 by A12,A32,SCMPDS_2:69
+A28:  x = Exec(i,s2).IC SCMPDS by A10,A11,A12,AMI_1:131
+        .= succ n2 by A11,A27,SCMPDS_2:69
         .= n2 + 1;
+      set w2 = n2;
+A29:  x = Exec(i,s1).IC SCMPDS by A5,A6,A7,AMI_1:131
+        .= abs(m1+k2) by A9,A26,SCMPDS_2:69;
       thus x in {}
       proof
-        per cases by A35,A36,ABSVALUE:1;
-        suppose w2+1 = m1+k2;
-          hence thesis by A1,A10,Lm8;
+        per cases by A29,A28,ABSVALUE:1;
+        suppose
+          w2+1 = m1+k2;
+          hence thesis by A1,A6,A8,Lm7;
         end;
-        suppose w2+1 = -(m1+k2);
-          hence thesis by A4,A10,Lm9;
+        suppose
+          w2+1 = -(m1+k2);
+          hence thesis by A4,A6,A8,Lm8;
         end;
       end;
     end;
@@ -1593,35 +1626,36 @@ registration
   coherence
   proof
     k2 = 5 or k2 <> 5;
-    hence thesis by Lm10,Lm11;
+    hence thesis by Lm9,Lm10;
   end;
   cluster JUMP ((a,k1)<=0_goto k2) -> empty;
   coherence
   proof
     k2 = 5 or k2 <> 5;
-    hence thesis by Lm12,Lm13;
+    hence thesis by Lm11,Lm12;
   end;
   cluster JUMP ((a,k1)>=0_goto k2) -> empty;
   coherence
   proof
     k2 = 5 or k2 <> 5;
-    hence thesis by Lm14,Lm15;
+    hence thesis by Lm13,Lm14;
   end;
 end;
 
-theorem Th29:
+theorem Th24:
   SUCC(l) = NAT
 proof
   thus SUCC(l) c= NAT;
   let x be set;
-  assume x in NAT;
+  set X = { NIC(i,l) \ JUMP i where i is Element of the Instructions of SCMPDS
+  : not contradiction };
+  assume
+  x in NAT;
   then reconsider x as Instruction-Location of SCMPDS by AMI_1:def 4;
-  set X = { NIC(i,l) \ JUMP i where
-  i is Element of the Instructions of SCMPDS: not contradiction };
   set i = goto (locnum x - locnum l);
-  NIC(i,l) = { abs(locnum x - locnum l + locnum l) } by Th14
+  NIC(i,l) = { abs(locnum x - locnum l + locnum l) } by Th9
     .= { locnum x } by ABSVALUE:def 1
-    .= {x} by Th8;
+    .= {x} by Th3;
   then
 A1: x in NIC(i,l) by TARSKI:def 1;
   NIC(i,l) \ JUMP i in X;
@@ -1632,11 +1666,15 @@ registration
   cluster SCMPDS -> non InsLoc-antisymmetric;
   coherence
   proof
+    SUCC(inspos(2)) = NAT by Th24;
+    then
+A1: inspos(2) <= inspos(1) by AMISTD_1:59;
+    SUCC(inspos(1)) = NAT by Th24;
+    then
+A2: inspos(1) <= inspos(2) by AMISTD_1:59;
     assume
-A1: SCMPDS is InsLoc-antisymmetric;
-    SUCC(inspos(1)) = NAT & SUCC(inspos(2)) = NAT by Th29;
-    then inspos(1) <= inspos(2) & inspos(2) <= inspos(1) by AMISTD_1:59;
-    hence thesis by A1,AMISTD_1:def 9;
+    SCMPDS is InsLoc-antisymmetric;
+    hence thesis by A2,A1,AMISTD_1:def 9;
   end;
 end;
 

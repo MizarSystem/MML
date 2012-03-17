@@ -30,14 +30,14 @@ definition
   Linear_Space_of_ComplexSequences means
 :: CSSPACE3:def 1
 
-  for x being set holds x in it
-  iff (x in the_set_of_ComplexSequences & seq_id(x) is absolutely_summable);
+  for x being set holds x in it iff
+  x in the_set_of_ComplexSequences & seq_id(x) is absolutely_summable;
 end;
 
 theorem :: CSSPACE3:1
-  for c be Complex, seq be Complex_Sequence, rseq be Real_Sequence st
-  seq is convergent & ( for i be Element of NAT holds rseq.i = |.(seq.i-c).| )
-  holds ( rseq is convergent & lim rseq = |.(lim seq-c).| );
+  for c be Complex, seq be Complex_Sequence, rseq be Real_Sequence
+st seq is convergent & ( for i be Element of NAT holds rseq.i = |.(seq.i-c).| )
+  holds rseq is convergent & lim rseq = |.(lim seq-c).|;
 
 registration
   cluster the_set_of_l1ComplexSequences -> non empty;
@@ -48,82 +48,76 @@ registration
 end;
 
 registration
-  cluster CLSStruct (# the_set_of_l1ComplexSequences,
-      Zero_(the_set_of_l1ComplexSequences,Linear_Space_of_ComplexSequences),
-      Add_(the_set_of_l1ComplexSequences,Linear_Space_of_ComplexSequences),
-      Mult_(the_set_of_l1ComplexSequences,Linear_Space_of_ComplexSequences) #)
-    -> Abelian add-associative right_zeroed right_complementable
-    ComplexLinearSpace-like;
+  cluster CLSStruct (# the_set_of_l1ComplexSequences, Zero_(
+      the_set_of_l1ComplexSequences,Linear_Space_of_ComplexSequences), Add_(
+      the_set_of_l1ComplexSequences,Linear_Space_of_ComplexSequences), Mult_(
+the_set_of_l1ComplexSequences,Linear_Space_of_ComplexSequences) #) -> Abelian
+    add-associative right_zeroed right_complementable ComplexLinearSpace-like;
 end;
 
 definition
   func cl_norm -> Function of the_set_of_l1ComplexSequences, REAL means
 :: CSSPACE3:def 2
 
-  for x be set st x in the_set_of_l1ComplexSequences holds
-  it.x = Sum |.seq_id x.|;
+for x be set st x in the_set_of_l1ComplexSequences holds it.x = Sum |.seq_id x
+  .|;
 end;
 
 registration
-  let X be non empty set, Z be Element of X, A be BinOp of X,
-  M be Function of [:COMPLEX, X:], X, N be Function of X, REAL;
+  let X be non empty set, Z be Element of X, A be BinOp of X, M be Function of
+  [:COMPLEX, X:], X, N be Function of X, REAL;
   cluster CNORMSTR (# X, Z, A, M, N #) -> non empty;
 end;
 
 canceled 2;
 
 theorem :: CSSPACE3:4
-  for l be CNORMSTR st the CLSStruct of l is ComplexLinearSpace
-  holds l is ComplexLinearSpace;
+  for l be CNORMSTR st the CLSStruct of l is ComplexLinearSpace holds l
+  is ComplexLinearSpace;
 
 theorem :: CSSPACE3:5
-
-for cseq be Complex_Sequence st (for n be Element of NAT holds cseq.n=0c) holds
-  cseq is absolutely_summable & Sum |.cseq.| = 0;
+  for cseq be Complex_Sequence st (for n be Element of NAT holds
+  cseq.n=0c) holds cseq is absolutely_summable & Sum |.cseq.| = 0;
 
 theorem :: CSSPACE3:6
-  for cseq be Complex_Sequence st
-  ( cseq is absolutely_summable & Sum |.cseq.| = 0 ) holds
-  for n be Element of NAT holds cseq.n = 0c;
+  for cseq be Complex_Sequence st cseq is absolutely_summable & Sum
+  |.cseq.| = 0 holds for n be Element of NAT holds cseq.n = 0c;
 
 theorem :: CSSPACE3:7
-  CNORMSTR (# the_set_of_l1ComplexSequences,
-    Zero_(the_set_of_l1ComplexSequences,Linear_Space_of_ComplexSequences),
-    Add_(the_set_of_l1ComplexSequences,Linear_Space_of_ComplexSequences),
-    Mult_(the_set_of_l1ComplexSequences,Linear_Space_of_ComplexSequences),
-    cl_norm #) is ComplexLinearSpace;
+  CNORMSTR (# the_set_of_l1ComplexSequences, Zero_(
+    the_set_of_l1ComplexSequences,Linear_Space_of_ComplexSequences), Add_(
+    the_set_of_l1ComplexSequences,Linear_Space_of_ComplexSequences), Mult_(
+the_set_of_l1ComplexSequences,Linear_Space_of_ComplexSequences), cl_norm #) is
+  ComplexLinearSpace;
 
 definition
   func Complex_l1_Space -> non empty CNORMSTR equals
 :: CSSPACE3:def 3
-  CNORMSTR (# the_set_of_l1ComplexSequences,
-    Zero_(the_set_of_l1ComplexSequences,Linear_Space_of_ComplexSequences),
-    Add_(the_set_of_l1ComplexSequences,Linear_Space_of_ComplexSequences),
-    Mult_(the_set_of_l1ComplexSequences,Linear_Space_of_ComplexSequences),
-    cl_norm #);
+  CNORMSTR (#
+    the_set_of_l1ComplexSequences, Zero_(the_set_of_l1ComplexSequences,
+    Linear_Space_of_ComplexSequences), Add_(the_set_of_l1ComplexSequences,
+    Linear_Space_of_ComplexSequences), Mult_(the_set_of_l1ComplexSequences,
+    Linear_Space_of_ComplexSequences), cl_norm #);
 end;
 
 begin :: Complex_l1_Space is Banach
 
 theorem :: CSSPACE3:8
   the carrier of Complex_l1_Space = the_set_of_l1ComplexSequences &
-  ( for x be set holds x is VECTOR of Complex_l1_Space
-  iff x is Complex_Sequence & seq_id x is absolutely_summable ) &
-  0.Complex_l1_Space = CZeroseq &
-  ( for u be VECTOR of Complex_l1_Space holds u =seq_id u ) &
-  ( for u,v be VECTOR of Complex_l1_Space holds u+v =seq_id(u)+seq_id(v) ) &
-  ( for p be Complex for u be VECTOR of Complex_l1_Space holds
-  p*u =p(#)seq_id(u) ) & ( for u be VECTOR of Complex_l1_Space holds
-  -u = -seq_id u & seq_id(-u) = -seq_id(u) ) &
-  ( for u,v be VECTOR of Complex_l1_Space holds u-v =seq_id(u)-seq_id v ) &
-
-( for v be VECTOR of Complex_l1_Space holds seq_id v is absolutely_summable ) &
-  ( for v be VECTOR of Complex_l1_Space holds ||.v.|| = Sum |.seq_id v.| );
+( for x be set holds x is VECTOR of Complex_l1_Space iff x is Complex_Sequence
+  & seq_id x is absolutely_summable ) & 0.Complex_l1_Space = CZeroseq & ( for u
+  be VECTOR of Complex_l1_Space holds u =seq_id u ) & ( for u,v be VECTOR of
+Complex_l1_Space holds u+v =seq_id(u)+seq_id(v) ) & ( for p be Complex for u be
+  VECTOR of Complex_l1_Space holds p*u =p(#)seq_id(u) ) & ( for u be VECTOR of
+  Complex_l1_Space holds -u = -seq_id u & seq_id(-u) = -seq_id(u) ) & ( for u,v
+  be VECTOR of Complex_l1_Space holds u-v =seq_id(u)-seq_id v ) & ( for v be
+  VECTOR of Complex_l1_Space holds seq_id v is absolutely_summable ) & for v be
+  VECTOR of Complex_l1_Space holds ||.v.|| = Sum |.seq_id v.|;
 
 theorem :: CSSPACE3:9
-  for x, y being Point of Complex_l1_Space, p be Complex holds
-  ( ||.x.|| = 0 iff x = 0.Complex_l1_Space ) & 0 <= ||.x.|| &
-  ||.x+y.|| <= ||.x.|| + ||.y.|| & ||. p*x .|| = |.p.| * ||.x.||;
+  for x, y being Point of Complex_l1_Space, p be Complex holds (
+||.x.|| = 0 iff x = 0.Complex_l1_Space ) & 0 <= ||.x.|| & ||.x+y.|| <= ||.x.||
+  + ||.y.|| & ||. p*x .|| = |.p.| * ||.x.||;
 
 registration
   cluster Complex_l1_Space -> ComplexNormSpace-like ComplexLinearSpace-like
@@ -134,7 +128,6 @@ definition
   let X be non empty CNORMSTR, x, y be Point of X;
   func dist(x,y) -> Real equals
 :: CSSPACE3:def 4
-
   ||.x - y.||;
 end;
 
@@ -144,9 +137,9 @@ definition
   attr seqt is CCauchy means
 :: CSSPACE3:def 5
 
-  for r1 be Real st r1 > 0 ex k1 be Element of NAT st
-  for n1, m1 be Element of NAT st n1 >= k1 & m1 >= k1 holds
-  dist(seqt.n1, seqt.m1) < r1;
+  for r1 be Real st r1 > 0 ex k1 be Element
+of NAT st for n1, m1 be Element of NAT st n1 >= k1 & m1 >= k1 holds dist(seqt.
+  n1, seqt.m1) < r1;
 end;
 
 notation
@@ -159,11 +152,11 @@ reserve NRM for non empty ComplexNormSpace;
 reserve seq for sequence of NRM;
 
 theorem :: CSSPACE3:10
-  seq is Cauchy_sequence_by_Norm iff for r be Real st r > 0
-  ex k be Element of NAT st for n, m be Element of NAT st
-  n >= k & m >= k holds ||.(seq.n) - (seq.m).|| < r;
+  seq is Cauchy_sequence_by_Norm iff for r be Real st r > 0 ex k
+  be Element of NAT st for n, m be Element of NAT st n >= k & m >= k holds ||.(
+  seq.n) - (seq.m).|| < r;
 
 theorem :: CSSPACE3:11
-  for vseq be sequence of Complex_l1_Space st
-  vseq is Cauchy_sequence_by_Norm holds vseq is convergent;
+  for vseq be sequence of Complex_l1_Space st vseq is
+  Cauchy_sequence_by_Norm holds vseq is convergent;
 

@@ -7,6 +7,7 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="TARSKI"/>
@@ -24,34 +25,34 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="95"/>
+<Func kind="K" nr="103"/>
 </Typ>
 </ArgTypes>
 <Typ kind="M" nr="6">
 <Cluster/>
-<Func kind="K" nr="123"/>
+<Func kind="K" nr="131"/>
 </Typ>
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4">
-<Func kind="K" nr="95"/>
+<Func kind="K" nr="103"/>
 </Adjective>
 <Adjective nr="5">
-<Func kind="K" nr="123"/>
+<Func kind="K" nr="131"/>
 </Adjective>
 <Adjective nr="5">
-<Func kind="K" nr="124"/>
+<Func kind="K" nr="132"/>
 </Adjective>
 <Adjective nr="6"/>
-<Adjective nr="30"/>
-<Adjective nr="32">
+<Adjective nr="31"/>
+<Adjective nr="33">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
 </RCluster>
 <FCluster aid="CQC_LANG" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="164"/>
+<Func kind="K" nr="172"/>
 <Cluster>
 <Adjective nr="10" value="false"/>
 </Cluster>

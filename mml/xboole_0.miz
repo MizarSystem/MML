@@ -16,13 +16,14 @@ begin
 
 reserve X, Y, Z, x, y, z for set;
 
-scheme Separation { A()-> set, P[set] } :
-  ex X being set st for x being set holds x in X iff x in A() & P[x]
-proof
+scheme
+  Separation { A()-> set, P[set] } : ex X being set st for x being set holds x
+  in X iff x in A() & P[x] proof
   defpred Q[set,set] means $1 = $2 & P[$2];
 A1: for x,y,z st Q[x,y] & Q[x,z] holds y = z;
   consider X such that
-A2: for x holds x in X iff ex y st y in A() & Q[y,x] from TARSKI:sch 1(A1);
+A2: for x holds x in X iff ex y st y in A() & Q[y,x]
+    from TARSKI:sch 1(A1);
   take X;
   let x;
   x in X iff ex y st y in A() & y = x & P[x] by A2;
@@ -32,7 +33,7 @@ end;
 definition
   let X be set;
   attr X is empty means
-  :Def5:
+  :Def1:
   not ex x being set st x in X;
 end;
 
@@ -40,8 +41,8 @@ registration
   cluster empty set;
   existence
   proof
-    consider X;
     defpred P[set] means contradiction;
+    consider X;
     consider Y such that
 A1: x in Y iff x in X & P[x] from Separation;
     take Y;
@@ -55,7 +56,7 @@ definition
   coherence;
   let X,Y be set;
   func X \/ Y -> set means
-  :Def2:
+  :Def3:
   x in it iff x in X or x in Y;
   existence
   proof
@@ -63,72 +64,74 @@ definition
     let x;
     thus x in union {X,Y} implies x in X or x in Y
     proof
-      assume x in union {X,Y};
+      assume
+      x in union {X,Y};
       then ex X0 being set st x in X0 & X0 in {X,Y} by TARSKI:def 4;
       hence thesis by TARSKI:def 2;
     end;
-    assume x in X or x in Y;
+    assume
+    x in X or x in Y;
     then consider X0 being set such that
-A2: X0 = X or X0 = Y and
-A3: x in X0;
-    X0 in {X,Y} by A2,TARSKI:def 2;
-    hence thesis by A3,TARSKI:def 4;
+A1: X0 = X or X0 = Y and
+A2: x in X0;
+    X0 in {X,Y} by A1,TARSKI:def 2;
+    hence thesis by A2,TARSKI:def 4;
   end;
   uniqueness
   proof
     let A1, A2 be set such that
-A4: x in A1 iff x in X or x in Y and
-A5: x in A2 iff x in X or x in Y;
+A3: x in A1 iff x in X or x in Y and
+A4: x in A2 iff x in X or x in Y;
     now
       let x;
-      x in A1 iff x in X or x in Y by A4;
-      hence x in A1 iff x in A2 by A5;
+      x in A1 iff x in X or x in Y by A3;
+      hence x in A1 iff x in A2 by A4;
     end;
     hence thesis by TARSKI:2;
   end;
   commutativity;
   idempotence;
   func X /\ Y -> set means
-  :Def3:
+  :Def4:
   x in it iff x in X & x in Y;
   existence
   proof
     defpred P[set] means $1 in Y;
-    thus ex Z being set st for x holds x in Z iff x in X & P[x]
-    from Separation;
+    thus ex Z being set st for x holds x in Z iff x in X & P[x] from
+    Separation;
   end;
   uniqueness
   proof
     let A1, A2 be set such that
-A6: x in A1 iff x in X & x in Y and
-A7: x in A2 iff x in X & x in Y;
+A5: x in A1 iff x in X & x in Y and
+A6: x in A2 iff x in X & x in Y;
     now
       let x;
-      x in A1 iff x in X & x in Y by A6;
-      hence x in A1 iff x in A2 by A7;
+      x in A1 iff x in X & x in Y by A5;
+      hence x in A1 iff x in A2 by A6;
     end;
     hence thesis by TARSKI:2;
   end;
   commutativity;
   idempotence;
   func X \ Y -> set means
-  :Def4:
+  :Def5:
   x in it iff x in X & not x in Y;
   existence
   proof
     defpred P[set] means not $1 in Y;
-    thus ex Z being set st for x holds x in Z iff x in X & P[x]
-    from Separation;
+    thus ex Z being set st for x holds x in Z iff x in X & P[x] from
+    Separation;
   end;
   uniqueness
   proof
     let A1, A2 be set such that
-A8: x in A1 iff x in X & not x in Y and
-A9: x in A2 iff x in X & not x in Y;
+A7: x in A1 iff x in X & not x in Y and
+A8: x in A2 iff x in X & not x in Y;
     now
       let x;
-      x in A1 iff x in X & not x in Y by A8;
-      hence x in A1 iff x in A2 by A9;
+      x in A1 iff x in X & not x in Y by A7;
+      hence x in A1 iff x in A2 by A8;
     end;
     hence thesis by TARSKI:2;
   end;
@@ -137,7 +140,6 @@ end;
 definition
   let X, Y be set;
   func X \+\ Y -> set equals
-
   (X \ Y) \/ (Y \ X);
   correctness;
   commutativity;
@@ -154,23 +156,24 @@ definition
     let X,Y;
     assume
 A1: X c= Y;
-    assume X <> Y;
-    assume Y c= X;
+    assume
+    X <> Y;
+    assume
+    Y c= X;
     then for x holds x in X iff x in Y by A1,TARSKI:def 3;
     hence thesis by TARSKI:2;
   end;
   pred X,Y are_c=-comparable means
-
   X c= Y or Y c= X;
   reflexivity;
   symmetry;
   redefine pred X = Y means
-
   X c= Y & Y c= X;
   compatibility
   proof
     thus X = Y implies X c= Y & Y c= X;
-    assume X c= Y & Y c= X;
+    assume
+    X c= Y & Y c= X;
     then for x holds x in X iff x in Y by TARSKI:def 3;
     hence thesis by TARSKI:2;
   end;
@@ -184,8 +187,8 @@ end;
 theorem
   x in X \+\ Y iff not (x in X iff x in Y)
 proof
-  x in X \+\ Y iff x in X \ Y or x in Y \ X by Def2;
-  hence thesis by Def4;
+  x in X \+\ Y iff x in X \ Y or x in Y \ X by Def3;
+  hence thesis by Def5;
 end;
 
 theorem
@@ -196,8 +199,8 @@ A1: not x in X iff (x in Y iff x in Z);
   now
     let x;
     x in X iff x in Y & not x in Z or x in Z & not x in Y by A1;
-    then x in X iff x in Y \ Z or x in Z \ Y by Def4;
-    hence x in X iff x in Y \+\ Z by Def2;
+    then x in X iff x in Y \ Z or x in Z \ Y by Def5;
+    hence x in X iff x in Y \+\ Z by Def3;
   end;
   hence thesis by TARSKI:2;
 end;
@@ -211,21 +214,24 @@ registration
   let x1 be set;
   cluster { x1 } -> non empty;
   coherence
-  proof x1 in {x1} by TARSKI:def 1;
-   hence ex x being set st x in {x1};
+  proof
+    x1 in {x1} by TARSKI:def 1;
+    hence ex x being set st x in {x1};
   end;
   let x2 be set;
   cluster { x1, x2 } -> non empty;
   coherence
-  proof x1 in {x1,x2} by TARSKI:def 2;
-   hence ex x being set st x in {x1,x2};
+  proof
+    x1 in {x1,x2} by TARSKI:def 2;
+    hence ex x being set st x in {x1,x2};
   end;
 end;
 
 registration
   cluster non empty set;
   existence
-  proof consider x;
+  proof
+    consider x;
     take {x};
     thus thesis;
   end;
@@ -237,8 +243,8 @@ registration
   coherence
   proof
     consider x being set such that
-A1: x in D by Def5;
-    x in D \/ X by A1,Def2;
+A1: x in D by Def1;
+    x in D \/ X by A1,Def3;
     hence ex x being set st x in D \/ X;
   end;
   cluster X \/ D -> non empty;
@@ -246,28 +252,30 @@ A1: x in D by Def5;
 end;
 
 Lm1: X is empty implies X = {}
-  proof
-    assume not ex x st x in X;
-     then x in {} iff x in X by Def5;
-    hence thesis by TARSKI:2;
-  end;
+proof
+  assume
+  not ex x st x in X;
+  then x in {} iff x in X by Def1;
+  hence thesis by TARSKI:2;
+end;
 
 theorem Th3:
   X meets Y iff ex x st x in X & x in Y
 proof
   hereby
-    assume X meets Y;
+    assume
+    X meets Y;
     then X /\ Y <> {} by Def7;
     then X /\ Y is not empty by Lm1;
     then consider x such that
-A1: x in X /\ Y by Def5;
+A1: x in X /\ Y by Def1;
     take x;
-    thus x in X & x in Y by A1,Def3;
+    thus x in X & x in Y by A1,Def4;
   end;
   given x such that
 A2: x in X & x in Y;
-  x in X /\ Y by A2,Def3;
-  then X /\ Y <> {} by Def5;
+  x in X /\ Y by A2,Def4;
+  then X /\ Y <> {} by Def1;
   hence thesis by Def7;
 end;
 
@@ -275,48 +283,51 @@ theorem
   X meets Y iff ex x st x in X /\ Y
 proof
   hereby
-    assume X meets Y;
+    assume
+    X meets Y;
     then X /\ Y <> {} by Def7;
     then X /\ Y is not empty by Lm1;
     then consider x such that
-A1: x in X /\ Y by Def5;
+A1: x in X /\ Y by Def1;
     take x;
     thus x in X /\ Y by A1;
   end;
-  assume ex x st x in X /\ Y;
-  then X /\ Y <> {} by Def5;
+  assume
+  ex x st x in X /\ Y;
+  then X /\ Y <> {} by Def1;
   hence thesis by Def7;
 end;
 
 theorem
-  X misses Y & x in X \/ Y implies
-  (x in X & not x in Y) or (x in Y & not x in X) by Def2,Th3;
+  X misses Y & x in X \/ Y implies x in X & not x in Y or x in Y & not x
+  in X by Def3,Th3;
 
-scheme Extensionality { X,Y() -> set, P[set] } : X() = Y()
+scheme
+  Extensionality { X,Y() -> set, P[set] } : X() = Y()
 provided
-A1: for x holds x in X() iff P[x]
-and
+A1: for x holds x in X() iff P[x] and
 A2: for x holds x in Y() iff P[x]
 proof
-A3: x in X() implies x in Y()
+A3: x in Y() implies x in X()
   proof
-    assume x in X();
-    then P[x] by A1;
-    hence thesis by A2;
-  end;
-  x in Y() implies x in X()
-  proof
-    assume x in Y();
+    assume
+    x in Y();
     then P[x] by A2;
     hence thesis by A1;
+  end;
+  x in X() implies x in Y()
+  proof
+    assume
+    x in X();
+    then P[x] by A1;
+    hence thesis by A2;
   end;
   hence thesis by A3,TARSKI:2;
 end;
 
-scheme SetEq { P[set] } : for X1,X2 being set st
-  (for x being set holds x in X1 iff P[x]) &
-  (for x being set holds x in X2 iff P[x]) holds X1 = X2
-proof
+scheme
+  SetEq { P[set] } : for X1,X2 being set st (for x being set holds x in X1 iff
+  P[x]) & (for x being set holds x in X2 iff P[x]) holds X1 = X2 proof
   let X1,X2 be set such that
 A1: for x being set holds x in X1 iff P[x] and
 A2: for x being set holds x in X2 iff P[x];
@@ -331,21 +342,21 @@ theorem
   X c< Y implies ex x st x in Y & not x in X
 proof
   assume
-A1: X c< Y;
-  then
-A2: not for x holds x in X iff x in Y by TARSKI:2;
-  X c= Y by A1,Def8;
-  hence thesis by A2,TARSKI:def 3;
+  X c< Y;
+  then ( not for x holds x in X iff x in Y)& X c= Y by Def8,TARSKI:2;
+  hence thesis by TARSKI:def 3;
 end;
 
 :: 2008.08.07, A.T.
 
 theorem
- X <> {} implies ex x st x in X
-  proof assume
-Z:  X <> {};
-   assume not ex x st x in X;
-    then X is empty by Def5;
-   hence thesis by Z,Lm1;
-  end;
+  X <> {} implies ex x st x in X
+proof
+  assume
+A1: X <> {};
+  assume
+  not ex x st x in X;
+  then X is empty by Def1;
+  hence thesis by A1,Lm1;
+end;
 

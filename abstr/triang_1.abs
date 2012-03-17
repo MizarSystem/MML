@@ -6,22 +6,20 @@
 
 environ
 
- vocabularies FINSEQ_1, ORDERS_2, BOOLE, WELLORD1, FINSUB_1, AMI_1, RELAT_1,
-      RELAT_2, FINSET_1, SETFAM_1, CARD_1, FUNCT_3, FUNCT_1, ORDERS_1,
-      FINSEQ_4, SUBSET_1, ARYTM_1, TARSKI, PROB_1, PBOOLE, FUNCT_2, QC_LANG1,
-      ORDINAL2, FINSEQ_2, PRALG_1, CQC_LANG, TRIANG_1, FUNCOP_1, ARYTM;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0,
-      RELAT_1, RELAT_2, RELSET_1, SETFAM_1, ORDERS_1, DOMAIN_1, NAT_1, FUNCT_1,
-      PARTFUN1, FUNCT_2, FUNCT_3, FINSET_1, FINSEQ_1, FINSEQ_2, FINSUB_1,
-      STRUCT_0, WELLORD1, TOLER_1, SEQM_3, PBOOLE, ORDERS_2, FINSEQOP,
-      FUNCOP_1, XXREAL_0;
+ vocabularies FINSEQ_1, ORDERS_2, BOOLE, WELLORD1, FINSUB_1, RELAT_1, RELAT_2,
+      FINSET_1, CARD_1, FUNCT_1, ORDERS_1, FINSEQ_4, PROB_1, PBOOLE, FUNCT_2,
+      QC_LANG1, ORDINAL2, FINSEQ_2, PRALG_1, CQC_LANG, TRIANG_1, FUNCOP_1,
+      ARYTM;
+ notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, RELAT_1, RELAT_2,
+      SETFAM_1, ORDERS_1, DOMAIN_1, NAT_1, FUNCT_1, PARTFUN1, FUNCT_2,
+      FINSET_1, FINSEQ_1, FINSEQ_2, FINSUB_1, STRUCT_0, WELLORD1, SEQM_3,
+      PBOOLE, ORDERS_2, FINSEQOP, FUNCOP_1, XXREAL_0, PRE_POLY;
  constructors SETFAM_1, WELLORD2, DOMAIN_1, FUNCT_3, FINSUB_1, XXREAL_0, NAT_1,
       TOLER_1, FINSEQOP, PBOOLE, ORDERS_2, SEQM_3, SEQ_1, XREAL_0, MEMBERED,
-      RELSET_1;
+      RELSET_1, PRE_POLY;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, ORDINAL1, FINSET_1,
-      FINSUB_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1, STRUCT_0,
-      ORDERS_2, MEMBERED, VALUED_0, CARD_1, RELSET_1, GOBOARD1, FUNCT_1,
-      FUNCT_2;
+      FINSUB_1, NUMBERS, XXREAL_0, NAT_1, FINSEQ_1, STRUCT_0, ORDERS_2,
+      MEMBERED, VALUED_0, CARD_1, RELSET_1, FUNCT_1, FUNCT_2, PRE_POLY;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
 
 
@@ -29,18 +27,6 @@ begin
 
 reserve A,x,y,z,u for set,
   k,l,m,n for Element of NAT;
-
-scheme :: TRIANG_1:sch 1
- Regr1 { n() -> Nat, P[set] }: for k st k <= n() holds P[k]
-provided
- P[n()]
-and
- for k st k < n() & P[k+1] holds P[k];
-
-registration
-  let n be Nat;
-  cluster Seg (n+1) -> non empty;
-end;
 
 registration
   let X be non empty set, R be Order of X;
@@ -50,89 +36,26 @@ end;
 theorem :: TRIANG_1:1
   {}|_2 A = {};
 
-registration
-  let X be set;
-  cluster non empty Subset of Fin X;
-end;
-
-registration
-  let X be non empty set;
-  cluster non empty with_non-empty_elements Subset of Fin X;
-end;
-
-registration
-  let X be non empty set,
-  F be non empty with_non-empty_elements Subset of Fin X;
-  cluster non empty Element of F;
-end;
-
-registration
-  let X be non empty set;
-  cluster with_non-empty_element Subset of Fin X;
-end;
-
-definition
-  let X be non empty set, R be Order of X, A be Subset of X;
-  redefine func R|_2 A -> Order of A;
-end;
-
-scheme :: TRIANG_1:sch 2
- SubFinite{D()->set, A()->Subset of D(), P[set]}: P[A()]
-provided
- A() is finite
-and
- P[{}(D())]
-and
- for x being Element of D(), B being Subset of D()
-st x in A() & B c= A() & P[B] holds P[B \/ {x}];
-
 theorem :: TRIANG_1:2
-  for F being non empty Poset, A be Subset of F st A is finite & A <> {} &
-  for B,C being Element of F st B in A & C in A holds B <= C or C <= B
-  ex m being Element of F st m in A & for C being Element of F st C in A
-  holds m <= C;
+  for F being non empty Poset, A be Subset of F st A is finite & A <> {}
+  & for B,C being Element of F st B in A & C in A holds B <= C or C <= B ex m
+being Element of F st m in A & for C being Element of F st C in A holds m <= C;
 
 registration
-  let X be non empty set, F be with_non-empty_element Subset of Fin X;
-  cluster finite non empty Element of F;
-end;
-
-registration
-  let P be non empty Poset, A be non empty finite Subset of P,
-  x be Element of P;
+  let P be non empty Poset, A be non empty finite Subset of P, x be Element of
+  P;
   cluster InitSegm(A,x) -> finite;
 end;
-
-theorem :: TRIANG_1:3
-  for A,B being finite set st A c= B & card A = card B holds A = B;
-
-definition
-  let X be set, A be finite Subset of X, R be Order of X;
-  assume
- R linearly_orders A;
-  canceled;
-  func SgmX (R,A) -> FinSequence of X means
-:: TRIANG_1:def 2
-
-  rng it = A & for n,m be Nat
-  st n in dom it & m in dom it & n < m holds
-  it/.n <> it/.m & [it/.n,it/.m] in R;
-end;
-
-theorem :: TRIANG_1:4
-  for X be set, A be finite Subset of X, R be Order of X,
-  f be FinSequence of X st rng f = A &
-  for n,m be Nat st n in dom f & m in dom f & n < m
-  holds f/.n <> f/.m & [f/.n, f/.m] in R holds f = SgmX(R,A);
 
 begin :: Abstract Complexes
 
 definition
+ canceled;
   let C be non empty Poset;
   func symplexes(C) -> Subset of Fin the carrier of C equals
-:: TRIANG_1:def 3
-  {A where A is Element of Fin the carrier of C :
-  the InternalRel of C linearly_orders A};
+:: TRIANG_1:def 2
+  {A where A is
+  Element of Fin the carrier of C : the InternalRel of C linearly_orders A};
 end;
 
 registration
@@ -142,6 +65,8 @@ end;
 
 reserve C for non empty Poset;
 
+canceled 2;
+
 theorem :: TRIANG_1:5
   for x be Element of C holds {x} in symplexes(C);
 
@@ -149,29 +74,14 @@ theorem :: TRIANG_1:6
   {} in symplexes(C);
 
 theorem :: TRIANG_1:7
-  for x, s be set st x c= s & s in symplexes(C) holds x in symplexes(C);
+  for x, s be set st x c= s & s in symplexes(C) holds x in
+  symplexes(C);
 
-registration
-  let X be set, F be non empty Subset of Fin X;
-  cluster -> finite Element of F;
-end;
-
-definition
-  let X be set, F be non empty Subset of Fin X;
-  redefine mode Element of F -> Subset of X;
-end;
-
-theorem :: TRIANG_1:8
-  for X being set, A being finite Subset of X, R being Order of X
-  st R linearly_orders A holds SgmX(R,A) is one-to-one;
-
-theorem :: TRIANG_1:9
-  for X being set, A being finite Subset of X, R being Order of X
-  st R linearly_orders A holds len(SgmX(R, A)) = card A;
+canceled 2;
 
 theorem :: TRIANG_1:10
-  for C be non empty Poset, A being non empty Element of symplexes(C)
-  st card A = n holds dom(SgmX(the InternalRel of C, A)) = Seg n;
+  for C be non empty Poset, A being non empty Element of symplexes
+  (C) st card A = n holds dom(SgmX(the InternalRel of C, A)) = Seg n;
 
 registration
   let C be non empty Poset;
@@ -187,10 +97,10 @@ end;
 definition
   let IT be SetSequence;
   attr IT is lower_non-empty means
-:: TRIANG_1:def 4
+:: TRIANG_1:def 3
 
-  for n be Nat st IT.n is non empty holds
-  for m be Nat st m < n holds IT.m is non empty;
+  for n be Nat st IT.n is non empty
+  holds for m be Nat st m < n holds IT.m is non empty;
 end;
 
 registration
@@ -200,9 +110,10 @@ end;
 definition
   let X be SetSequence;
   func FuncsSeq X -> SetSequence means
-:: TRIANG_1:def 5
+:: TRIANG_1:def 4
 
-  for n be Nat holds it.n = Funcs(X.(n+1),X.n);
+  for n be Nat holds it.n = Funcs(
+  X.(n+1),X.n);
 end;
 
 registration
@@ -215,17 +126,16 @@ definition
   let n be Nat;
   let f be Element of Funcs(Seg n,Seg(n+1));
   func @ f -> FinSequence of REAL equals
-:: TRIANG_1:def 6
-
+:: TRIANG_1:def 5
   f;
 end;
 
 definition
   func NatEmbSeq -> SetSequence means
-:: TRIANG_1:def 7
+:: TRIANG_1:def 6
 
-  for n be Nat holds
-  it.n = {f where f is Element of Funcs(Seg n,Seg(n+1)) : @ f is increasing};
+  for n be Nat holds it.n = {f
+  where f is Element of Funcs(Seg n,Seg(n+1)) : @ f is increasing};
 end;
 
 registration
@@ -244,18 +154,18 @@ definition
 end;
 
 definition
-  struct TriangStr (# SkeletonSeq -> SetSequence,
-    FacesAssign -> ManySortedFunction of
-    NatEmbSeq, FuncsSeq(the SkeletonSeq) #);
+  struct TriangStr (# SkeletonSeq -> SetSequence, FacesAssign ->
+    ManySortedFunction of NatEmbSeq, FuncsSeq(the SkeletonSeq) #);
 end;
 
 definition
   let T be TriangStr;
   canceled;
   attr T is lower_non-empty means
-:: TRIANG_1:def 9
+:: TRIANG_1:def 8
 
-  the SkeletonSeq of T is lower_non-empty;
+  the SkeletonSeq of T is
+  lower_non-empty;
 end;
 
 registration
@@ -268,8 +178,8 @@ registration
 end;
 
 registration
-  let S be lower_non-empty SetSequence,
-  F be ManySortedFunction of NatEmbSeq, FuncsSeq S;
+  let S be lower_non-empty SetSequence, F be ManySortedFunction of NatEmbSeq,
+  FuncsSeq S;
   cluster TriangStr (#S,F#) -> lower_non-empty;
 end;
 
@@ -287,29 +197,27 @@ definition
 end;
 
 definition
-  let T be lower_non-empty TriangStr, n be Nat, x be Symplex of T,n+1,
-  f be Face of n;
+  let T be lower_non-empty TriangStr, n be Nat, x be Symplex of T,n+1, f be
+  Face of n;
   assume
  (the SkeletonSeq of T).(n+1) <> {};
   func face (x,f) -> Symplex of T,n means
-:: TRIANG_1:def 10
+:: TRIANG_1:def 9
 
-  for F,G be Function st F = (the FacesAssign of T).n & G = F.f holds
-  it = G.x;
+  for F,G be Function st F = (
+  the FacesAssign of T).n & G = F.f holds it = G.x;
 end;
 
 definition
   let C be non empty Poset;
   func Triang C -> lower_non-empty strict TriangStr means
-:: TRIANG_1:def 11
-  (the SkeletonSeq of it).0 = { {} } &
-  (for n be Nat st n > 0 holds (the SkeletonSeq of it).n =
-  { SgmX(the InternalRel of C, A)
-  where A is non empty Element of symplexes(C) : card A = n }) & for n be Nat,
-  f be Face of n, s be Element of (the SkeletonSeq of it).(n+1)
-  st s in (the SkeletonSeq of it).(n+1)
-  for A be non empty Element of symplexes(C)
-  st SgmX(the InternalRel of C, A) = s
-  holds face (s,f) = (SgmX(the InternalRel of C, A)) * f;
+:: TRIANG_1:def 10
+  (the SkeletonSeq of
+  it).0 = { {} } & (for n be Nat st n > 0 holds (the SkeletonSeq of it).n = {
+  SgmX(the InternalRel of C, A) where A is non empty Element of symplexes(C) :
+card A = n }) & for n be Nat, f be Face of n, s be Element of (the SkeletonSeq
+  of it).(n+1) st s in (the SkeletonSeq of it).(n+1) for A be non empty Element
+of symplexes(C) st SgmX(the InternalRel of C, A) = s holds face (s,f) = (SgmX(
+  the InternalRel of C, A)) * f;
 end;
 

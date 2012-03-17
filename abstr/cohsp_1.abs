@@ -7,14 +7,14 @@
 environ
 
  vocabularies FUNCT_1, TARSKI, FINSET_1, COH_SP, BOOLE, RELAT_1, CLASSES1,
-      TOLER_1, FINSUB_1, CARD_1, ARYTM_1, FUNCOP_1, PBOOLE, MCART_1, PROB_1,
-      ZF_LANG, CARD_3, FINSEQ_1, FUNCT_5, LATTICES, MONOID_0, COHSP_1, ARYTM;
+      FINSUB_1, CARD_1, ARYTM_1, FUNCOP_1, PBOOLE, MCART_1, PROB_1, ZF_LANG,
+      CARD_3, FINSEQ_1, FUNCT_5, LATTICES, MONOID_0, COHSP_1, ARYTM;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS,
       REAL_1, NAT_1, MCART_1, RELAT_1, FUNCT_1, FINSEQ_1, FINSET_1, FINSUB_1,
-      TOLER_1, CLASSES1, COH_SP, PBOOLE, CARD_3, PARTFUN1, FUNCT_2, FUNCOP_1;
+      CLASSES1, COH_SP, PBOOLE, CARD_3, PARTFUN1, FUNCT_2, FUNCOP_1;
  constructors FINSUB_1, REAL_1, NAT_1, CARD_3, PBOOLE, BORSUK_1, COH_SP;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, PARTFUN1, FINSET_1, FINSUB_1,
-      XREAL_0, NAT_1, FINSEQ_1, ORDINAL1, CARD_1;
+      XREAL_0, NAT_1, FINSEQ_1, ORDINAL1, CARD_1, RELAT_1;
  requirements NUMERALS, BOOLE, SUBSET;
 
 
@@ -25,8 +25,8 @@ definition
   redefine attr X is binary_complete means
 :: COHSP_1:def 1
 
-  for A being set st for a,b being set st a in A & b in A holds a \/ b in X
-  holds union A in X;
+  for A being set st for a,b
+  being set st a in A & b in A holds a \/ b in X holds union A in X;
 end;
 
 registration
@@ -37,17 +37,17 @@ definition
   let X be set;
   func FlatCoh X -> set equals
 :: COHSP_1:def 2
-
   CohSp id X;
   func Sub_of_Fin X -> Subset of X means
 :: COHSP_1:def 3
 
-   for x being set holds x in it iff x in X & x is finite;
+  for x being set holds x in it
+  iff x in X & x is finite;
 end;
 
 theorem :: COHSP_1:1
-  for X,x being set holds
-  x in FlatCoh X iff x = {} or ex y being set st x = {y} & y in X;
+  for X,x being set holds x in FlatCoh X iff x = {} or ex y being
+  set st x = {y} & y in X;
 
 theorem :: COHSP_1:2
   for X being set holds union FlatCoh X = X;
@@ -71,14 +71,11 @@ theorem :: COHSP_1:4
   Web {{}} = {};
 
 scheme :: COHSP_1:sch 1
- MinimalElementwrtIncl { a, A() -> set, P[set] }:
-  ex a being set st a in A() & P[a] &
-  for b being set st b in A() & P[b] & b c= a holds b = a
+
+  MinimalElementwrtIncl { a, A() -> set, P[set] }: ex a being set st a in A()
+  & P[a] & for b being set st b in A() & P[b] & b c= a holds b = a
 provided
- a() in A()
-and
- P[a()]
-and
+ a() in A() & P[a()] and
  a() is finite;
 
 registration
@@ -90,12 +87,12 @@ definition
   let X be set;
   attr X is c=directed means
 :: COHSP_1:def 4
-  for Y being finite Subset of X ex a being set st union Y c= a & a in X;
+  for Y being finite Subset of X ex a being set st
+  union Y c= a & a in X;
   attr X is c=filtered means
 :: COHSP_1:def 5
-
-  for Y being finite Subset of X
-  ex a being set st (for y being set st y in Y holds a c= y) & a in X;
+  for Y being finite Subset of X ex a being set st
+  (for y being set st y in Y holds a c= y) & a in X;
 end;
 
 registration
@@ -104,22 +101,20 @@ registration
 end;
 
 theorem :: COHSP_1:5
-  for X being set st X is c=directed
-  for a,b being set st a in X & b in X ex c being set st a \/ b c= c & c in X;
+  for X being set st X is c=directed for a,b being set st a in X &
+  b in X ex c being set st a \/ b c= c & c in X;
 
 theorem :: COHSP_1:6
-  for X being non empty set st
-  for a,b being set st a in X & b in X ex c being set st a \/ b c= c & c in X
-  holds X is c=directed;
+  for X being non empty set st for a,b being set st a in X & b in X
+  ex c being set st a \/ b c= c & c in X holds X is c=directed;
 
 theorem :: COHSP_1:7
-  for X being set st X is c=filtered
-  for a,b being set st a in X & b in X ex c being set st c c= a /\ b & c in X;
+  for X being set st X is c=filtered for a,b being set st a in X & b in
+  X ex c being set st c c= a /\ b & c in X;
 
 theorem :: COHSP_1:8
-  for X being non empty set st
-  for a,b being set st a in X & b in X ex c being set st c c= a /\ b & c in X
-  holds X is c=filtered;
+  for X being non empty set st for a,b being set st a in X & b in X
+  ex c being set st c c= a /\ b & c in X holds X is c=filtered;
 
 theorem :: COHSP_1:9
   for x being set holds {x} is c=directed c=filtered;
@@ -159,9 +154,8 @@ definition
 end;
 
 theorem :: COHSP_1:13
-  for X being non empty set, Y being set st
-  X is c=directed & Y c= union X & Y is finite
-  ex Z being set st Z in X & Y c= Z;
+  for X being non empty set, Y being set st X is c=directed & Y c=
+  union X & Y is finite ex Z being set st Z in X & Y c= Z;
 
 notation
   let X be set;
@@ -174,7 +168,8 @@ definition
   attr X is d.union-closed means
 :: COHSP_1:def 7
 
-  for A being Subset of X st A is c=directed holds union A in X;
+  for A being Subset of X st A is
+  c=directed holds union A in X;
 end;
 
 registration
@@ -184,8 +179,8 @@ end;
 canceled;
 
 theorem :: COHSP_1:15
-
-for C being Coherence_Space, A being c=directed Subset of C holds union A in C;
+  for C being Coherence_Space, A being c=directed Subset of C
+  holds union A in C;
 
 registration
   cluster -> d.union-closed Coherence_Space;
@@ -204,24 +199,24 @@ definition
   let X, Y be set;
   pred X includes_lattice_of Y means
 :: COHSP_1:def 8
-  for a,b being set st a in Y & b in Y holds a /\ b in X & a \/ b in X;
+  for a,b being set st a in Y & b in Y
+  holds a /\ b in X & a \/ b in X;
 end;
 
 theorem :: COHSP_1:16
-  for X being non empty set st X includes_lattice_of X holds
-  X is c=directed c=filtered;
+  for X being non empty set st X includes_lattice_of X holds X is
+  c=directed c=filtered;
 
 definition
   let X, x, y be set;
   pred X includes_lattice_of x, y means
 :: COHSP_1:def 9
-
   X includes_lattice_of {x, y};
 end;
 
 theorem :: COHSP_1:17
-  for X,x,y being set holds X includes_lattice_of x, y iff
-  x in X & y in X & x /\ y in X & x \/ y in X;
+  for X,x,y being set holds X includes_lattice_of x, y iff x in X
+  & y in X & x /\ y in X & x \/ y in X;
 
 begin :: Continuous, Stable, and Linear Functions
 
@@ -230,14 +225,13 @@ definition
   attr f is union-distributive means
 :: COHSP_1:def 10
 
-   for A being Subset of dom f st union A in dom f holds
-  f.union A = union (f.:A);
+  for A being Subset of dom f st
+  union A in dom f holds f.union A = union (f.:A);
   attr f is d.union-distributive means
 :: COHSP_1:def 11
 
-  for
-  A being Subset of dom f st A is c=directed & union A in dom f holds
-  f.union A = union (f.:A);
+  for A being Subset of dom f st
+  A is c=directed & union A in dom f holds f.union A = union (f.:A);
 end;
 
 definition
@@ -245,13 +239,13 @@ definition
   attr f is c=-monotone means
 :: COHSP_1:def 12
 
-  for
-  a, b being set st a in dom f & b in dom f & a c= b holds f.a c= f.b;
+  for a, b being set st a in dom f & b in
+  dom f & a c= b holds f.a c= f.b;
   attr f is cap-distributive means
 :: COHSP_1:def 13
 
-   for a,b being set st dom f includes_lattice_of a, b holds
-  f.(a/\b) = f.a /\ f.b;
+  for a,b being set st dom f
+  includes_lattice_of a, b holds f.(a/\b) = f.a /\ f.b;
 end;
 
 registration
@@ -260,9 +254,8 @@ registration
 end;
 
 theorem :: COHSP_1:18
-  for f being Function st f is union-distributive
-  for x,y being set st x in dom f & y in dom f & x \/ y in dom f
-  holds f.(x \/ y) = (f.x) \/ (f.y);
+  for f being Function st f is union-distributive for x,y being set st x
+  in dom f & y in dom f & x \/ y in dom f holds f.(x \/ y) = (f.x) \/ (f.y);
 
 theorem :: COHSP_1:19
   for f being Function st f is union-distributive holds f.{} = {};
@@ -286,7 +279,8 @@ definition
   attr f is U-continuous means
 :: COHSP_1:def 14
 
-   dom f is d.union-closed & f is d.union-distributive;
+  dom f is d.union-closed & f is
+  d.union-distributive;
 end;
 
 definition
@@ -294,7 +288,8 @@ definition
   attr f is U-stable means
 :: COHSP_1:def 15
 
-   dom f is multiplicative & f is U-continuous cap-distributive;
+  dom f is multiplicative & f is
+  U-continuous cap-distributive;
 end;
 
 definition
@@ -347,28 +342,25 @@ theorem :: COHSP_1:20
   for X being set holds union Fin X = X;
 
 theorem :: COHSP_1:21
-  for f being U-continuous Function st dom f is subset-closed
-  for a being set st a in dom f holds f.a = union (f.:Fin a);
+  for f being U-continuous Function st dom f is subset-closed for
+  a being set st a in dom f holds f.a = union (f.:Fin a);
 
 theorem :: COHSP_1:22
-  for f being Function st dom f is subset-closed holds
-  f is U-continuous iff dom f is d.union-closed & f is c=-monotone &
-  for a, y being set st a in dom f & y in f.a
-  ex b being set st b is finite & b c= a & y in f.b;
+  for f being Function st dom f is subset-closed holds f is
+  U-continuous iff dom f is d.union-closed & f is c=-monotone & for a, y being
+set st a in dom f & y in f.a ex b being set st b is finite & b c= a & y in f.b;
 
 theorem :: COHSP_1:23
-  for f being Function st dom f is subset-closed d.union-closed holds
-  f is U-stable iff f is c=-monotone &
-  for a, y being set st a in dom f & y in f.a
-  ex b being set st b is finite & b c= a & y in f.b &
-  for c being set st c c= a & y in f.c holds b c= c;
+  for f being Function st dom f is subset-closed d.union-closed
+holds f is U-stable iff f is c=-monotone & for a, y being set st a in dom f & y
+in f.a ex b being set st b is finite & b c= a & y in f.b & for c being set st c
+  c= a & y in f.c holds b c= c;
 
 theorem :: COHSP_1:24
-  for f being Function st dom f is subset-closed d.union-closed holds
-  f is U-linear iff f is c=-monotone &
-  for a, y being set st a in dom f & y in f.a
-  ex x being set st x in a & y in f.{x} &
-  for b being set st b c= a & y in f.b holds x in b;
+  for f being Function st dom f is subset-closed d.union-closed
+holds f is U-linear iff f is c=-monotone & for a, y being set st a in dom f & y
+in f.a ex x being set st x in a & y in f.{x} & for b being set st b c= a & y in
+  f.b holds x in b;
 
 begin :: Graph of Continuous Function
 
@@ -377,8 +369,8 @@ definition
   func graph f -> set means
 :: COHSP_1:def 17
 
-  for x being set holds x in it iff
-  ex y being finite set, z being set st x = [y,z] & y in dom f & z in f.y;
+  for x being set holds x in it iff ex y
+  being finite set, z being set st x = [y,z] & y in dom f & z in f.y;
 end;
 
 definition
@@ -393,42 +385,39 @@ registration
 end;
 
 theorem :: COHSP_1:25
-  for f being Function, x,y being set holds
-  [x,y] in graph f iff x is finite & x in dom f & y in f.x;
+  for f being Function, x,y being set holds [x,y] in graph f iff x
+  is finite & x in dom f & y in f.x;
 
 theorem :: COHSP_1:26
-  for f being c=-monotone Function
-  for a,b being set st b in dom f & a c= b & b is finite
-  for y being set st [a,y] in graph f holds [b,y] in graph f;
+  for f being c=-monotone Function for a,b being set st b in dom f
+& a c= b & b is finite for y being set st [a,y] in graph f holds [b,y] in graph
+  f;
 
 theorem :: COHSP_1:27
   for C1, C2 being Coherence_Space for f being Function of C1,C2
-  for a being Element of C1 for y1,y2 being set
-  st [a,y1] in graph f & [a,y2] in graph f holds {y1,y2} in C2;
+for a being Element of C1 for y1,y2 being set st [a,y1] in graph f & [a,y2] in
+  graph f holds {y1,y2} in C2;
 
 theorem :: COHSP_1:28
-  for C1, C2 being Coherence_Space for f being c=-monotone Function of C1,C2
-  for a,b being Element of C1 st a \/ b in C1
-  for y1,y2 being set st [a,y1] in graph f & [b,y2] in graph f holds {y1,y2} in
-  C2;
+  for C1, C2 being Coherence_Space for f being c=-monotone Function of
+C1,C2 for a,b being Element of C1 st a \/ b in C1 for y1,y2 being set st [a,y1]
+  in graph f & [b,y2] in graph f holds {y1,y2} in C2;
 
 theorem :: COHSP_1:29
-  for C1, C2 being Coherence_Space
-  for f,g being U-continuous Function of C1,C2
-  st graph f = graph g holds f = g;
+  for C1, C2 being Coherence_Space for f,g being U-continuous
+  Function of C1,C2 st graph f = graph g holds f = g;
 
 theorem :: COHSP_1:30
-  for C1, C2 being Coherence_Space for X being Subset of [:C1, union C2:] st
-  (for x being set st x in X holds x`1 is finite) &
-  (for a,b being finite Element of C1 st a c= b
-  for y being set st [a,y] in X holds [b,y] in X) &
-  (for a being finite Element of C1 for y1,y2 being set
-  st [a,y1] in X & [a,y2] in X holds {y1,y2} in C2)
-  ex f being U-continuous Function of C1,C2 st X = graph f;
+  for C1, C2 being Coherence_Space for X being Subset of [:C1, union C2
+  :] st (for x being set st x in X holds x`1 is finite) & (for a,b being finite
+Element of C1 st a c= b for y being set st [a,y] in X holds [b,y] in X) & (for
+  a being finite Element of C1 for y1,y2 being set st [a,y1] in X & [a,y2] in X
+  holds {y1,y2} in C2) ex f being U-continuous Function of C1,C2 st X = graph f
+;
 
 theorem :: COHSP_1:31
-  for C1, C2 being Coherence_Space for f being U-continuous Function of C1,C2
-  for a being Element of C1 holds f.a = (graph f).:Fin a;
+  for C1, C2 being Coherence_Space for f being U-continuous Function of
+  C1,C2 for a being Element of C1 holds f.a = (graph f).:Fin a;
 
 begin :: Trace of Stable Function
 
@@ -437,15 +426,15 @@ definition
   func Trace f -> set means
 :: COHSP_1:def 18
 
-  for x being set holds x in it iff
-  ex a, y being set st x = [a,y] & a in dom f & y in f.a &
-  for b being set st b in dom f & b c= a & y in f.b holds a = b;
+  for x being set holds x in it iff ex a, y
+being set st x = [a,y] & a in dom f & y in f.a & for b being set st b in dom f
+  & b c= a & y in f.b holds a = b;
 end;
 
 theorem :: COHSP_1:32
-  for f being Function for a, y being set holds
-  [a,y] in Trace f iff a in dom f & y in f.a &
-  for b being set st b in dom f & b c= a & y in f.b holds a = b;
+  for f being Function for a, y being set holds [a,y] in Trace f
+  iff a in dom f & y in f.a & for b being set st b in dom f & b c= a & y in f.b
+  holds a = b;
 
 definition
   let C1, C2 be non empty set;
@@ -463,73 +452,67 @@ theorem :: COHSP_1:33
   Trace f c= graph f;
 
 theorem :: COHSP_1:34
-  for f being U-continuous Function st dom f is subset-closed
-  for a, y being set st [a,y] in Trace f holds a is finite;
+  for f being U-continuous Function st dom f is subset-closed for
+  a, y being set st [a,y] in Trace f holds a is finite;
 
 theorem :: COHSP_1:35
-  for C1, C2 being Coherence_Space for f being c=-monotone Function of C1,C2
-  for a1,a2 being set st a1 \/ a2 in C1
-  for y1,y2 being set st [a1,y1] in Trace f & [a2,y2] in Trace f
-  holds {y1,y2} in C2;
+  for C1, C2 being Coherence_Space for f being c=-monotone
+Function of C1,C2 for a1,a2 being set st a1 \/ a2 in C1 for y1,y2 being set st
+  [a1,y1] in Trace f & [a2,y2] in Trace f holds {y1,y2} in C2;
 
 theorem :: COHSP_1:36
-  for C1, C2 being Coherence_Space
-  for f being cap-distributive Function of C1,C2
-  for a1,a2 being set st a1 \/ a2 in C1
-  for y being set st [a1,y] in Trace f & [a2,y] in Trace f holds a1 = a2;
+  for C1, C2 being Coherence_Space for f being cap-distributive
+Function of C1,C2 for a1,a2 being set st a1 \/ a2 in C1 for y being set st [a1,
+  y] in Trace f & [a2,y] in Trace f holds a1 = a2;
 
 theorem :: COHSP_1:37
-  for C1, C2 being Coherence_Space
-  for f,g being U-stable Function of C1,C2 st Trace f c= Trace g
-  for a being Element of C1 holds f.a c= g.a;
+  for C1, C2 being Coherence_Space for f,g being U-stable Function
+  of C1,C2 st Trace f c= Trace g for a being Element of C1 holds f.a c= g.a;
 
 theorem :: COHSP_1:38
-  for C1, C2 being Coherence_Space for f,g being U-stable Function of C1,C2
-  st Trace f = Trace g holds f = g;
+  for C1, C2 being Coherence_Space for f,g being U-stable Function
+  of C1,C2 st Trace f = Trace g holds f = g;
 
 theorem :: COHSP_1:39
-  for C1, C2 being Coherence_Space for X being Subset of [:C1, union C2:] st
-  (for x being set st x in X holds x`1 is finite) &
-  (for a,b being Element of C1 st a \/ b in C1
-  for y1,y2 being set st [a,y1] in X & [b,y2] in X holds {y1,y2} in C2) &
-  (for a,b being Element of C1 st a \/ b in C1
-  for y being set st [a,y] in X & [b,y] in X holds a = b)
-  ex f being U-stable Function of C1,C2 st X = Trace f;
+  for C1, C2 being Coherence_Space for X being Subset of [:C1,
+union C2:] st (for x being set st x in X holds x`1 is finite) & (for a,b being
+Element of C1 st a \/ b in C1 for y1,y2 being set st [a,y1] in X & [b,y2] in X
+holds {y1,y2} in C2) & (for a,b being Element of C1 st a \/ b in C1 for y being
+set st [a,y] in X & [b,y] in X holds a = b) ex f being U-stable Function of C1,
+  C2 st X = Trace f;
 
 theorem :: COHSP_1:40
-  for C1, C2 being Coherence_Space for f being U-stable Function of C1,C2
-  for a being Element of C1 holds f.a = (Trace f).:Fin a;
+  for C1, C2 being Coherence_Space for f being U-stable Function of C1,
+  C2 for a being Element of C1 holds f.a = (Trace f).:Fin a;
 
 theorem :: COHSP_1:41
-  for C1,C2 being Coherence_Space, f being U-stable Function of C1,C2
-  for a being Element of C1, y being set holds
-  y in f.a iff ex b being Element of C1 st [b,y] in Trace f & b c= a;
+  for C1,C2 being Coherence_Space, f being U-stable Function of C1
+  ,C2 for a being Element of C1, y being set holds y in f.a iff ex b being
+  Element of C1 st [b,y] in Trace f & b c= a;
 
 theorem :: COHSP_1:42
-  for C1, C2 being Coherence_Space
-  ex f being U-stable Function of C1, C2 st Trace f = {};
+  for C1, C2 being Coherence_Space ex f being U-stable Function of C1,
+  C2 st Trace f = {};
 
 theorem :: COHSP_1:43
-  for C1, C2 being Coherence_Space
-  for a being finite Element of C1, y being set st y in union C2
-  ex f being U-stable Function of C1, C2 st Trace f = {[a,y]};
+  for C1, C2 being Coherence_Space for a being finite Element of
+  C1, y being set st y in union C2 ex f being U-stable Function of C1, C2 st
+  Trace f = {[a,y]};
 
 theorem :: COHSP_1:44
-  for C1, C2 being Coherence_Space for a being Element of C1, y being set
-  for f being U-stable Function of C1, C2 st Trace f = {[a,y]}
-  for b being Element of C1 holds
-  (a c= b implies f.b = {y}) & (not a c= b implies f.b = {});
+  for C1, C2 being Coherence_Space for a being Element of C1, y being
+  set for f being U-stable Function of C1, C2 st Trace f = {[a,y]} for b being
+Element of C1 holds (a c= b implies f.b = {y}) & (not a c= b implies f.b = {});
 
 theorem :: COHSP_1:45
-  for C1, C2 being Coherence_Space for f being U-stable Function of C1,C2
-  for X being Subset of Trace f
-  ex g being U-stable Function of C1, C2 st Trace g = X;
+  for C1, C2 being Coherence_Space for f being U-stable Function
+  of C1,C2 for X being Subset of Trace f ex g being U-stable Function of C1, C2
+  st Trace g = X;
 
 theorem :: COHSP_1:46
-  for C1, C2 being Coherence_Space for A being set st
-  for x,y being set st x in A & y in A
-  ex f being U-stable Function of C1,C2 st x \/ y = Trace f
-  ex f being U-stable Function of C1,C2 st union A = Trace f;
+  for C1, C2 being Coherence_Space for A being set st for x,y
+being set st x in A & y in A ex f being U-stable Function of C1,C2 st x \/ y =
+  Trace f ex f being U-stable Function of C1,C2 st union A = Trace f;
 
 definition
   let C1, C2 be Coherence_Space;
@@ -546,47 +529,46 @@ registration
 end;
 
 theorem :: COHSP_1:47
-  for C1,C2 being Coherence_Space, f being U-stable Function of C1,C2 holds
-  Trace f c= [:Sub_of_Fin C1, union C2:];
+  for C1,C2 being Coherence_Space, f being U-stable Function of C1
+  ,C2 holds Trace f c= [:Sub_of_Fin C1, union C2:];
 
 theorem :: COHSP_1:48
-  for C1,C2 being Coherence_Space holds
-  union StabCoh(C1,C2) = [:Sub_of_Fin C1, union C2:];
+  for C1,C2 being Coherence_Space holds union StabCoh(C1,C2) = [:
+  Sub_of_Fin C1, union C2:];
 
 theorem :: COHSP_1:49
-  for C1,C2 being Coherence_Space
-  for a,b being finite Element of C1, y1,y2 being set holds
-  [[a,y1],[b,y2]] in Web StabCoh(C1,C2) iff
-  not a \/ b in C1 & y1 in union C2 & y2 in union C2 or
-  [y1,y2] in Web C2 & (y1 = y2 implies a = b);
+  for C1,C2 being Coherence_Space for a,b being finite Element of
+C1, y1,y2 being set holds [[a,y1],[b,y2]] in Web StabCoh(C1,C2) iff not a \/ b
+in C1 & y1 in union C2 & y2 in union C2 or [y1,y2] in Web C2 & (y1 = y2 implies
+  a = b);
 
 begin :: Trace of Linear Functions
 
 theorem :: COHSP_1:50
-  for C1, C2 being Coherence_Space
-  for f being U-stable Function of C1,C2 holds f is U-linear iff
-  for a,y being set st [a,y] in Trace f ex x being set st a = {x};
+  for C1, C2 being Coherence_Space for f being U-stable Function
+  of C1,C2 holds f is U-linear iff for a,y being set st [a,y] in Trace f ex x
+  being set st a = {x};
 
 definition
   let f be Function;
   func LinTrace f -> set means
 :: COHSP_1:def 20
 
-  for x being set holds x in it iff
-  ex y,z being set st x = [y,z] & [{y},z] in Trace f;
+  for x being set holds x in it iff ex y
+  ,z being set st x = [y,z] & [{y},z] in Trace f;
 end;
 
 theorem :: COHSP_1:51
-  for f being Function, x,y being set holds
-  [x,y] in LinTrace f iff [{x},y] in Trace f;
+  for f being Function, x,y being set holds [x,y] in LinTrace f
+  iff [{x},y] in Trace f;
 
 theorem :: COHSP_1:52
-  for f being Function st f.{} = {}
-  for x,y being set st {x} in dom f & y in f.{x} holds [x,y] in LinTrace f;
+  for f being Function st f.{} = {} for x,y being set st {x} in
+  dom f & y in f.{x} holds [x,y] in LinTrace f;
 
 theorem :: COHSP_1:53
-  for f being Function, x,y being set st [x,y] in LinTrace f
-  holds {x} in dom f & y in f.{x};
+  for f being Function, x,y being set st [x,y] in LinTrace f holds
+  {x} in dom f & y in f.{x};
 
 definition
   let C1, C2 be non empty set;
@@ -609,60 +591,54 @@ definition
 end;
 
 theorem :: COHSP_1:54
-  for C1, C2 being Coherence_Space for f being c=-monotone Function of C1,C2
-  for x1,x2 being set st {x1,x2} in C1
-  for y1,y2 being set st [x1,y1] in LinTrace f & [x2,y2] in LinTrace f
-  holds {y1,y2} in C2;
+  for C1, C2 being Coherence_Space for f being c=-monotone
+Function of C1,C2 for x1,x2 being set st {x1,x2} in C1 for y1,y2 being set st [
+  x1,y1] in LinTrace f & [x2,y2] in LinTrace f holds {y1,y2} in C2;
 
 theorem :: COHSP_1:55
-  for C1, C2 being Coherence_Space
-  for f being cap-distributive Function of C1,C2
-  for x1,x2 being set st {x1,x2} in C1
-  for y being set st [x1,y] in LinTrace f & [x2,y] in LinTrace f holds x1 = x2;
+  for C1, C2 being Coherence_Space for f being cap-distributive
+Function of C1,C2 for x1,x2 being set st {x1,x2} in C1 for y being set st [x1,y
+  ] in LinTrace f & [x2,y] in LinTrace f holds x1 = x2;
 
 theorem :: COHSP_1:56
-  for C1, C2 being Coherence_Space for f,g being U-linear Function of C1,C2
-  st LinTrace f = LinTrace g holds f = g;
+  for C1, C2 being Coherence_Space for f,g being U-linear Function
+  of C1,C2 st LinTrace f = LinTrace g holds f = g;
 
 theorem :: COHSP_1:57
-  for C1, C2 being Coherence_Space
-  for X being Subset of [:union C1, union C2:] st
-  (for a,b being set st {a,b} in C1
-  for y1,y2 being set st [a,y1] in X & [b,y2] in X holds {y1,y2} in C2) &
-  (for a,b being set st {a,b} in C1
-  for y being set st [a,y] in X & [b,y] in X holds a = b)
-  ex f being U-linear Function of C1,C2 st X = LinTrace f;
+  for C1, C2 being Coherence_Space for X being Subset of [:union
+C1, union C2:] st (for a,b being set st {a,b} in C1 for y1,y2 being set st [a,
+y1] in X & [b,y2] in X holds {y1,y2} in C2) & (for a,b being set st {a,b} in C1
+  for y being set st [a,y] in X & [b,y] in X holds a = b) ex f being U-linear
+  Function of C1,C2 st X = LinTrace f;
 
 theorem :: COHSP_1:58
-  for C1, C2 being Coherence_Space for f being U-linear Function of C1,C2
-  for a being Element of C1 holds f.a = (LinTrace f).:a;
+  for C1, C2 being Coherence_Space for f being U-linear Function of C1,
+  C2 for a being Element of C1 holds f.a = (LinTrace f).:a;
 
 theorem :: COHSP_1:59
-  for C1, C2 being Coherence_Space
-  ex f being U-linear Function of C1, C2 st LinTrace f = {};
+  for C1, C2 being Coherence_Space ex f being U-linear Function of C1,
+  C2 st LinTrace f = {};
 
 theorem :: COHSP_1:60
-  for C1, C2 being Coherence_Space
-  for x being set, y being set st x in union C1 & y in union C2
-  ex f being U-linear Function of C1, C2 st LinTrace f = {[x,y]};
+  for C1, C2 being Coherence_Space for x being set, y being set st
+  x in union C1 & y in union C2 ex f being U-linear Function of C1, C2 st
+  LinTrace f = {[x,y]};
 
 theorem :: COHSP_1:61
-  for C1, C2 being Coherence_Space
-  for x being set, y being set st x in union C1 & y in union C2
-  for f being U-linear Function of C1, C2 st LinTrace f = {[x,y]}
-  for a being Element of C1 holds
-  (x in a implies f.a = {y}) & (not x in a implies f.a = {});
+  for C1, C2 being Coherence_Space for x being set, y being set st x in
+union C1 for f being U-linear Function of C1, C2 st LinTrace f = {[x,y]} for a
+being Element of C1 holds (x in a implies f.a = {y}) & (not x in a implies f.a
+  = {});
 
 theorem :: COHSP_1:62
-  for C1, C2 being Coherence_Space for f being U-linear Function of C1,C2
-  for X being Subset of LinTrace f
-  ex g being U-linear Function of C1, C2 st LinTrace g = X;
+  for C1, C2 being Coherence_Space for f being U-linear Function
+  of C1,C2 for X being Subset of LinTrace f ex g being U-linear Function of C1,
+  C2 st LinTrace g = X;
 
 theorem :: COHSP_1:63
-  for C1, C2 being Coherence_Space for A being set st
-  for x,y being set st x in A & y in A
-  ex f being U-linear Function of C1,C2 st x \/ y = LinTrace f
-  ex f being U-linear Function of C1,C2 st union A = LinTrace f;
+  for C1, C2 being Coherence_Space for A being set st for x,y
+being set st x in A & y in A ex f being U-linear Function of C1,C2 st x \/ y =
+  LinTrace f ex f being U-linear Function of C1,C2 st union A = LinTrace f;
 
 registration
   let C1, C2 be Coherence_Space;
@@ -670,14 +646,14 @@ registration
 end;
 
 theorem :: COHSP_1:64
-  for C1,C2 being Coherence_Space holds
-  union LinCoh(C1,C2) = [:union C1, union C2:];
+  for C1,C2 being Coherence_Space holds union LinCoh(C1,C2) = [:union C1
+  , union C2:];
 
 theorem :: COHSP_1:65
-  for C1,C2 being Coherence_Space for x1,x2 being set, y1,y2 being set holds
-  [[x1,y1],[x2,y2]] in Web LinCoh(C1,C2) iff x1 in union C1 & x2 in union C1 &
-  (not [x1,x2] in Web C1 & y1 in union C2 & y2 in union C2 or
-  [y1,y2] in Web C2 & (y1 = y2 implies x1 = x2));
+  for C1,C2 being Coherence_Space for x1,x2 being set, y1,y2 being set
+  holds [[x1,y1],[x2,y2]] in Web LinCoh(C1,C2) iff x1 in union C1 & x2 in union
+C1 & (not [x1,x2] in Web C1 & y1 in union C2 & y2 in union C2 or [y1,y2] in Web
+  C2 & (y1 = y2 implies x1 = x2));
 
 begin :: Negation of Coherence Spaces
 
@@ -685,15 +661,13 @@ definition
   let C be Coherence_Space;
   func 'not' C -> set equals
 :: COHSP_1:def 22
-
-  {a where a is Subset of union C:
-  for b being Element of C ex x being set st a /\ b c= {x}};
+  {a where a is Subset of union C: for b being
+  Element of C ex x being set st a /\ b c= {x}};
 end;
 
 theorem :: COHSP_1:66
-  for C being Coherence_Space, x being set holds
-  x in 'not' C iff x c= union C &
-  for a being Element of C ex z being set st x /\ a c= {z};
+  for C being Coherence_Space, x being set holds x in 'not' C iff
+  x c= union C & for a being Element of C ex z being set st x /\ a c= {z};
 
 registration
   let C be Coherence_Space;
@@ -704,16 +678,16 @@ theorem :: COHSP_1:67
   for C being Coherence_Space holds union 'not' C = union C;
 
 theorem :: COHSP_1:68
-  for C being Coherence_Space, x,y being set st x <> y & {x,y} in C
-  holds not {x,y} in 'not' C;
+  for C being Coherence_Space, x,y being set st x <> y & {x,y} in
+  C holds not {x,y} in 'not' C;
 
 theorem :: COHSP_1:69
-  for C being Coherence_Space, x,y being set
-  st {x,y} c= union C & not {x,y} in C holds {x,y} in 'not' C;
+  for C being Coherence_Space, x,y being set st {x,y} c= union C &
+  not {x,y} in C holds {x,y} in 'not' C;
 
 theorem :: COHSP_1:70
-  for C being Coherence_Space for x,y being set holds [x,y] in Web 'not' C iff
-  x in union C & y in union C & (x = y or not [x,y] in Web C);
+  for C being Coherence_Space for x,y being set holds [x,y] in Web 'not'
+  C iff x in union C & y in union C & (x = y or not [x,y] in Web C);
 
 theorem :: COHSP_1:71
   for C being Coherence_Space holds 'not' 'not' C = C;
@@ -722,7 +696,8 @@ theorem :: COHSP_1:72
   'not' {{}} = {{}};
 
 theorem :: COHSP_1:73
-  for X being set holds 'not' FlatCoh X = bool X & 'not' bool X = FlatCoh X;
+  for X being set holds 'not' FlatCoh X = bool X & 'not' bool X =
+  FlatCoh X;
 
 begin :: Product and Coproduct on Coherence Spaces
 
@@ -730,7 +705,6 @@ definition
   let x,y be set;
   func x U+ y -> set equals
 :: COHSP_1:def 23
-
   Union disjoin <*x,y*>;
 end;
 
@@ -741,8 +715,8 @@ theorem :: COHSP_1:75
   for x being set holds x U+ {} = [:x,{1}:] & {} U+ x = [:x,{2}:];
 
 theorem :: COHSP_1:76
-  for x,y,z being set st z in x U+ y
-  holds z = [z`1,z`2] & (z`2 = 1 & z`1 in x or z`2 = 2 & z`1 in y);
+  for x,y,z being set st z in x U+ y holds z = [z`1,z`2] & (z`2 =
+  1 & z`1 in x or z`2 = 2 & z`1 in y);
 
 theorem :: COHSP_1:77
   for x,y,z being set holds [z,1] in x U+ y iff z in x;
@@ -751,59 +725,61 @@ theorem :: COHSP_1:78
   for x,y,z being set holds [z,2] in x U+ y iff z in y;
 
 theorem :: COHSP_1:79
-  for x1,y1, x2,y2 being set holds
-  x1 U+ y1 c= x2 U+ y2 iff x1 c= x2 & y1 c= y2;
+  for x1,y1, x2,y2 being set holds x1 U+ y1 c= x2 U+ y2 iff x1 c=
+  x2 & y1 c= y2;
 
 theorem :: COHSP_1:80
-  for x,y, z being set st z c= x U+ y
-  ex x1,y1 being set st z = x1 U+ y1 & x1 c= x & y1 c= y;
+  for x,y, z being set st z c= x U+ y ex x1,y1 being set st z = x1
+  U+ y1 & x1 c= x & y1 c= y;
 
 theorem :: COHSP_1:81
-  for x1,y1, x2,y2 being set holds x1 U+ y1 = x2 U+ y2 iff x1 = x2 & y1 = y2;
+  for x1,y1, x2,y2 being set holds x1 U+ y1 = x2 U+ y2 iff x1 = x2
+  & y1 = y2;
 
 theorem :: COHSP_1:82
-  for x1,y1, x2,y2 being set holds
-  x1 U+ y1 \/ x2 U+ y2 = (x1 \/ x2) U+ (y1 \/ y2);
+  for x1,y1, x2,y2 being set holds x1 U+ y1 \/ x2 U+ y2 = (x1 \/
+  x2) U+ (y1 \/ y2);
 
 theorem :: COHSP_1:83
-  for x1,y1, x2,y2 being set holds
-  (x1 U+ y1) /\ (x2 U+ y2) = (x1 /\ x2) U+ (y1 /\ y2);
+  for x1,y1, x2,y2 being set holds (x1 U+ y1) /\ (x2 U+ y2) = (x1
+  /\ x2) U+ (y1 /\ y2);
 
 definition
   let C1, C2 be Coherence_Space;
   func C1 "/\" C2 -> set equals
 :: COHSP_1:def 24
-  {a U+ b where a is Element of C1, b is Element of C2: not contradiction};
+  {a U+ b where a is Element of C1, b is Element
+  of C2: not contradiction};
   func C1 "\/" C2 -> set equals
 :: COHSP_1:def 25
-  {a U+ {} where a is Element of C1: not contradiction} \/
-  {{} U+ b where b is Element of C2: not contradiction};
+  {a U+ {} where a is Element of C1: not
+  contradiction} \/ {{} U+ b where b is Element of C2: not contradiction};
 end;
 
 theorem :: COHSP_1:84
-  for C1,C2 being Coherence_Space for x being set holds x in C1 "/\" C2 iff
-  ex a being Element of C1, b being Element of C2 st x = a U+ b;
+  for C1,C2 being Coherence_Space for x being set holds x in C1
+  "/\" C2 iff ex a being Element of C1, b being Element of C2 st x = a U+ b;
 
 theorem :: COHSP_1:85
-  for C1,C2 being Coherence_Space for x,y being set holds
-  x U+ y in C1 "/\" C2 iff x in C1 & y in C2;
+  for C1,C2 being Coherence_Space for x,y being set holds x U+ y
+  in C1 "/\" C2 iff x in C1 & y in C2;
 
 theorem :: COHSP_1:86
-  for C1,C2 being Coherence_Space holds
-  union (C1 "/\" C2) = (union C1) U+ (union C2);
+  for C1,C2 being Coherence_Space holds union (C1 "/\" C2) = (
+  union C1) U+ (union C2);
 
 theorem :: COHSP_1:87
-  for C1,C2 being Coherence_Space for x,y being set holds
-  x U+ y in C1 "\/" C2 iff x in C1 & y = {} or x = {} & y in C2;
+  for C1,C2 being Coherence_Space for x,y being set holds x U+ y
+  in C1 "\/" C2 iff x in C1 & y = {} or x = {} & y in C2;
 
 theorem :: COHSP_1:88
-  for C1,C2 being Coherence_Space for x being set st x in C1 "\/" C2
-  ex a being Element of C1, b being Element of C2 st
-  x = a U+ b & (a = {} or b = {});
+  for C1,C2 being Coherence_Space for x being set st x in C1 "\/"
+C2 ex a being Element of C1, b being Element of C2 st x = a U+ b & (a = {} or b
+  = {});
 
 theorem :: COHSP_1:89
-  for C1,C2 being Coherence_Space holds
-  union (C1 "\/" C2) = (union C1) U+ (union C2);
+  for C1,C2 being Coherence_Space holds union (C1 "\/" C2) = (union C1)
+  U+ (union C2);
 
 registration
   let C1, C2 be Coherence_Space;
@@ -814,29 +790,28 @@ end;
 reserve C1, C2 for Coherence_Space;
 
 theorem :: COHSP_1:90
-  for x,y being set holds
-  [[x,1],[y,1]] in Web (C1 "/\" C2) iff [x,y] in Web C1;
+  for x,y being set holds [[x,1],[y,1]] in Web (C1 "/\" C2) iff [x,y] in
+  Web C1;
 
 theorem :: COHSP_1:91
-  for x,y being set holds
-  [[x,2],[y,2]] in Web (C1 "/\" C2) iff [x,y] in Web C2;
+  for x,y being set holds [[x,2],[y,2]] in Web (C1 "/\" C2) iff [x,y] in
+  Web C2;
 
 theorem :: COHSP_1:92
-  for x,y being set st x in union C1 & y in union C2 holds
-  [[x,1],[y,2]] in Web (C1 "/\" C2) & [[y,2],[x,1]] in Web (C1 "/\" C2);
+  for x,y being set st x in union C1 & y in union C2 holds [[x,1],[y,2]]
+  in Web (C1 "/\" C2) & [[y,2],[x,1]] in Web (C1 "/\" C2);
 
 theorem :: COHSP_1:93
-  for x,y being set holds
-  [[x,1],[y,1]] in Web (C1 "\/" C2) iff [x,y] in Web C1;
+  for x,y being set holds [[x,1],[y,1]] in Web (C1 "\/" C2) iff [x,y] in
+  Web C1;
 
 theorem :: COHSP_1:94
-  for x,y being set holds
-  [[x,2],[y,2]] in Web (C1 "\/" C2) iff [x,y] in Web C2;
+  for x,y being set holds [[x,2],[y,2]] in Web (C1 "\/" C2) iff [x,y] in
+  Web C2;
 
 theorem :: COHSP_1:95
-  for x,y being set holds
-  not [[x,1],[y,2]] in Web (C1 "\/" C2) & not [[y,2],[x,1]] in Web (C1 "\/" C2)
-;
+  for x,y being set holds not [[x,1],[y,2]] in Web (C1 "\/" C2) & not [[
+  y,2],[x,1]] in Web (C1 "\/" C2);
 
 theorem :: COHSP_1:96
   'not' (C1 "/\" C2) = 'not' C1 "\/" 'not' C2;
@@ -845,13 +820,13 @@ definition
   let C1,C2 be Coherence_Space;
   func C1 [*] C2 -> set equals
 :: COHSP_1:def 26
-  union {bool [:a,b:] where a is Element of C1, b is Element of C2:
-  not contradiction};
+  union {bool [:a,b:] where a is Element of C1, b
+  is Element of C2: not contradiction};
 end;
 
 theorem :: COHSP_1:97
-  for C1,C2 being Coherence_Space, x being set holds x in C1 [*] C2 iff
-  ex a being Element of C1, b being Element of C2 st x c= [:a,b:];
+  for C1,C2 being Coherence_Space, x being set holds x in C1 [*]
+  C2 iff ex a being Element of C1, b being Element of C2 st x c= [:a,b:];
 
 registration
   let C1,C2 be Coherence_Space;
@@ -859,8 +834,8 @@ registration
 end;
 
 theorem :: COHSP_1:98
-  for C1,C2 being Coherence_Space, a being Element of C1 [*] C2 holds
-  proj1 a in C1 & proj2 a in C2 & a c= [:proj1 a, proj2 a:];
+  for C1,C2 being Coherence_Space, a being Element of C1 [*] C2
+  holds proj1 a in C1 & proj2 a in C2 & a c= [:proj1 a, proj2 a:];
 
 registration
   let C1,C2 be Coherence_Space;
@@ -868,11 +843,10 @@ registration
 end;
 
 theorem :: COHSP_1:99
-  for C1,C2 being Coherence_Space holds
-  union (C1 [*] C2) = [:union C1, union C2:];
+  for C1,C2 being Coherence_Space holds union (C1 [*] C2) = [:union C1,
+  union C2:];
 
 theorem :: COHSP_1:100
-  for x1,y1, x2,y2 being set holds
-  [[x1,x2],[y1,y2]] in Web (C1 [*] C2) iff [x1,y1] in Web C1 & [x2,y2] in
-  Web C2;
+  for x1,y1, x2,y2 being set holds [[x1,x2],[y1,y2]] in Web (C1 [*] C2)
+  iff [x1,y1] in Web C1 & [x2,y2] in Web C2;
 

@@ -14,20 +14,19 @@ environ
       STRUCT_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, NAT_1, RELAT_1,
       FUNCT_1, FUNCT_2, FINSEQ_1, FINSET_1, PARTFUN1, MCART_1, FUNCT_4, CARD_3,
-      FUNCOP_1, FUNCT_3, STRUCT_0, PBOOLE, MSUALG_1, MSAFREE2,
-      CIRCUIT1, CIRCUIT2, CIRCCOMB, FACIRC_1, TREES_1, TREES_2, TREES_3,
-      TREES_4, TREES_9, MSATERM, PUA2MSS1, XXREAL_0;
+      FUNCOP_1, FUNCT_3, STRUCT_0, PBOOLE, MSUALG_1, MSAFREE2, CIRCUIT1,
+      CIRCUIT2, CIRCCOMB, FACIRC_1, TREES_1, TREES_2, TREES_3, TREES_4,
+      TREES_9, MSATERM, PUA2MSS1, XXREAL_0;
  constructors XXREAL_0, TREES_9, MSUALG_3, MSATERM, CIRCUIT1, CIRCUIT2,
       FACIRC_1, PUA2MSS1, INSTALG1, NAT_1, XREAL_0, RELSET_1;
- registrations XBOOLE_0, RELAT_1, FUNCT_1, FUNCOP_1, FRAENKEL, XREAL_0,
-      FINSEQ_1, CARD_3, PBOOLE, TREES_2, TREES_3, TREES_9, STRUCT_0, MSUALG_1,
-      MSUALG_2, MSAFREE, MSATERM, CIRCCOMB, INSTALG1, ORDINAL1, FINSET_1,
-      CARD_1, RELSET_1;
+ registrations XBOOLE_0, RELAT_1, FUNCT_1, FUNCOP_1, XREAL_0, FINSEQ_1, CARD_3,
+      PBOOLE, TREES_2, TREES_3, TREES_9, STRUCT_0, MSUALG_1, MSUALG_2, MSAFREE,
+      MSATERM, CIRCCOMB, INSTALG1, ORDINAL1, FINSET_1, CARD_1, RELSET_1;
  requirements NUMERALS, BOOLE, SUBSET;
- definitions TARSKI, PARTFUN1, FUNCOP_1, PBOOLE, MSUALG_1, MSAFREE2,
-      CIRCUIT2, CIRCCOMB, PUA2MSS1, FINSET_1, FACIRC_1, XBOOLE_0;
- theorems TARSKI, ZFMISC_1, NAT_1, RELAT_1, FUNCT_1, FUNCT_2, FINSEQ_1,
-      PARTFUN1, FUNCT_4, FUNCT_6, MCART_1, PBOOLE, MSAFREE2, PRE_CIRC, CARD_3,
+ definitions TARSKI, PARTFUN1, FUNCOP_1, PBOOLE, MSUALG_1, MSAFREE2, CIRCUIT2,
+      CIRCCOMB, PUA2MSS1, FINSET_1, FACIRC_1, XBOOLE_0;
+ theorems MSUALG_1, TARSKI, ZFMISC_1, NAT_1, RELAT_1, FUNCT_1, FUNCT_2,
+      FINSEQ_1, PARTFUN1, FUNCT_4, FUNCT_6, MCART_1, PBOOLE, MSAFREE2, CARD_3,
       TREES_1, TREES_2, TREES_3, TREES_4, TREES_9, MSAFREE, MSATERM, CIRCUIT1,
       CIRCUIT2, CIRCCOMB, FACIRC_1, PUA2MSS1, INSTALG1, XBOOLE_0, FINSET_1,
       ORDINAL1;
@@ -51,11 +50,13 @@ A1: for s being SortSymbol of S, v being Element of V.s holds
   proof
     let s being SortSymbol of S, v being Element of V.s;
     let t be Term of S,V, T be c-Term of A,V;
-    assume t = root-tree [v,s] & T = t;
-    then the_sort_of t = s & the_sort_of T = s by MSATERM:14,16;
-    hence thesis;
+    assume that
+A2: t = root-tree [v,s] and
+A3: T = t;
+    the_sort_of t = s by A2,MSATERM:14;
+    hence thesis by A2,A3,MSATERM:16;
   end;
-A2: for o being OperSymbol of S, p being ArgumentSeq of Sym(o,V) st
+A4: for o being OperSymbol of S, p being ArgumentSeq of Sym(o,V) st
   for t' being Term of S,V st t' in rng p holds P[t'] holds
   P[[o,the carrier of S]-tree p]
   proof
@@ -67,11 +68,11 @@ A2: for o being OperSymbol of S, p being ArgumentSeq of Sym(o,V) st
     let t being Term of S,V, T being c-Term of A,V;
     assume t = [o,the carrier of S]-tree p;
     then
-A3: t.{} = [o,the carrier of S] by TREES_4:def 4;
+A5: t.{} = [o,the carrier of S] by TREES_4:def 4;
     then the_sort_of t = the_result_sort_of o by MSATERM:17;
-    hence thesis by A3,MSATERM:17;
+    hence thesis by A5,MSATERM:17;
   end;
-  for t being Term of S,V holds P[t] from MSATERM:sch 1(A1,A2);
+  for t being Term of S,V holds P[t] from MSATERM:sch 1(A1,A4);
   hence thesis;
 end;
 
@@ -80,7 +81,6 @@ definition
   let V be non-empty ManySortedSet of the carrier of S;
   let X be non empty Subset of S-Terms V;
   func X-CircuitStr -> non empty strict ManySortedSign equals
-
   ManySortedSign(#
     Subtrees X, [:the carrier' of S,{the carrier of S}:]-Subtrees X,
     [:the carrier' of S,{the carrier of S}:]-ImmediateSubtrees X,
@@ -105,7 +105,7 @@ reserve S for non empty non void ManySortedSign,
   X for non empty Subset of S-Terms V,
   t for Element of X;
 
-theorem Th2:
+theorem
   X-CircuitStr is void iff for t being Element of X holds t is root &
   not t.{} in [:the carrier' of S, {the carrier of S}:] by TREES_9:26;
 
@@ -117,12 +117,12 @@ proof
     then consider t being CompoundTerm of S, V such that
 A1: t in X by MSATERM:def 7;
     t.{} in [:the carrier' of S, {the carrier of S}:] by MSATERM:def 6;
-    hence X-CircuitStr is non void by A1,Th2;
+    hence X-CircuitStr is non void by A1,TREES_9:26;
   end;
   assume X-CircuitStr is non void;
   then consider t such that
 A2: t is not root or t.{} in [:the carrier' of S, {the carrier of S}:]
-  by Th2;
+  by TREES_9:26;
   t in X;
   then t is CompoundTerm of S,V by A2,MSATERM:28,def 6;
   hence thesis by MSATERM:def 7;
@@ -138,8 +138,8 @@ end;
 
 theorem Th4:
   (for v being Vertex of X-CircuitStr holds v is Term of S,V) &
-  (for s being set st s in the carrier' of X-CircuitStr holds
-  s is CompoundTerm of S,V)
+  for s being set st s in the carrier' of X-CircuitStr holds
+  s is CompoundTerm of S,V
 proof
   set C = [:the carrier' of S, {the carrier of S}:];
   hereby
@@ -152,15 +152,17 @@ A1: v = t|p by TREES_9:20;
   let s be set;
   assume s in the carrier' of X-CircuitStr;
   then consider t being Element of X, p being Node of t such that
-A2: s = t|p & (not p in Leaves dom t or t.p in C) by TREES_9:25;
+A2: s = t|p and
+A3: not p in Leaves dom t or t.p in C by TREES_9:25;
   t in X;
   then reconsider s as Term of S,V by A2,MSATERM:29;
   reconsider e = {} as Node of t|p by TREES_1:47;
-  dom (t|p) = (dom t qua Tree)|(p qua FinSequence of NAT) & p = p^e
-  by FINSEQ_1:47,TREES_2:def 11;
-  then t.p = s.e & (p in Leaves dom t iff s is root)
-  by A2,TREES_2:def 11,TREES_9:6;
-  hence thesis by A2,MSATERM:28,def 6;
+A4: dom (t|p) = (dom t qua Tree)|(p qua FinSequence of NAT) by TREES_2:def 11;
+  p = p^e by FINSEQ_1:47;
+  then
+A5: t.p = s.e by A2,A4,TREES_2:def 11;
+  p in Leaves dom t iff s is root by A2,TREES_9:6;
+  hence thesis by A3,A5,MSATERM:28,def 6;
 end;
 
 theorem Th5:
@@ -175,9 +177,10 @@ proof
 A1: t = tt|p by TREES_9:20;
   assume t is CompoundTerm of S,V;
   then reconsider t' = t as CompoundTerm of S,V;
-  t'.{} in C & p^(<*>NAT) = p & {} in (dom tt)|p
-  by FINSEQ_1:47,MSATERM:def 6,TREES_1:47;
-  then tt.p in C by A1,TREES_2:def 11;
+A2: t'.{} in C by MSATERM:def 6;
+A3: p^(<*>NAT) = p by FINSEQ_1:47;
+  {} in (dom tt)|p by TREES_1:47;
+  then tt.p in C by A1,A2,A3,TREES_2:def 11;
   hence thesis by A1,TREES_9:25;
 end;
 
@@ -234,50 +237,52 @@ theorem Th7:
 proof
   let t1,t2 be non empty Subset of S-Terms V;
   set C = [:the carrier' of S, {the carrier of S}:];
-A1: dom (C-ImmediateSubtrees t1) = C-Subtrees t1 &
-  dom id (C-Subtrees t1) = C-Subtrees t1 &
-  dom (C-ImmediateSubtrees t2) = C-Subtrees t2 &
-  dom id (C-Subtrees t2) = C-Subtrees t2 by FUNCT_2:def 1,RELAT_1:71;
+A1: dom (C-ImmediateSubtrees t1) = C-Subtrees t1 by FUNCT_2:def 1;
+A2: dom id (C-Subtrees t1) = C-Subtrees t1 by RELAT_1:71;
+A3: dom (C-ImmediateSubtrees t2) = C-Subtrees t2 by FUNCT_2:def 1;
+A4: dom id (C-Subtrees t2) = C-Subtrees t2 by RELAT_1:71;
   hereby
     let x be set;
-    assume x in (dom the Arity of t1-CircuitStr) /\ dom the Arity of t2
+    assume
+A5: x in (dom the Arity of t1-CircuitStr) /\ dom the Arity of t2
     -CircuitStr;
     then
-A2: x in dom the Arity of t1-CircuitStr &
-    x in dom the Arity of t2-CircuitStr by XBOOLE_0:def 4;
-    then reconsider u = x as Element of Subtrees t1 by A1;
-    (C-ImmediateSubtrees t1).x in (Subtrees t1)* by A1,A2,FUNCT_2:7;
+A6: x in dom the Arity of t1-CircuitStr by XBOOLE_0:def 4;
+A7: x in dom the Arity of t2-CircuitStr by A5,XBOOLE_0:def 4;
+    reconsider u = x as Element of Subtrees t1 by A1,A6;
+    (C-ImmediateSubtrees t1).x in (Subtrees t1)* by A1,A6,FUNCT_2:7;
     then reconsider y1 = (the Arity of t1-CircuitStr).x as
     FinSequence of Subtrees t1 by FINSEQ_1:def 11;
-    (the Arity of t2-CircuitStr).x in (Subtrees t2)* by A1,A2,FUNCT_2:7;
+    (the Arity of t2-CircuitStr).x in (Subtrees t2)* by A3,A7,FUNCT_2:7;
     then reconsider y2 = (the Arity of t2-CircuitStr).x as
     FinSequence of Subtrees t2 by FINSEQ_1:def 11;
-    now
+A8: now
       hereby
         let t be Element of t1;
         t in t1;
-        then t is Term of S,V;
         hence t is finite;
       end;
       hereby
         let t be Element of t2;
         t in t2;
-        then t is Term of S,V;
         hence t is finite;
       end;
     end;
-    then u = (u.{})-tree y1 & u = (u.{})-tree y2 by A1,A2,TREES_9:def 13;
+    then
+A9: u = (u.{})-tree y1 by A1,A6,TREES_9:def 13;
+    u = (u.{})-tree y2 by A3,A7,A8,TREES_9:def 13;
     hence (the Arity of t1-CircuitStr).x = (the Arity of t2-CircuitStr).x
-    by TREES_4:15;
+    by A9,TREES_4:15;
   end;
   let x be set;
-  assume x in (dom the ResultSort of t1-CircuitStr) /\
+  assume
+A10: x in (dom the ResultSort of t1-CircuitStr) /\
   dom the ResultSort of t2-CircuitStr;
   then
-A3: x in dom the ResultSort of t1-CircuitStr &
-  x in dom the ResultSort of t2-CircuitStr by XBOOLE_0:def 4;
-  hence (the ResultSort of t1-CircuitStr).x = x by A1,FUNCT_1:35
-    .= (the ResultSort of t2-CircuitStr).x by A1,A3,FUNCT_1:35;
+A11: x in dom the ResultSort of t1-CircuitStr by XBOOLE_0:def 4;
+A12: x in dom the ResultSort of t2-CircuitStr by A10,XBOOLE_0:def 4;
+  thus (the ResultSort of t1-CircuitStr).x = x by A2,A11,FUNCT_1:35
+    .= (the ResultSort of t2-CircuitStr).x by A4,A12,FUNCT_1:35;
 end;
 
 registration
@@ -327,26 +332,29 @@ proof
     let x be set;
     assume x in C-Subtrees (X1 \/ X2);
     then consider t being Element of X1 \/ X2, n being Node of t such that
-A1: x = t|n & (not n in Leaves dom t or t.n in C) by TREES_9:25;
+A1: x = t|n and
+A2: not n in Leaves dom t or t.n in C by TREES_9:25;
     t in X1 or t in X2 by XBOOLE_0:def 3;
-    then x in C-Subtrees X1 or x in C-Subtrees X2 by A1,TREES_9:25;
+    then x in C-Subtrees X1 or x in C-Subtrees X2 by A1,A2,TREES_9:25;
     hence x in (C-Subtrees X1) \/ (C-Subtrees X2) by XBOOLE_0:def 3;
   end;
   let x be set;
   assume
-A2: x in (C-Subtrees X1) \/ (C-Subtrees X2);
-  per cases by A2,XBOOLE_0:def 3;
+A3: x in (C-Subtrees X1) \/ (C-Subtrees X2);
+  per cases by A3,XBOOLE_0:def 3;
   suppose x in C-Subtrees X1;
     then consider t being Element of X1, n being Node of t such that
-A3: x = t|n & (not n in Leaves dom t or t.n in C) by TREES_9:25;
+A4: x = t|n and
+A5: not n in Leaves dom t or t.n in C by TREES_9:25;
     t is Element of X1 \/ X2 by XBOOLE_0:def 3;
-    hence thesis by A3,TREES_9:25;
+    hence thesis by A4,A5,TREES_9:25;
   end;
   suppose x in C-Subtrees X2;
     then consider t being Element of X2, n being Node of t such that
-A4: x = t|n & (not n in Leaves dom t or t.n in C) by TREES_9:25;
+A6: x = t|n and
+A7: not n in Leaves dom t or t.n in C by TREES_9:25;
     t is Element of X1 \/ X2 by XBOOLE_0:def 3;
-    hence thesis by A4,TREES_9:25;
+    hence thesis by A6,A7,TREES_9:25;
   end;
 end;
 
@@ -370,35 +378,37 @@ A3: now
   set f = C-ImmediateSubtrees (X1 \/ X2);
   set f1 = C-ImmediateSubtrees X1;
   set f2 = C-ImmediateSubtrees X2;
-A4: dom f = C-Subtrees X & dom f1 = C-Subtrees X1 & dom f2 = C-Subtrees X2
-  by FUNCT_2:def 1;
-A5: C-Subtrees X = (C-Subtrees X1) \/ (C-Subtrees X2) by Th9;
+A4: dom f = C-Subtrees X by FUNCT_2:def 1;
+A5: dom f1 = C-Subtrees X1 by FUNCT_2:def 1;
+A6: dom f2 = C-Subtrees X2 by FUNCT_2:def 1;
+A7: C-Subtrees X = (C-Subtrees X1) \/ (C-Subtrees X2) by Th9;
   now
     let x be set;
     assume
-A6: x in dom f1 \/ dom f2;
-    then reconsider t = x as Element of Subtrees X by A4,A5;
-    f.x in (Subtrees X)* by A4,A5,A6,FUNCT_2:7;
+A8: x in dom f1 \/ dom f2;
+    then reconsider t = x as Element of Subtrees X by A5,A6,A7;
+    f.x in (Subtrees X)* by A5,A6,A7,A8,FUNCT_2:7;
     then reconsider p = f.x as FinSequence of Subtrees X by FINSEQ_1:def 11;
     hereby
       assume
-A7:   x in dom f2;
-      then f2.x in (Subtrees X2)* by A4,FUNCT_2:7;
+A9:   x in dom f2;
+      then f2.x in (Subtrees X2)* by A6,FUNCT_2:7;
       then reconsider p2 = f2.x as FinSequence of Subtrees X2 by
-FINSEQ_1:def 11;
-      t = (t.{})-tree p & t = (t.{})-tree p2 by A2,A3,A4,A5,A6,A7,
-TREES_9:def 13;
-      hence f.x = f2.x by TREES_4:15;
+      FINSEQ_1:def 11;
+A10:  t = (t.{})-tree p by A3,A5,A6,A7,A8,TREES_9:def 13;
+      t = (t.{})-tree p2 by A2,A6,A9,TREES_9:def 13;
+      hence f.x = f2.x by A10,TREES_4:15;
     end;
     assume not x in dom f2;
     then
-A8: x in dom f1 by A6,XBOOLE_0:def 3;
-    then f1.x in (Subtrees X1)* by A4,FUNCT_2:7;
+A11: x in dom f1 by A8,XBOOLE_0:def 3;
+    then f1.x in (Subtrees X1)* by A5,FUNCT_2:7;
     then reconsider p1 = f1.x as FinSequence of Subtrees X1 by FINSEQ_1:def 11;
-    t = (t.{})-tree p & t = (t.{})-tree p1 by A1,A3,A4,A5,A6,A8,TREES_9:def 13;
-    hence f.x = f1.x by TREES_4:15;
+A12: t = (t.{})-tree p by A3,A5,A6,A7,A8,TREES_9:def 13;
+    t = (t.{})-tree p1 by A1,A5,A11,TREES_9:def 13;
+    hence f.x = f1.x by A12,TREES_4:15;
   end;
-  hence thesis by A4,A5,FUNCT_4:def 1;
+  hence thesis by A4,A5,A6,A7,FUNCT_4:def 1;
 end;
 
 theorem Th11:
@@ -414,13 +424,11 @@ A2: C-Subtrees X = (C-Subtrees X1) \/ (C-Subtrees X2) by Th9;
     hereby
       let t be Element of X1;
       t in X1;
-      then t is Term of S,V;
       hence t is finite;
     end;
     hereby
       let t be Element of X2;
       t in X2;
-      then t is Term of S,V;
       hence t is finite;
     end;
   end;
@@ -443,7 +451,7 @@ A1: rng the ResultSort of G = the carrier' of G by RELAT_1:71;
     assume
 A2: x in InputVertices (X-CircuitStr);
     then
-A3: x in the carrier of G & not x in the carrier' of G by A1,XBOOLE_0:def 5;
+A3: not x in the carrier' of G by A1,XBOOLE_0:def 5;
     thus x in Subtrees X by A2;
     reconsider t = x as Term of S,V by A2,Th4;
     (ex s being SortSymbol of S, v being Element of V.s st t.{} = [v,s])
@@ -451,7 +459,7 @@ A3: x in the carrier of G & not x in the carrier' of G by A1,XBOOLE_0:def 5;
     then (ex s being SortSymbol of S, v being Element of V.s st t.{} = [v,s])
     or t is CompoundTerm of S,V by MSATERM:def 6;
     then consider s being SortSymbol of S, v being Element of V.s such that
-A4: t.{} = [v,s] by A3,Th5;
+A4: t.{} = [v,s] by A2,A3,Th5;
     take s;
     reconsider v as Element of V.s;
     take v;
@@ -477,13 +485,12 @@ theorem Th13:
 proof
   let X be SetWithCompoundTerm of S,V;
   let g be Gate of X-CircuitStr;
-A1: now
+  now
     let t be Element of X;
     t in X;
-    then t is Term of S,V;
     hence t is finite;
   end;
-  thus thesis by A1,TREES_9:def 13;
+  hence thesis by TREES_9:def 13;
 end;
 
 begin  :: <section2>Circuit genereted by terms</section2>
@@ -504,8 +511,7 @@ definition
     reconsider u = v as Term of S,V by Th4;
     assume
 A1: not thesis;
-    then S1 = (the Sorts of A).the_sort_of u &
-    S2 = (the Sorts of A).the_sort_of u;
+    then S1 = (the Sorts of A).the_sort_of u;
     hence thesis by A1;
   end;
   existence
@@ -551,15 +557,15 @@ A1: X is SetWithCompoundTerm of S,V;
     reconsider o' = o as Gate of X'-CircuitStr;
     assume
 A2: not thesis;
-    then f1 = (the Charact of A).(o'.{})`1 &
-    f1 = (the Charact of A).(o'.{})`1;
+    then f1 = (the Charact of A).(o'.{})`1;
     hence thesis by A2;
   end;
   existence
   proof
     reconsider X' = X as SetWithCompoundTerm of S,V by A1;
     reconsider o' = o as Gate of X'-CircuitStr;
-    take (the Charact of A).(o'.{})`1; thus thesis;
+    take (the Charact of A).(o'.{})`1;
+    thus thesis;
   end;
 end;
 
@@ -672,35 +678,38 @@ A1: g = (f.{})-tree ag by Th13;
   assume g.{} = [o,the carrier of S];
   then consider a being ArgumentSeq of Sym(o,V) such that
 A2: f = [o,the carrier of S]-tree a by MSATERM:10;
-A3: len a = len the_arity_of o & a = ag by A1,A2,MSATERM:22,TREES_4:15;
-  then
-A4: dom the_arity_of o = Seg len a & dom the_arity_of g = Seg len a &
-  dom a = Seg len a by FINSEQ_1:def 3;
-A5: rng the_arity_of g c= the carrier of t-CircuitStr &
-  rng the_arity_of o c= the carrier of S by FINSEQ_1:def 4;
-  dom (X-CircuitSorts A) = the carrier of X-CircuitStr &
-  dom the Sorts of A = the carrier of S by PARTFUN1:def 4;
-  then
-A6: dom ((X-CircuitSorts A)*the_arity_of g) = Seg len a &
-  dom ((the Sorts of A)*the_arity_of o) = Seg len a by A4,A5,RELAT_1:46;
+A3: len a = len the_arity_of o by MSATERM:22;
+A4: a = ag by A1,A2,TREES_4:15;
+A5: dom the_arity_of o = Seg len a by A3,FINSEQ_1:def 3;
+A6: dom the_arity_of g = Seg len a by A4,FINSEQ_1:def 3;
+A7: rng the_arity_of g c= the carrier of t-CircuitStr by FINSEQ_1:def 4;
+A8: rng the_arity_of o c= the carrier of S by FINSEQ_1:def 4;
+A9: dom (X-CircuitSorts A) = the carrier of X-CircuitStr by PARTFUN1:def 4;
+A10: dom the Sorts of A = the carrier of S by PARTFUN1:def 4;
+A11: dom ((X-CircuitSorts A)*the_arity_of g) = Seg len a by A6,A7,A9,
+  RELAT_1:46;
+A12: dom ((the Sorts of A)*the_arity_of o) = Seg len a by A5,A8,A10,
+  RELAT_1:46;
   now
     let i be set;
     assume
-A7: i in Seg len a;
+A13: i in Seg len a;
     then reconsider j = i as Element of NAT;
-    ag.i in rng the_arity_of g by A4,A7,FUNCT_1:def 5;
-    then reconsider v = ag.j as Vertex of t-CircuitStr by A5;
-    (the_arity_of o).i in rng the_arity_of o by A4,A7,FUNCT_1:def 5;
-    then reconsider s = (the_arity_of o).j as SortSymbol of S by A5;
-    reconsider u = v as Term of S,V by A3,A4,A7,MSATERM:22;
-A8: the_sort_of u = s by A3,A4,A7,MSATERM:23;
-A9: ((t-CircuitSorts A)*the_arity_of g).i = (t-CircuitSorts A).v &
-    ((the Sorts of A)*the_arity_of o).i = (the Sorts of A).s
-    by A6,A7,FUNCT_1:22;
-    hence ((t-CircuitSorts A)*the_arity_of g).i = the_sort_of (v, A) by Def4
-      .= ((the Sorts of A)*the_arity_of o).i by A8,A9,Def2;
+    ag.i in rng the_arity_of g by A6,A13,FUNCT_1:def 5;
+    then reconsider v = ag.j as Vertex of t-CircuitStr by A7;
+    (the_arity_of o).i in rng the_arity_of o by A5,A13,FUNCT_1:def 5;
+    then reconsider s = (the_arity_of o).j as SortSymbol of S by A8;
+    reconsider u = v as Term of S,V by A4,A6,A13,MSATERM:22;
+A14: the_sort_of u = s by A4,A6,A13,MSATERM:23;
+A15: ((t-CircuitSorts A)*the_arity_of g).i = (t-CircuitSorts A).v by A11,A13,
+    FUNCT_1:22;
+A16: ((the Sorts of A)*the_arity_of o).i = (the Sorts of A).s by A12,A13,
+    FUNCT_1:22;
+    thus ((t-CircuitSorts A)*the_arity_of g).i = the_sort_of (v, A) by A15
+    ,Def4
+      .= ((the Sorts of A)*the_arity_of o).i by A14,A16,Def2;
   end;
-  hence thesis by A6,FUNCT_1:9;
+  hence thesis by A11,A12,FUNCT_1:9;
 end;
 
 definition
@@ -729,8 +738,8 @@ A2: for o being Gate of X-CircuitStr st o in the carrier' of X-CircuitStr
       assume
 A3:   x in the carrier' of X-CircuitStr;
       then reconsider o = x as Gate of X-CircuitStr;
-      C1.o = the_action_of (o, A) & C2.o = the_action_of (o, A) by A1,A2,A3;
-      hence C1.x = C2.x;
+      C1.o = the_action_of (o, A) by A1,A3;
+      hence C1.x = C2.x by A2,A3;
     end;
     hence thesis by PBOOLE:3;
   end;
@@ -776,31 +785,33 @@ A8:   the_result_sort_of g = g by FUNCT_1:35;
       reconsider I = i as CompoundTerm of S,V by A7,Th4;
       I.{} in [:the carrier' of S,{the carrier of S}:] by MSATERM:def 6;
       then consider o,y being set such that
-A9:   o in the carrier' of S & y in {the carrier of S} & I.{} = [o,y]
+A9:   o in the carrier' of S and
+A10:  y in {the carrier of S} and
+A11:  I.{} = [o,y]
       by ZFMISC_1:103;
       reconsider o as OperSymbol of S by A9;
-A10:  o = (I.{})`1 by A9,MCART_1:7;
-A11:  y = the carrier of S & g.{} = [o,y] by A9,TARSKI:def 1;
+A12:  o = (I.{})`1 by A11,MCART_1:7;
+A13:  y = the carrier of S by A10,TARSKI:def 1;
       ex g being Gate of X-CircuitStr st
       g = i & CHARACT.i = the_action_of (g, A) by A5,A7;
       then
-A12:  CHARACT.i = the_action_of (g, A)
-        .= (the Charact of A).o by A10,Def3;
-A13:  ((the Sorts of A)*the ResultSort of S).o
+A14:  CHARACT.i = the_action_of (g, A)
+        .= (the Charact of A).o by A12,Def3;
+A15:  ((the Sorts of A)*the ResultSort of S).o
       = (the Sorts of A).(the_result_sort_of o) by FUNCT_2:21
-        .= (the Sorts of A).(the_sort_of I) by A11,MSATERM:17;
-A14:  ((X-CircuitSorts A)*the ResultSort of X-CircuitStr).g
+        .= (the Sorts of A).(the_sort_of I) by A11,A13,MSATERM:17;
+A16:  ((X-CircuitSorts A)*the ResultSort of X-CircuitStr).g
       = (X-CircuitSorts A).(the_result_sort_of g) by FUNCT_2:21
         .= the_sort_of (v, A) by A8,Def4
         .= (the Sorts of A).the_sort_of I by Def2;
-A15:  ((X-CircuitSorts A)#*the Arity of X-CircuitStr).g
+A17:  ((X-CircuitSorts A)#*the Arity of X-CircuitStr).g
       = (X-CircuitSorts A)#.(the_arity_of g) by FUNCT_2:21
         .= product ((X'-CircuitSorts A)*the_arity_of g) by PBOOLE:def 19
-        .= product ((the Sorts of A)*the_arity_of o) by A11,Th14;
+        .= product ((the Sorts of A)*the_arity_of o) by A11,A13,Th14;
       ((the Sorts of A)#*the Arity of S).o
       = (the Sorts of A)#.the_arity_of o by FUNCT_2:21
         .= product ((the Sorts of A)*the_arity_of o) by PBOOLE:def 19;
-      hence thesis by A12,A13,A14,A15,PBOOLE:def 18;
+      hence thesis by A14,A15,A16,A17,PBOOLE:def 18;
     end;
     then reconsider CHARACT as ManySortedFunction of
     (X-CircuitSorts A)#*the Arity of X-CircuitStr,
@@ -821,14 +832,7 @@ definition
   let A be non-empty MSAlgebra over S;
   func X-Circuit A -> non-empty strict MSAlgebra over X-CircuitStr equals
   MSAlgebra(#X-CircuitSorts A, X-CircuitCharact A#);
-  correctness
-  proof
-    set C = MSAlgebra(#X-CircuitSorts A, X-CircuitCharact A#);
-    C is non-empty
-    proof thus the Sorts of C is non-empty;
-    end;
-    hence thesis;
-  end;
+  correctness by MSUALG_1:def 8;
 end;
 
 theorem
@@ -897,34 +901,30 @@ proof
   thus the Sorts of X1-Circuit A tolerates the Sorts of X2-Circuit A
   proof
     let x be set;
-    assume x in (dom the Sorts of X1-Circuit A) /\ dom the Sorts of X2-Circuit
+    assume
+    A1: x in (dom the Sorts of X1-Circuit A) /\ dom the Sorts of X2-Circuit
     A;
     then
-A1: x in dom the Sorts of X1-Circuit A & x in dom the Sorts of X2 -Circuit A
-    by XBOOLE_0:def 4;
-    then
-A2: x in the carrier of X1-CircuitStr & x in the carrier of X2 -CircuitStr
-    by PARTFUN1:def 4;
-    reconsider v1 = x as Vertex of X1-CircuitStr by A1,PARTFUN1:def 4
-;
-    reconsider v2 = x as Vertex of X2-CircuitStr by A1,PARTFUN1:def 4
-;
-    reconsider t = x as Term of S,V by A2,Th4;
+A2: x in dom the Sorts of X1-Circuit A by XBOOLE_0:def 4;
+A3: x in dom the Sorts of X2 -Circuit A by A1,XBOOLE_0:def 4;
+A4: x in the carrier of X1-CircuitStr by A2,PARTFUN1:def 4;
+    reconsider v1 = x as Vertex of X1-CircuitStr by A2,PARTFUN1:def 4;
+    reconsider v2 = x as Vertex of X2-CircuitStr by A3,PARTFUN1:def 4;
+    reconsider t = x as Term of S,V by A4,Th4;
     thus (the Sorts of X1-Circuit A).x = the_sort_of (v1, A) by Def4
       .= (the Sorts of A).the_sort_of t by Def2
       .= the_sort_of (v2, A) by Def2
       .= (the Sorts of X2-Circuit A).x by Def4;
   end;
   let x be set;
-  assume x in (dom the Charact of X1-Circuit A) /\ dom the Charact of X2
+  assume
+A5: x in (dom the Charact of X1-Circuit A) /\ dom the Charact of X2
   -Circuit A;
   then
-A3: x in dom the Charact of X1-Circuit A & x in dom the Charact of X2
-  -Circuit A by XBOOLE_0:def 4;
-  then reconsider g1 = x as Gate of X1-CircuitStr by PARTFUN1:def 4
-;
-  reconsider g2 = x as Gate of X2-CircuitStr by A3,PARTFUN1:def 4
-;
+A6: x in dom the Charact of X1-Circuit A by XBOOLE_0:def 4;
+A7: x in dom the Charact of X2 -Circuit A by A5,XBOOLE_0:def 4;
+  reconsider g1 = x as Gate of X1-CircuitStr by A6,PARTFUN1:def 4;
+  reconsider g2 = x as Gate of X2-CircuitStr by A7,PARTFUN1:def 4;
   thus (the Charact of X1-Circuit A).x = the_action_of (g1, A) by Def5
     .= (the Charact of A).(g1.{})`1 by Def3
     .= the_action_of (g2, A) by Def3
@@ -947,29 +947,33 @@ A1: t1 in X1 by MSATERM:def 7;
   then reconsider X = X1 \/ X2 as SetWithCompoundTerm of S,V by MSATERM:def 7;
   let A be non-empty MSAlgebra over S;
   set C1 = X1-Circuit A, C2 = X2-Circuit A, C = X-Circuit A;
-  C1 tolerates C2 by Th19;
+A2: C1 tolerates C2 by Th19;
   then
-A2: the Sorts of C1 tolerates the Sorts of C2 &
-  the Charact of C1 tolerates the Charact of C2 by CIRCCOMB:def 3;
+A3: the Sorts of C1 tolerates the Sorts of C2 by CIRCCOMB:def 3;
+A4: the Charact of C1 tolerates the Charact of C2 by A2,CIRCCOMB:def 3;
+A5: the Sorts of C1+*C2 = (the Sorts of C1) +* (the Sorts of C2) by A3,
+  CIRCCOMB:def 4;
+A6: the Charact of C1+*C2 = (the Charact of C1) +* (the Charact of C2) by A3,
+  CIRCCOMB:def 4;
+A7: X-CircuitStr = X1-CircuitStr+*(X2-CircuitStr) by Th11;
+A8: C1 tolerates C by Th19;
+A9: C2 tolerates C by Th19;
+A10: the Sorts of C1 tolerates the Sorts of C by A8,CIRCCOMB:def 3;
+A11: the Sorts of C2 tolerates the Sorts of C by A9,CIRCCOMB:def 3;
+A12: the Charact of C1 tolerates the Charact of C by A8,CIRCCOMB:def 3;
+A13: the Charact of C2 tolerates the Charact of C by A9,CIRCCOMB:def 3;
+A14: dom the Sorts of C1+*C2 = the carrier of X-CircuitStr by A7,
+  PARTFUN1:def 4;
+  dom the Charact of C1+*C2 = the carrier' of X-CircuitStr by A7,
+  PARTFUN1:def 4;
   then
-A3: the Sorts of C1+*C2 = (the Sorts of C1) +* (the Sorts of C2) &
-  the Charact of C1+*C2 = (the Charact of C1) +* (the Charact of C2)
-  by CIRCCOMB:def 4;
-A4: X-CircuitStr = X1-CircuitStr+*(X2-CircuitStr) by Th11;
-  C1 tolerates C & C2 tolerates C by Th19;
-  then
-A5: the Sorts of C1 tolerates the Sorts of C &
-  the Sorts of C2 tolerates the Sorts of C &
-  the Charact of C1 tolerates the Charact of C &
-  the Charact of C2 tolerates the Charact of C by CIRCCOMB:def 3;
-  dom the Sorts of C1+*C2 = the carrier of X-CircuitStr &
-  dom the Charact of C1+*C2 = the carrier' of X-CircuitStr
-  by A4,PARTFUN1:def 4;
-  then dom the Charact of C1+*C2 = dom the Charact of C &
-  dom the Sorts of C1+*C2 = dom the Sorts of C by PARTFUN1:def 4;
-  then the Charact of C1+*C2 = the Charact of C &
-  the Sorts of C1+*C2 = the Sorts of C by A2,A3,A5,CIRCCOMB:5,PARTFUN1:136;
-  hence thesis;
+A15: dom the Charact of C1+*C2 = dom the Charact of C by PARTFUN1:def 4;
+A16: dom the Sorts of C1+*C2 = dom the Sorts of C by A14,PARTFUN1:def 4;
+A17: the Charact of C1+*C2 = the Charact of C by A4,A6,A12,A13,A15,CIRCCOMB:5
+  ,PARTFUN1:136;
+  the Sorts of C1+*C2 = the Sorts of C by A3,A5,A10,A11,A16,CIRCCOMB:5
+  ,PARTFUN1:136;
+  hence thesis by A17;
 end;
 
 begin :: <section3>Correctness of a Term Circuit</section3>
@@ -1015,11 +1019,11 @@ A1: for x being Vertex of S, v being Element of V.x
     suppose root-tree [v,x] in Subtrees X;
       then reconsider a = root-tree [v,x] as Vertex of X-CircuitStr;
       reconsider t = a as Term of S,V by MSATERM:4;
-      the_sort_of t = x &
-      the_sort_of (a, A) = (the Sorts of A).the_sort_of t &
-      (X-CircuitSorts A).a = the_sort_of (a, A) &
-      s.a in (the Sorts of X-Circuit A).a by Def2,Def4,CIRCUIT1:5,MSATERM:14;
-      then reconsider b = s.a as Element of (the Sorts of A).x;
+A2:   the_sort_of t = x by MSATERM:14;
+A3:   the_sort_of (a, A) = (the Sorts of A).the_sort_of t by Def2;
+      (X-CircuitSorts A).a = the_sort_of (a, A) by Def4;
+      then reconsider b = s.a as Element of (the Sorts of A).x by A2,A3,
+      CIRCUIT1:5;
       take b;
       thus thesis;
     end;
@@ -1049,7 +1053,8 @@ proof
 A1: root-tree [v,x] in Subtrees X;
   then root-tree [v,x] in InputVertices (X-CircuitStr) by Th12;
   then s is_stable_at root-tree [v,x] by FACIRC_1:18;
-  then Following(s,n).root-tree [v,x] = s.root-tree [v,x] by FACIRC_1:def 9;
+  then Following(s,n).root-tree [v,x] = s.root-tree [v,x] by
+  FACIRC_1:def 9;
   hence thesis by A1,Def8;
 end;
 
@@ -1113,117 +1118,125 @@ A7: for t being Term of S,V st t in rng p & t in Subtrees X holds
 A8: [o,the carrier of S]-tree p in Subtrees X;
     consider tt being Element of X, n being Node of tt such that
 A9: [o,the carrier of S]-tree p = tt|n by A8,TREES_9:20;
-    <*>NAT in (dom tt)|n & n^{} = n by FINSEQ_1:47,TREES_1:47;
-    then tt.n = (tt|n).{} by TREES_2:def 11
+A10: <*>NAT in (dom tt)|n by TREES_1:47;
+    n^{} = n by FINSEQ_1:47;
+    then tt.n = (tt|n).{} by A10,TREES_2:def 11
       .= [o,the carrier of S] by A9,TREES_4:def 4;
     then tt.n in [:the carrier' of S,{the carrier of S}:] by ZFMISC_1:129;
     then reconsider g = [o,the carrier of S]-tree p as Gate of X-CircuitStr
     by A9,TREES_9:25;
-A10: the_result_sort_of g = g by FUNCT_1:34;
-A11: g.{} = [o,the carrier of S] by TREES_4:def 4;
+A11: the_result_sort_of g = g by FUNCT_1:34;
+A12: g.{} = [o,the carrier of S] by TREES_4:def 4;
     g = (g.{})-tree the_arity_of g by Th13;
     then
-A12: the_arity_of g = p by TREES_4:15;
-A13: rng the_arity_of g c= Subtrees X by FINSEQ_1:def 4;
-A14: dom ([o,the carrier of S]-tree p) = tree doms p by TREES_4:10;
+A13: the_arity_of g = p by TREES_4:15;
+A14: rng the_arity_of g c= Subtrees X by FINSEQ_1:def 4;
+A15: dom ([o,the carrier of S]-tree p) = tree doms p by TREES_4:10;
     now
       let x being set;
       assume
-A15:  x in rng the_arity_of g;
-      then reconsider t = x as Element of Subtrees X by A13;
+A16:  x in rng the_arity_of g;
+      then reconsider t = x as Element of Subtrees X by A14;
       reconsider t as Term of S,V by A1,Th4;
-A16:  Following(q, 1+height dom t) is_stable_at t &
-      Following(q,1+height dom t).t = t@(f, A) by A7,A12,A15;
       consider z being set such that
-A17:  z in dom p & t = p.z by A12,A15,FUNCT_1:def 5;
-      z in dom doms p & (doms p).z = dom t by A17,FUNCT_6:31;
-      then dom t in rng doms p by FUNCT_1:def 5;
+A17:  z in dom p and
+A18:  t = p.z by A13,A16,FUNCT_1:def 5;
+A19:  z in dom doms p by A17,A18,FUNCT_6:31;
+      (doms p).z = dom t by A17,A18,FUNCT_6:31;
+      then dom t in rng doms p by A19,FUNCT_1:def 5;
       then height dom t < height tree doms p by TREES_3:81;
       then 1+height dom t <= height tree doms p by NAT_1:13;
       then consider i being Nat such that
-A18:  height tree doms p = (1+height dom t)+i by NAT_1:10;
+A20:  height tree doms p = (1+height dom t)+i by NAT_1:10;
       reconsider i as Element of NAT by ORDINAL1:def 13;
       Following(q,height dom ([o,the carrier of S]-tree p))
-      = Following(Following(q,1+height dom t),i) by A14,A18,FACIRC_1:13;
+      = Following(Following(q,1+height dom t),i) by A15,A20,FACIRC_1:13;
       hence Following(q,height dom ([o,the carrier of S]-tree p))
-      is_stable_at x by A16,FACIRC_1:17;
+      is_stable_at x by A7,A13,A16,FACIRC_1:17;
     end;
     then Following Following(q,height dom ([o,the carrier of S]-tree p))
-    is_stable_at [o,the carrier of S]-tree p by A10,FACIRC_1:19;
+    is_stable_at [o,the carrier of S]-tree p by A11,FACIRC_1:19;
     hence Following(q,1+height dom ([o,the carrier of S]-tree p))
     is_stable_at [o,the carrier of S]-tree p by FACIRC_1:12;
     reconsider t = Sym(o,V)-tree p as c-Term of A,V by MSATERM:27;
-A19: Sym(o,(the Sorts of A) \/ V) = [o, the carrier of S] &
-    Sym(o,V) = [o,the carrier of S] by MSAFREE:def 11;
-A20: t = [o,the carrier of S]-tree p by MSAFREE:def 11;
+A21: Sym(o,(the Sorts of A) \/ V) = [o, the carrier of S] by MSAFREE:def 11;
+A22: Sym(o,V) = [o,the carrier of S] by MSAFREE:def 11;
+A23: t = [o,the carrier of S]-tree p by MSAFREE:def 11;
     deffunc f(set) = Following(q,height dom t).(p.$1);
     consider vp being FinSequence such that
-A21: len vp = len p and
-A22: for i being Nat st i in dom vp holds vp.i = f(i) from FINSEQ_1:sch 2;
-A23: dom vp = Seg len p & dom p = Seg len p by A21,FINSEQ_1:def 3;
-A24: dom p = dom the_arity_of o by MSATERM:22;
+A24: len vp = len p and
+A25: for i being Nat st i in dom vp holds vp.i = f(i) from FINSEQ_1:sch 2;
+A26: dom vp = Seg len p by A24,FINSEQ_1:def 3;
+A27: dom p = Seg len p by FINSEQ_1:def 3;
+A28: dom p = dom the_arity_of o by MSATERM:22;
     now
       let i be Nat;
       assume
-A25:  i in dom p;
+A29:  i in dom p;
       then reconsider t = p.i as Term of S,V by MSATERM:22;
       reconsider t' = t as c-Term of A,V by MSATERM:27;
       take t';
       the_sort_of t = the_sort_of t' by Th1;
-      hence t' = p.i & the_sort_of t' = (the_arity_of o).i by A25,MSATERM:23;
+      hence t' = p.i & the_sort_of t' = (the_arity_of o).i by A29,
+      MSATERM:23;
     end;
-    then reconsider p' = p as ArgumentSeq of o,A,V by A24,MSATERM:24;
+    then reconsider p' = p as ArgumentSeq of o,A,V by A28,MSATERM:24;
     now
       let i be Nat;
       assume
-A26:  i in dom p;
+A30:  i in dom p;
       let t being c-Term of A,V;
       assume
-A27:  t = p.i;
+A31:  t = p.i;
       then
-A28:  t in rng p by A26,FUNCT_1:def 5;
-      then reconsider tt = t as Element of Subtrees X by A12,A13;
+A32:  t in rng p by A30,FUNCT_1:def 5;
+      then reconsider tt = t as Element of Subtrees X by A13,A14;
       reconsider tt as Term of S,V by A1,Th4;
-A29:  Following(q, 1+height dom t) is_stable_at tt &
-      Following(q, 1+height dom t).tt = tt@(f, A) by A7,A28;
-A30:  vp.i = Following(q, height dom ([o,the carrier of S]-tree p)).t
-      by A20,A22,A23,A26,A27;
-      i in dom doms p & (doms p).i = dom t by A26,A27,FUNCT_6:31;
-      then dom t in rng doms p by FUNCT_1:def 5;
+A33:  Following(q, 1+height dom t) is_stable_at tt by A7,A32;
+A34:  Following(q, 1+height dom t).tt = tt@(f, A) by A7,A32;
+A35:  vp.i = Following(q, height dom ([o,the carrier of S]-tree p)).t
+      by A23,A25,A26,A27,A30,A31;
+A36:  i in dom doms p by A30,A31,FUNCT_6:31;
+      (doms p).i = dom t by A30,A31,FUNCT_6:31;
+      then dom t in rng doms p by A36,FUNCT_1:def 5;
       then height dom t < height tree doms p by TREES_3:81;
       then 1+height dom t <= height tree doms p by NAT_1:13;
       then consider j being Nat such that
-A31:  height tree doms p = (1+height dom t)+j by NAT_1:10;
+A37:  height tree doms p = (1+height dom t)+j by NAT_1:10;
       reconsider j as Element of NAT by ORDINAL1:def 13;
       Following(q,height dom ([o,the carrier of S]-tree p))
-      = Following(Following(q,1+height dom t),j) by A14,A31,FACIRC_1:13;
+      = Following(Following(q,1+height dom t),j) by A15,A37,FACIRC_1:13;
       then Following(q,height dom ([o,the carrier of S]-tree p)).t
-      = Following(q,1+height dom t).t by A29,FACIRC_1:def 9;
-      hence vp.i = t@f by A29,A30,Def7;
+      = Following(q,1+height dom t).t by A33,FACIRC_1:def 9;
+      hence vp.i = t@f by A34,A35,Def7;
     end;
     then
-A32: (Sym(o,(the Sorts of A) \/ V)-tree p' qua c-Term of A,V)@f = Den( o,A).vp
-    by A21,MSATERM:43;
+    A38: (
+Sym(o,(the Sorts of A) \/ V)-tree p' qua c-Term of A,V)@f = Den( o,A).vp
+    by A24,MSATERM:43;
     now
-      rng p c= the carrier of X-CircuitStr &
-      dom Following(q, height dom t) = the carrier of X-CircuitStr
-      by A12,CIRCUIT1:4,FINSEQ_1:def 4;
-      hence dom (Following(q, height dom t)*p) = dom p by RELAT_1:46;
+A39:  rng p c= the carrier of X-CircuitStr by A13,FINSEQ_1:def 4;
+      dom Following(q, height dom t) = the carrier of X-CircuitStr by
+      CIRCUIT1:4;
+      hence dom (Following(q, height dom t)*p) = dom p by A39,
+      RELAT_1:46;
       let z be set;
       assume
-A33:  z in Seg len p;
+A40:  z in Seg len p;
       then reconsider i = z as Element of NAT;
-      vp.i = Following(q, height dom t).(p.i) by A22,A33,A23;
-      hence vp.z = (Following(q, height dom t)*p).z by A23,A33,FUNCT_1:23;
+      vp.i = Following(q, height dom t).(p.i) by A25,A26,A40;
+      hence vp.z = (Following(q, height dom t)*p).z by A27,A40,
+      FUNCT_1:23;
     end;
     then
-A34: vp = Following(q, height dom t)*the_arity_of g by A12,A23,FUNCT_1:9;
-    Den(g, X-Circuit A) = Den(o,A) by A11,Th17;
+A41: vp = Following(q, height dom t)*the_arity_of g by A13,A26,A27,
+    FUNCT_1:9;
+    Den(g, X-Circuit A) = Den(o,A) by A12,Th17;
     then Den(o,A).vp = (Following Following(q,height dom t)).t
-    by A10,A20,A34,FACIRC_1:10;
+    by A11,A23,A41,FACIRC_1:10;
     hence Following(q,1+height dom ([o,the carrier of S]-tree p)).
-    ([o,the carrier of S]-tree p) = t@f by A19,A32,FACIRC_1:12
-      .= ([o,the carrier of S]-tree p)@(f, A) by A19,Def7;
+    ([o,the carrier of S]-tree p) = t@f by A21,A22,A38,FACIRC_1:12
+      .= ([o,the carrier of S]-tree p)@(f, A) by A22,Def7;
   end;
   thus for t being Term of S,V holds P[t] from MSATERM:sch 1(A2,A6);
 end;
@@ -1278,127 +1291,134 @@ A7: for t being Term of S,V st t in rng p & t in Subtrees X holds
 A8: [o,the carrier of S]-tree p in Subtrees X;
     consider tt being Element of X, n being Node of tt such that
 A9: [o,the carrier of S]-tree p = tt|n by A8,TREES_9:20;
-    <*>NAT in (dom tt)|n & n^{} = n by FINSEQ_1:47,TREES_1:47;
-    then tt.n = (tt|n).{} by TREES_2:def 11
+A10: <*>NAT in (dom tt)|n by TREES_1:47;
+    n^{} = n by FINSEQ_1:47;
+    then tt.n = (tt|n).{} by A10,TREES_2:def 11
       .= [o,the carrier of S] by A9,TREES_4:def 4;
     then tt.n in [:the carrier' of S,{the carrier of S}:] by ZFMISC_1:129;
     then reconsider g = [o,the carrier of S]-tree p as Gate of X-CircuitStr
     by A9,TREES_9:25;
-A10: the_result_sort_of g = g by FUNCT_1:34;
-A11: g.{} = [o,the carrier of S] by TREES_4:def 4;
+A11: the_result_sort_of g = g by FUNCT_1:34;
+A12: g.{} = [o,the carrier of S] by TREES_4:def 4;
     g = (g.{})-tree the_arity_of g by Th13;
     then
-A12: the_arity_of g = p by TREES_4:15;
-A13: rng the_arity_of g c= Subtrees X by FINSEQ_1:def 4;
-A14: dom ([o,the carrier of S]-tree p) = tree doms p by TREES_4:10;
+A13: the_arity_of g = p by TREES_4:15;
+A14: rng the_arity_of g c= Subtrees X by FINSEQ_1:def 4;
+A15: dom ([o,the carrier of S]-tree p) = tree doms p by TREES_4:10;
     now
       assume height dom ([o,the carrier of S]-tree p) = 0;
       then [o,the carrier of S]-tree p = root-tree [o,the carrier of S]
-      by A11,TREES_1:80,TREES_4:5;
+      by A12,TREES_1:80,TREES_4:5;
       then p = {} by TREES_4:17;
       then len p = 0;
       then len the_arity_of o = 0 by MSATERM:22;
-      then the_arity_of o = {} & g is Term of S,V by Th4;
-      hence contradiction by A1,A8,A11;
+      then
+A16:  the_arity_of o = {};
+      g is Term of S,V by Th4;
+      hence contradiction by A1,A8,A12,A16;
     end;
     then consider h being Nat such that
-A15: height dom ([o,the carrier of S]-tree p) = h+1 by NAT_1:6;
+A17: height dom ([o,the carrier of S]-tree p) = h+1 by NAT_1:6;
     reconsider h as Element of NAT by ORDINAL1:def 13;
     now
       let x being set;
       assume
-A16:  x in rng the_arity_of g;
-      then reconsider t = x as Element of Subtrees X by A13;
+A18:  x in rng the_arity_of g;
+      then reconsider t = x as Element of Subtrees X by A14;
       reconsider t as Term of S,V by A2,Th4;
-A17:  Following(q, height dom t) is_stable_at t &
-      Following(q, height dom t).t = t@(f, A) by A7,A12,A16;
       consider z being set such that
-A18:  z in dom p & t = p.z by A12,A16,FUNCT_1:def 5;
-      z in dom doms p & (doms p).z = dom t by A18,FUNCT_6:31;
-      then dom t in rng doms p by FUNCT_1:def 5;
+A19:  z in dom p and
+A20:  t = p.z by A13,A18,FUNCT_1:def 5;
+A21:  z in dom doms p by A19,A20,FUNCT_6:31;
+      (doms p).z = dom t by A19,A20,FUNCT_6:31;
+      then dom t in rng doms p by A21,FUNCT_1:def 5;
       then height dom t < height tree doms p by TREES_3:81;
-      then height dom t <= h by A14,A15,NAT_1:13;
+      then height dom t <= h by A15,A17,NAT_1:13;
       then consider i being Nat such that
-A19:  h = (height dom t)+i by NAT_1:10;
+A22:  h = (height dom t)+i by NAT_1:10;
       reconsider i as Element of NAT by ORDINAL1:def 13;
       Following(q,h) = Following(Following(q,height dom t),i)
-      by A19,FACIRC_1:13;
-      hence Following(q,h) is_stable_at x by A17,FACIRC_1:17;
+      by A22,FACIRC_1:13;
+      hence Following(q,h) is_stable_at x by A7,A13,A18,FACIRC_1:17;
     end;
     then Following Following(q,h) is_stable_at [o,the carrier of S]-tree p
-    by A10,FACIRC_1:19;
+    by A11,FACIRC_1:19;
     hence Following(q,height dom ([o,the carrier of S]-tree p))
-    is_stable_at [o,the carrier of S]-tree p by A15,FACIRC_1:12;
+    is_stable_at [o,the carrier of S]-tree p by A17,FACIRC_1:12;
     reconsider t = Sym(o,V)-tree p as c-Term of A,V by MSATERM:27;
-A20: Sym(o,(the Sorts of A) \/ V) = [o, the carrier of S] &
-    Sym(o,V) = [o,the carrier of S] by MSAFREE:def 11;
-A21: t = [o,the carrier of S]-tree p by MSAFREE:def 11;
+A23: Sym(o,(the Sorts of A) \/ V) = [o, the carrier of S] by MSAFREE:def 11;
+A24: Sym(o,V) = [o,the carrier of S] by MSAFREE:def 11;
+A25: t = [o,the carrier of S]-tree p by MSAFREE:def 11;
     deffunc f(set) = Following(q,h).(p.$1);
     consider vp being FinSequence such that
-A22: len vp = len p and
-A23: for i being Nat st i in dom vp holds vp.i = f(i) from FINSEQ_1:sch 2;
-A24: dom vp = Seg len p & dom p = Seg len p by A22,FINSEQ_1:def 3;
-A25: dom p = dom the_arity_of o by MSATERM:22;
+A26: len vp = len p and
+A27: for i being Nat st i in dom vp holds vp.i = f(i) from FINSEQ_1:sch 2;
+A28: dom vp = Seg len p by A26,FINSEQ_1:def 3;
+A29: dom p = Seg len p by FINSEQ_1:def 3;
+A30: dom p = dom the_arity_of o by MSATERM:22;
     now
       let i be Nat;
       assume
-A26:  i in dom p;
+A31:  i in dom p;
       then reconsider t = p.i as Term of S,V by MSATERM:22;
       reconsider t' = t as c-Term of A,V by MSATERM:27;
       take t';
       the_sort_of t = the_sort_of t' by Th1;
-      hence t' = p.i & the_sort_of t' = (the_arity_of o).i by A26,MSATERM:23;
+      hence t' = p.i & the_sort_of t' = (the_arity_of o).i by A31,
+      MSATERM:23;
     end;
-    then reconsider p' = p as ArgumentSeq of o,A,V by A25,MSATERM:24;
+    then reconsider p' = p as ArgumentSeq of o,A,V by A30,MSATERM:24;
     now
       let i be Nat;
       assume
-A27:  i in dom p;
+A32:  i in dom p;
       let t being c-Term of A,V;
       assume
-A28:  t = p.i;
+A33:  t = p.i;
       then
-A29:  t in rng p by A27,FUNCT_1:def 5;
-      then reconsider tt = t as Element of Subtrees X by A12,A13;
+A34:  t in rng p by A32,FUNCT_1:def 5;
+      then reconsider tt = t as Element of Subtrees X by A13,A14;
       reconsider tt as Term of S,V by A2,Th4;
-A30:  Following(q, height dom t) is_stable_at tt &
-      Following(q, height dom t).tt = tt@(f, A) by A7,A29;
-A31:  vp.i = Following(q,h).t by A23,A24,A27,A28;
-      i in dom doms p & (doms p).i = dom t by A27,A28,FUNCT_6:31;
-      then dom t in rng doms p by FUNCT_1:def 5;
+A35:  Following(q, height dom t) is_stable_at tt by A7,A34;
+A36:  Following(q, height dom t).tt = tt@(f, A) by A7,A34;
+A37:  vp.i = Following(q,h).t by A27,A28,A29,A32,A33;
+A38:  i in dom doms p by A32,A33,FUNCT_6:31;
+      (doms p).i = dom t by A32,A33,FUNCT_6:31;
+      then dom t in rng doms p by A38,FUNCT_1:def 5;
       then height dom t < height tree doms p by TREES_3:81;
-      then height dom t <= h by A14,A15,NAT_1:13;
+      then height dom t <= h by A15,A17,NAT_1:13;
       then consider j being Nat such that
-A32:  h = (height dom t)+j by NAT_1:10;
+A39:  h = (height dom t)+j by NAT_1:10;
       reconsider j as Element of NAT by ORDINAL1:def 13;
       Following(q,h) = Following(Following(q,height dom t),j)
-      by A32,FACIRC_1:13;
-      then Following(q,h).t = Following(q,height dom t).t by A30,FACIRC_1:def 9
-;
-      hence vp.i = t@f by A30,A31,Def7;
+      by A39,FACIRC_1:13;
+      then Following(q,h).t = Following(q,height dom t).t by A35,
+      FACIRC_1:def 9;
+      hence vp.i = t@f by A36,A37,Def7;
     end;
     then
-A33: (Sym(o,(the Sorts of A) \/ V)-tree p' qua c-Term of A,V)@f = Den( o,A).vp
-    by A22,MSATERM:43;
+    A40: (
+Sym(o,(the Sorts of A) \/ V)-tree p' qua c-Term of A,V)@f = Den( o,A).vp
+    by A26,MSATERM:43;
     now
-      rng p c= the carrier of X-CircuitStr &
-      dom Following(q, h) = the carrier of X-CircuitStr
-      by A12,CIRCUIT1:4,FINSEQ_1:def 4;
-      hence dom (Following(q, h)*p) = dom p by RELAT_1:46;
+A41:  rng p c= the carrier of X-CircuitStr by A13,FINSEQ_1:def 4;
+      dom Following(q, h) = the carrier of X-CircuitStr by CIRCUIT1:4;
+      hence dom (Following(q, h)*p) = dom p by A41,RELAT_1:46;
       let z be set;
       assume
-A34:  z in Seg len p;
+A42:  z in Seg len p;
       then reconsider i = z as Element of NAT;
-      vp.i = Following(q, h).(p.i) by A23,A34,A24;
-      hence vp.z = (Following(q, h)*p).z by A24,A34,FUNCT_1:23;
+      vp.i = Following(q, h).(p.i) by A27,A28,A42;
+      hence vp.z = (Following(q, h)*p).z by A29,A42,FUNCT_1:23;
     end;
     then
-A35: vp = Following(q, h)*the_arity_of g by A12,A24,FUNCT_1:9;
-    Den(g, X-Circuit A) = Den(o,A) by A11,Th17;
-    then Den(o,A).vp = (Following Following(q,h)).t by A10,A21,A35,FACIRC_1:10;
+A43: vp = Following(q, h)*the_arity_of g by A13,A28,A29,FUNCT_1:9;
+    Den(g, X-Circuit A) = Den(o,A) by A12,Th17;
+    then Den(o,A).vp = (Following Following(q,h)).t by A11,A25,A43,
+    FACIRC_1:10;
     hence Following(q,height dom ([o,the carrier of S]-tree p)).
-    ([o,the carrier of S]-tree p) = t@f by A15,A20,A33,FACIRC_1:12
-      .= ([o,the carrier of S]-tree p)@(f, A) by A20,Def7;
+    ([o,the carrier of S]-tree p) = t@f by A17,A23,A24,A40,FACIRC_1:12
+      .= ([o,the carrier of S]-tree p)@(f, A) by A24,Def7;
   end;
   thus for t being Term of S,V holds P[t] from MSATERM:sch 1(A3,A6);
 end;
@@ -1421,17 +1441,18 @@ theorem Th24:
   the carrier' of S2 = g.:the carrier' of S1
 proof
   let S1, S2 be non empty ManySortedSign, f,g be Function such that
-A1: f is one-to-one & g is one-to-one and
-A2: f, g form_morphism_between S1, S2 and
-A3: f", g" form_morphism_between S2, S1;
-  thus the carrier of S2 = dom (f") by A3,PUA2MSS1:def 13
+A1: f is one-to-one and
+A2: g is one-to-one and
+A3: f, g form_morphism_between S1, S2 and
+A4: f", g" form_morphism_between S2, S1;
+  thus the carrier of S2 = dom (f") by A4,PUA2MSS1:def 13
     .= rng f by A1,FUNCT_1:55
     .= f.:dom f by RELAT_1:146
-    .= f.:the carrier of S1 by A2,PUA2MSS1:def 13;
-  thus the carrier' of S2 = dom (g") by A3,PUA2MSS1:def 13
-    .= rng g by A1,FUNCT_1:55
+    .= f.:the carrier of S1 by A3,PUA2MSS1:def 13;
+  thus the carrier' of S2 = dom (g") by A4,PUA2MSS1:def 13
+    .= rng g by A2,FUNCT_1:55
     .= g.:dom g by RELAT_1:146
-    .= g.:the carrier' of S1 by A2,PUA2MSS1:def 13;
+    .= g.:the carrier' of S1 by A3,PUA2MSS1:def 13;
 end;
 
 theorem Th25:
@@ -1440,13 +1461,14 @@ theorem Th25:
   holds rng f = the carrier of S2 & rng g = the carrier' of S2
 proof
   let S1, S2 be non empty ManySortedSign, f,g be Function such that
-A1: f is one-to-one & g is one-to-one and
+A1: f is one-to-one and
+A2: g is one-to-one and
   f, g form_morphism_between S1, S2 and
-A2: f", g" form_morphism_between S2, S1;
+A3: f", g" form_morphism_between S2, S1;
   thus rng f = dom (f") by A1,FUNCT_1:55
-    .= the carrier of S2 by A2,PUA2MSS1:def 13;
-  thus rng g = dom (g") by A1,FUNCT_1:55
-    .= the carrier' of S2 by A2,PUA2MSS1:def 13;
+    .= the carrier of S2 by A3,PUA2MSS1:def 13;
+  thus rng g = dom (g") by A2,FUNCT_1:55
+    .= the carrier' of S2 by A3,PUA2MSS1:def 13;
 end;
 
 theorem Th26:
@@ -1456,8 +1478,9 @@ proof
   let S be non empty ManySortedSign;
   set f = id the carrier of S, g = id the carrier' of S;
   thus f is one-to-one;
-  f" = f & g" = g by FUNCT_1:67;
-  hence thesis by INSTALG1:9;
+A1: f" = f by FUNCT_1:67;
+  g" = g by FUNCT_1:67;
+  hence thesis by A1,INSTALG1:9;
 end;
 
 theorem Th27:
@@ -1465,12 +1488,13 @@ theorem Th27:
   st S1, S2 are_equivalent_wrt f, g holds S2, S1 are_equivalent_wrt f", g"
 proof
   let S1, S2 be non empty ManySortedSign, f,g be Function such that
-A1: f is one-to-one & g is one-to-one and
-A2: f, g form_morphism_between S1, S2 and
-A3: f", g" form_morphism_between S2, S1;
-  thus f" is one-to-one & g" is one-to-one by A1;
-  f" " = f & g" " = g by A1,FUNCT_1:65;
-  hence thesis by A2,A3;
+A1: f is one-to-one and
+A2: g is one-to-one and
+A3: f, g form_morphism_between S1, S2 and
+A4: f", g" form_morphism_between S2, S1;
+  thus f" is one-to-one & g" is one-to-one by A1,A2;
+  f" " = f by A1,FUNCT_1:65;
+  hence thesis by A2,A3,A4,FUNCT_1:65;
 end;
 
 theorem Th28:
@@ -1480,15 +1504,18 @@ theorem Th28:
 proof
   let S1, S2, S3 be non empty ManySortedSign;
   let f1,g1, f2,g2 be Function such that
-A1: f1 is one-to-one & g1 is one-to-one and
-A2: f1, g1 form_morphism_between S1, S2 and
-A3: f1", g1" form_morphism_between S2, S1 and
-A4: f2 is one-to-one & g2 is one-to-one and
-A5: f2, g2 form_morphism_between S2, S3 and
-A6: f2", g2" form_morphism_between S3, S2;
-  thus f2*f1 is one-to-one & g2*g1 is one-to-one by A1,A4;
-  (f2*f1)" = f1"*f2" & (g2*g1)" = g1"*g2" by A1,A4,FUNCT_1:66;
-  hence thesis by A2,A3,A5,A6,PUA2MSS1:30;
+A1: f1 is one-to-one and
+A2: g1 is one-to-one and
+A3: f1, g1 form_morphism_between S1, S2 and
+A4: f1", g1" form_morphism_between S2, S1 and
+A5: f2 is one-to-one and
+A6: g2 is one-to-one and
+A7: f2, g2 form_morphism_between S2, S3 and
+A8: f2", g2" form_morphism_between S3, S2;
+  thus f2*f1 is one-to-one & g2*g1 is one-to-one by A1,A2,A5,A6;
+A9: (f2*f1)" = f1"*f2" by A1,A5,FUNCT_1:66;
+  (g2*g1)" = g1"*g2" by A2,A6,FUNCT_1:66;
+  hence thesis by A3,A4,A7,A8,A9,PUA2MSS1:30;
 end;
 
 theorem Th29:
@@ -1499,17 +1526,17 @@ theorem Th29:
 proof
   let S1, S2 be non empty ManySortedSign, f,g be Function such that
 A1: S1, S2 are_equivalent_wrt f, g;
-A2: f is one-to-one & g is one-to-one by A1,Def9;
+A2: f is one-to-one by A1,Def9;
 A3: f, g form_morphism_between S1, S2 by A1,Def9;
-A4: rng g = the carrier' of S2 &
-  dom the ResultSort of S2 = the carrier' of S2 by A1,Th25,FUNCT_2:def 1;
-A5: f.:rng the ResultSort of S1 = rng (f*the ResultSort of S1) by RELAT_1:160
+A4: rng g = the carrier' of S2 by A1,Th25;
+A5: dom the ResultSort of S2 = the carrier' of S2 by FUNCT_2:def 1;
+A6: f.:rng the ResultSort of S1 = rng (f*the ResultSort of S1) by RELAT_1:160
     .= rng ((the ResultSort of S2)*g) by A3,PUA2MSS1:def 13
-    .= rng the ResultSort of S2 by A4,RELAT_1:47;
+    .= rng the ResultSort of S2 by A4,A5,RELAT_1:47;
   thus f.:InputVertices S1 = f.:(the carrier of S1) \ f.:
   rng the ResultSort of S1 by A2,FUNCT_1:123
-    .= InputVertices S2 by A1,A5,Th24;
-  thus thesis by A5;
+    .= InputVertices S2 by A1,A6,Th24;
+  thus thesis by A6;
 end;
 
 definition
@@ -1559,13 +1586,14 @@ theorem Th31:
 proof
   let S1, S2 be non empty ManySortedSign;
   let f, g be Function;
-  assume
-A1: dom f = the carrier of S1 & dom g = the carrier' of S1 &
-  rng f c= the carrier of S2;
+  assume that
+A1: dom f = the carrier of S1
+  and dom g = the carrier' of S1 and
+A2: rng f c= the carrier of S2;
   now
     let v be Vertex of S1;
     f.v in rng f by A1,FUNCT_1:def 5;
-    hence f.v in the carrier of S2 by A1;
+    hence f.v in the carrier of S2 by A2;
   end;
   hence thesis;
 end;
@@ -1577,13 +1605,15 @@ theorem Th32:
 proof
   let S1, S2 be non empty non void ManySortedSign;
   let f, g be Function;
-  assume
-A1: dom f = the carrier of S1 & dom g = the carrier' of S1 &
-  rng f c= the carrier of S2 & rng g c= the carrier' of S2;
+  assume that
+  dom f = the carrier of S1 and
+A1: dom g = the carrier' of S1
+  and rng f c= the carrier of S2 and
+A2: rng g c= the carrier' of S2;
   now
     let v be Gate of S1;
     g.v in rng g by A1,FUNCT_1:def 5;
-    hence g.v in the carrier' of S2 by A1;
+    hence g.v in the carrier' of S2 by A2;
   end;
   hence thesis;
 end;
@@ -1594,9 +1624,11 @@ theorem Th33:
   holds f.:InnerVertices S1 c= InnerVertices S2
 proof
   let S1, S2 be non empty ManySortedSign;
-  let f, g be Function such that
-A1: f, g form_morphism_between S1, S2;
-  f*the ResultSort of S1 = (the ResultSort of S2)*g by A1,PUA2MSS1:def 13;
+  let f, g be Function;
+  assume
+  f, g form_morphism_between S1, S2;
+  then f*the ResultSort of S1 = (the ResultSort of S2)*g by
+  PUA2MSS1:def 13;
   then f.:InnerVertices S1 = rng ((the ResultSort of S2)*g) by RELAT_1:160;
   hence thesis by RELAT_1:45;
 end;
@@ -1615,17 +1647,17 @@ A2: v1 in InnerVertices S1;
   let v2 be Vertex of S2 such that
 A3: v2 = f.v1;
   reconsider g1 = g.action_at v1 as Gate of S2 by A1,Th32;
-A4: dom g = the carrier' of S1 & dom f = the carrier of S1
-  by A1,PUA2MSS1:def 13;
-A5: dom the ResultSort of S1 = the carrier' of S1 by FUNCT_2:def 1;
-A6: f.:InnerVertices S1 c= InnerVertices S2 by A1,Th33;
-A7: v2 in f.:InnerVertices S1 by A2,A3,A4,FUNCT_1:def 12;
+A4: dom g = the carrier' of S1 by A1,PUA2MSS1:def 13;
+A5: dom f = the carrier of S1 by A1,PUA2MSS1:def 13;
+A6: dom the ResultSort of S1 = the carrier' of S1 by FUNCT_2:def 1;
+A7: f.:InnerVertices S1 c= InnerVertices S2 by A1,Th33;
+A8: v2 in f.:InnerVertices S1 by A2,A3,A5,FUNCT_1:def 12;
   the_result_sort_of g1 =
   ((the ResultSort of S2)*g).action_at v1 by A4,FUNCT_1:23
     .= (f*the ResultSort of S1).action_at v1 by A1,PUA2MSS1:def 13
-    .= f.(the_result_sort_of action_at v1) by A5,FUNCT_1:23
+    .= f.(the_result_sort_of action_at v1) by A6,FUNCT_1:23
     .= v2 by A2,A3,MSAFREE2:def 7;
-  hence thesis by A6,A7,MSAFREE2:def 7;
+  hence thesis by A7,A8,MSAFREE2:def 7;
 end;
 
 definition
@@ -1648,9 +1680,9 @@ proof
   let S be non empty ManySortedSign;
   let C be non-empty MSAlgebra over S;
   thus id the carrier of S is one-to-one;
-  dom the Sorts of C = the carrier of S &
+A1: dom the Sorts of C = the carrier of S by PARTFUN1:def 4;
   dom the Charact of C = the carrier' of S by PARTFUN1:def 4;
-  hence thesis by INSTALG1:9,RELAT_1:78;
+  hence thesis by A1,INSTALG1:9,RELAT_1:78;
 end;
 
 theorem Th36:
@@ -1666,17 +1698,19 @@ proof
   let C1 be non-empty MSAlgebra over S1;
   let C2 be non-empty MSAlgebra over S2;
   let C3 be non-empty MSAlgebra over S3 such that
-A1: f1 is one-to-one & g1 is one-to-one and
-A2: f1, g1 form_morphism_between S1, S2 and
-A3: the Sorts of C1 = (the Sorts of C2)*f1 and
-A4: the Charact of C1 = (the Charact of C2)*g1 and
-A5: f2 is one-to-one & g2 is one-to-one and
-A6: f2, g2 form_morphism_between S2, S3 and
-A7: the Sorts of C2 = (the Sorts of C3)*f2 and
-A8: the Charact of C2 = (the Charact of C3)*g2;
-  thus f2*f1 is one-to-one & g2*g1 is one-to-one by A1,A5;
-  thus f2*f1, g2*g1 form_morphism_between S1, S3 by A2,A6,PUA2MSS1:30;
-  thus thesis by A3,A4,A7,A8,RELAT_1:55;
+A1: f1 is one-to-one and
+A2: g1 is one-to-one and
+A3: f1, g1 form_morphism_between S1, S2 and
+A4: the Sorts of C1 = (the Sorts of C2)*f1 and
+A5: the Charact of C1 = (the Charact of C2)*g1 and
+A6: f2 is one-to-one and
+A7: g2 is one-to-one and
+A8: f2, g2 form_morphism_between S2, S3 and
+A9: the Sorts of C2 = (the Sorts of C3)*f2 and
+A10: the Charact of C2 = (the Charact of C3)*g2;
+  thus f2*f1 is one-to-one & g2*g1 is one-to-one by A1,A2,A6,A7;
+  thus f2*f1, g2*g1 form_morphism_between S1, S3 by A3,A8,PUA2MSS1:30;
+  thus thesis by A4,A5,A9,A10,RELAT_1:55;
 end;
 
 definition
@@ -1699,11 +1733,16 @@ proof
   let f,g be Function;
   let C1 be non-empty MSAlgebra over S1;
   let C2 be non-empty MSAlgebra over S2;
-  assume f is one-to-one & g is one-to-one & f, g form_morphism_between S1, S2
-  & the Sorts of C1 = (the Sorts of C2)*f &
-  the Charact of C1 = (the Charact of C2)*g &
-  f" is one-to-one & g" is one-to-one & f", g" form_morphism_between S2, S1;
-  hence thesis by Def9;
+  assume that
+A1: f is one-to-one and
+A2: g is one-to-one and
+A3: f, g form_morphism_between S1, S2
+  and the Sorts of C1 = (the Sorts of C2)*f
+  and the Charact of C1 = (the Charact of C2)*g
+  and f" is one-to-one
+  and g" is one-to-one and
+A4: f", g" form_morphism_between S2, S1;
+  thus thesis by A1,A2,A3,A4,Def9;
 end;
 
 theorem Th38:
@@ -1726,28 +1765,30 @@ A1: C1, C2 are_similar_wrt f, g;
     the Charact of C1 = (the Charact of C2)*g by Def12;
   end;
   assume that
-A2: f is one-to-one & g is one-to-one and
-A3: f, g form_morphism_between S1, S2 and
-A4: f", g" form_morphism_between S2, S1 and
-A5: the Sorts of C1 = (the Sorts of C2)*f &
-  the Charact of C1 = (the Charact of C2)*g; thus
+A2: f is one-to-one and
+A3: g is one-to-one and
+A4: f, g form_morphism_between S1, S2 and
+A5: f", g" form_morphism_between S2, S1 and
+A6: the Sorts of C1 = (the Sorts of C2)*f and
+A7: the Charact of C1 = (the Charact of C2)*g;
+  thus
   f is one-to-one & g is one-to-one & f, g form_morphism_between S1, S2 &
   the Sorts of C1 = (the Sorts of C2)*f &
-  the Charact of C1 = (the Charact of C2)*g by A2,A3,A5;
-  thus f" is one-to-one & g" is one-to-one by A2;
-  thus f", g" form_morphism_between S2, S1 by A4;
-  dom (f") = the carrier of S2 by A4,PUA2MSS1:def 13;
+  the Charact of C1 = (the Charact of C2)*g by A2,A3,A4,A6,A7;
+  thus f" is one-to-one & g" is one-to-one by A2,A3;
+  thus f", g" form_morphism_between S2, S1 by A5;
+  dom (f") = the carrier of S2 by A5,PUA2MSS1:def 13;
   then rng f = the carrier of S2 by A2,FUNCT_1:55;
   then f*(f") = id the carrier of S2 by A2,FUNCT_1:61
     .= id dom the Sorts of C2 by PARTFUN1:def 4;
   hence the Sorts of C2 = (the Sorts of C2)*(f*f") by RELAT_1:78
-    .= (the Sorts of C1)*f" by A5,RELAT_1:55;
-  dom (g") = the carrier' of S2 by A4,PUA2MSS1:def 13;
-  then rng g = the carrier' of S2 by A2,FUNCT_1:55;
-  then g*(g") = id the carrier' of S2 by A2,FUNCT_1:61
+    .= (the Sorts of C1)*f" by A6,RELAT_1:55;
+  dom (g") = the carrier' of S2 by A5,PUA2MSS1:def 13;
+  then rng g = the carrier' of S2 by A3,FUNCT_1:55;
+  then g*(g") = id the carrier' of S2 by A3,FUNCT_1:61
     .= id dom the Charact of C2 by PARTFUN1:def 4;
   hence the Charact of C2 = (the Charact of C2)*(g*g") by RELAT_1:78
-    .= (the Charact of C1)*g" by A5,RELAT_1:55;
+    .= (the Charact of C1)*g" by A7,RELAT_1:55;
 end;
 
 theorem
@@ -1757,8 +1798,10 @@ proof
   let S be non empty ManySortedSign;
   let C be non-empty MSAlgebra over S;
   set f = id the carrier of S, g = id the carrier' of S;
-  f" = f & g" = g by FUNCT_1:67;
-  hence f, g form_embedding_of C, C & f", g" form_embedding_of C, C by Th35;
+A1: f" = f by FUNCT_1:67;
+  g" = g by FUNCT_1:67;
+  hence f, g form_embedding_of C, C & f", g" form_embedding_of C, C by A1,
+  Th35;
 end;
 
 theorem Th40:
@@ -1771,12 +1814,14 @@ proof
   let f,g be Function;
   let C1 be non-empty MSAlgebra over S1;
   let C2 be non-empty MSAlgebra over S2;
-  assume
-A1: f, g form_embedding_of C1, C2 & f", g" form_embedding_of C2, C1;
-  then f is one-to-one & g is one-to-one by Def12;
-  then f" " = f & g" " = g by FUNCT_1:65;
+  assume that
+A1: f, g form_embedding_of C1, C2 and
+A2: f", g" form_embedding_of C2, C1;
+A3: f is one-to-one by A1,Def12;
+A4: g is one-to-one by A1,Def12;
+  f" " = f by A3,FUNCT_1:65;
   hence f", g" form_embedding_of C2, C1 &
-  f" ", g" " form_embedding_of C1, C2 by A1;
+  f" ", g" " form_embedding_of C1, C2 by A1,A2,A4,FUNCT_1:65;
 end;
 
 theorem
@@ -1792,14 +1837,19 @@ proof
   let C1 be non-empty MSAlgebra over S1;
   let C2 be non-empty MSAlgebra over S2;
   let C3 be non-empty MSAlgebra over S3;
-  assume
-A1: f1, g1 form_embedding_of C1, C2 & f1", g1" form_embedding_of C2, C1 &
-  f2, g2 form_embedding_of C2, C3 & f2", g2" form_embedding_of C3, C2;
-  hence f2*f1, g2*g1 form_embedding_of C1, C3 by Th36;
-  f1 is one-to-one & g1 is one-to-one &
-  f2 is one-to-one & g2 is one-to-one by A1,Def12;
-  then (f2*f1)" = f1"*f2" & (g2*g1)" = g1"*g2" by FUNCT_1:66;
-  hence thesis by A1,Th36;
+  assume that
+A1: f1, g1 form_embedding_of C1, C2 and
+A2: f1", g1" form_embedding_of C2, C1 and
+A3: f2, g2 form_embedding_of C2, C3 and
+A4: f2", g2" form_embedding_of C3, C2;
+  thus f2*f1, g2*g1 form_embedding_of C1, C3 by A1,A3,Th36;
+A5: f1 is one-to-one by A1,Def12;
+A6: g1 is one-to-one by A1,Def12;
+A7: f2 is one-to-one by A3,Def12;
+A8: g2 is one-to-one by A3,Def12;
+A9: (f2*f1)" = f1"*f2" by A5,A7,FUNCT_1:66;
+  (g2*g1)" = g1"*g2" by A6,A8,FUNCT_1:66;
+  hence thesis by A2,A4,A9,Th36;
 end;
 
 definition
@@ -1820,10 +1870,13 @@ theorem Th42:
   dom f = the carrier of G1 & rng f c= the carrier of G2 &
   dom g = the carrier' of G1 & rng g c= the carrier' of G2
 proof
-  assume f is one-to-one & g is one-to-one &
-  dom f = the carrier of G1 & dom g = the carrier' of G1 &
-  rng f c= the carrier of G2 & rng g c= the carrier' of G2;
-  hence thesis;
+  assume that f is one-to-one
+  and g is one-to-one and
+A1: dom f = the carrier of G1 and
+A2: dom g = the carrier' of G1 and
+A3: rng f c= the carrier of G2 and
+A4: rng g c= the carrier' of G2;
+  thus thesis by A1,A2,A3,A4;
 end;
 
 theorem Th43:
@@ -1831,7 +1884,8 @@ theorem Th43:
   for o1 being Gate of G1, o2 being Gate of G2 st o2 = g.o1
   holds Den(o2, C2) = Den(o1, C1)
 proof
-  assume that f is one-to-one & g is one-to-one and
+  assume that f is one-to-one
+  and g is one-to-one and
 A1: f, g form_morphism_between G1, G2 and
   the Sorts of C1 = (the Sorts of C2)*f and
 A2: the Charact of C1 = (the Charact of C2)*g;
@@ -1847,7 +1901,8 @@ theorem Th44:
   for s1 being State of C1, s2 being State of C2 st s1 = s2*f
   holds o2 depends_on_in s2 = o1 depends_on_in s1
 proof
-  assume that f is one-to-one & g is one-to-one and
+  assume that f is one-to-one
+  and g is one-to-one and
 A1: f, g form_morphism_between G1, G2 and
   the Sorts of C1 = (the Sorts of C2)*f and
   the Charact of C1 = (the Charact of C2)*g;
@@ -1866,28 +1921,30 @@ theorem Th45:
   for s being State of C2 holds s*f is State of C1
 proof
   set S1 = G1, S2 = G2;
-  assume that f is one-to-one & g is one-to-one and
+  assume that f is one-to-one
+  and g is one-to-one and
 A1: f, g form_morphism_between S1, S2 and
 A2: the Sorts of C1 = (the Sorts of C2)*f and
   the Charact of C1 = (the Charact of C2)*g;
   let s be State of C2;
-A3: dom the Sorts of C2 = the carrier of S2 &
-  dom the Sorts of C1 = the carrier of S1 by PARTFUN1:def 4;
-A4: dom s = dom the Sorts of C2 & for x being set st x in dom the Sorts of C2
-  holds s.x in (the Sorts of C2).x by CARD_3:18;
-A5: rng f c= the carrier of S2 & dom f = the carrier of S1
-  by A1,PUA2MSS1:def 13;
+A3: dom the Sorts of C2 = the carrier of S2 by PARTFUN1:def 4;
+A4: dom the Sorts of C1 = the carrier of S1 by PARTFUN1:def 4;
+A5: dom s = dom the Sorts of C2 by CARD_3:18;
+A6: rng f c= the carrier of S2 by A1,PUA2MSS1:def 13;
+A7: dom f = the carrier of S1 by A1,PUA2MSS1:def 13;
   then
-A6: dom (s*f) = the carrier of S1 by A3,A4,RELAT_1:46;
+A8: dom (s*f) = the carrier of S1 by A3,A5,A6,RELAT_1:46;
   now
     let x be set;
     assume
-A7: x in the carrier of S1;
-    then f.x in rng f & (s*f).x = s.(f.x) by A5,FUNCT_1:23,def 5;
-    then (s*f).x in (the Sorts of C2).(f.x) by A3,A5,CARD_3:18;
-    hence (s*f).x in (the Sorts of C1).x by A2,A5,A7,FUNCT_1:23;
+A9: x in the carrier of S1;
+    then
+A10: f.x in rng f by A7,FUNCT_1:def 5;
+    (s*f).x = s.(f.x) by A7,A9,FUNCT_1:23;
+    then (s*f).x in (the Sorts of C2).(f.x) by A3,A6,A10,CARD_3:18;
+    hence (s*f).x in (the Sorts of C1).x by A2,A7,A9,FUNCT_1:23;
   end;
-  hence thesis by A3,A6,CARD_3:18;
+  hence thesis by A4,A8,CARD_3:18;
 end;
 
 theorem Th46:
@@ -1905,30 +1962,30 @@ A3: s1 = s2*f and
 A4: for v being Vertex of G1 st v in InputVertices G1
   holds s2 is_stable_at f.v;
   reconsider s2' = (Following s2)*f as State of C1 by A1,Th45;
-A5: dom f = the carrier of G1 & rng f c= the carrier of G2
-  by A2,PUA2MSS1:def 13;
+A5: dom f = the carrier of G1 by A2,PUA2MSS1:def 13;
   now
     let v be Vertex of G1;
 A6: s2'.v = (Following s2).(f.v) by A5,FUNCT_1:23;
     reconsider fv = f.v as Vertex of G2 by A2,Th31;
     hereby
       assume v in InputVertices G1;
-      then s2 is_stable_at f.v & Following(s2, 1) = Following s2
-      by A4,FACIRC_1:14;
-      hence s2'.v = s2.(f.v) by A6,FACIRC_1:def 9
+      then
+A7:   s2 is_stable_at f.v by A4;
+      Following(s2, 1) = Following s2 by FACIRC_1:14;
+      hence s2'.v = s2.(f.v) by A6,A7,FACIRC_1:def 9
         .= s1.v by A3,A5,FUNCT_1:23;
     end;
-A7: f.:InnerVertices G1 c= InnerVertices G2 by A2,Th33;
+A8: f.:InnerVertices G1 c= InnerVertices G2 by A2,Th33;
     assume
-A8: v in InnerVertices G1;
+A9: v in InnerVertices G1;
     then
-A9: fv in f.:InnerVertices G1 by A5,FUNCT_1:def 12;
-A10: action_at fv = g.action_at v by A2,A8,Th34;
+A10: fv in f.:InnerVertices G1 by A5,FUNCT_1:def 12;
+A11: action_at fv = g.action_at v by A2,A9,Th34;
     thus s2'.v = (Den(action_at fv, C2)).(action_at fv depends_on_in s2)
-    by A6,A7,A9,CIRCUIT2:def 5
-      .= (Den(action_at v, C1)).(action_at fv depends_on_in s2) by A1,A10,Th43
+    by A6,A8,A10,CIRCUIT2:def 5
+      .= (Den(action_at v, C1)).(action_at fv depends_on_in s2) by A1,A11,Th43
       .= (Den(action_at v,C1)).(action_at v depends_on_in s1)
-    by A1,A3,A10,Th44;
+    by A1,A3,A11,Th44;
   end;
   hence thesis by CIRCUIT2:def 5;
 end;
@@ -1984,12 +2041,13 @@ theorem
   for s2 being State of C2, s1 being State of C1 st s1 = s2*f
   holds s2 is stable implies s1 is stable
 proof
-  assume
-A1: f, g form_embedding_of C1, C2 & f preserves_inputs_of G1, G2;
+  assume that
+A1: f, g form_embedding_of C1, C2 and
+A2: f preserves_inputs_of G1, G2;
   let s2 be State of C2, s1 be State of C1 such that
-A2: s1 = s2*f;
+A3: s1 = s2*f;
   assume s2 = Following s2;
-  hence s1 = Following s1 by A1,A2,Th47;
+  hence s1 = Following s1 by A1,A2,A3,Th47;
 end;
 
 theorem Th50:
@@ -1997,34 +2055,36 @@ theorem Th50:
   for s2 being State of C2, s1 being State of C1 st s1 = s2*f
   for v1 being Vertex of G1 holds s1 is_stable_at v1 iff s2 is_stable_at f.v1
 proof
-  assume
-A1: f, g form_embedding_of C1, C2 & f preserves_inputs_of G1, G2;
+  assume that
+A1: f, g form_embedding_of C1, C2 and
+A2: f preserves_inputs_of G1, G2;
   let s2 be State of C2, s1 be State of C1 such that
-A2: s1 = s2*f;
+A3: s1 = s2*f;
   let v1 be Vertex of G1;
-A3: f,g form_morphism_between G1,G2 by A1,Def12;
+A4: f,g form_morphism_between G1,G2 by A1,Def12;
   then
-A4: dom f = the carrier of G1 by PUA2MSS1:def 13;
-  reconsider v2 = f.v1 as Vertex of G2 by A3,Th31;
+A5: dom f = the carrier of G1 by PUA2MSS1:def 13;
+  reconsider v2 = f.v1 as Vertex of G2 by A4,Th31;
   thus s1 is_stable_at v1 implies s2 is_stable_at f.v1
   proof
     assume
-A5: for n being Nat holds (Following(s1,n)).v1 = s1.v1;
+A6: for n being Nat holds (Following(s1,n)).v1 = s1.v1;
     let n be Nat;
     n in NAT by ORDINAL1:def 13;
-    then Following(s1,n) = Following(s2,n)*f by A1,A2,Th48;
-    hence (Following(s2,n)).(f.v1) = (Following(s1,n)).v1 by A4,FUNCT_1:23
-      .= s1.v1 by A5
-      .= s2.(f.v1) by A2,A4,FUNCT_1:23;
+    then Following(s1,n) = Following(s2,n)*f by A1,A2,A3,Th48;
+    hence (Following(s2,n)).(f.v1) = (Following(s1,n)).v1 by A5,
+    FUNCT_1:23
+      .= s1.v1 by A6
+      .= s2.(f.v1) by A3,A5,FUNCT_1:23;
   end;
   assume
-A6: for n being Nat holds (Following(s2,n)).(f.v1) = s2.(f.v1);
+A7: for n being Nat holds (Following(s2,n)).(f.v1) = s2.(f.v1);
   let n be Nat;
-    n in NAT by ORDINAL1:def 13;
-  then Following(s1,n) = Following(s2,n)*f by A1,A2,Th48;
-  hence (Following(s1,n)).v1 = (Following(s2,n)).v2 by A4,FUNCT_1:23
-    .= s2.v2 by A6
-    .= s1.v1 by A2,A4,FUNCT_1:23;
+  n in NAT by ORDINAL1:def 13;
+  then Following(s1,n) = Following(s2,n)*f by A1,A2,A3,Th48;
+  hence (Following(s1,n)).v1 = (Following(s2,n)).v2 by A5,FUNCT_1:23
+    .= s2.v2 by A7
+    .= s1.v1 by A3,A5,FUNCT_1:23;
 end;
 
 theorem
@@ -2040,27 +2100,27 @@ theorem Th52:
   for s1 being State of C1, s2 being State of C2
   holds s1 = s2*f iff s2 = s1*f"
 proof
-  assume
-A1: f, g form_embedding_of C1, C2 & f", g" form_embedding_of C2, C1;
-  then
-A2: f is one-to-one & f" is one-to-one by Def12;
+  assume that
+A1: f, g form_embedding_of C1, C2 and
+A2: f", g" form_embedding_of C2, C1;
+A3: f is one-to-one by A1,Def12;
   let s1 be State of C1;
   let s2 be State of C2;
   f, g form_morphism_between G1, G2 by A1,Def12;
   then
-A3: dom f = the carrier of G1 & dom s1 = the carrier of G1
-  by CIRCUIT1:4,PUA2MSS1:def 13;
-A4: s1*f"*f = s1*(f"*f) by RELAT_1:55
-    .= s1*id dom f by A2,FUNCT_1:61
-    .= s1 by A3,RELAT_1:78;
-  f", g" form_morphism_between G2, G1 by A1,Def12;
+A4: dom f = the carrier of G1 by PUA2MSS1:def 13;
+A5: dom s1 = the carrier of G1 by CIRCUIT1:4;
+A6: s1*f"*f = s1*(f"*f) by RELAT_1:55
+    .= s1*id dom f by A3,FUNCT_1:61
+    .= s1 by A4,A5,RELAT_1:78;
+  f", g" form_morphism_between G2, G1 by A2,Def12;
   then
-A5: dom (f") = the carrier of G2 & dom s2 = the carrier of G2
-  by CIRCUIT1:4,PUA2MSS1:def 13;
+A7: dom (f") = the carrier of G2 by PUA2MSS1:def 13;
+A8: dom s2 = the carrier of G2 by CIRCUIT1:4;
   s2*f*(f") = s2*(f*(f")) by RELAT_1:55
-    .= s2*((f" ")*(f")) by A2,FUNCT_1:65
-    .= s2*id dom (f") by A2,FUNCT_1:61;
-  hence thesis by A4,A5,RELAT_1:78;
+    .= s2*((f" ")*(f")) by A3,FUNCT_1:65
+    .= s2*id dom (f") by A3,FUNCT_1:61;
+  hence thesis by A6,A7,A8,RELAT_1:78;
 end;
 
 theorem Th53:
@@ -2084,10 +2144,10 @@ theorem Th55:
   for s1 being State of C1, s2 being State of C2 st s1 = s2*f
   holds Following s1 = (Following s2)*f
 proof
-  assume C1, C2 are_similar_wrt f, g;
-  then f, g form_embedding_of C1, C2 & f preserves_inputs_of G1, G2
-  by Def13,Th54;
-  hence thesis by Th47;
+  assume
+A1: C1, C2 are_similar_wrt f, g;
+  then f, g form_embedding_of C1, C2 by Def13;
+  hence thesis by A1,Th47,Th54;
 end;
 
 theorem Th56:
@@ -2095,10 +2155,10 @@ theorem Th56:
   for s1 being State of C1, s2 being State of C2 st s1 = s2*f
   for n being Element of NAT holds Following(s1,n) = Following(s2,n)*f
 proof
-  assume C1, C2 are_similar_wrt f, g;
-  then f, g form_embedding_of C1, C2 & f preserves_inputs_of G1, G2
-  by Def13,Th54;
-  hence thesis by Th48;
+  assume
+A1: C1, C2 are_similar_wrt f, g;
+  then f, g form_embedding_of C1, C2 by Def13;
+  hence thesis by A1,Th48,Th54;
 end;
 
 theorem
@@ -2136,35 +2196,36 @@ A3: s1 = s2*f;
   let v1 be Vertex of G1;
 A4: G1, G2 are_equivalent_wrt f, g by A1,Th38;
   then
-A5: f,g form_morphism_between G1,G2 & f",g" form_morphism_between G2,G1
-  by Def9;
-  then
-A6: dom f = the carrier of G1 & dom (f") = the carrier of G2
-  by PUA2MSS1:def 13;
+A5: f,g form_morphism_between G1,G2 by Def9;
+A6: f",g" form_morphism_between G2,G1 by A4,Def9;
+A7: dom f = the carrier of G1 by A5,PUA2MSS1:def 13;
+A8: dom (f") = the carrier of G2 by A6,PUA2MSS1:def 13;
   reconsider v2 = f.v1 as Vertex of G2 by A5,Th31;
   f is one-to-one by A4,Def9;
   then
-A7: v1 = f".v2 by A6,FUNCT_1:56;
+A9: v1 = f".v2 by A7,FUNCT_1:56;
   thus s1 is_stable_at v1 implies s2 is_stable_at f.v1
   proof
     assume
-A8: for n being Nat holds (Following(s1,n)).v1 = s1.v1;
+A10: for n being Nat holds (Following(s1,n)).v1 = s1.v1;
     let n be Nat;
     n in NAT by ORDINAL1:def 13;
     then Following(s1,n) = Following(s2,n)*f by A1,A3,Th56;
-    hence (Following(s2,n)).(f.v1) = (Following(s1,n)).v1 by A6,FUNCT_1:23
-      .= s1.v1 by A8
-      .= s2.(f.v1) by A3,A6,FUNCT_1:23;
+    hence (Following(s2,n)).(f.v1) = (Following(s1,n)).v1 by A7,
+    FUNCT_1:23
+      .= s1.v1 by A10
+      .= s2.(f.v1) by A3,A7,FUNCT_1:23;
   end;
   assume
-A9: for n being Nat holds (Following(s2,n)).(f.v1) = s2.(f.v1);
+A11: for n being Nat holds (Following(s2,n)).(f.v1) = s2.(f.v1);
   let n be Nat;
-X:    n in NAT by ORDINAL1:def 13;
+A12: n in NAT by ORDINAL1:def 13;
   s2 = s1*f" by A1,A3,Th52;
-  then Following(s2,n) = Following(s1,n)*f" by A2,Th56,X;
-  hence (Following(s1,n)).v1 = (Following(s2,n)).v2 by A6,A7,FUNCT_1:23
-    .= s2.v2 by A9
-    .= s1.v1 by A3,A6,FUNCT_1:23;
+  then Following(s2,n) = Following(s1,n)*f" by A2,A12,Th56;
+  hence (Following(s1,n)).v1 = (Following(s2,n)).v2 by A8,A9,
+  FUNCT_1:23
+    .= s2.v2 by A11
+    .= s1.v1 by A3,A7,FUNCT_1:23;
 end;
 
 begin :: <section5>Term specification</section5>
@@ -2181,7 +2242,6 @@ definition
   Def15: ex f, g st f, g form_embedding_of X-Circuit A, C &
   f preserves_inputs_of X-CircuitStr, G;
   pred X, A specifies C means
-
   C, X-Circuit A are_similar;
 end;
 
@@ -2258,16 +2318,16 @@ A5: t in Subtrees X;
   let s be State of C;
   reconsider s' = s*f as State of X-Circuit A by A2,Th45;
   reconsider t' = t as Vertex of X-CircuitStr by A5;
-A6: Following(s', 1+height dom t) is_stable_at t' &
-  Following(s', 1+height dom t) = Following(s, 1+height dom t)*f
-  by A2,A3,Th22,Th48;
-  hence Following(s, 1+height dom t) is_stable_at f.t by A2,A3,Th50;
+A6: Following(s', 1+height dom t) is_stable_at t' by Th22;
+A7: Following(s', 1+height dom t) = Following(s, 1+height dom t)*f by A2,A3,
+  Th48;
+  hence Following(s, 1+height dom t) is_stable_at f.t by A2,A3,A6,Th50;
   let s' be State of X-Circuit A such that
-A7: s' = s*f;
+A8: s' = s*f;
   let h be CompatibleValuation of s';
-  dom f = the carrier of X-CircuitStr &
-  Following(s', 1+height dom t).t' = t@(h,A) by A4,Th22,PUA2MSS1:def 13;
-  hence thesis by A6,A7,FUNCT_1:23;
+A9: dom f = the carrier of X-CircuitStr by A4,PUA2MSS1:def 13;
+  Following(s', 1+height dom t).t' = t@(h,A) by Th22;
+  hence thesis by A7,A8,A9,FUNCT_1:23;
 end;
 
 theorem Th61:
@@ -2297,7 +2357,8 @@ A5: f, g form_morphism_between X-CircuitStr, G by A2,Def12;
   take v;
   let s be State of C;
   thus Following(s, 1+height dom t) is_stable_at v by A1,Th60;
-  take f; thus thesis by A1,Th60;
+  take f;
+  thus thesis by A1,Th60;
 end;
 
 theorem

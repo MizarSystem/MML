@@ -11,14 +11,13 @@ environ
       LIMFUNC1, ABSVALUE, ARYTM_3, SQUARE_1, RCOMP_1, INTEGRA5, FINSEQ_4,
       ARYTM, SIN_COS, INTEGR10, LIMFUNC2, LATTICES, ORDINAL2;
  notations XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XREAL_0, XXREAL_0, COMPLEX1,
-      XCMPLX_0, REAL_1, RELSET_1, FUNCT_2, RCOMP_1, PARTFUN1, RFUNCT_1, SEQ_1,
-      SEQ_2, LIMFUNC1, LIMFUNC2, MEMBERED, INTEGRA1, INTEGRA5, SIN_COS,
-      VALUED_1, FCONT_1;
+      XCMPLX_0, REAL_1, RELSET_1, FUNCT_2, RCOMP_1, PARTFUN1, SEQ_1, SEQ_2,
+      LIMFUNC1, LIMFUNC2, MEMBERED, INTEGRA5, SIN_COS, VALUED_1, FCONT_1;
  constructors ARYTM_0, REAL_1, PARTFUN2, LIMFUNC1, LIMFUNC2, TAYLOR_1,
       RFUNCT_3, FCONT_1, RFUNCT_2, PSCOMP_1, BINOP_2, INTEGRA5, RSSPACE,
       COMSEQ_3, SIN_COS, INTEGRA7, CFUNCT_1, SEQ_1, FDIFF_1, SEQM_3, RELSET_1;
- registrations XREAL_0, NUMBERS, MEMBERED, NAT_1, RELAT_1, XXREAL_0, XBOOLE_0,
-      VALUED_0, SIN_COS, FCONT_1, RELSET_1;
+ registrations XREAL_0, NUMBERS, MEMBERED, NAT_1, XXREAL_0, XBOOLE_0, VALUED_0,
+      SIN_COS, FCONT_1, RELSET_1;
  requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
 
 
@@ -27,12 +26,12 @@ begin :: Preliminaries
 reserve a,b,r,g for Element of REAL;
 
 theorem :: INTEGR10:1
-  for a,b,g1,M be real number st a < b & 0 < g1 & 0 < M
-  holds ex r st a < r & r < b & (b - r)*M < g1;
+  for a,b,g1,M be real number st a < b & 0 < g1 & 0 < M holds ex r
+  st a < r & r < b & (b - r)*M < g1;
 
 theorem :: INTEGR10:2
-  for a,b,g1,M be real number st a < b & 0 < g1 & 0 < M
-  holds ex r st a < r & r < b & (r - a)*M < g1;
+  for a,b,g1,M be real number st a < b & 0 < g1 & 0 < M holds ex r
+  st a < r & r < b & (r - a)*M < g1;
 
 theorem :: INTEGR10:3
   exp_R.b - exp_R.a = integral(exp_R,a,b);
@@ -45,13 +44,10 @@ definition
   pred f is_right_ext_Riemann_integrable_on a,b means
 :: INTEGR10:def 1
 
-  (for d be Real st a <= d & d < b
-  holds f is_integrable_on [' a,d '] & f|[' a,d '] is bounded) &
-  ex Intf be PartFunc of REAL,REAL
-  st dom Intf = [.a,b.[
-  & (for x be Real st x in dom Intf holds
-  Intf.x = integral(f,a,x)) &
-  Intf is_left_convergent_in b;
+  (for d be Real st
+  a <= d & d < b holds f is_integrable_on [' a,d '] & f|[' a,d '] is bounded) &
+ex Intf be PartFunc of REAL,REAL st dom Intf = [.a,b.[ & (for x be Real st x in
+  dom Intf holds Intf.x = integral(f,a,x)) & Intf is_left_convergent_in b;
 end;
 
 definition
@@ -60,12 +56,10 @@ definition
   pred f is_left_ext_Riemann_integrable_on a,b means
 :: INTEGR10:def 2
 
-  (for d be Real st a < d & d <= b
-  holds f is_integrable_on [' d,b '] & f|[' d,b '] is bounded) &
-  ex Intf be PartFunc of REAL,REAL st dom Intf = ].a,b.]
-  & (for x be Real st x in dom Intf holds
-  Intf.x = integral(f,x,b)) &
-  Intf is_right_convergent_in a;
+  (for d be Real st
+  a < d & d <= b holds f is_integrable_on [' d,b '] & f|[' d,b '] is bounded) &
+ex Intf be PartFunc of REAL,REAL st dom Intf = ].a,b.] & (for x be Real st x in
+  dom Intf holds Intf.x = integral(f,x,b)) & Intf is_right_convergent_in a;
 end;
 
 definition
@@ -76,12 +70,9 @@ definition
   func ext_right_integral(f,a,b) -> Real means
 :: INTEGR10:def 3
 
-  ex Intf be PartFunc of REAL,REAL
-  st dom Intf = [.a,b.[
-  & (for x be Real st x in dom Intf holds
-  Intf.x = integral(f,a,x)) &
-  Intf is_left_convergent_in b &
-  it = lim_left(Intf,b);
+  ex Intf be PartFunc of
+REAL,REAL st dom Intf = [.a,b.[ & (for x be Real st x in dom Intf holds Intf.x
+  = integral(f,a,x)) & Intf is_left_convergent_in b & it = lim_left(Intf,b);
 end;
 
 definition
@@ -92,12 +83,9 @@ definition
   func ext_left_integral(f,a,b) -> Real means
 :: INTEGR10:def 4
 
-  ex Intf be PartFunc of REAL,REAL
-  st dom Intf = ].a,b.]
-  & (for x be Real st x in dom Intf holds
-  Intf.x = integral(f,x,b)) &
-  Intf is_right_convergent_in a &
-  it = lim_right(Intf,a);
+  ex Intf be PartFunc of
+REAL,REAL st dom Intf = ].a,b.] & (for x be Real st x in dom Intf holds Intf.x
+  = integral(f,x,b)) & Intf is_right_convergent_in a & it = lim_right(Intf,a);
 end;
 
 definition
@@ -106,13 +94,11 @@ definition
   pred f is_+infty_ext_Riemann_integrable_on a means
 :: INTEGR10:def 5
 
-  (for b be Real st a <= b holds
-  f is_integrable_on [' a,b '] & f|[' a,b '] is bounded) &
-  ex Intf be PartFunc of REAL,REAL
-  st dom Intf = right_closed_halfline(a)
-  & (for x be Real st x in dom Intf holds
-  Intf.x = integral(f,a,x)) &
-  Intf is convergent_in+infty;
+  (for b be Real st
+  a <= b holds f is_integrable_on [' a,b '] & f|[' a,b '] is bounded) & ex Intf
+  be PartFunc of REAL,REAL st dom Intf = right_closed_halfline(a) & (for x be
+  Real st x in dom Intf holds Intf.x = integral(f,a,x)) & Intf is
+  convergent_in+infty;
 end;
 
 definition
@@ -121,13 +107,10 @@ definition
   pred f is_-infty_ext_Riemann_integrable_on b means
 :: INTEGR10:def 6
 
-  (for a be Real st a <= b holds
-  f is_integrable_on [' a,b '] & f|[' a,b '] is bounded) &
-  ex Intf be PartFunc of REAL,REAL
-  st dom Intf = left_closed_halfline(b)
-  & (for x be Real st x in dom Intf holds
-  Intf.x = integral(f,x,b)) &
-  Intf is convergent_in-infty;
+  (for a be Real st
+  a <= b holds f is_integrable_on [' a,b '] & f|[' a,b '] is bounded) & ex Intf
+be PartFunc of REAL,REAL st dom Intf = left_closed_halfline(b) & (for x be Real
+st x in dom Intf holds Intf.x = integral(f,x,b)) & Intf is convergent_in-infty;
 end;
 
 definition
@@ -138,12 +121,10 @@ definition
   func infty_ext_right_integral(f,a) -> Real means
 :: INTEGR10:def 7
 
-  ex Intf be PartFunc of REAL,REAL
-  st dom Intf = right_closed_halfline(a)
-  & (for x be Real st x in dom Intf holds
-  Intf.x = integral(f,a,x)) &
-  Intf is convergent_in+infty &
-  it = lim_in+infty Intf;
+  ex Intf be PartFunc
+  of REAL,REAL st dom Intf = right_closed_halfline(a) & (for x be Real st x in
+  dom Intf holds Intf.x = integral(f,a,x)) & Intf is convergent_in+infty & it =
+  lim_in+infty Intf;
 end;
 
 definition
@@ -154,122 +135,91 @@ definition
   func infty_ext_left_integral(f,b) -> Real means
 :: INTEGR10:def 8
 
-  ex Intf be PartFunc of REAL,REAL
-  st dom Intf = left_closed_halfline(b)
-  & (for x be Real st x in dom Intf holds
-  Intf.x = integral(f,x,b)) &
-  Intf is convergent_in-infty &
-  it = lim_in-infty Intf;
+  ex Intf be PartFunc
+of REAL,REAL st dom Intf = left_closed_halfline(b) & (for x be Real st x in dom
+  Intf holds Intf.x = integral(f,x,b)) & Intf is convergent_in-infty & it =
+  lim_in-infty Intf;
 end;
 
 definition
   let f be PartFunc of REAL,REAL;
   attr f is infty_ext_Riemann_integrable means
 :: INTEGR10:def 9
-  f is_+infty_ext_Riemann_integrable_on 0 &
-  f is_-infty_ext_Riemann_integrable_on 0;
+  f
+is_+infty_ext_Riemann_integrable_on 0 & f is_-infty_ext_Riemann_integrable_on 0
+  ;
 end;
 
 definition
   let f be PartFunc of REAL,REAL;
   func infty_ext_integral(f) -> Real equals
 :: INTEGR10:def 10
-  infty_ext_right_integral(f,0) + infty_ext_left_integral(f,0);
+  infty_ext_right_integral(f,0) +
+  infty_ext_left_integral(f,0);
 end;
 
 begin :: Linearity of Extended Riemann Integral
 
 theorem :: INTEGR10:4
-  for f,g be PartFunc of REAL,REAL,
-  a,b be Real st a < b &
-  [' a,b '] c= dom f &
-  [' a,b '] c= dom g &
-  f is_right_ext_Riemann_integrable_on a,b &
-  g is_right_ext_Riemann_integrable_on a,b holds
-  f + g is_right_ext_Riemann_integrable_on a,b &
-  ext_right_integral(f + g,a,b)
-  = ext_right_integral(f,a,b) + ext_right_integral(g,a,b);
+  for f,g be PartFunc of REAL,REAL, a,b be Real st a < b & [' a,b '] c=
+  dom f & [' a,b '] c= dom g & f is_right_ext_Riemann_integrable_on a,b & g
+  is_right_ext_Riemann_integrable_on a,b holds f + g
+  is_right_ext_Riemann_integrable_on a,b & ext_right_integral(f + g,a,b) =
+  ext_right_integral(f,a,b) + ext_right_integral(g,a,b);
 
 theorem :: INTEGR10:5
-  for f be PartFunc of REAL,REAL,
-  a,b be Real st a < b & [' a,b '] c= dom f &
-  f is_right_ext_Riemann_integrable_on a,b holds
-  for r be Real holds
-  r(#)f is_right_ext_Riemann_integrable_on a,b &
-  ext_right_integral(r(#)f,a,b) = r*ext_right_integral(f,a,b);
+  for f be PartFunc of REAL,REAL, a,b be Real st a < b & [' a,b '] c=
+dom f & f is_right_ext_Riemann_integrable_on a,b holds for r be Real holds r(#)
+  f is_right_ext_Riemann_integrable_on a,b & ext_right_integral(r(#)f,a,b) = r*
+  ext_right_integral(f,a,b);
 
 theorem :: INTEGR10:6
-  for f,g be PartFunc of REAL,REAL,
-  a,b be Real st a < b &
-  [' a,b '] c= dom f &
-  [' a,b '] c= dom g &
-  f is_left_ext_Riemann_integrable_on a,b &
-  g is_left_ext_Riemann_integrable_on a,b holds
-  f + g is_left_ext_Riemann_integrable_on a,b &
-  ext_left_integral(f + g,a,b)
-  = ext_left_integral(f,a,b) + ext_left_integral(g,a,b);
+  for f,g be PartFunc of REAL,REAL, a,b be Real st a < b & [' a,b '] c=
+  dom f & [' a,b '] c= dom g & f is_left_ext_Riemann_integrable_on a,b & g
+  is_left_ext_Riemann_integrable_on a,b holds f + g
+  is_left_ext_Riemann_integrable_on a,b & ext_left_integral(f + g,a,b) =
+  ext_left_integral(f,a,b) + ext_left_integral(g,a,b);
 
 theorem :: INTEGR10:7
-  for f be PartFunc of REAL,REAL,
-  a,b be Real st a < b &
-  [' a,b '] c= dom f &
-  f is_left_ext_Riemann_integrable_on a,b holds
-  for r be Real holds
-  r(#)f is_left_ext_Riemann_integrable_on a,b &
-  ext_left_integral(r(#)f,a,b) = r*ext_left_integral(f,a,b);
+  for f be PartFunc of REAL,REAL, a,b be Real st a < b & [' a,b '] c=
+dom f & f is_left_ext_Riemann_integrable_on a,b holds for r be Real holds r(#)f
+  is_left_ext_Riemann_integrable_on a,b & ext_left_integral(r(#)f,a,b) = r*
+  ext_left_integral(f,a,b);
 
 theorem :: INTEGR10:8
-  for f,g be PartFunc of REAL,REAL,
-  a be real number st
-  right_closed_halfline(a) c= dom f &
-  right_closed_halfline(a) c= dom g &
-  f is_+infty_ext_Riemann_integrable_on a &
-  g is_+infty_ext_Riemann_integrable_on a holds
-  f + g is_+infty_ext_Riemann_integrable_on a &
-  infty_ext_right_integral(f + g,a)
-  = infty_ext_right_integral(f,a) + infty_ext_right_integral(g,a);
+  for f,g be PartFunc of REAL,REAL, a be real number st
+  right_closed_halfline(a) c= dom f & right_closed_halfline(a) c= dom g & f
+is_+infty_ext_Riemann_integrable_on a & g is_+infty_ext_Riemann_integrable_on a
+holds f + g is_+infty_ext_Riemann_integrable_on a & infty_ext_right_integral(f
+  + g,a) = infty_ext_right_integral(f,a) + infty_ext_right_integral(g,a);
 
 theorem :: INTEGR10:9
-  for f be PartFunc of REAL,REAL,
-  a be real number st
-  right_closed_halfline(a) c= dom f &
-  f is_+infty_ext_Riemann_integrable_on a holds
-  for r be Real holds
-  r(#)f is_+infty_ext_Riemann_integrable_on a &
+  for f be PartFunc of REAL,REAL, a be real number st
+  right_closed_halfline(a) c= dom f & f is_+infty_ext_Riemann_integrable_on a
+  holds for r be Real holds r(#)f is_+infty_ext_Riemann_integrable_on a &
   infty_ext_right_integral(r(#)f,a) = r*infty_ext_right_integral(f,a);
 
 theorem :: INTEGR10:10
-  for f,g be PartFunc of REAL,REAL,
-  b be real number st
-  left_closed_halfline(b) c= dom f &
-  left_closed_halfline(b) c= dom g &
-  f is_-infty_ext_Riemann_integrable_on b &
-  g is_-infty_ext_Riemann_integrable_on b holds
-  f + g is_-infty_ext_Riemann_integrable_on b &
-  infty_ext_left_integral(f + g,b)
-  = infty_ext_left_integral(f,b) + infty_ext_left_integral(g,b);
+  for f,g be PartFunc of REAL,REAL, b be real number st
+  left_closed_halfline(b) c= dom f & left_closed_halfline(b) c= dom g & f
+is_-infty_ext_Riemann_integrable_on b & g is_-infty_ext_Riemann_integrable_on b
+holds f + g is_-infty_ext_Riemann_integrable_on b & infty_ext_left_integral(f +
+  g,b) = infty_ext_left_integral(f,b) + infty_ext_left_integral(g,b);
 
 theorem :: INTEGR10:11
-  for f be PartFunc of REAL,REAL,
-  b be real number st
-  left_closed_halfline(b) c= dom f &
-  f is_-infty_ext_Riemann_integrable_on b holds
-  for r be Real holds
-  r(#)f is_-infty_ext_Riemann_integrable_on b &
+  for f be PartFunc of REAL,REAL, b be real number st
+  left_closed_halfline(b) c= dom f & f is_-infty_ext_Riemann_integrable_on b
+  holds for r be Real holds r(#)f is_-infty_ext_Riemann_integrable_on b &
   infty_ext_left_integral(r(#)f,b) = r*infty_ext_left_integral(f,b);
 
 theorem :: INTEGR10:12
-  for f be PartFunc of REAL,REAL,
-  a,b be Real st a < b & [' a,b '] c= dom f &
-  f is_integrable_on [' a,b '] & f|[' a,b '] is bounded holds
+  for f be PartFunc of REAL,REAL, a,b be Real st a < b & [' a,b '] c=
+  dom f & f is_integrable_on [' a,b '] & f|[' a,b '] is bounded holds
   ext_right_integral(f,a,b) = integral(f,a,b);
 
 theorem :: INTEGR10:13
-  for f be PartFunc of REAL,REAL, a,b be Real st
-  a < b &
-  [' a,b '] c= dom f &
-  f is_integrable_on [' a,b '] & f|[' a,b '] is bounded
-  holds
+  for f be PartFunc of REAL,REAL, a,b be Real st a < b & [' a,b '] c=
+  dom f & f is_integrable_on [' a,b '] & f|[' a,b '] is bounded holds
   ext_left_integral(f,a,b) = integral(f,a,b);
 
 begin :: The Definition of One-Sided Laplace Transform
@@ -278,7 +228,8 @@ definition
   let s be real number;
   func exp*- s -> Function of REAL,REAL means
 :: INTEGR10:def 11
-  for t be Real holds it.t = exp_R.(-s*t);
+  for t be Real holds it.t = exp_R
+  .(-s*t);
 end;
 
 definition
@@ -286,32 +237,27 @@ definition
   func One-sided_Laplace_transform(f) -> PartFunc of REAL,REAL means
 :: INTEGR10:def 12
 
-  dom it = right_open_halfline(0) &
-  for s be Real st s in dom it holds
-  it.s = infty_ext_right_integral(f(#)(exp*-s),0);
+  dom it = right_open_halfline(0) & for s be Real st s in dom it holds it.s =
+  infty_ext_right_integral(f(#)(exp*-s),0);
 end;
 
 begin :: Linearity of One-Sided Laplace Transform
 
 theorem :: INTEGR10:14
-  for f, g be PartFunc of REAL,REAL
-  st dom f = right_closed_halfline(0)
-  & dom g = right_closed_halfline(0)
-  & (for s be Real st s in right_open_halfline(0) holds
-  f(#)(exp*-s) is_+infty_ext_Riemann_integrable_on 0)
-  & (for s be Real st s in right_open_halfline(0) holds
-  g(#)(exp*-s) is_+infty_ext_Riemann_integrable_on 0) holds
-  (for s be Real st s in right_open_halfline(0) holds
-  (f + g)(#)(exp*-s) is_+infty_ext_Riemann_integrable_on 0) &
-  One-sided_Laplace_transform(f + g)
-  = One-sided_Laplace_transform(f) + One-sided_Laplace_transform(g);
+  for f, g be PartFunc of REAL,REAL st dom f = right_closed_halfline(0)
+& dom g = right_closed_halfline(0) & (for s be Real st s in right_open_halfline
+(0) holds f(#)(exp*-s) is_+infty_ext_Riemann_integrable_on 0) & (for s be Real
+  st s in right_open_halfline(0) holds g(#)(exp*-s)
+  is_+infty_ext_Riemann_integrable_on 0) holds (for s be Real st s in
+  right_open_halfline(0) holds (f + g)(#)(exp*-s)
+  is_+infty_ext_Riemann_integrable_on 0) & One-sided_Laplace_transform(f + g) =
+  One-sided_Laplace_transform(f) + One-sided_Laplace_transform(g);
 
 theorem :: INTEGR10:15
-  for f be PartFunc of REAL,REAL, a be Real
-  st dom f = right_closed_halfline(0)
-  & (for s be Real st s in right_open_halfline(0) holds
-  f(#)(exp*-s) is_+infty_ext_Riemann_integrable_on 0) holds
-  (for s be Real st s in right_open_halfline(0) holds
-  (a(#)f)(#)(exp*-s) is_+infty_ext_Riemann_integrable_on 0) &
-  One-sided_Laplace_transform(a(#)f)
-  = a(#)One-sided_Laplace_transform(f);
+  for f be PartFunc of REAL,REAL, a be Real st dom f =
+right_closed_halfline(0) & (for s be Real st s in right_open_halfline(0) holds
+  f(#)(exp*-s) is_+infty_ext_Riemann_integrable_on 0) holds (for s be Real st s
+  in right_open_halfline(0) holds (a(#)f)(#)(exp*-s)
+is_+infty_ext_Riemann_integrable_on 0) & One-sided_Laplace_transform(a(#)f) = a
+  (#)One-sided_Laplace_transform(f);
+

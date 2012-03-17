@@ -8,12 +8,12 @@ environ
 
  vocabularies CARD_1, REALSET1, GROUP_2, BOOLE, GRAPH_1, INT_1, NAT_1, ARYTM_1,
       ARYTM_3, GROUP_1, FINSET_1, GROUP_4, PBOOLE, TARSKI, RELAT_1, FINSEQ_1,
-      FUNCT_1, FILTER_0, GROUP_8, SETFAM_1, LATTICES, ARYTM, ORDINAL2,
-      ALGSTR_0, VECTSP_1;
+      FUNCT_1, FILTER_0, GROUP_8, SETFAM_1, ARYTM, ORDINAL2, ALGSTR_0,
+      VECTSP_1;
  notations XBOOLE_0, CARD_1, TARSKI, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS,
       XCMPLX_0, XXREAL_0, RELAT_1, REALSET1, FUNCT_1, FUNCT_2, PBOOLE, INT_1,
-      NAT_1, FINSET_1, GROUP_2, GROUP_4, GROUP_6, GR_CY_1, FINSEQ_1, DOMAIN_1,
-      STRUCT_0, ALGSTR_0, GROUP_1, INT_2;
+      NAT_1, FINSET_1, GROUP_2, GROUP_4, GR_CY_1, FINSEQ_1, DOMAIN_1, STRUCT_0,
+      ALGSTR_0, GROUP_1, INT_2;
  constructors WELLORD2, BINOP_1, XXREAL_0, REAL_1, NAT_1, NAT_D, BINOP_2,
       PBOOLE, REALSET2, GROUP_4, GROUP_6, GR_CY_1, RELSET_1;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, XXREAL_0, XREAL_0, NAT_1, INT_1,
@@ -38,10 +38,11 @@ theorem
   p is prime & card G = p implies ex a being Element of G st ord a = p
 proof
   let G be strict finite Group;
-  assume
-A1: p is prime & card G = p;
-  then G is cyclic Group by GR_CY_1:45;
-  hence thesis by A1,GR_CY_1:43;
+  assume that
+A1: p is prime and
+A2: card G = p;
+  G is cyclic Group by A1,A2,GR_CY_1:45;
+  hence thesis by A2,GR_CY_1:43;
 end;
 
 theorem
@@ -52,13 +53,15 @@ proof
   let a1,a2 be Element of H;
 A1: the carrier of H c= the carrier of G by GROUP_2:def 5;
   let b1,b2 be Element of G such that
-A2: a1 = b1 & a2 = b2;
+A2: a1 = b1 and
+A3: a2 = b2;
   dom the multF of G = [:the carrier of G, the carrier of G:] by FUNCT_2:def 1;
   then
-A3: the multF of G is ManySortedSet of [:the carrier of G, the carrier of G :]
+  A4: the
+ multF of G is ManySortedSet of [:the carrier of G, the carrier of G :]
   by PARTFUN1:def 4;
   the multF of H = (the multF of G)||the carrier of H by GROUP_2:def 5;
-  hence thesis by A1,A2,A3,ALTCAT_1:7;
+  hence thesis by A1,A2,A3,A4,ALTCAT_1:7;
 end;
 
 theorem
@@ -78,18 +81,19 @@ proof
   let G be Group, H be Subgroup of G;
   let a be Element of H;
   let b be Element of G such that
-A1: a =b & G is finite;
-A2: not(a is being_of_order_0) & not(b is being_of_order_0) by A1,GR_CY_1:26;
-  then
-A3: a |^ (ord a) = 1_H by GROUP_1:def 12;
-A4: b |^ ord b = 1_G by A2,GROUP_1:def 12;
+A1: a =b and
+A2: G is finite;
+A3: not a is being_of_order_0 by A2,GR_CY_1:26;
+A4: not b is being_of_order_0 by A2,GR_CY_1:26;
+A5: a |^ (ord a) = 1_H by A3,GROUP_1:def 12;
+A6: b |^ ord b = 1_G by A4,GROUP_1:def 12;
   a |^ (ord a) = b |^ (ord a) by A1,GROUP_4:3;
   then
-A5: ord b divides ord a by A3,A4,GROUP_1:86,GROUP_2:53;
-  a |^ (ord b) = 1_G by A1,A4,GROUP_4:3;
+A7: ord b divides ord a by A5,A6,GROUP_1:86,GROUP_2:53;
+  a |^ (ord b) = 1_G by A1,A6,GROUP_4:3;
   then a |^ (ord b) = 1_H by GROUP_2:53;
   then ord a divides ord b by GROUP_1:86;
-  hence thesis by A5,NAT_D:5;
+  hence thesis by A7,NAT_D:5;
 end;
 
 theorem
@@ -104,8 +108,9 @@ A1: h in H;
     let a be set;
     assume a in H * h;
     then consider g being Element of G such that
-A2: a = g * h & g in H by GROUP_2:126;
-    g * h in H by A1,A2,GROUP_2:59;
+A2: a = g * h and
+A3: g in H by GROUP_2:126;
+    g * h in H by A1,A3,GROUP_2:59;
     hence thesis by A2,STRUCT_0:def 5;
   end;
   hence thesis by TARSKI:def 3;
@@ -121,16 +126,12 @@ A1: a <> 1_G;
 A2: gr {a} = (1).G;
 A3: the carrier of (1).G = {1_G} by GROUP_2:def 7;
 A4: {a} c= the carrier of gr {a} by GROUP_4:def 5;
-  a = 1_G
+  for xx being set holds xx = a implies xx = 1_G
   proof
-    for xx being set holds xx = a implies xx = 1_G
-    proof
-      let xx be set;
-      assume xx = a;
-      then xx in {a} by TARSKI:def 1;
-      hence thesis by A2,A3,A4,TARSKI:def 1;
-    end;
-    hence thesis;
+    let xx be set;
+    assume xx = a;
+    then xx in {a} by TARSKI:def 1;
+    hence thesis by A2,A3,A4,TARSKI:def 1;
   end;
   hence thesis by A1;
 end;
@@ -176,9 +177,8 @@ theorem Th11:
 proof
   assume
 A1: b is not being_of_order_0;
-  then ord b <> 0 by GROUP_1:def 12;
   then
-A2: ord b > 0;
+A2: ord b <> 0 by GROUP_1:def 12;
   deffunc B(Nat) = b |^ $1;
   consider f being FinSequence such that
 A3: len f = ord b & for i being Nat st i in dom f holds
@@ -200,21 +200,22 @@ A7: a = b|^k by A1,A6,Th10;
     per cases;
     suppose
 A8:   k = 0;
-      ord b >= 0+1 & ord b <= ord b by A2,NAT_1:13;
+      ord b >= 0+1 by A2,NAT_1:13;
       then
 A9:   ord b in Seg ord b by FINSEQ_1:3;
       a = 1_G by A7,A8,GROUP_1:43
         .= b |^ ord b by A1,GROUP_1:def 12
-        .= f.ord b by A3,A9,A4;
+        .= f.ord b by A3,A4,A9;
       hence thesis by A4,A9,FUNCT_1:def 5;
     end;
-    suppose k <> 0;
-      then k > 0 & k < ord b by A2,NEWTON:79;
-      then k >= 0+1 & k <= ord b by NAT_1:13;
+    suppose
+A10:  k <> 0;
+A11:  k < ord b by A2,NEWTON:79;
+      k >= 0+1 by A10,NAT_1:13;
       then
-A10:  k in Seg ord b by FINSEQ_1:3;
-      then a = f.k by A3,A7,A4;
-      hence thesis by A4,A10,FUNCT_1:def 5;
+A12:  k in Seg ord b by A11,FINSEQ_1:3;
+      then a = f.k by A3,A4,A7;
+      hence thesis by A4,A12,FUNCT_1:def 5;
     end;
   end;
   hence the carrier of gr {b} is finite;
@@ -241,7 +242,7 @@ theorem Th13:
   b is being_of_order_0 iff for n being Integer st b |^n = 1_G holds n = 0
 proof
   thus b is being_of_order_0 implies for n being Integer st b |^n = 1_G
-   holds n = 0
+  holds n = 0
   proof
     assume
 A1: b is being_of_order_0;
@@ -302,26 +303,24 @@ A5: b is not being_of_order_0
 A6:   b is being_of_order_0;
       then
 A7:   b|^2 <> 1_G by GROUP_1:def 11;
-      gr{b|^2} <> G
+      not b in gr{b|^2}
       proof
-        not b in gr{b|^2}
-        proof
-          assume b in gr{b|^2};
-          then consider j1 being Integer such that
-A8:       b = (b|^2)|^j1 by GR_CY_1:25;
-          b = b |^ (2 *j1) by A8,GROUP_1:67;
-          then b" * (b |^ (2 * j1)) = 1_G by GROUP_1:def 6;
-          then (b|^ -1) * (b |^(2 * j1)) = 1_G by GROUP_1:62;
-          then b |^ (-1 + (2 * j1)) = 1_G by GROUP_1:63;
-          then -1 + (2 * j1) = 0 by A6,Th13;
-          hence thesis by INT_1:22;
-        end;
-        hence thesis by A4,GR_CY_2:8;
+        assume b in gr{b|^2};
+        then consider j1 being Integer such that
+A8:     b = (b|^2)|^j1 by GR_CY_1:25;
+        b = b |^ (2 *j1) by A8,GROUP_1:67;
+        then b" * (b |^ (2 * j1)) = 1_G by GROUP_1:def 6;
+        then (b|^ -1) * (b |^(2 * j1)) = 1_G by GROUP_1:62;
+        then b |^ (-1 + (2 * j1)) = 1_G by GROUP_1:63;
+        then -1 + (2 * j1) = 0 by A6,Th13;
+        hence thesis by INT_1:22;
       end;
+      then gr{b|^2} <> G by A4,GR_CY_2:8;
       hence contradiction by A2,A7,Th7;
     end;
     then consider n being Element of NAT such that
-A9: n = ord b & b is not being_of_order_0;
+A9: n = ord b
+    and b is not being_of_order_0;
 A10: G is finite by A4,A5,Th11;
     then
 A11: card G = n by A4,A9,GR_CY_1:27;
@@ -333,64 +332,56 @@ A12:  not n is prime;
       proof
 A13:    not (n>1 & for m being natural number holds
         m divides n implies m = 1 or m = n) by A12,INT_2:def 5;
-A14:    n > 1
-        proof
-A15:      n >= 1 by A10,A11,GROUP_1:90;
-          n <> 1 by A3,A9,GROUP_1:85;
-          hence thesis by A15,XXREAL_0:1;
-        end;
+        n >= 1 by A10,A11,GROUP_1:90;
+        then n > 1 by A3,A9,GROUP_1:85,XXREAL_0:1;
         then consider m being natural number such that
-A16:    m <> 1 & m <> n & m divides n by A13;
+A14:    m <> 1 and
+A15:    m <> n and
+A16:    m divides n by A13;
         reconsider m as Element of NAT by ORDINAL1:def 13;
         consider o being Nat such that
 A17:    n = m * o by A16,NAT_D:def 3;
         reconsider o as Element of NAT by ORDINAL1:def 13;
         take u = m;
         take v = o;
-A18:    u > 1
+        u <> 0
         proof
-          u <> 0
-          proof
-            assume u = 0;
-            then n = 0 * (n div 0) by A16,NAT_D:3;
-            hence contradiction by A14;
-          end;
-          then 0 < u;
-          then 0 + 1 <= u by INT_1:20;
-          hence thesis by A16,XXREAL_0:1;
+          assume u = 0;
+          then n = 0 * (n div 0) by A16,NAT_D:3;
+          hence contradiction by A10,A11,GROUP_1:90;
         end;
-        v > 1
-        proof
-          v <> 0 by A14,A17;
-          then 0 < v;
-          then
-A19:      0 + 1 <= v by INT_1:20;
-          v <> 1 by A16,A17;
-          hence thesis by A19,XXREAL_0:1;
-        end;
-        hence thesis by A17,A18;
+        then
+A18:    0 + 1 <= u by INT_1:20;
+        0 < v by A10,A11,A17,GROUP_1:90;
+        then
+A19:    0 + 1 <= v by INT_1:20;
+        v <> 1 by A15,A17;
+        hence thesis by A14,A17,A18,A19,XXREAL_0:1;
       end;
       then consider u, v being Element of NAT such that
-A20:  u > 1 & v > 1 & n = u *v;
-      ord (b |^v) = u by A4,A10,A11,A20,GR_CY_2:14;
+A20:  u > 1 and
+A21:  v > 1 and
+A22:  n = u *v;
+      ord (b |^v) = u by A4,A10,A11,A22,GR_CY_2:14;
       then
-A21:  card gr {b |^v } = u by A10,GR_CY_1:27;
-A22:  u <> n by A20,XCMPLX_1:7;
-      gr {b |^v } <> (1).G by A20,A21,GROUP_2:81;
-      hence thesis by A2,A11,A21,A22;
+A23:  card gr {b |^v } = u by A10,GR_CY_1:27;
+A24:  u <> n by A20,A21,A22,XCMPLX_1:7;
+      gr {b |^v } <> (1).G by A20,A23,GROUP_2:81;
+      hence thesis by A2,A11,A23,A24;
     end;
     hence thesis by A4,A5,A11,Th11,GR_CY_2:10;
   end;
-  assume
-A23: G is cyclic & G is finite &
-  ex p being Element of NAT st card G = p & p is prime;
+  assume that
+  G is cyclic and
+A25: G is finite and
+A26: ex p being Element of NAT st card G = p & p is prime;
   let H;
-  reconsider G as finite Group by A23;
+  reconsider G as finite Group by A25;
   reconsider H as Subgroup of G;
   card G = card H * index H by GROUP_2:177;
   then
-A24: card H divides card G by NAT_D:def 3;
-  per cases by A23,A24,INT_2:def 5;
+A27: card H divides card G by NAT_D:def 3;
+  per cases by A26,A27,INT_2:def 5;
   suppose card H = card G;
     hence thesis by GROUP_2:85;
   end;
@@ -411,18 +402,21 @@ proof
   proof
     assume z in x * A * y;
     then consider b being Element of G such that
-A1: z = b * y & b in x * A by GROUP_2:34;
+A1: z = b * y and
+A2: b in x * A by GROUP_2:34;
     consider u being Element of G such that
-A2: b = x * u & u in A by A1,GROUP_2:33;
+A3: b = x * u and
+A4: u in A by A2,GROUP_2:33;
     take a = u;
-    thus thesis by A1,A2;
+    thus thesis by A1,A3,A4;
   end;
   given a being Element of G such that
-A3: z = x * a * y & a in A;
+A5: z = x * a * y and
+A6: a in A;
   ex h being Element of G st z = h * y & h in x * A
   proof
     take h = x * a;
-    thus thesis by A3,GROUP_2:33;
+    thus thesis by A5,A6,GROUP_2:33;
   end;
   hence thesis by GROUP_2:34;
 end;
@@ -444,93 +438,66 @@ proof
   consider f being Function of A, the carrier of G such that
 A1: for a being Element of A holds f.a = F(a) from FUNCT_2:sch 4;
 A2: dom f = A by FUNCT_2:def 1;
-A3: rng f = B
+A3: rng f c= B
   proof
-A4: rng f c= B
-    proof
-      let s be set;
-      assume s in rng f;
-      then consider a being set such that
-A5:   a in A & s = f.a by A2,FUNCT_1:def 5;
-      reconsider a as Element of A by A5;
-      s = F(a) by A1,A5;
-      hence thesis by Th15;
-    end;
-    B c= rng f
-    proof
-      let s be set;
-      assume s in B;
-      then consider a being Element of G such that
-A6:   s = x" * a * x & a in A by Th15;
-      ex x being Element of G st x in dom f & s = f.x
-      proof
-        take x = a;
-        thus thesis by A1,A6,FUNCT_2:def 1;
-      end;
-      hence thesis by FUNCT_1:def 5;
-    end;
-    hence thesis by A4,XBOOLE_0:def 10;
+    let s be set;
+    assume s in rng f;
+    then consider a being set such that
+A4: a in A and
+A5: s = f.a by A2,FUNCT_1:def 5;
+    reconsider a as Element of A by A4;
+    s = F(a) by A1,A5;
+    hence thesis by Th15;
   end;
-  then reconsider f as Function of A,B by A2,FUNCT_2:4;
+A6: B c= rng f
+  proof
+    let s be set;
+    assume s in B;
+    then consider a being Element of G such that
+A7: s = x" * a * x and
+A8: a in A by Th15;
+    ex x being Element of G st x in dom f & s = f.x
+    proof
+      take x = a;
+      thus thesis by A1,A7,A8,FUNCT_2:def 1;
+    end;
+    hence thesis by FUNCT_1:def 5;
+  end;
+  reconsider f as Function of A,B by A2,A3,FUNCT_2:4;
   deffunc FF(Element of G) = x*$1*x";
   consider g being Function of B, the carrier of G such that
-A7: for b being Element of B holds g.b = FF(b) from FUNCT_2:sch 4;
-A8: dom g = B by FUNCT_2:def 1;
-  rng g = A
+A9: for b being Element of B holds g.b = FF(b) from FUNCT_2:sch 4;
+A10: dom g = B by FUNCT_2:def 1;
+  rng g c= A
   proof
-A9: rng g c= A
-    proof
-      let s be set;
-      assume s in rng g;
-      then consider a being set such that
-A10:  a in B & s = g.a by A8,FUNCT_1:def 5;
-      reconsider a as Element of B by A10;
-A11:  s = FF(a) by A7,A10;
-      consider c being Element of G such that
-A12:  a = x" * c * x & c in A by Th15;
-      s = x * (x" * c) * x * x" by A11,A12,GROUP_1:def 4
-        .= (x * x") * c * x * x" by GROUP_1:def 4
-        .= (x * x") * c * (x * x") by GROUP_1:def 4
-        .= 1_G * c * (x * x") by GROUP_1:def 6
-        .= 1_G * c * 1_G by GROUP_1:def 6
-        .= 1_G * c by GROUP_1:def 5
-        .= c by GROUP_1:def 5;
-      hence thesis by A12;
-    end;
-    A c= rng g
-    proof
-      let s be set;
-      assume s in A;
-      then reconsider s as Element of A;
-      consider b being Element of G such that
-A13:  b = x" * s * x;
-A14:  b in B by A13,Th15;
-      ex u being set st u in dom g & s = g.u
-      proof
-        take u = b;
-        g.u = x * (x" * s * x) * x" by A7,A13,A14
-          .= x * (x" * s) * x * x" by GROUP_1:def 4
-          .= x * x" * s * x * x" by GROUP_1:def 4
-          .= (x * x") * s * (x * x") by GROUP_1:def 4
-          .= 1_G * s * (x * x") by GROUP_1:def 6
-          .= 1_G * s * 1_G by GROUP_1:def 6
-          .= 1_G * s by GROUP_1:def 5
-          .= s by GROUP_1:def 5;
-        hence thesis by A14,FUNCT_2:def 1;
-      end;
-      hence thesis by FUNCT_1:def 5;
-    end;
-    hence thesis by A9,XBOOLE_0:def 10;
+    let s be set;
+    assume s in rng g;
+    then consider a being set such that
+A11: a in B and
+A12: s = g.a by A10,FUNCT_1:def 5;
+    reconsider a as Element of B by A11;
+A13: s = FF(a) by A9,A12;
+    consider c being Element of G such that
+A14: a = x" * c * x and
+A15: c in A by Th15;
+    s = x * (x" * c) * x * x" by A13,A14,GROUP_1:def 4
+      .= (x * x") * c * x * x" by GROUP_1:def 4
+      .= (x * x") * c * (x * x") by GROUP_1:def 4
+      .= 1_G * c * (x * x") by GROUP_1:def 6
+      .= 1_G * c * 1_G by GROUP_1:def 6
+      .= 1_G * c by GROUP_1:def 5
+      .= c by GROUP_1:def 5;
+    hence thesis by A15;
   end;
-  then reconsider g as Function of B,A by A8,FUNCT_2:4;
-A15: for a,b being Element of A st f.a = f.b holds a = b
+  then reconsider g as Function of B,A by A10,FUNCT_2:4;
+A16: for a,b being Element of A st f.a = f.b holds a = b
   proof
     let a,b be Element of A such that
-A16: f.a = f.b;
-A17: x" * a * x in B by Th15;
-A18: x" * b * x in B by Th15;
-A19: g.(f.a) = g.(x" * a * x) by A1
-      .= x * (x" * a * x) * x" by A7,A17
+A17: f.a = f.b;
+A18: x" * a * x in B by Th15;
+A19: x" * b * x in B by Th15;
+A20: g.(f.a) = g.(x" * a * x) by A1
+      .= x * (x" * a * x) * x" by A9,A18
       .= x * (x" * a) * x * x" by GROUP_1:def 4
       .= (x * x") * a * x * x" by GROUP_1:def 4
       .= (x * x") * a * (x * x") by GROUP_1:def 4
@@ -539,7 +506,7 @@ A19: g.(f.a) = g.(x" * a * x) by A1
       .= a * 1_G by GROUP_1:def 6
       .= a by GROUP_1:def 5;
     g.(f.b) = g.(x" * b * x) by A1
-      .= x * (x" * b * x) * x" by A7,A18
+      .= x * (x" * b * x) * x" by A9,A19
       .= x * (x" * b) * x * x" by GROUP_1:def 4
       .= (x * x") * b * x * x" by GROUP_1:def 4
       .= (x * x") * b * (x * x") by GROUP_1:def 4
@@ -547,12 +514,12 @@ A19: g.(f.a) = g.(x" * a * x) by A1
       .= b * (x * x") by GROUP_1:def 5
       .= b * 1_G by GROUP_1:def 6
       .= b by GROUP_1:def 5;
-    hence thesis by A16,A19;
+    hence thesis by A17,A20;
   end;
   A,B are_equipotent
   proof
     take f;
-    thus thesis by A3,A15,FUNCT_2:def 1,GROUP_6:1;
+    thus thesis by A3,A6,A16,FUNCT_2:def 1,GROUP_6:1,XBOOLE_0:def 10;
   end;
   hence thesis by CARD_1:21;
 end;
@@ -589,18 +556,21 @@ proof
   proof
     assume z in H * x * K;
     then consider g1, g2 being Element of G such that
-A1: z = g1 * g2 & g1 in H * x & g2 in K by GROUP_2:114;
-    consider h1 being Element of G such that
-A2: g1 = h1 * x & h1 in H by A1,GROUP_2:126;
-    thus thesis by A1,A2;
+A1: z = g1 * g2 and
+A2: g1 in H * x and
+A3: g2 in K by GROUP_2:114;
+    ex h1 being Element of G st ( g1 = h1 * x)&( h1 in H) by A2,GROUP_2:126;
+    hence thesis by A1,A3;
   end;
   given g,h being Element of G such that
-A3: z = g * x * h & g in H & h in K;
+A4: z = g * x * h and
+A5: g in H and
+A6: h in K;
   ex g1, g2 being Element of G st z = g1 * g2 & g1 in H * x & g2 in K
   proof
     set g1 = g * x;
-    g1 in H * x by A3,GROUP_2:126;
-    hence thesis by A3;
+    g1 in H * x by A5,GROUP_2:126;
+    hence thesis by A4,A6;
   end;
   hence thesis by GROUP_2:114;
 end;
@@ -616,100 +586,91 @@ proof
   end;
   suppose ex z st z in H * x * K & z in H * y * K;
     then consider z such that
-A1: z in H * x * K & z in H * y * K;
+A1: z in H * x * K and
+A2: z in H * y * K;
     consider h1, k1 being Element of G such that
-A2: z = h1 * x * k1 & h1 in H & k1 in K by A1,Th17;
+A3: z = h1 * x * k1 and
+A4: h1 in H and
+A5: k1 in K by A1,Th17;
     consider h2, k2 being Element of G such that
-A3: z = h2 * y * k2 & h2 in H & k2 in K by A1,Th17;
-A4: H * x * K c= H * y * K
+A6: z = h2 * y * k2 and
+A7: h2 in H and
+A8: k2 in K by A2,Th17;
+    for a be set st a in H * x * K holds a in H * y * K
     proof
-      for a be set st a in H * x * K holds a in H * y * K
+      let a be set;
+      assume a in H * x * K;
+      then consider h,k being Element of G such that
+A9:   a = h * x * k and
+A10:  h in H and
+A11:  k in K by Th17;
+      ex c,d being Element of G st a = c * y * d & c in H & d in K
       proof
-        let a be set;
-        assume a in H * x * K;
-        then consider h,k being Element of G such that
-A5:     a = h * x * k & h in H & k in K by Th17;
-        ex c,d being Element of G st a = c * y * d & c in H & d in K
-        proof
-          h = h * 1_G by GROUP_1:def 5;
-          then
-A6:       h * x * k = h * 1_G * x * 1_G * k by GROUP_1:def 5;
-          1_G = h1" * h1 by GROUP_1:def 6;
-          then
-A7:       h * x * k = h * (h1" * h1) * x * (k1 * k1") * k by A6,GROUP_1:def 6
-            .= h * (h1" * h1) * x * k1 * k1" * k by GROUP_1:def 4
-            .= h * h1" * h1 * x * k1 * k1" * k by GROUP_1:def 4
-            .= h * h1" * (h1 * x) * k1 * k1" * k by GROUP_1:def 4
-            .= h * h1" * (h2 * y * k2) * k1" * k by A2,A3,GROUP_1:def 4
-            .= h * h1" * (h2 * y) * k2 * k1" * k by GROUP_1:def 4
-            .= (h * h1") * h2 * y * k2 * k1" * k by GROUP_1:def 4
-            .= (h * h1" * h2) * y * (k2 * k1") * k by GROUP_1:def 4
-            .= (h * h1" * h2) * y * (k2 * k1" * k) by GROUP_1:def 4;
-          take c = h * h1" * h2;
-          take d = k2 * k1" * k;
-A8:       h * h1" * h2 in H
-          proof
-            h in H & h1" in H by A2,A5,GROUP_2:60;
-            then h * h1" in H by GROUP_2:59;
-            hence thesis by A3,GROUP_2:59;
-          end;
-          k2 * k1" * k in K
-          proof
-            k2 in K & k1" in K by A2,A3,GROUP_2:60;
-            then k2 * k1" in K by GROUP_2:59;
-            hence thesis by A5,GROUP_2:59;
-          end;
-          hence thesis by A5,A7,A8;
-        end;
-        hence thesis by Th17;
+        h = h * 1_G by GROUP_1:def 5;
+        then
+A12:    h * x * k = h * 1_G * x * 1_G * k by GROUP_1:def 5;
+        1_G = h1" * h1 by GROUP_1:def 6;
+        then
+A13:    h * x * k = h * (h1" * h1) * x * (k1 * k1") * k by A12,GROUP_1:def 6
+          .= h * (h1" * h1) * x * k1 * k1" * k by GROUP_1:def 4
+          .= h * h1" * h1 * x * k1 * k1" * k by GROUP_1:def 4
+          .= h * h1" * (h1 * x) * k1 * k1" * k by GROUP_1:def 4
+          .= h * h1" * (h2 * y * k2) * k1" * k by A3,A6,GROUP_1:def 4
+          .= h * h1" * (h2 * y) * k2 * k1" * k by GROUP_1:def 4
+          .= (h * h1") * h2 * y * k2 * k1" * k by GROUP_1:def 4
+          .= (h * h1" * h2) * y * (k2 * k1") * k by GROUP_1:def 4
+          .= (h * h1" * h2) * y * (k2 * k1" * k) by GROUP_1:def 4;
+        take c = h * h1" * h2;
+        take d = k2 * k1" * k;
+        h1" in H by A4,GROUP_2:60;
+        then
+A14:    h * h1" in H by A10,GROUP_2:59;
+        k1" in K by A5,GROUP_2:60;
+        then k2 * k1" in K by A8,GROUP_2:59;
+        hence thesis by A7,A9,A11,A13,A14,GROUP_2:59;
       end;
-      hence thesis by TARSKI:def 3;
+      hence thesis by Th17;
     end;
-    H * y * K c= H * x * K
+    then
+A15: H * x * K c= H * y * K by TARSKI:def 3;
+    for a be set st a in H * y * K holds a in H * x * K
     proof
-      for a be set st a in H * y * K holds a in H * x * K
+      let a be set;
+      assume a in H * y * K;
+      then consider h,k being Element of G such that
+A16:  a = h * y * k and
+A17:  h in H and
+A18:  k in K by Th17;
+      ex c,d being Element of G st a = c * x * d & c in H & d in K
       proof
-        let a be set;
-        assume a in H * y * K;
-        then consider h,k being Element of G such that
-A9:     a = h * y * k & h in H & k in K by Th17;
-        ex c,d being Element of G st a = c * x * d & c in H & d in K
-        proof
-          h = h * 1_G by GROUP_1:def 5;
-          then
-A10:      h * y * k = h * 1_G * y * 1_G * k by GROUP_1:def 5;
-          1_G = h2" * h2 by GROUP_1:def 6;
-          then
-A11:      h * y * k = h * (h2" * h2) * y * (k2 * k2") * k by A10,GROUP_1:def 6
-            .= h * (h2" * h2) * y * k2 * k2" * k by GROUP_1:def 4
-            .= h * h2" * h2 * y * k2 * k2" * k by GROUP_1:def 4
-            .= h * h2" * (h2 * y) * k2 * k2" * k by GROUP_1:def 4
-            .= h * h2" * (h1 * x * k1) * k2" * k by A2,A3,GROUP_1:def 4
-            .= h * h2" * (h1 * x) * k1 * k2" * k by GROUP_1:def 4
-            .= (h * h2") * h1 * x * k1 * k2" * k by GROUP_1:def 4
-            .= (h * h2" * h1) * x * (k1 * k2") * k by GROUP_1:def 4
-            .= (h * h2" * h1) * x * (k1 * k2" * k) by GROUP_1:def 4;
-          take c = h * h2" * h1;
-          take d = k1 * k2" * k;
-A12:      h * h2" * h1 in H
-          proof
-            h in H & h2" in H by A3,A9,GROUP_2:60;
-            then h * h2" in H by GROUP_2:59;
-            hence thesis by A2,GROUP_2:59;
-          end;
-          k1 * k2" * k in K
-          proof
-            k1 in K & k2" in K by A2,A3,GROUP_2:60;
-            then k1 * k2" in K by GROUP_2:59;
-            hence thesis by A9,GROUP_2:59;
-          end;
-          hence thesis by A9,A11,A12;
-        end;
-        hence thesis by Th17;
+        h = h * 1_G by GROUP_1:def 5;
+        then
+A19:    h * y * k = h * 1_G * y * 1_G * k by GROUP_1:def 5;
+        1_G = h2" * h2 by GROUP_1:def 6;
+        then
+A20:    h * y * k = h * (h2" * h2) * y * (k2 * k2") * k by A19,
+        GROUP_1:def 6
+          .= h * (h2" * h2) * y * k2 * k2" * k by GROUP_1:def 4
+          .= h * h2" * h2 * y * k2 * k2" * k by GROUP_1:def 4
+          .= h * h2" * (h2 * y) * k2 * k2" * k by GROUP_1:def 4
+          .= h * h2" * (h1 * x * k1) * k2" * k by A3,A6,GROUP_1:def 4
+          .= h * h2" * (h1 * x) * k1 * k2" * k by GROUP_1:def 4
+          .= (h * h2") * h1 * x * k1 * k2" * k by GROUP_1:def 4
+          .= (h * h2" * h1) * x * (k1 * k2") * k by GROUP_1:def 4
+          .= (h * h2" * h1) * x * (k1 * k2" * k) by GROUP_1:def 4;
+        take c = h * h2" * h1;
+        take d = k1 * k2" * k;
+        h2" in H by A7,GROUP_2:60;
+        then
+A21:    h * h2" in H by A17,GROUP_2:59;
+        k2" in K by A8,GROUP_2:60;
+        then k1 * k2" in K by A5,GROUP_2:59;
+        hence thesis by A4,A16,A18,A20,A21,GROUP_2:59;
       end;
-      hence thesis by TARSKI:def 3;
+      hence thesis by Th17;
     end;
-    hence thesis by A4,XBOOLE_0:def 10;
+    then H * y * K c= H * x * K by TARSKI:def 3;
+    hence thesis by A15,XBOOLE_0:def 10;
   end;
 end;
 
@@ -730,53 +691,58 @@ notation
 end;
 
 theorem Th19:
-  G = A "\/" B & D = A /\ B & G is finite implies index(G,B) >= index(A,D)
+  D = A /\ B & G is finite implies index(G,B) >= index(A,D)
 proof
-  assume
-A1: G = A "\/" B & D = A /\ B & G is finite;
-  then reconsider LCB = Left_Cosets B as finite non empty set;
-  A is finite by A1;
-  then reconsider LCD = Left_Cosets D as finite non empty set;
-A2: now
+  assume that
+A1: D = A /\ B and
+A2: G is finite;
+  reconsider LCB = Left_Cosets B as finite non empty set by A2;
+  reconsider LCD = Left_Cosets D as finite non empty set by A2;
+A3: now
     let x,y be Element of G;
     let x',y' be Element of A such that
-A3: x' = x & y' = y;
-A4: y'" = y" by A3,GROUP_2:57;
-A5: y'"*x' in A by STRUCT_0:def 5;
+A4: x' = x and
+A5: y' = y;
+A6: y'" = y" by A5,GROUP_2:57;
+A7: y'"*x' in A by STRUCT_0:def 5;
     x*B = y*B iff y"*x in B by GROUP_2:137;
-    then x*B = y*B iff y'"*x' in B by A3,A4,GROUP_2:52;
-    then x*B = y*B iff y'"*x' in D by A1,A5,GROUP_2:99;
+    then x*B = y*B iff y'"*x' in B by A4,A6,GROUP_2:52;
+    then x*B = y*B iff y'"*x' in D by A1,A7,GROUP_2:99;
     hence x*B = y*B iff x'*D = y'*D by GROUP_2:137;
   end;
   defpred P[set, set] means ex a being Element of G, a' being Element of A st
   a = a' & $2 = a*B & $1 = a'*D;
-A6: for x being Element of LCD ex y being Element of LCB st P[x,y]
+A8: for x being Element of LCD ex y being Element of LCB st P[x,y]
   proof
     let x be Element of LCD;
     x in LCD;
     then consider a' being Element of A such that
-A7: x = a'*D by GROUP_2:def 15;
+A9: x = a'*D by GROUP_2:def 15;
     reconsider a = a' as Element of G by GROUP_2:51;
     reconsider y = a*B as Element of LCB by GROUP_2:def 15;
-    take y,a,a'; thus thesis by A7;
+    take y,a,a';
+    thus thesis by A9;
   end;
   consider F being Function of LCD, LCB such that
-A8: for a being Element of LCD holds P[a,F.a] from FUNCT_2:sch 3(A6);
-A9: dom F = LCD & rng F c= LCB by FUNCT_2:def 1,RELAT_1:def 19;
-A10: index D = card LCD by GROUP_2:def 18;
-A11: index B = card LCB by GROUP_2:def 18;
+A10: for a being Element of LCD holds P[a,F.a] from FUNCT_2:sch 3(A8);
+A11: dom F = LCD by FUNCT_2:def 1;
+A12: rng F c= LCB by RELAT_1:def 19;
+A13: index D = card LCD by GROUP_2:def 18;
+A14: index B = card LCB by GROUP_2:def 18;
   F is one-to-one
   proof
     let x1,x2 be set;
-    assume x1 in dom F & x2 in dom F;
-    then reconsider z1 = x1, z2 = x2 as Element of LCD by FUNCT_2:def 1;
-    consider a being Element of G, a' being Element of A such that
-A12: a = a' & F.z1 = a*B & z1 = a'*D by A8;
-    consider b being Element of G, b' being Element of A such that
-A13: b = b' & F.z2 = b*B & z2 = b'*D by A8;
-    thus thesis by A2,A12,A13;
+    assume that
+A15: x1 in dom F and
+A16: x2 in dom F;
+    reconsider z1 = x1, z2 = x2 as Element of LCD by A15,A16,FUNCT_2:def 1;
+A17: ex a being Element of G, a' being Element of A st ( a = a')&
+    ( F.z1 = a*B)&( z1 = a'*D) by A10;
+    ex b being Element of G, b' being Element of A st ( b = b')&
+    ( F.z2 = b*B)&( z2 = b'*D) by A10;
+    hence thesis by A3,A17;
   end;
-  then index D c= index B by A9,A10,A11,CARD_1:26;
+  then index D c= index B by A11,A12,A13,A14,CARD_1:26;
   hence thesis by NAT_1:40;
 end;
 
@@ -785,97 +751,82 @@ theorem Th20:
 proof
   let G be finite Group, H be Subgroup of G;
   card G = card H * index H by GROUP_2:177;
-  then index H <> 0 by GROUP_1:90;
-  hence thesis;
+  hence thesis by GROUP_1:90;
 end;
 
 theorem
   for G being Group st G is finite for C being Subgroup of G
-  for A,B being Subgroup of C st C = A "\/" B
+  for A,B being Subgroup of C
   for D being Subgroup of A st D = A /\ B
   for E being Subgroup of B st E = A /\ B
   for F being Subgroup of C st F = A /\ B holds
-  Left_Cosets(B) is finite & Left_Cosets(A) is finite &
   index (C,A), index (C,B) are_relative_prime
   implies index (C,B) = index (A,D) & index (C,A) = index (B,E)
 proof
   let G such that
 A1: G is finite;
   let C be Subgroup of G;
-  let A,B be Subgroup of C such that
-A2: C = A "\/" B;
+  let A,B be Subgroup of C;
   let D be Subgroup of A such that
-A3: D = A /\ B;
+A2: D = A /\ B;
   let E be Subgroup of B such that
-A4: E = A /\ B;
+A3: E = A /\ B;
   let F be Subgroup of C such that
-A5: F = A /\ B;
-  assume
-A6: Left_Cosets(B) is finite &
-  Left_Cosets(A) is finite & index A, index B are_relative_prime;
-A7: C is finite & F = E & F = D by A1,A3,A4,A5;
-  then index F = index E * index B by GROUP_2:179;
+A4: F = A /\ B;
+  assume that
+A5: index A, index B are_relative_prime;
+  index F = index E * index B by A1,A3,A4,GROUP_2:179;
   then
-A8: index E * index B = index D * index A by A7,GROUP_2:179;
+A6: index E * index B = index D * index A by A1,A2,A4,GROUP_2:179;
   then (index B qua Integer) divides
   ((index A qua Integer) * (index D qua Integer)) by INT_1:def 9;
   then
-A9: (index B qua Integer) divides (index D qua Integer) by A6,INT_2:40;
-A10: index B divides index D
+A7: (index B qua Integer) divides (index D qua Integer) by A5,INT_2:40;
+  ex n being Element of NAT st index D = (index B) * n
   proof
-    ex n being Element of NAT st index D = (index B) * n
-    proof
-      consider i being Integer such that
-A11:  index D = (index B qua Integer) * i by A9,INT_1:def 9;
-      0 <= i by A1,A11,Th20;
-      then reconsider i as Element of NAT by INT_1:16;
-      take n = i;
-      thus thesis by A11;
-    end;
-    hence thesis by NAT_D:def 3;
+    consider i being Integer such that
+A8: index D = (index B qua Integer) * i by A7,INT_1:def 9;
+    0 <= i by A1,A8,Th20;
+    then reconsider i as Element of NAT by INT_1:16;
+    take n = i;
+    thus thesis by A8;
   end;
-A13: index(C,B) >= index(A,D) by A2,A3,A7,Th19;
-A14: index B = index D
+  then
+A9: index B divides index D by NAT_D:def 3;
+A10: index(C,B) >= index(A,D) by A1,A2,Th19;
+A11: index B = index D
   proof
     assume
-A15: index B <> index D;
-    A is finite by A1;
-    then index D > 0 by Th20;
-    then index B <= index D by A10,NAT_D:7;
-    hence contradiction by A13,A15,XXREAL_0:1;
+A12: index B <> index D;
+    index D > 0 by A1,Th20;
+    then index B <= index D by A9,NAT_D:7;
+    hence contradiction by A10,A12,XXREAL_0:1;
   end;
   (index A qua Integer) divides
-  ((index B qua Integer) * (index E qua Integer)) by A8,INT_1:def 9;
+  ((index B qua Integer) * (index E qua Integer)) by A6,INT_1:def 9;
   then
-A16: (index A qua Integer) divides index E by A6,INT_2:40;
-A17: index A divides index E
+A13: (index A qua Integer) divides index E by A5,INT_2:40;
+  ex n being Element of NAT st index E = (index A) * n
   proof
-    ex n being Element of NAT st index E = (index A) * n
-    proof
-      consider i being Integer such that
-A18:  index E = (index A qua Integer) * i by A16,INT_1:def 9;
-      0 <= i by A1,A18,Th20;
-      then reconsider i as Element of NAT by INT_1:16;
-      take n = i;
-      thus thesis by A18;
-    end;
-    hence thesis by NAT_D:def 3;
+    consider i being Integer such that
+A14: index E = (index A qua Integer) * i by A13,INT_1:def 9;
+    0 <= i by A1,A14,Th20;
+    then reconsider i as Element of NAT by INT_1:16;
+    take n = i;
+    thus thesis by A14;
   end;
-A20: index A >= index E
-  proof
-    C = B "\/" A by A2,GROUP_4:74;
-    hence thesis by A4,A7,Th19;
-  end;
+  then
+A15: index A divides index E by NAT_D:def 3;
+A16: index A >= index E by A1,A3,Th19;
   index A = index E
   proof
     assume
-A21: index A <> index E;
-    B is finite by A1;
-    then index E > 0 by Th20;
-    then index A <= index E by A17,NAT_D:7;
-    hence contradiction by A20,A21,XXREAL_0:1;
+A17: index A <> index E;
+    index E > 0 by A1,Th20;
+    then index A <= index E by A15,NAT_D:7;
+    hence contradiction by A16,A17,XXREAL_0:1;
   end;
-  hence thesis by A14;
+  hence thesis by A11;
 end;
 
 theorem Th22:
@@ -892,41 +843,38 @@ A2: j = k or j = - k by INT_1:8;
   suppose
 A3: j =k;
     defpred P[Element of NAT] means a |^ $1 in H;
-A4: P[0]
-    proof
-      a |^0 = 1_G by GROUP_1:43;
-      hence thesis by GROUP_2:55;
-    end;
+    a |^0 = 1_G by GROUP_1:43;
+    then
+A4: P[0] by GROUP_2:55;
 A5: for n being Element of NAT st P[n] holds P[n + 1]
     proof
-      let n be Element of NAT such that
-A6:   P[n];
-      (a |^ n) * a in H by A1,A6,GROUP_2:59;
+      let n be Element of NAT;
+      assume
+      P[n];
+      then (a |^ n) * a in H by A1,GROUP_2:59;
       hence thesis by GROUP_1:66;
     end;
     for n being Element of NAT holds P[n] from NAT_1:sch 1(A4,A5);
     hence thesis by A3;
   end;
   suppose
-A7: j = - k;
+A6: j = - k;
     defpred PP[Element of NAT] means a |^ (- $1) in H;
-A8: PP[0]
-    proof
-      a |^0 = 1_G by GROUP_1:43;
-      hence thesis by GROUP_2:55;
-    end;
-A9: for n being Element of NAT st PP[n] holds PP[n +1 ]
+    a |^0 = 1_G by GROUP_1:43;
+    then
+A7: PP[0] by GROUP_2:55;
+A8: for n being Element of NAT st PP[n] holds PP[n +1 ]
     proof
       let n be Element of NAT such that
-A10:  PP[n];
+A9:   PP[n];
       a" in H by A1,GROUP_2:60;
-      then a |^(-n) * a" in H by A10,GROUP_2:59;
+      then a |^(-n) * a" in H by A9,GROUP_2:59;
       then a |^(-n) * a |^ (-1) in H by GROUP_1:62;
       then a |^(- n + (- 1)) in H by GROUP_1:63;
       hence thesis;
     end;
-    for n being Element of NAT holds PP[n] from NAT_1:sch 1(A8,A9);
-    hence thesis by A7;
+    for n being Element of NAT holds PP[n] from NAT_1:sch 1(A7,A8);
+    hence thesis by A6;
   end;
 end;
 
@@ -937,16 +885,13 @@ proof
 A1: G <> (1).G;
   assume
 A2: not ex b being Element of G st b <> 1_G;
-  G is trivial
+  for x,y being Element of G holds x = y
   proof
-    for x,y being Element of G holds x = y
-    proof
-      let x,y be Element of G;
-      x = 1_G by A2;
-      hence thesis by A2;
-    end;
-    hence thesis by STRUCT_0:def 10;
+    let x,y be Element of G;
+    x = 1_G by A2;
+    hence thesis by A2;
   end;
+  then G is trivial by STRUCT_0:def 10;
   hence contradiction by A1,GROUP_6:13;
 end;
 
@@ -958,44 +903,45 @@ proof
   let G be strict Group;
   let a be Element of G such that
 A1: G = gr{a};
-  let H be strict Subgroup of G such that
-A2: H <> (1).G;
-A3: H <> (1).H by A2,GROUP_2:75;
+  let H be strict Subgroup of G;
+  assume
+  H <> (1).G;
+  then
+A2: H <> (1).H by GROUP_2:75;
   consider b being Element of H;
   consider c being Element of H such that
-A4: c <> 1_H by A3,Th23;
-A5: c in H by STRUCT_0:def 5;
+A3: c <> 1_H by A2,Th23;
+A4: c in H by STRUCT_0:def 5;
   then c in G by GROUP_2:49;
   then reconsider c as Element of G by STRUCT_0:def 5;
-A6: c in gr{a} by A1,STRUCT_0:def 5;
+A5: c in gr{a} by A1,STRUCT_0:def 5;
   ex j being Integer st c = a |^j & j <> 0
   proof
     assume
-A7: not ex j being Integer st c = a |^j & j <> 0;
+A6: not ex j being Integer st c = a |^j & j <> 0;
     consider i being Integer such that
-A8: c = a |^ i by A6,GR_CY_1:25;
-A9: a |^i <> 1_G by A4,A8,GROUP_2:53;
-    i = 0 by A7,A8;
-    hence contradiction by A9,GROUP_1:43;
+A7: c = a |^ i by A5,GR_CY_1:25;
+A8: a |^i <> 1_G by A3,A7,GROUP_2:53;
+    i = 0 by A6,A7;
+    hence contradiction by A8,GROUP_1:43;
   end;
   then consider j being Integer such that
-A10: c = a |^ j & j <> 0;
+A9: c = a |^ j and
+A10: j <> 0;
   consider n being Element of NAT such that
 A11: j = n or j = -n by INT_1:8;
   per cases by A11;
   suppose
-A12: j = n;
-    thus thesis by A5,A10,A12;
+    j = n;
+    hence thesis by A4,A9,A10;
   end;
   suppose
-A13: j = - n;
-    then n <> 0 by A10;
+A12: j = - n;
     then
-A14: 0 < n;
-    (a |^ n)" in H by A5,A10,A13,GROUP_1:70;
+A13: 0 < n by A10;
+    (a |^ n)" in H by A4,A9,A12,GROUP_1:70;
     then (a |^ n)"" in H by GROUP_2:60;
-    then a |^ n in H;
-    hence thesis by A14;
+    hence thesis by A13;
   end;
 end;
 
@@ -1025,24 +971,27 @@ A3:   ex k being Nat st P[k];
       hence thesis;
     end;
     then consider m being Nat such that
-A4: 0 < m & b |^m in H & for j being Nat st 0 < j & b |^ j in H holds m <= j;
+A4: 0 < m and
+A5: b |^m in H and
+A6: for j being Nat st 0 < j & b |^ j in H holds m <= j;
     set c = b |^ m;
-    reconsider c as Element of H by A4,STRUCT_0:def 5;
+    reconsider c as Element of H by A5,STRUCT_0:def 5;
     for a being Element of H holds ex i being Integer st a = c |^ i
     proof
       let a be Element of H;
       ex t being Integer st b |^t in H & b|^t = a
       proof
-A5:     a in G by GROUP_2:50;
-A6:     a in gr{b} by A2,GROUP_2:50;
-        a is Element of G by A5,STRUCT_0:def 5;
+A7:     a in G by GROUP_2:50;
+A8:     a in gr{b} by A2,GROUP_2:50;
+        a is Element of G by A7,STRUCT_0:def 5;
         then consider j1 being Integer such that
-A7:     a = b |^ j1 by A6,GR_CY_1:25;
-        b |^ j1 in H by A7,STRUCT_0:def 5;
-        hence thesis by A7;
+A9:     a = b |^ j1 by A8,GR_CY_1:25;
+        b |^ j1 in H by A9,STRUCT_0:def 5;
+        hence thesis by A9;
       end;
       then consider t being Integer such that
-A8:   b |^ t in H & b |^t = a;
+A10:  b |^ t in H and
+A11:  b |^t = a;
       ex r,s being Integer st 0 <= s & s < m & t = m * r + s
       proof
         take r = t div m;
@@ -1050,30 +999,29 @@ A8:   b |^ t in H & b |^t = a;
         thus thesis by A4,NEWTON:78,79,80;
       end;
       then consider r,s being Integer such that
-A9:   0 <= s & s < m & t = m * r + s;
-      reconsider s as Element of NAT by A9,INT_1:16;
-A10:  b |^ t = b |^(m *r) * (b |^s) by A9,GROUP_1:63
+A12:  0 <= s and
+A13:  s < m and
+A14:  t = m * r + s;
+      reconsider s as Element of NAT by A12,INT_1:16;
+A15:  b |^ t = b |^(m *r) * (b |^s) by A14,GROUP_1:63
         .= ((b |^m)|^ r) * (b |^ s) by GROUP_1:67;
-A11:  (b |^m) |^r in H by A4,Th22;
-A12:  b |^s in H
+A16:  (b |^m) |^r in H by A5,Th22;
+      b |^s in H
       proof
         set u = b |^t;
         set v = (b |^m) |^ r;
-A13:    v" * u = (v" * v) * b|^s by A10,GROUP_1:def 4
+A17:    v" * u = (v" * v) * b|^s by A15,GROUP_1:def 4
           .= 1_G * b |^ s by GROUP_1:def 6
           .= b |^ s by GROUP_1:def 5;
-        v" in H by A11,GROUP_2:60;
-        hence thesis by A8,A13,GROUP_2:59;
+        v" in H by A16,GROUP_2:60;
+        hence thesis by A10,A17,GROUP_2:59;
       end;
-      b |^ s = 1_G
-      proof
-        s = 0 by A4,A9,A12;
-        hence thesis by GROUP_1:43;
-      end;
+      then s = 0 by A6,A13;
+      then b |^ s = 1_G by GROUP_1:43;
       then
-A14:  b |^ t = (b |^ m) |^r by A10,GROUP_1:def 5;
+A18:  b |^ t = (b |^ m) |^r by A15,GROUP_1:def 5;
       (b |^m)|^ r = (c) |^ r by GROUP_4:4;
-      hence thesis by A8,A14;
+      hence thesis by A11,A18;
     end;
     then H = gr{c} by GR_CY_2:11;
     hence thesis by GR_CY_2:10;

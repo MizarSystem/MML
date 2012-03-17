@@ -7,6 +7,7 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="TARSKI"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
@@ -22,7 +23,7 @@
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="30" value="false"/>
+<Adjective nr="31" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -33,7 +34,7 @@
 <For>
 <Typ kind="M" nr="9">
 <Cluster>
-<Adjective nr="30" value="false"/>
+<Adjective nr="31" value="false"/>
 <Adjective nr="45"/>
 <Adjective nr="54">
 <Func kind="F" nr="1"/>
@@ -105,12 +106,12 @@
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="30" value="false"/>
+<Adjective nr="31" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="30" value="false"/>
+<Adjective nr="31" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -235,7 +236,7 @@
 <And>
 <Not>
 <And>
-<Pred kind="R" nr="28">
+<Pred kind="R" nr="29">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Var nr="2"/>
@@ -255,7 +256,7 @@
 <Var nr="2"/>
 </Pred>
 <Not>
-<Pred kind="R" nr="28">
+<Pred kind="R" nr="29">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Var nr="2"/>
@@ -283,7 +284,7 @@
 <And>
 <Not>
 <And>
-<Pred kind="R" nr="28">
+<Pred kind="R" nr="29">
 <Func kind="F" nr="2"/>
 <Var nr="1"/>
 <Var nr="2"/>
@@ -303,7 +304,7 @@
 <Var nr="2"/>
 </Pred>
 <Not>
-<Pred kind="R" nr="28">
+<Pred kind="R" nr="29">
 <Func kind="F" nr="2"/>
 <Var nr="1"/>
 <Var nr="2"/>
@@ -319,12 +320,12 @@
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="30" value="false"/>
+<Adjective nr="31" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="9">
 <Cluster>
-<Adjective nr="30" value="false"/>
+<Adjective nr="31" value="false"/>
 <Adjective nr="54">
 <Func kind="F" nr="1"/>
 </Adjective>
@@ -333,7 +334,7 @@
 </Typ>
 <Typ kind="M" nr="9">
 <Cluster>
-<Adjective nr="30" value="false"/>
+<Adjective nr="31" value="false"/>
 <Adjective nr="54">
 <Func kind="F" nr="1"/>
 </Adjective>
@@ -450,12 +451,12 @@
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="30" value="false"/>
+<Adjective nr="31" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="9">
 <Cluster>
-<Adjective nr="30" value="false"/>
+<Adjective nr="31" value="false"/>
 <Adjective nr="54">
 <Func kind="F" nr="1"/>
 </Adjective>
@@ -464,7 +465,7 @@
 </Typ>
 <Typ kind="M" nr="9">
 <Cluster>
-<Adjective nr="30" value="false"/>
+<Adjective nr="31" value="false"/>
 <Adjective nr="54">
 <Func kind="F" nr="1"/>
 </Adjective>

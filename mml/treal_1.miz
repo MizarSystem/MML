@@ -34,11 +34,13 @@ reserve a,b,c,d for real number;
 
 Lm1: for x being set st x in [.a,b.] holds x is Real;
 
-Lm2: for x being Point of Closed-Interval-TSpace(a,b) st a <= b
-holds x is Real
+Lm2: for x being Point of Closed-Interval-TSpace(a,b) st a <= b holds x is
+Real
+
 proof
   let x be Point of Closed-Interval-TSpace(a,b);
-  assume a <= b;
+  assume
+  a <= b;
   then the carrier of Closed-Interval-TSpace(a,b) = [.a,b.] by TOPMETR:25;
   hence thesis by Lm1;
 end;
@@ -51,136 +53,147 @@ proof
   let A be Subset of R^1;
   assume
 A1: A = [.a,b.];
-  reconsider a, b as Real by XREAL_0:def 1;
   reconsider B = A` as Subset of TopSpaceMetr(RealSpace) by TOPMETR:def 7;
-A2: the carrier of RealSpace = the carrier of TopSpaceMetr(RealSpace)
-  by TOPMETR:16;
+  reconsider a, b as Real by XREAL_0:def 1;
   reconsider D = B as Subset of RealSpace by TOPMETR:16;
   set C = D`;
-  for c being Point of RealSpace st c in B
-  ex r being real number st r > 0 & Ball(c,r) c= B
+A2: the carrier of RealSpace = the carrier of TopSpaceMetr(RealSpace) by
+  TOPMETR:16;
+  for c being Point of RealSpace st c in B ex r being real number st r > 0
+  & Ball(c,r) c= B
   proof
     let c be Point of RealSpace;
-    assume
-A3: c in B;
     reconsider n = c as Real by METRIC_1:def 14;
-    not n in [.a,b.] by A1,A3,XBOOLE_0:def 5;
+    assume
+    c in B;
+    then not n in [.a,b.] by A1,XBOOLE_0:def 5;
     then
-A4: not n in {p where p is Real : a <= p & p <= b} by RCOMP_1:def 1;
-    thus ex r being real number st r > 0 & Ball(c,r) c= B
-    proof
-      now per cases by A4;
-        suppose
-A5:       not a <= n;
-          take r = a - n;
-          now
-            let x be set;
-            assume
-A6:         x in Ball(c,r);
-            then reconsider t = x as Real by METRIC_1:def 14;
-            reconsider u = x as Point of RealSpace by A6;
-            Ball(c,r) = {q where q is Element of RealSpace
-            :dist(c,q)<r} by METRIC_1:18;
-            then ex v being Element of RealSpace st v = u & dist(c,v)<r by A6;
-            then (real_dist).(t,n) < r by METRIC_1:def 1,def 14;
-            then abs(t - n) < r & t - n <= abs(t - n)
-            by ABSVALUE:11,METRIC_1:def 13;
-            then t - n < a - n by XXREAL_0:2;
-            then not ex q being Real st q = t & a <= q & q <= b by XREAL_1:11;
-            then not t in {p where p is Real : a <= p & p <= b};
-            then not u in C & the carrier of RealSpace <> {}
-            by A1,A2,RCOMP_1:def 1,TOPMETR:def 7;
-            hence x in B by SUBSET_1:50;
-          end;
-          hence r > 0 & Ball(c,r) c= B by A5,TARSKI:def 3,XREAL_1:52;
+A3: not n in {p where p is Real : a <= p & p <= b} by RCOMP_1:def 1;
+    now
+      per cases by A3;
+      suppose
+A4:     not a <= n;
+        take r = a - n;
+        now
+          let x be set;
+          assume
+A5:       x in Ball(c,r);
+          then reconsider t = x as Real by METRIC_1:def 14;
+          reconsider u = x as Point of RealSpace by A5;
+          Ball(c,r) = {q where q is Element of RealSpace :dist(c,q)<r} by
+          METRIC_1:18;
+          then
+          ex v being Element of RealSpace st v = u & dist(c,v)<r by A5;
+          then (real_dist).(t,n) < r by METRIC_1:def 1,def 14;
+          then
+A6:       abs(t - n) < r by METRIC_1:def 13;
+          t - n <= abs(t - n) by ABSVALUE:11;
+          then t - n < a - n by A6,XXREAL_0:2;
+          then not ex q being Real st q = t & a <= q & q <= b by
+          XREAL_1:
+          11;
+          then not t in {p where p is Real : a <= p & p <= b};
+          then not u in C by A1,A2,RCOMP_1:def 1,TOPMETR:def 7;
+          hence x in B by SUBSET_1:50;
         end;
-        suppose
-A7:       not n <= b;
-          take r = n - b;
-          now
-            let x be set;
-            assume
-A8:         x in Ball(c,r);
-            then reconsider t = x as Real by METRIC_1:def 14;
-            reconsider u = x as Point of RealSpace by A8;
-            Ball(c,r) = {q where q is Element of RealSpace
-            :dist(c,q)<r} by METRIC_1:18;
-            then ex v being Element of RealSpace st v = u & dist(c,v)<r by A8;
-            then (real_dist).(n,t) < r by METRIC_1:def 1,def 14;
-            then abs(n - t) < r & n - t <= abs(n - t)
-            by ABSVALUE:11,METRIC_1:def 13;
-            then n - t < n - b by XXREAL_0:2;
-            then not ex q being Real st q = t & a <= q & q <= b by XREAL_1:12;
-            then not t in {p where p is Real : a <= p & p <= b};
-            then not u in C & the carrier of RealSpace <> {}
-            by A1,A2,RCOMP_1:def 1,TOPMETR:def 7;
-            hence x in B by SUBSET_1:50;
-          end;
-          hence r > 0 & Ball(c,r) c= B by A7,TARSKI:def 3,XREAL_1:52;
-        end;
+        hence r > 0 & Ball(c,r) c= B by A4,TARSKI:def 3,XREAL_1:52;
       end;
-      hence thesis;
+      suppose
+A7:     not n <= b;
+        take r = n - b;
+        now
+          let x be set;
+          assume
+A8:       x in Ball(c,r);
+          then reconsider t = x as Real by METRIC_1:def 14;
+          reconsider u = x as Point of RealSpace by A8;
+          Ball(c,r) = {q where q is Element of RealSpace :dist(c,q)<r} by
+          METRIC_1:18;
+          then
+          ex v being Element of RealSpace st v = u & dist(c,v)<r by A8;
+          then (real_dist).(n,t) < r by METRIC_1:def 1,def 14;
+          then
+A9:       abs(n - t) < r by METRIC_1:def 13;
+          n - t <= abs(n - t) by ABSVALUE:11;
+          then n - t < n - b by A9,XXREAL_0:2;
+          then not ex q being Real st q = t & a <= q & q <= b by
+          XREAL_1:
+          12;
+          then not t in {p where p is Real : a <= p & p <= b};
+          then not u in C by A1,A2,RCOMP_1:def 1,TOPMETR:def 7;
+          hence x in B by SUBSET_1:50;
+        end;
+        hence r > 0 & Ball(c,r) c= B by A7,TARSKI:def 3,XREAL_1:52;
+      end;
     end;
+    hence ex r being real number st r > 0 & Ball(c,r) c= B;
   end;
   then A` is open by TOPMETR:22,def 7;
   hence thesis by TOPS_1:29;
 end;
 
 theorem Th5:
-  a <= b implies Closed-Interval-TSpace(a,b) is closed SubSpace of R^1
+  a <= b implies Closed-Interval-TSpace(a,b) is closed SubSpace of
+  R^1
 proof
-  assume a <= b;
+  assume
+  a <= b;
   then the carrier of Closed-Interval-TSpace(a,b) = [.a,b.] by TOPMETR:25;
-  then for A be Subset of R^1 holds
-  A = the carrier of Closed-Interval-TSpace(a,b) implies A is closed by Th4;
+  then
+  for A be Subset of R^1 holds A = the carrier of Closed-Interval-TSpace(a
+  ,b) implies A is closed by Th4;
   hence thesis by BORSUK_1:def 14;
 end;
 
 theorem
-  a <= c & d <= b & c <= d implies
-  Closed-Interval-TSpace(c,d) is closed SubSpace of Closed-Interval-TSpace(a,b)
+  a <= c & d <= b & c <= d implies Closed-Interval-TSpace(c,d) is closed
+  SubSpace of Closed-Interval-TSpace(a,b)
 proof
-  assume
-A1: a <= c & d <= b & c <= d;
+  assume that
+A1: a <= c and
+A2: d <= b and
+A3: c <= d;
+  [.c,d.] c= [.a,b.] by A1,A2,XXREAL_1:34;
   then
-A2: a <= d by XXREAL_0:2;
-  [.c,d.] c= [.a,b.] by A1,XXREAL_1:34;
-  then the carrier of Closed-Interval-TSpace(c,d) c= [.a,b.] by A1,TOPMETR:25;
-  then
-A3: the carrier of Closed-Interval-TSpace(c,d) c=
-  the carrier of Closed-Interval-TSpace(a,b) by A1,A2,TOPMETR:25,XXREAL_0:2;
-  Closed-Interval-TSpace(c,d) is closed SubSpace of R^1 by A1,Th5;
-  hence thesis by A3,TSEP_1:14;
+A4: the carrier of Closed-Interval-TSpace(c,d) c= [.a,b.] by A3,
+  TOPMETR:
+  25;
+A5: Closed-Interval-TSpace(c,d) is closed SubSpace of R^1 by A3,Th5;
+  a <= d by A1,A3,XXREAL_0:2;
+  then the carrier of Closed-Interval-TSpace(c,d) c= the carrier of
+  Closed-Interval-TSpace(a,b) by A2,A4,TOPMETR:25,XXREAL_0:2;
+  hence thesis by A5,TSEP_1:14;
 end;
 
 theorem
   a <= c & b <= d & c <= b implies Closed-Interval-TSpace(a,d) =
   Closed-Interval-TSpace(a,b) union Closed-Interval-TSpace(c,d) &
-  Closed-Interval-TSpace(c,b) =
-  Closed-Interval-TSpace(a,b) meet Closed-Interval-TSpace(c,d)
+  Closed-Interval-TSpace(c,b) = Closed-Interval-TSpace(a,b) meet
+  Closed-Interval-TSpace(c,d)
 proof
-  assume
-A1: a <= c & b <= d & c <= b;
+  assume that
+A1: a <= c and
+A2: b <= d and
+A3: c <= b;
+A4: the carrier of Closed-Interval-TSpace(a,b) = [.a,b.] & the carrier of
+  Closed-Interval-TSpace(c,d) = [.c,d.] by A1,A2,A3,TOPMETR:25,XXREAL_0:2;
+  a <= b by A1,A3,XXREAL_0:2;
   then
-A2: a <= b & c <= d by XXREAL_0:2;
-A3: the carrier of Closed-Interval-TSpace(a,b) = [.a,b.] &
-  the carrier of Closed-Interval-TSpace(c,d) = [.c,d.] by A1,TOPMETR:25
-,XXREAL_0:2;
-A4: the carrier of Closed-Interval-TSpace(a,d) = [.a,d.] by A1,A2,TOPMETR:25
-,XXREAL_0:2;
-  [.a,b.] \/ [.c,d.] = [.a,d.] by A1,XXREAL_1:174;
-  hence Closed-Interval-TSpace(a,d) =
-  Closed-Interval-TSpace(a,b) union Closed-Interval-TSpace(c,d)
-  by A3,A4,TSEP_1:def 2;
-A5: the carrier of Closed-Interval-TSpace(c,b) = [.c,b.] by A1,TOPMETR:25;
-A6: [.a,b.] /\ [.c,d.] = [.c,b.] by A1,XXREAL_1:143;
-  then (the carrier of Closed-Interval-TSpace(a,b)) /\
-  (the carrier of Closed-Interval-TSpace(c,d)) <> {} by A1,A3,XXREAL_1:1;
-  then (the carrier of Closed-Interval-TSpace(a,b)) meets
-  (the carrier of Closed-Interval-TSpace(c,d)) by XBOOLE_0:def 7;
-  then Closed-Interval-TSpace(a,b) meets Closed-Interval-TSpace(c,d)
-  by TSEP_1:def 3;
-  hence thesis by A3,A5,A6,TSEP_1:def 5;
+A5: the carrier of Closed-Interval-TSpace(a,d) = [.a,d.] by A2,
+  TOPMETR:25
+  ,XXREAL_0:2;
+A6: the carrier of Closed-Interval-TSpace(c,b) = [.c,b.] by A3,TOPMETR:25;
+  [.a,b.] \/ [.c,d.] = [.a,d.] by A1,A2,A3,XXREAL_1:174;
+  hence Closed-Interval-TSpace(a,d) = Closed-Interval-TSpace(a,b) union
+  Closed-Interval-TSpace(c,d) by A4,A5,TSEP_1:def 2;
+A7: [.a,b.] /\ [.c,d.] = [.c,b.] by A1,A2,XXREAL_1:143;
+  then (the carrier of Closed-Interval-TSpace(a,b)) /\ (the carrier of
+  Closed-Interval-TSpace(c,d)) <> {} by A3,A4,XXREAL_1:1;
+  then (the carrier of Closed-Interval-TSpace(a,b)) meets (the carrier of
+  Closed-Interval-TSpace(c,d)) by XBOOLE_0:def 7;
+  then Closed-Interval-TSpace(a,b) meets Closed-Interval-TSpace(c,d) by
+  TSEP_1:def 3;
+  hence thesis by A4,A6,A7,TSEP_1:def 5;
 end;
 
 definition
@@ -208,17 +221,19 @@ A1: a <= b;
 end;
 
 theorem
-  0[01] = (#)(0,1) & 1[01] = (0,1)(#) by Def1,Def2,BORSUK_1:def 17,def 18;
+  0[01] = (#)(0,1) & 1[01] = (0,1)(#) by Def1,Def2,BORSUK_1:def 17,def
+  18;
 
 theorem
   a <= b & b <= c implies (#)(a,b) = (#)(a,c) & (b,c)(#) = (a,c)(#)
 proof
-  assume
-A1: a <= b & b <= c;
-  hence (#)(a,b) = a by Def1
-    .= (#)(a,c) by A1,Def1,XXREAL_0:2;
-  thus (b,c)(#) = c by A1,Def2
-    .= (a,c)(#) by A1,Def2,XXREAL_0:2;
+  assume that
+A1: a <= b and
+A2: b <= c;
+  thus (#)(a,b) = a by A1,Def1
+    .= (#)(a,c) by A1,A2,Def1,XXREAL_0:2;
+  thus (b,c)(#) = c by A2,Def2
+    .= (a,c)(#) by A1,A2,Def2,XXREAL_0:2;
 end;
 
 begin
@@ -229,115 +244,115 @@ definition
   let a,b be real number such that
 A1: a <= b;
   let t1,t2 be Point of Closed-Interval-TSpace(a,b);
-  func L[01](t1,t2) -> Function of
-  Closed-Interval-TSpace(0,1),Closed-Interval-TSpace(a,b) means
+  func L[01](t1,t2) -> Function of Closed-Interval-TSpace(0,1),
+  Closed-Interval-TSpace(a,b) means
   :Def3:
-  for s being Point of Closed-Interval-TSpace(0,1),
-  r,r1,r2 being real number st
-  s=r & r1=t1 & r2=t2 holds it.s = (1-r)*r1 + r*r2;
+  for s being Point of
+  Closed-Interval-TSpace(0,1), r,r1,r2 being real number st s=r & r1=t1 & r2=t2
+  holds it.s = (1-r)*r1 + r*r2;
   existence
   proof
     reconsider r1 = t1, r2 = t2 as Real by A1,Lm2;
     deffunc U(Element of REAL) = (1-$1)*r1 + $1*r2;
     consider LI being Function of REAL,REAL such that
 A2: for r being Real holds LI.r= U(r) from FUNCT_2:sch 4;
-A3: dom(LI|[.0,1.]) = the carrier of Closed-Interval-TSpace(0,1)
-    proof
-A4:   [.0,1.] = REAL /\ [.0,1.] by XBOOLE_1:28;
-      dom LI = REAL & dom(LI|[.0,1.]) = (dom LI) /\ [.0,1.]
-      by FUNCT_2:def 1,RELAT_1:90;
-      hence thesis by A4,TOPMETR:25;
+A3: [.a,b.] = the carrier of Closed-Interval-TSpace(a,b) by A1,TOPMETR:25;
+    now
+      let y be set;
+      assume
+A4:   y in rng(LI|[.0,1.]);
+      then reconsider d = y as Real;
+      y in LI.:[.0,1.] by A4,RELAT_1:148;
+      then consider x being set such that
+      x in dom LI and
+A5:   x in [.0,1.] and
+A6:   y = LI.x by FUNCT_1:def 12;
+      reconsider c = x as Real by A5;
+A7:   d = (1 - c)*r1 + c*r2 by A2,A6;
+      r1 in [.a,b.] by A3;
+      then r1 in { p where p is Real : a <= p & p <= b} by RCOMP_1:def 1;
+      then
+A8:   ex v1 being Real st v1 = r1 & a <= v1 & v1 <= b;
+      c in { p where p is Real : 0 <= p & p <= 1} by A5,RCOMP_1:def 1;
+      then
+A9:   ex u being Real st u = c & 0 <= u & u <= 1;
+      r2 in [.a,b.] by A3;
+      then r2 in { p where p is Real : a <= p & p <= b} by RCOMP_1:def 1;
+      then
+A10:  ex v2 being Real st v2 = r2 & a <= v2 & v2 <= b;
+      then
+A11:  c*a <= c*r2 by A9,XREAL_1:66;
+A12:  c*r2 <= c*b by A9,A10,XREAL_1:66;
+A13:  0 <= 1 - c by A9,XREAL_1:50;
+      then (1 - c)*r1 <= (1 - c)*b by A8,XREAL_1:66;
+      then
+A14:  d <= (1 - c)*b + c*b by A7,A12,XREAL_1:9;
+      (1 - c)*a <= (1 - c)*r1 by A8,A13,XREAL_1:66;
+      then (1 - c)*a + c*a <= d by A7,A11,XREAL_1:9;
+      then y in { q where q is Real : a <= q & q <= b} by A14;
+      hence y in [.a,b.] by RCOMP_1:def 1;
     end;
-A5: [.a,b.] = the carrier of Closed-Interval-TSpace(a,b) by A1,TOPMETR:25;
-    rng(LI|[.0,1.]) c= the carrier of Closed-Interval-TSpace(a,b)
-    proof
-      now
-        let y be set;
-        assume
-A6:     y in rng(LI|[.0,1.]);
-        then y in LI.:[.0,1.] by RELAT_1:148;
-        then consider x being set such that x in dom LI and
-A7:     x in [.0,1.] and
-A8:     y = LI.x by FUNCT_1:def 12;
-        reconsider c = x as Real by A7;
-        c in { p where p is Real : 0 <= p & p <= 1} by A7,RCOMP_1:def 1;
-        then
-A9:     ex u being Real st u = c & 0 <= u & u <= 1;
-        r1 in [.a,b.] & r2 in [.a,b.] by A5;
-        then r1 in { p where p is Real : a <= p & p <= b} &
-        r2 in { p where p is Real : a <= p & p <= b} by RCOMP_1:def 1;
-        then
-A10:    (ex v1 being Real st v1 = r1 & a <= v1 & v1 <= b) &
-        (ex v2 being Real st v2 = r2 & a <= v2 & v2 <= b);
-        reconsider d = y as Real by A6;
-A11:    d = (1 - c)*r1 + c*r2 by A2,A8;
-A12:    0 <= 1 - c & 1 - c <= 1 by A9,XREAL_1:45,50;
-        then (1 - c)*a <= (1 - c)*r1 & c*a <= c*r2 by A9,A10,XREAL_1:66;
-        then
-A13:    (1 - c)*a + c*a <= d by A11,XREAL_1:9;
-        (1 - c)*r1 <= (1 - c)*b & c*r2 <= c*b by A9,A10,A12,XREAL_1:66;
-        then d <= (1 - c)*b + c*b by A11,XREAL_1:9;
-        then y in { q where q is Real : a <= q & q <= b} by A13;
-        hence y in [.a,b.] by RCOMP_1:def 1;
-      end;
-      hence thesis by A5,TARSKI:def 3;
-    end;
-    then reconsider F = LI|[.0,1.] as Function
-    of Closed-Interval-TSpace(0,1),Closed-Interval-TSpace(a,b) by A3,
-FUNCT_2:def 1,RELSET_1:11;
+    then
+A15: rng(LI|[.0,1.]) c= the carrier of Closed-Interval-TSpace(a,b) by A3,
+    TARSKI:def 3;
+A16: dom(LI|[.0,1.]) = (dom LI) /\ [.0,1.] by RELAT_1:90;
+    [.0,1.] = REAL /\ [.0,1.] & dom LI = REAL by FUNCT_2:def 1,XBOOLE_1:28;
+    then dom(LI|[.0,1.]) = the carrier of Closed-Interval-TSpace(0,1) by
+    A16,
+    TOPMETR:25;
+    then reconsider F = LI|[.0,1.] as Function of Closed-Interval-TSpace(0,1),
+    Closed-Interval-TSpace(a,b) by A15, FUNCT_2:def 1,RELSET_1:11;
     take F;
-    let s be Point of Closed-Interval-TSpace(0,1), r,r1,r2 be real number
-    such that
-A14: s=r & r1=t1 & r2=t2;
-A15: r is Real by XREAL_0:def 1;
-    s in the carrier of Closed-Interval-TSpace(0,1) &
+    let s be Point of Closed-Interval-TSpace(0,1), r,r1,r2 be real number such
+    that
+A17: s=r and
+A18: r1=t1 & r2=t2;
+A19: r is Real by XREAL_0:def 1;
     the carrier of Closed-Interval-TSpace(0,1) = [.0,1.] by TOPMETR:25;
-    hence F.s = LI.r by A14,FUNCT_1:72
-      .= (1-r)*r1 + r*r2 by A2,A14,A15;
+    hence F.s = LI.r by A17,FUNCT_1:72
+      .= (1-r)*r1 + r*r2 by A2,A18,A19;
   end;
   uniqueness
   proof
-    let F1, F2 be Function of
-    Closed-Interval-TSpace(0,1),Closed-Interval-TSpace(a,b);
+    let F1, F2 be Function of Closed-Interval-TSpace(0,1),
+    Closed-Interval-TSpace(a,b);
     assume
-A16: for s being Point of Closed-Interval-TSpace(0,1),
-    r,r1,r2 being real number st
-    s=r & r1=t1 & r2=t2 holds F1.s = (1-r)*r1 + r*r2;
+A20: for s being Point of Closed-Interval-TSpace(0,1), r,r1,r2 being
+    real number st s=r & r1=t1 & r2=t2 holds F1.s = (1-r)*r1 + r*r2;
     assume
-A17: for s being Point of Closed-Interval-TSpace(0,1),
-    r,r1,r2 being real number st
-    s=r & r1=t1 & r2=t2 holds F2.s = (1-r)*r1 + r*r2;
+A21: for s being Point of Closed-Interval-TSpace(0,1), r,r1,r2 being
+    real number st s=r & r1=t1 & r2=t2 holds F2.s = (1-r)*r1 + r*r2;
     for s being Point of Closed-Interval-TSpace(0,1) holds F1.s = F2.s
     proof
+      reconsider r1 = t1, r2 = t2 as Real by A1,Lm2;
       let s be Point of Closed-Interval-TSpace(0,1);
       reconsider r = s as Real by Lm2;
-      reconsider r1 = t1, r2 = t2 as Real by A1,Lm2;
-      thus F1.s = (1-r)*r1 + r*r2 by A16
-        .= F2.s by A17;
+      thus F1.s = (1-r)*r1 + r*r2 by A20
+        .= F2.s by A21;
     end;
     hence F1 = F2 by FUNCT_2:113;
   end;
 end;
 
 theorem Th10:
-  a <= b implies for t1,t2 being Point of Closed-Interval-TSpace(a,b) holds
-  for s being Point of Closed-Interval-TSpace(0,1),
-  r,r1,r2 being real number st
-  s=r & r1=t1 & r2=t2 holds L[01](t1,t2).s = (r2 - r1)*r + r1
+  a <= b implies for t1,t2 being Point of Closed-Interval-TSpace(a
+,b) holds for s being Point of Closed-Interval-TSpace(0,1), r,r1,r2 being real
+  number st s=r & r1=t1 & r2=t2 holds L[01](t1,t2).s = (r2 - r1)*r + r1
 proof
   assume
 A1: a <= b;
   let t1,t2 be Point of Closed-Interval-TSpace(a,b);
   let s be Point of Closed-Interval-TSpace(0,1), r,r1,r2 be real number;
-  assume s=r & r1=t1 & r2=t2;
+  assume
+  s=r & r1=t1 & r2=t2;
   hence L[01](t1,t2).s = (1-r)*r1 + r*r2 by A1,Def3
     .= (r2 - r1)*r + r1;
 end;
 
 theorem Th11:
-  a <= b implies for t1,t2 being Point of Closed-Interval-TSpace(a,b) holds
-  L[01](t1,t2) is continuous Function of
-  Closed-Interval-TSpace(0,1),Closed-Interval-TSpace(a,b)
+  a <= b implies for t1,t2 being Point of Closed-Interval-TSpace(a
+  ,b) holds L[01](t1,t2) is continuous Function of Closed-Interval-TSpace(0,1),
+  Closed-Interval-TSpace(a,b)
 proof
   assume
 A1: a <= b;
@@ -347,65 +362,70 @@ A1: a <= b;
   consider L being Function of REAL,REAL such that
 A2: for r being Real holds L.r= U(r) from FUNCT_2:sch 4;
   reconsider f = L as Function of R^1, R^1 by TOPMETR:24;
-A3: f is continuous by A2,TOPMETR:28;
-A4: for s being Point of Closed-Interval-TSpace(0,1),
-  w being Point of R^1 st s = w holds L[01](t1,t2).s = f.w
+A3: for s being Point of Closed-Interval-TSpace(0,1), w being Point of R^1
+  st s = w holds L[01](t1,t2).s = f.w
   proof
     let s be Point of Closed-Interval-TSpace(0,1), w be Point of R^1;
     reconsider r = s as Real by Lm2;
     assume
-A5: s = w;
+A4: s = w;
     thus L[01](t1,t2).s = (r2 - r1)*r + r1 by A1,Th10
-      .= f.w by A2,A5;
+      .= f.w by A2,A4;
   end;
-A6: [.0,1.] = the carrier of Closed-Interval-TSpace(0,1) by TOPMETR:25;
-  for s being Point of Closed-Interval-TSpace(0,1) holds
-  L[01](t1,t2) is_continuous_at s
+A5: [.0,1.] = the carrier of Closed-Interval-TSpace(0,1) by TOPMETR:25;
+A6: f is continuous by A2,TOPMETR:28;
+  for s being Point of Closed-Interval-TSpace(0,1) holds L[01](t1,t2)
+  is_continuous_at s
   proof
     let s be Point of Closed-Interval-TSpace(0,1);
-    reconsider w = s as Point of R^1 by A6,TARSKI:def 3,TOPMETR:24;
-    for G being Subset of Closed-Interval-TSpace(a,b) st
-    G is open & L[01](t1,t2).s in G
-    ex H being Subset of Closed-Interval-TSpace(0,1) st
-    H is open & s in H & L[01](t1,t2).:H c= G
+    reconsider w = s as Point of R^1 by A5,TARSKI:def 3,TOPMETR:24;
+    for G being Subset of Closed-Interval-TSpace(a,b) st G is open & L[01]
+(t1,t2).s in G ex H being Subset of Closed-Interval-TSpace(0,1) st H is open &
+    s in H & L[01](t1,t2).:H c= G
     proof
       let G be Subset of Closed-Interval-TSpace(a,b);
-      assume G is open;
+      assume
+      G is open;
       then consider G0 being Subset of R^1 such that
 A7:   G0 is open and
 A8:   G0 /\ [#] Closed-Interval-TSpace(a,b) = G by TOPS_2:32;
-      assume L[01](t1,t2).s in G;
-      then f.w in G by A4;
-      then f.w in G0 & f is_continuous_at w by A3,A8,TMAP_1:49,XBOOLE_0:def 4;
+A9:   f is_continuous_at w by A6,TMAP_1:49;
+      assume
+      L[01](t1,t2).s in G;
+      then f.w in G by A3;
+      then f.w in G0 by A8,XBOOLE_0:def 4;
       then consider H0 being Subset of R^1 such that
-A9:   H0 is open and
-A10:  w in H0 and
-A11:  f.:H0 c= G0 by A7,TMAP_1:48;
+A10:  H0 is open and
+A11:  w in H0 and
+A12:  f.:H0 c= G0 by A7,A9,TMAP_1:48;
       now
-        reconsider H = H0 /\ [#] Closed-Interval-TSpace(0,1)
-        as Subset of Closed-Interval-TSpace(0,1);
+        reconsider H = H0 /\ [#] Closed-Interval-TSpace(0,1) as Subset of
+        Closed-Interval-TSpace(0,1);
         take H;
-        thus H is open by A9,TOPS_2:32;
-        thus s in H by A10,XBOOLE_0:def 4;
+        thus H is open by A10,TOPS_2:32;
+        thus s in H by A11,XBOOLE_0:def 4;
         thus L[01](t1,t2).:H c= G
         proof
           let t be set;
-          assume t in L[01](t1,t2).:H;
-          then consider r be set such that r in dom L[01](t1,t2) and
-A12:      r in H and
-A13:      t = L[01](t1,t2).r by FUNCT_1:def 12;
-A14:      r in the carrier of Closed-Interval-TSpace(0,1) by A12;
-          reconsider r as Point of Closed-Interval-TSpace(0,1) by A12;
-          reconsider p = r as Point of R^1 by A6,TARSKI:def 3,TOPMETR:24;
-          p in [#] R^1;
-          then t=f.p & p in H0 & p in dom f by A4,A12,A13,FUNCT_2:def 1
-,XBOOLE_0:def 4;
+          assume
+          t in L[01](t1,t2).:H;
+          then consider r be set such that
+          r in dom L[01](t1,t2) and
+A13:      r in H and
+A14:      t = L[01](t1,t2).r by FUNCT_1:def 12;
+A15:      r in the carrier of Closed-Interval-TSpace(0,1) by A13;
+          reconsider r as Point of Closed-Interval-TSpace(0,1) by A13;
+          r in dom L[01](t1,t2) by A15,FUNCT_2:def 1;
           then
-A15:      t in f.:H0 by FUNCT_1:def 12;
-          r in dom L[01](t1,t2) by A14,FUNCT_2:def 1;
-          then t in L[01](t1,t2).:(the carrier of Closed-Interval-TSpace(0,1))
-          by A13,FUNCT_1:def 12;
-          hence thesis by A8,A11,A15,XBOOLE_0:def 4;
+A16:      t in L[01](t1,t2).:(the carrier of Closed-Interval-TSpace(0,1))
+          by A14,FUNCT_1:def 12;
+          reconsider p = r as Point of R^1 by A5,TARSKI:def 3,TOPMETR:24;
+          p in [#] R^1;
+          then
+A17:      p in dom f by FUNCT_2:def 1;
+          t=f.p & p in H0 by A3,A13,A14,XBOOLE_0:def 4;
+          then t in f.:H0 by A17,FUNCT_1:def 12;
+          hence thesis by A8,A12,A16,XBOOLE_0:def 4;
         end;
       end;
       hence thesis;
@@ -416,8 +436,8 @@ A15:      t in f.:H0 by FUNCT_1:def 12;
 end;
 
 theorem
-  a <= b implies for t1,t2 being Point of Closed-Interval-TSpace(a,b) holds
-  L[01](t1,t2).(#)(0,1) = t1 & L[01](t1,t2).(0,1)(#) = t2
+  a <= b implies for t1,t2 being Point of Closed-Interval-TSpace(a,b)
+  holds L[01](t1,t2).(#)(0,1) = t1 & L[01](t1,t2).(0,1)(#) = t2
 proof
   assume
 A1: a <= b;
@@ -434,8 +454,8 @@ end;
 theorem
   L[01]((#)(0,1),(0,1)(#)) = id Closed-Interval-TSpace(0,1)
 proof
-  for x being Point of Closed-Interval-TSpace(0,1) holds
-  L[01]((#)(0,1),(0,1)(#)).x = x
+  for x being Point of Closed-Interval-TSpace(0,1) holds L[01]((#)(0,1),(0
+  ,1)(#)).x = x
   proof
     let x be Point of Closed-Interval-TSpace(0,1);
     reconsider y = x as Real by Lm2;
@@ -450,112 +470,112 @@ definition
   let a,b be real number such that
 A1: a < b;
   let t1,t2 be Point of Closed-Interval-TSpace(0,1);
-  func P[01](a,b,t1,t2) -> Function of
-  Closed-Interval-TSpace(a,b),Closed-Interval-TSpace(0,1) means
+  func P[01](a,b,t1,t2) -> Function of Closed-Interval-TSpace(a,b),
+  Closed-Interval-TSpace(0,1) means
   :Def4:
-  for s being Point of Closed-Interval-TSpace(a,b),
-  r,r1,r2 being real number st
-  s=r & r1=t1 & r2=t2 holds it.s = ((b-r)*r1 + (r-a)*r2)/(b-a);
+  for s being Point of
+  Closed-Interval-TSpace(a,b), r,r1,r2 being real number st s=r & r1=t1 & r2=t2
+  holds it.s = ((b-r)*r1 + (r-a)*r2)/(b-a);
   existence
   proof
-    reconsider r1 = t1, r2 = t2 as Real by Lm2;
     reconsider a1 = a, b1 = b as Real by XREAL_0:def 1;
+    reconsider r1 = t1, r2 = t2 as Real by Lm2;
     deffunc U(Element of REAL) = ((b1-$1)*r1 + ($1-a1)*r2)/(b1-a1);
     consider PI being Function of REAL,REAL such that
 A2: for r being Real holds PI.r= U(r) from FUNCT_2:sch 4;
-A3: dom(PI|[.a,b.]) = the carrier of Closed-Interval-TSpace(a,b)
-    proof
-A4:   [.a,b.] = REAL /\ [.a,b.] by XBOOLE_1:28;
-      dom PI = REAL & dom(PI|[.a,b.]) = (dom PI) /\ [.a,b.]
-      by FUNCT_2:def 1,RELAT_1:90;
-      hence thesis by A1,A4,TOPMETR:25;
+A3: [.0,1.] = the carrier of Closed-Interval-TSpace(0,1) by TOPMETR:25;
+    now
+      let y be set;
+      assume
+A4:   y in rng(PI|[.a,b.]);
+      then reconsider d = y as Real;
+      y in PI.:[.a,b.] by A4,RELAT_1:148;
+      then consider x being set such that
+      x in dom PI and
+A5:   x in [.a,b.] and
+A6:   y = PI.x by FUNCT_1:def 12;
+      reconsider c = x as Real by A5;
+A7:   d = ((b - c)*r1 + (c - a)*r2)/(b-a) by A2,A6;
+      r1 in [.0,1.] by A3;
+      then r1 in { p where p is Real : 0 <= p & p <= 1} by RCOMP_1:def 1;
+      then
+A8:   ex v1 being Real st v1 = r1 & 0 <= v1 & v1 <= 1;
+      c in { p where p is Real : a <= p & p <= b} by A5,RCOMP_1:def 1;
+      then
+A9:   ex u being Real st u = c & a <= u & u <= b;
+      then
+A10:  0 <= c - a by XREAL_1:50;
+      r2 in [.0,1.] by A3;
+      then r2 in { p where p is Real : 0 <= p & p <= 1} by RCOMP_1:def 1;
+      then
+A11:  ex v2 being Real st v2 = r2 & 0 <= v2 & v2 <= 1;
+      then
+A12:  (c - a)*r2 <= c - a by A10,XREAL_1:155;
+A13:  0 < b - a by A1,XREAL_1:52;
+A14:  0 <= b - c by A9,XREAL_1:50;
+      then (b - c)*r1 <= b - c by A8,XREAL_1:155;
+      then (b - c)*r1 + (c - a)*r2 <= (b + - c) + (c - a) by
+      A12, XREAL_1:
+      9;
+      then d <= (b - a)/(b - a) by A13,A7,XREAL_1:74;
+      then d <= 1 by A13,XCMPLX_1:60;
+      then y in { q where q is Real : 0 <= q & q <= 1} by A8,A11,A13,A7,A14
+      ,A10;
+      hence y in [.0,1.] by RCOMP_1:def 1;
     end;
-A5: [.0,1.] = the carrier of Closed-Interval-TSpace(0,1) by TOPMETR:25;
-    rng(PI|[.a,b.]) c= the carrier of Closed-Interval-TSpace(0,1)
-    proof
-      now
-        let y be set;
-        assume
-A6:     y in rng(PI|[.a,b.]);
-        then y in PI.:[.a,b.] by RELAT_1:148;
-        then consider x being set such that x in dom PI and
-A7:     x in [.a,b.] and
-A8:     y = PI.x by FUNCT_1:def 12;
-        reconsider c = x as Real by A7;
-        c in { p where p is Real : a <= p & p <= b} by A7,RCOMP_1:def 1;
-        then
-A9:     ex u being Real st u = c & a <= u & u <= b;
-        r1 in [.0,1.] & r2 in [.0,1.] by A5;
-        then r1 in { p where p is Real : 0 <= p & p <= 1} &
-        r2 in { p where p is Real : 0 <= p & p <= 1} by RCOMP_1:def 1;
-        then
-A10:    (ex v1 being Real st v1 = r1 & 0 <= v1 & v1 <= 1) &
-        (ex v2 being Real st v2 = r2 & 0 <= v2 & v2 <= 1);
-        reconsider d = y as Real by A6;
-A11:    0 < b - a by A1,XREAL_1:52;
-A12:    d = ((b - c)*r1 + (c - a)*r2)/(b-a) by A2,A8;
-A13:    0 <= b - c & 0 <= c - a by A9,XREAL_1:50;
-        then 0 <= (b - c)*r1 & 0 <= (c - a)*r2 by A10;
-        then 0 + 0 <= (b - c)*r1 + (c - a)*r2;
-        then
-A14:    0 <= d by A11,A12;
-        (b - c)*r1 <= b - c & (c - a)*r2 <= c - a by A10,A13,XREAL_1:155;
-        then (b - c)*r1 + (c - a)*r2 <= (b + - c) + (c - a) by XREAL_1:9;
-        then d <= (b - a)/(b - a) & b - a <> 0 by A11,A12,XREAL_1:74;
-        then d <= 1 by XCMPLX_1:60;
-        then y in { q where q is Real : 0 <= q & q <= 1} by A14;
-        hence y in [.0,1.] by RCOMP_1:def 1;
-      end;
-      hence thesis by A5,TARSKI:def 3;
-    end;
-    then reconsider F = PI|[.a,b.] as Function
-    of Closed-Interval-TSpace(a,b),Closed-Interval-TSpace(0,1) by A3,
-FUNCT_2:def 1,RELSET_1:11;
+    then
+A15: rng(PI|[.a,b.]) c= the carrier of Closed-Interval-TSpace(0,1) by A3,
+    TARSKI:def 3;
+A16: dom(PI|[.a,b.]) = (dom PI) /\ [.a,b.] by RELAT_1:90;
+    [.a,b.] = REAL /\ [.a,b.] & dom PI = REAL by FUNCT_2:def 1,XBOOLE_1:28;
+    then dom(PI|[.a,b.]) = the carrier of Closed-Interval-TSpace(a,b) by A1,
+    A16, TOPMETR:25;
+    then reconsider F = PI|[.a,b.] as Function of Closed-Interval-TSpace(a,b),
+    Closed-Interval-TSpace(0,1) by A15, FUNCT_2:def 1,RELSET_1:11;
     take F;
-    let s be Point of Closed-Interval-TSpace(a,b), r,r1,r2 be real number
-    such that
-A15: s=r & r1=t1 & r2=t2;
-A16: r is Real by XREAL_0:def 1;
-    s in the carrier of Closed-Interval-TSpace(a,b) &
+    let s be Point of Closed-Interval-TSpace(a,b), r,r1,r2 be real number such
+    that
+A17: s=r and
+A18: r1=t1 & r2=t2;
+A19: r is Real by XREAL_0:def 1;
     the carrier of Closed-Interval-TSpace(a,b) = [.a,b.] by A1,TOPMETR:25;
-    hence F.s = PI.r by A15,FUNCT_1:72
-      .= ((b-r)*r1 + (r-a)*r2)/(b-a) by A2,A15,A16;
+    hence F.s = PI.r by A17,FUNCT_1:72
+      .= ((b-r)*r1 + (r-a)*r2)/(b-a) by A2,A18,A19;
   end;
   uniqueness
   proof
-    let F1, F2 be Function of
-    Closed-Interval-TSpace(a,b),Closed-Interval-TSpace(0,1);
+    let F1, F2 be Function of Closed-Interval-TSpace(a,b),
+    Closed-Interval-TSpace(0,1);
     assume
-A17: for s being Point of Closed-Interval-TSpace(a,b),
-    r,r1,r2 being real number st
-    s=r & r1=t1 & r2=t2 holds F1.s = ((b-r)*r1 + (r-a)*r2)/(b-a);
+A20: for s being Point of Closed-Interval-TSpace(a,b), r,r1,r2 being
+real number st s=r & r1=t1 & r2=t2 holds F1.s = ((b-r)*r1 + (r-a)*r2)/(b-a);
     assume
-A18: for s being Point of Closed-Interval-TSpace(a,b),
-    r,r1,r2 being real number st
-    s=r & r1=t1 & r2=t2 holds F2.s = ((b-r)*r1 + (r-a)*r2)/(b-a);
+A21: for s being Point of Closed-Interval-TSpace(a,b), r,r1,r2 being
+real number st s=r & r1=t1 & r2=t2 holds F2.s = ((b-r)*r1 + (r-a)*r2)/(b-a);
     for s being Point of Closed-Interval-TSpace(a,b) holds F1.s = F2.s
     proof
       let s be Point of Closed-Interval-TSpace(a,b);
       reconsider r = s as Real by A1,Lm2;
       reconsider r1 = t1, r2 = t2 as Real by Lm2;
-      thus F1.s = ((b-r)*r1 + (r-a)*r2)/(b-a) by A17
-        .= F2.s by A18;
+      thus F1.s = ((b-r)*r1 + (r-a)*r2)/(b-a) by A20
+        .= F2.s by A21;
     end;
     hence F1 = F2 by FUNCT_2:113;
   end;
 end;
 
 theorem Th14:
-  a < b implies for t1,t2 being Point of Closed-Interval-TSpace(0,1)
-  for s being Point of Closed-Interval-TSpace(a,b), r,r1,r2 being Real st
-  s=r & r1=t1 & r2=t2 holds
-  P[01](a,b,t1,t2).s = ((r2 - r1)/(b-a))*r + (b*r1 -a*r2)/(b-a)
+  a < b implies for t1,t2 being Point of Closed-Interval-TSpace(0,
+1) for s being Point of Closed-Interval-TSpace(a,b), r,r1,r2 being Real st s=r
+& r1=t1 & r2=t2 holds P[01](a,b,t1,t2).s = ((r2 - r1)/(b-a))*r + (b*r1 -a*r2)/(
+  b-a)
 proof
   assume
 A1: a < b;
   let t1,t2 be Point of Closed-Interval-TSpace(0,1);
   let s be Point of Closed-Interval-TSpace(a,b), r,r1,r2 be Real;
-  assume s=r & r1=t1 & r2=t2;
+  assume
+  s=r & r1=t1 & r2=t2;
   hence P[01](a,b,t1,t2).s = ((b-r)*r1 + (r-a)*r2)/(b-a) by A1,Def4
     .= (r*(r2 - r1) + (b*r1 -a*r2))/(b-a)
     .= (r*(r2 - r1))/(b-a) + (b*r1 -a*r2)/(b-a) by XCMPLX_1:63
@@ -565,79 +585,84 @@ A1: a < b;
 end;
 
 theorem Th15:
-  a < b implies for t1,t2 being Point of Closed-Interval-TSpace(0,1) holds
-  P[01](a,b,t1,t2) is continuous Function of
-  Closed-Interval-TSpace(a,b),Closed-Interval-TSpace(0,1)
+  a < b implies for t1,t2 being Point of Closed-Interval-TSpace(0,
+1) holds P[01](a,b,t1,t2) is continuous Function of Closed-Interval-TSpace(a,b)
+  ,Closed-Interval-TSpace(0,1)
 proof
   assume
 A1: a < b;
+  reconsider a, b as Real by XREAL_0:def 1;
+A2: [.a,b.] = the carrier of Closed-Interval-TSpace(a,b) by A1,TOPMETR:25;
   let t1,t2 be Point of Closed-Interval-TSpace(0,1);
   reconsider r1 = t1, r2 = t2 as Real by Lm2;
-  reconsider a, b as Real by XREAL_0:def 1;
   deffunc U(Element of REAL) = ((r2 - r1)/(b-a))*$1 + (b*r1 -a*r2)/(b-a);
   consider P being Function of REAL,REAL such that
-A2: for r being Real holds P.r= U(r) from FUNCT_2:sch 4;
+A3: for r being Real holds P.r= U(r) from FUNCT_2:sch 4;
   reconsider f = P as Function of R^1, R^1 by TOPMETR:24;
-A3: f is continuous by A2,TOPMETR:28;
-A4: for s being Point of Closed-Interval-TSpace(a,b),
-  w being Point of R^1 st s = w holds P[01](a,b,t1,t2).s = f.w
+A4: for s being Point of Closed-Interval-TSpace(a,b), w being Point of R^1
+  st s = w holds P[01](a,b,t1,t2).s = f.w
   proof
     let s be Point of Closed-Interval-TSpace(a,b), w be Point of R^1;
     reconsider r = s as Real by A1,Lm2;
     assume
 A5: s = w;
-    thus P[01](a,b,t1,t2).s
-    = ((r2 - r1)/(b-a))*r + (b*r1 -a*r2)/(b-a) by A1,Th14
-      .= f.w by A2,A5;
+    thus P[01](a,b,t1,t2).s = ((r2 - r1)/(b-a))*r + (b*r1 -a*r2)/(b-a) by A1,
+    Th14
+      .= f.w by A3,A5;
   end;
-A6: [.a,b.] = the carrier of Closed-Interval-TSpace(a,b) by A1,TOPMETR:25;
-  for s being Point of Closed-Interval-TSpace(a,b) holds
-  P[01](a,b,t1,t2) is_continuous_at s
+A6: f is continuous by A3,TOPMETR:28;
+  for s being Point of Closed-Interval-TSpace(a,b) holds P[01](a,b,t1,t2)
+  is_continuous_at s
   proof
     let s be Point of Closed-Interval-TSpace(a,b);
-    reconsider w = s as Point of R^1 by A6,TARSKI:def 3,TOPMETR:24;
-    for G being Subset of Closed-Interval-TSpace(0,1) st
-    G is open & P[01](a,b,t1,t2).s in G
-    ex H being Subset of Closed-Interval-TSpace(a,b) st
-    H is open & s in H & P[01](a,b,t1,t2).:H c= G
+    reconsider w = s as Point of R^1 by A2,TARSKI:def 3,TOPMETR:24;
+    for G being Subset of Closed-Interval-TSpace(0,1) st G is open & P[01]
+    (a,b,t1,t2).s in G ex H being Subset of Closed-Interval-TSpace(a,b) st H is
+    open & s in H & P[01](a,b,t1,t2).:H c= G
     proof
       let G be Subset of Closed-Interval-TSpace(0,1);
-      assume G is open;
+      assume
+      G is open;
       then consider G0 being Subset of R^1 such that
 A7:   G0 is open and
 A8:   G0 /\ [#] Closed-Interval-TSpace(0,1) = G by TOPS_2:32;
-      assume P[01](a,b,t1,t2).s in G;
+A9:   f is_continuous_at w by A6,TMAP_1:49;
+      assume
+      P[01](a,b,t1,t2).s in G;
       then f.w in G by A4;
-      then f.w in G0 & f is_continuous_at w by A3,A8,TMAP_1:49,XBOOLE_0:def 4;
+      then f.w in G0 by A8,XBOOLE_0:def 4;
       then consider H0 being Subset of R^1 such that
-A9:   H0 is open and
-A10:  w in H0 and
-A11:  f.: H0 c= G0 by A7,TMAP_1:48;
+A10:  H0 is open and
+A11:  w in H0 and
+A12:  f.: H0 c= G0 by A7,A9,TMAP_1:48;
       now
-        reconsider H = H0 /\ [#] Closed-Interval-TSpace(a,b)
-        as Subset of Closed-Interval-TSpace(a,b);
+        reconsider H = H0 /\ [#] Closed-Interval-TSpace(a,b) as Subset of
+        Closed-Interval-TSpace(a,b);
         take H;
-        thus H is open by A9,TOPS_2:32;
-        thus s in H by A10,XBOOLE_0:def 4;
+        thus H is open by A10,TOPS_2:32;
+        thus s in H by A11,XBOOLE_0:def 4;
         thus P[01](a,b,t1,t2).:H c= G
         proof
           let t be set;
-          assume t in P[01](a,b,t1,t2).:H;
-          then consider r be set such that r in dom P[01](a,b,t1,t2) and
-A12:      r in H and
-A13:      t = P[01](a,b,t1,t2).r by FUNCT_1:def 12;
-A14:      r in the carrier of Closed-Interval-TSpace(a,b) by A12;
-          reconsider r as Point of Closed-Interval-TSpace(a,b) by A12;
-          reconsider p = r as Point of R^1 by A6,TARSKI:def 3,TOPMETR:24;
-          p in [#] R^1;
-          then t=f.p & p in H0 & p in dom f by A4,A12,A13,FUNCT_2:def 1
-,XBOOLE_0:def 4;
+          assume
+          t in P[01](a,b,t1,t2).:H;
+          then consider r be set such that
+          r in dom P[01](a,b,t1,t2) and
+A13:      r in H and
+A14:      t = P[01](a,b,t1,t2).r by FUNCT_1:def 12;
+A15:      r in the carrier of Closed-Interval-TSpace(a,b) by A13;
+          reconsider r as Point of Closed-Interval-TSpace(a,b) by A13;
+          r in dom P[01](a,b,t1,t2) by A15,FUNCT_2:def 1;
           then
-A15:      t in f.:H0 by FUNCT_1:def 12;
-          r in dom P[01](a,b,t1,t2) by A14,FUNCT_2:def 1;
-          then t in P[01](a,b,t1,t2).:
-          (the carrier of Closed-Interval-TSpace(a,b)) by A13,FUNCT_1:def 12;
-          hence thesis by A8,A11,A15,XBOOLE_0:def 4;
+A16:      t in P[01](a,b,t1,t2).: (the carrier of Closed-Interval-TSpace(
+          a,b)) by A14, FUNCT_1:def 12;
+          reconsider p = r as Point of R^1 by A2,TARSKI:def 3,TOPMETR:24;
+          p in [#] R^1;
+          then
+A17:      p in dom f by FUNCT_2:def 1;
+          t=f.p & p in H0 by A4,A13,A14,XBOOLE_0:def 4;
+          then t in f.:H0 by A17,FUNCT_1:def 12;
+          hence thesis by A8,A12,A16,XBOOLE_0:def 4;
         end;
       end;
       hence thesis;
@@ -648,27 +673,28 @@ A15:      t in f.:H0 by FUNCT_1:def 12;
 end;
 
 theorem
-  a < b implies for t1,t2 being Point of Closed-Interval-TSpace(0,1) holds
-  P[01](a,b,t1,t2).(#)(a,b) = t1 & P[01](a,b,t1,t2).(a,b)(#) = t2
+  a < b implies for t1,t2 being Point of Closed-Interval-TSpace(0,1)
+  holds P[01](a,b,t1,t2).(#)(a,b) = t1 & P[01](a,b,t1,t2).(a,b)(#) = t2
 proof
   assume
 A1: a < b;
+  then
+A2: b - a <> 0;
   let t1,t2 be Point of Closed-Interval-TSpace(0,1);
-A2: a = (#)(a,b) by A1,Def1;
   reconsider r1 = t1, r2 = t2 as Real by Lm2;
-A3: b - a <> 0 by A1;
-  thus P[01](a,b,t1,t2).(#)(a,b) = ((b-a)*r1 + (a-a)*r2)/(b-a) by A1,A2,Def4
-    .= t1 by A3,XCMPLX_1:90;
+  a = (#)(a,b) by A1,Def1;
+  hence P[01](a,b,t1,t2).(#)(a,b) = ((b-a)*r1 + (a-a)*r2)/(b-a) by A1,Def4
+    .= t1 by A2,XCMPLX_1:90;
   b = (a,b)(#) by A1,Def2;
   hence P[01](a,b,t1,t2).(a,b)(#) = ((b-b)*r1 + (b-a)*r2)/(b-a) by A1,Def4
-    .= t2 by A3,XCMPLX_1:90;
+    .= t2 by A2,XCMPLX_1:90;
 end;
 
 theorem
   P[01](0,1,(#)(0,1),(0,1)(#)) = id Closed-Interval-TSpace(0,1)
 proof
-  for x being Point of Closed-Interval-TSpace(0,1) holds
-  P[01](0,1,(#)(0,1),(0,1)(#)).x = x
+  for x being Point of Closed-Interval-TSpace(0,1) holds P[01](0,1,(#)(0,1
+  ),(0,1)(#)).x = x
   proof
     let x be Point of Closed-Interval-TSpace(0,1);
     reconsider y = x as Real by Lm2;
@@ -680,178 +706,176 @@ proof
 end;
 
 theorem Th18:
-  a < b implies id Closed-Interval-TSpace(a,b) =
-  L[01]((#)(a,b),(a,b)(#)) * P[01](a,b,(#)(0,1),(0,1)(#)) &
-  id Closed-Interval-TSpace(0,1) =
-  P[01](a,b,(#)(0,1),(0,1)(#)) * L[01]((#)(a,b),(a,b)(#))
+  a < b implies id Closed-Interval-TSpace(a,b) = L[01]((#)(a,b),(a
+,b)(#)) * P[01](a,b,(#)(0,1),(0,1)(#)) & id Closed-Interval-TSpace(0,1) = P[01]
+  (a,b,(#)(0,1),(0,1)(#)) * L[01]((#)(a,b),(a,b)(#))
 proof
-  assume
-A1: a < b;
-  then
-A2: b - a <> 0;
+A1: 0 = (#)(0,1) & 1 = (0,1)(#) by Def1,Def2;
   set L = L[01]((#)(a,b),(a,b)(#)), P = P[01](a,b,(#)(0,1),(0,1)(#));
-A3: 0 = (#)(0,1) & 1 = (0,1)(#) by Def1,Def2;
-A4: a = (#)(a,b) & b = (a,b)(#) by A1,Def1,Def2;
+  assume
+A2: a < b;
+  then
+A3: b - a <> 0;
+A4: a = (#)(a,b) & b = (a,b)(#) by A2,Def1,Def2;
   for c being Point of Closed-Interval-TSpace(a,b) holds (L*P).c = c
   proof
     let c be Point of Closed-Interval-TSpace(a,b);
-    reconsider r = c as Real by A1,Lm2;
-A5: P.c = ((b-r)*0 + (r-a)*1)/(b-a) by A1,A3,Def4
+    reconsider r = c as Real by A2,Lm2;
+A5: P.c = ((b-r)*0 + (r-a)*1)/(b-a) by A2,A1,Def4
       .= (r-a)/(b-a);
     thus (L*P).c = L.(P.c) by FUNCT_2:21
-      .= (1-((r-a)/(b-a)))*a + ((r-a)/(b-a))*b by A1,A4,A5,Def3
-      .= ((1*(b-a)-(r-a))/(b-a))*a + ((r-a)/(b-a))*b by A2,XCMPLX_1:128
+      .= (1-((r-a)/(b-a)))*a + ((r-a)/(b-a))*b by A2,A4,A5,Def3
+      .= ((1*(b-a)-(r-a))/(b-a))*a + ((r-a)/(b-a))*b by A3,XCMPLX_1:128
       .= ((b-r)/(b-a))*(a/1) + ((r-a)/(b-a))*b
       .= ((b-r)*a)/(1*(b-a)) + ((r-a)/(b-a))*b by XCMPLX_1:77
       .= ((b-r)*a)/(b-a) + ((r-a)/(b-a))*(b/1)
       .= ((b-r)*a)/(b-a) + ((r-a)*b)/(1*(b-a)) by XCMPLX_1:77
       .= ((a*b-a*r) + (r-a)*b)/(b-a) by XCMPLX_1:63
       .= ((b-a)*r)/(b-a)
-      .= c by A2,XCMPLX_1:90;
+      .= c by A3,XCMPLX_1:90;
   end;
   hence id Closed-Interval-TSpace(a,b) = L*P by TMAP_1:92;
   for c being Point of Closed-Interval-TSpace(0,1) holds (P*L).c = c
   proof
     let c be Point of Closed-Interval-TSpace(0,1);
     reconsider r = c as Real by Lm2;
-A6: L.c = (1-r)*a + r*b by A1,A4,Def3
+A6: L.c = (1-r)*a + r*b by A2,A4,Def3
       .= r*(b-a) + a;
     thus (P*L).c = P.(L.c) by FUNCT_2:21
-      .= ((b-(r*(b-a) + a))*0 + ((r*(b-a) + a)-a)*1)/(b-a) by A1,A3,A6,Def4
-      .= c by A2,XCMPLX_1:90;
+      .= ((b-(r*(b-a) + a))*0 + ((r*(b-a) + a)-a)*1)/(b-a) by A2,A1,A6,Def4
+      .= c by A3,XCMPLX_1:90;
   end;
   hence thesis by TMAP_1:92;
 end;
 
 theorem Th19:
-  a < b implies id Closed-Interval-TSpace(a,b) =
-  L[01]((a,b)(#),(#)(a,b)) * P[01](a,b,(0,1)(#),(#)(0,1)) &
-  id Closed-Interval-TSpace(0,1) =
+  a < b implies id Closed-Interval-TSpace(a,b) = L[01]((a,b)(#),
+  (#)(a,b)) * P[01](a,b,(0,1)(#),(#)(0,1)) & id Closed-Interval-TSpace(0,1) =
   P[01](a,b,(0,1)(#),(#)(0,1)) * L[01]((a,b)(#),(#)(a,b))
 proof
-  assume
-A1: a < b;
-  then
-A2: b - a <> 0;
+A1: 0 = (#)(0,1) & 1 = (0,1)(#) by Def1,Def2;
   set L = L[01]((a,b)(#),(#)(a,b)), P = P[01](a,b,(0,1)(#),(#)(0,1));
-A3: 0 = (#)(0,1) & 1 = (0,1)(#) by Def1,Def2;
-A4: a = (#)(a,b) & b = (a,b)(#) by A1,Def1,Def2;
+  assume
+A2: a < b;
+  then
+A3: b - a <> 0;
+A4: a = (#)(a,b) & b = (a,b)(#) by A2,Def1,Def2;
   for c being Point of Closed-Interval-TSpace(a,b) holds (L*P).c = c
   proof
     let c be Point of Closed-Interval-TSpace(a,b);
-    reconsider r = c as Real by A1,Lm2;
-A5: P.c = ((b-r)*1 + (r-a)*0)/(b-a) by A1,A3,Def4
+    reconsider r = c as Real by A2,Lm2;
+A5: P.c = ((b-r)*1 + (r-a)*0)/(b-a) by A2,A1,Def4
       .= (b-r)/(b-a);
     thus (L*P).c = L.(P.c) by FUNCT_2:21
-      .= (1-((b-r)/(b-a)))*b + ((b-r)/(b-a))*a by A1,A4,A5,Def3
-      .= ((1*(b-a)-(b-r))/(b-a))*b + ((b-r)/(b-a))*a by A2,XCMPLX_1:128
+      .= (1-((b-r)/(b-a)))*b + ((b-r)/(b-a))*a by A2,A4,A5,Def3
+      .= ((1*(b-a)-(b-r))/(b-a))*b + ((b-r)/(b-a))*a by A3,XCMPLX_1:128
       .= ((r-a)/(b-a))*(b/1) + ((b-r)/(b-a))*a
       .= ((r-a)*b)/(1*(b-a)) + ((b-r)/(b-a))*a by XCMPLX_1:77
       .= ((r-a)*b)/(b-a) + ((b-r)/(b-a))*(a/1)
       .= ((r-a)*b)/(b-a) + ((b-r)*a)/(1*(b-a)) by XCMPLX_1:77
       .= ((b*r-b*a) + (b-r)*a)/(b-a) by XCMPLX_1:63
       .= ((b-a)*r)/(b-a)
-      .= c by A2,XCMPLX_1:90;
+      .= c by A3,XCMPLX_1:90;
   end;
   hence id Closed-Interval-TSpace(a,b) = L*P by TMAP_1:92;
   for c being Point of Closed-Interval-TSpace(0,1) holds (P*L).c = c
   proof
     let c be Point of Closed-Interval-TSpace(0,1);
     reconsider r = c as Real by Lm2;
-A6: L.c = (1-r)*b + r*a by A1,A4,Def3
+A6: L.c = (1-r)*b + r*a by A2,A4,Def3
       .= r*(a-b) + b;
     thus (P*L).c = P.(L.c) by FUNCT_2:21
-      .= ((b-(r*(a-b) + b))*1 + ((r*(a-b) + b)-a)*0)/(b-a) by A1,A3,A6,Def4
+      .= ((b-(r*(a-b) + b))*1 + ((r*(a-b) + b)-a)*0)/(b-a) by A2,A1,A6,Def4
       .= (r*(-(a-b)))/(b-a)
-      .= c by A2,XCMPLX_1:90;
+      .= c by A3,XCMPLX_1:90;
   end;
   hence thesis by TMAP_1:92;
 end;
 
 theorem Th20:
   a < b implies L[01]((#)(a,b),(a,b)(#)) is being_homeomorphism &
-  L[01]((#)(a,b),(a,b)(#))" = P[01](a,b,(#)(0,1),(0,1)(#)) &
-  P[01](a,b,(#)(0,1),(0,1)(#)) is being_homeomorphism &
-  P[01](a,b,(#)(0,1),(0,1)(#))" = L[01]((#)(a,b),(a,b)(#))
+L[01]((#)(a,b),(a,b)(#))" = P[01](a,b,(#)(0,1),(0,1)(#)) & P[01](a,b,(#)(0,1),(
+0,1)(#)) is being_homeomorphism & P[01](a,b,(#)(0,1),(0,1)(#))" = L[01]((#)(a,b
+  ),(a,b)(#))
 proof
+  set L = L[01]((#)(a,b),(a,b)(#)), P = P[01](a,b,(#)(0,1),(0,1)(#));
   assume
 A1: a < b;
-  set L = L[01]((#)(a,b),(a,b)(#)), P = P[01](a,b,(#)(0,1),(0,1)(#));
-A2: id (the carrier of Closed-Interval-TSpace(0,1)) = P * L by A1,Th18;
   then
-A3: L is one-to-one &
-  rng P = the carrier of Closed-Interval-TSpace(0,1) by FUNCT_2:29;
-A4: rng P = [#](Closed-Interval-TSpace(0,1)) by A2,FUNCT_2:29;
-A5: id (the carrier of Closed-Interval-TSpace(a,b)) =
-  id Closed-Interval-TSpace(a,b)
+A2: id (the carrier of Closed-Interval-TSpace(0,1)) = P * L by Th18;
+  then
+A3: L is one-to-one by FUNCT_2:29;
+A4: L is continuous & P is continuous Function of Closed-Interval-TSpace(a,
+  b), Closed-Interval-TSpace(0,1) by A1,Th11,Th15;
+A5: id (the carrier of Closed-Interval-TSpace(a,b)) = id
+  Closed-Interval-TSpace(a,b)
     .= L * P by A1,Th18;
   then
-A6: P is one-to-one &
-  rng L = the carrier of Closed-Interval-TSpace(a,b) by FUNCT_2:29;
-A7: rng L = [#](Closed-Interval-TSpace(a,b)) by A5,FUNCT_2:29;
-A8: dom L = [#]Closed-Interval-TSpace(0,1) by FUNCT_2:def 1;
-A9: dom P = [#]Closed-Interval-TSpace(a,b) by FUNCT_2:def 1;
-A10: L" = L qua Function" by A3,A6,TOPS_2:def 4;
-A11: P" = P qua Function" by A3,A6,TOPS_2:def 4;
-A12: P = L qua Function" by A2,A3,A6,FUNCT_2:36;
-A13: L = P qua Function" by A3,A5,A6,FUNCT_2:36;
-A14: L is continuous Function of
-  Closed-Interval-TSpace(0,1),Closed-Interval-TSpace(a,b) by A1,Th11;
-A15: L is continuous by A1,Th11;
-A16: P is continuous Function of
-  Closed-Interval-TSpace(a,b),Closed-Interval-TSpace(0,1) by A1,Th15;
-A17: P is continuous by A1,Th15;
-  thus L[01]((#)(a,b),(a,b)(#)) is being_homeomorphism
-  by A3,A7,A8,A10,A12,A15,A16,TOPS_2:def 5;
-  thus L[01]((#)(a,b),(a,b)(#))" = P[01](a,b,(#)(0,1),(0,1)(#))
-  by A2,A3,A6,A10,FUNCT_2:36;
-  thus P[01](a,b,(#)(0,1),(0,1)(#)) is being_homeomorphism
-  by A4,A6,A9,A11,A13,A14,A17,TOPS_2:def 5;
-  thus thesis
-  by A3,A5,A6,A11,FUNCT_2:36;
+A6: rng L = [#](Closed-Interval-TSpace(a,b)) by FUNCT_2:29;
+A7: rng L = the carrier of Closed-Interval-TSpace(a,b) by A5,FUNCT_2:29;
+  then
+A8: L" = L qua Function" by A3,TOPS_2:def 4;
+  dom L = [#]Closed-Interval-TSpace(0,1) & P = L qua Function" by A2,A3,
+  A7, FUNCT_2:36,def 1;
+  hence L[01]((#)(a,b),(a,b)(#)) is being_homeomorphism by A3,A6,A8,A4,
+  TOPS_2:def 5;
+  thus L[01]((#)(a,b),(a,b)(#))" = P[01](a,b,(#)(0,1),(0,1)(#)) by A2,A3,A7,
+  A8,FUNCT_2:36;
+A9: rng P = [#](Closed-Interval-TSpace(0,1)) by A2,FUNCT_2:29;
+A10: L is continuous Function of Closed-Interval-TSpace(0,1),
+  Closed-Interval-TSpace(a,b) & P is continuous by A1,Th11,Th15;
+A11: P is one-to-one by A5,FUNCT_2:29;
+A12: rng P = the carrier of Closed-Interval-TSpace(0,1) by A2,FUNCT_2:29;
+  then
+A13: P" = P qua Function" by A11,TOPS_2:def 4;
+  dom P = [#]Closed-Interval-TSpace(a,b) & L = P qua Function" by A12,A5,
+  A11, FUNCT_2:36,def 1;
+  hence P[01](a,b,(#)(0,1),(0,1)(#)) is being_homeomorphism by A9,A11,A13,
+  A10,TOPS_2:def 5;
+  thus thesis by A12,A5,A11,A13,FUNCT_2:36;
 end;
 
 theorem
-  a < b implies L[01]((a,b)(#),(#)(a,b)) is being_homeomorphism &
-  L[01]((a,b)(#),(#)(a,b))" = P[01](a,b,(0,1)(#),(#)(0,1)) &
-  P[01](a,b,(0,1)(#),(#)(0,1)) is being_homeomorphism &
-  P[01](a,b,(0,1)(#),(#)(0,1))" = L[01]((a,b)(#),(#)(a,b))
+  a < b implies L[01]((a,b)(#),(#)(a,b)) is being_homeomorphism & L[01](
+(a,b)(#),(#)(a,b))" = P[01](a,b,(0,1)(#),(#)(0,1)) & P[01](a,b,(0,1)(#),(#)(0,1
+)) is being_homeomorphism & P[01](a,b,(0,1)(#),(#)(0,1))" = L[01]((a,b)(#),(#)(
+  a,b))
 proof
+  set L = L[01]((a,b)(#),(#)(a,b)), P = P[01](a,b,(0,1)(#),(#)(0,1));
   assume
 A1: a < b;
-  set L = L[01]((a,b)(#),(#)(a,b)), P = P[01](a,b,(0,1)(#),(#)(0,1));
-A2: id (the carrier of Closed-Interval-TSpace(0,1)) = P * L by A1,Th19;
   then
-A3: L is one-to-one &
-  rng P = the carrier of Closed-Interval-TSpace(0,1) by FUNCT_2:29;
-A4: rng P = [#](Closed-Interval-TSpace(0,1)) by A2,FUNCT_2:29;
-A5: id (the carrier of Closed-Interval-TSpace(a,b)) =
-  id Closed-Interval-TSpace(a,b)
+A2: id (the carrier of Closed-Interval-TSpace(0,1)) = P * L by Th19;
+  then
+A3: L is one-to-one by FUNCT_2:29;
+A4: L is continuous & P is continuous Function of Closed-Interval-TSpace(a,
+  b), Closed-Interval-TSpace(0,1) by A1,Th11,Th15;
+A5: id (the carrier of Closed-Interval-TSpace(a,b)) = id
+  Closed-Interval-TSpace(a,b)
     .= L * P by A1,Th19;
   then
-A6: P is one-to-one &
-  rng L = the carrier of Closed-Interval-TSpace(a,b) by FUNCT_2:29;
-A7: rng L = [#](Closed-Interval-TSpace(a,b)) by A5,FUNCT_2:29;
-A8: dom L = [#]Closed-Interval-TSpace(0,1) by FUNCT_2:def 1;
-A9: dom P = [#]Closed-Interval-TSpace(a,b) by FUNCT_2:def 1;
-A10: L" = L qua Function" by A3,A6,TOPS_2:def 4;
-A11: P" = P qua Function" by A3,A6,TOPS_2:def 4;
-A12: P = L qua Function" by A2,A3,A6,FUNCT_2:36;
-A13: L = P qua Function" by A3,A5,A6,FUNCT_2:36;
-A14: L is continuous Function of
-  Closed-Interval-TSpace(0,1),Closed-Interval-TSpace(a,b) by A1,Th11;
-A15: L is continuous by A1,Th11;
-A16: P is continuous Function of
-  Closed-Interval-TSpace(a,b),Closed-Interval-TSpace(0,1) by A1,Th15;
-A17: P is continuous by A1,Th15;
-  thus L[01]((a,b)(#),(#)(a,b)) is being_homeomorphism
-  by A3,A7,A8,A10,A12,A15,A16,TOPS_2:def 5;
-  thus L[01]((a,b)(#),(#)(a,b))" = P[01](a,b,(0,1)(#),(#)(0,1))
-  by A2,A3,A6,A10,FUNCT_2:36;
-  thus P[01](a,b,(0,1)(#),(#)(0,1)) is being_homeomorphism
-  by A4,A6,A9,A11,A13,A14,A17,TOPS_2:def 5;
-  thus thesis
-  by A3,A5,A6,A11,FUNCT_2:36;
+A6: rng L = [#](Closed-Interval-TSpace(a,b)) by FUNCT_2:29;
+A7: rng L = the carrier of Closed-Interval-TSpace(a,b) by A5,FUNCT_2:29;
+  then
+A8: L" = L qua Function" by A3,TOPS_2:def 4;
+  dom L = [#]Closed-Interval-TSpace(0,1) & P = L qua Function" by A2,A3,
+  A7, FUNCT_2:36,def 1;
+  hence L[01]((a,b)(#),(#)(a,b)) is being_homeomorphism by A3,A6,A8,A4,
+  TOPS_2:def 5;
+  thus L[01]((a,b)(#),(#)(a,b))" = P[01](a,b,(0,1)(#),(#)(0,1)) by A2,A3,A7,
+  A8,FUNCT_2:36;
+A9: rng P = [#](Closed-Interval-TSpace(0,1)) by A2,FUNCT_2:29;
+A10: L is continuous Function of Closed-Interval-TSpace(0,1),
+  Closed-Interval-TSpace(a,b) & P is continuous by A1,Th11,Th15;
+A11: P is one-to-one by A5,FUNCT_2:29;
+A12: rng P = the carrier of Closed-Interval-TSpace(0,1) by A2,FUNCT_2:29;
+  then
+A13: P" = P qua Function" by A11,TOPS_2:def 4;
+  dom P = [#]Closed-Interval-TSpace(a,b) & L = P qua Function" by A12,A5,
+  A11, FUNCT_2:36,def 1;
+  hence P[01](a,b,(0,1)(#),(#)(0,1)) is being_homeomorphism by A9,A11,A13,
+  A10,TOPS_2:def 5;
+  thus thesis by A12,A5,A11,A13,FUNCT_2:36;
 end;
 
 begin
@@ -861,250 +885,270 @@ begin
 theorem Th22:
   I[01] is connected
 proof
-  for A,B being Subset of I[01]
-  st [#]I[01] = A \/ B & A <> {}I[01] & B <> {}I[01] & A is closed &
-  B is closed holds A meets B
+  for A,B being Subset of I[01] st [#]I[01] = A \/ B & A <> {}I[01] & B <>
+  {}I[01] & A is closed & B is closed holds A meets B
   proof
     let A,B be Subset of I[01];
     assume that
 A1: [#]I[01] = A \/ B and
-A2: A <> {}I[01] & B <> {}I[01] and
-A3: A is closed and
-A4: B is closed;
-    assume
-A5: A misses B;
-A6: I[01] is closed SubSpace of R^1 by Th5,TOPMETR:27;
+A2: A <> {}I[01] and
+A3: B <> {}I[01] and
+A4: A is closed and
+A5: B is closed;
     reconsider P = A, Q = B as Subset of REAL by BORSUK_1:83,XBOOLE_1:1;
-A7: the carrier of RealSpace = the carrier of TopSpaceMetr(RealSpace)
-    by TOPMETR:16;
-    reconsider A0 = P, B0 = Q as Subset of R^1 by METRIC_1:def 14,TOPMETR:16
-,def 7;
-A8: A0 is closed & B0 is closed by A3,A4,A6,TSEP_1:12;
+    assume
+A6: A misses B;
     consider x being Element of P;
     reconsider x as Real by A2,TARSKI:def 3;
-A9: now
+A7: now
       take x;
       thus x in P by A2;
     end;
     consider x being Element of Q;
-    reconsider x as Real by A2,TARSKI:def 3;
-A10: now
+    reconsider x as Real by A3,TARSKI:def 3;
+A8: now
       take x;
-      thus x in Q by A2;
+      thus x in Q by A3;
     end;
+A9: the carrier of RealSpace = the carrier of TopSpaceMetr(RealSpace) by
+    TOPMETR:16;
+    now
+      take p = 0;
+      let r be real number;
+      assume
+      r in P;
+      then r in [.0,1.] by BORSUK_1:83;
+      then r in {w where w is Real : 0<=w & w<=1} by RCOMP_1:def 1;
+      then ex u being Real st u = r & 0<=u & u<=1;
+      hence p <= r;
+    end;
+    then
+A10: P is bounded_below by SEQ_4:def 2;
+    now
+      take p = 0;
+      let r be real number;
+      assume
+      r in Q;
+      then r in [.0,1.] by BORSUK_1:83;
+      then r in {w where w is Real : 0<=w & w<=1} by RCOMP_1:def 1;
+      then ex u being Real st u = r & 0<=u & u<=1;
+      hence p <= r;
+    end;
+    then
+A11: Q is bounded_below by SEQ_4:def 2;
+    reconsider A0 = P, B0 = Q as Subset of R^1 by METRIC_1:def 14,TOPMETR:16 ,
+    def 7;
+A12: I[01] is closed SubSpace of R^1 by Th5,TOPMETR:27;
+    then
+A13: A0 is closed by A4,TSEP_1:12;
+A14: B0 is closed by A5,A12,TSEP_1:12;
     0 in {w where w is Real : 0<=w & w<=1};
     then
-A11: 0 in [.0,1.] by RCOMP_1:def 1;
-A12: P is bounded_below
-    proof
-      now
-        take p = 0;
-        let r be real number;
-        assume r in P;
-        then r in [.0,1.] by BORSUK_1:83;
-        then r in {w where w is Real : 0<=w & w<=1} by RCOMP_1:def 1;
-        then ex u being Real st u = r & 0<=u & u<=1;
-        hence p <= r;
-      end;
-      hence thesis by SEQ_4:def 2;
-    end;
-A13: Q is bounded_below
-    proof
-      now
-        take p = 0;
-        let r be real number;
-        assume r in Q;
-        then r in [.0,1.] by BORSUK_1:83;
-        then r in {w where w is Real : 0<=w & w<=1} by RCOMP_1:def 1;
-        then ex u being Real st u = r & 0<=u & u<=1;
-        hence p <= r;
-      end;
-      hence thesis by SEQ_4:def 2;
-    end;
-    now per cases by A1,A11,BORSUK_1:83,XBOOLE_0:def 3;
-      suppose 0 in P;
-        then
-A14:    not 0 in Q by A5,XBOOLE_0:3;
+A15: 0 in [.0,1.] by RCOMP_1:def 1;
+    now
+      per cases by A1,A15,BORSUK_1:83,XBOOLE_0:def 3;
+      suppose
+A16:    0 in P;
+        reconsider B00 = B0` as Subset of R^1;
         set l = lower_bound Q;
         reconsider m = l as Point of RealSpace by METRIC_1:def 14;
         reconsider t = m as Point of R^1 by TOPMETR:16,def 7;
-        reconsider B00 = B0` as Subset of R^1;
-A15:    l in Q
+        set W = {w where w is Real : 0<=w & w<l};
+A17:    l in Q
         proof
-          assume not l in Q;
-          then t in B00 & B00 is open by A8,SUBSET_1:50,TOPS_1:29;
+          assume
+          not l in Q;
+          then
+A18:      t in B00 by SUBSET_1:50;
+          B00 is open by A14,TOPS_1:29;
           then consider s being real number such that
-A16:      s > 0 and
-A17:      Ball(m,s) c= B0` by TOPMETR:22,def 7;
+A19:      s > 0 and
+A20:      Ball(m,s) c= B0` by A18,TOPMETR:22,def 7;
           consider r being real number such that
-A18:      r in Q and
-A19:      r < l+s by A10,A13,A16,SEQ_4:def 5;
+A21:      r in Q and
+A22:      r < l+s by A8,A11,A19,SEQ_4:def 5;
           reconsider r as Real by XREAL_0:def 1;
-          reconsider rm = r as Point of RealSpace by METRIC_1:def 14;
-          l <= r by A13,A18,SEQ_4:def 5;
+          l <= r by A11,A21,SEQ_4:def 5;
           then l - r <= 0 by XREAL_1:49;
-          then -s < -(l - r) by A16,XREAL_1:26;
-          then -s < r - l & r - l < s by A19,XREAL_1:21;
-          then abs(r - l) < s by SEQ_2:9;
-          then (the distance of RealSpace).(rm,m) < s
-          by METRIC_1:def 13,def 14;
+          then
+A23:      -s < -(l - r) by A19,XREAL_1:26;
+          reconsider rm = r as Point of RealSpace by METRIC_1:def 14;
+          r - l < s by A22,XREAL_1:21;
+          then abs(r - l) < s by A23,SEQ_2:9;
+          then (the distance of RealSpace).(rm,m) < s by METRIC_1:def 13,
+          def 14;
           then dist(m,rm) < s by METRIC_1:def 1;
           then rm in {q where q is Element of RealSpace : dist(m,q)<s};
           then rm in Ball(m,s) by METRIC_1:18;
-          hence contradiction by A17,A18,XBOOLE_0:def 5;
+          hence contradiction by A20,A21,XBOOLE_0:def 5;
         end;
         then l in [.0,1.] by BORSUK_1:83;
         then l in {u where u is Real : 0<=u & u<=1} by RCOMP_1:def 1;
         then
-A20:    ex u0 being Real st u0 = l & 0<=u0 & u0<=1;
-        set W = {w where w is Real : 0<=w & w<l};
+A24:    ex u0 being Real st u0 = l & 0<=u0 & u0<=1;
         now
           let x be set;
-          assume x in W;
+          assume
+          x in W;
           then consider w0 being Real such that
-A21:      w0 = x & 0<=w0 & w0<l;
-          w0 <= 1 by A20,A21,XXREAL_0:2;
-          then w0 in {u where u is Real : 0<=u & u<=1} by A21;
+A25:      w0 = x and
+A26:      0<=w0 and
+A27:      w0<l;
+          w0 <= 1 by A24,A27,XXREAL_0:2;
+          then w0 in {u where u is Real : 0<=u & u<=1} by A26;
           then w0 in P \/ Q by A1,BORSUK_1:83,RCOMP_1:def 1;
           then w0 in P or w0 in Q by XBOOLE_0:def 3;
-          hence x in P by A13,A21,SEQ_4:def 5;
+          hence x in P by A11,A25,A27,SEQ_4:def 5;
         end;
         then
-A22:    W c= P by TARSKI:def 3;
-        then reconsider D = W as Subset of R^1 by A7,METRIC_1:def 14
-,TOPMETR:def 7,XBOOLE_1:1;
-A23:    t in Cl D
-        proof
+A28:    W c= P by TARSKI:def 3;
+        then reconsider D = W as Subset of R^1 by A9,METRIC_1:def 14 ,TOPMETR:
+        def 7,XBOOLE_1:1;
+A29:    not 0 in Q by A6,A16,XBOOLE_0:3;
+        now
+          let G be Subset of R^1;
+          assume
+A30:      G is open;
+          assume
+          t in G;
+          then consider e being real number such that
+A31:      e > 0 and
+A32:      Ball(m,e) c= G by A30,TOPMETR:22,def 7;
+          reconsider e as Element of REAL by XREAL_0:def 1;
+          set e0 = max(0,l - (e/2));
+          reconsider e1 = e0 as Point of RealSpace by METRIC_1:def 14;
+A33:      e*(1/2) < e*1 by A31,XREAL_1:70;
           now
-            let G be Subset of R^1;
-            assume
-A24:        G is open;
-            assume t in G;
-            then consider e being real number such that
-A25:        e > 0 and
-A26:        Ball(m,e) c= G by A24,TOPMETR:22,def 7;
-            reconsider e as Element of REAL by XREAL_0:def 1;
-A27:        e*(1/2) < e*1 by A25,XREAL_1:70;
-            set e0 = max(0,l - (e/2));
-A28:        0 <= e0 by XXREAL_0:25;
-            e0 = 0 or e0 = l - (e/2) by XXREAL_0:16; then
-            e0 < l by A14,A15,A20,A25,XREAL_1:141,46; then
-A31:        e0 in W by A28;
-            reconsider e1 = e0 as Point of RealSpace by METRIC_1:def 14;
-            now per cases by XXREAL_0:16;
-              suppose
-A32:            e0 = 0;
-                then l <= e/2 by XREAL_1:52,XXREAL_0:25;
-                then l < e & abs l = l by A20,A27,ABSVALUE:def 1,XXREAL_0:2;
-                hence abs(l - e0) < e by A32;
-              end;
-              suppose e0 = l - (e/2);
-                then l - e0 < e & l - e0 > 0 by A25,A27,XREAL_1:141;
-                hence abs(l - e0) < e by ABSVALUE:def 1;
-              end;
+            per cases by XXREAL_0:16;
+            suppose
+A34:          e0 = 0;
+              then l <= e/2 by XREAL_1:52,XXREAL_0:25;
+              then l < e by A33,XXREAL_0:2;
+              hence abs(l - e0) < e by A24,A34,ABSVALUE:def 1;
             end;
-            then (the distance of RealSpace).(m,e1) < e
-            by METRIC_1:def 13,def 14;
-            then dist(m,e1) < e by METRIC_1:def 1;
-            then e1 in {z where z is Element of RealSpace : dist(m,z)<e};
-            then e1 in Ball(m,e) by METRIC_1:18;
-            hence D meets G by A26,A31,XBOOLE_0:3;
+            suppose
+              e0 = l - (e/2);
+              hence abs(l - e0) < e by A31,A33,ABSVALUE:def 1;
+            end;
           end;
-          hence thesis by PRE_TOPC:54;
+          then (the distance of RealSpace).(m,e1) < e by METRIC_1:def 13,
+          def 14;
+          then dist(m,e1) < e by METRIC_1:def 1;
+          then e1 in {z where z is Element of RealSpace : dist(m,z)<e};
+          then
+A35:      e1 in Ball(m,e) by METRIC_1:18;
+          e0 = 0 or e0 = l - (e/2) by XXREAL_0:16;
+          then 0 <= e0 & e0 < l by A29,A17,A24,A31,
+          XREAL_1:46,141,XXREAL_0
+          :25;
+          then e0 in W;
+          hence D meets G by A32,A35,XBOOLE_0:3;
         end;
-        Cl D c= Cl A0 & Cl A0 = A0 by A8,A22,PRE_TOPC:49,52;
-        hence contradiction by A5,A15,A23,XBOOLE_0:3;
-      end;
-      suppose 0 in Q;
         then
-A33:    not 0 in P by A5,XBOOLE_0:3;
+A36:    t in Cl D by PRE_TOPC:54;
+A37:    Cl A0 = A0 by A13,PRE_TOPC:52;
+        Cl D c= Cl A0 by A28,PRE_TOPC:49;
+        hence contradiction by A6,A17,A36,A37,XBOOLE_0:3;
+      end;
+      suppose
+A38:    0 in Q;
+        reconsider A00 = A0` as Subset of R^1;
         set l = lower_bound P;
         reconsider m = l as Point of RealSpace by METRIC_1:def 14;
         reconsider t = m as Point of R^1 by TOPMETR:16,def 7;
-        reconsider A00 = A0` as Subset of R^1;
-A34:    l in P
+        set W = {w where w is Real : 0<=w & w<l};
+A39:    l in P
         proof
-          assume not l in P;
-          then t in A00 & A00 is open by A8,SUBSET_1:50,TOPS_1:29;
+          assume
+          not l in P;
+          then
+A40:      t in A00 by SUBSET_1:50;
+          A00 is open by A13,TOPS_1:29;
           then consider s being real number such that
-A35:      s > 0 and
-A36:      Ball(m,s) c= A0` by TOPMETR:22,def 7;
+A41:      s > 0 and
+A42:      Ball(m,s) c= A0` by A40,TOPMETR:22,def 7;
           consider r being real number such that
-A37:      r in P and
-A38:      r < l+s by A9,A12,A35,SEQ_4:def 5;
+A43:      r in P and
+A44:      r < l+s by A7,A10,A41,SEQ_4:def 5;
           reconsider r as Real by XREAL_0:def 1;
-          reconsider rm = r as Point of RealSpace by METRIC_1:def 14;
-          l <= r by A12,A37,SEQ_4:def 5;
+          l <= r by A10,A43,SEQ_4:def 5;
           then l - r <= 0 by XREAL_1:49;
-          then -s < -(l - r) by A35,XREAL_1:26;
-          then -s < r - l & r - l < s by A38,XREAL_1:21;
-          then abs(r - l) < s by SEQ_2:9;
+          then
+A45:      -s < -(l - r) by A41,XREAL_1:26;
+          reconsider rm = r as Point of RealSpace by METRIC_1:def 14;
+          r - l < s by A44,XREAL_1:21;
+          then abs(r - l) < s by A45,SEQ_2:9;
           then (real_dist).(r,l) < s by METRIC_1:def 13;
           then dist(rm,m) < s by METRIC_1:def 1,def 14;
           then rm in {q where q is Element of RealSpace : dist(m,q)<s};
           then rm in Ball(m,s) by METRIC_1:18;
-          hence contradiction by A36,A37,XBOOLE_0:def 5;
+          hence contradiction by A42,A43,XBOOLE_0:def 5;
         end;
         then l in [.0,1.] by BORSUK_1:83;
         then l in {u where u is Real : 0<=u & u<=1} by RCOMP_1:def 1;
         then
-A39:    ex u0 being Real st u0 = l & 0<=u0 & u0<=1;
-        set W = {w where w is Real : 0<=w & w<l};
+A46:    ex u0 being Real st u0 = l & 0<=u0 & u0<=1;
         now
           let x be set;
-          assume x in W;
+          assume
+          x in W;
           then consider w0 being Real such that
-A40:      w0 = x & 0<=w0 & w0<l;
-          w0 <= 1 by A39,A40,XXREAL_0:2;
-          then w0 in {u where u is Real : 0<=u & u<=1} by A40;
+A47:      w0 = x and
+A48:      0<=w0 and
+A49:      w0<l;
+          w0 <= 1 by A46,A49,XXREAL_0:2;
+          then w0 in {u where u is Real : 0<=u & u<=1} by A48;
           then w0 in P \/ Q by A1,BORSUK_1:83,RCOMP_1:def 1;
           then w0 in P or w0 in Q by XBOOLE_0:def 3;
-          hence x in Q by A12,A40,SEQ_4:def 5;
+          hence x in Q by A10,A47,A49,SEQ_4:def 5;
         end;
         then
-A41:    W c= Q by TARSKI:def 3;
-        then reconsider D = W as Subset of R^1 by A7,METRIC_1:def 14
-,TOPMETR:def 7,XBOOLE_1:1;
-A42:    t in Cl D
-        proof
+A50:    W c= Q by TARSKI:def 3;
+        then reconsider D = W as Subset of R^1 by A9,METRIC_1:def 14 ,TOPMETR:
+        def 7,XBOOLE_1:1;
+A51:    not 0 in P by A6,A38,XBOOLE_0:3;
+        now
+          let G be Subset of R^1;
+          assume
+A52:      G is open;
+          assume
+          t in G;
+          then consider e being real number such that
+A53:      e > 0 and
+A54:      Ball(m,e) c= G by A52,TOPMETR:22,def 7;
+          reconsider e as Real by XREAL_0:def 1;
+          set e0 = max(0,l - (e/2));
+          reconsider e1 = e0 as Point of RealSpace by METRIC_1:def 14;
+A55:      e*(1/2) < e*1 by A53,XREAL_1:70;
           now
-            let G be Subset of R^1;
-            assume
-A43:        G is open;
-            assume t in G;
-            then consider e being real number such that
-A44:        e > 0 and
-A45:        Ball(m,e) c= G by A43,TOPMETR:22,def 7;
-            reconsider e as Real by XREAL_0:def 1;
-A46:        e*(1/2) < e*1 by A44,XREAL_1:70;
-            set e0 = max(0,l - (e/2));
-A47:        0 <= e0 by XXREAL_0:25;
-            e0 = 0 or e0 = l - (e/2) by XXREAL_0:16; then
-            e0 < l by A33,A34,A39,A44,XREAL_1:141,46; then
-A50:        e0 in W by A47;
-            reconsider e1 = e0 as Point of RealSpace by METRIC_1:def 14;
-            now per cases by XXREAL_0:16;
-              suppose
-A51:            e0 = 0;
-                then l <= e/2 by XREAL_1:52,XXREAL_0:25;
-                then l < e & abs l = l by A39,A46,ABSVALUE:def 1,XXREAL_0:2;
-                hence abs(l - e0) < e by A51;
-              end;
-              suppose e0 = l - (e/2);
-                then l - e0 < e & l - e0 > 0 by A44,A46,XREAL_1:141;
-                hence abs(l - e0) < e by ABSVALUE:def 1;
-              end;
+            per cases by XXREAL_0:16;
+            suppose
+A56:          e0 = 0;
+              then l <= e/2 by XREAL_1:52,XXREAL_0:25;
+              then l < e by A55,XXREAL_0:2;
+              hence abs(l - e0) < e by A46,A56,ABSVALUE:def 1;
             end;
-            then (real_dist).(l,e0) < e by METRIC_1:def 13;
-            then dist(m,e1) < e by METRIC_1:def 1,def 14;
-            then e1 in {z where z is Element of RealSpace : dist(m,z)<e};
-            then e1 in Ball(m,e) by METRIC_1:18;
-            hence D meets G by A45,A50,XBOOLE_0:3;
+            suppose
+              e0 = l - (e/2);
+              hence abs(l - e0) < e by A53,A55,ABSVALUE:def 1;
+            end;
           end;
-          hence thesis by PRE_TOPC:54;
+          then (real_dist).(l,e0) < e by METRIC_1:def 13;
+          then dist(m,e1) < e by METRIC_1:def 1,def 14;
+          then e1 in {z where z is Element of RealSpace : dist(m,z)<e};
+          then
+A57:      e1 in Ball(m,e) by METRIC_1:18;
+          e0 = 0 or e0 = l - (e/2) by XXREAL_0:16;
+          then 0 <= e0 & e0 < l by A51,A39,A46,A53,XREAL_1:46,141,
+          XXREAL_0:25;
+          then e0 in W;
+          hence D meets G by A54,A57,XBOOLE_0:3;
         end;
-        Cl D c= Cl B0 & Cl B0 = B0 by A8,A41,PRE_TOPC:49,52;
-        hence contradiction by A5,A34,A42,XBOOLE_0:3;
+        then
+A58:    t in Cl D by PRE_TOPC:54;
+A59:    Cl B0 = B0 by A14,PRE_TOPC:52;
+        Cl D c= Cl B0 by A50,PRE_TOPC:49;
+        hence contradiction by A6,A39,A58,A59,XBOOLE_0:3;
       end;
     end;
     hence contradiction;
@@ -1117,463 +1161,471 @@ theorem
 proof
   assume
 A1: a <= b;
-  now per cases by A1,XXREAL_0:1;
+  now
+    per cases by A1,XXREAL_0:1;
     suppose
-A2:   a < b;
-      set A = the carrier of Closed-Interval-TSpace(0,1);
-A3:   A = [#](Closed-Interval-TSpace(0,1));
-      L[01]((#)(a,b),(a,b)(#)) is being_homeomorphism by A2,Th20;
+      a < b;
+      then L[01]((#)(a,b),(a,b)(#)) is being_homeomorphism by Th20;
       then
-A4:   rng L[01]((#)(a,b),(a,b)(#) ) = [#](Closed-Interval-TSpace(a,b )) &
-      L[01]((#)(a,b),(a,b)(#)) is continuous by TOPS_2:def 5;
-      L[01]((#)(a,b),(a,b)(#)).:(A) = rng L[01]((#)(a,b),(a,b)(#)
-      ) by FUNCT_2:45;
-      hence thesis by A3,A4,Th22,CONNSP_1:15
-,TOPMETR:27;
+A2:   rng L[01]((#)(a,b),(a,b)(#) ) = [#](Closed-Interval-TSpace(a,b )) &
+      L[01]( (#)(a,b),(a,b)(#)) is continuous by TOPS_2:def 5;
+      set A = the carrier of Closed-Interval-TSpace(0,1);
+      A = [#](Closed-Interval-TSpace(0,1)) & L[01]((#)(a,b),(a,b)(#)).:(A)
+      = rng L[01]((#)(a,b),(a,b)(#) ) by FUNCT_2:45;
+      hence thesis by A2,Th22,CONNSP_1:15,TOPMETR:27;
     end;
     suppose
-A5:   a = b;
+A3:   a = b;
       then [.a,b.] = {a} & a = (#)(a,b) by Def1,XXREAL_1:17;
-      then [#] Closed-Interval-TSpace(a,b) = {(#)(a,b)} &
-      {(#)(a,b)} is connected by A5,CONNSP_1:29,TOPMETR:25;
-      hence thesis by CONNSP_1:28;
+      then
+A4:   [#] Closed-Interval-TSpace(a,b) = {(#)(a,b)} by A3,TOPMETR:25;
+      {(#)(a,b)} is connected by CONNSP_1:29;
+      hence thesis by A4,CONNSP_1:28;
     end;
   end;
   hence thesis;
 end;
 
 theorem Th24:
-  for f being continuous Function of I[01],I[01]
-  ex x being Point of I[01] st f.x = x
+  for f being continuous Function of I[01],I[01] ex x being Point
+  of I[01] st f.x = x
 proof
   let f be continuous Function of I[01],I[01];
-  assume
-A1: for x being Point of I[01] holds f.x <> x;
-A2: Closed-Interval-TSpace(0,1) =
-  TopSpaceMetr(Closed-Interval-MSpace(0,1)) by TOPMETR:def 8;
-A3: the carrier of Closed-Interval-MSpace(0,1) = [.0,1.] by TOPMETR:14;
   reconsider F = f as Function of [.0,1.], [.0,1.] by BORSUK_1:83;
-A4: [.0,1.] = {q where q is Real : 0<=q & q<=1 } by RCOMP_1:def 1;
-  set A = {a where a is Real : a in [.0,1.] & F.a in [.0,a.]},
-  B = {b where b is Real : b in [.0,1.] & F.b in [.b,1.]};
+  set A = {a where a is Real : a in [.0,1.] & F.a in [.0,a.]}, B = {b where b
+  is Real : b in [.0,1.] & F.b in [.b,1.]};
   A c= REAL
   proof
     let x be set;
-    assume x in A;
+    assume
+    x in A;
     then ex a being Real st a = x & a in [.0,1.] & F.a in [.0,a.];
     hence thesis;
   end;
   then reconsider A as Subset of REAL;
+A1: Closed-Interval-TSpace(0,1) = TopSpaceMetr(Closed-Interval-MSpace(0,1))
+  by TOPMETR:def 8;
+A2: A c= [.0,1.]
+  proof
+    let x be set;
+    assume
+A3: x in A;
+    then reconsider x as Real;
+    ex a0 being Real st a0 = x & a0 in [.0,1.] & F.a0 in [.0,a0.] by A3;
+    hence thesis;
+  end;
   B c= REAL
   proof
     let x be set;
-    assume x in B;
+    assume
+    x in B;
     then ex b being Real st b = x & b in [.0,1.] & F.b in [.b,1.];
     hence thesis;
   end;
   then reconsider B as Subset of REAL;
-A5: A c= [.0,1.]
+A4: the carrier of Closed-Interval-MSpace(0,1) = [.0,1.] by TOPMETR:14;
+  0 in {w where w is Real : 0<=w & w<=1};
+  then
+A5: 0 in [.0,1.] by RCOMP_1:def 1;
+A6: [.0,1.] <> {} by XXREAL_1:1;
+  then [.0,1.] = dom F by FUNCT_2:def 1;
+  then F.0 in rng F by A5,FUNCT_1:def 5;
+  then
+A7: 0 in B by A5;
+A8: [.0,1.] = {q where q is Real : 0<=q & q<=1 } by RCOMP_1:def 1;
+A9: [.0,1.] c= A \/ B
   proof
     let x be set;
     assume
-A6: x in A;
-    then reconsider x as Real;
-    ex a0 being Real st a0 = x & a0 in [.0,1.] & F.a0 in [.0,a0.] by A6;
-    hence thesis;
-  end;
-A7: B c= [.0,1.]
-  proof
-    let x be set;
-    assume
-A8: x in B;
-    then reconsider x as Real;
-    ex b0 being Real st b0 = x & b0 in [.0,1.] & F.b0 in [.b0,1.] by A8;
-    hence thesis;
-  end;
-A9: [.0,1.] <> {} by XXREAL_1:1;
-A10: A \/ B = [.0,1.]
-  proof
-A11: A \/ B c= [.0,1.] by A5,A7,XBOOLE_1:8;
-    [.0,1.] c= A \/ B
-    proof
-      let x be set;
-      assume
-A12:  x in [.0,1.];
-      then reconsider y = x as Real;
-      ex p being Real st p = y & 0<=p & p<=1 by A4,A12;
-      then
-A13:  [.0,1.] = [.0,y.] \/ [.y,1.] by XXREAL_1:174;
-      [.0,1.] = dom F & rng F c= [.0,1.] by A9,FUNCT_2:def 1;
-      then
-A14:  F.y in rng F by A12,FUNCT_1:def 5;
-      now per cases by A13,A14,XBOOLE_0:def 3;
-        suppose F.y in [.0,y.];
-          then y in A & A c= A \/ B by A12,XBOOLE_1:7;
-          hence y in A \/ B;
-        end;
-        suppose F.y in [.y,1.];
-          then y in B & B c= A \/ B by A12,XBOOLE_1:7;
-          hence y in A \/ B;
-        end;
+A10: x in [.0,1.];
+    then reconsider y = x as Real;
+    ex p being Real st p = y & 0<=p & p<=1 by A8,A10;
+    then
+A11: [.0,1.] = [.0,y.] \/ [.y,1.] by XXREAL_1:174;
+    [.0,1.] = dom F by A6,FUNCT_2:def 1;
+    then
+A12: F.y in rng F by A10,FUNCT_1:def 5;
+    now
+      per cases by A11,A12,XBOOLE_0:def 3;
+      suppose
+A13:    F.y in [.0,y.];
+A14:    A c= A \/ B by XBOOLE_1:7;
+        y in A by A10,A13;
+        hence y in A \/ B by A14;
       end;
-      hence thesis;
+      suppose
+A15:    F.y in [.y,1.];
+A16:    B c= A \/ B by XBOOLE_1:7;
+        y in B by A10,A15;
+        hence y in A \/ B by A16;
+      end;
     end;
-    hence thesis by A11,XBOOLE_0:def 10;
+    hence thesis;
   end;
-A15: 1 in A
+  1 in {w where w is Real : 0<=w & w<=1};
+  then
+A17: 1 in [.0,1.] by RCOMP_1:def 1;
+A18: B c= [.0,1.]
   proof
-    1 in {w where w is Real : 0<=w & w<=1};
-    then
-A16: 1 in [.0,1.] by RCOMP_1:def 1;
-    [.0,1.] = dom F & rng F c= [.0,1.] by A9,FUNCT_2:def 1;
-    then F.1 in rng F by A16,FUNCT_1:def 5;
-    hence thesis by A16;
-  end;
-A17: 0 in B
-  proof
-    0 in {w where w is Real : 0<=w & w<=1};
-    then
-A18: 0 in [.0,1.] by RCOMP_1:def 1;
-    [.0,1.] = dom F & rng F c= [.0,1.] by A9,FUNCT_2:def 1;
-    then F.0 in rng F by A18,FUNCT_1:def 5;
-    hence thesis by A18;
-  end;
-A19: A /\ B = {}
-  proof
+    let x be set;
     assume
-A20: A /\ B <> {};
+A19: x in B;
+    then reconsider x as Real;
+    ex b0 being Real st b0 = x & b0 in [.0,1.] & F.b0 in [.b0,1.] by A19;
+    hence thesis;
+  end;
+  assume
+A20: for x being Point of I[01] holds f.x <> x;
+A21: A /\ B = {}
+  proof
     consider x being Element of A /\ B;
-A21: x in A by A20,XBOOLE_0:def 4;
+    assume
+A22: A /\ B <> {};
     then
-A22: ex z being Real st z = x & z in [.0,1.] & F.z in [.0,z.];
-    reconsider x as Real by A21;
-    x in B by A20,XBOOLE_0:def 4;
+A23: x in A by XBOOLE_0:def 4;
+    then
+A24: ex z being Real st z = x & z in [.0,1.] & F.z in [.0,z.];
+    reconsider x as Real by A23;
+    x in B by A22,XBOOLE_0:def 4;
     then ex b0 being Real st b0 = x & b0 in [.0,1.] & F.b0 in [.b0,1.];
     then
-A23: F.x in [.0,x.] /\ [.x,1.] by A22,XBOOLE_0:def 4;
-    x in {q where q is Real : 0<=q & q<=1 } by A22,RCOMP_1:def 1;
+A25: F.x in [.0,x.] /\ [.x,1.] by A24,XBOOLE_0:def 4;
+    x in {q where q is Real : 0<=q & q<=1 } by A24,RCOMP_1:def 1;
     then ex u being Real st u = x & 0<=u & u<=1;
-    then F.x in {x} by A23,XXREAL_1:418;
+    then F.x in {x} by A25,XXREAL_1:418;
     then F.x = x by TARSKI:def 1;
-    hence contradiction by A1,A22,BORSUK_1:83;
+    hence contradiction by A20,A24,BORSUK_1:83;
   end;
   then
-A24: A misses B by XBOOLE_0:def 7;
-  ex P,Q being Subset of I[01] st [#]
-  I[01] = P \/ Q & P <> {}I[01] & Q <> {}I[01] & P is closed & Q is closed
-  & P misses Q
+A26: A misses B by XBOOLE_0:def 7;
+  [.0,1.] = dom F by A6,FUNCT_2:def 1;
+  then F.1 in rng F by A17,FUNCT_1:def 5;
+  then
+A27: 1 in A by A17;
+  ex P,Q being Subset of I[01] st [#] I[01] = P \/ Q & P <> {}I[01] & Q
+  <> {}I[01] & P is closed & Q is closed & P misses Q
   proof
-    reconsider P = A, Q = B as Subset of I[01] by A5,A7,BORSUK_1:83;
-    take P,Q; thus
-A25: [#]I[01] = P \/ Q by A10,BORSUK_1:83;
-    thus P <> {}I[01] & Q <> {}I[01] by A15,A17;
+    reconsider P = A, Q = B as Subset of I[01] by A2,A18,BORSUK_1:83;
+    take P,Q;
+    thus
+A28: [#]I[01] = P \/ Q by A9,BORSUK_1:83,XBOOLE_0:def 10;
+    thus P <> {}I[01] & Q <> {}I[01] by A27,A7;
     thus P is closed
     proof
-      assume not P is closed;
+      consider z being Element of (Cl P) /\ Q;
+      assume
+      not P is closed;
       then
-A26:  Cl P <> P by PRE_TOPC:52;
-A27:  (Cl P) /\ Q <> {}
+A29:  Cl P <> P by PRE_TOPC:52;
+A30:  (Cl P) /\ Q <> {}
       proof
-        assume (Cl P) /\ Q = {};
+        assume
+        (Cl P) /\ Q = {};
         then (Cl P) misses Q by XBOOLE_0:def 7;
         then
-A28:    Cl P c= Q` & P c= Cl P by PRE_TOPC:48,SUBSET_1:43;
-        P = Q` by A24,A25,PRE_TOPC:25;
-        hence contradiction by A26,A28,XBOOLE_0:def 10;
+A31:    Cl P c= Q` by SUBSET_1:43;
+        P c= Cl P & P = Q` by A26,A28,PRE_TOPC:25,48;
+        hence contradiction by A29,A31,XBOOLE_0:def 10;
       end;
-      consider z being Element of (Cl P) /\ Q;
-A29:  z in Cl P & z in Q by A27,XBOOLE_0:def 4;
-      then reconsider z as Point of I[01];
-      reconsider t0 = z as Real by A29;
-A30:  ex c being Real st c = t0 & c in [.0,1.] & F.c in [.c,1.] by A29;
+      then
+A32:  z in Cl P by XBOOLE_0:def 4;
+A33:  z in Q by A30,XBOOLE_0:def 4;
+      reconsider z as Point of I[01] by A32;
+      reconsider t0 = z as Real by A33;
+A34:  ex c being Real st c = t0 & c in [.0,1.] & F.c in [.c,1.] by A33;
       then reconsider s0 = F.t0 as Real;
-      t0 <= s0 by A30,XXREAL_1:1;
+      t0 <= s0 by A34,XXREAL_1:1;
       then
-A31:  0 <= s0 - t0 by XREAL_1:50;
-      reconsider m = z, n = f.z as Point of Closed-Interval-MSpace(0,1)
-      by BORSUK_1:83,TOPMETR:14;
+A35:  0 <= s0 - t0 by XREAL_1:50;
       set r = (s0 - t0) * 2";
-A32:  s0 - t0 <> 0 by A1;
-      then
-A33:  0 / 2 < (s0 - t0) / 2 & 0 <> 2 by A31,XREAL_1:76;
-A34:  r < (s0 - t0) * 1 by A31,A32,XREAL_1:70;
-A35:  t0 + r = s0 - r;
+      reconsider m = z, n = f.z as Point of Closed-Interval-MSpace(0,1) by
+      BORSUK_1:83,TOPMETR:14;
       reconsider W = Ball(n,r) as Subset of I[01] by BORSUK_1:83,TOPMETR:14;
-A36:  Ball(n,r) c= [.t0,1.]
-      proof
-        let x be set;
-        assume
-A37:    x in Ball(n,r);
-        then x in [.0,1.] by A3;
-        then reconsider t = x as Real;
-        reconsider u = x as Point of Closed-Interval-MSpace(0,1) by A37;
-        Ball(n,r)= {q where q is Element of
-        Closed-Interval-MSpace(0,1):dist(n,q)<r} by METRIC_1:18;
-        then ex p being Element of Closed-Interval-MSpace(0,1) st
-        p = u & dist(n,p)<r by A37;
-        then abs(s0 - t) < r by HEINE:1;
-        then abs(s0 - t) < s0 - t0 & s0 - t <= abs(s0 - t)
-        by A34,ABSVALUE:11,XXREAL_0:2;
-        then s0 - t < s0 - t0 by XXREAL_0:2;
-        then
-A38:    t0 <= t by XREAL_1:12;
-        t <= 1 by A3,A37,XXREAL_1:1;
-        then t in {q where q is Real : t0<=q & q<=1 } by A38;
-        hence thesis by RCOMP_1:def 1;
-      end;
-A39:  f.z in W by A33,TBSP_1:16;
-      W is open & f is_continuous_at z by A2,TMAP_1:55,TOPMETR:21,27;
+A36:  W is open & f is_continuous_at z by A1,TMAP_1:55,TOPMETR:21,27;
+A37:  s0 - t0 <> 0 by A20;
+      then
+A38:  0 / 2 < (s0 - t0) / 2 by A35,XREAL_1:76;
+      then f.z in W by TBSP_1:16;
       then consider V being Subset of I[01] such that
-A40:  V is open and
-A41:  z in V and
-A42:  f.:V c= W by A39,TMAP_1:48;
+A39:  V is open & z in V and
+A40:  f.:V c= W by A36,TMAP_1:48;
       consider s being real number such that
-A43:  s > 0 and
-A44:  Ball(m,s) c= V by A2,A40,A41,TOPMETR:22,27;
+A41:  s > 0 and
+A42:  Ball(m,s) c= V by A1,A39,TOPMETR:22,27;
       reconsider s as Real by XREAL_0:def 1;
       set r0 = min(s,r);
-A45:  r0 > 0 by A33,A43,XXREAL_0:15;
-A46:  r0 <= r by XXREAL_0:17;
       reconsider W0 = Ball(m,r0) as Subset of I[01] by BORSUK_1:83,TOPMETR:14;
-A47:  W0 is open by A2,TOPMETR:21,27;
-A48:  z in W0 by A45,TBSP_1:16;
-      Ball(m,r0) c= Ball(m,s) by PCOMPS_1:1,XXREAL_0:17;
+      r0 > 0 by A38,A41,XXREAL_0:15;
       then
-A49:  W0 c= V by A44,XBOOLE_1:1;
-      P meets W0 by A29,A47,A48,PRE_TOPC:54;
-      then
-A50:  P /\ W0 <> {}I[01] by XBOOLE_0:def 7;
+A43:  z in W0 by TBSP_1:16;
       consider w being Element of P /\ W0;
-A51:  w in P & w in W0 by A50,XBOOLE_0:def 4;
-      then reconsider w as Point of Closed-Interval-MSpace(0,1);
-      reconsider w1 = w as Point of I[01] by A51;
-      reconsider d = w1 as Real by A51;
-      Ball(m,r0) = {q where q is Element of
-      Closed-Interval-MSpace(0,1):dist(m,q)<r0} by METRIC_1:18;
-      then ex p being Element of
-      Closed-Interval-MSpace(0,1) st p = w & dist(m,p)<r0 by A51;
-      then dist(w,m) < r by A46,XXREAL_0:2;
-      then abs(d - t0) < r & d - t0 <= abs(d - t0) by ABSVALUE:11,HEINE:1;
-      then d - t0 < r by XXREAL_0:2;
+      W0 is open by A1,TOPMETR:21,27;
+      then P meets W0 by A32,A43,PRE_TOPC:54;
       then
-A52:  d < s0 - r by A35,XREAL_1:21;
-A53:  Ball(n,r) c= [.d,1.]
+A44:  P /\ W0 <> {}I[01] by XBOOLE_0:def 7;
+      then
+A45:  w in P by XBOOLE_0:def 4;
+A46:  w in W0 by A44,XBOOLE_0:def 4;
+      then reconsider w as Point of Closed-Interval-MSpace(0,1);
+      reconsider w1 = w as Point of I[01] by A45;
+      reconsider d = w1 as Real by A45;
+A47:  d in A by A44,XBOOLE_0:def 4;
+      Ball(m,r0) = {q where q is Element of Closed-Interval-MSpace(0,1):
+      dist(m,q)<r0} by METRIC_1:18;
+      then r0 <= r & ex p being Element of Closed-Interval-MSpace(0,1) st p =
+      w & dist( m,p)<r0 by A46,XXREAL_0:17;
+      then dist(w,m) < r by XXREAL_0:2;
+      then
+A48:  abs(d - t0) < r by HEINE:1;
+      d - t0 <= abs(d - t0) by ABSVALUE:11;
+      then t0 + r = s0 - r & d - t0 < r by A48,XXREAL_0:2;
+      then
+A49:  d < s0 - r by XREAL_1:21;
+A50:  r < (s0 - t0) * 1 by A35,A37,XREAL_1:70;
+A51:  Ball(n,r) c= [.t0,1.]
       proof
         let x be set;
         assume
-A54:    x in Ball(n,r);
+A52:    x in Ball(n,r);
+        then reconsider u = x as Point of Closed-Interval-MSpace(0,1);
+        x in [.0,1.] by A4,A52;
+        then reconsider t = x as Real;
+        Ball(n,r)= {q where q is Element of Closed-Interval-MSpace(0,1):
+        dist(n,q)<r} by METRIC_1:18;
         then
-A55:    x in [.0,1.] by A3;
-        reconsider v = x as Point of Closed-Interval-MSpace(0,1) by A54;
-        reconsider t = x as Real by A55;
-A56:    t0 <= t & t <= 1 by A36,A54,XXREAL_1:1;
-        Ball(n,r)= {q where q is Element of
-        Closed-Interval-MSpace(0,1):dist(n,q)<r} by METRIC_1:18;
-        then ex p being Element of
-        Closed-Interval-MSpace(0,1) st p = v & dist(n,p)<r by A54;
+        ex p being Element of Closed-Interval-MSpace(0,1) st p = u & dist
+        (n,p)<r by A52;
+        then abs(s0 - t) < r by HEINE:1;
+        then
+A53:    abs(s0 - t) < s0 - t0 by A50,XXREAL_0:2;
+        s0 - t <= abs(s0 - t) by ABSVALUE:11;
+        then s0 - t < s0 - t0 by A53,XXREAL_0:2;
+        then
+A54:    t0 <= t by XREAL_1:12;
+        t <= 1 by A4,A52,XXREAL_1:1;
+        then t in {q where q is Real : t0<=q & q<=1 } by A54;
+        hence thesis by RCOMP_1:def 1;
+      end;
+A55:  Ball(n,r) c= [.d,1.]
+      proof
+        let x be set;
+        assume
+A56:    x in Ball(n,r);
+        then reconsider v = x as Point of Closed-Interval-MSpace(0,1);
+        x in [.0,1.] by A4,A56;
+        then reconsider t = x as Real;
+        Ball(n,r)= {q where q is Element of Closed-Interval-MSpace(0,1):
+        dist(n,q)<r} by METRIC_1:18;
+        then ex p being Element of Closed-Interval-MSpace(0,1) st p = v &
+        dist(n,p)<r by A56;
         then
 A57:    abs(s0 - t) < r by HEINE:1;
-        now per cases;
-          suppose t <= s0;
+A58:    now
+          per cases;
+          suppose
+            t <= s0;
             then 0 <= s0 - t by XREAL_1:50;
             then s0 - t < r by A57,ABSVALUE:def 1;
             then s0 < r + t by XREAL_1:21;
             then s0 - r < t by XREAL_1:21;
-            hence d < t by A52,XXREAL_0:2;
+            hence d < t by A49,XXREAL_0:2;
           end;
           suppose
-A58:        s0 < t;
-            s0 - r < s0 by A33,XREAL_1:46;
-            then d < s0 by A52,XXREAL_0:2;
-            hence d < t by A58,XXREAL_0:2;
+A59:        s0 < t;
+            s0 - r < s0 by A38,XREAL_1:46;
+            then d < s0 by A49,XXREAL_0:2;
+            hence d < t by A59,XXREAL_0:2;
           end;
         end;
-        then t in {w0 where w0 is Real : d<=w0 & w0<=1} by A56;
+        t <= 1 by A51,A56,XXREAL_1:1;
+        then t in {w0 where w0 is Real : d<=w0 & w0<=1} by A58;
         hence thesis by RCOMP_1:def 1;
       end;
-      F.d in [.d,1.]
-      proof
-        f.w1 in f.:V by A49,A51,FUNCT_2:43;
-        then f.w1 in W by A42;
-        hence thesis by A53;
-      end;
-      then d in A & d in B by A50,BORSUK_1:83,XBOOLE_0:def 4;
-      hence contradiction by A24,XBOOLE_0:3;
+      Ball(m,r0) c= Ball(m,s) by PCOMPS_1:1,XXREAL_0:17;
+      then W0 c= V by A42,XBOOLE_1:1;
+      then f.w1 in f.:V by A46,FUNCT_2:43;
+      then f.w1 in W by A40;
+      then d in B by A55,BORSUK_1:83;
+      hence contradiction by A26,A47,XBOOLE_0:3;
     end;
     thus Q is closed
     proof
-      assume not Q is closed;
+      consider z being Element of (Cl Q) /\ P;
+      assume
+      not Q is closed;
       then
-A59:  Cl Q <> Q by PRE_TOPC:52;
-A60:  (Cl Q) /\ P <> {}
+A60:  Cl Q <> Q by PRE_TOPC:52;
+A61:  (Cl Q) /\ P <> {}
       proof
-        assume (Cl Q) /\ P = {};
+        assume
+        (Cl Q) /\ P = {};
         then (Cl Q) misses P by XBOOLE_0:def 7;
         then
-A61:    Cl Q c= P` & Q c= Cl Q by PRE_TOPC:48,SUBSET_1:43;
-        Q = P` by A24,A25,PRE_TOPC:25;
-        hence contradiction by A59,A61,XBOOLE_0:def 10;
+A62:    Cl Q c= P` by SUBSET_1:43;
+        Q c= Cl Q & Q = P` by A26,A28,PRE_TOPC:25,48;
+        hence contradiction by A60,A62,XBOOLE_0:def 10;
       end;
-      consider z being Element of (Cl Q) /\ P;
-A62:  z in Cl Q & z in P by A60,XBOOLE_0:def 4;
-      then reconsider z as Point of I[01];
-      reconsider t0 = z as Real by A62;
-A63:  ex c being Real st c = t0 & c in [.0,1.] & F.c in [.0,c.] by A62;
+      then
+A63:  z in Cl Q by XBOOLE_0:def 4;
+A64:  z in P by A61,XBOOLE_0:def 4;
+      reconsider z as Point of I[01] by A63;
+      reconsider t0 = z as Real by A64;
+A65:  ex c being Real st c = t0 & c in [.0,1.] & F.c in [.0,c.] by A64;
       then reconsider s0 = F.t0 as Real;
-      s0 <= t0 by A63,XXREAL_1:1;
+      s0 <= t0 by A65,XXREAL_1:1;
       then
-A64:  0 <= t0 - s0 by XREAL_1:50;
-      reconsider m = z, n = f.z as Point of Closed-Interval-MSpace(0,1)
-      by BORSUK_1:83,TOPMETR:14;
+A66:  0 <= t0 - s0 by XREAL_1:50;
       set r = (t0 - s0) * 2";
-A65:  t0 - s0 <> 0 by A1;
-      then
-A66:  0 / 2 < (t0 - s0) / 2 & 0 <> 2 by A64,XREAL_1:76;
-A67:  r < (t0 - s0) * 1 by A64,A65,XREAL_1:70;
-A68:  s0 + r = t0 - r;
+      reconsider m = z, n = f.z as Point of Closed-Interval-MSpace(0,1) by
+      BORSUK_1:83,TOPMETR:14;
       reconsider W = Ball(n,r) as Subset of I[01] by BORSUK_1:83,TOPMETR:14;
-A69:  Ball(n,r) c= [.0,t0.]
+A67:  W is open & f is_continuous_at z by A1,TMAP_1:55,TOPMETR:21,27;
+A68:  t0 - s0 <> 0 by A20;
+      then
+A69:  0 / 2 < (t0 - s0) / 2 by A66,XREAL_1:76;
+      then f.z in W by TBSP_1:16;
+      then consider V being Subset of I[01] such that
+A70:  V is open & z in V and
+A71:  f.:V c= W by A67,TMAP_1:48;
+      consider s being real number such that
+A72:  s > 0 and
+A73:  Ball(m,s) c= V by A1,A70,TOPMETR:22,27;
+      reconsider s as Real by XREAL_0:def 1;
+      set r0 = min(s,r);
+      reconsider W0 = Ball(m,r0) as Subset of I[01] by BORSUK_1:83,TOPMETR:14;
+      r0 > 0 by A69,A72,XXREAL_0:15;
+      then
+A74:  z in W0 by TBSP_1:16;
+      consider w being Element of Q /\ W0;
+      W0 is open by A1,TOPMETR:21,27;
+      then Q meets W0 by A63,A74,PRE_TOPC:54;
+      then
+A75:  Q /\ W0 <> {}I[01] by XBOOLE_0:def 7;
+      then
+A76:  w in Q by XBOOLE_0:def 4;
+A77:  w in W0 by A75,XBOOLE_0:def 4;
+      then reconsider w as Point of Closed-Interval-MSpace(0,1);
+      reconsider w1 = w as Point of I[01] by A76;
+      reconsider d = w1 as Real by A76;
+A78:  d in B by A75,XBOOLE_0:def 4;
+      Ball(m,r0) = {q where q is Element of Closed-Interval-MSpace(0,1):
+      dist(m,q)<r0} by METRIC_1:18;
+      then r0 <= r & ex p being Element of Closed-Interval-MSpace(0,1) st p =
+      w & dist( m,p)<r0 by A77,XXREAL_0:17;
+      then dist(m,w) < r by XXREAL_0:2;
+      then
+A79:  abs(t0 - d) < r by HEINE:1;
+      t0 - d <= abs(t0 - d) by ABSVALUE:11;
+      then t0 + - d < r by A79,XXREAL_0:2;
+      then t0 < r - (-d) by XREAL_1:22;
+      then s0 + r = t0 - r & t0 < r + - (-d);
+      then
+A80:  s0 + r < d by XREAL_1:21;
+A81:  r < (t0 - s0) * 1 by A66,A68,XREAL_1:70;
+A82:  Ball(n,r) c= [.0,t0.]
       proof
         let x be set;
         assume
-A70:    x in Ball(n,r);
-        then x in [.0,1.] by A3;
+A83:    x in Ball(n,r);
+        then reconsider u = x as Point of Closed-Interval-MSpace(0,1);
+        x in [.0,1.] by A4,A83;
         then reconsider t = x as Real;
-        reconsider u = x as Point of Closed-Interval-MSpace(0,1) by A70;
-        Ball(n,r)={q where q is Element of
-        Closed-Interval-MSpace(0,1):dist(n,q)<r} by METRIC_1:18;
-        then ex p being Element of Closed-Interval-MSpace(0,1) st
-        p = u & dist(n,p)<r by A70;
+        Ball(n,r)={q where q is Element of Closed-Interval-MSpace(0,1):
+        dist(n,q)<r} by METRIC_1:18;
+        then ex p being Element of Closed-Interval-MSpace(0,1) st p = u &
+        dist(n,p)<r by A83;
         then abs(t - s0) < r by HEINE:1;
-        then abs(t - s0) < t0 - s0 & t - s0 <= abs(t - s0)
-        by A67,ABSVALUE:11,XXREAL_0:2;
-        then t - s0 < t0 - s0 by XXREAL_0:2;
         then
-A71:    t <= t0 by XREAL_1:11;
-        0 <= t & t <= 1 by A3,A70,XXREAL_1:1;
-        then t in {q where q is Real : 0<=q & q<=t0 } by A71;
+A84:    abs(t - s0) < t0 - s0 by A81,XXREAL_0:2;
+        t - s0 <= abs(t - s0) by ABSVALUE:11;
+        then t - s0 < t0 - s0 by A84,XXREAL_0:2;
+        then
+A85:    t <= t0 by XREAL_1:11;
+        0 <= t by A4,A83,XXREAL_1:1;
+        then t in {q where q is Real : 0<=q & q<=t0 } by A85;
         hence thesis by RCOMP_1:def 1;
       end;
-A72:  f.z in W by A66,TBSP_1:16;
-      W is open & f is_continuous_at z by A2,TMAP_1:55,TOPMETR:21,27;
-      then consider V being Subset of I[01] such that
-A73:  V is open and
-A74:  z in V and
-A75:  f.:V c= W by A72,TMAP_1:48;
-      consider s being real number such that
-A76:  s > 0 and
-A77:  Ball(m,s) c= V by A2,A73,A74,TOPMETR:22,27;
-      reconsider s as Real by XREAL_0:def 1;
-      set r0 = min(s,r);
-A78:  r0 > 0 by A66,A76,XXREAL_0:15;
-A79:  r0 <= r by XXREAL_0:17;
-      reconsider W0 = Ball(m,r0) as Subset of I[01] by BORSUK_1:83,TOPMETR:14;
-A80:  W0 is open by A2,TOPMETR:21,27;
-A81:  z in W0 by A78,TBSP_1:16;
-      Ball(m,r0) c= Ball(m,s) by PCOMPS_1:1,XXREAL_0:17;
-      then
-A82:  W0 c= V by A77,XBOOLE_1:1;
-      Q meets W0 by A62,A80,A81,PRE_TOPC:54;
-      then
-A83:  Q /\ W0 <> {}I[01] by XBOOLE_0:def 7;
-      consider w being Element of Q /\ W0;
-A84:  w in Q & w in W0 by A83,XBOOLE_0:def 4;
-      then reconsider w as Point of Closed-Interval-MSpace(0,1);
-      reconsider w1 = w as Point of I[01] by A84;
-      reconsider d = w1 as Real by A84;
-      Ball(m,r0) = {q where q is Element of
-      Closed-Interval-MSpace(0,1):dist(m,q)<r0} by METRIC_1:18;
-      then ex p being Element of
-      Closed-Interval-MSpace(0,1) st p = w & dist(m,p)<r0 by A84;
-      then dist(m,w) < r by A79,XXREAL_0:2;
-      then abs(t0 - d) < r & t0 - d <= abs(t0 - d) by ABSVALUE:11,HEINE:1;
-      then t0 + - d < r by XXREAL_0:2;
-      then t0 < r - (-d) by XREAL_1:22;
-      then t0 < r + - (-d);
-      then
-A85:  s0 + r < d by A68,XREAL_1:21;
 A86:  Ball(n,r) c= [.0,d.]
       proof
         let x be set;
         assume
 A87:    x in Ball(n,r);
+        then reconsider v = x as Point of Closed-Interval-MSpace(0,1);
+        x in [.0,1.] by A4,A87;
+        then reconsider t = x as Real;
+        Ball(n,r)= {q where q is Element of Closed-Interval-MSpace(0,1):
+        dist(n,q)<r} by METRIC_1:18;
+        then ex p being Element of Closed-Interval-MSpace(0,1) st p = v &
+        dist(n,p)<r by A87;
         then
-A88:    x in [.0,1.] by A3;
-        reconsider v = x as Point of Closed-Interval-MSpace(0,1) by A87;
-        reconsider t = x as Real by A88;
-A89:    0 <= t & t <= t0 by A69,A87,XXREAL_1:1;
-        Ball(n,r)= {q where q is Element of
-        Closed-Interval-MSpace(0,1):dist(n,q)<r} by METRIC_1:18;
-        then ex p being Element of
-        Closed-Interval-MSpace(0,1) st p = v & dist(n,p)<r by A87;
-        then
-A90:    abs(t - s0) < r by HEINE:1;
-        now per cases;
-          suppose s0 <= t;
+A88:    abs(t - s0) < r by HEINE:1;
+A89:    now
+          per cases;
+          suppose
+            s0 <= t;
             then 0 <= t - s0 by XREAL_1:50;
-            then t - s0 < r by A90,ABSVALUE:def 1;
+            then t - s0 < r by A88,ABSVALUE:def 1;
             then t < s0 + r by XREAL_1:21;
-            hence t < d by A85,XXREAL_0:2;
+            hence t < d by A80,XXREAL_0:2;
           end;
           suppose
-A91:        t < s0;
-            s0 < s0 + r by A66,XREAL_1:31;
-            then s0 < d by A85,XXREAL_0:2;
-            hence t < d by A91,XXREAL_0:2;
+A90:        t < s0;
+            s0 < s0 + r by A69,XREAL_1:31;
+            then s0 < d by A80,XXREAL_0:2;
+            hence t < d by A90,XXREAL_0:2;
           end;
         end;
+        0 <= t by A82,A87,XXREAL_1:1;
         then t in {w0 where w0 is Real : 0<=w0 & w0<=d} by A89;
         hence thesis by RCOMP_1:def 1;
       end;
-      F.d in [.0,d.]
-      proof
-        f.w1 in f.:V by A82,A84,FUNCT_2:43;
-        then f.w1 in W by A75;
-        hence thesis by A86;
-      end;
-      then d in A & d in B by A83,BORSUK_1:83,XBOOLE_0:def 4;
-      hence contradiction by A24,XBOOLE_0:3;
+      Ball(m,r0) c= Ball(m,s) by PCOMPS_1:1,XXREAL_0:17;
+      then W0 c= V by A73,XBOOLE_1:1;
+      then f.w1 in f.:V by A77,FUNCT_2:43;
+      then f.w1 in W by A71;
+      then d in A by A86,BORSUK_1:83;
+      hence contradiction by A26,A78,XBOOLE_0:3;
     end;
-    thus thesis by A19,XBOOLE_0:def 7;
+    thus thesis by A21,XBOOLE_0:def 7;
   end;
   hence contradiction by Th22,CONNSP_1:11;
 end;
 
 theorem Th25:
-  a <= b implies for f being continuous Function
-  of Closed-Interval-TSpace(a,b), Closed-Interval-TSpace(a,b)
-  ex x being Point of Closed-Interval-TSpace(a,b) st f.x = x
+  a <= b implies for f being continuous Function of
+  Closed-Interval-TSpace(a,b), Closed-Interval-TSpace(a,b) ex x being Point of
+  Closed-Interval-TSpace(a,b) st f.x = x
 proof
   assume
 A1: a <= b;
-  let f be continuous Function
-  of Closed-Interval-TSpace(a,b), Closed-Interval-TSpace(a,b);
-  now per cases by A1,XXREAL_0:1;
+  let f be continuous Function of Closed-Interval-TSpace(a,b),
+  Closed-Interval-TSpace(a,b);
+  now
+    per cases by A1,XXREAL_0:1;
     suppose
 A2:   a < b;
       set L = L[01]((#)(a,b),(a,b)(#)), P = P[01](a,b,(#)(0,1),(0,1)(#));
+A3:   P is continuous Function of Closed-Interval-TSpace(a,b),
+      Closed-Interval-TSpace(0,1) by A2,Th15;
       set g = (P * f) * L;
-A3:   id Closed-Interval-TSpace(a,b) = L * P by A2,Th18;
-A4:   id Closed-Interval-TSpace(0,1) = P * L by A2,Th18;
-A5:   f = (L * P) * f by A3,TMAP_1:93
+A4:   id Closed-Interval-TSpace(a,b) = L * P by A2,Th18;
+      then
+A5:   f = (L * P) * f by TMAP_1:93
         .= L * (P * f) by RELAT_1:55
-        .= L * ((P * f) * (L * P)) by A3,TMAP_1:93
+        .= L * ((P * f) * (L * P)) by A4,TMAP_1:93
         .= L * (g * P) by RELAT_1:55
         .= (L * g) * P by RELAT_1:55;
-A6:   L is continuous Function
-      of Closed-Interval-TSpace(0,1), Closed-Interval-TSpace(a,b) by A1,Th11;
-      P is continuous Function
-      of Closed-Interval-TSpace(a,b), Closed-Interval-TSpace(0,1) by A2,Th15;
-      then P * f is continuous;
-      then g is continuous by A6;
+      L is continuous Function of Closed-Interval-TSpace(0,1),
+      Closed-Interval-TSpace(a,b) by A1,Th11;
       then consider y be Point of Closed-Interval-TSpace(0,1) such that
-A7:   g.y = y by Th24,TOPMETR:27;
+A6:   g.y = y by A3,Th24,TOPMETR:27;
+A7:   id Closed-Interval-TSpace(0,1) = P * L by A2,Th18;
       now
         take x = L.y;
         thus f.x = (((L * g) * P) * L).y by A5,FUNCT_2:21
-          .= ((L * g) *(id Closed-Interval-TSpace(0,1))).y by A4,RELAT_1:55
+          .= ((L * g) *(id Closed-Interval-TSpace(0,1))).y by A7,RELAT_1:55
           .= (L * g).y by TMAP_1:93
-          .= x by A7,FUNCT_2:21;
+          .= x by A6,FUNCT_2:21;
       end;
       hence thesis;
     end;
@@ -1593,10 +1645,10 @@ A9:   the carrier of Closed-Interval-TSpace(a,b) = {(#)(a,b)} by A8,TOPMETR:25;
 end;
 
 theorem Th26:
-  for X, Y being non empty SubSpace of R^1, f being continuous Function of X,Y
-  holds (ex a,b being Real st
-  a <= b & [.a,b.] c= the carrier of X & [.a,b.] c= the carrier of Y &
-  f.:[.a,b.] c= [.a,b.]) implies ex x being Point of X st f.x = x
+  for X, Y being non empty SubSpace of R^1, f being continuous
+Function of X,Y holds (ex a,b being Real st a <= b & [.a,b.] c= the carrier of
+  X & [.a,b.] c= the carrier of Y & f.:[.a,b.] c= [.a,b.]) implies ex x being
+  Point of X st f.x = x
 proof
   let X, Y be non empty SubSpace of R^1, f be continuous Function of X,Y;
   given a,b being Real such that
@@ -1605,85 +1657,91 @@ A2: [.a,b.] c= the carrier of X and
 A3: [.a,b.] c= the carrier of Y and
 A4: f.:[.a,b.] c= [.a,b.];
   reconsider A = [.a,b.] as non empty Subset of X by A1,A2,XXREAL_1:1;
-A5: A = the carrier of Closed-Interval-TSpace(a,b) by A1,TOPMETR:25;
-A6: dom(f|A) = the carrier of Closed-Interval-TSpace(a,b)
-  proof
-A7: A = (the carrier of X) /\ A by XBOOLE_1:28;
-    dom f = the carrier of X & dom(f|A) = (dom f) /\ A
-    by FUNCT_2:def 1,RELAT_1:90;
-    hence thesis by A1,A7,TOPMETR:25;
-  end;
-  rng(f|A) c= the carrier of Closed-Interval-TSpace(a,b) by A4,A5,RELAT_1:148;
-  then reconsider g = f|A as Function
-  of Closed-Interval-TSpace(a,b),Closed-Interval-TSpace(a,b) by A6,
-FUNCT_2:def 1,RELSET_1:11;
-  reconsider Z = Closed-Interval-TSpace(a,b) as SubSpace of X by A5,TSEP_1:4;
-A8: Z is SubSpace of Y by A3,A5,TSEP_1:4;
-  for s being Point of Closed-Interval-TSpace(a,b) holds g is_continuous_at s
+A5: dom(f|A) = (dom f) /\ A by RELAT_1:90;
+  A = (the carrier of X) /\ A & dom f = the carrier of X by FUNCT_2:def 1
+  ,XBOOLE_1:28;
+  then
+A6: dom(f|A) = the carrier of Closed-Interval-TSpace(a,b) by A1,A5,
+  TOPMETR:25;
+A7: A = the carrier of Closed-Interval-TSpace(a,b) by A1,TOPMETR:25;
+  then reconsider Z = Closed-Interval-TSpace(a,b) as SubSpace of X by
+  TSEP_1:4;
+  rng(f|A) c= the carrier of Closed-Interval-TSpace(a,b) by A4,A7, RELAT_1
+  :148;
+  then reconsider g = f|A as Function of Closed-Interval-TSpace(a,b),
+  Closed-Interval-TSpace(a,b) by A6, FUNCT_2:def 1,RELSET_1:11;
+A8: Z is SubSpace of Y by A3,A7,TSEP_1:4;
+  for s being Point of Closed-Interval-TSpace(a,b) holds g
+  is_continuous_at s
   proof
     let s be Point of Closed-Interval-TSpace(a,b);
-    reconsider w = s as Point of X by A5,TARSKI:def 3;
-    for G being Subset of Closed-Interval-TSpace(a,b) st G is open & g.s in G
-    ex H being Subset of Z st H is open & s in H & g.:H c= G
+    reconsider w = s as Point of X by A7,TARSKI:def 3;
+    for G being Subset of Closed-Interval-TSpace(a,b) st G is open & g.s
+    in G ex H being Subset of Z st H is open & s in H & g.:H c= G
     proof
       let G be Subset of Closed-Interval-TSpace(a,b);
-      assume G is open;
+A9:   f is_continuous_at w by TMAP_1:49;
+      assume
+      G is open;
       then consider G0 being Subset of Y such that
-A9:   G0 is open and
-A10:  G0 /\ [#] Closed-Interval-TSpace(a,b) = G by A8,TOPS_2:32;
-      assume g.s in G;
-      then f.w in G by A5,FUNCT_1:72;
-      then f.w in G0 & f is_continuous_at w by A10,TMAP_1:49,XBOOLE_0:def 4;
+A10:  G0 is open and
+A11:  G0 /\ [#] Closed-Interval-TSpace(a,b) = G by A8,TOPS_2:32;
+      assume
+      g.s in G;
+      then f.w in G by A7,FUNCT_1:72;
+      then f.w in G0 by A11,XBOOLE_0:def 4;
       then consider H0 being Subset of X such that
-A11:  H0 is open and
-A12:  w in H0 and
-A13:  f.:H0 c= G0 by A9,TMAP_1:48;
+A12:  H0 is open and
+A13:  w in H0 and
+A14:  f.:H0 c= G0 by A10,A9,TMAP_1:48;
       now
         reconsider H = H0 /\ [#] Closed-Interval-TSpace(a,b) as Subset of Z;
         take H;
-        thus H is open by A11,TOPS_2:32;
-        thus s in H by A12,XBOOLE_0:def 4;
+        thus H is open by A12,TOPS_2:32;
+        thus s in H by A13,XBOOLE_0:def 4;
         thus g.:H c= G
         proof
           let t be set;
-          assume t in g.:H;
-          then consider r be set such that r in dom g and
-A14:      r in H and
-A15:      t = g.r by FUNCT_1:def 12;
-A16:      r in the carrier of Z by A14;
-          reconsider r as Point of Closed-Interval-TSpace(a,b) by A14;
-          reconsider p = r as Point of X by A5,TARSKI:def 3;
-          p in [#] X;
-          then t=f.p & p in H0 & p in dom f
-          by A5,A14,A15,FUNCT_1:72,FUNCT_2:def 1,XBOOLE_0:def 4;
+          assume
+          t in g.:H;
+          then consider r be set such that
+          r in dom g and
+A15:      r in H and
+A16:      t = g.r by FUNCT_1:def 12;
+A17:      r in the carrier of Z by A15;
+          reconsider r as Point of Closed-Interval-TSpace(a,b) by A15;
+          r in dom g by A17,FUNCT_2:def 1;
           then
-A17:      t in f.:H0 by FUNCT_1:def 12;
-          r in dom g by A16,FUNCT_2:def 1;
-          then t in g.:(the carrier of Z) by A15,FUNCT_1:def 12;
-          hence thesis by A10,A13,A17,XBOOLE_0:def 4;
+A18:      t in g.:(the carrier of Z) by A16,FUNCT_1:def 12;
+          reconsider p = r as Point of X by A7,TARSKI:def 3;
+          p in [#] X;
+          then
+A19:      p in dom f by FUNCT_2:def 1;
+          t=f.p & p in H0 by A7,A15,A16,FUNCT_1:72,XBOOLE_0:def 4;
+          then t in f.:H0 by A19,FUNCT_1:def 12;
+          hence thesis by A11,A14,A18,XBOOLE_0:def 4;
         end;
       end;
       hence thesis;
     end;
     hence thesis by TMAP_1:48;
   end;
-  then reconsider h = g as continuous Function
-  of Closed-Interval-TSpace(a,b),Closed-Interval-TSpace(a,b) by TMAP_1:49;
+  then reconsider h = g as continuous Function of Closed-Interval-TSpace(a,b),
+  Closed-Interval-TSpace(a,b) by TMAP_1:49;
   now
     consider y being Point of Closed-Interval-TSpace(a,b) such that
-A18: h.y = y by A1,Th25;
-    reconsider x = y as Point of X by A5,TARSKI:def 3;
+A20: h.y = y by A1,Th25;
+    reconsider x = y as Point of X by A7,TARSKI:def 3;
     take x;
-    thus f.x = x by A5,A18,FUNCT_1:72;
+    thus f.x = x by A7,A20,FUNCT_1:72;
   end;
   hence thesis;
 end;
 
 theorem
-  for X, Y being non empty SubSpace of R^1,
-  f being continuous Function of X,Y holds (ex a,b being Real st
-  a <= b & [.a,b.] c= the carrier of X & f.:[.a,b.] c= [.a,b.]) implies
-  ex x being Point of X st f.x = x
+  for X, Y being non empty SubSpace of R^1, f being continuous Function
+of X,Y holds (ex a,b being Real st a <= b & [.a,b.] c= the carrier of X & f.:[.
+  a,b.] c= [.a,b.]) implies ex x being Point of X st f.x = x
 proof
   let X, Y be non empty SubSpace of R^1, f be continuous Function of X,Y;
   given a,b being Real such that
@@ -1691,29 +1749,26 @@ A1: a <= b and
 A2: [.a,b.] c= the carrier of X and
 A3: f.:[.a,b.] c= [.a,b.];
   set g = (Y incl R^1) * f;
-  (Y incl R^1) is continuous Function of Y,R^1 by TMAP_1:98;
-  then
-A4: g is continuous;
-A5: R^1 is SubSpace of R^1 by TSEP_1:2;
-  the carrier of X c= the carrier of R^1 by BORSUK_1:35;
-  then
-A6: [.a,b.] c= the carrier of R^1 by A2,XBOOLE_1:1;
-  f.:[.a,b.] c= the carrier of Y &
   the carrier of Y c= the carrier of R^1 by BORSUK_1:35;
   then reconsider B = f.:[.a,b.] as Subset of R^1 by XBOOLE_1:1;
   g.:[.a,b.] = (Y incl R^1).:(f.:[.a,b.]) by RELAT_1:159;
   then g.:[.a,b.] = ((id R^1)|Y).:B by TMAP_1:def 6;
   then g.:[.a,b.] = (id R^1).:B by TMAP_1:61;
   then
-A7: g.:[.a,b.] c= [.a,b.] by A3,FUNCT_1:162;
+A4: g.:[.a,b.] c= [.a,b.] by A3,FUNCT_1:162;
+A5: (Y incl R^1) is continuous Function of Y,R^1 & R^1 is SubSpace of R^1 by
+  TMAP_1:98,TSEP_1:2;
+  the carrier of X c= the carrier of R^1 by BORSUK_1:35;
+  then
+A6: [.a,b.] c= the carrier of R^1 by A2,XBOOLE_1:1;
   now
     consider x being Point of X such that
-A8: g.x = x by A1,A2,A4,A5,A6,A7,Th26;
-    take x;
+A7: g.x = x by A1,A2,A5,A6,A4,Th26;
     the carrier of Y c= the carrier of R^1 by BORSUK_1:35;
     then reconsider y = f.x as Point of R^1 by TARSKI:def 3;
+    take x;
     thus f.x = (Y incl R^1).y by TMAP_1:95
-      .= x by A8,FUNCT_2:21;
+      .= x by A7,FUNCT_2:21;
   end;
   hence thesis;
 end;

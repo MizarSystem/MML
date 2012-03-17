@@ -11,19 +11,18 @@ environ
       ABSVALUE, REALSET1, ORDINAL1, ARYTM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XXREAL_0,
       REAL_1, ABSVALUE, NAT_1, DOMAIN_1, FUNCT_1, PARTFUN1, FUNCT_2, BINOP_1,
-      FUNCOP_1, FINSEQ_1, FINSEQ_3, FINSEQ_4, STRUCT_0, FSM_1, SQUARE_1,
-      REALSET1;
+      FUNCOP_1, FINSEQ_1, FINSEQ_3, FINSEQ_4, STRUCT_0, FSM_1, SQUARE_1;
  constructors REAL_1, SQUARE_1, NAT_1, BINOP_2, ABSVALUE, FUNCOP_1, FINSEQ_3,
       FINSEQ_4, REALSET1, BORSUK_1, FSM_1, VALUED_1;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0,
-      NAT_1, MEMBERED, FINSEQ_1, REALSET1, NAT_2, STRUCT_0, FSM_1, XCMPLX_0,
-      XREAL_0, CARD_1;
+      NAT_1, MEMBERED, FINSEQ_1, REALSET1, NAT_2, STRUCT_0, FSM_1, XREAL_0,
+      CARD_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions STRUCT_0, FSM_1, XBOOLE_0, ORDINAL1;
  theorems NAT_1, NAT_2, FINSEQ_1, PARTFUN1, FINSEQ_2, FINSEQ_3, FSM_1, MATRLIN,
       FUNCT_1, REWRITE1, WSIERP_1, GRFUNC_1, TREES_1, ZFMISC_1, GRAPH_2,
       TARSKI, FUNCOP_1, FUNCT_2, RELAT_1, ABSVALUE, XBOOLE_0, XREAL_1,
-      XXREAL_0, FINSEQ_4, ORDINAL1;
+      XXREAL_0, FINSEQ_4, ORDINAL1, PRE_POLY;
  schemes NAT_1, NAT_2, BINOP_1;
 
 begin :: Calculating type
@@ -58,12 +57,14 @@ A1: len <*s*> = 1 by FINSEQ_1:56;
 A2: len GEN(<*s*>, q) = len <*s*> + 1 by FSM_1:def 2
     .= 2 by A1;
 A3: GEN(<*s*>, q).1 = q by FSM_1:def 2;
-  1 >= 1 & 1 <= len <*s*> by FINSEQ_1:56;
+  1 <= len <*s*> by FINSEQ_1:56;
   then consider WI being Element of I, QI, QI1 being State of S such that
-A4: WI = <*s*>.1 & QI = GEN(<*s*>, q).1 & QI1 = GEN(<*s*>, q).(1+1) &
-  WI-succ_of QI = QI1 by FSM_1:def 2;
+A4: WI = <*s*>.1 and
+A5: QI = GEN(<*s*>, q).1 and
+A6: QI1 = GEN(<*s*>, q).(1+1) and
+A7: WI-succ_of QI = QI1 by FSM_1:def 2;
   WI = s by A4,FINSEQ_1:57;
-  hence thesis by A2,A3,A4,FINSEQ_1:61;
+  hence thesis by A2,A3,A5,A6,A7,FINSEQ_1:61;
 end;
 
 theorem Th2:
@@ -80,14 +81,16 @@ A3: len <*s1*> = 1 by FINSEQ_1:56;
   then
 A4: GEN(w, q).(1+1) = (the Tran of S).[q, s1] by A2,A3,FSM_1:21;
 A5: len w = 2 by FINSEQ_1:61;
-  2 >= 1 & 2 <= len w by FINSEQ_1:61;
+  2 <= len w by FINSEQ_1:61;
   then consider WI being Element of I, QI, QI1 being State of S such that
-A6: WI = w.2 & QI = GEN(w, q).2 & QI1 = GEN(w, q).(2+1) &
-  WI-succ_of QI = QI1 by FSM_1:def 2;
-A7: WI = s2 by A6,FINSEQ_1:61;
+A6: WI = w.2 and
+A7: QI = GEN(w, q).2 and
+A8: QI1 = GEN(w, q).(2+1) and
+A9: WI-succ_of QI = QI1 by FSM_1:def 2;
+A10: WI = s2 by A6,FINSEQ_1:61;
   len GEN(w, q) = len w + 1 by FSM_1:def 2
     .= 3 by A5;
-  hence thesis by A1,A4,A6,A7,FINSEQ_1:62;
+  hence thesis by A1,A4,A7,A8,A9,A10,FINSEQ_1:62;
 end;
 
 theorem
@@ -134,22 +137,23 @@ A2: w1.1 = w2.1;
   then
 A3: Seg(1+len w1) c= Seg(1+len w2) & A = Seg(1+len w1) or
   Seg(1+len w2) c= Seg(1+len w1) & A = Seg(1+len w2) by FINSEQ_1:7,9;
-  len GEN(w1, the InitS of S) = 1+len w1 &
-  len GEN(w2, the InitS of S) = 1+len w2 by FSM_1:def 2;
-  then
-A4: dom GEN(w1, the InitS of S) = Seg(1+len w1) &
-  dom GEN(w2, the InitS of S) = Seg(1+len w2) by FINSEQ_1:def 3;
+A4: len GEN(w1, the InitS of S) = 1+len w1 by FSM_1:def 2;
+A5: len GEN(w2, the InitS of S) = 1+len w2 by FSM_1:def 2;
+A6: dom GEN(w1, the InitS of S) = Seg(1+len w1) by A4,FINSEQ_1:def 3;
+A7: dom GEN(w2, the InitS of S) = Seg(1+len w2) by A5,FINSEQ_1:def 3;
   now
     let x be set;
     assume
-A5: x in A;
+A8: x in A;
     then reconsider i = x as Element of NAT;
-A6: i >= 1 & i <= 1+len w1 & i <= 1+len w2 by A3,A5,FINSEQ_1:3;
-    thus GEN(w1, the InitS of S).x = GEN(w2, the InitS of S).x
-    by A1,A2,A6,Def1;
+A9: i >= 1 by A3,A8,FINSEQ_1:3;
+A10: i <= 1+len w1 by A3,A8,FINSEQ_1:3;
+    i <= 1+len w2 by A3,A8,FINSEQ_1:3;
+    hence GEN(w1, the InitS of S).x = GEN(w2, the InitS of S).x
+    by A1,A2,A9,A10,Def1;
   end;
   hence GEN(w1, the InitS of S) c= GEN(w2, the InitS of S) or
-  GEN(w2, the InitS of S) c= GEN(w1, the InitS of S) by A3,A4,GRFUNC_1:8;
+  GEN(w2, the InitS of S) c= GEN(w1, the InitS of S) by A3,A6,A7,GRFUNC_1:8;
 end;
 
 theorem Th5:
@@ -162,26 +166,28 @@ A1: for w1, w2 st w1.1 = w2.1 holds
   GEN(w1, the InitS of S), GEN(w2, the InitS of S) are_c=-comparable;
   let j, w1, w2 such that
 A2: w1.1 = w2.1 and
-A3: j <= len(w1)+1 & j <= len(w2)+1;
-A4: dom GEN(w1, the InitS of S) =
+A3: j <= len(w1)+1 and
+A4: j <= len(w2)+1;
+A5: dom GEN(w1, the InitS of S) =
   Seg len(GEN(w1,the InitS of S)) by FINSEQ_1:def 3
     .= Seg(len w1 + 1) by FSM_1:def 2;
-A5: dom GEN(w2, the InitS of S) =
+A6: dom GEN(w2, the InitS of S) =
   Seg len(GEN(w2,the InitS of S)) by FINSEQ_1:def 3
     .= Seg(len w2 + 1) by FSM_1:def 2;
-  1 <= j by NAT_1:14;
-  then j in dom GEN(w1, the InitS of S) & j in dom GEN(w2, the InitS of S)
-  by A3,A4,A5,FINSEQ_1:3;
+A7: 1 <= j by NAT_1:14;
   then
-A6: j in dom GEN(w1, the InitS of S) /\ dom GEN(w2, the InitS of S)
-  by XBOOLE_0:def 4;
+A8: j in dom GEN(w1, the InitS of S) by A3,A5,FINSEQ_1:3;
+  j in dom GEN(w2, the InitS of S) by A4,A6,A7,FINSEQ_1:3;
+  then
+A9: j in dom GEN(w1, the InitS of S) /\ dom GEN(w2, the InitS of S)
+  by A8,XBOOLE_0:def 4;
   GEN(w1, the InitS of S), GEN(w2, the InitS of S) are_c=-comparable by A1,A2;
   then GEN(w1, the InitS of S) c= GEN(w2, the InitS of S) or
   GEN(w2, the InitS of S) c= GEN(w1, the InitS of S) by XBOOLE_0:def 9;
   then GEN(w1, the InitS of S) tolerates GEN(w2, the InitS of S)
   by PARTFUN1:135;
   hence thesis
-  by A6,PARTFUN1:def 6;
+  by A9,PARTFUN1:def 6;
 end;
 
 theorem
@@ -192,20 +198,23 @@ proof
   assume
 A1: S is calculating_type;
   let w1,w2;
-  assume
-A2: w1.1 = w2.1 & len w1 = len w2;
-  len GEN(w1, the InitS of S) = 1 + len w1 &
+  assume that
+A2: w1.1 = w2.1 and
+A3: len w1 = len w2;
+A4: len GEN(w1, the InitS of S) = 1 + len w1 by FSM_1:def 2;
   len GEN(w2, the InitS of S) = 1 + len w2 by FSM_1:def 2;
-  hence thesis by A1,A2,Th4,TREES_1:19;
+  hence thesis by A1,A2,A3,A4,Th4,TREES_1:19;
 end;
 
 Lm1: now
   let I, S, w, q;
 A1: dom GEN(w, q) = Seg(len GEN(w,q)) by FINSEQ_1:def 3
     .= Seg(len w + 1) by FSM_1:def 2;
-  1 <= 1 & 1 <= len w + 1 by NAT_1:11;
-  then 1 in dom GEN(w, q) & GEN(w, q).1 = q by A1,FINSEQ_1:3,FSM_1:def 2;
-  then [1,q] in GEN(w, q) by FUNCT_1:def 4;
+  1 <= len w + 1 by NAT_1:11;
+  then
+A2: 1 in dom GEN(w, q) by A1,FINSEQ_1:3;
+  GEN(w, q).1 = q by FSM_1:def 2;
+  then [1,q] in GEN(w, q) by A2,FUNCT_1:def 4;
   then {[1,q]} c= GEN(w, q) by ZFMISC_1:37;
   then <*q*> c= GEN(w, q) by FINSEQ_1:def 5;
   then GEN(<*> I, q) c= GEN(w, q) by FSM_1:16;
@@ -220,13 +229,15 @@ A3: p.len p = q.1;
   consider p1 being FinSequence, x being set such that
 A4: p = p1^<*x*> by A1,FINSEQ_1:63;
   consider y being set, q1 being FinSequence such that
-A5: q = <*y*>^q1 & len q = len q1 + 1 by A2,REWRITE1:5;
+A5: q = <*y*>^q1
+  and len q = len q1 + 1 by A2,REWRITE1:5;
 A6: len p = len p1 + len <*x*> by A4,FINSEQ_1:35
     .= len p1 + 1 by FINSEQ_1:56;
   then
-A7: p.(len p) = x & q.1 = y by A4,A5,FINSEQ_1:58,59;
+A7: p.(len p) = x by A4,FINSEQ_1:59;
+A8: q.1 = y by A5,FINSEQ_1:58;
   Del(p, len p)^q = p1^(<*y*>^q1) by A4,A5,A6,WSIERP_1:48
-    .= p^q1 by A3,A4,A7,FINSEQ_1:45;
+    .= p^q1 by A3,A4,A7,A8,FINSEQ_1:45;
   hence Del(p, len p)^q = p^Del(q,1) by A5,WSIERP_1:48;
 end;
 
@@ -242,7 +253,8 @@ A1: for w1, w2 st w1.1 = w2.1 & len w1 = len w2 holds
     let w1, w2;
     assume
 A2: w1.1 = w2.1;
-    thus GEN(w1, the InitS of S), GEN(w2, the InitS of S) are_c=-comparable
+    thus
+    GEN(w1, the InitS of S), GEN(w2, the InitS of S) are_c=-comparable
     proof per cases;
       suppose w1 = <*> I or w2 = <*> I;
         hence thesis by Lm1;
@@ -256,71 +268,67 @@ A3:     w1 <> {} & w2 <> {};
 A4:     v1 = w2 & len v2 = len w2 & len w1 >= len w2 or
         len v1 = len w1 & v2 = w1 & len w1 <= len w2
         by FINSEQ_1:21,FINSEQ_2:23;
-A5:     len w1 <> 0 & len w2 <> 0 by A3;
-        then len w1 > 0 & len w2 > 0;
-        then len w1 >= 0+1 & len w2 >= 0+1 & 1 <= 1 by NAT_1:13;
-        then v1.1 = w2.1 & v2.1 = w1.1 by A4,GRAPH_2:2;
+A5:     len w1 >= 0+1 by A3,NAT_1:13;
+A6:     len w2 >= 0+1 by A3,NAT_1:13;
+A7:     v1.1 = w2.1 by A4,A5,GRAPH_2:2;
+        v2.1 = w1.1 by A4,A6,GRAPH_2:2;
         then
-A6:     GEN(v1, the InitS of S) = GEN(w1, the InitS of S) or
-        GEN(v2, the InitS of S) = GEN(w2, the InitS of S) by A1,A2,A4;
+A8:     GEN(v1, the InitS of S) = GEN(w1, the InitS of S) or
+        GEN(v2, the InitS of S) = GEN(w2, the InitS of S) by A1,A2,A4,A7;
         consider s1 being FinSequence such that
-A7:     w2 = v1^s1 by TREES_1:3;
+A9:     w2 = v1^s1 by FINSEQ_1:101;
         consider s2 being FinSequence such that
-A8:     w1 = v2^s2 by TREES_1:3;
-        reconsider s1, s2 as FinSequence of I by A7,A8,FINSEQ_1:50;
+A10:    w1 = v2^s2 by FINSEQ_1:101;
+        reconsider s1, s2 as FinSequence of I by A9,A10,FINSEQ_1:50;
         v1 <> {}
         proof
           assume
-A9:       v1 = {};
-A10:      dom v1 = dom w2 /\ Seg len w1 by RELAT_1:90
+A11:      v1 = {};
+A12:      dom v1 = dom w2 /\ Seg len w1 by RELAT_1:90
             .= Seg len w2 /\ Seg len w1 by FINSEQ_1:def 3;
           len w2 <= len w1 or len w1 <= len w2;
-          then dom v1 = Seg len w2 or dom v1 = Seg len w1 by A10,FINSEQ_1:9;
+          then dom v1 = Seg len w2 or dom v1 = Seg len w1 by A12,FINSEQ_1:9;
           then len v1 = len w2 or len v1 = len w1 by FINSEQ_1:def 3;
-          then 0 = len w2 or 0 = len w1 by A9;
-          hence contradiction by A3;
+          hence contradiction by A3,A11;
         end;
-        then len v1 <> 0;
-        then 1 <= len v1 & len v1 <= len v1 by NAT_1:14;
-        then consider WI being Element of I, QI,QI1 being State of S such that
-A11:    WI = v1.(len v1) & QI = GEN(v1, the InitS of S).(len v1) &
-        QI1 = GEN(v1, the InitS of S).(len v1+1) &
-        WI-succ_of QI = QI1 by FSM_1:def 2;
+        then 1 <= len v1 by NAT_1:14;
+        then
+A13:    ex WI being Element of I, QI,QI1 being State of S st ( WI =
+v1.(len v1))&( QI = GEN(v1, the InitS of S).(len v1))&( QI1 = GEN(v1, the InitS
+        of S).(len v1+1))&( WI-succ_of QI = QI1) by FSM_1:def 2;
         v2 <> {}
         proof
           assume v2 = {};
           then
-A12:      len v2 = 0;
-A13:      dom v2 = dom w1 /\ Seg len w2 by RELAT_1:90
+A14:      len v2 = 0;
+A15:      dom v2 = dom w1 /\ Seg len w2 by RELAT_1:90
             .= Seg len w1 /\ Seg len w2 by FINSEQ_1:def 3;
           len w2 <= len w1 or len w1 <= len w2;
-          then dom v2 = Seg len w2 or dom v2 = Seg len w1 by A13,FINSEQ_1:9;
-          hence contradiction by A5,A12,FINSEQ_1:def 3;
+          then dom v2 = Seg len w2 or dom v2 = Seg len w1 by A15,FINSEQ_1:9;
+          hence contradiction by A3,A14,FINSEQ_1:def 3;
         end;
-        then len v2 <> 0;
-        then 1 <= len v2 & len v2 <= len v2 by NAT_1:14;
-        then consider WI2 being Element of I,
-        QI2,QI12 being State of S such that
-A14:    WI2 = v2.(len v2) & QI2 = GEN(v2, the InitS of S).(len v2) &
-        QI12 = GEN(v2, the InitS of S).(len v2+1) &
-        WI2-succ_of QI2 = QI12 by FSM_1:def 2;
-        reconsider q1 = GEN(v1, the InitS of S).(len v1+1),
-        q2 = GEN(v2, the InitS of S).(len v2+1) as State of S by A11,A14;
-A15:    GEN(s1, q1).1 = q1 & GEN(s2, q2).1 = q2 &
-        len GEN(v1, the InitS of S) = len v1+1 &
-        len GEN(v2, the InitS of S) = len v2+1 by FSM_1:def 2;
+        then 1 <= len v2 by NAT_1:14;
+        then ex WI2 being Element of I, QI2,QI12 being State of S st (
+WI2 = v2.(len v2))&( QI2 = GEN(v2, the InitS of S).(len v2))&( QI12 = GEN(v2,
+        the InitS of S).(len v2+1))&( WI2-succ_of QI2 = QI12) by FSM_1:def 2;
+        then reconsider q1 = GEN(v1, the InitS of S).(len v1+1),
+        q2 = GEN(v2, the InitS of S).(len v2+1) as State of S by A13;
+A16:    GEN(s1, q1).1 = q1 by FSM_1:def 2;
+A17:    GEN(s2, q2).1 = q2 by FSM_1:def 2;
+A18:    len GEN(v1, the InitS of S) = len v1+1 by FSM_1:def 2;
+A19:    len GEN(v2, the InitS of S) = len v2+1 by FSM_1:def 2;
         the InitS of S, v1-leads_to q1 by FSM_1:def 3;
         then
-A16:    GEN(w2, the InitS of S)
-        = Del(GEN(v1, the InitS of S), len v1 + 1)^GEN(s1, q1) by A7,FSM_1:23
-          .= GEN(v1, the InitS of S)^Del(GEN(s1, q1),1) by A15,Lm2;
+A20:    GEN(w2, the InitS of S)
+        = Del(GEN(v1, the InitS of S), len v1 + 1)^GEN(s1, q1) by A9,FSM_1:23
+          .= GEN(v1, the InitS of S)^Del(GEN(s1, q1),1) by A16,A18,Lm2;
         the InitS of S, v2-leads_to q2 by FSM_1:def 3;
         then GEN(w1, the InitS of S)
-        = Del(GEN(v2, the InitS of S), len v2 + 1)^GEN(s2, q2) by A8,FSM_1:23
-          .= GEN(v2, the InitS of S)^Del(GEN(s2, q2),1) by A15,Lm2;
+        = Del(GEN(v2, the InitS of S), len v2 + 1)^GEN(s2, q2) by A10,FSM_1:23
+          .= GEN(v2, the InitS of S)^Del(GEN(s2, q2),1) by A17,A19,Lm2;
         then GEN(w1, the InitS of S) c= GEN(w2, the InitS of S) or
         GEN(w2, the InitS of S) c= GEN(w1, the InitS of S)
-        by A6,A16,TREES_1:8;
+        by A8,A20,TREES_1:8;
         hence thesis by XBOOLE_0:def 9;
       end;
     end;
@@ -356,21 +364,23 @@ end;
 theorem
   q is accessible & q <> the InitS of S implies ex s st q is_accessible_via s
 proof
-  assume
-A1: q is accessible & q <> the InitS of S;
-  then consider W be FinSequence of I such that
-A2: the InitS of S,W-leads_to q by Def3;
+  assume that
+A1: q is accessible and
+A2: q <> the InitS of S;
+  consider W be FinSequence of I such that
+A3: the InitS of S,W-leads_to q by A1,Def3;
   W <> {}
   proof
     assume W = {};
     then len W = 0;
     then GEN(W, the InitS of S).(len W + 1) = the InitS of S by FSM_1:def 2;
-    hence contradiction by A1,A2,FSM_1:def 3;
+    hence contradiction by A2,A3,FSM_1:def 3;
   end;
   then consider S being Element of I, w' being FinSequence of I such that
-A3: W.1 = S & W = <*S*>^w' by FINSEQ_3:111;
+  W.1 = S and
+A4: W = <*S*>^w' by FINSEQ_3:111;
   take S;
-  thus thesis by A2,A3,Def2;
+  thus thesis by A3,A4,Def2;
 end;
 
 theorem
@@ -394,50 +404,51 @@ A1: S is calculating_type;
 A2: the InitS of S, <*s*>^w-leads_to q;
   defpred P[Nat] means
   q = GEN(<*s*>^w, the InitS of S).$1 & $1 >= 1 & $1 <= len(<*s*>^w)+1;
-  len(<*s*>^w)+1 >= 1 & q = GEN(<*s*>^w, the InitS of S).(len(<*s*>^w)+1 )
-  by A2,FSM_1:def 3,NAT_1:11;
+A3: len(<*s*>^w)+1 >= 1 by NAT_1:11;
+  q = GEN(<*s*>^w, the InitS of S).(len(<*s*>^w)+1 ) by A2,FSM_1:def 3;
   then
-A3: ex m being Nat st P[m];
+A4: ex m being Nat st P[m] by A3;
   consider m being Nat such that
-A4: P[m] and
-A5: for k being Nat st P[k] holds m <= k from NAT_1:sch 5(A3);
-  reconsider m as non empty Element of NAT by A4,ORDINAL1:def 13;
+A5: P[m] and
+A6: for k being Nat st P[k] holds m <= k from NAT_1:sch 5(A4);
+  reconsider m as non empty Element of NAT by A5,ORDINAL1:def 13;
   take m;
   let w1 such that
-A6: len w1+1 >= m & w1.1 = s;
+A7: len w1+1 >= m and
+A8: w1.1 = s;
   (<*s*>^w).1 = s by FINSEQ_1:58;
   then GEN(w1, the InitS of S), GEN(<*s*>^w, the InitS of S) are_c=-comparable
-  by A1,A6,Th4;
+  by A1,A8,Th4;
   then
-A7: GEN(w1, the InitS of S) c= GEN(<*s*>^w, the InitS of S) or
+A9: GEN(w1, the InitS of S) c= GEN(<*s*>^w, the InitS of S) or
   GEN(<*s*>^w, the InitS of S) c= GEN(w1, the InitS of S) by XBOOLE_0:def 9;
-A8: dom(GEN(<*s*>^w, the InitS of S))
+A10: dom(GEN(<*s*>^w, the InitS of S))
   = Seg(len GEN(<*s*>^w, the InitS of S)) by FINSEQ_1:def 3
     .= Seg(len(<*s*>^w)+1) by FSM_1:def 2;
-  dom(GEN(w1, the InitS of S))
+A11: dom(GEN(w1, the InitS of S))
   = Seg(len GEN(w1, the InitS of S)) by FINSEQ_1:def 3
     .= Seg(len w1 + 1) by FSM_1:def 2;
-  then m in dom GEN(<*s*>^w, the InitS of S) & m in dom GEN(w1, the InitS of
-  S) by A4,A6,A8,FINSEQ_1:3;
-  hence q = GEN(w1, the InitS of S).m by A4,A7,GRFUNC_1:8;
+A12: m in dom GEN(<*s*>^w, the InitS of S) by A5,A10,FINSEQ_1:3;
+  m in dom GEN(w1, the InitS of S) by A5,A7,A11,FINSEQ_1:3;
+  hence q = GEN(w1, the InitS of S).m by A5,A9,A12,GRFUNC_1:8;
   let i;
   assume
-A9: i < m;
-  then
-A10: 1 <= i & i <= len(<*s*>^w)+1 & i <= len w1 + 1
-  by A4,A6,NAT_1:14,XXREAL_0:2;
-A11: dom GEN(w1, the InitS of S)
+A13: i < m;
+A14: 1 <= i by NAT_1:14;
+A15: i <= len(<*s*>^w)+1 by A5,A13,XXREAL_0:2;
+A16: i <= len w1 + 1 by A7,A13,XXREAL_0:2;
+A17: dom GEN(w1, the InitS of S)
   = Seg(len GEN(w1, the InitS of S)) by FINSEQ_1:def 3
     .= Seg(len w1 + 1) by FSM_1:def 2;
   dom GEN(<*s*>^w, the InitS of S)
   = Seg(len GEN(<*s*>^w, the InitS of S)) by FINSEQ_1:def 3
     .= Seg(len(<*s*>^w)+1) by FSM_1:def 2;
   then
-A12: i in dom GEN(<*s*>^w, the InitS of S) & i in dom GEN(w1, the InitS of S)
-  by A10,A11,FINSEQ_1:3;
+A18: i in dom GEN(<*s*>^w, the InitS of S) by A14,A15,FINSEQ_1:3;
+A19: i in dom GEN(w1, the InitS of S) by A14,A16,A17,FINSEQ_1:3;
   assume GEN(w1, the InitS of S).i = q;
-  then q = GEN(<*s*>^w, the InitS of S).i by A7,A12,GRFUNC_1:8;
-  hence thesis by A5,A9,A10;
+  then q = GEN(<*s*>^w, the InitS of S).i by A9,A18,A19,GRFUNC_1:8;
+  hence thesis by A6,A13,A14,A15;
 end;
 
 definition
@@ -452,53 +463,58 @@ theorem
   S is calculating_type
 proof
   assume
-A1: (for s1,s2,q holds (the Tran of S).[q,s1] = (the Tran of S).[q,s2]);
+A1: for s1,s2,q holds (the Tran of S).[q,s1] = (the Tran of S).[q,s2];
   for j holds for w1,w2 st w1.1 = w2.1 & j <= len(w1)+1 & j <= len(w2)+1 holds
   GEN(w1, the InitS of S).j = GEN(w2, the InitS of S).j
   proof
     let j;
     let w1,w2;
-    assume
-A2: w1.1 = w2.1 & j <= len(w1)+1 & j <= len(w2)+1;
+    assume that
+A2: w1.1 = w2.1 and
+A3: j <= len(w1)+1 and
+A4: j <= len(w2)+1;
     defpred P[Nat] means for w1,w2 st w1.1 = w2.1 &
     $1 <= len(w1) + 1 & $1 <= len(w2) + 1
     holds GEN(w1, the InitS of S).$1 = GEN(w2, the InitS of S).$1;
-A3: P[1]
+A5: P[1]
     proof
       let w1,w2;
       GEN(w1, the InitS of S).1 = the InitS of S by FSM_1:def 2;
       hence thesis by FSM_1:def 2;
     end;
-A4: for h being non empty Nat st P[h] holds P[h+1]
+A6: for h being non empty Nat st P[h] holds P[h+1]
     proof
       let h be non empty Nat;
       assume
-A5:   for w1,w2 st w1.1 = w2.1 & h <= len(w1)+1 & h <= len(w2)+1 holds
+A7:   for w1,w2 st w1.1 = w2.1 & h <= len(w1)+1 & h <= len(w2)+1 holds
       GEN(w1, the InitS of S).h = GEN(w2, the InitS of S).h;
       let w1,w2;
-      assume
-A6:   w1.1 = w2.1 & h+1 <= len(w1)+1 & h+1 <= len(w2)+1;
-      then
-A7:   h <= len(w1) by XREAL_1:8;
-A8:   h <= len(w1)+1 by A6,NAT_1:13;
+      assume that
+A8:   w1.1 = w2.1 and
+A9:   h+1 <= len(w1)+1 and
+A10:  h+1 <= len(w2)+1;
+A11:  h <= len(w1) by A9,XREAL_1:8;
+A12:  h <= len(w1)+1 by A9,NAT_1:13;
       1 <= h by NAT_1:14;
       then consider WI being Element of I, QI, QI1 being State of S such that
-A9:   WI = w1.h & QI = GEN(w1, the InitS of S).h &
-      QI1 = GEN(w1, the InitS of S).(h+1) &
-      WI-succ_of QI = QI1 by A7,FSM_1:def 2;
-A10:  h <= len(w2) by A6,XREAL_1:8;
-A11:  h <= len(w2)+1 by A6,NAT_1:13;
+      WI = w1.h and
+A13:  QI = GEN(w1, the InitS of S).h and
+A14:  QI1 = GEN(w1, the InitS of S).(h+1) and
+A15:  WI-succ_of QI = QI1 by A11,FSM_1:def 2;
+A16:  h <= len(w2) by A10,XREAL_1:8;
+A17:  h <= len(w2)+1 by A10,NAT_1:13;
       1 <= h by NAT_1:14;
       then consider WI2 being Element of I,
       QI2, QI12 being State of S such that
-A12:  WI2 = w2.h & QI2 = GEN(w2, the InitS of S).h &
-      QI12 = GEN(w2, the InitS of S).(h+1) &
-      WI2-succ_of QI2 = QI12 by A10,FSM_1:def 2;
-      QI = QI2 by A5,A6,A8,A9,A11,A12;
-      hence thesis by A1,A9,A12;
+      WI2 = w2.h and
+A18:  QI2 = GEN(w2, the InitS of S).h and
+A19:  QI12 = GEN(w2, the InitS of S).(h+1) and
+A20:  WI2-succ_of QI2 = QI12 by A16,FSM_1:def 2;
+      QI = QI2 by A7,A8,A12,A13,A17,A18;
+      hence thesis by A1,A14,A15,A19,A20;
     end;
-    for j being non empty Nat holds P[j] from NAT_1:sch 10(A3,A4);
-    hence thesis by A2;
+    for j being non empty Nat holds P[j] from NAT_1:sch 10(A5,A6);
+    hence thesis by A2,A3,A4;
   end;
   hence thesis by Def1;
 end;
@@ -509,31 +525,30 @@ theorem
   (the Tran of S).[q1,s] <> the InitS of S holds S is calculating_type
 proof
   let S;
-  assume
-A1: (for s1,s2,q st q<>the InitS of S holds
-  (the Tran of S).[q,s1] = (the Tran of S).[q,s2]) & for s,q1 holds
-  (the Tran of S).[q1,s] <> the InitS of S;
-A2: for j st j >= 2 holds for w1 st j <= len(w1)+1 holds
+  assume that
+A1: for s1,s2,q st q<>the InitS of S holds (the Tran of S).[q,s1] = (the
+  Tran of S).[q,s2] and
+A2: for s,q1 holds (the Tran of S).[q1,s] <> the InitS of S;
+A3: for j st j >= 2 holds for w1 st j <= len(w1)+1 holds
   GEN(w1, the InitS of S).j <> the InitS of S
   proof
     let j;
     assume j >= 2;
-    then j <> 0 & j <> 1;
+    then j <> 1;
     then
-A3: j is non trivial by NAT_2:def 1;
+A4: j is non trivial by NAT_2:def 1;
     defpred P[Nat] means for w1 st $1 <= len w1 + 1 holds
     GEN(w1, the InitS of S).$1 <> the InitS of S;
-A4: P[2]
+A5: P[2]
     proof
       let w1;
       assume 2 <= len(w1) + 1;
       then 1 + 1 <= len(w1) + 1;
       then 1 <= len(w1) by XREAL_1:8;
-      then consider WI being Element of I, QI, QI1 being State of S such that
-A5:   WI = w1.1 & QI = GEN(w1, the InitS of S).1 &
-      QI1 = GEN(w1, the InitS of S).(1+1) &
-      WI-succ_of QI = QI1 by FSM_1:def 2;
-      thus thesis by A1,A5;
+      then ex WI being Element of I, QI, QI1 being State of S st ( WI =
+w1.1)&( QI = GEN(w1, the InitS of S).1)&( QI1 = GEN(w1, the InitS of S).(1+1))&
+      ( WI-succ_of QI = QI1) by FSM_1:def 2;
+      hence thesis by A2;
     end;
 A6: for h being non trivial Nat st P[h] holds P[h+1]
     proof
@@ -545,65 +560,68 @@ A6: for h being non trivial Nat st P[h] holds P[h+1]
 A7:   h+1 <= len(w1)+1;
 A8:   1 <= h by NAT_1:14;
       h <= len(w1) by A7,XREAL_1:8;
-      then consider WI being Element of I, QI, QI1 being State of S such that
-A9:   WI = w1.h & QI = GEN(w1, the InitS of S).h &
-      QI1 = GEN(w1, the InitS of S).(h+1) &
-      WI-succ_of QI = QI1 by A8,FSM_1:def 2;
-      thus thesis by A1,A9;
+      then ex WI being Element of I, QI, QI1 being State of S st ( WI =
+w1.h)&( QI = GEN(w1, the InitS of S).h)&( QI1 = GEN(w1, the InitS of S).(h+1))&
+      ( WI-succ_of QI = QI1) by A8,FSM_1:def 2;
+      hence thesis by A2;
     end;
-    for h being non trivial Nat holds P[h] from NAT_2:sch 2(A4,A6);
-    hence thesis by A3;
+    for h being non trivial Nat holds P[h] from NAT_2:sch 2(A5,A6);
+    hence thesis by A4;
   end;
   for j holds for w1,w2 st w1.1 = w2.1 & j <= len(w1)+1 & j <= len(w2)+1 holds
   GEN(w1, the InitS of S).j = GEN(w2, the InitS of S).j
   proof
     let j;
     let w1,w2;
-    assume
-A10: w1.1 = w2.1 & j <= len(w1)+1 & j <= len(w2)+1;
+    assume that
+A9: w1.1 = w2.1 and
+A10: j <= len(w1)+1 and
+A11: j <= len(w2)+1;
     defpred P[Nat] means for w1,w2 st w1.1 = w2.1 &
     $1 <= len(w1) + 1 & $1 <= len(w2) + 1
     holds GEN(w1, the InitS of S).$1 = GEN(w2, the InitS of S).$1;
-A11: P[1]
+A12: P[1]
     proof
       let w1,w2;
       GEN(w1, the InitS of S).1 = the InitS of S by FSM_1:def 2;
       hence thesis by FSM_1:def 2;
     end;
-A12: for h being non empty Nat st P[h] holds P[h+1]
+A13: for h being non empty Nat st P[h] holds P[h+1]
     proof
       let h be non empty Nat;
       assume
-A13:  for w1,w2 st w1.1 = w2.1 & h <= len(w1)+1 & h <= len(w2)+1 holds
+A14:  for w1,w2 st w1.1 = w2.1 & h <= len(w1)+1 & h <= len(w2)+1 holds
       GEN(w1, the InitS of S).h = GEN(w2, the InitS of S).h;
       let w1,w2;
-      assume
-A14:  w1.1 = w2.1 & h+1 <= len(w1)+1 & h+1 <= len(w2)+1;
-      then
-A15:  h <= len(w1) by XREAL_1:8;
-A16:  h <= len(w1)+1 by A14,NAT_1:13;
-A17:  1 <= h by NAT_1:14;
+      assume that
+A15:  w1.1 = w2.1 and
+A16:  h+1 <= len(w1)+1 and
+A17:  h+1 <= len(w2)+1;
+A18:  h <= len(w1) by A16,XREAL_1:8;
+A19:  h <= len(w1)+1 by A16,NAT_1:13;
+A20:  1 <= h by NAT_1:14;
       then consider WI being Element of I, QI, QI1 being State of S such that
-A18:  WI = w1.h & QI = GEN(w1, the InitS of S).h &
-      QI1 = GEN(w1, the InitS of S).(h+1) &
-      WI-succ_of QI = QI1 by A15,FSM_1:def 2;
-A19:  h <= len(w2) by A14,XREAL_1:8;
-A20:  h <= len(w2)+1 by A14,NAT_1:13;
+A21:  WI = w1.h and
+A22:  QI = GEN(w1, the InitS of S).h and
+A23:  QI1 = GEN(w1, the InitS of S).(h+1) and
+A24:  WI-succ_of QI = QI1 by A18,FSM_1:def 2;
+A25:  h <= len(w2) by A17,XREAL_1:8;
+A26:  h <= len(w2)+1 by A17,NAT_1:13;
       1 <= h by NAT_1:14;
       then consider WI2 being Element of I,
       QI2, QI12 being State of S such that
-A21:  WI2 = w2.h & QI2 = GEN(w2, the InitS of S).h &
-      QI12 = GEN(w2, the InitS of S).(h+1) &
-      WI2-succ_of QI2 = QI12 by A19,FSM_1:def 2;
-A22:  QI = QI2 by A13,A14,A16,A18,A20,A21;
-X:    h in NAT by ORDINAL1:def 13;
-      h = 1 or h > 1 by A17,XXREAL_0:1;
+A27:  WI2 = w2.h and
+A28:  QI2 = GEN(w2, the InitS of S).h and
+A29:  QI12 = GEN(w2, the InitS of S).(h+1) and
+A30:  WI2-succ_of QI2 = QI12 by A25,FSM_1:def 2;
+A31:  QI = QI2 by A14,A15,A19,A22,A26,A28;
+A32:  h in NAT by ORDINAL1:def 13;
+      h = 1 or h > 1 by A20,XXREAL_0:1;
       then h = 1 or h >= 1 + 1 by NAT_1:13;
-      then WI = WI2 or QI <> the InitS of S by A2,A14,A16,A18,A21,X;
-      hence thesis by A1,A18,A21,A22;
+      hence thesis by A1,A3,A15,A19,A21,A22,A23,A24,A27,A29,A30,A31,A32;
     end;
-    for j being non empty Nat holds P[j] from NAT_1:sch 10(A11,A12);
-    hence thesis by A10;
+    for j being non empty Nat holds P[j] from NAT_1:sch 10(A12,A13);
+    hence thesis by A9,A10,A11;
   end;
   hence thesis by Def1;
 end;
@@ -612,81 +630,83 @@ theorem Th14:
   S is regular & S is calculating_type implies
   for s1, s2, q st q<>the InitS of S holds GEN(<*s1*>,q).2 = GEN(<*s2*>,q).2
 proof
-  assume
-A1: S is regular & S is calculating_type;
+  assume that
+A1: S is regular and
+A2: S is calculating_type;
   let s1, s2, q;
   assume
-A2: q<>the InitS of S;
+A3: q<>the InitS of S;
   q is accessible by A1,Def4;
   then consider w such that
-A3: the InitS of S,w-leads_to q by Def3;
+A4: the InitS of S,w-leads_to q by Def3;
   w <> {}
   proof
     assume w = {};
     then len w = 0;
     then GEN(w, the InitS of S).(len w+1) = the InitS of S by FSM_1:def 2;
-    hence contradiction by A2,A3,FSM_1:def 3;
+    hence contradiction by A3,A4,FSM_1:def 3;
   end;
   then consider x being Element of I, w' being FinSequence of I such that
-A4: w.1 = x & w = <*x*>^w' by FINSEQ_3:111;
+  w.1 = x and
+A5: w = <*x*>^w' by FINSEQ_3:111;
   set w1 = w^<*s1*>, w2 = w^<*s2*>;
   len <*x*> = 1 by FINSEQ_1:56;
   then len <*x*> + len w' >= 1 by NAT_1:11;
-  then len w >= 1 by A4,FINSEQ_1:35;
+  then len w >= 1 by A5,FINSEQ_1:35;
   then
-A5: 1 in dom w by FINSEQ_3:27;
+A6: 1 in dom w by FINSEQ_3:27;
   then w.1 = w1.1 by FINSEQ_1:def 7;
   then
-A6: w1.1 = w2.1 by A5,FINSEQ_1:def 7;
-A7: len <*s1*> = 1 by FINSEQ_1:56;
+A7: w1.1 = w2.1 by A6,FINSEQ_1:def 7;
+A8: len <*s1*> = 1 by FINSEQ_1:56;
   then
-A8: len w1 = len w + 1 by FINSEQ_1:35;
-A9: len <*s2*> = 1 by FINSEQ_1:56;
+A9: len w1 = len w + 1 by FINSEQ_1:35;
+A10: len <*s2*> = 1 by FINSEQ_1:56;
   then
-A10: len w2 = len w + 1 by FINSEQ_1:35;
-A11: len w1 = len w2 by A8,A9,FINSEQ_1:35;
+A11: len w2 = len w + 1 by FINSEQ_1:35;
+A12: len w1 = len w2 by A9,A10,FINSEQ_1:35;
   set p = Del(GEN(w, the InitS of S), len w + 1);
   set p1 = GEN(<*s1*>, q);
-A12: GEN(w1, the InitS of S) = p^p1 by A3,FSM_1:23;
-A13: len(GEN(w, the InitS of S)) = len w + 1 by FSM_1:def 2;
+A13: GEN(w1, the InitS of S) = p^p1 by A4,FSM_1:23;
+A14: len(GEN(w, the InitS of S)) = len w + 1 by FSM_1:def 2;
   then
-A14: len p = len w by MATRLIN:3;
-A15: len p1 = len(<*s1*>) + 1 by FSM_1:def 2
+A15: len p = len w by PRE_POLY:12;
+A16: len p1 = len(<*s1*>) + 1 by FSM_1:def 2
     .= 1 + 1 by FINSEQ_1:56;
-A16: len(GEN(w1, the InitS of S)) = len(p^p1) by A3,FSM_1:23
+A17: len(GEN(w1, the InitS of S)) = len(p^p1) by A4,FSM_1:23
     .= len p + len p1 by FINSEQ_1:35
-    .= len w + (1 + 1) by A13,A15,MATRLIN:3
+    .= len w + (1 + 1) by A14,A16,PRE_POLY:12
     .= (len w + 1) + 1
-    .= len w1 + 1 by A7,FINSEQ_1:35;
-A17: len p + 1 <= len w1 + 1 by A8,A14,NAT_1:11;
-  len(p^p1) = len w1 + 1 by A3,A16,FSM_1:23;
+    .= len w1 + 1 by A8,FINSEQ_1:35;
+A18: len p + 1 <= len w1 + 1 by A9,A15,NAT_1:11;
+  len(p^p1) = len w1 + 1 by A4,A17,FSM_1:23;
   then len p + len p1 = len w1 + 1 by FINSEQ_1:35;
   then
-A18: GEN(w1,the InitS of S).(len w1 + 1)=p1.((len w1 + 1) - len p)
-  by A12,A17,FINSEQ_1:36
-    .= p1.((len w1 + 1) - len w) by A13,MATRLIN:3
-    .= p1.((len w + 1 + 1) - len w) by A7,FINSEQ_1:35
+A19: GEN(w1,the InitS of S).(len w1 + 1)=p1.((len w1 + 1) - len p)
+  by A13,A18,FINSEQ_1:36
+    .= p1.((len w1 + 1) - len w) by A14,PRE_POLY:12
+    .= p1.((len w + 1 + 1) - len w) by A8,FINSEQ_1:35
     .= p1.2;
   set p2 = GEN(<*s2*>, q);
-A19: GEN(w2, the InitS of S) = p^p2 by A3,FSM_1:23;
-A20: len p2 = len(<*s2*>) + 1 by FSM_1:def 2
+A20: GEN(w2, the InitS of S) = p^p2 by A4,FSM_1:23;
+A21: len p2 = len(<*s2*>) + 1 by FSM_1:def 2
     .= 1 + 1 by FINSEQ_1:56;
-A21: len(GEN(w2, the InitS of S)) = len(p^p2) by A3,FSM_1:23
+A22: len(GEN(w2, the InitS of S)) = len(p^p2) by A4,FSM_1:23
     .= len p + len p2 by FINSEQ_1:35
-    .= len w + (1 + 1) by A13,A20,MATRLIN:3
+    .= len w + (1 + 1) by A14,A21,PRE_POLY:12
     .= (len w + 1) + 1
-    .= len w2 + 1 by A9,FINSEQ_1:35;
-  len w + 1 <= len w2 + 1 by A10,NAT_1:11;
+    .= len w2 + 1 by A10,FINSEQ_1:35;
+  len w + 1 <= len w2 + 1 by A11,NAT_1:11;
   then
-A22: len p + 1 <= len w2 + 1 by A13,MATRLIN:3;
-  len(p^p2) = len w2 + 1 by A3,A21,FSM_1:23;
+A23: len p + 1 <= len w2 + 1 by A14,PRE_POLY:12;
+  len(p^p2) = len w2 + 1 by A4,A22,FSM_1:23;
   then len w2 + 1 <= len p + len p2 by FINSEQ_1:35;
   then GEN(w2,the InitS of S).(len w2 + 1)=p2.((len w2 + 1) - len p)
-  by A19,A22,FINSEQ_1:36
-    .= p2.((len w2 + 1) - len w) by A13,MATRLIN:3
-    .= p2.((len w + 1 + 1) - len w) by A9,FINSEQ_1:35
+  by A20,A23,FINSEQ_1:36
+    .= p2.((len w2 + 1) - len w) by A14,PRE_POLY:12
+    .= p2.((len w + 1 + 1) - len w) by A10,FINSEQ_1:35
     .= p2.2;
-  hence thesis by A1,A6,A11,A18,Def1;
+  hence thesis by A2,A7,A12,A19,Def1;
 end;
 
 theorem
@@ -694,29 +714,34 @@ theorem
   for s1, s2, q st q<>the InitS of S holds
   (the Tran of S).[q,s1] = (the Tran of S).[q,s2]
 proof
-  assume
-A1: S is regular & S is calculating_type;
+  assume that
+A1: S is regular and
+A2: S is calculating_type;
   let s1, s2, q;
   assume
-A2: q<>the InitS of S;
+A3: q<>the InitS of S;
   set w1=<*s1*>;
   set w2=<*s2*>;
-A3: len w1 = 0+1 by FINSEQ_1:56;
+A4: len w1 = 0+1 by FINSEQ_1:56;
   reconsider j = len w1 as non empty Element of NAT;
   consider WI being Element of I, QI, QI1 being State of S such that
-A4: WI = w1.j & QI = GEN(w1, q).j & QI1 = GEN(w1, q).(j+1) &
-  WI-succ_of QI = QI1 by A3,FSM_1:def 2;
-  WI = s1 by A3,A4,FINSEQ_1:def 8;
+A5: WI = w1.j and
+A6: QI = GEN(w1, q).j and
+A7: QI1 = GEN(w1, q).(j+1) and
+A8: WI-succ_of QI = QI1 by A4,FSM_1:def 2;
+  WI = s1 by A4,A5,FINSEQ_1:def 8;
   then
-A5: QI1 = s1-succ_of q by A3,A4,FSM_1:def 2;
-A6: len w2 = 0+1 by FINSEQ_1:56;
+A9: QI1 = s1-succ_of q by A4,A6,A8,FSM_1:def 2;
+A10: len w2 = 0+1 by FINSEQ_1:56;
   reconsider h = len w2 as non empty Element of NAT;
   consider WI2 being Element of I, QI2, QI12 being State of S such that
-A7: WI2 = w2.h & QI2 = GEN(w2, q).h & QI12 = GEN(w2, q).(h+1) &
-  WI2-succ_of QI2 = QI12 by A6,FSM_1:def 2;
-A8: QI2 = q by A6,A7,FSM_1:def 2;
-  WI2 = s2 by A6,A7,FINSEQ_1:def 8;
-  hence thesis by A1,A2,A3,A4,A5,A6,A7,A8,Th14;
+A11: WI2 = w2.h and
+A12: QI2 = GEN(w2, q).h and
+A13: QI12 = GEN(w2, q).(h+1) and
+A14: WI2-succ_of QI2 = QI12 by A10,FSM_1:def 2;
+A15: QI2 = q by A10,A12,FSM_1:def 2;
+  WI2 = s2 by A10,A11,FINSEQ_1:def 8;
+  hence thesis by A1,A2,A3,A4,A7,A9,A10,A13,A14,A15,Th14;
 end;
 
 theorem
@@ -725,70 +750,75 @@ theorem
   (the Tran of S).[the InitS of S,s2] holds
   (the Tran of S).[q,s] <> the InitS of S
 proof
-  assume
-A1: S is regular & S is calculating_type;
+  assume that
+A1: S is regular and
+A2: S is calculating_type;
   let s, s1, s2, q;
   assume
-A2: (the Tran of S).[the InitS of S,s1] <>
+A3: (the Tran of S).[the InitS of S,s1] <>
   (the Tran of S).[the InitS of S,s2];
   q is accessible by A1,Def4;
   then consider w such that
-A3: the InitS of S, w-leads_to q by Def3;
-A4: GEN(w, the InitS of S).(len w + 1) = q by A3,FSM_1:def 3;
+A4: the InitS of S, w-leads_to q by Def3;
+A5: GEN(w, the InitS of S).(len w + 1) = q by A4,FSM_1:def 3;
   assume
-A5: (the Tran of S).[q,s]=the InitS of S;
+A6: (the Tran of S).[q,s]=the InitS of S;
   reconsider w1 = <*s,s1*>, w2 = <*s,s2*> as FinSequence of I;
-A6: GEN(w1,q) = <* q, the InitS of S,
-  (the Tran of S).[the InitS of S,s1] *> by A5,Th2;
-  GEN(w2,q) = <* q, the InitS of S,
-  (the Tran of S).[the InitS of S,s2] *> by A5,Th2;
-  then
-A7: GEN(w1, q).3 = (the Tran of S).[the InitS of S,s1] &
-  GEN(w2, q).3 = (the Tran of S).[the InitS of S,s2] by A6,FINSEQ_1:62;
-A8: len w1 = 2 & len w2 = 2 by FINSEQ_1:61;
-  then 1 <= 3 & 3 <= len w1 +1 & 3 <= len w2+1;
-  then
-A9: GEN(w^w1, the InitS of S).(len w+3)
-  = (the Tran of S).[the InitS of S,s1] & GEN(w^w2, the InitS of S).(len w+3)
-  = (the Tran of S).[the InitS of S,s2] by A3,A7,FSM_1:22;
+A7: GEN(w1,q) = <* q, the InitS of S,
+  (the Tran of S).[the InitS of S,s1] *> by A6,Th2;
+A8: GEN(w2,q) = <* q, the InitS of S,
+  (the Tran of S).[the InitS of S,s2] *> by A6,Th2;
+A9: GEN(w1, q).3 = (the Tran of S).[the InitS of S,s1] by A7,FINSEQ_1:62;
+A10: GEN(w2, q).3 = (the Tran of S).[the InitS of S,s2] by A8,FINSEQ_1:62;
+A11: len w1 = 2 by FINSEQ_1:61;
+A12: len w2 = 2 by FINSEQ_1:61;
+A13: 3 <= len w1 +1 by A11;
+A14: 3 <= len w2+1 by A12;
+A15: GEN(w^w1, the InitS of S).(len w+3) = (the Tran of S).[the InitS of S,
+  s1] by A4,A9,A13,FSM_1:22;
+A16: GEN(w^w2, the InitS of S).(len w+3) = (the Tran of S).[the InitS of S,
+  s2] by A4,A10,A14,FSM_1:22;
   per cases;
   suppose w = {};
     then
-A10: len w = 0;
-A11: GEN(w1, the InitS of S) = <* the InitS of S,
-    (the Tran of S).[the InitS of S,s],
-    (the Tran of S).[(the Tran of S).[the InitS of S,s], s1]*> &
-    GEN(w2, the InitS of S) = <* the InitS of S,
-    (the Tran of S).[the InitS of S,s],
-    (the Tran of S).[(the Tran of S).[the InitS of S,s], s2]*> by Th2;
-A12: w1.1 = s & w2.1 = s by FINSEQ_1:61;
-A13: 3 <= len w1 + 1 & 3 <= len w2 + 1 by A8;
-A14: GEN(w1, the InitS of S).3 =
+A17: len w = 0;
+A18: GEN(w1, the InitS of S) = <* the InitS of S, (the Tran of S).[the InitS
+    of S,s], (the Tran of S).[(the Tran of S).[the InitS of S,s], s1]*> by Th2;
+A19: GEN(w2, the InitS of S) = <* the InitS of S, (the Tran of S).[the InitS
+    of S,s], (the Tran of S).[(the Tran of S).[the InitS of S,s], s2]*> by Th2;
+A20: w1.1 = s by FINSEQ_1:61;
+A21: w2.1 = s by FINSEQ_1:61;
+A22: 3 <= len w1 + 1 by A11;
+A23: 3 <= len w2 + 1 by A12;
+A24: GEN(w1, the InitS of S).3 =
     (the Tran of S).[(the Tran of S).[the InitS of S,s], s1]
-    by A11,FINSEQ_1:62
+    by A18,FINSEQ_1:62
       .= (the Tran of S).[the InitS of S, s1]
-    by A4,A5,A10,FSM_1:def 2;
+    by A5,A6,A17,FSM_1:def 2;
     GEN(w2, the InitS of S).3 =
     (the Tran of S).[(the Tran of S).[the InitS of S,s], s2]
-    by A11,FINSEQ_1:62
+    by A19,FINSEQ_1:62
       .= (the Tran of S).[the InitS of S, s2]
-    by A4,A5,A10,FSM_1:def 2;
-    hence contradiction by A1,A2,A12,A13,A14,Def1;
+    by A5,A6,A17,FSM_1:def 2;
+    hence contradiction by A2,A3,A20,A21,A22,A23,A24,Def1;
   end;
   suppose w <> {};
     then consider s' being set, w' being FinSequence such that
-A15: w = <*s'*>^w' & len w = len w'+1 by REWRITE1:5;
+A25: w = <*s'*>^w'
+    and len w = len w'+1 by REWRITE1:5;
     dom <*s'*> = Seg 1 by FINSEQ_1:def 8;
     then
-A16: 1 in dom <*s'*> by FINSEQ_1:3;
+A26: 1 in dom <*s'*> by FINSEQ_1:3;
     then
-A17: w.1 = <*s'*>.1 by A15,FINSEQ_1:def 7
+A27: w.1 = <*s'*>.1 by A25,FINSEQ_1:def 7
       .= s' by FINSEQ_1:def 8;
-    dom <*s'*> c= dom w by A15,FINSEQ_1:39;
+A28: dom <*s'*> c= dom w by A25,FINSEQ_1:39;
     then
-A18: (w^w1).1 = s' & (w^w2).1 = s' by A16,A17,FINSEQ_1:def 7;
-    len(w^w1)+1 = (len w+2)+1 & len(w^w2)+1 = (len w+2)+1 by A8,FINSEQ_1:35;
-    hence contradiction by A1,A2,A9,A18,Def1;
+A29: (w^w1).1 = s' by A26,A27,FINSEQ_1:def 7;
+A30: (w^w2).1 = s' by A26,A27,A28,FINSEQ_1:def 7;
+A31: len(w^w1)+1 = (len w+2)+1 by A11,FINSEQ_1:35;
+    len(w^w2)+1 = (len w+2)+1 by A12,FINSEQ_1:35;
+    hence contradiction by A2,A3,A15,A16,A29,A30,A31,Def1;
   end;
 end;
 
@@ -881,7 +911,7 @@ proof
   assume
 A1: 1 < j;
   set M = I-TwoStatesMooreSM(i,f,o);
-A2: the InitS of M = i & the carrier of M = {i, f} by Def7;
+A2: the carrier of M = {i, f} by Def7;
 A3: the Tran of M = [:{i, f}, I:] --> f by Def7;
   defpred P[Nat] means $1 <= len w + 1 implies
   GEN(w, the InitS of I-TwoStatesMooreSM(i,f,o)).$1 = f;
@@ -890,26 +920,27 @@ A4: P[2]
     assume 2 <= len w + 1;
     then 1+1 <= len w+1;
     then 1 < len w+1 by NAT_1:13;
-    then 1 <= 1 & 1 <= len w by NAT_1:13;
-    then consider WI being Element of I, QI, QI1 being State of M such that
-A5: WI = w.1 & QI = GEN(w, the InitS of M).1 &
-    QI1 = GEN(w, the InitS of M).(1+1) & WI-succ_of QI = QI1 by FSM_1:def 2;
-    thus thesis by A2,A3,A5,FUNCOP_1:13;
+    then 1 <= len w by NAT_1:13;
+    then ex WI being Element of I, QI, QI1 being State of M st ( WI
+= w.1)&( QI = GEN(w, the InitS of M).1)&( QI1 = GEN(w, the InitS of M).(1+1))&(
+    WI-succ_of QI = QI1) by FSM_1:def 2;
+    hence thesis by A2,A3,FUNCOP_1:13;
   end;
-A6: for k be non trivial Nat st P[k] holds P[k+1]
+A5: for k be non trivial Nat st P[k] holds P[k+1]
   proof
     let k be non trivial Nat;
     assume that k <= len w + 1 implies GEN(w, the InitS of M).k = f and
-A7: k+1 <= len w + 1;
-    1 <= k & k <= len w by A7,NAT_2:21,XREAL_1:8;
-    then consider WI being Element of I, QI, QI1 being State of M such that
-A8: WI = w.k & QI = GEN(w, the InitS of M).k &
-    QI1 = GEN(w, the InitS of M).(k+1) & WI-succ_of QI = QI1 by FSM_1:def 2;
-    thus thesis by A2,A3,A8,FUNCOP_1:13;
+A6: k+1 <= len w + 1;
+A7: 1 <= k by NAT_2:21;
+    k <= len w by A6,XREAL_1:8;
+    then ex WI being Element of I, QI, QI1 being State of M st ( WI
+= w.k)&( QI = GEN(w, the InitS of M).k)&( QI1 = GEN(w, the InitS of M).(k+1))&(
+    WI-succ_of QI = QI1) by A7,FSM_1:def 2;
+    hence thesis by A2,A3,FUNCOP_1:13;
   end;
-A9: j is non trivial Nat by A1,NAT_2:def 1;
-  for k be non trivial Nat holds P[k] from NAT_2:sch 2(A4,A6);
-  hence thesis by A9;
+A8: j is non trivial Nat by A1,NAT_2:def 1;
+  for k be non trivial Nat holds P[k] from NAT_2:sch 2(A4,A5);
+  hence thesis by A8;
 end;
 
 registration
@@ -924,24 +955,26 @@ registration
     GEN(w1, the InitS of M) = GEN(w2, the InitS of M)
     proof
       let w1,w2;
-      assume
-A1:   w1.1 = w2.1 & len w1 = len w2;
+      assume that
+      w1.1 = w2.1 and
+A1:   len w1 = len w2;
       reconsider p = GEN(w1, the InitS of M),
       q = GEN(w2, the InitS of M) as FinSequence;
 A2:   p.1 = the InitS of M by FSM_1:def 2
         .= q.1 by FSM_1:def 2;
-A3:   len p = len w1 + 1 & len q = len w1 + 1 by A1,FSM_1:def 2;
+A3:   len p = len w1 + 1 by FSM_1:def 2;
+A4:   len q = len w1 + 1 by A1,FSM_1:def 2;
       now
         let j be Nat;
         assume
-A4:     1 <= j;
+A5:     1 <= j;
 A6:     j in NAT by ORDINAL1:def 13;
-        j = 1 or j > 1 by A4,XXREAL_0:1;
+        j = 1 or j > 1 by A5,XXREAL_0:1;
         then p.j = q.j or (j <= len p implies p.j = f & q.j = f)
         by A1,A2,A3,A6,Th17;
         hence j <= len p implies p.j = q.j;
       end;
-      hence thesis by A3,FINSEQ_1:18;
+      hence thesis by A3,A4,FINSEQ_1:18;
     end;
     hence thesis by Th7;
   end;
@@ -956,14 +989,13 @@ registration
   proof
     let s;
     {i,f} = the carrier of I-TwoStatesMooreSM(i,f,o) by Def7;
-
 then reconsider q = f as State of I-TwoStatesMooreSM(i,f,o) by TARSKI:def 2;
     take q;
     thus q is_accessible_via s
     proof
       take w = <*> I;
       <*s*>^w = <*s*> by FINSEQ_1:47;
-      then len (<*s*>^w) = 1 & 1 <= 1 by FINSEQ_1:56;
+      then len (<*s*>^w) = 1 by FINSEQ_1:56;
       hence GEN(<*s*>^w,
       the InitS of I-TwoStatesMooreSM(i,f,o)).(len (<*s*>^w)+1) = q by Th17;
     end;
@@ -977,76 +1009,80 @@ reserve n, m, o, p for non empty Element of NAT,
   q for State of M;
 
 theorem Th18:
-  M is calculating_type & s leads_to_final_state_of M &
-  not the InitS of M in the FinalS of M implies
+  M is calculating_type & s leads_to_final_state_of M
+  implies
   ex m being non empty Element of NAT st
   (for w st len w+1 >= m & w.1 = s holds
   GEN(w, the InitS of M).m in the FinalS of M) &
-  (for w,j st j <= len w +1 & w.1 = s & j < m holds
-  not GEN(w, the InitS of M).j in the FinalS of M)
+  for w,j st j <= len w +1 & w.1 = s & j < m holds
+  not GEN(w, the InitS of M).j in the FinalS of M
 proof
   assume
 A1: M is calculating_type;
   given q such that
-A2: q is_accessible_via s & q in the FinalS of M;
+A2: q is_accessible_via s and
+A3: q in the FinalS of M;
   consider w such that
-A3: the InitS of M,<*s*>^w-leads_to q by A2,Def2;
-  assume not the InitS of M in the FinalS of M;
+A4: the InitS of M,<*s*>^w-leads_to q by A2,Def2;
   defpred P[Nat] means GEN(<*s*>^w, the InitS of M).$1 in the FinalS of M &
   $1 >= 1 & $1 <= len(<*s*>^w)+1;
-  len(<*s*>^w)+1 >= 1 & q = GEN(<*s*>^w, the InitS of M).(len(<*s*>^w)+1 )
-  by A3,FSM_1:def 3,NAT_1:11;
+A5: len(<*s*>^w)+1 >= 1 by NAT_1:11;
+  q = GEN(<*s*>^w, the InitS of M).(len(<*s*>^w)+1 ) by A4,FSM_1:def 3;
   then
-A4: ex m being Nat st P[m] by A2;
+A6: ex m being Nat st P[m] by A3,A5;
   consider m being Nat such that
-A5: P[m] and
-A6: for k being Nat st P[k] holds m <= k from NAT_1:sch 5(A4);
-  reconsider m as non empty Element of NAT by A5,ORDINAL1:def 13;
+A7: P[m] and
+A8: for k being Nat st P[k] holds m <= k from NAT_1:sch 5(A6);
+  reconsider m as non empty Element of NAT by A7,ORDINAL1:def 13;
   take m;
   hereby
     let w1 such that
-A7: len w1+1 >= m & w1.1 = s;
+A9: len w1+1 >= m and
+A10: w1.1 = s;
     (<*s*>^w).1 = s by FINSEQ_1:58;
     then GEN(w1, the InitS of M), GEN(<*s*>^w, the InitS of M)
-    are_c=-comparable by A1,A7,Th4;
+    are_c=-comparable by A1,A10,Th4;
     then
-A8: GEN(w1, the InitS of M) c= GEN(<*s*>^w, the InitS of M) or
+A11: GEN(w1, the InitS of M) c= GEN(<*s*>^w, the InitS of M) or
     GEN(<*s*>^w, the InitS of M) c= GEN(w1, the InitS of M) by XBOOLE_0:def 9;
-A9: dom(GEN(<*s*>^w, the InitS of M))
+A12: dom(GEN(<*s*>^w, the InitS of M))
     = Seg(len GEN(<*s*>^w, the InitS of M)) by FINSEQ_1:def 3
       .= Seg(len(<*s*>^w)+1) by FSM_1:def 2;
-    dom(GEN(w1, the InitS of M))
+A13: dom(GEN(w1, the InitS of M))
     = Seg(len GEN(w1, the InitS of M)) by FINSEQ_1:def 3
       .= Seg(len w1 + 1) by FSM_1:def 2;
-    then m in dom GEN(<*s*>^w, the InitS of M) &
-    m in dom GEN(w1, the InitS of M) by A5,A7,A9,FINSEQ_1:3;
-    hence GEN(w1, the InitS of M).m in the FinalS of M by A5,A8,GRFUNC_1:8;
+A14: m in dom GEN(<*s*>^w, the InitS of M) by A7,A12,FINSEQ_1:3;
+    m in dom GEN(w1, the InitS of M) by A7,A9,A13,FINSEQ_1:3;
+    hence GEN(w1, the InitS of M).m in the FinalS of M by A7,A11,A14,GRFUNC_1:8
+;
   end;
   let w1;
   let i;
-  assume
-A10: i <= len w1 + 1 & w1.1 = s & i < m;
+  assume that
+A15: i <= len w1 + 1 and
+A16: w1.1 = s and
+A17: i < m;
   (<*s*>^w).1 = s by FINSEQ_1:58;
   then GEN(w1, the InitS of M), GEN(<*s*>^w, the InitS of M) are_c=-comparable
-  by A1,A10,Th4;
+  by A1,A16,Th4;
   then
-A11: GEN(w1, the InitS of M) c= GEN(<*s*>^w, the InitS of M) or
+A18: GEN(w1, the InitS of M) c= GEN(<*s*>^w, the InitS of M) or
   GEN(<*s*>^w, the InitS of M) c= GEN(w1, the InitS of M) by XBOOLE_0:def 9;
-A12: 1 <= i & i <= len(<*s*>^w)+1 & i <= len w1 + 1
-  by A5,A10,NAT_1:14,XXREAL_0:2;
-A13: dom GEN(w1, the InitS of M)
+A19: 1 <= i by NAT_1:14;
+A20: i <= len(<*s*>^w)+1 by A7,A17,XXREAL_0:2;
+A21: dom GEN(w1, the InitS of M)
   = Seg(len GEN(w1, the InitS of M)) by FINSEQ_1:def 3
     .= Seg(len w1 + 1) by FSM_1:def 2;
   dom GEN(<*s*>^w, the InitS of M)
   = Seg(len GEN(<*s*>^w, the InitS of M)) by FINSEQ_1:def 3
     .= Seg(len(<*s*>^w)+1) by FSM_1:def 2;
   then
-A14: i in dom GEN(<*s*>^w, the InitS of M) & i in dom GEN(w1, the InitS of M)
-  by A12,A13,FINSEQ_1:3;
+A22: i in dom GEN(<*s*>^w, the InitS of M) by A19,A20,FINSEQ_1:3;
+A23: i in dom GEN(w1, the InitS of M) by A15,A19,A21,FINSEQ_1:3;
   assume GEN(w1, the InitS of M).i in the FinalS of M;
   then GEN(<*s*>^w, the InitS of M).i in the FinalS of M
-  by A11,A14,GRFUNC_1:8;
-  hence thesis by A6,A10,A12;
+  by A18,A22,A23,GRFUNC_1:8;
+  hence thesis by A8,A17,A19,A20;
 end;
 
 begin :: Correctness of a result of state machine
@@ -1063,7 +1099,7 @@ definition
   not GEN(w, the InitS of M).n in the FinalS of M;
 end;
 
-theorem Th19:
+theorem
   the InitS of M in the FinalS of M implies
   (the OFun of M).the InitS of M is_result_of s, M
 proof
@@ -1076,46 +1112,47 @@ A1: the InitS of M in the FinalS of M;
 end;
 
 theorem Th20:
-  M is calculating_type & s leads_to_final_state_of M &
-  not the InitS of M in the FinalS of M implies ex t st t is_result_of s, M
+  M is calculating_type & s leads_to_final_state_of M
+  implies ex t st t is_result_of s, M
 proof
-  assume
-A1: M is calculating_type & s leads_to_final_state_of M &
-  not the InitS of M in the FinalS of M;
-  then consider q such that
-A2: q is_accessible_via s & q in the FinalS of M by Def5;
+  assume that
+A1: M is calculating_type and
+A2: s leads_to_final_state_of M;
+  consider q such that
+A3: q is_accessible_via s and
+A4: q in the FinalS of M by A2,Def5;
   consider w such that
-A3: the InitS of M,<*s*>^w-leads_to q by A2,Def2;
-A4: GEN(<*s*>^w, the InitS of M).(len(<*s*>^w)+1) = q by A3,FSM_1:def 3;
+A5: the InitS of M,<*s*>^w-leads_to q by A3,Def2;
+A6: GEN(<*s*>^w, the InitS of M).(len(<*s*>^w)+1) = q by A5,FSM_1:def 3;
   consider m being non empty Element of NAT such that
-A5: (for w st len w+1 >= m & w.1 = s holds
-  GEN(w, the InitS of M).m in the FinalS of M) &
-  (for w,j st j <= len w +1 & w.1 = s & j < m holds
-  not GEN(w, the InitS of M).j in the FinalS of M) by A1,Th18;
-A6: len(<*s*>^w)+1 is non empty &
-  (<*s*>^w).1 = s & len(<*s*>^w)+1 <= len(<*s*>^w)+1 by FINSEQ_1:58;
+A7: for w st len w+1 >= m & w.1 = s holds GEN(w, the InitS of M).m in the
+  FinalS of M and
+A8: for w,j st j <= len w +1 & w.1 = s & j < m holds not GEN(w, the
+  InitS of M).j in the FinalS of M
+  by A1,A2,Th18;
+A9: (<*s*>^w).1 = s by FINSEQ_1:58;
   then
-A7: len(<*s*>^w)+1 >= m by A2,A4,A5;
-  then GEN(<*s*>^w, the InitS of M).m in the FinalS of M by A5,A6;
+A10: len(<*s*>^w)+1 >= m by A4,A6,A8;
+  then GEN(<*s*>^w, the InitS of M).m in the FinalS of M by A7,A9;
   then reconsider t = (the OFun of M).(GEN(<*s*>^w, the InitS of M).m)
   as Element of O by FUNCT_2:7;
   take t, m;
   let w1 such that
-A8: w1.1=s;
+A11: w1.1=s;
   (<*s*>^w).1 = s by FINSEQ_1:58;
   hence m <= len w1+1 implies
   t = (the OFun of M).(GEN(w1, the InitS of M).m) &
-  GEN(w1, the InitS of M).m in the FinalS of M by A1,A5,A7,A8,Def1;
-  thus thesis by A5,A8;
+  GEN(w1, the InitS of M).m in the FinalS of M by A1,A7,A10,A11,Def1;
+  thus thesis by A8,A11;
 end;
 
 theorem Th21:
-  M is calculating_type & s leads_to_final_state_of M implies
+  s leads_to_final_state_of M implies
   for t1, t2 being Element of O st t1 is_result_of s, M & t2 is_result_of s, M
   holds t1 = t2
 proof
-  assume
-A1: M is calculating_type & s leads_to_final_state_of M;
+  assume that
+A1: s leads_to_final_state_of M;
   let t1, t2 being Element of O;
   given m such that
 A2: for w1 st w1.1=s holds (m <= len w1+1 implies
@@ -1130,25 +1167,23 @@ A3: for w2 st w2.1=s holds (o <= len w2+1 implies
   for p st p < o & p <= len w2+1 holds
   not GEN(w2, the InitS of M).p in the FinalS of M;
   consider q being State of M such that
-A4: q is_accessible_via s & q in the FinalS of M by A1,Def5;
+A4: q is_accessible_via s and
+A5: q in the FinalS of M by A1,Def5;
   consider w being FinSequence of I such that
-A5: the InitS of M,<*s*>^w-leads_to q by A4,Def2;
+A6: the InitS of M,<*s*>^w-leads_to q by A4,Def2;
   set w1 = <*s*>^w;
-A6: GEN(w1, the InitS of M).(len w1+1) = q by A5,FSM_1:def 3;
-  len(<*s*>^w)+1 is non empty & (<*s*>^w).1 = s by FINSEQ_1:58;
+A7: GEN(w1, the InitS of M).(len w1+1) = q by A6,FSM_1:def 3;
+A8: (<*s*>^w).1 = s by FINSEQ_1:58;
   then
-A7: len(<*s*>^w)+1 >= m & o <= len w1+1 by A2,A3,A4,A6;
-A8: o < m or o = m or o > m by XXREAL_0:1;
-  w1.1 = s by FINSEQ_1:58;
-  then t1 = (the OFun of M).(GEN(w1, the InitS of M).m) &
-  GEN(w1, the InitS of M).m in the FinalS of M &
-  t2 = (the OFun of M).(GEN(w1, the InitS of M).o) &
-  GEN(w1, the InitS of M).o in the FinalS of M &
-  (for n st n < m & n <= len w1+1 holds
-  not GEN(w1, the InitS of M).n in the FinalS of M) &
-  for n st n < o & n <= len w1+1 holds
-  not GEN(w1, the InitS of M).n in the FinalS of M by A2,A3,A7;
-  hence thesis by A7,A8;
+A9: len(<*s*>^w)+1 >= m by A2,A5,A7;
+A10: o <= len w1+1 by A3,A5,A7,A8;
+A11: o < m or o = m or o > m by XXREAL_0:1;
+A12: w1.1 = s by FINSEQ_1:58;
+  then
+A13: t1 = (the OFun of M).(GEN(w1, the InitS of M).m) by A2,A9;
+A14: GEN(w1, the InitS of M).m in the FinalS of M by A2,A9,A12;
+  GEN(w1, the InitS of M).o in the FinalS of M by A3,A10,A12;
+  hence thesis by A2,A3,A9,A10,A11,A12,A13,A14;
 end;
 
 theorem Th22:
@@ -1162,80 +1197,85 @@ theorem Th22:
 proof
   let X be non empty set, f be BinOp of X;
   let M be non empty Moore-SM_Final over [:X, X:], succ X;
-  assume
-A1: M is calculating_type & the carrier of M = succ X & the FinalS of M = X &
-  the InitS of M = X & the OFun of M = id the carrier of M &
-  for x,y being Element of X holds
-  (the Tran of M).[the InitS of M, [x,y]] = f.(x,y);
-  then
-A2: not the InitS of M in the FinalS of M; thus
-A3: now
+  assume that
+A1: M is calculating_type and
+A2: the carrier of M = succ X and
+A3: the FinalS of M = X and
+A4: the InitS of M = X and
+A5: the OFun of M = id the carrier of M and
+A6: for x,y being Element of X holds (the Tran of M).[the InitS of M, [x
+  ,y]] = f.(x,y);
+A7: not the InitS of M in the FinalS of M by A3,A4;
+  thus
+A8: now
     let s be Element of [:X,X:];
     consider x,y being set such that
-A4: x in X & y in X & s = [x,y] by ZFMISC_1:def 2;
-    reconsider x,y as Element of X by A4;
+A9: x in X and
+A10: y in X and
+A11: s = [x,y] by ZFMISC_1:def 2;
+    reconsider x,y as Element of X by A9,A10;
     thus s leads_to_final_state_of M
     proof
-      reconsider q = f.(x,y) as State of M by A1,XBOOLE_0:def 3;
+      reconsider q = f.(x,y) as State of M by A2,XBOOLE_0:def 3;
       take q;
       thus q is_accessible_via s
       proof
         take w = <*> [:X, X:];
         reconsider W = <*s*>^w as FinSequence of [:X, X:];
-A5:     W = <*[x,y]*> by A4,FINSEQ_1:47;
+A12:    W = <*[x,y]*> by A11,FINSEQ_1:47;
         then len W = 1 by FINSEQ_1:56;
-        then consider WI being Element of [:X, X:],
-        QI,QI1 being State of M such that
-A6:     WI = W.1 & QI = GEN(W, the InitS of M).1 &
-        QI1 = GEN(W, the InitS of M).(1+1) &
-        WI-succ_of QI = QI1 by FSM_1:def 2;
+        then
+A13:    ex WI being Element of [:X, X:], QI,QI1 being State of M st
+( WI = W.1)&( QI = GEN(W, the InitS of M).1)&( QI1 = GEN(W, the InitS of M).(1+
+        1))&( WI-succ_of QI = QI1) by FSM_1:def 2;
         GEN(W, the InitS of M).(len W + 1)
-        = GEN(W, the InitS of M).(1+1) by A5,FINSEQ_1:56
-          .= (the Tran of M).[the InitS of M, W.1] by A6,FSM_1:def 2
-          .= (the Tran of M).[the InitS of M, [x,y]] by A4,FINSEQ_1:58
-          .= f.(x,y) by A1;
+        = GEN(W, the InitS of M).(1+1) by A12,FINSEQ_1:56
+          .= (the Tran of M).[the InitS of M, W.1] by A13,FSM_1:def 2
+          .= (the Tran of M).[the InitS of M, [x,y]] by A11,FINSEQ_1:58
+          .= f.(x,y) by A6;
         hence thesis by FSM_1:def 3;
       end;
-      thus thesis by A1;
+      thus thesis by A3;
     end;
   end;
   let x,y be Element of X;
-  [x,y] leads_to_final_state_of M by A3;
-  then consider m being non empty Element of NAT such that
-A7: for w being FinSequence of [:X, X:] st len w+1 >= m & w.1 = [x,y] holds
+  consider m being non empty Element of NAT such that
+A14: for w being FinSequence of [:X, X:] st len w+1 >= m & w.1 = [x,y] holds
   GEN(w, the InitS of M).m in the FinalS of M and
-A8: for w being FinSequence of [:X, X:], i being non empty Element of NAT
+A15: for w being FinSequence of [:X, X:], i being non empty Element of NAT
   st i <= len w + 1 & w.1 = [x,y] & i < m holds
-  not GEN(w, the InitS of M).i in the FinalS of M by A1,A2,Th18;
+  not GEN(w, the InitS of M).i in the FinalS of M by A1,A8,Th18;
   take m;
   set s = [x,y], t = f.(x,y);
   let w being FinSequence of [:X, X:] such that
-A9: w.1 = s;
+A16: w.1 = s;
   hereby
     assume
-A10: m <= len w + 1;
-    GEN(w, the InitS of M).1 = X by A1,FSM_1:def 2;
-    then m <> 1 & m >= 1 by A1,A2,A7,A9,A10,NAT_1:14;
-    then m > 1 by XXREAL_0:1;
+A17: m <= len w + 1;
+    GEN(w, the InitS of M).1 = X by A4,FSM_1:def 2;
     then
-A11: m >= 1+1 by NAT_1:13;
+A18: m <> 1 by A4,A7,A14,A16,A17;
+    m >= 1 by NAT_1:14;
+    then m > 1 by A18,XXREAL_0:1;
     then
-A12: 1 + 1 <= len w + 1 by A10,XXREAL_0:2;
-    then 1 <= 1 & 1 <= len w by XREAL_1:8;
-    then consider WI being Element of [:X, X:],
-    QI, QI1 being State of M such that
-A13: WI = w.1 & QI = GEN(w, the InitS of M).1 &
-    QI1 = GEN(w, the InitS of M).(1+1) & WI-succ_of QI = QI1 by FSM_1:def 2;
-A14: GEN(w, the InitS of M).2
-    = (the Tran of M).[the InitS of M, w.1] by A13,FSM_1:def 2
-      .= f.(x,y) by A1,A9;
-A15: m = 2 or m > 2 by A11,XXREAL_0:1;
+A19: m >= 1+1 by NAT_1:13;
+    then
+A20: 1 + 1 <= len w + 1 by A17,XXREAL_0:2;
+    then 1 <= len w by XREAL_1:8;
+    then ex WI being Element of [:X, X:], QI, QI1 being State of M
+st ( WI = w.1)&( QI = GEN(w, the InitS of M).1)&( QI1 = GEN(w, the InitS of M).
+    (1+1))&( WI-succ_of QI = QI1) by FSM_1:def 2;
+    then
+A21: GEN(w, the InitS of M).2
+    = (the Tran of M).[the InitS of M, w.1] by FSM_1:def 2
+      .= f.(x,y) by A6,A16;
+A22: m = 2 or m > 2 by A19,XXREAL_0:1;
     f.(x,y) in succ X by XBOOLE_0:def 3;
     hence t = (the OFun of M).(GEN(w, the InitS of M).m)
-    by A1,A8,A9,A12,A14,A15,FUNCT_1:35;
-    thus GEN(w, the InitS of M).m in the FinalS of M by A7,A9,A10;
+    by A2,A3,A5,A15,A16,A20,A21,A22,FUNCT_1:35;
+    thus GEN(w, the InitS of M).m in the FinalS of M by A14,A16,A17;
   end;
-  thus thesis by A8,A9;
+  thus thesis by A15,A16;
 end;
 
 theorem Th23:
@@ -1250,22 +1290,25 @@ proof
   consider f being BinOp of REAL such that
 A1: for x,y holds f.(x,y) = max(x,y) from BINOP_1:sch 4;
   let M being non empty Moore-SM_Final over [:REAL, REAL:], succ REAL;
-  assume
-A2: M is calculating_type & the carrier of M = succ REAL &
-  the FinalS of M = REAL & the InitS of M = REAL &
-  the OFun of M = id the carrier of M;
-  assume
-A3: (for x,y st x >= y holds (the Tran of M).[the InitS of M, [x,y]] = x) &
-  (for x,y st x < y holds (the Tran of M).[the InitS of M, [x,y]] = y);
+  assume that
+A2: M is calculating_type and
+A3: the carrier of M = succ REAL and
+A4: the FinalS of M = REAL and
+A5: the InitS of M = REAL and
+A6: the OFun of M = id the carrier of M;
+  assume that
+A7: for x,y st x >= y holds (the Tran of M).[the InitS of M, [x,y]] = x and
+A8: for x,y st x < y holds (the Tran of M).[the InitS of M, [x,y]] = y;
   let x,y;
   now
     let x,y;
-    (x >= y implies (the Tran of M).[the InitS of M, [x,y]] = x) &
-    (x < y implies (the Tran of M).[the InitS of M, [x,y]] = y) by A3;
-    then (the Tran of M).[the InitS of M, [x,y]] = max(x,y) by XXREAL_0:def 10;
+A9: x >= y implies (the Tran of M).[the InitS of M, [x,y]] = x by A7;
+    x < y implies (the Tran of M).[the InitS of M, [x,y]] = y by A8;
+    then (the Tran of M).[the InitS of M, [x,y]] = max(x,y) by A9,
+XXREAL_0:def 10;
     hence (the Tran of M).[the InitS of M, [x,y]] = f.(x,y) by A1;
   end;
-  then f.(x,y) is_result_of [x,y], M by A2,Th22;
+  then f.(x,y) is_result_of [x,y], M by A2,A3,A4,A5,A6,Th22;
   hence thesis by A1;
 end;
 
@@ -1281,22 +1324,25 @@ proof
   consider f being BinOp of REAL such that
 A1: for x,y holds f.(x,y) = min(x,y) from BINOP_1:sch 4;
   let M being non empty Moore-SM_Final over [:REAL, REAL:], succ REAL;
-  assume
-A2: M is calculating_type & the carrier of M = succ REAL &
-  the FinalS of M = REAL & the InitS of M = REAL &
-  the OFun of M = id the carrier of M;
-  assume
-A3: (for x,y st x < y holds (the Tran of M).[the InitS of M, [x,y]] = x) &
-  (for x,y st x >= y holds (the Tran of M).[the InitS of M, [x,y]] = y);
+  assume that
+A2: M is calculating_type and
+A3: the carrier of M = succ REAL and
+A4: the FinalS of M = REAL and
+A5: the InitS of M = REAL and
+A6: the OFun of M = id the carrier of M;
+  assume that
+A7: for x,y st x < y holds (the Tran of M).[the InitS of M, [x,y]] = x and
+A8: for x,y st x >= y holds (the Tran of M).[the InitS of M, [x,y]] = y;
   let x,y;
   now
     let x,y;
-    (x < y implies (the Tran of M).[the InitS of M, [x,y]] = x) &
-    (x >= y implies (the Tran of M).[the InitS of M, [x,y]] = y) by A3;
-    then (the Tran of M).[the InitS of M, [x,y]] = min(x,y) by XXREAL_0:def 9;
+A9: x < y implies (the Tran of M).[the InitS of M, [x,y]] = x by A7;
+    x >= y implies (the Tran of M).[the InitS of M, [x,y]] = y by A8;
+    then (the Tran of M).[the InitS of M, [x,y]] = min(x,y) by A9,
+XXREAL_0:def 9;
     hence (the Tran of M).[the InitS of M, [x,y]] = f.(x,y) by A1;
   end;
-  then f.(x,y) is_result_of [x,y], M by A2,Th22;
+  then f.(x,y) is_result_of [x,y], M by A2,A3,A4,A5,A6,Th22;
   hence thesis by A1;
 end;
 
@@ -1312,19 +1358,21 @@ proof
   consider f being BinOp of REAL such that
 A1: for x,y holds f.(x,y) = F(x,y) from BINOP_1:sch 4;
   let M being non empty Moore-SM_Final over [:REAL, REAL:], succ REAL;
+  assume that
+A2: M is calculating_type and
+A3: the carrier of M = succ REAL and
+A4: the FinalS of M = REAL and
+A5: the InitS of M = REAL and
+A6: the OFun of M = id the carrier of M;
   assume
-A2: M is calculating_type & the carrier of M = succ REAL &
-  the FinalS of M = REAL & the InitS of M = REAL &
-  the OFun of M = id the carrier of M;
-  assume
-A3: for x,y holds (the Tran of M).[the InitS of M, [x,y]] = x + y;
+A7: for x,y holds (the Tran of M).[the InitS of M, [x,y]] = x + y;
   let x,y;
   now
     let x,y;
-    (the Tran of M).[the InitS of M, [x,y]] = x+y by A3;
+    (the Tran of M).[the InitS of M, [x,y]] = x+y by A7;
     hence (the Tran of M).[the InitS of M, [x,y]] = f.(x,y) by A1;
   end;
-  then f.(x,y) is_result_of [x,y], M by A2,Th22;
+  then f.(x,y) is_result_of [x,y], M by A2,A3,A4,A5,A6,Th22;
   hence thesis by A1;
 end;
 
@@ -1343,15 +1391,18 @@ proof
   consider f being BinOp of REAL such that
 A1: for x,y holds f.(x,y) = F(x,y) from BINOP_1:sch 4;
   let M being non empty Moore-SM_Final over [:REAL, REAL:], succ REAL;
-  assume
-A2: M is calculating_type & the carrier of M = succ REAL &
-  the FinalS of M = REAL & the InitS of M = REAL &
-  the OFun of M = id the carrier of M;
-  assume
-A3: (for x,y st x>0 or y>0 holds (the Tran of M).[the InitS of M, [x,y]] = 1) &
-  (for x,y st (x=0 or y=0) & x <= 0 & y <=0
-  holds (the Tran of M).[the InitS of M, [x,y]] = 0) &
-  (for x,y st x<0 & y<0 holds (the Tran of M).[the InitS of M, [x,y]] = -1);
+  assume that
+A2: M is calculating_type and
+A3: the carrier of M = succ REAL and
+A4: the FinalS of M = REAL and
+A5: the InitS of M = REAL and
+A6: the OFun of M = id the carrier of M;
+  assume that
+A7: for x,y st x>0 or y>0 holds (the Tran of M).[the InitS of M, [x,y]] = 1 and
+A8: for x,y st (x=0 or y=0) & x <= 0 & y <=0 holds (the Tran of M).[the
+  InitS of M, [x,y]] = 0 and
+A9: for x,y st x<0 & y<0 holds (the Tran of M).[the InitS of M, [x,y]]
+  = -1;
   let x,y;
   now
     let x,y;
@@ -1359,73 +1410,73 @@ A3: (for x,y st x>0 or y>0 holds (the Tran of M).[the InitS of M, [x,y]] = 1) &
     proof
       now per cases;
         suppose
-A4:       x > 0;
+A10:      x > 0;
           then
-A5:       sgn x = 1 by ABSVALUE:def 2;
+A11:      sgn x = 1 by ABSVALUE:def 2;
           now per cases;
             suppose y > 0;
               then sgn y = 1 by ABSVALUE:def 2;
-              hence thesis by A3,A4,A5;
+              hence thesis by A7,A10,A11;
             end;
             suppose y = 0;
               then sgn y = 0 by ABSVALUE:def 2;
-              then max(sgn x, sgn y) = 1 by A5,XXREAL_0:def 10;
-              hence thesis by A3,A4;
+              then max(sgn x, sgn y) = 1 by A11,XXREAL_0:def 10;
+              hence thesis by A7,A10;
             end;
             suppose y < 0;
               then sgn y = -1 by ABSVALUE:def 2;
-              then max(sgn x, sgn y) = 1 by A5,XXREAL_0:def 10;
-              hence thesis by A3,A4;
+              then max(sgn x, sgn y) = 1 by A11,XXREAL_0:def 10;
+              hence thesis by A7,A10;
             end;
           end;
           hence thesis;
         end;
         suppose
-A6:       x = 0;
+A12:      x = 0;
           then
-A7:       sgn x = 0 by ABSVALUE:def 2;
+A13:      sgn x = 0 by ABSVALUE:def 2;
           now per cases;
             suppose
-A8:           y > 0;
+A14:          y > 0;
               then sgn y = 1 by ABSVALUE:def 2;
-              then max(sgn x, sgn y) = 1 by A7,XXREAL_0:def 10;
-              hence thesis by A3,A8;
+              then max(sgn x, sgn y) = 1 by A13,XXREAL_0:def 10;
+              hence thesis by A7,A14;
             end;
             suppose
-A9:           y = 0;
+A15:          y = 0;
               then sgn y = 0 by ABSVALUE:def 2;
-              hence thesis by A3,A6,A9;
+              hence thesis by A8,A12,A15;
             end;
             suppose
-A10:          y < 0;
+A16:          y < 0;
               then sgn y = -1 by ABSVALUE:def 2;
-              then max(sgn x, sgn y) = 0 by A7,XXREAL_0:def 10;
-              hence thesis by A3,A6,A10;
+              then max(sgn x, sgn y) = 0 by A13,XXREAL_0:def 10;
+              hence thesis by A8,A12,A16;
             end;
           end;
           hence thesis;
         end;
         suppose
-A11:      x < 0;
+A17:      x < 0;
           then
-A12:      sgn x = -1 by ABSVALUE:def 2;
+A18:      sgn x = -1 by ABSVALUE:def 2;
           now per cases;
             suppose
-A13:          y > 0;
+A19:          y > 0;
               then sgn y = 1 by ABSVALUE:def 2;
-              then max(sgn x, sgn y) = 1 by A12,XXREAL_0:def 10;
-              hence thesis by A3,A13;
+              then max(sgn x, sgn y) = 1 by A18,XXREAL_0:def 10;
+              hence thesis by A7,A19;
             end;
             suppose
-A14:          y = 0;
+A20:          y = 0;
               then sgn y = 0 by ABSVALUE:def 2;
-              then max(sgn x, sgn y) = 0 by A12,XXREAL_0:def 10;
-              hence thesis by A3,A11,A14;
+              then max(sgn x, sgn y) = 0 by A18,XXREAL_0:def 10;
+              hence thesis by A8,A17,A20;
             end;
             suppose
-A15:          y < 0;
+A21:          y < 0;
               then sgn y = -1 by ABSVALUE:def 2;
-              hence thesis by A3,A11,A12,A15;
+              hence thesis by A9,A17,A18,A21;
             end;
           end;
           hence thesis;
@@ -1435,7 +1486,7 @@ A15:          y < 0;
     end;
     hence (the Tran of M).[the InitS of M, [x,y]] = f.(x,y) by A1;
   end;
-  then f.(x,y) is_result_of [x,y], M by A2,Th22;
+  then f.(x,y) is_result_of [x,y], M by A2,A3,A4,A5,A6,Th22;
   hence thesis by A1;
 end;
 
@@ -1456,7 +1507,8 @@ registration
   proof consider O;
     consider M being
     calculating_type halting (non empty Moore-SM_Final over I, O);
-    take M; thus thesis;
+    take M;
+    thus thesis;
   end;
 end;
 
@@ -1469,12 +1521,7 @@ A1: s leads_to_final_state_of M by Def6;
   :Def9:
   it is_result_of s, M;
   uniqueness by A1,Th21;
-  existence
-  proof
-    the InitS of M in the FinalS of M implies
-    (the OFun of M).the InitS of M is_result_of s, M by Th19;
-    hence thesis by A1,Th20;
-  end;
+  existence by A1,Th20;
 end;
 
 theorem
@@ -1485,26 +1532,26 @@ proof
   set M = I-TwoStatesMooreSM(0,1,f);
   reconsider 01 = 1 as Element of {0, 1} by TARSKI:def 2;
 A1: s leads_to_final_state_of M by Def6;
-A2: the InitS of M = 0 & the FinalS of M = {1} & not 0 in {1} &
-  the OFun of M = f by Def7,TARSKI:def 1;
-  then consider m being non empty Element of NAT such that
-A3: for w st len w+1 >= m & w.1 = s holds
+A2: the FinalS of M = {1} by Def7;
+A3: the OFun of M = f by Def7;
+  consider m being non empty Element of NAT such that
+A4: for w st len w+1 >= m & w.1 = s holds
   GEN(w, the InitS of M).m in the FinalS of M and
-A4: for w,j st j <= len w +1 & w.1 = s & j < m holds
+A5: for w,j st j <= len w +1 & w.1 = s & j < m holds
   not GEN(w, the InitS of M).j in the FinalS of M by A1,Th18;
   now
     take m;
     let w;
     assume
-A5: w.1 = s;
+A6: w.1 = s;
     hereby
       assume m <= len w + 1;
-      then GEN(w, the InitS of M).m in the FinalS of M by A3,A5;
+      then GEN(w, the InitS of M).m in the FinalS of M by A4,A6;
       hence f.1 = (the OFun of M).(GEN(w, the InitS of M).m) &
-      GEN(w, the InitS of M).m in the FinalS of M by A2,TARSKI:def 1;
+      GEN(w, the InitS of M).m in the FinalS of M by A2,A3,TARSKI:def 1;
     end;
     thus for n st n < m & n <= len w + 1 holds
-    not GEN(w, the InitS of M).n in the FinalS of M by A4,A5;
+    not GEN(w, the InitS of M).n in the FinalS of M by A5,A6;
   end;
   then f.01 is_result_of s,M by Def8;
   hence thesis by Def9;
@@ -1521,15 +1568,17 @@ theorem
 proof
   let M being calculating_type halting
   (non empty Moore-SM_Final over [:REAL, REAL:], succ REAL);
-  assume
-A1: the carrier of M = succ REAL & the FinalS of M = REAL &
-  the InitS of M = REAL & the OFun of M = id the carrier of M &
-  (for x,y st x >= y holds (the Tran of M).[the InitS of M, [x,y]] = x) &
-  (for x,y st x < y holds (the Tran of M).[the InitS of M, [x,y]] = y);
+  assume that
+A1: the carrier of M = succ REAL and
+A2: the FinalS of M = REAL and
+A3: the InitS of M = REAL and
+A4: the OFun of M = id the carrier of M and
+A5: for x,y st x >= y holds (the Tran of M).[the InitS of M, [x,y]] = x and
+A6: for x,y st x < y holds (the Tran of M).[the InitS of M, [x,y]] = y;
   let x,y;
-  max(x,y) in succ REAL & [x,y] leads_to_final_state_of M &
-  max(x,y) is_result_of [x,y], M by A1,Def6,Th23,XBOOLE_0:def 3;
-  hence thesis by Def9;
+A7: max(x,y) in succ REAL by XBOOLE_0:def 3;
+  max(x,y) is_result_of [x,y], M by A1,A2,A3,A4,A5,A6,Th23;
+  hence thesis by A7,Def9;
 end;
 
 theorem
@@ -1543,15 +1592,17 @@ theorem
 proof
   let M being calculating_type halting
   (non empty Moore-SM_Final over [:REAL, REAL:], succ REAL);
-  assume
-A1: the carrier of M = succ REAL & the FinalS of M = REAL &
-  the InitS of M = REAL & the OFun of M = id the carrier of M &
-  (for x,y st x < y holds (the Tran of M).[the InitS of M, [x,y]] = x) &
-  (for x,y st x >= y holds (the Tran of M).[the InitS of M, [x,y]] = y);
+  assume that
+A1: the carrier of M = succ REAL and
+A2: the FinalS of M = REAL and
+A3: the InitS of M = REAL and
+A4: the OFun of M = id the carrier of M and
+A5: for x,y st x < y holds (the Tran of M).[the InitS of M, [x,y]] = x and
+A6: for x,y st x >= y holds (the Tran of M).[the InitS of M, [x,y]] = y;
   let x,y;
-  min(x,y) in succ REAL & [x,y] leads_to_final_state_of M &
-  min(x,y) is_result_of [x,y], M by A1,Def6,Th24,XBOOLE_0:def 3;
-  hence thesis by Def9;
+A7: min(x,y) in succ REAL by XBOOLE_0:def 3;
+  min(x,y) is_result_of [x,y], M by A1,A2,A3,A4,A5,A6,Th24;
+  hence thesis by A7,Def9;
 end;
 
 theorem
@@ -1564,14 +1615,16 @@ theorem
 proof
   let M being calculating_type halting
   (non empty Moore-SM_Final over [:REAL, REAL:], succ REAL);
-  assume
-A1: the carrier of M = succ REAL & the FinalS of M = REAL &
-  the InitS of M = REAL & the OFun of M = id the carrier of M &
-  (for x,y holds (the Tran of M).[the InitS of M, [x,y]] = x+y);
+  assume that
+A1: the carrier of M = succ REAL and
+A2: the FinalS of M = REAL and
+A3: the InitS of M = REAL and
+A4: the OFun of M = id the carrier of M and
+A5: for x,y holds (the Tran of M).[the InitS of M, [x,y]] = x+y;
   let x,y;
-  x+y in succ REAL & [x,y] leads_to_final_state_of M &
-  x+y is_result_of [x,y], M by A1,Def6,Th25,XBOOLE_0:def 3;
-  hence thesis by Def9;
+A6: x+y in succ REAL by XBOOLE_0:def 3;
+  x+y is_result_of [x,y], M by A1,A2,A3,A4,A5,Th25;
+  hence thesis by A6,Def9;
 end;
 
 theorem
@@ -1587,17 +1640,20 @@ theorem
 proof
   let M being calculating_type halting
   (non empty Moore-SM_Final over [:REAL, REAL:], succ REAL);
-  assume
-A1: the carrier of M = succ REAL & the FinalS of M = REAL &
-  the InitS of M = REAL & the OFun of M = id the carrier of M;
-  assume
-A2: (for x,y st x>0 or y>0 holds (the Tran of M).[the InitS of M, [x,y]] = 1) &
-  (for x,y st (x=0 or y=0) & x <= 0 & y <=0
-  holds (the Tran of M).[the InitS of M, [x,y]] = 0) &
-  (for x,y st x<0 & y<0 holds (the Tran of M).[the InitS of M, [x,y]] = -1);
+  assume that
+A1: the carrier of M = succ REAL and
+A2: the FinalS of M = REAL and
+A3: the InitS of M = REAL and
+A4: the OFun of M = id the carrier of M;
+  assume that
+A5: for x,y st x>0 or y>0 holds (the Tran of M).[the InitS of M, [x,y]] = 1 and
+A6: for x,y st (x=0 or y=0) & x <= 0 & y <=0 holds (the Tran of M).[the
+  InitS of M, [x,y]] = 0 and
+A7: for x,y st x<0 & y<0 holds (the Tran of M).[the InitS of M, [x,y]]
+  = -1;
   let x,y;
-  max(sgn x, sgn y) in succ REAL & [x,y] leads_to_final_state_of M &
-  max(sgn x, sgn y) is_result_of [x,y], M by A1,A2,Def6,Th26,XBOOLE_0:def 3;
-  hence thesis by Def9;
+A8: max(sgn x, sgn y) in succ REAL by XBOOLE_0:def 3;
+  max(sgn x, sgn y) is_result_of [x,y], M by A1,A2,A3,A4,A5,A6,A7,Th26;
+  hence thesis by A8,Def9;
 end;
 

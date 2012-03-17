@@ -12,17 +12,17 @@ environ
       RELOC, SCMFSA_9, UNIALG_2, CARD_3, SCMFSA6B, AMI_2, SCMFSA6C, SFMASTR1,
       PRE_FF, ABSVALUE, SCMFSA9A, ARYTM, AMISTD_2;
  notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0, FINSUB_1,
-      FUNCOP_1, INT_1, NAT_1, ABIAN, RELAT_1, FUNCT_1, FUNCT_2, FUNCT_4,
-      PRE_FF, CARD_3, AMI_1, SCMNORM, SCMFSA_2, SCMFSA_4, SCMFSA_5, SCMFSA6A,
-      SCMFSA6B, SF_MASTR, SCMFSA6C, SCMFSA_7, SCMFSA7B, SCMFSA8A, SCMFSA8B,
-      SCMFSA_9, SFMASTR1, INT_2, XXREAL_0;
+      FUNCOP_1, INT_1, NAT_1, ABIAN, RELAT_1, FUNCT_1, FUNCT_2, PRE_FF, CARD_3,
+      AMI_1, SCMNORM, SCMFSA_2, SCMFSA_4, SCMFSA_5, SCMFSA6A, SCMFSA6B,
+      SF_MASTR, SCMFSA6C, SCMFSA_7, SCMFSA7B, SCMFSA8A, SCMFSA8B, SCMFSA_9,
+      SFMASTR1, INT_2, XXREAL_0;
  constructors XXREAL_0, NAT_1, NAT_D, SEQ_1, PRE_FF, ABIAN, SCMFSA_5, SCMFSA_7,
       SCMFSA6A, SCMFSA6B, SCMFSA6C, SCMFSA8A, SCMFSA8B, SCMFSA_9, SFMASTR1,
-      SCMNORM, SCMFSA_4, AFINSQ_1, RELSET_1;
+      SCMNORM, SCMFSA_4, AFINSQ_1, RELSET_1, PRE_POLY;
  registrations XBOOLE_0, SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1, FINSET_1,
-      FINSUB_1, FRAENKEL, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, CARD_3,
-      ABIAN, SCMFSA_2, SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA7B, SCMFSA8A,
-      SCMFSA8B, SCMFSA_9, SFMASTR1, SCMNORM, AMI_1, FINSEQ_1;
+      FINSUB_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, CARD_3, ABIAN,
+      SCMFSA_2, SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA7B, SCMFSA8A, SCMFSA8B,
+      SCMFSA_9, SFMASTR1, SCMNORM, VALUED_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -56,21 +56,19 @@ theorem :: SCMFSA9A:12  :: GotoUsedF:
 
 reserve s, s1, s2 for State of SCM+FSA,
   a for read-write Int-Location,
-  b for Int-Location,
+  b for
+  Int-Location,
   I, J for Program of SCM+FSA,
   Ig for good Program of SCM+FSA,
-  i, j, k, m, n for Element of NAT;
+  i, j
+  , k, m, n for Element of NAT;
 
-:: set D = Int-Locations U FinSeq-Locations;
-:: set SAt = Start-At insloc 0;
-:: set IL = NAT;
-
-theorem :: SCMFSA9A:13  :: eifUsed:
+theorem :: SCMFSA9A:13
   UsedIntLoc if=0(b, I, J) = {b} \/ UsedIntLoc I \/ UsedIntLoc J;
 
 theorem :: SCMFSA9A:14  :: eifUsedF:
-  for a being Int-Location
-  holds UsedInt*Loc if=0(a, I, J) = UsedInt*Loc I \/ UsedInt*Loc J;
+  for a being Int-Location holds UsedInt*Loc if=0(a, I, J) =
+  UsedInt*Loc I \/ UsedInt*Loc J;
 
 theorem :: SCMFSA9A:15  :: ifUsed:
   UsedIntLoc if>0(b, I, J) = {b} \/ UsedIntLoc I \/ UsedIntLoc J;
@@ -80,259 +78,247 @@ theorem :: SCMFSA9A:16  :: ifUsedF:
 
 begin
 
-theorem :: SCMFSA9A:17  :: ewhileUsed:
+theorem :: SCMFSA9A:17 :: ewhileUsed:
   UsedIntLoc while=0(b, I) = {b} \/ UsedIntLoc I;
 
-theorem :: SCMFSA9A:18  :: ewhileUsedF:
+theorem :: SCMFSA9A:18 :: ewhileUsedF:
   UsedInt*Loc while=0(b, I) = UsedInt*Loc I;
 
 definition
-  let s be State of SCM+FSA, a be read-write Int-Location,
-  I be Program of SCM+FSA;
+  let s be State of SCM+FSA, a be read-write Int-Location, I be Program of
+  SCM+FSA;
   pred ProperBodyWhile=0 a, I, s means
 :: SCMFSA9A:def 1
 
-  for k being Element of NAT st StepWhile=0(a,I,s).k.a = 0
-  holds I is_closed_on StepWhile=0(a,I,s).k &
-  I is_halting_on StepWhile=0(a,I,s).k;
+  for k being Element of NAT st
+  StepWhile=0(a,I,s).k.a = 0 holds I is_closed_on StepWhile=0(a,I,s).k & I
+  is_halting_on StepWhile=0(a,I,s).k;
   pred WithVariantWhile=0 a, I, s means
 :: SCMFSA9A:def 2
 
-  ex f being Function of product the Object-Kind of SCM+FSA, NAT
-  st for k being Element of NAT
-  holds ( f.(StepWhile=0(a,I,s).(k+1)) < f.(StepWhile=0(a,I,s).k)
-  or StepWhile=0(a,I,s).k.a <> 0 );
+  ex f being Function of product
+  the Object-Kind of SCM+FSA, NAT st for k being Element of NAT holds ( f.(
+StepWhile=0(a,I,s).(k+1)) < f.(StepWhile=0(a,I,s).k) or StepWhile=0(a,I,s).k.a
+  <> 0 );
 end;
 
 theorem :: SCMFSA9A:19  :: eParaProper:
-  for I being parahalting Program of SCM+FSA holds ProperBodyWhile=0 a, I, s;
+  for I being parahalting Program of SCM+FSA holds
+  ProperBodyWhile=0 a, I, s;
 
-theorem :: SCMFSA9A:20    :: SCMFSA_9:24, corrected
-  ProperBodyWhile=0 a, I, s & WithVariantWhile=0 a, I, s
-  implies while=0(a,I) is_halting_on s & while=0(a,I) is_closed_on s;
+theorem :: SCMFSA9A:20  :: SCMFSA_9:24, corrected
+  ProperBodyWhile=0 a, I, s & WithVariantWhile=0 a, I, s implies
+  while=0(a,I) is_halting_on s & while=0(a,I) is_closed_on s;
 
-theorem :: SCMFSA9A:21    :: SCMFSA_9:25, corrected
-  for I being parahalting Program of SCM+FSA st WithVariantWhile=0 a, I, s
-  holds while=0(a,I) is_halting_on s & while=0(a,I) is_closed_on s;
+theorem :: SCMFSA9A:21  :: SCMFSA_9:25, corrected
+  for I being parahalting Program of SCM+FSA st WithVariantWhile=0
+  a, I, s holds while=0(a,I) is_halting_on s & while=0(a,I) is_closed_on s;
 
 theorem :: SCMFSA9A:22  :: based on SCMFSA_9:10
-  while=0(a, I) +* (Start-At insloc 0) c= s & s.a <> 0
-  implies LifeSpan s = 4 & for k being Element of NAT
-  holds DataPart Computation(s,k) = DataPart s;
+  while=0(a, I) +* (Start-At insloc 0) c= s & s.a <> 0 implies
+  LifeSpan s = 4 & for k being Element of NAT holds DataPart Computation(s,k) =
+  DataPart s;
 
 theorem :: SCMFSA9A:23  :: based on SCMFSA_9:22
-  I is_closed_on s & I is_halting_on s & s.a = 0 implies
-  DataPart Computation((s +* (while=0(a,I) +* Start-At insloc 0)),
-  (LifeSpan (s +* (I +* Start-At insloc 0)) + 3))
-  = DataPart Computation((s +* (I +* Start-At insloc 0)),
-  (LifeSpan (s +* (I +* Start-At insloc 0))));
+  I is_closed_on s & I is_halting_on s & s.a = 0 implies DataPart
+  Computation((s +* (while=0(a,I) +* Start-At insloc 0)), (LifeSpan (s +* (I +*
+Start-At insloc 0)) + 3)) = DataPart Computation((s +* (I +* Start-At insloc 0)
+  ), (LifeSpan (s +* (I +* Start-At insloc 0))));
 
 theorem :: SCMFSA9A:24  :: Step_eq0_0:
-  (StepWhile=0(a, I, s).k).a <> 0
-  implies
-  DataPart StepWhile=0(a, I, s).(k+1) = DataPart StepWhile=0(a, I, s).k;
+  (StepWhile=0(a, I, s).k).a <> 0 implies DataPart StepWhile=0(a,
+  I, s).(k+1) = DataPart StepWhile=0(a, I, s).k;
 
 theorem :: SCMFSA9A:25  :: Step_eq0_1:
-  ( I is_halting_on Initialize StepWhile=0(a, I, s).k &
-  I is_closed_on Initialize StepWhile=0(a, I, s).k or I is parahalting) &
-  (StepWhile=0(a, I, s).k).a = 0 & (StepWhile=0(a, I, s).k).intloc 0 = 1
-  implies DataPart StepWhile=0(a, I, s).(k+1)
-  = DataPart IExec(I, StepWhile=0(a, I, s).k);
+  ( I is_halting_on Initialize StepWhile=0(a, I, s).k & I
+  is_closed_on Initialize StepWhile=0(a, I, s).k or I is parahalting) & (
+  StepWhile=0(a, I, s).k).a = 0 & (StepWhile=0(a, I, s).k).intloc 0 = 1 implies
+DataPart StepWhile=0(a, I, s).(k+1) = DataPart IExec(I, StepWhile=0(a, I, s).k)
+;
 
-theorem :: SCMFSA9A:26  :: eGoodStep0:
+theorem :: SCMFSA9A:26 :: eGoodStep0:
   (ProperBodyWhile=0 a, Ig, s or Ig is parahalting) & s.intloc 0 = 1
   implies for k holds StepWhile=0(a, Ig, s).k.intloc 0 = 1;
 
-theorem :: SCMFSA9A:27  :: eSW12:
-  ProperBodyWhile=0 a, I, s1 & DataPart s1 = DataPart s2 implies
-  for k holds DataPart StepWhile=0(a, I, s1).k =
-  DataPart StepWhile=0(a, I, s2).k;
+theorem :: SCMFSA9A:27
+  ProperBodyWhile=0 a, I, s1 & DataPart s1 = DataPart s2 implies for k
+  holds DataPart StepWhile=0(a, I, s1).k = DataPart StepWhile=0(a, I, s2).k;
 
 definition
-  let s be State of SCM+FSA, a be read-write Int-Location,
-  I be Program of SCM+FSA;
+  let s be State of SCM+FSA, a be read-write Int-Location, I be Program of
+  SCM+FSA;
   assume that
  ProperBodyWhile=0 a, I, s or I is parahalting and
  WithVariantWhile=0 a, I, s;
   func ExitsAtWhile=0(a, I, s) -> Element of NAT means
 :: SCMFSA9A:def 3
 
-  ex k being Element of NAT st it = k & (StepWhile=0(a, I, s).k).a <> 0 &
-  (for i being Element of NAT st (StepWhile=0(a, I, s).i).a <> 0
-  holds k <= i) &
-  DataPart Computation((s +* (while=0(a, I) +* (Start-At insloc 0))),
-  (LifeSpan (s +* (while=0(a, I) +* (Start-At insloc 0)))))
-  = DataPart StepWhile=0(a, I, s).k;
+  ex k being
+  Element of NAT st it = k & (StepWhile=0(a, I, s).k).a <> 0 & (for i being
+  Element of NAT st (StepWhile=0(a, I, s).i).a <> 0 holds k <= i) & DataPart
+  Computation((s +* (while=0(a, I) +* (Start-At insloc 0))), (LifeSpan (s +* (
+  while=0(a, I) +* (Start-At insloc 0))))) = DataPart StepWhile=0(a, I, s).k;
 end;
 
-theorem :: SCMFSA9A:28  :: IE_while_ne0:
-  s.intloc 0 = 1 & s.a <> 0 implies
-  DataPart IExec(while=0(a, I), s) = DataPart s;
+theorem :: SCMFSA9A:28 :: IE_while_ne0:
+  s.intloc 0 = 1 & s.a <> 0 implies DataPart IExec(while=0(a, I), s) =
+  DataPart s;
 
-theorem :: SCMFSA9A:29  :: IE_while_eq0:
+theorem :: SCMFSA9A:29 :: IE_while_eq0:
   (ProperBodyWhile=0 a, I, Initialize s or I is parahalting) &
-  WithVariantWhile=0 a, I, Initialize s
-  implies DataPart IExec(while=0(a, I), s)
+WithVariantWhile=0 a, I, Initialize s implies DataPart IExec(while=0(a, I), s)
   = DataPart StepWhile=0(a, I, Initialize s).ExitsAtWhile=0(a, I, Initialize s)
 ;
 
 begin
 
-theorem :: SCMFSA9A:30  :: whileUsed:
+theorem :: SCMFSA9A:30 :: whileUsed:
   UsedIntLoc while>0(b, I) = {b} \/ UsedIntLoc I;
 
-theorem :: SCMFSA9A:31  :: whileUsedF:
+theorem :: SCMFSA9A:31 :: whileUsedF:
   UsedInt*Loc while>0(b, I) = UsedInt*Loc I;
 
 definition
-  let s be State of SCM+FSA, a be read-write Int-Location,
-  I be Program of SCM+FSA;
+  let s be State of SCM+FSA, a be read-write Int-Location, I be Program of
+  SCM+FSA;
   pred ProperBodyWhile>0 a, I, s means
 :: SCMFSA9A:def 4
 
-  for k being Element of NAT st StepWhile>0(a,I,s).k.a > 0
-  holds I is_closed_on StepWhile>0(a,I,s).k &
-  I is_halting_on StepWhile>0(a,I,s).k;
+  for k being Element of NAT st
+  StepWhile>0(a,I,s).k.a > 0 holds I is_closed_on StepWhile>0(a,I,s).k & I
+  is_halting_on StepWhile>0(a,I,s).k;
   pred WithVariantWhile>0 a, I, s means
 :: SCMFSA9A:def 5
 
-  ex f being Function of product the Object-Kind of SCM+FSA, NAT
-  st for k being Element of NAT
-  holds ( f.(StepWhile>0(a,I,s).(k+1)) < f.(StepWhile>0(a,I,s).k)
-  or StepWhile>0(a,I,s).k.a <= 0 );
+  ex f being Function of product
+  the Object-Kind of SCM+FSA, NAT st for k being Element of NAT holds ( f.(
+StepWhile>0(a,I,s).(k+1)) < f.(StepWhile>0(a,I,s).k) or StepWhile>0(a,I,s).k.a
+  <= 0 );
 end;
 
 theorem :: SCMFSA9A:32  :: ParaProper:
-  for I being parahalting Program of SCM+FSA holds ProperBodyWhile>0 a, I, s;
+  for I being parahalting Program of SCM+FSA holds
+  ProperBodyWhile>0 a, I, s;
 
-theorem :: SCMFSA9A:33    :: SCMFSA_9:42, corrected
-  ProperBodyWhile>0 a, I, s & WithVariantWhile>0 a, I, s
-  implies while>0(a,I) is_halting_on s & while>0(a,I) is_closed_on s;
+theorem :: SCMFSA9A:33  :: SCMFSA_9:42, corrected
+  ProperBodyWhile>0 a, I, s & WithVariantWhile>0 a, I, s implies
+  while>0(a,I) is_halting_on s & while>0(a,I) is_closed_on s;
 
-theorem :: SCMFSA9A:34    :: SCMFSA_9:43, corrected
-  for I being parahalting Program of SCM+FSA st WithVariantWhile>0 a, I, s
-  holds while>0(a,I) is_halting_on s & while>0(a,I) is_closed_on s;
+theorem :: SCMFSA9A:34  :: SCMFSA_9:43, corrected
+  for I being parahalting Program of SCM+FSA st WithVariantWhile>0
+  a, I, s holds while>0(a,I) is_halting_on s & while>0(a,I) is_closed_on s;
 
 theorem :: SCMFSA9A:35  :: based on SCMFSA_9:32
-  while>0(a, I) +* (Start-At insloc 0) c= s & s.a <= 0
-  implies LifeSpan s = 4 & for k being Element of NAT
-  holds DataPart Computation(s,k) = DataPart s;
+  while>0(a, I) +* (Start-At insloc 0) c= s & s.a <= 0 implies
+  LifeSpan s = 4 & for k being Element of NAT holds DataPart Computation(s,k) =
+  DataPart s;
 
 theorem :: SCMFSA9A:36  :: based on SCMFSA_9:36
-  I is_closed_on s & I is_halting_on s & s.a > 0 implies
-  DataPart Computation((s +* (while>0(a,I) +* Start-At insloc 0)),
-  (LifeSpan (s +* (I +* Start-At insloc 0)) + 3))
-  = DataPart Computation((s +* (I +* Start-At insloc 0)),
-  (LifeSpan (s +* (I +* Start-At insloc 0))));
+  I is_closed_on s & I is_halting_on s & s.a > 0 implies DataPart
+  Computation((s +* (while>0(a,I) +* Start-At insloc 0)), (LifeSpan (s +* (I +*
+Start-At insloc 0)) + 3)) = DataPart Computation((s +* (I +* Start-At insloc 0)
+  ), (LifeSpan (s +* (I +* Start-At insloc 0))));
 
 theorem :: SCMFSA9A:37  :: Step_gt0_0:
-  (StepWhile>0(a, I, s).k).a <= 0
-  implies DataPart StepWhile>0(a, I, s).(k+1) =
-  DataPart StepWhile>0(a, I, s).k;
+  (StepWhile>0(a, I, s).k).a <= 0 implies DataPart StepWhile>0(a,
+  I, s).(k+1) = DataPart StepWhile>0(a, I, s).k;
 
 theorem :: SCMFSA9A:38  :: Step_gt0_1:
-  ( I is_halting_on Initialize StepWhile>0(a, I, s).k &
-  I is_closed_on Initialize StepWhile>0(a, I, s).k or I is parahalting) &
-  (StepWhile>0(a, I, s).k).a > 0 & (StepWhile>0(a, I, s).k).intloc 0 = 1
-  implies DataPart StepWhile>0(a, I, s).(k+1)
-  = DataPart IExec(I, StepWhile>0(a, I, s).k);
+  ( I is_halting_on Initialize StepWhile>0(a, I, s).k & I
+  is_closed_on Initialize StepWhile>0(a, I, s).k or I is parahalting) & (
+  StepWhile>0(a, I, s).k).a > 0 & (StepWhile>0(a, I, s).k).intloc 0 = 1 implies
+DataPart StepWhile>0(a, I, s).(k+1) = DataPart IExec(I, StepWhile>0(a, I, s).k)
+;
 
 theorem :: SCMFSA9A:39  :: GoodStep0:
-  (ProperBodyWhile>0 a, Ig, s or Ig is parahalting) & s.intloc 0 = 1
-  implies for k holds StepWhile>0(a, Ig, s).k.intloc 0 = 1;
+  (ProperBodyWhile>0 a, Ig, s or Ig is parahalting) & s.intloc 0 =
+  1 implies for k holds StepWhile>0(a, Ig, s).k.intloc 0 = 1;
 
-theorem :: SCMFSA9A:40  :: SW12:
-  ProperBodyWhile>0 a, I, s1 &
-  DataPart s1 = DataPart s2 implies
-  for k holds
-  DataPart StepWhile>0(a, I, s1).k = DataPart StepWhile>0(a, I, s2).k;
+theorem :: SCMFSA9A:40
+  ProperBodyWhile>0 a, I, s1 & DataPart s1 = DataPart s2 implies
+for k holds DataPart StepWhile>0(a, I, s1).k = DataPart StepWhile>0(a, I, s2).k
+;
 
 definition
-  let s be State of SCM+FSA, a be read-write Int-Location,
-  I be Program of SCM+FSA;
+  let s be State of SCM+FSA, a be read-write Int-Location, I be Program of
+  SCM+FSA;
   assume that
  ProperBodyWhile>0 a, I, s or I is parahalting and
  WithVariantWhile>0 a, I, s;
   func ExitsAtWhile>0(a, I, s) -> Element of NAT means
 :: SCMFSA9A:def 6
 
-  ex k being Element of NAT st it = k & (StepWhile>0(a, I, s).k).a <= 0 &
-  (for i being Element of NAT st (StepWhile>0(a, I, s).i).a <= 0
-  holds k <= i) &
-  DataPart Computation((s +* (while>0(a, I) +* (Start-At insloc 0))),
-  (LifeSpan (s +* (while>0(a, I) +* (Start-At insloc 0)))))
-  = DataPart StepWhile>0(a, I, s).k;
+  ex k being
+  Element of NAT st it = k & (StepWhile>0(a, I, s).k).a <= 0 & (for i being
+  Element of NAT st (StepWhile>0(a, I, s).i).a <= 0 holds k <= i) & DataPart
+  Computation((s +* (while>0(a, I) +* (Start-At insloc 0))), (LifeSpan (s +* (
+  while>0(a, I) +* (Start-At insloc 0))))) = DataPart StepWhile>0(a, I, s).k;
 end;
 
-theorem :: SCMFSA9A:41  :: IE_while_le0:
-  s.intloc 0 = 1 & s.a <= 0 implies
-  DataPart IExec(while>0(a, I), s) = DataPart s;
+theorem :: SCMFSA9A:41 :: IE_while_le0:
+  s.intloc 0 = 1 & s.a <= 0 implies DataPart IExec(while>0(a, I), s) =
+  DataPart s;
 
 theorem :: SCMFSA9A:42  :: IE_while_gt0:
   (ProperBodyWhile>0 a, I, Initialize s or I is parahalting) &
-  WithVariantWhile>0 a, I, Initialize s
-  implies DataPart IExec(while>0(a, I), s)
+WithVariantWhile>0 a, I, Initialize s implies DataPart IExec(while>0(a, I), s)
   = DataPart StepWhile>0(a, I, Initialize s).ExitsAtWhile>0(a, I, Initialize s)
 ;
 
 theorem :: SCMFSA9A:43
-  StepWhile>0(a, I, s).k.a <= 0 implies for n being Element of NAT st k <= n
-  holds DataPart StepWhile>0(a, I, s).n = DataPart StepWhile>0(a, I, s).k;
+  StepWhile>0(a, I, s).k.a <= 0 implies for n being Element of NAT
+st k <= n holds DataPart StepWhile>0(a, I, s).n = DataPart StepWhile>0(a, I, s)
+  .k;
 
 theorem :: SCMFSA9A:44
-  DataPart s1 = DataPart s2 & ProperBodyWhile>0 a, I, s1
-  implies ProperBodyWhile>0 a, I, s2;
+  DataPart s1 = DataPart s2 & ProperBodyWhile>0 a, I, s1 implies
+  ProperBodyWhile>0 a, I, s2;
 
 theorem :: SCMFSA9A:45
-  s.intloc 0 = 1 & ProperBodyWhile>0 a, Ig, s & WithVariantWhile>0 a, Ig, s
-  implies for i, j st i <> j & i <= ExitsAtWhile>0(a, Ig, s) &
-  j <= ExitsAtWhile>0(a, Ig, s)
-  holds StepWhile>0(a, Ig, s).i <> StepWhile>0(a, Ig, s).j &
-  DataPart StepWhile>0(a, Ig, s).i <> DataPart StepWhile>0(a, Ig, s).j;
+  s.intloc 0 = 1 & ProperBodyWhile>0 a, Ig, s & WithVariantWhile>0
+  a, Ig, s implies for i, j st i <> j & i <= ExitsAtWhile>0(a, Ig, s) & j <=
+ExitsAtWhile>0(a, Ig, s) holds StepWhile>0(a, Ig, s).i <> StepWhile>0(a, Ig, s)
+  .j & DataPart StepWhile>0(a, Ig, s).i <> DataPart StepWhile>0(a, Ig, s).j;
 
 definition
   let f be Function of product the Object-Kind of SCM+FSA, NAT;
   attr f is on_data_only means
 :: SCMFSA9A:def 7
 
-  for s1, s2 st DataPart s1 = DataPart s2 holds f.s1 = f.s2;
+  for s1, s2 st DataPart s1 = DataPart s2
+  holds f.s1 = f.s2;
 end;
 
 theorem :: SCMFSA9A:46
-  s.intloc 0 = 1 & ProperBodyWhile>0 a, Ig, s & WithVariantWhile>0 a, Ig, s
-  implies ex f being Function of product the Object-Kind of SCM+FSA, NAT st
-  f is on_data_only & for k being Element of NAT holds
-  f.(StepWhile>0(a, Ig, s).(k+1)) < f.(StepWhile>0(a, Ig, s).k)
-  or StepWhile>0(a, Ig, s).k.a <= 0;
+  s.intloc 0 = 1 & ProperBodyWhile>0 a, Ig, s & WithVariantWhile>0
+a, Ig, s implies ex f being Function of product the Object-Kind of SCM+FSA, NAT
+st f is on_data_only & for k being Element of NAT holds f.(StepWhile>0(a, Ig, s
+  ).(k+1)) < f.(StepWhile>0(a, Ig, s).k) or StepWhile>0(a, Ig, s).k.a <= 0;
 
 theorem :: SCMFSA9A:47
-  s1.intloc 0 = 1 & DataPart s1 = DataPart s2 &
-  ProperBodyWhile>0 a, Ig, s1 & WithVariantWhile>0 a, Ig, s1
-  implies WithVariantWhile>0 a, Ig, s2;
+  s1.intloc 0 = 1 & DataPart s1 = DataPart s2 & ProperBodyWhile>0 a, Ig,
+  s1 & WithVariantWhile>0 a, Ig, s1 implies WithVariantWhile>0 a, Ig, s2;
 
 begin :: fusc using while>0, bottom-up
 
 definition
   let N, result be Int-Location;
-
+  func Fusc_macro ( N, result ) -> Program of SCM+FSA equals
+:: SCMFSA9A:def 8
+  SubFrom(result,
+  result) ';' ((1-stRWNotIn {N, result}) := intloc 0) ';' ((2-ndRWNotIn {N,
+result}) := N) ';' while>0 ( 2-ndRWNotIn {N, result}, (3-rdRWNotIn {N, result})
+:= 2 ';' Divide(2-ndRWNotIn {N, result}, 3-rdRWNotIn {N, result}) ';' if=0 ( 3
+  -rdRWNotIn {N, result}, Macro AddTo(1-stRWNotIn {N, result}, result), Macro
+  AddTo(result, 1-stRWNotIn {N, result}) ) );
+end;
 :: set next = 1-stRWNotIn {N, result};
 :: set aux  = 2-ndRWNotIn {N, result};
 :: set rem2 = 3-rdRWNotIn {N, result};
 :: while and if do not allocate memory, no need to save anything
-  func Fusc_macro ( N, result ) -> Program of SCM+FSA equals
-:: SCMFSA9A:def 8
-  SubFrom(result, result) ';' ((1-stRWNotIn {N, result}) := intloc 0) ';'
-  ((2-ndRWNotIn {N, result}) := N) ';' while>0 ( 2-ndRWNotIn {N, result},
-  (3-rdRWNotIn {N, result}) := 2 ';'
-  Divide(2-ndRWNotIn {N, result}, 3-rdRWNotIn {N, result}) ';'
-  if=0 ( 3-rdRWNotIn {N, result},
-  Macro AddTo(1-stRWNotIn {N, result}, result),
-  Macro AddTo(result, 1-stRWNotIn {N, result}) ) );
-end;
 
 theorem :: SCMFSA9A:48
-  for N, result being read-write Int-Location st N <> result
-  for n being Element of NAT st n = s.N
-  holds IExec(Fusc_macro(N, result), s).result = Fusc n &
-  IExec(Fusc_macro(N, result), s).N = n;
+  for N, result being read-write Int-Location st N <> result for n being
+Element of NAT st n = s.N holds IExec(Fusc_macro(N, result), s).result = Fusc n
+  & IExec(Fusc_macro(N, result), s).N = n;
 

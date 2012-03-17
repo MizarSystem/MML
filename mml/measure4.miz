@@ -7,16 +7,15 @@
 environ
 
  vocabularies SUPINF_1, MEASURE1, RLVECT_1, ARYTM_1, SETFAM_1, FUNCT_1, BOOLE,
-      TARSKI, RELAT_1, SUPINF_2, PROB_1, MEASURE3, MEASURE4, ARYTM,
-      REALSET1, FUNCOP_1;
+      TARSKI, RELAT_1, SUPINF_2, PROB_1, MEASURE3, MEASURE4, ARYTM, REALSET1,
+      FUNCOP_1;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, NUMBERS, FUNCT_1,
       RELSET_1, PARTFUN1, FUNCT_2, XXREAL_0, XREAL_0, VALUED_0, FUNCOP_1,
-      REAL_1, NAT_1, SETFAM_1, PROB_1, SUPINF_1,
-      SUPINF_2, MEASURE1, MEASURE3;
+      REAL_1, NAT_1, SETFAM_1, PROB_1, SUPINF_1, SUPINF_2, MEASURE1, MEASURE3;
  constructors ENUMSET1, PARTFUN1, REAL_1, NAT_1, PROB_2, MEASURE3, SUPINF_1,
       FUNCOP_1, RELSET_1;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, FUNCT_2, NUMBERS,
-      XXREAL_0, XREAL_0, NAT_1, MEASURE1, VALUED_0, MEMBERED, XXREAL_3;
+      XXREAL_0, XREAL_0, NAT_1, MEASURE1, VALUED_0, MEMBERED;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, MEASURE3, XBOOLE_0;
  theorems TARSKI, ENUMSET1, FUNCT_1, FUNCT_2, ZFMISC_1, NAT_1, SUPINF_2,
@@ -33,10 +32,9 @@ reserve x,y,z for R_eal,
 canceled 3;
 
 theorem Th4:
-  for S being non empty Subset-Family of X, F, G being Function of NAT,S,
-  A being Element of S st
-  for n being Element of NAT holds G.n = A /\ F.n holds
-  union rng G = A /\ union rng F
+  for S being non empty Subset-Family of X, F, G being Function of
+NAT,S, A being Element of S st for n being Element of NAT holds G.n = A /\ F.n
+  holds union rng G = A /\ union rng F
 proof
   let S be non empty Subset-Family of X;
   let F, G be Function of NAT,S, A be Element of S;
@@ -45,130 +43,145 @@ A1: for n being Element of NAT holds G.n = A /\ F.n;
   thus union rng G c= A /\ union rng F
   proof
     let r be set;
-    assume r in union rng G;
+    assume
+    r in union rng G;
     then consider E being set such that
-A2: r in E & E in rng G by TARSKI:def 4;
+A2: r in E and
+A3: E in rng G by TARSKI:def 4;
     consider s being set such that
-A3: s in dom G & E = G.s by A2,FUNCT_1:def 5;
-    reconsider s as Element of NAT by A3;
-    r in A /\ F.s by A1,A2,A3;
+A4: s in dom G and
+A5: E = G.s by A3,FUNCT_1:def 5;
+    reconsider s as Element of NAT by A4;
+A6: r in A /\ F.s by A1,A2,A5;
     then
-A4: r in A & r in F.s by XBOOLE_0:def 4;
-    F.s in rng F by FUNCT_2:6;
-    then r in union rng F by A4,TARSKI:def 4;
-    hence thesis by A4,XBOOLE_0:def 4;
+A7: r in A by XBOOLE_0:def 4;
+A8: F.s in rng F by FUNCT_2:6;
+    r in F.s by A6,XBOOLE_0:def 4;
+    then r in union rng F by A8,TARSKI:def 4;
+    hence thesis by A7,XBOOLE_0:def 4;
   end;
   let r be set;
-  assume r in A /\ union rng F;
+  assume
+A9: r in A /\ union rng F;
   then
-A5: r in A & r in union rng F by XBOOLE_0:def 4;
+A10: r in A by XBOOLE_0:def 4;
+  r in union rng F by A9,XBOOLE_0:def 4;
   then consider E being set such that
-A6: r in E & E in rng F by TARSKI:def 4;
+A11: r in E and
+A12: E in rng F by TARSKI:def 4;
   consider s being set such that
-A7: s in dom F & E = F.s by A6,FUNCT_1:def 5;
-  reconsider s as Element of NAT by A7;
-  A /\ E = G.s by A1,A7;
-  then
-A8: r in G.s by A5,A6,XBOOLE_0:def 4;
-  G.s in rng G by FUNCT_2:6;
-  hence thesis by A8,TARSKI:def 4;
+A13: s in dom F and
+A14: E = F.s by A12,FUNCT_1:def 5;
+  reconsider s as Element of NAT by A13;
+A15: G.s in rng G by FUNCT_2:6;
+  A /\ E = G.s by A1,A14;
+  then r in G.s by A10,A11,XBOOLE_0:def 4;
+  hence thesis by A15,TARSKI:def 4;
 end;
 
 theorem Th5:
-  for S being non empty Subset-Family of X for F, G being Function of NAT,S st
-  (G.0 = F.0 &
-  for n being Element of NAT holds G.(n+1) = F.(n+1) \/ G.n) holds
-  for H being Function of NAT,S st (H.0 = F.0 &
-  for n being Element of NAT holds H.(n+1) = F.(n+1) \ G.n) holds
-  union rng F = union rng H
+  for S being non empty Subset-Family of X for F, G being Function
+of NAT,S st (G.0 = F.0 & for n being Element of NAT holds G.(n+1) = F.(n+1) \/
+G.n) holds for H being Function of NAT,S st (H.0 = F.0 & for n being Element of
+  NAT holds H.(n+1) = F.(n+1) \ G.n) holds union rng F = union rng H
 proof
   let S be non empty Subset-Family of X;
   let F, G be Function of NAT,S;
-  assume
-A1: G.0 = F.0 & for n being Element of NAT holds G.(n+1) = F.(n+1) \/ G.n;
+  assume that
+A1: G.0 = F.0 and
+A2: for n being Element of NAT holds G.(n+1) = F.(n+1) \/ G.n;
   let H be Function of NAT,S;
-  assume
-A2: H.0 = F.0 & for n being Element of NAT holds H.(n+1) = F.(n+1) \ G.n;
-A3: for n being Element of NAT holds H.n c= F.n
-  proof
-    let n be Element of NAT;
-A4: n=0 implies H.n c= F.n by A2;
-    (ex k being Nat st n = k + 1) implies H.n c= F.n
-    proof
-      given k being Nat such that
-A5:   n = k + 1;
-      reconsider k as Element of NAT by ORDINAL1:def 13;
-      H.n = F.n \ G.k by A2,A5;
-      hence thesis;
-    end;
-    hence thesis by A4,NAT_1:6;
-  end;
-A6: union rng H c= union rng F
-  proof
-    let r be set;
-    assume r in union rng H;
-    then consider E being set such that
-A7: r in E & E in rng H by TARSKI:def 4;
-    consider s being set such that
-A8: s in dom H & E = H.s by A7,FUNCT_1:def 5;
-    reconsider s as Element of NAT by A8;
-A9: E c= F.s by A3,A8;
-    F.s in rng F by FUNCT_2:6;
-    hence thesis by A7,A9,TARSKI:def 4;
-  end;
+  assume that
+A3: H.0 = F.0 and
+A4: for n being Element of NAT holds H.(n+1) = F.(n+1) \ G.n;
   thus union rng F c= union rng H
   proof
     let r be set;
-    assume r in union rng F;
+    assume
+    r in union rng F;
     then consider E being set such that
-A10: r in E & E in rng F by TARSKI:def 4;
-    consider s being set such that
-A11: s in dom F & E = F.s by A10,FUNCT_1:def 5;
+A5: r in E and
+A6: E in rng F by TARSKI:def 4;
+A7: ex s being set st s in dom F & E = F.s by A6,FUNCT_1:def 5;
     ex s1 being Element of NAT st r in H.s1
     proof
       defpred P[Nat] means r in F.$1;
-A12:  ex k being Nat st P[k] by A10,A11;
-      ex k being Nat st P[k] &
-      for n being Nat st P[n] holds k <= n from NAT_1:sch 5(A12);
+A8:   ex k being Nat st P[k] by A5,A7;
+      ex k being Nat st P[k] & for n being Nat st P[n] holds k <= n from
+      NAT_1:sch 5(A8);
       then consider k being Nat such that
-A13:  r in F.k & for n being Nat st r in F.n holds k <= n;
-A14:  k=0 implies ex s1 being Element of NAT st r in H.s1 by A2,A13;
-      (ex l being Nat st k = l + 1) implies
-      (ex s1 being Element of NAT st r in H.s1)
+A9:   r in F.k and
+A10:  for n being Nat st r in F.n holds k <= n;
+A11:  (ex l being Nat st k = l + 1) implies ex s1 being Element of NAT st
+      r in H.s1
       proof
         given l being Nat such that
-A15:    k = l + 1;
-        reconsider l as Element of NAT by ORDINAL1:def 13;
-A16:    not r in G.l
-        proof
-          assume r in G.l;
-          then consider i being Element of NAT such that
-A17:      i <= l & r in F.i by A1,MEASURE2:6;
-          k <= i by A13,A17;
-          hence thesis by A15,A17,NAT_1:13;
-        end;
-A18:    H.(l+1) = F.(l+1) \ G.l by A2;
+A12:    k = l + 1;
         take k;
-        thus thesis by A13,A15,A16,A18,XBOOLE_0:def 5;
+        reconsider l as Element of NAT by ORDINAL1:def 13;
+A13:    not r in G.l
+        proof
+          assume
+          r in G.l;
+          then consider i being Element of NAT such that
+A14:      i <= l and
+A15:      r in F.i by A1,A2,MEASURE2:6;
+          k <= i by A10,A15;
+          hence thesis by A12,A14,NAT_1:13;
+        end;
+        H.(l+1) = F.(l+1) \ G.l by A4;
+        hence thesis by A9,A12,A13,XBOOLE_0:def 5;
       end;
-      hence thesis by A14,NAT_1:6;
+      k=0 implies ex s1 being Element of NAT st r in H.s1 by A3,A9;
+      hence thesis by A11,NAT_1:6;
     end;
     then consider s1 being Element of NAT such that
-A19: r in H.s1;
+A16: r in H.s1;
     H.s1 in rng H by FUNCT_2:6;
-    hence thesis by A19,TARSKI:def 4;
+    hence thesis by A16,TARSKI:def 4;
   end;
-  thus thesis by A6;
+A17: for n being Element of NAT holds H.n c= F.n
+  proof
+    let n be Element of NAT;
+A18: (ex k being Nat st n = k + 1) implies H.n c= F.n
+    proof
+      given k being Nat such that
+A19:  n = k + 1;
+      reconsider k as Element of NAT by ORDINAL1:def 13;
+      H.n = F.n \ G.k by A4,A19;
+      hence thesis;
+    end;
+    n=0 implies H.n c= F.n by A3;
+    hence thesis by A18,NAT_1:6;
+  end;
+  union rng H c= union rng F
+  proof
+    let r be set;
+    assume
+    r in union rng H;
+    then consider E being set such that
+A20: r in E and
+A21: E in rng H by TARSKI:def 4;
+    consider s being set such that
+A22: s in dom H and
+A23: E = H.s by A21,FUNCT_1:def 5;
+    reconsider s as Element of NAT by A22;
+A24: F.s in rng F by FUNCT_2:6;
+    E c= F.s by A17,A23;
+    hence thesis by A20,A24,TARSKI:def 4;
+  end;
+  hence thesis;
 end;
 
 theorem Th6:
   bool X is SigmaField of X
 proof
-A1: for A being set holds A in bool X implies X\A in bool X;
-A2: for M being N_Sub_set_fam of X st M c= bool X holds union M in bool X;
+A1: for M being N_Sub_set_fam of X st M c= bool X holds union M in bool X;
   reconsider Y = bool X as Subset-Family of X by ZFMISC_1:def 1;
-  reconsider Y as non empty compl-closed sigma-additive Subset-Family of X
-  by A1,A2,MEASURE1:def 3,def 9;
+  for A being set holds A in bool X implies X\A in bool X;
+  then reconsider
+  Y as non empty compl-closed sigma-additive Subset-Family of X by
+  A1,MEASURE1:def 3,def 9;
   Y is SigmaField of X;
   hence thesis;
 end;
@@ -180,36 +193,35 @@ definition
   canceled;
   mode C_Measure of X -> Function of bool X,ExtREAL means
     :Def2:
-    it is nonnegative zeroed &
-    for A,B being Subset of X st A c= B holds it.A <= it.B &
+    it is
+nonnegative zeroed & for A,B being Subset of X st A c= B holds it.A <= it.B &
     for F being Function of NAT,bool X holds it.(union rng F) <= SUM(it*F);
   existence
-proof
-  set M = bool X --> 0.;
-A2: for A being Subset of X holds 0.<= M.A;
-  then
-A3: M is nonnegative by MEASURE1:def 4;
-A4: {} c= X by XBOOLE_1:2;
-A5: for F being Function of NAT,bool X holds M.(union rng F) <= SUM(M*F)
   proof
-    let F be Function of NAT,bool X;
-A6: M.(union rng F) = 0.by FUNCOP_1:13;
-A7: M*F is nonnegative by A3,MEASURE1:54;
-B9: for r being Element of NAT st 0 <= r holds (M*F).r = 0.
+    set M = bool X --> 0.;
+    take M;
+A1: for A being Subset of X holds 0.<= M.A;
+    then
+A2: M is nonnegative by MEASURE1:def 4;
+A3: for F being Function of NAT,bool X holds M.(union rng F) <= SUM(M*F)
     proof
-      let r be Element of NAT;
-      dom (M*F) = NAT by FUNCT_2:def 1;
-      then (M*F).r = M.(F.r) by FUNCT_1:22;
-      hence thesis by FUNCOP_1:13;
+      let F be Function of NAT,bool X;
+A4:   M.(union rng F) = 0.by FUNCOP_1:13;
+A5:   for r being Element of NAT st 0 <= r holds (M*F).r = 0.
+      proof
+        let r be Element of NAT;
+        dom (M*F) = NAT by FUNCT_2:def 1;
+        then (M*F).r = M.(F.r) by FUNCT_1:22;
+        hence thesis by FUNCOP_1:13;
+      end;
+A6:   Ser(M*F).0 = (M*F).0 by SUPINF_2:63;
+      M*F is nonnegative by A2,MEASURE1:54;
+      hence thesis by A4,A5,A6,SUPINF_2:67;
     end;
-    Ser(M*F).0 = (M*F).0 by SUPINF_2:63;
-    hence thesis by A6,B9,A7,SUPINF_2:67;
+    {} c= X by XBOOLE_1:2;
+    then M.{} = 0. by FUNCOP_1:13;
+    hence thesis by A1,A3,FUNCOP_1:13,MEASURE1:def 4,VALUED_0:def 19;
   end;
-  take M;
-Y: M.{} = 0. by A4,FUNCOP_1:13;
-  for A,B being Subset of X holds M.A <= M.B by FUNCOP_1:13;
-  hence thesis by A2,A5,Y,MEASURE1:def 4,VALUED_0:def 19;
-end;
 end;
 
 reserve C for C_Measure of X;
@@ -219,64 +231,65 @@ definition
   let C be C_Measure of X;
   func sigma_Field(C) -> non empty Subset-Family of X means
   :Def3:
-  for A being Subset of X holds (A in it iff for W,Z being Subset of X holds
-  (W c= A & Z c= X \ A implies C.W + C.Z <= C.(W \/ Z)));
+  for A being
+Subset of X holds (A in it iff for W,Z being Subset of X holds (W c= A & Z c= X
+  \ A implies C.W + C.Z <= C.(W \/ Z)));
   existence
   proof
-    defpred P[set] means for A being set holds (A = $1 implies
-    for W,Z being Subset of X holds
-    (W c= A & Z c= X \ A implies C.W + C.Z <= C.(W \/ Z)));
+    reconsider A = {} as Subset of X by XBOOLE_1:2;
+    defpred P[set] means for A being set holds (A = $1 implies for W,Z being
+    Subset of X holds (W c= A & Z c= X \ A implies C.W + C.Z <= C.(W \/ Z)));
     consider D being set such that
-A1: for
-    y being set holds (y in D iff (y in bool X & P[y])) from XBOOLE_0:sch 1;
-A2: for A being set holds (A in D iff A in bool X &
-    for W,Z being Subset of X holds
-    (W c= A & Z c= X \ A implies C.W + C.Z <= C.(W \/ Z)))
+A1: for y being set holds (y in D iff y in bool X & P[y] ) from
+    XBOOLE_0:sch 1;
+A2: for A being set holds (A in D iff A in bool X & for W,Z being Subset
+    of X holds (W c= A & Z c= X \ A implies C.W + C.Z <= C.(W \/ Z)))
     proof
       let A be set;
-      P[A] iff for W,Z being Subset of X holds
-      (W c= A & Z c= X \ A implies C.W + C.Z <= C.(W \/ Z));
+      P[A] iff for W,Z being Subset of X holds (W c= A & Z c= X \ A
+      implies C.W + C.Z <= C.(W \/ Z));
       hence thesis by A1;
     end;
-    reconsider A = {} as Subset of X by XBOOLE_1:2;
+    then
+A3: for A being set holds A in D implies A in bool X;
     now
       let W,Z be Subset of X;
-X:    C is zeroed by Def2;
-      assume W c= A & Z c= X \ A;
-      then
-A3:   W = {};
-      then C.W = 0 by X,VALUED_0:def 19;
-      hence C.W + C.Z <= C.(W \/ Z) by A3,XXREAL_3:4;
+      assume that
+A4:   W c= A and
+      Z c= X \ A;
+A5:   W = {} by A4;
+      C is zeroed by Def2;
+      then C.W = 0 by A5,VALUED_0:def 19;
+      hence C.W + C.Z <= C.(W \/ Z) by A5,XXREAL_3:4;
     end;
-    then D <> {} & for A being set holds A in D implies A in bool X by A2;
-    then reconsider D as non empty Subset-Family of X by TARSKI:def 3;
+    then reconsider D as non empty Subset-Family of X by A2,A3,TARSKI:def 3;
     take D;
     thus thesis by A2;
   end;
   uniqueness
   proof
     let D1,D2 be non empty Subset-Family of X such that
-A4: for A being Subset of X holds (A in D1 iff for W,Z being Subset of X holds
-    (W c= A & Z c= X \ A implies C.W + C.Z <= C.(W \/ Z))) and
-A5: for A being Subset of X holds (A in D2 iff for W,Z being Subset of X holds
-    (W c= A & Z c= X \ A implies C.W + C.Z <= C.(W \/ Z)));
+A6: for A being Subset of X holds (A in D1 iff for W,Z being Subset
+    of X holds (W c= A & Z c= X \ A implies C.W + C.Z <= C.(W \/ Z))) and
+A7: for A being Subset of X holds (A in D2 iff for W,Z being Subset
+    of X holds (W c= A & Z c= X \ A implies C.W + C.Z <= C.(W \/ Z)));
     for A being set holds A in D1 iff A in D2
     proof
       let A be set;
       hereby
         assume
-A6:     A in D1;
+A8:     A in D1;
         then reconsider A' = A as Subset of X;
-        for W,Z being Subset of X holds
-        (W c= A & Z c= X \ A' implies C.W + C.Z <= C.(W \/ Z)) by A4,A6;
-        hence A in D2 by A5;
+        for W,Z being Subset of X holds (W c= A & Z c= X \ A' implies C.W
+        + C.Z <= C.(W \/ Z)) by A6,A8;
+        hence A in D2 by A7;
       end;
       assume
-A7:   A in D2;
+A9:   A in D2;
       then reconsider A as Subset of X;
-      for W,Z being Subset of X holds
-      (W c= A & Z c= X \ A implies C.W + C.Z <= C.(W \/ Z)) by A5,A7;
-      hence thesis by A4;
+      for W,Z being Subset of X holds (W c= A & Z c= X \ A implies C.W +
+      C.Z <= C.(W \/ Z)) by A7,A9;
+      hence thesis by A6;
     end;
     hence thesis by TARSKI:2;
   end;
@@ -288,99 +301,110 @@ proof
   let W,Z be Subset of X;
   reconsider P = {} as Subset of X by XBOOLE_1:2;
   consider F being Function of NAT,bool X such that
-A1: rng F = {W,Z,P} & F.0 = W & F.1 = Z &
-  for n being Element of NAT st 1 < n holds F.n = P by MEASURE1:38;
-A2: union {W,Z,P} = W \/ Z
+A1: rng F = {W,Z,P} and
+A2: F.0 = W and
+A3: F.1 = Z and
+A4: for n being Element of NAT st 1 < n holds F.n = P by MEASURE1:38;
+A5: (C*F).1 = C.Z by A3,FUNCT_2:21;
+  set G = C*F;
+A6: union {W,Z,P} = W \/ Z
   proof
     thus union {W,Z,P} c= W \/ Z
     proof
       let x be set;
-      assume x in union {W,Z,P};
-      then consider Y being set such that
-A3:   x in Y & Y in {W,Z,P} by TARSKI:def 4;
-      x in W or x in Z or x in P by A3,ENUMSET1:def 1;
+      assume
+      x in union {W,Z,P};
+      then ex Y being set st x in Y & Y in {W,Z,P} by TARSKI:def 4;
+      then x in W or x in Z or x in P by ENUMSET1:def 1;
       hence thesis by XBOOLE_0:def 3;
     end;
     let x be set;
     assume
-A4: x in W \/ Z;
-    now per cases by A4,XBOOLE_0:def 3;
+A7: x in W \/ Z;
+    now
+      per cases by A7,XBOOLE_0:def 3;
       suppose
-A5:     x in W;
+A8:     x in W;
         take Y = W;
-        thus x in Y & Y in {W,Z,P} by A5,ENUMSET1:def 1;
+        thus x in Y & Y in {W,Z,P} by A8,ENUMSET1:def 1;
       end;
       suppose
-A6:     x in Z;
+A9:     x in Z;
         take Y = Z;
-        thus x in Y & Y in {W,Z,P} by A6,ENUMSET1:def 1;
+        thus x in Y & Y in {W,Z,P} by A9,ENUMSET1:def 1;
       end;
     end;
     hence thesis by TARSKI:def 4;
   end;
-  C is nonnegative by Def2;
-  then
-A7: C*F is nonnegative by MEASURE1:54;
-A8: for r being Element of NAT st 2 <= r holds (C*F).r = 0.
+A10: C is zeroed by Def2;
+A11: for r being Element of NAT st 2 <= r holds (C*F).r = 0.
   proof
     let r be Element of NAT;
-X:    C is zeroed by Def2;
-    assume 2 <= r;
+    assume
+    2 <= r;
     then 1 + 1 <= r;
     then 1 < r by NAT_1:13;
-    then F.r = {} by A1;
-    then C.(F.r) = 0. by X,VALUED_0:def 19;
+    then
+A12: F.r = {} by A4;
+    C is zeroed by Def2;
+    then C.(F.r) = 0. by A12,VALUED_0:def 19;
     hence thesis by FUNCT_2:21;
   end;
-  F.0 = W & F.1 = Z & F.2 = P by A1;
+  C is nonnegative by Def2;
   then
-A9: (C*F).2 = C.P & (C*F).1 = C.Z & (C*F).0 = C.W by FUNCT_2:21;
-  set G = C*F;
+A13: C*F is nonnegative by MEASURE1:54;
+  F.2 = P by A4;
+  then
+A14: (C*F).2 = C.P by FUNCT_2:21;
+A15: (C*F).0 = C.W by A2,FUNCT_2:21;
   consider y1,y2 being R_eal such that
-A10: y1 = Ser(G).1 & y2 = Ser(G).0;
-X:    C is zeroed by Def2;
-  Ser(G).2 = y1 + G.(1 + 1) by A10,SUPINF_2:63
-    .= Ser(G).1 + 0. by A9,A10,X,VALUED_0:def 19
+A16: y1 = Ser(G).1 and
+A17: y2 = Ser(G).0;
+  Ser(G).2 = y1 + G.(1 + 1) by A16,SUPINF_2:63
+    .= Ser(G).1 + 0. by A14,A16,A10,VALUED_0:def 19
     .= Ser(G).1 by XXREAL_3:4
-    .= y2 + G.(0 + 1) by A10,SUPINF_2:63
-    .= C.W + C.Z by A9,A10,SUPINF_2:63;
-  then SUM(C*F) = C.W + C.Z by A7,A8,SUPINF_2:67;
-  hence thesis by A1,A2,Def2;
+    .= y2 + G.(0 + 1) by A17,SUPINF_2:63
+    .= C.W + C.Z by A5,A15,A17,SUPINF_2:63;
+  then SUM(C*F) = C.W + C.Z by A13,A11,SUPINF_2:67;
+  hence thesis by A1,A6,Def2;
 end;
 
 canceled;
 
 theorem Th14:
-  for A being Subset of X holds
-  (A in sigma_Field(C) iff for W,Z being Subset of X holds
-  (W c= A & Z c= X \ A implies C.W + C.Z = C.(W \/ Z)))
+  for A being Subset of X holds (A in sigma_Field(C) iff for W,Z
+  being Subset of X holds (W c= A & Z c= X \ A implies C.W + C.Z = C.(W \/ Z)))
 proof
   let A be Subset of X;
   hereby
     assume
 A1: A in sigma_Field(C);
     let W,Z be Subset of X;
-    assume W c= A & Z c= X \ A;
-    then C.(W \/ Z) <= C.W + C.Z & C.W + C.Z <= C.(W \/ Z) by A1,Def3,Th12;
-    hence C.W + C.Z = C.(W \/ Z) by XXREAL_0:1;
+    assume that
+A2: W c= A and
+A3: Z c= X \ A;
+A4: C.(W \/ Z) <= C.W + C.Z by Th12;
+    C.W + C.Z <= C.(W \/ Z) by A1,A2,A3,Def3;
+    hence C.W + C.Z = C.(W \/ Z) by A4,XXREAL_0:1;
   end;
-  assume for W,Z being Subset of X holds
-  (W c= A & Z c= X \ A implies C.W + C.Z = C.(W \/ Z));
-  then for W,Z being Subset of X holds
-  (W c= A & Z c= X \ A implies C.W + C.Z <= C.(W \/ Z));
+  assume
+  for W,Z being Subset of X holds (W c= A & Z c= X \ A implies C.W + C
+  .Z = C.(W \/ Z));
+  then for W,Z being Subset of X holds (W c= A & Z c= X \ A implies C.W + C.Z
+  <= C.(W \/ Z));
   hence thesis by Def3;
 end;
 
 theorem Th15:
-  for W,Z being Subset of X holds
-  (W in sigma_Field(C) & Z in sigma_Field(C) & Z misses W) implies
-  C.(W \/ Z) = C.W + C.Z
+  for W,Z being Subset of X holds W in sigma_Field(C) & Z misses W
+  implies C.(W \/ Z) = C.W + C.Z
 proof
   let W,Z be Subset of X;
-  assume
-A1: W in sigma_Field(C) & Z in sigma_Field(C) & Z misses W;
+  assume that
+A1: W in sigma_Field(C) and
+A2: Z misses W;
   Z \ W c= X \ W by XBOOLE_1:33;
-  then Z c= X \ W by A1,XBOOLE_1:83;
+  then Z c= X \ W by A2,XBOOLE_1:83;
   hence thesis by A1,Th14;
 end;
 
@@ -389,119 +413,138 @@ theorem Th16:
 proof
   assume
 A1: A in sigma_Field(C);
-  for W,Z being Subset of X holds
-  W c= X \ A & Z c= X \ (X \ A) implies C.W + C.Z <= C.(W \/ Z)
+  for W,Z being Subset of X holds W c= X \ A & Z c= X \ (X \ A) implies C.
+  W + C.Z <= C.(W \/ Z)
   proof
     let W,Z be Subset of X;
-    assume
-A2: W c= X \ A & Z c= X \ (X \ A);
+    assume that
+A2: W c= X \ A and
+A3: Z c= X \ (X \ A);
     X \ (X \ A) = X /\ A by XBOOLE_1:48;
-    then Z c= A & W c= X \ A by A1,A2,XBOOLE_1:28;
-    hence thesis by A1,Def3;
+    then Z c= A by A1,A3,XBOOLE_1:28;
+    hence thesis by A1,A2,Def3;
   end;
   hence thesis by Def3;
 end;
 
 theorem Th17:
-  A in sigma_Field(C) & B in sigma_Field(C) implies A \/ B in sigma_Field(C)
+  A in sigma_Field(C) & B in sigma_Field(C) implies A \/ B in
+  sigma_Field(C)
 proof
-  assume
-A1: A in sigma_Field(C) & B in sigma_Field(C);
-  then reconsider A,B as Subset of X;
+  assume that
+A1: A in sigma_Field(C) and
+A2: B in sigma_Field(C);
+  reconsider A,B as Subset of X by A1,A2;
   set D = A \/ B;
-  for W,Z being Subset of X holds
-  W c= D & Z c= X \ D implies C.W + C.Z = C.(W \/ Z)
+  for W,Z being Subset of X holds W c= D & Z c= X \ D implies C.W + C.Z =
+  C.(W \/ Z)
   proof
     let W,Z be Subset of X;
-    assume
-A2: W c= D & Z c= X \ D;
-    set W1 = W /\ A;
-A3: W \ A c= X \ A by XBOOLE_1:33;
+    assume that
+A3: W c= D and
+A4: Z c= X \ D;
     set W2 = W \ A;
+    set Z1 = W2 \/ Z;
+A5: (X \ A) /\ (X \ B) c= X \ B by XBOOLE_1:17;
+    set W1 = W /\ A;
+A6: W1 c= A by XBOOLE_1:17;
     (X \ A) /\ (X \ B) c= X \ A by XBOOLE_1:17;
     then
-B4:  X \ (A \/ B) c= X \ A by XBOOLE_1:53;
+A7: X \ (A \/ B) c= X \ A by XBOOLE_1:53;
+    Z c= (X \ A) /\ (X \ B) by A4,XBOOLE_1:53;
     then
-A4: W1 c= A & Z c= X \ A by A2,XBOOLE_1:1,17;
-A5: W2 \/ Z c= X \ A \/ Z by A3,XBOOLE_1:9;
-    set Z1 = W2 \/ Z;
-A6: Z1 c= X \ A by B4,A5,A2,XBOOLE_1:1,12;
-A7: W = W1 \/ W2 by XBOOLE_1:51;
-A8: C.(W \/ Z) = C.((W1 \/ W2) \/ Z) by XBOOLE_1:51
+A8: Z c= X \ B by A5,XBOOLE_1:1;
+    W = W1 \/ W2 by XBOOLE_1:51;
+    then C.W <= C.W1 + C.W2 by Th12;
+    then
+A9: C.W + C.Z <= (C.W1 + C.W2) + C.Z by XXREAL_3:38;
+    W \ A c= B \/ A \ A by A3,XBOOLE_1:33;
+    then
+A10: W \ A c= B \ A by XBOOLE_1:40;
+    B \ A c= B by XBOOLE_1:36;
+    then W2 c= B by A10,XBOOLE_1:1;
+    then
+A11: C.W2 + C.Z <= C.Z1 by A2,A8,Def3;
+    C is nonnegative by Def2;
+    then
+A12: 0. <= C.W1 by MEASURE1:def 4;
+    W \ A c= X \ A by XBOOLE_1:33;
+    then W2 \/ Z c= X \ A \/ Z by XBOOLE_1:9;
+    then
+A13: Z1 c= X \ A by A4,A7,XBOOLE_1:1,12;
+    C.(W \/ Z) = C.((W1 \/ W2) \/ Z) by XBOOLE_1:51
       .= C.(W1 \/ Z1) by XBOOLE_1:4
-      .= C.W1 + C.Z1 by A1,A4,A6,Th14;
-    W \ A c= B \/ A \ A by A2,XBOOLE_1:33;
-    then W \ A c= B \ A & B \ A c= B by XBOOLE_1:36,40;
+      .= C.W1 + C.Z1 by A1,A6,A13,Th14;
     then
-A9: W2 c= B by XBOOLE_1:1;
-    Z c= (X \ A) /\ (X \ B) & (X \ A) /\ (X \ B) c= X \ B
-    by A2,XBOOLE_1:17,53;
-    then Z c= X \ B by XBOOLE_1:1;
+A14: C.W1 + (C.W2 + C.Z) <= C.(W \/ Z) by A11,XXREAL_3:38;
+A15: C is nonnegative by Def2;
     then
-A10: C.W2 + C.Z <= C.Z1 by A1,A9,Def3;
-    C is nonnegative by Def2;
+A16: 0.<= C.Z by MEASURE1:def 4;
+    0.<= C.W2 by A15,MEASURE1:def 4;
+    then (C.W1 + C.W2) + C.Z <= C.(W \/ Z) by A16,A12,A14,XXREAL_3:48;
     then
-A11: 0.<= C.W2 & 0.<= C.Z by MEASURE1:def 4;
-    C is nonnegative by Def2;
-    then
-A13: 0. <= C.W1 by MEASURE1:def 4;
-    C.W1 + (C.W2 + C.Z) <= C.(W \/ Z) by A8,A10,XXREAL_3:38;
-    then
-A14: (C.W1 + C.W2) + C.Z <= C.(W \/ Z) by A11,A13,XXREAL_3:48;
-    C.W <= C.W1 + C.W2 by A7,Th12;
-    then C.W + C.Z <= (C.W1 + C.W2) + C.Z by XXREAL_3:38;
-    then
-A16: C.W + C.Z <= C.(W \/ Z) by A14,XXREAL_0:2;
+A17: C.W + C.Z <= C.(W \/ Z) by A9,XXREAL_0:2;
     C.(W \/ Z) <= C.W + C.Z by Th12;
-    hence thesis by A16,XXREAL_0:1;
+    hence thesis by A17,XXREAL_0:1;
   end;
   hence thesis by Th14;
 end;
 
 theorem Th18:
-  A in sigma_Field(C) & B in sigma_Field(C) implies A /\ B in sigma_Field(C)
+  A in sigma_Field(C) & B in sigma_Field(C) implies A /\ B in
+  sigma_Field(C)
 proof
-  assume
-A1: A in sigma_Field(C) & B in sigma_Field(C);
-  then A /\ B c= X /\ X by XBOOLE_1:27;
+  assume that
+A1: A in sigma_Field(C) and
+A2: B in sigma_Field(C);
+A3: X \ B in sigma_Field(C) by A2,Th16;
+  A /\ B c= X /\ X by A1,A2,XBOOLE_1:27;
   then
-A2: A /\ B = X /\ (A /\ B) by XBOOLE_1:28
+A4: A /\ B = X /\ (A /\ B) by XBOOLE_1:28
     .= X \ (X \(A /\ B)) by XBOOLE_1:48
     .= X \ ((X \ A) \/ (X \ B)) by XBOOLE_1:54;
-  X \ A in sigma_Field(C) & X \ B in sigma_Field(C) by A1,Th16;
-  then (X \ A) \/ (X \ B) in sigma_Field(C) by Th17;
-  hence thesis by A2,Th16;
+  X \ A in sigma_Field(C) by A1,Th16;
+  then (X \ A) \/ (X \ B) in sigma_Field(C) by A3,Th17;
+  hence thesis by A4,Th16;
 end;
 
 theorem Th19:
-  A in sigma_Field(C) & B in sigma_Field(C) implies A \ B in sigma_Field(C)
+  A in sigma_Field(C) & B in sigma_Field(C) implies A \ B in
+  sigma_Field(C)
 proof
-  assume
-A1: A in sigma_Field(C) & B in sigma_Field(C);
+  assume that
+A1: A in sigma_Field(C) and
+A2: B in sigma_Field(C);
   for x being set holds x in A \ B iff x in A /\ (X \ B)
   proof
     let x be set;
     hereby
-      assume x in A \ B;
-      then x in A & not x in B by XBOOLE_0:def 5;
-      then x in A & x in (X \ B) by A1,XBOOLE_0:def 5;
-      hence x in A /\ (X \ B) by XBOOLE_0:def 4;
+      assume
+A3:   x in A \ B;
+      then
+A4:   not x in B by XBOOLE_0:def 5;
+      x in A by A3;
+      then x in (X \ B) by A1,A4,XBOOLE_0:def 5;
+      hence x in A /\ (X \ B) by A3,XBOOLE_0:def 4;
     end;
-    assume x in A /\ (X \ B);
-    then x in A & x in (X \ B) by XBOOLE_0:def 4;
-    then x in A & (x in X & not x in B) by XBOOLE_0:def 5;
-    hence thesis by XBOOLE_0:def 5;
+    assume
+A5: x in A /\ (X \ B);
+    then x in (X \ B) by XBOOLE_0:def 4;
+    then
+A6: not x in B by XBOOLE_0:def 5;
+    x in A by A5,XBOOLE_0:def 4;
+    hence thesis by A6,XBOOLE_0:def 5;
   end;
   then
-A2: A \ B = A /\ (X \ B) by TARSKI:2;
-  X \ B in sigma_Field(C) by A1,Th16;
-  hence thesis by A1,A2,Th18;
+A7: A \ B = A /\ (X \ B) by TARSKI:2;
+  X \ B in sigma_Field(C) by A2,Th16;
+  hence thesis by A1,A7,Th18;
 end;
 
 theorem Th20:
-  for N being Function of NAT,S holds for A being Element of S holds
-  ex F being Function of NAT,S st
-  for n being Element of NAT holds F.n = A /\ N.n
+  for N being Function of NAT,S holds for A being Element of S
+holds ex F being Function of NAT,S st for n being Element of NAT holds F.n = A
+  /\ N.n
 proof
   let N be Function of NAT,S;
   let A be Element of S;
@@ -509,15 +552,16 @@ proof
 A1: for x being set st x in NAT ex y being set st y in S & P[x,y]
   proof
     let x be set;
-    assume x in NAT;
+    assume
+    x in NAT;
     then reconsider x as Element of NAT;
     consider y being set such that
 A2: y = A /\ N.x;
     take y;
     thus thesis by A2;
   end;
-  ex F being Function of NAT,S st
-  for x being set st x in NAT holds P[x,F.x] from FUNCT_2:sch 1(A1);
+  ex F being Function of NAT,S st for x being set st x in NAT holds P[x,F.
+  x] from FUNCT_2:sch 1(A1);
   then consider F being Function of NAT,S such that
 A3: for x being set st x in NAT holds P[x,F.x];
   take F;
@@ -527,90 +571,74 @@ end;
 theorem Th21:
   sigma_Field(C) is SigmaField of X
 proof
-A1: for A being set holds A in sigma_Field(C) implies X\A in sigma_Field(C)
-  by Th16;
-A2: C is nonnegative by Def2;
-  for M being N_Sub_set_fam of X holds
-  M c= sigma_Field(C) implies union M in sigma_Field(C)
+A1: C is nonnegative by Def2;
+A2: for M being N_Sub_set_fam of X holds M c= sigma_Field(C) implies union M
+  in sigma_Field(C)
   proof
     let M be N_Sub_set_fam of X;
     assume
 A3: M c= sigma_Field(C);
-    for W,Z being Subset of X holds
-    (W c= union M & Z c= X \ union M implies C.W + C.Z <= C.(W \/ Z))
+    for W,Z being Subset of X holds (W c= union M & Z c= X \ union M
+    implies C.W + C.Z <= C.(W \/ Z))
     proof
-      let W,Z be Subset of X;
-      assume
-A4:   W c= union M & Z c= X \ union M;
       reconsider S = bool X as SigmaField of X by Th6;
+      let W,Z be Subset of X;
+      assume that
+A4:   W c= union M and
+A5:   Z c= X \ union M;
       consider F being Function of NAT,bool X such that
-A5:   rng F = M by SUPINF_2:def 14;
-A6:   for n being Element of NAT holds F.n in sigma_Field(C)
+A6:   rng F = M by SUPINF_2:def 14;
+      consider G being Function of NAT,S such that
+A7:   G.0 = F.0 and
+A8:   for n being Element of NAT holds G.(n+1) = F.(n+1) \/ G.n by
+      MEASURE2:5;
+      consider B being Function of NAT,S such that
+A9:   B.0 = F.0 and
+A10:  for n being Element of NAT holds B.(n+1) = F.(n+1) \ G.n by
+      MEASURE2:9;
+A11:  union rng F = union rng B by A7,A8,A9,A10,Th5;
+      defpred P[Element of NAT] means G.$1 in sigma_Field(C);
+A12:  for n being Element of NAT holds F.n in sigma_Field(C)
       proof
         let n be Element of NAT;
-        F.n in M by A5,FUNCT_2:6;
+        F.n in M by A6,FUNCT_2:6;
         hence thesis by A3;
       end;
-      consider G being Function of NAT,S such that
-A7:   G.0 = F.0 & for n being Element of NAT holds
-      G.(n+1) = F.(n+1) \/ G.n by MEASURE2:5;
-      defpred P[Element of NAT] means G.$1 in sigma_Field(C);
-A8:   P[0] by A6,A7;
-A9:   for k being Element of NAT st P[k] holds P[k+1]
+A13:  for k being Element of NAT st P[k] holds P[k+1]
       proof
         let k be Element of NAT;
         assume
-A10:    G.k in sigma_Field(C);
-A11:    G.(k+1) = F.(k+1) \/ G.k by A7;
-        F.(k+1) in sigma_Field(C) by A6;
-        hence thesis by A10,A11,Th17;
+A14:    G.k in sigma_Field(C);
+A15:    F.(k+1) in sigma_Field(C) by A12;
+        G.(k+1) = F.(k+1) \/ G.k by A8;
+        hence thesis by A14,A15,Th17;
       end;
-A12:  for n being Element of NAT holds P[n] from NAT_1:sch 1(A8,A9);
-      consider B being Function of NAT,S such that
-A13:  B.0 = F.0 & for n being Element of NAT holds
-      B.(n+1) = F.(n+1) \ G.n by MEASURE2:9;
-A14:  union rng F = union rng B by A7,A13,Th5;
+A16:  P[0] by A12,A7;
+A17:  for n being Element of NAT holds P[n] from NAT_1:sch 1(A16,A13);
       consider Q being Function of NAT,S such that
-A15:  for n being Element of NAT holds Q.n = W /\ B.n by Th20;
-A16:  union rng Q = W /\ union rng B by A15,Th4;
+A18:  for n being Element of NAT holds Q.n = W /\ B.n by Th20;
+A19:  union rng Q = W /\ union rng B by A18,Th4;
       consider QQ being Function of NAT,S such that
-A17:  QQ.0 = Q.0 & for n being Element of NAT holds
-      QQ.(n+1) = Q.(n+1) \/ QQ.n by MEASURE2:5;
+A20:  QQ.0 = Q.0 and
+A21:  for n being Element of NAT holds QQ.(n+1) = Q.(n+1) \/ QQ.n by
+      MEASURE2:5;
       reconsider Q,QQ,F,G as Function of NAT,bool X;
-A18:  C*Q is nonnegative by A2,MEASURE1:54;
-A19:  QQ.0 = W /\ F.0 by A13,A15,A17;
-A20:  F.0 in sigma_Field(C) by A6;
-A21:  QQ.0 c= F.0 by A19,XBOOLE_1:17;
+A22:  F.0 in sigma_Field(C) by A12;
       defpred P[Element of NAT] means C.(Z \/ QQ.$1) = C.Z + Ser(C*Q).$1;
-      F.0 in rng F by FUNCT_2:6;
-      then X \ union rng F c= X \ F.0 by XBOOLE_1:34,ZFMISC_1:92;
-      then
-A22:  Z c= X \ F.0 by A4,A5,XBOOLE_1:1;
-      Ser(C*Q).0 = (C*Q).0 by SUPINF_2:63
-        .= C.(QQ.0) by A17,FUNCT_2:21;
-      then
-A23:  P[0] by A20,A21,A22,Th14;
+A23:  C*Q is nonnegative by A1,MEASURE1:54;
 A24:  for k being Element of NAT st P[k] holds P[k+1]
       proof
-        let k be Element of NAT;
-        assume
-A25:    C.(Z \/ QQ.k) = C.Z + Ser(C*Q).k;
-A26:    QQ.(k+1) = QQ.k \/ Q.(k+1) by A17;
-        Q.(k+1) = W /\ B.(k+1) by A15
-          .= W /\ (F.(k+1) \ G.k) by A13;
-        then
-A27:    Q.(k+1) c= F.(k+1) \ G.k by XBOOLE_1:17;
-        F.(k+1) in sigma_Field(C) & G.k in sigma_Field(C) by A6,A12;
-        then
-A28:    F.(k+1) \ G.k in sigma_Field(C) by Th19;
-A29:    F.(k+1) c= union rng F by FUNCT_2:6,ZFMISC_1:92;
-        F.(k+1) \ G.k c= F.(k+1) by XBOOLE_1:36;
-        then F.(k+1) \ G.k c= union rng F by A29,XBOOLE_1:1;
-        then X \ union rng F c= X \ (F.(k+1) \ G.k) by XBOOLE_1:34;
-        then
-A30:    Z c= X \ (F.(k+1) \ G.k) by A4,A5,XBOOLE_1:1;
         defpred P[Element of NAT] means QQ.$1 c= G.$1;
-        QQ.0 = W /\ F.0 by A13,A15,A17;
+        let k be Element of NAT;
+A25:    F.(k+1) \ G.k c= F.(k+1) by XBOOLE_1:36;
+A26:    QQ.(k+1) = QQ.k \/ Q.(k+1) by A21;
+A27:    G.k in sigma_Field(C) by A17;
+        F.(k+1) in sigma_Field(C) by A12;
+        then
+A28:    F.(k+1) \ G.k in sigma_Field(C) by A27,Th19;
+A29:    0. <= (C*Q).(k+1) by A23,SUPINF_2:58;
+A30:    0. <= Ser(C*Q).k by A23,SUPINF_2:59;
+        QQ.0 = W /\ F.0 by A9,A18,A20;
         then
 A31:    P[0] by A7,XBOOLE_1:17;
         for n being Element of NAT holds QQ.n misses (F.(n+1) \ G.n)
@@ -621,14 +649,15 @@ A32:      for n being Element of NAT st P[n] holds P[n+1]
             let n be Element of NAT;
             assume
 A33:        QQ.n c= G.n;
-A34:        QQ.(n+1) = Q.(n+1) \/ QQ.n by A17
-              .= (W /\ B.(n+1)) \/ QQ.n by A15
-              .= (W /\ (F.(n+1) \ G.n)) \/ QQ.n by A13;
-A35:        W /\ (F.(n+1) \ G.n) c= W /\ F.(n+1) by XBOOLE_1:26,36;
-            W /\ F.(n+1) c= F.(n+1) by XBOOLE_1:17;
-            then W /\ (F.(n+1) \ G.n) c= F.(n+1) by A35,XBOOLE_1:1;
-            then QQ.(n+1) c= F.(n+1) \/ G.n by A33,A34,XBOOLE_1:13;
-            hence thesis by A7;
+A34:        W /\ F.(n+1) c= F.(n+1) by XBOOLE_1:17;
+            W /\ (F.(n+1) \ G.n) c= W /\ F.(n+1) by XBOOLE_1:26,36;
+            then
+A35:        W /\ (F.(n+1) \ G.n) c= F.(n+1) by A34,XBOOLE_1:1;
+            QQ.(n+1) = Q.(n+1) \/ QQ.n by A21
+              .= (W /\ B.(n+1)) \/ QQ.n by A18
+              .= (W /\ (F.(n+1) \ G.n)) \/ QQ.n by A10;
+            then QQ.(n+1) c= F.(n+1) \/ G.n by A33,A35,XBOOLE_1:13;
+            hence thesis by A8;
           end;
 A36:      for n being Element of NAT holds P[n] from NAT_1:sch 1(A31,A32);
           G.n misses (F.(n+1) \ G.n) by XBOOLE_1:79;
@@ -637,147 +666,171 @@ A36:      for n being Element of NAT holds P[n] from NAT_1:sch 1(A31,A32);
         then QQ.k misses (F.(k+1) \ G.k);
         then
 A37:    QQ.k /\ (F.(k+1) \ G.k) = {} by XBOOLE_0:def 7;
-        QQ.k c= X \ (F.(k+1) \ G.k)
+A38:    QQ.k c= X \ (F.(k+1) \ G.k)
         proof
           let z be set;
           assume
-A38:      z in QQ.k;
+A39:      z in QQ.k;
           then not z in F.(k+1) \ G.k by A37,XBOOLE_0:def 4;
-          hence thesis by A38,XBOOLE_0:def 5;
+          hence thesis by A39,XBOOLE_0:def 5;
         end;
+        Q.(k+1) = W /\ B.(k+1) by A18
+          .= W /\ (F.(k+1) \ G.k) by A10;
         then
-A39:    Z \/ QQ.k c= X \ (F.(k+1) \ G.k) by A30,XBOOLE_1:8;
-A40:    0. <= C.Z & 0. <= Ser(C*Q).k & 0. <= (C*Q).(k+1)
-        by A2,A18,SUPINF_2:58,59;
-        C.(Q.(k+1)) + C.(Z \/ QQ.k) = C.((Z \/ QQ.k) \/ Q.(k+1)) by A27,A28,A39
-,Th14
+A40:    Q.(k+1) c= F.(k+1) \ G.k by XBOOLE_1:17;
+        F.(k+1) c= union rng F by FUNCT_2:6,ZFMISC_1:92;
+        then F.(k+1) \ G.k c= union rng F by A25,XBOOLE_1:1;
+        then X \ union rng F c= X \ (F.(k+1) \ G.k) by XBOOLE_1:34;
+        then Z c= X \ (F.(k+1) \ G.k) by A5,A6,XBOOLE_1:1;
+        then Z \/ QQ.k c= X \ (F.(k+1) \ G.k) by A38,XBOOLE_1:8;
+        then
+A41:    C.(Q.(k+1)) + C.(Z \/ QQ.k) = C.((Z \/ QQ.k) \/ Q.(k+1)) by A40,
+        A28,Th14
           .= C.(Z \/ QQ.(k+1)) by A26,XBOOLE_1:4;
-        then C.(Z \/ QQ.(k+1)) = (C.Z + Ser(C*Q).k) + (C*Q).(k+1) by A25,
-FUNCT_2:21
-          .= C.Z + (Ser(C*Q).k + (C*Q).(k+1)) by A40,XXREAL_3:48
+A42:    0. <= C.Z by A1,SUPINF_2:58;
+        assume
+        C.(Z \/ QQ.k) = C.Z + Ser(C*Q).k;
+        then C.(Z \/ QQ.(k+1)) = (C.Z + Ser(C*Q).k) + (C*Q).(k+1) by A41,
+        FUNCT_2:21
+          .= C.Z + (Ser(C*Q).k + (C*Q).(k+1)) by A42,A30,A29,XXREAL_3:48
           .= C.Z + Ser(C*Q).(k+1) by SUPINF_2:63;
         hence thesis;
       end;
-A41:  for n being Element of NAT holds P[n] from NAT_1:sch 1(A23,A24);
-      defpred Q[Element of NAT] means QQ.$1 c= W;
-      QQ.0 = W /\ B.0 by A15,A17;
+      QQ.0 = W /\ F.0 by A9,A18,A20;
       then
-A42:  Q[0] by XBOOLE_1:17;
-A43:  for n being Element of NAT st Q[n] holds Q[n+1]
+A43:  QQ.0 c= F.0 by XBOOLE_1:17;
+A44:  Ser(C*Q).0 = (C*Q).0 by SUPINF_2:63
+        .= C.(QQ.0) by A20,FUNCT_2:21;
+      F.0 in rng F by FUNCT_2:6;
+      then X \ union rng F c= X \ F.0 by XBOOLE_1:34,ZFMISC_1:92;
+      then Z c= X \ F.0 by A5,A6,XBOOLE_1:1;
+      then
+A45:  P[0] by A22,A43,A44,Th14;
+A46:  for n being Element of NAT holds P[n] from NAT_1:sch 1(A45,A24);
+      defpred Q[Element of NAT] means QQ.$1 c= W;
+A47:  for n being Element of NAT st Q[n] holds Q[n+1]
       proof
         let n be Element of NAT;
         assume
-A44:    QQ.n c= W;
-A45:    QQ.(n+1) = Q.(n+1) \/ QQ.n by A17
-          .= (W /\ B.(n+1)) \/ QQ.n by A15;
-        W /\ B.(n+1) c= W by XBOOLE_1:17;
-        then QQ.(n+1) c= W \/ W by A44,A45,XBOOLE_1:13;
+A48:    QQ.n c= W;
+A49:    W /\ B.(n+1) c= W by XBOOLE_1:17;
+        QQ.(n+1) = Q.(n+1) \/ QQ.n by A21
+          .= (W /\ B.(n+1)) \/ QQ.n by A18;
+        then QQ.(n+1) c= W \/ W by A48,A49,XBOOLE_1:13;
         hence thesis;
       end;
-A46:  for n being Element of NAT holds Q[n] from NAT_1:sch 1(A42,A43);
-A47:  union rng Q = W by A4,A5,A14,A16,XBOOLE_1:28;
-A50:  C.Z = +infty implies C.W + C.Z <= C.(W \/ Z)
+      QQ.0 = W /\ B.0 by A18,A20;
+      then
+A50:  Q[0] by XBOOLE_1:17;
+A51:  for n being Element of NAT holds Q[n] from NAT_1:sch 1(A50,A47);
+A52:  union rng Q = W by A4,A6,A11,A19,XBOOLE_1:28;
+A53:  C.Z is real implies C.W + C.Z <= C.(W \/ Z )
       proof
-        assume
-A51:    C.Z = +infty;
-        0. <= C.W by A2,MEASURE1:def 4;
-        then
-A52:    C.W + C.Z = +infty by A51,XXREAL_3:def 2;
-        Z c= W \/ Z by XBOOLE_1:7;
-        hence thesis by A51,A52,Def2;
-      end;
-X:    C.Z is real implies C.W + C.Z <= C.(W \/ Z )
-      proof
-        assume
-A53:    C.Z is real;
-A54:    for n being Element of NAT holds Ser(C*Q).n <= C.(Z \/ W) - C.Z
-        proof
-          let n be Element of NAT;
-A49:      Ser(C*Q).n + C.Z = C.(Z \/ QQ.n) by A41;
-          Z \/ QQ.n c= Z \/ W by A46,XBOOLE_1:9;
-          then Ser(C*Q).n + C.Z <= C.(Z \/ W) by A49,Def2;
-          hence thesis by A53,XXREAL_3:49;
-        end;
-        defpred P[set,set] means ($1 = 0 implies
-        $2 = C.(Z \/ W) - C.Z ) & ($1 <> 0 implies $2 = 0.);
-A55:    for x being set st x in NAT ex y being set st y in ExtREAL & P[x,y]
+        defpred P[set,set] means ($1 = 0 implies $2 = C.(Z \/ W) - C.Z ) & ($1
+        <> 0 implies $2 = 0.);
+A54:    for x being set st x in NAT ex y being set st y in ExtREAL & P[x,
+        y]
         proof
           let x be set;
-          assume x in NAT;
+          assume
+          x in NAT;
           then reconsider x as Element of NAT;
           x <> 0 implies ex y being set st y in ExtREAL & P[x,y];
           hence thesis;
         end;
         consider R being Function of NAT,ExtREAL such that
-A56:    for x being set st x in NAT holds P[x,R.x] from FUNCT_2:sch 1(A55);
+A55:    for x being set st x in NAT holds P[x,R.x] from FUNCT_2:sch 1
+        (A54);
+        assume
+A56:    C.Z is real;
         for n being Element of NAT holds 0. <= R.n
         proof
           let n be Element of NAT;
           per cases;
-          suppose n = 0;
+          suppose
+            n = 0;
+            C.Z in REAL or C.Z in {-infty,+infty} by XBOOLE_0:def 3,
+            XXREAL_0:def 4;
+            then consider y being Real such that
+A57:        y = C.Z by A56,TARSKI:def 2;
             Z c= Z \/ W by XBOOLE_1:7;
             then C.Z <= C.(Z \/ W) by Def2;
             then
-A57:        C.Z - C.Z <= C.(Z \/ W) - C.Z by XXREAL_3:39;
-            C.Z in REAL or C.Z in {-infty,+infty}
-            by XBOOLE_0:def 3,XXREAL_0:def 4;
-            then consider y being Real such that
-A58:        y = C.Z by A53,TARSKI:def 2;
-            C.Z - C.Z = y - y by A58,SUPINF_2:5;
-            hence thesis by A56,A57;
+A58:        C.Z - C.Z <= C.(Z \/ W) - C.Z by XXREAL_3:39;
+            C.Z - C.Z = y - y by A57,SUPINF_2:5;
+            hence thesis by A55,A58;
           end;
-          suppose n <> 0;
-            hence thesis by A56;
+          suppose
+            n <> 0;
+            hence thesis by A55;
           end;
         end;
         then
 A59:    R is nonnegative by SUPINF_2:58;
-A60:    for n being Element of NAT holds Ser(C*Q).n <= Ser(R).n
+A60:    for n being Element of NAT holds Ser(C*Q).n <= C.(Z \/ W) - C.Z
         proof
-          defpred P[Element of NAT] means Ser(R).$1 = C.(Z \/ W) - C.Z;
           let n be Element of NAT;
-          Ser(R).0 = R.0 by SUPINF_2:63;
-          then
-A61:      P[0] by A56;
-A62:      for k being Element of NAT st P[k] holds P[k+1]
+A61:      Z \/ QQ.n c= Z \/ W by A51,XBOOLE_1:9;
+          Ser(C*Q).n + C.Z = C.(Z \/ QQ.n) by A46;
+          then Ser(C*Q).n + C.Z <= C.(Z \/ W) by A61,Def2;
+          hence thesis by A56,XXREAL_3:49;
+        end;
+A62:    for n being Element of NAT holds Ser(C*Q).n <= Ser(R).n
+        proof
+          let n be Element of NAT;
+          defpred P[Element of NAT] means Ser(R).$1 = C.(Z \/ W) - C.Z;
+A63:      for k being Element of NAT st P[k] holds P[k+1]
           proof
             let k be Element of NAT;
             assume
-A63:        Ser(R).k = C.(Z \/ W) - C.Z;
+A64:        Ser(R).k = C.(Z \/ W) - C.Z;
             set y = Ser(R).k;
             thus Ser(R).(k+1) = y + R.(k+1) by SUPINF_2:63
-              .= y + 0. by A56
-              .= C.(Z \/ W) - C.Z by A63,XXREAL_3:4;
+              .= y + 0. by A55
+              .= C.(Z \/ W) - C.Z by A64,XXREAL_3:4;
           end;
-          for k being Element of NAT holds P[k] from NAT_1:sch 1(A61,A62);
+          Ser(R).0 = R.0 by SUPINF_2:63;
+          then
+A65:      P[0] by A55;
+          for k being Element of NAT holds P[k] from NAT_1:sch 1(A65,
+          A63);
           then Ser(R).n = C.(Z \/ W) - C.Z;
-          hence thesis by A54;
+          hence thesis by A60;
         end;
-        for k being Element of NAT st 1 <= k holds R.k = 0. by A56;
-        then
-A64:    SUM(R) = Ser(R).1 by A59,SUPINF_2:67;
         set y = Ser(R).0;
         y = R.0 by SUPINF_2:63;
         then
-A65:    y = C.(Z \/ W) - C.Z by A56;
-        Ser(R).1 = y + R.(0+1) by SUPINF_2:63
-          .= y + 0. by A56
-          .= C.(Z \/ W) - C.Z by A65,XXREAL_3:4;
+A66:    y = C.(Z \/ W) - C.Z by A55;
+A67:    C.W <= SUM(C*Q) by A52,Def2;
+        for k being Element of NAT st 1 <= k holds R.k = 0. by A55;
         then
-A66:    SUM(C*Q) <= C.(Z \/ W) - C.Z by A60,A64,MEASURE3:3;
-        C.W <= SUM(C*Q) by A47,Def2;
-        then C.W <= C.(Z \/ W) - C.Z by A66,XXREAL_0:2;
-        hence thesis by A53,XXREAL_3:49;
+A68:    SUM(R) = Ser(R).1 by A59,SUPINF_2:67;
+        Ser(R).1 = y + R.(0+1) by SUPINF_2:63
+          .= y + 0. by A55
+          .= C.(Z \/ W) - C.Z by A66,XXREAL_3:4;
+        then SUM(C*Q) <= C.(Z \/ W) - C.Z by A62,A68,MEASURE3:3;
+        then C.W <= C.(Z \/ W) - C.Z by A67,XXREAL_0:2;
+        hence thesis by A56,XXREAL_3:49;
       end;
-       0 <= C.Z by A2,MEASURE1:def 4;
-       then C.Z is Element of REAL or C.Z = +infty by XXREAL_0:14;
-      hence thesis by A50,X;
+A69:  C.Z = +infty implies C.W + C.Z <= C.(W \/ Z)
+      proof
+A70:    Z c= W \/ Z by XBOOLE_1:7;
+        assume
+A71:    C.Z = +infty;
+        0. <= C.W by A1,MEASURE1:def 4;
+        then C.W + C.Z = +infty by A71,XXREAL_3:def 2;
+        hence thesis by A71,A70,Def2;
+      end;
+      0 <= C.Z by A1,MEASURE1:def 4;
+      then C.Z is Element of REAL or C.Z = +infty by XXREAL_0:14;
+      hence thesis by A69,A53;
     end;
     hence thesis by Def3;
   end;
-  then reconsider Y = sigma_Field C as
-  non empty compl-closed sigma-additive Subset-Family of X
-  by A1,MEASURE1:def 3,def 9;
+  for A being set holds A in sigma_Field(C) implies X\A in sigma_Field(C)
+  by Th16;
+  then reconsider Y = sigma_Field C as non empty compl-closed sigma-additive
+  Subset-Family of X by A2,MEASURE1:def 3,def 9;
   Y is SigmaField of X;
   hence thesis;
 end;
@@ -806,11 +859,12 @@ definition
   let C be C_Measure of X;
   func sigma_Meas(C) -> Function of sigma_Field(C),ExtREAL means
   :Def4:
-  for A being Subset of X st A in sigma_Field(C) holds it.A = C.A;
+  for A
+  being Subset of X st A in sigma_Field(C) holds it.A = C.A;
   existence
   proof
-    ex D being Function of sigma_Field(C),ExtREAL st
-    (for A being Subset of X holds A in sigma_Field(C) implies D.A = C.A)
+    ex D being Function of sigma_Field(C),ExtREAL st for A being Subset of
+    X holds A in sigma_Field(C) implies D.A = C.A
     proof
       deffunc F(set) = C.$1;
 A1:   for S being set st S in sigma_Field(C) holds F(S) in ExtREAL;
@@ -828,10 +882,11 @@ A3: for A being Subset of X st A in sigma_Field(C) holds D.A = C.A;
   uniqueness
   proof
     let D1,D2 be Function of sigma_Field(C),ExtREAL such that
-A4: for A being Subset of X holds A in sigma_Field(C) implies D1.A = C.A and
-A5: for A being Subset of X holds A in sigma_Field(C) implies D2.A = C.A;
-A6: (sigma_Field(C) = dom D1) & (sigma_Field(C) = dom D2) by FUNCT_2:def 1;
-    for A being set st A in sigma_Field(C) holds D1.A = D2.A
+A4: for A being Subset of X holds A in sigma_Field(C) implies D1.A = C
+    .A and
+A5: for A being Subset of X holds A in sigma_Field(C) implies D2.A = C
+    .A;
+A6: for A being set st A in sigma_Field(C) holds D1.A = D2.A
     proof
       let A be set;
       assume
@@ -841,7 +896,9 @@ A7:   A in sigma_Field(C);
         .= D2.A by A5,A7;
       hence thesis;
     end;
-    hence thesis by A6,FUNCT_1:9;
+A8: sigma_Field(C) = dom D2 by FUNCT_2:def 1;
+    sigma_Field(C) = dom D1 by FUNCT_2:def 1;
+    hence thesis by A8,A6,FUNCT_1:9;
   end;
 end;
 
@@ -851,59 +908,62 @@ proof
 A1: now
     let A be Element of sigma_Field(C);
     reconsider A' = A as Subset of X;
-A2: (sigma_Meas(C)).A' = C.A' by Def4;
-    C is nonnegative by Def2;
+A2: C is nonnegative by Def2;
+    (sigma_Meas(C)).A' = C.A' by Def4;
     hence 0.<= (sigma_Meas(C)).A by A2,MEASURE1:def 4;
   end;
-X:    C is zeroed by Def2;
   {} in sigma_Field(C) by PROB_1:10;
-  then (sigma_Meas(C)).{} = C.{} by Def4;
   then
-A3: sigma_Meas(C) is nonnegative & (sigma_Meas(C)).{} = 0.
-  by A1,X,MEASURE1:def 4,VALUED_0:def 19;
-  now
+A3: (sigma_Meas(C)).{} = C.{} by Def4;
+A4: now
     let A,B be Element of sigma_Field(C);
-    assume
-A4: A misses B;
     reconsider A' = A,B' = B as Subset of X;
-A5: (sigma_Meas(C)).A' = C.A' & (sigma_Meas(C)).B' = C.B' by Def4;
-    C.(A' \/ B') = C.A' + C.B' by A4,Th15;
-    hence (sigma_Meas(C)).(A \/ B) = (sigma_Meas(C)).A + (sigma_Meas(C)).B
-    by A5,Def4;
+A5: (sigma_Meas(C)).B' = C.B' by Def4;
+    assume
+    A misses B;
+    then
+A6: C.(A' \/ B') = C.A' + C.B' by Th15;
+    (sigma_Meas(C)).A' = C.A' by Def4;
+    hence (sigma_Meas(C)).(A \/ B) = (sigma_Meas(C)).A + (sigma_Meas(C)).B by
+    A5,A6,Def4;
   end;
-  hence thesis by A3,MEASURE1:def 5,VALUED_0:def 19;
+  C is zeroed by Def2;
+  then (sigma_Meas(C)).{} = 0. by A3,VALUED_0:def 19;
+  hence thesis by A1,A4,MEASURE1:def 4,def 5,VALUED_0:def 19;
 end;
 
 theorem Th23:
   sigma_Meas(C) is sigma_Measure of sigma_Field(C)
 proof
   reconsider M = sigma_Meas(C) as Measure of sigma_Field(C) by Th22;
-  for F being Sep_Sequence of sigma_Field(C) holds M.(union rng F) <= SUM(M*F)
+  for F being Sep_Sequence of sigma_Field(C) holds M.(union rng F) <= SUM(
+  M*F)
   proof
     let F be Sep_Sequence of sigma_Field(C);
     consider A being Subset of X such that
 A1: A = union rng F;
-    consider a,b being R_eal such that
-A2: a = M.A & b = C.A;
-    reconsider F' = F as Function of NAT,bool X by FUNCT_2:9;
-A3: C*F' is Function of NAT,ExtREAL;
-    for k being set st k in NAT holds (M*F).k = (C*F).k
+A2: for k being set st k in NAT holds (M*F).k = (C*F).k
     proof
       let k be set;
       assume
-A4:   k in NAT;
+A3:   k in NAT;
       then
-A5:   (M*F).k = M.(F.k) by FUNCT_2:21;
-A6:   F.k in sigma_Field(C) by A4,FUNCT_2:7;
+A4:   (M*F).k = M.(F.k) by FUNCT_2:21;
+A5:   F.k in sigma_Field(C) by A3,FUNCT_2:7;
       reconsider F as Function of NAT,bool X by FUNCT_2:9;
-      (C*F).k = C.(F.k) by A4,FUNCT_2:21;
-      hence thesis by A5,A6,Def4;
+      (C*F).k = C.(F.k) by A3,FUNCT_2:21;
+      hence thesis by A4,A5,Def4;
     end;
+    reconsider F' = F as Function of NAT,bool X by FUNCT_2:9;
+    consider a,b being R_eal such that
+    a = M.A and
+A6: b = C.A;
+    C*F' is Function of NAT,ExtREAL;
     then
-A7: M*F = C*F by A3,FUNCT_2:18;
+A7: M*F = C*F by A2,FUNCT_2:18;
     reconsider F as Function of NAT,bool X by FUNCT_2:9;
-    b <= SUM(C*F) by A1,A2,Def2;
-    hence thesis by A1,A2,A7,Def4;
+    b <= SUM(C*F) by A1,A6,Def2;
+    hence thesis by A1,A6,A7,Def4;
   end;
   hence thesis by MEASURE3:17;
 end;
@@ -916,21 +976,23 @@ definition
 end;
 
 theorem Th24:
-  for A being Subset of X holds C.A = 0. implies A in sigma_Field(C)
+  for A being Subset of X holds C.A = 0. implies A in sigma_Field(
+  C)
 proof
   let A be Subset of X;
   assume
 A1: C.A = 0.;
   now
     let W,Z be Subset of X;
-    assume
-A2: W c= A & Z c= X \ A;
-    C is nonnegative by Def2;
-    then 0.<= C.W & C.W <= 0. by A1,A2,Def2,MEASURE1:def 4;
-    then
-A3: C.W = 0.;
+    assume that
+A2: W c= A and
+    Z c= X \ A;
     Z c= W \/ Z by XBOOLE_1:7;
-    then C.Z <= C.(W \/ Z) by Def2;
+    then
+A3: C.Z <= C.(W \/ Z) by Def2;
+    C is nonnegative by Def2;
+    then 0.<= C.W by MEASURE1:def 4;
+    then C.W = 0. by A1,A2,Def2;
     hence C.W + C.Z <= C.(W \/ Z) by A3,XXREAL_3:4;
   end;
   hence thesis by Def3;
@@ -943,12 +1005,14 @@ proof
   let B;
   assume that
 A1: B in sigma_Field(C) and
-A2: A c= B & (sigma_Meas(C)).B = 0.;
+A2: A c= B and
+A3: (sigma_Meas(C)).B = 0.;
   reconsider B as Subset of X by A1;
-A3: C.B = 0. by A1,A2,Def4;
   C is nonnegative by Def2;
-  then 0.<= C.A & C.A <= 0. by A2,A3,Def2,MEASURE1:def 4;
-  then C.A = 0.;
+  then
+A4: 0.<= C.A by MEASURE1:def 4;
+  C.B = 0. by A1,A3,Def4;
+  then C.A = 0. by A2,A4,Def2;
   hence thesis by Th24;
 end;
 

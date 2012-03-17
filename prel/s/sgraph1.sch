@@ -9,6 +9,7 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="NUMBERS"/>
@@ -33,7 +34,7 @@
 <And>
 <Pred kind="R" nr="2">
 <Var nr="1"/>
-<Func kind="K" nr="119">
+<Func kind="K" nr="128">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>
@@ -49,7 +50,7 @@
 <Func kind="G" nr="6">
 <Func kind="K" nr="25"/>
 <Func kind="K" nr="34">
-<Func kind="K" nr="118">
+<Func kind="K" nr="127">
 <Func kind="K" nr="25"/>
 </Func>
 </Func>
@@ -68,7 +69,7 @@
 <And>
 <Pred kind="R" nr="2">
 <Var nr="1"/>
-<Func kind="K" nr="119">
+<Func kind="K" nr="128">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>
@@ -99,7 +100,7 @@
 </Func>
 </Func>
 <Func kind="K" nr="34">
-<Func kind="K" nr="118">
+<Func kind="K" nr="127">
 <Func kind="K" nr="26">
 <Func kind="U" nr="1">
 <Var nr="1"/>
@@ -133,7 +134,7 @@
 </Pred>
 <Pred kind="R" nr="2">
 <Var nr="2"/>
-<Func kind="K" nr="118">
+<Func kind="K" nr="127">
 <Func kind="U" nr="1">
 <Var nr="1"/>
 </Func>
@@ -151,7 +152,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="30">
-<Func kind="K" nr="118">
+<Func kind="K" nr="127">
 <Func kind="U" nr="1">
 <Var nr="1"/>
 </Func>
